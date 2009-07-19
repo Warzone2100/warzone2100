@@ -9,13 +9,14 @@
 # MoroSqua <Unknown>, 2008.
 # TuniX12 <sedra12@gmail.com>, 2008.
 # Cyril Brulebois <kibi@debian.org>, 2008.
+# Gesierfou <gesierfou@yahoo.fr>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-07-19 21:30+0200\n"
-"PO-Revision-Date: 2008-11-20 20:34+0000\n"
-"Last-Translator: Cyril Brulebois <kibi@debian.org>\n"
+"POT-Creation-Date: 2009-07-19 23:12+0200\n"
+"PO-Revision-Date: 2009-05-15 21:52+0100\n"
+"Last-Translator: gesierfou <gesierfou@yahoo.fr>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -169,7 +170,7 @@ msgstr "Nouvelle Structure Défensive Disponible"
 
 #: data/base/messages/resmessages12.rmsg:5
 msgid "Armored Mortar battery pit"
-msgstr "Batterie de Mortiers retranchée"
+msgstr "Batterie de Mortier retranchée"
 
 #: data/base/messages/resmessages12.rmsg:6
 #: data/base/messages/resmessages12.rmsg:19
@@ -279,7 +280,7 @@ msgstr "Point défensif blindé équipé de Mini-Roquettes"
 
 #: data/base/messages/resmessages12.rmsg:31
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr "Point défensif blindé équipé d'une Mitrailleuse Lourde"
+msgstr "Point fortifié à Mitrailleuse Lourde"
 
 #: data/base/messages/resmessages12.rmsg:32
 #: data/base/messages/resmessages12.rmsg:45
@@ -374,7 +375,7 @@ msgstr "Puissance Défensive: Elevée"
 
 #: data/base/messages/resmessages12.rmsg:44
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr "Point défensif blindé équipé de Lance-Roquettes"
+msgstr "Point fortifié à lance missile AC"
 
 #: data/base/messages/resmessages12.rmsg:56
 #: data/base/messages/resmessages23.rmsg:43
@@ -385,7 +386,7 @@ msgstr "Vitesse de Construction Améliorée"
 #: data/base/messages/resmessages12.rmsg:57
 #: data/base/messages/resmessages23.rmsg:44
 msgid "Improved Engineering Techniques"
-msgstr "Techniques de Construction Améliorées"
+msgstr "Technique de Construction Améliorée"
 
 #: data/base/messages/resmessages12.rmsg:58
 #: data/base/messages/resmessages23.rmsg:45
@@ -397,16 +398,16 @@ msgstr "Augmente la vitesse de construction"
 #: data/base/messages/resmessages23.rmsg:46
 #: data/base/messages/resmessages3.rmsg:514
 msgid "All trucks upgraded automatically"
-msgstr "Tous les véhicules de construction améliorés automatiquement"
+msgstr "Amélioration de tous les véhicules de construction automatique"
 
 #: data/base/messages/resmessages12.rmsg:69
 #: data/base/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
-msgstr "Nouvelle Tourelle Système Disponible pour Création"
+msgstr "Nouveau système de tourelle disponible pour assemblage"
 
 #: data/base/messages/resmessages12.rmsg:70
 msgid "Counter-battery turret detects enemy indirect fire batteries"
-msgstr "Tourelle Anti-batteries détectant les batteries à tir indirect"
+msgstr "Tourelle de contre-batterie détectant l'artillerie enemie"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessagesall.rmsg:97
@@ -418,32 +419,32 @@ msgstr "Ordonne aux unités d'artillerie associées de viser les batteries ennem
 #: data/base/messages/resmessagesall.rmsg:98
 #: data/mp/messages/resmessagesall.rmsg:98
 msgid "Counter-battery fire continues until enemy battery is suppressed"
-msgstr "Le tir de riposte continue jusqu'à élimination de la batterie ennemie"
+msgstr "Tir de riposte continue, jusqu'à élimination de l'artillerie ennemie"
 
 #: data/base/messages/resmessages12.rmsg:82
 #: data/base/messages/resmessages23.rmsg:56
 #: data/base/messages/resmessages3.rmsg:524
 msgid "CB Sensor Improved"
-msgstr "Tourelle AB Améliorée"
+msgstr "Tourelle de contre-batterie Améliorée"
 
 #: data/base/messages/resmessages12.rmsg:83
 #: data/base/messages/resmessages2.rmsg:447
 #: data/base/messages/strings/resstrings.txt:486
 #: data/mp/messages/strings/resstrings.txt:514
 msgid "New fire detection systems"
-msgstr "Nouveaux systèmes de détection de tir"
+msgstr "Nouveau système de détection de tir"
 
 #: data/base/messages/resmessages12.rmsg:84
 #: data/base/messages/resmessages23.rmsg:58
 #: data/base/messages/resmessages3.rmsg:526
 msgid "Extends CB Range"
-msgstr "Augmente la protée des radars AB"
+msgstr "Portée des radars de contre-batterie augmentée"
 
 #: data/base/messages/resmessages12.rmsg:85
 #: data/base/messages/resmessages23.rmsg:59
 #: data/base/messages/resmessages3.rmsg:527
 msgid "All CB sensors upgraded automatically"
-msgstr "Tous les radars AB améliorés automatiquement"
+msgstr "Amélioration automatique des radars de contre-batterie"
 
 #: data/base/messages/resmessages12.rmsg:95
 #: data/base/messages/resmessages12.rmsg:212
@@ -454,7 +455,7 @@ msgstr "Tous les radars AB améliorés automatiquement"
 #: data/base/messages/resmessagesall.rmsg:173
 #: data/mp/messages/resmessagesall.rmsg:173
 msgid "Cannon Upgrade"
-msgstr "Amélioration pour Canons"
+msgstr "Amélioration pour Canon"
 
 #: data/base/messages/resmessages12.rmsg:96
 msgid "Determines range to target"
@@ -464,7 +465,7 @@ msgstr "Détermine la distance à la cible"
 #: data/base/messages/resmessagesall.rmsg:175
 #: data/mp/messages/resmessagesall.rmsg:175
 msgid "Increases Cannon accuracy"
-msgstr "Augmente la précision des Canons"
+msgstr "Précision des Canons accrue"
 
 #: data/base/messages/resmessages12.rmsg:98
 #: data/base/messages/resmessages12.rmsg:215
@@ -475,7 +476,7 @@ msgstr "Augmente la précision des Canons"
 #: data/base/messages/resmessagesall.rmsg:176
 #: data/mp/messages/resmessagesall.rmsg:176
 msgid "All cannons upgraded automatically"
-msgstr "Tous les canons améliorés automatiquement"
+msgstr "Amélioration automatique des canons"
 
 #: data/base/messages/resmessages12.rmsg:108
 #: data/base/messages/resmessages1.rmsg:602
@@ -496,7 +497,7 @@ msgstr "Le mécanisme de chargement automatique remplace le chargement manuel"
 
 #: data/base/messages/resmessages12.rmsg:110
 msgid "Increases Flamer ROF"
-msgstr "Augmente la cadence de tir des lance-flammes"
+msgstr "Cadence de tir des lances-flammes améliorée"
 
 #: data/base/messages/resmessages12.rmsg:111
 #: data/base/messages/resmessages1.rmsg:605
@@ -505,7 +506,7 @@ msgstr "Augmente la cadence de tir des lance-flammes"
 #: data/mp/messages/resmessagesall.rmsg:735
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "All flamers upgraded automatically"
-msgstr "Tous les lance-flammes améliorés automatiquement"
+msgstr "Amélioration automatique des lances-flammes"
 
 #: data/base/messages/resmessages12.rmsg:121
 #: data/base/messages/resmessages1.rmsg:537
@@ -543,7 +544,7 @@ msgstr "Mitrailleuse lourde de calibre 12,7mm"
 #: data/mp/messages/resmessagesall.rmsg:838
 #: data/mp/messages/resmessagesall.rmsg:851
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
-msgstr "Cibles Conseillées: Infanterie, bâtiments, véhicules à roues"
+msgstr "Fort contre: Infanterie, bâtiments, véhicules à roues"
 
 #: data/base/messages/resmessages12.rmsg:124
 #: data/base/messages/resmessages1.rmsg:45
@@ -629,11 +630,11 @@ msgstr "Résistance : Moyenne"
 #: data/mp/messages/strings/resstrings.txt:886
 #: data/mp/messages/strings/resstrings.txt:898
 msgid "Machinegun Upgrade"
-msgstr "Amélioration pour Mitrailleuses"
+msgstr "Amélioration pour Mitrailleuse"
 
 #: data/base/messages/resmessages12.rmsg:135
 msgid "Chaingun mechanism replaces belt-feed"
-msgstr "Les chargeurs à chaîne remplacent les chargeurs à bandes"
+msgstr "Les chargeurs à chaîne remplacent les chargeurs à bande"
 
 #: data/base/messages/resmessages12.rmsg:136
 #: data/base/messages/resmessages23.rmsg:175
@@ -641,7 +642,7 @@ msgstr "Les chargeurs à chaîne remplacent les chargeurs à bandes"
 #: data/base/messages/strings/resstrings.txt:859
 #: data/mp/messages/strings/resstrings.txt:900
 msgid "Increases Machinegun ROF"
-msgstr "Augmente la cadence de tir des Mitrailleuses"
+msgstr "Cadence de tir des Mitrailleuses augmentée"
 
 #: data/base/messages/resmessages12.rmsg:137
 #: data/base/messages/resmessages1.rmsg:644
@@ -656,7 +657,7 @@ msgstr "Augmente la cadence de tir des Mitrailleuses"
 #: data/mp/messages/strings/resstrings.txt:889
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "All machineguns upgraded automatically"
-msgstr "Toutes les mitrailleuses améliorées automatiquement"
+msgstr "Amélioration automatique des mitrailleuses"
 
 #: data/base/messages/resmessages12.rmsg:147
 #: data/base/messages/resmessages1.rmsg:667
@@ -692,7 +693,7 @@ msgstr "Peut être affecté à un radar"
 #: data/mp/messages/resmessagesall.rmsg:305
 #: data/mp/messages/strings/resstrings.txt:934
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
-msgstr "Cibles Conseillées: Bâtiments; infanterie, véhicules à roues"
+msgstr "Fort contre: Bâtiments; infanterie, véhicules à roues"
 
 #: data/base/messages/resmessages12.rmsg:150
 #: data/base/messages/resmessages12.rmsg:189
@@ -737,7 +738,7 @@ msgstr "Les systèmes de visée anticipent la distance et les conditions météo
 #: data/base/messages/resmessages23.rmsg:188
 #: data/base/messages/resmessages3.rmsg:1176
 msgid "Increases Mortar accuracy"
-msgstr "Augmente la précision des Mortiers"
+msgstr "Précision des Mortiers accrue"
 
 #: data/base/messages/resmessages12.rmsg:163
 #: data/base/messages/resmessages12.rmsg:176
@@ -749,16 +750,16 @@ msgstr "Augmente la précision des Mortiers"
 #: data/base/messages/strings/resstrings.txt:908
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "All mortars upgraded automatically"
-msgstr "Tous les mortiers sont améliorés automatiquement"
+msgstr "Amélioration automatique des mortiers"
 
 #: data/base/messages/resmessages12.rmsg:174
 msgid "Automatic loader replaces manual feed"
-msgstr "Chargeur automatique remplaçant l'alimentation à la main"
+msgstr "Chargeur automatique remplaçant le chargement manuel"
 
 #: data/base/messages/resmessages12.rmsg:175
 #: data/base/messages/resmessages3.rmsg:1189
 msgid "Increases Mortar ROF"
-msgstr "Augmente la cadence de tir des Mortiers"
+msgstr "Cadence de tir des Mortiers améliorée"
 
 #: data/base/messages/resmessages12.rmsg:186
 #: data/base/messages/resmessages12.rmsg:251
@@ -773,11 +774,11 @@ msgstr "Nouvelle Roquette Disponible"
 
 #: data/base/messages/resmessages12.rmsg:187
 msgid "Rocket artillery; can be assigned to a sensor"
-msgstr "Artillerie de roquettes; peut être affectée à un radar"
+msgstr "Artillerie lance-roquettes; peut être affectée à un radar"
 
 #: data/base/messages/resmessages12.rmsg:188
 msgid "Best Targets: Vehicles and Emplacements"
-msgstr "Cibles Conseillées: Véhicules et Emplacements"
+msgstr "Fort contre: Véhicules et Emplacements"
 
 #: data/base/messages/resmessages12.rmsg:199
 #: data/base/messages/resmessages12.rmsg:238
@@ -789,7 +790,7 @@ msgstr "Cibles Conseillées: Véhicules et Emplacements"
 #: data/mp/messages/resmessagesall.rmsg:134
 #: data/mp/messages/strings/resstrings.txt:1008
 msgid "Rocket Upgrade"
-msgstr "Amélioration pour Roquettes"
+msgstr "Amélioration pour Roquette"
 
 #: data/base/messages/resmessages12.rmsg:200
 msgid "Autoloader increases reload rate"
@@ -797,7 +798,7 @@ msgstr "Chargeur automatique améliorant la vitesse de rechargement"
 
 #: data/base/messages/resmessages12.rmsg:201
 msgid "Increases Rocket ROF"
-msgstr "Augmente la cadence de tir des Lance-Roquettes"
+msgstr "Cadence de tir des Lance-Roquettes améliorée"
 
 #: data/base/messages/resmessages12.rmsg:202
 #: data/base/messages/resmessages12.rmsg:241
@@ -809,22 +810,22 @@ msgstr "Augmente la cadence de tir des Lance-Roquettes"
 #: data/mp/messages/resmessagesall.rmsg:137
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "All rockets upgraded automatically"
-msgstr "Toutes les roquettes améliorées automatiquement"
+msgstr "Amélioration automatique des lances-roquettes"
 
 #: data/base/messages/resmessages12.rmsg:214
 #: data/base/messages/resmessages3.rmsg:890
 msgid "Increases Cannon ROF"
-msgstr "Augmente la cadence de tir des Canons"
+msgstr "Cadence de tir des Canons augmentée"
 
 #: data/base/messages/resmessages12.rmsg:226
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
-msgstr "Obus \"Armor-Piercing Fin-Stabilized Discarding Sabot\""
+msgstr "Obus APFSDS"
 
 #: data/base/messages/resmessages12.rmsg:227
 #: data/base/messages/resmessages1.rmsg:578
 #: data/base/messages/resmessages3.rmsg:877
 msgid "Increases Cannon damage"
-msgstr "Augmente les dégâts des Canons"
+msgstr "Dégâts des Canons augmentés"
 
 #: data/base/messages/resmessages12.rmsg:239
 msgid "Rocket tracks the laser designator to the target"
@@ -835,7 +836,7 @@ msgstr "Les roquettes suivent le guidage laser jusqu'à la cible"
 #: data/base/messages/resmessagesall.rmsg:136
 #: data/mp/messages/resmessagesall.rmsg:136
 msgid "Increases Rocket accuracy"
-msgstr "Augmente la précision des Roquettes"
+msgstr "Précision des Roquettes augmentée"
 
 #: data/base/messages/resmessages12.rmsg:252
 msgid "Heavy anti-tank rocket"
@@ -861,7 +862,7 @@ msgstr "Roquette antichar lourde"
 #: data/mp/messages/strings/resstrings.txt:764
 #: data/mp/messages/strings/resstrings.txt:770
 msgid "Best Targets: Vehicles"
-msgstr "Cibles Conseillées: Véhicules"
+msgstr "Fort contre: Véhicules"
 
 #: data/base/messages/resmessages12.rmsg:265
 msgid "Fires salvoes of mini-rockets"
@@ -869,11 +870,11 @@ msgstr "Tire des salves de mini-roquettes"
 
 #: data/base/messages/resmessages12.rmsg:266
 msgid "Best Targets: Base structures"
-msgstr "Cibles Conseillées: Bâtiments"
+msgstr "Fort contre: Bâtiments"
 
 #: data/base/messages/resmessages1.rmsg:5
 msgid "New battlefield computer system"
-msgstr "Nouvel Ordinateur de Bataille"
+msgstr "Nouvel Ordinateur de bataille"
 
 #: data/base/messages/resmessages1.rmsg:6
 #: data/mp/messages/resmessagesall.rmsg:890
@@ -908,7 +909,7 @@ msgstr "Le Lien Synaptique permet aux êtres humains de se connecter directement
 
 #: data/base/messages/resmessages1.rmsg:19
 msgid "Cyborgs can now be researched"
-msgstr "Vous pouvez maintenant rechercher les Cyborgs"
+msgstr "Vous pouvez maintenant faire des recherches sur les Cyborgs"
 
 #: data/base/messages/resmessages1.rmsg:20
 msgid "New research options available"
@@ -921,12 +922,12 @@ msgstr "Nouvelles options de recherche disponibles"
 #: data/base/messages/strings/resstrings.txt:31
 #: data/mp/messages/strings/resstrings.txt:33
 msgid "Cyborg Materials Improved"
-msgstr "Matériaux pour Cyborgs améliorés"
+msgstr "Matériaux pour Cyborg améliorés"
 
 #: data/base/messages/resmessages1.rmsg:31
 #: data/base/messages/resmessages1.rmsg:473
 msgid "Layered composite alloys and energy-absorbing fibres"
-msgstr "sandwich de couches d'alliages composites et de fibres absorbant les impacts"
+msgstr "Blindage composite multi-couches d'alliage et de fibres absorbant les impacts"
 
 #: data/base/messages/resmessages1.rmsg:32
 #: data/base/messages/resmessages2.rmsg:19
@@ -935,7 +936,7 @@ msgstr "sandwich de couches d'alliages composites et de fibres absorbant les imp
 #: data/base/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:35
 msgid "Increases Kinetic Armor and Body Points"
-msgstr "Augmente le Blindage Cinétique et la Résistance"
+msgstr "Blindage Cinétique et Résistance augmentés"
 
 #: data/base/messages/resmessages1.rmsg:33
 #: data/base/messages/resmessages23.rmsg:7
@@ -950,7 +951,7 @@ msgstr "Augmente le Blindage Cinétique et la Résistance"
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "All Cyborgs upgraded automatically"
-msgstr "Tous les Cyborgs sont améliorés automatiquement"
+msgstr "Amélioration automatique des Cyborgs"
 
 #: data/base/messages/resmessages1.rmsg:43
 #: data/base/messages/resmessages1.rmsg:56
@@ -1018,7 +1019,7 @@ msgstr "Équipé d'une Mitrailleuse"
 #: data/mp/messages/strings/resstrings.txt:98
 #: data/mp/messages/strings/resstrings.txt:104
 msgid "Requires Cyborg factory to produce"
-msgstr "Nécessite une usine de production de Cyborgs"
+msgstr "Usine de production de Cyborgs nécessaire"
 
 #: data/base/messages/resmessages1.rmsg:57
 msgid "Armed with Cyborg Cannon"
@@ -1068,7 +1069,7 @@ msgstr "Puissance Défensive: Faible"
 
 #: data/base/messages/resmessages1.rmsg:122
 msgid "Armored guard tower with Mini-Pod Rocket"
-msgstr "Tour de garde blindée équipée de Mini-Roquettes"
+msgstr "Tour de défense à Mini-Roquettes"
 
 #: data/base/messages/resmessages1.rmsg:135
 msgid "Armored bunker with Machinegun"
@@ -1088,15 +1089,15 @@ msgstr "Bunker blindé équipé d'un Canon Léger"
 
 #: data/base/messages/resmessages1.rmsg:187
 msgid "Armored hardpoint with Light Cannon"
-msgstr "Point défensif blindé équipé d'un Canon Léger"
+msgstr "Point fortifié à Canon Léger"
 
 #: data/base/messages/resmessages1.rmsg:200
 msgid "Armored hardpoint with Medium Cannon"
-msgstr "Point défensif blindé équipé d'un Canon Moyen"
+msgstr "Point fortifié à Canon Moyen"
 
 #: data/base/messages/resmessages1.rmsg:213
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr "Point défensif blindé équipé d'un Canon Lourd"
+msgstr "Point fortifié à Canon Lourd"
 
 #: data/base/messages/resmessages1.rmsg:226
 #: data/base/messages/strings/resstrings.txt:324
@@ -1616,7 +1617,7 @@ msgstr "Canon Lourd tirant des munitions de 120mm"
 
 #: data/base/messages/resmessages1.rmsg:577
 msgid "High Explosive Anti-Tank Cannon Shells"
-msgstr "Obus \"High Explosive Anti-Tank\" pour Canons"
+msgstr "Obus HEAT pour Canon"
 
 #: data/base/messages/resmessages1.rmsg:590
 msgid "Flame-thrower firing Propylene Oxide gel"
@@ -1628,7 +1629,7 @@ msgstr "Lance-Flammes au gel d'Oxyde de Propylène"
 #: data/mp/messages/resmessagesall.rmsg:331
 #: data/mp/messages/strings/resstrings.txt:796
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr "Cibles Conseillées: Bunkers, véhicules à roues et aéroglisseurs"
+msgstr "Fort contre: Bunkers, véhicules à roues et aéroglisseurs"
 
 #: data/base/messages/resmessages1.rmsg:592
 #: data/mp/messages/resmessagesall.rmsg:332
@@ -1653,11 +1654,11 @@ msgstr "Mitrailleuse de calibre 7,62mm"
 
 #: data/base/messages/resmessages1.rmsg:629
 msgid "Twin 7.62mm machineguns"
-msgstr "Mitrailleuse bitube de calibre 7,62mm"
+msgstr "Mitrailleuses jumelées de calibre 7,62mm"
 
 #: data/base/messages/resmessages1.rmsg:642
 msgid "Hardened case machinegun bullets"
-msgstr "Balles pour mitrailleuses à enveloppe renforcée"
+msgstr "Balles à enveloppe renforcée pour mitrailleuse"
 
 #: data/base/messages/resmessages1.rmsg:643
 #: data/base/messages/resmessages1.rmsg:656
@@ -1671,7 +1672,7 @@ msgstr "Augmente les dommages des Mitrailleuses"
 
 #: data/base/messages/resmessages1.rmsg:655
 msgid "Armor-Piercing Discard Sabot Bullets"
-msgstr "Balles \"Armor-Piercing Discard Sabot\""
+msgstr "Balles APDS"
 
 #: data/base/messages/resmessages1.rmsg:668
 #: data/mp/messages/resmessagesall.rmsg:304
@@ -1695,7 +1696,7 @@ msgstr "Roquettes légères anti-véhicules à tir rapide"
 
 #: data/base/messages/resmessages1.rmsg:695
 msgid "Best Targets: Wheeled and hover vehicles"
-msgstr "Cibles Conseillées: Véhicules à roues et aéroglisseurs"
+msgstr "Fort contre: Véhicules à roues et aéroglisseurs"
 
 #: data/base/messages/resmessages1.rmsg:706
 #: data/base/messages/resmessages1.rmsg:719
@@ -1810,7 +1811,7 @@ msgstr "Augmente la Résistance"
 
 #: data/base/messages/resmessages23.rmsg:18
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr "Point défensif blindé équipé d'un Canon HPV"
+msgstr "Point fortifié à Canon à Hyper-vélocité"
 
 #: data/base/messages/resmessages23.rmsg:31
 #: data/base/messages/resmessages3.rmsg:434
@@ -1959,7 +1960,7 @@ msgstr "Toutes les tours de contrôle améliorées automatiquement"
 #: data/mp/messages/strings/resstrings.txt:692
 #: data/mp/messages/strings/resstrings.txt:710
 msgid "AA Upgrade"
-msgstr "Amélioration pour canons AA"
+msgstr "Amélioration pour canon de DCA"
 
 #: data/base/messages/resmessages23.rmsg:135
 #: data/base/messages/resmessages2.rmsg:837
@@ -1986,7 +1987,7 @@ msgstr "Augmente la précision des armes AA"
 #: data/mp/messages/strings/resstrings.txt:695
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "All AA weapons upgraded automatically"
-msgstr "Tous les canons AA améliorés automatiquement"
+msgstr "Amélioration automatique de tous les canons de DCA"
 
 #: data/base/messages/resmessages23.rmsg:147
 #: data/base/messages/resmessages2.rmsg:706
@@ -2006,7 +2007,7 @@ msgstr "Largue des bombes incendiaires"
 
 #: data/base/messages/resmessages23.rmsg:149
 msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Cibles Conseillées: Bunkers et Points Défensifs"
+msgstr "Fort contre: Bunkers et Points Défensifs"
 
 #: data/base/messages/resmessages23.rmsg:160
 #: data/base/messages/resmessages2.rmsg:732
@@ -2057,7 +2058,7 @@ msgstr "Obusier rotatif de calibre 105, peut être affecté à un radar"
 #: data/mp/messages/strings/resstrings.txt:812
 #: data/mp/messages/strings/resstrings.txt:820
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr "Cibles Conseillées: Bâtiments, infanterie, véhicules à roues"
+msgstr "Fort contre: Bâtiments, infanterie, véhicules à roues"
 
 #: data/base/messages/resmessages23.rmsg:213
 msgid "Multi-barrel, rapid-fire machinegun"
@@ -2236,7 +2237,7 @@ msgstr "Attaque automatiquement les ennemis à portée"
 #: data/base/messages/strings/resstrings.txt:198
 #: data/mp/messages/strings/resstrings.txt:220
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr "Point défensif blindé équipé d'un Canon Hyper Véloce"
+msgstr "Point défensif blindé équipé d'un Canon à hyper vélocité"
 
 #: data/base/messages/resmessages2.rmsg:239
 #: data/base/messages/strings/resstrings.txt:204
@@ -2284,7 +2285,7 @@ msgstr "Point défensif blindé équipé de Roquettes Anti-char"
 #: data/base/messages/strings/resstrings.txt:334
 #: data/mp/messages/strings/resstrings.txt:360
 msgid "New robotic repair techniques"
-msgstr "Nouvelles techniques de réparation robotisées"
+msgstr "Nouvelle technique de réparation robotisée"
 
 #: data/base/messages/resmessages2.rmsg:343
 #: data/base/messages/strings/names.txt:786
@@ -2298,7 +2299,7 @@ msgstr "Production de Cyborgs Robotisée"
 #: data/base/messages/strings/resstrings.txt:366
 #: data/mp/messages/strings/resstrings.txt:392
 msgid "New Robotic Techniques improve factory production"
-msgstr "Nouvelles techniques robotisées améliorant la vitesse de production des usines"
+msgstr "Nouvelle technique robotisée améliorant la vitesse de production des usines"
 
 #: data/base/messages/resmessages2.rmsg:357
 #: data/base/messages/strings/resstrings.txt:367
@@ -2613,40 +2614,40 @@ msgstr "Détecte et se verrouille sur les émissions moteur des VTOLs"
 #: data/base/messages/strings/resstrings.txt:669
 #: data/mp/messages/strings/resstrings.txt:702
 msgid "AA Flak Upgrade"
-msgstr "Amélioration pour canons AA"
+msgstr "Amélioration pour canons de DCA"
 
 #: data/base/messages/resmessages2.rmsg:655
 #: data/base/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:703
 msgid "High Explosive Flak shards"
-msgstr "Éclats \"High Explosive\" pour canons AA"
+msgstr "Grenades HE pour canons de DCA"
 
 #: data/base/messages/resmessages2.rmsg:656
 #: data/base/messages/resmessages3.rmsg:825
 #: data/base/messages/strings/resstrings.txt:671
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "Increases AA Flak damage"
-msgstr "Augmente les dégâts des armes AA"
+msgstr "Augmente les dégâts des armes de DCA"
 
 #: data/base/messages/resmessages2.rmsg:657
 #: data/base/messages/resmessages3.rmsg:826
 #: data/base/messages/strings/resstrings.txt:672
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "All AA flak weapons upgraded automatically"
-msgstr "Tous les canons AA améliorés automatiquement"
+msgstr "Amélioration automatique de tous les canons de DCA"
 
 #: data/base/messages/resmessages2.rmsg:668
 #: data/base/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:711
 msgid "Recoil loaded AA ammunition hopper"
-msgstr "Mécanisme de rechargement au recul pour canons AA"
+msgstr "Mécanisme de rechargement au recul pour canons de DCA"
 
 #: data/base/messages/resmessages2.rmsg:669
 #: data/base/messages/resmessages3.rmsg:838
 #: data/base/messages/strings/resstrings.txt:679
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "Increases AA ROF"
-msgstr "Augmente la cadence de tir des armes AA"
+msgstr "Augmente la cadence de tir des armes de DCA"
 
 #: data/base/messages/resmessages2.rmsg:680
 #: data/base/messages/resmessages2.rmsg:693
@@ -2670,7 +2671,7 @@ msgstr "Une bombe-tourelle a explosée à proximité d'un ennemi"
 #: data/mp/messages/strings/resstrings.txt:720
 #: data/mp/messages/strings/resstrings.txt:726
 msgid "Best Targets: Base Structures and Defenses"
-msgstr "Cibles Conseillées: Bâtiments et Défenses"
+msgstr "Fort contre: Bâtiments et Défenses"
 
 #: data/base/messages/resmessages2.rmsg:694
 #: data/base/messages/strings/resstrings.txt:692
@@ -2688,7 +2689,7 @@ msgstr "Largue des bombes explosives à fragmentation"
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/strings/resstrings.txt:732
 msgid "Best Targets: Base Structures"
-msgstr "Cibles Conseillées: Bâtiments"
+msgstr "Fort contre: Bâtiments"
 
 #: data/base/messages/resmessages2.rmsg:720
 #: data/base/messages/strings/resstrings.txt:704
@@ -2700,7 +2701,7 @@ msgstr "Largue des bombes \"High Explosive Armor Piercing\""
 #: data/base/messages/strings/resstrings.txt:705
 #: data/mp/messages/strings/resstrings.txt:738
 msgid "Best Targets: Defenses"
-msgstr "Cibles Conseillées: Défenses"
+msgstr "Fort contre: Défenses"
 
 #: data/base/messages/resmessages2.rmsg:733
 #: data/base/messages/strings/resstrings.txt:714
@@ -2761,7 +2762,7 @@ msgstr "Obusier de calibre 105 à obus incendiaires, peut être affecté à un r
 #: data/base/messages/strings/resstrings.txt:789
 #: data/mp/messages/strings/resstrings.txt:828
 msgid "Best Targets: Base Structures, bunkers"
-msgstr "Cibles Conseillées: Bâtiments, bunkers"
+msgstr "Fort contre: Bâtiments, bunkers"
 
 #: data/base/messages/resmessages2.rmsg:836
 #: data/base/messages/resmessages2.rmsg:849
@@ -2776,7 +2777,7 @@ msgstr "Cibles Conseillées: Bâtiments, bunkers"
 #: data/mp/messages/strings/resstrings.txt:840
 #: data/mp/messages/strings/resstrings.txt:848
 msgid "Howitzer Upgrade"
-msgstr "Amélioration pour Obusiers"
+msgstr "Amélioration pour Obusier"
 
 #: data/base/messages/resmessages2.rmsg:838
 #: data/base/messages/resmessages3.rmsg:903
@@ -2906,7 +2907,7 @@ msgstr "Équipé de missiles SAM Avenger"
 #: data/base/messages/resmessages3.rmsg:109
 #: data/base/messages/resmessages3.rmsg:174
 msgid "Armed with Needle Gun"
-msgstr "Équipé d'un Canon Aiguille"
+msgstr "Équipé d'un Canon à aiguille"
 
 #: data/base/messages/resmessages3.rmsg:122
 #: data/base/messages/resmessages3.rmsg:187
@@ -2987,11 +2988,11 @@ msgstr "Point défensif blindé équipé d'un Canon Gauss"
 
 #: data/base/messages/resmessages3.rmsg:343
 msgid "Armored guard tower with Scourge Missile"
-msgstr "Tour de garde blindée équipée de Missiles Scourge"
+msgstr "Tour de défense à Missiles Scourge"
 
 #: data/base/messages/resmessages3.rmsg:356
 msgid "Armored guard tower with Needle Gun"
-msgstr "Tour de garde blindée équipée d'un Canon Aiguille"
+msgstr "Tour de défense à Canon à aiguille"
 
 #: data/base/messages/resmessages3.rmsg:369
 msgid "Armored hardpoint with Scourge AT Missile"
@@ -3178,7 +3179,7 @@ msgstr "L'ordinateur calcule la position de la cible et y dirige l'obus"
 
 #: data/base/messages/resmessages3.rmsg:824
 msgid "High Explosive Armor Piercing Flak"
-msgstr "Obus \"High Explosive Armor Piercing\" pour canons AA"
+msgstr "Obus HEAP pour canons de DCA"
 
 #: data/base/messages/resmessages3.rmsg:837
 msgid "Chainfeed loader eradicates jams and improves performance"
@@ -3194,7 +3195,7 @@ msgstr "Largue des bombes thermiques à haute intensité"
 #: data/mp/messages/resmessagesall.rmsg:162
 #: data/mp/messages/resmessagesall.rmsg:864
 msgid "Best Targets: Bunkers and hardpoints"
-msgstr "Cibles Conseillées: Bunkers et Points Défensifs"
+msgstr "Fort contre: Bunkers et Points Défensifs"
 
 #: data/base/messages/resmessages3.rmsg:863
 msgid "Bombs lock on and guide themselves to the target"
@@ -3231,7 +3232,7 @@ msgstr "Génère des décharges d'énergie laser consentrées"
 #: data/base/messages/resmessages3.rmsg:942
 #: data/base/messages/resmessages3.rmsg:955
 msgid "Best Targets: Cyborgs"
-msgstr "Cibles Conseillées: Cyborgs"
+msgstr "Fort contre: Cyborgs"
 
 #: data/base/messages/resmessages3.rmsg:954
 msgid "Fires pulses of laser light"
@@ -3241,7 +3242,7 @@ msgstr "Émet des impulsions laser"
 #: data/base/messages/resmessages3.rmsg:979
 #: data/base/messages/resmessages3.rmsg:992
 msgid "Laser Upgrade"
-msgstr "Amélioration pour Lasers"
+msgstr "Amélioration pour Laser"
 
 #: data/base/messages/resmessages3.rmsg:967
 msgid "Improvement in laser optics reduces light dispersal"
@@ -3275,11 +3276,11 @@ msgstr "Augmente la cadence de tir des Lasers"
 
 #: data/base/messages/resmessages3.rmsg:1006
 msgid "Depleted uranium kinetic energy bullets"
-msgstr "Balles utilisant de l'uranium appauvri pour produire de l'énergie cinétique"
+msgstr "Balles à l'uranium appauvri à énergie cinétique"
 
 #: data/base/messages/resmessages3.rmsg:1019
 msgid "Collapsing Plutonium kinetic energy bullets"
-msgstr "Balles utilisant du plutonium"
+msgstr "Balles au plutonium à énergie cinétique"
 
 #: data/base/messages/resmessages3.rmsg:1031
 #: data/base/messages/resmessages3.rmsg:1044
@@ -3300,7 +3301,7 @@ msgstr "Missile Anti-Bunker"
 #: data/base/messages/resmessages3.rmsg:1148
 #: data/base/messages/resmessages3.rmsg:1161
 msgid "Missile Upgrade"
-msgstr "Amélioration pour Missiles"
+msgstr "Amélioration pour Missile"
 
 #: data/base/messages/resmessages3.rmsg:1058
 msgid "On-board computer predicts target movement"
@@ -3346,7 +3347,7 @@ msgstr "Missile Sol-Air"
 #: data/mp/messages/resmessagesall.rmsg:708
 #: data/mp/messages/resmessagesall.rmsg:812
 msgid "Best Targets: Aerial targets only"
-msgstr "Cibles Conseillées: Avions uniquement"
+msgstr "Fort contre: Avions uniquement"
 
 #: data/base/messages/resmessages3.rmsg:1110
 #: data/mp/messages/resmessagesall.rmsg:707
@@ -3365,7 +3366,7 @@ msgstr "Missile d'artillerie hautement explosif"
 #: data/base/messages/resmessages3.rmsg:1124
 #: data/base/messages/resmessages3.rmsg:1137
 msgid "Best Targets: Base structures and cyborgs"
-msgstr "Cibles Conseillées: Bâtiments et cyborgs"
+msgstr "Fort contre: Bâtiments et cyborgs"
 
 #: data/base/messages/resmessages3.rmsg:1136
 msgid "High explosive heavy artillery missile"
@@ -3410,7 +3411,7 @@ msgstr "Canon électrique lourd projetant de grosses fléchettes"
 #: data/base/messages/resmessages3.rmsg:1252
 #: data/base/messages/resmessages3.rmsg:1265
 msgid "Rail Gun Upgrade"
-msgstr "Amélioration pour Canons Électriques"
+msgstr "Amélioration pour Canon Électrique"
 
 #: data/base/messages/resmessages3.rmsg:1240
 msgid "Computer predicts and compensates for target's movement"
@@ -3418,13 +3419,13 @@ msgstr "L'ordinateur calcule et corrige le tir en fonction des déplacements de 
 
 #: data/base/messages/resmessages3.rmsg:1241
 msgid "Increases Rail Gun accuracy"
-msgstr "Augmente la précision des Canons Électriques"
+msgstr "Précision des Canons Électriques augmentée"
 
 #: data/base/messages/resmessages3.rmsg:1242
 #: data/base/messages/resmessages3.rmsg:1255
 #: data/base/messages/resmessages3.rmsg:1268
 msgid "All rail guns upgraded automatically"
-msgstr "Tous les canons électriques améliorés automatiquement"
+msgstr "Amélioration automatique des canons électriques"
 
 #: data/base/messages/resmessages3.rmsg:1253
 msgid "Improved armor-piercing dart"
@@ -3432,7 +3433,7 @@ msgstr "Fléchette perforante améliorée"
 
 #: data/base/messages/resmessages3.rmsg:1254
 msgid "Increases Rail Gun damage"
-msgstr "Augmente les dégâts des Canons Électriques"
+msgstr "Dégâts des Canons Électriques augmentés"
 
 #: data/base/messages/resmessages3.rmsg:1266
 msgid "Increased gauss output speeds up reload time"
@@ -3440,7 +3441,7 @@ msgstr "Augmentation du champ magnétique accélérant de rechargement"
 
 #: data/base/messages/resmessages3.rmsg:1267
 msgid "Increases Rail Gun ROF"
-msgstr "Augmente la cadence de tir des Canons Électriques"
+msgstr "Cadence de tir des Canons Électriques augmentées"
 
 #: data/base/messages/resmessagesall.rmsg:4
 #: data/mp/messages/resmessagesall.rmsg:4
@@ -4786,29 +4787,25 @@ msgstr "Véhicule de Construction"
 #: data/mp/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:1829
 msgid "Machinegun Viper Wheels"
-msgstr "Mitrailleuse Viper sur Roues"
+msgstr "Auto mitrailleuse Vipère"
 
 #: data/base/messages/strings/names.txt:143
 #: data/mp/messages/strings/names.txt:143
-#, fuzzy
 msgid "Light Cannon Viper Wheels"
 msgstr "Canon Léger Viper sur Roues"
 
 #: data/base/messages/strings/names.txt:144
 #: data/mp/messages/strings/names.txt:145
-#, fuzzy
 msgid "Flamer Viper Wheels"
-msgstr "Mitrailleuse Viper sur Roues"
+msgstr "lance-flammes Viper sur Roues"
 
 #: data/base/messages/strings/names.txt:145
 #: data/mp/messages/strings/names.txt:146
-#, fuzzy
 msgid "Sensor Turret Viper Wheels"
-msgstr "Tourelle Radar"
+msgstr "Radar Viper sur roues"
 
 #: data/base/messages/strings/names.txt:146
 #: data/mp/messages/strings/names.txt:147
-#, fuzzy
 msgid "Light Cannon Viper Tracks"
 msgstr "Canon Léger Viper Chenillé"
 
@@ -4819,27 +4816,23 @@ msgstr "Mitrailleuse Lourde Cobra Semi-chenillée"
 
 #: data/base/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:150
-#, fuzzy
 msgid "Mortar Cobra Half-tracks"
-msgstr "Lance-Roquettes Cobra Autochenilles"
+msgstr "Mortier Cobra Semi-chenillée"
 
 #: data/base/messages/strings/names.txt:150
 #: data/mp/messages/strings/names.txt:151
-#, fuzzy
 msgid "Light Cannon Cobra Tracks"
-msgstr "Canon Léger Viper Chenillé"
+msgstr "Canon Léger Cobra Chenillé"
 
 #: data/base/messages/strings/names.txt:170
 #: data/mp/messages/strings/names.txt:173
-#, fuzzy
 msgid "Medium Cannon Viper Tracks"
 msgstr "Canon Moyen Viper Chenillé"
 
 #: data/base/messages/strings/names.txt:171
 #: data/mp/messages/strings/names.txt:174
-#, fuzzy
 msgid "Repair Turret Viper Wheels"
-msgstr "Mitrailleuse Viper sur Roues"
+msgstr "Tourelle de réparation Mobile Viper sur Roues"
 
 #: data/base/messages/strings/names.txt:172
 #, fuzzy
@@ -4849,62 +4842,55 @@ msgstr "Tourelle de Réparation Mobile Viper Semi-chenillée"
 #: data/base/messages/strings/names.txt:174
 #: data/mp/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:1830
-#, fuzzy
 msgid "Twin Machinegun Viper Wheels"
-msgstr "Mitrailleuse Viper sur Roues"
+msgstr "Mitrailleuses jumellées Viper sur Roues"
 
 #: data/base/messages/strings/names.txt:175
 #: data/mp/messages/strings/names.txt:178
-#, fuzzy
 msgid "Twin Machinegun Viper Half-tracks"
 msgstr "Mitrailleuses Jumelées Viper Semi-chenillées"
 
 #: data/base/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:179
-#, fuzzy
 msgid "Heavy Machinegun Viper Half-tracks"
-msgstr "Mitrailleuse Lourde Cobra Semi-chenillée"
+msgstr "Mitrailleuse Lourde Viper Semi-chenillée"
 
 #: data/base/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:180
 #: data/mp/messages/strings/names.txt:1837
-#, fuzzy
 msgid "Heavy Machinegun Viper Tracks"
-msgstr "Mitrailleuse Lourde Viper Chenillée"
+msgstr "Mitrailleuse Lourde Viper Chenillé"
 
 #: data/base/messages/strings/names.txt:178
 #: data/mp/messages/strings/names.txt:181
-#, fuzzy
 msgid "Lancer Viper Wheels"
-msgstr "Mitrailleuse Viper sur Roues"
+msgstr "Lanceur Viper sur Roues"
 
 #: data/base/messages/strings/names.txt:179
 #: data/mp/messages/strings/names.txt:182
 #, fuzzy
 msgid "Mini-Rocket Viper Wheels"
-msgstr "Mini-Bloc de Roquettes Viper sur Roues"
+msgstr "Mini-lance Roquettes Viper sur Roues"
 
 #: data/base/messages/strings/names.txt:180
 #: data/mp/messages/strings/names.txt:183
 #, fuzzy
 msgid "Mini-Rocket Artillery Viper Wheels"
-msgstr "Batterie de Mini-Roquettes Viper sur Roues"
+msgstr "Mini-artillerie Viper sur Roues"
 
 #: data/base/messages/strings/names.txt:181
 #, fuzzy
 msgid "Bunker Buster Viper Wheels"
-msgstr "Roquettes Anti-Bunker Viper sur Roues"
+msgstr "Roquette Anti-Bunker Viper sur Roues"
 
 #: data/base/messages/strings/names.txt:183
 #: data/mp/messages/strings/names.txt:186
 #: data/mp/messages/strings/names.txt:1359
-#, fuzzy
 msgid "Medium Cannon Cobra Tracks"
-msgstr "Canon Moyen Viper Chenillé"
+msgstr "Canon Moyen Cobra Chenillé"
 
 #: data/base/messages/strings/names.txt:184
 #: data/mp/messages/strings/names.txt:187
-#, fuzzy
 msgid "Heavy Cannon Cobra Tracks"
 msgstr "Canon Lourd Cobra Chenillé"
 
@@ -4918,24 +4904,21 @@ msgstr "Véhicule de Construction Cobra"
 #: data/base/messages/strings/names.txt:186
 #, fuzzy
 msgid "Sensor Cobra Half-tracks"
-msgstr "Lance-Roquettes Cobra Autochenilles"
+msgstr "Tourelle de capteur Cobra semi-chenillé"
 
 #: data/base/messages/strings/names.txt:187
 #: data/mp/messages/strings/names.txt:190
 #: data/mp/messages/strings/names.txt:1358
-#, fuzzy
 msgid "Flamer Cobra Tracks"
-msgstr "Réparateur Cobra chenillé"
+msgstr "lance-flammes Cobra chenillé"
 
 #: data/base/messages/strings/names.txt:188
 #: data/mp/messages/strings/names.txt:191
-#, fuzzy
 msgid "Bombard Cobra Half-tracks"
-msgstr "Lance-Roquettes Cobra Autochenilles"
+msgstr "Bombarde Cobra Semi-chenillé"
 
 #: data/base/messages/strings/names.txt:189
 #: data/mp/messages/strings/names.txt:192
-#, fuzzy
 msgid "Command Turret Cobra Half-tracks"
 msgstr "Tourelle de Commandement Cobra Semi-chenillée"
 
@@ -4950,38 +4933,34 @@ msgstr "Lance-Roquettes Cobra Autochenilles"
 #: data/mp/messages/strings/names.txt:194
 #, fuzzy
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
-msgstr "Batterie de Mini-Roquettes Cobra Semi-chenillée"
+msgstr "Mini-artillerie Cobra Semi-chenillée"
 
 #: data/base/messages/strings/names.txt:193
 #: data/mp/messages/strings/names.txt:196
-#, fuzzy
 msgid "Light Cannon Python Tracks"
-msgstr "Canon HPV Python chenillé"
+msgstr "Canon léger Python chenillé"
 
 #: data/base/messages/strings/names.txt:194
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1331
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1920
-#, fuzzy
 msgid "Medium Cannon Python Tracks"
-msgstr "Canon HPV Python chenillé"
+msgstr "Canon moyen Python chenillé"
 
 #: data/base/messages/strings/names.txt:195
 #: data/mp/messages/strings/names.txt:198
 #: data/mp/messages/strings/names.txt:1356
 #: data/mp/messages/strings/names.txt:1510
 #: data/mp/messages/strings/names.txt:1845
-#, fuzzy
 msgid "Heavy Cannon Python Tracks"
-msgstr "Canon HPV Python chenillé"
+msgstr "Canon lourd Python chenillé"
 
 #: data/base/messages/strings/names.txt:196
 #: data/base/messages/strings/names.txt:1422
 #: data/mp/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:1435
-#, fuzzy
 msgid "Command Turret Python Tracks"
-msgstr "Commandant Python chenillé"
+msgstr "Tourelle de commandement Python chenillé"
 
 #: data/base/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:202
@@ -5076,7 +5055,7 @@ msgstr "Lanceur"
 #: data/mp/messages/strings/names.txt:223
 #: data/mp/messages/strings/names.txt:541
 msgid "Heavy Gunner"
-msgstr "Mitrailleur Lourd"
+msgstr "Canon lourd"
 
 #: data/base/messages/strings/names.txt:219
 #: data/mp/messages/strings/names.txt:222
@@ -5313,9 +5292,8 @@ msgstr "Z NULL REPAIR"
 
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
-#, fuzzy
 msgid "Repair Turret"
-msgstr "Tourelle de Réparations Lourde"
+msgstr "Tourelle de Réparation"
 
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:352
@@ -5343,7 +5321,7 @@ msgstr "Tour Radar"
 #: data/mp/messages/strings/names.txt:431
 #: data/mp/messages/strings/names.txt:902
 msgid "Hardened Sensor Tower"
-msgstr "Tour Radar Renforcée"
+msgstr "Tour radar en béton"
 
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/names.txt:887
@@ -5502,26 +5480,26 @@ msgstr "Emplacement à Hellstorm"
 #: data/base/messages/strings/names.txt:715
 #: data/mp/messages/strings/names.txt:726
 msgid "Tornado AA Flak Site"
-msgstr "Site AA Tornade"
+msgstr "Site de DCA Tornade"
 
 #: data/base/messages/strings/names.txt:410
 #: data/base/messages/strings/names.txt:712
 msgid "Cyclone AA Flak Site"
-msgstr "Site AA Cyclone"
+msgstr "Site de DCA Cyclone"
 
 #: data/base/messages/strings/names.txt:411
 #: data/base/messages/strings/names.txt:713
 #: data/mp/messages/strings/names.txt:418
 #: data/mp/messages/strings/names.txt:724
 msgid "Hurricane AA Site"
-msgstr "Site AA Ouragan"
+msgstr "Site de DCA Ouragan"
 
 #: data/base/messages/strings/names.txt:412
 #: data/base/messages/strings/names.txt:714
 #: data/mp/messages/strings/names.txt:419
 #: data/mp/messages/strings/names.txt:725
 msgid "Whirlwind AA Site"
-msgstr "Site AA Tourbillon"
+msgstr "Site de DCA Tourbillon"
 
 #: data/base/messages/strings/names.txt:414
 #: data/base/messages/strings/names.txt:726
@@ -5624,35 +5602,33 @@ msgstr "Tour de Garde à Mitrailleuse"
 #: data/base/messages/strings/names.txt:439
 #: data/mp/messages/strings/names.txt:446
 msgid "Twin Machinegun Guard Tower"
-msgstr "Tour de Garde à Mitrailleuse Double"
+msgstr "Tour de Garde à Mitrailleuses jumelées"
 
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:447
 #: data/mp/messages/strings/names.txt:767
-#, fuzzy
 msgid "Heavy Machinegun Tower"
-msgstr "Tour de Garde à Mitrailleuse Lourde"
+msgstr "Tour à Mitrailleuse Lourde"
 
 #: data/base/messages/strings/names.txt:441
 #: data/base/messages/strings/names.txt:757
 #: data/mp/messages/strings/names.txt:448
 msgid "Flamer Guard Tower"
-msgstr "Tour de Garde Incendiaire"
+msgstr "Tour de Garde à lance-flammes"
 
 #: data/base/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:449
 #: data/mp/messages/strings/names.txt:748
 #: data/mp/messages/strings/names.txt:769
-#, fuzzy
 msgid "Lancer Tower"
-msgstr "Tour de Garde à Lance-Roquettes"
+msgstr "Tour Lance-Roquettes"
 
 #: data/base/messages/strings/names.txt:443
 #: data/mp/messages/strings/names.txt:450
 #: data/mp/messages/strings/names.txt:770
 #, fuzzy
 msgid "Mini-Rocket Tower"
-msgstr "Tour de Garde à Mini-Roquettes"
+msgstr "Tour à Mini-Roquettes"
 
 #: data/base/messages/strings/names.txt:446
 #: data/base/messages/strings/names.txt:496
@@ -5668,7 +5644,7 @@ msgstr "Bunker à Mitrailleuse"
 #: data/mp/messages/strings/names.txt:454
 #: data/mp/messages/strings/names.txt:505
 msgid "Twin Machinegun Bunker"
-msgstr "Bunker à Mitrailleuse Double"
+msgstr "Bunker à Mitrailleuses jumelées"
 
 #: data/base/messages/strings/names.txt:448
 #: data/base/messages/strings/names.txt:500
@@ -5691,13 +5667,13 @@ msgstr "Bunker à Canon Léger"
 #: data/mp/messages/strings/names.txt:457
 #: data/mp/messages/strings/names.txt:747
 msgid "Flamer Bunker"
-msgstr "Bunker Incendiaire"
+msgstr "Bunker à lance-flammes"
 
 #: data/base/messages/strings/names.txt:451
 #: data/base/messages/strings/names.txt:737
 #: data/mp/messages/strings/names.txt:458
 msgid "Lancer Bunker"
-msgstr "Bunker Lance-Roquettes"
+msgstr "Bunker à lance-roquettes"
 
 #: data/base/messages/strings/names.txt:454
 #: data/base/messages/strings/names.txt:456
@@ -5766,7 +5742,7 @@ msgstr "Tour à Missiles Scourge"
 #: data/mp/messages/strings/names.txt:477
 #: data/mp/messages/strings/names.txt:773
 msgid "Needle Gun Tower"
-msgstr "Tour à Canon Aiguille"
+msgstr "Tour à Canon à aiguille"
 
 #: data/base/messages/strings/names.txt:471
 #: data/base/messages/strings/names.txt:743
@@ -5801,7 +5777,7 @@ msgstr "Canon Lourd"
 #: data/mp/messages/strings/names.txt:484
 #: data/mp/messages/strings/names.txt:1049
 msgid "Hyper Velocity Cannon"
-msgstr "Canon Hyper Véloce"
+msgstr "Canon à Hyper Vélocité"
 
 #: data/base/messages/strings/names.txt:478
 #: data/base/messages/strings/names.txt:1037
@@ -5862,7 +5838,7 @@ msgstr "Mitrailleuse"
 #: data/mp/messages/strings/names.txt:504
 #: data/mp/messages/strings/names.txt:1112
 msgid "Twin Machinegun"
-msgstr "Mitrailleuse Double"
+msgstr "Mitrailleuses jumelées"
 
 #: data/base/messages/strings/names.txt:499
 #: data/base/messages/strings/names.txt:1100
@@ -5954,7 +5930,7 @@ msgstr "Emplacement à Salière"
 #: data/mp/messages/strings/names.txt:526
 #: data/mp/messages/strings/names.txt:1155
 msgid "Needle Gun"
-msgstr "Canon Aiguille"
+msgstr "Canon à aiguille"
 
 #: data/base/messages/strings/names.txt:520
 #: data/base/messages/strings/names.txt:1143
@@ -6028,28 +6004,28 @@ msgstr "Roquettes Anti-Char VTOL"
 #: data/mp/messages/strings/names.txt:551
 #: data/mp/messages/strings/names.txt:993
 msgid "Tornado Flak Turret"
-msgstr "Tourelle AA Tornade"
+msgstr "Tourelle de DCA Tornade"
 
 #: data/base/messages/strings/names.txt:545
 #: data/base/messages/strings/names.txt:981
 #: data/mp/messages/strings/names.txt:552
 #: data/mp/messages/strings/names.txt:994
 msgid "Cyclone Flak Turret"
-msgstr "Tourelle AA Cyclone"
+msgstr "Tourelle de DCA Cyclone"
 
 #: data/base/messages/strings/names.txt:550
 #: data/base/messages/strings/names.txt:983
 #: data/mp/messages/strings/names.txt:557
 #: data/mp/messages/strings/names.txt:996
 msgid "Whirlwind AA Turret"
-msgstr "Tourelle AA Tourbillon"
+msgstr "Tourelle de DCA Tourbillon"
 
 #: data/base/messages/strings/names.txt:551
 #: data/base/messages/strings/names.txt:982
 #: data/mp/messages/strings/names.txt:558
 #: data/mp/messages/strings/names.txt:995
 msgid "Hurricane AA Turret"
-msgstr "Tourelle AA Ouragan"
+msgstr "Tourelle de DCA Ouragan"
 
 #: data/base/messages/strings/names.txt:558
 msgid "LasSat"
@@ -6063,7 +6039,7 @@ msgstr "Canon VTOL"
 #: data/base/messages/strings/names.txt:561
 #: data/mp/messages/strings/names.txt:568
 msgid "VTOL Hyper Velocity Cannon"
-msgstr "Canon Hyper Véloce VTOL"
+msgstr "Canon à hyper vélocité VTOL"
 
 #: data/base/messages/strings/names.txt:562
 #: data/mp/messages/strings/names.txt:569
@@ -6083,7 +6059,7 @@ msgstr "Mitrailleuse VTOL"
 #: data/base/messages/strings/names.txt:566
 #: data/mp/messages/strings/names.txt:573
 msgid "VTOL Twin Machinegun"
-msgstr "Mitrailleuse Double VTOL"
+msgstr "Mitrailleuses jumelées VTOL"
 
 #: data/base/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:574
@@ -6098,7 +6074,7 @@ msgstr "Fusil d'Assaut VTOL"
 #: data/base/messages/strings/names.txt:569
 #: data/mp/messages/strings/names.txt:576
 msgid "VTOL Needle Gun"
-msgstr "Canon Aiguille VTOL"
+msgstr "Canon à aiguille VTOL"
 
 #: data/base/messages/strings/names.txt:570
 #: data/mp/messages/strings/names.txt:577
@@ -6323,55 +6299,46 @@ msgstr "Alliages Composites Superdenses Cyborg Mk3"
 
 #: data/base/messages/strings/names.txt:673
 #: data/mp/messages/strings/names.txt:682
-#, fuzzy
 msgid "Bunker Blaster Cyborg"
-msgstr "Anti-Bunker"
+msgstr "Cyborg Anti-Bunker"
 
 #: data/base/messages/strings/names.txt:674
 #: data/mp/messages/strings/names.txt:683
-#, fuzzy
 msgid "Heavy Gunner Cyborg"
-msgstr "Mitrailleur Lourd"
+msgstr "Cyborg à canon lourd"
 
 #: data/base/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:684
-#, fuzzy
 msgid "Flamer Cyborg"
-msgstr "Incedieur"
+msgstr "Cyborg lance-flammes"
 
 #: data/base/messages/strings/names.txt:676
 #: data/mp/messages/strings/names.txt:685
-#, fuzzy
 msgid "Machinegunner Cyborg"
-msgstr "Mitrailleur"
+msgstr "Cyborg Mitrailleur"
 
 #: data/base/messages/strings/names.txt:677
 #: data/mp/messages/strings/names.txt:686
-#, fuzzy
 msgid "Lancer Cyborg"
-msgstr "Lanceur"
+msgstr "Cyborg Lanceur"
 
 #: data/base/messages/strings/names.txt:678
 #: data/mp/messages/strings/names.txt:687
-#, fuzzy
 msgid "Assault Gunner Cyborg"
-msgstr "Cyborg d'Assaut"
+msgstr "Cyborg canon d'Assaut"
 
 #: data/base/messages/strings/names.txt:679
 #: data/mp/messages/strings/names.txt:688
-#, fuzzy
 msgid "Needle Gunner Cyborg"
-msgstr "Canonnier Aiguille"
+msgstr "Cyborg à canon à aiguille"
 
 #: data/base/messages/strings/names.txt:680
 #: data/mp/messages/strings/names.txt:689
-#, fuzzy
 msgid "Scourge Cyborg"
 msgstr "Super Cyborg à Missile Scourge"
 
 #: data/base/messages/strings/names.txt:681
 #: data/mp/messages/strings/names.txt:690
-#, fuzzy
 msgid "Flashlight Gunner Cyborg"
 msgstr "Cyborg Flashlight"
 
@@ -6418,7 +6385,7 @@ msgstr "Pack de Saut Cyborg"
 #: data/base/messages/strings/names.txt:697
 #: data/mp/messages/strings/names.txt:706
 msgid "Hardcrete"
-msgstr "Mur de Béton"
+msgstr "Mur en béton"
 
 #: data/base/messages/strings/names.txt:699
 #: data/mp/messages/strings/names.txt:708
@@ -6443,17 +6410,17 @@ msgstr "Béton Renforcé Mk3"
 #: data/base/messages/strings/names.txt:704
 #: data/mp/messages/strings/names.txt:713
 msgid "Supercrete"
-msgstr "Superbéton"
+msgstr "Super béton"
 
 #: data/base/messages/strings/names.txt:705
 #: data/mp/messages/strings/names.txt:714
 msgid "Supercrete Mk2"
-msgstr "Superbéton Mk2"
+msgstr "Super béton Mk2"
 
 #: data/base/messages/strings/names.txt:706
 #: data/mp/messages/strings/names.txt:715
 msgid "Supercrete Mk3"
-msgstr "Superbéton Mk3"
+msgstr "Super béton Mk3"
 
 #: data/base/messages/strings/names.txt:707
 #: data/mp/messages/strings/names.txt:716
@@ -6474,7 +6441,7 @@ msgstr "Béton Plastifié Mk3"
 #: data/mp/messages/strings/names.txt:728
 #: data/mp/messages/strings/names.txt:1386
 msgid "HPV Cannon Emplacement"
-msgstr "Emplacement à Canon HPV"
+msgstr "Emplacement à Canon canon à hyper vélocité"
 
 #: data/base/messages/strings/names.txt:720
 #: data/base/messages/strings/names.txt:1371
@@ -6579,7 +6546,7 @@ msgstr "Point Défensif Roquettes Anti-Char"
 #: data/mp/messages/strings/names.txt:786
 #: data/mp/messages/strings/names.txt:1394
 msgid "HPV Cannon Hardpoint"
-msgstr "Point Défensif Canon HPV"
+msgstr "Point Défensif Canon canon à hyper vélocité"
 
 #: data/base/messages/strings/names.txt:778
 #: data/base/messages/strings/names.txt:1383
@@ -6925,52 +6892,52 @@ msgstr "Tourelle de Réparations Lourde"
 #: data/mp/messages/strings/names.txt:897
 #: data/mp/messages/strings/resstrings.txt:478
 msgid "Mobile Repair Upgrade"
-msgstr "Amélioration pour Réparations Mobiles"
+msgstr "Amélioration pour Réparation Mobile"
 
 #: data/base/messages/strings/names.txt:885
 #: data/mp/messages/strings/names.txt:898
 msgid "Mobile Repair Upgrade Mk2"
-msgstr "Amélioration pour Réparations Mobiles Mk2"
+msgstr "Amélioration pour Réparation Mobile Mk2"
 
 #: data/base/messages/strings/names.txt:891
 #: data/mp/messages/strings/names.txt:904
 msgid "CB Turret"
-msgstr "Tourelle AB"
+msgstr "Tourelle de contre-batterie"
 
 #: data/base/messages/strings/names.txt:893
 #: data/mp/messages/strings/names.txt:906
 msgid "CB Sensor Upgrade"
-msgstr "Amélioration pour Radar AB"
+msgstr "Amélioration pour Radar de CB"
 
 #: data/base/messages/strings/names.txt:894
 #: data/mp/messages/strings/names.txt:907
 msgid "CB Sensor Upgrade 2"
-msgstr "Amélioration pour Radar AB Mk2"
+msgstr "Amélioration pour Radar de CB Mk2"
 
 #: data/base/messages/strings/names.txt:895
 #: data/mp/messages/strings/names.txt:908
 msgid "CB Sensor Upgrade 3"
-msgstr "Amélioration pour Radar AB Mk3"
+msgstr "Amélioration pour Radar de CB Mk3"
 
 #: data/base/messages/strings/names.txt:897
 #: data/mp/messages/strings/names.txt:910
 msgid "VTOL CB Turret"
-msgstr "Tourelle de Contrôle AB Mobile"
+msgstr "Tourelle de Contrôle de CB Mobile"
 
 #: data/base/messages/strings/names.txt:900
 #: data/mp/messages/strings/names.txt:913
 msgid "VTOL CB Upgrade"
-msgstr "Amélioration pour Contrôle AB"
+msgstr "Amélioration pour Contrôle de CB"
 
 #: data/base/messages/strings/names.txt:901
 #: data/mp/messages/strings/names.txt:914
 msgid "VTOL CB Upgrade 2"
-msgstr "Amélioration pour Contrôle AB Mk2"
+msgstr "Amélioration pour Contrôle de CB Mk2"
 
 #: data/base/messages/strings/names.txt:902
 #: data/mp/messages/strings/names.txt:915
 msgid "VTOL CB Upgrade 3"
-msgstr "Amélioration pour Contrôle AB Mk3"
+msgstr "Amélioration pour Contrôle de CB Mk3"
 
 #: data/base/messages/strings/names.txt:903
 #: data/mp/messages/strings/names.txt:916
@@ -7192,7 +7159,7 @@ msgstr "Alliages Composites Superdenses Mk3"
 #: data/base/messages/strings/names.txt:964
 #: data/mp/messages/strings/names.txt:977
 msgid "Hover Propulsion"
-msgstr "Aéroglisseurs"
+msgstr "Aéroglisseur"
 
 #: data/base/messages/strings/names.txt:965
 #: data/mp/messages/strings/names.txt:978
@@ -7237,77 +7204,77 @@ msgstr "Propulsion Roues II"
 #: data/base/messages/strings/names.txt:984
 #: data/mp/messages/strings/names.txt:997
 msgid "AA Thermal Imaging Sensor"
-msgstr "Détecteur Thermique AA"
+msgstr "Détecteur Thermique pour DCA"
 
 #: data/base/messages/strings/names.txt:985
 #: data/mp/messages/strings/names.txt:998
 msgid "AA Target Acquisition Shells"
-msgstr "Obus AA à Acquisition de Cible"
+msgstr "Obus à Acquisition de Cible pour DCA"
 
 #: data/base/messages/strings/names.txt:986
 #: data/mp/messages/strings/names.txt:999
 msgid "AA Target Prediction Computer"
-msgstr "Ordinateur Ballistique AA"
+msgstr "Ordinateur Ballistique pour DCA"
 
 #: data/base/messages/strings/names.txt:987
 #: data/mp/messages/strings/names.txt:1000
 msgid "AA HE Flak"
-msgstr "Obus AA HE"
+msgstr "Obus HE pour DCA"
 
 #: data/base/messages/strings/names.txt:988
 #: data/mp/messages/strings/names.txt:1001
 msgid "AA HE Flak Mk2"
-msgstr "Obus AA HE Mk2"
+msgstr "Obus HE pour DCA Mk2"
 
 #: data/base/messages/strings/names.txt:989
 #: data/mp/messages/strings/names.txt:1002
 msgid "AA HE Flak Mk3"
-msgstr "Obus AA HE Mk3"
+msgstr "Obus HE pour DCA Mk3"
 
 #: data/base/messages/strings/names.txt:990
 #: data/mp/messages/strings/names.txt:1003
 msgid "AA HEAP Flak"
-msgstr "Obus AA HEAP"
+msgstr "Obus HEAP pour DCA"
 
 #: data/base/messages/strings/names.txt:991
 #: data/mp/messages/strings/names.txt:1004
 msgid "AA HEAP Flak Mk2"
-msgstr "Obus AA HEAP Mk2"
+msgstr "Obus HEAP pour DCA Mk2"
 
 #: data/base/messages/strings/names.txt:992
 #: data/mp/messages/strings/names.txt:1005
 msgid "AA HEAP Flak Mk3"
-msgstr "Obus AA HEAP Mk3"
+msgstr "Obus HEAP pour DCA Mk3"
 
 #: data/base/messages/strings/names.txt:993
 #: data/mp/messages/strings/names.txt:1006
 msgid "AA Ammunition Hopper"
-msgstr "Chargeur Automatique AA"
+msgstr "Chargeur Automatique pour DCA"
 
 #: data/base/messages/strings/names.txt:994
 #: data/mp/messages/strings/names.txt:1007
 msgid "AA Ammunition Hopper Mk2"
-msgstr "Chargeur Automatique AA Mk2"
+msgstr "Chargeur Automatique pour DCA Mk2"
 
 #: data/base/messages/strings/names.txt:995
 #: data/mp/messages/strings/names.txt:1008
 msgid "AA Ammunition Hopper Mk3"
-msgstr "Chargeur Automatique AA Mk3"
+msgstr "Chargeur Automatique pour DCA Mk3"
 
 #: data/base/messages/strings/names.txt:996
 #: data/mp/messages/strings/names.txt:1009
 msgid "AA Chainfeed Loader"
-msgstr "Chargeur AA Chaîné"
+msgstr "Chargeur Chaîné pour DCA"
 
 #: data/base/messages/strings/names.txt:997
 #: data/mp/messages/strings/names.txt:1010
 msgid "AA Chainfeed Loader Mk2"
-msgstr "Chargeur AA Chaîné Mk2"
+msgstr "Chargeur Chaîné pour DCA Mk2"
 
 #: data/base/messages/strings/names.txt:998
 #: data/mp/messages/strings/names.txt:1011
 msgid "AA Chainfeed Loader Mk3"
-msgstr "Chargeur AA Chaîné Mk3"
+msgstr "Chargeur Chaîné pour DCA Mk3"
 
 #: data/base/messages/strings/names.txt:1003
 msgid "Cluster Bombs Bay"
@@ -7343,87 +7310,87 @@ msgstr "Bombardement par Acquisition de Cible"
 #: data/base/messages/strings/names.txt:1012
 #: data/mp/messages/strings/names.txt:1025
 msgid "Cannon Laser Rangefinder"
-msgstr "Canons à Estimation Laser de Distance"
+msgstr "Télémètre laser pour Canon"
 
 #: data/base/messages/strings/names.txt:1013
 #: data/mp/messages/strings/names.txt:1026
 msgid "Cannon Laser Designator"
-msgstr "Canons à Viseur Laser"
+msgstr "Visée laser pour Canon"
 
 #: data/base/messages/strings/names.txt:1014
 #: data/mp/messages/strings/names.txt:1027
 msgid "HEAT Cannon Shells"
-msgstr "Obus HEAT pour Canons"
+msgstr "Obus HEAT pour Canon"
 
 #: data/base/messages/strings/names.txt:1015
 #: data/mp/messages/strings/names.txt:1028
 msgid "HEAT Cannon Shells Mk2"
-msgstr "Obus HEAT pour Canons Mk2"
+msgstr "Obus HEAT pour Canon Mk2"
 
 #: data/base/messages/strings/names.txt:1016
 #: data/mp/messages/strings/names.txt:1029
 msgid "HEAT Cannon Shells Mk3"
-msgstr "Obus HEAT pour Canons Mk3"
+msgstr "Obus HEAT pour Canon Mk3"
 
 #: data/base/messages/strings/names.txt:1017
 #: data/mp/messages/strings/names.txt:1030
 msgid "APFSDS Cannon Rounds"
-msgstr "Obus APFSDS pour Canons"
+msgstr "Obus APFSDS pour Canon"
 
 #: data/base/messages/strings/names.txt:1018
 #: data/mp/messages/strings/names.txt:1031
 msgid "APFSDS Cannon Rounds Mk2"
-msgstr "Obus APFSDS pour Canons Mk2"
+msgstr "Obus APFSDS pour Canon Mk2"
 
 #: data/base/messages/strings/names.txt:1019
 #: data/mp/messages/strings/names.txt:1032
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr "Obus APFSDS pour Canons Mk3"
+msgstr "Obus APFSDS pour Canon Mk3"
 
 #: data/base/messages/strings/names.txt:1020
 #: data/mp/messages/strings/names.txt:1033
 msgid "HVAPFSDS Cannon Rounds"
-msgstr "Obus HVAPFSDS pour Canons"
+msgstr "Obus HVAPFSDS pour Canon"
 
 #: data/base/messages/strings/names.txt:1021
 #: data/mp/messages/strings/names.txt:1034
 msgid "HVAPFSDS Cannon Rounds Mk2"
-msgstr "Obus HVAPFSDS pour Canons Mk2"
+msgstr "Obus HVAPFSDS pour Canon Mk2"
 
 #: data/base/messages/strings/names.txt:1022
 #: data/mp/messages/strings/names.txt:1035
 msgid "HVAPFSDS Cannon Rounds Mk3"
-msgstr "Obus HVAPFSDS pour Canons Mk3"
+msgstr "Obus HVAPFSDS pour Canon Mk3"
 
 #: data/base/messages/strings/names.txt:1026
 #: data/mp/messages/strings/names.txt:1039
 msgid "Cannon Autoloader"
-msgstr "Chargeur Automatique pour Canons"
+msgstr "Chargeur Automatique pour Canon"
 
 #: data/base/messages/strings/names.txt:1027
 #: data/mp/messages/strings/names.txt:1040
 msgid "Cannon Autoloader Mk2"
-msgstr "Chargeur Automatique pour Canons Mk2"
+msgstr "Chargeur Automatique pour Canon Mk2"
 
 #: data/base/messages/strings/names.txt:1028
 #: data/mp/messages/strings/names.txt:1041
 msgid "Cannon Autoloader Mk3"
-msgstr "Chargeur Automatique pour Canons Mk3"
+msgstr "Chargeur Automatique pour Canon Mk3"
 
 #: data/base/messages/strings/names.txt:1029
 #: data/mp/messages/strings/names.txt:1042
 msgid "Cannon Rapid Loader"
-msgstr "Chargeur Accéléré por Canons"
+msgstr "Chargeur Accéléré pour Canon"
 
 #: data/base/messages/strings/names.txt:1030
 #: data/mp/messages/strings/names.txt:1043
 msgid "Cannon Rapid Loader Mk2"
-msgstr "Chargeur Accéléré por Canons Mk2"
+msgstr "Chargeur Accéléré pour Canon Mk2"
 
 #: data/base/messages/strings/names.txt:1031
 #: data/mp/messages/strings/names.txt:1044
 msgid "Cannon Rapid Loader Mk3"
-msgstr "Chargeur Accéléré por Canons Mk3"
+msgstr "Chargeur Accéléré pour Canon Mk3"
 
 #: data/base/messages/strings/names.txt:1039
 #: data/mp/messages/strings/names.txt:1052
@@ -7578,17 +7545,17 @@ msgstr "Obus HEAP pour Obusiers Mk3"
 #: data/base/messages/strings/names.txt:1077
 #: data/mp/messages/strings/names.txt:1090
 msgid "Howitzer Autoloader"
-msgstr "Chargeur Automatique pour Obusiers"
+msgstr "Chargeur Automatique pour Obusier"
 
 #: data/base/messages/strings/names.txt:1078
 #: data/mp/messages/strings/names.txt:1091
 msgid "Howitzer Autoloader Mk2"
-msgstr "Chargeur Automatique pour Obusiers Mk2"
+msgstr "Chargeur Automatique pour Obusier Mk2"
 
 #: data/base/messages/strings/names.txt:1079
 #: data/mp/messages/strings/names.txt:1092
 msgid "Howitzer Autoloader Mk3"
-msgstr "Chargeur Automatique pour Obusiers Mk3"
+msgstr "Chargeur Automatique pour Obusier Mk3"
 
 #: data/base/messages/strings/names.txt:1080
 msgid "Fast Loader"
@@ -7602,61 +7569,61 @@ msgstr "Laser - Flashlight"
 #: data/base/messages/strings/names.txt:1085
 #: data/mp/messages/strings/names.txt:1098
 msgid "Hardened MG Bullets"
-msgstr "Balles pour Mitrailleuses Renforcées"
+msgstr "Balles renforcées pour Mitrailleuse"
 
 #: data/base/messages/strings/names.txt:1086
 #: data/mp/messages/strings/names.txt:1099
 msgid "APDSB MG Bullets"
-msgstr "Balles APDS pour Mitrailleuses"
+msgstr "Balles APDS pour Mitrailleuse"
 
 #: data/base/messages/strings/names.txt:1087
 #: data/mp/messages/strings/names.txt:1100
 msgid "APDSB MG Bullets Mk2"
-msgstr "Balles APDS pour Mitrailleuses Mk2"
+msgstr "Balles APDS pour Mitrailleuse Mk2"
 
 #: data/base/messages/strings/names.txt:1088
 #: data/mp/messages/strings/names.txt:1101
 msgid "APDSB MG Bullets Mk3"
-msgstr "Balles APDS pour Mitrailleuses Mk3"
+msgstr "Balles APDS pour Mitrailleuse Mk3"
 
 #: data/base/messages/strings/names.txt:1089
 #: data/mp/messages/strings/names.txt:1102
 msgid "Tungsten-Tipped MG Bullets"
-msgstr "Balles à Pointe de Tungstène pour Mitrailleuses"
+msgstr "Balles à Pointe de Tungstène pour Mitrailleuse"
 
 #: data/base/messages/strings/names.txt:1090
 #: data/mp/messages/strings/names.txt:1103
 msgid "Tungsten-Tipped MG Bullets Mk2"
-msgstr "Balles à Pointe de Tungstène pour Mitrailleuses Mk2"
+msgstr "Balles à Pointe de Tungstène pour Mitrailleuse Mk2"
 
 #: data/base/messages/strings/names.txt:1091
 #: data/mp/messages/strings/names.txt:1104
 msgid "Tungsten-Tipped MG Bullets Mk3"
-msgstr "Balles à Pointe de Tungstène pour Mitrailleuses Mk3"
+msgstr "Balles à Pointe de Tungstène pour Mitrailleuse Mk3"
 
 #: data/base/messages/strings/names.txt:1092
 #: data/mp/messages/strings/names.txt:1105
 msgid "Depleted Uranium MG Bullets"
-msgstr "Balles pour Mitrailleuses en Uranium Appauvri"
+msgstr "Balles en Uranium Appauvri pour Mitrailleuse"
 
 #: data/base/messages/strings/names.txt:1093
 #: data/mp/messages/strings/names.txt:1106
 msgid "Depleted Uranium MG Bullets Mk2"
-msgstr "Balles pour Mitrailleuses en Uranium Appauvri Mk2"
+msgstr "Balles en Uranium Appauvri pour Mitrailleuse Mk2"
 
 #: data/base/messages/strings/names.txt:1095
 #: data/mp/messages/strings/names.txt:1108
 msgid "Chaingun Upgrade"
-msgstr "Chargeurs Automatiques pour Mitrailleuses"
+msgstr "Chargeur Automatique pour Mitrailleuse"
 
 #: data/base/messages/strings/names.txt:1096
 msgid "Rapid Fire Chaingun Upgrade"
-msgstr "Chargeurs à Cadence Rapide"
+msgstr "Chargeur à Cadence Rapide"
 
 #: data/base/messages/strings/names.txt:1097
 #: data/mp/messages/strings/names.txt:1110
 msgid "Hyper Fire Chaingun Upgrade"
-msgstr "Chargeurs à Cadence Hyper-Rapide"
+msgstr "Chargeur à Cadence Hyper-Rapide"
 
 #: data/base/messages/strings/names.txt:1103
 #: data/mp/messages/strings/names.txt:1116
@@ -7666,52 +7633,52 @@ msgstr "Missiles à Prédiction de Mouvement"
 #: data/base/messages/strings/names.txt:1104
 #: data/mp/messages/strings/names.txt:1117
 msgid "Search & Destroy Missiles"
-msgstr "Missiles à Tête Chercheuse"
+msgstr "Missile à Tête Chercheuse"
 
 #: data/base/messages/strings/names.txt:1105
 #: data/mp/messages/strings/names.txt:1118
 msgid "Advanced Missile Warhead"
-msgstr "Ogives Avancées pour Missiles"
+msgstr "Ogive Avancée pour Missile"
 
 #: data/base/messages/strings/names.txt:1106
 #: data/mp/messages/strings/names.txt:1119
 msgid "Advanced Missile Warhead Mk2"
-msgstr "Ogives Avancées pour Missiles Mk2"
+msgstr "Ogive Avancée pour Missile Mk2"
 
 #: data/base/messages/strings/names.txt:1107
 #: data/mp/messages/strings/names.txt:1120
 msgid "Advanced Missile Warhead Mk3"
-msgstr "Ogives Avancées pour Missiles Mk3"
+msgstr "Ogive Avancée pour Missile Mk3"
 
 #: data/base/messages/strings/names.txt:1108
 #: data/mp/messages/strings/names.txt:1121
 msgid "Advanced Missile Allocation System"
-msgstr "Système d'Allocation de Missiles Avancé"
+msgstr "Système d'Allocation de Missile Avancé"
 
 #: data/base/messages/strings/names.txt:1109
 #: data/mp/messages/strings/names.txt:1122
 msgid "Advanced Missile Allocation System Mk2"
-msgstr "Système d'Allocation de Missiles Avancé Mk2"
+msgstr "Système d'Allocation de Missile Avancé Mk2"
 
 #: data/base/messages/strings/names.txt:1110
 #: data/mp/messages/strings/names.txt:1123
 msgid "Advanced Missile Allocation System Mk3"
-msgstr "Système d'Allocation de Missiles Avancé Mk3"
+msgstr "Système d'Allocation de Missile Avancé Mk3"
 
 #: data/base/messages/strings/names.txt:1111
 #: data/mp/messages/strings/names.txt:1124
 msgid "HEAP Missile Warhead"
-msgstr "Ogive HEAP pour Missiles"
+msgstr "Ogive HEAP pour Missile"
 
 #: data/base/messages/strings/names.txt:1112
 #: data/mp/messages/strings/names.txt:1125
 msgid "HEAP Missile Warhead Mk2"
-msgstr "Ogive HEAP pour Missiles Mk2"
+msgstr "Ogive HEAP pour Missile Mk2"
 
 #: data/base/messages/strings/names.txt:1113
 #: data/mp/messages/strings/names.txt:1126
 msgid "HEAP Missile Warhead Mk3"
-msgstr "Ogive HEAP pour Missiles Mk3"
+msgstr "Ogive HEAP pour Missile Mk3"
 
 #: data/base/messages/strings/names.txt:1114
 #: data/mp/messages/strings/names.txt:1127
@@ -7721,67 +7688,67 @@ msgstr "Sytème de Chargement des Missiles Amélioré"
 #: data/base/messages/strings/names.txt:1125
 #: data/mp/messages/strings/names.txt:1138
 msgid "Mortar Targeting Computer"
-msgstr "Ordinateur Ballistique pour Mortiers"
+msgstr "Ordinateur Ballistique pour Mortier"
 
 #: data/base/messages/strings/names.txt:1126
 #: data/mp/messages/strings/names.txt:1139
 msgid "Thermal Imaging Mortar Shells"
-msgstr "Obus pour Morters à Visée Thermique"
+msgstr "Obus pour Mortier à Visée Thermique"
 
 #: data/base/messages/strings/names.txt:1127
 #: data/mp/messages/strings/names.txt:1140
 msgid "Target Acquisition Mortar Shells"
-msgstr "Obus pour Mortiers à Acquisition de Cible"
+msgstr "Obus pour Mortier à Acquisition de Cible"
 
 #: data/base/messages/strings/names.txt:1128
 #: data/mp/messages/strings/names.txt:1141
 msgid "HE Mortar Shells"
-msgstr "Obus HE pour Mortiers"
+msgstr "Obus HE pour Mortier"
 
 #: data/base/messages/strings/names.txt:1129
 #: data/mp/messages/strings/names.txt:1142
 msgid "HE Mortar Shells Mk2"
-msgstr "Obus HE pour Mortiers Mk2"
+msgstr "Obus HE pour Mortier Mk2"
 
 #: data/base/messages/strings/names.txt:1130
 #: data/mp/messages/strings/names.txt:1143
 msgid "HE Mortar Shells Mk3"
-msgstr "Obus HE pour Mortiers Mk3"
+msgstr "Obus HE pour Mortier Mk3"
 
 #: data/base/messages/strings/names.txt:1131
 #: data/mp/messages/strings/names.txt:1144
 msgid "HEAP Mortar Shells"
-msgstr "Obus HEAP pour Mortiers"
+msgstr "Obus HEAP pour Mortier"
 
 #: data/base/messages/strings/names.txt:1132
 #: data/mp/messages/strings/names.txt:1145
 msgid "HEAP Mortar Shells Mk2"
-msgstr "Obus HEAP pour Mortiers Mk2"
+msgstr "Obus HEAP pour Mortier Mk2"
 
 #: data/base/messages/strings/names.txt:1133
 #: data/mp/messages/strings/names.txt:1146
 msgid "HEAP Mortar Shells Mk3"
-msgstr "Obus HEAP pour Mortiers Mk3"
+msgstr "Obus HEAP pour Mortier Mk3"
 
 #: data/base/messages/strings/names.txt:1134
 #: data/mp/messages/strings/names.txt:1147
 msgid "Mortar Autoloader"
-msgstr "Chargeur Automatique pour Mortiers"
+msgstr "Chargeur Automatique pour Mortier"
 
 #: data/base/messages/strings/names.txt:1135
 #: data/mp/messages/strings/names.txt:1148
 msgid "Mortar Autoloader Mk2"
-msgstr "Chargeur Automatique pour Mortiers Mk2"
+msgstr "Chargeur Automatique pour Mortier Mk2"
 
 #: data/base/messages/strings/names.txt:1136
 #: data/mp/messages/strings/names.txt:1149
 msgid "Mortar Autoloader Mk3"
-msgstr "Chargeur Automatique pour Mortiers Mk3"
+msgstr "Chargeur Automatique pour Mortier Mk3"
 
 #: data/base/messages/strings/names.txt:1137
 #: data/mp/messages/strings/names.txt:1150
 msgid "Mortar Fast Loader"
-msgstr "Chargeur Rapide pour Mortiers"
+msgstr "Chargeur Rapide pour Mortier"
 
 #: data/base/messages/strings/names.txt:1139
 #: data/mp/messages/strings/names.txt:1152
@@ -7800,32 +7767,32 @@ msgstr "Ordinateur Ballistique"
 #: data/base/messages/strings/names.txt:1146
 #: data/mp/messages/strings/names.txt:1159
 msgid "Hardened Rail Dart"
-msgstr "Projectile pour Canon Électrique Renforcé"
+msgstr "Projectile renforcé pour Canon à aiguille"
 
 #: data/base/messages/strings/names.txt:1147
 #: data/mp/messages/strings/names.txt:1160
 msgid "Hardened Rail Dart Mk2"
-msgstr "Projectile pour Canon Électrique Renforcé Mk2"
+msgstr "Projectile renforcé pour Canon à aiguille Mk2"
 
 #: data/base/messages/strings/names.txt:1148
 #: data/mp/messages/strings/names.txt:1161
 msgid "Hardened Rail Dart Mk3"
-msgstr "Projectile pour Canon Électrique Renforcé Mk3"
+msgstr "Projectile renforcé pour Canon à aiguille Mk3"
 
 #: data/base/messages/strings/names.txt:1149
 #: data/mp/messages/strings/names.txt:1162
 msgid "Rail Gun ROF"
-msgstr "CDT des Canons Électriques améliorée"
+msgstr "Portée des Canons Électriques améliorée"
 
 #: data/base/messages/strings/names.txt:1150
 #: data/mp/messages/strings/names.txt:1163
 msgid "Rail Gun ROF Mk2"
-msgstr "CDT des Canons Électriques améliorée Mk2"
+msgstr "Portée des Canons Électriques améliorée Mk2"
 
 #: data/base/messages/strings/names.txt:1151
 #: data/mp/messages/strings/names.txt:1164
 msgid "Rail Gun ROF Mk3"
-msgstr "CDT des Canons Électriques améliorée Mk3"
+msgstr "Portée des Canons Électriques améliorée Mk3"
 
 #: data/base/messages/strings/names.txt:1153
 #: data/mp/messages/strings/names.txt:1166
@@ -7945,17 +7912,17 @@ msgstr "Ogive HESH pour Roquettes Mk3"
 #: data/base/messages/strings/names.txt:1176
 #: data/mp/messages/strings/names.txt:1189
 msgid "Rocket Autoloader"
-msgstr "Chargeur Automatique pour Roquettes"
+msgstr "Chargeur Automatique pour lance roquettes"
 
 #: data/base/messages/strings/names.txt:1177
 #: data/mp/messages/strings/names.txt:1190
 msgid "Rocket Autoloader Mk2"
-msgstr "Chargeur Automatique pour Roquettes Mk2"
+msgstr "Chargeur Automatique pour lance roquettes Mk2"
 
 #: data/base/messages/strings/names.txt:1178
 #: data/mp/messages/strings/names.txt:1191
 msgid "Rocket Autoloader Mk3"
-msgstr "Chargeur Automatique pour Roquettes Mk3"
+msgstr "Chargeur Automatique pour lance roquettes Mk3"
 
 #: data/base/messages/strings/names.txt:1180
 #: data/mp/messages/strings/names.txt:1193
@@ -7974,7 +7941,6 @@ msgstr "Roquettes Anti-Char"
 
 #: data/base/messages/strings/names.txt:1187
 #: data/mp/messages/strings/names.txt:1200
-#, fuzzy
 msgid "Machinegun Artifact"
 msgstr "Artefact pour Mitrailleuse"
 
@@ -8198,7 +8164,6 @@ msgstr "Emplacement pour Missiles Archangel"
 #: data/base/messages/strings/names.txt:1421
 #: data/mp/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:1434
-#, fuzzy
 msgid "Heavy Machinegun Cobra Half-tracks"
 msgstr "Mitrailleuse Lourde Cobra Semi-chenillée"
 
@@ -8229,7 +8194,7 @@ msgstr "Cyborg Flashlight"
 #: data/mp/messages/strings/names.txt:1452
 #: data/mp/messages/strings/names.txt:1605
 msgid "Needle Gunner"
-msgstr "Canonnier Aiguille"
+msgstr "à canon à aiguille"
 
 #: data/base/messages/strings/names.txt:1440
 #: data/mp/messages/strings/names.txt:1453
@@ -8246,12 +8211,12 @@ msgstr "Anti-Char Python Chenilles"
 #: data/base/messages/strings/names.txt:1459
 #: data/mp/messages/strings/names.txt:1472
 msgid "HPV Cannon Python Tracks"
-msgstr "Canon HPV Python chenillé"
+msgstr "Canon canon à hyper vélocité Python chenillé"
 
 #: data/base/messages/strings/names.txt:1460
 #: data/mp/messages/strings/names.txt:1473
 msgid "Cyclone AA Python Half-tracks"
-msgstr "Cyclone AA Pythn semi-chenillé"
+msgstr "DCA Cyclone Pythn semi-chenillé"
 
 #: data/base/messages/strings/names.txt:1461
 #: data/mp/messages/strings/names.txt:1474
@@ -8286,17 +8251,17 @@ msgstr "Silo de Missiles"
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:260
 msgid "Armored guard tower with Heavy Machinegun"
-msgstr "Tour de garde blindée équipée d'une Mitrailleuse Lourde"
+msgstr "Tour de défense à Mitrailleuse Lourde"
 
 #: data/base/messages/strings/resstrings.txt:240
 #: data/mp/messages/strings/resstrings.txt:266
 msgid "Armored guard tower with Flamer"
-msgstr "Tour de garde blindée équipée d'un Lance-Flammes"
+msgstr "Tour de défense à Lance-Flammes"
 
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:272
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "Tour de garde blidée équipée d'un Lance-Roquettes"
+msgstr "Tour de défense à Lance-Roquettes AC"
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:286
@@ -8616,7 +8581,7 @@ msgstr "Tourelle de Commandement Scorpion Chenilles"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1300
 msgid "mantis Command Turret Tracks"
-msgstr "Tourelle de Commandement Mante Chenilles"
+msgstr "Tourelle de Commandement Mante Religieuse Chenilles"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1301
 msgid "Cobra Lancer Tracks"
@@ -8624,11 +8589,11 @@ msgstr "Lance-roquettes Cobra chenillé"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1302
 msgid "Mantis Heavy Cannon Tracks"
-msgstr "Canon Lourd Mante Chenilles"
+msgstr "Canon Lourd Mante Religieuse Chenilles"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1303
 msgid "Mantis Tank Killer Tracks"
-msgstr "Anti-Char Mante Chenilles"
+msgstr "Anti-Char Mante Religieuse Chenilles"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1304
 msgid "Mantis Scourge Tracks"
@@ -8636,7 +8601,7 @@ msgstr ""
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1305
 msgid "Scorpion Heavy Machinegun Tracks"
-msgstr "Mitrailleuse Lourde Scorpion Chenilles"
+msgstr "Mitrailleuse Lourde Scorpion Chenillée"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1306
 msgid "Scorpion Repair Tracks"
@@ -8656,7 +8621,7 @@ msgstr "Camion Scorpion Autoporté"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1310
 msgid "Mantis Hover Truck"
-msgstr "Camion Mante Autoporté"
+msgstr "Camion Mante Religieuse Autoporté"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1311
 msgid "Cobra Bunker Buster Tracks"
@@ -8716,29 +8681,27 @@ msgstr "Laser Lourd Tigre Chenilles"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1325
 msgid "Wyvern Gauss Cannon Tracks"
-msgstr "Canon Gauss Vouivre Chenilles"
+msgstr "Canon Gauss Viverne Chenilles"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1326
 msgid "Wyvern Pulse Laser Tracks"
-msgstr "Laser à Impulsion Vouivre Chenilles"
+msgstr "Laser à Impulsion Viverne Chenilles"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1327
 msgid "Wyvern Heavy Laser Tracks"
-msgstr "Laser Lourd Vouivre Chenilles"
+msgstr "Laser Lourd Viverne Chenilles"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1328
-#, fuzzy
 msgid "Viper Machinegun Half-Track"
-msgstr "Mitrailleuses Jumelées Viper Semi-chenillées"
+msgstr "Mitrailleuse Viper Semi-chenillée"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1329
-#, fuzzy
 msgid "Viper Flamer Half-Track"
-msgstr "Tourelle de Réparation Mobile Viper Semi-chenillée"
+msgstr "lance-flammes Viper Semi-chenillée"
 
 #: data/mp/messages/resmessagesall.rmsg:186
 msgid "Cyborg Transport Available"
-msgstr "Transporteur pour Cyborgs Disponible"
+msgstr "Transporteur Cyborg Disponible"
 
 #: data/mp/messages/resmessagesall.rmsg:187
 msgid "Armed with Machinegun"
@@ -8823,7 +8786,7 @@ msgstr "Tire de fortes impulsions d'énergie laser"
 
 #: data/mp/messages/resmessagesall.rmsg:435
 msgid "Best Targets: Heavy cyborgs"
-msgstr "Cibles Conseillées: Cyborgs Lourds"
+msgstr "Fort contre: Cyborgs Lourds"
 
 #: data/mp/messages/resmessagesall.rmsg:447
 msgid "76mm twin-barrel automatic-cannon"
@@ -8865,7 +8828,7 @@ msgstr "Zone d'effet étroite"
 
 #: data/mp/messages/resmessagesall.rmsg:499
 msgid "Armored guard tower with Nexus Link"
-msgstr "Tour de garde fortifiée avec système Nexus"
+msgstr "Tour de défense à Lien Nexus"
 
 #: data/mp/messages/resmessagesall.rmsg:512
 #: data/mp/messages/resmessagesall.rmsg:525
@@ -8879,7 +8842,7 @@ msgstr "Canon tirant du Plasma"
 #: data/mp/messages/resmessagesall.rmsg:643
 #: data/mp/messages/resmessagesall.rmsg:656
 msgid "Best Targets : Vehicles"
-msgstr "Cibles Conseillées: Véhicules"
+msgstr "Fort contre: Véhicules"
 
 #: data/mp/messages/resmessagesall.rmsg:538
 msgid "Armored strongpoint with Heavy Laser"
@@ -8887,7 +8850,7 @@ msgstr "Mur armé d'un laser lourd"
 
 #: data/mp/messages/resmessagesall.rmsg:551
 msgid "Armored guard tower with EMP Cannon"
-msgstr "Tour de garde fortifiée avec canon EMP"
+msgstr "Tour de défense à canon EMP"
 
 #: data/mp/messages/resmessagesall.rmsg:564
 msgid "Armed with Cyborg Pulse Laser"
@@ -8970,7 +8933,7 @@ msgstr "Mortier EMP retranché"
 
 #: data/mp/messages/resmessagesall.rmsg:784
 msgid "Laser AA Gun Available"
-msgstr "Canon AA Laser Disponible"
+msgstr "Canon Laser de DCA Disponible"
 
 #: data/mp/messages/resmessagesall.rmsg:785
 msgid "Twin Medium Anti-Aircraft Laser"
@@ -8986,12 +8949,12 @@ msgstr "Point fortifié de DCA Cyclone disponible"
 
 #: data/mp/messages/resmessagesall.rmsg:824
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr "Mitrailleuse Anti-Aérienne quadritube de calibre 80mm"
+msgstr "Mitrailleuse Anti-Aérienne quadritubes de calibre 80mm"
 
 #: data/mp/messages/resmessagesall.rmsg:837
 #: data/mp/messages/resmessagesall.rmsg:850
 msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr "Mitrailleuse rotative double"
+msgstr "Mitrailleuses rotatives jumelées"
 
 #: data/mp/messages/resmessagesall.rmsg:849
 msgid "Hardpoint Twin Assault Gun Available"
@@ -9027,24 +8990,20 @@ msgid "Cyborg Transport"
 msgstr "Transport Cyborg"
 
 #: data/mp/messages/strings/names.txt:144
-#, fuzzy
 msgid "Light Cannon Viper Half-tracks"
 msgstr "Canon Léger Viper Semi-chenillé"
 
 #: data/mp/messages/strings/names.txt:175
-#, fuzzy
 msgid "Repair Turret Viper Half-track"
 msgstr "Tourelle de Réparation Mobile Viper Semi-chenillée"
 
 #: data/mp/messages/strings/names.txt:184
-#, fuzzy
 msgid "Bunker Buster Rockets Viper Wheels"
-msgstr "Roquettes Anti-Bunker Viper sur Roues"
+msgstr "Roquette Anti-Bunker Viper sur Roues"
 
 #: data/mp/messages/strings/names.txt:189
-#, fuzzy
 msgid "Sensor Turret Cobra Half-tracks"
-msgstr "Lance-Roquettes Cobra Autochenilles"
+msgstr "Tourelle de capteur Cobra semi-chenillé"
 
 #: data/mp/messages/strings/names.txt:372
 #: data/mp/messages/strings/names.txt:1702
@@ -9057,9 +9016,8 @@ msgid "Radar Detector Tower"
 msgstr "Tour de Contrôle Aérien"
 
 #: data/mp/messages/strings/names.txt:385
-#, fuzzy
 msgid "Nexus Link"
-msgstr "Tourelle de Lien Nexus"
+msgstr "Lien Nexus"
 
 #: data/mp/messages/strings/names.txt:387
 #: data/mp/messages/strings/names.txt:922
@@ -9070,16 +9028,16 @@ msgstr "Tourelle de Lien Nexus"
 #: data/mp/messages/strings/names.txt:732
 #, fuzzy
 msgid "Inferno Bunker"
-msgstr "Bunker Lance-Roquettes"
+msgstr "Bunker à lance-roquettes"
 
 #: data/mp/messages/strings/names.txt:416
 msgid "Tornado AA Site"
-msgstr "Site AA Tornade"
+msgstr "Site DCA Tornade"
 
 #: data/mp/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:723
 msgid "Cyclone AA Site"
-msgstr "Site AA Cyclone"
+msgstr "Site DCA Cyclone"
 
 #: data/mp/messages/strings/names.txt:473
 #: data/mp/messages/strings/names.txt:787
@@ -9109,41 +9067,36 @@ msgid "VTOL Cluster Bomb Bay"
 msgstr "Bombes à Fragmentation"
 
 #: data/mp/messages/strings/names.txt:589
-#, fuzzy
 msgid "Collective Corner Wall"
 msgstr "Mur en Béton du Collectif"
 
 #: data/mp/messages/strings/names.txt:611
-#, fuzzy
 msgid "Nexus Wall"
 msgstr "Mur Nexus"
 
 #: data/mp/messages/strings/names.txt:612
-#, fuzzy
 msgid "Nexus Corner Wall"
 msgstr "Angle en Béton Renforcé"
 
 #: data/mp/messages/strings/names.txt:718
-#, fuzzy
 msgid "Plascrete Mk3"
-msgstr "Béton Plastifié Mk2"
+msgstr "Béton Plastifié Mk3"
 
 #: data/mp/messages/strings/names.txt:719
 msgid "Plasteel"
-msgstr "Mur Plastique-Acier"
+msgstr "Béton Plastique-Acier"
 
 #: data/mp/messages/strings/names.txt:720
 msgid "Plasteel Mk2"
-msgstr "Mur Plastique-Acier"
+msgstr "Béton Plastique-Acier MK2"
 
 #: data/mp/messages/strings/names.txt:721
 msgid "Plasteel Mk3"
-msgstr "Mur Plastique-Acier"
+msgstr "Béton Plastique-Acier MK3"
 
 #: data/mp/messages/strings/names.txt:768
-#, fuzzy
 msgid "Flamer Tower"
-msgstr "Tour de Garde Incendiaire"
+msgstr "Tour lance-flammes"
 
 #: data/mp/messages/strings/names.txt:805
 #, fuzzy
@@ -9246,23 +9199,19 @@ msgid "Heavy Repair Turret"
 msgstr "Tourelle de Réparations Lourde"
 
 #: data/mp/messages/strings/names.txt:926
-#, fuzzy
 msgid "Nexus Intruder Program"
 msgstr "Ciber virus de NEXUS"
 
 #: data/mp/messages/strings/names.txt:927
 #: data/mp/messages/strings/names.txt:1685
-#, fuzzy
 msgid "Nexus Resistance Circuits"
-msgstr "Circuits Résisitifs"
+msgstr "Circuits Résisitifs NEXUS"
 
 #: data/mp/messages/strings/names.txt:928
-#, fuzzy
 msgid "Nexus Resistance Circuits Mk2"
 msgstr "Circuits Résistifs NEXUS Mk2"
 
 #: data/mp/messages/strings/names.txt:929
-#, fuzzy
 msgid "Nexus Resistance Circuits Mk3"
 msgstr "Circuits Résistifs NEXUS Mk3"
 
@@ -9274,7 +9223,7 @@ msgstr "Bombes à Fragmentation"
 #: data/mp/messages/strings/names.txt:1021
 #, fuzzy
 msgid "HE Bomb Shells"
-msgstr "Obus HE pour Mortiers"
+msgstr "Obus HE pour Mortier"
 
 #: data/mp/messages/strings/names.txt:1022
 #, fuzzy
@@ -9284,79 +9233,67 @@ msgstr "Ogive à charge creuse améliorée"
 #: data/mp/messages/strings/names.txt:1023
 #, fuzzy
 msgid "Advanced Bomb Warhead"
-msgstr "Ogives Avancées pour Missiles"
+msgstr "Ogive Avancée pour Missile"
 
 #: data/mp/messages/strings/names.txt:1093
-#, fuzzy
 msgid "Howitzer Fast Loader"
-msgstr "Chargeur Rapide pour Mortiers"
+msgstr "Chargeur Rapide d'obusier"
 
 #: data/mp/messages/strings/names.txt:1109
 msgid "Rapid Fire Chaingun"
 msgstr "Mitrailleuse à Cadence Rapide"
 
 #: data/mp/messages/strings/names.txt:1158
-#, fuzzy
 msgid "Rail Target Prediction Computer"
 msgstr "Ordinateur Ballistique"
 
 #: data/mp/messages/strings/names.txt:1382
-#, fuzzy
 msgid "Assault Gun Tower"
-msgstr "Tour de Garde à Fusil d'Assaut"
+msgstr "Tour canon d'Assaut"
 
 #: data/mp/messages/strings/names.txt:1436
 msgid "Repair Cobra Tracks"
 msgstr "Réparateur Cobra chenillé"
 
 #: data/mp/messages/strings/names.txt:1511
-#, fuzzy
 msgid "Bunker Buster Cobra Hover"
-msgstr "Roquettes Anti-Bunker"
+msgstr "Lance Roquette Anti-Bunker Cobra hovercraft"
 
 #: data/mp/messages/strings/names.txt:1513
-#, fuzzy
 msgid "Sensor Upgrade Mk2"
-msgstr "Amélioration pour Radar"
+msgstr "Amélioration de capteur MK2"
 
 #: data/mp/messages/strings/names.txt:1514
-#, fuzzy
 msgid "Sensor Upgrade Mk3"
-msgstr "Amélioration pour Radar"
+msgstr "Amélioration de capteur MK3"
 
 #: data/mp/messages/strings/names.txt:1515
-#, fuzzy
 msgid "Vapor Turbine Generator Mk2"
-msgstr "Turbine à Vapeur"
+msgstr "Générateur Turbine à vapeur MK2"
 
 #: data/mp/messages/strings/names.txt:1519
-#, fuzzy
 msgid "Gas Turbine Generator Mk2"
-msgstr "Turbine à Gaz"
+msgstr "Générateur Turbine à Gaz MK2"
 
 #: data/mp/messages/strings/names.txt:1520
-#, fuzzy
 msgid "Gas Turbine Generator Mk3"
-msgstr "Turbine à Gaz"
+msgstr "Générateur Turbine à Gaz MK3"
 
 #: data/mp/messages/strings/names.txt:1523
-#, fuzzy
 msgid "Vapor Turbine Generator Mk3"
-msgstr "Turbine à Vapeur"
+msgstr "Générateur Turbine à vapeur MK3"
 
 #: data/mp/messages/strings/names.txt:1608
-#, fuzzy
 msgid "Thermite Flamer Cyborg"
-msgstr "Lance-flammes Thermique"
+msgstr "Cyborg Lance-flammes Thermique"
 
 #: data/mp/messages/strings/names.txt:1611
 msgid "Thermite Flamer"
 msgstr "Lance-flammes Thermique"
 
 #: data/mp/messages/strings/names.txt:1613
-#, fuzzy
 msgid "Grenadier Cyborg"
-msgstr "Grenadier"
+msgstr "Cyborg Grenadier"
 
 #: data/mp/messages/strings/names.txt:1616
 msgid "Grenadier"
@@ -9391,9 +9328,8 @@ msgstr "Lance-flammes au Plasma"
 
 #: data/mp/messages/strings/names.txt:1638
 #: data/mp/messages/strings/names.txt:1639
-#, fuzzy
 msgid "Plasmite Flamer Bunker"
-msgstr "Lance-flammes au Plasma"
+msgstr "Bunker Lance-Plasma"
 
 #: data/mp/messages/strings/names.txt:1640
 #: data/mp/messages/strings/names.txt:1641
@@ -9405,7 +9341,7 @@ msgstr "Mortier Incendiaire"
 #: data/mp/messages/strings/names.txt:1643
 #, fuzzy
 msgid "Incendiary Mortar Pit"
-msgstr "Mortier Incendiaire"
+msgstr "Batterie de Mortier Incendiaire"
 
 #: data/mp/messages/strings/names.txt:1647
 msgid "Cyborg Superdense Thermal Armor"
@@ -9436,7 +9372,7 @@ msgstr "Blindage Thermique Superdense pour Véhicules Mk3"
 #: data/mp/messages/strings/names.txt:1659
 #: data/mp/messages/strings/names.txt:1660
 msgid "Super Heavy-Gunner"
-msgstr "Super Canonnier Lourd"
+msgstr "Super à canon Lourd"
 
 #: data/mp/messages/strings/names.txt:1662
 #: data/mp/messages/strings/names.txt:1663
@@ -9450,7 +9386,7 @@ msgstr "Super Cyborg à Auto-Canon"
 #: data/mp/messages/strings/names.txt:1669
 #: data/mp/messages/strings/names.txt:1670
 msgid "Super HPV Cyborg"
-msgstr "Super Cyborg à Canon HPV"
+msgstr "Super Cyborg à Canon à HV"
 
 #: data/mp/messages/strings/names.txt:1672
 #: data/mp/messages/strings/names.txt:1673
@@ -9465,9 +9401,8 @@ msgid "Heavy Laser"
 msgstr "Laser Lourd"
 
 #: data/mp/messages/strings/names.txt:1679
-#, fuzzy
 msgid "VTOL Heavy Laser"
-msgstr "Laser Lourd"
+msgstr "Laser Lourd VTOL"
 
 #: data/mp/messages/strings/names.txt:1680
 #: data/mp/messages/strings/names.txt:1681
@@ -9533,7 +9468,6 @@ msgstr "Super Cyborg à Missile Scourge"
 
 #: data/mp/messages/strings/names.txt:1733
 #: data/mp/messages/strings/names.txt:1734
-#, fuzzy
 msgid "Nexus Link Tower"
 msgstr "Tourelle de Lien Nexus"
 
@@ -9553,9 +9487,8 @@ msgid "Mass Driver Fortress"
 msgstr "Forteresse à Catapulte Électromagnétique"
 
 #: data/mp/messages/strings/names.txt:1744
-#, fuzzy
 msgid "Mass Driver"
-msgstr "Forteresse à Catapulte Électromagnétique"
+msgstr "Catapulte Électromagnétique"
 
 #: data/mp/messages/strings/names.txt:1747
 #: data/mp/messages/strings/names.txt:1748
@@ -9567,21 +9500,21 @@ msgstr "Forteresse à Canon"
 #: data/mp/messages/strings/names.txt:1752
 #: data/mp/messages/strings/names.txt:1753
 msgid "Heavy Rocket Bastion"
-msgstr "Bastion à Roquettes"
+msgstr "Bastion à Roquette"
 
 #: data/mp/messages/strings/names.txt:1755
 #: data/mp/messages/strings/names.txt:1756
 #: data/mp/messages/strings/names.txt:1757
 msgid "Missile Fortress"
-msgstr "Forteresse à Missiles"
+msgstr "Forteresse à Missile"
 
 #: data/mp/messages/strings/names.txt:1761
 msgid "Super Heavy Body - Wyvern"
-msgstr "Châssis Super Lourd- Wyverne"
+msgstr "Châssis Super Lourd - Viverne"
 
 #: data/mp/messages/strings/names.txt:1762
 msgid "Wyvern"
-msgstr "Wyverne"
+msgstr "Viverne"
 
 #: data/mp/messages/strings/names.txt:1764
 msgid "Super Heavy Body - Dragon"
@@ -9610,9 +9543,8 @@ msgstr "Mortier EMP"
 
 #: data/mp/messages/strings/names.txt:1774
 #: data/mp/messages/strings/names.txt:1776
-#, fuzzy
 msgid "EMP Mortar Pit"
-msgstr " Mortier Retranché"
+msgstr "Mortier Retranché EMP"
 
 #: data/mp/messages/strings/names.txt:1777
 #: data/mp/messages/strings/names.txt:1779
@@ -9621,29 +9553,28 @@ msgstr "Laser AA Stormbringer"
 
 #: data/mp/messages/strings/names.txt:1778
 #: data/mp/messages/strings/names.txt:1780
-#, fuzzy
 msgid "Stormbringer Emplacement"
-msgstr "Emplacement à Bombarde"
+msgstr "Emplacement Strombringer"
 
 #: data/mp/messages/strings/names.txt:1781
 #: data/mp/messages/strings/names.txt:1782
 msgid "Vindicator Hardpoint"
-msgstr "Point Défensif Vindicator"
+msgstr "Point fortifié à SAM Vindicator"
 
 #: data/mp/messages/strings/names.txt:1783
 #: data/mp/messages/strings/names.txt:1784
 msgid "Whirlwind Hardpoint"
-msgstr "Point Défensif Tourbillon"
+msgstr "Point fortifié à DCA Tourbillon"
 
 #: data/mp/messages/strings/names.txt:1785
 #: data/mp/messages/strings/names.txt:1786
 msgid "Cyclone Hardpoint"
-msgstr "Point Défensif Cyclone"
+msgstr "Point fortifié à DCA Cyclone"
 
 #: data/mp/messages/strings/names.txt:1787
 #: data/mp/messages/strings/names.txt:1788
 msgid "Avenger Hardpoint"
-msgstr "Point Défensif Avenger"
+msgstr "Point fortifié à DCA Avenger"
 
 #: data/mp/messages/strings/names.txt:1792
 #: data/mp/messages/strings/names.txt:1793
@@ -9652,37 +9583,34 @@ msgstr "Double Fusil d'Assaut"
 
 #: data/mp/messages/strings/names.txt:1794
 #: data/mp/messages/strings/names.txt:1795
-#, fuzzy
 msgid "Twin Assault Gun Hardpoint"
-msgstr "Point Défensif Fusil d'Assaut"
+msgstr "Point fortifié à canon d'assaut jumelés"
 
 #: data/mp/messages/strings/names.txt:1797
-#, fuzzy
 msgid "VTOL Plasmite Bomb Bay"
-msgstr "Bombes à Fragmentation"
+msgstr "Baie de largage de Bombes Plasmite pour VTOL"
 
 #: data/mp/messages/strings/names.txt:1798
 msgid "Plasmite Bomb"
 msgstr "Bombes au Plasma"
 
 #: data/mp/messages/strings/names.txt:1799
-#, fuzzy
 msgid "VTOL EMP Missile Launcher"
-msgstr "Lance-Missiles EMP"
+msgstr "Lance-Missile EMP VTOL"
 
 #: data/mp/messages/strings/names.txt:1800
 msgid "EMP Missile Launcher"
-msgstr "Lance-Missiles EMP"
+msgstr "Lance-Missile EMP"
 
 #: data/mp/messages/strings/names.txt:1804
 #: data/mp/messages/strings/names.txt:1805
 msgid "Command turret MkII"
-msgstr "Tourelle de Commandemet MkII"
+msgstr "Tourelle de Commandemet Mk2"
 
 #: data/mp/messages/strings/names.txt:1806
 #: data/mp/messages/strings/names.txt:1807
 msgid "Command turret MkIII"
-msgstr "Tourelle de Commandemet MkIII"
+msgstr "Tourelle de Commandemet Mk3"
 
 #: data/mp/messages/strings/names.txt:1808
 #: data/mp/messages/strings/names.txt:1809
@@ -9690,120 +9618,98 @@ msgid "Command turret MkIV"
 msgstr "Tourelle de Commandemet MkIV"
 
 #: data/mp/messages/strings/names.txt:1819
-#, fuzzy
 msgid "Heavy Repair Turret Cobra Hover"
-msgstr "Tourelle de Réparations Lourde"
+msgstr "Dépanneuse Lourde Cobra Aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1820
 #: data/mp/messages/strings/names.txt:1831
-#, fuzzy
 msgid "Heavy Machinegun Viper Wheels"
-msgstr "Mitrailleuse Viper sur Roues"
+msgstr "Mitrailleuse lourde Viper sur Roues"
 
 #: data/mp/messages/strings/names.txt:1822
-#, fuzzy
 msgid "Tank Killer Mantis Hover"
-msgstr "Point Défensif Roquettes Anti-Char"
+msgstr "Tueur de char Mantis aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1823
 #: data/mp/messages/strings/names.txt:1838
-#, fuzzy
 msgid "Heavy Machinegun Cobra Tracks"
 msgstr "Mitrailleuse Lourde Viper Chenillée"
 
 #: data/mp/messages/strings/names.txt:1824
-#, fuzzy
 msgid "Heavy Cannon Cobra Hover"
-msgstr "Canon Lourd"
+msgstr "Canon Lourd Cobra aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1832
-#, fuzzy
 msgid "Heavy Machinegun Cobra Wheels"
-msgstr "Mitrailleuse Viper sur Roues"
+msgstr "Mitrailleuse lourde Viper sur Roues"
 
 #: data/mp/messages/strings/names.txt:1833
-#, fuzzy
 msgid "Heavy Machinegun Cobra Hover"
-msgstr "Tour de Garde à Mitrailleuse Lourde"
+msgstr "Mitrailleuse Lourde Cobra sur roues"
 
 #: data/mp/messages/strings/names.txt:1835
-#, fuzzy
 msgid "Machinegun Viper Tracks"
 msgstr "Mitrailleuse Viper sur Roues"
 
 #: data/mp/messages/strings/names.txt:1836
-#, fuzzy
 msgid "Twin Machinegun Viper Tracks"
-msgstr "Tour de Garde à Mitrailleuse Double"
+msgstr "Mitrailleuses jumelées Viper chenillée"
 
 #: data/mp/messages/strings/names.txt:1840
-#, fuzzy
 msgid "Medium Cannon Cobra Hover"
-msgstr "Canon Moyen"
+msgstr "Canon Moyen Cobra aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1841
-#, fuzzy
 msgid "Medium Cannon Scorpion Hover"
-msgstr "Point Défensif Canon Moyen"
+msgstr "Canon Moyen Scorpion aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1842
-#, fuzzy
 msgid "Medium Cannon Scorpion Tracks"
-msgstr "Canon Moyen Viper Chenillé"
+msgstr "Canon Moyen Scorpion Chenillé"
 
 #: data/mp/messages/strings/names.txt:1843
-#, fuzzy
 msgid "Medium Cannon Python Hover"
-msgstr "Canon Moyen"
+msgstr "Canon Moyen Python aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1844
-#, fuzzy
 msgid "Heavy Cannon Python Hover"
-msgstr "Canon HPV Python chenillé"
+msgstr "Canon lourd Python aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1846
-#, fuzzy
 msgid "Rail Gun Mantis Tracks"
-msgstr "Canon d'assaut Python chenillé"
+msgstr "Canon électrique Mantis chenillé"
 
 #: data/mp/messages/strings/names.txt:1847
-#, fuzzy
 msgid "Pulse Laser Mantis Tracks"
-msgstr "Laser à Impulsion Tigre Chenilles"
+msgstr "Laser à Impulsion Mantis Chenilles"
 
 #: data/mp/messages/strings/names.txt:1848
-#, fuzzy
 msgid "Lancer Python Tracks"
-msgstr "Commandant Python chenillé"
+msgstr "Lanceur Python chenillé"
 
 #: data/mp/messages/strings/names.txt:1849
-#, fuzzy
 msgid "Lancer Mantis Tracks"
-msgstr "Lance-roquettes Cobra chenillé"
+msgstr "Lanceur Mantis chenillé"
 
 #: data/mp/messages/strings/names.txt:1850
-#, fuzzy
 msgid "Tank Killer Vengeance Tracks"
-msgstr "Anti-Char Python Chenilles"
+msgstr "Tueur de char Vengeance Chenillé"
 
 #: data/mp/messages/strings/names.txt:1855
-#, fuzzy
 msgid "Heavy Cannon Tiger Tracks"
-msgstr "Canon Lourd Cobra Chenillé"
+msgstr "Canon Lourd Tigre Chenillé"
 
 #: data/mp/messages/strings/names.txt:1856
-#, fuzzy
 msgid "Needle Gun Tiger Tracks"
-msgstr "Tour à Canon Aiguille"
+msgstr "Canon à aiguille Tigre chenillé"
 
 #: data/mp/messages/strings/names.txt:1857
 msgid "Needle Gun Retribution Tracks"
-msgstr ""
+msgstr "Canon à aiguille Retribution chenillé"
 
 #: data/mp/messages/strings/names.txt:1858
-#, fuzzy
 msgid "Needle Gun Vengeance Tracks"
-msgstr "Canonnier Aiguille"
+msgstr "Canon à aiguille Vengeance chenillé"
 
 #: data/mp/messages/strings/names.txt:1859
 msgid "Vengeance Tracks Rail Gun"
@@ -9825,236 +9731,198 @@ msgstr "Bombes à Fragmentation"
 #: data/mp/messages/strings/names.txt:1865
 #, fuzzy
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "Roquette Anti-Bunker"
+msgstr "Roquette Anti-Bunker VTOL"
 
 #: data/mp/messages/strings/names.txt:1866
 #, fuzzy
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "Bombes à Fragmentation"
+msgstr "Bombes à Fragmentation Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1867
 #, fuzzy
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "Roquette Anti-Bunker"
+msgstr "Roquette Anti-Bunker Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1870
-#, fuzzy
 msgid "VTOL Lancer Bug VTOL"
-msgstr "Lance-Roquettes VTOL"
+msgstr "Lanceur VTOL"
 
 #: data/mp/messages/strings/names.txt:1871
-#, fuzzy
 msgid "VTOL HPV Cannon Bug VTOL"
-msgstr "Canon VTOL"
+msgstr "Canon à HV VTOL"
 
 #: data/mp/messages/strings/names.txt:1872
-#, fuzzy
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr "VTOL Scorpion armé d'un HPV"
+msgstr "Lanceur Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1873
-#, fuzzy
 msgid "VTOL HPV Cannon Scorpion VTOL"
-msgstr "Point Défensif Canon HPV"
+msgstr "Canon à HV Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1874
-#, fuzzy
 msgid "VTOL Lancer Mantis VTOL"
-msgstr "Lance-Roquettes VTOL"
+msgstr "Lanceur Mantis VTOL"
 
 #: data/mp/messages/strings/names.txt:1875
 msgid "VTOL HPV Cannon Mantis VTOL"
-msgstr ""
+msgstr "Canon à HV Mantis VTOL"
 
 #: data/mp/messages/strings/names.txt:1879
 #, fuzzy
 msgid "Repair Turret Mantis Tracks"
-msgstr "Réparateur Cobra chenillé"
+msgstr "Dépanneuse Mantis chenillée"
 
 #: data/mp/messages/strings/names.txt:1881
-#, fuzzy
 msgid "Lancer Scorpion Tracks"
-msgstr "Lance-Roquettes Scorpion chenillé"
+msgstr "Lanceur Scorpion chenillé"
 
 #: data/mp/messages/strings/names.txt:1882
-#, fuzzy
 msgid "Heavy Cannon Scorpion Tracks"
-msgstr "Canon Lourd Cobra Chenillé"
+msgstr "Canon Lourd Scorpion Chenillé"
 
 #: data/mp/messages/strings/names.txt:1883
-#, fuzzy
 msgid "Lancer Scorpion VTOL"
-msgstr "VTOL Scorpion armé d'un HPV"
+msgstr "Lanceur Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1884
-#, fuzzy
 msgid "Bunker Buster Scorpion VTOL"
-msgstr "Roquette Anti-Bunker"
+msgstr "Roquette Anti-Bunker Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1886
-#, fuzzy
 msgid "Command Turret Viper Tracks"
-msgstr "Tourelle de Commandement Vipère Chenilles"
+msgstr "Tourelle de Commandement Vipère Chenillée"
 
 #: data/mp/messages/strings/names.txt:1887
-#, fuzzy
 msgid "Command Turret Cobra Tracks"
-msgstr "Tourelle de Commandement Vipère Chenilles"
+msgstr "Tourelle de Commandement Vipère Chenillée"
 
 #: data/mp/messages/strings/names.txt:1888
-#, fuzzy
 msgid "Command Turret Scorpion Tracks"
-msgstr "Tourelle de Commandement Vipère Chenilles"
+msgstr "Tourelle de Commandement Scorpion Chenillée"
 
 #: data/mp/messages/strings/names.txt:1889
-#, fuzzy
 msgid "Command Turret Mantis Tracks"
-msgstr "Tourelle de Commandement Vipère Chenilles"
+msgstr "Tourelle de Commandement Mantis Chenillée"
 
 #: data/mp/messages/strings/names.txt:1891
-#, fuzzy
 msgid "Lancer Cobra Tracks"
-msgstr "Lance-Roquettes Cobra Autochenilles"
+msgstr "Lanceur Cobra chenillé"
 
 #: data/mp/messages/strings/names.txt:1892
-#, fuzzy
 msgid "Heavy Cannon Mantis Tracks"
-msgstr "Canon Lourd Cobra Chenillé"
+msgstr "Canon Lourd Mantis Chenillé"
 
 #: data/mp/messages/strings/names.txt:1893
-#, fuzzy
 msgid "Tank Killer Mantis Tracks"
-msgstr "Anti-Char Python Chenilles"
+msgstr "Tueur de char Mantis Chenillé"
 
 #: data/mp/messages/strings/names.txt:1894
-#, fuzzy
 msgid "Scourge Mantis Tracks"
-msgstr "Tour à Missiles Scourge"
+msgstr "Lance missile Scourge Mantis chenillé"
 
 #: data/mp/messages/strings/names.txt:1895
 #, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Mitrailleuse Lourde Viper Chenillée"
+msgstr "Mitrailleuse Lourde Scorpion Chenillée"
 
 #: data/mp/messages/strings/names.txt:1897
-#, fuzzy
 msgid "Repair Scorpion Tracks"
-msgstr "Réparateur Cobra chenillé"
+msgstr "Dépanneuse Scorpion chenillée"
 
 #: data/mp/messages/strings/names.txt:1898
-#, fuzzy
 msgid "Heavy Repair Scorpion Hover"
-msgstr "Réparateur Lourd Scorpion Autoporté"
+msgstr "Dépanneuse Lourde Scorpion aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1901
-#, fuzzy
 msgid "Truck Cobra Hover"
-msgstr "Camion Cobra Autoporté"
+msgstr "Camion Cobra aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1902
-#, fuzzy
 msgid "Truck Scorpion Hover"
-msgstr "Camion Scorpion Autoporté"
+msgstr "Camion Scorpion aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1903
-#, fuzzy
 msgid "Truck Mantis Hover"
-msgstr "Camion Mante Autoporté"
+msgstr "Camion Mantis aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1906
-#, fuzzy
 msgid "Bunker Buster Cobra Tracks"
-msgstr "Roquettes Anti-Bunker"
+msgstr "Lance roquette Anti-Bunker Cobra chenillé"
 
 #: data/mp/messages/strings/names.txt:1907
-#, fuzzy
 msgid "Bunker Buster Scorpion Tracks"
-msgstr "Roquettes Anti-Bunker"
+msgstr "Lance roquette Anti-Bunker Scorpion chenillé"
 
 #: data/mp/messages/strings/names.txt:1908
-#, fuzzy
 msgid "Bunker Buster Mantis Tracks"
-msgstr "Roquettes Anti-Bunker"
+msgstr "Lance roquette Anti-Bunker Mantis chenillé"
 
 #: data/mp/messages/strings/names.txt:1910
-#, fuzzy
 msgid "Lancer Viper Tracks"
-msgstr "Lance-roquettes Cobra chenillé"
+msgstr "Lanceur Viper chenillé"
 
 #: data/mp/messages/strings/names.txt:1912
 #, fuzzy
 msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr "Lance-Roquettes Cobra Autochenilles"
+msgstr "Mini lance-Roquettes Cobra Semi-chenillé"
 
 #: data/mp/messages/strings/names.txt:1913
 #, fuzzy
 msgid "Mini-Rocket Cobra Tracks"
-msgstr "Mini-Roquettes"
+msgstr "Mini lance-Roquettes Cobra sur roues"
 
 #: data/mp/messages/strings/names.txt:1914
 #, fuzzy
 msgid "Mini-Rocket Artillery Cobra Tracks"
-msgstr "Batterie de Mini-Roquettes"
+msgstr "Lanceur de Mini-Roquettes Cobra chenillé"
 
 #: data/mp/messages/strings/names.txt:1916
-#, fuzzy
 msgid "Inferno Cobra Half-Tracks"
-msgstr "Lance-Roquettes Cobra Autochenilles"
+msgstr "Inferno Cobra semi-chenillé"
 
 #: data/mp/messages/strings/names.txt:1917
-#, fuzzy
 msgid "HPV Cannon Python Hover"
-msgstr "Canon HPV Python chenillé"
+msgstr "Canon à HV Python aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1921
-#, fuzzy
 msgid "Scourge Python Tracks"
-msgstr "Commandant Python chenillé"
+msgstr "Lance missile Python chenillé"
 
 #: data/mp/messages/strings/names.txt:1922
-#, fuzzy
 msgid "Gauss Cannon Python Tracks"
-msgstr "Canon HPV Python chenillé"
+msgstr "Canon gauss Python chenillé"
 
 #: data/mp/messages/strings/names.txt:1923
-#, fuzzy
 msgid "Pulse Laser Python Tracks"
-msgstr "Laser à Impulsion Tigre Chenilles"
+msgstr "Laser à Impulsion Python Chenillé"
 
 #: data/mp/messages/strings/names.txt:1924
-#, fuzzy
 msgid "Pulse Laser Tiger Tracks"
-msgstr "Laser à Impulsion Tigre Chenilles"
+msgstr "Laser à Impulsion Tigre Chenillé"
 
 #: data/mp/messages/strings/names.txt:1925
-#, fuzzy
 msgid "Heavy Laser Tiger Tracks"
-msgstr "Laser Lourd Tigre Chenilles"
+msgstr "Laser Lourd Tigre Chenillé"
 
 #: data/mp/messages/strings/names.txt:1926
-#, fuzzy
 msgid "Gauss Cannon Wyvern Tracks"
-msgstr "Canon Gauss Python Chenilles"
+msgstr "Canon Gauss Wyvern Chenillé"
 
 #: data/mp/messages/strings/names.txt:1927
-#, fuzzy
 msgid "Pulse Laser Wyvern Tracks"
-msgstr "Laser à Impulsion Tigre Chenilles"
+msgstr "Laser à Impulsion Wyvern Chenillé"
 
 #: data/mp/messages/strings/names.txt:1928
-#, fuzzy
 msgid "Heavy Laser Wyvern Tracks"
-msgstr "Laser Lourd Tigre Chenilles"
+msgstr "Laser Lourd Wyvern Chenillé"
 
 #: data/mp/messages/strings/names.txt:1930
-#, fuzzy
 msgid "Machinegun Viper Half-Tracks"
-msgstr "Mitrailleuses Jumelées Viper Semi-chenillées"
+msgstr "Mitrailleuse Viper Semi-chenillée"
 
 #: data/mp/messages/strings/names.txt:1931
-#, fuzzy
 msgid "Flamer Viper Half-Tracks"
-msgstr "Tourelle de Réparation Mobile Viper Semi-chenillée"
+msgstr "Lance-flammes Viper Semi-chenillé"
 
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:98
@@ -10617,14 +10485,12 @@ msgid "Hero"
 msgstr "Héros"
 
 #: src/frontend.c:246
-#, fuzzy
 msgid "Single Player"
-msgstr "Campagne (Un Joueur)"
+msgstr "Un Joueur"
 
 #: src/frontend.c:247
-#, fuzzy
 msgid "Multi Player"
-msgstr "Partie en Réseau"
+msgstr "Multi-joueurs"
 
 #: src/frontend.c:248
 #: src/frontend.c:306
@@ -10637,9 +10503,8 @@ msgid "Options"
 msgstr "Options"
 
 #: src/frontend.c:250
-#, fuzzy
 msgid "View Intro"
-msgstr "Voir le Véhicule de Construction suivant"
+msgstr "Voir Intro"
 
 #: src/frontend.c:252
 msgid "Quit Game"
@@ -10676,9 +10541,8 @@ msgid "New Campaign"
 msgstr "Nouvelle Campagne"
 
 #: src/frontend.c:363
-#, fuzzy
 msgid "Start Skirmish Game"
-msgstr "Démarrer le Serveur"
+msgstr "Démarrer escarmouche"
 
 #: src/frontend.c:364
 #: src/ingameop.c:257
@@ -10732,9 +10596,8 @@ msgid "Audio Options"
 msgstr "Options Audio"
 
 #: src/frontend.c:552
-#, fuzzy
 msgid "Mouse Options"
-msgstr "Options du Jeu"
+msgstr "Options souris"
 
 #: src/frontend.c:553
 msgid "Key Mappings"
@@ -10827,7 +10690,7 @@ msgstr "Sous-titres"
 
 #: src/frontend.c:700
 msgid "Shadows"
-msgstr "Ombrage"
+msgstr "Ombres"
 
 #: src/frontend.c:839
 #: src/ingameop.c:155
@@ -10885,16 +10748,15 @@ msgstr ""
 #: src/frontend.c:1134
 #, fuzzy
 msgid "Switch Mouse Buttons"
-msgstr "Options du Jeu"
+msgstr "Options souris"
 
 #: src/frontend.c:1144
 msgid "* May negatively affect performance"
 msgstr ""
 
 #: src/frontend.c:1191
-#, fuzzy
 msgid "Hardware"
-msgstr "Mur de Béton"
+msgstr "Matériel"
 
 #: src/frontend.c:1196
 msgid "Software (coloured)"
@@ -11043,9 +10905,8 @@ msgid "Feat"
 msgstr "Fonction"
 
 #: src/hci.c:4073
-#, fuzzy
 msgid "Place Features on map"
-msgstr "Placer des Bâtiments sur la carte"
+msgstr "Placer les éléments sur la carte"
 
 #: src/hci.c:4084
 msgid "Pause or unpause the game"
@@ -11132,9 +10993,8 @@ msgid "Current Objective"
 msgstr "Objectif Actuel"
 
 #: src/intelmap.c:1487
-#, fuzzy
 msgid "New Intelligence Report"
-msgstr "Réception du Rapport de Conaissances"
+msgstr "Nouveau rapport de transmission"
 
 #: src/intorder.c:179
 #: src/keymap.c:388
@@ -11254,7 +11114,6 @@ msgid "Lets us see what you see!"
 msgstr "Voyons voir ce que tu vois !"
 
 #: src/keybind.c:200
-#, fuzzy
 msgid "Fine, weapon & sensor display is off!"
 msgstr "C'est bon, je désactive l'affichage des senseurs !"
 
@@ -12202,7 +12061,7 @@ msgstr "Joueurs"
 #: src/multijoin.c:98
 #: src/multijoin.c:99
 msgid "Players Still Joining"
-msgstr "Les joueurs sont encore en cours de connexion"
+msgstr "Les joueurs sont en cours de connexion"
 
 #: src/multijoin.c:221
 #, c-format
@@ -12256,16 +12115,14 @@ msgid "Kills"
 msgstr "Meurtres"
 
 #: src/multimenu.c:765
-#, fuzzy
 msgid "Units"
-msgstr "Unité"
+msgstr "Unités"
 
 #: src/multimenu.c:770
 msgid "Ping"
 msgstr "Ping"
 
 #: src/multimenu.c:774
-#, fuzzy
 msgid "Structs"
 msgstr "Structure"
 
@@ -12279,7 +12136,7 @@ msgstr "Envoyer un Rapport de Visibilité"
 
 #: src/multimenu.c:1135
 msgid "Leak Technology Documents"
-msgstr "Divulguer des Documents Technologiques"
+msgstr "Transmettre des technologies"
 
 #: src/multimenu.c:1142
 msgid "Hand Over Selected Units"
@@ -12357,7 +12214,7 @@ msgstr "Bâtiments Ennemis : %u"
 #: src/scores.c:103
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr "Unités Assemblées : %u"
+msgstr "Unités produites : %u"
 
 #: src/scores.c:104
 #, c-format
@@ -12380,7 +12237,7 @@ msgid "Rookie: %u"
 msgstr "Bleus : %u"
 
 #: src/scores.c:109
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
 msgstr "Deuxième Classe : %u"
@@ -12512,7 +12369,7 @@ msgid "%s - Connected %u of %u"
 msgstr "%s - %u connexions établies sur %u"
 
 #: src/structure.c:6034
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Endommagé à %3.0f%%"
 
@@ -12523,7 +12380,6 @@ msgid "%s - Electronically Damaged"
 msgstr "%s - Électroniquement endommagé"
 
 #: src/structure.c:6430
-#, fuzzy
 msgid "Electronic Reward - Visibility Report"
 msgstr "Récompense électronique - Rapport de visibilité"
 
@@ -12544,19 +12400,17 @@ msgid "Factory Reward - Nothing"
 msgstr "Récompense d'usine - Rien"
 
 #: src/structure.c:6555
-#, fuzzy
 msgid "Repair Facility Award - Repair"
-msgstr "Atelier de réparation d'attribution - Réparation"
+msgstr "Récompense Atelier de réparation - Réparation"
 
 #: src/structure.c:6562
-#, fuzzy
 msgid "Repair Facility Award - Nothing"
-msgstr "Atelier de réparation d'attribution - Rien"
+msgstr "Récompense Atelier de réparation - Rien"
 
 #: src/transporter.c:397
 #: src/transporter.c:451
 msgid "Launch Transport"
-msgstr "Lancer le Transporteur"
+msgstr "Envoyer le Transporteur"
 
 #: src/transporter.c:1747
 msgid "Reinforcements landing"
@@ -12590,82 +12444,62 @@ msgstr " - Compilation %s"
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
 
-#, fuzzy
-#~ msgid "Cursor Mode"
-#~ msgstr "Module Énergétique"
-
-#~ msgid "Game"
-#~ msgstr "Jeu"
-
-#~ msgid "Mayhem"
-#~ msgstr "Chaos"
-
-#~ msgid "Skirmish"
-#~ msgstr "Escarmouche"
-
-#, fuzzy
-#~ msgid "Cluster Bombs Bug VTOL"
-#~ msgstr "Bombes à Fragmentation"
-
-#~ msgid "Energy bars display toggled"
-#~ msgstr "Affichage de la résistance modifié"
-
 #~ msgid "Viper Light Cannon Wheels"
-#~ msgstr "Canon Léger Viper sur Roues"
+#~ msgstr "Canon Léger Vipère sur Roues"
 
 #~ msgid "Viper Flamer Wheels"
-#~ msgstr "Lance-Flamme Viper sur Roues"
+#~ msgstr "Lance-Flamme Vipère sur Roues"
 
 #~ msgid "Viper Sensor Wheels"
-#~ msgstr "Radar Viper sur Roues"
+#~ msgstr "Radar Vipère sur Roues"
 
 #~ msgid "Viper Light Cannon Tracks"
-#~ msgstr "Canon Léger Viper Chenillé"
+#~ msgstr "Canon Léger Vipère Chenillé"
 
 #~ msgid "Cobra Heavy Machinegun Half-track"
-#~ msgstr "Mitrailleuse Lourde Cobra Semi-chenillée"
+#~ msgstr "Auto mitrailleuse Lourde Cobra Semi-chenillée"
 
 #~ msgid "Cobra Mortar Half-track"
-#~ msgstr "Mortier Viper Semi-chenillé"
+#~ msgstr "Mortier Cobra Semi-chenillé"
 
 #~ msgid "Cobra Light Cannon Tracks"
 #~ msgstr "Canon Léger Cobra Chenillé"
 
 #~ msgid "Viper Medium Cannon Tracks"
-#~ msgstr "Canon Moyen Viper Chenillé"
+#~ msgstr "Canon Moyen Vipère Chenillé"
 
 #~ msgid "Viper Repair Wheels"
-#~ msgstr "Tourelle de Réparation Mobile Viper sur Roues"
+#~ msgstr "Tourelle de Réparation Mobile Vipère sur Roues"
 
 #~ msgid "Viper Repair Half-track"
-#~ msgstr "Tourelle de Réparation Mobile Viper Semi-chenillée"
+#~ msgstr "Tourelle de Réparation Mobile Vipère Semi-chenillée"
 
 #~ msgid "Viper Machine Gun Wheels"
-#~ msgstr "Mitrailleuse Viper sur Roues"
+#~ msgstr "Auto mitrailleuse Vipère"
 
 #~ msgid "Viper Twin Machinegun Wheels"
-#~ msgstr "Mitrailleuses Jumelées Viper sur Roues"
+#~ msgstr "Mitrailleuses Jumelées Vipère sur Roues"
 
 #~ msgid "Viper Twin Machinegun Half-track"
-#~ msgstr "Mitrailleuses Jumelées Viper Semi-chenillées"
+#~ msgstr "Mitrailleuses Jumelées Vipère Semi-chenillées"
 
 #~ msgid "Viper Heavy Machinegun Half-track"
-#~ msgstr "Mitrailleuse Lourde Viper Semi-chenillée"
+#~ msgstr "Mitrailleuse Lourde Vipère Semi-chenillée"
 
 #~ msgid "Viper Heavy Machinegun Tracks"
-#~ msgstr "Mitrailleuse Lourde Viper Chenillée"
+#~ msgstr "Mitrailleuse Lourde Vipère Chenillée"
 
 #~ msgid "Viper Lancer Wheels"
-#~ msgstr "Lanceur Viper sur Roues"
+#~ msgstr "Lanceur Vipère sur Roues"
 
 #~ msgid "Viper Mini-Pod Rockets Wheels"
-#~ msgstr "Mini-Bloc de Roquettes Viper sur Roues"
+#~ msgstr "Mini-Bloc de Roquettes Vipère sur Roues"
 
 #~ msgid "Viper Mini-Rocket Artillery Wheels"
-#~ msgstr "Batterie de Mini-Roquettes Viper sur Roues"
+#~ msgstr "Batterie de Mini-Roquettes Vipère sur Roues"
 
 #~ msgid "Viper Bunker Buster Rockets Wheels"
-#~ msgstr "Roquettes Anti-Bunker Viper sur Roues"
+#~ msgstr "Roquettes Anti-Bunker Vipère sur Roues"
 
 #~ msgid "Cobra Heavy Cannon Tracks"
 #~ msgstr "Canon Lourd Cobra Chenillé"
@@ -12712,69 +12546,71 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Commander Python Tracks"
 #~ msgstr "Commandant Python chenillé"
 
-#, fuzzy
 #~ msgid "Mini-Pod Artillery"
 #~ msgstr "Batterie de Mini-Roquettes"
 
-#, fuzzy
 #~ msgid "Mini-Pod Battery"
 #~ msgstr "Batterie de Mini-Roquettes"
 
-#, fuzzy
 #~ msgid "Stabilized Mini-Pods"
 #~ msgstr "Mini-Roquettes Stabilisées"
 
-#, fuzzy
 #~ msgid "Stabilized Mini-Pods Mk2"
 #~ msgstr "Mini-Roquettes Stabilisées Mk2"
 
-#, fuzzy
 #~ msgid "HE Mini-Pods"
-#~ msgstr "Mini-Roquettes"
+#~ msgstr "Mini-Roquettes HE"
 
-#, fuzzy
 #~ msgid "HE Mini-Pods Mk2"
 #~ msgstr "Mini-Roquettes HE Mk2"
 
-#, fuzzy
 #~ msgid "HE Mini-Pods Mk3"
 #~ msgstr "Mini-Roquettes HE Mk3"
 
-#, fuzzy
 #~ msgid "HEAP Mini-Pods"
 #~ msgstr "Mini-Roquettes HEAP"
 
-#, fuzzy
 #~ msgid "HEAP Mini-Pods Mk2"
 #~ msgstr "Mini-Roquettes HEAP Mk2"
 
-#, fuzzy
 #~ msgid "HEAP Mini-Pods Mk3"
 #~ msgstr "Mini-Roquettes HEAP Mk3"
 
-#, fuzzy
 #~ msgid "Fast Fire Mini-Pods"
 #~ msgstr "Mini-Roquettes à Tir Rapide"
 
-#, fuzzy
 #~ msgid "Fast Fire Mini-Pods Mk2"
 #~ msgstr "Mini-Roquettes à Tir Rapide Mk2"
 
-#, fuzzy
 #~ msgid "Fast Fire Mini-Pods Mk3"
 #~ msgstr "Mini-Roquettes à Tir Rapide Mk3"
 
-#, fuzzy
 #~ msgid "Rapid Fire Mini-Pods"
 #~ msgstr "Mini-Roquettes à Tir Super Rapide"
 
-#, fuzzy
 #~ msgid "Rapid Fire Mini-Pods Mk2"
 #~ msgstr "Mini-Roquettes à Tir Super Rapide Mk2"
 
-#, fuzzy
 #~ msgid "Rapid Fire Mini-Pods Mk3"
 #~ msgstr "Mini-Roquettes à Tir Super Rapide Mk3"
+
+#~ msgid "Cluster Bombs Bug VTOL"
+#~ msgstr "Bombes à Fragmentation VTOL"
+
+#~ msgid "Cursor Mode"
+#~ msgstr "Type de Curseur"
+
+#~ msgid "Energy bars display toggled"
+#~ msgstr "Affichage de la résistance modifié"
+
+#~ msgid "Game"
+#~ msgstr "Jeu"
+
+#~ msgid "Mayhem"
+#~ msgstr "Chaos"
+
+#~ msgid "Skirmish"
+#~ msgstr "Escarmouche"
 
 #~ msgid "The host has left the game!"
 #~ msgstr "L'hôte à quitté la partie !"
@@ -13032,7 +12868,7 @@ msgstr "Version %s%s%s%s"
 #~ msgstr "Canon Lourd Python Chenilles"
 
 #~ msgid "Mantis Tracks Pulse Laser"
-#~ msgstr "Laser à Impulsion Mante Chenilles"
+#~ msgstr "Laser à Impulsion Mante Religieuse Chenilles"
 
 #~ msgid "Vengeance Tracks Tank Killer"
 #~ msgstr "Anti-char Vengeance Chenilles"
@@ -13044,7 +12880,7 @@ msgstr "Version %s%s%s%s"
 #~ msgstr "Réparateur Cobra Chenilles"
 
 #~ msgid "Mantis Repair Tracks"
-#~ msgstr "Réparateur Mante Chenilles"
+#~ msgstr "Réparateur Mante Religieuse Chenilles"
 
 #~ msgid "Single Player Campaign"
 #~ msgstr "Campagne (Un Joueur)"
@@ -13074,13 +12910,13 @@ msgstr "Version %s%s%s%s"
 #~ msgstr "Lance-roquettes Python chenillé"
 
 #~ msgid "Mantis Tracks Lancer"
-#~ msgstr "Lance-roquettes Mante chenillé"
+#~ msgstr "Lance-roquettes Mante Religieuse chenillé"
 
 #~ msgid "Mantis Lancer VTOL"
 #~ msgstr "VTOL Mantis armé d'un lance-roquettes"
 
 #~ msgid "Mantis HPV VTOL"
-#~ msgstr "VTOL Mantis armé d'un HPV"
+#~ msgstr "VTOL Mantis armé d'un canon à hyper vélocité"
 
 #~ msgid "%s - Damage %u%%"
 #~ msgstr "%s - Endommagé à %u%%"
@@ -13100,6 +12936,5 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Improvement in laser emission density "
 #~ msgstr "Amélioration de la densité des émissions laser "
 
-#, fuzzy
 #~ msgid "Python Tank Killer Tracks"
-#~ msgstr "Commandant Python Chenillé"
+#~ msgstr "Chenilles de tueur de char Python"
