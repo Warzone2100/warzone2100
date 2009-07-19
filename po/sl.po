@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-06-20 21:04+0200\n"
+"POT-Creation-Date: 2009-07-19 17:21+0200\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -10023,12 +10023,12 @@ msgstr "Igralec %u ima napačno verzijo igre. Auto brcam."
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr "Igralec %u ima napačno geslo. Auto brcam."
 
-#: lib/netplay/netplay.c:1901
+#: lib/netplay/netplay.c:1918
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Ni bilo mogoče razrešiti imena glavnega strežnika (%s)!"
 
-#: lib/netplay/netplay.c:1911
+#: lib/netplay/netplay.c:1928
 #, fuzzy
 msgid "Could not communicate with lobby server!  Is TCP port 9990 open?"
 msgstr "Ni bilo mogoče komunicirati z vežnim strežnikom! Je TCP prehod %u odprt za izhodni promet?"
@@ -10467,8 +10467,8 @@ msgstr "UČNE VAJE"
 #: src/frontend.c:713
 #: src/frontend.c:852
 #: src/frontend.c:955
-#: src/frontend.c:1145
-#: src/frontend.c:1286
+#: src/frontend.c:1147
+#: src/frontend.c:1288
 msgctxt "menu"
 msgid "Return"
 msgstr "Nazaj"
@@ -10492,8 +10492,8 @@ msgstr "EN IGRALEC"
 
 #: src/frontend.c:450
 #: src/ingameop.c:394
-#: src/mission.c:2833
-#: src/mission.c:2938
+#: src/mission.c:2839
+#: src/mission.c:2944
 msgid "Load Saved Game"
 msgstr "Naloži shranjeno igro"
 
@@ -10511,8 +10511,8 @@ msgstr "Pridružite se igri"
 
 #: src/frontend.c:548
 #: src/frontend.c:855
-#: src/frontend.c:1289
-#: src/frontend.c:1309
+#: src/frontend.c:1291
+#: src/frontend.c:1311
 msgid "GAME OPTIONS"
 msgstr "MOŽNOSTI IGRE"
 
@@ -10541,10 +10541,31 @@ msgid "Key Mappings"
 msgstr "Vnosi tipk"
 
 #: src/frontend.c:628
+msgid "Video Playback"
+msgstr "Igranje posnetkov"
+
+#: src/frontend.c:632
+#: src/frontend.c:806
+msgid "1X"
+msgstr "1X"
+
+#: src/frontend.c:636
+#: src/frontend.c:796
+msgid "2X"
+msgstr "2X"
+
+#: src/frontend.c:640
+#: src/frontend.c:801
+#: src/frontend.c:923
+#: src/frontend.c:977
+msgid "Fullscreen"
+msgstr "Cel zaslon"
+
+#: src/frontend.c:650
 msgid "Screen Shake"
 msgstr "Tresenje zaslona"
 
-#: src/frontend.c:631
+#: src/frontend.c:653
 #: src/frontend.c:691
 #: src/frontend.c:704
 #: src/frontend.c:737
@@ -10555,14 +10576,16 @@ msgstr "Tresenje zaslona"
 #: src/frontend.c:1067
 #: src/frontend.c:1101
 #: src/frontend.c:1113
+#: src/frontend.c:1125
 #: src/frontend.c:1137
-#: src/frontend.c:1167
-#: src/frontend.c:1180
-#: src/frontend.c:1208
+#: src/frontend.c:1169
+#: src/frontend.c:1182
+#: src/frontend.c:1196
+#: src/frontend.c:1210
 msgid "On"
 msgstr "Vklopljeno"
 
-#: src/frontend.c:635
+#: src/frontend.c:657
 #: src/frontend.c:687
 #: src/frontend.c:696
 #: src/frontend.c:708
@@ -10574,49 +10597,30 @@ msgstr "Vklopljeno"
 #: src/frontend.c:1062
 #: src/frontend.c:1105
 #: src/frontend.c:1117
+#: src/frontend.c:1129
 #: src/frontend.c:1141
-#: src/frontend.c:1162
-#: src/frontend.c:1175
-#: src/frontend.c:1203
+#: src/frontend.c:1164
+#: src/frontend.c:1177
+#: src/frontend.c:1191
+#: src/frontend.c:1205
 msgid "Off"
 msgstr "Izklopljeno"
 
-#: src/frontend.c:640
+#: src/frontend.c:662
 #: src/multiint.c:1140
 msgid "Fog"
 msgstr "Megla"
 
-#: src/frontend.c:643
+#: src/frontend.c:665
 #: src/frontend.c:755
 msgid "Mist"
 msgstr "Meglica"
 
-#: src/frontend.c:647
+#: src/frontend.c:669
 #: src/frontend.c:748
 #: src/multiint.c:1142
 msgid "Fog Of War"
 msgstr "Megla vojne"
-
-#: src/frontend.c:652
-msgid "Video Playback"
-msgstr "Igranje posnetkov"
-
-#: src/frontend.c:656
-#: src/frontend.c:806
-msgid "1X"
-msgstr "1X"
-
-#: src/frontend.c:660
-#: src/frontend.c:796
-msgid "2X"
-msgstr "2X"
-
-#: src/frontend.c:664
-#: src/frontend.c:801
-#: src/frontend.c:923
-#: src/frontend.c:977
-msgid "Fullscreen"
-msgstr "Cel zaslon"
 
 #: src/frontend.c:676
 #: src/frontend.c:680
@@ -10668,7 +10672,8 @@ msgid "* Takes effect on game restart"
 msgstr "* Začne delovati po ponovnem zagonu"
 
 #: src/frontend.c:1098
-msgid "Reverse Mouse"
+#, fuzzy
+msgid "Reverse Rotation"
 msgstr "Obrnjena miška"
 
 #: src/frontend.c:1109
@@ -10676,61 +10681,53 @@ msgid "Trap Cursor"
 msgstr "Ujemi kazalec"
 
 #: src/frontend.c:1121
-msgid "Cursor Mode"
-msgstr "Kurzorski način"
-
-#: src/frontend.c:1125
-msgid "Software (colored)"
-msgstr "Programska oprema (barvno)"
-
-#: src/frontend.c:1129
-#: src/frontend.c:1189
-msgid "Hardware"
-msgstr "Strojna oprema"
+msgid "Colored Cursors *"
+msgstr ""
 
 #: src/frontend.c:1134
-msgid "Right-click Orders"
-msgstr "Desno-klikni ukazi"
+#, fuzzy
+msgid "Switch Mouse Buttons"
+msgstr "Možnosti miške"
 
-#: src/frontend.c:1194
-msgid "Software (coloured)"
-msgstr "Programska oprema (barvno)"
+#: src/frontend.c:1144
+msgid "* May negatively affect performance"
+msgstr ""
 
-#: src/frontend.c:1241
-#: src/frontend.c:1307
+#: src/frontend.c:1243
+#: src/frontend.c:1309
 msgid "Difficulty"
 msgstr "Težavnost"
 
-#: src/frontend.c:1245
-#: src/frontend.c:1315
-#: src/frontend.c:1347
+#: src/frontend.c:1247
+#: src/frontend.c:1317
+#: src/frontend.c:1349
 msgid "Easy"
 msgstr "Lahka"
 
-#: src/frontend.c:1248
-#: src/frontend.c:1318
-#: src/frontend.c:1339
+#: src/frontend.c:1250
+#: src/frontend.c:1320
+#: src/frontend.c:1341
 msgid "Normal"
 msgstr "Običajna"
 
-#: src/frontend.c:1252
-#: src/frontend.c:1321
-#: src/frontend.c:1343
+#: src/frontend.c:1254
+#: src/frontend.c:1323
+#: src/frontend.c:1345
 msgid "Hard"
 msgstr "Težka"
 
-#: src/frontend.c:1257
-#: src/frontend.c:1308
+#: src/frontend.c:1259
+#: src/frontend.c:1310
 msgid "Scroll Speed"
 msgstr "Hitrost pomikanja"
 
-#: src/frontend.c:1271
-#: src/frontend.c:1305
+#: src/frontend.c:1273
+#: src/frontend.c:1307
 msgid "Language"
 msgstr "Jezik"
 
-#: src/frontend.c:1283
-#: src/frontend.c:1306
+#: src/frontend.c:1285
+#: src/frontend.c:1308
 msgid "Unit Colour"
 msgstr "Barva enot"
 
@@ -10757,7 +10754,7 @@ msgstr "MAPA SHRANJENA!"
 #: src/hci.c:1702
 #: src/loop.c:515
 #: src/loop.c:531
-#: src/mission.c:2904
+#: src/mission.c:2910
 msgid "GAME SAVED :"
 msgstr "IGRA SHRANJENA:"
 
@@ -10892,8 +10889,8 @@ msgstr "Nadaljuj igro"
 
 #: src/ingameop.c:259
 #: src/ingameop.c:398
-#: src/mission.c:2823
-#: src/mission.c:2941
+#: src/mission.c:2829
+#: src/mission.c:2947
 msgid "Save Game"
 msgstr "Shrani igro"
 
@@ -11218,67 +11215,67 @@ msgstr "Vsi sovražniki uničeni z goljufanjem!"
 msgid "Destroying selected droids and structures!"
 msgstr "Uničevanje izbranih droidov in zgradb!"
 
-#: src/keybind.c:2298
+#: src/keybind.c:2293
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Centriran na GS igralca, smer SEVER"
 
-#: src/keybind.c:2310
+#: src/keybind.c:2305
 msgid "Unable to locate HQ!"
 msgstr "Ni mogoče najti GS!"
 
-#: src/keybind.c:2326
+#: src/keybind.c:2321
 msgid "Formation speed limiting OFF"
 msgstr "Omejevanje hitrosti reda IZKLOPLJENO"
 
-#: src/keybind.c:2330
+#: src/keybind.c:2325
 msgid "Formation speed limiting ON"
 msgstr "Omejevanje hitrosti reda VKLOPLJENO"
 
-#: src/keybind.c:2460
-#: src/keybind.c:2501
-#: src/keybind.c:2523
+#: src/keybind.c:2455
+#: src/keybind.c:2496
+#: src/keybind.c:2518
 msgid "Game Speed Reset"
 msgstr "Hitrost igre ponastavljena"
 
-#: src/keybind.c:2464
+#: src/keybind.c:2459
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Hitrost igre povečana na %3.1f"
 
-#: src/keybind.c:2505
+#: src/keybind.c:2500
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Hitrost igre zmanjšana na %3.1f"
 
-#: src/keybind.c:2535
+#: src/keybind.c:2530
 msgid "Build menu will reopen"
 msgstr "Gradbeni meni se bo ponovno odprl"
 
-#: src/keybind.c:2539
+#: src/keybind.c:2534
 msgid "Build menu will not reopen"
 msgstr "Gradbeni meni se ne bo ponovno odprl"
 
-#: src/keybind.c:2551
+#: src/keybind.c:2546
 msgid "Radar showing friend-foe colors"
 msgstr "Radar kaže barve prijateja-sovražnika"
 
-#: src/keybind.c:2555
+#: src/keybind.c:2550
 msgid "Radar showing player colors"
 msgstr "Radar kaže barve igralca"
 
-#: src/keybind.c:2572
+#: src/keybind.c:2567
 msgid "Radar showing only objects"
 msgstr "Radar kaže samo predmete"
 
-#: src/keybind.c:2575
+#: src/keybind.c:2570
 msgid "Radar blending terrain and height"
 msgstr "Radar združuje teren in višino "
 
-#: src/keybind.c:2578
+#: src/keybind.c:2573
 msgid "Radar showing terrain"
 msgstr "Radar kaže teren"
 
-#: src/keybind.c:2581
+#: src/keybind.c:2576
 msgid "Radar showing height"
 msgstr "Radar kaže višino"
 
@@ -11672,37 +11669,37 @@ msgstr "Nastavi ponovno odpiranje gradbenega menija"
 msgid "Could not save game!"
 msgstr "Ni bilo mogoče shraniti igre!"
 
-#: src/mission.c:2371
+#: src/mission.c:2377
 msgid "Load Transport"
 msgstr "Naloži prevoz"
 
-#: src/mission.c:2770
+#: src/mission.c:2776
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "CILJ DOSEŽEN z goljufanjem!"
 
-#: src/mission.c:2770
+#: src/mission.c:2776
 msgid "OBJECTIVE ACHIEVED"
 msgstr "CILJ DOSEŽEN"
 
-#: src/mission.c:2776
+#: src/mission.c:2782
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "CILJ SPODLETEL--in vi ste goljufali!"
 
-#: src/mission.c:2776
+#: src/mission.c:2782
 msgid "OBJECTIVE FAILED"
 msgstr "CILJ SPODLETEL"
 
-#: src/mission.c:2802
-#: src/mission.c:2839
-#: src/mission.c:2957
+#: src/mission.c:2808
+#: src/mission.c:2845
+#: src/mission.c:2963
 msgid "Quit To Main Menu"
 msgstr "Končaj v glavni meni"
 
-#: src/mission.c:2810
+#: src/mission.c:2816
 msgid "Continue Game"
 msgstr "Nadaljuj igro"
 
-#: src/move.c:2959
+#: src/move.c:2961
 #: src/multigifts.c:326
 #, fuzzy, c-format
 msgid "You found %u power in an oil drum"
@@ -12363,6 +12360,21 @@ msgstr "- Zgrajen %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#~ msgid "Cursor Mode"
+#~ msgstr "Kurzorski način"
+
+#~ msgid "Software (colored)"
+#~ msgstr "Programska oprema (barvno)"
+
+#~ msgid "Hardware"
+#~ msgstr "Strojna oprema"
+
+#~ msgid "Right-click Orders"
+#~ msgstr "Desno-klikni ukazi"
+
+#~ msgid "Software (coloured)"
+#~ msgstr "Programska oprema (barvno)"
 
 #~ msgid "Build Progress"
 #~ msgstr "Potek gradnje"
