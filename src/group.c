@@ -208,8 +208,8 @@ void grpLeave(DROID_GROUP *psGroup, DROID *psDroid)
 {
 	DROID	*psPrev, *psCurr;
 
-	ASSERT_OR_RETURN(false, grpInitialized, "Group code not initialized yet");
-	ASSERT_OR_RETURN(false, psGroup != NULL,
+	ASSERT_OR_RETURN(, grpInitialized, "Group code not initialized yet");
+	ASSERT_OR_RETURN(, psGroup != NULL,
 		"grpLeave: invalid group pointer" );
 
 	if (psDroid != NULL && psDroid->psGroup != psGroup)
