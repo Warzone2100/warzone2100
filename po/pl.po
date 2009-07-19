@@ -10771,7 +10771,7 @@ msgstr "Pełny ekran"
 
 #: src/frontend.c:649
 msgid "Screen Shake"
-msgstr "Wstrząsy przy wybuchach"
+msgstr "Wstrząsy ekranu"
 
 #: src/frontend.c:652
 #: src/frontend.c:690
