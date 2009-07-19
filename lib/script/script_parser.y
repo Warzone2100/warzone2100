@@ -744,8 +744,8 @@ static CODE_ERROR scriptCodeFunction(FUNC_SYMBOL	*psFSymbol,		// The function be
 			type2 = psPBlock->aParams[i];
 			if (!interpCheckEquiv(type1, type2))
 			{
-				debug(LOG_ERROR, "scriptCodeFunction: Type mismatch for paramter %d (%d/%d)", i, psFSymbol->aParams[i], psPBlock->aParams[i]);
-				snprintf(aErrorString, sizeof(aErrorString), "Type mismatch for paramter %d", i);
+				debug(LOG_ERROR, "scriptCodeFunction: Type mismatch for parameter %d (%d/%d)", i, psFSymbol->aParams[i], psPBlock->aParams[i]);
+				snprintf(aErrorString, sizeof(aErrorString), "Type mismatch for parameter %d", i);
 				scr_error("%s", aErrorString);
 				typeError = true;
 			}
@@ -831,7 +831,7 @@ static UDWORD checkFuncParamTypes(EVENT_SYMBOL		*psFSymbol,		// The function bei
 		//{
 			if (!interpCheckEquiv(psFSymbol->aParams[i], psPBlock->aParams[i]))
 			{
-				debug(LOG_ERROR, "checkFuncParamTypes: Type mismatch for paramter %d ('1' based) in Function '%s' (provided type: %d, expected: %d)", (i+1), psFSymbol->pIdent, psPBlock->aParams[i], psFSymbol->aParams[i]);
+				debug(LOG_ERROR, "checkFuncParamTypes: Type mismatch for parameter %d ('1' based) in Function '%s' (provided type: %d, expected: %d)", (i+1), psFSymbol->pIdent, psPBlock->aParams[i], psFSymbol->aParams[i]);
 				scr_error("Parameter type mismatch");
 				return i+1;
 			}
