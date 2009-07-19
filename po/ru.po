@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-07-19 17:34+0200\n"
-"PO-Revision-Date: 2009-03-30 19:26+0600\n"
+"POT-Creation-Date: 2009-07-19 21:30+0200\n"
+"PO-Revision-Date: 2009-06-27 14:27+0600\n"
 "Last-Translator: Макс <Raptor9000@rambler.ru>\n"
 "Language-Team: Russian <>\n"
 "MIME-Version: 1.0\n"
@@ -8992,12 +8992,11 @@ msgstr "Башня датчика на полугусеничном ходу"
 #: data/mp/messages/strings/names.txt:372
 #: data/mp/messages/strings/names.txt:1702
 msgid "Radar Detector"
-msgstr ""
+msgstr "Обнаружитель радаров."
 
 #: data/mp/messages/strings/names.txt:380
-#, fuzzy
 msgid "Radar Detector Tower"
-msgstr "Башня ВВС"
+msgstr "Башня с датчиком"
 
 #: data/mp/messages/strings/names.txt:385
 msgid "Nexus Link"
@@ -9043,9 +9042,8 @@ msgid "Laser Satellite Command Post"
 msgstr "Командный Центр Лазернми спутниками"
 
 #: data/mp/messages/strings/names.txt:582
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay"
-msgstr "Кластерные бомбы"
+msgstr "ВВС Кластерные бомбы"
 
 #: data/mp/messages/strings/names.txt:589
 msgid "Collective Corner Wall"
@@ -9080,92 +9078,74 @@ msgid "Flamer Tower"
 msgstr "Башня с огнеметом"
 
 #: data/mp/messages/strings/names.txt:805
-#, fuzzy
 msgid "Automated Manufacturing"
-msgstr "Автоматизированная перезарядка ВВС"
+msgstr "Автоматизированное производство"
 
 #: data/mp/messages/strings/names.txt:806
-#, fuzzy
 msgid "Automated Manufacturing Mk2"
-msgstr "Автоперевооружение ВВС МК2"
+msgstr "Автоматизированное производство МК2"
 
 #: data/mp/messages/strings/names.txt:807
-#, fuzzy
 msgid "Automated Manufacturing Mk3"
-msgstr "Автоперевооружение ВВС МК3"
+msgstr "Автоматизированное производство МК3"
 
 #: data/mp/messages/strings/names.txt:808
-#, fuzzy
 msgid "Robotic Manufacturing"
-msgstr "Производство"
+msgstr "роботизированное производство"
 
 #: data/mp/messages/strings/names.txt:809
-#, fuzzy
 msgid "Robotic Manufacturing Mk2"
-msgstr "Роботоперевооружение ВВС МК2"
+msgstr "роботизированное производство МК2"
 
 #: data/mp/messages/strings/names.txt:810
-#, fuzzy
 msgid "Robotic Manufacturing Mk3"
-msgstr "Роботоперевооружение ВВС МК3"
+msgstr "роботизированное производство МК3"
 
 #: data/mp/messages/strings/names.txt:811
-#, fuzzy
 msgid "Advanced Manufacturing"
-msgstr "Продвинутые методы ведения войны"
+msgstr "Продвинутое производство"
 
 #: data/mp/messages/strings/names.txt:812
-#, fuzzy
 msgid "Advanced Manufacturing Mk2"
 msgstr "продвинутое производство МК2"
 
 #: data/mp/messages/strings/names.txt:813
-#, fuzzy
 msgid "Self-Replicating Manufacturing"
 msgstr "Саморепликация завода киборгов"
 
 #: data/mp/messages/strings/names.txt:814
-#, fuzzy
 msgid "Advanced Manufacturing Mk3"
-msgstr "продвинутое производство МК3"
+msgstr "Продвинутое производство МК3"
 
 #: data/mp/messages/strings/names.txt:833
-#, fuzzy
 msgid "Automated Repair Facility Mk2"
 msgstr "Автоматизированный ремонтный блок"
 
 #: data/mp/messages/strings/names.txt:834
-#, fuzzy
 msgid "Automated Repair Facility Mk3"
 msgstr "Автоматизированный ремонтный блок"
 
 #: data/mp/messages/strings/names.txt:835
-#, fuzzy
 msgid "Robotic Repair Facility"
 msgstr "Роботизированная мастерская"
 
 #: data/mp/messages/strings/names.txt:836
-#, fuzzy
 msgid "Robotic Repair Facility Mk2"
 msgstr "Роботизированная мастерская МК2"
 
 #: data/mp/messages/strings/names.txt:837
-#, fuzzy
 msgid "Advanced Repair Facility"
 msgstr "Продвинутая ремонтная мастерская"
 
 #: data/mp/messages/strings/names.txt:838
-#, fuzzy
 msgid "Robotic Repair Facility Mk3"
 msgstr "Роботизированная мастерская МК3"
 
 #: data/mp/messages/strings/names.txt:839
-#, fuzzy
 msgid "Advanced Repair Facility Mk2"
 msgstr "Продвинутая ремонтная мастерская МК2"
 
 #: data/mp/messages/strings/names.txt:840
-#, fuzzy
 msgid "Advanced Repair Facility Mk3"
 msgstr "Продвинутая ремонтная мастерская МК3"
 
@@ -9197,24 +9177,20 @@ msgid "Nexus Resistance Circuits Mk3"
 msgstr "Программы сопротивления НЕКСУС МК3"
 
 #: data/mp/messages/strings/names.txt:1016
-#, fuzzy
 msgid "Cluster Bomb Bay"
 msgstr "Отсек для кластерных бомб"
 
 #: data/mp/messages/strings/names.txt:1021
-#, fuzzy
 msgid "HE Bomb Shells"
-msgstr "Высокомощные снаряды миномета"
+msgstr "Высокомощные снаряды"
 
 #: data/mp/messages/strings/names.txt:1022
-#, fuzzy
 msgid "Improved Bomb Warhead"
-msgstr "Улучшение состава заряда боеголовки"
+msgstr "Улучшенная бомбовая боеголовка"
 
 #: data/mp/messages/strings/names.txt:1023
-#, fuzzy
 msgid "Advanced Bomb Warhead"
-msgstr "Улучшенная боеголовка"
+msgstr "Продвинутая бомбовая боеголовка"
 
 #: data/mp/messages/strings/names.txt:1093
 msgid "Howitzer Fast Loader"
@@ -9701,24 +9677,20 @@ msgid "Vengeance Tracks Guass Scourge"
 msgstr "Месть Гусеницы Бич Гаусса"
 
 #: data/mp/messages/strings/names.txt:1864
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "Кластерные бомбы"
+msgstr "ВВС Кластерные бомбы ЖУК"
 
 #: data/mp/messages/strings/names.txt:1865
-#, fuzzy
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "ВВП Антибункер Жук "
+msgstr "ВВС Антибункер Жук "
 
 #: data/mp/messages/strings/names.txt:1866
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
 msgstr "Кластерный бомбардировщик Скорпион ВВС"
 
 #: data/mp/messages/strings/names.txt:1867
-#, fuzzy
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "ВВП Антибункер Скорпион"
+msgstr "ВВС Антибункер Скорпион"
 
 #: data/mp/messages/strings/names.txt:1870
 msgid "VTOL Lancer Bug VTOL"
@@ -9745,7 +9717,6 @@ msgid "VTOL HPV Cannon Mantis VTOL"
 msgstr "ВВП ГС Пушка Мантис"
 
 #: data/mp/messages/strings/names.txt:1879
-#, fuzzy
 msgid "Repair Turret Mantis Tracks"
 msgstr "Ремонтная Мантис на гусеничном ходу"
 
@@ -9798,7 +9769,6 @@ msgid "Scourge Mantis Tracks"
 msgstr "Бич Мантис Гусеницы"
 
 #: data/mp/messages/strings/names.txt:1895
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
 msgstr "Тяжелый пулемёт Скорпион на гусеничном ходу"
 
@@ -9899,175 +9869,181 @@ msgid "Flamer Viper Half-Tracks"
 msgstr "Огнемёт Гадюка на полугусеничном ходу"
 
 #: lib/framework/i18n.c:45
-#: lib/framework/i18n.c:96
+#: lib/framework/i18n.c:98
 msgid "System locale"
 msgstr "Системная локаль"
 
 #: lib/framework/i18n.c:47
-#: lib/framework/i18n.c:98
+#: lib/framework/i18n.c:100
 msgid "Czech"
 msgstr "Чешский"
 
 #: lib/framework/i18n.c:48
-#: lib/framework/i18n.c:99
+#: lib/framework/i18n.c:101
 msgid "Danish"
 msgstr "Датский"
 
 #: lib/framework/i18n.c:49
-#: lib/framework/i18n.c:100
+#: lib/framework/i18n.c:102
 msgid "German"
 msgstr "Немецкий"
 
 #: lib/framework/i18n.c:50
-#: lib/framework/i18n.c:101
+#: lib/framework/i18n.c:103
 msgid "English"
 msgstr "Английский"
 
 #: lib/framework/i18n.c:51
-#: lib/framework/i18n.c:102
+#: lib/framework/i18n.c:104
 msgid "English (United Kingdom)"
 msgstr "Английский (Великобритания)"
 
 #: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:103
+#: lib/framework/i18n.c:105
 msgid "Spanish"
 msgstr "Испанский"
 
 #: lib/framework/i18n.c:53
-#: lib/framework/i18n.c:104
+#: lib/framework/i18n.c:106
 msgid "Basque"
 msgstr "Баскский"
 
 #: lib/framework/i18n.c:54
-#: lib/framework/i18n.c:105
+#: lib/framework/i18n.c:107
 msgid "Finnish"
 msgstr "Финский"
 
 #: lib/framework/i18n.c:55
-#: lib/framework/i18n.c:106
+#: lib/framework/i18n.c:108
 msgid "French"
 msgstr "Французский"
 
 #: lib/framework/i18n.c:63
-#: lib/framework/i18n.c:114
+#: lib/framework/i18n.c:116
 msgid "Frisian"
 msgstr "Фризский"
 
 #: lib/framework/i18n.c:64
-#: lib/framework/i18n.c:115
+#: lib/framework/i18n.c:117
 msgid "Irish"
 msgstr "Ирладский"
 
 #: lib/framework/i18n.c:65
-#: lib/framework/i18n.c:116
+#: lib/framework/i18n.c:118
 msgid "Italian"
 msgstr "Итальянский"
 
 #: lib/framework/i18n.c:66
-#: lib/framework/i18n.c:118
+#: lib/framework/i18n.c:119
+msgid "Latin"
+msgstr "Латинский"
+
+#: lib/framework/i18n.c:67
+#: lib/framework/i18n.c:120
 msgid "Lithuanian"
 msgstr "Литовский"
 
-#: lib/framework/i18n.c:67
-#: lib/framework/i18n.c:119
+#: lib/framework/i18n.c:68
+#: lib/framework/i18n.c:121
 msgid "Latvian"
 msgstr "Латвийский"
 
-#: lib/framework/i18n.c:68
-#: lib/framework/i18n.c:120
+#: lib/framework/i18n.c:69
+#: lib/framework/i18n.c:122
 msgid "Norwegian"
 msgstr "Норвежский"
 
-#: lib/framework/i18n.c:69
-#: lib/framework/i18n.c:121
+#: lib/framework/i18n.c:70
+#: lib/framework/i18n.c:123
 msgid "Norwegian (Nynorsk)"
 msgstr "Норвежский (нюнорск)"
 
-#: lib/framework/i18n.c:70
-#: lib/framework/i18n.c:122
+#: lib/framework/i18n.c:71
+#: lib/framework/i18n.c:124
 msgid "Dutch"
 msgstr "Голландский"
 
-#: lib/framework/i18n.c:71
-#: lib/framework/i18n.c:123
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:125
 msgid "Polish"
 msgstr "Польский"
 
-#: lib/framework/i18n.c:72
-#: lib/framework/i18n.c:124
+#: lib/framework/i18n.c:73
+#: lib/framework/i18n.c:126
 msgid "Brazilian Portuguese"
 msgstr "Бразильский Португальский"
 
-#: lib/framework/i18n.c:73
-#: lib/framework/i18n.c:125
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:127
 msgid "Portuegese"
 msgstr "Португальский"
 
-#: lib/framework/i18n.c:74
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:75
+#: lib/framework/i18n.c:128
 msgid "Romanian"
 msgstr "Румынский"
 
-#: lib/framework/i18n.c:75
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:76
+#: lib/framework/i18n.c:129
 msgid "Russian"
 msgstr "Русский"
 
-#: lib/framework/i18n.c:76
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:77
+#: lib/framework/i18n.c:130
 msgid "Slovenian"
 msgstr "Словенский"
 
-#: lib/framework/i18n.c:78
-#: lib/framework/i18n.c:80
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:79
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:131
 msgid "Swedish (Sweden)"
 msgstr "Шведский"
 
-#: lib/framework/i18n.c:82
-#: lib/framework/i18n.c:130
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:132
 msgid "Swedish"
 msgstr "Шведский"
 
-#: lib/framework/i18n.c:83
-#: lib/framework/i18n.c:131
+#: lib/framework/i18n.c:84
+#: lib/framework/i18n.c:133
 msgid "Turkish"
 msgstr "Турецкий"
 
-#: lib/framework/i18n.c:84
-#: lib/framework/i18n.c:132
+#: lib/framework/i18n.c:85
+#: lib/framework/i18n.c:134
 msgid "Uzbek (Cyrillic)"
 msgstr "Узбекский (кириллица)"
 
-#: lib/framework/i18n.c:85
-#: lib/framework/i18n.c:133
+#: lib/framework/i18n.c:86
+#: lib/framework/i18n.c:135
 msgid "Simplified Chinese"
 msgstr "Упрощенный китайский"
 
-#: lib/framework/i18n.c:117
-msgid "Latin"
-msgstr "Латинский"
+#: lib/framework/i18n.c:87
+#: lib/framework/i18n.c:136
+msgid "Traditional Chinese"
+msgstr ""
 
 #: lib/netplay/netplay.c:1112
 #: lib/netplay/netplay.c:1146
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
-msgstr ""
+msgstr "У игрока %u несоответствует версия игры. Автокик."
 
 #: lib/netplay/netplay.c:1227
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
-msgstr ""
+msgstr "Игрок %u ввелд неверный пароль. Автокик"
 
 #: lib/netplay/netplay.c:2753
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
-msgstr ""
+msgstr "не могу получить имя основного сервера (%s)!"
 
 #: lib/netplay/netplay.c:2778
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-msgstr ""
+msgstr "Не удалось соединиться с лобби-сервером. проверьте, открыт-ли TCP-порт %u для исходящего траффика."
 
 #: src/clparse.c:99
 msgid "Run in cheat mode"
@@ -10290,7 +10266,7 @@ msgstr "Перевозчик"
 
 #: src/design.c:1368
 msgid "Hydra "
-msgstr ""
+msgstr "Гидра"
 
 #: src/design.c:1565
 msgid "Sensor Range"
@@ -10776,7 +10752,7 @@ msgstr "Цвет юнита"
 #: src/hci.c:5606
 #: src/intelmap.c:532
 #: src/intorder.c:661
-#: src/loadsave.c:265
+#: src/loadsave.c:267
 #: src/multimenu.c:477
 #: src/multimenu.c:1336
 #: src/transporter.c:286
@@ -10786,9 +10762,8 @@ msgid "Close"
 msgstr "Закрыть"
 
 #: src/hci.c:1356
-#, fuzzy
 msgid "MAP SAVED!"
-msgstr "ИГРА СОХРАНЕНА!"
+msgstr "КАРТА СОХРАНЕНА!"
 
 #: src/hci.c:1703
 #: src/loop.c:506
@@ -10931,14 +10906,12 @@ msgid "Save Game"
 msgstr "Сохранить игру"
 
 #: src/intdisplay.c:197
-#, fuzzy
 msgid "Build Progress"
-msgstr "Бронирование"
+msgstr "прогресс постройки"
 
 #: src/intdisplay.c:228
-#, fuzzy
 msgid "Construction Progress"
-msgstr "строительный юнит"
+msgstr "Прогресс строительства"
 
 #: src/intdisplay.c:260
 msgid "Power Accrued"
@@ -11213,15 +11186,15 @@ msgstr "Исследовано"
 
 #: src/keybind.c:1394
 msgid "Only displaying energy bars when selected"
-msgstr ""
+msgstr "отображать панель прогресса только для выбранных единиц"
 
 #: src/keybind.c:1397
 msgid "Always displaying energy bars for units"
-msgstr ""
+msgstr "Всегда отображать панеот прогресса для юнитов"
 
 #: src/keybind.c:1400
 msgid "Always displaying energy bars for units and structures"
-msgstr ""
+msgstr "Всегда отображать панел прогресса для юнитов и построек"
 
 #: src/keybind.c:1422
 msgid "Demo mode off - Returning to normal game mode"
@@ -11710,9 +11683,8 @@ msgstr "открыть заново меню постройки"
 
 #: src/loop.c:513
 #: src/loop.c:529
-#, fuzzy
 msgid "Could not save game!"
-msgstr "Загрузить игру"
+msgstr "Не удалось сохранить игру!"
 
 #: src/mission.c:2079
 msgid "Load Transport"
@@ -11745,7 +11717,6 @@ msgid "Continue Game"
 msgstr "Продолжить игру"
 
 #: src/mission.c:2612
-#, fuzzy
 msgid "GAME SAVED :"
 msgstr "ИГРА СОХРАНЕНА!"
 
@@ -11831,29 +11802,28 @@ msgid "IP"
 msgstr "IP"
 
 #: src/multiint.c:754
-#, fuzzy
 msgid "No games are available"
-msgstr "Доступны новые технологии"
+msgstr "Доступны новые игры"
 
 #: src/multiint.c:757
 msgid "Game is full"
-msgstr ""
+msgstr "Игра заполнена"
 
 #: src/multiint.c:761
 msgid "You were kicked!"
-msgstr ""
+msgstr "Вас выгнали!"
 
 #: src/multiint.c:764
 msgid "Wrong Game Version!"
-msgstr ""
+msgstr "Неверная версия игры!"
 
 #: src/multiint.c:767
 msgid "Incorrect Password!"
-msgstr ""
+msgstr "неверный пароль!"
 
 #: src/multiint.c:771
 msgid "Connection Error"
-msgstr ""
+msgstr "Ошибка соединения"
 
 #: src/multiint.c:869
 msgid "Searching"
@@ -11869,7 +11839,7 @@ msgstr "Обновить список игр"
 
 #: src/multiint.c:1005
 msgid "Enter Password First "
-msgstr ""
+msgstr "Для начала введите пароль"
 
 #: src/multiint.c:1115
 msgid "OPTIONS"
@@ -11884,9 +11854,8 @@ msgid "Select Map"
 msgstr "Выбрать карту"
 
 #: src/multiint.c:1120
-#, fuzzy
 msgid "Click to set Password"
-msgstr "щелкни чтобы посмотреть карту"
+msgstr "Щелкни чтобы задать пароль"
 
 #: src/multiint.c:1129
 #: src/multiint.c:1130
@@ -11990,11 +11959,11 @@ msgstr "ЧАТ"
 
 #: src/multiint.c:2073
 msgid "*** password is now required! ***"
-msgstr ""
+msgstr "*** Требуется пароль! ***"
 
 #: src/multiint.c:2080
 msgid "*** password is NOT required! ***"
-msgstr ""
+msgstr "*** пароль не требуется! ***"
 
 #: src/multiint.c:2319
 msgid "Sorry! Failed to host the game."
@@ -12010,8 +11979,9 @@ msgid "The host has kicked %s from the game!"
 msgstr "Хост выкинул %s из игры!"
 
 #: src/multiint.c:2457
+#, fuzzy
 msgid "you are being a jerk."
-msgstr ""
+msgstr "Вас одурачивают."
 
 #: src/multiint.c:2540
 msgid "Host is Starting Game"
@@ -12037,9 +12007,8 @@ msgid "%s is Joining the Game"
 msgstr "%s присоединился к игре"
 
 #: src/multijoin.c:313
-#, fuzzy
 msgid "System message:"
-msgstr "Системная локаль"
+msgstr "Системное сообщение"
 
 #: src/multimenu.c:607
 msgid "Technology level 1"
@@ -12426,6 +12395,9 @@ msgstr "Версия %s%s%s%s"
 
 #~ msgid "Skirmish"
 #~ msgstr "Стычка"
+
+#~ msgid "The game is full!"
+#~ msgstr "игра переполнена"
 
 #~ msgid "Cluster Bombs Bug VTOL"
 #~ msgstr "Кластерный бомбардировщик Жук ВВС"

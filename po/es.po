@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-07-19 17:34+0200\n"
+"POT-Creation-Date: 2009-07-19 21:30+0200\n"
 "PO-Revision-Date: 2008-05-09 17:09+0000\n"
 "Last-Translator: Samuel G. I. <amuchamu@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -10053,164 +10053,170 @@ msgid "Flamer Viper Half-Tracks"
 msgstr "Víbora Lanzallamas Semi-oruga"
 
 #: lib/framework/i18n.c:45
-#: lib/framework/i18n.c:96
+#: lib/framework/i18n.c:98
 msgid "System locale"
 msgstr "Idioma del sistema"
 
 #: lib/framework/i18n.c:47
-#: lib/framework/i18n.c:98
+#: lib/framework/i18n.c:100
 msgid "Czech"
 msgstr "Checo"
 
 #: lib/framework/i18n.c:48
-#: lib/framework/i18n.c:99
+#: lib/framework/i18n.c:101
 msgid "Danish"
 msgstr "Danés"
 
 #: lib/framework/i18n.c:49
-#: lib/framework/i18n.c:100
+#: lib/framework/i18n.c:102
 msgid "German"
 msgstr "Alemán"
 
 #: lib/framework/i18n.c:50
-#: lib/framework/i18n.c:101
+#: lib/framework/i18n.c:103
 msgid "English"
 msgstr "Inglés"
 
 #: lib/framework/i18n.c:51
-#: lib/framework/i18n.c:102
+#: lib/framework/i18n.c:104
 msgid "English (United Kingdom)"
 msgstr "Inglés (Reino Unido)"
 
 #: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:103
+#: lib/framework/i18n.c:105
 #, fuzzy
 msgid "Spanish"
 msgstr "Español"
 
 #: lib/framework/i18n.c:53
-#: lib/framework/i18n.c:104
+#: lib/framework/i18n.c:106
 #, fuzzy
 msgid "Basque"
 msgstr "Vasco"
 
 #: lib/framework/i18n.c:54
-#: lib/framework/i18n.c:105
+#: lib/framework/i18n.c:107
 #, fuzzy
 msgid "Finnish"
 msgstr "Finlandés"
 
 #: lib/framework/i18n.c:55
-#: lib/framework/i18n.c:106
+#: lib/framework/i18n.c:108
 msgid "French"
 msgstr "Francés"
 
 #: lib/framework/i18n.c:63
-#: lib/framework/i18n.c:114
+#: lib/framework/i18n.c:116
 msgid "Frisian"
 msgstr "Frisian"
 
 #: lib/framework/i18n.c:64
-#: lib/framework/i18n.c:115
+#: lib/framework/i18n.c:117
 #, fuzzy
 msgid "Irish"
 msgstr "Irlandés"
 
 #: lib/framework/i18n.c:65
-#: lib/framework/i18n.c:116
+#: lib/framework/i18n.c:118
 msgid "Italian"
 msgstr "Italiano"
 
 #: lib/framework/i18n.c:66
-#: lib/framework/i18n.c:118
+#: lib/framework/i18n.c:119
+msgid "Latin"
+msgstr "Latino"
+
+#: lib/framework/i18n.c:67
+#: lib/framework/i18n.c:120
 msgid "Lithuanian"
 msgstr "Lituano"
 
-#: lib/framework/i18n.c:67
-#: lib/framework/i18n.c:119
+#: lib/framework/i18n.c:68
+#: lib/framework/i18n.c:121
 #, fuzzy
 msgid "Latvian"
 msgstr "Letón"
 
-#: lib/framework/i18n.c:68
-#: lib/framework/i18n.c:120
+#: lib/framework/i18n.c:69
+#: lib/framework/i18n.c:122
 msgid "Norwegian"
 msgstr "Noruego"
 
-#: lib/framework/i18n.c:69
-#: lib/framework/i18n.c:121
+#: lib/framework/i18n.c:70
+#: lib/framework/i18n.c:123
 #, fuzzy
 msgid "Norwegian (Nynorsk)"
 msgstr "Noruego"
 
-#: lib/framework/i18n.c:70
-#: lib/framework/i18n.c:122
+#: lib/framework/i18n.c:71
+#: lib/framework/i18n.c:124
 msgid "Dutch"
 msgstr "Holandés"
 
-#: lib/framework/i18n.c:71
-#: lib/framework/i18n.c:123
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:125
 #, fuzzy
 msgid "Polish"
 msgstr "Polaco"
 
-#: lib/framework/i18n.c:72
-#: lib/framework/i18n.c:124
+#: lib/framework/i18n.c:73
+#: lib/framework/i18n.c:126
 #, fuzzy
 msgid "Brazilian Portuguese"
 msgstr "Portugués Brasileño"
 
-#: lib/framework/i18n.c:73
-#: lib/framework/i18n.c:125
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:127
 msgid "Portuegese"
 msgstr "Portugués"
 
-#: lib/framework/i18n.c:74
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:75
+#: lib/framework/i18n.c:128
 msgid "Romanian"
 msgstr "Rumano"
 
-#: lib/framework/i18n.c:75
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:76
+#: lib/framework/i18n.c:129
 msgid "Russian"
 msgstr "Ruso"
 
-#: lib/framework/i18n.c:76
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:77
+#: lib/framework/i18n.c:130
 msgid "Slovenian"
 msgstr "Eslovenio"
 
-#: lib/framework/i18n.c:78
-#: lib/framework/i18n.c:80
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:79
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:131
 #, fuzzy
 msgid "Swedish (Sweden)"
 msgstr "Sueco"
 
-#: lib/framework/i18n.c:82
-#: lib/framework/i18n.c:130
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:132
 msgid "Swedish"
 msgstr "Sueco"
 
-#: lib/framework/i18n.c:83
-#: lib/framework/i18n.c:131
+#: lib/framework/i18n.c:84
+#: lib/framework/i18n.c:133
 #, fuzzy
 msgid "Turkish"
 msgstr "Turco"
 
-#: lib/framework/i18n.c:84
-#: lib/framework/i18n.c:132
+#: lib/framework/i18n.c:85
+#: lib/framework/i18n.c:134
 msgid "Uzbek (Cyrillic)"
 msgstr "Uzbek (Cirílico)"
 
-#: lib/framework/i18n.c:85
-#: lib/framework/i18n.c:133
+#: lib/framework/i18n.c:86
+#: lib/framework/i18n.c:135
 msgid "Simplified Chinese"
 msgstr "Chino simplificado"
 
-#: lib/framework/i18n.c:117
-msgid "Latin"
-msgstr "Latino"
+#: lib/framework/i18n.c:87
+#: lib/framework/i18n.c:136
+msgid "Traditional Chinese"
+msgstr ""
 
 #: lib/netplay/netplay.c:1112
 #: lib/netplay/netplay.c:1146
@@ -10946,7 +10952,7 @@ msgstr "Color de las unidades"
 #: src/hci.c:5606
 #: src/intelmap.c:532
 #: src/intorder.c:661
-#: src/loadsave.c:265
+#: src/loadsave.c:267
 #: src/multimenu.c:477
 #: src/multimenu.c:1336
 #: src/transporter.c:286
