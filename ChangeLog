@@ -1,6 +1,11 @@
 0000-00-00: Version 2.2.2
  * General:
-   * Fix: Various workarounds to make game run more stable (r7836)
+   * Change: Stop rotation when "Continue" is pressed after winning a multiplayer/skirmish game (r7887)
+   * Change: Show when a game was saved in a tooltip on the loading screen. (r7864, ticket:682)
+   * Fix: Cannot display more than one game from lobby. Also fix a lobby display issue. (r7839, ticket:691)
+   * Fix: Various checks and workarounds to make game run more stable (r7836, r7894, r7889, r7883, r7881, r7851, r7847, r7842, r7822)
+   * Fix: Updated translations (r7880, r7877, r7875, r7871, r7868, r7863, r7861, 
+   * Fix: Bug that caused some keyboard shortcuts to be unusable in multiplayer since they were considered cheats (r7856)
 
 2009-06-21: Version 2.2.1
  * General:
