@@ -378,6 +378,7 @@ AC_CONFIG_FILES([Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile
+		lib/iniparser/Makefile
 		lib/ivis_opengl/Makefile
 		lib/ivis_common/Makefile
 		lib/netplay/Makefile
