@@ -2353,6 +2353,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			apsFlagPosLists[player] = NULL;
 			//clear all the messages?
 			apsProxDisp[player] = NULL;
+			apsSensorList[0] = NULL;
 		}
 		initFactoryNumFlag();
 	}

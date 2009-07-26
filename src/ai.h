@@ -97,8 +97,11 @@ extern BOOL aiChooseTarget(BASE_OBJECT *psObj,
 /*set the droid to attack if wihin range otherwise move to target*/
 extern void attackTarget(DROID *psDroid, BASE_OBJECT *psTarget);
 
-/* See if there is a target in range for Sensor objects*/
+/** See if there is a target in range for Sensor objects. */
 extern BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);
+
+/** See if there is a friendly sensor anywhere holding a valid target for psObj. */
+BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_STATS *psWStats);
 
 /*set of rules which determine whether the weapon associated with the object
 can fire on the propulsion type of the target*/
