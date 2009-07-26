@@ -1250,7 +1250,7 @@ void sound_SetObjectPosition(AUDIO_SAMPLE *psSample)
 	alSourcef( psSample->iSample, AL_GAIN, gain );
 
 	// the alSource3i variant would be better, if it wouldn't provide linker errors however
-	alSource3f( psSample->iSample, AL_POSITION, (float)psSample->x,(float)psSample->x,(float)psSample->x );
+	alSource3f( psSample->iSample, AL_POSITION, (float)psSample->x,(float)psSample->y,(float)psSample->z );
 	sound_GetError();
 #endif
 }
