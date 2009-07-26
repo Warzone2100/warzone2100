@@ -455,6 +455,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 				psMove->asPath = psNext->sMove.asPath;
 				retval = psNext->retval;
 				ASSERT(retval != FPR_OK || psMove->asPath, "Ok result but no path after copy");
+				ASSERT(retval != FPR_OK || psMove->numPoints > 0, "Ok result but path empty after copy");
 				free(psNext);
 				SDL_SemPost(fpathSemaphore);
 				objTrace(id, "Got a path to (%d, %d)! Length=%d Retval=%d", (int)psMove->DestinationX,
