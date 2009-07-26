@@ -1,4 +1,4 @@
-0000-00-00: Version 2.2.2
+2009-07-26: Version 2.2.2
  * General:
    * Change: Stop rotation when "Continue" is pressed after winning a multiplayer/skirmish game (r7887)
    * Change: Show when a game was saved in a tooltip on the loading screen. (r7864, ticket:682)
