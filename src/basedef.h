@@ -78,7 +78,8 @@ typedef enum _object_type
 	UDWORD              armour[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES]
 
 #define NEXTOBJ(pointerType) \
-	pointerType     *psNext                         /**< Pointer to the next object in the list */
+	pointerType     *psNext;			/**< Pointer to the next object in the object list */ \
+	pointerType     *psNextFunc			/**< Pointer to the next object in the function list */
 
 #define SIMPLE_ELEMENTS(pointerType) \
 	BASE_ELEMENTS1(pointerType); \
@@ -102,6 +103,13 @@ static inline bool isDead(const BASE_OBJECT* psObj)
 {
 	// See objmem.c for comments on the NOT_CURRENT_LIST hack
 	return (psObj->died > NOT_CURRENT_LIST);
+}
+
+static inline int objPosDiffSq(Vector3uw pos1, Vector3uw pos2)
+{
+	const int xdiff = pos1.x - pos2.x;
+	const int ydiff = pos1.y - pos2.y;
+	return (xdiff * xdiff + ydiff * ydiff);
 }
 
 // Must be #included __AFTER__ the definition of BASE_OBJECT
