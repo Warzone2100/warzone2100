@@ -46,7 +46,8 @@ int main(int argc, char **argv)
 		else { strcpy(tilesetName, "(unknown)"); }
 
 		printf("Loaded map: %s\n", filename);
-		printf("\tMap version: %d\n", (int)map->version);
+		printf("\tMap version: %d\n", (int)map->mapVersion);
+		printf("\tGame version: %d\n", (int)map->gameVersion);
 		printf("\tWidth: %d\n", (int)map->width);
 		printf("\tHeight: %d\n", (int)map->height);
 		printf("\tGateways: %d\n", (int)map->numGateways);

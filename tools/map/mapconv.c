@@ -69,6 +69,8 @@ int main(int argc, char **argv)
 
 	mkdir(filename, 0777);
 	strcpy(base, filename);
+	strcat(filename, "/map-001");	
+	mkdir(filename, 0777);
 
 	/*** Map configuration ***/
 	strcat(filename, "/map.ini");
@@ -93,7 +95,7 @@ int main(int argc, char **argv)
 	MADD("TileHeight = %d", TILE_WIDTH);
 	MADD("SeaLevel = %d", SEALEVEL);
 	MADD("Tileset = %s", tilesetTextures[map->tileset]);
-	MADD("NumTiles = %d", map->width * map->height);
+
 	MADD("\n[scroll_limits]");
 	MADD("x1 = %d", map->scrollMinX);
 	MADD("y1 = %d", map->scrollMinY);
