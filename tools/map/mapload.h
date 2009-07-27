@@ -23,6 +23,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "wzglobal.h"
 #include "physfs_ext.h"
 
 #define MAX_LEVEL_SIZE	20
@@ -72,8 +73,8 @@ typedef struct _maptile_type
 
 typedef struct _mapfile_type
 {
-	uint32_t		height, width, version, numGateways, numFeatures, numTerrainTypes;
-	uint32_t		numPlayers, numDroids, numStructures;
+	uint32_t		height, width, mapVersion, gameVersion, numGateways, numFeatures, numTerrainTypes, power[8];
+	uint32_t		numPlayers, numDroids, numStructures, droidVersion, structVersion, featVersion, terrainVersion;
 	int32_t			scrollMinX;
 	int32_t			scrollMinY;
 	uint32_t		scrollMaxX;
