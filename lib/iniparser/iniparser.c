@@ -15,6 +15,7 @@
 */
 /*---------------------------- Includes ------------------------------------*/
 #include <ctype.h>
+#include <physfs.h>
 #include "iniparser.h"
 
 /*---------------------------- Defines -------------------------------------*/
@@ -516,6 +517,36 @@ static line_status iniparser_line(
     return sta ;
 }
 
+/** 
+ * fgets() reads in at most one less than size characters from stream and stores them into the 
+ * buffer pointed to by s.  Reading stops after an EOF or a newline.  If a newline is read, it is 
+ * stored into the buffer.  A '\0' is stored after the last character in the buffer. 
+ * return s on success, and NULL on error or when end of file occurs while no characters have been read.
+ */
+static char *PHYSFS_fgets(char *s, int size, PHYSFS_file *stream)
+{
+	char c;
+	int i = 0;
+
+	if (size <= 0 || !stream || !s || PHYSFS_eof(stream))
+	{
+		return NULL;
+	}
+	do
+	{
+		PHYSFS_sint64 retval = PHYSFS_read(stream, &c, 1, 1);
+
+		if (retval != 1)
+		{
+			fprintf(stderr, "Bad reading of INI file: %s\n", PHYSFS_getLastError());
+			return NULL;
+		}
+		s[i++] = c;
+	} while (!PHYSFS_eof(stream) && c != '\n' && i < size - 1);
+	s[i] = '\0';
+	return s;
+}
+
 /*-------------------------------------------------------------------------*/
 /**
   @brief    Parse an ini file and return an allocated dictionary object
@@ -532,7 +563,7 @@ static line_status iniparser_line(
 /*--------------------------------------------------------------------------*/
 dictionary * iniparser_load(const char * ininame)
 {
-    FILE * in ;
+    PHYSFS_file * in;
 
     char line    [ASCIILINESZ+1] ;
     char section [ASCIILINESZ+1] ;
@@ -547,14 +578,14 @@ dictionary * iniparser_load(const char * ininame)
 
     dictionary * dict ;
 
-    if ((in=fopen(ininame, "r"))==NULL) {
+    if ((in=PHYSFS_openRead(ininame))==NULL) {
         fprintf(stderr, "iniparser: cannot open %s\n", ininame);
         return NULL ;
     }
 
     dict = dictionary_new(0) ;
     if (!dict) {
-        fclose(in);
+        PHYSFS_close(in);
         return NULL ;
     }
 
@@ -564,7 +595,7 @@ dictionary * iniparser_load(const char * ininame)
     memset(val,     0, ASCIILINESZ);
     last=0 ;
 
-    while (fgets(line+last, ASCIILINESZ-last, in)!=NULL) {
+    while (PHYSFS_fgets(line+last, ASCIILINESZ-last, in)!=NULL) {
         lineno++ ;
         len = (int)strlen(line)-1;
         /* Safety check against buffer overflows */
@@ -574,7 +605,7 @@ dictionary * iniparser_load(const char * ininame)
                     ininame,
                     lineno);
             dictionary_del(dict);
-            fclose(in);
+            PHYSFS_close(in);
             return NULL ;
         }
         /* Get rid of \n and spaces at end of line */
@@ -627,7 +658,7 @@ dictionary * iniparser_load(const char * ininame)
         dictionary_del(dict);
         dict = NULL ;
     }
-    fclose(in);
+    PHYSFS_close(in);
     return dict ;
 }
 
