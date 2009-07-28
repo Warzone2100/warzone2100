@@ -93,6 +93,10 @@ extern void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
 /** Clean up path jobs and results for a droid. Function is thread-safe. */
 extern void fpathRemoveDroidData(int id);
 
+/** Check LOS (Line Of Sight) between two tiles
+ */
+extern BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2);
+
 /** Quick O(1) test of whether it is theoretically possible to go from origin to destination
  *  using the given propulsion type. */
 bool fpathCheck(Vector2i orig, Vector2i dest, PROPULSION_TYPE propulsion);
