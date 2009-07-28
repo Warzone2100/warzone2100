@@ -25,10 +25,7 @@
 
 #include "lib/framework/frame.h"
 
-#include "objects.h"
 #include "map.h"
-#include "raycast.h"
-#include "fpath.h"
 
 #include "astar.h"
 
@@ -317,56 +314,6 @@ static FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 	psNode->type = NT_OPEN;
 
 	return psNode;
-}
-
-// Variables for the callback
-static SDWORD	finalX,finalY, vectorX,vectorY;
-static BOOL		obstruction;
-
-/** The visibility ray callback
- */
-static bool fpathVisCallback(Vector3i pos, int dist, void* data)
-{
-	/* Has to be -1 to make sure that it doesn't match any enumerated
-	 * constant from PROPULSION_TYPE.
-	 */
-	static const PROPULSION_TYPE prop = (PROPULSION_TYPE)-1;
-
-	// See if this point is past the final point (dot product)
-	int vx = pos.x - finalX, vy = pos.y - finalY;
-
-	if (vx*vectorX + vy*vectorY <= 0)
-	{
-		return false;
-	}
-
-	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), prop))
-	{
-		// found an obstruction
-		obstruction = true;
-		return false;
-	}
-
-	return true;
-}
-
-BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
-{
-	// convert to world coords
-	Vector3i p1 = { world_coord(x1) + TILE_UNITS / 2, world_coord(y1) + TILE_UNITS / 2, 0 };
-	Vector3i p2 = { world_coord(x2) + TILE_UNITS / 2, world_coord(y2) + TILE_UNITS / 2, 0 };
-	Vector3i dir = Vector3i_Sub(p2, p1);
-
-	// Initialise the callback variables
-	finalX = p2.x;
-	finalY = p2.y;
-	vectorX = -dir.x;
-	vectorY = -dir.y;
-	obstruction = false;
-
-	rayCast(p1, dir, RAY_MAXLEN, fpathVisCallback, NULL);
-
-	return !obstruction;
 }
 
 SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)

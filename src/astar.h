@@ -48,10 +48,6 @@ enum
  */
 SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob);
 
-/** Check LOS (Line Of Sight) between two tiles
- */
-extern BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2);
-
 /** Clean up the path finding node table.
  *
  *  @note Call this <em>only</em> on shutdown to prevent memory from leaking.
