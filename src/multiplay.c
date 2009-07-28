@@ -464,7 +464,10 @@ BOOL setPlayerName(UDWORD player, const char *sName)
 // to determine human/computer players and responsibilities of each..
 BOOL isHumanPlayer(UDWORD player)
 {
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Player index (%u) out of range", player);
+	if (player >= MAX_PLAYERS)
+	{
+		return false;	// obvious, really
+	}
 	return NetPlay.players[player].allocated;
 }
 
