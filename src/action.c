@@ -2271,11 +2271,15 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DACTION_FIRESUPPORT:
+		if (!psDroid->psTarget)
+		{
+			psDroid->action = DACTION_NONE;
+			return;
+		}
 		//can be either a droid or a structure now - AB 7/10/98
-		ASSERT_OR_RETURN( , (psDroid->psTarget->type == OBJ_DROID ||
-			psDroid->psTarget->type == OBJ_STRUCTURE) &&
-				(psDroid->psTarget->player == psDroid->player),
-			"DACTION_FIRESUPPORT: incorrect target type" );
+		ASSERT_OR_RETURN(, (psDroid->psTarget->type == OBJ_DROID || psDroid->psTarget->type == OBJ_STRUCTURE)
+				   && (psDroid->psTarget->player == psDroid->player), "DACTION_FIRESUPPORT: incorrect target type" );
+
 			//don't move VTOL's
 			// also don't move closer to sensor towers
 			if (!isVtolDroid(psDroid) &&
