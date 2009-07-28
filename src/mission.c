@@ -2737,12 +2737,10 @@ void launchMission(void)
 //sets up the game to start a new mission
 BOOL setUpMission(UDWORD type)
 {
-	//close the interface
+	// Close the interface
 	intResetScreen(true);
 
-	//oldMission = mission.type;
-	/*the last mission must have been successful otherwise endgame would have
-	been called*/
+	/* The last mission must have been successful otherwise endgame would have been called */
 	endMission();
 
 	//release the level data for the previous mission
@@ -2751,38 +2749,28 @@ BOOL setUpMission(UDWORD type)
 		return false;
 	}
 
-	//if (type == MISSION_OFFCLEAR || type == MISSION_OFFKEEP)
-	if ( type == LDS_CAMSTART )
+	if (type == LDS_CAMSTART)
 	{
+		// Another one of those lovely hacks!!
+		BOOL    bPlaySuccess = true;
 
-        //this cannot be called here since we need to be able to save the game at the end of cam1 and cam2
-		/*CDrequired = getCDForCampaign( getCampaignNumber() );
-		if ( cdspan_CheckCDPresent(CDrequired) )*/
+		// We don't want the 'mission accomplished' audio/text message at end of cam1
+		if (getCampaignNumber() == 2)
 		{
-            //another one of those lovely hacks!!
-            BOOL    bPlaySuccess = true;
-
-            //we don't want the 'mission accomplished' audio/text message at end of cam1
-            if (getCampaignNumber() == 2)
-            {
-                bPlaySuccess = false;
-            }
-    		//give the option of save/continue
-	    	if (!intAddMissionResult(true, bPlaySuccess))
-		    {
-			    return false;
-		    }
-		    loopMissionState = LMS_SAVECONTINUE;
+			bPlaySuccess = false;
 		}
+		// Give the option of save/continue
+		if (!intAddMissionResult(true, bPlaySuccess))
+		{
+			return false;
+		}
+		loopMissionState = LMS_SAVECONTINUE;
 	}
 	else if (type == LDS_MKEEP
 		|| type == LDS_MCLEAR
-		|| type == LDS_MKEEP_LIMBO
-		)
+		|| type == LDS_MKEEP_LIMBO)
 	{
-
 		launchMission();
-
 	}
 	else
 	{
@@ -2791,7 +2779,8 @@ BOOL setUpMission(UDWORD type)
 			setWidgetsStatus(true);
 			intResetScreen(false);
 		}
-		//give the option of save/continue
+
+		// Give the option of save / continue
 		if (!intAddMissionResult(true, true))
 		{
 			return false;
