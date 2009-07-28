@@ -614,7 +614,7 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_WEAPON_STATS* cols, sqlite
 		ASSERT(false, "loadWeaponStats: effectSize is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
 		return false;
 	}
-	stats->rotate = sqlite3_column_double(stmt, cols->effectSize);
+	stats->effectSize = sqlite3_column_double(stmt, cols->effectSize);
 
 	// surfaceToAir          NUMERIC NOT NULL, -- indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
 	if (sqlite3_column_int(stmt, cols->surfaceToAir) > UBYTE_MAX)
