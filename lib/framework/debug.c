@@ -29,7 +29,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <time.h>
-#include "frameint.h"
 #include "string_ext.h"
 
 #include "lib/gamelib/gtime.h"
