@@ -2140,7 +2140,6 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 		PATHJOB job;
 
 		route.numPoints = 0;
-		astarResetCounters();
 		job.origX = x;
 		job.origY = y;
 		job.destX = endx;
