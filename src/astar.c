@@ -21,13 +21,11 @@
  *  A* based path finding
  */
 
-#include <assert.h>
-
+#ifndef WZ_TESTING
 #include "lib/framework/frame.h"
-
 #include "map.h"
-
 #include "astar.h"
+#endif
 
 static SDWORD	astarOuter, astarRemove;
 
@@ -318,7 +316,7 @@ static FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 
 SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
-	FP_NODE		*psFound, *psCurr, *psNew, *psParent, *psNext;
+	FP_NODE		*psFound, *psCurr, *psNew;
 	FP_NODE		*psNearest, *psRoute;
 	SDWORD		dir, x,y, currDist;
 	SDWORD		retval = ASR_OK;
@@ -456,7 +454,27 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 
 	if (psRoute)
 	{
-		int index, count = psMove->numPoints;
+		int	count = 0;	// calculated length of route
+
+		// Count length of route
+		psCurr = psRoute;
+		while (psCurr)
+		{
+			psCurr = psCurr->psRoute;
+			count++;
+		}
+
+		// TODO FIXME once we can change numPoints to something larger than uchar
+		psMove->numPoints = MIN(255, count);
+
+		// Allocate memory
+		psMove->asPath = calloc(sizeof(*psMove->asPath), count);
+		ASSERT(psMove->asPath, "Out of memory");
+		if (!psMove->asPath)
+		{
+			fpathHardTableReset();
+			return ASR_FAILED;
+		}
 
 		// get the route in the correct order
 		// If as I suspect this is to reverse the list, then it's my suspicion that
@@ -466,42 +484,16 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		// The idea is impractical, because you can't guarentee that the target is
 		// reachable. As I see it, this is the reason why psNearest got introduced.
 		// -- Dennis L.
-		psParent = NULL;
-		for(psCurr=psRoute; psCurr; psCurr=psNext)
-		{
-			psNext = psCurr->psRoute;
-			psCurr->psRoute = psParent;
-			psParent = psCurr;
-			count++;
-		}
-		ASSERT(count > 0, "Route has no nodes");
-		if (count <= 0)
-		{
-			fpathHardTableReset();
-			return ASR_FAILED;
-		}
-		psRoute = psParent;
-
 		psCurr = psRoute;
-		psMove->asPath = realloc(psMove->asPath, sizeof(*psMove->asPath) * count);
-		ASSERT(psMove->asPath, "Out of memory");
-		if (!psMove->asPath)
+		psMove->DestinationX = world_coord(psCurr->x);
+		psMove->DestinationY = world_coord(psCurr->y);
+		while (psCurr)
 		{
-			fpathHardTableReset();
-			return ASR_FAILED;
-		}
-		index = psMove->numPoints;
-		while (psCurr && index < count)
-		{
-			psMove->asPath[index].x = psCurr->x;
-			psMove->asPath[index].y = psCurr->y;
-			index++;
-			ASSERT(psCurr->x < mapWidth && psCurr->y < mapHeight, "Bad route generated!");
+			count--;
+			psMove->asPath[count].x = psCurr->x;
+			psMove->asPath[count].y = psCurr->y;
 			psCurr = psCurr->psRoute;
 		}
-		psMove->numPoints = index;
-		psMove->DestinationX = world_coord(psMove->asPath[index - 1].x);
-		psMove->DestinationY = world_coord(psMove->asPath[index - 1].y);
 	}
 	else
 	{
