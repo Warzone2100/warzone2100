@@ -587,6 +587,7 @@ static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 	FPATH_RETVAL retval = fpathAStarRoute(&psResult->sMove, psJob);
 
 	ASSERT(retval != ASR_OK || psResult->sMove.asPath, "Ok result but no path in result");
+	ASSERT(retval == ASR_FAILED || psResult->sMove.numPoints > 0, "Ok result but no length of path in result");
 	switch (retval)
 	{
 	case ASR_NEAREST:
@@ -607,7 +608,7 @@ static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 			psResult->retval = FPR_FAILED;
 		}
 		break;
-	default:
+	case ASR_OK:
 		objTrace(psJob->droidID, "Got route of length %d", psResult->sMove.numPoints);
 		psResult->retval = FPR_OK;
 		break;
