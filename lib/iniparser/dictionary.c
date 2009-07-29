@@ -91,7 +91,7 @@ static char * xstrdup(char * s)
   by comparing the key itself in last resort.
  */
 /*--------------------------------------------------------------------------*/
-unsigned dictionary_hash(char * key)
+unsigned dictionary_hash(const char * key)
 {
 	int			len ;
 	unsigned	hash ;
@@ -178,7 +178,7 @@ void dictionary_del(dictionary * d)
   dictionary object, you should not try to free it or modify it.
  */
 /*--------------------------------------------------------------------------*/
-char * dictionary_get(dictionary * d, char * key, char * def)
+const char * dictionary_get(dictionary * d, const char * key, const char * def)
 {
 	unsigned	hash ;
 	int			i ;

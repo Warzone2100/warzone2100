@@ -72,7 +72,7 @@ typedef struct _dictionary_ {
   by comparing the key itself in last resort.
  */
 /*--------------------------------------------------------------------------*/
-unsigned dictionary_hash(char * key);
+unsigned dictionary_hash(const char * key);
 
 /*-------------------------------------------------------------------------*/
 /**
@@ -112,7 +112,7 @@ void dictionary_del(dictionary * vd);
   dictionary object, you should not try to free it or modify it.
  */
 /*--------------------------------------------------------------------------*/
-char * dictionary_get(dictionary * d, char * key, char * def);
+const char * dictionary_get(dictionary * d, const char * key, const char * def);
 
 
 /*-------------------------------------------------------------------------*/
