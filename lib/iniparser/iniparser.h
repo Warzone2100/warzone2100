@@ -125,7 +125,7 @@ void iniparser_dump(dictionary * d, FILE * f);
   the dictionary, do not free or modify it.
  */
 /*--------------------------------------------------------------------------*/
-char * iniparser_getstring(dictionary * d, const char * key, char * def);
+const char * iniparser_getstring(dictionary * d, const char * key, const char * def);
 
 /*-------------------------------------------------------------------------*/
 /**
