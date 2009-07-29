@@ -552,7 +552,7 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 			ASSERT(psCurr->x < mapWidth && psCurr->y < mapHeight, "Bad route generated!");
 			psCurr = psCurr->psRoute;
 		}
-		psMove->numPoints = index;
+		psMove->numPoints = MIN(255, index);
 		psMove->DestinationX = world_coord(psMove->asPath[index - 1].x);
 		psMove->DestinationY = world_coord(psMove->asPath[index - 1].y);
 	}
