@@ -23,14 +23,6 @@
 
 #include "fpath.h"
 
-/** Reset the A* counters
- *
- *  This function resets astarInner among others.
- *
- *  @ingroup pathfinding
- */
-extern void astarResetCounters(void);
-
 /** return codes for astar
  *
  *  @ingroup pathfinding

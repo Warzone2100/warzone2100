@@ -169,8 +169,6 @@ int main(int argc, char **argv)
 		move.asPath = NULL;
 		move.numPoints = 0;
 
-		astarResetCounters();
-
 		result = fpathAStarRoute(&move, &job);
 		assert(result == ASR_OK);
 		assert(move.numPoints == 214);

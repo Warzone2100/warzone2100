@@ -299,9 +299,6 @@ void moveUpdateBaseSpeed(void)
 
 	// Set the base turn rate
 	baseTurn = ((float)totalTime * BASE_TURN) / (GAME_TICKS_PER_SEC * BASE_FRAMES);
-
-	// reset the astar counters
-	astarResetCounters();
 }
 
 /** Set a target location in world coordinates for a droid to move to

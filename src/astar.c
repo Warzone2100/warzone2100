@@ -27,15 +27,6 @@
 #include "astar.h"
 #endif
 
-static SDWORD	astarOuter, astarRemove;
-
-/** Keeps track of the amount of iterations done in the inner loop of our A*
- *  implementation.
- *
- *  @ingroup pathfinding
- */
-int astarInner = 0;
-
 /** Counter to implement lazy deletion from nodeArray.
  *
  *  @see fpathTableReset
@@ -88,14 +79,6 @@ static const Vector2i aDirOffset[NUM_DIR] =
 	{ 1, 0},
 	{ 1, 1},
 };
-
-// reset the astar counters
-void astarResetCounters(void)
-{
-	astarInner = 0;
-	astarOuter = 0;
-	astarRemove = 0;
-}
 
 /** Add a node to the node table
  *
@@ -245,7 +228,7 @@ static FP_NODE *fpathOpenGet(void)
 
 /** Estimate the distance to the target point
  */
-static SDWORD fpathEstimate(SDWORD x, SDWORD y, SDWORD fx, SDWORD fy)
+static SDWORD WZ_DECL_CONST fpathEstimate(SDWORD x, SDWORD y, SDWORD fx, SDWORD fy)
 {
 	SDWORD xdiff, ydiff;
 
@@ -283,7 +266,7 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
 	FP_NODE		*psFound, *psCurr, *psNew;
 	FP_NODE		*psNearest, *psRoute;
-	SDWORD		dir, x,y, currDist;
+	SDWORD		dir, x, y, currDist;
 	SDWORD		retval = ASR_OK;
 	const int       tileSX = map_coord(psJob->origX);
 	const int       tileSY = map_coord(psJob->origY);
@@ -325,10 +308,8 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 			psNearest = psCurr;
 		}
 
-		astarOuter += 1;
-
 		// loop through possible moves in 8 directions to find a valid move
-		for(dir=0; dir<NUM_DIR; dir+=1)
+		for (dir = 0; dir < NUM_DIR; dir += 1)
 		{
 			/* make non-orthogonal-adjacent moves' dist a bit longer/cost a bit more
 			   5  6  7
@@ -352,7 +333,6 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 			x = psCurr->x + aDirOffset[dir].x;
 			y = psCurr->y + aDirOffset[dir].y;
 
-
 			// See if the node has already been visited
 			psFound = fpathGetNode(x, y);
 			if (psFound && psFound->dist <= currDist)
@@ -368,9 +348,6 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 				continue;
 			}
 
-			astarInner += 1;
-			ASSERT(astarInner >= 0, "astarInner overflowed!");
-
 			// Now insert the point into the appropriate list
 			if (!psFound)
 			{
@@ -378,15 +355,13 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 				psNew = fpathNewNode(x,y, currDist, psCurr);
 				if (psNew)
 				{
-					psNew->est = (SWORD)fpathEstimate(x,y, tileFX, tileFY);
+					psNew->est = fpathEstimate(x, y, tileFX, tileFY);
 					fpathOpenAdd(psNew);
 					fpathAddNode(psNew);
 				}
 			}
 			else if (psFound->type == NT_OPEN)
 			{
-				astarRemove += 1;
-
 				// already in the open list but this is shorter
 				psFound->dist = (SWORD)currDist;
 				psFound->psRoute = psCurr;
@@ -399,14 +374,9 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 				psFound->psRoute = psCurr;
 				fpathOpenAdd(psFound);
 			}
-			else
-			{
-				ASSERT(!"the open and closed lists are fried/wrong", "fpathAStarRoute: the open and closed lists are f***ed");
-			}
 		}
 
 		// add the current point to the closed nodes
-//		fpathAddNode(psCurr);
 		psCurr->type = NT_CLOSED;
 	}
 
