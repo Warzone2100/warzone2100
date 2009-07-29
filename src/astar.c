@@ -40,7 +40,7 @@ int astarInner = 0;
  *
  *  @see fpathTableReset
  */
-static int resetIterationCount = 0;
+static uint16_t resetIterationCount = 0;
 
 /** The structure to store a node of the route in node table
  *
@@ -48,13 +48,13 @@ static int resetIterationCount = 0;
  */
 typedef struct _fp_node
 {
-	int     x, y;           // map coords
-	SWORD	dist, est;	// distance so far and estimate to end
-	SWORD	type;		// open or closed node
 	struct _fp_node *psOpen;
 	struct _fp_node	*psRoute;	// Previous point in the route
 	struct _fp_node *psNext;
-	int iteration;
+	uint16_t	iteration;
+	short		x, y;           // map coords
+	short		dist, est;	// distance so far and estimate to end
+	short		type;		// open or closed node
 } FP_NODE;
 
 // types of node
@@ -160,7 +160,7 @@ static void fpathTableReset(void)
 	++resetIterationCount;
 
 	// Check to prevent overflows of resetIterationCount
-	if (resetIterationCount < INT_MAX - 1)
+	if (resetIterationCount < UINT16_MAX - 1)
 	{
 		ASSERT(resetIterationCount > 0, "Integer overflow occurred!");
 
@@ -192,47 +192,9 @@ void fpathHardTableReset()
 	resetIterationCount = 0;
 }
 
-/** Compare two nodes
- */
-static inline SDWORD fpathCompare(FP_NODE *psFirst, FP_NODE *psSecond)
-{
-	SDWORD	first,second;
-
-	first = psFirst->dist + psFirst->est;
-	second = psSecond->dist + psSecond->est;
-	if (first < second)
-	{
-		return -1;
-	}
-	else if (first > second)
-	{
-		return 1;
-	}
-
-	// equal totals, give preference to node closer to target
-	if (psFirst->est < psSecond->est)
-	{
-		return -1;
-	}
-	else if (psFirst->est > psSecond->est)
-	{
-		return 1;
-	}
-
-	// exactly equal
-	return 0;
-}
-
-/** make a 50/50 random choice
- */
-static BOOL fpathRandChoice(void)
-{
-	return ONEINTWO;
-}
-
 /** Add a node to the open list
  */
-static void fpathOpenAdd(FP_NODE *psNode)
+static inline void fpathOpenAdd(FP_NODE *psNode)
 {
 	psNode->psOpen = psOpen;
 	psOpen = psNode;
@@ -243,7 +205,6 @@ static void fpathOpenAdd(FP_NODE *psNode)
 static FP_NODE *fpathOpenGet(void)
 {
 	FP_NODE	*psNode, *psCurr, *psPrev, *psParent = NULL;
-	SDWORD	comp;
 
 	if (psOpen == NULL)
 	{
@@ -255,12 +216,16 @@ static FP_NODE *fpathOpenGet(void)
 	psNode = psOpen;
 	for(psCurr = psOpen; psCurr; psCurr = psCurr->psOpen)
 	{
-		comp = fpathCompare(psCurr, psNode);
-		if (comp < 0 || (comp == 0 && fpathRandChoice()))
+		const int first = psCurr->dist + psCurr->est;
+		const int second = psNode->dist + psNode->est;
+
+		// if equal totals, give preference to node closer to target
+		if (first < second || (first == second && psCurr->est < psNode->est))
 		{
 			psParent = psPrev;
 			psNode = psCurr;
 		}
+
 		psPrev = psCurr;
 	}
 
