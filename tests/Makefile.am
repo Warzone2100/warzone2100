@@ -4,16 +4,21 @@ BUILT_SOURCES = \
 	maplist.txt
 
 check_PROGRAMS = \
-	maptest
+	maptest \
+	astartest
 
 maptest_SOURCES = ../tools/map/mapload.c maptest.c
-maptest_LDADD = $(SDL_CFLAGS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OPENGL_LIBS)
+maptest_LDADD = $(PHYSFS_LIBS) $(PNG_LIBS)
+
+astartest_SOURCES = astartest.c
+astartest_LDADD = $(SDL_LIBS)
 
 CLEANFILES = \
 	$(BUILT_SOURCES)
 
 TESTS = \
-	maptest
+	maptest \
+	astartest
 
 maplist.txt:
 	(cd ../data ; find base mods -name game.map > ../tests/maplist.txt )
