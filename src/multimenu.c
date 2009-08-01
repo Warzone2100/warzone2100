@@ -889,7 +889,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 				//c11:ping
 				if (player != selectedPlayer)
 				{
-					if (ingame.PingTimes[player] > 2000)
+					if (ingame.PingTimes[player] >= 2000)
 					{
 						sprintf(str,"???");
 					}
