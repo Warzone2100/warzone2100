@@ -1559,7 +1559,7 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 		}
 		xdiff = (SDWORD)psObj->pos.x - (SDWORD)psDroid->pos.x;
 		ydiff = (SDWORD)psObj->pos.y - (SDWORD)psDroid->pos.y;
-		if ((float)xdiff * *pX + (float)ydiff * *pY < 0)
+		if ((float)xdiff * *pX + (float)ydiff * *pY < 0.0f)
 		{
 			// object behind
 			continue;
@@ -1591,7 +1591,7 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 	{
 		for(xdiff=-2; xdiff<=2; xdiff++)
 		{
-			if ((float)xdiff * *pX + (float)ydiff * *pY <= 0)
+			if ((float)xdiff * *pX + (float)ydiff * *pY <= 0.0f)
 			{
 				// object behind
 				continue;
@@ -1624,10 +1624,10 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 		distTot /= numObst;
 
 		// Create the avoid vector
-		if (dirX == 0 && dirY == 0)
+		if (dirX == 0.0f && dirY == 0.0f)
 		{
-			avoidX = 0;
-			avoidY = 0;
+			avoidX = 0.0f;
+			avoidY = 0.0f;
 			distTot = AVOID_DIST*AVOID_DIST;
 		}
 		else
@@ -1635,7 +1635,7 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 			omag = sqrtf(dirX*dirX + dirY*dirY);
 			ox = dirX / omag;
 			oy = dirY / omag;
-			if (*pX * oy + *pY * -ox < 0)
+			if (*pX * oy + *pY * -ox < 0.0f)
 			{
 				avoidX = -oy;
 				avoidY = ox;
@@ -1649,13 +1649,13 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 
 		// combine the avoid vector and the target vector
 		ratio = (float)distTot / (float)(AVOID_DIST * AVOID_DIST);
-		if (ratio > 1)
+		if (ratio > 1.0f)
 		{
-			ratio = 1;
+			ratio = 1.0f;
 		}
 
-		*pX = *pX * ratio + avoidX * (1.f - ratio);
-		*pY = *pY * ratio + avoidY * (1.f - ratio);
+		*pX = *pX * ratio + avoidX * (1.0f - ratio);
+		*pY = *pY * ratio + avoidY * (1.0f - ratio);
 	}
 	ASSERT(isfinite(*pX) && isfinite(*pY), "moveGetObstacleVector: bad float");
 }
