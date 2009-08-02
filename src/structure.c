@@ -3106,7 +3106,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					}
 					// Second highest priority:
 					// Help out another nearby repair facility
-					else if (mindist > (TILE_UNITS*8)*(TILE_UNITS*8)
+					else if (psTarget && mindist > (TILE_UNITS*8)*(TILE_UNITS*8)
 						   && psTarget != (BASE_OBJECT *)psStructure && psDroid->action == DACTION_WAITFORREPAIR)
 					{
 						REPAIR_FACILITY *stealFrom = &((STRUCTURE *)psTarget)->pFunctionality->repairFacility;
