@@ -642,7 +642,6 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 {
 	BASE_OBJECT		*psTarget = NULL;
 	DROID			*psCommander;
-	SECONDARY_STATE		state;
 	SDWORD			curTargetWeight=-1;
 
 	/* Get the sensor range */
@@ -692,7 +691,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		        || curTargetWeight <= 0		// attacker had no valid target, use new one
 			|| newTargetWeight > curTargetWeight + OLD_TARGET_THRESHOLD)	// updating and new target is better
 		    && validTarget(psObj, psTarget, weapon_slot)
-		    && (aiDroidHasRange((DROID *)psObj, psTarget, weapon_slot) || (secondaryGetState((DROID *)psObj, DSO_HALTTYPE, &state) && state != DSS_HALT_HOLD)))
+		    && (aiDroidHasRange((DROID *)psObj, psTarget, weapon_slot) || (secondaryGetState((DROID *)psObj, DSO_HALTTYPE) != DSS_HALT_HOLD)))
 		{
 			ASSERT(!isDead(psTarget), "aiChooseTarget: Droid found a dead target!");
 			*ppsTarget = psTarget;
@@ -904,7 +903,6 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 void aiUpdateDroid(DROID *psDroid)
 {
 	BASE_OBJECT	*psTarget;
-	SECONDARY_STATE	state;
 	BOOL		lookForTarget,updateTarget;
 
 	ASSERT(psDroid != NULL, "Invalid droid pointer");
@@ -976,8 +974,7 @@ void aiUpdateDroid(DROID *psDroid)
 	if ((psDroid->order == DORDER_NONE) &&
 		(psDroid->player == selectedPlayer) &&
 		!isVtolDroid(psDroid) &&
-		secondaryGetState(psDroid, DSO_HALTTYPE, &state) &&
-		(state == DSS_HALT_GUARD))
+		secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_GUARD)
 	{
 		lookForTarget = false;
 		updateTarget = false;
@@ -1011,12 +1008,9 @@ void aiUpdateDroid(DROID *psDroid)
 	}
 
 	// do not attack if the attack level is wrong
-	if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state))
+	if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) != DSS_ALEV_ALWAYS)
 	{
-		if (state != DSS_ALEV_ALWAYS)
-		{
-			lookForTarget = false;
-		}
+		lookForTarget = false;
 	}
 
 	/* Don't rebuild 'Naybor' list too often */
