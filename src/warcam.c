@@ -361,7 +361,7 @@ BOOL Status = true;
 				/* Inform via console */
 				if(foundTarget->type == OBJ_DROID)
 				{
-					if(!getWarCamStatus())
+					if(getWarCamStatus())
 					{
 						CONPRINTF(ConsoleString,(ConsoleString,"WZ/CAM  - %s",droidGetName((DROID*)foundTarget)));
 					}
@@ -767,7 +767,7 @@ static void updateCameraAcceleration(UBYTE update)
 		else
 		{
 		 	behind.x = ( CAM_DEFAULT_Y_OFFSET * SIN( DEG( trackingCamera.target->direction ) ) ) >> FP12_SHIFT;
-			behind.x = ( CAM_DEFAULT_X_OFFSET * COS( DEG( trackingCamera.target->direction ) ) ) >> FP12_SHIFT;
+			behind.y = ( CAM_DEFAULT_X_OFFSET * COS( DEG( trackingCamera.target->direction ) ) ) >> FP12_SHIFT;
 		}
 
 		concern.y += angle*5;
