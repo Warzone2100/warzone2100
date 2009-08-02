@@ -683,7 +683,6 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
    		OrdIndex = AvailableOrders[j].OrderIndex;
 
 		// Get current order state.
-   		//secondaryGetState(SelectedDroids[0], OrderButtons[OrdIndex].Order, &State);
 		State = GetSecondaryStates(OrderButtons[OrdIndex].Order);
 
 		// Get number of buttons.
@@ -1428,7 +1427,6 @@ static BOOL intRefreshOrderButtons(void)
    		OrdIndex = AvailableOrders[j].OrderIndex;
 
 		// Get current order state.
-   		//secondaryGetState(SelectedDroids[0], OrderButtons[OrdIndex].Order, &State);
 		State = GetSecondaryStates(OrderButtons[OrdIndex].Order);
 
 		// Get number of buttons.
@@ -1512,20 +1510,18 @@ static SDWORD GetSecondaryStates(SECONDARY_ORDER sec)
     }
     else //droids
     {
-	    for(i=0; i<NumSelectedDroids; i++)
+	    for (i=0; i<NumSelectedDroids; i++)
 	    {
-		    if (secondaryGetState(SelectedDroids[i], sec, &currState))
-		    {
-			    if (bFirst)
-			    {
-				    state = currState;
-				    bFirst = false;
-			    }
-			    else if (state != currState)
-			    {
-				    state = 0;
-			    }
-		    }
+		    currState = secondaryGetState(SelectedDroids[i], sec);
+			if (bFirst)
+			{
+				state = currState;
+				bFirst = false;
+			}
+			else if (state != currState)
+			{
+				state = 0;
+			}
 	    }
     }
 
