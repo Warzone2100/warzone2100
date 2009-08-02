@@ -74,6 +74,7 @@ typedef enum _droid_order
 	DORDER_LEAVEMAP,			// 36 - vtol flying off the map
 	DORDER_RTR_SPECIFIED,		// return to repair at a specified repair center
 	DORDER_CIRCLE = 40,				// circles target location and engage
+	DORDER_TEMP_HOLD,		// hold position until given next order
 } DROID_ORDER;
 
 // secondary orders for droids
@@ -120,8 +121,6 @@ typedef enum _secondary_state
 	DSS_PATROL_SET			= 0x400000,
 	DSS_CIRCLE_SET			= 0x400100,
 	DSS_FIREDES_SET			= 0x800000,
-	DSS_VTOLPROD_START		= 0x01000000,
-	DSS_VTOLPROD_END		= 0x10000000,
 } SECONDARY_STATE;
 
 // masks for the secondary order state
@@ -215,7 +214,7 @@ void orderSelectedStatsTwoLoc(UDWORD player, DROID_ORDER order,
 extern BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec);
 
 // get the state of a secondary order, return false if unsupported
-extern BOOL secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE *pState);
+extern SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec);
 
 // set the state of a secondary order, return false if failed.
 extern BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State);

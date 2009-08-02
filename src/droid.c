@@ -146,7 +146,6 @@ BOOL droidInit(void)
 float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
 	float		relativeDamage;
-	SECONDARY_STATE	state;
 
 	CHECK_DROID(psDroid);
 
@@ -161,7 +160,7 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 	if (relativeDamage > 0.0f)
 	{
 		// reset the attack level
-		if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && state == DSS_ALEV_ATTACKED)
+		if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ATTACKED)
 		{
 			secondarySetState(psDroid, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
 		}

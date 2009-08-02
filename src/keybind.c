@@ -2166,7 +2166,19 @@ void	kf_SetDroidAttackCease( void )
 // --------------------------------------------------------------------------
 void	kf_SetDroidMoveHold( void )
 {
-	kfsf_SetSelectedDroidsState(DSO_HALTTYPE,DSS_HALT_HOLD);
+	DROID	*psDroid;
+
+	// NOT A CHEAT CODE
+	// This is a function to set unit orders via keyboard shortcuts. It should
+	// _not_ be disallowed in multiplayer games.
+
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (psDroid->selected)
+		{
+			orderDroid(psDroid, DORDER_TEMP_HOLD);
+		}
+	}
 }
 
 // --------------------------------------------------------------------------
@@ -2307,12 +2319,7 @@ UDWORD		xJump = 0, yJump = 0;
 // --------------------------------------------------------------------------
 void kf_ToggleFormationSpeedLimiting( void )
 {
-	// Bail out if we're running a _true_ multiplayer game
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
+	// THIS IS NOT A CHEAT
 
 	if ( moveFormationSpeedLimitingOn() )
 	{
