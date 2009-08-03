@@ -58,13 +58,11 @@
 #include "intdisplay.h"
 #include "mission.h"
 #include "lib/gamelib/gtime.h"
-//======================================================================================
-//--------------------------------
+
 #define totalslots 36			// saves slots
 #define slotsInColumn 12		// # of slots in a column
 #define totalslotspace 64		// guessing 64 max chars for filename.
-//--------------------------------
-// ////////////////////////////////////////////////////////////////////////////
+
 #define LOADSAVE_X				D_W + 16
 #define LOADSAVE_Y				D_H + 5
 #define LOADSAVE_W				610
@@ -72,11 +70,9 @@
 
 #define MAX_SAVE_NAME			60
 
-
 #define LOADSAVE_HGAP			9
 #define LOADSAVE_VGAP			9
 #define LOADSAVE_BANNER_DEPTH	40 		//top banner which displays either load or save
-
 
 #define LOADENTRY_W				((LOADSAVE_W / 3 )-(3 * LOADSAVE_HGAP)) 
 #define LOADENTRY_H				(LOADSAVE_H -(5 * LOADSAVE_VGAP )- (LOADSAVE_BANNER_DEPTH+LOADSAVE_VGAP) ) /5
@@ -93,16 +89,11 @@
 #define SAVEENTRY_EDIT			ID_LOADSAVE + totalslots + totalslots		// save edit box. must be highest value possible I guess. -Q
 
 // ////////////////////////////////////////////////////////////////////////////
-void drawBlueBox				(UDWORD x,UDWORD y, UDWORD w, UDWORD h);
-BOOL closeLoadSave				(void);
-BOOL runLoadSave				(BOOL bResetMissionWidgets);
-BOOL displayLoadSave			(void);
 static BOOL _addLoadSave		(BOOL bLoad, const char *sSearchPath, const char *sExtension, const char *title);
 static BOOL _runLoadSave		(BOOL bResetMissionWidgets);
 static void displayLoadBanner	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayLoadSlot		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayLoadSaveEdit	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		removeWildcards		(char *pStr);
 
 static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 static	BOOL		mode;
@@ -156,6 +147,7 @@ BOOL bLoad;
 
 	return _addLoadSave(bLoad,sSearchPath,sExtension,title);
 }
+
 //****************************************************************************************
 // Load menu/save menu?
 //*****************************************************************************************
@@ -314,7 +306,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	// Check for an extension like ".ext", not "ext"
 	sasprintf((char**)&checkExtension, ".%s", sExtension);
 
-	// add savegame filenames minus extensions to buttons (up to max 10)
+	// add savegame filenames minus extensions to buttons
 	files = PHYSFS_enumerateFiles(sSearchPath);
 	for (i = files; *i != NULL; ++i)
 	{
@@ -348,7 +340,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 		slotCount++;		// goto next but...
 		if (slotCount == totalslots)
 		{
-			break;	// only show up to 10 entries
+			break;
 		}
 	}
 	PHYSFS_freeList(files);
