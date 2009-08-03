@@ -1188,8 +1188,6 @@ void actionUpdateDroid(DROID *psDroid)
 					 && CAN_UPDATE_NAYBORS(psDroid)
 					 && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
-						SECONDARY_STATE state;
-
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 						{
 							psDroid->action = DACTION_MOVEFIRE;
@@ -2212,7 +2210,7 @@ void actionUpdateDroid(DROID *psDroid)
 		actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 
 		// WSS shouldn't get a free pass to hit anything on map
-		if (cbSensorDroid(psDroid) && asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type != SUPER_SENSOR
+		if ((cbSensorDroid(psDroid) && asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type != SUPER_SENSOR)
 		    || objRadarDetector((BASE_OBJECT *)psDroid))
 		{
 			// don't move to the target, just make sure it is visible
