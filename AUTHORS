@@ -1,68 +1,58 @@
 Original game developed by Pumpkin Studios, and published by EIDOS Interactive.
 
-The Warzone Resurrection Project team and former contributors to the GPL version, in alphabetical order:
+The Warzone Resurrection Project team, in alphabetical order:
+
+-- <Buginator> : Programming
+Bruce V. Edwards <cathuria> : 2D/3D Graphics
+Elio Gubser <elio, ohyeh> : 2D Graphics
+Steven Koenig <kreuvf> : Documentation, translation
+Gerard Krol <gerard_> : Programming, Textures
+Guangcong Luo <Zarel> : Programming, Balancing, and Documentation
+Per I. Mathisen <per> : Programming
+Kim Metcalfe <lav-coyote25> : Documentation, Maps and Support
+-- <Mysteryem> : 3D Graphics
+Christian Ohm <cybersphinx> : Programming
+Tim P. <kamaze> : Webmaster
+Giel van Schijndel <Giel> : Programming and Debian Linux and Windows Packaging
+Dennis Schridde <devurandom> : Programming and general Linux and Windows Packaging
+Freddie Witherden <EvilGuru> : Programming and MacOSX Packaging
+
+
+Former contributors to the GPL version, in alphabetical order:
 
 Scott Balneaves <sbalneav> : Programming
--- <Buginator> : Programming
 Roman C. <troman> : Programming and Scripting + Scripting-engine rewrite and AI
 Denis Dupeyron <charun> : Programming
-Bruce V. Edwards <cathuria> : 2D/3D Graphics
 Don Edwards : 2D Graphics support
 Mike Gilmore <Chojun> : Programming
-Elio Gubser <elio, ohyeh> : 2D Graphics
 -- <Hatsjoe> : 2D Graphics
 Carl Hee <Watermelon> : Programming + Multiturrets
 Adam Holland
 Stefan Huehner <shuehner> : Programming + original 64bit support
 Ari Johnson <iamtheari> : Programming and MacOSX Packaging + original MacOSX port
-Steven Koenig <kreuvf> : Documentation, translation
 Martin Koller <mkoller> : Programming
-Gerard Krol <gerard_> : Programming, Textures
 Angus Lees <gus> : Debian Packaging
-Guangcong Luo <Zarel> : Programming, Balancing, and Documentation
 Dennis Luxen <pret> : Programming
 Kevin Malec <Kevin`> : Websupport
-Per I. Mathisen <per> : Programming
 Dion Mendel <noid> : Programming, original Linux port
-Kim Metcalfe <lav-coyote25> : Documentation, Maps and Support
--- <Mysteryem> : 3D Graphics
-Christian Ohm <cybersphinx> : Programming
-Tim P. <kamaze> : Webmaster
 Phil Procario <GrimMoroe, grimandmandy> : 3D Graphics
-Marcus Rast <charon> : Programming
 -- <Pseudonym404> : Programming + original 64bit support
 Victor Qamly <vqamly> : Programming
+Marcus Rast <charon> : Programming
 Ben Russon <grizzly> : Support
 Hylke van der Schaaf <TheNoid> : Programming
-Giel van Schijndel <Giel> : Programming and Debian Linux and Windows Packaging
-Dennis Schridde <devurandom> : Programming and general Linux and Windows Packaging
 Dmitri Shuralyov <shurcool> : Programming
 Rodolphe Suescun <rodzilla> : Programming
-Freddie Witherden <EvilGuru> : Programming and MacOSX Packaging
 -- <vs2k5> : Programming
 
-These files are licensed GPL version 2 or (at your option) any later version,
-but cannot easily contain the copyright in the file itself:
 
-data/base/texpages/page-40-ground-plants.png
-data/base/texpages/page-41-slightly-cracked-concrete.png
-data/base/texpages/page-42-rock.png
-data/base/texpages/page-43-mud.png
-data/base/texpages/page-53-cracked-concrete.png
-data/base/texpages/page-54-snow-grass.png
-data/base/texpages/page-55-grass.png
-	Copyright (c) 2008 Image*After/Tristan Bethe (imageafter.com)
+Non-project members whose content has been used in Warzone, in alphabetical order:
 
-These files are licensed CC BY-SA version 3.0,
-but cannot easily contain the copyright in the file itself:
-
-data/base/components/prop/prsrwhl1.pie
-data/base/components/prop/prslwhl1.pie
-data/base/components/prop/prmrwhl1.pie
-data/base/components/prop/prmlwhl1.pie
-data/base/components/prop/prlrwhl1.pie
-data/base/components/prop/prllwhl1.pie
-data/base/components/prop/prhrwhl1.pie
-data/base/components/prop/prhlwhl1.pie
-	Copyright (c) 2008 Mysteryem
-
+Tristan Bethe : Terrain textures
+Jennifer Boyer : Terrain textures
+Bart Everson : Terrain textures
+Mitch Featherston : Terrain textures
+Peter Kaminski : Terrain textures
+Konstantin Kleine-Niermann : Terrain textures
+Sherrie Thai : Terrain textures
+Mark A. Vargas : Terrain textures
