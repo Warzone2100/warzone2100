@@ -9,6 +9,18 @@ data/mods/global/newst_tiles/
 	- CC BY SA 3.0	- Copyright (c) 1999-2004 N.E.W.S.T., permission by "Frank Lamboy" <rman>
 lib/framework/tagfile.*
 	- Public Domain
+data/base/texpages/page-6-features-rockies.png
+	- CC BY SA 3.0	- Copyright (c) 2009 <Mysteryem>
+data/base/texpages/page-17-droid-weapons.png
+	- CC BY SA 3.0	- Copyright (c) 2009 <Mysteryem>
+data/base/texpages/page-40-ground-plants.png
+data/base/texpages/page-41-slightly-cracked-concrete.png
+data/base/texpages/page-42-rock.png
+data/base/texpages/page-43-mud.png
+data/base/texpages/page-53-cracked-concrete.png
+data/base/texpages/page-54-snow-grass.png
+data/base/texpages/page-55-grass.png
+	- GPLv2 or later - Copyright (c) 2008 Image*After/Tristan Bethe (imageafter.com)
 data/base/texpages/page-44-mud.png
 data/base/texpages/page-45-yellow-sand.png
 data/base/texpages/page-46-cliff.png
@@ -32,3 +44,12 @@ data/base/texpages/page-52-plants-on-rock.png
 data/base/texpages/page-56-gravel.png
 data/base/texpages/page-58-snow-gravel.png
 	- CC BY 2.0 - Adapted from a photo Copyright (c) 2007 Konstantin Kleine-Niermann
+data/base/components/prop/prsrwhl1.pie
+data/base/components/prop/prslwhl1.pie
+data/base/components/prop/prmrwhl1.pie
+data/base/components/prop/prmlwhl1.pie
+data/base/components/prop/prlrwhl1.pie
+data/base/components/prop/prllwhl1.pie
+data/base/components/prop/prhrwhl1.pie
+data/base/components/prop/prhlwhl1.pie
+	- CC BY SA 3.0 - Copyright (c) 2008 <Mysteryem>
