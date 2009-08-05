@@ -54,9 +54,6 @@ extern void formationLeave(FORMATION *psFormation, const DROID* psDroid);
 // remove all the members from a formation and release it
 extern void formationReset(FORMATION *psFormation);
 
-// re-insert all the units in the formation
-extern void formationReorder(FORMATION *psFormation);
-
 // get a target position to move into a formation
 extern BOOL formationGetPos(FORMATION *psFormation, DROID* psDroid,
 					 SDWORD *pX, SDWORD *pY, BOOL bCheckLOS);

@@ -175,12 +175,10 @@ STAT_BAR	infoBars[]=
 };
 
 // --------------------------------------------------------------------
-void	constructTime(char *psText, UDWORD hours, UDWORD minutes, UDWORD seconds);
-void	drawDroidBars( void );
-void	drawUnitBars( void );
+static void constructTime(char *psText, UDWORD hours, UDWORD minutes, UDWORD seconds);
 static void drawStatBars(void);
-void	fillUpStats( void );
-void	dispAdditionalInfo( void );
+static void fillUpStats( void );
+static void dispAdditionalInfo( void );
 // --------------------------------------------------------------------
 
 /* The present mission data */
