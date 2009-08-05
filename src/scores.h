@@ -93,7 +93,6 @@ extern BOOL	scoreInitSystem			( void );
 extern void	scoreUpdateVar			( DATA_INDEX var );
 extern void	scoreDataToConsole		( void );
 extern void	scoreDataToScreen		( void );
-extern void constructTime			( char *psText, UDWORD hours, UDWORD minutes, UDWORD seconds );
 extern void	getAsciiTime			( char *psText, UDWORD time );
 extern bool readScoreData			( const char* fileName );
 extern bool writeScoreData			( const char* fileName );

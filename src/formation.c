@@ -483,7 +483,7 @@ static void formationFindFree(FORMATION *psFormation, DROID* psDroid,
 
 
 // re-insert all the units in the formation
-void formationReorder(FORMATION *psFormation)
+static void formationReorder(FORMATION *psFormation)
 {
 	SDWORD		numObj, i,curr,prev;
 	F_MEMBER	*asMembers, asDroids[F_MAXMEMBERS];
