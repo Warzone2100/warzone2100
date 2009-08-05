@@ -15,7 +15,12 @@
 */
 /*---------------------------- Includes ------------------------------------*/
 #include <ctype.h>
-#include <physfs.h>
+#include <stdbool.h>
+#include <stdint.h>
+
+#include "lib/framework/wzglobal.h"
+#include "lib/framework/physfs_ext.h"
+
 #include "iniparser.h"
 
 /*---------------------------- Defines -------------------------------------*/
@@ -211,8 +216,9 @@ void iniparser_dump(dictionary * d, FILE * f)
   It is Ok to specify @c stderr or @c stdout as output files.
  */
 /*--------------------------------------------------------------------------*/
-void iniparser_dump_ini(dictionary * d, FILE * f)
+void iniparser_dump_ini(dictionary * d, const char *path)
 {
+    PHYSFS_file *f = PHYSFS_openWrite(path);
     int     i, j ;
     char    keym[ASCIILINESZ+1];
     int     nsec ;
@@ -227,27 +233,29 @@ void iniparser_dump_ini(dictionary * d, FILE * f)
         for (i=0 ; i<d->size ; i++) {
             if (d->key[i]==NULL)
                 continue ;
-            fprintf(f, "%s = %s\n", d->key[i], d->val[i]);
+            PHYSFS_printf(f, "%s = %s\n", d->key[i], d->val[i]);
         }
+        PHYSFS_close(f);
         return ;
     }
     for (i=0 ; i<nsec ; i++) {
         secname = iniparser_getsecname(d, i) ;
         seclen  = (int)strlen(secname);
-        fprintf(f, "\n[%s]\n", secname);
+        PHYSFS_printf(f, "\n[%s]\n", secname);
         sprintf(keym, "%s:", secname);
         for (j=0 ; j<d->size ; j++) {
             if (d->key[j]==NULL)
                 continue ;
             if (!strncmp(d->key[j], keym, seclen+1)) {
-                fprintf(f,
+                PHYSFS_printf(f,
                         "%-30s = %s\n",
                         d->key[j]+seclen+1,
                         d->val[j] ? d->val[j] : "");
             }
         }
     }
-    fprintf(f, "\n");
+    PHYSFS_printf(f, "\n");
+    PHYSFS_close(f);
     return ;
 }
 
@@ -410,9 +418,6 @@ int iniparser_find_entry(
     return found ;
 }
 
-// commented out by Per for Warzone project, since it generated a warning
-// (correctly) about being undeclared / unused
-#if 0
 /*-------------------------------------------------------------------------*/
 /**
   @brief    Set an entry in a dictionary.
@@ -426,11 +431,10 @@ int iniparser_find_entry(
   It is Ok to set val to NULL.
  */
 /*--------------------------------------------------------------------------*/
-int iniparser_set(dictionary * ini, char * entry, char * val)
+int iniparser_setstring(dictionary * ini, const char * entry, const char * val)
 {
     return dictionary_set(ini, strlwc(entry), val) ;
 }
-#endif
 
 /*-------------------------------------------------------------------------*/
 /**
@@ -579,7 +583,6 @@ dictionary * iniparser_load(const char * ininame)
     dictionary * dict ;
 
     if ((in=PHYSFS_openRead(ininame))==NULL) {
-        fprintf(stderr, "iniparser: cannot open %s\n", ininame);
         return NULL ;
     }
 

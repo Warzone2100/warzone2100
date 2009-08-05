@@ -178,7 +178,7 @@ STAT_BAR	infoBars[]=
 void	constructTime(char *psText, UDWORD hours, UDWORD minutes, UDWORD seconds);
 void	drawDroidBars( void );
 void	drawUnitBars( void );
-void	drawStatBars( void );
+static void drawStatBars(void);
 void	fillUpStats( void );
 void	dispAdditionalInfo( void );
 // --------------------------------------------------------------------
@@ -190,6 +190,7 @@ static	BOOL	bDispStarted = false;
 static	char	text[255];
 static	char	text2[255];
 extern bool Cheated;
+
 // --------------------------------------------------------------------
 /* Initialise the mission data info - done before each mission */
 BOOL	scoreInitSystem( void )
@@ -329,7 +330,7 @@ UDWORD	hours,minutes,seconds;
 
 
 // -----------------------------------------------------------------------------------
-void	drawStatBars( void )
+static void drawStatBars(void)
 {
 UDWORD	index;
 BOOL	bMoreBars;
