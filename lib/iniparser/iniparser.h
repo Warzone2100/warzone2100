@@ -34,13 +34,6 @@
 
 #include "dictionary.h"
 
-/*---------------------------------------------------------------------------
-   								Macros
- ---------------------------------------------------------------------------*/
-/** For backwards compatibility only */
-#define iniparser_getstr(d, k)  iniparser_getstring(d, k, NULL)
-#define iniparser_setstr        iniparser_setstring
-
 /*-------------------------------------------------------------------------*/
 /**
   @brief    Get number of sections in a dictionary
@@ -93,7 +86,7 @@ char * iniparser_getsecname(dictionary * d, int n);
  */
 /*--------------------------------------------------------------------------*/
 
-void iniparser_dump_ini(dictionary * d, FILE * f);
+void iniparser_dump_ini(dictionary * d, const char *path);
 
 /*-------------------------------------------------------------------------*/
 /**
@@ -219,7 +212,7 @@ int iniparser_getboolean(dictionary * d, const char * key, int notfound);
   It is Ok to set val to NULL.
  */
 /*--------------------------------------------------------------------------*/
-int iniparser_setstring(dictionary * ini, char * entry, char * val);
+int iniparser_setstring(dictionary * ini, const char * entry, const char * val);
 
 
 /*-------------------------------------------------------------------------*/

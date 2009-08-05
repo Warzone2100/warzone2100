@@ -65,7 +65,7 @@ static void * mem_double(void * ptr, int size)
   for systems that do not have it.
  */
 /*--------------------------------------------------------------------------*/
-static char * xstrdup(char * s)
+static char * xstrdup(const char * s)
 {
     char * t ;
     if (!s)
@@ -225,7 +225,7 @@ const char * dictionary_get(dictionary * d, const char * key, const char * def)
   This function returns non-zero in case of failure.
  */
 /*--------------------------------------------------------------------------*/
-int dictionary_set(dictionary * d, char * key, char * val)
+int dictionary_set(dictionary * d, const char * key, const char * val)
 {
 	int			i ;
 	unsigned	hash ;
@@ -244,8 +244,8 @@ int dictionary_set(dictionary * d, char * key, char * val)
 					/* Found a value: modify and return */
 					if (d->val[i]!=NULL)
 						free(d->val[i]);
-                    d->val[i] = val ? xstrdup(val) : NULL ;
-                    /* Value has been modified: return */
+					d->val[i] = val ? xstrdup(val) : NULL ;
+					/* Value has been modified: return */
 					return 0 ;
 				}
 			}
@@ -276,7 +276,7 @@ int dictionary_set(dictionary * d, char * key, char * val)
     }
 	/* Copy key */
 	d->key[i]  = xstrdup(key);
-    d->val[i]  = val ? xstrdup(val) : NULL ;
+	d->val[i]  = val ? xstrdup(val) : NULL ;
 	d->hash[i] = hash;
 	d->n ++ ;
 	return 0 ;

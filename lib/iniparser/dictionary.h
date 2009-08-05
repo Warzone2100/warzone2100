@@ -137,7 +137,7 @@ const char * dictionary_get(dictionary * d, const char * key, const char * def);
   This function returns non-zero in case of failure.
  */
 /*--------------------------------------------------------------------------*/
-int dictionary_set(dictionary * vd, char * key, char * val);
+int dictionary_set(dictionary * vd, const char * key, const char * val);
 
 /*-------------------------------------------------------------------------*/
 /**
