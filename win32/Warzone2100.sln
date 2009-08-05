@@ -13,6 +13,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Warzone2100", "Warzone2100.
 		{33979915-684A-4885-BFEA-2A4CCC5A5FD6} = {33979915-684A-4885-BFEA-2A4CCC5A5FD6}
 		{2D0B0F06-3CA2-46C7-908D-5C7098645021} = {2D0B0F06-3CA2-46C7-908D-5C7098645021}
 		{BBCBB046-6EFC-4369-853A-CAEF001B449E} = {BBCBB046-6EFC-4369-853A-CAEF001B449E}
+		{0A5A8B49-7072-4196-AA26-DD767760C6B5} = {0A5A8B49-7072-4196-AA26-DD767760C6B5}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "autorevision", "..\build_tools\autorevision\autorevision.vcproj", "{32FC4941-5ADF-483F-BD90-CDEBC50BA4AE}"
@@ -41,6 +42,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite3", "..\lib\sqlite3\sqlite3.vcproj", "{BBCBB046-6EFC-4369-853A-CAEF001B449E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "exceptionhandler", "..\lib\exceptionhandler\exceptionhandler.vcproj", "{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iniparser", "..\lib\iniparser\iniparser.vcproj", "{0A5A8B49-7072-4196-AA26-DD767760C6B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -100,6 +103,10 @@ Global
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.Debug|Win32.Build.0 = Debug|Win32
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.Release|Win32.ActiveCfg = Release|Win32
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.Release|Win32.Build.0 = Release|Win32
+		{0A5A8B49-7072-4196-AA26-DD767760C6B5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0A5A8B49-7072-4196-AA26-DD767760C6B5}.Debug|Win32.Build.0 = Debug|Win32
+		{0A5A8B49-7072-4196-AA26-DD767760C6B5}.Release|Win32.ActiveCfg = Release|Win32
+		{0A5A8B49-7072-4196-AA26-DD767760C6B5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
