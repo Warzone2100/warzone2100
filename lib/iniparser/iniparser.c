@@ -15,11 +15,13 @@
 */
 /*---------------------------- Includes ------------------------------------*/
 #include <ctype.h>
-#include <stdbool.h>
-#include <stdint.h>
+#include <physfs.h>
 
 #include "lib/framework/wzglobal.h"
-#include "lib/framework/physfs_ext.h"
+#include "lib/framework/types.h"
+
+// Declaring it here instead ofincluding lib/framework/physfs_ext.h to ease build dependencies
+bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...) WZ_DECL_FORMAT(printf, 2, 3);
 
 #include "iniparser.h"
 
