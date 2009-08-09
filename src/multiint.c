@@ -215,6 +215,7 @@ void loadMapPreview(bool hideInterface)
 
 	// load the terrain types
 	psLevel = levFindDataSet(game.map);
+	ASSERT_OR_RETURN(, psLevel, "Could not find level dataset!");
 	rebuildSearchPath(psLevel->dataDir, false);
 	sstrcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
