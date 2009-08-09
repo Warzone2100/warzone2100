@@ -22,7 +22,7 @@ import re, hashlib
 import pydot
 
 
-PATH='/home/rhamph/src/warzone/mainline/data/mp/'
+PATH='../../data/mp/'
 PREREQS='stats/research/multiplayer/prresearch.txt'
 NAMES='messages/strings/names.txt'
 COSTS='stats/research/multiplayer/research.txt'
