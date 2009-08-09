@@ -317,7 +317,7 @@ BOOL sound_Play3DTrack( AUDIO_SAMPLE *psSample )
 //
 void sound_StopTrack( AUDIO_SAMPLE *psSample )
 {
-	ASSERT(psSample != NULL, "Sample pointer invalid");
+	ASSERT_OR_RETURN(, psSample != NULL, "Sample pointer invalid");
 
 #ifndef WZ_NOSOUND
 	sound_StopSample(psSample);
