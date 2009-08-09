@@ -250,9 +250,13 @@ void formationLeave(FORMATION *psFormation, const DROID* psDroid)
 	F_MEMBER	*asMembers;
 	FORMATION	*psCurr, *psPrev;
 
-	ASSERT( psFormation != NULL,
+	ASSERT_OR_RETURN(, psFormation != NULL,
 		"formationLeave: invalid formation" );
-	ASSERT( psFormation->refCount > 0,
+	if (!psDroid)
+	{
+		return;
+	}
+	ASSERT_OR_RETURN(, psFormation->refCount > 0,
 		"formationLeave: refcount is zero" );
 
 	asMembers = psFormation->asMembers;
