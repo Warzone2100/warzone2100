@@ -350,7 +350,7 @@ int saveModel(const char *filename, MODEL *psModel)
 MODEL *readModel(const char *filename, int now)
 {
 	FILE *fp = fopen(filename, "r");
-	int num, x, meshes, mesh;
+	int num, x, meshes, mesh, version;
 	char s[200];
 	MODEL *psModel;
 
@@ -360,10 +360,15 @@ MODEL *readModel(const char *filename, int now)
 		exit(1);
 	}
 
-	num = fscanf(fp, "WZM %d\n", &x);
-	if (num != 1 || x != 1)
+	num = fscanf(fp, "WZM %d\n", &version);
+	if (num != 1)
 	{
-		fprintf(stderr, "Bad WZM file %s\n", filename);
+		fprintf(stderr, "Bad WZM file or wrong version: %s\n", filename);
+		exit(1);
+	}
+	if (version != 1 && version != 2)
+	{
+		fprintf(stderr, "Bad WZM version %d in %s\n", version, filename);
 		exit(1);
 	}
 
@@ -388,10 +393,10 @@ MODEL *readModel(const char *filename, int now)
 		MESH *psMesh = &psModel->mesh[mesh];
 		int j;
 
-		num = fscanf(fp, "\nMESH %d\n", &x);
-		if (num != 1 || mesh != x)
+		num = fscanf(fp, "\nMESH %s\n", s);
+		if (num != 1)
 		{
-			fprintf(stderr, "Bad MESH directive in %s, was %d should be %d.\n", filename, x, mesh);
+			fprintf(stderr, "Bad MESH directive in %s, was \"%s\".\n", filename, s);
 			exit(1);
 		}
 
@@ -529,8 +534,17 @@ MODEL *readModel(const char *filename, int now)
 		for (j = 0; j < psMesh->connectors; j++)
 		{
 			CONNECTOR *conn = &psMesh->connectorArray[j];
+			int angle, angler1, angler2;
 
-			num = fscanf(fp, "\n%f %f %f %d", &conn->pos.x, &conn->pos.y, &conn->pos.z, &conn->type);
+			if (version == 1)
+			{
+				num = fscanf(fp, "\n%f %f %f %d", &conn->pos.x, &conn->pos.y, &conn->pos.z, &conn->type);
+			}
+			else if (version == 2)
+			{
+				num = fscanf(fp, "\n%s %f %f %f %d %d %d", s, &conn->pos.x, &conn->pos.y, &conn->pos.z, &angle, &angler1, &angler2);
+				conn->type = 0;	// TODO
+			}
 			if (num != 4)
 			{
 				fprintf(stderr, "Bad CONNECTORS entry in mesh %d, number %d\n", mesh, j);
