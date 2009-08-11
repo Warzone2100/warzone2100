@@ -251,6 +251,8 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleShowGateways,
 	kf_ToggleShowPath,
 	kf_MapCheck,
+	kf_SetDroidGoToTransport,
+	kf_SetDroidMoveGuard,
 	NULL		// last function!
 };
 
@@ -383,6 +385,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_D,KEYMAP_PRESSED,kf_JumpToUnassignedUnits,	_("View Unassigned Units"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_E,KEYMAP_PRESSED,kf_SetDroidAttackReturn,	_("Return Fire"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F,KEYMAP_PRESSED,kf_SetDroidAttackAtWill,	_("Fire at Will"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_G,KEYMAP_PRESSED,kf_SetDroidMoveGuard,		_("Guard Position"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_H,KEYMAP_PRESSED,kf_SetDroidReturnToBase,	_("Return to HQ"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_I,KEYMAP_PRESSED,kf_SetDroidRangeDefault,	_("Optimum Range"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_O,KEYMAP_PRESSED,kf_SetDroidRangeShort,		_("Short Range"));
@@ -390,6 +393,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_Q,KEYMAP_PRESSED,kf_SetDroidMovePatrol ,		_("Patrol"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_R,KEYMAP_PRESSED,kf_SetDroidGoForRepair ,	_("Return For Repair"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_S,KEYMAP_PRESSED,kf_SetDroidMoveHold ,		_("Hold Position"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_T,KEYMAP_PRESSED,kf_SetDroidGoToTransport,	_("Go to Transport"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_RETURN,KEYMAP_PRESSED,kf_SendTextMessage,			_("Send Text Message"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_U,KEYMAP_PRESSED,kf_SetDroidRangeLong,		_("Long Range"));
 

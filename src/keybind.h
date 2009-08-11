@@ -148,10 +148,12 @@ extern void	kf_SetDroidAttackReturn( void );
 extern void	kf_SetDroidAttackCease( void );
 
 extern void	kf_SetDroidMoveHold( void );
+extern void	kf_SetDroidMoveGuard( void );
 extern void	kf_SetDroidMovePursue( void ); //not there?
 extern void	kf_SetDroidMovePatrol( void ); // not there?
 
 extern void	kf_SetDroidReturnToBase( void );
+extern void	kf_SetDroidGoToTransport( void );
 extern void	kf_SetDroidGoForRepair( void );
 extern void	kf_SetDroidRecycle( void );
 extern void	kf_ScatterDroids( void );

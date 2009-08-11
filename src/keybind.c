@@ -2182,6 +2182,12 @@ void	kf_SetDroidMoveHold( void )
 }
 
 // --------------------------------------------------------------------------
+void	kf_SetDroidMoveGuard( void )
+{
+	kfsf_SetSelectedDroidsState(DSO_HALTTYPE,DSS_HALT_GUARD);
+}
+
+// --------------------------------------------------------------------------
 void	kf_SetDroidMovePursue( void )
 {
 	kfsf_SetSelectedDroidsState(DSO_HALTTYPE,DSS_HALT_PURSUE);	// ASK?
@@ -2197,6 +2203,12 @@ void	kf_SetDroidMovePatrol( void )
 void	kf_SetDroidReturnToBase( void )
 {
 	kfsf_SetSelectedDroidsState(DSO_RETURN_TO_LOC,DSS_RTL_BASE);
+}
+
+// --------------------------------------------------------------------------
+void	kf_SetDroidGoToTransport( void )
+{
+	kfsf_SetSelectedDroidsState(DSO_RETURN_TO_LOC,DSS_RTL_TRANSPORT);
 }
 
 // --------------------------------------------------------------------------
