@@ -51,6 +51,7 @@
 #include "multilimit.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/script/script.h"
+#include "challenge.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -231,6 +232,15 @@ BOOL startLimitScreen(void)
 				sButInit.y +=  BARHEIGHT +5;
 			}
 		}
+	}
+
+	if (challengeActive)
+	{
+		sliderEnableDrag(false);
+	}
+	else
+	{
+		sliderEnableDrag(true);
 	}
 
 	return true;

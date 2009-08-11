@@ -46,6 +46,7 @@
 #include "lib/widget/button.h"
 
 #include "advvis.h"
+#include "challenge.h"
 #include "component.h"
 #include "difficulty.h"
 #include "display.h"
@@ -361,7 +362,8 @@ void startSinglePlayerMenu(void)
 
 	addTextButton(FRONTEND_NEWGAME,  FRONTEND_POS2X,FRONTEND_POS2Y,_("New Campaign") ,false,false);
 	addTextButton(FRONTEND_SKIRMISH, FRONTEND_POS3X,FRONTEND_POS3Y, _("Start Skirmish Game"),false,false);
-	addTextButton(FRONTEND_LOADGAME, FRONTEND_POS4X,FRONTEND_POS4Y, _("Load Game"),false,false);
+	addTextButton(FRONTEND_CHALLENGES, FRONTEND_POS4X, FRONTEND_POS4Y, _("Challenges"), false, false);
+	addTextButton(FRONTEND_LOADGAME, FRONTEND_POS5X,FRONTEND_POS5Y, _("Load Game"),false,false);
 
 	addSideText	 (FRONTEND_SIDETEXT ,FRONTEND_SIDEX,FRONTEND_SIDEY,_("SINGLE PLAYER"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -411,6 +413,10 @@ BOOL runSinglePlayerMenu(void)
 			loadOK();
 		}
 	}
+	else if (challengesUp)
+	{
+		runChallenges();
+	}
 	else
 	{
 		// FIXME: We should do a SPinit() to make sure all the variables are reset correctly.
@@ -459,6 +465,10 @@ BOOL runSinglePlayerMenu(void)
 				changeTitleMode(TITLE);
 				break;
 
+			case FRONTEND_CHALLENGES:
+				addChallenges();
+				break;
+
 			default:
 				break;
 		}
@@ -471,13 +481,17 @@ BOOL runSinglePlayerMenu(void)
 	}
 
 
-	if(!bLoadSaveUp)										// if save/load screen is up
+	if (!bLoadSaveUp && !challengesUp)						// if save/load screen is up
 	{
 		widgDisplayScreen(psWScreen);						// show the widgets currently running
 	}
-	if(bLoadSaveUp)										// if save/load screen is up
+	if (bLoadSaveUp)								// if save/load screen is up
 	{
 		displayLoadSave();
+	}
+	else if (challengesUp)
+	{
+		displayChallenges();
 	}
 
 	return true;

@@ -47,6 +47,7 @@
 
 #include "advvis.h"
 #include "atmos.h"
+#include "challenge.h"
 #include "cluster.h"
 #include "cmddroid.h"
 #include "component.h"
@@ -1108,6 +1109,9 @@ BOOL stageThreeInitialise(void)
 BOOL stageThreeShutDown(void)
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
+
+	challengesUp = false;
+	challengeActive = false;
 
 	// make sure any button tips are gone.
 	widgReset();

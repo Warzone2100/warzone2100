@@ -66,6 +66,7 @@ noinst_HEADERS = \
 	bridge.h \
 	bucket3d.h \
 	cheat.h \
+	challenge.h \
 	clparse.h \
 	cluster.h \
 	cmddroiddef.h \
@@ -198,6 +199,7 @@ warzone2100_SOURCES = \
 	baseobject.c \
 	bridge.c \
 	bucket3d.c \
+	challenge.c \
 	cheat.c \
 	clparse.c \
 	cluster.c \

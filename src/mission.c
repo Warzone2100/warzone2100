@@ -39,6 +39,7 @@
 #include "lib/widget/widget.h"
 
 #include "game.h"
+#include "challenge.h"
 #include "projectile.h"
 #include "power.h"
 #include "structure.h"
@@ -528,7 +529,7 @@ the display*/
 void addMissionTimerInterface(void)
 {
 	//don't add if the timer hasn't been set
-	if (mission.time < 0)
+	if (mission.time < 0 && !challengeActive)
 	{
 		return;
 	}
@@ -2183,42 +2184,39 @@ void fillTimeDisplay(char *psText, UDWORD time, BOOL bHours)
 void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	W_LABEL		*Label = (W_LABEL*)psWidget;
-	UDWORD		timeElapsed;//, calcTime;
+	UDWORD		timeElapsed;
 	SDWORD		timeRemaining;
 
-    //take into account cheating with the mission timer
-    //timeElapsed = gameTime - mission.startTime;
-
-    //if the cheatTime has been set, then don't want the timer to countdown until stop cheating
-    if (mission.cheatTime)
-    {
-        timeElapsed = mission.cheatTime - mission.startTime;
-    }
-    else
-    {
-	    timeElapsed = gameTime - mission.startTime;
-    }
-	//check not gone over more than one hour - the mission should have been aborted?
-	//if (timeElapsed > 60*60*GAME_TICKS_PER_SEC)
-	//check not gone over more than 99 mins - the mission should have been aborted?
-    //check not gone over more than 5 hours - arbitary number of hours
-    if (timeElapsed > 5*60*60*GAME_TICKS_PER_SEC)
+	// If the cheatTime has been set, then don't want the timer to countdown until stop cheating
+	if (mission.cheatTime)
 	{
-		ASSERT( false,"You've taken too long for this mission!" );
-		return;
+		timeElapsed = mission.cheatTime - mission.startTime;
+	}
+	else
+	{
+		timeElapsed = gameTime - mission.startTime;
 	}
 
-	timeRemaining = mission.time - timeElapsed;
-	if (timeRemaining < 0)
+	if (!challengeActive)
 	{
-		timeRemaining = 0;
+		timeRemaining = mission.time - timeElapsed;
+		if (timeRemaining < 0)
+		{
+			timeRemaining = 0;
+		}
+	}
+	else
+	{
+		timeRemaining = timeElapsed;
 	}
 
 	fillTimeDisplay(Label->aText, timeRemaining, true);
+	Label->style &= ~WIDG_HIDDEN;	// Make sure its visible
 
-    //make sure its visible
-    Label->style &= ~WIDG_HIDDEN;
-
+	if (challengeActive)
+	{
+		return;	// all done
+	}
 
     //make timer flash if time remaining < 5 minutes
     if (timeRemaining < FIVE_MINUTES)
@@ -2265,8 +2263,6 @@ void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext)
             missionCountDown &= ~NOT_PLAYED_ONE;
         }
     }
-
-
 }
 
 #define	TRANSPORTER_REINFORCE_LEADIN	10*GAME_TICKS_PER_SEC
