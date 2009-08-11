@@ -174,6 +174,7 @@ enum
 	FRONTEND_NEWGAME		= 20200,	// single player (menu)
 	FRONTEND_LOADGAME,
 	FRONTEND_SKIRMISH,
+	FRONTEND_CHALLENGES,
 	FRONTEND_HOST			= 20300,	//multiplayer menu options
 	FRONTEND_JOIN,
 	FE_P0,								// player 0 buton

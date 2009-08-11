@@ -275,6 +275,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\challenge.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\cheat.c"
 					>
 				</File>
@@ -739,6 +743,10 @@
 			</File>
 			<File
 				RelativePath="..\src\bulletdef.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\challenge.h"
 				>
 			</File>
 			<File

@@ -36,9 +36,12 @@
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/iniparser/iniparser.h"
 #include "objects.h"
 #include "hci.h"
+#include "loadsave.h"
 #include "message.h"
+#include "challenge.h"
 #include "intelmap.h"
 #include "map.h"
 #include "structure.h"
@@ -3258,6 +3261,54 @@ BOOL scrGameOverMessage(void)
     // this should be called when the video Quit is processed
     // not always is tough, so better be sure
 	displayGameOver(gameWon);
+
+	if (challengeActive)
+	{
+		char sPath[64], key[64], timestr[32], *fStr;
+		int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
+		bool victory = false;
+		dictionary *dict = iniparser_load(CHALLENGE_SCORES);
+
+		fStr = strrchr(sRequestResult, '/');
+		fStr++;	// skip slash
+		if (fStr == '\0')
+		{
+			debug(LOG_ERROR, "Bad path to challenge file (%s)", sRequestResult);
+			return true;
+		}
+		sstrcpy(sPath, fStr);
+		sPath[strlen(sPath) - 4] = '\0';	// remove .ini
+		if (dict)
+		{
+			ssprintf(key, "%s:Victory", sPath);
+			victory = iniparser_getboolean(dict, key, false);
+			ssprintf(key, "%s:seconds", sPath);
+			seconds = iniparser_getint(dict, key, 0);
+		}
+		else
+		{
+			dict = dictionary_new(3);
+		}
+
+		// Update score if we have a victory and best recorded was a loss,
+		// or both were losses but time is higher, or both were victories
+		// but time is lower.
+		if ((!victory && gameWon) 
+		    || (!gameWon && !victory && newtime > seconds)
+		    || (gameWon && victory && newtime < seconds))
+		{
+			dictionary_set(dict, sPath, NULL);
+			ssprintf(key, "%s:Seconds", sPath);
+			ssprintf(timestr, "%d", newtime);
+			iniparser_setstring(dict, key, timestr);
+			ssprintf(key, "%s:Player", sPath);
+			iniparser_setstring(dict, key, NetPlay.players[selectedPlayer].name);
+			ssprintf(key, "%s:Victory", sPath);
+			iniparser_setstring(dict, key, gameWon ? "true": "false");
+		}
+		iniparser_dump_ini(dict, CHALLENGE_SCORES);
+		iniparser_freedict(dict);
+	}
 
 	return true;
 }

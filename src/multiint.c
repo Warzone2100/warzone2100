@@ -53,6 +53,9 @@
 #include "lib/widget/widgint.h"
 #include "lib/widget/label.h"
 
+#include "lib/iniparser/iniparser.h"
+
+#include "challenge.h"
 #include "main.h"
 #include "objects.h"
 #include "display.h"// pal stuff
@@ -1117,6 +1120,10 @@ static void addGameOptions(BOOL bRedo)
 
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), game.name, IMAGE_EDIT_GAME, IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_MAP  , MCOL0, MROW3, _("Select Map"), game.map, IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, MULTIOP_MAP_ICON);
+	if (challengeActive)
+	{
+		widgSetButtonState(psWScreen, MULTIOP_MAP_ICON, WBUT_DISABLE);
+	}
 	// password box
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT  , MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE , MULTIOP_PASSWORD_BUT);
 	// Disable Password button for skirmish games
@@ -1134,11 +1141,26 @@ static void addGameOptions(BOOL bRedo)
 	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,	0);
 	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,	0);
 
-	if (game.scavengers)	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
-	else			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_LOCK);
+	if (game.scavengers)
+	{
+		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
+		if (challengeActive)
+		{
+			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
+		}
+	}
+	else
+	{
+		widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_LOCK);
+		if (challengeActive)
+		{
+			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
+		}
+	}
 
 	if (game.maxPlayers == 8)
 	{
+		widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_LOCK);
 		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);	// full, cannot enable scavenger player
 	}
 
@@ -1174,6 +1196,11 @@ static void addGameOptions(BOOL bRedo)
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);				//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
+		if (challengeActive)
+		{
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N, WBUT_DISABLE);
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y, WBUT_DISABLE);
+		}
 
 		switch(game.alliance)
 		{
@@ -1198,17 +1225,32 @@ static void addGameOptions(BOOL bRedo)
 		widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,0);		//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,0);
 		widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,0);
-		switch(game.power)
+		if (game.power <= LEV_LOW)
 		{
-		case LEV_LOW:
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,WBUT_LOCK);
-			break;
-		case LEV_MED:
+			if (challengeActive)
+			{
+				widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED, WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI, WBUT_DISABLE);
+			}
+		}
+		else if (game.power <= LEV_MED)
+		{
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,WBUT_LOCK);
-			break;
-		case LEV_HI:
+			if (challengeActive)
+			{
+				widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW, WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI, WBUT_DISABLE);
+			}
+		}
+		else
+		{
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI,WBUT_LOCK);
-			break;
+			if (challengeActive)
+			{
+				widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW, WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED, WBUT_DISABLE);
+			}
 		}
 
 		addBlueForm(MULTIOP_OPTIONS, MULTIOP_BASETYPE, _("Base"), MCOL0, MROW9, MULTIOP_BLUEFORMW, 27);
@@ -1225,12 +1267,27 @@ static void addGameOptions(BOOL bRedo)
 		{
 		case 0:
 			widgSetButtonState(psWScreen, MULTIOP_CLEAN,WBUT_LOCK);
+			if (challengeActive)
+			{
+				widgSetButtonState(psWScreen, MULTIOP_BASE, WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_DEFENCE, WBUT_DISABLE);
+			}
 			break;
 		case 1:
 			widgSetButtonState(psWScreen, MULTIOP_BASE,WBUT_LOCK);
+			if (challengeActive)
+			{
+				widgSetButtonState(psWScreen, MULTIOP_CLEAN, WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_DEFENCE, WBUT_DISABLE);
+			}
 			break;
 		case 2:
 			widgSetButtonState(psWScreen, MULTIOP_DEFENCE,WBUT_LOCK);
+			if (challengeActive)
+			{
+				widgSetButtonState(psWScreen, MULTIOP_CLEAN, WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_BASE, WBUT_DISABLE);
+			}
 			break;
 		}
 
@@ -1247,7 +1304,7 @@ static void addGameOptions(BOOL bRedo)
 		_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	// host Games button
-	if(ingame.bHostSetup && !bHosted)
+	if(ingame.bHostSetup && !bHosted && !challengeActive)
 	{
 		addMultiBut(psWScreen,MULTIOP_OPTIONS,MULTIOP_HOST,MULTIOP_HOSTX,MULTIOP_HOSTY,35,28,
 					_("Start Hosting Game"), IMAGE_HOST, IMAGE_HOST_HI, IMAGE_HOST_HI);
@@ -1255,10 +1312,11 @@ static void addGameOptions(BOOL bRedo)
 
 	// hosted or hosting.
 	// limits button.
-	if(ingame.bHostSetup )
+	if (ingame.bHostSetup)
 	{
 		addMultiBut(psWScreen,MULTIOP_OPTIONS,MULTIOP_STRUCTLIMITS,MULTIOP_STRUCTLIMITSX,MULTIOP_STRUCTLIMITSY,
-		            35, 28, _("Set Structure Limits"), IMAGE_SLIM, IMAGE_SLIM_HI, IMAGE_SLIM_HI);
+		            35, 28, challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"), 
+		            IMAGE_SLIM, IMAGE_SLIM_HI, IMAGE_SLIM_HI);
 	}
 
 	return;
@@ -1825,7 +1883,7 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
 				sFormInit.width = MULTIOP_ROW_WIDTH;
 				sFormInit.height = MULTIOP_PLAYERHEIGHT;
-				if (NetPlay.isHost)
+				if (NetPlay.isHost && !challengeActive)
 				{
 					sFormInit.pTip = "Click to adjust AI difficulty";
 				}
@@ -1842,7 +1900,7 @@ UDWORD addPlayerBox(BOOL players)
 		}
 	}
 
-	if(ingame.bHostSetup) // if hosting.
+	if (ingame.bHostSetup && !challengeActive) // if hosting.
 	{
 		sliderEnableDrag(true);
 	}else{
@@ -2344,7 +2402,6 @@ static void processMultiopWidgets(UDWORD id)
 					{
 						game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);
 					}
-
 					break;
 				}
 			}
@@ -2364,8 +2421,16 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 
 	case CON_CANCEL:
-		NETGameLocked(false);		// reset status on a cancel
-		stopJoining();
+		if (!challengeActive)
+		{
+			NETGameLocked(false);		// reset status on a cancel
+			stopJoining();
+		}
+		else
+		{
+			widgDelete(psWScreen, FRONTEND_BACKDROP);
+			changeTitleMode(TITLE);
+		}
 		break;
 	case MULTIOP_MAP_BUT:
 		loadMapPreview(true);
@@ -2374,7 +2439,7 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 	}
 
-	if (id >= MULTIOP_TEAMS_START && id <= MULTIOP_TEAMS_END)		// Clicked on a team chooser
+	if (id >= MULTIOP_TEAMS_START && id <= MULTIOP_TEAMS_END && !challengeActive)		// Clicked on a team chooser
 	{
 		int clickedMenuID = id - MULTIOP_TEAMS_START;
 
@@ -2462,7 +2527,7 @@ static void processMultiopWidgets(UDWORD id)
 		}
 	}
 
-	if((id >= MULTIOP_SKSLIDE) && (id <=MULTIOP_SKSLIDE_END)) // choseskirmish difficulty.
+	if((id >= MULTIOP_SKSLIDE) && (id <=MULTIOP_SKSLIDE_END) && !challengeActive) // choseskirmish difficulty.
 	{
 		UDWORD newValue, oldValue;
 
@@ -2722,7 +2787,6 @@ void runMultiOptions(void)
 					value = widgGetSliderPos(psWScreen,MULTIOP_SKSLIDE+id);
 					if(value != game.skDiff[id])
 					{
-
 						if(value == 0 && (id == game.maxPlayers-1)  )
 						{
 							game.skDiff[id] = 1;
@@ -2868,8 +2932,6 @@ BOOL startMultiOptions(BOOL bReenter)
 		teamChooserUp = -1;
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-//			game.skirmishPlayers[i] = 1; // clear out skirmish setting
-//			game.skDiff[i] = (rand()%19)+1;	//1-20
 			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);
 		}
 
@@ -2890,6 +2952,49 @@ BOOL startMultiOptions(BOOL bReenter)
 		}
 
 		loadMultiStats((char*)sPlayer,&nullStats);
+
+		if (challengeActive)
+		{
+			int		i;
+			dictionary	*dict = iniparser_load(sRequestResult);
+
+			resetReadyStatus(false);
+			removeWildcards((char*)sPlayer);
+
+			if (!hostCampaign((char*)game.name,(char*)sPlayer))
+			{
+				debug(LOG_ERROR, "Failed to host the challenge.");
+				return false;
+			}
+			bHosted = true;
+
+			sstrcpy(game.map, iniparser_getstring(dict, "challenge:Map", game.map));
+			game.maxPlayers = iniparser_getint(dict, "challenge:MaxPlayers", game.maxPlayers);	// TODO, read from map itself, not here!!
+			game.scavengers = iniparser_getboolean(dict, "challenge:Scavengers", game.scavengers);
+			game.alliance = ALLIANCES_TEAMS;
+			game.power = iniparser_getint(dict, "challenge:Power", game.power);
+			game.base = iniparser_getint(dict, "challenge:Bases", game.base + 1) - 1;		// count from 1 like the humans do
+			for (i = 0; i < MAX_PLAYERS; i++)
+			{
+				char key[64];
+
+				ssprintf(key, "player_%d:team", i + 1);
+				NetPlay.players[i].team = iniparser_getint(dict, key, NetPlay.players[i].team + 1) - 1;
+				if (i != 0)
+				{
+					ssprintf(key, "player_%d:difficulty", i + 1);
+					game.skDiff[i] = iniparser_getint(dict, key, game.skDiff[i]);
+				}
+			}
+
+			iniparser_freedict(dict);
+
+			ingame.localOptionsReceived = true;
+			addGameOptions(false);									// update game options box.
+			addChatBox();
+			disableMultiButs();
+			addPlayerBox(true);
+		}
 	}
 
 	addPlayerBox(false);								// Players
