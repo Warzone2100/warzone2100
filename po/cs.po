@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-07-19 21:15+0200\n"
+"POT-Creation-Date: 2009-08-13 18:49+0200\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -4801,9 +4801,11 @@ msgid "Light Cannon Viper Tracks"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:148
-#, fuzzy
-msgid "Heavy Machinegun Cobra Half-trackS"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+#: data/base/messages/strings/names.txt:1421
+#: data/mp/messages/strings/names.txt:149
+#: data/mp/messages/strings/names.txt:1434
+msgid "Heavy Machinegun Cobra Half-tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:150
@@ -5913,6 +5915,7 @@ msgid "Pepperpot"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:518
+#: data/mp/messages/strings/names.txt:525
 msgid "Pepperpot Emplacement"
 msgstr ""
 
@@ -8149,12 +8152,6 @@ msgstr ""
 msgid "Archangel Missile Emplacement"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:1421
-#: data/mp/messages/strings/names.txt:149
-#: data/mp/messages/strings/names.txt:1434
-msgid "Heavy Machinegun Cobra Half-tracks"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:1423
 #: data/mp/messages/strings/names.txt:1878
 #, fuzzy
@@ -8888,7 +8885,7 @@ msgid "Medium Super Heavy Body"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:681
-msgid "More armor and body points than Vengance"
+msgid "More armor and body points than Vengeance"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:682
@@ -9034,10 +9031,6 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:475
 #: data/mp/messages/strings/names.txt:749
 msgid "Pulse Laser Tower"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:525
-msgid "Peperpot Emplacement"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:565
@@ -9565,18 +9558,20 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1804
 #: data/mp/messages/strings/names.txt:1805
-msgid "Command turret MkII"
-msgstr ""
+#, fuzzy
+msgid "Command Turret II"
+msgstr "Velitelé (F6)"
 
 #: data/mp/messages/strings/names.txt:1806
 #: data/mp/messages/strings/names.txt:1807
-msgid "Command turret MkIII"
+msgid "Command Turret III"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1808
 #: data/mp/messages/strings/names.txt:1809
-msgid "Command turret MkIV"
-msgstr ""
+#, fuzzy
+msgid "Command Turret IV"
+msgstr "Velitelé (F6)"
 
 #: data/mp/messages/strings/names.txt:1819
 msgid "Heavy Repair Turret Cobra Hover"
@@ -9677,11 +9672,11 @@ msgid "Vengeance Tracks Rail Gun"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1860
-msgid "Vengeance Tracks Guass Cannon"
+msgid "Vengeance Tracks Gauss Cannon"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1861
-msgid "Vengeance Tracks Guass Scourge"
+msgid "Vengeance Tracks Gauss Scourge"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1864
@@ -9996,7 +9991,8 @@ msgstr "Portugalsky"
 
 #: lib/framework/i18n.c:74
 #: lib/framework/i18n.c:127
-msgid "Portuegese"
+#, fuzzy
+msgid "Portuguese"
 msgstr "Portugalsky"
 
 #: lib/framework/i18n.c:75
@@ -10379,16 +10375,16 @@ msgstr "%s - Poškození %d%% - Zkušenosti %d, %s"
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Nákladní auto dostalo rozkaz postavit ropnou věž"
 
-#: src/droid.c:191
+#: src/droid.c:190
 msgid "Unit Lost!"
 msgstr "Jednotka ztracena!"
 
-#: src/droid.c:1585
+#: src/droid.c:1584
 #, fuzzy
 msgid "Structure Restored"
 msgstr "Budova obnovena"
 
-#: src/droid.c:3349
+#: src/droid.c:3348
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -10396,7 +10392,7 @@ msgstr[0] "Skupina %u vybrána - %u Jednotka"
 msgstr[1] "Skupina %u vybrána - %u Jednotky"
 msgstr[2] "Skupina %u vybrána - %u Jednotek"
 
-#: src/droid.c:3362
+#: src/droid.c:3361
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -10404,7 +10400,7 @@ msgstr[0] "%u jednotka začleněna do Skupiny %u"
 msgstr[1] "%u jednotky začleněny do Skupiny %u"
 msgstr[2] "%u jednotek začleněno do Skupiny %u"
 
-#: src/droid.c:3375
+#: src/droid.c:3374
 #, fuzzy, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -10412,7 +10408,7 @@ msgstr[0] "Zameřeno na skupinu %u - %u jednotka"
 msgstr[1] "Zameřeno na skupinu %u - %u jednotky"
 msgstr[2] "Zameřeno na skupinu %u - %u jednotek"
 
-#: src/droid.c:3379
+#: src/droid.c:3378
 #, fuzzy, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -10420,41 +10416,41 @@ msgstr[0] "Vyrovnání se skupinou %u - %u jednotka"
 msgstr[1] "Vyrovnání se skupinou %u - %u jednotky"
 msgstr[2] "Vyrovnání se skupinou %u - %u jednotek"
 
-#: src/droid.c:3598
+#: src/droid.c:3597
 msgid "Rookie"
 msgstr "Nováček"
 
-#: src/droid.c:3599
+#: src/droid.c:3598
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelenáč"
 
-#: src/droid.c:3600
+#: src/droid.c:3599
 #, fuzzy
 msgid "Trained"
 msgstr "Trénovaný"
 
-#: src/droid.c:3601
+#: src/droid.c:3600
 msgid "Regular"
 msgstr "Běžný"
 
-#: src/droid.c:3602
+#: src/droid.c:3601
 msgid "Professional"
 msgstr "Profesionální"
 
-#: src/droid.c:3603
+#: src/droid.c:3602
 msgid "Veteran"
 msgstr "Veterán"
 
-#: src/droid.c:3604
+#: src/droid.c:3603
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3605
+#: src/droid.c:3604
 msgid "Special"
 msgstr "Speciální"
 
-#: src/droid.c:3606
+#: src/droid.c:3605
 msgid "Hero"
 msgstr "Hrdina"
 
@@ -10533,8 +10529,8 @@ msgstr "HRA JEDNOHO HRÁČE"
 
 #: src/frontend.c:450
 #: src/ingameop.c:394
-#: src/mission.c:2839
-#: src/mission.c:2944
+#: src/mission.c:2835
+#: src/mission.c:2940
 msgid "Load Saved Game"
 msgstr "Načti Uloženou Hru"
 
@@ -10650,7 +10646,7 @@ msgid "Off"
 msgstr "Vypnuto"
 
 #: src/frontend.c:662
-#: src/multiint.c:1140
+#: src/multiint.c:1141
 msgid "Fog"
 msgstr "Mlha"
 
@@ -10661,7 +10657,7 @@ msgstr "Mlha"
 
 #: src/frontend.c:669
 #: src/frontend.c:748
-#: src/multiint.c:1142
+#: src/multiint.c:1143
 msgid "Fog Of War"
 msgstr "Válečná mlha"
 
@@ -10798,7 +10794,7 @@ msgstr "HRA ULOŽENA!"
 #: src/hci.c:1702
 #: src/loop.c:515
 #: src/loop.c:531
-#: src/mission.c:2910
+#: src/mission.c:2906
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "HRA ULOŽENA!"
@@ -10847,8 +10843,8 @@ msgid "Build (F3)"
 msgstr "Stavba (F3)"
 
 #: src/hci.c:3905
-#: src/multiint.c:1190
-#: src/multiint.c:1194
+#: src/multiint.c:1191
+#: src/multiint.c:1195
 msgid "Power"
 msgstr "Energie"
 
@@ -10940,8 +10936,8 @@ msgstr "Pokračovat ve hře"
 
 #: src/ingameop.c:259
 #: src/ingameop.c:398
-#: src/mission.c:2829
-#: src/mission.c:2947
+#: src/mission.c:2825
+#: src/mission.c:2943
 msgid "Save Game"
 msgstr "Uložit hru"
 
@@ -11275,68 +11271,68 @@ msgstr "Nepřítel zničen podváděním!"
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2293
+#: src/keybind.c:2305
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2305
+#: src/keybind.c:2317
 msgid "Unable to locate HQ!"
 msgstr "Nelze nalézt HQ!"
 
-#: src/keybind.c:2321
+#: src/keybind.c:2328
 msgid "Formation speed limiting OFF"
 msgstr ""
 
-#: src/keybind.c:2325
+#: src/keybind.c:2332
 msgid "Formation speed limiting ON"
 msgstr ""
 
-#: src/keybind.c:2455
-#: src/keybind.c:2496
-#: src/keybind.c:2518
+#: src/keybind.c:2462
+#: src/keybind.c:2503
+#: src/keybind.c:2525
 #, fuzzy
 msgid "Game Speed Reset"
 msgstr "Restartování herní rychlosti"
 
-#: src/keybind.c:2459
+#: src/keybind.c:2466
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Rychlost Hry Zvýšena na %3.1f"
 
-#: src/keybind.c:2500
+#: src/keybind.c:2507
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Rychlost Hry Snížena na %3.1f"
 
-#: src/keybind.c:2530
+#: src/keybind.c:2537
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2534
+#: src/keybind.c:2541
 msgid "Build menu will not reopen"
 msgstr ""
 
-#: src/keybind.c:2546
+#: src/keybind.c:2553
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2550
+#: src/keybind.c:2557
 msgid "Radar showing player colors"
 msgstr "Radar ukazuje barvy hráčů"
 
-#: src/keybind.c:2567
+#: src/keybind.c:2574
 msgid "Radar showing only objects"
 msgstr "Radar ukazuje pouze objekty"
 
-#: src/keybind.c:2570
+#: src/keybind.c:2577
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2573
+#: src/keybind.c:2580
 msgid "Radar showing terrain"
 msgstr "Radar ukazuje terén"
 
-#: src/keybind.c:2576
+#: src/keybind.c:2583
 msgid "Radar showing height"
 msgstr "Radar ukazuje výšku"
 
@@ -11345,10 +11341,10 @@ msgid "KEY MAPPING"
 msgstr "MAPOVÁNÍ KLÁVES"
 
 #: src/keyedit.c:379
-#: src/multiint.c:551
-#: src/multiint.c:593
-#: src/multiint.c:983
-#: src/multiint.c:1259
+#: src/multiint.c:552
+#: src/multiint.c:594
+#: src/multiint.c:984
+#: src/multiint.c:1260
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
 msgstr "Zpět na Předchozí Obrazovku"
@@ -11712,7 +11708,8 @@ msgid "Select all Wheels"
 msgstr "Vybet všechny Kolové Jednotky"
 
 #: src/keymap.c:423
-msgid "Select all Similiar Units"
+#, fuzzy
+msgid "Select all Similar Units"
 msgstr "Vybet všechny Podobné Jednotky"
 
 #: src/keymap.c:427
@@ -11741,35 +11738,35 @@ msgstr ""
 msgid "Could not save game!"
 msgstr "Nahrát uloženou hru"
 
-#: src/mission.c:2377
+#: src/mission.c:2373
 msgid "Load Transport"
 msgstr "Naložit transport"
 
-#: src/mission.c:2776
+#: src/mission.c:2772
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "CÍL SPLNĚN"
 
-#: src/mission.c:2776
+#: src/mission.c:2772
 msgid "OBJECTIVE ACHIEVED"
 msgstr "CÍL SPLNĚN"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "SELHÁNÍ"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 msgid "OBJECTIVE FAILED"
 msgstr "SELHÁNÍ"
 
-#: src/mission.c:2808
-#: src/mission.c:2845
-#: src/mission.c:2963
+#: src/mission.c:2804
+#: src/mission.c:2841
+#: src/mission.c:2959
 msgid "Quit To Main Menu"
 msgstr "Vyskočit do hlavního menu"
 
-#: src/mission.c:2816
+#: src/mission.c:2812
 msgid "Continue Game"
 msgstr "Pokračovat ve hře"
 
@@ -11829,223 +11826,223 @@ msgstr "%s uzavřel spojenectví s %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Nalezl jsi plány na %s"
 
-#: src/multiint.c:496
+#: src/multiint.c:497
 #: src/multilimit.c:156
 msgid "Accept Settings"
 msgstr "Potvrď nastavení"
 
-#: src/multiint.c:507
+#: src/multiint.c:508
 msgid "IP Address or Machine Name"
 msgstr "IP Adresa nebo Jméno Stroje"
 
-#: src/multiint.c:548
+#: src/multiint.c:549
 msgid "CONNECTION"
 msgstr "SPOJENÍ"
 
-#: src/multiint.c:561
+#: src/multiint.c:562
 msgid "Lobby"
 msgstr "Lobby"
 
-#: src/multiint.c:562
+#: src/multiint.c:563
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:758
+#: src/multiint.c:759
 #, fuzzy
 msgid "No games are available"
 msgstr "Posily jsou k dispozici."
 
-#: src/multiint.c:761
+#: src/multiint.c:762
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.c:765
+#: src/multiint.c:766
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.c:768
+#: src/multiint.c:769
 msgid "Wrong Game Version!"
 msgstr ""
 
-#: src/multiint.c:771
+#: src/multiint.c:772
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:774
+#: src/multiint.c:775
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.c:778
+#: src/multiint.c:779
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:875
+#: src/multiint.c:876
 msgid "Searching"
 msgstr "Hledám"
 
-#: src/multiint.c:980
+#: src/multiint.c:981
 msgid "GAMES"
 msgstr "HRY"
 
-#: src/multiint.c:990
+#: src/multiint.c:991
 msgid "Refresh Games List"
 msgstr "Aktualizuj Seznam Her"
 
-#: src/multiint.c:1011
+#: src/multiint.c:1012
 msgid "Enter Password First "
 msgstr ""
 
-#: src/multiint.c:1099
+#: src/multiint.c:1100
 msgid "OPTIONS"
 msgstr "NASTAVENÍ"
 
-#: src/multiint.c:1101
+#: src/multiint.c:1102
 msgid "Select Game Name"
 msgstr "Vyber jméno hry"
 
-#: src/multiint.c:1102
+#: src/multiint.c:1103
 msgid "Select Map"
 msgstr "Vyber Mapu"
 
-#: src/multiint.c:1104
+#: src/multiint.c:1105
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.c:1112
+#: src/multiint.c:1113
 msgid "Game"
 msgstr "Hra"
 
-#: src/multiint.c:1114
+#: src/multiint.c:1115
 msgid "Mayhem"
 msgstr "Mayhem"
 
-#: src/multiint.c:1116
+#: src/multiint.c:1117
 #, fuzzy
 msgid "Skirmish"
 msgstr "Šarvátka"
 
-#: src/multiint.c:1137
+#: src/multiint.c:1138
 msgid "Select Player Name"
 msgstr "Vyber jméno hráče"
 
-#: src/multiint.c:1143
+#: src/multiint.c:1144
 #, fuzzy
 msgid "Distance Fog"
 msgstr "vzdálená mlha"
 
-#: src/multiint.c:1156
+#: src/multiint.c:1157
 #: src/multimenu.c:754
 msgid "Alliances"
 msgstr "Spojenectví"
 
-#: src/multiint.c:1159
+#: src/multiint.c:1160
 msgid "No Alliances"
 msgstr "Bez Spojenectví"
 
-#: src/multiint.c:1161
+#: src/multiint.c:1162
 msgid "Allow Alliances"
 msgstr "Povolená Spojenectví"
 
-#: src/multiint.c:1165
+#: src/multiint.c:1166
 msgid "Locked Teams"
 msgstr "Pevné Týmy"
 
-#: src/multiint.c:1197
+#: src/multiint.c:1198
 #, fuzzy
 msgid "Low Power Levels"
 msgstr "Nízkoenergetické úrovně"
 
-#: src/multiint.c:1199
+#: src/multiint.c:1200
 #, fuzzy
 msgid "Medium Power Levels"
 msgstr "Středně energetické úrovně"
 
-#: src/multiint.c:1201
+#: src/multiint.c:1202
 #, fuzzy
 msgid "High Power Levels"
 msgstr "Vysokoenergetické úrovně"
 
-#: src/multiint.c:1221
-#: src/multiint.c:1225
+#: src/multiint.c:1222
+#: src/multiint.c:1226
 msgid "Base"
 msgstr "Základna"
 
-#: src/multiint.c:1228
+#: src/multiint.c:1229
 msgid "Start with No Bases"
 msgstr "Začni bez Základen"
 
-#: src/multiint.c:1230
+#: src/multiint.c:1231
 msgid "Start with Bases"
 msgstr "Začni se Základnami"
 
-#: src/multiint.c:1232
+#: src/multiint.c:1233
 msgid "Start with Advanced Bases"
 msgstr "Začni s Rozvinutými Základnami"
 
-#: src/multiint.c:1249
+#: src/multiint.c:1250
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.c:1251
+#: src/multiint.c:1252
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.c:1265
+#: src/multiint.c:1266
 #, fuzzy
 msgid "Start Hosting Game"
 msgstr "Začni hostovat hru"
 
-#: src/multiint.c:1273
+#: src/multiint.c:1274
 msgid "Set Structure Limits"
 msgstr "Nastavení limitu budov"
 
-#: src/multiint.c:1665
+#: src/multiint.c:1666
 msgid "Team"
 msgstr ""
 
-#: src/multiint.c:1710
+#: src/multiint.c:1711
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/multiint.c:1716
+#: src/multiint.c:1717
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.c:1770
+#: src/multiint.c:1771
 msgid "PLAYERS"
 msgstr "HRÁČI"
 
-#: src/multiint.c:1909
+#: src/multiint.c:1910
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:2132
+#: src/multiint.c:2133
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2139
+#: src/multiint.c:2140
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2463
+#: src/multiint.c:2464
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "Pevné Týmy"
 
-#: src/multiint.c:2508
+#: src/multiint.c:2509
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Hostitel vyhodil %s ze hry!"
 
-#: src/multiint.c:2510
+#: src/multiint.c:2511
 msgid "you are being a jerk."
 msgstr ""
 
-#: src/multiint.c:2598
+#: src/multiint.c:2599
 msgid "Host is Starting Game"
 msgstr "Host začíná hru"
 
-#: src/multiint.c:3084
+#: src/multiint.c:3085
 msgid "Players"
 msgstr "Hráči"
 
@@ -12143,35 +12140,35 @@ msgstr ""
 msgid "Give Power To Player"
 msgstr ""
 
-#: src/multiplay.c:1902
+#: src/multiplay.c:1903
 msgid "Green"
 msgstr "Zelená"
 
-#: src/multiplay.c:1903
+#: src/multiplay.c:1904
 msgid "Orange"
 msgstr "Oranžová"
 
-#: src/multiplay.c:1904
+#: src/multiplay.c:1905
 msgid "Grey"
 msgstr "Šedá"
 
-#: src/multiplay.c:1905
+#: src/multiplay.c:1906
 msgid "Black"
 msgstr "Černá"
 
-#: src/multiplay.c:1906
+#: src/multiplay.c:1907
 msgid "Red"
 msgstr "Červená"
 
-#: src/multiplay.c:1907
+#: src/multiplay.c:1908
 msgid "Blue"
 msgstr "Modrá"
 
-#: src/multiplay.c:1908
+#: src/multiplay.c:1909
 msgid "Pink"
 msgstr "Růžová"
 
-#: src/multiplay.c:1909
+#: src/multiplay.c:1910
 msgid "Cyan"
 msgstr "Azurová"
 
@@ -12443,6 +12440,10 @@ msgid "Version %s%s%s%s"
 msgstr ""
 
 #, fuzzy
+#~ msgid "Heavy Machinegun Cobra Half-trackS"
+#~ msgstr "Vybrat všechny Kolopásové Jednotky"
+
+#, fuzzy
 #~ msgid "Hardware"
 #~ msgstr "Těžká"
 
@@ -12461,7 +12462,3 @@ msgstr ""
 #, fuzzy
 #~ msgid "Establish a forward base near the site of the Research Centre."
 #~ msgstr "Vybuduj předsunutou základnu na náhorní plošině."
-
-#, fuzzy
-#~ msgid "Commander"
-#~ msgstr "Velitelé (F6)"
