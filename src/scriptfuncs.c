@@ -8375,7 +8375,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 	return numEnemies;
 }
 
-/* Similiar to structureBuiltInRange(), but also returns true if structure is not finished */
+/* Similar to structureBuiltInRange(), but also returns true if structure is not finished */
 BOOL scrNumStructsByStatInRange(void)
 {
 	SDWORD		player, lookingPlayer, index, x, y, range;
