@@ -71,7 +71,7 @@ static const struct
 	{ "nl", N_("Dutch"), LANG_DUTCH, SUBLANG_DEFAULT },
 	{ "pl", N_("Polish"), LANG_POLISH, SUBLANG_DEFAULT },
 	{ "pt_BR", N_("Brazilian Portuguese"), LANG_PORTUGUESE, SUBLANG_PORTUGUESE_BRAZILIAN },
-	{ "pt", N_("Portuegese"), LANG_PORTUGUESE, SUBLANG_DEFAULT },
+	{ "pt", N_("Portuguese"), LANG_PORTUGUESE, SUBLANG_DEFAULT },
 	{ "ro", N_("Romanian"), LANG_ROMANIAN, SUBLANG_DEFAULT },
 	{ "ru", N_("Russian"), LANG_RUSSIAN, SUBLANG_DEFAULT },
 	{ "sl", N_("Slovenian"), LANG_SLOVENIAN, SUBLANG_DEFAULT },
@@ -124,7 +124,7 @@ static const struct
 	{ "nl", N_("Dutch"), "nl_NL.UTF-8", "nl_NL" },
 	{ "pl", N_("Polish"), "pl.UTF-8", "pl" },
 	{ "pt_BR", N_("Brazilian Portuguese"), "pt_BR.UTF-8", "pt_BR" },
-	{ "pt", N_("Portuegese"), "pt_PT.UTF-8", "pt_PT" },
+	{ "pt", N_("Portuguese"), "pt_PT.UTF-8", "pt_PT" },
 	{ "ro", N_("Romanian"), "ro.UTF-8", "ro" },
 	{ "ru", N_("Russian"), "ru_RU.UTF-8", "ru_RU" },
 	{ "sl", N_("Slovenian"), "sl.UTF-8", "sl" },
@@ -173,7 +173,7 @@ const char *getLanguage(void)
 #else
 const char *getLanguage(void)
 {
-	static char language[4] = { '\0' }; // ISO639 language code has to fit in!
+	static char language[6] = { '\0' }; // large enough for xx_YY
 	const char *localeName = setlocale(LC_MESSAGES, NULL);
 	char *delim = NULL;
 
@@ -184,16 +184,21 @@ const char *getLanguage(void)
 
 	sstrcpy(language, localeName);
 
-	delim = strchr(language, '_');
-
-	if ( !delim )
-	{
-		delim = strchr(language, '.');
-	}
-
-	if ( delim ) // Cut after '_' or '.'
+	// cut anything after a '.' to get rid of the encoding part
+	delim = strchr(language, '.');
+	if (delim)
 	{
 		*delim = '\0';
+	}
+
+	// if language is xx_XX, cut the _XX part
+	delim = strchr(language, '_');
+	if (delim)
+	{
+		if (!strncasecmp(language, delim + 1, 2))
+		{
+			*delim = '\0';
+		}
 	}
 
 	return language;
