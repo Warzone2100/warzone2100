@@ -522,7 +522,7 @@ Mortar1Mk1-Pit			_("Mortar Emplacement")
 Mortar2Mk1				_("Bombard")
 Mortar2Mk1-Pit			_("Bombard Emplacement")
 Mortar3ROTARYMk1			_("Pepperpot")
-Mortar3ROTARYMk1-Pit		_("Peperpot Emplacement")
+Mortar3ROTARYMk1-Pit		_("Pepperpot Emplacement")
 RailGun1Mk1				_("Needle Gun")
 RailGun2Mk1				_("Rail Gun")
 RailGun3Mk1				_("Gauss Cannon")
@@ -1801,12 +1801,12 @@ R-Wpn-Bomb06				_("EMP Missile Launcher")
 
 // added by Marc 15th September - Upgraded Command Turrets
 
-CommandTurret2				_("Command turret MkII")
-R-Comp-CommandTurret02			_("Command turret MkII")
-CommandTurret3				_("Command turret MkIII")
-R-Comp-CommandTurret03			_("Command turret MkIII")
-CommandTurret4				_("Command turret MkIV")
-R-Comp-CommandTurret04			_("Command turret MkIV")
+CommandTurret2				_("Command Turret II")
+R-Comp-CommandTurret02			_("Command Turret II")
+CommandTurret3				_("Command Turret III")
+R-Comp-CommandTurret03			_("Command Turret III")
+CommandTurret4				_("Command Turret IV")
+R-Comp-CommandTurret04			_("Command Turret IV")
 
 			/////////////////
 			//NEW TEMPLATES//
@@ -1857,8 +1857,8 @@ A-Tiger-Trk-Needle			_("Needle Gun Tiger Tracks")
 A-Retrib-Trk-Needle			_("Needle Gun Retribution Tracks")
 A-Veng-Trk-Needle			_("Needle Gun Vengeance Tracks")
 A-Veng-Trk-Rail				_("Vengeance Tracks Rail Gun")
-A-Veng-Trk-Guass			_("Vengeance Tracks Guass Cannon")
-A-Veng-Trk-Scourge			_("Vengeance Tracks Guass Scourge")
+A-Veng-Trk-Guass			_("Vengeance Tracks Gauss Cannon")
+A-Veng-Trk-Scourge			_("Vengeance Tracks Gauss Scourge")
 
 //Anti Structure VTOLs
 V-Bug-ClusterBomb			_("VTOL Cluster Bomb Bay Bug VTOL")
