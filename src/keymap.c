@@ -424,7 +424,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_V,KEYMAP_PRESSED,kf_SelectAllVTOLs,			_("Select all VTOLs"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_W,KEYMAP_PRESSED,kf_SelectAllWheeled,			_("Select all Wheels"));
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_Y,KEYMAP_PRESSED,kf_FrameRate,					"Show frame rate");
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_Z,KEYMAP_PRESSED,kf_SelectAllSameType,		_("Select all Similiar Units"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_Z,KEYMAP_PRESSED,kf_SelectAllSameType,		_("Select all Similar Units"));
 	//                                **********************************
 	//                                **********************************
 	//									SELECT PLAYERS - DEBUG ONLY
