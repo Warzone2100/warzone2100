@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-07-19 21:15+0200\n"
+"POT-Creation-Date: 2009-08-13 18:49+0200\n"
 "PO-Revision-Date: 2008-05-09 17:09+0000\n"
 "Last-Translator: Samuel G. I. <amuchamu@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -4808,8 +4808,11 @@ msgid "Light Cannon Viper Tracks"
 msgstr "Víbora Cañón Ligero Oruga"
 
 #: data/base/messages/strings/names.txt:148
+#: data/base/messages/strings/names.txt:1421
+#: data/mp/messages/strings/names.txt:149
+#: data/mp/messages/strings/names.txt:1434
 #, fuzzy
-msgid "Heavy Machinegun Cobra Half-trackS"
+msgid "Heavy Machinegun Cobra Half-tracks"
 msgstr "Cobra Ametralladora Pesada Semi-oruga"
 
 #: data/base/messages/strings/names.txt:149
@@ -5941,6 +5944,7 @@ msgid "Pepperpot"
 msgstr "Pepperpot"
 
 #: data/base/messages/strings/names.txt:518
+#: data/mp/messages/strings/names.txt:525
 msgid "Pepperpot Emplacement"
 msgstr "Emplazamiento Pepperpot"
 
@@ -8190,13 +8194,6 @@ msgstr "Emplazamiento de Misil Ángel"
 msgid "Archangel Missile Emplacement"
 msgstr "Emplazamiento de Misil Arcángel"
 
-#: data/base/messages/strings/names.txt:1421
-#: data/mp/messages/strings/names.txt:149
-#: data/mp/messages/strings/names.txt:1434
-#, fuzzy
-msgid "Heavy Machinegun Cobra Half-tracks"
-msgstr "Cobra Ametralladora Pesada Semi-oruga"
-
 #: data/base/messages/strings/names.txt:1423
 #: data/mp/messages/strings/names.txt:1878
 #, fuzzy
@@ -8932,7 +8929,8 @@ msgid "Medium Super Heavy Body"
 msgstr "Carrocería Súper Pesada Media"
 
 #: data/mp/messages/resmessagesall.rmsg:681
-msgid "More armor and body points than Vengance"
+#, fuzzy
+msgid "More armor and body points than Vengeance"
 msgstr "Más defensa y puntos estructurales que Venganza"
 
 #: data/mp/messages/resmessagesall.rmsg:682
@@ -9087,10 +9085,6 @@ msgstr "Defensa Incendiaria"
 #, fuzzy
 msgid "Pulse Laser Tower"
 msgstr "Láser de Pulsos"
-
-#: data/mp/messages/strings/names.txt:525
-msgid "Peperpot Emplacement"
-msgstr "Emplazamiento Pepperpot"
 
 #: data/mp/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:1692
@@ -9671,18 +9665,21 @@ msgstr "Lanzamisiles PEM"
 
 #: data/mp/messages/strings/names.txt:1804
 #: data/mp/messages/strings/names.txt:1805
-msgid "Command turret MkII"
-msgstr "Torreta Comandante MkII"
+#, fuzzy
+msgid "Command Turret II"
+msgstr "Torreta de Comandante"
 
 #: data/mp/messages/strings/names.txt:1806
 #: data/mp/messages/strings/names.txt:1807
-msgid "Command turret MkIII"
+#, fuzzy
+msgid "Command Turret III"
 msgstr "Torreta Comandante MkIII"
 
 #: data/mp/messages/strings/names.txt:1808
 #: data/mp/messages/strings/names.txt:1809
-msgid "Command turret MkIV"
-msgstr "Torreta Comandante MkIV"
+#, fuzzy
+msgid "Command Turret IV"
+msgstr "Torreta de Comandante"
 
 #: data/mp/messages/strings/names.txt:1819
 #, fuzzy
@@ -9806,11 +9803,13 @@ msgid "Vengeance Tracks Rail Gun"
 msgstr "Venganza Oruga Pistola de Raíles"
 
 #: data/mp/messages/strings/names.txt:1860
-msgid "Vengeance Tracks Guass Cannon"
+#, fuzzy
+msgid "Vengeance Tracks Gauss Cannon"
 msgstr "Venganza Oruga Cañón de Gauss"
 
 #: data/mp/messages/strings/names.txt:1861
-msgid "Vengeance Tracks Guass Scourge"
+#, fuzzy
+msgid "Vengeance Tracks Gauss Scourge"
 msgstr "Venganza Oruga Azote"
 
 #: data/mp/messages/strings/names.txt:1864
@@ -10167,7 +10166,8 @@ msgstr "Portugués"
 
 #: lib/framework/i18n.c:74
 #: lib/framework/i18n.c:127
-msgid "Portuegese"
+#, fuzzy
+msgid "Portuguese"
 msgstr "Portugués"
 
 #: lib/framework/i18n.c:75
@@ -10548,76 +10548,76 @@ msgstr "%s - Daño %d%% - Experiencia %d, %s"
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Camión enviado a construir Torre Petrolífera"
 
-#: src/droid.c:191
+#: src/droid.c:190
 msgid "Unit Lost!"
 msgstr "¡Unidad destruida!"
 
-#: src/droid.c:1585
+#: src/droid.c:1584
 msgid "Structure Restored"
 msgstr "Estructura Restaurada"
 
-#: src/droid.c:3349
+#: src/droid.c:3348
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u seleccionado - %u Unidad"
 msgstr[1] "Grupo %u seleccionado - %u Unidades"
 
-#: src/droid.c:3362
+#: src/droid.c:3361
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidad asignada al Grupo %u"
 msgstr[1] "%u unidades asignadas al Grupo %u"
 
-#: src/droid.c:3375
+#: src/droid.c:3374
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado en el Grupo %u - %u Unidad"
 msgstr[1] "Centrado en el Grupo %u - %u Unidades"
 
-#: src/droid.c:3379
+#: src/droid.c:3378
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alineando con el Grupo %u - %u Unidad"
 msgstr[1] "Alineando con el Grupo %u - %u Unidades"
 
-#: src/droid.c:3598
+#: src/droid.c:3597
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.c:3599
+#: src/droid.c:3598
 msgctxt "rank"
 msgid "Green"
 msgstr "Principiante"
 
-#: src/droid.c:3600
+#: src/droid.c:3599
 msgid "Trained"
 msgstr "Entrenado"
 
-#: src/droid.c:3601
+#: src/droid.c:3600
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3602
+#: src/droid.c:3601
 msgid "Professional"
 msgstr "Profesional"
 
-#: src/droid.c:3603
+#: src/droid.c:3602
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3604
+#: src/droid.c:3603
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.c:3605
+#: src/droid.c:3604
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.c:3606
+#: src/droid.c:3605
 msgid "Hero"
 msgstr "Héroe"
 
@@ -10696,8 +10696,8 @@ msgstr "UN JUGADOR"
 
 #: src/frontend.c:450
 #: src/ingameop.c:394
-#: src/mission.c:2839
-#: src/mission.c:2944
+#: src/mission.c:2835
+#: src/mission.c:2940
 msgid "Load Saved Game"
 msgstr "Cargar Partida Guardada"
 
@@ -10813,7 +10813,7 @@ msgid "Off"
 msgstr "Desactivado"
 
 #: src/frontend.c:662
-#: src/multiint.c:1140
+#: src/multiint.c:1141
 msgid "Fog"
 msgstr "Niebla"
 
@@ -10824,7 +10824,7 @@ msgstr "Neblina"
 
 #: src/frontend.c:669
 #: src/frontend.c:748
-#: src/multiint.c:1142
+#: src/multiint.c:1143
 msgid "Fog Of War"
 msgstr "Niebla de Guerra"
 
@@ -10961,7 +10961,7 @@ msgstr "¡PARTIDA GUARDADA!"
 #: src/hci.c:1702
 #: src/loop.c:515
 #: src/loop.c:531
-#: src/mission.c:2910
+#: src/mission.c:2906
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "¡PARTIDA GUARDADA!"
@@ -11010,8 +11010,8 @@ msgid "Build (F3)"
 msgstr "Construcción (F3)"
 
 #: src/hci.c:3905
-#: src/multiint.c:1190
-#: src/multiint.c:1194
+#: src/multiint.c:1191
+#: src/multiint.c:1195
 msgid "Power"
 msgstr "Energía"
 
@@ -11103,8 +11103,8 @@ msgstr "Continuar Partida"
 
 #: src/ingameop.c:259
 #: src/ingameop.c:398
-#: src/mission.c:2829
-#: src/mission.c:2947
+#: src/mission.c:2825
+#: src/mission.c:2943
 msgid "Save Game"
 msgstr "Guardar Partida"
 
@@ -11436,67 +11436,67 @@ msgstr "¡Enemigo destruído por tramposo!"
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2293
+#: src/keybind.c:2305
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Centrado en el CG del jugador, dirección Norte"
 
-#: src/keybind.c:2305
+#: src/keybind.c:2317
 msgid "Unable to locate HQ!"
 msgstr "¡Incapazde encontrar el CG!"
 
-#: src/keybind.c:2321
+#: src/keybind.c:2328
 msgid "Formation speed limiting OFF"
 msgstr "Límite de velocidad de formación DESACTIVADO"
 
-#: src/keybind.c:2325
+#: src/keybind.c:2332
 msgid "Formation speed limiting ON"
 msgstr "Límite de velocidad de formación ACTIVADO"
 
-#: src/keybind.c:2455
-#: src/keybind.c:2496
-#: src/keybind.c:2518
+#: src/keybind.c:2462
+#: src/keybind.c:2503
+#: src/keybind.c:2525
 msgid "Game Speed Reset"
 msgstr "Reestablecer Velocidad de Juego"
 
-#: src/keybind.c:2459
+#: src/keybind.c:2466
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Velocidad de Juego Aumentada a  %3.1f"
 
-#: src/keybind.c:2500
+#: src/keybind.c:2507
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Velocidad de Juego Reducida a  %3.1f"
 
-#: src/keybind.c:2530
+#: src/keybind.c:2537
 msgid "Build menu will reopen"
 msgstr "Menú de construcción se reabrirá"
 
-#: src/keybind.c:2534
+#: src/keybind.c:2541
 msgid "Build menu will not reopen"
 msgstr "Menú de construcción no se reabrirá"
 
-#: src/keybind.c:2546
+#: src/keybind.c:2553
 msgid "Radar showing friend-foe colors"
 msgstr "Radar mostrando colores de amigo-enemigo"
 
-#: src/keybind.c:2550
+#: src/keybind.c:2557
 msgid "Radar showing player colors"
 msgstr "Radar mostrando colores de jugador"
 
-#: src/keybind.c:2567
+#: src/keybind.c:2574
 msgid "Radar showing only objects"
 msgstr "Radar mostrando sólo objetos"
 
-#: src/keybind.c:2570
+#: src/keybind.c:2577
 msgid "Radar blending terrain and height"
 msgstr "Radar mezclando terreno y alturas"
 
-#: src/keybind.c:2573
+#: src/keybind.c:2580
 msgid "Radar showing terrain"
 msgstr "Radar mostrando terreno"
 
-#: src/keybind.c:2576
+#: src/keybind.c:2583
 msgid "Radar showing height"
 msgstr "Radar mostrando alturas"
 
@@ -11505,10 +11505,10 @@ msgid "KEY MAPPING"
 msgstr "MAPEO DE TECLAS"
 
 #: src/keyedit.c:379
-#: src/multiint.c:551
-#: src/multiint.c:593
-#: src/multiint.c:983
-#: src/multiint.c:1259
+#: src/multiint.c:552
+#: src/multiint.c:594
+#: src/multiint.c:984
+#: src/multiint.c:1260
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
 msgstr "Volver a la Pantalla Anterior"
@@ -11862,7 +11862,8 @@ msgid "Select all Wheels"
 msgstr "Seleccionar todos con Ruedas"
 
 #: src/keymap.c:423
-msgid "Select all Similiar Units"
+#, fuzzy
+msgid "Select all Similar Units"
 msgstr "Seleccionar todas las unidades Similares"
 
 #: src/keymap.c:427
@@ -11891,35 +11892,35 @@ msgstr "Alternar Reabrir el menú de construción"
 msgid "Could not save game!"
 msgstr "Cargar una partida guardada"
 
-#: src/mission.c:2377
+#: src/mission.c:2373
 msgid "Load Transport"
 msgstr "Cargar Transporte"
 
-#: src/mission.c:2776
+#: src/mission.c:2772
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBJETIVO CUMPLIDO"
 
-#: src/mission.c:2776
+#: src/mission.c:2772
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJETIVO CUMPLIDO"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "OBJETIVO FALLADO"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 msgid "OBJECTIVE FAILED"
 msgstr "OBJETIVO FALLADO"
 
-#: src/mission.c:2808
-#: src/mission.c:2845
-#: src/mission.c:2963
+#: src/mission.c:2804
+#: src/mission.c:2841
+#: src/mission.c:2959
 msgid "Quit To Main Menu"
 msgstr "Salir al Menú Principal"
 
-#: src/mission.c:2816
+#: src/mission.c:2812
 msgid "Continue Game"
 msgstr "Continuar Partida"
 
@@ -11979,217 +11980,217 @@ msgstr "%s forma una Alianza con %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Descubres los planos de %s"
 
-#: src/multiint.c:496
+#: src/multiint.c:497
 #: src/multilimit.c:156
 msgid "Accept Settings"
 msgstr "Aceptar Configuración"
 
-#: src/multiint.c:507
+#: src/multiint.c:508
 msgid "IP Address or Machine Name"
 msgstr "Dirección IP o Nombre de la Máquina"
 
-#: src/multiint.c:548
+#: src/multiint.c:549
 msgid "CONNECTION"
 msgstr "CONEXIÓN"
 
-#: src/multiint.c:561
+#: src/multiint.c:562
 msgid "Lobby"
 msgstr "Vestíbulo"
 
-#: src/multiint.c:562
+#: src/multiint.c:563
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:758
+#: src/multiint.c:759
 #, fuzzy
 msgid "No games are available"
 msgstr "Nuevas tecnologías disponibles."
 
-#: src/multiint.c:761
+#: src/multiint.c:762
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.c:765
+#: src/multiint.c:766
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.c:768
+#: src/multiint.c:769
 msgid "Wrong Game Version!"
 msgstr ""
 
-#: src/multiint.c:771
+#: src/multiint.c:772
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:774
+#: src/multiint.c:775
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.c:778
+#: src/multiint.c:779
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:875
+#: src/multiint.c:876
 msgid "Searching"
 msgstr "Buscando"
 
-#: src/multiint.c:980
+#: src/multiint.c:981
 msgid "GAMES"
 msgstr "PARTIDAS"
 
-#: src/multiint.c:990
+#: src/multiint.c:991
 msgid "Refresh Games List"
 msgstr "Actualizar Lista de Partidas"
 
-#: src/multiint.c:1011
+#: src/multiint.c:1012
 msgid "Enter Password First "
 msgstr ""
 
-#: src/multiint.c:1099
+#: src/multiint.c:1100
 msgid "OPTIONS"
 msgstr "OPCIONES"
 
-#: src/multiint.c:1101
+#: src/multiint.c:1102
 msgid "Select Game Name"
 msgstr "Elegir Nombre de la Partida"
 
-#: src/multiint.c:1102
+#: src/multiint.c:1103
 msgid "Select Map"
 msgstr "Elegir Mapa"
 
-#: src/multiint.c:1104
+#: src/multiint.c:1105
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.c:1112
+#: src/multiint.c:1113
 msgid "Game"
 msgstr "Partida"
 
-#: src/multiint.c:1114
+#: src/multiint.c:1115
 msgid "Mayhem"
 msgstr "Caos"
 
-#: src/multiint.c:1116
+#: src/multiint.c:1117
 msgid "Skirmish"
 msgstr "Escaramuza"
 
-#: src/multiint.c:1137
+#: src/multiint.c:1138
 msgid "Select Player Name"
 msgstr "Elejir Nombre del Jugador"
 
-#: src/multiint.c:1143
+#: src/multiint.c:1144
 msgid "Distance Fog"
 msgstr "Niebla de Distancia"
 
-#: src/multiint.c:1156
+#: src/multiint.c:1157
 #: src/multimenu.c:754
 msgid "Alliances"
 msgstr "Alianzas"
 
-#: src/multiint.c:1159
+#: src/multiint.c:1160
 msgid "No Alliances"
 msgstr "Sin Alianzas"
 
-#: src/multiint.c:1161
+#: src/multiint.c:1162
 msgid "Allow Alliances"
 msgstr "Permitir Alianzas"
 
-#: src/multiint.c:1165
+#: src/multiint.c:1166
 msgid "Locked Teams"
 msgstr "Equipos Fijos"
 
-#: src/multiint.c:1197
+#: src/multiint.c:1198
 msgid "Low Power Levels"
 msgstr "Niveles de Poder Bajo"
 
-#: src/multiint.c:1199
+#: src/multiint.c:1200
 msgid "Medium Power Levels"
 msgstr "Niveles de Poder Medio"
 
-#: src/multiint.c:1201
+#: src/multiint.c:1202
 msgid "High Power Levels"
 msgstr "Niveles de Poder Alto"
 
-#: src/multiint.c:1221
-#: src/multiint.c:1225
+#: src/multiint.c:1222
+#: src/multiint.c:1226
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.c:1228
+#: src/multiint.c:1229
 msgid "Start with No Bases"
 msgstr "Comenzar sin Bases"
 
-#: src/multiint.c:1230
+#: src/multiint.c:1231
 msgid "Start with Bases"
 msgstr "Comenzar con Bases"
 
-#: src/multiint.c:1232
+#: src/multiint.c:1233
 msgid "Start with Advanced Bases"
 msgstr "Comenzar con Bases Avanzadas"
 
-#: src/multiint.c:1249
+#: src/multiint.c:1250
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.c:1251
+#: src/multiint.c:1252
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.c:1265
+#: src/multiint.c:1266
 msgid "Start Hosting Game"
 msgstr "Comenzar Hospedando un Juego"
 
-#: src/multiint.c:1273
+#: src/multiint.c:1274
 msgid "Set Structure Limits"
 msgstr "Fijar Límites de Estructuras"
 
-#: src/multiint.c:1665
+#: src/multiint.c:1666
 msgid "Team"
 msgstr ""
 
-#: src/multiint.c:1710
+#: src/multiint.c:1711
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/multiint.c:1716
+#: src/multiint.c:1717
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.c:1770
+#: src/multiint.c:1771
 msgid "PLAYERS"
 msgstr "JUGADORES"
 
-#: src/multiint.c:1909
+#: src/multiint.c:1910
 msgid "CHAT"
 msgstr "CHARLA"
 
-#: src/multiint.c:2132
+#: src/multiint.c:2133
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2139
+#: src/multiint.c:2140
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2463
+#: src/multiint.c:2464
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "Equipos Fijos"
 
-#: src/multiint.c:2508
+#: src/multiint.c:2509
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "¡El anfitrión ha expulsado a %s de la partida!"
 
-#: src/multiint.c:2510
+#: src/multiint.c:2511
 msgid "you are being a jerk."
 msgstr ""
 
-#: src/multiint.c:2598
+#: src/multiint.c:2599
 msgid "Host is Starting Game"
 msgstr "Anfitrión Comenzando Partida"
 
-#: src/multiint.c:3084
+#: src/multiint.c:3085
 msgid "Players"
 msgstr "Jugadores"
 
@@ -12287,35 +12288,35 @@ msgstr "Transferir las unidades seleccionadas"
 msgid "Give Power To Player"
 msgstr "Dar Energía al Jugador"
 
-#: src/multiplay.c:1902
+#: src/multiplay.c:1903
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.c:1903
+#: src/multiplay.c:1904
 msgid "Orange"
 msgstr "Naranja"
 
-#: src/multiplay.c:1904
+#: src/multiplay.c:1905
 msgid "Grey"
 msgstr "Gris"
 
-#: src/multiplay.c:1905
+#: src/multiplay.c:1906
 msgid "Black"
 msgstr "Negro"
 
-#: src/multiplay.c:1906
+#: src/multiplay.c:1907
 msgid "Red"
 msgstr "Rojo"
 
-#: src/multiplay.c:1907
+#: src/multiplay.c:1908
 msgid "Blue"
 msgstr "Azul"
 
-#: src/multiplay.c:1908
+#: src/multiplay.c:1909
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.c:1909
+#: src/multiplay.c:1910
 msgid "Cyan"
 msgstr "Cian"
 
@@ -12586,6 +12587,19 @@ msgstr " - Construido %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versión: %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Heavy Machinegun Cobra Half-trackS"
+#~ msgstr "Cobra Ametralladora Pesada Semi-oruga"
+
+#~ msgid "Peperpot Emplacement"
+#~ msgstr "Emplazamiento Pepperpot"
+
+#~ msgid "Command turret MkII"
+#~ msgstr "Torreta Comandante MkII"
+
+#~ msgid "Command turret MkIV"
+#~ msgstr "Torreta Comandante MkIV"
 
 #, fuzzy
 #~ msgid "Cursor Mode"

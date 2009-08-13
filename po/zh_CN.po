@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-07-19 22:55+0200\n"
+"POT-Creation-Date: 2009-08-13 18:49+0200\n"
 "PO-Revision-Date: 2009-05-13 16:12+0800\n"
 "Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -4808,8 +4808,11 @@ msgid "Light Cannon Viper Tracks"
 msgstr "轻型加农炮地堡"
 
 #: data/base/messages/strings/names.txt:148
+#: data/base/messages/strings/names.txt:1421
+#: data/mp/messages/strings/names.txt:149
+#: data/mp/messages/strings/names.txt:1434
 #, fuzzy
-msgid "Heavy Machinegun Cobra Half-trackS"
+msgid "Heavy Machinegun Cobra Half-tracks"
 msgstr "重型机枪防御塔"
 
 #: data/base/messages/strings/names.txt:149
@@ -5936,6 +5939,7 @@ msgid "Pepperpot"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:518
+#: data/mp/messages/strings/names.txt:525
 msgid "Pepperpot Emplacement"
 msgstr ""
 
@@ -8177,13 +8181,6 @@ msgstr ""
 msgid "Archangel Missile Emplacement"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:1421
-#: data/mp/messages/strings/names.txt:149
-#: data/mp/messages/strings/names.txt:1434
-#, fuzzy
-msgid "Heavy Machinegun Cobra Half-tracks"
-msgstr "重型机枪防御塔"
-
 #: data/base/messages/strings/names.txt:1423
 #: data/mp/messages/strings/names.txt:1878
 msgid "Repair Turret Cobra Tracks"
@@ -8916,7 +8913,7 @@ msgid "Medium Super Heavy Body"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:681
-msgid "More armor and body points than Vengance"
+msgid "More armor and body points than Vengeance"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:682
@@ -9065,10 +9062,6 @@ msgstr ""
 #, fuzzy
 msgid "Pulse Laser Tower"
 msgstr "喷火器防御塔"
-
-#: data/mp/messages/strings/names.txt:525
-msgid "Peperpot Emplacement"
-msgstr ""
 
 #: data/mp/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:1692
@@ -9608,18 +9601,21 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1804
 #: data/mp/messages/strings/names.txt:1805
-msgid "Command turret MkII"
-msgstr ""
+#, fuzzy
+msgid "Command Turret II"
+msgstr "指挥炮塔"
 
 #: data/mp/messages/strings/names.txt:1806
 #: data/mp/messages/strings/names.txt:1807
-msgid "Command turret MkIII"
-msgstr ""
+#, fuzzy
+msgid "Command Turret III"
+msgstr "指挥炮塔"
 
 #: data/mp/messages/strings/names.txt:1808
 #: data/mp/messages/strings/names.txt:1809
-msgid "Command turret MkIV"
-msgstr ""
+#, fuzzy
+msgid "Command Turret IV"
+msgstr "指挥炮塔"
 
 #: data/mp/messages/strings/names.txt:1819
 msgid "Heavy Repair Turret Cobra Hover"
@@ -9734,11 +9730,12 @@ msgid "Vengeance Tracks Rail Gun"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1860
-msgid "Vengeance Tracks Guass Cannon"
-msgstr ""
+#, fuzzy
+msgid "Vengeance Tracks Gauss Cannon"
+msgstr "蟒蛇 履带式 重型加农炮"
 
 #: data/mp/messages/strings/names.txt:1861
-msgid "Vengeance Tracks Guass Scourge"
+msgid "Vengeance Tracks Gauss Scourge"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1864
@@ -10058,7 +10055,8 @@ msgstr "葡萄牙语"
 
 #: lib/framework/i18n.c:74
 #: lib/framework/i18n.c:127
-msgid "Portuegese"
+#, fuzzy
+msgid "Portuguese"
 msgstr "葡萄牙语"
 
 #: lib/framework/i18n.c:75
@@ -10439,77 +10437,77 @@ msgstr "%s - 损伤 %d%% - 经验 %d, %s"
 msgid "Truck ordered to build Oil Derrick"
 msgstr "命令工程车建造钻油塔"
 
-#: src/droid.c:191
+#: src/droid.c:190
 msgid "Unit Lost!"
 msgstr "单位被摧毁! "
 
-#: src/droid.c:1585
+#: src/droid.c:1584
 msgid "Structure Restored"
 msgstr "重建建筑物"
 
-#: src/droid.c:3349
+#: src/droid.c:3348
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "已选择 %u 号编队 - %u 单位"
 
-#: src/droid.c:3362
+#: src/droid.c:3361
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u 单位已指派为 %u 号编队"
 
-#: src/droid.c:3375
+#: src/droid.c:3374
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "移动视野中心到 %u 号编队 - %u 单位"
 
-#: src/droid.c:3379
+#: src/droid.c:3378
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3598
+#: src/droid.c:3597
 #, fuzzy
 msgid "Rookie"
 msgstr "新兵部队: %u"
 
-#: src/droid.c:3599
+#: src/droid.c:3598
 #, fuzzy
 msgctxt "rank"
 msgid "Green"
 msgstr "绿色"
 
-#: src/droid.c:3600
+#: src/droid.c:3599
 #, fuzzy
 msgid "Trained"
 msgstr "作训部队: %u"
 
-#: src/droid.c:3601
+#: src/droid.c:3600
 #, fuzzy
 msgid "Regular"
 msgstr "标准部队: %u"
 
-#: src/droid.c:3602
+#: src/droid.c:3601
 msgid "Professional"
 msgstr "专业部队"
 
-#: src/droid.c:3603
+#: src/droid.c:3602
 msgid "Veteran"
 msgstr "老兵部队"
 
-#: src/droid.c:3604
+#: src/droid.c:3603
 msgid "Elite"
 msgstr "精锐部队"
 
-#: src/droid.c:3605
+#: src/droid.c:3604
 msgid "Special"
 msgstr "特种部队"
 
-#: src/droid.c:3606
+#: src/droid.c:3605
 msgid "Hero"
 msgstr "英雄部队"
 
@@ -10585,8 +10583,8 @@ msgstr "单人游戏"
 
 #: src/frontend.c:450
 #: src/ingameop.c:394
-#: src/mission.c:2839
-#: src/mission.c:2944
+#: src/mission.c:2835
+#: src/mission.c:2940
 msgid "Load Saved Game"
 msgstr "载入游戏"
 
@@ -10701,7 +10699,7 @@ msgid "Off"
 msgstr "关"
 
 #: src/frontend.c:662
-#: src/multiint.c:1140
+#: src/multiint.c:1141
 msgid "Fog"
 msgstr "迷雾"
 
@@ -10712,7 +10710,7 @@ msgstr "薄雾（可以看见地形）"
 
 #: src/frontend.c:669
 #: src/frontend.c:748
-#: src/multiint.c:1142
+#: src/multiint.c:1143
 msgid "Fog Of War"
 msgstr "战争迷雾"
 
@@ -10848,7 +10846,7 @@ msgstr "游戏已保存! "
 #: src/hci.c:1702
 #: src/loop.c:515
 #: src/loop.c:531
-#: src/mission.c:2910
+#: src/mission.c:2906
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "游戏已保存! "
@@ -10897,8 +10895,8 @@ msgid "Build (F3)"
 msgstr "建造建筑 (F3)"
 
 #: src/hci.c:3905
-#: src/multiint.c:1190
-#: src/multiint.c:1194
+#: src/multiint.c:1191
+#: src/multiint.c:1195
 msgid "Power"
 msgstr "能源"
 
@@ -10985,8 +10983,8 @@ msgstr "继续游戏"
 
 #: src/ingameop.c:259
 #: src/ingameop.c:398
-#: src/mission.c:2829
-#: src/mission.c:2947
+#: src/mission.c:2825
+#: src/mission.c:2943
 msgid "Save Game"
 msgstr "保存游戏"
 
@@ -11313,67 +11311,67 @@ msgstr ""
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2293
+#: src/keybind.c:2305
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2305
+#: src/keybind.c:2317
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.c:2321
+#: src/keybind.c:2328
 msgid "Formation speed limiting OFF"
 msgstr ""
 
-#: src/keybind.c:2325
+#: src/keybind.c:2332
 msgid "Formation speed limiting ON"
 msgstr ""
 
-#: src/keybind.c:2455
-#: src/keybind.c:2496
-#: src/keybind.c:2518
+#: src/keybind.c:2462
+#: src/keybind.c:2503
+#: src/keybind.c:2525
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.c:2459
+#: src/keybind.c:2466
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2500
+#: src/keybind.c:2507
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2530
+#: src/keybind.c:2537
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2534
+#: src/keybind.c:2541
 msgid "Build menu will not reopen"
 msgstr ""
 
-#: src/keybind.c:2546
+#: src/keybind.c:2553
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2550
+#: src/keybind.c:2557
 msgid "Radar showing player colors"
 msgstr ""
 
-#: src/keybind.c:2567
+#: src/keybind.c:2574
 msgid "Radar showing only objects"
 msgstr ""
 
-#: src/keybind.c:2570
+#: src/keybind.c:2577
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2573
+#: src/keybind.c:2580
 msgid "Radar showing terrain"
 msgstr ""
 
-#: src/keybind.c:2576
+#: src/keybind.c:2583
 msgid "Radar showing height"
 msgstr ""
 
@@ -11382,10 +11380,10 @@ msgid "KEY MAPPING"
 msgstr "按键设置"
 
 #: src/keyedit.c:379
-#: src/multiint.c:551
-#: src/multiint.c:593
-#: src/multiint.c:983
-#: src/multiint.c:1259
+#: src/multiint.c:552
+#: src/multiint.c:594
+#: src/multiint.c:984
+#: src/multiint.c:1260
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
 msgstr "返回到前一个屏幕"
@@ -11739,7 +11737,7 @@ msgid "Select all Wheels"
 msgstr ""
 
 #: src/keymap.c:423
-msgid "Select all Similiar Units"
+msgid "Select all Similar Units"
 msgstr ""
 
 #: src/keymap.c:427
@@ -11768,35 +11766,35 @@ msgstr ""
 msgid "Could not save game!"
 msgstr "载入游戏"
 
-#: src/mission.c:2377
+#: src/mission.c:2373
 msgid "Load Transport"
 msgstr "登陆运输飞船"
 
-#: src/mission.c:2776
+#: src/mission.c:2772
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "任务目标完成"
 
-#: src/mission.c:2776
+#: src/mission.c:2772
 msgid "OBJECTIVE ACHIEVED"
 msgstr "任务目标完成"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "任务目标失败"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 msgid "OBJECTIVE FAILED"
 msgstr "任务目标失败"
 
-#: src/mission.c:2808
-#: src/mission.c:2845
-#: src/mission.c:2963
+#: src/mission.c:2804
+#: src/mission.c:2841
+#: src/mission.c:2959
 msgid "Quit To Main Menu"
 msgstr "退回到主菜单"
 
-#: src/mission.c:2816
+#: src/mission.c:2812
 msgid "Continue Game"
 msgstr "继续游戏"
 
@@ -11856,217 +11854,217 @@ msgstr ""
 msgid "You Discover Blueprints For %s"
 msgstr ""
 
-#: src/multiint.c:496
+#: src/multiint.c:497
 #: src/multilimit.c:156
 msgid "Accept Settings"
 msgstr "确认设置"
 
-#: src/multiint.c:507
+#: src/multiint.c:508
 msgid "IP Address or Machine Name"
 msgstr "IP地址或计算机名称"
 
-#: src/multiint.c:548
+#: src/multiint.c:549
 msgid "CONNECTION"
 msgstr "连接"
 
-#: src/multiint.c:561
+#: src/multiint.c:562
 msgid "Lobby"
 msgstr "游戏大厅"
 
-#: src/multiint.c:562
+#: src/multiint.c:563
 msgid "IP"
 msgstr "IP直连"
 
-#: src/multiint.c:758
+#: src/multiint.c:759
 msgid "No games are available"
 msgstr ""
 
-#: src/multiint.c:761
+#: src/multiint.c:762
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.c:765
+#: src/multiint.c:766
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.c:768
+#: src/multiint.c:769
 msgid "Wrong Game Version!"
 msgstr ""
 
-#: src/multiint.c:771
+#: src/multiint.c:772
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:774
+#: src/multiint.c:775
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.c:778
+#: src/multiint.c:779
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:875
+#: src/multiint.c:876
 msgid "Searching"
 msgstr "正在搜索"
 
-#: src/multiint.c:980
+#: src/multiint.c:981
 msgid "GAMES"
 msgstr "游戏"
 
-#: src/multiint.c:990
+#: src/multiint.c:991
 msgid "Refresh Games List"
 msgstr "刷新游戏列表"
 
-#: src/multiint.c:1011
+#: src/multiint.c:1012
 msgid "Enter Password First "
 msgstr ""
 
-#: src/multiint.c:1099
+#: src/multiint.c:1100
 msgid "OPTIONS"
 msgstr "选项"
 
-#: src/multiint.c:1101
+#: src/multiint.c:1102
 msgid "Select Game Name"
 msgstr "选择游戏名称"
 
-#: src/multiint.c:1102
+#: src/multiint.c:1103
 msgid "Select Map"
 msgstr "选择地图"
 
-#: src/multiint.c:1104
+#: src/multiint.c:1105
 #, fuzzy
 msgid "Click to set Password"
 msgstr "点击查看地图"
 
-#: src/multiint.c:1112
+#: src/multiint.c:1113
 msgid "Game"
 msgstr "游戏"
 
-#: src/multiint.c:1114
+#: src/multiint.c:1115
 msgid "Mayhem"
 msgstr "玩家对战"
 
-#: src/multiint.c:1116
+#: src/multiint.c:1117
 msgid "Skirmish"
 msgstr "人机对战"
 
-#: src/multiint.c:1137
+#: src/multiint.c:1138
 msgid "Select Player Name"
 msgstr "选择玩家名字"
 
-#: src/multiint.c:1143
+#: src/multiint.c:1144
 msgid "Distance Fog"
 msgstr "薄雾（可以看见地形）"
 
-#: src/multiint.c:1156
+#: src/multiint.c:1157
 #: src/multimenu.c:754
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.c:1159
+#: src/multiint.c:1160
 msgid "No Alliances"
 msgstr "无同盟"
 
-#: src/multiint.c:1161
+#: src/multiint.c:1162
 msgid "Allow Alliances"
 msgstr "允许同盟"
 
-#: src/multiint.c:1165
+#: src/multiint.c:1166
 msgid "Locked Teams"
 msgstr "已锁定团队"
 
-#: src/multiint.c:1197
+#: src/multiint.c:1198
 msgid "Low Power Levels"
 msgstr "低能源水平"
 
-#: src/multiint.c:1199
+#: src/multiint.c:1200
 msgid "Medium Power Levels"
 msgstr "中等能源水平"
 
-#: src/multiint.c:1201
+#: src/multiint.c:1202
 msgid "High Power Levels"
 msgstr "高能源水平"
 
-#: src/multiint.c:1221
-#: src/multiint.c:1225
+#: src/multiint.c:1222
+#: src/multiint.c:1226
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.c:1228
+#: src/multiint.c:1229
 msgid "Start with No Bases"
 msgstr "开始时没有基地"
 
-#: src/multiint.c:1230
+#: src/multiint.c:1231
 msgid "Start with Bases"
 msgstr "开始时有基地"
 
-#: src/multiint.c:1232
+#: src/multiint.c:1233
 msgid "Start with Advanced Bases"
 msgstr "开始时有高级基地"
 
-#: src/multiint.c:1249
+#: src/multiint.c:1250
 msgid "Map Preview"
 msgstr "地图预览"
 
-#: src/multiint.c:1251
+#: src/multiint.c:1252
 msgid "Click to see Map"
 msgstr "点击查看地图"
 
-#: src/multiint.c:1265
+#: src/multiint.c:1266
 msgid "Start Hosting Game"
 msgstr "开始建立游戏"
 
-#: src/multiint.c:1273
+#: src/multiint.c:1274
 msgid "Set Structure Limits"
 msgstr "设置建筑数量限制"
 
-#: src/multiint.c:1665
+#: src/multiint.c:1666
 msgid "Team"
 msgstr "团队"
 
-#: src/multiint.c:1710
+#: src/multiint.c:1711
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
-#: src/multiint.c:1716
+#: src/multiint.c:1717
 msgid "Click when ready"
 msgstr "点击准备开始游戏"
 
-#: src/multiint.c:1770
+#: src/multiint.c:1771
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.c:1909
+#: src/multiint.c:1910
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.c:2132
+#: src/multiint.c:2133
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2139
+#: src/multiint.c:2140
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2463
+#: src/multiint.c:2464
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "已锁定团队"
 
-#: src/multiint.c:2508
+#: src/multiint.c:2509
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家将 %s 踢出游戏!"
 
-#: src/multiint.c:2510
+#: src/multiint.c:2511
 msgid "you are being a jerk."
 msgstr ""
 
-#: src/multiint.c:2598
+#: src/multiint.c:2599
 msgid "Host is Starting Game"
 msgstr "主玩家正在开始游戏"
 
-#: src/multiint.c:3084
+#: src/multiint.c:3085
 msgid "Players"
 msgstr "玩家"
 
@@ -12164,35 +12162,35 @@ msgstr ""
 msgid "Give Power To Player"
 msgstr ""
 
-#: src/multiplay.c:1902
+#: src/multiplay.c:1903
 msgid "Green"
 msgstr "绿色"
 
-#: src/multiplay.c:1903
+#: src/multiplay.c:1904
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.c:1904
+#: src/multiplay.c:1905
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.c:1905
+#: src/multiplay.c:1906
 msgid "Black"
 msgstr "黑色"
 
-#: src/multiplay.c:1906
+#: src/multiplay.c:1907
 msgid "Red"
 msgstr "红色"
 
-#: src/multiplay.c:1907
+#: src/multiplay.c:1908
 msgid "Blue"
 msgstr "蓝色"
 
-#: src/multiplay.c:1908
+#: src/multiplay.c:1909
 msgid "Pink"
 msgstr "粉红色"
 
-#: src/multiplay.c:1909
+#: src/multiplay.c:1910
 msgid "Cyan"
 msgstr "青绿色"
 
@@ -12461,6 +12459,10 @@ msgstr ""
 msgid "Version %s%s%s%s"
 msgstr ""
 
+#, fuzzy
+#~ msgid "Heavy Machinegun Cobra Half-trackS"
+#~ msgstr "重型机枪防御塔"
+
 #~ msgid "Commander"
 #~ msgstr "指挥官"
 
@@ -12508,9 +12510,6 @@ msgstr ""
 
 #~ msgid "Python Hover Heavy Cannon"
 #~ msgstr "蟒蛇 气垫式 重型加农炮"
-
-#~ msgid "Python Tracks Heavy Cannon"
-#~ msgstr "蟒蛇 履带式 重型加农炮"
 
 #~ msgid "Load Campaign"
 #~ msgstr "载入战役"
