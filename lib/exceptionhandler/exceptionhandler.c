@@ -135,6 +135,8 @@ typedef void(*SigActionHandler)(int, siginfo_t *, void *);
 
 #ifdef WZ_OS_MAC
 static struct sigaction oldAction[32];
+#elif defined(_NSIG)
+static struct sigaction oldAction[_NSIG];
 #else
 static struct sigaction oldAction[NSIG];
 #endif
