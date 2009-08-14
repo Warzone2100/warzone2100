@@ -72,6 +72,11 @@ case ${host_os} in
 		WIN32_LIBS='-ldbghelp -lshfolder -lwinmm -lws2_32'
 		AC_SUBST([WIN32_LIBS], [${WIN32_LIBS}])
 		;;
+	*openbsd*)
+		AC_DEFINE([_XOPEN_SOURCE], 600, [Enable POSIX extensions if present])
+		# Make sure that backtrace_symbols_fd (GNU raw back trace extension) has some symbols to work with
+		LDFLAGS="-Wl,-export-dynamic ${LDFLAGS}"
+		;;
 	*)
 		# Some platforms don't need _XOPEN_SOURCE
 		case ${host_os} in
