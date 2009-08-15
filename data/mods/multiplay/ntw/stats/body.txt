@@ -24,7 +24,7 @@ Cyb-Bod-Rail1,Level All,LIGHT,1,1,150,150,cybd_std.Pie,100,1,500,12,8,12,8,12,8,
 Cyb-Bod-Mechanic,Level All,LIGHT,1,1,150,150,cybd_std.Pie,100,1,500,12,8,12,8,12,8,12,8,12,8,12,8,0,0
 Cyb-Bod-Las1,Level All,LIGHT,1,1,150,150,cybd_std.Pie,100,1,500,12,8,12,8,12,8,12,8,12,8,12,8,0,0
 Cyb-Hvybod-HPV,Level All,LIGHT,1,1,150,150,cybd_std.Pie,100,1,500,12,8,12,8,12,8,12,8,12,8,12,8,0,0
-Cyb-Bod-ComEng,Level All,LIGHT,25,150,150,150,cybd_std.Pie,100,1,500,12,8,12,8,12,8,12,8,12,8,12,8,0,0
+Cyb-Bod-ComEng,Level All,LIGHT,50,150,150,150,cybd_std.Pie,100,1,500,12,8,12,8,12,8,12,8,12,8,12,8,0,0
 Cyb-Bod-Atmiss,Level All,LIGHT,1,1,150,150,cybd_std.Pie,100,1,500,12,8,12,8,12,8,12,8,12,8,12,8,0,0
 B4body-sml-trike01,Level One,LIGHT,25,40,100,30,extrike.Pie,35,1,2000,2,2,2,2,2,2,2,2,2,2,2,2,0,1
 B3body-sml-buggy01,Level One,LIGHT,30,60,200,35,exbuggy.Pie,50,1,2500,2,3,2,3,2,3,2,3,2,3,2,3,0,1
