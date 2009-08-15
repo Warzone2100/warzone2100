@@ -53,23 +53,25 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		path[1] = '.';	// TODO FIXME this must be bugged...
+		path[0] = '.';
 		path[1] = '\0';
 		strcpy(filename, argv[1]);
 	}
+
 	PHYSFS_init(argv[0]);
 	PHYSFS_addToSearchPath(path, 1);
-
 	map = mapLoad(filename);
+	PHYSFS_deinit();
+
 	if (!map)
 	{
 		fprintf(stderr, "Failed to load map\n");
 		return -1;
 	}
 
-	mkdir(filename, 0777);
-	strcpy(base, filename);
-	strcat(filename, "/map-001");	
+	strcpy(base, argv[1]);
+	strcpy(filename, base);
+	strcat(filename, "/map-001");
 	mkdir(filename, 0777);
 
 	/*** Map configuration ***/
@@ -103,6 +105,19 @@ int main(int argc, char **argv)
 	MADD("y2 = %u", map->scrollMaxY);
 	fclose(fp);
 
+	/*** Game data ***/
+	strcpy(filename, base);
+	strcat(filename, "/game.ini");
+	fp = fopen(filename, "w");
+	if (!fp)
+	{
+		fprintf(stderr, "Could not open target: %s", filename);
+		return -1;
+	}
+	MADD("[game]");
+	MADD("SaveKey = %d", (int)map->tileset);
+	fclose(fp);
+
 	/*** Terrain data ***/
 	terrain = malloc(map->width * map->height * 2);
 	height = malloc(map->width * map->height);
@@ -119,16 +134,16 @@ int main(int argc, char **argv)
 		psTile++;
 	}
 	strcpy(filename, base);
-	strcat(filename, "/terrain.png");
+	strcat(filename, "/map-001/terrain.png");
 	savePngI16(filename, terrain, map->width, map->height);
 	strcpy(filename, base);
-	strcat(filename, "/height.png");
+	strcat(filename, "/map-001/height.png");
 	savePngI8(filename, height, map->width, map->height);
 	strcpy(filename, base);
-	strcat(filename, "/rotations.png");
+	strcat(filename, "/map-001/rotations.png");
 	savePngI16(filename, rotate, map->width, map->height);
 	strcpy(filename, base);
-	strcat(filename, "/flips.png");
+	strcat(filename, "/map-001/flips.png");
 	savePngI8(filename, flip, map->width, map->height);
 	free(height);
 	free(terrain);
@@ -137,7 +152,7 @@ int main(int argc, char **argv)
 
 	/*** Features ***/
 	strcpy(filename, base);
-	strcat(filename, "/features.ini");
+	strcat(filename, "/map-001/features.ini");
 	fp = fopen(filename, "w");
 	MADD("[feature_header]");
 	MADD("entries = %u", map->numFeatures);
@@ -157,7 +172,7 @@ int main(int argc, char **argv)
 
 	/*** Structures ***/
 	strcpy(filename, base);
-	strcat(filename, "/structure.ini");
+	strcat(filename, "/map-001/structure.ini");
 	fp = fopen(filename, "w");
 	MADD("[structure_header]");
 	MADD("entries = %u", map->numStructures);
@@ -177,7 +192,7 @@ int main(int argc, char **argv)
 
 	/*** Droids ***/
 	strcpy(filename, base);
-	strcat(filename, "/droids.ini");
+	strcat(filename, "/map-001/droids.ini");
 	fp = fopen(filename, "w");
 	MADD("[droid_header]");
 	MADD("entries = %u", map->numDroids);
@@ -197,7 +212,7 @@ int main(int argc, char **argv)
 
 	/*** Gateways ***/
 	strcpy(filename, base);
-	strcat(filename, "/gateways.ini");
+	strcat(filename, "/map-001/gateways.ini");
 	fp = fopen(filename, "w");
 	MADD("[gateway_header]");
 	MADD("entries = %u", map->numGateways);
