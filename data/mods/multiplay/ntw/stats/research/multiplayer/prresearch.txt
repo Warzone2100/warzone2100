@@ -167,7 +167,7 @@ R-Struc-Factory-Upgrade01,R-Struc-Factory-Module,109
 R-Struc-Factory-Upgrade02,R-Struc-Factory-Upgrade01,109
 R-Struc-Factory-Upgrade03,R-Struc-Factory-Upgrade02,109
 R-Cyborg-Metals01,R-Struc-Factory-Cyborg,109
-R-Cyborg-Metals01,R-Struc-Research-Module,109
+R-Cyborg-Metals01,R-Struc-Research-Upgrade02,109
 R-Cyborg-Metals02,R-Cyborg-Metals01,109
 R-Cyborg-Metals03,R-Cyborg-Metals02,109
 CAM1WEAPONS,CAM1RESEARCH,109
