@@ -1,0 +1,556 @@
+/////////////////////////////////////////////////////////////////////
+// ai for skirmish game
+// Generic vlo for each computer player
+/////////////////////////////////////////////////////////////////////
+
+script "player5.slo"
+run
+{
+   player          INT                 5
+    // this player is player x.
+
+//////////////////////////////////////
+// BecomePrey AI version 2.92 - 1.10
+//////////////////////////////////////
+// Elite Force, 2008
+// by NIKER
+// NIKER@seznam.cz
+// http://wef.warzone2100.de
+
+// This AI is optimized for WZ 1.10 version
+// If you want to use whole BecomePrey AI or it's part, contact me.
+// Module design of BecomePrey2 allows mod creators to simple customize it for any mod.
+// I will most likely allow any experiments with this AI.
+// NOTE: This AI was created using my VSC2 program!
+///////////////////////////////////////
+// THIS FILE STORES DATA AND CONSTANT VARIABLES
+
+//+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*
+//+*+*+*+ BecomePrey AI SETTINGS (modify number variables and TRUE/FALSE) *+*+*+*+*+*+*
+//+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*
+
+// you may edit these variables:
+	//DEBUG MODE
+	EnableDebug	BOOL		FALSE   //<-- edit this value
+					
+	//AI CONTROLS HUMAN BASE
+	AIControl		BOOL		FALSE  //<-- edit this value
+
+	//CHEAT LEVEL			
+	CheatLevel	INT		0 //<-- edit this value
+
+	//AUTO-BASE LEVEL
+	AutoBaseCheat	INT		0  //<-- edit this value
+
+	//GENERAL FEATURE OVERRIDE
+	useTanks		BOOL		TRUE
+	useCyborgs	BOOL		TRUE
+	useVtols		BOOL		TRUE
+	useNEXUS	BOOL		TRUE
+	useReincarnation	BOOL		TRUE
+	usePower		BOOL		TRUE
+
+	//STANDARD AUTO-BASE DEFENCES (ADVANCED CHEAT SETTING)
+	stdDefOilGr	STRUCTURESTAT		"GuardTower-ATMiss"
+	stdDefOilAA	STRUCTURESTAT		"P0-AASite-SAM1" 
+	stdBaseFortress	STRUCTURESTAT		"X-Super-Cannon"
+
+// -------->>> MODIFICATION MANUAL:
+//---------------------------------------------------------------
+
+// DEBUG MODE:
+// TRUE enables debug mode - you can see whole map and you get regular power gifts
+// FALSE disables debug mode - it means that game runs in normal mode
+
+// ALLOW AI TO CONTROL HUMAN BASE
+// TRUE enables AI control over your base
+// FALSE disables AI control over your base
+
+// CHEAT LEVELS DESCRIPTION:
+// 0 = Cheats disabled
+// 1 = Light MoneyCheat
+// 2 = Heavy MoneyCheat
+// 3 = ResearchSpeedCheat
+// 4 = Light MoneyCheat + ResearchSpeedCheat
+// 5 = Heavy MoneyCheat + ResearchSpeedCheat
+// 6 = Unlimited MoneyCheat + ResearchSpeedCheat (BOTs - level 5 apply)
+
+// AUTO-BASE CHEAT LEVELS DESCRIPTION:
+// 0 = No auto-bases
+// 1 = Light auto-bases (all derricks in range, all factories, necessary powerGens)
+// 2 = Heavy auto-bases (all derricks in range with one Ground and one AA weapon, all factories, necessary powerGens, 6 base fortresses)
+
+// GENERAL FEATURE OVERRIDE
+// useTanks - enables/disables building of tanks
+// useCyborgs - enables/disables building of cyborgs
+// useVtols - enables/disables building of VTOLs
+// useNEXUS - if enabled, LINK units are treated as special units and not just as tanks 
+// useReincarnation - can AI give truck to dead ally and restore him?
+// usePower - should be power used? If disabled, ALL players have unlimited power
+// NOTE: Tank, cyborg and VTOL switch only prevents AI from production of this type, all control functions are still active in case of map-included units, reinforcements and player-given units.
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+
+//+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*
+//+*+ DO NOT EDIT BELOW THIS LINE (for AI experts and mod developers ONLY) *+*+*+*+*+*+*
+//+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*
+
+	tileExpand	INT	30
+	linkRange	INT	14 	//range of NEXUS Link Turret
+	// structures
+ 
+ 	// generic names, often used.
+	oilRes			FEATURESTAT		"OilResource"
+	resLab			STRUCTURESTAT		"A0ResearchFacility"
+	powGen			STRUCTURESTAT		"A0PowerGenerator"
+	factory			STRUCTURESTAT		"A0LightFactory"
+	derrick			STRUCTURESTAT		"A0ResourceExtractor"
+	cybFactory		STRUCTURESTAT		"A0CyborgFactory"
+	playerHQ			STRUCTURESTAT		"A0CommandCentre"
+	vtolPad			STRUCTURESTAT		"A0VtolPad"
+	vtolFactory		STRUCTURESTAT		"A0VTolFactory1"
+	repairFacility		STRUCTURESTAT		"A0RepairCentre3"
+	sensorTower		STRUCTURESTAT		"Sys-SensoTower02"
+	CBSense			STRUCTURESTAT		"Sys-CB-Tower01"
+	uplinkCenter		STRUCTURESTAT		"A0Sat-linkCentre"
+	lassat			STRUCTURESTAT		"A0LasSatCommand"
+	nexusDefence		RESEARCHSTAT		"R-Sys-Resistance-Circuits"
+	powerAddOn		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"
+	cyborgPropulsion		PROPULSION		"CyborgLegs"
+	NEXUS_WEAPON1	WEAPON		"NEXUSlink"
+	NEXUS_WEAPON2	WEAPON		"SpyTurret01"
+	BBs			WEAPON		"Rocket-VTOL-BB"
+	demAnomallyFix		STRUCTURESTAT		"A0ADemolishStructure"
+	CyborgHotfixR		RESEARCHSTAT		"R-Struc-Factory-Cyborg"
+	CyborgLegs 		RESEARCHSTAT 		"R-Cyborg-Legs01"
+	artefact			FEATURESTAT		"Crate"
+	hoverProp		PROPULSION		"hover01"
+
+	// incendry emplacements.
+	numIncendrys	INT					8
+	incendrys[7]	STRUCTURESTAT		"Emplacement-MortarPit01"
+	incendrys[6]	STRUCTURESTAT		"Emplacement-MortarPit02"
+	incendrys[5]	STRUCTURESTAT		"Emplacement-RotMor"
+	incendrys[4]	STRUCTURESTAT		"Emplacement-Howitzer105"	
+	incendrys[3]	STRUCTURESTAT		"Emplacement-Howitzer150"
+	incendrys[2]	STRUCTURESTAT		"Emplacement-RotHow"
+	incendrys[1]	STRUCTURESTAT		"Emplacement-MdART-pit"
+	incendrys[0]	STRUCTURESTAT		"Emplacement-HvART-pit"	
+
+	// sensor types
+	numSense	INT					3
+	sense[0]		STRUCTURESTAT		"Sys-SensoTowerWS"
+	sense[1]		STRUCTURESTAT		"Sys-SensoTower02"
+	sense[2]		STRUCTURESTAT		"Sys-SensoTower01"
+
+
+
+	//anti a.
+	numAA	INT					6
+	vtolDefStruct[0]	STRUCTURESTAT		"AASite-QuadMg1"			//hurricane
+	vtolDefStruct[1]	STRUCTURESTAT		"AASite-QuadBof" 			//cyclone
+	vtolDefStruct[2]	STRUCTURESTAT		"AASite-QuadRotMg"		//plasma site
+	vtolDefStruct[3]	STRUCTURESTAT		"P0-AASite-SAM1" 			//avenger
+	vtolDefStruct[4]	STRUCTURESTAT		"P0-AASite-SAM2" 			//vindicator
+	vtolDefStruct[5]	STRUCTURESTAT		"P0-AASite-Laser" 			//laser
+
+	// upgrade structures
+	powModule		STRUCTURESTAT		"A0PowMod1"
+	facModule		STRUCTURESTAT		"A0FacMod1"
+	resModule		STRUCTURESTAT		"A0ResearchModule1"
+
+ 	// Essential structs.
+	numStructs		INT					3
+	structs[0]			STRUCTURESTAT		"A0LightFactory"
+	structs[1]			STRUCTURESTAT		"A0ResearchFacility"
+	structs[2]			STRUCTURESTAT		"A0CyborgFactory"
+	structsLimits[0]			INT		5
+	structsLimits[1]			INT		5
+	structsLimits[2]			INT		3
+
+
+	// oil-defenses
+	numOilStrGroups	INT							7	//number of building stages
+	highPowerGroup	INT							3	//build this and following group only on high power conditions
+	numOilStructs[0]	INT							2	//cheap defense 1
+	numOilStructs[1]	INT							4	//cheap defense 2
+	numOilStructs[2]	INT							7	//AA defense
+	numOilStructs[3]	INT							3	//arty defense
+	numOilStructs[4]	INT							3	//sensor
+	numOilStructs[5]	INT							4	//luxury defense
+	numOilStructs[6]	INT							1	//CB sensor
+	oilStructs[0][0]	STRUCTURESTAT		"WallTower04"
+	oilStructs[0][1]	STRUCTURESTAT		"PillBox6"
+	oilStructs[1][0]	STRUCTURESTAT		"Emplacement-HPVcannon"
+	oilStructs[1][1]	STRUCTURESTAT		"Emplacement-HvyATrocket"
+	oilStructs[1][2]	STRUCTURESTAT		"WallTower-Atmiss"
+	oilStructs[1][3]	STRUCTURESTAT		"Emplacement-PulseLaser"
+	oilStructs[2][0]	STRUCTURESTAT		"AASite-QuadRotMg"	
+	oilStructs[2][1]	STRUCTURESTAT		"WallTower-QuadRotAAGun" 
+	oilStructs[2][2]	STRUCTURESTAT		"P0-AASite-SAM1" 	
+	oilStructs[2][3]	STRUCTURESTAT		"WallTower-SamSite" 
+	oilStructs[2][4]	STRUCTURESTAT		"P0-AASite-SAM2" 		
+	oilStructs[2][5]	STRUCTURESTAT		"WallTower-SamHvy" 	
+	oilStructs[2][6]	STRUCTURESTAT		"P0-AASite-Laser" 		
+	oilStructs[3][0]	STRUCTURESTAT		"Emplacement-RotHow"
+	oilStructs[3][1]	STRUCTURESTAT		"Emplacement-MdART-pit"
+	oilStructs[3][2]	STRUCTURESTAT		"Emplacement-HvART-pit"
+	oilStructs[4][0]	STRUCTURESTAT		"Sys-SensoTower01"
+	oilStructs[4][1]	STRUCTURESTAT		"Sys-SensoTower02"
+	oilStructs[4][2]	STRUCTURESTAT		"Sys-SensoTowerWS"
+	oilStructs[5][0]	STRUCTURESTAT		"X-Super-Cannon"
+	oilStructs[5][1]	STRUCTURESTAT		"X-Super-Rocket"
+	oilStructs[5][2]	STRUCTURESTAT		"X-Super-Missile"
+	oilStructs[5][3]	STRUCTURESTAT		"X-Super-MassDriver"
+	oilStructs[6][0]	STRUCTURESTAT		"Sys-CB-Tower01"
+
+// defensive structs.
+defendDelay	INT		4800	//delay before AI starts to build defenses
+defendDelayHP	INT		1600	//delay before AI starts to build defenses under high power conditions
+
+TEdge[0]		STRUCTURESTAT		"A0VtolPad"
+TEdge[1]		STRUCTURESTAT		"Emplacement-Howitzer150"
+
+numTStructs[0]	INT					14
+defStructs[0][0] STRUCTURESTAT       "PillBox5"
+defStructs[0][1] STRUCTURESTAT       "WallTower04"
+defStructs[0][2] STRUCTURESTAT       "Emplacement-HeavyLaser"
+defStructs[0][3] STRUCTURESTAT       "WallTower01"
+defStructs[0][4] STRUCTURESTAT       "PillBox6"
+defStructs[0][5] STRUCTURESTAT       "GuardTower5"
+defStructs[0][6] STRUCTURESTAT       "WallTower06"
+defStructs[0][7] STRUCTURESTAT       "PillBox4"
+defStructs[0][8] STRUCTURESTAT       "WallTower02"
+defStructs[0][9] STRUCTURESTAT       "PillBox1"
+defStructs[0][10] STRUCTURESTAT       "GuardTower1"
+defStructs[0][11] STRUCTURESTAT       "WallTower03"
+defStructs[0][12] STRUCTURESTAT       "GuardTower6"
+defStructs[0][13] STRUCTURESTAT       "Emplacement-MRL-pit"
+
+numTStructs[1]	INT					14
+defStructs[1][0] STRUCTURESTAT       "Wall-VulcanCan"
+defStructs[1][1] STRUCTURESTAT       "Wall-RotMg"
+defStructs[1][2] STRUCTURESTAT       "WallTower04"
+defStructs[1][3] STRUCTURESTAT       "Emplacement-HPVcannon"
+defStructs[1][4] STRUCTURESTAT       "WallTower-HPVcannon"
+defStructs[1][5] STRUCTURESTAT       "Tower-Projector"
+defStructs[1][6] STRUCTURESTAT       "WallTower-Projector"
+defStructs[1][7] STRUCTURESTAT       "PillBox6"
+defStructs[1][8] STRUCTURESTAT       "WallTower06"
+defStructs[1][9] STRUCTURESTAT       "Emplacement-MRL-pit"
+defStructs[1][10] STRUCTURESTAT       "Pillbox-RotMG"
+defStructs[1][11] STRUCTURESTAT       "Emplacement-HvyATrocket"
+defStructs[1][12] STRUCTURESTAT       "WallTower-HvATrocket"
+defStructs[1][13] STRUCTURESTAT       "PillBox-Cannon6"
+
+numTStructs[2]	INT					23
+defStructs[2][0] STRUCTURESTAT       "WallTower-EMP"
+defStructs[2][1] STRUCTURESTAT       "Emplacement-MortarEMP"
+defStructs[2][2] STRUCTURESTAT       "Emplacement-PrisLas"
+defStructs[2][3] STRUCTURESTAT       "WallTower-PulseLas"
+defStructs[2][4] STRUCTURESTAT       "Emplacement-Rail3"
+defStructs[2][5] STRUCTURESTAT       "WallTower-Rail3"
+defStructs[2][6] STRUCTURESTAT       "Emplacement-HeavyLaser"
+defStructs[2][7] STRUCTURESTAT       "Emplacement-HPVcannon"
+defStructs[2][8] STRUCTURESTAT       "WallTower-HPVcannon"
+defStructs[2][9] STRUCTURESTAT       "PillBox6"
+defStructs[2][10] STRUCTURESTAT       "GuardTower-Rail1"
+defStructs[2][11] STRUCTURESTAT       "Sys-SpyTower"
+defStructs[2][12] STRUCTURESTAT       "Emplacement-PlasmaCannon"
+defStructs[2][13] STRUCTURESTAT       "Plasmite-flamer-bunker"
+defStructs[2][14] STRUCTURESTAT       "Emplacement-PulseLaser"
+defStructs[2][15] STRUCTURESTAT       "WallTower-Rail2"
+defStructs[2][16] STRUCTURESTAT       "Emplacement-Rail2"
+defStructs[2][17] STRUCTURESTAT       "WallTower-Atmiss"
+defStructs[2][18] STRUCTURESTAT       "GuardTower-ATMiss"
+defStructs[2][19] STRUCTURESTAT       "Emplacement-HvyATrocket"
+defStructs[2][20] STRUCTURESTAT       "WallTower-HvATrocket"
+defStructs[2][21] STRUCTURESTAT       "PillBox-Cannon6"
+defStructs[2][22] STRUCTURESTAT	"X-Super-MassDriver"
+defStructs[2][23] STRUCTURESTAT	"X-Super-Missile"
+defStructs[2][24] STRUCTURESTAT	"X-Super-Cannon"
+
+
+
+
+	// wall structs (4)
+	numWallWeaps	INT					16
+	wallWeaps[0]	STRUCTURESTAT		"WallTower-TwinAssaultGun"
+	wallWeaps[1]	STRUCTURESTAT		"WallTower-Atmiss"
+	wallWeaps[2]	STRUCTURESTAT		"WallTower-Rail2"
+	wallWeaps[3]	STRUCTURESTAT		"WallTower01"
+	wallWeaps[4]	STRUCTURESTAT		"WallTower-HvATrocket"
+	wallWeaps[5]	STRUCTURESTAT		"WallTower03"
+	wallWeaps[6]	STRUCTURESTAT		"WallTower06"
+	wallWeaps[7]	STRUCTURESTAT		"WallTower-Projector"
+	wallWeaps[8]	STRUCTURESTAT		"WallTower-HPVcannon"
+	wallWeaps[9]	STRUCTURESTAT		"WallTower04"
+	wallWeaps[10]	STRUCTURESTAT		"WallTower-Rail3"
+	wallWeaps[11]	STRUCTURESTAT		"WallTower-EMP"
+	wallWeaps[12]	STRUCTURESTAT		"WallTower02"
+	wallWeaps[13]	STRUCTURESTAT		"Wall-VulcanCan"
+	wallWeaps[14]	STRUCTURESTAT		"Wall-RotMg"
+	wallWeaps[15]	STRUCTURESTAT		"Sys-SpyTower"
+
+
+//////// ATTACK THEESE TYPES:
+	numGroundTargets		INT				93
+	numCyborgGroundTargets	INT				97
+	
+	structureTargets[0]		STRUCTURESTAT		"A0CommandCentre"
+	structureTargets[1]		STRUCTURESTAT		"A0LightFactory"
+	structureTargets[2]		STRUCTURESTAT		"A0CommandCentre"
+	structureTargets[3]		STRUCTURESTAT		"A0ResearchFacility"
+	structureTargets[4]		STRUCTURESTAT		"A0CyborgFactory"
+	structureTargets[5]		STRUCTURESTAT		"Sys-CB-Tower01"
+	structureTargets[6]		STRUCTURESTAT		"Sys-SpyTower"
+	structureTargets[7]		STRUCTURESTAT		"X-Super-Rocket"
+	structureTargets[8]		STRUCTURESTAT		"X-Super-Cannon"
+	structureTargets[9]		STRUCTURESTAT		"X-Super-MassDriver"
+	structureTargets[10]		STRUCTURESTAT		"X-Super-Missile"
+	structureTargets[11]		STRUCTURESTAT		"Plasmite-flamer-bunker"
+	structureTargets[12]		STRUCTURESTAT		"A0VTolFactory1"
+	structureTargets[13]		STRUCTURESTAT		"Emplacement-PlasmaCannon"
+	structureTargets[14]		STRUCTURESTAT		"A0LightFactory"
+	structureTargets[15]		STRUCTURESTAT		"PillBox-Cannon6"
+	structureTargets[16]		STRUCTURESTAT		"Sys-SensoTowerWS"
+	structureTargets[17]		STRUCTURESTAT		"A0VtolPad"
+	structureTargets[18]		STRUCTURESTAT		"WallTower-Atmiss"
+	structureTargets[20]		STRUCTURESTAT		"WallTower-EMP"
+	structureTargets[21]		STRUCTURESTAT		"Emplacement-MortarEMP"
+	structureTargets[22]		STRUCTURESTAT		"Emplacement-PrisLas"
+	structureTargets[23]		STRUCTURESTAT		"WallTower-Rail3"
+	structureTargets[24]		STRUCTURESTAT		"Emplacement-Howitzer150"
+	structureTargets[25]		STRUCTURESTAT		"WallTower04"
+	structureTargets[26]		STRUCTURESTAT		"Emplacement-RotHow"
+	structureTargets[27]		STRUCTURESTAT		"AASite-QuadRotMg"		//plasma site
+	structureTargets[28]		STRUCTURESTAT		"P0-AASite-SAM1" 			//avenger
+	structureTargets[29]		STRUCTURESTAT		"P0-AASite-SAM2" 			//vindicator
+	structureTargets[30]		STRUCTURESTAT		"P0-AASite-Laser" 			//laser
+	structureTargets[31]		STRUCTURESTAT		"PillBox6"
+	structureTargets[32]		STRUCTURESTAT		"Emplacement-RotMor"
+	structureTargets[33]		STRUCTURESTAT		"Emplacement-PulseLaser"
+	structureTargets[34]		STRUCTURESTAT		"Sys-SpyTower"
+	structureTargets[35]		STRUCTURESTAT		"A0ComDroidControl"
+	structureTargets[36]		STRUCTURESTAT		"A0PowerGenerator"
+	structureTargets[37]		STRUCTURESTAT		"A0RepairCentre3"
+	structureTargets[38]		STRUCTURESTAT		"A0CyborgFactory"
+	structureTargets[39]		STRUCTURESTAT		"A0VTolFactory1"
+	structureTargets[40]		STRUCTURESTAT       "PillBox5"
+	structureTargets[41]		STRUCTURESTAT      "WallTower04"
+	structureTargets[42]		STRUCTURESTAT      "Emplacement-HeavyLaser"
+	structureTargets[43]		STRUCTURESTAT     "WallTower01"
+	structureTargets[44]		STRUCTURESTAT     "PillBox6"
+	structureTargets[45]		STRUCTURESTAT     "GuardTower5"
+	structureTargets[46]		STRUCTURESTAT     "WallTower06"
+	structureTargets[47]		STRUCTURESTAT    "PillBox4"
+	structureTargets[48]		STRUCTURESTAT     "WallTower02"
+	structureTargets[49]		STRUCTURESTAT    "PillBox1"
+	structureTargets[50]		STRUCTURESTAT     "GuardTower1"
+	structureTargets[51]		STRUCTURESTAT     "WallTower03"
+	structureTargets[52]		STRUCTURESTAT    "GuardTower6"
+	structureTargets[53]		STRUCTURESTAT    "Emplacement-MRL-pit"
+	structureTargets[54]		STRUCTURESTAT     "Wall-VulcanCan"
+	structureTargets[55]		STRUCTURESTAT    "Wall-RotMg"
+	structureTargets[56]		STRUCTURESTAT     "WallTower04"
+	structureTargets[57]		STRUCTURESTAT     "Emplacement-HPVcannon"
+	structureTargets[58]		STRUCTURESTAT      "WallTower-HPVcannon"
+	structureTargets[59]		STRUCTURESTAT     "Tower-Projector"
+	structureTargets[60]		STRUCTURESTAT     "WallTower-Projector"
+	structureTargets[61]		STRUCTURESTAT     "PillBox6"
+	structureTargets[62]		STRUCTURESTAT    "WallTower06"
+	structureTargets[63]		STRUCTURESTAT     "Emplacement-MRL-pit"
+	structureTargets[64]		STRUCTURESTAT      "Pillbox-RotMG"
+	structureTargets[65]		STRUCTURESTAT       "Emplacement-HvyATrocket"
+	structureTargets[66]		STRUCTURESTAT      "WallTower-HvATrocket"
+	structureTargets[67]		STRUCTURESTAT       "PillBox-Cannon6"
+	structureTargets[68]		STRUCTURESTAT       "WallTower-EMP"
+	structureTargets[69]		STRUCTURESTAT      "Emplacement-MortarEMP"
+	structureTargets[70]		STRUCTURESTAT      "Emplacement-PrisLas"
+	structureTargets[71]		STRUCTURESTAT     "WallTower-PulseLas"
+	structureTargets[72]		STRUCTURESTAT    "Emplacement-Rail3"
+	structureTargets[73]		STRUCTURESTAT     "WallTower-Rail3"
+	structureTargets[74]		STRUCTURESTAT      "Emplacement-HeavyLaser"
+	structureTargets[75]		STRUCTURESTAT       "Emplacement-HPVcannon"
+	structureTargets[76]		STRUCTURESTAT       "WallTower-HPVcannon"
+	structureTargets[77]		STRUCTURESTAT      "PillBox6"
+	structureTargets[78]		STRUCTURESTAT      "GuardTower-Rail1"
+	structureTargets[79]		STRUCTURESTAT       "Sys-SpyTower"
+	structureTargets[80]		STRUCTURESTAT      "Emplacement-PlasmaCannon"
+	structureTargets[81]		STRUCTURESTAT      "Plasmite-flamer-bunker"
+	structureTargets[82]		STRUCTURESTAT      "Emplacement-PulseLaser"
+	structureTargets[83]		STRUCTURESTAT     "WallTower-Rail2"
+	structureTargets[84]		STRUCTURESTAT      "Emplacement-Rail2"
+	structureTargets[85]		STRUCTURESTAT     "WallTower-Atmiss"
+	structureTargets[86]		STRUCTURESTAT       "GuardTower-ATMiss"
+	structureTargets[87]		STRUCTURESTAT      "Emplacement-HvyATrocket"
+	structureTargets[88]		STRUCTURESTAT     "WallTower-HvATrocket"
+	structureTargets[89]		STRUCTURESTAT      "PillBox-Cannon6"
+	structureTargets[90]		STRUCTURESTAT	"X-Super-MassDriver"
+	structureTargets[91]		STRUCTURESTAT	"X-Super-Missile"
+	structureTargets[92]		STRUCTURESTAT	"X-Super-Cannon"
+	//cyborgs only
+	structureTargets[93]		STRUCTURESTAT		"A0ResourceExtractor"
+	structureTargets[94]		STRUCTURESTAT		"Sys-CB-Tower01"
+	structureTargets[95]		STRUCTURESTAT		"Sys-SensoTowerWS"
+	structureTargets[96]		STRUCTURESTAT		"Sys-SensoTower02"
+	
+	//Rush Stance attack list
+	numRushTargets		INT				11
+	rushTargets[0]		STRUCTURESTAT		"Emplacement-RotHow"
+	rushTargets[1]		STRUCTURESTAT		"Emplacement-Howitzer150"
+	rushTargets[2]		STRUCTURESTAT		"Emplacement-RotMor"
+	rushTargets[3]		STRUCTURESTAT		"Emplacement-MdART-pit"
+	rushTargets[4]		STRUCTURESTAT		"Sys-SpyTower"
+	rushTargets[5]		STRUCTURESTAT		"A0LightFactory"
+	rushTargets[6]		STRUCTURESTAT		"A0CyborgFactory"
+	rushTargets[7]		STRUCTURESTAT		"A0VTolFactory1"
+	rushTargets[8]		STRUCTURESTAT		"A0ResearchFacility"
+	rushTargets[9]		STRUCTURESTAT		"A0CommandCentre"
+	rushTargets[10]		STRUCTURESTAT		"P0-AASite-Laser"
+
+	//these structures are used to detect closest enemy base or frontline defenses
+	numInitialTargets		INT			5
+	initialTargets[0]		STRUCTURESTAT		"A0LightFactory"
+	initialTargets[1]		STRUCTURESTAT		"A0CyborgFactory"
+	initialTargets[2]		STRUCTURESTAT		"A0CommandCentre"
+	initialTargets[3]		STRUCTURESTAT		"A0VTolFactory1"
+	initialTargets[4]		STRUCTURESTAT		"A0RepairCentre3"
+
+	//new target list for AVAS MKV
+	numVtolTargets		INT			18
+	vtolTargets[0]		STRUCTURESTAT		"A0LightFactory"
+	vtolTargets[1]		STRUCTURESTAT		"A0CyborgFactory"
+	vtolTargets[2]		STRUCTURESTAT		"A0CommandCentre"
+	vtolTargets[3]		STRUCTURESTAT		"A0VTolFactory1"
+	vtolTargets[4]		STRUCTURESTAT		"A0RepairCentre3"
+	vtolTargets[5]		STRUCTURESTAT		"A0ResearchFacility"
+	vtolTargets[6]		STRUCTURESTAT		"A0VTolFactory1"
+	vtolTargets[7]		STRUCTURESTAT		"Sys-SensoTowerWS"
+	vtolTargets[8]		STRUCTURESTAT		"Sys-CB-Tower01"
+	vtolTargets[9]		STRUCTURESTAT		"Sys-SpyTower"
+	vtolTargets[10]		STRUCTURESTAT		"X-Super-Rocket"
+	vtolTargets[11]		STRUCTURESTAT		"X-Super-Cannon"
+	vtolTargets[12]		STRUCTURESTAT		"X-Super-MassDriver"
+	vtolTargets[13]		STRUCTURESTAT		"X-Super-Missile"
+	vtolTargets[14]		STRUCTURESTAT		"Sys-SensoTower01"
+	vtolTargets[15]		STRUCTURESTAT		"Sys-SensoTower02"
+	vtolTargets[16]		STRUCTURESTAT		"WallTower-EMP"
+	vtolTargets[17]		STRUCTURESTAT		"Emplacement-MortarEMP"
+
+
+	//general AA - all AAs enemy can use
+	numGenAA	INT					10
+	vtolGenStruct[0]	STRUCTURESTAT		"AASite-QuadMg1"			//hurricane
+	vtolGenStruct[1]	STRUCTURESTAT		"WallTower-DoubleAAGun" 		//cyclone
+	vtolGenStruct[2]	STRUCTURESTAT		"AASite-QuadBof" 			//cyclone
+	vtolGenStruct[3]	STRUCTURESTAT		"AASite-QuadRotMg"		//plasma site
+	vtolGenStruct[4]	STRUCTURESTAT		"WallTower-QuadRotAAGun" 	//plasma
+	vtolGenStruct[5]	STRUCTURESTAT		"P0-AASite-SAM1" 			//avenger
+	vtolGenStruct[6]	STRUCTURESTAT		"WallTower-SamSite" 		//avenger hp
+	vtolGenStruct[7]	STRUCTURESTAT		"P0-AASite-SAM2" 			//vindicator
+	vtolGenStruct[8]	STRUCTURESTAT		"WallTower-SamHvy" 		//vindicator hp
+	vtolGenStruct[9]	STRUCTURESTAT		"P0-AASite-Laser" 			//laser
+
+
+	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	/////////////////////// RANDOM TEMPLATES //////////////////////
+
+
+	// COMBAT TEMPLATES
+//1.10
+	numTmpls	INT		28
+	tmpl0[27]	TEMPLATE	"ViperMG01Wheels"
+	tmpl0[26]	TEMPLATE	"ViperMG02Halftrack"
+	tmpl0[25]	TEMPLATE	"ViperMRLWheels"
+	tmpl0[24]	TEMPLATE	"CobraMedCnTrks"
+	tmpl0[23]	TEMPLATE	"CobraLtA-Thalftrack"
+	tmpl0[22]	TEMPLATE	"CobraMRLHalftrack"
+	tmpl0[21]	TEMPLATE	"CobraHvyCnTrks"
+	tmpl0[20]	TEMPLATE	"SK-Cobra-Hover-HMG"
+	tmpl0[19]	TEMPLATE	"SK-Cobra-Hover-Lancer"
+	tmpl0[18]	TEMPLATE	"SK-Mantis-Hover-HVC"
+	tmpl0[17]	TEMPLATE	"SK-Python-Hover-Hcannon"
+	tmpl0[16]	TEMPLATE	"SK-Python-Hover-Lancer"
+	tmpl0[15]	TEMPLATE	"SK-Tiger-Track-Hcannon"
+	tmpl0[14]	TEMPLATE	"SK-Tiger-Track-TK"
+	tmpl0[13]	TEMPLATE	"SK-Tiger-Track-Scourge"
+	tmpl0[12]	TEMPLATE	"SK-Retre-Hover-Scourge"
+	tmpl0[11]	TEMPLATE	"SK-Retre-Track-Scourge"
+	tmpl0[10]	TEMPLATE	"SK-Retre-Hover-RailGun"
+	tmpl0[9]	TEMPLATE	"SK-Retre-Track-FlashLight"
+	tmpl0[8]	TEMPLATE	"SK-Retre-Track-PulseLsr"
+	tmpl0[7]	TEMPLATE	"SK-Retre-Track-RailGun"
+	tmpl0[6]	TEMPLATE	"SK-Veng-Hover-Scourge"
+	tmpl0[5]	TEMPLATE	"SK-Veng-Track-Scourge"
+	tmpl0[4]	TEMPLATE	"SK-Veng-Track-PulseLsr"
+	tmpl0[3]	TEMPLATE	"SK-Veng-Hover-PulseLsr"
+	tmpl0[2]	TEMPLATE	"SK-Veng-Track-HvyLaser"
+	tmpl0[1]	TEMPLATE	"SK-Veng-Track-Gauss"
+	tmpl0[0]	TEMPLATE	"SK-Veng-Hover-Gauss"
+
+	numBBs		INT		5
+	tmpl1[4]	TEMPLATE	"SK-Veng-Track-HvyLaser"
+	tmpl1[3]	TEMPLATE	"SK-Veng-Hover-PulseLsr"
+	tmpl1[2]	TEMPLATE	"SK-Scorp-Hover-BB"
+	tmpl1[1]	TEMPLATE	"SK-Cobra-Hover-BB"
+	tmpl1[0]	TEMPLATE	"SK-Panther-Htrk-BB"
+
+
+
+
+
+	/////////////////////////////////////////////////////////////////////
+	// SENSORS / REPAIR TEMPLATES
+
+	constructor	TEMPLATE	"ConstructorDroid"
+	cybcondroid	TEMPLATE	"Cyb-ComEng"
+                engBody                 BODY                   "Cyb-Bod-ComEng"
+
+	/////////////////////////////////////////////////////////////////////
+	// cyborg templates
+	numSuperCyb	INT		17
+
+	superCyb[0]		TEMPLATE	"Cyb-Hvy-A-T"
+	superCyb[1]		TEMPLATE	"Cyb-Hvy-RailGunner"
+	superCyb[2]		TEMPLATE	"Cyb-Hvy-PulseLsr"
+	superCyb[3]		TEMPLATE	"Cyb-Hvy-TK"
+	superCyb[4]		TEMPLATE	"Cyb-Hvy-Acannon"
+	superCyb[5]		TEMPLATE	"Cyb-Hvy-HPV"
+	superCyb[6]		TEMPLATE	"MP-Cyb-Laser1-GRD"
+	superCyb[7]		TEMPLATE	"Cyb-Hvy-Mcannon"
+	superCyb[8]		TEMPLATE	"MP-Cyb-ATmiss-GRD"
+	superCyb[9]		TEMPLATE	"Cyb-Thermite"
+	superCyb[10]		TEMPLATE	"MP-Cyb-Needle-GRD"
+	superCyb[11]		TEMPLATE	"CyborgRotMgGround"
+	superCyb[12]		TEMPLATE	"CyborgRkt01Ground"
+	superCyb[13]		TEMPLATE	"CyborgCannon01Grd"
+	superCyb[14]		TEMPLATE	"CyborgFlamer01Grd"
+	superCyb[15]		TEMPLATE	"Cyb-Gren"
+	superCyb[16]		TEMPLATE	"CyborgChain01Ground"
+
+	/////////////////////////////////////////////////////////////////////
+	// VTOL TEMPLATES
+	numVtols		INT		8
+	vtols[0]	TEMPLATE	"SK-Retre-VTOL-PulseLsr"
+	vtols[1]	TEMPLATE	"SK-Retre-VTOL-Scourge"
+	vtols[2]	TEMPLATE	"SK-Panther-VTOL-TK"
+	vtols[3]	TEMPLATE	"SK-Panther-VTOL-Phosbomb"
+	vtols[4]	TEMPLATE	"SK-Leopard-VTOL-PhosBomb"
+	vtols[5]	TEMPLATE	"SK-Bug-VTOL-BB"
+	vtols[6]	TEMPLATE	"SK-Bug-VTOL-CLBomb"
+	vtols[7]	TEMPLATE	"P6-L-LTAT-V"
+
+
+
+////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+}
