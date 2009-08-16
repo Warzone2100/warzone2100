@@ -26,7 +26,8 @@
 #include "aud.h"
 #include "audio.h"
 #include "audio_id.h"
-
+#include "openal_error.h"
+#include "mixer.h"
 // defines
 #define NO_SAMPLE				- 2
 #define MAX_SAME_SAMPLES		2
@@ -662,6 +663,11 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 {
 	//~~~~~~~~~~~~~~~~~~~~~~
 	AUDIO_SAMPLE	*psSample;
+	// coordinates
+	float	listenerX, listenerY, listenerZ, dX, dY, dZ;
+	// calculation results
+	float	distance, gain, sfx3d_volume;
+	ALenum err;
 	//~~~~~~~~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
@@ -671,6 +677,36 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 	}
 
 	if ( audio_CheckSame3DTracksPlaying(iTrack, iX, iY, iZ) == false )
+	{
+		return false;
+	}
+
+	// compute distance
+	// NOTE, if this call fails, expect garbage
+	alGetListener3f(AL_POSITION, &listenerX, &listenerY, &listenerZ);
+	err = sound_GetError();
+	if (err != AL_NO_ERROR)
+	{
+		return false;
+	}
+	dX = (float)iX - listenerX; // distances on all axis
+	dY = (float)iY - listenerY;
+	dZ = (float)iZ - listenerZ;
+	distance = sqrtf(dX * dX + dY * dY + dZ * dZ); // Pythagorean theorem
+
+	sfx3d_volume = sound_GetEffectsVolume();
+	// compute gain
+	gain = (1.0 - (distance * ATTENUATION_FACTOR)) ;//* 1.0f * sfx3d_volume
+	if (gain > 1.0f)
+	{
+		gain = 1.0f;
+	}
+	if (gain < 0.0f)
+	{
+		gain = 0.0f;
+	}
+	// don't bother adding samples that we can't hear
+	if (gain == 0.0f)
 	{
 		return false;
 	}

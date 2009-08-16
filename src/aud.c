@@ -100,7 +100,7 @@ void audio_GetObjectPos(void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 
 	/* check is valid pointer */
 	ASSERT( psBaseObj != NULL,
-			"audio_GetObjectPos: game object pointer invalid\n" );
+			"audio_GetObjectPos: game object pointer invalid" );
 
 	*piX = psBaseObj->pos.x;
 	*piZ = map_TileHeight(map_coord(psBaseObj->pos.x), map_coord(psBaseObj->pos.y));
