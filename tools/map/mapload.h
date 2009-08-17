@@ -75,6 +75,7 @@ typedef struct _mapfile_type
 {
 	uint32_t		height, width, mapVersion, gameVersion, numGateways, numFeatures, numTerrainTypes, power[8];
 	uint32_t		numPlayers, numDroids, numStructures, droidVersion, structVersion, featVersion, terrainVersion;
+	uint32_t		gameType, gameTime;
 	int32_t			scrollMinX;
 	int32_t			scrollMinY;
 	uint32_t		scrollMaxX;

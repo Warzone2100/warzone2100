@@ -31,7 +31,7 @@ GAMEMAP *mapLoad(char *filename)
 {
 	char		path[PATH_MAX];
 	GAMEMAP		*map = malloc(sizeof(*map));
-	uint32_t	i, j, gameTime, gameType, gwVersion;
+	uint32_t	i, j, gwVersion;
 	char		aFileType[4];
 	bool		littleEndian = true;
 	PHYSFS_file	*fp = NULL;
@@ -164,8 +164,8 @@ mapfailure:
 	{
 		littleEndian = false;
 	}
-	if (!readU32(&gameTime)
-	    || !readU32(&gameType)
+	if (!readU32(&map->gameTime)
+	    || !readU32(&map->gameType)
 	    || !readS32(&map->scrollMinX)
 	    || !readS32(&map->scrollMinY)
 	    || !readU32(&map->scrollMaxX)

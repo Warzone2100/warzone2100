@@ -118,6 +118,8 @@ int main(int argc, char **argv)
 	}
 	MADD("[game]");
 	MADD("SaveKey = %d", (int)map->tileset);
+	MADD("SaveType = %u", map->gameType);
+	MADD("GameTime = %u", map->gameTime);
 	fclose(fp);
 
 	/*** Terrain data ***/
