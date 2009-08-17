@@ -27,14 +27,14 @@
 
 static const char *tilesetTextures[] = { "Arizona", "Urban", "Rockies" };
 
+#define MADD(...) fprintf(fp, __VA_ARGS__); fprintf(fp, "\n");
+
 int main(int argc, char **argv)
 {
 	char filename[PATH_MAX], base[PATH_MAX];
 	char path[PATH_MAX], *delim;
 	GAMEMAP *map;
 	FILE *fp;
-	uint16_t *terrain, *rotate;
-	uint8_t *height, *flip;
 	int i;
 	MAPTILE *psTile;
 
@@ -75,35 +75,37 @@ int main(int argc, char **argv)
 	mkdir(filename, 0777);
 
 	/*** Map configuration ***/
-	strcat(filename, "/map.ini");
-	fp = fopen(filename, "w");
-	if (!fp)
+	if (map->mapVersion > 0)
 	{
-		fprintf(stderr, "Could not open target: %s", filename);
-		return -1;
-	}
-	#define MADD(...) fprintf(fp, __VA_ARGS__); fprintf(fp, "\n");
-	MADD("[map]");
-	if (map->levelName[0] != '\0')
-	{
-		MADD("Name = %s", map->levelName);
-	}
-	MADD("SnapMode = %d", SNAP_MODE);
-	MADD("Gravity = %d", GRAVITY);
-	MADD("HeightScale = %d", ELEVATION_SCALE);
-	MADD("MapWidth = %d", map->width);
-	MADD("MapHeight = %d", map->height);
-	MADD("TileWidth = %d", TILE_HEIGHT);
-	MADD("TileHeight = %d", TILE_WIDTH);
-	MADD("SeaLevel = %d", SEALEVEL);
-	MADD("Tileset = %s", tilesetTextures[map->tileset]);
+		strcat(filename, "/map.ini");
+		fp = fopen(filename, "w");
+		if (!fp)
+		{
+			fprintf(stderr, "Could not open target: %s", filename);
+			return -1;
+		}
+		MADD("[map]");
+		if (map->levelName[0] != '\0')
+		{
+			MADD("Name = %s", map->levelName);
+		}
+		MADD("SnapMode = %d", SNAP_MODE);
+		MADD("Gravity = %d", GRAVITY);
+		MADD("HeightScale = %d", ELEVATION_SCALE);
+		MADD("MapWidth = %d", map->width);
+		MADD("MapHeight = %d", map->height);
+		MADD("TileWidth = %d", TILE_HEIGHT);
+		MADD("TileHeight = %d", TILE_WIDTH);
+		MADD("SeaLevel = %d", SEALEVEL);
+		MADD("Tileset = %s", tilesetTextures[map->tileset]);
 
-	MADD("\n[scroll_limits]");
-	MADD("x1 = %d", map->scrollMinX);
-	MADD("y1 = %d", map->scrollMinY);
-	MADD("x2 = %u", map->scrollMaxX);
-	MADD("y2 = %u", map->scrollMaxY);
-	fclose(fp);
+		MADD("\n[scroll_limits]");
+		MADD("x1 = %d", map->scrollMinX);
+		MADD("y1 = %d", map->scrollMinY);
+		MADD("x2 = %u", map->scrollMaxX);
+		MADD("y2 = %u", map->scrollMaxY);
+		fclose(fp);
+	}
 
 	/*** Game data ***/
 	strcpy(filename, base);
@@ -119,112 +121,130 @@ int main(int argc, char **argv)
 	fclose(fp);
 
 	/*** Terrain data ***/
-	terrain = malloc(map->width * map->height * 2);
-	height = malloc(map->width * map->height);
-	rotate = malloc(map->width * map->height * 2);
-	flip = malloc(map->width * map->height);
-	psTile = mapTile(map, 0, 0);
-	for (i = 0; i < map->width * map->height; i++)
+	if (map->mapVersion > 0)
 	{
-		height[i] = psTile->height;
-		terrain[i] = psTile->texture & TILE_NUMMASK;
-		rotate[i] = ((psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT) * 90;
-		flip[i] = TRI_FLIPPED(psTile) ? 255 : 0;
+		uint16_t *terrain, *rotate;
+		uint8_t *height, *flip;
 
-		psTile++;
+		terrain = malloc(map->width * map->height * 2);
+		height = malloc(map->width * map->height);
+		rotate = malloc(map->width * map->height * 2);
+		flip = malloc(map->width * map->height);
+		psTile = mapTile(map, 0, 0);
+		for (i = 0; i < map->width * map->height; i++)
+		{
+			height[i] = psTile->height;
+			terrain[i] = psTile->texture & TILE_NUMMASK;
+			rotate[i] = ((psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT) * 90;
+			flip[i] = TRI_FLIPPED(psTile) ? 255 : 0;
+
+			psTile++;
+		}
+		strcpy(filename, base);
+		strcat(filename, "/map-001/terrain.png");
+		savePngI16(filename, terrain, map->width, map->height);
+		strcpy(filename, base);
+		strcat(filename, "/map-001/height.png");
+		savePngI8(filename, height, map->width, map->height);
+		strcpy(filename, base);
+		strcat(filename, "/map-001/rotations.png");
+		savePngI16(filename, rotate, map->width, map->height);
+		strcpy(filename, base);
+		strcat(filename, "/map-001/flips.png");
+		savePngI8(filename, flip, map->width, map->height);
+		free(height);
+		free(terrain);
+		free(rotate);
+		free(flip);
 	}
-	strcpy(filename, base);
-	strcat(filename, "/map-001/terrain.png");
-	savePngI16(filename, terrain, map->width, map->height);
-	strcpy(filename, base);
-	strcat(filename, "/map-001/height.png");
-	savePngI8(filename, height, map->width, map->height);
-	strcpy(filename, base);
-	strcat(filename, "/map-001/rotations.png");
-	savePngI16(filename, rotate, map->width, map->height);
-	strcpy(filename, base);
-	strcat(filename, "/map-001/flips.png");
-	savePngI8(filename, flip, map->width, map->height);
-	free(height);
-	free(terrain);
-	free(rotate);
-	free(flip);
 
 	/*** Features ***/
-	strcpy(filename, base);
-	strcat(filename, "/map-001/features.ini");
-	fp = fopen(filename, "w");
-	MADD("[feature_header]");
-	MADD("entries = %u", map->numFeatures);
-	for (i = 0; i < map->numDroids; i++)
+	if (map->featVersion > 0)
 	{
-		LND_OBJECT *psObj = &map->mLndObjects[IMD_FEATURE][i];
+		strcpy(filename, base);
+		strcat(filename, "/map-001/features.ini");
+		fp = fopen(filename, "w");
+		MADD("[feature_header]");
+		MADD("entries = %u", map->numFeatures);
+		for (i = 0; i < map->numDroids; i++)
+		{
+			LND_OBJECT *psObj = &map->mLndObjects[IMD_FEATURE][i];
 
-		MADD("\n[feature_%04u]", i);
-		MADD("pos.x = %u", psObj->x);
-		MADD("pos.y = %u", psObj->y);
-		MADD("pos.z = %u", psObj->z);
-		MADD("direction = %u", psObj->direction);
-		MADD("player = %u", psObj->player);
-		MADD("template = %s", psObj->name);
+			MADD("\n[feature_%04u]", i);
+			MADD("pos.x = %u", psObj->x);
+			MADD("pos.y = %u", psObj->y);
+			MADD("pos.z = %u", psObj->z);
+			MADD("direction = %u", psObj->direction);
+			MADD("player = %u", psObj->player);
+			MADD("template = %s", psObj->name);
+		}
+		fclose(fp);
 	}
-	fclose(fp);
 
 	/*** Structures ***/
-	strcpy(filename, base);
-	strcat(filename, "/map-001/structure.ini");
-	fp = fopen(filename, "w");
-	MADD("[structure_header]");
-	MADD("entries = %u", map->numStructures);
-	for (i = 0; i < map->numDroids; i++)
+	if (map->structVersion)
 	{
-		LND_OBJECT *psObj = &map->mLndObjects[IMD_STRUCTURE][i];
+		strcpy(filename, base);
+		strcat(filename, "/map-001/structure.ini");
+		fp = fopen(filename, "w");
+		MADD("[structure_header]");
+		MADD("entries = %u", map->numStructures);
+		for (i = 0; i < map->numDroids; i++)
+		{
+			LND_OBJECT *psObj = &map->mLndObjects[IMD_STRUCTURE][i];
 
-		MADD("\n[structure_%04u]", i);
-		MADD("pos.x = %u", psObj->x);
-		MADD("pos.y = %u", psObj->y);
-		MADD("pos.z = %u", psObj->z);
-		MADD("direction = %u", psObj->direction);
-		MADD("player = %u", psObj->player);
-		MADD("template = %s", psObj->name);
+			MADD("\n[structure_%04u]", i);
+			MADD("pos.x = %u", psObj->x);
+			MADD("pos.y = %u", psObj->y);
+			MADD("pos.z = %u", psObj->z);
+			MADD("direction = %u", psObj->direction);
+			MADD("player = %u", psObj->player);
+			MADD("template = %s", psObj->name);
+		}
+		fclose(fp);
 	}
-	fclose(fp);
 
 	/*** Droids ***/
-	strcpy(filename, base);
-	strcat(filename, "/map-001/droids.ini");
-	fp = fopen(filename, "w");
-	MADD("[droid_header]");
-	MADD("entries = %u", map->numDroids);
-	for (i = 0; i < map->numDroids; i++)
+	if (map->droidVersion > 0)
 	{
-		LND_OBJECT *psObj = &map->mLndObjects[IMD_DROID][i];
+		strcpy(filename, base);
+		strcat(filename, "/map-001/droids.ini");
+		fp = fopen(filename, "w");
+		MADD("[droid_header]");
+		MADD("entries = %u", map->numDroids);
+		for (i = 0; i < map->numDroids; i++)
+		{
+			LND_OBJECT *psObj = &map->mLndObjects[IMD_DROID][i];
 
-		MADD("\n[droid_%04u]", i);
-		MADD("pos.x = %u", psObj->x);
-		MADD("pos.y = %u", psObj->y);
-		MADD("pos.z = %u", psObj->z);
-		MADD("direction = %u", psObj->direction);
-		MADD("player = %u", psObj->player);
-		MADD("template = %s", psObj->name);
+			MADD("\n[droid_%04u]", i);
+			MADD("pos.x = %u", psObj->x);
+			MADD("pos.y = %u", psObj->y);
+			MADD("pos.z = %u", psObj->z);
+			MADD("direction = %u", psObj->direction);
+			MADD("player = %u", psObj->player);
+			MADD("template = %s", psObj->name);
+		}
+		fclose(fp);
 	}
-	fclose(fp);
 
 	/*** Gateways ***/
-	strcpy(filename, base);
-	strcat(filename, "/map-001/gateways.ini");
-	fp = fopen(filename, "w");
-	MADD("[gateway_header]");
-	MADD("entries = %u", map->numGateways);
-	for (i = 0; i < map->numGateways; i++)
+	if (map->mapVersion > 0)
 	{
-		GATEWAY *psGate = mapGateway(map, i);
+		strcpy(filename, base);
+		strcat(filename, "/map-001/gateways.ini");
+		fp = fopen(filename, "w");
+		MADD("[gateway_header]");
+		MADD("entries = %u", map->numGateways);
+		for (i = 0; i < map->numGateways; i++)
+		{
+			GATEWAY *psGate = mapGateway(map, i);
 
-		MADD("\n[gateway_%04d]", i);
-		MADD("x1=%hhu", psGate->x1);
-		MADD("y1=%hhu",	psGate->y1);
-		MADD("x2=%hhu",	psGate->x2);
-		MADD("y2=%hhu",	psGate->y2);
+			MADD("\n[gateway_%04d]", i);
+			MADD("x1=%hhu", psGate->x1);
+			MADD("y1=%hhu",	psGate->y1);
+			MADD("x2=%hhu",	psGate->x2);
+			MADD("y2=%hhu",	psGate->y2);
+		}
 	}
 
 	mapFree(map);
