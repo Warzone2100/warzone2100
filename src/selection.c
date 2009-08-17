@@ -60,7 +60,6 @@ UDWORD	selNameSelect			( char *droidName, UDWORD player, BOOL bOnScreen );
 
 static DROID	*psOldRD = NULL;	// pointer to last selected repair unit
 static DROID	*psOldNS = NULL;
-static STRUCTURE *psOldStruct = NULL;
 
 UDWORD	selDroidSelection( UDWORD	player, SELECTION_CLASS droidClass,
 						  SELECTIONTYPE droidType, BOOL bOnScreen )
@@ -526,6 +525,7 @@ void	selNextSpecifiedBuilding(UDWORD	structType)
 {
 STRUCTURE	*psCurr;
 STRUCTURE	*psResult;
+STRUCTURE	*psOldStruct;
 STRUCTURE	*psFirst;
 BOOL		bLaterInList;
 
@@ -533,52 +533,54 @@ BOOL		bLaterInList;
 	ASSERT( structType>=REF_HQ && structType<=NUM_DIFF_BUILDINGS,
 		"Invalid structure type in selNextSpecifiedBuilding" );
 
-	for(psCurr = apsStructLists[selectedPlayer], psFirst = NULL,psResult = NULL,bLaterInList = false;
+	for(psCurr = apsStructLists[selectedPlayer], psFirst = NULL,psResult = NULL,psOldStruct=NULL,bLaterInList = false;
 		psCurr && !psResult; psCurr = psCurr->psNext)
+	{
+		if( (psCurr->pStructureType->type == structType) &&
+			(psCurr->status == SS_BUILT) )
 		{
-			if(psCurr->pStructureType->type == structType)
+			if(!psFirst)
 			{
-				if(!psFirst)
-				{
-					psFirst = psCurr;
-				}
-				if(psCurr == psOldStruct)
-				{
-					bLaterInList = true;
-				}
-				if(!psOldStruct)
-				{
-					psResult = psCurr;
-				}
-				else if(psCurr!=psOldStruct && bLaterInList)
-				{
-					psResult = psCurr;
-				}
+				psFirst = psCurr;
+			}
+			if(psCurr->selected)
+			{
+				bLaterInList = true;
+				psOldStruct=psCurr;
+			}
+			else if(bLaterInList)
+			{
+				psResult = psCurr;
 			}
 		}
+	}
 
-		if(!psResult)
+	if(!psResult)
+	{
+		if(psFirst)
 		{
-			if(psFirst)
-			{
-				psResult = psFirst;
-			}
+			psResult = psFirst;
 		}
+	}
 
-		if(psResult && !psResult->died)
+	if(psResult && !psResult->died)
+	{
+		if(getWarCamStatus())
 		{
-			if(getWarCamStatus())
-			{
-				camToggleStatus();
-			}
-			setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), false);
-			psOldStruct = psResult;
+			camToggleStatus();
 		}
-		else
+		setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), false);
+		if(psOldStruct)
 		{
-			// Can't find required building
-			addConsoleMessage("Cannot find required building!",LEFT_JUSTIFY,SYSTEM_MESSAGE);
+		  psOldStruct->selected = false;
 		}
+		psResult->selected = true;
+	}
+	else
+	{
+		// Can't find required building
+		addConsoleMessage("Cannot find required building!",LEFT_JUSTIFY,SYSTEM_MESSAGE);
+	}
 }
 
 
