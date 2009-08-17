@@ -8904,9 +8904,8 @@ msgid "Medium Super Heavy Body"
 msgstr "Mittlerer superschwerer Rumpf"
 
 #: data/mp/messages/resmessagesall.rmsg:681
-#, fuzzy
 msgid "More armor and body points than Vengeance"
-msgstr "Verfügt über mehr Panzerung und Rumpfpunkte als Vengeance"
+msgstr "Mehr Panzerung und Rumpfpunkte als Vengeance"
 
 #: data/mp/messages/resmessagesall.rmsg:682
 msgid "Slow moving Body"
@@ -9574,21 +9573,18 @@ msgstr "EMP-Raketenwerfer"
 
 #: data/mp/messages/strings/names.txt:1804
 #: data/mp/messages/strings/names.txt:1805
-#, fuzzy
 msgid "Command Turret II"
-msgstr "Commanderturm"
+msgstr "Commanderturm II"
 
 #: data/mp/messages/strings/names.txt:1806
 #: data/mp/messages/strings/names.txt:1807
-#, fuzzy
 msgid "Command Turret III"
-msgstr "Commanderturm MkIII"
+msgstr "Commanderturm III"
 
 #: data/mp/messages/strings/names.txt:1808
 #: data/mp/messages/strings/names.txt:1809
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "Commanderturm"
+msgstr "Commanderturm IV"
 
 #: data/mp/messages/strings/names.txt:1819
 msgid "Heavy Repair Turret Cobra Hover"
@@ -9688,15 +9684,12 @@ msgstr "Nadelgeschütz Vengeance Ketten"
 msgid "Vengeance Tracks Rail Gun"
 msgstr "Vengeance Ketten Magnetgeschütz"
 
-# Original is screwed ~.~
 #: data/mp/messages/strings/names.txt:1860
-#, fuzzy
 msgid "Vengeance Tracks Gauss Cannon"
 msgstr "Vengeance Ketten Gauß-Kanone"
 
 # Original is screwed ~.~
 #: data/mp/messages/strings/names.txt:1861
-#, fuzzy
 msgid "Vengeance Tracks Gauss Scourge"
 msgstr "Vengeance Ketten Scourge"
 
@@ -9999,7 +9992,6 @@ msgstr "Brasilianisches Portugiesisch"
 
 #: lib/framework/i18n.c:74
 #: lib/framework/i18n.c:127
-#, fuzzy
 msgid "Portuguese"
 msgstr "Portugiesisch"
 
@@ -10047,7 +10039,7 @@ msgstr "Vereinfachtes Chinesisch"
 #: lib/framework/i18n.c:87
 #: lib/framework/i18n.c:136
 msgid "Traditional Chinese"
-msgstr ""
+msgstr "Traditionelles Chinesisch"
 
 #: lib/netplay/netplay.c:279
 #: lib/netplay/netplay.c:313
@@ -11677,9 +11669,8 @@ msgid "Select all Wheels"
 msgstr "Alle Radfahrzeuge auswählen"
 
 #: src/keymap.c:423
-#, fuzzy
 msgid "Select all Similar Units"
-msgstr "Alle gleichartigen Einheiten auswählen"
+msgstr "Alle ähnlichen Einheiten auswählen"
 
 #: src/keymap.c:427
 msgid "Select next Factory"
