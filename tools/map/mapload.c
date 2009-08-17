@@ -60,8 +60,11 @@ GAMEMAP *mapLoad(char *filename)
 
 	if (!fp)
 	{
-		debug(LOG_ERROR, "Map file %s not found", path);
-		goto failure;
+		map->mapVersion = 0;
+		map->width = UINT32_MAX;
+		map->height = UINT32_MAX;
+		map->mMapTiles = NULL;
+		goto mapfailure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
 	    || !readU32(&map->mapVersion)
@@ -135,7 +138,7 @@ GAMEMAP *mapLoad(char *filename)
 		}
 	}
 	PHYSFS_close(fp);
-
+mapfailure:
 
 	/* === Load game data === */
 
@@ -201,7 +204,9 @@ GAMEMAP *mapLoad(char *filename)
 	if (!fp)
 	{
 		debug(LOG_ERROR, "Feature file %s not found", path);
-		goto failure;
+		map->featVersion = 0;
+		map->numFeatures = 0;
+		goto featfailure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
 	    || aFileType[0] != 'f'
@@ -253,6 +258,7 @@ GAMEMAP *mapLoad(char *filename)
 		}
 	}
 	PHYSFS_close(fp);
+featfailure:
 
 
 	/* === Load terrain data === */
@@ -263,8 +269,8 @@ GAMEMAP *mapLoad(char *filename)
 	fp = PHYSFS_openRead(path);
 	if (!fp)
 	{
-		debug(LOG_ERROR, "Terrain type file %s not found", path);
-		goto failure;
+		map->terrainVersion = 0;
+		goto terrainfailure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
 	    || aFileType[0] != 't'
@@ -301,7 +307,7 @@ GAMEMAP *mapLoad(char *filename)
 		goto failure;
 	}
 	PHYSFS_close(fp);
-
+terrainfailure:
 
 	/* === Load structure data === */
 
