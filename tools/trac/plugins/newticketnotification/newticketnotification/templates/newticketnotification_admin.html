@@ -1,0 +1,62 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:py="http://genshi.edgewall.org/">
+
+  <xi:include href="admin.html" />
+
+  <head>
+    <title>Ticket Notifications</title>
+  </head>
+
+  <body>
+
+    <h2>Ticket Notifications</h2>
+
+    <form class="addnew" id="addaddress" method="post">
+      <fieldset>
+        <legend>Add Address</legend>
+        <div class="field">
+          <label>Address: <input type="text" name="email" id="email" /></label>
+        </div>
+        <div class="buttons">
+          <input type="submit" name="add" value="Add" />
+        </div>
+      </fieldset>
+    </form>
+
+    <py:choose>
+      <form py:when="newticketnotification.addresses" id="address_table" method="post">
+        <p>
+          When a new ticket is created a notification e-mail will be sent
+          (carbon copy) to these e-mail addresses.
+        </p>
+        <table class="listing" id="addresslist">
+          <thead>
+            <tr><th class="sel">&nbsp;</th>
+              <th>Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr py:for="address in newticketnotification.addresses">
+              <td class="sel"><input type="checkbox" name="sel" value="$address" /></td>
+              <td class="name">$address</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="buttons">
+          <input type="submit" name="remove" value="Remove selected items" />
+        </div>
+      </form>
+
+      <p py:otherwise="" class="help">
+        Currently no notification addresses are available. Use the &quot;Add
+        Address&quot; form to add them.
+      </p>
+    </py:choose>
+
+  </body>
+
+</html>

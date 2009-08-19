@@ -9,6 +9,7 @@ setup(
     version = '0.1',
 
     packages = ['newticketnotification'],
+    package_data = { 'newticketnotification': ['templates/*.html'] },
 
     install_requires = ['trac>=0.11'],
 
@@ -17,6 +18,7 @@ setup(
     description = 'Extends Trac to notify a configured set of e-mail addresses upon ticket creation.',
     license = 'BSD',
     keywords = 'trac plugin ticket create notify e-mail',
+    url = 'http://developer.wz2100.net/browser/trunk/tools/trac/plugins/newticketnotification',
     classifiers = [
         'Framework :: Trac',
         'License :: OSI Approved :: BSD License',
@@ -24,6 +26,7 @@ setup(
 
     entry_points = {
         'trac.plugins': [
+            'newticketnotification.admin = newticketnotification.admin',
             'newticketnotification.main = newticketnotification.main',
         ],
     },
