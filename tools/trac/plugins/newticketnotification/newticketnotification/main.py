@@ -1,5 +1,8 @@
-# vim: set et sts=4 sw=4:
-import re
+# vim: set et sts=4 sw=4 encoding=utf8:
+# -*- coding: utf-8 -*-
+
+from model import *
+
 from trac.config import Option
 from trac.core import *
 from trac.ticket.api import ITicketChangeListener
@@ -10,8 +13,6 @@ class TicketCCNotifyEmail(TicketNotifyEmail):
     cc_on_newticket = Option('notification', 'cc_on_newticket', '',
         """Email address(es) to always send notifications to when new tickets
            are created, addresses can be seen by all recipients (Cc:).""")
-
-    _split_args = re.compile(r',\s*').split
 
     def send(self, torcpts, ccrcpts, mime_headers={}):
         public_cc = self.config.getbool('notification', 'use_public_cc')
@@ -25,19 +26,15 @@ class TicketCCNotifyEmail(TicketNotifyEmail):
 
     @property
     def ccrecipients(self):
-        ccrcpts = self._split_args(self.config.get('notification', 'cc_on_newticket'))
-
-        # Make sure that empty strings result in empty lists
-        if len(ccrcpts) == 1 and ccrcpts[0] == "":
-            return []
-
-        return ccrcpts
+        return get_cc_recipients(self.config)
 
     def get_recipients(self, tktid):
         return (self.torecipients, self.ccrecipients)
 
 class NewTicketNotification(Component):
-    """Extends Trac to notify a configured set of e-mail addresses upon ticket creation."""
+    """Extends Trac to notify a configured set of e-mail addresses upon ticket
+    creation.
+    """
 
     implements(ITicketChangeListener)
 
