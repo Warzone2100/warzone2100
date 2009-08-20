@@ -96,19 +96,6 @@ BOOL screenInitialise(
 		// The flags to pass to SDL_SetVideoMode.
 		video_flags  = SDL_OPENGL;    // Enable OpenGL in SDL.
 		video_flags |= SDL_ANYFORMAT; // Don't emulate requested BPP if not available.
-		video_flags |= SDL_HWPALETTE; // Store the palette in hardware.
-
-		// This checks to see if surfaces can be stored in memory.
-		if (video_info->hw_available) {
-			video_flags |= SDL_HWSURFACE;
-		} else {
-			video_flags |= SDL_SWSURFACE;
-		}
-
-		// This checks if hardware blits can be done.
-		if (video_info->blit_hw) {
-			video_flags |= SDL_HWACCEL;
-		}
 
 		if (fullScreen) {
 			video_flags |= SDL_FULLSCREEN;
