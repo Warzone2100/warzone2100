@@ -61,7 +61,7 @@ BOOL	InGameOpUp		= false;
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static BOOL addIGTextButton(UDWORD id, UWORD y, const char *string, UDWORD Style)
+static BOOL addIGTextButton(UDWORD id, UWORD y, UWORD width, const char *string, UDWORD Style)
 {
 	W_BUTINIT sButInit;
 
@@ -75,7 +75,7 @@ static BOOL addIGTextButton(UDWORD id, UWORD y, const char *string, UDWORD Style
 
 	sButInit.x			= INTINGAMEOP_1_X;
 	sButInit.y			= y;
-	sButInit.width		= INTINGAMEOP_OP_W;
+	sButInit.width		= width;
 	sButInit.height		= INTINGAMEOP_OP_H;
 
 	sButInit.FontID		= font_regular;
@@ -115,10 +115,10 @@ static BOOL addQuitOptions(void)
 	widgAddForm(psWScreen, &sFormInit);
 
 	//resume
-	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, _("Resume Game"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
 	//  quit
-	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_2_Y, _("Quit"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 
 	return true;
 }
@@ -149,22 +149,34 @@ static BOOL addSlideOptions(void)
 
 	widgAddForm(psWScreen, &sFormInit);
 
-	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_4_Y, _("Resume Game"), WBUT_PLAIN);
-
 	// fx vol
-	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_1_Y, _("Voice Volume"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Voice Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_FXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_1_Y-5,
 				AUDIO_VOL_MAX, (int)(sound_GetUIVolume() * 100.0));
 
 	// fx vol
-	addIGTextButton(INTINGAMEOP_3DFXVOL, INTINGAMEOP_2_Y, _("FX Volume"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_3DFXVOL, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("FX Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_3DFXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_2_Y-5,
 				AUDIO_VOL_MAX, (int)(sound_GetEffectsVolume() * 100.0));
 
 	// cd vol
-	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_3_Y, _("Music Volume"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Music Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_3_Y-5,
 				AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100));
+
+	// Tactical UI: Target Origin
+	if(tuiTargetOrigin)
+	{
+		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_4_Y, INTINGAMEOP_SW_W,
+			_("Tactical UI (Target Origin Icon): Show"), WBUT_PLAIN);
+	}
+	else
+	{
+		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_4_Y, INTINGAMEOP_SW_W,
+			_("Tactical UI (Target Origin Icon): Hide"), WBUT_PLAIN);
+	}
+
+	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_5_Y, INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
 
 	return true;
 }
@@ -237,26 +249,26 @@ static BOOL _intAddInGameOptions(void)
 
     if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{
-		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_5_Y, _("Quit"), OPALIGN);
+		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 
 	}
 	else
 	{
-		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_3_Y, _("Quit"), OPALIGN);
+		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 	}
 
 	// add 'resume'
-	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, _("Resume Game"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
 	// add 'options'
-	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_2_Y, _("Options"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Options"), OPALIGN);
 
 
 	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{		// add 'load'
-		addIGTextButton(INTINGAMEOP_LOAD, INTINGAMEOP_3_Y, _("Load Game"), OPALIGN);
+		addIGTextButton(INTINGAMEOP_LOAD, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
 		// add 'save'
-		addIGTextButton(INTINGAMEOP_SAVE, INTINGAMEOP_4_Y, _("Save Game"), OPALIGN);
+		addIGTextButton(INTINGAMEOP_SAVE, INTINGAMEOP_4_Y, INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
 	}
 
 
@@ -416,6 +428,19 @@ void intProcessInGameOptions(UDWORD id)
 		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_CDVOL_S) / 100.0);
 		break;
 
+	case INTINGAMEOP_TUI_TARGET_ORIGIN_SW:
+		tuiTargetOrigin = !tuiTargetOrigin;
+		if(tuiTargetOrigin)
+		{
+			widgSetString(psWScreen, INTINGAMEOP_TUI_TARGET_ORIGIN_SW, _("Tactical UI (Target Origin Icon): Show"));
+		}
+		else
+		{
+			widgSetString(psWScreen, INTINGAMEOP_TUI_TARGET_ORIGIN_SW, _("Tactical UI (Target Origin Icon): Hide"));
+		}
+		
+		break;
+		
 	default:
 		break;
 	}

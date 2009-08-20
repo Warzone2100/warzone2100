@@ -169,6 +169,9 @@ BOOL	radarOnScreen=false;
 /// Show unit/building gun/sensor range
 bool rangeOnScreen = false;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
 
+/// Tactical UI: show/hide target origin icon
+bool tuiTargetOrigin = false; 
+
 /// Temporary values for the terrain render - top left corner of grid to be rendered
 static int playerXTile, playerZTile;
 
@@ -2905,6 +2908,53 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 	}
 }
 
+/// draw target origin icon for the specified structure
+static void drawStructureTargetOriginIcon(STRUCTURE *psStruct, WEAPON *psWeap, int weapon_slot)
+{
+	SDWORD		scrX,scrY,scrR;
+	UDWORD		scale;
+
+	// Process main weapon only for now
+	if (!tuiTargetOrigin || weapon_slot || psWeap->nStat == 0)
+	{
+		return;
+	}
+
+	scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
+	scrX = psStruct->sDisplay.screenX;
+	scrY = psStruct->sDisplay.screenY + (scale*10);
+	scrR = scale*20;
+
+	/* Render target origin graphics */
+	switch(psStruct->targetOrigin[weapon_slot])
+	{
+	case ORIGIN_VISUAL:
+		iV_DrawImage(IntImages, IMAGE_ORIGIN_VISUAL, scrX+scrR+5, scrY-1);
+		break;
+	case ORIGIN_COMMANDER:
+		iV_DrawImage(IntImages, IMAGE_ORIGIN_COMMANDER, scrX+scrR+5, scrY-1);
+		break;
+	case ORIGIN_SENSOR:
+		iV_DrawImage(IntImages, IMAGE_ORIGIN_SENSOR_STANDARD, scrX+scrR+5, scrY-1);
+		break;
+	case ORIGIN_CB_SENSOR:
+		iV_DrawImage(IntImages, IMAGE_ORIGIN_SENSOR_CB, scrX+scrR+5, scrY-1);
+		break;
+	case ORIGIN_AIRDEF_SENSOR:
+		iV_DrawImage(IntImages, IMAGE_ORIGIN_SENSOR_AIRDEF, scrX+scrR+5, scrY-1);
+		break;
+	case ORIGIN_RADAR_DETECTOR:
+		iV_DrawImage(IntImages, IMAGE_ORIGIN_RADAR_DETECTOR, scrX+scrR+5, scrY-1);
+		break;
+	case ORIGIN_UNKNOWN:
+		// Do nothing
+		break;
+	default:
+		debug(LOG_WARNING,"Unexpected target origin in structure(%d)!", psStruct->id);
+
+	}
+}
+
 /// draw the health bar for the specified structure
 static void drawStructureHealth(STRUCTURE *psStruct)
 {
@@ -3017,6 +3067,7 @@ static void	drawStructureSelections( void )
 				for (i = 0; i < psStruct->numWeaps; i++)
 				{
 					drawWeaponReloadBar((BASE_OBJECT *)psStruct, &psStruct->asWeaps[i], i);
+					drawStructureTargetOriginIcon(psStruct, &psStruct->asWeaps[i], i);
 				}
 			}
 

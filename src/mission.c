@@ -77,6 +77,7 @@
 #include "keymap.h"
 #include "texture.h"
 #include "warzoneconfig.h"
+#include "combat.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -3180,7 +3181,7 @@ void missionDestroyObjects(void)
 		{
 			if (psStruct->psTarget[i] && psStruct->psTarget[i]->died)
 			{
-				setStructureTarget(psStruct, NULL, i);
+				setStructureTarget(psStruct, NULL, i, ORIGIN_UNKNOWN);
 			}
 		}
 		psStruct = psStruct->psNext;

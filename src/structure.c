@@ -1691,6 +1691,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			psBuilding->asWeaps[i].rotation = 0;
 			psBuilding->asWeaps[i].pitch = 0;
 			psBuilding->psTarget[i] = NULL;
+			psBuilding->targetOrigin[i] = ORIGIN_UNKNOWN;
 		}
 		psBuilding->targetted = 0;
 
@@ -2826,6 +2827,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 	UDWORD				i;
 	float secondsToBuild, powerNeeded;
 	int secondsElapsed;
+	UWORD 				tmpOrigin = ORIGIN_UNKNOWN;
 
 	CHECK_STRUCTURE(psStructure);
 
@@ -2872,30 +2874,32 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 			{
 				if ((psStructure->id % 20) == (frameGetFrameNumber() % 20))
 				{
-					if ( aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[i], i, true) )
+					if (aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[i], i, true, &tmpOrigin) )
 					{
-						objTrace(psStructure->id, "Targeting %d at (%d, %d)", psChosenObjs[i]->id, psChosenObjs[i]->pos.x, psChosenObjs[i]->pos.y);
-						setStructureTarget(psStructure, psChosenObjs[i], i);
+						objTrace(psStructure->id, "Weapon %d is targeting %d at (%d, %d)", i, psChosenObjs[i]->id,
+							psChosenObjs[i]->pos.x, psChosenObjs[i]->pos.y);
+						setStructureTarget(psStructure, psChosenObjs[i], i, tmpOrigin);
 					}
 					else
 					{
-						if ( aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[0], 0, true) )
+						if ( aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[0], 0, true, &tmpOrigin) )
 						{
 							if (psChosenObjs[0])
 							{
-								debug(LOG_ATTACK, "Struct(%d) attacking : %d", psStructure->id, psChosenObjs[0]->id );
-								setStructureTarget(psStructure, psChosenObjs[0], i);
+								objTrace(psStructure->id, "Weapon %d is supporting main weapon: %d at (%d, %d)", i,
+									psChosenObjs[0]->id, psChosenObjs[0]->pos.x, psChosenObjs[0]->pos.y);
+								setStructureTarget(psStructure, psChosenObjs[0], i, tmpOrigin);
 								psChosenObjs[i] = psChosenObjs[0];
 							}
 							else
 							{
-								setStructureTarget(psStructure, NULL, i);
+								setStructureTarget(psStructure, NULL, i, ORIGIN_UNKNOWN);
 								psChosenObjs[i] = NULL;
 							}
 						}
 						else
 						{
-							setStructureTarget(psStructure, NULL, i);
+							setStructureTarget(psStructure, NULL, i, ORIGIN_UNKNOWN);
 							psChosenObjs[i] = NULL;
 						}
 					}
@@ -2943,12 +2947,19 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 			{
 				if (aiChooseSensorTarget((BASE_OBJECT *)psStructure, &psChosenObj))
 				{
-					debug(LOG_ATTACK, "Struct(%d) attacking : %d", psStructure->id, psChosenObj->id);
-					setStructureTarget(psStructure, psChosenObj, 0);
+					objTrace(psStructure->id, "Sensing (%d)", psChosenObj->id);
+					if (objRadarDetector((BASE_OBJECT *)psStructure))
+					{
+						setStructureTarget(psStructure, psChosenObj, 0, ORIGIN_RADAR_DETECTOR);
+					}
+					else
+					{
+						setStructureTarget(psStructure, psChosenObj, 0, ORIGIN_SENSOR);
+					}
 				}
 				else
 				{
-					setStructureTarget(psStructure, NULL, 0);
+					setStructureTarget(psStructure, NULL, 0, ORIGIN_UNKNOWN);
 				}
 			}
 			psChosenObj = psStructure->psTarget[0];
@@ -3735,7 +3746,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	{
 		if (psBuilding->psTarget[i] && psBuilding->psTarget[i]->died)
 		{
-			setStructureTarget(psBuilding, NULL, i);
+			setStructureTarget(psBuilding, NULL, i, ORIGIN_UNKNOWN);
 		}
 	}
 
@@ -7584,7 +7595,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 			{
 				if (psStruct->psTarget[0] == (BASE_OBJECT *)psStructure)
 				{
-					setStructureTarget(psStruct, NULL, 0);
+					setStructureTarget(psStruct, NULL, 0, ORIGIN_UNKNOWN);
 				}
 			}
 

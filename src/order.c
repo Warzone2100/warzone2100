@@ -523,7 +523,7 @@ void orderUpdateDroid(DROID *psDroid)
 		// if there is an enemy around, attack it
 		if ( (psDroid->action == DACTION_MOVE) && CAN_UPDATE_NAYBORS(psDroid) &&
 			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS) &&
-			 (aiBestNearestTarget(psDroid, &psObj, 0) >= 0) )
+			 (aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0) )
 		{
 			switch (psDroid->droidType)
 			{
@@ -588,7 +588,7 @@ void orderUpdateDroid(DROID *psDroid)
 		// if there is an enemy around, attack it
 		if ( (psDroid->action == DACTION_MOVE) && CAN_UPDATE_NAYBORS(psDroid) &&
 			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS) &&
-			 (aiBestNearestTarget(psDroid, &psObj, 0) >= 0) )
+			 (aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0) )
 		{
 			switch (psDroid->droidType)
 			{

@@ -88,11 +88,11 @@ extern void aiUpdateDroid(DROID *psDroid);
 
 // Find the nearest best target for a droid
 // returns integer representing quality of choice, -1 if failed
-extern SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot);
+extern SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, UWORD *targetOrigin);
 
 /* See if there is a target in range added int weapon_slot*/
 extern BOOL aiChooseTarget(BASE_OBJECT *psObj,
-						   BASE_OBJECT **ppsTarget, int weapon_slot, BOOL bUpdateTarget);
+						   BASE_OBJECT **ppsTarget, int weapon_slot, BOOL bUpdateTarget, UWORD *targetOrigin);
 
 /*set the droid to attack if wihin range otherwise move to target*/
 extern void attackTarget(DROID *psDroid, BASE_OBJECT *psTarget);
@@ -101,7 +101,7 @@ extern void attackTarget(DROID *psDroid, BASE_OBJECT *psTarget);
 extern BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);
 
 /** See if there is a friendly sensor anywhere holding a valid target for psObj. */
-BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_STATS *psWStats);
+BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_STATS *psWStats, UWORD *targetOrigin);
 
 /*set of rules which determine whether the weapon associated with the object
 can fire on the propulsion type of the target*/
