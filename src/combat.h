@@ -39,6 +39,17 @@
 // %age at which a unit is considered to be heavily damaged
 #define HEAVY_DAMAGE_LEVEL	25
 
+/* who specified the target? */
+#define ORIGIN_UNKNOWN				0	///< Default value if unknown
+#define ORIGIN_PLAYER				1	///< Came directly from player (droids only)
+#define ORIGIN_VISUAL				2	///< I can see you clearly :-)
+#define ORIGIN_ALLY 				3	///< Came from allied unit/structure  (droids only?)
+#define ORIGIN_COMMANDER			4	///< Came from commander
+#define ORIGIN_SENSOR				5	///< Came from standard sensor
+#define ORIGIN_CB_SENSOR			6	///< Came from counter-battery sensor
+#define ORIGIN_AIRDEF_SENSOR		7	///< Came from Air Defense sensor
+#define ORIGIN_RADAR_DETECTOR		8	///< Came from Radar Detector sensor
+
 /* Initialise the combat system */
 extern BOOL combInitialise(void);
 

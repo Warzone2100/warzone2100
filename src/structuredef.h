@@ -282,6 +282,7 @@ typedef struct _structure
 	UBYTE		targetted;
 	WEAPON		asWeaps[STRUCT_MAXWEAPS];
 	BASE_OBJECT	*psTarget[STRUCT_MAXWEAPS];
+	UWORD		targetOrigin[STRUCT_MAXWEAPS];
 
 #ifdef DEBUG
 	// these are to help tracking down dangling pointers

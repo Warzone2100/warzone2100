@@ -1074,7 +1074,7 @@ void actionUpdateDroid(DROID *psDroid)
 					WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 					if (psDroid->asWeaps[i].nStat > 0
 					 && psWeapStats->rotate
-					 && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
+					 && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) != DSS_ALEV_ALWAYS)
 						{
@@ -1186,7 +1186,7 @@ void actionUpdateDroid(DROID *psDroid)
 					 && psWeapStats->rotate
 					 && psWeapStats->fireOnMove != FOM_NO
 					 && CAN_UPDATE_NAYBORS(psDroid)
-					 && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
+					 && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 						{
@@ -1225,7 +1225,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				BASE_OBJECT *psTemp;
 
-				if (aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
+				if (aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
 				{
 					bHasTarget = true;
 					setDroidActionTarget(psDroid, psTemp, i);
@@ -1393,7 +1393,7 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 				// If we still don't have a target, try to find one
 				else if (psDroid->psActionTarget[i] == NULL &&
-					aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false))
+					aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false, NULL))
 				{
 					setDroidActionTarget(psDroid, psTargets[i], i);
 				}
@@ -1402,7 +1402,7 @@ void actionUpdateDroid(DROID *psDroid)
 			// target, so try to find a new one
 			else if (psDroid->psActionTarget[0] == NULL &&
 			          psDroid->order != DORDER_ATTACK &&
-			          aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false))
+			          aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false, NULL))
 			{
 				setDroidActionTarget(psDroid, psTargets[i], i);
 			}
@@ -2386,7 +2386,7 @@ void actionUpdateDroid(DROID *psDroid)
 					WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 					if (psDroid->asWeaps[i].nStat > 0
 					 && psWeapStats->rotate
-					 && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
+					 && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) != DSS_ALEV_ALWAYS)
 						{

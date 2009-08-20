@@ -42,6 +42,7 @@
 #include "droid.h"
 #include "formation.h"
 #include "mapgrid.h"
+#include "combat.h"
 
 #ifdef DEBUG
 static SDWORD factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
@@ -558,7 +559,7 @@ void killStruct(STRUCTURE *psBuilding)
 
 	for (i = 0; i < STRUCT_MAXWEAPS; i++)
 	{
-		setStructureTarget(psBuilding, NULL, i);
+		setStructureTarget(psBuilding, NULL, i, ORIGIN_UNKNOWN);
 	}
 
 	if (psBuilding->pFunctionality != NULL)

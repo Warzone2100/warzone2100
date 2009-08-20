@@ -135,4 +135,6 @@ extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 extern UWORD barMode;
 extern UDWORD geoOffset;
 
+extern bool tuiTargetOrigin;
+
 #endif // __INCLUDED_SRC_DISPLAY3D_H__
