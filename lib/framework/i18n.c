@@ -63,7 +63,7 @@ static const struct
 	{ "fy", N_("Frisian"), LANG_FRISIAN, SUBLANG_FRISIAN_NETHERLANDS },
 	{ "ga", N_("Irish"), LANG_IRISH, SUBLANG_DEFAULT },
 	{ "it", N_("Italian"), LANG_ITALIAN, SUBLANG_DEFAULT },
-	{ "la", N_("Latin"), LANG_LATIN, SUBLANG_DEFAULT },
+//	{ "la", N_("Latin"), LANG_LATIN, SUBLANG_DEFAULT },
 	{ "lt", N_("Lithuanian"), LANG_LITHUANIAN, SUBLANG_DEFAULT },
 //	{ "lv", N_("Latvian"), LANG_LATVIAN, SUBLANG_DEFAULT },
 	{ "nb", N_("Norwegian"), LANG_NORWEGIAN, SUBLANG_DEFAULT },
