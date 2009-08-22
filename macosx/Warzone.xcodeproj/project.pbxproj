@@ -652,6 +652,9 @@
 		2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 2244463B0E3EB7CB004D0F1F /* messagely.h */; };
 		22E244D70E65361800EC2B3E /* baseobject.c in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.c */; };
 		22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 22E244D50E65361800EC2B3E /* baseobject.h */; };
+		647D9C531039288D006D37CF /* dictionary.c in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C4F1039288D006D37CF /* dictionary.c */; };
+		647D9C541039288D006D37CF /* iniparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C511039288D006D37CF /* iniparser.c */; };
+		647D9C571039289A006D37CF /* challenge.c in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C551039289A006D37CF /* challenge.c */; };
 		9711775E0F87A677000C8A96 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
 		971177A80F87A726000C8A96 /* pixman-access-accessors.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177850F87A726000C8A96 /* pixman-access-accessors.c */; };
 		971177A90F87A726000C8A96 /* pixman-access.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177860F87A726000C8A96 /* pixman-access.c */; };
@@ -1807,6 +1810,12 @@
 		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = baseobject.c; path = ../src/baseobject.c; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
+		647D9C4F1039288D006D37CF /* dictionary.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dictionary.c; path = ../lib/iniparser/dictionary.c; sourceTree = SOURCE_ROOT; };
+		647D9C501039288D006D37CF /* dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dictionary.h; path = ../lib/iniparser/dictionary.h; sourceTree = SOURCE_ROOT; };
+		647D9C511039288D006D37CF /* iniparser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = iniparser.c; path = ../lib/iniparser/iniparser.c; sourceTree = SOURCE_ROOT; };
+		647D9C521039288D006D37CF /* iniparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iniparser.h; path = ../lib/iniparser/iniparser.h; sourceTree = SOURCE_ROOT; };
+		647D9C551039289A006D37CF /* challenge.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = challenge.c; path = ../src/challenge.c; sourceTree = SOURCE_ROOT; };
+		647D9C561039289A006D37CF /* challenge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = challenge.h; path = ../src/challenge.h; sourceTree = SOURCE_ROOT; };
 		971177640F87A677000C8A96 /* pixman.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = pixman.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		971177650F87A677000C8A96 /* PhysFS-Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PhysFS-Info copy.plist"; path = "Resources/PhysFS-Info copy.plist"; sourceTree = "<group>"; };
 		971177850F87A726000C8A96 /* pixman-access-accessors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-access-accessors.c"; path = "external/pixman/pixman/pixman-access-accessors.c"; sourceTree = "<group>"; };
@@ -2282,6 +2291,12 @@
 		0246A0980BD3CB97004D1C70 /* Warzone sources */ = {
 			isa = PBXGroup;
 			children = (
+				647D9C551039289A006D37CF /* challenge.c */,
+				647D9C561039289A006D37CF /* challenge.h */,
+				647D9C4F1039288D006D37CF /* dictionary.c */,
+				647D9C501039288D006D37CF /* dictionary.h */,
+				647D9C511039288D006D37CF /* iniparser.c */,
+				647D9C521039288D006D37CF /* iniparser.h */,
 				02BBB2060DA874CF002D438B /* Exception Handler */,
 				026591F40D7B6DE200B20A35 /* SQLite */,
 				0246A1970BD3CCC3004D1C70 /* Warzone */,
@@ -4648,6 +4663,9 @@
 				974964340F5ABC3F00A38899 /* interpreter.c in Sources */,
 				9749647B0F5ABEA500A38899 /* stats-db2.tpl.sql.c in Sources */,
 				975BCF3F0FED360000C36BEC /* dumpinfo.cpp in Sources */,
+				647D9C531039288D006D37CF /* dictionary.c in Sources */,
+				647D9C541039288D006D37CF /* iniparser.c in Sources */,
+				647D9C571039289A006D37CF /* challenge.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
