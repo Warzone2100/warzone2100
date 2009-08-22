@@ -11,9 +11,9 @@
    * Fix: Fix crash length overflow by capping path lengths to max 255 nodes. (r7916, ticket:738)
    * Fix: Fix a typo, we wanted to display "???" when ping is >=2000 (r7922)
    * Fix: Fix camera bug in warcam code. Patch by i-NoD (r7924, ticket:757)
-   * Fix: General order/action code cleanup:(r7926)
+   * Fix: General order/action code cleanup (r7926)
    * Fix: Fix segfault when trying to read target of droid with no target in aiUpdateStructure (r7928)
-   * Fix: Use _NSIG in the exceptionhandler if available. (r7972, ticket:818)
+   * Fix: Use _NSIG in the exceptionhandler if available for *BSD compatibility. (r7972, ticket:818)
    * Fix: Add correct linker flags for openbsd to configure. (r7974, ticket:819)
    * Fix: Disable locales without translation. (r7969, ticket:813)
    * Fix: NTW updated to 1.8.7 (r7998 - r8009)
@@ -28,21 +28,20 @@
  * Sound:
    * Fix: Fixes the removal of unused (sound) sources. (r8012, r8026, ticket:770)
 
-
 2009-06-21: Version 2.2.1
  * General:
    * Change: No longer require space between rearm pads, allow dragging pad production with mouse, and droids may drive over inactive rearm pads (r7701, ticket:569)
+   * Change: Allow droids to grab artifacts and oil drums from up to 1 tile away (r7779)
+   * Change: Bump up MAX_RESEARCH to 500 from 450. (r7774, ticket:599)
+   * Change: Add more information to the crash dump file (r7740, 7745)
+   * Change: When host drops from the lobby, abort the game. (r7787 ticket:583)
    * Fix: Various crashes related to failing orders (r7699)
    * Fix: Show translations for finished research display (r7730)
-   * Change: Add more information to the crash dump file (r7740, 7745)
    * Fix: Mac users can read in .wz files (r7754)
    * Fix: Experience speed adjustment happens after max speed limit; fix bug with speed calculation. (r7761)
    * Fix: Numerous issues with NTW mod (r7676-7677, r7713-7716)
-   * Fix: fix to *never* control the transport in SP games. (really this time!) (r7776, ticket:568)
-   * Change: Allow droids to grab artifacts and oil drums from up to 1 tile away (r7779)
-   * Change: Bump up MAX_RESEARCH to 500 from 450. (r7774, ticket:599)
+   * Fix: Fix to *never* control the transport in SP games (really this time!) (r7776, ticket:568)
    * Fix: Make sure we take xOffset into account, we don't always start at 0 for the FMV text. (r7780, ticket:625)
-   * Change: When host drops from the lobby, abort the game. (r7787 ticket:583)
    * Fix: Make sure either parameter isn't below the minimum screen res. that we support. (r7786)
    * Fix: Make sure we take xOffset into account, we don't always start at 0 for the FMV text. (r7780, ticket:625)
    * Fix: Clear the keyboard/mouse input on lost focus correctly. (r7797, ticket:515)
