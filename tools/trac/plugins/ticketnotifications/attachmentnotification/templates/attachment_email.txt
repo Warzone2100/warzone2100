@@ -1,0 +1,14 @@
+$ticket_body_hdr
+$ticket_props
+
+Attachment $attachment.filename (${pretty_size(attachment.size)}) - added by ${attachment.author and format_author(attachment.author) or 'anonymous'}
+#if attachment.description
+
+Description:
+$attachment.description
+#end
+
+-- 
+Ticket URL: <$ticket.link>
+$project.name <${project.url or abs_href()}>
+$project.descr

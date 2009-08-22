@@ -5,11 +5,17 @@
 from setuptools import setup
 
 setup(
-    name = 'NewTicketNotification',
+    name = 'TicketNotifications',
     version = '0.1',
 
-    packages = ['newticketnotification'],
-    package_data = { 'newticketnotification': ['templates/*.html'] },
+    packages = [
+        'attachmentnotification',
+        'newticketnotification',
+    ],
+    package_data = {
+        'attachmentnotification': ['templates/*.txt'],
+        'newticketnotification': ['templates/*.html'],
+    },
 
     install_requires = ['trac>=0.11'],
 
@@ -26,6 +32,7 @@ setup(
 
     entry_points = {
         'trac.plugins': [
+            'attachmentnotification.main = attachmentnotification.main',
             'newticketnotification.admin = newticketnotification.admin',
             'newticketnotification.main = newticketnotification.main',
         ],
