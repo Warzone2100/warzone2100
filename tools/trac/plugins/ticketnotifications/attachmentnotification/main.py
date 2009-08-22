@@ -1,8 +1,6 @@
 # vim: set et sts=4 sw=4 encoding=utf8:
 # -*- coding: utf-8 -*-
 
-from model import *
-
 from trac.attachment import IAttachmentChangeListener
 from trac.core import *
 from trac.ticket import Ticket

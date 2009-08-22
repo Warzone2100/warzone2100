@@ -24,7 +24,7 @@ setup(
     description = 'Extends Trac to notify a configured set of e-mail addresses upon ticket creation.',
     license = 'BSD',
     keywords = 'trac plugin ticket create notify e-mail',
-    url = 'http://developer.wz2100.net/browser/trunk/tools/trac/plugins/newticketnotification',
+    url = 'http://developer.wz2100.net/browser/trunk/tools/trac/plugins/ticketnotifications',
     classifiers = [
         'Framework :: Trac',
         'License :: OSI Approved :: BSD License',
