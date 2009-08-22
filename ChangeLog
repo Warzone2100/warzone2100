@@ -18,6 +18,7 @@
    * Fix: Disable locales without translation. (r7969, ticket:813)
    * Fix: NTW updated to 1.8.7 (r7998 - r8009)
    * Fix: When babas are burning, we always play the scream now. (r8025, ticket:830)
+   * Fix: Make sure we have a valid color choice for our SP game, when we are coming from a MP game. (r8032)
  * Translations:
    * Fix: Commit Portuguese translation. (r7943, ticket:783)
    * Fix: Updated translations (r7880, r7877, r7875, r7871, r7868, r7863, r7861)
