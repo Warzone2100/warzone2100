@@ -38,13 +38,14 @@ class NewTicketNotification(Component):
 
     implements(ITicketChangeListener)
 
+    # ITicketChangeListener methods
     def ticket_created(self, ticket):
         """Called when a ticket is created."""
         try:
             tn = TicketCCNotifyEmail(self.env)
             tn.notify(ticket, newticket=True)
         except Exception, e:
-            self.log.error("Failure sending notification on creation of "
+            self.log.exception("Failure sending notification on creation of "
                     "ticket #%s: %s", ticket.id, exception_to_unicode(e))
 
     def ticket_changed(self, ticket, comment, author, old_values):
