@@ -673,9 +673,8 @@ void droidBurn(DROID *psDroid)
 
 	/* add scream */
 	debug( LOG_NEVER, "baba burn" );
-
-	audio_PlayObjDynamicTrack( psDroid, ID_SOUND_BARB_SCREAM+(rand()%3), NULL );
-
+	// NOTE: They always scream when burning now
+	audio_PlayObjDynamicTrack( psDroid, ID_SOUND_BARB_SCREAM, NULL );
 
 	/* set droid running */
 	orderDroid( psDroid, DORDER_RUNBURN );
