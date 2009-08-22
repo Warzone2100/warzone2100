@@ -1,4 +1,4 @@
-2009-07-26: Version 2.2.2
+2009-08-23: Version 2.2.2
  * General:
    * Change: Add the ability of allied players to share sensors (ticket:636, r7900)
    * Change: Stop rotation when "Continue" is pressed after winning a multiplayer/skirmish game (r7887)
@@ -6,8 +6,27 @@
    * Fix: Cannot display more than one game from lobby. Also fix a lobby display issue. (r7839, ticket:691)
    * Fix: Various checks and workarounds to make game run more stable (r7836, r7894, r7889, r7883, r7881, r7851, r7847, r7842, r7822, r7910 / ticket:759)
    * Fix: Crash due to path length overflow (r7916, ticket:738, ticket:765)
-   * Fix: Updated translations (r7880, r7877, r7875, r7871, r7868, r7863, r7861, 
    * Fix: Bug that caused some keyboard shortcuts to be unusable in multiplayer since they were considered cheats (r7856)
+   * Fix: Verify that our "target" is still around before doing fire support with it. (r7910, ticket:759)
+   * Fix: Fix crash length overflow by capping path lengths to max 255 nodes. (r7916, ticket:738)
+   * Fix: Fix a typo, we wanted to display "???" when ping is >=2000 (r7922)
+   * Fix: Fix camera bug in warcam code. Patch by i-NoD (r7924, ticket:757)
+   * Fix: General order/action code cleanup:(r7926)
+   * Fix: Fix segfault when trying to read target of droid with no target in aiUpdateStructure (r7928)
+   * Fix: Use _NSIG in the exceptionhandler if available. (r7972, ticket:818)
+   * Fix: Add correct linker flags for openbsd to configure. (r7974, ticket:819)
+   * Fix: Disable locales without translation. (r7969, ticket:813)
+   * Fix: NTW updated to 1.8.7 (r7998 - r8009)
+   * Fix: When babas are burning, we always play the scream now. (r8025, ticket:830)
+ * Translations:
+   * Fix: Commit Portuguese translation. (r7943, ticket:783)
+   * Fix: Updated translations (r7880, r7877, r7875, r7871, r7868, r7863, r7861)
+ * Graphics:
+   * Fix: Increase video buffer size from 4K to 256K.  This fixes playback of videos with a bitrate larger than ~2000kbps. (r7981)
+   * Change: Add a north pointer for the rotating radar.  (r8013, ticket:769)
+ * Sound:
+   * Fix: Fixes the removal of unused (sound) sources. (r8012, r8026, ticket:770)
+
 
 2009-06-21: Version 2.2.1
  * General:
