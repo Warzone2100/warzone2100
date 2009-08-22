@@ -22,6 +22,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "audio_id.h"
+#include "src/droid.h"
 
 //*
 //
@@ -32,7 +33,7 @@
 //
 // static global variables
 // array of pointers to sound effects
-static TRACK                    *g_apTrack[MAX_TRACKS];
+static TRACK			*g_apTrack[MAX_TRACKS];
 
 // number of tracks loaded
 static SDWORD			g_iCurTracks = 0;
@@ -358,6 +359,13 @@ void sound_FinishedCallback( AUDIO_SAMPLE *psSample )
 	if ( psSample->pCallback != NULL )
 	{
 		psSample->pCallback(psSample->psObj);
+		// NOTE: we must invalidate the iAudioID (iTrack) so the game knows to add the
+		// sample back into the queue.  This is a bit of a hacky way to handle "looped" samples,
+		// since currently, the game don't have a decent way to handle this.
+		if (psSample->psObj)
+		{
+			droidAudioTrackStopped((void *)psSample->psObj);
+		}
 	}
 
 	// set finished flag
