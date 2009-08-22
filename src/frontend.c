@@ -419,11 +419,19 @@ BOOL runSinglePlayerMenu(void)
 	}
 	else
 	{
+		uint8_t playercolor = 0;
+
 		// FIXME: We should do a SPinit() to make sure all the variables are reset correctly.
 		// game.type is switched to SKIRMISH in startMultiOptions()
 		NetPlay.bComms = false;
 		bMultiPlayer = false;
 		game.type = CAMPAIGN;
+		// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
+		playercolor = getPlayerColour(0);
+		if (playercolor >= 1 && playercolor <= 3)
+		{
+			setPlayerColour(0,0);		// default is green
+		}
 
 		id = widgRunScreen(psWScreen);						// Run the current set of widgets
 
