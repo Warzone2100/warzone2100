@@ -27,16 +27,32 @@
 //Watermelon:num of VTOL weapons should be same as DROID_MAXWEAPS
 #define VTOL_MAXWEAPS		3
 
+typedef enum _move_status
+{
+MOVEINACTIVE,
+MOVENAVIGATE,
+MOVETURN,
+MOVEPAUSE,
+MOVEPOINTTOPOINT,
+MOVETURNSTOP,
+MOVETURNTOTARGET,
+MOVEROUTE,
+MOVEHOVER,
+MOVEDRIVE,
+MOVEWAITROUTE,
+MOVESHUFFLE,
+MOVEROUTESHUFFLE,
+} MOVE_STATUS;
+
 typedef struct _move_control
 {
-	UBYTE	Status;						// Inactive, Navigating or moving point to point status
-	UBYTE	Position;	   				// Position in asPath
-	UBYTE	numPoints;					// number of points in asPath
-	Vector2i *asPath;					// Pointer to list of block X,Y map coordinates.
+	MOVE_STATUS	Status;					// Inactive, Navigating or moving point to point status
+	uint16_t	Position;				// Position in asPath
+	uint16_t	numPoints;				// number of points in asPath
+	Vector2i	 *asPath;				// Pointer to list of block X,Y map coordinates.
+
 	SDWORD	DestinationX, DestinationY;			// World coordinates of movement destination
 	SDWORD	srcX,srcY,targetX,targetY;
-
-	/* Stuff for John's movement update */
 	float	fx,fy;						// droid location as a fract
 	float	speed;						// Speed of motion
 	SWORD	boundX,boundY;				// Vector for the end of path boundary
