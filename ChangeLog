@@ -1,3 +1,7 @@
+0000-00-00: Version 2.2.3
+ * Campaign:
+   * Fix: Assert failure on effect cleanup when entering third campaign (ticket:836, r8045)
+
 2009-08-23: Version 2.2.2
  * General:
    * Change: Add the ability of allied players to share sensors (ticket:636, r7900)
