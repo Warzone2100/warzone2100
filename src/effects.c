@@ -454,7 +454,7 @@ static void positionEffect(const EFFECT *psEffect)
 
 static void killEffect(EFFECT *e)
 {
-	if (e->group == EFFECT_FIRE)
+	if (e->group == EFFECT_FIRE && psMapTiles)
 	{
 		const int posX = map_coord(e->position.x);
 		const int posY = map_coord(e->position.z);
