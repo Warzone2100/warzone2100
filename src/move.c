@@ -1667,8 +1667,10 @@ static Vector2f moveGetDirection(DROID *psDroid)
 		{
 			dest = Vector2f_Normalise(nextDelta);
 		}
-		// We are passing the next waypoint, so for now don't interpolate it
-		else if (nextMagnitude < FLT_EPSILON)
+		// We are passing the next waypoint or so close we could be circling between both, 
+		// so for now don't interpolate it. Instead head to the first unvisited waypoint as
+		// a silly workaround. What we should do is drop this waypoint and head to the next.
+		else if (nextMagnitude < WAYPOINT_DSQ)
 		{
 			dest = Vector2f_Normalise(delta);
 		}
