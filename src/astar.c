@@ -395,6 +395,7 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		psCurr = psRoute;
 		while (psCurr)
 		{
+			ASSERT(tileOnMap(psCurr->x, psCurr->y), "Assigned XY coordinates (%d, %d) not on map!", (int)psCurr->x, (int)psCurr->y);
 			psCurr = psCurr->psRoute;
 			count++;
 		}
