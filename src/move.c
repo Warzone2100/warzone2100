@@ -2305,26 +2305,20 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction
 	moveUpdateDroidDirection( psDroid, &speed, direction, PERSON_SPIN_ANGLE,
 				PERSON_SPIN_SPEED, PERSON_TURN_SPEED, &iDroidDir, &fSpeed );
 
-	fNormalSpeed = moveCalcNormalSpeed( psDroid, fSpeed, iDroidDir,
-										PERSON_ACCEL, PERSON_DECEL );
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, iDroidDir, PERSON_ACCEL, PERSON_DECEL);
+
 	/* people don't skid at the moment so set zero perpendicular speed */
 	fPerpSpeed = 0;
 
-	moveCombineNormalAndPerpSpeeds( psDroid, fNormalSpeed,
-										fPerpSpeed, iDroidDir );
-
+	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 	moveGetDroidPosDiffs( psDroid, &dx, &dy );
-
 	moveCalcDroidSlide(psDroid, &dx,&dy);
 	moveCalcBlockingSlide(psDroid, &dx,&dy, direction, &slideDir);
-
 	moveUpdateDroidPos( psDroid, dx, dy );
 
 	//set the droid height here so other routines can use it
 	psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);//jps 21july96
-
 	psDroid->sMove.fz = psDroid->pos.z;
-
 
 	/* update anim if moving and not on fire */
 	if ( psDroid->droidType == DROID_PERSON && speed != 0 &&
@@ -2959,8 +2953,7 @@ void moveUpdateDroid(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( psPropStats != NULL,
-			"moveUpdateUnit: invalid propulsion stats pointer" );
+	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
 
 //	if(driveModeActive()) {
 //		driveUpdateDroid(psDroid);
