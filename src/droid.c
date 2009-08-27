@@ -1155,8 +1155,8 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	STRUCTURE	*psStruct;
 
 	CHECK_DROID(psDroid);
-
-	ASSERT_OR_RETURN(false, psDroid->action == DACTION_BUILD, "unit is not building" );
+	ASSERT_OR_RETURN(false, psDroid->action == DACTION_BUILD, "%s (order %s) has wrong action for construction: %s",
+	                 droidGetName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action));
 	ASSERT_OR_RETURN(false, psDroid->psTarget, "Trying to update a construction, but no target!");
 
 	psStruct = (STRUCTURE *)psDroid->psTarget;
