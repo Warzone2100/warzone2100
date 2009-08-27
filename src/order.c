@@ -1869,14 +1869,14 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		// droids doing a DORDER_RTR periodically give themselves a DORDER_RTR so that
 		// they always go to the nearest repair facility
 		// this stops the unit doing anything more if the same repair facility gets chosen
-		if (psDroid->order == DORDER_RTR &&
-			psDroid->psTarget == (BASE_OBJECT *)psRepairFac)
+		if (psDroid->order == DORDER_RTR && psDroid->psTarget == (BASE_OBJECT *)psRepairFac)
 		{
+			objTrace(psDroid->id, "DONE FOR NOW");
 			break;
 		}
 
 		/* give repair order if repair facility found */
-		if ( psRepairFac != NULL )
+		if (psRepairFac != NULL)
 		{
 			if (psRepairFac->pStructureType->type == REF_REPAIR_FACILITY)
 			{
@@ -1885,21 +1885,23 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				psDroid->orderX = psRepairFac->pos.x;
 				psDroid->orderY = psRepairFac->pos.y;
 				setDroidTarget(psDroid, (BASE_OBJECT *) psRepairFac);
-                /*if in multiPlayer, and the Transporter has been sent to be
-                repaired, need to find a suitable location to drop down*/
-                if (game.maxPlayers > 0 && psDroid->droidType == DROID_TRANSPORTER)
+				/* If in multiPlayer, and the Transporter has been sent to be
+				 * repaired, need to find a suitable location to drop down. */
+				if (game.maxPlayers > 0 && psDroid->droidType == DROID_TRANSPORTER)
 				{
-                    UDWORD droidX, droidY;
-                    droidX = psDroid->orderX;
-                    droidY = psDroid->orderY;
+					UDWORD droidX, droidY;
+					droidX = psDroid->orderX;
+					droidY = psDroid->orderY;
+
+					objTrace(psDroid->id, "Repair transport");
 					actionVTOLLandingPos(psDroid, &droidX,&droidY);
-                    actionDroidLoc(psDroid, DACTION_MOVE, droidX,droidY);
+					actionDroidLoc(psDroid, DACTION_MOVE, droidX,droidY);
 				}
 				else
-                {
-				    actionDroidObjLoc( psDroid, DACTION_MOVE, (BASE_OBJECT *) psRepairFac,
-									psDroid->orderX, psDroid->orderY);
-                }
+				{
+					objTrace(psDroid->id, "Go to repair facility at (%d, %d) using (%d, %d)!", (int)psRepairFac->pos.x, (int)psRepairFac->pos.y, (int)psDroid->orderX, (int)psDroid->orderY);
+					actionDroidObjLoc(psDroid, DACTION_MOVE, (BASE_OBJECT *)psRepairFac, psDroid->orderX, psDroid->orderY);
+				}
 			}
 			else
 			{
@@ -1909,9 +1911,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		else
 		{
 			// no repair facility or HQ go to the landing zone
-
 			if (!bMultiPlayer && selectedPlayer == 0)
-
 			{
 				orderDroid(psDroid, DORDER_RTB);
 			}

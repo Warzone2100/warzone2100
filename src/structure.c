@@ -3096,6 +3096,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 							else if (psRepairFac->psDeliveryPoint != NULL)
 							{
 								// move the droid out the way
+								objTrace(psDroid->id, "Repair not needed - move to delivery point");
 								orderDroidLoc( psDroid, DORDER_MOVE,
 									psRepairFac->psDeliveryPoint->coords.x,
 									psRepairFac->psDeliveryPoint->coords.y );
@@ -3129,6 +3130,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 						currdist = xdiff * xdiff + ydiff * ydiff + (TILE_UNITS*8)*(TILE_UNITS*8); // lower priority
 						if (currdist < mindist && currdist - (TILE_UNITS*8)*(TILE_UNITS*8) < distLimit)
 						{
+							objTrace(psChosenObj->id, "Stolen by another repair facility, currdist=%d, mindist=%d, distLimit=%d", (int)currdist, (int)mindist, distLimit);
 							mindist = currdist;
 							psChosenObj = (BASE_OBJECT *)psDroid;
 							psRepairFac->droidQueue++;	// shared queue
@@ -3577,11 +3579,13 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 							// return a droid to it's command group
 							DROID	*psCommander = psDroid->psGroup->psCommander;
 
+							objTrace(psDroid->id, "Repair complete - move to commander");
 							orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
 						}
 						else if (psRepairFac->psDeliveryPoint != NULL)
 						{
 							// move the droid out the way
+							objTrace(psDroid->id, "Repair complete - move to delivery point");
 							orderDroidLoc( psDroid, DORDER_MOVE,
 								psRepairFac->psDeliveryPoint->coords.x,
 								psRepairFac->psDeliveryPoint->coords.y );
