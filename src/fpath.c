@@ -405,6 +405,7 @@ void fpathRemoveDroidData(int id)
 static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner)
 {
 	PATHJOB		*psJob = NULL;
+	int		count;
 
 	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
 
@@ -498,14 +499,17 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	if (!firstJob)
 	{
 		firstJob = psJob;
+		count = 0;
 	}
 	else
 	{
 		PATHJOB *psNext = firstJob;
 
+		count = 0;
 		while (psNext->next != NULL)
 		{
 			psNext = psNext->next;
+			count++;
 		}
 
 		psNext->next = psJob;
@@ -513,7 +517,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 
 	SDL_SemPost(fpathSemaphore);
 
-	objTrace(id, "Queued up a path-finding request to (%d, %d)", tX, tY);
+	objTrace(id, "Queued up a path-finding request to (%d, %d), %d items earlier in queue", tX, tY, count);
 	return FPR_WAIT;	// wait while polling result queue
 }
 
