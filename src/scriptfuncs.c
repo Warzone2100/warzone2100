@@ -4206,6 +4206,8 @@ BOOL scrAllianceExistsBetween(void)
 	{
 		return false;
 	}
+	ASSERT_OR_RETURN(false, i < MAX_PLAYERS && j < MAX_PLAYERS && i >= 0 && j >= 0, 
+	                 "Invalid player parameters %d and %d", i, j);
 	if(alliances[i][j] == ALLIANCE_FORMED)
 	{
 		scrFunctionResult.v.bval = true;
