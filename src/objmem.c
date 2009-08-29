@@ -32,6 +32,7 @@
 #include "hci.h"
 #include "map.h"
 #include "power.h"
+#include "objects.h"
 #include "lib/script/script.h"
 #include "scriptvals.h"
 #include "scripttabs.h"
@@ -239,6 +240,7 @@ static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
 	objID++;
 	newObject->player = (UBYTE)player;
 	newObject->died = 0;
+	newObject->psNextFunc = NULL;
 
 	return newObject;
 }
@@ -261,6 +263,7 @@ static inline void addObjectToList(BASE_OBJECT *list[], BASE_OBJECT *object, int
 static inline void addObjectToFuncList(BASE_OBJECT *list[], BASE_OBJECT *object, int player)
 {
 	ASSERT(object != NULL, "Invalid pointer");
+	ASSERT_OR_RETURN(, object->psNextFunc == NULL, "%s(%p) is already in a function list!", objInfo(object), object);
 
 	// Prepend the object to the top of the list
 	object->psNextFunc = list[player];
@@ -358,6 +361,7 @@ static inline void removeObjectFromFuncList(BASE_OBJECT *list[], BASE_OBJECT *ob
 	if (list[player] == object)
 	{
 		list[player] = list[player]->psNextFunc;
+		object->psNextFunc = NULL;
 		return;
 	}
 	
@@ -372,6 +376,7 @@ static inline void removeObjectFromFuncList(BASE_OBJECT *list[], BASE_OBJECT *ob
 	// Modify the "next" pointer of the previous item to
 	// point to the "next" item of the item to delete.
 	psPrev->psNextFunc = psCurr->psNextFunc;
+	object->psNextFunc = NULL;
 }
 
 static inline BASE_OBJECT* findObjectInList(BASE_OBJECT list[], UDWORD idNum)
@@ -456,6 +461,13 @@ void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS])
 			}
 		}
 	}
+	else if (pList[psDroidToAdd->player] == mission.apsDroidLists[psDroidToAdd->player])
+	{
+		if (psDroidToAdd->droidType == DROID_SENSOR)
+		{
+			addObjectToFuncList(mission.apsSensorList, (BASE_OBJECT*)psDroidToAdd, 0);
+		}
+	}
 }
 
 /* Destroy a droid */
@@ -507,6 +519,13 @@ void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
 			removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psDroidToRemove, 0);
 		}
 		psDroidToRemove->died = NOT_CURRENT_LIST;
+	}
+	else if (pList[psDroidToRemove->player] == mission.apsDroidLists[psDroidToRemove->player])
+	{
+		if (psDroidToRemove->droidType == DROID_SENSOR)
+		{
+			removeObjectFromFuncList(mission.apsSensorList, (BASE_OBJECT*)psDroidToRemove, 0);
+		}
 	}
 }
 

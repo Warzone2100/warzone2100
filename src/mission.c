@@ -254,6 +254,7 @@ void initMission(void)
 		mission.apsFlagPosLists[inc] = NULL;
 		apsLimboDroids[inc] = NULL;
 	}
+	mission.apsSensorList[0] = NULL;
 	offWorldKeepLists = false;
 	mission.time = -1;
 	setMissionCountDown();
@@ -325,6 +326,8 @@ BOOL missionShutDown(void)
 			apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 			mission.apsFlagPosLists[inc] = NULL;
 		}
+		apsSensorList[0] = mission.apsSensorList[0];
+		mission.apsSensorList[0] = NULL;
 
 		psMapTiles = mission.psMapTiles;
 		mapWidth = mission.mapWidth;
@@ -714,7 +717,7 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 }
 
 /* Saves the necessary data when moving from a home base Mission to an OffWorld mission */
-void saveMissionData(void)
+static void saveMissionData(void)
 {
 	UDWORD			inc;
 	DROID			*psDroid;
@@ -806,6 +809,7 @@ void saveMissionData(void)
 		mission.apsFeatureLists[inc] = apsFeatureLists[inc];
 		mission.apsFlagPosLists[inc] = apsFlagPosLists[inc];
 	}
+	mission.apsSensorList[0] = apsSensorList[0];
 
 	mission.playerX = player.p.x;
 	mission.playerY = player.p.z;
@@ -878,6 +882,8 @@ void restoreMissionData(void)
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = NULL;
 	}
+	apsSensorList[0] = mission.apsSensorList[0];
+	mission.apsSensorList[0] = NULL;
 	//swap mission data over
 
 	psMapTiles = mission.psMapTiles;
@@ -1464,6 +1470,9 @@ void swapMissionPointers(void)
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = (FLAG_POSITION *)pVoid;
 	}
+	pVoid = (void*)apsSensorList[0];
+	apsSensorList[0] = mission.apsSensorList[0];
+	mission.apsSensorList[0] = (BASE_OBJECT *)pVoid;
 }
 
 void endMission(void)
