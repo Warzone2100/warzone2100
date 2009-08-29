@@ -793,6 +793,21 @@ void droidUpdate(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 
+#ifdef DEBUG
+	// Check that we are (still) in the sensor list
+	if (psDroid->droidType == DROID_SENSOR)
+	{
+		BASE_OBJECT	*psSensor;
+
+		for (psSensor = apsSensorList[0]; psSensor; psSensor = psSensor->psNextFunc)
+		{
+			if (psSensor == (BASE_OBJECT *)psDroid) break;
+		}
+		ASSERT(psSensor == (BASE_OBJECT *)psDroid, "%s(%p) not in sensor list!", 
+		       droidGetName(psDroid), psDroid);
+	}
+#endif
+
 	// update the cluster of the droid
 	if (psDroid->id % 20 == frameGetFrameNumber() % 20)
 	{
