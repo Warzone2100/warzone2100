@@ -1,6 +1,7 @@
 0000-00-00: Version 2.2.3
  * Campaign:
    * Fix: Assert failure on effect cleanup when entering third campaign (ticket:836, r8045)
+   * Fix: Infinite loop when transporting a sensor droid to offworld campaign map (ticket:852, ticket:853, r8062)
 
 2009-08-23: Version 2.2.2
  * General:
