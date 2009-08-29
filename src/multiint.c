@@ -99,6 +99,35 @@
 #endif
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
+
+// ////////////////////////////////////////////////////////////////////////////
+// tertile dependant colors for map preview
+
+// C1 - Arizona type
+#define WZCOL_TERC1_CLIFF_LOW   pal_Colour(0x68, 0x3C, 0x24)
+#define WZCOL_TERC1_CLIFF_HIGH  pal_Colour(0xE8, 0x84, 0x5C)
+#define WZCOL_TERC1_WATER       pal_Colour(0x3F, 0x68, 0x9A)
+#define WZCOL_TERC1_ROAD_LOW    pal_Colour(0x24, 0x1F, 0x16)
+#define WZCOL_TERC1_ROAD_HIGH   pal_Colour(0xB2, 0x9A, 0x66)
+#define WZCOL_TERC1_GROUND_LOW  pal_Colour(0x24, 0x1F, 0x16)
+#define WZCOL_TERC1_GROUND_HIGH pal_Colour(0xCC, 0xB2, 0x80)
+// C2 - Urban type
+#define WZCOL_TERC2_CLIFF_LOW   pal_Colour(0x3C, 0x3C, 0x3C)
+#define WZCOL_TERC2_CLIFF_HIGH  pal_Colour(0x84, 0x84, 0x84)
+#define WZCOL_TERC2_WATER       WZCOL_TERC1_WATER
+#define WZCOL_TERC2_ROAD_LOW    pal_Colour(0x00, 0x00, 0x00)
+#define WZCOL_TERC2_ROAD_HIGH   pal_Colour(0x24, 0x1F, 0x16)
+#define WZCOL_TERC2_GROUND_LOW  pal_Colour(0x1F, 0x1F, 0x1F)
+#define WZCOL_TERC2_GROUND_HIGH pal_Colour(0xB2, 0xB2, 0xB2)
+// C3 - Rockies type
+#define WZCOL_TERC3_CLIFF_LOW   pal_Colour(0x3C, 0x3C, 0x3C)
+#define WZCOL_TERC3_CLIFF_HIGH  pal_Colour(0xFF, 0xFF, 0xFF)
+#define WZCOL_TERC3_WATER       WZCOL_TERC1_WATER
+#define WZCOL_TERC3_ROAD_LOW    pal_Colour(0x24, 0x1F, 0x16)
+#define WZCOL_TERC3_ROAD_HIGH   pal_Colour(0x3D, 0x21, 0x0A)
+#define WZCOL_TERC3_GROUND_LOW  pal_Colour(0x00, 0x1C, 0x0E)
+#define WZCOL_TERC3_GROUND_HIGH WZCOL_TERC3_CLIFF_HIGH
+
 // ////////////////////////////////////////////////////////////////////////////
 // vars
 extern char	MultiCustomMapsPath[PATH_MAX];
@@ -194,6 +223,28 @@ static	void stopJoining(void);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
+static int guessMapTilesetType(void)
+{
+	if (terrainTypes[0] == 1 && terrainTypes[1] == 0 && terrainTypes[2] == 2)
+	{
+		return TILESET_ARIZONA;
+	}
+	else if (terrainTypes[0] == 2 && terrainTypes[1] == 2 && terrainTypes[2] == 2)
+	{
+		return TILESET_URBAN;
+	}
+	else if (terrainTypes[0] == 0 && terrainTypes[1] == 0 && terrainTypes[2] == 2)
+	{
+		return TILESET_ROCKIES;
+	}
+	else
+	{
+		debug(LOG_MAP, "Custom level dataset: %u %u %u, using ARIZONA set",
+			terrainTypes[0], terrainTypes[1], terrainTypes[2]);
+		return TILESET_ARIZONA;
+	}
+}
+
 /// This function is a HACK
 /// Loads the entire map (including calculating gateways) just to show
 /// a picture of it
@@ -203,6 +254,7 @@ void loadMapPreview(bool hideInterface)
 	UDWORD			fileSize;
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel = NULL;
+	PIELIGHT		plCliffL, plCliffH, plWater, plRoadL, plRoadH, plGroundL, plGroundH;
 
 	UDWORD			i, j, x, y, height, offX2, offY2;
 	UBYTE			scale,col;
@@ -249,7 +301,39 @@ void loadMapPreview(bool hideInterface)
 	}
 	gwShutDown();
 
-	scale =1;
+	// set tileset colors
+	switch (guessMapTilesetType())
+	{
+	case TILESET_ARIZONA:
+		plCliffL = WZCOL_TERC1_CLIFF_LOW;
+		plCliffH = WZCOL_TERC1_CLIFF_HIGH;
+		plWater = WZCOL_TERC1_WATER;
+		plRoadL = WZCOL_TERC1_ROAD_LOW;
+		plRoadH = WZCOL_TERC1_ROAD_HIGH;
+		plGroundL = WZCOL_TERC1_GROUND_LOW;
+		plGroundH = WZCOL_TERC1_GROUND_HIGH;
+		break;
+	case TILESET_URBAN:
+		plCliffL = WZCOL_TERC2_CLIFF_LOW;
+		plCliffH = WZCOL_TERC2_CLIFF_HIGH;
+		plWater = WZCOL_TERC2_WATER;
+		plRoadL = WZCOL_TERC2_ROAD_LOW;
+		plRoadH = WZCOL_TERC2_ROAD_HIGH;
+		plGroundL = WZCOL_TERC2_GROUND_LOW;
+		plGroundH = WZCOL_TERC2_GROUND_HIGH;
+		break;
+	case TILESET_ROCKIES:
+		plCliffL = WZCOL_TERC3_CLIFF_LOW;
+		plCliffH = WZCOL_TERC3_CLIFF_HIGH;
+		plWater = WZCOL_TERC3_WATER;
+		plRoadL = WZCOL_TERC3_ROAD_LOW;
+		plRoadH = WZCOL_TERC3_ROAD_HIGH;
+		plGroundL = WZCOL_TERC3_GROUND_LOW;
+		plGroundH = WZCOL_TERC3_GROUND_HIGH;
+		break;
+	}
+
+	scale = 1;
 	if((mapHeight <  240)&&(mapWidth < 320))
 	{
 		scale = 2;
@@ -300,40 +384,28 @@ void loadMapPreview(bool hideInterface)
 			{
 				for (y = (i * scale); y < (i * scale) + scale; y++)
 				{
-
-#define WZCOL_TER_CLIFF_LOW   pal_Colour(0x68, 0x3C, 0x24)
-#define WZCOL_TER_CLIFF_HIGH  pal_Colour(0xE8, 0x84, 0x5C)
-
-#define WZCOL_TER_WATER       pal_Colour(0x3F, 0x68, 0x9A)
-
-#define WZCOL_TER_ROAD_LOW    pal_Colour(0x24, 0x1F, 0x16)
-#define WZCOL_TER_ROAD_HIGH   pal_Colour(0xB2, 0x9A, 0x66)
-
-#define WZCOL_TER_GROUND_LOW  pal_Colour(0x24, 0x1F, 0x16)
-#define WZCOL_TER_GROUND_HIGH pal_Colour(0xCC, 0xB2, 0x80)
-
 					char * const p = imageData + (3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2)));
 					switch (terrainType(WTile))
 					{
 					case TER_CLIFFFACE:
-						p[0] = WZCOL_TER_CLIFF_LOW.byte.r + (WZCOL_TER_CLIFF_HIGH.byte.r-WZCOL_TER_CLIFF_LOW.byte.r) * col / 256;
-						p[1] = WZCOL_TER_CLIFF_LOW.byte.g + (WZCOL_TER_CLIFF_HIGH.byte.g-WZCOL_TER_CLIFF_LOW.byte.g) * col / 256;
-						p[2] = WZCOL_TER_CLIFF_LOW.byte.b + (WZCOL_TER_CLIFF_HIGH.byte.b-WZCOL_TER_CLIFF_LOW.byte.b) * col / 256;
+						p[0] = plCliffL.byte.r + (plCliffH.byte.r-plCliffL.byte.r) * col / 256;
+						p[1] = plCliffL.byte.g + (plCliffH.byte.g-plCliffL.byte.g) * col / 256;
+						p[2] = plCliffL.byte.b + (plCliffH.byte.b-plCliffL.byte.b) * col / 256;
 						break;
 					case TER_WATER:
-						p[0] = WZCOL_TER_WATER.byte.r;
-						p[1] = WZCOL_TER_WATER.byte.g;
-						p[2] = WZCOL_TER_WATER.byte.b;
+						p[0] = plWater.byte.r;
+						p[1] = plWater.byte.g;
+						p[2] = plWater.byte.b;
 						break;
 					case TER_ROAD:
-						p[0] = WZCOL_TER_ROAD_LOW.byte.r + (WZCOL_TER_ROAD_HIGH.byte.r-WZCOL_TER_ROAD_LOW.byte.r) * col / 256;
-						p[1] = WZCOL_TER_ROAD_LOW.byte.g + (WZCOL_TER_ROAD_HIGH.byte.g-WZCOL_TER_ROAD_LOW.byte.g) * col / 256;
-						p[2] = WZCOL_TER_ROAD_LOW.byte.b + (WZCOL_TER_ROAD_HIGH.byte.b-WZCOL_TER_ROAD_LOW.byte.b) * col / 256;
+						p[0] = plRoadL.byte.r + (plRoadH.byte.r-plRoadL.byte.r) * col / 256;
+						p[1] = plRoadL.byte.g + (plRoadH.byte.g-plRoadL.byte.g) * col / 256;
+						p[2] = plRoadL.byte.b + (plRoadH.byte.b-plRoadL.byte.b) * col / 256;
 						break;
 					default:
-						p[0] = WZCOL_TER_GROUND_LOW.byte.r + (WZCOL_TER_GROUND_HIGH.byte.r-WZCOL_TER_GROUND_LOW.byte.r) * col / 256;
-						p[1] = WZCOL_TER_GROUND_LOW.byte.g + (WZCOL_TER_GROUND_HIGH.byte.g-WZCOL_TER_GROUND_LOW.byte.g) * col / 256;
-						p[2] = WZCOL_TER_GROUND_LOW.byte.b + (WZCOL_TER_GROUND_HIGH.byte.b-WZCOL_TER_GROUND_LOW.byte.b) * col / 256;
+						p[0] = plGroundL.byte.r + (plGroundH.byte.r-plGroundL.byte.r) * col / 256;
+						p[1] = plGroundL.byte.g + (plGroundH.byte.g-plGroundL.byte.g) * col / 256;
+						p[2] = plGroundL.byte.b + (plGroundH.byte.b-plGroundL.byte.b) * col / 256;
 						break;
 					}
 				}

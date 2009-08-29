@@ -48,6 +48,10 @@ typedef enum _terrain_type
 	TER_MAX,
 } TYPE_OF_TERRAIN;
 
+#define TILESET_ARIZONA 0
+#define TILESET_URBAN	1
+#define TILESET_ROCKIES 2
+
 #define TALLOBJECT_YMAX		(200)
 #define TALLOBJECT_ADJUST	(300)
 
