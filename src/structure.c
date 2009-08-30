@@ -3130,10 +3130,10 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 						currdist = xdiff * xdiff + ydiff * ydiff + (TILE_UNITS*8)*(TILE_UNITS*8); // lower priority
 						if (currdist < mindist && currdist - (TILE_UNITS*8)*(TILE_UNITS*8) < distLimit)
 						{
-							objTrace(psChosenObj->id, "Stolen by another repair facility, currdist=%d, mindist=%d, distLimit=%d", (int)currdist, (int)mindist, distLimit);
 							mindist = currdist;
 							psChosenObj = (BASE_OBJECT *)psDroid;
 							psRepairFac->droidQueue++;	// shared queue
+							objTrace(psChosenObj->id, "Stolen by another repair facility, currdist=%d, mindist=%d, distLimit=%d", (int)currdist, (int)mindist, distLimit);
 						}
 					}
 					// Lowest priority:
