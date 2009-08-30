@@ -90,6 +90,8 @@ extern BOOL scrCmdDroidAddDroid(void);
 // returns max number of droids in a commander group
 extern BOOL scrCmdDroidMaxGroup(void);
 
+// return whether a droid can reach given destination
+extern BOOL scrDroidCanReach(void);
 
 // types for structure targets
 typedef enum _scr_struct_tar
