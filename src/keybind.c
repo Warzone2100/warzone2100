@@ -301,6 +301,7 @@ void	kf_CloneSelected( void )
 			{
 				updateDroidOrientation(psNewDroid);
 			}
+			psNewDroid->selected = true;
 		}
 	}
 }
