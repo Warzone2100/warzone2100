@@ -47,6 +47,7 @@ static CHEAT_ENTRY cheatCodes[] =
 //	{"PJKSVQZ,",kf_ToggleOutline},
 //	{"L\\MZZQ[JRO",kf_ScreenDump},	//screendump
 
+	{"clone wars", kf_CloneSelected}, // clone selected units
 	{"noassert", kf_NoAssert}, // turn off asserts
 	{"count me", kf_ShowNumObjects}, // give a count of objects in the world
 	{"give all", kf_AllAvailable},	// give all
