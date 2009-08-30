@@ -2890,7 +2890,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 
 
 // Sets the parts array in a template given a droid.
-static void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate)
+void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate)
 {
 	UDWORD inc;
 	psTemplate->numWeaps = 0;
@@ -3835,15 +3835,6 @@ void setUpBuildModule(DROID *psDroid)
 		//we've got a problem if it didn't find a structure
 		psDroid->action = DACTION_NONE;
 	}
-}
-
-const char *getDroidName(const DROID *psDroid)
-{
-	DROID_TEMPLATE sTemplate;
-
-	templateSetParts(psDroid, &sTemplate);
-
-	return getTemplateName(&sTemplate);
 }
 
 const char* getTemplateName(const DROID_TEMPLATE *psTemplate)
