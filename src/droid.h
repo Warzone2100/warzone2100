@@ -296,9 +296,6 @@ extern BOOL buildModule(STRUCTURE *psStruct);
  - if so, helping to build the current one*/
 extern void setUpBuildModule(DROID *psDroid);
 
-/*return the name to display for the interface given a DROID structure*/
-extern const char* getDroidName(const DROID *psDroid) WZ_DECL_UNUSED;
-
 /*return the name to display for the interface - we don't know if this is
 a string ID or something the user types in*/
 extern const char* getTemplateName(const DROID_TEMPLATE *psTemplate);
@@ -564,5 +561,7 @@ int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj);
 
 // Minimum damage a weapon will deal to its target
 #define	MIN_WEAPON_DAMAGE	1
+
+void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate);
 
 #endif // __INCLUDED_SRC_DROID_H__
