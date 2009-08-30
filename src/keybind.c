@@ -268,6 +268,43 @@ DROID	*psDroid;
 	}
 }
 
+void	kf_CloneSelected( void )
+{
+	DROID		*psDroid, *psNewDroid;
+	DROID_TEMPLATE	sTemplate;
+	const int	limit = 10;	// make 10 clones
+	int		i, impact_side;
+
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
+	{
+		for (i = 0; psDroid->selected && i < limit; i++)
+		{
+			// create a template based on the droid
+			templateSetParts(psDroid, &sTemplate);
+
+			// copy the name across
+			sstrcpy(sTemplate.aName, psDroid->aName);
+
+			// create a new droid
+			psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false);
+			ASSERT_OR_RETURN(, psNewDroid != NULL, "Unable to build a unit");
+			addDroid(psNewDroid, apsDroidLists);
+			psNewDroid->body = psDroid->body;
+			for (impact_side = 0; impact_side < NUM_HIT_SIDES; impact_side=impact_side+1)
+			{
+				psNewDroid->armour[impact_side][WC_KINETIC] = psDroid->armour[impact_side][WC_KINETIC];
+				psNewDroid->armour[impact_side][WC_HEAT] = psDroid->armour[impact_side][WC_HEAT];
+			}
+			psNewDroid->experience = psDroid->experience;
+			psNewDroid->direction = psDroid->direction;
+			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER))
+			{
+				updateDroidOrientation(psNewDroid);
+			}
+		}
+	}
+}
+
 // --------------------------------------------------------------------------
 //
 ///* Prints out the date and time of the build of the game */
