@@ -43,6 +43,7 @@
 #include "power.h"
 #include "geometry.h"
 #include "src/scriptfuncs.h"
+#include "fpathdef.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
@@ -2188,6 +2189,33 @@ BOOL scrIterateGroupB(void)
 	}
 
 	return true;
+}
+
+BOOL scrDroidCanReach(void)
+{
+	DROID			*psDroid;
+	int			x, y;
+
+	if (!stackPopParams(3, ST_DROID, &psDroid, VAL_INT, &x, VAL_INT, &y))
+	{
+		debug(LOG_ERROR, "Failed to pop parameters");
+		return false;
+	}
+	if (psDroid)
+	{
+		const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+		const Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
+		const Vector2i rPos = { map_coord(x), map_coord(y) };
+
+		scrFunctionResult.v.bval = fpathCheck(dPos, rPos, psPropStats->propulsionType);
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+		{
+			debug(LOG_ERROR, "stackPushResult failed");
+			return false;
+		}
+		return true;
+	}
+	return false;
 }
 
 // ********************************************************************************************
