@@ -1466,6 +1466,20 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
 	UDWORD		iFactoryDistSq;
 	STRUCTURE	*psStruct, *psRepairFac, *psFactory;
+	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	const Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
+	const Vector2i rPos = { map_coord(psOrder->x), map_coord(psOrder->y) };
+
+	if ((validOrderForLoc(psOrder->order) || psOrder->order == DORDER_BUILD) && !fpathCheck(dPos, rPos, psPropStats->propulsionType))
+	{
+		if (!isHumanPlayer(psDroid->player))
+		{
+			debug(LOG_SCRIPT, "Invalid order %s given to player %d's %s for position (%d, %d) - ignoring", 
+			      getDroidOrderName(psOrder->order), psDroid->player, droidGetName(psDroid), (int)psOrder->x, (int)psOrder->y);
+		}
+		objTrace(psDroid->id, "Invalid order %s for position (%d, %d) - ignoring", getDroidOrderName(psOrder->order), (int)psOrder->x, (int)psOrder->y);
+		return;
+	}
 
 	// deal with a droid receiving a primary order
 	if (secondaryGotPrimaryOrder(psDroid, psOrder->order))
