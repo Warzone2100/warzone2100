@@ -43,7 +43,7 @@
 #include "power.h"
 #include "geometry.h"
 #include "src/scriptfuncs.h"
-#include "fpathdef.h"
+#include "fpath.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
