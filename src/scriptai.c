@@ -2190,5 +2190,26 @@ BOOL scrIterateGroupB(void)
 	return true;
 }
 
+// Dummy version for 2.2 branch - always returns true
+BOOL scrDroidCanReach(void)
+{
+	DROID			*psDroid;
+	int			x, y;
+
+	if (!stackPopParams(3, ST_DROID, &psDroid, VAL_INT, &x, VAL_INT, &y))
+	{
+		debug(LOG_ERROR, "Failed to pop parameters");
+		return false;
+	}
+	scrFunctionResult.v.bval = true;
+
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "stackPushResult failed");
+		return false;
+	}
+	return true;
+}
+
 // ********************************************************************************************
 // ********************************************************************************************
