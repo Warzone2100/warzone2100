@@ -1470,7 +1470,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	const Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
 	const Vector2i rPos = { map_coord(psOrder->x), map_coord(psOrder->y) };
 
-	if ((validOrderForLoc(psOrder->order) || psOrder->order == DORDER_BUILD) && !fpathCheck(dPos, rPos, psPropStats->propulsionType))
+	if (psOrder->order != DORDER_TRANSPORTIN	// transporters special
+	    && (validOrderForLoc(psOrder->order) || psOrder->order == DORDER_BUILD) 
+	    && !fpathCheck(dPos, rPos, psPropStats->propulsionType))
 	{
 		if (!isHumanPlayer(psDroid->player))
 		{
