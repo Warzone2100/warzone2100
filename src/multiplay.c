@@ -1594,7 +1594,7 @@ UBYTE sendMap(void)
 	return done;
 }
 
-// another player is broadcasting a map, recv a chunk
+// Another player is broadcasting a map, recv a chunk. Returns false if not yet done.
 BOOL recvMapFileData()
 {
 	UBYTE done;
@@ -1613,6 +1613,7 @@ BOOL recvMapFileData()
 		{
 			return false;
 		}
+		return true;
 	}
 	else
 	{
@@ -1620,7 +1621,7 @@ BOOL recvMapFileData()
 		CONPRINTF(ConsoleString,(ConsoleString,"MAP:%d%%",done));
 	}
 
-	return true;
+	return false;
 }
 
 
