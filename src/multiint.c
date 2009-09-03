@@ -2694,8 +2694,13 @@ void frontendMultiMessages(void)
 		case NET_REQUESTMAP:
 			recvMapFileRequested();
 			break;
+
 		case FILEMSG:
-			recvMapFileData();
+			widgSetButtonState(psWScreen, MULTIOP_MAP_BUT, 1);	// turn preview button off
+			if (recvMapFileData())
+			{
+				widgSetButtonState(psWScreen, MULTIOP_MAP_BUT, 0);	// turn it back on again
+			}
 			break;
 
 		case NET_OPTIONS:					// incoming options file.
