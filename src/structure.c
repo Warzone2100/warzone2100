@@ -3228,7 +3228,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						if (((RESEARCH *)psResFacility->psSubject)->researchPoints >
 							((RESEARCH *)psResFacility->psBestTopic)->researchPoints)
 						{
-							psResFacility->psSubject = psResFacility->psSubject;
+							psResFacility->psBestTopic = psResFacility->psSubject;
 						}
 					}
 					psResFacility->psSubject = NULL;
