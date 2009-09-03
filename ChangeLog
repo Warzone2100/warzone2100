@@ -1,9 +1,13 @@
 0000-00-00: Version 2.2.3
- * General:
+ * Multiplayer:
    * Change: Add tileset dependent map preview colours (r8064)
+   * Fix: Crash if map preview during map download (r8079, ticket:756)
  * Campaign:
    * Fix: Assert failure on effect cleanup when entering third campaign (ticket:836, r8045)
    * Fix: Infinite loop when transporting a sensor droid to offworld campaign map (ticket:852, ticket:853, r8062)
+ * Scripting:
+   * Change: Added dummy version of function droidCanReach() that always returns true for backward compatibility (r8077)
+   * Fix: Do not crash in non-debug mode when calling allianceExists() with bad player ID (r8075)
 
 2009-08-23: Version 2.2.2
  * General:
