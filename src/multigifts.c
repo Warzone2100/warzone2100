@@ -730,15 +730,14 @@ void recvMultiPlayerRandomArtifacts()
 // ///////////////////////////////////////////////////////////////
 void giftArtifact(UDWORD owner, UDWORD x, UDWORD y)
 {
-	PLAYER_RESEARCH *pO,*pR;
-	UDWORD	topic=0;
-	pR   = asPlayerResList[selectedPlayer];
+	PLAYER_RESEARCH	*pR = asPlayerResList[selectedPlayer];
 
 	if (owner < MAX_PLAYERS)
 	{
-		pO	 = asPlayerResList[owner];
+		PLAYER_RESEARCH	*pO = asPlayerResList[owner];
+		int topic;
 
-		for (topic = numResearch - 1; topic > 0; topic--)
+		for (topic = numResearch - 1; topic >= 0; topic--)
 		{
 			if (IsResearchCompleted(&pO[topic])
 			 && !IsResearchPossible(&pR[topic]))
