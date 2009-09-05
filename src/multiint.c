@@ -3008,6 +3008,19 @@ BOOL startMultiOptions(BOOL bReenter)
 	{
 		setLobbyError(ERROR_NOERROR);
 	}
+
+	// free limiter structure
+	// challengeActive can be removed when challenge will set the limits from some config file
+	if(!bReenter || challengeActive)
+	{
+		if(ingame.numStructureLimits)
+		{
+			ingame.numStructureLimits = 0;
+			free(ingame.pStructureLimits);
+			ingame.pStructureLimits = NULL;
+		}
+	}
+	
 	if(!bReenter)
 	{
 		teamChooserUp = -1;
@@ -3025,12 +3038,6 @@ BOOL startMultiOptions(BOOL bReenter)
 		}
 
 		ingame.localOptionsReceived = false;
-		if(ingame.numStructureLimits)
-		{
-			ingame.numStructureLimits = 0;
-			free(ingame.pStructureLimits);
-			ingame.pStructureLimits = NULL;
-		}
 
 		loadMultiStats((char*)sPlayer,&nullStats);
 
