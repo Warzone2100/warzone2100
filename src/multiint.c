@@ -2500,7 +2500,11 @@ static void processMultiopWidgets(UDWORD id)
 		}
 		else
 		{
+			NETclose();
 			widgDelete(psWScreen, FRONTEND_BACKDROP);
+			challengeActive = false;
+			bHosted = false;
+			ingame.localJoiningInProgress = false;
 			changeTitleMode(TITLE);
 		}
 		break;

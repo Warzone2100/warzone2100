@@ -148,13 +148,16 @@ BOOL startLimitScreen(void)
 					iV_GetImageHeight(FrontImages,IMAGE_RETURN),
 					_("Return To Previous Screen"),IMAGE_NO,IMAGE_NO,true);
 
-
 	// ok button
 	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_OK,
 					LIMITS_OKX,LIMITS_OKY,
 					iV_GetImageWidth(FrontImages,IMAGE_OK),
 					iV_GetImageHeight(FrontImages,IMAGE_OK),
 					_("Accept Settings"),IMAGE_OK,IMAGE_OK,true);
+	if (challengeActive)
+	{
+		widgSetButtonState(psWScreen, IDLIMITS_OK, WBUT_DISABLE);
+	}
 
 	// Count the number of minor tabs needed
 	numButtons = 0;
