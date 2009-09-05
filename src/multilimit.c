@@ -100,6 +100,18 @@ static BOOL useStruct(UDWORD count,UDWORD i)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
+static inline void freeLimitSet(void)
+{
+	// Free the old set if required
+	if (ingame.numStructureLimits)
+	{
+		free(ingame.pStructureLimits);
+		ingame.numStructureLimits = 0;
+		ingame.pStructureLimits = NULL;
+	}
+}
+
+// ////////////////////////////////////////////////////////////////////////////
 BOOL startLimitScreen(void)
 {
 	W_FORMINIT		sButInit;
@@ -110,22 +122,46 @@ BOOL startLimitScreen(void)
 	addBackdrop();//background
 
 	// load stats...
-	if(!bForceEditorLoaded)
+	if(!bLimiterLoaded)
 	{
-		initLoadingScreen( true );//changed by jeremy mar8
-
-		if (!resLoad("wrf/piestats.wrf", 501))
+		initLoadingScreen(true);
+		
+		if (!resLoad("wrf/limiter_tex.wrf", 501))
 		{
 			return false;
 		}
 
-		if (!resLoad("wrf/forcedit2.wrf", 502))
+		if (!resLoad("wrf/piestats.wrf", 502))
 		{
 			return false;
 		}
 
-		bForceEditorLoaded = true;
-		closeLoadingScreen();
+		if (!resLoad("wrf/limiter_data.wrf", 503))
+		{
+			return false;
+		}
+
+		bLimiterLoaded = true;
+
+		closeLoadingScreen();		
+	}
+
+	if (challengeActive)
+	{
+		// reset the sliders..
+		// it's a HACK since the actual limiter structure was cleared in the startMultiOptions function 
+		for (i = 0; i < numStructureStats ; ++i)
+		{
+			asStructLimits[0][i].limit = asStructLimits[0][i].globalLimit;
+		}
+		
+		// turn off the sliders
+		sliderEnableDrag(false);
+	}
+	else
+	{
+		//enable the sliders
+		sliderEnableDrag(true);
 	}
 
 	addSideText(FRONTEND_SIDETEXT1,LIMITSX-2,LIMITSY,"LIMITS");	// draw sidetext...
@@ -146,7 +182,7 @@ BOOL startLimitScreen(void)
 					LIMITS_OKX-40,LIMITS_OKY,
 					iV_GetImageWidth(FrontImages,IMAGE_RETURN),
 					iV_GetImageHeight(FrontImages,IMAGE_RETURN),
-					_("Return To Previous Screen"),IMAGE_NO,IMAGE_NO,true);
+					_("Apply the Default values and Return To Previous Screen"),IMAGE_NO,IMAGE_NO,true);
 
 	// ok button
 	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_OK,
@@ -154,10 +190,6 @@ BOOL startLimitScreen(void)
 					iV_GetImageWidth(FrontImages,IMAGE_OK),
 					iV_GetImageHeight(FrontImages,IMAGE_OK),
 					_("Accept Settings"),IMAGE_OK,IMAGE_OK,true);
-	if (challengeActive)
-	{
-		widgSetButtonState(psWScreen, IDLIMITS_OK, WBUT_DISABLE);
-	}
 
 	// Count the number of minor tabs needed
 	numButtons = 0;
@@ -237,15 +269,6 @@ BOOL startLimitScreen(void)
 		}
 	}
 
-	if (challengeActive)
-	{
-		sliderEnableDrag(false);
-	}
-	else
-	{
-		sliderEnableDrag(true);
-	}
-
 	return true;
 }
 
@@ -253,7 +276,7 @@ BOOL startLimitScreen(void)
 
 void runLimitScreen(void)
 {
-	UDWORD id,statid;
+	UDWORD i, id, statid;
 
 	frontendMultiMessages();							// network stuff.
 
@@ -275,10 +298,16 @@ void runLimitScreen(void)
 		{
 		case IDLIMITS_RETURN:
 			// reset the sliders..
+			for (i = 0; i < numStructureStats ; ++i)
+			{
+				asStructLimits[0][i].limit = asStructLimits[0][i].globalLimit;
+			}
+			// free limiter structure
+			freeLimitSet();
+			//inform others
+			sendOptions();
+
 			eventReset();
-			resReleaseBlockData(501);
-			resReleaseBlockData(502);
-			bForceEditorLoaded = false;
 			changeTitleMode(MULTIOPTION);
 
 			// make some noize.
@@ -311,14 +340,16 @@ void createLimitSet(void)
 	UDWORD			i, numchanges = 0, bufSize, idx = 0;
 	MULTISTRUCTLIMITS	*pEntry;
 
-	// Free the old set if required
-	if (ingame.numStructureLimits)
-	{
-		ingame.numStructureLimits = 0;
-		free(ingame.pStructureLimits);
-		ingame.pStructureLimits = NULL;
-	}
+	// free old limiter structure
+	freeLimitSet();
 
+	// don't bother creating if a challenge mode is active
+	// there are no settings loaded from the .ini file for now...
+	if (challengeActive)
+	{
+		return;
+	}
+	
 	// Count the number of changes
 	for (i = 0; i < numStructureStats; i++)
 	{
@@ -380,13 +411,7 @@ void applyLimitSet(void)
 		}
 	}
 
-	// Free
-	if (ingame.numStructureLimits)
-	{
-		free(ingame.pStructureLimits);
-		ingame.numStructureLimits = 0;
-		ingame.pStructureLimits = NULL;
-	}
+	freeLimitSet();
 }
 
 // ////////////////////////////////////////////////////////////////////////////

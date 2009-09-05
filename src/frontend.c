@@ -69,6 +69,9 @@
 #include "version.h"
 #include "configuration.h"
 
+// ////////////////////////////////////////////////////////////////////////////
+// Global variables
+
 static int StartWithGame = 1; // New game starts in Cam 1.
 
 // Widget code and non-constant strings do not get along
@@ -78,7 +81,7 @@ static char textureSize[WIDG_MAXSTR];
 tMode titleMode; // the global case
 char			aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
-BOOL			bForceEditorLoaded = false;
+BOOL			bLimiterLoaded = false;
 BOOL			bUsingKeyboard = false;		// to disable mouse pointer when using keys.
 BOOL			bUsingSlider   = false;
 
@@ -216,7 +219,7 @@ void changeTitleMode(tMode mode)
 	case QUIT:
 	case LOADSAVEGAME:
 		bUsingKeyboard = false;
-		bForceEditorLoaded = false;
+		bLimiterLoaded = false;
 	case SHOWINTRO:
 		break;
 

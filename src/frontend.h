@@ -60,7 +60,7 @@ extern char	aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file 
 extern BOOL	bUsingKeyboard;	// to disable mouse pointer when using keys.
 extern BOOL	bUsingSlider;
 
-extern BOOL	bForceEditorLoaded;
+extern BOOL	bLimiterLoaded;
 
 extern void	changeTitleMode			(tMode mode);
 extern BOOL startTitleMenu			(void);
