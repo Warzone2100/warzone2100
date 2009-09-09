@@ -2665,6 +2665,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	{
 		psDroid->psActionTarget[i] = NULL;
 		psDroid->asWeaps[i].lastFired = 0;
+		psDroid->asWeaps[i].shotsFired = 0;
 		psDroid->asWeaps[i].nStat = 0;
 		psDroid->asWeaps[i].ammo = 0;
 		psDroid->asWeaps[i].recoilValue = 0;
@@ -2839,31 +2840,26 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	UDWORD						inc;
 
 	psDroid->droidType = droidTemplateType(pTemplate);
-
 	psDroid->direction = 0;
 	psDroid->pitch =  0;
 	psDroid->roll = 0;
 	psDroid->numWeaps = pTemplate->numWeaps;
-	for (inc = 0;inc < psDroid->numWeaps;inc++)
-	{
-		psDroid->asWeaps[inc].rotation = 0;
-		psDroid->asWeaps[inc].pitch = 0;
-	}
-
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
 	psDroid->originalBody = psDroid->body;
 
 	//create the droids weapons
 	if (pTemplate->numWeaps > 0)
 	{
-
 		for (inc=0; inc < pTemplate->numWeaps; inc++)
 		{
 			psDroid->asWeaps[inc].lastFired=0;
+			psDroid->asWeaps[inc].shotsFired=0;
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
 			psDroid->asWeaps[inc].recoilValue = 0;
 			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->
 				asWeaps[inc].nStat)->numRounds;
+			psDroid->asWeaps[inc].rotation = 0;
+			psDroid->asWeaps[inc].pitch = 0;
 		}
 	}
 	else

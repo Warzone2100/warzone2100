@@ -2338,14 +2338,19 @@ void	renderStructure(STRUCTURE *psStructure)
 								}
 							}
 						}
-						// we have a droid weapon so do we draw a muzzle flash
+						// we have a weapon so we draw a muzzle flash
 						if( weaponImd[i]->nconnectors && psStructure->visible[selectedPlayer]>(UBYTE_MAX/2)
 						         && psStructure->pStructureType->type != REF_REPAIR_FACILITY)
 						{
-							/* Now we need to move to the end of the barrel */
-							pie_TRANSLATE(weaponImd[i]->connectors[i].x, weaponImd[i]->connectors[i].z, weaponImd[i]->connectors[i].y );
+							// which barrel is firing? (in case if model has multiple muzzle connectors)
+							DWORD connector_num = (psStructure->asWeaps[i].shotsFired) % (weaponImd[i]->nconnectors);
+
+							/* Now we need to move to the end of the firing barrel (there maybe multiple barrels) */
+							pie_TRANSLATE(weaponImd[i]->connectors[connector_num].x,
+											weaponImd[i]->connectors[connector_num].z,
+											weaponImd[i]->connectors[connector_num].y);
+
 							// and draw the muzzle flash
-							// animate for the duration of the flash only
 							if (flashImd[i])
 							{
 								// assume no clan colours formuzzle effects
@@ -2354,15 +2359,16 @@ void	renderStructure(STRUCTURE *psStructure)
 									// no anim so display one frame for a fixed time
 									if (gameTime < (psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
 									{
-										pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 128);//muzzle flash
+										pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 									}
 								}
 								else
 								{
+									// animated muzzle
 									frame = (gameTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
 									if (frame < flashImd[i]->numFrames)
 									{
-										pie_Draw3DShape(flashImd[i], frame, 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 20);//muzzle flash
+										pie_Draw3DShape(flashImd[i], frame, 0, buildingBrightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 									}
 								}
 							}
@@ -2909,13 +2915,13 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 }
 
 /// draw target origin icon for the specified structure
-static void drawStructureTargetOriginIcon(STRUCTURE *psStruct, WEAPON *psWeap, int weapon_slot)
+static void drawStructureTargetOriginIcon(STRUCTURE *psStruct, int weapon_slot)
 {
 	SDWORD		scrX,scrY,scrR;
 	UDWORD		scale;
 
 	// Process main weapon only for now
-	if (!tuiTargetOrigin || weapon_slot || psWeap->nStat == 0)
+	if (!tuiTargetOrigin || weapon_slot || !((psStruct->asWeaps[weapon_slot]).nStat))
 	{
 		return;
 	}
@@ -2951,7 +2957,6 @@ static void drawStructureTargetOriginIcon(STRUCTURE *psStruct, WEAPON *psWeap, i
 		break;
 	default:
 		debug(LOG_WARNING,"Unexpected target origin in structure(%d)!", psStruct->id);
-
 	}
 }
 
@@ -3067,7 +3072,7 @@ static void	drawStructureSelections( void )
 				for (i = 0; i < psStruct->numWeaps; i++)
 				{
 					drawWeaponReloadBar((BASE_OBJECT *)psStruct, &psStruct->asWeaps[i], i);
-					drawStructureTargetOriginIcon(psStruct, &psStruct->asWeaps[i], i);
+					drawStructureTargetOriginIcon(psStruct, i);
 				}
 			}
 

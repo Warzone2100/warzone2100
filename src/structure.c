@@ -1734,6 +1734,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				if (pStructureType->psWeapStat[weapon])
 				{
 					psBuilding->asWeaps[weapon].lastFired = 0;
+					psBuilding->asWeaps[weapon].shotsFired = 0;
 					//in multiPlayer make the Las-Sats require re-loading from the start
 					if (bMultiPlayer && pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT)
 					{
@@ -1751,6 +1752,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			if (pStructureType->psWeapStat[0])
 			{
 				psBuilding->asWeaps[0].lastFired = 0;
+				psBuilding->asWeaps[0].shotsFired = 0;
 				//in multiPlayer make the Las-Sats require re-loading from the start
 				if (bMultiPlayer && pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT)
 				{
