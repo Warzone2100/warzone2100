@@ -231,10 +231,6 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		}
 	}
 
-	// base hit chance, based on weapon's chance to hit as defined in
-	// weapons.txt and with applied weapon upgrades, without any accuracy modifiers
-	baseHitChance = 0;
-
 	/* Now see if the target is in range  - also check not too near */
 	xDiff = abs(psAttacker->pos.x - psTarget->pos.x);
 	yDiff = abs(psAttacker->pos.y - psTarget->pos.y);
@@ -306,18 +302,19 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		}
 	}
 
-	// if target was in range deal with weapon fire
-	if(baseHitChance > 0)
-	{
-		/* note when the weapon fired */
-		psWeap->lastFired = gameTime;
+	/* -------!!! From that point we are sure that we are firing !!!------- */
 
-		/* reduce ammo if salvo */
-		if (psStats->reloadTime)
-		{
-			psWeap->ammo--;
-		}
+	/* note when the weapon fired */
+	psWeap->lastFired = gameTime;
+
+	/* reduce ammo if salvo */
+	if (psStats->reloadTime)
+	{
+		psWeap->ammo--;
 	}
+
+	// increment the shots counter
+	psWeap->shotsFired++;
 
 	// visibility modifiers
 	//if (psTarget->visible[psAttacker->player] < VIS_ATTACK_MOD_LEVEL)
@@ -400,10 +397,11 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			predict.x = psTarget->pos.x;
 			predict.y = psTarget->pos.y;
 		}
-
 		predict.z = psTarget->pos.z;
 
-		debug(LOG_SENSOR, "combFire: Accurate prediction range (%d)", dice);
+		objTrace(psAttacker->id, "combFire: [%s]->%u: resultHitChance=%d, visibility=%hhu : ",
+			psStats->pName, psTarget->id, resultHitChance, psTarget->visible[psAttacker->player]);
+		
 		if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player, predict, psTarget, false, weapon_slot))
 		{
 			/* Out of memory - we can safely ignore this */
@@ -411,18 +409,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			return;
 		}
 	}
-	else
-	{
-		goto missed;
-	}
-
-	objTrace(psAttacker->id, "combFire: %u[%s]->%u: resultHitChance=%d, visibility=%hhu : ",
-	      psAttacker->id, psStats->pName, psTarget->id, resultHitChance, psTarget->visible[psAttacker->player]);
-
-	return;
-
-missed:
-	/* Deal with a missed shot */
+	else /* Deal with a missed shot */
 	{
 		int missDir = rand() % BUL_MAXSCATTERDIR, missDist = 2 * (100 - resultHitChance);
 		Vector3i miss = {
@@ -433,8 +420,7 @@ missed:
 
 		objTrace(psAttacker->id, "combFire: Missed shot (%d) ended up at (%4d,%4d)", dice, miss.x, miss.y);
 
-		/* Fire off the bullet to the miss location. The miss is only visible if the player owns
-		* the target. (Why? - Per) */
+		/* Fire off the bullet to the miss location. The miss is only visible if the player owns the target. (Why? - Per) */
 		proj_SendProjectile(psWeap, psAttacker, psAttacker->player, miss, NULL, psTarget->player == selectedPlayer, weapon_slot);
 	}
 	return;

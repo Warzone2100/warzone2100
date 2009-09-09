@@ -38,6 +38,7 @@ typedef struct _weapon
 	 * @c gameTime when this weapon was last fired.
 	 */
 	UDWORD          lastFired;
+	UDWORD          shotsFired;
 	UDWORD          recoilValue;
 	UWORD		pitch;
 	UWORD		rotation;
