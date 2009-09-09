@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2009-08-13 18:49+0200\n"
-"PO-Revision-Date: 2009-06-20 21:23+0100\n"
+"PO-Revision-Date: 2009-09-09 21:53+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -395,7 +395,7 @@ msgstr "Erhöht Konstruktionsgeschwindigkeit"
 #: data/base/messages/resmessages23.rmsg:46
 #: data/base/messages/resmessages3.rmsg:514
 msgid "All trucks upgraded automatically"
-msgstr "Alle LKW werden automatisch aufgerüstet"
+msgstr "Alle LKW wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages12.rmsg:69
 #: data/base/messages/resmessages1.rmsg:4
@@ -441,7 +441,7 @@ msgstr "Erweitert CB-Sensorreichweite"
 #: data/base/messages/resmessages23.rmsg:59
 #: data/base/messages/resmessages3.rmsg:527
 msgid "All CB sensors upgraded automatically"
-msgstr "Alle CB-Sensoren werden automatisch aufgerüstet"
+msgstr "Alle CB-Sensoren wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages12.rmsg:95
 #: data/base/messages/resmessages12.rmsg:212
@@ -473,7 +473,7 @@ msgstr "Erhöht Genauigkeit von Geschützen"
 #: data/base/messages/resmessagesall.rmsg:176
 #: data/mp/messages/resmessagesall.rmsg:176
 msgid "All cannons upgraded automatically"
-msgstr "Alle Geschütze werden automatisch aufgerüstet"
+msgstr "Alle Geschütze wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages12.rmsg:108
 #: data/base/messages/resmessages1.rmsg:602
@@ -503,7 +503,7 @@ msgstr "Erhöht Feuerrate von Flammenwerfern"
 #: data/mp/messages/resmessagesall.rmsg:735
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "All flamers upgraded automatically"
-msgstr "Alle Flammenwerfer werden automatisch aufgerüstet"
+msgstr "Alle Flammenwerfer wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages12.rmsg:121
 #: data/base/messages/resmessages1.rmsg:537
@@ -654,7 +654,7 @@ msgstr "Erhöht Feuerrate von Maschinengewehren"
 #: data/mp/messages/strings/resstrings.txt:889
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "All machineguns upgraded automatically"
-msgstr "Alle Maschinengewehre werden automatisch aufgerüstet"
+msgstr "Alle Maschinengewehre wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages12.rmsg:147
 #: data/base/messages/resmessages1.rmsg:667
@@ -747,7 +747,7 @@ msgstr "Erhöht Genauigkeit von Mörsern"
 #: data/base/messages/strings/resstrings.txt:908
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "All mortars upgraded automatically"
-msgstr "Alle Mörser werden automatisch aufgerüstet"
+msgstr "Alle Mörser wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages12.rmsg:174
 msgid "Automatic loader replaces manual feed"
@@ -807,7 +807,7 @@ msgstr "Erhöht Feuerrate von Raketen"
 #: data/mp/messages/resmessagesall.rmsg:137
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "All rockets upgraded automatically"
-msgstr "Alle Raketen werden automatisch aufgerüstet"
+msgstr "Alle Raketen wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages12.rmsg:214
 #: data/base/messages/resmessages3.rmsg:890
@@ -948,7 +948,7 @@ msgstr "Erhöht kinetische Panzerung und Rumpfpunkte"
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "All Cyborgs upgraded automatically"
-msgstr "Alle Cyborgs werden automatisch aufgerüstet"
+msgstr "Alle Cyborgs wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages1.rmsg:43
 #: data/base/messages/resmessages1.rmsg:56
@@ -1054,7 +1054,7 @@ msgstr "Erhöht Panzerung und Rumpfpunkte"
 #: data/base/messages/strings/resstrings.txt:106
 #: data/mp/messages/strings/resstrings.txt:124
 msgid "All defenses and walls upgraded automatically"
-msgstr "Verteidigungsanlagen und Mauern werden automatisch aufgerüstet"
+msgstr "Verteidigungsanlagen und Mauern wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages1.rmsg:109
 msgid "Steel tower with machinegun"
@@ -1204,7 +1204,7 @@ msgstr "Erhöht Produktionsrate von Cyborgfabriken"
 #: data/mp/messages/strings/resstrings.txt:376
 #: data/mp/messages/strings/resstrings.txt:384
 msgid "All Cyborg factories upgraded automatically"
-msgstr "Alle Cyborgfabriken werden automatisch aufgerüstet"
+msgstr "Alle Cyborgfabriken wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages1.rmsg:291
 #: data/base/messages/strings/names.txt:399
@@ -1269,7 +1269,7 @@ msgstr "Automatisierte Fabrikproduktion"
 #: data/mp/messages/strings/resstrings.txt:394
 #: data/mp/messages/strings/resstrings.txt:402
 msgid "All vehicle factories upgraded automatically"
-msgstr "Alle Fahrzeugfabriken werden automatisch aufgerüstet"
+msgstr "Alle Fahrzeugfabriken wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages1.rmsg:329
 msgid "Power Module Available"
@@ -1328,7 +1328,7 @@ msgstr "Analyse der Daten zur synaptischen Verbindung"
 #: data/base/messages/strings/resstrings.txt:392
 #: data/mp/messages/strings/resstrings.txt:418
 msgid "All research facilities upgraded automatically"
-msgstr "Alle Forschungseinrichtungen werden automatisch aufgerüstet"
+msgstr "Alle Forschungseinrichtungen wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages1.rmsg:368
 #: data/base/messages/resmessages2.rmsg:381
@@ -1366,7 +1366,7 @@ msgstr "Erhöht Panzerung und Rumpfpunkte"
 #: data/base/messages/strings/resstrings.txt:402
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "All base structures upgraded automatically"
-msgstr "Alle Basisgebäude werden automatisch aufgerüstet"
+msgstr "Alle Basisgebäude wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages1.rmsg:381
 msgid "Project Light Body"
@@ -1509,7 +1509,7 @@ msgstr "Erhöht Fahrzeuggeschwindigkeit"
 #: data/mp/messages/strings/resstrings.txt:607
 #: data/mp/messages/strings/resstrings.txt:617
 msgid "All vehicles upgraded automatically"
-msgstr "Alle Fahrzeuge werden automatisch aufgerüstet"
+msgstr "Alle Fahrzeuge wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages1.rmsg:472
 #: data/base/messages/resmessages2.rmsg:511
@@ -1723,7 +1723,7 @@ msgstr "Verbessert Genauigkeit von Miniraketen"
 #: data/mp/messages/strings/resstrings.txt:989
 #: data/mp/messages/strings/resstrings.txt:997
 msgid "All mini-rockets upgraded automatically"
-msgstr "Alle Miniraketen werden automatisch aufgerüstet"
+msgstr "Alle Miniraketen wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages1.rmsg:720
 msgid "Improved shaped charge warhead"
@@ -1823,7 +1823,7 @@ msgstr "Gasturbine erhöht Leistungsabgabe"
 #: data/base/messages/resmessages23.rmsg:33
 #: data/base/messages/resmessages3.rmsg:436
 msgid "All power generators upgraded automatically"
-msgstr "Alle Kraftwerke werden automatisch aufgerüstet"
+msgstr "Alle Kraftwerke wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages23.rmsg:57
 #: data/base/messages/resmessages23.rmsg:83
@@ -1880,7 +1880,7 @@ msgstr "Erweitert Reichweite von VTOL-CB-Sensoren"
 #: data/base/messages/strings/resstrings.txt:488
 #: data/mp/messages/strings/resstrings.txt:516
 msgid "All VTOL CB sensors upgraded automatically"
-msgstr "Alle VTOL-CB-Sensoren werden automatisch aufgerüstet"
+msgstr "Alle VTOL-CB-Sensoren wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages23.rmsg:96
 msgid "VTOL Strike Tower detects approaching enemies"
@@ -1946,7 +1946,7 @@ msgstr "Erweitert VTOL-Schlagsensorreichweite"
 #: data/base/messages/strings/resstrings.txt:502
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "Alle VTOL-Schlagsensoren werden automatisch aufgerüstet"
+msgstr "Alle VTOL-Schlagsensoren wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages23.rmsg:134
 #: data/base/messages/resmessages2.rmsg:641
@@ -1985,7 +1985,7 @@ msgstr "Erhöht Genauigkeit der Luftabwehr"
 #: data/mp/messages/strings/resstrings.txt:695
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "All AA weapons upgraded automatically"
-msgstr "Alle Luftabwehrwaffen werden automatisch aufgerüstet"
+msgstr "Alle Luftabwehrwaffen wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages23.rmsg:147
 #: data/base/messages/resmessages2.rmsg:706
@@ -2033,7 +2033,7 @@ msgstr "Erhöht Genauigkeit von Bomben"
 #: data/base/messages/strings/resstrings.txt:716
 #: data/mp/messages/strings/resstrings.txt:749
 msgid "All bomb bays upgraded automatically"
-msgstr "Alle Bombenabwurfschächte werden automatisch aufgerüstet"
+msgstr "Alle Bombenabwurfschächte wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages23.rmsg:174
 msgid "Robotic advances make new chaingun upgrade available"
@@ -2370,7 +2370,7 @@ msgstr "Verringert Zeit für Bewaffnung"
 #: data/base/messages/strings/resstrings.txt:424
 #: data/mp/messages/strings/resstrings.txt:450
 msgid "All rearming pads upgraded automatically"
-msgstr "Alle Servicestationen werden automatisch aufgerüstet"
+msgstr "Alle Servicestationen wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages2.rmsg:420
 #: data/base/messages/strings/resstrings.txt:459
@@ -2520,28 +2520,28 @@ msgstr "Fahrzeugantrieb verbessert"
 #: data/base/messages/strings/resstrings.txt:594
 #: data/mp/messages/strings/resstrings.txt:627
 msgid "All half-tracks upgraded automatically"
-msgstr "Alle Halbkettenfahrzeuge werden automatisch aufgerüstet"
+msgstr "Alle Halbkettenfahrzeuge wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages2.rmsg:553
 #: data/base/messages/resmessages3.rmsg:748
 #: data/base/messages/strings/resstrings.txt:604
 #: data/mp/messages/strings/resstrings.txt:637
 msgid "All hovers upgraded automatically"
-msgstr "Alle Hoverfahrzeuge werden automatisch aufgerüstet"
+msgstr "Alle Hoverfahrzeuge wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages2.rmsg:566
 #: data/base/messages/resmessages3.rmsg:761
 #: data/base/messages/strings/resstrings.txt:614
 #: data/mp/messages/strings/resstrings.txt:647
 msgid "All tracks upgraded automatically"
-msgstr "Alle Kettenfahrzeuge werden automatisch aufgerüstet"
+msgstr "Alle Kettenfahrzeuge wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages2.rmsg:579
 #: data/base/messages/resmessages3.rmsg:774
 #: data/base/messages/strings/resstrings.txt:624
 #: data/mp/messages/strings/resstrings.txt:657
 msgid "All wheels upgraded automatically"
-msgstr "Alle Radfahrzeuge werden automatisch aufgerüstet"
+msgstr "Alle Radfahrzeuge wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages2.rmsg:589
 #: data/base/messages/resmessages2.rmsg:602
@@ -2632,7 +2632,7 @@ msgstr "Erhöht Schaden von Luftabwehrgeschützen"
 #: data/base/messages/strings/resstrings.txt:672
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "All AA flak weapons upgraded automatically"
-msgstr "Alle Luftabwehrgeschütze werden automatisch aufgerüstet"
+msgstr "Alle Luftabwehrgeschütze wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages2.rmsg:668
 #: data/base/messages/strings/resstrings.txt:678
@@ -2798,7 +2798,7 @@ msgstr "Erhöht die Genauigkeit von Haubitzen"
 #: data/mp/messages/strings/resstrings.txt:843
 #: data/mp/messages/strings/resstrings.txt:851
 msgid "All howitzers upgraded automatically"
-msgstr "Alle Haubitzen werden automatisch aufgerüstet"
+msgstr "Alle Haubitzen wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages2.rmsg:850
 #: data/base/messages/strings/resstrings.txt:802
@@ -3175,7 +3175,7 @@ msgstr "Erhöhte Rumpfpunkte und Geschwindigkeit"
 #: data/base/messages/resmessages3.rmsg:787
 #: data/base/messages/resmessages3.rmsg:800
 msgid "All VTOLs upgraded automatically"
-msgstr "Alle VTOLs werden automatisch aufgerüstet"
+msgstr "Alle VTOLs wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages3.rmsg:811
 msgid "Computer plots and guides shell to target's position"
@@ -3260,7 +3260,7 @@ msgstr "Erhöht Genauigkeit von Lasern"
 #: data/base/messages/resmessages3.rmsg:982
 #: data/base/messages/resmessages3.rmsg:995
 msgid "All lasers upgraded automatically"
-msgstr "Alle Laser werden automatisch aufgerüstet"
+msgstr "Alle Laser wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages3.rmsg:980
 msgid "Improvement in laser emission density"
@@ -3322,7 +3322,7 @@ msgstr "Erhöht Genauigkeit von Lenkraketen"
 #: data/base/messages/resmessages3.rmsg:1151
 #: data/base/messages/resmessages3.rmsg:1164
 msgid "All missiles upgraded automatically"
-msgstr "Alle Lenkraketen werden automatisch aufgerüstet"
+msgstr "Alle Lenkraketen wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages3.rmsg:1071
 msgid "Missile actively seeks and homes on targets"
@@ -3429,7 +3429,7 @@ msgstr "Erhöht Genauigkeit von Magnetwaffen"
 #: data/base/messages/resmessages3.rmsg:1255
 #: data/base/messages/resmessages3.rmsg:1268
 msgid "All rail guns upgraded automatically"
-msgstr "Alle Magnetwaffen werden automatisch aufgerüstet"
+msgstr "Alle Magnetwaffen wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages3.rmsg:1253
 msgid "Improved armor-piercing dart"
@@ -3561,7 +3561,7 @@ msgstr "Erweitert Sensorreichweite"
 #: data/base/messages/resmessagesall.rmsg:85
 #: data/mp/messages/resmessagesall.rmsg:85
 msgid "All sensors upgraded automatically"
-msgstr "Alle Sensoren werden automatisch aufgerüstet"
+msgstr "Alle Sensoren wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessagesall.rmsg:96
 #: data/mp/messages/resmessagesall.rmsg:96
@@ -8306,7 +8306,7 @@ msgstr "Erhöht Reparaturgeschwindigkeit"
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:480
 msgid "All mobile repair units upgraded automatically"
-msgstr "Alle mobilen Reparatureinheiten werden automatisch aufgerüstet"
+msgstr "Alle mobilen Reparatureinheiten wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:539
@@ -11045,7 +11045,7 @@ msgstr "VTOL-Fabrikproduktion zuweisen"
 
 #: src/intorder.c:201
 msgid "Circle"
-msgstr "Kreis"
+msgstr "Kreisen"
 
 #: src/keybind.c:133
 msgid "Sorry, that cheat is disabled in multiplayer games."
