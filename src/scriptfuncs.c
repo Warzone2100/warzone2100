@@ -6411,7 +6411,7 @@ BOOL scrFireWeaponAtObj(void)
 {
 	Vector3i target;
 	BASE_OBJECT *psTarget;
-	WEAPON sWeapon = {0, 0, 0, 0, 0, 0};
+	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0};
 
 	if (!stackPopParams(2, ST_WEAPON, &sWeapon.nStat, ST_BASEOBJECT, &psTarget))
 	{
@@ -6437,7 +6437,7 @@ BOOL scrFireWeaponAtObj(void)
 BOOL scrFireWeaponAtLoc(void)
 {
 	Vector3i target;
-	WEAPON sWeapon = {0, 0, 0, 0, 0, 0};
+	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0};
 
 	if (!stackPopParams(3, ST_WEAPON, &sWeapon.nStat, VAL_INT, &target.x, VAL_INT, &target.y))
 	{
