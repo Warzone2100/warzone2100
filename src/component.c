@@ -1080,7 +1080,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 								if (psShape->nconnectors)
 								{
 									// which barrel is firing? (in case if model have multiple muzzle connectors)
-									UDWORD connector_num = (psDroid->asWeaps[i].shotsFired) % (psShape->nconnectors);
+									unsigned int connector_num = (psDroid->asWeaps[i].shotsFired) % (psShape->nconnectors);
 									
 									/* Now we need to move to the end of the firing barrel (there maybe multiple barrels) */
 									pie_TRANSLATE( psShape->connectors[connector_num].x,

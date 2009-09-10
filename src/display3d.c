@@ -2343,7 +2343,7 @@ void	renderStructure(STRUCTURE *psStructure)
 						         && psStructure->pStructureType->type != REF_REPAIR_FACILITY)
 						{
 							// which barrel is firing? (in case if model has multiple muzzle connectors)
-							UDWORD connector_num = (psStructure->asWeaps[i].shotsFired) % (weaponImd[i]->nconnectors);
+							unsigned int connector_num = (psStructure->asWeaps[i].shotsFired) % (weaponImd[i]->nconnectors);
 
 							/* Now we need to move to the end of the firing barrel (there maybe multiple barrels) */
 							pie_TRANSLATE(weaponImd[i]->connectors[connector_num].x,
