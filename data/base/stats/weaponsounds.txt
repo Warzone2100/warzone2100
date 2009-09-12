@@ -87,3 +87,4 @@ Rocket-VTOL-BB,rocket.ogg,smlexpl.ogg,262
 Rocket-VTOL-HvyA-T,rocket.ogg,lrgexpl.ogg,263
 Rocket-VTOL-LtA-T,rocket.ogg,smlexpl.ogg,264
 Rocket-VTOL-Pod,rocket.ogg,smlexpl.ogg,265
+MG4ROTARY-Pillbox,asltmg.ogg,-1,266
