@@ -434,8 +434,10 @@ static AUDIO_ID_MAP asAudioID[] =
 {ID_SOUND_FIRE_ROAR,                           "freroar.ogg"},
 
         /* Misc */
-
+{ID_SOUND_HELP,									"help.ogg"},
 {ID_SOUND_BARB_SCREAM,                         "scream.ogg"},
+{ID_SOUND_BARB_SCREAM2,							"scream2.ogg"},
+{ID_SOUND_BARB_SCREAM3,							"scream3.ogg"},
 {ID_SOUND_OF_SILENCE,                          "silence.ogg"},
 
         /* Extra */
