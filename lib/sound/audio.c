@@ -517,7 +517,8 @@ static void audio_UpdateQueue( void )
 void audio_Update()
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	Vector3f playerPos, playerForward, playerUp;
+	Vector3f playerPos;
+	float angle;
 	AUDIO_SAMPLE	*psSample, *psSampleTemp;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -526,14 +527,14 @@ void audio_Update()
 	{
 		return;
 	}
-
+	sound_GetError();	// clear error codes
 	audio_UpdateQueue();
-
+	sound_GetError();	// clear error codes
 	// get player position
 	playerPos = audio_GetPlayerPos();
-	audio_GetPlayerOrientation(&playerForward, &playerUp);
+	audio_Get3DPlayerRotAboutVerticalAxis(&angle);
 	sound_SetPlayerPos(playerPos);
-	sound_SetPlayerOrientation(playerForward, playerUp);
+	sound_SetPlayerOrientation(angle);
 
 	// loop through 3D sounds and remove if finished or update position
 	psSample = g_psSampleList;
