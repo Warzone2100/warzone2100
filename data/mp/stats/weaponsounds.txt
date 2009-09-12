@@ -90,7 +90,7 @@ Cyb-Wpn-Rail1,gaussgun.ogg,gaussgun.ogg,269
 Cyb-Wpn-Grenade,cybgrnd.ogg,smlexpl.ogg,270
 Cyb-Wpn-Thermite,flmthrow.ogg,-1,271
 Howitzer-Incenediary,lrgcan.ogg,lrgexpl.ogg,272
-PlasmiteFlamer,flmthrow.ogg,-1,273
+MG4ROTARY-Pillbox,asltmg.ogg,-1,273
 Mortar-Incenediary,mortar.ogg,lrgexpl.ogg,274
 Cannon6TwinAslt,rapdcan.ogg,smlexpl.ogg,275
 Cyb-Hvywpn-Acannon,rapdcan.ogg,smlexpl.ogg,276
@@ -111,3 +111,9 @@ Bomb6-VTOL-EMP,emp.ogg,-1,292
 Bomb5-VTOL-Plasmite,flmthrow.ogg,-1,293
 AAGunLaser,plslsr.ogg,lsrexpl.ogg,295
 MortarEMP,emp.ogg,-1,296
+CommandTurret2,rotlsr.ogg,-1,297
+CommandTurret3,rotlsr.ogg,-1,298
+CommandTurret4,rotlsr.ogg,-1,299
+Cyb-Hvywpn-A-T,rocket.ogg,smlexpl.ogg,300
+Cyb-Hvywpn-PulseLsr,plslsr.ogg,lsrexpl.ogg,301
+Cyb-Hvywpn-RailGunner,gaussgun.ogg,gaussgun.ogg,302
