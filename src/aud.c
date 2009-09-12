@@ -29,7 +29,7 @@
 #include "display3d.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/gamelib/gtime.h"
-
+#include "lib/framework/math_ext.h"
 #include "lib/sound/aud.h"
 #include "lib/sound/tracklib.h"
 
@@ -59,7 +59,7 @@ BOOL audio_ObjectDead(void * psObj)
 		return psBaseObj->died;
 	}
 }
-
+// @FIXME we don't need to do this, since we are not using qsound.
 Vector3f audio_GetPlayerPos(void)
 {
 	Vector3f pos;
@@ -84,7 +84,16 @@ void audio_GetPlayerOrientation(Vector3f* forward, Vector3f* up)
 }
 
 /**
+ * get the angle, and convert it from fixed point PSX crap to a float and then convert that to radians
+ */
+void audio_Get3DPlayerRotAboutVerticalAxis(float *angle)
+{
+	*angle = ((float) player.r.y / DEG_1)* M_PI / 180.0f;
+}
+
+/**
  * Get QSound axial position from world (x,y)
+@FIXME we don't need to do this, since we are not using qsound.
  */
 void audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
@@ -94,6 +103,7 @@ void audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY, SDWORD *piX, SDWORD *piY
 	*piY = world_coord(GetHeightOfMap()) - iWorldY;
 }
 
+// @FIXME we don't need to do this, since we are not using qsound.
 void audio_GetObjectPos(void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
 	BASE_OBJECT	*psBaseObj = (BASE_OBJECT *) psObj;

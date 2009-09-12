@@ -259,11 +259,12 @@ BOOL sound_InitLibrary( void )
 	// Check what version of Open AL we are using
 	PrintOpenALVersion(LOG_SOUND);
 
-
+	alGetError();	// clear error codes
 	alListener3f(AL_POSITION, 0.f, 0.f, 0.f);
 	alListenerfv( AL_VELOCITY, listenerVel );
 	alListenerfv( AL_ORIENTATION, listenerOri );
 	alDistanceModel( AL_NONE );
+	sound_GetError();
 #endif
 	return true;
 }
@@ -302,6 +303,7 @@ void sound_ShutdownLibrary( void )
 
 	debug(LOG_SOUND, "close device");
 	alcCloseDevice(device);
+	sound_GetError();
 #endif
 
 	while( aSample )
@@ -435,8 +437,7 @@ void sound_Update()
 	err = sound_GetDeviceError(device);
 	if (err != ALC_NO_ERROR)
 	{
-		debug(LOG_ERROR, "Error while processing audio context: %s",
-		      alGetString(err));
+		debug(LOG_ERROR, "Error while processing audio context: %s", alGetString(err));
 	}
 #endif
 }
@@ -693,9 +694,9 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	{
 		return false;
 	}
-	volume = ((float)psTrack->iVol / 100.0f);       // each object can have OWN volume!
-	psSample->fVol = volume;                        // save computed volume
-	volume *= sfx_volume;                           // and now take into account the Users sound Prefs.
+	volume = ((float)psTrack->iVol / 100.0f);		// each object can have OWN volume!
+	psSample->fVol = volume;						// save computed volume
+	volume *= sfx_volume;							// and now take into account the Users sound Prefs.
 
 	// We can't hear it, so don't bother creating it.
 	if (volume == 0.0f)
@@ -768,8 +769,8 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 		return false;
 	}
 
-	volume = ((float)psTrack->iVol / 100.f);        // max range is 0-100
-	psSample->fVol = volume;                        // store results for later
+	volume = ((float)psTrack->iVol / 100.f);		// max range is 0-100
+	psSample->fVol = volume;						// store results for later
 
 	// If we can't hear it, then don't bother playing it.
 	if (volume == 0.0f)
@@ -997,6 +998,7 @@ void sound_StopStream(AUDIO_STREAM* stream)
 	assert(stream != NULL);
 
 #if !defined(WZ_NOSOUND)
+	sound_GetError();	// clear error codes
 	// Tell OpenAL to stop playing on the given source
 	alSourceStop(stream->source);
 	sound_GetError();
@@ -1064,6 +1066,7 @@ float sound_GetStreamVolume(const AUDIO_STREAM* stream)
 #if !defined(WZ_NOSOUND)
 	ALfloat volume;
 	alGetSourcef(stream->source, AL_GAIN, &volume);
+	sound_GetError();
 
 	return volume;
 #else
@@ -1082,6 +1085,7 @@ void sound_SetStreamVolume(AUDIO_STREAM* stream, float volume)
 	stream->volume = volume;
 #if !defined(WZ_NOSOUND)
 	alSourcef(stream->source, AL_GAIN, stream->volume);
+	sound_GetError();
 #endif
 }
 
@@ -1267,7 +1271,7 @@ void sound_StopSample(AUDIO_SAMPLE* psSample)
 		debug(LOG_SOUND, "sound_StopSample: sample number (%u) out of range, we probably have run out of available OpenAL sources", psSample->iSample);
 		return;
 	}
-
+	sound_GetError();	// clear error codes
 	// Tell OpenAL to stop playing the given sample
 	alSourceStop(psSample->iSample);
 	sound_GetError();
@@ -1284,10 +1288,29 @@ void sound_SetPlayerPos(Vector3f pos)
 
 /**
  * Sets the player's orientation to use for sound
+ * \param angle the angle in radians
+ @NOTE the up vector is swapped because of qsound idiosyncrasies
+ @FIXME we don't use qsound, but it still is in qsound 'format'...
+*/
+void sound_SetPlayerOrientation(float angle)
+{
+#ifndef WZ_NOSOUND
+
+	const ALfloat ori[6] =
+	{
+		-sinf(angle), cosf(angle), 0.0f,	// forward (at) vector
+		0.0f, 0.0f, 1.0f,					// up vector
+	};
+	alListenerfv(AL_ORIENTATION, ori);
+	sound_GetError();
+#endif
+}
+/**
+ * Sets the player's orientation to use for sound
  * \param forward forward pointing vector
  * \param up      upward pointing vector
  */
-void sound_SetPlayerOrientation(Vector3f forward, Vector3f up)
+void sound_SetPlayerOrientationVector(Vector3f forward, Vector3f up)
 {
 #ifndef WZ_NOSOUND
 	const ALfloat ori[6] =
