@@ -706,9 +706,6 @@ GAMECODE gameLoop(void)
 /* The video playback loop */
 void videoLoop(void)
 {
-	bool bVolKilled = false;
-	float originalVolume = 0.0;
-
 	// There is something really odd here. - Per
 	static BOOL bActiveBackDrop = false;
 
@@ -721,14 +718,6 @@ void videoLoop(void)
 	if (loop_GetVideoStatus())
 	{
 		bQuitVideo = !seq_UpdateFullScreenVideo(NULL);
-	}
-
-	if ( (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB) || bQuitVideo) && !seq_AnySeqLeft() )
-	{
-		/* zero volume before video quit - restore later */
-		originalVolume = sound_GetUIVolume();
-		sound_SetUIVolume(0.0);
-		bVolKilled = true;
 	}
 
 	//toggling display mode disabled in video mode
@@ -826,11 +815,6 @@ void videoLoop(void)
 
 	pie_ScreenFlip(CLEAR_BLACK);// videoloopflip
 
-	/* restore volume after video quit */
-	if (bVolKilled)
-	{
-		sound_SetUIVolume(originalVolume);
-	}
 }
 
 
