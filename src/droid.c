@@ -175,8 +175,10 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 	else if (relativeDamage < 0.0f)
 	{
 		// HACK: Prevent transporters from being destroyed in single player
-		if (!bMultiPlayer && psDroid->droidType == DROID_TRANSPORTER)
+		// FIXME: in projectile routines, turnOffMultiMsg() is called, and bites us here
+		if ( (game.type == CAMPAIGN) && !bMultiPlayer && (psDroid->droidType == DROID_TRANSPORTER) )
 		{
+			debug(LOG_ATTACK, "Transport(%d) saved from death--since it should never die (SP only)", psDroid->id);
 			psDroid->body = 1;
 			return 0.0f;
 		}
