@@ -1,10 +1,17 @@
 0000-00-00: Version 2.2.3
+ * General:
+   * Fix: Correct orientation of sound output in 3D (ticket:220, r8103)
+   * Fix: Some sounds were missing for super cyborgs (ticket:830, r8102)
+   * Fix: Do not sometimes crash due to integer underflow when picking up artifacts (ticket:373, r8084)
  * Multiplayer:
    * Change: Add tileset dependent map preview colours (r8064)
    * Fix: Crash if map preview during map download (r8079, ticket:756)
+   * Fix: Stop ability to bypass unit limits by hiding droids in transports (ticket:921, r8105)
+   * Fix: Cyborg transport being invincible while in the air (ticket:892, r8104)
  * Campaign:
    * Fix: Assert failure on effect cleanup when entering third campaign (ticket:836, r8045)
    * Fix: Infinite loop when transporting a sensor droid to offworld campaign map (ticket:852, ticket:853, r8062)
+   * Fix: Do not lower volume to zero when multiple videos queued up (ticket:670, r8106)
  * Scripting:
    * Change: Added dummy version of function droidCanReach() that always returns true for backward compatibility (r8077)
    * Fix: Do not crash in non-debug mode when calling allianceExists() with bad player ID (r8075)
