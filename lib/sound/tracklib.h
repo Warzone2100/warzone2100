@@ -56,7 +56,8 @@ BOOL	sound_SampleIsFinished( AUDIO_SAMPLE * psSample );
 BOOL	sound_QueueSamplePlaying( void );
 
 void	sound_SetPlayerPos(Vector3f pos);
-void sound_SetPlayerOrientation(Vector3f forward, Vector3f up);
+void sound_SetPlayerOrientationVector(Vector3f forward, Vector3f up);
+void sound_SetPlayerOrientation(float angle);
 void	sound_SetObjectPosition( AUDIO_SAMPLE *psSample );
 
 void *	sound_GetObject( SDWORD iSample );
