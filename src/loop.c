@@ -306,7 +306,21 @@ GAMECODE gameLoop(void)
 						case DROID_TRANSPORTER:
 							if( (psCurr->psGroup != NULL) )
 							{
+								DROID *psDroid = NULL;
+
 								numTransporterDroids[i] += psCurr->psGroup->refCount-1;
+								// and count the units inside it...for MP games only(?)
+								if (bMultiPlayer)
+								{
+									for (psDroid = psCurr->psGroup->psList; psDroid != NULL && psDroid != psCurr; psDroid = psDroid->psGrpNext)
+									{
+										// since in MP we can only have cyborgs in transport, don't need to count DROID_CONSTRUCT as well.
+										if (psDroid->droidType == DROID_CYBORG_CONSTRUCT)
+										{
+											numConstructorDroids[i] += 1;
+										}
+									}
+								}
 							}
 							break;
 						default:
