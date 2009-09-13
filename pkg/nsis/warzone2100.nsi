@@ -290,7 +290,7 @@ SectionGroupEnd
 Section $(TEXT_SecFMVs) SecFMVs
 
   IfFileExists "sequences.wz" +5
-    NSISdl::download "http://download.gna.org/warzone/videos/2.2/warzone2100-sequences-en-hi-2.2-1.wz"               "sequences.wz"
+    NSISdl::download "http://www.il.fontys.nl/~giel/warzone/videos/warzone2100-sequences-en-hi-2.2-1.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
       MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
