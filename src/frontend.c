@@ -527,6 +527,7 @@ BOOL runMultiPlayerMenu(void)
 		break;
 	case FRONTEND_JOIN:
 		ingame.bHostSetup = false;
+		bMultiPlayer = true;
 		changeTitleMode(PROTOCOL);
 		break;
 
