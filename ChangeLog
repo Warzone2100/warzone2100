@@ -1,5 +1,6 @@
 2009-09-13: Version 2.2.3
  * General:
+   * Fix: When ownership of a building changes while we are building it, tell our droids to stop building it. (ticket:895, r8125)
    * Fix: Correct orientation of sound output in 3D (ticket:220, r8103)
    * Fix: Some sounds were missing for super cyborgs (ticket:919, r8110, r8111)
    * Fix: Some sounds were removed for baba screams (ticket:830, r8102)
