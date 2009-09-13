@@ -527,7 +527,9 @@
 
 #elif defined(WZ_OS_UNIX)
 #  include <unistd.h>
-#  include <alloca.h>
+#  if defined(HAVE_ALLOCA_H)
+#    include <alloca.h>
+#  endif
 #endif /* WZ_OS_* */
 
 
