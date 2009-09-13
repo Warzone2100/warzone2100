@@ -47,6 +47,8 @@ AC_GNU_SOURCE
 AX_CHECK_STRLCPY
 AX_CHECK_STRLCAT
 
+AC_CHECK_HEADERS(alloca.h)
+
 # Check for gettext
 AM_GNU_GETTEXT([external])
 AC_PROG_VERSION_CHECK([msgfmt xgettext], [0.15])
