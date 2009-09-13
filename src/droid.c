@@ -1123,8 +1123,8 @@ BOOL droidStartBuild(DROID *psDroid)
 		}
 	}
 
-	//check structure not already built
-	if (psStruct->status != SS_BUILT)
+	//check structure not already built, and we still 'own' it
+	if (psStruct->status != SS_BUILT && psStruct->player ==  psDroid->player)
 	{
 		psDroid->actionStarted = gameTime;
 		psDroid->actionPoints = 0;
@@ -1207,6 +1207,13 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	{
 		psDroid->actionStarted = gameTime;
 		return true;
+	}
+
+	// make sure we still 'own' the building in question
+	if (psStruct->player != psDroid->player)
+	{
+		psDroid->action = DACTION_NONE;		// stop what you are doing fool it isn't ours anymore!
+		return false;
 	}
 
 	constructPoints = constructorPoints(asConstructStats + psDroid->
