@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2009-09-13 14:09+0200\n"
-"PO-Revision-Date: 2009-09-09 21:53+0100\n"
+"PO-Revision-Date: 2009-09-13 14:57+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -6707,7 +6707,7 @@ msgstr "Aufhängung mit Flashlight"
 #: data/mp/messages/strings/names.txt:474
 #: data/mp/messages/strings/names.txt:788
 msgid "Rail Gun Hardpoint"
-msgstr "Stellung mit Magnetgeschütz"
+msgstr "Aufhängung mit Magnetgeschütz"
 
 #: data/base/messages/strings/names.txt:469
 #: data/base/messages/strings/names.txt:761
@@ -9680,40 +9680,34 @@ msgid "Viper Flamer Half-Track"
 msgstr "Viper Flammenwerfer Halbketten"
 
 #: data/mp/messages/resmessages1.rmsg:148
-#, fuzzy
 msgid "Armored guard tower with Lancer AT rocket"
 msgstr "Gepanzerter Wachturm mit Lancer-Antipanzerrakete"
 
 #: data/mp/messages/resmessages1.rmsg:552
 #: data/mp/messages/resmessages1.rmsg:565
 #: data/mp/messages/resmessages2.rmsg:747
-#, fuzzy
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr "Beste Ziele: Fahrzeuge und Stellungen"
+msgstr "Beste Ziele: Fahrzeuge, Aufhängungen"
 
 #: data/mp/messages/resmessages23.rmsg:160
 #: data/mp/messages/resmessages2.rmsg:732
 #: data/mp/messages/resmessages3.rmsg:862
-#, fuzzy
 msgid "Bomb Upgrade"
-msgstr "Verbesserung des Bombenvisiers"
+msgstr "Bombenverbesserung"
 
 #: data/mp/messages/resmessages23.rmsg:161
-#, fuzzy
 msgid "Improved trinitramine explosive formula"
-msgstr "Verbesserte hochexplosive Geschosse"
+msgstr "Verbesserte Trinitraminsprengstoffformel"
 
 #: data/mp/messages/resmessages23.rmsg:162
 #: data/mp/messages/resmessages2.rmsg:734
 #: data/mp/messages/resmessages3.rmsg:864
-#, fuzzy
 msgid "Increases Bombing damage"
-msgstr "Erhöht Schaden von Geschützen"
+msgstr "Erhöht Bombenschaden"
 
 #: data/mp/messages/resmessages3.rmsg:304
-#, fuzzy
 msgid "Armored guard tower with Pulse Laser"
-msgstr "Gepanzerter Wachturm mit Flammenwerfer"
+msgstr "Gepanzerter Wachturm mit Pulslaser"
 
 #: data/mp/messages/resmessagesall.rmsg:186
 msgid "Cyborg Transport Available"
