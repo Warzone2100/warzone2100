@@ -8,7 +8,7 @@ data/texpages/bdrops/backdrop4.png
 data/texpages/bdrops/backdrop6.png
 	- CC0		- Copyright (c) 2010-2011 jorzi
 data/base/texpages/page-25-sky-urban.png
-	- CC BY 2.0 - Adapted from a photo Copyright (c) 2006 Mark A. Vargas
+	- CC0, original work by cybersphinx
 3rdparty/miniupnpc/*
 	- BSD, copyright Thomas Bernard (http://miniupnp.free.fr)
 3rdparty/quesoglc/*
