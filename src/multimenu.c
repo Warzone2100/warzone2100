@@ -757,8 +757,8 @@ static void displayExtraGubbins(UDWORD height)
 
 	if(getDebugMappingStatus())
 	{	// shows # units for *all* players in debug mode ONLY!
-		iV_DrawText("Units", MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-		iV_DrawText("Power", MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+		iV_DrawText(_("Units"), MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+		iV_DrawText(_("Power"), MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	}
 	else
 	{	// shows # units for *yourself* (+ team member?) only.
