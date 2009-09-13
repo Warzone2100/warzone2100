@@ -3,8 +3,9 @@
    * Fix: When ownership of a building changes while we are building it, tell our droids to stop building it. (ticket:895, r8125)
    * Fix: Correct orientation of sound output in 3D (ticket:220, r8103)
    * Fix: Some sounds were missing for super cyborgs (ticket:919, r8110, r8111)
-   * Fix: Some sounds were removed for baba screams (ticket:830, r8102)
+   * Fix: Use all three baba scream sounds again (ticket:830, r8102)
    * Fix: Do not sometimes crash due to integer underflow when picking up artifacts (ticket:373, r8084)
+   * Fix: Some building issues on BSD (r8116, r8133, ticket:817, ticket:823)
  * Multiplayer:
    * Change: Add tileset dependent map preview colours (r8064)
    * Fix: Crash if map preview during map download (r8079, ticket:756)
@@ -13,10 +14,15 @@
  * Campaign:
    * Fix: Assert failure on effect cleanup when entering third campaign (ticket:836, r8045)
    * Fix: Infinite loop when transporting a sensor droid to offworld campaign map (ticket:852, ticket:853, r8062)
+ * Video:
    * Fix: Do not lower volume to zero when multiple videos queued up (ticket:670, r8106)
+ * Translations:
+   * Fix: Make some more strings translateable (r8121, r8129, ticket:906, ticket:907)
+   * Fix: Updated German translation (r8092, r8131)
  * Scripting:
    * Change: Added dummy version of function droidCanReach() that always returns true for backward compatibility (r8077)
    * Fix: Do not crash in non-debug mode when calling allianceExists() with bad player ID (r8075)
+
 
 2009-08-23: Version 2.2.2
  * General:
@@ -41,6 +47,7 @@
    * Fix: Make sure we have a valid color choice for our SP game, when we are coming from a MP game. (r8032)
  * Translations:
    * Fix: Commit Portuguese translation. (r7943, ticket:783)
+   * Fix: Updated Russian translation (r8036, ticket:834)
    * Fix: Updated translations (r7880, r7877, r7875, r7871, r7868, r7863, r7861)
  * Graphics:
    * Fix: Increase video buffer size from 4K to 256K.  This fixes playback of videos with a bitrate larger than ~2000kbps. (r7981)
