@@ -276,6 +276,7 @@ static const char * wz_strsignal(int signum, int sigcode)
 		case SIGUSR2:
 			return "SIGUSR2: User-defined signal 2";
 #if _XOPEN_UNIX
+# if defined(SIGPOLL)
 		case SIGPOLL:
 			switch (sigcode)
 			{
@@ -307,6 +308,7 @@ static const char * wz_strsignal(int signum, int sigcode)
 				default:
 					return "SIGPOLL: Pollable event";
 			}
+# endif
 		case SIGPROF:
 			return "SIGPROF: Profiling timer expired";
 		case SIGSYS:
