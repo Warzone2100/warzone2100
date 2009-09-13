@@ -1388,58 +1388,6 @@ BOOL intRunMultiMenu(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-
-static BOOL intCheckAllianceValid( UBYTE player1, UBYTE player2 )
-{
-	UBYTE	i, iAlliances, iHumanPlayers;
-
-	if ( bMultiPlayer )
-	{
-		return true;
-	}
-
-	/* throw out currently allied or human/computer alliances */
-	if ( (player1 == player2) ||
-		 aiCheckAlliances( player1, player2 ) ||
-		 !(isHumanPlayer(player1) && isHumanPlayer(player2)) )
-	{
-		return false;
-	}
-
-	/* get num human players */
-	iHumanPlayers = 0;
-	for( i=0;i<MAX_PLAYERS;i++ )
-	{
-		if ( isHumanPlayer(i) )
-		{
-			iHumanPlayers++;
-		}
-	}
-
-	/* count number of current alliances */
-	iAlliances = 0;
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		if ( isHumanPlayer(i) )
-		{
-			if ( ((i != player1) && aiCheckAlliances( i, player1 )) ||
-				 ((i != player2) && aiCheckAlliances( i, player2 ))    )
-			{
-				iAlliances++;
-			}
-		}
-	}
-
-	/* return false if total alliances excedds max */
-	if ( iAlliances >= iHumanPlayers-2 )
-	{
-		return false;
-	}
-
-	return true;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 // process clicks made by user.
 void intProcessMultiMenu(UDWORD id)
 {
@@ -1459,16 +1407,10 @@ void intProcessMultiMenu(UDWORD id)
 		switch(alliances[selectedPlayer][i])
 		{
 		case ALLIANCE_BROKEN:
-			if ( intCheckAllianceValid( (UBYTE)selectedPlayer, i ) )
-			{
-				requestAlliance((UBYTE)selectedPlayer,i,true,true);			// request an alliance
-			}
+			requestAlliance((UBYTE)selectedPlayer,i,true,true);			// request an alliance
 			break;
 		case ALLIANCE_INVITATION:
-			if ( intCheckAllianceValid( (UBYTE)selectedPlayer, i ) )
-			{
-				formAlliance((UBYTE)selectedPlayer,i,true,true,true);			// form an alliance
-			}
+			formAlliance((UBYTE)selectedPlayer,i,true,true,true);			// form an alliance
 			break;
 		case ALLIANCE_REQUESTED:
 			breakAlliance((UBYTE)selectedPlayer,i,true,true);		// break an alliance
