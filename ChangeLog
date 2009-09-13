@@ -14,6 +14,8 @@
  * Campaign:
    * Fix: Assert failure on effect cleanup when entering third campaign (ticket:836, r8045)
    * Fix: Infinite loop when transporting a sensor droid to offworld campaign map (ticket:852, ticket:853, r8062)
+ * Graphics:
+   * Change: New skybox for urban maps, this one is licensed CC0, not CC-by 2.0 (ticket:922)
  * Video:
    * Fix: Do not lower volume to zero when multiple videos queued up (ticket:670, r8106)
  * Translations:
