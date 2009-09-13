@@ -21,6 +21,7 @@
  *  Handle clipboard text and data in arbitrary formats
  */
 
+#define SDL_VIDEO_DRIVER_X11
 #include "lib/framework/frame.h"
 
 #include <SDL.h>
