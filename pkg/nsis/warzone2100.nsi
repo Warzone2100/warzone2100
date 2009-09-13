@@ -290,7 +290,7 @@ SectionGroupEnd
 Section $(TEXT_SecFMVs) SecFMVs
 
   IfFileExists "sequences.wz" +5
-    NSISdl::download "http://download.gna.org/warzone/videos/warzone2100-sequences-latest.wz"               "sequences.wz"
+    NSISdl::download "http://download.gna.org/warzone/videos/2.2/warzone2100-sequences-en-hi-2.2-1.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
       MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
@@ -402,7 +402,7 @@ FunctionEnd
 ;  LangString DESC_SecMusicMod ${LANG_ENGLISH} "Download and install music."
 
   LangString TEXT_SecFMVs ${LANG_ENGLISH} "Videos"
-  LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install videos (in-game cutscenes)."
+  LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install Hi-quality videos (in-game cutscenes). 545 MB  A Low-quality version is available at http://wz2100.net/download and the German versions are available at http://warzone2100.de"
 
   LangString TEXT_SecNLS ${LANG_ENGLISH} "NLS"
   LangString DESC_SecNLS ${LANG_ENGLISH} "Support for languages other than English."
@@ -428,7 +428,7 @@ FunctionEnd
 ;  LangString DESC_SecMusicMod ${LANG_DUTCH} "Muziek downloaden en installeren."
 
   LangString TEXT_SecFMVs ${LANG_DUTCH} "FMV"
-  LangString DESC_SecFMVs ${LANG_DUTCH} "FMV downloaden en installeren."
+  LangString DESC_SecFMVs ${LANG_DUTCH} "Download en installeer hoge kwaliteits videos (in-game cutscenes). 545 MiB  Een lage kwaliteits versie is beschikbaar op http://wz2100.net/download en de Duitse versies zijn beschikbaar op http://warzone2100.de"
 
   LangString TEXT_SecNLS ${LANG_DUTCH} "NLS"
   LangString DESC_SecNLS ${LANG_DUTCH} "Ondersteuning voor andere talen dan Engels (Nederlands inbegrepen)."
@@ -454,7 +454,7 @@ FunctionEnd
 ;  LangString DESC_SecMusicMod ${LANG_GERMAN} "Musik herunterladen und installieren."
 
   LangString TEXT_SecFMVs ${LANG_GERMAN} "FMV"
-  LangString DESC_SecFMVs ${LANG_GERMAN} "FMV herunterladen und installieren."
+  LangString DESC_SecFMVs ${LANG_GERMAN} "Englische Videosequenzen herunterladen und installieren (545 MiB). Die deutschen Videos gibt es auf http://warzone2100.de/, kleinere englische in schlechterer QualitÃ¤t auf http://wz2100.net/download."
 
   LangString TEXT_SecNLS ${LANG_GERMAN} "NLS"
   LangString DESC_SecNLS ${LANG_GERMAN} "Unterstützung für Sprachen außer Englisch (Deutsch inbegriffen)."
