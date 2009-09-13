@@ -880,7 +880,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 			if (myResponsibility(player))
 			{
 				SetPlayerTextColor(alliances[selectedPlayer][player], player);
-				sprintf(str, "%d", getNumDroids(player));
+				sprintf(str, "%d", getNumDroids(player) + getNumTransporterDroids(player));
 				iV_DrawText(str, x+MULTIMENU_C10, y+MULTIMENU_FONT_OSET);
 			}
 
