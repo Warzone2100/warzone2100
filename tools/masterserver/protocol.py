@@ -43,15 +43,15 @@ def _socket(family = socket.AF_INET, type = socket.SOCK_STREAM, proto = 0):
 @contextmanager
 def connection(host, port, family = socket.AF_UNSPEC, socktype = socket.SOCK_STREAM):
 	addrs = socket.getaddrinfo(host, port, family, socktype)
-	for i in xrange(len(addrs)):
-		(family, socktype, proto, canonname, sockaddr) = addrs[i]
+	for num, addr in enumerate(addrs):
+		(family, socktype, proto, canonname, sockaddr) = addr
 		with _socket(family, socktype, proto) as s:
 			timeout = s.gettimeout()
 			s.settimeout(10.0)
 			try:
 				s.connect(sockaddr)
 			except socket.timeout:
-				if i == (len(addrs) - 1):
+				if num == (len(addrs) - 1):
 					raise
 				continue
 			s.settimeout(timeout)
