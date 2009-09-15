@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-09-15 23:18+0200\n"
+"POT-Creation-Date: 2009-09-15 23:48+0200\n"
 "PO-Revision-Date: 2008-05-05 12:29+0000\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -10907,21 +10907,21 @@ msgstr "Taani Keel"
 msgid "German"
 msgstr "Saksa Keel"
 
-#: lib/framework/i18n.c:50
-#: lib/framework/i18n.c:104
-#, fuzzy
-msgid "Estonian"
-msgstr "Rumeenia Keel"
-
-#: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:106
+#: lib/framework/i18n.c:51
+#: lib/framework/i18n.c:105
 msgid "English (United Kingdom)"
 msgstr "Inglise Keel (Ühendatud Kuningriik)"
 
-#: lib/framework/i18n.c:53
-#: lib/framework/i18n.c:107
+#: lib/framework/i18n.c:52
+#: lib/framework/i18n.c:106
 msgid "Spanish"
 msgstr "Hispaania Keel"
+
+#: lib/framework/i18n.c:53
+#: lib/framework/i18n.c:107
+#, fuzzy
+msgid "Estonian"
+msgstr "Rumeenia Keel"
 
 #: lib/framework/i18n.c:55
 #: lib/framework/i18n.c:109
