@@ -433,8 +433,16 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (sscanf(token, "%ix%i", &width, &height ) != 2 )
 				{
-					debug(LOG_ERROR, "Invalid parameter specified. (format is: 800x600)");
+					debug(LOG_ERROR, "Invalid parameter specified (format is WIDTHxHEIGHT, e.g. 800x600)");
 					return false;
+				}
+				if (width < 640) {
+					debug(LOG_ERROR, "Screen width < 640 unsupported, using 640");
+					width = 640;
+				}
+				if (height < 480) {
+					debug(LOG_ERROR, "Screen height < 480 unsupported, using 480");
+					width = 480;
 				}
 				// tell the display system of the desired resolution
 				pie_SetVideoBufferWidth(width);
