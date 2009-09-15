@@ -442,7 +442,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				}
 				if (height < 480) {
 					debug(LOG_ERROR, "Screen height < 480 unsupported, using 480");
-					width = 480;
+					height = 480;
 				}
 				// tell the display system of the desired resolution
 				pie_SetVideoBufferWidth(width);
