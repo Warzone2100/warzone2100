@@ -418,6 +418,11 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	bool	bInvert = false;
 	bool	bRepair = false;
 
+	if (!psTarget)
+	{
+		return false;
+	}
+
 	/* check whether turret position inverted vertically on body */
 	if (psAttacker->type == OBJ_DROID && !cyborgDroid((DROID *)psAttacker) && isVtolDroid((DROID *)psAttacker))
 	{
@@ -1299,31 +1304,21 @@ void actionUpdateDroid(DROID *psDroid)
 						//to fix a AA-weapon attack ground unit exploit
 						if (nonNullWeapon[j])
 						{
-							BASE_OBJECT* psActionTarget;
+							BASE_OBJECT* psActionTarget = psDroid->psActionTarget[j];
 
-							if (psDroid->psActionTarget[j])
+							if (!psActionTarget)
 							{
-								psActionTarget = psDroid->psActionTarget[j];
-							}
-							else
-							{
-								psActionTarget = psDroid->psActionTarget[0];
+								if (targetVisibile[0])
+								{
+									psActionTarget = psDroid->psActionTarget[0];
+								}
 							}
 
-							if (validTarget((BASE_OBJECT *)psDroid, psActionTarget, j)
+							if (psActionTarget && validTarget((BASE_OBJECT *)psDroid, psActionTarget, j)
 							 && actionTargetTurret((BASE_OBJECT*)psDroid, psActionTarget, &psDroid->asWeaps[j]))
 							{
 								// In range - fire !!!
-								combFire(&psDroid->asWeaps[j], (BASE_OBJECT *)psDroid,
-										psActionTarget, j);
-							}
-							else if (targetVisibile[0]
-							      && validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], j)
-							      && actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[j]))
-							{
-								// In range - fire !!!
-								combFire(&psDroid->asWeaps[j], (BASE_OBJECT *)psDroid,
-										psDroid->psActionTarget[0], j);
+								combFire(&psDroid->asWeaps[j], (BASE_OBJECT *)psDroid, psActionTarget, j);
 							}
 						}
 					}
