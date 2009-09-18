@@ -1030,11 +1030,11 @@
 		0223BC030CFE3FFA0056EF85 /* unicode.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unicode.c; path = external/quesoglc/src/unicode.c; sourceTree = SOURCE_ROOT; };
 		0223BC220CFE40210056EF85 /* fribidi_char_type.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fribidi_char_type.c; path = external/quesoglc/src/fribidi/fribidi_char_type.c; sourceTree = SOURCE_ROOT; };
 		0223BC230CFE40210056EF85 /* fribidi_mirroring.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fribidi_mirroring.c; path = external/quesoglc/src/fribidi/fribidi_mirroring.c; sourceTree = SOURCE_ROOT; };
-		0223BC240CFE40210056EF85 /* fribidi_tab_char_type_9.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.interfacer; name = fribidi_tab_char_type_9.i; path = external/quesoglc/src/fribidi/fribidi_tab_char_type_9.i; sourceTree = SOURCE_ROOT; };
-		0223BC250CFE40210056EF85 /* fribidi_tab_mirroring.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.interfacer; name = fribidi_tab_mirroring.i; path = external/quesoglc/src/fribidi/fribidi_tab_mirroring.i; sourceTree = SOURCE_ROOT; };
+		0223BC240CFE40210056EF85 /* fribidi_tab_char_type_9.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c.preprocessed; name = fribidi_tab_char_type_9.i; path = external/quesoglc/src/fribidi/fribidi_tab_char_type_9.i; sourceTree = SOURCE_ROOT; };
+		0223BC250CFE40210056EF85 /* fribidi_tab_mirroring.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c.preprocessed; name = fribidi_tab_mirroring.i; path = external/quesoglc/src/fribidi/fribidi_tab_mirroring.i; sourceTree = SOURCE_ROOT; };
 		0223BC260CFE40210056EF85 /* fribidi_types.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fribidi_types.c; path = external/quesoglc/src/fribidi/fribidi_types.c; sourceTree = SOURCE_ROOT; };
 		0223BC270CFE40210056EF85 /* fribidi_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fribidi_types.h; path = external/quesoglc/src/fribidi/fribidi_types.h; sourceTree = SOURCE_ROOT; };
-		0223BC280CFE40210056EF85 /* fribidi_types.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.interfacer; name = fribidi_types.i; path = external/quesoglc/src/fribidi/fribidi_types.i; sourceTree = SOURCE_ROOT; };
+		0223BC280CFE40210056EF85 /* fribidi_types.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c.preprocessed; name = fribidi_types.i; path = external/quesoglc/src/fribidi/fribidi_types.i; sourceTree = SOURCE_ROOT; };
 		0223BC290CFE40210056EF85 /* fribidi_unicode.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fribidi_unicode.h; path = external/quesoglc/src/fribidi/fribidi_unicode.h; sourceTree = SOURCE_ROOT; };
 		0223BC2A0CFE40210056EF85 /* fribidi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fribidi.c; path = external/quesoglc/src/fribidi/fribidi.c; sourceTree = SOURCE_ROOT; };
 		0223BC2B0CFE40210056EF85 /* fribidi.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fribidi.h; path = external/quesoglc/src/fribidi/fribidi.h; sourceTree = SOURCE_ROOT; };
@@ -5284,6 +5284,7 @@
 					__MACOSX__,
 					"$(inherited)",
 				);
+				GCC_VERSION = 4.0;
 				OTHER_CFLAGS = "$(inherited)";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
@@ -5305,6 +5306,7 @@
 					__MACOSX__,
 					"$(inherited)",
 				);
+				GCC_VERSION = 4.0;
 				OTHER_CFLAGS = "$(inherited)";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
