@@ -3073,7 +3073,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					// Take any droid with orders to Return to Repair (DORDER_RTR),
 					// or that have been ordered to this repair facility (DORDER_RTR_SPECIFIED),
 					// or any "lost" unit with one of those two orders.
-					if (((psDroid->order == DORDER_RTR || psDroid->order == DORDER_RTR_SPECIFIED)
+					if (((psDroid->order == DORDER_RTR || psDroid->order == DORDER_RTR_SPECIFIED
+					      && (!psTarget || psTarget == (BASE_OBJECT *)psStructure))
 					  && psDroid->action != DACTION_WAITFORREPAIR && psDroid->action != DACTION_MOVETOREPAIRPOINT
 					  && psDroid->action != DACTION_WAITDURINGREPAIR)
 					  || (psTarget && psTarget == (BASE_OBJECT *)psStructure))
