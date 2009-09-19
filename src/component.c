@@ -587,11 +587,17 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 		ASSERT(ComponentIMD, "No ComponentIMD");
 	}
 
-	if(MountIMD)
+	if (MountIMD)
 	{
 		pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
+
+		/* translate for weapon mount point */
+		if (MountIMD->nconnectors)
+		{
+			pie_TRANSLATE(MountIMD->connectors->x, MountIMD->connectors->z, MountIMD->connectors->y);
+		}
 	}
-	if(ComponentIMD)
+	if (ComponentIMD)
 	{
 		pie_Draw3DShape(ComponentIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 	}
@@ -1049,12 +1055,10 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 							
 							pie_TRANSLATE(0,0,psDroid->asWeaps[i].recoilValue);
 
-							/* translate for weapon mount point if cyborg */
-							if (cyborgDroid(psDroid) && psShape && psShape->nconnectors)
+							/* translate for weapon mount point */
+							if (psShape && psShape->nconnectors)
 							{
-								pie_TRANSLATE( psShape->connectors[0].x,
-											   psShape->connectors[0].z,
-											   psShape->connectors[0].y  );
+								pie_TRANSLATE(psShape->connectors->x, psShape->connectors->z, psShape->connectors->y);
 							}
 
 							/* vtol weapons inverted */
@@ -1079,8 +1083,14 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 								
 								if (psShape->nconnectors)
 								{
-									// which barrel is firing? (in case if model have multiple muzzle connectors)
-									unsigned int connector_num = (psDroid->asWeaps[i].shotsFired) % (psShape->nconnectors);
+									unsigned int connector_num = 0;
+
+									// which barrel is firing if model have multiple muzzle connectors?
+									if (psDroid->asWeaps[i].shotsFired && (psShape->nconnectors > 1))
+									{
+										// shoot first, draw later - substract one shot to get correct results
+										connector_num = (psDroid->asWeaps[i].shotsFired - 1) % (psShape->nconnectors);
+									}
 									
 									/* Now we need to move to the end of the firing barrel (there maybe multiple barrels) */
 									pie_TRANSLATE( psShape->connectors[connector_num].x,

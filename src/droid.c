@@ -3213,16 +3213,20 @@ void	setSelectedCommander(UDWORD commander)
  */
 BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 {
-	iIMDShape *psShape, *psWeaponImd;
+	iIMDShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
 
 	CHECK_DROID(psDroid);
 
-	psShape = BODY_IMD(psDroid, psDroid->player);
-	psWeaponImd = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pIMD;
-
-	if(psShape && psShape->nconnectors)
+	if (psBodyImd && psBodyImd->nconnectors)
 	{
 		Vector3f barrel = {0.0f, 0.0f, 0.0f};
+		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
+
+		if (psDroid->asWeaps[weapon_slot].nStat)
+		{
+			psMountImd = WEAPON_MOUNT_IMD(psDroid, weapon_slot);
+			psWeaponImd = WEAPON_IMD(psDroid, weapon_slot);
+		}
 
 		pie_MatBegin();
 
@@ -3232,18 +3236,36 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 		pie_MatRotY( DEG( psDroid->direction ) );
 		pie_MatRotX( DEG( psDroid->pitch ) );
 		pie_MatRotZ( DEG( -psDroid->roll ) );
-		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
-					  -psShape->connectors[weapon_slot].y);//note y and z flipped
+		pie_TRANSLATE(psBodyImd->connectors[weapon_slot].x, -psBodyImd->connectors[weapon_slot].z,
+					 -psBodyImd->connectors[weapon_slot].y);//note y and z flipped
 
-		//matrix = the gun and turret mount on the body
+		//matrix = the weapon[slot] mount on the body
 		pie_MatRotY(DEG(psDroid->asWeaps[weapon_slot].rotation));	// +ve anticlockwise
-		pie_MatRotX(DEG(psDroid->asWeaps[weapon_slot].pitch));		// +ve up
-		pie_MatRotZ(DEG(0));
 
-		//matrix = the muzzle mount on turret
-		if( psWeaponImd && psWeaponImd->nconnectors )
+		// process turret mount
+		if (psMountImd && psMountImd->nconnectors)
 		{
-			barrel = Vector3f_Init(psWeaponImd->connectors->x, -psWeaponImd->connectors->y, -psWeaponImd->connectors->z);
+			pie_TRANSLATE(psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
+		}		
+
+		//matrix = the turret connector for the gun
+		pie_MatRotX(DEG(psDroid->asWeaps[weapon_slot].pitch));		// +ve up
+
+		//process the gun
+		if (psWeaponImd && psWeaponImd->nconnectors)
+		{
+			unsigned int connector_num = 0;
+
+			// which barrel is firing if model have multiple muzzle connectors?
+			if (psDroid->asWeaps[weapon_slot].shotsFired && (psWeaponImd->nconnectors > 1))
+			{
+				// shoot first, draw later - substract one shot to get correct results
+				connector_num = (psDroid->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
+			}
+			
+			barrel = Vector3f_Init(psWeaponImd->connectors[connector_num].x,
+									-psWeaponImd->connectors[connector_num].y,
+									-psWeaponImd->connectors[connector_num].z);
 		}
 
 		pie_RotateTranslate3f(&barrel, muzzle);
