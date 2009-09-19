@@ -5539,18 +5539,21 @@ BOOL getLasSatExists(UDWORD player)
 /* calculate muzzle tip location in 3d world */
 BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int weapon_slot)
 {
-	iIMDShape *psShape = psStructure->pStructureType->pIMD, *psWeaponImd = NULL;
+	iIMDShape *psShape = psStructure->pStructureType->pIMD;
 
 	CHECK_STRUCTURE(psStructure);
-
-	if (psStructure->asWeaps[weapon_slot].nStat > 0)
-	{
-		psWeaponImd = asWeaponStats[psStructure->asWeaps[weapon_slot].nStat].pIMD;
-	}
 
 	if(psShape && psShape->nconnectors)
 	{
 		Vector3f barrel = {0.0f, 0.0f, 0.0f};
+		unsigned int nWeaponStat = psStructure->asWeaps[weapon_slot].nStat;
+		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
+
+		if (nWeaponStat)
+		{
+			psWeaponImd = asWeaponStats[nWeaponStat].pIMD;
+			psMountImd = asWeaponStats[nWeaponStat].pMountGraphic;
+		}
 
 		pie_MatBegin();
 
@@ -5563,17 +5566,35 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int w
 		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
 					-psShape->connectors[weapon_slot].y);//note y and z flipped
 
-		//matrix = the gun and turret mount on the body
+		//matrix = the weapon[slot] mount on the body
 		pie_MatRotY(DEG(psStructure->asWeaps[weapon_slot].rotation));	// +ve anticlockwise
-		pie_MatRotX(DEG(psStructure->asWeaps[weapon_slot].pitch));	// +ve up
-		pie_MatRotZ(DEG(0));
 
-		//matrix = the muzzle mount on turret
-		if( psWeaponImd && psWeaponImd->nconnectors )
+		// process turret mount
+		if (psMountImd && psMountImd->nconnectors)
 		{
-			barrel = Vector3f_Init(psWeaponImd->connectors->x, -psWeaponImd->connectors->y, -psWeaponImd->connectors->z);
+			pie_TRANSLATE(psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
 		}
 
+		//matrix = the turret connector for the gun
+		pie_MatRotX(DEG(psStructure->asWeaps[weapon_slot].pitch));	// +ve up
+		
+		//process the gun
+		if (psWeaponImd && psWeaponImd->nconnectors)
+		{
+			unsigned int connector_num = 0;
+
+			// which barrel is firing if model have multiple muzzle connectors?
+			if (psStructure->asWeaps[weapon_slot].shotsFired && (psWeaponImd->nconnectors > 1))
+			{
+				// shoot first, draw later - substract one shot to get correct results
+				connector_num = (psStructure->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
+			}
+			
+			barrel = Vector3f_Init(psWeaponImd->connectors[connector_num].x,
+									-psWeaponImd->connectors[connector_num].y,
+									-psWeaponImd->connectors[connector_num].z);
+		}
+		
 		pie_RotateTranslate3f(&barrel, muzzle);
 		muzzle->z = -muzzle->z;
 
