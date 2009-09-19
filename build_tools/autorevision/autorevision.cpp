@@ -41,6 +41,7 @@ using namespace std;
     #include <cstdlib>
     #include <climits>
     #include <cerrno>
+    #include <unistd.h>
     inline void set_env(const char* k, const char* v) { setenv(k, v, 1); };
 #endif
 
