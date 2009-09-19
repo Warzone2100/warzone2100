@@ -25,6 +25,7 @@
 #include "lib/framework/frame.h"
 
 #include <SDL.h>
+#include <sqlite3.h>
 
 #if defined(WZ_OS_WIN)
 // FIXME HACK Workaround DATADIR definition in objbase.h
@@ -1014,6 +1015,7 @@ int main(int argc, char *argv[])
 
 	// Register the PhysicsFS implementation of the SQLite VFS class with
 	// SQLite's VFS system as the default (non-zero=default, zero=default).
+	debug(LOG_NEVER, "SQLite versions, compile time: %s, link time: %s", SQLITE_VERSION, sqlite3_libversion());
 	sqlite3_register_physfs_vfs(1);
 
 	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFSAA(), war_getFullscreen(), war_GetVsync()))
