@@ -632,7 +632,7 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "groupAddArea",		scrGroupAddArea,		VAL_VOID,
 		6, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT,VAL_INT, VAL_INT,VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
-	{ "groupAddAreaNoGroup",scrGroupAddArea,		VAL_VOID,
+	{ "groupAddAreaNoGroup",	scrGroupAddAreaNoGroup,		VAL_VOID,
 		6, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT,VAL_INT, VAL_INT,VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 	{ "groupAddGroup",		scrGroupAddGroup,		VAL_VOID,
