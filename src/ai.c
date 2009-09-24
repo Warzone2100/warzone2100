@@ -195,7 +195,7 @@ BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_S
 		{
 			continue;
 		}
-		if (aiObjHasRange(psObj, psTemp, weapon_slot))
+		if (aiObjHasRange(psObj, psTemp, weapon_slot) && visibleObject(psSensor, psTemp, false))
 		{
 			int distSq = objPosDiffSq(psTemp->pos, psObj->pos);
 
