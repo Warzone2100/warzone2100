@@ -620,6 +620,7 @@ static void pie_DrawShadows(void)
 {
 	const float width = pie_GetVideoBufferWidth();
 	const float height = pie_GetVideoBufferHeight();
+	GLenum op_depth_pass_front = GL_INCR, op_depth_pass_back = GL_DECR;
 
 	pie_SetTexturePage(TEXPAGE_NONE);
 
@@ -632,39 +633,57 @@ static void pie_DrawShadows(void)
 	glEnable(GL_STENCIL_TEST);
 
 	// Check if we have the required extensions
-	if (GLEE_EXT_stencil_two_side
-	 && GLEE_EXT_stencil_wrap)
+	if (GLEE_EXT_stencil_wrap)
+	{
+		op_depth_pass_front = GL_INCR_WRAP_EXT;
+		op_depth_pass_back = GL_DECR_WRAP_EXT;
+	}
+
+	// generic 1-pass version
+	if (GLEE_EXT_stencil_two_side)
 	{
 		glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 		glDisable(GL_CULL_FACE);
 		glStencilMask(~0);
 		glActiveStencilFaceEXT(GL_BACK);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_DECR_WRAP_EXT);
+		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_back);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
 		glActiveStencilFaceEXT(GL_FRONT);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR_WRAP_EXT);
+		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_front);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
 
 		pie_ShadowDrawLoop();
+		
 		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
-
 	}
+	// check for ATI-specific 1-pass version
+	else if (GLEE_ATI_separate_stencil)
+	{
+		glDisable(GL_CULL_FACE);
+		glStencilMask(~0);
+		glStencilOpSeparateATI(GL_BACK, GL_KEEP, GL_KEEP, op_depth_pass_back);
+		glStencilOpSeparateATI(GL_FRONT, GL_KEEP, GL_KEEP, op_depth_pass_front);
+		glStencilFunc(GL_ALWAYS, 0, ~0);
+
+		pie_ShadowDrawLoop();	
+	}
+	// fall back to default 2-pass version
 	else
 	{
-		// Setup stencil for back faces.
 		glStencilMask(~0);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
 		glEnable(GL_CULL_FACE);
+		
+		// Setup stencil for front-facing polygons
 		glCullFace(GL_BACK);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_front);
 
 		pie_ShadowDrawLoop();
 
-		// Setup stencil for front faces.
+		// Setup stencil for back-facing polygons
 		glCullFace(GL_FRONT);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
+		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_back);
 
-		// Draw shadows again
 		pie_ShadowDrawLoop();
 	}
 
