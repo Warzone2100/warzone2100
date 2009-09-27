@@ -137,7 +137,7 @@ BOOL screenInitialise(
 				break;
 			case 16:
 				debug( LOG_ERROR, "Warning: Using colour depth of %i instead of %i.", bpp, screenDepth );
-				debug( LOG_ERROR, "         You will experience graphics glitches!" );
+				debug( LOG_ERROR, "You will experience graphics glitches or crashes!" );
 				SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
 				SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 6 );
 				SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
@@ -156,13 +156,16 @@ BOOL screenInitialise(
 	}
 
 	screen = SDL_SetVideoMode(width, height, bpp, video_flags);
-	if ( !screen ) {
+	if ( !screen )
+	{
 		debug( LOG_ERROR, "Error: SDL_SetVideoMode failed (%s).", SDL_GetError() );
 		return false;
 	}
 	if ( SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1)
 	{
 		debug( LOG_ERROR, "OpenGL initialization did not give double buffering!" );
+		debug( LOG_ERROR, "Double buffering is required for this game!");
+		exit(1);
 	}
 	// Note that no initialisation of GLee is required, since this is handled automatically.
 
@@ -175,6 +178,8 @@ BOOL screenInitialise(
 		ssprintf(buf, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
 		addDumpInfo(buf);
 		ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
+		addDumpInfo(buf);
+		ssprintf(buf, "Video Mode %d x %d (%d bpp) (%s)", width, height, bpp, fullScreen ? "fullscreen" : "window");
 		addDumpInfo(buf);
 		/* Dump information about OpenGL implementation to the console */
 		debug(LOG_3D, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
