@@ -76,7 +76,11 @@
 # else
 #  include <AL/al.h>
 # endif
-
+#if defined(WZ_OS_MAC)
+#include <OpenGL/glu.h>
+#else
+#include <GL/glu.h>
+#endif
 // stick this in sequence.h perhaps?
 typedef struct
 {
@@ -296,6 +300,7 @@ static void video_write(bool update)
 	const int video_width = videodata.ti.frame_width;
 	const int video_height = videodata.ti.frame_height;
 	yuv_buffer yuv;
+	GLenum errCode = glGetError();		//clear error codes out
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, video_texture);
@@ -330,6 +335,13 @@ static void video_write(bool update)
 
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video_width,
 				video_height, GL_RGBA, GL_UNSIGNED_BYTE, RGBAframe);
+
+		errCode = glGetError();
+
+		if (errCode != GL_NO_ERROR)
+		{
+			debug(LOG_ERROR, "OpenGL error uploading frame: %s, (0x%0x)", gluErrorString(errCode), errCode);
+		}
 	}
 
 	glDisable(GL_DEPTH_TEST);
