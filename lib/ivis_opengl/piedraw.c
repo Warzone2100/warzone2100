@@ -128,7 +128,6 @@ static unsigned int nb_tshapes = 0;
 
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DECL_UNUSED PIELIGHT specular, int pieFlag, int pieFlagData)
 {
-	Vector3f *pVertices, *pPixels, scrPoints[pie_MAX_VERTICES];
 	iIMDPoly *pPolys;
 	BOOL light = lighting;
 
@@ -179,41 +178,20 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 	}
 
-	if (pieFlag & pie_RAISE)
-	{
-		pieFlagData = (shape->max.y * (pie_RAISE_SCALE - pieFlagData)) / pie_RAISE_SCALE;
-	}
-
 	pie_SetTexturePage(shape->texpage);
 
-	//now draw the shape
-	//rotate and project points from shape->points to scrPoints
-	for (pVertices = shape->points, pPixels = scrPoints;
-			pVertices < shape->points + shape->npoints;
-			pVertices++, pPixels++)
+	if (pieFlag & pie_HEIGHT_SCALED)	// construct
 	{
-		float tempY = pVertices->y;
-		if (pieFlag & pie_RAISE)
-		{
-			tempY = pVertices->y - pieFlagData;
-			if (tempY < 0)
-				tempY = 0;
-
-		}
-		else if ( (pieFlag & pie_HEIGHT_SCALED) && pVertices->y > 0 )
-		{
-			tempY = (pVertices->y * pieFlagData) / pie_RAISE_SCALE;
-		}
-		pPixels->x = pVertices->x;
-		pPixels->y = tempY;
-		pPixels->z = pVertices->z;
+		glScalef(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f);
+	}
+	if (pieFlag & pie_RAISE)		// collapse
+	{
+		glTranslatef(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) / pie_RAISE_SCALE, 1.0f);
 	}
 
 	glColor4ubv(colour.vector);	// Only need to set once for entire model
 
-	for (pPolys = shape->polys;
-			pPolys < shape->polys + shape->npolys;
-			pPolys++)
+	for (pPolys = shape->polys; pPolys < shape->polys + shape->npolys; pPolys++)
 	{
 		Vector2f	texCoords[pie_MAX_VERTICES_PER_POLYGON];
 		Vector3f	vertexCoords[pie_MAX_VERTICES_PER_POLYGON];
@@ -224,9 +202,9 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 				n < pPolys->npnts;
 				n++, index++)
 		{
-			vertexCoords[n].x = scrPoints[*index].x;
-			vertexCoords[n].y = scrPoints[*index].y;
-			vertexCoords[n].z = scrPoints[*index].z;
+			vertexCoords[n].x = shape->points[*index].x;
+			vertexCoords[n].y = shape->points[*index].y;
+			vertexCoords[n].z = shape->points[*index].z;
 			texCoords[n].x = pPolys->texCoord[n].x;
 			texCoords[n].y = pPolys->texCoord[n].y;
 		}

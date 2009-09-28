@@ -2147,7 +2147,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			if (structureIsBlueprint(psStructure))
 			{
 				pieFlag = pie_TRANSLUCENT;
-				pieFlagData = 120;
+				pieFlagData = BLUEPRINT_OPACITY;
 			}
 			else
 			{
@@ -2169,16 +2169,15 @@ void	renderStructure(STRUCTURE *psStructure)
 		objectShimmy((BASE_OBJECT *)psStructure);
 	}
 
-	//first check if partially built - ANOTHER HACK!
-	if (psStructure->status == SS_BEING_BUILT
-	    || psStructure->status == SS_BEING_DEMOLISHED
-	    || (psStructure->status == SS_BEING_BUILT && psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR))
+	if (defensive)
 	{
-		if (defensive)
-		{
-			temp = strImd->points;
-			strImd->points = alteredPoints;
-		}
+		temp = strImd->points;
+		strImd->points = alteredPoints;
+	}
+
+	//first check if partially built - ANOTHER HACK!
+	if (psStructure->status == SS_BEING_BUILT || psStructure->status == SS_BEING_DEMOLISHED)
+	{
 		pie_Draw3DShape(strImd, 0, playerFrame, buildingBrightness, WZCOL_BLACK, pie_HEIGHT_SCALED | pie_SHADOW,
 		                (SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE));
 		if (defensive)
@@ -2188,11 +2187,6 @@ void	renderStructure(STRUCTURE *psStructure)
 	}
 	else
 	{
-		if (defensive)
-		{
-			temp = strImd->points;
-			strImd->points = alteredPoints;
-		}
 		if (structureIsBlueprint(psStructure))
 		{
 			pieFlag = pie_TRANSLUCENT;
@@ -2257,12 +2251,8 @@ void	renderStructure(STRUCTURE *psStructure)
 					mountImd[0] =  psStructure->pStructureType->pECM->pMountGraphic;
 					flashImd[0] = NULL;
 				}
-			}
-
-			if (weaponImd[0] == NULL)
-			{
 				//check for sensor
-				if (psStructure->pStructureType->pSensor != NULL)
+				else if (psStructure->pStructureType->pSensor != NULL)
 				{
 					weaponImd[0] =  psStructure->pStructureType->pSensor->pIMD;
 					/* No recoil for sensors */
