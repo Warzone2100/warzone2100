@@ -61,8 +61,6 @@ typedef struct _iSurface {
 //*************************************************************************
 
 typedef struct {
-	int nFrames;
-	int playbackRate;
 	int textureWidth;
 	int textureHeight;
 } iTexAnim;
