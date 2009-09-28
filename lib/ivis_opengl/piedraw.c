@@ -213,7 +213,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 
 		if (frame != 0 && pPolys->flags & iV_IMD_TEXANIM)
 		{
-			frame %= pPolys->texAnim.nFrames;
+			frame %= shape->numFrames;
 
 			if (frame > 0)
 			{

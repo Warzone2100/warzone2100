@@ -167,19 +167,17 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			ASSERT(tWidth > 0, "%s: texture width = %d", GetLastResourceFilename(), tWidth);
 			ASSERT(tHeight > 0, "%s: texture height = %d (width=%d)", GetLastResourceFilename(), tHeight, tWidth);
 
-			/* Assumes same number of frames per poly */
+			/* Must have same number of frames and same playback rate for all polygons */
 			s->numFrames = nFrames;
-			poly->texAnim.nFrames = nFrames;
-			poly->texAnim.playbackRate =pbRate;
-
-			/* Uses Max metric playback rate */
 			s->animInterval = pbRate;
+
 			poly->texAnim.textureWidth = tWidth;
 			poly->texAnim.textureHeight = tHeight;
 		}
 		else
 		{
-			poly->texAnim.nFrames = 0;
+			poly->texAnim.textureWidth = 0;
+			poly->texAnim.textureHeight = 0;
 		}
 
 		// PC texture coord routine
