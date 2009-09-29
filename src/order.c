@@ -2122,8 +2122,8 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT(psDroid != NULL, "Invalid unit pointer");
-	ASSERT(validOrderForLoc(order), "Invalid order for location");
+	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid unit pointer");
+	ASSERT_OR_RETURN(, validOrderForLoc(order), "Invalid order for location");
 
 	orderClearDroidList(psDroid);
 
