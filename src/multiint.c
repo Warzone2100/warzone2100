@@ -1624,18 +1624,8 @@ static BOOL changeColour(UBYTE player, UBYTE col)
 			return true;
 		}
 	}
-	debug(LOG_ERROR, "Failed to swap colours for player %d, position %d", (int)player, (int)col);
+	debug(LOG_ERROR, "Failed to swap colours for player %d, colour %d", (int)player, (int)col);
 	return false;
-	if (!safeToUseColour(player, col))
-	{
-		debug(LOG_NET, "Unavailable colour %d", (int)col);
-		return false;
-	}
-
-	setPlayerColour(player, col);
-	NETBroadcastPlayerInfo(player);
-
-	return true;
 }
 
 static BOOL SendColourRequest(UBYTE player, UBYTE col)

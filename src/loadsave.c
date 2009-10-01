@@ -90,7 +90,6 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 static BOOL _addLoadSave		(BOOL bLoad, const char *sSearchPath, const char *sExtension, const char *title);
-static BOOL _runLoadSave		(BOOL bResetMissionWidgets);
 static void displayLoadBanner	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayLoadSlot		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayLoadSaveEdit	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -134,12 +133,10 @@ BOOL bLoad;
 	case LOAD_FRONTEND:
 	case LOAD_MISSIONEND:
 	case LOAD_INGAME:
-	case LOAD_FORCE:
 		bLoad = true;
 		break;
 	case SAVE_MISSIONEND:
 	case SAVE_INGAME:
-	case SAVE_FORCE:
 	default:
 		bLoad = false;
 		break;
@@ -378,13 +375,6 @@ BOOL closeLoadSave(void)
 	return true;
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-BOOL runLoadSave(BOOL bResetMissionWidgets)
-{
-	return _runLoadSave(bResetMissionWidgets);
-}
-
-
 /***************************************************************************
 	Delete a savegame.  saveGameName should be a .gam extension save game
 	filename reference.  We delete this file, any .es file with the same
@@ -434,9 +424,9 @@ void deleteSaveGame(char* saveGameName)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Returns true if cancel pressed or a valid game slot was selected.
-// if when returning true strlen(sRequestResult) != 0 then a valid game
-// slot was selected otherwise cancel was selected..
-static BOOL _runLoadSave(BOOL bResetMissionWidgets)
+// if when returning true strlen(sRequestResult) != 0 then a valid game slot was selected
+// otherwise cancel was selected..
+BOOL runLoadSave(BOOL bResetMissionWidgets)
 {
 	UDWORD		id=0;
 	W_EDBINIT	sEdInit;
@@ -451,14 +441,14 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 	// cancel this operation...
 	if(id == LOADSAVE_CANCEL || CancelPressed() )
 	{
-		goto failure;
+		goto cleanup;
 	}
 
 	// clicked a load entry
 	if( id >= LOADENTRY_START  &&  id <= LOADENTRY_END )
 	{
 
-		if(mode)								// Loading, return that entry.
+		if (mode)								// Loading, return that entry.
 		{
 			if( ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText )
 			{
@@ -466,15 +456,11 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 			}
 			else
 			{
-				goto failure;				// clicked on an empty box
+				goto cleanup;				// clicked on an empty box
 			}
 
-			if( bLoadSaveMode == LOAD_FORCE || bLoadSaveMode ==SAVE_FORCE )
-			{
-				goto successforce;				// it's a force, dont check the cd.
-			}
-				goto success;
-			}
+			goto success;
+		}
 		else //  SAVING!add edit box at that position.
 		{
 
@@ -538,8 +524,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 		}
 
 
-		// scan to see if that game exists in another slot, if
-		// so then fail.
+		// scan to see if that game exists in another slot, if so then fail.
 		sstrcpy(sTemp, ((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText);
 
 		for(i=LOADENTRY_START;i<LOADENTRY_END;i++)
@@ -572,30 +557,19 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 				deleteSaveGame(sDelete);	//only delete game if a new game fills the slot
 			}
 		}
-		else
-		{
-			goto failure;				// we entered a blank name..
-		}
-
-		// we're done. saving.
-		closeLoadSave();
-		bRequestLoad = false;
-        if (bResetMissionWidgets && widgGetFromID(psWScreen,IDMISSIONRES_FORM) == NULL)
-        {
-            resetMissionWidgets();			//reset the mission widgets here if necessary
-        }
-		return true;
+		
+		goto cleanup;
 	}
 
 	return false;
 
 // failed and/or cancelled..
-failure:
+cleanup:
 	closeLoadSave();
 	bRequestLoad = false;
     if (bResetMissionWidgets && widgGetFromID(psWScreen,IDMISSIONRES_FORM) == NULL)
 	{
-		resetMissionWidgets();
+		resetMissionWidgets();			//reset the mission widgets here if necessary
 	}
     return true;
 
@@ -604,7 +578,6 @@ success:
 	campaign = getCampaign(sRequestResult);
 	setCampaignNumber(campaign);
 	debug(LOG_WZ, "Set campaign for %s to %u", sRequestResult, campaign);
-successforce:
 	closeLoadSave();
 	bRequestLoad = true;
 	return true;

@@ -3370,10 +3370,8 @@ SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec)
 		{
 			return DSS_FIREDES_SET;
 		}
-		return DSS_NONE;
 		break;
 	default:
-		return DSS_NONE;
 		break;
 	}
 
