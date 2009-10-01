@@ -33,9 +33,7 @@ LOAD_FRONTEND,
 LOAD_MISSIONEND,
 SAVE_MISSIONEND,
 LOAD_INGAME,
-SAVE_INGAME,
-LOAD_FORCE,
-SAVE_FORCE
+SAVE_INGAME
 }LOADSAVE_MODE;
 
 /***************************************************************************/
