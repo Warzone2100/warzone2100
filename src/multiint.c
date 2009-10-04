@@ -1820,14 +1820,7 @@ UDWORD addPlayerBox(BOOL players)
 		return 0;
 	}
 
-	if(bHosted || ingame.localJoiningInProgress)
-	{
-		NETplayerInfo();
-	}
-	else
-	{
-		NETplayerInfo();			// get player info.
-	}
+	NETplayerInfo();		// get player info.
 
 	widgDelete(psWScreen,MULTIOP_PLAYERS);		// del player window
 	widgDelete(psWScreen,FRONTEND_SIDETEXT2);	// del text too,
