@@ -3677,12 +3677,6 @@ static void renderSurroundings(void)
 	// Set the camera position
 	pie_MATTRANS(0, 0, distance);
 
-	// Rotate for the player and for the wind
-	pie_MatRotZ(player.r.z);
-	pie_MatRotX(player.r.x);
-	pie_MatRotY(player.r.y);
-
-	// Skybox //
 	// rotate it
 	pie_MatRotY(DEG(1) * wind);
 
