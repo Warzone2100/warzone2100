@@ -114,6 +114,7 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 
 	player2dpid[player] = 0;					// remove player, make computer controlled
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
+	ingame.DataIntegrity[player] = false;
 
 	(void)setPlayerName(player,"");				//clear custom player name (will use default instead)
 
@@ -288,6 +289,8 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		ASSERT( NetPlay.playercount<=MAX_PLAYERS,"Too many players!" );
 
 		// setup data for this player, then broadcast it to the other players.
+		// make darn sure this array is cleared or we deadlock in this loop
+		// FIXME: rand() makes no sense for us, and should be removed.
 		do
 		{
 			// Randomly allocate a player to this new machine
@@ -311,6 +314,65 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 	return true;
 }
 
+bool sendDataCheck(void)
+{
+	int i = 0;
+	uint32_t	playerdpid = NetPlay.dpidPlayer;
+
+	NETbeginEncode(NET_DATA_CHECK, HOST_DPID);		// only need to send to HOST
+	for(i = 0; i < DATA_MAXDATA; i++)
+	{
+		NETuint32_t(&DataHash[i]);
+	}
+		NETuint32_t(&playerdpid);
+	NETend();
+	debug(LOG_NET, "sending hash to host");
+	return true;
+}
+
+bool recvDataCheck(void)
+{
+	int i = 0;
+	uint32_t	playerdpid;
+	uint32_t tempBuffer[DATA_MAXDATA] = {0};
+
+	NETbeginDecode(NET_DATA_CHECK);
+	for(i = 0; i < DATA_MAXDATA; i++)
+	{
+		NETuint32_t(&tempBuffer[i]);
+	}
+		NETuint32_t(&playerdpid);
+	NETend();
+
+	if (NetPlay.bHost)
+	{
+		for (i = 0; i < MAX_PLAYERS; i++)
+		{
+			if (player2dpid[i] == playerdpid)
+			{
+				break;
+			}
+		}
+		ASSERT_OR_RETURN( , i <= MAX_PLAYERS, "We could not find this player (dpid %u)!", playerdpid );
+
+		if (memcmp(DataHash, tempBuffer, sizeof(DataHash)))
+		{
+			char msg[256] = {'\0'};
+
+			sprintf(msg, _("Kicking player, %s, because data doesn't match!"), getPlayerName(i));
+			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+
+			kickPlayer(playerdpid, _("Data doesn't match!"), ERROR_WRONGDATA);
+			debug(LOG_WARNING, "Kicking Player %s,(dpid=%u), they are using a mod or have modified their data.", getPlayerName(i), playerdpid);
+		}
+		else
+		{
+			debug(LOG_NET, "DataCheck message received and verified for player %s (dpid=%u)", getPlayerName(i), playerdpid);
+			ingame.DataIntegrity[i] = true;
+		}
+	}
+	return true;
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // Setup Stuff for a new player.
@@ -322,6 +384,7 @@ void setupNewPlayer(UDWORD dpid, UDWORD player)
 	player2dpid[player] = dpid;							// assign them a player too.
 	ingame.PingTimes[player] =0;						// reset ping time
 	ingame.JoiningInProgress[player] = true;			// note that player is now joining.
+	ingame.DataIntegrity[player] = false;
 
 	for(i=0;i<MAX_PLAYERS;i++)							// set all alliances to broken.
 	{

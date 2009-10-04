@@ -840,6 +840,9 @@ static void addGames(void)
 		case ERROR_WRONGVESION:
 			txt = _("Wrong Game Version!");
 			break;
+		case ERROR_WRONGDATA:
+			txt = _("Wrong data/mod detected by Host.");
+			break;
 		case ERROR_WRONGPASSWORD:
 			txt = _("Incorrect Password!");
 			break;
@@ -2428,7 +2431,7 @@ static void processMultiopWidgets(UDWORD id)
 		sstrcpy(game.map, widgGetString(psWScreen, MULTIOP_MAP));		// add the name
 
 		resetReadyStatus(false);
-
+		resetDataHash();
 		removeWildcards((char*)sPlayer);
 
 		hostCampaign((char*)game.name,(char*)sPlayer);
@@ -2655,6 +2658,9 @@ void startMultiplayerGame(void)
 		}
 
 		NEThaltJoining();							// stop new players entering.
+		ingame.TimeEveryoneIsInGame = 0;
+		ingame.isAllPlayersDataOK = false;
+		memset(&ingame.DataIntegrity, 0x0, sizeof(ingame.DataIntegrity));
 		SendFireUp();								//bcast a fireup message
 	}
 
@@ -2770,11 +2776,13 @@ void frontendMultiMessages(void)
 			NETend();
 
 			ingame.JoiningInProgress[player_id] = false;
+			ingame.DataIntegrity[player_id] = false;
 			break;
 		}
 		case NET_FIREUP:					// campaign game started.. can fire the whole shebang up...
 			if(ingame.localOptionsReceived)
 			{
+				resetDataHash();
 				decideWRF();
 
 				// set the fog correctly..

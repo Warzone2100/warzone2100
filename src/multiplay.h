@@ -53,7 +53,10 @@ typedef struct {
 	BOOL				localOptionsReceived;				// used to show if we have game options yet..
 	BOOL				localJoiningInProgress;				// used before we know our player number.
 	BOOL				JoiningInProgress[MAX_PLAYERS];
+	BOOL				DataIntegrity[MAX_PLAYERS];
 	BOOL				bHostSetup;
+	int32_t				TimeEveryoneIsInGame;
+	bool				isAllPlayersDataOK;
 	UDWORD				startTime;
 	UDWORD				numStructureLimits;					// number of limits
 	MULTISTRUCTLIMITS	*pStructureLimits;					// limits chunk.
