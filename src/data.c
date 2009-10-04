@@ -99,8 +99,6 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 	int fillbytes = 0, CRtoStrip = 0;
 	uint8_t *NewData = NULL;
 
-	//	debug(LOG_NET, "pData is {%.10s}\n size is %u bytes ", pData, size);	// this is a bit spammy...
-
 	// find out how many CRs are in the buffer
 	for (i=0; i < size; i++)
 	{
