@@ -929,7 +929,7 @@ static void drawTiles(iView *player)
 	pie_DrawTerrain(MAX(0,-playerZTile-1),
 	                MAX(0,-playerXTile-1),
 	                MIN(visibleTiles.y, mapHeight-playerZTile),
-	                MIN(visibleTiles.x, mapHeight-playerXTile));
+	                MIN(visibleTiles.x, mapWidth-playerXTile));
 
 	// Update height for water
 	for (i = 0; i < visibleTiles.y + 1; i++)
