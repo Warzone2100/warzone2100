@@ -90,3 +90,6 @@ Makefile.in
 # Waf:
 /waf
 /.waf-*
+
+# Lua:
+*.lua
