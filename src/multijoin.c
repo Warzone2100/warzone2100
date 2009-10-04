@@ -353,7 +353,7 @@ bool recvDataCheck(void)
 				break;
 			}
 		}
-		ASSERT_OR_RETURN( , i <= MAX_PLAYERS, "We could not find this player (dpid %u)!", playerdpid );
+		ASSERT_OR_RETURN(false , i <= MAX_PLAYERS, "We could not find this player (dpid %u)!", playerdpid );
 
 		if (memcmp(DataHash, tempBuffer, sizeof(DataHash)))
 		{
