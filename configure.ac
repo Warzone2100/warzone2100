@@ -198,9 +198,11 @@ elif test "x$enable_debug" = "xrelaxed" ; then
 elif test "x$enable_debug" = "xdebugprofile" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -pg -Wall -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
+	LDFLAGS="-pg ${LDFLAGS}"
 elif test "x$enable_debug" = "xprofile" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -pg -Wall -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
+	LDFLAGS="-pg ${LDFLAGS}"
 else
 	WZ_CFLAGS="${WZ_CFLAGS} -g -Wall -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
