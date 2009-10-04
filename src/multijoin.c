@@ -360,6 +360,7 @@ bool recvDataCheck(void)
 			char msg[256] = {'\0'};
 
 			sprintf(msg, _("Kicking player, %s, because data doesn't match!"), getPlayerName(i));
+			sendTextMessage(msg, true);
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 			kickPlayer(playerdpid, _("Data doesn't match!"), ERROR_WRONGDATA);
