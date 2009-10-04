@@ -89,6 +89,7 @@ static UDWORD radarBufferSize = 0;
 static void DrawRadarTiles(void);
 static void DrawRadarObjects(void);
 static void DrawRadarExtras(float radarX, float radarY, float pixSizeH, float pixSizeV);
+static void DrawNorth(void);
 
 static void radarSize(float zoom)
 {
@@ -267,6 +268,7 @@ void drawRadar(void)
 		{
 			// rotate the map
 			iV_MatrixRotateZ(player.r.y);
+			DrawNorth();
 		}
 		// draw the box at the dimensions of the map
 		iV_TransBoxFill(-radarWidth/2.0,
@@ -283,6 +285,10 @@ void drawRadar(void)
         pie_MatEnd();
 		drawRadarBlips(-radarWidth/2.0, -radarHeight/2.0, pixSizeH, pixSizeV);
 	pie_MatEnd();
+}
+static void DrawNorth(void)
+{
+	iV_DrawImage(IntImages, RADAR_NORTH, -((radarWidth / 2.0) + (IntImages->ImageDefs[RADAR_NORTH].Width) + 1) , -(radarHeight / 2.0));
 }
 
 static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile)

@@ -61,7 +61,6 @@ R-Vehicle-Prop-Wheels,wheeled01,PROPULSION,0,0,5
 R-Sys-Spade1Mk1,Spade1Mk1,CONSTRUCT,0,0,11
 R-Vehicle-Prop-VTOL,V-Tol,PROPULSION,0,0,5
 R-Wpn-Cannon5,Cannon5VulcanMk1,WEAPON,0,0,10
-R-Wpn-Cannon5,Cyb-Hvybod-Acannon,BODY,0,0,2
 R-Wpn-AAGun02,AAGun2Mk1,WEAPON,0,0,10
 R-Wpn-Flame2,Flame2,WEAPON,0,0,10
 R-Wpn-Flame2,Cyb-Bod-Thermite,BODY,0,0,2
@@ -105,6 +104,7 @@ R-Wpn-MdArtMissile,Missile-MdArt,WEAPON,0,0,10
 R-Wpn-HvArtMissile,Missile-HvyArt,WEAPON,0,10
 R-Sys-Autorepair-General,AutoRepair,REPAIR,ZNULLREPAIR,REPAIR,6
 R-Wpn-Cannon6TwinAslt,Cannon6TwinAslt,WEAPON,0,0,10
+R-Wpn-Cannon6TwinAslt,Cyb-Hvybod-Acannon,BODY,0,0,2
 R-Wpn-HvyLaser,HeavyLaser,WEAPON,0,0,10
 R-Wpn-HvyLaser,HeavyLaser-VTOL,WEAPON,0,0,10
 R-Wpn-PlasmaCannon,Laser4-PlasmaCannon,WEAPON,0,0,10

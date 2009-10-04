@@ -128,7 +128,6 @@ static unsigned int nb_tshapes = 0;
 
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DECL_UNUSED PIELIGHT specular, int pieFlag, int pieFlagData)
 {
-	Vector3f *pVertices, *pPixels, scrPoints[pie_MAX_VERTICES];
 	iIMDPoly *pPolys;
 	BOOL light = lighting;
 
@@ -179,41 +178,20 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 	}
 
-	if (pieFlag & pie_RAISE)
-	{
-		pieFlagData = (shape->max.y * (pie_RAISE_SCALE - pieFlagData)) / pie_RAISE_SCALE;
-	}
-
 	pie_SetTexturePage(shape->texpage);
 
-	//now draw the shape
-	//rotate and project points from shape->points to scrPoints
-	for (pVertices = shape->points, pPixels = scrPoints;
-			pVertices < shape->points + shape->npoints;
-			pVertices++, pPixels++)
+	if (pieFlag & pie_HEIGHT_SCALED)	// construct
 	{
-		float tempY = pVertices->y;
-		if (pieFlag & pie_RAISE)
-		{
-			tempY = pVertices->y - pieFlagData;
-			if (tempY < 0)
-				tempY = 0;
-
-		}
-		else if ( (pieFlag & pie_HEIGHT_SCALED) && pVertices->y > 0 )
-		{
-			tempY = (pVertices->y * pieFlagData) / pie_RAISE_SCALE;
-		}
-		pPixels->x = pVertices->x;
-		pPixels->y = tempY;
-		pPixels->z = pVertices->z;
+		glScalef(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f);
+	}
+	if (pieFlag & pie_RAISE)		// collapse
+	{
+		glTranslatef(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) / pie_RAISE_SCALE, 1.0f);
 	}
 
 	glColor4ubv(colour.vector);	// Only need to set once for entire model
 
-	for (pPolys = shape->polys;
-			pPolys < shape->polys + shape->npolys;
-			pPolys++)
+	for (pPolys = shape->polys; pPolys < shape->polys + shape->npolys; pPolys++)
 	{
 		Vector2f	texCoords[pie_MAX_VERTICES_PER_POLYGON];
 		Vector3f	vertexCoords[pie_MAX_VERTICES_PER_POLYGON];
@@ -224,9 +202,9 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 				n < pPolys->npnts;
 				n++, index++)
 		{
-			vertexCoords[n].x = scrPoints[*index].x;
-			vertexCoords[n].y = scrPoints[*index].y;
-			vertexCoords[n].z = scrPoints[*index].z;
+			vertexCoords[n].x = shape->points[*index].x;
+			vertexCoords[n].y = shape->points[*index].y;
+			vertexCoords[n].z = shape->points[*index].z;
 			texCoords[n].x = pPolys->texCoord[n].x;
 			texCoords[n].y = pPolys->texCoord[n].y;
 		}
@@ -235,7 +213,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 
 		if (frame != 0 && pPolys->flags & iV_IMD_TEXANIM)
 		{
-			frame %= pPolys->texAnim.nFrames;
+			frame %= shape->numFrames;
 
 			if (frame > 0)
 			{
@@ -620,6 +598,7 @@ static void pie_DrawShadows(void)
 {
 	const float width = pie_GetVideoBufferWidth();
 	const float height = pie_GetVideoBufferHeight();
+	GLenum op_depth_pass_front = GL_INCR, op_depth_pass_back = GL_DECR;
 
 	pie_SetTexturePage(TEXPAGE_NONE);
 
@@ -632,39 +611,57 @@ static void pie_DrawShadows(void)
 	glEnable(GL_STENCIL_TEST);
 
 	// Check if we have the required extensions
-	if (GLEE_EXT_stencil_two_side
-	 && GLEE_EXT_stencil_wrap)
+	if (GLEE_EXT_stencil_wrap)
+	{
+		op_depth_pass_front = GL_INCR_WRAP_EXT;
+		op_depth_pass_back = GL_DECR_WRAP_EXT;
+	}
+
+	// generic 1-pass version
+	if (GLEE_EXT_stencil_two_side)
 	{
 		glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 		glDisable(GL_CULL_FACE);
 		glStencilMask(~0);
 		glActiveStencilFaceEXT(GL_BACK);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_DECR_WRAP_EXT);
+		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_back);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
 		glActiveStencilFaceEXT(GL_FRONT);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR_WRAP_EXT);
+		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_front);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
 
 		pie_ShadowDrawLoop();
+		
 		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
-
 	}
+	// check for ATI-specific 1-pass version
+	else if (GLEE_ATI_separate_stencil)
+	{
+		glDisable(GL_CULL_FACE);
+		glStencilMask(~0);
+		glStencilOpSeparateATI(GL_BACK, GL_KEEP, GL_KEEP, op_depth_pass_back);
+		glStencilOpSeparateATI(GL_FRONT, GL_KEEP, GL_KEEP, op_depth_pass_front);
+		glStencilFunc(GL_ALWAYS, 0, ~0);
+
+		pie_ShadowDrawLoop();	
+	}
+	// fall back to default 2-pass version
 	else
 	{
-		// Setup stencil for back faces.
 		glStencilMask(~0);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
 		glEnable(GL_CULL_FACE);
+		
+		// Setup stencil for front-facing polygons
 		glCullFace(GL_BACK);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_front);
 
 		pie_ShadowDrawLoop();
 
-		// Setup stencil for front faces.
+		// Setup stencil for back-facing polygons
 		glCullFace(GL_FRONT);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
+		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_back);
 
-		// Draw shadows again
 		pie_ShadowDrawLoop();
 	}
 

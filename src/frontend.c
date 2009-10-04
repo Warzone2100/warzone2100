@@ -46,6 +46,7 @@
 #include "lib/widget/button.h"
 
 #include "advvis.h"
+#include "challenge.h"
 #include "component.h"
 #include "difficulty.h"
 #include "display.h"
@@ -68,6 +69,9 @@
 #include "version.h"
 #include "configuration.h"
 
+// ////////////////////////////////////////////////////////////////////////////
+// Global variables
+
 static int StartWithGame = 1; // New game starts in Cam 1.
 
 // Widget code and non-constant strings do not get along
@@ -77,7 +81,7 @@ static char textureSize[WIDG_MAXSTR];
 tMode titleMode; // the global case
 char			aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
-BOOL			bForceEditorLoaded = false;
+BOOL			bLimiterLoaded = false;
 BOOL			bUsingKeyboard = false;		// to disable mouse pointer when using keys.
 BOOL			bUsingSlider   = false;
 
@@ -215,7 +219,7 @@ void changeTitleMode(tMode mode)
 	case QUIT:
 	case LOADSAVEGAME:
 		bUsingKeyboard = false;
-		bForceEditorLoaded = false;
+		bLimiterLoaded = false;
 	case SHOWINTRO:
 		break;
 
@@ -361,7 +365,8 @@ void startSinglePlayerMenu(void)
 
 	addTextButton(FRONTEND_NEWGAME,  FRONTEND_POS2X,FRONTEND_POS2Y,_("New Campaign") ,false,false);
 	addTextButton(FRONTEND_SKIRMISH, FRONTEND_POS3X,FRONTEND_POS3Y, _("Start Skirmish Game"),false,false);
-	addTextButton(FRONTEND_LOADGAME, FRONTEND_POS4X,FRONTEND_POS4Y, _("Load Game"),false,false);
+	addTextButton(FRONTEND_CHALLENGES, FRONTEND_POS4X, FRONTEND_POS4Y, _("Challenges"), false, false);
+	addTextButton(FRONTEND_LOADGAME, FRONTEND_POS5X,FRONTEND_POS5Y, _("Load Game"),false,false);
 
 	addSideText	 (FRONTEND_SIDETEXT ,FRONTEND_SIDEX,FRONTEND_SIDEY,_("SINGLE PLAYER"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -411,13 +416,25 @@ BOOL runSinglePlayerMenu(void)
 			loadOK();
 		}
 	}
+	else if (challengesUp)
+	{
+		runChallenges();
+	}
 	else
 	{
+		uint8_t playercolor = 0;
+
 		// FIXME: We should do a SPinit() to make sure all the variables are reset correctly.
 		// game.type is switched to SKIRMISH in startMultiOptions()
 		NetPlay.bComms = false;
 		bMultiPlayer = false;
 		game.type = CAMPAIGN;
+		// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
+		playercolor = getPlayerColour(0);
+		if (playercolor >= 1 && playercolor <= 3)
+		{
+			setPlayerColour(0,0);		// default is green
+		}
 
 		id = widgRunScreen(psWScreen);						// Run the current set of widgets
 
@@ -459,6 +476,10 @@ BOOL runSinglePlayerMenu(void)
 				changeTitleMode(TITLE);
 				break;
 
+			case FRONTEND_CHALLENGES:
+				addChallenges();
+				break;
+
 			default:
 				break;
 		}
@@ -471,13 +492,17 @@ BOOL runSinglePlayerMenu(void)
 	}
 
 
-	if(!bLoadSaveUp)										// if save/load screen is up
+	if (!bLoadSaveUp && !challengesUp)						// if save/load screen is up
 	{
 		widgDisplayScreen(psWScreen);						// show the widgets currently running
 	}
-	if(bLoadSaveUp)										// if save/load screen is up
+	if (bLoadSaveUp)								// if save/load screen is up
 	{
 		displayLoadSave();
+	}
+	else if (challengesUp)
+	{
+		displayChallenges();
 	}
 
 	return true;
@@ -622,6 +647,28 @@ BOOL startGameOptions2Menu(void)
 	addTopForm();
 	addBottomForm();
 
+//	////////////
+//	//FMV mode.
+	addTextButton(FRONTEND_FMVMODE,	FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Video Playback"), true, false);
+	switch (war_GetFMVmode())
+	{
+		case FMV_1X:
+			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55,FRONTEND_POS2Y, _("1X"), true, false);
+			break;
+
+		case FMV_2X:
+			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55,FRONTEND_POS2Y, _("2X"), true, false);
+			break;
+
+		case FMV_FULLSCREEN:
+			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55,FRONTEND_POS2Y, _("Fullscreen"), true, false);
+			break;
+
+		default:
+			ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
+			break;
+	}
+
 	////////////
 	// screenshake
 	addTextButton(FRONTEND_SSHAKE,	 FRONTEND_POS3X-35,   FRONTEND_POS3Y, _("Screen Shake"),true,false);
@@ -644,28 +691,6 @@ BOOL startGameOptions2Menu(void)
 	else
 	{
 		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS4Y, _("Fog Of War"),true,false);
-	}
-
-//	////////////
-//	//FMV mode.
-	addTextButton(FRONTEND_FMVMODE,	FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Video Playback"), true, false);
-	switch (war_GetFMVmode())
-	{
-		case FMV_1X:
-			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS6M - 55,FRONTEND_POS6Y, _("1X"), true, false);
-			break;
-
-		case FMV_2X:
-			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS6M - 55,FRONTEND_POS6Y, _("2X"), true, false);
-			break;
-
-		case FMV_FULLSCREEN:
-			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS6M - 55,FRONTEND_POS6Y, _("Fullscreen"), true, false);
-			break;
-
-		default:
-			ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
-			break;
 	}
 
 	////////////
@@ -697,14 +722,14 @@ BOOL startGameOptions2Menu(void)
 
 	////////////
 	//shadows
-	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Shadows"), true, false);
+	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Shadows"), true, false);
 	if (getDrawShadows())
 	{
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS7Y, _("On"), true, false);
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS6M - 55,  FRONTEND_POS6Y, _("On"), true, false);
 	}
 	else
 	{	// not flipped
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS7Y, _("Off"), true, false);
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS6M - 55,  FRONTEND_POS6Y, _("Off"), true, false);
 	}
 
 	////////////
@@ -1035,10 +1060,10 @@ BOOL runGameOptions4Menu(void)
 		{
 			int newTexSize = getTextureSize() * 2;
 
-			// Clip such that 32 <= size <= 2048
+			// Clip such that 128 <= size <= 2048
 			if (newTexSize > 2048)
 			{
-				newTexSize = 32;
+				newTexSize = 128;
 			}
 
 			// Set the new size
@@ -1095,14 +1120,14 @@ BOOL startGameOptions5Menu(void)
 
 	////////////
 	// mouseflip
-	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X-35,   FRONTEND_POS2Y, _("Reverse Mouse"),true,false);
+	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X-35,   FRONTEND_POS2Y, _("Reverse Rotation"),true,false);
 	if( getInvertMouseStatus() )
 	{	// flipped
-		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-55,  FRONTEND_POS2Y, _("On"),true,false);
+		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-25,  FRONTEND_POS2Y, _("On"),true,false);
 	}
 	else
 	{	// not flipped
-		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-55,  FRONTEND_POS2Y, _("Off"),true,false);
+		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-25,  FRONTEND_POS2Y, _("Off"),true,false);
 	}
 
 	// Cursor trapping
@@ -1110,36 +1135,38 @@ BOOL startGameOptions5Menu(void)
 
 	if (war_GetTrapCursor())
 	{
-		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-55, FRONTEND_POS3Y, _("On"), true, false);
+		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-25, FRONTEND_POS3Y, _("On"), true, false);
 	}
 	else
 	{
-		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-55, FRONTEND_POS3Y, _("Off"), true, false);
+		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-25, FRONTEND_POS3Y, _("Off"), true, false);
 	}
 	
 	// Hardware / software cursor toggle
-	addTextButton(FRONTEND_CURSORMODE, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Cursor Mode"), true, false);
+	addTextButton(FRONTEND_CURSORMODE, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Colored Cursors *"), true, false);
 
 	if (war_GetColouredCursor())
 	{
-		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-85, FRONTEND_POS4Y, _("Software (colored)"), true, false);
+		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-25, FRONTEND_POS4Y, _("On"), true, false);
 	}
 	else
 	{
-		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-85, FRONTEND_POS4Y, _("Hardware"), true, false);
+		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-25, FRONTEND_POS4Y, _("Off"), true, false);
 	}
 
 	////////////
 	// left-click orders
-	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X-35,   FRONTEND_POS5Y, _("Right-click Orders"),true,false);
+	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X-35,   FRONTEND_POS5Y, _("Switch Mouse Buttons"),true,false);
 	if( getRightClickOrders() )
 	{	// right-click orders
-		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-55,  FRONTEND_POS5Y, _("On"),true,false);
+		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("On"),true,false);
 	}
 	else
 	{	// left-click orders
-		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-55,  FRONTEND_POS5Y, _("Off"),true,false);
+		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("Off"),true,false);
 	}
+
+	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("* May negatively affect performance"), true, true);
 
 	// Quit/return
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);

@@ -38,6 +38,7 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 #include "lib/script/script.h"
+#include "lib/netplay/netplay.h"
 
 #include "action.h"
 #include "lib/sound/audio_id.h"
@@ -1689,7 +1690,7 @@ INT_RETVAL intRunWidgets(void)
 			{
 				if(bRequestLoad)
 				{
-//					loadGame(sRequestResult,true,false,true);
+					NET_InitPlayers();	// reinitialize starting positions
 					loopMissionState = LMS_LOADGAME;
 					sstrcpy(saveGameName, sRequestResult);
 				}
@@ -1699,7 +1700,7 @@ INT_RETVAL intRunWidgets(void)
 					{
 						char msg[256] = {'\0'};
 
-						sstrcpy(msg, _("GAME SAVED :"));
+						sstrcpy(msg, _("GAME SAVED: "));
 						sstrcat(msg, saveGameName);
 						addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
@@ -5205,7 +5206,7 @@ static BASE_OBJECT *intGetObject(UDWORD id)
 	}
 
 	/* Find the object that the ID refers to */
-	ASSERT((SDWORD)id - IDOBJ_OBJSTART >= 0 && (SDWORD)id - IDOBJ_OBJSTART < numObjects, "Invalid button ID %u", id);
+	ASSERT_OR_RETURN(NULL, (SDWORD)id - IDOBJ_OBJSTART >= 0 && (SDWORD)id - IDOBJ_OBJSTART < numObjects, "Invalid button ID %u", id);
 	psObj = apsObjectList[id - IDOBJ_OBJSTART];
 
 	return psObj;

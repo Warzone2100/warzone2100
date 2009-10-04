@@ -56,6 +56,7 @@ extern char * campaign_mods[MAX_MODS];
 extern char * multiplay_mods[MAX_MODS];
 extern char iptoconnect[PATH_MAX];
 extern BOOL hostlaunch;
+extern bool CauseCrash;
 
 //! Let the end user into debug mode....
 BOOL	bAllowDebugMode = false;
@@ -88,6 +89,7 @@ typedef enum
 	CLI_CONNECTTOIP,
 	CLI_HOSTLAUNCH,
 	CLI_NOASSERT,
+	CLI_CRASH,
 } CLI_OPTIONS;
 
 static const struct poptOption* getOptionsTable(void)
@@ -107,6 +109,7 @@ static const struct poptOption* getOptionsTable(void)
 		{ "mod_ca",     '\0', POPT_ARG_STRING, NULL, CLI_MOD_CA,     N_("Enable a campaign only mod"),        N_("mod") },
 		{ "mod_mp",     '\0', POPT_ARG_STRING, NULL, CLI_MOD_MP,     N_("Enable a multiplay only mod"),       N_("mod") },
 		{ "noassert",	'\0', POPT_ARG_NONE,   NULL, CLI_NOASSERT,   N_("Disable asserts"),                   NULL },
+		{ "crash",		'\0', POPT_ARG_NONE,   NULL, CLI_CRASH,      N_("Causes a crash to test the crash handler"), NULL },
 		{ "savegame",   '\0', POPT_ARG_STRING, NULL, CLI_SAVEGAME,   N_("Load a saved game"),                 N_("savegame") },
 		{ "usage",      '\0', POPT_ARG_NONE
 		          | POPT_ARGFLAG_DOC_HIDDEN,   NULL, CLI_USAGE,      NULL,                                    NULL, },
@@ -289,6 +292,14 @@ bool ParseCommandLine(int argc, const char** argv)
 				kf_NoAssert();
 				break;
 
+			// NOTE: The sole purpose of this is to test the crash handler.
+			case CLI_CRASH:
+				CauseCrash = true;
+				NetPlay.bComms = false;
+				sstrcpy(aLevelName, "CAM_3A");
+				SetGameMode(GS_NORMAL);
+				break;
+
 			case CLI_CHEAT:
 				printf("  ** DEBUG MODE UNLOCKED! **\n");
 				bAllowDebugMode = true;
@@ -422,8 +433,16 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (sscanf(token, "%ix%i", &width, &height ) != 2 )
 				{
-					debug(LOG_ERROR, "Invalid parameter specified. (format is: 800x600)");
+					debug(LOG_ERROR, "Invalid parameter specified (format is WIDTHxHEIGHT, e.g. 800x600)");
 					return false;
+				}
+				if (width < 640) {
+					debug(LOG_ERROR, "Screen width < 640 unsupported, using 640");
+					width = 640;
+				}
+				if (height < 480) {
+					debug(LOG_ERROR, "Screen height < 480 unsupported, using 480");
+					height = 480;
 				}
 				// tell the display system of the desired resolution
 				pie_SetVideoBufferWidth(width);

@@ -38,6 +38,7 @@ void	audio_GetStaticPos( SDWORD iWorldX, SDWORD iWorldY,
 BOOL	audio_ObjectDead( void * psObj );
 Vector3f audio_GetPlayerPos(void);
 void audio_GetPlayerOrientation(Vector3f* forward, Vector3f* up);
+void audio_Get3DPlayerRotAboutVerticalAxis(float *angle);
 
 #if defined(__cplusplus)
 }

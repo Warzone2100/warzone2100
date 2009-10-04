@@ -25,6 +25,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/frameresource.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 
 #ifndef WZ_NOSOUND
 # ifdef WZ_OS_MAC
@@ -47,7 +48,6 @@
 #include "openal_error.h"
 #include "mixer.h"
 
-#define ATTENUATION_FACTOR	0.0003f
 
 #ifndef WZ_NOSOUND
 ALuint current_queue_sample = -1;
@@ -122,6 +122,7 @@ static void sound_RemoveSample(SAMPLE_LIST* previous, SAMPLE_LIST* to_remove)
 static void PrintOpenALVersion(code_part part)
 {
 	const ALchar* pDeviceNames = NULL;
+	char buf[256];
 
 	debug(part, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
 	debug(part, "OpenAL Version: %s", alGetString(AL_VERSION));
@@ -139,6 +140,14 @@ static void PrintOpenALVersion(code_part part)
 		debug(part, "available openAL device(s) are: %s", pDeviceNames);
 		pDeviceNames += strlen(pDeviceNames) + 1;
 	}
+
+	// Copy this info to be used by the crash handler for the dump file
+	ssprintf(buf, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
+	addDumpInfo(buf);
+	ssprintf(buf, "OpenAL Version: %s", alGetString(AL_VERSION));
+	addDumpInfo(buf);
+	ssprintf(buf, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
+	addDumpInfo(buf);
 }
 #endif
 
@@ -152,6 +161,11 @@ BOOL sound_InitLibrary( void )
 	int err;
 	const ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	const ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+	ALCint attrSize;
+	ALCint *temp;
+	ALCint *attributes;
+	ALCint *data;
+	char buf[256];
 
 #ifdef WZ_OS_WIN
 	/* HACK: Select the "software" OpenAL device on Windows because it
@@ -191,6 +205,48 @@ BOOL sound_InitLibrary( void )
 		debug(LOG_ERROR, "Couldn't initialize audio context: %s", alcGetString(device, err));
 		return false;
 	}
+	// getting more info about openAL
+	alcGetIntegerv(device, ALC_ATTRIBUTES_SIZE, sizeof(attrSize),&attrSize);
+	attributes = (ALCint *)malloc(attrSize * sizeof(ALCint));
+	alcGetIntegerv(device, ALC_ALL_ATTRIBUTES, attrSize, attributes);
+	data = attributes;
+	temp = attributes + attrSize ;
+	while (data < temp)
+	{
+		switch (*data)
+		{
+			case ALC_FREQUENCY:
+				data += 1;
+				ssprintf(buf, "ALC_FREQUENCY = %d", *data);
+				addDumpInfo(buf);
+				break;
+			case ALC_REFRESH:
+				data += 1;
+				ssprintf(buf, "ALC_REFRESH = %d", *data);
+				addDumpInfo(buf);
+				break;
+			case ALC_SYNC:
+				data += 1;
+				ssprintf(buf, "ALC_SYNC = %d", *data);
+				addDumpInfo(buf);
+				break;
+			case ALC_MONO_SOURCES:
+				data += 1;
+				ssprintf(buf, "ALC_MONO_SOURCES = %d", *data);
+				addDumpInfo(buf);
+				break;
+			case ALC_STEREO_SOURCES:
+				data += 1;
+				ssprintf(buf, "ALC_STEREO_SOURCES = %d", *data);
+				addDumpInfo(buf);
+				break;
+			default:
+				break;
+		}
+		data += 1;
+	}
+	free(attributes);
+
 #endif
 
 	openal_initialized = true;
@@ -203,11 +259,12 @@ BOOL sound_InitLibrary( void )
 	// Check what version of Open AL we are using
 	PrintOpenALVersion(LOG_SOUND);
 
-
+	alGetError();	// clear error codes
 	alListener3f(AL_POSITION, 0.f, 0.f, 0.f);
 	alListenerfv( AL_VELOCITY, listenerVel );
 	alListenerfv( AL_ORIENTATION, listenerOri );
 	alDistanceModel( AL_NONE );
+	sound_GetError();
 #endif
 	return true;
 }
@@ -246,6 +303,7 @@ void sound_ShutdownLibrary( void )
 
 	debug(LOG_SOUND, "close device");
 	alcCloseDevice(device);
+	sound_GetError();
 #endif
 
 	while( aSample )
@@ -271,6 +329,9 @@ static void sound_DestroyIteratedSample(SAMPLE_LIST** previous, SAMPLE_LIST** sa
 		sound_GetError();
 	}
 #endif
+
+	// Do the cleanup of this sample
+	sound_FinishedCallback((*sample)->curr);
 
 	// Remove the sample from the list
 	sound_RemoveSample(*previous, *sample);
@@ -303,6 +364,7 @@ void sound_Update()
 	SAMPLE_LIST* node = active_samples;
 	SAMPLE_LIST* previous = NULL;
 	ALCenum err;
+	ALfloat gain;
 
 	if ( !openal_initialized )
 	{
@@ -315,6 +377,17 @@ void sound_Update()
 	while (node != NULL)
 	{
 		ALenum state, err;
+
+		// query what the gain is for this sample
+		alGetSourcef(node->curr->iSample, AL_GAIN, &gain);
+		err = sound_GetError();
+
+		// if gain is 0, then we can't hear it, so we kill it.
+		if (gain == 0.0f)
+		{
+			sound_DestroyIteratedSample(&previous, &node);
+			continue;
+		}
 
 		//ASSERT(alIsSource(node->curr->iSample), "Not a valid source!");
 		alGetSourcei(node->curr->iSample, AL_SOURCE_STATE, &state);
@@ -347,8 +420,8 @@ void sound_Update()
 				node = node->next;
 				break;
 
-			case AL_STOPPED:
-				sound_FinishedCallback(node->curr);
+			// NOTE: if it isn't playing | paused, then it is most likely either done
+			// or a error.  In either case, we want to kill the sample in question.
 
 			default:
 				sound_DestroyIteratedSample(&previous, &node);
@@ -364,8 +437,7 @@ void sound_Update()
 	err = sound_GetDeviceError(device);
 	if (err != ALC_NO_ERROR)
 	{
-		debug(LOG_ERROR, "Error while processing audio context: %s",
-		      alGetString(err));
+		debug(LOG_ERROR, "Error while processing audio context: %s", alGetString(err));
 	}
 #endif
 }
@@ -622,9 +694,15 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	{
 		return false;
 	}
-	volume = ((float)psTrack->iVol / 100.0f);       // each object can have OWN volume!
-	psSample->fVol = volume;                        // save computed volume
-	volume *= sfx_volume;                           // and now take into account the Users sound Prefs.
+	volume = ((float)psTrack->iVol / 100.0f);		// each object can have OWN volume!
+	psSample->fVol = volume;						// save computed volume
+	volume *= sfx_volume;							// and now take into account the Users sound Prefs.
+
+	// We can't hear it, so don't bother creating it.
+	if (volume == 0.0f)
+	{
+		return false;
+	}
 
 	// Clear error codes
 	alGetError();
@@ -649,6 +727,13 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	alSourcei( psSample->iSample, AL_SOURCE_RELATIVE, AL_TRUE );
 	alSourcei( psSample->iSample, AL_LOOPING, (sound_SetupChannel(psSample)) ? AL_TRUE : AL_FALSE );
 
+	// NOTE: this is only useful for debugging.
+#ifdef DEBUG
+	psSample->is3d = false;
+	psSample->isLooping = sound_TrackLooped(psSample->iTrack)? AL_TRUE : AL_FALSE;
+	memcpy(psSample->filename,psTrack->fileName, strlen(psTrack->fileName));
+	psSample->filename[strlen(psTrack->fileName)]='\0';
+#endif
 	// Clear error codes
 	alGetError();
 
@@ -684,9 +769,14 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 		return false;
 	}
 
-	volume = ((float)psTrack->iVol / 100.f);        // max range is 0-100
-	psSample->fVol = volume;                        // store results for later
+	volume = ((float)psTrack->iVol / 100.f);		// max range is 0-100
+	psSample->fVol = volume;						// store results for later
 
+	// If we can't hear it, then don't bother playing it.
+	if (volume == 0.0f)
+	{
+		return false;
+	}
 	// Clear error codes
 	alGetError();
 
@@ -704,12 +794,20 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 
 	// HACK: this is a workaround for a bug in the 64bit implementation of OpenAL on GNU/Linux
 	// The AL_PITCH value really should be 1.0.
-	alSourcef( psSample->iSample, AL_PITCH, 1.001 );
+	alSourcef(psSample->iSample, AL_PITCH, 1.001f);
 
 	sound_SetObjectPosition( psSample );
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
 	alSourcei( psSample->iSample, AL_BUFFER, psTrack->iBufferName );
 	alSourcei( psSample->iSample, AL_LOOPING, (sound_SetupChannel(psSample)) ? AL_TRUE : AL_FALSE );
+
+	// NOTE: this is only useful for debugging.
+#ifdef DEBUG
+	psSample->is3d = true;
+	psSample->isLooping = sound_TrackLooped(psSample->iTrack)? AL_TRUE : AL_FALSE;
+	memcpy(psSample->filename,psTrack->fileName, strlen(psTrack->fileName));
+	psSample->filename[strlen(psTrack->fileName)]='\0';
+#endif
 
 	// Clear error codes
 	alGetError();
@@ -806,7 +904,7 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 
 	// HACK: this is a workaround for a bug in the 64bit implementation of OpenAL on GNU/Linux
 	// The AL_PITCH value really should be 1.0.
-	alSourcef(stream->source, AL_PITCH, 1.001);
+	alSourcef(stream->source, AL_PITCH, 1.001f);
 
 	// Create some OpenAL buffers to store the decoded data in
 	alGenBuffers(buffer_count, buffers);
@@ -900,6 +998,7 @@ void sound_StopStream(AUDIO_STREAM* stream)
 	assert(stream != NULL);
 
 #if !defined(WZ_NOSOUND)
+	sound_GetError();	// clear error codes
 	// Tell OpenAL to stop playing on the given source
 	alSourceStop(stream->source);
 	sound_GetError();
@@ -967,6 +1066,7 @@ float sound_GetStreamVolume(const AUDIO_STREAM* stream)
 #if !defined(WZ_NOSOUND)
 	ALfloat volume;
 	alGetSourcef(stream->source, AL_GAIN, &volume);
+	sound_GetError();
 
 	return volume;
 #else
@@ -985,6 +1085,7 @@ void sound_SetStreamVolume(AUDIO_STREAM* stream, float volume)
 	stream->volume = volume;
 #if !defined(WZ_NOSOUND)
 	alSourcef(stream->source, AL_GAIN, stream->volume);
+	sound_GetError();
 #endif
 }
 
@@ -1170,7 +1271,7 @@ void sound_StopSample(AUDIO_SAMPLE* psSample)
 		debug(LOG_SOUND, "sound_StopSample: sample number (%u) out of range, we probably have run out of available OpenAL sources", psSample->iSample);
 		return;
 	}
-
+	sound_GetError();	// clear error codes
 	// Tell OpenAL to stop playing the given sample
 	alSourceStop(psSample->iSample);
 	sound_GetError();
@@ -1187,10 +1288,29 @@ void sound_SetPlayerPos(Vector3f pos)
 
 /**
  * Sets the player's orientation to use for sound
+ * \param angle the angle in radians
+ @NOTE the up vector is swapped because of qsound idiosyncrasies
+ @FIXME we don't use qsound, but it still is in qsound 'format'...
+*/
+void sound_SetPlayerOrientation(float angle)
+{
+#ifndef WZ_NOSOUND
+
+	const ALfloat ori[6] =
+	{
+		-sinf(angle), cosf(angle), 0.0f,	// forward (at) vector
+		0.0f, 0.0f, 1.0f,					// up vector
+	};
+	alListenerfv(AL_ORIENTATION, ori);
+	sound_GetError();
+#endif
+}
+/**
+ * Sets the player's orientation to use for sound
  * \param forward forward pointing vector
  * \param up      upward pointing vector
  */
-void sound_SetPlayerOrientation(Vector3f forward, Vector3f up)
+void sound_SetPlayerOrientationVector(Vector3f forward, Vector3f up)
 {
 #ifndef WZ_NOSOUND
 	const ALfloat ori[6] =
@@ -1206,6 +1326,7 @@ void sound_SetPlayerOrientation(Vector3f forward, Vector3f up)
 
 //*
 // =======================================================================================================================
+// Compute the sample's volume relative to AL_POSITION.
 // =======================================================================================================================
 //
 void sound_SetObjectPosition(AUDIO_SAMPLE *psSample)
@@ -1219,6 +1340,12 @@ void sound_SetObjectPosition(AUDIO_SAMPLE *psSample)
 	float	distance, gain;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+	// only set it when we have a valid sample
+	if (!psSample)
+	{
+		return;
+	}
+
 	// compute distance
 	alGetListener3f( AL_POSITION, &listenerX, &listenerY, &listenerZ );
 	sound_GetError();
@@ -1228,21 +1355,24 @@ void sound_SetObjectPosition(AUDIO_SAMPLE *psSample)
 	distance = sqrtf(dX * dX + dY * dY + dZ * dZ); // Pythagorean theorem
 
 	// compute gain
-	gain = (1.0 - (distance * ATTENUATION_FACTOR)) * psSample->fVol * sfx3d_volume;
-	if (gain > 1.0)
+	gain = (1.0f - (distance * ATTENUATION_FACTOR)) * psSample->fVol * sfx3d_volume;
+	// max volume
+	if (gain > 1.0f)
 	{
-		gain = 1.0;
+		gain = 1.0f;
 	}
-	if ( gain < 0.0 )
+	if (gain < 0.0f)
 	{
-		gain = 0.0;
+		// this sample can't be heard right now
+		gain = 0.0f;
 	}
 	alSourcef( psSample->iSample, AL_GAIN, gain );
 
 	// the alSource3i variant would be better, if it wouldn't provide linker errors however
-	alSource3f( psSample->iSample, AL_POSITION, (float)psSample->x,(float)psSample->x,(float)psSample->x );
+	alSource3f( psSample->iSample, AL_POSITION, (float)psSample->x,(float)psSample->y,(float)psSample->z );
 	sound_GetError();
 #endif
+	return;
 }
 
 //*

@@ -436,11 +436,12 @@ static bool deserializeLandingZoneData(PHYSFS_file* fileHandle, LANDING_ZONE* se
 
 static bool serializeMultiplayerGame(PHYSFS_file* fileHandle, const MULTIPLAYERGAME* serializeMulti)
 {
+	const char *dummy8c = "DUMMYSTRING";
 	unsigned int i;
 
 	if (!PHYSFS_writeUBE8(fileHandle, serializeMulti->type)
 	 || PHYSFS_write(fileHandle, serializeMulti->map, 1, 128) != 128
-	 || PHYSFS_write(fileHandle, serializeMulti->version, 1, 8) != 8
+	 || PHYSFS_write(fileHandle, dummy8c, 1, 8) != 8
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->maxPlayers)
 	 || PHYSFS_write(fileHandle, serializeMulti->name, 1, 128) != 128
 	 || !PHYSFS_writeSBE32(fileHandle, serializeMulti->fog)
@@ -468,10 +469,11 @@ static bool deserializeMultiplayerGame(PHYSFS_file* fileHandle, MULTIPLAYERGAME*
 	int32_t boolFog;
 	uint8_t dummy8;
 	uint16_t dummy16;
+	char dummy8c[8];
 
 	if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->type)
 	 || PHYSFS_read(fileHandle, serializeMulti->map, 1, 128) != 128
-	 || PHYSFS_read(fileHandle, serializeMulti->version, 1, 8) != 8
+	 || PHYSFS_read(fileHandle, dummy8c, 1, 8) != 8
 	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->maxPlayers)
 	 || PHYSFS_read(fileHandle, serializeMulti->name, 1, 128) != 128
 	 || !PHYSFS_readSBE32(fileHandle, &boolFog)
@@ -535,9 +537,9 @@ static bool deserializeGameStruct(PHYSFS_file* fileHandle, GAMESTRUCT* serialize
 
 static bool serializePlayer(PHYSFS_file* fileHandle, const PLAYER* serializePlayer)
 {
-	return (PHYSFS_writeUBE32(fileHandle, serializePlayer->dpid)
+	return (PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_write(fileHandle, serializePlayer->name, StringSize, 1) == 1
-	     && PHYSFS_writeUBE32(fileHandle, serializePlayer->bHost)
+	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0));
 }
 
@@ -545,9 +547,9 @@ static bool deserializePlayer(PHYSFS_file* fileHandle, PLAYER* serializePlayer)
 {
 	uint32_t dummy;
 
-	return (PHYSFS_readUBE32(fileHandle, &serializePlayer->dpid)
+	return (PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_read(fileHandle, serializePlayer->name, StringSize, 1) == 1
-	     && PHYSFS_readUBE32(fileHandle, &serializePlayer->bHost)
+	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy));
 }
 
@@ -568,7 +570,7 @@ static bool serializeNetPlay(PHYSFS_file* fileHandle, const NETPLAY* serializeNe
 	}
 
 	return (PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bComms)
-	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bHost)
+	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
@@ -594,7 +596,7 @@ static bool deserializeNetPlay(PHYSFS_file* fileHandle, NETPLAY* serializeNetPla
 	}
 
 	return (PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bComms)
-	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bHost)
+	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy)
@@ -1339,7 +1341,7 @@ static bool deserializeSaveGameV31Data(PHYSFS_file* fileHandle, SAVE_GAME_V31* s
 	uint32_t        savePlayer;	\
 	char            sPName[32];	\
 	BOOL            multiPlayer;\
-	uint32_t        sPlayer2dpid[MAX_PLAYERS]
+	uint32_t        sPlayerIndex[MAX_PLAYERS]
 
 typedef struct save_game_v33
 {
@@ -1360,7 +1362,7 @@ static bool serializeSaveGameV33Data(PHYSFS_file* fileHandle, const SAVE_GAME_V3
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->sPlayer2dpid[i]))
+		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->sPlayerIndex[i]))
 			return false;
 	}
 
@@ -1384,7 +1386,7 @@ static bool deserializeSaveGameV33Data(PHYSFS_file* fileHandle, SAVE_GAME_V33* s
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->sPlayer2dpid[i]))
+		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->sPlayerIndex[i]))
 			return false;
 	}
 
@@ -2353,6 +2355,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			apsFlagPosLists[player] = NULL;
 			//clear all the messages?
 			apsProxDisp[player] = NULL;
+			apsSensorList[0] = NULL;
 		}
 		initFactoryNumFlag();
 	}
@@ -2577,20 +2580,29 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			PLAYERSTATS		playerStats;
 
 			game			= saveGameData.sGame;
-			NetPlay			= saveGameData.sNetPlay;
-			selectedPlayer	= saveGameData.savePlayer;
 			productionPlayer= selectedPlayer;
 			bMultiPlayer	= saveGameData.multiPlayer;
 			cmdDroidMultiExpBoost(true);
-			for(inc=0;inc<MAX_PLAYERS;inc++)
+
+			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
+			for (i = 0; i < MAX_PLAYERS; i++)
 			{
-				player2dpid[inc]=saveGameData.sPlayer2dpid[inc];
+				strcpy((NetPlay.players[i]).name, ((saveGameData.sNetPlay).players[i]).name);
+				if ((saveGameData.sGame).skDiff[i] == UBYTE_MAX)
+				{
+					(NetPlay.players[i]).allocated = true;
+				}
+				else
+				{
+					(NetPlay.players[i]).allocated = false;
+				}
 			}
+			
 			if(bMultiPlayer)
 			{
 				loadMultiStats(saveGameData.sPName,&playerStats);				// stats stuff
-				setMultiStats(NetPlay.dpidPlayer,playerStats,false);
-				setMultiStats(NetPlay.dpidPlayer,playerStats,true);
+				setMultiStats(selectedPlayer, playerStats, false);
+				setMultiStats(selectedPlayer, playerStats, true);
 			}
 		}
 
@@ -3811,7 +3823,6 @@ static bool writeMapFile(const char* fileName)
 {
 	char* pFileData = NULL;
 	UDWORD fileSize;
-	char fileNameMod[250], *dot;
 
 	/* Get the save data */
 	bool status = mapSave(&pFileData, &fileSize);
@@ -3821,19 +3832,6 @@ static bool writeMapFile(const char* fileName)
 		/* Write the data to the file */
 		status = saveFile(fileName, pFileData, fileSize);
 	}
-
-	/* Save in new savegame format */
-	strcpy(fileNameMod, fileName);
-	dot = strrchr(fileNameMod, '.');
-	*dot = '\0';
-	strcat(fileNameMod, ".wzs");
-	debug(LOG_WZ, "SAVING %s INTO NEW FORMAT AS %s!", fileName, fileNameMod);
-	if (!mapSaveTagged(fileNameMod))
-	{
-		debug(LOG_ERROR, "Saving %s into new format as %s FAILED!", fileName, fileNameMod);
-	}
-	debug(LOG_WZ, "Loading new savegame format for validation");
-	mapLoadTagged(fileNameMod);
 
 	if (pFileData != NULL)
 	{
@@ -3935,13 +3933,10 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version)
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[2]);
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[3]);
 		}
-		for(i = 0; i < MAX_PLAYERS; i++)
-			endian_udword(&psSaveGame->sNetPlay.players[i].dpid);
 		endian_udword(&psSaveGame->sNetPlay.playercount);
-		endian_udword(&psSaveGame->sNetPlay.dpidPlayer);
 		endian_udword(&psSaveGame->savePlayer);
 		for(i = 0; i < MAX_PLAYERS; i++)
-			endian_udword(&psSaveGame->sPlayer2dpid[i]);
+			endian_udword(&psSaveGame->sPlayerIndex[i]);
 	}
 	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
 	if(version >= VERSION_31) {
@@ -4720,20 +4715,29 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			PLAYERSTATS		playerStats;
 
 			bMultiPlayer	= saveGameData.multiPlayer;
-			NetPlay			= saveGameData.sNetPlay;
-			selectedPlayer	= saveGameData.savePlayer;
 			productionPlayer = selectedPlayer;
 			game			= saveGameData.sGame;
 			cmdDroidMultiExpBoost(true);
-			for(i = 0; i < MAX_PLAYERS; ++i)
+
+			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
+			for (i = 0; i < MAX_PLAYERS; i++)
 			{
-				player2dpid[i] = saveGameData.sPlayer2dpid[i];
+				strcpy((NetPlay.players[i]).name, ((saveGameData.sNetPlay).players[i]).name);
+				if ((saveGameData.sGame).skDiff[i] == UBYTE_MAX)
+				{
+					(NetPlay.players[i]).allocated = true;
+				}
+				else
+				{
+					(NetPlay.players[i]).allocated = false;
+				}
 			}
+			
 			if(bMultiPlayer)
 			{
 				loadMultiStats(saveGameData.sPName,&playerStats);				// stats stuff
-				setMultiStats(NetPlay.dpidPlayer,playerStats,false);
-				setMultiStats(NetPlay.dpidPlayer,playerStats,true);
+				setMultiStats(selectedPlayer, playerStats, false);
+				setMultiStats(selectedPlayer, playerStats, true);
 			}
 		}
 
@@ -4952,7 +4956,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	strcpy(saveGame.sPName, getPlayerName(selectedPlayer));
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		saveGame.sPlayer2dpid[i] = player2dpid[i];
+		saveGame.sPlayerIndex[i] = i;
 	}
 
 	//version 34
@@ -5126,9 +5130,20 @@ DROID_TEMPLATE *FindDroidTemplate(const char * const name)
 
 
 // -----------------------------------------------------------------------------------------
-UDWORD RemapPlayerNumber(UDWORD OldNumber)
+// Remaps old player number based on position on map to new owner
+static UDWORD RemapPlayerNumber(UDWORD OldNumber)
 {
-	return(OldNumber);
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (OldNumber == NetPlay.players[i].position)
+		{
+			return i;
+		}
+	}
+	ASSERT(false, "Found no player position for player %d", (int)OldNumber);
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -12051,22 +12066,17 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 				yy = map_coord(psSaveStructure->y);
 			}
 		}
-		// if human player, then use clan color.  If AI, then use something else.
-		if( isHumanPlayer(playerid) )
+		playerid = getPlayerColour(RemapPlayerNumber(playerid));
+		// kludge to fix black, so you can see it on some maps.
+		if (playerid == 3)	// in this case 3 = pallete entry for black.
 		{
-			playerid = (UDWORD) getPlayerColour(playerid);
-			color.rgba = clanColours[playerid].rgba;
-			// kludge to fix black, so you can see it on some maps.
-			if ( playerid == 3 )	// in this case 3 = pallete entry for black.
-			{
-				color = WZCOL_GREY;
-			}
+			color = WZCOL_GREY;
 		}
 		else
-		{	// Use a dark green color for the AI
-			color = WZCOL_MAP_PREVIEW_AIPLAYER ;
+		{
+			color.rgba = clanColours[playerid].rgba;
 		}
-
+		
 		if(HQ)
 		{	// This shows where the HQ is on the map in a special color.
 			// We could do the same for anything else (oil/whatever) also.

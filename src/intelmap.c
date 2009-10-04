@@ -1361,7 +1361,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 		/* Get the travel to the next line */
 		linePitch = iV_GetTextLineSize();
 		/* Fix for spacing.... */
-		linePitch+=6;
+		linePitch+=3;
 		ty+=3;
 		/* Fix for spacing.... */
 
@@ -1377,7 +1377,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 				return;
 			}
 			//need to check the string will fit!
-			iV_DrawText(((VIEWDATA *)psMessage->pViewData)->ppTextMsg[i], x0 + TEXT_XINDENT,
+			iV_DrawText(_(((VIEWDATA *)psMessage->pViewData)->ppTextMsg[i]), x0 + TEXT_XINDENT,
 				(ty + TEXT_YINDENT*3) + (i * linePitch));
 		}
 	}

@@ -42,9 +42,12 @@
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/iniparser/iniparser.h"
 #include "objects.h"
 #include "hci.h"
+#include "loadsave.h"
 #include "message.h"
+#include "challenge.h"
 #include "intelmap.h"
 #include "map.h"
 #include "structure.h"
@@ -2359,7 +2362,56 @@ static int scrGameOverMessage(lua_State *L)
 	// not always is tough, so better be sure
 	displayGameOver(gameWon);
 
-	return 0;
+	if (challengeActive)
+	{
+		char sPath[64], key[64], timestr[32], *fStr;
+		int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
+		bool victory = false;
+		dictionary *dict = iniparser_load(CHALLENGE_SCORES);
+
+		fStr = strrchr(sRequestResult, '/');
+		fStr++;	// skip slash
+		if (fStr == '\0')
+		{
+			debug(LOG_ERROR, "Bad path to challenge file (%s)", sRequestResult);
+			return true;
+		}
+		sstrcpy(sPath, fStr);
+		sPath[strlen(sPath) - 4] = '\0';	// remove .ini
+		if (dict)
+		{
+			ssprintf(key, "%s:Victory", sPath);
+			victory = iniparser_getboolean(dict, key, false);
+			ssprintf(key, "%s:seconds", sPath);
+			seconds = iniparser_getint(dict, key, 0);
+		}
+		else
+		{
+			dict = dictionary_new(3);
+		}
+
+		// Update score if we have a victory and best recorded was a loss,
+		// or both were losses but time is higher, or both were victories
+		// but time is lower.
+		if ((!victory && gameWon) 
+		    || (!gameWon && !victory && newtime > seconds)
+		    || (gameWon && victory && newtime < seconds))
+		{
+			dictionary_set(dict, sPath, NULL);
+			ssprintf(key, "%s:Seconds", sPath);
+			ssprintf(timestr, "%d", newtime);
+			iniparser_setstring(dict, key, timestr);
+			ssprintf(key, "%s:Player", sPath);
+			iniparser_setstring(dict, key, NetPlay.players[selectedPlayer].name);
+			ssprintf(key, "%s:Victory", sPath);
+			iniparser_setstring(dict, key, gameWon ? "true": "false");
+		}
+		iniparser_dump_ini(dict, CHALLENGE_SCORES);
+		iniparser_freedict(dict);
+	}
+
+	return true;
+
 }
 
 
@@ -3131,6 +3183,8 @@ static int scrAllianceExistsBetween(lua_State *L)
 
 	lua_pushboolean(L, alliances[i][j] == ALLIANCE_FORMED);
 	return 1;
+	ASSERT_OR_RETURN(false, i < MAX_PLAYERS && j < MAX_PLAYERS && i >= 0 && j >= 0, 
+	                 "Invalid player parameters %d and %d", i, j);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -5083,7 +5137,7 @@ WZ_DECL_UNUSED static BOOL scrFireWeaponAtObj(void)
 {
 	Vector3i target;
 	BASE_OBJECT *psTarget;
-	WEAPON sWeapon = {0, 0, 0, 0, 0, 0};
+	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0};
 
 	if (!stackPopParams(2, ST_WEAPON, &sWeapon.nStat, ST_BASEOBJECT, &psTarget))
 	{
@@ -5109,7 +5163,7 @@ WZ_DECL_UNUSED static BOOL scrFireWeaponAtObj(void)
 WZ_DECL_UNUSED static BOOL scrFireWeaponAtLoc(void)
 {
 	Vector3i target;
-	WEAPON sWeapon = {0, 0, 0, 0, 0, 0};
+	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0};
 
 	if (!stackPopParams(3, ST_WEAPON, &sWeapon.nStat, VAL_INT, &target.x, VAL_INT, &target.y))
 	{
@@ -6506,7 +6560,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 	return numEnemies;
 }
 
-/* Similiar to structureBuiltInRange(), but also returns true if structure is not finished */
+/* Similar to structureBuiltInRange(), but also returns true if structure is not finished */
 WZ_DECL_UNUSED static BOOL scrNumStructsByStatInRange(void)
 {
 	SDWORD		player, lookingPlayer, index, x, y, range;

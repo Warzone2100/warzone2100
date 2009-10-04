@@ -29,6 +29,7 @@
 
 
 #if defined(HAVE_CONFIG_H)
+#  undef _XOPEN_SOURCE
 #  include "config.h"
 #elif defined(__MACOSX__)
 #  include "config-macosx.h"
@@ -554,10 +555,9 @@
 
 #elif defined(WZ_OS_UNIX)
 #  include <unistd.h>
-#elif defined(WZ_OS_LINUX)
-#  include <alloca.h>
-#elif defined(WZ_OS_FREEBSD)
-#  include <stdlib.h> // For alloca
+#  if defined(HAVE_ALLOCA_H)
+#    include <alloca.h>
+#  endif
 #endif /* WZ_OS_* */
 
 

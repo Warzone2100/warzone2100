@@ -23,14 +23,6 @@
 
 #include "fpath.h"
 
-/** Reset the A* counters
- *
- *  This function resets astarInner among others.
- *
- *  @ingroup pathfinding
- */
-extern void astarResetCounters(void);
-
 /** return codes for astar
  *
  *  @ingroup pathfinding
@@ -47,10 +39,6 @@ enum
  *  @ingroup pathfinding
  */
 SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob);
-
-/** Check LOS (Line Of Sight) between two tiles
- */
-extern BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2);
 
 /** Clean up the path finding node table.
  *

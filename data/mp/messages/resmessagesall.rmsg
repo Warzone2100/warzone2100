@@ -678,7 +678,7 @@ RES_V_B13
 {
 	{
 		_("Medium Super Heavy Body"),
-		_("More armor and body points than Vengance"),
+		_("More armor and body points than Vengeance"),
 		_("Slow moving Body"),
 		_("Very expensive to produce"),
 	},

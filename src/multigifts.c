@@ -428,7 +428,7 @@ void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allow
 	}
 
 	// Not campaign and alliances are transitive
-	if ((bMultiPlayer || game.type == SKIRMISH) && game.alliance == ALLIANCES_TEAMS)
+	if (game.alliance == ALLIANCES_TEAMS)
 	{
 		giftRadar(p1, p2, false);
 		giftRadar(p2, p1, false);
@@ -730,15 +730,14 @@ void recvMultiPlayerRandomArtifacts()
 // ///////////////////////////////////////////////////////////////
 void giftArtifact(UDWORD owner, UDWORD x, UDWORD y)
 {
-	PLAYER_RESEARCH *pO,*pR;
-	UDWORD	topic=0;
-	pR   = asPlayerResList[selectedPlayer];
+	PLAYER_RESEARCH	*pR = asPlayerResList[selectedPlayer];
 
 	if (owner < MAX_PLAYERS)
 	{
-		pO	 = asPlayerResList[owner];
+		PLAYER_RESEARCH	*pO = asPlayerResList[owner];
+		int topic;
 
-		for (topic = numResearch - 1; topic > 0; topic--)
+		for (topic = numResearch - 1; topic >= 0; topic--)
 		{
 			if (IsResearchCompleted(&pO[topic])
 			 && !IsResearchPossible(&pR[topic]))
@@ -817,9 +816,8 @@ void createTeamAlliances(void)
 		for (j = 0; j < MAX_PLAYERS; j++)
 		{
 			if (i != j
-			 && playerTeam[i] == playerTeam[j]	// Wto different players belonging to the same team
+			 && NetPlay.players[i].team == NetPlay.players[j].team	// two different players belonging to the same team
 			 && !aiCheckAlliances(i, j)
-			 && playerTeam[i] >= 0
 			 && game.skDiff[i]
 			 && game.skDiff[j])	// Not allied and not ignoring teams
 			{

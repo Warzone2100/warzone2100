@@ -146,7 +146,6 @@ BOOL droidInit(void)
 float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
 	float		relativeDamage;
-	SECONDARY_STATE	state;
 
 	CHECK_DROID(psDroid);
 
@@ -161,7 +160,7 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 	if (relativeDamage > 0.0f)
 	{
 		// reset the attack level
-		if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && state == DSS_ALEV_ATTACKED)
+		if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ATTACKED)
 		{
 			secondarySetState(psDroid, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
 		}
@@ -176,8 +175,10 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 	else if (relativeDamage < 0.0f)
 	{
 		// HACK: Prevent transporters from being destroyed in single player
-		if (!bMultiPlayer && psDroid->droidType == DROID_TRANSPORTER)
+		// FIXME: in projectile routines, turnOffMultiMsg() is called, and bites us here
+		if ( (game.type == CAMPAIGN) && !bMultiPlayer && (psDroid->droidType == DROID_TRANSPORTER) )
 		{
+			debug(LOG_ATTACK, "Transport(%d) saved from death--since it should never die (SP only)", psDroid->id);
 			psDroid->body = 1;
 			return 0.0f;
 		}
@@ -675,9 +676,8 @@ void droidBurn(DROID *psDroid)
 
 	/* add scream */
 	debug( LOG_NEVER, "baba burn" );
-
+	// NOTE: 3 types of screams are available ID_SOUND_BARB_SCREAM - ID_SOUND_BARB_SCREAM3
 	audio_PlayObjDynamicTrack( psDroid, ID_SOUND_BARB_SCREAM+(rand()%3), NULL );
-
 
 	/* set droid running */
 	orderDroid( psDroid, DORDER_RUNBURN );
@@ -795,6 +795,21 @@ void droidUpdate(DROID *psDroid)
 	SDWORD	damageToDo;
 
 	CHECK_DROID(psDroid);
+
+#ifdef DEBUG
+	// Check that we are (still) in the sensor list
+	if (psDroid->droidType == DROID_SENSOR)
+	{
+		BASE_OBJECT	*psSensor;
+
+		for (psSensor = apsSensorList[0]; psSensor; psSensor = psSensor->psNextFunc)
+		{
+			if (psSensor == (BASE_OBJECT *)psDroid) break;
+		}
+		ASSERT(psSensor == (BASE_OBJECT *)psDroid, "%s(%p) not in sensor list!", 
+		       droidGetName(psDroid), psDroid);
+	}
+#endif
 
 	// update the cluster of the droid
 	if (psDroid->id % 20 == frameGetFrameNumber() % 20)
@@ -1099,8 +1114,8 @@ BOOL droidStartBuild(DROID *psDroid)
 		}
 	}
 
-	//check structure not already built
-	if (psStruct->status != SS_BUILT)
+	//check structure not already built, and we still 'own' it
+	if (psStruct->status != SS_BUILT && psStruct->player ==  psDroid->player)
 	{
 		psDroid->actionStarted = gameTime;
 		psDroid->actionPoints = 0;
@@ -1158,8 +1173,8 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	STRUCTURE	*psStruct;
 
 	CHECK_DROID(psDroid);
-
-	ASSERT_OR_RETURN(false, psDroid->action == DACTION_BUILD, "unit is not building" );
+	ASSERT_OR_RETURN(false, psDroid->action == DACTION_BUILD, "%s (order %s) has wrong action for construction: %s",
+	                 droidGetName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action));
 	ASSERT_OR_RETURN(false, psDroid->psTarget, "Trying to update a construction, but no target!");
 
 	psStruct = (STRUCTURE *)psDroid->psTarget;
@@ -1175,6 +1190,13 @@ BOOL droidUpdateBuild(DROID *psDroid)
 		debug( LOG_NEVER, "DACTION_BUILD: done");
 		psDroid->action = DACTION_NONE;
 
+		return false;
+	}
+
+	// make sure we still 'own' the building in question
+	if (psStruct->player != psDroid->player)
+	{
+		psDroid->action = DACTION_NONE;		// stop what you are doing fool it isn't ours anymore!
 		return false;
 	}
 
@@ -2456,15 +2478,16 @@ UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex, UD
 	// Factor in terrain
 	speed *= getSpeedFactor(terrainType, propulsion->propulsionType);
 	speed /= 100;
-	// Factor in experience
-	speed *= (100 + EXP_SPEED_BONUS * level);
-	speed /= 100;
 
 	// Need to ensure doesn't go over the max speed possible for this propulsion
 	if (speed > propulsion->maxSpeed)
 	{
 		speed = propulsion->maxSpeed;
 	}
+
+	// Factor in experience
+	speed *= (100 + EXP_SPEED_BONUS * level);
+	speed /= 100;
 
 	return speed;
 }
@@ -2652,6 +2675,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	{
 		psDroid->psActionTarget[i] = NULL;
 		psDroid->asWeaps[i].lastFired = 0;
+		psDroid->asWeaps[i].shotsFired = 0;
 		psDroid->asWeaps[i].nStat = 0;
 		psDroid->asWeaps[i].ammo = 0;
 		psDroid->asWeaps[i].recoilValue = 0;
@@ -2826,31 +2850,26 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	UDWORD						inc;
 
 	psDroid->droidType = droidTemplateType(pTemplate);
-
 	psDroid->direction = 0;
 	psDroid->pitch =  0;
 	psDroid->roll = 0;
 	psDroid->numWeaps = pTemplate->numWeaps;
-	for (inc = 0;inc < psDroid->numWeaps;inc++)
-	{
-		psDroid->asWeaps[inc].rotation = 0;
-		psDroid->asWeaps[inc].pitch = 0;
-	}
-
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
 	psDroid->originalBody = psDroid->body;
 
 	//create the droids weapons
 	if (pTemplate->numWeaps > 0)
 	{
-
 		for (inc=0; inc < pTemplate->numWeaps; inc++)
 		{
 			psDroid->asWeaps[inc].lastFired=0;
+			psDroid->asWeaps[inc].shotsFired=0;
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
 			psDroid->asWeaps[inc].recoilValue = 0;
 			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->
 				asWeaps[inc].nStat)->numRounds;
+			psDroid->asWeaps[inc].rotation = 0;
+			psDroid->asWeaps[inc].pitch = 0;
 		}
 	}
 	else
@@ -2877,7 +2896,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 
 
 // Sets the parts array in a template given a droid.
-static void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate)
+void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate)
 {
 	UDWORD inc;
 	psTemplate->numWeaps = 0;
@@ -3195,16 +3214,20 @@ void	setSelectedCommander(UDWORD commander)
  */
 BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 {
-	iIMDShape *psShape, *psWeaponImd;
+	iIMDShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
 
 	CHECK_DROID(psDroid);
 
-	psShape = BODY_IMD(psDroid, psDroid->player);
-	psWeaponImd = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pIMD;
-
-	if(psShape && psShape->nconnectors)
+	if (psBodyImd && psBodyImd->nconnectors)
 	{
 		Vector3f barrel = {0.0f, 0.0f, 0.0f};
+		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
+
+		if (psDroid->asWeaps[weapon_slot].nStat)
+		{
+			psMountImd = WEAPON_MOUNT_IMD(psDroid, weapon_slot);
+			psWeaponImd = WEAPON_IMD(psDroid, weapon_slot);
+		}
 
 		pie_MatBegin();
 
@@ -3214,18 +3237,36 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 		pie_MatRotY( DEG( psDroid->direction ) );
 		pie_MatRotX( DEG( psDroid->pitch ) );
 		pie_MatRotZ( DEG( -psDroid->roll ) );
-		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
-					  -psShape->connectors[weapon_slot].y);//note y and z flipped
+		pie_TRANSLATE(psBodyImd->connectors[weapon_slot].x, -psBodyImd->connectors[weapon_slot].z,
+					 -psBodyImd->connectors[weapon_slot].y);//note y and z flipped
 
-		//matrix = the gun and turret mount on the body
+		//matrix = the weapon[slot] mount on the body
 		pie_MatRotY(DEG(psDroid->asWeaps[weapon_slot].rotation));	// +ve anticlockwise
-		pie_MatRotX(DEG(psDroid->asWeaps[weapon_slot].pitch));		// +ve up
-		pie_MatRotZ(DEG(0));
 
-		//matrix = the muzzle mount on turret
-		if( psWeaponImd && psWeaponImd->nconnectors )
+		// process turret mount
+		if (psMountImd && psMountImd->nconnectors)
 		{
-			barrel = Vector3f_Init(psWeaponImd->connectors->x, -psWeaponImd->connectors->y, -psWeaponImd->connectors->z);
+			pie_TRANSLATE(psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
+		}		
+
+		//matrix = the turret connector for the gun
+		pie_MatRotX(DEG(psDroid->asWeaps[weapon_slot].pitch));		// +ve up
+
+		//process the gun
+		if (psWeaponImd && psWeaponImd->nconnectors)
+		{
+			unsigned int connector_num = 0;
+
+			// which barrel is firing if model have multiple muzzle connectors?
+			if (psDroid->asWeaps[weapon_slot].shotsFired && (psWeaponImd->nconnectors > 1))
+			{
+				// shoot first, draw later - substract one shot to get correct results
+				connector_num = (psDroid->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
+			}
+			
+			barrel = Vector3f_Init(psWeaponImd->connectors[connector_num].x,
+									-psWeaponImd->connectors[connector_num].y,
+									-psWeaponImd->connectors[connector_num].z);
 		}
 
 		pie_RotateTranslate3f(&barrel, muzzle);
@@ -3398,7 +3439,7 @@ unsigned int getDroidLevel(const DROID* psDroid)
 	unsigned int i;
 
 	// Commanders don't need as much kills for ranks in multiplayer
-	if (isCommander && cmdGetDroidMultiExpBoost())
+	if (isCommander && cmdGetDroidMultiExpBoost() && bMultiPlayer)
 	{
 		numKills *= 2;
 	}
@@ -3822,15 +3863,6 @@ void setUpBuildModule(DROID *psDroid)
 		//we've got a problem if it didn't find a structure
 		psDroid->action = DACTION_NONE;
 	}
-}
-
-const char *getDroidName(const DROID *psDroid)
-{
-	DROID_TEMPLATE sTemplate;
-
-	templateSetParts(psDroid, &sTemplate);
-
-	return getTemplateName(&sTemplate);
 }
 
 const char* getTemplateName(const DROID_TEMPLATE *psTemplate)
@@ -4289,7 +4321,7 @@ BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 	//finally check the right droid/sensor combination
 	// check vtol droid with commander
 	if ((isVtolDroid(psDroid) || !proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
-		((DROID *)psObj)->droidType == DROID_COMMAND)
+		psObj->type == OBJ_DROID && ((DROID *)psObj)->droidType == DROID_COMMAND)
 	{
 		return true;
 	}
@@ -4681,8 +4713,12 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
 //
 void SelectDroid(DROID *psDroid)
 {
-	psDroid->selected = true;
-	intRefreshScreen();
+	// we shouldn't ever control the transporter in SP games
+	if (psDroid->droidType != DROID_TRANSPORTER || bMultiPlayer)
+	{
+		psDroid->selected = true;
+		intRefreshScreen();
+	}
 }
 
 
@@ -4795,4 +4831,17 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 			ASSERT_HELPER(droid->psActionTarget[i]->direction >= 0.0f, location, function, "CHECK_DROID: Bad direction of turret %u's target", i);
 		}
 	}
+}
+
+int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj)
+{
+	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
+	Vector2i rPos = { map_coord(psObj->pos.x), map_coord(psObj->pos.y) };
+
+	if (!fpathCheck(dPos, rPos, psPropStats->propulsionType))
+	{
+		return -1;
+	}
+	return objPosDiffSq(psDroid->pos, psObj->pos);
 }

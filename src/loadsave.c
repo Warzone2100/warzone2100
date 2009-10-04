@@ -27,6 +27,7 @@
 
 #include <ctype.h>
 #include <physfs.h>
+#include <time.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -57,13 +58,11 @@
 #include "intdisplay.h"
 #include "mission.h"
 #include "lib/gamelib/gtime.h"
-//======================================================================================
-//--------------------------------
+
 #define totalslots 36			// saves slots
 #define slotsInColumn 12		// # of slots in a column
 #define totalslotspace 64		// guessing 64 max chars for filename.
-//--------------------------------
-// ////////////////////////////////////////////////////////////////////////////
+
 #define LOADSAVE_X				D_W + 16
 #define LOADSAVE_Y				D_H + 5
 #define LOADSAVE_W				610
@@ -71,11 +70,9 @@
 
 #define MAX_SAVE_NAME			60
 
-
 #define LOADSAVE_HGAP			9
 #define LOADSAVE_VGAP			9
 #define LOADSAVE_BANNER_DEPTH	40 		//top banner which displays either load or save
-
 
 #define LOADENTRY_W				((LOADSAVE_W / 3 )-(3 * LOADSAVE_HGAP)) 
 #define LOADENTRY_H				(LOADSAVE_H -(5 * LOADSAVE_VGAP )- (LOADSAVE_BANNER_DEPTH+LOADSAVE_VGAP) ) /5
@@ -92,16 +89,10 @@
 #define SAVEENTRY_EDIT			ID_LOADSAVE + totalslots + totalslots		// save edit box. must be highest value possible I guess. -Q
 
 // ////////////////////////////////////////////////////////////////////////////
-void drawBlueBox				(UDWORD x,UDWORD y, UDWORD w, UDWORD h);
-BOOL closeLoadSave				(void);
-BOOL runLoadSave				(BOOL bResetMissionWidgets);
-BOOL displayLoadSave			(void);
 static BOOL _addLoadSave		(BOOL bLoad, const char *sSearchPath, const char *sExtension, const char *title);
-static BOOL _runLoadSave		(BOOL bResetMissionWidgets);
 static void displayLoadBanner	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayLoadSlot		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayLoadSaveEdit	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		removeWildcards		(char *pStr);
 
 static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 static	BOOL		mode;
@@ -142,12 +133,10 @@ BOOL bLoad;
 	case LOAD_FRONTEND:
 	case LOAD_MISSIONEND:
 	case LOAD_INGAME:
-	case LOAD_FORCE:
 		bLoad = true;
 		break;
 	case SAVE_MISSIONEND:
 	case SAVE_INGAME:
-	case SAVE_FORCE:
 	default:
 		bLoad = false;
 		break;
@@ -155,6 +144,7 @@ BOOL bLoad;
 
 	return _addLoadSave(bLoad,sSearchPath,sExtension,title);
 }
+
 //****************************************************************************************
 // Load menu/save menu?
 //*****************************************************************************************
@@ -165,7 +155,8 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	W_LABINIT		sLabInit;
 	UDWORD			slotCount;
 // removed hardcoded values!  change with the defines above! -Q
-	static char	sSlots[totalslots][totalslotspace];
+	static char	sSlotCaps[totalslots][totalslotspace];
+	static char	sSlotTips[totalslots][totalslotspace];
 	char **i, **files;
 	const char* checkExtension;
 
@@ -312,11 +303,13 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	// Check for an extension like ".ext", not "ext"
 	sasprintf((char**)&checkExtension, ".%s", sExtension);
 
-	// add savegame filenames minus extensions to buttons (up to max 10)
+	// add savegame filenames minus extensions to buttons
 	files = PHYSFS_enumerateFiles(sSearchPath);
 	for (i = files; *i != NULL; ++i)
 	{
 		W_BUTTON *button;
+		char savefile[256];
+		time_t savetime;
 
 		// See if this filename contains the extension we're looking for
 		if (!strstr(*i, checkExtension))
@@ -328,15 +321,23 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 		button = (W_BUTTON*)widgGetFromID(psRequestScreen, LOADENTRY_START + slotCount);
 
 		debug(LOG_SAVE, "We found [%s]", *i);
-		/* Set the tip and add the button */
+
+		/* Figure save-time */
+		snprintf(savefile, sizeof(savefile), "%s/%s", sSearchPath, *i);
+		savetime = PHYSFS_getLastModTime(savefile);
+		sstrcpy(sSlotTips[slotCount], ctime(&savetime));
+
+		/* Set the button-text */
 		(*i)[strlen(*i) - 4] = '\0'; // remove .gam extension
-		sstrcpy(sSlots[slotCount], *i);  //store it!
-		button->pTip = sSlots[slotCount];
-		button->pText = sSlots[slotCount];
+		sstrcpy(sSlotCaps[slotCount], *i);  //store it!
+		
+		/* Add button */
+		button->pTip = sSlotTips[slotCount];
+		button->pText = sSlotCaps[slotCount];
 		slotCount++;		// goto next but...
 		if (slotCount == totalslots)
 		{
-			break;	// only show up to 10 entries
+			break;
 		}
 	}
 	PHYSFS_freeList(files);
@@ -373,13 +374,6 @@ BOOL closeLoadSave(void)
 	inputLooseFocus();
 	return true;
 }
-
-// ////////////////////////////////////////////////////////////////////////////
-BOOL runLoadSave(BOOL bResetMissionWidgets)
-{
-	return _runLoadSave(bResetMissionWidgets);
-}
-
 
 /***************************************************************************
 	Delete a savegame.  saveGameName should be a .gam extension save game
@@ -430,9 +424,9 @@ void deleteSaveGame(char* saveGameName)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Returns true if cancel pressed or a valid game slot was selected.
-// if when returning true strlen(sRequestResult) != 0 then a valid game
-// slot was selected otherwise cancel was selected..
-static BOOL _runLoadSave(BOOL bResetMissionWidgets)
+// if when returning true strlen(sRequestResult) != 0 then a valid game slot was selected
+// otherwise cancel was selected..
+BOOL runLoadSave(BOOL bResetMissionWidgets)
 {
 	UDWORD		id=0;
 	W_EDBINIT	sEdInit;
@@ -447,14 +441,14 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 	// cancel this operation...
 	if(id == LOADSAVE_CANCEL || CancelPressed() )
 	{
-		goto failure;
+		goto cleanup;
 	}
 
 	// clicked a load entry
 	if( id >= LOADENTRY_START  &&  id <= LOADENTRY_END )
 	{
 
-		if(mode)								// Loading, return that entry.
+		if (mode)								// Loading, return that entry.
 		{
 			if( ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText )
 			{
@@ -462,15 +456,11 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 			}
 			else
 			{
-				goto failure;				// clicked on an empty box
+				goto cleanup;				// clicked on an empty box
 			}
 
-			if( bLoadSaveMode == LOAD_FORCE || bLoadSaveMode ==SAVE_FORCE )
-			{
-				goto successforce;				// it's a force, dont check the cd.
-			}
-				goto success;
-			}
+			goto success;
+		}
 		else //  SAVING!add edit box at that position.
 		{
 
@@ -534,8 +524,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 		}
 
 
-		// scan to see if that game exists in another slot, if
-		// so then fail.
+		// scan to see if that game exists in another slot, if so then fail.
 		sstrcpy(sTemp, ((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText);
 
 		for(i=LOADENTRY_START;i<LOADENTRY_END;i++)
@@ -568,30 +557,19 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 				deleteSaveGame(sDelete);	//only delete game if a new game fills the slot
 			}
 		}
-		else
-		{
-			goto failure;				// we entered a blank name..
-		}
-
-		// we're done. saving.
-		closeLoadSave();
-		bRequestLoad = false;
-        if (bResetMissionWidgets && widgGetFromID(psWScreen,IDMISSIONRES_FORM) == NULL)
-        {
-            resetMissionWidgets();			//reset the mission widgets here if necessary
-        }
-		return true;
+		
+		goto cleanup;
 	}
 
 	return false;
 
 // failed and/or cancelled..
-failure:
+cleanup:
 	closeLoadSave();
 	bRequestLoad = false;
     if (bResetMissionWidgets && widgGetFromID(psWScreen,IDMISSIONRES_FORM) == NULL)
 	{
-		resetMissionWidgets();
+		resetMissionWidgets();			//reset the mission widgets here if necessary
 	}
     return true;
 
@@ -600,7 +578,6 @@ success:
 	campaign = getCampaign(sRequestResult);
 	setCampaignNumber(campaign);
 	debug(LOG_WZ, "Set campaign for %s to %u", sRequestResult, campaign);
-successforce:
 	closeLoadSave();
 	bRequestLoad = true;
 	return true;
@@ -688,9 +665,9 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 
-	if(((W_BUTTON *)psWidget)->pTip )
+	if(((W_BUTTON *)psWidget)->pText )
 	{
-		sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip);
+		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText);
 
 		iV_SetFont(font_regular);									// font
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);

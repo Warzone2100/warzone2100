@@ -135,6 +135,8 @@ typedef void(*SigActionHandler)(int, siginfo_t *, void *);
 
 #ifdef WZ_OS_MAC
 static struct sigaction oldAction[32];
+#elif defined(_NSIG)
+static struct sigaction oldAction[_NSIG];
 #else
 static struct sigaction oldAction[NSIG];
 #endif
@@ -356,6 +358,10 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
  */
 static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
 {
+	int gdbPipe[2];
+	pid_t pid;
+	char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
+	char *gdbEnv[] = { NULL };
 	/* Check if the "bare minimum" is available: GDB and an absolute path
 	 * to our program's binary.
 	 */
@@ -380,7 +386,6 @@ static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
 	}
 
 	// Create a pipe to use for communication with 'gdb'
-	int gdbPipe[2];
 	if (pipe(gdbPipe) == -1)
 	{
 		write(dumpFile, "Pipe failed\n",
@@ -392,7 +397,7 @@ static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
 	}
 
 	// Fork a new child process
-	const pid_t pid = fork();
+	pid = fork();
 	if (pid == -1)
 	{
 		write(dumpFile, "Fork failed\n",
@@ -415,9 +420,6 @@ static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
 
 		return pid;
 	}
-
-	char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
-	char *gdbEnv[] = { NULL };
 
 	close(gdbPipe[1]); // No output to pipe
 
@@ -452,12 +454,8 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 {
 	// Spawn a GDB instance and retrieve a pipe to its stdin
 	int gdbPipe;
-	const pid_t pid = execGdb(dumpFile, &gdbPipe);
-	if (pid == 0)
-	{
-		return false;
-	}
-
+	int status;
+	pid_t wpid;
 	                                  // Retrieve a full stack backtrace
 	static const char gdbCommands[] = "backtrace full\n"
 
@@ -470,6 +468,11 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	                                  // Show the content of all registers
 	                                  "info registers\n"
 	                                  "quit\n";
+	const pid_t pid = execGdb(dumpFile, &gdbPipe);
+	if (pid == 0)
+	{
+		return false;
+	}
 
 	write(gdbPipe, gdbCommands, sizeof(gdbCommands));
 
@@ -479,8 +482,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	fsync(gdbPipe);
 
 	// Wait for our child to terminate
-	int status;
-	const pid_t wpid = waitpid(pid, &status, 0);
+	wpid = waitpid(pid, &status, 0);
 
 	// Clean up our end of the pipe
 	close(gdbPipe);
@@ -532,24 +534,23 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSED void * sigcontext)
 {
 	static sig_atomic_t allreadyRunning = 0;
-
-	if (allreadyRunning)
-		raise(signum);
-	allreadyRunning = 1;
-
+	// XXXXXX will be converted into random characters by mkstemp(3)
+	static const char gdmpPath[] = "/tmp/warzone2100.gdmp-XXXXXX";
+	char dumpFilename[sizeof(gdmpPath)];
+	int dumpFile;
+	const char *signal;
 # if defined(__GLIBC__)
 	void * btBuffer[MAX_BACKTRACE] = {NULL};
 	uint32_t btSize = backtrace(btBuffer, MAX_BACKTRACE);
 # endif
 
-	// XXXXXX will be converted into random characters by mkstemp(3)
-	static const char gdmpPath[] = "/tmp/warzone2100.gdmp-XXXXXX";
+	if (allreadyRunning)
+		raise(signum);
+	allreadyRunning = 1;
 
-	char dumpFilename[sizeof(gdmpPath)];
 	sstrcpy(dumpFilename, gdmpPath);
 
-	const int dumpFile = mkstemp(dumpFilename);
-
+	dumpFile = mkstemp(dumpFilename);
 
 	if (dumpFile == -1)
 	{
@@ -557,14 +558,12 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 		return;
 	}
 
-
 	// Dump a generic info header
 	dbgDumpHeader(dumpFile);
 
-
 	write(dumpFile, "Dump caused by signal: ", strlen("Dump caused by signal: "));
 
-	const char * signal = wz_strsignal(siginfo->si_signo, siginfo->si_code);
+	signal = wz_strsignal(siginfo->si_signo, siginfo->si_code);
 	write(dumpFile, signal, strlen(signal));
 	write(dumpFile, "\n\n", 2);
 
@@ -602,6 +601,9 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 #if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 static bool fetchProgramPath(char * const programPath, size_t const bufSize, const char * const programCommand)
 {
+	FILE *whichProgramStream;
+	size_t bytesRead;
+	char *linefeed;
 	// Construct the "which $(programCommand)" string
 	char whichProgramCommand[PATH_MAX];
 	snprintf(whichProgramCommand, sizeof(whichProgramCommand), "which %s", programCommand);
@@ -614,8 +616,8 @@ static bool fetchProgramPath(char * const programPath, size_t const bufSize, con
 	/* Execute the "which" command (constructed above) and collect its
 	 * output in programPath.
 	 */
-	FILE * const whichProgramStream = popen(whichProgramCommand, "r");
-	size_t const bytesRead = fread(programPath, 1, bufSize, whichProgramStream);
+	whichProgramStream = popen(whichProgramCommand, "r");
+	bytesRead = fread(programPath, 1, bufSize, whichProgramStream);
 	pclose(whichProgramStream);
 
 	// Check whether our buffer is too small, indicate failure if it is
@@ -626,7 +628,7 @@ static bool fetchProgramPath(char * const programPath, size_t const bufSize, con
 	}
 
 	// Cut of the linefeed (and everything following it) if it's present.
-	char * const linefeed = strchr(programPath, '\n');
+	linefeed = strchr(programPath, '\n');
 	if (linefeed)
 	{
 		*linefeed = '\0';
@@ -651,6 +653,10 @@ static bool fetchProgramPath(char * const programPath, size_t const bufSize, con
  */
 void setupExceptionHandler(int argc, char * argv[])
 {
+#if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
+	const char *programCommand;
+	time_t currentTime;
+#endif
 #if !defined(WZ_OS_MAC)
 	// Initialize info required for the debug dumper
 	dbgDumpInit(argc, argv);
@@ -663,7 +669,7 @@ void setupExceptionHandler(int argc, char * argv[])
 	prevExceptionHandler = SetUnhandledExceptionFilter(windowsExceptionHandler);
 # endif // !defined(WZ_CC_MINGW)
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
-	const char * const programCommand = argv[0];
+	programCommand = argv[0];
 
 	// Get full path to this program. Needed for gdb to find the binary.
 	programIsAvailable = fetchProgramPath(programPath, sizeof(programPath), programCommand);
@@ -673,7 +679,7 @@ void setupExceptionHandler(int argc, char * argv[])
 
 	sysInfoValid = (uname(&sysInfo) == 0);
 
-	time_t currentTime = time(NULL);
+	currentTime = time(NULL);
 	sstrcpy(executionDate, ctime(&currentTime));
 
 	snprintf(programPID, sizeof(programPID), "%i", getpid());

@@ -145,7 +145,7 @@ ViperFlameWheels			_("Flamer Viper Wheels")
 ViperSensorWheels			_("Sensor Turret Viper Wheels")
 ViperLtCannonTracks			_("Light Cannon Viper Tracks")
 
-CobraHMGHalfTrack			_("Heavy Machinegun Cobra Half-trackS")
+CobraHMGHalfTrack			_("Heavy Machinegun Cobra Half-tracks")
 CobraMortarHalfTrack			_("Mortar Cobra Half-tracks")
 CobraLtCnTrks				_("Light Cannon Cobra Tracks")
 

@@ -155,7 +155,7 @@ artType	[0]	int		1				//get from STRUCTURE
 artVal	[0]	int		0				//get from Medium Factory
 artX		[0]	int		4928
 artY		[0]	int		4288
-artComp	[0]	RESEARCHSTAT	"CAM2RESEARCH" //"R-Wpn-TUTMG"			//CHANGE THIS RESEARCH STAT
+artComp	[0]	RESEARCHSTAT	"CAM2RESEARCH" //"R-Wpn-MG1Mk1"			//CHANGE THIS RESEARCH STAT
 */
 
 /* ********************************************	*/

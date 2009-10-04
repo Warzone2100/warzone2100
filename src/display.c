@@ -565,7 +565,8 @@ static void CheckFinishedDrag(void)
 				    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 				{
 					if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
-					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE)
+					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE
+					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD)
 					    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
 					{
 						wallDrag.x2 = mouseTileX;
@@ -608,7 +609,8 @@ static void CheckStartWallDrag(void)
 		    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 		{
 			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE)
+			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE
+			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD)
 			    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
 			{
 				wallDrag.x1 = wallDrag.x2 = mouseTileX;
@@ -686,7 +688,8 @@ static void HandleDrag(void)
 		if(buildState == BUILD3D_VALID)
 		{
 			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE)
+			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE
+			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD)
 			    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
 			{
 				int dx, dy;
@@ -1640,11 +1643,7 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 		}
 		else
 		{
-			// we shouldn't ever control the transporter in SP games
-			if (psDroid->droidType != DROID_TRANSPORTER || bMultiPlayer)
-			{
-				SelectDroid(psDroid);
-			}
+			SelectDroid(psDroid);
 		}
 /*						if(psDroid->droidType == DROID_COMMAND)
 		{
@@ -2211,14 +2210,14 @@ void	dealWithLMB( void )
 				audio_PlayTrack( ID_SOUND_SELECT );
 			}
 
-			if(godMode && (mouseTileX >= 0) && (mouseTileX < (SDWORD)mapWidth) &&
-				(mouseTileY >= 0) && (mouseTileY < (SDWORD)mapHeight))
+			if (getDebugMappingStatus() && tileOnMap(mouseTileX, mouseTileY))
 			{
-				DBCONPRINTF(ConsoleString,(ConsoleString,"Tile Coords : %d,%d (%d,%d)", mouseTileX,mouseTileY,
-					mouseTileX*TILE_UNITS + TILE_UNITS/2, mouseTileY*TILE_UNITS + TILE_UNITS/2));
-			}
+				MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
 
-			//addConsoleMessage("Droid ordered to new location",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
+				DBCONPRINTF(ConsoleString, (ConsoleString, "Tile Coords : %d, %d [%d, %d] continent(l%d, h%d)", 
+				            mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
+				            (int)psTile->limitedContinent, (int)psTile->hoverContinent));
+			}
 		}
 
 		driveDisableTactical();

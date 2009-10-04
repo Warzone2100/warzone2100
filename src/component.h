@@ -29,8 +29,6 @@
 	Pumpkin Studios, EIDOS Interactive.
 */
 
-extern UBYTE PlayerColour[MAX_PLAYERS];// = {0,1,2,3,4,5,6,7}
-extern void initPlayerColours(void);
 extern BOOL setPlayerColour(UDWORD player, UDWORD col);
 extern UBYTE getPlayerColour(UDWORD pl);
 
@@ -75,7 +73,7 @@ extern void	compPersonToBits(DROID *psDroid);
 /* Get the brain imd */
 #define BRAIN_IMD(DROID,PLAYER)	(asBrainStats[DROID->asBits[COMP_BRAIN].nStat].pIMD)
 /* Get the weapon imd */
-#define WEAPON_IMD(DROID,PLAYER)	(asWeaponStats[DROID->asWeaps[0].nStat].pIMD)
+#define WEAPON_IMD(DROID,WEAPON_NUM)	(asWeaponStats[DROID->asWeaps[WEAPON_NUM].nStat].pIMD)
 /* Get the propulsion imd  THIS IS A LITTLE MORE COMPLICATED NOW!*/
 //#define PROPULSION_IMD(DROID,PLAYER)	(asPropulsionStats[DROID->asBits[COMP_PROPULSION].nStat].pIMD[PLAYER])
 /* Get the sensor imd */
@@ -87,7 +85,7 @@ extern void	compPersonToBits(DROID *psDroid);
 /* Get a construct imd */
 #define CONSTRUCT_IMD(DROID,PLAYER)	(asConstructStats[DROID->asBits[COMP_CONSTRUCT].nStat].pIMD)
 /* Get a weapon mount imd*/
-#define WEAPON_MOUNT_IMD(DROID,PLAYER)	(asWeaponStats[DROID->asWeaps[0].nStat].pMountGraphic)
+#define WEAPON_MOUNT_IMD(DROID,WEAPON_NUM)	(asWeaponStats[DROID->asWeaps[WEAPON_NUM].nStat].pMountGraphic)
 /* Get a sensor mount imd*/
 #define SENSOR_MOUNT_IMD(DROID,PLAYER)	(asSensorStats[DROID->asBits[COMP_SENSOR].nStat].pMountGraphic)
 /* Get a construct mount imd*/
@@ -97,7 +95,7 @@ extern void	compPersonToBits(DROID *psDroid);
 /* Get a repair mount imd*/
 #define REPAIR_MOUNT_IMD(DROID,PLAYER)	(asRepairStats[DROID->asBits[COMP_REPAIRUNIT].nStat].pMountGraphic)
 /* Get a muzzle flash pie*/
-#define MUZZLE_FLASH_PIE(DROID,PLAYER)	(asWeaponStats[DROID->asWeaps[0].nStat].pMuzzleGraphic)
+#define MUZZLE_FLASH_PIE(DROID,WEAPON_NUM)	(asWeaponStats[DROID->asWeaps[WEAPON_NUM].nStat].pMuzzleGraphic)
 
 /* Don't know what these might be? */
 extern void	updateLightLevels(void);

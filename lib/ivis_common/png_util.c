@@ -19,14 +19,12 @@
 */
 
 #include "lib/framework/frame.h"
-
+#include "lib/framework/debug.h"
 #include "png_util.h"
 #include <png.h>
 #include <physfs.h>
 
 #define PNG_BYTES_TO_CHECK 8
-static const unsigned int channelBitdepth = 8;
-static const unsigned int channelsPerPixel = 3;
 
 // PNG callbacks
 static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
@@ -166,16 +164,28 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	}
 
 	PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
+
+	ASSERT_OR_RETURN(false, image->depth > 3, "Unsupported image depth (%d) found.  We only support 3 (RGB) or 4 (ARGB)", image->depth);
+
 	return true;
 }
 
-void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
+static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, int color_type)
 {
 	unsigned char** scanlines = NULL;
 	png_infop info_ptr = NULL;
 	png_structp png_ptr = NULL;
+	unsigned int channelsPerPixel = 3;
+	PHYSFS_file* fileHandle;
 
-	PHYSFS_file* fileHandle = PHYSFS_openWrite(fileName);
+	if (color_type == PNG_COLOR_TYPE_GRAY)
+	{
+		channelsPerPixel = 1;
+	}
+
+	ASSERT(image->depth != 0, "Bad depth");
+
+	fileHandle = PHYSFS_openWrite(fileName);
 	if (fileHandle == NULL)
 	{
 		debug(LOG_ERROR, "pie_PNGSaveFile: PHYSFS_openWrite failed (while openening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
@@ -204,7 +214,7 @@ void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
 	else
 	{
 		unsigned int currentRow;
-		unsigned int row_stride = image->width * channelsPerPixel;
+		unsigned int row_stride = image->width * channelsPerPixel * image->depth / 8;
 
 		scanlines = malloc(sizeof(const char*) * image->height);
 		if (scanlines == NULL)
@@ -241,8 +251,8 @@ void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
 		// so to spare some CPU cycles we comment this out.
 		// png_set_compression_level(png_ptr, Z_DEFAULT_COMPRESSION);
 
-		png_set_IHDR(png_ptr, info_ptr, image->width, image->height, channelBitdepth,
-			             PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+		png_set_IHDR(png_ptr, info_ptr, image->width, image->height, image->depth,
+		             color_type, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
 		// Create an array of scanlines
 		for (currentRow = 0; currentRow < image->height; ++currentRow)
@@ -259,4 +269,14 @@ void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
 
 	free(scanlines);
 	return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+}
+
+void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
+{
+	internal_saveImage_PNG(fileName, image, PNG_COLOR_TYPE_RGB);
+}
+
+void iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image)
+{
+	internal_saveImage_PNG(fileName, image, PNG_COLOR_TYPE_GRAY);
 }

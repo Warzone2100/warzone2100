@@ -25,9 +25,6 @@
 
 #include "piedef.h"
 
-#define iV_DIVSHIFT 15
-#define iV_DIVMULTP (1 << iV_DIVSHIFT)
-
 extern void iV_Reset(void);
 extern void iV_ShutDown(void);
 

@@ -169,6 +169,9 @@ BOOL	radarOnScreen=false;
 /// Show unit/building gun/sensor range
 bool rangeOnScreen = false;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
 
+/// Tactical UI: show/hide target origin icon
+bool tuiTargetOrigin = false; 
+
 /// Temporary values for the terrain render - top left corner of grid to be rendered
 static int playerXTile, playerZTile;
 
@@ -218,6 +221,8 @@ bool showORDERS = false;
 int NET_PlayerConnectionStatus = 0;
 #define NETWORK_FORM_ID 0xFAAA
 #define NETWORK_BUT_ID 0xFAAB
+/** When enabled, this causes a segfault in the game, to test out the crash handler */
+bool CauseCrash = false;
 
 /** tells us in realtime, what droid is doing (order / action)
 */
@@ -395,9 +400,6 @@ void draw3DScene( void )
 
 	// draw terrain
 	displayTerrain();
-
-	// draw skybox
-	renderSurroundings();
 
 	pie_BeginInterface();
 	updateLightLevels();
@@ -589,7 +591,14 @@ void draw3DScene( void )
 	structureEffects(); // add fancy effects to structures
 
 	showDroidSensorRanges(); //shows sensor data for units/droids/whatever...-Q 5-10-05
-
+	if (CauseCrash)
+	{
+		char *crash = 0;
+		debug(LOG_ERROR, "Forcing a segfault! (crash handler test)");
+		// and here comes the crash
+		*crash = 0x3;
+		exit(-1);	// will never reach this, but just in case...
+	}
 	//visualize radius if needed
 	if (bRangeDisplay)
 	{
@@ -823,6 +832,9 @@ static void drawTiles(iView *player)
 	pie_TranslateTextureEnd();
 	// and to the warzone modelview transform
 	glPopMatrix();
+
+	// draw skybox
+	renderSurroundings();
 	
 	// clear the terrain highlight
 	for (i = 0; i < visibleTiles.y; i++)
@@ -2135,7 +2147,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			if (structureIsBlueprint(psStructure))
 			{
 				pieFlag = pie_TRANSLUCENT;
-				pieFlagData = 120;
+				pieFlagData = BLUEPRINT_OPACITY;
 			}
 			else
 			{
@@ -2157,16 +2169,15 @@ void	renderStructure(STRUCTURE *psStructure)
 		objectShimmy((BASE_OBJECT *)psStructure);
 	}
 
-	//first check if partially built - ANOTHER HACK!
-	if (psStructure->status == SS_BEING_BUILT
-	    || psStructure->status == SS_BEING_DEMOLISHED
-	    || (psStructure->status == SS_BEING_BUILT && psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR))
+	if (defensive)
 	{
-		if (defensive)
-		{
-			temp = strImd->points;
-			strImd->points = alteredPoints;
-		}
+		temp = strImd->points;
+		strImd->points = alteredPoints;
+	}
+
+	//first check if partially built - ANOTHER HACK!
+	if (psStructure->status == SS_BEING_BUILT || psStructure->status == SS_BEING_DEMOLISHED)
+	{
 		pie_Draw3DShape(strImd, 0, playerFrame, buildingBrightness, WZCOL_BLACK, pie_HEIGHT_SCALED | pie_SHADOW,
 		                (SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE));
 		if (defensive)
@@ -2176,11 +2187,6 @@ void	renderStructure(STRUCTURE *psStructure)
 	}
 	else
 	{
-		if (defensive)
-		{
-			temp = strImd->points;
-			strImd->points = alteredPoints;
-		}
 		if (structureIsBlueprint(psStructure))
 		{
 			pieFlag = pie_TRANSLUCENT;
@@ -2245,10 +2251,6 @@ void	renderStructure(STRUCTURE *psStructure)
 					mountImd[0] =  psStructure->pStructureType->pECM->pMountGraphic;
 					flashImd[0] = NULL;
 				}
-			}
-
-			if (weaponImd[0] == NULL)
-			{
 				//check for sensor
 				if (psStructure->pStructureType->pSensor != NULL)
 				{
@@ -2326,32 +2328,40 @@ void	renderStructure(STRUCTURE *psStructure)
 								}
 							}
 						}
-						// we have a droid weapon so do we draw a muzzle flash
-						if( weaponImd[i]->nconnectors && psStructure->visible[selectedPlayer]>(UBYTE_MAX/2)
-						         && psStructure->pStructureType->type != REF_REPAIR_FACILITY)
+						// we have a weapon so we draw a muzzle flash
+						if( weaponImd[i]->nconnectors && flashImd[i] && psStructure->visible[selectedPlayer]>(UBYTE_MAX/2)
+							&& psStructure->pStructureType->type != REF_REPAIR_FACILITY)
 						{
-							/* Now we need to move to the end of the barrel */
-							pie_TRANSLATE(weaponImd[i]->connectors[i].x, weaponImd[i]->connectors[i].z, weaponImd[i]->connectors[i].y );
-							// and draw the muzzle flash
-							// animate for the duration of the flash only
-							if (flashImd[i])
+							unsigned int connector_num = 0;
+
+							// which barrel is firing if model have multiple muzzle connectors?
+							if (psStructure->asWeaps[i].shotsFired && (weaponImd[i]->nconnectors > 1))
 							{
-								// assume no clan colours formuzzle effects
-								if (flashImd[i]->numFrames == 0 || flashImd[i]->animInterval <= 0)
+								// shoot first, draw later - substract one shot to get correct results
+								connector_num = (psStructure->asWeaps[i].shotsFired - 1) % (weaponImd[i]->nconnectors);
+							}
+
+							/* Now we need to move to the end of the firing barrel */
+							pie_TRANSLATE(weaponImd[i]->connectors[connector_num].x,
+											weaponImd[i]->connectors[connector_num].z,
+											weaponImd[i]->connectors[connector_num].y);
+
+							// assume no clan colours for muzzle effects
+							if (flashImd[i]->numFrames == 0 || flashImd[i]->animInterval <= 0)
+							{
+								// no anim so display one frame for a fixed time
+								if (gameTime < (psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
 								{
-									// no anim so display one frame for a fixed time
-									if (gameTime < (psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
-									{
-										pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 128);//muzzle flash
-									}
+									pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 								}
-								else
+							}
+							else
+							{
+								// animated muzzle
+								frame = (gameTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
+								if (frame < flashImd[i]->numFrames)
 								{
-									frame = (gameTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
-									if (frame < flashImd[i]->numFrames)
-									{
-										pie_Draw3DShape(flashImd[i], frame, 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 20);//muzzle flash
-									}
+									pie_Draw3DShape(flashImd[i], frame, 0, buildingBrightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 								}
 							}
 						}
@@ -2896,6 +2906,52 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 	}
 }
 
+/// draw target origin icon for the specified structure
+static void drawStructureTargetOriginIcon(STRUCTURE *psStruct, int weapon_slot)
+{
+	SDWORD		scrX,scrY,scrR;
+	UDWORD		scale;
+
+	// Process main weapon only for now
+	if (!tuiTargetOrigin || weapon_slot || !((psStruct->asWeaps[weapon_slot]).nStat))
+	{
+		return;
+	}
+
+	scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
+	scrX = psStruct->sDisplay.screenX;
+	scrY = psStruct->sDisplay.screenY + (scale*10);
+	scrR = scale*20;
+
+	/* Render target origin graphics */
+	switch(psStruct->targetOrigin[weapon_slot])
+	{
+	case ORIGIN_VISUAL:
+		iV_DrawImage(IntImages, IMAGE_ORIGIN_VISUAL, scrX+scrR+5, scrY-1);
+		break;
+	case ORIGIN_COMMANDER:
+		iV_DrawImage(IntImages, IMAGE_ORIGIN_COMMANDER, scrX+scrR+5, scrY-1);
+		break;
+	case ORIGIN_SENSOR:
+		iV_DrawImage(IntImages, IMAGE_ORIGIN_SENSOR_STANDARD, scrX+scrR+5, scrY-1);
+		break;
+	case ORIGIN_CB_SENSOR:
+		iV_DrawImage(IntImages, IMAGE_ORIGIN_SENSOR_CB, scrX+scrR+5, scrY-1);
+		break;
+	case ORIGIN_AIRDEF_SENSOR:
+		iV_DrawImage(IntImages, IMAGE_ORIGIN_SENSOR_AIRDEF, scrX+scrR+5, scrY-1);
+		break;
+	case ORIGIN_RADAR_DETECTOR:
+		iV_DrawImage(IntImages, IMAGE_ORIGIN_RADAR_DETECTOR, scrX+scrR+5, scrY-1);
+		break;
+	case ORIGIN_UNKNOWN:
+		// Do nothing
+		break;
+	default:
+		debug(LOG_WARNING,"Unexpected target origin in structure(%d)!", psStruct->id);
+	}
+}
+
 /// draw the health bar for the specified structure
 static void drawStructureHealth(STRUCTURE *psStruct)
 {
@@ -3008,6 +3064,7 @@ static void	drawStructureSelections( void )
 				for (i = 0; i < psStruct->numWeaps; i++)
 				{
 					drawWeaponReloadBar((BASE_OBJECT *)psStruct, &psStruct->asWeaps[i], i);
+					drawStructureTargetOriginIcon(psStruct, i);
 				}
 			}
 
@@ -3611,9 +3668,6 @@ static void renderSurroundings(void)
 	static float wind = 0.0f;
 	const float skybox_scale = 20000.0f;
 
-	// set up matrices and textures
-	pie_PerspectiveBegin();
-
 	// Push identity matrix onto stack
 	pie_MatBegin();
 
@@ -3646,7 +3700,6 @@ static void renderSurroundings(void)
 
 	// Load Saved State
 	pie_MatEnd();
-	pie_PerspectiveEnd();
 }
 
 /// Flattens an imd to the landscape and handles 4 different rotations

@@ -47,6 +47,11 @@ CLEANFILES = \
 	scriptvals_parser.tab.c \
 	scriptvals_parser.tab.h
 
+EXTRA_DIST = \
+	message_lexer.l message_parser.y \
+	scriptvals_lexer.l scriptvals_parser.y \
+	level_lexer.l
+
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = \
 	action.h \
@@ -61,6 +66,7 @@ noinst_HEADERS = \
 	bridge.h \
 	bucket3d.h \
 	cheat.h \
+	challenge.h \
 	clparse.h \
 	cluster.h \
 	cmddroiddef.h \
@@ -193,6 +199,7 @@ warzone2100_SOURCES = \
 	baseobject.c \
 	bridge.c \
 	bucket3d.c \
+	challenge.c \
 	cheat.c \
 	clparse.c \
 	cluster.c \
@@ -304,10 +311,11 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/ivis_common/libivis_common.a \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a \
+	$(top_builddir)/lib/iniparser/libiniparser.a \
 	$(top_builddir)/lib/lua/liblua.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a
 
-warzone2100_LDADD += $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS) $(SQLITE_LIBS) $(LUA_LIBS)
+warzone2100_LDADD += $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS) $(SQLITE_LIBS) $(LUA_LIBS)
 
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)

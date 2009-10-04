@@ -148,10 +148,12 @@ extern void	kf_SetDroidAttackReturn( void );
 extern void	kf_SetDroidAttackCease( void );
 
 extern void	kf_SetDroidMoveHold( void );
+extern void	kf_SetDroidMoveGuard( void );
 extern void	kf_SetDroidMovePursue( void ); //not there?
 extern void	kf_SetDroidMovePatrol( void ); // not there?
 
 extern void	kf_SetDroidReturnToBase( void );
+extern void	kf_SetDroidGoToTransport( void );
 extern void	kf_SetDroidGoForRepair( void );
 extern void	kf_SetDroidRecycle( void );
 extern void	kf_ScatterDroids( void );
@@ -226,6 +228,8 @@ extern	void	kf_MovePause( void );
 extern void kf_SpeedUp( void );
 extern void kf_SlowDown( void );
 extern void kf_NormalSpeed( void );
+
+extern void kf_CloneSelected( void );
 
 #define SPIN_SCALING	(360*DEG_1)
 #define	SECS_PER_SPIN	2

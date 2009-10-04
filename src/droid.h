@@ -296,9 +296,6 @@ extern BOOL buildModule(STRUCTURE *psStruct);
  - if so, helping to build the current one*/
 extern void setUpBuildModule(DROID *psDroid);
 
-/*return the name to display for the interface given a DROID structure*/
-extern const char* getDroidName(const DROID *psDroid) WZ_DECL_UNUSED;
-
 /*return the name to display for the interface - we don't know if this is
 a string ID or something the user types in*/
 extern const char* getTemplateName(const DROID_TEMPLATE *psTemplate);
@@ -556,10 +553,15 @@ static inline void setSaveDroidBase(DROID *psSaveDroid, STRUCTURE *psNewBase)
 
 void checkDroid(const DROID *droid, const char * const location_description, const char * function, const int recurse);
 
-/* assert if droid is bad */
+/** assert if droid is bad */
 #define CHECK_DROID(droid) checkDroid(droid, AT_MACRO, __FUNCTION__, max_check_object_recursion)
+
+/** If droid can get to given object using its current propulsion, return the square distance. Otherwise return -1. */
+int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj);
 
 // Minimum damage a weapon will deal to its target
 #define	MIN_WEAPON_DAMAGE	1
+
+void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate);
 
 #endif // __INCLUDED_SRC_DROID_H__

@@ -210,6 +210,8 @@ extern BOOL placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY);
 /* is this a lassat structure? */
 static inline BOOL isLasSat(STRUCTURE_STATS *pStructureType)
 {
+	ASSERT_OR_RETURN(false, pStructureType != NULL, "LasSat is invalid?");
+
 	return (pStructureType->psWeapStat[0]
 	        && pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT);
 }
@@ -432,11 +434,12 @@ static inline int structConcealment(const STRUCTURE* psObj)
 	return objConcealment((const BASE_OBJECT*)psObj);
 }
 
-#define setStructureTarget(_psBuilding, _psNewTarget, _idx) _setStructureTarget(_psBuilding, _psNewTarget, _idx, __LINE__, __FUNCTION__)
-static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNewTarget, UWORD idx, int line, const char *func)
+#define setStructureTarget(_psBuilding, _psNewTarget, _idx, _targetOrigin) _setStructureTarget(_psBuilding, _psNewTarget, _idx, _targetOrigin, __LINE__, __FUNCTION__)
+static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNewTarget, UWORD idx, UWORD targetOrigin, int line, const char *func)
 {
 	assert(idx < STRUCT_MAXWEAPS);
 	psBuilding->psTarget[idx] = psNewTarget;
+	psBuilding->targetOrigin[idx] = targetOrigin;
 	ASSERT(psNewTarget == NULL || !psNewTarget->died, "setStructureTarget set dead target");
 #ifdef DEBUG
 	psBuilding->targetLine[idx] = line;

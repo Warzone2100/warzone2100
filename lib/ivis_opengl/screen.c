@@ -26,7 +26,7 @@
 
 #include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
-
+#include "lib/exceptionhandler/dumpinfo.h"
 #include <SDL.h>
 #include <physfs.h>
 #include <png.h>
@@ -36,6 +36,7 @@
 #include "lib/framework/frameint.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieblitfunc.h"
+
 #if defined(WZ_OS_MAC)
 #include <OpenGL/glu.h>
 #else
@@ -95,19 +96,6 @@ BOOL screenInitialise(
 		// The flags to pass to SDL_SetVideoMode.
 		video_flags  = SDL_OPENGL;    // Enable OpenGL in SDL.
 		video_flags |= SDL_ANYFORMAT; // Don't emulate requested BPP if not available.
-		video_flags |= SDL_HWPALETTE; // Store the palette in hardware.
-
-		// This checks to see if surfaces can be stored in memory.
-		if (video_info->hw_available) {
-			video_flags |= SDL_HWSURFACE;
-		} else {
-			video_flags |= SDL_SWSURFACE;
-		}
-
-		// This checks if hardware blits can be done.
-		if (video_info->blit_hw) {
-			video_flags |= SDL_HWACCEL;
-		}
 
 		if (fullScreen) {
 			video_flags |= SDL_FULLSCREEN;
@@ -171,33 +159,67 @@ BOOL screenInitialise(
 	{
 		debug( LOG_ERROR, "OpenGL initialization did not give double buffering!" );
 	}
-	// Note that no initialisation of GLee is required, since this is handled automatically.
+	
+	{
+		char buf[256];
 
-	/* Dump information about OpenGL implementation to the console */
-	debug(LOG_3D, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
-	debug(LOG_3D, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
-	debug(LOG_3D, "OpenGL Version : %s", glGetString(GL_VERSION));
-	debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE
-	debug(LOG_3D, "Supported OpenGL extensions:");
-	debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLEE_VERSION_1_2 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLEE_VERSION_1_3 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLEE_VERSION_1_4 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLEE_VERSION_1_5 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLEE_VERSION_2_0 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLEE_VERSION_2_1 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLEE_VERSION_3_0 ? "is" : "is NOT");
-	debug(LOG_3D, "  * Texture compression %s supported.", GLEE_ARB_texture_compression ? "is" : "is NOT");
-	debug(LOG_3D, "  * Two side stencil %s supported.", GLEE_EXT_stencil_two_side ? "is" : "is NOT");
-	debug(LOG_3D, "  * Stencil wrap %s supported.", GLEE_EXT_stencil_wrap ? "is" : "is NOT");
-	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
-	debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
-	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object  ? "is" : "is NOT");
+		// Copy this info to be used by the crash handler for the dump file
+		ssprintf(buf, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
+		addDumpInfo(buf);
+		ssprintf(buf, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
+		addDumpInfo(buf);
+		ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
+		addDumpInfo(buf);
+		/* Dump information about OpenGL implementation to the console */
+		debug(LOG_3D, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
+		debug(LOG_3D, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
+		debug(LOG_3D, "OpenGL Version : %s", glGetString(GL_VERSION));
+		debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE
+		debug(LOG_3D, "Supported OpenGL extensions:");
+		debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLEE_VERSION_1_2 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLEE_VERSION_1_3 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLEE_VERSION_1_4 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLEE_VERSION_1_5 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLEE_VERSION_2_0 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLEE_VERSION_2_1 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLEE_VERSION_3_0 ? "is" : "is NOT");
+		debug(LOG_3D, "  * Texture compression %s supported.", GLEE_ARB_texture_compression ? "is" : "is NOT");
+		debug(LOG_3D, "  * Two side stencil %s supported.", GLEE_EXT_stencil_two_side ? "is" : "is NOT");
+		debug(LOG_3D, "  * ATI separate stencil is%s supported.", GLEE_ATI_separate_stencil ? "" : " NOT");
+		debug(LOG_3D, "  * Stencil wrap %s supported.", GLEE_EXT_stencil_wrap ? "is" : "is NOT");
+		debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
+		debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
+		debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object  ? "is" : "is NOT");
+	}
+	
+#ifndef WZ_OS_MAC
+	// Make OpenGL's VBO functions available under the core names for
+	// implementations that have them only as extensions, namely Mesa.
+	if (!strncmp((const char *)glGetString(GL_RENDERER), "Mesa", 4))
+	{
+		info("Using VBO extension functions under the core names.");
+		// GLee is usually initialized automatically when needed, but
+		// here it has to be done explicitly.
+		GLeeInit();
+		GLeeFuncPtr_glBindBuffer = GLeeFuncPtr_glBindBufferARB;
+		GLeeFuncPtr_glDeleteBuffers = GLeeFuncPtr_glDeleteBuffersARB;
+		GLeeFuncPtr_glGenBuffers = GLeeFuncPtr_glGenBuffersARB;
+		GLeeFuncPtr_glIsBuffer = GLeeFuncPtr_glIsBufferARB;
+		GLeeFuncPtr_glBufferData = GLeeFuncPtr_glBufferDataARB;
+		GLeeFuncPtr_glBufferSubData = GLeeFuncPtr_glBufferSubDataARB;
+		GLeeFuncPtr_glGetBufferSubData = GLeeFuncPtr_glGetBufferSubDataARB;
+		GLeeFuncPtr_glMapBuffer = GLeeFuncPtr_glMapBufferARB;
+		GLeeFuncPtr_glUnmapBuffer = GLeeFuncPtr_glUnmapBufferARB;
+		GLeeFuncPtr_glGetBufferParameteriv = GLeeFuncPtr_glGetBufferParameterivARB;
+		GLeeFuncPtr_glGetBufferPointerv = GLeeFuncPtr_glGetBufferPointervARB;
+	}
+#endif
 
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-	glOrtho(0, width, height, 0, 1, -1);
+	glOrtho(0.0f, (double)width, (double)height, 0.0f, 1.0f, -1.0f);
 
 	glMatrixMode(GL_TEXTURE);
 	glScalef(1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f); // FIXME Scaling texture coords to 256x256!
@@ -355,7 +377,7 @@ static const unsigned int channelsPerPixel = 3;
 void screenDoDumpToDiskIfRequired(void)
 {
 	const char* fileName = screendump_filename;
-	static iV_Image image = { 0, 0, 0, NULL };
+	static iV_Image image = { 0, 0, 8, NULL };
 
 	if (!screendump_required) return;
 	debug( LOG_3D, "Saving screenshot %s\n", fileName );

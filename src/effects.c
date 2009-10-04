@@ -254,7 +254,7 @@ static void effectStructureUpdates(void);
 static void effectDroidUpdates(void);
 
 static UDWORD effectGetNumFrames(EFFECT *psEffect);
-
+static void killEffect(EFFECT *e);
 
 /*!
  * Initialise memory between first and last as singly linked list
@@ -266,7 +266,7 @@ static void initEffectPool(EFFECT *first, EFFECT *last)
 	EFFECT *it;
 	for (it = first; it < last; it++)
 	{
-		 // We do not need a double-linked-list for inactiveeffects, since we always pick from the front:
+		// We do not need a double-linked-list for inactiveeffects, since we always pick from the front:
 		it->prev = NULL;
 		it->next = it+1;
 	}
@@ -310,7 +310,7 @@ static EFFECT *Effect_malloc(void)
 	if (inactiveList.first == NULL)
 	{
 		/* Allocate new effect chunk */
-		EffectChunk *chunk = malloc(sizeof(EffectChunk));
+		EffectChunk *chunk = calloc(1, sizeof(EffectChunk));
 
 		debug(LOG_MEMORY, "%zd effects in use, allocating %d extra", activeList.num, EFFECT_CHUNK_SIZE);
 
@@ -369,18 +369,21 @@ static void Effect_free(void *self)
 
 	/* Adjust counts */
 	inactiveList.num++;
+	ASSERT_OR_RETURN(, activeList.num > 0, "Underflow");
 	activeList.num--;
 }
 
 void shutdownEffectsSystem(void)
 {
-	EffectChunk *chunk;
+	EFFECT *eff;
 
-	for (chunk = chunkList.first; chunk != NULL;)
+	/* Traverse the list */
+	for (eff = activeList.first; eff;)
 	{
-		EffectChunk *chunkNext = chunk->next;
-		free(chunk);
-		chunk = chunkNext;
+		EFFECT *effNext = eff->next;
+
+		killEffect(eff);
+		eff = effNext;
 	}
 	chunkList.first = NULL;
 	chunkList.last = NULL;
@@ -398,7 +401,7 @@ void initEffectsSystem(void)
 	shutdownEffectsSystem();
 
 	/* Allocate new chunk */
-	chunk = malloc(sizeof(EffectChunk));
+	chunk = calloc(1, sizeof(EffectChunk));
 
 	/* Deal with out-of-memory conditions */
 	if (chunk == NULL)
@@ -451,7 +454,7 @@ static void positionEffect(const EFFECT *psEffect)
 
 static void killEffect(EFFECT *e)
 {
-	if (e->group == EFFECT_FIRE)
+	if (e->group == EFFECT_FIRE && psMapTiles)
 	{
 		const int posX = map_coord(e->position.x);
 		const int posY = map_coord(e->position.z);

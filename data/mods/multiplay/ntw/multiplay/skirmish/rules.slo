@@ -20,6 +20,7 @@ public	STRUCTURESTAT	NuclearReactor1;
 public	STRUCTURESTAT	CoolingTower1;
 public	STRUCTURESTAT	look;
 public	STRUCTURESTAT	shield;
+public	STRUCTURESTAT	command2;
 
 ////////
 // starting technologies.
@@ -242,6 +243,7 @@ event initialisedEvent(CALL_GAMEINIT)
 		setStructureLimits(CoolingTower1, 	4,playnum);
 		setStructureLimits(look, 	1, playnum);
 		setStructureLimits(shield, 	1, playnum);
+		setStructureLimits(command2, 	1, playnum);
 
 //-----------------------------------------
 //MOD code comes here

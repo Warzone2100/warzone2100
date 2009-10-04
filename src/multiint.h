@@ -38,15 +38,11 @@ extern	void	runMultiOptions			(void);
 extern	BOOL	startMultiOptions		(BOOL bReenter);
 extern	void	frontendMultiMessages	(void);
 
-extern	BOOL	chooseColour			(UDWORD);
-
 extern BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi);
 
 extern	char	sPlayer[128];
-extern	SDWORD	playerTeamGUI[MAX_PLAYERS];
-extern	SDWORD	playerTeam[MAX_PLAYERS];
 
-void	kickPlayer(uint32_t dpid, const char *reason, LOBBY_ERROR_TYPES type);
+void	kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
 UDWORD	addPlayerBox(BOOL);			// players (mid) box
 void loadMapPreview(bool hideInterface);
 
@@ -233,7 +229,7 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_POWER			10296
 #define MULTIOP_ALLIANCES		10298
 #define MULTIOP_BASETYPE		10300
-#define MULTIOP_TECHLEVEL		10302	// WARNING 10300+ used in forceditor.
+#define MULTIOP_TECHLEVEL		10302
 #define MULTIOP_COMPUTER		10304
 #define	MULTIOP_FOG				10306
 
@@ -255,11 +251,9 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_PASSWORD	920010
 #define MULTIOP_PASSWORD_BUT 920012
 #define MULTIOP_PASSWORD_EDIT 920013
+
 // ///////////////////////////////
 // Many Button Variations..
-
-#define FORCE_BUTW			56
-#define FORCE_BUTH			38
 
 #define CON_BUTWIDTH			60
 #define CON_BUTHEIGHT			46

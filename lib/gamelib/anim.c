@@ -84,8 +84,10 @@ BOOL anim_Init()
 void anim_ReleaseAnim(BASEANIM *psAnim)
 {
 	// remove the anim from the list
-	LIST_REMOVE(g_animGlobals.psAnimList, psAnim, BASEANIM);
-
+	if (g_animGlobals.psAnimList)
+	{
+		LIST_REMOVE(g_animGlobals.psAnimList, psAnim, BASEANIM);
+	}
 	/* free anim scripts */
 	free( psAnim->psStates );
 
@@ -169,9 +171,7 @@ BOOL anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 	/* check frame count matches script */
 	if ( ubType == ANIM_3D_TRANS && uwObj != uwFrames )
 	{
-		debug( LOG_ERROR, "anim_Create3D: frames in pie %s != script objects %i\n",
-					szPieFileName, uwObj );
-		abort();
+		ASSERT(false, "Frames in pie %s != script objects %i", szPieFileName, uwObj);
 		return false;
 	}
 
@@ -218,8 +218,7 @@ BOOL anim_EndScript()
 
 	if ( g_animGlobals.uwCurState != psAnim->uwStates )
 	{
-		debug( LOG_ERROR, "anim_End3D: states in current anim not consistent with header\n" );
-		abort();
+		ASSERT(false, "States in current anim not consistent with header");
 		return false;
 	}
 
@@ -300,8 +299,7 @@ void anim_SetVals(char szFileName[], UWORD uwAnimID)
 
 	if ( psAnim == NULL )
 	{
-		debug( LOG_ERROR, "anim_SetVals: can't find anim %s\n", szFileName );
-		abort();
+		ASSERT(false, "Can't find anim %s", szFileName);
 		return ;
 	}
 
@@ -316,8 +314,7 @@ BASEANIM *anim_LoadFromFile(PHYSFS_file* fileHandle)
 {
 	if ( ParseResourceFile( fileHandle ) == false )
 	{
-		debug( LOG_ERROR, "anim_LoadFromFile: couldn't parse file\n" );
-		abort();
+		ASSERT(false, "Couldn't parse file");
 		return NULL;
 	}
 
@@ -334,8 +331,7 @@ UWORD anim_GetAnimID(char *szName)
 
 	if ( cPos == NULL )
 	{
-		debug( LOG_ERROR, "anim_GetAnimID: %s isn't .ani file\n", szName );
-		abort();
+		ASSERT(false, "%s isn't .ani file", szName);
 		return NO_ANIM;
 	}
 

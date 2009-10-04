@@ -59,7 +59,7 @@ STRUCTURE				*psCBLastResStructure;
 SDWORD					CBResFacilityOwner;
 
 //research is now loaded per campaign - this hopefully is the max there will be in any one campaign!
-#define MAX_RESEARCH        (450)
+#define MAX_RESEARCH        (500)
 
 //need to define max's for each of the lists associated with the research - these
 //values have been chosen based on the current research stats - 21/12/98
@@ -1712,7 +1712,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 		//add console text message
 		if (pResearch->pViewData != NULL)
 		{
-			snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), *pResearch->pViewData->ppTextMsg);
+			snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), _(*pResearch->pViewData->ppTextMsg));
 			addConsoleMessage(consoleMsg, LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 		else

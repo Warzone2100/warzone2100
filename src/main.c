@@ -25,6 +25,7 @@
 #include "lib/framework/frame.h"
 
 #include <SDL.h>
+#include <sqlite3.h>
 
 #if defined(WZ_OS_WIN)
 // FIXME HACK Workaround DATADIR definition in objbase.h
@@ -40,6 +41,7 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/tagfile.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 
 #include "lib/sound/playlist.h"
 #include "lib/gamelib/gtime.h"
@@ -55,6 +57,7 @@
 #include "lib/framework/physfs_vfs.h"
 
 #include "clparse.h"
+#include "challenge.h"
 #include "configuration.h"
 #include "display.h"
 #include "frontend.h"
@@ -64,6 +67,7 @@
 #include "lighting.h"
 #include "loadsave.h"
 #include "loop.h"
+#include "mission.h"
 #include "modding.h"
 #include "multiplay.h"
 #include "research.h"
@@ -92,13 +96,13 @@ typedef enum _focus_state
 } FOCUS_STATE;
 
 #if defined(WZ_OS_WIN)
-# define WZ_WRITEDIR "Warzone 2100 2.2"
+# define WZ_WRITEDIR "Warzone 2100 Trunk"
 #elif defined(WZ_OS_MAC)
 # include <CoreServices/CoreServices.h>
 # include <unistd.h>
-# define WZ_WRITEDIR "Warzone 2100 2.2"
+# define WZ_WRITEDIR "Warzone 2100 Trunk"
 #else
-# define WZ_WRITEDIR ".warzone2100-2.2"
+# define WZ_WRITEDIR ".warzone2100-trunk"
 #endif
 
 char datadir[PATH_MAX] = ""; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be empty on startup for ParseCommandLine to work!
@@ -582,6 +586,11 @@ static void startGameLoop(void)
 
 	// set a flag for the trigger/event system to indicate initialisation is complete
 	gameInitialised = true;
+
+	if (challengeActive)
+	{
+		addMissionTimerInterface();
+	}
 }
 
 
@@ -894,7 +903,6 @@ int main(int argc, char *argv[])
 	PHYSFS_mkdir("music");
 	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
-	make_dir(MultiForcesPath, "multiplay", "forces");
 	make_dir(MultiCustomMapsPath, "multiplay", "custommaps");
 
 	/* Put these files in the writedir root */
@@ -934,8 +942,80 @@ int main(int argc, char *argv[])
 		soundTest();
 	}
 
+	// Now we check the mods to see if they exsist or not (specified on the command line)
+	// They are all capped at 100 mods max(see clparse.c)
+	// FIX ME: I know this is a bit hackish, but better than nothing for now?
+	{
+		char *modname;
+		char modtocheck[256];
+		int i = 0;
+		int result = 0;
+
+		// check global mods
+		for(i=0; i < 100; i++)
+		{
+			modname = global_mods[i];
+			if (modname == NULL)
+			{
+				break;
+			}
+			ssprintf(modtocheck, "mods/global/%s", modname);
+			result = PHYSFS_exists(modtocheck);
+			result |= PHYSFS_isDirectory(modtocheck); 
+			if (!result)
+			{
+				debug(LOG_ERROR, "The (global) mod (%s) you have specified doesn't exist!", modname);
+			}
+			else
+			{
+				info("(global) mod (%s) is enabled", modname);
+			}
+		}
+		// check campaign mods
+		for(i=0; i < 100; i++)
+		{
+			modname = campaign_mods[i];
+			if (modname == NULL)
+			{
+				break;
+			}
+			ssprintf(modtocheck, "mods/campaign/%s", modname);
+			result = PHYSFS_exists(modtocheck);
+			result |= PHYSFS_isDirectory(modtocheck); 
+			if (!result)
+			{
+				debug(LOG_ERROR, "The mod_ca (%s) you have specified doesn't exist!", modname);
+			}
+			else
+			{
+				info("mod_ca (%s) is enabled", modname);
+			}
+		}
+		// check multiplay mods
+		for(i=0; i < 100; i++)
+		{
+			modname = multiplay_mods[i];
+			if (modname == NULL)
+			{
+				break;
+			}
+			ssprintf(modtocheck, "mods/multiplay/%s", modname);
+			result = PHYSFS_exists(modtocheck);
+			result |= PHYSFS_isDirectory(modtocheck); 
+			if (!result)
+			{
+				debug(LOG_ERROR, "The mod_mp (%s) you have specified doesn't exist!", modname);
+			}
+			else
+			{
+				info("mod_mp (%s) is enabled", modname);
+			}
+		}
+	}
+
 	// Register the PhysicsFS implementation of the SQLite VFS class with
 	// SQLite's VFS system as the default (non-zero=default, zero=default).
+	debug(LOG_NEVER, "SQLite versions, compile time: %s, link time: %s", SQLITE_VERSION, sqlite3_libversion());
 	sqlite3_register_physfs_vfs(1);
 
 	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFSAA(), war_getFullscreen(), war_GetVsync()))
@@ -975,6 +1055,13 @@ int main(int argc, char *argv[])
 		exit(0);
 	}
 
+	{
+		// Copy this info to be used by the crash handler for the dump file
+		char buf[256];
+
+		ssprintf(buf,"Using language: %s", getLanguageName());
+		addDumpInfo(buf);
+	}
 	// Do the game mode specific initialisation.
 	switch(GetGameMode())
 	{

@@ -8,14 +8,19 @@ AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
+
 BUILT_SOURCES = \
 	audp_lexer.lex.c \
 	audp_parser.tab.c \
 	audp_parser.tab.h
+
 CLEANFILES = \
 	audp_lexer.lex.c \
 	audp_parser.tab.c \
 	audp_parser.tab.h
+
+EXTRA_DIST = \
+	audp_lexer.l audp_parser.y
 
 noinst_LIBRARIES = libgamelib.a
 noinst_HEADERS = \

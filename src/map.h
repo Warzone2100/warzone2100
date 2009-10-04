@@ -48,6 +48,10 @@ typedef enum _terrain_type
 	TER_MAX,
 } TYPE_OF_TERRAIN;
 
+#define TILESET_ARIZONA 0
+#define TILESET_URBAN	1
+#define TILESET_ROCKIES 2
+
 #define TALLOBJECT_YMAX		(200)
 #define TALLOBJECT_ADJUST	(300)
 
@@ -98,6 +102,8 @@ typedef struct _maptile
 	float			level;
 	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
 	PIELIGHT		colour;
+	short			limitedContinent;	/** For land or sea limited propulsion types */
+	short			hoverContinent;		/** For hover type propulsions */
 
 	int             ground; ///< The ground type used for the terrain renderer
 	BOOL            decal;  ///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
@@ -400,6 +406,8 @@ extern bool	writeVisibilityData(const char* fileName);
 
 //scroll min and max values
 extern SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
+
+void mapFloodFillContinents(void);
 
 extern void mapTest(void);
 

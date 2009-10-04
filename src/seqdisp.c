@@ -232,7 +232,7 @@ static void seq_SetUserResolution(void)
 //full screenvideo functions
 static bool seq_StartFullScreenVideo(const char* videoName, const char* audioName, VIDEO_RESOLUTION resolution)
 {
-	const char* aAudioName;
+	const char* aAudioName = NULL;
 	int chars_printed;
 
 	bHoldSeqForAudio = false;
@@ -454,7 +454,8 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 	SDWORD sourceLength, currentLength;
 	char* currentText;
 	static SDWORD lastX;
-	const unsigned int BUFFER_WIDTH = pie_GetVideoBufferWidth();
+	// make sure we take xOffset into account, we don't always start at 0
+	const unsigned int BUFFER_WIDTH = pie_GetVideoBufferWidth() - xOffset;
 
 	iV_SetFont(font_regular);
 

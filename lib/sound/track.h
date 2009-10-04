@@ -37,6 +37,8 @@ extern "C"
 {
 #endif
 
+#define ATTENUATION_FACTOR	0.0003f
+
 #define	SAMPLE_NOT_ALLOCATED	-1
 #define	SAMPLE_NOT_FOUND		-3
 #define	SAMPLE_COORD_INVALID	-5
@@ -56,6 +58,11 @@ typedef struct AUDIO_SAMPLE
 	SDWORD                  iTrack;         // ID number identifying a specific sound; currently (r1182) mapped in audio_id.c
 #ifndef WZ_NOSOUND
 	ALuint                  iSample;        // OpenAL name of the sound source
+#ifdef DEBUG	// only used for debugging
+	ALboolean			isLooping;		// if	sample loops
+	ALboolean			is3d;			// if	sample is 3d (as opposed to 2d)
+	char				filename[256];	// actual filename of sample
+#endif
 #endif
 	SDWORD                  x, y, z;
 	float                   fVol;           // computed volume of sample

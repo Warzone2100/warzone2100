@@ -39,6 +39,7 @@
 #include "lib/widget/widget.h"
 
 #include "game.h"
+#include "challenge.h"
 #include "projectile.h"
 #include "power.h"
 #include "structure.h"
@@ -76,6 +77,7 @@
 #include "keymap.h"
 #include "texture.h"
 #include "warzoneconfig.h"
+#include "combat.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -252,6 +254,7 @@ void initMission(void)
 		mission.apsFlagPosLists[inc] = NULL;
 		apsLimboDroids[inc] = NULL;
 	}
+	mission.apsSensorList[0] = NULL;
 	offWorldKeepLists = false;
 	mission.time = -1;
 	setMissionCountDown();
@@ -323,6 +326,8 @@ BOOL missionShutDown(void)
 			apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 			mission.apsFlagPosLists[inc] = NULL;
 		}
+		apsSensorList[0] = mission.apsSensorList[0];
+		mission.apsSensorList[0] = NULL;
 
 		psMapTiles = mission.psMapTiles;
 		mapWidth = mission.mapWidth;
@@ -528,7 +533,7 @@ the display*/
 void addMissionTimerInterface(void)
 {
 	//don't add if the timer hasn't been set
-	if (mission.time < 0)
+	if (mission.time < 0 && !challengeActive)
 	{
 		return;
 	}
@@ -633,6 +638,8 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 	SDWORD	iLandX, iLandY, iDx, iDy;
 	double  fR;
 
+	ASSERT_OR_RETURN(, iPlayer < 8, "Flying nonexistent player %d's transporters in", iPlayer);
+
 	bTrackingTransporter = bTrackTransporter;
 
 	iLandX = getLandingX(iPlayer);
@@ -710,7 +717,7 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 }
 
 /* Saves the necessary data when moving from a home base Mission to an OffWorld mission */
-void saveMissionData(void)
+static void saveMissionData(void)
 {
 	UDWORD			inc;
 	DROID			*psDroid;
@@ -802,6 +809,7 @@ void saveMissionData(void)
 		mission.apsFeatureLists[inc] = apsFeatureLists[inc];
 		mission.apsFlagPosLists[inc] = apsFlagPosLists[inc];
 	}
+	mission.apsSensorList[0] = apsSensorList[0];
 
 	mission.playerX = player.p.x;
 	mission.playerY = player.p.z;
@@ -874,6 +882,8 @@ void restoreMissionData(void)
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = NULL;
 	}
+	apsSensorList[0] = mission.apsSensorList[0];
+	mission.apsSensorList[0] = NULL;
 	//swap mission data over
 
 	psMapTiles = mission.psMapTiles;
@@ -1460,6 +1470,9 @@ void swapMissionPointers(void)
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = (FLAG_POSITION *)pVoid;
 	}
+	pVoid = (void*)apsSensorList[0];
+	apsSensorList[0] = mission.apsSensorList[0];
+	mission.apsSensorList[0] = (BASE_OBJECT *)pVoid;
 }
 
 void endMission(void)
@@ -2177,42 +2190,39 @@ void fillTimeDisplay(char *psText, UDWORD time, BOOL bHours)
 void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	W_LABEL		*Label = (W_LABEL*)psWidget;
-	UDWORD		timeElapsed;//, calcTime;
+	UDWORD		timeElapsed;
 	SDWORD		timeRemaining;
 
-    //take into account cheating with the mission timer
-    //timeElapsed = gameTime - mission.startTime;
-
-    //if the cheatTime has been set, then don't want the timer to countdown until stop cheating
-    if (mission.cheatTime)
-    {
-        timeElapsed = mission.cheatTime - mission.startTime;
-    }
-    else
-    {
-	    timeElapsed = gameTime - mission.startTime;
-    }
-	//check not gone over more than one hour - the mission should have been aborted?
-	//if (timeElapsed > 60*60*GAME_TICKS_PER_SEC)
-	//check not gone over more than 99 mins - the mission should have been aborted?
-    //check not gone over more than 5 hours - arbitary number of hours
-    if (timeElapsed > 5*60*60*GAME_TICKS_PER_SEC)
+	// If the cheatTime has been set, then don't want the timer to countdown until stop cheating
+	if (mission.cheatTime)
 	{
-		ASSERT( false,"You've taken too long for this mission!" );
-		return;
+		timeElapsed = mission.cheatTime - mission.startTime;
+	}
+	else
+	{
+		timeElapsed = gameTime - mission.startTime;
 	}
 
-	timeRemaining = mission.time - timeElapsed;
-	if (timeRemaining < 0)
+	if (!challengeActive)
 	{
-		timeRemaining = 0;
+		timeRemaining = mission.time - timeElapsed;
+		if (timeRemaining < 0)
+		{
+			timeRemaining = 0;
+		}
+	}
+	else
+	{
+		timeRemaining = timeElapsed;
 	}
 
 	fillTimeDisplay(Label->aText, timeRemaining, true);
+	Label->style &= ~WIDG_HIDDEN;	// Make sure its visible
 
-    //make sure its visible
-    Label->style &= ~WIDG_HIDDEN;
-
+	if (challengeActive)
+	{
+		return;	// all done
+	}
 
     //make timer flash if time remaining < 5 minutes
     if (timeRemaining < FIVE_MINUTES)
@@ -2259,8 +2269,6 @@ void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext)
             missionCountDown &= ~NOT_PLAYED_ONE;
         }
     }
-
-
 }
 
 #define	TRANSPORTER_REINFORCE_LEADIN	10*GAME_TICKS_PER_SEC
@@ -2731,12 +2739,10 @@ void launchMission(void)
 //sets up the game to start a new mission
 BOOL setUpMission(UDWORD type)
 {
-	//close the interface
+	// Close the interface
 	intResetScreen(true);
 
-	//oldMission = mission.type;
-	/*the last mission must have been successful otherwise endgame would have
-	been called*/
+	/* The last mission must have been successful otherwise endgame would have been called */
 	endMission();
 
 	//release the level data for the previous mission
@@ -2745,38 +2751,28 @@ BOOL setUpMission(UDWORD type)
 		return false;
 	}
 
-	//if (type == MISSION_OFFCLEAR || type == MISSION_OFFKEEP)
-	if ( type == LDS_CAMSTART )
+	if (type == LDS_CAMSTART)
 	{
+		// Another one of those lovely hacks!!
+		BOOL    bPlaySuccess = true;
 
-        //this cannot be called here since we need to be able to save the game at the end of cam1 and cam2
-		/*CDrequired = getCDForCampaign( getCampaignNumber() );
-		if ( cdspan_CheckCDPresent(CDrequired) )*/
+		// We don't want the 'mission accomplished' audio/text message at end of cam1
+		if (getCampaignNumber() == 2)
 		{
-            //another one of those lovely hacks!!
-            BOOL    bPlaySuccess = true;
-
-            //we don't want the 'mission accomplished' audio/text message at end of cam1
-            if (getCampaignNumber() == 2)
-            {
-                bPlaySuccess = false;
-            }
-    		//give the option of save/continue
-	    	if (!intAddMissionResult(true, bPlaySuccess))
-		    {
-			    return false;
-		    }
-		    loopMissionState = LMS_SAVECONTINUE;
+			bPlaySuccess = false;
 		}
+		// Give the option of save/continue
+		if (!intAddMissionResult(true, bPlaySuccess))
+		{
+			return false;
+		}
+		loopMissionState = LMS_SAVECONTINUE;
 	}
 	else if (type == LDS_MKEEP
 		|| type == LDS_MCLEAR
-		|| type == LDS_MKEEP_LIMBO
-		)
+		|| type == LDS_MKEEP_LIMBO)
 	{
-
 		launchMission();
-
 	}
 	else
 	{
@@ -2785,7 +2781,8 @@ BOOL setUpMission(UDWORD type)
 			setWidgetsStatus(true);
 			intResetScreen(false);
 		}
-		//give the option of save/continue
+
+		// Give the option of save / continue
 		if (!intAddMissionResult(true, true))
 		{
 			return false;
@@ -2985,7 +2982,7 @@ BOOL withinLandingZone(UDWORD x, UDWORD y)
 //returns the x coord for where the Transporter can land (for player 0)
 UWORD getLandingX( SDWORD iPlayer )
 {
-	ASSERT( iPlayer<MAX_NOGO_AREAS, "getLandingX: player %d out of range", iPlayer );
+	ASSERT_OR_RETURN(0, iPlayer < MAX_NOGO_AREAS, "getLandingX: player %d out of range", iPlayer);
 	return (UWORD)world_coord((sLandingZone[iPlayer].x1 + (sLandingZone[iPlayer].x2 -
 		sLandingZone[iPlayer].x1)/2));
 }
@@ -2993,7 +2990,7 @@ UWORD getLandingX( SDWORD iPlayer )
 //returns the y coord for where the Transporter can land
 UWORD getLandingY( SDWORD iPlayer )
 {
-	ASSERT( iPlayer<MAX_NOGO_AREAS, "getLandingY: player %d out of range", iPlayer );
+	ASSERT_OR_RETURN(0, iPlayer < MAX_NOGO_AREAS, "getLandingY: player %d out of range", iPlayer);
 	return (UWORD)world_coord((sLandingZone[iPlayer].y1 + (sLandingZone[iPlayer].y2 -
 		sLandingZone[iPlayer].y1)/2));
 }
@@ -3193,7 +3190,7 @@ void missionDestroyObjects(void)
 		{
 			if (psStruct->psTarget[i] && psStruct->psTarget[i]->died)
 			{
-				setStructureTarget(psStruct, NULL, i);
+				setStructureTarget(psStruct, NULL, i, ORIGIN_UNKNOWN);
 			}
 		}
 		psStruct = psStruct->psNext;

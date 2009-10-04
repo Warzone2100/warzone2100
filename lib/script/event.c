@@ -363,7 +363,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 	//-------------------------------
 	psCode->ppsLocalVarVal = (INTERP_VAL **)malloc(sizeof(INTERP_VAL*) * psCode->numEvents);	//allocate space for array of local var arrays for each event
 
-	debug(LOG_SCRIPT,"allocated space for %d events", psCode->numEvents);
+	//debug(LOG_SCRIPT,"allocated space for %d events", psCode->numEvents);
 
 	for(i=0;i < psCode->numEvents; i++)
 	{
@@ -371,7 +371,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 		{
 			psCode->ppsLocalVarVal[i] = (INTERP_VAL*)malloc(sizeof(INTERP_VAL) * psCode->numLocalVars[i]);	//allocate space for local vars array (for the current event)
 
-			debug(LOG_SCRIPT,"Event %d has %d local variables", i, psCode->numLocalVars[i]);
+			//debug(LOG_SCRIPT,"Event %d has %d local variables", i, psCode->numLocalVars[i]);
 
 			for(j=0; j < psCode->numLocalVars[i]; j++)
 			{

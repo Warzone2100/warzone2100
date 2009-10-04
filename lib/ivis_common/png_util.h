@@ -41,4 +41,13 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image);
  */
 void iV_saveImage_PNG(const char *fileName, const iV_Image *image);
 
+/*!
+ * Save a PNG from image into file using grayscale colour model.
+ *
+ * \param fileName output file to save to
+ * \param image Texture to read from
+ * \return true on success, false otherwise
+ */
+void iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image);
+
 #endif // _LIBIVIS_COMMON_PNG_H_

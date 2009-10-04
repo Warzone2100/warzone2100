@@ -30,6 +30,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/listmacs.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 #include "init.h"
 #include "objects.h"
 #include "hci.h"
@@ -45,6 +46,7 @@
 #include "scripttabs.h"
 #include "research.h"
 #include "lib/framework/lexer_input.h"
+#include "effects.h"
 
 extern int lev_get_lineno(void);
 extern char* lev_get_text(void);
@@ -487,6 +489,8 @@ BOOL levReleaseAll(void)
 {
 	SDWORD i;
 
+	// clear out old effect data first
+	initEffectsSystem();
 	// release old data if any was loaded
 	if (psCurrLevel != NULL)
 	{
@@ -973,6 +977,14 @@ BOOL levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 	else
 	{
 		psCurrLevel = psChangeLevel;
+	}
+
+	{
+		// Copy this info to be used by the crash handler for the dump file
+		char buf[256];
+
+		ssprintf(buf, "Current Level/map is %s", psCurrLevel->pName);
+		addDumpInfo(buf);
 	}
 
 

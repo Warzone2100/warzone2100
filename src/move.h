@@ -26,20 +26,6 @@
 
 #include "objectdef.h"
 
-#define MOVEINACTIVE		0
-#define MOVENAVIGATE		1
-#define MOVETURN			2
-#define MOVEPAUSE			3
-#define MOVEPOINTTOPOINT	4
-#define MOVETURNSTOP		5
-#define MOVETURNTOTARGET	6
-#define MOVEROUTE			7
-#define MOVEHOVER			8
-#define MOVEDRIVE			9
-#define MOVEWAITROUTE		11
-#define MOVESHUFFLE			12
-#define MOVEROUTESHUFFLE	13
-
 /* The base movement speed */
 extern float	baseSpeed;
 

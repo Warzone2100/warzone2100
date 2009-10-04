@@ -31,8 +31,7 @@ GAMEMAP *mapLoad(char *filename)
 {
 	char		path[PATH_MAX];
 	GAMEMAP		*map = malloc(sizeof(*map));
-	uint32_t	i, j, gameTime, gameType, droidVersion, structVersion;
-	uint32_t	gwVersion, gameVersion, featVersion, terrainVersion;
+	uint32_t	i, j, gwVersion;
 	char		aFileType[4];
 	bool		littleEndian = true;
 	PHYSFS_file	*fp = NULL;
@@ -61,11 +60,14 @@ GAMEMAP *mapLoad(char *filename)
 
 	if (!fp)
 	{
-		debug(LOG_ERROR, "Map file %s not found", path);
-		goto failure;
+		map->mapVersion = 0;
+		map->width = UINT32_MAX;
+		map->height = UINT32_MAX;
+		map->mMapTiles = NULL;
+		goto mapfailure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
-	    || !readU32(&map->version)
+	    || !readU32(&map->mapVersion)
 	    || !readU32(&map->width)
 	    || !readU32(&map->height)
 	    || aFileType[0] != 'm'
@@ -75,14 +77,14 @@ GAMEMAP *mapLoad(char *filename)
 		debug(LOG_ERROR, "Bad header in %s", path);
 		goto failure;
 	}
-	else if (map->version <= 9)
+	else if (map->mapVersion <= 9)
 	{
-		debug(LOG_ERROR, "%s: Unsupported save format version %u", path, map->version);
+		debug(LOG_ERROR, "%s: Unsupported save format version %u", path, map->mapVersion);
 		goto failure;
 	}
-	else if (map->version > 36)
+	else if (map->mapVersion > 36)
 	{
-		debug(LOG_ERROR, "%s: Undefined save format version %u", path, map->version);
+		debug(LOG_ERROR, "%s: Undefined save format version %u", path, map->mapVersion);
 		goto failure;
 	}
 	else if (map->width * map->height > MAP_MAXAREA)
@@ -136,7 +138,7 @@ GAMEMAP *mapLoad(char *filename)
 		}
 	}
 	PHYSFS_close(fp);
-
+mapfailure:
 
 	/* === Load game data === */
 
@@ -153,17 +155,17 @@ GAMEMAP *mapLoad(char *filename)
 	    || aFileType[1] != 'a'
 	    || aFileType[2] != 'm'
 	    || aFileType[3] != 'e'
-	    || !readU32(&gameVersion))
+	    || !readU32(&map->gameVersion))
 	{
 		debug(LOG_ERROR, "Bad header in %s", path);
 		goto failure;
 	}
-	if (gameVersion > 35)	// big-endian
+	if (map->gameVersion > 35)	// big-endian
 	{
 		littleEndian = false;
 	}
-	if (!readU32(&gameTime)
-	    || !readU32(&gameType)
+	if (!readU32(&map->gameTime)
+	    || !readU32(&map->gameType)
 	    || !readS32(&map->scrollMinX)
 	    || !readS32(&map->scrollMinY)
 	    || !readU32(&map->scrollMaxX)
@@ -172,6 +174,23 @@ GAMEMAP *mapLoad(char *filename)
 	{
 		debug(LOG_ERROR, "Bad data in %s", filename);
 		goto failure;
+	}
+	for (i = 0; i < 8; i++)
+	{
+		if (map->gameVersion >= 10)
+		{
+			uint32_t dummy;	// extracted power, not used
+
+			if (!readU32(&map->power[i]) || !readU32(&dummy))
+			{
+				debug(LOG_ERROR, "Bad power data in %s", filename);
+				goto failure;
+			}
+		}
+		else
+		{
+			map->power[i] = 0;	// TODO... is there a default?
+		}
 	}
 	PHYSFS_close(fp);
 
@@ -185,14 +204,16 @@ GAMEMAP *mapLoad(char *filename)
 	if (!fp)
 	{
 		debug(LOG_ERROR, "Feature file %s not found", path);
-		goto failure;
+		map->featVersion = 0;
+		map->numFeatures = 0;
+		goto featfailure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
 	    || aFileType[0] != 'f'
 	    || aFileType[1] != 'e'
 	    || aFileType[2] != 'a'
 	    || aFileType[3] != 't'
-	    || !readU32(&featVersion)
+	    || !readU32(&map->featVersion)
 	    || !readU32(&map->numFeatures))
 	{
 		debug(LOG_ERROR, "Bad features header in %s", path);
@@ -206,7 +227,7 @@ GAMEMAP *mapLoad(char *filename)
 		uint32_t dummy;
 		uint8_t visibility[8];
 
-		if (featVersion <= 19)
+		if (map->featVersion <= 19)
 		{
 			nameLength = 40;
 		}
@@ -223,7 +244,7 @@ GAMEMAP *mapLoad(char *filename)
 			goto failure;
 		}
 		psObj->player = 0;	// work around invalid feature owner
-		if (featVersion >= 14 && PHYSFS_read(fp, &visibility, 1, 8) != 8)
+		if (map->featVersion >= 14 && PHYSFS_read(fp, &visibility, 1, 8) != 8)
 		{
 			debug(LOG_ERROR, "Failed to read feature visibility from %s", path);
 			goto failure;
@@ -237,6 +258,7 @@ GAMEMAP *mapLoad(char *filename)
 		}
 	}
 	PHYSFS_close(fp);
+featfailure:
 
 
 	/* === Load terrain data === */
@@ -247,15 +269,15 @@ GAMEMAP *mapLoad(char *filename)
 	fp = PHYSFS_openRead(path);
 	if (!fp)
 	{
-		debug(LOG_ERROR, "Terrain type file %s not found", path);
-		goto failure;
+		map->terrainVersion = 0;
+		goto terrainfailure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
 	    || aFileType[0] != 't'
 	    || aFileType[1] != 't'
 	    || aFileType[2] != 'y'
 	    || aFileType[3] != 'p'
-	    || !readU32(&terrainVersion)
+	    || !readU32(&map->terrainVersion)
 	    || !readU32(&map->numTerrainTypes))
 	{
 		debug(LOG_ERROR, "Bad features header in %s", path);
@@ -280,12 +302,12 @@ GAMEMAP *mapLoad(char *filename)
 	}
 	else
 	{
-		debug(LOG_ERROR, "Unknown terrain signature in %s: %lu %lu %lu", path, 
+		debug(LOG_ERROR, "Unknown terrain signature in %s: %hu %hu %hu", path, 
 		      terrainSignature[0], terrainSignature[1], terrainSignature[2]);
 		goto failure;
 	}
 	PHYSFS_close(fp);
-
+terrainfailure:
 
 	/* === Load structure data === */
 
@@ -302,7 +324,7 @@ GAMEMAP *mapLoad(char *filename)
 		    || aFileType[1] != 't'
 		    || aFileType[2] != 'r'
 		    || aFileType[3] != 'u'
-		    || !readU32(&structVersion)
+		    || !readU32(&map->structVersion)
 		    || !readU32(&map->numStructures))
 		{
 			debug(LOG_ERROR, "Bad structure header in %s", path);
@@ -319,7 +341,7 @@ GAMEMAP *mapLoad(char *filename)
 			int32_t dummyS32;
 			char researchName[60];
 
-			if (structVersion <= 19)
+			if (map->structVersion <= 19)
 			{
 				nameLength = 40;
 			}
@@ -349,7 +371,7 @@ GAMEMAP *mapLoad(char *filename)
 				debug(LOG_ERROR, "Failed to read structure from %s", path);
 				goto failure;
 			}
-			if (structVersion >= 12
+			if (map->structVersion >= 12
 			    && (!readU32(&dummy)    // factoryInc
 			        || !readU8(&dummy8) // loopsPerformed - causes structure padding
 			        || !readU8(&dummy8) // structure padding
@@ -364,12 +386,12 @@ GAMEMAP *mapLoad(char *filename)
 				debug(LOG_ERROR, "Failed to read structure v12 part from %s", path);
 				goto failure;
 			}
-			if (structVersion >= 14 && PHYSFS_read(fp, &visibility, 1, 8) != 8)
+			if (map->structVersion >= 14 && PHYSFS_read(fp, &visibility, 1, 8) != 8)
 			{
 				debug(LOG_ERROR, "Failed to read structure visibility from %s", path);
 				goto failure;
 			}
-			if (structVersion >= 15 && PHYSFS_read(fp, researchName, nameLength, 1) != 1)
+			if (map->structVersion >= 15 && PHYSFS_read(fp, researchName, nameLength, 1) != 1)
 			{
 				// If version < 20, then this causes no padding, but the short below
 				// will still cause two bytes padding; however, if version >= 20, we
@@ -378,17 +400,17 @@ GAMEMAP *mapLoad(char *filename)
 				debug(LOG_ERROR, "Failed to read structure v15 part from %s", path);
 				goto failure;
 			}
-			if (structVersion >= 17 && !readS16(&dummyS16))
+			if (map->structVersion >= 17 && !readS16(&dummyS16))
 			{
 				debug(LOG_ERROR, "Failed to read structure v17 part from %s", path);
 				goto failure;
 			}
-			if (structVersion >= 15 && !readS16(&dummyS16))	// structure padding
+			if (map->structVersion >= 15 && !readS16(&dummyS16))	// structure padding
 			{
 				debug(LOG_ERROR, "Failed to read 16 bits of structure padding from %s", path);
 				goto failure;
 			}
-			if (structVersion >= 21 && !readU32(&dummy))
+			if (map->structVersion >= 21 && !readU32(&dummy))
 			{
 				debug(LOG_ERROR, "Failed to read structure v21 part from %s", path);
 				goto failure;
@@ -425,7 +447,7 @@ GAMEMAP *mapLoad(char *filename)
 		    || aFileType[1] != 'i'
 		    || aFileType[2] != 'n'
 		    || aFileType[3] != 't'
-		    || !readU32(&droidVersion)
+		    || !readU32(&map->droidVersion)
 		    || !readU32(&map->numDroids))
 		{
 			debug(LOG_ERROR, "Bad droid header in %s", path);
@@ -437,9 +459,8 @@ GAMEMAP *mapLoad(char *filename)
 			LND_OBJECT *psObj = &map->mLndObjects[IMD_DROID][i];
 			int nameLength = 60;
 			uint32_t dummy;
-			uint8_t visibility[8];
 
-			if (droidVersion <= 19)
+			if (map->droidVersion <= 19)
 			{
 				nameLength = 40;
 			}

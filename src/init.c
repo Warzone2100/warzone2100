@@ -47,6 +47,7 @@
 
 #include "advvis.h"
 #include "atmos.h"
+#include "challenge.h"
 #include "cluster.h"
 #include "cmddroid.h"
 #include "component.h"
@@ -256,12 +257,10 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 #endif // DEBUG
 					// Remove maps and mods
 					removeSubdirs( curSearchPath->path, "maps", NULL );
+					removeSubdirs( curSearchPath->path, "mods/music", NULL );
 					removeSubdirs( curSearchPath->path, "mods/global", global_mods );
-					removeSubdirs( curSearchPath->path, "mods/global/autoload", NULL );
 					removeSubdirs( curSearchPath->path, "mods/campaign", campaign_mods );
-					removeSubdirs( curSearchPath->path, "mods/campaign/autoload", NULL );
 					removeSubdirs( curSearchPath->path, "mods/multiplay", multiplay_mods );
-					removeSubdirs( curSearchPath->path, "mods/multiplay/autoload", NULL );
 
 					// Remove multiplay patches
 					sstrcpy(tmpstr, curSearchPath->path);
@@ -300,13 +299,12 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					// Add global and campaign mods
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 
+					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods );
-					addSubdirs( curSearchPath->path, "mods/global/autoload", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/campaign", PHYSFS_APPEND, campaign_mods );
-					addSubdirs( curSearchPath->path, "mods/campaign/autoload", PHYSFS_APPEND, NULL );
 					if (!PHYSFS_removeFromSearchPath( curSearchPath->path ))
 					{
-						debug(LOG_ERROR, "Failed to remove path %s again", curSearchPath->path);
+						info("* Failed to remove path %s again", curSearchPath->path);
 					}
 
 					// Add plain dir
@@ -339,10 +337,9 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					// Add maps and global and multiplay mods
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 					addSubdirs( curSearchPath->path, "maps", PHYSFS_APPEND, NULL );
+					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods );
-					addSubdirs( curSearchPath->path, "mods/global/autoload", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, multiplay_mods );
-					addSubdirs( curSearchPath->path, "mods/multiplay/autoload", PHYSFS_APPEND, NULL );
 					PHYSFS_removeFromSearchPath( curSearchPath->path );
 
 					// Add multiplay patches
@@ -425,8 +422,9 @@ BOOL systemInitialise(void)
 	buildMapList();
 
 	// Initialize render engine
-	war_SetFog(false);
-	if (!pie_Initialise()) {
+	war_SetFog(war_GetFog());		// Set Fog mode based on user preferences
+	if (!pie_Initialise())
+	{
 		debug(LOG_ERROR, "Unable to initialise renderer");
 		return false;
 	}
@@ -1066,7 +1064,7 @@ BOOL stageThreeInitialise(void)
 	setAllPauseStates(false);
 
 	/* decide if we have to create teams, ONLY in multiplayer mode!*/
-	if( bMultiPlayer && game.alliance == ALLIANCES_TEAMS && game.type == SKIRMISH)
+	if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
 	{
 		createTeamAlliances();
 
@@ -1112,6 +1110,9 @@ BOOL stageThreeShutDown(void)
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
 
+	challengesUp = false;
+	challengeActive = false;
+
 	// make sure any button tips are gone.
 	widgReset();
 
@@ -1145,19 +1146,6 @@ BOOL stageThreeShutDown(void)
     initRunData();
 
 	resetVTOLLandingPos();
-
-// Restore player colours since the scripts might of changed them.
-
-	if(!bMultiPlayer)
-	{
-		int temp = getPlayerColour(selectedPlayer);
-		initPlayerColours();
-		setPlayerColour(selectedPlayer,temp);
-	}
-	else
-	{
-		initPlayerColours();		// reset colours leaving multiplayer game.
-	}
 
 	setScriptWinLoseVideo(PLAY_NONE);
 

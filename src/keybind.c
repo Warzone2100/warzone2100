@@ -268,6 +268,44 @@ DROID	*psDroid;
 	}
 }
 
+void	kf_CloneSelected( void )
+{
+	DROID		*psDroid, *psNewDroid;
+	DROID_TEMPLATE	sTemplate;
+	const int	limit = 10;	// make 10 clones
+	int		i, impact_side;
+
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
+	{
+		for (i = 0; psDroid->selected && i < limit; i++)
+		{
+			// create a template based on the droid
+			templateSetParts(psDroid, &sTemplate);
+
+			// copy the name across
+			sstrcpy(sTemplate.aName, psDroid->aName);
+
+			// create a new droid
+			psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false);
+			ASSERT_OR_RETURN(, psNewDroid != NULL, "Unable to build a unit");
+			addDroid(psNewDroid, apsDroidLists);
+			psNewDroid->body = psDroid->body;
+			for (impact_side = 0; impact_side < NUM_HIT_SIDES; impact_side=impact_side+1)
+			{
+				psNewDroid->armour[impact_side][WC_KINETIC] = psDroid->armour[impact_side][WC_KINETIC];
+				psNewDroid->armour[impact_side][WC_HEAT] = psDroid->armour[impact_side][WC_HEAT];
+			}
+			psNewDroid->experience = psDroid->experience;
+			psNewDroid->direction = psDroid->direction;
+			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER))
+			{
+				updateDroidOrientation(psNewDroid);
+			}
+			psNewDroid->selected = true;
+		}
+	}
+}
+
 // --------------------------------------------------------------------------
 //
 ///* Prints out the date and time of the build of the game */
@@ -1706,12 +1744,34 @@ void	kf_ToggleWeather( void )
 // --------------------------------------------------------------------------
 void	kf_SelectNextFactory(void)
 {
+STRUCTURE	*psCurr;
+
 	selNextSpecifiedBuilding(REF_FACTORY);
+
+	//deselect factories of other types
+	for(psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	{
+		if( psCurr->selected && 
+		    ( (psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
+			(psCurr->pStructureType->type == REF_VTOL_FACTORY) ) )
+		{
+		  psCurr->selected = false;
+		}
+	}
+
+	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
+	{
+		setKeyButtonMapping(IDRET_MANUFACTURE);
+	}
 }
 // --------------------------------------------------------------------------
 void	kf_SelectNextResearch(void)
 {
 	selNextSpecifiedBuilding(REF_RESEARCH);
+	if (intCheckReticuleButEnabled(IDRET_RESEARCH))
+	{
+		setKeyButtonMapping(IDRET_RESEARCH);
+	}
 }
 // --------------------------------------------------------------------------
 void	kf_SelectNextPowerStation(void)
@@ -1721,7 +1781,25 @@ void	kf_SelectNextPowerStation(void)
 // --------------------------------------------------------------------------
 void	kf_SelectNextCyborgFactory(void)
 {
+STRUCTURE	*psCurr;
+
 	selNextSpecifiedBuilding(REF_CYBORG_FACTORY);
+
+	//deselect factories of other types
+	for(psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	{
+		if( psCurr->selected && 
+		    ( (psCurr->pStructureType->type == REF_FACTORY) ||
+			(psCurr->pStructureType->type == REF_VTOL_FACTORY) ) )
+		{
+		  psCurr->selected = false;
+		}
+	}
+
+	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
+	{
+		setKeyButtonMapping(IDRET_MANUFACTURE);
+	}
 }
 // --------------------------------------------------------------------------
 
@@ -2167,7 +2245,25 @@ void	kf_SetDroidAttackCease( void )
 // --------------------------------------------------------------------------
 void	kf_SetDroidMoveHold( void )
 {
-	kfsf_SetSelectedDroidsState(DSO_HALTTYPE,DSS_HALT_HOLD);
+	DROID	*psDroid;
+
+	// NOT A CHEAT CODE
+	// This is a function to set unit orders via keyboard shortcuts. It should
+	// _not_ be disallowed in multiplayer games.
+
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (psDroid->selected)
+		{
+			orderDroid(psDroid, DORDER_TEMP_HOLD);
+		}
+	}
+}
+
+// --------------------------------------------------------------------------
+void	kf_SetDroidMoveGuard( void )
+{
+	kfsf_SetSelectedDroidsState(DSO_HALTTYPE,DSS_HALT_GUARD);
 }
 
 // --------------------------------------------------------------------------
@@ -2186,6 +2282,12 @@ void	kf_SetDroidMovePatrol( void )
 void	kf_SetDroidReturnToBase( void )
 {
 	kfsf_SetSelectedDroidsState(DSO_RETURN_TO_LOC,DSS_RTL_BASE);
+}
+
+// --------------------------------------------------------------------------
+void	kf_SetDroidGoToTransport( void )
+{
+	kfsf_SetSelectedDroidsState(DSO_RETURN_TO_LOC,DSS_RTL_TRANSPORT);
 }
 
 // --------------------------------------------------------------------------
@@ -2218,14 +2320,9 @@ static void kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE st
 {
 	DROID	*psDroid;
 
-#ifndef DEBUG
-	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
-#endif
+	// NOT A CHEAT CODE
+	// This is a function to set unit orders via keyboard shortcuts. It should
+	// _not_ be disallowed in multiplayer games.
 
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -2313,12 +2410,7 @@ UDWORD		xJump = 0, yJump = 0;
 // --------------------------------------------------------------------------
 void kf_ToggleFormationSpeedLimiting( void )
 {
-	// Bail out if we're running a _true_ multiplayer game
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
+	// THIS IS NOT A CHEAT
 
 	if ( moveFormationSpeedLimitingOn() )
 	{

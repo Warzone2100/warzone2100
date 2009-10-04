@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/netplay/netplay.h"
 #include "basedef.h"
 #include "droid.h"
 #include "action.h"
@@ -77,35 +78,19 @@ static UDWORD		lightLastChanged;
 SDWORD		lightSpeed=2;
 extern UDWORD selectedPlayer;
 
-UBYTE		PlayerColour[MAX_PLAYERS];// = {0,1,2,3,4,5,6,7}
-
 // Colour Lookups
 // use col = MAX_PLAYERS for anycolour (see multiint.c)
 BOOL setPlayerColour(UDWORD player, UDWORD col)
 {
-	if(player >MAX_PLAYERS || col >MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "wrong values");
-		return false;
-	}
-	PlayerColour[(UBYTE)player] = (UBYTE)col;
+	ASSERT(player < MAX_PLAYERS && col < MAX_PLAYERS, "Bad colour setting");
+	NetPlay.players[player].colour = col;
 	return true;
 }
 
 UBYTE getPlayerColour(UDWORD pl)
 {
-	return PlayerColour[pl];
+	return NetPlay.players[pl].colour;
 }
-
-void initPlayerColours(void)
-{
-	UBYTE i;
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		PlayerColour[i] = i;
-	}
-}
-
 
 void updateLightLevels(void)
 {
@@ -602,11 +587,17 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 		ASSERT(ComponentIMD, "No ComponentIMD");
 	}
 
-	if(MountIMD)
+	if (MountIMD)
 	{
 		pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
+
+		/* translate for weapon mount point */
+		if (MountIMD->nconnectors)
+		{
+			pie_TRANSLATE(MountIMD->connectors->x, MountIMD->connectors->z, MountIMD->connectors->y);
+		}
 	}
-	if(ComponentIMD)
+	if (ComponentIMD)
 	{
 		pie_Draw3DShape(ComponentIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 	}
@@ -927,8 +918,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				pie_Draw3DShape(psShapeTemp, 0, psDroid->player-6, brightness, specular, pieFlag, iPieData);
 			}
 		}
-		//else if( psDroid->droidType == DROID_CYBORG)
-	else if (cyborgDroid(psDroid))
+		else if (cyborgDroid(psDroid))
 		{
 			/* draw body if cyborg not animating */
 			if ( psDroid->psCurAnim == NULL || psDroid->psCurAnim->bVisible == false )
@@ -1017,8 +1007,6 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
 				/* Double check that the weapon droid actually has any */
-				//uses numWeaps
-				//if(psDroid->numWeaps)
 				for (i = 0;i < psDroid->numWeaps;i++)
 				{
 					if (psDroid->asWeaps[i].nStat > 0 || psDroid->droidType == DROID_DEFAULT)
@@ -1048,38 +1036,29 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 								pie_MatRotY(DEG( (-(SDWORD)psDroid->asWeaps[i].rotation)) );
 							}
 
-
 							/* vtol weapons inverted */
 							if ( iConnector >= VTOL_CONNECTOR_START )
 							{
 								pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
 							}
 
+							/* Get the mount graphic */
+							psShape = WEAPON_MOUNT_IMD(psDroid, i);
+							
+							pie_TRANSLATE(0,0,psDroid->asWeaps[i].recoilValue/3);
 
-							//psShape = WEAPON_MOUNT_IMD(psDroid,psDroid->player);
-							psShape = (asWeaponStats[psDroid->asWeaps[i].nStat]).pMountGraphic;
 							/* Draw it */
-							//if(psDroid->numWeaps) already done this check above?!
-							{
-								pie_TRANSLATE(0,0,psDroid->asWeaps[i].recoilValue/3);
-							}
 							if(psShape)
 							{
 								pie_Draw3DShape(psShape, 0, colour, brightness, specular, pieFlag, iPieData);
 							}
+							
+							pie_TRANSLATE(0,0,psDroid->asWeaps[i].recoilValue);
 
-							//if(psDroid->numWeaps) already done this check above?!
+							/* translate for weapon mount point */
+							if (psShape && psShape->nconnectors)
 							{
-								pie_TRANSLATE(0,0,psDroid->asWeaps[i].recoilValue);
-							}
-
-							/* translate for weapon mount point if cyborg */
-							//if( psDroid->droidType == DROID_CYBORG &&
-							if (cyborgDroid(psDroid) && psShape && psShape->nconnectors)
-							{
-								pie_TRANSLATE( psShape->connectors[0].x,
-											   psShape->connectors[0].z,
-											   psShape->connectors[0].y  );
+								pie_TRANSLATE(psShape->connectors->x, psShape->connectors->z, psShape->connectors->y);
 							}
 
 							/* vtol weapons inverted */
@@ -1095,42 +1074,51 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 							}
 
 							/* Get the weapon (gun?) graphic */
-							//psShape = WEAPON_IMD(psDroid,psDroid->player);
-							psShape = (asWeaponStats[psDroid->asWeaps[i].nStat]).pIMD;
-							/* Draw it */
-							if(psShape)
+							psShape = WEAPON_IMD(psDroid, i);
+							
+							// We have a weapon so we draw it and a muzzle flash from weapon connector
+							if (psShape)
 							{
 								pie_Draw3DShape(psShape, 0, colour, brightness, specular, pieFlag, iPieData);
-							}
-							//we have a droid weapon so do we draw a muzzle flash
-							if( psShape && psShape->nconnectors )
-							{
-								/* Now we need to move to the end fo the barrel */
-								//fixed the bug,I mingled body connector and weapon connector :/
-								pie_TRANSLATE( psShape->connectors[0].x,
-											   psShape->connectors[0].z,
-											   psShape->connectors[0].y  );
-								//and draw the muzzle flash
-								//animate for the duration of the flash only
-								//change macro to actual accessor for each turret effect
-								//psShape = MUZZLE_FLASH_PIE(psDroid,psDroid->player);
-								psShape = (asWeaponStats[psDroid->asWeaps[i].nStat]).pMuzzleGraphic;
-								if(psShape)
+								
+								if (psShape->nconnectors)
 								{
-									//assume no clan colours formuzzle effects
-									if ((psShape->numFrames == 0) || (psShape->animInterval <= 0))//no anim so display one frame for a fixed time
+									unsigned int connector_num = 0;
+
+									// which barrel is firing if model have multiple muzzle connectors?
+									if (psDroid->asWeaps[i].shotsFired && (psShape->nconnectors > 1))
 									{
-										if (gameTime < (psDroid->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
-										{
-											pie_Draw3DShape(psShape, 0, 0, brightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);//muzzle flash
-										}
+										// shoot first, draw later - substract one shot to get correct results
+										connector_num = (psDroid->asWeaps[i].shotsFired - 1) % (psShape->nconnectors);
 									}
-									else
+									
+									/* Now we need to move to the end of the firing barrel (there maybe multiple barrels) */
+									pie_TRANSLATE( psShape->connectors[connector_num].x,
+												   psShape->connectors[connector_num].z,
+												   psShape->connectors[connector_num].y);
+									
+									//and draw the muzzle flash
+									psShape = MUZZLE_FLASH_PIE(psDroid, i);
+									
+									if (psShape)
 									{
-										frame = (gameTime - psDroid->asWeaps[i].lastFired)/psShape->animInterval;
-										if (frame < psShape->numFrames)
+										//assume no clan colours for muzzle effects
+										if ((psShape->numFrames == 0) || (psShape->animInterval <= 0))										
 										{
-											pie_Draw3DShape(psShape, frame, 0, brightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);//muzzle flash
+											//no anim so display one frame for a fixed time
+											if (gameTime < (psDroid->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
+											{
+												pie_Draw3DShape(psShape, 0, 0, brightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
+											}
+										}
+										else
+										{
+											// animated muzzle
+											frame = (gameTime - psDroid->asWeaps[i].lastFired) / psShape->animInterval;
+											if (frame < psShape->numFrames)
+											{
+												pie_Draw3DShape(psShape, frame, 0, brightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
+											}
 										}
 									}
 								}
@@ -1405,7 +1393,8 @@ void destroyFXDroid(DROID	*psDroid)
 				{
 					if(psDroid->asWeaps[0].nStat > 0)
 					{
-						psImd = WEAPON_MOUNT_IMD(psDroid,psDroid->player);
+						// get main mount
+						psImd = WEAPON_MOUNT_IMD(psDroid, 0);
 					}
 				}
 				else
@@ -1430,7 +1419,8 @@ void destroyFXDroid(DROID	*psDroid)
 			case DROID_COMMAND:
 				if(psDroid->numWeaps)
 				{
-					psImd = WEAPON_IMD(psDroid,psDroid->player);
+					// get main weapon
+					psImd = WEAPON_IMD(psDroid, 0);
 				}
 				else
 				{

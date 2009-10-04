@@ -47,6 +47,8 @@ AC_GNU_SOURCE
 AX_CHECK_STRLCPY
 AX_CHECK_STRLCAT
 
+AC_CHECK_HEADERS(alloca.h)
+
 # Check for gettext
 AM_GNU_GETTEXT([external])
 AC_PROG_VERSION_CHECK([msgfmt xgettext], [0.15])
@@ -71,6 +73,11 @@ case ${host_os} in
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
 		WIN32_LIBS='-ldbghelp -lshfolder -lwinmm -lws2_32'
 		AC_SUBST([WIN32_LIBS], [${WIN32_LIBS}])
+		;;
+	*openbsd*)
+		AC_DEFINE([_XOPEN_SOURCE], 600, [Enable POSIX extensions if present])
+		# Make sure that backtrace_symbols_fd (GNU raw back trace extension) has some symbols to work with
+		LDFLAGS="-Wl,-export-dynamic ${LDFLAGS}"
 		;;
 	*)
 		# Some platforms don't need _XOPEN_SOURCE
@@ -271,7 +278,7 @@ fi
 
 PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
-PKG_CHECK_MODULES([THEORA], [theora >= 0.1])
+PKG_CHECK_MODULES([THEORA], [theora >= 1.0])
 
 AS_IF([test "x$enable_sound" = "xyes"],[
 	PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
@@ -374,7 +381,6 @@ AC_CONFIG_FILES([Makefile
 		data/base/Makefile
 		data/base/stats-sql/Makefile
 		data/mods/Makefile
-		data/mods/global/Makefile
 		data/mods/multiplay/Makefile
 		data/music/Makefile
 		pkg/Makefile
@@ -385,6 +391,7 @@ AC_CONFIG_FILES([Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile
+		lib/iniparser/Makefile
 		lib/ivis_opengl/Makefile
 		lib/ivis_common/Makefile
 		lib/netplay/Makefile
@@ -410,7 +417,7 @@ AS_IF([test "x$with_distributor" = "xUNKNOWN"],[
 
 AS_IF([test "x$use_system_sqlite" = "xno"],[
 	AC_MSG_NOTICE()
-	AC_MSG_WARN([Not using a system provided SQLite library.])
+	AC_MSG_WARN([No compatible SQLite library detected, using integrated copy instead.])
 	AC_MSG_WARN([${SQLITE_PKG_ERRORS}])
 	AC_MSG_WARN([We currently only accept SQLite versions >= 3.6.10.])
 ])

@@ -371,7 +371,7 @@ void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 {
 	W_SLIDER	*psSlider;
 	SWORD		x0,y0, x1,y1;
-	UWORD		width,height;
+	UWORD		width = 0, height = 0;
 
 	psSlider = (W_SLIDER *)psWidget;
 

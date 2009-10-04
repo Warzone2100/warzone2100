@@ -60,7 +60,7 @@ extern char	aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file 
 extern BOOL	bUsingKeyboard;	// to disable mouse pointer when using keys.
 extern BOOL	bUsingSlider;
 
-extern BOOL	bForceEditorLoaded;
+extern BOOL	bLimiterLoaded;
 
 extern void	changeTitleMode			(tMode mode);
 extern BOOL startTitleMenu			(void);
@@ -174,6 +174,7 @@ enum
 	FRONTEND_NEWGAME		= 20200,	// single player (menu)
 	FRONTEND_LOADGAME,
 	FRONTEND_SKIRMISH,
+	FRONTEND_CHALLENGES,
 	FRONTEND_HOST			= 20300,	//multiplayer menu options
 	FRONTEND_JOIN,
 	FE_P0,								// player 0 buton

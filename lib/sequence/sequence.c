@@ -173,9 +173,10 @@ static int ScrnvidYpos = 0;
 // Helper; just grab some more compressed bitstream and sync it for page extraction
 static int buffer_data(PHYSFS_file* in, ogg_sync_state* oy)
 {
-	// read in 4K chunks
-	char *buffer = ogg_sync_buffer(oy, 4096);
-	int bytes = PHYSFS_read(in, buffer, 1, 4096);
+	// read in 256K chunks
+	const int size = 262144;
+	char *buffer = ogg_sync_buffer(oy, size);
+	int bytes = PHYSFS_read(in, buffer, 1, size);
 
 	ogg_sync_wrote(oy, bytes);
 	return(bytes);
@@ -486,7 +487,7 @@ bool seq_Play(const char* filename)
 	fpInfile = PHYSFS_openRead(filename);
 	if (fpInfile == NULL)
 	{
-		debug(LOG_ERROR, "unable to open '%s' for playback", filename);
+		info("unable to open '%s' for playback", filename);
 		return false;
 	}
 

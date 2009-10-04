@@ -219,7 +219,7 @@ static bool rayLOSCallback(Vector3i pos, int distSq, void *data)
 	else
 	{
 		// Calculate the current LOS gradient
-		int newGrad = (help->lastHeight - help->startHeight) * GRAD_MUL / help->lastDist;
+		int newGrad = (help->lastHeight - help->startHeight) * GRAD_MUL / MAX(1, help->lastDist);
 		if (newGrad >= help->currGrad)
 		{
 			help->currGrad = newGrad;
@@ -414,7 +414,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 
 		// See if the target can be seen
 		top = dest.z + visObjHeight(psTarget) - help.startHeight;
-		targetGrad = top * GRAD_MUL / help.lastDist;
+		targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
 
 		if (targetGrad >= help.currGrad)
 		{
@@ -841,7 +841,7 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 
 		// See if the target can be seen
 		top = dest.z + visObjHeight(psTarget) - help.startHeight;
-		targetGrad = top * GRAD_MUL / help.lastDist;
+		targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
 
 		return targetGrad >= help.currGrad;
 	}

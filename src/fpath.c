@@ -279,7 +279,7 @@ BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int p
 		{
 			return true;
 		}
-		else if (moveType == FMT_ATTACK
+		else if (moveType == FMT_ATTACK && psTile->psObject
 		         && psTile->psObject->type == OBJ_STRUCTURE && aiCheckAlliances(psTile->psObject->player, player))
 		{
 			return true;
@@ -405,6 +405,7 @@ void fpathRemoveDroidData(int id)
 static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner)
 {
 	PATHJOB		*psJob = NULL;
+	int		count;
 
 	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
 
@@ -455,6 +456,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 				psMove->asPath = psNext->sMove.asPath;
 				retval = psNext->retval;
 				ASSERT(retval != FPR_OK || psMove->asPath, "Ok result but no path after copy");
+				ASSERT(retval != FPR_OK || psMove->numPoints > 0, "Ok result but path empty after copy");
 				free(psNext);
 				SDL_SemPost(fpathSemaphore);
 				objTrace(id, "Got a path to (%d, %d)! Length=%d Retval=%d", (int)psMove->DestinationX,
@@ -497,14 +499,17 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	if (!firstJob)
 	{
 		firstJob = psJob;
+		count = 0;
 	}
 	else
 	{
 		PATHJOB *psNext = firstJob;
 
+		count = 0;
 		while (psNext->next != NULL)
 		{
 			psNext = psNext->next;
+			count++;
 		}
 
 		psNext->next = psJob;
@@ -512,7 +517,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 
 	SDL_SemPost(fpathSemaphore);
 
-	objTrace(id, "Queued up a path-finding request to (%d, %d)", tX, tY);
+	objTrace(id, "Queued up a path-finding request to (%d, %d), %d items earlier in queue", tX, tY, count);
 	return FPR_WAIT;	// wait while polling result queue
 }
 
@@ -586,6 +591,7 @@ static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 	FPATH_RETVAL retval = fpathAStarRoute(&psResult->sMove, psJob);
 
 	ASSERT(retval != ASR_OK || psResult->sMove.asPath, "Ok result but no path in result");
+	ASSERT(retval == ASR_FAILED || psResult->sMove.numPoints > 0, "Ok result but no length of path in result");
 	switch (retval)
 	{
 	case ASR_NEAREST:
@@ -606,11 +612,61 @@ static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 			psResult->retval = FPR_FAILED;
 		}
 		break;
-	default:
+	case ASR_OK:
 		objTrace(psJob->droidID, "Got route of length %d", psResult->sMove.numPoints);
 		psResult->retval = FPR_OK;
 		break;
 	}
+}
+
+// Variables for the callback
+static SDWORD	finalX,finalY, vectorX,vectorY;
+static BOOL		obstruction;
+
+/** The visibility ray callback
+ */
+static bool fpathVisCallback(Vector3i pos, int dist, void* data)
+{
+	/* Has to be -1 to make sure that it doesn't match any enumerated
+	 * constant from PROPULSION_TYPE.
+	 */
+	static const PROPULSION_TYPE prop = (PROPULSION_TYPE)-1;
+
+	// See if this point is past the final point (dot product)
+	int vx = pos.x - finalX, vy = pos.y - finalY;
+
+	if (vx*vectorX + vy*vectorY <= 0)
+	{
+		return false;
+	}
+
+	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), prop))
+	{
+		// found an obstruction
+		obstruction = true;
+		return false;
+	}
+
+	return true;
+}
+
+BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
+{
+	// convert to world coords
+	Vector3i p1 = { world_coord(x1) + TILE_UNITS / 2, world_coord(y1) + TILE_UNITS / 2, 0 };
+	Vector3i p2 = { world_coord(x2) + TILE_UNITS / 2, world_coord(y2) + TILE_UNITS / 2, 0 };
+	Vector3i dir = Vector3i_Sub(p2, p1);
+
+	// Initialise the callback variables
+	finalX = p2.x;
+	finalY = p2.y;
+	vectorX = -dir.x;
+	vectorY = -dir.y;
+	obstruction = false;
+
+	rayCast(p1, dir, RAY_MAXLEN, fpathVisCallback, NULL);
+
+	return !obstruction;
 }
 
 static FPATH_RETVAL fpathSimpleRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY)
@@ -695,4 +751,43 @@ void fpathTest(int x, int y, int x2, int y2)
 	assert(fpathResultQueueLength() == 0);
 	assert(firstJob == NULL);
 	assert(firstResult == NULL);
+}
+
+bool fpathCheck(Vector2i orig, Vector2i dest, PROPULSION_TYPE propulsion)
+{
+	MAPTILE *origTile;
+	MAPTILE *destTile;
+
+	// We have to be careful with this check because it is called on
+	// load when playing campaign on droids that are on the other
+	// map during missions, and those maps are usually larger.
+	if (!tileOnMap(orig.x, orig.y) || !tileOnMap(dest.x, dest.y))
+	{
+		return false;
+	}
+
+	origTile = mapTile(orig.x, orig.y);
+	destTile = mapTile(dest.x, dest.y);
+
+	ASSERT(propulsion != PROPULSION_TYPE_NUM, "Bad propulsion type");
+	ASSERT(origTile != NULL && destTile != NULL, "Bad tile parameter");
+
+	switch (propulsion)
+	{
+	case PROPULSION_TYPE_PROPELLOR:
+	case PROPULSION_TYPE_WHEELED:
+	case PROPULSION_TYPE_TRACKED:
+	case PROPULSION_TYPE_LEGGED:
+	case PROPULSION_TYPE_SKI: 	// ?!
+	case PROPULSION_TYPE_HALF_TRACKED:
+		return origTile->limitedContinent == destTile->limitedContinent;
+	case PROPULSION_TYPE_HOVER:
+		return origTile->hoverContinent == destTile->hoverContinent;
+	case PROPULSION_TYPE_JUMP:
+	case PROPULSION_TYPE_LIFT:
+		return true;	// FIXME: This is not entirely correct for all possible maps. - Per
+	case PROPULSION_TYPE_NUM:
+		break;
+	}
+	return true;	// should never get here
 }

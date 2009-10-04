@@ -21,31 +21,17 @@
  *  A* based path finding
  */
 
-#include <assert.h>
-
+#ifndef WZ_TESTING
 #include "lib/framework/frame.h"
-
-#include "objects.h"
 #include "map.h"
-#include "raycast.h"
-#include "fpath.h"
-
 #include "astar.h"
-
-static SDWORD	astarOuter, astarRemove;
-
-/** Keeps track of the amount of iterations done in the inner loop of our A*
- *  implementation.
- *
- *  @ingroup pathfinding
- */
-int astarInner = 0;
+#endif
 
 /** Counter to implement lazy deletion from nodeArray.
  *
  *  @see fpathTableReset
  */
-static int resetIterationCount = 0;
+static uint16_t resetIterationCount = 0;
 
 /** The structure to store a node of the route in node table
  *
@@ -53,13 +39,13 @@ static int resetIterationCount = 0;
  */
 typedef struct _fp_node
 {
-	int     x, y;           // map coords
-	SWORD	dist, est;	// distance so far and estimate to end
-	SWORD	type;		// open or closed node
 	struct _fp_node *psOpen;
 	struct _fp_node	*psRoute;	// Previous point in the route
 	struct _fp_node *psNext;
-	int iteration;
+	uint16_t	iteration;
+	short		x, y;           // map coords
+	short		dist, est;	// distance so far and estimate to end
+	short		type;		// open or closed node
 } FP_NODE;
 
 // types of node
@@ -93,14 +79,6 @@ static const Vector2i aDirOffset[NUM_DIR] =
 	{ 1, 0},
 	{ 1, 1},
 };
-
-// reset the astar counters
-void astarResetCounters(void)
-{
-	astarInner = 0;
-	astarOuter = 0;
-	astarRemove = 0;
-}
 
 /** Add a node to the node table
  *
@@ -165,7 +143,7 @@ static void fpathTableReset(void)
 	++resetIterationCount;
 
 	// Check to prevent overflows of resetIterationCount
-	if (resetIterationCount < INT_MAX - 1)
+	if (resetIterationCount < UINT16_MAX - 1)
 	{
 		ASSERT(resetIterationCount > 0, "Integer overflow occurred!");
 
@@ -197,47 +175,9 @@ void fpathHardTableReset()
 	resetIterationCount = 0;
 }
 
-/** Compare two nodes
- */
-static inline SDWORD fpathCompare(FP_NODE *psFirst, FP_NODE *psSecond)
-{
-	SDWORD	first,second;
-
-	first = psFirst->dist + psFirst->est;
-	second = psSecond->dist + psSecond->est;
-	if (first < second)
-	{
-		return -1;
-	}
-	else if (first > second)
-	{
-		return 1;
-	}
-
-	// equal totals, give preference to node closer to target
-	if (psFirst->est < psSecond->est)
-	{
-		return -1;
-	}
-	else if (psFirst->est > psSecond->est)
-	{
-		return 1;
-	}
-
-	// exactly equal
-	return 0;
-}
-
-/** make a 50/50 random choice
- */
-static BOOL fpathRandChoice(void)
-{
-	return ONEINTWO;
-}
-
 /** Add a node to the open list
  */
-static void fpathOpenAdd(FP_NODE *psNode)
+static inline void fpathOpenAdd(FP_NODE *psNode)
 {
 	psNode->psOpen = psOpen;
 	psOpen = psNode;
@@ -248,7 +188,6 @@ static void fpathOpenAdd(FP_NODE *psNode)
 static FP_NODE *fpathOpenGet(void)
 {
 	FP_NODE	*psNode, *psCurr, *psPrev, *psParent = NULL;
-	SDWORD	comp;
 
 	if (psOpen == NULL)
 	{
@@ -260,12 +199,16 @@ static FP_NODE *fpathOpenGet(void)
 	psNode = psOpen;
 	for(psCurr = psOpen; psCurr; psCurr = psCurr->psOpen)
 	{
-		comp = fpathCompare(psCurr, psNode);
-		if (comp < 0 || (comp == 0 && fpathRandChoice()))
+		const int first = psCurr->dist + psCurr->est;
+		const int second = psNode->dist + psNode->est;
+
+		// if equal totals, give preference to node closer to target
+		if (first < second || (first == second && psCurr->est < psNode->est))
 		{
 			psParent = psPrev;
 			psNode = psCurr;
 		}
+
 		psPrev = psCurr;
 	}
 
@@ -285,7 +228,7 @@ static FP_NODE *fpathOpenGet(void)
 
 /** Estimate the distance to the target point
  */
-static SDWORD fpathEstimate(SDWORD x, SDWORD y, SDWORD fx, SDWORD fy)
+static SDWORD WZ_DECL_CONST fpathEstimate(SDWORD x, SDWORD y, SDWORD fx, SDWORD fy)
 {
 	SDWORD xdiff, ydiff;
 
@@ -319,61 +262,11 @@ static FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 	return psNode;
 }
 
-// Variables for the callback
-static SDWORD	finalX,finalY, vectorX,vectorY;
-static BOOL		obstruction;
-
-/** The visibility ray callback
- */
-static bool fpathVisCallback(Vector3i pos, int dist, void* data)
-{
-	/* Has to be -1 to make sure that it doesn't match any enumerated
-	 * constant from PROPULSION_TYPE.
-	 */
-	static const PROPULSION_TYPE prop = (PROPULSION_TYPE)-1;
-
-	// See if this point is past the final point (dot product)
-	int vx = pos.x - finalX, vy = pos.y - finalY;
-
-	if (vx*vectorX + vy*vectorY <= 0)
-	{
-		return false;
-	}
-
-	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), prop))
-	{
-		// found an obstruction
-		obstruction = true;
-		return false;
-	}
-
-	return true;
-}
-
-BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
-{
-	// convert to world coords
-	Vector3i p1 = { world_coord(x1) + TILE_UNITS / 2, world_coord(y1) + TILE_UNITS / 2, 0 };
-	Vector3i p2 = { world_coord(x2) + TILE_UNITS / 2, world_coord(y2) + TILE_UNITS / 2, 0 };
-	Vector3i dir = Vector3i_Sub(p2, p1);
-
-	// Initialise the callback variables
-	finalX = p2.x;
-	finalY = p2.y;
-	vectorX = -dir.x;
-	vectorY = -dir.y;
-	obstruction = false;
-
-	rayCast(p1, dir, RAY_MAXLEN, fpathVisCallback, NULL);
-
-	return !obstruction;
-}
-
 SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
-	FP_NODE		*psFound, *psCurr, *psNew, *psParent, *psNext;
+	FP_NODE		*psFound, *psCurr, *psNew;
 	FP_NODE		*psNearest, *psRoute;
-	SDWORD		dir, x,y, currDist;
+	SDWORD		dir, x, y, currDist;
 	SDWORD		retval = ASR_OK;
 	const int       tileSX = map_coord(psJob->origX);
 	const int       tileSY = map_coord(psJob->origY);
@@ -415,10 +308,8 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 			psNearest = psCurr;
 		}
 
-		astarOuter += 1;
-
 		// loop through possible moves in 8 directions to find a valid move
-		for(dir=0; dir<NUM_DIR; dir+=1)
+		for (dir = 0; dir < NUM_DIR; dir += 1)
 		{
 			/* make non-orthogonal-adjacent moves' dist a bit longer/cost a bit more
 			   5  6  7
@@ -442,7 +333,6 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 			x = psCurr->x + aDirOffset[dir].x;
 			y = psCurr->y + aDirOffset[dir].y;
 
-
 			// See if the node has already been visited
 			psFound = fpathGetNode(x, y);
 			if (psFound && psFound->dist <= currDist)
@@ -458,9 +348,6 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 				continue;
 			}
 
-			astarInner += 1;
-			ASSERT(astarInner >= 0, "astarInner overflowed!");
-
 			// Now insert the point into the appropriate list
 			if (!psFound)
 			{
@@ -468,15 +355,13 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 				psNew = fpathNewNode(x,y, currDist, psCurr);
 				if (psNew)
 				{
-					psNew->est = (SWORD)fpathEstimate(x,y, tileFX, tileFY);
+					psNew->est = fpathEstimate(x, y, tileFX, tileFY);
 					fpathOpenAdd(psNew);
 					fpathAddNode(psNew);
 				}
 			}
 			else if (psFound->type == NT_OPEN)
 			{
-				astarRemove += 1;
-
 				// already in the open list but this is shorter
 				psFound->dist = (SWORD)currDist;
 				psFound->psRoute = psCurr;
@@ -489,14 +374,9 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 				psFound->psRoute = psCurr;
 				fpathOpenAdd(psFound);
 			}
-			else
-			{
-				ASSERT(!"the open and closed lists are fried/wrong", "fpathAStarRoute: the open and closed lists are f***ed");
-			}
 		}
 
 		// add the current point to the closed nodes
-//		fpathAddNode(psCurr);
 		psCurr->type = NT_CLOSED;
 	}
 
@@ -509,7 +389,28 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 
 	if (psRoute)
 	{
-		int index, count = psMove->numPoints;
+		int	count = 0;	// calculated length of route
+
+		// Count length of route
+		psCurr = psRoute;
+		while (psCurr)
+		{
+			ASSERT(tileOnMap(psCurr->x, psCurr->y), "Assigned XY coordinates (%d, %d) not on map!", (int)psCurr->x, (int)psCurr->y);
+			psCurr = psCurr->psRoute;
+			count++;
+		}
+
+		// TODO FIXME once we can change numPoints to something larger than uchar
+		psMove->numPoints = MIN(255, count);
+
+		// Allocate memory
+		psMove->asPath = calloc(sizeof(*psMove->asPath), count);
+		ASSERT(psMove->asPath, "Out of memory");
+		if (!psMove->asPath)
+		{
+			fpathHardTableReset();
+			return ASR_FAILED;
+		}
 
 		// get the route in the correct order
 		// If as I suspect this is to reverse the list, then it's my suspicion that
@@ -519,42 +420,16 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		// The idea is impractical, because you can't guarentee that the target is
 		// reachable. As I see it, this is the reason why psNearest got introduced.
 		// -- Dennis L.
-		psParent = NULL;
-		for(psCurr=psRoute; psCurr; psCurr=psNext)
-		{
-			psNext = psCurr->psRoute;
-			psCurr->psRoute = psParent;
-			psParent = psCurr;
-			count++;
-		}
-		ASSERT(count > 0, "Route has no nodes");
-		if (count <= 0)
-		{
-			fpathHardTableReset();
-			return ASR_FAILED;
-		}
-		psRoute = psParent;
-
 		psCurr = psRoute;
-		psMove->asPath = realloc(psMove->asPath, sizeof(*psMove->asPath) * count);
-		ASSERT(psMove->asPath, "Out of memory");
-		if (!psMove->asPath)
+		psMove->DestinationX = world_coord(psCurr->x);
+		psMove->DestinationY = world_coord(psCurr->y);
+		while (psCurr)
 		{
-			fpathHardTableReset();
-			return ASR_FAILED;
-		}
-		index = psMove->numPoints;
-		while (psCurr && index < count)
-		{
-			psMove->asPath[index].x = psCurr->x;
-			psMove->asPath[index].y = psCurr->y;
-			index++;
-			ASSERT(psCurr->x < mapWidth && psCurr->y < mapHeight, "Bad route generated!");
+			count--;
+			psMove->asPath[count].x = psCurr->x;
+			psMove->asPath[count].y = psCurr->y;
 			psCurr = psCurr->psRoute;
 		}
-		psMove->numPoints = index;
-		psMove->DestinationX = world_coord(psMove->asPath[index - 1].x);
-		psMove->DestinationY = world_coord(psMove->asPath[index - 1].y);
 	}
 	else
 	{
