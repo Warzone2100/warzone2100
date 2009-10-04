@@ -408,7 +408,6 @@ float requestPower(int player, float amount)
 
 	// keep track on how much energy we could possibly spend
 	asPower[player].powerRequested += amount;
-	ASSERT(asPower[player].powerRequested < 1000, "you are asking too much");
 	
 	if (amountConsidered <= asPower[player].currentPower)
 	{
@@ -445,7 +444,6 @@ int requestPowerFor(int player, float amount, int points)
 
 	// keep track on how much energy we could possibly spend
 	asPower[player].powerRequested += amount;
-	ASSERT(asPower[player].powerRequested < 1000, "you are asking too much");
 	
 	if (amountConsidered <= asPower[player].currentPower)
 	{
