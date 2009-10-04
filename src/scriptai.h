@@ -24,8 +24,6 @@
 #ifndef __INCLUDED_SRC_SCRIPTAI_H__
 #define __INCLUDED_SRC_SCRIPTAI_H__
 
-// return whether a droid can reach given destination
-extern BOOL scrDroidCanReach(void);
 // types for structure targets
 typedef enum _scr_struct_tar
 {

@@ -1942,31 +1942,19 @@ static int scrIterateGroupB(lua_State *L)
 	return 1;
 }
 
-BOOL scrDroidCanReach(void)
+static int scrDroidCanReach(lua_State *L)
 {
-	DROID			*psDroid;
-	int			x, y;
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
 
-	if (!stackPopParams(3, ST_DROID, &psDroid, VAL_INT, &x, VAL_INT, &y))
-	{
-		debug(LOG_ERROR, "Failed to pop parameters");
-		return false;
-	}
-	if (psDroid)
-	{
-		const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		const Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
-		const Vector2i rPos = { map_coord(x), map_coord(y) };
 
-		scrFunctionResult.v.bval = fpathCheck(dPos, rPos, psPropStats->propulsionType);
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			debug(LOG_ERROR, "stackPushResult failed");
-			return false;
-		}
-		return true;
-	}
-	return false;
+	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	const Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
+	const Vector2i rPos = { map_coord(x), map_coord(y) };
+
+	lua_pushboolean(L, fpathCheck(dPos, rPos, psPropStats->propulsionType));
+	return 1;
 }
 
 // ********************************************************************************************
@@ -2007,7 +1995,7 @@ void registerScriptAIfuncs(lua_State *L)
 	lua_register(L, "orderDroidLoc", scrOrderDroidLoc);
 	lua_register(L, "skDefenseLocation", scrSkDefenseLocation);
 	lua_register(L, "skDefenseLocationB", scrSkDefenseLocationB);
-	//lua_register(L, "", );
+	lua_register(L, "droidCanReach", scrDroidCanReach);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
