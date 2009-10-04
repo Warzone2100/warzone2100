@@ -3666,7 +3666,7 @@ static void locateMouse(void)
 static void renderSurroundings(void)
 {
 	static float wind = 0.0f;
-	const float skybox_scale = 20000.0f;
+	const float skybox_scale = 15000.0f;
 
 	// Push identity matrix onto stack
 	pie_MatBegin();
