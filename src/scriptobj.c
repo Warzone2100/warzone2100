@@ -1582,7 +1582,22 @@ void luaWZObj_pushdroid(lua_State *L, DROID* droid)
 	if (droid->psTarget)
 	{
 		lua_pushstring(L, "target");
+		
+		BASE_OBJECT *oldTarget;
+		if (droid->psTarget->type == OBJ_DROID)
+		{
+			// slight hack for preventing an endless loop when two droids are
+			// shooting at each other
+			oldTarget = ((DROID*)droid->psTarget)->psTarget;
+			((DROID*)droid->psTarget)->psTarget = NULL;
+		}
+		
 		luaWZObj_pushobject(L, droid->psTarget);
+		
+		if (droid->psTarget->type == OBJ_DROID)
+		{
+			((DROID*)droid->psTarget)->psTarget = oldTarget;
+		}
 		lua_settable(L, -3);
 	}
 	luaWZ_setintfield(L, "action", droid->action);
