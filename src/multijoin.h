@@ -42,5 +42,7 @@ typedef struct {
 
 extern DROIDSTORE *tempDroidList;
 extern void ShowMOTD(void);
+extern bool recvDataCheck(void);
+extern bool sendDataCheck(void);
 
 #endif // __INCLUDED_SRC_MULTIJOIN_H__

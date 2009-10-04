@@ -67,6 +67,7 @@
 #include "multirecv.h"								// incoming messages stuff
 #include "multistat.h"
 #include "multigifts.h"								// gifts and alliances.
+#include "multiint.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -255,8 +256,39 @@ BOOL multiPlayerLoop(void)
 		{
 			if(bDisplayMultiJoiningStatus)
 			{
+				if (!NetPlay.bHost)
+				{
+					sendDataCheck();
+				}
 				bDisplayMultiJoiningStatus = 0;
 				setWidgetsStatus(true);
+			}
+			if (!ingame.TimeEveryoneIsInGame)
+			{
+				ingame.TimeEveryoneIsInGame = gameTime;
+			}
+			// Only have to do this on a true MP game
+			if (NetPlay.bHost && !ingame.isAllPlayersDataOK && NetPlay.bComms)
+			{
+				if (gameTime - ingame.TimeEveryoneIsInGame > GAME_TICKS_PER_SEC * 60)
+				{
+					// we waited 60 secs to make sure people didn't bypass the data integrity checks
+					int i;
+					for (i=0; i < MAX_PLAYERS; i++)
+					{
+						if (ingame.DataIntegrity[i] == false && isHumanPlayer(i) && player2dpid[i] != HOST_DPID)
+						{
+							char msg[256] = {'\0'};
+
+							sprintf(msg, _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(i));
+							addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+
+							kickPlayer(player2dpid[i], _("It is not nice to cheat!"), ERROR_CHEAT);
+							debug(LOG_WARNING, "Kicking Player %s (dpid=%u), they tried to bypass data integrity check!", getPlayerName(i), player2dpid[i]);
+						}
+					}
+					ingame.isAllPlayersDataOK = true;
+				}
 			}
 		}
 
@@ -639,6 +671,9 @@ BOOL recvMessage(void)
 				break;
 			case NET_TEXTMSG:					// simple text message
 				recvTextMessage();
+				break;
+			case NET_DATA_CHECK:
+				recvDataCheck();
 				break;
 			case NET_AITEXTMSG:					//multiplayer AI text message
 				recvTextMessageAI();

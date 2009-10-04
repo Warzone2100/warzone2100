@@ -39,7 +39,8 @@ typedef enum
 	ERROR_KICKED,
 	ERROR_WRONGVESION,
 	ERROR_WRONGPASSWORD,				// NOTE WRONG_PASSWORD results in conflict
-	ERROR_HOSTDROPPED
+	ERROR_HOSTDROPPED,
+	ERROR_WRONGDATA
 } LOBBY_ERROR_TYPES;
 
 typedef enum
@@ -109,6 +110,7 @@ typedef enum
 	NET_REQUEST_VERSION,	//62 Host requests version check
 	NET_REQUEST_PASSWORD,	//63 Host requests password
 	NET_PASSWORD_CHECK,		//64 password check
+	NET_DATA_CHECK,			//65 Host wants a data check
 	NUM_GAME_PACKETS		//   *MUST* be last.
 } MESSAGE_TYPES;
 
