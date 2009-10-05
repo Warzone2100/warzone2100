@@ -1471,6 +1471,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	const Vector2i rPos = { map_coord(psOrder->x), map_coord(psOrder->y) };
 
 	if (psOrder->order != DORDER_TRANSPORTIN	// transporters special
+	    && psOrder->psObj == NULL			// location-type order
 	    && (validOrderForLoc(psOrder->order) || psOrder->order == DORDER_BUILD) 
 	    && !fpathCheck(dPos, rPos, psPropStats->propulsionType))
 	{
