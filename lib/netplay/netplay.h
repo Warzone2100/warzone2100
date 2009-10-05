@@ -38,7 +38,9 @@ typedef enum
 	ERROR_CHEAT,
 	ERROR_KICKED,
 	ERROR_WRONGVERSION,
-	ERROR_WRONGPASSWORD				// NOTE WRONG_PASSWORD results in conflict
+	ERROR_WRONGPASSWORD,				// NOTE WRONG_PASSWORD results in conflict
+	ERROR_HOSTDROPPED,
+	ERROR_WRONGDATA
 } LOBBY_ERROR_TYPES;
 
 
@@ -110,6 +112,7 @@ typedef enum
 	NET_REQUEST_PASSWORD,	//63 Host requests password
 	NET_PASSWORD_CHECK,		//64 password check
 	NET_POSITIONREQUEST,	//65 position in GUI player list
+	NET_DATA_CHECK,			//66 Data integrity check
 	NUM_GAME_PACKETS		//   *MUST* be last.
 } MESSAGE_TYPES;
 
