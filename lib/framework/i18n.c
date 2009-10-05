@@ -1,4 +1,4 @@
-/*
+﻿/*
 	This file is part of Warzone 2100.
 	Copyright (C) 2005-2009  Warzone Resurrection Project
 
@@ -50,7 +50,7 @@ static const struct
 //	{ "en", N_("English"), LANG_ENGLISH, SUBLANG_DEFAULT },
 	{ "en_GB", N_("English (United Kingdom)"), LANG_ENGLISH, SUBLANG_DEFAULT },
 	{ "es", N_("Spanish"), LANG_SPANISH, SUBLANG_DEFAULT },
-	{ "et_EE", N_("Estonian"), LANG_ESTONIAN, SUBLANG_ESTONIAN },
+	{ "et_EE", N_("Estonian"), LANG_ESTONIAN, SUBLANG_DEFAULT },
 //	{ "eu", N_("Basque"), LANG_BASQUE, SUBLANG_DEFAULT },
 	{ "fi", N_("Finnish"), LANG_FINNISH, SUBLANG_DEFAULT },
 	{ "fr", N_("French"), LANG_FRENCH, SUBLANG_DEFAULT },
