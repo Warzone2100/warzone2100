@@ -1,4 +1,4 @@
-﻿/*
+/*
 	This file is part of Warzone 2100.
 	Copyright (C) 2005-2009  Warzone Resurrection Project
 
