@@ -117,6 +117,7 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 	STRUCTURE		*psStruct,*psNext;
 
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
+	ingame.DataIntegrity[player] = false;
 
 	(void)setPlayerName(player,"");				//clear custom player name (will use default instead)
 
@@ -280,6 +281,66 @@ BOOL MultiPlayerJoin(UDWORD playerIndex)
 	return true;
 }
 
+bool sendDataCheck(void)
+{
+	int i = 0;
+	uint32_t	player = selectedPlayer;
+
+	NETbeginEncode(NET_DATA_CHECK, NET_HOST_ONLY);		// only need to send to HOST
+	for(i = 0; i < DATA_MAXDATA; i++)
+	{
+		NETuint32_t(&DataHash[i]);
+	}
+		NETuint32_t(&player);
+	NETend();
+	debug(LOG_NET, "sending hash to host");
+	return true;
+}
+
+bool recvDataCheck(void)
+{
+	int i = 0;
+	uint32_t	player;
+	uint32_t tempBuffer[DATA_MAXDATA] = {0};
+
+	NETbeginDecode(NET_DATA_CHECK);
+	for(i = 0; i < DATA_MAXDATA; i++)
+	{
+		NETuint32_t(&tempBuffer[i]);
+	}
+		NETuint32_t(&player);
+	NETend();
+
+	if (NetPlay.isHost)
+	{
+		for (i = 0; i < MAX_PLAYERS; i++)
+		{
+			if (i == player)
+			{
+				break;
+			}
+		}
+		ASSERT_OR_RETURN(false , i <= MAX_PLAYERS, "We could not find this player (%u)!", player );
+
+		if (memcmp(DataHash, tempBuffer, sizeof(DataHash)))
+		{
+			char msg[256] = {'\0'};
+
+			sprintf(msg, _("Kicking player, %s, because data doesn't match!"), getPlayerName(i));
+			sendTextMessage(msg, true);
+			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+
+			kickPlayer(player, _("Data doesn't match!"), ERROR_WRONGDATA);
+			debug(LOG_WARNING, "Kicking Player %s,(%u), they are using a mod or have modified their data.", getPlayerName(i), player);
+		}
+		else
+		{
+			debug(LOG_NET, "DataCheck message received and verified for player %s (dpid=%u)", getPlayerName(i), player);
+			ingame.DataIntegrity[i] = true;
+		}
+	}
+	return true;
+}
 // ////////////////////////////////////////////////////////////////////////////
 // Setup Stuff for a new player.
 void setupNewPlayer(UDWORD player)
@@ -289,6 +350,7 @@ void setupNewPlayer(UDWORD player)
 
 	ingame.PingTimes[player] = 0;					// Reset ping time
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
+	ingame.DataIntegrity[player] = false;
 
 	for (i = 0; i < MAX_PLAYERS; i++)				// Set all alliances to broken
 	{
