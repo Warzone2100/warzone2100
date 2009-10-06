@@ -8326,10 +8326,12 @@ BOOL loadStructSetPointers(void)
 						else
 						{
 							psRepair->psObj = getBaseObjFromId(_tmpid);
+							ASSERT(psRepair->psObj->type == OBJ_DROID, "%s cannot repair %s", 
+							       objInfo((BASE_OBJECT *)psStruct), objInfo(psRepair->psObj));
 							//if the build has started set the powerAccrued =
 							//powerRequired to sync the interface
-							if (psRepair->timeStarted != ACTION_START_TIME &&
-								psRepair->psObj)
+							if (psRepair->timeStarted != ACTION_START_TIME && psRepair->psObj
+							    && psRepair->psObj->type == OBJ_DROID)
 							{
 								psRepair->powerAccrued = powerReqForDroidRepair((DROID*)psRepair->psObj);
 							}
