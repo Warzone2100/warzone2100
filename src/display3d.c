@@ -2251,7 +2251,10 @@ void	renderStructure(STRUCTURE *psStructure)
 					mountImd[0] =  psStructure->pStructureType->pECM->pMountGraphic;
 					flashImd[0] = NULL;
 				}
-				//check for sensor
+			}
+			if (weaponImd[0] == NULL)	// not set above
+			{
+				//check for sensor (or repair center)
 				if (psStructure->pStructureType->pSensor != NULL)
 				{
 					weaponImd[0] =  psStructure->pStructureType->pSensor->pIMD;
