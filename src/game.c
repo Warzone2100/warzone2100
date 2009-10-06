@@ -3482,227 +3482,228 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 {
 	UDWORD			fileExtension;
 	DROID			*psDroid, *psNext;
+	char			CurrentFileName[PATH_MAX] = {'\0'};
 
 	ASSERT_OR_RETURN(false, aFileName && strlen(aFileName) > 4, "Bad savegame filename");
+	sstrcpy(CurrentFileName, aFileName);
+	debug(LOG_WZ, "saveGame: %s", CurrentFileName);
 
-	debug(LOG_WZ, "saveGame: %s", aFileName);
-
-	fileExtension = strlen(aFileName) - 3;
+	fileExtension = strlen(CurrentFileName) - 3;
 	gameTimeStop();
 
 	/* Write the data to the file */
-	if (!writeGameFile(aFileName, saveType))
+	if (!writeGameFile(CurrentFileName, saveType))
 	{
-		debug(LOG_ERROR, "saveGame: writeGameFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeGameFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//remove the file extension
-	aFileName[strlen(aFileName) - 4] = '\0';
+	CurrentFileName[strlen(CurrentFileName) - 4] = '\0';
 
 	//create dir will fail if directory already exists but don't care!
-	(void) PHYSFS_mkdir(aFileName);
+	(void) PHYSFS_mkdir(CurrentFileName);
 
 	//save the map file
-	strcat(aFileName, "/game.map");
+	strcat(CurrentFileName, "/game.map");
 	/* Write the data to the file */
-	if (!writeMapFile(aFileName))
+	if (!writeMapFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeMapFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeMapFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the droids filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "unit.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "unit.bjo");
 	/*Write the current droid lists to the file*/
-	if (!writeDroidFile(aFileName,apsDroidLists))
+	if (!writeDroidFile(CurrentFileName,apsDroidLists))
 	{
-		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the structures filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "struct.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "struct.bjo");
 	/*Write the data to the file*/
-	if (!writeStructFile(aFileName))
+	if (!writeStructFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeStructFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeStructFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the templates filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "templ.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "templ.bjo");
 	/*Write the data to the file*/
-	if (!writeTemplateFile(aFileName))
+	if (!writeTemplateFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeTemplateFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeTemplateFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the features filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "feat.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "feat.bjo");
 	/*Write the data to the file*/
-	if (!writeFeatureFile(aFileName))
+	if (!writeFeatureFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeFeatureFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeFeatureFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the terrain types filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "ttypes.ttp");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "ttypes.ttp");
 	/*Write the data to the file*/
-	if (!writeTerrainTypeMapFile(aFileName))
+	if (!writeTerrainTypeMapFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeTerrainTypeMapFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeTerrainTypeMapFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the strucutLimits filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "limits.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "limits.bjo");
 	/*Write the data to the file*/
-	if (!writeStructLimitsFile(aFileName))
+	if (!writeStructLimitsFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeStructLimitsFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeStructLimitsFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the component lists filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "compl.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "compl.bjo");
 	/*Write the data to the file*/
-	if (!writeCompListFile(aFileName))
+	if (!writeCompListFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeCompListFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeCompListFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 	//create the structure type lists filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "strtype.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "strtype.bjo");
 	/*Write the data to the file*/
-	if (!writeStructTypeListFile(aFileName))
+	if (!writeStructTypeListFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeStructTypeListFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeStructTypeListFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the research filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "resstate.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "resstate.bjo");
 	/*Write the data to the file*/
-	if (!writeResearchFile(aFileName))
+	if (!writeResearchFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeResearchFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeResearchFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the message filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "messtate.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "messtate.bjo");
 	/*Write the data to the file*/
-	if (!writeMessageFile(aFileName))
+	if (!writeMessageFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeMessageFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeMessageFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the proximity message filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "proxstate.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "proxstate.bjo");
 	/*Write the data to the file*/
-	if (!writeMessageFile(aFileName))
+	if (!writeMessageFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeMessageFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeMessageFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the message filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "visstate.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "visstate.bjo");
 	/*Write the data to the file*/
-	if (!writeVisibilityData(aFileName))
+	if (!writeVisibilityData(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeVisibilityData(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeVisibilityData(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the message filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "prodstate.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "prodstate.bjo");
 	/*Write the data to the file*/
-	if (!writeProductionFile(aFileName))
+	if (!writeProductionFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeProductionFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeProductionFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 
 	//create the message filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "fxstate.tag");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "fxstate.tag");
 	/*Write the data to the file*/
-	if (!writeFXData(aFileName))
+	if (!writeFXData(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeFXData(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeFXData(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//added at V15 save
 	//create the message filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "score.tag");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "score.tag");
 	/*Write the data to the file*/
-	if (!writeScoreData(aFileName))
+	if (!writeScoreData(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeScoreData(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeScoreData(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the message filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "flagstate.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "flagstate.bjo");
 	/*Write the data to the file*/
-	if (!writeFlagFile(aFileName))
+	if (!writeFlagFile(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeFlagFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeFlagFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	//create the message filename
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "firesupport.tag");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "firesupport.tag");
 	/*Write the data to the file*/
-	if (!writeFiresupportDesignators(aFileName))
+	if (!writeFiresupportDesignators(CurrentFileName))
 	{
-		debug(LOG_ERROR, "saveGame: writeFiresupportDesignators(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeFiresupportDesignators(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
 	// save the script state if necessary
 	if (saveType == GTYPE_SAVE_MIDMISSION)
 	{
-		aFileName[fileExtension-1] = '\0';
-		strcat(aFileName, ".es");
+		CurrentFileName[fileExtension-1] = '\0';
+		strcat(CurrentFileName, ".es");
 		/*Write the data to the file*/
-		if (!writeScriptState(aFileName))
+		if (!writeScriptState(CurrentFileName))
 		{
-			debug(LOG_ERROR, "saveGame: writeScriptState(\"%s\") failed", aFileName);
+			debug(LOG_ERROR, "saveGame: writeScriptState(\"%s\") failed", CurrentFileName);
 			goto error;
 		}
 	}
 
 	//create the droids filename
-	aFileName[fileExtension-1] = '\0';
-	strcat(aFileName, "/munit.bjo");
+	CurrentFileName[fileExtension-1] = '\0';
+	strcat(CurrentFileName, "/munit.bjo");
 	/*Write the swapped droid lists to the file*/
-	if (!writeDroidFile(aFileName, mission.apsDroidLists))
+	if (!writeDroidFile(CurrentFileName, mission.apsDroidLists))
 	{
-		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
@@ -3724,12 +3725,12 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 		}
 	}
 
-	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "limbo.bjo");
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "limbo.bjo");
 	/*Write the swapped droid lists to the file*/
-	if (!writeDroidFile(aFileName, apsLimboDroids))
+	if (!writeDroidFile(CurrentFileName, apsLimboDroids))
 	{
-		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", aFileName);
+		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
@@ -3741,52 +3742,52 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 
 
 		//save the map file
-		aFileName[fileExtension] = '\0';
-		strcat(aFileName, "mission.map");
+		CurrentFileName[fileExtension] = '\0';
+		strcat(CurrentFileName, "mission.map");
 		/* Write the data to the file */
-		if (!writeMapFile(aFileName))
+		if (!writeMapFile(CurrentFileName))
 		{
-			debug(LOG_ERROR, "saveGame: writeMapFile(\"%s\") failed", aFileName);
+			debug(LOG_ERROR, "saveGame: writeMapFile(\"%s\") failed", CurrentFileName);
 			goto error;
 		}
 
 		//save the map file
-		aFileName[fileExtension] = '\0';
-		strcat(aFileName, "misvis.bjo");
+		CurrentFileName[fileExtension] = '\0';
+		strcat(CurrentFileName, "misvis.bjo");
 		/* Write the data to the file */
-		if (!writeVisibilityData(aFileName))
+		if (!writeVisibilityData(CurrentFileName))
 		{
-			debug(LOG_ERROR, "saveGame: writeVisibilityData(\"%s\") failed", aFileName);
+			debug(LOG_ERROR, "saveGame: writeVisibilityData(\"%s\") failed", CurrentFileName);
 			goto error;
 		}
 
 		//create the structures filename
-		aFileName[fileExtension] = '\0';
-		strcat(aFileName, "mstruct.bjo");
+		CurrentFileName[fileExtension] = '\0';
+		strcat(CurrentFileName, "mstruct.bjo");
 		/*Write the data to the file*/
-		if (!writeStructFile(aFileName))
+		if (!writeStructFile(CurrentFileName))
 		{
-			debug(LOG_ERROR, "saveGame: writeStructFile(\"%s\") failed", aFileName);
+			debug(LOG_ERROR, "saveGame: writeStructFile(\"%s\") failed", CurrentFileName);
 			goto error;
 		}
 
 		//create the features filename
-		aFileName[fileExtension] = '\0';
-		strcat(aFileName, "mfeat.bjo");
+		CurrentFileName[fileExtension] = '\0';
+		strcat(CurrentFileName, "mfeat.bjo");
 		/*Write the data to the file*/
-		if (!writeFeatureFile(aFileName))
+		if (!writeFeatureFile(CurrentFileName))
 		{
-			debug(LOG_ERROR, "saveGame: writeFeatureFile(\"%s\") failed", aFileName);
+			debug(LOG_ERROR, "saveGame: writeFeatureFile(\"%s\") failed", CurrentFileName);
 			goto error;
 		}
 
 		//create the message filename
-		aFileName[fileExtension] = '\0';
-		strcat(aFileName, "mflagstate.bjo");
+		CurrentFileName[fileExtension] = '\0';
+		strcat(CurrentFileName, "mflagstate.bjo");
 		/*Write the data to the file*/
-		if (!writeFlagFile(aFileName))
+		if (!writeFlagFile(CurrentFileName))
 		{
-			debug(LOG_ERROR, "saveGame: writeFlagFile(\"%s\") failed", aFileName);
+			debug(LOG_ERROR, "saveGame: writeFlagFile(\"%s\") failed", CurrentFileName);
 			goto error;
 		}
 
@@ -3795,7 +3796,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	}
 
 	// strip the last filename
-	aFileName[fileExtension-1] = '\0';
+	CurrentFileName[fileExtension-1] = '\0';
 
 	/* Start the game clock */
 	gameTimeStart();
