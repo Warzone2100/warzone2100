@@ -597,37 +597,54 @@ BOOL displayLoadSave(void)
 void removeWildcards(char *pStr)
 {
 	UDWORD i;
-
-	for(i=0;i<strlen(pStr);i++)
+	
+	// Remember never to allow: < > : " / \ | ? *
+	
+	// Whitelist: Get rid of any characters except:
+	// a-z A-Z 0-9 - + ! , = ^ @ # $ % & ' ( ) [ ] (and space)
+	for (i=0; i<strlen(pStr); i++)
 	{
-/*	if(   pStr[i] == '?'
-		   || pStr[i] == '*'
-		   || pStr[i] == '"'
-		   || pStr[i] == '.'
-		   || pStr[i] == '/'
-		   || pStr[i] == '\\'
-		   || pStr[i] == '|' )
+		if (!isalnum(pStr[i])
+		    && (pStr[i] != ' ' || i==0 || pStr[i-1]==' ')
+			// We allow spaces as long as they aren't the first char, or two spaces in a row
+		    && pStr[i] != '-'
+		    && pStr[i] != '+'
+		    && pStr[i] != '!'
+		    && pStr[i] != ','
+		    && pStr[i] != '='
+		    && pStr[i] != '^'
+		    && pStr[i] != '@'
+		    && (pStr[i]<35 || pStr[i]>41) // # $ % & ' ( )
+		    && pStr[i] != '[' && pStr[i] != ']'
+			)
 		{
 			pStr[i] = '_';
 		}
-*/
-		if( !isalnum(pStr[i])
- 		 && pStr[i] != ' '
-		 && pStr[i] != '-'
-		 && pStr[i] != '+'
-  		 && pStr[i] != '!'
-		 )
-		{
-			pStr[i] = '_';
-		}
-
 	}
-
+	
 	if (strlen(pStr) >= MAX_SAVE_NAME)
 	{
 		pStr[MAX_SAVE_NAME - 1] = 0;
 	}
-
+	
+	// Trim trailing spaces
+	for (i=strlen(pStr)-1; pStr[i]==' ' && i>=0; i--);
+	pStr[i+1] = 0;
+	
+	// Trims leading spaces (currently unused)
+	/* for (i=0; pStr[i]==' '; i++);
+	 if (i != 0)
+	 {
+	 memmove(pStr, pStr+i, strlen(pStr)+1-i);
+	 } */
+	
+	// If that leaves us with a blank string, replace with '!'
+	if (pStr[0] == 0)
+	{
+		pStr[0] = '!';
+		pStr[1] = 0;
+	}
+	
 	return;
 }
 
