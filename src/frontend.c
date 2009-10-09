@@ -528,6 +528,10 @@ BOOL runMultiPlayerMenu(void)
 	case FRONTEND_JOIN:
 		ingame.bHostSetup = false;
 		bMultiPlayer = true;
+		if (getLobbyError() != ERROR_CHEAT && getLobbyError() != ERROR_KICKED)
+		{
+			setLobbyError(ERROR_NOERROR);
+		}
 		changeTitleMode(PROTOCOL);
 		break;
 
