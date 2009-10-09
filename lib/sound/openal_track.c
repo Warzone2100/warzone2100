@@ -148,6 +148,8 @@ static void PrintOpenALVersion(code_part part)
 	addDumpInfo(buf);
 	ssprintf(buf, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
 	addDumpInfo(buf);
+	ssprintf(buf, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
+	addDumpInfo(buf);
 }
 #endif
 
@@ -161,11 +163,6 @@ BOOL sound_InitLibrary( void )
 	int err;
 	const ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	const ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
-	ALCint attrSize;
-	ALCint *temp;
-	ALCint *attributes;
-	ALCint *data;
-	char buf[256];
 
 #ifdef WZ_OS_WIN
 	/* HACK: Select the "software" OpenAL device on Windows because it
@@ -205,48 +202,6 @@ BOOL sound_InitLibrary( void )
 		debug(LOG_ERROR, "Couldn't initialize audio context: %s", alcGetString(device, err));
 		return false;
 	}
-	// getting more info about openAL
-	alcGetIntegerv(device, ALC_ATTRIBUTES_SIZE, sizeof(attrSize),&attrSize);
-	attributes = (ALCint *)malloc(attrSize * sizeof(ALCint));
-	alcGetIntegerv(device, ALC_ALL_ATTRIBUTES, attrSize, attributes);
-	data = attributes;
-	temp = attributes + attrSize ;
-	while (data < temp)
-	{
-		switch (*data)
-		{
-			case ALC_FREQUENCY:
-				data += 1;
-				ssprintf(buf, "ALC_FREQUENCY = %d", *data);
-				addDumpInfo(buf);
-				break;
-			case ALC_REFRESH:
-				data += 1;
-				ssprintf(buf, "ALC_REFRESH = %d", *data);
-				addDumpInfo(buf);
-				break;
-			case ALC_SYNC:
-				data += 1;
-				ssprintf(buf, "ALC_SYNC = %d", *data);
-				addDumpInfo(buf);
-				break;
-			case ALC_MONO_SOURCES:
-				data += 1;
-				ssprintf(buf, "ALC_MONO_SOURCES = %d", *data);
-				addDumpInfo(buf);
-				break;
-			case ALC_STEREO_SOURCES:
-				data += 1;
-				ssprintf(buf, "ALC_STEREO_SOURCES = %d", *data);
-				addDumpInfo(buf);
-				break;
-			default:
-				break;
-		}
-		data += 1;
-	}
-	free(attributes);
-
 #endif
 
 	openal_initialized = true;
