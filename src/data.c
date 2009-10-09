@@ -1005,9 +1005,7 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	SCRIPT_CODE** psProg = (SCRIPT_CODE**)ppData;
 	PHYSFS_file* fileHandle;
 	uint8_t *pBuffer;
-	unsigned int bytesRead =0;
-	unsigned int fileSize=0;
-	char *temp[256];
+	PHYSFS_sint64 fileSize = 0;
 
 	debug(LOG_WZ, "COMPILING SCRIPT ...%s", GetLastResourceFilename());
 	scr_lineno = 1;
@@ -1018,21 +1016,16 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	{
 		return false;
 	}
-	// do to the changes in r2531 we must do this routine a bit different.
-	do
-	{
-		bytesRead = PHYSFS_read(fileHandle, temp, 1, 256);
-		fileSize += bytesRead;
-	} while(bytesRead != 0);
+	// due to the changes in r2531 we must do this routine a bit different.
+	fileSize = PHYSFS_fileLength(fileHandle);
 
 	pBuffer = malloc(fileSize * sizeof(char));
 	if (pBuffer == NULL)
 	{
-		debug(LOG_ERROR, "Fatal memory allocation, couldn't allocate %u buffer", fileSize);
+		debug(LOG_ERROR, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);
 		abort();
 	}
 
-	PHYSFS_seek(fileHandle, 0);		//reset position
 	PHYSFS_read(fileHandle, pBuffer, 1, fileSize);
 
 	calcDataHash(pBuffer, fileSize, DATA_SCRIPT);
@@ -1072,9 +1065,7 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 	BOOL success;
 	PHYSFS_file* fileHandle;
 	uint8_t *pBuffer;
-	unsigned int bytesRead = 0;
-	unsigned int fileSize = 0;
-	char *temp[256];
+	PHYSFS_sint64 fileSize = 0;
 
 	*ppData = NULL;
 
@@ -1092,21 +1083,16 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 	{
 		return false;
 	}
-	// do to the changes in r2532 we must do this routine a bit different.
-	do
-	{
-		bytesRead = PHYSFS_read(fileHandle, temp, 1, 256);
-		fileSize += bytesRead;
-	} while(bytesRead != 0);
+	// due to the changes in r2532 we must do this routine a bit different.
+	fileSize = PHYSFS_fileLength(fileHandle);
 
 	pBuffer = malloc(fileSize * sizeof(char));
 	if (pBuffer == NULL)
 	{
-		debug(LOG_ERROR, "Fatal memory allocation, couldn't allocate %u buffer", fileSize);
+		debug(LOG_ERROR, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);
 		abort();
 	}
 
-	PHYSFS_seek(fileHandle, 0);		//reset position
 	PHYSFS_read(fileHandle, pBuffer, 1, fileSize);
 
 	calcDataHash(pBuffer, fileSize, DATA_SCRIPTVAL);
