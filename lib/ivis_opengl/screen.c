@@ -179,6 +179,8 @@ BOOL screenInitialise(
 		addDumpInfo(buf);
 		ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
 		addDumpInfo(buf);
+		ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		addDumpInfo(buf);
 		ssprintf(buf, "Video Mode %d x %d (%d bpp) (%s)", width, height, bpp, fullScreen ? "fullscreen" : "window");
 		addDumpInfo(buf);
 		/* Dump information about OpenGL implementation to the console */
@@ -200,7 +202,10 @@ BOOL screenInitialise(
 		debug(LOG_3D, "  * Stencil wrap %s supported.", GLEE_EXT_stencil_wrap ? "is" : "is NOT");
 		debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
 		debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
-		debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object  ? "is" : "is NOT");
+		debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object ? "is" : "is NOT");
+		debug(LOG_3D, "  * Shader Objects %s supported.", GL_ARB_shader_objects ? "is" : "is NOT");
+		debug(LOG_3D, "  * Vertex Buffer Object (VBO) %s supported.", GL_ARB_vertex_buffer_object ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	}
 
 	glViewport(0, 0, width, height);
