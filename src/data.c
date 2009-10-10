@@ -1111,7 +1111,7 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	}
 
 	// due to the changes in r2531 we must do this routine a bit different.
-	fileSize = PHYSFS_fileLength(fileName);
+	fileSize = PHYSFS_fileLength(fileHandle);
 
 	pBuffer = malloc(fileSize * sizeof(char));
 	if (pBuffer == NULL)
@@ -1180,7 +1180,7 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 		return false;
 	}
 	// due to the changes in r2532 we must do this routine a bit different.
-	fileSize = PHYSFS_fileLength(fileName);
+	fileSize = PHYSFS_fileLength(fileHandle);
 
 	pBuffer = malloc(fileSize * sizeof(char));
 	if (pBuffer == NULL)
