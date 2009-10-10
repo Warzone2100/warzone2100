@@ -1167,16 +1167,11 @@ static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD
 }
 
 
-
+// FIX ME: bRedo is not used anymore since the removal of the forced screenClearFocus()
+// need to check for side effects.
 static void addGameOptions(BOOL bRedo)
 {
 	W_FORMINIT		sFormInit;
-
-	if(bRedo)
-	{
-		// stop any editing going on
-		screenClearFocus(psWScreen);
-	}
 
 	widgDelete(psWScreen,MULTIOP_OPTIONS);  				// clear options list
 	widgDelete(psWScreen,FRONTEND_SIDETEXT3);				// del text..
