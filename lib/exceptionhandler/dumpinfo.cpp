@@ -300,6 +300,12 @@ static void createHeader(int const argc, char* argv[])
 #else
 	       << "UNKNOWN" << endl
 #endif
+	   << "Compiled mode: "
+#ifdef DEBUG
+			<< "Debug build" << endl
+#else
+			<< "Release build" << endl
+#endif
 	   << "Executed on: " << getCurTime() << endl
 	   << getSysinfo() << endl
 	   << "Pointers: " << (sizeof(void*) * CHAR_BIT) << "bit" << endl
