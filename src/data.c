@@ -1098,7 +1098,6 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	PHYSFS_file* fileHandle;
 	uint8_t *pBuffer;
 	PHYSFS_sint64 fileSize = 0;
-	char *temp[256];
 
 	debug(LOG_WZ, "COMPILING SCRIPT ...%s", GetLastResourceFilename());
 	scr_lineno = 1;
@@ -1161,7 +1160,6 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 	PHYSFS_file* fileHandle;
 	uint8_t *pBuffer;
 	PHYSFS_sint64 fileSize = 0;
-	char *temp[256];
 
 	*ppData = NULL;
 
