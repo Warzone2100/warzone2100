@@ -1097,8 +1097,7 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	SCRIPT_CODE** psProg = (SCRIPT_CODE**)ppData;
 	PHYSFS_file* fileHandle;
 	uint8_t *pBuffer;
-	unsigned int bytesRead =0;
-	unsigned int fileSize=0;
+	PHYSFS_sint64 fileSize = 0;
 	char *temp[256];
 
 	debug(LOG_WZ, "COMPILING SCRIPT ...%s", GetLastResourceFilename());
@@ -1110,12 +1109,9 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	{
 		return false;
 	}
+
 	// due to the changes in r2531 we must do this routine a bit different.
-	do
-	{
-		bytesRead = PHYSFS_read(fileHandle, temp, 1, 256);
-		fileSize += bytesRead;
-	} while(bytesRead != 0);
+	fileSize = PHYSFS_fileLength(fileName);
 
 	pBuffer = malloc(fileSize * sizeof(char));
 	if (pBuffer == NULL)
@@ -1124,12 +1120,12 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 		abort();
 	}
 
-	PHYSFS_seek(fileHandle, 0);		//reset position
 	PHYSFS_read(fileHandle, pBuffer, 1, fileSize);
 
 	calcDataHash(pBuffer, fileSize, DATA_SCRIPT);
 
 	free(pBuffer);
+
 	PHYSFS_seek(fileHandle, 0);		//reset position
 
 	*psProg = scriptCompile(fileHandle, SCRIPTTYPE);
@@ -1164,8 +1160,7 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 	BOOL success;
 	PHYSFS_file* fileHandle;
 	uint8_t *pBuffer;
-	unsigned int bytesRead = 0;
-	unsigned int fileSize = 0;
+	PHYSFS_sint64 fileSize = 0;
 	char *temp[256];
 
 	*ppData = NULL;
@@ -1185,11 +1180,7 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 		return false;
 	}
 	// due to the changes in r2532 we must do this routine a bit different.
-	do
-	{
-		bytesRead = PHYSFS_read(fileHandle, temp, 1, 256);
-		fileSize += bytesRead;
-	} while(bytesRead != 0);
+	fileSize = PHYSFS_fileLength(fileName);
 
 	pBuffer = malloc(fileSize * sizeof(char));
 	if (pBuffer == NULL)
@@ -1198,7 +1189,6 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 		abort();
 	}
 
-	PHYSFS_seek(fileHandle, 0);		//reset position
 	PHYSFS_read(fileHandle, pBuffer, 1, fileSize);
 
 	calcDataHash(pBuffer, fileSize, DATA_SCRIPTVAL);
