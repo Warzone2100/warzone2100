@@ -594,6 +594,10 @@ void draw3DScene( void )
 	if (CauseCrash)
 	{
 		char *crash = 0;
+#ifdef DEBUG
+		ASSERT(false, "Yes, this is a assert.  This should not happen on release builds! Use --noassert to bypass in debug builds.");
+		debug(LOG_WARNING, " *** Warning!  You have compiled in debug mode! ***");
+#endif
 		debug(LOG_ERROR, "Forcing a segfault! (crash handler test)");
 		// and here comes the crash
 		*crash = 0x3;
