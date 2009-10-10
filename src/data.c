@@ -1115,7 +1115,7 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	pBuffer = malloc(fileSize * sizeof(char));
 	if (pBuffer == NULL)
 	{
-		debug(LOG_ERROR, "Fatal memory allocation, couldn't allocate %u buffer", fileSize);
+		debug(LOG_ERROR, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);
 		abort();
 	}
 
@@ -1183,7 +1183,7 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 	pBuffer = malloc(fileSize * sizeof(char));
 	if (pBuffer == NULL)
 	{
-		debug(LOG_ERROR, "Fatal memory allocation, couldn't allocate %u buffer", fileSize);
+		debug(LOG_ERROR, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);
 		abort();
 	}
 
