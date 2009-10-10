@@ -2561,7 +2561,7 @@ BOOL NETsetupTCPIP(const char *machine)
 // File Transfer programs.
 /** Send file. It returns % of file sent when 100 it's complete. Call until it returns 100. 
  * @TODO Needs to be rewritten. See issue #215. */
-#define MAX_FILE_TRANSFER_PACKET 256
+#define MAX_FILE_TRANSFER_PACKET 1024
 UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 {
 	static int32_t  	fileSize,currPos;
