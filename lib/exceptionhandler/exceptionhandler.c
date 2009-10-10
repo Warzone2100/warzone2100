@@ -587,7 +587,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	gdbExtendedBacktrace(dumpFile);
 
 	printf("Saved dump file to '%s'\n"
-	       "If you create a bugreport regardings this crash, please include this file.\n", dumpFilename);
+	       "If you create a bugreport regarding this crash, please include this file.\n", dumpFilename);
 	close(dumpFile);
 
 
