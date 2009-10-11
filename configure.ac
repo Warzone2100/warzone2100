@@ -282,6 +282,9 @@ fi
 
 # Checks for libraries:
 
+# check for nearbyint()
+AC_CHECK_LIB(m, nearbyint, [MATH_LIB=""], AC_MSG_ERROR([nearbyint not found.]))
+
 # Look for Popt
 AC_CHECK_HEADER(popt.h, , AC_MSG_ERROR([Popt header not found.]))
 AC_CHECK_LIB(popt, poptGetContext, AC_SUBST([POPT_LIBS], [-lpopt]), AC_MSG_ERROR([Popt not found.]), [${WIN32_LIBS}])
