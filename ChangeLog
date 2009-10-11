@@ -15,9 +15,9 @@
    * MRL Emplacement renamed Mini-Rocket Battery
    * Angel Missile renamed Seraph Missile Array
    * Angel Missile Battery renamed Short-Range Missile Battery
-   * Hurricane damage increased 40 -> 50, splash increased 10 -> 30
-   * Cyclone damage increased 50 -> 70, splash increased 40 -> 60
-   * Whirlwind damage increased 50 -> 65, splash increased 30 -> 50
+   * Hurricane splash increased 10 -> 30
+   * Cyclone splash increased 40 -> 60
+   * Whirlwind splash increased 30 -> 50
    * Avenger and Vindicator damage increased 320 -> 350, accuracy increased 60%-70% -> 70%-80%
    * Stormbringer damage increased 140 -> 180
    * All lasers now have 80%-80% accuracy
