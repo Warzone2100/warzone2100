@@ -285,6 +285,21 @@ Section $(TEXT_SecNTWMod) SecNTWMod
 
 SectionEnd
 
+Section $(TEXT_SecOriginalMod) SecOriginalMod
+
+  SetOutPath "$INSTDIR\mods\multiplay"
+
+  File "${TOP_BUILDDIR}\data\mods\multiplay\original.wz"
+
+  SetOutPath "$INSTDIR"
+
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Original.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp original.wz"
+  !insertmacro MUI_STARTMENU_WRITE_END
+
+SectionEnd
+
+
 SectionGroupEnd
 
 Section $(TEXT_SecFMVs) SecFMVs
@@ -410,6 +425,8 @@ FunctionEnd
   LangString TEXT_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod"
   LangString DESC_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod. Modifies most of the weapons and research."
 
+  LangString TEXT_SecOriginalMod ${LANG_ENGLISH} "Original 1.10 balance"
+  LangString DESC_SecOriginalMod ${LANG_ENGLISH} "Play the game with the original 1.10 version balance stats."
 
 
   LangString TEXT_SecBase ${LANG_DUTCH} "Standaard installatie"
@@ -436,6 +453,8 @@ FunctionEnd
   LangString TEXT_SecNTWMod ${LANG_DUTCH} "NTW: New Team War mod"
   LangString DESC_SecNTWMod ${LANG_DUTCH} "NTW: New Team War mod. Wijzigd de meeste wapens en onderzoeken."
 
+  LangString TEXT_SecOriginalMod ${LANG_DUTCH} "Original 1.10 balance"
+  LangString DESC_SecOriginalMod ${LANG_DUTCH} "Play the game with the original 1.10 version balance stats."
 
 
   LangString TEXT_SecBase ${LANG_GERMAN} "Standardinstallation"
@@ -462,6 +481,8 @@ FunctionEnd
   LangString TEXT_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod"
   LangString DESC_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod. Verändert die meisten Forschungen und Waffen."
 
+  LangString TEXT_SecOriginalMod ${LANG_GERMAN} "Original 1.10 balance"
+  LangString DESC_SecOriginalMod ${LANG_GERMAN} "Play the game with the original 1.10 version balance stats."
 
 
   LangString TEXT_RunWarzone ${LANG_ENGLISH} "Run ${PACKAGE_NAME}"
@@ -546,6 +567,7 @@ Section "Uninstall"
 
   Delete "$INSTDIR\mods\multiplay\ntw.wz"
   Delete "$INSTDIR\mods\multiplay\aivolution.wz"
+  Delete "$INSTDIR\mods\multiplay\original.wz"
 
   RMDir "$INSTDIR\mods\multiplay"
   RMDir "$INSTDIR\mods\music"
@@ -660,6 +682,7 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME}.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Aivolution.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - NTW.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Original.lnk"
 ;  RMDir "$SMPROGRAMS\$STARTMENU_FOLDER"
 
   ;Delete empty start menu parent diretories
