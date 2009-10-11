@@ -306,7 +306,8 @@ AC_CHECK_LIB(GLU, main,
 	OPENGL_LIBS="${OPENGL_LIBS} -lGLU",
 	AC_CHECK_LIB(glu32, main,
 		OPENGL_LIBS="${OPENGL_LIBS} -lglu32",
-		AC_MSG_ERROR([GLU library not found.])))
+		AC_MSG_ERROR([GLU library not found.]),
+		[${OPENGL_LIBS} -lm]), [${OPENGL_LIBS} -lm])
 AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
 
 # Look for OpenGLC
