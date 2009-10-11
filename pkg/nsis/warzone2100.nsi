@@ -482,7 +482,7 @@ FunctionEnd
   LangString DESC_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod. Verändert die meisten Forschungen und Waffen."
 
   LangString TEXT_SecOriginalMod ${LANG_GERMAN} "Original 1.10 balance"
-  LangString DESC_SecOriginalMod ${LANG_GERMAN} "Play the game with the original 1.10 version balance stats."
+  LangString DESC_SecOriginalMod ${LANG_GERMAN} "Spielen Sie das Spiel mit dem Balancing aus der Originalversion 1.10."
 
 
   LangString TEXT_RunWarzone ${LANG_ENGLISH} "Run ${PACKAGE_NAME}"
