@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-09-13 14:09+0200\n"
+"POT-Creation-Date: 2009-10-11 23:47+0200\n"
 "PO-Revision-Date: 2009-05-13 16:12+0800\n"
 "Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -5858,7 +5858,6 @@ msgid "Mini-Rocket Viper Wheels"
 msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/base/messages/strings/names.txt:180
-#: data/mp/messages/strings/names.txt:183
 msgid "Mini-Rocket Artillery Viper Wheels"
 msgstr ""
 
@@ -5918,7 +5917,6 @@ msgid "Lancer Cobra Half-tracks"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:191
-#: data/mp/messages/strings/names.txt:194
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
 msgstr ""
 
@@ -6856,8 +6854,6 @@ msgstr "鞭挞导弹"
 
 #: data/base/messages/strings/names.txt:505
 #: data/base/messages/strings/names.txt:1121
-#: data/mp/messages/strings/names.txt:512
-#: data/mp/messages/strings/names.txt:1134
 msgid "Angel Missile"
 msgstr "天使导弹"
 
@@ -6942,8 +6938,6 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:523
 #: data/base/messages/strings/names.txt:1181
-#: data/mp/messages/strings/names.txt:530
-#: data/mp/messages/strings/names.txt:1194
 msgid "Mini-Rocket Artillery"
 msgstr ""
 
@@ -7433,8 +7427,6 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:717
 #: data/base/messages/strings/names.txt:1373
-#: data/mp/messages/strings/names.txt:728
-#: data/mp/messages/strings/names.txt:1386
 msgid "HPV Cannon Emplacement"
 msgstr ""
 
@@ -7453,7 +7445,6 @@ msgid "Bombard Pit"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:728
-#: data/mp/messages/strings/names.txt:739
 msgid "Angel Missile Battery"
 msgstr ""
 
@@ -7471,6 +7462,7 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:731
 #: data/mp/messages/strings/names.txt:742
+#: data/mp/messages/strings/names.txt:1381
 msgid "Mini-Rocket Battery"
 msgstr ""
 
@@ -7538,8 +7530,6 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:775
 #: data/base/messages/strings/names.txt:1381
-#: data/mp/messages/strings/names.txt:786
-#: data/mp/messages/strings/names.txt:1394
 msgid "HPV Cannon Hardpoint"
 msgstr ""
 
@@ -9138,7 +9128,6 @@ msgid "Cobra Medium Cannon Tracks"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1368
-#: data/mp/messages/strings/names.txt:1381
 msgid "MRL Emplacement"
 msgstr ""
 
@@ -9148,7 +9137,6 @@ msgid "Railgun Emplacement"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1376
-#: data/mp/messages/strings/names.txt:1389
 msgid "Angel Missile Emplacement"
 msgstr ""
 
@@ -9198,7 +9186,6 @@ msgid "Tank Killer Python Tracks"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1459
-#: data/mp/messages/strings/names.txt:1472
 msgid "HPV Cannon Python Tracks"
 msgstr ""
 
@@ -10018,6 +10005,11 @@ msgstr "轻型加农炮地堡"
 msgid "Repair Turret Viper Half-track"
 msgstr ""
 
+#: data/mp/messages/strings/names.txt:183
+#, fuzzy
+msgid "Mini-Rocket Array Viper Wheels"
+msgstr "轮式蝰蛇坦克（机枪）"
+
 #: data/mp/messages/strings/names.txt:184
 msgid "Bunker Buster Rockets Viper Wheels"
 msgstr ""
@@ -10025,6 +10017,11 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:189
 msgid "Sensor Turret Cobra Half-tracks"
 msgstr ""
+
+#: data/mp/messages/strings/names.txt:194
+#, fuzzy
+msgid "Mini-Rocket Array Cobra Half-tracks"
+msgstr "半履带式"
 
 #: data/mp/messages/strings/names.txt:372
 #: data/mp/messages/strings/names.txt:1702
@@ -10070,6 +10067,17 @@ msgstr ""
 msgid "Pulse Laser Tower"
 msgstr "喷火器防御塔"
 
+#: data/mp/messages/strings/names.txt:512
+#: data/mp/messages/strings/names.txt:1134
+msgid "Seraph Missile Array"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:530
+#: data/mp/messages/strings/names.txt:1194
+#, fuzzy
+msgid "Mini-Rocket Array"
+msgstr "机枪防御塔"
+
 #: data/mp/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:1692
 #: data/mp/messages/strings/names.txt:1699
@@ -10108,10 +10116,25 @@ msgstr ""
 msgid "Plasteel Mk3"
 msgstr ""
 
+#: data/mp/messages/strings/names.txt:728
+#: data/mp/messages/strings/names.txt:1386
+msgid "Hyper Velocity Cannon Emplacement"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:739
+#: data/mp/messages/strings/names.txt:1389
+msgid "Seraph Missile Battery"
+msgstr ""
+
 #: data/mp/messages/strings/names.txt:768
 #, fuzzy
 msgid "Flamer Tower"
 msgstr "喷火器防御塔"
+
+#: data/mp/messages/strings/names.txt:786
+#: data/mp/messages/strings/names.txt:1394
+msgid "Hyper Velocity Cannon Hardpoint"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:805
 msgid "Automated Manufacturing"
@@ -10253,6 +10276,11 @@ msgstr "突击炮"
 #: data/mp/messages/strings/names.txt:1436
 msgid "Repair Cobra Tracks"
 msgstr ""
+
+#: data/mp/messages/strings/names.txt:1472
+#, fuzzy
+msgid "Hyper Velocity Cannon Python Tracks"
+msgstr "重型加农炮"
 
 #: data/mp/messages/strings/names.txt:1511
 msgid "Bunker Buster Cobra Hover"
@@ -10766,7 +10794,7 @@ msgid "VTOL Lancer Bug VTOL"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1871
-msgid "VTOL HPV Cannon Bug VTOL"
+msgid "VTOL Hyper Velocity Cannon Bug VTOL"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1872
@@ -10774,15 +10802,16 @@ msgid "VTOL Lancer Scorpion VTOL"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1873
-msgid "VTOL HPV Cannon Scorpion VTOL"
-msgstr ""
+#, fuzzy
+msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
+msgstr "重型加农炮"
 
 #: data/mp/messages/strings/names.txt:1874
 msgid "VTOL Lancer Mantis VTOL"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1875
-msgid "VTOL HPV Cannon Mantis VTOL"
+msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1879
@@ -10895,16 +10924,18 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1914
-msgid "Mini-Rocket Artillery Cobra Tracks"
-msgstr ""
+#, fuzzy
+msgid "Mini-Rocket Array Cobra Tracks"
+msgstr "机枪防御塔"
 
 #: data/mp/messages/strings/names.txt:1916
 msgid "Inferno Cobra Half-Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1917
-msgid "HPV Cannon Python Hover"
-msgstr ""
+#, fuzzy
+msgid "Hyper Velocity Cannon Python Hover"
+msgstr "重型加农炮"
 
 #: data/mp/messages/strings/names.txt:1921
 msgid "Scourge Python Tracks"
@@ -10948,122 +10979,127 @@ msgid "Flamer Viper Half-Tracks"
 msgstr ""
 
 #: lib/framework/i18n.c:45
-#: lib/framework/i18n.c:98
+#: lib/framework/i18n.c:99
 msgid "System locale"
 msgstr "系统语言"
 
 #: lib/framework/i18n.c:47
-#: lib/framework/i18n.c:100
+#: lib/framework/i18n.c:101
 msgid "Czech"
 msgstr ""
 
 #: lib/framework/i18n.c:48
-#: lib/framework/i18n.c:101
+#: lib/framework/i18n.c:102
 msgid "Danish"
 msgstr "丹麦语"
 
 #: lib/framework/i18n.c:49
-#: lib/framework/i18n.c:102
+#: lib/framework/i18n.c:103
 msgid "German"
 msgstr "德语"
 
 #: lib/framework/i18n.c:51
-#: lib/framework/i18n.c:104
+#: lib/framework/i18n.c:105
 msgid "English (United Kingdom)"
 msgstr ""
 
 #: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:105
+#: lib/framework/i18n.c:106
 #, fuzzy
 msgid "Spanish"
 msgstr "丹麦语"
 
-#: lib/framework/i18n.c:54
+#: lib/framework/i18n.c:53
 #: lib/framework/i18n.c:107
+msgid "Estonian"
+msgstr ""
+
+#: lib/framework/i18n.c:55
+#: lib/framework/i18n.c:109
 #, fuzzy
 msgid "Finnish"
 msgstr "丹麦语"
 
-#: lib/framework/i18n.c:55
-#: lib/framework/i18n.c:108
+#: lib/framework/i18n.c:56
+#: lib/framework/i18n.c:110
 msgid "French"
 msgstr "法语"
 
-#: lib/framework/i18n.c:63
-#: lib/framework/i18n.c:116
+#: lib/framework/i18n.c:64
+#: lib/framework/i18n.c:118
 msgid "Frisian"
 msgstr ""
 
-#: lib/framework/i18n.c:64
-#: lib/framework/i18n.c:117
+#: lib/framework/i18n.c:65
+#: lib/framework/i18n.c:119
 #, fuzzy
 msgid "Irish"
 msgstr "人机对战"
 
-#: lib/framework/i18n.c:65
-#: lib/framework/i18n.c:118
+#: lib/framework/i18n.c:66
+#: lib/framework/i18n.c:120
 msgid "Italian"
 msgstr "意大利语"
 
-#: lib/framework/i18n.c:67
-#: lib/framework/i18n.c:120
+#: lib/framework/i18n.c:68
+#: lib/framework/i18n.c:122
 msgid "Lithuanian"
 msgstr ""
 
-#: lib/framework/i18n.c:69
-#: lib/framework/i18n.c:122
+#: lib/framework/i18n.c:70
+#: lib/framework/i18n.c:124
 msgid "Norwegian"
 msgstr "挪威语"
 
-#: lib/framework/i18n.c:71
-#: lib/framework/i18n.c:124
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:126
 msgid "Dutch"
 msgstr "荷兰语"
 
-#: lib/framework/i18n.c:72
-#: lib/framework/i18n.c:125
+#: lib/framework/i18n.c:73
+#: lib/framework/i18n.c:127
 #, fuzzy
 msgid "Polish"
 msgstr "拆除"
 
-#: lib/framework/i18n.c:73
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:128
 #, fuzzy
 msgid "Brazilian Portuguese"
 msgstr "葡萄牙语"
 
-#: lib/framework/i18n.c:74
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:75
+#: lib/framework/i18n.c:129
 #, fuzzy
 msgid "Portuguese"
 msgstr "葡萄牙语"
 
-#: lib/framework/i18n.c:75
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:76
+#: lib/framework/i18n.c:130
 msgid "Romanian"
 msgstr ""
 
-#: lib/framework/i18n.c:76
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:77
+#: lib/framework/i18n.c:131
 msgid "Russian"
 msgstr "俄语"
 
-#: lib/framework/i18n.c:77
-#: lib/framework/i18n.c:130
+#: lib/framework/i18n.c:78
+#: lib/framework/i18n.c:132
 msgid "Slovenian"
 msgstr ""
 
-#: lib/framework/i18n.c:86
-#: lib/framework/i18n.c:135
+#: lib/framework/i18n.c:87
+#: lib/framework/i18n.c:137
 msgid "Simplified Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:87
-#: lib/framework/i18n.c:136
+#: lib/framework/i18n.c:88
+#: lib/framework/i18n.c:138
 msgid "Traditional Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:119
+#: lib/framework/i18n.c:121
 msgid "Latin"
 msgstr "拉丁语"
 
@@ -11078,12 +11114,12 @@ msgstr ""
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:1918
+#: lib/netplay/netplay.c:1924
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:1928
+#: lib/netplay/netplay.c:1934
 msgid "Could not communicate with lobby server!  Is TCP port 9990 open?"
 msgstr ""
 
@@ -11514,12 +11550,12 @@ msgstr "游戏教程"
 #: src/frontend.c:310
 #: src/frontend.c:367
 #: src/frontend.c:508
-#: src/frontend.c:564
-#: src/frontend.c:722
-#: src/frontend.c:861
-#: src/frontend.c:964
-#: src/frontend.c:1156
-#: src/frontend.c:1297
+#: src/frontend.c:568
+#: src/frontend.c:726
+#: src/frontend.c:865
+#: src/frontend.c:968
+#: src/frontend.c:1160
+#: src/frontend.c:1301
 msgctxt "menu"
 msgid "Return"
 msgstr "返回"
@@ -11560,225 +11596,225 @@ msgstr "建立游戏"
 msgid "Join Game"
 msgstr "加入游戏"
 
-#: src/frontend.c:557
-#: src/frontend.c:864
-#: src/frontend.c:1300
-#: src/frontend.c:1320
+#: src/frontend.c:561
+#: src/frontend.c:868
+#: src/frontend.c:1304
+#: src/frontend.c:1324
 msgid "GAME OPTIONS"
 msgstr "游戏选项"
 
-#: src/frontend.c:558
+#: src/frontend.c:562
 msgid "Game Options"
 msgstr "游戏选项"
 
-#: src/frontend.c:559
+#: src/frontend.c:563
 msgid "Graphics Options"
 msgstr "图形选项"
 
-#: src/frontend.c:560
+#: src/frontend.c:564
 msgid "Video Options"
 msgstr "视频选项"
 
-#: src/frontend.c:561
+#: src/frontend.c:565
 msgid "Audio Options"
 msgstr "音频选项"
 
-#: src/frontend.c:562
+#: src/frontend.c:566
 #, fuzzy
 msgid "Mouse Options"
 msgstr "游戏选项"
 
-#: src/frontend.c:563
+#: src/frontend.c:567
 msgid "Key Mappings"
 msgstr "按键设置"
 
-#: src/frontend.c:637
+#: src/frontend.c:641
 msgid "Video Playback"
 msgstr "视频回放"
 
-#: src/frontend.c:641
-#: src/frontend.c:815
+#: src/frontend.c:645
+#: src/frontend.c:819
 msgid "1X"
 msgstr ""
 
-#: src/frontend.c:645
-#: src/frontend.c:805
+#: src/frontend.c:649
+#: src/frontend.c:809
 msgid "2X"
 msgstr ""
 
-#: src/frontend.c:649
-#: src/frontend.c:810
-#: src/frontend.c:932
-#: src/frontend.c:986
+#: src/frontend.c:653
+#: src/frontend.c:814
+#: src/frontend.c:936
+#: src/frontend.c:990
 msgid "Fullscreen"
 msgstr "全屏显示"
 
-#: src/frontend.c:659
+#: src/frontend.c:663
 msgid "Screen Shake"
 msgstr "屏幕震动"
 
-#: src/frontend.c:662
-#: src/frontend.c:700
-#: src/frontend.c:713
-#: src/frontend.c:746
-#: src/frontend.c:782
-#: src/frontend.c:791
-#: src/frontend.c:953
-#: src/frontend.c:1038
-#: src/frontend.c:1076
-#: src/frontend.c:1110
-#: src/frontend.c:1122
-#: src/frontend.c:1134
-#: src/frontend.c:1146
-#: src/frontend.c:1178
-#: src/frontend.c:1191
-#: src/frontend.c:1205
-#: src/frontend.c:1219
-msgid "On"
-msgstr "开"
-
 #: src/frontend.c:666
-#: src/frontend.c:696
-#: src/frontend.c:705
+#: src/frontend.c:704
 #: src/frontend.c:717
-#: src/frontend.c:741
-#: src/frontend.c:777
+#: src/frontend.c:750
+#: src/frontend.c:786
 #: src/frontend.c:795
 #: src/frontend.c:957
-#: src/frontend.c:1033
-#: src/frontend.c:1071
+#: src/frontend.c:1042
+#: src/frontend.c:1080
 #: src/frontend.c:1114
 #: src/frontend.c:1126
 #: src/frontend.c:1138
 #: src/frontend.c:1150
-#: src/frontend.c:1173
-#: src/frontend.c:1186
-#: src/frontend.c:1200
-#: src/frontend.c:1214
+#: src/frontend.c:1182
+#: src/frontend.c:1195
+#: src/frontend.c:1209
+#: src/frontend.c:1223
+msgid "On"
+msgstr "开"
+
+#: src/frontend.c:670
+#: src/frontend.c:700
+#: src/frontend.c:709
+#: src/frontend.c:721
+#: src/frontend.c:745
+#: src/frontend.c:781
+#: src/frontend.c:799
+#: src/frontend.c:961
+#: src/frontend.c:1037
+#: src/frontend.c:1075
+#: src/frontend.c:1118
+#: src/frontend.c:1130
+#: src/frontend.c:1142
+#: src/frontend.c:1154
+#: src/frontend.c:1177
+#: src/frontend.c:1190
+#: src/frontend.c:1204
+#: src/frontend.c:1218
 msgid "Off"
 msgstr "关"
 
-#: src/frontend.c:671
-#: src/multiint.c:1213
+#: src/frontend.c:675
+#: src/multiint.c:1211
 msgid "Fog"
 msgstr "迷雾"
 
-#: src/frontend.c:674
-#: src/frontend.c:764
+#: src/frontend.c:678
+#: src/frontend.c:768
 msgid "Mist"
 msgstr "薄雾（可以看见地形）"
 
-#: src/frontend.c:678
-#: src/frontend.c:757
-#: src/multiint.c:1215
+#: src/frontend.c:682
+#: src/frontend.c:761
+#: src/multiint.c:1213
 msgid "Fog Of War"
 msgstr "战争迷雾"
 
-#: src/frontend.c:685
 #: src/frontend.c:689
+#: src/frontend.c:693
 msgid "Subtitles"
 msgstr "字幕"
 
-#: src/frontend.c:710
+#: src/frontend.c:714
 msgid "Shadows"
 msgstr "阴影"
 
-#: src/frontend.c:849
+#: src/frontend.c:853
 #: src/ingameop.c:155
 msgid "Voice Volume"
 msgstr "语音音量"
 
-#: src/frontend.c:853
+#: src/frontend.c:857
 #: src/ingameop.c:160
 msgid "FX Volume"
 msgstr "声效音量"
 
-#: src/frontend.c:857
+#: src/frontend.c:861
 #: src/ingameop.c:165
 msgid "Music Volume"
 msgstr "音乐音量"
 
-#: src/frontend.c:928
+#: src/frontend.c:932
 msgid "Graphics Mode*"
 msgstr "图形模式*"
 
-#: src/frontend.c:936
-#: src/frontend.c:981
+#: src/frontend.c:940
+#: src/frontend.c:985
 msgid "Windowed"
 msgstr "窗口"
 
-#: src/frontend.c:940
+#: src/frontend.c:944
 msgid "Resolution*"
 msgstr "屏幕分辨率*"
 
-#: src/frontend.c:945
+#: src/frontend.c:949
 msgid "Texture size"
 msgstr "质材尺寸"
 
-#: src/frontend.c:949
+#: src/frontend.c:953
 msgid "Vertical sync*"
 msgstr ""
 
-#: src/frontend.c:961
+#: src/frontend.c:965
 msgid "* Takes effect on game restart"
 msgstr "* 重启游戏后生效"
 
-#: src/frontend.c:1107
+#: src/frontend.c:1111
 #, fuzzy
 msgid "Reverse Rotation"
 msgstr "翻转鼠标"
 
-#: src/frontend.c:1118
+#: src/frontend.c:1122
 msgid "Trap Cursor"
 msgstr ""
 
-#: src/frontend.c:1130
+#: src/frontend.c:1134
 msgid "Colored Cursors *"
 msgstr ""
 
-#: src/frontend.c:1143
+#: src/frontend.c:1147
 msgid "Switch Mouse Buttons"
 msgstr ""
 
-#: src/frontend.c:1153
+#: src/frontend.c:1157
 msgid "* May negatively affect performance"
 msgstr ""
 
-#: src/frontend.c:1252
-#: src/frontend.c:1318
+#: src/frontend.c:1256
+#: src/frontend.c:1322
 msgid "Difficulty"
 msgstr "游戏难度"
 
-#: src/frontend.c:1256
-#: src/frontend.c:1326
-#: src/frontend.c:1358
+#: src/frontend.c:1260
+#: src/frontend.c:1330
+#: src/frontend.c:1362
 msgid "Easy"
 msgstr "容易"
 
-#: src/frontend.c:1259
-#: src/frontend.c:1329
-#: src/frontend.c:1350
+#: src/frontend.c:1263
+#: src/frontend.c:1333
+#: src/frontend.c:1354
 msgid "Normal"
 msgstr "正常"
 
-#: src/frontend.c:1263
-#: src/frontend.c:1332
-#: src/frontend.c:1354
+#: src/frontend.c:1267
+#: src/frontend.c:1336
+#: src/frontend.c:1358
 msgid "Hard"
 msgstr "困难"
 
-#: src/frontend.c:1268
-#: src/frontend.c:1319
+#: src/frontend.c:1272
+#: src/frontend.c:1323
 msgid "Scroll Speed"
 msgstr "屏幕卷动速度"
 
-#: src/frontend.c:1282
-#: src/frontend.c:1316
+#: src/frontend.c:1286
+#: src/frontend.c:1320
 msgid "Language"
 msgstr "语言"
 
-#: src/frontend.c:1294
-#: src/frontend.c:1317
+#: src/frontend.c:1298
+#: src/frontend.c:1321
 msgid "Unit Colour"
 msgstr "单位颜色"
 
@@ -11855,8 +11891,8 @@ msgid "Build (F3)"
 msgstr "建造建筑 (F3)"
 
 #: src/hci.c:3905
-#: src/multiint.c:1263
-#: src/multiint.c:1267
+#: src/multiint.c:1261
+#: src/multiint.c:1265
 #: src/multimenu.c:761
 msgid "Power"
 msgstr "能源"
@@ -12343,8 +12379,8 @@ msgstr "按键设置"
 #: src/keyedit.c:379
 #: src/multiint.c:624
 #: src/multiint.c:666
-#: src/multiint.c:1056
-#: src/multiint.c:1332
+#: src/multiint.c:1059
+#: src/multiint.c:1330
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
 msgstr "返回到前一个屏幕"
@@ -12853,179 +12889,183 @@ msgid "Wrong Game Version!"
 msgstr ""
 
 #: src/multiint.c:844
-msgid "Incorrect Password!"
+msgid "Wrong data/mod detected by Host."
 msgstr ""
 
 #: src/multiint.c:847
+msgid "Incorrect Password!"
+msgstr ""
+
+#: src/multiint.c:850
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.c:851
+#: src/multiint.c:854
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:948
+#: src/multiint.c:951
 msgid "Searching"
 msgstr "正在搜索"
 
-#: src/multiint.c:1053
+#: src/multiint.c:1056
 msgid "GAMES"
 msgstr "游戏"
 
-#: src/multiint.c:1063
+#: src/multiint.c:1066
 msgid "Refresh Games List"
 msgstr "刷新游戏列表"
 
-#: src/multiint.c:1084
+#: src/multiint.c:1087
 msgid "Enter Password First "
 msgstr ""
 
-#: src/multiint.c:1172
+#: src/multiint.c:1170
 msgid "OPTIONS"
 msgstr "选项"
 
-#: src/multiint.c:1174
+#: src/multiint.c:1172
 msgid "Select Game Name"
 msgstr "选择游戏名称"
 
-#: src/multiint.c:1175
+#: src/multiint.c:1173
 msgid "Select Map"
 msgstr "选择地图"
 
-#: src/multiint.c:1177
+#: src/multiint.c:1175
 #, fuzzy
 msgid "Click to set Password"
 msgstr "点击查看地图"
 
-#: src/multiint.c:1185
+#: src/multiint.c:1183
 msgid "Game"
 msgstr "游戏"
 
-#: src/multiint.c:1187
+#: src/multiint.c:1185
 msgid "Mayhem"
 msgstr "玩家对战"
 
-#: src/multiint.c:1189
+#: src/multiint.c:1187
 msgid "Skirmish"
 msgstr "人机对战"
 
-#: src/multiint.c:1210
+#: src/multiint.c:1208
 msgid "Select Player Name"
 msgstr "选择玩家名字"
 
-#: src/multiint.c:1216
+#: src/multiint.c:1214
 msgid "Distance Fog"
 msgstr "薄雾（可以看见地形）"
 
-#: src/multiint.c:1229
+#: src/multiint.c:1227
 #: src/multimenu.c:754
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.c:1232
+#: src/multiint.c:1230
 msgid "No Alliances"
 msgstr "无同盟"
 
-#: src/multiint.c:1234
+#: src/multiint.c:1232
 msgid "Allow Alliances"
 msgstr "允许同盟"
 
-#: src/multiint.c:1238
+#: src/multiint.c:1236
 msgid "Locked Teams"
 msgstr "已锁定团队"
 
-#: src/multiint.c:1270
+#: src/multiint.c:1268
 msgid "Low Power Levels"
 msgstr "低能源水平"
 
-#: src/multiint.c:1272
+#: src/multiint.c:1270
 msgid "Medium Power Levels"
 msgstr "中等能源水平"
 
-#: src/multiint.c:1274
+#: src/multiint.c:1272
 msgid "High Power Levels"
 msgstr "高能源水平"
 
-#: src/multiint.c:1294
-#: src/multiint.c:1298
+#: src/multiint.c:1292
+#: src/multiint.c:1296
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.c:1301
+#: src/multiint.c:1299
 msgid "Start with No Bases"
 msgstr "开始时没有基地"
 
-#: src/multiint.c:1303
+#: src/multiint.c:1301
 msgid "Start with Bases"
 msgstr "开始时有基地"
 
-#: src/multiint.c:1305
+#: src/multiint.c:1303
 msgid "Start with Advanced Bases"
 msgstr "开始时有高级基地"
 
-#: src/multiint.c:1322
+#: src/multiint.c:1320
 msgid "Map Preview"
 msgstr "地图预览"
 
-#: src/multiint.c:1324
+#: src/multiint.c:1322
 msgid "Click to see Map"
 msgstr "点击查看地图"
 
-#: src/multiint.c:1338
+#: src/multiint.c:1336
 msgid "Start Hosting Game"
 msgstr "开始建立游戏"
 
-#: src/multiint.c:1346
+#: src/multiint.c:1344
 msgid "Set Structure Limits"
 msgstr "设置建筑数量限制"
 
-#: src/multiint.c:1738
+#: src/multiint.c:1736
 msgid "Team"
 msgstr "团队"
 
-#: src/multiint.c:1783
+#: src/multiint.c:1781
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
-#: src/multiint.c:1789
+#: src/multiint.c:1787
 msgid "Click when ready"
 msgstr "点击准备开始游戏"
 
-#: src/multiint.c:1843
+#: src/multiint.c:1834
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.c:1982
+#: src/multiint.c:1973
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.c:2205
+#: src/multiint.c:2196
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2212
+#: src/multiint.c:2203
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2536
+#: src/multiint.c:2527
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "已锁定团队"
 
-#: src/multiint.c:2581
+#: src/multiint.c:2572
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家将 %s 踢出游戏!"
 
-#: src/multiint.c:2583
-msgid "you are being a jerk."
+#: src/multiint.c:2574
+msgid "you are unwanted by the host"
 msgstr ""
 
-#: src/multiint.c:2671
+#: src/multiint.c:2665
 msgid "Host is Starting Game"
 msgstr "主玩家正在开始游戏"
 
-#: src/multiint.c:3162
+#: src/multiint.c:3158
 msgid "Players"
 msgstr "玩家"
 
@@ -13034,21 +13074,30 @@ msgstr "玩家"
 msgid "Players Still Joining"
 msgstr ""
 
-#: src/multijoin.c:228
+#: src/multijoin.c:229
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s 已离开游戏"
 
-#: src/multijoin.c:308
+#: src/multijoin.c:311
 msgid "The game is full!"
 msgstr ""
 
-#: src/multijoin.c:337
+#: src/multijoin.c:362
+#, c-format
+msgid "Kicking player, %s, because data doesn't match!"
+msgstr ""
+
+#: src/multijoin.c:366
+msgid "Data doesn't match!"
+msgstr ""
+
+#: src/multijoin.c:401
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s 正在进入游戏"
 
-#: src/multijoin.c:346
+#: src/multijoin.c:410
 #, fuzzy
 msgid "System message:"
 msgstr "系统语言"
@@ -13124,35 +13173,44 @@ msgstr ""
 msgid "Give Power To Player"
 msgstr ""
 
-#: src/multiplay.c:1904
+#: src/multiplay.c:283
+#, c-format
+msgid "Kicking player %s, because they tried to bypass data integrity check!"
+msgstr ""
+
+#: src/multiplay.c:287
+msgid "It is not nice to cheat!"
+msgstr ""
+
+#: src/multiplay.c:1940
 msgid "Green"
 msgstr "绿色"
 
-#: src/multiplay.c:1905
+#: src/multiplay.c:1941
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.c:1906
+#: src/multiplay.c:1942
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.c:1907
+#: src/multiplay.c:1943
 msgid "Black"
 msgstr "黑色"
 
-#: src/multiplay.c:1908
+#: src/multiplay.c:1944
 msgid "Red"
 msgstr "红色"
 
-#: src/multiplay.c:1909
+#: src/multiplay.c:1945
 msgid "Blue"
 msgstr "蓝色"
 
-#: src/multiplay.c:1910
+#: src/multiplay.c:1946
 msgid "Pink"
 msgstr "粉红色"
 
-#: src/multiplay.c:1911
+#: src/multiplay.c:1947
 msgid "Cyan"
 msgstr "青绿色"
 
@@ -13333,54 +13391,54 @@ msgstr "未能定位任何指挥官"
 msgid "Control Limit Reached - Production Halted"
 msgstr "已达到可控制单位总数上限 - 停止生产新单位"
 
-#: src/structure.c:5841
-#: src/structure.c:5866
+#: src/structure.c:5842
+#: src/structure.c:5867
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - 已指派 %u 单位"
 
-#: src/structure.c:5916
+#: src/structure.c:5917
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:5930
+#: src/structure.c:5931
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 损伤 %3.0f%%"
 
-#: src/structure.c:6051
-#: src/structure.c:6100
+#: src/structure.c:6052
+#: src/structure.c:6101
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - 电子伤害"
 
-#: src/structure.c:6335
+#: src/structure.c:6336
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6375
+#: src/structure.c:6376
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6399
+#: src/structure.c:6400
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6423
+#: src/structure.c:6424
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6432
+#: src/structure.c:6433
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6460
+#: src/structure.c:6461
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6467
+#: src/structure.c:6468
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
