@@ -1827,6 +1827,11 @@ UBYTE NETrecvFile(void)
 		pFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
 	}
 
+	if (!pFileHandle) // file can't be opened
+	{
+		return 0;
+	}
+
 	NETbin(outBuff, bytesRead);
 	NETend();
 
