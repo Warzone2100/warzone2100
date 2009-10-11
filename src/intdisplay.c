@@ -2948,7 +2948,7 @@ void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 			BarGraph->majorSize, iV_GetImageHeight(IntImages,IMAGE_DES_STATSCURR));
 
 	/* draw text value */
-	sprintf( szVal, "%d", BarGraph->iValue );
+	sprintf(szVal, "%d", BarGraph->iOriginal);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	iV_DrawText( szVal, x0, iY );
 
@@ -3005,7 +3005,7 @@ void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
                         width, iV_GetImageHeight(IntImages,IMAGE_DES_STATSCURR));
 
 	/* draw text value */
-	sprintf( szVal, "%d", BarGraph->iValue );
+	sprintf(szVal, "%d", BarGraph->iOriginal);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	iV_DrawText( szVal, x0, iY );
 
