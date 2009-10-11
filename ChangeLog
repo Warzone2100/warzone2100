@@ -1,9 +1,10 @@
-2000-00-00: Version 2.2.4
+2009-10-11: Version 2.2.4
  * General:
    * Fix: Indirect fire weapons can no longer use sensors to fire at targets the sensor cannot see. (r8177)
    * Fix: Improved error handling in some cases - try to avoid crashing (ticket:962)
    * Fix: Bug in map renderer that would cause non-power of two maps to display wrongly. (r8208)
    * Fix: Added support for ATI-specific two-sided stencil extension. Will decrease CPU usage on ATI cards. (r8185)
+   * Fix: Correctly handle savegame names (ticket:981, r8227, r8246 )
  * Multiplayer:
    * Change: Data integrity check is added.  This will break network connectivity with 2.2.3. (r8205, ticket:961)
 
