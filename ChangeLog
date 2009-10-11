@@ -4,9 +4,39 @@
    * Fix: Improved error handling in some cases - try to avoid crashing (ticket:962)
    * Fix: Bug in map renderer that would cause non-power of two maps to display wrongly. (r8208)
    * Fix: Added support for ATI-specific two-sided stencil extension. Will decrease CPU usage on ATI cards. (r8185)
-   * Fix: Correctly handle savegame names (ticket:981, r8227, r8246 )
+   * Fix: Correctly handle savegame names (ticket:981, r8227, r8246)
+ * Campaign:
+   * Fix: Improve anti-air and make it more like the original by making AA shots homing like in skirmish (r8258)
  * Multiplayer:
    * Change: Data integrity check is added.  This will break network connectivity with 2.2.3. (r8205, ticket:961)
+ * Balancing - skirmish (r8262):
+   * Most projectiles 1.5x faster to reduce sync problems
+   * Mini-Rocket Artillery renamed Mini-Rocket Array
+   * MRL Emplacement renamed Mini-Rocket Battery
+   * Angel Missile renamed Seraph Missile Array
+   * Angel Missile Battery renamed Short-Range Missile Battery
+   * Hurricane damage increased 40 -> 50, splash increased 10 -> 30
+   * Cyclone damage increased 50 -> 70, splash increased 40 -> 60
+   * Whirlwind damage increased 50 -> 65, splash increased 30 -> 50
+   * Avenger and Vindicator damage increased 320 -> 350, accuracy increased 60%-70% -> 70%-80%
+   * Stormbringer damage increased 140 -> 180
+   * All lasers now have 80%-80% accuracy
+   * Plasmite Bomb weight increased 8000 -> 12000
+   * Mini-pod can hit air targets
+   * Decrease Pulse Laser and Heavy Laser ROF, increase corresponding damage
+   * Decrease VTOL MG damage, increase VTOL MG shots-per-rearm
+   * Artillery to hover multiplier decreased from 110% to 100%
+   * Artillery to tracks multiplier decreased from 65% to 50%
+   * Artillery to half-tracks multiplier decreased from 80% to 70%
+   * Artillery to wheels multiplier decreased from 95% to 90%
+   * Anti-tank to hover multiplier decreased from 100% to 90%
+   * AP to hard multiplier increased from 45% to 50%
+   * Seraph Missile Array range increased from 5-11 to 5-14
+   * Command Center must be built before MG tower can be researched
+   * Truck HP decreased 50 -> 25
+   * Truck weight increased 600 -> 800
+   * Inferno bunker research price 150 -> 125
+   * Plasmite bunker research price 150 -> 125
 
 2009-09-13: Version 2.2.3
  * General:
