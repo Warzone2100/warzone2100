@@ -725,7 +725,7 @@ R-Defense-AASite-QuadMg1		_("Hurricane AA Site")
 R-Defense-AASite-QuadRotMg		_("Whirlwind AA Site")
 R-Defense-AASite-TwinBof		_("Tornado AA Flak Site")
 
-R-Defense-Emplacement-HPVcannon	_("Hyper Velocity Emplacement")
+R-Defense-Emplacement-HPVcannon	_("Hyper Velocity Cannon Emplacement")
 
 R-Defense-Howitzer			_("Howitzer Emplacement")
 R-Defense-HvyA-Trocket			_("Tank Killer Emplacement")
@@ -1870,9 +1870,9 @@ V-Scor-BB				_("VTOL Bunker Buster Scorpion VTOL")
 V-Bug-Lancer				_("VTOL Lancer Bug VTOL")
 V-Bug-HPV				_("VTOL Hyper Velocity Cannon Bug VTOL")
 V-Scor-Lancer				_("VTOL Lancer Scorpion VTOL")
-V-Scor-HPV				_("VTOL Hyper Velocity Scorpion VTOL")
+V-Scor-HPV				_("VTOL Hyper Velocity Cannon Scorpion VTOL")
 V-Mantis-Lancer				_("VTOL Lancer Mantis VTOL")
-V-Mantis-HPV				_("VTOL Hyper Velocity Mantis VTOL")
+V-Mantis-HPV				_("VTOL Hyper Velocity Cannon Mantis VTOL")
 
 //Repair
 A-Rep-Cobra-Trk				_("Repair Turret Cobra Tracks")
@@ -1914,7 +1914,7 @@ CobraPODTracks				_("Mini-Rocket Cobra Tracks")
 CobraMRLTracks				_("Mini-Rocket Array Cobra Tracks")
 
 CobraInfernoHTracks			_("Inferno Cobra Half-Tracks")
-PythonHoverHVC				_("Hyper Velocity Python Hover")
+PythonHoverHVC				_("Hyper Velocity Cannon Python Hover")
 
 PythonTKTracks				_("Tank Killer Python Tracks")
 PythonMedCanTracks			_("Medium Cannon Python Tracks")
