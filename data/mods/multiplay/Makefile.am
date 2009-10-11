@@ -48,7 +48,7 @@ $(AIVOLUTIONARCHIVE): $(AIVOLUTIONLIST:%=$(basename $(AIVOLUTIONARCHIVE))/%)
 multiplaymodsdir = $(pkgdatadir)/mods/multiplay
 nodist_multiplaymods_DATA = $(OLD110ARCHIVE) $(NTWARCHIVE) $(AIVOLUTIONARCHIVE)
 
-dist-hook: (OLD110ARCHIVE) $(NTWARCHIVE) $(AIVOLUTIONARCHIVE)
+dist-hook: $(OLD110ARCHIVE) $(NTWARCHIVE) $(AIVOLUTIONARCHIVE)
 	unzip -u $(OLD110ARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(OLD110ARCHIVE))
 	unzip -u $(NTWARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(NTWARCHIVE))
 	unzip -u $(AIVOLUTIONARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(AIVOLUTIONARCHIVE))
