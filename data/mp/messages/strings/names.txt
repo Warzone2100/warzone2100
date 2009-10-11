@@ -511,7 +511,7 @@ MG4ROTARYMk1			_("Assault Gun")
 Missile-A-T				_("Scourge Missile")
 Missile-MdArt			_("Seraph Missile Array")
 Missile-HvySAM			_("Vindicator SAM")
-Missile-HvyArt			_("ArchSeraph Missile")
+Missile-HvyArt			_("Archangel Missile")
 
 Missile-LtSAM			_("Avenger SAM")
 //Missile-VTOL-BB			_("VTOL Devastator Missile")
@@ -737,7 +737,7 @@ R-Defense-HvyMor				_("Bombard Pit")
 R-Defense-IDFRocket			_("Ripple Rocket Battery")
 
 R-Defense-MdArtMissile			_("Seraph Missile Battery")
-R-Defense-HvyArtMissile			_("ArchSeraph Missile Battery")
+R-Defense-HvyArtMissile			_("Archangel Missile Battery")
 R-Defense-MortarPit			_("Mortar Pit")
 R-Defense-MRL				_("Mini-Rocket Battery")
 
@@ -1131,8 +1131,8 @@ R-Wpn-MissileSlow-ROF01			_("Improved Missile Loading System")
 R-Wpn-Missile-LtSAM			_("Avenger SAM")
 R-Wpn-Missile-HvSAM 			_("Vindicator SAM")
 R-Wpn-Missile2A-T				_("Scourge Missile")
-R-Wpn-MdArtMissile 			_("Seraph Missile")
-R-Wpn-HvArtMissile 			_("ArchSeraph Missile")
+R-Wpn-MdArtMissile 			_("Seraph Missile Array")
+R-Wpn-HvArtMissile 			_("Archangel Missile")
 //R-Wpn-Missile-SAM			"*R-Wpn-Missile-SAM*"
 
 R-Wpn-Mortar-Acc01			_("Mortar Targeting Computer")
@@ -1388,7 +1388,7 @@ Emplacement-PulseLaser	_("Pulse Laser Emplacement")
 Emplacement-Rail2		_("Railgun Emplacement")
 Emplacement-MdART-pit	_("Seraph Missile Battery")
 Missile-MdArt-pit		"*Seraph Missile-pit*"
-Emplacement-HvART-pit	_("ArchSeraph Missile Emplacement")
+Emplacement-HvART-pit	_("Archangel Missile Emplacement")
 Missile-HvyArt-pit		"*Missile-HvyArt-pit*"
 WallTower-HvATrocket	_("Tank Killer Hardpoint")
 WallTower-HPVcannon		_("Hyper Velocity Cannon Hardpoint")
