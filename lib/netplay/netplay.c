@@ -1829,7 +1829,8 @@ UBYTE NETrecvFile(void)
 
 	if (!pFileHandle) // file can't be opened
 	{
-		return 0;
+		debug(LOG_ERROR, "Fatal error while creating file: %s", PHYSFS_getLastError());
+		abort();
 	}
 
 	NETbin(outBuff, bytesRead);
