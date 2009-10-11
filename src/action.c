@@ -1965,14 +1965,14 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			moveStopDroid(psDroid);
 		}
-
+		if (psDroid->action == DACTION_SULK)
+		{
+			objTrace(psDroid->id, "Failed to go to objective, aborting build action");
+			psDroid->action = DACTION_NONE;
+			break;
+		}
 		if (droidUpdateBuild(psDroid))
 		{
-/*			if ( (psDroid->psTarget) && (psDroid->sMove.Status != MOVESHUFFLE) )
-			{
-				moveTurnDroid(psDroid,psDroid->psTarget->pos.x,psDroid->psTarget->pos.y);
-			}*/
-			// make construct droid to use turretRotation[0]
 			actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 		}
 		break;
