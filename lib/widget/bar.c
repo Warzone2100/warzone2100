@@ -157,6 +157,7 @@ void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 		return;
 	}
 
+	psBGraph->iOriginal = iValue;
 	if ( iValue < psBGraph->iRange )
 	{
 		psBGraph->iValue = (UWORD) iValue;
