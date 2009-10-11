@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-09-13 14:09+0200\n"
+"POT-Creation-Date: 2009-10-11 23:47+0200\n"
 "PO-Revision-Date: 2009-08-22 16:28+0600\n"
 "Last-Translator: Max <Raptor9000@yandex.ru>\n"
 "Language-Team: Russian <>\n"
@@ -5845,7 +5845,6 @@ msgid "Mini-Rocket Viper Wheels"
 msgstr "Миниракеты \"Гадюка\" на колёсах"
 
 #: data/base/messages/strings/names.txt:180
-#: data/mp/messages/strings/names.txt:183
 msgid "Mini-Rocket Artillery Viper Wheels"
 msgstr "Батарея миниракет \"Гадюка\" на колёсах"
 
@@ -5899,7 +5898,6 @@ msgid "Lancer Cobra Half-tracks"
 msgstr "Лансер Кобра Полугусеницы"
 
 #: data/base/messages/strings/names.txt:191
-#: data/mp/messages/strings/names.txt:194
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
 msgstr "Батарея миниракет \"Кобра\" на полугусеничном ходу"
 
@@ -6830,8 +6828,6 @@ msgstr "Ракета Бич"
 
 #: data/base/messages/strings/names.txt:505
 #: data/base/messages/strings/names.txt:1121
-#: data/mp/messages/strings/names.txt:512
-#: data/mp/messages/strings/names.txt:1134
 msgid "Angel Missile"
 msgstr "Ракета Ангел"
 
@@ -6916,8 +6912,6 @@ msgstr "Пушка Гаусса"
 
 #: data/base/messages/strings/names.txt:523
 #: data/base/messages/strings/names.txt:1181
-#: data/mp/messages/strings/names.txt:530
-#: data/mp/messages/strings/names.txt:1194
 msgid "Mini-Rocket Artillery"
 msgstr "Батарея миниракет"
 
@@ -7404,8 +7398,6 @@ msgstr "Пласткрит МК3"
 
 #: data/base/messages/strings/names.txt:717
 #: data/base/messages/strings/names.txt:1373
-#: data/mp/messages/strings/names.txt:728
-#: data/mp/messages/strings/names.txt:1386
 msgid "HPV Cannon Emplacement"
 msgstr "Установка ГС Пушки"
 
@@ -7424,7 +7416,6 @@ msgid "Bombard Pit"
 msgstr "Бомбардный окоп"
 
 #: data/base/messages/strings/names.txt:728
-#: data/mp/messages/strings/names.txt:739
 msgid "Angel Missile Battery"
 msgstr "Батарея ракет Ангел"
 
@@ -7442,6 +7433,7 @@ msgstr "Минометный окоп"
 
 #: data/base/messages/strings/names.txt:731
 #: data/mp/messages/strings/names.txt:742
+#: data/mp/messages/strings/names.txt:1381
 msgid "Mini-Rocket Battery"
 msgstr "Батарея миниракет"
 
@@ -7508,8 +7500,6 @@ msgstr "Укрепточка Танк Киллера"
 
 #: data/base/messages/strings/names.txt:775
 #: data/base/messages/strings/names.txt:1381
-#: data/mp/messages/strings/names.txt:786
-#: data/mp/messages/strings/names.txt:1394
 msgid "HPV Cannon Hardpoint"
 msgstr "Укрепточка ГС Пушки"
 
@@ -9107,7 +9097,6 @@ msgid "Cobra Medium Cannon Tracks"
 msgstr "Средняя Пушка Кобра на гусеничном ходу"
 
 #: data/base/messages/strings/names.txt:1368
-#: data/mp/messages/strings/names.txt:1381
 msgid "MRL Emplacement"
 msgstr "Установка MRL"
 
@@ -9117,7 +9106,6 @@ msgid "Railgun Emplacement"
 msgstr "Установка Рельсовой Пушки"
 
 #: data/base/messages/strings/names.txt:1376
-#: data/mp/messages/strings/names.txt:1389
 msgid "Angel Missile Emplacement"
 msgstr "Установка ракет Ангел"
 
@@ -9167,7 +9155,6 @@ msgid "Tank Killer Python Tracks"
 msgstr "Танк-Киллер Питон Гусеницы"
 
 #: data/base/messages/strings/names.txt:1459
-#: data/mp/messages/strings/names.txt:1472
 msgid "HPV Cannon Python Tracks"
 msgstr "ГС Пушка Питон Гусеницы"
 
@@ -9991,6 +9978,11 @@ msgstr "Легкая пушка Гадюка на полугусеничном �
 msgid "Repair Turret Viper Half-track"
 msgstr "Ремонтная Гадюка на полугусеничном ходу"
 
+#: data/mp/messages/strings/names.txt:183
+#, fuzzy
+msgid "Mini-Rocket Array Viper Wheels"
+msgstr "Батарея миниракет \"Гадюка\" на колёсах"
+
 #: data/mp/messages/strings/names.txt:184
 msgid "Bunker Buster Rockets Viper Wheels"
 msgstr "Антибункер Гадюка Колеса"
@@ -9998,6 +9990,11 @@ msgstr "Антибункер Гадюка Колеса"
 #: data/mp/messages/strings/names.txt:189
 msgid "Sensor Turret Cobra Half-tracks"
 msgstr "Башня с датчиком на полугусеничном ходу"
+
+#: data/mp/messages/strings/names.txt:194
+#, fuzzy
+msgid "Mini-Rocket Array Cobra Half-tracks"
+msgstr "Батарея миниракет \"Кобра\" на полугусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:372
 #: data/mp/messages/strings/names.txt:1702
@@ -10041,6 +10038,18 @@ msgstr "Укрепленная точка с импульсным лазером
 msgid "Pulse Laser Tower"
 msgstr "Башня с Импульсным лазером"
 
+#: data/mp/messages/strings/names.txt:512
+#: data/mp/messages/strings/names.txt:1134
+#, fuzzy
+msgid "Seraph Missile Array"
+msgstr "Увеличение точности ракеты"
+
+#: data/mp/messages/strings/names.txt:530
+#: data/mp/messages/strings/names.txt:1194
+#, fuzzy
+msgid "Mini-Rocket Array"
+msgstr "Батарея миниракет"
+
 #: data/mp/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:1692
 #: data/mp/messages/strings/names.txt:1699
@@ -10079,9 +10088,27 @@ msgstr "Пластил МК2"
 msgid "Plasteel Mk3"
 msgstr "Пластил МК3"
 
+#: data/mp/messages/strings/names.txt:728
+#: data/mp/messages/strings/names.txt:1386
+#, fuzzy
+msgid "Hyper Velocity Cannon Emplacement"
+msgstr "Гипер Скоростная Пушка"
+
+#: data/mp/messages/strings/names.txt:739
+#: data/mp/messages/strings/names.txt:1389
+#, fuzzy
+msgid "Seraph Missile Battery"
+msgstr "Батарея ракет Ангел"
+
 #: data/mp/messages/strings/names.txt:768
 msgid "Flamer Tower"
 msgstr "Башня с огнеметом"
+
+#: data/mp/messages/strings/names.txt:786
+#: data/mp/messages/strings/names.txt:1394
+#, fuzzy
+msgid "Hyper Velocity Cannon Hardpoint"
+msgstr "Гипер Скоростная Пушка"
 
 #: data/mp/messages/strings/names.txt:805
 msgid "Automated Manufacturing"
@@ -10217,6 +10244,11 @@ msgstr "Бышня со Штурмовым орудием"
 #: data/mp/messages/strings/names.txt:1436
 msgid "Repair Cobra Tracks"
 msgstr "Ремонтная Кобра Гусеницы"
+
+#: data/mp/messages/strings/names.txt:1472
+#, fuzzy
+msgid "Hyper Velocity Cannon Python Tracks"
+msgstr "Тяжелая пушка пушка Кобра на гусеницы"
 
 #: data/mp/messages/strings/names.txt:1511
 msgid "Bunker Buster Cobra Hover"
@@ -10703,15 +10735,17 @@ msgid "VTOL Lancer Bug VTOL"
 msgstr "ВВП Лансер Жук"
 
 #: data/mp/messages/strings/names.txt:1871
-msgid "VTOL HPV Cannon Bug VTOL"
-msgstr "Гиперскоростная пушка ВВС Жук"
+#, fuzzy
+msgid "VTOL Hyper Velocity Cannon Bug VTOL"
+msgstr "Авиационная гиперскоростная пушка"
 
 #: data/mp/messages/strings/names.txt:1872
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "ВВП Лансер скорпион"
 
 #: data/mp/messages/strings/names.txt:1873
-msgid "VTOL HPV Cannon Scorpion VTOL"
+#, fuzzy
+msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "ВВП ГС Пушка Скорпион"
 
 #: data/mp/messages/strings/names.txt:1874
@@ -10719,8 +10753,9 @@ msgid "VTOL Lancer Mantis VTOL"
 msgstr "ВВП Лансер Мантис"
 
 #: data/mp/messages/strings/names.txt:1875
-msgid "VTOL HPV Cannon Mantis VTOL"
-msgstr "ВВП ГС Пушка Мантис"
+#, fuzzy
+msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
+msgstr "Авиационная гиперскоростная пушка"
 
 #: data/mp/messages/strings/names.txt:1879
 msgid "Repair Turret Mantis Tracks"
@@ -10823,7 +10858,8 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr "Миниракеты \"Кобра\" гусеницы"
 
 #: data/mp/messages/strings/names.txt:1914
-msgid "Mini-Rocket Artillery Cobra Tracks"
+#, fuzzy
+msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "Батарея миниракет \"Кобра\" Гусеницы"
 
 #: data/mp/messages/strings/names.txt:1916
@@ -10831,8 +10867,9 @@ msgid "Inferno Cobra Half-Tracks"
 msgstr "Ад Кобра Полугусеницы"
 
 #: data/mp/messages/strings/names.txt:1917
-msgid "HPV Cannon Python Hover"
-msgstr "ГС Пушка Питон Ховер"
+#, fuzzy
+msgid "Hyper Velocity Cannon Python Hover"
+msgstr "Тяжелая  пушка Питон Ховер"
 
 #: data/mp/messages/strings/names.txt:1921
 msgid "Scourge Python Tracks"
@@ -10875,116 +10912,122 @@ msgid "Flamer Viper Half-Tracks"
 msgstr "Огнемёт Гадюка на полугусеничном ходу"
 
 #: lib/framework/i18n.c:45
-#: lib/framework/i18n.c:98
+#: lib/framework/i18n.c:99
 msgid "System locale"
 msgstr "Системная локализация"
 
 #: lib/framework/i18n.c:47
-#: lib/framework/i18n.c:100
+#: lib/framework/i18n.c:101
 msgid "Czech"
 msgstr "Чешский"
 
 #: lib/framework/i18n.c:48
-#: lib/framework/i18n.c:101
+#: lib/framework/i18n.c:102
 msgid "Danish"
 msgstr "Датский"
 
 #: lib/framework/i18n.c:49
-#: lib/framework/i18n.c:102
+#: lib/framework/i18n.c:103
 msgid "German"
 msgstr "Немецкий"
 
 #: lib/framework/i18n.c:51
-#: lib/framework/i18n.c:104
+#: lib/framework/i18n.c:105
 msgid "English (United Kingdom)"
 msgstr "Английский (Великобритания)"
 
 #: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:105
+#: lib/framework/i18n.c:106
 msgid "Spanish"
 msgstr "Испанский"
 
-#: lib/framework/i18n.c:54
+#: lib/framework/i18n.c:53
 #: lib/framework/i18n.c:107
+#, fuzzy
+msgid "Estonian"
+msgstr "Румынский"
+
+#: lib/framework/i18n.c:55
+#: lib/framework/i18n.c:109
 msgid "Finnish"
 msgstr "Финский"
 
-#: lib/framework/i18n.c:55
-#: lib/framework/i18n.c:108
+#: lib/framework/i18n.c:56
+#: lib/framework/i18n.c:110
 msgid "French"
 msgstr "Французский"
 
-#: lib/framework/i18n.c:63
-#: lib/framework/i18n.c:116
+#: lib/framework/i18n.c:64
+#: lib/framework/i18n.c:118
 msgid "Frisian"
 msgstr "Фризский"
 
-#: lib/framework/i18n.c:64
-#: lib/framework/i18n.c:117
+#: lib/framework/i18n.c:65
+#: lib/framework/i18n.c:119
 msgid "Irish"
 msgstr "Ирладский"
 
-#: lib/framework/i18n.c:65
-#: lib/framework/i18n.c:118
+#: lib/framework/i18n.c:66
+#: lib/framework/i18n.c:120
 msgid "Italian"
 msgstr "Итальянский"
 
-#: lib/framework/i18n.c:67
-#: lib/framework/i18n.c:120
+#: lib/framework/i18n.c:68
+#: lib/framework/i18n.c:122
 msgid "Lithuanian"
 msgstr "Литовский"
 
-#: lib/framework/i18n.c:69
-#: lib/framework/i18n.c:122
+#: lib/framework/i18n.c:70
+#: lib/framework/i18n.c:124
 msgid "Norwegian"
 msgstr "Норвежский"
 
-#: lib/framework/i18n.c:71
-#: lib/framework/i18n.c:124
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:126
 msgid "Dutch"
 msgstr "Голландский"
 
-#: lib/framework/i18n.c:72
-#: lib/framework/i18n.c:125
+#: lib/framework/i18n.c:73
+#: lib/framework/i18n.c:127
 msgid "Polish"
 msgstr "Польский"
 
-#: lib/framework/i18n.c:73
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:128
 msgid "Brazilian Portuguese"
 msgstr "Бразильский Португальский"
 
-#: lib/framework/i18n.c:74
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:75
+#: lib/framework/i18n.c:129
 msgid "Portuguese"
 msgstr "Португальский"
 
-#: lib/framework/i18n.c:75
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:76
+#: lib/framework/i18n.c:130
 msgid "Romanian"
 msgstr "Румынский"
 
-#: lib/framework/i18n.c:76
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:77
+#: lib/framework/i18n.c:131
 msgid "Russian"
 msgstr "Русский"
 
-#: lib/framework/i18n.c:77
-#: lib/framework/i18n.c:130
+#: lib/framework/i18n.c:78
+#: lib/framework/i18n.c:132
 msgid "Slovenian"
 msgstr "Словенский"
 
-#: lib/framework/i18n.c:86
-#: lib/framework/i18n.c:135
+#: lib/framework/i18n.c:87
+#: lib/framework/i18n.c:137
 msgid "Simplified Chinese"
 msgstr "Упрощенный китайский"
 
-#: lib/framework/i18n.c:87
-#: lib/framework/i18n.c:136
+#: lib/framework/i18n.c:88
+#: lib/framework/i18n.c:138
 msgid "Traditional Chinese"
 msgstr "китайский"
 
-#: lib/framework/i18n.c:119
+#: lib/framework/i18n.c:121
 msgid "Latin"
 msgstr "Латинский"
 
@@ -10999,12 +11042,12 @@ msgstr "У игрока %u несоответствует версия игры.
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr "Игрок %u ввелд неверный пароль. Автокик"
 
-#: lib/netplay/netplay.c:1918
+#: lib/netplay/netplay.c:1924
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "не могу получить имя основного сервера (%s)!"
 
-#: lib/netplay/netplay.c:1928
+#: lib/netplay/netplay.c:1934
 msgid "Could not communicate with lobby server!  Is TCP port 9990 open?"
 msgstr "Не удалось соединиться с лобби-сервером. проверьте, открыт-ли TCP-порт %u для исходящего траффика."
 
@@ -11434,12 +11477,12 @@ msgstr "ОБУЧЕНИЕ"
 #: src/frontend.c:310
 #: src/frontend.c:367
 #: src/frontend.c:508
-#: src/frontend.c:564
-#: src/frontend.c:722
-#: src/frontend.c:861
-#: src/frontend.c:964
-#: src/frontend.c:1156
-#: src/frontend.c:1297
+#: src/frontend.c:568
+#: src/frontend.c:726
+#: src/frontend.c:865
+#: src/frontend.c:968
+#: src/frontend.c:1160
+#: src/frontend.c:1301
 msgctxt "menu"
 msgid "Return"
 msgstr "Назад"
@@ -11480,223 +11523,223 @@ msgstr "Создать игру"
 msgid "Join Game"
 msgstr "Присоединиться"
 
-#: src/frontend.c:557
-#: src/frontend.c:864
-#: src/frontend.c:1300
-#: src/frontend.c:1320
+#: src/frontend.c:561
+#: src/frontend.c:868
+#: src/frontend.c:1304
+#: src/frontend.c:1324
 msgid "GAME OPTIONS"
 msgstr "НАСТРОЙКИ ИГРЫ"
 
-#: src/frontend.c:558
+#: src/frontend.c:562
 msgid "Game Options"
 msgstr "Настройки игры"
 
-#: src/frontend.c:559
+#: src/frontend.c:563
 msgid "Graphics Options"
 msgstr "Настройки графики"
 
-#: src/frontend.c:560
+#: src/frontend.c:564
 msgid "Video Options"
 msgstr "Настройки видео"
 
-#: src/frontend.c:561
+#: src/frontend.c:565
 msgid "Audio Options"
 msgstr "Настройки звука"
 
-#: src/frontend.c:562
+#: src/frontend.c:566
 msgid "Mouse Options"
 msgstr "Настройки Мыши"
 
-#: src/frontend.c:563
+#: src/frontend.c:567
 msgid "Key Mappings"
 msgstr "Расскладка клавиатуры"
 
-#: src/frontend.c:637
+#: src/frontend.c:641
 msgid "Video Playback"
 msgstr "Воспроизведение видео"
 
-#: src/frontend.c:641
-#: src/frontend.c:815
+#: src/frontend.c:645
+#: src/frontend.c:819
 msgid "1X"
 msgstr "1Х"
 
-#: src/frontend.c:645
-#: src/frontend.c:805
+#: src/frontend.c:649
+#: src/frontend.c:809
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.c:649
-#: src/frontend.c:810
-#: src/frontend.c:932
-#: src/frontend.c:986
+#: src/frontend.c:653
+#: src/frontend.c:814
+#: src/frontend.c:936
+#: src/frontend.c:990
 msgid "Fullscreen"
 msgstr "Полный экран"
 
-#: src/frontend.c:659
+#: src/frontend.c:663
 msgid "Screen Shake"
 msgstr "Дрожание экрана"
 
-#: src/frontend.c:662
-#: src/frontend.c:700
-#: src/frontend.c:713
-#: src/frontend.c:746
-#: src/frontend.c:782
-#: src/frontend.c:791
-#: src/frontend.c:953
-#: src/frontend.c:1038
-#: src/frontend.c:1076
-#: src/frontend.c:1110
-#: src/frontend.c:1122
-#: src/frontend.c:1134
-#: src/frontend.c:1146
-#: src/frontend.c:1178
-#: src/frontend.c:1191
-#: src/frontend.c:1205
-#: src/frontend.c:1219
-msgid "On"
-msgstr "Вкл."
-
 #: src/frontend.c:666
-#: src/frontend.c:696
-#: src/frontend.c:705
+#: src/frontend.c:704
 #: src/frontend.c:717
-#: src/frontend.c:741
-#: src/frontend.c:777
+#: src/frontend.c:750
+#: src/frontend.c:786
 #: src/frontend.c:795
 #: src/frontend.c:957
-#: src/frontend.c:1033
-#: src/frontend.c:1071
+#: src/frontend.c:1042
+#: src/frontend.c:1080
 #: src/frontend.c:1114
 #: src/frontend.c:1126
 #: src/frontend.c:1138
 #: src/frontend.c:1150
-#: src/frontend.c:1173
-#: src/frontend.c:1186
-#: src/frontend.c:1200
-#: src/frontend.c:1214
+#: src/frontend.c:1182
+#: src/frontend.c:1195
+#: src/frontend.c:1209
+#: src/frontend.c:1223
+msgid "On"
+msgstr "Вкл."
+
+#: src/frontend.c:670
+#: src/frontend.c:700
+#: src/frontend.c:709
+#: src/frontend.c:721
+#: src/frontend.c:745
+#: src/frontend.c:781
+#: src/frontend.c:799
+#: src/frontend.c:961
+#: src/frontend.c:1037
+#: src/frontend.c:1075
+#: src/frontend.c:1118
+#: src/frontend.c:1130
+#: src/frontend.c:1142
+#: src/frontend.c:1154
+#: src/frontend.c:1177
+#: src/frontend.c:1190
+#: src/frontend.c:1204
+#: src/frontend.c:1218
 msgid "Off"
 msgstr "Выкл."
 
-#: src/frontend.c:671
-#: src/multiint.c:1213
+#: src/frontend.c:675
+#: src/multiint.c:1211
 msgid "Fog"
 msgstr "Туман"
 
-#: src/frontend.c:674
-#: src/frontend.c:764
+#: src/frontend.c:678
+#: src/frontend.c:768
 msgid "Mist"
 msgstr "Мгла"
 
-#: src/frontend.c:678
-#: src/frontend.c:757
-#: src/multiint.c:1215
+#: src/frontend.c:682
+#: src/frontend.c:761
+#: src/multiint.c:1213
 msgid "Fog Of War"
 msgstr "Туман войны"
 
-#: src/frontend.c:685
 #: src/frontend.c:689
+#: src/frontend.c:693
 msgid "Subtitles"
 msgstr "Субтитры"
 
-#: src/frontend.c:710
+#: src/frontend.c:714
 msgid "Shadows"
 msgstr "Тени"
 
-#: src/frontend.c:849
+#: src/frontend.c:853
 #: src/ingameop.c:155
 msgid "Voice Volume"
 msgstr "Громкость голоса"
 
-#: src/frontend.c:853
+#: src/frontend.c:857
 #: src/ingameop.c:160
 msgid "FX Volume"
 msgstr "Громкость эффектов"
 
-#: src/frontend.c:857
+#: src/frontend.c:861
 #: src/ingameop.c:165
 msgid "Music Volume"
 msgstr "Громкость музыкы"
 
-#: src/frontend.c:928
+#: src/frontend.c:932
 msgid "Graphics Mode*"
 msgstr "Графический режим*"
 
-#: src/frontend.c:936
-#: src/frontend.c:981
+#: src/frontend.c:940
+#: src/frontend.c:985
 msgid "Windowed"
 msgstr "В окне"
 
-#: src/frontend.c:940
+#: src/frontend.c:944
 msgid "Resolution*"
 msgstr "Разрешение*"
 
-#: src/frontend.c:945
+#: src/frontend.c:949
 msgid "Texture size"
 msgstr "Размер текстур"
 
-#: src/frontend.c:949
+#: src/frontend.c:953
 msgid "Vertical sync*"
 msgstr "Вертикальная синхронизация*"
 
-#: src/frontend.c:961
+#: src/frontend.c:965
 msgid "* Takes effect on game restart"
 msgstr "* Применится после перезагрузки игры"
 
-#: src/frontend.c:1107
+#: src/frontend.c:1111
 msgid "Reverse Rotation"
 msgstr "Инверсия мыши"
 
-#: src/frontend.c:1118
+#: src/frontend.c:1122
 msgid "Trap Cursor"
 msgstr "Захват курсора"
 
-#: src/frontend.c:1130
+#: src/frontend.c:1134
 msgid "Colored Cursors *"
 msgstr "цветные курсоры *"
 
-#: src/frontend.c:1143
+#: src/frontend.c:1147
 msgid "Switch Mouse Buttons"
 msgstr "Настройки Мыши"
 
-#: src/frontend.c:1153
+#: src/frontend.c:1157
 msgid "* May negatively affect performance"
 msgstr "*может снизить производительность"
 
-#: src/frontend.c:1252
-#: src/frontend.c:1318
+#: src/frontend.c:1256
+#: src/frontend.c:1322
 msgid "Difficulty"
 msgstr "Сложность"
 
-#: src/frontend.c:1256
-#: src/frontend.c:1326
-#: src/frontend.c:1358
+#: src/frontend.c:1260
+#: src/frontend.c:1330
+#: src/frontend.c:1362
 msgid "Easy"
 msgstr "Легкая"
 
-#: src/frontend.c:1259
-#: src/frontend.c:1329
-#: src/frontend.c:1350
+#: src/frontend.c:1263
+#: src/frontend.c:1333
+#: src/frontend.c:1354
 msgid "Normal"
 msgstr "Нормальная"
 
-#: src/frontend.c:1263
-#: src/frontend.c:1332
-#: src/frontend.c:1354
+#: src/frontend.c:1267
+#: src/frontend.c:1336
+#: src/frontend.c:1358
 msgid "Hard"
 msgstr "Тяжелая"
 
-#: src/frontend.c:1268
-#: src/frontend.c:1319
+#: src/frontend.c:1272
+#: src/frontend.c:1323
 msgid "Scroll Speed"
 msgstr "Скорость прокрутки"
 
-#: src/frontend.c:1282
-#: src/frontend.c:1316
+#: src/frontend.c:1286
+#: src/frontend.c:1320
 msgid "Language"
 msgstr "Язык"
 
-#: src/frontend.c:1294
-#: src/frontend.c:1317
+#: src/frontend.c:1298
+#: src/frontend.c:1321
 msgid "Unit Colour"
 msgstr "Цвет юнита"
 
@@ -11771,8 +11814,8 @@ msgid "Build (F3)"
 msgstr "Строить (F3)"
 
 #: src/hci.c:3905
-#: src/multiint.c:1263
-#: src/multiint.c:1267
+#: src/multiint.c:1261
+#: src/multiint.c:1265
 #: src/multimenu.c:761
 msgid "Power"
 msgstr "Энергия"
@@ -12256,8 +12299,8 @@ msgstr "РАСКЛАДКА КЛАВИАТУРЫ"
 #: src/keyedit.c:379
 #: src/multiint.c:624
 #: src/multiint.c:666
-#: src/multiint.c:1056
-#: src/multiint.c:1332
+#: src/multiint.c:1059
+#: src/multiint.c:1330
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
 msgstr "Назад"
@@ -12763,177 +12806,181 @@ msgid "Wrong Game Version!"
 msgstr "Неверная версия игры!"
 
 #: src/multiint.c:844
+msgid "Wrong data/mod detected by Host."
+msgstr ""
+
+#: src/multiint.c:847
 msgid "Incorrect Password!"
 msgstr "неверный пароль!"
 
-#: src/multiint.c:847
+#: src/multiint.c:850
 msgid "Host has dropped connection!"
 msgstr "*Хост разорвал соединение!"
 
-#: src/multiint.c:851
+#: src/multiint.c:854
 msgid "Connection Error"
 msgstr "Ошибка соединения"
 
-#: src/multiint.c:948
+#: src/multiint.c:951
 msgid "Searching"
 msgstr "Поиск"
 
-#: src/multiint.c:1053
+#: src/multiint.c:1056
 msgid "GAMES"
 msgstr "ИГРЫ"
 
-#: src/multiint.c:1063
+#: src/multiint.c:1066
 msgid "Refresh Games List"
 msgstr "Обновить список игр"
 
-#: src/multiint.c:1084
+#: src/multiint.c:1087
 msgid "Enter Password First "
 msgstr "Для начала введите пароль"
 
-#: src/multiint.c:1172
+#: src/multiint.c:1170
 msgid "OPTIONS"
 msgstr "ПАРАМЕТРЫ"
 
-#: src/multiint.c:1174
+#: src/multiint.c:1172
 msgid "Select Game Name"
 msgstr "Выбрать название игры"
 
-#: src/multiint.c:1175
+#: src/multiint.c:1173
 msgid "Select Map"
 msgstr "Выбрать карту"
 
-#: src/multiint.c:1177
+#: src/multiint.c:1175
 msgid "Click to set Password"
 msgstr "Щелкни чтобы задать пароль"
 
-#: src/multiint.c:1185
+#: src/multiint.c:1183
 msgid "Game"
 msgstr "Игра"
 
-#: src/multiint.c:1187
+#: src/multiint.c:1185
 msgid "Mayhem"
 msgstr "погром"
 
-#: src/multiint.c:1189
+#: src/multiint.c:1187
 msgid "Skirmish"
 msgstr "Стычка"
 
-#: src/multiint.c:1210
+#: src/multiint.c:1208
 msgid "Select Player Name"
 msgstr "Выбор Имя Игрока"
 
-#: src/multiint.c:1216
+#: src/multiint.c:1214
 msgid "Distance Fog"
 msgstr "Туман на растоянии"
 
-#: src/multiint.c:1229
+#: src/multiint.c:1227
 #: src/multimenu.c:754
 msgid "Alliances"
 msgstr "Союзники"
 
-#: src/multiint.c:1232
+#: src/multiint.c:1230
 msgid "No Alliances"
 msgstr "Без Союзов"
 
-#: src/multiint.c:1234
+#: src/multiint.c:1232
 msgid "Allow Alliances"
 msgstr "Позволить Союзы"
 
-#: src/multiint.c:1238
+#: src/multiint.c:1236
 msgid "Locked Teams"
 msgstr "Закрытые Команды"
 
-#: src/multiint.c:1270
+#: src/multiint.c:1268
 msgid "Low Power Levels"
 msgstr "Низкий уровень энергии"
 
-#: src/multiint.c:1272
+#: src/multiint.c:1270
 msgid "Medium Power Levels"
 msgstr "Средний уровень энергии"
 
-#: src/multiint.c:1274
+#: src/multiint.c:1272
 msgid "High Power Levels"
 msgstr "Высокий уровень энергии"
 
-#: src/multiint.c:1294
-#: src/multiint.c:1298
+#: src/multiint.c:1292
+#: src/multiint.c:1296
 msgid "Base"
 msgstr "База"
 
-#: src/multiint.c:1301
+#: src/multiint.c:1299
 msgid "Start with No Bases"
 msgstr "Начать без Базы"
 
-#: src/multiint.c:1303
+#: src/multiint.c:1301
 msgid "Start with Bases"
 msgstr "Начать с Базой"
 
-#: src/multiint.c:1305
+#: src/multiint.c:1303
 msgid "Start with Advanced Bases"
 msgstr "Начать с Продвинутой Базой"
 
-#: src/multiint.c:1322
+#: src/multiint.c:1320
 msgid "Map Preview"
 msgstr "Просмотр карты"
 
-#: src/multiint.c:1324
+#: src/multiint.c:1322
 msgid "Click to see Map"
 msgstr "щелкни чтобы посмотреть карту"
 
-#: src/multiint.c:1338
+#: src/multiint.c:1336
 msgid "Start Hosting Game"
 msgstr "Начать хостинг игры"
 
-#: src/multiint.c:1346
+#: src/multiint.c:1344
 msgid "Set Structure Limits"
 msgstr "Установить лимиты сооружений"
 
-#: src/multiint.c:1738
+#: src/multiint.c:1736
 msgid "Team"
 msgstr "Команда"
 
-#: src/multiint.c:1783
+#: src/multiint.c:1781
 msgid "Waiting for other players"
 msgstr "ожидание других игроков"
 
-#: src/multiint.c:1789
+#: src/multiint.c:1787
 msgid "Click when ready"
 msgstr "щелкни когда будешь готов"
 
-#: src/multiint.c:1843
+#: src/multiint.c:1834
 msgid "PLAYERS"
 msgstr "ИГРОКИ"
 
-#: src/multiint.c:1982
+#: src/multiint.c:1973
 msgid "CHAT"
 msgstr "ЧАТ"
 
-#: src/multiint.c:2205
+#: src/multiint.c:2196
 msgid "*** password is now required! ***"
 msgstr "*** Требуется пароль! ***"
 
-#: src/multiint.c:2212
+#: src/multiint.c:2203
 msgid "*** password is NOT required! ***"
 msgstr "*** пароль не требуется! ***"
 
-#: src/multiint.c:2536
+#: src/multiint.c:2527
 msgid "'Locked Teams' mode enabled"
 msgstr "Закрытые Команды"
 
-#: src/multiint.c:2581
+#: src/multiint.c:2572
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Хост выкинул %s из игры!"
 
-#: src/multiint.c:2583
-msgid "you are being a jerk."
-msgstr "Вас одурачивают."
+#: src/multiint.c:2574
+msgid "you are unwanted by the host"
+msgstr ""
 
-#: src/multiint.c:2671
+#: src/multiint.c:2665
 msgid "Host is Starting Game"
 msgstr "Хост стартует"
 
-#: src/multiint.c:3162
+#: src/multiint.c:3158
 msgid "Players"
 msgstr "Игроки"
 
@@ -12942,21 +12989,30 @@ msgstr "Игроки"
 msgid "Players Still Joining"
 msgstr "Игроки еще соединяються"
 
-#: src/multijoin.c:228
+#: src/multijoin.c:229
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s покинул игру"
 
-#: src/multijoin.c:308
+#: src/multijoin.c:311
 msgid "The game is full!"
 msgstr "игра переполнена"
 
-#: src/multijoin.c:337
+#: src/multijoin.c:362
+#, c-format
+msgid "Kicking player, %s, because data doesn't match!"
+msgstr ""
+
+#: src/multijoin.c:366
+msgid "Data doesn't match!"
+msgstr ""
+
+#: src/multijoin.c:401
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s присоединился к игре"
 
-#: src/multijoin.c:346
+#: src/multijoin.c:410
 msgid "System message:"
 msgstr "Системное сообщение"
 
@@ -13029,35 +13085,44 @@ msgstr "Передать выбранных юнитов"
 msgid "Give Power To Player"
 msgstr "Передать энергию  игроку"
 
-#: src/multiplay.c:1904
+#: src/multiplay.c:283
+#, c-format
+msgid "Kicking player %s, because they tried to bypass data integrity check!"
+msgstr ""
+
+#: src/multiplay.c:287
+msgid "It is not nice to cheat!"
+msgstr ""
+
+#: src/multiplay.c:1940
 msgid "Green"
 msgstr "Зелёный"
 
-#: src/multiplay.c:1905
+#: src/multiplay.c:1941
 msgid "Orange"
 msgstr "Оранжевый"
 
-#: src/multiplay.c:1906
+#: src/multiplay.c:1942
 msgid "Grey"
 msgstr "Серый"
 
-#: src/multiplay.c:1907
+#: src/multiplay.c:1943
 msgid "Black"
 msgstr "Чёрный"
 
-#: src/multiplay.c:1908
+#: src/multiplay.c:1944
 msgid "Red"
 msgstr "Красный"
 
-#: src/multiplay.c:1909
+#: src/multiplay.c:1945
 msgid "Blue"
 msgstr "Синий"
 
-#: src/multiplay.c:1910
+#: src/multiplay.c:1946
 msgid "Pink"
 msgstr "Розовый"
 
-#: src/multiplay.c:1911
+#: src/multiplay.c:1947
 msgid "Cyan"
 msgstr "Голубой"
 
@@ -13239,8 +13304,8 @@ msgstr "невозможно найти ни одного командира"
 msgid "Control Limit Reached - Production Halted"
 msgstr "Достигнут Предел - Производство Остановлено"
 
-#: src/structure.c:5841
-#: src/structure.c:5866
+#: src/structure.c:5842
+#: src/structure.c:5867
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
@@ -13248,47 +13313,47 @@ msgstr[0] "%s - %u Юнит назначен"
 msgstr[1] "%s - %u Юнитов назначено"
 msgstr[2] "%s - %u Юнита назначено"
 
-#: src/structure.c:5916
+#: src/structure.c:5917
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - подключено %u из %u"
 
-#: src/structure.c:5930
+#: src/structure.c:5931
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - повреждение %3.0f%%"
 
-#: src/structure.c:6051
-#: src/structure.c:6100
+#: src/structure.c:6052
+#: src/structure.c:6101
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Электронные повреждения"
 
-#: src/structure.c:6335
+#: src/structure.c:6336
 msgid "Electronic Reward - Visibility Report"
 msgstr "награда - доклад о местоположении"
 
-#: src/structure.c:6375
+#: src/structure.c:6376
 msgid "Factory Reward - Propulsion"
 msgstr "награда завода - движитель"
 
-#: src/structure.c:6399
+#: src/structure.c:6400
 msgid "Factory Reward - Body"
 msgstr "награда завода - рама"
 
-#: src/structure.c:6423
+#: src/structure.c:6424
 msgid "Factory Reward - Weapon"
 msgstr "награда завода - оружие"
 
-#: src/structure.c:6432
+#: src/structure.c:6433
 msgid "Factory Reward - Nothing"
 msgstr "награда завода - ШИШ"
 
-#: src/structure.c:6460
+#: src/structure.c:6461
 msgid "Repair Facility Award - Repair"
 msgstr "награда мастерской - ремонт"
 
-#: src/structure.c:6467
+#: src/structure.c:6468
 msgid "Repair Facility Award - Nothing"
 msgstr "награда мастерской  - ШИШ"
 
@@ -13328,6 +13393,18 @@ msgstr " - сборка %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версия %s%s%s%s"
+
+#~ msgid "VTOL HPV Cannon Bug VTOL"
+#~ msgstr "Гиперскоростная пушка ВВС Жук"
+
+#~ msgid "VTOL HPV Cannon Mantis VTOL"
+#~ msgstr "ВВП ГС Пушка Мантис"
+
+#~ msgid "HPV Cannon Python Hover"
+#~ msgstr "ГС Пушка Питон Ховер"
+
+#~ msgid "you are being a jerk."
+#~ msgstr "Вас одурачивают."
 
 #~ msgid "English"
 #~ msgstr "Английский"
