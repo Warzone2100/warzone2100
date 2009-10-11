@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-09-13 14:22+0200\n"
+"POT-Creation-Date: 2009-10-11 23:58+0200\n"
 "PO-Revision-Date: 2009-05-15 21:52+0100\n"
 "Last-Translator: gesierfou <gesierfou@yahoo.fr>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -5851,7 +5851,6 @@ msgid "Mini-Rocket Viper Wheels"
 msgstr "Mini-lance Roquettes Viper sur Roues"
 
 #: data/base/messages/strings/names.txt:180
-#: data/mp/messages/strings/names.txt:183
 #, fuzzy
 msgid "Mini-Rocket Artillery Viper Wheels"
 msgstr "Mini-artillerie Viper sur Roues"
@@ -5908,7 +5907,6 @@ msgid "Lancer Cobra Half-tracks"
 msgstr "Lance-Roquettes Cobra Autochenilles"
 
 #: data/base/messages/strings/names.txt:191
-#: data/mp/messages/strings/names.txt:194
 #, fuzzy
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
 msgstr "Mini-artillerie Cobra Semi-chenillée"
@@ -6841,8 +6839,6 @@ msgstr "Missile Scourge"
 
 #: data/base/messages/strings/names.txt:505
 #: data/base/messages/strings/names.txt:1121
-#: data/mp/messages/strings/names.txt:512
-#: data/mp/messages/strings/names.txt:1134
 msgid "Angel Missile"
 msgstr "Missiles Angel"
 
@@ -6927,8 +6923,6 @@ msgstr "Canon Gauss"
 
 #: data/base/messages/strings/names.txt:523
 #: data/base/messages/strings/names.txt:1181
-#: data/mp/messages/strings/names.txt:530
-#: data/mp/messages/strings/names.txt:1194
 msgid "Mini-Rocket Artillery"
 msgstr "Batterie de Mini-Roquettes"
 
@@ -7417,8 +7411,6 @@ msgstr "Béton Plastifié Mk3"
 
 #: data/base/messages/strings/names.txt:717
 #: data/base/messages/strings/names.txt:1373
-#: data/mp/messages/strings/names.txt:728
-#: data/mp/messages/strings/names.txt:1386
 msgid "HPV Cannon Emplacement"
 msgstr "Emplacement à Canon canon à hyper vélocité"
 
@@ -7437,7 +7429,6 @@ msgid "Bombard Pit"
 msgstr "Bombarde Retranchée"
 
 #: data/base/messages/strings/names.txt:728
-#: data/mp/messages/strings/names.txt:739
 msgid "Angel Missile Battery"
 msgstr "Batterie de Missiles Angel"
 
@@ -7455,6 +7446,7 @@ msgstr "Mortier Retranché"
 
 #: data/base/messages/strings/names.txt:731
 #: data/mp/messages/strings/names.txt:742
+#: data/mp/messages/strings/names.txt:1381
 msgid "Mini-Rocket Battery"
 msgstr "Batterie de Mini-Roquettes"
 
@@ -7522,8 +7514,6 @@ msgstr "Point Défensif Roquettes Anti-Char"
 
 #: data/base/messages/strings/names.txt:775
 #: data/base/messages/strings/names.txt:1381
-#: data/mp/messages/strings/names.txt:786
-#: data/mp/messages/strings/names.txt:1394
 msgid "HPV Cannon Hardpoint"
 msgstr "Point Défensif Canon canon à hyper vélocité"
 
@@ -9121,7 +9111,6 @@ msgid "Cobra Medium Cannon Tracks"
 msgstr "Canon Moyen Cobra Chenillé"
 
 #: data/base/messages/strings/names.txt:1368
-#: data/mp/messages/strings/names.txt:1381
 msgid "MRL Emplacement"
 msgstr "Emplacement pour AMR"
 
@@ -9131,7 +9120,6 @@ msgid "Railgun Emplacement"
 msgstr "Emplacement pour Canon Électrique"
 
 #: data/base/messages/strings/names.txt:1376
-#: data/mp/messages/strings/names.txt:1389
 msgid "Angel Missile Emplacement"
 msgstr "Emplacement pour Missiles Angel"
 
@@ -9182,7 +9170,6 @@ msgid "Tank Killer Python Tracks"
 msgstr "Anti-Char Python Chenilles"
 
 #: data/base/messages/strings/names.txt:1459
-#: data/mp/messages/strings/names.txt:1472
 msgid "HPV Cannon Python Tracks"
 msgstr "Canon canon à hyper vélocité Python chenillé"
 
@@ -10007,6 +9994,11 @@ msgstr "Canon Léger Viper Semi-chenillé"
 msgid "Repair Turret Viper Half-track"
 msgstr "Tourelle de Réparation Mobile Viper Semi-chenillée"
 
+#: data/mp/messages/strings/names.txt:183
+#, fuzzy
+msgid "Mini-Rocket Array Viper Wheels"
+msgstr "Mini-artillerie Viper sur Roues"
+
 #: data/mp/messages/strings/names.txt:184
 msgid "Bunker Buster Rockets Viper Wheels"
 msgstr "Roquette Anti-Bunker Viper sur Roues"
@@ -10014,6 +10006,11 @@ msgstr "Roquette Anti-Bunker Viper sur Roues"
 #: data/mp/messages/strings/names.txt:189
 msgid "Sensor Turret Cobra Half-tracks"
 msgstr "Tourelle de capteur Cobra semi-chenillé"
+
+#: data/mp/messages/strings/names.txt:194
+#, fuzzy
+msgid "Mini-Rocket Array Cobra Half-tracks"
+msgstr "Mini-artillerie Cobra Semi-chenillée"
 
 #: data/mp/messages/strings/names.txt:372
 #: data/mp/messages/strings/names.txt:1702
@@ -10061,6 +10058,18 @@ msgstr "Point Défensif Lance-Flammes"
 msgid "Pulse Laser Tower"
 msgstr "Laser à Impulsions"
 
+#: data/mp/messages/strings/names.txt:512
+#: data/mp/messages/strings/names.txt:1134
+#, fuzzy
+msgid "Seraph Missile Array"
+msgstr "Augmente la précision des Missiles"
+
+#: data/mp/messages/strings/names.txt:530
+#: data/mp/messages/strings/names.txt:1194
+#, fuzzy
+msgid "Mini-Rocket Array"
+msgstr "Batterie de Mini-Roquettes"
+
 #: data/mp/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:1692
 #: data/mp/messages/strings/names.txt:1699
@@ -10100,9 +10109,27 @@ msgstr "Béton Plastique-Acier MK2"
 msgid "Plasteel Mk3"
 msgstr "Béton Plastique-Acier MK3"
 
+#: data/mp/messages/strings/names.txt:728
+#: data/mp/messages/strings/names.txt:1386
+#, fuzzy
+msgid "Hyper Velocity Cannon Emplacement"
+msgstr "Canon à Hyper Vélocité"
+
+#: data/mp/messages/strings/names.txt:739
+#: data/mp/messages/strings/names.txt:1389
+#, fuzzy
+msgid "Seraph Missile Battery"
+msgstr "Batterie de Missiles Angel"
+
 #: data/mp/messages/strings/names.txt:768
 msgid "Flamer Tower"
 msgstr "Tour lance-flammes"
+
+#: data/mp/messages/strings/names.txt:786
+#: data/mp/messages/strings/names.txt:1394
+#, fuzzy
+msgid "Hyper Velocity Cannon Hardpoint"
+msgstr "Canon à Hyper Vélocité"
 
 #: data/mp/messages/strings/names.txt:805
 #, fuzzy
@@ -10260,6 +10287,11 @@ msgstr "Tour canon d'Assaut"
 #: data/mp/messages/strings/names.txt:1436
 msgid "Repair Cobra Tracks"
 msgstr "Réparateur Cobra chenillé"
+
+#: data/mp/messages/strings/names.txt:1472
+#, fuzzy
+msgid "Hyper Velocity Cannon Python Tracks"
+msgstr "Canon lourd Python chenillé"
 
 #: data/mp/messages/strings/names.txt:1511
 msgid "Bunker Buster Cobra Hover"
@@ -10759,15 +10791,17 @@ msgid "VTOL Lancer Bug VTOL"
 msgstr "Lanceur VTOL"
 
 #: data/mp/messages/strings/names.txt:1871
-msgid "VTOL HPV Cannon Bug VTOL"
-msgstr "Canon à HV VTOL"
+#, fuzzy
+msgid "VTOL Hyper Velocity Cannon Bug VTOL"
+msgstr "Canon à hyper vélocité VTOL"
 
 #: data/mp/messages/strings/names.txt:1872
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "Lanceur Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1873
-msgid "VTOL HPV Cannon Scorpion VTOL"
+#, fuzzy
+msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "Canon à HV Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1874
@@ -10775,8 +10809,9 @@ msgid "VTOL Lancer Mantis VTOL"
 msgstr "Lanceur Mantis VTOL"
 
 #: data/mp/messages/strings/names.txt:1875
-msgid "VTOL HPV Cannon Mantis VTOL"
-msgstr "Canon à HV Mantis VTOL"
+#, fuzzy
+msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
+msgstr "Canon à hyper vélocité VTOL"
 
 #: data/mp/messages/strings/names.txt:1879
 #, fuzzy
@@ -10884,7 +10919,7 @@ msgstr "Mini lance-Roquettes Cobra sur roues"
 
 #: data/mp/messages/strings/names.txt:1914
 #, fuzzy
-msgid "Mini-Rocket Artillery Cobra Tracks"
+msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "Lanceur de Mini-Roquettes Cobra chenillé"
 
 #: data/mp/messages/strings/names.txt:1916
@@ -10892,8 +10927,9 @@ msgid "Inferno Cobra Half-Tracks"
 msgstr "Inferno Cobra semi-chenillé"
 
 #: data/mp/messages/strings/names.txt:1917
-msgid "HPV Cannon Python Hover"
-msgstr "Canon à HV Python aéro-glisseur"
+#, fuzzy
+msgid "Hyper Velocity Cannon Python Hover"
+msgstr "Canon lourd Python aéro-glisseur"
 
 #: data/mp/messages/strings/names.txt:1921
 msgid "Scourge Python Tracks"
@@ -10936,117 +10972,123 @@ msgid "Flamer Viper Half-Tracks"
 msgstr "Lance-flammes Viper Semi-chenillé"
 
 #: lib/framework/i18n.c:45
-#: lib/framework/i18n.c:98
+#: lib/framework/i18n.c:99
 msgid "System locale"
 msgstr "Langage du système"
 
 #: lib/framework/i18n.c:47
-#: lib/framework/i18n.c:100
+#: lib/framework/i18n.c:101
 msgid "Czech"
 msgstr "Tchèque"
 
 #: lib/framework/i18n.c:48
-#: lib/framework/i18n.c:101
+#: lib/framework/i18n.c:102
 msgid "Danish"
 msgstr "Danois"
 
 #: lib/framework/i18n.c:49
-#: lib/framework/i18n.c:102
+#: lib/framework/i18n.c:103
 msgid "German"
 msgstr "Allemand"
 
 #: lib/framework/i18n.c:51
-#: lib/framework/i18n.c:104
+#: lib/framework/i18n.c:105
 msgid "English (United Kingdom)"
 msgstr "Anglais (Royaume-Uni)"
 
 #: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:105
+#: lib/framework/i18n.c:106
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: lib/framework/i18n.c:54
+#: lib/framework/i18n.c:53
 #: lib/framework/i18n.c:107
+#, fuzzy
+msgid "Estonian"
+msgstr "Roumain"
+
+#: lib/framework/i18n.c:55
+#: lib/framework/i18n.c:109
 msgid "Finnish"
 msgstr "Finlandais"
 
-#: lib/framework/i18n.c:55
-#: lib/framework/i18n.c:108
+#: lib/framework/i18n.c:56
+#: lib/framework/i18n.c:110
 msgid "French"
 msgstr "Français"
 
-#: lib/framework/i18n.c:63
-#: lib/framework/i18n.c:116
+#: lib/framework/i18n.c:64
+#: lib/framework/i18n.c:118
 msgid "Frisian"
 msgstr "Frisons"
 
-#: lib/framework/i18n.c:64
-#: lib/framework/i18n.c:117
+#: lib/framework/i18n.c:65
+#: lib/framework/i18n.c:119
 msgid "Irish"
 msgstr "Irlandais"
 
-#: lib/framework/i18n.c:65
-#: lib/framework/i18n.c:118
+#: lib/framework/i18n.c:66
+#: lib/framework/i18n.c:120
 msgid "Italian"
 msgstr "Italien"
 
-#: lib/framework/i18n.c:67
-#: lib/framework/i18n.c:120
+#: lib/framework/i18n.c:68
+#: lib/framework/i18n.c:122
 msgid "Lithuanian"
 msgstr "Lituanien"
 
-#: lib/framework/i18n.c:69
-#: lib/framework/i18n.c:122
+#: lib/framework/i18n.c:70
+#: lib/framework/i18n.c:124
 msgid "Norwegian"
 msgstr "Norvégien"
 
-#: lib/framework/i18n.c:71
-#: lib/framework/i18n.c:124
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:126
 msgid "Dutch"
 msgstr "Hollandais"
 
-#: lib/framework/i18n.c:72
-#: lib/framework/i18n.c:125
+#: lib/framework/i18n.c:73
+#: lib/framework/i18n.c:127
 msgid "Polish"
 msgstr "Polonais"
 
-#: lib/framework/i18n.c:73
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:128
 msgid "Brazilian Portuguese"
 msgstr "Portugais Brésilien "
 
-#: lib/framework/i18n.c:74
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:75
+#: lib/framework/i18n.c:129
 #, fuzzy
 msgid "Portuguese"
 msgstr "Portugais"
 
-#: lib/framework/i18n.c:75
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:76
+#: lib/framework/i18n.c:130
 msgid "Romanian"
 msgstr "Roumain"
 
-#: lib/framework/i18n.c:76
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:77
+#: lib/framework/i18n.c:131
 msgid "Russian"
 msgstr "Russe"
 
-#: lib/framework/i18n.c:77
-#: lib/framework/i18n.c:130
+#: lib/framework/i18n.c:78
+#: lib/framework/i18n.c:132
 msgid "Slovenian"
 msgstr "Slovénien"
 
-#: lib/framework/i18n.c:86
-#: lib/framework/i18n.c:135
+#: lib/framework/i18n.c:87
+#: lib/framework/i18n.c:137
 msgid "Simplified Chinese"
 msgstr "Chinois simplifié"
 
-#: lib/framework/i18n.c:87
-#: lib/framework/i18n.c:136
+#: lib/framework/i18n.c:88
+#: lib/framework/i18n.c:138
 msgid "Traditional Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:119
+#: lib/framework/i18n.c:121
 msgid "Latin"
 msgstr "Latin"
 
@@ -11417,40 +11459,40 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alignement avec le groupe %u - %u Unité"
 msgstr[1] "Alignement avec le groupe %u - %u Unités"
 
-#: src/droid.c:3400
+#: src/droid.c:3422
 msgid "Rookie"
 msgstr "Débutant"
 
-#: src/droid.c:3401
+#: src/droid.c:3423
 msgctxt "rank"
 msgid "Green"
 msgstr "Deuxième Classe"
 
-#: src/droid.c:3402
+#: src/droid.c:3424
 msgid "Trained"
 msgstr "Aspirant"
 
-#: src/droid.c:3403
+#: src/droid.c:3425
 msgid "Regular"
 msgstr "Normal"
 
-#: src/droid.c:3404
+#: src/droid.c:3426
 msgid "Professional"
 msgstr "Professionnel"
 
-#: src/droid.c:3405
+#: src/droid.c:3427
 msgid "Veteran"
 msgstr "Vétéran"
 
-#: src/droid.c:3406
+#: src/droid.c:3428
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.c:3407
+#: src/droid.c:3429
 msgid "Special"
 msgstr "Spécial"
 
-#: src/droid.c:3408
+#: src/droid.c:3430
 msgid "Hero"
 msgstr "Héros"
 
@@ -11496,12 +11538,12 @@ msgstr "TUTORIAUX"
 #: src/frontend.c:314
 #: src/frontend.c:372
 #: src/frontend.c:525
-#: src/frontend.c:579
-#: src/frontend.c:737
-#: src/frontend.c:876
-#: src/frontend.c:979
-#: src/frontend.c:1172
-#: src/frontend.c:1313
+#: src/frontend.c:583
+#: src/frontend.c:741
+#: src/frontend.c:880
+#: src/frontend.c:983
+#: src/frontend.c:1176
+#: src/frontend.c:1317
 msgctxt "menu"
 msgid "Return"
 msgstr "Menu précédent"
@@ -11547,231 +11589,231 @@ msgstr "Créer une Nouvelle Partie"
 msgid "Join Game"
 msgstr "Joindre une Partie"
 
-#: src/frontend.c:572
-#: src/frontend.c:879
-#: src/frontend.c:1316
-#: src/frontend.c:1336
+#: src/frontend.c:576
+#: src/frontend.c:883
+#: src/frontend.c:1320
+#: src/frontend.c:1340
 msgid "GAME OPTIONS"
 msgstr "OPTIONS"
 
-#: src/frontend.c:573
+#: src/frontend.c:577
 msgid "Game Options"
 msgstr "Options du Jeu"
 
-#: src/frontend.c:574
+#: src/frontend.c:578
 msgid "Graphics Options"
 msgstr "Options Graphiques"
 
-#: src/frontend.c:575
+#: src/frontend.c:579
 msgid "Video Options"
 msgstr "Options Vidéos"
 
-#: src/frontend.c:576
+#: src/frontend.c:580
 msgid "Audio Options"
 msgstr "Options Audio"
 
-#: src/frontend.c:577
+#: src/frontend.c:581
 msgid "Mouse Options"
 msgstr "Options souris"
 
-#: src/frontend.c:578
+#: src/frontend.c:582
 msgid "Key Mappings"
 msgstr "Raccourcis Clavier"
 
-#: src/frontend.c:652
+#: src/frontend.c:656
 msgid "Video Playback"
 msgstr "Affichage des Vidéos"
 
-#: src/frontend.c:656
-#: src/frontend.c:830
+#: src/frontend.c:660
+#: src/frontend.c:834
 msgid "1X"
 msgstr ""
 
-#: src/frontend.c:660
-#: src/frontend.c:820
+#: src/frontend.c:664
+#: src/frontend.c:824
 msgid "2X"
 msgstr ""
 
-#: src/frontend.c:664
-#: src/frontend.c:825
-#: src/frontend.c:947
-#: src/frontend.c:1001
+#: src/frontend.c:668
+#: src/frontend.c:829
+#: src/frontend.c:951
+#: src/frontend.c:1005
 msgid "Fullscreen"
 msgstr "Plein Écran"
 
-#: src/frontend.c:674
+#: src/frontend.c:678
 msgid "Screen Shake"
 msgstr "Tremblements de l'écran (explosion)"
 
-#: src/frontend.c:677
-#: src/frontend.c:715
-#: src/frontend.c:728
-#: src/frontend.c:761
-#: src/frontend.c:797
-#: src/frontend.c:806
-#: src/frontend.c:968
-#: src/frontend.c:1054
-#: src/frontend.c:1092
-#: src/frontend.c:1126
-#: src/frontend.c:1138
-#: src/frontend.c:1150
-#: src/frontend.c:1162
-#: src/frontend.c:1194
-#: src/frontend.c:1207
-#: src/frontend.c:1235
-msgid "On"
-msgstr "Activé"
-
 #: src/frontend.c:681
-#: src/frontend.c:711
-#: src/frontend.c:720
+#: src/frontend.c:719
 #: src/frontend.c:732
-#: src/frontend.c:756
-#: src/frontend.c:792
+#: src/frontend.c:765
+#: src/frontend.c:801
 #: src/frontend.c:810
 #: src/frontend.c:972
-#: src/frontend.c:1049
-#: src/frontend.c:1087
+#: src/frontend.c:1058
+#: src/frontend.c:1096
 #: src/frontend.c:1130
 #: src/frontend.c:1142
 #: src/frontend.c:1154
 #: src/frontend.c:1166
-#: src/frontend.c:1189
-#: src/frontend.c:1202
-#: src/frontend.c:1230
+#: src/frontend.c:1198
+#: src/frontend.c:1211
+#: src/frontend.c:1239
+msgid "On"
+msgstr "Activé"
+
+#: src/frontend.c:685
+#: src/frontend.c:715
+#: src/frontend.c:724
+#: src/frontend.c:736
+#: src/frontend.c:760
+#: src/frontend.c:796
+#: src/frontend.c:814
+#: src/frontend.c:976
+#: src/frontend.c:1053
+#: src/frontend.c:1091
+#: src/frontend.c:1134
+#: src/frontend.c:1146
+#: src/frontend.c:1158
+#: src/frontend.c:1170
+#: src/frontend.c:1193
+#: src/frontend.c:1206
+#: src/frontend.c:1234
 msgid "Off"
 msgstr "Désactivé"
 
-#: src/frontend.c:686
-#: src/multiint.c:1243
+#: src/frontend.c:690
+#: src/multiint.c:1244
 msgid "Fog"
 msgstr "Brouillard"
 
-#: src/frontend.c:689
-#: src/frontend.c:779
+#: src/frontend.c:693
+#: src/frontend.c:783
 msgid "Mist"
 msgstr "Brume"
 
-#: src/frontend.c:693
-#: src/frontend.c:772
-#: src/multiint.c:1245
+#: src/frontend.c:697
+#: src/frontend.c:776
+#: src/multiint.c:1246
 msgid "Fog Of War"
 msgstr "Brouillard de guerre"
 
-#: src/frontend.c:700
 #: src/frontend.c:704
+#: src/frontend.c:708
 msgid "Subtitles"
 msgstr "Sous-titres"
 
-#: src/frontend.c:725
+#: src/frontend.c:729
 msgid "Shadows"
 msgstr "Ombres"
 
-#: src/frontend.c:864
+#: src/frontend.c:868
 #: src/ingameop.c:153
 msgid "Voice Volume"
 msgstr "Volume de la Voix"
 
-#: src/frontend.c:868
+#: src/frontend.c:872
 #: src/ingameop.c:158
 msgid "FX Volume"
 msgstr "Volume des Bruits(FX)"
 
-#: src/frontend.c:872
+#: src/frontend.c:876
 #: src/ingameop.c:163
 msgid "Music Volume"
 msgstr "Volume de la Musique"
 
-#: src/frontend.c:943
+#: src/frontend.c:947
 msgid "Graphics Mode*"
 msgstr "Paramètres Visuels*"
 
-#: src/frontend.c:951
-#: src/frontend.c:996
+#: src/frontend.c:955
+#: src/frontend.c:1000
 msgid "Windowed"
 msgstr "Fenêtré"
 
-#: src/frontend.c:955
+#: src/frontend.c:959
 msgid "Resolution*"
 msgstr "Résolution*"
 
-#: src/frontend.c:960
+#: src/frontend.c:964
 msgid "Texture size"
 msgstr "Taille des Textures"
 
-#: src/frontend.c:964
+#: src/frontend.c:968
 msgid "Vertical sync*"
 msgstr ""
 
-#: src/frontend.c:976
+#: src/frontend.c:980
 msgid "* Takes effect on game restart"
 msgstr "* Le jeu doit être redémarré pour que ces options s'appliquent"
 
-#: src/frontend.c:1123
+#: src/frontend.c:1127
 #, fuzzy
 msgid "Reverse Rotation"
 msgstr "Souris Inversée"
 
-#: src/frontend.c:1134
+#: src/frontend.c:1138
 msgid "Trap Cursor"
 msgstr "Piéger le Curseur"
 
-#: src/frontend.c:1146
+#: src/frontend.c:1150
 msgid "Colored Cursors *"
 msgstr ""
 
-#: src/frontend.c:1159
+#: src/frontend.c:1163
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Options souris"
 
-#: src/frontend.c:1169
+#: src/frontend.c:1173
 msgid "* May negatively affect performance"
 msgstr ""
 
-#: src/frontend.c:1216
+#: src/frontend.c:1220
 msgid "Hardware"
 msgstr "Matériel"
 
-#: src/frontend.c:1221
+#: src/frontend.c:1225
 msgid "Software (coloured)"
 msgstr ""
 
-#: src/frontend.c:1268
-#: src/frontend.c:1334
+#: src/frontend.c:1272
+#: src/frontend.c:1338
 msgid "Difficulty"
 msgstr "Difficulté"
 
-#: src/frontend.c:1272
-#: src/frontend.c:1342
-#: src/frontend.c:1374
+#: src/frontend.c:1276
+#: src/frontend.c:1346
+#: src/frontend.c:1378
 msgid "Easy"
 msgstr "Facile"
 
-#: src/frontend.c:1275
-#: src/frontend.c:1345
-#: src/frontend.c:1366
+#: src/frontend.c:1279
+#: src/frontend.c:1349
+#: src/frontend.c:1370
 msgid "Normal"
 msgstr "Normale"
 
-#: src/frontend.c:1279
-#: src/frontend.c:1348
-#: src/frontend.c:1370
+#: src/frontend.c:1283
+#: src/frontend.c:1352
+#: src/frontend.c:1374
 msgid "Hard"
 msgstr "Difficile"
 
-#: src/frontend.c:1284
-#: src/frontend.c:1335
+#: src/frontend.c:1288
+#: src/frontend.c:1339
 msgid "Scroll Speed"
 msgstr "Vitesse de Défilement"
 
-#: src/frontend.c:1298
-#: src/frontend.c:1332
+#: src/frontend.c:1302
+#: src/frontend.c:1336
 msgid "Language"
 msgstr "Langue"
 
-#: src/frontend.c:1310
-#: src/frontend.c:1333
+#: src/frontend.c:1314
+#: src/frontend.c:1337
 msgid "Unit Colour"
 msgstr "Couleur des Unités"
 
@@ -11782,7 +11824,7 @@ msgstr "Couleur des Unités"
 #: src/hci.c:5606
 #: src/intelmap.c:532
 #: src/intorder.c:661
-#: src/loadsave.c:259
+#: src/loadsave.c:256
 #: src/multimenu.c:477
 #: src/multimenu.c:1336
 #: src/transporter.c:286
@@ -11847,7 +11889,7 @@ msgid "Build (F3)"
 msgstr "Construction (F3)"
 
 #: src/hci.c:3860
-#: src/multiint.c:1290
+#: src/multiint.c:1291
 #: src/multimenu.c:761
 msgid "Power"
 msgstr "Énergie"
@@ -12353,8 +12395,8 @@ msgstr "RACOURCIS CLAVIERS"
 #: src/keyedit.c:379
 #: src/multiint.c:622
 #: src/multiint.c:664
-#: src/multiint.c:1053
-#: src/multiint.c:1376
+#: src/multiint.c:1059
+#: src/multiint.c:1377
 msgid "Return To Previous Screen"
 msgstr "Revenir à l'écran précédent"
 
@@ -12873,181 +12915,189 @@ msgid "Wrong Game Version!"
 msgstr ""
 
 #: src/multiint.c:843
+msgid "Wrong data/mod detected by Host."
+msgstr ""
+
+#: src/multiint.c:846
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:847
+#: src/multiint.c:849
+msgid "Host has dropped connection!"
+msgstr ""
+
+#: src/multiint.c:853
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:945
+#: src/multiint.c:951
 msgid "Searching"
 msgstr "Recherche"
 
-#: src/multiint.c:1050
+#: src/multiint.c:1056
 msgid "GAMES"
 msgstr "PARTIES"
 
-#: src/multiint.c:1060
+#: src/multiint.c:1066
 msgid "Refresh Games List"
 msgstr "Rafraîchir la Liste des Parties"
 
-#: src/multiint.c:1081
+#: src/multiint.c:1087
 msgid "Enter Password First "
 msgstr ""
 
-#: src/multiint.c:1191
+#: src/multiint.c:1192
 msgid "OPTIONS"
 msgstr "OPTIONS"
 
-#: src/multiint.c:1193
+#: src/multiint.c:1194
 msgid "Select Game Name"
 msgstr "Nom de la partie"
 
-#: src/multiint.c:1194
+#: src/multiint.c:1195
 msgid "Select Map"
 msgstr "Carte à utiliser"
 
-#: src/multiint.c:1200
+#: src/multiint.c:1201
 #, fuzzy
 msgid "Click to set Password"
 msgstr "Cliquer pour voir la carte"
 
-#: src/multiint.c:1209
 #: src/multiint.c:1210
+#: src/multiint.c:1211
 #, fuzzy
 msgid "Scavengers"
 msgstr "Pillard"
 
-#: src/multiint.c:1211
+#: src/multiint.c:1212
 #, fuzzy
 msgid "No Scavengers"
 msgstr "Pillard"
 
-#: src/multiint.c:1240
+#: src/multiint.c:1241
 msgid "Select Player Name"
 msgstr "Choisir Nom du Joueur"
 
-#: src/multiint.c:1246
+#: src/multiint.c:1247
 msgid "Distance Fog"
 msgstr "Brouillard de distance"
 
-#: src/multiint.c:1257
+#: src/multiint.c:1258
 #: src/multimenu.c:754
 msgid "Alliances"
 msgstr "Alliances"
 
-#: src/multiint.c:1260
+#: src/multiint.c:1261
 msgid "No Alliances"
 msgstr "Pas d'Alliances"
 
-#: src/multiint.c:1262
+#: src/multiint.c:1263
 msgid "Allow Alliances"
 msgstr "Autoriser les Alliances"
 
-#: src/multiint.c:1266
+#: src/multiint.c:1267
 msgid "Locked Teams"
 msgstr "Verrouiller les Équipes"
 
-#: src/multiint.c:1292
+#: src/multiint.c:1293
 msgid "Low Power Levels"
 msgstr "Niveau d'énergie Faible"
 
-#: src/multiint.c:1294
+#: src/multiint.c:1295
 msgid "Medium Power Levels"
 msgstr "Niveau d'énergie Moyen"
 
-#: src/multiint.c:1296
+#: src/multiint.c:1297
 msgid "High Power Levels"
 msgstr "Niveau d'énergie Élevé"
 
-#: src/multiint.c:1328
+#: src/multiint.c:1329
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.c:1330
+#: src/multiint.c:1331
 msgid "Start with No Bases"
 msgstr "Commencer sans Base"
 
-#: src/multiint.c:1332
+#: src/multiint.c:1333
 msgid "Start with Bases"
 msgstr "Commencer avec une base"
 
-#: src/multiint.c:1334
+#: src/multiint.c:1335
 msgid "Start with Advanced Bases"
 msgstr "Commencer avec une Base Avancée"
 
-#: src/multiint.c:1366
+#: src/multiint.c:1367
 msgid "Map Preview"
 msgstr "Prévisualisation de la carte"
 
-#: src/multiint.c:1368
+#: src/multiint.c:1369
 msgid "Click to see Map"
 msgstr "Cliquer pour voir la carte"
 
-#: src/multiint.c:1382
+#: src/multiint.c:1383
 msgid "Start Hosting Game"
 msgstr "Démarrer le Serveur"
 
-#: src/multiint.c:1390
+#: src/multiint.c:1391
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "Fixer des limites de Construction"
 
-#: src/multiint.c:1390
+#: src/multiint.c:1391
 msgid "Set Structure Limits"
 msgstr "Fixer des limites de Construction"
 
-#: src/multiint.c:1797
+#: src/multiint.c:1788
 msgid "Team"
 msgstr "Équipe"
 
-#: src/multiint.c:1830
+#: src/multiint.c:1821
 msgid "Waiting for other players"
 msgstr "Attente des autres joueurs"
 
-#: src/multiint.c:1836
+#: src/multiint.c:1827
 msgid "Click when ready"
 msgstr "Cliquer une fois prêt"
 
-#: src/multiint.c:1874
+#: src/multiint.c:1865
 msgid "PLAYERS"
 msgstr "JOUEURS"
 
-#: src/multiint.c:2034
+#: src/multiint.c:2025
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:2204
+#: src/multiint.c:2195
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2211
+#: src/multiint.c:2202
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2450
+#: src/multiint.c:2442
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2552
+#: src/multiint.c:2544
 msgid "'Locked Teams' mode enabled"
 msgstr "Verrouiller les équipes"
 
-#: src/multiint.c:2597
+#: src/multiint.c:2589
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'hôte a banni %s de la partie"
 
-#: src/multiint.c:2599
+#: src/multiint.c:2591
 msgid "you are being a jerk."
 msgstr ""
 
-#: src/multiint.c:2682
+#: src/multiint.c:2677
 msgid "Host is Starting Game"
 msgstr "L'hôte démarre la partie"
 
-#: src/multiint.c:3206
+#: src/multiint.c:3203
 msgid "Players"
 msgstr "Joueurs"
 
@@ -13056,17 +13106,26 @@ msgstr "Joueurs"
 msgid "Players Still Joining"
 msgstr "Les joueurs sont en cours de connexion"
 
-#: src/multijoin.c:221
+#: src/multijoin.c:222
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s a Quitté la Partie"
 
-#: src/multijoin.c:303
+#: src/multijoin.c:329
+#, c-format
+msgid "Kicking player, %s, because data doesn't match!"
+msgstr ""
+
+#: src/multijoin.c:333
+msgid "Data doesn't match!"
+msgstr ""
+
+#: src/multijoin.c:365
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s vient de Rejoindre la Partie"
 
-#: src/multijoin.c:313
+#: src/multijoin.c:375
 #, fuzzy
 msgid "System message:"
 msgstr "Langage du système"
@@ -13145,35 +13204,44 @@ msgstr "Céder les Unités Sélectionnées"
 msgid "Give Power To Player"
 msgstr "Donner de l'énergie au Joueur"
 
-#: src/multiplay.c:1842
+#: src/multiplay.c:282
+#, c-format
+msgid "Kicking player %s, because they tried to bypass data integrity check!"
+msgstr ""
+
+#: src/multiplay.c:286
+msgid "It is not nice to cheat!"
+msgstr ""
+
+#: src/multiplay.c:1878
 msgid "Green"
 msgstr "Joueur Vert"
 
-#: src/multiplay.c:1843
+#: src/multiplay.c:1879
 msgid "Orange"
 msgstr "Joueur Orange"
 
-#: src/multiplay.c:1844
+#: src/multiplay.c:1880
 msgid "Grey"
 msgstr "Joueur Gris"
 
-#: src/multiplay.c:1845
+#: src/multiplay.c:1881
 msgid "Black"
 msgstr "Joueur Noir"
 
-#: src/multiplay.c:1846
+#: src/multiplay.c:1882
 msgid "Red"
 msgstr "Joueur Rouge"
 
-#: src/multiplay.c:1847
+#: src/multiplay.c:1883
 msgid "Blue"
 msgstr "Joueur Bleu"
 
-#: src/multiplay.c:1848
+#: src/multiplay.c:1884
 msgid "Pink"
 msgstr "Joueur Rose"
 
-#: src/multiplay.c:1849
+#: src/multiplay.c:1885
 msgid "Cyan"
 msgstr "Joueur Cyan"
 
@@ -13354,55 +13422,55 @@ msgstr "Impossible de localiser le moindre Commandant !"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite de Commandement Atteinte - Arrêt de la Production"
 
-#: src/structure.c:5962
-#: src/structure.c:5987
+#: src/structure.c:5984
+#: src/structure.c:6009
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unité assignée"
 msgstr[1] "%s - %u Unités assignées"
 
-#: src/structure.c:6037
+#: src/structure.c:6059
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u connexions établies sur %u"
 
-#: src/structure.c:6051
+#: src/structure.c:6073
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Endommagé à %3.0f%%"
 
-#: src/structure.c:6167
-#: src/structure.c:6212
+#: src/structure.c:6189
+#: src/structure.c:6234
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Électroniquement endommagé"
 
-#: src/structure.c:6447
+#: src/structure.c:6469
 msgid "Electronic Reward - Visibility Report"
 msgstr "Récompense électronique - Rapport de visibilité"
 
-#: src/structure.c:6487
+#: src/structure.c:6509
 msgid "Factory Reward - Propulsion"
 msgstr "Récompense d'usine - Propulsion"
 
-#: src/structure.c:6511
+#: src/structure.c:6533
 msgid "Factory Reward - Body"
 msgstr "Récompense d'usine - Corps"
 
-#: src/structure.c:6535
+#: src/structure.c:6557
 msgid "Factory Reward - Weapon"
 msgstr "Récompense d'usine - Armes"
 
-#: src/structure.c:6544
+#: src/structure.c:6566
 msgid "Factory Reward - Nothing"
 msgstr "Récompense d'usine - Rien"
 
-#: src/structure.c:6572
+#: src/structure.c:6594
 msgid "Repair Facility Award - Repair"
 msgstr "Récompense Atelier de réparation - Réparation"
 
-#: src/structure.c:6579
+#: src/structure.c:6601
 msgid "Repair Facility Award - Nothing"
 msgstr "Récompense Atelier de réparation - Rien"
 
@@ -13442,6 +13510,15 @@ msgstr " - Compilation %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
+
+#~ msgid "VTOL HPV Cannon Bug VTOL"
+#~ msgstr "Canon à HV VTOL"
+
+#~ msgid "VTOL HPV Cannon Mantis VTOL"
+#~ msgstr "Canon à HV Mantis VTOL"
+
+#~ msgid "HPV Cannon Python Hover"
+#~ msgstr "Canon à HV Python aéro-glisseur"
 
 #~ msgid "English"
 #~ msgstr "Anglais"
