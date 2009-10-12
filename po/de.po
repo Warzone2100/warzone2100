@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2009-10-11 23:47+0200\n"
-"PO-Revision-Date: 2009-10-12 19:03+0200\n"
+"PO-Revision-Date: 2009-10-12 20:00+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -10055,7 +10055,7 @@ msgstr "Turm mit Pulslaser"
 #: data/mp/messages/strings/names.txt:512
 #: data/mp/messages/strings/names.txt:1134
 msgid "Seraph Missile Array"
-msgstr "Seraph-Lenkraketen-Anordnung"
+msgstr "Seraph-Raketen-Anordnung"
 
 #: data/mp/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:1194
@@ -10108,7 +10108,7 @@ msgstr "Stellung mit Hochgeschwindigkeitsgeschütz"
 #: data/mp/messages/strings/names.txt:739
 #: data/mp/messages/strings/names.txt:1389
 msgid "Seraph Missile Battery"
-msgstr "Seraph-Lenkraketen-Batterie"
+msgstr "Seraph-Raketen-Batterie"
 
 #: data/mp/messages/strings/names.txt:768
 msgid "Flamer Tower"
