@@ -96,7 +96,7 @@ BOOL combShutdown(void)
 void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	WEAPON_STATS	*psStats;
-	UDWORD			xDiff, yDiff, distSquared;
+	SDWORD			xDiff, yDiff, distSquared;
 	UDWORD			dice, damLevel;
 	SDWORD			resultHitChance=0,baseHitChance=0,fireChance;
 	UDWORD			firePause;
@@ -232,23 +232,21 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	/* Now see if the target is in range  - also check not too near */
-	xDiff = abs(psAttacker->pos.x - psTarget->pos.x);
-	yDiff = abs(psAttacker->pos.y - psTarget->pos.y);
+	xDiff = psAttacker->pos.x - psTarget->pos.x;
+	yDiff = psAttacker->pos.y - psTarget->pos.y;
 	distSquared = xDiff*xDiff + yDiff*yDiff;
 	dist = sqrtf(distSquared);
 	longRange = proj_GetLongRange(psStats);
 
-	if (distSquared <= (psStats->shortRange * psStats->shortRange) &&
-		distSquared >= (psStats->minRange * psStats->minRange))
+	if ((dist <= psStats->shortRange)  && (dist >= psStats->minRange))
 	{
 		// get weapon chance to hit in the short range
 		baseHitChance = weaponShortHit(psStats,psAttacker->player);
 	}
-	else if ((SDWORD)distSquared <= longRange * longRange &&
-			 ( (distSquared >= psStats->minRange * psStats->minRange) ||
-			   ((psAttacker->type == OBJ_DROID) &&
-			   !proj_Direct(psStats) &&
-			   actionInsideMinRange(psDroid, psTarget, psStats))))
+	else if ((dist <= longRange && dist >= psStats->minRange)
+	         || (psAttacker->type == OBJ_DROID
+	             && !proj_Direct(psStats)
+	             && actionInsideMinRange(psDroid, psTarget, psStats)))
 	{
 		// get weapon chance to hit in the long range
 		baseHitChance = weaponLongHit(psStats,psAttacker->player);
