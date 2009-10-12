@@ -26,18 +26,9 @@
 
 typedef struct _weapon
 {
-	/**
-	 * Index into the global @c asWeaponStats array; thus a "reference" of
-	 * some kind to the associated stats.
-	 */
-	unsigned int    nStat;
-
+	unsigned int    nStat;		///< Index into the asWeaponStats global array
 	UDWORD          ammo;
-
-	/**
-	 * @c gameTime when this weapon was last fired.
-	 */
-	UDWORD          lastFired;
+	UDWORD          lastFired;	///< The gametime when this weapon last fired
 	UDWORD          shotsFired;
 	UDWORD          recoilValue;
 	UWORD		pitch;
