@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2009-10-11 23:47+0200\n"
-"PO-Revision-Date: 2009-09-13 14:57+0200\n"
+"PO-Revision-Date: 2009-10-12 19:03+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -9995,9 +9995,8 @@ msgid "Repair Turret Viper Half-track"
 msgstr "Reparaturarm Viper Halbketten"
 
 #: data/mp/messages/strings/names.txt:183
-#, fuzzy
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr "Miniartillerieraketen Viper Räder"
+msgstr "Miniraketen-Anordnung Viper Räder"
 
 #: data/mp/messages/strings/names.txt:184
 msgid "Bunker Buster Rockets Viper Wheels"
@@ -10008,9 +10007,8 @@ msgid "Sensor Turret Cobra Half-tracks"
 msgstr "Sensorturm Cobra Halbketten"
 
 #: data/mp/messages/strings/names.txt:194
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr "Miniartillerieraketen Cobra Halbketten"
+msgstr "Miniraketen-Anordnung Cobra Halbketten"
 
 #: data/mp/messages/strings/names.txt:372
 #: data/mp/messages/strings/names.txt:1702
@@ -10056,15 +10054,13 @@ msgstr "Turm mit Pulslaser"
 
 #: data/mp/messages/strings/names.txt:512
 #: data/mp/messages/strings/names.txt:1134
-#, fuzzy
 msgid "Seraph Missile Array"
-msgstr "Erhöht Genauigkeit von Lenkraketen"
+msgstr "Seraph-Lenkraketen-Anordnung"
 
 #: data/mp/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:1194
-#, fuzzy
 msgid "Mini-Rocket Array"
-msgstr "Miniartillerieraketen"
+msgstr "Miniraketen-Anordnung"
 
 #: data/mp/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:1692
@@ -10106,15 +10102,13 @@ msgstr "Kunststoff-Stahl-Verbundstoff Mk3"
 
 #: data/mp/messages/strings/names.txt:728
 #: data/mp/messages/strings/names.txt:1386
-#, fuzzy
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "Hochgeschwindigkeitsgeschütz"
+msgstr "Stellung mit Hochgeschwindigkeitsgeschütz"
 
 #: data/mp/messages/strings/names.txt:739
 #: data/mp/messages/strings/names.txt:1389
-#, fuzzy
 msgid "Seraph Missile Battery"
-msgstr "Angel-Raketen-Batterie"
+msgstr "Seraph-Lenkraketen-Batterie"
 
 #: data/mp/messages/strings/names.txt:768
 msgid "Flamer Tower"
@@ -10122,9 +10116,8 @@ msgstr "Turm mit Flammenwerfer"
 
 #: data/mp/messages/strings/names.txt:786
 #: data/mp/messages/strings/names.txt:1394
-#, fuzzy
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Hochgeschwindigkeitsgeschütz"
+msgstr "Aufhängung mit Hochgeschwindigkeitsgeschütz"
 
 #: data/mp/messages/strings/names.txt:805
 msgid "Automated Manufacturing"
@@ -10262,9 +10255,8 @@ msgid "Repair Cobra Tracks"
 msgstr "Reparaturarm Cobra Ketten"
 
 #: data/mp/messages/strings/names.txt:1472
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr "Schweres Geschütz Python Ketten"
+msgstr "Hochgeschwindigkeitsgeschütz Python Ketten"
 
 #: data/mp/messages/strings/names.txt:1511
 msgid "Bunker Buster Cobra Hover"
@@ -10752,16 +10744,14 @@ msgid "VTOL Lancer Bug VTOL"
 msgstr "VTOL-Lancer Bug VTOL"
 
 #: data/mp/messages/strings/names.txt:1871
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "VTOL-Hochgeschwindigkeitsgeschütz"
+msgstr "VTOL-Hochgeschwindigkeitsgeschütz Bug VTOL"
 
 #: data/mp/messages/strings/names.txt:1872
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "VTOL-Lancer Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1873
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "VTOL-Hochgeschwindigkeitsgeschütz Scorpion VTOL"
 
@@ -10770,9 +10760,8 @@ msgid "VTOL Lancer Mantis VTOL"
 msgstr "VTOL-Lancer Mantis VTOL"
 
 #: data/mp/messages/strings/names.txt:1875
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "VTOL-Hochgeschwindigkeitsgeschütz"
+msgstr "VTOL-Hochgeschwindigkeitsgeschütz Mantis VTOL"
 
 #: data/mp/messages/strings/names.txt:1879
 msgid "Repair Turret Mantis Tracks"
@@ -10875,18 +10864,16 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr "Miniraketen Cobra Ketten"
 
 #: data/mp/messages/strings/names.txt:1914
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr "Miniartillerieraketen Cobra Ketten"
+msgstr "Miniraketen-Anordnung Cobra Ketten"
 
 #: data/mp/messages/strings/names.txt:1916
 msgid "Inferno Cobra Half-Tracks"
 msgstr "Inferno Cobra Halbketten"
 
 #: data/mp/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Schweres Geschütz Python Hover"
+msgstr "Hochgeschwindigkeitsgeschütz Python Hover"
 
 #: data/mp/messages/strings/names.txt:1921
 msgid "Scourge Python Tracks"
@@ -10960,9 +10947,8 @@ msgstr "Spanisch"
 
 #: lib/framework/i18n.c:53
 #: lib/framework/i18n.c:107
-#, fuzzy
 msgid "Estonian"
-msgstr "Rumänisch"
+msgstr "Estnisch"
 
 #: lib/framework/i18n.c:55
 #: lib/framework/i18n.c:109
@@ -12830,7 +12816,7 @@ msgstr "Falsche Spielversion!"
 
 #: src/multiint.c:844
 msgid "Wrong data/mod detected by Host."
-msgstr ""
+msgstr "Spielleiter hat falsche Daten/falschen Mod gefunden."
 
 #: src/multiint.c:847
 msgid "Incorrect Password!"
@@ -12999,7 +12985,7 @@ msgstr "Der Spielleiter hat %s aus dem Spiel geworfen!"
 
 #: src/multiint.c:2574
 msgid "you are unwanted by the host"
-msgstr ""
+msgstr "Der Spielleiter möchte dich nicht"
 
 #: src/multiint.c:2665
 msgid "Host is Starting Game"
@@ -13026,11 +13012,11 @@ msgstr "Das Spiel ist voll!"
 #: src/multijoin.c:362
 #, c-format
 msgid "Kicking player, %s, because data doesn't match!"
-msgstr ""
+msgstr "Werfe Spieler %s hinaus, da Daten nicht übereinstimmen!"
 
 #: src/multijoin.c:366
 msgid "Data doesn't match!"
-msgstr ""
+msgstr "Daten stimmen nicht überein!"
 
 #: src/multijoin.c:401
 #, c-format
@@ -13113,11 +13099,11 @@ msgstr "Energie übertragen"
 #: src/multiplay.c:283
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr ""
+msgstr "Werfe Spieler %s hinaus wegen des Versuchs die Datenintegritätsprüfung zu umgehen!"
 
 #: src/multiplay.c:287
 msgid "It is not nice to cheat!"
-msgstr ""
+msgstr "Es ist nicht nett zu schummeln!"
 
 #: src/multiplay.c:1940
 msgid "Green"
