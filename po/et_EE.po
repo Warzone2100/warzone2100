@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2009-10-11 23:47+0200\n"
-"PO-Revision-Date: 2009-10-09 23:45+0200\n"
+"PO-Revision-Date: 2009-10-12 23:24+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1500,12 +1500,12 @@ msgstr "Kõik parandamisekeskused uuendati automaatselt"
 #: data/base/messages/resmessages1.rmsg:265
 #: data/mp/messages/resmessages1.rmsg:265
 msgid "Enables command turret research"
-msgstr "Võimaldab juhttorni arendamist"
+msgstr "Võimaldab komandörii arendamist"
 
 #: data/base/messages/resmessages1.rmsg:266
 #: data/mp/messages/resmessages1.rmsg:266
 msgid "Directs and collates information for command turrets"
-msgstr "Juhib ja kogub informatsiooni juhttornile"
+msgstr "Juhib ja kogub informatsiooni komandörile"
 
 #: data/base/messages/resmessages1.rmsg:267
 #: data/mp/messages/resmessages1.rmsg:267
@@ -1652,7 +1652,7 @@ msgstr "Täiustunud Energia Generaatori Jõudlus"
 #: data/base/messages/resmessages1.rmsg:331
 #: data/mp/messages/resmessages1.rmsg:331
 msgid "Burns oil more efficiently"
-msgstr "Põletab õli efektiivsemalt"
+msgstr "Põletab naftat efektiivsemalt"
 
 #: data/base/messages/resmessages1.rmsg:332
 #: data/mp/messages/resmessages1.rmsg:332
@@ -3708,7 +3708,7 @@ msgstr "Lamineeritud sulamid kombineeritud energiat juhtivate optika kimpudega"
 #: data/mp/messages/resmessages3.rmsg:96
 #: data/mp/messages/strings/resstrings.txt:96
 msgid "Armed with Revenger Surface-to-Air missile"
-msgstr "Relvastatud Kättemaksja Maa-Õhk rakettidaga"
+msgstr "Relvastatud Kättemaksja Maa-Õhk rakettidega"
 
 #: data/base/messages/resmessages3.rmsg:109
 #: data/base/messages/resmessages3.rmsg:174
@@ -5883,7 +5883,7 @@ msgstr "Pool-Roomikutega Cobra Pommitaja"
 #: data/base/messages/strings/names.txt:189
 #: data/mp/messages/strings/names.txt:192
 msgid "Command Turret Cobra Half-tracks"
-msgstr "Pool-Roomikutega Cobra Juhttorn"
+msgstr "Pool-Roomikutega Cobra Komandör"
 
 #: data/base/messages/strings/names.txt:190
 #: data/base/messages/strings/names.txt:1420
@@ -5894,7 +5894,7 @@ msgstr "Pool-Roomikutega Cobra Lancer"
 
 #: data/base/messages/strings/names.txt:191
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
-msgstr "Pool-Roomikutega Mini-Rakettida Suurtükid"
+msgstr "Pool-Roomikutega Mini-Rakettide Suurtükid"
 
 #: data/base/messages/strings/names.txt:193
 #: data/mp/messages/strings/names.txt:196
@@ -5921,7 +5921,7 @@ msgstr "Roomikutega Python Raskekahur"
 #: data/mp/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:1435
 msgid "Command Turret Python Tracks"
-msgstr "Roomikutega Python Juhttorn"
+msgstr "Roomikutega Python Komandör"
 
 #: data/base/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:202
@@ -6111,7 +6111,7 @@ msgstr "Z NULL BRAIN"
 #: data/mp/messages/strings/names.txt:549
 #: data/mp/messages/strings/names.txt:655
 msgid "Command Turret"
-msgstr "Juhttorn"
+msgstr "Komandör"
 
 #: data/base/messages/strings/names.txt:303
 #: data/mp/messages/strings/names.txt:306
@@ -6332,7 +6332,7 @@ msgstr "Skramblertorn"
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:390
 msgid "Oil Derrick"
-msgstr "Õli Puurtorn"
+msgstr "Naftapuurtorn"
 
 #: data/base/messages/strings/names.txt:384
 #: data/mp/messages/strings/names.txt:391
@@ -6838,7 +6838,7 @@ msgstr "Hävitaja SAM"
 #: data/mp/messages/strings/names.txt:514
 #: data/mp/messages/strings/names.txt:1135
 msgid "Archangel Missile"
-msgstr "Peaingli Raketid"
+msgstr "Archangel Raketid"
 
 #: data/base/messages/strings/names.txt:509
 #: data/base/messages/strings/names.txt:1118
@@ -6920,7 +6920,7 @@ msgstr "Punkripurustaja"
 #: data/mp/messages/strings/names.txt:533
 #: data/mp/messages/strings/names.txt:1196
 msgid "Mini-Rocket Pod"
-msgstr "Mini-Rakettide Kaun"
+msgstr "Mini-Raketiheitja"
 
 #: data/base/messages/strings/names.txt:527
 #: data/base/messages/strings/names.txt:1184
@@ -7417,7 +7417,7 @@ msgstr "Ingli Rakettide Patarei"
 #: data/base/messages/strings/names.txt:729
 #: data/mp/messages/strings/names.txt:740
 msgid "Archangel Missile Battery"
-msgstr "Peaingli Rakettida Patarei"
+msgstr "Archangel Rakettide Patarei"
 
 #: data/base/messages/strings/names.txt:730
 #: data/base/messages/strings/names.txt:1216
@@ -7508,7 +7508,7 @@ msgstr "Gausskahuri Hardpoint"
 #: data/base/messages/strings/names.txt:780
 #: data/mp/messages/strings/names.txt:791
 msgid "Command Relay Post"
-msgstr "Juhtimis Vahetus Jaam"
+msgstr "Juhtimisjaama Keskus"
 
 #: data/base/messages/strings/names.txt:784
 #: data/mp/messages/strings/names.txt:795
@@ -7534,12 +7534,12 @@ msgstr "Robootiline Küborgide Tootmine Mk3"
 #: data/mp/messages/resmessagesall.rmsg:759
 #: data/mp/messages/strings/names.txt:800
 msgid "Advanced Cyborg Production"
-msgstr "Advanced Cyborg Production"
+msgstr "Arenenud Küborgide Tootmine"
 
 #: data/base/messages/strings/names.txt:790
 #: data/mp/messages/strings/names.txt:801
 msgid "Advanced Cyborg Production Mk2"
-msgstr "C Mk2"
+msgstr "Arenenud Küborgide Tootmine Mk2"
 
 #: data/base/messages/strings/names.txt:791
 #: data/mp/messages/strings/names.txt:802
@@ -8588,17 +8588,17 @@ msgstr "Otsi ja Hävita Raketid"
 #: data/base/messages/strings/names.txt:1105
 #: data/mp/messages/strings/names.txt:1118
 msgid "Advanced Missile Warhead"
-msgstr "Arenenud Rakettida Lõhkepea"
+msgstr "Arenenud Rakettide Lõhkepea"
 
 #: data/base/messages/strings/names.txt:1106
 #: data/mp/messages/strings/names.txt:1119
 msgid "Advanced Missile Warhead Mk2"
-msgstr "Arenenud Rakettida Lõhkepea Mk2"
+msgstr "Arenenud Rakettide Lõhkepea Mk2"
 
 #: data/base/messages/strings/names.txt:1107
 #: data/mp/messages/strings/names.txt:1120
 msgid "Advanced Missile Warhead Mk3"
-msgstr "Arenenud Rakettida Lõhkepea Mk3"
+msgstr "Arenenud Rakettide Lõhkepea Mk3"
 
 #: data/base/messages/strings/names.txt:1108
 #: data/mp/messages/strings/names.txt:1121
@@ -8633,7 +8633,7 @@ msgstr "HEAP Rakettide Lõhkepea Mk3"
 #: data/base/messages/strings/names.txt:1114
 #: data/mp/messages/strings/names.txt:1127
 msgid "Improved Missile Loading System"
-msgstr "Täiustunud Rakettida Laadimis Süsteem"
+msgstr "Täiustunud Rakettide Laadimis Süsteem"
 
 #: data/base/messages/strings/names.txt:1125
 #: data/mp/messages/strings/names.txt:1138
@@ -8972,7 +8972,7 @@ msgstr "Tehisese"
 #: data/base/messages/strings/names.txt:1236
 #: data/mp/messages/strings/names.txt:1249
 msgid "Oil Resource"
-msgstr "Õli Resurss"
+msgstr "Naftaresurss"
 
 #: data/base/messages/strings/names.txt:1262
 #: data/mp/messages/strings/names.txt:1275
@@ -8997,7 +8997,7 @@ msgstr "Hüt"
 #: data/base/messages/strings/names.txt:1275
 #: data/mp/messages/strings/names.txt:1288
 msgid "Oil Drum"
-msgstr "Õli Tünn"
+msgstr "Naftatünn"
 
 #: data/base/messages/strings/names.txt:1293
 #: data/mp/messages/strings/names.txt:1306
@@ -9107,7 +9107,7 @@ msgstr "Ingli Rakettide Paigaldus"
 #: data/base/messages/strings/names.txt:1378
 #: data/mp/messages/strings/names.txt:1391
 msgid "Archangel Missile Emplacement"
-msgstr "Peaingli Rakettide Paigaldus"
+msgstr "Archangel Rakettide Paigaldus"
 
 #: data/base/messages/strings/names.txt:1423
 #: data/mp/messages/strings/names.txt:1878
@@ -9310,19 +9310,19 @@ msgstr "Selles treening seanssil õpid saa, kuidas ehitada efectiivne baas"
 
 #: data/base/script/text/tutorial3.slo:304
 msgid "Oil resources are key to your success"
-msgstr "Õliressursid on edukuse võtmeks"
+msgstr "Naftaressursid on edukuse võtmeks"
 
 #: data/base/script/text/tutorial3.slo:313
 msgid "To build an oil derrick, select one of your trucks"
-msgstr "Et ehitada õli puurtorni, vali üks oma veoautodest"
+msgstr "Et ehitada naftapuurtorni, vali üks oma veoautodest"
 
 #: data/base/script/text/tutorial3.slo:333
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr "Vasak-klikka õliressursil mis on radaril näidatud pulseerivana(sinine), et käskida oma veoautol ehitada"
+msgstr "Vasak-klikka naftaressursil mis on radaril näidatud pulseerivana(sinine), et käskida oma veoautol ehitada"
 
 #: data/base/script/text/tutorial3.slo:353
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr "Õlipuurtorn hetkel ei tööta. Ehita energia generaator, et õli energiaks muuta"
+msgstr "naftapuurtorn hetkel ei tööta. Ehita energia generaator, et nafta energiaks muuta"
 
 #: data/base/script/text/tutorial3.slo:370
 #: data/base/script/text/tutorial3.slo:576
@@ -9509,19 +9509,19 @@ msgstr "VTOL Scorpion BB"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1297
 msgid "Viper Command Turret Tracks"
-msgstr "Roomikutega Viper Juhttorn"
+msgstr "Roomikutega Viper Komandör"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1298
 msgid "Cobra Command Turret Tracks"
-msgstr "Roomikutega Cobra Juhttorn"
+msgstr "Roomikutega Cobra Komandör"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1299
 msgid "Scorpion Command Turret Tracks"
-msgstr "Roomikutega Scorpion Juhttorn"
+msgstr "Roomikutega Scorpion Komandör"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1300
 msgid "mantis Command Turret Tracks"
-msgstr "Roomikutega Mantis Juhttorn"
+msgstr "Roomikutega Mantis Komandör"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1301
 msgid "Cobra Lancer Tracks"
@@ -9968,9 +9968,8 @@ msgid "Repair Turret Viper Half-track"
 msgstr "Pool-Roomikutega Viper Remonditorn"
 
 #: data/mp/messages/strings/names.txt:183
-#, fuzzy
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr "Ratastega Viper Mini-Rakettide Suurtükkid"
+msgstr "Ratastega Viper MRA"
 
 #: data/mp/messages/strings/names.txt:184
 msgid "Bunker Buster Rockets Viper Wheels"
@@ -9981,9 +9980,8 @@ msgid "Sensor Turret Cobra Half-tracks"
 msgstr "Pool-Roomikutega Cobra Sensortorn"
 
 #: data/mp/messages/strings/names.txt:194
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr "Pool-Roomikutega Mini-Rakettida Suurtükid"
+msgstr "Pool-Roomikutega Cobra MRA"
 
 #: data/mp/messages/strings/names.txt:372
 #: data/mp/messages/strings/names.txt:1702
@@ -10029,15 +10027,13 @@ msgstr "Pulsslaseri Torn"
 
 #: data/mp/messages/strings/names.txt:512
 #: data/mp/messages/strings/names.txt:1134
-#, fuzzy
 msgid "Seraph Missile Array"
-msgstr "Suurendab Raketi täpsust"
+msgstr "Seraph Rakettide Paigaldus"
 
 #: data/mp/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:1194
-#, fuzzy
 msgid "Mini-Rocket Array"
-msgstr "Mini-Rakettide Süürtükid"
+msgstr "MRA"
 
 #: data/mp/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:1692
@@ -10079,15 +10075,13 @@ msgstr "Terasbetoon Mk3"
 
 #: data/mp/messages/strings/names.txt:728
 #: data/mp/messages/strings/names.txt:1386
-#, fuzzy
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "Hüperkiire Kahur"
+msgstr "Hüperkiire Kahuri Paigaldus"
 
 #: data/mp/messages/strings/names.txt:739
 #: data/mp/messages/strings/names.txt:1389
-#, fuzzy
 msgid "Seraph Missile Battery"
-msgstr "Ingli Rakettide Patarei"
+msgstr "Seraphi Rakettide Patarei"
 
 #: data/mp/messages/strings/names.txt:768
 msgid "Flamer Tower"
@@ -10095,9 +10089,8 @@ msgstr "Flamer Guard Tower"
 
 #: data/mp/messages/strings/names.txt:786
 #: data/mp/messages/strings/names.txt:1394
-#, fuzzy
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Hüperkiire Kahur"
+msgstr "Hüperkiire Kahuri Hardpoint"
 
 #: data/mp/messages/strings/names.txt:805
 msgid "Automated Manufacturing"
@@ -10235,9 +10228,8 @@ msgid "Repair Cobra Tracks"
 msgstr "Roomikutega Cobra Remont"
 
 #: data/mp/messages/strings/names.txt:1472
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr "Roomikutega Python Raskekahur"
+msgstr "Roomikutega Python Hüperkiire Kahur"
 
 #: data/mp/messages/strings/names.txt:1511
 msgid "Bunker Buster Cobra Hover"
@@ -10585,17 +10577,17 @@ msgstr "EMP Raketiheitja"
 #: data/mp/messages/strings/names.txt:1804
 #: data/mp/messages/strings/names.txt:1805
 msgid "Command Turret II"
-msgstr "Juhttorn II"
+msgstr "Komandör II"
 
 #: data/mp/messages/strings/names.txt:1806
 #: data/mp/messages/strings/names.txt:1807
 msgid "Command Turret III"
-msgstr "Juhttorn III"
+msgstr "Komandör III"
 
 #: data/mp/messages/strings/names.txt:1808
 #: data/mp/messages/strings/names.txt:1809
 msgid "Command Turret IV"
-msgstr "Juhttorn IV"
+msgstr "Komandör IV"
 
 #: data/mp/messages/strings/names.txt:1819
 msgid "Heavy Repair Turret Cobra Hover"
@@ -10724,27 +10716,24 @@ msgid "VTOL Lancer Bug VTOL"
 msgstr "VTOL Bug Lancer"
 
 #: data/mp/messages/strings/names.txt:1871
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "VTOL Hüperkiire Kahur"
+msgstr "VTOL Bug Hüperkiire Kahur"
 
 #: data/mp/messages/strings/names.txt:1872
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "VTOL Scorpion Lancer"
 
 #: data/mp/messages/strings/names.txt:1873
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "VTOL Scorpion HPV Kahur"
+msgstr "VTOL Scorpion Hüperkiire Kahur"
 
 #: data/mp/messages/strings/names.txt:1874
 msgid "VTOL Lancer Mantis VTOL"
 msgstr "VTOL Mantis Lancer"
 
 #: data/mp/messages/strings/names.txt:1875
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "VTOL Hüperkiire Kahur"
+msgstr "VTOL Mantis Hüperkiire Kahur"
 
 #: data/mp/messages/strings/names.txt:1879
 msgid "Repair Turret Mantis Tracks"
@@ -10768,19 +10757,19 @@ msgstr "VTOL Scorpion Punkripurustaja"
 
 #: data/mp/messages/strings/names.txt:1886
 msgid "Command Turret Viper Tracks"
-msgstr "Roomikutega Viper Juhttorn"
+msgstr "Roomikutega Viper Komandör"
 
 #: data/mp/messages/strings/names.txt:1887
 msgid "Command Turret Cobra Tracks"
-msgstr "Roomikutega Cobra Juhttorn"
+msgstr "Roomikutega Cobra Komandör"
 
 #: data/mp/messages/strings/names.txt:1888
 msgid "Command Turret Scorpion Tracks"
-msgstr "Roomikutega Scorpion Juhttorn"
+msgstr "Roomikutega Scorpion Komandör"
 
 #: data/mp/messages/strings/names.txt:1889
 msgid "Command Turret Mantis Tracks"
-msgstr "Roomikutega Mantis Juhttorn"
+msgstr "Roomikutega Mantis Komandör"
 
 #: data/mp/messages/strings/names.txt:1891
 msgid "Lancer Cobra Tracks"
@@ -10847,18 +10836,16 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr "Roomikutega Cobra Mini-Raketid"
 
 #: data/mp/messages/strings/names.txt:1914
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr "Roomikutega Cobra Mini-Rakettide Suurtükk"
+msgstr "Roomikutega Cobra MRA"
 
 #: data/mp/messages/strings/names.txt:1916
 msgid "Inferno Cobra Half-Tracks"
 msgstr "Pool-Roomikutega Cobra Põrgupõletaja"
 
 #: data/mp/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Hõljukiga Python Raskekahur"
+msgstr "Hõljukiga Python Hüperkiire Kahur"
 
 #: data/mp/messages/strings/names.txt:1921
 msgid "Scourge Python Tracks"
@@ -11334,7 +11321,7 @@ msgstr "Mängija Väjavisatud"
 
 #: src/display.c:1690
 msgid "Cannot Build. Oil Resource Burning."
-msgstr "EI Saa Ehitada. Õli Resurss Põleb."
+msgstr "EI Saa Ehitada. Naftaresurss Põleb."
 
 #: src/display.c:1886
 #: src/display.c:2515
@@ -11344,7 +11331,7 @@ msgstr "%s - Kahju %d%% - Kogemus %d, %s"
 
 #: src/display.c:2096
 msgid "Truck ordered to build Oil Derrick"
-msgstr "Veoautol kästi Õli Puurtorn ehitada"
+msgstr "Veoautol kästi Naftapuurtorn ehitada"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -12443,7 +12430,7 @@ msgstr "Vali Komandör 4"
 
 #: src/keymap.c:339
 msgid "Select Commander 5"
-msgstr "Select Commander 5"
+msgstr "Vali Komandör 5"
 
 #: src/keymap.c:340
 msgid "Select Commander 6"
@@ -12511,7 +12498,7 @@ msgstr "Keera Vasakule"
 
 #: src/keymap.c:361
 msgid "Reset Pitch"
-msgstr "Reset Pitch"
+msgstr "Tühista Liikumine"
 
 #: src/keymap.c:362
 msgid "Rotate Right"
@@ -12555,7 +12542,7 @@ msgstr "Vaata Läände"
 
 #: src/keymap.c:372
 msgid "View next Oil Derrick"
-msgstr "Näita Järgmist Õli Puurtorni"
+msgstr "Näita Järgmist Naftapuurtorni"
 
 #: src/keymap.c:373
 msgid "View next Repair Unit"
@@ -12583,11 +12570,11 @@ msgstr "Konsool Sisse/Välja"
 
 #: src/keymap.c:381
 msgid "Center View on HQ"
-msgstr "Centre View on HQ"
+msgstr "Kesk vaade Juhtimiskeskusele"
 
 #: src/keymap.c:383
 msgid "View Unassigned Units"
-msgstr "View Unassigned Units"
+msgstr "Näita määramata üksusi"
 
 #: src/keymap.c:385
 msgid "Fire at Will"
@@ -12595,7 +12582,7 @@ msgstr "Vaba Tuli"
 
 #: src/keymap.c:386
 msgid "Return to HQ"
-msgstr "Naase HQ Juurde"
+msgstr "Naase Juhtimiskeskuse Juurde"
 
 #: src/keymap.c:393
 msgid "Send Text Message"
@@ -12611,15 +12598,15 @@ msgstr "Vali kõok raskesti kahjustatud üksused"
 
 #: src/keymap.c:414
 msgid "Select all Half-tracks"
-msgstr "vali kõik pool-roomikud"
+msgstr "Vali kõik pool-roomikud"
 
 #: src/keymap.c:415
 msgid "Select all Hovers"
-msgstr "vali kõik hõljukid"
+msgstr "Vali kõik hõljukid"
 
 #: src/keymap.c:417
 msgid "Select all Units on Screen"
-msgstr "vali kõik üksused Ekraanil"
+msgstr "Vali kõik üksused Ekraanil"
 
 #: src/keymap.c:418
 msgid "Select all Tracks"
@@ -12647,15 +12634,15 @@ msgstr "Vali järgmine tehas"
 
 #: src/keymap.c:428
 msgid "Select next Research Facility"
-msgstr "vali järgmine uurimiskeskus"
+msgstr "Vali järgmine uurimiskeskus"
 
 #: src/keymap.c:429
 msgid "Select next Power Generator"
-msgstr "vali järgmine energiageneraator"
+msgstr "Vali järgmine energiageneraator"
 
 #: src/keymap.c:430
 msgid "Select next Cyborg Factory"
-msgstr "vali järgmine küborgi tehas"
+msgstr "Vali järgmine küborgi tehas"
 
 #: src/keymap.c:431
 msgid "Toggle reopening the build menu"
@@ -12700,7 +12687,7 @@ msgstr "Jätka Mängu"
 #: src/multigifts.c:326
 #, c-format
 msgid "You found %u power in an oil drum"
-msgstr "Sa leidsid õli tünnist %u energiat"
+msgstr "Sa leidsid naftatünnist %u energiat"
 
 #: src/multigifts.c:169
 #, c-format
@@ -12791,7 +12778,7 @@ msgstr "Vale Mängu versioon"
 
 #: src/multiint.c:844
 msgid "Wrong data/mod detected by Host."
-msgstr ""
+msgstr "Vale info/mode võõrustaja poolt avastatud"
 
 #: src/multiint.c:847
 msgid "Incorrect Password!"
@@ -12925,7 +12912,7 @@ msgstr "Tiim"
 
 #: src/multiint.c:1781
 msgid "Waiting for other players"
-msgstr "Teist mängijate ootamine"
+msgstr "Teiste mängijate ootamine"
 
 #: src/multiint.c:1787
 msgid "Click when ready"
@@ -12958,7 +12945,7 @@ msgstr "Võõrustaja lõi %s mängust välja!"
 
 #: src/multiint.c:2574
 msgid "you are unwanted by the host"
-msgstr ""
+msgstr "sa oled võõrustaja poolt soovimatu isik"
 
 #: src/multiint.c:2665
 msgid "Host is Starting Game"
@@ -12985,11 +12972,11 @@ msgstr "Mäng on Täis"
 #: src/multijoin.c:362
 #, c-format
 msgid "Kicking player, %s, because data doesn't match!"
-msgstr ""
+msgstr "Mängija %s väljalöömine, sest info ei klapi!"
 
 #: src/multijoin.c:366
 msgid "Data doesn't match!"
-msgstr ""
+msgstr "Info ei klapi!"
 
 #: src/multijoin.c:401
 #, c-format
@@ -13072,11 +13059,11 @@ msgstr "Anna Mängijale Energiat"
 #: src/multiplay.c:283
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr ""
+msgstr "Mängija %s väljalöömine, sest ta proovis infokontrollist mõõda pääseda!"
 
 #: src/multiplay.c:287
 msgid "It is not nice to cheat!"
-msgstr ""
+msgstr "Pole ilus sohki teha"
 
 #: src/multiplay.c:1940
 msgid "Green"
@@ -13378,200 +13365,136 @@ msgstr "Versioon %s%s%s%s"
 
 #~ msgid "VTOL HPV Cannon Bug VTOL"
 #~ msgstr "VTOL Bug HPV Kahur"
-
 #~ msgid "VTOL HPV Cannon Mantis VTOL"
 #~ msgstr "VTOL Mantis HPV Kahur"
-
 #~ msgid "HPV Cannon Python Hover"
 #~ msgstr "Hõljukiga Python HPV Kahur"
-
 #~ msgid "you are being a jerk."
 #~ msgstr "sa oled idikas"
-
 #~ msgid "English"
 #~ msgstr "Inglise Keel"
-
 #~ msgid "Basque"
 #~ msgstr "Baski Keel"
-
 #~ msgid "Latvian"
 #~ msgstr "Läti Keel"
-
 #~ msgid "Norwegian (Nynorsk)"
 #~ msgstr "Norra Keel (Nynorsk)"
-
 #~ msgid "Swedish (Sweden)"
 #~ msgstr "Rootsi Keel (Sweden)"
-
 #~ msgid "Swedish"
 #~ msgstr "Rootsi Keel"
-
 #~ msgid "Turkish"
 #~ msgstr "Türgi Keel"
-
 #~ msgid "Uzbek (Cyrillic)"
 #~ msgstr "Uspeki Keel (Cyrillic)"
-
 #~ msgid "Heavy Machinegun Cobra Half-trackS"
 #~ msgstr "Pool-Roomikutega Cobra Raskekuulipildujaga"
-
 #~ msgid "Peperpot Emplacement"
 #~ msgstr "Kiirmortiiri Paigaldus"
-
 #~ msgid "Command turret MkII"
 #~ msgstr "Juhttorn MkII"
-
 #~ msgid "Command turret MkIV"
 #~ msgstr "Juhttorn MkIV"
-
 #~ msgid "Cursor Mode"
 #~ msgstr "Kursor Mode"
-
 #~ msgid "Hardware"
 #~ msgstr "Riistvara"
-
 #~ msgid "Viper Light Cannon Wheels"
 #~ msgstr "Ratastega Viper Kergekahur"
-
 #~ msgid "Viper Flamer Wheels"
 #~ msgstr "Ratastega Viper Leegiheitja"
-
 #~ msgid "Viper Sensor Wheels"
 #~ msgstr "Ratastega Viper Sensor"
-
 #~ msgid "Viper Light Cannon Tracks"
 #~ msgstr "Roomikutega Viper Kergekahur"
-
 #~ msgid "Cobra Heavy Machinegun Half-track"
 #~ msgstr "Pool-Roomikutega Cobra Raskekuulipilduja"
-
 #~ msgid "Cobra Mortar Half-track"
 #~ msgstr "Pool-Roomikutega Cobra Mortiir"
-
 #~ msgid "Cobra Light Cannon Tracks"
 #~ msgstr "Roomikutega Cobra Kergekahur"
-
 #~ msgid "Viper Medium Cannon Tracks"
 #~ msgstr "Roomikutega Viper Keskkahur"
-
 #~ msgid "Viper Repair Wheels"
 #~ msgstr "Ratastega Viper Remont"
-
 #~ msgid "Viper Repair Half-track"
 #~ msgstr "Viper Repair Half-track"
-
 #~ msgid "Viper Machine Gun Wheels"
 #~ msgstr "Ratastega Viper Kuulipilduja"
-
 #~ msgid "Viper Twin Machinegun Wheels"
 #~ msgstr "Ratastega Viper Kaksikkuulipilduja"
-
 #~ msgid "Viper Twin Machinegun Half-track"
 #~ msgstr "Pool-Roomikutega Viper Kaksikkuulipilduja"
-
 #~ msgid "Viper Heavy Machinegun Half-track"
 #~ msgstr "Pool-Roomikutega Viper Raskekuulipilduja"
-
 #~ msgid "Viper Heavy Machinegun Tracks"
 #~ msgstr "Roomikutega Viper Raskekuulipilduja"
-
 #~ msgid "Viper Lancer Wheels"
 #~ msgstr "Ratastega Viper Lancer"
-
 #~ msgid "Viper Mini-Pod Rockets Wheels"
 #~ msgstr "Ratastega Viper Mini-Raketid"
-
 #~ msgid "Viper Mini-Rocket Artillery Wheels"
 #~ msgstr "Ratastega Viper Mini-Rakettide Suurtükk"
-
 #~ msgid "Viper Bunker Buster Rockets Wheels"
 #~ msgstr "Ratastega Viper Punkripurustaja"
-
 #~ msgid "Cobra Heavy Cannon Tracks"
 #~ msgstr "Roomikutega Cobra Raskekahur"
-
 #~ msgid "Cobra Sensor Half-track"
 #~ msgstr "Pool-Roomikutega Cobra Sensor"
-
 #~ msgid "Cobra Bombard Half-track"
 #~ msgstr "Pool-Roomikutega Cobra Pommitaja"
-
 #~ msgid "Cobra Command Turret Half-track"
 #~ msgstr "Pool-Roomikutega Cobra Juhttorn"
-
 #~ msgid "Cobra Lancer Half-track"
 #~ msgstr "Pool-Roomikutega Cobra Lancer"
-
 #~ msgid "Cobra Mini-Rocket Artillery Half-track"
 #~ msgstr "Pool-Roomikutega Cobra Mini Rakettide Suurtükk"
-
 #~ msgid "Python Light Cannon Tracks"
 #~ msgstr "Roomiktega Python Kergekahur"
-
 #~ msgid "Python Medium Cannon Tracks"
 #~ msgstr "Roomikutega Python Keskkahur"
-
 #~ msgid "Python Commander Tracks"
 #~ msgstr "Roomikutega Python Raskekahur"
-
 #~ msgid "Mini-Pod"
 #~ msgstr "Mini-Raketid"
-
 #~ msgid "VTOL Mini-Pod"
 #~ msgstr "VTOL Mini-Raketid"
-
 #~ msgid "Machine Gunner"
 #~ msgstr "Kuulipildur"
-
 #~ msgid "Mini-Pod Rockets"
 #~ msgstr "Mini-Raketid"
-
 #~ msgid "Machine Gun Artifact"
 #~ msgstr "Kuulipilduja Tehisese"
-
 #~ msgid "HMG Cobra Half-tracks"
 #~ msgstr "Pool-Roomikutega Cobra HMG"
-
 #~ msgid "Commander Python Tracks"
 #~ msgstr "Roomikutega Python Komandör"
-
 #~ msgid "Mini-Pod Artillery"
 #~ msgstr "Mini-Rakettide Suurtükid"
-
 #~ msgid "Mini-Pod Battery"
 #~ msgstr "Mini-Rakettide Patarei"
-
 #~ msgid "Stabilized Mini-Pods"
 #~ msgstr "Stabiliseeritud Mini-Raketid"
-
 #~ msgid "Stabilized Mini-Pods Mk2"
 #~ msgstr "Stabiliseeritud Mini-Raketid Mk2"
-
 #~ msgid "HE Mini-Pods"
 #~ msgstr "HE Mini-Raketid"
-
 #~ msgid "HE Mini-Pods Mk2"
 #~ msgstr "HE Mini-Raketid Mk2"
-
 #~ msgid "HE Mini-Pods Mk3"
 #~ msgstr "HE Mini-Raketid Mk3"
-
 #~ msgid "HEAP Mini-Pods"
 #~ msgstr "HEAP Mini-Raketid"
-
 #~ msgid "HEAP Mini-Pods Mk2"
 #~ msgstr "HEAP Mini-Raketid Mk2"
 
 #, fuzzy
 #~ msgid "HEAP Mini-Pods Mk3"
 #~ msgstr "HEAP Mini-Raketid Mk3"
-
 #~ msgid "Fast Fire Mini-Pods"
 #~ msgstr "Kiirtule Mini-Raketid"
-
 #~ msgid "Fast Fire Mini-Pods Mk2"
 #~ msgstr "Kiirtule Mini-Raketid Mk2"
-
 #~ msgid "Fast Fire Mini-Pods Mk3"
 #~ msgstr "Kiirtule Mini-Raketid Mk3"
 
@@ -13590,336 +13513,226 @@ msgstr "Versioon %s%s%s%s"
 #, fuzzy
 #~ msgid "Cluster Bombs Bug VTOL"
 #~ msgstr "VTOL Bug Parvpommitus"
-
 #~ msgid "Energy bars display toggled"
 #~ msgstr "Energia riba kuvamine vahetatud"
-
 #~ msgid "The host has left the game!"
 #~ msgstr "Võõrustaja lahkus mängust!"
-
 #~ msgid "NEXUS Link Tower"
 #~ msgstr "NEXUS Link Torn"
-
 #~ msgid "Whirlwind AATurret"
 #~ msgstr "Tuulispasa AAtorn"
-
 #~ msgid "Power Upgrade"
 #~ msgstr "Energia Uuendus"
-
 #~ msgid "Viper Wheels Machinegun"
 #~ msgstr "Ratastega Viper Kuulipilduja"
-
 #~ msgid "Viper Wheels Twin Machinegun"
 #~ msgstr "Ratastega Viper Kaksikkuulipilduja"
-
 #~ msgid "Viper Wheels Heavy Machinegun"
 #~ msgstr "Ratastega Viper Raskekuulipilduja"
-
 #~ msgid "Cobra Wheels Heavy Machinegun"
 #~ msgstr "Ratastega Cobra Raskekuulipilduja"
-
 #~ msgid "Cobra Hover Heavy Machinegun"
 #~ msgstr "Hõljukiga Cobra Raskekuulipilduja"
-
 #~ msgid "Viper Tracks Machinegun"
 #~ msgstr "Roomikutega Viper Kuulipilduja"
-
 #~ msgid "Viper Tracks Twin Machinegun"
 #~ msgstr "Roomikutega Viper Kaksikkuulipilduja"
-
 #~ msgid "Viper Tracks Heavy Machinegun"
 #~ msgstr "Roomikutega Viper Raskekuulipilduja"
-
 #~ msgid "Cobra Tracks Heavy Machinegun"
 #~ msgstr "Roomikutega Cobra Raskekuulipilduja"
-
 #~ msgid "Cobra Hover Medium Cannon"
 #~ msgstr "Hõljukiga Cobra Keskkahuriga"
-
 #~ msgid "Scorpion Hover Medium Cannon"
 #~ msgstr "Hõljukiga Scorpion Keskkahur"
-
 #~ msgid "Scorpion Tracks Medium Cannon"
 #~ msgstr "Roomikutega Scorpion Keskkahur"
-
 #~ msgid "Python Hover Medium Cannon"
 #~ msgstr "Hõljukiga Python Keskkahur"
-
 #~ msgid "Python Hover Heavy Cannon"
 #~ msgstr "Hõljukiga Python Raskekahur"
-
 #~ msgid "Python Tracks Heavy Cannon"
 #~ msgstr "Roomikutega Python Raskekahur"
-
 #~ msgid "Mantis Tracks Railgun"
 #~ msgstr "Roomikutega Mantis Railkahur"
-
 #~ msgid "Mantis Tracks Pulse Laser"
 #~ msgstr "Roomikutega Mantis Pulsslaser"
-
 #~ msgid "Python Tracks Lancer"
 #~ msgstr "Roomikutega Python Lancer"
-
 #~ msgid "Mantis Tracks Lancer"
 #~ msgstr "Roomikutega Mantis Lancer"
-
 #~ msgid "Vengeance Tracks Tank Killer"
 #~ msgstr "Roomikutega Vengeance Tankitapja"
-
 #~ msgid "Tiger Tracks Heavy Cannon"
 #~ msgstr "Roomikutega Tiger Raskekahur"
-
 #~ msgid "Tiger Tracks Needle Gun"
 #~ msgstr "Roomikutega Tiger Nõelakahur"
-
 #~ msgid "Vengeance Tracks Needle Gun"
 #~ msgstr "Roomikutega Vengeance Nõelakahur"
-
 #~ msgid "Scorpion Cluster Bomb VTOL"
 #~ msgstr "VTOL Scorpion Parvpommitus"
-
 #~ msgid "Scorpion Bunker Buster VTOL"
 #~ msgstr "VTOL Scorpion Punkripurustaja"
-
 #~ msgid "Bug Lancer VTOL"
 #~ msgstr "VTOL Bud Lancer"
-
 #~ msgid "Bug HPV VTOL"
 #~ msgstr "VTOL Bug HPV"
-
 #~ msgid "Scorpion HPV VTOL"
 #~ msgstr "VTOL Scorpion HPV"
-
 #~ msgid "Mantis Lancer VTOL"
 #~ msgstr "VTOL Mantis Lancer"
-
 #~ msgid "Mantis HPV VTOL"
 #~ msgstr "VTOL Mantis HPV"
-
 #~ msgid "Cobra Repair Tracks"
 #~ msgstr "Roomikutega Cobra Remont"
-
 #~ msgid "Mantis Repair Tracks"
 #~ msgstr "Roomikutega Mantis Remont"
-
 #~ msgid "Python Tank Killer Tracks"
 #~ msgstr "Roomikutega Python Tankitapja"
-
 #~ msgid "Load Campaign"
 #~ msgstr "Laadi Kampaania"
-
 #~ msgid "One Player Skirmish"
 #~ msgstr "Ühe Mängia Lahing"
-
 #~ msgid "Full"
 #~ msgstr "Täis"
-
 #~ msgid "Minimal"
 #~ msgstr "Minimaalne"
-
 #~ msgid "Played"
 #~ msgstr "Mängitud"
-
 #~ msgid "Campaign One Full Version Test Message"
 #~ msgstr "Kampaania Üks Täis Versiooni Testi Sõnum"
-
 #~ msgid "New Paradigm Transmission"
 #~ msgstr "Uus Paradigmi Ülekanne"
-
 #~ msgid "The New Paradigm have been driven from this zone."
 #~ msgstr "Uus Paradigmid on selles piirkonnas ära aetud."
-
 #~ msgid "Establish a forward base near the site of the Research Centre."
 #~ msgstr "Raja edasine baas Uurimiskeskuse lähedusse."
-
 #~ msgid "Commander"
 #~ msgstr "Komandör"
-
 #~ msgid "Congratulations on defeating the New Paradigm."
 #~ msgstr "Õnnitlused Uus Paradigmi võitmise puhul."
-
 #~ msgid "This sector is now secure."
 #~ msgstr "See sector on nüüd kindlustatud."
-
 #~ msgid "When we failed to respond it became threatening."
 #~ msgstr "Kui me ei suutnud vastata muutus see ähvardavaks."
-
 #~ msgid "Nexus removed itself leaving no trace"
 #~ msgstr "Nexus eemaldas end jätmata jälgi"
-
 #~ msgid "The Nexus Intruder Program has links with the Reed corporation."
 #~ msgstr "Nexuse Sissetungi Programmil on ühendus Reed Korporatsiooniga."
-
 #~ msgid "Nexus has technology and weapons and is not friendly."
 #~ msgstr "Nexusel on tehnoloogia ja relvad ja ei ole sõbralik."
-
 #~ msgid "Warriors of the Collective..."
 #~ msgstr "Collectivite Sõdurid..."
-
 #~ msgid "Destroy and kill all who resist the Machine."
 #~ msgstr "Hävitage ja tapke kõik kes Masinatele vastu hakkavad."
-
 #~ msgid "Attack!"
 #~ msgstr "Rünnak!"
-
 #~ msgid "Analysis of the reactor site indicates The Collective"
 #~ msgstr "Reactori paiga analüüs näitab Collective"
-
 #~ msgid "were preparing to route its power to this location."
 #~ msgstr "me valmistame energiat sellesse asukohta suunama."
-
 #~ msgid "Argle Bargle - Please Remove when some text here!"
 #~ msgstr "Argle Bargle - Palun Eemaldada kui siin on mingi tekst!"
-
 #~ msgid "Proceed with caution. Scout and confirm Gamma are not contaminated."
 #~ msgstr "Jätkake ettevaatusega.Luurake ja kinnitaga, et Gamma ei ole nakkusohtlik."
-
 #~ msgid "Secure this zone."
 #~ msgstr "Kindlustage see tsoon."
-
 #~ msgid "A relief force will be sent as soon as the zone is cleared of all enemy."
 #~ msgstr "Abiväed saadetakse niipea, kui tsoon on vaenlastest puhastatud."
-
 #~ msgid "Be wary of attempts by NEXUS to control and infiltrate your systems."
 #~ msgstr "Ole ettevaatlik NEXUSe üritustele sinus süsteem kontrollida ja neist läbi tungida."
-
 #~ msgid "End Of Briefing."
 #~ msgstr "Briifingu Lõpp."
-
 #~ msgid "Armed Scavengers Approaching"
 #~ msgstr "Relvastatud Mässajad Lähenevad"
-
 #~ msgid "Civilian Rescued"
 #~ msgstr "Tsiviilisik Päästetud"
-
 #~ msgid "Civilians Rescued"
 #~ msgstr "Tsiviilisikud Päästetud"
-
 #~ msgid "Unit Rescued"
 #~ msgstr "Üksus Päästetud"
-
 #~ msgid "Units Rescued"
 #~ msgstr "Üksused Päästetud"
-
 #~ msgid "Group Rescued"
 #~ msgstr "Grupp Päästetud"
-
 #~ msgid "Unit Captured"
 #~ msgstr "Üksus Vallutatud"
-
 #~ msgid "Group Captured"
 #~ msgstr "Grupp Vallutatud"
-
 #~ msgid "Structure Captured"
 #~ msgstr "Ehitis Vallutattud"
-
 #~ msgid "Structure Destroyed"
 #~ msgstr "Ehitis Vallutatud"
-
 #~ msgid "Structure Infected"
 #~ msgstr "Ehitis Nakatunud"
-
 #~ msgid "Unit Infected"
 #~ msgstr "Üksus Nakatunud"
-
 #~ msgid "Group Infected"
 #~ msgstr "Grupp Nakatunud"
-
 #~ msgid "Primary Objective Completed"
 #~ msgstr "Peamine Eesmärk Lõpetatud"
-
 #~ msgid "Secondary Objective Completed"
 #~ msgstr "Teisejärguline Eesmärk Lõpetatud"
-
 #~ msgid "Time Limit Exceeded"
 #~ msgstr "Ajalimiit Ületatud"
-
 #~ msgid "Out Of Time"
 #~ msgstr "Aeg Läbi"
-
 #~ msgid "Enemy Escaped"
 #~ msgstr "Vaenlane Põgenes"
-
 #~ msgid "Enemy Transport Landing"
 #~ msgstr "Vaenlase Transport Maandub"
-
 #~ msgid "Incoming Airstrike"
 #~ msgstr "Saabuv Õhurünnak"
-
 #~ msgid "Team Alpha Eradicated"
 #~ msgstr "Rühm Alfa Hävitatud"
-
 #~ msgid "Team Beta Eradicated"
 #~ msgstr "Rühm Beeta Hävitatud"
-
 #~ msgid "Team Gamma Eradicated"
 #~ msgstr "Rühm Gamma Hävitatud"
-
 #~ msgid "Team Alpha Rescued"
 #~ msgstr "Rühm Alfa Päästatud"
-
 #~ msgid "Team Beta Rescued"
 #~ msgstr "Rühm Beeta Päästetud"
-
 #~ msgid "Team Gamma Rescued"
 #~ msgstr "Rühm Gamma Päästetud"
-
 #~ msgid "Team Alpha Liberated"
 #~ msgstr "Rühm Alfa Vabastatud"
-
 #~ msgid "Team Beta Liberated"
 #~ msgstr "Rühm Beeta Vabastatud"
-
 #~ msgid "Team Gamma Liberated"
 #~ msgstr "Rühm Gamma Vabastatud"
-
 #~ msgid "Civilians Eradicated"
 #~ msgstr "Tsiviilisikud Hävitatud"
-
 #~ msgid "Civilians Liberated"
 #~ msgstr "Tsiviilisikud Vabastatud"
-
 #~ msgid "Enemy Eradicated"
 #~ msgstr "Vaenlane Hävitatud"
-
 #~ msgid "New Paradigm base eradicated"
 #~ msgstr "Uus Paradigmi baas hävitatud"
-
 #~ msgid "Collective base eradicated"
 #~ msgstr "Collectivite baas hävitatud"
-
 #~ msgid "Nexus base eradicated"
 #~ msgstr "Nexuse baas hävitatud"
-
 #~ msgid "LasSat firing"
 #~ msgstr "LaserSatelliit tulistab"
-
 #~ msgid "LasSats firing"
 #~ msgstr "LaserSatelliidid tulistavad"
-
 #~ msgid "Satellite Uplink"
 #~ msgstr "Satelliite Uplink"
-
 #~ msgid "NASDA Central"
 #~ msgstr "NASDA Keskus"
-
 #~ msgid "SAM Site"
 #~ msgstr "SAM Plats"
-
 #~ msgid "Now left click the Viper Body"
 #~ msgstr "Nüüd vasak-klikka Viper Kerel"
-
 #~ msgid "Select the Vehicle Propulsion icon"
 #~ msgstr "Vali Masina Liikumissüsteemi ikoonil"
-
 #~ msgid "Presently unused"
 #~ msgstr "Hetkel kasutamata"
-
 #~ msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
 #~ msgstr "TRANSPORDI MISSIOON: Päästa Tsiviilisikud Ohjeldamis Laagris"
-
 #~ msgid "R-Wpn-MG-Damage11"
 #~ msgstr "R-Wpn-MG-Damage11"
-
 #~ msgid "R-Struc-Power-Cam2"
 #~ msgstr "R-Struc-Power-Cam2"
+
