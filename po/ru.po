@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2009-10-11 23:47+0200\n"
-"PO-Revision-Date: 2009-08-22 16:28+0600\n"
+"PO-Revision-Date: 2009-10-14 16:59+0600\n"
 "Last-Translator: Max <Raptor9000@yandex.ru>\n"
 "Language-Team: Russian <>\n"
 "MIME-Version: 1.0\n"
@@ -9645,40 +9645,34 @@ msgid "Viper Flamer Half-Track"
 msgstr "Огнемёт Гадюка на полугусеничном ходу"
 
 #: data/mp/messages/resmessages1.rmsg:148
-#, fuzzy
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "бронированная вышка с ракетницей Лансер"
+msgstr "бронированная охранная вышка с ракетницей Лансер"
 
 #: data/mp/messages/resmessages1.rmsg:552
 #: data/mp/messages/resmessages1.rmsg:565
 #: data/mp/messages/resmessages2.rmsg:747
-#, fuzzy
 msgid "Best Targets: Vehicles, Hardpoints"
 msgstr "лучшие цели: наземный транспорт и орудийные установки"
 
 #: data/mp/messages/resmessages23.rmsg:160
 #: data/mp/messages/resmessages2.rmsg:732
 #: data/mp/messages/resmessages3.rmsg:862
-#, fuzzy
 msgid "Bomb Upgrade"
-msgstr "улучшенный бомбприцел"
+msgstr "Обновление бомб"
 
 #: data/mp/messages/resmessages23.rmsg:161
-#, fuzzy
 msgid "Improved trinitramine explosive formula"
-msgstr "Улучшенные взрывчатые снаряды"
+msgstr "Улучшенные тройная формула взрывчатки для мин"
 
 #: data/mp/messages/resmessages23.rmsg:162
 #: data/mp/messages/resmessages2.rmsg:734
 #: data/mp/messages/resmessages3.rmsg:864
-#, fuzzy
 msgid "Increases Bombing damage"
-msgstr "Увеличение урона пушки"
+msgstr "Увеличение урона бомбардировки"
 
 #: data/mp/messages/resmessages3.rmsg:304
-#, fuzzy
 msgid "Armored guard tower with Pulse Laser"
-msgstr "Бронированная вышка с огнеметом"
+msgstr "Бронированная охранная башня с импульсным лазером"
 
 #: data/mp/messages/resmessagesall.rmsg:186
 msgid "Cyborg Transport Available"
@@ -9979,9 +9973,8 @@ msgid "Repair Turret Viper Half-track"
 msgstr "Ремонтная Гадюка на полугусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:183
-#, fuzzy
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr "Батарея миниракет \"Гадюка\" на колёсах"
+msgstr "Блок миниракет Гадюка на колёсах"
 
 #: data/mp/messages/strings/names.txt:184
 msgid "Bunker Buster Rockets Viper Wheels"
@@ -9992,9 +9985,8 @@ msgid "Sensor Turret Cobra Half-tracks"
 msgstr "Башня с датчиком на полугусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:194
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr "Батарея миниракет \"Кобра\" на полугусеничном ходу"
+msgstr "Батарея миниракет Кобра на полугусеницы"
 
 #: data/mp/messages/strings/names.txt:372
 #: data/mp/messages/strings/names.txt:1702
@@ -10040,15 +10032,13 @@ msgstr "Башня с Импульсным лазером"
 
 #: data/mp/messages/strings/names.txt:512
 #: data/mp/messages/strings/names.txt:1134
-#, fuzzy
 msgid "Seraph Missile Array"
-msgstr "Увеличение точности ракеты"
+msgstr "Ракетный блок Серафим"
 
 #: data/mp/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:1194
-#, fuzzy
 msgid "Mini-Rocket Array"
-msgstr "Батарея миниракет"
+msgstr "Блок миниракет"
 
 #: data/mp/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:1692
@@ -10090,15 +10080,13 @@ msgstr "Пластил МК3"
 
 #: data/mp/messages/strings/names.txt:728
 #: data/mp/messages/strings/names.txt:1386
-#, fuzzy
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "Гипер Скоростная Пушка"
+msgstr "Установка ГС пушки"
 
 #: data/mp/messages/strings/names.txt:739
 #: data/mp/messages/strings/names.txt:1389
-#, fuzzy
 msgid "Seraph Missile Battery"
-msgstr "Батарея ракет Ангел"
+msgstr "Батарея ракет Сериафим"
 
 #: data/mp/messages/strings/names.txt:768
 msgid "Flamer Tower"
@@ -10106,9 +10094,8 @@ msgstr "Башня с огнеметом"
 
 #: data/mp/messages/strings/names.txt:786
 #: data/mp/messages/strings/names.txt:1394
-#, fuzzy
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Гипер Скоростная Пушка"
+msgstr "Укрепточка с ГС пушкой"
 
 #: data/mp/messages/strings/names.txt:805
 msgid "Automated Manufacturing"
@@ -10246,9 +10233,8 @@ msgid "Repair Cobra Tracks"
 msgstr "Ремонтная Кобра Гусеницы"
 
 #: data/mp/messages/strings/names.txt:1472
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr "Тяжелая пушка пушка Кобра на гусеницы"
+msgstr "ГС пушка питон гусеницы"
 
 #: data/mp/messages/strings/names.txt:1511
 msgid "Bunker Buster Cobra Hover"
@@ -10735,16 +10721,14 @@ msgid "VTOL Lancer Bug VTOL"
 msgstr "ВВП Лансер Жук"
 
 #: data/mp/messages/strings/names.txt:1871
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "Авиационная гиперскоростная пушка"
+msgstr "ВВС ГС пушка жук"
 
 #: data/mp/messages/strings/names.txt:1872
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "ВВП Лансер скорпион"
 
 #: data/mp/messages/strings/names.txt:1873
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "ВВП ГС Пушка Скорпион"
 
@@ -10753,9 +10737,8 @@ msgid "VTOL Lancer Mantis VTOL"
 msgstr "ВВП Лансер Мантис"
 
 #: data/mp/messages/strings/names.txt:1875
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "Авиационная гиперскоростная пушка"
+msgstr "ВВС ГС пушка мантис"
 
 #: data/mp/messages/strings/names.txt:1879
 msgid "Repair Turret Mantis Tracks"
@@ -10858,18 +10841,16 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr "Миниракеты \"Кобра\" гусеницы"
 
 #: data/mp/messages/strings/names.txt:1914
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr "Батарея миниракет \"Кобра\" Гусеницы"
+msgstr "Блок миниракет Кобра Гусеницы"
 
 #: data/mp/messages/strings/names.txt:1916
 msgid "Inferno Cobra Half-Tracks"
 msgstr "Ад Кобра Полугусеницы"
 
 #: data/mp/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Тяжелая  пушка Питон Ховер"
+msgstr "ГС пушка питон ховер"
 
 #: data/mp/messages/strings/names.txt:1921
 msgid "Scourge Python Tracks"
@@ -10943,9 +10924,8 @@ msgstr "Испанский"
 
 #: lib/framework/i18n.c:53
 #: lib/framework/i18n.c:107
-#, fuzzy
 msgid "Estonian"
-msgstr "Румынский"
+msgstr "Эстонский"
 
 #: lib/framework/i18n.c:55
 #: lib/framework/i18n.c:109
@@ -12807,7 +12787,7 @@ msgstr "Неверная версия игры!"
 
 #: src/multiint.c:844
 msgid "Wrong data/mod detected by Host."
-msgstr ""
+msgstr "владаелец обнаружил неверные данные/мод"
 
 #: src/multiint.c:847
 msgid "Incorrect Password!"
@@ -12974,7 +12954,7 @@ msgstr "Хост выкинул %s из игры!"
 
 #: src/multiint.c:2574
 msgid "you are unwanted by the host"
-msgstr ""
+msgstr "владелец не желает вас видеть в игре"
 
 #: src/multiint.c:2665
 msgid "Host is Starting Game"
@@ -13001,11 +12981,11 @@ msgstr "игра переполнена"
 #: src/multijoin.c:362
 #, c-format
 msgid "Kicking player, %s, because data doesn't match!"
-msgstr ""
+msgstr "Кик игрока %s из-за несоответствия данных!"
 
 #: src/multijoin.c:366
 msgid "Data doesn't match!"
-msgstr ""
+msgstr "Несоответствие данных!"
 
 #: src/multijoin.c:401
 #, c-format
@@ -13088,11 +13068,11 @@ msgstr "Передать энергию  игроку"
 #: src/multiplay.c:283
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr ""
+msgstr "Кик игрока %s за попытку обойти проверку внутренних данных"
 
 #: src/multiplay.c:287
 msgid "It is not nice to cheat!"
-msgstr ""
+msgstr "Обманывать не хорошо!"
 
 #: src/multiplay.c:1940
 msgid "Green"
@@ -13396,148 +13376,100 @@ msgstr "Версия %s%s%s%s"
 
 #~ msgid "VTOL HPV Cannon Bug VTOL"
 #~ msgstr "Гиперскоростная пушка ВВС Жук"
-
 #~ msgid "VTOL HPV Cannon Mantis VTOL"
 #~ msgstr "ВВП ГС Пушка Мантис"
-
 #~ msgid "HPV Cannon Python Hover"
 #~ msgstr "ГС Пушка Питон Ховер"
-
 #~ msgid "you are being a jerk."
 #~ msgstr "Вас одурачивают."
-
 #~ msgid "English"
 #~ msgstr "Английский"
-
 #~ msgid "Basque"
 #~ msgstr "Баскский"
-
 #~ msgid "Latvian"
 #~ msgstr "Латвийский"
-
 #~ msgid "Norwegian (Nynorsk)"
 #~ msgstr "Норвежский (нюнорск)"
-
 #~ msgid "Swedish (Sweden)"
 #~ msgstr "Шведский"
-
 #~ msgid "Swedish"
 #~ msgstr "Шведский"
-
 #~ msgid "Turkish"
 #~ msgstr "Турецкий"
-
 #~ msgid "Uzbek (Cyrillic)"
 #~ msgstr "Узбекский (кириллица)"
-
 #~ msgid "Heavy Machinegun Cobra Half-trackS"
 #~ msgstr "Тяжелый пулемёт \"Кобра\" на полугусеничном ходу"
-
 #~ msgid "Peperpot Emplacement"
 #~ msgstr "Установка Пепперпот"
-
 #~ msgid "Command turret MkII"
 #~ msgstr "командная МК2"
-
 #~ msgid "Command turret MkIV"
 #~ msgstr "командная МК4"
-
 #~ msgid "Cursor Mode"
 #~ msgstr "настройка Курсора"
-
 #~ msgid "Software (colored)"
 #~ msgstr "софт (окрашено)"
-
 #~ msgid "Hardware"
 #~ msgstr "Железо"
-
 #~ msgid "Right-click Orders"
 #~ msgstr "приказы правой кнопкой мыши"
-
 #~ msgid "Software (coloured)"
 #~ msgstr "софт (окрашено)"
-
 #~ msgid "Build Progress"
 #~ msgstr "прогресс постройки"
-
 #~ msgid "Construction Progress"
 #~ msgstr "Прогресс строительства"
-
 #~ msgid "Player %u found %u power in an oil drum"
 #~ msgstr "Игрок %u нашел %u энергии в бочке с горючим"
-
 #~ msgid "Cluster Bombs Bug VTOL"
 #~ msgstr "Кластерный бомбардировщик Жук ВВС"
-
 #~ msgid "Energy bars display toggled"
 #~ msgstr "Панели энергии переключены"
-
 #~ msgid "NO GAMES ARE AVAILABLE"
 #~ msgstr "Нет доступных игр"
-
 #~ msgid "Viper Light Cannon Wheels"
 #~ msgstr "Мелкокалиберная пушка \"Гадюка\" на колёсах"
-
 #~ msgid "Viper Flamer Wheels"
 #~ msgstr "Огнемёт \"Гадюка\" на колёсах"
-
 #~ msgid "Viper Sensor Wheels"
 #~ msgstr "Сенсором \"Гадюка\" на колёсах"
-
 #~ msgid "Viper Light Cannon Tracks"
 #~ msgstr "Мелкокалиберная пушка \"Гадюка\" на гусеничном ходу"
-
 #~ msgid "Cobra Heavy Machinegun Half-track"
 #~ msgstr "Крупнокалиберный пулемёт \"Кобра\" на полугусеничном ходу"
-
 #~ msgid "Cobra Mortar Half-track"
 #~ msgstr "Миномёт \"Кобра\" на полугусеничном ходу"
-
 #~ msgid "Cobra Light Cannon Tracks"
 #~ msgstr "Мелкокалиберная пушка \"Кобра\" на гусеничном ходу"
-
 #~ msgid "Viper Medium Cannon Tracks"
 #~ msgstr "Среднекалиберная пушка \"Гадюка\" на гусеничном ходу"
-
 #~ msgid "Viper Repair Wheels"
 #~ msgstr "Ремонтная \"Гадюка\" на колёсах"
-
 #~ msgid "Viper Repair Half-track"
 #~ msgstr "Ремонтная \"Гадюка\" на полугусеничном ходу"
-
 #~ msgid "Viper Machine Gun Wheels"
 #~ msgstr "Пулемёт \"Гадюка\" на колёсах"
-
 #~ msgid "Viper Twin Machinegun Wheels"
 #~ msgstr "Спаренный пулемёт \"Гадюка\" на колёсах"
-
 #~ msgid "Viper Twin Machinegun Half-track"
 #~ msgstr "Спаренный пулемёт \"Гадюка\" на полугусеничном ходу"
-
 #~ msgid "Viper Heavy Machinegun Half-track"
 #~ msgstr "Тяжёлый пулемёт \"Гадюка\" на полугусеничном ходу"
-
 #~ msgid "Viper Heavy Machinegun Tracks"
 #~ msgstr "Крупнокалиберный пулемёт \"Гадюка\" на гусеничном ходу"
-
 #~ msgid "Cobra Heavy Cannon Tracks"
 #~ msgstr "Крупнокалиберная пушка \"Кобра\" на гусеничном ходу"
-
 #~ msgid "Cobra Sensor Half-track"
 #~ msgstr "Сенсор \"Кобра\" на полугусеничном ходу"
-
 #~ msgid "Cobra Bombard Half-track"
 #~ msgstr "Бомбарда \"Кобра\" на полугусеничном ходу"
-
 #~ msgid "Python Light Cannon Tracks"
 #~ msgstr "Мелкокалиберная пушка \"Питон\" на гусеничном ходу"
-
 #~ msgid "Python Medium Cannon Tracks"
 #~ msgstr "Среднекалиберная пушка \"Питон\" на гусеничном ходу"
-
 #~ msgid "Machine Gunner"
 #~ msgstr "Пулемётчик"
-
 #~ msgid "Machine Gun Artifact"
 #~ msgstr "Артефакт \"Пулемёт\""
 
@@ -13548,156 +13480,110 @@ msgstr "Версия %s%s%s%s"
 #, fuzzy
 #~ msgid "HEAP Mini-Pods Mk3"
 #~ msgstr "Взрывчатая бронебойная боеголовка Mk3"
-
 #~ msgid "The host has left the game!"
 #~ msgstr "Хост покинул игру"
-
 #~ msgid "Viper Wheels Machinegun"
 #~ msgstr "Пулемёт \"Гадюка\" на колёсах"
-
 #~ msgid "Viper Wheels Twin Machinegun"
 #~ msgstr "Спаренный пулемёт \"Гадюка\" на колёсах"
-
 #~ msgid "Viper Wheels Heavy Machinegun"
 #~ msgstr "Крупнокалиберный пулемёт \"Гадюка\" на колёсах"
-
 #~ msgid "Cobra Wheels Heavy Machinegun"
 #~ msgstr "Крупнокалиберный пулемёт \"Кобра\" на колёсах"
-
 #~ msgid "Viper Tracks Machinegun"
 #~ msgstr "Пулемёт \"Гадюка\" на гусеничном ходу"
-
 #~ msgid "Viper Tracks Twin Machinegun"
 #~ msgstr "Спаренный пулемёт \"Гадюка\" на гусеничном ходу"
-
 #~ msgid "Viper Tracks Heavy Machinegun"
 #~ msgstr "Крупнокалиберный пулемёт \"Гадюка\" на гусеничном ходу"
-
 #~ msgid "Cobra Tracks Heavy Machinegun"
 #~ msgstr "Крупнокалиберный пулемёт \"Кобра\" на гусеничном ходу"
-
 #~ msgid "Scorpion Tracks Medium Cannon"
 #~ msgstr "Среднекалиберная пушка \"Скорпион\" на гусеничном ходу"
-
 #~ msgid "Python Tracks Heavy Cannon"
 #~ msgstr "Крупнокалиберная пушка \"Питон\" на гусеничном ходу"
-
 #~ msgid "Mantis Tracks Pulse Laser"
 #~ msgstr "Импульсный лазер \"Богомол\" на гусеничном ходу"
-
 #~ msgid "Tiger Tracks Heavy Cannon"
 #~ msgstr "Крупнокалиберная пушка \"Тигр\" на гусеничном ходу"
-
 #~ msgid "Python Tank Killer Tracks"
 #~ msgstr "Истребитель танков \"Питон\" на гусеничном ходу"
-
 #~ msgid "Load Campaign"
 #~ msgstr "Загрузить кампанию"
-
 #~ msgid "Full"
 #~ msgstr "Полностью"
-
 #~ msgid "Minimal"
 #~ msgstr "Минимум"
-
 #~ msgid "Played"
 #~ msgstr "Игр"
-
 #~ msgid "New Paradigm Transmission"
 #~ msgstr "Сообщение от Новой Парадигмы"
 
 #, fuzzy
 #~ msgid "Establish a forward base near the site of the Research Centre."
 #~ msgstr "Постройте передовую базу на плато."
-
 #~ msgid "Commander"
 #~ msgstr "Командующий"
 
 #, fuzzy
 #~ msgid "Congratulations on defeating the New Paradigm."
 #~ msgstr "Поздравляем, Командующий."
-
 #~ msgid "This sector is now secure."
 #~ msgstr "Сектор безопасен."
 
 #, fuzzy
 #~ msgid "were preparing to route its power to this location."
 #~ msgstr "Мы обнаруживаем вражеские войска в этом районе."
-
 #~ msgid "End Of Briefing."
 #~ msgstr "Иструктаж завершен."
-
 #~ msgid "Civilian Rescued"
 #~ msgstr "Гражданский спасен"
-
 #~ msgid "Civilians Rescued"
 #~ msgstr "Гражданские спасены"
-
 #~ msgid "Unit Rescued"
 #~ msgstr "Юнит спасен"
-
 #~ msgid "Units Rescued"
 #~ msgstr "Юниты спасены"
-
 #~ msgid "Group Rescued"
 #~ msgstr "Группа спасена"
-
 #~ msgid "Unit Captured"
 #~ msgstr "Юнит захвачен"
-
 #~ msgid "Group Captured"
 #~ msgstr "Группа захвачена"
-
 #~ msgid "Structure Captured"
 #~ msgstr "Сооружение захвачено"
-
 #~ msgid "Structure Destroyed"
 #~ msgstr "Сооружение уничтожено"
-
 #~ msgid "Out Of Time"
 #~ msgstr "Время вышло"
-
 #~ msgid "Enemy Escaped"
 #~ msgstr "Враг сбежал"
-
 #~ msgid "Team Alpha Eradicated"
 #~ msgstr "Команда Альфа ликвидирована"
-
 #~ msgid "Team Beta Eradicated"
 #~ msgstr "Команда Бета ликвидирована"
-
 #~ msgid "Team Gamma Eradicated"
 #~ msgstr "Команда Гамма ликвидирована"
-
 #~ msgid "Team Alpha Rescued"
 #~ msgstr "Команда Альфа спасена"
-
 #~ msgid "Team Beta Rescued"
 #~ msgstr "Команда Бета спасена"
-
 #~ msgid "Team Gamma Rescued"
 #~ msgstr "Команда Гамма спасена"
-
 #~ msgid "Team Alpha Liberated"
 #~ msgstr "Команда Альфа освобождена"
-
 #~ msgid "Team Beta Liberated"
 #~ msgstr "Команда Бета освобождена"
-
 #~ msgid "Team Gamma Liberated"
 #~ msgstr "Команда Гамма освобождена"
-
 #~ msgid "Civilians Eradicated"
 #~ msgstr "Гражданские уничтожены"
-
 #~ msgid "Civilians Liberated"
 #~ msgstr "Гражданские освобождены"
-
 #~ msgid "Enemy Eradicated"
 #~ msgstr "Враг ликвидирован"
-
 #~ msgid "New Paradigm base eradicated"
 #~ msgstr "База Новая Парадигма уничтожена"
-
 #~ msgid "Nexus base eradicated"
 #~ msgstr "База Нексус уничтожена"
+
