@@ -331,7 +331,7 @@ static void createHeader(int const argc, char* argv[])
 	}
 }
 
-void addDumpInfo( char *inbuffer)
+void addDumpInfo(const char *inbuffer)
 {
 	time_t rawtime;
 	struct tm * timeinfo;
