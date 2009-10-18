@@ -260,7 +260,10 @@ static BOOL setLocaleUnix(const char* locale)
 	}
 	else
 	{
-		debug(LOG_WZ, "Requested locale \"%s\", got \"%s\" instead", locale, actualLocale);
+		if (strcmp(locale, actualLocale))
+		{
+			debug(LOG_WZ, "Requested locale \"%s\", got \"%s\" instead", locale, actualLocale);
+		}
 	}
 
 	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
