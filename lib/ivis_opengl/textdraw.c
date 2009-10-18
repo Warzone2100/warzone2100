@@ -122,7 +122,7 @@ static void iV_initializeGLC(void)
 	}
 	else
 	{
-		debug(LOG_NEVER, "Succesfully initialized. _glcContext = %d", _glcContext);
+		debug(LOG_NEVER, "Successfully initialized. _glcContext = %d", _glcContext);
 	}
 
 	glcContext(_glcContext);
