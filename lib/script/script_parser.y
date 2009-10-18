@@ -913,7 +913,7 @@ static CODE_ERROR scriptCodeCallbackParams(
 	{
 		if (!interpCheckEquiv(psCBSymbol->aParams[i], psPBlock->aParams[i]))
 		{
-			snprintf(aErrorString, sizeof(aErrorString), "Type mismatch for paramter %d", i);
+			snprintf(aErrorString, sizeof(aErrorString), "Type mismatch for parameter %d", i);
 			scr_error("%s", aErrorString);
 			typeError = true;
 		}
