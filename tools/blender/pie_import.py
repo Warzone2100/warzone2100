@@ -545,4 +545,4 @@ def load_pie(filename):
 	ui.setData('filename', filename, True)
 	ui.Run()
 
-Window.FileSelector(load_pie, 'Import Warzone model')
+Window.FileSelector(load_pie, 'Import Warzone model', '*.pie')
