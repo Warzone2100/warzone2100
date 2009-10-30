@@ -154,7 +154,6 @@ lib/framework/frameresource.c
 lib/framework/i18n.c
 lib/framework/input.c
 lib/framework/lexer_input.c
-lib/framework/physfs_vfs.c
 lib/framework/stdio_ext.c
 lib/framework/SDL_framerate.c
 lib/framework/strres.c
