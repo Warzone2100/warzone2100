@@ -40,7 +40,6 @@
 
 #include "lib/framework/frameresource.h"
 #include "stats.h"
-#include "stats-db.h"
 #include "structure.h"
 #include "feature.h"
 #include "research.h"
@@ -216,19 +215,6 @@ static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBBODYLoad(struct sqlite3* db, const char* tableName, void **ppData)
-{
-	if (!loadBodyStatsFromDB(db, tableName)
-	 || !allocComponentList(COMP_BODY, numBodyStats))
-	{
-		return false;
-	}
-
-	// set a dummy value so the release function gets called
-	*ppData = (void *)1;
-	return true;
-}
-
 static void dataReleaseStats(WZ_DECL_UNUSED void *pData)
 {
 	freeComponentLists();
@@ -242,19 +228,6 @@ static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SWEAPON);
 
 	if (!loadWeaponStats(pBuffer, size)
-	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
-	{
-		return false;
-	}
-
-	// not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-static BOOL dataDBWEAPONLoad(struct sqlite3* db, const char* tableName, void **ppData)
-{
-	if (!loadWeaponStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
 		return false;
@@ -281,38 +254,12 @@ static BOOL bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataCONSTRLoad(struct sqlite3* db, const char* tableName, void **ppData)
-{
-	if (!loadConstructStatsFromDB(db)
-	 || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
 /* Load the ECM stats */
 static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SECM);
 
 	if (!loadECMStats(pBuffer, size)
-	 || !allocComponentList(COMP_ECM, numECMStats))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-static BOOL dataDBECMLoad(struct sqlite3* db, const char* tableName, void **ppData)
-{
-	if (!loadECMStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_ECM, numECMStats))
 	{
 		return false;
@@ -339,38 +286,12 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBPROPLoad(struct sqlite3* db, const char* tableName, void **ppData)
-{
-	if (!loadPropulsionStatsFromDB(db)
-	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
-	{
-		return false;
-	}
-
-	// not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
 /* Load the Sensor stats */
 static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SSENSOR);
 
 	if (!loadSensorStats(pBuffer, size)
-	 || !allocComponentList(COMP_SENSOR, numSensorStats))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-static BOOL dataDBSENSORLoad(struct sqlite3* db, const char* tableName, void **ppData)
-{
-	if (!loadSensorStatsFromDB(db)
 	 || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
 		return false;
@@ -403,19 +324,6 @@ static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SBRAIN);
 
 	if (!loadBrainStats(pBuffer, size)
-	 || !allocComponentList(COMP_BRAIN, numBrainStats))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-static BOOL dataDBBRAINLoad(struct sqlite3* db, const char* tableName, void** ppData)
-{
-	if (!loadBrainStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_BRAIN, numBrainStats))
 	{
 		return false;
@@ -1276,24 +1184,6 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{ "RESEARCHMSG", dataResearchMsgLoad, dataSMSGRelease },
 };
 
-typedef struct
-{
-	const char *aType;                      ///< points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
-	RES_TABLELOAD tableLoad;                ///< routine to process the data for this type
-	RES_FREE release;                       ///< routine to release the data (NULL indicates none)
-} RES_TYPE_MIN_TABLE;
-
-static const RES_TYPE_MIN_TABLE TableResourceTypes[] =
-{
-	{"DBWEAPON", dataDBWEAPONLoad, NULL},
-	{"DBBODY", dataDBBODYLoad, dataReleaseStats},
-	{"DBBRAIN", dataDBBRAINLoad, NULL},
-	{"DBPROP", dataDBPROPLoad, NULL},
-	{"DBSENSOR", dataDBSENSORLoad, NULL},
-	{"DBECM", dataDBECMLoad, NULL},
-	{"DBCONSTR", dataCONSTRLoad, NULL},
-};
-
 /* Pass all the data loading functions to the framework library */
 BOOL dataInitLoadFuncs(void)
 {
@@ -1328,21 +1218,6 @@ BOOL dataInitLoadFuncs(void)
 			if(!resAddFileLoad(CurrentType->aType, CurrentType->fileLoad, CurrentType->release))
 			{
 				return false; // error whilst adding a file load
-			}
-		}
-	}
-
-	// iterate through table load functions
-	{
-		const RES_TYPE_MIN_TABLE *CurrentType;
-		// Points just past the last item in the list
-		const RES_TYPE_MIN_TABLE * const EndType = &TableResourceTypes[ARRAY_SIZE(TableResourceTypes)];
-
-		for (CurrentType = TableResourceTypes; CurrentType != EndType; ++CurrentType)
-		{
-			if (!resAddTableLoad(CurrentType->aType, CurrentType->tableLoad, CurrentType->release))
-			{
-				return false; // error whilst adding a table load
 			}
 		}
 	}

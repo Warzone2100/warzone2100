@@ -39,8 +39,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "framework", "..\lib\framewo
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18} = {9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite3", "..\lib\sqlite3\sqlite3.vcproj", "{BBCBB046-6EFC-4369-853A-CAEF001B449E}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "exceptionhandler", "..\lib\exceptionhandler\exceptionhandler.vcproj", "{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iniparser", "..\lib\iniparser\iniparser.vcproj", "{0A5A8B49-7072-4196-AA26-DD767760C6B5}"

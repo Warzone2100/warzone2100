@@ -5,9 +5,6 @@
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
 if PERL_AVAILABLE
-%.c: $(top_srcdir)/build_tools/code-generators/db-lang.pl $(top_srcdir)/build_tools/code-generators/c_sqliteload_cg.pm %.tpl.sql.c %.tpl
-	$(PERL) $^ $@
-
 %.h: $(top_srcdir)/build_tools/code-generators/db-lang.pl $(top_srcdir)/build_tools/code-generators/c_structdef_cg.pm %.tpl.struct.h %.tpl
 	$(PERL) $^ $@
 endif
@@ -16,7 +13,7 @@ endif
 force-linker.cpp:
 	touch $@
 
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(POPT_CFLAGS) $(SQLITE_CFLAGS) $(WZ_CPPFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(POPT_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
@@ -33,7 +30,6 @@ BUILT_SOURCES = \
 
 if PERL_AVAILABLE
 BUILT_SOURCES += \
-	stats-db2.c \
 	stats-db2.h
 endif
 
@@ -167,12 +163,9 @@ noinst_HEADERS = \
 	scriptvals_parser.tab.h \
 	selection.h \
 	seqdisp.h \
-	stats-db2.c \
 	stats-db2.h \
 	statsdef.h \
 	stats.h \
-	stats-db.c \
-	stats-db.h \
 	stringdef.h \
 	structuredef.h \
 	structure.h \
@@ -314,8 +307,7 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/iniparser/libiniparser.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a
 
-warzone2100_LDADD += $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS) $(SQLITE_LIBS)
-
+warzone2100_LDADD += $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS)
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)
 endif
