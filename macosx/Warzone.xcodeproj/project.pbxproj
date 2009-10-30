@@ -658,7 +658,6 @@
 		9749642C0F5ABBE100A38899 /* stdio_ext.c in Sources */ = {isa = PBXBuildFile; fileRef = 974964280F5ABBE100A38899 /* stdio_ext.c */; };
 		974964330F5ABC3F00A38899 /* eventsave.c in Sources */ = {isa = PBXBuildFile; fileRef = 9749642F0F5ABC3F00A38899 /* eventsave.c */; };
 		974964340F5ABC3F00A38899 /* interpreter.c in Sources */ = {isa = PBXBuildFile; fileRef = 974964310F5ABC3F00A38899 /* interpreter.c */; };
-		9749647B0F5ABEA500A38899 /* stats-db2.tpl.sql.c in Sources */ = {isa = PBXBuildFile; fileRef = 974964780F5ABEA500A38899 /* stats-db2.tpl.sql.c */; };
 		976AE8280EA0B59A00F2473F /* timer.c in Sources */ = {isa = PBXBuildFile; fileRef = 976AE8260EA0B59A00F2473F /* timer.c */; };
 		97AEAB720E8C1C3A00A10721 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB6E0E8C1C3A00A10721 /* codec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		97AEAB730E8C1C3A00A10721 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB6F0E8C1C3A00A10721 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1791,8 +1790,6 @@
 		974964300F5ABC3F00A38899 /* eventsave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eventsave.h; path = ../lib/script/eventsave.h; sourceTree = SOURCE_ROOT; };
 		974964310F5ABC3F00A38899 /* interpreter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = interpreter.c; path = ../lib/script/interpreter.c; sourceTree = SOURCE_ROOT; };
 		974964320F5ABC3F00A38899 /* interpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = interpreter.h; path = ../lib/script/interpreter.h; sourceTree = SOURCE_ROOT; };
-		974964780F5ABEA500A38899 /* stats-db2.tpl.sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "stats-db2.tpl.sql.c"; path = "../src/stats-db2.tpl.sql.c"; sourceTree = SOURCE_ROOT; };
-		974964790F5ABEA500A38899 /* stats-db2.tpl.struct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "stats-db2.tpl.struct.h"; path = "../src/stats-db2.tpl.struct.h"; sourceTree = SOURCE_ROOT; };
 		976AE8260EA0B59A00F2473F /* timer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = timer.c; path = ../lib/sequence/timer.c; sourceTree = SOURCE_ROOT; };
 		976AE8270EA0B59A00F2473F /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timer.h; path = ../lib/sequence/timer.h; sourceTree = SOURCE_ROOT; };
 		97AEA8C60E8C164200A10721 /* internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = internal.h; path = external/libtheora/lib/internal.h; sourceTree = "<group>"; };
@@ -2199,7 +2196,6 @@
 			isa = PBXGroup;
 			children = (
 				02BBB2060DA874CF002D438B /* Exception Handler */,
-				026591F40D7B6DE200B20A35 /* SQLite */,
 				0246A1970BD3CCC3004D1C70 /* Warzone */,
 				0246A1790BD3CCAB004D1C70 /* Widget */,
 				0246A1640BD3CC90004D1C70 /* Sound */,
@@ -2451,8 +2447,6 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
-				974964780F5ABEA500A38899 /* stats-db2.tpl.sql.c */,
-				974964790F5ABEA500A38899 /* stats-db2.tpl.struct.h */,
 				9749641E0F5ABB9E00A38899 /* stringdef.h */,
 				22E244D40E65361800EC2B3E /* baseobject.c */,
 				22E244D50E65361800EC2B3E /* baseobject.h */,
@@ -2875,13 +2869,6 @@
 				0246A4050BD3CDFC004D1C70 /* SDLnetUDP.c */,
 			);
 			name = "SDL_net sources";
-			sourceTree = "<group>";
-		};
-		026591F40D7B6DE200B20A35 /* SQLite */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = SQLite;
 			sourceTree = "<group>";
 		};
 		02BBB2060DA874CF002D438B /* Exception Handler */ = {
@@ -4447,7 +4434,6 @@
 				9749642C0F5ABBE100A38899 /* stdio_ext.c in Sources */,
 				974964330F5ABC3F00A38899 /* eventsave.c in Sources */,
 				974964340F5ABC3F00A38899 /* interpreter.c in Sources */,
-				9749647B0F5ABEA500A38899 /* stats-db2.tpl.sql.c in Sources */,
 				9710CCAD0FEACEE500AFF563 /* dumpinfo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

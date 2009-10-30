@@ -22,7 +22,6 @@ BASELIST = \
 	script \
 	sequenceaudio \
 	stats \
-	stats-sql \
 	structs \
 	tagdefinitions \
 	texpages \
