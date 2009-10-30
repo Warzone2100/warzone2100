@@ -1,8 +1,6 @@
 top_srcdir=..
 top_builddir=$(top_srcdir)
 
-CPPFLAGS += -I$(top_srcdir)/lib/sqlite3
-
 include $(top_srcdir)/makerules/common.mk
 
 # Due to the lexer's dependencies on the parser's header we need to compile the
@@ -132,8 +130,7 @@ LIBS=$(top_builddir)/lib/libgamelib.a \
 	$(top_builddir)/lib/libsound.a \
 	$(top_builddir)/lib/libwidget.a \
 	$(top_builddir)/lib/libframework.a \
-	$(top_builddir)/lib/libexceptionhandler.a \
-	$(top_builddir)/lib/libsqlite3.a
+	$(top_builddir)/lib/libexceptionhandler.a
 
 ifeq ($(strip $(TARGET)),windows)
 LIBS += $(top_builddir)/win32/warzone2100.o

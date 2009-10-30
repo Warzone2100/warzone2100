@@ -532,9 +532,6 @@
 		02581C860BD5AD1100957CBC /* SDL_net.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 0246A3ED0BD3CD8A004D1C70 /* SDL_net.framework */; };
 		02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
 		02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
-		026591FA0D7B6E0F00B20A35 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 026591F70D7B6E0F00B20A35 /* sqlite3.c */; };
-		026591FB0D7B6E0F00B20A35 /* sqlite3.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 026591F80D7B6E0F00B20A35 /* sqlite3.h */; };
-		026591FC0D7B6E0F00B20A35 /* sqlite3ext.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 026591F90D7B6E0F00B20A35 /* sqlite3ext.h */; };
 		027F9E360D0322CE00FA2030 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A3BC0BD3CD2B004D1C70 /* OpenGL.framework */; };
 		027F9E370D0322D300FA2030 /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027F9E1F0D03229500FA2030 /* libfreetype.dylib */; };
 		027F9E380D0322D400FA2030 /* libfontconfig.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02EA22450CFE494000EA65A0 /* libfontconfig.dylib */; };
@@ -691,11 +688,9 @@
 		9749642C0F5ABBE100A38899 /* stdio_ext.c in Sources */ = {isa = PBXBuildFile; fileRef = 974964280F5ABBE100A38899 /* stdio_ext.c */; };
 		974964330F5ABC3F00A38899 /* eventsave.c in Sources */ = {isa = PBXBuildFile; fileRef = 9749642F0F5ABC3F00A38899 /* eventsave.c */; };
 		974964340F5ABC3F00A38899 /* interpreter.c in Sources */ = {isa = PBXBuildFile; fileRef = 974964310F5ABC3F00A38899 /* interpreter.c */; };
-		9749647B0F5ABEA500A38899 /* stats-db2.tpl.sql.c in Sources */ = {isa = PBXBuildFile; fileRef = 974964780F5ABEA500A38899 /* stats-db2.tpl.sql.c */; };
 		974EDB380EDC818D00A25352 /* terrain.c in Sources */ = {isa = PBXBuildFile; fileRef = 974EDB360EDC818D00A25352 /* terrain.c */; };
 		975BCF3F0FED360000C36BEC /* dumpinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 975BCF3D0FED360000C36BEC /* dumpinfo.cpp */; };
 		976AE8280EA0B59A00F2473F /* timer.c in Sources */ = {isa = PBXBuildFile; fileRef = 976AE8260EA0B59A00F2473F /* timer.c */; };
-		9797385B0E815F4400D6418D /* physfs_vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 979738590E815F4400D6418D /* physfs_vfs.c */; };
 		97AEAB720E8C1C3A00A10721 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB6E0E8C1C3A00A10721 /* codec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		97AEAB730E8C1C3A00A10721 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB6F0E8C1C3A00A10721 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		97AEAB740E8C1C3A00A10721 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB700E8C1C3A00A10721 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -971,8 +966,6 @@
 				0223BBC10CFE3CD60056EF85 /* tagfile.h in Copy frameworks (36) */,
 				02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks (36) */,
 				02CDDD1D0D159E2F00722688 /* openal_error.h in Copy frameworks (36) */,
-				026591FB0D7B6E0F00B20A35 /* sqlite3.h in Copy frameworks (36) */,
-				026591FC0D7B6E0F00B20A35 /* sqlite3ext.h in Copy frameworks (36) */,
 				02AAD1430D9ED28C00248B0F /* file.h in Copy frameworks (36) */,
 				02AAD1450D9ED28C00248B0F /* i18n.h in Copy frameworks (36) */,
 				02AAD1460D9ED28C00248B0F /* physfs_ext.h in Copy frameworks (36) */,
@@ -1686,9 +1679,6 @@
 		0246AA030BD3DEFA004D1C70 /* SDL_sysloadso.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDL_sysloadso.c; path = external/SDL/src/loadso/dlopen/SDL_sysloadso.c; sourceTree = "<group>"; };
 		0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		02581C5D0BD5A94A00957CBC /* libSDLmain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSDLmain.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		026591F70D7B6E0F00B20A35 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = ../lib/sqlite3/sqlite3.c; sourceTree = SOURCE_ROOT; };
-		026591F80D7B6E0F00B20A35 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../lib/sqlite3/sqlite3.h; sourceTree = SOURCE_ROOT; };
-		026591F90D7B6E0F00B20A35 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = ../lib/sqlite3/sqlite3ext.h; sourceTree = SOURCE_ROOT; };
 		027F9E1F0D03229500FA2030 /* libfreetype.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
 		02AAD13F0D9ED28C00248B0F /* file.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = file.h; path = ../lib/framework/file.h; sourceTree = SOURCE_ROOT; };
 		02AAD1400D9ED28C00248B0F /* i18n.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = i18n.c; path = ../lib/framework/i18n.c; sourceTree = SOURCE_ROOT; };
@@ -1867,16 +1857,12 @@
 		974964300F5ABC3F00A38899 /* eventsave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eventsave.h; path = ../lib/script/eventsave.h; sourceTree = SOURCE_ROOT; };
 		974964310F5ABC3F00A38899 /* interpreter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = interpreter.c; path = ../lib/script/interpreter.c; sourceTree = SOURCE_ROOT; };
 		974964320F5ABC3F00A38899 /* interpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = interpreter.h; path = ../lib/script/interpreter.h; sourceTree = SOURCE_ROOT; };
-		974964780F5ABEA500A38899 /* stats-db2.tpl.sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "stats-db2.tpl.sql.c"; path = "../src/stats-db2.tpl.sql.c"; sourceTree = SOURCE_ROOT; };
-		974964790F5ABEA500A38899 /* stats-db2.tpl.struct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "stats-db2.tpl.struct.h"; path = "../src/stats-db2.tpl.struct.h"; sourceTree = SOURCE_ROOT; };
 		974EDB360EDC818D00A25352 /* terrain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = terrain.c; path = ../src/terrain.c; sourceTree = SOURCE_ROOT; };
 		974EDB370EDC818D00A25352 /* terrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = terrain.h; path = ../src/terrain.h; sourceTree = SOURCE_ROOT; };
 		975BCF3D0FED360000C36BEC /* dumpinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dumpinfo.cpp; path = ../lib/exceptionhandler/dumpinfo.cpp; sourceTree = SOURCE_ROOT; };
 		975BCF3E0FED360000C36BEC /* dumpinfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dumpinfo.h; path = ../lib/exceptionhandler/dumpinfo.h; sourceTree = SOURCE_ROOT; };
 		976AE8260EA0B59A00F2473F /* timer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = timer.c; path = ../lib/sequence/timer.c; sourceTree = SOURCE_ROOT; };
 		976AE8270EA0B59A00F2473F /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timer.h; path = ../lib/sequence/timer.h; sourceTree = SOURCE_ROOT; };
-		979738590E815F4400D6418D /* physfs_vfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_vfs.c; path = ../lib/framework/physfs_vfs.c; sourceTree = SOURCE_ROOT; };
-		9797385A0E815F4400D6418D /* physfs_vfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_vfs.h; path = ../lib/framework/physfs_vfs.h; sourceTree = SOURCE_ROOT; };
 		97AEA8C60E8C164200A10721 /* internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = internal.h; path = external/libtheora/lib/internal.h; sourceTree = "<group>"; };
 		97AEA9550E8C182B00A10721 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		97AEA9600E8C184C00A10721 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -2323,8 +2309,6 @@
 				974964290F5ABBE100A38899 /* stdio_ext.h */,
 				9749642A0F5ABBE100A38899 /* string_ext.h */,
 				9749642B0F5ABBE100A38899 /* vector.h */,
-				979738590E815F4400D6418D /* physfs_vfs.c */,
-				9797385A0E815F4400D6418D /* physfs_vfs.h */,
 				9742E5750DF9979C000A5D41 /* parsetest.c */,
 				9742E5760DF9979C000A5D41 /* parsetest.h */,
 				9742E5710DF9975E000A5D41 /* lexer_input.c */,
@@ -2552,8 +2536,6 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
-				974964780F5ABEA500A38899 /* stats-db2.tpl.sql.c */,
-				974964790F5ABEA500A38899 /* stats-db2.tpl.struct.h */,
 				9749641E0F5ABB9E00A38899 /* stringdef.h */,
 				22E244D40E65361800EC2B3E /* baseobject.c */,
 				22E244D50E65361800EC2B3E /* baseobject.h */,
@@ -2977,16 +2959,6 @@
 				0246A4050BD3CDFC004D1C70 /* SDLnetUDP.c */,
 			);
 			name = "SDL_net sources";
-			sourceTree = "<group>";
-		};
-		026591F40D7B6DE200B20A35 /* SQLite */ = {
-			isa = PBXGroup;
-			children = (
-				026591F70D7B6E0F00B20A35 /* sqlite3.c */,
-				026591F80D7B6E0F00B20A35 /* sqlite3.h */,
-				026591F90D7B6E0F00B20A35 /* sqlite3ext.h */,
-			);
-			name = SQLite;
 			sourceTree = "<group>";
 		};
 		02BBB2060DA874CF002D438B /* Exception Handler */ = {
@@ -4641,7 +4613,6 @@
 				0223BBC00CFE3CD60056EF85 /* tagfile.c in Sources */,
 				02CDDD1C0D159E2F00722688 /* openal_error.c in Sources */,
 				020A7E670D246D2B009C29F5 /* sequence.c in Sources */,
-				026591FA0D7B6E0F00B20A35 /* sqlite3.c in Sources */,
 				02AAD1440D9ED28C00248B0F /* i18n.c in Sources */,
 				02BBB2090DA874F6002D438B /* exceptionhandler.c in Sources */,
 				02B2132D0DA8755F0059E864 /* cursors.c in Sources */,
@@ -4654,14 +4625,12 @@
 				2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */,
 				22E244D70E65361800EC2B3E /* baseobject.c in Sources */,
 				024480240C5E4BEE00E1A641 /* utf.c in Sources */,
-				9797385B0E815F4400D6418D /* physfs_vfs.c in Sources */,
 				976AE8280EA0B59A00F2473F /* timer.c in Sources */,
 				974EDB380EDC818D00A25352 /* terrain.c in Sources */,
 				974964240F5ABBBB00A38899 /* hashtable.c in Sources */,
 				9749642C0F5ABBE100A38899 /* stdio_ext.c in Sources */,
 				974964330F5ABC3F00A38899 /* eventsave.c in Sources */,
 				974964340F5ABC3F00A38899 /* interpreter.c in Sources */,
-				9749647B0F5ABEA500A38899 /* stats-db2.tpl.sql.c in Sources */,
 				975BCF3F0FED360000C36BEC /* dumpinfo.cpp in Sources */,
 				647D9C531039288D006D37CF /* dictionary.c in Sources */,
 				647D9C541039288D006D37CF /* iniparser.c in Sources */,

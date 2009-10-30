@@ -1,8 +1,6 @@
 top_srcdir=../..
 top_builddir=$(top_srcdir)
 
-CPPFLAGS += -I$(top_srcdir)/lib/sqlite3
-
 include $(top_srcdir)/makerules/common.mk
 
 # Due to the lexer's dependencies on the parser's header we need to compile the
@@ -25,7 +23,6 @@ SRC= \
 	i18n.c \
 	input.c \
 	lexer_input.c \
-	physfs_vfs.c \
 	SDL_framerate.c \
 	stdio_ext.c \
 	strres.c \
