@@ -503,7 +503,7 @@ KEY_MAPPING	*newMapping;
 	newMapping = (KEY_MAPPING*)malloc(sizeof(KEY_MAPPING));
 	if (newMapping == NULL)
 	{
-		debug(LOG_ERROR, "keyAddMapping: Out of memory!");
+		debug(LOG_FATAL, "keyAddMapping: Out of memory!");
 		abort();
 		return NULL;
 	}
@@ -512,7 +512,7 @@ KEY_MAPPING	*newMapping;
 	newMapping->pName = strdup(name);
 	if (newMapping->pName == NULL)
 	{
-		debug(LOG_ERROR, "keyAddMapping: Out of memory!");
+		debug(LOG_FATAL, "keyAddMapping: Out of memory!");
 		abort();
 		return NULL;
 	}
@@ -777,7 +777,7 @@ SDWORD		i;
 				break;
 
  			default:
-				debug(LOG_ERROR, "Unknown key action (action code %u) while processing keymap.", (unsigned int)keyToProcess->action);
+				debug(LOG_FATAL, "Unknown key action (action code %u) while processing keymap.", (unsigned int)keyToProcess->action);
 				abort();
  				break;
 			}

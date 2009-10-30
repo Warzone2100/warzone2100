@@ -1829,7 +1829,7 @@ UBYTE NETrecvFile(void)
 
 	if (!pFileHandle) // file can't be opened
 	{
-		debug(LOG_ERROR, "Fatal error while creating file: %s", PHYSFS_getLastError());
+		debug(LOG_FATAL, "Fatal error while creating file: %s", PHYSFS_getLastError());
 		abort();
 	}
 

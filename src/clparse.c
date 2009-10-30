@@ -179,7 +179,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 
 		if (iOption == POPT_ERROR_BADOPT)
 		{
-			debug(LOG_ERROR, "Unrecognized option: %s", poptBadOption(poptCon, 0));
+			debug(LOG_FATAL, "Unrecognized option: %s", poptBadOption(poptCon, 0));
 			exit(1);
 		}
 

@@ -84,7 +84,7 @@ W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 	psWidget = (W_SLIDER *)malloc(sizeof(W_SLIDER));
 	if (psWidget == NULL)
 	{
-		debug(LOG_ERROR, "sliderCreate: Out of memory");
+		debug(LOG_FATAL, "sliderCreate: Out of memory");
 		abort();
 		return NULL;
 	}

@@ -524,7 +524,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 
 	if (asStructureStats == NULL)
 	{
-		debug( LOG_ERROR, "Structure Stats - Out of memory" );
+		debug( LOG_FATAL, "Structure Stats - Out of memory" );
 		abort(); // FIXME exit(EXIT_FAILURE)?
 		return false;
 	}
@@ -682,7 +682,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 				sizeof(FUNCTION*));
 			if (psStructure->asFuncList == NULL)
 			{
-				debug( LOG_ERROR, "Out of memory assigning structure Functions" );
+				debug( LOG_FATAL, "Out of memory assigning structure Functions" );
 				abort();
 				return false;
 			}
@@ -716,7 +716,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 		asStructLimits[player] = malloc(sizeof(STRUCTURE_LIMITS) * numStructureStats);
 		if (asStructLimits[player] == NULL)
 		{
-			debug( LOG_ERROR, "Unable to allocate structure limits" );
+			debug( LOG_FATAL, "Unable to allocate structure limits" );
 			abort();
 			return false;
 		}
@@ -1996,7 +1996,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 
 			if (psBuilding->pFunctionality == NULL)
 			{
-				debug(LOG_ERROR, "Out of memory");
+				debug(LOG_FATAL, "Out of memory");
 				abort();
 				return false;
 			}

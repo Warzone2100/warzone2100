@@ -124,8 +124,8 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 	if (!NewData)
 	{
 		//fatal error...
-		debug(LOG_ERROR, "Out of memory!");
-		exit(-1);
+		debug(LOG_FATAL, "Out of memory!");
+		abort();
 	}
 	memset(NewData, 0xff, newsize);		// fill the new buffer with bit pattern 0xff
 
@@ -1022,7 +1022,7 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	pBuffer = malloc(fileSize * sizeof(char));
 	if (pBuffer == NULL)
 	{
-		debug(LOG_ERROR, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);
+		debug(LOG_FATAL, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);
 		abort();
 	}
 
@@ -1089,7 +1089,7 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 	pBuffer = malloc(fileSize * sizeof(char));
 	if (pBuffer == NULL)
 	{
-		debug(LOG_ERROR, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);
+		debug(LOG_FATAL, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);
 		abort();
 	}
 
@@ -1104,7 +1104,7 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 	success = scrvLoad(fileHandle);
 
 	if (!success)
-		debug(LOG_ERROR, "Script %s did not compile", GetLastResourceFilename());
+		debug(LOG_FATAL, "Script %s did not compile", GetLastResourceFilename());
 
 	PHYSFS_close(fileHandle);
 

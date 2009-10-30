@@ -549,7 +549,7 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 	pTrack = (TRACK*)malloc(sizeof(TRACK) + filename_size);
 	if (pTrack == NULL)
 	{
-		debug( LOG_ERROR, "sound_ConstructTrack: couldn't allocate memory\n" );
+		debug( LOG_FATAL, "sound_ConstructTrack: couldn't allocate memory\n" );
 		abort();
 		return NULL;
 	}
@@ -822,7 +822,7 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 	stream = malloc(sizeof(AUDIO_STREAM));
 	if (stream == NULL)
 	{
-		debug(LOG_ERROR, "sound_PlayStream: Out of memory");
+		debug(LOG_FATAL, "sound_PlayStream: Out of memory");
 		abort();
 		return NULL;
 	}

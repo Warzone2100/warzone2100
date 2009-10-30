@@ -233,7 +233,7 @@ BOOL	startHigher;
 	}
 	else
 	{
-		debug( LOG_ERROR, "Weirdy Bridge requested - no axes allignment" );
+		debug( LOG_FATAL, "Weirdy Bridge requested - no axes allignment" );
 		abort();
 	}
 }

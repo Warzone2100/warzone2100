@@ -6719,7 +6719,7 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 	pFileData = (char*)malloc(fileSize);
 	if (pFileData == NULL)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}
@@ -7998,7 +7998,7 @@ BOOL writeStructFile(char *pFileName)
 	pFileData = (char*)malloc(fileSize);
 	if (pFileData == NULL)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}
@@ -8633,7 +8633,7 @@ BOOL writeFeatureFile(char *pFileName)
 	pFileData = (char*)malloc(fileSize);
 	if (pFileData == NULL)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}
@@ -8804,7 +8804,7 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		psTemplate = malloc(sizeof(DROID_TEMPLATE));
 		if (psTemplate == NULL)
 		{
-			debug(LOG_ERROR, "loadSaveTemplateV7: Out of memory");
+			debug(LOG_FATAL, "loadSaveTemplateV7: Out of memory");
 			abort();
 			goto error;
 		}
@@ -9087,7 +9087,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		psTemplate = malloc(sizeof(DROID_TEMPLATE));
 		if (psTemplate == NULL)
 		{
-			debug(LOG_ERROR, "loadSaveTemplateV: Out of memory");
+			debug(LOG_FATAL, "loadSaveTemplateV: Out of memory");
 			abort();
 			goto error;
 		}
@@ -9243,7 +9243,7 @@ BOOL writeTemplateFile(char *pFileName)
 	pFileData = (char*)malloc(fileSize);
 	if (pFileData == NULL)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}
@@ -9390,7 +9390,7 @@ static BOOL writeTerrainTypeMapFile(char *pFileName)
 	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
-		debug( LOG_ERROR, "writeTerrainTypeMapFile: Out of memory" );
+		debug( LOG_FATAL, "writeTerrainTypeMapFile: Out of memory" );
 		abort();
 		return false;
 	}
@@ -9616,7 +9616,7 @@ static BOOL writeCompListFile(char *pFileName)
 	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
-		debug( LOG_ERROR, "writeCompListFile: Out of memory" );
+		debug( LOG_FATAL, "writeCompListFile: Out of memory" );
 		abort();
 		return false;
 	}
@@ -9928,7 +9928,7 @@ static BOOL writeStructTypeListFile(char *pFileName)
 	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
-		debug( LOG_ERROR, "writeStructTypeListFile: Out of memory" );
+		debug( LOG_FATAL, "writeStructTypeListFile: Out of memory" );
 		abort();
 		return false;
 	}
@@ -10205,7 +10205,7 @@ static BOOL writeResearchFile(char *pFileName)
 	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
-		debug( LOG_ERROR, "writeResearchFile: Out of memory" );
+		debug( LOG_FATAL, "writeResearchFile: Out of memory" );
 		abort();
 		return false;
 	}
@@ -10572,7 +10572,7 @@ static BOOL writeMessageFile(char *pFileName)
 	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
-		debug( LOG_ERROR, "writeMessageFile: Out of memory" );
+		debug( LOG_FATAL, "writeMessageFile: Out of memory" );
 		abort();
 		return false;
 	}
@@ -10901,7 +10901,7 @@ static BOOL writeFlagFile(char *pFileName)
 	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
-		debug( LOG_ERROR, "writeflagFile: Out of memory" );
+		debug( LOG_FATAL, "writeflagFile: Out of memory" );
 		abort();
 		return false;
 	}
@@ -11119,7 +11119,7 @@ static BOOL writeProductionFile(char *pFileName)
 	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
-		debug( LOG_ERROR, "writeProductionFile: Out of memory" );
+		debug( LOG_FATAL, "writeProductionFile: Out of memory" );
 		abort();
 		return false;
 	}
@@ -11228,7 +11228,7 @@ BOOL loadSaveStructLimitsV19(char *pFileData, UDWORD filesize, UDWORD numLimits)
 	psSaveLimits = (SAVE_STRUCTLIMITS_V2 *) malloc(sizeof(SAVE_STRUCTLIMITS_V2));
 	if (!psSaveLimits)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}
@@ -11300,7 +11300,7 @@ BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 	psSaveLimits = (SAVE_STRUCTLIMITS*) malloc(sizeof(SAVE_STRUCTLIMITS));
 	if (!psSaveLimits)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}
@@ -11380,7 +11380,7 @@ BOOL writeStructLimitsFile(char *pFileName)
 	pFileData = (char*)malloc(fileSize);
 	if (pFileData == NULL)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}

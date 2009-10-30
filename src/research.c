@@ -134,7 +134,7 @@ BOOL researchInitVars(void)
 	asResearch = (RESEARCH *)malloc(sizeof(RESEARCH)* MAX_RESEARCH);
 	if (asResearch == NULL)
 	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
 		abort();
 		return false;
 	}
@@ -147,7 +147,7 @@ BOOL researchInitVars(void)
 			sizeof(PLAYER_RESEARCH));
 		if (asPlayerResList[i] == NULL)
 		{
-			debug( LOG_ERROR, "Out of memory assigning Player_Research" );
+			debug( LOG_FATAL, "Out of memory assigning Player_Research" );
 			abort();
 			return false;
 		}
@@ -160,7 +160,7 @@ BOOL researchInitVars(void)
 	pResearchPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_PR);
 	if (pResearchPR == NULL)
 	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
 		abort();
 		return false;
 	}
@@ -169,7 +169,7 @@ BOOL researchInitVars(void)
 	pResearchStructPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_PR);
 	if (pResearchStructPR == NULL)
 	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
 		abort();
 		return false;
 	}
@@ -178,7 +178,7 @@ BOOL researchInitVars(void)
 	pResearchFunc = (FUNCTION **) malloc(sizeof(FUNCTION *) * MAX_RESEARCH_FUNC);
 	if (pResearchFunc == NULL)
 	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
 		abort();
 		return false;
 	}
@@ -187,7 +187,7 @@ BOOL researchInitVars(void)
 	pResearchStructRed = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RED);
 	if (pResearchStructRed == NULL)
 	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
 		abort();
 		return false;
 	}
@@ -196,7 +196,7 @@ BOOL researchInitVars(void)
 	pResearchArteRed = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RED);
 	if (pResearchArteRed == NULL)
 	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
 		abort();
 		return false;
 	}
@@ -205,7 +205,7 @@ BOOL researchInitVars(void)
 	pResearchStructRes = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RES);
 	if (pResearchStructRes == NULL)
 	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
 		abort();
 		return false;
 	}
@@ -214,7 +214,7 @@ BOOL researchInitVars(void)
 	pResearchArteRes = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RES);
 	if (pResearchArteRes == NULL)
 	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
 		abort();
 		return false;
 	}
@@ -223,7 +223,7 @@ BOOL researchInitVars(void)
 	pResearchArteRep = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RES);
 	if (pResearchArteRep == NULL)
 	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
 		abort();
 		return false;
 	}
@@ -958,7 +958,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 								break;
 							default:
 								/* NO DEFAULT CASE? Alex.... Here ya go - just for you...*/
-								debug( LOG_ERROR, "Unknown research list" );
+								debug( LOG_FATAL, "Unknown research list" );
 								abort();
 								return false;
 						}
@@ -967,7 +967,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 						if (pResearch[incR].storeCount >
 										(SDWORD)numToFind)
 						{
-							debug( LOG_ERROR, "Trying to allocate more Structures than allowed for research %s", getResearchName(pResearch) );
+							debug( LOG_FATAL, "Trying to allocate more Structures than allowed for research %s", getResearchName(pResearch) );
 							abort();
 							return false;
 						}
@@ -1067,7 +1067,7 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 						if (pResearch[incR].storeCount >
 										(SDWORD)pResearch[incR].numFunctions)
 						{
-							debug( LOG_ERROR, "Trying to allocate more Functions than allowed for research %s", ResearchName );
+							debug( LOG_FATAL, "Trying to allocate more Functions than allowed for research %s", ResearchName );
 							abort();
 							return false;
 						}
