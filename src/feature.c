@@ -131,7 +131,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 
 	if (asFeatureStats == NULL)
 	{
-		debug( LOG_ERROR, "Feature Stats - Out of memory" );
+		debug( LOG_FATAL, "Feature Stats - Out of memory" );
 		abort();
 		return false;
 	}

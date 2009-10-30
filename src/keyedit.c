@@ -558,7 +558,7 @@ BOOL saveKeyMap(void)
 			count++);
 		if(keyMapSaveTable[count] == NULL)
 		{
-			debug( LOG_ERROR, "can't find keymapped function %s in the keymap "
+			debug( LOG_FATAL, "can't find keymapped function %s in the keymap "
 			       "save table at %d!", name, count );
 			abort();
 		}

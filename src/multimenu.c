@@ -208,7 +208,7 @@ static char* enumerateMultiMaps(UDWORD* players, bool first, unsigned int camToU
 				char* const found = strdup(lev->pName);
 				if (found == NULL)
 				{
-					debug(LOG_ERROR, "Out of memory");
+					debug(LOG_FATAL, "Out of memory");
 					// No way to indicate out-of-memory failure by return value
 					abort();
 					return NULL;
@@ -243,7 +243,7 @@ static char* enumerateMultiMaps(UDWORD* players, bool first, unsigned int camToU
 				char* const found = strdup(lev->pName);
 				if (found == NULL)
 				{
-					debug(LOG_ERROR, "Out of memory");
+					debug(LOG_FATAL, "Out of memory");
 					// No way to indicate out-of-memory failure by return value
 					abort();
 					return NULL;
@@ -374,7 +374,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	fileList = PHYSFS_enumerateFiles(searchDir);
 	if (!fileList)
 	{
-		debug(LOG_ERROR, "addMultiRequest: Out of memory");
+		debug(LOG_FATAL, "addMultiRequest: Out of memory");
 		abort();
 		return;
 	}

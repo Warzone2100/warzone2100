@@ -138,7 +138,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	psMapTiles = calloc(width * height, sizeof(MAPTILE));
 	if (psMapTiles == NULL)
 	{
-		debug(LOG_ERROR, "Out of memory");
+		debug(LOG_FATAL, "Out of memory");
 		abort();
 		return false;
 	}
@@ -1060,7 +1060,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	*ppFileData = (char*)malloc(*pFileSize);
 	if (*ppFileData == NULL)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}

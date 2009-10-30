@@ -101,7 +101,7 @@ W_SCREEN* widgCreateScreen()
 	W_SCREEN* psScreen = (W_SCREEN *)malloc(sizeof(W_SCREEN));
 	if (psScreen == NULL)
 	{
-		debug(LOG_ERROR, "widgCreateScreen: Out of memory");
+		debug(LOG_FATAL, "widgCreateScreen: Out of memory");
 		abort();
 		return NULL;
 	}

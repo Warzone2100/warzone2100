@@ -140,7 +140,7 @@ BOOL resizeRadar(void)
 	radarBuffer = malloc(radarBufferSize);
 	if (radarBuffer == NULL)
 	{
-		debug(LOG_ERROR, "Out of memory!");
+		debug(LOG_FATAL, "Out of memory!");
 		abort();
 		return false;
 	}
