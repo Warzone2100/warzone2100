@@ -418,7 +418,7 @@ void loadMapPreview(bool hideInterface)
 	memset(playerpos,0x77,sizeof(playerpos));
 	// color our texture with clancolors @ correct position
 	plotStructurePreview16(imageData, scale, offX2, offY2,playerpos);
-	glGetError();					// clear openGL errorcodes
+	glErrors();					// clear openGL errorcodes
 	// and now, for those that have FBO available on their card
 	// added hack to work around bad drivers that report FBO available, when it is not.
 	if(Init_FBO(BACKDROP_HACK_WIDTH,BACKDROP_HACK_HEIGHT) && !bFboProblem)
@@ -428,7 +428,7 @@ void loadMapPreview(bool hideInterface)
 
 		// First we bind the FBO so we can render to it
 		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
-		checkGLErrors("write to fbo enabled");	
+		bFboProblem |= glErrors();
 
 		//set up projection & model matrix for the texture(!)
 		glMatrixMode(GL_PROJECTION);
@@ -440,7 +440,6 @@ void loadMapPreview(bool hideInterface)
 		glPushMatrix();
 		glLoadIdentity();
 		glViewport( 0, 0, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT );
-		checkGLErrors("viewport set");	
 		// Then render as normal
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT );		//| GL_DEPTH_BUFFER_BIT);	
@@ -450,11 +449,9 @@ void loadMapPreview(bool hideInterface)
 		glBindTexture(GL_TEXTURE_2D, FBOtexture);
 		//upload the texture to the FBO
 		glTexSubImage2D(GL_TEXTURE_2D,0,0,0,BACKDROP_HACK_WIDTH,BACKDROP_HACK_HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,imageData);
-		checkGLErrors("After texture upload");
 
 		iV_SetFont(font_large);
 		glDisable(GL_CULL_FACE);
-		checkGLErrors("After setting font");
 		for(i=0;i < MAX_PLAYERS;i++)//
 		{
 			float fx,fy;
@@ -477,12 +474,10 @@ void loadMapPreview(bool hideInterface)
 			iV_DrawTextF(fx,fy,"%d",i);
 		}
 		glcRenderStyle(GLC_TEXTURE);
-		checkGLErrors("after text draw");
 
 		// set rendering back to default frame buffer
 		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
 		glReadPixels(0, 0, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,fboData);
-		checkGLErrors("Reading pixels");
 
 		//done with the FBO, so unbind it.
 		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
@@ -491,6 +486,7 @@ void loadMapPreview(bool hideInterface)
 		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 		glPopAttrib();
+		bFboProblem |= glErrors();
 		// if we detected a error, then we must fallback to old texture, or user will not see anything.
 		if(!bFboProblem)
 		{
@@ -500,8 +496,7 @@ void loadMapPreview(bool hideInterface)
 		{
 			screen_Upload(imageData);
 		}
-		checkGLErrors("Done with FBO routine");
-
+		bFboProblem |= glErrors();
 	}
 	else
 	{
