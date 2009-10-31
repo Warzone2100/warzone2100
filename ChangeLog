@@ -1,3 +1,9 @@
+2009-00-00: Version 2.2.5
+ * General:
+   * Change: Try to display dialog box when a game internal error causes game to crash on Windows (r8307)
+   * Fix: Reduce the time it takes to rebuild font cache on Vista and Windows 7 (ticket:1013, r8322)
+   * Fix: Collection of smaller bugfixes (ticket:997, ticket:1018, ticket:1021, ticket:1006)
+
 2009-10-11: Version 2.2.4
  * General:
    * Fix: Indirect fire weapons can no longer use sensors to fire at targets the sensor cannot see. (r8177)
