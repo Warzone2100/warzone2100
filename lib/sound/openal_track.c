@@ -118,41 +118,6 @@ static void sound_RemoveSample(SAMPLE_LIST* previous, SAMPLE_LIST* to_remove)
 	}
 }
 
-#ifndef WZ_NOSOUND
-static void PrintOpenALVersion(code_part part)
-{
-	const ALchar* pDeviceNames = NULL;
-	char buf[256];
-
-	debug(part, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
-	debug(part, "OpenAL Version: %s", alGetString(AL_VERSION));
-	debug(part, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
-	debug(part, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
-
-	// Print the available devices
-	pDeviceNames = alcGetString(NULL, ALC_DEVICE_SPECIFIER);
-	/* Devices are separated by NUL chars ('\0') and the list of devices is
-	 * terminated by two NUL chars (or an empty C string, depending on how
-	 * you look at it).
-	 */
-	while (pDeviceNames != NULL && *pDeviceNames != '\0')
-	{
-		debug(part, "available openAL device(s) are: %s", pDeviceNames);
-		pDeviceNames += strlen(pDeviceNames) + 1;
-	}
-
-	// Copy this info to be used by the crash handler for the dump file
-	ssprintf(buf, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
-	addDumpInfo(buf);
-	ssprintf(buf, "OpenAL Version: %s", alGetString(AL_VERSION));
-	addDumpInfo(buf);
-	ssprintf(buf, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
-	addDumpInfo(buf);
-	ssprintf(buf, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
-	addDumpInfo(buf);
-}
-#endif
-
 //*
 // =======================================================================================================================
 // =======================================================================================================================
@@ -163,6 +128,19 @@ BOOL sound_InitLibrary( void )
 	int err;
 	const ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	const ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+	char buf[512];
+	const ALCchar *deviceName;
+
+	/* Get the available devices and print them.
+	 * Devices are separated by NUL chars ('\0') and the list of devices is
+	 * terminated by two NUL chars.
+	 */
+	deviceName = alcGetString(NULL, ALC_DEVICE_SPECIFIER);
+	while (deviceName != NULL && *deviceName != '\0')
+	{
+		debug(LOG_SOUND, "available OpenAL device(s) are: %s", deviceName);
+		deviceName += strlen(deviceName) + 1;
+	}
 
 #ifdef WZ_OS_WIN
 	/* HACK: Select the "software" OpenAL device on Windows because it
@@ -171,37 +149,60 @@ BOOL sound_InitLibrary( void )
 	 *       to be significantly less noticeable.
 	 */
 	device = alcOpenDevice("Generic Software");
+	
+	// If the software device isn't available, fall back to default
 	if (!device)
+#endif
 	{
-		// If the software device isn't available, fall back to default
+		// Open default device
 		device = alcOpenDevice(NULL);
 	}
-#else
-	device = alcOpenDevice(0);
-#endif
-	if(!device)
+
+	if (!device)
 	{
-		PrintOpenALVersion(LOG_ERROR);
 		debug(LOG_ERROR, "Couldn't open audio device.");
 		return false;
 	}
 
+	// Print current device name and add it to dump info
+	deviceName = alcGetString(device, ALC_DEVICE_SPECIFIER);
+	debug(LOG_SOUND, "Current audio device: %s", deviceName);
+	ssprintf(buf, "OpenAL Device Name: %s", deviceName);
+	addDumpInfo(buf);
+
 	context = alcCreateContext(device, NULL);		//NULL was contextAttributes
 	if (!context)
 	{
-		PrintOpenALVersion(LOG_ERROR);
 		debug(LOG_ERROR, "Couldn't open audio context.");
 		return false;
 	}
+	
 	alcMakeContextCurrent(context);
 
 	err = sound_GetDeviceError(device);
 	if (err != ALC_NO_ERROR)
 	{
-		PrintOpenALVersion(LOG_ERROR);
 		debug(LOG_ERROR, "Couldn't initialize audio context: %s", alcGetString(device, err));
 		return false;
 	}
+
+	// Dump Open AL device info (depends on context)
+	// to the crash handler for the dump file and debug log
+	ssprintf(buf, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
+	addDumpInfo(buf);
+	debug(LOG_SOUND, buf);
+
+	ssprintf(buf, "OpenAL Version: %s", alGetString(AL_VERSION));
+	addDumpInfo(buf);
+	debug(LOG_SOUND, buf);
+
+	ssprintf(buf, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
+	addDumpInfo(buf);
+	debug(LOG_SOUND, buf);
+
+	ssprintf(buf, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
+	addDumpInfo(buf);
+	debug(LOG_SOUND, buf);
 #endif
 
 	openal_initialized = true;
@@ -211,14 +212,10 @@ BOOL sound_InitLibrary( void )
 	alGetError();
 	alcGetError(device);
 
-	// Check what version of Open AL we are using
-	PrintOpenALVersion(LOG_SOUND);
-
-	alGetError();	// clear error codes
 	alListener3f(AL_POSITION, 0.f, 0.f, 0.f);
-	alListenerfv( AL_VELOCITY, listenerVel );
-	alListenerfv( AL_ORIENTATION, listenerOri );
-	alDistanceModel( AL_NONE );
+	alListenerfv(AL_VELOCITY, listenerVel);
+	alListenerfv(AL_ORIENTATION, listenerOri);
+	alDistanceModel(AL_NONE);
 	sound_GetError();
 #endif
 	return true;
