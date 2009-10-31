@@ -883,7 +883,7 @@ BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 	psNewTrig = malloc(sizeof(ACTIVE_TRIGGER));
 	if (psNewTrig == NULL)
 	{
-		debug( LOG_ERROR, "eventLoadTrigger: out of memory" );
+		debug( LOG_FATAL, "eventLoadTrigger: out of memory" );
 		abort();
 		return false;
 	}

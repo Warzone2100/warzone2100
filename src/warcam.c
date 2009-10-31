@@ -414,7 +414,7 @@ BOOL Status = true;
 			Status = false;
 		break;
 	default:
-		debug( LOG_ERROR, "Weirdy status for tracking Camera" );
+		debug( LOG_FATAL, "Weirdy status for tracking Camera" );
 		abort();
 		break;
 	}

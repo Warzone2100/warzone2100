@@ -354,14 +354,14 @@ void loadMapPreview(bool hideInterface)
 	imageData = (char*)malloc(oursize * 3);		// used for the texture
 	if( !imageData )
 	{
-		debug(LOG_ERROR,"Out of memory for texture!");
+		debug(LOG_FATAL,"Out of memory for texture!");
 		abort();	// should be a fatal error ?
 		return;
 	}
 	fboData = (char*)malloc(oursize* 3);		// used for the FBO texture
 	if( !fboData )
 	{
-		debug(LOG_ERROR,"Out of memory for FBO texture!");
+		debug(LOG_FATAL,"Out of memory for FBO texture!");
 		free(imageData);
 		abort();	// should be a fatal error?
 		return ;

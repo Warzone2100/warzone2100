@@ -181,7 +181,7 @@ animObj_Update( void )
 			if ( hashTable_RemoveElement( g_pAnimObjTable, psObj,
 				(intptr_t) psObj->psParent, psObj->psAnim->uwID ) == false )
 			{
-				debug( LOG_ERROR, "animObj_Update: couldn't remove anim obj\n" );
+				debug( LOG_FATAL, "animObj_Update: couldn't remove anim obj\n" );
 				abort();
 			}
 		}
@@ -240,7 +240,7 @@ animObj_Add( void *pParentObj, int iAnimID,
 
 	if ( uwObj > ANIM_MAX_COMPONENTS )
 	{
-		debug( LOG_ERROR, "animObj_Add: number of components too small\n" );
+		debug( LOG_FATAL, "animObj_Add: number of components too small\n" );
 		abort();
 	}
 

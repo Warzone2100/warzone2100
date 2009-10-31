@@ -248,7 +248,7 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 		break;
 		/* Gone tits up by the looks of it */
 	default:
-		debug( LOG_ERROR, "Weirdy type of text justification for console print" );
+		debug( LOG_FATAL, "Weirdy type of text justification for console print" );
 		abort();
 		break;
 	}
@@ -682,7 +682,7 @@ void	setDefaultConsoleJust(CONSOLE_TEXT_JUSTIFICATION defJ)
 		defJustification = defJ;
 		break;
 	default:
-		debug( LOG_ERROR, "Weird default text justification for console" );
+		debug( LOG_FATAL, "Weird default text justification for console" );
 		abort();
 		break;
 	}

@@ -113,6 +113,7 @@ BOOL resLoad(const char *pResFile, SDWORD blockID)
 	input.input.physfsfile = openLoadFile(pResFile, true);
 	if (!input.input.physfsfile)
 	{
+		debug(LOG_FATAL, "Could not open file %s", pResFile);
 		return false;
 	}
 
@@ -120,7 +121,7 @@ BOOL resLoad(const char *pResFile, SDWORD blockID)
 	res_set_extra(&input);
 	if (res_parse() != 0)
 	{
-		debug(LOG_ERROR, "resLoad: failed to parse %s", pResFile);
+		debug(LOG_FATAL, "Failed to parse %s", pResFile);
 		retval = false;
 	}
 
@@ -149,7 +150,7 @@ static RES_TYPE* resAlloc(const char *pType)
 	psT = (RES_TYPE *)malloc(sizeof(RES_TYPE));
 	if (!psT)
 	{
-		debug( LOG_ERROR, "resAlloc: Out of memory" );
+		debug( LOG_FATAL, "resAlloc: Out of memory" );
 		abort();
 		return NULL;
 	}

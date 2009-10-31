@@ -290,12 +290,19 @@ static void getPlatformUserDir(char * const tmpstr, size_t const size)
 	else
 #endif
 	if (PHYSFS_getUserDir())
+	{
 		strlcpy(tmpstr, PHYSFS_getUserDir(), size); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
+	}
 	// If PhysicsFS fails (might happen if environment variable HOME is unset or wrong) then use the current working directory
 	else if (getCurrentDir(tmpstr, size))
+	{
 		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
+	}
 	else
+	{
+		debug(LOG_FATAL, "Can't get UserDir?");
 		abort();
+}
 }
 
 
@@ -309,14 +316,14 @@ static void initialize_ConfigDir(void)
 
 		if (!PHYSFS_setWriteDir(tmpstr)) // Workaround for PhysFS not creating the writedir as expected.
 		{
-			debug(LOG_ERROR, "Error setting write directory to \"%s\": %s",
+			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
 			      tmpstr, PHYSFS_getLastError());
 			exit(1);
 		}
 
 		if (!PHYSFS_mkdir(WZ_WRITEDIR)) // s.a.
 		{
-			debug(LOG_ERROR, "Error creating directory \"%s\": %s",
+			debug(LOG_FATAL, "Error creating directory \"%s\": %s",
 			      WZ_WRITEDIR, PHYSFS_getLastError());
 			exit(1);
 		}
@@ -327,7 +334,7 @@ static void initialize_ConfigDir(void)
 
 		if (!PHYSFS_setWriteDir(tmpstr))
 		{
-			debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
+			debug( LOG_FATAL, "Error setting write directory to \"%s\": %s",
 			tmpstr, PHYSFS_getLastError() );
 			exit(1);
 		}
@@ -344,7 +351,7 @@ static void initialize_ConfigDir(void)
 
 		if (!PHYSFS_setWriteDir(tmpstr)) // Workaround for PhysFS not creating the writedir as expected.
 		{
-			debug(LOG_ERROR, "Error setting write directory to \"%s\": %s",
+			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
 			      tmpstr, PHYSFS_getLastError());
 			exit(1);
 		}
@@ -481,7 +488,7 @@ static void scanDataDirs( void )
 	}
 	else
 	{
-		debug( LOG_ERROR, "Could not find game data. Aborting." );
+		debug( LOG_FATAL, "Could not find game data. Aborting." );
 		exit(1);
 	}
 }
@@ -507,7 +514,7 @@ static void make_dir(char *dest, const char *dirname, const char *subdir)
 	}
 	PHYSFS_mkdir(dest);
 	if ( !PHYSFS_mkdir(dest) ) {
-		debug(LOG_ERROR, "Unable to create directory \"%s\" in write dir \"%s\"!",
+		debug(LOG_FATAL, "Unable to create directory \"%s\" in write dir \"%s\"!",
 		      dest, PHYSFS_getWriteDir());
 		exit(EXIT_FAILURE);
 	}
@@ -525,7 +532,7 @@ static void startTitleLoop(void)
 	screen_RestartBackDrop();
 	if (!frontendInitialise("wrf/frontend.wrf"))
 	{
-		debug( LOG_ERROR, "Shutting down after failure" );
+		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
 	}
 	frontendInitVars();
@@ -540,7 +547,7 @@ static void stopTitleLoop(void)
 {
 	if (!frontendShutdown())
 	{
-		debug( LOG_ERROR, "Shutting down after failure" );
+		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
 	}
 }
@@ -556,21 +563,21 @@ static void startGameLoop(void)
 
 	if (!levLoadData(aLevelName, NULL, 0))
 	{
-		debug( LOG_ERROR, "Shutting down after failure" );
+		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
 	}
 	//after data is loaded check the research stats are valid
 	if (!checkResearchStats())
 	{
-		debug( LOG_ERROR, "Invalid Research Stats" );
-		debug( LOG_ERROR, "Shutting down after failure" );
+		debug( LOG_FATAL, "Invalid Research Stats" );
+		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
 	}
 	//and check the structure stats are valid
 	if (!checkStructureStats())
 	{
-		debug( LOG_ERROR, "Invalid Structure Stats" );
-		debug( LOG_ERROR, "Shutting down after failure" );
+		debug( LOG_FATAL, "Invalid Structure Stats" );
+		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
 	}
 

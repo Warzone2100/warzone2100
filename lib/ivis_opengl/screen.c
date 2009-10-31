@@ -140,11 +140,11 @@ BOOL screenInitialise(
 				SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 8 );
 				break;
 			case 8:
-				debug( LOG_ERROR, "Error: You don't want to play Warzone with a bit depth of %i, do you?", bpp );
+				debug( LOG_FATAL, "Error: You don't want to play Warzone with a bit depth of %i, do you?", bpp );
 				exit( 1 );
 				break;
 			default:
-				debug( LOG_ERROR, "Error: Unsupported bit depth: %i", bpp );
+				debug( LOG_FATAL, "Error: Unsupported bit depth: %i", bpp );
 				exit( 1 );
 				break;
 		}
@@ -157,7 +157,9 @@ BOOL screenInitialise(
 	}
 	if ( SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1)
 	{
-		debug( LOG_ERROR, "OpenGL initialization did not give double buffering!" );
+		debug( LOG_FATAL, "OpenGL initialization did not give double buffering!" );
+		debug( LOG_FATAL, "Double buffering is required for this game!");
+		exit(1);
 	}
 	
 	{

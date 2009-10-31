@@ -611,7 +611,7 @@ static BOOL cleanMap(UDWORD player)
 	case CAMP_WALLS:												//everything.
 		break;
 	default:
-		debug( LOG_ERROR, "Unknown Campaign Style" );
+		debug( LOG_FATAL, "Unknown Campaign Style" );
 		abort();
 		break;
 	}

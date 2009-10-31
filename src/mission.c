@@ -1546,7 +1546,7 @@ void endMission(void)
 		default:
 		{
 			//error!
-			debug( LOG_ERROR, "Unknown Mission Type" );
+			debug( LOG_FATAL, "Unknown Mission Type" );
 			abort();
 		}
 	}

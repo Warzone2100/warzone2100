@@ -101,7 +101,7 @@ static W_FORM* formCreatePlain(const W_FORMINIT* psInit)
 	W_FORM* psWidget = (W_FORM *)malloc(sizeof(W_FORM));
 	if (psWidget == NULL)
 	{
-		debug(LOG_ERROR, "formCreatePlain: Out of memory");
+		debug(LOG_FATAL, "formCreatePlain: Out of memory");
 		abort();
 		return NULL;
 	}
@@ -158,7 +158,7 @@ static W_CLICKFORM* formCreateClickable(const W_FORMINIT* psInit)
 	W_CLICKFORM* psWidget = (W_CLICKFORM *)malloc(sizeof(W_CLICKFORM));
 	if (psWidget == NULL)
 	{
-		debug(LOG_ERROR, "formCreateClickable: Out of memory");
+		debug(LOG_FATAL, "formCreateClickable: Out of memory");
 		abort();
 		return NULL;
 	}
@@ -255,7 +255,7 @@ static W_TABFORM* formCreateTabbed(const W_FORMINIT* psInit)
 	psWidget = (W_TABFORM *)malloc(sizeof(W_TABFORM));
 	if (psWidget == NULL)
 	{
-		debug(LOG_ERROR, "formCreateTabbed: Out of memory");
+		debug(LOG_FATAL, "formCreateTabbed: Out of memory");
 		abort();
 		return NULL;
 	}

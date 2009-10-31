@@ -3749,7 +3749,7 @@ BOOL scrStartMission(void)
 	psNewLevel = levFindDataSet(pGame);
 	if (psNewLevel == NULL)
 	{
-		debug( LOG_ERROR, "scrStartMission: couldn't find level data" );
+		debug( LOG_FATAL, "scrStartMission: couldn't find level data" );
 		abort();
 		return false;
 	}
@@ -6623,7 +6623,7 @@ BOOL scrTutorialTemplates(void)
 	sstrcpy(pName, "ViperLtMGWheels");
 	if (!getResourceName(pName))
 	{
-		debug( LOG_ERROR, "tutorial template setup failed" );
+		debug( LOG_FATAL, "tutorial template setup failed" );
 		abort();
 		return false;
 	}
@@ -6658,7 +6658,7 @@ BOOL scrTutorialTemplates(void)
 	}
 	else
 	{
-		debug( LOG_ERROR, "tutorial template setup failed" );
+		debug( LOG_FATAL, "tutorial template setup failed" );
 		abort();
 		return false;
 	}
@@ -11187,7 +11187,7 @@ BOOL scrGetChatCmdDescription(void)
 	pChatCommand = (char*)malloc(MAXSTRLEN);
 	if (pChatCommand == NULL)
 	{
-		debug(LOG_ERROR, "scrGetCmdDescription: Out of memory!");
+		debug(LOG_FATAL, "scrGetCmdDescription: Out of memory!");
 		abort();
 		return false;
 	}
@@ -11831,7 +11831,7 @@ BOOL scrPgettext()
 
 	if (asprintf(&msg_ctxt_id, "%s%s%s", strParam1, GETTEXT_CONTEXT_GLUE, strParam2) == -1)
 	{
-		debug(LOG_ERROR, "Out of memory");
+		debug(LOG_FATAL, "Out of memory");
 		abort();
 		return false;
 	}

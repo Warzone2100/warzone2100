@@ -386,7 +386,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 						newstack = realloc(edgelist, sizeof(EDGE) * edgelistsize);
 						if (newstack == NULL)
 						{
-							debug(LOG_ERROR, "pie_DrawShadow: Out of memory!");
+							debug(LOG_FATAL, "pie_DrawShadow: Out of memory!");
 							abort();
 							return;
 						}

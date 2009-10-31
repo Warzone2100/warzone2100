@@ -240,7 +240,7 @@ TITLECODE titleLoop(void)
 			break;
 
 		default:
-			debug( LOG_ERROR, "unknown title screen mode" );
+			debug( LOG_FATAL, "unknown title screen mode" );
 			abort();
 	}
 

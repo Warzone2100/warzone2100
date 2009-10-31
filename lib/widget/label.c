@@ -48,7 +48,7 @@ W_LABEL* labelCreate(const W_LABINIT* psInit)
 	psWidget = (W_LABEL *)malloc(sizeof(W_LABEL));
 	if (psWidget == NULL)
 	{
-		debug(LOG_ERROR, "labelCreate: Out of memory");
+		debug(LOG_FATAL, "labelCreate: Out of memory");
 		abort();
 		return NULL;
 	}
