@@ -948,7 +948,7 @@ BOOL recvResearchStatus()
 		psBuilding = IdToStruct(structRef, player);
 
 		// Set that facility to research
-		if (psBuilding)
+		if (psBuilding && psBuilding->pFunctionality)
 		{
 			psResFacilty = (RESEARCH_FACILITY *) psBuilding->pFunctionality;
 
