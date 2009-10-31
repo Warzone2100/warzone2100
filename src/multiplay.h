@@ -101,9 +101,9 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define CAMPAIGNTEMPLATES		5
 
 #define PING_LO					0			// this ping is kickin'.
-#define PING_MED				600			// this ping is crusin'.
-#define PING_HI					1200		// this ping is crawlin'.
-#define PING_LIMIT				2000		// if ping is bigger than this, then worry and panic.
+#define PING_MED				200			// this ping is crawlin'
+#define PING_HI					400			// this ping just plain sucks :P
+#define PING_LIMIT				1000		// if ping is bigger than this, then worry and panic.
 
 #define LEV_LOW					400			// how many points to allocate for res levels???
 #define LEV_MED					700
