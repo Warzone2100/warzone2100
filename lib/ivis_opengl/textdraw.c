@@ -86,7 +86,8 @@ static inline void iV_printFontList(void)
 	debug(LOG_NEVER, "GLC_CURRENT_FONT_COUNT = %d", font_count);
 	if (font_count == 0)
 	{
-		debug(LOG_ERROR, "The required font (%s) isn't loaded", font_family);
+		debug(LOG_ERROR, "The requested font (%s) isn't loaded", font_family);
+		info("Forcing GLC_AUTO_FONT");
 
 		// Fall back to unselected fonts since the requested font apparently
 		// isn't available.
@@ -137,6 +138,8 @@ static void iV_initializeGLC(void)
 	if (!glcNewFontFromFamily(_glcFont_Regular, font_family))
 	{
 		debug(LOG_ERROR, "Failed to select font family %s as regular font error code %0x", font_family, glcGetError());
+		// select a default font since requested font failed and print out what is available to QuesoGLC
+		iV_printFontList();
 	}
 	else
 	{
@@ -176,9 +179,10 @@ static void iV_initializeGLC(void)
 void iV_TextInit()
 {
 	iV_initializeGLC();
-	// if we failed in init, then we need a default font
-	iV_printFontList();
 	iV_SetFont(font_regular);
+#ifdef DEBUG
+	iV_printFontList();
+#endif
 }
 
 void iV_TextShutdown()
