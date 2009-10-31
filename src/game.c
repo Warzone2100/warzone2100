@@ -100,7 +100,6 @@
 /// @note This represents a size internal to savegame files, so: DO NOT CHANGE THIS
 #define MAX_GAME_STR_SIZE 20
 
-static UDWORD RemapPlayerNumber(UDWORD OldNumber);
 
 typedef struct _game_save_header
 {
@@ -5115,7 +5114,7 @@ DROID_TEMPLATE *FindDroidTemplate(const char * const name)
 
 // -----------------------------------------------------------------------------------------
 // Remaps old player number based on position on map to new owner
-static UDWORD RemapPlayerNumber(UDWORD OldNumber)
+UDWORD RemapPlayerNumber(UDWORD OldNumber)
 {
 	int i;
 

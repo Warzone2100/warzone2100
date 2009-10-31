@@ -24,6 +24,26 @@
 #define PHYSFS_APPEND 1
 #define PHYSFS_PREPEND 0
 
+static inline bool PHYSFS_writeSLE8(PHYSFS_file* file, int8_t val)
+{
+	return (PHYSFS_write(file, &val, sizeof(int8_t), 1) == 1);
+}
+
+static inline bool PHYSFS_writeULE8(PHYSFS_file* file, uint8_t val)
+{
+	return (PHYSFS_write(file, &val, sizeof(uint8_t), 1) == 1);
+}
+
+static inline bool PHYSFS_readSLE8(PHYSFS_file* file, int8_t* val)
+{
+	return (PHYSFS_read(file, val, sizeof(int8_t), 1) == 1);
+}
+
+static inline bool PHYSFS_readULE8(PHYSFS_file* file, uint8_t* val)
+{
+	return (PHYSFS_read(file, val, sizeof(uint8_t), 1) == 1);
+}
+
 static inline bool PHYSFS_writeSBE8(PHYSFS_file* file, int8_t val)
 {
 	return (PHYSFS_write(file, &val, sizeof(int8_t), 1) == 1);
@@ -64,5 +84,7 @@ static inline bool PHYSFS_readBEFloat(PHYSFS_file* file, float* val)
 	uint32_t* readValue = (uint32_t*)val;
 	return (PHYSFS_readUBE32(file, readValue) != 0);
 }
+
+bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...) WZ_DECL_FORMAT(printf, 2, 3);
 
 #endif // _physfs_ext_h

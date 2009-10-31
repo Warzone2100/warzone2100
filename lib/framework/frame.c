@@ -36,6 +36,7 @@
 #include "frameresource.h"
 #include "input.h"
 #include "SDL_framerate.h"
+#include "physfs_ext.h"
 
 #include "cursors.h"
 
