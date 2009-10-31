@@ -330,7 +330,7 @@ Section $(TEXT_SecNLS) SecNLS
   File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\es.gmo"
 
   SetOutPath "$INSTDIR\locale\et\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\et.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\et_EE.gmo"
 
   SetOutPath "$INSTDIR\locale\fi\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fi.gmo"
