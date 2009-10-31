@@ -82,8 +82,8 @@ static inline void iV_printFontList(void)
 {
 	unsigned int i;
 	unsigned int font_count = glcGeti(GLC_CURRENT_FONT_COUNT);
-	debug(LOG_NEVER, "GLC_CURRENT_FONT_COUNT = %d", font_count);
 
+	debug(LOG_NEVER, "GLC_CURRENT_FONT_COUNT = %d", font_count);
 	if (font_count == 0)
 	{
 		debug(LOG_ERROR, "The required font (%s) isn't loaded", font_family);
@@ -136,27 +136,7 @@ static void iV_initializeGLC(void)
 
 	if (!glcNewFontFromFamily(_glcFont_Regular, font_family))
 	{
-		GLint count, i;
-
 		debug(LOG_ERROR, "Failed to select font family %s as regular font error code %0x", font_family, glcGetError());
-
-		// Get the number of entries in the catalog list
-		count = glcGeti(GLC_CATALOG_COUNT);
-		info("GLC_CATALOG_COUNT is %d.  Listing follows.", count);
-
-		// Print the path to the catalogs
-		for (i = 0; i <= count; i++)
-		{
-			info("Fonts found %s\n", glcGetListc(GLC_CATALOG_LIST, i));
-		}
-
-		// we now force a known working font -- we ship it, so it must be there right?
-		if (!glcNewFontFromFamily(_glcFont_Regular, "DejaVu Sans"))
-		{
-			debug(LOG_FATAL, "Unable to find DejaVu Sans font?  Needed font is missing, aborting game since it is unplayable!");
-			abort();
-		}
-
 	}
 	else
 	{
@@ -196,11 +176,9 @@ static void iV_initializeGLC(void)
 void iV_TextInit()
 {
 	iV_initializeGLC();
-	iV_SetFont(font_regular);
-
-#ifdef DEBUG
+	// if we failed in init, then we need a default font
 	iV_printFontList();
-#endif
+	iV_SetFont(font_regular);
 }
 
 void iV_TextShutdown()
