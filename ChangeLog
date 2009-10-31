@@ -6,7 +6,7 @@
    * Fix: Added support for ATI-specific two-sided stencil extension. Will decrease CPU usage on ATI cards. (r8185)
    * Fix: Correctly handle savegame names (ticket:981, r8227, r8246)
  * Campaign:
-   * Fix: Improve anti-air and make it more like the original by making AA shots homing like in skirmish (r8258)
+   * Fix: Improve anti-air and make it more like the original by making AA shots homing like in skirmish (r8258, ticket:206)
  * Multiplayer:
    * Change: Data integrity check is added.  This will break network connectivity with 2.2.3. (r8205, ticket:961)
  * Balancing - skirmish (r8262):
