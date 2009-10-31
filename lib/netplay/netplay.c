@@ -1719,7 +1719,6 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 			debug(LOG_WARNING, "GAMESTRUCT recv size mismatch; received %u bytes; expecting %d", i, (int)sizeof(buf));
 			return false;
 		}
-		return false;
 	}
 
 	// Now dump the data into the game struct
