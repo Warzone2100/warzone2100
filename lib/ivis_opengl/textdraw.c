@@ -118,7 +118,7 @@ static void iV_initializeGLC(void)
 	_glcContext = glcGenContext();
 	if (!_glcContext)
 	{
-		debug(LOG_ERROR, "Failed to initialize");
+		debug(LOG_ERROR, "Failed to initialize error code %0x", glcGetError());
 	}
 	else
 	{
@@ -136,7 +136,18 @@ static void iV_initializeGLC(void)
 
 	if (!glcNewFontFromFamily(_glcFont_Regular, font_family))
 	{
-		debug(LOG_ERROR, "Failed to select font family %s as regular font", font_family);
+		GLint count, i;
+
+		debug(LOG_ERROR, "Failed to select font family %s as regular font error code %0x", font_family, glcGetError());
+
+		// Get the number of entries in the catalog list
+		count = glcGeti(GLC_CATALOG_COUNT);
+
+		// Print the path to the catalogs
+		for (i = 0; i < count; i++)
+		{
+			info("Fonts found %s\n", glcGetListc(GLC_CATALOG_LIST, i));
+		}
 	}
 	else
 	{
@@ -145,7 +156,7 @@ static void iV_initializeGLC(void)
 
 	if (!glcFontFace(_glcFont_Regular, font_face_regular))
 	{
-		debug(LOG_WARNING, "Failed to select the \"%s\" font face of font family %s", font_face_regular, font_family);
+		debug(LOG_WARNING, "Failed to select the \"%s\" font face of font family %s error code %0x", font_face_regular, font_family, glcGetError());
 	}
 	else
 	{
@@ -154,7 +165,7 @@ static void iV_initializeGLC(void)
 
 	if (!glcNewFontFromFamily(_glcFont_Bold, font_family))
 	{
-		debug(LOG_ERROR, "iV_initializeGLC: Failed to select font family %s for the bold font", font_family);
+		debug(LOG_ERROR, "iV_initializeGLC: Failed to select font family %s for the bold font error code %0x", font_family, glcGetError());
 	}
 	else
 	{
@@ -163,7 +174,7 @@ static void iV_initializeGLC(void)
 
 	if (!glcFontFace(_glcFont_Bold, font_face_bold))
 	{
-		debug(LOG_WARNING, "Failed to select the \"%s\" font face of font family %s", font_face_bold, font_family);
+		debug(LOG_WARNING, "Failed to select the \"%s\" font face of font family %s error code %0x", font_face_bold, font_family, glcGetError());
 	}
 	else
 	{
