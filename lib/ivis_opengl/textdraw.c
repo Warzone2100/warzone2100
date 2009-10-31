@@ -142,12 +142,21 @@ static void iV_initializeGLC(void)
 
 		// Get the number of entries in the catalog list
 		count = glcGeti(GLC_CATALOG_COUNT);
+		info("GLC_CATALOG_COUNT is %d.  Listing follows.", count);
 
 		// Print the path to the catalogs
-		for (i = 0; i < count; i++)
+		for (i = 0; i <= count; i++)
 		{
 			info("Fonts found %s\n", glcGetListc(GLC_CATALOG_LIST, i));
 		}
+
+		// we now force a known working font -- we ship it, so it must be there right?
+		if (!glcNewFontFromFamily(_glcFont_Regular, "DejaVu Sans"))
+		{
+			debug(LOG_FATAL, "Unable to find DejaVu Sans font?  Needed font is missing, aborting game since it is unplayable!");
+			abort();
+		}
+
 	}
 	else
 	{
