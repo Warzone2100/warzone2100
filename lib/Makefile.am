@@ -5,7 +5,7 @@ SUBDIRS = framework	\
 	iniparser	\
 	ivis_common	\
 	ivis_opengl	\
-	gamelib		\
+	gamelib	\
 	sound		\
 	netplay		\
 	widget

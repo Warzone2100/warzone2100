@@ -71,7 +71,7 @@ case ${host_os} in
 	*mingw32*)
 		host_os_mingw32=yes
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
-		WIN32_LIBS='-ldbghelp -lshfolder -lwinmm -lwsock32'
+		WIN32_LIBS='-ldbghelp -lshfolder -lwinmm -lws2_32'
 		AC_SUBST([WIN32_LIBS], [${WIN32_LIBS}])
 		;;
 	*openbsd*)
@@ -293,10 +293,6 @@ AC_CHECK_LIB(popt, poptGetContext, AC_SUBST([POPT_LIBS], [-lpopt]), AC_MSG_ERROR
 AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found.]))
 AC_CHECK_LIB(physfs, PHYSFS_init, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS not found.]), [${WIN32_LIBS}])
 
-# Look for SDL_net
-AC_CHECK_HEADER(SDL/SDL_net.h, , AC_MSG_ERROR([SDL_net header not found.]))
-AC_CHECK_LIB(SDL_net, SDLNet_Init, AC_SUBST([SDL_NET_LIBS], [-lSDL_net]), AC_MSG_ERROR([SDL_net not found.]), [${SDL_LIBS} ${WIN32_LIBS}])
-
 # Look for OpenGL
 AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
 	AC_MSG_ERROR([SDL OpenGL header not found. Please install SDL with OpenGL support.]))
@@ -366,6 +362,7 @@ AC_CONFIG_FILES([Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile
+		lib/iniparser/Makefile
 		lib/ivis_opengl/Makefile
 		lib/ivis_common/Makefile
 		lib/netplay/Makefile
