@@ -44,6 +44,7 @@
 char masterserver_name[255] = {'\0'};
 unsigned int masterserver_port = 0, gameserver_port = 0;
 
+#define ALL_PLAYERS_ALLOCATED 999
 #define MAX_CONNECTED_PLAYERS	8
 #define MAX_TMP_SOCKETS		16
 
@@ -577,7 +578,7 @@ static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
 {
 	unsigned int i;
 
-	for (i = 1; i < MAX_CONNECTED_PLAYERS; ++i)
+	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		if (players[i].allocated == false)
 		{
@@ -590,7 +591,7 @@ static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
 		}
 	}
 
-	return 0;
+	return ALL_PLAYERS_ALLOCATED;
 }
 
 static void NET_DestroyPlayer(unsigned int id)
@@ -2118,6 +2119,13 @@ static void NETallowJoining(void)
 					dpid = NET_CreatePlayer(name, 0);
 
 					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
+
+					if (dpid == ALL_PLAYERS_ALLOCATED)
+					{
+						debug(LOG_ERROR, "All dpids were used up!  Aborting join.");
+						return;
+					}
+
 					NET_initBufferedSocket(connected_bsocket[dpid], tmp_socket[i]);
 					SDLNet_TCP_AddSocket(socket_set, connected_bsocket[dpid]->socket);
 					tmp_socket[i] = NULL;
