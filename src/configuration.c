@@ -55,10 +55,8 @@
 #define DEFAULTCDVOL	60
 #define DEFAULTSCROLL	1000
 
-#define MASTERSERVERPORT 9990
-#define GAMESERVERPORT   2100
-
-extern void registry_clear(void); // from configfile.c
+#define MASTERSERVERPORT	9990
+#define GAMESERVERPORT		2100
 
 void	setSinglePlayerFrameLimit		(SDWORD limit);
 SDWORD	getSinglePlayerFrameLimit		(void);
@@ -92,7 +90,7 @@ void setDefaultFrameRateLimit(void)
 // ////////////////////////////////////////////////////////////////////////////
 BOOL loadConfig(void)
 {
-	SDWORD	val;
+	int val;
 	char	sBuf[255];
 
 	openWarzoneKey();
@@ -232,7 +230,7 @@ BOOL loadConfig(void)
 		setInvertMouseStatus(true);
 		setWarzoneKeyNumeric("mouseflip", true);
 	}
-	
+
 	// //////////////////////////
 	// mouse buttons
 	if (getWarzoneKeyNumeric("RightClickOrders", &val))
@@ -244,7 +242,7 @@ BOOL loadConfig(void)
 		setRightClickOrders(false);
 		setWarzoneKeyNumeric("RightClickOrders", false);
 	}
-	
+
 	// //////////////////////////
 	// rotate radar
 	if(getWarzoneKeyNumeric("rotateRadar", &val))
@@ -278,7 +276,7 @@ BOOL loadConfig(void)
 	else
 	{
 		NETsetMasterserverName("lobby.wz2100.net");
-		setWarzoneKeyString("masterserver_name", "lobby.wz2100.net");
+		setWarzoneKeyString("masterserver_name", NETgetMasterserverName());
 	}
 
 	if (getWarzoneKeyString("fontname", sBuf))
@@ -332,7 +330,7 @@ BOOL loadConfig(void)
 	else
 	{
 		NETsetMasterserverPort(MASTERSERVERPORT);
-		setWarzoneKeyNumeric("masterserver_port", MASTERSERVERPORT);
+		setWarzoneKeyNumeric("masterserver_port", NETgetMasterserverPort());
 	}
 
 	if (getWarzoneKeyNumeric("gameserver_port", &val))
@@ -346,7 +344,7 @@ BOOL loadConfig(void)
 	else
 	{
 		NETsetGameserverPort(GAMESERVERPORT);
-		setWarzoneKeyNumeric("gameserver_port", GAMESERVERPORT);
+		setWarzoneKeyNumeric("gameserver_port", NETgetGameserverPort());
 	}
 
 	// //////////////////////////
@@ -410,7 +408,6 @@ BOOL loadConfig(void)
 	// favourite colour
 	if(!bMultiPlayer)
 	{
-		initPlayerColours();	// clear current maps.
 		if(getWarzoneKeyNumeric("colour", &val))
 		{
 			setPlayerColour(0, val);
@@ -464,9 +461,13 @@ BOOL loadConfig(void)
 	// map name
 	if(getWarzoneKeyString("mapName", sBuf))
 	{
-		sstrcpy(game.map, sBuf);
+		/* FIXME: Get rid of storing the max-player count in the config
+		 *        file. Instead we should parse the map *before*
+		 *        showing the skirmish/multiplayer setup screen.
+		 */
 		if (getWarzoneKeyNumeric("maxPlayers", &val))
 		{
+			sstrcpy(game.map, sBuf);
 			game.maxPlayers = val;
 		}
 		else
@@ -737,6 +738,9 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("textureSize", getTextureSize());
 	setWarzoneKeyNumeric("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	setWarzoneKeyNumeric("ColouredCursor", war_GetColouredCursor());
+	setWarzoneKeyString("masterserver_name", NETgetMasterserverName());
+	setWarzoneKeyNumeric("masterserver_port", NETgetMasterserverPort());
+	setWarzoneKeyNumeric("gameserver_port", NETgetGameserverPort());
 
 	if(!bMultiPlayer)
 	{
@@ -745,7 +749,7 @@ BOOL saveConfig(void)
 	else
 	{
 		debug( LOG_NEVER, "Writing multiplay prefs to registry\n" );
-		if(NetPlay.bHost && ingame.localJoiningInProgress)
+		if(NetPlay.isHost && ingame.localJoiningInProgress)
 		{
 			setWarzoneKeyString("gameName", game.name);			//  last hosted game
 		}

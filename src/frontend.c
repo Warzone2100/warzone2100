@@ -77,6 +77,7 @@ static char textureSize[WIDG_MAXSTR];
 tMode titleMode; // the global case
 char			aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
+BOOL			bLimiterLoaded = false;
 BOOL			bForceEditorLoaded = false;
 BOOL			bUsingKeyboard = false;		// to disable mouse pointer when using keys.
 BOOL			bUsingSlider   = false;

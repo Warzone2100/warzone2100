@@ -528,6 +528,7 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 		return true;
 
 	ASSERT(x != 0 && y != 0, "SendDroid: Invalid droid coordinates");
+	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
 
 	// Dont send other droids during campaign setup
 	if (ingame.localJoiningInProgress)
@@ -585,6 +586,9 @@ BOOL recvDroid()
 		pT = IdToTemplate(templateID, player);
 	}
 	NETend();
+
+	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
+
 	debug(LOG_LIFE, "<=== getting Droid from %u id of %u ",player,id);
 	if ((pos.x == 0 && pos.y == 0) || pos.x > world_coord(mapWidth) || pos.y > world_coord(mapHeight))
 	{
@@ -603,7 +607,7 @@ BOOL recvDroid()
 
 	// forget about calculating the power, we *know* they built it, so we set
 	// their power accordingly on the local machine.
-	setPower(player, power);
+	setPower((uint32_t) player, power);
 	debug(LOG_SYNC, "Syncing players %u power to %u", player, power);
 
 	// Create that droid on this machine.

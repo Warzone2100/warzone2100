@@ -30,8 +30,8 @@
 // Game Options Structure. Enough info to completely describe the static stuff in amultiplay game.
 typedef struct {
 	uint8_t		type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
+	BOOL		scavengers;					// whether scavengers are on or off
 	char		map[128];					// name of multiplayer map being used.
-	char		version[8];					// version of warzone
 	uint8_t		maxPlayers;					// max players to allow
 	char		name[128];					// game name   (to be used)
 	BOOL		fog;
@@ -72,7 +72,6 @@ extern MULTIPLAYERINGAME	ingame;						// the game description.
 
 extern BOOL					bMultiPlayer;				// true when more than 1 player.
 extern UDWORD				selectedPlayer;
-extern SDWORD				player2dpid[MAX_PLAYERS];	// note this is of type DPID, not DWORD
 extern BOOL					openchannels[MAX_PLAYERS];
 extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
@@ -102,9 +101,9 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define CAMPAIGNTEMPLATES		5
 
 #define PING_LO					0			// this ping is kickin'.
-#define PING_MED				600			// this ping is crusin'.
-#define PING_HI					1200		// this ping is crawlin'.
-#define PING_LIMIT				2000		// if ping is bigger than this, then worry and panic.
+#define PING_MED				200			// this ping is crawlin'
+#define PING_HI					400			// this ping just plain sucks :P
+#define PING_LIMIT				1000		// if ping is bigger than this, then worry and panic.
 
 #define LEV_LOW					400			// how many points to allocate for res levels???
 #define LEV_MED					700
@@ -130,7 +129,6 @@ extern BOOL myResponsibility	(UDWORD player);
 extern BOOL responsibleFor		(UDWORD player, UDWORD playerinquestion);
 extern UDWORD whosResponsible	(UDWORD player);
 extern Vector3i cameraToHome		(UDWORD player,BOOL scroll);
-extern SDWORD dpidToPlayer		(SDWORD dpid);
 extern char		playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 
 extern BOOL	multiPlayerLoop		(void);							// for loop.c
@@ -198,8 +196,6 @@ extern BOOL sendPing			(void);							// allow game to request pings.
 
 extern BOOL ForceDroidSync(const DROID* droidToSend);
 // multijoin
-extern void modifyResources		(POWER_GEN_FUNCTION* psFunction);
-
 extern BOOL sendReseachStatus	(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL bStart);
 
 extern void displayAIMessage	(char *pStr, SDWORD from, SDWORD to); //make AI process a message

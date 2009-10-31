@@ -150,6 +150,8 @@ typedef enum {
   LOG_GATEWAY,
   LOG_MSG,
   LOG_INFO,	/**< special; on by default, for both debug & release builds  */
+  LOG_TERRAIN,
+  LOG_FEATURE,
   LOG_FATAL,	/**< special; on by default, for both debug & release builds  */
   LOG_LAST /**< _must_ be last! */
 } code_part;

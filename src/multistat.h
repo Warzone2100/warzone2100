@@ -44,7 +44,7 @@ typedef struct
 extern BOOL			saveMultiStats			(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
 extern BOOL			loadMultiStats			(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
 extern PLAYERSTATS	getMultiStats			(UDWORD player,BOOL bLocal);									// get from net
-extern BOOL			setMultiStats			(SDWORD playerDPID, PLAYERSTATS plStats,BOOL bLocal);			// send to net.
+extern BOOL			setMultiStats			(SDWORD player, PLAYERSTATS plStats,BOOL bLocal);			// send to net.
 extern void			updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted);
 extern void			updateMultiStatsGames	(void);
 extern void			updateMultiStatsWins	(void);

@@ -98,6 +98,10 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 	iV_DrawText(_("Players Still Joining"),
 					x+(w/2)-(iV_GetTextWidth(_("Players Still Joining"))/2),
 					y+(h/2)-8 );
+	if (!NetPlay.playercount)
+	{
+		return true;
+	}
 	sprintf(sTmp,"%d%%", PERCENT((NetPlay.playercount-joinCount),NetPlay.playercount) );
 	iV_DrawText(sTmp ,x + (w / 2) - 10, y + (h / 2) + 10);
 
@@ -112,7 +116,6 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 	BOOL			bTemp;
 	STRUCTURE		*psStruct,*psNext;
 
-	player2dpid[player] = 0;					// remove player, make computer controlled
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
 
@@ -203,66 +206,45 @@ static void resetMultiVisibility(UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // A remote player has left the game
-BOOL MultiPlayerLeave( UDWORD dp)
+BOOL MultiPlayerLeave(UDWORD playerIndex)
 {
-	unsigned int i = 0;
 	char	buf[255];
 
-	// when the host drops in the lobby, we are screwed, so exit lobby screen
-	while((player2dpid[i] != NetPlay.dpidPlayer) && (i<MAX_PLAYERS) )i++;	// need to find who we are
-	if (ingame.JoiningInProgress[i] && dp == HOST_DPID)
+	if (playerIndex >= MAX_PLAYERS)
 	{
-		info("Host has quit the game, aborting!");
-		setLobbyError(ERROR_HOSTDROPPED);
-		stopJoining();
-		return true;
+		ASSERT(false, "Bad player number");
+		return false;
 	}
 
-	i = 0;
-	while((player2dpid[i] != dp) && (i<MAX_PLAYERS) )i++;	// find out which!
+	NETlogEntry("Player leaving game", 0, playerIndex);
+	debug(LOG_WARNING,"** Warning, player %u [%s], has left the game.", playerIndex, getPlayerName(playerIndex));
 
-	if(i != MAX_PLAYERS)									// player not already removed
+	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
+
+	turnOffMultiMsg(true);
+	clearPlayer(playerIndex, false, false);
+	game.skDiff[playerIndex] = DIFF_SLIDER_STOPS / 2;
+
+	turnOffMultiMsg(false);
+
+	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+
+	if (widgGetFromID(psWScreen, IDRET_FORM))
 	{
-		NETlogEntry("Player leaving game",0,dp);
-		debug(LOG_WARNING,"** Warning, player %u (dpid %u) [%s], has left the game.", i, dp, getPlayerName(i));
-
-		ssprintf(buf, _("%s has Left the Game"), getPlayerName(i));
-
-		turnOffMultiMsg(true);
-		clearPlayer(i,false,false);
-		// game.skDiff[] is using dpid as a index.
-		game.skDiff[dp] = (DIFF_SLIDER_STOPS / 2);
-
-		turnOffMultiMsg(false);
-
-		addConsoleMessage(buf,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-
-		if(widgGetFromID(psWScreen,IDRET_FORM))
-		{
-			audio_QueueTrack( ID_CLAN_EXIT );
-		}
-
-		NETplayerInfo();				// update the player info stuff
-
-		// fire script callback to reassign skirmish players.
-		CBPlayerLeft = i;
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
-		return true;
-	}
-	else
-	{
-		debug(LOG_WARNING, "Could not find Player %u (dpid=%u) to leave?", i, dp);
+		audio_QueueTrack(ID_CLAN_EXIT);
 	}
 
-	return false;
+	// fire script callback to reassign skirmish players.
+	CBPlayerLeft = playerIndex;
+	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
+
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // A Remote Player has joined the game.
-BOOL MultiPlayerJoin(UDWORD dpid)
+BOOL MultiPlayerJoin(UDWORD playerIndex)
 {
-	UDWORD i;
-
 	if(widgGetFromID(psWScreen,IDRET_FORM))	// if ingame.
 	{
 		audio_QueueTrack( ID_CLAN_ENTER );
@@ -276,39 +258,24 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		}
 	}
 
-	if(NetPlay.bHost)		// host responsible for welcoming this player.
+	if(NetPlay.isHost)		// host responsible for welcoming this player.
 	{
 		// if we've already received a request from this player don't reallocate.
-		for(i=0; (i<MAX_PLAYERS) ;i++)
+		if (ingame.JoiningInProgress[playerIndex])
 		{
-			if((player2dpid[i] == dpid) && ingame.JoiningInProgress[i] )
-			{
-				return true;
-			}
+			return true;
 		}
-		ASSERT( NetPlay.playercount<=MAX_PLAYERS,"Too many players!" );
+		ASSERT(NetPlay.playercount <= MAX_PLAYERS, "Too many players!");
 
 		// setup data for this player, then broadcast it to the other players.
-		// make darn sure this array is cleared or we deadlock in this loop
-		// FIXME: rand() makes no sense for us, and should be removed.
-		do
-		{
-			// Randomly allocate a player to this new machine
-			i = rand() % game.maxPlayers;
-		} while (player2dpid[i] != 0);
-
-		setPlayerColour(i,MAX_PLAYERS);				// force a colourchoice
-		chooseColour(i);							// pick an unused colour.
-
-		setupNewPlayer(dpid,i);						// setup all the guff for that player.
-		sendOptions(dpid,i);
-
-		bPlayerReadyGUI[dpid] = false;
+		setupNewPlayer(playerIndex);						// setup all the guff for that player.
+		sendOptions();
+		bPlayerReadyGUI[playerIndex] = false;
 
 		// if skirmish and game full, then kick...
-		if(game.type == SKIRMISH && NetPlay.playercount > game.maxPlayers )
+		if (NetPlay.playercount > game.maxPlayers)
 		{
-			kickPlayer(dpid, _("The game is full!"), ERROR_FULL);
+			kickPlayer(playerIndex, "Sorry, game is full!", ERROR_FULL);
 		}
 	}
 	return true;
@@ -317,14 +284,14 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 bool sendDataCheck(void)
 {
 	int i = 0;
-	uint32_t	playerdpid = NetPlay.dpidPlayer;
+	uint32_t	player = selectedPlayer;
 
-	NETbeginEncode(NET_DATA_CHECK, HOST_DPID);		// only need to send to HOST
+	NETbeginEncode(NET_DATA_CHECK, NET_HOST_ONLY);		// only need to send to HOST
 	for(i = 0; i < DATA_MAXDATA; i++)
 	{
 		NETuint32_t(&DataHash[i]);
 	}
-		NETuint32_t(&playerdpid);
+		NETuint32_t(&player);
 	NETend();
 	debug(LOG_NET, "sending hash to host");
 	return true;
@@ -333,7 +300,7 @@ bool sendDataCheck(void)
 bool recvDataCheck(void)
 {
 	int i = 0;
-	uint32_t	playerdpid;
+	uint32_t	player;
 	uint32_t tempBuffer[DATA_MAXDATA] = {0};
 
 	NETbeginDecode(NET_DATA_CHECK);
@@ -341,19 +308,19 @@ bool recvDataCheck(void)
 	{
 		NETuint32_t(&tempBuffer[i]);
 	}
-		NETuint32_t(&playerdpid);
+		NETuint32_t(&player);
 	NETend();
 
-	if (NetPlay.bHost)
+	if (NetPlay.isHost)
 	{
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			if (player2dpid[i] == playerdpid)
+			if (i == player)
 			{
 				break;
 			}
 		}
-		ASSERT_OR_RETURN(false , i <= MAX_PLAYERS, "We could not find this player (dpid %u)!", playerdpid );
+		ASSERT_OR_RETURN(false , i <= MAX_PLAYERS, "We could not find this player (%u)!", player );
 
 		if (memcmp(DataHash, tempBuffer, sizeof(DataHash)))
 		{
@@ -363,44 +330,42 @@ bool recvDataCheck(void)
 			sendTextMessage(msg, true);
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
-			kickPlayer(playerdpid, _("Data doesn't match!"), ERROR_WRONGDATA);
-			debug(LOG_WARNING, "Kicking Player %s,(dpid=%u), they are using a mod or have modified their data.", getPlayerName(i), playerdpid);
+			kickPlayer(player, _("Data doesn't match!"), ERROR_WRONGDATA);
+			debug(LOG_WARNING, "Kicking Player %s,(%u), they are using a mod or have modified their data.", getPlayerName(i), player);
 		}
 		else
 		{
-			debug(LOG_NET, "DataCheck message received and verified for player %s (dpid=%u)", getPlayerName(i), playerdpid);
+			debug(LOG_NET, "DataCheck message received and verified for player %s (dpid=%u)", getPlayerName(i), player);
 			ingame.DataIntegrity[i] = true;
 		}
 	}
 	return true;
 }
-
 // ////////////////////////////////////////////////////////////////////////////
 // Setup Stuff for a new player.
-void setupNewPlayer(UDWORD dpid, UDWORD player)
+void setupNewPlayer(UDWORD player)
 {
-	UDWORD i;//,col;
+	UDWORD i;
 	char buf[255];
 
-	player2dpid[player] = dpid;							// assign them a player too.
-	ingame.PingTimes[player] =0;						// reset ping time
-	ingame.JoiningInProgress[player] = true;			// note that player is now joining.
+	ingame.PingTimes[player] = 0;					// Reset ping time
+	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
 	ingame.DataIntegrity[player] = false;
 
-	for(i=0;i<MAX_PLAYERS;i++)							// set all alliances to broken.
+	for (i = 0; i < MAX_PLAYERS; i++)				// Set all alliances to broken
 	{
 		alliances[selectedPlayer][i] = ALLIANCE_BROKEN;
 		alliances[i][selectedPlayer] = ALLIANCE_BROKEN;
 	}
 
 	resetMultiVisibility(player);						// set visibility flags.
-	NETplayerInfo();								// update the net info stuff
 
-	setMultiStats(player2dpid[player],getMultiStats(player,false),true);  // get the players score from the ether.
+	setMultiStats(player, getMultiStats(player, false), true);  // get the players score from the ether.
 
 	ssprintf(buf, _("%s is Joining the Game"), getPlayerName(player));
-	addConsoleMessage(buf,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
+
 
 // While not the perfect place for this, it has to do when a HOST joins (hosts) game
 // unfortunatly, we don't get the message until after the setup is done.
@@ -409,25 +374,4 @@ void ShowMOTD(void)
 	// when HOST joins the game, show server MOTD message first
 	addConsoleMessage(_("System message:"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// reduce the amount of oil that can be extracted.
-void modifyResources(POWER_GEN_FUNCTION* psFunction)
-{
-	switch(game.power)
-	{
-	case LEV_LOW:
-		psFunction->powerMultiplier = psFunction->powerMultiplier * 3/4 ;	// careful with the brackets! (do mul before div)
-		break;
-	case LEV_MED:
-		psFunction->powerMultiplier = psFunction->powerMultiplier * 1;
-		break;
-	case LEV_HI:
-		psFunction->powerMultiplier = psFunction->powerMultiplier * 5/4  ;
-		break;
-	default:
-		break;
-	}
-	return;
 }

@@ -780,10 +780,10 @@ static BOOL loadPowerGenFunction(const char *pData)
 		&psFunction->criticalMassDamage, &psFunction->radiationDecayTime);
 
 
-	if(bMultiPlayer)
-	{
-		modifyResources(psFunction);
-	}
+//	if(bMultiPlayer)
+//	{
+//		modifyResources(psFunction);
+//	}
 
 
 	//allocate storage for the name

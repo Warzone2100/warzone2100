@@ -174,6 +174,8 @@ BOOL recvBuildStarted()
 BOOL SendBuildFinished(STRUCTURE *psStruct)
 {
 	uint32_t power = getPower( (uint32_t) psStruct->player);
+	uint8_t player = psStruct->player;
+	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
 
 	NETbeginEncode(NET_BUILDFINISHED, NET_ALL_PLAYERS);
 		NETuint32_t(&power);			// send how much power we got.
@@ -184,7 +186,7 @@ BOOL SendBuildFinished(STRUCTURE *psStruct)
 		NETuint16_t(&psStruct->pos.x);
 		NETuint16_t(&psStruct->pos.y);
 		NETuint16_t(&psStruct->pos.z);
-		NETuint8_t(&psStruct->player);
+		NETuint8_t(&player);
 	return NETend();
 }
 
@@ -208,8 +210,10 @@ BOOL recvBuildFinished()
 		NETuint8_t(&player);
 	NETend();
 
+	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
+
 	psStruct = IdToStruct(structId,ANYPLAYER);
-	setPower(player, power);		// we sync the power level as well
+	setPower( (uint32_t)player, power);		// we sync the power level as well
 
 	if (psStruct)
 	{												// make it complete.

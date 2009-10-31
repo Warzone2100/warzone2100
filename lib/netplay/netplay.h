@@ -37,11 +37,12 @@ typedef enum
 	ERROR_FULL,
 	ERROR_CHEAT,
 	ERROR_KICKED,
-	ERROR_WRONGVESION,
+	ERROR_WRONGVERSION,
 	ERROR_WRONGPASSWORD,				// NOTE WRONG_PASSWORD results in conflict
 	ERROR_HOSTDROPPED,
 	ERROR_WRONGDATA
 } LOBBY_ERROR_TYPES;
+
 
 typedef enum
 {
@@ -110,7 +111,8 @@ typedef enum
 	NET_REQUEST_VERSION,	//62 Host requests version check
 	NET_REQUEST_PASSWORD,	//63 Host requests password
 	NET_PASSWORD_CHECK,		//64 password check
-	NET_DATA_CHECK,			//65 Host wants a data check
+	NET_POSITIONREQUEST,	//65 position in GUI player list
+	NET_DATA_CHECK,			//66 Data integrity check
 	NUM_GAME_PACKETS		//   *MUST* be last.
 } MESSAGE_TYPES;
 
@@ -119,7 +121,7 @@ typedef enum
 #define MaxMsgSize		8192		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define MaxGames		12			// max number of concurrently playable games to allow.
-#define extra_string_size	255		// extra 255 char for future use
+#define extra_string_size	239		// extra 255 char for future use
 #define modlist_string_size	255		// For a concatenated list of mods
 
 #define SESSION_JOINDISABLED	1
@@ -148,7 +150,7 @@ typedef struct
 	SESSIONDESC	desc;
 	// END of old GAMESTRUCT format
 	// NOTE: do NOT save the following items in game.c--it will break savegames.
-	char		misc[StringSize];				// misc string  (future use)
+	char		secondaryHosts[2][40];
 	char		extra[extra_string_size];		// extra string (future use)
 	char		versionstring[StringSize];		// 
 	char		modlist[modlist_string_size];	// ???
@@ -157,7 +159,8 @@ typedef struct
 	uint32_t	privateGame;					// if true, it is a private game
 	uint32_t	pureGame;						// NO mods allowed if true
 	uint32_t	Mods;							// number of concatenated mods?
-	uint32_t	future1;						// for future use
+	// Game ID, used on the lobby server to link games with multiple address families to eachother
+	uint32_t	gameId;
 	uint32_t	future2;						// for future use
 	uint32_t	future3;						// for future use
 	uint32_t	future4;						// for future use
@@ -167,6 +170,7 @@ typedef struct
 // Message information. ie. the packets sent between machines.
 
 #define NET_ALL_PLAYERS 255
+#define NET_HOST_ONLY 0
 
 typedef struct {
 	uint16_t	size;				// used size of body
@@ -180,42 +184,45 @@ typedef struct {
 #define		FILEMSG			254		// a file packet
 
 // ////////////////////////////////////////////////////////////////////////
-// Player information. Update using NETplayerinfo
-typedef struct {
-	uint32_t dpid;
-	char name[StringSize];
-
-	// These are actually boolean values so uint8_t would suffice just as well.
-	// The problem is however that these where previously declared as BOOL,
-	// which is typedef'd as int, which on most platforms is equal to uint32_t.
-	uint32_t bHost;
+// Player information. Filled when players join, never re-ordered. selectedPlayer global points to 
+// currently controlled player. This array is indexed by GUI slots in pregame.
+typedef struct
+{
+	char		name[StringSize];	///< Player name
+	int32_t		position;		///< Map starting position
+	int32_t		colour;			///< Which colour slot this player is using
+	BOOL		allocated;		///< Allocated as a human player
+	uint32_t	heartattacktime;	///< Time cardiac arrest started
+	BOOL		heartbeat;		///< If we are still alive or not
+	BOOL		kick;			///< If we should kick them
+	int32_t		connection;		///< Index into connection list
+	int32_t		team;			///< Which team we are on
+	BOOL		ready;			///< player ready to start?
+	uint32_t	versionCheckTime;	///< Time when check sent. Uses 0xffffffff for nothing sent yet
+	BOOL		playerVersionFlag;	///< We kick on false
 } PLAYER;
 
 // ////////////////////////////////////////////////////////////////////////
 // all the luvly Netplay info....
 typedef struct {
-	GAMESTRUCT	games[MaxGames];		// the collection of games
-	PLAYER		players[MAX_PLAYERS];	// the array of players.
-	uint32_t	playercount;			// number of players in game.
-	uint32_t	dpidPlayer;				// ID of player created
-
-	// booleans
-	uint32_t	bComms;					// actually do the comms?
-	uint32_t	bHost;					// true if we are hosting the session
+	GAMESTRUCT	games[MaxGames];	///< The collection of games
+	PLAYER		players[MAX_PLAYERS];	///< The array of players.
+	uint32_t	playercount;		///< Number of players in game.
+	uint32_t	hostPlayer;		///< Index of host in player array
+	uint32_t	bComms;			///< Actually do the comms?
+	BOOL		isHost;			///< True if we are hosting the game
+	int32_t		maxPlayers;		///< Maximum number of players in this game
 	char gamePassword[StringSize];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
+	char MOTDbuffer[255];				// buffer for MOTD
 	char* MOTD;
 } NETPLAY;
-
-/// This is the hardcoded dpid (player ID) value for the hosting player.
-#define HOST_DPID 1
 
 // ////////////////////////////////////////////////////////////////////////
 // variables
 
 extern NETPLAY				NetPlay;
-
 extern NETMSG NetMsg;
 
 // ////////////////////////////////////////////////////////////////////////
@@ -228,7 +235,7 @@ extern BOOL   NETrecv(uint8_t *type);				// recv a message if possible
 extern UBYTE   NETsendFile(BOOL newFile, char *fileName, UDWORD player);	// send file chunk.
 extern UBYTE   NETrecvFile(void);			// recv file chunk
 
-extern int NETclose	(void);					// close current game
+extern int NETclose(void);					// close current game
 extern int NETshutdown(void);					// leave the game in play.
 
 extern UDWORD	NETgetBytesSent(void);				// return bytes sent/recv.  call regularly for good results
@@ -248,17 +255,21 @@ extern BOOL	NETfindGame(void);		// find games being played(uses GAME_GUID);
 extern BOOL	NETjoinGame(UDWORD gameNumber, const char* playername);			// join game given with playername
 extern BOOL	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
-
-//from netusers.c
-extern UDWORD	NETplayerInfo(void);		// count players in this game.
-extern BOOL	NETchangePlayerName(UDWORD dpid, char *newName);// change a players name.
+extern BOOL	NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 
 #include "netlog.h"
 
 extern void NETsetMasterserverName(const char* hostname);
+extern const char* NETgetMasterserverName(void);
 extern void NETsetMasterserverPort(unsigned int port);
+extern unsigned int NETgetMasterserverPort(void);
 extern void NETsetGameserverPort(unsigned int port);
+extern unsigned int NETgetGameserverPort(void);
 
 extern BOOL NETsetupTCPIP(const char *machine);
 extern void NETsetGamePassword(const char *password);
+extern void NETBroadcastPlayerInfo(uint32_t index);
+extern void NETCheckVersion(uint32_t player);
+extern void NET_InitPlayers(void);
+
 #endif

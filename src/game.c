@@ -100,7 +100,7 @@
 /// @note This represents a size internal to savegame files, so: DO NOT CHANGE THIS
 #define MAX_GAME_STR_SIZE 20
 
-UDWORD RemapPlayerNumber(UDWORD OldNumber);
+static UDWORD RemapPlayerNumber(UDWORD OldNumber);
 
 typedef struct _game_save_header
 {
@@ -436,11 +436,12 @@ static bool deserializeLandingZoneData(PHYSFS_file* fileHandle, LANDING_ZONE* se
 
 static bool serializeMultiplayerGame(PHYSFS_file* fileHandle, const MULTIPLAYERGAME* serializeMulti)
 {
+	const char *dummy8c = "DUMMYSTRING";
 	unsigned int i;
 
 	if (!PHYSFS_writeUBE8(fileHandle, serializeMulti->type)
 	 || PHYSFS_write(fileHandle, serializeMulti->map, 1, 128) != 128
-	 || PHYSFS_write(fileHandle, serializeMulti->version, 1, 8) != 8
+	 || PHYSFS_write(fileHandle, dummy8c, 1, 8) != 8
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->maxPlayers)
 	 || PHYSFS_write(fileHandle, serializeMulti->name, 1, 128) != 128
 	 || !PHYSFS_writeSBE32(fileHandle, serializeMulti->fog)
@@ -468,10 +469,11 @@ static bool deserializeMultiplayerGame(PHYSFS_file* fileHandle, MULTIPLAYERGAME*
 	int32_t boolFog;
 	uint8_t dummy8;
 	uint16_t dummy16;
+	char dummy8c[8];
 
 	if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->type)
 	 || PHYSFS_read(fileHandle, serializeMulti->map, 1, 128) != 128
-	 || PHYSFS_read(fileHandle, serializeMulti->version, 1, 8) != 8
+	 || PHYSFS_read(fileHandle, dummy8c, 1, 8) != 8
 	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->maxPlayers)
 	 || PHYSFS_read(fileHandle, serializeMulti->name, 1, 128) != 128
 	 || !PHYSFS_readSBE32(fileHandle, &boolFog)
@@ -535,9 +537,9 @@ static bool deserializeGameStruct(PHYSFS_file* fileHandle, GAMESTRUCT* serialize
 
 static bool serializePlayer(PHYSFS_file* fileHandle, const PLAYER* serializePlayer)
 {
-	return (PHYSFS_writeUBE32(fileHandle, serializePlayer->dpid)
+	return (PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_write(fileHandle, serializePlayer->name, StringSize, 1) == 1
-	     && PHYSFS_writeUBE32(fileHandle, serializePlayer->bHost)
+	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0));
 }
 
@@ -545,9 +547,9 @@ static bool deserializePlayer(PHYSFS_file* fileHandle, PLAYER* serializePlayer)
 {
 	uint32_t dummy;
 
-	return (PHYSFS_readUBE32(fileHandle, &serializePlayer->dpid)
+	return (PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_read(fileHandle, serializePlayer->name, StringSize, 1) == 1
-	     && PHYSFS_readUBE32(fileHandle, &serializePlayer->bHost)
+	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy));
 }
 
@@ -568,7 +570,7 @@ static bool serializeNetPlay(PHYSFS_file* fileHandle, const NETPLAY* serializeNe
 	}
 
 	return (PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bComms)
-	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bHost)
+	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
@@ -594,7 +596,7 @@ static bool deserializeNetPlay(PHYSFS_file* fileHandle, NETPLAY* serializeNetPla
 	}
 
 	return (PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bComms)
-	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bHost)
+	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy)
@@ -1339,7 +1341,7 @@ static bool deserializeSaveGameV31Data(PHYSFS_file* fileHandle, SAVE_GAME_V31* s
 	uint32_t        savePlayer;	\
 	char            sPName[32];	\
 	BOOL            multiPlayer;\
-	uint32_t        sPlayer2dpid[MAX_PLAYERS]
+	uint32_t        sPlayerIndex[MAX_PLAYERS]
 
 typedef struct save_game_v33
 {
@@ -1360,7 +1362,7 @@ static bool serializeSaveGameV33Data(PHYSFS_file* fileHandle, const SAVE_GAME_V3
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->sPlayer2dpid[i]))
+		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->sPlayerIndex[i]))
 			return false;
 	}
 
@@ -1384,7 +1386,7 @@ static bool deserializeSaveGameV33Data(PHYSFS_file* fileHandle, SAVE_GAME_V33* s
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->sPlayer2dpid[i]))
+		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->sPlayerIndex[i]))
 			return false;
 	}
 
@@ -2373,20 +2375,20 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//JPS 25 feb
 		//initialise upgrades
 		//initialise the structure upgrade arrays
-		memset(asStructureUpgrade, 0, MAX_PLAYERS * sizeof(STRUCTURE_UPGRADE));
-		memset(asWallDefenceUpgrade, 0, MAX_PLAYERS * sizeof(WALLDEFENCE_UPGRADE));
-		memset(asResearchUpgrade, 0, MAX_PLAYERS * sizeof(RESEARCH_UPGRADE));
-		memset(asPowerUpgrade, 0, MAX_PLAYERS * sizeof(POWER_UPGRADE));
-		memset(asRepairFacUpgrade, 0, MAX_PLAYERS * sizeof(REPAIR_FACILITY_UPGRADE));
-		memset(asProductionUpgrade, 0, MAX_PLAYERS * NUM_FACTORY_TYPES * sizeof(PRODUCTION_UPGRADE));
-		memset(asReArmUpgrade, 0, MAX_PLAYERS * sizeof(REARM_UPGRADE));
+		memset(asStructureUpgrade, 0, sizeof(asStructureUpgrade));
+		memset(asWallDefenceUpgrade, 0, sizeof(asWallDefenceUpgrade));
+		memset(asResearchUpgrade, 0, sizeof(asResearchUpgrade));
+		memset(asPowerUpgrade, 0, sizeof(asPowerUpgrade));
+		memset(asRepairFacUpgrade, 0, sizeof(asRepairFacUpgrade));
+		memset(asProductionUpgrade, 0, sizeof(asProductionUpgrade));
+		memset(asReArmUpgrade, 0, sizeof(asReArmUpgrade));
 
 		//initialise the upgrade structures
-		memset(asWeaponUpgrade, 0, MAX_PLAYERS * WSC_NUM_WEAPON_SUBCLASSES * sizeof(WEAPON_UPGRADE));
-		memset(asSensorUpgrade, 0, MAX_PLAYERS * sizeof(SENSOR_UPGRADE));
-		memset(asECMUpgrade, 0, MAX_PLAYERS * sizeof(ECM_UPGRADE));
-		memset(asRepairUpgrade, 0, MAX_PLAYERS * sizeof(REPAIR_UPGRADE));
-		memset(asBodyUpgrade, 0, MAX_PLAYERS * sizeof(BODY_UPGRADE) * BODY_TYPE);
+		memset(asWeaponUpgrade, 0, sizeof(asWeaponUpgrade));
+		memset(asSensorUpgrade, 0, sizeof(asSensorUpgrade));
+		memset(asECMUpgrade, 0, sizeof(asECMUpgrade));
+		memset(asRepairUpgrade, 0, sizeof(asRepairUpgrade));
+		memset(asBodyUpgrade, 0, sizeof(asBodyUpgrade));
 		//JPS 25 feb
 	}
 
@@ -2578,20 +2580,29 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			PLAYERSTATS		playerStats;
 
 			game			= saveGameData.sGame;
-			NetPlay			= saveGameData.sNetPlay;
-			selectedPlayer	= saveGameData.savePlayer;
 			productionPlayer= selectedPlayer;
 			bMultiPlayer	= saveGameData.multiPlayer;
 			cmdDroidMultiExpBoost(true);
-			for(inc=0;inc<MAX_PLAYERS;inc++)
+
+			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
+			for (i = 0; i < MAX_PLAYERS; i++)
 			{
-				player2dpid[inc]=saveGameData.sPlayer2dpid[inc];
+				strcpy((NetPlay.players[i]).name, ((saveGameData.sNetPlay).players[i]).name);
+				if ((saveGameData.sGame).skDiff[i] == UBYTE_MAX)
+				{
+					(NetPlay.players[i]).allocated = true;
+				}
+				else
+				{
+					(NetPlay.players[i]).allocated = false;
+				}
 			}
+			
 			if(bMultiPlayer)
 			{
 				loadMultiStats(saveGameData.sPName,&playerStats);				// stats stuff
-				setMultiStats(NetPlay.dpidPlayer,playerStats,false);
-				setMultiStats(NetPlay.dpidPlayer,playerStats,true);
+				setMultiStats(selectedPlayer, playerStats, false);
+				setMultiStats(selectedPlayer, playerStats, true);
 			}
 		}
 
@@ -3198,24 +3209,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 	}
 
-	if (saveGameVersion > VERSION_12)
-	{
-		//if user save game then load up the FX
-		if ((gameType == GTYPE_SAVE_START) ||
-			(gameType == GTYPE_SAVE_MIDMISSION))
-		{
-			//load in the message list file
-			aFileName[fileExten] = '\0';
-			strcat(aFileName, "fxstate.tag");
-
-			// load the fx data from the file
-			if (!readFXData(aFileName))
-			{
-				debug(LOG_ERROR, "loadgame: Fail33");
-				goto error;
-			}
-		}
-	}
 
 	if (saveGameVersion >= VERSION_16)
 	{
@@ -3464,18 +3457,6 @@ error:
 //		free(psMapTiles);
 	}
 	psMapTiles = NULL;
-
-	/*if (!loadFile("blank.map", &pFileData, &fileSize))
-	{
-		return false;
-	}
-
-	if (!mapLoad(pFileData, fileSize))
-	{
-		return false;
-	}
-
-	free(pFileData);*/
 
 	/* Start the game clock */
 	gameTimeStart();
@@ -3936,13 +3917,10 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version)
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[2]);
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[3]);
 		}
-		for(i = 0; i < MAX_PLAYERS; i++)
-			endian_udword(&psSaveGame->sNetPlay.players[i].dpid);
 		endian_udword(&psSaveGame->sNetPlay.playercount);
-		endian_udword(&psSaveGame->sNetPlay.dpidPlayer);
 		endian_udword(&psSaveGame->savePlayer);
 		for(i = 0; i < MAX_PLAYERS; i++)
-			endian_udword(&psSaveGame->sPlayer2dpid[i]);
+			endian_udword(&psSaveGame->sPlayerIndex[i]);
 	}
 	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
 	if(version >= VERSION_31) {
@@ -4721,20 +4699,29 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			PLAYERSTATS		playerStats;
 
 			bMultiPlayer	= saveGameData.multiPlayer;
-			NetPlay			= saveGameData.sNetPlay;
-			selectedPlayer	= saveGameData.savePlayer;
 			productionPlayer = selectedPlayer;
 			game			= saveGameData.sGame;
 			cmdDroidMultiExpBoost(true);
-			for(i = 0; i < MAX_PLAYERS; ++i)
+
+			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
+			for (i = 0; i < MAX_PLAYERS; i++)
 			{
-				player2dpid[i] = saveGameData.sPlayer2dpid[i];
+				strcpy((NetPlay.players[i]).name, ((saveGameData.sNetPlay).players[i]).name);
+				if ((saveGameData.sGame).skDiff[i] == UBYTE_MAX)
+				{
+					(NetPlay.players[i]).allocated = true;
+				}
+				else
+				{
+					(NetPlay.players[i]).allocated = false;
+				}
 			}
+			
 			if(bMultiPlayer)
 			{
 				loadMultiStats(saveGameData.sPName,&playerStats);				// stats stuff
-				setMultiStats(NetPlay.dpidPlayer,playerStats,false);
-				setMultiStats(NetPlay.dpidPlayer,playerStats,true);
+				setMultiStats(selectedPlayer, playerStats, false);
+				setMultiStats(selectedPlayer, playerStats, true);
 			}
 		}
 
@@ -4751,6 +4738,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			(void)setPlayerName(i, saveGameData.sPlayerName[i]);
 	}
 
+	clearPlayerPower();
     //don't adjust any power if a camStart (gameType is set to GTYPE_SCENARIO_START when a camChange saveGame is loaded)
     if (gameType != GTYPE_SCENARIO_START)
     {
@@ -4760,11 +4748,8 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
             //only overwrite selectedPlayer's power on a startMission save game
             if (gameType == GTYPE_SAVE_MIDMISSION || i == selectedPlayer)
             {
-    		    asPower[i].currentPower = powerSaved[i].currentPower;
-	    	    asPower[i].extractedPower = powerSaved[i].extractedPower;
+				setPower(i, powerSaved[i].currentPower);
             }
-		    //init the last structure
-		    asPower[i].psLastPowered = NULL;
 	    }
     }
 
@@ -4841,8 +4826,8 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	//save out the players power
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		saveGame.power[i].currentPower = asPower[i].currentPower;
-		saveGame.power[i].extractedPower = asPower[i].extractedPower;
+		saveGame.power[i].currentPower = getPower(i);
+		saveGame.power[i].extractedPower = 0; // UNUSED
 	}
 
 	//camera position
@@ -4955,7 +4940,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	strcpy(saveGame.sPName, getPlayerName(selectedPlayer));
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		saveGame.sPlayer2dpid[i] = player2dpid[i];
+		saveGame.sPlayerIndex[i] = i;
 	}
 
 	//version 34
@@ -5129,9 +5114,20 @@ DROID_TEMPLATE *FindDroidTemplate(const char * const name)
 
 
 // -----------------------------------------------------------------------------------------
-UDWORD RemapPlayerNumber(UDWORD OldNumber)
+// Remaps old player number based on position on map to new owner
+static UDWORD RemapPlayerNumber(UDWORD OldNumber)
 {
-	return(OldNumber);
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (OldNumber == NetPlay.players[i].position)
+		{
+			return i;
+		}
+	}
+	ASSERT(false, "Found no player position for player %d", (int)OldNumber);
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -5431,7 +5427,6 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget[0], psSaveDroid->actionTargetID);
 		psDroid->actionStarted		= psSaveDroid->actionStarted;
 		psDroid->actionPoints		= psSaveDroid->actionPoints;
-		psDroid->powerAccrued		= psSaveDroid->actionHeight;
 		//added for V14
 
 		psDroid->psGroup = NULL;
@@ -5834,7 +5829,6 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget[0], psSaveDroid->actionTargetID);
 	psDroid->actionStarted		= psSaveDroid->actionStarted;
 	psDroid->actionPoints		= psSaveDroid->actionPoints;
-	psDroid->powerAccrued		= psSaveDroid->actionHeight;
 	//added for V14
 
 
@@ -6086,6 +6080,9 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
 
+		// Give it to the correct player
+		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
+
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
 		if (psSaveDroid->player >= MAX_PLAYERS)
@@ -6237,6 +6234,9 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
+
+		// Give it to the correct player
+		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
 
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
@@ -6399,6 +6399,9 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
 
+		// Give it to the correct player
+		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
+
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
 		if (psSaveDroid->player >= MAX_PLAYERS)
@@ -6546,7 +6549,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 
 			psSaveDroid->actionStarted	= psCurr->actionStarted;
 			psSaveDroid->actionPoints	= psCurr->actionPoints;
-			psSaveDroid->actionHeight	= psCurr->powerAccrued;
+			psSaveDroid->actionHeight	= 0; // UNUSED
 
 			//version 14
 			if (psCurr->psTarStats != NULL)
@@ -8317,10 +8320,12 @@ BOOL loadStructSetPointers(void)
 						else
 						{
 							psRepair->psObj = getBaseObjFromId(_tmpid);
+							ASSERT(psRepair->psObj->type == OBJ_DROID, "%s cannot repair %s", 
+							       objInfo((BASE_OBJECT *)psStruct), objInfo(psRepair->psObj));
 							//if the build has started set the powerAccrued =
 							//powerRequired to sync the interface
-							if (psRepair->timeStarted != ACTION_START_TIME &&
-								psRepair->psObj)
+							if (psRepair->timeStarted != ACTION_START_TIME && psRepair->psObj
+							    && psRepair->psObj->type == OBJ_DROID)
 							{
 								psRepair->powerAccrued = powerReqForDroidRepair((DROID*)psRepair->psObj);
 							}
@@ -10756,7 +10761,7 @@ BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ver
 		psflag->screenX = psSaveflag->screenX;			//screen coords and radius of Position imd
 		psflag->screenY = psSaveflag->screenY;
 		psflag->screenR = psSaveflag->screenR;
-		psflag->player = psSaveflag->player;			//which player the Position belongs to
+		psflag->player = RemapPlayerNumber(psSaveflag->player);	// which player the position belongs to
 		psflag->selected = psSaveflag->selected;		//flag to indicate whether the Position
 		psflag->coords = psSaveflag->coords;			//the world coords of the Position
 		psflag->factoryInc = psSaveflag->factoryInc;	//indicates whether the first, second etc factory
@@ -12070,22 +12075,17 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 				yy = map_coord(psSaveStructure->y);
 			}
 		}
-		// if human player, then use clan color.  If AI, then use something else.
-		if( isHumanPlayer(playerid) )
+		playerid = getPlayerColour(RemapPlayerNumber(playerid));
+		// kludge to fix black, so you can see it on some maps.
+		if (playerid == 3)	// in this case 3 = pallete entry for black.
 		{
-			playerid = (UDWORD) getPlayerColour(playerid);
-			color.rgba = clanColours[playerid].rgba;
-			// kludge to fix black, so you can see it on some maps.
-			if ( playerid == 3 )	// in this case 3 = pallete entry for black.
-			{
-				color = WZCOL_GREY;
-			}
+			color = WZCOL_GREY;
 		}
 		else
-		{	// Use a dark green color for the AI
-			color = WZCOL_MAP_PREVIEW_AIPLAYER ;
+		{
+			color.rgba = clanColours[playerid].rgba;
 		}
-
+		
 		if(HQ)
 		{	// This shows where the HQ is on the map in a special color.
 			// We could do the same for anything else (oil/whatever) also.

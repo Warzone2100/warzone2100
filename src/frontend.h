@@ -57,6 +57,7 @@ extern tMode titleMode;					// the global case
 
 extern char	aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
+extern BOOL	bLimiterLoaded;
 extern BOOL	bUsingKeyboard;	// to disable mouse pointer when using keys.
 extern BOOL	bUsingSlider;
 

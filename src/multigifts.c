@@ -311,6 +311,7 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 	if (from == ANYPLAYER)
 	{
 		gifval = OILDRUM_POWER;
+		CONPRINTF(ConsoleString,(ConsoleString,_("Player %u found %u power in an oil drum"), to, gifval));
 	}
 	else
 	{
@@ -321,10 +322,6 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 
 	addPower(to, gifval);
 
-	if (from == ANYPLAYER && to == selectedPlayer)
-	{
-		CONPRINTF(ConsoleString,(ConsoleString,_("You found %u power in an oil drum"),gifval));
-	}
 	if (send)
 	{
 		uint8_t giftType = POWER_GIFT;
@@ -431,7 +428,7 @@ void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allow
 	}
 
 	// Not campaign and alliances are transitive
-	if ((bMultiPlayer || game.type == SKIRMISH) && game.alliance == ALLIANCES_TEAMS)
+	if (game.alliance == ALLIANCES_TEAMS)
 	{
 		giftRadar(p1, p2, false);
 		giftRadar(p2, p1, false);
@@ -562,89 +559,6 @@ void  technologyGiveAway(const STRUCTURE *pS)
 	return;
 }
 
-
-
-///////////////////////////////////////////////////////////////////////////////
-// loooosseeeerrr  gifts
-// if the player is losing then give a simple gift.
-
-#define GIFTFREQ (1000*(60*5))			// every 5 mins tops..
-
-static void addLoserGifts(void)
-{
-	static UDWORD	lastgift = 0;
-	int				count, i;
-	uint8_t			player = ONEPLAYER;
-	uint8_t			quantity;
-	uint32_t		x, y;
-	FEATURE			*pF;
-	FEATURE_TYPE	type = FEAT_OIL_DRUM;
-	STRUCTURE		*psStruct;
-
-	if (lastgift > gameTime)
-		lastgift = 0;	// might be a restart
-
-	// Player has no power, so give the player some oil
-	if (apsStructLists[selectedPlayer] && getPower(selectedPlayer) < 10)
-	{
-		// Only proceed if it's been a while
-		if (gameTime - lastgift < GIFTFREQ)
-		{
-			return;
-		}
-
-		// Only proceed if no powergen
-		for (psStruct = apsStructLists[selectedPlayer];
-			 psStruct && psStruct->pStructureType->type != REF_POWER_GEN;
-			 psStruct = psStruct->psNext);
-		if (psStruct)
-		{
-			return;
-		}
-
-		lastgift = gameTime;
-
-		for (i = 0;
-			 i < numFeatureStats && asFeatureStats[i].subType != FEAT_OIL_DRUM;
-			 i++);
-
-		quantity = rand() % 5 + 1;
-
-		NETbeginEncode(NET_ARTIFACTS, NET_ALL_PLAYERS);
-			NETuint8_t(&quantity);
-			NETenum(&type);
-
-			for (count = 0; count < quantity; count++)
-			{
-				x = map_coord(apsStructLists[selectedPlayer]->pos.x);
-				y = map_coord(apsStructLists[selectedPlayer]->pos.y);
-
-				if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
-				{
-					ASSERT(false, "addlosergifts: Unable to find a free location");
-				}
-
-				NETlogEntry("gift", 0, 0);
-
-				pF = buildFeature((asFeatureStats + i), world_coord(x), world_coord(y), false);
-
-				NETuint32_t(&x);
-				NETuint32_t(&y);
-				NETuint32_t(&pF->id);
-				NETuint8_t(&player);
-
-				if (pF)
-				{
-					// Flag for multiplayer artifacts
-					pF->player = player;
-				}
-			}
-
-		NETend();
-		audio_QueueTrack(ID_GIFT);
-	}
-}
-
 /** Sends a build order for the given feature type to all players
  *  \param subType the type of feature to build
  *  \param x,y the coordinates to place the feature at
@@ -689,6 +603,23 @@ void recvMultiPlayerFeature()
 		}
 	}
 }
+// must match _feature_type in featuredef.h
+static const char *feature_names[] =
+{
+	"FEAT_BUILD_WRECK",
+	"FEAT_HOVER",
+	"FEAT_TANK",
+	"FEAT_GEN_ARTE",
+	"FEAT_OIL_RESOURCE",
+	"FEAT_BOULDER",
+	"FEAT_VEHICLE",
+	"FEAT_BUILDING",
+	"FEAT_DROID",
+	"FEAT_LOS_OBJ",
+	"FEAT_OIL_DRUM",
+	"FEAT_TREE",
+	"FEAT_SKYSCRAPER",
+};
 ///////////////////////////////////////////////////////////////////////////////
 // splatter artifact gifts randomly about.
 void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
@@ -698,6 +629,7 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 	uint32_t	x, y;
 	uint8_t		player = ANYPLAYER;
 
+	debug(LOG_FEATURE, "Sending %u artifact(s) type: (%s)", quantity, feature_names[type]);
 	NETbeginEncode(NET_ARTIFACTS, NET_ALL_PLAYERS);
 		NETuint8_t(&quantity);
 		NETenum(&type);
@@ -715,7 +647,8 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 
 			if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 			{
-				ASSERT(false, "addMultiPlayerRandomArtifacts: Unable to find a free location");
+				ASSERT(false, "Unable to find a free location");
+				break;
 			}
 
 			pF = buildFeature(asFeatureStats + i, world_coord(x), world_coord(y), false);
@@ -756,6 +689,7 @@ void recvMultiPlayerRandomArtifacts()
 		NETuint8_t(&quantity);
 		NETenum(&type);
 
+	debug(LOG_FEATURE, "receiving %u artifact(s) type: (%s)", quantity, feature_names[type]);
 	for (i = 0; i < numFeatureStats && asFeatureStats[i].subType != type; i++);
 
 	for (count = 0; count < quantity; count++)
@@ -769,13 +703,13 @@ void recvMultiPlayerRandomArtifacts()
 
 		if (!tileOnMap(tx, ty))
 		{
-			debug(LOG_ERROR, "recvMultiPlayerRandomArtifacts: Bad tile coordinates (%u,%u)", tx, ty);
+			debug(LOG_ERROR, "Bad tile coordinates (%u,%u)", tx, ty);
 			continue;
 		}
 		psTile = mapTile(tx, ty);
 		if (!psTile || psTile->psObject != NULL)
 		{
-			debug(LOG_ERROR, "recvMultiPlayerRandomArtifacts: Already something at (%u,%u)!", tx, ty);
+			debug(LOG_ERROR, "Already something at (%u,%u)!", tx, ty);
 			continue;
 		}
 
@@ -785,6 +719,10 @@ void recvMultiPlayerRandomArtifacts()
 			pF->id		= ref;
 			pF->player	= player;
 		}
+		else
+		{
+			debug(LOG_ERROR, "Couldn't build feature %u for player %u ?", ref, player);
+		}
 	}
 	NETend();
 }
@@ -792,13 +730,12 @@ void recvMultiPlayerRandomArtifacts()
 // ///////////////////////////////////////////////////////////////
 void giftArtifact(UDWORD owner, UDWORD x, UDWORD y)
 {
-	PLAYER_RESEARCH *pO,*pR;
-	SDWORD	topic = 0;
-	pR   = asPlayerResList[selectedPlayer];
+	PLAYER_RESEARCH	*pR = asPlayerResList[selectedPlayer];
 
 	if (owner < MAX_PLAYERS)
 	{
-		pO	 = asPlayerResList[owner];
+		PLAYER_RESEARCH	*pO = asPlayerResList[owner];
+		int topic;
 
 		for (topic = numResearch - 1; topic >= 0; topic--)
 		{
@@ -806,7 +743,7 @@ void giftArtifact(UDWORD owner, UDWORD x, UDWORD y)
 			 && !IsResearchPossible(&pR[topic]))
 			{
 				// Make sure the topic can be researched
-				if (asResearch[topic].researchPower 
+				if (asResearch[topic].researchPower
 				 && asResearch[topic].researchPoints)
 				{
 					MakeResearchPossible(&pR[topic]);
@@ -840,8 +777,6 @@ void processMultiPlayerArtifacts(void)
 		return;
 	}
 	lastCall = gameTime;
-
-	addLoserGifts();
 
 	for(pF = apsFeatureLists[0]; pF ; pF = pFN)
 	{
@@ -881,9 +816,8 @@ void createTeamAlliances(void)
 		for (j = 0; j < MAX_PLAYERS; j++)
 		{
 			if (i != j
-			 && playerTeam[i] == playerTeam[j]	// Wto different players belonging to the same team
+			 && NetPlay.players[i].team == NetPlay.players[j].team	// two different players belonging to the same team
 			 && !aiCheckAlliances(i, j)
-			 && playerTeam[i] >= 0
 			 && game.skDiff[i]
 			 && game.skDiff[j])	// Not allied and not ignoring teams
 			{

@@ -1002,6 +1002,8 @@ BOOL recvPowerCheck()
 		NETuint32_t(&power);
 	NETend();
 
+	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
+
 	if (player >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Bad NET_CHECK_POWER packet: player is %d", (int)player);
@@ -1015,7 +1017,7 @@ BOOL recvPowerCheck()
 	{
 		debug(LOG_SYNC, "NET_CHECK_POWER: Adjusting power for player %d (%s) from %u to %u",
 		      (int)player, isHumanPlayer(player) ? "Human" : "AI", power2, power);
-		setPower(player, power);
+		setPower( (uint32_t)player, power);
 	}
 	return true;
 }
@@ -1055,10 +1057,10 @@ BOOL sendScoreCheck(void)
 	stats.killsToAdd = stats.scoreToAdd = 0;
 
 	// Store local version
-	setMultiStats(player2dpid[selectedPlayer], stats, true);
+	setMultiStats(selectedPlayer, stats, true);
 
 	// Send score to the ether
-	setMultiStats(player2dpid[selectedPlayer], stats, false);
+	setMultiStats(selectedPlayer, stats, false);
 
 	// Broadcast any changes in other players, but not in FRONTEND!!!
 	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT)
@@ -1100,7 +1102,7 @@ BOOL sendScoreCheck(void)
 	{
 		if (isHumanPlayer(i))
 		{
-			setMultiStats(player2dpid[i], getMultiStats(i, false), true);
+			setMultiStats(i, getMultiStats(i, false), true);
 		}
 	}
 
@@ -1140,10 +1142,7 @@ BOOL recvScoreSubmission()
 
 static UDWORD averagePing(void)
 {
-	UDWORD i,count,total;
-
-	count =0;
-	total =0;
+	UDWORD i, count = 0, total = 0;
 
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
@@ -1178,7 +1177,7 @@ BOOL sendPing(void)
 	lastPing = gameTime;
 
 	// If host, also update the average ping stat for joiners
-	if (NetPlay.bHost)
+	if (NetPlay.isHost)
 	{
 		if (lastav > gameTime)
 		{
@@ -1249,7 +1248,7 @@ BOOL recvPing()
 	// If this is a new ping, respond to it
 	if (isNew)
 	{
-		NETbeginEncode(NET_PING, player2dpid[sender]);
+		NETbeginEncode(NET_PING, sender);
 			// We are responding to a new ping
 			isNew = false;
 
