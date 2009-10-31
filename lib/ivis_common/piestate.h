@@ -32,6 +32,8 @@
 
 /***************************************************************************/
 
+#include <SDL/SDL_opengl.h>
+
 #include "lib/framework/frame.h"
 #include "piedef.h"
 
@@ -135,5 +137,11 @@ extern void pie_DrawMouse(unsigned int X, unsigned int Y);
 extern void pie_ShowMouse(bool visible);
 
 extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
+
+#define glErrors(info) \
+	_glerrors(__FUNCTION__, __FILE__, __LINE__)
+
+extern bool _glerrors(const char *, const char *, int);
+
 
 #endif // _pieState_h

@@ -297,6 +297,7 @@ static void video_write(bool update)
 	const int video_height = videodata.ti.frame_height;
 	yuv_buffer yuv;
 
+	glErrors();
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, video_texture);
 
@@ -330,6 +331,7 @@ static void video_write(bool update)
 
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video_width,
 				video_height, GL_RGBA, GL_UNSIGNED_BYTE, RGBAframe);
+		glErrors();
 	}
 
 	glDisable(GL_DEPTH_TEST);

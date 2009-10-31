@@ -246,6 +246,7 @@ BOOL screenInitialise(
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+	glErrors();
 	return true;
 }
 
@@ -459,25 +460,12 @@ void screenDumpToDisk(const char* path)
 		screendump_required = true;
 }
 
-/**
- * Checks if an OpenGL error has occurred.
- * \param label Label to print when an OpenGL occurred.
- */
-void checkGLErrors(const char *label)
-{
-	const GLenum errCode = glGetError();
-
-	if (errCode == GL_NO_ERROR)
-		return;
-
-	debug(LOG_ERROR, "OpenGL ERROR in %s: %s, (0x%0x)", label, gluErrorString(errCode), errCode);
-	bFboProblem = true;		// we have a issue with the FBO, fallback to normal routine
-}
 
 BOOL Init_FBO(unsigned int width, unsigned int height)
 {
 	GLenum status;
 
+	glErrors();
 	// Bail out if FBOs aren't supported
 	if (!GLEE_EXT_framebuffer_object)
 		return false;
@@ -555,21 +543,20 @@ BOOL Init_FBO(unsigned int width, unsigned int height)
 	}
 
 	glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0); // unbind it for now.
-	checkGLErrors("Init_FBO() Completed");
-	return true;
 
+	bFboProblem |= glErrors(); // don't use FBOs if something here caused an error
+	return true;
 }
 
 void Delete_FBO(void)
 {
 	if(FBOinit)
 	{
+		glErrors();
 		glDeleteFramebuffersEXT(1, &fbo);
-		checkGLErrors("Deleting FBO");
 		glDeleteRenderbuffersEXT(1, &FBOdepthbuffer);
-		checkGLErrors("deleting FBOdepthbuffer");
 		glDeleteTextures(1,&FBOtexture);
-		checkGLErrors("deleting FBOtexture");
+		bFboProblem |= glErrors();
 		fbo = FBOdepthbuffer = FBOtexture = FBOinit = 0;	//reset everything.
 	}
 }
