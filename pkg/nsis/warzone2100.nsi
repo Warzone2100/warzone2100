@@ -457,7 +457,7 @@ FunctionEnd
   LangString DESC_SecNTWMod ${LANG_DUTCH} "NTW: New Team War mod. Wijzigd de meeste wapens en onderzoeken."
 
   LangString TEXT_SecOriginalMod ${LANG_DUTCH} "Original 1.10 balance"
-  LangString DESC_SecOriginalMod ${LANG_DUTCH} "Play the game with the original 1.10 version balance stats."
+  LangString DESC_SecOriginalMod ${LANG_DUTCH} "Speel het spel met de originele 1.10 versie balans stats."
 
 
   LangString TEXT_SecBase ${LANG_GERMAN} "Standardinstallation"
