@@ -55,7 +55,7 @@ KEY_MAPPING	*psMapping,*psReturn;
 		psMapping && !psReturn;
 		psMapping = psMapping->psNext)
 		{
-			if(psMapping->function == function)
+			if ((void *)psMapping->function == function)
 			{
 				psReturn = psMapping;
 			}
