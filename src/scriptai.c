@@ -1497,7 +1497,7 @@ BOOL scrSkCanBuildTemplate(void)
 	case DROID_DEFAULT:		        // Default droid
 	case DROID_ANY:
 	default:
-		debug( LOG_ERROR, "scrSkCanBuildTemplate: Unhandled template type" );
+		debug( LOG_FATAL, "scrSkCanBuildTemplate: Unhandled template type" );
 		abort();
 		break;
 	}

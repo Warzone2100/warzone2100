@@ -515,7 +515,7 @@ BOOL intInitialise(void)
 		MAXSTRUCTURES);
 	if (!apsStructStatsList)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}
@@ -524,7 +524,7 @@ BOOL intInitialise(void)
 	ppResearchList = (RESEARCH **) malloc(sizeof(RESEARCH *) * MAXRESEARCH);
 	if (ppResearchList == NULL)
 	{
-		debug( LOG_ERROR, "Unable to allocate memory for research list" );
+		debug( LOG_FATAL, "Unable to allocate memory for research list" );
 		abort();
 		return false;
 	}
@@ -538,13 +538,13 @@ BOOL intInitialise(void)
 
 	if (pList == NULL)
 	{
-		debug( LOG_ERROR, "Unable to allocate memory for research list" );
+		debug( LOG_FATAL, "Unable to allocate memory for research list" );
 		abort();
 		return false;
 	}
 	if (pSList == NULL)
 	{
-		debug( LOG_ERROR, "Unable to allocate memory for sorted research list" );
+		debug( LOG_FATAL, "Unable to allocate memory for sorted research list" );
 		abort();
 		return false;
 	}
@@ -554,7 +554,7 @@ BOOL intInitialise(void)
 		MAXTEMPLATES);
 	if (apsTemplateList == NULL)
 	{
-		debug( LOG_ERROR, "Unable to allocate memory for template list" );
+		debug( LOG_FATAL, "Unable to allocate memory for template list" );
 		abort();
 		return false;
 	}
@@ -577,7 +577,7 @@ BOOL intInitialise(void)
 		MAXFEATURES);
 	if (apsFeatureList == NULL)
 	{
-		debug( LOG_ERROR, "Unable to allocate memory for feature list" );
+		debug( LOG_FATAL, "Unable to allocate memory for feature list" );
 		abort();
 		return false;
 	}
@@ -587,7 +587,7 @@ BOOL intInitialise(void)
 		MAXCOMPONENT);
 	if (apsComponentList == NULL)
 	{
-		debug( LOG_ERROR, "Unable to allocate memory for component list" );
+		debug( LOG_FATAL, "Unable to allocate memory for component list" );
 		abort();
 		return false;
 	}
@@ -597,7 +597,7 @@ BOOL intInitialise(void)
 		MAXEXTRASYS);
 	if (apsExtraSysList == NULL)
 	{
-		debug( LOG_ERROR, "Unable to allocate memory for extra systems list" );
+		debug( LOG_FATAL, "Unable to allocate memory for extra systems list" );
 		abort();
 		return false;
 	}
@@ -606,7 +606,7 @@ BOOL intInitialise(void)
 	apsObjectList = (BASE_OBJECT **)malloc(sizeof(BASE_OBJECT *) * MAX_OBJECTS);
 	if (!apsObjectList)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}
@@ -615,7 +615,7 @@ BOOL intInitialise(void)
 	apsListToOrder = (BASE_OBJECT **)malloc(sizeof(BASE_OBJECT *) * ORDERED_LIST_SIZE);
 	if (!apsListToOrder)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}

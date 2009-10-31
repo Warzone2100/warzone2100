@@ -224,7 +224,7 @@ void changeTitleMode(tMode mode)
 		break;
 
 	default:
-		debug( LOG_ERROR, "Unknown title mode requested" );
+		debug( LOG_FATAL, "Unknown title mode requested" );
 		abort();
 		break;
 	}

@@ -109,7 +109,7 @@ BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 	psNew = (GATEWAY*)malloc(sizeof(GATEWAY));
 	if (!psNew)
 	{
-		debug( LOG_ERROR, "gwNewGateway: out of memory" );
+		debug( LOG_FATAL, "gwNewGateway: out of memory" );
 		abort();
 		return false;
 	}

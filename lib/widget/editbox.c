@@ -68,7 +68,7 @@ W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 	psWidget = (W_EDITBOX *)malloc(sizeof(W_EDITBOX));
 	if (psWidget == NULL)
 	{
-		debug(LOG_ERROR, "editBoxCreate: Out of memory");
+		debug(LOG_FATAL, "editBoxCreate: Out of memory");
 		abort();
 		return NULL;
 	}

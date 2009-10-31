@@ -175,7 +175,7 @@ bool texLoad(const char *fileName)
 	sprintf(fullPath, "%s.radar", fileName);
 	if (!loadFile(fullPath, &buffer, &size))
 	{
-		debug(LOG_ERROR, "texLoad: Could not find radar colours at %s", fullPath);
+		debug(LOG_FATAL, "texLoad: Could not find radar colours at %s", fullPath);
 		abort(); // cannot recover; we could possibly generate a random palette?
 	}
 	i = 0; // tile

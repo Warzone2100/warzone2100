@@ -102,14 +102,14 @@ BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 	psNew = (SCRV_STORE*)malloc(sizeof(SCRV_STORE));
 	if (!psNew)
 	{
-		debug( LOG_ERROR, "scrvAddContext: Out of memory" );
+		debug( LOG_FATAL, "scrvAddContext: Out of memory" );
 		abort();
 		return false;
 	}
 	psNew->pIDString = (char*)malloc(strlen(pID) + 1);
 	if (!psNew->pIDString)
 	{
-		debug( LOG_ERROR, "scrvAddContext: Out of memory" );
+		debug( LOG_FATAL, "scrvAddContext: Out of memory" );
 		abort();
 		return false;
 	}
@@ -229,7 +229,7 @@ BOOL scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext)
 		}
 	}
 
-	debug( LOG_ERROR, "scrvGetContext: couldn't find context for id: %s", pID );
+	debug( LOG_FATAL, "scrvGetContext: couldn't find context for id: %s", pID );
 	abort();
 	return false;
 }

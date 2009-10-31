@@ -73,6 +73,7 @@ static const char *code_part_names[] = {
 	"gateway",
 	"message",
 	"info",
+	"fatal",
 	"terrain",
 	"feature",
 	"last"
@@ -229,6 +230,7 @@ void debug_init(void)
 	memset( enabled_debug, false, sizeof(enabled_debug) );
 	enabled_debug[LOG_ERROR] = true;
 	enabled_debug[LOG_INFO] = true;
+	enabled_debug[LOG_FATAL] = true;
 	inputBuffer[0][0] = '\0';
 	inputBuffer[1][0] = '\0';
 #ifdef DEBUG
@@ -387,6 +389,20 @@ void _debug( code_part part, const char *function, const char *str, ... )
 		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 
 		printToDebugCallbacks(outputBuffer);
+
+		// Throw up a dialog box for windows users since most don't have a clue to check the stderr.txt file for information
+		if (part == LOG_FATAL)
+		{
+#if defined(WZ_OS_WIN)
+			char wbuf[512];
+			ssprintf(wbuf, "%s\n\nPlease check your stderr.txt file in the same directory as the program file for more details. \\
+				\nDo not forget to upload both the stderr.txt file and the warzone2100.rpt file in your bug reports!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			MessageBoxA( NULL,
+				wbuf,
+				"Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
+#endif
+		// TODO: Add Mac OS X dialog as well?
+		}
 	}
 	useInputBuffer1 = !useInputBuffer1; // Swap buffers
 }

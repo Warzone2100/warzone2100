@@ -55,7 +55,7 @@ W_BUTTON* buttonCreate(const W_BUTINIT* psInit)
 	psWidget = (W_BUTTON *)malloc(sizeof(W_BUTTON));
 	if (psWidget == NULL)
 	{
-		debug(LOG_ERROR, "buttonCreate: Out of memory" );
+		debug(LOG_FATAL, "buttonCreate: Out of memory" );
 		abort();
 		return NULL;
 	}

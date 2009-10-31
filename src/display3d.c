@@ -598,7 +598,7 @@ void draw3DScene( void )
 		ASSERT(false, "Yes, this is a assert.  This should not happen on release builds! Use --noassert to bypass in debug builds.");
 		debug(LOG_WARNING, " *** Warning!  You have compiled in debug mode! ***");
 #endif
-		debug(LOG_ERROR, "Forcing a segfault! (crash handler test)");
+		debug(LOG_FATAL, "Forcing a segfault! (crash handler test)");
 		// and here comes the crash
 		*crash = 0x3;
 		exit(-1);	// will never reach this, but just in case...

@@ -107,7 +107,7 @@ bool PlayList_Read(const char* path)
 		song = malloc(sizeof(*songList));
 		if (song == NULL)
 		{
-			debug(LOG_ERROR, "Out of memory!");
+			debug(LOG_FATAL, "Out of memory!");
 			PHYSFS_close(fileHandle);
 			abort();
 			return false;

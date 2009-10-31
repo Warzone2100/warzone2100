@@ -64,7 +64,7 @@ W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 	psWidget = (W_BARGRAPH *)malloc(sizeof(W_BARGRAPH));
 	if (psWidget == NULL)
 	{
-		debug(LOG_ERROR, "barGraphCreate: Out of memory");
+		debug(LOG_FATAL, "barGraphCreate: Out of memory");
 		abort();
 		return NULL;
 	}

@@ -132,7 +132,12 @@ BOOL researchInitVars(void)
 	asResearch = NULL;
 	// research is a pre-defined size now
 	asResearch = (RESEARCH *)malloc(sizeof(RESEARCH)* MAX_RESEARCH);
-	ASSERT_OR_RETURN(false, asResearch, "Research Stats - Out of memory");
+	if (asResearch == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(asResearch, 0, (MAX_RESEARCH * sizeof(RESEARCH)));
 
 	// create the PLAYER_RESEARCH arrays
@@ -142,7 +147,7 @@ BOOL researchInitVars(void)
 			sizeof(PLAYER_RESEARCH));
 		if (asPlayerResList[i] == NULL)
 		{
-			debug( LOG_ERROR, "Out of memory assigning Player_Research" );
+			debug( LOG_FATAL, "Out of memory assigning Player_Research" );
 			abort();
 			return false;
 		}
@@ -153,35 +158,75 @@ BOOL researchInitVars(void)
 
 	// and deal with all the other arrays for research
 	pResearchPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_PR);
-	ASSERT_OR_RETURN(false, pResearchPR, "Research Stats - Out of memory");
+	if (pResearchPR == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchPR, 0, (MAX_RESEARCH_PR * sizeof(UWORD)));
 
 	pResearchStructPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_PR);
-	ASSERT_OR_RETURN(false, pResearchStructPR, "Research Stats - Out of memory");
+	if (pResearchStructPR == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchStructPR, 0, (MAX_RESEARCH_STRUCT_PR * sizeof(UWORD)));
 
 	pResearchFunc = (FUNCTION **) malloc(sizeof(FUNCTION *) * MAX_RESEARCH_FUNC);
-	ASSERT_OR_RETURN(false, pResearchFunc, "Research Stats - Out of memory");
+	if (pResearchFunc == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchFunc, 0, (MAX_RESEARCH_FUNC * sizeof(FUNCTION *)));
 
 	pResearchStructRed = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RED);
-	ASSERT_OR_RETURN(false, pResearchStructRed, "Research Stats - Out of memory");
+	if (pResearchStructRed == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchStructRed, 0, (MAX_RESEARCH_STRUCT_RED * sizeof(UWORD)));
 
 	pResearchArteRed = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RED);
-	ASSERT_OR_RETURN(false, pResearchArteRed, "Research Stats - Out of memory");
+	if (pResearchArteRed == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchArteRed, 0, (MAX_RESEARCH_ARTE_RED * sizeof(COMPONENT_STATS *)));
 
 	pResearchStructRes = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RES);
-	ASSERT_OR_RETURN(false, pResearchStructRes, "Research Stats - Out of memory");
+	if (pResearchStructRes == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchStructRes, 0, (MAX_RESEARCH_STRUCT_RES * sizeof(UWORD)));
 
 	pResearchArteRes = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RES);
-	ASSERT_OR_RETURN(false, pResearchArteRes, "Research Stats - Out of memory");
+	if (pResearchArteRes == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMPONENT_STATS *)));
 
 	pResearchArteRep = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RES);
-	ASSERT_OR_RETURN(false, pResearchArteRep, "Research Stats - Out of memory");
+	if (pResearchArteRep == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchArteRep, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMPONENT_STATS *)));
 
 	for(i=0; i<MAX_PLAYERS; i++)
@@ -829,7 +874,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 								break;
 							default:
 								/* NO DEFAULT CASE? Alex.... Here ya go - just for you...*/
-								debug( LOG_ERROR, "Unknown research list" );
+								debug( LOG_FATAL, "Unknown research list" );
 								abort();
 								return false;
 						}
@@ -838,7 +883,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 						if (pResearch[incR].storeCount >
 										(SDWORD)numToFind)
 						{
-							debug( LOG_ERROR, "Trying to allocate more Structures than allowed for research %s", getResearchName(pResearch) );
+							debug( LOG_FATAL, "Trying to allocate more Structures than allowed for research %s", getResearchName(pResearch) );
 							abort();
 							return false;
 						}
@@ -938,7 +983,7 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 						if (pResearch[incR].storeCount >
 										(SDWORD)pResearch[incR].numFunctions)
 						{
-							debug( LOG_ERROR, "Trying to allocate more Functions than allowed for research %s", ResearchName );
+							debug( LOG_FATAL, "Trying to allocate more Functions than allowed for research %s", ResearchName );
 							abort();
 							return false;
 						}

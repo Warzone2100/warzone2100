@@ -2658,6 +2658,12 @@ UBYTE NETrecvFile(void)
 		pFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
 	}
 
+	if (!pFileHandle) // file can't be opened
+	{
+		debug(LOG_FATAL, "Fatal error while creating file: %s", PHYSFS_getLastError());
+		abort();
+	}
+
 	NETbin(outBuff, bytesRead);
 	NETend();
 

@@ -952,14 +952,14 @@ BOOL stackInitialise(void)
 	psStackBase = calloc(1, sizeof(*psStackBase));
 	if (psStackBase == NULL)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}
 	psStackBase->aVals = calloc(INIT_SIZE, sizeof(*psStackBase->aVals));
 	if (!psStackBase->aVals)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}

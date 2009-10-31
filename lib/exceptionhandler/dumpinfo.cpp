@@ -325,7 +325,7 @@ static void createHeader(int const argc, char* argv[])
 	dbgHeader = strdup(os.str().c_str());
 	if (dbgHeader == NULL)
 	{
-		debug(LOG_ERROR, "createHeader: Out of memory!");
+		debug(LOG_FATAL, "createHeader: Out of memory!");
 		abort();
 		return;
 	}
