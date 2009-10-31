@@ -368,9 +368,11 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 
 
 	context = mode;
-	current_tech = mapCam;
-	current_numplayers = numPlayers;
-
+	if(mode == MULTIOP_MAP)
+	{	// only save these when they select MAP button
+		current_tech = mapCam;
+		current_numplayers = numPlayers;
+	}
 	fileList = PHYSFS_enumerateFiles(searchDir);
 	if (!fileList)
 	{
