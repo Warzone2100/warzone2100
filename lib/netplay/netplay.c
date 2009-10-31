@@ -589,7 +589,7 @@ static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
 	}
 	else
 	{
-		for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+		for (i = 1; i < MAX_CONNECTED_PLAYERS; ++i)
 		{
 			if (players[i].allocated == false)
 			{
