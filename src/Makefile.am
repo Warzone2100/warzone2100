@@ -8,7 +8,7 @@
 force-linker.cpp:
 	touch $@
 
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(SDL_NET_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(POPT_CFLAGS) $(WZ_CPPFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(POPT_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
@@ -52,6 +52,7 @@ noinst_HEADERS = \
 	bridge.h \
 	bucket3d.h \
 	cheat.h \
+	challenge.h \
 	clparse.h \
 	cluster.h \
 	cmddroiddef.h \
@@ -159,6 +160,7 @@ noinst_HEADERS = \
 	structuredef.h \
 	structure.h \
 	target.h \
+	terrain.h \
 	text.h \
 	texture.h \
 	transporter.h \
@@ -180,6 +182,7 @@ warzone2100_SOURCES = \
 	baseobject.c \
 	bridge.c \
 	bucket3d.c \
+	challenge.c \
 	cheat.c \
 	clparse.c \
 	cluster.c \
@@ -290,9 +293,10 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/ivis_common/libivis_common.a \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a \
+	$(top_builddir)/lib/iniparser/libiniparser.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a
 
-warzone2100_LDADD += $(LTLIBINTL) $(SDL_LIBS) $(SDL_NET_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS)
+warzone2100_LDADD += $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS)
 
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)
