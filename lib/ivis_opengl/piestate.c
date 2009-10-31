@@ -258,3 +258,15 @@ void pie_ShowMouse(bool visible)
 	}
 }
 
+bool _glerrors(const char *function, const char *file, int line)
+{
+	bool ret = false;
+	GLenum err = glGetError();
+	while (err != GL_NO_ERROR)
+	{
+		ret = true;
+		debug(LOG_ERROR, "OpenGL error in function %s at %s:%u: %s\n", function, file, line, gluErrorString(err));
+		err = glGetError();
+	}
+	return ret;
+}
