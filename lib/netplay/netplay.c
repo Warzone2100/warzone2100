@@ -578,19 +578,30 @@ static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
 {
 	unsigned int i;
 
-	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+	if (NetPlay.bHost && players[PLAYER_HOST].allocated == false)
 	{
-		if (players[i].allocated == false)
+		debug(LOG_NET, "Creating Host, %s, is set to slot %u", name, PLAYER_HOST);
+		players[PLAYER_HOST].allocated = true;
+		sstrcpy(players[PLAYER_HOST].name, name);
+		players[PLAYER_HOST].flags = flags;
+		NETBroadcastPlayerInfo(PLAYER_HOST);
+		return PLAYER_HOST;
+	}
+	else
+	{
+		for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 		{
-			debug(LOG_NET, "A new player has been created. Player, %s, is set to slot %u", name, i);
-			players[i].allocated = true;
-			sstrcpy(players[i].name, name);
-			players[i].flags = flags;
-			NETBroadcastPlayerInfo(i);
-			return i;
+			if (players[i].allocated == false)
+			{
+				debug(LOG_NET, "A new player has been created. Player, %s, is set to slot %u", name, i);
+				players[i].allocated = true;
+				sstrcpy(players[i].name, name);
+				players[i].flags = flags;
+				NETBroadcastPlayerInfo(i);
+				return i;
+			}
 		}
 	}
-
 	return ALL_PLAYERS_ALLOCATED;
 }
 
@@ -2263,8 +2274,9 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	game.future4 = 0xBAD04;								// for future use
 
 	NET_InitPlayers();
-	NetPlay.dpidPlayer	= NET_CreatePlayer(PlayerName, PLAYER_HOST);
 	NetPlay.bHost		= true;
+	NetPlay.dpidPlayer	= NET_CreatePlayer(PlayerName, PLAYER_HOST);
+
 
 	MultiPlayerJoin(NetPlay.dpidPlayer);
 
