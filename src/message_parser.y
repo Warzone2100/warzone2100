@@ -325,8 +325,8 @@ message_list:		'{' text_messages '}'
 						}
 
 						stringStart = (char*)&$$.stringArray[$$.count];
-						for (psCur = $2, i = 0, stringStart;
-						     psCur != NULL && i < $$.count;
+						for (psCur = $2, i = 0;
+                                                     stringStart && psCur != NULL && i < $$.count;
 						     psCur = psCur->psNext, ++i)
 						{
 							assert(&stringStart[strlen(psCur->str)] - (char*)$$.stringArray < bytes);
