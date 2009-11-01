@@ -395,7 +395,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 		{
 #if defined(WZ_OS_WIN)
 			char wbuf[512];
-			ssprintf(wbuf, "%s\n\nPlease check your stderr.txt file in the same directory as the program file for more details. \\
+			ssprintf(wbuf, "%s\n\nPlease check your stderr.txt file in the same directory as the program file for more details. \
 				\nDo not forget to upload both the stderr.txt file and the warzone2100.rpt file in your bug reports!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 			MessageBoxA( NULL,
 				wbuf,
