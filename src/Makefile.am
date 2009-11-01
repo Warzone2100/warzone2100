@@ -160,7 +160,6 @@ noinst_HEADERS = \
 	structuredef.h \
 	structure.h \
 	target.h \
-	terrain.h \
 	text.h \
 	texture.h \
 	transporter.h \

@@ -598,6 +598,7 @@ int gettimeofday(struct timeval* tv, struct timezone* tz)
 
 	return 0;
 }
+#endif
 
 bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...)
 {
@@ -610,6 +611,3 @@ bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...)
 
 	return PHYSFS_write(file, vaBuffer, strlen(vaBuffer), 1);
 }
-
-
-#endif
