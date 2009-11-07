@@ -368,7 +368,6 @@ AC_CONFIG_FILES([Makefile
 		build_tools/autorevision/Makefile
 		icons/Makefile
 		data/Makefile
-		data/base/Makefile
 		data/mods/Makefile
 		data/mods/multiplay/Makefile
 		data/music/Makefile
