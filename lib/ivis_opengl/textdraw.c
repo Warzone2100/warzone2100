@@ -127,7 +127,7 @@ static void iV_initializeGLC(void)
 
 	glcContext(_glcContext);
 
-	glcDisable(GLC_AUTO_FONT);
+	glcEnable(GLC_AUTO_FONT);		// We *do* want font fall-backs
 	glcRenderStyle(GLC_TEXTURE);
 	glcStringType(GLC_UTF8_QSO); // Set GLC's string type to UTF-8 FIXME should be UCS4 to avoid conversions
 
