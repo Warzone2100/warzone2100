@@ -130,11 +130,6 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 
   !insertmacro MUI_RESERVEFILE_LANGDLL
 
-;-------------------------------
-; for the message box
-LangString DIALOG_MSG ${LANG_ENGLISH} "Do you want to play the game in Chinese?$\r$\n$\r$\n$\r$\nImportant: This requires a different font, which may cause Warzone 2100 to take a long time to start on Windows Vista and later." 
-LangString DIALOG_MSG ${LANG_GERMAN} "Möchten Sie das Spiel auf Chinesisch spielen?$\r$\n$\r$\n$\r$\nWichtig: Dies benötigt eine andere Schriftart, was dazu führen könnte, dass Warzone 2100 unter Windows Vista und später sehr viel Zeit zum Starten benötigt."
-LangString DIALOG_MSG ${LANG_DUTCH}  "Wil je het spel in het Chinees spelen?$\r$\n$\r$\n$\r$\nLet op: hiervoor is een ander lettertype nodig, en het kan zijn dat het met Windows Vista lang duurt om Warzone 2100 op te starten." 
 ;--------------------------------
 ;Installer Sections
 
@@ -185,13 +180,7 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=readme.screen.css" "${TOP_SRCDIR}\doc\styles\readme.screen.css"
 
   SetOutPath "$INSTDIR\fonts"
-  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 $(DIALOG_MSG) IDYES WINDOWSFONT_ENABLED IDNO WINDOWSFONT_DISABLED
-WINDOWSFONT_ENABLED:
-  File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_enable" 
-  goto FONT_DONE
-WINDOWSFONT_DISABLED:
   File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_disable"
-FONT_DONE:
   File "${EXTDIR}\etc\fonts\DejaVuSans.ttf"
   File "${EXTDIR}\etc\fonts\DejaVuSans-Bold.ttf"
 
@@ -312,8 +301,9 @@ Section $(TEXT_SecFMVs) SecFMVs
 
 SectionEnd
 
-Section $(TEXT_SecNLS) SecNLS
+SectionGroup $(TEXT_SecNLS) SecNLS
 
+Section "-NLS files" SecNLS_files
   SetOutPath "$INSTDIR\locale\cs\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\cs.gmo"
 
@@ -385,7 +375,14 @@ Section $(TEXT_SecNLS) SecNLS
 
 SectionEnd
 
+;Replace fonts.conf with Windows 'fonts' enabled one
+Section /o $(TEXT_SecNLS_WinFonts) SecNLS_WinFonts
+  SetOutPath "$INSTDIR\fonts"
+  Delete "$INSTDIR\fonts\fonts.conf"
+  File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_enable" 
+SectionEnd
 
+SectionGroupEnd
 
 ;--------------------------------
 ;Installer Functions
@@ -425,6 +422,9 @@ FunctionEnd
   LangString TEXT_SecNLS ${LANG_ENGLISH} "NLS"
   LangString DESC_SecNLS ${LANG_ENGLISH} "Support for languages other than English."
 
+  LangString TEXT_SecNLS_WinFonts ${LANG_ENGLISH} "WinFonts"
+  LangString DESC_SecNLS_WinFonts ${LANG_ENGLISH} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+  
   LangString TEXT_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod"
   LangString DESC_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod. Modifies most of the weapons and research."
 
@@ -453,6 +453,9 @@ FunctionEnd
   LangString TEXT_SecNLS ${LANG_DUTCH} "NLS"
   LangString DESC_SecNLS ${LANG_DUTCH} "Ondersteuning voor andere talen dan Engels (Nederlands inbegrepen)."
 
+  LangString TEXT_SecNLS_WinFonts ${LANG_DUTCH} "WinFonts"
+  LangString DESC_SecNLS_WinFonts ${LANG_DUTCH} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+  
   LangString TEXT_SecNTWMod ${LANG_DUTCH} "NTW: New Team War mod"
   LangString DESC_SecNTWMod ${LANG_DUTCH} "NTW: New Team War mod. Wijzigd de meeste wapens en onderzoeken."
 
@@ -481,6 +484,9 @@ FunctionEnd
   LangString TEXT_SecNLS ${LANG_GERMAN} "NLS"
   LangString DESC_SecNLS ${LANG_GERMAN} "Unterstützung für Sprachen außer Englisch (Deutsch inbegriffen)."
 
+  LangString TEXT_SecNLS_WinFonts ${LANG_GERMAN} "WinFonts"
+  LangString DESC_SecNLS_WinFonts ${LANG_GERMAN} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+  
   LangString TEXT_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod"
   LangString DESC_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod. Verändert die meisten Forschungen und Waffen."
 
@@ -512,6 +518,7 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOriginalMod} $(DESC_SecOriginalMod)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS} $(DESC_SecNLS)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS_WinFonts} $(DESC_SecNLS_WinFonts)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
