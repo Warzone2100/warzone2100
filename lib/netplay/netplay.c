@@ -248,9 +248,9 @@ static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "2.2-net-merge"; 
+char VersionString[VersionStringSize] = "2.3.0 beta 1"; 
 static int NETCODE_VERSION_MAJOR = 2;	// unused for now
-static int NETCODE_VERSION_MINOR = 24;	// unused for now
+static int NETCODE_VERSION_MINOR = 30;	// unused for now
 static int NUMBER_OF_MODS = 0;			// unused for now
 static int NETCODE_HASH = 0;			// unused for now
 

@@ -1,8 +1,19 @@
-2009-00-00: Version 2.2.5
+2009-11-14: Version 2.3.0 beta 1
  * General:
-   * Change: Try to display dialog box when a game internal error causes game to crash on Windows (r8307)
+   *  Fix: Use Enable GLC_AUTO_FONT to enable it to fallback to different fonts if the default font doesn't contain the needed font. (r8365)
+   * Change: Try to display dialog box when a internal game error causes game to crash on Windows (r8307)
    * Fix: Reduce the time it takes to rebuild font cache on Vista and Windows 7 (ticket:1013, r8322)
    * Fix: Collection of smaller bugfixes (ticket:997, ticket:1018, ticket:1021, ticket:1006)
+   * Change: Switched fontconfig question from scary pop-up message to NLS sub-feature (r8359, ticket:1034).
+   * Fix: make distcheck should now work after initial make (to generate yacc/lex files) (r8360)
+ *Multiplayer:
+   * Change: Drop SDL_NET in favor of using BSD sockets (same as trunk code) (r8342, ticket:1038)
+   * Change: Try to mitigate turnOffMultiMsg() via setting isMPDirtyBit when needed.
+   * Change: Max unit count is down from 300 to 150 to mitigate bandwidth issues.
+   * Change: Sync code is now run when isMPDirtyBit is set or 135ms has expired for droids / power / structures (45ms per frame (locked) so ~ every 3 itterations)
+   * Change: Ping (in game, not lobby!) is now sent every 4 itterations and Score is sent every 5
+   * Change: MAX_BYTESPERSEC bump up to 7K from ~3.3K to mitigate when we can sync.
+   * Change: When we have reached MAX_BYTESPERSEC limit, inform of this event in the logs **FOR THIS BETA ONLY**
 
 2009-10-11: Version 2.2.4
  * General:
