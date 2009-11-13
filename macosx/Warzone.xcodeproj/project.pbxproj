@@ -734,6 +734,9 @@
 		97AEAC560E8C261B00A10721 /* Theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; };
 		97F013D60EDEAE76004947E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
 		97F013D80EDEAE98004947E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
+		EFF3E8D510AD2A740099670F /* dictionary.c in Sources */ = {isa = PBXBuildFile; fileRef = EFF3E8D410AD2A740099670F /* dictionary.c */; };
+		EFF3E8D910AD2A9A0099670F /* iniparser.c in Sources */ = {isa = PBXBuildFile; fileRef = EFF3E8D710AD2A9A0099670F /* iniparser.c */; };
+		EFF3E8DE10AD2BAB0099670F /* challenge.c in Sources */ = {isa = PBXBuildFile; fileRef = EFF3E8DC10AD2BAB0099670F /* challenge.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -1871,6 +1874,12 @@
 		97AEABCC0E8C1C6D00A10721 /* fdct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fdct_mmx.c; sourceTree = "<group>"; };
 		97AEABCD0E8C1C6D00A10721 /* idct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = idct_mmx.c; sourceTree = "<group>"; };
 		97F013D10EDEAE5C004947E5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		EFF3E8D410AD2A740099670F /* dictionary.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dictionary.c; path = ../lib/iniparser/dictionary.c; sourceTree = SOURCE_ROOT; };
+		EFF3E8D610AD2A8D0099670F /* dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dictionary.h; path = ../lib/iniparser/dictionary.h; sourceTree = SOURCE_ROOT; };
+		EFF3E8D710AD2A9A0099670F /* iniparser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = iniparser.c; path = ../lib/iniparser/iniparser.c; sourceTree = SOURCE_ROOT; };
+		EFF3E8D810AD2A9A0099670F /* iniparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iniparser.h; path = ../lib/iniparser/iniparser.h; sourceTree = SOURCE_ROOT; };
+		EFF3E8DC10AD2BAB0099670F /* challenge.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = challenge.c; path = ../src/challenge.c; sourceTree = SOURCE_ROOT; };
+		EFF3E8DD10AD2BAB0099670F /* challenge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = challenge.h; path = ../src/challenge.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2132,6 +2141,7 @@
 			children = (
 				023A1D4F0D2DAEC900EFEB37 /* Resources */,
 				02CDDCFD0D159BE700722688 /* Autorevision sources */,
+				EFF3E89110AD29AC0099670F /* Iniparser sources */,
 				02F5CC7F0D1495EB0000A2D0 /* Popt sources */,
 				0223BBE50CFE3F4B0056EF85 /* QuesoGLC sources */,
 				022B2F460BD55940002E64E3 /* Gettext sources */,
@@ -2195,6 +2205,8 @@
 		0246A0980BD3CB97004D1C70 /* Warzone sources */ = {
 			isa = PBXGroup;
 			children = (
+				EFF3E8DC10AD2BAB0099670F /* challenge.c */,
+				EFF3E8DD10AD2BAB0099670F /* challenge.h */,
 				02BBB2060DA874CF002D438B /* Exception Handler */,
 				0246A1970BD3CCC3004D1C70 /* Warzone */,
 				0246A1790BD3CCAB004D1C70 /* Widget */,
@@ -3208,6 +3220,17 @@
 				97AEABCD0E8C1C6D00A10721 /* idct_mmx.c */,
 			);
 			path = x86_64;
+			sourceTree = "<group>";
+		};
+		EFF3E89110AD29AC0099670F /* Iniparser sources */ = {
+			isa = PBXGroup;
+			children = (
+				EFF3E8D710AD2A9A0099670F /* iniparser.c */,
+				EFF3E8D810AD2A9A0099670F /* iniparser.h */,
+				EFF3E8D610AD2A8D0099670F /* dictionary.h */,
+				EFF3E8D410AD2A740099670F /* dictionary.c */,
+			);
+			name = "Iniparser sources";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -4435,6 +4458,9 @@
 				974964330F5ABC3F00A38899 /* eventsave.c in Sources */,
 				974964340F5ABC3F00A38899 /* interpreter.c in Sources */,
 				9710CCAD0FEACEE500AFF563 /* dumpinfo.cpp in Sources */,
+				EFF3E8D510AD2A740099670F /* dictionary.c in Sources */,
+				EFF3E8D910AD2A9A0099670F /* iniparser.c in Sources */,
+				EFF3E8DE10AD2BAB0099670F /* challenge.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
