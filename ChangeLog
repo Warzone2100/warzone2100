@@ -8,12 +8,12 @@
    * Fix: make distcheck should now work after initial make (to generate yacc/lex files) (r8360)
  *Multiplayer:
    * Change: Drop SDL_NET in favor of using BSD sockets (same as trunk code) (r8342, ticket:1038)
-   * Change: Try to mitigate turnOffMultiMsg() via setting isMPDirtyBit when needed.
-   * Change: Max unit count is down from 300 to 150 to mitigate bandwidth issues.
-   * Change: Sync code is now run when isMPDirtyBit is set or 135ms has expired for droids / power / structures (45ms per frame (locked) so ~ every 3 itterations)
-   * Change: Ping (in game, not lobby!) is now sent every 4 itterations and Score is sent every 5
-   * Change: MAX_BYTESPERSEC bump up to 7K from ~3.3K to mitigate when we can sync.
-   * Change: When we have reached MAX_BYTESPERSEC limit, inform of this event in the logs **FOR THIS BETA ONLY**
+   * Change: Try to mitigate turnOffMultiMsg() via setting isMPDirtyBit when needed. (r8369)
+   * Change: Max unit count is down from 300 to 150 to mitigate bandwidth issues. (r8369)
+   * Change: Sync code is now run when isMPDirtyBit is set or 135ms has expired for droids / power / structures (45ms per frame (locked) so ~ every 3 iterations ) (r8369)
+   * Change: Ping (in game, not lobby!) is now sent every 4 iterations  and Score is sent every 5 (r8369)
+   * Change: MAX_BYTESPERSEC bump up to 7K from ~3.3K to mitigate when we can sync. (r8369)
+   * Change: When we have reached MAX_BYTESPERSEC limit, inform of this event in the logs **FOR THIS BETA ONLY** (r8369)
 
 2009-10-11: Version 2.2.4
  * General:
