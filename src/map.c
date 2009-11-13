@@ -1156,9 +1156,13 @@ extern SWORD map_Height(int x, int y)
 	int	h0, hx, hy, hxy, wTL = 0, wTR = 0, wBL = 0, wBR = 0;
 	BOOL	bWaterTile = false;
 
+	// Clamp x and y values to actual ones
 	ASSERT(x >= 0, "map_Height: Negative x value");
 	ASSERT(y >= 0, "map_Height: Negative y value");
-
+	x = (x < 0 ? 0 : x);
+	y = (y < 0 ? 0 : y);
+	ASSERT(x < world_coord(mapWidth), "map_Height: x value is too big");
+	ASSERT(y < world_coord(mapHeight), "map_Height: y value is too big");
 	x = (x >= world_coord(mapWidth) ? world_coord(mapWidth - 1) : x);
 	y = (y >= world_coord(mapHeight) ? world_coord(mapHeight - 1) : y);
 
