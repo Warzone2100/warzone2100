@@ -8,7 +8,7 @@
    * Fix: make distcheck should now work after initial make (to generate yacc/lex files) (r8360)
    * Add: add new debug flag of "input" used for debug messages for input issues (keyboard/mouse)  (r8376)
    * Change: Add modifier to the keymap editor to show which keys are set to the numpad (r8376)
-   *NOTE*: Please reset your keymap! (Click on the trashcan icon a few times)
+   * Change: Warzone 2100 -2.3 is the new (default) config direcotry (r8387)
  *Multiplayer:
    * Change: Drop SDL_NET in favor of using BSD sockets (same as trunk code) (r8342, ticket:1038)
    * Change: Try to mitigate turnOffMultiMsg() via setting isMPDirtyBit when needed. (r8369)
@@ -17,7 +17,7 @@
    * Change: Ping (in game, not lobby!) is now sent every 4 iterations  and Score is sent every 5 (r8369)
    * Change: MAX_BYTESPERSEC bump up to 7K from ~3.3K to mitigate when we can sync. (r8369)
    * Change: When we have reached MAX_BYTESPERSEC limit, inform of this event in the logs **FOR THIS BETA ONLY** (r8369)
-
+   * Change: Only tally up outgoing bytes instead of both incoming and outgoing bytes when checking for max packet size. (8386)
 2009-10-11: Version 2.2.4
  * General:
    * Fix: Indirect fire weapons can no longer use sensors to fire at targets the sensor cannot see. (r8177)
