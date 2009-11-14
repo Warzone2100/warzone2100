@@ -118,7 +118,7 @@ typedef enum
 
 // Constants
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
-#define MaxMsgSize		8192		// max size of a message in bytes.
+#define MaxMsgSize		16384		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define MaxGames		12			// max number of concurrently playable games to allow.
 #define extra_string_size	239		// extra 255 char for future use

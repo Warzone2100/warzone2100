@@ -78,13 +78,13 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
-// NOTE: MaxMsgSize is currently set to 8K.  When MAX_BYTESPERSEC has been reached (sent + recv!), then we do NOT
+// NOTE: MaxMsgSize is currently set to 16K.  When MAX_BYTESPERSEC has been reached (sent + recv!), then we do NOT
 //       do the sync code checks anymore(!), needless to say, this can and does cause issues.
 // FIXME: We should define this externally so people with dial-up modems can configure this
 // FIXME: Use possible compression on the packets.
 // NOTE: Remember, we (now) allow 150 units max * 7 (1 human, 6 AI possible for Host) to send to the other player.
 
-#define MAX_BYTESPERSEC			6144		// bump up to 6K
+#define MAX_BYTESPERSEC			14336
 
 #define ANYPLAYER				99
 #define ONEPLAYER				98
