@@ -87,12 +87,12 @@ static UDWORD averagePing(void);
 // Defined numeric values
 // NOTE / FIXME: Current MP games are locked at 45ms
 #define MP_FPS_LOCK			45			
-#define AV_PING_FREQUENCY	MP_FPS_LOCK * 20		// how often to update average pingtimes. in approx millisecs.
-#define PING_FREQUENCY		MP_FPS_LOCK * 10		// how often to update pingtimes. in approx millisecs.
-#define STRUCT_FREQUENCY	MP_FPS_LOCK * 6			// how often (ms) to send a structure check.
-#define DROID_FREQUENCY		MP_FPS_LOCK * 5			// how ofter (ms) to send droid checks
-#define POWER_FREQUENCY		MP_FPS_LOCK * 7			// how often to send power levels
-#define SCORE_FREQUENCY		MP_FPS_LOCK * 25		// how often to update global score.
+#define AV_PING_FREQUENCY	MP_FPS_LOCK * 1000		// how often to update average pingtimes. in approx millisecs.
+#define PING_FREQUENCY		MP_FPS_LOCK * 600		// how often to update pingtimes. in approx millisecs.
+#define STRUCT_FREQUENCY	MP_FPS_LOCK * 10		// how often (ms) to send a structure check.
+#define DROID_FREQUENCY		MP_FPS_LOCK * 7			// how ofter (ms) to send droid checks
+#define POWER_FREQUENCY		MP_FPS_LOCK * 14		// how often to send power levels
+#define SCORE_FREQUENCY		MP_FPS_LOCK * 2400		// how often to update global score.
 
 #define SYNC_PANIC			40000					// maximum time before doing a dirty fix. [not even used!]
 
