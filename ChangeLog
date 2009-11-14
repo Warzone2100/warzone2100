@@ -15,7 +15,7 @@
    * Change: Try to mitigate turnOffMultiMsg() via setting isMPDirtyBit when needed. (r8369)
    * Change: Max unit count is down from 300 to 150 to mitigate bandwidth issues. (r8369)
    * Change: Sync code is now run when isMPDirtyBit is set or 315ms has expired for droids / 630ms for power / 450 ms for structures (r8383)
-   * Change: Ping (in game, not lobby!) is now sent every 4 iterations  and Score is sent every 5 (r8369)
+   * Change: Ping (in game, not lobby!) & Score is now sent more frequently (r8369)
    * Change: MAX_BYTESPERSEC bump up to 7K from ~3.3K to mitigate when we can sync. (r8369)
    * Change: When we have reached MAX_BYTESPERSEC limit, inform of this event in the logs **FOR THIS BETA ONLY** (r8369)
    * Change: Only tally up outgoing bytes instead of both incoming and outgoing bytes when checking for max packet size. (8386)
