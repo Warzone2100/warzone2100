@@ -153,6 +153,7 @@ typedef enum {
   LOG_TERRAIN,
   LOG_FEATURE,
   LOG_FATAL,	/**< special; on by default, for both debug & release builds  */
+  LOG_INPUT,	// mouse / keyboard events
   LOG_LAST /**< _must_ be last! */
 } code_part;
 

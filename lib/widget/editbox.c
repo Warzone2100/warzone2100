@@ -420,6 +420,7 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 						&printChars, &printWidth);
 				}
 			}
+			debug(LOG_INPUT, "EditBox cursor left");
 			break;
 		case INPBUF_RIGHT :
 			/* Move the cursor right */
@@ -442,16 +443,20 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 				fitStringStart(pBuffer + printStart, psWidget->width,
 					&printChars, &printWidth);
 			}
+			debug(LOG_INPUT, "EditBox cursor right");
 			break;
 		case INPBUF_UP :
+			debug(LOG_INPUT, "EditBox cursor up");
 			break;
 		case INPBUF_DOWN :
+			debug(LOG_INPUT, "EditBox cursor down");
 			break;
 		case INPBUF_HOME :
 			/* Move the cursor to the start of the buffer */
 			pos = 0;
 			printStart = 0;
 			fitStringStart(pBuffer, psWidget->width, &printChars, &printWidth);
+			debug(LOG_INPUT, "EditBox cursor home");
 			break;
 		case INPBUF_END :
 			/* Move the cursor to the end of the buffer */
@@ -460,6 +465,7 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			{
 				fitStringEnd(pBuffer, psWidget->width, &printStart, &printChars, &printWidth);
 			}
+			debug(LOG_INPUT, "EditBox cursor end");
 			break;
 		case INPBUF_INS :
 			if (editState == WEDBS_INSERT)
@@ -470,6 +476,7 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			{
 				editState = WEDBS_INSERT;
 			}
+			debug(LOG_INPUT, "EditBox cursor insert");
 			break;
 		case INPBUF_DEL :
 			delCharRight(pBuffer, &pos);
@@ -477,10 +484,13 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			/* Update the printable text */
 			fitStringStart(pBuffer + printStart, psWidget->width,
 				&printChars, &printWidth);
+			debug(LOG_INPUT, "EditBox cursor delete");
 			break;
 		case INPBUF_PGUP :
+			debug(LOG_INPUT, "EditBox cursor page up");
 			break;
 		case INPBUF_PGDN :
+			debug(LOG_INPUT, "EditBox cursor page down");
 			break;
 		case INPBUF_BKSPACE :
 			/* Delete the character to the left of the cursor */
@@ -507,20 +517,24 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 				fitStringStart(pBuffer + printStart, psWidget->width,
 					&printChars, &printWidth);
 			}
+			debug(LOG_INPUT, "EditBox cursor backspace");
 			break;
 		case INPBUF_TAB :
 			putSelection(pBuffer, &pos);
 
 			/* Update the printable text */
 			fitStringEnd(pBuffer, psWidget->width, &printStart, &printChars, &printWidth);
+			debug(LOG_INPUT, "EditBox cursor tab");
 			break;
 		case INPBUF_CR :
 			/* Finish editing */
 			editBoxFocusLost(psContext->psScreen, psWidget);
 			screenClearFocus(psContext->psScreen);
+			debug(LOG_INPUT, "EditBox cursor return");
 			return;
 			break;
 		case INPBUF_ESC :
+			debug(LOG_INPUT, "EditBox cursor escape");
 			break;
 
 		default:

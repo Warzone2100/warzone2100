@@ -266,7 +266,7 @@ void inputHandleKeyEvent(SDL_KeyboardEvent * keyEvent)
 					break;
 			}
 
-			debug( LOG_NEVER, "Code: %x\n", vk);
+			debug( LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", vk, vk, vk < 255 ? (char) vk : '?' , SDL_GetKeyName(keyCodeToSDLKey(keyEvent->keysym.sym)));
 			if (char_code < 32)
 			{
 				char_code = 0;

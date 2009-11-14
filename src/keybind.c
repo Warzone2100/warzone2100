@@ -1864,10 +1864,17 @@ void kf_SendTextMessage(void)
 	ch = (char)inputGetKey();
 	while (ch != 0)												// in progress
 	{
+		// FIXME: Why are we using duplicate defines? INPBUF_CR == KEY_RETURN == SDLK_RETURN
+
 		// Kill if they hit return - it maxes out console or it's more than one line long
 		if ((ch == INPBUF_CR) || (strlen(sTextToSend)>=MAX_CONSOLE_STRING_LENGTH-16) // Prefixes with ERROR: and terminates with '?'
 		 || iV_GetTextWidth(sTextToSend) > (pie_GetVideoBufferWidth()-64))// sendit
 		{
+			// NOTE: This is for debugging strange keyboard issues.  Don't remove.
+			if (ch == KEY_RETURN)
+			{
+				debug(LOG_INPUT, "user has hit the return key to terminate the console string");
+			}
 			bAllowOtherKeyPresses = true;
 			//	flushConsoleMessages();
 
