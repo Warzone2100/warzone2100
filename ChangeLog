@@ -8,6 +8,7 @@
    * Fix: make distcheck should now work after initial make (to generate yacc/lex files) (r8360)
    * Add: add new debug flag of "input" used for debug messages for input issues (keyboard/mouse)  (r8376)
    * Change: Add modifier to the keymap editor to show which keys are set to the numpad (r8376)
+   *NOTE*: Please reset your keymap! (Click on the trashcan icon a few times)
  *Multiplayer:
    * Change: Drop SDL_NET in favor of using BSD sockets (same as trunk code) (r8342, ticket:1038)
    * Change: Try to mitigate turnOffMultiMsg() via setting isMPDirtyBit when needed. (r8369)
