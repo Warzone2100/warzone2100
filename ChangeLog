@@ -10,7 +10,7 @@
    * Change: Add modifier to the keymap editor to show which keys are set to the numpad (r8376)
    * Change: Warzone 2100 -2.3 is the new (default) config direcotry (r8387)
    * Change: NTW Research Balance Update, Cannons, Missiles & Rockets (r8385)
- *Multiplayer:
+ * Multiplayer:
    * Change: Drop SDL_NET in favor of using BSD sockets (same as trunk code) (r8342, ticket:1038)
    * Change: Try to mitigate turnOffMultiMsg() via setting isMPDirtyBit when needed. (r8369)
    * Change: Max unit count is down from 300 to 150 to mitigate bandwidth issues. (r8369)
