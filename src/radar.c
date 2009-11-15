@@ -200,13 +200,6 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 	pos.x += radarWidth/2.0;
 	pos.y += radarHeight/2.0;
 
-	if (pos.x<0 || pos.y<0 || pos.x>=radarWidth || pos.y>=radarHeight)
-	{
-		ASSERT(false, "clicked outside radar minimap (%d, %d) -> (%.1f,%.1f)", mX, mY, pos.x, pos.y);
-		*PosX = 0;
-		*PosY = 0;
-		return;
-	}
 	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
 	sPosX = pos.x / pixSizeH;	// adjust for pixel size
 	sPosY = pos.y / pixSizeV;
@@ -605,8 +598,8 @@ BOOL CoordInRadar(int x,int y)
 	{
 		pos = Vector2f_Rotate2f(pos, -player.r.y/DEG(1));
 	}
-	pos.x += radarWidth/2;
-	pos.y += radarHeight/2;
+	pos.x += radarWidth/2.0;
+	pos.y += radarHeight/2.0;
 
 	if (pos.x<0 || pos.y<0 || pos.x>=radarWidth || pos.y>=radarHeight)
 	{
