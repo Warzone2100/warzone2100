@@ -700,6 +700,8 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 			if (!worldOnMap(nextPos.x, nextPos.y))
 			{
 				psProj->state = PROJ_IMPACT;
+				psProj->tarX = psProj->pos.x;
+				psProj->tarY = psProj->pos.y;
 				setProjectileDestination(psProj, NULL);
 				debug(LOG_NEVER, "**** projectile(%i) off map - removed ****\n", psProj->id);
 				return;
@@ -927,6 +929,8 @@ static void proj_InFlightIndirectFunc(PROJECTILE *psProj)
 			if (!worldOnMap(nextPos.x, nextPos.y))
 			{
 				psProj->state = PROJ_IMPACT;
+				psProj->tarX = psProj->pos.x;
+				psProj->tarY = psProj->pos.y;
 				setProjectileDestination(psProj, NULL);
 				debug(LOG_NEVER, "**** projectile(%i) off map - removed ****\n", psProj->id);
 				return;
