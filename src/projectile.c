@@ -980,13 +980,14 @@ static void proj_InFlightIndirectFunc(PROJECTILE *psProj)
 			continue;
 		}
 
-		if (psTempObj->player == psProj->player ||
-			aiCheckAlliances(psTempObj->player, psProj->player))
+		if ((psTempObj->player == psProj->player ||
+			 aiCheckAlliances(psTempObj->player, psProj->player))
+			&& psTempObj != psProj->psDest)
 		{
-			// No friendly fire
+			// No friendly fire unless intentional
 			continue;
 		}
-
+		
 		/* Actual collision test */
 		{
 			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
@@ -1315,8 +1316,12 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 				/* see if psCurrD is hit (don't hit main target twice) */
 				if ((BASE_OBJECT *)psCurrD != psObj->psDest)
 				{
-					// Check whether it is in hit radius
-					if (Vector3i_InSphere(Vector3uw_To3i(psCurrD->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
+					bool bTargetInAir = (asPropulsionTypes[asPropulsionStats[psCurrD->asBits[COMP_PROPULSION].nStat].propulsionType].travel == AIR && ((DROID *)psCurrD)->sMove.Status != MOVEINACTIVE);
+					
+					// Check whether we can hit it and it is in hit radius
+					if (!((psStats->surfaceToAir == SHOOT_IN_AIR && !bTargetInAir) ||
+						  (psStats->surfaceToAir == SHOOT_ON_GROUND && bTargetInAir)) &&
+					    Vector3i_InSphere(Vector3uw_To3i(psCurrD->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
 					{
 						int dice;
 						HIT_ROLL(dice);
@@ -1354,6 +1359,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			}
 
 			// FIXME Check whether we hit above maximum structure height, to skip unnecessary calculations!
+			if (psStats->surfaceToAir != SHOOT_IN_AIR)
 			{
 				STRUCTURE *psCurrS, *psNextS;
 
