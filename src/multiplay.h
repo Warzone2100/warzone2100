@@ -35,10 +35,10 @@ typedef struct {
 	uint8_t		maxPlayers;					// max players to allow
 	char		name[128];					// game name   (to be used)
 	BOOL		fog;
-	uint32_t    power;						// power level for arena game
+	uint32_t	power;						// power level for arena game
 	uint8_t		base;						// clean/base/base&defence
 	uint8_t		alliance;					// no/yes/AIs vs Humans
-	uint8_t		skDiff[MAX_PLAYERS];			// skirmish game difficulty settings.
+	uint8_t		skDiff[MAX_PLAYERS];		// skirmish game difficulty settings. 0x0=OFF 0xff=HUMAN
 } MULTIPLAYERGAME;
 
 typedef struct
