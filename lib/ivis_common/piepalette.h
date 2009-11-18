@@ -69,8 +69,12 @@
 #define WZCOL_BLUEPRINT_VALID		psPalette[44]
 #define WZCOL_BLUEPRINT_INVALID		psPalette[45]
 #define WZCOL_BLUEPRINT_PLANNED		psPalette[46]
+#define WZCOL_HEALTH_HIGH_SHADOW	psPalette[47]
+#define WZCOL_HEALTH_MEDIUM_SHADOW	psPalette[48]
+#define WZCOL_HEALTH_LOW_SHADOW		psPalette[49]
+#define WZCOL_HEALTH_RESISTANCE		psPalette[50]
 
-#define WZCOL_MAX			47
+#define WZCOL_MAX			51
 
 //*************************************************************************
 

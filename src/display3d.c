@@ -2809,6 +2809,10 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		scrR = psObj->sDisplay.screenR;
 		scrY += scrR + 2;
 
+		if (weapon_slot != 0) // only rendering resistance in the first slot
+		{
+			return;
+		}
 		if (psDroid->resistance)
 		{
 			mulH = (float)psDroid->resistance / (float)droidResistance(psDroid);
@@ -2821,10 +2825,10 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		firingStage = ((((2*scrR)*10000)/100)*firingStage)/10000;
 		if(firingStage >= (UDWORD)(2*scrR))
 		{
-			firingStage = (2*scrR) - 1;
+			firingStage = (2*scrR);
 		}
-		pie_BoxFill(scrX - scrR-1, 6+scrY + 0 + (weapon_slot * 5), scrX - scrR +(2*scrR),    6+scrY+3 + (weapon_slot * 5), WZCOL_RELOAD_BACKGROUND);
-		pie_BoxFill(scrX - scrR,   6+scrY + 1 + (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 + (weapon_slot * 5), WZCOL_RELOAD_BAR);
+		pie_BoxFill(scrX - scrR-1, 3+scrY + 0 + (weapon_slot * 2), scrX - scrR +(2*scrR)+1,    3+scrY+3 + (weapon_slot * 2), WZCOL_RELOAD_BACKGROUND);
+		pie_BoxFill(scrX - scrR,   3+scrY + 1 + (weapon_slot * 2), scrX - scrR +firingStage, 3+scrY+2 + (weapon_slot * 2), WZCOL_HEALTH_RESISTANCE);
 		return;
 	}
 
@@ -2880,7 +2884,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 			psStruct = (STRUCTURE *)psObj;
 			damLevel = (1. - getStructureDamage(psStruct)) * 100;
 			scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
-			scrY += scale * 10 - 1;
+			scrY += scale * 10;
 			scrR = scale * 20;
 			break;
 		default:
@@ -2904,11 +2908,11 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 			firingStage = ((((2*scrR)*10000)/100)*firingStage)/10000;
 			if(firingStage >= (UDWORD)(2*scrR))
 			{
-				firingStage = (2*scrR) - 1;
+				firingStage = (2*scrR);
 			}
 			/* Power bars */
-			pie_BoxFill(scrX - scrR-1, 6+scrY + 0 + (weapon_slot * 5), scrX - scrR +(2*scrR),    6+scrY+3 + (weapon_slot * 5), WZCOL_RELOAD_BACKGROUND);
-			pie_BoxFill(scrX - scrR,   6+scrY + 1 + (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 + (weapon_slot * 5), WZCOL_RELOAD_BAR);
+			pie_BoxFill(scrX - scrR-1, 2+scrY + 0 + (weapon_slot * 2), scrX - scrR +(2*scrR)+1,    2+scrY+3 + (weapon_slot * 2), WZCOL_RELOAD_BACKGROUND);
+			pie_BoxFill(scrX - scrR,   2+scrY + 1 + (weapon_slot * 2), scrX - scrR +firingStage, 2+scrY+2 + (weapon_slot * 2), WZCOL_RELOAD_BAR);
 		}
 	}
 }
@@ -2963,7 +2967,7 @@ static void drawStructureTargetOriginIcon(STRUCTURE *psStruct, int weapon_slot)
 static void drawStructureHealth(STRUCTURE *psStruct)
 {
 	SDWORD		scrX,scrY,scrR;
-	PIELIGHT	powerCol = WZCOL_BLACK;
+	PIELIGHT	powerCol = WZCOL_BLACK, powerColShadow = WZCOL_BLACK;
 	UDWORD		health,width;
 	UDWORD		scale;
 
@@ -2995,19 +2999,23 @@ static void drawStructureHealth(STRUCTURE *psStruct)
 	if (health > REPAIRLEV_HIGH)
 	{
 		powerCol = WZCOL_HEALTH_HIGH;
+		powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
 	}
 	else if (health > REPAIRLEV_LOW)
 	{
 		powerCol = WZCOL_HEALTH_MEDIUM;
+		powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
 	}
 	else
 	{
 		powerCol = WZCOL_HEALTH_LOW;
+		powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
 	}
 	health = (((width*10000)/100)*health)/10000;
 	health*=2;
-	pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+2, WZCOL_RELOAD_BACKGROUND);
+	pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+3, WZCOL_RELOAD_BACKGROUND);
 	pie_BoxFill(scrX-scrR, scrY, scrX-scrR+health, scrY+1, powerCol);
+	pie_BoxFill(scrX-scrR, scrY+1, scrX-scrR+health, scrY+2, powerColShadow);
 }
 
 /// draw the construction bar for the specified structure
@@ -3027,8 +3035,8 @@ static void drawStructureBuildProgress(STRUCTURE *psStruct)
 	powerCol = WZCOL_YELLOW;
 	health = (((width*10000)/100)*health)/10000;
 	health*=2;
-	pie_BoxFill(scrX - scrR - 1, scrY - 1 + 5, scrX + scrR + 1, scrY + 2 + 5, WZCOL_RELOAD_BACKGROUND);
-	pie_BoxFill(scrX - scrR, scrY + 5, scrX - scrR + health, scrY + 1 + 5, powerCol);
+	pie_BoxFill(scrX - scrR - 1, scrY - 1 + 5, scrX + scrR + 1, scrY + 3 + 5, WZCOL_RELOAD_BACKGROUND);
+	pie_BoxFill(scrX - scrR, scrY + 5, scrX - scrR + health, scrY + 2 + 5, powerCol);
 }
 
 /// Draw the health of structures and show enemy structures being targetted
@@ -3192,7 +3200,7 @@ static void	drawDroidSelections( void )
 	UDWORD			scrX,scrY,scrR;
 	DROID			*psDroid;
 	UDWORD			damage;
-	PIELIGHT		powerCol = WZCOL_BLACK;
+	PIELIGHT		powerCol = WZCOL_BLACK, powerColShadow = WZCOL_BLACK;
 	PIELIGHT		boxCol;
 	BASE_OBJECT		*psClickedOn;
 	BOOL			bMouseOverDroid = false;
@@ -3229,14 +3237,17 @@ static void	drawDroidSelections( void )
 			if (damage > REPAIRLEV_HIGH)
 			{
 				powerCol = WZCOL_HEALTH_HIGH;
+				powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
 			}
 			else if (damage > REPAIRLEV_LOW)
 			{
 				powerCol = WZCOL_HEALTH_MEDIUM;
+				powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
 			}
 			else
 			{
 				powerCol = WZCOL_HEALTH_LOW;
+				powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
 			}
 			mulH = (float)psDroid->body / (float)psDroid->originalBody;
 			damage = mulH * (float)psDroid->sDisplay.screenR;// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
@@ -3267,8 +3278,9 @@ static void	drawDroidSelections( void )
 				}
 
 				/* Power bars */
-				pie_BoxFill(scrX - scrR - 1, scrY + scrR+2, scrX + scrR + 1, scrY + scrR + 5, WZCOL_RELOAD_BACKGROUND);
+				pie_BoxFill(scrX - scrR - 1, scrY + scrR+2, scrX + scrR + 1, scrY + scrR + 6, WZCOL_RELOAD_BACKGROUND);
 				pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, powerCol);
+				pie_BoxFill(scrX - scrR, scrY + scrR+4, scrX - scrR + damage, scrY + scrR + 5, powerColShadow);
 
 				/* Write the droid rank out */
 				if((scrX+scrR)>0 && (scrY+scrR)>0 && (scrX-scrR) < pie_GetVideoBufferWidth() && (scrY-scrR) < pie_GetVideoBufferHeight())
@@ -3325,14 +3337,17 @@ static void	drawDroidSelections( void )
 				if (damage > REPAIRLEV_HIGH)
 				{
 					powerCol = WZCOL_HEALTH_HIGH;
+					powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
 				}
 				else if (damage > REPAIRLEV_LOW)
 				{
 					powerCol = WZCOL_HEALTH_MEDIUM;
+					powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
 				}
 				else
 				{
 					powerCol = WZCOL_HEALTH_LOW;
+					powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
 				}
 
 				//show resistance values if CTRL/SHIFT depressed
@@ -3372,8 +3387,9 @@ static void	drawDroidSelections( void )
 					//if(bEnergyBars)
 					{
 						/* Power bars */
-						pie_BoxFill(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 5, WZCOL_RELOAD_BACKGROUND);
+						pie_BoxFill(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 6, WZCOL_RELOAD_BACKGROUND);
 						pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, powerCol);
+						pie_BoxFill(scrX - scrR, scrY + scrR+4, scrX - scrR + damage, scrY + scrR + 5, powerColShadow);
 					}
 				}
 			}
