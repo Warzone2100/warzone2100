@@ -26,7 +26,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "lib/gamelib/gtime.h"
-
+#include "src/component.h"
 #include <time.h>			// for stats
 #include <SDL_timer.h>
 #include <physfs.h>
