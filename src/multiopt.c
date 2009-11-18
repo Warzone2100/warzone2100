@@ -650,9 +650,14 @@ static BOOL campInit(void)
 	// Remove baba player for skirmish
 	if (!game.scavengers)
 	{
-		for (player = game.maxPlayers; player < MAX_PLAYERS; player++)
+		for (player = 1; player < MAX_PLAYERS; player++)
 		{
-			clearPlayer(player, true, false);
+			// we want to remove disabled AI & all the other players that don't belong
+			if (game.skDiff[player] == 0 || player >= game.maxPlayers)
+			{
+				clearPlayer(player, true, false);
+				debug(LOG_NET, "removing disabled AI (%d) from map.", player);
+			}
 		}
 	}
 

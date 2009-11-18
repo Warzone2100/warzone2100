@@ -1468,7 +1468,7 @@ static void addColourChooser(UDWORD player)
 			iV_GetImageHeight(FrontImages,IMAGE_WEE_GUY),		  //h
 			"Player number", IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
 
-			if(isHumanPlayer(i) && i!=selectedPlayer)
+		if(isHumanPlayer(NetPlay.players[i].position) && i!=selectedPlayer )
 			{
 				widgSetButtonState(psWScreen,MULTIOP_PLAYCHOOSER+i ,WBUT_DISABLE);
 			}
@@ -1615,12 +1615,14 @@ static BOOL changeColour(UBYTE player, UBYTE col)
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (NetPlay.players[i].colour == col)
+		if (getPlayerColour(i) == col)
 		{
 			debug(LOG_NET, "Swapping colours between players %d(%d) and %d(%d)",
 			      player, getPlayerColour(player), i, getPlayerColour(i));
 			setPlayerColour(i, getPlayerColour(player));
+			NetPlay.players[i].colour = getPlayerColour(player);
 			setPlayerColour(player, col);
+			NetPlay.players[player].colour = col;
 			NETBroadcastPlayerInfo(player);
 			NETBroadcastPlayerInfo(i);
 			return true;
@@ -1655,6 +1657,7 @@ static BOOL SendPositionRequest(UBYTE player, UBYTE position)
 	}
 	else
 	{
+		debug(LOG_NET, "Requesting the host to change our position. From %d to %d", player, position);
 		// clients tell the host which position they want
 		NETbeginEncode(NET_POSITIONREQUEST, NET_HOST_ONLY);
 			NETuint8_t(&player);
@@ -1699,14 +1702,14 @@ BOOL recvPositionRequest()
 		return true;
 	}
 
-	NETbeginDecode(NET_COLOURREQUEST);
+	NETbeginDecode(NET_POSITIONREQUEST);
 		NETuint8_t(&player);
 		NETuint8_t(&position);
 	NETend();
-
+	debug(LOG_NET, "Host received position request from player %d to %d", player, position);
 	if (player > MAX_PLAYERS || position > MAX_PLAYERS)
 	{
-		debug(LOG_ERROR, "Invalid NET_COLOURREQUEST from player %d: Tried to change player %d to %d",
+		debug(LOG_ERROR, "Invalid NET_POSITIONREQUEST from player %d: Tried to change player %d to %d",
 		      NETgetSource(), (int)player, (int)position);
 		return false;
 	}
@@ -1958,8 +1961,13 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.pDisplay = displayPlayer;
 				sFormInit.UserData = i;
 				widgAddForm(psWScreen, &sFormInit);
-				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 43,9, DIFF_SLIDER_STOPS,
+#ifdef DEBUG
+				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 63,9, DIFF_SLIDER_STOPS,
 					(game.skDiff[i] <= DIFF_SLIDER_STOPS ? game.skDiff[i] : DIFF_SLIDER_STOPS / 2));	//set to 50% (value of UBYTE_MAX == human player)
+#else
+				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 43,9, DIFF_SLIDER_STOPS,
+					(game.skDiff[i] <= DIFF_SLIDER_STOPS ? game.skDiff[i] : DIFF_SLIDER_STOPS / 2));
+#endif
 			}
 		}
 	}
@@ -2723,6 +2731,10 @@ void frontendMultiMessages(void)
 			recvColourRequest();
 			break;
 
+		case NET_POSITIONREQUEST:
+			recvPositionRequest();
+			break;
+
 		case NET_TEAMREQUEST:
 			recvTeamRequest();
 			break;
@@ -3024,7 +3036,8 @@ BOOL startMultiOptions(BOOL bReenter)
 		teamChooserUp = -1;
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);
+			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);	// reset AI (turn it on again)
+			setPlayerColour(i,i);						//reset all colors as well
 		}
 
 		if(!NetPlay.bComms)			// force skirmish if no comms.
@@ -3476,8 +3489,76 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	}
 	else
 	{
+#ifdef DEBUG
+		// This is used for debugging right now, don't touch!
+		// yes, I know it looks like crap, but the sliders are a fixed size.
+
+		x=x+33;
+		// player number
+		switch (NetPlay.players[j].position)
+		{
+		case 0:
+			iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
+			break;
+		case 1:
+			iV_DrawImage(IntImages,IMAGE_GN_1,x+5,y+29);
+			break;
+		case 2:
+			iV_DrawImage(IntImages,IMAGE_GN_2,x+4,y+29);
+			break;
+		case 3:
+			iV_DrawImage(IntImages,IMAGE_GN_3,x+4,y+29);
+			break;
+		case 4:
+			iV_DrawImage(IntImages,IMAGE_GN_4,x+4,y+29);
+			break;
+		case 5:
+			iV_DrawImage(IntImages,IMAGE_GN_5,x+4,y+29);
+			break;
+		case 6:
+			iV_DrawImage(IntImages,IMAGE_GN_6,x+4,y+29);
+			break;
+		case 7:
+			iV_DrawImage(IntImages,IMAGE_GN_7,x+4,y+29);
+			break;
+		default:
+			break;
+		}
+
+		switch(getPlayerColour(j))		//flag icon
+		{
+		case 0:
+			iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
+			break;
+		case 1:
+			iV_DrawImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);
+			break;
+		case 2:
+			iV_DrawImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);
+			break;
+		case 3:
+			iV_DrawImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);
+			break;
+		case 4:
+			iV_DrawImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);
+			break;
+		case 5:
+			iV_DrawImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);
+			break;
+		case 6:
+			iV_DrawImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);
+			break;
+		case 7:
+			iV_DrawImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);
+			break;
+		default:
+			break;
+		}
+#else
+
 		//bluboxes.
 		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
+#endif
 	}
 
 }

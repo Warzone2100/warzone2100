@@ -731,6 +731,7 @@ BOOL recvMessage(void)
 			ingame.JoiningInProgress[player_id] = false;
 			break;
 		}
+		// FIXME: the next 4 cases might not belong here --check (we got two loops for this)
 		case NET_COLOURREQUEST:
 			recvColourRequest();
 			break;
