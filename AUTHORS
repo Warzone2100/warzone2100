@@ -2,6 +2,7 @@ Original game developed by Pumpkin Studios, and published by EIDOS Interactive.
 
 The Warzone 2100 Project team, in alphabetical order:
 
+Thomas Barlow <Mysteryem> : 3D Graphics
 -- <Buginator> : Programming
 Bruce V. Edwards <cathuria> : 2D/3D Graphics
 Elio Gubser <elio, ohyeh> : 2D Graphics
@@ -10,7 +11,6 @@ Gerard Krol <gerard_> : Programming, Textures
 Guangcong Luo <Zarel> : Programming, Balancing, and Documentation
 Per I. Mathisen <per> : Programming
 Kim Metcalfe <lav-coyote25> : Documentation, Maps and Support
--- <Mysteryem> : 3D Graphics
 Christian Ohm <cybersphinx> : Programming
 Tim P. <kamaze> : Webmaster
 Giel van Schijndel <Giel> : Programming and Debian Linux and Windows Packaging
