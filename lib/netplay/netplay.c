@@ -1111,11 +1111,12 @@ static void recvVersionCheck()
 
 		sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victim);
 		sendTextMessage(msg, true);
-
+		sasprintf((char**)&msg, "you have the wrong version; update it! (You have [%s], we expect [%s].)", playersVersion, VersionString);
+		
 		if (NetPlay.isHost)
 		{
-			kickPlayer( victim, "you have the wrong version of the game, so Update it!", ERROR_WRONGVERSION );
-
+			kickPlayer( victim, msg, ERROR_WRONGVERSION );
+			
 			// reset flags /time after we kick them
 			NetPlay.players[victim].versionCheckTime = -1;
 			NetPlay.players[victim].playerVersionFlag = false;
@@ -1148,7 +1149,7 @@ static void VersionCheckTimeOut(uint32_t victim)
 
 	if(NetPlay.isHost)
 	{
-		kickPlayer( victim, "You have the wrong version of the game, so Update it!", ERROR_WRONGVERSION );
+		kickPlayer( victim, "you have the wrong version; update it! (Version string never received.)", ERROR_WRONGVERSION );
 
 		// reset flags /time after we kick them
 		NetPlay.players[victim].versionCheckTime = -1;
