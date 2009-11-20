@@ -2336,16 +2336,14 @@ void actionUpdateDroid(DROID *psDroid)
 			// Got to destination - start repair
 			//rotate turret to point at droid being repaired
 			//use 0 for repair droid
-			if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]))
+			actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
+			if (droidStartDroidRepair(psDroid))
 			{
-				if (droidStartDroidRepair(psDroid))
-				{
-					psDroid->action = DACTION_DROIDREPAIR;
-				}
-				else
-				{
-					psDroid->action = DACTION_NONE;
-				}
+				psDroid->action = DACTION_DROIDREPAIR;
+			}
+			else
+			{
+				psDroid->action = DACTION_NONE;
 			}
 		}
 		if (DROID_STOPPED(psDroid))
@@ -2407,7 +2405,7 @@ void actionUpdateDroid(DROID *psDroid)
 		ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
 		if (xdiff * xdiff + ydiff * ydiff > REPAIR_RANGE)
 		{
-			if (secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD)
+			if (secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD || psDroid->order == DORDER_REPAIR)
 			{
 				/*once started - don't allow the Repair droid to follow the
 				damaged droid for too long*/

@@ -1887,8 +1887,11 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			orderDroid(psDroid, DORDER_STOP);
 			gridAddObject((BASE_OBJECT *)psDroid);
 			psDroid->selected = false;
-			// This is mainly for VTOLs
-			setDroidBase(psDroid, NULL);
+			if (!bMultiPlayer)
+			{
+				// So VTOLs don't try to rearm on another map
+				setDroidBase(psDroid, NULL);
+			}
 			psDroid->cluster = 0;
 			if (goingHome)
 			{
@@ -1899,13 +1902,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			// Inform all other players
 			if (bMultiPlayer)
 			{
-				/* This isn't used for cyborg transports, only
-				 * for "normal" ones, though we shouldn't get
-				 * those in a multiplayer game.
-				 *
-				 * NOTE: Why(!) is this here?
-				 */
-				ASSERT(!"We should never get here", "Apparently we have a \"large\" transporter in a multiplayer game, please make a bugreport from this");
 				sendDroidDisEmbark(psDroid, psTransporter);
 			}
 		}
