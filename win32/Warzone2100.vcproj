@@ -79,7 +79,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				ExecutionBucket="11"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net-static.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib libtheora_static.lib ws2_32.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib libtheora_static.lib ws2_32.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\devpkg\lib&quot;"
@@ -159,7 +159,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\..\lib\sqlite3&quot;;&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\devpkg\include&quot;;&quot;$(SolutionDir)\devpkg\include\SDL&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;YY_STATIC"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -179,7 +179,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				ExecutionBucket="11"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net-static.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib libtheora.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib libtheora_static.lib ws2_32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\devpkg\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"

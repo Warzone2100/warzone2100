@@ -104,7 +104,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;STATICLIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -187,35 +187,11 @@
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\miniupnpcmodule.c"
-						>
-					</File>
-					<File
 						RelativePath=".\miniupnpc\miniwget.c"
 						>
 					</File>
 					<File
 						RelativePath=".\miniupnpc\minixml.c"
-						>
-					</File>
-					<File
-						RelativePath=".\miniupnpc\minixmlvalid.c"
-						>
-					</File>
-					<File
-						RelativePath=".\miniupnpc\testigddescparse.c"
-						>
-					</File>
-					<File
-						RelativePath=".\miniupnpc\testminixml.c"
-						>
-					</File>
-					<File
-						RelativePath=".\miniupnpc\testupnpreplyparse.c"
-						>
-					</File>
-					<File
-						RelativePath=".\miniupnpc\upnpc.c"
 						>
 					</File>
 					<File
