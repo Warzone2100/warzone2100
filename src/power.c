@@ -134,7 +134,7 @@ void releasePlayerPower(void)
 /*check the current power - if enough return true, else return false */
 BOOL checkPower(int player, float quantity)
 {
-	ASSERT(player < MAX_PLAYERS, "checkPower: Bad player");
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Bad player (%d)", player);
 
 	//if not doing a check on the power - just return true
 	if (!powerCalculated)
@@ -151,15 +151,14 @@ BOOL checkPower(int player, float quantity)
 
 void usePower(int player, float quantity)
 {
-	ASSERT(asPower[player].currentPower >= quantity, "not enough power");
-	asPower[player].currentPower -= quantity;
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
+	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity);
 }
 
 void addPower(int player, float quantity)
 {
-	ASSERT(player < MAX_PLAYERS, "addPower: Bad player (%u)", player);
-	ASSERT(asPower[player].currentPower + quantity >= 0, "not enough power");
-	asPower[player].currentPower += quantity;
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
+	asPower[player].currentPower = MAX(0, asPower[player].currentPower + quantity);
 }
 
 /*resets the power calc flag for all players*/
