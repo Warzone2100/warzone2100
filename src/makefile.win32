@@ -125,6 +125,7 @@ LIBS=$(top_builddir)/lib/libgamelib.a \
 	$(top_builddir)/lib/libivis_opengl.a \
 	$(top_builddir)/lib/libnetplay.a \
 	$(top_builddir)/lib/libscript.a \
+	$(top_builddir)/lib/libminiupnpc.a \
 	$(top_builddir)/lib/libsequence.a \
 	$(top_builddir)/lib/libsound.a \
 	$(top_builddir)/lib/libwidget.a \
