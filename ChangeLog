@@ -12,6 +12,7 @@
    * Change: Alt+click now works in Mac OS X. (r8432, ticket:1084)
    * Change: New and improved HP bars! Now 2 pixels high! (r8428)
  * Multiplayer:
+   * Change: In skirmish always show position of and do not show proximity messages for oil wells (r8444, ticket:1087)
    * Fix: Set AI colors (r8409, ticket:1070)
    * Fix: Enable/disable AIs (r8409, Ticket:1065)
    * Fix: Send team position (r8409, ticket:1075)
@@ -19,22 +20,22 @@
 
 2009-11-14: Version 2.3.0 beta 1
  * General:
-   *  Fix: Use Enable GLC_AUTO_FONT to enable it to fallback to different fonts if the default font doesn't contain the needed font. (r8365)
    * Change: Try to display dialog box when a internal game error causes game to crash on Windows (r8307)
-   * Fix: Reduce the time it takes to rebuild font cache on Vista and Windows 7 (ticket:1013, r8322)
-   * Fix: Collection of smaller bugfixes (ticket:997, ticket:1018, ticket:1021, ticket:1006)
    * Change: Switched fontconfig question from scary pop-up message to NLS sub-feature (r8359, ticket:1034).
-   * Fix: make distcheck should now work after initial make (to generate yacc/lex files) (r8360)
-   * Add: add new debug flag of "input" used for debug messages for input issues (keyboard/mouse)  (r8376)
+   * Change: Add new debug flag of "input" used for debug messages for input issues (keyboard/mouse)  (r8376)
    * Change: Add modifier to the keymap editor to show which keys are set to the numpad (r8376)
    * Change: Warzone 2100 -2.3 is the new (default) config direcotry (r8387)
    * Change: NTW Research Balance Update, Cannons, Missiles & Rockets (r8385)
+   * Fix: Use Enable GLC_AUTO_FONT to enable it to fallback to different fonts if the default font doesn't contain the needed font. (r8365)
+   * Fix: Reduce the time it takes to rebuild font cache on Vista and Windows 7 (ticket:1013, r8322)
+   * Fix: Collection of smaller bugfixes (ticket:997, ticket:1018, ticket:1021, ticket:1006)
+   * Fix: make distcheck should now work after initial make (to generate yacc/lex files) (r8360)
  * Multiplayer:
    * Change: Drop SDL_NET in favor of using BSD sockets (same as trunk code) (r8342, ticket:1038)
    * Change: Try to mitigate turnOffMultiMsg() via setting isMPDirtyBit when needed. (r8369)
    * Change: Max unit count is down from 300 to 150 to mitigate bandwidth issues. (r8369)
    * Change: Sync code is now run when isMPDirtyBit is set or 315ms has expired for droids / 630ms for power / 450 ms for structures (r8383)
-   * Change: Ping (in game, not lobby!) & Score is now sent more frequently (r8369)
+   * Change: Ping (in game, not lobby!) & score is now sent more frequently (r8369)
    * Change: MAX_BYTESPERSEC bump up to 7K from ~3.3K to mitigate when we can sync. (r8369)
    * Change: When we have reached MAX_BYTESPERSEC limit, inform of this event in the logs **FOR THIS BETA ONLY** (r8369)
    * Change: Only tally up outgoing bytes instead of both incoming and outgoing bytes when checking for max packet size. (8386)
