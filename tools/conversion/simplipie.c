@@ -42,7 +42,6 @@ typedef int bool;
 #define MAX_POLYGON_SIZE 16
 
 static char *input = "";
-static char output[PATH_MAX];
 static bool verbose = false;
 
 typedef struct {
@@ -60,7 +59,6 @@ typedef struct {
 static void parse_args(int argc, char **argv)
 {
 	unsigned int i = 1;
-	char *dot;
 
 	for (i = 1; argc >= 2 + i && argv[i][0] == '-'; i++)
 	{
@@ -76,10 +74,6 @@ static void parse_args(int argc, char **argv)
 		exit(1);
 	}
 	input = argv[i++];
-	strncpy(output, input, PATH_MAX);
-	dot = strrchr(output, '.');
-	*dot = '\0';
-	strcat(output, ".pie3");
 }
 
 static void dump_to_pie(FILE *ctl, FILE *fp)
@@ -315,6 +309,8 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 int main(int argc, char **argv)
 {
 	FILE *p, *f;
+	char buffer[1024];
+	size_t rsize;
 
 	parse_args(argc, argv);
 	
@@ -324,15 +320,28 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Cannot open \"%s\" for reading: %s\n", input, strerror(errno));
 		exit(1);
 	}
-	f = fopen(output, "w");
+	f = tmpfile();
 	if (!f)
 	{
-		fprintf(stderr, "Cannot open \"%s\" for reading: %s\n", output, strerror(errno));
+		fprintf(stderr, "Cannot open temporary file for writing: %s\n", strerror(errno));
 		exit(1);
 	}
 	dump_to_pie(f, p);
-	fclose(f);
 	fclose(p);
+
+	// Now copy temporary file to original
+	rewind(f);
+	p = fopen(input, "w");
+	while (!feof(f) && !ferror(p) && !ferror(f))
+	{
+		rsize = fread(buffer, 1, sizeof(buffer), f);
+		fwrite(buffer, rsize, 1, p);
+	}
+	if (ferror(f)) fprintf(stderr, "Error reading: %s\n", strerror(ferror(f)));
+	if (ferror(p)) fprintf(stderr, "Error writing: %s\n", strerror(ferror(p)));
+
+	fclose(p);
+	fclose(f);	// also deletes temporary file
 
 	return 0;
 }
