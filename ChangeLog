@@ -1,4 +1,4 @@
-2009-11-28: Version 2.3.0 beta 2
+2009-11-21: Version 2.3.0 beta 2
  * General:
    * Change: Allow either the normal return/enter key or the numpad enter key to terminate strings. (r8425, ticket:1055)
  * Multiplayer:
