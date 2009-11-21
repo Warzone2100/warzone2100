@@ -212,8 +212,9 @@ UDWORD inputGetKey(void)
 
 	return retVal;
 }
-
-char inputGetCharKey(void) {
+// FIXME: Need unicode support
+char inputGetCharKey(void)
+{
 	return currentChar;
 }
 

@@ -1848,9 +1848,10 @@ void kf_GiveTemplateSet(void)
 
 // --------------------------------------------------------------------------
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
+// FIXME: We need unicode support for text entry!
 void kf_SendTextMessage(void)
 {
-	char	ch;
+	UDWORD	ch;
 	char tmp[MAX_CONSOLE_STRING_LENGTH + 100];
 
 	if(bAllowOtherKeyPresses)									// just starting.
@@ -1861,20 +1862,15 @@ void kf_SendTextMessage(void)
 		inputClearBuffer();
 	}
 
-	ch = (char)inputGetKey();
+	ch = inputGetKey();
 	while (ch != 0)												// in progress
 	{
 		// FIXME: Why are we using duplicate defines? INPBUF_CR == KEY_RETURN == SDLK_RETURN
 
-		// Kill if they hit return - it maxes out console or it's more than one line long
-		if ((ch == INPBUF_CR) || (strlen(sTextToSend)>=MAX_CONSOLE_STRING_LENGTH-16) // Prefixes with ERROR: and terminates with '?'
+		// Kill if they hit return or keypad enter or it maxes out console or it's more than one line long
+		if ((ch == INPBUF_CR) || (ch == SDLK_KP_ENTER) || (strlen(sTextToSend)>=MAX_CONSOLE_STRING_LENGTH-16) // Prefixes with ERROR: and terminates with '?'
 		 || iV_GetTextWidth(sTextToSend) > (pie_GetVideoBufferWidth()-64))// sendit
 		{
-			// NOTE: This is for debugging strange keyboard issues.  Don't remove.
-			if (ch == KEY_RETURN)
-			{
-				debug(LOG_INPUT, "user has hit the return key to terminate the console string");
-			}
 			bAllowOtherKeyPresses = true;
 			//	flushConsoleMessages();
 
@@ -1951,13 +1947,13 @@ void kf_SendTextMessage(void)
 		}
 		else							 						// display
 		{
+			// FIXME: we need to support unicode here
 			const char input_char[2] = { inputGetCharKey(), '\0' };
-
 			sstrcat(sTextToSend, input_char);
 			sstrcpy(sCurrentConsoleText, sTextToSend);
 		}
 
-		ch = (char)inputGetKey();
+		ch = inputGetKey();
 	}
 
 	// macro store stuff
