@@ -243,7 +243,7 @@ static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "2.3.0 beta 1"; 
+char VersionString[VersionStringSize] = "2.3.0 beta 2"; 
 static int NETCODE_VERSION_MAJOR = 2;	// unused for now
 static int NETCODE_VERSION_MINOR = 30;	// unused for now
 static int NUMBER_OF_MODS = 0;			// unused for now
@@ -550,7 +550,6 @@ static void delSocket(SocketSet* set, Socket* socket)
 	size_t i;
 
 	ASSERT(set != NULL, "NULL SocketSet provided");
-	ASSERT(socket != NULL, "NULL Socket provided");
 
 	for (i = 0; i < set->len; ++i)
 	{
