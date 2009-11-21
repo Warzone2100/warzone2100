@@ -1,4 +1,9 @@
 2009-11-21: Version 2.3.0 beta 2
+ * General:
+   * Change: Allow either the normal return/enter key or the numpad enter key to terminate strings. (r8425, ticket:1055)
+   * Change: Alt+click now works in Mac OS X. (r8432, ticket:1084)
+   * Change: New and improved HP bars! Now 2 pixels high! (r8428)
+   * Fix: Assorted bug fixes (r8399, 8400, 
  * Gameplay:
    * Change: You can now repair/rearm/upgrade/guard allied units and structures. (r8432, ticket:1084)
    * Change: Cursors should now more accurately represent what happens when you click there. (r8432, ticket:1084)
@@ -7,16 +12,20 @@
    * Change: Repair turrets are more reliable now, and don't fidget before repairing. (r8421, ticket:1084)
    * Change: You can damage your own units/structures with Alt+click again. Allies are still immune. (r8432, ticket:1084)
    * Change: Cyborg transports should fly at a lower height now - so they shouldn't take so long to descend. (r8430)
- * General:
-   * Change: Allow either the normal return/enter key or the numpad enter key to terminate strings. (r8425, ticket:1055)
-   * Change: Alt+click now works in Mac OS X. (r8432, ticket:1084)
-   * Change: New and improved HP bars! Now 2 pixels high! (r8428)
  * Multiplayer:
+   * Change: Add UPnP support to automatically forward the needed ports on supported routers (r8445, r8446, r8447, r8449, ticket:1073)
    * Change: In skirmish always show position of and do not show proximity messages for oil wells (r8444, ticket:1087)
    * Fix: Set AI colors (r8409, ticket:1070)
-   * Fix: Enable/disable AIs (r8409, Ticket:1065)
+   * Fix: Enable/disable AIs (r8409, ticket:1065)
    * Fix: Send team position (r8409, ticket:1075)
    * Fix: Add missing wrf files for limiter screen. (r8408)
+ * Graphics:
+   * Fix: Corrected cyborg transport model (r8404)
+   * Fix: Correct menu captions (r8414)
+ * Translations:
+   * Updated: German (r8452), Dutch (r8412)
+ * Mods:
+   * NTW: Cannons and Cyborgs balance update (r8395)
 
 2009-11-14: Version 2.3.0 beta 1
  * General:
