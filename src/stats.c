@@ -754,7 +754,7 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 {
 	BODY_STATS sStats, * const psStats = &sStats;
-	const unsigned int NumBody = numCR(pBodyData, bufferSize);
+	const unsigned int NumBody = numCR(pBodyData, bufferSize) - 1;
 	unsigned int i, designable;
 	char BodyName[MAX_STR_LENGTH], size[MAX_STR_LENGTH],
 		GfxFile[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
@@ -765,6 +765,9 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 	{
 		return false;
 	}
+
+	// Skip descriptive header
+	pBodyData = strchr(pBodyData,'\n') + 1;
 
 	for (i = 0; i < NumBody; i++)
 	{
@@ -1101,7 +1104,7 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 /*Load the Sensor stats from the file exported from Access*/
 BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 {
-	const unsigned int NumSensor = numCR(pSensorData, bufferSize);
+	const unsigned int NumSensor = numCR(pSensorData, bufferSize) - 1;
 	SENSOR_STATS sStats, * const psStats = &sStats;
 	unsigned int i = 0, designable;
 	char			SensorName[MAX_STR_LENGTH], location[MAX_STR_LENGTH],
@@ -1113,6 +1116,9 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 	{
 		return false;
 	}
+
+	// Skip header
+	pSensorData = strchr(pSensorData,'\n') + 1;
 
 	for (i = 0; i < NumSensor; i++)
 	{
@@ -1220,13 +1226,13 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		//save the stats
 		statsSetSensor(psStats, i);
 
-        //set the max stat values for the design screen
-        if (psStats->designable)
-        {
-            setMaxSensorRange(psStats->range);
-            setMaxSensorPower(psStats->power);
-            setMaxComponentWeight(psStats->weight);
-        }
+ 		// set the max stat values for the design screen
+		if (psStats->designable)
+		{
+			setMaxSensorRange(psStats->range);
+			setMaxSensorPower(psStats->power);
+			setMaxComponentWeight(psStats->weight);
+		}
 
 		//increment the pointer to the start of the next record
 		pSensorData = strchr(pSensorData,'\n') + 1;

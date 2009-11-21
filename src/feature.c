@@ -125,7 +125,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 	char				featureName[MAX_STR_LENGTH], GfxFile[MAX_STR_LENGTH],
 						type[MAX_STR_LENGTH];
 
-	numFeatureStats = numCR(pFeatureData, bufferSize);
+	numFeatureStats = numCR(pFeatureData, bufferSize) - 1;
 
 	asFeatureStats = (FEATURE_STATS*)malloc(sizeof(FEATURE_STATS) * numFeatureStats);
 
@@ -137,6 +137,10 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 	}
 
 	psFeature = asFeatureStats;
+
+	// Ignore first line containing headers
+	pFeatureData = strchr(pFeatureData,'\n') + 1;
+
 	for (i = 0; i < numFeatureStats; i++)
 	{
 		UDWORD Width, Breadth;
@@ -147,7 +151,6 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		featureName[0] = '\0';
 		GfxFile[0] = '\0';
 		type[0] = '\0';
-
 
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pFeatureData, "%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
