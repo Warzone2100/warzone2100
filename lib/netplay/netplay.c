@@ -35,6 +35,10 @@
 #include "netplay.h"
 #include "netlog.h"
 
+#include "miniupnpc/miniwget.h"
+#include "miniupnpc/miniupnpc.h"
+#include "miniupnpc/upnpcommands.h"
+
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
 # include <errno.h>
@@ -217,6 +221,15 @@ static Socket* tcp_socket = NULL;		//socket used to talk to lobbyserver/ host ma
 static NETBUFSOCKET*	bsocket = NULL;		//buffered socket (holds tcp_socket) (clients only?)
 static NETBUFSOCKET*	connected_bsocket[MAX_CONNECTED_PLAYERS] = { NULL };
 static SocketSet* socket_set = NULL;
+
+// UPnP
+static int upnp = false;
+
+static struct UPNPUrls urls;
+static struct IGDdatas data;
+
+// local ip address
+static char lanaddr[16];
 
 /**
  * Used for connections with clients.
@@ -1789,6 +1802,104 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	return true;
 }
 
+
+
+static int upnp_init(void *asdf)
+{
+	struct UPNPDev *devlist;
+	struct UPNPDev *dev;
+	char *descXML;
+	int descXMLsize = 0;
+
+	memset(&urls, 0, sizeof(struct UPNPUrls));
+	memset(&data, 0, sizeof(struct IGDdatas));
+
+	debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
+	devlist = upnpDiscover(500, NULL, NULL, 0);
+	debug(LOG_NET, "UPnP device search finished.");
+	if (devlist)
+	{
+		dev = devlist;
+		while (dev)
+		{
+			if (strstr(dev->st, "InternetGatewayDevice"))
+				break;
+			dev = dev->pNext;
+		}
+		if (!dev)
+		{
+			dev = devlist; /* defaulting to first device */
+		}
+
+		debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
+
+		descXML = miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr));
+		debug(LOG_NET, "LAN address: %s", lanaddr);
+		if (descXML)
+		{
+			parserootdesc (descXML, descXMLsize, &data);
+			free (descXML); descXML = 0;
+			GetUPNPUrls (&urls, &data, dev->descURL);
+		}
+		freeUPNPDevlist(devlist);
+
+		if (urls.controlURL[0] == '\0')
+		{
+			return false;
+		}
+		return true;
+	}
+	debug(LOG_NET, "No UPnP devices found.");
+	return false;
+}
+
+static bool upnp_add_redirect(int port)
+{
+	char externalIP[16];
+	char port_str[16];
+	int r;
+
+	debug(LOG_NET, "upnp_add_redir(%d)\n", port);
+	UPNP_GetExternalIPAddress(urls.controlURL, data.servicetype, externalIP);
+	sprintf(port_str, "%d", port);
+	r = UPNP_AddPortMapping(urls.controlURL, data.servicetype,
+			port_str, port_str, lanaddr, "Warzone 2100", "TCP", 0);
+	if (r != UPNPCOMMAND_SUCCESS)
+	{
+		debug(LOG_NET, "AddPortMapping(%s, %s, %s) failed\n", port_str, port_str, lanaddr);
+		return false;
+	}
+	return true;
+
+}
+
+static void upnp_rem_redirect(int port)
+{
+	char port_str[16];
+	debug(LOG_NET, "upnp_rem_redir(%d)", port);
+	sprintf(port_str, "%d", port);
+	UPNP_DeletePortMapping(urls.controlURL, data.servicetype, port_str, "TCP", 0);
+}
+
+void NETaddRedirects(void)
+{
+	debug(LOG_NET, "%s\n", __FUNCTION__);
+	if (upnp) {
+		upnp_add_redirect(2100);
+		upnp_add_redirect(9990);
+	}
+}
+
+void NETremRedirects(void)
+{
+	debug(LOG_NET, "%s\n", __FUNCTION__);
+	if (upnp)
+	{
+		upnp_rem_redirect(2100);
+		upnp_rem_redirect(9990);
+	}
+}
+
 // ////////////////////////////////////////////////////////////////////////
 // setup stuff
 int NETinit(BOOL bFirstCall)
@@ -1800,6 +1911,30 @@ int NETinit(BOOL bFirstCall)
 	if(bFirstCall)
 	{
 		debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
+
+#if defined(WZ_OS_WIN)
+		{
+			static WSADATA stuff;
+			WORD ver_required = (2 << 8) + 2;
+			if (WSAStartup(ver_required, &stuff) != 0)
+			{
+				debug(LOG_ERROR, "Failed to initialize Winsock: %s", strSockError(getSockErr()));
+				return -1;
+			}
+		}
+
+		winsock2_dll = LoadLibraryA("ws2_32.dll");
+		if (winsock2_dll)
+		{
+			getaddrinfo_dll_func = GetProcAddress(winsock2_dll, "getaddrinfo");
+			freeaddrinfo_dll_func = GetProcAddress(winsock2_dll, "freeaddrinfo");
+		}
+
+		// Determine major Windows version
+		major_windows_version = LOBYTE(LOWORD(GetVersion()));
+#endif
+
+		upnp = upnp_init(NULL);
 
 		for(i = 0; i < MAX_PLAYERS; i++)
 		{
@@ -1813,28 +1948,6 @@ int NETinit(BOOL bFirstCall)
 		sstrcpy(NetPlay.gamePassword,"Enter Password First");
 		NETstartLogging();
 	}
-
-#if defined(WZ_OS_WIN)
-	{
-		static WSADATA stuff;
-		WORD ver_required = (2 << 8) + 2;
-		if (WSAStartup(ver_required, &stuff) != 0)
-		{
-			debug(LOG_ERROR, "Failed to initialize Winsock: %s", strSockError(getSockErr()));
-			return -1;
-		}
-	}
-
-	winsock2_dll = LoadLibraryA("ws2_32.dll");
-	if (winsock2_dll)
-	{
-		getaddrinfo_dll_func = GetProcAddress(winsock2_dll, "getaddrinfo");
-		freeaddrinfo_dll_func = GetProcAddress(winsock2_dll, "freeaddrinfo");
-	}
-
-	// Determine major Windows version
-	major_windows_version = LOBYTE(LOWORD(GetVersion()));
-#endif
 
 	NetPlay.ShowedMOTD = false;
 	NetPlay.GamePassworded = false;
@@ -1862,6 +1975,8 @@ int NETshutdown(void)
 		freeaddrinfo_dll_func = NULL;
 	}
 #endif
+
+	NETremRedirects();
 
 	return 0;
 }
@@ -3073,6 +3188,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	debug(LOG_NET, "NEThostGame(%s, %s, %d, %d, %d, %d, %u)", SessionName, PlayerName,
 	      one, two, three, four, plyrs);
 
+	NETaddRedirects();
 	NET_InitPlayers();
 	NetPlay.maxPlayers = MAX_PLAYERS;
 	if(!NetPlay.bComms)

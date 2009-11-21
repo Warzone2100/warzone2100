@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <sys/types.h>
 #ifdef WIN32
 #include <winsock2.h>
@@ -20,9 +19,14 @@ struct sockaddr_un {
   uint16_t sun_family;
   char     sun_path[UNIX_PATH_LEN];
 };
+// Warzone additions
+#include "lib/framework/types.h"
+typedef SSIZE_T ssize_t;
+// end WZ
 #else
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <unistd.h>
 #endif
 
 #include "minissdpc.h"

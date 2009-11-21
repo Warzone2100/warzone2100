@@ -725,6 +725,7 @@ BOOL multiGameShutdown(void)
 
 	// close game
 	NETclose();
+	NETremRedirects();
 
 	if (ingame.numStructureLimits)
 	{
