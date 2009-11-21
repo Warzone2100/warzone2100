@@ -9,7 +9,8 @@ PARSERS= \
 	message_parser.tab.c \
 	message_lexer.lex.c \
 	scriptvals_parser.tab.c \
-	scriptvals_lexer.lex.c
+	scriptvals_lexer.lex.c \
+	level_lexer.lex.c
 
 SRC= \
 	$(PARSERS) \
@@ -23,6 +24,7 @@ SRC= \
 	baseobject.c \
 	bridge.c \
 	bucket3d.c \
+	challenge.c \
 	cheat.c \
 	clparse.c \
 	cluster.c \
@@ -61,7 +63,6 @@ SRC= \
 	keybind.c \
 	keyedit.c \
 	keymap.c \
-	level_lexer.lex.c \
 	levels.c \
 	lighting.c \
 	loadsave.c \
@@ -119,6 +120,7 @@ SRC= \
 	wrappers.c
 
 LIBS=$(top_builddir)/lib/libgamelib.a \
+	$(top_builddir)/lib/libiniparser.a \
 	$(top_builddir)/lib/libivis_common.a \
 	$(top_builddir)/lib/libivis_opengl.a \
 	$(top_builddir)/lib/libnetplay.a \
@@ -135,6 +137,6 @@ endif
 
 EXE=warzone2100
 
-CLEANFILES=message_parser.tab.h scriptvals_parser.tab.h
+CLEANFILES=message_parser.tab.h scriptvals_parser.tab.h $(PARSERS)
 
 include $(top_srcdir)/makerules/exe.mk

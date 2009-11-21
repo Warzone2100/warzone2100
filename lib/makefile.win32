@@ -6,6 +6,7 @@ include $(top_srcdir)/makerules/common.mk
 SUBDIRS=framework \
 	exceptionhandler \
 	gamelib \
+	iniparser \
 	ivis_common \
 	ivis_opengl \
 	netplay \

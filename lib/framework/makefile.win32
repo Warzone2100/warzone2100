@@ -33,6 +33,6 @@ SRC= \
 
 LIB=framework
 
-CLEANFILES=strres_parser.tab.h resource_parser.tab.h
+CLEANFILES=strres_parser.tab.h resource_parser.tab.h $(PARSERS)
 
 include $(top_srcdir)/makerules/lib.mk

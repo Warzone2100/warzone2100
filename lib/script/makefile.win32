@@ -22,8 +22,6 @@ SRC= \
 
 LIB=script
 
-CLEANFILES= \
-	chat_parser.tab.h \
-	script_parser.tab.h
+CLEANFILES=chat_parser.tab.h script_parser.tab.h $(PARSERS)
 
 include $(top_srcdir)/makerules/lib.mk

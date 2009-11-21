@@ -41,7 +41,7 @@ WZ_LDFLAGS:=-L$(DEVDIR)/lib
 # Setup build environment with config values
 
 WZ_CFLAGS+=-g -Wall -Werror-implicit-function-declaration
-WZ_CXXFLAGS+= -g -Wall
+WZ_CXXFLAGS+=-g -Wall
 
 ifeq ($(strip $(MODE)),debug)
 WZ_CPPFLAGS+=-DDEBUG
@@ -73,7 +73,7 @@ CC:=gcc
 CXX:=g++
 WINDRES:=windres
 WZ_CPPFLAGS+=-DWIN32
-WZ_LDFLAGS+=-mwindows -lmingw32 -lSDLmain -lSDL -lSDL_net -lpng12 -lphysfs -lz -lvorbisfile -lvorbis -logg -lpopt -lintl -lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32 -lbfd -liberty -liconv -lz -lfreetype -lfontconfig -lexpat -ltheora
+WZ_LDFLAGS+=-mwindows -lmingw32 -lSDLmain -lSDL -lpng12 -lphysfs -lz -lvorbisfile -lvorbis -logg -lpopt -lintl -lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lws2_32 -lbfd -liberty -liconv -lz -lfreetype -lfontconfig -lexpat -ltheora
 
 
 # Import environment variables
