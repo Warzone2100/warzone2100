@@ -423,14 +423,20 @@ static void DrawRadarObjects(void)
 		for (y = scrollMinY; y < scrollMaxY; y++)
 		{
 			MAPTILE		*psTile = mapTile(x, y);
-			STRUCTURE	*psStruct = (STRUCTURE *)psTile->psObject;
+			STRUCTURE	*psStruct;
 			size_t		pos = (x - scrollMinX) + (y - scrollMinY) * radarTexWidth;
 
 			ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
-			if (!TileHasStructure(psTile))
+			if (game.type == SKIRMISH && TileHasFeature(psTile) && ((FEATURE *)psTile->psObject)->psStats->subType == FEAT_OIL_RESOURCE)
+			{
+				radarBuffer[pos] = WZCOL_DBLUE.rgba;
+				continue;
+			}
+			else if (!TileHasStructure(psTile))
 			{
 				continue;
 			}
+			psStruct = (STRUCTURE *)psTile->psObject;
 			clan = psStruct->player;
 
 			//see if have to draw enemy/ally color

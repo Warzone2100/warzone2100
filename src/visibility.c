@@ -288,6 +288,11 @@ bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, boo
 		return false;
 	}
 
+	if (game.type == SKIRMISH && psTarget->type == OBJ_FEATURE && ((FEATURE *)psTarget)->psStats->subType == FEAT_OIL_RESOURCE)
+	{
+		return UBYTE_MAX;
+	}
+
 	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
 	pos = Vector3uw_To3i(psViewer->pos);
 	dest = Vector3uw_To3i(psTarget->pos);
@@ -592,8 +597,8 @@ void processVisibility(BASE_OBJECT *psObj)
 		the selected Player - if there isn't an Resource Extractor on it*/
 		if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
 		{
-			if (!TileHasStructure(mapTile(map_coord(psObj->pos.x),
-			                               map_coord(psObj->pos.y))))
+			if (!TileHasStructure(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y)))
+			    && game.type != SKIRMISH)
 			{
 				psMessage = addMessage(MSG_PROXIMITY, true, selectedPlayer);
 				if (psMessage)
