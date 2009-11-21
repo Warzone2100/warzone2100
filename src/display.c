@@ -1720,12 +1720,6 @@ static void FeedbackOrderGiven(void)
 }
 
 
-static void FeedbackClickedOn(void)
-{
-	FeedbackOrderGiven();
-}
-
-
 // check whether the queue order keys are pressed
 BOOL ctrlShiftDown(void)
 {
