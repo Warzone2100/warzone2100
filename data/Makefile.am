@@ -9,6 +9,7 @@ stamp:
 	rm -f stamp
 
 BASELIST = \
+	palette.txt \
 	anims \
 	audio \
 	components \
