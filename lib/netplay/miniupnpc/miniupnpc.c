@@ -16,6 +16,8 @@
 #endif
 #endif
 
+#include "lib/framework/wzglobal.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -38,7 +40,12 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/param.h>
-#include <netinet/in.h>
+#ifdef WZ_OS_MAC
+# undef _POSIX_C_SOURCE
+# include <netinet/in.h>
+#else
+# include <netinet/in.h>
+#endif
 #include <arpa/inet.h>
 #include <poll.h>
 #include <netdb.h>
