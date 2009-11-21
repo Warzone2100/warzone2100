@@ -6,6 +6,10 @@ noinst_HEADERS = \
 	miniupnpc.h \
 	miniupnpcstrings.h \
 	miniwget.h \
+	minixml.h \
+	minisoap.h \
+	minissdpc.h \
+	codelength.h \
 	upnpcommands.h \
 	igd_desc_parse.h \
 	upnpreplyparse.h \
