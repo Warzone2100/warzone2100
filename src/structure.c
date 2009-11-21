@@ -3153,6 +3153,31 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 						}
 					}
 				}
+				if (!psChosenObj) // Nothing to repair? Repair allied units!
+				{
+					mindist = (TILE_UNITS*5/2)*(TILE_UNITS*5/2);
+
+					for (i=0; i<MAX_PLAYERS; i++)
+					{
+						if (aiCheckAlliances(i, psStructure->player) && i != psStructure->player)
+						{
+							for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+							{
+								if (psDroid->body < psDroid->originalBody)
+								{
+									xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
+									ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+									currdist = xdiff*xdiff + ydiff*ydiff;
+									if (currdist < mindist)
+									{
+										mindist = currdist;
+										psChosenObj = (BASE_OBJECT *)psDroid;
+									}
+								}
+							}
+						}
+					}
+				}
 				psDroid = (DROID *)psChosenObj;
 				if (psDroid)
 				{
@@ -3223,6 +3248,24 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 						(psChosenObj == NULL || (((DROID *)psChosenObj)->actionStarted > psDroid->actionStarted)) )
 					{
 						psChosenObj = (BASE_OBJECT *)psDroid;
+					}
+				}
+				if (!psChosenObj) // None available? Try allies.
+				{
+					for (i=0; i<MAX_PLAYERS; i++)
+					{
+						if (aiCheckAlliances(i, psStructure->player) && i != psStructure->player)
+						{
+							for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+							{
+								// move next droid waiting on ground to rearm pad
+								if (vtolReadyToRearm(psDroid, psStructure))
+								{
+									psChosenObj = (BASE_OBJECT *)psDroid;
+									break;
+								}
+							}
+						}
 					}
 				}
 				psDroid = (DROID *)psChosenObj;
@@ -6009,6 +6052,11 @@ void printStructureInfo(STRUCTURE *psStructure)
 			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned", "%s - %u Units assigned", assigned_droids),
 				getStatName(psStructure->pStructureType), assigned_droids));
 		}
+		else
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
+									  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
+		}
 		break;
 	case REF_REPAIR_FACILITY:
 #ifdef DEBUG
@@ -7419,8 +7467,14 @@ STRUCTURE *	findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, BOOL bClear
 	SDWORD			xdiff,ydiff, mindist, currdist, totallyDist;
 	SDWORD			cx,cy;
 
+	ASSERT_OR_RETURN(NULL, psDroid, "findNearestReArmPad: No droid was passed.");
+
 	if (psTarget != NULL)
 	{
+		if (!vtolOnRearmPad(psTarget, psDroid))
+		{
+			return psTarget;
+		}
 		cx = (SDWORD)psTarget->pos.x;
 		cy = (SDWORD)psTarget->pos.y;
 	}
@@ -7475,19 +7529,25 @@ STRUCTURE *	findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, BOOL bClear
 void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 {
 	DROID	*psCurr;
-	SDWORD	tx,ty;
+	SDWORD	tx,ty, i;
 
 	tx = map_coord(psStruct->pos.x);
 	ty = map_coord(psStruct->pos.y);
 
-	for(psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr=psCurr->psNext)
+	for (i=0; i<MAX_PLAYERS; i++)
 	{
-		if (psCurr != psDroid
-		 && map_coord(psCurr->pos.x) == tx
-		 && map_coord(psCurr->pos.y) == ty
-		 && isVtolDroid(psCurr))
+		if (aiCheckAlliances(psStruct->player, i))
 		{
-			actionDroidObj(psCurr, DACTION_CLEARREARMPAD, (BASE_OBJECT *)psStruct);
+			for (psCurr = apsDroidLists[i]; psCurr; psCurr=psCurr->psNext)
+			{
+				if (psCurr != psDroid
+				 && map_coord(psCurr->pos.x) == tx
+				 && map_coord(psCurr->pos.y) == ty
+				 && isVtolDroid(psCurr))
+				{
+					actionDroidObj(psCurr, DACTION_CLEARREARMPAD, (BASE_OBJECT *)psStruct);
+				}
+			}
 		}
 	}
 }
@@ -7504,7 +7564,7 @@ BOOL vtolOnRearmPad(STRUCTURE *psStruct, DROID *psDroid)
 	ty = map_coord(psStruct->pos.y);
 
 	found = false;
-	for(psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr=psCurr->psNext)
+	for (psCurr = apsDroidLists[psStruct->player]; psCurr; psCurr=psCurr->psNext)
 	{
 		if (psCurr != psDroid
 		 && map_coord(psCurr->pos.x) == tx
