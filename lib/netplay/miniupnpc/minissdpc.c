@@ -13,16 +13,16 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <io.h>
+// Warzone additions
+#include "lib/framework/types.h"
+typedef SSIZE_T ssize_t;
+// end WZ
 /* Hack */
 #define UNIX_PATH_LEN   108
 struct sockaddr_un {
   uint16_t sun_family;
   char     sun_path[UNIX_PATH_LEN];
 };
-// Warzone additions
-#include "lib/framework/types.h"
-typedef SSIZE_T ssize_t;
-// end WZ
 #else
 #include <sys/socket.h>
 #include <sys/un.h>
