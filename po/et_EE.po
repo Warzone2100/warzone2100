@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-11-21 17:06+0100\n"
+"POT-Creation-Date: 2009-11-21 18:49+0100\n"
 "PO-Revision-Date: 2009-10-12 23:24+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -11006,23 +11006,23 @@ msgstr "Traditsiooniline Hiina Keel"
 msgid "Latin"
 msgstr "Ladina Keel"
 
-#: lib/netplay/netplay.c:1107
-#: lib/netplay/netplay.c:1142
+#: lib/netplay/netplay.c:1119
+#: lib/netplay/netplay.c:1154
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr "Mängijal %u on vale mänguversioon. Automaatne minemalöömine"
 
-#: lib/netplay/netplay.c:1223
+#: lib/netplay/netplay.c:1235
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr "Mängijal %u  on vale salasõna. Automaatne minemalöömine"
 
-#: lib/netplay/netplay.c:2759
+#: lib/netplay/netplay.c:2873
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Ei suuda peaserveri nime lahendada (%s)!"
 
-#: lib/netplay/netplay.c:2784
+#: lib/netplay/netplay.c:2898
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Ei suuda lobby serveriga suhelda! Kas port TCP 9990 on avatud?"
@@ -12958,36 +12958,36 @@ msgstr "MÄNGIJAD"
 msgid "CHAT"
 msgstr "VESTLUS"
 
-#: src/multiint.c:2204
+#: src/multiint.c:2205
 msgid "*** password is now required! ***"
 msgstr "*** salasõna on vajalik! ***"
 
-#: src/multiint.c:2211
+#: src/multiint.c:2212
 msgid "*** password is NOT required! ***"
 msgstr "*** salasõna pole vaja! ***"
 
-#: src/multiint.c:2451
+#: src/multiint.c:2452
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2553
+#: src/multiint.c:2554
 msgid "'Locked Teams' mode enabled"
 msgstr "Lukustatud Tiimid, mode lubatud"
 
-#: src/multiint.c:2598
+#: src/multiint.c:2599
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Võõrustaja lõi %s mängust välja!"
 
-#: src/multiint.c:2600
-msgid "you are being a jerk."
-msgstr "sa oled idikas"
+#: src/multiint.c:2601
+msgid "you are unwanted by the host"
+msgstr "sa oled võõrustaja poolt soovimatu isik"
 
-#: src/multiint.c:2686
+#: src/multiint.c:2687
 msgid "Host is Starting Game"
 msgstr "Võõrustaja Alustab Mängu"
 
-#: src/multiint.c:3217
+#: src/multiint.c:3218
 msgid "Players"
 msgstr "Mängijad"
 
@@ -13021,7 +13021,7 @@ msgstr "Süsteemi sõnum:"
 
 #: src/multilimit.c:185
 #, fuzzy
-msgid "Apply the Default values and Return To Previous Screen"
+msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Naase Eelmisele Ekraanile"
 
 #: src/multimenu.c:609
@@ -13401,6 +13401,9 @@ msgstr " - Built %s"
 msgid "Version %s%s%s%s"
 msgstr "Versioon %s%s%s%s"
 
+#~ msgid "you are being a jerk."
+#~ msgstr "sa oled idikas"
+
 #~ msgid "Game"
 #~ msgstr "Mäng"
 
@@ -13409,9 +13412,6 @@ msgstr "Versioon %s%s%s%s"
 
 #~ msgid "Skirmish"
 #~ msgstr "Skirmish"
-
-#~ msgid "you are unwanted by the host"
-#~ msgstr "sa oled võõrustaja poolt soovimatu isik"
 
 #~ msgid "The game is full!"
 #~ msgstr "Mäng on Täis"

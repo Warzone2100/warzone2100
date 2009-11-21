@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-11-21 17:06+0100\n"
+"POT-Creation-Date: 2009-11-21 18:49+0100\n"
 "PO-Revision-Date: 2009-10-12 20:00+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
@@ -11034,23 +11034,23 @@ msgstr "Traditionelles Chinesisch"
 msgid "Latin"
 msgstr "Latein"
 
-#: lib/netplay/netplay.c:1107
-#: lib/netplay/netplay.c:1142
+#: lib/netplay/netplay.c:1119
+#: lib/netplay/netplay.c:1154
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr "Spieler %u hat die falsche Spielversion. Automatischer Rauswurf."
 
-#: lib/netplay/netplay.c:1223
+#: lib/netplay/netplay.c:1235
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr "Spieler %u gibt ein falsches Passwort an. Automatischer Rauswurf."
 
-#: lib/netplay/netplay.c:2759
+#: lib/netplay/netplay.c:2873
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
 
-#: lib/netplay/netplay.c:2784
+#: lib/netplay/netplay.c:2898
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Konnte nicht mit Lobbyserver kommunizieren! Ist der TCP-Port 9990 offen?"
@@ -12997,37 +12997,37 @@ msgstr "SPIELER"
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:2204
+#: src/multiint.c:2205
 msgid "*** password is now required! ***"
 msgstr "*** Jetzt wird ein Passwort benötigt! ***"
 
-#: src/multiint.c:2211
+#: src/multiint.c:2212
 msgid "*** password is NOT required! ***"
 msgstr "*** Passwort wird nicht benötigt! ***"
 
-#: src/multiint.c:2451
+#: src/multiint.c:2452
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
 # festgelegt ungleich fest -Kreuvf
-#: src/multiint.c:2553
+#: src/multiint.c:2554
 msgid "'Locked Teams' mode enabled"
 msgstr "\"Feste Teams\"-Modus aktiviert"
 
-#: src/multiint.c:2598
+#: src/multiint.c:2599
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Der Spielleiter hat %s aus dem Spiel geworfen!"
 
-#: src/multiint.c:2600
-msgid "you are being a jerk."
-msgstr "Sie sind ein Trottel."
+#: src/multiint.c:2601
+msgid "you are unwanted by the host"
+msgstr "Der Spielleiter möchte dich nicht"
 
-#: src/multiint.c:2686
+#: src/multiint.c:2687
 msgid "Host is Starting Game"
 msgstr "Der Spielleiter startet das Spiel"
 
-#: src/multiint.c:3217
+#: src/multiint.c:3218
 msgid "Players"
 msgstr "Spieler"
 
@@ -13061,7 +13061,7 @@ msgstr "Systemnachricht:"
 
 #: src/multilimit.c:185
 #, fuzzy
-msgid "Apply the Default values and Return To Previous Screen"
+msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Zurück zum vorherigen Bildschirm"
 
 #: src/multimenu.c:609
@@ -13443,6 +13443,9 @@ msgstr " - %s gebaut"
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
 
+#~ msgid "you are being a jerk."
+#~ msgstr "Sie sind ein Trottel."
+
 #~ msgid "Game"
 #~ msgstr "Spiel"
 
@@ -13451,9 +13454,6 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Skirmish"
 #~ msgstr "Geplänkel"
-
-#~ msgid "you are unwanted by the host"
-#~ msgstr "Der Spielleiter möchte dich nicht"
 
 #~ msgid "The game is full!"
 #~ msgstr "Das Spiel ist voll!"

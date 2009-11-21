@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-11-21 17:06+0100\n"
+"POT-Creation-Date: 2009-11-21 18:49+0100\n"
 "PO-Revision-Date: 2009-08-04 22:59+0100\n"
 "Last-Translator: Pedro Miguel Martins da Silva Caetano <pedro.m.caetano@netcabo.pt>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
@@ -11044,23 +11044,23 @@ msgstr "Chinês Tradicional"
 msgid "Latin"
 msgstr "Latim"
 
-#: lib/netplay/netplay.c:1107
-#: lib/netplay/netplay.c:1142
+#: lib/netplay/netplay.c:1119
+#: lib/netplay/netplay.c:1154
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr "Jogador %u tem a versão errada do jogo.  A expulsar automaticamente."
 
-#: lib/netplay/netplay.c:1223
+#: lib/netplay/netplay.c:1235
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr "Jogador %u usou uma palavra-passe errada.  A expulsar automaticamente."
 
-#: lib/netplay/netplay.c:2759
+#: lib/netplay/netplay.c:2873
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Não pode ser obtido o nome do masterserver (%s)!"
 
-#: lib/netplay/netplay.c:2784
+#: lib/netplay/netplay.c:2898
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Não foi possível comunicar com o servidor de lobby! A porta TCP %u está aberta para tráfego outgoing?"
@@ -13000,36 +13000,36 @@ msgstr "JOGADORES"
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:2204
+#: src/multiint.c:2205
 msgid "*** password is now required! ***"
 msgstr "*** É agora necessária uma Palavra-passe! ***"
 
-#: src/multiint.c:2211
+#: src/multiint.c:2212
 msgid "*** password is NOT required! ***"
 msgstr "*** NÃO é necessária Palavra-passe ***"
 
-#: src/multiint.c:2451
+#: src/multiint.c:2452
 msgid "Sorry! Failed to host the game."
 msgstr "Desculpa! Não foi possível criar o jogo."
 
-#: src/multiint.c:2553
+#: src/multiint.c:2554
 msgid "'Locked Teams' mode enabled"
 msgstr "Modo \"Equipas Fixas\" activado"
 
-#: src/multiint.c:2598
+#: src/multiint.c:2599
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "O servidor kickou %s do jogo!"
 
-#: src/multiint.c:2600
-msgid "you are being a jerk."
-msgstr "estás a ser parvo."
+#: src/multiint.c:2601
+msgid "you are unwanted by the host"
+msgstr ""
 
-#: src/multiint.c:2686
+#: src/multiint.c:2687
 msgid "Host is Starting Game"
 msgstr "O servidor está a começar o jogo"
 
-#: src/multiint.c:3217
+#: src/multiint.c:3218
 msgid "Players"
 msgstr "Jogadores"
 
@@ -13063,7 +13063,7 @@ msgstr "Mensagem de Sistema:"
 
 #: src/multilimit.c:185
 #, fuzzy
-msgid "Apply the Default values and Return To Previous Screen"
+msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Voltar ao ecrâ anterior"
 
 #: src/multimenu.c:609
@@ -13444,6 +13444,9 @@ msgstr " - Construído %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
+
+#~ msgid "you are being a jerk."
+#~ msgstr "estás a ser parvo."
 
 #~ msgid "Game"
 #~ msgstr "Jogo"

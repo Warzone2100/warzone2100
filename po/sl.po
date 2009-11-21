@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-11-21 17:06+0100\n"
+"POT-Creation-Date: 2009-11-21 18:49+0100\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -11032,23 +11032,23 @@ msgstr ""
 msgid "Latin"
 msgstr "Latinski"
 
-#: lib/netplay/netplay.c:1107
-#: lib/netplay/netplay.c:1142
+#: lib/netplay/netplay.c:1119
+#: lib/netplay/netplay.c:1154
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr "Igralec %u ima napačno verzijo igre. Auto brcam."
 
-#: lib/netplay/netplay.c:1223
+#: lib/netplay/netplay.c:1235
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr "Igralec %u ima napačno geslo. Auto brcam."
 
-#: lib/netplay/netplay.c:2759
+#: lib/netplay/netplay.c:2873
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Ni bilo mogoče razrešiti imena glavnega strežnika (%s)!"
 
-#: lib/netplay/netplay.c:2784
+#: lib/netplay/netplay.c:2898
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Ni bilo mogoče komunicirati z vežnim strežnikom! Je TCP prehod %u odprt za izhodni promet?"
@@ -12994,36 +12994,36 @@ msgstr "IGRALCI"
 msgid "CHAT"
 msgstr "POGOVOR"
 
-#: src/multiint.c:2204
+#: src/multiint.c:2205
 msgid "*** password is now required! ***"
 msgstr "*** geslo je sedaj potrebno! ***"
 
-#: src/multiint.c:2211
+#: src/multiint.c:2212
 msgid "*** password is NOT required! ***"
 msgstr "*** geslo NI potrebno! ***"
 
-#: src/multiint.c:2451
+#: src/multiint.c:2452
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2553
+#: src/multiint.c:2554
 msgid "'Locked Teams' mode enabled"
 msgstr "Omogočen način 'zaklenjene skupine'"
 
-#: src/multiint.c:2598
+#: src/multiint.c:2599
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Gostitelj je brcnil %s iz igre!"
 
-#: src/multiint.c:2600
-msgid "you are being a jerk."
-msgstr "obnašate se neumno."
+#: src/multiint.c:2601
+msgid "you are unwanted by the host"
+msgstr ""
 
-#: src/multiint.c:2686
+#: src/multiint.c:2687
 msgid "Host is Starting Game"
 msgstr "Gostitelj začenja igro"
 
-#: src/multiint.c:3217
+#: src/multiint.c:3218
 msgid "Players"
 msgstr "Igralci"
 
@@ -13057,7 +13057,7 @@ msgstr "Sistemsko sporočilo:"
 
 #: src/multilimit.c:185
 #, fuzzy
-msgid "Apply the Default values and Return To Previous Screen"
+msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Vrni se na prejšnji zaslon"
 
 #: src/multimenu.c:609
@@ -13441,6 +13441,9 @@ msgstr "- Zgrajen %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#~ msgid "you are being a jerk."
+#~ msgstr "obnašate se neumno."
 
 #~ msgid "Game"
 #~ msgstr "Igra"
