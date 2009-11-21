@@ -1128,7 +1128,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 //AI multiplayer message, send from a certain player index to another player index
 BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 {
-	UDWORD	sendPlayer;		//dpidPlayer is a uint32_t, not int32_t!
+	UDWORD	sendPlayer;
 
 	//check if this is one of the local players, don't need net send then
 	if (to == selectedPlayer || myResponsibility(to))	//(the only) human on this machine or AI on this machine
