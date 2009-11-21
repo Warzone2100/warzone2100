@@ -69,7 +69,7 @@ static void parse_args(int argc, char **argv)
 	}
 	if (argc < 1 + i)
 	{
-		fprintf(stderr, "Syntax: simplipie [-y|-r|-t] input_filename\n");
+		fprintf(stderr, "Syntax: simplipie [-v] input_filename\n");
 		fprintf(stderr, "  -v  Verbose mode.\n");
 		exit(1);
 	}
@@ -286,7 +286,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 				exit(EXIT_FAILURE);
 			}
 			fprintf(ctl, "\nCONNECTORS %d", x);
-			for (j = 0; num == 1 && j < x; ++j)
+			for (j = 0; j < x; ++j)
 			{
 				int a, b, c;
 
