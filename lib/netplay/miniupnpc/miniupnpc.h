@@ -11,6 +11,8 @@
 #include "declspec.h"
 #include "igd_desc_parse.h"
 
+#undef DEBUG
+
 #ifdef __cplusplus
 extern "C" {
 #endif

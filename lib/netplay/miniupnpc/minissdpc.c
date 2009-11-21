@@ -8,12 +8,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <sys/types.h>
 #ifdef WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <io.h>
+// Warzone additions
+#include "lib/framework/types.h"
+typedef SSIZE_T ssize_t;
+// end WZ
 /* Hack */
 #define UNIX_PATH_LEN   108
 struct sockaddr_un {
@@ -23,6 +26,7 @@ struct sockaddr_un {
 #else
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <unistd.h>
 #endif
 
 #include "minissdpc.h"
