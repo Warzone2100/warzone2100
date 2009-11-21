@@ -79,7 +79,7 @@
  */
 #define WBUT_NOPRIMARY		0x10
 #define WBUT_SECONDARY		0x20	///< Enable secondary buttons.
-#define WBUT_TXTCENTRE		64	///< Text only buttons. centre the text?
+#define WBUT_TXTCENTRE		0x40	///< Text only buttons. centre the text?
 
 /*********** Edit Box styles *************/
 
