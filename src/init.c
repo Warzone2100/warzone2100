@@ -47,6 +47,7 @@
 
 #include "advvis.h"
 #include "atmos.h"
+#include "challenge.h"
 #include "cluster.h"
 #include "cmddroid.h"
 #include "component.h"
@@ -421,7 +422,8 @@ BOOL systemInitialise(void)
 
 	// Initialize render engine
 	war_SetFog(war_GetFog());		// Set Fog mode based on user preferences
-	if (!pie_Initialise()) {
+	if (!pie_Initialise())
+	{
 		debug(LOG_ERROR, "Unable to initialise renderer");
 		return false;
 	}
@@ -1105,6 +1107,9 @@ BOOL stageThreeInitialise(void)
 BOOL stageThreeShutDown(void)
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
+
+	challengesUp = false;
+	challengeActive = false;
 
 	// make sure any button tips are gone.
 	widgReset();

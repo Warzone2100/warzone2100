@@ -61,8 +61,6 @@ extern BOOL	bLimiterLoaded;
 extern BOOL	bUsingKeyboard;	// to disable mouse pointer when using keys.
 extern BOOL	bUsingSlider;
 
-extern BOOL	bForceEditorLoaded;
-
 extern void	changeTitleMode			(tMode mode);
 extern BOOL startTitleMenu			(void);
 extern BOOL runTitleMenu			(void);
@@ -175,6 +173,7 @@ enum
 	FRONTEND_NEWGAME		= 20200,	// single player (menu)
 	FRONTEND_LOADGAME,
 	FRONTEND_SKIRMISH,
+	FRONTEND_CHALLENGES,
 	FRONTEND_HOST			= 20300,	//multiplayer menu options
 	FRONTEND_JOIN,
 	FE_P0,								// player 0 buton

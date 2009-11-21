@@ -11,6 +11,7 @@ stamp:
 BASELIST = \
 	anims \
 	audio \
+	challenges \
 	components \
 	effects \
 	features \

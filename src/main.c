@@ -52,6 +52,7 @@
 #include "lib/sound/cdaudio.h"
 
 #include "clparse.h"
+#include "challenge.h"
 #include "configuration.h"
 #include "display.h"
 #include "frontend.h"
@@ -61,6 +62,7 @@
 #include "lighting.h"
 #include "loadsave.h"
 #include "loop.h"
+#include "mission.h"
 #include "modding.h"
 #include "multiplay.h"
 #include "research.h"
@@ -581,6 +583,11 @@ static void startGameLoop(void)
 
 	// set a flag for the trigger/event system to indicate initialisation is complete
 	gameInitialised = true;
+
+	if (challengeActive)
+	{
+		addMissionTimerInterface();
+	}
 }
 
 
@@ -893,7 +900,6 @@ int main(int argc, char *argv[])
 	PHYSFS_mkdir("music");
 	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
-	make_dir(MultiForcesPath, "multiplay", "forces");
 	make_dir(MultiCustomMapsPath, "multiplay", "custommaps");
 
 	/* Put these files in the writedir root */
