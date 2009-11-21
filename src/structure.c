@@ -1280,15 +1280,31 @@ void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	structureBuild(psStruct, psDroid, -buildPoints);
 }
 
-void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
+BOOL structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
-	float repairFraction = buildPoints/(float)psStruct->pStructureType->buildPoints;
-
-	psStruct->body += repairFraction*structureBody(psStruct);
-	CLIP(psStruct->body, 0, structureBody(psStruct));
-	if (psStruct->body == 0)
+	int repairAmount = (buildPoints * structureBody(psStruct))/psStruct->pStructureType->buildPoints;
+	/*	(droid construction power * current max hitpoints [incl. upgrades])
+			/ construction power that was necessary to build structure in the first place
+	
+	=> to repair a building from 1HP to full health takes as much time as building it.
+	=> if buildPoints = 1 and structureBody < buildPoints, repairAmount might get truncated to zero.
+		This happens with expensive, but weak buildings like mortar pits. In this case, do nothing
+		and notify the caller (read: droid) of your idleness by returning false.
+	*/
+	if (repairAmount != 0)  // didn't get truncated to zero
 	{
-		removeStruct(psStruct, true);
+		psStruct->body += repairAmount;
+		CLIP(psStruct->body, 0, structureBody(psStruct));
+		if (psStruct->body == 0)
+		{
+			removeStruct(psStruct, true);
+		}
+		return true;
+	} 
+	else
+	{
+		// got truncated to zero; wait until droid has accumulated enough buildpoints
+		return false;
 	}
 }
 

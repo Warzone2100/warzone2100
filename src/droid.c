@@ -1534,25 +1534,27 @@ BOOL droidUpdateRepair( DROID *psDroid )
 	psStruct = (STRUCTURE *)psDroid->psActionTarget[0];
 
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
-
-	iRepairPoints = constructorPoints(asConstructStats + psDroid->
-		asBits[COMP_CONSTRUCT].nStat, psDroid->player);
-
-	iPointsToAdd = iRepairPoints * (gameTime - psDroid->actionStarted) /
-		GAME_TICKS_PER_SEC;
+	iRepairPoints = constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat, psDroid->player);
+	iPointsToAdd = iRepairPoints * (gameTime - psDroid->actionStarted) / GAME_TICKS_PER_SEC;
 
 	/* add points to structure */
-	structureRepair(psStruct, psDroid, iPointsToAdd - psDroid->actionPoints);
-	/* store the amount just added */
-	psDroid->actionPoints = iPointsToAdd;
+	if (iPointsToAdd - psDroid->actionPoints > 0)
+	{
+		if (structureRepair(psStruct, psDroid, iPointsToAdd - psDroid->actionPoints))
+		{
+			/* store the amount just added */
+			psDroid->actionPoints = iPointsToAdd;
+		}
+	}
 
 	/* if not finished repair return true else complete repair and return false */
-	if ( psStruct->body < structureBody(psStruct))
+	if (psStruct->body < structureBody(psStruct))
 	{
 		return true;
 	}
 	else
 	{
+		objTrace(psDroid->id, "Repaired of %s all done with %u - %u points", objInfo((BASE_OBJECT *)psStruct), iPointsToAdd, psDroid->actionPoints);
 		psStruct->body = (UWORD)structureBody(psStruct);
 		return false;
 	}
