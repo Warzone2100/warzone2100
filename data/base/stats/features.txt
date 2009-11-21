@@ -1,3 +1,4 @@
+Feature key,Width,Breadth,Damageable,Armour,Body points,Graphics file,Type,Tiledraw,Allow LOS,Start visible
 Crate,1,1,0,20,50,MICAPSUL.PIE,GENERIC ARTEFACT,1,0,0
 OilResource,1,1,0,0,0,mislick.pie,OIL RESOURCE,1,1,0
 Boulder1,1,1,0,0,0,mibould1.pie,BOULDER,1,0,1
