@@ -2657,12 +2657,17 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 		order = DORDER_MOVE;
 	}
 
-	// scout if shift was pressed
-	if(keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
+	// scout if alt was pressed
+	if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
 	{
 		order = DORDER_SCOUT;
+		if (isVtolDroid(psDroid))
+		{
+			// Patrol if in a VTOL
+			order = DORDER_PATROL;
+		}
 	}
-
+	
 	// and now we want Transporters to fly! - in multiPlayer!!
 	if (psDroid->droidType == DROID_TRANSPORTER && game.maxPlayers != 0)
 	{
@@ -2752,33 +2757,27 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 	STRUCTURE		*psStruct;
 	FEATURE			*psFeature;
 
-	if(psDroid->droidType == DROID_TRANSPORTER)
+	if (psDroid->droidType == DROID_TRANSPORTER)
 	{
         //in multiPlayer, need to be able to get Transporter repaired
         if (bMultiPlayer)
         {
-            //default to no order
-            order = DORDER_NONE;
-            if (psObj->player == psDroid->player &&
-			  psObj->type == OBJ_STRUCTURE)
+            if (aiCheckAlliances(psObj->player, psDroid->player) &&
+				psObj->type == OBJ_STRUCTURE)
             {
 		        psStruct = (STRUCTURE *) psObj;
 		        ASSERT( psObj != NULL,
-				        "chooseOrderObj: invalid structure pointer" );
+					   "chooseOrderObj: invalid structure pointer" );
 			    if ( psStruct->pStructureType->type == REF_REPAIR_FACILITY &&
-				     psStruct->status == SS_BUILT)
+					psStruct->status == SS_BUILT)
 			    {
-				    order = DORDER_RTR_SPECIFIED;
+				    return DORDER_RTR_SPECIFIED;
 			    }
             }
-            return (order);
-        }
-        else
-        {
-		    return(DORDER_NONE);
-        }
+		}
+		return DORDER_NONE;
 	}
-
+	
 	//check for transporters first
 	if (psObj->type == OBJ_DROID && ((DROID *)psObj)->droidType == DROID_TRANSPORTER
 		&& psObj->player == psDroid->player)
@@ -2866,43 +2865,44 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 		}*/
 	}
 	//repair droid
-	else if (psObj->player == psDroid->player &&
-		psObj->type == OBJ_DROID &&
-		//psDroid->droidType == DROID_REPAIR &&
-        (psDroid->droidType == DROID_REPAIR ||
-        psDroid->droidType == DROID_CYBORG_REPAIR) &&
-		droidIsDamaged((DROID *)psObj))
+	else if (aiCheckAlliances(psObj->player, psDroid->player) &&
+			 psObj->type == OBJ_DROID &&
+			 //psDroid->droidType == DROID_REPAIR &&
+			 (psDroid->droidType == DROID_REPAIR ||
+			  psDroid->droidType == DROID_CYBORG_REPAIR) &&
+			 droidIsDamaged((DROID *)psObj))
 	{
 		order = DORDER_DROIDREPAIR;
 	}
 	// guarding constructor droids
-	else if (psObj->player == psDroid->player &&
+	else if (aiCheckAlliances(psObj->player, psDroid->player) &&
 			 psObj->type == OBJ_DROID &&
 			 (((DROID *)psObj)->droidType == DROID_CONSTRUCT ||
-             ((DROID *)psObj)->droidType == DROID_CYBORG_CONSTRUCT ||
-             ((DROID *)psObj)->droidType == DROID_SENSOR) &&
+			  ((DROID *)psObj)->droidType == DROID_CYBORG_CONSTRUCT ||
+			  ((DROID *)psObj)->droidType == DROID_SENSOR ||
+			  (((DROID *)psObj)->droidType == DROID_COMMAND && psObj->player != psDroid->player)) &&
 			 (psDroid->droidType == DROID_WEAPON ||
-             psDroid->droidType == DROID_CYBORG) &&
+			  psDroid->droidType == DROID_CYBORG) &&
 			 proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat))
 	{
 		order = DORDER_GUARD;
 		assignSensorTarget(psObj);
 		psDroid->selected = false;
 	}
-	else if ( psObj->player == psDroid->player &&
-			  psObj->type == OBJ_STRUCTURE )
+	else if ( aiCheckAlliances(psObj->player, psDroid->player) &&
+			 psObj->type == OBJ_STRUCTURE )
 	{
 		psStruct = (STRUCTURE *) psObj;
 		ASSERT( psObj != NULL,
-				"chooseOrderObj: invalid structure pointer" );
-
+			   "chooseOrderObj: invalid structure pointer" );
+		
 		/* check whether construction droid */
 		order = DORDER_NONE;
-		if ( psDroid->droidType == DROID_CONSTRUCT ||
-            psDroid->droidType == DROID_CYBORG_CONSTRUCT)
+		if (psDroid->droidType == DROID_CONSTRUCT ||
+		    psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 		{
             //Re-written to allow demolish order to be added to the queuing system
-            if (intDemolishSelectMode())
+            if (intDemolishSelectMode() && psObj->player == psDroid->player)
 			{
 				//check to see if anything is currently trying to build the structure
 				//can't build and demolish at the same time!
@@ -2933,13 +2933,6 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 					order = DORDER_HELPBUILD;
 				}
 			}
-			//check for half built structure
-			/*else if ( psStruct->status == SS_BEING_BUILT)
-			{
-				// got a construction droid building a structure
-				order = DORDER_HELPBUILD;
-			}*/
-			//else if ( psStruct->body < psStruct->baseBodyPoints )
 			else if ( psStruct->body < structureBody(psStruct))
 			{
 				order = DORDER_REPAIR;
@@ -3082,7 +3075,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 	bOrderEffectDisplayed = false;
 
     psDemolish = NULL;
-    for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
+    for (psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
 	{
 		if (psCurr->selected)
 		{
@@ -3099,14 +3092,14 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 			}
 		}
 	}
-
+	
 	orderPlayOrderObjAudio( player, psObj );
-
+	
 	turnOffMultiMsg(false); //msgs back on.
-
+	
     //This feels like the wrong place but it has to be done once the order has been received...
     //demolish queuing...need to bring the interface back up
-    if (psDemolish)
+    if (psDemolish && player == psObj->player)
     {
         /*this will stop the constructor being able to demolish any other
         buildings until the demolish button is re-selected*/
