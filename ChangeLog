@@ -1,11 +1,22 @@
 2009-11-21: Version 2.3.0 beta 2
+ * Gameplay:
+   * Change: You can now repair/rearm/upgrade/guard allied units and structures. (r8432, ticket:1084)
+   * Change: Cursors should now more accurately represent what happens when you click there. (r8432, ticket:1084)
+   * Change: Cyborg transports can be unloaded with Alt+click. (r8421, ticket:1084)
+   * Change: VTOLs will scout with Alt+click. (r8432, ticket:1084)
+   * Change: Repair turrets are more reliable now, and don't fidget before repairing. (r8421, ticket:1084)
+   * Change: You can damage your own units/structures with Alt+click again. Allies are still immune. (r8432, ticket:1084)
+   * Change: Cyborg transports should fly at a lower height now - so they shouldn't take so long to descend. (r8430)
  * General:
    * Change: Allow either the normal return/enter key or the numpad enter key to terminate strings. (r8425, ticket:1055)
+   * Change: Alt+click now works in Mac OS X. (r8432, ticket:1084)
+   * Change: New and improved HP bars! Now 2 pixels high! (r8428)
  * Multiplayer:
-   * Fix: Set AI colors ( r8409, ticket:1070)
-   * Fix: Enable/disable AIs( r8409, Ticket:1065)
-   * Fix: Send team position ( r8409, ticket:1075)
-   *.Fix: Add missing wrf files for limiter screen. ( r8408)
+   * Fix: Set AI colors (r8409, ticket:1070)
+   * Fix: Enable/disable AIs (r8409, Ticket:1065)
+   * Fix: Send team position (r8409, ticket:1075)
+   * Fix: Add missing wrf files for limiter screen. (r8408)
+
 2009-11-14: Version 2.3.0 beta 1
  * General:
    *  Fix: Use Enable GLC_AUTO_FONT to enable it to fallback to different fonts if the default font doesn't contain the needed font. (r8365)
