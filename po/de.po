@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2009-11-21 18:49+0100\n"
-"PO-Revision-Date: 2009-10-12 20:00+0200\n"
+"PO-Revision-Date: 2009-11-21 19:05+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -11051,9 +11051,9 @@ msgid "Could not resolve masterserver name (%s)!"
 msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
 
 #: lib/netplay/netplay.c:2898
-#, fuzzy, c-format
+#, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-msgstr "Konnte nicht mit Lobbyserver kommunizieren! Ist der TCP-Port 9990 offen?"
+msgstr "Konnte nicht mit Lobbyserver kommunizieren! Ist der TCP-Port %u für ausgehenden Verkehr geöffnet?"
 
 #: src/clparse.c:99
 msgid "Run in cheat mode"
@@ -11360,9 +11360,9 @@ msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Schaden %d%% - Erfahrung %d, %s"
 
 #: src/display.c:1952
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
-msgstr "%s - Schaden %d%% - Erfahrung %d, %s"
+msgstr "%s - Verbündet - Schaden %d%% - Erfahrung %d, %s"
 
 #: src/display.c:2159
 msgid "Truck ordered to build Oil Derrick"
@@ -11650,9 +11650,8 @@ msgid "Shadows"
 msgstr "Schatten"
 
 #: src/frontend.c:710
-#, fuzzy
 msgid "GRAPHICS OPTIONS"
-msgstr "SPIELOPTIONEN"
+msgstr "GRAFIKOPTIONEN"
 
 #: src/frontend.c:841
 #: src/ingameop.c:155
@@ -11670,9 +11669,8 @@ msgid "Music Volume"
 msgstr "Musiklautstärke"
 
 #: src/frontend.c:856
-#, fuzzy
 msgid "AUDIO OPTIONS"
-msgstr "SPIELOPTIONEN"
+msgstr "AUDIOOPTIONEN"
 
 #: src/frontend.c:921
 msgid "Graphics Mode*"
@@ -11700,9 +11698,8 @@ msgid "* Takes effect on game restart"
 msgstr "* Wirkt sich bei Spielneustart aus"
 
 #: src/frontend.c:957
-#, fuzzy
 msgid "VIDEO OPTIONS"
-msgstr "SPIELOPTIONEN"
+msgstr "VIDEOOPTIONEN"
 
 #: src/frontend.c:1115
 msgid "Reverse Rotation"
@@ -11713,9 +11710,8 @@ msgid "Trap Cursor"
 msgstr "Mauszeiger einfangen"
 
 #: src/frontend.c:1138
-#, fuzzy
 msgid "Colored Cursors*"
-msgstr "Bunte Mauszeiger *"
+msgstr "Bunte Mauszeiger*"
 
 #: src/frontend.c:1151
 msgid "Switch Mouse Buttons"
@@ -11726,9 +11722,8 @@ msgid "* May negatively affect performance"
 msgstr "* Könnte die Spielgeschwindigkeit negativ beeinflussen"
 
 #: src/frontend.c:1164
-#, fuzzy
 msgid "MOUSE OPTIONS"
-msgstr "SPIELOPTIONEN"
+msgstr "MAUSOPTIONEN"
 
 #: src/frontend.c:1265
 #: src/frontend.c:1331
@@ -12514,9 +12509,8 @@ msgid "Select Commander 9"
 msgstr "Commander 9 auswählen"
 
 #: src/keymap.c:347
-#, fuzzy
 msgid "Multiplayer Options / Alliance dialog"
-msgstr "Mehrspielereinstellungen"
+msgstr "Mehrspieleroptionen / Allianzdialog"
 
 # Das hat(te) Warzone damals schon, kA, ob noch nutzbar -Kreuvf
 #: src/keymap.c:348
@@ -12776,9 +12770,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s gibt Ihnen Technologiedokumente"
 
 #: src/multigifts.c:314
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u found %u power in an oil drum"
-msgstr "Sie haben %u Energie in einem Ölfass gefunden"
+msgstr "Spieler %u hat %u Energie in einem Ölfass gefunden"
 
 #: src/multigifts.c:338
 #, c-format
@@ -12893,14 +12887,12 @@ msgstr "Klicken zum Setzen eines Passworts"
 
 #: src/multiint.c:1211
 #: src/multiint.c:1212
-#, fuzzy
 msgid "Scavengers"
 msgstr "Scavenger"
 
 #: src/multiint.c:1213
-#, fuzzy
 msgid "No Scavengers"
-msgstr "Scavenger"
+msgstr "Keine Scavenger"
 
 #: src/multiint.c:1242
 msgid "Select Player Name"
@@ -12969,9 +12961,8 @@ msgid "Start Hosting Game"
 msgstr "Spiel eröffnen"
 
 #: src/multiint.c:1392
-#, fuzzy
 msgid "Show Structure Limits"
-msgstr "Gebäudebeschränkungen einstellen"
+msgstr "Zeige Gebäudebeschränkungen"
 
 #: src/multiint.c:1392
 msgid "Set Structure Limits"
@@ -13007,7 +12998,7 @@ msgstr "*** Passwort wird nicht benötigt! ***"
 
 #: src/multiint.c:2452
 msgid "Sorry! Failed to host the game."
-msgstr ""
+msgstr "Verzeihung! Spielerstellung fehlgeschlagen."
 
 # festgelegt ungleich fest -Kreuvf
 #: src/multiint.c:2554
@@ -13060,9 +13051,8 @@ msgid "System message:"
 msgstr "Systemnachricht:"
 
 #: src/multilimit.c:185
-#, fuzzy
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "Zurück zum vorherigen Bildschirm"
+msgstr "Standardwerte nehmen und zum vorherigen Bildschirm zurückkehren"
 
 #: src/multimenu.c:609
 msgid "Technology level 1"
