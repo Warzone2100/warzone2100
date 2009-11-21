@@ -1,12 +1,12 @@
-PIE 2
-TYPE 200
-TEXTURE 0 page-17-droid-weapons.png 256 256
+PIE 3
+TYPE 0
+TEXTURE 0 page-17-droid-weapons.png 0 0
 LEVELS 1
 LEVEL 1
-POINTS 4
-	-8 -2 -2
-	8 0 -3
-	-3 7 5
+POINTS 4 
+	-8 -2 -2 
+	8 0 -3 
+	-3 7 5 
 	1 -12 6
 POLYGONS 4
 	200 3 2 1 0 115 145 119 157 105 152

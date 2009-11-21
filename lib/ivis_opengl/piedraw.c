@@ -229,11 +229,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 			}
 		}
 
-		if (pPolys->flags & PIE_NO_CULL)
-		{
-			glDisable(GL_CULL_FACE);
-		}
-
 		glBegin(GL_TRIANGLE_FAN);
 
 		if (light)
@@ -248,11 +243,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 		}
 
 		glEnd();
-
-		if (pPolys->flags & PIE_NO_CULL)
-		{
-			glEnable(GL_CULL_FACE);
-		}
 	}
 
 	if (pieFlag & pie_BUTTON)
