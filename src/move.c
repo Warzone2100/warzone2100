@@ -2420,7 +2420,7 @@ static void moveAdjustVtolHeight( DROID * psDroid, UDWORD iMapHeight )
 {
 	UDWORD	iMinHeight, iMaxHeight, iLevelHeight;
 
-	if ( psDroid->droidType == DROID_TRANSPORTER )
+	if ( psDroid->droidType == DROID_TRANSPORTER && !bMultiPlayer )
 	{
 		iMinHeight   = 2*VTOL_HEIGHT_MIN;
 		iLevelHeight = 2*VTOL_HEIGHT_LEVEL;
