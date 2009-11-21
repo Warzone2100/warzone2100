@@ -21,6 +21,8 @@
 #include "minisoap.h"
 #include "miniupnpcstrings.h"
 
+#undef DEBUG
+
 /* only for malloc */
 #include <stdlib.h>
 

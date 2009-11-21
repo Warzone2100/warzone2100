@@ -2101,6 +2101,7 @@ static void stopJoining(void)
 			widgDelete(psWScreen,FRONTEND_BACKDROP);		// refresh options screen.
 			startMultiOptions(true);
 			ingame.localJoiningInProgress = false;
+			NETremRedirects();
 			return;
 		}
 		else if(ingame.localJoiningInProgress)				// cancel a joined game.
