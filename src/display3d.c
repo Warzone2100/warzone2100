@@ -2911,8 +2911,8 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 				firingStage = (2*scrR);
 			}
 			/* Power bars */
-			pie_BoxFill(scrX - scrR-1, 2+scrY + 0 + (weapon_slot * 2), scrX - scrR +(2*scrR)+1,    2+scrY+3 + (weapon_slot * 2), WZCOL_RELOAD_BACKGROUND);
-			pie_BoxFill(scrX - scrR,   2+scrY + 1 + (weapon_slot * 2), scrX - scrR +firingStage, 2+scrY+2 + (weapon_slot * 2), WZCOL_RELOAD_BAR);
+			pie_BoxFill(scrX - scrR-1, 3+scrY + 0 + (weapon_slot * 2), scrX - scrR +(2*scrR)+1,    3+scrY+3 + (weapon_slot * 2), WZCOL_RELOAD_BACKGROUND);
+			pie_BoxFill(scrX - scrR,   3+scrY + 1 + (weapon_slot * 2), scrX - scrR +firingStage, 3+scrY+2 + (weapon_slot * 2), WZCOL_RELOAD_BAR);
 		}
 	}
 }
