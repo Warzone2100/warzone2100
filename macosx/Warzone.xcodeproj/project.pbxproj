@@ -766,6 +766,15 @@
 		97AEAC560E8C261B00A10721 /* Theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; };
 		97F013D60EDEAE76004947E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
 		97F013D80EDEAE98004947E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
+		EFBC96B810B92A9C009C6753 /* igd_desc_parse.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96A510B92A9C009C6753 /* igd_desc_parse.c */; };
+		EFBC96B910B92A9C009C6753 /* minisoap.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96A710B92A9C009C6753 /* minisoap.c */; };
+		EFBC96BA10B92A9C009C6753 /* minissdpc.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96A910B92A9C009C6753 /* minissdpc.c */; };
+		EFBC96BB10B92A9C009C6753 /* miniupnpc.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96AB10B92A9C009C6753 /* miniupnpc.c */; };
+		EFBC96BC10B92A9C009C6753 /* miniwget.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96AE10B92A9C009C6753 /* miniwget.c */; };
+		EFBC96BD10B92A9C009C6753 /* minixml.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96B010B92A9C009C6753 /* minixml.c */; };
+		EFBC96BE10B92A9C009C6753 /* upnpcommands.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96B210B92A9C009C6753 /* upnpcommands.c */; };
+		EFBC96BF10B92A9C009C6753 /* upnperrors.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96B410B92A9C009C6753 /* upnperrors.c */; };
+		EFBC96C010B92A9C009C6753 /* upnpreplyparse.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96B610B92A9C009C6753 /* upnpreplyparse.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -1942,6 +1951,28 @@
 		97AEABCC0E8C1C6D00A10721 /* fdct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fdct_mmx.c; sourceTree = "<group>"; };
 		97AEABCD0E8C1C6D00A10721 /* idct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = idct_mmx.c; sourceTree = "<group>"; };
 		97F013D10EDEAE5C004947E5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		EFBC96A210B92A9C009C6753 /* bsdqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bsdqueue.h; path = ../lib/netplay/miniupnpc/bsdqueue.h; sourceTree = SOURCE_ROOT; };
+		EFBC96A310B92A9C009C6753 /* codelength.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codelength.h; path = ../lib/netplay/miniupnpc/codelength.h; sourceTree = SOURCE_ROOT; };
+		EFBC96A410B92A9C009C6753 /* declspec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = declspec.h; path = ../lib/netplay/miniupnpc/declspec.h; sourceTree = SOURCE_ROOT; };
+		EFBC96A510B92A9C009C6753 /* igd_desc_parse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = igd_desc_parse.c; path = ../lib/netplay/miniupnpc/igd_desc_parse.c; sourceTree = SOURCE_ROOT; };
+		EFBC96A610B92A9C009C6753 /* igd_desc_parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = igd_desc_parse.h; path = ../lib/netplay/miniupnpc/igd_desc_parse.h; sourceTree = SOURCE_ROOT; };
+		EFBC96A710B92A9C009C6753 /* minisoap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = minisoap.c; path = ../lib/netplay/miniupnpc/minisoap.c; sourceTree = SOURCE_ROOT; };
+		EFBC96A810B92A9C009C6753 /* minisoap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = minisoap.h; path = ../lib/netplay/miniupnpc/minisoap.h; sourceTree = SOURCE_ROOT; };
+		EFBC96A910B92A9C009C6753 /* minissdpc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = minissdpc.c; path = ../lib/netplay/miniupnpc/minissdpc.c; sourceTree = SOURCE_ROOT; };
+		EFBC96AA10B92A9C009C6753 /* minissdpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = minissdpc.h; path = ../lib/netplay/miniupnpc/minissdpc.h; sourceTree = SOURCE_ROOT; };
+		EFBC96AB10B92A9C009C6753 /* miniupnpc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = miniupnpc.c; path = ../lib/netplay/miniupnpc/miniupnpc.c; sourceTree = SOURCE_ROOT; };
+		EFBC96AC10B92A9C009C6753 /* miniupnpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = miniupnpc.h; path = ../lib/netplay/miniupnpc/miniupnpc.h; sourceTree = SOURCE_ROOT; };
+		EFBC96AD10B92A9C009C6753 /* miniupnpcstrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = miniupnpcstrings.h; path = ../lib/netplay/miniupnpc/miniupnpcstrings.h; sourceTree = SOURCE_ROOT; };
+		EFBC96AE10B92A9C009C6753 /* miniwget.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = miniwget.c; path = ../lib/netplay/miniupnpc/miniwget.c; sourceTree = SOURCE_ROOT; };
+		EFBC96AF10B92A9C009C6753 /* miniwget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = miniwget.h; path = ../lib/netplay/miniupnpc/miniwget.h; sourceTree = SOURCE_ROOT; };
+		EFBC96B010B92A9C009C6753 /* minixml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = minixml.c; path = ../lib/netplay/miniupnpc/minixml.c; sourceTree = SOURCE_ROOT; };
+		EFBC96B110B92A9C009C6753 /* minixml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = minixml.h; path = ../lib/netplay/miniupnpc/minixml.h; sourceTree = SOURCE_ROOT; };
+		EFBC96B210B92A9C009C6753 /* upnpcommands.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upnpcommands.c; path = ../lib/netplay/miniupnpc/upnpcommands.c; sourceTree = SOURCE_ROOT; };
+		EFBC96B310B92A9C009C6753 /* upnpcommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = upnpcommands.h; path = ../lib/netplay/miniupnpc/upnpcommands.h; sourceTree = SOURCE_ROOT; };
+		EFBC96B410B92A9C009C6753 /* upnperrors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upnperrors.c; path = ../lib/netplay/miniupnpc/upnperrors.c; sourceTree = SOURCE_ROOT; };
+		EFBC96B510B92A9C009C6753 /* upnperrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = upnperrors.h; path = ../lib/netplay/miniupnpc/upnperrors.h; sourceTree = SOURCE_ROOT; };
+		EFBC96B610B92A9C009C6753 /* upnpreplyparse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upnpreplyparse.c; path = ../lib/netplay/miniupnpc/upnpreplyparse.c; sourceTree = SOURCE_ROOT; };
+		EFBC96B710B92A9C009C6753 /* upnpreplyparse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = upnpreplyparse.h; path = ../lib/netplay/miniupnpc/upnpreplyparse.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2433,6 +2464,28 @@
 		0246A12B0BD3CC47004D1C70 /* Netplay */ = {
 			isa = PBXGroup;
 			children = (
+				EFBC96A210B92A9C009C6753 /* bsdqueue.h */,
+				EFBC96A310B92A9C009C6753 /* codelength.h */,
+				EFBC96A410B92A9C009C6753 /* declspec.h */,
+				EFBC96A510B92A9C009C6753 /* igd_desc_parse.c */,
+				EFBC96A610B92A9C009C6753 /* igd_desc_parse.h */,
+				EFBC96A710B92A9C009C6753 /* minisoap.c */,
+				EFBC96A810B92A9C009C6753 /* minisoap.h */,
+				EFBC96A910B92A9C009C6753 /* minissdpc.c */,
+				EFBC96AA10B92A9C009C6753 /* minissdpc.h */,
+				EFBC96AB10B92A9C009C6753 /* miniupnpc.c */,
+				EFBC96AC10B92A9C009C6753 /* miniupnpc.h */,
+				EFBC96AD10B92A9C009C6753 /* miniupnpcstrings.h */,
+				EFBC96AE10B92A9C009C6753 /* miniwget.c */,
+				EFBC96AF10B92A9C009C6753 /* miniwget.h */,
+				EFBC96B010B92A9C009C6753 /* minixml.c */,
+				EFBC96B110B92A9C009C6753 /* minixml.h */,
+				EFBC96B210B92A9C009C6753 /* upnpcommands.c */,
+				EFBC96B310B92A9C009C6753 /* upnpcommands.h */,
+				EFBC96B410B92A9C009C6753 /* upnperrors.c */,
+				EFBC96B510B92A9C009C6753 /* upnperrors.h */,
+				EFBC96B610B92A9C009C6753 /* upnpreplyparse.c */,
+				EFBC96B710B92A9C009C6753 /* upnpreplyparse.h */,
 				02CBED8A0C5B8BEB00316CE2 /* nettypes.c */,
 				02CBED8B0C5B8BEB00316CE2 /* nettypes.h */,
 				0246A12E0BD3CC58004D1C70 /* netjoin_stub.c */,
@@ -4634,6 +4687,15 @@
 				647D9C531039288D006D37CF /* dictionary.c in Sources */,
 				647D9C541039288D006D37CF /* iniparser.c in Sources */,
 				647D9C571039289A006D37CF /* challenge.c in Sources */,
+				EFBC96B810B92A9C009C6753 /* igd_desc_parse.c in Sources */,
+				EFBC96B910B92A9C009C6753 /* minisoap.c in Sources */,
+				EFBC96BA10B92A9C009C6753 /* minissdpc.c in Sources */,
+				EFBC96BB10B92A9C009C6753 /* miniupnpc.c in Sources */,
+				EFBC96BC10B92A9C009C6753 /* miniwget.c in Sources */,
+				EFBC96BD10B92A9C009C6753 /* minixml.c in Sources */,
+				EFBC96BE10B92A9C009C6753 /* upnpcommands.c in Sources */,
+				EFBC96BF10B92A9C009C6753 /* upnperrors.c in Sources */,
+				EFBC96C010B92A9C009C6753 /* upnpreplyparse.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
