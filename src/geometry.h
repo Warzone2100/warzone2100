@@ -40,12 +40,22 @@ extern unsigned int WZ_DECL_CONST dirtyHypot(int deltaX, int deltaY);
 
 static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 {
-	return (STRUCTURE *)mapTile(x,y)->psObject;
+	BASE_OBJECT psObj = mapTile(x,y)->psObject;
+	if (psObj->type == OBJ_STRUCTURE)
+	{
+		return (STRUCTURE *)psObj;
+	}
+	return NULL;
 }
 
 static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
 {
-	return (FEATURE *)mapTile(x,y)->psObject;
+	BASE_OBJECT psObj = mapTile(x,y)->psObject;
+	if (psObj->type == OBJ_FEATURE)
+	{
+		return (FEATURE *)psObj;
+	}
+	return NULL;
 }
 
 static inline BASE_OBJECT *getTileOccupier(UDWORD x, UDWORD y)
