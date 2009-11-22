@@ -78,9 +78,13 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
-// Max bit-rate, set for a 28.8KB/s modem (we have hardcore fans!)
+// NOTE: MaxMsgSize is currently set to 8K.  When MAX_BYTESPERSEC has been reached (sent + recv!), then we do NOT
+//       do the sync code checks anymore(!), needless to say, this can and does cause issues.
+// FIXME: We should define this externally so people with dial-up modems can configure this
+// FIXME: Use possible compression on the packets.
+// NOTE: Remember, we (now) allow 150 units max * 7 (1 human, 6 AI possible for Host) to send to the other player.
 
-#define MAX_BYTESPERSEC			3400
+#define MAX_BYTESPERSEC			6144		// bump up to 6K
 
 #define ANYPLAYER				99
 #define ONEPLAYER				98
@@ -220,5 +224,6 @@ extern	void startMultiplayerGame	(void);
 extern	void resetReadyStatus		(bool bSendOptions);
 
 extern	BOOL bPlayerReadyGUI[MAX_PLAYERS];
+extern bool isMPDirtyBit;
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__
