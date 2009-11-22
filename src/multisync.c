@@ -144,7 +144,7 @@ BOOL sendCheck(void)
 	}
 	else
 	{
-		debug(LOG_INFO, "Couldn't sendDroidCheck()  Sent = %ld, Recv = %ld", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
+		debug(LOG_INFO, "Couldn't sendDroidCheck()  Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
 	}
 	if(okToSend())
 	{
@@ -152,7 +152,7 @@ BOOL sendCheck(void)
 	}
 	else
 	{
-		debug(LOG_INFO, "Couldn't sendStructureCheck() Sent = %ld, Recv = %ld", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
+		debug(LOG_INFO, "Couldn't sendStructureCheck() Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
 	}
 	if(okToSend())
 	{
@@ -160,7 +160,7 @@ BOOL sendCheck(void)
 	}
 	else
 	{
-		debug(LOG_INFO, "Couldn't sendPowerCheck() Sent = %ld, Recv = %ld", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
+		debug(LOG_INFO, "Couldn't sendPowerCheck() Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
 	}
 	if(okToSend())
 	{
@@ -168,7 +168,7 @@ BOOL sendCheck(void)
 	}
 	else
 	{
-		debug(LOG_INFO, "Couldn't sendScoreCheck() Sent = %ld, Recv = %ld", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
+		debug(LOG_INFO, "Couldn't sendScoreCheck() Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
 	}
 
 	sendPing();
