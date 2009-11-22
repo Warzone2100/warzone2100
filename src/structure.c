@@ -2738,10 +2738,11 @@ static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
 
 
 // Disallow manufacture of units once these limits are reached,
-// dos'nt mean that these numbers can't be exceeded if units are
+// doesn't mean that these numbers can't be exceeded if units are
 // put down in the editor or by the scripts.
 static UWORD MaxDroidsAllowedPerPlayer[MAX_PLAYERS] = {100, 999, 999, 999, 999, 999, 999, 999};
-static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS] = {300, 300, 300, 300, 300, 300, 300, 300};
+// FIXME: We should have this variable user defined.
+static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS] = {150, 150, 150, 150, 150, 150, 150, 150};
 
 BOOL IsPlayerStructureLimitReached(UDWORD PlayerNumber)
 {
