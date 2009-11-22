@@ -656,7 +656,6 @@
 		9727525910B88F9100F3D7B7 /* miniupnpc.c in Sources */ = {isa = PBXBuildFile; fileRef = 9727524610B88F9100F3D7B7 /* miniupnpc.c */; };
 		9727525B10B88F9100F3D7B7 /* miniwget.c in Sources */ = {isa = PBXBuildFile; fileRef = 9727524A10B88F9100F3D7B7 /* miniwget.c */; };
 		9727525C10B88F9100F3D7B7 /* minixml.c in Sources */ = {isa = PBXBuildFile; fileRef = 9727524C10B88F9100F3D7B7 /* minixml.c */; };
-		9727525D10B88F9100F3D7B7 /* minixmlvalid.c in Sources */ = {isa = PBXBuildFile; fileRef = 9727524E10B88F9100F3D7B7 /* minixmlvalid.c */; };
 		9727526010B88F9100F3D7B7 /* upnperrors.c in Sources */ = {isa = PBXBuildFile; fileRef = 9727525210B88F9100F3D7B7 /* upnperrors.c */; };
 		9727526110B88F9100F3D7B7 /* upnpreplyparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 9727525410B88F9100F3D7B7 /* upnpreplyparse.c */; };
 		9742E5730DF9975E000A5D41 /* lexer_input.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.c */; };
@@ -743,6 +742,7 @@
 		97AEAC560E8C261B00A10721 /* Theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; };
 		97F013D60EDEAE76004947E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
 		97F013D80EDEAE98004947E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
+		EFBC966710B9282F009C6753 /* upnpcommands.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC966510B9282F009C6753 /* upnpcommands.c */; };
 		EFF3E8D510AD2A740099670F /* dictionary.c in Sources */ = {isa = PBXBuildFile; fileRef = EFF3E8D410AD2A740099670F /* dictionary.c */; };
 		EFF3E8D910AD2A9A0099670F /* iniparser.c in Sources */ = {isa = PBXBuildFile; fileRef = EFF3E8D710AD2A9A0099670F /* iniparser.c */; };
 		EFF3E8DE10AD2BAB0099670F /* challenge.c in Sources */ = {isa = PBXBuildFile; fileRef = EFF3E8DC10AD2BAB0099670F /* challenge.c */; };
@@ -1003,11 +1003,11 @@
 		0223BC030CFE3FFA0056EF85 /* unicode.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unicode.c; path = external/quesoglc/src/unicode.c; sourceTree = SOURCE_ROOT; };
 		0223BC220CFE40210056EF85 /* fribidi_char_type.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fribidi_char_type.c; path = external/quesoglc/src/fribidi/fribidi_char_type.c; sourceTree = SOURCE_ROOT; };
 		0223BC230CFE40210056EF85 /* fribidi_mirroring.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fribidi_mirroring.c; path = external/quesoglc/src/fribidi/fribidi_mirroring.c; sourceTree = SOURCE_ROOT; };
-		0223BC240CFE40210056EF85 /* fribidi_tab_char_type_9.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.interfacer; name = fribidi_tab_char_type_9.i; path = external/quesoglc/src/fribidi/fribidi_tab_char_type_9.i; sourceTree = SOURCE_ROOT; };
-		0223BC250CFE40210056EF85 /* fribidi_tab_mirroring.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.interfacer; name = fribidi_tab_mirroring.i; path = external/quesoglc/src/fribidi/fribidi_tab_mirroring.i; sourceTree = SOURCE_ROOT; };
+		0223BC240CFE40210056EF85 /* fribidi_tab_char_type_9.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c.preprocessed; name = fribidi_tab_char_type_9.i; path = external/quesoglc/src/fribidi/fribidi_tab_char_type_9.i; sourceTree = SOURCE_ROOT; };
+		0223BC250CFE40210056EF85 /* fribidi_tab_mirroring.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c.preprocessed; name = fribidi_tab_mirroring.i; path = external/quesoglc/src/fribidi/fribidi_tab_mirroring.i; sourceTree = SOURCE_ROOT; };
 		0223BC260CFE40210056EF85 /* fribidi_types.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fribidi_types.c; path = external/quesoglc/src/fribidi/fribidi_types.c; sourceTree = SOURCE_ROOT; };
 		0223BC270CFE40210056EF85 /* fribidi_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fribidi_types.h; path = external/quesoglc/src/fribidi/fribidi_types.h; sourceTree = SOURCE_ROOT; };
-		0223BC280CFE40210056EF85 /* fribidi_types.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.interfacer; name = fribidi_types.i; path = external/quesoglc/src/fribidi/fribidi_types.i; sourceTree = SOURCE_ROOT; };
+		0223BC280CFE40210056EF85 /* fribidi_types.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c.preprocessed; name = fribidi_types.i; path = external/quesoglc/src/fribidi/fribidi_types.i; sourceTree = SOURCE_ROOT; };
 		0223BC290CFE40210056EF85 /* fribidi_unicode.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fribidi_unicode.h; path = external/quesoglc/src/fribidi/fribidi_unicode.h; sourceTree = SOURCE_ROOT; };
 		0223BC2A0CFE40210056EF85 /* fribidi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fribidi.c; path = external/quesoglc/src/fribidi/fribidi.c; sourceTree = SOURCE_ROOT; };
 		0223BC2B0CFE40210056EF85 /* fribidi.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fribidi.h; path = external/quesoglc/src/fribidi/fribidi.h; sourceTree = SOURCE_ROOT; };
@@ -1799,7 +1799,6 @@
 		9727524B10B88F9100F3D7B7 /* miniwget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = miniwget.h; path = ../lib/netplay/miniupnpc/miniwget.h; sourceTree = SOURCE_ROOT; };
 		9727524C10B88F9100F3D7B7 /* minixml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = minixml.c; path = ../lib/netplay/miniupnpc/minixml.c; sourceTree = SOURCE_ROOT; };
 		9727524D10B88F9100F3D7B7 /* minixml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = minixml.h; path = ../lib/netplay/miniupnpc/minixml.h; sourceTree = SOURCE_ROOT; };
-		9727524E10B88F9100F3D7B7 /* minixmlvalid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = minixmlvalid.c; path = ../lib/netplay/miniupnpc/minixmlvalid.c; sourceTree = SOURCE_ROOT; };
 		9727525210B88F9100F3D7B7 /* upnperrors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upnperrors.c; path = ../lib/netplay/miniupnpc/upnperrors.c; sourceTree = SOURCE_ROOT; };
 		9727525310B88F9100F3D7B7 /* upnperrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = upnperrors.h; path = ../lib/netplay/miniupnpc/upnperrors.h; sourceTree = SOURCE_ROOT; };
 		9727525410B88F9100F3D7B7 /* upnpreplyparse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upnpreplyparse.c; path = ../lib/netplay/miniupnpc/upnpreplyparse.c; sourceTree = SOURCE_ROOT; };
@@ -1904,6 +1903,8 @@
 		97AEABCC0E8C1C6D00A10721 /* fdct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fdct_mmx.c; sourceTree = "<group>"; };
 		97AEABCD0E8C1C6D00A10721 /* idct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = idct_mmx.c; sourceTree = "<group>"; };
 		97F013D10EDEAE5C004947E5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		EFBC966510B9282F009C6753 /* upnpcommands.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upnpcommands.c; path = ../lib/netplay/miniupnpc/upnpcommands.c; sourceTree = SOURCE_ROOT; };
+		EFBC966610B9282F009C6753 /* upnpcommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = upnpcommands.h; path = ../lib/netplay/miniupnpc/upnpcommands.h; sourceTree = SOURCE_ROOT; };
 		EFF3E8D410AD2A740099670F /* dictionary.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dictionary.c; path = ../lib/iniparser/dictionary.c; sourceTree = SOURCE_ROOT; };
 		EFF3E8D610AD2A8D0099670F /* dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dictionary.h; path = ../lib/iniparser/dictionary.h; sourceTree = SOURCE_ROOT; };
 		EFF3E8D710AD2A9A0099670F /* iniparser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = iniparser.c; path = ../lib/iniparser/iniparser.c; sourceTree = SOURCE_ROOT; };
@@ -2387,6 +2388,8 @@
 		0246A12B0BD3CC47004D1C70 /* Netplay */ = {
 			isa = PBXGroup;
 			children = (
+				EFBC966510B9282F009C6753 /* upnpcommands.c */,
+				EFBC966610B9282F009C6753 /* upnpcommands.h */,
 				9727523D10B88F9100F3D7B7 /* bsdqueue.h */,
 				9727523E10B88F9100F3D7B7 /* codelength.h */,
 				9727523F10B88F9100F3D7B7 /* declspec.h */,
@@ -2403,7 +2406,6 @@
 				9727524B10B88F9100F3D7B7 /* miniwget.h */,
 				9727524C10B88F9100F3D7B7 /* minixml.c */,
 				9727524D10B88F9100F3D7B7 /* minixml.h */,
-				9727524E10B88F9100F3D7B7 /* minixmlvalid.c */,
 				9727525210B88F9100F3D7B7 /* upnperrors.c */,
 				9727525310B88F9100F3D7B7 /* upnperrors.h */,
 				9727525410B88F9100F3D7B7 /* upnpreplyparse.c */,
@@ -4518,9 +4520,9 @@
 				9727525910B88F9100F3D7B7 /* miniupnpc.c in Sources */,
 				9727525B10B88F9100F3D7B7 /* miniwget.c in Sources */,
 				9727525C10B88F9100F3D7B7 /* minixml.c in Sources */,
-				9727525D10B88F9100F3D7B7 /* minixmlvalid.c in Sources */,
 				9727526010B88F9100F3D7B7 /* upnperrors.c in Sources */,
 				9727526110B88F9100F3D7B7 /* upnpreplyparse.c in Sources */,
+				EFBC966710B9282F009C6753 /* upnpcommands.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
