@@ -257,7 +257,11 @@ enum {
 	IMAGE_TRANS_LOCKED,		// clear background 'locked'
 	IMAGE_TRANS_UNLOCKED,	//  "       "       'unlocked'
 	IMAGE_UNLOCK_BLUE,		// Custom image for the host screen to fix the blend issue
-	IMAGE_LOCK_BLUE			//
+	IMAGE_LOCK_BLUE,		//
+	IMAGE_SCAVENGERS_ON,
+	IMAGE_SCAVENGERS_OFF,
+	IMAGE_SCAVENGERS_ON_HI,
+	IMAGE_SCAVENGERS_OFF_HI,
 };
 
 #endif // __INCLUDED_SRC_FREND_H__
