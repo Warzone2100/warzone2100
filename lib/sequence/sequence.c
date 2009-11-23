@@ -66,7 +66,6 @@
 
 #include <theora/theora.h>
 #include <physfs.h>
-#include <SDL.h>
 
 #if !defined(WZ_NOSOUND)
 # include <vorbis/codec.h>

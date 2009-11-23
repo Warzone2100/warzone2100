@@ -29,5 +29,6 @@ void wzScreenFlip(void);	///< Swap the graphics buffers
 void wzGrabMouse(void);		///< Trap mouse cursor in application window
 void wzReleaseMouse(void);	///< Undo the wzGrabMouse operation
 bool wzActiveWindow(void);	///< Whether application currently has the mouse pointer over it
+int wzGetTicks(void);		///< Milliseconds since start of game
 
 #endif

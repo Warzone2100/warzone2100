@@ -114,7 +114,7 @@ static void InitFrameStuff( void )
 /* MaintainFrameStuff - call this during completion of each frame loop */
 static void MaintainFrameStuff( void )
 {
-	curTicks = SDL_GetTicks();
+	curTicks = wzGetTicks();
 	curFrames++;
 
 	// Update the framerate only once per second

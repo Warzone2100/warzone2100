@@ -32,6 +32,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piefunc.h"
+#include "lib/framework/wzapp_c.h"
 
 #include "hci.h"		// access to widget screen.
 #include "wrappers.h"
@@ -272,17 +273,17 @@ void loadingScreenCallback(void)
 	UDWORD			currTick;
 	PIELIGHT		colour;
 
-	if(SDL_GetTicks()-lastTick < 16)
+	if (wzGetTicks()-lastTick < 16)
 	{
 		return;
 	}
-	currTick = SDL_GetTicks();
+	currTick = wzGetTicks();
 	if ((currTick - lastTick) > 500)
 	{
 		currTick -= lastTick;
 		debug( LOG_NEVER, "loadingScreenCallback: pause %d\n", currTick );
 	}
-	lastTick = SDL_GetTicks();
+	lastTick = wzGetTicks();
 	colour.byte.r = 1;
 	colour.byte.g = 1;
 	colour.byte.b = 1;

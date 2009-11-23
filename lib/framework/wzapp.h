@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QGLWidget>
 #include <QBuffer>
+#include <QTime>
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,21 +21,6 @@ class WzMainWindow : public QGLWidget
 {
 	Q_OBJECT
 
-public:
-	WzMainWindow(const QGLFormat &format, QWidget *parent = 0);
-	~WzMainWindow();
-	void initializeGL();
-	void resizeGL(int w, int h);
-	void paintGL();
-	static WzMainWindow *instance();
-	void setCursor(CURSOR index);
-	void setCursor(QCursor cursor);
-	void setFontType(enum iV_fonts FontID);
-
-public slots:
-	void tick();
-	void close();
-
 private:
 	void loadCursor(CURSOR cursor, int x, int y, QBuffer &buffer);
 	void mouseMoveEvent(QMouseEvent *event);
@@ -48,8 +34,25 @@ private:
 
 	QCursor *cursors[CURSOR_MAX];
 	QTimer *timer;
+	QTime tickCount;
 	QFont regular, bold;
 	static WzMainWindow *myself;
+
+public:
+	WzMainWindow(const QGLFormat &format, QWidget *parent = 0);
+	~WzMainWindow();
+	void initializeGL();
+	void resizeGL(int w, int h);
+	void paintGL();
+	static WzMainWindow *instance();
+	void setCursor(CURSOR index);
+	void setCursor(QCursor cursor);
+	void setFontType(enum iV_fonts FontID);
+	int ticks() { return tickCount.elapsed(); }
+
+public slots:
+	void tick();
+	void close();
 };
          
 #endif

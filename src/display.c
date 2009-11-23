@@ -30,6 +30,7 @@
 #include "lib/framework/strres.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/wzapp_c.h"
 
 #include "display.h"
 #include "map.h"
@@ -1135,7 +1136,7 @@ void scroll(void)
 		}
 	}
 	/* Time to update scroll - change to should be time */
-	timeDiff = SDL_GetTicks() - scrollRefTime;
+	timeDiff = wzGetTicks() - scrollRefTime;
 
 	// WHEN its fixed - you can uncomment it!
 	/*
@@ -1145,7 +1146,7 @@ void scroll(void)
 	}
 	*/
 	/* Store reference time */
-	scrollRefTime = SDL_GetTicks();
+	scrollRefTime = wzGetTicks();
 
 	if (timeDiff > GTIME_MAXFRAME)
 	{

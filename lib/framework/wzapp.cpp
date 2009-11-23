@@ -137,6 +137,7 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 {
 	myself = this;
 	timer = new QTimer(this);
+	tickCount.start();
 	connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
 	for (int i = 0; i < CURSOR_MAX; cursors[i++] = NULL) ;
 	timer->start(0);
@@ -605,6 +606,10 @@ void wzScreenFlip()
 	WzMainWindow::instance()->swapBuffers();
 }
 
+int wzGetTicks()
+{
+	return WzMainWindow::instance()->ticks();
+}
 
 /****************************************/
 /***     Mouse and keyboard support   ***/

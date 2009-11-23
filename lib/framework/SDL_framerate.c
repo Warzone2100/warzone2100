@@ -7,6 +7,8 @@
  
  */
 
+#include "frame.h"
+#include "wzapp_c.h"
 #include "SDL_framerate.h"
 
 /* 
@@ -71,7 +73,7 @@ void SDL_framerateDelay(FPSmanager * manager)
     /*
      * Get/calc ticks 
      */
-    current_ticks = SDL_GetTicks();
+    current_ticks = wzGetTicks();
     target_ticks = manager->lastticks + (Uint32) ((float) manager->framecount * manager->rateticks);
 
     if (current_ticks <= target_ticks) {
@@ -79,6 +81,6 @@ void SDL_framerateDelay(FPSmanager * manager)
 	SDL_Delay(the_delay);
     } else {
 	manager->framecount = 0;
-	manager->lastticks = SDL_GetTicks();
+	manager->lastticks = wzGetTicks();
     }
 }
