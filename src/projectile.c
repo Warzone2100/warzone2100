@@ -745,10 +745,10 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 			continue;
 		}
 
-		if (psTempObj->player == psProj->player ||
-			aiCheckAlliances(psTempObj->player, psProj->player))
+		if (aiCheckAlliances(psTempObj->player, psProj->player)
+			&& psTempObj != psProj->psDest)
 		{
-			// No friendly fire
+			// No friendly fire unless intentional
 			continue;
 		}
 
@@ -980,8 +980,7 @@ static void proj_InFlightIndirectFunc(PROJECTILE *psProj)
 			continue;
 		}
 
-		if ((psTempObj->player == psProj->player ||
-			 aiCheckAlliances(psTempObj->player, psProj->player))
+		if (aiCheckAlliances(psTempObj->player, psProj->player)
 			&& psTempObj != psProj->psDest)
 		{
 			// No friendly fire unless intentional
