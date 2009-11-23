@@ -387,6 +387,7 @@ BOOL copyTemplateSet(UDWORD from,UDWORD to)
 	while(apsDroidTemplates[to])				// clear the old template out.
 	{
 		psTempl = apsDroidTemplates[to]->psNext;
+		free(apsDroidTemplates[to]->pName);
 		free(apsDroidTemplates[to]);
 		apsDroidTemplates[to] = psTempl;
 	}
@@ -398,88 +399,114 @@ BOOL copyTemplateSet(UDWORD from,UDWORD to)
 // setup templates
 BOOL multiTemplateSetup(void)
 {
-	UDWORD player, pcPlayer = 0;
+	UDWORD player;
 
-		// Yes, this code really *is* as hacky as it looks.
-		// I'm going to try to narrate what's going on.
+	// Yes, this code really *is* as hacky as it looks.
+	// Fortunately, a recent patch makes it slightly less hacky,
+	// but still really hacky.
+	// I'm going to try to narrate what's going on.
 
-		// Player 5 currently contains the human player template set.
-		// (i.e. Nothing but a truck)
-		// Templates from players 5, 2, and 6 are added to player 4.
-		// This puts the AI template set in player 4.
-		addTemplateSet(CAMPAIGNTEMPLATES,DEATHMATCHTEMPLATES);
-		addTemplateSet(6,DEATHMATCHTEMPLATES);
-		addTemplateSet(2,DEATHMATCHTEMPLATES);
+	// First, let's give these two some better names.
 
-		// To reiterate:
-		// Player 5 contains the human player template set.
-		// Player 4 contains the AI player template set.
+#define AI_TEMPLATES DEATHMATCHTEMPLATES // 4
+#define HUMAN_TEMPLATES CAMPAIGNTEMPLATES // 5
 
-		//choose which way to do this.
-		if(isHumanPlayer(CAMPAIGNTEMPLATES))
+	// We build our template sets.
+
+	// * Humans only start with a truck, in player 5.
+	//   We don't need to worry about that.
+
+	// * AI units are stored in players 2, 4, and 6, for some reason.
+	//   We consolidate all the AI units in player 4.
+	//   We also add the human players' truck to the AIs.
+	//   (Not that most AI scripts actually use the truck in their
+	//   own template set...)
+	addTemplateSet(HUMAN_TEMPLATES, AI_TEMPLATES);
+	addTemplateSet(6, AI_TEMPLATES);
+	addTemplateSet(2, AI_TEMPLATES);
+
+	// To reiterate:
+	// Player 5 (HUMAN_TEMPLATES) contains the human player template set.
+	// Player 4 (AI_TEMPLATES) contains the AI player template set.
+
+	// Now, we need to make sure all human players end up with the
+	// human templates, and all AI players end up with the AI templates.
+	// Which turns out to be pretty complicated, if for some reason
+	// player 5 (HUMAN_TEMPLATES) is an AI, or player 4 (AI_TEMPLATES)
+	// is a human.
+
+	if (isHumanPlayer(HUMAN_TEMPLATES))
+	{
+		// Player 5 is a human.
+		// We just copy player 4's templates onto all the AI's,
+		// then copy player 5's template onto all the humans.
+
+		// AIs first
+		for (player=0;player<game.maxPlayers;player++)
 		{
-			// Player 5 is a human. No workarounds are needed.
-			// We just copy player 4's templates onto all the AI's,
-			// then copy player 5's template onto all the humans.
-
-			//pc first
-			for(player=0;player<game.maxPlayers;player++)
+			if (!isHumanPlayer(player))
 			{
-				if(!isHumanPlayer(player))
-				{
-					copyTemplateSet(DEATHMATCHTEMPLATES,player);
-				}
-			}
-			//now players.
-			for(player=0;player<game.maxPlayers;player++)
-			{
-				if(isHumanPlayer(player))
-				{
-					copyTemplateSet(CAMPAIGNTEMPLATES,player);
-				}
+				copyTemplateSet(AI_TEMPLATES, player);
 			}
 		}
-		else
+		// Now humans
+		for (player=0;player<game.maxPlayers;player++)
 		{
-			// Player 5 is an AI player. This is a really bad workaround.
-			// We find an AI player: pcPlayer.
-			// We copy player 4's templates onto pcPlayer.
-			// Then, we copy player 5's templates onto all the
-			// human players, and pcPlayer's templates onto all the
-			// AI players.
-
-			// ensure a copy of pc templates to a pc player.
-			if(isHumanPlayer(DEATHMATCHTEMPLATES))
+			if (isHumanPlayer(player))
 			{
+				copyTemplateSet(HUMAN_TEMPLATES, player);
+			}
+		}
+	}
+	else if (!isHumanPlayer(AI_TEMPLATES))
+	{
+		// Player 4 is an AI.
+		// Like the above, except in the opposite order.
 
-				for(player=0;player<MAX_PLAYERS && isHumanPlayer(player);player++);
-				if(!isHumanPlayer(player))
-				{
-					pcPlayer = player;
-					copyTemplateSet(DEATHMATCHTEMPLATES,pcPlayer);
-				}
+		// Humans first
+		for (player = 0; player < game.maxPlayers; player++)
+		{
+			if (isHumanPlayer(player))
+			{
+				copyTemplateSet(HUMAN_TEMPLATES, player);
+			}
+		}
+		// Now AIs
+		for (player = 0; player < game.maxPlayers; player++)
+		{
+			if (!isHumanPlayer(player))
+			{
+				copyTemplateSet(AI_TEMPLATES, player);
+			}
+		}
+	}
+	else
+	{
+		// Player 5 is an AI player, and player 4 is a human player.
+		// The best way to deal with this is to swap them.
+		// We'll use player 6 for temporary storage.
+		copyTemplateSet(AI_TEMPLATES, 6);
+		copyTemplateSet(HUMAN_TEMPLATES, AI_TEMPLATES);
+		copyTemplateSet(6, HUMAN_TEMPLATES);
+
+		// Now, we can copy all the player 5 templates (now AI
+		// templates) to the other AIs, and the player 4 templates
+		// (now human templates) to humans
+
+		// Since players 4 and 5 both have the templates they
+		// should end up with, we can now do this in one pass.
+		for (player=0;player<game.maxPlayers;player++)
+		{
+			if (isHumanPlayer(player))
+			{
+				copyTemplateSet(AI_TEMPLATES, player);
 			}
 			else
 			{
-				pcPlayer = DEATHMATCHTEMPLATES;
-			}
-			//players first
-			for (player = 0; player < game.maxPlayers; player++)
-			{
-				if(isHumanPlayer(player))
-				{
-					copyTemplateSet(CAMPAIGNTEMPLATES,player);
-				}
-			}
-			//now pc
-			for (player = 0; player < game.maxPlayers; player++)
-			{
-				if(!isHumanPlayer(player))
-				{
-					copyTemplateSet(pcPlayer,player);
-				}
+				copyTemplateSet(HUMAN_TEMPLATES, player);
 			}
 		}
+	}
 
 	return true;
 }
