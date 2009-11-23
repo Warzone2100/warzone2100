@@ -286,7 +286,7 @@ then
 	if ! same_commit $remote/${git} ${git}
 	then
 		echo_c "== Pushing the changes to $remote"
-		$dry_run ||  git push $remote ${git}
+		$dry_run ||  git push $remote ${git} || exit 1
 	else
 		echo_c "== No local changes, so not pushing to $remote"
 	fi
