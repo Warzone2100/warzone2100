@@ -745,14 +745,13 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 			continue;
 		}
 
-		if ((psTempObj->player == psProj->player ||
-			aiCheckAlliances(psTempObj->player, psProj->player))
+		if (aiCheckAlliances(psTempObj->player, psProj->player)
 			&& psTempObj != psProj->psDest)
 		{
 			// No friendly fire unless intentional
 			continue;
 		}
-
+		
 		if (psStats->surfaceToAir == SHOOT_IN_AIR &&
 			(psTempObj->type == OBJ_STRUCTURE ||
 				psTempObj->type == OBJ_FEATURE ||
@@ -981,13 +980,13 @@ static void proj_InFlightIndirectFunc(PROJECTILE *psProj)
 			continue;
 		}
 
-		if (psTempObj->player == psProj->player ||
-			aiCheckAlliances(psTempObj->player, psProj->player))
+		if (aiCheckAlliances(psTempObj->player, psProj->player)
+			&& psTempObj != psProj->psDest)
 		{
-			// No friendly fire
+			// No friendly fire unless intentional
 			continue;
 		}
-
+		
 		/* Actual collision test */
 		{
 			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
