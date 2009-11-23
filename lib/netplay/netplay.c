@@ -24,6 +24,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp_c.h"
 #include "lib/framework/string_ext.h"
 #include "lib/gamelib/gtime.h"
 
@@ -1709,7 +1710,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	 || !tcp_socket->ready
 	 || (result = readNoInt(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
-		unsigned int time = SDL_GetTicks();
+		unsigned int time = wzGetTicks();
 		if (result == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Server socket ecountered error: %s", strSockError(getSockErr()));
@@ -1718,7 +1719,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 			return false;
 		}
 		i = result;
-		while (i < sizeof(buf) && SDL_GetTicks() < time + 2500)
+		while (i < sizeof(buf) && wzGetTicks() < time + 2500)
 		{
 			result = readNoInt(tcp_socket, buf+i, sizeof(buf)-i);
 			if (result == SOCKET_ERROR || result <= 0)

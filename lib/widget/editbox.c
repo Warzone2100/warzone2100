@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp_c.h"
 #include "widget.h"
 #include "widgint.h"
 #include "editbox.h"
@@ -730,7 +731,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 
 	/* Display the cursor if editing */
 #if CURSOR_BLINK
-	blink = (SDL_GetTicks()/WEDB_BLINKRATE) % 2;
+	blink = (wzGetTicks() / WEDB_BLINKRATE) % 2;
 	if ((psEdBox->state & WEDBS_MASK) == WEDBS_INSERT && blink)
 #else
 	if ((psEdBox->state & WEDBS_MASK) == WEDBS_INSERT)
