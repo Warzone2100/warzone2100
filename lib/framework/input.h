@@ -145,10 +145,6 @@ typedef enum _key_code
 /** Tell the input system that we have lost the focus. */
 extern void inputLooseFocus(void);
 
-extern void inputHandleKeyEvent(SDL_KeyboardEvent*);
-extern void inputHandleMouseMotionEvent(SDL_MouseMotionEvent*);
-extern void inputHandleMouseButtonEvent(SDL_MouseButtonEvent*);
-
 /** Converts the key code into an ascii string. */
 extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
 
@@ -173,14 +169,15 @@ typedef enum _mouse_key_code
 	MOUSE_MMB = SDL_BUTTON_MIDDLE,
 	MOUSE_RMB = SDL_BUTTON_RIGHT,
 	MOUSE_WUP = SDL_BUTTON_WHEELUP,
-	MOUSE_WDN = SDL_BUTTON_WHEELDOWN
+	MOUSE_WDN = SDL_BUTTON_WHEELDOWN,
+	MOUSE_BAD
 } MOUSE_KEY_CODE;
 
 /** Return the current X position of the mouse. */
-extern Uint16 mouseX(void) WZ_DECL_PURE;
+extern uint16_t mouseX(void) WZ_DECL_PURE;
 
 /** Return the current Y position of the mouse. */
-extern Uint16 mouseY(void) WZ_DECL_PURE;
+extern uint16_t mouseY(void) WZ_DECL_PURE;
 
 /** This returns true if the mouse key is currently depressed. */
 extern BOOL mouseDown(MOUSE_KEY_CODE code);
@@ -198,25 +195,25 @@ extern BOOL mouseReleased(MOUSE_KEY_CODE code);
 extern BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
 
 /** Warps the mouse to the given position. */
-extern void SetMousePos(Uint16 x, Uint16 y);
+extern void SetMousePos(uint16_t x, uint16_t y);
 
 /* The input buffer can contain normal character codes and these control codes */
-#define INPBUF_LEFT		0x010000
-#define INPBUF_RIGHT	0x020000
-#define INPBUF_UP		0x030000
-#define INPBUF_DOWN		0x040000
-#define INPBUF_HOME		0x050000
-#define INPBUF_END		0x060000
-#define INPBUF_INS		0x070000
-#define INPBUF_DEL		0x080000
-#define INPBUF_PGUP		0x090000
-#define INPBUF_PGDN		0x0a0000
+#define INPBUF_LEFT		KEY_LEFTARROW
+#define INPBUF_RIGHT	KEY_RIGHTARROW
+#define INPBUF_UP		KEY_UPARROW
+#define INPBUF_DOWN		KEY_DOWNARROW
+#define INPBUF_HOME		KEY_HOME
+#define INPBUF_END		KEY_END
+#define INPBUF_INS		KEY_INSERT
+#define INPBUF_DEL		KEY_DELETE
+#define INPBUF_PGUP		KEY_PAGEUP
+#define INPBUF_PGDN		KEY_PAGEDOWN
 
 /* Some defines for keys that map into the normal character space */
-#define INPBUF_BKSPACE		0x000008
-#define INPBUF_TAB		0x000009
-#define INPBUF_CR		0x00000D
-#define INPBUF_ESC		0x00001b
+#define INPBUF_BKSPACE	KEY_BACKSPACE
+#define INPBUF_TAB		KEY_TAB
+#define INPBUF_CR		KEY_RETURN
+#define INPBUF_ESC		KEY_ESC
 
 /** Return the next key press or 0 if no key in the buffer.
  * The key returned will have been remaped to the correct ascii code for the
@@ -229,5 +226,10 @@ extern char inputGetCharKey(void);
 
 /** Clear the input buffer. */
 extern void inputClearBuffer(void);
+
+/* This is called once a frame so that the system can tell
+ * whether a key was pressed this turn or held down from the last frame.
+ */
+extern void inputNewFrame(void);
 
 #endif

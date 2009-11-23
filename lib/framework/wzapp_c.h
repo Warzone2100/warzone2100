@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2008  Giel van Schijndel
-	Copyright (C) 2008-2009  Warzone Resurrection Project
+	Copyright (C) 1999-2004  Eidos Interactive
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,10 +18,16 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "frame.h"
-#include "cursors.h"
+#ifndef __INCLUDED_WZAPP_C_H__
+#define __INCLUDED_WZAPP_C_H__
 
-void init_system_cursor(CURSOR cur, enum CURSOR_TYPE type)
-{
-	init_system_cursor32(cur);
-}
+int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h);
+int	wzQuit(void);			///< Quit game
+void wzCreateCursor(CURSOR index, uint8_t *data, uint8_t *mask, int w, int h, int hot_x, int hot_y);
+void wzSetCursor(CURSOR index);
+void wzScreenFlip(void);	///< Swap the graphics buffers
+void wzGrabMouse(void);		///< Trap mouse cursor in application window
+void wzReleaseMouse(void);	///< Undo the wzGrabMouse operation
+bool wzActiveWindow(void);	///< Whether application currently has the mouse pointer over it
+
+#endif

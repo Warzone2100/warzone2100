@@ -21,7 +21,6 @@
 #define ENDIAN_HACK_H
 
 /* Endianness hacks */
-// TODO Use SDL_SwapXXXX instead
 
 static inline void endian_uword(UWORD* uword)
 {

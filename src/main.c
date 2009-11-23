@@ -24,8 +24,6 @@
 // Get platform defines before checking for them!
 #include "lib/framework/frame.h"
 
-#include <SDL.h>
-
 #if defined(WZ_OS_WIN)
 // FIXME HACK Workaround DATADIR definition in objbase.h
 // This works since DATADIR is never used on Windows.
@@ -39,6 +37,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/tagfile.h"
+#include "lib/framework/wzapp_c.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
@@ -586,7 +585,7 @@ static void startGameLoop(void)
 	// Trap the cursor if cursor snapping is enabled
 	if (war_GetTrapCursor())
 	{
-		SDL_WM_GrabInput(SDL_GRAB_ON);
+		wzGrabMouse();
 	}
 
 	// set a flag for the trigger/event system to indicate initialisation is complete
@@ -622,7 +621,7 @@ static void stopGameLoop(void)
 	// Disable cursor trapping
 	if (war_GetTrapCursor())
 	{
-		SDL_WM_GrabInput(SDL_GRAB_OFF);
+		wzReleaseMouse();
 	}
 
 	gameInitialised = false;
@@ -652,7 +651,7 @@ static bool initSaveGameLoad(void)
 	// Trap the cursor if cursor snapping is enabled
 	if (war_GetTrapCursor())
 	{
-		SDL_WM_GrabInput(SDL_GRAB_ON);
+		wzGrabMouse();
 	}
 
 	return true;
@@ -708,12 +707,7 @@ static void runTitleLoop(void)
 		case TITLECODE_QUITGAME:
 			debug(LOG_MAIN, "TITLECODE_QUITGAME");
 			stopTitleLoop();
-			{
-				// Create a quit event to halt game loop.
-				SDL_Event quitEvent;
-				quitEvent.type = SDL_QUIT;
-				SDL_PushEvent(&quitEvent);
-			}
+			wzQuit();
 			break;
 		case TITLECODE_SAVEGAMELOAD:
 			{
@@ -748,7 +742,7 @@ static void runTitleLoop(void)
 	}
 }
 
-
+#if 0
 /*!
  * Activation (focus change) eventhandler
  */
@@ -793,20 +787,16 @@ static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 		cdAudio_Pause();
 	}
 }
-
+#endif
 
 /*!
  * The mainloop.
  * Fetches events, executes appropriate code
  */
-static void mainLoop(void)
+void mainLoop(void)
 {
-	SDL_Event event;
-
-	while (true)
-	{
-		frameUpdate(); // General housekeeping
-
+	frameUpdate(); // General housekeeping
+#if 0
 		/* Deal with any windows messages */
 		while (SDL_PollEvent(&event))
 		{
@@ -836,33 +826,32 @@ static void mainLoop(void)
 					break;
 			}
 		}
-		// Screenshot key is now available globally
-		if(keyPressed(KEY_F10))
-		{
-			kf_ScreenDump();
-			inputLooseFocus();		// remove it from input stream
-		}
+#endif
+	// Screenshot key is now available globally
+	if (keyPressed(KEY_F10))
+	{
+		kf_ScreenDump();
+		inputLooseFocus();		// remove it from input stream
+	}
 
-		if (focusState == FOCUS_IN)
+	if (focusState == FOCUS_IN)
+	{
+		if (loop_GetVideoStatus())
 		{
-			if (loop_GetVideoStatus())
-			{
-				videoLoop(); // Display the video if neccessary
-			}
-			else switch (GetGameMode())
-			{
-				case GS_NORMAL: // Run the gameloop code
-					runGameLoop();
-					break;
-				case GS_TITLE_SCREEN: // Run the titleloop code
-					runTitleLoop();
-					break;
-				default:
-					break;
-			}
-
-			gameTimeUpdate(); // Update gametime. FIXME There is probably code duplicated with MaintainFrameStuff
+			videoLoop(); // Display the video if neccessary
 		}
+		else switch (GetGameMode())
+		{
+			case GS_NORMAL: // Run the gameloop code
+				runGameLoop();
+				break;
+			case GS_TITLE_SCREEN: // Run the titleloop code
+				runTitleLoop();
+				break;
+			default:
+				break;
+		}
+		gameTimeUpdate(); // Update gametime. FIXME There is probably code duplicated with MaintainFrameStuff
 	}
 }
 
@@ -1018,6 +1007,12 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	return wzInit(argc, argv, war_getFSAA(), war_GetVsync(), pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight());
+}
+
+// Called from wzInit after graphics initialized
+int finalInitialization()
+{
 	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFSAA(), war_getFullscreen(), war_GetVsync()))
 	{
 		return -1;
@@ -1078,15 +1073,7 @@ int main(int argc, char *argv[])
 			debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
 			break;
 	}
-
-	debug(LOG_MAIN, "Entering main loop");
-
-	// Enter the mainloop
-	mainLoop();
-
-	debug(LOG_MAIN, "Shutting down Warzone 2100");
-
-	return EXIT_SUCCESS;
+	return 0;
 }
 
 

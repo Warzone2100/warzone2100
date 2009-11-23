@@ -22,6 +22,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
+#include "lib/framework/wzapp_c.h"
 #include "objects.h"
 #include "basedef.h"
 #include "map.h"
@@ -1322,7 +1323,7 @@ void	kf_TogglePauseMode( void )
 		// If cursor trapping is enabled allow the cursor to leave the window
 		if (war_GetTrapCursor())
 		{
-			SDL_WM_GrabInput(SDL_GRAB_OFF);
+			wzReleaseMouse();
 		}
 
 		/* And stop the clock */
@@ -1341,7 +1342,7 @@ void	kf_TogglePauseMode( void )
 		// Re-enable cursor trapping if it is enabled
 		if (war_GetTrapCursor())
 		{
-			SDL_WM_GrabInput(SDL_GRAB_ON);
+			wzGrabMouse();
 		}
 
 		/* And start the clock again */

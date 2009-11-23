@@ -92,12 +92,6 @@
 #include "init.h"
 #include "levels.h"
 
-#if defined(WZ_OS_MAC)
-#include <QuesoGLC/glc.h>
-#else
-#include <GL/glc.h>
-#endif
-
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -463,7 +457,6 @@ void loadMapPreview(bool hideInterface)
 			fx+=(float)offX2;
 			fy+=(float)offY2;
 
-			glcRenderStyle(GLC_TEXTURE);
 			// first draw a slightly bigger font of the number using said color
 			iV_SetTextColour(WZCOL_DBLUE);
 			iV_SetTextSize(28.f);
@@ -473,7 +466,6 @@ void loadMapPreview(bool hideInterface)
 			iV_SetTextSize(24.f);
 			iV_DrawTextF(fx,fy,"%d",i);
 		}
-		glcRenderStyle(GLC_TEXTURE);
 
 		// set rendering back to default frame buffer
 		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);

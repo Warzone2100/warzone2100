@@ -63,11 +63,6 @@ extern void screenShutDown(void);
  */
 extern void screenFlipToGDI(void);
 
-/* This is called once a frame so that the system can tell
- * whether a key was pressed this turn or held down from the last frame.
- */
-extern void inputNewFrame(void);
-
 /* The Current screen size and bit depth */
 extern UDWORD		screenWidth;
 extern UDWORD		screenHeight;

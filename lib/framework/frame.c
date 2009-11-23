@@ -28,6 +28,7 @@
  */
 #include "frame.h"
 #include "file.h"
+#include "wzapp_c.h"
 
 #include <SDL.h>
 #include <physfs.h>
@@ -40,18 +41,11 @@
 
 #include "cursors.h"
 
-static const enum CURSOR_TYPE cursor_type =
-#if defined(WZ_OS_MAC)
-	CURSOR_16;
-#else
-	CURSOR_32;
-#endif
+static const enum CURSOR_TYPE cursor_type = CURSOR_32;
 
 /* Linux specific stuff */
 
 static CURSOR currentCursor = ~(CURSOR)0;
-static SDL_Cursor* aCursors[CURSOR_MAX];
-
 bool selfTest = false;
 
 /************************************************************************************
@@ -162,10 +156,10 @@ void frameSetCursor(CURSOR cur)
 {
 	ASSERT(cur < CURSOR_MAX, "frameSetCursorFromRes: bad resource ID" );
 
-	//If we are already using this cursor then  return
+	// If we are already using this cursor then do nothing
 	if (cur != currentCursor)
         {
-		SDL_SetCursor(aCursors[cur]);
+		wzSetCursor(cur);
 		currentCursor = cur;
         }
 }
@@ -173,42 +167,38 @@ void frameSetCursor(CURSOR cur)
 
 static void initCursors(void)
 {
-	aCursors[CURSOR_ARROW]       = init_system_cursor(CURSOR_ARROW, cursor_type);
-	aCursors[CURSOR_DEST]        = init_system_cursor(CURSOR_DEST, cursor_type);
-	aCursors[CURSOR_SIGHT]       = init_system_cursor(CURSOR_SIGHT, cursor_type);
-	aCursors[CURSOR_TARGET]      = init_system_cursor(CURSOR_TARGET, cursor_type);
-	aCursors[CURSOR_LARROW]      = init_system_cursor(CURSOR_LARROW, cursor_type);
-	aCursors[CURSOR_RARROW]      = init_system_cursor(CURSOR_RARROW, cursor_type);
-	aCursors[CURSOR_DARROW]      = init_system_cursor(CURSOR_DARROW, cursor_type);
-	aCursors[CURSOR_UARROW]      = init_system_cursor(CURSOR_UARROW, cursor_type);
-	aCursors[CURSOR_DEFAULT]     = init_system_cursor(CURSOR_DEFAULT, cursor_type);
-	aCursors[CURSOR_EDGEOFMAP]   = init_system_cursor(CURSOR_EDGEOFMAP, cursor_type);
-	aCursors[CURSOR_ATTACH]      = init_system_cursor(CURSOR_ATTACH, cursor_type);
-	aCursors[CURSOR_ATTACK]      = init_system_cursor(CURSOR_ATTACK, cursor_type);
-	aCursors[CURSOR_BOMB]        = init_system_cursor(CURSOR_BOMB, cursor_type);
-	aCursors[CURSOR_BRIDGE]      = init_system_cursor(CURSOR_BRIDGE, cursor_type);
-	aCursors[CURSOR_BUILD]       = init_system_cursor(CURSOR_BUILD, cursor_type);
-	aCursors[CURSOR_EMBARK]      = init_system_cursor(CURSOR_EMBARK, cursor_type);
-	aCursors[CURSOR_FIX]         = init_system_cursor(CURSOR_FIX, cursor_type);
-	aCursors[CURSOR_GUARD]       = init_system_cursor(CURSOR_GUARD, cursor_type);
-	aCursors[CURSOR_JAM]         = init_system_cursor(CURSOR_JAM, cursor_type);
-	aCursors[CURSOR_LOCKON]      = init_system_cursor(CURSOR_LOCKON, cursor_type);
-	aCursors[CURSOR_MENU]        = init_system_cursor(CURSOR_MENU, cursor_type);
-	aCursors[CURSOR_MOVE]        = init_system_cursor(CURSOR_MOVE, cursor_type);
-	aCursors[CURSOR_NOTPOSSIBLE] = init_system_cursor(CURSOR_NOTPOSSIBLE, cursor_type);
-	aCursors[CURSOR_PICKUP]      = init_system_cursor(CURSOR_PICKUP, cursor_type);
-	aCursors[CURSOR_SEEKREPAIR]  = init_system_cursor(CURSOR_SEEKREPAIR, cursor_type);
-	aCursors[CURSOR_SELECT]      = init_system_cursor(CURSOR_SELECT, cursor_type);
+	init_system_cursor(CURSOR_ARROW, cursor_type);
+	init_system_cursor(CURSOR_DEST, cursor_type);
+	init_system_cursor(CURSOR_SIGHT, cursor_type);
+	init_system_cursor(CURSOR_TARGET, cursor_type);
+	init_system_cursor(CURSOR_LARROW, cursor_type);
+	init_system_cursor(CURSOR_RARROW, cursor_type);
+	init_system_cursor(CURSOR_DARROW, cursor_type);
+	init_system_cursor(CURSOR_UARROW, cursor_type);
+	init_system_cursor(CURSOR_DEFAULT, cursor_type);
+	init_system_cursor(CURSOR_EDGEOFMAP, cursor_type);
+	init_system_cursor(CURSOR_ATTACH, cursor_type);
+	init_system_cursor(CURSOR_ATTACK, cursor_type);
+	init_system_cursor(CURSOR_BOMB, cursor_type);
+	init_system_cursor(CURSOR_BRIDGE, cursor_type);
+	init_system_cursor(CURSOR_BUILD, cursor_type);
+	init_system_cursor(CURSOR_EMBARK, cursor_type);
+	init_system_cursor(CURSOR_FIX, cursor_type);
+	init_system_cursor(CURSOR_GUARD, cursor_type);
+	init_system_cursor(CURSOR_JAM, cursor_type);
+	init_system_cursor(CURSOR_LOCKON, cursor_type);
+	init_system_cursor(CURSOR_MENU, cursor_type);
+	init_system_cursor(CURSOR_MOVE, cursor_type);
+	init_system_cursor(CURSOR_NOTPOSSIBLE, cursor_type);
+	init_system_cursor(CURSOR_PICKUP, cursor_type);
+	init_system_cursor(CURSOR_SEEKREPAIR, cursor_type);
+	init_system_cursor(CURSOR_SELECT, cursor_type);
 }
 
 
 static void freeCursors(void)
 {
-	unsigned int i;
-	for(i = 0 ; i < ARRAY_SIZE(aCursors); ++i)
-	{
-		SDL_FreeCursor(aCursors[i]);
-	}
+	// no-op
 }
 
 /*
@@ -225,13 +215,11 @@ BOOL frameInitialise(
 					BOOL fullScreen,		// Whether to start full screen or windowed
 					BOOL vsync)				// If to sync to vblank or not
 {
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
+	if (SDL_Init(SDL_INIT_TIMER) != 0)
 	{
 		debug( LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError() );
 		return false;
 	}
-
-	SDL_WM_SetCaption(pWindowName, NULL);
 
 	/* Initialise the trig stuff */
 	if (!trigInitialise())
@@ -268,12 +256,8 @@ BOOL frameInitialise(
  */
 void frameUpdate(void)
 {
-	/* Tell the input system about the start of another frame */
-	inputNewFrame();
-
 	/* Update the frame rate stuff */
 	MaintainFrameStuff();
-
 	SDL_framerateDelay(&wzFPSmanager);
 }
 
@@ -283,18 +267,23 @@ void frameUpdate(void)
  */
 void frameShutDown(void)
 {
+	debug(LOG_NEVER, "Screen shutdown!");
 	screenShutDown();
 
 	/* Free all cursors */
+	debug(LOG_NEVER, "Free the cursors!");
 	freeCursors();
 
 	/* Destroy the Application window */
+	debug(LOG_NEVER, "Destroy SDL!");
 	SDL_Quit();
 
 	/* shutdown the trig stuff */
+	debug(LOG_NEVER, "Down with trigonometry!");
 	trigShutDown();
 
 	// Shutdown the resource stuff
+	debug(LOG_NEVER, "No more resources!");
 	resShutDown();
 }
 

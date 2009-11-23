@@ -133,7 +133,6 @@ extern void pie_SetRendMode(REND_MODE rendMode);
 
 extern void pie_InitColourMouse(IMAGEFILE* img, const uint16_t cursorIDs[CURSOR_MAX]);
 extern void pie_SetMouse(CURSOR cursor, bool coloured);
-extern void pie_DrawMouse(unsigned int X, unsigned int Y);
 extern void pie_ShowMouse(bool visible);
 
 extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);

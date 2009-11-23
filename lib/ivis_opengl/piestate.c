@@ -24,9 +24,6 @@
 #include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 
-#include <SDL.h>
-#include <SDL_mouse.h>
-
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/tex.h"
@@ -42,7 +39,6 @@ static CURSOR MouseCursor = 0;
 static bool ColouredMouse = false;
 static IMAGEFILE* MouseCursors = NULL;
 static uint16_t MouseCursorIDs[CURSOR_MAX];
-static bool MouseVisible = true;
 
 /*
  *	Source
@@ -229,33 +225,6 @@ void pie_SetMouse(CURSOR cursor, bool coloured)
 
 	frameSetCursor(MouseCursor);
 	ColouredMouse = coloured;
-}
-
-/** Draws the current mouse cursor at the given coordinates
- *  \param X,Y mouse coordinates
- */
-void pie_DrawMouse(unsigned int X, unsigned int Y)
-{
-	if (ColouredMouse && MouseVisible)
-	{
-		ASSERT(MouseCursors != NULL, "Drawing coloured mouse cursor while no coloured mouse cursors have been loaded yet!");
-
-		iV_DrawImage(MouseCursors, MouseCursorIDs[MouseCursor], X, Y);
-	}
-}
-
-/** Set the visibility of the mouse cursor */
-void pie_ShowMouse(bool visible)
-{
-	MouseVisible = visible;
-	if (MouseVisible && !ColouredMouse)
-	{
-		SDL_ShowCursor(SDL_ENABLE);
-	}
-	else
-	{
-		SDL_ShowCursor(SDL_DISABLE);
-	}
 }
 
 bool _glerrors(const char *function, const char *file, int line)
