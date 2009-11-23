@@ -1535,6 +1535,11 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 			if (psFeature && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 			{
+				if (fireOnLocation(psFeature->pos.x,psFeature->pos.y))
+				{
+					// Can't build on burning oil resource
+					return NULL;
+				}
 				// remove it from the map
 				turnOffMultiMsg(true); // dont send this one!
 				removeFeature(psFeature);
