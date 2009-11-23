@@ -1842,7 +1842,7 @@ static int upnp_init(void *asdf)
 		}
 		freeUPNPDevlist(devlist);
 
-		if (urls.controlURL[0] == '\0')
+		if (!urls.controlURL || urls.controlURL[0] == '\0')
 		{
 			return false;
 		}
