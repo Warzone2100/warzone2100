@@ -41,7 +41,7 @@ extern unsigned int WZ_DECL_CONST dirtyHypot(int deltaX, int deltaY);
 static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 {
 	BASE_OBJECT * psObj = mapTile(x,y)->psObject;
-	if (psObj->type == OBJ_STRUCTURE)
+	if (psObj && psObj->type == OBJ_STRUCTURE)
 	{
 		return (STRUCTURE *)psObj;
 	}
@@ -51,7 +51,7 @@ static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
 {
 	BASE_OBJECT * psObj = mapTile(x,y)->psObject;
-	if (psObj->type == OBJ_FEATURE)
+	if (psObj && psObj->type == OBJ_FEATURE)
 	{
 		return (FEATURE *)psObj;
 	}
