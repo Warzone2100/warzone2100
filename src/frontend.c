@@ -484,13 +484,11 @@ BOOL runSinglePlayerMenu(void)
 				break;
 		}
 
-	if(CancelPressed())
-	{
-		changeTitleMode(TITLE);
+		if(CancelPressed())
+		{
+			changeTitleMode(TITLE);
+		}
 	}
-
-	}
-
 
 	if (!bLoadSaveUp && !challengesUp)						// if save/load screen is up
 	{
@@ -1220,12 +1218,12 @@ BOOL runGameOptions5Menu(void)
 			if (war_GetColouredCursor())
 			{
 				war_SetColouredCursor(false);
-				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Hardware"));
+				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Off"));
 			}
 			else
 			{
 				war_SetColouredCursor(true);
-				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Software (coloured)"));
+				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("On"));
 			}
 			break;
 
