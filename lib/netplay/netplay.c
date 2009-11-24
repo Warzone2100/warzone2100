@@ -109,10 +109,6 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 *	NOTE /rant:  If the buffer size isn't big enough, it will invalidate the socket.
 *	Which means that we need to allocate a buffer big enough to handle worst case
 *	situations.
-*	SDLNet_TCP_Recv() craps out because of this, and the forthcoming error message
-*	is less than eloquent.
-*	("SDL is not running on known window manager" is NOT a valid socket error msg!)
-*	Perhaps SDLNet_GetError() being a alias for SDL_GetError() has something to do with this?
 *
 *	reference: MaxMsgSize in netplay.h  (currently set to 8192)
 *	
@@ -1315,7 +1311,7 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 		{
 			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %d", NET_BUFFER_SIZE, bs->bytes);
 		}
-		debug(LOG_WARNING, "SDLNet_TCP_Recv error: %s tcp_socket %p is now invalid", strSockError(getSockErr()), bs->socket);
+		debug(LOG_WARNING, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), bs->socket);
 		socketClose(bs->socket);
 		bs->socket = NULL;
 	}
@@ -2166,8 +2162,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 	msg->size = htons(msg->size);
 
 	if (NetPlay.isHost)
-	{	// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
-		// SDLNet_TCP_Send *can* block!
+	{
 		if (   player < MAX_CONNECTED_PLAYERS
 		    && connected_bsocket[player] != NULL
 		    && connected_bsocket[player]->socket != NULL
@@ -2188,8 +2183,6 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 	}
 	else
 	{
-		// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
-		// SDLNet_TCP_Send *can* block!
 			if (tcp_socket && (result = writeAll(tcp_socket, msg, size) == size))
 			{
 				return true;
@@ -2239,8 +2232,6 @@ BOOL NETbcast(NETMSG *msg)
 			}
 			else
 			{	
-				// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
-				// SDLNet_TCP_Send *can* block!
 				if (writeAll(connected_bsocket[i]->socket, msg, size) == SOCKET_ERROR)
 				{
 					// Write error, most likely client disconnect.
@@ -2259,8 +2250,6 @@ BOOL NETbcast(NETMSG *msg)
 		{
 			return false;
 		}
-		// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
-		// SDLNet_TCP_Send *can* block!
 		if (writeAll(tcp_socket, msg, size) == SOCKET_ERROR)
 		{
 			// Write error, most likely client disconnect.
