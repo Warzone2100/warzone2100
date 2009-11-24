@@ -32,7 +32,6 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/textdraw.h"
-#include "scrap.h"
 
 
 /* Pixel gap between edge of edit box and text */
@@ -112,8 +111,6 @@ W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 	}
 
 	editBoxInitialise(psWidget);
-
-	init_scrap();
 
 	return psWidget;
 }
@@ -208,21 +205,6 @@ static void overwriteChar(char *pBuffer, UDWORD *pPos, char ch)
 	/* Update the insertion point */
 	*pPos += 1;
 }
-
-/* Put a character into a text buffer overwriting any text under the cursor */
-static void putSelection(char *pBuffer, UDWORD *pPos)
-{
-	static char* scrap = NULL;
-	int scraplen;
-
-	get_scrap(T('T','E','X','T'), &scraplen, &scrap);
-	if (scraplen > 0 && scraplen < WIDG_MAXSTR-2)
-	{
-		strlcpy(pBuffer, scrap, scraplen);
-		*pPos = scraplen - 1;
-	}
-}
-
 
 /* Delete a character to the left of the position */
 static void delCharLeft(char *pBuffer, UDWORD *pPos)
@@ -510,7 +492,8 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			}
 			break;
 		case INPBUF_TAB :
-			putSelection(pBuffer, &pos);
+			sstrcat(psWidget->aText, wzGetClipboard());	// get clipboard contents
+			pos = strlen(pBuffer - 1);			// put cursor at end
 
 			/* Update the printable text */
 			fitStringEnd(pBuffer, psWidget->width, &printStart, &printChars, &printWidth);

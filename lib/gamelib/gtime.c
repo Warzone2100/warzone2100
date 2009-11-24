@@ -24,7 +24,6 @@
  *
  */
 
-#include <SDL_timer.h>
 #include <time.h>
 
 #include "lib/framework/frame.h"

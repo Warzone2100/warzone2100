@@ -29,7 +29,6 @@
 #include "lib/gamelib/gtime.h"
 
 #include <time.h>			// for stats
-#include <SDL_timer.h>
 #include <physfs.h>
 #include <string.h>
 

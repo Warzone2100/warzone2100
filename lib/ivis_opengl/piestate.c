@@ -36,7 +36,6 @@
 
 // Variables for the coloured mouse cursor
 static CURSOR MouseCursor = 0;
-static bool ColouredMouse = false;
 static IMAGEFILE* MouseCursors = NULL;
 static uint16_t MouseCursorIDs[CURSOR_MAX];
 
@@ -215,7 +214,7 @@ void pie_InitColourMouse(IMAGEFILE* img, const uint16_t cursorIDs[CURSOR_MAX])
 
 /** Selects the given mouse cursor.
  *  \param cursor   mouse cursor to render
- *  \param coloured wether a coloured or black&white cursor should be used
+ *  \param coloured wether a coloured or black&white cursor should be used ... NOW UNUSED - FIXME REMOVE IT
  */
 void pie_SetMouse(CURSOR cursor, bool coloured)
 {
@@ -224,7 +223,6 @@ void pie_SetMouse(CURSOR cursor, bool coloured)
 	MouseCursor = cursor;
 
 	frameSetCursor(MouseCursor);
-	ColouredMouse = coloured;
 }
 
 bool _glerrors(const char *function, const char *file, int line)

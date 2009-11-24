@@ -2588,10 +2588,8 @@ void intRemoveMissionResultNoAnim(void)
 	intShowPowerBar();
 }
 
-
 void intRunMissionResult(void)
 {
-	// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 	pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 
 	if(bLoadSaveUp)

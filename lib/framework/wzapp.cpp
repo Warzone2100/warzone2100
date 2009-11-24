@@ -24,6 +24,7 @@
 #include <QBitmap>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QClipboard>
 #include "wzapp.h"
 
 #ifdef __cplusplus
@@ -609,6 +610,18 @@ void wzScreenFlip()
 int wzGetTicks()
 {
 	return WzMainWindow::instance()->ticks();
+}
+
+const char *wzGetClipboard()
+{
+	static char clipText[120];
+	QString text;
+	QClipboard *clipboard = QApplication::clipboard();
+
+	text = clipboard->text(QClipboard::Selection);				// try X11 specific buffer first
+	if (text.isEmpty()) text = clipboard->text(QClipboard::Clipboard);	// if not, try generic clipboard
+	sstrcpy(clipText, text.toAscii().constData());
+	return clipText;
 }
 
 /****************************************/

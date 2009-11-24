@@ -30,5 +30,6 @@ void wzGrabMouse(void);		///< Trap mouse cursor in application window
 void wzReleaseMouse(void);	///< Undo the wzGrabMouse operation
 bool wzActiveWindow(void);	///< Whether application currently has the mouse pointer over it
 int wzGetTicks(void);		///< Milliseconds since start of game
+const char *wzGetClipboard(void); ///< Get reference to static string of clipboard contents; not reentrant!
 
 #endif
