@@ -26,7 +26,6 @@
 // ////////////////////////////////////////////////////////////////////////////
 // includes
 #include <string.h>
-#include <SDL.h>
 #include <physfs.h>
 
 #include "lib/framework/frame.h"

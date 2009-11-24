@@ -276,28 +276,21 @@ static const unsigned int channelsPerPixel = 3;
  */
 void screenDoDumpToDiskIfRequired(void)
 {
-// FIXME TODO
-#if 0
 	const char* fileName = screendump_filename;
 	static iV_Image image = { 0, 0, 8, NULL };
 
 	if (!screendump_required) return;
 	debug( LOG_3D, "Saving screenshot %s\n", fileName );
 
-	// Dump the currently displayed screen in a buffer
-	// Casting to unsigned int here to prevent GCC from warning about a
-	// comparison between unsigned and signed integers. Why does SDL use
-	// a signed integer anyway? When will your screen ever have a negative
-	// width or height for your screen? Assert it to be sure though. -- Giel
-	if (image.width != (unsigned int)screen->w || image.height != (unsigned int)screen->h)
+	if (image.width != screenWidth || image.height != screenHeight)
 	{
 		if (image.bmp != NULL)
 		{
 			free(image.bmp);
 		}
 
-		image.width = screen->w;
-		image.height = screen->h;
+		image.width = screenWidth;
+		image.height = screenHeight;
 		image.bmp = malloc(channelsPerPixel * image.width * image.height);
 		if (image.bmp == NULL)
 		{
@@ -314,7 +307,6 @@ void screenDoDumpToDiskIfRequired(void)
 	// display message to user about screenshot
 	snprintf(ConsoleString,sizeof(ConsoleString),"Screenshot %s saved!",fileName);
 	addConsoleMessage(ConsoleString, LEFT_JUSTIFY,SYSTEM_MESSAGE);
-#endif
 
 	screendump_required = false;
 }

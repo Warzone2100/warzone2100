@@ -76,11 +76,16 @@ void SDL_framerateDelay(FPSmanager * manager)
     current_ticks = wzGetTicks();
     target_ticks = manager->lastticks + (Uint32) ((float) manager->framecount * manager->rateticks);
 
-    if (current_ticks <= target_ticks) {
+	if (current_ticks <= target_ticks)
+	{
 	the_delay = target_ticks - current_ticks;
-	SDL_Delay(the_delay);
-    } else {
-	manager->framecount = 0;
-	manager->lastticks = wzGetTicks();
-    }
+#if defined(WZ_OS_WIN32) || defined(WZ_OS_WIN64)
+	Sleep(the_delay / 1000);
+#else
+	usleep(the_delay);
+#endif
+	} else {
+		manager->framecount = 0;
+		manager->lastticks = wzGetTicks();
+	}
 }

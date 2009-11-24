@@ -22,7 +22,7 @@
 #define __INCLUDED_WZAPP_C_H__
 
 int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h);
-int	wzQuit(void);			///< Quit game
+int wzQuit(void);		///< Quit game
 void wzCreateCursor(CURSOR index, uint8_t *data, uint8_t *mask, int w, int h, int hot_x, int hot_y);
 void wzSetCursor(CURSOR index);
 void wzScreenFlip(void);	///< Swap the graphics buffers
