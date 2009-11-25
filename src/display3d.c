@@ -4503,11 +4503,16 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 
 		xDif = xDif/4096;	 // 'cause it's fixed point
 		yDif = yDif/4096;
-		pos.x = MAX(psObj->pos.x - xDif, 0);
-		pos.z = MAX(psObj->pos.y - yDif, 0);
-		pos.y = map_Height(pos.x,pos.z) + 16;
-		effectGiveAuxVar(40);	// half normal plasma size...
-		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_VERY_SMALL,false,NULL,0);
+		pos.x = psObj->pos.x - xDif;
+		pos.z = psObj->pos.y - yDif;
+
+		// Check if it's actually on map
+		if (worldOnMap(pos.x, pos.z))
+		{
+			pos.y = map_Height(pos.x, pos.z) + 16;
+			effectGiveAuxVar(40);	// half normal plasma size...
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_VERY_SMALL, false, NULL, 0);
+		}
 	}
 }
 static void	showSensorRange2(BASE_OBJECT *psObj)
@@ -4538,12 +4543,16 @@ static void	showSensorRange2(BASE_OBJECT *psObj)
 
 		xDif = xDif/4096;	 // cos it's fixed point
 		yDif = yDif/4096;
-		pos.x = MAX(psObj->pos.x - xDif, 0);
-		pos.z = MAX(psObj->pos.y - yDif, 0);
-		pos.y = map_Height(pos.x,pos.z) + 16;
-		effectGiveAuxVar(80);	// half normal plasma size...
+		pos.x = psObj->pos.x - xDif;
+		pos.z = psObj->pos.y - yDif;
 
-		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,false,NULL,0);
+		// Check if it's actually on map
+		if (worldOnMap(pos.x, pos.z))
+		{
+			pos.y = map_Height(pos.x, pos.z) + 16;
+			effectGiveAuxVar(80);	// half normal plasma size...
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
+		}
 	}
 
 	showWeaponRange(psObj);
@@ -4567,12 +4576,11 @@ static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 		pos.z = centerY - yDif;
 
 		// don't draw off map
-		if(pos.x >= 0 && pos.z >= 0)
+		if (worldOnMap(pos.x, pos.z))
 		{
-			pos.y = map_Height(pos.x,pos.z) + 16;
+			pos.y = map_Height(pos.x, pos.z) + 16;
 			effectGiveAuxVar(80);	// half normal plasma size...
-
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 		}
 	}
 }
