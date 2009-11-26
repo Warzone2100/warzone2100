@@ -78,6 +78,8 @@ static UDWORD		lightLastChanged;
 SDWORD		lightSpeed=2;
 extern UDWORD selectedPlayer;
 
+UBYTE		PlayerColour[MAX_PLAYERS] = {0,1,2,3,4,5,6,7};
+
 // Colour Lookups
 // use col = MAX_PLAYERS for anycolour (see multiint.c)
 BOOL setPlayerColour(UDWORD player, UDWORD col)

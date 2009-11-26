@@ -117,7 +117,7 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 	{
 		newsize = (size - CRtoStrip) + (4- fillbytes);
 		fillbytes = newsize % 4;
-		debug(LOG_NET, "The size of the buffer (%u bytes) is not on a 4 byte boundry, compensating to a new buffer size of %u bytes.", size, newsize);
+		debug(LOG_NET, "The size of the buffer (%u bytes - stripped %d) is not on a 4 byte boundry, compensating to a new buffer size of %u bytes.", size, CRtoStrip, newsize);
 	}
 
 	NewData = malloc(newsize * sizeof(uint8_t));
