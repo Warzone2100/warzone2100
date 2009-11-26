@@ -1416,6 +1416,7 @@ void NETBroadcastPlayerInfo(uint32_t index)
 		NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 		NETuint32_t(&NetPlay.players[index].heartattacktime);
 		NETint32_t(&NetPlay.players[index].colour);
+		NETint32_t(&NetPlay.players[index].position);
 		NETint32_t(&NetPlay.players[index].team);
 		NETbool(&NetPlay.players[index].ready);
 		NETuint32_t(&NetPlay.hostPlayer);
@@ -2304,11 +2305,14 @@ static BOOL NETprocessSystemMessage(void)
 				NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 				NETuint32_t(&NetPlay.players[index].heartattacktime);
 				NETint32_t(&NetPlay.players[index].colour);
+				NETint32_t(&NetPlay.players[index].position);
 				NETint32_t(&NetPlay.players[index].team);
 				NETbool(&NetPlay.players[index].ready);
 				NETuint32_t(&NetPlay.hostPlayer);
 			NETend();
 			debug(LOG_NET, "Receiving MSG_PLAYER_INFO for player %u (%s)", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
+			// update the color to the local array
+			setPlayerColour(index, NetPlay.players[index].colour);
 
 			// If we're the game host make sure to send the updated
 			// data to all other clients as well.
