@@ -727,20 +727,29 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 static void socketClose(Socket* sock)
 {
 	unsigned int i;
+	int err = 0;
 
-	for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
+	if (sock)
 	{
-		if (sock->fd[i] != INVALID_SOCKET)
+		for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
 		{
+			if (sock->fd[i] != INVALID_SOCKET)
+			{
 #if   defined(WZ_OS_WIN)
-			closesocket(sock->fd[i]);
+				err = closesocket(sock->fd[i]);
 #else
-			close(sock->fd[i]);
+				err = close(sock->fd[i]);
 #endif
+				if (err)
+				{
+					debug(LOG_ERROR, "Failed to close socket: %s", strSockError(getSockErr()));
+				}
+			}
 		}
+		free(sock);
+		sock = NULL;
 	}
 
-	free(sock);
 }
 
 static Socket* socketAccept(Socket* sock)
