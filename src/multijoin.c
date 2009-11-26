@@ -335,7 +335,7 @@ bool recvDataCheck(void)
 		}
 		else
 		{
-			debug(LOG_NET, "DataCheck message received and verified for player %s (dpid=%u)", getPlayerName(i), player);
+			debug(LOG_NET, "DataCheck message received and verified for player %s (slot=%u)", getPlayerName(i), player);
 			ingame.DataIntegrity[i] = true;
 		}
 	}
