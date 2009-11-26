@@ -346,7 +346,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	//                                **********************************
 	//                                **********************************
 	//	MULTIPLAYER
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KPENTER,KEYMAP_PRESSED,kf_addMultiMenu,		_("Multiplayer Options"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KPENTER,KEYMAP_PRESSED,kf_addMultiMenu,		_("Multiplayer Options / Alliance dialog"));
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_KP_FULLSTOP,KEYMAP_PRESSED,kf_multiAudioStart,	_("Start Multiplayer Audio"));
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_KP_FULLSTOP,KEYMAP_RELEASED,kf_multiAudioStop,	_("Stop Multiplayer Audio"));
 	//
@@ -878,6 +878,7 @@ BOOL	onlySub;
 	{
 		CONPRINTF(ConsoleString,(ConsoleString,"%s and %s - %s",asciiMeta,asciiSub,psMapping->pName));
 	}
+	debug(LOG_INPUT, "Received %s from Console", ConsoleString);
 }
 
 // ----------------------------------------------------------------------------------
