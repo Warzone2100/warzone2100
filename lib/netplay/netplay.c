@@ -105,15 +105,14 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 #define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity
 #define NET_READ_TIMEOUT	0
 /*
-*
+*	=== Using new socket code, this might not hold true any longer ===
 *	NOTE /rant:  If the buffer size isn't big enough, it will invalidate the socket.
 *	Which means that we need to allocate a buffer big enough to handle worst case
 *	situations.
+*	reference: MaxMsgSize in netplay.h  (currently set to 16K)
 *
-*	reference: MaxMsgSize in netplay.h  (currently set to 8192)
-*	
 */
-#define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 8K
+#define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 16K
 
 // HACK(s) to allow us to call a src/multi*.c function
 extern void recvMultiStats(void);								// from src/multistat.c
