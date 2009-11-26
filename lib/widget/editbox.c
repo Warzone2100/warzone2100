@@ -527,6 +527,7 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			debug(LOG_INPUT, "EditBox cursor tab");
 			break;
 		case INPBUF_CR :
+		case SDLK_KP_ENTER:		// either normal return key || keypad enter
 			/* Finish editing */
 			editBoxFocusLost(psContext->psScreen, psWidget);
 			screenClearFocus(psContext->psScreen);
