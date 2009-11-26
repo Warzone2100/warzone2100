@@ -27,9 +27,6 @@
 #include <SDL.h>
 
 #if defined(WZ_OS_WIN)
-// FIXME HACK Workaround DATADIR definition in objbase.h
-// This works since DATADIR is never used on Windows.
-#  undef DATADIR
 #  include <shlobj.h> /* For SHGetFolderPath */
 #elif defined(WZ_OS_UNIX)
 #  include <errno.h>
@@ -80,11 +77,11 @@
 
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)
-#  undef DATADIR
+#  undef WZ_DATADIR
 #endif
 
-#if !defined(DATADIR)
-#  define DATADIR "data"
+#if !defined(WZ_DATADIR)
+#  define WZ_DATADIR "data"
 #endif
 
 typedef enum _focus_state
@@ -455,7 +452,7 @@ static void scanDataDirs( void )
 				if( !PHYSFS_exists("gamedesc.lev") )
 				{
 					// Guessed fallback default datadir on Unix
-					registerSearchPath( DATADIR, 6 );
+					registerSearchPath( WZ_DATADIR, 6 );
 					rebuildSearchPath( mod_multiplay, true );
 				}
 			}

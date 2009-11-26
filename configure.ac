@@ -351,7 +351,7 @@ if test "x$host_os_mingw32" = "xyes" ; then
     WIN32_LIBS="${WIN32_LIBS} ${BFD_LIBS} ${IBERTY_LIBS} -lstdc++"
 fi
 
-WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -DWZ_DATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 
