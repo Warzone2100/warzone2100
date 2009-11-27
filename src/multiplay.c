@@ -1526,9 +1526,13 @@ BOOL recvMapFileRequested()
 		addConsoleMessage("Map was requested: SENDING MAP!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
 		sstrcpy(mapName, game.map);
-		// chop off the -T1
+		if (	strncmp(mapName,"-T1",3) == 0
+			|| strncmp(mapName,"-T2",3) == 0
+			|| strncmp(mapName,"-T3",3) == 0)
+		{
+		// chop off the -T1 *only when needed!*
 		mapName[strlen(game.map)-3] = 0;		// chop off the -T1 etc..
-
+		}
 		// chop off the sk- if required.
 		if(strncmp(mapName,"Sk-",3) == 0)
 		{
@@ -1539,6 +1543,8 @@ BOOL recvMapFileRequested()
 		snprintf(mapStr, sizeof(mapStr), "%dc-%s.wz", game.maxPlayers, mapName);
 		snprintf(fixedname, sizeof(fixedname), "maps/%s", mapStr);		//We know maps are in /maps dir...now. fix for linux -Q
 		sstrcpy(mapStr, fixedname);
+		debug(LOG_NET, "Map was requested.  Sending %s", mapStr);
+		// NOTE: should we check if file exsists before trying to send it ?
 		NETsendFile(true,mapStr,0);
 	}
 
