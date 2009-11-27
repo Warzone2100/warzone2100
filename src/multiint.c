@@ -2111,6 +2111,10 @@ static void stopJoining(void)
 
 		if(bHosted)											// cancel a hosted game.
 		{
+			// annouce we are leaving...
+			debug(LOG_NET, "Host is quitting game...");
+			NETbeginEncode(NET_HOST_DROPPED, NET_ALL_PLAYERS);
+			NETend();
 			sendLeavingMsg();								// say goodbye
 			NETclose();										// quit running game.
 			bHosted = false;								// stop host mode.
@@ -2122,6 +2126,7 @@ static void stopJoining(void)
 		}
 		else if(ingame.localJoiningInProgress)				// cancel a joined game.
 		{
+			debug(LOG_NET, "Canceling game...");
 			sendLeavingMsg();								// say goodbye
 			NETclose();										// quit running game.
 
@@ -2144,7 +2149,7 @@ static void stopJoining(void)
 			}
 			return;
 		}
-
+		debug(LOG_NET, "We have stopped joining.");
 		changeTitleMode(TITLE);		// Go back to top level menu
 		selectedPlayer = 0;
 
@@ -2835,6 +2840,14 @@ void frontendMultiMessages(void)
 			}
 			break;
 		}
+		case NET_HOST_DROPPED:
+			NETbeginDecode(NET_HOST_DROPPED);
+			NETend();
+			stopJoining();
+			debug(LOG_NET, "The host has quit!");
+			setLobbyError(ERROR_HOSTDROPPED);
+			break;
+
 		case NET_TEXTMSG:					// Chat message
 			if(ingame.localOptionsReceived)
 			{

@@ -256,7 +256,7 @@ static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "2.3.0 beta 2"; 
+char VersionString[VersionStringSize] = "2.3.0 beta 3"; 
 static int NETCODE_VERSION_MAJOR = 2;	// unused for now
 static int NETCODE_VERSION_MINOR = 30;	// unused for now
 static int NUMBER_OF_MODS = 0;			// unused for now
@@ -1459,6 +1459,7 @@ static void NET_DestroyPlayer(unsigned int index)
 	{
 		NetPlay.players[index].allocated = false;
 		NetPlay.playercount--;
+		game.desc.dwCurrentPlayers = NetPlay.playercount;
 	}
 }
 
@@ -1498,7 +1499,7 @@ void NETplayerDropped(UDWORD index)
 	NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
 		NETuint32_t(&id);
 	NETend();
-	
+	debug(LOG_NET, "NET_PLAYER_DROPPED received for player %d", id);
 	NET_DestroyPlayer(id);		// just clears array
 	MultiPlayerLeave(id);			// more cleanup
 	NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
@@ -2540,7 +2541,7 @@ receive_message:
 						NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
 							NETuint32_t(&i);
 						NETend();
-	
+						debug(LOG_NET, "sending NET_PLAYER_DROPPED for player %d", i);
 						NET_DestroyPlayer(i);			// just clears array
 						MultiPlayerLeave(i);			// more cleanup
 						NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
@@ -3060,6 +3061,7 @@ static void NETallowJoining(void)
 				{
 					// get the correct player count after kicks / leaves
 					game.desc.dwCurrentPlayers = NetPlay.playercount;
+					debug(LOG_NET, "Sending update to server to reflect new player count %d", NetPlay.playercount);
 					NETsendGAMESTRUCT(tmp_socket[i], &game);
 				}
 
@@ -3298,7 +3300,7 @@ BOOL NETfindGame(void)
 	int result = 0;
 	debug(LOG_NET, "Looking for games...");
 	
-	if (getLobbyError() > ERROR_CONNECTION)
+	if (getLobbyError() == ERROR_CHEAT || getLobbyError() == ERROR_KICKED)
 	{
 		return false;
 	}
