@@ -1,3 +1,9 @@
+2009-11-29: Version 2.3.0 beta 3
+ * Multiplayer:
+  * Fix map transfers again (r8533, ticket:1104)
+  * Fix when host drops a game, broadcast a dropped message (r8538)
+  * Fix player count (r8538)
+
 2009-11-21: Version 2.3.0 beta 2
  * General:
    * Change: Allow either the normal return/enter key or the numpad enter key to terminate strings. (r8425, ticket:1055)
