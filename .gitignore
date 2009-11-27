@@ -20,6 +20,9 @@
 /src/warzone2100
 /tests/t1000
 
+# trunk leftovers:
+/tests
+
 # Autotool files:
 .deps
 Makefile
