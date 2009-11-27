@@ -2683,13 +2683,15 @@ BOOL NETsetupTCPIP(const char *machine)
 // File Transfer programs.
 /** Send file. It returns % of file sent when 100 it's complete. Call until it returns 100. 
  * @TODO Needs to be rewritten. See issue #215. */
-#define MAX_FILE_TRANSFER_PACKET 1024
+#define MAX_FILE_TRANSFER_PACKET 2048
 UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 {
-	static int32_t  	fileSize,currPos;
+	static int32_t	currPos;
+	static PHYSFS_sint64 fileSize;
+	static PHYSFS_sint32 SizeOfFile;		// we don't support 64bit nettypes yet.
 	static PHYSFS_file	*pFileHandle;
-	int32_t  		bytesRead;
-	char			inBuff[MAX_FILE_TRANSFER_PACKET];
+	int32_t		bytesRead;
+	char	inBuff[MAX_FILE_TRANSFER_PACKET];
 	uint8_t			sendto = 0;
 
 	memset(inBuff, 0x0, sizeof(inBuff));
@@ -2697,22 +2699,16 @@ UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 	{
 		// open the file.
 		pFileHandle = PHYSFS_openRead(fileName);			// check file exists
-		debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
+		debug(LOG_NET, "Sending [directory: %s] %s to client", PHYSFS_getRealDir(fileName), fileName);
 		if (pFileHandle == NULL)
 		{
 			debug(LOG_ERROR, "Failed to open %s for reading: %s", fileName, PHYSFS_getLastError());
 			return 0; // failed
 		}
 		// get the file's size.
-		fileSize = 0;
+		fileSize = PHYSFS_fileLength(pFileHandle);
+		SizeOfFile = (int32_t) fileSize;	// we don't support 64bit int nettypes.
 		currPos = 0;
-		do
-		{
-			bytesRead = PHYSFS_read(pFileHandle, inBuff, 1, MAX_FILE_TRANSFER_PACKET);
-			fileSize += bytesRead;
-		} while(bytesRead != 0);
-
-		PHYSFS_seek(pFileHandle, 0);
 	}
 	// read some bytes.
 	if (!pFileHandle)
@@ -2736,7 +2732,7 @@ UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 	}
 
 	// form a message
-	NETint32_t(&fileSize);		// total bytes in this file.
+	NETint32_t(&SizeOfFile);		// total bytes in this file. (we don't support 64bit yet)
 	NETint32_t(&bytesRead);	// bytes in this packet
 	NETint32_t(&currPos);		// start byte
 
@@ -2757,7 +2753,7 @@ UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 // recv file. it returns % of the file so far recvd.
 UBYTE NETrecvFile(void)
 {
-	int32_t		fileSize, currPos, bytesRead;
+	int32_t		fileSize = 0, currPos = 0, bytesRead = 0;
 	char		fileName[256];
 	char		outBuff[MAX_FILE_TRANSFER_PACKET];
 	static PHYSFS_file	*pFileHandle;
@@ -2773,7 +2769,7 @@ UBYTE NETrecvFile(void)
 
 	// read filename
 	NETstring(fileName, 256);	// Ugh. 256 = max array size
-	debug(LOG_NET, "Creating new file %s", fileName);
+	debug(LOG_NET, "Creating new file %s, position is %d", fileName, currPos);
 
 	if (currPos == 0)	// first packet!
 	{
@@ -2783,6 +2779,7 @@ UBYTE NETrecvFile(void)
 	if (!pFileHandle) // file can't be opened
 	{
 		debug(LOG_FATAL, "Fatal error while creating file: %s", PHYSFS_getLastError());
+		debug(LOG_FATAL, "Either we do not have write permission, or the Host sent us a invalid file (%s)!", fileName);
 		abort();
 	}
 
