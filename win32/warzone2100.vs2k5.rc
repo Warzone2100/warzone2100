@@ -22,12 +22,12 @@ BEGIN
 		BEGIN
 			VALUE "CompanyName", "Warzone 2100 Project"
 			VALUE "FileDescription", "Warzone 2100"
-			VALUE "FileVersion", "2.3.0 beta 2"
+			VALUE "FileVersion", "2.3.0 beta 3"
 			VALUE "InternalName", "Warzone 2100"
 			VALUE "LegalCopyright", "Copyright © 2005-2009 Warzone 2100 Project"
 			VALUE "OriginalFilename", "warzone2100.exe"
 			VALUE "ProductName", "Warzone 2100"
-			VALUE "ProductVersion", "2.3.0 beta 2"
+			VALUE "ProductVersion", "2.3.0 beta 3"
 		END
 	END
 	BLOCK "VarFileInfo"
