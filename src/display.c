@@ -1815,7 +1815,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 				addTransporterInterface(psDroid, false);
 			}
 		}
-		else if (cyborgDroidSelected(selectedPlayer))
+		else if (!bMultiPlayer || cyborgDroidSelected(selectedPlayer))
 		{
 			orderSelectedObj(selectedPlayer, (BASE_OBJECT*)psDroid);
 			FeedbackOrderGiven();
