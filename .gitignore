@@ -1,5 +1,6 @@
-# Backup files:
+# Backup/temporary files:
 *~
+.*.swp
 
 # Generated binary files:
 *.o
@@ -58,6 +59,8 @@ Makefile.in
 
 # CScope:
 /.cscope
+.cscope*
+cscope.out
 
 # Waf:
 /waf
