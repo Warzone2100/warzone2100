@@ -206,12 +206,15 @@ void recvOptions()
 			widgSetSliderPos(psWScreen, MULTIOP_SKSLIDE + i, game.skDiff[i]);
 		}
 	}
-
+	debug(LOG_NET, "Rebuilding map list");
+	rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
+	buildMapList();
 	// See if we have the map or not
 	if (!checkGameWdg(game.map))
 	{
 		uint32_t player = selectedPlayer;
 
+		debug(LOG_NET, "Map was not found, requesting map %s from host.", game.map);
 		// Request the map from the host
 		NETbeginEncode(NET_REQUESTMAP, NET_HOST_ONLY);
 		NETuint32_t(&player);
