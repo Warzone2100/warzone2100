@@ -2688,8 +2688,8 @@ BOOL NETsetupTCPIP(const char *machine)
 UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 {
 	static int32_t	currPos;
-	static PHYSFS_sint64 fileSize;
-	static PHYSFS_sint32 SizeOfFile;		// we don't support 64bit nettypes yet.
+	static PHYSFS_sint64 fileSize_64;
+	static PHYSFS_sint32 fileSize_32;		// we don't support 64bit nettypes yet.
 	static PHYSFS_file	*pFileHandle;
 	int32_t		bytesRead;
 	char	inBuff[MAX_FILE_TRANSFER_PACKET];
@@ -2707,8 +2707,8 @@ UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 			return 0; // failed
 		}
 		// get the file's size.
-		fileSize = PHYSFS_fileLength(pFileHandle);
-		SizeOfFile = (int32_t) fileSize;	// we don't support 64bit int nettypes.
+		fileSize_64 = PHYSFS_fileLength(pFileHandle);
+		fileSize_32 = (int32_t) fileSize_64;	// we don't support 64bit int nettypes.
 		currPos = 0;
 	}
 	// read some bytes.
@@ -2733,7 +2733,7 @@ UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 	}
 
 	// form a message
-	NETint32_t(&SizeOfFile);		// total bytes in this file. (we don't support 64bit yet)
+	NETint32_t(&fileSize_32);		// total bytes in this file. (we don't support 64bit yet)
 	NETint32_t(&bytesRead);	// bytes in this packet
 	NETint32_t(&currPos);		// start byte
 
@@ -2742,12 +2742,12 @@ UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 	NETend();
 
 	currPos += bytesRead;		// update position!
-	if(currPos == fileSize)
+	if(currPos == fileSize_64)
 	{
 		PHYSFS_close(pFileHandle);
 	}
 
-	return (currPos * 100) / fileSize;
+	return (currPos * 100) / fileSize_64;
 }
 
 
