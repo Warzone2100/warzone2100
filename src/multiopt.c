@@ -207,6 +207,9 @@ void recvOptions()
 		}
 	}
 	debug(LOG_NET, "Rebuilding map list");
+	// clear out the old level list.
+	levShutDown();
+	levInitialise();
 	rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
 	buildMapList();
 	// See if we have the map or not
