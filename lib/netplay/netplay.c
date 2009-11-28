@@ -2774,6 +2774,22 @@ UBYTE NETrecvFile(void)
 
 	if (currPos == 0)	// first packet!
 	{
+		if (PHYSFS_exists(fileName))
+		{
+			PHYSFS_file *fin;
+			PHYSFS_sint64 fsize;
+			fin = PHYSFS_openRead(fileName);
+			fsize = PHYSFS_fileLength(fin);
+			if ((int32_t) fsize == fileSize)
+			{
+				debug(LOG_NET, "We already have the file %s.  Skipping", fileName);
+				NETend();
+				PHYSFS_close(fin);
+				return 100;
+			}
+			PHYSFS_close(fin);
+			debug(LOG_NET, "We have the same named file, but different size.  Redownloading %s", fileName);
+		}
 		pFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
 	}
 
