@@ -26,7 +26,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "lib/gamelib/gtime.h"
-#include "src/component.h"
+#include "src/component.h"		// FIXME: we need to handle this better
 #include <time.h>			// for stats
 #include <SDL_timer.h>
 #include <physfs.h>
@@ -38,6 +38,7 @@
 #include "miniupnpc/miniwget.h"
 #include "miniupnpc/miniupnpc.h"
 #include "miniupnpc/upnpcommands.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
@@ -1819,6 +1820,7 @@ static int upnp_init(void *asdf)
 	struct UPNPDev *dev;
 	char *descXML;
 	int descXMLsize = 0;
+	char buf[255];
 
 	memset(&urls, 0, sizeof(struct UPNPUrls));
 	memset(&data, 0, sizeof(struct IGDdatas));
@@ -1854,10 +1856,16 @@ static int upnp_init(void *asdf)
 
 		if (!urls.controlURL || urls.controlURL[0] == '\0')
 		{
+			ssprintf(buf, "UPnP device found: %s %s LAN address %s, but failed controlURL", dev->descURL, dev->st, lanaddr);
+			addDumpInfo(buf);
 			return false;
 		}
+		ssprintf(buf, "UPnP device found: %s %s LAN address %s", dev->descURL, dev->st, lanaddr);
+		addDumpInfo(buf);
 		return true;
 	}
+	ssprintf(buf, "UPnP device not found.");
+	addDumpInfo(buf);
 	debug(LOG_NET, "No UPnP devices found.");
 	return false;
 }
