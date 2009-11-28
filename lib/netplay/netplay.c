@@ -2724,6 +2724,10 @@ UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 		// even if they already have it? multiplay.c 1529 & 1550 are both
 		// NETsendFile(true,mapStr,0); & NETsendFile(false,game.map,0);
 		// so we ALWAYS send it, it seems?
+		// NOTE: we send to everyone since there is no way to signal the host
+		// to stop sending the map.  Which means that everytime a player joins
+		// that doesn't have the map, it will send to all players again.
+		// We also are limited by fps(!) to the amount of time the loop runs.
 		NETbeginEncode(FILEMSG, NET_ALL_PLAYERS);	// send it.
 	}
 	else
@@ -2750,7 +2754,7 @@ UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 	return (currPos * 100) / fileSize_64;
 }
 
-
+/* @TODO Needs to be rewritten. See issue #215. */
 // recv file. it returns % of the file so far recvd.
 UBYTE NETrecvFile(void)
 {
@@ -2782,13 +2786,21 @@ UBYTE NETrecvFile(void)
 			fsize = PHYSFS_fileLength(fin);
 			if ((int32_t) fsize == fileSize)
 			{
-				debug(LOG_NET, "We already have the file %s.  Skipping", fileName);
-				NETend();
-				PHYSFS_close(fin);
-				return 100;
+				// NOTE: we would send a abort message to host, but since we can't,
+				// we won't.
+#ifdef DEBUG
+				debug(LOG_NET, "We already have the file %s.", fileName);
+#endif
+
+				// NOTE: we can't abort out, since the host ALWAYS sends the data until done
+				//	PHYSFS_close(fin);
+				//	NETend();
+				//	return 100;
 			}
 			PHYSFS_close(fin);
+#ifdef DEBUG
 			debug(LOG_NET, "We have the same named file, but different size.  Redownloading %s", fileName);
+#endif
 		}
 		pFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
 	}
