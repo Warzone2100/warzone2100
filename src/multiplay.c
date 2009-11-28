@@ -1526,9 +1526,9 @@ BOOL recvMapFileRequested()
 		addConsoleMessage("Map was requested: SENDING MAP!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
 		sstrcpy(mapName, game.map);
-		if (	strstr(mapName,"-T1",3) != 0
-			|| strstr(mapName,"-T2",3) != 0
-			|| strstr(mapName,"-T3",3) != 0)
+		if (	strstr(mapName,"-T1") != 0
+			|| strstr(mapName,"-T2") != 0
+			|| strstr(mapName,"-T3") != 0)
 		{
 		// chop off the -T1 *only when needed!*
 			mapName[strlen(game.map)-3] = 0;		// chop off the -T1 etc..
