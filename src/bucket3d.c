@@ -247,7 +247,7 @@ extern BOOL bucketRenderCurrentList(void)
 					renderAnimComponent((COMPONENT_OBJECT*)thisTag->pObject);
 				break;
 				case RENDER_DELIVPOINT:
-					renderDeliveryPoint((FLAG_POSITION*)thisTag->pObject);
+					renderDeliveryPoint((FLAG_POSITION*)thisTag->pObject, false);
 				break;
 			}
 			thisTag = thisTag->psNextTag;
