@@ -1931,7 +1931,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.style = WBUT_PLAIN;
 				sButInit.x = 7 + MULTIOP_TEAMSWIDTH;
 				sButInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*NetPlay.players[i].position)+4);
-				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH + 1;
+				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				if (selectedPlayer == i)
 				{
