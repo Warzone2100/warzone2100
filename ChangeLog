@@ -1,4 +1,6 @@
 2009-11-29: Version 2.3.0 beta 3
+ * General:
+   * Change:  NSIS updates to inculde Russian, and allow user to pick which video they want to download.  (r8561, ticket:1111)
  * Multiplayer:
   * Change: Put UPnP device detection into a background thread. (r8563)
   * Fix map transfers again (r8533, ticket:1104)
