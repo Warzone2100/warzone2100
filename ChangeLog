@@ -1,8 +1,11 @@
 2009-11-29: Version 2.3.0 beta 3
  * Multiplayer:
+  * Change: Put UPnP device detection into a background thread. (r8563)
   * Fix map transfers again (r8533, ticket:1104)
   * Fix when host drops a game, broadcast a dropped message (r8538)
   * Fix player count (r8538)
+ * Graphics:
+  * Change: Backport building blueprints from trunk. (r8562)
 
 2009-11-21: Version 2.3.0 beta 2
  * General:
@@ -10,7 +13,7 @@
    * Change: Alt+click now works in Mac OS X. (r8432, ticket:1084)
    * Change: New and improved HP bars! Now 2 pixels high! (r8428)
    * Change: New game mode - challenges. See who can complete a fixed game setup the quickest! (ticket:778)
-   * Fix: Assorted bug fixes (r8399, 8400, 
+   * Fix: Assorted bug fixes (r8399, 8400)
  * Gameplay:
    * Change: You can now repair/rearm/upgrade/guard allied units and structures. (r8432, ticket:1084)
    * Change: Cursors should now more accurately represent what happens when you click there. (r8432, ticket:1084)
@@ -26,6 +29,7 @@
    * Fix: Enable/disable AIs (r8409, ticket:1065)
    * Fix: Send team position (r8409, ticket:1075)
    * Fix: Add missing wrf files for limiter screen. (r8408)
+   * Fix: All multiplayer games are shown again. (r8467)
  * Graphics:
    * Fix: Corrected cyborg transport model (r8404)
    * Fix: Correct menu captions (r8414)
