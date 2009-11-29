@@ -3494,12 +3494,14 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	}
 	else
 	{
-		// AI player
+		// AI
 		drawBlueBox(x,y,31,psWidget->height);	// left.
+	}
+	// Draw for both AI and human players
 
-		// player number
-		switch (NetPlay.players[j].position)
-		{
+	// player number
+	switch (NetPlay.players[j].position)
+	{
 		case 0:
 			iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
 			break;
@@ -3526,36 +3528,38 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			break;
 		default:
 			break;
-		}
+	}
 
-		switch(getPlayerColour(j))		//flag icon
+	if (game.skDiff[j]) // not isabled
+	{
+		switch (getPlayerColour(j))		// flag icon
 		{
-		case 0:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
-			break;
-		case 1:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);
-			break;
-		case 2:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);
-			break;
-		case 3:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);
-			break;
-		case 4:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);
-			break;
-		case 5:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);
-			break;
-		case 6:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);
-			break;
-		case 7:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);
-			break;
-		default:
-			break;
+			case 0:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
+				break;
+			case 1:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);
+				break;
+			case 2:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);
+				break;
+			case 3:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);
+				break;
+			case 4:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);
+				break;
+			case 5:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);
+				break;
+			case 6:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);
+				break;
+			case 7:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);
+				break;
+			default:
+				break;
 		}
 	}
 
