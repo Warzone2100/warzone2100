@@ -3330,38 +3330,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_DrawImage(FrontImages,IMAGE_LAMP_RED,x,y);
 		}
 
-
-		// player number
-		switch (NetPlay.players[j].position)
-		{
-		case 0:
-			iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
-			break;
-		case 1:
-			iV_DrawImage(IntImages,IMAGE_GN_1,x+5,y+29);
-			break;
-		case 2:
-			iV_DrawImage(IntImages,IMAGE_GN_2,x+4,y+29);
-			break;
-		case 3:
-			iV_DrawImage(IntImages,IMAGE_GN_3,x+4,y+29);
-			break;
-		case 4:
-			iV_DrawImage(IntImages,IMAGE_GN_4,x+4,y+29);
-			break;
-		case 5:
-			iV_DrawImage(IntImages,IMAGE_GN_5,x+4,y+29);
-			break;
-		case 6:
-			iV_DrawImage(IntImages,IMAGE_GN_6,x+4,y+29);
-			break;
-		case 7:
-			iV_DrawImage(IntImages,IMAGE_GN_7,x+4,y+29);
-			break;
-		default:
-			break;
-		}
-
 		// ranking against other players.
 		eval = bestPlayer(j);
 		switch (eval)
@@ -3466,75 +3434,49 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 				}
 			}
 		}
-
-		switch(getPlayerColour(j))		//flag icon
-		{
-		case 0:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
-			break;
-		case 1:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);
-			break;
-		case 2:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);
-			break;
-		case 3:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);
-			break;
-		case 4:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);
-			break;
-		case 5:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);
-			break;
-		case 6:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);
-			break;
-		case 7:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);
-			break;
-		default:
-			break;
-		}
 		game.skDiff[j] = UBYTE_MAX;	// set AI difficulty to 0xFF (i.e. not an AI)
 	}
 	else
 	{
-		// AI player
+		// AI
 		drawBlueBox(x,y,31,psWidget->height);	// left.
+	}
+	// Draw for both AI and human players
 
-		// player number
-		switch (NetPlay.players[j].position)
-		{
-		case 0:
-			iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
-			break;
-		case 1:
-			iV_DrawImage(IntImages,IMAGE_GN_1,x+5,y+29);
-			break;
-		case 2:
-			iV_DrawImage(IntImages,IMAGE_GN_2,x+4,y+29);
-			break;
-		case 3:
-			iV_DrawImage(IntImages,IMAGE_GN_3,x+4,y+29);
-			break;
-		case 4:
-			iV_DrawImage(IntImages,IMAGE_GN_4,x+4,y+29);
-			break;
-		case 5:
-			iV_DrawImage(IntImages,IMAGE_GN_5,x+4,y+29);
-			break;
-		case 6:
-			iV_DrawImage(IntImages,IMAGE_GN_6,x+4,y+29);
-			break;
-		case 7:
-			iV_DrawImage(IntImages,IMAGE_GN_7,x+4,y+29);
-			break;
-		default:
-			break;
-		}
+	// player number
+	switch (NetPlay.players[j].position)
+	{
+	case 0:
+		iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
+		break;
+	case 1:
+		iV_DrawImage(IntImages,IMAGE_GN_1,x+5,y+29);
+		break;
+	case 2:
+		iV_DrawImage(IntImages,IMAGE_GN_2,x+4,y+29);
+		break;
+	case 3:
+		iV_DrawImage(IntImages,IMAGE_GN_3,x+4,y+29);
+		break;
+	case 4:
+		iV_DrawImage(IntImages,IMAGE_GN_4,x+4,y+29);
+		break;
+	case 5:
+		iV_DrawImage(IntImages,IMAGE_GN_5,x+4,y+29);
+		break;
+	case 6:
+		iV_DrawImage(IntImages,IMAGE_GN_6,x+4,y+29);
+		break;
+	case 7:
+		iV_DrawImage(IntImages,IMAGE_GN_7,x+4,y+29);
+		break;
+	default:
+		break;
+	}
 
-		switch(getPlayerColour(j))		//flag icon
+	if (game.skDiff[j]) // not disabled
+	{
+		switch (getPlayerColour(j))		// flag icon
 		{
 		case 0:
 			iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
