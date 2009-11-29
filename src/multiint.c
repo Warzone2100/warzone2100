@@ -1812,7 +1812,7 @@ static void drawReadyButton(UDWORD player)
 				8 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH,
 				(UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*NetPlay.players[player].position)+4),
 				MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT);
-
+	
 	// draw 'ready' button
 	if (NetPlay.players[player].ready)
 	{
