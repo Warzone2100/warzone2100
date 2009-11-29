@@ -1,17 +1,14 @@
 2009-11-29: Version 2.3.0 beta 3
  * General:
-   * Change: NSIS updates to include Russian, and allow user to pick which video they want to download. (r8561, ticket:1111)
+   * Change: Windows installer updated, and allows user to choose video to download (r8561, ticket:1111)
    * Fix: Make Warzone work correctly in Mac OS X again. (r8469, r8481)
-   * Fix: Some crashes. (r8478, r8498)
+   * Fix: Some crashes. (r8478, r8498, ticket:1099)
  * Gameplay:
    * Fix: Friendly fire wasn't working correctly. (r8496)
    * Fix: REALLY REALLY make sure AIs can't build on burning oil resources. (r8493)
  * Multiplayer:
    * Change: Put UPnP device detection into a background thread. (r8563)
-   * Change: Multiplayer game setup screen changes: (r8559)
-     * Sort player list by map position
-     * Show color and position of AI players
-     * Hide team selector when not in Locked Teams
+   * Change: Multiplayer game setup screen changes including sort by position and show info for AIs (r8559)
    * Fix: Games with exactly 5 players no longer have template issues. (r8500)
    * Fix: Map transfers improved. (r8533, ticket:1104)
    * Fix: When host drops a game, broadcast a dropped message. (r8538)
@@ -20,6 +17,7 @@
    * Fix: Transport works correctly in campaign now. (r8540)
  * Graphics:
    * Change: Backport building blueprints from trunk. (r8562)
+   * Change: Make use of the new scavenger icons (ticket:1093, r8488)
 
 2009-11-21: Version 2.3.0 beta 2
  * General:
