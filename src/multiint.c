@@ -1439,8 +1439,8 @@ static void addColourChooser(UDWORD player)
 
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_COLCHOOSER_FORM,"",
-				10,
-				((MULTIOP_PLAYERHEIGHT+5)*player)+4,
+				7,
+				((MULTIOP_PLAYERHEIGHT+5)*NetPlay.players[player].position)+4,
 				MULTIOP_ROW_WIDTH,MULTIOP_PLAYERHEIGHT);
 
 	// add the flags
@@ -1745,8 +1745,8 @@ static void addTeamChooser(UDWORD player)
 
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_TEAMCHOOSER_FORM,"",
-				10,
-				((MULTIOP_TEAMSHEIGHT+5)*player)+4,
+				7,
+				((MULTIOP_TEAMSHEIGHT+5)*NetPlay.players[player].position)+4,
 				MULTIOP_ROW_WIDTH,MULTIOP_TEAMSHEIGHT);
 
 	// tally up the team counts
@@ -1815,8 +1815,8 @@ static void drawReadyButton(UDWORD player)
 
 	// add form to hold 'ready' botton
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_READY_FORM_ID + player,"",
-				11 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH,
-				(UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*player)+4),
+				8 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH,
+				(UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*NetPlay.players[player].position)+4),
 				MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT);
 
 	// draw 'ready' button
@@ -1881,8 +1881,8 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_TEAMS_START+i;
 				sButInit.style = WBUT_PLAIN;
-				sButInit.x = 10;
-				sButInit.y = (UWORD)(( (MULTIOP_TEAMSHEIGHT+5)*i)+4);
+				sButInit.x = 7;
+				sButInit.y = (UWORD)(( (MULTIOP_TEAMSHEIGHT+5)*NetPlay.players[i].position)+4);
 				sButInit.width = MULTIOP_TEAMSWIDTH;
 				sButInit.height = MULTIOP_TEAMSHEIGHT;
 				if (canChooseTeamFor(i))
@@ -1901,8 +1901,9 @@ UDWORD addPlayerBox(BOOL players)
 				{
 					addTeamChooser(i);
 				}
-				else if(game.skDiff[i])	//only if not disabled
+				else if(game.skDiff[i] && game.alliance == ALLIANCES_TEAMS)
 				{
+					// only if not disabled and in locked teams mode
 					widgAddButton(psWScreen, &sButInit);
 				}
 			}
@@ -1917,8 +1918,8 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_PLAYER_START+i;
 				sButInit.style = WBUT_PLAIN;
-				sButInit.x = 10 + MULTIOP_TEAMSWIDTH;
-				sButInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
+				sButInit.x = 7 + MULTIOP_TEAMSWIDTH;
+				sButInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*NetPlay.players[i].position)+4);
 				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				if (selectedPlayer == i)
@@ -1948,9 +1949,9 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.formID = MULTIOP_PLAYERS;
 				sFormInit.id = MULTIOP_PLAYER_START+i;
 				sFormInit.style = WBUT_PLAIN;
-				sFormInit.x = 10;
-				sFormInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
-				sFormInit.width = MULTIOP_ROW_WIDTH;
+				sFormInit.x = 7 + MULTIOP_TEAMSWIDTH;
+				sFormInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*NetPlay.players[i].position)+4);
+				sFormInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH + 1;
 				sFormInit.height = MULTIOP_PLAYERHEIGHT;
 				if (NetPlay.isHost && !challengeActive)
 				{
@@ -1963,13 +1964,8 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.pDisplay = displayPlayer;
 				sFormInit.UserData = i;
 				widgAddForm(psWScreen, &sFormInit);
-#ifdef DEBUG
-				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 63,9, DIFF_SLIDER_STOPS,
+				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 35,9, DIFF_SLIDER_STOPS,
 					(game.skDiff[i] <= DIFF_SLIDER_STOPS ? game.skDiff[i] : DIFF_SLIDER_STOPS / 2));	//set to 50% (value of UBYTE_MAX == human player)
-#else
-				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 43,9, DIFF_SLIDER_STOPS,
-					(game.skDiff[i] <= DIFF_SLIDER_STOPS ? game.skDiff[i] : DIFF_SLIDER_STOPS / 2));
-#endif
 			}
 		}
 	}
@@ -3284,7 +3280,7 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 
-	iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 3, y + 6);
+	iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 2, y + 8);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -3500,16 +3496,13 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		default:
 			break;
 		}
-		//unknown bugfix PERFIX
-		game.skDiff[j] = UBYTE_MAX;	// don't clear this one!
+		game.skDiff[j] = UBYTE_MAX;	// set AI difficulty to 0xFF (i.e. not an AI)
 	}
 	else
 	{
-#ifdef DEBUG
-		// This is used for debugging right now, don't touch!
-		// yes, I know it looks like crap, but the sliders are a fixed size.
+		// AI player
+		drawBlueBox(x,y,31,psWidget->height);	// left.
 
-		x=x+33;
 		// player number
 		switch (NetPlay.players[j].position)
 		{
@@ -3570,11 +3563,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		default:
 			break;
 		}
-#else
-
-		//bluboxes.
-		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
-#endif
 	}
 
 }
