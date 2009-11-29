@@ -29,6 +29,7 @@
 #include "src/component.h"		// FIXME: we need to handle this better
 #include <time.h>			// for stats
 #include <SDL_timer.h>
+#include <SDL_thread.h>
 #include <physfs.h>
 #include <string.h>
 
@@ -225,6 +226,8 @@ static SocketSet* socket_set = NULL;
 
 // UPnP
 static int upnp = false;
+static bool upnp_done = false;
+SDL_Thread *upnpdiscover;
 
 static struct UPNPUrls urls;
 static struct IGDdatas data;
@@ -1827,7 +1830,7 @@ static int upnp_init(void *asdf)
 	memset(&data, 0, sizeof(struct IGDdatas));
 
 	debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
-	devlist = upnpDiscover(500, NULL, NULL, 0);
+	devlist = upnpDiscover(2000, NULL, NULL, 0);
 	debug(LOG_NET, "UPnP device search finished.");
 	if (devlist)
 	{
@@ -1902,6 +1905,11 @@ static void upnp_rem_redirect(int port)
 void NETaddRedirects(void)
 {
 	debug(LOG_NET, "%s\n", __FUNCTION__);
+	if (!upnp_done)
+	{
+		SDL_WaitThread(upnpdiscover, &upnp);
+		upnp_done = true;
+	}
 	if (upnp) {
 		upnp_add_redirect(2100);
 		upnp_add_redirect(9990);
@@ -1952,7 +1960,7 @@ int NETinit(BOOL bFirstCall)
 		major_windows_version = LOBYTE(LOWORD(GetVersion()));
 #endif
 
-		upnp = upnp_init(NULL);
+		upnpdiscover = SDL_CreateThread(&upnp_init, NULL);
 
 		for(i = 0; i < MAX_PLAYERS; i++)
 		{
