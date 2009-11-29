@@ -1866,7 +1866,21 @@ UDWORD addPlayerBox(BOOL players)
 
 	if(players)
 	{
-		for(i=0;i<game.maxPlayers;i++)
+		int numPlayers = 0;
+
+		for (i=0;i<game.maxPlayers;i++)
+		{
+			if (game.skDiff[i])
+			{
+				numPlayers++;
+				if (numPlayers > 2)
+				{
+					break; // We just need to know if we have enough to start a game
+				}
+			}
+		}
+
+		for (i=0;i<game.maxPlayers;i++)
 		{
 			if(ingame.localOptionsReceived)
 			{
@@ -1905,7 +1919,10 @@ UDWORD addPlayerBox(BOOL players)
 			if (ingame.localOptionsReceived && NetPlay.players[i].allocated)	// only draw if real player!
 			{
 				// add a 'ready' button
-				drawReadyButton(i);
+				if (numPlayers > 1) // only if we have enough players to start
+				{
+					drawReadyButton(i);
+				}
 
 				// draw player info box
 				memset(&sButInit, 0, sizeof(W_BUTINIT));
@@ -2461,23 +2478,6 @@ static void processMultiopWidgets(UDWORD id)
 
 		disableMultiButs();
 
-		// Ensure that Skirmish games have at least one AI player
-		if (!NetPlay.bComms)
-		{
-			// Search for the last AI player we can find and make sure that it is enabled
-			for (i = game.maxPlayers - 1; i != ~0; --i)
-			{
-				if (!isHumanPlayer(i))
-				{
-					if (game.skDiff[i] == 0)
-					{
-						game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);
-					}
-					break;
-				}
-			}
-		}
-
 		addPlayerBox(!ingame.bHostSetup || bHosted);	//to make sure host can't skip player selection menu (sets game.skdiff to UBYTE_MAX for humans)
 		break;
 
@@ -2605,17 +2605,6 @@ static void processMultiopWidgets(UDWORD id)
 	if((id >= MULTIOP_SKSLIDE) && (id <=MULTIOP_SKSLIDE_END) && !challengeActive) // choseskirmish difficulty.
 	{
 		UDWORD newValue, oldValue;
-
-		if(		(id-MULTIOP_SKSLIDE == game.maxPlayers-1)
-			&& (widgGetSliderPos(psWScreen,id) == 0)
-			)
-		{
-			if((NetPlay.bComms == 0) || (NetPlay.playercount == 1))	//allow to disable all AIs in an mp game
-			{
-				game.skDiff[id-MULTIOP_SKSLIDE] = 1;
-				widgSetSliderPos(psWScreen,id,1);
-			}
-		}
 
 		newValue = widgGetSliderPos(psWScreen,id);
 		oldValue = (UDWORD)game.skDiff[id-MULTIOP_SKSLIDE];
@@ -2884,16 +2873,7 @@ void runMultiOptions(void)
 					value = widgGetSliderPos(psWScreen,MULTIOP_SKSLIDE+id);
 					if(value != game.skDiff[id])
 					{
-						if(value == 0 && (id == game.maxPlayers-1)  )
-						{
-							game.skDiff[id] = 1;
-							widgSetSliderPos(psWScreen,id+MULTIOP_SKSLIDE,1);
-						}
-						else
-						{
-							game.skDiff[id] = value;
-						}
-
+						game.skDiff[id] = value;
 
 						if (NetPlay.isHost)
 						{
