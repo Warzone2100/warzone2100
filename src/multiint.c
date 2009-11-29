@@ -2179,7 +2179,6 @@ static void stopJoining(void)
 static void processMultiopWidgets(UDWORD id)
 {
 	PLAYERSTATS playerStats;
-	UDWORD i;
 	char	tmp[255];
 
 	// host, who is setting up the game
