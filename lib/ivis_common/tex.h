@@ -37,7 +37,7 @@
 typedef struct
 {
 	char name[iV_TEXNAME_MAX];
-	unsigned int id;
+	unsigned long id;
 } iTexPage;
 
 //*************************************************************************
