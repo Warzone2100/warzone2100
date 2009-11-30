@@ -294,6 +294,8 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(UDWORD x, UDWORD y)
 {
 	ASSERT_OR_RETURN(0, x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
 	ASSERT_OR_RETURN(0, y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);
+	ASSERT_OR_RETURN(0, x >= 0, "x coordinate %u less than 0", x);
+	ASSERT_OR_RETURN(0, y >= 0, "y coordinate %u less than 0", y);
 
 	return &psMapTiles[x + (y * mapWidth)];
 }
