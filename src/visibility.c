@@ -533,81 +533,92 @@ void processVisibility(BASE_OBJECT *psObj)
 		}
 	}
 
-	while (psViewer = gridIterate(), psViewer != NULL)
+	if (game.type == SKIRMISH && psObj->type == OBJ_FEATURE && ((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
 	{
-		int val;
-
-		// If we've got ranged line of sight...
-		if (psViewer->type != OBJ_FEATURE && currVis[psViewer->player] < UBYTE_MAX
-		    && (val = visibleObject(psViewer, psObj, false)))
- 		{
-			// Tell system that this side can see this object
-			currVis[psViewer->player] = val;
-			if (prevVis[psViewer->player] < currVis[psViewer->player])
-			{
-				if (psObj->visible[psViewer->player] < val)
-				{
-					psObj->visible[psViewer->player] = val;
-				}
-				if(psObj->type != OBJ_FEATURE)
-				{
-					// features are not in the cluster system
-					clustObjectSeen(psObj, psViewer);
-				}
-			}
- 		}
-	}
-
-	//forward out vision to our allies
-	if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
-	{
-		unsigned int player;
+		// everyone can see oil resources in skirmish!
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			unsigned int ally;
-			for (ally = 0; ally < MAX_PLAYERS; ally++)
+			psObj->visible[player] = UBYTE_MAX;
+		}
+	}
+	else
+	{
+		while (psViewer = gridIterate(), psViewer != NULL)
+		{
+			int val;
+
+			// If we've got ranged line of sight...
+			if (psViewer->type != OBJ_FEATURE && currVis[psViewer->player] < UBYTE_MAX
+				&& (val = visibleObject(psViewer, psObj, false)))
 			{
-				if (currVis[player] && aiCheckAlliances(player, ally))
+				// Tell system that this side can see this object
+				currVis[psViewer->player] = val;
+				if (prevVis[psViewer->player] < currVis[psViewer->player])
 				{
-					currVis[ally] = currVis[player];
+					if (psObj->visible[psViewer->player] < val)
+					{
+						psObj->visible[psViewer->player] = val;
+					}
+					if(psObj->type != OBJ_FEATURE)
+					{
+						// features are not in the cluster system
+						clustObjectSeen(psObj, psViewer);
+					}
 				}
 			}
 		}
-	}
 
-	// update the visibility levels
-	for (player = 0; player < MAX_PLAYERS; player++)
-	{
-		SDWORD	visLevel = currVis[player];
-
-		if (player == psObj->player)
+		//forward out vision to our allies
+		if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
 		{
-			// owner can always see it fully
-			psObj->visible[player] = UBYTE_MAX;
-			continue;
-		}
-
-		// Droids can vanish from view, other objects will stay
-		if (visLevel < psObj->visible[player] && psObj->type == OBJ_DROID)
-		{
-			if (psObj->visible[player] <= visLevelDec)
+			unsigned int player;
+			for (player = 0; player < MAX_PLAYERS; player++)
 			{
-				psObj->visible[player] = 0;
-			}
-			else
-			{
-				psObj->visible[player] -= visLevelDec;
+				unsigned int ally;
+				for (ally = 0; ally < MAX_PLAYERS; ally++)
+				{
+					if (currVis[player] && aiCheckAlliances(player, ally))
+					{
+						currVis[ally] = currVis[player];
+					}
+				}
 			}
 		}
-		else if (visLevel > psObj->visible[player])
+
+		// update the visibility levels
+		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			if (psObj->visible[player] + visLevelInc >= UBYTE_MAX)
+			SDWORD	visLevel = currVis[player];
+
+			if (player == psObj->player)
 			{
+				// owner can always see it fully
 				psObj->visible[player] = UBYTE_MAX;
+				continue;
 			}
-			else
+
+			// Droids can vanish from view, other objects will stay
+			if (visLevel < psObj->visible[player] && psObj->type == OBJ_DROID)
 			{
-				psObj->visible[player] += visLevelInc;
+				if (psObj->visible[player] <= visLevelDec)
+				{
+					psObj->visible[player] = 0;
+				}
+				else
+				{
+					psObj->visible[player] -= visLevelDec;
+				}
+			}
+			else if (visLevel > psObj->visible[player])
+			{
+				if (psObj->visible[player] + visLevelInc >= UBYTE_MAX)
+				{
+					psObj->visible[player] = UBYTE_MAX;
+				}
+				else
+				{
+					psObj->visible[player] += visLevelInc;
+				}
 			}
 		}
 	}
@@ -630,15 +641,14 @@ void processVisibility(BASE_OBJECT *psObj)
 		the selected Player - if there isn't an Resource Extractor on it*/
 		if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
 		{
-			if (!TileHasStructure(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y)))
-			    && game.type != SKIRMISH)
+			if (!TileHasStructure(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y))))
 			{
 				psMessage = addMessage(MSG_PROXIMITY, true, selectedPlayer);
 				if (psMessage)
 				{
 					psMessage->pViewData = (MSG_VIEWDATA *)psObj;
 				}
-				if (!bInTutorial)
+				if (!bInTutorial && game.type != SKIRMISH)
 				{
 					//play message to indicate been seen
 					audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE,
