@@ -493,88 +493,99 @@ void processVisibility(BASE_OBJECT *psObj)
 		if (getSatUplinkExists(player) || (player == selectedPlayer && godMode))
 		{
 			currVis[player] = true;
-			if (psObj->visible[player] == 0)
-			{
-				psObj->visible[player] = 1;
-			}
-		}
-	}
-
-	while (psViewer = gridIterate(), psViewer != NULL)
-	{
-		// If we've got ranged line of sight...
-		if ( (psViewer->type != OBJ_FEATURE) &&
-			 !currVis[psViewer->player] &&
-			 visibleObject(psViewer, psObj, false) )
- 		{
-			// Tell system that this side can see this object
-			currVis[psViewer->player] = true;
-			if (!prevVis[psViewer->player])
-			{
-				if (psObj->visible[psViewer->player] == 0)
-				{
-					psObj->visible[psViewer->player] = 1;
-				}
-				if(psObj->type != OBJ_FEATURE)
-				{
-					// features are not in the cluster system
-					clustObjectSeen(psObj, psViewer);
-				}
-			}
- 		}
-	}
-
-	//forward out vision to our allies
-	if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
-	{
-		unsigned int player;
-		for (player = 0; player < MAX_PLAYERS; player++)
-		{
-			unsigned int ally;
-			for (ally = 0; ally < MAX_PLAYERS; ally++)
-			{
-				if (currVis[player] && aiCheckAlliances(player, ally))
-				{
-					currVis[ally] = true;
-				}
-			}
-		}
-	}
-
-	// update the visibility levels
-	for (player = 0; player < MAX_PLAYERS; player++)
-	{
-		if (player == psObj->player)
-		{
-			// owner can always see it fully
-			psObj->visible[player] = UBYTE_MAX;
-			continue;
-		}
-
-		visLevel = (currVis[player] ? UBYTE_MAX : 0);
-
-		// Droids can vanish from view, other objects will stay
-		if ( (visLevel < psObj->visible[player]) &&
-			 (psObj->type == OBJ_DROID) )
-		{
-			if (psObj->visible[player] <= visLevelDec)
-			{
-				psObj->visible[player] = 0;
-			}
-			else
-			{
-				psObj->visible[player] -= visLevelDec;
-			}
-		}
-		else if (visLevel > psObj->visible[player])
-		{
-			if (psObj->visible[player] + visLevelInc >= UBYTE_MAX)
+			if (psObj->visible[player] != UBYTE_MAX)
 			{
 				psObj->visible[player] = UBYTE_MAX;
 			}
-			else
+		}
+	}
+
+	if (game.type == SKIRMISH && psObj->type == OBJ_FEATURE && ((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
+	{
+		// everyone can see oil resources in skirmish!
+		for (player = 0; player < MAX_PLAYERS; player++)
+		{
+			psObj->visible[player] = UBYTE_MAX;
+		}
+	}
+	else
+	{
+		while (psViewer = gridIterate(), psViewer != NULL)
+		{
+			// If we've got ranged line of sight...
+			if ( (psViewer->type != OBJ_FEATURE) &&
+				 !currVis[psViewer->player] &&
+				 visibleObject(psViewer, psObj, false) )
 			{
-				psObj->visible[player] += visLevelInc;
+				// Tell system that this side can see this object
+				currVis[psViewer->player] = true;
+				if (!prevVis[psViewer->player])
+				{
+					if (psObj->visible[psViewer->player] == 0)
+					{
+						psObj->visible[psViewer->player] = 1;
+					}
+					if(psObj->type != OBJ_FEATURE)
+					{
+						// features are not in the cluster system
+						clustObjectSeen(psObj, psViewer);
+					}
+				}
+			}
+		}
+
+		//forward out vision to our allies
+		if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
+		{
+			unsigned int player;
+			for (player = 0; player < MAX_PLAYERS; player++)
+			{
+				unsigned int ally;
+				for (ally = 0; ally < MAX_PLAYERS; ally++)
+				{
+					if (currVis[player] && aiCheckAlliances(player, ally))
+					{
+						currVis[ally] = true;
+					}
+				}
+			}
+		}
+
+		// update the visibility levels
+		for (player = 0; player < MAX_PLAYERS; player++)
+		{
+			if (player == psObj->player)
+			{
+				// owner can always see it fully
+				psObj->visible[player] = UBYTE_MAX;
+				continue;
+			}
+
+			visLevel = (currVis[player] ? UBYTE_MAX : 0);
+
+			// Droids can vanish from view, other objects will stay
+			if ( (visLevel < psObj->visible[player]) &&
+				 (psObj->type == OBJ_DROID) )
+			{
+				if (psObj->visible[player] <= visLevelDec)
+				{
+					psObj->visible[player] = 0;
+				}
+				else
+				{
+					psObj->visible[player] -= visLevelDec;
+				}
+			}
+			else if (visLevel > psObj->visible[player])
+			{
+				if (psObj->visible[player] + visLevelInc >= UBYTE_MAX)
+				{
+					psObj->visible[player] = UBYTE_MAX;
+				}
+				else
+				{
+					psObj->visible[player] += visLevelInc;
+				}
 			}
 		}
 	}
@@ -597,15 +608,14 @@ void processVisibility(BASE_OBJECT *psObj)
 		the selected Player - if there isn't an Resource Extractor on it*/
 		if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
 		{
-			if (!TileHasStructure(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y)))
-			    && game.type != SKIRMISH)
+			if (!TileHasStructure(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y))))
 			{
 				psMessage = addMessage(MSG_PROXIMITY, true, selectedPlayer);
 				if (psMessage)
 				{
 					psMessage->pViewData = (MSG_VIEWDATA *)psObj;
 				}
-				if (!bInTutorial)
+				if (!bInTutorial && game.type != SKIRMISH)
 				{
 					//play message to indicate been seen
 					audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE,

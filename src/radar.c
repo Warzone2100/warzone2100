@@ -427,12 +427,7 @@ static void DrawRadarObjects(void)
 			size_t		pos = (x - scrollMinX) + (y - scrollMinY) * radarTexWidth;
 
 			ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
-			if (game.type == SKIRMISH && TileHasFeature(psTile) && ((FEATURE *)psTile->psObject)->psStats->subType == FEAT_OIL_RESOURCE)
-			{
-				radarBuffer[pos] = WZCOL_DBLUE.rgba;
-				continue;
-			}
-			else if (!TileHasStructure(psTile))
+			if (!TileHasStructure(psTile))
 			{
 				continue;
 			}

@@ -1053,7 +1053,7 @@ void addOilResourceProximities(void)
 		if (psFeat->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 			//check to see if the feature is visible to the selected player
-			if (psFeat->visible[selectedPlayer] && game.type != SKIRMISH)
+			if (psFeat->visible[selectedPlayer])
 			{
 				//if there isn't an oil derrick built on it
 				if (!TileHasStructure(mapTile(map_coord(psFeat->pos.x),
