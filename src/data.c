@@ -151,7 +151,17 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 	while (pt < newsize )
 	{
 		val = (uint32_t *)(NewData+pt);
-		hashval = SDL_SwapBE32(hashval ^ SDL_SwapBE32((*val)));		// I hope this is correct...can't test since no PPC machine
+
+		// original:
+		//hashval = SDL_SwapBE32(hashval ^ SDL_SwapBE32((*val)));		// I hope this is correct...can't test since no PPC machine
+		// Next time, ask someone who does, or at least get some someone to double-check your math. ;)
+
+		// Here is a solution that makes BE archs binary-compatible with the LE output of the above
+		hashval = SDL_Swap32(hashval ^ SDL_Swap32(*val));
+
+		// Here is the solution that the above was probably intended to do:
+		//hashval ^= (*val); // no endianness enforcement, since it'll be done by whatever handles its output
+		
 		// spams a ton--but useful for debugging.
 		//	debug(LOG_NET, "hash %08x pt %08x val is %08x", hashval, pt, *val);
 		pt += 4;
@@ -173,7 +183,16 @@ void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 	}
 
 	// create the hash for that data block.
-	DataHash[index] = SDL_SwapBE32(DataHash[index] ^ hashBuffer(pBuffer, size));	// check endian issues?
+
+	// Here is the original solution:
+	//DataHash[index] = SDL_SwapBE32(DataHash[index] ^ hashBuffer(pBuffer, size));	// check endian issues?
+
+	// Here is a solution that makes BE archs binary-compatible with the LE output of the above
+	DataHash[index] = SDL_Swap32(DataHash[index] ^ SDL_SwapLE32(hashBuffer(pBuffer, size)));
+
+	// Here is the solution that the above was probably intended to do:
+	//DataHash[index] ^= SDL_SwapBE32(hashBuffer(pBuffer, size));
+
 	debug(LOG_NET, "DataHash[%2u] = %08x\n", index, DataHash[index]); 
 	return;
 }
