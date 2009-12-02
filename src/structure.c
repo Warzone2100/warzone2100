@@ -6177,8 +6177,8 @@ BOOL validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory)
 		}
 	}
 	//check for VTOL droid
-	else if ((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->
-		propulsionType == PROPULSION_TYPE_LIFT)
+	else if (psTemplate->asParts[COMP_PROPULSION] &&
+	         ((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->propulsionType == PROPULSION_TYPE_LIFT))
 	{
 		if (psFactory->pStructureType->type != REF_VTOL_FACTORY)
 		{
@@ -6201,8 +6201,8 @@ BOOL validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory)
 	//check if vtol factory
 	else if (psFactory->pStructureType->type == REF_VTOL_FACTORY)
 	{
-		if ((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->
-			propulsionType != PROPULSION_TYPE_LIFT)
+		if (!psTemplate->asParts[COMP_PROPULSION] ||
+		    ((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->propulsionType != PROPULSION_TYPE_LIFT))
 		{
 			return false;
 		}
