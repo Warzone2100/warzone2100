@@ -261,7 +261,7 @@ static BOOL _intAddInGameOptions(void)
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
 	// add 'options'
-	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Options"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Audio Options"), OPALIGN);
 
 
 	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
