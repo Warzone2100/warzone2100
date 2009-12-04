@@ -212,6 +212,10 @@ static BOOL		allow_joining = false;
 static	bool server_not_there = false;
 static GAMESTRUCT	game;
 
+// update flags
+bool netPlayersUpdated;
+int mapDownloadProgress;
+
 /**
  * Socket used for these purposes:
  *  * Host a game, be a server.
@@ -2312,6 +2316,7 @@ static BOOL NETprocessSystemMessage(void)
 		case NET_PLAYER_STATS:
 		{
 			recvMultiStats();
+			netPlayersUpdated = true;
 			break;
 		}
 		case NET_PLAYER_INFO:
@@ -2352,6 +2357,7 @@ static BOOL NETprocessSystemMessage(void)
 			{
 				NETBroadcastPlayerInfo(index);
 			}
+			netPlayersUpdated = true;
 			break;
 		}
 		case NET_PLAYER_JOINED:
@@ -2366,6 +2372,7 @@ static BOOL NETprocessSystemMessage(void)
 				(unsigned int)index, tcp_socket);
 
 			MultiPlayerJoin(index);
+			netPlayersUpdated = true;
 			break;
 		}
 		// This message type is when player is leaving 'nicely', and socket is still valid.
@@ -3239,6 +3246,9 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	debug(LOG_NET, "NEThostGame(%s, %s, %d, %d, %d, %d, %u)", SessionName, PlayerName,
 	      one, two, three, four, plyrs);
 
+	mapDownloadProgress = 100;
+	netPlayersUpdated = true;
+
 	NETaddRedirects();
 	NET_InitPlayers();
 	NetPlay.maxPlayers = MAX_PLAYERS;
@@ -3488,6 +3498,9 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	NETclose();	// just to be sure :)
 
 	debug(LOG_NET, "Trying to join gameNumber (%u)...", gameNumber);
+
+	mapDownloadProgress = 100;
+	netPlayersUpdated = true;
 
 	if (hostname == masterserver_name)
 	{

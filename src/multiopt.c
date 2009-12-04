@@ -174,6 +174,7 @@ void recvOptions()
 			NETuint8_t(&alliances[i][j]);
 		}
 	}
+	netPlayersUpdated = true;
 
 	// Free any structure limits we may have in-place
 	if (ingame.numStructureLimits)
