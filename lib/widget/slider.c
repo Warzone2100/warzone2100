@@ -233,7 +233,11 @@ void sliderRun(W_SLIDER *psWidget, W_CONTEXT *psContext)
 		psWidget->state &= ~SLD_DRAG;
 		widgSetReturn(psContext->psScreen, (WIDGET *)psWidget);
 	}
-	else if (psWidget->state & SLD_DRAG)
+	else if (!(psWidget->state & SLD_DRAG) && mouseDown(MOUSE_LMB))
+	{
+		sliderClicked(psWidget, psContext);
+	}
+	if (psWidget->state & SLD_DRAG)
 	{
 		/* Figure out where the drag box should be */
 		mx = psContext->mx - psWidget->x;
