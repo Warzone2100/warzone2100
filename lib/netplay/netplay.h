@@ -226,6 +226,10 @@ typedef struct {
 extern NETPLAY				NetPlay;
 extern NETMSG NetMsg;
 
+// update flags
+extern bool netPlayersUpdated;
+extern int mapDownloadProgress;
+
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern int   NETinit(BOOL bFirstCall);				// init

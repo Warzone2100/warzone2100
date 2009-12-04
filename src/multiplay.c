@@ -1580,10 +1580,8 @@ UBYTE sendMap(void)
 // Another player is broadcasting a map, recv a chunk. Returns false if not yet done.
 BOOL recvMapFileData()
 {
-	UBYTE done;
-
-	done =  NETrecvFile();
-	if(done == 100)
+	mapDownloadProgress = NETrecvFile();
+	if (mapDownloadProgress == 100)
 	{
 		addConsoleMessage("MAP DOWNLOADED!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		sendTextMessage("MAP DOWNLOADED",true);					//send
@@ -1597,11 +1595,6 @@ BOOL recvMapFileData()
 			return false;
 		}
 		return true;
-	}
-	else
-	{
-		flushConsoleMessages();
-		CONPRINTF(ConsoleString,(ConsoleString,"MAP:%d%%",done));
 	}
 
 	return false;
@@ -1919,4 +1912,5 @@ void resetReadyStatus(bool bSendOptions)
 	{
 		sendOptions();
 	}
+	netPlayersUpdated = true;
 }

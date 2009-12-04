@@ -1454,20 +1454,22 @@ static void addColourChooser(UDWORD player)
 	}
 
 	//add the position chooser.
-	for(i=0;i<game.maxPlayers;i++)
+	for (i=0;i<game.maxPlayers;i++)
 	{
-
 		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_PLAYCHOOSER+i,
 			(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7),//x
 			23,													  //y
 			iV_GetImageWidth(FrontImages,IMAGE_WEE_GUY)+7,		  //w
 			iV_GetImageHeight(FrontImages,IMAGE_WEE_GUY),		  //h
 			"Player number", IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
+	}
 
-		if(isHumanPlayer(NetPlay.players[i].position) && i!=selectedPlayer )
-			{
-				widgSetButtonState(psWScreen,MULTIOP_PLAYCHOOSER+i ,WBUT_DISABLE);
-			}
+	for (i=0;i<game.maxPlayers;i++)
+	{
+		if (isHumanPlayer(i) && i!=selectedPlayer )
+		{
+			widgSetButtonState(psWScreen, MULTIOP_PLAYCHOOSER+NetPlay.players[i].position, WBUT_DISABLE);
+		}
 	}
 
 	bColourChooserUp = true;
@@ -1485,6 +1487,7 @@ static void changeTeam(UBYTE player, UBYTE team)
 	NetPlay.players[player].team = team;
 	debug(LOG_WZ, "set %d as new team for player %d", team, player);
 	NETBroadcastPlayerInfo(player);
+	netPlayersUpdated = true;
 }
 
 static BOOL SendTeamRequest(UBYTE player, UBYTE chosenTeam)
@@ -1527,9 +1530,11 @@ BOOL recvTeamRequest()
 		return false;
 	}
 
-	resetReadyStatus(false);
-
-	changeTeam(player, team);
+	if (NetPlay.players[player].team != team)
+	{
+		resetReadyStatus(false);
+	}
+	changeTeam(player, team); // we do this regardless, in case of sync issues
 
 	return true;
 }
@@ -1580,6 +1585,7 @@ static BOOL changeReadyStatus(UBYTE player, BOOL bReady)
 	drawReadyButton(player);
 	NetPlay.players[player].ready = bReady;
 	NETBroadcastPlayerInfo(player);
+	netPlayersUpdated = true;
 
 	return true;
 }
@@ -1602,6 +1608,7 @@ static BOOL changePosition(UBYTE player, UBYTE position)
 		}
 	}
 	debug(LOG_ERROR, "Failed to swap positions for player %d, position %d", (int)player, (int)position);
+	netPlayersUpdated = true;
 	return false;
 }
 
@@ -1621,6 +1628,7 @@ static BOOL changeColour(UBYTE player, UBYTE col)
 			NetPlay.players[player].colour = col;
 			NETBroadcastPlayerInfo(player);
 			NETBroadcastPlayerInfo(i);
+			netPlayersUpdated = true;
 			return true;
 		}
 	}
@@ -2341,6 +2349,7 @@ static void processMultiopWidgets(UDWORD id)
 			game.alliance = NO_ALLIANCES;	//0;
 
 			resetReadyStatus(false);
+			netPlayersUpdated = true;
 
 			if(bHosted)
 			{
@@ -2357,6 +2366,7 @@ static void processMultiopWidgets(UDWORD id)
 			game.alliance = ALLIANCES;	//1;
 
 			resetReadyStatus(false);
+			netPlayersUpdated = true;
 
 			if(bHosted)
 			{
@@ -2849,7 +2859,6 @@ void runMultiOptions(void)
 
 	frontendMultiMessages();
 
-
 	// keep sending the map if required.
 	if(bSendingMap)
 	{
@@ -2857,9 +2866,9 @@ void runMultiOptions(void)
 	}
 
 	// update boxes?
-	if(lastrefresh > gameTime)lastrefresh= 0;
-	if ((gameTime - lastrefresh) >2000)
+	if (netPlayersUpdated || (NetPlay.isHost && mouseDown(MOUSE_LMB) && gameTime-lastrefresh>500))
 	{
+		netPlayersUpdated = false;
 		lastrefresh= gameTime;
 		if (!multiRequestUp && (bHosted || ingame.localJoiningInProgress))
 		{
@@ -3056,6 +3065,8 @@ BOOL startMultiOptions(BOOL bReenter)
 			game.maxPlayers = iniparser_getint(dict, "challenge:MaxPlayers", game.maxPlayers);	// TODO, read from map itself, not here!!
 			game.scavengers = iniparser_getboolean(dict, "challenge:Scavengers", game.scavengers);
 			game.alliance = ALLIANCES_TEAMS;
+			netPlayersUpdated = true;
+			mapDownloadProgress = 100;
 			game.power = iniparser_getint(dict, "challenge:Power", game.power);
 			game.base = iniparser_getint(dict, "challenge:Bases", game.base + 1) - 1;		// count from 1 like the humans do
 			for (i = 0; i < MAX_PLAYERS; i++)
@@ -3273,7 +3284,16 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 
-	if (ingame.localOptionsReceived && NetPlay.players[j].allocated)					// only draw if real player!
+	if (mapDownloadProgress != 100 && j == selectedPlayer)
+	{
+		static char mapProgressString[MAX_STR_LENGTH] = {'\0'};
+		snprintf(mapProgressString, MAX_STR_LENGTH, _("Map: %d%% downloaded"), mapDownloadProgress);
+		iV_SetFont(font_regular); // font
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_DrawText(mapProgressString, x + 5, y + 22);
+		return;
+	}
+	else if (ingame.localOptionsReceived && NetPlay.players[j].allocated)					// only draw if real player!
 	{
 		//bluboxes.
 		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
@@ -3754,6 +3774,7 @@ void setLockedTeamsMode(void)
 	widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
 	widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_LOCK);
 	game.alliance = ALLIANCES_TEAMS;		//2
+	netPlayersUpdated = true;
 	if(bHosted)
 	{
 		sendOptions();

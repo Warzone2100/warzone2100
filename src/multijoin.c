@@ -238,6 +238,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 	CBPlayerLeft = playerIndex;
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
 
+	netPlayersUpdated = true;
 	return true;
 }
 
