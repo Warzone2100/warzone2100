@@ -21,7 +21,11 @@
 #define _tex_
 
 #include "png_util.h"
-#include "lib/ivis_opengl/GLee.h"
+#if defined __APPLE__ && defined __MACH__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
 //*************************************************************************
 
