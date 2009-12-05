@@ -2579,7 +2579,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			PLAYERSTATS		playerStats;
 
 			game			= saveGameData.sGame;
-			productionPlayer= selectedPlayer;
+			productionPlayer = selectedPlayer = saveGameData.savePlayer;
 			bMultiPlayer	= saveGameData.multiPlayer;
 			cmdDroidMultiExpBoost(true);
 
@@ -4698,7 +4698,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			PLAYERSTATS		playerStats;
 
 			bMultiPlayer	= saveGameData.multiPlayer;
-			productionPlayer = selectedPlayer;
+			productionPlayer = selectedPlayer = saveGameData.savePlayer;
 			game			= saveGameData.sGame;
 			cmdDroidMultiExpBoost(true);
 
@@ -6079,9 +6079,6 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
 
-		// Give it to the correct player
-		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
-
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
 		if (psSaveDroid->player >= MAX_PLAYERS)
@@ -6233,9 +6230,6 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
-
-		// Give it to the correct player
-		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
 
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
@@ -6397,9 +6391,6 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
-
-		// Give it to the correct player
-		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
 
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
