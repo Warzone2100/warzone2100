@@ -91,7 +91,7 @@ static int newPage(const char *name, int level, int width, int height, int count
 	if (texPage == _TEX_INDEX)
 	{
 		// We need to create a new texture page; create it and increase texture table to store it
-		glGenTextures(1, (GLuint *) &_TEX_PAGE[texPage].id);
+		glGenTextures(1, &_TEX_PAGE[texPage].id);
 		_TEX_INDEX++;
 	}
 	terrainPage = texPage;
