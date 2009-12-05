@@ -1466,8 +1466,7 @@ static void addColourChooser(UDWORD player)
 
 	for (i=0;i<game.maxPlayers;i++)
 	{
-		// we only want to disable button when another human is there.  We don't care about AIs.
-		if (isHumanPlayer(i))
+		if (isHumanPlayer(i) && i!=selectedPlayer )
 		{
 			widgSetButtonState(psWScreen, MULTIOP_PLAYCHOOSER+NetPlay.players[i].position, WBUT_DISABLE);
 		}
