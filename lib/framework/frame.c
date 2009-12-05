@@ -41,11 +41,7 @@
 #include "cursors.h"
 
 static const enum CURSOR_TYPE cursor_type =
-#if defined(WZ_OS_MAC)
-	CURSOR_16;
-#else
 	CURSOR_32;
-#endif
 
 /* Linux specific stuff */
 
