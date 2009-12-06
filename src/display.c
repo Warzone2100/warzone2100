@@ -968,7 +968,7 @@ void processMouseClickInput(void)
 				arnMPointers[item][selection] == CURSOR_MOVE)
 			{
 				// Alt+move = scout
-				pie_SetMouse(CURSOR_LOCKON, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_JAM, war_GetColouredCursor());
 			}
 			else if (arnMPointers[item][selection] == CURSOR_NOTPOSSIBLE &&
 			         ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
