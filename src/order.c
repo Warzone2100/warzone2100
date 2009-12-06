@@ -311,7 +311,7 @@ void orderUpdateDroid(DROID *psDroid)
 		{
 			orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psDroid->psGroup->psCommander);
 		}
-		else if (psDroid->droidType == DROID_TRANSPORTER)
+		else if (psDroid->droidType == DROID_TRANSPORTER && !bMultiPlayer)
 		{
 			//check transporter isn't sitting there waiting to be filled when nothing exists!
 			if (psDroid->player == selectedPlayer && getDroidsToSafetyFlag()
@@ -845,8 +845,8 @@ void orderUpdateDroid(DROID *psDroid)
             {
                 /*once the Transporter has reached its destination (and landed),
                 get all the units to disembark*/
-                if (psDroid->action == DACTION_NONE && psDroid->sMove.Status ==
-                    MOVEINACTIVE && psDroid->sMove.iVertSpeed == 0)
+                if (psDroid->action != DACTION_MOVE && psDroid->action != DACTION_MOVEFIRE &&
+				    psDroid->sMove.Status == MOVEINACTIVE && psDroid->sMove.iVertSpeed == 0)
                 {
                     //only need to unload if this player's droid
                     if (psDroid->player == selectedPlayer)
@@ -2484,9 +2484,9 @@ BOOL orderDroidList(DROID *psDroid)
         switch (psDroid->asOrderList[0].order)
         {
         case DORDER_MOVE:
-        case DORDER_SCOUT:
-		sOrder.psObj = NULL;
-		break;
+		case DORDER_DISEMBARK:
+			sOrder.psObj = NULL;
+			break;
         case DORDER_ATTACK:
         case DORDER_REPAIR:
         case DORDER_OBSERVE:
@@ -2589,8 +2589,8 @@ static BOOL orderDroidLocAdd(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD
 {
 	DROID_ORDER_DATA	sOrder;
 
-	// can only queue move and scout orders
-	if (order != DORDER_MOVE && order != DORDER_SCOUT)
+	// can only queue move, scout, and disembark orders
+	if (order != DORDER_MOVE && order != DORDER_SCOUT && order != DORDER_DISEMBARK)
 	{
 		return false;
 	}
