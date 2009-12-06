@@ -536,20 +536,26 @@ static bool deserializeGameStruct(PHYSFS_file* fileHandle, GAMESTRUCT* serialize
 
 static bool serializePlayer(PHYSFS_file* fileHandle, const PLAYER* serializePlayer)
 {
-	return (PHYSFS_writeUBE32(fileHandle, 0)
+	return (PHYSFS_writeUBE32(fileHandle, serializePlayer->position)
 	     && PHYSFS_write(fileHandle, serializePlayer->name, StringSize, 1) == 1
-	     && PHYSFS_writeUBE32(fileHandle, 0)
-	     && PHYSFS_writeUBE32(fileHandle, 0));
+	     && PHYSFS_writeUBE32(fileHandle, serializePlayer->colour)
+	     && PHYSFS_writeUBE32(fileHandle, serializePlayer->team));
 }
 
 static bool deserializePlayer(PHYSFS_file* fileHandle, PLAYER* serializePlayer)
 {
-	uint32_t dummy;
+	uint32_t position, colour, team;
+	bool retval;
 
-	return (PHYSFS_readUBE32(fileHandle, &dummy)
-	     && PHYSFS_read(fileHandle, serializePlayer->name, StringSize, 1) == 1
-	     && PHYSFS_readUBE32(fileHandle, &dummy)
-	     && PHYSFS_readUBE32(fileHandle, &dummy));
+	retval = (PHYSFS_readUBE32(fileHandle, &position)
+	          && PHYSFS_read(fileHandle, serializePlayer->name, StringSize, 1) == 1
+	          && PHYSFS_readUBE32(fileHandle, &colour)
+	          && PHYSFS_readUBE32(fileHandle, &team));
+
+	serializePlayer->position = position;
+	serializePlayer->colour = colour;
+	serializePlayer->team = team;
+	return retval;
 }
 
 static bool serializeNetPlay(PHYSFS_file* fileHandle, const NETPLAY* serializeNetPlay)
@@ -569,9 +575,9 @@ static bool serializeNetPlay(PHYSFS_file* fileHandle, const NETPLAY* serializeNe
 	}
 
 	return (PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bComms)
-	     && PHYSFS_writeUBE32(fileHandle, 0)
-	     && PHYSFS_writeUBE32(fileHandle, 0)
-	     && PHYSFS_writeUBE32(fileHandle, 0)
+	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->playercount)
+	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->hostPlayer)
+	     && PHYSFS_writeUBE32(fileHandle, selectedPlayer)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0));
@@ -594,13 +600,14 @@ static bool deserializeNetPlay(PHYSFS_file* fileHandle, NETPLAY* serializeNetPla
 			return false;
 	}
 
+	serializeNetPlay->isHost = true;	// only host can load
 	return (PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bComms)
-	     && PHYSFS_readUBE32(fileHandle, &dummy)
-	     && PHYSFS_readUBE32(fileHandle, &dummy)
-	     && PHYSFS_readUBE32(fileHandle, &dummy)
-	     && PHYSFS_readUBE32(fileHandle, &dummy)
-	     && PHYSFS_readUBE32(fileHandle, &dummy)
-	     && PHYSFS_readUBE32(fileHandle, &dummy));
+	        && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->playercount)
+	        && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->hostPlayer)
+	        && PHYSFS_readUBE32(fileHandle, &selectedPlayer)
+	        && PHYSFS_readUBE32(fileHandle, &dummy)
+	        && PHYSFS_readUBE32(fileHandle, &dummy)
+	        && PHYSFS_readUBE32(fileHandle, &dummy));
 }
 
 #define GAME_SAVE_V7	\
@@ -2152,8 +2159,8 @@ static BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize);
 static DROID_TEMPLATE *FindDroidTemplate(const char * const name);
 
 static BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists);
-static BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
-static BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
+//static BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
+//static BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
 static BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
 static BOOL loadDroidSetPointers(void);
 static BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists);
@@ -3882,7 +3889,7 @@ static bool gameLoad(const char* fileName)
 		PHYSFS_close(fileHandle);
 		return retVal;
 	}
-	else if (fileHeader.version <= CURRENT_VERSION_NUM)
+	else if (fileHeader.version == CURRENT_VERSION_NUM)
 	{
 		bool retVal = gameLoadV(fileHandle, fileHeader.version);
 		PHYSFS_close(fileHandle);
@@ -3890,7 +3897,7 @@ static bool gameLoad(const char* fileName)
 	}
 	else
 	{
-		debug(LOG_ERROR, "gameLoad: undefined save format version %u", fileHeader.version);
+		debug(LOG_ERROR, "Unsupported main save format version %u", fileHeader.version);
 		PHYSFS_close(fileHandle);
 
 		return false;
@@ -4057,7 +4064,7 @@ static UDWORD getCampaignV(PHYSFS_file* fileHandle, unsigned int version)
 		// Convert from little-endian to native byte-order
 		endian_SaveGameV((SAVE_GAME*)&saveGame, VERSION_14);
 	}
-	else if (version <= CURRENT_VERSION_NUM)
+	else if (version == CURRENT_VERSION_NUM)
 	{
 		if (!deserializeSaveGameV14Data(fileHandle, &saveGame))
 		{
@@ -4065,6 +4072,11 @@ static UDWORD getCampaignV(PHYSFS_file* fileHandle, unsigned int version)
 
 			return 0;
 		}
+	}
+	else
+	{
+		debug(LOG_ERROR, "Bad savegame version %u", version);
+		return 0;
 	}
 
 //	savedGameTime = saveGame.gameTime;
@@ -4117,7 +4129,6 @@ UDWORD getCampaign(const char* fileName)
 
 	//set main version Id from game file
 	saveGameVersion = fileHeader.version;
-
 
 	/* Check the file version */
 	if (fileHeader.version < VERSION_14)
@@ -4402,7 +4413,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			return false;
 		}
 	}
-	else if (version <= CURRENT_VERSION_NUM)
+	else if (version == CURRENT_VERSION_NUM)
 	{
 		if (!deserializeSaveGameData(fileHandle, &saveGameData))
 		{
@@ -4413,7 +4424,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 	}
 	else
 	{
-		debug(LOG_ERROR, "gameLoadV: out of range version number (%u) for savegame", version);
+		debug(LOG_ERROR, "Unsupported version number (%u) for savegame", version);
 
 		return false;
 	}
@@ -4997,7 +5008,7 @@ BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize)
 	}
 	else
 	{
-		debug( LOG_ERROR, "UnitInit: undefined save format version %d", psHeader->version );
+		debug(LOG_ERROR, "Unsupported save format version %d", psHeader->version);
 
 		return false;
 	}
@@ -5153,27 +5164,7 @@ BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidList
 	pFileData += DROID_HEADER_SIZE;
 
 	/* Check the file version */
-	if (psHeader->version < VERSION_9)
-	{
-		debug( LOG_ERROR, "UnitLoad; unsupported save format version %d", psHeader->version );
-
-		return false;
-	}
-	else if (psHeader->version == VERSION_11)
-	{
-		if (!loadSaveDroidV11(pFileData, filesize, psHeader->quantity, psHeader->version, ppsCurrentDroidLists))
-		{
-			return false;
-		}
-	}
-	else if (psHeader->version <= VERSION_19)//old save name size
-	{
-		if (!loadSaveDroidV19(pFileData, filesize, psHeader->quantity, psHeader->version, ppsCurrentDroidLists))
-		{
-			return false;
-		}
-	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
+	if (psHeader->version == CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveDroidV(pFileData, filesize, psHeader->quantity, psHeader->version, ppsCurrentDroidLists))
 		{
@@ -5182,14 +5173,14 @@ BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidList
 	}
 	else
 	{
-		debug( LOG_ERROR, "UnitLoad: undefined save format version %d", psHeader->version );
-
+		debug(LOG_ERROR, "Unsupported droid save format version %u", psHeader->version);
 		return false;
 	}
 
 	return true;
 }
 
+#if 0
 // -----------------------------------------------------------------------------------------
 static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 {
@@ -5506,6 +5497,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 
 	return psDroid;
 }
+#endif
 
 static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * const psDroid)
 {
@@ -6015,6 +6007,7 @@ static BOOL loadDroidSetPointers(void)
 	return true;
 }
 
+#if 0
 // -----------------------------------------------------------------------------------------
 /* code specific to version 11 of a save droid */
 BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists)
@@ -6078,9 +6071,6 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
-
-		// Give it to the correct player
-		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
 
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
@@ -6234,9 +6224,6 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
 
-		// Give it to the correct player
-		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
-
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
 		if (psSaveDroid->player >= MAX_PLAYERS)
@@ -6297,6 +6284,7 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 
 	return true;
 }
+#endif
 
 // -----------------------------------------------------------------------------------------
 /* code for all versions after save name change v19*/
@@ -6397,9 +6385,6 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
-
-		// Give it to the correct player
-		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
 
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
@@ -6827,7 +6812,7 @@ BOOL loadSaveStructure(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
+	else if (psHeader->version == CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveStructureV(pFileData, filesize, psHeader->quantity, psHeader->version))
 		{
@@ -6836,8 +6821,7 @@ BOOL loadSaveStructure(char *pFileData, UDWORD filesize)
 	}
 	else
 	{
-		debug( LOG_ERROR, "StructLoad: undefined save format version %d", psHeader->version );
-
+		debug(LOG_ERROR, "Unsupported save format version %u", psHeader->version);
 		return false;
 	}
 
@@ -7180,8 +7164,6 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 		endian_udword(&psSaveStructure->player);
 		endian_udword(&psSaveStructure->burnStart);
 		endian_udword(&psSaveStructure->burnDamage);
-
-		psSaveStructure->player=RemapPlayerNumber(psSaveStructure->player);
 
 		if (psSaveStructure->player >= MAX_PLAYERS)
 		{
@@ -7616,7 +7598,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		endian_udword(&psSaveStructure->burnStart);
 		endian_udword(&psSaveStructure->burnDamage);
 
-		psSaveStructure->player=RemapPlayerNumber(psSaveStructure->player);
+		psSaveStructure->player = psSaveStructure->player;
 
 		if (psSaveStructure->player >= MAX_PLAYERS)
 		{
@@ -8395,7 +8377,7 @@ BOOL loadSaveFeature(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
+	else if (psHeader->version == CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveFeatureV(pFileData, filesize, psHeader->quantity, psHeader->version))
 		{
@@ -8404,8 +8386,7 @@ BOOL loadSaveFeature(char *pFileData, UDWORD filesize)
 	}
 	else
 	{
-		debug( LOG_ERROR, "FeatLoad: undefined save format version %d", psHeader->version );
-
+		debug(LOG_ERROR, "Unsupported save format version %u", psHeader->version);
 		return false;
 	}
 
@@ -8751,7 +8732,7 @@ BOOL loadSaveTemplate(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
+	else if (psHeader->version == CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveTemplateV(pFileData, filesize, psHeader->quantity))
 		{
@@ -8760,8 +8741,7 @@ BOOL loadSaveTemplate(char *pFileData, UDWORD filesize)
 	}
 	else
 	{
-		debug( LOG_ERROR, "TemplateLoad: undefined save format version %d", psHeader->version );
-
+		debug(LOG_ERROR, "Unsupported template save format version %u", psHeader->version);
 		return false;
 	}
 	return true;
@@ -9466,7 +9446,7 @@ BOOL loadSaveCompList(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
+	else if (psHeader->version == CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveCompListV(pFileData, filesize, psHeader->quantity, psHeader->version))
 		{
@@ -9475,8 +9455,7 @@ BOOL loadSaveCompList(char *pFileData, UDWORD filesize)
 	}
 	else
 	{
-		debug( LOG_ERROR, "CompLoad: undefined save format version %d", psHeader->version );
-
+		debug( LOG_ERROR, "Unsupported component save format version %u", psHeader->version);
 		return false;
 	}
 
@@ -9779,7 +9758,7 @@ BOOL loadSaveStructTypeList(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
+	else if (psHeader->version == CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveStructTypeListV(pFileData, filesize, psHeader->quantity))
 		{
@@ -9788,8 +9767,7 @@ BOOL loadSaveStructTypeList(char *pFileData, UDWORD filesize)
 	}
 	else
 	{
-		debug( LOG_ERROR, "StructTypeLoad: undefined save format version %d", psHeader->version );
-
+		debug(LOG_ERROR, "Unsupported struct type save format version %u", psHeader->version);
 		return false;
 	}
 
@@ -10013,7 +9991,7 @@ BOOL loadSaveResearch(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
+	else if (psHeader->version == CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveResearchV(pFileData, filesize, psHeader->quantity))
 		{
@@ -10022,8 +10000,7 @@ BOOL loadSaveResearch(char *pFileData, UDWORD filesize)
 	}
 	else
 	{
-		debug( LOG_ERROR, "ResearchLoad: undefined save format version %d", psHeader->version );
-
+		debug( LOG_ERROR, "Unsupported research save format version %u", psHeader->version);
 		return false;
 	}
 
@@ -10760,7 +10737,7 @@ BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ver
 		psflag->screenX = psSaveflag->screenX;			//screen coords and radius of Position imd
 		psflag->screenY = psSaveflag->screenY;
 		psflag->screenR = psSaveflag->screenR;
-		psflag->player = RemapPlayerNumber(psSaveflag->player);	// which player the position belongs to
+		psflag->player = psSaveflag->player;	// which player the position belongs to
 		psflag->selected = psSaveflag->selected;		//flag to indicate whether the Position
 		psflag->coords = psSaveflag->coords;			//the world coords of the Position
 		psflag->factoryInc = psSaveflag->factoryInc;	//indicates whether the first, second etc factory
@@ -11203,7 +11180,7 @@ BOOL loadSaveStructLimits(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
+	else if (psHeader->version == CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveStructLimitsV(pFileData, filesize, psHeader->quantity))
 		{
@@ -11212,8 +11189,7 @@ BOOL loadSaveStructLimits(char *pFileData, UDWORD filesize)
 	}
 	else
 	{
-		debug( LOG_ERROR, "loadSaveStructLimits: Incorrect file format version" );
-
+		debug(LOG_ERROR, "Unsupported limits file format version %u", psHeader->version);
 		return false;
 	}
 	return true;
