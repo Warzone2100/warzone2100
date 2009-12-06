@@ -1917,7 +1917,7 @@ BOOL transporterFlying(DROID *psTransporter)
         (bMultiPlayer && psTransporter->order == DORDER_MOVE) ||
         //in multiPlayer mode the Transporter can be moved and emptied!
         (bMultiPlayer && psTransporter->order == DORDER_DISEMBARK) ||
-        //in multiPlayer, cannot select transporter whilst flying
+        //in multiPlayer, descending still counts as flying
         (bMultiPlayer && psTransporter->order == DORDER_NONE &&
         psTransporter->sMove.iVertSpeed != 0))
     {
