@@ -63,6 +63,8 @@
 
 #include "scriptextern.h"
 
+#include "multimenu.h"
+
 //#define NO_VIDEO
 
 /* Intelligence Map screen IDs */
@@ -287,6 +289,11 @@ BOOL intAddIntelMap(void)
 		return false;
 	}
 
+	if (bMultiPlayer && !MultiMenuUp && !playCurrent)
+	{
+		intAddMultiMenu();
+	}
+
 	return true;
 }
 
@@ -489,7 +496,11 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		intRemoveMessageView(false);
 		Animate = false;
 	}
-
+	if (MultiMenuUp)
+	{
+		intCloseMultiMenuNoAnim();
+	}
+	
 	/* Add the base form */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	sFormInit.formID = 0;
@@ -702,6 +713,14 @@ void intProcessIntelMap(UDWORD id)
 		//if close button pressed on 3D View then close the view only
 		psCurrentMsg = NULL;
 		intRemoveMessageView(true);
+		if (bMultiPlayer && !MultiMenuUp)
+		{
+			intAddMultiMenu();
+		}
+	}
+	else if (MultiMenuUp)
+	{
+		intProcessMultiMenu(id);
 	}
 }
 
@@ -1048,6 +1067,11 @@ void intRemoveIntelMap(void)
 	//remove the text label
 	widgDelete(psWScreen, IDINTMAP_PAUSELABEL);
 
+	if (bMultiPlayer && MultiMenuUp)
+	{
+		intCloseMultiMenu();
+	}
+	
 	intCleanUpIntelMap();
 }
 
@@ -1066,6 +1090,11 @@ void intRemoveIntelMapNoAnim(void)
 	widgDelete(psWScreen, IDINTMAP_FORM);
 	//remove the text label
 	widgDelete(psWScreen, IDINTMAP_PAUSELABEL);
+
+	if (bMultiPlayer && MultiMenuUp)
+	{
+		intCloseMultiMenuNoAnim();
+	}
 
 	intCleanUpIntelMap();
 }
