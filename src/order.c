@@ -561,6 +561,12 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 				if (psDroid->order == DORDER_PATROL)
 				{
+					// see if we have anything queued up
+					if (orderDroidList(psDroid))
+					{
+						// started a new order, quit
+						break;
+					}
 					// head back to the other point
 					temp = psDroid->orderX;
 					psDroid->orderX = psDroid->orderX2;
@@ -624,6 +630,12 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 				if ( orderStarted && ((orderStarted + 500) > gameTime) )
 				{
+					break;
+				}
+				// see if we have anything queued up
+				if (orderDroidList(psDroid))
+				{
+					// started a new order, quit
 					break;
 				}
 				orderStarted = gameTime;
