@@ -2428,6 +2428,8 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	if (psDroid->listSize == 0 &&
 		(psDroid->order == DORDER_NONE ||
 		 psDroid->order == DORDER_GUARD ||
+		 psDroid->order == DORDER_PATROL ||
+		 psDroid->order == DORDER_CIRCLE ||
 		 psDroid->order == DORDER_TEMP_HOLD))
 	{
 		orderDroidBase(psDroid, psOrder);
