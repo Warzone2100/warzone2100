@@ -1883,7 +1883,10 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		//don't create the Structure use existing one
 		psBuilding = getTileStructure(map_coord(x), map_coord(y));
 
-		ASSERT_OR_RETURN(NULL, psBuilding != NULL, "No owning structure for this module - %s", getStructName(pStructureType));
+		if (!psBuilding)
+		{
+			return NULL;
+		}
 
 		if (pStructureType->type == REF_FACTORY_MODULE)
 		{
