@@ -2484,6 +2484,7 @@ BOOL orderDroidList(DROID *psDroid)
         switch (psDroid->asOrderList[0].order)
         {
         case DORDER_MOVE:
+		case DORDER_SCOUT:
 		case DORDER_DISEMBARK:
 			sOrder.psObj = NULL;
 			break;
