@@ -118,7 +118,7 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 
 // HACK(s) to allow us to call a src/multi*.c function
 extern void recvMultiStats(void);								// from src/multistat.c
-extern BOOL sendTextMessage(const char *pStr, BOOL all);		// from src/multiplay.c
+extern BOOL sendTextMessage(char *pStr, BOOL all);		// from src/multiplay.c
 extern BOOL MultiPlayerJoin(UDWORD playerIndex);				// from src/multijoin.c
 extern BOOL MultiPlayerLeave(UDWORD playerIndex);				// from src/multijoin.c
 extern void ShowMOTD(void);																// from src/multijoin.c
