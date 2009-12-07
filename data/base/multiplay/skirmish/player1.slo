@@ -548,8 +548,7 @@ event basedetails(basedetailsTr)
 // build derricks on oil.
 event buildDerrick(buildDerrickTr)
 {
-
-	feature = getFeature(me);					// find unoccupied oil resource.
+	feature = closestOil(baseX, baseY, true);			// find unoccupied oil resource.
 	if(feature != NULLOBJECT)
 	{
 		buildX = feature.x;
@@ -583,10 +582,6 @@ event buildDerrick(buildDerrickTr)
 				droid = iterateGroup(buildGroup);
 			}
 		}
-	}
-	else											// feature is null
-	{
-		initGetFeature(oilRes,me,me);		// start again next time.
 	}
 }
 
