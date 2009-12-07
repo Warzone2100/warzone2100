@@ -574,7 +574,7 @@ event buildDerrick(buildDerrickTr)
 			boolResult = FALSE;							// only send 1 droid to each derrick
 			while( (boolResult == FALSE) and (droid != NULLOBJECT) )
 			{
-				if( (droid.order == DORDER_NONE) or (droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
+				if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
 				{
 					orderDroidStatsLoc(droid, DORDER_BUILD,derrick, buildX,buildY);	//build a derick
 					boolResult = TRUE;
@@ -929,7 +929,7 @@ event buildBase(buildBaseTr)
 						droid = iterateGroup(buildGroup);
 						while((droid != NULLOBJECT) and (_numBuilders < _maxBuilders))
 						{
-							if ((droid.order == DORDER_NONE) or (droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
+							if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
 							{
 								orderDroidStatsLoc(droid, DORDER_BUILD,structs[count], buildX,buildY);	// build it
 								_numBuilders++;
@@ -2465,7 +2465,7 @@ event vtolStructs(inactive)
 			_numTrucks = 0;							// only send _maxTrucks to do the job
 			while( (_numTrucks < _maxTrucks) and (droid != NULLOBJECT))
 			{
-				if ((droid.order == DORDER_NONE) or (droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
+				if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
 				{
 					orderDroidStatsLoc(droid, DORDER_BUILD,vtolFactory, buildX,buildY);
 					_numTrucks++;
