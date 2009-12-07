@@ -1798,7 +1798,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 		if (psBuilding == NULL)
 		{
-			ASSERT(!"module has no owning structure", "No owning structure for this module - %s", getStructName(pStructureType));
 			return false;
 		}
 		if (pStructureType->type == REF_FACTORY_MODULE)
