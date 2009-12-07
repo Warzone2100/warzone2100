@@ -1032,20 +1032,22 @@ BOOL recvResearchStatus()
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between players. proceed string with players to send to.
 // eg "123hi there" sends "hi there" to players 1,2 and 3.
-BOOL sendTextMessage(char *pStr, BOOL all)
+BOOL sendTextMessage(const char *pStr, BOOL all)
 {
 	BOOL				normal = true;
 	BOOL				sendto[MAX_PLAYERS];
+	int					posTable[MAX_PLAYERS];
 	UDWORD				i;
 	char				display[MAX_CONSOLE_STRING_LENGTH];
 	char				msg[MAX_CONSOLE_STRING_LENGTH];
+	char*				curStr = (char*)pStr;
 
 	if (!ingame.localOptionsReceived)
 	{
 		if(!bMultiPlayer)
 		{
 			// apparently we are not in a mp game, so dump the message to the console.
-			addConsoleMessage(pStr,LEFT_JUSTIFY, SYSTEM_MESSAGE);
+			addConsoleMessage(curStr,LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 		return true;
 	}
@@ -1053,7 +1055,7 @@ BOOL sendTextMessage(char *pStr, BOOL all)
 	memset(display,0x0, sizeof(display));	//clear buffer
 	memset(msg,0x0, sizeof(display));		//clear buffer
 	memset(sendto,0x0, sizeof(sendto));		//clear private flag
-	sstrcpy(msg, pStr);
+	sstrcpy(msg, curStr);
 
 	if (!all)
 	{
@@ -1063,9 +1065,9 @@ BOOL sendTextMessage(char *pStr, BOOL all)
 			posTable[NetPlay.players[i].position] = i;
 		}
 
-		if (pStr[0] == '.')
+		if (curStr[0] == '.')
 		{
-			pStr++;
+			curStr++;
 			for (i = 0; i < game.maxPlayers; i++)
 			{
 				if (aiCheckAlliances(selectedPlayer, i))
@@ -1079,9 +1081,9 @@ BOOL sendTextMessage(char *pStr, BOOL all)
 				sstrcpy(display, _("(allies"));
 			}
 		}
-		for (; pStr[0] >= '0' && pStr[0] <= '7'; pStr++)		// for each 0..7 numeric char encountered
+		for (; curStr[0] >= '0' && curStr[0] <= '7'; curStr++)		// for each 0..7 numeric char encountered
 		{
-			sendto[ posTable[pStr[0]-'0'] ] = true;
+			sendto[ posTable[curStr[0]-'0'] ] = true;
 			if (!all)
 			{
 				if (normal)
@@ -1094,7 +1096,7 @@ BOOL sendTextMessage(char *pStr, BOOL all)
 				}
 				if ((isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ) ))
 				{
-					sstrcat(display, getPlayerName(posTable[pStr[0]-'0']));
+					sstrcat(display, getPlayerName(posTable[curStr[0]-'0']));
 				}
 				else
 				{
@@ -1106,12 +1108,12 @@ BOOL sendTextMessage(char *pStr, BOOL all)
 
 		if (!normal)	// lets user know it is a private message
 		{
-			if (pStr[0] == ' ')
+			if (curStr[0] == ' ')
 			{
-				pStr++;
+				curStr++;
 			}
 			sstrcat(display, ") ");
-			sstrcat(display, pStr);
+			sstrcat(display, curStr);
 		}
 	}
 
@@ -1157,7 +1159,7 @@ BOOL sendTextMessage(char *pStr, BOOL all)
 				}
 				else	//also send to AIs now (non-humans), needed for AI
 				{
-					sendAIMessage(pStr, selectedPlayer, i);
+					sendAIMessage(curStr, selectedPlayer, i);
 				}
 			}
 		}
@@ -1166,7 +1168,7 @@ BOOL sendTextMessage(char *pStr, BOOL all)
 	//This is for local display
 	sstrcpy(msg, NetPlay.players[selectedPlayer].name);		// name
 	sstrcat(msg, ": ");						// seperator
-	sstrcat(msg, (normal?pStr:display));						// add message
+	sstrcat(msg, (normal?curStr:display));						// add message
 
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, selectedPlayer);	// display
 
