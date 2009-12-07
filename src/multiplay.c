@@ -1031,8 +1031,8 @@ BOOL recvResearchStatus()
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between players. proceed string with players to send to.
-// eg "123 hi there" sends "hi there" to players 1,2 and 3.
-BOOL sendTextMessage(const char *pStr, BOOL all)
+// eg "123hi there" sends "hi there" to players 1,2 and 3.
+BOOL sendTextMessage(char *pStr, BOOL all)
 {
 	BOOL				normal = true;
 	BOOL				sendto[MAX_PLAYERS];
@@ -1054,23 +1054,72 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 	memset(msg,0x0, sizeof(display));		//clear buffer
 	memset(sendto,0x0, sizeof(sendto));		//clear private flag
 	sstrcpy(msg, pStr);
-	for (i = 0; pStr[i] >= '0' && pStr[i] <= '7' && i < MAX_PLAYERS; i++)		// for each 0..7 numeric char encountered
-	{
-		sendto[ pStr[i]-'0' ] = true;
-		normal = false;
-	}
 
-	if (!all && !normal)	// lets user know it is a private message
+	if (!all)
 	{
-		sstrcpy(display, "(private)");
-		sstrcat(display, pStr);
+		// create a position table
+		for (i = 0; i < game.maxPlayers; i++)
+		{
+			posTable[NetPlay.players[i].position] = i;
+		}
+
+		if (pStr[0] == '.')
+		{
+			pStr++;
+			for (i = 0; i < game.maxPlayers; i++)
+			{
+				if (aiCheckAlliances(selectedPlayer, i))
+				{
+					sendto[i] = true;
+				}
+			}
+			normal = false;
+			if (!all)
+			{
+				sstrcpy(display, _("(allies"));
+			}
+		}
+		for (; pStr[0] >= '0' && pStr[0] <= '7'; pStr++)		// for each 0..7 numeric char encountered
+		{
+			sendto[ posTable[pStr[0]-'0'] ] = true;
+			if (!all)
+			{
+				if (normal)
+				{
+					sstrcpy(display, _("(private to "));
+				}
+				else
+				{
+					sstrcat(display, ", ");
+				}
+				if ((isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ) ))
+				{
+					sstrcat(display, getPlayerName(posTable[pStr[0]-'0']));
+				}
+				else
+				{
+					sstrcat(display, _("[invalid]"));
+				}
+			}
+			normal = false;
+		}
+
+		if (!normal)	// lets user know it is a private message
+		{
+			if (pStr[0] == ' ')
+			{
+				pStr++;
+			}
+			sstrcat(display, ") ");
+			sstrcat(display, pStr);
+		}
 	}
 
 	if (all)	//broadcast
 	{
 		NETbeginEncode(NET_TEXTMSG, NET_ALL_PLAYERS);
-			NETuint32_t(&selectedPlayer);		// who this msg is from
-			NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
+		NETuint32_t(&selectedPlayer);		// who this msg is from
+		NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 		NETend();
 	}
 	else if (normal)
@@ -1082,8 +1131,8 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 				if (isHumanPlayer(i))
 				{
 					NETbeginEncode(NET_TEXTMSG, i);
-						NETuint32_t(&selectedPlayer);		// who this msg is from
-						NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
+					NETuint32_t(&selectedPlayer);		// who this msg is from
+					NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
 				else	//also send to AIs now (non-humans), needed for AI
@@ -1102,25 +1151,24 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 				if (isHumanPlayer(i))
 				{
 					NETbeginEncode(NET_TEXTMSG, i);
-						NETuint32_t(&selectedPlayer);				// who this msg is from
-						NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
+					NETuint32_t(&selectedPlayer);				// who this msg is from
+					NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
 				else	//also send to AIs now (non-humans), needed for AI
 				{
-					sendAIMessage(display, selectedPlayer, i);
+					sendAIMessage(pStr, selectedPlayer, i);
 				}
 			}
 		}
-		sprintf(display,"(private)");
 	}
 
 	//This is for local display
-	sstrcat(display, NetPlay.players[selectedPlayer].name);		// name
-	sstrcat(display, ": ");						// seperator
-	sstrcat(display, pStr);						// add message
+	sstrcpy(msg, NetPlay.players[selectedPlayer].name);		// name
+	sstrcat(msg, ": ");						// seperator
+	sstrcat(msg, (normal?pStr:display));						// add message
 
-	addConsoleMessage(display, DEFAULT_JUSTIFY, selectedPlayer);	// display
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, selectedPlayer);	// display
 
 	return true;
 }
