@@ -994,12 +994,12 @@ static Socket* socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
-		debug(LOG_NET, "Succesfully created an IPv4 socket");
+		debug(LOG_NET, "Successfully created an IPv4 socket");
 	}
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		debug(LOG_NET, "Succesfully created an IPv6 socket");
+		debug(LOG_NET, "Successfully created an IPv6 socket");
 	}
 
 #if defined(IPV6_V6ONLY)
@@ -1011,7 +1011,7 @@ static Socket* socketListen(unsigned int port)
 		}
 		else
 		{
-			debug(LOG_NET, "Succesfully enabled IPv4 to IPv6 mapping. Cleaning up IPv4 socket.");
+			debug(LOG_NET, "Successfully enabled IPv4 to IPv6 mapping. Cleaning up IPv4 socket.");
 #if   defined(WZ_OS_WIN)
 			closesocket(conn->fd[SOCK_IPV4_LISTEN]);
 #else
