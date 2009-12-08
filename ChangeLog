@@ -1,3 +1,14 @@
+2000-00-00: Version 2.3.0 RC1
+ * General:
+   * Fix: Bug in savegames that would renumber players - this breaks all existing savegames (r8626)
+ * Gameplay:
+   * Change: Show proximity blips again for oil resources, but they do not blink (r8587)
+   * Fix: Bug that caused transporter not to disembark when auto-repairing and allow order to be queued (r8624)
+ * Scripting:
+   * New: Function droidCanReach() allows checking if droid destinations are possible (r8644)
+ * AI:
+   * Make AIs go for closest oil first (ticket:1166, r8632)
+
 2009-11-29: Version 2.3.0 beta 3
  * General:
    * Change: Windows installer updated, and allows user to choose video to download (r8561, ticket:1111)
