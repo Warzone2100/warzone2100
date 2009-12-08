@@ -93,6 +93,10 @@ extern void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
 /** Clean up path jobs and results for a droid. Function is thread-safe. */
 extern void fpathRemoveDroidData(int id);
 
+/** Quick O(1) test of whether it is theoretically possible to go from origin to destination
+ *  using the given propulsion type. */
+bool fpathCheck(Vector2i orig, Vector2i dest, PROPULSION_TYPE propulsion);
+
 /** Unit testing. */
 void fpathTest(int x, int y, int x2, int y2);
 

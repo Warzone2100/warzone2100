@@ -95,6 +95,8 @@ typedef struct _maptile
 	float			level;
 	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
 	PIELIGHT		colour;
+	short			limitedContinent;	/** For land or sea limited propulsion types */
+	short			hoverContinent;		/** For hover type propulsions */
 
 //	TYPE_OF_TERRAIN	type;			// The terrain type for the tile
 } MAPTILE;
@@ -365,6 +367,8 @@ extern bool	writeVisibilityData(const char* fileName);
 
 //scroll min and max values
 extern SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
+
+void mapFloodFillContinents(void);
 
 extern void mapTest(void);
 
