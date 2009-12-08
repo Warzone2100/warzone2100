@@ -3249,7 +3249,10 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	mapDownloadProgress = 100;
 	netPlayersUpdated = true;
 
-	NETaddRedirects();
+	if (NetPlay.bComms)
+	{
+		NETaddRedirects();
+	}
 	NET_InitPlayers();
 	NetPlay.maxPlayers = MAX_PLAYERS;
 	if(!NetPlay.bComms)
