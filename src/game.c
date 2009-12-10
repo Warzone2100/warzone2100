@@ -2159,8 +2159,8 @@ static BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize);
 static DROID_TEMPLATE *FindDroidTemplate(const char * const name);
 
 static BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists);
-//static BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
-//static BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
+static BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
+static BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
 static BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
 static BOOL loadDroidSetPointers(void);
 static BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists);
@@ -2252,7 +2252,7 @@ bool loadGameInit(const char* fileName)
 {
 	if (!gameLoad(fileName))
 	{
-		debug(LOG_ERROR, "Corrupted savegame file %s, Unable to load!", fileName);
+		debug(LOG_ERROR, "Corrupted / unsupported savegame file %s, Unable to load!", fileName);
 		// NOTE: why do we start the game clock on a *failed* load?
 		// Start the game clock
 		gameTimeStart();
@@ -3874,7 +3874,7 @@ static bool gameLoad(const char* fileName)
 
 	//set main version Id from game file
 	saveGameVersion = fileHeader.version;
-
+	debug(LOG_SAVE, "file version is %u, (%s)", fileHeader.version, fileName);
 	/* Check the file version */
 	if (fileHeader.version < VERSION_7)
 	{
@@ -3889,7 +3889,7 @@ static bool gameLoad(const char* fileName)
 		PHYSFS_close(fileHandle);
 		return retVal;
 	}
-	else if (fileHeader.version == CURRENT_VERSION_NUM)
+	else if (fileHeader.version <= CURRENT_VERSION_NUM)
 	{
 		bool retVal = gameLoadV(fileHandle, fileHeader.version);
 		PHYSFS_close(fileHandle);
@@ -4045,7 +4045,7 @@ static UDWORD getCampaignV(PHYSFS_file* fileHandle, unsigned int version)
 {
 	SAVE_GAME_V14 saveGame;
 
-	debug(LOG_WZ, "getCampaignV: version = %u", version);
+	debug(LOG_SAVE, "getCampaignV: version = %u", version);
 
 	if (version < VERSION_14)
 	{
@@ -4064,7 +4064,7 @@ static UDWORD getCampaignV(PHYSFS_file* fileHandle, unsigned int version)
 		// Convert from little-endian to native byte-order
 		endian_SaveGameV((SAVE_GAME*)&saveGame, VERSION_14);
 	}
-	else if (version == CURRENT_VERSION_NUM)
+	else if (version <= CURRENT_VERSION_NUM)
 	{
 		if (!deserializeSaveGameV14Data(fileHandle, &saveGame))
 		{
@@ -4130,6 +4130,7 @@ UDWORD getCampaign(const char* fileName)
 	//set main version Id from game file
 	saveGameVersion = fileHeader.version;
 
+	debug(LOG_SAVE, "fileversion is %u, (%s) ", fileHeader.version, fileName);
 	/* Check the file version */
 	if (fileHeader.version < VERSION_14)
 	{
@@ -4413,7 +4414,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			return false;
 		}
 	}
-	else if (version == CURRENT_VERSION_NUM)
+	else if (version <= CURRENT_VERSION_NUM)
 	{
 		if (!deserializeSaveGameData(fileHandle, &saveGameData))
 		{
@@ -4426,6 +4427,15 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 	{
 		debug(LOG_ERROR, "Unsupported version number (%u) for savegame", version);
 
+		return false;
+	}
+
+	debug(LOG_SAVE, "Savegame is of type: %u", saveGameData.sGame.type);
+
+	// Campaign games are fine, only skirmish games are broken in v36
+	if (saveGameData.sGame.type != CAMPAIGN && version == VERSION_36)
+	{
+		debug(LOG_ERROR, "Skirmish savegames of version %u are not supported in this release.", version);
 		return false;
 	}
 
@@ -4792,6 +4802,8 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 
 	fileHeader.version = CURRENT_VERSION_NUM;
 
+	debug(LOG_SAVE, "fileversion is %u, (%s) ", fileHeader.version, fileName);
+
 	if (!serializeSaveGameHeader(fileHandle, &fileHeader))
 	{
 		debug(LOG_ERROR, "game.c:writeGameFile: could not write header to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
@@ -4992,6 +5004,8 @@ BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize)
 	//increment to the start of the data
 	pFileData += DROIDINIT_HEADER_SIZE;
 
+	debug(LOG_SAVE, "fileversion is %u ", psHeader->version);
+
 	/* Check the file version */
 	if (psHeader->version < VERSION_7)
 	{
@@ -5129,6 +5143,11 @@ UDWORD RemapPlayerNumber(UDWORD OldNumber)
 {
 	int i;
 
+	if (game.type == CAMPAIGN)		// don't remap for SP games
+	{
+		return OldNumber;
+	}
+
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (OldNumber == NetPlay.players[i].position)
@@ -5163,8 +5182,30 @@ BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidList
 	//increment to the start of the data
 	pFileData += DROID_HEADER_SIZE;
 
+	debug(LOG_SAVE, "fileversion is %u ", psHeader->version);
+
 	/* Check the file version */
-	if (psHeader->version == CURRENT_VERSION_NUM)
+	if (psHeader->version < VERSION_9)
+	{
+		debug( LOG_ERROR, "UnitLoad; unsupported save format version %d", psHeader->version );
+
+		return false;
+	}
+	else if (psHeader->version == VERSION_11)
+	{
+		if (!loadSaveDroidV11(pFileData, filesize, psHeader->quantity, psHeader->version, ppsCurrentDroidLists))
+		{
+			return false;
+		}
+	}
+	else if (psHeader->version <= VERSION_19)//old save name size
+	{
+		if (!loadSaveDroidV19(pFileData, filesize, psHeader->quantity, psHeader->version, ppsCurrentDroidLists))
+		{
+			return false;
+		}
+	}
+	else if (psHeader->version <= CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveDroidV(pFileData, filesize, psHeader->quantity, psHeader->version, ppsCurrentDroidLists))
 		{
@@ -5180,7 +5221,6 @@ BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidList
 	return true;
 }
 
-#if 0
 // -----------------------------------------------------------------------------------------
 static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 {
@@ -5497,7 +5537,6 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 
 	return psDroid;
 }
-#endif
 
 static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * const psDroid)
 {
@@ -6007,7 +6046,6 @@ static BOOL loadDroidSetPointers(void)
 	return true;
 }
 
-#if 0
 // -----------------------------------------------------------------------------------------
 /* code specific to version 11 of a save droid */
 BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists)
@@ -6023,6 +6061,8 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 	UBYTE	i;
 
 	psCurrentTransGroup = NULL;
+
+	debug(LOG_SAVE, "fileversion is %u ", version);
 
 	psSaveDroid = &sSaveDroid;
 	if (version <= VERSION_10)
@@ -6146,6 +6186,8 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 	UBYTE	i;
 
 	psCurrentTransGroup = NULL;
+
+	debug(LOG_SAVE, "fileversion is %u ", version);
 
 	psSaveDroid = &sSaveDroid;
 	if (version <= VERSION_10)
@@ -6284,7 +6326,6 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 
 	return true;
 }
-#endif
 
 // -----------------------------------------------------------------------------------------
 /* code for all versions after save name change v19*/
@@ -6299,6 +6340,8 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 	UDWORD					sizeOfSaveDroid = 0;
 //	DROID_GROUP				*psGrp;
 	UBYTE	i;
+
+	debug(LOG_SAVE, "fileversion is %u ", version);
 
 	if (version <= VERSION_20)
 	{
@@ -6723,6 +6766,8 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 	endian_udword(&psHeader->version);
 	endian_udword(&psHeader->quantity);
 
+	debug(LOG_SAVE, "file version is %u for (%s) ", psHeader->version, pFileName);
+
 	psSaveDroid = (SAVE_DROID*)(pFileData + DROID_HEADER_SIZE);
 
 	/* Put the droid data into the buffer */
@@ -6791,6 +6836,8 @@ BOOL loadSaveStructure(char *pFileData, UDWORD filesize)
 	//increment to the start of the data
 	pFileData += STRUCT_HEADER_SIZE;
 
+	debug(LOG_SAVE, "file version is %u ", psHeader->version);
+
 	/* Check the file version */
 	if (psHeader->version < VERSION_7)
 	{
@@ -6812,7 +6859,7 @@ BOOL loadSaveStructure(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version == CURRENT_VERSION_NUM)
+	else if (psHeader->version <= CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveStructureV(pFileData, filesize, psHeader->quantity, psHeader->version))
 		{
@@ -7543,6 +7590,8 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 	UDWORD					sizeOfSaveStructure = 0;
 	UDWORD					researchId;
 
+	debug(LOG_SAVE, "fileversion is %u ", version);
+
 	if (version <= VERSION_20)
 	{
 		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V20);
@@ -7597,8 +7646,6 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		endian_udword(&psSaveStructure->player);
 		endian_udword(&psSaveStructure->burnStart);
 		endian_udword(&psSaveStructure->burnDamage);
-
-		psSaveStructure->player = psSaveStructure->player;
 
 		if (psSaveStructure->player >= MAX_PLAYERS)
 		{
@@ -7999,6 +8046,8 @@ BOOL writeStructFile(char *pFileName)
 	endian_udword(&psHeader->version);
 	endian_udword(&psHeader->quantity);
 
+	debug(LOG_SAVE, "file version is %u for %s ", psHeader->version, pFileName);
+
 	psSaveStruct = (SAVE_STRUCTURE*)(pFileData + STRUCT_HEADER_SIZE);
 
 	/* Put the structure data into the buffer */
@@ -8360,6 +8409,8 @@ BOOL loadSaveFeature(char *pFileData, UDWORD filesize)
 	endian_udword(&psHeader->version);
 	endian_udword(&psHeader->quantity);
 
+	debug(LOG_SAVE, "file version is %u ", psHeader->version);
+
 	//increment to the start of the data
 	pFileData += FEATURE_HEADER_SIZE;
 
@@ -8377,7 +8428,7 @@ BOOL loadSaveFeature(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version == CURRENT_VERSION_NUM)
+	else if (psHeader->version <= CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveFeatureV(pFileData, filesize, psHeader->quantity, psHeader->version))
 		{
@@ -8708,6 +8759,8 @@ BOOL loadSaveTemplate(char *pFileData, UDWORD filesize)
 	endian_udword(&psHeader->version);
 	endian_udword(&psHeader->quantity);
 
+	debug(LOG_SAVE, "fileversion is %u ", psHeader->version);
+
 	//increment to the start of the data
 	pFileData += TEMPLATE_HEADER_SIZE;
 
@@ -8732,7 +8785,7 @@ BOOL loadSaveTemplate(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version == CURRENT_VERSION_NUM)
+	else if (psHeader->version <= CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveTemplateV(pFileData, filesize, psHeader->quantity))
 		{
@@ -9429,6 +9482,8 @@ BOOL loadSaveCompList(char *pFileData, UDWORD filesize)
 	endian_udword(&psHeader->version);
 	endian_udword(&psHeader->quantity);
 
+	debug(LOG_SAVE, "file version is %u ", psHeader->version);
+
 	//increment to the start of the data
 	pFileData += COMPLIST_HEADER_SIZE;
 
@@ -9446,7 +9501,7 @@ BOOL loadSaveCompList(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version == CURRENT_VERSION_NUM)
+	else if (psHeader->version <= CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveCompListV(pFileData, filesize, psHeader->quantity, psHeader->version))
 		{
@@ -9741,6 +9796,8 @@ BOOL loadSaveStructTypeList(char *pFileData, UDWORD filesize)
 	endian_udword(&psHeader->version);
 	endian_udword(&psHeader->quantity);
 
+	debug(LOG_SAVE, "file version is %u ", psHeader->version);
+
 	//increment to the start of the data
 	pFileData += STRUCTLIST_HEADER_SIZE;
 
@@ -9758,7 +9815,7 @@ BOOL loadSaveStructTypeList(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version == CURRENT_VERSION_NUM)
+	else if (psHeader->version <= CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveStructTypeListV(pFileData, filesize, psHeader->quantity))
 		{
@@ -9974,6 +10031,8 @@ BOOL loadSaveResearch(char *pFileData, UDWORD filesize)
 	endian_udword(&psHeader->version);
 	endian_udword(&psHeader->quantity);
 
+	debug(LOG_SAVE, "file version is %u ", psHeader->version);
+
 	//increment to the start of the data
 	pFileData += RESEARCH_HEADER_SIZE;
 
@@ -9991,7 +10050,7 @@ BOOL loadSaveResearch(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version == CURRENT_VERSION_NUM)
+	else if (psHeader->version <= CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveResearchV(pFileData, filesize, psHeader->quantity))
 		{
@@ -11172,6 +11231,8 @@ BOOL loadSaveStructLimits(char *pFileData, UDWORD filesize)
 	endian_udword(&psHeader->version);
 	endian_udword(&psHeader->quantity);
 
+	debug(LOG_SAVE, "fileversion is %u ", psHeader->version);
+
 	// Check the file version
 	if ((psHeader->version >= VERSION_15) && (psHeader->version <= VERSION_19))
 	{
@@ -11180,7 +11241,7 @@ BOOL loadSaveStructLimits(char *pFileData, UDWORD filesize)
 			return false;
 		}
 	}
-	else if (psHeader->version == CURRENT_VERSION_NUM)
+	else if (psHeader->version <= CURRENT_VERSION_NUM)
 	{
 		if (!loadSaveStructLimitsV(pFileData, filesize, psHeader->quantity))
 		{
