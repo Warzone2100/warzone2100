@@ -1832,49 +1832,59 @@ static int upnp_init(void *asdf)
 	memset(&urls, 0, sizeof(struct UPNPUrls));
 	memset(&data, 0, sizeof(struct IGDdatas));
 
-	debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
-	devlist = upnpDiscover(2000, NULL, NULL, 0);
-	debug(LOG_NET, "UPnP device search finished.");
-	if (devlist)
+	if (NetPlay.isUPNP)
 	{
-		dev = devlist;
-		while (dev)
+		debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
+		devlist = upnpDiscover(2000, NULL, NULL, 0);
+		debug(LOG_NET, "UPnP device search finished.");
+		if (devlist)
 		{
-			if (strstr(dev->st, "InternetGatewayDevice"))
-				break;
-			dev = dev->pNext;
-		}
-		if (!dev)
-		{
-			dev = devlist; /* defaulting to first device */
-		}
+			dev = devlist;
+			while (dev)
+			{
+				if (strstr(dev->st, "InternetGatewayDevice"))
+					break;
+				dev = dev->pNext;
+			}
+			if (!dev)
+			{
+				dev = devlist; /* defaulting to first device */
+			}
 
-		debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
+			debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
 
-		descXML = miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr));
-		debug(LOG_NET, "LAN address: %s", lanaddr);
-		if (descXML)
-		{
-			parserootdesc (descXML, descXMLsize, &data);
-			free (descXML); descXML = 0;
-			GetUPNPUrls (&urls, &data, dev->descURL);
-		}
-		freeUPNPDevlist(devlist);
+			descXML = miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr));
+			debug(LOG_NET, "LAN address: %s", lanaddr);
+			if (descXML)
+			{
+				parserootdesc (descXML, descXMLsize, &data);
+				free (descXML); descXML = 0;
+				GetUPNPUrls (&urls, &data, dev->descURL);
+			}
+			freeUPNPDevlist(devlist);
 
-		if (!urls.controlURL || urls.controlURL[0] == '\0')
-		{
-			ssprintf(buf, "UPnP device found: %s %s LAN address %s, but failed controlURL", dev->descURL, dev->st, lanaddr);
+			if (!urls.controlURL || urls.controlURL[0] == '\0')
+			{
+				ssprintf(buf, "UPnP device found: %s %s LAN address %s, but failed controlURL", dev->descURL, dev->st, lanaddr);
+				addDumpInfo(buf);
+				return false;
+			}
+			ssprintf(buf, "UPnP device found: %s %s LAN address %s", dev->descURL, dev->st, lanaddr);
 			addDumpInfo(buf);
-			return false;
+			return true;
 		}
-		ssprintf(buf, "UPnP device found: %s %s LAN address %s", dev->descURL, dev->st, lanaddr);
+		ssprintf(buf, "UPnP device not found.");
 		addDumpInfo(buf);
-		return true;
+		debug(LOG_NET, "No UPnP devices found.");
+		return false;
 	}
-	ssprintf(buf, "UPnP device not found.");
-	addDumpInfo(buf);
-	debug(LOG_NET, "No UPnP devices found.");
-	return false;
+	else
+	{
+		ssprintf(buf, "UPnP detection routine disabled by user.");
+		addDumpInfo(buf);
+		debug(LOG_NET, "UPnP detection routine disabled by user.");
+		return false;
+	}
 }
 
 static bool upnp_add_redirect(int port)
@@ -1969,6 +1979,7 @@ int NETinit(BOOL bFirstCall)
 		{
 			memset(&NetPlay.games[i], 0, sizeof(NetPlay.games[i]));
 		}
+		// NOTE NetPlay.isUPNP is already set in configuration.c!
 		NetPlay.bComms = true;
 		NetPlay.GamePassworded = false;
 		NetPlay.ShowedMOTD = false;
@@ -2005,8 +2016,10 @@ int NETshutdown(void)
 	}
 #endif
 
-	NETremRedirects();
-
+	if (NetPlay.bComms && NetPlay.isUPNP)
+	{
+		NETremRedirects();
+	}
 	return 0;
 }
 
@@ -3249,7 +3262,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	mapDownloadProgress = 100;
 	netPlayersUpdated = true;
 
-	if (NetPlay.bComms)
+	if (NetPlay.bComms && NetPlay.isUPNP)
 	{
 		NETaddRedirects();
 	}
