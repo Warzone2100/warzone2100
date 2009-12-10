@@ -491,10 +491,23 @@
 #  include <typeinfo>
 #  define WZ_ASSERT_STATIC_STRING(_var) assert(typeid(_var) == typeid(char[sizeof(_var)]))
 #elif defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
-#  define WZ_ASSERT_STATIC_STRING(_var) assert(__builtin_types_compatible_p(typeof(_var), char[]))
+#  define WZ_ASSERT_STATIC_STRING(_var) STATIC_ASSERT(__builtin_types_compatible_p(typeof(_var), char[]))
 #else
 #  define WZ_ASSERT_STATIC_STRING(_var) (void)(_var)
 #endif
+
+/*! \def WZ_ASSERT_ARRAY
+ * Asserts that the given variable is a (statically sized) array, not just a pointer.
+ */
+#if defined(__cplusplus)
+#  define WZ_ASSERT_ARRAY_EXPR(a) 0
+#elif defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
+/* &a[0] degrades to a pointer: a different type from an array */
+#  define WZ_ASSERT_ARRAY_EXPR(a) STATIC_ASSERT_EXPR(!__builtin_types_compatible_p(typeof(a), typeof(&(a)[0])))
+#else
+#  define WZ_ASSERT_ARRAY_EXPR(a) 0
+#endif
+#define WZ_ASSERT_ARRAY(a) (void)WZ_ASSERT_ARRAY_EXPR(a)
 
 
 /* ---- Platform specific setup ---- */

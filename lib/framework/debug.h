@@ -108,11 +108,24 @@ extern bool assertEnabled;
 
 /**
  * Compile time assert
+ *
+ * Forces a compilation error if condition is true, but also produce a result
+ * (of value 0 and type size_t), so the expression can be used anywhere that
+ * a comma expression isn't permitted.
+ *
+ * \param expr Expression to evaluate
+ *
+ * \note BUILD_BUG_ON_ZERO from <linux/kernel.h>
+ */
+#define STATIC_ASSERT_EXPR( expr ) \
+	(sizeof(struct { int:-!(expr); }))
+/**
+ * Compile time assert
  * Not to be used in global context!
  * \param expr Expression to evaluate
  */
 #define STATIC_ASSERT( expr ) \
-	do { enum { assert_static__ = 1/(expr) }; } while(0)
+	(void)STATIC_ASSERT_EXPR(expr)
 
 
 /***
