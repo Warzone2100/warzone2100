@@ -39,23 +39,20 @@ int main(int argc, char **argv)
 	if (map)
 	{
 		int x, y;
-		char *pixels = malloc(4 * map->width * map->height);	// RGBA 32 bits
+		uint8_t *pixels = malloc(map->width * map->height);
 
 		for (x = 0; x < map->width; x++)
 		{
 			for (y = 0; y < map->height; y++)
 			{
 				MAPTILE *psTile = mapTile(map, x, y);
-				int pixpos = y * map->width * 4 + x * 4;
+				int pixpos = y * map->width + x;
 
 				pixels[pixpos++] = psTile->height;
-				pixels[pixpos++] = psTile->height;
-				pixels[pixpos++] = psTile->height;
-				pixels[pixpos] = 255;	// alpha
 			}
 		}
 		strcat(filename, ".png");
-		savePng(filename, pixels, map->width, map->height);
+		savePngI8(filename, pixels, map->width, map->height);
 		free(pixels);
 	}
 	mapFree(map);
