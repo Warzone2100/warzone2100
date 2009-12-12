@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2009-12-12 15:15+0100\n"
-"PO-Revision-Date: 2009-11-21 19:05+0100\n"
+"PO-Revision-Date: 2009-12-12 16:02+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -11501,9 +11501,8 @@ msgid "Start Skirmish Game"
 msgstr "Geplänkel eröffnen"
 
 #: src/frontend.c:368
-#, fuzzy
 msgid "Challenges"
-msgstr "Scavenger"
+msgstr "Herausforderungen"
 
 #: src/frontend.c:369
 #: src/ingameop.c:257
@@ -13030,7 +13029,7 @@ msgstr "Spieler"
 #: src/multiint.c:3297
 #, c-format
 msgid "Map: %d%% downloaded"
-msgstr ""
+msgstr "Karte: %d%% heruntergeladen"
 
 #: src/multijoin.c:98
 #: src/multijoin.c:99
@@ -13143,17 +13142,16 @@ msgid "It is not nice to cheat!"
 msgstr "Es ist nicht nett zu schummeln!"
 
 #: src/multiplay.c:1081
-#, fuzzy
 msgid "(allies"
-msgstr "Bündnisse"
+msgstr "(Verbündete"
 
 #: src/multiplay.c:1091
 msgid "(private to "
-msgstr ""
+msgstr "(direkt an "
 
 #: src/multiplay.c:1103
 msgid "[invalid]"
-msgstr ""
+msgstr "[ungültig]"
 
 #: src/multiplay.c:1930
 msgid "Green"
