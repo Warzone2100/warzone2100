@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-12-12 15:45+0100\n"
-"PO-Revision-Date: 2009-06-12 13:45+0100\n"
+"POT-Creation-Date: 2009-12-12 15:55+0100\n"
+"PO-Revision-Date: 2009-12-08 18:03+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -9646,40 +9646,34 @@ msgid "Viper Flamer Half-Track"
 msgstr "Inceneritore Viper Semicingoli"
 
 #: data/mp/messages/resmessages1.rmsg:148
-#, fuzzy
 msgid "Armored guard tower with Lancer AT rocket"
 msgstr "Torre di guardia corazzata con razzo AT Lancer"
 
 #: data/mp/messages/resmessages1.rmsg:552
 #: data/mp/messages/resmessages1.rmsg:565
 #: data/mp/messages/resmessages2.rmsg:747
-#, fuzzy
 msgid "Best Targets: Vehicles, Hardpoints"
 msgstr "Migliori bersagli: Veicoli e Postazioni"
 
 #: data/mp/messages/resmessages23.rmsg:160
 #: data/mp/messages/resmessages2.rmsg:732
 #: data/mp/messages/resmessages3.rmsg:862
-#, fuzzy
 msgid "Bomb Upgrade"
 msgstr "Miglioramento delle bombe"
 
 #: data/mp/messages/resmessages23.rmsg:161
-#, fuzzy
 msgid "Improved trinitramine explosive formula"
-msgstr "Colpi ad alto esplosivo migliorati"
+msgstr "Formula esplosiva di trinitrammine migliorata"
 
 #: data/mp/messages/resmessages23.rmsg:162
 #: data/mp/messages/resmessages2.rmsg:734
 #: data/mp/messages/resmessages3.rmsg:864
-#, fuzzy
 msgid "Increases Bombing damage"
-msgstr "Aumenta il danno dei cannoni"
+msgstr "Aumenta il danno delle bombe"
 
 #: data/mp/messages/resmessages3.rmsg:304
-#, fuzzy
 msgid "Armored guard tower with Pulse Laser"
-msgstr "Torre di guardia corazzata con Inceneritore"
+msgstr "Torre di guardia corazzata con Laser a Impulsi"
 
 #: data/mp/messages/resmessagesall.rmsg:186
 msgid "Cyborg Transport Available"
@@ -9882,7 +9876,6 @@ msgid "Medium Super Heavy Body"
 msgstr "Corpo Super Pesante Medio"
 
 #: data/mp/messages/resmessagesall.rmsg:681
-#, fuzzy
 msgid "More armor and body points than Vengeance"
 msgstr "Più armatura e punti vita del Vengeance"
 
@@ -9981,7 +9974,6 @@ msgid "Repair Turret Viper Half-track"
 msgstr "Torretta Riparatrice Viper Semicingoli"
 
 #: data/mp/messages/strings/names.txt:183
-#, fuzzy
 msgid "Mini-Rocket Array Viper Wheels"
 msgstr "Artiglieria di Minirazzi Viper Ruote"
 
@@ -9994,7 +9986,6 @@ msgid "Sensor Turret Cobra Half-tracks"
 msgstr "Torretta Sensoria Cobra Semi-Cingoli"
 
 #: data/mp/messages/strings/names.txt:194
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "Artiglieria di Minirazzi Cobra Semicingoli"
 
@@ -10042,15 +10033,13 @@ msgstr "Torre con Laser a Impulso"
 
 #: data/mp/messages/strings/names.txt:512
 #: data/mp/messages/strings/names.txt:1134
-#, fuzzy
 msgid "Seraph Missile Array"
-msgstr "Aumenta la precisione dei missili"
+msgstr "Batteria di Missili Seraph"
 
 #: data/mp/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:1194
-#, fuzzy
 msgid "Mini-Rocket Array"
-msgstr "Artiglieria a minirazzi"
+msgstr "Batteria di Artiglieria a minirazzi"
 
 #: data/mp/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:1692
@@ -10092,15 +10081,13 @@ msgstr "Plasteel Mk3"
 
 #: data/mp/messages/strings/names.txt:728
 #: data/mp/messages/strings/names.txt:1386
-#, fuzzy
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "Cannone ad Iper Velocità"
+msgstr "Postazione con Cannone ad Iper Velocità"
 
 #: data/mp/messages/strings/names.txt:739
 #: data/mp/messages/strings/names.txt:1389
-#, fuzzy
 msgid "Seraph Missile Battery"
-msgstr "Batteria di Missili Angel"
+msgstr "Batteria di Missili Seraph"
 
 #: data/mp/messages/strings/names.txt:768
 msgid "Flamer Tower"
@@ -10108,9 +10095,8 @@ msgstr "Torre di Guardia con Inceneritore"
 
 #: data/mp/messages/strings/names.txt:786
 #: data/mp/messages/strings/names.txt:1394
-#, fuzzy
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Cannone ad Iper Velocità"
+msgstr "Postazione con Cannone ad Iper Velocità"
 
 #: data/mp/messages/strings/names.txt:805
 msgid "Automated Manufacturing"
@@ -10248,9 +10234,8 @@ msgid "Repair Cobra Tracks"
 msgstr "Ripara Cobra Tracks"
 
 #: data/mp/messages/strings/names.txt:1472
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr "Cannone Pesante Python Cingoli"
+msgstr "Cannone ad Iper Velocità Python Cingoli"
 
 #: data/mp/messages/strings/names.txt:1511
 msgid "Bunker Buster Cobra Hover"
@@ -10597,21 +10582,18 @@ msgstr "Lanciamissili EMP"
 
 #: data/mp/messages/strings/names.txt:1804
 #: data/mp/messages/strings/names.txt:1805
-#, fuzzy
 msgid "Command Turret II"
-msgstr "Torretta di Comando"
+msgstr "Torretta di Comando MkII"
 
 #: data/mp/messages/strings/names.txt:1806
 #: data/mp/messages/strings/names.txt:1807
-#, fuzzy
 msgid "Command Turret III"
 msgstr "Torretta di Comando MkIII"
 
 #: data/mp/messages/strings/names.txt:1808
 #: data/mp/messages/strings/names.txt:1809
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "Torretta di Comando"
+msgstr "Torretta di Comando MkIV"
 
 #: data/mp/messages/strings/names.txt:1819
 msgid "Heavy Repair Turret Cobra Hover"
@@ -10712,12 +10694,10 @@ msgid "Vengeance Tracks Rail Gun"
 msgstr "Vengeance Cingoli Cannone a massa"
 
 #: data/mp/messages/strings/names.txt:1860
-#, fuzzy
 msgid "Vengeance Tracks Gauss Cannon"
 msgstr "Vengeance Cingoli Cannone Gauss"
 
 #: data/mp/messages/strings/names.txt:1861
-#, fuzzy
 msgid "Vengeance Tracks Gauss Scourge"
 msgstr "Vengeance Cingoli Scourge"
 
@@ -10742,27 +10722,24 @@ msgid "VTOL Lancer Bug VTOL"
 msgstr "Lancer Bug VTOL"
 
 #: data/mp/messages/strings/names.txt:1871
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "Cannone ad ipervelocità VTOL"
+msgstr "Cannone ad ipervelocità Bug VTOL"
 
 #: data/mp/messages/strings/names.txt:1872
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "Lancer Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1873
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "Cannone HPV Scorpion VTOL"
+msgstr "Cannone ad Iper Velocità Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1874
 msgid "VTOL Lancer Mantis VTOL"
 msgstr "Lancer Mantis VTOL"
 
 #: data/mp/messages/strings/names.txt:1875
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "Cannone ad ipervelocità VTOL"
+msgstr "Cannone ad ipervelocità Mantis VTOL"
 
 #: data/mp/messages/strings/names.txt:1879
 msgid "Repair Turret Mantis Tracks"
@@ -10865,18 +10842,16 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr "Minirazzi Cobra Cingoli"
 
 #: data/mp/messages/strings/names.txt:1914
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr "Artiglieria a minirazzi Cobra Cingoli"
+msgstr "Batteria di minirazzi Cobra Cingoli"
 
 #: data/mp/messages/strings/names.txt:1916
 msgid "Inferno Cobra Half-Tracks"
 msgstr "Inferno Cobra Semi-Cingoli"
 
 #: data/mp/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Cannone Pesante Python Hover"
+msgstr "Cannone ad ipervelocità Python Hover"
 
 #: data/mp/messages/strings/names.txt:1921
 msgid "Scourge Python Tracks"
@@ -10950,9 +10925,8 @@ msgstr "Spagnolo"
 
 #: lib/framework/i18n.c:53
 #: lib/framework/i18n.c:107
-#, fuzzy
 msgid "Estonian"
-msgstr "Rumeno"
+msgstr "Estone"
 
 #: lib/framework/i18n.c:55
 #: lib/framework/i18n.c:109
@@ -11006,7 +10980,6 @@ msgstr "Portoghese brasiliano"
 
 #: lib/framework/i18n.c:75
 #: lib/framework/i18n.c:129
-#, fuzzy
 msgid "Portuguese"
 msgstr "Portoghese"
 
@@ -11033,7 +11006,7 @@ msgstr "Cinese semplice"
 #: lib/framework/i18n.c:88
 #: lib/framework/i18n.c:138
 msgid "Traditional Chinese"
-msgstr ""
+msgstr "Cinese Tradizionale"
 
 #: lib/framework/i18n.c:121
 msgid "Latin"
@@ -11046,9 +11019,9 @@ msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr "Il giocatore %u ha la versione sbagliata.Auto-kicking."
 
 #: lib/netplay/netplay.c:1253
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
-msgstr "Il giocatore %u ha la password sbagliata.Auto-kicking."
+msgstr "Il giocatore %u ha la password sbagliata.Kick automatico."
 
 #: lib/netplay/netplay.c:2924
 #, c-format
@@ -11140,7 +11113,7 @@ msgstr "Disabilita asserzioni"
 
 #: src/clparse.c:112
 msgid "Causes a crash to test the crash handler"
-msgstr ""
+msgstr "Causa un crash per testare l'handler dei crash"
 
 #: src/clparse.c:113
 msgid "Load a saved game"
@@ -11505,9 +11478,8 @@ msgid "Start Skirmish Game"
 msgstr "Inizia schermaglia."
 
 #: src/frontend.c:368
-#, fuzzy
 msgid "Challenges"
-msgstr "Sciacallo"
+msgstr ""
 
 #: src/frontend.c:369
 #: src/ingameop.c:269
@@ -11714,26 +11686,25 @@ msgid "VIDEO OPTIONS"
 msgstr "OPZIONI DI GIOCO"
 
 #: src/frontend.c:1124
-#, fuzzy
 msgid "Reverse Rotation"
-msgstr "Inverti il Mouse"
+msgstr "Inverti la rotazione"
 
 #: src/frontend.c:1135
 msgid "Trap Cursor"
 msgstr "Blocca il Cursore"
 
 #: src/frontend.c:1147
+#, fuzzy
 msgid "Colored Cursors*"
-msgstr ""
+msgstr "Cursori colorati *"
 
 #: src/frontend.c:1160
-#, fuzzy
 msgid "Switch Mouse Buttons"
-msgstr "Opzioni del mouse"
+msgstr "Inverti i tasti del mouse"
 
 #: src/frontend.c:1170
 msgid "* May negatively affect performance"
-msgstr ""
+msgstr "* Può avere effetti negativi sulla performance"
 
 #: src/frontend.c:1173
 #, fuzzy
@@ -12196,9 +12167,9 @@ msgid "Fog off"
 msgstr "Nebbia disattiva"
 
 #: src/keybind.c:1117
-#, fuzzy, c-format
+#, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
-msgstr "Attenzione! Questo trucco può causare problemi più tardi! [%s]"
+msgstr "Attenzione! Questo trucco può causare problemi più avanti! [%s]"
 
 #: src/keybind.c:1117
 msgid "Ending Mission."
@@ -12711,7 +12682,6 @@ msgid "Select all Wheels"
 msgstr "Seleziona tutte le Ruote"
 
 #: src/keymap.c:427
-#, fuzzy
 msgid "Select all Similar Units"
 msgstr "Seleziona tutte le unità simili"
 
@@ -12873,7 +12843,7 @@ msgstr "Versione del Gioco sbagliata!"
 
 #: src/multiint.c:838
 msgid "Wrong data/mod detected by Host."
-msgstr ""
+msgstr "Dati/Mod sbagliati rilevati dall'Host"
 
 #: src/multiint.c:841
 msgid "Incorrect Password!"
@@ -12881,7 +12851,7 @@ msgstr "Password non corretta!"
 
 #: src/multiint.c:844
 msgid "Host has dropped connection!"
-msgstr ""
+msgstr "L'host ha terminato la connessione!"
 
 #: src/multiint.c:848
 msgid "Connection Error"
@@ -13043,7 +13013,7 @@ msgstr "L'host ha espulso %s dalla partita!"
 
 #: src/multiint.c:2607
 msgid "you are unwanted by the host"
-msgstr ""
+msgstr "Non sei voluto dall'host"
 
 #: src/multiint.c:2682
 msgid "Host is Starting Game"
@@ -13071,11 +13041,11 @@ msgstr "%s ha abbandonato la partita"
 #: src/multijoin.c:330
 #, c-format
 msgid "Kicking player, %s, because data doesn't match!"
-msgstr ""
+msgstr "Il giocatore, %s,sarà kickato perchè i dati non corrispondono!"
 
 #: src/multijoin.c:334
 msgid "Data doesn't match!"
-msgstr ""
+msgstr "I dati non corrispondono!"
 
 #: src/multijoin.c:366
 #, c-format
@@ -13163,11 +13133,11 @@ msgstr "Invia Energia al Giocatore"
 #: src/multiplay.c:284
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr ""
+msgstr "Il giocatore %s sarà kickato perchè hanno cercato di bypassare il controllo dell'integrità dei dati!"
 
 #: src/multiplay.c:288
 msgid "It is not nice to cheat!"
-msgstr ""
+msgstr "Non è bello bararare!"
 
 #: src/multiplay.c:1081
 #, fuzzy
@@ -13388,8 +13358,9 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossibile localizzare alcun Comandante!"
 
 #: src/structure.c:2825
+#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
-msgstr "Comando: Limite di Controllo Raggiunto - Produzione Bloccata"
+msgstr "Limite di Controllo Raggiunto - Produzione Bloccata"
 
 #: src/structure.c:6055
 #: src/structure.c:6080
@@ -13481,14 +13452,17 @@ msgstr " - Costruito %s"
 msgid "Version %s%s%s%s"
 msgstr "Versione %s%s%s%s"
 
-#~ msgid "Hardware"
-#~ msgstr "Hardware"
+#~ msgid "Game"
+#~ msgstr "Partita"
 
-#~ msgid "Software (coloured)"
-#~ msgstr "Software (colorato)"
+#~ msgid "Mayhem"
+#~ msgstr "Mayhem"
 
-#~ msgid "you are being a jerk."
-#~ msgstr "Stai facendo l'idiota."
+#~ msgid "Skirmish"
+#~ msgstr "Schermaglia"
+
+#~ msgid "The game is full!"
+#~ msgstr "La partita è piena!"
 
 #~ msgid "VTOL HPV Cannon Bug VTOL"
 #~ msgstr "Cannone HPV Bug VTOL"
@@ -13498,6 +13472,9 @@ msgstr "Versione %s%s%s%s"
 
 #~ msgid "HPV Cannon Python Hover"
 #~ msgstr "Cannone ad ipervelocità Python Cingoli"
+
+#~ msgid "you are being a jerk."
+#~ msgstr "Stai facendo l'idiota."
 
 #~ msgid "English"
 #~ msgstr "Inglese"
@@ -13541,20 +13518,14 @@ msgstr "Versione %s%s%s%s"
 #~ msgid "Software (colored)"
 #~ msgstr "Software (colorato)"
 
+#~ msgid "Hardware"
+#~ msgstr "Hardware"
+
 #~ msgid "Right-click Orders"
 #~ msgstr "Ordini tramite click destro"
 
-#~ msgid "Game"
-#~ msgstr "Partita"
-
-#~ msgid "Mayhem"
-#~ msgstr "Mayhem"
-
-#~ msgid "Skirmish"
-#~ msgstr "Schermaglia"
-
-#~ msgid "The game is full!"
-#~ msgstr "La partita è piena!"
+#~ msgid "Software (coloured)"
+#~ msgstr "Software (colorato)"
 
 #~ msgid "Viper Light Cannon Wheels"
 #~ msgstr "Viper Cannone Leggero Ruote"
