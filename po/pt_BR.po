@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-12-05 16:27+0100\n"
+"POT-Creation-Date: 2009-12-12 15:45+0100\n"
 "PO-Revision-Date: 2009-03-31 17:52-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@hotmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
@@ -11813,11 +11813,11 @@ msgstr "OPÇÕES DE JOGO"
 #: src/hci.c:3949
 #: src/hci.c:4402
 #: src/hci.c:5606
-#: src/intelmap.c:532
+#: src/intelmap.c:543
 #: src/intorder.c:661
 #: src/loadsave.c:256
 #: src/multimenu.c:479
-#: src/multimenu.c:1338
+#: src/multimenu.c:1329
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -11994,24 +11994,24 @@ msgstr "Unidade de Construção"
 msgid "Power Accrued"
 msgstr "Energia Coletada"
 
-#: src/intelmap.c:245
+#: src/intelmap.c:247
 #: src/keybind.c:1330
 msgid "PAUSED"
 msgstr "PAUSA"
 
-#: src/intelmap.c:406
+#: src/intelmap.c:413
 msgid "Research Update"
 msgstr "Atualização de Pesquisas"
 
-#: src/intelmap.c:410
+#: src/intelmap.c:417
 msgid "Project Goals"
 msgstr "Objetivos do Projeto"
 
-#: src/intelmap.c:413
+#: src/intelmap.c:420
 msgid "Current Objective"
 msgstr "Objetivo Atual"
 
-#: src/intelmap.c:1487
+#: src/intelmap.c:1516
 msgid "New Intelligence Report"
 msgstr "Chegando relatório de inteligência."
 
@@ -13201,35 +13201,48 @@ msgstr ""
 msgid "It is not nice to cheat!"
 msgstr ""
 
-#: src/multiplay.c:1880
+#: src/multiplay.c:1081
+#, fuzzy
+msgid "(allies"
+msgstr "Alianças"
+
+#: src/multiplay.c:1091
+msgid "(private to "
+msgstr ""
+
+#: src/multiplay.c:1103
+msgid "[invalid]"
+msgstr ""
+
+#: src/multiplay.c:1930
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.c:1881
+#: src/multiplay.c:1931
 msgid "Orange"
 msgstr "Laranja"
 
-#: src/multiplay.c:1882
+#: src/multiplay.c:1932
 msgid "Grey"
 msgstr "Cinza"
 
-#: src/multiplay.c:1883
+#: src/multiplay.c:1933
 msgid "Black"
 msgstr "Preto"
 
-#: src/multiplay.c:1884
+#: src/multiplay.c:1934
 msgid "Red"
 msgstr "Vermelho"
 
-#: src/multiplay.c:1885
+#: src/multiplay.c:1935
 msgid "Blue"
 msgstr "Azul"
 
-#: src/multiplay.c:1886
+#: src/multiplay.c:1936
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.c:1887
+#: src/multiplay.c:1937
 msgid "Cyan"
 msgstr "Ciano"
 
@@ -13406,60 +13419,60 @@ msgstr "Impossível localizar Unidades de Sensor!"
 msgid "Unable to locate any Commanders!"
 msgstr "Impossível localizar Comandantes!"
 
-#: src/structure.c:2822
+#: src/structure.c:2825
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite de Unidades Alcancado - Produção Interrompida"
 
-#: src/structure.c:6052
-#: src/structure.c:6077
+#: src/structure.c:6055
+#: src/structure.c:6080
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unidade designada"
 msgstr[1] "%s - %u Unidades designadas"
 
-#: src/structure.c:6082
-#: src/structure.c:6146
+#: src/structure.c:6085
+#: src/structure.c:6149
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Dano %3.0f%%"
 
-#: src/structure.c:6132
+#: src/structure.c:6135
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u de %u conectados"
 
-#: src/structure.c:6262
-#: src/structure.c:6307
+#: src/structure.c:6265
+#: src/structure.c:6310
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danificado Eletronicamente"
 
-#: src/structure.c:6542
+#: src/structure.c:6545
 msgid "Electronic Reward - Visibility Report"
 msgstr "Prêmio - Relatório de Visibilidade"
 
-#: src/structure.c:6582
+#: src/structure.c:6585
 msgid "Factory Reward - Propulsion"
 msgstr "Prêmio - Propulsão"
 
-#: src/structure.c:6606
+#: src/structure.c:6609
 msgid "Factory Reward - Body"
 msgstr "Prêmio - Chassis"
 
-#: src/structure.c:6630
+#: src/structure.c:6633
 msgid "Factory Reward - Weapon"
 msgstr "Prêmio - Arma"
 
-#: src/structure.c:6639
+#: src/structure.c:6642
 msgid "Factory Reward - Nothing"
 msgstr "Prêmio - Nada"
 
-#: src/structure.c:6667
+#: src/structure.c:6670
 msgid "Repair Facility Award - Repair"
 msgstr "Prêmio - Centro de Reparos"
 
-#: src/structure.c:6674
+#: src/structure.c:6677
 msgid "Repair Facility Award - Nothing"
 msgstr "Prêmio - Nada"
 
