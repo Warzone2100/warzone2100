@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-12-05 16:13+0100\n"
+"POT-Creation-Date: 2009-12-12 15:15+0100\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -11097,12 +11097,12 @@ msgstr ""
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:2930
+#: lib/netplay/netplay.c:2943
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2955
+#: lib/netplay/netplay.c:2968
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -11833,11 +11833,11 @@ msgstr "遊戲選項"
 #: src/hci.c:3994
 #: src/hci.c:4447
 #: src/hci.c:5651
-#: src/intelmap.c:530
+#: src/intelmap.c:541
 #: src/intorder.c:661
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1338
+#: src/multimenu.c:1329
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -11999,24 +11999,24 @@ msgstr "儲存遊戲"
 msgid "Power Accrued"
 msgstr "能量增加"
 
-#: src/intelmap.c:243
+#: src/intelmap.c:245
 #: src/keybind.c:1292
 msgid "PAUSED"
 msgstr "暫停"
 
-#: src/intelmap.c:404
+#: src/intelmap.c:411
 msgid "Research Update"
 msgstr "研發升級"
 
-#: src/intelmap.c:408
+#: src/intelmap.c:415
 msgid "Project Goals"
 msgstr "計畫目標"
 
-#: src/intelmap.c:411
+#: src/intelmap.c:418
 msgid "Current Objective"
 msgstr "目前目標"
 
-#: src/intelmap.c:1482
+#: src/intelmap.c:1511
 msgid "New Intelligence Report"
 msgstr "新的智能情報"
 
@@ -13204,35 +13204,48 @@ msgstr ""
 msgid "It is not nice to cheat!"
 msgstr ""
 
-#: src/multiplay.c:1880
+#: src/multiplay.c:1081
+#, fuzzy
+msgid "(allies"
+msgstr "同盟"
+
+#: src/multiplay.c:1091
+msgid "(private to "
+msgstr ""
+
+#: src/multiplay.c:1103
+msgid "[invalid]"
+msgstr ""
+
+#: src/multiplay.c:1930
 msgid "Green"
 msgstr "綠色"
 
-#: src/multiplay.c:1881
+#: src/multiplay.c:1931
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.c:1882
+#: src/multiplay.c:1932
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.c:1883
+#: src/multiplay.c:1933
 msgid "Black"
 msgstr "黑色"
 
-#: src/multiplay.c:1884
+#: src/multiplay.c:1934
 msgid "Red"
 msgstr "紅色"
 
-#: src/multiplay.c:1885
+#: src/multiplay.c:1935
 msgid "Blue"
 msgstr "藍色"
 
-#: src/multiplay.c:1886
+#: src/multiplay.c:1936
 msgid "Pink"
 msgstr "粉紅色"
 
-#: src/multiplay.c:1887
+#: src/multiplay.c:1937
 msgid "Cyan"
 msgstr "青綠色"
 
@@ -13408,60 +13421,60 @@ msgstr "找不到任何雷達單位！"
 msgid "Unable to locate any Commanders!"
 msgstr "找不到任何指揮官車！"
 
-#: src/structure.c:2746
+#: src/structure.c:2745
 #, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "已達到可控制單位總數上限，停止生產新單位"
 
-#: src/structure.c:5931
-#: src/structure.c:5956
+#: src/structure.c:5930
+#: src/structure.c:5955
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - 已指派 %u  單位"
 
-#: src/structure.c:5961
-#: src/structure.c:6025
+#: src/structure.c:5960
+#: src/structure.c:6024
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 損傷 %3.0f%%"
 
-#: src/structure.c:6011
+#: src/structure.c:6010
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - 連接鑽油井數量 %u of %u"
 
-#: src/structure.c:6146
-#: src/structure.c:6195
+#: src/structure.c:6145
+#: src/structure.c:6194
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s -電子傷害"
 
-#: src/structure.c:6430
+#: src/structure.c:6429
 msgid "Electronic Reward - Visibility Report"
 msgstr "電子回饋—可檢視報告"
 
-#: src/structure.c:6470
+#: src/structure.c:6469
 msgid "Factory Reward - Propulsion"
 msgstr "工廠獎勵—推進動力"
 
-#: src/structure.c:6494
+#: src/structure.c:6493
 msgid "Factory Reward - Body"
 msgstr "工廠獎勵—車身"
 
-#: src/structure.c:6518
+#: src/structure.c:6517
 msgid "Factory Reward - Weapon"
 msgstr "工廠獎勵—武器"
 
-#: src/structure.c:6527
+#: src/structure.c:6526
 msgid "Factory Reward - Nothing"
 msgstr "工廠獎勵—無"
 
-#: src/structure.c:6555
+#: src/structure.c:6554
 msgid "Repair Facility Award - Repair"
 msgstr "修理中心獎勵—修理"
 
-#: src/structure.c:6562
+#: src/structure.c:6561
 msgid "Repair Facility Award - Nothing"
 msgstr "修理工廠回饋—無"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-12-05 16:13+0100\n"
+"POT-Creation-Date: 2009-12-12 15:15+0100\n"
 "PO-Revision-Date: 2008-05-09 16:42+0000\n"
 "Last-Translator: Roman <rms200x@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -11024,12 +11024,12 @@ msgstr ""
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:2930
+#: lib/netplay/netplay.c:2943
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2955
+#: lib/netplay/netplay.c:2968
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -11761,11 +11761,11 @@ msgstr ""
 #: src/hci.c:3994
 #: src/hci.c:4447
 #: src/hci.c:5651
-#: src/intelmap.c:530
+#: src/intelmap.c:541
 #: src/intorder.c:661
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1338
+#: src/multimenu.c:1329
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -11928,24 +11928,24 @@ msgstr "Išsaugoti žaidimą"
 msgid "Power Accrued"
 msgstr ""
 
-#: src/intelmap.c:243
+#: src/intelmap.c:245
 #: src/keybind.c:1292
 msgid "PAUSED"
 msgstr ""
 
-#: src/intelmap.c:404
+#: src/intelmap.c:411
 msgid "Research Update"
 msgstr ""
 
-#: src/intelmap.c:408
+#: src/intelmap.c:415
 msgid "Project Goals"
 msgstr ""
 
-#: src/intelmap.c:411
+#: src/intelmap.c:418
 msgid "Current Objective"
 msgstr ""
 
-#: src/intelmap.c:1482
+#: src/intelmap.c:1511
 msgid "New Intelligence Report"
 msgstr ""
 
@@ -13123,35 +13123,47 @@ msgstr ""
 msgid "It is not nice to cheat!"
 msgstr ""
 
-#: src/multiplay.c:1880
+#: src/multiplay.c:1081
+msgid "(allies"
+msgstr ""
+
+#: src/multiplay.c:1091
+msgid "(private to "
+msgstr ""
+
+#: src/multiplay.c:1103
+msgid "[invalid]"
+msgstr ""
+
+#: src/multiplay.c:1930
 msgid "Green"
 msgstr "Žalia"
 
-#: src/multiplay.c:1881
+#: src/multiplay.c:1931
 msgid "Orange"
 msgstr "Oranžinė"
 
-#: src/multiplay.c:1882
+#: src/multiplay.c:1932
 msgid "Grey"
 msgstr "Pilka"
 
-#: src/multiplay.c:1883
+#: src/multiplay.c:1933
 msgid "Black"
 msgstr "Juoda"
 
-#: src/multiplay.c:1884
+#: src/multiplay.c:1934
 msgid "Red"
 msgstr "Raudona"
 
-#: src/multiplay.c:1885
+#: src/multiplay.c:1935
 msgid "Blue"
 msgstr "Mėlyna"
 
-#: src/multiplay.c:1886
+#: src/multiplay.c:1936
 msgid "Pink"
 msgstr "Rožinė"
 
-#: src/multiplay.c:1887
+#: src/multiplay.c:1937
 msgid "Cyan"
 msgstr "Žydra"
 
@@ -13328,60 +13340,60 @@ msgstr ""
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
-#: src/structure.c:2746
+#: src/structure.c:2745
 msgid "Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5931
-#: src/structure.c:5956
+#: src/structure.c:5930
+#: src/structure.c:5955
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5961
-#: src/structure.c:6025
+#: src/structure.c:5960
+#: src/structure.c:6024
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.c:6011
+#: src/structure.c:6010
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:6146
-#: src/structure.c:6195
+#: src/structure.c:6145
+#: src/structure.c:6194
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6430
+#: src/structure.c:6429
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6470
+#: src/structure.c:6469
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6494
+#: src/structure.c:6493
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6518
+#: src/structure.c:6517
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6527
+#: src/structure.c:6526
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6555
+#: src/structure.c:6554
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6562
+#: src/structure.c:6561
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-12-05 16:13+0100\n"
+"POT-Creation-Date: 2009-12-12 15:15+0100\n"
 "PO-Revision-Date: 2009-05-15 21:52+0100\n"
 "Last-Translator: gesierfou <gesierfou@yahoo.fr>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -11103,12 +11103,12 @@ msgstr "Le joueur %u a été kické car il a une version obsolète du jeu."
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr "Le joueur %u a été kické car il a donné un mot de passe incorrect."
 
-#: lib/netplay/netplay.c:2930
+#: lib/netplay/netplay.c:2943
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Impossible de résourdre le DNS du serveur maître (%s) !"
 
-#: lib/netplay/netplay.c:2955
+#: lib/netplay/netplay.c:2968
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Impossible de communiquer avec le serveur maître ! Le port TCP %u est-il ouvert en sortie ?"
@@ -11844,11 +11844,11 @@ msgstr "OPTIONS"
 #: src/hci.c:3994
 #: src/hci.c:4447
 #: src/hci.c:5651
-#: src/intelmap.c:530
+#: src/intelmap.c:541
 #: src/intorder.c:661
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1338
+#: src/multimenu.c:1329
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12010,24 +12010,24 @@ msgstr "Sauvegarder"
 msgid "Power Accrued"
 msgstr "Puissance Accrue"
 
-#: src/intelmap.c:243
+#: src/intelmap.c:245
 #: src/keybind.c:1292
 msgid "PAUSED"
 msgstr "PAUSE"
 
-#: src/intelmap.c:404
+#: src/intelmap.c:411
 msgid "Research Update"
 msgstr "Mise à jour des recherches"
 
-#: src/intelmap.c:408
+#: src/intelmap.c:415
 msgid "Project Goals"
 msgstr "Objectifs du Projet"
 
-#: src/intelmap.c:411
+#: src/intelmap.c:418
 msgid "Current Objective"
 msgstr "Objectif Actuel"
 
-#: src/intelmap.c:1482
+#: src/intelmap.c:1511
 msgid "New Intelligence Report"
 msgstr "Nouveau rapport de transmission"
 
@@ -13215,35 +13215,48 @@ msgstr "Le joueur %s à été kické car il a essayé de contourner le contrôle
 msgid "It is not nice to cheat!"
 msgstr "C'est pas bien de tricher !"
 
-#: src/multiplay.c:1880
+#: src/multiplay.c:1081
+#, fuzzy
+msgid "(allies"
+msgstr "Alliances"
+
+#: src/multiplay.c:1091
+msgid "(private to "
+msgstr ""
+
+#: src/multiplay.c:1103
+msgid "[invalid]"
+msgstr ""
+
+#: src/multiplay.c:1930
 msgid "Green"
 msgstr "Joueur Vert"
 
-#: src/multiplay.c:1881
+#: src/multiplay.c:1931
 msgid "Orange"
 msgstr "Joueur Orange"
 
-#: src/multiplay.c:1882
+#: src/multiplay.c:1932
 msgid "Grey"
 msgstr "Joueur Gris"
 
-#: src/multiplay.c:1883
+#: src/multiplay.c:1933
 msgid "Black"
 msgstr "Joueur Noir"
 
-#: src/multiplay.c:1884
+#: src/multiplay.c:1934
 msgid "Red"
 msgstr "Joueur Rouge"
 
-#: src/multiplay.c:1885
+#: src/multiplay.c:1935
 msgid "Blue"
 msgstr "Joueur Bleu"
 
-#: src/multiplay.c:1886
+#: src/multiplay.c:1936
 msgid "Pink"
 msgstr "Joueur Rose"
 
-#: src/multiplay.c:1887
+#: src/multiplay.c:1937
 msgid "Cyan"
 msgstr "Joueur Cyan"
 
@@ -13420,61 +13433,61 @@ msgstr "Impossible de localiser la moindre unité radar !"
 msgid "Unable to locate any Commanders!"
 msgstr "Impossible de localiser le moindre Commandant !"
 
-#: src/structure.c:2746
+#: src/structure.c:2745
 #, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Limite de Commandement Atteinte - Arrêt de la Production"
 
-#: src/structure.c:5931
-#: src/structure.c:5956
+#: src/structure.c:5930
+#: src/structure.c:5955
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unité assignée"
 msgstr[1] "%s - %u Unités assignées"
 
-#: src/structure.c:5961
-#: src/structure.c:6025
+#: src/structure.c:5960
+#: src/structure.c:6024
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Endommagé à %3.0f%%"
 
-#: src/structure.c:6011
+#: src/structure.c:6010
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u connexions établies sur %u"
 
-#: src/structure.c:6146
-#: src/structure.c:6195
+#: src/structure.c:6145
+#: src/structure.c:6194
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Électroniquement endommagé"
 
-#: src/structure.c:6430
+#: src/structure.c:6429
 msgid "Electronic Reward - Visibility Report"
 msgstr "Récompense électronique - Rapport de visibilité"
 
-#: src/structure.c:6470
+#: src/structure.c:6469
 msgid "Factory Reward - Propulsion"
 msgstr "Récompense d'usine - Propulsion"
 
-#: src/structure.c:6494
+#: src/structure.c:6493
 msgid "Factory Reward - Body"
 msgstr "Récompense d'usine - Corps"
 
-#: src/structure.c:6518
+#: src/structure.c:6517
 msgid "Factory Reward - Weapon"
 msgstr "Récompense d'usine - Armes"
 
-#: src/structure.c:6527
+#: src/structure.c:6526
 msgid "Factory Reward - Nothing"
 msgstr "Récompense d'usine - Rien"
 
-#: src/structure.c:6555
+#: src/structure.c:6554
 msgid "Repair Facility Award - Repair"
 msgstr "Récompense Atelier de réparation - Réparation"
 
-#: src/structure.c:6562
+#: src/structure.c:6561
 msgid "Repair Facility Award - Nothing"
 msgstr "Récompense Atelier de réparation - Rien"
 

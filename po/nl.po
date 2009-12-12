@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-12-05 16:13+0100\n"
+"POT-Creation-Date: 2009-12-12 15:15+0100\n"
 "PO-Revision-Date: 2009-10-31 12:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -11150,12 +11150,12 @@ msgstr "Speler %u Heeft de verkeerde versie van het spel. Automatisch verwijderd
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr "Speler %u heeft het verkeerde wachtwoord.  Automatisch verwijderd van het spel."
 
-#: lib/netplay/netplay.c:2930
+#: lib/netplay/netplay.c:2943
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2955
+#: lib/netplay/netplay.c:2968
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Kan niet communiceren met de lobby server! is TCP port 9990 open?"
@@ -11889,11 +11889,11 @@ msgstr "SPELINSTELLINGEN"
 #: src/hci.c:3994
 #: src/hci.c:4447
 #: src/hci.c:5651
-#: src/intelmap.c:530
+#: src/intelmap.c:541
 #: src/intorder.c:661
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1338
+#: src/multimenu.c:1329
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12054,24 +12054,24 @@ msgstr "Spel opslaan"
 msgid "Power Accrued"
 msgstr "Energie toegenomen"
 
-#: src/intelmap.c:243
+#: src/intelmap.c:245
 #: src/keybind.c:1292
 msgid "PAUSED"
 msgstr "GEPAUZEERD"
 
-#: src/intelmap.c:404
+#: src/intelmap.c:411
 msgid "Research Update"
 msgstr "Onderzoeksverbetering"
 
-#: src/intelmap.c:408
+#: src/intelmap.c:415
 msgid "Project Goals"
 msgstr "Projectdoelen"
 
-#: src/intelmap.c:411
+#: src/intelmap.c:418
 msgid "Current Objective"
 msgstr "Huidig doel"
 
-#: src/intelmap.c:1482
+#: src/intelmap.c:1511
 msgid "New Intelligence Report"
 msgstr "Nieuwe inlichtingen"
 
@@ -13252,35 +13252,48 @@ msgstr ""
 msgid "It is not nice to cheat!"
 msgstr "Het is niet leuk dat je valspeeld!"
 
-#: src/multiplay.c:1880
+#: src/multiplay.c:1081
+#, fuzzy
+msgid "(allies"
+msgstr "Bondgenootschappen toestaan"
+
+#: src/multiplay.c:1091
+msgid "(private to "
+msgstr ""
+
+#: src/multiplay.c:1103
+msgid "[invalid]"
+msgstr ""
+
+#: src/multiplay.c:1930
 msgid "Green"
 msgstr "Groen"
 
-#: src/multiplay.c:1881
+#: src/multiplay.c:1931
 msgid "Orange"
 msgstr "Oranje"
 
-#: src/multiplay.c:1882
+#: src/multiplay.c:1932
 msgid "Grey"
 msgstr "Grijs"
 
-#: src/multiplay.c:1883
+#: src/multiplay.c:1933
 msgid "Black"
 msgstr "Zwart"
 
-#: src/multiplay.c:1884
+#: src/multiplay.c:1934
 msgid "Red"
 msgstr "Rood"
 
-#: src/multiplay.c:1885
+#: src/multiplay.c:1935
 msgid "Blue"
 msgstr "Blauw"
 
-#: src/multiplay.c:1886
+#: src/multiplay.c:1936
 msgid "Pink"
 msgstr "Roze"
 
-#: src/multiplay.c:1887
+#: src/multiplay.c:1937
 msgid "Cyan"
 msgstr "Cyaan"
 
@@ -13457,61 +13470,61 @@ msgstr "Kon geen sensoreenheden vinden!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kon geen commandanten vinden!"
 
-#: src/structure.c:2746
+#: src/structure.c:2745
 #, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Commando controlelimiet bereikt - Productie gestopt"
 
-#: src/structure.c:5931
-#: src/structure.c:5956
+#: src/structure.c:5930
+#: src/structure.c:5955
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Eenheid toegewezen"
 msgstr[1] "%s - %u Eenheden toegewezen"
 
-#: src/structure.c:5961
-#: src/structure.c:6025
+#: src/structure.c:5960
+#: src/structure.c:6024
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schade %3.0f%%"
 
-#: src/structure.c:6011
+#: src/structure.c:6010
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Verbonden met %u van %u"
 
-#: src/structure.c:6146
-#: src/structure.c:6195
+#: src/structure.c:6145
+#: src/structure.c:6194
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschadigd"
 
-#: src/structure.c:6430
+#: src/structure.c:6429
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronische onderscheiding - Zichtbaarheidsverslag"
 
-#: src/structure.c:6470
+#: src/structure.c:6469
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrieksonderscheiding - Aandrijving"
 
-#: src/structure.c:6494
+#: src/structure.c:6493
 msgid "Factory Reward - Body"
 msgstr "Fabrieksonderscheiding - Carrosserie"
 
-#: src/structure.c:6518
+#: src/structure.c:6517
 msgid "Factory Reward - Weapon"
 msgstr "Fabrieksonderscheiding - Wapen"
 
-#: src/structure.c:6527
+#: src/structure.c:6526
 msgid "Factory Reward - Nothing"
 msgstr "Fabrieksonderscheiding - Niets"
 
-#: src/structure.c:6555
+#: src/structure.c:6554
 msgid "Repair Facility Award - Repair"
 msgstr "Reparatie-onderscheiding - Reparatie"
 
-#: src/structure.c:6562
+#: src/structure.c:6561
 msgid "Repair Facility Award - Nothing"
 msgstr "Reparatie-onderscheiding - Niets"
 
