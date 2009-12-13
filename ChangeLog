@@ -24,7 +24,8 @@
  * Scripting:
    * New: Function droidCanReach() allows checking if droid destinations are possible (r8644)
  * AI:
-   * Make AIs go for closest oil first (ticket:1166, r8632)
+   * Change: AI will set all its droids to 'do or die' and no longer build repair centers (r8681)
+   * Fix: Make AIs go for closest oil first (ticket:1166, r8632)
  * Graphics:
    * Change: New wall models for the player in campaign and in multiplay (r8665)
  * Translations:
