@@ -177,11 +177,11 @@ run
 	defStructs[1]	STRUCTURESTAT		"Pillbox-RotMG"
 	defStructs[3]	STRUCTURESTAT		"GuardTower6"
 	defStructs[2]	STRUCTURESTAT		"PillBox4"		//LC
-	defStructs[4]	STRUCTURESTAT		"PillBox6"		//Lancer
+	defStructs[4]	STRUCTURESTAT		"GuardTower5"		//Lancer
 	defStructs[5]	STRUCTURESTAT		"Sys-SensoTower02"
 	defStructs[6]	STRUCTURESTAT		"WallTower03"		//MC
 	defStructs[7]	STRUCTURESTAT		"WallTower04"		//HC
-	defStructs[8]	STRUCTURESTAT		"PillBox6"		//Lancer
+	defStructs[8]	STRUCTURESTAT		"GuardTower5"		//Lancer
 
 	defStructs[9]	STRUCTURESTAT		"WallTower04"		//HC
 	defStructs[10]	STRUCTURESTAT		"WallTower-HPVcannon"
