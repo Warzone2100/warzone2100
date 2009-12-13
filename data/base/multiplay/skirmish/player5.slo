@@ -102,7 +102,7 @@ public	int				numStructs,numIncendrys,numDefStructs,numExtraStructs[TECHS],numWa
 private	STRUCTURESTAT	structChoice[5];
 public	STRUCTURESTAT	incendrys[8],structs[13],defStructs[26],extraStructs[TECHS][6],wallWeaps[11];
 public	STRUCTURESTAT	sensorTower,wall,cornerWall,resLab,powGen,playerHQ,lassat,factory,derrick,cybFactory,
-						vtolDefStruct[5],vtolPad,vtolFactory,repairFacility,uplink,baseStruct[8];
+						vtolDefStruct[5],vtolPad,vtolFactory,uplink,baseStruct[8];
 public	STRUCTURESTAT	powModule,facModule,resModule,vtolModule;
 public	int				extraStruct;
 
@@ -1323,21 +1323,6 @@ event droidBuiltAssign(droidBuiltTr)
 //When droid built: set droid retreat level and start building next droid
 event droidBuilt(droidBuiltTr)
 {
-	local STRUCTURE _repairFacility;
-
-	if(!isVtol(droid))
-	{
-		_repairFacility = getStructure(repairFacility,me);
-		if(_repairFacility == NULLOBJECT)
-		{
-			setDroidSecondary(droid,DSO_REPAIR_LEVEL, DSS_REPLEV_NEVER);
-		}
-		else
-		{
-			setDroidSecondary(droid,DSO_REPAIR_LEVEL, DSS_REPLEV_LOW);
-		}
-	}
-
 	/* Start building next droid */
 	if(structure != NULLOBJECT)
 	{
