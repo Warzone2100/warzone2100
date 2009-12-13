@@ -53,7 +53,6 @@ run
 	playerHQ		STRUCTURESTAT		"A0CommandCentre"
 	vtolPad			STRUCTURESTAT		"A0VtolPad"
 	vtolFactory		STRUCTURESTAT		"A0VTolFactory1"
-	repairFacility	STRUCTURESTAT		"A0RepairCentre3"
 	sensorTower		STRUCTURESTAT		"Sys-SensoTower02"
 	lassat			STRUCTURESTAT		"A0LasSatCommand"
 	nexusDefence	RESEARCHSTAT		"R-Sys-Resistance-Circuits"
@@ -215,12 +214,11 @@ run
 
 
 	// extra structs
-	numExtraStructs[0]	int					5
+	numExtraStructs[0]	int					4
 	extraStructs[0][0]	STRUCTURESTAT		"A0LightFactory"
-	extraStructs[0][1]	STRUCTURESTAT		"A0RepairCentre3"
-	extraStructs[0][2]	STRUCTURESTAT		"A0LightFactory"
-	extraStructs[0][3]	STRUCTURESTAT		"A0ResearchFacility"
-	extraStructs[0][4]	STRUCTURESTAT		"A0CyborgFactory"
+	extraStructs[0][1]	STRUCTURESTAT		"A0LightFactory"
+	extraStructs[0][2]	STRUCTURESTAT		"A0ResearchFacility"
+	extraStructs[0][3]	STRUCTURESTAT		"A0CyborgFactory"
 	
 	numExtraStructs[1]	int					5
 	extraStructs[1][0]	STRUCTURESTAT		"A0VTolFactory1"
