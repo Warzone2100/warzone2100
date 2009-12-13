@@ -27,6 +27,7 @@
 #define _netplay_h
 
 #include "nettypes.h"
+#include <physfs.h>
 
 // Lobby Connection errors
 
@@ -40,7 +41,8 @@ typedef enum
 	ERROR_WRONGVERSION,
 	ERROR_WRONGPASSWORD,				// NOTE WRONG_PASSWORD results in conflict
 	ERROR_HOSTDROPPED,
-	ERROR_WRONGDATA
+	ERROR_WRONGDATA,
+	ERROR_UNKNOWNFILEISSUE
 } LOBBY_ERROR_TYPES;
 
 
@@ -92,7 +94,7 @@ typedef enum
 	NET_DROIDDISEMBARK,		//43 droid disembarked from a Transporter
 	NET_RESEARCHSTATUS,		//44 research state.
 	NET_LASSAT,				//45 lassat firing.
-	NET_REQUESTMAP,			//46 dont have map, please send it.
+	NET_UNUSED_46,			//46 old map request, now unused.
 	NET_AITEXTMSG,			//47 chat between AIs
 	NET_TEAMS_ON,			//48 locked teams mode
 	NET_BEACONMSG,			//49 place beacon
@@ -114,6 +116,12 @@ typedef enum
 	NET_POSITIONREQUEST,	//65 position in GUI player list
 	NET_DATA_CHECK,			//66 Data integrity check
 	NET_HOST_DROPPED,		//67 Host has dropped
+	NET_FUTURE1,			//68	future use
+	NET_FUTURE2,			//69		"
+	NET_FUTURE3,			//70		"
+	NET_FILE_REQUESTED,		//71 Player has requested a file (map/mod/?)
+	NET_FILE_CANCELLED,		//72 Player cancelled a file request
+	NET_FILE_PAYLOAD,		//73 sending file to the player that needs it
 	NUM_GAME_PACKETS		//   *MUST* be last.
 } MESSAGE_TYPES;
 
@@ -182,8 +190,29 @@ typedef struct {
 	BOOL		status;				// If the packet compiled or not (this is _not_ sent!)
 } NETMSG;
 
-#define		FILEMSG			254		// a file packet
+typedef struct
+{
+	PHYSFS_file	*pFileHandle;		// handle
+	PHYSFS_sint32 fileSize_32;		// size
+	int32_t		currPos;			// current position
+	BOOL	isSending;				// sending to this player
+	BOOL	isCancelled;			// player cancelled
+	int32_t	filetype;				// future use (1=map 2=mod 3=...)
+}	WZFile;
 
+typedef struct
+{
+	int32_t player;					// the client we sent data to
+	int32_t done;					// how far done we are (100= finished)
+	int32_t byteCount;				// current byte count
+}	wzFileStatus;
+
+typedef enum
+{
+	WZ_FILE_OK,
+	ALREADY_HAVE_FILE,
+	STUCK_IN_FILE_LOOP
+}	wzFileEnum;
 // ////////////////////////////////////////////////////////////////////////
 // Player information. Filled when players join, never re-ordered. selectedPlayer global points to 
 // currently controlled player. This array is indexed by GUI slots in pregame.
@@ -201,6 +230,8 @@ typedef struct
 	BOOL		ready;			///< player ready to start?
 	uint32_t	versionCheckTime;	///< Time when check sent. Uses 0xffffffff for nothing sent yet
 	BOOL		playerVersionFlag;	///< We kick on false
+	BOOL		needFile;			///< if We need a file sent to us
+	WZFile		wzFile;				///< for each player, we keep track of map progress
 } PLAYER;
 
 // ////////////////////////////////////////////////////////////////////////
@@ -238,7 +269,7 @@ extern BOOL   NETsend(NETMSG *msg, UDWORD player);	// send to player
 extern BOOL   NETbcast(NETMSG *msg);				// broadcast to everyone
 extern BOOL   NETrecv(uint8_t *type);				// recv a message if possible
 
-extern UBYTE   NETsendFile(BOOL newFile, char *fileName, UDWORD player);	// send file chunk.
+extern UBYTE   NETsendFile(char *fileName, UDWORD player);	// send file chunk.
 extern UBYTE   NETrecvFile(void);			// recv file chunk
 
 extern int NETclose(void);					// close current game

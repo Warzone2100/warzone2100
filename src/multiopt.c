@@ -220,7 +220,7 @@ void recvOptions()
 
 		debug(LOG_NET, "Map was not found, requesting map %s from host.", game.map);
 		// Request the map from the host
-		NETbeginEncode(NET_REQUESTMAP, NET_HOST_ONLY);
+		NETbeginEncode(NET_FILE_REQUESTED, NET_HOST_ONLY);
 		NETuint32_t(&player);
 		NETend();
 

@@ -147,8 +147,7 @@ extern BOOL sendAIMessage		(char *pStr, UDWORD player, UDWORD to);	//send AI mes
 
 extern BOOL turnOffMultiMsg		(BOOL bDoit);
 
-extern UBYTE sendMap			(void);
-
+extern void sendMap(void);
 extern BOOL multiplayerWinSequence(BOOL firstCall);
 
 /////////////////////////////////////////////////////////
