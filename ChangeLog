@@ -1,11 +1,12 @@
 2009-12-13: Version 2.3.0 beta 4
  * General:
    * New: For windows people only, show a popup window for errors. (r8652)
+   * New: Add config variable 'UPnP' to enable/disable UPnP detection / routines.  1=on, 0=off, default is ON. (r8651)
+   * Change: Don't add UPnP redirects in singe player skirmish (r8649)
    * Fix: Loading savegames would sometimes make you the wrong player - this breaks all skirmish savegames - campaign savegames are fine (r8626)
    * Fix: Fixed endianness issues - PowerPC Macs can now play with others (r8593)
    * Fix: Hardware-accelerated cursors work correctly in Mac OS X (r8611)
-   * Fix: Some crashes (r8596, r8636)
-   * New: Add config variable 'UPnP' to enable/disable UPnP detection / routines.  1=on, 0=off, default is ON. (r8651)
+   * Fix: Some crashes (r8596, r8636, r8677)
  * Multiplayer:
    * New: ".message" sends message to allies (r8640)
    * Change: "5message" appears as "(private to Blue) message" instead of "(private) 5message" (r8640)
@@ -26,6 +27,8 @@
    * Make AIs go for closest oil first (ticket:1166, r8632)
  * Graphics:
    * Change: New wall models for the player in campaign and in multiplay (r8665)
+ * Translations:
+   * Updated: French (r8614), Italian (r8661), German (r8662)
 
 2009-11-29: Version 2.3.0 beta 3
  * General:
