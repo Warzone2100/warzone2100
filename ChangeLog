@@ -1,18 +1,29 @@
 2009-12-13: Version 2.3.0 beta 4
  * General:
-   * Fix: Bug in savegames that would renumber players - this breaks old SKIRMISH savegames, Campaign games are still OK. (r8626)
-   * Add: For windows people only, throw up a system dialog when either fatal, or informational events happen. (r8652)
-   * Fix: Don't allow players to control the transport in SP games. (r8666, r8670)
-   * Add: Add config variable 'UPnP' to enable/disable UPnP detection / routines.  1=on, 0=off, default is ON. (r8651)
+   * New: For windows people only, show a popup window for errors. (r8652)
+   * Fix: Loading savegames would sometimes make you the wrong player - this breaks all skirmish savegames - campaign savegames are fine (r8626)
+   * Fix: Fixed endianness issues - PowerPC Macs can now play with others (r8593)
+   * Fix: Hardware-accelerated cursors work correctly in Mac OS X (r8611)
+   * Fix: Some crashes (r8596, r8636)
+   * New: Add config variable 'UPnP' to enable/disable UPnP detection / routines.  1=on, 0=off, default is ON. (r8651)
+ * Multiplayer:
+   * New: ".message" sends message to allies (r8640)
+   * Change: "5message" appears as "(private to Blue) message" instead of "(private) 5message" (r8640)
+   * Fix: "5message" now sends message to player in position 5 instead of ID 5 (r8640)
+   * Fix: Game setup screen updates now happen instantly, instead of every 2 seconds (r8603)
+   * Fix: AI difficulty slider can now be dragged continuously (r8601)
+   * Fix: Map download progress doesn't clear chat screen anymore (r8603)
+   * Fix: Map transfers should no longer crash. r8667
  * Gameplay:
-   * Change: Show proximity blips again for oil resources, but they do not blink (r8587)
+   * New: Multiplayer alliances menu now appears in Intelligence screen (r8638)
+   * Change: Show proximity blips again for oil resources, but they do not blink on map (r8587)
+   * Fix: Multiplayer alliances menu sorted by position again (r8638)
    * Fix: Bug that caused transporter not to disembark when auto-repairing and allow order to be queued (r8624)
+   * Fix: Don't allow players to control the transport in single-player campaign. (r8666, r8670)
  * Scripting:
    * New: Function droidCanReach() allows checking if droid destinations are possible (r8644)
  * AI:
    * Make AIs go for closest oil first (ticket:1166, r8632)
- * Multiplayer:
-   * Fix: File (map for now) transfers should be fully working now. r8667
 
 2009-11-29: Version 2.3.0 beta 3
  * General:
