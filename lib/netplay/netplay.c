@@ -1867,16 +1867,16 @@ static int upnp_init(void *asdf)
 			free (descXML); descXML = 0;
 			GetUPNPUrls (&urls, &data, dev->descURL);
 		}
+		ssprintf(buf, "UPnP device found: %s %s LAN address %s", dev->descURL, dev->st, lanaddr);
+		addDumpInfo(buf);
 		freeUPNPDevlist(devlist);
 
 		if (!urls.controlURL || urls.controlURL[0] == '\0')
 		{
-			ssprintf(buf, "UPnP device found: %s %s LAN address %s, but failed controlURL", dev->descURL, dev->st, lanaddr);
+			ssprintf(buf, "controlURL not available, UPnP disabled");
 			addDumpInfo(buf);
 			return false;
 		}
-		ssprintf(buf, "UPnP device found: %s %s LAN address %s", dev->descURL, dev->st, lanaddr);
-		addDumpInfo(buf);
 		return true;
 	}
 	ssprintf(buf, "UPnP device not found.");
