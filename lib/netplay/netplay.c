@@ -49,6 +49,7 @@
 # include <netinet/in.h>
 # include <sys/socket.h>
 # include <sys/types.h>
+# include <sys/select.h>
 # include <unistd.h>
 typedef int SOCKET;
 static const SOCKET INVALID_SOCKET = -1;
@@ -1070,12 +1071,18 @@ static struct addrinfo* resolveHost(const char* host, unsigned int port)
 	struct addrinfo* results;
 	char* service;
 	struct addrinfo hint;
-	int error;
+	int error, flags = 0;
 
 	hint.ai_family    = AF_UNSPEC;
 	hint.ai_socktype  = SOCK_STREAM;
 	hint.ai_protocol  = 0;
-	hint.ai_flags     = (AI_V4MAPPED | AI_ADDRCONFIG);
+#ifdef AI_V4MAPPED
+	flags             |= AI_V4MAPPED;
+#endif
+#ifdef AI_ADDRCONFIG
+	flags             |= AI_ADDRCONFIG;
+#endif
+	hint.ai_flags     = flags;
 	hint.ai_addrlen   = 0;
 	hint.ai_addr      = NULL;
 	hint.ai_canonname = NULL;
