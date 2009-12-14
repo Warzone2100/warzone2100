@@ -1,8 +1,7 @@
 Warzone 2100 - Readme
 =====================
-This file has not been updated since the release of 2.1. Some information may
-not be correct any more. For current information visit the homepage of the
-Warzone 2100 Resurrection Project (http://wz2100.net/).
+This file may be out of date. For current information visit the homepage of the
+Warzone 2100 Project (http://wz2100.net/).
 
 Content
 -------
@@ -29,7 +28,7 @@ breaking and innovative 3D real-time strategy game.
 
 In 2004 Eidos, in collaboration with Pumpkin Studios, decided to release
 the source for the game under the terms of the GNU GPL, including everything
-but the music and in-game video sequences.
+but the music and in-game video sequences, which were released later.
 
 Additionally all multiplayer-maps that were available in Warzone 2100 1.10,
 the last official version by Pumpkin Studios, are available in Warzone 2100 as
@@ -40,21 +39,19 @@ well.
 After the liberation of the Warzone 2100 source-code on December 6th, 2004, all
 proprietary technologies had been replaced with open-source-counterparts.
 
-Right now supported platforms are GNU/Linux, Mac OS X 10.4 (Tiger) and Windows
-(98 - XP). There are reports that Warzone 2100 is working on BSD, too. While 
-Warzone 2100 may work under Windows Vista it is not supported by us.
-
-The game is becoming more and more stable over time, but you should not expect
-the game to run without any issues.
+Right now supported platforms are GNU/Linux, Mac OS X 10.4-10.6 and Windows
+(98 - 7). There are reports that Warzone 2100 is working on BSD, too.
 
 2.1 Reporting Bugs
 ------------------
 This game still has bugs and if you run into one, please use the bugtracker
-(https://gna.org/bugs/?group=warzone) to report this bug. In order to faster fix
+(http://developer.wz2100.net/) to report this bug. In order to faster fix
 those bugs we require that you follow these rules:
 
    1. If the game crashes you may save a memory dump. Please do so and upload it
-      when reporting the bug. (Linux locates that file at /tmp/warzone2100.gdmp)
+      when reporting the bug. (Linux locates that file at /tmp/warzone2100.gdmp,
+      Windows at /Program Files/Warzone 2100/warzone2100.RPT, Mac OS X by
+      clicking "Details" in the crash error message)
       A self created backtrace is just as useful.
    2. Give as much information about what you were doing before the crash/bug
       occured.
@@ -72,7 +69,7 @@ those bugs we require that you follow these rules:
 ================
 3.1 Warzone directory
 ---------------------
-Warzone 2100 uses an own sub-directory in a user's home direcoty to save
+Warzone 2100 uses an own sub-directory in a user's home directory to save
 configuration data, save-games and certain other things. Additionally you can
 use this directory to place custom maps and mods so the game can find them. The
 location of this directory depends on the operating system.
@@ -80,17 +77,18 @@ location of this directory depends on the operating system.
 Warzone directory under GNU/Linux
 *********************************
 Under GNU/Linux the warzone-dir can be found in your home-directory, it's called
-".warzone2100-2.1". The leading dot indicates that it is a hidden directory so
-depending on your configuration you may not be able to see it. However, you can
-still access it by typing the path into your address-bar.
+".warzone2100-<version>". The leading dot indicates that it is a hidden
+directory so depending on your configuration you may not be able to see it.
+However, you can still access it by typing the path into your address-bar.
 
 Warzone directory under Windows
 *******************************
-The directory is called "Warzone 2100 2.1" and is located in "My Documents".
+The directory is called "Warzone 2100 <version>" and is located in "My
+Documents".
 
 Warzone directory under Mac OS X
 ********************************
-The directory "Warzone 2100 2.1" can be found in your home-directory at:
+The directory "Warzone 2100 <version>" can be found in your home-directory at:
 ~/Library/Application Support/
 
 3.2 Configuration file
@@ -121,11 +119,15 @@ bpp=32
        Sets the colour depth in bpp = bits per pixel.
 
 cdvol=50
-       Sets the volume for music ranging from 0 (no sound) to 100 (loudest.
+       Sets the volume for music ranging from 0 (no sound) to 100 (loudest).
 
 colour=0
        Sets your colour in the single player mode: Green (0), red (4), blue (5),
        pink (6) and cyan (7).
+
+ColouredCursor=0 on Windows/Linux, 1 on Mac OS X
+       Toggles whether to use hardware-accelerated black/white cursors (0) or
+       slower coloured cursors (1).
 
 debugmode=0
        Toggles debug mode on (1) and off (0). --cheat sets this to 1. In order
@@ -134,6 +136,10 @@ debugmode=0
 difficulty=1
        Sets the difficulty for campaign game: easy (0), medium (1) or hard (2).
        This value is not changed by difficulty-cheats.
+
+FMVmode=0
+       Sets whether to play FMVs fullscreen (0), 1x (1), 2x (2), or fullscreen
+       preserving aspect ratio (3).
 
 fog=1
        Sets fog to fog of war (1) or distance fog (0).
@@ -209,6 +215,12 @@ power=400
        (400), if you specify an unknown value. You can choose from low power
        levels (100), medium power levels (400) and high power levels (700).
 
+RightClickOrders=0
+       Whether to use left-click (0) or right-click (1) for ordering units to
+       move, attack, etc. Right-click ordering (1) makes the mouse buttons
+       resemble how they're used in most modern RTSes, such as the StarCraft
+       and WarCraft series.
+
 radarObjectMode=0
        Toggles friend-foe-colours on (1) and off (0). The value is not affected
        by using Ctrl+Tab.
@@ -265,6 +277,11 @@ trapCursor=0
 
 type=12
        Used for selecting a game-type, do not edit this.
+
+UPnP=1
+       Whether or not to enable (1) or disable (0) UPnP. When enabled, Warzone
+       will try to automatically configure port forwarding in your router, if
+       your router supports UPnP.
 
 visfog=1
        Toggles the effect used for unexplored terrain: Black tiles (1) or dimmed
@@ -358,12 +375,13 @@ persist from one start of Warzone 2100 to the next. For example starting the
 game with --nosound only once will silence it as long as you do not start it
 with --sound or change the corresponding value in the configuration file. Fur-
 ther information on command-line options can be found at the Wiki of the War-
-zone 2100 Resurrection Project (http://wiki.wz2100.net/command_line_options).
+zone 2100 Project (http://developer.wz2100.net/wiki/CommandLineOptions).
 
 3.4 Music
 ---------
 A playlist-system is used that can point to any *.ogg in your warzone music
-path.
+path. However, if you just wish to play Warzone with your own music, it is far
+easier to turn off Warzone music and use an external music player such as iTunes.
 
 Warzone 2100 reads the playlist from the first location it is found, searching
 in this order:
@@ -387,7 +405,8 @@ and space). You will receive the following error (running with --debug sound) if
 -----------------------------
 There are two methods to start a multiplayer-game via internet: using the host's
 IP or using the lobby-server. Make sure to be able to communicate on TCP-ports
-9998 and 9999.
+2100 and 9999. Note that for port forwarding, you only need to configure your
+router to forward port 2100.
 
 You can choose whether to connect via Lobby or IP:
 
@@ -543,17 +562,17 @@ Ctrl + O                       Display debug-menu
 
 7. Additional resources
 =======================
-Homepage of the Warzone Resurrection Project (English):
+Homepage of the Warzone 2100 Project (English):
 http://wz2100.net/
 
-Gna!-Project site of Warzone (English):
-https://gna.org/projects/warzone/
+Sourceforge project site of Warzone (English):
+https://sourceforge.net/projects/warzone2100/
 
 Warzone-Wiki (English):
-http://wiki.wz2100.net/
+http://developer.wz2100.net/
 
 Warzone2100.de (German):
 http://warzone2100.de/
 
-AUTHOR: Kreuvf (kreuvf@warzone2100.de)
-LAST UPDATE: 2009/05/29
+AUTHOR: Kreuvf (kreuvf@warzone2100.de), Zarel (zarel@wz2100.net)
+LAST UPDATE: 2009-12-14
