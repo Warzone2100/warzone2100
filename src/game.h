@@ -71,9 +71,10 @@
 #define VERSION_34              34              //saves AI names for multiplayer (.gam file)
 #define VERSION_35              35              //uses the (de)serialization API for saving/loading games and is big-endian instead of little-endian
 #define VERSION_36              36              //saves beacon properly
+#define VERSION_37		37		//dpid changes; this had better be the last version
 
 
-#define CURRENT_VERSION_NUM     VERSION_36
+#define CURRENT_VERSION_NUM     VERSION_37
 
 //used in the loadGame
 #define KEEPOBJECTS				true

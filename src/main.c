@@ -639,7 +639,13 @@ static bool initSaveGameLoad(void)
 	if (!loadGameInit(saveGameName))
 	{
 		// FIXME: we really should throw up a error window, but we can't (easily) so I won't.
-		debug( LOG_ERROR, "Trying to load Game %s failed!", saveGameName);
+		debug(LOG_ERROR, "Trying to load Game %s failed!", saveGameName);
+		debug(LOG_POPUP, "Failed to load a save game! It is either corrupted or a unsupported format.\n\nRestarting main menu.");
+		// FIXME: If we bomb out on a in game load, then we would crash if we don't do the next two calls
+		// Doesn't seem to be a way to tell where we are in game loop to determine if/when we should do the two calls.
+		gameLoopStatus = GAMECODE_FASTEXIT;	// clear out all old data
+		stopGameLoop();
+		startTitleLoop(); // Restart into titleloop
 		SetGameMode(GS_TITLE_SCREEN);
 		return false;
 	}

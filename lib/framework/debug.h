@@ -167,6 +167,7 @@ typedef enum {
   LOG_FEATURE,
   LOG_FATAL,	/**< special; on by default, for both debug & release builds  */
   LOG_INPUT,	// mouse / keyboard events
+  LOG_POPUP,	// special, on by default, for both debug & release builds (used for OS dependent popup code)
   LOG_LAST /**< _must_ be last! */
 } code_part;
 
