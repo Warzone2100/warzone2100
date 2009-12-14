@@ -1085,25 +1085,22 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 		for (; curStr[0] >= '0' && curStr[0] <= '7'; curStr++)		// for each 0..7 numeric char encountered
 		{
 			i = posTable[curStr[0]-'0'];
-			if (!all)
+			if (normal)
 			{
-				if (normal)
-				{
-					sstrcpy(display, _("(private to "));
-				}
-				else
-				{
-					sstrcat(display, ", ");
-				}
-				if ((isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ) ))
-				{
-					sstrcat(display, getPlayerName(posTable[curStr[0]-'0']));
-					sendto[i] = true;
-				}
-				else
-				{
-					sstrcat(display, _("[invalid]"));
-				}
+				sstrcpy(display, _("(private to "));
+			}
+			else
+			{
+				sstrcat(display, ", ");
+			}
+			if ((isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ) ))
+			{
+				sstrcat(display, getPlayerName(posTable[curStr[0]-'0']));
+				sendto[i] = true;
+			}
+			else
+			{
+				sstrcat(display, _("[invalid]"));
 			}
 			normal = false;
 		}
