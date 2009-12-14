@@ -55,11 +55,11 @@ typedef enum _object_type
 	Vector3uw       pos;                            /**< Position of the object */ \
 	float           direction;                      /**< Object's yaw +ve rotation around up-axis */ \
 	SWORD           pitch;                          /**< Object's pitch +ve rotation around right-axis (nose up/down) */ \
+	UBYTE           player;                         /**< Which player the object belongs to */ \
 	SWORD           roll                            /**< Object's roll +ve rotation around forward-axis (left wing up/down) */
 
 #define BASE_ELEMENTS2(pointerType) \
 	SCREEN_DISP_DATA    sDisplay;                   /**< screen coordinate details */ \
-	UBYTE               player;                     /**< Which player the object belongs to */ \
 	UBYTE               group;                      /**< Which group selection is the droid currently in? */ \
 	UBYTE               selected;                   /**< Whether the object is selected (might want this elsewhere) */ \
 	UBYTE               cluster;                    /**< Which cluster the object is a member of */ \
