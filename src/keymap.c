@@ -347,8 +347,6 @@ void	keyInitMappings( BOOL bForceDefaults )
 	//                                **********************************
 	//	MULTIPLAYER
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KPENTER,KEYMAP_PRESSED,kf_addMultiMenu,		_("Multiplayer Options / Alliance dialog"));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_KP_FULLSTOP,KEYMAP_PRESSED,kf_multiAudioStart,	_("Start Multiplayer Audio"));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_KP_FULLSTOP,KEYMAP_RELEASED,kf_multiAudioStop,	_("Stop Multiplayer Audio"));
 	//
 	//	GAME CONTROLS - Moving around, zooming in, rotating etc
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_BACKSPACE,KEYMAP_PRESSED,kf_SeekNorth,		_("Snap View to North"));
