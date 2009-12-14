@@ -1053,6 +1053,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 	memset(display,0x0, sizeof(display));	//clear buffer
 	memset(msg,0x0, sizeof(display));		//clear buffer
 	memset(sendto,0x0, sizeof(sendto));		//clear private flag
+	memset(posTable,0x0, sizeof(posTable));		//clear buffer
 	sstrcpy(msg, curStr);
 
 	if (!all)
@@ -1081,7 +1082,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 		}
 		for (; curStr[0] >= '0' && curStr[0] <= '7'; curStr++)		// for each 0..7 numeric char encountered
 		{
-			sendto[ posTable[curStr[0]-'0'] ] = true;
+			i = posTable[curStr[0]-'0'];
 			if (!all)
 			{
 				if (normal)
@@ -1095,6 +1096,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 				if ((isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ) ))
 				{
 					sstrcat(display, getPlayerName(posTable[curStr[0]-'0']));
+					sendto[i] = true;
 				}
 				else
 				{
