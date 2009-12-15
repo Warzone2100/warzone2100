@@ -5226,14 +5226,8 @@ BOOL scrGetNearestGateway( void )
 		return(false);
 	}
 
-	if(psGateways == NULL)
-	{
-		ASSERT( false,"SCRIPT : No gateways found in getNearestGatway" );
-		return(false);
-	}
-
 	nearestSoFar = UDWORD_MAX;
-	retX = retY = 0;
+	retX = retY = -1;
 	success = false;
 	for(psGateway = psGateways; psGateway; psGateway = psGateway->psNext)
 	{
