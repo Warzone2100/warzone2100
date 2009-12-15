@@ -66,6 +66,7 @@
 #include "modding.h"
 #include "multiplay.h"
 #include "research.h"
+#include "scripttabs.h"
 #include "seqdisp.h"
 #include "warzoneconfig.h"
 #include "main.h"
@@ -592,6 +593,10 @@ static void startGameLoop(void)
 	if (challengeActive)
 	{
 		addMissionTimerInterface();
+	}
+	if (game.type == SKIRMISH)
+	{
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
 	}
 }
 
