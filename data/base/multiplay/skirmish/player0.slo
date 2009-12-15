@@ -98,7 +98,7 @@ public	STRUCTURESTAT	vtolTarget[10],rebuildStat[TECHS][2];
 
 // structures
 private int				baseX,baseY,minx,miny,maxx,maxy;
-public	int				numStructs,numIncendrys,numDefStructs,numExtraStructs[TECHS],numWallWeaps,numBaseStruct,numLightCyborgs;
+public	int				numStructs,numIncendrys,numDefStructs,numExtraStructs[TECHS],numWallWeaps,numBaseStruct,numLightCyborgs,numFundamental;
 private	STRUCTURESTAT	structChoice[5];
 public	STRUCTURESTAT	incendrys[8],structs[13],defStructs[26],extraStructs[TECHS][6],wallWeaps[11];
 public	STRUCTURESTAT	sensorTower,wall,cornerWall,resLab,powGen,playerHQ,lassat,factory,derrick,cybFactory,
@@ -218,6 +218,7 @@ trigger watchBaseThreatTr			(every, 120);
 trigger manageAllyHelpTr			(every, 80);
 trigger everySec					(every, 10);
 trigger manageDefendLocationTr		(every, 70);
+trigger startLevelTr				(CALL_START_NEXT_LEVEL);
 
 /* Events */
 event	multiMsgEv;
@@ -390,12 +391,49 @@ event initialisedEvent(CALL_GAMEINIT)
 	if(aiResponsibleForPlayer(me))
 	{
 		bRunning = true;
-		buildTruck();
 	}
 	else
 	{
 		shutDownAI();
 	}
+}
+
+event startLevel(startLevelTr)
+{
+	if (!bRunning)
+	{
+		exit;
+	}
+	count = 0;
+	while (count < numFundamental)
+	{
+		// check that struct.
+		structure = getStructure(structs[count], me);
+		if(structure == NULLOBJECT)				// if missing build it.
+		{
+			if (isStructureAvailable(structs[count], me))
+			{
+				buildX = baseX;						// pick a location
+				buildY = baseY;
+				boolResult = pickStructLocationB(structs[count], ref buildX, ref buildY,me,0);
+				if(boolResult == TRUE)
+				{
+					initIterateGroup(buildGroup);				// find idle droids in build group.
+					droid = iterateGroup(buildGroup);
+					while (droid != NULLOBJECT)
+					{
+						if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
+						{
+							orderDroidStatsLoc(droid, DORDER_BUILD, structs[count], buildX, buildY);	// build it
+						}
+						droid = iterateGroup(buildGroup);
+					}
+				}
+			}
+		}
+		count = count + 1;
+	}
+	buildTruck();
 }
 
 // decide what technology branch we will use
@@ -1347,14 +1385,15 @@ event structBuilt(structBuiltTr)
 	local	FEATURE	_oilResource;
 	local	int		_count,_count2;
 
-	if(structure == NULLOBJECT || droid == NULLOBJECT){
+	if (structure == NULLOBJECT || droid == NULLOBJECT)
+	{
 		exit;
 	}
 
 	/* factory or factory module */
 	if(structure.stattype == REF_FACTORY)
 	{
-		if( isStructureAvailable(facModule,me) and (skGetFactoryCapacity(structure) < 2 ))
+		if( isStructureAvailable(facModule,me) and (skGetFactoryCapacity(structure) < 2 ) and (getDroidCount(me) > 4))
 		{
 			orderDroidStatsLoc(droid, DORDER_BUILD,facModule, structure.x,structure.y);	// upgrade it.
 		}
@@ -3032,11 +3071,7 @@ function void shutDownAI()
 
 event reassignPlayers(reassignTr)
 {
-	if(count == me)
-	{
-		dbg(" AI 0 is reassigningAI to dropped player ", me);
-		//reassignAI();
-	}
+	dbg("Reassign event is ignored", me);
 }
 
 function void reassignAI()
@@ -3091,6 +3126,7 @@ function void reassignAI()
 	setEventTrigger(structBuilt, structBuiltTr);
 	setEventTrigger(structureDestroyed, structureDestroyedTr);
 	setEventTrigger(rebuildStructureEv, rebuildStructureTr);
+	setEventTrigger(startLevel, startLevelTr);
 }
 
 /* Returns true if we just received a beacon from a certain player */

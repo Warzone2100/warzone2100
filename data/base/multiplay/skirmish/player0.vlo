@@ -10,7 +10,7 @@ run
 	branchDefault	int					0
 	branchVTOL		int					1
 
-	me				int					0			// this player is player x.
+	me		int					0			// this player is player x.
 
 	//default branch
 	numScouts[0]	int					3			// min number of droids in group to aim for.
@@ -141,12 +141,13 @@ run
 	facModule		STRUCTURESTAT		"A0FacMod1"
 	resModule		STRUCTURESTAT		"A0ResearchModule1"
 
- 	// Essential structs.
+ 	// Essential and fundamental structs. Fundamental => what you build on level start
 	numStructs		int					13
-	structs[0]		STRUCTURESTAT		"A0PowerGenerator"
-	structs[1]		STRUCTURESTAT		"A0LightFactory"
-	structs[2]		STRUCTURESTAT		"A0CommandCentre"
-	structs[3]		STRUCTURESTAT		"A0ResearchFacility"
+	numFundamental		int					5
+	structs[0]		STRUCTURESTAT		"A0LightFactory"
+	structs[1]		STRUCTURESTAT		"A0ResearchFacility"
+	structs[2]		STRUCTURESTAT		"A0PowerGenerator"
+	structs[3]		STRUCTURESTAT		"A0CommandCentre"
 	structs[4]		STRUCTURESTAT		"A0CyborgFactory"
 
 	structs[5]		STRUCTURESTAT		"Sys-CB-Tower01"
