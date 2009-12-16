@@ -130,7 +130,11 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 # define MAX_DATE_STRING 256
 
 
+#ifdef SA_SIGINFO
 typedef void(*SigActionHandler)(int, siginfo_t *, void *);
+#else
+typedef void(*SigActionHandler)(int);
+#endif
 
 
 #ifdef WZ_OS_MAC
@@ -159,6 +163,7 @@ static char
  * \param sigcode Signal code
  * \return String with the description of the signal. "Unknown signal" when no description is available.
  */
+#ifdef SA_SIGINFO
 static const char * wz_strsignal(int signum, int sigcode)
 {
 	switch (signum)
@@ -277,6 +282,7 @@ static const char * wz_strsignal(int signum, int sigcode)
 			return "Unknown signal";
 	}
 }
+#endif // SA_SIGINFO
 
 
 /**
@@ -288,9 +294,13 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
 {
 	struct sigaction new_handler;
 
-	new_handler.sa_sigaction = signalHandler;
 	sigemptyset(&new_handler.sa_mask);
+#ifdef SA_SIGINFO
 	new_handler.sa_flags = SA_SIGINFO;
+	new_handler.sa_sigaction = signalHandler;
+#else
+	new_handler.sa_handler = signalHandler;
+#endif
 
 	sigaction(SIGABRT, NULL, &oldAction[SIGABRT]);
 	if (oldAction[SIGABRT].sa_handler != SIG_IGN)
@@ -531,7 +541,11 @@ static bool gdbExtendedBacktrace(int const dumpFile)
  * \param siginfo Signal info
  * \param sigcontext Signal context
  */
+#ifdef SA_SIGINFO
 static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSED void * sigcontext)
+#else
+static void posixExceptionHandler(int signum)
+#endif
 {
 	static sig_atomic_t allreadyRunning = 0;
 	// XXXXXX will be converted into random characters by mkstemp(3)
@@ -561,11 +575,13 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	// Dump a generic info header
 	dbgDumpHeader(dumpFile);
 
+#ifdef SA_SIGINFO
 	write(dumpFile, "Dump caused by signal: ", strlen("Dump caused by signal: "));
 
 	signal = wz_strsignal(siginfo->si_signo, siginfo->si_code);
 	write(dumpFile, signal, strlen(signal));
 	write(dumpFile, "\n\n", 2);
+#endif
 
 	dbgDumpLog(dumpFile); // dump out the last several log calls
 

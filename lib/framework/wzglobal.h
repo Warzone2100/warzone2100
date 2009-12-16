@@ -573,6 +573,11 @@
 #  endif
 #endif /* WZ_OS_* */
 
+// Define PATH_MAX for systems that don't have it, like Hurd
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
+
 
 #if !defined(WZ_C99) && !defined(va_copy)
 /**
