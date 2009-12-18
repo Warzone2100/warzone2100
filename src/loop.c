@@ -318,16 +318,16 @@ GAMECODE gameLoop(void)
 								DROID *psDroid = NULL;
 
 								numTransporterDroids[i] += psCurr->psGroup->refCount-1;
-								// and count the units inside it...for MP games only(?)
-								if (bMultiPlayer)
+								// and count the units inside it...
+								for (psDroid = psCurr->psGroup->psList; psDroid != NULL && psDroid != psCurr; psDroid = psDroid->psGrpNext)
 								{
-									for (psDroid = psCurr->psGroup->psList; psDroid != NULL && psDroid != psCurr; psDroid = psDroid->psGrpNext)
+									if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
 									{
-										// since in MP we can only have cyborgs in transport, don't need to count DROID_CONSTRUCT as well.
-										if (psDroid->droidType == DROID_CYBORG_CONSTRUCT)
-										{
-											numConstructorDroids[i] += 1;
-										}
+										numConstructorDroids[i] += 1;
+									}
+									if (psDroid->droidType == DROID_COMMAND)
+									{
+										numCommandDroids[i] += 1;
 									}
 								}
 							}
