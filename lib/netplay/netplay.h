@@ -245,6 +245,7 @@ typedef struct {
 	BOOL		isHost;			///< True if we are hosting the game
 	int32_t		maxPlayers;		///< Maximum number of players in this game
 	BOOL		isUPNP;					// if we want the UPnP detection routines to run
+	BOOL		isHostAlive;	/// if the host is still alive
 	char gamePassword[StringSize];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once

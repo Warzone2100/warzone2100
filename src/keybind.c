@@ -1043,7 +1043,10 @@ void	kf_ToggleDroidInfo( void )
 void	kf_addInGameOptions( void )
 {
 		setWidgetsStatus(true);
-		intAddInGameOptions();
+		if (!isInGamePopupUp)	// they can *only* quit when popup is up.
+		{
+			intAddInGameOptions();
+		}
 }
 // --------------------------------------------------------------------------
 /* Tell the scripts to start a mission*/

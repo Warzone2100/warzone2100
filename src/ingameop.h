@@ -30,16 +30,18 @@ extern BOOL intCloseInGameOptions		(BOOL bPutUpLoadSave, BOOL bResetMissionWidge
 extern void intCloseInGameOptionsNoAnim	(BOOL bResetMissionWidgets);
 extern BOOL intRunInGameOptions			(void);
 extern void intProcessInGameOptions		(UDWORD);
+extern void intAddInGamePopup(void);
 
 // status bools.
 extern BOOL	ClosingInGameOp;
 extern BOOL	InGameOpUp;
-
+extern bool isInGamePopupUp;
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
 // the screen itself.
 #define INTINGAMEOP				10500
+#define INTINGAMEPOPUP			77335
 
 // position info for window.
 
@@ -101,6 +103,10 @@ enum
 	INTINGAMEOP_CURSOR_S,
 	INTINGAMEOP_SUBTITLES,
 	INTINGAMEOP_SUBTITLES_BT,
+	INTINGAMEOP_POPUP_QUIT,
+	INTINGAMEOP_POPUP_MSG1,
+	INTINGAMEOP_POPUP_MSG2,
+	INTINGAMEOP_POPUP_MSG3
 };
 
 
