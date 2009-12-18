@@ -714,10 +714,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\base.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\basedef.h"
 				>
 			</File>
@@ -731,14 +727,6 @@
 			</File>
 			<File
 				RelativePath="..\src\bucket3d.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\bullet.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\bulletdef.h"
 				>
 			</File>
 			<File
@@ -1066,10 +1054,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\optimisepath.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\order.h"
 				>
 			</File>
@@ -1079,10 +1063,6 @@
 			</File>
 			<File
 				RelativePath="..\src\parsetest.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\platform.h"
 				>
 			</File>
 			<File
@@ -1235,14 +1215,6 @@
 			</File>
 			<File
 				RelativePath="..\src\weapondef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\weapons.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\winmain.h"
 				>
 			</File>
 			<File
