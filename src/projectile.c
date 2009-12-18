@@ -291,6 +291,8 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 			experienceInc *= QualityFactor(psDroid, (DROID *) psObj->psDest);
 		}
 
+		ASSERT_OR_RETURN(, -0.1 < experienceInc && experienceInc < 2.1, "Experience increase out of range");
+
 		psDroid->experience += experienceInc;
 		cmdDroidUpdateKills(psDroid, experienceInc);
 
@@ -303,6 +305,8 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 	}
 	else if (psObj->psSource->type == OBJ_STRUCTURE)
 	{
+		ASSERT_OR_RETURN(, -0.1 < experienceInc && experienceInc < 2.1, "Experience increase out of range");
+
 		// See if there was a command droid designating this target
 		psDroid = cmdDroidGetDesignator(psObj->psSource->player);
 
