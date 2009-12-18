@@ -86,6 +86,7 @@
 #include "multistat.h"
 #include "multirecv.h"
 #include "multimenu.h"
+#include "multilimit.h"
 
 #include "warzoneconfig.h"
 
@@ -2679,6 +2680,18 @@ void startMultiplayerGame(void)
 
 	if (NetPlay.isHost)
 	{
+		if (!bLimiterLoaded)	// if they set limits, then skip this
+		{
+			if (!resLoad("wrf/piestats.wrf", 502))
+			{
+				debug(LOG_WARNING, "Unable to load limits.  Defaults not set.");
+			}
+			else if (!resLoad("wrf/limiter_data.wrf", 503))
+			{
+				debug(LOG_WARNING, "Unable to load limits?");
+			}
+			createLimitSet();
+		}
 		sendOptions();
 		NEThaltJoining();							// stop new players entering.
 		ingame.TimeEveryoneIsInGame = 0;
