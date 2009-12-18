@@ -2690,6 +2690,7 @@ void startMultiplayerGame(void)
 			{
 				debug(LOG_WARNING, "Unable to load limits?");
 			}
+			resetDataHash();	// need to reset it, since host's data has changed.
 			createLimitSet();
 		}
 		sendOptions();
