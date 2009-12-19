@@ -414,7 +414,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 		{
 #if defined(WZ_OS_WIN)
 			char wbuf[512];
-			ssprintf(wbuf, "A non fatal error has occuerd.\n\n%s\n\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			ssprintf(wbuf, "A non fatal error has occurred.\n\n%s\n\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 			MessageBoxA( NULL,
 				wbuf,
 				"Warzone has detected a problem.", MB_OK|MB_ICONINFORMATION);
