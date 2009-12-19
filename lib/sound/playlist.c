@@ -164,7 +164,7 @@ void playListTest()
 {
 	int i;
 
-	for (i = 0; i < 100; i++)
+	for (i = 0; i < 10; i++)
 	{
 		const char *cur, *next;
 
