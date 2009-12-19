@@ -1422,6 +1422,9 @@ void NET_InitPlayers()
 		NetPlay.players[i].ready = false;
 		NetPlay.players[i].versionCheckTime = 0xffffffff;
 		NetPlay.players[i].playerVersionFlag = false;
+		NetPlay.players[i].needFile = false;
+		NetPlay.players[i].wzFile.isCancelled = false;
+		NetPlay.players[i].wzFile.isSending = false;
 	}
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
@@ -3227,6 +3230,10 @@ static void NETallowJoining(void)
 						NETbeginEncode(NET_REQUEST_PASSWORD, index);
 						NETend();
 					}
+					// reset flags for new players
+					NetPlay.players[index].wzFile.isCancelled = false;
+					NetPlay.players[index].wzFile.isSending = false;
+					NetPlay.players[index].needFile = false;
 					// and now, request version from new person
 					NETbeginEncode(NET_REQUEST_VERSION, index);
 					NETend();
