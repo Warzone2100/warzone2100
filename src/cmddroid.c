@@ -188,8 +188,8 @@ void cmdDroidUpdateKills(DROID *psKiller, float experienceInc)
 		}
 		else
 		{
-		psCommander->experience += experienceInc;
-	}
+			psCommander->experience += experienceInc;
+		}
 	}
 }
 
