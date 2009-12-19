@@ -959,7 +959,7 @@ void processMouseClickInput(void)
 			}
 			
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && selection == SC_DROID_TRANSPORTER &&
-				arnMPointers[item][selection] == CURSOR_MOVE)
+				arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
 				// Alt+move = disembark transporter
 				pie_SetMouse(CURSOR_EMBARK, war_GetColouredCursor());
