@@ -251,7 +251,7 @@ static float QualityFactor(DROID *psAttacker, DROID *psVictim)
 	CLIP(powerRatio, 0.5, 2.0);
 	CLIP(pointsRatio, 0.5, 2.0);
 
-	return (powerRatio + pointsRatio) / 2;
+	return (powerRatio + pointsRatio) / 2.0;
 }
 
 // update the kills after a target is damaged/destroyed
