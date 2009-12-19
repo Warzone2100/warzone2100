@@ -2712,11 +2712,11 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 			}
 		}
 		aDroidExperience[player][experienceLoc] = 0;
-		psDroid->experience = (UWORD)numKills;
+		psDroid->experience = (float)numKills;
 	}
 	else
 	{
-		psDroid->experience = 0;
+		psDroid->experience = 0.f;
 	}
 
 	droidSetBits(pTemplate,psDroid);
@@ -3822,9 +3822,9 @@ void setUpBuildModule(DROID *psDroid)
 	//check not another Truck started
 	psStruct = getTileStructure(tileX,tileY);
 	if (psStruct)
+	{	// if a droid is currently building, or building is in progress of being built/upgraded the droid's order should be DORDER_HELPBUILD
+		if (checkDroidsBuilding(psStruct) || !psStruct->status )
 	{
-		if (checkDroidsBuilding(psStruct))
-		{
 			//set up the help build scenario
 			psDroid->order = DORDER_HELPBUILD;
 			setDroidTarget(psDroid, (BASE_OBJECT *)psStruct);
@@ -4521,7 +4521,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 				psNewDroid->armour[impact_side][WC_KINETIC] = armourK[impact_side];
 				psNewDroid->armour[impact_side][WC_HEAT] = armourH[impact_side];
 			}
-			psNewDroid->experience = numKills;
+			psNewDroid->experience = (float) numKills;
 			psNewDroid->direction = direction;
 			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER))
 			{
