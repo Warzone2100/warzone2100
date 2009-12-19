@@ -575,7 +575,6 @@ static void delSocket(SocketSet* set, Socket* socket)
 	size_t i;
 
 	ASSERT(set != NULL, "NULL SocketSet provided");
-	ASSERT(socket != NULL, "NULL Socket provided");
 
 	for (i = 0; i < set->len; ++i)
 	{
