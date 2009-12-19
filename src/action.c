@@ -83,7 +83,7 @@ typedef struct _droid_action_data
 	BASE_STATS		*psStats;
 } DROID_ACTION_DATA;
 
-// Check if a droid has stoped moving
+// Check if a droid has stopped moving
 #define DROID_STOPPED(psDroid) \
 	(psDroid->sMove.Status == MOVEINACTIVE || psDroid->sMove.Status == MOVEHOVER || \
 	 psDroid->sMove.Status == MOVESHUFFLE)
@@ -104,7 +104,7 @@ const char* getDroidActionName(DROID_ACTION action)
 		"DACTION_ATTACK",					// attacking something
 		"DACTION_OBSERVE",				// 7 observing something
 		"DACTION_FIRESUPPORT",			// attacking something visible by a sensor droid
-		"DACTION_SULK",					// 9 refuse to do anything aggresive for a fixed time
+		"DACTION_SULK",					// 9 refuse to do anything aggressive for a fixed time
 		"DACTION_DESTRUCT",				// self destruct
 		"DACTION_TRANSPORTOUT",			// 11 move transporter offworld
 		"DACTION_TRANSPORTWAITTOFLYIN",	// wait for timer to move reinforcements in
@@ -1327,7 +1327,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 
 		/* Extra bit of paranoia, in case none of the weapons have a target */
-		bHasTarget = false; 
+		bHasTarget = false;
 		for (i = 0; i < psDroid->numWeaps; i++)
 		{
 			if (psDroid->psActionTarget[i] != NULL)
