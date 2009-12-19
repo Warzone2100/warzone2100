@@ -13,6 +13,7 @@ public	STRUCTURESTAT		cybfac;
 public	STRUCTURESTAT		repair;
 public	STRUCTURESTAT		vtolfact;
 public	STRUCTURESTAT		vtolpad;
+public	STRUCTURESTAT		lassat;
 
 event initialisedEvent(init)
 {
@@ -25,5 +26,5 @@ event initialisedEvent(init)
 	setStructureLimits(repair, 	5, 	0);
 	setStructureLimits(vtolfact, 	5, 	0);
 	setStructureLimits(vtolpad, 	50,	0);
-
+	setStructureLimits(lassat,	1,	0);
 }
