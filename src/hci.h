@@ -265,6 +265,7 @@ typedef enum {
 	INT_MISSIONRES,	// Results of a mission display.
 	INT_MULTIMENU,	// multiplayer only, player stats etc...
 	INT_CDCHANGE,		// CD Change message box
+	INT_POPUPMSG,	// Adds a popup message to user
 
     INT_MAXMODE,   //leave as last so we can start the objMode at this value
 } INTMODE;

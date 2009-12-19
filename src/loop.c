@@ -40,6 +40,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
+#include "lib/netplay/netplay.h"
 
 #include "loop.h"
 #include "objects.h"
@@ -145,6 +146,11 @@ GAMECODE gameLoop(void)
 	BOOL		quitting=false;
 	INT_RETVAL	intRetVal;
 	int	        clearMode = 0;
+
+	if (!NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
+	{
+		intAddInGamePopup();
+	}
 
 	if (!war_GetFog())
 	{
@@ -487,11 +493,11 @@ GAMECODE gameLoop(void)
 			scroll();
 		}
 
-		if(InGameOpUp)		// ingame options menu up, run it!
+		if(InGameOpUp || isInGamePopupUp)		// ingame options menu up, run it!
 		{
 			widgval = widgRunScreen(psWScreen);
 			intProcessInGameOptions(widgval);
-			if(widgval == INTINGAMEOP_QUIT_CONFIRM)
+			if(widgval == INTINGAMEOP_QUIT_CONFIRM || widgval == INTINGAMEOP_POPUP_QUIT)
 			{
 				if(gamePaused())
 				{
@@ -577,7 +583,7 @@ GAMECODE gameLoop(void)
 			processInput();
 
 			//no key clicks or in Intelligence Screen
-			if (intRetVal == INT_NONE && !InGameOpUp)
+			if (intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
 			{
 				processMouseClickInput();
 			}

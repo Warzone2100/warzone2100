@@ -55,7 +55,7 @@
 //status bools.(for hci.h)
 BOOL	ClosingInGameOp	= false;
 BOOL	InGameOpUp		= false;
-
+bool 	isInGamePopupUp = false;
 // ////////////////////////////////////////////////////////////////////////////
 // functions
 
@@ -89,36 +89,60 @@ static BOOL addIGTextButton(UDWORD id, UWORD y, UWORD width, const char *string,
 static BOOL addQuitOptions(void)
 {
 	W_FORMINIT		sFormInit;
-//	UWORD WindowWidth;
+	W_BUTINIT	sButInit;
 
 	if (widgGetFromID(psWScreen,INTINGAMEOP))
 	{
 		widgDelete(psWScreen, INTINGAMEOP);		// get rid of the old stuff.
 	}
 
+	if (widgGetFromID(psWScreen,INTINGAMEPOPUP))
+	{
+		widgDelete(psWScreen, INTINGAMEPOPUP);		// get rid of the old stuff.
+	}
+
 	memset(&sFormInit,0, sizeof(W_FORMINIT));
-
-
-	sFormInit.width		= INTINGAMEOP3_W;
-
 	// add form
 	sFormInit.formID	= 0;
 	sFormInit.id		= INTINGAMEOP;
 	sFormInit.style		= WFORM_PLAIN;
+	sFormInit.width		= INTINGAMEOP3_W;
+	sFormInit.height	= INTINGAMEOP3_H;;
 	sFormInit.x		= (SWORD)INTINGAMEOP3_X;
 	sFormInit.y		= (SWORD)INTINGAMEOP3_Y;
-	sFormInit.height	= INTINGAMEOP3_H;
-
 	sFormInit.pDisplay	= intOpenPlainForm;
 	sFormInit.disableChildren= true;
 
 	widgAddForm(psWScreen, &sFormInit);
 
-	//resume
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
-
-	//  quit
 	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
+
+	if (NetPlay.isHost && NetPlay.bComms)		// only show for real MP games
+	{
+		sFormInit.id		= INTINGAMEPOPUP;
+		sFormInit.width		= 600;
+		sFormInit.height	= 26;
+		sFormInit.x			= (SWORD)(20+D_W);	// center it
+		sFormInit.y			= (SWORD) 130;
+
+		widgAddForm(psWScreen, &sFormInit);
+
+		memset( &sButInit, 0, sizeof(W_BUTINIT) );
+
+		sButInit.formID		= INTINGAMEPOPUP;
+		sButInit.FontID		= font_regular;
+		sButInit.style		= OPALIGN;
+		sButInit.width		= 600;
+		sButInit.height		= 10;
+		sButInit.x			= 0;
+		sButInit.y			= 8;
+		sButInit.pDisplay	= displayTextOption;
+		sButInit.id			= INTINGAMEOP_POPUP_MSG3;
+		sButInit.pText		= _("Warning, if Host quits, the game ends for everyone!");
+
+		widgAddButton(psWScreen, &sButInit);
+	}
 
 	return true;
 }
@@ -288,6 +312,75 @@ BOOL intAddInGameOptions(void)
 	return _intAddInGameOptions();
 }
 
+// 
+// Quick hack to throw up a ingame 'popup' for when the host drops connection.
+//
+void intAddInGamePopup(void)
+{
+	W_FORMINIT	sFormInit;
+	W_BUTINIT	sButInit;
+
+	//clear out any mission widgets - timers etc that may be on the screen
+	clearMissionWidgets();
+	setWidgetsStatus(true);
+	intResetScreen(false);
+
+	if (isInGamePopupUp) return;
+
+	audio_StopAll();
+
+	if(!gamePaused())
+	{
+		kf_TogglePauseMode();	// Pause the game.
+	}
+
+	memset(&sFormInit,0, sizeof(W_FORMINIT));
+
+	sFormInit.formID	= 0;
+	sFormInit.id		= INTINGAMEPOPUP;
+	sFormInit.style		= WFORM_PLAIN;
+	sFormInit.width		= 600;
+	sFormInit.height	= 160;
+	sFormInit.x			= (SWORD)(20+D_W);
+	sFormInit.y			= (SWORD)((240-(160/2))+D_H);
+	sFormInit.pDisplay	= intOpenPlainForm;
+	sFormInit.disableChildren= true;
+
+	widgAddForm(psWScreen, &sFormInit);
+
+	// add the text "buttons" now
+	memset( &sButInit, 0, sizeof(W_BUTINIT) );
+
+	sButInit.formID		= INTINGAMEPOPUP;
+	sButInit.style		= OPALIGN;
+	sButInit.width		= 600;
+	sButInit.FontID		= font_large;
+	sButInit.x			= 0;
+	sButInit.height		= 10;
+	sButInit.pDisplay	= displayTextOption;
+
+	sButInit.id			= INTINGAMEOP_POPUP_MSG2;
+	sButInit.y			= 20;
+	sButInit.pText		= _("Host has quit the game!");
+
+	widgAddButton(psWScreen, &sButInit);
+
+	sButInit.id			= INTINGAMEOP_POPUP_MSG1;
+	sButInit.y			= 60;
+	sButInit.pText		= _("The game can't continue without the host.");
+
+	widgAddButton(psWScreen, &sButInit);
+
+	sButInit.id			= INTINGAMEOP_POPUP_QUIT;
+	sButInit.y			= 124;
+	sButInit.pText		= _("-->  QUIT  <--");
+
+	widgAddButton(psWScreen, &sButInit);
+
+	intMode		= INT_POPUPMSG;			// change interface mode.
+	isInGamePopupUp = true;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 
 static void ProcessOptionFinished(void)
@@ -307,6 +400,10 @@ static void ProcessOptionFinished(void)
 
 void intCloseInGameOptionsNoAnim(BOOL bResetMissionWidgets)
 {
+	if (NetPlay.isHost)
+	{
+		widgDelete(psWScreen, INTINGAMEPOPUP);
+	}
 	widgDelete(psWScreen, INTINGAMEOP);
 	InGameOpUp = false;
 
@@ -328,6 +425,11 @@ BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
 	W_TABFORM	*Form;
 	WIDGET		*widg;
 
+	if (NetPlay.isHost)
+	{
+		widgDelete(psWScreen, INTINGAMEPOPUP);
+	}
+
 	if(bPutUpLoadSave)
 	{
 		widg = widgGetFromID(psWScreen,INTINGAMEOP);
@@ -343,8 +445,18 @@ BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
 	{
 		// close the form.
 		// Start the window close animation.
+		if (isInGamePopupUp)	// FIXME: we hijack this routine for the popup close.
+		{
+			Form = (W_TABFORM*)widgGetFromID(psWScreen,INTINGAMEPOPUP);
+			isInGamePopupUp = false;
+		}
+		else
+		{
 		Form = (W_TABFORM*)widgGetFromID(psWScreen,INTINGAMEOP);
-		if(Form) {
+		}
+
+		if(Form)
+		{
 			Form->display		 = intClosePlainForm;
 			Form->pUserData		 = NULL; // Used to signal when the close anim has finished.
 			Form->disableChildren= true;
@@ -379,6 +491,7 @@ void intProcessInGameOptions(UDWORD id)
 		addQuitOptions();
 		break;
 
+	case INTINGAMEOP_POPUP_QUIT:
 	case INTINGAMEOP_QUIT_CONFIRM:		//quit was confirmed.
 		intCloseInGameOptions(false, false);
 		break;

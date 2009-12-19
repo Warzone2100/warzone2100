@@ -1043,7 +1043,7 @@ void scroll(void)
 	float scaled_max_scroll_speed = scroll_zoom_factor * MAX_SCROLL_SPEED;
 	float scaled_accel;
 
-	if(InGameOpUp || bDisplayMultiJoiningStatus )		// cant scroll when menu up. or when over radar
+	if(InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
 	{
 		return;
 	}

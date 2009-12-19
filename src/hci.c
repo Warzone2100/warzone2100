@@ -1872,6 +1872,7 @@ INT_RETVAL intRunWidgets(void)
 		break;
 
 	/* Catch the quit button here */
+	case INTINGAMEOP_POPUP_QUIT:
 	case IDMISSIONRES_QUIT:			// mission quit
 	case INTINGAMEOP_QUIT_CONFIRM:			// esc quit confrim
 	case IDOPT_QUIT:						// options screen quit

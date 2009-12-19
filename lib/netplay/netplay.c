@@ -490,6 +490,11 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 {
 	size_t written = 0;
 
+	if (!sock)
+	{
+		return SOCKET_ERROR;
+	}
+
 	while (written < size)
 	{
 		ssize_t ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, 0);
@@ -1333,6 +1338,13 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %d", NET_BUFFER_SIZE, bs->bytes);
 		}
 		debug(LOG_WARNING, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), bs->socket);
+		if (tcp_socket == bs->socket)
+		{
+			debug(LOG_NET, "Host connection was lost!");
+			tcp_socket = NULL;
+			//Game is pretty much over --should just end everything when HOST dies.
+			NetPlay.isHostAlive = false;
+		}
 		socketClose(bs->socket);
 		bs->socket = NULL;
 	}
@@ -1992,6 +2004,7 @@ int NETinit(BOOL bFirstCall)
 		NetPlay.bComms = true;
 		NetPlay.GamePassworded = false;
 		NetPlay.ShowedMOTD = false;
+		NetPlay.isHostAlive = false;
 		NetPlay.gamePassword[0] = '\0';
 		NetPlay.MOTD = strdup("");
 		sstrcpy(NetPlay.gamePassword,"Enter Password First");
@@ -2046,7 +2059,7 @@ int NETclose(void)
 
 	NetPlay.isHost = false;
 	server_not_there = false;
-	server_not_there = false;
+	allow_joining = false;
 
 	if(bsocket)
 	{	// need delSocket() as well, socket_set or tmp_socket_set?
@@ -2297,7 +2310,7 @@ BOOL NETbcast(NETMSG *msg)
 	}
 	else
 	{
-		if (tcp_socket == NULL)
+		if (!tcp_socket)
 		{
 			return false;
 		}
@@ -2310,7 +2323,7 @@ BOOL NETbcast(NETMSG *msg)
 			tcp_socket = NULL;
 			NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
 			//Game is pretty much over --should just end everything when HOST dies.
-			setLobbyError(ERROR_HOSTDROPPED);
+			NetPlay.isHostAlive = false;
 			return false;
 		}
 	}
@@ -3329,6 +3342,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 
 	selectedPlayer= NET_CreatePlayer(PlayerName);
 	NetPlay.isHost	= true;
+	NetPlay.isHostAlive = true;
 	NetPlay.hostPlayer	= NET_HOST_ONLY;
 	ASSERT(selectedPlayer == NET_HOST_ONLY, "For now, host must start at player index zero, was %d", (int)selectedPlayer);
 
@@ -3611,6 +3625,7 @@ connect_succesfull:
 			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p, tcp_socket=%p",
 				(unsigned int)index, bsocket->socket, tcp_socket);
 			NetPlay.isHost = false;
+			NetPlay.isHostAlive = true;
 
 			if (index >= MAX_CONNECTED_PLAYERS)
 			{

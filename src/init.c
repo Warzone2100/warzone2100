@@ -92,6 +92,7 @@
 #include "main.h"
 #include "wrappers.h"
 #include "terrain.h"
+#include "ingameop.h"
 
 static void	initMiscVars(void);
 
@@ -1112,6 +1113,7 @@ BOOL stageThreeShutDown(void)
 
 	challengesUp = false;
 	challengeActive = false;
+	isInGamePopupUp = false;
 
 	// make sure any button tips are gone.
 	widgReset();
