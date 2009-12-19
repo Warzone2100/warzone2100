@@ -80,8 +80,6 @@ UBYTE						bDisplayMultiJoiningStatus;
 MULTIPLAYERGAME				game;									//info to describe game.
 MULTIPLAYERINGAME			ingame;
 
-BOOL						bSendingMap					= false;	// map broadcasting.
-
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
 char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 BOOL						bPlayerReadyGUI[MAX_PLAYERS] = {false};
@@ -1558,20 +1556,32 @@ BOOL recvDestroyFeature()
 BOOL recvMapFileRequested()
 {
 	char mapStr[256],mapName[256],fixedname[256];
+	uint32_t player;
 
-	// another player is requesting the map
+	PHYSFS_sint64 fileSize_64;
+	PHYSFS_file	*pFileHandle;
+
+	// We are not the host, so we don't care. (in fact, this would be a error)
 	if(!NetPlay.isHost)
 	{
 		return true;
 	}
 
-	// start sending the map to the other players.
-	if(!bSendingMap)
+	//	Check to see who wants the file
+	NETbeginDecode(NET_FILE_REQUESTED);
+	NETuint32_t(&player);
+	NETend();
+
+	if (!NetPlay.players[player].wzFile.isSending)
 	{
+		NetPlay.players[player].needFile = true;
+		NetPlay.players[player].wzFile.isCancelled = false;
+		NetPlay.players[player].wzFile.isSending = true;
+
 		memset(mapStr,0,256);
 		memset(mapName,0,256);
 		memset(fixedname,0,256);
-		bSendingMap = true;
+
 		addConsoleMessage("Map was requested: SENDING MAP!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
 		sstrcpy(mapName, game.map);
@@ -1592,38 +1602,55 @@ BOOL recvMapFileRequested()
 		snprintf(mapStr, sizeof(mapStr), "%dc-%s.wz", game.maxPlayers, mapName);
 		snprintf(fixedname, sizeof(fixedname), "maps/%s", mapStr);		//We know maps are in /maps dir...now. fix for linux -Q
 		sstrcpy(mapStr, fixedname);
-		debug(LOG_NET, "Map was requested.  Sending %s", mapStr);
-		// NOTE: should we check if file exsists before trying to send it ?
-		NETsendFile(true,mapStr,0);
+		debug(LOG_NET, "Map was requested. Looking for %s", mapStr);
+
+		// Checking to see if file is available...
+		pFileHandle = PHYSFS_openRead(mapStr);
+		if (pFileHandle == NULL)
+		{
+			debug(LOG_ERROR, "Failed to open %s for reading: %s", mapStr, PHYSFS_getLastError());
+			debug(LOG_FATAL, "You have a map (%s) that can't be located.\n\nMake sure it is in the correct directory and or format!", mapStr);
+			// NOTE: if we get here, then the game is basically over, The host can't send the file for whatever reason...
+			// Which also means, that we can't continue.
+			debug(LOG_NET, "***Host has a file issue, and is being forced to quit!***");
+			NETbeginEncode(NET_HOST_DROPPED, NET_ALL_PLAYERS);
+			NETend();
+			abort();
 	}
 
+		// get the file's size.
+		fileSize_64 = PHYSFS_fileLength(pFileHandle);
+		debug(LOG_NET, "File is valid, sending [directory: %s] %s to client %u", PHYSFS_getRealDir(mapStr), mapStr, player);
+
+		NetPlay.players[player].wzFile.pFileHandle = pFileHandle;
+		NetPlay.players[player].wzFile.fileSize_32 = (int32_t) fileSize_64;		//we don't support 64bit int nettypes.
+		NetPlay.players[player].wzFile.currPos = 0;
+
+		NETsendFile(mapStr, player);
+	}
 	return true;
 }
 
 // continue sending the map
-UBYTE sendMap(void)
+void sendMap(void)
 {
+	int i = 0;
 	UBYTE done;
-	static UDWORD lastCall;
 
-
-	if(lastCall > gameTime)lastCall= 0;
-	if ( (gameTime - lastCall) <200)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		return 0;
-	}
-	lastCall = gameTime;
-
-
-	done = NETsendFile(false,game.map,0);
-
-	if(done == 100)
+		if (NetPlay.players[i].wzFile.isSending)
 	{
+			done = NETsendFile(game.map, i);
+			if (done == 100)
+			{
 		addConsoleMessage("MAP SENT!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-		bSendingMap = false;
+				debug(LOG_NET, "=== File has been sent to player %d ===", i);
+				NetPlay.players[i].wzFile.isSending = false;
+				NetPlay.players[i].needFile = false;
 	}
-
-	return done;
+		}
+	}
 }
 
 // Another player is broadcasting a map, recv a chunk. Returns false if not yet done.
@@ -1634,6 +1661,7 @@ BOOL recvMapFileData()
 	{
 		addConsoleMessage("MAP DOWNLOADED!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		sendTextMessage("MAP DOWNLOADED",true);					//send
+		debug(LOG_NET, "=== File has been received. ===");
 
 		// clear out the old level list.
 		levShutDown();

@@ -202,8 +202,6 @@ typedef struct
 	Socket** fds;
 } SocketSet;
 
-#define PLAYER_HOST		1
-
 // ////////////////////////////////////////////////////////////////////////
 // Variables
 
@@ -2309,6 +2307,7 @@ BOOL NETbcast(NETMSG *msg)
 			tcp_socket = NULL;
 			NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
 			//Game is pretty much over --should just end everything when HOST dies.
+			setLobbyError(ERROR_HOSTDROPPED);
 			return false;
 		}
 	}
@@ -2720,78 +2719,52 @@ BOOL NETsetupTCPIP(const char *machine)
 // ////////////////////////////////////////////////////////////////////////
 // File Transfer programs.
 /** Send file. It returns % of file sent when 100 it's complete. Call until it returns 100. 
- * @TODO Needs to be rewritten. See issue #215. */
+*  @TODO: more error checking (?) different file types (?)
+*          Maybe should close file handle, and seek each time?
+*     
+*  @NOTE: MAX_FILE_TRANSFER_PACKET is set to 2k per packet since 7*2 = 14K which is pretty
+*         much our limit.  Don't screw with that without having a bigger buffer!
+*         NET_BUFFER_SIZE is at 16k.  (also remember text chat, plus all the other cruff)
+*/
 #define MAX_FILE_TRANSFER_PACKET 2048
-UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
+UBYTE NETsendFile(char *fileName, UDWORD player)
 {
-	static int32_t	currPos;
-	static PHYSFS_sint64 fileSize_64;
-	static PHYSFS_sint32 fileSize_32;		// we don't support 64bit nettypes yet.
-	static PHYSFS_file	*pFileHandle;
-	int32_t  		bytesRead;
-	char			inBuff[MAX_FILE_TRANSFER_PACKET];
-	uint8_t			sendto = 0;
+	int32_t		bytesRead = 0;
+	uint8_t		sendto = 0;
+	char	inBuff[MAX_FILE_TRANSFER_PACKET];
+
+	// We are not the host, so we don't care. (in fact, this would be a error)
+	if(!NetPlay.isHost)
+	{
+		return true;
+	}
 
 	memset(inBuff, 0x0, sizeof(inBuff));
-	if (newFile)
-	{
-		// open the file.
-		pFileHandle = PHYSFS_openRead(fileName);			// check file exists
-		debug(LOG_NET, "Sending [directory: %s] %s to client", PHYSFS_getRealDir(fileName), fileName);
-		if (pFileHandle == NULL)
-		{
-			debug(LOG_ERROR, "Failed to open %s for reading: %s", fileName, PHYSFS_getLastError());
-			return 0; // failed
-		}
-		// get the file's size.
-		fileSize_64 = PHYSFS_fileLength(pFileHandle);
-		fileSize_32 = (int32_t) fileSize_64;	// we don't support 64bit int nettypes.
-		currPos = 0;
-	}
+
 	// read some bytes.
-	if (!pFileHandle)
-	{
-		debug(LOG_ERROR, "No filehandle");
-		return 0; // failed
-	}
-	bytesRead = PHYSFS_read(pFileHandle, inBuff,1, MAX_FILE_TRANSFER_PACKET);
+	bytesRead = PHYSFS_read(NetPlay.players[player].wzFile.pFileHandle, inBuff,1, MAX_FILE_TRANSFER_PACKET);
+	sendto = (uint8_t) player;
 
-	if (player == 0)
-	{	// FIXME: why would you send (map) file to everyone ??
-		// even if they already have it? multiplay.c 1529 & 1550 are both
-		// NETsendFile(true,mapStr,0); & NETsendFile(false,game.map,0);
-		// so we ALWAYS send it, it seems?
-		// NOTE: we send to everyone since there is no way to signal the host
-		// to stop sending the map.  Which means that everytime a player joins
-		// that doesn't have the map, it will send to all players again.
-		// We also are limited by fps(!) to the amount of time the loop runs.
-		NETbeginEncode(FILEMSG, NET_ALL_PLAYERS);	// send it.
-	}
-	else
-	{
-		sendto = (uint8_t) player;
-		NETbeginEncode(FILEMSG,sendto);
-	}
-
-	// form a message
-	NETint32_t(&fileSize_32);		// total bytes in this file. (we don't support 64bit yet)
-	NETint32_t(&bytesRead);	// bytes in this packet
-	NETint32_t(&currPos);		// start byte
-
-	NETstring(fileName, 256);	//256 = max filename size
-	NETbin(inBuff, bytesRead);
+	NETbeginEncode(NET_FILE_PAYLOAD, sendto);
+		NETint32_t(&NetPlay.players[player].wzFile.fileSize_32);		// total bytes in this file. (we don't support 64bit yet)
+		NETint32_t(&bytesRead);											// bytes in this packet
+		NETint32_t(&NetPlay.players[player].wzFile.currPos);			// start byte
+		NETstring(fileName, 256);										//256 = max filename size
+		NETbin(inBuff, bytesRead);
 	NETend();
 
-	currPos += bytesRead;		// update position!
-	if(currPos == fileSize_64)
+	NetPlay.players[player].wzFile.currPos += bytesRead;		// update position!
+	if(NetPlay.players[player].wzFile.currPos == NetPlay.players[player].wzFile.fileSize_32)
 	{
-		PHYSFS_close(pFileHandle);
+		PHYSFS_close(NetPlay.players[player].wzFile.pFileHandle);
+		NetPlay.players[player].wzFile.isSending = false;	// we are done sending to this client.
+		NetPlay.players[player].needFile = false;
 	}
 
-	return (currPos * 100) / fileSize_64;
+	return (NetPlay.players[player].wzFile.currPos * 100) / NetPlay.players[player].wzFile.fileSize_32;
 }
 
-/* @TODO Needs to be rewritten. See issue #215. */
+/* @TODO more error checking (?) different file types (?) */
 // recv file. it returns % of the file so far recvd.
 UBYTE NETrecvFile(void)
 {
@@ -2799,18 +2772,17 @@ UBYTE NETrecvFile(void)
 	char		fileName[256];
 	char		outBuff[MAX_FILE_TRANSFER_PACKET];
 	static PHYSFS_file	*pFileHandle;
+	static bool isLoop = false;
 
 	memset(fileName, 0x0, sizeof(fileName));
 	memset(outBuff, 0x0, sizeof(outBuff));
 
 	//read incoming bytes.
-	NETbeginDecode(FILEMSG);
+	NETbeginDecode(NET_FILE_PAYLOAD);
 	NETint32_t(&fileSize);		// total bytes in this file.
 	NETint32_t(&bytesRead);		// bytes in this packet
 	NETint32_t(&currPos);		// start byte
-
-	// read filename
-	NETstring(fileName, 256);	// Ugh. 256 = max array size
+	NETstring(fileName, 256);	// read filename (only valid on 1st packet)
 	debug(LOG_NET, "Creating new file %s, position is %d", fileName, currPos);
 
 	if (currPos == 0)	// first packet!
@@ -2823,21 +2795,38 @@ UBYTE NETrecvFile(void)
 			fsize = PHYSFS_fileLength(fin);
 			if ((int32_t) fsize == fileSize)
 			{
-				// NOTE: we would send a abort message to host, but since we can't,
-				// we won't.
-#ifdef DEBUG
-				debug(LOG_NET, "We already have the file %s.", fileName);
-#endif
+				uint32_t reason = ALREADY_HAVE_FILE;
+				debug(LOG_NET, "We already have the file %s! ", fileName);
+				PHYSFS_close(fin);
+				NETend();
 
-				// NOTE: we can't abort out, since the host ALWAYS sends the data until done
-				//	PHYSFS_close(fin);
-				//	NETend();
-				//	return 100;
+				NETbeginEncode(NET_FILE_CANCELLED, NET_HOST_ONLY);
+					NETuint32_t(&selectedPlayer);
+					NETuint32_t(&reason);
+				NETend();
+				if (!isLoop)
+				{
+					isLoop = true;
+				}
+				else
+				{
+					uint32_t reason = STUCK_IN_FILE_LOOP;
+	
+					NETend();
+					// we should never get here, it means, that the game can't detect the level, but we have the file.
+					// so we kick this player out.
+					NETbeginEncode(NET_FILE_CANCELLED, NET_HOST_ONLY);
+						NETuint32_t(&selectedPlayer);
+						NETuint32_t(&reason);
+					NETend();
+					debug(LOG_FATAL, "Something is really wrong with the file's (%s) data, game can't detect it?", fileName);
+					return 100;
+				}
 			}
 			PHYSFS_close(fin);
-#ifdef DEBUG
-			debug(LOG_NET, "We have the same named file, but different size.  Redownloading %s", fileName);
-#endif
+
+			debug(LOG_NET, "We already have the file %s, but different size %d vs %d.  Redownloading", fileName, (int32_t) fsize, fileSize);
+
 		}
 		pFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
 	}

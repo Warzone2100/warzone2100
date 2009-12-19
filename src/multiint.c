@@ -837,6 +837,11 @@ static void addGames(void)
 		case ERROR_WRONGDATA: 
 			 txt = _("Wrong data/mod detected by Host.");
 			 break;
+		// AFAIK, the only way this can really happy is if the Host's file is named wrong, or a client side error.
+		case ERROR_UNKNOWNFILEISSUE: 
+			 txt = _("Host couldn't send file?");
+			 debug(LOG_POPUP, "Warzone couldn't complete a file request.\n\nPossibly, Host's file is incorrect. Check your logs for more details.");
+			 break;
 		case ERROR_WRONGPASSWORD:
 			txt = _("Incorrect Password!");
 			break;
@@ -1574,6 +1579,13 @@ BOOL recvReadyRequest()
 	{
 		debug(LOG_ERROR, "Invalid NET_READY_REQUEST from player %d: player id = %d",
 		      NETgetSource(), (int)player);
+		return false;
+	}
+
+	// do not allow players to select 'ready' if we are sending a map too them!
+	// TODO: make a new icon to show this state?
+	if (NetPlay.players[player].wzFile.isSending)
+	{
 		return false;
 	}
 
@@ -2695,15 +2707,43 @@ void frontendMultiMessages(void)
 		// Copy the message to the global one used by the new NET API
 		switch(type)
 		{
-		case NET_REQUESTMAP:
+		case NET_FILE_REQUESTED:
 			recvMapFileRequested();
 			break;
 
-		case FILEMSG:
+		case NET_FILE_PAYLOAD:
 			widgSetButtonState(psWScreen, MULTIOP_MAP_BUT, 1);	// turn preview button off
 			if (recvMapFileData())
 			{
 				widgSetButtonState(psWScreen, MULTIOP_MAP_BUT, 0);	// turn it back on again
+			}
+			break;
+
+		case NET_FILE_CANCELLED:					// host only routine
+			{
+				uint32_t reason;
+				uint32_t victim;
+
+				NETbeginDecode(NET_FILE_CANCELLED);
+					NETuint32_t(&victim);
+					NETuint32_t(&reason);
+				NETend();
+				switch (reason)
+				{
+					case STUCK_IN_FILE_LOOP:
+						debug(LOG_WARNING, "Received file cancel request from player %u, They are stuck in a loop?", victim);
+						kickPlayer(victim, "couldn't upload file for some reason. ", ERROR_UNKNOWNFILEISSUE);
+						NetPlay.players[victim].wzFile.isCancelled = true;
+						NetPlay.players[victim].wzFile.isSending = false;
+						break;
+
+					case ALREADY_HAVE_FILE:
+					default:
+						debug(LOG_WARNING, "Received file cancel request from player %u, They already have the file ?", victim);
+						NetPlay.players[victim].wzFile.isCancelled = true;
+						NetPlay.players[victim].wzFile.isSending = false;
+						break;
+				}
 			}
 			break;
 
@@ -2848,8 +2888,8 @@ void frontendMultiMessages(void)
 
 void runMultiOptions(void)
 {
-	static UDWORD	lastrefresh=0;
-	UDWORD			id,value;//,i;
+	static UDWORD	lastrefresh = 0;
+	UDWORD			id, value, i;
 	char			sTemp[128];
 	PLAYERSTATS		playerStats;
 	W_CONTEXT		context;
@@ -2859,10 +2899,13 @@ void runMultiOptions(void)
 
 	frontendMultiMessages();
 
-	// keep sending the map if required.
-	if(bSendingMap)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		sendMap();
+		// send it for each player that needs it
+		if (NetPlay.players[i].wzFile.isSending)
+		{
+			sendMap();
+		}
 	}
 
 	// update boxes?
