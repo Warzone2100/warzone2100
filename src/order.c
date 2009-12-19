@@ -2739,6 +2739,13 @@ void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 	{
 		if (psCurr->selected)
 		{
+			if (psCurr->droidType == DROID_TRANSPORTER && !bMultiPlayer)
+			{
+				// Never, ever, let users mess with the SP Trasnsporter
+				// it is script controlled, and will break things!
+				break;
+			}
+
 			order = chooseOrderLoc(psCurr, x, y);
 			// see if the order can be added to the list
 			if (order != DORDER_NONE && !(add && orderDroidLocAdd(psCurr, order, x, y)))
