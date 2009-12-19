@@ -172,7 +172,6 @@ BOOL anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 	if ( ubType == ANIM_3D_TRANS && uwObj != uwFrames )
 	{
 		ASSERT(false, "frames in pie %s != script objects %i", szPieFileName, uwObj);
-		
 		return false;
 	}
 
@@ -317,8 +316,7 @@ BASEANIM *anim_LoadFromFile(PHYSFS_file* fileHandle)
 {
 	if ( ParseResourceFile( fileHandle ) == false )
 	{
-		ASSERT(false, "anim_LoadFromFile: couldn't parse file");
-
+		ASSERT(false, "Couldn't parse file");
 		return NULL;
 	}
 
@@ -335,7 +333,7 @@ UWORD anim_GetAnimID(char *szName)
 
 	if ( cPos == NULL )
 	{
-		ASSERT(false, "anim_GetAnimID: %s isn't .ani file", szName);
+		ASSERT(false, "%s isn't .ani file", szName);
 
 		return NO_ANIM;
 	}
