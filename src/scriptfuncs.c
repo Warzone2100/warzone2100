@@ -6468,7 +6468,7 @@ BOOL scrSetDroidKills(void)
 		return false;
 	}
 
-	psDroid->experience = (UWORD)kills * 100;
+	psDroid->experience = (float)kills * 100.0;
 
 	return true;
 }
