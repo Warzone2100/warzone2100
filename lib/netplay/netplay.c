@@ -1840,6 +1840,8 @@ static int upnp_init(void *asdf)
 	memset(&urls, 0, sizeof(struct UPNPUrls));
 	memset(&data, 0, sizeof(struct IGDdatas));
 
+	if (NetPlay.isUPNP)
+	{
 	debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
 	devlist = upnpDiscover(2000, NULL, NULL, 0);
 	debug(LOG_NET, "UPnP device search finished.");
@@ -1883,6 +1885,14 @@ static int upnp_init(void *asdf)
 	addDumpInfo(buf);
 	debug(LOG_NET, "No UPnP devices found.");
 	return false;
+	}
+	else
+	{
+		ssprintf(buf, "UPnP detection routine disabled by user.");
+		addDumpInfo(buf);
+		debug(LOG_NET, "UPnP detection routine disabled by user.");
+		return false;
+	}
 }
 
 static bool upnp_add_redirect(int port)
@@ -1977,6 +1987,7 @@ int NETinit(BOOL bFirstCall)
 		{
 			memset(&NetPlay.games[i], 0, sizeof(NetPlay.games[i]));
 		}
+		// NOTE NetPlay.isUPNP is already set in configuration.c!
 		NetPlay.bComms = true;
 		NetPlay.GamePassworded = false;
 		NetPlay.ShowedMOTD = false;
@@ -2013,8 +2024,10 @@ int NETshutdown(void)
 	}
 #endif
 
+	if (NetPlay.bComms && NetPlay.isUPNP)
+	{
 	NETremRedirects();
-
+	}
 	return 0;
 }
 
@@ -3250,7 +3263,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	mapDownloadProgress = 100;
 	netPlayersUpdated = true;
 
-	if (NetPlay.bComms)
+	if (NetPlay.bComms && NetPlay.isUPNP)
 	{
 		NETaddRedirects();
 	}

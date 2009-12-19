@@ -213,6 +213,7 @@ typedef struct {
 	uint32_t	bComms;			///< Actually do the comms?
 	BOOL		isHost;			///< True if we are hosting the game
 	int32_t		maxPlayers;		///< Maximum number of players in this game
+	BOOL		isUPNP;					// if we want the UPnP detection routines to run
 	char gamePassword[StringSize];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once

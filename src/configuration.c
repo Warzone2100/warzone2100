@@ -592,6 +592,17 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("textureSize", getTextureSize());
 	}
 
+	// UPnP detection
+	if (getWarzoneKeyNumeric("UPnP", &val))
+	{
+		NetPlay.isUPNP = val;
+	}
+	else
+	{
+		setWarzoneKeyNumeric("UPnP", 1);
+		NetPlay.isUPNP = 1;
+	}
+
 	return closeWarzoneKey();
 }
 
