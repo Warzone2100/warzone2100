@@ -211,7 +211,7 @@ NETPLAY	NetPlay;
 
 static BOOL		allow_joining = false;
 static	bool server_not_there = false;
-static GAMESTRUCT	game;
+static GAMESTRUCT	gamestruct;
 
 // update flags
 bool netPlayersUpdated;
@@ -1205,7 +1205,7 @@ void NETCheckVersion(uint32_t player)
 void NETGameLocked( bool flag)
 {
 	NetPlay.GamePassworded = flag;
-	game.privateGame = flag;
+	gamestruct.privateGame = flag;
 	debug(LOG_NET, "Passworded game is %s", NetPlay.GamePassworded ? "TRUE" : "FALSE" );
 }
 
@@ -1475,7 +1475,7 @@ static void NET_DestroyPlayer(unsigned int index)
 	{
 		NetPlay.players[index].allocated = false;
 		NetPlay.playercount--;
-		game.desc.dwCurrentPlayers = NetPlay.playercount;
+		gamestruct.desc.dwCurrentPlayers = NetPlay.playercount;
 	}
 }
 
@@ -1596,102 +1596,102 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
  *
  * @see GAMESTRUCT,NETrecvGAMESTRUCT
  */
-static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
+static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).  Initialise
 	// to zero so that we can be sure we're not sending any (undefined)
 	// memory content across the network.
-	char buf[sizeof(game->GAMESTRUCT_VERSION) + sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(game->secondaryHosts) + sizeof(game->extra) + sizeof(game->versionstring) +
-		sizeof(game->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
+	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
+		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->versionstring) +
+		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
 	int result;
 
 	// Now dump the data into the buffer
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->GAMESTRUCT_VERSION);
+	*(uint32_t*)buffer = htonl(ourgamestruct->GAMESTRUCT_VERSION);
 	buffer += sizeof(uint32_t);
 
 	// Copy a string
-	strlcpy(buffer, game->name, sizeof(game->name));
-	buffer += sizeof(game->name);
+	strlcpy(buffer, ourgamestruct->name, sizeof(ourgamestruct->name));
+	buffer += sizeof(ourgamestruct->name);
 
 	// Copy 32bit large big endian numbers
-	*(int32_t*)buffer = htonl(game->desc.dwSize);
+	*(int32_t*)buffer = htonl(ourgamestruct->desc.dwSize);
 	buffer += sizeof(int32_t);
-	*(int32_t*)buffer = htonl(game->desc.dwFlags);
+	*(int32_t*)buffer = htonl(ourgamestruct->desc.dwFlags);
 	buffer += sizeof(int32_t);
 
 	// Copy yet another string
-	strlcpy(buffer, game->desc.host, sizeof(game->desc.host));
-	buffer += sizeof(game->desc.host);
+	strlcpy(buffer, ourgamestruct->desc.host, sizeof(ourgamestruct->desc.host));
+	buffer += sizeof(ourgamestruct->desc.host);
 
 	// Copy 32bit large big endian numbers
-	*(int32_t*)buffer = htonl(game->desc.dwMaxPlayers);
+	*(int32_t*)buffer = htonl(ourgamestruct->desc.dwMaxPlayers);
 	buffer += sizeof(int32_t);
-	*(int32_t*)buffer = htonl(game->desc.dwCurrentPlayers);
+	*(int32_t*)buffer = htonl(ourgamestruct->desc.dwCurrentPlayers);
 	buffer += sizeof(int32_t);
-	for (i = 0; i < ARRAY_SIZE(game->desc.dwUserFlags); ++i)
+	for (i = 0; i < ARRAY_SIZE(ourgamestruct->desc.dwUserFlags); ++i)
 	{
-		*(int32_t*)buffer = htonl(game->desc.dwUserFlags[i]);
+		*(int32_t*)buffer = htonl(ourgamestruct->desc.dwUserFlags[i]);
 		buffer += sizeof(int32_t);
 	}
 
 	// Copy a string
-	for (i = 0; i <ARRAY_SIZE(game->secondaryHosts); ++i)
+	for (i = 0; i <ARRAY_SIZE(ourgamestruct->secondaryHosts); ++i)
 	{
-		strlcpy(buffer, game->secondaryHosts[i], sizeof(game->secondaryHosts[i]));
-		buffer += sizeof(game->secondaryHosts[i]);
+		strlcpy(buffer, ourgamestruct->secondaryHosts[i], sizeof(ourgamestruct->secondaryHosts[i]));
+		buffer += sizeof(ourgamestruct->secondaryHosts[i]);
 	}
 
 	// Copy a string
-	strlcpy(buffer, game->extra, sizeof(game->extra));
-	buffer += sizeof(game->extra);
+	strlcpy(buffer, ourgamestruct->extra, sizeof(ourgamestruct->extra));
+	buffer += sizeof(ourgamestruct->extra);
 
 	// Copy a string
-	strlcpy(buffer, game->versionstring, sizeof(game->versionstring));
-	buffer += sizeof(game->versionstring);
+	strlcpy(buffer, ourgamestruct->versionstring, sizeof(ourgamestruct->versionstring));
+	buffer += sizeof(ourgamestruct->versionstring);
 
 	// Copy a string
-	strlcpy(buffer, game->modlist, sizeof(game->modlist));
-	buffer += sizeof(game->modlist);
+	strlcpy(buffer, ourgamestruct->modlist, sizeof(ourgamestruct->modlist));
+	buffer += sizeof(ourgamestruct->modlist);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->game_version_major);
+	*(uint32_t*)buffer = htonl(ourgamestruct->game_version_major);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->game_version_minor);
+	*(uint32_t*)buffer = htonl(ourgamestruct->game_version_minor);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->privateGame);
+	*(uint32_t*)buffer = htonl(ourgamestruct->privateGame);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->pureGame);
+	*(uint32_t*)buffer = htonl(ourgamestruct->pureGame);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->Mods);
+	*(uint32_t*)buffer = htonl(ourgamestruct->Mods);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->gameId);
+	*(uint32_t*)buffer = htonl(ourgamestruct->gameId);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->future2);
+	*(uint32_t*)buffer = htonl(ourgamestruct->future2);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->future3);
+	*(uint32_t*)buffer = htonl(ourgamestruct->future3);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->future4);
+	*(uint32_t*)buffer = htonl(ourgamestruct->future4);
 	buffer += sizeof(uint32_t);
 
 
@@ -1712,13 +1712,13 @@ static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
  *
  * @see GAMESTRUCT,NETsendGAMESTRUCT
  */
-static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
+static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
-	char buf[sizeof(game->GAMESTRUCT_VERSION) + sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(game->secondaryHosts) + sizeof(game->extra) + sizeof(game->versionstring) +
-		sizeof(game->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
+	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
+		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->versionstring) +
+		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char* buffer = buf;
 	unsigned int i;
 	int result = 0;
@@ -1758,70 +1758,70 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 
 	// Now dump the data into the game struct
 	// Copy 32bit large big endian numbers
-	game->GAMESTRUCT_VERSION = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->GAMESTRUCT_VERSION = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
 	// Copy a string
-	sstrcpy(game->name, buffer);
-	buffer += sizeof(game->name);
+	sstrcpy(ourgamestruct->name, buffer);
+	buffer += sizeof(ourgamestruct->name);
 
 	// Copy 32bit large big endian numbers
-	game->desc.dwSize = ntohl(*(int32_t*)buffer);
+	ourgamestruct->desc.dwSize = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
-	game->desc.dwFlags = ntohl(*(int32_t*)buffer);
+	ourgamestruct->desc.dwFlags = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
 
 	// Copy yet another string
-	sstrcpy(game->desc.host, buffer);
-	buffer += sizeof(game->desc.host);
+	sstrcpy(ourgamestruct->desc.host, buffer);
+	buffer += sizeof(ourgamestruct->desc.host);
 
 	// Copy 32bit large big endian numbers
-	game->desc.dwMaxPlayers = ntohl(*(int32_t*)buffer);
+	ourgamestruct->desc.dwMaxPlayers = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
-	game->desc.dwCurrentPlayers = ntohl(*(int32_t*)buffer);
+	ourgamestruct->desc.dwCurrentPlayers = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
-	for (i = 0; i < ARRAY_SIZE(game->desc.dwUserFlags); ++i)
+	for (i = 0; i < ARRAY_SIZE(ourgamestruct->desc.dwUserFlags); ++i)
 	{
-		game->desc.dwUserFlags[i] = ntohl(*(int32_t*)buffer);
+		ourgamestruct->desc.dwUserFlags[i] = ntohl(*(int32_t*)buffer);
 		buffer += sizeof(int32_t);
 	}
 
 	// Copy a string
-	for (i = 0; i < ARRAY_SIZE(game->secondaryHosts); ++i)
+	for (i = 0; i < ARRAY_SIZE(ourgamestruct->secondaryHosts); ++i)
 	{
-		sstrcpy(game->secondaryHosts[i], buffer);
-		buffer += sizeof(game->secondaryHosts[i]);
+		sstrcpy(ourgamestruct->secondaryHosts[i], buffer);
+		buffer += sizeof(ourgamestruct->secondaryHosts[i]);
 	}
 
 	// Copy a string
-	sstrcpy(game->extra, buffer);
-	buffer += sizeof(game->extra);
+	sstrcpy(ourgamestruct->extra, buffer);
+	buffer += sizeof(ourgamestruct->extra);
 
 	// Copy a string
-	sstrcpy(game->versionstring, buffer);
-	buffer += sizeof(game->versionstring);
+	sstrcpy(ourgamestruct->versionstring, buffer);
+	buffer += sizeof(ourgamestruct->versionstring);
 
 	// Copy a string
-	sstrcpy(game->modlist, buffer);
-	buffer += sizeof(game->modlist);
+	sstrcpy(ourgamestruct->modlist, buffer);
+	buffer += sizeof(ourgamestruct->modlist);
 
 	// Copy 32bit large big endian numbers
-	game->game_version_major = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->game_version_major = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->game_version_minor = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->game_version_minor = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->privateGame = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->privateGame = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->pureGame = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->pureGame = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->Mods = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->Mods = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->gameId = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->gameId = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
-	game->future2 = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->future2 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
-	game->future3 = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->future3 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
-	game->future4 = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->future4 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
 	
 	return true;
@@ -2979,8 +2979,8 @@ static void NETregisterServer(int state)
 					return;
 				}
 
-				game.gameId = ntohl(gameId);
-				debug(LOG_NET, "Using game ID: %u", (unsigned int)game.gameId);
+				gamestruct.gameId = ntohl(gameId);
+				debug(LOG_NET, "Using game ID: %u", (unsigned int)gamestruct.gameId);
 
 				// Register our game with the server for all available address families
 				for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
@@ -2990,7 +2990,7 @@ static void NETregisterServer(int state)
 
 					writeAll(rs_socket[i], "addg", sizeof("addg"));
 					// and now send what the server wants
-					NETsendGAMESTRUCT(rs_socket[i], &game);
+					NETsendGAMESTRUCT(rs_socket[i], &gamestruct);
 				}
 
 				// Get the return codes
@@ -3112,9 +3112,9 @@ static void NETallowJoining(void)
 				else
 				{
 					// get the correct player count after kicks / leaves
-					game.desc.dwCurrentPlayers = NetPlay.playercount;
+					gamestruct.desc.dwCurrentPlayers = NetPlay.playercount;
 					debug(LOG_NET, "Sending update to server to reflect new player count %d", NetPlay.playercount);
-					NETsendGAMESTRUCT(tmp_socket[i], &game);
+					NETsendGAMESTRUCT(tmp_socket[i], &gamestruct);
 				}
 
 				delSocket(tmp_socket_set, tmp_socket[i]);
@@ -3124,7 +3124,7 @@ static void NETallowJoining(void)
 			else if (strcmp(buffer, "join") == 0)
 			{
 				debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
-				NETsendGAMESTRUCT(tmp_socket[i], &game);
+				NETsendGAMESTRUCT(tmp_socket[i], &gamestruct);
 			}
 			else
 			{
@@ -3186,7 +3186,7 @@ static void NETallowJoining(void)
 					      (unsigned int)index, connected_bsocket[index]->socket);
 
 					// Increment player count
-					game.desc.dwCurrentPlayers++;
+					gamestruct.desc.dwCurrentPlayers++;
 
 					NETbeginEncode(NET_ACCEPTED, index);
 						NETuint8_t(&index);
@@ -3291,32 +3291,32 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 
 	NetPlay.isHost = true;
 
-	sstrcpy(game.name, SessionName);
-	memset(&game.desc, 0, sizeof(game.desc));
-	game.desc.dwSize = sizeof(game.desc);
-	//game.desc.guidApplication = GAME_GUID;
-	memset(game.desc.host, 0, sizeof(game.desc.host));
-	game.desc.dwCurrentPlayers = 1;
-	game.desc.dwMaxPlayers = plyrs;
-	game.desc.dwFlags = 0;
-	game.desc.dwUserFlags[0] = one;
-	game.desc.dwUserFlags[1] = two;
-	game.desc.dwUserFlags[2] = three;
-	game.desc.dwUserFlags[3] = four;
-	memset(game.secondaryHosts, 0, sizeof(game.secondaryHosts));
-	sstrcpy(game.extra, "Extra");						// extra string (future use)
-	sstrcpy(game.versionstring, VersionString);			// version (string)
-	sstrcpy(game.modlist, "Mod list");					// List of mods
-	game.GAMESTRUCT_VERSION = 3;						// version of this structure
-	game.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
-	game.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
-//	game.privateGame = 0;								// if true, it is a private game
-	game.pureGame = 0;									// NO mods allowed if true
-	game.Mods = 0;										// number of concatenated mods?
-	game.gameId  = 0;
-	game.future2 = 0xBAD02;								// for future use
-	game.future3 = 0xBAD03;								// for future use
-	game.future4 = 0xBAD04;								// for future use
+	sstrcpy(gamestruct.name, SessionName);
+	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
+	gamestruct.desc.dwSize = sizeof(gamestruct.desc);
+	//gamestruct.desc.guidApplication = GAME_GUID;
+	memset(gamestruct.desc.host, 0, sizeof(gamestruct.desc.host));
+	gamestruct.desc.dwCurrentPlayers = 1;
+	gamestruct.desc.dwMaxPlayers = plyrs;
+	gamestruct.desc.dwFlags = 0;
+	gamestruct.desc.dwUserFlags[0] = one;
+	gamestruct.desc.dwUserFlags[1] = two;
+	gamestruct.desc.dwUserFlags[2] = three;
+	gamestruct.desc.dwUserFlags[3] = four;
+	memset(gamestruct.secondaryHosts, 0, sizeof(gamestruct.secondaryHosts));
+	sstrcpy(gamestruct.extra, "Extra");						// extra string (future use)
+	sstrcpy(gamestruct.versionstring, VersionString);			// version (string)
+	sstrcpy(gamestruct.modlist, "Mod list");					// List of mods
+	gamestruct.GAMESTRUCT_VERSION = 3;						// version of this structure
+	gamestruct.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
+	gamestruct.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
+//	gamestruct.privateGame = 0;								// if true, it is a private game
+	gamestruct.pureGame = 0;									// NO mods allowed if true
+	gamestruct.Mods = 0;										// number of concatenated mods?
+	gamestruct.gameId  = 0;
+	gamestruct.future2 = 0xBAD02;								// for future use
+	gamestruct.future3 = 0xBAD03;								// for future use
+	gamestruct.future4 = 0xBAD04;								// for future use
 
 	selectedPlayer= NET_CreatePlayer(PlayerName);
 	NetPlay.isHost	= true;
