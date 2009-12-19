@@ -24,7 +24,7 @@
  *
  */
 #include <string.h>
-
+#include <float.h>
 #include "lib/framework/frame.h"
 #include "objects.h"
 #include "cmddroiddef.h"
@@ -177,13 +177,19 @@ void cmdDroidUpdateKills(DROID *psKiller, float experienceInc)
 {
 	DROID	*psCommander;
 
-	ASSERT( psKiller != NULL,
-		"cmdUnitUpdateKills: invalid Unit pointer" );
+	ASSERT_OR_RETURN( , psKiller != NULL, "invalid Unit pointer" );
 
 	if (hasCommander(psKiller))
 	{
 		psCommander = psKiller->psGroup->psCommander;
+		if (psCommander->experience + experienceInc > FLT_MAX)
+		{
+			psCommander->experience = FLT_MAX;
+		}
+		else
+		{
 		psCommander->experience += experienceInc;
+	}
 	}
 }
 
