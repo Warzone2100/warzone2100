@@ -1160,7 +1160,7 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 
 	// Get the object associated with this widget.
 	psMsg = (MESSAGE *)psBuffer->Data;
-	ASSERT( psMsg != NULL, "psBuffer->Data empty. Why?" );
+	ASSERT_OR_RETURN( , psMsg != NULL, "psBuffer->Data empty. Why?" );
 	//shouldn't have any proximity messages here...
 	if (psMsg->type == MSG_PROXIMITY)
 	{
