@@ -744,10 +744,10 @@ static void socketClose(Socket* sock)
 
 	if (sock)
 	{
-	for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
-	{
-		if (sock->fd[i] != INVALID_SOCKET)
+		for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
 		{
+			if (sock->fd[i] != INVALID_SOCKET)
+			{
 #if   defined(WZ_OS_WIN)
 				err = closesocket(sock->fd[i]);
 #else
@@ -756,8 +756,8 @@ static void socketClose(Socket* sock)
 				if (err)
 				{
 					debug(LOG_ERROR, "Failed to close socket: %s", strSockError(getSockErr()));
-		}
-	}
+				}
+			}
 		}
 		free(sock);
 		sock = NULL;
@@ -1147,11 +1147,11 @@ static void recvVersionCheck()
 		sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victim);
 		sendTextMessage(msg, true);
 		sasprintf((char**)&msg, "you have the wrong version; update it! (You have [%s], we expect [%s].)", playersVersion, VersionString);
-		
+
 		if (NetPlay.isHost)
 		{
 			kickPlayer( victim, msg, ERROR_WRONGVERSION );
-			
+
 			// reset flags /time after we kick them
 			NetPlay.players[victim].versionCheckTime = -1;
 			NetPlay.players[victim].playerVersionFlag = false;
@@ -1855,49 +1855,49 @@ static int upnp_init(void *asdf)
 
 	if (NetPlay.isUPNP)
 	{
-	debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
-	devlist = upnpDiscover(2000, NULL, NULL, 0);
-	debug(LOG_NET, "UPnP device search finished.");
-	if (devlist)
-	{
-		dev = devlist;
-		while (dev)
+		debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
+		devlist = upnpDiscover(2000, NULL, NULL, 0);
+		debug(LOG_NET, "UPnP device search finished.");
+		if (devlist)
 		{
-			if (strstr(dev->st, "InternetGatewayDevice"))
-				break;
-			dev = dev->pNext;
-		}
-		if (!dev)
-		{
-			dev = devlist; /* defaulting to first device */
-		}
+			dev = devlist;
+			while (dev)
+			{
+				if (strstr(dev->st, "InternetGatewayDevice"))
+					break;
+				dev = dev->pNext;
+			}
+			if (!dev)
+			{
+				dev = devlist; /* defaulting to first device */
+			}
 
-		debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
+			debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
 
-		descXML = miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr));
-		debug(LOG_NET, "LAN address: %s", lanaddr);
-		if (descXML)
-		{
-			parserootdesc (descXML, descXMLsize, &data);
-			free (descXML); descXML = 0;
-			GetUPNPUrls (&urls, &data, dev->descURL);
-		}
-		ssprintf(buf, "UPnP device found: %s %s LAN address %s", dev->descURL, dev->st, lanaddr);
-		addDumpInfo(buf);
-		freeUPNPDevlist(devlist);
-
-		if (!urls.controlURL || urls.controlURL[0] == '\0')
-		{
-			ssprintf(buf, "controlURL not available, UPnP disabled");
+			descXML = miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr));
+			debug(LOG_NET, "LAN address: %s", lanaddr);
+			if (descXML)
+			{
+				parserootdesc (descXML, descXMLsize, &data);
+				free (descXML); descXML = 0;
+				GetUPNPUrls (&urls, &data, dev->descURL);
+			}
+			ssprintf(buf, "UPnP device found: %s %s LAN address %s", dev->descURL, dev->st, lanaddr);
 			addDumpInfo(buf);
-			return false;
+			freeUPNPDevlist(devlist);
+
+			if (!urls.controlURL || urls.controlURL[0] == '\0')
+			{
+				ssprintf(buf, "controlURL not available, UPnP disabled");
+				addDumpInfo(buf);
+				return false;
+			}
+			return true;
 		}
-		return true;
-	}
-	ssprintf(buf, "UPnP device not found.");
-	addDumpInfo(buf);
-	debug(LOG_NET, "No UPnP devices found.");
-	return false;
+		ssprintf(buf, "UPnP device not found.");
+		addDumpInfo(buf);
+		debug(LOG_NET, "No UPnP devices found.");
+		return false;
 	}
 	else
 	{
@@ -2040,7 +2040,7 @@ int NETshutdown(void)
 
 	if (NetPlay.bComms && NetPlay.isUPNP)
 	{
-	NETremRedirects();
+		NETremRedirects();
 	}
 	return 0;
 }
@@ -2750,7 +2750,7 @@ UBYTE NETsendFile(char *fileName, UDWORD player)
 	char	inBuff[MAX_FILE_TRANSFER_PACKET];
 
 	// We are not the host, so we don't care. (in fact, this would be a error)
-	if(!NetPlay.isHost)
+	if (!NetPlay.isHost)
 	{
 		return true;
 	}
