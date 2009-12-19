@@ -120,8 +120,6 @@ unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int vo
 	if (g_apTrack[trackID] != NULL)
 	{
 		debug(LOG_ERROR, "sound_SetTrackVals: track %i already set (filename: \"%s\"\n", trackID, g_apTrack[trackID]->fileName);
-		abort();
-
 		return 0;
 	}
 
