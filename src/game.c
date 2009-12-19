@@ -5314,7 +5314,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	burnTime = psSaveDroid->burnStart;
 	psDroid->burnStart = burnTime;
 
-	psDroid->experience = (UWORD)psSaveDroid->numKills;
+	psDroid->experience = (float)psSaveDroid->numKills;
 	//version 11
 	for (i=0; i < psDroid->numWeaps; i++)
 	{
@@ -5434,7 +5434,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	burnTime = psSaveDroid->burnStart;
 	psDroid->burnStart = burnTime;
 
-	psDroid->experience = (UWORD)psSaveDroid->numKills;
+	psDroid->experience = (float)psSaveDroid->numKills;
 	//version 14
 	psDroid->resistance = droidResistance(psDroid);
 
@@ -5831,7 +5831,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	burnTime = psSaveDroid->burnStart;
 	psDroid->burnStart = burnTime;
 
-	psDroid->experience = (UWORD)psSaveDroid->numKills;
+	psDroid->experience = (float)psSaveDroid->numKills;
 	//version 14
 	psDroid->resistance = droidResistance(psDroid);
 
@@ -6549,7 +6549,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 
 
             //save out experience level
-			psSaveDroid->numKills		= psCurr->experience;
+			psSaveDroid->numKills	= (UDWORD) psCurr->experience;
 			//version 11
 			//Watermelon:endian_udword for new save format
 			for(i = 0;i < psCurr->numWeaps;i++)
