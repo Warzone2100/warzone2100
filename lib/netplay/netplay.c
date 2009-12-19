@@ -575,6 +575,7 @@ static void delSocket(SocketSet* set, Socket* socket)
 	size_t i;
 
 	ASSERT(set != NULL, "NULL SocketSet provided");
+	ASSERT(socket != NULL, "NULL Socket provided");
 
 	for (i = 0; i < set->len; ++i)
 	{
@@ -1336,7 +1337,7 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 		{
 			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %d", NET_BUFFER_SIZE, bs->bytes);
 		}
-		debug(LOG_WARNING, "SDLNet_TCP_Recv error: %s tcp_socket %p is now invalid", strSockError(getSockErr()), bs->socket);
+		debug(LOG_WARNING, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), bs->socket);
 		if (tcp_socket == bs->socket)
 		{
 			debug(LOG_NET, "Host connection was lost!");
@@ -2756,7 +2757,7 @@ UBYTE NETsendFile(char *fileName, UDWORD player)
 	char	inBuff[MAX_FILE_TRANSFER_PACKET];
 
 	// We are not the host, so we don't care. (in fact, this would be a error)
-	if(!NetPlay.isHost)
+	if (!NetPlay.isHost)
 	{
 		return true;
 	}
