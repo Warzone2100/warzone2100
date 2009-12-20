@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2009-12-20 18:45+0100\n"
-"PO-Revision-Date: 2009-12-12 16:02+0100\n"
+"PO-Revision-Date: 2009-12-20 19:05+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -11932,7 +11932,7 @@ msgstr "Spiel fortsetzen"
 
 #: src/ingameop.c:142
 msgid "Warning, if Host quits, the game ends for everyone!"
-msgstr ""
+msgstr "Warnung: Wenn der Spielleiter das Spiel verlässt, endet es für alle!"
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
@@ -11942,17 +11942,16 @@ msgid "Save Game"
 msgstr "Spiel speichern"
 
 #: src/ingameop.c:352
-#, fuzzy
 msgid "Host has quit the game!"
 msgstr "Der Spielleiter hat das Spiel verlassen!"
 
 #: src/ingameop.c:358
 msgid "The game can't continue without the host."
-msgstr ""
+msgstr "Das Spiel kann ohne Spielleiter nicht weitergehen."
 
 #: src/ingameop.c:364
 msgid "-->  QUIT  <--"
-msgstr ""
+msgstr "-->  BEENDEN  <--"
 
 #: src/intdisplay.c:202
 #: src/intdisplay.c:247
@@ -12859,7 +12858,7 @@ msgstr "Spielleiter hat falsche Daten/falschen Mod gefunden."
 
 #: src/multiint.c:849
 msgid "Host couldn't send file?"
-msgstr ""
+msgstr "Spielleiter konnte Datei nicht senden?"
 
 #: src/multiint.c:853
 msgid "Incorrect Password!"
