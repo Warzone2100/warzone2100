@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-12-12 15:15+0100\n"
+"POT-Creation-Date: 2009-12-20 18:45+0100\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -11086,23 +11086,23 @@ msgstr ""
 msgid "Latin"
 msgstr "拉丁語"
 
-#: lib/netplay/netplay.c:1136
-#: lib/netplay/netplay.c:1171
+#: lib/netplay/netplay.c:1146
+#: lib/netplay/netplay.c:1181
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:1252
+#: lib/netplay/netplay.c:1262
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:2943
+#: lib/netplay/netplay.c:2955
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2968
+#: lib/netplay/netplay.c:2980
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -11555,7 +11555,7 @@ msgid "Challenges"
 msgstr "拾荒者"
 
 #: src/frontend.c:369
-#: src/ingameop.c:257
+#: src/ingameop.c:281
 msgid "Load Game"
 msgstr "載入遊戲"
 
@@ -11564,7 +11564,7 @@ msgid "SINGLE PLAYER"
 msgstr "SINGLE PLAYER"
 
 #: src/frontend.c:467
-#: src/ingameop.c:394
+#: src/ingameop.c:507
 #: src/mission.c:2836
 #: src/mission.c:2941
 msgid "Load Saved Game"
@@ -11583,7 +11583,7 @@ msgid "Join Game"
 msgstr "加入遊戲"
 
 #: src/frontend.c:578
-#: src/multiint.c:1193
+#: src/multiint.c:1199
 msgid "OPTIONS"
 msgstr "選項"
 
@@ -11600,7 +11600,7 @@ msgid "Video Options"
 msgstr "顯示選項"
 
 #: src/frontend.c:582
-#: src/ingameop.c:252
+#: src/ingameop.c:276
 msgid "Audio Options"
 msgstr "音效選項"
 
@@ -11679,7 +11679,7 @@ msgid "Off"
 msgstr "關閉"
 
 #: src/frontend.c:680
-#: src/multiint.c:1247
+#: src/multiint.c:1253
 msgid "Fog"
 msgstr "迷霧"
 
@@ -11690,7 +11690,7 @@ msgstr "迷霧"
 
 #: src/frontend.c:687
 #: src/frontend.c:762
-#: src/multiint.c:1249
+#: src/multiint.c:1255
 msgid "Fog Of War"
 msgstr "完全迷霧"
 
@@ -11709,17 +11709,17 @@ msgid "GRAPHICS OPTIONS"
 msgstr "遊戲選項"
 
 #: src/frontend.c:854
-#: src/ingameop.c:155
+#: src/ingameop.c:179
 msgid "Voice Volume"
 msgstr "語音音量"
 
 #: src/frontend.c:858
-#: src/ingameop.c:160
+#: src/ingameop.c:184
 msgid "FX Volume"
 msgstr "音效音量"
 
 #: src/frontend.c:862
-#: src/ingameop.c:165
+#: src/ingameop.c:189
 msgid "Music Volume"
 msgstr "背景音樂音量"
 
@@ -11829,10 +11829,10 @@ msgid "GAME OPTIONS"
 msgstr "遊戲選項"
 
 #: src/hci.c:1009
-#: src/hci.c:3843
-#: src/hci.c:3994
-#: src/hci.c:4447
-#: src/hci.c:5651
+#: src/hci.c:3844
+#: src/hci.c:3995
+#: src/hci.c:4448
+#: src/hci.c:5652
 #: src/intelmap.c:541
 #: src/intorder.c:661
 #: src/loadsave.c:267
@@ -11850,148 +11850,165 @@ msgid "MAP SAVED!"
 msgstr "遊戲已儲存"
 
 #: src/hci.c:1702
-#: src/loop.c:529
-#: src/loop.c:545
+#: src/loop.c:535
+#: src/loop.c:551
 #: src/mission.c:2907
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "遊戲已儲存"
 
-#: src/hci.c:2108
+#: src/hci.c:2109
 msgid "Failed to create building"
 msgstr "建築物建造失敗"
 
-#: src/hci.c:2131
+#: src/hci.c:2132
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新建築物: %s."
 
-#: src/hci.c:2146
+#: src/hci.c:2147
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新功能: %s."
 
-#: src/hci.c:2167
+#: src/hci.c:2168
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新droid: %s."
 
-#: src/hci.c:3745
+#: src/hci.c:3746
 msgid "Commanders (F6)"
 msgstr "指揮命令 （F6）"
 
-#: src/hci.c:3761
+#: src/hci.c:3762
 msgid "Intelligence Display (F5)"
 msgstr "顯示任務及情報（F5）"
 
-#: src/hci.c:3777
+#: src/hci.c:3778
 msgid "Manufacture (F1)"
 msgstr "生產新的單位 （F1）"
 
-#: src/hci.c:3793
+#: src/hci.c:3794
 msgid "Design (F4)"
 msgstr "設計新的單位（F4）"
 
-#: src/hci.c:3809
+#: src/hci.c:3810
 msgid "Research (F2)"
 msgstr "研發新科技（F2）"
 
-#: src/hci.c:3825
+#: src/hci.c:3826
 msgid "Build (F3)"
 msgstr "建造新的建築物 （F3）"
 
-#: src/hci.c:3905
-#: src/multiint.c:1294
+#: src/hci.c:3906
+#: src/multiint.c:1300
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "能源"
 
-#: src/hci.c:4089
+#: src/hci.c:4090
 msgid "Tile"
 msgstr "貼圖"
 
-#: src/hci.c:4090
+#: src/hci.c:4091
 msgid "Place tiles on map"
 msgstr "在地圖上加入貼圖"
 
-#: src/hci.c:4099
+#: src/hci.c:4100
 msgid "Unit"
 msgstr "單位"
 
-#: src/hci.c:4100
+#: src/hci.c:4101
 msgid "Place Unit on map"
 msgstr "在地圖上加入單位"
 
-#: src/hci.c:4108
+#: src/hci.c:4109
 msgid "Struct"
 msgstr "建築"
 
-#: src/hci.c:4109
+#: src/hci.c:4110
 msgid "Place Structures on map"
 msgstr "在地圖上加入建築物"
 
-#: src/hci.c:4117
+#: src/hci.c:4118
 msgid "Feat"
 msgstr "特徵"
 
-#: src/hci.c:4118
+#: src/hci.c:4119
 msgid "Place Features on map"
 msgstr "在地圖上加入特徵"
 
-#: src/hci.c:4129
+#: src/hci.c:4130
 msgid "Pause or unpause the game"
 msgstr "暫停（或繼續）遊戲"
 
-#: src/hci.c:4143
+#: src/hci.c:4144
 msgid "Align height of all map objects"
 msgstr "使地圖上所有物件等高"
 
-#: src/hci.c:4168
-#: src/ingameop.c:121
-#: src/ingameop.c:240
-#: src/ingameop.c:245
+#: src/hci.c:4169
+#: src/ingameop.c:119
+#: src/ingameop.c:264
+#: src/ingameop.c:269
 msgid "Quit"
 msgstr "退出"
 
-#: src/hci.c:4169
+#: src/hci.c:4170
 msgid "Exit Game"
 msgstr "離開遊戲"
 
-#: src/hci.c:4532
+#: src/hci.c:4533
 #: src/intdisplay.c:212
 #: src/intdisplay.c:255
 #: src/intdisplay.c:306
 msgid "Progress Bar"
 msgstr "進度條"
 
-#: src/hci.c:5566
+#: src/hci.c:5567
 msgid "Factory Delivery Point"
 msgstr "工廠單位產出點"
 
-#: src/hci.c:5585
+#: src/hci.c:5586
 msgid "Loop Production"
 msgstr "循環生產"
 
-#: src/hci.c:5676
+#: src/hci.c:5677
 msgid "Tab Scroll left"
 msgstr "頁簽向左捲動"
 
-#: src/hci.c:5693
+#: src/hci.c:5694
 msgid "Tab Scroll right"
 msgstr "頁簽向右捲動"
 
 #: src/ingameop.c:118
-#: src/ingameop.c:152
-#: src/ingameop.c:249
+#: src/ingameop.c:176
+#: src/ingameop.c:273
 msgid "Resume Game"
 msgstr "返回遊戲"
 
-#: src/ingameop.c:259
-#: src/ingameop.c:398
+#: src/ingameop.c:142
+msgid "Warning, if Host quits, the game ends for everyone!"
+msgstr ""
+
+#: src/ingameop.c:283
+#: src/ingameop.c:511
 #: src/mission.c:2826
 #: src/mission.c:2944
 msgid "Save Game"
 msgstr "儲存遊戲"
+
+#: src/ingameop.c:352
+#, fuzzy
+msgid "Host has quit the game!"
+msgstr "主玩家已離開遊戲"
+
+#: src/ingameop.c:358
+msgid "The game can't continue without the host."
+msgstr ""
+
+#: src/ingameop.c:364
+msgid "-->  QUIT  <--"
+msgstr ""
 
 #: src/intdisplay.c:202
 #: src/intdisplay.c:247
@@ -12000,7 +12017,7 @@ msgid "Power Accrued"
 msgstr "能量增加"
 
 #: src/intelmap.c:245
-#: src/keybind.c:1292
+#: src/keybind.c:1295
 msgid "PAUSED"
 msgstr "暫停"
 
@@ -12021,32 +12038,32 @@ msgid "New Intelligence Report"
 msgstr "新的智能情報"
 
 #: src/intorder.c:179
-#: src/keymap.c:388
+#: src/keymap.c:386
 msgid "Short Range"
 msgstr "短距離"
 
 #: src/intorder.c:180
-#: src/keymap.c:394
+#: src/keymap.c:392
 msgid "Long Range"
 msgstr "長距離"
 
 #: src/intorder.c:181
-#: src/keymap.c:387
+#: src/keymap.c:385
 msgid "Optimum Range"
 msgstr "最適距離"
 
 #: src/intorder.c:182
-#: src/keymap.c:405
+#: src/keymap.c:403
 msgid "Retreat at Medium Damage"
 msgstr "中度損傷時撤退"
 
 #: src/intorder.c:183
-#: src/keymap.c:406
+#: src/keymap.c:404
 msgid "Retreat at Heavy Damage"
 msgstr "重度損傷時撤退"
 
 #: src/intorder.c:184
-#: src/keymap.c:407
+#: src/keymap.c:405
 msgid "Do or Die!"
 msgstr "奮戰到底！"
 
@@ -12055,22 +12072,22 @@ msgid "Fire-At-Will"
 msgstr "接觸時開火"
 
 #: src/intorder.c:186
-#: src/keymap.c:384
+#: src/keymap.c:382
 msgid "Return Fire"
 msgstr "遭受攻擊時還擊"
 
 #: src/intorder.c:187
-#: src/keymap.c:382
+#: src/keymap.c:380
 msgid "Hold Fire"
 msgstr "停火"
 
 #: src/intorder.c:188
-#: src/keymap.c:390
+#: src/keymap.c:388
 msgid "Patrol"
 msgstr "巡邏模式"
 
 #: src/intorder.c:189
-#: src/keymap.c:389
+#: src/keymap.c:387
 msgid "Pursue"
 msgstr "追蹤模式"
 
@@ -12079,12 +12096,12 @@ msgid "Guard Position"
 msgstr "保持戒備"
 
 #: src/intorder.c:191
-#: src/keymap.c:392
+#: src/keymap.c:390
 msgid "Hold Position"
 msgstr "保持原位"
 
 #: src/intorder.c:192
-#: src/keymap.c:391
+#: src/keymap.c:389
 msgid "Return For Repair"
 msgstr "返回修理"
 
@@ -12097,7 +12114,7 @@ msgid "Go to Transport"
 msgstr "前往運輸艦位置"
 
 #: src/intorder.c:195
-#: src/keymap.c:416
+#: src/keymap.c:414
 msgid "Return for Recycling"
 msgstr "返回回收"
 
@@ -12148,12 +12165,12 @@ msgstr "關閉細節、武器及雷達顯示"
 #: src/keybind.c:496
 #: src/keybind.c:536
 #: src/keybind.c:642
-#: src/keybind.c:1192
-#: src/keybind.c:1250
-#: src/keybind.c:1341
-#: src/keybind.c:1438
-#: src/keybind.c:1749
-#: src/keybind.c:1789
+#: src/keybind.c:1195
+#: src/keybind.c:1253
+#: src/keybind.c:1344
+#: src/keybind.c:1441
+#: src/keybind.c:1752
+#: src/keybind.c:1792
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
@@ -12224,161 +12241,161 @@ msgstr "戰爭迷霧開啟"
 msgid "Fog off"
 msgstr "戰爭迷霧關閉"
 
-#: src/keybind.c:1079
+#: src/keybind.c:1082
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1079
+#: src/keybind.c:1082
 #, fuzzy
 msgid "Ending Mission."
 msgstr "傳來訊息..."
 
-#: src/keybind.c:1193
+#: src/keybind.c:1196
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1193
+#: src/keybind.c:1196
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1251
+#: src/keybind.c:1254
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1251
+#: src/keybind.c:1254
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1263
+#: src/keybind.c:1266
 msgid "View Aligned to North"
 msgstr "View Aligned to North"
 
-#: src/keybind.c:1342
+#: src/keybind.c:1345
 msgid "Researched EVERYTHING for you!"
 msgstr "替你研發所有科技！"
 
-#: src/keybind.c:1375
+#: src/keybind.c:1378
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1376
+#: src/keybind.c:1379
 #, fuzzy
 msgid "Researched"
 msgstr "研發新科技"
 
-#: src/keybind.c:1396
+#: src/keybind.c:1399
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1399
+#: src/keybind.c:1402
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1402
+#: src/keybind.c:1405
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1424
+#: src/keybind.c:1427
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "關閉展示模式—回到正常遊戲模式"
 
-#: src/keybind.c:1439
+#: src/keybind.c:1442
 #, fuzzy
 msgid "Debug menu is Open"
 msgstr "建築選單將重新開啟"
 
-#: src/keybind.c:1470
+#: src/keybind.c:1473
 msgid "Unable to locate any resource extractors!"
 msgstr "無法找到任何資源（resource extractors）"
 
-#: src/keybind.c:1691
+#: src/keybind.c:1694
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "喔，外面的天氣真糟...下雪"
 
-#: src/keybind.c:1697
+#: src/keybind.c:1700
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "下雨啦～下雨啦～"
 
-#: src/keybind.c:1703
+#: src/keybind.c:1706
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "天氣預報：一整片晴朗的天空。"
 
-#: src/keybind.c:1748
+#: src/keybind.c:1751
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1750
+#: src/keybind.c:1753
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "敵軍已經死了...由於你作弊的關係.."
 
-#: src/keybind.c:1790
+#: src/keybind.c:1793
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2308
+#: src/keybind.c:2311
 msgid "Centered on player HQ, direction NORTH"
 msgstr "視角移至主基地，面向北方"
 
-#: src/keybind.c:2320
+#: src/keybind.c:2323
 msgid "Unable to locate HQ!"
 msgstr "無法定位至主基地"
 
-#: src/keybind.c:2331
+#: src/keybind.c:2334
 msgid "Formation speed limiting OFF"
 msgstr "成型速度限制關閉"
 
-#: src/keybind.c:2335
+#: src/keybind.c:2338
 msgid "Formation speed limiting ON"
 msgstr "成型速度限制開啟"
 
-#: src/keybind.c:2465
-#: src/keybind.c:2506
-#: src/keybind.c:2528
+#: src/keybind.c:2468
+#: src/keybind.c:2509
+#: src/keybind.c:2531
 msgid "Game Speed Reset"
 msgstr "重設遊戲速度"
 
-#: src/keybind.c:2469
+#: src/keybind.c:2472
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "遊戲速度增加至 %3.1f"
 
-#: src/keybind.c:2510
+#: src/keybind.c:2513
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "遊戲速度減少至 %3.1f"
 
-#: src/keybind.c:2540
+#: src/keybind.c:2543
 msgid "Build menu will reopen"
 msgstr "建築選單將重新開啟"
 
-#: src/keybind.c:2544
+#: src/keybind.c:2547
 msgid "Build menu will not reopen"
 msgstr "建造選單將不會開啟"
 
-#: src/keybind.c:2556
+#: src/keybind.c:2559
 msgid "Radar showing friend-foe colors"
 msgstr "雷達顯示友軍顏色"
 
-#: src/keybind.c:2560
+#: src/keybind.c:2563
 msgid "Radar showing player colors"
 msgstr "雷達顯示玩家顏色"
 
-#: src/keybind.c:2577
+#: src/keybind.c:2580
 msgid "Radar showing only objects"
 msgstr "雷達僅顯示物件"
 
-#: src/keybind.c:2580
+#: src/keybind.c:2583
 msgid "Radar blending terrain and height"
 msgstr "雷達描繪地形及高度"
 
-#: src/keybind.c:2583
+#: src/keybind.c:2586
 msgid "Radar showing terrain"
 msgstr "雷達顯示地形"
 
-#: src/keybind.c:2586
+#: src/keybind.c:2589
 msgid "Radar showing height"
 msgstr "雷達顯示高度"
 
@@ -12387,10 +12404,10 @@ msgid "KEY MAPPING"
 msgstr "鍵盤配置"
 
 #: src/keyedit.c:386
-#: src/multiint.c:623
-#: src/multiint.c:665
-#: src/multiint.c:1060
-#: src/multiint.c:1380
+#: src/multiint.c:624
+#: src/multiint.c:666
+#: src/multiint.c:1066
+#: src/multiint.c:1386
 msgid "Return To Previous Screen"
 msgstr "回到前一個畫面"
 
@@ -12571,205 +12588,197 @@ msgstr "選擇命令9"
 msgid "Multiplayer Options / Alliance dialog"
 msgstr "多人遊戲選項"
 
-#: src/keymap.c:348
-msgid "Start Multiplayer Audio"
-msgstr "開啟多人玩家音效"
-
-#: src/keymap.c:349
-msgid "Stop Multiplayer Audio"
-msgstr "停止多人遊戲音效"
-
-#: src/keymap.c:352
+#: src/keymap.c:350
 msgid "Snap View to North"
 msgstr "Snap View to North"
 
-#: src/keymap.c:353
+#: src/keymap.c:351
 msgid "Toggle Tracking Camera"
 msgstr "開啟或關閉追蹤視角"
 
-#: src/keymap.c:354
+#: src/keymap.c:352
 msgid "Display In-Game Options"
 msgstr "顯示遊戲中選項"
 
-#: src/keymap.c:355
+#: src/keymap.c:353
 msgid "Zoom Radar Out"
 msgstr "縮小雷達視野"
 
-#: src/keymap.c:356
+#: src/keymap.c:354
 msgid "Zoom Radar In"
 msgstr "放大雷達視野"
 
-#: src/keymap.c:357
+#: src/keymap.c:355
 msgid "Zoom In"
 msgstr "視角拉近"
 
-#: src/keymap.c:358
+#: src/keymap.c:356
 msgid "Zoom Out"
 msgstr "視角拉遠"
 
-#: src/keymap.c:359
+#: src/keymap.c:357
 msgid "Pitch Forward"
 msgstr "視角前進"
 
-#: src/keymap.c:360
+#: src/keymap.c:358
 msgid "Rotate Left"
 msgstr "向左旋轉"
 
-#: src/keymap.c:361
+#: src/keymap.c:359
 msgid "Reset Pitch"
 msgstr "重設視角"
 
-#: src/keymap.c:362
+#: src/keymap.c:360
 msgid "Rotate Right"
 msgstr "向右旋轉"
 
-#: src/keymap.c:363
+#: src/keymap.c:361
 msgid "Pitch Back"
 msgstr "視角後退"
 
-#: src/keymap.c:364
+#: src/keymap.c:362
 msgid "Orders Menu"
 msgstr "命令選單"
 
-#: src/keymap.c:365
+#: src/keymap.c:363
 msgid "Decrease Game Speed"
 msgstr "降低遊戲速度"
 
-#: src/keymap.c:366
+#: src/keymap.c:364
 msgid "Increase Game Speed"
 msgstr "增加遊戲速度"
 
-#: src/keymap.c:367
+#: src/keymap.c:365
 msgid "Reset Game Speed"
 msgstr "重設遊戲速度"
 
-#: src/keymap.c:368
+#: src/keymap.c:366
 msgid "View North"
 msgstr "面向北方"
 
-#: src/keymap.c:369
+#: src/keymap.c:367
 msgid "View South"
 msgstr "面向南方"
 
-#: src/keymap.c:370
+#: src/keymap.c:368
 msgid "View East"
 msgstr "面向東方"
 
-#: src/keymap.c:371
+#: src/keymap.c:369
 msgid "View West"
 msgstr "面向西方"
 
-#: src/keymap.c:372
+#: src/keymap.c:370
 msgid "View next Oil Derrick"
 msgstr "檢視下一座鑽油井"
 
-#: src/keymap.c:373
+#: src/keymap.c:371
 msgid "View next Repair Unit"
 msgstr "檢視下一座修理單位"
 
-#: src/keymap.c:374
+#: src/keymap.c:372
 msgid "View next Truck"
 msgstr "檢視下一部工程車"
 
-#: src/keymap.c:375
+#: src/keymap.c:373
 msgid "View next Sensor Unit"
 msgstr "檢視下一座雷達單位"
 
-#: src/keymap.c:376
+#: src/keymap.c:374
 msgid "View next Commander"
 msgstr "檢視下一部指揮車"
 
-#: src/keymap.c:377
+#: src/keymap.c:375
 msgid "Toggle Overlays"
 msgstr "開啟或關閉疊層顯示"
 
-#: src/keymap.c:378
+#: src/keymap.c:376
 msgid "Console On/Off"
 msgstr "開啟或關閉主控台"
 
-#: src/keymap.c:381
+#: src/keymap.c:379
 msgid "Center View on HQ"
 msgstr "視角移至主基地"
 
-#: src/keymap.c:383
+#: src/keymap.c:381
 msgid "View Unassigned Units"
 msgstr "檢視未指定的單位"
 
-#: src/keymap.c:385
+#: src/keymap.c:383
 msgid "Fire at Will"
 msgstr "接觸時開火"
 
-#: src/keymap.c:386
+#: src/keymap.c:384
 msgid "Return to HQ"
 msgstr "回到主基地"
 
-#: src/keymap.c:393
+#: src/keymap.c:391
 msgid "Send Text Message"
 msgstr "送出文字訊息"
 
-#: src/keymap.c:411
+#: src/keymap.c:409
 msgid "Select all Combat Units"
 msgstr "選擇所有戰鬥單位"
 
-#: src/keymap.c:412
+#: src/keymap.c:410
 msgid "Select all Heavily Damaged Units"
 msgstr "選擇所有重度損傷單位"
 
-#: src/keymap.c:414
+#: src/keymap.c:412
 msgid "Select all Half-tracks"
 msgstr "選擇所有半履帶單位"
 
-#: src/keymap.c:415
+#: src/keymap.c:413
 msgid "Select all Hovers"
 msgstr "選擇所有氣墊船單位"
 
-#: src/keymap.c:417
+#: src/keymap.c:415
 msgid "Select all Units on Screen"
 msgstr "選擇所有螢幕上單位"
 
-#: src/keymap.c:418
+#: src/keymap.c:416
 msgid "Select all Tracks"
 msgstr "選擇所有履帶單位"
 
-#: src/keymap.c:419
+#: src/keymap.c:417
 msgid "Select EVERY unit"
 msgstr "選擇所有單位"
 
-#: src/keymap.c:420
+#: src/keymap.c:418
 msgid "Select all VTOLs"
 msgstr "選擇所有VTOL 單位"
 
-#: src/keymap.c:421
+#: src/keymap.c:419
 msgid "Select all Wheels"
 msgstr "選擇所有輪系單位"
 
-#: src/keymap.c:423
+#: src/keymap.c:421
 #, fuzzy
 msgid "Select all Similar Units"
 msgstr "選擇所有類似單位"
 
-#: src/keymap.c:427
+#: src/keymap.c:425
 msgid "Select next Factory"
 msgstr "選擇下一個工廠"
 
-#: src/keymap.c:428
+#: src/keymap.c:426
 msgid "Select next Research Facility"
 msgstr "選擇下一個研發中心"
 
-#: src/keymap.c:429
+#: src/keymap.c:427
 msgid "Select next Power Generator"
 msgstr "選擇下一個發電廠"
 
-#: src/keymap.c:430
+#: src/keymap.c:428
 msgid "Select next Cyborg Factory"
 msgstr "選擇下一個生化人工廠"
 
-#: src/keymap.c:431
+#: src/keymap.c:429
 msgid "Toggle reopening the build menu"
 msgstr "開啟或關閉建築選單"
 
-#: src/loop.c:536
-#: src/loop.c:552
+#: src/loop.c:542
+#: src/loop.c:558
 #, fuzzy
 msgid "Could not save game!"
 msgstr "載入已儲存的遊戲"
@@ -12866,228 +12875,232 @@ msgstr "%s 與 %s 結盟"
 msgid "You Discover Blueprints For %s"
 msgstr "你發現一個用作於 %s 的藍圖"
 
-#: src/multiint.c:568
+#: src/multiint.c:569
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "接受設定"
 
-#: src/multiint.c:579
+#: src/multiint.c:580
 msgid "IP Address or Machine Name"
 msgstr "IP 位置或電腦名稱"
 
-#: src/multiint.c:620
+#: src/multiint.c:621
 msgid "CONNECTION"
 msgstr "連接"
 
-#: src/multiint.c:633
+#: src/multiint.c:634
 msgid "Lobby"
 msgstr "遊戲大廳"
 
-#: src/multiint.c:634
+#: src/multiint.c:635
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:831
+#: src/multiint.c:832
 #, fuzzy
 msgid "No games are available"
 msgstr "可使用新的科技"
 
-#: src/multiint.c:834
+#: src/multiint.c:835
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.c:838
+#: src/multiint.c:839
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.c:841
+#: src/multiint.c:842
 msgid "Wrong Game Version!"
 msgstr ""
 
-#: src/multiint.c:844
+#: src/multiint.c:845
 msgid "Wrong data/mod detected by Host."
 msgstr ""
 
-#: src/multiint.c:847
+#: src/multiint.c:849
+msgid "Host couldn't send file?"
+msgstr ""
+
+#: src/multiint.c:853
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:850
+#: src/multiint.c:856
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.c:854
+#: src/multiint.c:860
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:952
+#: src/multiint.c:958
 msgid "Searching"
 msgstr "搜尋"
 
-#: src/multiint.c:1057
+#: src/multiint.c:1063
 msgid "GAMES"
 msgstr "遊戲"
 
-#: src/multiint.c:1067
+#: src/multiint.c:1073
 msgid "Refresh Games List"
 msgstr "重新整理遊戲清單"
 
-#: src/multiint.c:1088
+#: src/multiint.c:1094
 msgid "Enter Password First "
 msgstr ""
 
-#: src/multiint.c:1195
+#: src/multiint.c:1201
 msgid "Select Game Name"
 msgstr "選擇遊戲名稱"
 
-#: src/multiint.c:1196
+#: src/multiint.c:1202
 msgid "Select Map"
 msgstr "選擇地圖"
 
-#: src/multiint.c:1202
+#: src/multiint.c:1208
 #, fuzzy
 msgid "Click to set Password"
 msgstr "按一下看地圖"
 
-#: src/multiint.c:1211
-#: src/multiint.c:1212
+#: src/multiint.c:1217
+#: src/multiint.c:1218
 #, fuzzy
 msgid "Scavengers"
 msgstr "拾荒者"
 
-#: src/multiint.c:1214
+#: src/multiint.c:1220
 #, fuzzy
 msgid "No Scavengers"
 msgstr "拾荒者"
 
-#: src/multiint.c:1244
+#: src/multiint.c:1250
 msgid "Select Player Name"
 msgstr "選擇玩家名稱"
 
-#: src/multiint.c:1250
+#: src/multiint.c:1256
 msgid "Distance Fog"
 msgstr "迷霧（看得見地形）"
 
-#: src/multiint.c:1261
+#: src/multiint.c:1267
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.c:1264
+#: src/multiint.c:1270
 msgid "No Alliances"
 msgstr "不允許同盟"
 
-#: src/multiint.c:1266
+#: src/multiint.c:1272
 msgid "Allow Alliances"
 msgstr "允許同盟"
 
-#: src/multiint.c:1270
+#: src/multiint.c:1276
 msgid "Locked Teams"
 msgstr "鎖定同盟模式"
 
-#: src/multiint.c:1296
+#: src/multiint.c:1302
 msgid "Low Power Levels"
 msgstr "生產能源速度：慢"
 
-#: src/multiint.c:1298
+#: src/multiint.c:1304
 msgid "Medium Power Levels"
 msgstr "生產能源速度：中"
 
-#: src/multiint.c:1300
+#: src/multiint.c:1306
 msgid "High Power Levels"
 msgstr "生產能源速度：快"
 
-#: src/multiint.c:1332
+#: src/multiint.c:1338
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.c:1334
+#: src/multiint.c:1340
 msgid "Start with No Bases"
 msgstr "開始時無基地"
 
-#: src/multiint.c:1336
+#: src/multiint.c:1342
 msgid "Start with Bases"
 msgstr "開始時有基地"
 
-#: src/multiint.c:1338
+#: src/multiint.c:1344
 msgid "Start with Advanced Bases"
 msgstr "開始時具規模基地"
 
-#: src/multiint.c:1370
+#: src/multiint.c:1376
 msgid "Map Preview"
 msgstr "預覽地圖"
 
-#: src/multiint.c:1372
+#: src/multiint.c:1378
 msgid "Click to see Map"
 msgstr "按一下看地圖"
 
-#: src/multiint.c:1386
+#: src/multiint.c:1392
 msgid "Start Hosting Game"
 msgstr "開始遊戲"
 
-#: src/multiint.c:1394
+#: src/multiint.c:1400
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "設定建築物數量限制"
 
-#: src/multiint.c:1394
+#: src/multiint.c:1400
 msgid "Set Structure Limits"
 msgstr "設定建築物數量限制"
 
-#: src/multiint.c:1802
+#: src/multiint.c:1815
 msgid "Team"
 msgstr "隊伍"
 
-#: src/multiint.c:1835
+#: src/multiint.c:1848
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
-#: src/multiint.c:1841
+#: src/multiint.c:1854
 msgid "Click when ready"
 msgstr "按一下開始"
 
-#: src/multiint.c:1879
+#: src/multiint.c:1892
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.c:2057
+#: src/multiint.c:2070
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.c:2232
+#: src/multiint.c:2245
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2239
+#: src/multiint.c:2252
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2481
+#: src/multiint.c:2494
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2566
+#: src/multiint.c:2579
 msgid "'Locked Teams' mode enabled"
 msgstr "鎖定同盟模式"
 
-#: src/multiint.c:2611
+#: src/multiint.c:2624
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家將 %s 踢出遊戲！"
 
-#: src/multiint.c:2613
+#: src/multiint.c:2626
 msgid "you are unwanted by the host"
 msgstr ""
 
-#: src/multiint.c:2688
+#: src/multiint.c:2714
 msgid "Host is Starting Game"
 msgstr "主玩家已開始遊戲"
 
-#: src/multiint.c:3220
+#: src/multiint.c:3276
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.c:3297
+#: src/multiint.c:3353
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
@@ -13195,57 +13208,57 @@ msgstr "交出選擇的單位"
 msgid "Give Power To Player"
 msgstr "提供玩家能源"
 
-#: src/multiplay.c:284
+#: src/multiplay.c:282
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:288
+#: src/multiplay.c:286
 msgid "It is not nice to cheat!"
 msgstr ""
 
-#: src/multiplay.c:1081
+#: src/multiplay.c:1080
 #, fuzzy
 msgid "(allies"
 msgstr "同盟"
 
-#: src/multiplay.c:1091
+#: src/multiplay.c:1088
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1103
+#: src/multiplay.c:1101
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1930
+#: src/multiplay.c:1957
 msgid "Green"
 msgstr "綠色"
 
-#: src/multiplay.c:1931
+#: src/multiplay.c:1958
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.c:1932
+#: src/multiplay.c:1959
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.c:1933
+#: src/multiplay.c:1960
 msgid "Black"
 msgstr "黑色"
 
-#: src/multiplay.c:1934
+#: src/multiplay.c:1961
 msgid "Red"
 msgstr "紅色"
 
-#: src/multiplay.c:1935
+#: src/multiplay.c:1962
 msgid "Blue"
 msgstr "藍色"
 
-#: src/multiplay.c:1936
+#: src/multiplay.c:1963
 msgid "Pink"
 msgstr "粉紅色"
 
-#: src/multiplay.c:1937
+#: src/multiplay.c:1964
 msgid "Cyan"
 msgstr "青綠色"
 
@@ -13388,12 +13401,12 @@ msgstr "你獲勝了！"
 msgid "YOU WERE DEFEATED!"
 msgstr "你被打敗了！"
 
-#: src/scriptfuncs.c:10208
+#: src/scriptfuncs.c:10202
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "由 %s 獲得引導指標"
 
-#: src/scriptfuncs.c:10254
+#: src/scriptfuncs.c:10248
 #, c-format
 msgid "Beacon %d"
 msgstr "引導指標 %d"
@@ -13514,6 +13527,12 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "版本 %s%s%s%s"
+
+#~ msgid "Start Multiplayer Audio"
+#~ msgstr "開啟多人玩家音效"
+
+#~ msgid "Stop Multiplayer Audio"
+#~ msgstr "停止多人遊戲音效"
 
 #~ msgid "Game"
 #~ msgstr "遊戲"
@@ -13743,9 +13762,6 @@ msgstr "版本 %s%s%s%s"
 
 #~ msgid "NO GAMES ARE AVAILABLE"
 #~ msgstr "沒有遊戲可加入"
-
-#~ msgid "The host has left the game!"
-#~ msgstr "主玩家已離開遊戲"
 
 #~ msgid "R-Wpn-MG-Damage11"
 #~ msgstr "R-Wpn-MG-Damage11"

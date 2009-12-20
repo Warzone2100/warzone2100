@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-12-12 15:15+0100\n"
+"POT-Creation-Date: 2009-12-20 18:45+0100\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -11032,23 +11032,23 @@ msgstr ""
 msgid "Latin"
 msgstr "Latinski"
 
-#: lib/netplay/netplay.c:1136
-#: lib/netplay/netplay.c:1171
+#: lib/netplay/netplay.c:1146
+#: lib/netplay/netplay.c:1181
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr "Igralec %u ima napačno verzijo igre. Auto brcam."
 
-#: lib/netplay/netplay.c:1252
+#: lib/netplay/netplay.c:1262
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr "Igralec %u ima napačno geslo. Auto brcam."
 
-#: lib/netplay/netplay.c:2943
+#: lib/netplay/netplay.c:2955
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Ni bilo mogoče razrešiti imena glavnega strežnika (%s)!"
 
-#: lib/netplay/netplay.c:2968
+#: lib/netplay/netplay.c:2980
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Ni bilo mogoče komunicirati z vežnim strežnikom! Je TCP prehod %u odprt za izhodni promet?"
@@ -11511,7 +11511,7 @@ msgid "Challenges"
 msgstr "Plenilec"
 
 #: src/frontend.c:369
-#: src/ingameop.c:257
+#: src/ingameop.c:281
 msgid "Load Game"
 msgstr "Naloži igro"
 
@@ -11520,7 +11520,7 @@ msgid "SINGLE PLAYER"
 msgstr "EN IGRALEC"
 
 #: src/frontend.c:467
-#: src/ingameop.c:394
+#: src/ingameop.c:507
 #: src/mission.c:2836
 #: src/mission.c:2941
 msgid "Load Saved Game"
@@ -11539,7 +11539,7 @@ msgid "Join Game"
 msgstr "Pridružite se igri"
 
 #: src/frontend.c:578
-#: src/multiint.c:1193
+#: src/multiint.c:1199
 msgid "OPTIONS"
 msgstr "MOŽNOSTI"
 
@@ -11556,7 +11556,7 @@ msgid "Video Options"
 msgstr "Video možnosti"
 
 #: src/frontend.c:582
-#: src/ingameop.c:252
+#: src/ingameop.c:276
 msgid "Audio Options"
 msgstr "Zvočne možnosti"
 
@@ -11635,7 +11635,7 @@ msgid "Off"
 msgstr "Izklopljeno"
 
 #: src/frontend.c:680
-#: src/multiint.c:1247
+#: src/multiint.c:1253
 msgid "Fog"
 msgstr "Megla"
 
@@ -11646,7 +11646,7 @@ msgstr "Meglica"
 
 #: src/frontend.c:687
 #: src/frontend.c:762
-#: src/multiint.c:1249
+#: src/multiint.c:1255
 msgid "Fog Of War"
 msgstr "Megla vojne"
 
@@ -11665,17 +11665,17 @@ msgid "GRAPHICS OPTIONS"
 msgstr "MOŽNOSTI IGRE"
 
 #: src/frontend.c:854
-#: src/ingameop.c:155
+#: src/ingameop.c:179
 msgid "Voice Volume"
 msgstr "Glasovi"
 
 #: src/frontend.c:858
-#: src/ingameop.c:160
+#: src/ingameop.c:184
 msgid "FX Volume"
 msgstr "Učinki"
 
 #: src/frontend.c:862
-#: src/ingameop.c:165
+#: src/ingameop.c:189
 msgid "Music Volume"
 msgstr "Glasba"
 
@@ -11785,10 +11785,10 @@ msgid "GAME OPTIONS"
 msgstr "MOŽNOSTI IGRE"
 
 #: src/hci.c:1009
-#: src/hci.c:3843
-#: src/hci.c:3994
-#: src/hci.c:4447
-#: src/hci.c:5651
+#: src/hci.c:3844
+#: src/hci.c:3995
+#: src/hci.c:4448
+#: src/hci.c:5652
 #: src/intelmap.c:541
 #: src/intorder.c:661
 #: src/loadsave.c:267
@@ -11805,147 +11805,164 @@ msgid "MAP SAVED!"
 msgstr "MAPA SHRANJENA!"
 
 #: src/hci.c:1702
-#: src/loop.c:529
-#: src/loop.c:545
+#: src/loop.c:535
+#: src/loop.c:551
 #: src/mission.c:2907
 msgid "GAME SAVED :"
 msgstr "IGRA SHRANJENA:"
 
-#: src/hci.c:2108
+#: src/hci.c:2109
 msgid "Failed to create building"
 msgstr "Ni uspelo zgraditi stavbe"
 
-#: src/hci.c:2131
+#: src/hci.c:2132
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novo zgradbo: %s."
 
-#: src/hci.c:2146
+#: src/hci.c:2147
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novo odliko: %s."
 
-#: src/hci.c:2167
+#: src/hci.c:2168
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novega droida: %s."
 
-#: src/hci.c:3745
+#: src/hci.c:3746
 msgid "Commanders (F6)"
 msgstr "Poveljniki (F6)"
 
-#: src/hci.c:3761
+#: src/hci.c:3762
 msgid "Intelligence Display (F5)"
 msgstr "Obveščevalni zaslon (F5)"
 
-#: src/hci.c:3777
+#: src/hci.c:3778
 msgid "Manufacture (F1)"
 msgstr "Izdelava (F1)"
 
-#: src/hci.c:3793
+#: src/hci.c:3794
 msgid "Design (F4)"
 msgstr "Načrtovanje (F4)"
 
-#: src/hci.c:3809
+#: src/hci.c:3810
 msgid "Research (F2)"
 msgstr "Raziskave (F2)"
 
-#: src/hci.c:3825
+#: src/hci.c:3826
 msgid "Build (F3)"
 msgstr "Gradnja (F3)"
 
-#: src/hci.c:3905
-#: src/multiint.c:1294
+#: src/hci.c:3906
+#: src/multiint.c:1300
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Moč"
 
-#: src/hci.c:4089
+#: src/hci.c:4090
 msgid "Tile"
 msgstr "Plošča"
 
-#: src/hci.c:4090
+#: src/hci.c:4091
 msgid "Place tiles on map"
 msgstr "Položi plošče na mapo"
 
-#: src/hci.c:4099
+#: src/hci.c:4100
 msgid "Unit"
 msgstr "Enota"
 
-#: src/hci.c:4100
+#: src/hci.c:4101
 msgid "Place Unit on map"
 msgstr "Položi enote na mapo"
 
-#: src/hci.c:4108
+#: src/hci.c:4109
 msgid "Struct"
 msgstr "Zgradba"
 
-#: src/hci.c:4109
+#: src/hci.c:4110
 msgid "Place Structures on map"
 msgstr "Položi zgradbe na mapo"
 
-#: src/hci.c:4117
+#: src/hci.c:4118
 msgid "Feat"
 msgstr "Odlika"
 
-#: src/hci.c:4118
+#: src/hci.c:4119
 msgid "Place Features on map"
 msgstr "Položi odlike na mapo"
 
-#: src/hci.c:4129
+#: src/hci.c:4130
 msgid "Pause or unpause the game"
 msgstr "Ustavi ali nadaljuj igro"
 
-#: src/hci.c:4143
+#: src/hci.c:4144
 msgid "Align height of all map objects"
 msgstr "Uskladi višino vseh predmetov na mapi"
 
-#: src/hci.c:4168
-#: src/ingameop.c:121
-#: src/ingameop.c:240
-#: src/ingameop.c:245
+#: src/hci.c:4169
+#: src/ingameop.c:119
+#: src/ingameop.c:264
+#: src/ingameop.c:269
 msgid "Quit"
 msgstr "Končaj"
 
-#: src/hci.c:4169
+#: src/hci.c:4170
 msgid "Exit Game"
 msgstr "Zapusti igro"
 
-#: src/hci.c:4532
+#: src/hci.c:4533
 #: src/intdisplay.c:212
 #: src/intdisplay.c:255
 #: src/intdisplay.c:306
 msgid "Progress Bar"
 msgstr "Črta napredka"
 
-#: src/hci.c:5566
+#: src/hci.c:5567
 msgid "Factory Delivery Point"
 msgstr "Dostavna točka tovarne"
 
-#: src/hci.c:5585
+#: src/hci.c:5586
 msgid "Loop Production"
 msgstr "Ponavljaj izdelavo"
 
-#: src/hci.c:5676
+#: src/hci.c:5677
 msgid "Tab Scroll left"
 msgstr "Tab premakni levo"
 
-#: src/hci.c:5693
+#: src/hci.c:5694
 msgid "Tab Scroll right"
 msgstr "Tab premakni desno"
 
 #: src/ingameop.c:118
-#: src/ingameop.c:152
-#: src/ingameop.c:249
+#: src/ingameop.c:176
+#: src/ingameop.c:273
 msgid "Resume Game"
 msgstr "Nadaljuj igro"
 
-#: src/ingameop.c:259
-#: src/ingameop.c:398
+#: src/ingameop.c:142
+msgid "Warning, if Host quits, the game ends for everyone!"
+msgstr ""
+
+#: src/ingameop.c:283
+#: src/ingameop.c:511
 #: src/mission.c:2826
 #: src/mission.c:2944
 msgid "Save Game"
 msgstr "Shrani igro"
+
+#: src/ingameop.c:352
+#, fuzzy
+msgid "Host has quit the game!"
+msgstr "Gostitelj je zapustil igro!"
+
+#: src/ingameop.c:358
+msgid "The game can't continue without the host."
+msgstr ""
+
+#: src/ingameop.c:364
+msgid "-->  QUIT  <--"
+msgstr ""
 
 #: src/intdisplay.c:202
 #: src/intdisplay.c:247
@@ -11954,7 +11971,7 @@ msgid "Power Accrued"
 msgstr "Moč povečana"
 
 #: src/intelmap.c:245
-#: src/keybind.c:1292
+#: src/keybind.c:1295
 msgid "PAUSED"
 msgstr "IGRA USTAVLJENA"
 
@@ -11975,32 +11992,32 @@ msgid "New Intelligence Report"
 msgstr "Novo obveščevalno poročilo"
 
 #: src/intorder.c:179
-#: src/keymap.c:388
+#: src/keymap.c:386
 msgid "Short Range"
 msgstr "Kratki domet"
 
 #: src/intorder.c:180
-#: src/keymap.c:394
+#: src/keymap.c:392
 msgid "Long Range"
 msgstr "Dolgi domet"
 
 #: src/intorder.c:181
-#: src/keymap.c:387
+#: src/keymap.c:385
 msgid "Optimum Range"
 msgstr "Najugodnejši domet"
 
 #: src/intorder.c:182
-#: src/keymap.c:405
+#: src/keymap.c:403
 msgid "Retreat at Medium Damage"
 msgstr "Umik pri srednje težki poškodbi"
 
 #: src/intorder.c:183
-#: src/keymap.c:406
+#: src/keymap.c:404
 msgid "Retreat at Heavy Damage"
 msgstr "Umik pri težki poškodbi"
 
 #: src/intorder.c:184
-#: src/keymap.c:407
+#: src/keymap.c:405
 msgid "Do or Die!"
 msgstr "Stori ali umri!"
 
@@ -12009,22 +12026,22 @@ msgid "Fire-At-Will"
 msgstr "Streljaj-po-želji"
 
 #: src/intorder.c:186
-#: src/keymap.c:384
+#: src/keymap.c:382
 msgid "Return Fire"
 msgstr "Vračaj streljanje"
 
 #: src/intorder.c:187
-#: src/keymap.c:382
+#: src/keymap.c:380
 msgid "Hold Fire"
 msgstr "Ustavi streljanje"
 
 #: src/intorder.c:188
-#: src/keymap.c:390
+#: src/keymap.c:388
 msgid "Patrol"
 msgstr "Patruliraj"
 
 #: src/intorder.c:189
-#: src/keymap.c:389
+#: src/keymap.c:387
 msgid "Pursue"
 msgstr "Zasleduj"
 
@@ -12033,12 +12050,12 @@ msgid "Guard Position"
 msgstr "Straži položaj"
 
 #: src/intorder.c:191
-#: src/keymap.c:392
+#: src/keymap.c:390
 msgid "Hold Position"
 msgstr "Drži položaj"
 
 #: src/intorder.c:192
-#: src/keymap.c:391
+#: src/keymap.c:389
 msgid "Return For Repair"
 msgstr "Vrni se na popravilo"
 
@@ -12051,7 +12068,7 @@ msgid "Go to Transport"
 msgstr "Pojdi do prevoza"
 
 #: src/intorder.c:195
-#: src/keymap.c:416
+#: src/keymap.c:414
 msgid "Return for Recycling"
 msgstr "Vrni se za reciklažo"
 
@@ -12102,12 +12119,12 @@ msgstr "Vredu, prikaz orožja & senzorjev je izklopljen!"
 #: src/keybind.c:496
 #: src/keybind.c:536
 #: src/keybind.c:642
-#: src/keybind.c:1192
-#: src/keybind.c:1250
-#: src/keybind.c:1341
-#: src/keybind.c:1438
-#: src/keybind.c:1749
-#: src/keybind.c:1789
+#: src/keybind.c:1195
+#: src/keybind.c:1253
+#: src/keybind.c:1344
+#: src/keybind.c:1441
+#: src/keybind.c:1752
+#: src/keybind.c:1792
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Igralec %u) uporablja goljufijo :%s"
@@ -12178,157 +12195,157 @@ msgstr "Megla vklopljena"
 msgid "Fog off"
 msgstr "Megla izklopljena"
 
-#: src/keybind.c:1079
+#: src/keybind.c:1082
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "Opozorilo! Ta goljufija lahko kasneje povzroči resne težave! [%s]"
 
-#: src/keybind.c:1079
+#: src/keybind.c:1082
 msgid "Ending Mission."
 msgstr "Končujem misijo."
 
-#: src/keybind.c:1193
+#: src/keybind.c:1196
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "GOLJUFIJE SO SEDAJ OMOGOČENE!"
 
-#: src/keybind.c:1193
+#: src/keybind.c:1196
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "GOLJUFIJE SO SEDAJ ONEMOGOČENE!"
 
-#: src/keybind.c:1251
+#: src/keybind.c:1254
 msgid "God Mode ON"
 msgstr "Božji način VKLOPLJEN"
 
-#: src/keybind.c:1251
+#: src/keybind.c:1254
 msgid "God Mode OFF"
 msgstr "Božji način IZKLOPLJEN"
 
-#: src/keybind.c:1263
+#: src/keybind.c:1266
 msgid "View Aligned to North"
 msgstr "Pogled poravnan na sever"
 
-#: src/keybind.c:1342
+#: src/keybind.c:1345
 msgid "Researched EVERYTHING for you!"
 msgstr "Raziskal VSE za vas!"
 
-#: src/keybind.c:1375
+#: src/keybind.c:1378
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Igralec %u) uporablja goljufijo :%s %s"
 
-#: src/keybind.c:1376
+#: src/keybind.c:1379
 msgid "Researched"
 msgstr "Raziskano"
 
-#: src/keybind.c:1396
+#: src/keybind.c:1399
 msgid "Only displaying energy bars when selected"
 msgstr "Črte moči prikazane le ob izboru"
 
-#: src/keybind.c:1399
+#: src/keybind.c:1402
 msgid "Always displaying energy bars for units"
 msgstr "Vedno prikazane črte moči za enote"
 
-#: src/keybind.c:1402
+#: src/keybind.c:1405
 msgid "Always displaying energy bars for units and structures"
 msgstr "Vedno prikazane črte moči za enote in zgradbe"
 
-#: src/keybind.c:1424
+#: src/keybind.c:1427
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Demo način izklopljen - Vračanje na navadni način igre"
 
-#: src/keybind.c:1439
+#: src/keybind.c:1442
 msgid "Debug menu is Open"
 msgstr "Razhroščevalni meni je odprt"
 
-#: src/keybind.c:1470
+#: src/keybind.c:1473
 msgid "Unable to locate any resource extractors!"
 msgstr "Ni mogoče najti nobenih črpalcev virov!"
 
-#: src/keybind.c:1691
+#: src/keybind.c:1694
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, vreme zunaj je strašno... SNEG"
 
-#: src/keybind.c:1697
+#: src/keybind.c:1700
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Pojem v dežju, jaz pojem v dežju... DEŽ"
 
-#: src/keybind.c:1703
+#: src/keybind.c:1706
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Napoved : jasno nebo za vsa območja... NI VREMENA"
 
-#: src/keybind.c:1748
+#: src/keybind.c:1751
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Opozorilo! To ima lahko drastične posledice, če se nepravilno uporabi v misijah"
 
-#: src/keybind.c:1750
+#: src/keybind.c:1753
 msgid "All enemies destroyed by cheating!"
 msgstr "Vsi sovražniki uničeni z goljufanjem!"
 
-#: src/keybind.c:1790
+#: src/keybind.c:1793
 msgid "Destroying selected droids and structures!"
 msgstr "Uničevanje izbranih droidov in zgradb!"
 
-#: src/keybind.c:2308
+#: src/keybind.c:2311
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Centriran na GS igralca, smer SEVER"
 
-#: src/keybind.c:2320
+#: src/keybind.c:2323
 msgid "Unable to locate HQ!"
 msgstr "Ni mogoče najti GS!"
 
-#: src/keybind.c:2331
+#: src/keybind.c:2334
 msgid "Formation speed limiting OFF"
 msgstr "Omejevanje hitrosti reda IZKLOPLJENO"
 
-#: src/keybind.c:2335
+#: src/keybind.c:2338
 msgid "Formation speed limiting ON"
 msgstr "Omejevanje hitrosti reda VKLOPLJENO"
 
-#: src/keybind.c:2465
-#: src/keybind.c:2506
-#: src/keybind.c:2528
+#: src/keybind.c:2468
+#: src/keybind.c:2509
+#: src/keybind.c:2531
 msgid "Game Speed Reset"
 msgstr "Hitrost igre ponastavljena"
 
-#: src/keybind.c:2469
+#: src/keybind.c:2472
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Hitrost igre povečana na %3.1f"
 
-#: src/keybind.c:2510
+#: src/keybind.c:2513
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Hitrost igre zmanjšana na %3.1f"
 
-#: src/keybind.c:2540
+#: src/keybind.c:2543
 msgid "Build menu will reopen"
 msgstr "Gradbeni meni se bo ponovno odprl"
 
-#: src/keybind.c:2544
+#: src/keybind.c:2547
 msgid "Build menu will not reopen"
 msgstr "Gradbeni meni se ne bo ponovno odprl"
 
-#: src/keybind.c:2556
+#: src/keybind.c:2559
 msgid "Radar showing friend-foe colors"
 msgstr "Radar kaže barve prijateja-sovražnika"
 
-#: src/keybind.c:2560
+#: src/keybind.c:2563
 msgid "Radar showing player colors"
 msgstr "Radar kaže barve igralca"
 
-#: src/keybind.c:2577
+#: src/keybind.c:2580
 msgid "Radar showing only objects"
 msgstr "Radar kaže samo predmete"
 
-#: src/keybind.c:2580
+#: src/keybind.c:2583
 msgid "Radar blending terrain and height"
 msgstr "Radar združuje teren in višino "
 
-#: src/keybind.c:2583
+#: src/keybind.c:2586
 msgid "Radar showing terrain"
 msgstr "Radar kaže teren"
 
-#: src/keybind.c:2586
+#: src/keybind.c:2589
 msgid "Radar showing height"
 msgstr "Radar kaže višino"
 
@@ -12337,10 +12354,10 @@ msgid "KEY MAPPING"
 msgstr "VNAŠANJE TIPK"
 
 #: src/keyedit.c:386
-#: src/multiint.c:623
-#: src/multiint.c:665
-#: src/multiint.c:1060
-#: src/multiint.c:1380
+#: src/multiint.c:624
+#: src/multiint.c:666
+#: src/multiint.c:1066
+#: src/multiint.c:1386
 msgid "Return To Previous Screen"
 msgstr "Vrni se na prejšnji zaslon"
 
@@ -12521,205 +12538,197 @@ msgstr "Izberite poveljnika 9"
 msgid "Multiplayer Options / Alliance dialog"
 msgstr "Večigralske možnosti"
 
-#: src/keymap.c:348
-msgid "Start Multiplayer Audio"
-msgstr "Začni večigralski avdio"
-
-#: src/keymap.c:349
-msgid "Stop Multiplayer Audio"
-msgstr "Končaj večigralski avdio"
-
-#: src/keymap.c:352
+#: src/keymap.c:350
 msgid "Snap View to North"
 msgstr "Usmeri pogled na sever"
 
-#: src/keymap.c:353
+#: src/keymap.c:351
 msgid "Toggle Tracking Camera"
 msgstr "Nastavi sledilno kamero"
 
-#: src/keymap.c:354
+#: src/keymap.c:352
 msgid "Display In-Game Options"
 msgstr "Prikaži možnosti v igri"
 
-#: src/keymap.c:355
+#: src/keymap.c:353
 msgid "Zoom Radar Out"
 msgstr "Zumiraj radar ven"
 
-#: src/keymap.c:356
+#: src/keymap.c:354
 msgid "Zoom Radar In"
 msgstr "Zumiraj radar noter"
 
-#: src/keymap.c:357
+#: src/keymap.c:355
 msgid "Zoom In"
 msgstr "Zumiraj ven"
 
-#: src/keymap.c:358
+#: src/keymap.c:356
 msgid "Zoom Out"
 msgstr "Zumiraj noter"
 
-#: src/keymap.c:359
+#: src/keymap.c:357
 msgid "Pitch Forward"
 msgstr "Nagni naprej"
 
-#: src/keymap.c:360
+#: src/keymap.c:358
 msgid "Rotate Left"
 msgstr "Zavrti levo"
 
-#: src/keymap.c:361
+#: src/keymap.c:359
 msgid "Reset Pitch"
 msgstr "Ponastavi naklon"
 
-#: src/keymap.c:362
+#: src/keymap.c:360
 msgid "Rotate Right"
 msgstr "Zavrti desno"
 
-#: src/keymap.c:363
+#: src/keymap.c:361
 msgid "Pitch Back"
 msgstr "Nagni nazaj"
 
-#: src/keymap.c:364
+#: src/keymap.c:362
 msgid "Orders Menu"
 msgstr "Ukazni meni"
 
-#: src/keymap.c:365
+#: src/keymap.c:363
 msgid "Decrease Game Speed"
 msgstr "Zmanjšaj hitrost igre"
 
-#: src/keymap.c:366
+#: src/keymap.c:364
 msgid "Increase Game Speed"
 msgstr "Povečaj hitrost igre"
 
-#: src/keymap.c:367
+#: src/keymap.c:365
 msgid "Reset Game Speed"
 msgstr "Ponastavi hitrost igre"
 
-#: src/keymap.c:368
+#: src/keymap.c:366
 msgid "View North"
 msgstr "Poglej sever"
 
-#: src/keymap.c:369
+#: src/keymap.c:367
 msgid "View South"
 msgstr "Poglej jug"
 
-#: src/keymap.c:370
+#: src/keymap.c:368
 msgid "View East"
 msgstr "Poglej vzhod"
 
-#: src/keymap.c:371
+#: src/keymap.c:369
 msgid "View West"
 msgstr "Poglej zahod"
 
-#: src/keymap.c:372
+#: src/keymap.c:370
 msgid "View next Oil Derrick"
 msgstr "Poglej naslednjo naftno vrtino"
 
-#: src/keymap.c:373
+#: src/keymap.c:371
 msgid "View next Repair Unit"
 msgstr "Poglej naslednjo enoto za popravila"
 
-#: src/keymap.c:374
+#: src/keymap.c:372
 msgid "View next Truck"
 msgstr "Poglej naslednji tovornjak"
 
-#: src/keymap.c:375
+#: src/keymap.c:373
 msgid "View next Sensor Unit"
 msgstr "Poglej naslednjo senzorsko enoto"
 
-#: src/keymap.c:376
+#: src/keymap.c:374
 msgid "View next Commander"
 msgstr "Poglej naslednjega poveljnika"
 
-#: src/keymap.c:377
+#: src/keymap.c:375
 msgid "Toggle Overlays"
 msgstr "Nastavi prekrivanja"
 
-#: src/keymap.c:378
+#: src/keymap.c:376
 msgid "Console On/Off"
 msgstr "Konzola vklopljena/izklopljena"
 
-#: src/keymap.c:381
+#: src/keymap.c:379
 msgid "Center View on HQ"
 msgstr "Centriraj pogled na GS"
 
-#: src/keymap.c:383
+#: src/keymap.c:381
 msgid "View Unassigned Units"
 msgstr "Poglej nedodeljene enote"
 
-#: src/keymap.c:385
+#: src/keymap.c:383
 msgid "Fire at Will"
 msgstr "Streljaj po želji"
 
-#: src/keymap.c:386
+#: src/keymap.c:384
 msgid "Return to HQ"
 msgstr "Vrni se v GS"
 
-#: src/keymap.c:393
+#: src/keymap.c:391
 msgid "Send Text Message"
 msgstr "Pošlji besedilno sporočilo"
 
-#: src/keymap.c:411
+#: src/keymap.c:409
 msgid "Select all Combat Units"
 msgstr "Izberi vse bojne enote"
 
-#: src/keymap.c:412
+#: src/keymap.c:410
 msgid "Select all Heavily Damaged Units"
 msgstr "Izberi vse težko poškodovane enote"
 
-#: src/keymap.c:414
+#: src/keymap.c:412
 msgid "Select all Half-tracks"
 msgstr "Izberi vse polgosenice"
 
-#: src/keymap.c:415
+#: src/keymap.c:413
 msgid "Select all Hovers"
 msgstr "Izberi vse zračne blazine"
 
-#: src/keymap.c:417
+#: src/keymap.c:415
 msgid "Select all Units on Screen"
 msgstr "Izberi vse enote na zaslonu"
 
-#: src/keymap.c:418
+#: src/keymap.c:416
 msgid "Select all Tracks"
 msgstr "Izberi vse gosenice"
 
-#: src/keymap.c:419
+#: src/keymap.c:417
 msgid "Select EVERY unit"
 msgstr "Izberi VSE enote"
 
-#: src/keymap.c:420
+#: src/keymap.c:418
 msgid "Select all VTOLs"
 msgstr "Izberi vse NVP"
 
-#: src/keymap.c:421
+#: src/keymap.c:419
 msgid "Select all Wheels"
 msgstr "Izberi vsa kolesa"
 
-#: src/keymap.c:423
+#: src/keymap.c:421
 #, fuzzy
 msgid "Select all Similar Units"
 msgstr "Izberi vse istovrstne enote"
 
-#: src/keymap.c:427
+#: src/keymap.c:425
 msgid "Select next Factory"
 msgstr "Izberi naslednjo tovarno"
 
-#: src/keymap.c:428
+#: src/keymap.c:426
 msgid "Select next Research Facility"
 msgstr "Izberi naslednjo raziskovalno stavbo"
 
-#: src/keymap.c:429
+#: src/keymap.c:427
 msgid "Select next Power Generator"
 msgstr "Izberi naslednji generator moči"
 
-#: src/keymap.c:430
+#: src/keymap.c:428
 msgid "Select next Cyborg Factory"
 msgstr "Izberi naslednjo tovarno kiborgov"
 
-#: src/keymap.c:431
+#: src/keymap.c:429
 msgid "Toggle reopening the build menu"
 msgstr "Nastavi ponovno odpiranje gradbenega menija"
 
-#: src/loop.c:536
-#: src/loop.c:552
+#: src/loop.c:542
+#: src/loop.c:558
 msgid "Could not save game!"
 msgstr "Ni bilo mogoče shraniti igre!"
 
@@ -12813,226 +12822,230 @@ msgstr "%s je sklenil zavezništvo z %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Odkrijete načrte za %s"
 
-#: src/multiint.c:568
+#: src/multiint.c:569
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Sprejmi nastavitve"
 
-#: src/multiint.c:579
+#: src/multiint.c:580
 msgid "IP Address or Machine Name"
 msgstr "IP naslov ali ime računalnika"
 
-#: src/multiint.c:620
+#: src/multiint.c:621
 msgid "CONNECTION"
 msgstr "POVEZAVA"
 
-#: src/multiint.c:633
+#: src/multiint.c:634
 msgid "Lobby"
 msgstr "Veža"
 
-#: src/multiint.c:634
+#: src/multiint.c:635
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:831
+#: src/multiint.c:832
 msgid "No games are available"
 msgstr "Nobenih iger ni na voljo"
 
-#: src/multiint.c:834
+#: src/multiint.c:835
 msgid "Game is full"
 msgstr "Igra je polna"
 
-#: src/multiint.c:838
+#: src/multiint.c:839
 msgid "You were kicked!"
 msgstr "Bili ste brcnjeni!"
 
-#: src/multiint.c:841
+#: src/multiint.c:842
 msgid "Wrong Game Version!"
 msgstr "Napačna verzija igre!"
 
-#: src/multiint.c:844
+#: src/multiint.c:845
 msgid "Wrong data/mod detected by Host."
 msgstr ""
 
-#: src/multiint.c:847
+#: src/multiint.c:849
+msgid "Host couldn't send file?"
+msgstr ""
+
+#: src/multiint.c:853
 msgid "Incorrect Password!"
 msgstr "Napačno geslo!"
 
-#: src/multiint.c:850
+#: src/multiint.c:856
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.c:854
+#: src/multiint.c:860
 msgid "Connection Error"
 msgstr "Napaka v povezavi"
 
-#: src/multiint.c:952
+#: src/multiint.c:958
 msgid "Searching"
 msgstr "Iskanje"
 
-#: src/multiint.c:1057
+#: src/multiint.c:1063
 msgid "GAMES"
 msgstr "IGRE"
 
-#: src/multiint.c:1067
+#: src/multiint.c:1073
 msgid "Refresh Games List"
 msgstr "Osveži spisek iger"
 
-#: src/multiint.c:1088
+#: src/multiint.c:1094
 msgid "Enter Password First "
 msgstr "Najprej vnesite geslo"
 
-#: src/multiint.c:1195
+#: src/multiint.c:1201
 msgid "Select Game Name"
 msgstr "Izberite ime igre"
 
-#: src/multiint.c:1196
+#: src/multiint.c:1202
 msgid "Select Map"
 msgstr "Izberite mapo"
 
-#: src/multiint.c:1202
+#: src/multiint.c:1208
 msgid "Click to set Password"
 msgstr "Kliknite za nastavitev gesla"
 
-#: src/multiint.c:1211
-#: src/multiint.c:1212
+#: src/multiint.c:1217
+#: src/multiint.c:1218
 #, fuzzy
 msgid "Scavengers"
 msgstr "Plenilec"
 
-#: src/multiint.c:1214
+#: src/multiint.c:1220
 #, fuzzy
 msgid "No Scavengers"
 msgstr "Plenilec"
 
-#: src/multiint.c:1244
+#: src/multiint.c:1250
 msgid "Select Player Name"
 msgstr "Izberite ime igralca"
 
-#: src/multiint.c:1250
+#: src/multiint.c:1256
 msgid "Distance Fog"
 msgstr "Daljna megla"
 
-#: src/multiint.c:1261
+#: src/multiint.c:1267
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Zavezništva"
 
-#: src/multiint.c:1264
+#: src/multiint.c:1270
 msgid "No Alliances"
 msgstr "Nobenih zavezništev"
 
-#: src/multiint.c:1266
+#: src/multiint.c:1272
 msgid "Allow Alliances"
 msgstr "Dovoli zavezništva"
 
-#: src/multiint.c:1270
+#: src/multiint.c:1276
 msgid "Locked Teams"
 msgstr "Zaklenjene skupine"
 
-#: src/multiint.c:1296
+#: src/multiint.c:1302
 msgid "Low Power Levels"
 msgstr "Nizke stopnje moči"
 
-#: src/multiint.c:1298
+#: src/multiint.c:1304
 msgid "Medium Power Levels"
 msgstr "Srednje velike stopnje moči"
 
-#: src/multiint.c:1300
+#: src/multiint.c:1306
 msgid "High Power Levels"
 msgstr "Visoke stopnje moči"
 
-#: src/multiint.c:1332
+#: src/multiint.c:1338
 msgid "Base"
 msgstr "Baza"
 
-#: src/multiint.c:1334
+#: src/multiint.c:1340
 msgid "Start with No Bases"
 msgstr "Začnite brez baz"
 
-#: src/multiint.c:1336
+#: src/multiint.c:1342
 msgid "Start with Bases"
 msgstr "Začnite z bazami"
 
-#: src/multiint.c:1338
+#: src/multiint.c:1344
 msgid "Start with Advanced Bases"
 msgstr "Začnite z naprednimi bazami"
 
-#: src/multiint.c:1370
+#: src/multiint.c:1376
 msgid "Map Preview"
 msgstr "Predogled mape"
 
-#: src/multiint.c:1372
+#: src/multiint.c:1378
 msgid "Click to see Map"
 msgstr "Kliknite za ogled mape"
 
-#: src/multiint.c:1386
+#: src/multiint.c:1392
 msgid "Start Hosting Game"
 msgstr "Začnite gostiti igro"
 
-#: src/multiint.c:1394
+#: src/multiint.c:1400
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "Nastavite gradbene omejitve"
 
-#: src/multiint.c:1394
+#: src/multiint.c:1400
 msgid "Set Structure Limits"
 msgstr "Nastavite gradbene omejitve"
 
-#: src/multiint.c:1802
+#: src/multiint.c:1815
 msgid "Team"
 msgstr "Skupina"
 
-#: src/multiint.c:1835
+#: src/multiint.c:1848
 msgid "Waiting for other players"
 msgstr "Čakanje ostalih igralcev"
 
-#: src/multiint.c:1841
+#: src/multiint.c:1854
 msgid "Click when ready"
 msgstr "Kliknite, ko boste pripravljeni"
 
-#: src/multiint.c:1879
+#: src/multiint.c:1892
 msgid "PLAYERS"
 msgstr "IGRALCI"
 
-#: src/multiint.c:2057
+#: src/multiint.c:2070
 msgid "CHAT"
 msgstr "POGOVOR"
 
-#: src/multiint.c:2232
+#: src/multiint.c:2245
 msgid "*** password is now required! ***"
 msgstr "*** geslo je sedaj potrebno! ***"
 
-#: src/multiint.c:2239
+#: src/multiint.c:2252
 msgid "*** password is NOT required! ***"
 msgstr "*** geslo NI potrebno! ***"
 
-#: src/multiint.c:2481
+#: src/multiint.c:2494
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2566
+#: src/multiint.c:2579
 msgid "'Locked Teams' mode enabled"
 msgstr "Omogočen način 'zaklenjene skupine'"
 
-#: src/multiint.c:2611
+#: src/multiint.c:2624
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Gostitelj je brcnil %s iz igre!"
 
-#: src/multiint.c:2613
+#: src/multiint.c:2626
 msgid "you are unwanted by the host"
 msgstr ""
 
-#: src/multiint.c:2688
+#: src/multiint.c:2714
 msgid "Host is Starting Game"
 msgstr "Gostitelj začenja igro"
 
-#: src/multiint.c:3220
+#: src/multiint.c:3276
 msgid "Players"
 msgstr "Igralci"
 
-#: src/multiint.c:3297
+#: src/multiint.c:3353
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
@@ -13139,57 +13152,57 @@ msgstr "Predaj izbrane enote"
 msgid "Give Power To Player"
 msgstr "Daj igralcu moč"
 
-#: src/multiplay.c:284
+#: src/multiplay.c:282
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:288
+#: src/multiplay.c:286
 msgid "It is not nice to cheat!"
 msgstr ""
 
-#: src/multiplay.c:1081
+#: src/multiplay.c:1080
 #, fuzzy
 msgid "(allies"
 msgstr "Zavezništva"
 
-#: src/multiplay.c:1091
+#: src/multiplay.c:1088
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1103
+#: src/multiplay.c:1101
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1930
+#: src/multiplay.c:1957
 msgid "Green"
 msgstr "Zelena"
 
-#: src/multiplay.c:1931
+#: src/multiplay.c:1958
 msgid "Orange"
 msgstr "Oranžna"
 
-#: src/multiplay.c:1932
+#: src/multiplay.c:1959
 msgid "Grey"
 msgstr "Siva"
 
-#: src/multiplay.c:1933
+#: src/multiplay.c:1960
 msgid "Black"
 msgstr "Črna"
 
-#: src/multiplay.c:1934
+#: src/multiplay.c:1961
 msgid "Red"
 msgstr "Rdeča"
 
-#: src/multiplay.c:1935
+#: src/multiplay.c:1962
 msgid "Blue"
 msgstr "Modra"
 
-#: src/multiplay.c:1936
+#: src/multiplay.c:1963
 msgid "Pink"
 msgstr "Roza"
 
-#: src/multiplay.c:1937
+#: src/multiplay.c:1964
 msgid "Cyan"
 msgstr "Cijan"
 
@@ -13332,12 +13345,12 @@ msgstr "ZMAGALI STE!"
 msgid "YOU WERE DEFEATED!"
 msgstr "BILI STE PREMAGANI!"
 
-#: src/scriptfuncs.c:10208
+#: src/scriptfuncs.c:10202
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Prejet poziv od %s!"
 
-#: src/scriptfuncs.c:10254
+#: src/scriptfuncs.c:10248
 #, c-format
 msgid "Beacon %d"
 msgstr "Poziv %d"
@@ -13464,6 +13477,12 @@ msgstr "- Zgrajen %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#~ msgid "Start Multiplayer Audio"
+#~ msgstr "Začni večigralski avdio"
+
+#~ msgid "Stop Multiplayer Audio"
+#~ msgstr "Končaj večigralski avdio"
 
 #~ msgid "you are being a jerk."
 #~ msgstr "obnašate se neumno."
@@ -13710,9 +13729,6 @@ msgstr "Verzija %s%s%s%s"
 
 #~ msgid "Rapid Fire Mini-Pods Mk3"
 #~ msgstr "Zelo hitro streljajoči mini-metalci tip 3"
-
-#~ msgid "The host has left the game!"
-#~ msgstr "Gostitelj je zapustil igro!"
 
 #, fuzzy
 #~ msgid "NEXUS Link Tower"
