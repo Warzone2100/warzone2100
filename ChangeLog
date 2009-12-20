@@ -1,17 +1,16 @@
 2009-12-20: Version 2.3.0 release candidate 1
  * General:
    * Change: Add more key shortcuts (ticket:806)
-   * Fix: Tally up construction borgs/trucks in SP games as well. (r8726, ticket:966)
+   * Fix: Tally up construction borgs/trucks in SP games as well (r8726, ticket:966)
  * Multiplayer:
-   * Change: Fix the hash routines to use Network byte order. (BE) (r8762)
-   * Add: Add the laser satellite to the limits screen. (r8729, ticket:1227)
-   * Add: Add a host has dropped dialog when the host drops. (r8717)
-   * Add: Add a host only dialog that warns them they are about to kill the game if they quit. (r8717)
-   * Fix: Enforce default limits if Host didn't enter limits in the limits screen (r8713)
-   * Change: People can now choose whatever position they want.  Needed for when games are full (temp fix) (r8774)
+   * New: Add the laser satellite to the limits screen (r8729, ticket:1227)
+   * New: Add a host has dropped dialog when the host drops (r8717)
+   * New: Add a host only dialog that warns them they are about to kill the game if they quit (r8717)
+   * Change: Fix the hash routines to use network byte order (r8762)
+   * Change: People can now choose whatever position they want - workaround for when games are full (r8774, ticket:1241)
+   * Fix: Enforce default limits if host did not enter limits in the limits screen (r8713)
  * Translations:
    * Updated: Brazilian (r8699), German (r8761)
-
 
 2009-12-13: Version 2.3.0 beta 4
  * General:
