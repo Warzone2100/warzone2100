@@ -466,8 +466,8 @@ FunctionEnd
   LangString TEXT_SecBase ${LANG_GERMAN} "Standardinstallation"
   LangString DESC_SecBase ${LANG_GERMAN} "Standardinstallation."
 
-  LangString TEXT_SecOpenAL ${LANG_GERMAN} "OpenAL Bibliotheken"
-  LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken für OpenAL, ein freies Audio Interface. Implementation von Creative Labs."
+  LangString TEXT_SecOpenAL ${LANG_GERMAN} "OpenAL-Bibliotheken"
+  LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken für OpenAL, ein freies Audio-Interface. Implementation von Creative Labs."
 
   LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
@@ -485,7 +485,7 @@ FunctionEnd
   LangString DESC_SecNLS ${LANG_GERMAN} "Unterstützung für Sprachen außer Englisch (Deutsch inbegriffen)."
 
   LangString TEXT_SecNLS_WinFonts ${LANG_GERMAN} "WinFonts"
-  LangString DESC_SecNLS_WinFonts ${LANG_GERMAN} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+  LangString DESC_SecNLS_WinFonts ${LANG_GERMAN} "Den Windows-Schriftarten-Ordner in den Suchpfad aufnehmen. Nutzen Sie dies, falls Sie später eigene Schriftarten in der Konfigurationsdatei eingeben wollen oder es zu Problemen mit der Standardschriftart kommt. Kann unter Vista und später langsam sein!"
   
   LangString TEXT_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod"
   LangString DESC_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod. Verändert die meisten Forschungen und Waffen."
