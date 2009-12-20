@@ -547,6 +547,8 @@ static SocketSet* allocSocketSet(size_t count)
 }
 
 /**
+ * Add the given socket to the given socket set.
+ *
  * @return true if @c socket is succesfully added to @set.
  */
 static bool addSocket(SocketSet* set, Socket* socket)
@@ -580,7 +582,7 @@ static bool addSocket(SocketSet* set, Socket* socket)
 }
 
 /**
- * @return true if @c socket is succesfully added to @set.
+ * Remove the given socket from the given socket set.
  */
 static void delSocket(SocketSet* set, Socket* socket)
 {
