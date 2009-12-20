@@ -1476,14 +1476,15 @@ static void addColourChooser(UDWORD player)
 					"Player number", IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
 	}
 
-	// disabled to allow anyone to pick any position they want at anytime.
-	//for (i=0;i<game.maxPlayers;i++)
-	//{
-	//	if (isHumanPlayer(i) && i!=selectedPlayer )
-	//	{
-	//		widgSetButtonState(psWScreen, MULTIOP_PLAYCHOOSER+NetPlay.players[i].position, WBUT_DISABLE);
-	//	}
-	//}
+#if 0
+	for (i=0;i<game.maxPlayers;i++)
+	{
+		if (isHumanPlayer(i) && i!=selectedPlayer )
+		{
+			widgSetButtonState(psWScreen, MULTIOP_PLAYCHOOSER+NetPlay.players[i].position, WBUT_DISABLE);
+		}
+	}
+#endif
 	
 	bColourChooserUp = true;
 }
