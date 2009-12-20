@@ -1833,20 +1833,23 @@ static void drawReadyButton(UDWORD player)
 				8 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH,
 				(UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*NetPlay.players[player].position)+4),
 				MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT);
-	
+
 	// draw 'ready' button
 	if (NetPlay.players[player].ready)
 	{
 		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID+player,MULTIOP_READY_START+player,3,
-			4,MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
-			_("Waiting for other players"),IMAGE_CHECK_ON,IMAGE_CHECK_ON,true);
+					8,MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
+					_("Waiting for other players"),IMAGE_CHECK_ON,IMAGE_CHECK_ON,IMAGE_CHECK_ON_HI);
 	}
 	else
 	{
 		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID+player,MULTIOP_READY_START+player,3, 
-			4,MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
-			_("Click when ready"),IMAGE_CHECK_OFF,IMAGE_CHECK_OFF,true);
+					8,MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
+					_("Click when ready"),IMAGE_CHECK_OFF,IMAGE_CHECK_OFF,IMAGE_CHECK_OFF_HI);
 	}
+
+	addText(MULTIOP_READY_START+MAX_PLAYERS+player, 0,10,
+	        _("READY?"), MULTIOP_READY_FORM_ID + player);
 }
 
 static bool canChooseTeamFor(int i)
@@ -3254,7 +3257,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	{
 		NetPlay.games[i].name[strlen(NetPlay.games[i].name)-1]='\0';
 	}
-	iV_DrawText(NetPlay.games[i].name, x + 100, y + 24);	// name
+	iV_DrawText(NetPlay.games[i].name, x + 100, y + 18);	// name
 
 	// get game info.
 	// TODO: Check whether this code is used at all in skirmish games, if not, remove it.
@@ -3281,6 +3284,8 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
 	}
 
+	iV_SetFont(font_small);											// font
+	iV_DrawText(NetPlay.games[i].versionstring, x + 100, y + 32);	// version
 }
 
 

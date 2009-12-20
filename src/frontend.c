@@ -104,6 +104,7 @@ void		removeBottomForm		(void);
 void		removeBackdrop			(void);
 
 static void	displayTitleBitmap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void		displayText				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 void		displayTextAt270		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void	displayBigSlider		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
@@ -1601,6 +1602,29 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsign
 }
 
 // ////////////////////////////////////////////////////////////////////////////
+void addText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
+{
+	W_LABINIT		sLabInit;
+	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	
+	sLabInit.formID = formID;
+	sLabInit.id = id;
+	sLabInit.x = (short)PosX;
+	sLabInit.y = (short)PosY;
+	sLabInit.style = (WLAB_PLAIN | WLAB_ALIGNCENTRE);
+	
+	// Align
+	sLabInit.width = MULTIOP_READY_WIDTH;
+	//sButInit.x+=35;
+	
+	sLabInit.height = FRONTEND_BUTHEIGHT;
+	sLabInit.pDisplay = displayText;
+	sLabInit.FontID = font_small;
+	sLabInit.pText = txt;
+	widgAddLabel(psWScreen, &sLabInit);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
 {
 	W_SLDINIT		sSldInit;
@@ -1711,6 +1735,35 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 
 	iV_DrawText( psBut->pText, fx, fy);
 
+	return;
+}
+
+
+// ////////////////////////////////////////////////////////////////////////////
+// show text.
+void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	SDWORD			fx,fy, fw;
+	W_LABEL		*psLab;
+	
+	psLab = (W_LABEL *)psWidget;
+	iV_SetFont(psLab->FontID);
+	
+  	fw = iV_GetTextWidth(psLab->aText);
+	fy = yOffset + psWidget->y;
+	
+	if (psWidget->style & WLAB_ALIGNCENTRE)	//check for centering, calculate offset.
+	{
+		fx = xOffset + psWidget->x + ((psWidget->width - fw) / 2);
+	}
+	else
+	{
+		fx = xOffset + psWidget->x;
+	}
+	
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_DrawText( psLab->aText, fx, fy);
+	
 	return;
 }
 
