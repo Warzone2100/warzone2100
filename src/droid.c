@@ -964,7 +964,6 @@ void droidUpdate(DROID *psDroid)
 	}
 
 	droidUpdateRecoil(psDroid);
-
 	calcDroidIllumination(psDroid);
 
 	// Check the resistance level of the droid
@@ -2866,6 +2865,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->actionY = 0;
 	psDroid->psTarStats = NULL;
 	psDroid->psTarget = NULL;
+	psDroid->lastFrustratedTime = 0;
 
 	for(i = 0;i < DROID_MAXWEAPS;i++)
 	{
