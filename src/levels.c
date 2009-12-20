@@ -113,7 +113,7 @@ void levShutDown(void)
 
 		psLevels = psLevels->psNext;
 
-		for (i = 0; i < ARRAY_SIZE(toDelete->apDataFiles[i]); ++i)
+		for (i = 0; i < ARRAY_SIZE(toDelete->apDataFiles); ++i)
 		{
 			if (toDelete->apDataFiles[i] != NULL)
 			{
