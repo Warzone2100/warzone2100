@@ -598,7 +598,7 @@ FunctionEnd
   
   ;German
   LangString TEXT_SecBase ${LANG_GERMAN} "Core files"
-  LangString DESC_SecBase ${LANG_GERMAN} "The core files required to run Warzone 2100."
+  LangString DESC_SecBase ${LANG_GERMAN} "Die Kerndateien, die für Warzone 2100 benötigt werden."
 
   LangString TEXT_SecOpenAL ${LANG_GERMAN} "OpenAL Bibliotheken"
   LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken für OpenAL, ein freies Audio Interface. Implementation von Creative Labs."
@@ -613,22 +613,22 @@ FunctionEnd
 ;  LangString DESC_SecMusicMod ${LANG_GERMAN} "Musik herunterladen und installieren."
 
   LangString TEXT_SecFMVs ${LANG_GERMAN} "Videos"
-  LangString DESC_SecFMVs ${LANG_GERMAN} "Download and install in-game cutscenes."
+  LangString DESC_SecFMVs ${LANG_GERMAN} "Videos herunterladen und installieren."
 
   LangString TEXT_SecFMVs_Eng ${LANG_GERMAN} "English"
-  LangString DESC_SecFMVs_Eng ${LANG_GERMAN} "Download and install English in-game cutscenes (545 MB)."
+  LangString DESC_SecFMVs_Eng ${LANG_GERMAN} "Die englischen Videos herunterladen und installieren (545 MiB)."
   
   LangString TEXT_SecFMVs_EngLo ${LANG_GERMAN} "English (LQ)"
-  LangString DESC_SecFMVs_EngLo ${LANG_GERMAN} "Download and install a low-quality version of English in-game cutscenes (162 MB)."
+  LangString DESC_SecFMVs_EngLo ${LANG_GERMAN} "Die englischen Videos in geringer Qualität herunterladen und installieren (162 MiB)."
   
   LangString TEXT_SecFMVs_Ger ${LANG_GERMAN} "German"
-  LangString DESC_SecFMVs_Ger ${LANG_GERMAN} "Download and install German in-game cutscenes (460 MB)."
+  LangString DESC_SecFMVs_Ger ${LANG_GERMAN} "Die deutschen Videos herunterladen und installieren (460 MiB)."
   
   LangString TEXT_SecNLS ${LANG_GERMAN} "Language files"
   LangString DESC_SecNLS ${LANG_GERMAN} "Unterstützung für Sprachen außer Englisch (Deutsch inbegriffen)."
 
   LangString TEXT_SecNLS_WinFonts ${LANG_GERMAN} "WinFonts"
-  LangString DESC_SecNLS_WinFonts ${LANG_GERMAN} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+  LangString DESC_SecNLS_WinFonts ${LANG_GERMAN} "Den Windows-Schriftarten-Ordner in den Suchpfad aufnehmen. Nutzen Sie dies, falls Sie später eigene Schriftarten in der Konfigurationsdatei eingeben wollen oder es zu Problemen mit der Standardschriftart kommt. Kann unter Vista und später langsam sein!"
   
   LangString TEXT_SecNTWMod ${LANG_GERMAN} "NTW"
   LangString DESC_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod. Verändert die meisten Forschungen und Waffen."
