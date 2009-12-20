@@ -32,6 +32,12 @@
 #include "lib/framework/frame.h"
 #include "pietypes.h"
 
+#if defined __APPLE__ && defined __MACH__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
 //*************************************************************************
 //
 // screen surface structure
@@ -129,7 +135,7 @@ typedef struct {
 #define MAX_NUM_TPAGEIDS 16
 typedef struct {
 	int NumImages;          /**< Number of images contained here */
-	int TPageIDs[MAX_NUM_TPAGEIDS];	/**< OpenGL Texture IDs */
+	GLuint TPageIDs[MAX_NUM_TPAGEIDS];	/**< OpenGL Texture IDs */
 	IMAGEDEF *ImageDefs;    /**< Stored images */
 } IMAGEFILE;
 

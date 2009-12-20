@@ -270,7 +270,7 @@ void pie_UploadDisplayBuffer()
 BOOL pie_InitRadar(void)
 {
 	radarTexture = _TEX_INDEX;
-	glGenTextures(1, (GLuint *) &_TEX_PAGE[_TEX_INDEX].id);
+	glGenTextures(1, &_TEX_PAGE[_TEX_INDEX].id);
 	_TEX_INDEX++;
 	return true;
 }
