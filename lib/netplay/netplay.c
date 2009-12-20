@@ -2156,7 +2156,10 @@ int NETclose(void)
 	if (socket_set)
 	{
 		// checking to make sure tcp_socket is still valid
-		delSocket(socket_set, tcp_socket);
+		if (tcp_socket)
+		{
+			delSocket(socket_set, tcp_socket);
+		}
 		debug(LOG_NET, "Freeing socket_set %p", socket_set);
 		free(socket_set);
 		socket_set=NULL;
