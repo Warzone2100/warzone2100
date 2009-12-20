@@ -327,15 +327,15 @@ Section /o $(TEXT_SecFMVs_EngLo) SecFMVs_EngLo
 
 SectionEnd
 
-Section /o $(TEXT_SecFMVs_Ger) SecFMVs_Ger
-
-  IfFileExists "sequences.wz" +5
-    NSISdl::download "http://www.il.fontys.nl/~giel/warzone/videos/warzone2100-sequences-ger-hi-2.2.wz"               "sequences.wz"
-    Pop $R0 ; Get the return value
-    StrCmp $R0 "success" +2
-      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
-
-SectionEnd
+;Section /o $(TEXT_SecFMVs_Ger) SecFMVs_Ger
+;
+;  IfFileExists "sequences.wz" +5
+;    NSISdl::download "http://download.gna.org/warzone/videos/2.2/warzone2100-sequences-ger-hi-2.2.wz"               "sequences.wz"
+;    Pop $R0 ; Get the return value
+;    StrCmp $R0 "success" +2
+;      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
+;
+;SectionEnd
 
 SectionGroupEnd
 
@@ -439,9 +439,9 @@ Function .onInit
   SectionSetSize ${SecFMVs_EngLo} $0
 
   # increase required size of section 'SecFMVs_Ger' by file size
-  SectionGetSize ${SecFMVs_Ger} $0
-  IntOp $0 $0 + 499187;492
-  SectionSetSize ${SecFMVs_Ger} $0
+;  SectionGetSize ${SecFMVs_Ger} $0
+;  IntOp $0 $0 + 499187;492
+;  SectionSetSize ${SecFMVs_Ger} $0
   
   ;HACK: Set section 'Video' as read-only
   SectionGetFlags ${SecFMVs} $0
@@ -456,11 +456,11 @@ FunctionEnd
 Function .onSelChange
 ${If} ${SectionIsSelected} ${SecFMVs_Eng}
 ${OrIf} ${SectionIsSelected} ${SecFMVs_EngLo}
-${OrIf} ${SectionIsSelected} ${SecFMVs_Ger}
+;${OrIf} ${SectionIsSelected} ${SecFMVs_Ger}
 	!insertmacro StartRadioButtons $5
 		!insertmacro RadioButton ${SecFMVs_Eng}
 		!insertmacro RadioButton ${SecFMVs_EngLo}
-		!insertmacro RadioButton ${SecFMVs_Ger}
+;		!insertmacro RadioButton ${SecFMVs_Ger}
 	!insertmacro EndRadioButtons
 ${EndIf}
 FunctionEnd
@@ -697,7 +697,7 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} $(DESC_SecFMVs_Eng)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngLo} $(DESC_SecFMVs_EngLo)
-	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Ger} $(DESC_SecFMVs_Ger)
+;	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Ger} $(DESC_SecFMVs_Ger)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS} $(DESC_SecNLS)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS_WinFonts} $(DESC_SecNLS_WinFonts)
