@@ -58,6 +58,7 @@ static const int SOCKET_ERROR = -1;
 # include <winsock2.h>
 # include <ws2tcpip.h>
 # undef EAGAIN
+# undef EBADF
 # undef ECONNRESET
 # undef EINPROGRESS
 # undef EINTR
@@ -65,6 +66,7 @@ static const int SOCKET_ERROR = -1;
 # undef ETIMEDOUT
 # undef EWOULDBLOCK
 # define EAGAIN      WSAEWOULDBLOCK
+# define EBADF       WSAEBADF
 # define ECONNRESET  WSAECONNRESET
 # define EINPROGRESS WSAEINPROGRESS
 # define EINTR       WSAEINTR
@@ -471,6 +473,13 @@ static ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 {
 	ssize_t received;
 
+	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	{
+		debug(LOG_ERROR, "Invalid socket");
+		setSockErr(EBADF);
+		return SOCKET_ERROR;
+	}
+
 	{
 		received = recv(sock->fd[SOCK_CONNECTION], buf, max_size, 0);
 	} while (received == SOCKET_ERROR && getSockErr() == EINTR);
@@ -490,8 +499,11 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 {
 	size_t written = 0;
 
-	if (!sock)
+	if (!sock
+	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
+		debug(LOG_ERROR, "Invalid socket");
+		setSockErr(EBADF);
 		return SOCKET_ERROR;
 	}
 
@@ -692,6 +704,14 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 
 	size_t received = 0;
 
+	if (!sock
+	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	{
+		debug(LOG_ERROR, "Invalid socket");
+		setSockErr(EBADF);
+		return SOCKET_ERROR;
+	}
+
 	while (received < size)
 	{
 		ssize_t ret;
@@ -757,12 +777,17 @@ static void socketClose(Socket* sock)
 				{
 					debug(LOG_ERROR, "Failed to close socket: %s", strSockError(getSockErr()));
 				}
+
+				/* Make sure that dangling pointers to this
+				 * structure don't think they've got their
+				 * hands on a valid socket.
+				 */
+				sock->fd[i] = INVALID_SOCKET;
 			}
 		}
 		free(sock);
 		sock = NULL;
 	}
-
 }
 
 static Socket* socketAccept(Socket* sock)
