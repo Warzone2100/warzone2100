@@ -1333,7 +1333,7 @@ static void NET_initBufferedSocket(NETBUFSOCKET* bs, Socket* s)
 
 static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 {
-	int size;
+	ssize_t size;
 	char* bufstart = bs->buffer + bs->buffer_start + bs->bytes;
 	const int bufsize = NET_BUFFER_SIZE - bs->buffer_start - bs->bytes;
 
@@ -1346,23 +1346,34 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 
 	size = readNoInt(bs->socket, bufstart, bufsize);
 
-	if (size > 0)
+	if (size != 0 && size != SOCKET_ERROR)
 	{
 		bs->bytes += size;
 		return true;
 	}
 	else
-	{	// an error occured, or the remote host has closed the connection.
+	{
+		if (size == 0)
+		{
+			debug(LOG_NET, "Connection closed from the other side");
+		}
+		else
+		{
+			debug(LOG_WARNING, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), bs->socket);
+		}
+
+		// an error occured, or the remote host has closed the connection.
 		if (socket_set != NULL)
 		{
 			delSocket(socket_set, bs->socket);
 		}
-		ASSERT( bs->bytes < NET_BUFFER_SIZE, "Socket buffer is too small!");
-		if( bs->bytes > NET_BUFFER_SIZE)
+
+		ASSERT(bs->bytes < NET_BUFFER_SIZE, "Socket buffer is too small!");
+
+		if (bs->bytes > NET_BUFFER_SIZE)
 		{
 			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %d", NET_BUFFER_SIZE, bs->bytes);
 		}
-		debug(LOG_WARNING, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), bs->socket);
 		if (tcp_socket == bs->socket)
 		{
 			debug(LOG_NET, "Host connection was lost!");
@@ -1632,9 +1643,11 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
  *       The implementation of NETsendGAMESTRUCT <em>must</em> guarantee to
  *       pack it in network byte order (big-endian).
  *
+ * @return true on success, false when a socket error has occurred
+ *
  * @see GAMESTRUCT,NETrecvGAMESTRUCT
  */
-static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
+static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).  Initialise
@@ -1645,7 +1658,7 @@ static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
-	int result;
+	ssize_t result;
 
 	// Now dump the data into the buffer
 	// Copy 32bit large big endian numbers
@@ -1737,10 +1750,17 @@ static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	result = writeAll(sock, buf, sizeof(buf));
 	if (result == SOCKET_ERROR)
 	{
+		const int err = getSockErr();
+
 		// If packet could not be sent, we should inform user of the error.
 		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", strSockError(getSockErr()));
 		debug(LOG_ERROR, "Please make sure TCP ports %u & %u are open!", masterserver_port, gameserver_port);
+
+		setSockErr(err);
+		return false;
 	}
+
+	return true;
 }
 
 /**
@@ -1759,7 +1779,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char* buffer = buf;
 	unsigned int i;
-	int result = 0;
+	ssize_t result = 0;
 
 	// Read a GAMESTRUCT from the connection
 	if (tcp_socket == NULL
@@ -1780,9 +1800,13 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 		while (i < sizeof(buf) && SDL_GetTicks() < time + 2500)
 		{
 			result = readNoInt(tcp_socket, buf+i, sizeof(buf)-i);
-			if (result == SOCKET_ERROR || result <= 0)
+			if (result == SOCKET_ERROR
+			 || result == 0)
 			{
+				debug(LOG_WARNING, "Server socket ecountered error: %s", strSockError(getSockErr()));
 				debug(LOG_WARNING, "GAMESTRUCT recv failed; received %u bytes out of %d", i, (int)sizeof(buf));
+				socketClose(tcp_socket);
+				tcp_socket = NULL;
 				return false;
 			}
 			i += result;
@@ -2234,7 +2258,7 @@ UDWORD NETgetPacketsRecvd(void)
 BOOL NETsend(NETMSG *msg, UDWORD player)
 {
 	int size;
-	int result = 0;
+	ssize_t result = 0;
 
 	if(!NetPlay.bComms)
 	{
@@ -3002,8 +3026,8 @@ static void NETregisterServer(int state)
 				}
 
 				// Get a game ID
-				writeAll(rs_socket[0], "gaId", sizeof("gaId"));
-				if (readAll(rs_socket[0], &gameId, sizeof(gameId), 10000) != sizeof(gameId))
+				if (writeAll(rs_socket[0], "gaId", sizeof("gaId")) == SOCKET_ERROR
+				 || readAll(rs_socket[0], &gameId, sizeof(gameId), 10000) != sizeof(gameId))
 				{
 					free(NetPlay.MOTD);
 					asprintf(&NetPlay.MOTD, "Failed to retrieve a game ID: %s", strSockError(getSockErr()));
@@ -3031,9 +3055,14 @@ static void NETregisterServer(int state)
 					if (rs_socket[i] == NULL)
 						continue;
 
-					writeAll(rs_socket[i], "addg", sizeof("addg"));
-					// and now send what the server wants
-					NETsendGAMESTRUCT(rs_socket[i], &gamestruct);
+					if (writeAll(rs_socket[i], "addg", sizeof("addg")) == SOCKET_ERROR
+					    // and now send what the server wants
+					 || !NETsendGAMESTRUCT(rs_socket[i], &gamestruct))
+					{
+						debug(LOG_ERROR, "Failed to register game with server: %s", strSockError(getSockErr()));
+						socketClose(rs_socket[i]);
+						rs_socket[i] = NULL;
+					}
 				}
 
 				// Get the return codes
@@ -3085,7 +3114,7 @@ static void NETallowJoining(void)
 	unsigned int i;
 	UDWORD numgames = htonl(1);	// always 1 on normal server
 	char buffer[5];
-	int recv_result = 9999;
+	ssize_t recv_result = 0;
 
 	if (allow_joining == false) return;
 	ASSERT(NetPlay.isHost, "Cannot receive joins if not host!");
@@ -3141,7 +3170,8 @@ static void NETallowJoining(void)
 		addSocket(tmp_socket_set, tmp_socket[i]);
 		if (checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
 		    && tmp_socket[i]->ready
-		    && (recv_result = readNoInt(tmp_socket[i], buffer, 5)))
+		    && (recv_result = readNoInt(tmp_socket[i], buffer, 5))
+		    && recv_result != SOCKET_ERROR)
 		{
 			if(strcmp(buffer, "list")==0)
 			{
@@ -3167,7 +3197,13 @@ static void NETallowJoining(void)
 			else if (strcmp(buffer, "join") == 0)
 			{
 				debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
-				NETsendGAMESTRUCT(tmp_socket[i], &gamestruct);
+				if (!NETsendGAMESTRUCT(tmp_socket[i], &gamestruct))
+				{
+					debug(LOG_ERROR, "Failed to respond (with GAMESTRUCT) to 'join' command: %s", strSockError(getSockErr()));
+					delSocket(tmp_socket_set, tmp_socket[i]);
+					socketClose(tmp_socket[i]);
+					tmp_socket[i] = NULL;
+				}
 			}
 			else
 			{
@@ -3191,9 +3227,9 @@ static void NETallowJoining(void)
 			if (   tmp_socket[i] != NULL
 			    && tmp_socket[i]->ready)
 			{
-				int size = readNoInt(tmp_socket[i], &NetMsg, sizeof(NetMsg));
+				ssize_t size = readNoInt(tmp_socket[i], &NetMsg, sizeof(NetMsg));
 
-				if (size <= 0)
+				if (size == 0 || size == SOCKET_ERROR)
 				{
 					// disconnect or programmer error
 					if (size == 0)
@@ -3485,9 +3521,9 @@ BOOL NETfindGame(void)
 	addSocket(socket_set, tcp_socket);
 
 	debug(LOG_NET, "Sending list cmd");
-	writeAll(tcp_socket, "list", sizeof("list"));
 
-	if (checkSockets(socket_set, NET_TIMEOUT_DELAY) > 0
+	if (writeAll(tcp_socket, "list", sizeof("list")) != SOCKET_ERROR
+	 && checkSockets(socket_set, NET_TIMEOUT_DELAY) > 0
 	 && tcp_socket->ready
 	 && (result = readNoInt(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
 	{
@@ -3610,7 +3646,16 @@ connect_succesfull:
 	// tcp_socket is used to talk to host machine
 	addSocket(socket_set, tcp_socket);
 
-	writeAll(tcp_socket, "join", sizeof("join"));
+	if (writeAll(tcp_socket, "join", sizeof("join")) == SOCKET_ERROR)
+	{
+		debug(LOG_ERROR, "Failed to send 'join' command: %s", strSockError(getSockErr()));
+		freeaddrinfo(hosts);
+		delSocket(socket_set, tcp_socket);
+		socketClose(tcp_socket);
+		free(socket_set);
+		socket_set = NULL;
+		return false;
+	}
 
 	if (NETrecvGAMESTRUCT(&NetPlay.games[gameNumber])
 	 && NetPlay.games[gameNumber].desc.host[0] == '\0')
