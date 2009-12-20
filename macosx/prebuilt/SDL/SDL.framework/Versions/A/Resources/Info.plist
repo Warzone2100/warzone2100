@@ -5,16 +5,22 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>${EXECUTABLE_NAME}</string>
+	<string>SDL</string>
+	<key>CFBundleGetInfoString</key>
+	<string>http://www.libsdl.org</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.Theora</string>
+	<string>SDL</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Simple DirectMedia Layer</string>
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.2.14</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>SDLX</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.2.14</string>
 </dict>
 </plist>
