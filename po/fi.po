@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-12-12 15:45+0100\n"
+"POT-Creation-Date: 2009-12-20 18:47+0100\n"
 "PO-Revision-Date: 2008-05-09 10:33+0000\n"
 "Last-Translator: Lartza <lartza@wippies.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -11013,23 +11013,23 @@ msgstr ""
 msgid "Latin"
 msgstr "latina"
 
-#: lib/netplay/netplay.c:1137
-#: lib/netplay/netplay.c:1172
+#: lib/netplay/netplay.c:1147
+#: lib/netplay/netplay.c:1182
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:1253
+#: lib/netplay/netplay.c:1263
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:2924
+#: lib/netplay/netplay.c:2949
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2949
+#: lib/netplay/netplay.c:2974
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -11492,7 +11492,7 @@ msgid "Challenges"
 msgstr ""
 
 #: src/frontend.c:369
-#: src/ingameop.c:269
+#: src/ingameop.c:293
 msgid "Load Game"
 msgstr "Lataa peli"
 
@@ -11501,7 +11501,7 @@ msgid "SINGLE PLAYER"
 msgstr "YKSINPELI"
 
 #: src/frontend.c:467
-#: src/ingameop.c:406
+#: src/ingameop.c:519
 #: src/mission.c:2539
 #: src/mission.c:2644
 msgid "Load Saved Game"
@@ -11520,7 +11520,7 @@ msgid "Join Game"
 msgstr "Liity peliin"
 
 #: src/frontend.c:574
-#: src/multiint.c:1187
+#: src/multiint.c:1193
 msgid "OPTIONS"
 msgstr "ASETUKSET"
 
@@ -11538,7 +11538,7 @@ msgid "Video Options"
 msgstr "Peliasetukset"
 
 #: src/frontend.c:578
-#: src/ingameop.c:264
+#: src/ingameop.c:288
 msgid "Audio Options"
 msgstr ""
 
@@ -11618,7 +11618,7 @@ msgid "Off"
 msgstr "Pois päältä"
 
 #: src/frontend.c:676
-#: src/multiint.c:1241
+#: src/multiint.c:1247
 msgid "Fog"
 msgstr "Sumu"
 
@@ -11629,7 +11629,7 @@ msgstr ""
 
 #: src/frontend.c:683
 #: src/frontend.c:758
-#: src/multiint.c:1243
+#: src/multiint.c:1249
 msgid "Fog Of War"
 msgstr ""
 
@@ -11648,17 +11648,17 @@ msgid "GRAPHICS OPTIONS"
 msgstr "PELIASETUKSET"
 
 #: src/frontend.c:850
-#: src/ingameop.c:153
+#: src/ingameop.c:177
 msgid "Voice Volume"
 msgstr ""
 
 #: src/frontend.c:854
-#: src/ingameop.c:158
+#: src/ingameop.c:182
 msgid "FX Volume"
 msgstr ""
 
 #: src/frontend.c:858
-#: src/ingameop.c:163
+#: src/ingameop.c:187
 msgid "Music Volume"
 msgstr ""
 
@@ -11767,10 +11767,10 @@ msgid "GAME OPTIONS"
 msgstr "PELIASETUKSET"
 
 #: src/hci.c:1010
-#: src/hci.c:3798
-#: src/hci.c:3949
-#: src/hci.c:4402
-#: src/hci.c:5606
+#: src/hci.c:3799
+#: src/hci.c:3950
+#: src/hci.c:4403
+#: src/hci.c:5607
 #: src/intelmap.c:543
 #: src/intorder.c:661
 #: src/loadsave.c:256
@@ -11788,157 +11788,173 @@ msgid "MAP SAVED!"
 msgstr "Peli tallennettu"
 
 #: src/hci.c:1703
-#: src/loop.c:520
-#: src/loop.c:536
+#: src/loop.c:526
+#: src/loop.c:542
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "Peli tallennettu"
 
-#: src/hci.c:2109
+#: src/hci.c:2110
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2132
+#: src/hci.c:2133
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr ""
 
-#: src/hci.c:2147
+#: src/hci.c:2148
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.c:2168
+#: src/hci.c:2169
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:3700
+#: src/hci.c:3701
 msgid "Commanders (F6)"
 msgstr "Komentajat (F6)"
 
-#: src/hci.c:3716
+#: src/hci.c:3717
 msgid "Intelligence Display (F5)"
 msgstr ""
 
-#: src/hci.c:3732
+#: src/hci.c:3733
 msgid "Manufacture (F1)"
 msgstr "Valmista (F1)"
 
-#: src/hci.c:3748
+#: src/hci.c:3749
 msgid "Design (F4)"
 msgstr "Suunnittele (F4)"
 
-#: src/hci.c:3764
+#: src/hci.c:3765
 msgid "Research (F2)"
 msgstr "Tutki (F2)"
 
-#: src/hci.c:3780
+#: src/hci.c:3781
 msgid "Build (F3)"
 msgstr "Rakenna (F3)"
 
-#: src/hci.c:3860
-#: src/multiint.c:1288
+#: src/hci.c:3861
+#: src/multiint.c:1294
 #: src/multimenu.c:763
 msgid "Power"
 msgstr ""
 
-#: src/hci.c:4044
+#: src/hci.c:4045
 msgid "Tile"
 msgstr ""
 
-#: src/hci.c:4045
+#: src/hci.c:4046
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.c:4054
+#: src/hci.c:4055
 #, fuzzy
 msgid "Unit"
 msgstr "Yksikkö"
 
-#: src/hci.c:4055
+#: src/hci.c:4056
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.c:4063
+#: src/hci.c:4064
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4064
+#: src/hci.c:4065
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Vihollisrakennukset: %u"
 
-#: src/hci.c:4072
+#: src/hci.c:4073
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4073
+#: src/hci.c:4074
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.c:4084
+#: src/hci.c:4085
 msgid "Pause or unpause the game"
 msgstr ""
 
-#: src/hci.c:4098
+#: src/hci.c:4099
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4123
-#: src/ingameop.c:121
-#: src/ingameop.c:252
-#: src/ingameop.c:257
+#: src/hci.c:4124
+#: src/ingameop.c:119
+#: src/ingameop.c:276
+#: src/ingameop.c:281
 msgid "Quit"
 msgstr "Lopeta"
 
-#: src/hci.c:4124
+#: src/hci.c:4125
 msgid "Exit Game"
 msgstr "Poistu pelistä"
 
-#: src/hci.c:4487
+#: src/hci.c:4488
 #: src/intdisplay.c:267
 msgid "Progress Bar"
 msgstr "Edistymispalkki"
 
-#: src/hci.c:5521
+#: src/hci.c:5522
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci.c:5540
+#: src/hci.c:5541
 msgid "Loop Production"
 msgstr "Jatkuva tuotanto"
 
-#: src/hci.c:5631
+#: src/hci.c:5632
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5648
+#: src/hci.c:5649
 msgid "Tab Scroll right"
 msgstr ""
 
 #: src/ingameop.c:118
-#: src/ingameop.c:179
-#: src/ingameop.c:261
+#: src/ingameop.c:203
+#: src/ingameop.c:285
 msgid "Resume Game"
 msgstr ""
 
-#: src/ingameop.c:171
-#: src/ingameop.c:435
+#: src/ingameop.c:142
+msgid "Warning, if Host quits, the game ends for everyone!"
+msgstr ""
+
+#: src/ingameop.c:195
+#: src/ingameop.c:548
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr ""
 
-#: src/ingameop.c:176
-#: src/ingameop.c:439
+#: src/ingameop.c:200
+#: src/ingameop.c:552
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr ""
 
-#: src/ingameop.c:271
-#: src/ingameop.c:410
+#: src/ingameop.c:295
+#: src/ingameop.c:523
 #: src/mission.c:2529
 #: src/mission.c:2647
 msgid "Save Game"
 msgstr "Tallenna peli"
+
+#: src/ingameop.c:364
+msgid "Host has quit the game!"
+msgstr ""
+
+#: src/ingameop.c:370
+msgid "The game can't continue without the host."
+msgstr ""
+
+#: src/ingameop.c:376
+msgid "-->  QUIT  <--"
+msgstr ""
 
 #: src/intdisplay.c:197
 #, fuzzy
@@ -11954,7 +11970,7 @@ msgid "Power Accrued"
 msgstr ""
 
 #: src/intelmap.c:247
-#: src/keybind.c:1330
+#: src/keybind.c:1333
 msgid "PAUSED"
 msgstr ""
 
@@ -11975,32 +11991,32 @@ msgid "New Intelligence Report"
 msgstr ""
 
 #: src/intorder.c:179
-#: src/keymap.c:391
+#: src/keymap.c:389
 msgid "Short Range"
 msgstr ""
 
 #: src/intorder.c:180
-#: src/keymap.c:398
+#: src/keymap.c:396
 msgid "Long Range"
 msgstr ""
 
 #: src/intorder.c:181
-#: src/keymap.c:390
+#: src/keymap.c:388
 msgid "Optimum Range"
 msgstr ""
 
 #: src/intorder.c:182
-#: src/keymap.c:409
+#: src/keymap.c:407
 msgid "Retreat at Medium Damage"
 msgstr ""
 
 #: src/intorder.c:183
-#: src/keymap.c:410
+#: src/keymap.c:408
 msgid "Retreat at Heavy Damage"
 msgstr ""
 
 #: src/intorder.c:184
-#: src/keymap.c:411
+#: src/keymap.c:409
 msgid "Do or Die!"
 msgstr ""
 
@@ -12009,37 +12025,37 @@ msgid "Fire-At-Will"
 msgstr ""
 
 #: src/intorder.c:186
-#: src/keymap.c:386
+#: src/keymap.c:384
 msgid "Return Fire"
 msgstr ""
 
 #: src/intorder.c:187
-#: src/keymap.c:384
+#: src/keymap.c:382
 msgid "Hold Fire"
 msgstr ""
 
 #: src/intorder.c:188
-#: src/keymap.c:393
+#: src/keymap.c:391
 msgid "Patrol"
 msgstr ""
 
 #: src/intorder.c:189
-#: src/keymap.c:392
+#: src/keymap.c:390
 msgid "Pursue"
 msgstr ""
 
 #: src/intorder.c:190
-#: src/keymap.c:388
+#: src/keymap.c:386
 msgid "Guard Position"
 msgstr ""
 
 #: src/intorder.c:191
-#: src/keymap.c:395
+#: src/keymap.c:393
 msgid "Hold Position"
 msgstr ""
 
 #: src/intorder.c:192
-#: src/keymap.c:394
+#: src/keymap.c:392
 msgid "Return For Repair"
 msgstr "Palaa korjaukseen"
 
@@ -12048,12 +12064,12 @@ msgid "Return To HQ"
 msgstr "Palaa tukikohtaan"
 
 #: src/intorder.c:194
-#: src/keymap.c:396
+#: src/keymap.c:394
 msgid "Go to Transport"
 msgstr ""
 
 #: src/intorder.c:195
-#: src/keymap.c:420
+#: src/keymap.c:418
 msgid "Return for Recycling"
 msgstr "Palaa kierrätykseen"
 
@@ -12104,12 +12120,12 @@ msgstr ""
 #: src/keybind.c:534
 #: src/keybind.c:574
 #: src/keybind.c:680
-#: src/keybind.c:1230
-#: src/keybind.c:1288
-#: src/keybind.c:1379
-#: src/keybind.c:1474
-#: src/keybind.c:1825
-#: src/keybind.c:1865
+#: src/keybind.c:1233
+#: src/keybind.c:1291
+#: src/keybind.c:1382
+#: src/keybind.c:1477
+#: src/keybind.c:1828
+#: src/keybind.c:1868
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
@@ -12180,158 +12196,158 @@ msgstr ""
 msgid "Fog off"
 msgstr ""
 
-#: src/keybind.c:1117
+#: src/keybind.c:1120
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1117
+#: src/keybind.c:1120
 msgid "Ending Mission."
 msgstr ""
 
-#: src/keybind.c:1231
+#: src/keybind.c:1234
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1231
+#: src/keybind.c:1234
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1289
+#: src/keybind.c:1292
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1289
+#: src/keybind.c:1292
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1301
+#: src/keybind.c:1304
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1380
+#: src/keybind.c:1383
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1411
+#: src/keybind.c:1414
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1412
+#: src/keybind.c:1415
 #, fuzzy
 msgid "Researched"
 msgstr "Tutki (F2)"
 
-#: src/keybind.c:1432
+#: src/keybind.c:1435
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1435
+#: src/keybind.c:1438
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1438
+#: src/keybind.c:1441
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1460
+#: src/keybind.c:1463
 msgid "Demo mode off - Returning to normal game mode"
 msgstr ""
 
-#: src/keybind.c:1475
+#: src/keybind.c:1478
 msgid "Debug menu is Open"
 msgstr ""
 
-#: src/keybind.c:1506
+#: src/keybind.c:1509
 msgid "Unable to locate any resource extractors!"
 msgstr ""
 
-#: src/keybind.c:1727
+#: src/keybind.c:1730
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.c:1733
+#: src/keybind.c:1736
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.c:1739
+#: src/keybind.c:1742
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.c:1824
+#: src/keybind.c:1827
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1826
+#: src/keybind.c:1829
 msgid "All enemies destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.c:1866
+#: src/keybind.c:1869
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2396
+#: src/keybind.c:2399
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2408
+#: src/keybind.c:2411
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.c:2419
+#: src/keybind.c:2422
 msgid "Formation speed limiting OFF"
 msgstr ""
 
-#: src/keybind.c:2423
+#: src/keybind.c:2426
 msgid "Formation speed limiting ON"
 msgstr ""
 
-#: src/keybind.c:2553
-#: src/keybind.c:2594
-#: src/keybind.c:2616
+#: src/keybind.c:2556
+#: src/keybind.c:2597
+#: src/keybind.c:2619
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.c:2557
+#: src/keybind.c:2560
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2598
+#: src/keybind.c:2601
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2628
+#: src/keybind.c:2631
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2632
+#: src/keybind.c:2635
 msgid "Build menu will not reopen"
 msgstr ""
 
-#: src/keybind.c:2644
+#: src/keybind.c:2647
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2648
+#: src/keybind.c:2651
 msgid "Radar showing player colors"
 msgstr ""
 
-#: src/keybind.c:2665
+#: src/keybind.c:2668
 msgid "Radar showing only objects"
 msgstr ""
 
-#: src/keybind.c:2668
+#: src/keybind.c:2671
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2671
+#: src/keybind.c:2674
 msgid "Radar showing terrain"
 msgstr ""
 
-#: src/keybind.c:2674
+#: src/keybind.c:2677
 msgid "Radar showing height"
 msgstr ""
 
@@ -12340,10 +12356,10 @@ msgid "KEY MAPPING"
 msgstr ""
 
 #: src/keyedit.c:386
-#: src/multiint.c:617
-#: src/multiint.c:659
-#: src/multiint.c:1054
-#: src/multiint.c:1374
+#: src/multiint.c:618
+#: src/multiint.c:660
+#: src/multiint.c:1060
+#: src/multiint.c:1380
 msgid "Return To Previous Screen"
 msgstr ""
 
@@ -12523,204 +12539,196 @@ msgstr ""
 msgid "Multiplayer Options / Alliance dialog"
 msgstr ""
 
-#: src/keymap.c:350
-msgid "Start Multiplayer Audio"
-msgstr ""
-
-#: src/keymap.c:351
-msgid "Stop Multiplayer Audio"
-msgstr ""
-
-#: src/keymap.c:354
+#: src/keymap.c:352
 msgid "Snap View to North"
 msgstr ""
 
-#: src/keymap.c:355
+#: src/keymap.c:353
 msgid "Toggle Tracking Camera"
 msgstr ""
 
-#: src/keymap.c:356
+#: src/keymap.c:354
 msgid "Display In-Game Options"
 msgstr ""
 
-#: src/keymap.c:357
+#: src/keymap.c:355
 msgid "Zoom Radar Out"
 msgstr ""
 
-#: src/keymap.c:358
+#: src/keymap.c:356
 msgid "Zoom Radar In"
 msgstr ""
 
-#: src/keymap.c:359
+#: src/keymap.c:357
 msgid "Zoom In"
 msgstr "Lähennä"
 
-#: src/keymap.c:360
+#: src/keymap.c:358
 msgid "Zoom Out"
 msgstr "Loitonna"
 
-#: src/keymap.c:361
+#: src/keymap.c:359
 msgid "Pitch Forward"
 msgstr ""
 
-#: src/keymap.c:362
+#: src/keymap.c:360
 msgid "Rotate Left"
 msgstr ""
 
-#: src/keymap.c:363
+#: src/keymap.c:361
 msgid "Reset Pitch"
 msgstr ""
 
-#: src/keymap.c:364
+#: src/keymap.c:362
 msgid "Rotate Right"
 msgstr ""
 
-#: src/keymap.c:365
+#: src/keymap.c:363
 msgid "Pitch Back"
 msgstr ""
 
-#: src/keymap.c:366
+#: src/keymap.c:364
 msgid "Orders Menu"
 msgstr ""
 
-#: src/keymap.c:367
+#: src/keymap.c:365
 msgid "Decrease Game Speed"
 msgstr ""
 
-#: src/keymap.c:368
+#: src/keymap.c:366
 msgid "Increase Game Speed"
 msgstr ""
 
-#: src/keymap.c:369
+#: src/keymap.c:367
 msgid "Reset Game Speed"
 msgstr ""
 
-#: src/keymap.c:370
+#: src/keymap.c:368
 msgid "View North"
 msgstr ""
 
-#: src/keymap.c:371
+#: src/keymap.c:369
 msgid "View South"
 msgstr ""
 
-#: src/keymap.c:372
+#: src/keymap.c:370
 msgid "View East"
 msgstr ""
 
-#: src/keymap.c:373
+#: src/keymap.c:371
 msgid "View West"
 msgstr ""
 
-#: src/keymap.c:374
+#: src/keymap.c:372
 msgid "View next Oil Derrick"
 msgstr ""
 
-#: src/keymap.c:375
+#: src/keymap.c:373
 msgid "View next Repair Unit"
 msgstr ""
 
-#: src/keymap.c:376
+#: src/keymap.c:374
 msgid "View next Truck"
 msgstr ""
 
-#: src/keymap.c:377
+#: src/keymap.c:375
 msgid "View next Sensor Unit"
 msgstr ""
 
-#: src/keymap.c:378
+#: src/keymap.c:376
 msgid "View next Commander"
 msgstr ""
 
-#: src/keymap.c:379
+#: src/keymap.c:377
 msgid "Toggle Overlays"
 msgstr ""
 
-#: src/keymap.c:380
+#: src/keymap.c:378
 msgid "Console On/Off"
 msgstr ""
 
-#: src/keymap.c:383
+#: src/keymap.c:381
 msgid "Center View on HQ"
 msgstr ""
 
-#: src/keymap.c:385
+#: src/keymap.c:383
 msgid "View Unassigned Units"
 msgstr ""
 
-#: src/keymap.c:387
+#: src/keymap.c:385
 msgid "Fire at Will"
 msgstr ""
 
-#: src/keymap.c:389
+#: src/keymap.c:387
 msgid "Return to HQ"
 msgstr ""
 
-#: src/keymap.c:397
+#: src/keymap.c:395
 msgid "Send Text Message"
 msgstr ""
 
-#: src/keymap.c:415
+#: src/keymap.c:413
 msgid "Select all Combat Units"
 msgstr ""
 
-#: src/keymap.c:416
+#: src/keymap.c:414
 msgid "Select all Heavily Damaged Units"
 msgstr ""
 
-#: src/keymap.c:418
+#: src/keymap.c:416
 msgid "Select all Half-tracks"
 msgstr ""
 
-#: src/keymap.c:419
+#: src/keymap.c:417
 msgid "Select all Hovers"
 msgstr ""
 
-#: src/keymap.c:421
+#: src/keymap.c:419
 msgid "Select all Units on Screen"
 msgstr ""
 
-#: src/keymap.c:422
+#: src/keymap.c:420
 msgid "Select all Tracks"
 msgstr ""
 
-#: src/keymap.c:423
+#: src/keymap.c:421
 msgid "Select EVERY unit"
 msgstr ""
 
-#: src/keymap.c:424
+#: src/keymap.c:422
 msgid "Select all VTOLs"
 msgstr ""
 
-#: src/keymap.c:425
+#: src/keymap.c:423
 msgid "Select all Wheels"
 msgstr ""
 
-#: src/keymap.c:427
+#: src/keymap.c:425
 msgid "Select all Similar Units"
 msgstr ""
 
-#: src/keymap.c:431
+#: src/keymap.c:429
 msgid "Select next Factory"
 msgstr ""
 
-#: src/keymap.c:432
+#: src/keymap.c:430
 msgid "Select next Research Facility"
 msgstr ""
 
-#: src/keymap.c:433
+#: src/keymap.c:431
 msgid "Select next Power Generator"
 msgstr ""
 
-#: src/keymap.c:434
+#: src/keymap.c:432
 msgid "Select next Cyborg Factory"
 msgstr ""
 
-#: src/keymap.c:435
+#: src/keymap.c:433
 msgid "Toggle reopening the build menu"
 msgstr ""
 
-#: src/loop.c:527
-#: src/loop.c:543
+#: src/loop.c:533
+#: src/loop.c:549
 #, fuzzy
 msgid "Could not save game!"
 msgstr "Lataa tallennettu peli"
@@ -12820,225 +12828,229 @@ msgstr ""
 msgid "You Discover Blueprints For %s"
 msgstr ""
 
-#: src/multiint.c:562
+#: src/multiint.c:563
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Hyväksy asetukset"
 
-#: src/multiint.c:573
+#: src/multiint.c:574
 msgid "IP Address or Machine Name"
 msgstr ""
 
-#: src/multiint.c:614
+#: src/multiint.c:615
 msgid "CONNECTION"
 msgstr "YHTEYS"
 
-#: src/multiint.c:627
+#: src/multiint.c:628
 msgid "Lobby"
 msgstr "Aula"
 
-#: src/multiint.c:628
+#: src/multiint.c:629
 msgid "IP"
 msgstr ""
 
-#: src/multiint.c:825
+#: src/multiint.c:826
 msgid "No games are available"
 msgstr ""
 
-#: src/multiint.c:828
+#: src/multiint.c:829
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.c:832
+#: src/multiint.c:833
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.c:835
+#: src/multiint.c:836
 msgid "Wrong Game Version!"
 msgstr ""
 
-#: src/multiint.c:838
+#: src/multiint.c:839
 msgid "Wrong data/mod detected by Host."
 msgstr ""
 
-#: src/multiint.c:841
+#: src/multiint.c:843
+msgid "Host couldn't send file?"
+msgstr ""
+
+#: src/multiint.c:847
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:844
+#: src/multiint.c:850
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.c:848
+#: src/multiint.c:854
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:946
+#: src/multiint.c:952
 msgid "Searching"
 msgstr "Etsitään"
 
-#: src/multiint.c:1051
+#: src/multiint.c:1057
 msgid "GAMES"
 msgstr ""
 
-#: src/multiint.c:1061
+#: src/multiint.c:1067
 msgid "Refresh Games List"
 msgstr ""
 
-#: src/multiint.c:1082
+#: src/multiint.c:1088
 msgid "Enter Password First "
 msgstr ""
 
-#: src/multiint.c:1189
+#: src/multiint.c:1195
 msgid "Select Game Name"
 msgstr ""
 
-#: src/multiint.c:1190
+#: src/multiint.c:1196
 msgid "Select Map"
 msgstr "Valitse kartta"
 
-#: src/multiint.c:1196
+#: src/multiint.c:1202
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.c:1205
-#: src/multiint.c:1206
+#: src/multiint.c:1211
+#: src/multiint.c:1212
 msgid "Scavengers"
 msgstr ""
 
-#: src/multiint.c:1208
+#: src/multiint.c:1214
 msgid "No Scavengers"
 msgstr ""
 
-#: src/multiint.c:1238
+#: src/multiint.c:1244
 #, fuzzy
 msgid "Select Player Name"
 msgstr "Valitse pelaajan nimi"
 
-#: src/multiint.c:1244
+#: src/multiint.c:1250
 msgid "Distance Fog"
 msgstr ""
 
-#: src/multiint.c:1255
+#: src/multiint.c:1261
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Liittoumat"
 
-#: src/multiint.c:1258
+#: src/multiint.c:1264
 msgid "No Alliances"
 msgstr "Ei liittoumia"
 
-#: src/multiint.c:1260
+#: src/multiint.c:1266
 msgid "Allow Alliances"
 msgstr "Salli liittoumat"
 
-#: src/multiint.c:1264
+#: src/multiint.c:1270
 msgid "Locked Teams"
 msgstr ""
 
-#: src/multiint.c:1290
+#: src/multiint.c:1296
 msgid "Low Power Levels"
 msgstr ""
 
-#: src/multiint.c:1292
+#: src/multiint.c:1298
 msgid "Medium Power Levels"
 msgstr ""
 
-#: src/multiint.c:1294
+#: src/multiint.c:1300
 msgid "High Power Levels"
 msgstr ""
 
-#: src/multiint.c:1326
+#: src/multiint.c:1332
 msgid "Base"
 msgstr "Tukikohta"
 
-#: src/multiint.c:1328
+#: src/multiint.c:1334
 msgid "Start with No Bases"
 msgstr "Aloita ilman tukikohtaa"
 
-#: src/multiint.c:1330
+#: src/multiint.c:1336
 msgid "Start with Bases"
 msgstr ""
 
-#: src/multiint.c:1332
+#: src/multiint.c:1338
 msgid "Start with Advanced Bases"
 msgstr ""
 
-#: src/multiint.c:1364
+#: src/multiint.c:1370
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.c:1366
+#: src/multiint.c:1372
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.c:1380
+#: src/multiint.c:1386
 msgid "Start Hosting Game"
 msgstr ""
 
-#: src/multiint.c:1388
+#: src/multiint.c:1394
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "Omat rakennukset: %u"
 
-#: src/multiint.c:1388
+#: src/multiint.c:1394
 msgid "Set Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1796
+#: src/multiint.c:1809
 msgid "Team"
 msgstr ""
 
-#: src/multiint.c:1829
+#: src/multiint.c:1842
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/multiint.c:1835
+#: src/multiint.c:1848
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.c:1873
+#: src/multiint.c:1886
 msgid "PLAYERS"
 msgstr "PELAAJAT"
 
-#: src/multiint.c:2051
+#: src/multiint.c:2064
 msgid "CHAT"
 msgstr ""
 
-#: src/multiint.c:2226
+#: src/multiint.c:2239
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2233
+#: src/multiint.c:2246
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2475
+#: src/multiint.c:2488
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2560
+#: src/multiint.c:2573
 msgid "'Locked Teams' mode enabled"
 msgstr ""
 
-#: src/multiint.c:2605
+#: src/multiint.c:2618
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr ""
 
-#: src/multiint.c:2607
+#: src/multiint.c:2620
 msgid "you are unwanted by the host"
 msgstr ""
 
-#: src/multiint.c:2682
+#: src/multiint.c:2708
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:3213
+#: src/multiint.c:3270
 msgid "Players"
 msgstr "Pelaajat"
 
-#: src/multiint.c:3290
+#: src/multiint.c:3347
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
@@ -13145,57 +13157,57 @@ msgstr ""
 msgid "Give Power To Player"
 msgstr ""
 
-#: src/multiplay.c:284
+#: src/multiplay.c:282
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:288
+#: src/multiplay.c:286
 msgid "It is not nice to cheat!"
 msgstr ""
 
-#: src/multiplay.c:1081
+#: src/multiplay.c:1080
 #, fuzzy
 msgid "(allies"
 msgstr "Liittoumat"
 
-#: src/multiplay.c:1091
+#: src/multiplay.c:1088
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1103
+#: src/multiplay.c:1101
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1930
+#: src/multiplay.c:1957
 msgid "Green"
 msgstr "Vihreä"
 
-#: src/multiplay.c:1931
+#: src/multiplay.c:1958
 msgid "Orange"
 msgstr "Oranssi"
 
-#: src/multiplay.c:1932
+#: src/multiplay.c:1959
 msgid "Grey"
 msgstr "Harmaa"
 
-#: src/multiplay.c:1933
+#: src/multiplay.c:1960
 msgid "Black"
 msgstr "Musta"
 
-#: src/multiplay.c:1934
+#: src/multiplay.c:1961
 msgid "Red"
 msgstr "Punainen"
 
-#: src/multiplay.c:1935
+#: src/multiplay.c:1962
 msgid "Blue"
 msgstr "Sininen"
 
-#: src/multiplay.c:1936
+#: src/multiplay.c:1963
 msgid "Pink"
 msgstr "Pinkki"
 
-#: src/multiplay.c:1937
+#: src/multiplay.c:1964
 msgid "Cyan"
 msgstr "Syaani"
 
@@ -13338,12 +13350,12 @@ msgstr ""
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10202
+#: src/scriptfuncs.c:10196
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10248
+#: src/scriptfuncs.c:10242
 #, c-format
 msgid "Beacon %d"
 msgstr ""
