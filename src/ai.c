@@ -37,6 +37,8 @@
 #include "projectile.h"
 #include "visibility.h"
 
+#define FRUSTATED_TIME 1000 * 5
+
 /* Calculates attack priority for a certain target */
 static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot);
 
@@ -323,7 +325,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 
 		if (targetInQuestion != NULL
 		    && targetInQuestion != (BASE_OBJECT *)psDroid		// in case friendly unit had me as target
-		    && (targetInQuestion->type == OBJ_DROID ||  targetInQuestion->type == OBJ_STRUCTURE)
+		    && (targetInQuestion->type == OBJ_DROID || targetInQuestion->type == OBJ_STRUCTURE || targetInQuestion->type == OBJ_FEATURE)
 		    && targetInQuestion->visible[psDroid->player]
 		    && !aiCheckAlliances(targetInQuestion->player,psDroid->player)
 		    && validTarget((BASE_OBJECT *)psDroid, targetInQuestion, weapon_slot)
@@ -370,6 +372,11 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 				{
 					psTarget = targetInQuestion;
 				}
+			}
+			else if (targetInQuestion->type == OBJ_FEATURE
+			         && gameTime - psDroid->lastFrustratedTime < FRUSTATED_TIME  && ((FEATURE *)targetInQuestion)->psStats->damageable)
+			{
+				psTarget = targetInQuestion;
 			}
 
 			/* Check if our weapon is most effective against this object */
@@ -613,7 +620,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	}
 	else	//a feature
 	{
-		return noTarget;
+		return 1;
 	}
 
 	/* We prefer objects we can see and can attack immediately */

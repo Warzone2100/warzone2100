@@ -147,6 +147,8 @@ typedef struct DROID
 	float           experience;
 	UBYTE           NameVersion;                    ///< Version number used for generating on-the-fly names (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied from droid template
 
+	UDWORD		lastFrustratedTime;		///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way
+
 	SWORD           resistance;                     ///< used in Electronic Warfare
 
 	UDWORD          numWeaps;                       ///< Watermelon:Re-enabled this,I need this one in droid.c

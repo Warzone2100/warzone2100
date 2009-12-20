@@ -1013,6 +1013,7 @@ static BOOL moveBlocked(DROID *psDroid)
 				psDroid->order = DORDER_NONE;
 				setDroidTarget(psDroid, NULL);
 				psDroid->psTarStats = NULL;
+				psDroid->lastFrustratedTime = gameTime;	// try desperate things
 			}
 			objTrace(psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
 			moveDroidTo(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
