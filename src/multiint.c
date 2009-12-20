@@ -2676,7 +2676,11 @@ void startMultiplayerGame(void)
 	{
 		if (!bLimiterLoaded)	// if they set limits, then skip this
 		{
-			if (!resLoad("wrf/piestats.wrf", 502))
+			if (!resLoad("wrf/limiter_tex.wrf", 501))
+			{
+				debug(LOG_WARNING, "Unable to load limiter_tex.  Defaults not set.");
+			}
+			else if (!resLoad("wrf/piestats.wrf", 502))
 			{
 				debug(LOG_WARNING, "Unable to load limits.  Defaults not set.");
 			}
