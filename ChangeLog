@@ -1,3 +1,7 @@
+2009-12-20: Version 2.3.0 release candidate 1
+ * General:
+   * Change: Add more key shortcuts (ticket:806)
+
 2009-12-13: Version 2.3.0 beta 4
  * General:
    * New: For windows people only, show a popup window for errors. (r8652)
