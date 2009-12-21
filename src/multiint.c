@@ -1405,8 +1405,8 @@ static BOOL safeToUseColour(UDWORD player,UDWORD col)
 {
 	UDWORD i;
 
-	// if already using it.
-	if( col == getPlayerColour(player) )
+	// if already using it, or we're the host
+	if( col == getPlayerColour(player) || NetPlay.isHost )
 	{
 		return true;						// already using it.
 	}
@@ -1470,14 +1470,17 @@ static void addColourChooser(UDWORD player)
 			"Player number", IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
 	}
 
-	for (i=0;i<game.maxPlayers;i++)
+	if (NetPlay.isHost)
 	{
-		if (isHumanPlayer(i) && i!=selectedPlayer )
+		for (i=0;i<game.maxPlayers;i++)
 		{
-			widgSetButtonState(psWScreen, MULTIOP_PLAYCHOOSER+NetPlay.players[i].position, WBUT_DISABLE);
+			if (isHumanPlayer(i) && i!=selectedPlayer )
+			{
+				widgSetButtonState(psWScreen, MULTIOP_PLAYCHOOSER+NetPlay.players[i].position, WBUT_DISABLE);
+			}
 		}
 	}
-
+	
 	bColourChooserUp = true;
 }
 
@@ -2599,30 +2602,30 @@ static void processMultiopWidgets(UDWORD id)
 
 	if((id >= MULTIOP_PLAYER_START) && (id <= MULTIOP_PLAYER_END))	// clicked on a player
 	{
-		if (id - MULTIOP_PLAYER_START == selectedPlayer)
+		// options for kicking
+		if(NetPlay.isHost)
+		{
+			if(mouseDown(MOUSE_RMB)) // both buttons....
+			{
+				int victim = id - MULTIOP_PLAYER_START;		// who to kick out
+				int j = 0;
+				char *msg;
+				
+				while (j != victim && j < MAX_PLAYERS)
+				{
+					j++; // find out ID of player
+				}
+				sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(j));
+				sendTextMessage(msg, true);
+				kickPlayer(victim, _("you are unwanted by the host"), ERROR_KICKED );
+				resetReadyStatus(true);		//reset and send notification to all clients
+			}
+		}
+		if (id - MULTIOP_PLAYER_START == selectedPlayer || (NetPlay.isHost && isHumanPlayer(id - MULTIOP_PLAYER_START)))
 		{
 			if (teamChooserUp < 0)		// not choosing team already
-				addColourChooser(id-MULTIOP_PLAYER_START);
-		}
-		else // options for kick out, etc..
-		{
-			if(NetPlay.isHost)
 			{
-				if(mouseDown(MOUSE_RMB)) // both buttons....
-				{
-					int victim = id - MULTIOP_PLAYER_START;		// who to kick out
-					int j = 0;
-					char *msg;
-
-					while (j != victim && j < MAX_PLAYERS)
-					{
-						j++; // find out ID of player
-					}
-					sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(j));
-					sendTextMessage(msg, true);
-					kickPlayer(victim, _("you are unwanted by the host"), ERROR_KICKED );
-					resetReadyStatus(true);		//reset and send notification to all clients
-				}
+				addColourChooser(id-MULTIOP_PLAYER_START);
 			}
 		}
 	}
