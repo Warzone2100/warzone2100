@@ -1897,7 +1897,7 @@ UDWORD addPlayerBox(BOOL players)
 
 		for (i=0;i<game.maxPlayers;i++)
 		{
-			if (game.skDiff[i])
+			if (game.skDiff[i] || isHumanPlayer(i))
 			{
 				numPlayers++;
 				if (numPlayers > 2)
