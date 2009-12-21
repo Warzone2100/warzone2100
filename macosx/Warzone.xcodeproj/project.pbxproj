@@ -343,13 +343,6 @@
 		0246A3B70BD3CD0B004D1C70 /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; };
 		0246A3B90BD3CD1F004D1C70 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A3B80BD3CD1F004D1C70 /* OpenAL.framework */; };
 		0246A3BD0BD3CD2B004D1C70 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A3BC0BD3CD2B004D1C70 /* OpenGL.framework */; };
-		0246A3FB0BD3CDA8004D1C70 /* SDL_net.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A3ED0BD3CD8A004D1C70 /* SDL_net.framework */; };
-		0246A4060BD3CDFC004D1C70 /* SDL_net.h in Headers */ = {isa = PBXBuildFile; fileRef = 0246A4000BD3CDFC004D1C70 /* SDL_net.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0246A4070BD3CDFC004D1C70 /* SDLnet.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A4010BD3CDFC004D1C70 /* SDLnet.c */; };
-		0246A4080BD3CDFC004D1C70 /* SDLnetselect.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A4020BD3CDFC004D1C70 /* SDLnetselect.c */; };
-		0246A4090BD3CDFC004D1C70 /* SDLnetsys.h in Headers */ = {isa = PBXBuildFile; fileRef = 0246A4030BD3CDFC004D1C70 /* SDLnetsys.h */; };
-		0246A40A0BD3CDFC004D1C70 /* SDLnetTCP.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A4040BD3CDFC004D1C70 /* SDLnetTCP.c */; };
-		0246A40B0BD3CDFC004D1C70 /* SDLnetUDP.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A4050BD3CDFC004D1C70 /* SDLnetUDP.c */; };
 		0246A5AB0BD3D482004D1C70 /* SDLMain.nib in Resources */ = {isa = PBXBuildFile; fileRef = 0246A5A80BD3D482004D1C70 /* SDLMain.nib */; };
 		0246A5F80BD3D5E5004D1C70 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A5F20BD3D5E5004D1C70 /* AudioToolbox.framework */; };
 		0246A5F90BD3D5E5004D1C70 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A5F30BD3D5E5004D1C70 /* AudioUnit.framework */; };
@@ -373,7 +366,6 @@
 		02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
 		02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; };
 		02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02356DC20BD3BBFC00E9A019 /* Png.framework */; };
-		02581C860BD5AD1100957CBC /* SDL_net.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 0246A3ED0BD3CD8A004D1C70 /* SDL_net.framework */; };
 		02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
 		02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
 		027F9E360D0322CE00FA2030 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A3BC0BD3CD2B004D1C70 /* OpenGL.framework */; };
@@ -487,7 +479,6 @@
 		2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 2244463B0E3EB7CB004D0F1F /* messagely.h */; };
 		22E244D70E65361800EC2B3E /* baseobject.c in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.c */; };
 		22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 22E244D50E65361800EC2B3E /* baseobject.h */; };
-		432BE39110D9C3CC00A486AB /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 432BE34C10D9C21900A486AB /* SDL.framework */; };
 		432BE39410D9C3E400A486AB /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 432BE34C10D9C21900A486AB /* SDL.framework */; };
 		432BE39710D9C45800A486AB /* SDLMain.h in Headers */ = {isa = PBXBuildFile; fileRef = 432BE34A10D9C21900A486AB /* SDLMain.h */; };
 		432BE39810D9C45900A486AB /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 432BE34B10D9C21900A486AB /* SDLMain.m */; };
@@ -829,13 +820,6 @@
 			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
 			remoteInfo = PhysFS;
 		};
-		0246A3FC0BD3CDB1004D1C70 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0246A3EC0BD3CD8A004D1C70;
-			remoteInfo = SDL_net;
-		};
 		02581C620BD5A97400957CBC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -923,7 +907,6 @@
 				02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks (36) */,
 				02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks (36) */,
 				02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks (36) */,
-				02581C860BD5AD1100957CBC /* SDL_net.framework in Copy frameworks (36) */,
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks (36) */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks (36) */,
 				02CBED8D0C5B8BEB00316CE2 /* nettypes.h in Copy frameworks (36) */,
@@ -1462,14 +1445,6 @@
 		0246A3BC0BD3CD2B004D1C70 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		0246A3E10BD3CD81004D1C70 /* SDL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0246A3E20BD3CD81004D1C70 /* SDL-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SDL-Info.plist"; path = "Resources/SDL-Info.plist"; sourceTree = "<group>"; };
-		0246A3ED0BD3CD8A004D1C70 /* SDL_net.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDL_net.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0246A3EE0BD3CD8A004D1C70 /* SDL_net-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SDL_net-Info.plist"; path = "Resources/SDL_net-Info.plist"; sourceTree = "<group>"; };
-		0246A4000BD3CDFC004D1C70 /* SDL_net.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDL_net.h; path = external/SDL_net/SDL_net.h; sourceTree = SOURCE_ROOT; };
-		0246A4010BD3CDFC004D1C70 /* SDLnet.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDLnet.c; path = external/SDL_net/SDLnet.c; sourceTree = SOURCE_ROOT; };
-		0246A4020BD3CDFC004D1C70 /* SDLnetselect.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDLnetselect.c; path = external/SDL_net/SDLnetselect.c; sourceTree = SOURCE_ROOT; };
-		0246A4030BD3CDFC004D1C70 /* SDLnetsys.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDLnetsys.h; path = external/SDL_net/SDLnetsys.h; sourceTree = SOURCE_ROOT; };
-		0246A4040BD3CDFC004D1C70 /* SDLnetTCP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDLnetTCP.c; path = external/SDL_net/SDLnetTCP.c; sourceTree = SOURCE_ROOT; };
-		0246A4050BD3CDFC004D1C70 /* SDLnetUDP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDLnetUDP.c; path = external/SDL_net/SDLnetUDP.c; sourceTree = SOURCE_ROOT; };
 		0246A5A60BD3D482004D1C70 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDLMain.h; path = external/SDL/src/main/macosx/SDLMain.h; sourceTree = "<group>"; };
 		0246A5A70BD3D482004D1C70 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = SDLMain.m; path = external/SDL/src/main/macosx/SDLMain.m; sourceTree = "<group>"; };
 		0246A5A80BD3D482004D1C70 /* SDLMain.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = SDLMain.nib; path = external/SDL/src/main/macosx/SDLMain.nib; sourceTree = "<group>"; };
@@ -1979,7 +1954,6 @@
 				0246A3BD0BD3CD2B004D1C70 /* OpenGL.framework in Frameworks */,
 				0246A3B90BD3CD1F004D1C70 /* OpenAL.framework in Frameworks */,
 				0246A3080BD3CD01004D1C70 /* IOKit.framework in Frameworks */,
-				0246A3FB0BD3CDA8004D1C70 /* SDL_net.framework in Frameworks */,
 				0246A3B30BD3CD0B004D1C70 /* Zlib.framework in Frameworks */,
 				0246A3B40BD3CD0B004D1C70 /* Png.framework in Frameworks */,
 				0246A3B50BD3CD0B004D1C70 /* Ogg.framework in Frameworks */,
@@ -2025,14 +1999,6 @@
 				0246A93B0BD3DD3E004D1C70 /* Carbon.framework in Frameworks */,
 				0246AA170BD3DFEE004D1C70 /* CoreFoundation.framework in Frameworks */,
 				97F013D60EDEAE76004947E5 /* Cocoa.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0246A3EB0BD3CD8A004D1C70 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				432BE39110D9C3CC00A486AB /* SDL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2228,7 +2194,6 @@
 				02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */,
 				02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */,
 				0246A3E10BD3CD81004D1C70 /* SDL.framework */,
-				0246A3ED0BD3CD8A004D1C70 /* SDL_net.framework */,
 				022B2F220BD55814002E64E3 /* Gettext.framework */,
 				02581C5D0BD5A94A00957CBC /* libSDLmain.a */,
 				0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */,
@@ -2252,7 +2217,6 @@
 				02356DC30BD3BBFC00E9A019 /* Png-Info.plist */,
 				02DDA8B20BD3C2F20049AB60 /* Pixman-Info.plist */,
 				0246A3E20BD3CD81004D1C70 /* SDL-Info.plist */,
-				0246A3EE0BD3CD8A004D1C70 /* SDL_net-Info.plist */,
 				022B2F230BD55815002E64E3 /* Gettext-Info.plist */,
 				0223BBD20CFE3D5C0056EF85 /* QuesoGLC-Info.plist */,
 				02F5CC6E0D1494AA0000A2D0 /* Popt-Info.plist */,
@@ -2792,19 +2756,6 @@
 			name = "SDL sources";
 			sourceTree = "<group>";
 		};
-		0246A3DB0BD3CD6A004D1C70 /* SDL_net sources */ = {
-			isa = PBXGroup;
-			children = (
-				0246A4000BD3CDFC004D1C70 /* SDL_net.h */,
-				0246A4010BD3CDFC004D1C70 /* SDLnet.c */,
-				0246A4020BD3CDFC004D1C70 /* SDLnetselect.c */,
-				0246A4030BD3CDFC004D1C70 /* SDLnetsys.h */,
-				0246A4040BD3CDFC004D1C70 /* SDLnetTCP.c */,
-				0246A4050BD3CDFC004D1C70 /* SDLnetUDP.c */,
-			);
-			name = "SDL_net sources";
-			sourceTree = "<group>";
-		};
 		02BBB2060DA874CF002D438B /* Exception Handler */ = {
 			isa = PBXGroup;
 			children = (
@@ -3017,7 +2968,6 @@
 				02F5CC7F0D1495EB0000A2D0 /* Popt sources */,
 				0223BBE50CFE3F4B0056EF85 /* QuesoGLC sources */,
 				022B2F460BD55940002E64E3 /* Gettext sources */,
-				0246A3DB0BD3CD6A004D1C70 /* SDL_net sources */,
 				0246A3DA0BD3CD5B004D1C70 /* SDL sources */,
 				02DDA8DE0BD3C3930049AB60 /* PhysFS sources */,
 				02DDA8620BD3C1BB0049AB60 /* Vorbis sources */,
@@ -3878,15 +3828,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0246A3E80BD3CD8A004D1C70 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0246A4060BD3CDFC004D1C70 /* SDL_net.h in Headers */,
-				0246A4090BD3CDFC004D1C70 /* SDLnetsys.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		02581C590BD5A94A00957CBC /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -4071,7 +4012,6 @@
 				02CDDCFF0D159C0000722688 /* PBXTargetDependency */,
 				02581C630BD5A97400957CBC /* PBXTargetDependency */,
 				022B313F0BD56915002E64E3 /* PBXTargetDependency */,
-				0246A3FD0BD3CDB1004D1C70 /* PBXTargetDependency */,
 				0246A2FF0BD3CCF0004D1C70 /* PBXTargetDependency */,
 				0246A3010BD3CCF2004D1C70 /* PBXTargetDependency */,
 				0246A3030BD3CCF3004D1C70 /* PBXTargetDependency */,
@@ -4161,25 +4101,6 @@
 			name = SDL;
 			productName = SDL;
 			productReference = 0246A3E10BD3CD81004D1C70 /* SDL.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		0246A3EC0BD3CD8A004D1C70 /* SDL_net */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0246A3EF0BD3CD8B004D1C70 /* Build configuration list for PBXNativeTarget "SDL_net" */;
-			buildPhases = (
-				02FD38460BD4016700776FD3 /* Fetch source */,
-				0246A3E80BD3CD8A004D1C70 /* Headers */,
-				0246A3E90BD3CD8A004D1C70 /* Resources */,
-				0246A3EA0BD3CD8A004D1C70 /* Sources */,
-				0246A3EB0BD3CD8A004D1C70 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = SDL_net;
-			productName = SDL_net;
-			productReference = 0246A3ED0BD3CD8A004D1C70 /* SDL_net.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		02581C5C0BD5A94A00957CBC /* SDLmain */ = {
@@ -4334,6 +4255,9 @@
 /* Begin PBXProject section */
 		02356D660BD3BB2600E9A019 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = NO;
+			};
 			buildConfigurationList = 02356D670BD3BB2600E9A019 /* Build configuration list for PBXProject "Warzone" */;
 			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
@@ -4351,7 +4275,6 @@
 				97AEAAEA0E8C1B5200A10721 /* Theora */,
 				02DDA8B00BD3C2F20049AB60 /* PhysFS */,
 				0246A3E00BD3CD81004D1C70 /* SDL */,
-				0246A3EC0BD3CD8A004D1C70 /* SDL_net */,
 				022B2F210BD55814002E64E3 /* Gettext */,
 				02581C5C0BD5A94A00957CBC /* SDLmain */,
 				43F3011A10D3572400707B6E /* Configure Popt */,
@@ -4416,13 +4339,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0246A3E90BD3CD8A004D1C70 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		02DDA7EA0BD3C03F0049AB60 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4479,7 +4395,7 @@
 		};
 		022B2F290BD55840002E64E3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -4507,7 +4423,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd external/gettext/gettext-runtime\n\ncat <<EOF > config.h\n#define ENABLE_NLS 1\n#define GNULIB_FWRITEERROR 1\n#define HAVE_ALLOCA 1\n#define HAVE_ALLOCA_H\n#define HAVE_ASPRINTF 1\n#define HAVE_ATEXIT 1\n#define HAVE_BUILTIN_EXPECT 1\n#define HAVE_CFLOCALECOPYCURRENT 1\n#define HAVE_CFPREFERENCESCOPYAPPVALUE 1\n#define HAVE_DECL_CLEARERR_UNLOCKED 1\n#define HAVE_DECL_FEOF_UNLOCKED 1\n#define HAVE_DECL_FERROR_UNLOCKED 1\n#define HAVE_DECL_FFLUSH_UNLOCKED 0\n#define HAVE_DECL_FGETS_UNLOCKED 0\n#define HAVE_DECL_FPUTC_UNLOCKED 0\n#define HAVE_DECL_FPUTS_UNLOCKED 0\n#define HAVE_DECL_FREAD_UNLOCKED 0\n#define HAVE_DECL_FWRITE_UNLOCKED 0\n#define HAVE_DECL_GETCHAR_UNLOCKED 1\n#define HAVE_DECL_GETC_UNLOCKED 1\n#define HAVE_DECL_GETENV 1\n#define HAVE_DECL_PUTCHAR_UNLOCKED 1\n#define HAVE_DECL_PUTC_UNLOCKED 1\n#define HAVE_DECL_STRDUP 1\n#define HAVE_DECL_STRERROR_R 1\n#define HAVE_DECL_WCWIDTH 1\n#define HAVE_DECL__SNPRINTF 0\n#define HAVE_DECL__SNWPRINTF 0\n#define HAVE_DLFCN_H 1\n#define HAVE_FWPRINTF 1\n#define HAVE_GETCWD 1\n#define HAVE_GETEGID 1\n#define HAVE_GETEUID 1\n#define HAVE_GETGID 1\n#define HAVE_GETOPT_H 1\n#define HAVE_GETOPT_LONG_ONLY 1\n#define HAVE_GETPAGESIZE 1\n#define HAVE_GETUID 1\n#define HAVE_ICONV 1\n#define HAVE_INTMAX_T 1\n#define HAVE_INTTYPES_H 1\n#define HAVE_INTTYPES_H_WITH_UINTMAX 1\n#define HAVE_ISWCNTRL 1\n#define HAVE_ISWPRINT 1\n#define HAVE_LANGINFO_CODESET 1\n#define HAVE_LC_MESSAGES 1\n#define HAVE_LIMITS_H 1\n#define HAVE_LONG_DOUBLE 1\n#define HAVE_LONG_LONG_INT 1\n#define HAVE_MBRTOWC 1\n#define HAVE_MBSTATE_T 1\n#define HAVE_MEMCHR 1\n#define HAVE_MEMMOVE 1\n#define HAVE_MEMORY_H 1\n#define HAVE_MMAP 1\n#define HAVE_MUNMAP 1\n#define HAVE_POSIX_PRINTF 1\n#define HAVE_PTHREAD_MUTEX_RECURSIVE 1\n#define HAVE_PTHREAD_RWLOCK 1\n#define HAVE_PUTENV 1\n#define HAVE_READLINK 1\n#define HAVE_SETENV 1\n#define HAVE_SETLOCALE 1\n#define HAVE_SNPRINTF 1\n#define HAVE_STDBOOL_H 1\n#define HAVE_STDDEF_H 1\n#define HAVE_STDINT_H 1\n#define HAVE_STDINT_H_WITH_UINTMAX 1\n#define HAVE_STDLIB_H 1\n#define HAVE_STPCPY 1\n#define HAVE_STRCASECMP 1\n#define HAVE_STRDUP 1\n#define HAVE_STRERROR 1\n#define HAVE_STRERROR_R 1\n#define HAVE_STRINGS_H 1\n#define HAVE_STRING_H 1\n#define HAVE_STRTOL 1\n#define HAVE_STRTOUL 1\n#define HAVE_SYS_PARAM_H 1\n#define HAVE_SYS_STAT_H 1\n#define HAVE_SYS_TYPES_H 1\n#define HAVE_TSEARCH 1\n#define HAVE_UINTMAX_T 1\n#define HAVE_UNISTD_H 1\n#define HAVE_UNSETENV 1\n#define HAVE_UNSIGNED_LONG_LONG 1\n#define HAVE_UNSIGNED_LONG_LONG_INT 1\n#define HAVE_VISIBILITY 1\n#define HAVE_WCHAR_H 1\n#define HAVE_WCHAR_T 1\n#define HAVE_WCSLEN 1\n#define HAVE_WCTYPE_H 1\n#define HAVE_WCWIDTH 1\n#define HAVE_WINT_T 1\n#define HAVE__BOOL 1\n#define ICONV_CONST const\n#define INSTALLPREFIX \"/usr/local\"\n#define INTDIV0_RAISES_SIGFPE 0\n#define MALLOC_0_IS_NONNULL 1\n#define PACKAGE \"gettext-runtime\"\n#define PACKAGE_BUGREPORT \"\"\n#define PACKAGE_NAME \"\"\n#define PACKAGE_STRING \"\"\n#define PACKAGE_TARNAME \"\"\n#define PACKAGE_VERSION \"\"\n#define STDC_HEADERS 1\n#define USE_POSIX_THREADS 1\n#define USE_UNLOCKED_IO 1\n#define VERSION \"0.16.1\"\n#define VOID_UNSETENV 1\n#ifndef _GNU_SOURCE\n# define _GNU_SOURCE 1\n#endif\n#ifndef _POSIX_PTHREAD_SEMANTICS\n# define _POSIX_PTHREAD_SEMANTICS 1\n#endif\n#ifndef _TANDEM_SOURCE\n# define _TANDEM_SOURCE 1\n#endif\n#define __GETOPT_PREFIX rpl_\n#define realpath rpl_realpath\n#define __libc_lock_t                   gl_lock_t\n#define __libc_lock_define              gl_lock_define\n#define __libc_lock_define_initialized  gl_lock_define_initialized\n#define __libc_lock_init                gl_lock_init\n#define __libc_lock_lock                gl_lock_lock\n#define __libc_lock_unlock              gl_lock_unlock\n#define __libc_lock_recursive_t                   gl_recursive_lock_t\n#define __libc_lock_define_recursive              gl_recursive_lock_define\n#define __libc_lock_define_initialized_recursive  gl_recursive_lock_define_initialized\n#define __libc_lock_init_recursive                gl_recursive_lock_init\n#define __libc_lock_lock_recursive                gl_recursive_lock_lock\n#define __libc_lock_unlock_recursive              gl_recursive_lock_unlock\n#define glthread_in_use  libintl_thread_in_use\n#define glthread_lock_init     libintl_lock_init\n#define glthread_lock_lock     libintl_lock_lock\n#define glthread_lock_unlock   libintl_lock_unlock\n#define glthread_lock_destroy  libintl_lock_destroy\n#define glthread_rwlock_init     libintl_rwlock_init\n#define glthread_rwlock_rdlock   libintl_rwlock_rdlock\n#define glthread_rwlock_wrlock   libintl_rwlock_wrlock\n#define glthread_rwlock_unlock   libintl_rwlock_unlock\n#define glthread_rwlock_destroy  libintl_rwlock_destroy\n#define glthread_recursive_lock_init     libintl_recursive_lock_init\n#define glthread_recursive_lock_lock     libintl_recursive_lock_lock\n#define glthread_recursive_lock_unlock   libintl_recursive_lock_unlock\n#define glthread_recursive_lock_destroy  libintl_recursive_lock_destroy\n#define glthread_once                 libintl_once\n#define glthread_once_call            libintl_once_call\n#define glthread_once_singlethreaded  libintl_once_singlethreaded\nEOF\n\ncd intl\n\ncat libgnuintl.h.in \\\n| sed -e '/IN_LIBGLOCALE/d' \\\n      -e 's,@''HAVE_POSIX_PRINTF''@,1,g' \\\n      -e 's,@''HAVE_ASPRINTF''@,1,g' \\\n      -e 's,@''HAVE_SNPRINTF''@,1,g' \\\n      -e 's,@''HAVE_WPRINTF''@,0,g' \\\n| sed -e 's/extern \\([^\"]\\)/extern LIBINTL_DLL_EXPORTED \\1/' \\\n      -e \"/#define _LIBINTL_H/r ./export.h\" \\\n| sed -e 's,@''HAVE_VISIBILITY''@,1,g' \\\n  > libgnuintl.h\n\ncat libgnuintl.h \\\n| sed -e '/IN_LIBGLOCALE/d' \\\n      -e 's,@''HAVE_POSIX_PRINTF''@,1,g' \\\n      -e 's,@''HAVE_ASPRINTF''@,1,g' \\\n      -e 's,@''HAVE_SNPRINTF''@,1,g' \\\n      -e 's,@''HAVE_WPRINTF''@,0,g' \\\n  > libintl.h\n";
+			shellScript = "cd external/gettext/gettext-runtime\n\n\ncat <<EOF > config.h\n#define ENABLE_NLS 1\n#define GNULIB_FWRITEERROR 1\n#define HAVE_ALLOCA 1\n#define HAVE_ALLOCA_H\n#define HAVE_ASPRINTF 1\n#define HAVE_ATEXIT 1\n#define HAVE_BUILTIN_EXPECT 1\n#define HAVE_CFLOCALECOPYCURRENT 1\n#define HAVE_CFPREFERENCESCOPYAPPVALUE 1\n#define HAVE_DECL_CLEARERR_UNLOCKED 1\n#define HAVE_DECL_FEOF_UNLOCKED 1\n#define HAVE_DECL_FERROR_UNLOCKED 1\n#define HAVE_DECL_FFLUSH_UNLOCKED 0\n#define HAVE_DECL_FGETS_UNLOCKED 0\n#define HAVE_DECL_FPUTC_UNLOCKED 0\n#define HAVE_DECL_FPUTS_UNLOCKED 0\n#define HAVE_DECL_FREAD_UNLOCKED 0\n#define HAVE_DECL_FWRITE_UNLOCKED 0\n#define HAVE_DECL_GETCHAR_UNLOCKED 1\n#define HAVE_DECL_GETC_UNLOCKED 1\n#define HAVE_DECL_GETENV 1\n#define HAVE_DECL_PUTCHAR_UNLOCKED 1\n#define HAVE_DECL_PUTC_UNLOCKED 1\n#define HAVE_DECL_STRDUP 1\n#define HAVE_DECL_STRERROR_R 1\n#define HAVE_DECL_WCWIDTH 1\n#define HAVE_DECL__SNPRINTF 0\n#define HAVE_DECL__SNWPRINTF 0\n#define HAVE_DLFCN_H 1\n#define HAVE_FWPRINTF 1\n#define HAVE_GETCWD 1\n#define HAVE_GETEGID 1\n#define HAVE_GETEUID 1\n#define HAVE_GETGID 1\n#define HAVE_GETOPT_H 1\n#define HAVE_GETOPT_LONG_ONLY 1\n#define HAVE_GETPAGESIZE 1\n#define HAVE_GETUID 1\n#define HAVE_ICONV 1\n#define HAVE_INTMAX_T 1\n#define HAVE_INTTYPES_H 1\n#define HAVE_INTTYPES_H_WITH_UINTMAX 1\n#define HAVE_ISWCNTRL 1\n#define HAVE_ISWPRINT 1\n#define HAVE_LANGINFO_CODESET 1\n#define HAVE_LC_MESSAGES 1\n#define HAVE_LIMITS_H 1\n#define HAVE_LONG_DOUBLE 1\n#define HAVE_LONG_LONG_INT 1\n#define HAVE_MBRTOWC 1\n#define HAVE_MBSTATE_T 1\n#define HAVE_MEMCHR 1\n#define HAVE_MEMMOVE 1\n#define HAVE_MEMORY_H 1\n#define HAVE_MMAP 1\n#define HAVE_MUNMAP 1\n#define HAVE_POSIX_PRINTF 1\n#define HAVE_PTHREAD_MUTEX_RECURSIVE 1\n#define HAVE_PTHREAD_RWLOCK 1\n#define HAVE_PUTENV 1\n#define HAVE_READLINK 1\n#define HAVE_SETENV 1\n#define HAVE_SETLOCALE 1\n#define HAVE_SNPRINTF 1\n#define HAVE_STDBOOL_H 1\n#define HAVE_STDDEF_H 1\n#define HAVE_STDINT_H 1\n#define HAVE_STDINT_H_WITH_UINTMAX 1\n#define HAVE_STDLIB_H 1\n#define HAVE_STPCPY 1\n#define HAVE_STRCASECMP 1\n#define HAVE_STRDUP 1\n#define HAVE_STRERROR 1\n#define HAVE_STRERROR_R 1\n#define HAVE_STRINGS_H 1\n#define HAVE_STRING_H 1\n#define HAVE_STRTOL 1\n#define HAVE_STRTOUL 1\n#define HAVE_SYS_PARAM_H 1\n#define HAVE_SYS_STAT_H 1\n#define HAVE_SYS_TYPES_H 1\n#define HAVE_TSEARCH 1\n#define HAVE_UINTMAX_T 1\n#define HAVE_UNISTD_H 1\n#define HAVE_UNSETENV 1\n#define HAVE_UNSIGNED_LONG_LONG 1\n#define HAVE_UNSIGNED_LONG_LONG_INT 1\n#define HAVE_VISIBILITY 1\n#define HAVE_WCHAR_H 1\n#define HAVE_WCHAR_T 1\n#define HAVE_WCSLEN 1\n#define HAVE_WCTYPE_H 1\n#define HAVE_WCWIDTH 1\n#define HAVE_WINT_T 1\n#define HAVE__BOOL 1\n#define ICONV_CONST const\n#define INSTALLPREFIX \"/usr/local\"\n#define INTDIV0_RAISES_SIGFPE 0\n#define MALLOC_0_IS_NONNULL 1\n#define PACKAGE \"gettext-runtime\"\n#define PACKAGE_BUGREPORT \"\"\n#define PACKAGE_NAME \"\"\n#define PACKAGE_STRING \"\"\n#define PACKAGE_TARNAME \"\"\n#define PACKAGE_VERSION \"\"\n#define STDC_HEADERS 1\n#define USE_POSIX_THREADS 1\n#define USE_UNLOCKED_IO 1\n#define VERSION \"0.16.1\"\n#define VOID_UNSETENV 1\n#ifndef _GNU_SOURCE\n# define _GNU_SOURCE 1\n#endif\n#ifndef _POSIX_PTHREAD_SEMANTICS\n# define _POSIX_PTHREAD_SEMANTICS 1\n#endif\n#ifndef _TANDEM_SOURCE\n# define _TANDEM_SOURCE 1\n#endif\n#define __GETOPT_PREFIX rpl_\n#define realpath rpl_realpath\n#define __libc_lock_t                   gl_lock_t\n#define __libc_lock_define              gl_lock_define\n#define __libc_lock_define_initialized  gl_lock_define_initialized\n#define __libc_lock_init                gl_lock_init\n#define __libc_lock_lock                gl_lock_lock\n#define __libc_lock_unlock              gl_lock_unlock\n#define __libc_lock_recursive_t                   gl_recursive_lock_t\n#define __libc_lock_define_recursive              gl_recursive_lock_define\n#define __libc_lock_define_initialized_recursive  gl_recursive_lock_define_initialized\n#define __libc_lock_init_recursive                gl_recursive_lock_init\n#define __libc_lock_lock_recursive                gl_recursive_lock_lock\n#define __libc_lock_unlock_recursive              gl_recursive_lock_unlock\n#define glthread_in_use  libintl_thread_in_use\n#define glthread_lock_init     libintl_lock_init\n#define glthread_lock_lock     libintl_lock_lock\n#define glthread_lock_unlock   libintl_lock_unlock\n#define glthread_lock_destroy  libintl_lock_destroy\n#define glthread_rwlock_init     libintl_rwlock_init\n#define glthread_rwlock_rdlock   libintl_rwlock_rdlock\n#define glthread_rwlock_wrlock   libintl_rwlock_wrlock\n#define glthread_rwlock_unlock   libintl_rwlock_unlock\n#define glthread_rwlock_destroy  libintl_rwlock_destroy\n#define glthread_recursive_lock_init     libintl_recursive_lock_init\n#define glthread_recursive_lock_lock     libintl_recursive_lock_lock\n#define glthread_recursive_lock_unlock   libintl_recursive_lock_unlock\n#define glthread_recursive_lock_destroy  libintl_recursive_lock_destroy\n#define glthread_once                 libintl_once\n#define glthread_once_call            libintl_once_call\n#define glthread_once_singlethreaded  libintl_once_singlethreaded\nEOF\n\ncd intl\n\ncat libgnuintl.h.in \\\n| sed -e '/IN_LIBGLOCALE/d' \\\n      -e 's,@''HAVE_POSIX_PRINTF''@,1,g' \\\n      -e 's,@''HAVE_ASPRINTF''@,1,g' \\\n      -e 's,@''HAVE_SNPRINTF''@,1,g' \\\n      -e 's,@''HAVE_WPRINTF''@,0,g' \\\n| sed -e 's/extern \\([^\"]\\)/extern LIBINTL_DLL_EXPORTED \\1/' \\\n      -e \"/#define _LIBINTL_H/r ./export.h\" \\\n| sed -e 's,@''HAVE_VISIBILITY''@,1,g' \\\n  > libgnuintl.h\n\ncat libgnuintl.h \\\n| sed -e '/IN_LIBGLOCALE/d' \\\n      -e 's,@''HAVE_POSIX_PRINTF''@,1,g' \\\n      -e 's,@''HAVE_ASPRINTF''@,1,g' \\\n      -e 's,@''HAVE_SNPRINTF''@,1,g' \\\n      -e 's,@''HAVE_WPRINTF''@,0,g' \\\n  > libintl.h\n";
 		};
 		02581CC40BD5AD5300957CBC /* Copy game data */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4648,20 +4564,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "DIRECTORY=\"SDL-1.2.14\"\nOUTDIR=\"SDL\"\nFILENAME=\"SDL-1.2.14.tar.gz\"\nSOURCE=\"http://www.libsdl.org/release/SDL-1.2.14.tar.gz\"\nMD5=\"e52086d1b508fa0b76c52ee30b55bec4\"\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ -d \"$DIRECTORY\" ]; then\n  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n  exit 1\nfi\n\nif [ ! -r \"$FILENAME\" ]; then\n  echo \"Fetching $SOURCE\"\n  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n    echo \"Unable to fetch $SOURCE\" >&2\n    exit 1\n  fi\nfi\n\nHAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for $FILENAME\" >&2\n  exit 1\nfi\n\nif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n  echo \"Md5 does not match for $FILENAME\" >&2\n  exit 1\nfi\n\nEXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\nif [ \"$EXTENSION\" = \"gz\" ]; then\n  if ! tar -zxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelif [ \"$EXTENSION\" = \"bz2\" ]; then\n  if ! tar -jxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelse\n  echo \"Unable to unpack $FILENAME\" >&2\n  exit 1\nfi\n\nif [ ! -d \"$DIRECTORY\" ]; then\n  echo \"Can't find $DIRECTORY to rename\" >&2\n  exit 1\nfi\n\nmv \"$DIRECTORY\" \"$OUTDIR\"\n";
-		};
-		02FD38460BD4016700776FD3 /* Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DIRECTORY=\"SDL_net-1.2.7\"\nOUTDIR=\"SDL_net\"\nFILENAME=\"SDL_net-1.2.7.tar.gz\"\nSOURCE=\"http://www.libsdl.org/projects/SDL_net/release/SDL_net-1.2.7.tar.gz\"\nMD5=\"6bd4662d1423810f3140d4da21b6d912\"\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR already exists, skipping\"\n  exit 0\nfi\n\nif [ -d \"$DIRECTORY\" ]; then\n  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n  exit 1\nfi\n\nif [ ! -r \"$FILENAME\" ]; then\n  echo \"Fetching $SOURCE\"\n  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n    echo \"Unable to fetch $SOURCE\" >&2\n    exit 1\n  fi\nfi\n\nHAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for $FILENAME\" >&2\n  exit 1\nfi\n\nif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n  echo \"Md5 does not match for $FILENAME\" >&2\n  exit 1\nfi\n\nEXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\nif [ \"$EXTENSION\" = \"gz\" ]; then\n  if ! tar -zxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelif [ \"$EXTENSION\" = \"bz2\" ]; then\n  if ! tar -jxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelse\n  echo \"Unable to unpack $FILENAME\" >&2\n  exit 1\nfi\n\nif [ ! -d \"$DIRECTORY\" ]; then\n  echo \"Can't find $DIRECTORY to rename\" >&2\n  exit 1\nfi\n\nmv \"$DIRECTORY\" \"$OUTDIR\"\n";
 		};
 		221052070E3D22540057CD9C /* Fetch source and build */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5159,17 +5061,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0246A3EA0BD3CD8A004D1C70 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0246A4070BD3CDFC004D1C70 /* SDLnet.c in Sources */,
-				0246A4080BD3CDFC004D1C70 /* SDLnetselect.c in Sources */,
-				0246A40A0BD3CDFC004D1C70 /* SDLnetTCP.c in Sources */,
-				0246A40B0BD3CDFC004D1C70 /* SDLnetUDP.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		02581C5A0BD5A94A00957CBC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -5356,11 +5247,6 @@
 			isa = PBXTargetDependency;
 			target = 02DDA8B00BD3C2F20049AB60 /* PhysFS */;
 			targetProxy = 0246A3060BD3CCF9004D1C70 /* PBXContainerItemProxy */;
-		};
-		0246A3FD0BD3CDB1004D1C70 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0246A3EC0BD3CD8A004D1C70 /* SDL_net */;
-			targetProxy = 0246A3FC0BD3CDB1004D1C70 /* PBXContainerItemProxy */;
 		};
 		02581C630BD5A97400957CBC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -6001,74 +5887,6 @@
 			};
 			name = Release;
 		};
-		0246A3F00BD3CD8B004D1C70 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Debug\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/prebuilt/SDL\"";
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MACOSX__,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = SDL_net;
-			};
-			name = Debug;
-		};
-		0246A3F10BD3CD8B004D1C70 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Debug\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/prebuilt/SDL\"";
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MACOSX__,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "";
-				INFOPLIST_PREFIX_HEADER = "";
-				INFOPLIST_PREPROCESS = NO;
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = SDL_net;
-			};
-			name = Release;
-		};
 		02581C6C0BD5A9A200957CBC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -6571,15 +6389,6 @@
 			buildConfigurations = (
 				0246A3E40BD3CD81004D1C70 /* Debug */,
 				0246A3E50BD3CD81004D1C70 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		0246A3EF0BD3CD8B004D1C70 /* Build configuration list for PBXNativeTarget "SDL_net" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0246A3F00BD3CD8B004D1C70 /* Debug */,
-				0246A3F10BD3CD8B004D1C70 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
