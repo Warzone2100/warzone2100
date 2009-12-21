@@ -2904,7 +2904,8 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 			  ((DROID *)psObj)->droidType == DROID_SENSOR ||
 			  (((DROID *)psObj)->droidType == DROID_COMMAND && psObj->player != psDroid->player)) &&
 			 (psDroid->droidType == DROID_WEAPON ||
-			  psDroid->droidType == DROID_CYBORG) &&
+			  psDroid->droidType == DROID_CYBORG ||
+			  psDroid->droidType == DROID_CYBORG_SUPER) &&
 			 proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat))
 	{
 		order = DORDER_GUARD;
@@ -3013,7 +3014,11 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 					}
 				}
 			}
-			else
+			// Some droids shouldn't be guarding
+			else if ((psDroid->droidType == DROID_WEAPON ||
+			          psDroid->droidType == DROID_CYBORG ||
+			          psDroid->droidType == DROID_CYBORG_SUPER) &&
+			         proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)
 			{
 				order = DORDER_GUARD;
 			}
