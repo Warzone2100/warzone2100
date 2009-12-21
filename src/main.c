@@ -910,7 +910,7 @@ int main(int argc, char *argv[])
 	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
 
 	/*** Initialize directory structure ***/
-	make_dir(ScreenDumpPath, "screendumps", NULL);
+	make_dir(ScreenDumpPath, "screenshots", NULL);
 	make_dir(SaveGamePath, "savegame", NULL);
 	PHYSFS_mkdir("maps");		// MUST have this to prevent crashes when getting map
 	PHYSFS_mkdir("music");
