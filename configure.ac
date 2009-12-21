@@ -301,6 +301,14 @@ fi
 # check for nearbyint()
 AC_CHECK_LIB(m, nearbyint, [MATH_LIB=""], AC_MSG_ERROR([nearbyint not found.]))
 
+# When (cross-)compiling for Windows (MinGW) we need to link in iberty for Popt
+# and the Dr. MinGW derived exception handler.
+if test "x$host_os_mingw32" = "xyes" ; then
+    AC_CHECK_LIB(iberty, main, AC_SUBST([IBERTY_LIBS], [-liberty]), AC_MSG_ERROR([libiberty not found.]))
+
+    WIN32_LIBS="${WIN32_LIBS} ${IBERTY_LIBS}"
+fi
+
 # Look for Popt
 AC_CHECK_HEADER(popt.h, , AC_MSG_ERROR([Popt header not found.]))
 AC_CHECK_LIB(popt, poptGetContext, AC_SUBST([POPT_LIBS], [-lpopt]), AC_MSG_ERROR([Popt not found.]), [${WIN32_LIBS}])
@@ -340,15 +348,13 @@ if test "x$enable_static" = "xyes" ; then
 fi
 AC_SUBST([OPENGLC_LIBS], [${OPENGLC_LIBS}])
 
-# When (cross-)compiling for Windows (MinGW) we need to link in BFD and iberty
-# for the Dr. MinGW derived exception handler.
+# When (cross-)compiling for Windows (MinGW) we need to link in BFD for the Dr.
+# MinGW derived exception handler.
 if test "x$host_os_mingw32" = "xyes" ; then
-    AC_CHECK_LIB(iberty, main, AC_SUBST([IBERTY_LIBS], [-liberty]), AC_MSG_ERROR([libiberty not found.]))
-
     AC_CHECK_HEADER(bfd.h, , AC_MSG_ERROR([BFD header not found.]))
     AC_CHECK_LIB(bfd, bfd_openr, AC_SUBST([BFD_LIBS], [-lbfd]), AC_MSG_ERROR([BFD not found.]), [${IBERTY_LIBS}])
 
-    WIN32_LIBS="${WIN32_LIBS} ${BFD_LIBS} ${IBERTY_LIBS} -lstdc++"
+    WIN32_LIBS="${WIN32_LIBS} ${BFD_LIBS} -lstdc++"
 fi
 
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -DWZ_DATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
