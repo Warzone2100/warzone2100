@@ -1,0 +1,27 @@
+PKG_NAME:=gettext
+PKG_VERSION:=0.17
+
+PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
+PKG_SOURCE_URL:=http://ftp.gnu.org/pub/gnu/gettext/
+PKG_MD5SUM:=58a2bc6d39c0ba57823034d55d65d606
+
+include $(TOPDIR)/rules.mk
+
+$(PKG_SOURCEBASE) extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
+	tar xzf $^
+	touch extract-stamp
+
+$(PKG_SOURCEBASE)/config.status: extract-stamp
+	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs --disable-java
+
+$(PKG_SOURCEBASE)/gettext-runtime/intl/libintl.la: $(PKG_SOURCEBASE)/config.status
+	$(MAKE) -C $(PKG_SOURCEBASE)/gettext-runtime/intl install-exec
+
+all: build
+build: $(PKG_SOURCEBASE)/gettext-runtime/intl/libintl.la
+
+clean:
+	$(RM) -r $(PKG_SOURCEBASE) extract-stamp
+
+.PHONY: all build clean

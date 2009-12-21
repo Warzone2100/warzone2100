@@ -1,46 +1,110 @@
-#!/bin/bash
+#!/bin/sh -e
 
-source __BUILD_CONFIG
+cd "`dirname "$0"`"
 
+##
+# Function that provides make-like behaviour for executed commands. It prints
+# the commandline used to execute them before execution.
+##
+execute()
+{
+	local r
+
+	echo "$@"
+	"$@"
+}
+
+# Some default configuration settings
+HOST_TRIPLET=mingw32
+INSTALLER_VERSION="2.0.8.0"
 DEBUGFLAG="--disable-debug"
-SPECIALFLAGS=""
+CC_FOR_BUILD="gcc"
+CXX_FOR_BUILD="g++"
+CFLAGS_FOR_BUILD=" "
+CXXFLAGS_FOR_BUILD=" "
+CPPFLAGS_FOR_BUILD=" "
+PREFIX="${HOME}/svn/warzone/devpkg-2.1"
 
-for i in $@; do
-	if [[ "x$i" = "xdebug" ]] ; then
-		DEBUGFLAG="--enable-debug"
-	elif [[ "x$i" = "xdebug-relaxed" ]] ; then
-		DEBUGFLAG="--enable-debug=relaxed"
-	elif [[ "x$i" = "xinstaller" ]] ; then
-		SPECIALFLAGS="${SPECIALFLAGS}
-			--enable-data --enable-installer --with-installer-extdir=\"${PREFIX}\"
-			--with-installer-version=${INSTALLER_VERSION}"
-	elif [[ "x$i" = "x-j3" ]] ; then
-		MAKE_FLAGS="-j3"
-	else
-		CONF_EXTRA_FLAGS="${CONF_EXTRA_FLAGS}
-			${i}"
-	fi
+__BOTHFLAGS="-pipe -m32 -march=i686 -O2 -g"
+CFLAGS="${__BOTHFLAGS} ${CFLAGS}"
+CXXFLAGS="${__BOTHFLAGS} ${CXXFLAGS}"
+unset __BOTHFLAGS
+
+if [ -f __BUILD_CONFIG.USER ]; then
+	source __BUILD_CONFIG.USER
+fi
+
+for arg in "$@"; do
+	case "$arg" in
+	*=*) val=`expr "X$arg" : '[^=]*=\(.*\)'` ;;
+	*)   val=yes ;;
+	esac
+
+	case "$arg" in
+	--enable-debug* | --disable-debug)
+		unset DEBUGFLAG
+		;;
+	--enable-installer | --enable-installer=yes)
+		INSTALLERFLAG="--enable-data --enable-installer ${PREFIX:+--with-installer-extdir=\"$PREFIX\"}
+			${INSTALLER_VERSION:+--with-installer-version=$INSTALLER_VERSION}"
+		;;
+	-with-* | --with-* | -enable-* | --enable-*)
+		;;
+	*=*)
+		var=`expr "x$arg" : 'x\([^=]*\)='`
+		# Reject names that are not valid shell variable names.
+		expr "x$var" : ".*[^_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]" >/dev/null && {
+			echo "$0: error: invalid variable name: $var" >&2
+			exit 1
+		}
+		eval $var=\$val
+		export $var
+		;;
+	*)
+		echo "$0: error: unknown command line option: $arg" >&2
+		exit 1
+		;;
+	esac
 done
 
-CONF_EXTRA_FLAGS="${DEBUGFLAG}
-	${SPECIALFLAGS}
-	${CONF_EXTRA_FLAGS}"
+PATH="${PREFIX}/bin:${PATH}"
+if [ -z "$PKG_CONFIG_PATH" ] ; then
+	PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig"
+fi
+if [ -n "$PREFIX" ] ; then
+	CPPFLAGS="${CPPFLAGS:+$CPPFLAGS }-I${PREFIX}/include"
+	LDFLAGS="${LDFLAGS:+$LDFLAGS }-L${PREFIX}/lib"
+fi
+export PATH
+export PKG_CONFIG_PATH
 
-# Move to the root directory
-cd ..
+if [ -f "/proc/cpuinfo" ] ; then
+	MAKE_FLAGS=-j$((`grep '^processor' /proc/cpuinfo | wc -l` + 1))
+fi
 
-./autogen.sh || exit 1
-./configure --target=${CROSSCOMPILETARGET} --host=${CROSSCOMPILETARGET} --enable-static --disable-shared \
-    --prefix="${PREFIX}" \
-	${CONF_EXTRA_FLAGS} \
-    CFLAGS="${CFLAGS}" \
-    CXXFLAGS="${CXXFLAGS}" \
-    CPPFLAGS="${CPPFLAGS}" \
-    LDFLAGS="${LDFLAGS}" \
-    CC_FOR_BUILD="gcc" \
-    CXX_FOR_BUILD="g++" \
-    CFLAGS_FOR_BUILD=" " \
-    CXXFLAGS_FOR_BUILD=" " \
-    CPPFLAGS_FOR_BUILD=" " \
-    PKGCONFIG_PREFIX="${PREFIX}" || exit 1
-make ${MAKE_FLAGS} || exit 1
+# Make sure we've got a build directory
+if [ ! -d build ] ; then
+	mkdir build
+fi
+
+# Make sure that the dependencies have been built
+execute make $MAKE_FLAGS -C libs "HOST_TRIPLET=$HOST_TRIPLET"
+
+cd build
+
+execute ../../autogen.sh
+execute ../../configure "--host=$HOST_TRIPLET" --enable-static --disable-shared ${DEBUGFLAG:+$DEBUGFLAG} \
+	${PREFIX:+--prefix=$PREFIX} \
+	${INSTALLERFLAG:+$INSTALLERFLAG} \
+	CFLAGS="$CFLAGS" \
+	CXXFLAGS="$CXXFLAGS" \
+	CPPFLAGS="-I$PWD/libs/include $CPPFLAGS" \
+	LDFLAGS="-L$PWD/libs/lib $LDFLAGS" \
+	CC_FOR_BUILD="$CC_FOR_BUILD" \
+	CXX_FOR_BUILD="$CXX_FOR_BUILD" \
+	CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD" \
+	CXXFLAGS_FOR_BUILD="$CXXFLAGS_FOR_BUILD" \
+	CPPFLAGS_FOR_BUILD="$CPPFLAGS_FOR_BUILD" \
+	PKGCONFIG_PREFIX="${PKGCONFIG_PREFIX:-$PREFIX}" \
+	"$@"
+execute make $MAKE_FLAGS
