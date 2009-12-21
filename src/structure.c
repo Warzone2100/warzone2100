@@ -1215,8 +1215,9 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 		     in order to be able to start a new built task, doubled in actionUpdateDroid() */
 		if (psDroid)
 		{
-			debug( LOG_NEVER, "DACTION_NONE: done\n");
 			psDroid->action = DACTION_NONE;
+			psDroid->order = DORDER_NONE;
+			setDroidTarget(psDroid, NULL);
 
 			/* Notify scripts we just finished building a structure, pass builder and what was built */
 			psScrCBNewStruct	= psStruct;

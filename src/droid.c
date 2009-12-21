@@ -1185,8 +1185,9 @@ BOOL droidUpdateBuild(DROID *psDroid)
 		// Update the interface
 		intBuildFinished(psDroid);
 
-		debug( LOG_NEVER, "DACTION_BUILD: done");
 		psDroid->action = DACTION_NONE;
+		psDroid->order = DORDER_NONE;
+		setDroidTarget(psDroid,	NULL);
 
 		return false;
 	}

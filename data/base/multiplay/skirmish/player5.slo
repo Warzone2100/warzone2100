@@ -165,6 +165,8 @@ private	int				defendX,defendY,defendRadius,tDefendStart,tDefendTimeout,
 						numDefendVtols,rebuildStructX[MAX_REBUILD_STRUCT],rebuildStructY[MAX_REBUILD_STRUCT],countRebuildStruct;
 private	STRUCTURESTAT	rebuildStructStat[MAX_REBUILD_STRUCT];
 
+private STRUCTURESTAT		fundamentalBeingBuilt;
+
 /////////////////////////////////////////////////////////////////////
 // triggers.
 
@@ -219,6 +221,7 @@ trigger manageAllyHelpTr			(every, 80);
 trigger everySec					(every, 10);
 trigger manageDefendLocationTr		(every, 70);
 trigger startLevelTr				(CALL_START_NEXT_LEVEL);
+trigger launchFundamentalsTr			(wait, 1);
 
 /* Events */
 event	multiMsgEv;
@@ -376,6 +379,8 @@ event initialisedEvent(CALL_GAMEINIT)
 	allianceTime[5] = 0;
 	allianceTime[6] = 0;
 	allianceTime[7] = 0;
+
+	fundamentalBeingBuilt = derrick;	// to avoid ever being null
 	
 	bRunning = false;
 
@@ -389,18 +394,14 @@ event initialisedEvent(CALL_GAMEINIT)
 	}
 }
 
-event startLevel(startLevelTr)
+function void buildFundamentals()
 {
-	if (!bRunning)
-	{
-		exit;
-	}
 	count = 0;
 	while (count < numFundamental)
 	{
 		// check that struct.
 		structure = getStructure(structs[count], me);
-		if(structure == NULLOBJECT)				// if missing build it.
+		if (structure == NULLOBJECT)				// if missing build it.
 		{
 			if (isStructureAvailable(structs[count], me))
 			{
@@ -416,14 +417,28 @@ event startLevel(startLevelTr)
 						if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
 						{
 							orderDroidStatsLoc(droid, DORDER_BUILD, structs[count], buildX, buildY);	// build it
+							fundamentalBeingBuilt = structs[count];
 						}
 						droid = iterateGroup(buildGroup);
 					}
 				}
+				exit;	// no need to check more
 			}
 		}
 		count = count + 1;
 	}
+	fundamentalBeingBuilt = derrick;
+}
+
+event launchFundamentals(inactive)
+{
+	buildFundamentals();
+	setEventTrigger(launchFundamentals, inactive);
+}
+
+event startLevel(startLevelTr)
+{
+	buildFundamentals();
 	buildTruck();
 }
 
@@ -1228,12 +1243,114 @@ event newfortify(fortifyTr)
 	}
 }
 
-//When droid built: set droid retreat level and start building next droid
+
+/////////////////////////////////////////////////////////////////////
+// droid building rules
+/////////////////////////////////////////////////////////////////////
+// deal with a droid being built
+event droidBuiltAssign(droidBuiltTr)
+{
+	if(isVtol(droid))
+	{
+		if(vtolDefendGr.members < numDefendVtols)
+		{
+			groupAddDroid(vtolDefendGr, droid);
+		}
+		else
+		{
+			count = 0;
+			while(count < numVtolAttackGroups)
+			{
+				if(vtolAttackGr[count].members < numAttackVtols)
+				{
+					dbg("added new vtol to group " & count, me);
+					groupAddDroid(vtolAttackGr[count], droid);
+					count = numVtolAttackGroups;
+				}
+				count++;
+			}
+		}
+	}
+	else if((droid.droidType != DROID_TRANSPORTER) and (droid.droidType != DROID_COMMAND))
+	{
+
+		if((droid.droidType == DROID_REPAIR)
+			or (droid.droidType == DROID_CYBORG_REPAIR))
+		{
+			numRepairUnits = numRepairUnits + 1;
+		}
+		
+		if((droid.droidType == DROID_CONSTRUCT)
+			or (droid.droidType == DROID_CYBORG_CONSTRUCT))				// if constructor droid
+		{
+			groupAddDroid(buildGroup, droid);
+		}
+		else
+		{
+			if(droid.droidType == DROID_CYBORG)
+			{
+				groupAddDroid(defendGroup, droid);
+			}
+			else
+			{
+				if(scoutGroup.members < numScouts[curTech])
+				{
+					groupAddDroid(scoutGroup, droid);
+				}
+				else if(attackGroup.members < numAttackers[curTech])
+				{
+					groupAddDroid(attackGroup, droid);
+				}
+				else if( defendGroup.members < numDefenders[curTech])
+				{
+					groupAddDroid(defendGroup, droid);
+				}
+				else
+				{
+					if(scoutGroup.members < maxScouts[curTech])
+					{
+						groupAddDroid(scoutGroup, droid);
+					}
+					else if(attackGroup.members < maxAttackers[curTech])
+					{
+						groupAddDroid(attackGroup, droid);
+					}
+					else if( defendGroup.members < maxDefenders[curTech])
+					{
+						groupAddDroid(defendGroup, droid);
+					}
+					else	//make them attack
+					{
+						groupAddDroid(attackGroup, droid);
+					}
+				}
+			}
+		}
+	}
+}
+
+//When droid built: check emergency jobs, start building next droid
 event droidBuilt(droidBuiltTr)
 {
+	local STRUCTURE _fundie;
+
 	/* Start building next droid */
 	if(structure != NULLOBJECT)
 	{
+		// derrick works as NULL here, as NULLSTAT does not seem to work
+		if (droid.droidType == DROID_CONSTRUCT and fundamentalBeingBuilt != derrick)
+		{
+			_fundie = getStructure(fundamentalBeingBuilt, me);
+			if (_fundie != NULLOBJECT)
+			{
+				if (not structureComplete(_fundie))
+				{
+					orderDroidObj(droid, DORDER_HELPBUILD, _fundie);
+				}
+			}
+		}
+
+		// Continue building new droids right away
 		if(structure.stattype == REF_FACTORY)
 		{
 			factoryBuildDroid(structure);
@@ -1263,9 +1380,13 @@ event structBuilt(structBuiltTr)
 	/* factory or factory module */
 	if(structure.stattype == REF_FACTORY)
 	{
-		if( isStructureAvailable(facModule,me) and (skGetFactoryCapacity(structure) < 2 ) and (getDroidCount(me) > 4))
+		if (isStructureAvailable(facModule, me) and (skGetFactoryCapacity(structure) < 2 ) and (getDroidCount(me) > 4))
 		{
 			orderDroidStatsLoc(droid, DORDER_BUILD,facModule, structure.x,structure.y);	// upgrade it.
+		}
+		else
+		{
+			buildTruck();
 		}
 	}
 	/* vtol factory or vtol factory module */
@@ -1290,6 +1411,10 @@ event structBuilt(structBuiltTr)
 			}
 		}
 	}
+
+	// Check if available trucks need to build more absolute necessities right away. We need a trigger here because
+	// droids involved in building have not yet come out of their build orders.
+	setEventTrigger(launchFundamentals, launchFundamentalsTr);
 
 	//see if we have just rebuilt a destroyed structure
 	_count = 0;
@@ -1356,9 +1481,7 @@ event droidDestroyed(droidDestroyedTr)
 // build more con droids.
 event conDroids(conDroidsTr)
 {
-
 	buildTruck();
-
 }
 
 function void buildTruck()
@@ -2896,6 +3019,7 @@ function void shutDownAI()
 	setEventTrigger(manageDefendLocationEv,	inactive);
 	setEventTrigger(structureDestroyed,inactive);
 	setEventTrigger(rebuildStructureEv,inactive);
+	setEventTrigger(startLevel, inactive);
 }
 
 event reassignPlayers(reassignTr)
