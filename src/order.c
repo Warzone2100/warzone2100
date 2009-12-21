@@ -3460,7 +3460,15 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 	{
 		if (psDroid->selected)
 		{
-			DeSelectDroid(psDroid);
+			DROID* psTempDroid;
+			for (psTempDroid = apsDroidLists[selectedPlayer]; psTempDroid; psTempDroid = psTempDroid->psNext)
+			{
+				if (psTempDroid!=psDroid && psTempDroid->selected)
+				{
+					DeSelectDroid(psDroid);
+					break;
+				}
+			}
 		}
 		if (!isVtolDroid(psDroid))
 		{
