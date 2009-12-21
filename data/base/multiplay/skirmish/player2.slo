@@ -308,13 +308,11 @@ event initialisedEvent(CALL_GAMEINIT)
 	powerSave = FALSE;
 
 	tLastHelpRequest = -1;	//when we requested help for the last time
-
 	lastHelpPlayer = -1;		//we are not currently helping anyone
 	tHelp = -1;					//when we started helping last time
 	tHelpTimeout = -1;			//time when help times out
 	helpX = -1;
 	helpY = -1;
-
 	defendX = -1;
 	defendY = -1;
 	defendRadius = -1;
@@ -326,14 +324,12 @@ event initialisedEvent(CALL_GAMEINIT)
 
 	// set current research branch
 	setTechBranch(-1);
-	//setTechBranch(branchVTOL);
 
 	numVtolAttackGroups = 10;
 	numAttackVtols = 10;	//num vtols in an attack group
 	numDefendVtols = 5;	//num vtols in an attack group
 
-	// setup build group
-	//all initial droids are in buildgroup!
+	// setup build group - all initial droids are in buildgroup!
 	groupAddArea(buildGroup, me, 0, 0, (mapWidth*128), (mapHeight*128));
 	initGetFeature(oilRes,me,me);		// use bucket = player
 
@@ -344,11 +340,6 @@ event initialisedEvent(CALL_GAMEINIT)
 	{
 		baseX = droid.x;
 		baseY = droid.y;
-
-		if(aiResponsibleForPlayer(me))
-		{
-			expandBase(droid);
-		}
 	}
 	else
 	{
@@ -484,41 +475,6 @@ function bool aiResponsibleForPlayer(int _player)
 	}
 
 	return TRUE;
-}
-
-/////////////////////////////////////////////////////////////////////
-// initial force setup thing. plonk down a force.
-event givehelp(every, 100)
-{
-
-	if(multiPlayerBaseType == CAMP_WALLS)
-	{
-		// free power
-		addPower(1500, me);
-
-		// free droids.
-		/* structure = getStructure(factory, me);
-		if(structure != NULLOBJECT)
-		{
-			count = 0;
-			while(count<10)
-			{
-				tempx = baseX;
-				tempy = baseY;
-
-
-				boolResult = pickStructLocation(defStructs[0], ref tempx, ref tempy,me);
-				if(boolResult == TRUE)
-				{
-					droid = addDroid(tmpl[curTech][ random(6) ]  , tempx, tempy, me);
-				}
-
-				count = count + 1;
-			}
-		} */
-	}
-	setEventTrigger(givehelp,	inactive);
-
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -1272,92 +1228,6 @@ event newfortify(fortifyTr)
 	}
 }
 
-
-/////////////////////////////////////////////////////////////////////
-// droid building rules
-/////////////////////////////////////////////////////////////////////
-// deal with a droid being built
-event droidBuiltAssign(droidBuiltTr)
-{
-	if(isVtol(droid))
-	{
-		if(vtolDefendGr.members < numDefendVtols)
-		{
-			groupAddDroid(vtolDefendGr, droid);
-		}
-		else
-		{
-			count = 0;
-			while(count < numVtolAttackGroups)
-			{
-				if(vtolAttackGr[count].members < numAttackVtols)
-				{
-					dbg("added new vtol to group " & count, me);
-					groupAddDroid(vtolAttackGr[count], droid);
-					count = numVtolAttackGroups;
-				}
-				count++;
-			}
-		}
-	}
-	else if((droid.droidType != DROID_TRANSPORTER) and (droid.droidType != DROID_COMMAND))
-	{
-
-		if((droid.droidType == DROID_REPAIR)
-			or (droid.droidType == DROID_CYBORG_REPAIR))
-		{
-			numRepairUnits = numRepairUnits + 1;
-		}
-		
-		if((droid.droidType == DROID_CONSTRUCT)
-			or (droid.droidType == DROID_CYBORG_CONSTRUCT))				// if constructor droid
-		{
-			groupAddDroid(buildGroup, droid);
-		}
-		else
-		{
-			if(droid.droidType == DROID_CYBORG)
-			{
-				groupAddDroid(defendGroup, droid);
-			}
-			else
-			{
-				if(scoutGroup.members < numScouts[curTech])
-				{
-					groupAddDroid(scoutGroup, droid);
-				}
-				else if(attackGroup.members < numAttackers[curTech])
-				{
-					groupAddDroid(attackGroup, droid);
-				}
-				else if( defendGroup.members < numDefenders[curTech])
-				{
-					groupAddDroid(defendGroup, droid);
-				}
-				else
-				{
-					if(scoutGroup.members < maxScouts[curTech])
-					{
-						groupAddDroid(scoutGroup, droid);
-					}
-					else if(attackGroup.members < maxAttackers[curTech])
-					{
-						groupAddDroid(attackGroup, droid);
-					}
-					else if( defendGroup.members < maxDefenders[curTech])
-					{
-						groupAddDroid(defendGroup, droid);
-					}
-					else	//make them attack
-					{
-						groupAddDroid(attackGroup, droid);
-					}
-				}
-			}
-		}
-	}
-}
-
 //When droid built: set droid retreat level and start building next droid
 event droidBuilt(droidBuiltTr)
 {
@@ -1490,46 +1360,6 @@ event conDroids(conDroidsTr)
 	buildTruck();
 
 }
-
-/* function void buildTruck()
-{
-	local 	int			_maxTrucks;
-	local 	STRUCTURE		_factory;
-	local	int 		_numBuilding,_haveTrucks,_maxTruckFactories,_totalTrucks;
-
-	_maxTrucks = MAX_TRUCKS;
-	if(powerSave){
-		_maxTrucks = MIN_TRUCKS;
-	}
-
-	_maxTruckFactories = 3; 		//max factories to use for truck production
-
-	_haveTrucks = buildGroup.members;
-	
-	// Find out how many trucks and combat engineers are already in production
-	_numBuilding = numTemplatesInProduction(constructor,me);	//trucks
-	_numBuilding = _numBuilding + numTemplatesInProduction(cybEngineer,me);	//engineers
-
-	_totalTrucks = _numBuilding + _haveTrucks;
-
-	initEnumStruct(FALSE,factory,me,me);
-	_factory = enumStruct();							// find factory.
-	while((_factory != NULLOBJECT) and (_numBuilding < _maxTruckFactories)
-		and (_totalTrucks < _maxTrucks))
-	{
-		if(structureComplete(_factory))
-		{
-			if(getDroidCount(me) < MAX_DROIDS)
-			{
-				buildDroid(constructor, _factory, me, 1);	// build constructor
-				_numBuilding++;
-				_totalTrucks++;
-			}
-		}
-
-		_factory = enumStruct();
-	}
-} */
 
 function void buildTruck()
 {
@@ -3019,7 +2849,6 @@ function void shutDownAI()
 {
 	bRunning = false;
 
-	setEventTrigger(givehelp,	inactive);
 	setEventTrigger(basedetails,	inactive);
 	setEventTrigger(buildDerrick,	inactive);
 	setEventTrigger(buildOilDefenseOrRetreat,	inactive);
