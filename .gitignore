@@ -40,6 +40,8 @@ win32/build
 win32/downloads
 win32/libs/gettext/extract-stamp
 win32/libs/gettext/gettext-0.17
+win32/libs/iconv/extract-stamp
+win32/libs/iconv/libiconv-1.13.1
 win32/libs/png/extract-stamp
 win32/libs/png/libpng-1.2.36
 win32/libs/popt/extract-stamp
