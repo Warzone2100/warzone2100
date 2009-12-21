@@ -3011,8 +3011,8 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 			// Some droids shouldn't be guarding
 			else if ((psDroid->droidType == DROID_WEAPON ||
 			          psDroid->droidType == DROID_CYBORG ||
-			          psDroid->droidType == DROID_CYBORG_SUPER) &&
-			         proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)
+			          psDroid->droidType == DROID_CYBORG_SUPER)
+			         && proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat))
 			{
 				order = DORDER_GUARD;
 			}
