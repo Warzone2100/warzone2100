@@ -1,4 +1,4 @@
-SUBDIRS=gettext iconv popt zlib png
+SUBDIRS=gettext iconv popt zlib png sdl
 
 all: all-recursive
 build: build-recursive
