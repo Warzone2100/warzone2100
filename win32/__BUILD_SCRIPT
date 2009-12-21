@@ -60,6 +60,11 @@ for arg in "$@"; do
 		eval $var=\$val
 		export $var
 		;;
+	clean | preclean)
+		execute rm -rf build downloads
+		execute make -C libs clean
+		[ "$arg" = "clean" ] && exit
+		;;
 	*)
 		echo "$0: error: unknown command line option: $arg" >&2
 		exit 1
