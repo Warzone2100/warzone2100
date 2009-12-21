@@ -47,6 +47,8 @@ win32/libs/png/libpng-1.2.36
 win32/libs/popt/extract-stamp
 win32/libs/popt/patch-stamp
 win32/libs/popt/popt-1.12
+win32/libs/sdl/SDL-1.2.14
+win32/libs/sdl/extract-stamp
 win32/libs/zlib/extract-stamp
 win32/libs/zlib/zlib-1.2.3
 
