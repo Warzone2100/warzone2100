@@ -145,15 +145,14 @@ not_version ()
   fi
 }
 
+# Chdir to the srcdir, then run auto* tools.
+cd "$SRCDIR"
+
 version_check 1 "autoconf" "ftp://ftp.gnu.org/pub/gnu/autoconf/" 2 56 || DIE=1
 version_check 1 "automake" "ftp://ftp.gnu.org/pub/gnu/automake/" 1 10 || DIE=1
 if [ "$DIE" -eq 1 ]; then
   exit 1
 fi
-
-
-# Chdir to the srcdir, then run auto* tools.
-cd "$SRCDIR"
 
 [ -f "$srcfile" ] || {
   echo "Are you sure $SRCDIR is a valid source directory?"
