@@ -16,7 +16,7 @@ execute()
 
 # Some default configuration settings
 HOST_TRIPLET=mingw32
-INSTALLER_VERSION="2.0.8.0"
+INSTALLER_VERSION="2.2.0.999"
 DEBUGFLAG="--disable-debug"
 CC_FOR_BUILD="gcc"
 CXX_FOR_BUILD="g++"

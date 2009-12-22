@@ -6,6 +6,8 @@ PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:=@SF/libpng
 PKG_MD5SUM:=debc62758716a169df9f62e6ab2bc634
 
+TARGETS:=$(TOPDIR)/build/libs/lib/libz.a $(TOPDIR)/build/libs/include/zconf.h $(TOPDIR)/build/libs/include/zlib.h
+
 include $(TOPDIR)/rules.mk
 
 extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
@@ -20,12 +22,21 @@ $(PKG_SOURCEBASE)/Makefile: $(PKG_SOURCEBASE)/configure
 
 $(PKG_SOURCEBASE)/libz.a: extract-stamp $(PKG_SOURCEBASE)/Makefile
 	$(MAKE) -C $(PKG_SOURCEBASE) libz.a
-	cp -p $(PKG_SOURCEBASE)/libz.a $(TOPDIR)/build/libs/lib/libz.a
-	cp -p $(PKG_SOURCEBASE)/zconf.h $(TOPDIR)/build/libs/include/zconf.h
-	cp -p $(PKG_SOURCEBASE)/zlib.h $(TOPDIR)/build/libs/include/zlib.h
+
+$(PKG_SOURCEBASE)/zconf.h: $(PKG_SOURCEBASE)/Makefile
+$(PKG_SOURCEBASE)/zlib.h: extract-stamp
+
+$(TOPDIR)/build/libs/lib/libz.a: $(PKG_SOURCEBASE)/libz.a
+	cp -p $< $@
+
+$(TOPDIR)/build/libs/include/zconf.h: $(PKG_SOURCEBASE)/zconf.h
+	cp -p $< $@
+
+$(TOPDIR)/build/libs/include/zlib.h: $(PKG_SOURCEBASE)/zlib.h
+	cp -p $< $@
 
 all: build
-build: $(PKG_SOURCEBASE)/libz.a
+build: $(TARGETS)
 
 clean:
 	$(RM) -rf $(PKG_SOURCEBASE) extract-stamp
