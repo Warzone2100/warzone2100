@@ -24,6 +24,8 @@ $(PKG_SOURCEBASE)/config.status: extract-stamp
 $(PKG_SOURCEBASE)/src/libogg.la: $(PKG_SOURCEBASE)/config.status
 	$(MAKE) -C $(PKG_SOURCEBASE)/src libogg.la
 
+$(PKG_SOURCEBASE)/include/ogg/ogg.h: extract-stamp
+
 $(TOPDIR)/build/libs/include/ogg/ogg.h: $(PKG_SOURCEBASE)/include/ogg/ogg.h $(PKG_SOURCEBASE)/config.status
 	$(MAKE) -C $(PKG_SOURCEBASE)/include install
 

@@ -6,6 +6,10 @@ PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:=http://rpm5.org/files/popt/
 PKG_MD5SUM:=f45290e9ac4b1cf209d0042eb6755543
 
+TARGETS:= \
+	$(TOPDIR)/build/libs/include/popt.h \
+	$(TOPDIR)/build/libs/lib/libpopt.la
+
 include $(TOPDIR)/rules.mk
 
 $(PKG_SOURCEBASE) extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
@@ -32,10 +36,18 @@ $(PKG_SOURCEBASE)/config.status: $(PKG_SOURCEBASE)/configure
 	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs
 
 $(PKG_SOURCEBASE)/libpopt.la: $(PKG_SOURCEBASE)/config.status
-	$(MAKE) -C $(PKG_SOURCEBASE) install-data
+	$(MAKE) -C $(PKG_SOURCEBASE) libpopt.la
+
+$(PKG_SOURCEBASE)/popt.h: extract-stamp
+
+$(TOPDIR)/build/libs/include/popt.h: $(PKG_SOURCEBASE)/popt.h $(PKG_SOURCEBASE)/config.status
+	$(MAKE) -C $(PKG_SOURCEBASE) install-includeHEADERS
+
+$(TOPDIR)/build/libs/lib/libpopt.la: $(PKG_SOURCEBASE)/libpopt.la
+	$(MAKE) -C $(PKG_SOURCEBASE) install-usrlibLTLIBRARIES
 
 all: build
-build: $(PKG_SOURCEBASE)/libpopt.la
+build: $(TARGETS)
 
 clean:
 	$(RM) -r $(PKG_SOURCEBASE) extract-stamp patch-stamp
