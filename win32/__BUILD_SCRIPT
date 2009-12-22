@@ -74,7 +74,7 @@ done
 
 PATH="${PREFIX}/bin:${PATH}"
 if [ -z "$PKG_CONFIG_PATH" ] ; then
-	PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig:`pwd`/build/libs/lib/pkgconfig"
+	PKG_CONFIG_PATH="`pwd`/build/libs/lib/pkgconfig:${PREFIX}/lib/pkgconfig"
 fi
 if [ -n "$PREFIX" ] ; then
 	CPPFLAGS="${CPPFLAGS:+$CPPFLAGS }-I${PREFIX}/include"
@@ -110,6 +110,7 @@ execute ../../configure "--host=$HOST_TRIPLET" --enable-static --disable-shared 
 	CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD" \
 	CXXFLAGS_FOR_BUILD="$CXXFLAGS_FOR_BUILD" \
 	CPPFLAGS_FOR_BUILD="$CPPFLAGS_FOR_BUILD" \
-	PKGCONFIG_PREFIX="${PKGCONFIG_PREFIX:-$PREFIX}" \
+	${PKGCONFIG_PREFIX:+PKGCONFIG_PREFIX=$PKGCONFIG_PREFIX} \
+	${PKG_CONFIG_PATH:+PKG_CONFIG_PATH=$PKG_CONFIG_PATH} \
 	"$@"
 execute make $MAKE_FLAGS

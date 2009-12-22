@@ -16,7 +16,7 @@ $(PKG_SOURCEBASE)/config.status: extract-stamp
 	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs --disable-audio --disable-cdrom
 
 $(PKG_SOURCEBASE)/build/libSDL.la $(PKG_SOURCEBASE)/build/libSDLmain.a: $(PKG_SOURCEBASE)/config.status
-	$(MAKE) -C $(PKG_SOURCEBASE) install-lib install-hdrs
+	$(MAKE) -C $(PKG_SOURCEBASE) install-lib install-hdrs install-data
 
 all: build
 build: $(PKG_SOURCEBASE)/build/libSDL.la $(PKG_SOURCEBASE)/build/libSDLmain.a
