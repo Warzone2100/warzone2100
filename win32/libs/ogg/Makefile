@@ -6,6 +6,10 @@ PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/ogg/
 PKG_MD5SUM:=10200ec22543841d9d1c23e0aed4e5e9
 
+TARGETS:= \
+	$(TOPDIR)/build/libs/include/ogg/ogg.h \
+	$(TOPDIR)/build/libs/lib/libogg.la
+
 include $(TOPDIR)/rules.mk
 
 $(PKG_SOURCEBASE) extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
@@ -18,10 +22,16 @@ $(PKG_SOURCEBASE)/config.status: extract-stamp
 	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs
 
 $(PKG_SOURCEBASE)/src/libogg.la: $(PKG_SOURCEBASE)/config.status
-	$(MAKE) -C $(PKG_SOURCEBASE) install
+	$(MAKE) -C $(PKG_SOURCEBASE)/src libogg.la
+
+$(TOPDIR)/build/libs/include/ogg/ogg.h: $(PKG_SOURCEBASE)/include/ogg/ogg.h $(PKG_SOURCEBASE)/config.status
+	$(MAKE) -C $(PKG_SOURCEBASE)/include install
+
+$(TOPDIR)/build/libs/lib/libogg.la: $(PKG_SOURCEBASE)/src/libogg.la
+	$(MAKE) -C $(PKG_SOURCEBASE)/src install
 
 all: build
-build: $(PKG_SOURCEBASE)/src/libogg.la
+build: $(TARGETS)
 
 clean:
 	$(RM) -r $(PKG_SOURCEBASE) extract-stamp

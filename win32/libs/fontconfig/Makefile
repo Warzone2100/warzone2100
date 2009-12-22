@@ -6,6 +6,11 @@ PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:=http://fontconfig.org/release/
 PKG_MD5SUM:=77e15a92006ddc2adbb06f840d591c0e
 
+TARGETS:= \
+	$(TOPDIR)/build/libs/etc/fonts/fonts.conf.wd_enable \
+	$(TOPDIR)/build/libs/etc/fonts/fonts.conf.wd_disable \
+	$(TOPDIR)/build/libs/lib/libfontconfig.la
+
 include $(TOPDIR)/rules.mk
 
 $(PKG_SOURCEBASE) extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
@@ -17,11 +22,25 @@ $(PKG_SOURCEBASE)/config.status: extract-stamp
 
 $(PKG_SOURCEBASE)/src/libfontconfig.la: $(PKG_SOURCEBASE)/config.status
 	$(MAKE) -C $(PKG_SOURCEBASE) all || $(MAKE) -C $(PKG_SOURCEBASE) all
+
+$(TOPDIR)/build/libs/lib/libfontconfig.la: $(PKG_SOURCEBASE)/src/libfontconfig.la
 	$(MAKE) -C $(PKG_SOURCEBASE) install-configDATA install-pkgconfigDATA install-exec
 	$(MAKE) -C $(PKG_SOURCEBASE)/fontconfig install
 
+$(TOPDIR)/build/libs/etc/fonts:
+	@test -d $@ || { \
+	    echo mkdir -p $@ ; \
+	    mkdir -p $@ || exit ; \
+	}
+
+$(TOPDIR)/build/libs/etc/fonts/fonts.conf.wd_enable:  $(TOPDIR)/../pkg/nsis/fonts.conf.wd_enable  $(TOPDIR)/build/libs/etc/fonts
+	cp -p $< $@
+
+$(TOPDIR)/build/libs/etc/fonts/fonts.conf.wd_disable: $(TOPDIR)/../pkg/nsis/fonts.conf.wd_disable $(TOPDIR)/build/libs/etc/fonts
+	cp -p $< $@
+
 all: build
-build: $(PKG_SOURCEBASE)/src/libfontconfig.la
+build: $(TARGETS)
 
 clean:
 	$(RM) -r $(PKG_SOURCEBASE) extract-stamp

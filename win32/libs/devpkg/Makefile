@@ -11,9 +11,9 @@ PKG_MD5SUM:=6afc9f975d217fd372ddcd7bbf8e1671
 include $(TOPDIR)/rules.mk
 
 extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
-	@test -d ../../build/libs || { \
-	    echo mkdir -p ../../build/libs ; \
-	    mkdir -p ../../build/libs || exit ; \
+	@test -d $(TOPDIR)/build/libs || { \
+	    echo mkdir -p $(TOPDIR)/build/libs ; \
+	    mkdir -p $(TOPDIR)/build/libs || exit ; \
 	}
 	tar -x -j -C $(TOPDIR)/build/libs -f $^
 	touch extract-stamp

@@ -38,6 +38,8 @@ win32/release
 # directories and files created when crosscompiling or Windows
 win32/build
 win32/downloads
+win32/libs/dejavu/dejavu-fonts-ttf-2.30
+win32/libs/dejavu/extract-stamp
 win32/libs/devpkg/extract-stamp
 win32/libs/expat/expat-2.0.1
 win32/libs/expat/extract-stamp
