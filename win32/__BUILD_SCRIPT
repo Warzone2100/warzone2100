@@ -25,11 +25,6 @@ CXXFLAGS_FOR_BUILD=" "
 CPPFLAGS_FOR_BUILD=" "
 PREFIX="${HOME}/svn/warzone/devpkg-2.1"
 
-__BOTHFLAGS="-pipe -m32 -march=i686 -O2 -g"
-CFLAGS="${__BOTHFLAGS} ${CFLAGS}"
-CXXFLAGS="${__BOTHFLAGS} ${CXXFLAGS}"
-unset __BOTHFLAGS
-
 if [ -f __BUILD_CONFIG.USER ]; then
 	source __BUILD_CONFIG.USER
 fi
@@ -72,9 +67,16 @@ for arg in "$@"; do
 	esac
 done
 
+__BOTHFLAGS="-pipe -m32 -march=i686 -O2 -g"
+CFLAGS="$__BOTHFLAGS $CFLAGS"
+CXXFLAGS="$__BOTHFLAGS $CXXFLAGS"
+CPPFLAGS="-I$PWD/build/libs/include $CPPFLAGS"
+LDFLAGS="-L$PWD/build/libs/lib $LDFLAGS"
+unset __BOTHFLAGS
+
 PATH="${PREFIX}/bin:${PATH}"
 if [ -z "$PKG_CONFIG_PATH" ] ; then
-	PKG_CONFIG_PATH="`pwd`/build/libs/lib/pkgconfig:${PREFIX}/lib/pkgconfig"
+	PKG_CONFIG_PATH="$PWD/build/libs/lib/pkgconfig:${PREFIX}/lib/pkgconfig"
 fi
 if [ -n "$PREFIX" ] ; then
 	CPPFLAGS="${CPPFLAGS:+$CPPFLAGS }-I${PREFIX}/include"
@@ -98,13 +100,14 @@ execute make $MAKE_FLAGS -C libs "HOST_TRIPLET=$HOST_TRIPLET"
 cd build
 
 execute ../../autogen.sh
-execute ../../configure "--host=$HOST_TRIPLET" --enable-static --disable-shared ${DEBUGFLAG:+$DEBUGFLAG} \
+execute ../../configure "$@" \
+	"--host=$HOST_TRIPLET" --enable-static --disable-shared ${DEBUGFLAG:+$DEBUGFLAG} \
 	${PREFIX:+--prefix=$PREFIX} \
 	${INSTALLERFLAG:+$INSTALLERFLAG} \
 	CFLAGS="$CFLAGS" \
 	CXXFLAGS="$CXXFLAGS" \
-	CPPFLAGS="-I$PWD/libs/include $CPPFLAGS" \
-	LDFLAGS="-L$PWD/libs/lib $LDFLAGS" \
+	CPPFLAGS="$CPPFLAGS" \
+	LDFLAGS="$LDFLAGS" \
 	CC_FOR_BUILD="$CC_FOR_BUILD" \
 	CXX_FOR_BUILD="$CXX_FOR_BUILD" \
 	CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD" \
@@ -112,6 +115,5 @@ execute ../../configure "--host=$HOST_TRIPLET" --enable-static --disable-shared 
 	CPPFLAGS_FOR_BUILD="$CPPFLAGS_FOR_BUILD" \
 	PKGCONFIG_DEFAULT_PREFIX=${PKGCONFIG_DEFAULT_PREFIX:-$PREFIX} \
 	${PKGCONFIG_PREFIX:+PKGCONFIG_PREFIX=$PKGCONFIG_PREFIX} \
-	${PKG_CONFIG_PATH:+PKG_CONFIG_PATH=$PKG_CONFIG_PATH} \
-	"$@"
+	${PKG_CONFIG_PATH:+PKG_CONFIG_PATH=$PKG_CONFIG_PATH}
 execute make $MAKE_FLAGS

@@ -10,6 +10,8 @@ include $(TOPDIR)/rules.mk
 
 $(PKG_SOURCEBASE) extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
 	tar xzf $^
+	@echo autoconf ; \
+	cd $(PKG_SOURCEBASE) && autoconf || $(RM) -r $(PKG_SOURCEBASE)
 	touch extract-stamp
 
 $(PKG_SOURCEBASE)/config.status: extract-stamp

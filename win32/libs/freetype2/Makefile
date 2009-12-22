@@ -12,10 +12,10 @@ extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
 	tar xjf $^
 	touch extract-stamp
 
-$(PKG_SOURCEBASE)/config.status: extract-stamp
+$(PKG_SOURCEBASE)/builds/unix/config.status: extract-stamp
 	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs
 
-$(PKG_SOURCEBASE)/objs/libfreetype.la: $(PKG_SOURCEBASE)/config.status
+$(PKG_SOURCEBASE)/objs/libfreetype.la: $(PKG_SOURCEBASE)/builds/unix/config.status
 	$(MAKE) -C $(PKG_SOURCEBASE) install
 
 all: build

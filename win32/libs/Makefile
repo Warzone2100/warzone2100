@@ -1,4 +1,4 @@
-SUBDIRS=expat freetype2 gettext iconv fontconfig ogg popt zlib png quesoglc sdl vorbis theora
+SUBDIRS=expat freetype2 gettext iconv zlib fontconfig ogg popt png quesoglc sdl vorbis theora
 
 all: all-recursive
 build: build-recursive
@@ -21,3 +21,5 @@ clean-recursive:
 	  echo $(MAKE) -C $$subdir TOPDIR=../.. -$(MAKEFLAGS) clean ; \
 	  $(MAKE) -C $$subdir TOPDIR=../.. -$(MAKEFLAGS) clean || exit; \
 	done
+
+.PHONY: all build clean all-recursive build-recursive clean-recursive

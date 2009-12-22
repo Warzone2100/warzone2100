@@ -15,11 +15,11 @@ extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
 $(PKG_SOURCEBASE)/config.status: extract-stamp
 	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs
 
-$(PKG_SOURCEBASE)/objs/libexpat.la: $(PKG_SOURCEBASE)/config.status
+$(PKG_SOURCEBASE)/libexpat.la: $(PKG_SOURCEBASE)/config.status
 	$(MAKE) -C $(PKG_SOURCEBASE) installlib
 
 all: build
-build: $(PKG_SOURCEBASE)/objs/libexpat.la
+build: $(PKG_SOURCEBASE)/libexpat.la
 
 clean:
 	$(RM) -rf $(PKG_SOURCEBASE) extract-stamp
