@@ -6,6 +6,8 @@ PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:=http://ftp.gnu.org/pub/gnu/libiconv/
 PKG_MD5SUM:=7ab33ebd26687c744a37264a330bbe9a
 
+TARGET:=$(TOPDIR)/build/libs/lib/libiconv.la
+
 include $(TOPDIR)/rules.mk
 
 $(PKG_SOURCEBASE) extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
@@ -16,10 +18,13 @@ $(PKG_SOURCEBASE)/config.status: extract-stamp
 	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs
 
 $(PKG_SOURCEBASE)/lib/libiconv.la: $(PKG_SOURCEBASE)/config.status
+	$(MAKE) -C $(PKG_SOURCEBASE)
+
+$(TARGET): $(PKG_SOURCEBASE)/lib/libiconv.la
 	$(MAKE) -C $(PKG_SOURCEBASE) install-lib
 
 all: build
-build: $(PKG_SOURCEBASE)/lib/libiconv.la
+build: $(TARGET)
 
 clean:
 	$(RM) -r $(PKG_SOURCEBASE) extract-stamp
