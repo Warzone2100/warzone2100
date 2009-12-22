@@ -6,6 +6,8 @@ PKG_SOURCE:=$(PKG_SOURCEBASE).tar.bz2
 PKG_SOURCE_URL:=@SF/freetype
 PKG_MD5SUM:=519c7cbf5cbd72ffa822c66844d3114c
 
+TARGET:=$(TOPDIR)/build/libs/lib/libfreetype.la
+
 include $(TOPDIR)/rules.mk
 
 extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
@@ -15,11 +17,11 @@ extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
 $(PKG_SOURCEBASE)/builds/unix/config.status: extract-stamp
 	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs
 
-$(PKG_SOURCEBASE)/objs/libfreetype.la: $(PKG_SOURCEBASE)/builds/unix/config.status
+$(TARGET): $(PKG_SOURCEBASE)/builds/unix/config.status
 	$(MAKE) -C $(PKG_SOURCEBASE) install
 
 all: build
-build: $(PKG_SOURCEBASE)/objs/libfreetype.la
+build: $(TARGET)
 
 clean:
 	$(RM) -rf $(PKG_SOURCEBASE) extract-stamp
