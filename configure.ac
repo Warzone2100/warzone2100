@@ -135,6 +135,10 @@ AS_IF([test -n "$PKGCONFIG_PREFIX"],[
 	PKG_CONFIG="${PKG_CONFIG} --define-variable=prefix=${PKGCONFIG_PREFIX}"
 ])
 
+AC_ARG_VAR([PKGCONFIG_DEFAULT_PREFIX], [Prefix path to look in for pkg-config templates])
+AS_IF([test -n "$PKGCONFIG_DEFAULT_PREFIX"],[
+	PKG_CONFIG="${PKG_CONFIG} --define-variable=__PREFIX__=${PKGCONFIG_DEFAULT_PREFIX}"
+])
 
 # Variable fixes for older autoconf versions:
 

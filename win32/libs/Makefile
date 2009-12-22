@@ -1,4 +1,4 @@
-SUBDIRS=expat freetype2 gettext iconv fontconfig popt zlib png quesoglc sdl
+SUBDIRS=expat freetype2 gettext iconv fontconfig ogg popt zlib png quesoglc sdl vorbis theora
 
 all: all-recursive
 build: build-recursive

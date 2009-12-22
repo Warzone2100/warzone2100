@@ -48,6 +48,8 @@ win32/libs/gettext/extract-stamp
 win32/libs/gettext/gettext-0.17
 win32/libs/iconv/extract-stamp
 win32/libs/iconv/libiconv-1.13.1
+win32/libs/ogg/extract-stamp
+win32/libs/ogg/libogg-1.1.4
 win32/libs/png/extract-stamp
 win32/libs/png/libpng-1.2.36
 win32/libs/popt/extract-stamp
@@ -57,6 +59,10 @@ win32/libs/quesoglc/fetch-stamp
 win32/libs/quesoglc/quesoglc-0.7.3~svn913
 win32/libs/sdl/SDL-1.2.14
 win32/libs/sdl/extract-stamp
+win32/libs/theora/extract-stamp
+win32/libs/theora/libtheora-1.1.1
+win32/libs/vorbis/extract-stamp
+win32/libs/vorbis/libvorbis-1.2.3
 win32/libs/zlib/extract-stamp
 win32/libs/zlib/zlib-1.2.3
 

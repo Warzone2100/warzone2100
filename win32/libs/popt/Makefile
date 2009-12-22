@@ -32,7 +32,7 @@ $(PKG_SOURCEBASE)/config.status: $(PKG_SOURCEBASE)/configure
 	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs
 
 $(PKG_SOURCEBASE)/libpopt.la: $(PKG_SOURCEBASE)/config.status
-	$(MAKE) -C $(PKG_SOURCEBASE) install-data
+	$(MAKE) -C $(PKG_SOURCEBASE) install
 
 all: build
 build: $(PKG_SOURCEBASE)/libpopt.la
