@@ -55,9 +55,10 @@ for arg in "$@"; do
 		eval $var=\$val
 		export $var
 		;;
-	clean | preclean)
-		execute rm -rf build downloads
+	clean | very-clean | preclean | very-preclean)
+		execute rm -rf build
 		execute make -C libs clean
+		expr "$arg" : 'very-' >/dev/null && execute rm -rf downloads
 		[ "$arg" = "clean" ] && exit
 		;;
 	*)
