@@ -29,10 +29,10 @@ $(PKG_SOURCEBASE)/configure: patch-stamp
 	cd $(PKG_SOURCEBASE) && autoconf
 
 $(PKG_SOURCEBASE)/config.status: $(PKG_SOURCEBASE)/configure
-	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs LDFLAGS=-liberty
+	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs
 
 $(PKG_SOURCEBASE)/libpopt.la: $(PKG_SOURCEBASE)/config.status
-	$(MAKE) -C $(PKG_SOURCEBASE) install
+	$(MAKE) -C $(PKG_SOURCEBASE) install-data
 
 all: build
 build: $(PKG_SOURCEBASE)/libpopt.la
