@@ -38,6 +38,12 @@ win32/release
 # directories and files created when crosscompiling or Windows
 win32/build
 win32/downloads
+win32/libs/expat/expat-2.0.1
+win32/libs/expat/extract-stamp
+win32/libs/fontconfig/extract-stamp
+win32/libs/fontconfig/fontconfig-2.8.0
+win32/libs/freetype2/extract-stamp
+win32/libs/freetype2/freetype-2.3.11
 win32/libs/gettext/extract-stamp
 win32/libs/gettext/gettext-0.17
 win32/libs/iconv/extract-stamp
@@ -47,6 +53,8 @@ win32/libs/png/libpng-1.2.36
 win32/libs/popt/extract-stamp
 win32/libs/popt/patch-stamp
 win32/libs/popt/popt-1.12
+win32/libs/quesoglc/fetch-stamp
+win32/libs/quesoglc/quesoglc-0.7.3~svn913
 win32/libs/sdl/SDL-1.2.14
 win32/libs/sdl/extract-stamp
 win32/libs/zlib/extract-stamp

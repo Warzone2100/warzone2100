@@ -1,4 +1,4 @@
-SUBDIRS=gettext iconv popt zlib png sdl
+SUBDIRS=expat freetype2 gettext iconv fontconfig popt zlib png quesoglc sdl
 
 all: all-recursive
 build: build-recursive
