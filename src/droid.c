@@ -1186,8 +1186,6 @@ BOOL droidUpdateBuild(DROID *psDroid)
 		intBuildFinished(psDroid);
 
 		psDroid->action = DACTION_NONE;
-		psDroid->order = DORDER_NONE;
-		setDroidTarget(psDroid,	NULL);
 
 		return false;
 	}
