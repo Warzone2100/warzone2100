@@ -3919,12 +3919,12 @@ BOOL electronicDroid(DROID *psDroid)
 		return true;
 	}
 
-	if (psDroid->droidType == DROID_COMMAND && psDroid->psGroup)
+	if (psDroid->droidType == DROID_COMMAND && psDroid->psGroup && psDroid->psGroup->psCommander == psDroid)
 	{
 		// if a commander has EW units attached it is electronic
 		for (psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
-			if (electronicDroid(psCurr))
+			if (psDroid != psCurr && electronicDroid(psCurr))
 			{
 				return true;
 			}
