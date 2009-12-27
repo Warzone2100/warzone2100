@@ -109,6 +109,18 @@ AS_IF([test -z "$CC_FOR_BUILD"],[
     AC_SUBST([CC_FOR_BUILD], [${CC}])
 ])
 
+AC_ARG_VAR([CFLAGS_FOR_BUILD], [Flags to use for the C
+	    compiler that produces binaries for the build system])
+AS_IF([test -z "$CFLAGS_FOR_BUILD"],[
+    AC_SUBST([CFLAGS_FOR_BUILD], [${CFLAGS}])
+])
+
+AC_ARG_VAR([CXXFLAGS_FOR_BUILD], [Flags to use for the C++
+	    compiler that produces binaries for the build system])
+AS_IF([test -z "$CXXFLAGS_FOR_BUILD"],[
+    AC_SUBST([CXXFLAGS_FOR_BUILD], [${CXXFLAGS}])
+])
+
 AC_ARG_VAR([CPPFLAGS_FOR_BUILD], [Preprocessor flags to use for the C and C++
 	    compilers that produce binaries for the build system])
 AS_IF([test -z "$CPPFLAGS_FOR_BUILD"],[
@@ -123,6 +135,10 @@ AS_IF([test -n "$PKGCONFIG_PREFIX"],[
 	PKG_CONFIG="${PKG_CONFIG} --define-variable=prefix=${PKGCONFIG_PREFIX}"
 ])
 
+AC_ARG_VAR([PKGCONFIG_DEFAULT_PREFIX], [Prefix path to look in for pkg-config templates])
+AS_IF([test -n "$PKGCONFIG_DEFAULT_PREFIX"],[
+	PKG_CONFIG="${PKG_CONFIG} --define-variable=__PREFIX__=${PKGCONFIG_DEFAULT_PREFIX}"
+])
 
 # Variable fixes for older autoconf versions:
 
@@ -285,6 +301,14 @@ fi
 # check for nearbyint()
 AC_CHECK_LIB(m, nearbyint, [MATH_LIB=""], AC_MSG_ERROR([nearbyint not found.]))
 
+# When (cross-)compiling for Windows (MinGW) we need to link in iberty for Popt
+# and the Dr. MinGW derived exception handler.
+if test "x$host_os_mingw32" = "xyes" ; then
+    AC_CHECK_LIB(iberty, main, AC_SUBST([IBERTY_LIBS], [-liberty]), AC_MSG_ERROR([libiberty not found.]))
+
+    WIN32_LIBS="${WIN32_LIBS} ${IBERTY_LIBS}"
+fi
+
 # Look for Popt
 AC_CHECK_HEADER(popt.h, , AC_MSG_ERROR([Popt header not found.]))
 AC_CHECK_LIB(popt, poptGetContext, AC_SUBST([POPT_LIBS], [-lpopt]), AC_MSG_ERROR([Popt not found.]), [${WIN32_LIBS}])
@@ -324,11 +348,9 @@ if test "x$enable_static" = "xyes" ; then
 fi
 AC_SUBST([OPENGLC_LIBS], [${OPENGLC_LIBS}])
 
-# When (cross-)compiling for Windows (MinGW) we need to link in BFD and iberty
-# for the Dr. MinGW derived exception handler.
+# When (cross-)compiling for Windows (MinGW) we need to link in BFD for the Dr.
+# MinGW derived exception handler.
 if test "x$host_os_mingw32" = "xyes" ; then
-    AC_CHECK_LIB(iberty, main, AC_SUBST([IBERTY_LIBS], [-liberty]), AC_MSG_ERROR([libiberty not found.]))
-
     AC_CHECK_HEADER(bfd.h, , AC_MSG_ERROR([BFD header not found.]))
     AC_CHECK_LIB(bfd, bfd_openr, AC_SUBST([BFD_LIBS], [-lbfd]), AC_MSG_ERROR([BFD not found.]), [${IBERTY_LIBS}])
 
