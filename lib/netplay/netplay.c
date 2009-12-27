@@ -2718,8 +2718,8 @@ receive_message:
 						{
 							// Write error, most likely client disconnect.
 							debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-							socketClose(connected_bsocket[pMsg->destination]->socket);
-							connected_bsocket[pMsg->destination]->socket = NULL;
+							socketClose(connected_bsocket[j]->socket);
+							connected_bsocket[j]->socket = NULL;
 						}
 					}
 				}
