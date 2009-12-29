@@ -2739,7 +2739,8 @@ void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 	{
 		if (psCurr->selected)
 		{
-			if (psCurr->droidType == DROID_TRANSPORTER && !bMultiPlayer)
+			// can't use bMultiPlayer since multimsg could be off.
+			if (psCurr->droidType == DROID_TRANSPORTER && game.type != SKIRMISH)
 			{
 				// Never, ever, let users mess with the SP Trasnsporter
 				// it is script controlled, and will break things!
