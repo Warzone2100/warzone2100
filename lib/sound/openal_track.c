@@ -131,6 +131,9 @@ BOOL sound_InitLibrary( void )
 	char buf[512];
 	const ALCchar *deviceName;
 
+#if 0
+	// This code is disabled because enumerating devices apparently crashes PulseAudio on Fedora12
+
 	/* Get the available devices and print them.
 	 * Devices are separated by NUL chars ('\0') and the list of devices is
 	 * terminated by two NUL chars.
@@ -141,6 +144,7 @@ BOOL sound_InitLibrary( void )
 		debug(LOG_SOUND, "available OpenAL device(s) are: %s", deviceName);
 		deviceName += strlen(deviceName) + 1;
 	}
+#endif
 
 #ifdef WZ_OS_WIN
 	/* HACK: Select the "software" OpenAL device on Windows because it
