@@ -121,13 +121,11 @@ static void sound_RemoveSample(SAMPLE_LIST* previous, SAMPLE_LIST* to_remove)
 #ifndef WZ_NOSOUND
 static void PrintOpenALVersion(code_part part)
 {
-	const ALchar* pDeviceNames = NULL;
 	char buf[256];
+#if 0
+	// This code is disabled because enumerating devices apparently crashes PulseAudio on Fedora12
 
-	debug(part, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
-	debug(part, "OpenAL Version: %s", alGetString(AL_VERSION));
-	debug(part, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
-	debug(part, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
+	const ALchar* pDeviceNames = NULL;
 
 	// Print the available devices
 	pDeviceNames = alcGetString(NULL, ALC_DEVICE_SPECIFIER);
@@ -140,6 +138,12 @@ static void PrintOpenALVersion(code_part part)
 		debug(part, "available openAL device(s) are: %s", pDeviceNames);
 		pDeviceNames += strlen(pDeviceNames) + 1;
 	}
+#endif
+
+	debug(part, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
+	debug(part, "OpenAL Version: %s", alGetString(AL_VERSION));
+	debug(part, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
+	debug(part, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
 
 	// Copy this info to be used by the crash handler for the dump file
 	ssprintf(buf, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
