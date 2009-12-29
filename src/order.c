@@ -2740,11 +2740,11 @@ void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 		if (psCurr->selected)
 		{
 			// can't use bMultiPlayer since multimsg could be off.
-			if (psCurr->droidType == DROID_TRANSPORTER && game.type != SKIRMISH)
+			if (psCurr->droidType == DROID_TRANSPORTER && game.type == CAMPAIGN)
 			{
-				// Never, ever, let users mess with the SP Trasnsporter
-				// it is script controlled, and will break things!
-				break;
+				// Transport in campaign cannot be controlled by players
+				DeSelectDroid(psCurr);
+				continue;
 			}
 
 			order = chooseOrderLoc(psCurr, x, y);
