@@ -240,8 +240,7 @@ typedef struct _rearm_pad
 	UDWORD				reArmPoints;		/* rearm points per cycle				 */
 	UDWORD				timeStarted;		/* Time reArm started on current object	 */
 	BASE_OBJECT			*psObj;				/* Object being rearmed		             */
-    UDWORD              currentPtsAdded;    /* stores the amount of body points added to the unit
-                                               that is being worked on */
+    UDWORD              timeLastUpdated;    /* Time rearm was last updated */
 } REARM_PAD;
 
 typedef union
