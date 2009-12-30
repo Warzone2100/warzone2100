@@ -4173,13 +4173,10 @@ BOOL isVtolDroid(const DROID* psDroid)
 	    && psDroid->droidType != DROID_TRANSPORTER;
 }
 
-/*returns true if a VTOL Weapon Droid which has completed all runs*/
+/* returns true if it's a VTOL weapon droid which has completed all runs */
 BOOL vtolEmpty(DROID *psDroid)
 {
 	UBYTE	i;
-	UBYTE	numVtolWeaps = 0;
-	UBYTE	emptyWeaps = 0;
-	BOOL	bEmpty = true;
 
 	CHECK_DROID(psDroid);
 
@@ -4192,30 +4189,44 @@ BOOL vtolEmpty(DROID *psDroid)
 		return false;
 	}
 
-	if (psDroid->numWeaps > 0)
+	for (i = 0; i < psDroid->numWeaps; i++)
 	{
-		for (i = 0;i < psDroid->numWeaps;i++)
+		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0 &&
+		    psDroid->sMove.iAttackRuns[i] < getNumAttackRuns(psDroid, i))
 		{
-			if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0)
-			{
-				numVtolWeaps += (1 << (1 + i));
-				if (psDroid->sMove.iAttackRuns[i] >= getNumAttackRuns(psDroid, i))
-				{
-					emptyWeaps += (1 << (1 + i));
-				}
-			}
+			return false;
 		}
 	}
 
-	for (i = 0;i < psDroid->numWeaps;i++)
+	return true;
+}
+
+/* returns true if it's a VTOL weapon droid which still has full ammo */
+BOOL vtolFull(DROID *psDroid)
+{
+	UBYTE	i;
+
+	CHECK_DROID(psDroid);
+
+	if (!isVtolDroid(psDroid))
 	{
-		if ((numVtolWeaps & (1 << (1 + i))) && !(emptyWeaps & (1 << (1 + i))))
+		return false;
+	}
+	if (psDroid->droidType != DROID_WEAPON)
+	{
+		return false;
+	}
+
+	for (i = 0; i < psDroid->numWeaps; i++)
+	{
+		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0 &&
+		    psDroid->sMove.iAttackRuns[i] > 0)
 		{
-			bEmpty = false;
-			break;
+			return false;
 		}
 	}
-	return bEmpty;
+
+	return true;
 }
 
 // true if a vtol is waiting to be rearmed by a particular rearm pad

@@ -1012,15 +1012,23 @@ void actionUpdateDroid(DROID *psDroid)
 			setDroidActionTarget(psDroid, NULL, i);
 			if (i == 0)
 			{
-				if ( (psDroid->action != DACTION_MOVEFIRE) &&
-					(psDroid->action != DACTION_TRANSPORTIN) &&
-					(psDroid->action != DACTION_TRANSPORTOUT)   )
+				if (psDroid->action != DACTION_MOVEFIRE &&
+				    psDroid->action != DACTION_TRANSPORTIN &&
+				    psDroid->action != DACTION_TRANSPORTOUT)
 				{
 					psDroid->action = DACTION_NONE;
-					//if Vtol - return to rearm pad
+					// if VTOL - return to rearm pad if not patrolling
 					if (isVtolDroid(psDroid))
 					{
-						moveToRearm(psDroid);
+						if (psDroid->order == DORDER_PATROL)
+						{
+							// Back to the patrol.
+							actionDroidLoc(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
+						}
+						else
+						{
+							moveToRearm(psDroid);
+						}
 					}
 				}
 			}
