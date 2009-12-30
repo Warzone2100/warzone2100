@@ -521,28 +521,59 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_SCOUT:
 	case DORDER_PATROL:
 		// if there is an enemy around, attack it
-		if ( (psDroid->action == DACTION_MOVE) && CAN_UPDATE_NAYBORS(psDroid) &&
-			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS) &&
-			 (aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0) )
+		if (psDroid->action == DACTION_MOVE || (psDroid->action == DACTION_NONE && isVtolDroid(psDroid)))
 		{
-			switch (psDroid->droidType)
+			bool tooFarFromPath = false;
+			if (isVtolDroid(psDroid) && psDroid->order == DORDER_PATROL)
 			{
-			case DROID_WEAPON:
-			case DROID_CYBORG:
-			case DROID_CYBORG_SUPER:
-			case DROID_PERSON:
-			case DROID_COMMAND:
-				actionDroidObj(psDroid, DACTION_ATTACK, psObj);
-				break;
-			case DROID_SENSOR:
-				actionDroidObj(psDroid, DACTION_OBSERVE, psObj);
-				break;
-			default:
-				actionDroid(psDroid, DACTION_NONE);
-				break;
+				// Don't stray too far from the patrol path - only attack if we're near it
+				// A fun algorithm to detect if we're near the path
+				SDWORD deltaX, deltaY;
+				deltaX = (SDWORD)psDroid->orderX - (SDWORD)psDroid->orderX2;
+				deltaY = (SDWORD)psDroid->orderY - (SDWORD)psDroid->orderY2;
+				if (deltaX >= deltaY &&
+				    (SDWORD)MIN(psDroid->orderX, psDroid->orderX2)-SCOUT_DIST <= psDroid->pos.x &&
+				    psDroid->pos.x <= (SDWORD)MAX(psDroid->orderX, psDroid->orderX2)+SCOUT_DIST)
+				{
+					tooFarFromPath = (abs(((SDWORD)psDroid->pos.x - (SDWORD)psDroid->orderX) * deltaY/deltaX +
+					                      (SDWORD)psDroid->orderY - (SDWORD)psDroid->pos.y) > SCOUT_DIST);
+				}
+				if (deltaX <= deltaY &&
+				    (SDWORD)MIN(psDroid->orderY, psDroid->orderY2)-SCOUT_DIST <= psDroid->pos.y &&
+				    psDroid->pos.y <= (SDWORD)MAX(psDroid->orderY, psDroid->orderY2)+SCOUT_DIST)
+				{
+					tooFarFromPath = (abs(((SDWORD)psDroid->pos.y - (SDWORD)psDroid->orderY) * deltaX/deltaY +
+					                      (SDWORD)psDroid->orderX - (SDWORD)psDroid->pos.x) > SCOUT_DIST);
+				}
+				else
+				{
+					tooFarFromPath = true;
+				}
+			}
+			if (!tooFarFromPath &&
+			    CAN_UPDATE_NAYBORS(psDroid) &&
+			    (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS) &&
+			    (aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0))
+			{
+				switch (psDroid->droidType)
+				{
+				case DROID_WEAPON:
+				case DROID_CYBORG:
+				case DROID_CYBORG_SUPER:
+				case DROID_PERSON:
+				case DROID_COMMAND:
+					actionDroidObj(psDroid, DACTION_ATTACK, psObj);
+					break;
+				case DROID_SENSOR:
+					actionDroidObj(psDroid, DACTION_OBSERVE, psObj);
+					break;
+				default:
+					actionDroid(psDroid, DACTION_NONE);
+					break;
+				}
 			}
 		}
-		else if (psDroid->action == DACTION_NONE)
+		if (psDroid->action == DACTION_NONE)
 		{
 			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->orderX;
 			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->orderY;
@@ -550,19 +581,25 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 				if (psDroid->order == DORDER_PATROL)
 				{
+					UDWORD tempCoord;
 					// see if we have anything queued up
 					if (orderDroidList(psDroid))
 					{
 						// started a new order, quit
 						break;
 					}
+					if (isVtolDroid(psDroid) && !vtolFull(psDroid))
+					{
+						moveToRearm(psDroid);
+						break;
+					}
 					// head back to the other point
-					temp = psDroid->orderX;
+					tempCoord = psDroid->orderX;
 					psDroid->orderX = psDroid->orderX2;
-					psDroid->orderX2 = (UWORD)temp;
-					temp = psDroid->orderY;
+					psDroid->orderX2 = tempCoord;
+					tempCoord = psDroid->orderY;
 					psDroid->orderY = psDroid->orderY2;
-					psDroid->orderY2 = (UWORD)temp;
+					psDroid->orderY2 = tempCoord;
 					actionDroidLoc(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
 				}
 				else

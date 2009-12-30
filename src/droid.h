@@ -334,8 +334,10 @@ extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
 
 //access function
 extern BOOL isVtolDroid(const DROID* psDroid);
-/*returns true if a VTOL Weapon Droid which has completed all runs*/
+/*returns true if a VTOL weapon droid which has completed all runs*/
 extern BOOL vtolEmpty(DROID *psDroid);
+/*returns true if a VTOL weapon droid which still has full ammo*/
+extern BOOL vtolFull(DROID *psDroid);
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
 extern BOOL  vtolHappy(const DROID* psDroid);
