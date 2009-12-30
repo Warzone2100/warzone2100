@@ -273,7 +273,7 @@ void orderUpdateDroid(DROID *psDroid)
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStruct, *psWall;
 	REPAIR_FACILITY	*psRepairFac;
-	SDWORD			xdiff,ydiff, temp;
+	SDWORD			xdiff,ydiff;
 	BOOL			bAttack;
 	UBYTE i;
 	float			radToAction;
@@ -564,7 +564,7 @@ void orderUpdateDroid(DROID *psDroid)
 			if (!tooFarFromPath &&
 			    CAN_UPDATE_NAYBORS(psDroid) &&
 			    (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS) &&
-			    (aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0) )
+			    (aiBestNearestTarget(psDroid, &psObj, 0) >= 0))
 			{
 				switch (psDroid->droidType)
 				{
