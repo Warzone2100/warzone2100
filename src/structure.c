@@ -3323,7 +3323,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				{
 					/* reset rearm started */
 					psReArmPad->timeStarted = ACTION_START_TIME;
-					psReArmPad->currentPtsAdded = 0;
+					psReArmPad->timeLastUpdated = 0;
 				}
 				CLEAR_TILE_NOTBLOCKING(psTile);	// no longer passable
 			}
@@ -3682,6 +3682,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 		else if (structureMode == REF_REARM_PAD)
 		{
 			REARM_PAD	*psReArmPad = &psStructure->pFunctionality->rearmPad;
+			UDWORD pointsAlreadyAdded;
 
 			psDroid = (DROID *)psChosenObj;
 			ASSERT_OR_RETURN( , psDroid != NULL, "invalid droid pointer");
@@ -3703,8 +3704,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 			{
 				if (psReArmPad->timeStarted == ACTION_START_TIME)
 				{
-					//set the time started
+					//set the time started and last updated
 					psReArmPad->timeStarted = gameTime;
+					psReArmPad->timeLastUpdated = gameTime;
 				}
 
 				bFinishAction = false;
@@ -3720,48 +3722,67 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 						//amount required is a factor of the droids' weight
 						pointsRequired = psDroid->weight / REARM_FACTOR;
 						//take numWeaps into consideration
-						pointsToAdd = psReArmPad->reArmPoints * (gameTime - psReArmPad->timeStarted) * psDroid->numWeaps /
-							GAME_TICKS_PER_SEC;
-						//if ((SDWORD)(psDroid->sMove.iAttackRuns - pointsToAdd) <= 0)
+						pointsToAdd = psReArmPad->reArmPoints * (gameTime - psReArmPad->timeStarted) /
+						    GAME_TICKS_PER_SEC;
+						pointsAlreadyAdded = psReArmPad->reArmPoints * (psReArmPad->timeLastUpdated - psReArmPad->timeStarted) /
+						    GAME_TICKS_PER_SEC;
 						if (pointsToAdd >= pointsRequired)
 						{
-							for (i = 0;i < psDroid->numWeaps;i++)
+							// We should be fully loaded by now.
+							for (i = 0; i < psDroid->numWeaps; i++)
 							{
-								/* set rearm value to no runs made */
+								// set rearm value to no runs made
 								psDroid->sMove.iAttackRuns[i] = 0;
-								//reset ammo and lastTimeFired
-								psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->
-									asWeaps[i].nStat].numRounds;
+								// reset ammo and lastFired
+								psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].numRounds;
 								psDroid->asWeaps[i].lastFired = 0;
 							}
 						}
 						else
 						{
-							for (i = 0;i < psDroid->numWeaps;i++)
+							for (i = 0; i < psDroid->numWeaps; i++)
 							{
-								//make sure that slot is depleted and dont divide integer by zero
-								if ( psDroid->sMove.iAttackRuns[i] > 0 )
+								// Make sure it's a rearmable weapon (and so we don't divide by zero)
+								if (psDroid->sMove.iAttackRuns[i] > 0 && asWeaponStats[psDroid->asWeaps[i].nStat].numRounds > 0)
 								{
-									if (pointsToAdd >= pointsRequired/psDroid->sMove.iAttackRuns[i])
+									// Do not "simplify" this formula.
+									// It is written this way to prevent rounding errors.
+									int ammoToAddThisTime =
+									    pointsToAdd*getNumAttackRuns(psDroid,i)/pointsRequired -
+									    pointsAlreadyAdded*getNumAttackRuns(psDroid,i)/pointsRequired;
+									if (ammoToAddThisTime > psDroid->sMove.iAttackRuns[i])
 									{
-										psDroid->sMove.iAttackRuns[i]--;
+										psDroid->sMove.iAttackRuns[i] = 0;
+									}
+									else if (ammoToAddThisTime > 0)
+									{
+										psDroid->sMove.iAttackRuns[i] -= ammoToAddThisTime;
+									}
+									if (ammoToAddThisTime)
+									{
+										// reset ammo and lastFired
+										psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].numRounds;
+										psDroid->asWeaps[i].lastFired = 0;
+										break;
 									}
 								}
 							}
 						}
 					}
 				}
-
 				/* do repairing */
 				if (psDroid->body < psDroid->originalBody)
 				{
-					pointsToAdd =  VTOL_REPAIR_FACTOR * (gameTime -
-						psReArmPad->timeStarted) / GAME_TICKS_PER_SEC;
-					//this was exponential...
-					if ((pointsToAdd - psReArmPad->currentPtsAdded) > 0)
+					// Do not "simplify" this formula.
+					// It is written this way to prevent rounding errors.
+					pointsToAdd =  VTOL_REPAIR_FACTOR * (100+asReArmUpgrade[psStructure->player].modifier) * (gameTime -
+					               psReArmPad->timeStarted) / (GAME_TICKS_PER_SEC * 100);
+					pointsAlreadyAdded =  VTOL_REPAIR_FACTOR * (100+asReArmUpgrade[psStructure->player].modifier) * (psReArmPad->timeLastUpdated -
+					               psReArmPad->timeStarted) / (GAME_TICKS_PER_SEC * 100);
+
+					if ((pointsToAdd - pointsAlreadyAdded) > 0)
 					{
-						psDroid->body += (pointsToAdd - psReArmPad->currentPtsAdded);
-						psReArmPad->currentPtsAdded = pointsToAdd;
+						psDroid->body += (pointsToAdd - pointsAlreadyAdded);
 					}
 					if (psDroid->body >= psDroid->originalBody)
 					{
@@ -3769,6 +3790,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 						psDroid->body = psDroid->originalBody;
 					}
 				}
+				psReArmPad->timeLastUpdated = gameTime;
 
 				//check for fully armed and fully repaired
 				if (vtolHappy(psDroid))

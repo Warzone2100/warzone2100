@@ -7929,11 +7929,11 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 					FIXME_CAST_ASSIGN(UDWORD, psReArmPad->psObj, psSaveStructure->subjectInc);
                     if (version < VERSION_28)
                     {
-                        psReArmPad->currentPtsAdded = 0;
+                        psReArmPad->timeLastUpdated = 0;
                     }
                     else
                     {
-                        psReArmPad->currentPtsAdded = psSaveStructure->dummy2;
+                        psReArmPad->timeLastUpdated = psSaveStructure->dummy2;
                     }
 				}
 				else
@@ -8227,7 +8227,7 @@ BOOL writeStructFile(char *pFileName)
 					psReArmPad = ((REARM_PAD *)psCurr->pFunctionality);
 					psSaveStruct->output = psReArmPad->reArmPoints;
 					psSaveStruct->droidTimeStarted = psReArmPad->timeStarted;
-                    psSaveStruct->dummy2 = psReArmPad->currentPtsAdded;
+					psSaveStruct->dummy2 = psReArmPad->timeLastUpdated;
 					if (psReArmPad->psObj != NULL)
 					{
 						psSaveStruct->subjectInc = psReArmPad->psObj->id;

@@ -1305,7 +1305,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 			tagWriteEnter(0x12, 1);
 			tagWrite(0x01, psRearm->reArmPoints);
 			tagWrite(0x02, psRearm->timeStarted);
-			tagWrite(0x03, psRearm->currentPtsAdded);
+			tagWrite(0x03, psRearm->timeLastUpdated);
 			if (psRearm->psObj)
 			{
 				tagWrites(0x04, psRearm->psObj->id);
