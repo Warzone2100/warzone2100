@@ -1,14 +1,31 @@
-2009-12-20: Version 2.3.0 release candidate 1
+2009-12-30: Version 2.3.0 beta 5
  * General:
    * Change: Add more key shortcuts (ticket:806)
+   * Change: Screenshots now get saved in "screenshots", not "screendumps" (r8818)
+   * Change: Deselect campaign transport when trying to give it orders instead of just doing nothing (r8856)
    * Fix: Tally up construction borgs/trucks in SP games as well (r8726, ticket:966)
+   * Fix: Trucks can't guard things, super cyborgs can (r8808)
+   * Fix: Don't deselect a retreating unit if it's the only unit selected (r8815)
+   * Fix: Can order more than one transport at one time in multiplayer (r8854)
+   * Fix: Make VTOLs finish patrolling/scouting before returning to rearm (r8863)
+   * Fix: Rearming pads now actually rearm at the speed they're intended to, rearming upgrades affect rearming pad repair speed (r8864)
+   * Fix: Assorted bugfixes (r8793, r8807, r8843, r8846, r8849, r8860)
+   * Fix: Various Xcode build fixes (r8798, r8800, r8820, r8852, r8859)
+   * Fix: Update win32 cross-build scripts (r8851)
+ * UI:
+   * Change: Add small text, use for ready button (r8795)
+   * Change: Show version number of games in the lobby (r8795)
+   * Change: Updated images (r8803)
  * Multiplayer:
    * New: Add the laser satellite to the limits screen (r8729, ticket:1227)
    * New: Add a host has dropped dialog when the host drops (r8717)
    * New: Add a host only dialog that warns them they are about to kill the game if they quit (r8717)
    * Change: Fix the hash routines to use network byte order (r8762)
    * Change: People can now choose whatever position they want - workaround for when games are full (r8774, ticket:1241)
+   * Change: Host can change position and color of other players (r8805)
    * Fix: Enforce default limits if host did not enter limits in the limits screen (r8713)
+ * AI:
+   * Change: Make no base builds much faster by making droids cooperate on more buildings, remove default AI cheating of 1500 free power on full base games (r8847)
  * Translations:
    * Updated: Brazilian (r8699), German (r8761)
 
