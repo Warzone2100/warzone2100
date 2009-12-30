@@ -279,6 +279,7 @@ void drawRadar(void)
 		drawRadarBlips(-radarWidth/2.0, -radarHeight/2.0, pixSizeH, pixSizeV);
 	pie_MatEnd();
 }
+
 static void DrawNorth(void)
 {
 	iV_DrawImage(IntImages, RADAR_NORTH, -((radarWidth / 2.0) + (IntImages->ImageDefs[RADAR_NORTH].Width) + 1) , -(radarHeight / 2.0));
@@ -291,14 +292,22 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 	switch(radarDrawMode)
 	{
 		case RADAR_MODE_TERRAIN:
+		case RADAR_MODE_TERRAIN_SEEN:
 		{
-			// draw radar terrain on/off feature
-			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
+			if ((getRevealStatus() || radarDrawMode == RADAR_MODE_TERRAIN_SEEN) && !TEST_TILE_VISIBLE(selectedPlayer, WTile))
+			{
+				WScr = WZCOL_RADAR_BACKGROUND;
+			}
+			else
+			{
+				// draw radar terrain on/off feature
+				PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
 
-			col.byte.r = sqrtf(col.byte.r * WTile->illumination);
-			col.byte.b = sqrtf(col.byte.b * WTile->illumination);
-			col.byte.g = sqrtf(col.byte.g * WTile->illumination);
-			WScr = col;
+				col.byte.r = sqrtf(col.byte.r * WTile->illumination);
+				col.byte.b = sqrtf(col.byte.b * WTile->illumination);
+				col.byte.g = sqrtf(col.byte.g * WTile->illumination);
+				WScr = col;
+			}
 		}
 		break;
 		case RADAR_MODE_COMBINED:
@@ -345,12 +354,7 @@ static void DrawRadarTiles(void)
 			size_t pos = radarTexWidth * (y - scrollMinY) + (x - scrollMinX);
 
 			ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
-			if (!getRevealStatus() || TEST_TILE_VISIBLE(selectedPlayer, psTile))
-			{
-				radarBuffer[pos] = appliedRadarColour(radarDrawMode, psTile).rgba;
-			} else {
-				radarBuffer[pos] = WZCOL_RADAR_BACKGROUND.rgba;
-			}
+			radarBuffer[pos] = appliedRadarColour(radarDrawMode, psTile).rgba;
 		}
 	}
 }
