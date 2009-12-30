@@ -261,7 +261,7 @@ void orderUpdateDroid(DROID *psDroid)
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStruct, *psWall;
 	REPAIR_FACILITY	*psRepairFac;
-	SDWORD			xdiff,ydiff, temp;
+	SDWORD			xdiff,ydiff;
 	BOOL			bAttack;
 	UBYTE i;
 	float			radToAction;
