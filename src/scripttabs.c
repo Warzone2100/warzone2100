@@ -1419,14 +1419,6 @@ FUNC_SYMBOL asFuncTable[] =
 		1, { (INTERP_TYPE)ST_DROID },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "updatePlayerTileVis",	scrUpdateVisibleTiles,		VAL_VOID,
-		1, { VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "checkVisibleTile",		scrCheckVisibleTile,		VAL_BOOL,
-		3, { VAL_INT, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
 	{ "assembleWeaponTemplate",		scrAssembleWeaponTemplate,		(INTERP_TYPE)ST_TEMPLATE,
 		4, { VAL_INT, (INTERP_TYPE)ST_BODY, (INTERP_TYPE)ST_PROPULSION, (INTERP_TYPE)ST_WEAPON },
 		0, 0, NULL, 0, 0, NULL, NULL },

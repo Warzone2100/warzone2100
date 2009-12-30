@@ -86,12 +86,6 @@ static SDWORD		rayPlayer;				// The player the ray is being cast for
 static SDWORD		startH;					// The height at the view point
 static SDWORD		currG;					// The current obscuring gradient
 
-// holds information about map tiles visible by droids
-static bool	scrTileVisible[MAX_PLAYERS][UBYTE_MAX][UBYTE_MAX] = {{{false}}};
-
-bool scrTileIsVisible(SDWORD player, SDWORD x, SDWORD y);
-void scrResetPlayerTileVisibility(SDWORD player);
-
 // initialise the visibility stuff
 BOOL visInitialise(void)
 {
@@ -754,62 +748,6 @@ void updateSensorDisplay()
 			visTilesUpdate((BASE_OBJECT*)psStruct, rayTerrainCallback);
 		}
 	}
-}
-
-bool scrRayTerrainCallback(Vector3i pos, int distSq, void *data)
-{
-	int dist = sqrtf(distSq);
-	int newH, newG; // The new gradient
-	MAPTILE *psTile;
-
-	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
-		&& pos.y >= 0 && pos.y < world_coord(mapHeight),
-			"rayTerrainCallback: coords off map" );
-
-	ASSERT(rayPlayer >= 0 && rayPlayer < MAX_PLAYERS, "rayScrTerrainCallback: wrong player index");
-
-	psTile = mapTile(map_coord(pos.x), map_coord(pos.y));
-
-	/* Not true visibility - done on sensor range */
-
-	if (dist == 0)
-	{
-		debug(LOG_ERROR, "rayTerrainCallback: dist is 0, which is not a valid distance");
-		dist = 1;
-	}
-
-	newH = psTile->height * ELEVATION_SCALE;
-	newG = (newH - startH) * GRAD_MUL / dist;
-	if (newG >= currG)
-	{
-		currG = newG;
-
-		scrTileVisible[rayPlayer][map_coord(pos.x)][map_coord(pos.y)] = true;
-	}
-
-	return true;
-}
-
-void scrResetPlayerTileVisibility(SDWORD player)
-{
-	int	x,y;
-
-	// clear script visibility info
-	for (x = 0; x < mapWidth; x++)
-	{
-		for(y = 0; y < mapHeight; y++)
-		{
-			scrTileVisible[player][x][y] = false;
-		}
-	}
-}
-
-bool scrTileIsVisible(SDWORD player, SDWORD x, SDWORD y)
-{
-	ASSERT(x >= 0 && y >= 0 && x < UBYTE_MAX && y < UBYTE_MAX,
-		"invalid tile coordinates");
-
-	return scrTileVisible[player][x][y];
 }
 
 /* Check whether psViewer can fire directly at psTarget.

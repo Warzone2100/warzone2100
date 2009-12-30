@@ -11424,64 +11424,6 @@ BOOL scrGetDroidLevel(void)
 	return true;
 }
 
-/*
- * Updates tile visibility for all map tiles for a given player,
- * to be used with scrCheckVisibleTile()
- */
-BOOL scrUpdateVisibleTiles(void)
-{
-	DROID		*psDroid;
-	STRUCTURE	*psStruct;
-	SDWORD		player;
-
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	scrResetPlayerTileVisibility(player);
-
-	for(psDroid = apsDroidLists[player];psDroid;psDroid=psDroid->psNext)
-	{
-		visTilesUpdate((BASE_OBJECT*)psDroid, scrRayTerrainCallback);
-	}
-
-	for(psStruct = apsStructLists[player];psStruct;psStruct=psStruct->psNext)
-	{
-		if (psStruct->pStructureType->type != REF_WALL
- 		    && psStruct->pStructureType->type != REF_WALLCORNER)
-		{
-			visTilesUpdate((BASE_OBJECT*)psStruct, scrRayTerrainCallback);
-		}
-	}
-
-	return true;
-}
-
-/*
- * Check is a given tile is visible for by a given player.
- * Should be used after a call to scrUpdateVisibleTiles().
- */
-BOOL scrCheckVisibleTile(void)
-{
-	int			x,y;
-	SDWORD		player;
-
-	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y))
-	{
-		return false;
-	}
-
-	scrFunctionResult.v.bval = scrTileIsVisible(player, x, y);
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrCheckVisibleTile(): failed to push result");
-		return false;
-	}
-
-	return true;
-}
-
 /* Assembles a template from components and returns it */
 BOOL scrAssembleWeaponTemplate(void)
 {

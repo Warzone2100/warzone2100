@@ -32,9 +32,6 @@ extern BOOL visTilesPending(BASE_OBJECT *psObj);
 /* The terrain revealing ray callback */
 extern bool rayTerrainCallback(Vector3i pos, int dist, void* data);
 
-/* Ray callback for scripts */
-extern bool scrRayTerrainCallback(Vector3i pos, int dist, void *data);
-
 /* Check which tiles can be seen by an object */
 extern void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback);
 
@@ -61,9 +58,6 @@ extern void setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player);
 // sensor range display
 extern BOOL	bDisplaySensorRange;
 extern void updateSensorDisplay(void);
-
-extern bool scrTileIsVisible(SDWORD player, SDWORD x, SDWORD y);
-extern void scrResetPlayerTileVisibility(SDWORD player);
 
 // fast test for whether obj2 is in range of obj1
 static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWORD range)
