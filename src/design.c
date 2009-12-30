@@ -3015,9 +3015,14 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 		UDWORD constructPower   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].buildPower;
 		UDWORD propulsionPower  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].buildPower;
 		UDWORD weaponPower      = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].buildPower;
-
+		UDWORD newComponentPower= psStats->buildPower;
 
 		type = statType(psStats->ref);
+		// Commanders receive the stats of their associated weapon.
+		if (type == COMP_BRAIN)
+		{
+			newComponentPower += ((BRAIN_STATS *)psStats)->psWeaponStat->buildPower;
+		}
 		/*if type = BODY or PROPULSION can do a straight comparison but if the new stat is
 		a 'system' stat then need to find out which 'system' is currently in place so the
 		comparison is meaningful*/
@@ -3029,25 +3034,25 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 		switch (type)
 		{
 		case COMP_BODY:
-			bodyPower = psStats->buildPower;
+			bodyPower = newComponentPower;
 			break;
 		case COMP_PROPULSION:
-			propulsionPower = psStats->buildPower;
+			propulsionPower = newComponentPower;
 			break;
 		case COMP_ECM:
-			ECMPower = psStats->buildPower;
+			ECMPower = newComponentPower;
 			break;
 		case COMP_SENSOR:
-			sensorPower = psStats->buildPower;
+			sensorPower = newComponentPower;
 			break;
 		case COMP_CONSTRUCT:
-			constructPower = psStats->buildPower;
+			constructPower = newComponentPower;
 			break;
 		case COMP_REPAIRUNIT:
-			repairPower = psStats->buildPower;
+			repairPower = newComponentPower;
 			break;
 		case COMP_WEAPON:
-			weaponPower = psStats->buildPower;
+			weaponPower = newComponentPower;
 			break;
 		//default:
 			//don't want to draw for unknown comp
@@ -3102,9 +3107,15 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 		UDWORD constructBody   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].body;
 		UDWORD propulsionBody  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].body;
 		UDWORD weaponBody      = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].body;
+		UDWORD newComponentBody= psStats->body;
 
 
 		type = statType(psStats->ref);
+		// Commanders receive the stats of their associated weapon.
+		if (type == COMP_BRAIN)
+		{
+			newComponentBody += ((BRAIN_STATS *)psStats)->psWeaponStat->body;
+		}
 		/*if type = BODY or PROPULSION can do a straight comparison but if the new stat is
 		a 'system' stat then need to find out which 'system' is currently in place so the
 		comparison is meaningful*/
@@ -3116,25 +3127,25 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 		switch (type)
 		{
 		case COMP_BODY:
-			bodyBody = psStats->body;
+			bodyBody = newComponentBody;
 			break;
 		case COMP_PROPULSION:
-			propulsionBody = psStats->body;
+			propulsionBody = newComponentBody;
 			break;
 		case COMP_ECM:
-			ECMBody = psStats->body;
+			ECMBody = newComponentBody;
 			break;
 		case COMP_SENSOR:
-			sensorBody = psStats->body;
+			sensorBody = newComponentBody;
 			break;
 		case COMP_CONSTRUCT:
-			constructBody = psStats->body;
+			constructBody = newComponentBody;
 			break;
 		case COMP_REPAIRUNIT:
-			repairBody = psStats->body;
+			repairBody = newComponentBody;
 			break;
 		case COMP_WEAPON:
-			weaponBody = psStats->body;
+			weaponBody = newComponentBody;
 			break;
 		//default:
 			//don't want to draw for unknown comp
@@ -3375,6 +3386,21 @@ BOOL intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 		}
 	}
 
+	// Check no mixing of systems and weapons
+	if (psTempl->numWeaps != 0 &&
+	    (psTempl->asParts[COMP_SENSOR] ||
+	     psTempl->asParts[COMP_ECM] ||
+	     psTempl->asParts[COMP_REPAIRUNIT] ||
+	     psTempl->asParts[COMP_CONSTRUCT]))
+	{
+		return false;
+	}
+	if (psTempl->numWeaps != 1 &&
+	    psTempl->asParts[COMP_BRAIN])
+	{
+		return false;
+	}
+	
 	//can only have a weapon on a VTOL propulsion
 	if (checkTemplateIsVtol(psTempl))
 	{
@@ -3962,7 +3988,10 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_ECM] = 0;
 			sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
 			sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
-			sCurrDesign.numWeaps = 0;
+			sCurrDesign.numWeaps = 1;
+			sCurrDesign.asWeaps[0] =
+				(((BRAIN_STATS *)apsExtraSysList[id - IDDES_EXTRASYSSTART])->psWeaponStat) -
+					asWeaponStats;
 			/* Set the new stats on the display */
 			intSetSystemForm(apsExtraSysList[id - IDDES_EXTRASYSSTART]);
 			break;
