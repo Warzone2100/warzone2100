@@ -724,7 +724,7 @@ static void addGames(void)
 	UDWORD i,gcount=0;
 	W_BUTINIT	sButInit;
 	int AtLeastOnePrivateGame = 0;
-	static const char *wrongVersionTip = "You have wrong version of game to play this game";
+	static const char *wrongVersionTip = "Your version of Warzone is incompatible with this game.";
 
 	//count games to see if need two columns.
 	for(i=0;i<MaxGames;i++)							// draw games
