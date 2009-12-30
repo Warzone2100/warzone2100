@@ -2294,7 +2294,7 @@ void	renderStructure(STRUCTURE *psStructure)
 					pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue);
 
 					pie_Draw3DShape(weaponImd[i], playerFrame, 0, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
-					if (psStructure->status == SS_BUILT)
+					if (psStructure->status == SS_BUILT && psStructure->visible[selectedPlayer] > (UBYTE_MAX / 2))
 					{
 						if (psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 						{
@@ -2327,8 +2327,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							}
 						}
 						// we have a weapon so we draw a muzzle flash
-						if( weaponImd[i]->nconnectors && flashImd[i] && psStructure->visible[selectedPlayer]>(UBYTE_MAX/2)
-							&& psStructure->pStructureType->type != REF_REPAIR_FACILITY)
+						if( weaponImd[i]->nconnectors && flashImd[i] && psStructure->pStructureType->type != REF_REPAIR_FACILITY)
 						{
 							unsigned int connector_num = 0;
 
@@ -2394,23 +2393,26 @@ void	renderStructure(STRUCTURE *psStructure)
 								iV_TRANSLATE(0, 0, -40);
 							}
 							iV_MatrixRotateX(DEG(psStructure->asWeaps[i].pitch));
-							// and draw the muzzle flash
-							// animate for the duration of the flash only
-							// assume no clan colours formuzzle effects
-							if (flashImd[i]->numFrames == 0 || flashImd[i]->animInterval <= 0)
+							// draw the muzzle flash?
+							if (psStructure && psStructure->visible[selectedPlayer] > UBYTE_MAX / 2)
 							{
-								// no anim so display one frame for a fixed time
-								if (gameTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
+								// animate for the duration of the flash only
+								// assume no clan colours for muzzle effects
+								if (flashImd[i]->numFrames == 0 || flashImd[i]->animInterval <= 0)
 								{
-									pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
+									// no anim so display one frame for a fixed time
+									if (gameTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
+									{
+										pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
+									}
 								}
-							}
-							else
-							{
-								frame = (gameTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
-								if (frame < flashImd[i]->numFrames)
+								else
 								{
-									pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
+									frame = (gameTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
+									if (frame < flashImd[i]->numFrames)
+									{
+										pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
+									}
 								}
 							}
 							iV_MatrixEnd();
