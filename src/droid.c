@@ -4788,7 +4788,6 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 		return false;
 	}
 
-	// FIXME -- why are we checking vtolAttackRuns on non AIR units?
 	if (asPropulsionTypes[psPropStats->propulsionType].travel == AIR)
 	{
 		//check weapon stat for indirect
@@ -4800,6 +4799,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 	}
 	else
 	{
+		// VTOL weapons do not go on non-AIR units.
 		if ( asWeaponStats[psTemplate->asWeaps[0]].vtolAttackRuns )
 		{
 			bValid = false;
