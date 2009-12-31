@@ -3030,7 +3030,9 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 		UDWORD repairPower      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].buildPower;
 		UDWORD constructPower   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].buildPower;
 		UDWORD propulsionPower  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].buildPower;
-		UDWORD weaponPower      = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].buildPower;
+		UDWORD weaponPower1     = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].buildPower;
+		UDWORD weaponPower2     = asWeaponStats[sCurrDesign.numWeaps>=2 ? sCurrDesign.asWeaps[1] : 0].buildPower;
+		UDWORD weaponPower3     = asWeaponStats[sCurrDesign.numWeaps>=3 ? sCurrDesign.asWeaps[2] : 0].buildPower;
 		UDWORD newComponentPower= psStats->buildPower;
 
 		type = statType(psStats->ref);
@@ -3068,7 +3070,19 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 			repairPower = newComponentPower;
 			break;
 		case COMP_WEAPON:
-			weaponPower = newComponentPower;
+			brainPower = 0;
+			if (desCompMode == IDES_TURRET_A)
+			{
+				weaponPower2 = newComponentPower;
+			}
+			else if (desCompMode == IDES_TURRET_B)
+			{
+				weaponPower3 = newComponentPower;
+			}
+			else
+			{
+				weaponPower1 = newComponentPower;
+			}
 			break;
 		//default:
 			//don't want to draw for unknown comp
@@ -3084,12 +3098,7 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 			bodyPower) / 100;
 
 		//add weapon power
-		// FIXME: Only takes first weapon into account
-		power += weaponPower;
-		for(i=1; i<sCurrDesign.numWeaps; i++)
-		{
-			power += asWeaponStats[sCurrDesign.asWeaps[i]].buildPower;
-		}
+		power += weaponPower1 + weaponPower2 + weaponPower3;
 		widgSetMinorBarSize( psWScreen, IDDES_POWERBAR,
 								power);
 	}
@@ -3122,9 +3131,10 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 		UDWORD repairBody      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].body;
 		UDWORD constructBody   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].body;
 		UDWORD propulsionBody  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].body;
-		UDWORD weaponBody      = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].body;
+		UDWORD weaponBody1     = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].body;
+		UDWORD weaponBody2     = asWeaponStats[sCurrDesign.numWeaps>=2 ? sCurrDesign.asWeaps[1] : 0].body;
+		UDWORD weaponBody3     = asWeaponStats[sCurrDesign.numWeaps>=3 ? sCurrDesign.asWeaps[2] : 0].body;
 		UDWORD newComponentBody= psStats->body;
-
 
 		type = statType(psStats->ref);
 		// Commanders receive the stats of their associated weapon.
@@ -3161,26 +3171,34 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 			repairBody = newComponentBody;
 			break;
 		case COMP_WEAPON:
-			weaponBody = newComponentBody;
+			brainBody = 0;
+			if (desCompMode == IDES_TURRET_A)
+			{
+				weaponBody2 = newComponentBody;
+			}
+			else if (desCompMode == IDES_TURRET_B)
+			{
+				weaponBody3 = newComponentBody;
+			}
+			else
+			{
+				weaponBody1 = newComponentBody;
+			}
 			break;
 		//default:
 			//don't want to draw for unknown comp
 		}
 		// this code is from calcTemplateBody
 
-    	//get the component power
+    	//get the component HP
     	body = bodyBody + brainBody + sensorBody + ECMBody + repairBody + constructBody;
 
-    	/* propulsion power points are a percentage of the bodys' power points */
+    	/* propulsion HP are a percentage of the body's HP */
     	body += (propulsionBody *
     		bodyBody) / 100;
 
-     	//add weapon power
-        body += weaponBody;
-    	for (i=1; i<sCurrDesign.numWeaps; i++)
-    	{
-    		body += asWeaponStats[sCurrDesign.asWeaps[i]].body;
-    	}
+     	//add weapon HP
+        body += weaponBody1 + weaponBody2 + weaponBody3;
     	body += (body * asBodyUpgrade[selectedPlayer]->body / 100);
    		widgSetMinorBarSize( psWScreen, IDDES_BODYPOINTS,
 								body);
@@ -3701,7 +3719,10 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asWeaps[0] =
 				((WEAPON_STATS *)apsComponentList[id - IDDES_COMPSTART]) -
 				asWeaponStats;
-			sCurrDesign.numWeaps = 1;
+			if (sCurrDesign.numWeaps < 1)
+			{
+				sCurrDesign.numWeaps = 1;
+			}
 			/* Reset the sensor, ECM and constructor and repair
 				- defaults will be set when OK is hit */
 			sCurrDesign.asParts[COMP_SENSOR] = 0;
@@ -3731,7 +3752,10 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asWeaps[1] =
 				((WEAPON_STATS *)apsComponentList[id - IDDES_COMPSTART]) -
 				asWeaponStats;
-			sCurrDesign.numWeaps = 2;
+			if (sCurrDesign.numWeaps < 2)
+			{
+				sCurrDesign.numWeaps = 2;
+			}
 			/* Reset the sensor, ECM and constructor and repair
 				- defaults will be set when OK is hit */
 			sCurrDesign.asParts[COMP_SENSOR] = 0;
