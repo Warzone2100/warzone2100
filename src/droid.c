@@ -4771,11 +4771,9 @@ true if valid weapon*/
 /* this will be buggy if the droid being checked has both AA weapon and non-AA weapon
 Cannot think of a solution without adding additional return value atm.
 */
-// FIXME: This routine is a mess
 BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 {
 	PROPULSION_STATS	*psPropStats;
-	BOOL			bValid = true;
 
 	//check propulsion stat for vtol
 	psPropStats = asPropulsionStats + psTemplate->asParts[COMP_PROPULSION];
@@ -4794,7 +4792,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 		if (!proj_Direct(asWeaponStats + psTemplate->asWeaps[0])
 			|| !asWeaponStats[psTemplate->asWeaps[0]].vtolAttackRuns)
 		{
-			bValid = false;
+			return false;
 		}
 	}
 	else
@@ -4802,7 +4800,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 		// VTOL weapons do not go on non-AIR units.
 		if ( asWeaponStats[psTemplate->asWeaps[0]].vtolAttackRuns )
 		{
-			bValid = false;
+			return false;
 		}
 	}
 
@@ -4811,10 +4809,10 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 		&& asWeaponStats[psTemplate->asWeaps[0]].weaponSubClass != WSC_COMMAND)
 	{
 		assert(false);
-		bValid = false;
+		return false;
 	}
 
-	return bValid;
+	return true;
 }
 
 /*called when a Template is deleted in the Design screen*/
