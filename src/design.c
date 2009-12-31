@@ -3020,7 +3020,7 @@ static UDWORD getSystemType(DROID_TEMPLATE* droidTemplate)
 static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 {
 	UDWORD				type;
-	UDWORD				power, i;
+	UDWORD				power;
 
 	if (psStats != NULL) {
 		UDWORD bodyPower        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].buildPower;
@@ -3121,7 +3121,7 @@ static void intSetBodyPoints(DROID_TEMPLATE *psTemplate)
 static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 {
 	UDWORD				type;
-	UDWORD				body, i;
+	UDWORD				body;
 
 	if (psStats != NULL) {
 		UDWORD bodyBody        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].body;
