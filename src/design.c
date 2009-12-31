@@ -348,6 +348,8 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats);
 static void intSetBodyPoints(DROID_TEMPLATE *psTemplate);
 /* Sets the Body Points shadow Bar for the current Template with new stat*/
 static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats);
+/* set flashing flag for button */
+static void intSetButtonFlash( UDWORD id, BOOL bFlash );
 /*Function to set the shadow bars for all the stats when the mouse is over
 the Template buttons*/
 static void runTemplateShadowStats(UDWORD id);
@@ -1160,30 +1162,36 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 			widgDelete(psWScreen, IDDES_COMPFORM);
 			widgDelete(psWScreen, IDDES_RIGHTBASE);
 			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, 0);
+			widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
 			break;
 		case IDES_TURRET:
 			widgDelete(psWScreen, IDDES_COMPFORM);
 			widgDelete(psWScreen, IDDES_RIGHTBASE);
 			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, 0);
+			widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
 			break;
 		case IDES_BODY:
 			widgDelete(psWScreen, IDDES_COMPFORM);
 			widgDelete(psWScreen, IDDES_RIGHTBASE);
 			widgSetButtonState(psWScreen, IDDES_BODYFORM, 0);
+			widgSetButtonState(psWScreen, IDDES_BODYBUTTON, 0);
 			break;
 		case IDES_PROPULSION:
 			widgDelete(psWScreen, IDDES_COMPFORM);
 			widgDelete(psWScreen, IDDES_RIGHTBASE);
 			widgSetButtonState(psWScreen, IDDES_PROPFORM, 0);
+			widgSetButtonState(psWScreen, IDDES_PROPBUTTON, 0);
 			break;
 		case IDES_TURRET_A:
 			widgDelete(psWScreen, IDDES_COMPFORM);
 			widgDelete(psWScreen, IDDES_RIGHTBASE);
+			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, 0);
 			widgSetButtonState(psWScreen, IDDES_WPABUTTON, 0);
 			break;
 		case IDES_TURRET_B:
 			widgDelete(psWScreen, IDDES_COMPFORM);
 			widgDelete(psWScreen, IDDES_RIGHTBASE);
+			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, 0);
 			widgSetButtonState(psWScreen, IDDES_WPBBUTTON, 0);
 			break;
 		}
@@ -1214,6 +1222,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 									 sCurrDesign.asParts[COMP_BRAIN]);
 			intAddSystemButtons(IDES_SYSTEM);
 			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
+			widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
 			break;
 		case IDES_TURRET:
 			intAddComponentForm(
@@ -1226,6 +1235,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 								   numWeaponStats, weaponIndex,TAB_USEMAJOR);
 			intAddSystemButtons(IDES_TURRET);
 			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
+			widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
 			break;
 		case IDES_BODY:
 			intAddComponentForm(
@@ -1236,6 +1246,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 								   apCompLists[selectedPlayer][COMP_BODY],
 								   numBodyStats, sCurrDesign.asParts[COMP_BODY],TAB_USEMAJOR);
 			widgSetButtonState(psWScreen, IDDES_BODYFORM, WBUT_LOCK);
+			widgSetButtonState(psWScreen, IDDES_BODYBUTTON, WBUT_CLICKLOCK);
 			break;
 		case IDES_PROPULSION:
 			intAddComponentForm(
@@ -1248,6 +1259,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 								   numPropulsionStats, sCurrDesign.asParts[COMP_PROPULSION],
 								   TAB_USEMAJOR);
 			widgSetButtonState(psWScreen, IDDES_PROPFORM, WBUT_LOCK);
+			widgSetButtonState(psWScreen, IDDES_PROPBUTTON, WBUT_CLICKLOCK);
 			break;
 		case IDES_TURRET_A:
 			intAddComponentForm(
@@ -1259,7 +1271,10 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 								   apCompLists[selectedPlayer][COMP_WEAPON],
 								   numWeaponStats, weaponIndex,TAB_USEMAJOR);
 			intAddSystemButtons(IDES_TURRET_A);
-			widgSetButtonState(psWScreen, IDDES_WPABUTTON, WBUT_LOCK);
+			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
+			widgSetButtonState(psWScreen, IDDES_WPABUTTON, WBUT_CLICKLOCK);
+			// Stop the button flashing
+			intSetButtonFlash( IDDES_WPABUTTON,   false );
 			break;
 		case IDES_TURRET_B:
 			intAddComponentForm(
@@ -1271,7 +1286,10 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 								   apCompLists[selectedPlayer][COMP_WEAPON],
 								   numWeaponStats, weaponIndex,TAB_USEMAJOR);
 			intAddSystemButtons(IDES_TURRET_B);
-			widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_LOCK);
+			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
+			widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_CLICKLOCK);
+			// Stop the button flashing
+			intSetButtonFlash( IDDES_WPBBUTTON,   false );
 			break;
 		}
 	}
@@ -2128,9 +2146,7 @@ static BOOL intAddSystemButtons(DES_COMPMODE mode)
     //if currently got a VTOL proplusion attached then don't add the system buttons
 	//dont add the system button if mode is IDES_TURRET_A or IDES_TURRET_B
     if (!checkTemplateIsVtol(&sCurrDesign) &&
-		mode != IDES_TURRET_A &&
-		mode != IDES_TURRET_B &&
-		sCurrDesign.numWeaps < 2)
+	    mode != IDES_TURRET_A && mode != IDES_TURRET_B)
     {
 	    // add the system button
 	    sButInit.formID = IDDES_RIGHTBASE;
@@ -3586,23 +3602,6 @@ void intProcessDesign(UDWORD id)
 				widgHide( psWScreen, IDDES_WPABUTTON );
 				widgHide( psWScreen, IDDES_WPBBUTTON );
 
-				// reveal,flash,reset additional buttons
-				if (psTempl->numWeaps == 2 && (asBodyStats + psTempl->asParts[COMP_BODY])->weaponSlots == 2 )
-				{
-					widgReveal( psWScreen, IDDES_WPABUTTON );
-					intSetButtonFlash( IDDES_WPABUTTON,   false );
-					widgSetButtonState(psWScreen, IDDES_WPABUTTON,   0);
-				}
-				else if (psTempl->numWeaps == 3 && (asBodyStats + psTempl->asParts[COMP_BODY])->weaponSlots == 3 )
-				{
-					widgReveal( psWScreen, IDDES_WPABUTTON );
-					widgReveal( psWScreen, IDDES_WPBBUTTON );
-					intSetButtonFlash( IDDES_WPABUTTON,   false );
-					intSetButtonFlash( IDDES_WPBBUTTON,   false );
-					widgSetButtonState(psWScreen, IDDES_WPABUTTON,   0);
-					widgSetButtonState(psWScreen, IDDES_WPBBUTTON,   0);
-				}
-
 				/* turn off button flashes */
 				intSetButtonFlash( IDDES_SYSTEMBUTTON, false );
 				intSetButtonFlash( IDDES_BODYBUTTON,   false );
@@ -3611,6 +3610,24 @@ void intProcessDesign(UDWORD id)
 				intSetButtonFlash( IDDES_WPABUTTON,   false );
 				intSetButtonFlash( IDDES_WPBBUTTON,   false );
 
+				// reveal additional buttons
+				if (psTempl->numWeaps >= 2)
+				{
+					widgReveal( psWScreen, IDDES_WPABUTTON );
+				}
+				else
+				{
+					intSetButtonFlash( IDDES_WPABUTTON,   true );
+				}
+				if (psTempl->numWeaps == 3)
+				{
+					widgReveal( psWScreen, IDDES_WPBBUTTON );
+				}
+				else
+				{
+					intSetButtonFlash( IDDES_WPBBUTTON,   true );
+				}
+				
 				/* reset button states */
 				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
 				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
@@ -3700,6 +3717,8 @@ void intProcessDesign(UDWORD id)
 			}
 			/* Set the new stats on the display */
 			intSetSystemForm(apsComponentList[id - IDDES_COMPSTART]);
+			// Stop the button flashing
+			intSetButtonFlash( IDDES_SYSTEMBUTTON, false );
 			// do the callback if in the tutorial
 			if (bInTutorial)
 			{
@@ -3728,6 +3747,8 @@ void intProcessDesign(UDWORD id)
 			}
 			/* Set the new stats on the display */
 			intSetSystemForm(apsComponentList[id - IDDES_COMPSTART]);
+			// Stop the button flashing
+			intSetButtonFlash( IDDES_WPABUTTON,   false );
 			// do the callback if in the tutorial
 			if (bInTutorial)
 			{
@@ -3749,6 +3770,8 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_BRAIN] = 0;
 			/* Set the new stats on the display */
 			intSetSystemForm(apsComponentList[id - IDDES_COMPSTART]);
+			// Stop the button flashing
+			intSetButtonFlash( IDDES_WPBBUTTON,   false );
 			// do the callback if in the tutorial
 			if (bInTutorial)
 			{
@@ -3766,21 +3789,51 @@ void intProcessDesign(UDWORD id)
 			/* Set the new stats on the display */
 			intSetBodyStats((BODY_STATS *)apsComponentList[id - IDDES_COMPSTART]);
 
-			if (sCurrDesign.numWeaps > 1 && (sCurrDesign.asParts[COMP_BODY] + asBodyStats)->weaponSlots < sCurrDesign.numWeaps )
+			if ((sCurrDesign.asParts[COMP_BODY] + asBodyStats)->weaponSlots == 1)
 			{
-				if ( (sCurrDesign.asParts[COMP_BODY] + asBodyStats)->weaponSlots == 1 )
+				if (sCurrDesign.numWeaps > 1)
 				{
+					sCurrDesign.numWeaps = 1;
 					sCurrDesign.asWeaps[1] = 0;
 					sCurrDesign.asWeaps[2] = 0;
-					widgHide( psWScreen, IDDES_WPABUTTON );
-					widgHide( psWScreen, IDDES_WPBBUTTON );
 				}
-				else if( (sCurrDesign.asParts[COMP_BODY] + asBodyStats)->weaponSlots == 2 )
+				widgHide( psWScreen, IDDES_WPABUTTON );
+				widgHide( psWScreen, IDDES_WPBBUTTON );
+			}
+			else if ((sCurrDesign.asParts[COMP_BODY] + asBodyStats)->weaponSlots >= 2)
+			{
+				if (sCurrDesign.numWeaps > 2)
 				{
+					sCurrDesign.numWeaps = 2;
 					sCurrDesign.asWeaps[2] = 0;
+				}
+				else if (sCurrDesign.numWeaps == 1 && sCurrDesign.asWeaps[0] && sCurrDesign.asParts[COMP_BRAIN] == 0)
+				{
+					widgReveal( psWScreen, IDDES_WPABUTTON );
+					widgSetButtonState(psWScreen, IDDES_WPABUTTON,   0);
+					intSetButtonFlash( IDDES_WPABUTTON,   false );
+				}
+				else
+				{
 					widgHide( psWScreen, IDDES_WPBBUTTON );
 				}
 			}
+			if ((sCurrDesign.asParts[COMP_BODY] + asBodyStats)->weaponSlots == 3)
+			{
+				if (sCurrDesign.numWeaps == 2)
+				{
+					widgReveal( psWScreen, IDDES_WPBBUTTON );
+					widgSetButtonState(psWScreen, IDDES_WPBBUTTON,   0);
+					intSetButtonFlash( IDDES_WPABUTTON,   false );
+				}
+				else if (sCurrDesign.numWeaps == 1 && sCurrDesign.asParts[COMP_BRAIN] == 0)
+				{
+					widgReveal( psWScreen, IDDES_WPABUTTON );
+					widgSetButtonState(psWScreen, IDDES_WPABUTTON,   0);
+				}
+			}
+			// Stop the button flashing
+			intSetButtonFlash( IDDES_BODYBUTTON,   false );
 			// do the callback if in the tutorial
 			if (bInTutorial)
 			{
@@ -3797,16 +3850,13 @@ void intProcessDesign(UDWORD id)
 			// Check that the weapon (if any) is valid for this propulsion
 			if (!intCheckValidWeaponForProp())
 			{
-				// Could be more than one weapon... FIXME - generalize!
-				if (sCurrDesign.numWeaps > 1)
-				{
-					// Reset slot 2,3 weapons so it wont cause more than one weapon on VTOL problem
-					sCurrDesign.asWeaps[1] = 0;
-					sCurrDesign.asWeaps[2] = 0;
-				}
-
 				// Not valid weapon so initialise the weapon stat
 				sCurrDesign.asWeaps[0] = 0;
+				sCurrDesign.asWeaps[1] = 0;
+				sCurrDesign.asWeaps[2] = 0;
+				sCurrDesign.numWeaps = 0;
+				widgHide( psWScreen, IDDES_WPABUTTON );
+				widgHide( psWScreen, IDDES_WPBBUTTON );
 
 				// Init all other stats as well!
 				sCurrDesign.asParts[COMP_SENSOR] = 0;
@@ -3815,11 +3865,12 @@ void intProcessDesign(UDWORD id)
 				sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
 				sCurrDesign.asParts[COMP_ECM] = 0;
 
-				/* Reset the weapon stats on the display */
-				intSetSystemForm((COMPONENT_STATS *)(asWeaponStats + sCurrDesign.asWeaps[0]));
-				intSetDesignMode(IDES_PROPULSION);	// ???
+				// We need a turret again
+				intSetButtonFlash( IDDES_SYSTEMBUTTON, true );
 			}
 
+			// Stop the button flashing
+			intSetButtonFlash( IDDES_PROPBUTTON,   false );
 			// do the callback if in the tutorial
 			if (bInTutorial)
 			{
@@ -3850,54 +3901,6 @@ void intProcessDesign(UDWORD id)
 
 		/* Update the name in the edit box */
 		intSetEditBoxTextFromTemplate( &sCurrDesign );
-
-		/* flash next button if design not complete */
-		if ( intValidTemplate( &sCurrDesign, aCurrName ) == false )
-		{
-			/* reset button states */
-			widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
-			widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
-			widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
-
-#ifdef FLASH_BUTTONS
-			switch (desCompMode)
-			{
-				case IDES_BODY:
-					widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   WBUT_CLICKLOCK);
-					break;
-				case IDES_PROPULSION:
-					widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON,   WBUT_CLICKLOCK);
-					break;
-				case IDES_SYSTEM:
-				case IDES_TURRET:
-					//if weaponSlots > 1,+ 1 turret else fall back to body button
-					if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 1 )
-					{
-						widgSetButtonState(psWScreen, IDDES_WPABUTTON, WBUT_CLICKLOCK);
-					}
-					else
-					{
-						widgSetButtonState(psWScreen, IDDES_BODYBUTTON, WBUT_CLICKLOCK);
-					}
-				// hope these hacks will work
-				case IDES_TURRET_A:
-					//if body weaponSlots > 2,+ 1 turret else fall back to body button
-					if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2 )
-					{
-						widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_CLICKLOCK);
-					}
-					else
-					{
-						widgSetButtonState(psWScreen, IDDES_BODYBUTTON, WBUT_CLICKLOCK);
-					}
-				case IDES_TURRET_B:
-					widgSetButtonState(psWScreen, IDDES_BODYBUTTON, WBUT_CLICKLOCK);
-					break;
-				default:
-					break;
-			}
-#endif
-		}
 	}
 	else if (id >= IDDES_EXTRASYSSTART && id <= IDDES_EXTRASYSEND)
 	{
@@ -3926,6 +3929,8 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
 			sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
 			sCurrDesign.asParts[COMP_BRAIN] = 0;
+			widgHide( psWScreen, IDDES_WPABUTTON );
+			widgHide( psWScreen, IDDES_WPBBUTTON );
 			// Set the new stats on the display
 			intSetSystemForm(apsExtraSysList[id - IDDES_EXTRASYSSTART]);
 			break;
@@ -3942,6 +3947,8 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
 			sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
 			sCurrDesign.asParts[COMP_BRAIN] = 0;
+			widgHide( psWScreen, IDDES_WPABUTTON );
+			widgHide( psWScreen, IDDES_WPBBUTTON );
 			// Set the new stats on the display
 			intSetSystemForm(apsExtraSysList[id - IDDES_EXTRASYSSTART]);
 			break;
@@ -3958,6 +3965,8 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_SENSOR] = 0;
 			sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
 			sCurrDesign.asParts[COMP_BRAIN] = 0;
+			widgHide( psWScreen, IDDES_WPABUTTON );
+			widgHide( psWScreen, IDDES_WPBBUTTON );
 			// Set the new stats on the display
 			intSetSystemForm(apsExtraSysList[id - IDDES_EXTRASYSSTART]);
 			break;
@@ -3974,6 +3983,8 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_SENSOR] = 0;
 			sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
 			sCurrDesign.asParts[COMP_BRAIN] = 0;
+			widgHide( psWScreen, IDDES_WPABUTTON );
+			widgHide( psWScreen, IDDES_WPBBUTTON );
 			// Set the new stats on the display
 			intSetSystemForm(apsExtraSysList[id - IDDES_EXTRASYSSTART]);
 			break;
@@ -3992,10 +4003,14 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asWeaps[0] =
 				(((BRAIN_STATS *)apsExtraSysList[id - IDDES_EXTRASYSSTART])->psWeaponStat) -
 					asWeaponStats;
+			widgHide( psWScreen, IDDES_WPABUTTON );
+			widgHide( psWScreen, IDDES_WPBBUTTON );
 			/* Set the new stats on the display */
 			intSetSystemForm(apsExtraSysList[id - IDDES_EXTRASYSSTART]);
 			break;
 		}
+		// Stop the button flashing
+		intSetButtonFlash( IDDES_SYSTEMBUTTON, false );
 		// Lock the new button
 		widgSetButtonState(psWScreen, id, WBUT_LOCK);
 		desCompID = id;
@@ -4029,12 +4044,6 @@ void intProcessDesign(UDWORD id)
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_SYSTEM);
 			}
 		}
-#ifdef FLASH_BUTTONS
-		/* flash body button */
-//		widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
-//		widgSetButtonState(psWScreen, IDDES_BODYBUTTON, WBUT_CLICKLOCK);
-//		widgSetButtonState(psWScreen, IDDES_PROPBUTTON, 0);
-#endif
 	}
 	else
 	{
@@ -4180,21 +4189,6 @@ void intProcessDesign(UDWORD id)
 			widgHide(   psWScreen, IDDES_BODYFORM );
 			widgHide(   psWScreen, IDDES_PROPFORM );
 
-#ifdef FLASH_BUTTONS
-			/* lock button if design complete */
-			if ( intValidTemplate( &sCurrDesign, aCurrName ) == true )
-			{
-				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
-				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
-				widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
-				//weaponSlots > 1 check
-				if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 1 )
-				{
-					widgSetButtonState(psWScreen, IDDES_WPABUTTON,   0);
-				}
-			}
-#endif
-
 			break;
 		// WPABUTTON
 		case IDDES_WPABUTTON:
@@ -4217,22 +4211,6 @@ void intProcessDesign(UDWORD id)
 			widgReveal( psWScreen, IDDES_SYSTEMFORM );
 			widgHide(   psWScreen, IDDES_BODYFORM );
 			widgHide(   psWScreen, IDDES_PROPFORM );
-
-#ifdef FLASH_BUTTONS
-			/* lock button if design complete */
-			if ( intValidTemplate( &sCurrDesign, aCurrName ) == true )
-			{
-				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
-				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
-				widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
-				widgSetButtonState(psWScreen, IDDES_WPABUTTON,   WBUT_CLICKLOCK);
-				//weaponSlots > 2 checks
-				if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2 )
-				{
-					widgSetButtonState(psWScreen, IDDES_WPBBUTTON,   0);
-				}
-			}
-#endif
 
 			break;
 		// WPBBUTTON
@@ -4257,18 +4235,6 @@ void intProcessDesign(UDWORD id)
 			widgHide(   psWScreen, IDDES_BODYFORM );
 			widgHide(   psWScreen, IDDES_PROPFORM );
 
-#ifdef FLASH_BUTTONS
-			/* lock button if design complete */
-			if ( intValidTemplate( &sCurrDesign, aCurrName ) == true )
-			{
-				//enable the 2nd turret button
-				widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_CLICKLOCK);
-				widgSetButtonState(psWScreen, IDDES_WPABUTTON, 0);
-				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
-				widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
-			}
-#endif
-
 			break;
 		case IDDES_BODYBUTTON:
 			/* reveal components if not already onscreen */
@@ -4280,16 +4246,6 @@ void intProcessDesign(UDWORD id)
 			widgReveal( psWScreen, IDDES_BODYFORM );
 			widgHide(   psWScreen, IDDES_PROPFORM );
 
-#ifdef FLASH_BUTTONS
-			/* lock button if design complete */
-			if ( intValidTemplate( &sCurrDesign, aCurrName ) == true )
-			{
-				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
-				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   WBUT_CLICKLOCK);
-				widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
-			}
-#endif
-
 			break;
 		case IDDES_PROPBUTTON:
 			/* reveal components if not already onscreen */
@@ -4299,16 +4255,6 @@ void intProcessDesign(UDWORD id)
 			widgHide(   psWScreen, IDDES_SYSTEMFORM );
 			widgHide(   psWScreen, IDDES_BODYFORM );
 			widgReveal( psWScreen, IDDES_PROPFORM );
-
-#ifdef FLASH_BUTTONS
-			/* lock button if design complete */
-			if ( intValidTemplate( &sCurrDesign, aCurrName ) == true )
-			{
-				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
-				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
-				widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   WBUT_CLICKLOCK);
-			}
-#endif
 
 			break;
 		}
@@ -4367,13 +4313,11 @@ void intProcessDesign(UDWORD id)
 				case IDES_BODY:
 					intSetDesignMode( IDES_PROPULSION );
 					widgReveal(psWScreen, IDDES_PROPBUTTON);
-					widgSetButtonState(psWScreen, IDDES_PROPBUTTON, WBUT_CLICKLOCK);
 					break;
 
 				case IDES_PROPULSION:
 					intSetDesignMode( IDES_TURRET );
 					widgReveal(psWScreen, IDDES_SYSTEMBUTTON);
-					widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
 					break;
 
 				case IDES_SYSTEM:
@@ -4383,12 +4327,10 @@ void intProcessDesign(UDWORD id)
 						debug(LOG_GUI, "intProcessDesign: First weapon selected, doing next.");
 						intSetDesignMode( IDES_TURRET_A );
 						widgReveal(psWScreen, IDDES_WPABUTTON);
-						widgSetButtonState(psWScreen, IDDES_WPABUTTON, WBUT_CLICKLOCK);
 					}
 					else
 					{
 						debug(LOG_GUI, "intProcessDesign: First weapon selected, is final.");
-						intSetDesignMode( IDES_BODY );
 					}
 					break;
 				case IDES_TURRET_A:
@@ -4397,17 +4339,14 @@ void intProcessDesign(UDWORD id)
 						debug(LOG_GUI, "intProcessDesign: Second weapon selected, doing next.");
 						intSetDesignMode( IDES_TURRET_B );
 						widgReveal(psWScreen, IDDES_WPBBUTTON);
-						widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_CLICKLOCK);
 					}
 					else
 					{
 						debug(LOG_GUI, "intProcessDesign: Second weapon selected, is final.");
-						intSetDesignMode( IDES_BODY );
 					}
 					break;
 				case IDES_TURRET_B:
 					debug(LOG_GUI, "intProcessDesign: Third weapon selected, is final.");
-					intSetDesignMode( IDES_BODY );
 					break;
 				default:
 					break;
@@ -4699,11 +4638,6 @@ static BOOL saveTemplate(void)
 			intSetButtonFlash( IDDES_SYSTEMBUTTON, false );
 			intSetButtonFlash( IDDES_BODYBUTTON,   false );
 			intSetButtonFlash( IDDES_PROPBUTTON,   false );
-
-			/* reset all button states */
-			widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
-			widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
-			widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
 		}
 		else
 		{
@@ -4853,6 +4787,18 @@ to check the weapon is 'allowed'. Check if VTOL, the weapon is direct fire.
 Also check numVTOLattackRuns for the weapon is not zero - return true if valid weapon*/
 static BOOL intCheckValidWeaponForProp(void)
 {
+	if (asPropulsionTypes[((PROPULSION_STATS *)(asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION]))->propulsionType].travel != AIR)
+	{
+		if (sCurrDesign.numWeaps == 0 &&
+		    (sCurrDesign.asParts[COMP_SENSOR] ||
+		     sCurrDesign.asParts[COMP_REPAIRUNIT] ||
+		     sCurrDesign.asParts[COMP_CONSTRUCT] ||
+		     sCurrDesign.asParts[COMP_ECM]))
+		{
+			// non-AIR propulsions can have systems, too.
+			return true;
+		}
+	}
 	return checkValidWeaponForProp(&sCurrDesign);
 }
 

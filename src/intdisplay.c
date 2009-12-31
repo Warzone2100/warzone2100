@@ -1514,19 +1514,20 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, W
 
 }
 
-// Flash one of two images depending on if the widget is hilighted by the mouse.
-//
+// Flash one of two images, regardless of whether or not it is highlighted
+// Commented-out portions are retained because I am planning on making the intensity of the
+// flash depend on whether or not the button is highlighted.
 void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
-	BOOL Hilight = false;
-	UDWORD Down = 0;
+	//BOOL Hilight = false;
+	//UDWORD Down = 0;
 	UWORD ImageID;
 
 	ASSERT( psWidget->type == WIDG_BUTTON,"intDisplayButtonFlash : Not a button" );
 
-	if( ((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
+	/* if( ((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
 	{
 		Hilight = true;
 	}
@@ -1534,13 +1535,13 @@ void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 	if( ((W_BUTTON*)psWidget)->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
 	{
 		Down = 1;
-	}
+	} */
 
-	if ( Down && ((gameTime2/250) % 2 == 0) )
+	if ( /* Down && */ (gameTime2/250) % 2 == 0 )
 	{
 		ImageID = UNPACKDWORD_TRI_B(psWidget->UserData);
-		Hilight = false;
-	} else
+	}
+	else
 	{
 		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
 	}
