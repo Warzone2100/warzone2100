@@ -311,7 +311,6 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 	if (from == ANYPLAYER)
 	{
 		gifval = OILDRUM_POWER;
-		CONPRINTF(ConsoleString,(ConsoleString,_("Player %u found %u power in an oil drum"), to, gifval));
 	}
 	else
 	{
