@@ -127,6 +127,13 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 
 	numFeatureStats = numCR(pFeatureData, bufferSize);
 
+	// Skip descriptive header
+	if (strncmp(pFeatureData,"Feature ",8)==0)
+	{
+		pFeatureData = strchr(pFeatureData,'\n') + 1;
+		numFeatureStats--;
+	}
+	
 	asFeatureStats = (FEATURE_STATS*)malloc(sizeof(FEATURE_STATS) * numFeatureStats);
 
 	if (asFeatureStats == NULL)
