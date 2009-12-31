@@ -340,7 +340,7 @@ const char *getStatName(const void * Stat)
 /*Load the weapon stats from the file exported from Access*/
 BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 {
-	const unsigned int NumWeapons = numCR(pWeaponData, bufferSize);
+	unsigned int	NumWeapons = numCR(pWeaponData, bufferSize);
 	WEAPON_STATS	sStats, * const psStats = &sStats;
 	UDWORD			i, rotate, maxElevation, surfaceToAir;
 	SDWORD			minElevation;
@@ -358,6 +358,13 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 	char			*StatsName;
 	UDWORD			penetrate;
 	UDWORD dummyVal;
+
+	// Skip descriptive header
+	if (strncmp(pWeaponData,"Weapon ",7)==0)
+	{
+		pWeaponData = strchr(pWeaponData,'\n') + 1;
+		NumWeapons--;
+	}
 
 	if (!statsAllocWeapons(NumWeapons))
 	{
@@ -754,20 +761,24 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 {
 	BODY_STATS sStats, * const psStats = &sStats;
-	const unsigned int NumBody = numCR(pBodyData, bufferSize) - 1;
+	unsigned int NumBody = numCR(pBodyData, bufferSize);
 	unsigned int i, designable;
 	char BodyName[MAX_STR_LENGTH], size[MAX_STR_LENGTH],
 		GfxFile[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
 		flameIMD[MAX_STR_LENGTH];
 	UDWORD dummyVal;
 
+	// Skip descriptive header
+	if (strncmp(pBodyData,"Body ",5)==0)
+	{
+		pBodyData = strchr(pBodyData,'\n') + 1;
+		NumBody--;
+	}
+
 	if (!statsAllocBody(NumBody))
 	{
 		return false;
 	}
-
-	// Skip descriptive header
-	pBodyData = strchr(pBodyData,'\n') + 1;
 
 	for (i = 0; i < NumBody; i++)
 	{
@@ -1104,7 +1115,7 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 /*Load the Sensor stats from the file exported from Access*/
 BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 {
-	const unsigned int NumSensor = numCR(pSensorData, bufferSize) - 1;
+	unsigned int NumSensor = numCR(pSensorData, bufferSize);
 	SENSOR_STATS sStats, * const psStats = &sStats;
 	unsigned int i = 0, designable;
 	char			SensorName[MAX_STR_LENGTH], location[MAX_STR_LENGTH],
@@ -1112,13 +1123,17 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 	char			mountGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
 	UDWORD dummyVal;
 
+	// Skip descriptive header
+	if (strncmp(pSensorData,"Sensor ",7)==0)
+	{
+		pSensorData = strchr(pSensorData,'\n') + 1;
+		NumSensor--;
+	}
+	
 	if (!statsAllocSensor(NumSensor))
 	{
 		return false;
 	}
-
-	// Skip header
-	pSensorData = strchr(pSensorData,'\n') + 1;
 
 	for (i = 0; i < NumSensor; i++)
 	{

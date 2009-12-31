@@ -125,8 +125,15 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 	char				featureName[MAX_STR_LENGTH], GfxFile[MAX_STR_LENGTH],
 						type[MAX_STR_LENGTH];
 
-	numFeatureStats = numCR(pFeatureData, bufferSize) - 1;
+	numFeatureStats = numCR(pFeatureData, bufferSize);
 
+	// Skip descriptive header
+	if (strncmp(pFeatureData,"Feature ",8)==0)
+	{
+		pFeatureData = strchr(pFeatureData,'\n') + 1;
+		numFeatureStats--;
+	}
+	
 	asFeatureStats = (FEATURE_STATS*)malloc(sizeof(FEATURE_STATS) * numFeatureStats);
 
 	if (asFeatureStats == NULL)
@@ -137,9 +144,6 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 	}
 
 	psFeature = asFeatureStats;
-
-	// Ignore first line containing headers
-	pFeatureData = strchr(pFeatureData,'\n') + 1;
 
 	for (i = 0; i < numFeatureStats; i++)
 	{

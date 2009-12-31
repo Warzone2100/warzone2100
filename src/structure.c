@@ -493,7 +493,7 @@ static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 /* load the Structure stats from the Access database */
 BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 {
-	const unsigned int NumStructures = numCR(pStructData, bufferSize) - 1;
+	unsigned int        NumStructures = numCR(pStructData, bufferSize);
 	UDWORD i, inc, player, numWeaps, weapSlots;
 	char				StructureName[MAX_STR_LENGTH], foundation[MAX_STR_LENGTH],
 						type[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
@@ -507,6 +507,13 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 	UDWORD				iID;
 	UDWORD              dummyVal;
 
+	// Skip descriptive header
+	if (strncmp(pStructData,"Structure ",10)==0)
+	{
+		pStructData = strchr(pStructData,'\n') + 1;
+		NumStructures--;
+	}
+	
 #if (MAX_PLAYERS != 8)
 	char NotUsedString[MAX_STR_LENGTH];
 #endif
@@ -541,9 +548,6 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 
 	//get the start of the structure_stats storage
 	psStructure = asStructureStats;
-
-	// Skip headers
-	pStructData = strchr(pStructData,'\n') + 1;
 
 	for (i = 0; i < NumStructures; i++)
 	{
