@@ -55,9 +55,7 @@ extern void visUpdateLevel(void);
 
 extern void setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player);
 
-// sensor range display
-extern BOOL	bDisplaySensorRange;
-extern void updateSensorDisplay(void);
+void visRemoveVisibility(BASE_OBJECT *psObj);
 
 // fast test for whether obj2 is in range of obj1
 static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWORD range)

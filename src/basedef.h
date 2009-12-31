@@ -40,6 +40,11 @@ typedef enum _object_type
 	OBJ_TARGET,     ///< for the camera tracking
 } OBJECT_TYPE;
 
+typedef struct _tilePos
+{
+	UBYTE x, y;
+} TILEPOS;
+
 /*
  Coordinate system used for objects in Warzone 2100:
   x - "right"
@@ -75,6 +80,8 @@ typedef enum _object_type
 	SDWORD              sensorPower;		/**< Active sensor power */ \
 	SDWORD              sensorRange;		/**< Range of sensor */ \
 	SDWORD              ECMMod;			/**< Ability to conceal oneself from sensors */ \
+	UWORD               numWatchedTiles;		/**< Number of watched tiles, zero for features */ \
+	TILEPOS             *watchedTiles;		/**< Variable size array of watched tiles, NULL for features */ \
 	UDWORD              armour[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES]
 
 #define NEXTOBJ(pointerType) \

@@ -306,6 +306,12 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 				col.byte.r = sqrtf(col.byte.r * WTile->illumination);
 				col.byte.b = sqrtf(col.byte.b * WTile->illumination);
 				col.byte.g = sqrtf(col.byte.g * WTile->illumination);
+				if (!hasSensorOnTile(WTile, selectedPlayer))
+				{
+					col.byte.r /= 2;
+					col.byte.b /= 2;
+					col.byte.g /= 2;
+				}
 				WScr = col;
 			}
 		}

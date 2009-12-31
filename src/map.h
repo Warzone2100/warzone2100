@@ -98,7 +98,7 @@ typedef struct _maptile
 	UBYTE			illumination;	// How bright is this tile?
 	UWORD			texture;		// Which graphics texture is on this tile
 	bool			bMaxed;
-	bool			activeSensor;	// selected player can see through fog of war here
+	UBYTE			watchers[MAX_PLAYERS];		// player sees through fog of war here with this many objects
 	float			level;
 	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
 	PIELIGHT		colour;
@@ -414,5 +414,29 @@ void mapFloodFillContinents(void);
 extern void mapTest(void);
 
 extern bool fireOnLocation(unsigned int x, unsigned int y);
+
+/**
+ * Transitive sensor check for tile. Has to be here rather than
+ * visibility.h due to header include order issues. 
+ */
+static inline bool hasSensorOnTile(MAPTILE *psTile, int player)
+{
+	int k;
+	bool seen = false;
+
+	if (psTile->watchers[selectedPlayer] == 0)
+	{
+		// Check if an ally can provide us with vision on this tile
+		for (k = 0; k < MAX_PLAYERS; k++)
+		{
+			if (psTile->watchers[k] > 0 && aiCheckAlliances(k, selectedPlayer))
+			{
+				seen = true;
+			}
+		}
+		return seen;
+	}
+	return true;
+}
 
 #endif // __INCLUDED_SRC_MAP_H__

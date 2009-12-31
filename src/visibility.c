@@ -63,6 +63,10 @@ static SDWORD			visLevelInc, visLevelDec;
 // alexl's sensor range.
 BOOL bDisplaySensorRange;
 
+// horrible hack because this code is full of them and I ain't rewriting it all - Per
+#define MAX_SEEN_TILES 1024
+static TILEPOS recordTilePos[MAX_SEEN_TILES];
+static int lastRecordTilePos = -1;
 
 typedef struct {
 	bool rayStart; // Whether this is the first point on the ray
@@ -147,15 +151,18 @@ static int visObjHeight(const BASE_OBJECT * psObject)
 /* The terrain revealing ray callback */
 bool rayTerrainCallback(Vector3i pos, int distSq, void * data)
 {
-	int dist = sqrtf(distSq);
+	const int mapX = map_coord(pos.x);
+	const int mapY = map_coord(pos.y);
+	int i, dist = sqrtf(distSq);
 	int newH, newG; // The new gradient
 	MAPTILE *psTile;
+	bool alreadySeen = false;
 
 	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
 		&& pos.y >= 0 && pos.y < world_coord(mapHeight),
 			"rayTerrainCallback: coords off map" );
 
-	psTile = mapTile(map_coord(pos.x), map_coord(pos.y));
+	psTile = mapTile(mapX, mapY);
 
 	/* Not true visibility - done on sensor range */
 
@@ -179,7 +186,30 @@ bool rayTerrainCallback(Vector3i pos, int distSq, void * data)
 			SET_TILE_VISIBLE(selectedPlayer,psTile);		//reveal radar
 		}
 
-		/* Not true visibility - done on sensor range */
+		/* Record all tiles that this object confers visibility to. Only record each tile
+		 * once. Note that there is both a limit to how many objects can watch any given
+		 * tile, and a limit to how many tiles each object can watch. Strange but non fatal
+		 * things will happen if these limits are exceeded. */
+		if (psTile->watchers[rayPlayer] < UBYTE_MAX && lastRecordTilePos < MAX_SEEN_TILES)
+		{
+			for (i = 0; i < lastRecordTilePos; i++)
+			{
+				if (recordTilePos[i].x == mapX && recordTilePos[i].y == mapY)
+				{
+					alreadySeen = true;
+					break;
+				}
+			}
+			if (!alreadySeen)
+			{
+				psTile->watchers[rayPlayer]++;			// we see this tile
+				recordTilePos[lastRecordTilePos].x = mapX;	// record having seen it
+				recordTilePos[lastRecordTilePos].y = mapY;
+				lastRecordTilePos++;
+			}
+		}
+
+		/* Single player visibility system - fix me one day to work properly in MP */
 		if (rayPlayer == selectedPlayer
 		    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
 			&& aiCheckAlliances(selectedPlayer, rayPlayer)))
@@ -189,7 +219,6 @@ bool rayTerrainCallback(Vector3i pos, int distSq, void * data)
 			{
 				avInformOfChange(map_coord(pos.x), map_coord(pos.y));		//reveal map
 			}
-			psTile->activeSensor = true;
 		}
 	}
 
@@ -259,6 +288,27 @@ BOOL visTilesPending(BASE_OBJECT *psObj)
 	return (((DROID*)psObj)->updateFlags & DUPF_SCANTERRAIN);
 }
 
+/* Remove tile visibility from object */
+void visRemoveVisibility(BASE_OBJECT *psObj)
+{
+	if (psObj->watchedTiles && psObj->numWatchedTiles > 0)
+	{
+		int i = 0;
+
+		for (i = 0; i < psObj->numWatchedTiles; i++)
+		{
+			const TILEPOS pos = psObj->watchedTiles[i];
+			MAPTILE *psTile = mapTile(pos.x, pos.y);
+
+			ASSERT(psTile->watchers > 0, "Not watching watched tile (%d, %d)", (int)pos.x, (int)pos.y);
+			psTile->watchers[psObj->player]--;
+		}
+		free(psObj->watchedTiles);
+		psObj->watchedTiles = NULL;
+		psObj->numWatchedTiles = 0;
+	}
+}
+
 /* Check which tiles can be seen by an object */
 void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
 {
@@ -268,7 +318,12 @@ void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
 
 	ASSERT(psObj->type != OBJ_FEATURE, "visTilesUpdate: visibility updates are not for features!");
 
+	lastRecordTilePos = 0;
+	memset(recordTilePos, 0, sizeof(recordTilePos));
 	rayPlayer = psObj->player;
+
+	// Remove previous map visibility provided by object
+	visRemoveVisibility(psObj);
 
 	// Do the whole circle in 80 steps
 	for (ray = 0; ray < NUM_RAYS; ray += NUM_RAYS / 80)
@@ -281,6 +336,14 @@ void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
 
 		// Cast the rays from the viewer
 		rayCast(pos, dir, range, callback, NULL);
+	}
+
+	// Record new map visibility provided by object
+	if (lastRecordTilePos > 0)
+	{
+		psObj->watchedTiles = calloc(lastRecordTilePos, sizeof(*psObj->watchedTiles));
+		psObj->numWatchedTiles = lastRecordTilePos;
+		memcpy(psObj->watchedTiles, recordTilePos, lastRecordTilePos * sizeof(*psObj->watchedTiles));
 	}
 }
 
@@ -713,39 +776,6 @@ MAPTILE		*psTile;
 
 			psTile = mapTile(mapX+i,mapY+j);
 			SET_TILE_VISIBLE(player, psTile);
-		}
-	}
-}
-
-void updateSensorDisplay()
-{
-	MAPTILE		*psTile = psMapTiles;
-	int		x;
-	DROID		*psDroid;
-	STRUCTURE	*psStruct;
-
-	// clear sensor info
-	for (x = 0; x < mapWidth * mapHeight; x++)
-	{
-		psTile->activeSensor = false;
-		psTile++;
-	}
-
-	// process the sensor range of all droids/structs.
-
-	// units.
-	for(psDroid = apsDroidLists[selectedPlayer];psDroid;psDroid=psDroid->psNext)
-	{
-		visTilesUpdate((BASE_OBJECT*)psDroid, rayTerrainCallback);
-	}
-
-	// structs.
-	for(psStruct = apsStructLists[selectedPlayer];psStruct;psStruct=psStruct->psNext)
-	{
-		if (psStruct->pStructureType->type != REF_WALL
- 		    && psStruct->pStructureType->type != REF_WALLCORNER)
-		{
-			visTilesUpdate((BASE_OBJECT*)psStruct, rayTerrainCallback);
 		}
 	}
 }
