@@ -11,7 +11,7 @@ TARGETS:= \
 include $(TOPDIR)/rules.mk
 
 $(PKG_SOURCEBASE) fetch-stamp:
-	svn export -r 913 $(PKG_CHECKOUT_URL) $(PKG_SOURCEBASE)
+	svn export --force -r 913 $(PKG_CHECKOUT_URL) $(PKG_SOURCEBASE)
 	touch fetch-stamp
 
 $(PKG_SOURCEBASE)/configure.in: fetch-stamp
