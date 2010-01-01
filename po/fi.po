@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-01-01 20:42+0100\n"
-"PO-Revision-Date: 2008-05-09 10:33+0000\n"
-"Last-Translator: Lartza <lartza@wippies.com>\n"
+"PO-Revision-Date: 2010-01-01 21:08+0200\n"
+"Last-Translator: Tefa <muu_posti@hotamil.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10916,9 +10916,8 @@ msgstr ""
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:106
-#, fuzzy
 msgid "Spanish"
-msgstr "tanska"
+msgstr "espanja"
 
 #: lib/framework/i18n.c:53
 #: lib/framework/i18n.c:107
@@ -10927,9 +10926,8 @@ msgstr ""
 
 #: lib/framework/i18n.c:55
 #: lib/framework/i18n.c:109
-#, fuzzy
 msgid "Finnish"
-msgstr "tanska"
+msgstr "suomi"
 
 #: lib/framework/i18n.c:56
 #: lib/framework/i18n.c:110
@@ -10968,15 +10966,13 @@ msgstr "hollanti"
 
 #: lib/framework/i18n.c:73
 #: lib/framework/i18n.c:127
-#, fuzzy
 msgid "Polish"
-msgstr "englanti"
+msgstr "puola"
 
 #: lib/framework/i18n.c:74
 #: lib/framework/i18n.c:128
-#, fuzzy
 msgid "Brazilian Portuguese"
-msgstr "portugali"
+msgstr "Brasilian portugali"
 
 #: lib/framework/i18n.c:75
 #: lib/framework/i18n.c:129
@@ -11142,19 +11138,19 @@ msgstr "LEVEYSxKORKEUS"
 
 #: src/clparse.c:119
 msgid "Enable shadows"
-msgstr ""
+msgstr "Varjot päällä"
 
 #: src/clparse.c:120
 msgid "Disable shadows"
-msgstr ""
+msgstr "Varjot pois päältä"
 
 #: src/clparse.c:121
 msgid "Enable sound"
-msgstr ""
+msgstr "Äänet päällä"
 
 #: src/clparse.c:122
 msgid "Disable sound"
-msgstr ""
+msgstr "Äänet pois päältä"
 
 #: src/clparse.c:123
 msgid "Activate self-test"
@@ -11182,7 +11178,7 @@ msgstr "Pelaaja"
 #: src/design.c:476
 #: src/design.c:3573
 msgid "New Vehicle"
-msgstr ""
+msgstr "Uusi Ajoneuvo"
 
 #: src/design.c:523
 msgid "Vehicle Body"
@@ -11388,7 +11384,7 @@ msgstr[1] ""
 
 #: src/droid.c:3605
 msgid "Rookie"
-msgstr ""
+msgstr "Aloittelija"
 
 #: src/droid.c:3606
 msgctxt "rank"
@@ -11397,7 +11393,7 @@ msgstr ""
 
 #: src/droid.c:3607
 msgid "Trained"
-msgstr ""
+msgstr "Koulutettu"
 
 #: src/droid.c:3608
 msgid "Regular"
@@ -11459,7 +11455,7 @@ msgstr "PÄÄVALIKKO"
 
 #: src/frontend.c:313
 msgid "Fast Play"
-msgstr ""
+msgstr "Pikapeli"
 
 #: src/frontend.c:314
 msgid "TUTORIALS"
@@ -11489,7 +11485,7 @@ msgstr ""
 
 #: src/frontend.c:370
 msgid "Challenges"
-msgstr ""
+msgstr "Haasteet"
 
 #: src/frontend.c:371
 #: src/ingameop.c:281
@@ -11530,22 +11526,20 @@ msgstr "Peliasetukset"
 
 #: src/frontend.c:582
 msgid "Graphics Options"
-msgstr ""
+msgstr "Grafiikka-asetukset"
 
 #: src/frontend.c:583
-#, fuzzy
 msgid "Video Options"
-msgstr "Peliasetukset"
+msgstr "Videoasetukset"
 
 #: src/frontend.c:584
 #: src/ingameop.c:276
 msgid "Audio Options"
-msgstr ""
+msgstr "Ääniasetukset"
 
 #: src/frontend.c:585
-#, fuzzy
 msgid "Mouse Options"
-msgstr "Peliasetukset"
+msgstr "Hiiriasetukset"
 
 #: src/frontend.c:586
 msgid "Key Mappings"
@@ -11643,9 +11637,8 @@ msgid "Shadows"
 msgstr "Varjot"
 
 #: src/frontend.c:725
-#, fuzzy
 msgid "GRAPHICS OPTIONS"
-msgstr "PELIASETUKSET"
+msgstr "GRAFIIKKA-ASETUKSET"
 
 #: src/frontend.c:856
 #: src/ingameop.c:179
@@ -11663,9 +11656,8 @@ msgid "Music Volume"
 msgstr ""
 
 #: src/frontend.c:871
-#, fuzzy
 msgid "AUDIO OPTIONS"
-msgstr "PELIASETUKSET"
+msgstr "ÄÄNIASETUKSET"
 
 #: src/frontend.c:936
 msgid "Graphics Mode*"
@@ -11693,9 +11685,8 @@ msgid "* Takes effect on game restart"
 msgstr ""
 
 #: src/frontend.c:972
-#, fuzzy
 msgid "VIDEO OPTIONS"
-msgstr "PELIASETUKSET"
+msgstr "VIDEOASETUKSET"
 
 #: src/frontend.c:1130
 msgid "Reverse Rotation"
@@ -11710,18 +11701,16 @@ msgid "Colored Cursors*"
 msgstr ""
 
 #: src/frontend.c:1166
-#, fuzzy
 msgid "Switch Mouse Buttons"
-msgstr "Peliasetukset"
+msgstr ""
 
 #: src/frontend.c:1176
 msgid "* May negatively affect performance"
 msgstr ""
 
 #: src/frontend.c:1179
-#, fuzzy
 msgid "MOUSE OPTIONS"
-msgstr "PELIASETUKSET"
+msgstr "HIIRIASETUKSET"
 
 #: src/frontend.c:1280
 #: src/frontend.c:1346
@@ -11783,17 +11772,15 @@ msgid "Close"
 msgstr "Sulje"
 
 #: src/hci.c:1355
-#, fuzzy
 msgid "MAP SAVED!"
-msgstr "Peli tallennettu"
+msgstr "Kartta tallennettu"
 
 #: src/hci.c:1702
 #: src/loop.c:535
 #: src/loop.c:551
 #: src/mission.c:2907
-#, fuzzy
 msgid "GAME SAVED :"
-msgstr "Peli tallennettu"
+msgstr "PELI TALLENNETTU :"
 
 #: src/hci.c:2109
 msgid "Failed to create building"
@@ -11866,9 +11853,8 @@ msgid "Struct"
 msgstr ""
 
 #: src/hci.c:4110
-#, fuzzy
 msgid "Place Structures on map"
-msgstr "Vihollisrakennukset: %u"
+msgstr "Sijoita rakennukset kartalle"
 
 #: src/hci.c:4118
 msgid "Feat"
@@ -11947,7 +11933,7 @@ msgstr ""
 
 #: src/ingameop.c:364
 msgid "-->  QUIT  <--"
-msgstr ""
+msgstr "-->  POISTU  <--"
 
 #: src/intdisplay.c:202
 #: src/intdisplay.c:247
@@ -12176,11 +12162,11 @@ msgstr ""
 
 #: src/keybind.c:643
 msgid "Fog on"
-msgstr ""
+msgstr "Sumu päällä"
 
 #: src/keybind.c:643
 msgid "Fog off"
-msgstr ""
+msgstr "Sumu pois päältä"
 
 #: src/keybind.c:1082
 #, c-format
@@ -12201,11 +12187,11 @@ msgstr ""
 
 #: src/keybind.c:1254
 msgid "God Mode ON"
-msgstr ""
+msgstr "Jumalmoodi PÄÄLLÄ"
 
 #: src/keybind.c:1254
 msgid "God Mode OFF"
-msgstr ""
+msgstr "Jumalmoodi POIS PÄÄLTÄ"
 
 #: src/keybind.c:1266
 msgid "View Aligned to North"
@@ -12221,9 +12207,8 @@ msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
 #: src/keybind.c:1379
-#, fuzzy
 msgid "Researched"
-msgstr "Tutki (F2)"
+msgstr "Tutkittu"
 
 #: src/keybind.c:1399
 msgid "Only displaying energy bars when selected"
@@ -12359,7 +12344,7 @@ msgstr ""
 
 #: src/keymap.c:295
 msgid "Research"
-msgstr ""
+msgstr "Tutki"
 
 #: src/keymap.c:296
 msgid "Build"
@@ -12367,7 +12352,7 @@ msgstr "Rakenna"
 
 #: src/keymap.c:297
 msgid "Design"
-msgstr ""
+msgstr "Suunnittele"
 
 #: src/keymap.c:298
 msgid "Intelligence Display"
@@ -12375,7 +12360,7 @@ msgstr ""
 
 #: src/keymap.c:299
 msgid "Commanders"
-msgstr ""
+msgstr "Komentajat"
 
 #: src/keymap.c:300
 msgid "Toggle Radar"
@@ -12443,43 +12428,43 @@ msgstr ""
 
 #: src/keymap.c:323
 msgid "Select Group 0"
-msgstr ""
+msgstr "Valitse Ryhmä 0"
 
 #: src/keymap.c:324
 msgid "Select Group 1"
-msgstr ""
+msgstr "Valitse Ryhmä 1"
 
 #: src/keymap.c:325
 msgid "Select Group 2"
-msgstr ""
+msgstr "Valitse Ryhmä 2"
 
 #: src/keymap.c:326
 msgid "Select Group 3"
-msgstr ""
+msgstr "Valitse Ryhmä 3"
 
 #: src/keymap.c:327
 msgid "Select Group 4"
-msgstr ""
+msgstr "Valitse Ryhmä 4"
 
 #: src/keymap.c:328
 msgid "Select Group 5"
-msgstr ""
+msgstr "Valitse Ryhmä 5"
 
 #: src/keymap.c:329
 msgid "Select Group 6"
-msgstr ""
+msgstr "Valitse Ryhmä 6"
 
 #: src/keymap.c:330
 msgid "Select Group 7"
-msgstr ""
+msgstr "Valitse Ryhmä 7"
 
 #: src/keymap.c:331
 msgid "Select Group 8"
-msgstr ""
+msgstr "Valitse Ryhmä 8"
 
 #: src/keymap.c:332
 msgid "Select Group 9"
-msgstr ""
+msgstr "Valitse Ryhmä 9"
 
 #: src/keymap.c:336
 msgid "Select Commander 0"
@@ -12558,16 +12543,18 @@ msgid "Pitch Forward"
 msgstr ""
 
 #: src/keymap.c:360
+#, fuzzy
 msgid "Rotate Left"
-msgstr ""
+msgstr "Kierrä vasempaan"
 
 #: src/keymap.c:361
 msgid "Reset Pitch"
 msgstr ""
 
 #: src/keymap.c:362
+#, fuzzy
 msgid "Rotate Right"
-msgstr ""
+msgstr "Käännä Oikeaan"
 
 #: src/keymap.c:363
 msgid "Pitch Back"
@@ -12651,7 +12638,7 @@ msgstr ""
 
 #: src/keymap.c:395
 msgid "Send Text Message"
-msgstr ""
+msgstr "Lähetä Viesti"
 
 #: src/keymap.c:413
 msgid "Select all Combat Units"
@@ -12715,9 +12702,8 @@ msgstr ""
 
 #: src/loop.c:542
 #: src/loop.c:558
-#, fuzzy
 msgid "Could not save game!"
-msgstr "Lataa tallennettu peli"
+msgstr "Peliä ei voitu tallentaa!"
 
 #: src/mission.c:2379
 msgid "Load Transport"
@@ -12782,7 +12768,7 @@ msgstr ""
 #: src/multigifts.c:337
 #, c-format
 msgid "%s Gives You %u Power"
-msgstr ""
+msgstr "%s Antaa Sinulle %u Voimaa"
 
 #: src/multigifts.c:357
 #, c-format
@@ -12816,7 +12802,7 @@ msgstr "Hyväksy asetukset"
 
 #: src/multiint.c:580
 msgid "IP Address or Machine Name"
-msgstr ""
+msgstr "IP-osoite tai koneen nimi"
 
 #: src/multiint.c:621
 msgid "CONNECTION"
@@ -12828,15 +12814,15 @@ msgstr "Aula"
 
 #: src/multiint.c:635
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/multiint.c:832
 msgid "No games are available"
-msgstr ""
+msgstr "Ei pelejä saatavilla"
 
 #: src/multiint.c:835
 msgid "Game is full"
-msgstr ""
+msgstr "Peli on täynnä"
 
 #: src/multiint.c:839
 msgid "You were kicked!"
@@ -12844,7 +12830,7 @@ msgstr ""
 
 #: src/multiint.c:842
 msgid "Wrong Game Version!"
-msgstr ""
+msgstr "Väärä Pelin Versio!"
 
 #: src/multiint.c:845
 msgid "Wrong data/mod detected by Host."
@@ -12872,11 +12858,11 @@ msgstr "Etsitään"
 
 #: src/multiint.c:1063
 msgid "GAMES"
-msgstr ""
+msgstr "PELIT"
 
 #: src/multiint.c:1073
 msgid "Refresh Games List"
-msgstr ""
+msgstr "Päivitä Pelien Lista"
 
 #: src/multiint.c:1094
 msgid "Enter Password First "
@@ -12884,7 +12870,7 @@ msgstr ""
 
 #: src/multiint.c:1201
 msgid "Select Game Name"
-msgstr ""
+msgstr "Valitse Pelin Nimi"
 
 #: src/multiint.c:1202
 msgid "Select Map"
@@ -12927,7 +12913,7 @@ msgstr "Salli liittoumat"
 
 #: src/multiint.c:1276
 msgid "Locked Teams"
-msgstr ""
+msgstr "Lukitut Joukkueet"
 
 #: src/multiint.c:1302
 msgid "Low Power Levels"
@@ -12959,7 +12945,7 @@ msgstr ""
 
 #: src/multiint.c:1376
 msgid "Map Preview"
-msgstr ""
+msgstr "Kartan esikatselu"
 
 #: src/multiint.c:1378
 msgid "Click to see Map"
@@ -12970,9 +12956,8 @@ msgid "Start Hosting Game"
 msgstr ""
 
 #: src/multiint.c:1400
-#, fuzzy
 msgid "Show Structure Limits"
-msgstr "Omat rakennukset: %u"
+msgstr ""
 
 #: src/multiint.c:1400
 msgid "Set Structure Limits"
@@ -12980,11 +12965,11 @@ msgstr ""
 
 #: src/multiint.c:1818
 msgid "Team"
-msgstr ""
+msgstr "Joukkue"
 
 #: src/multiint.c:1851
 msgid "Waiting for other players"
-msgstr ""
+msgstr "Odotetaan muita pelaajia"
 
 #: src/multiint.c:1857
 msgid "Click when ready"
@@ -12992,7 +12977,7 @@ msgstr ""
 
 #: src/multiint.c:1861
 msgid "READY?"
-msgstr ""
+msgstr "VALMIS?"
 
 #: src/multiint.c:1898
 msgid "PLAYERS"
@@ -13004,11 +12989,11 @@ msgstr ""
 
 #: src/multiint.c:2251
 msgid "*** password is now required! ***"
-msgstr ""
+msgstr "*** salasana vaaditaan ***"
 
 #: src/multiint.c:2258
 msgid "*** password is NOT required! ***"
-msgstr ""
+msgstr "*** salasanaa ei vaadita ***"
 
 #: src/multiint.c:2500
 msgid "Sorry! Failed to host the game."
@@ -13038,7 +13023,7 @@ msgstr "Pelaajat"
 #: src/multiint.c:3361
 #, c-format
 msgid "Map: %d%% downloaded"
-msgstr ""
+msgstr "Kartta: %d%% ladattu"
 
 #: src/multijoin.c:98
 #: src/multijoin.c:99
@@ -13048,7 +13033,7 @@ msgstr ""
 #: src/multijoin.c:222
 #, c-format
 msgid "%s has Left the Game"
-msgstr ""
+msgstr "%s poistui pelistä"
 
 #: src/multijoin.c:330
 #, c-format
@@ -13062,7 +13047,7 @@ msgstr ""
 #: src/multijoin.c:366
 #, c-format
 msgid "%s is Joining the Game"
-msgstr ""
+msgstr "%s on liittymässä peliin"
 
 #: src/multijoin.c:376
 msgid "System message:"
@@ -13090,15 +13075,15 @@ msgstr ""
 
 #: src/multimenu.c:636
 msgid "2 players"
-msgstr ""
+msgstr "2 pelaajaa"
 
 #: src/multimenu.c:642
 msgid "4 players"
-msgstr ""
+msgstr "4 pelaajaa"
 
 #: src/multimenu.c:648
 msgid "8 players"
-msgstr ""
+msgstr "8 pelaajaa"
 
 #: src/multimenu.c:757
 msgid "Score"
@@ -13106,13 +13091,12 @@ msgstr ""
 
 #: src/multimenu.c:758
 msgid "Kills"
-msgstr ""
+msgstr "Tapot"
 
 #: src/multimenu.c:762
 #: src/multimenu.c:767
-#, fuzzy
 msgid "Units"
-msgstr "Yksikkö"
+msgstr "Yksiköt"
 
 #: src/multimenu.c:772
 msgid "Ping"
@@ -13237,7 +13221,7 @@ msgstr ""
 #: src/scores.c:104
 #, c-format
 msgid "Total Units: %u"
-msgstr ""
+msgstr "Yksikköjä yhteensä: %u"
 
 #: src/scores.c:105
 #, c-format
@@ -13247,23 +13231,23 @@ msgstr ""
 #: src/scores.c:106
 #, c-format
 msgid "Total Structures: %u"
-msgstr ""
+msgstr "Rakennuksia yhteensä: %u"
 
 #: src/scores.c:108
 #, c-format
 msgid "Rookie: %u"
-msgstr ""
+msgstr "Aloittelija: %u"
 
 #: src/scores.c:109
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Vihreä"
+msgstr "Vihreä: %u"
 
 #: src/scores.c:110
 #, c-format
 msgid "Trained: %u"
-msgstr ""
+msgstr "Koulutettu: %u"
 
 #: src/scores.c:111
 #, c-format
@@ -13273,17 +13257,17 @@ msgstr ""
 #: src/scores.c:112
 #, c-format
 msgid "Professional: %u"
-msgstr ""
+msgstr "Ammattilainen: %u"
 
 #: src/scores.c:113
 #, c-format
 msgid "Veteran: %u"
-msgstr ""
+msgstr "Veteraani: %u"
 
 #: src/scores.c:114
 #, c-format
 msgid "Elite: %u"
-msgstr ""
+msgstr "Eliitti: %u"
 
 #: src/scores.c:115
 #, c-format
@@ -13293,7 +13277,7 @@ msgstr ""
 #: src/scores.c:116
 #, c-format
 msgid "Hero: %u"
-msgstr ""
+msgstr "Sankari: %u"
 
 #: src/scores.c:351
 msgid "Unit Losses"
@@ -13349,8 +13333,8 @@ msgstr ""
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u yksikkö valittu"
+msgstr[1] "%u yksiköt valittu"
 
 #: src/selection.c:434
 #: src/selection.c:521
