@@ -343,25 +343,15 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 	ASSERT_OR_RETURN(, psGroup != NULL,
 		"orderGroupLoc: invalid droid group" );
 
-	if(bMultiPlayer)
-	{
-		SendGroupOrderGroup(psGroup,order,x,y,NULL);
-		bMultiPlayer = false;
+	SendGroupOrderGroup(psGroup,order,x,y,NULL);
+	turnOffMultiMsg(true);
 
-		for(psCurr=psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
-		{
-			orderDroidLoc(psCurr, order, x,y);
-		}
-
-		bMultiPlayer = true;
-	}
-	else
+	for(psCurr=psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 	{
-		for(psCurr=psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
-		{
-			orderDroidLoc(psCurr, order, x,y);
-		}
+		orderDroidLoc(psCurr, order, x,y);
 	}
+
+	turnOffMultiMsg(false);
 }
 
 /* Give a group of droids an order */
@@ -372,25 +362,15 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 	ASSERT_OR_RETURN(, psGroup != NULL,
 		"orderGroupObj: invalid droid group" );
 
-	if(bMultiPlayer)
-	{
-		SendGroupOrderGroup(psGroup,order,0,0,psObj);
-		bMultiPlayer = false;
+	SendGroupOrderGroup(psGroup,order,0,0,psObj);
+	turnOffMultiMsg(true);
 
-		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
-		{
-			orderDroidObj(psCurr, order, (BASE_OBJECT *)psObj);
-		}
-
-		bMultiPlayer = true;
-	}
-	else
+	for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 	{
-		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
-		{
-			orderDroidObj(psCurr, order, (BASE_OBJECT *)psObj);
-		}
+		orderDroidObj(psCurr, order, (BASE_OBJECT *)psObj);
 	}
+
+	turnOffMultiMsg(false);
 }
 
 /* set the secondary state for a group of droids */

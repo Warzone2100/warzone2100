@@ -76,6 +76,7 @@ bool						isMPDirtyBit = false;		// When we are forced to use turnOffMultiMsg() 
 BOOL						bMultiPlayer				= false;	// true when more than 1 player.
 BOOL						openchannels[MAX_PLAYERS]={true};
 UBYTE						bDisplayMultiJoiningStatus;
+int							multiMsgOff = 1;						// see turnOffMultiMsg() in multiplay.c
 
 MULTIPLAYERGAME				game;									//info to describe game.
 MULTIPLAYERINGAME			ingame;
@@ -117,28 +118,24 @@ void		startMultiplayerGame		(void);
 // temporarily disable multiplayer mode.
 BOOL turnOffMultiMsg(BOOL bDoit)
 {
-	static BOOL bTemp;
-
-	if(bDoit)	// turn off msgs.
+	if (!bMultiPlayer)
 	{
-		if(bTemp == true)
-		{
-			// This is spammed multiple times.
-			debug(LOG_NEVER, "multiple calls to turn off");
-		}
-		if(bMultiPlayer)
-		{
-			bMultiPlayer = false;
-			bTemp = true;
-			isMPDirtyBit = true;
-		}
+		return true;
+	}
+	if (bDoit)	// turn off msgs.
+	{
+		multiMsgOff++;
+		isMPDirtyBit = true;
 	}
 	else	// turn on msgs.
 	{
-		if(bTemp)
+		if (multiMsgOff)
 		{
-			bMultiPlayer = true;
-			bTemp = false;
+			multiMsgOff--;
+		}
+		else
+		{
+			ASSERT_OR_RETURN(false, false, "MultiMessages turned on when they were never off.");
 		}
 	}
 	return true;
@@ -799,6 +796,11 @@ BOOL SendResearch(uint8_t player, uint32_t index)
 	UBYTE i;
 	PLAYER_RESEARCH *pPlayerRes;
 
+	if (multiMsgOff) // don't send if multiMsgs are off
+	{
+		return true;
+	}
+	
 	// Send the player that is researching the topic and the topic itself
 	NETbeginEncode(NET_RESEARCH, NET_ALL_PLAYERS);
 		NETuint8_t(&player);
@@ -1366,6 +1368,13 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 	int i;
 	uint8_t player = selectedPlayer;
 
+	return true;
+
+	if (multiMsgOff) // don't send if multiMsgs are off
+	{
+		return true;
+	}
+
 	ASSERT(pTempl != NULL, "sendTemplate: Old Pumpkin bug");
 	if (!pTempl) return true; /* hack */
 
@@ -1459,6 +1468,10 @@ BOOL recvTemplate()
 
 BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 {
+	if (multiMsgOff) // don't send if multiMsgs are off
+	{
+		return true;
+	}
 	uint8_t player = selectedPlayer;
 
 	NETbeginEncode(NET_TEMPLATEDEST, NET_ALL_PLAYERS);

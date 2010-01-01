@@ -380,8 +380,7 @@ void	removeDroidBase(DROID *psDel)
 	}
 
 	//ajl, inform others of destruction.
-	if (bMultiPlayer
-	 && !(psDel->player != selectedPlayer && psDel->order == DORDER_RECYCLE))
+	if (!(psDel->player != selectedPlayer && psDel->order == DORDER_RECYCLE))
 	{
 		ASSERT_OR_RETURN( , droidOnMap(psDel), "Asking other players to destroy droid driving off the map");
 		SendDestroyDroid(psDel);
@@ -1092,12 +1091,9 @@ BOOL droidStartBuild(DROID *psDroid)
 		}
 		psStruct->body /= 10; // structures start at 10% health
 
-		if (bMultiPlayer)
+		if(myResponsibility(psDroid->player) )
 		{
-			if(myResponsibility(psDroid->player) )
-			{
-				sendBuildStarted(psStruct, psDroid);
-			}
+			sendBuildStarted(psStruct, psDroid);
 		}
 
 	}

@@ -126,6 +126,7 @@ TITLECODE titleLoop(void)
 		{
 			ingame.bHostSetup = true;
 			bMultiPlayer = true;
+			multiMsgOff = 0;
 			game.type = SKIRMISH;		// needed?
 			changeTitleMode(MULTIOPTION);
 			hostlaunch = false;			// reset the bool to default state.

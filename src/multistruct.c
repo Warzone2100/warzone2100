@@ -54,6 +54,11 @@
 // INFORM others that a building has been started, and base plate should be put down.
 BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 {
+	if (multiMsgOff) // don't send if multiMsgs are off
+	{
+		return true;
+	}
+
 	NETbeginEncode(NET_BUILD, NET_ALL_PLAYERS);
 
 		// Who is building it
@@ -176,6 +181,11 @@ BOOL SendBuildFinished(STRUCTURE *psStruct)
 	uint32_t power = getPower( (uint32_t) psStruct->player);
 	uint8_t player = psStruct->player;
 	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
+
+	if (multiMsgOff) // don't send if multiMsgs are off
+	{
+		return true;
+	}
 
 	NETbeginEncode(NET_BUILDFINISHED, NET_ALL_PLAYERS);
 		NETuint32_t(&power);			// send how much power we got.
@@ -324,6 +334,10 @@ BOOL recvDemolishFinished()
 // Inform others that a structure has been destroyed
 BOOL SendDestroyStructure(STRUCTURE *s)
 {
+	if (multiMsgOff) // don't send if multiMsgs are off
+	{
+		return true;
+	}
 	technologyGiveAway(s);
 	NETbeginEncode(NET_STRUCTDEST, NET_ALL_PLAYERS);
 

@@ -1343,8 +1343,8 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 								{
 									updateMultiStatsDamage(psObj->psSource->player, psCurrD->player, damage);
 								}
-								turnOffMultiMsg(true);
 							}
+							turnOffMultiMsg(true);
 
 							//Watermelon:uses a slightly different check for angle,
 							// since fragment of a project is from the explosion spot not from the projectile start position
