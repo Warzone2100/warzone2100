@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-12-30 22:20+0100\n"
+"POT-Creation-Date: 2010-01-01 20:42+0100\n"
 "PO-Revision-Date: 2008-04-21 08:59+0000\n"
 "Last-Translator: Wander Nauta <wnauta@gmail.com>\n"
 "Language-Team: Frisian <fy@li.org>\n"
@@ -11179,144 +11179,144 @@ msgstr ""
 msgid "Player"
 msgstr "Spiler"
 
-#: src/design.c:453
-#: src/design.c:474
-#: src/design.c:3513
+#: src/design.c:455
+#: src/design.c:476
+#: src/design.c:3573
 msgid "New Vehicle"
 msgstr ""
 
-#: src/design.c:521
+#: src/design.c:523
 msgid "Vehicle Body"
 msgstr ""
 
-#: src/design.c:543
+#: src/design.c:545
 msgid "Vehicle Propulsion"
 msgstr ""
 
-#: src/design.c:566
-#: src/design.c:591
-#: src/design.c:617
+#: src/design.c:568
+#: src/design.c:593
+#: src/design.c:619
 msgid "Vehicle Turret"
 msgstr ""
 
-#: src/design.c:638
+#: src/design.c:640
 msgid "Delete Design"
 msgstr ""
 
-#: src/design.c:692
-#: src/design.c:740
+#: src/design.c:694
+#: src/design.c:742
 msgid "Kinetic Armour"
 msgstr ""
 
-#: src/design.c:701
-#: src/design.c:751
+#: src/design.c:703
+#: src/design.c:753
 msgid "Thermal Armour"
 msgstr ""
 
-#: src/design.c:717
-#: src/design.c:771
+#: src/design.c:719
+#: src/design.c:773
 msgid "Engine Output"
 msgstr ""
 
-#: src/design.c:725
-#: src/design.c:780
-#: src/design.c:1581
-#: src/design.c:1618
-#: src/design.c:1639
+#: src/design.c:727
+#: src/design.c:782
+#: src/design.c:1599
+#: src/design.c:1636
 #: src/design.c:1657
-#: src/design.c:1678
+#: src/design.c:1675
 #: src/design.c:1696
-#: src/design.c:1734
-#: src/design.c:1769
-#: src/design.c:1904
-#: src/design.c:1921
-#: src/design.c:1956
-#: src/design.c:1992
+#: src/design.c:1714
+#: src/design.c:1752
+#: src/design.c:1787
+#: src/design.c:1922
+#: src/design.c:1939
+#: src/design.c:1974
+#: src/design.c:2010
 msgid "Weight"
 msgstr ""
 
-#: src/design.c:811
-#: src/design.c:831
+#: src/design.c:813
+#: src/design.c:833
 msgid "Total Power Required"
 msgstr ""
 
-#: src/design.c:844
-#: src/design.c:865
+#: src/design.c:846
+#: src/design.c:867
 msgid "Total Body Points"
 msgstr ""
 
-#: src/design.c:1061
-#: src/design.c:1093
+#: src/design.c:1063
+#: src/design.c:1095
 msgid "Power Usage"
 msgstr ""
 
-#: src/design.c:1344
+#: src/design.c:1362
 msgid "Transporter"
 msgstr ""
 
-#: src/design.c:1366
+#: src/design.c:1384
 msgid "Hydra "
 msgstr ""
 
-#: src/design.c:1563
+#: src/design.c:1581
 msgid "Sensor Range"
 msgstr ""
 
-#: src/design.c:1572
+#: src/design.c:1590
 msgid "Sensor Power"
 msgstr ""
 
-#: src/design.c:1609
+#: src/design.c:1627
 msgid "ECM Power"
 msgstr ""
 
-#: src/design.c:1631
-#: src/design.c:1648
-#: src/design.c:1670
-#: src/design.c:1687
+#: src/design.c:1649
+#: src/design.c:1666
+#: src/design.c:1688
+#: src/design.c:1705
 msgid "Build Points"
 msgstr ""
 
-#: src/design.c:1710
-#: src/design.c:1742
+#: src/design.c:1728
+#: src/design.c:1760
 msgid "Range"
 msgstr ""
 
-#: src/design.c:1718
-#: src/design.c:1751
+#: src/design.c:1736
+#: src/design.c:1769
 msgid "Damage"
 msgstr ""
 
-#: src/design.c:1726
-#: src/design.c:1760
+#: src/design.c:1744
+#: src/design.c:1778
 msgid "Rate-of-Fire"
 msgstr ""
 
-#: src/design.c:1896
-#: src/design.c:1912
+#: src/design.c:1914
+#: src/design.c:1930
 msgid "Air Speed"
 msgstr ""
 
-#: src/design.c:1932
-#: src/design.c:1965
+#: src/design.c:1950
+#: src/design.c:1983
 msgid "Road Speed"
 msgstr ""
 
-#: src/design.c:1940
-#: src/design.c:1974
+#: src/design.c:1958
+#: src/design.c:1992
 msgid "Off-Road Speed"
 msgstr ""
 
-#: src/design.c:1948
-#: src/design.c:1983
+#: src/design.c:1966
+#: src/design.c:2001
 msgid "Water Speed"
 msgstr ""
 
-#: src/design.c:2117
+#: src/design.c:2135
 msgid "Weapons"
 msgstr ""
 
-#: src/design.c:2141
+#: src/design.c:2157
 msgid "Systems"
 msgstr ""
 
@@ -12747,7 +12747,12 @@ msgstr "Ferlitte Nei Haadmenu"
 msgid "Continue Game"
 msgstr "Fjirder Mei Spul"
 
-#: src/move.c:2962
+#: src/move.c:2956
+#, c-format
+msgid "You found %u power in an oil drum."
+msgstr ""
+
+#: src/move.c:2963
 #, c-format
 msgid "You found %u power in an oil drum"
 msgstr ""
@@ -12772,37 +12777,32 @@ msgstr "Prebeare om in %s fuort te jaan - maar dat is net legaal."
 msgid "%s Gives You Technology Documents"
 msgstr "%s Jouwt Dij Teknologyske Dokuminten"
 
-#: src/multigifts.c:314
-#, c-format
-msgid "Player %u found %u power in an oil drum"
-msgstr ""
-
-#: src/multigifts.c:338
+#: src/multigifts.c:337
 #, fuzzy, c-format
 msgid "%s Gives You %u Power"
 msgstr "%s Jouwt Dij Stroom"
 
-#: src/multigifts.c:358
+#: src/multigifts.c:357
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s Freget In Freonskip Mei Dij Oan"
 
-#: src/multigifts.c:367
+#: src/multigifts.c:366
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Do Freegest %s Om In Freonskip Te Foarmjen"
 
-#: src/multigifts.c:387
+#: src/multigifts.c:386
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s Brekt De Freonskip Mei %s"
 
-#: src/multigifts.c:413
+#: src/multigifts.c:412
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s Foarmet In Freonskip Mei %s"
 
-#: src/multigifts.c:750
+#: src/multigifts.c:749
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Do Fynst Blaudrukken Foar %s"
@@ -13371,61 +13371,61 @@ msgstr "Koe gjin Sensorienheden fine!"
 msgid "Unable to locate any Commanders!"
 msgstr "Koe gjin Kommandanten fine!"
 
-#: src/structure.c:2745
+#: src/structure.c:2752
 #, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Kommandolimyt helle - Produksje stopt"
 
-#: src/structure.c:5952
-#: src/structure.c:5977
+#: src/structure.c:5959
+#: src/structure.c:5984
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Ienheid tawezen"
 msgstr[1] "%s - %u Ienheden tawezen"
 
-#: src/structure.c:5982
-#: src/structure.c:6046
+#: src/structure.c:5989
+#: src/structure.c:6053
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Skea %3.0f%%"
 
-#: src/structure.c:6032
+#: src/structure.c:6039
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u fan %u ferbûn"
 
-#: src/structure.c:6167
-#: src/structure.c:6216
+#: src/structure.c:6174
+#: src/structure.c:6223
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronysk skea tabrocht"
 
-#: src/structure.c:6451
+#: src/structure.c:6458
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronyske priis - Sichtberhydsrapport"
 
-#: src/structure.c:6491
+#: src/structure.c:6498
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrykspriis - Oandriuwing"
 
-#: src/structure.c:6515
+#: src/structure.c:6522
 msgid "Factory Reward - Body"
 msgstr "Fabrykspriis - Lichem"
 
-#: src/structure.c:6539
+#: src/structure.c:6546
 msgid "Factory Reward - Weapon"
 msgstr "Fabrykspriis - Wapen"
 
-#: src/structure.c:6548
+#: src/structure.c:6555
 msgid "Factory Reward - Nothing"
 msgstr "Fabrykspriis - Niks"
 
-#: src/structure.c:6576
+#: src/structure.c:6583
 msgid "Repair Facility Award - Repair"
 msgstr "Reparaasjefasiliteit Priis - Reparaasje"
 
-#: src/structure.c:6583
+#: src/structure.c:6590
 msgid "Repair Facility Award - Nothing"
 msgstr "Reparaasjefasiliteit Priis - Niks"
 

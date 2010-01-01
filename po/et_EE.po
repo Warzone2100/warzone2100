@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-12-30 22:20+0100\n"
+"POT-Creation-Date: 2010-01-01 20:42+0100\n"
 "PO-Revision-Date: 2009-10-12 23:24+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -11171,144 +11171,144 @@ msgstr "mine otse võõrustaja aknasse"
 msgid "Player"
 msgstr "Mägija"
 
-#: src/design.c:453
-#: src/design.c:474
-#: src/design.c:3513
+#: src/design.c:455
+#: src/design.c:476
+#: src/design.c:3573
 msgid "New Vehicle"
 msgstr "Uus Sõiduk"
 
-#: src/design.c:521
+#: src/design.c:523
 msgid "Vehicle Body"
 msgstr "Masina Kere"
 
-#: src/design.c:543
+#: src/design.c:545
 msgid "Vehicle Propulsion"
 msgstr "Masina Liikumissüsteem"
 
-#: src/design.c:566
-#: src/design.c:591
-#: src/design.c:617
+#: src/design.c:568
+#: src/design.c:593
+#: src/design.c:619
 msgid "Vehicle Turret"
 msgstr "Masina Torn"
 
-#: src/design.c:638
+#: src/design.c:640
 msgid "Delete Design"
 msgstr "Kustuta Konstruktsioon"
 
-#: src/design.c:692
-#: src/design.c:740
+#: src/design.c:694
+#: src/design.c:742
 msgid "Kinetic Armour"
 msgstr "Kinemaatiline Soomus"
 
-#: src/design.c:701
-#: src/design.c:751
+#: src/design.c:703
+#: src/design.c:753
 msgid "Thermal Armour"
 msgstr "Soojussoomus"
 
-#: src/design.c:717
-#: src/design.c:771
+#: src/design.c:719
+#: src/design.c:773
 msgid "Engine Output"
 msgstr "Mootori Võimsus"
 
-#: src/design.c:725
-#: src/design.c:780
-#: src/design.c:1581
-#: src/design.c:1618
-#: src/design.c:1639
+#: src/design.c:727
+#: src/design.c:782
+#: src/design.c:1599
+#: src/design.c:1636
 #: src/design.c:1657
-#: src/design.c:1678
+#: src/design.c:1675
 #: src/design.c:1696
-#: src/design.c:1734
-#: src/design.c:1769
-#: src/design.c:1904
-#: src/design.c:1921
-#: src/design.c:1956
-#: src/design.c:1992
+#: src/design.c:1714
+#: src/design.c:1752
+#: src/design.c:1787
+#: src/design.c:1922
+#: src/design.c:1939
+#: src/design.c:1974
+#: src/design.c:2010
 msgid "Weight"
 msgstr "Kaal"
 
-#: src/design.c:811
-#: src/design.c:831
+#: src/design.c:813
+#: src/design.c:833
 msgid "Total Power Required"
 msgstr "Täielik Energiakulu"
 
-#: src/design.c:844
-#: src/design.c:865
+#: src/design.c:846
+#: src/design.c:867
 msgid "Total Body Points"
 msgstr "Kokku Kerepunkte(HP)"
 
-#: src/design.c:1061
-#: src/design.c:1093
+#: src/design.c:1063
+#: src/design.c:1095
 msgid "Power Usage"
 msgstr "Energia Kulu"
 
-#: src/design.c:1344
+#: src/design.c:1362
 msgid "Transporter"
 msgstr "Transporter"
 
-#: src/design.c:1366
+#: src/design.c:1384
 msgid "Hydra "
 msgstr "Hüdra"
 
-#: src/design.c:1563
+#: src/design.c:1581
 msgid "Sensor Range"
 msgstr "Sensori Ulatus"
 
-#: src/design.c:1572
+#: src/design.c:1590
 msgid "Sensor Power"
 msgstr "Sensori Tugevus"
 
-#: src/design.c:1609
+#: src/design.c:1627
 msgid "ECM Power"
 msgstr "ECM Tugevus"
 
-#: src/design.c:1631
-#: src/design.c:1648
-#: src/design.c:1670
-#: src/design.c:1687
+#: src/design.c:1649
+#: src/design.c:1666
+#: src/design.c:1688
+#: src/design.c:1705
 msgid "Build Points"
 msgstr "Ehitamispunktid"
 
-#: src/design.c:1710
-#: src/design.c:1742
+#: src/design.c:1728
+#: src/design.c:1760
 msgid "Range"
 msgstr "Ulatus"
 
-#: src/design.c:1718
-#: src/design.c:1751
+#: src/design.c:1736
+#: src/design.c:1769
 msgid "Damage"
 msgstr "Kahju"
 
-#: src/design.c:1726
-#: src/design.c:1760
+#: src/design.c:1744
+#: src/design.c:1778
 msgid "Rate-of-Fire"
 msgstr "Laskekiirus"
 
-#: src/design.c:1896
-#: src/design.c:1912
+#: src/design.c:1914
+#: src/design.c:1930
 msgid "Air Speed"
 msgstr "Kiirus Õhus"
 
-#: src/design.c:1932
-#: src/design.c:1965
+#: src/design.c:1950
+#: src/design.c:1983
 msgid "Road Speed"
 msgstr "Kiirus Teel"
 
-#: src/design.c:1940
-#: src/design.c:1974
+#: src/design.c:1958
+#: src/design.c:1992
 msgid "Off-Road Speed"
 msgstr "Kiirus Maastikul"
 
-#: src/design.c:1948
-#: src/design.c:1983
+#: src/design.c:1966
+#: src/design.c:2001
 msgid "Water Speed"
 msgstr "Kiirus Vees"
 
-#: src/design.c:2117
+#: src/design.c:2135
 msgid "Weapons"
 msgstr "Relvad"
 
-#: src/design.c:2141
+#: src/design.c:2157
 msgid "Systems"
 msgstr "Süsteemid"
 
@@ -12728,7 +12728,12 @@ msgstr "Välju Peamenüüsse"
 msgid "Continue Game"
 msgstr "Jätka Mängu"
 
-#: src/move.c:2962
+#: src/move.c:2956
+#, fuzzy, c-format
+msgid "You found %u power in an oil drum."
+msgstr "Sa leidsid naftatünnist %u energiat"
+
+#: src/move.c:2963
 #, c-format
 msgid "You found %u power in an oil drum"
 msgstr "Sa leidsid naftatünnist %u energiat"
@@ -12753,37 +12758,32 @@ msgstr "Proovisid ära anda mittetühja %s - see pole lubatud "
 msgid "%s Gives You Technology Documents"
 msgstr "%s Annab Sulle Tehnoloogia Dokumendid"
 
-#: src/multigifts.c:314
-#, fuzzy, c-format
-msgid "Player %u found %u power in an oil drum"
-msgstr "Sa leidsid naftatünnist %u energiat"
-
-#: src/multigifts.c:338
+#: src/multigifts.c:337
 #, c-format
 msgid "%s Gives You %u Power"
 msgstr "%s Annab Sulle %u Energiat"
 
-#: src/multigifts.c:358
+#: src/multigifts.c:357
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s Taotleb Sinuga Liitlust"
 
-#: src/multigifts.c:367
+#: src/multigifts.c:366
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Saa Kutsusid %s Liitu Sõlmima"
 
-#: src/multigifts.c:387
+#: src/multigifts.c:386
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s Lõpetab Liitluse %s -ga"
 
-#: src/multigifts.c:413
+#: src/multigifts.c:412
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s Moodustab %s -ga Liitluse"
 
-#: src/multigifts.c:750
+#: src/multigifts.c:749
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Sa Avastasid %s joonised"
@@ -13349,60 +13349,60 @@ msgstr "Võimetu leidma Sensorüksusi!"
 msgid "Unable to locate any Commanders!"
 msgstr "Võimetu leidma Komandöre!"
 
-#: src/structure.c:2745
+#: src/structure.c:2752
 msgid "Control Limit Reached - Production Halted"
 msgstr "Kontroll Limiit Saavutatud - Tootmine Peatatud"
 
-#: src/structure.c:5952
-#: src/structure.c:5977
+#: src/structure.c:5959
+#: src/structure.c:5984
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Üksus määratud"
 msgstr[1] "%s - %u Üksused määratud"
 
-#: src/structure.c:5982
-#: src/structure.c:6046
+#: src/structure.c:5989
+#: src/structure.c:6053
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Kahju %3.0f%%"
 
-#: src/structure.c:6032
+#: src/structure.c:6039
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u Ühendatud %u -st"
 
-#: src/structure.c:6167
-#: src/structure.c:6216
+#: src/structure.c:6174
+#: src/structure.c:6223
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektrooniliselt Kahjustatud"
 
-#: src/structure.c:6451
+#: src/structure.c:6458
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektrooniline Autasu - Nägemis Raport"
 
-#: src/structure.c:6491
+#: src/structure.c:6498
 msgid "Factory Reward - Propulsion"
 msgstr "Tehase Auhind - Liikumissüsteem"
 
-#: src/structure.c:6515
+#: src/structure.c:6522
 msgid "Factory Reward - Body"
 msgstr "Tehase Autasu - Kere"
 
-#: src/structure.c:6539
+#: src/structure.c:6546
 msgid "Factory Reward - Weapon"
 msgstr "Tehase Autasu - Relv"
 
-#: src/structure.c:6548
+#: src/structure.c:6555
 msgid "Factory Reward - Nothing"
 msgstr "Tehase Autasu - Midagi"
 
-#: src/structure.c:6576
+#: src/structure.c:6583
 msgid "Repair Facility Award - Repair"
 msgstr "Remontimiskeskuse Autasu - Remont"
 
-#: src/structure.c:6583
+#: src/structure.c:6590
 msgid "Repair Facility Award - Nothing"
 msgstr "Remontimiskeskuse Autasu - Midagi"
 
@@ -13442,6 +13442,10 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versioon %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Player %u found %u power in an oil drum"
+#~ msgstr "Sa leidsid naftatünnist %u energiat"
 
 #~ msgid "Start Multiplayer Audio"
 #~ msgstr "Alusta Mitmikmängu Audiot"
