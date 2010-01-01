@@ -3,14 +3,19 @@ UPDATERFILE=$(PACKAGE)-$(VERSION).update.exe
 
 CLEANFILES=$(INSTALLERFILE)
 
+GMOFILES = $(addprefix $(top_builddir)/po/,$(addsuffix .gmo,$(basename $(notdir $(wildcard $(top_srcdir)/po/*.po)))))
+
 if INSTALLER
 all: $(INSTALLERFILE)
 endif
 
+$(top_builddir)/po/%.gmo: $(top_srcdir)/po/%.po
+	$(MAKE) $(AM_MAKEFLAGS) -C $(top_builddir)/po $(notdir $@)
+
 data:
 	$(MAKE) $(AM_MAKEFLAGS) -C ../../data/ all
 
-$(INSTALLERFILE): warzone2100.nsi ../../src/warzone2100.exe data
+$(INSTALLERFILE): warzone2100.nsi ../../src/warzone2100.exe data $(GMOFILES)
 	$(MAKENSIS) -DOUTFILE="$(abs_builddir)/$@" -DPACKAGE="$(PACKAGE)" -DPACKAGE_NAME="$(PACKAGE_NAME)" -DPACKAGE_VERSION="$(PACKAGE_VERSION)" -DPACKAGE_BUGREPORT="$(PACKAGE_BUGREPORT)" -DVERSIONNUM="$(INSTALLER_VERSION)" -DEXTDIR="$(INSTALLER_EXTDIR)" -DTOP_SRCDIR="$(abs_top_srcdir)" -DTOP_BUILDDIR="$(abs_top_builddir)" -X"SetCompressor /FINAL /SOLID $(INSTALLER_COMPRESSION)" $<
 
 $(UPDATERFILE): warzone2100.update.nsi
