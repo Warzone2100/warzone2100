@@ -27,7 +27,7 @@ CXXFLAGS_FOR_BUILD=" "
 CPPFLAGS_FOR_BUILD=" "
 
 if [ -f __BUILD_CONFIG.USER ]; then
-	source __BUILD_CONFIG.USER
+	. ./__BUILD_CONFIG.USER
 fi
 
 for arg in "$@"; do

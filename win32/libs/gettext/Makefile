@@ -16,7 +16,7 @@ $(PKG_SOURCEBASE) extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
 	touch extract-stamp
 
 $(PKG_SOURCEBASE)/config.status: extract-stamp
-	cd $(PKG_SOURCEBASE) && bash configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs --disable-java
+	cd $(PKG_SOURCEBASE) && "$(SHELL)" ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs --disable-java
 
 $(PKG_SOURCEBASE)/gettext-runtime/intl/libintl.la: $(PKG_SOURCEBASE)/config.status
 	env SHELL="$(SHELL)" $(MAKE) SHELL="$(SHELL)" -C $(PKG_SOURCEBASE)/gettext-runtime/intl libintl.la
