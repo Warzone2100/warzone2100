@@ -60,7 +60,7 @@ for arg in "$@"; do
 		execute rm -rf build
 		execute make -C libs clean
 		expr "$arg" : 'very-' >/dev/null && execute rm -rf downloads
-		[ "$arg" = "clean" ] && exit
+		expr "$arg" : '.*pre' || exit 0
 		;;
 	*)
 		echo "$0: error: unknown command line option: $arg" >&2
@@ -90,13 +90,15 @@ if [ ! -d build ] ; then
 	mkdir build
 fi
 
+set -x
+
 # Make sure that the dependencies have been built
-execute make $MAKE_FLAGS -C libs "HOST_TRIPLET=$HOST_TRIPLET"
+make $MAKE_FLAGS -C libs "HOST_TRIPLET=$HOST_TRIPLET"
 
 cd build
 
-execute ../../autogen.sh
-execute ../../configure "$@" \
+[ -x ../../configure ] || ../../autogen.sh
+../../configure "$@" \
 	"--host=$HOST_TRIPLET" --enable-static --disable-shared ${DEBUGFLAG:+$DEBUGFLAG} \
 	${INSTALLERFLAG:+$INSTALLERFLAG} \
 	CFLAGS="$CFLAGS" \
@@ -110,4 +112,4 @@ execute ../../configure "$@" \
 	CPPFLAGS_FOR_BUILD="$CPPFLAGS_FOR_BUILD" \
 	PKGCONFIG_DEFAULT_PREFIX=${PKGCONFIG_DEFAULT_PREFIX:-$PWD/build/libs} \
 	${PKG_CONFIG_PATH:+PKG_CONFIG_PATH=$PKG_CONFIG_PATH}
-execute make $MAKE_FLAGS
+make $MAKE_FLAGS
