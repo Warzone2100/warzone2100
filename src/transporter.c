@@ -56,7 +56,7 @@
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "mapgrid.h"
-
+#include "visibility.h"
 #include "multiplay.h"
 
 //#define IDTRANS_FORM			9000	//The Transporter base form
@@ -1523,6 +1523,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	{
 		debug(LOG_ERROR,"droid %d not found, so nothing added to transporter!",psDroidToAdd->id);
 	}
+	visRemoveVisibility((BASE_OBJECT *)psDroidToAdd);
 
 	//this is called by droidRemove
 	//intRefreshScreen();
