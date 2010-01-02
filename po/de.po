@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-01-01 20:42+0100\n"
-"PO-Revision-Date: 2009-12-20 19:05+0100\n"
+"PO-Revision-Date: 2010-01-02 20:05+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -12758,9 +12758,9 @@ msgid "Continue Game"
 msgstr "Spiel fortsetzen"
 
 #: src/move.c:2956
-#, fuzzy, c-format
+#, c-format
 msgid "You found %u power in an oil drum."
-msgstr "Sie haben %u Energie in einem Ölfass gefunden"
+msgstr "Sie haben %u Energie in einem Ölfass gefunden."
 
 #: src/move.c:2963
 #, c-format
@@ -12999,7 +12999,7 @@ msgstr "Klicken, wenn bereit"
 
 #: src/multiint.c:1861
 msgid "READY?"
-msgstr ""
+msgstr "BEREIT?"
 
 #: src/multiint.c:1898
 msgid "PLAYERS"
