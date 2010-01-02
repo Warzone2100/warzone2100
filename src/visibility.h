@@ -58,9 +58,7 @@ extern void visUpdateLevel(void);
 
 extern void setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player);
 
-// sensor range display
-extern BOOL	bDisplaySensorRange;
-extern void updateSensorDisplay(void);
+void visRemoveVisibility(BASE_OBJECT *psObj);
 
 extern bool scrTileIsVisible(SDWORD player, SDWORD x, SDWORD y);
 extern void scrResetPlayerTileVisibility(SDWORD player);

@@ -719,11 +719,6 @@ static void drawTiles(iView *player)
 	UDWORD i, j;
 	SDWORD rx, rz;
 
-	if (bDisplaySensorRange)
-	{
-		updateSensorDisplay();
-	}
-
 	// Animate the water texture, just cycles the V coordinate through half the tiles height.
 	if(!gamePaused())
 	{
@@ -819,7 +814,7 @@ static void drawTiles(iView *player)
 				}
 
 				// Real fog of war - darken where we cannot see enemy units moving around
-				if (bDisplaySensorRange && !psTile->activeSensor)
+				if (!hasSensorOnTile(psTile, selectedPlayer))
 				{
 					TileIllum.byte.r = TileIllum.byte.r / 2;
 					TileIllum.byte.g = TileIllum.byte.g / 2;

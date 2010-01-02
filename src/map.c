@@ -155,6 +155,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 		psTile->height = MAX_HEIGHT / 4;
 		psTile->illumination = 255;
 		psTile->level = psTile->illumination;
+		memset(psTile->watchers, 0, sizeof(psTile->watchers));
 		psTile->bMaxed = true;
 		psTile->colour= WZCOL_WHITE;
 		psTile++;
@@ -194,6 +195,9 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 
 		psMapTiles[i].texture = psTileData->texture;
 		psMapTiles[i].height = psTileData->height;
+
+		// Visibility stuff
+		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
 		for (j=0; j<MAX_PLAYERS; j++)
 		{
 			psMapTiles[i].tileVisBits =(UBYTE)(( (psMapTiles[i].tileVisBits) &~ (UBYTE)(1<<j) ));
