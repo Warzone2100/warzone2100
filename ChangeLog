@@ -1,5 +1,6 @@
-2009-12-30: Version 2.3.0 beta 5
+2010-01-02: Version 2.3.0 beta 5
  * General:
+   * Change: Show sensor visibility coverage on terrain and minimap (ticket:1289, r8918)
    * Change: Add more key shortcuts (ticket:806)
    * Change: Screenshots now get saved in "screenshots", not "screendumps" (r8818)
    * Change: Deselect campaign transport when trying to give it orders instead of just doing nothing (r8856)
@@ -20,7 +21,7 @@
    * Change: Show version number of games in the lobby (r8795)
    * Change: Updated images (r8803)
    * Fix: Commanders now display the correct amount of power/health in the design screen (r8877)
-   * Fix: Design screen: no longer possible to build droid with two weapons on a body only supporting one, better indication of active component (r8881)
+   * Fix: Design screen issues with two weapons and indication of active component (r8881)
    * Fix: Correctly calculate secondary weapon shadow power/HP, allow changing primary weapon without removing secondary weapons (r8883)
  * Multiplayer:
    * New: Add the laser satellite to the limits screen (r8729, ticket:1227)
@@ -31,12 +32,12 @@
    * Change: Host can change position and color of other players (r8805)
    * Fix: Enforce default limits if host did not enter limits in the limits screen (r8713)
  * AI:
-   * Change: Make no base builds much faster by making droids cooperate on more buildings, remove default AI cheating of 1500 free power on full base games (r8847)
+   * Change: No base builds faster by droids cooperating on more buildings; remove AI cheating of 1500 free power on full base games (r8847)
  * Balance:
    * Update cyborg lasers to match changes to regular lasers
    * Change cyborg transport research icon to cyborg transport
    * Change Lancer's prereqs from HEAP Mini-Rockets to HE Mini-Rockets Mk3
-   * Allow only Dragon to have multi-turret; decrease its HP by 50 (all r8895)
+   * Allow only Dragon to have multi-turret; decrease its HP by 50 (r8895)
  * Translations:
    * Updated: Brazilian (r8699), Finnish (r8913), German (r8761, r8916)
 
