@@ -1153,49 +1153,22 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 	if (newCompMode != desCompMode)
 	{
 		/* Have to change the component display - remove the old one */
-		switch (desCompMode)
+		if (desCompMode != IDES_NOCOMPONENT)
 		{
-		case IDES_NOCOMPONENT:
-			/* Nothing displayed so nothing to remove */
-			break;
-		case IDES_SYSTEM:
 			widgDelete(psWScreen, IDDES_COMPFORM);
 			widgDelete(psWScreen, IDDES_RIGHTBASE);
-			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, 0);
-			widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
-			break;
-		case IDES_TURRET:
-			widgDelete(psWScreen, IDDES_COMPFORM);
-			widgDelete(psWScreen, IDDES_RIGHTBASE);
-			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, 0);
-			widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
-			break;
-		case IDES_BODY:
-			widgDelete(psWScreen, IDDES_COMPFORM);
-			widgDelete(psWScreen, IDDES_RIGHTBASE);
+			
 			widgSetButtonState(psWScreen, IDDES_BODYFORM, 0);
-			widgSetButtonState(psWScreen, IDDES_BODYBUTTON, 0);
-			break;
-		case IDES_PROPULSION:
-			widgDelete(psWScreen, IDDES_COMPFORM);
-			widgDelete(psWScreen, IDDES_RIGHTBASE);
 			widgSetButtonState(psWScreen, IDDES_PROPFORM, 0);
+			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, 0);
+			
+			widgSetButtonState(psWScreen, IDDES_BODYBUTTON, 0);
 			widgSetButtonState(psWScreen, IDDES_PROPBUTTON, 0);
-			break;
-		case IDES_TURRET_A:
-			widgDelete(psWScreen, IDDES_COMPFORM);
-			widgDelete(psWScreen, IDDES_RIGHTBASE);
-			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, 0);
+			widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
 			widgSetButtonState(psWScreen, IDDES_WPABUTTON, 0);
-			break;
-		case IDES_TURRET_B:
-			widgDelete(psWScreen, IDDES_COMPFORM);
-			widgDelete(psWScreen, IDDES_RIGHTBASE);
-			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, 0);
 			widgSetButtonState(psWScreen, IDDES_WPBBUTTON, 0);
-			break;
 		}
-
+		
 		/* Set up the display for the new mode */
 		desCompMode = newCompMode;
 		switch (desCompMode)
@@ -3574,18 +3547,18 @@ void intProcessDesign(UDWORD id)
 			sstrcpy(aCurrName, _("New Vehicle"));
 			sstrcpy(sCurrDesign.aName, aCurrName);
 
-			/* hide body and system component buttons */
+			/* reveal body button */
+			widgReveal( psWScreen, IDDES_BODYBUTTON );
+			/* hide other component buttons */
 			widgHide( psWScreen, IDDES_SYSTEMBUTTON );
 			widgHide( psWScreen, IDDES_PROPBUTTON );
-			//hide WeaponA and WeaponB button
 			widgHide( psWScreen, IDDES_WPABUTTON );
 			widgHide( psWScreen, IDDES_WPBBUTTON );
 
 			/* set button render routines to flash */
-			intSetButtonFlash( IDDES_SYSTEMBUTTON, true );
 			intSetButtonFlash( IDDES_BODYBUTTON,   true );
+			intSetButtonFlash( IDDES_SYSTEMBUTTON, true );
 			intSetButtonFlash( IDDES_PROPBUTTON,   true );
-			//set WeaponA and Weapon button to flash
 			intSetButtonFlash( IDDES_WPABUTTON,   true );
 			intSetButtonFlash( IDDES_WPBBUTTON,   true );
 		}
@@ -3604,7 +3577,7 @@ void intProcessDesign(UDWORD id)
 				currID ++;
 			}
 
-			ASSERT( psTempl != NULL, "template not found!");
+			ASSERT_OR_RETURN(, psTempl != NULL, "template not found!");
 
 			if ( psTempl != NULL )
 			{
@@ -3612,22 +3585,21 @@ void intProcessDesign(UDWORD id)
 				memcpy(&sCurrDesign, psTempl, sizeof(DROID_TEMPLATE));
 				sstrcpy(aCurrName, getTemplateName(psTempl));
 
-				/* reveal body and propulsion component buttons */
+				/* reveal body/propulsion/turret component buttons */
 				widgReveal( psWScreen, IDDES_BODYBUTTON );
 				widgReveal( psWScreen, IDDES_PROPBUTTON );
 				widgReveal( psWScreen, IDDES_SYSTEMBUTTON );
-				//hide these 2 to prevent cheat
+				/* hide extra turrets */
 				widgHide( psWScreen, IDDES_WPABUTTON );
 				widgHide( psWScreen, IDDES_WPBBUTTON );
-
+				
 				/* turn off button flashes */
-				intSetButtonFlash( IDDES_SYSTEMBUTTON, false );
 				intSetButtonFlash( IDDES_BODYBUTTON,   false );
+				intSetButtonFlash( IDDES_SYSTEMBUTTON, false );
 				intSetButtonFlash( IDDES_PROPBUTTON,   false );
-				//turn off additional 2 button flashes
 				intSetButtonFlash( IDDES_WPABUTTON,   false );
 				intSetButtonFlash( IDDES_WPBBUTTON,   false );
-
+				
 				// reveal additional buttons
 				if (psTempl->numWeaps >= 2)
 				{
@@ -3645,25 +3617,9 @@ void intProcessDesign(UDWORD id)
 				{
 					intSetButtonFlash( IDDES_WPBBUTTON,   true );
 				}
-				
-				/* reset button states */
-				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
-				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
-				widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
-				//reset additional 2 buttons
-				widgSetButtonState(psWScreen, IDDES_WPABUTTON,   0);
-				widgSetButtonState(psWScreen, IDDES_WPBBUTTON,   0);
 			}
-
-			intSetDesignMode(IDES_BODY);
 		}
 
-		/* reveal and flash body component button */
-		widgReveal( psWScreen, IDDES_BODYBUTTON );
-
-#ifdef FLASH_BUTTONS
-		widgSetButtonState(psWScreen, IDDES_BODYBUTTON, WBUT_CLICKLOCK);
-#endif
 		/* reveal design form if not already on-screen */
 		widgReveal( psWScreen, IDDES_FORM );
 
@@ -3693,6 +3649,12 @@ void intProcessDesign(UDWORD id)
 		/* Update the component form */
 		widgDelete(psWScreen, IDDES_COMPFORM);
 		widgDelete(psWScreen, IDDES_RIGHTBASE);
+		/* reset button states */
+		widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
+		widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
+		widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
+		widgSetButtonState(psWScreen, IDDES_WPABUTTON,   0);
+		widgSetButtonState(psWScreen, IDDES_WPBBUTTON,   0);
 		desCompMode = IDES_NOCOMPONENT;
 		intSetDesignMode(IDES_BODY);
 	}
@@ -4183,6 +4145,12 @@ void intProcessDesign(UDWORD id)
 				/* show correct body component highlight */
 				widgDelete(psWScreen, IDDES_COMPFORM);
 				widgDelete(psWScreen, IDDES_RIGHTBASE);
+				/* reset button states */
+				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
+				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
+				widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
+				widgSetButtonState(psWScreen, IDDES_WPABUTTON,   0);
+				widgSetButtonState(psWScreen, IDDES_WPBBUTTON,   0);
 				desCompMode = IDES_NOCOMPONENT;
 				intSetDesignMode(IDES_BODY);
 			}
@@ -4342,7 +4310,8 @@ void intProcessDesign(UDWORD id)
 
 				case IDES_SYSTEM:
 				case IDES_TURRET:
-					if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 1 )
+					if ((asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 1 &&
+					    sCurrDesign.numWeaps == 1 && sCurrDesign.asParts[COMP_BRAIN] == 0)
 					{
 						debug(LOG_GUI, "intProcessDesign: First weapon selected, doing next.");
 						intSetDesignMode( IDES_TURRET_A );
