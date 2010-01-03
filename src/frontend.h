@@ -164,6 +164,7 @@ enum
 	FRONTEND_SIDETEXT4,					// side-ee-ways text
 	FRONTEND_LOADCAM2,					// loading via --GAME CAM_2A
 	FRONTEND_LOADCAM3,					// loading via --GAME CAM_3A
+	FRONTEND_PASSWORDFORM,
 	// begin menu
 	FRONTEND_SINGLEPLAYER	= 20100,	// title screen
 	FRONTEND_MULTIPLAYER,

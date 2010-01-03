@@ -189,8 +189,13 @@ void		setLockedTeamsMode			(void);
 
 // find games
 static void addGames				(void);
+static void removeGames				(void);
 void		runGameFind				(void);
 void		startGameFind			(void);
+
+// password form functions
+static void hidePasswordForm(void);
+static void showPasswordForm(void);
 
 // Connection option functions
 static void addConnections			(UDWORD);
@@ -544,6 +549,7 @@ static BOOL OptionsInet(void)			//internet options
 	W_EDBINIT		sEdInit;
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
+	W_CONTEXT		sContext;
 
 	psConScreen = widgCreateScreen();
 	widgSetTipFont(psConScreen,font_regular);
@@ -593,6 +599,15 @@ static BOOL OptionsInet(void)			//internet options
 	{
 		return false;
 	}
+	// auto click in the text box
+	sContext.psScreen	= psWScreen;
+	sContext.psForm		= (W_FORM *)psWScreen->psForm;
+	sContext.xOffset	= 0;
+	sContext.yOffset	= 0;
+	sContext.mx			= 0;
+	sContext.my			= 0;
+	editBoxClicked((W_EDITBOX*)widgGetFromID(psWScreen,CON_PASSWORD), &sContext);
+
 	SettingsUp = true;
 	return true;
 }
@@ -666,7 +681,6 @@ void runConnectionScreen(void )
 			if ((LobbyError != ERROR_KICKED) && (LobbyError != ERROR_CHEAT))
 			{
 				setLobbyError(ERROR_NOERROR);
-				EnablePasswordPrompt = false;
 			}
 			changeTitleMode(GAMEFIND);
 			break;
@@ -723,7 +737,6 @@ static void addGames(void)
 {
 	UDWORD i,gcount=0;
 	W_BUTINIT	sButInit;
-	int AtLeastOnePrivateGame = 0;
 	static const char *wrongVersionTip = "Your version of Warzone is incompatible with this game.";
 
 	//count games to see if need two columns.
@@ -731,22 +744,8 @@ static void addGames(void)
 	{
 		if( NetPlay.games[i].desc.dwSize !=0)
 		{
-			if (NetPlay.games[i].privateGame)
-			{
-				AtLeastOnePrivateGame++;
-			}
 			gcount++;
 		}
-	}
-	if (AtLeastOnePrivateGame
-		&& getLobbyError() != ERROR_KICKED
-		&& getLobbyError() != ERROR_CHEAT)
-	{
-		EnablePasswordPrompt = true;
-	}
-	else
-	{
-		EnablePasswordPrompt = false;
 	}
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = FRONTEND_BOTFORM;
@@ -755,7 +754,6 @@ static void addGames(void)
 	sButInit.height = GAMES_GAMEHEIGHT;
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = displayRemoteGame;
-
 
 	// we want the old games deleted, and only list games when we should
 	if (getLobbyError() || !gcount)
@@ -768,7 +766,7 @@ static void addGames(void)
 	}
 	// in case they refresh, and a game becomes available.
 	widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE);
-	
+
 	// only have to do this if we have any games available.
 	if (!getLobbyError() && gcount)
 	{
@@ -782,19 +780,19 @@ static void addGames(void)
 
 				if (gcount < 6)							// only center column needed.
 				{
-					sButInit.x = 125;
+					sButInit.x = 165;
 					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
 				}
 				else
 				{
 					if (i<6)		//column 1
 					{
-						sButInit.x = 10;
+						sButInit.x = 50;
 						sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
 					}
 					else		//column 2
 					{
-						sButInit.x = 20+GAMES_GAMEWIDTH;
+						sButInit.x = 60+GAMES_GAMEWIDTH;
 						sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*(i-6) ) );
 					}
 				}
@@ -810,12 +808,6 @@ static void addGames(void)
 				sButInit.UserData = i;
 
 				widgAddButton(psWScreen, &sButInit);
-				if (NetPlay.games[i].desc.dwMaxPlayers == NetPlay.games[i].desc.dwCurrentPlayers ||
-				    strcmp(VersionString, NetPlay.games[i].versionstring) != 0)
-				{
-					// disabled - can't be joined
-					widgSetButtonState(psWScreen, GAMES_GAMESTART+i, WBUT_DISABLE);
-				}
 			}
 		}
 	}
@@ -867,7 +859,7 @@ static void addGames(void)
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID = FRONTEND_BOTFORM;
 		sButInit.id = FRONTEND_NOGAMESAVAILABLE;
-		sButInit.x = 20;
+		sButInit.x = 70;
 		sButInit.y = 50;
 		sButInit.style = WBUT_PLAIN | WBUT_TXTCENTRE;
 		sButInit.width = FRONTEND_BUTWIDTH;
@@ -879,7 +871,16 @@ static void addGames(void)
 
 		widgAddButton(psWScreen, &sButInit);
 	}
+}
 
+static void removeGames(void)
+{
+	int i;
+	for (i = 0; i<MaxGames; i++)
+	{
+		widgDelete(psWScreen, GAMES_GAMESTART+i);	// remove old widget
+	}
+	widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE);
 }
 
 void runGameFind(void )
@@ -888,8 +889,8 @@ void runGameFind(void )
 	static UDWORD lastupdate=0;
 	static char game_password[64];		// check if StringSize is available
 
-	if(lastupdate> gameTime)lastupdate = 0;
-	if(gameTime-lastupdate >6000)
+	if (lastupdate > gameTime) lastupdate = 0;
+	if (gameTime-lastupdate > 6000 && !EnablePasswordPrompt)
 	{
 		lastupdate = gameTime;
 		if(safeSearch)
@@ -923,8 +924,7 @@ void runGameFind(void )
 	{
 		gameNumber = id-GAMES_GAMESTART;
 
-		if( ( NetPlay.games[gameNumber].desc.dwCurrentPlayers < NetPlay.games[gameNumber].desc.dwMaxPlayers)
-			&& !(NetPlay.games[gameNumber].desc.dwFlags & SESSION_JOINDISABLED) ) // if still joinable
+		if (!(NetPlay.games[gameNumber].desc.dwFlags & SESSION_JOINDISABLED)) // if still joinable
 		{
 			// TODO: Check whether this code is used at all in skirmish games, if not, remove it.
 			// if skirmish, check it wont take the last slot
@@ -938,17 +938,36 @@ void runGameFind(void )
 				goto FAIL;
 			}
 
-
-			ingame.localOptionsReceived = false;			// note we are awaiting options
-			sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
-
-			joinCampaign(gameNumber,(char*)sPlayer);
-
-			changeTitleMode(MULTIOPTION);
+			if (NetPlay.games[gameNumber].privateGame)
+			{
+				showPasswordForm();
+			}
+			else
+			{
+				ingame.localOptionsReceived = false;			// note we are awaiting options
+				sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
+				
+				joinCampaign(gameNumber,(char*)sPlayer);
+				
+				changeTitleMode(MULTIOPTION);
+			}
 		}
 
 	}
-
+	else if (id == CON_PASSWORDYES)
+	{
+		ingame.localOptionsReceived = false;			// note we are awaiting options
+		sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
+		
+		joinCampaign(gameNumber,(char*)sPlayer);
+		
+		changeTitleMode(MULTIOPTION);
+	}
+	else if (id == CON_PASSWORDNO)
+	{
+		hidePasswordForm();
+	}
+	
 FAIL:
 
 	widgDisplayScreen(psWScreen);								// show the widgets currently running
@@ -967,11 +986,11 @@ static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOff
 	UDWORD	w = psWidget->width;
 	UDWORD  h = psWidget->height;
 
-	pie_BoxFill(x, y, x + w, y + h, WZCOL_MENU_LOAD_BORDER);
-	pie_BoxFill(x + 1, y + 1, x + w - 1, y + h - 1, WZCOL_SCORE_BOX_BORDER);
+	pie_BoxFill(x, y, x + w, y + h, WZCOL_MENU_BORDER);
+	pie_BoxFill(x + 1, y + 1, x + w - 1, y + h - 1, WZCOL_MENU_BACKGROUND);
 }
 
-static void FlashPasswordLabel( WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void showPasswordLabel( WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	SDWORD	fx,fy;
 	W_LABEL	*psLab;
@@ -979,19 +998,15 @@ static void FlashPasswordLabel( WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	psLab = (W_LABEL *)psWidget;
 
 	fx = xOffset + psWidget->x;
-	fy = yOffset + psWidget->y;// + iV_GetTextWidth(psLab->aText);
+	fy = yOffset + psWidget->y;
 
 	iV_SetFont(font_large);
-	// A quick way to flash the text
-	((gameTime2 / 250) % 4) ? iV_SetTextColour(WZCOL_TEXT_BRIGHT) : iV_SetTextColour(WZCOL_TEXT_DARK);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	iV_DrawText(psLab->aText, fx, fy);
 	iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-
-	return;
-
-
 }
+
 // This is what starts the lobby screen
 void startGameFind(void)
 {
@@ -999,122 +1014,56 @@ void startGameFind(void)
 	const char	*txt;
 	W_BUTINIT	sButInit;
 	W_EDBINIT	sEdInit;
+	W_LABINIT	sLabInit;
 
 	addBackdrop();										//background image
-
-	// draws the background of the top text
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = FRONTEND_TOPFORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x		= FRONTEND_TOPFORMX;
-	sFormInit.y		= 4;
-	sFormInit.width = FRONTEND_TOPFORMW;
-	sFormInit.height= FRONTEND_TOPFORMH-80;
-	sFormInit.pDisplay = intDisplayPlainForm;
-
-	widgAddForm(psWScreen, &sFormInit);
-
-	// draws the top text of the screen
-	txt = "Warzone 2100 Lobby";
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-	sButInit.formID = FRONTEND_TOPFORM;
-	sButInit.id = FRONTEND_NOGAMESAVAILABLE+20;
-	sButInit.x = 25;
-	sButInit.y = 20;
-	sButInit.style = WBUT_PLAIN | WBUT_TXTCENTRE;
-	sButInit.width = FRONTEND_BUTWIDTH;
-	sButInit.UserData = 0; // store disable state
-	sButInit.height = FRONTEND_BUTHEIGHT;
-	sButInit.pDisplay = displayTextOption;
-	sButInit.FontID = font_large;
-	sButInit.pText = txt;
-
-	widgAddButton(psWScreen, &sButInit);
 
 	// draws the background of the games listed
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	sFormInit.formID = FRONTEND_BACKDROP;
 	sFormInit.id = FRONTEND_BOTFORM;
 	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = FRONTEND_BOTFORMX;
-	sFormInit.y = FRONTEND_BOTFORMY-85;
-	sFormInit.width = FRONTEND_BOTFORMW;
-	sFormInit.height = FRONTEND_BOTFORMH+40;
+	sFormInit.x = MULTIOP_OPTIONSX;
+	sFormInit.y = MULTIOP_OPTIONSY;
+	sFormInit.width = MULTIOP_CHATBOXW;
+	sFormInit.height = 460;
 	sFormInit.pDisplay = intOpenPlainForm;
 	sFormInit.disableChildren = true;
 
 	widgAddForm(psWScreen, &sFormInit);
 
-	// draws the background of the password box
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = 31777;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = FRONTEND_BOTFORMX;
-	sFormInit.y = 432;
-	sFormInit.width = FRONTEND_BOTFORMW;
-	sFormInit.height = 40;
-	sFormInit.pDisplay = intOpenPlainForm;
-	sFormInit.disableChildren = true;
-
-	widgAddForm(psWScreen, &sFormInit);
-
-	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY,_("GAMES"));
+	addSideText(FRONTEND_SIDETEXT,  MULTIOP_OPTIONSX-3, MULTIOP_OPTIONSY,_("GAMES"));
 
 	// cancel
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,5,MULTIOP_OKW,MULTIOP_OKH,_("Return To Previous Screen"),
 		IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
-	if (!safeSearch && (!disableLobbyRefresh))
+	//refresh
+	addMultiBut(psWScreen,FRONTEND_BOTFORM,MULTIOP_REFRESH, MULTIOP_CHATBOXW-MULTIOP_OKW-5,5,MULTIOP_OKW,MULTIOP_OKH,
+	            _("Refresh Games List"),IMAGE_REFRESH,IMAGE_REFRESH,false);			// Find Games button
+	if (safeSearch || disableLobbyRefresh)
 	{
-		//refresh
-		addMultiBut(psWScreen,FRONTEND_BOTFORM,MULTIOP_REFRESH ,480-MULTIOP_OKW-5 ,5,MULTIOP_OKW,MULTIOP_OKH,
-					_("Refresh Games List"),IMAGE_REFRESH,IMAGE_REFRESH,false);			// Find Games button
+		widgHide(psWScreen, MULTIOP_REFRESH);
 	}
 
 	NETfindGame();
 	addGames();	// now add games.
 
-	// now only display the password stuff if needed.
-	if (EnablePasswordPrompt)
-	{
-		W_LABINIT	sLabInit;
-		//	const char	*ptxt;
+	// Password stuff. Hidden by default.
 
-		// password label.
-		memset(&sLabInit, 0, sizeof(W_LABINIT));
-		sLabInit.formID = FRONTEND_BACKDROP;
-		sLabInit.id		= CON_SETTINGS_LABEL+1;
-		sLabInit.style	= WLAB_ALIGNCENTRE;
-		sLabInit.x		= 195;
-		sLabInit.y		= 449;
-		sLabInit.width	= CON_SETTINGSWIDTH;
-		sLabInit.height = 20;
-		sLabInit.pText	= _("Enter Password First ");
-		sLabInit.FontID = font_regular;
-		sLabInit.pDisplay = FlashPasswordLabel;
-		widgAddLabel(psWScreen, &sLabInit);
-
-/*
-	// draws the label text as a button
-	ptxt = _("Enter password First!");
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-	sButInit.formID = FRONTEND_BACKDROP;
-	sButInit.id = CON_SETTINGS_LABEL+1;
-	sButInit.x = 170;
-	sButInit.y = 430;
-	sButInit.style = WBUT_PLAIN | WBUT_TXTCENTRE;
-	sButInit.width = 300;
-	sButInit.UserData = 0; // store disable state
-	sButInit.height = 20;
-	sButInit.pDisplay = displayTextOption;
-	sButInit.FontID = font_large;
-	sButInit.pText = ptxt;
-
-	widgAddButton(psWScreen, &sButInit);
-	widgSetButtonState(psWScreen, CON_SETTINGS_LABEL+1, WBUTS_FLASH);
-*/
+	// password label.
+	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	sLabInit.formID = FRONTEND_BACKDROP;
+	sLabInit.id		= CON_PASSWORD_LABEL;
+	sLabInit.style	= WLAB_ALIGNCENTRE;
+	sLabInit.x		= 180;
+	sLabInit.y		= 195;
+	sLabInit.width	= CON_SETTINGSWIDTH;
+	sLabInit.height = 20;
+	sLabInit.pText	= _("Enter Password:");
+	sLabInit.FontID = font_regular;
+	sLabInit.pDisplay = FlashPasswordLabel;
+	widgAddLabel(psWScreen, &sLabInit);
 
 	// and finally draw the password entry box
 	memset(&sEdInit, 0, sizeof(W_EDBINIT));
@@ -1122,15 +1071,87 @@ void startGameFind(void)
 	sEdInit.id = CON_PASSWORD;
 	sEdInit.style = WEDB_PLAIN;
 	sEdInit.x = 180;
-	sEdInit.y = 450;
+	sEdInit.y = 200;
 	sEdInit.width = 280;
 	sEdInit.height = 20;
 	sEdInit.pText = "";
 	sEdInit.FontID = font_regular;
-	sEdInit.pBoxDisplay = displayPasswordEditBox ; 
-	
+	sEdInit.pBoxDisplay = displayPasswordEditBox;
+
 	widgAddEditBox(psWScreen, &sEdInit);
+
+	addMultiBut(psWScreen, FRONTEND_BACKDROP,CON_PASSWORDYES,230,225,MULTIOP_OKW,MULTIOP_OKH,
+	            _("OK"),IMAGE_OK,IMAGE_OK,true);
+	addMultiBut(psWScreen, FRONTEND_BACKDROP,CON_PASSWORDNO,280,225,MULTIOP_OKW,MULTIOP_OKH,
+	            _("Cancel"),IMAGE_NO,IMAGE_NO,true);
+
+	// draws the background of the password box
+	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit.formID = FRONTEND_BACKDROP;
+	sFormInit.id = FRONTEND_PASSWORDFORM;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.x = FRONTEND_BOTFORMX;
+	sFormInit.y = 160;
+	sFormInit.width = FRONTEND_TOPFORMW;
+	sFormInit.height = FRONTEND_TOPFORMH-40;
+	sFormInit.pDisplay = intOpenPlainForm;
+	sFormInit.disableChildren = true;
+
+	widgAddForm(psWScreen, &sFormInit);
+
+	widgHide(psWScreen, FRONTEND_PASSWORDFORM);
+	widgHide(psWScreen, CON_PASSWORD_LABEL);
+	widgHide(psWScreen, CON_PASSWORD);
+	widgHide(psWScreen, CON_PASSWORDYES);
+	widgHide(psWScreen, CON_PASSWORDNO);
+
+	EnablePasswordPrompt = false;
+}
+
+static void hidePasswordForm(void)
+{
+	EnablePasswordPrompt = false;
+
+	widgHide(psWScreen, FRONTEND_PASSWORDFORM);
+	widgHide(psWScreen, CON_PASSWORD_LABEL);
+	widgHide(psWScreen, CON_PASSWORD);
+	widgHide(psWScreen, CON_PASSWORDYES);
+	widgHide(psWScreen, CON_PASSWORDNO);
+
+	widgReveal(psWScreen, FRONTEND_SIDETEXT);
+	widgReveal(psWScreen, FRONTEND_BOTFORM);
+	widgReveal(psWScreen, CON_CANCEL);
+	if (!safeSearch && (!disableLobbyRefresh))
+	{
+		widgReveal(psWScreen, MULTIOP_REFRESH);
 	}
+	addGames();
+}
+static void showPasswordForm(void)
+{
+	W_CONTEXT sContext;
+	EnablePasswordPrompt = true;
+
+	widgHide(psWScreen, FRONTEND_SIDETEXT);
+	widgHide(psWScreen, FRONTEND_BOTFORM);
+	widgHide(psWScreen, CON_CANCEL);
+	widgHide(psWScreen, MULTIOP_REFRESH);
+	removeGames();
+
+	widgReveal(psWScreen, FRONTEND_PASSWORDFORM);
+	widgReveal(psWScreen, CON_PASSWORD_LABEL);
+	widgReveal(psWScreen, CON_PASSWORD);
+	widgReveal(psWScreen, CON_PASSWORDYES);
+	widgReveal(psWScreen, CON_PASSWORDNO);
+
+	// auto click in the password box
+	sContext.psScreen	= psWScreen;
+	sContext.psForm		= (W_FORM *)psWScreen->psForm;
+	sContext.xOffset	= 0;
+	sContext.yOffset	= 0;
+	sContext.mx			= 0;
+	sContext.my			= 0;
+	editBoxClicked((W_EDITBOX*)widgGetFromID(psWScreen,CON_PASSWORD), &sContext);
 }
 
 
@@ -3247,20 +3268,53 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 
 	//draw game info
 	iV_SetFont(font_regular);													// font
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
+	// get game info.
+	// TODO: Check whether this code is used at all in skirmish games, if not, remove it.
+	if ((NetPlay.games[i].desc.dwFlags & SESSION_JOINDISABLED)
+		|| (bMultiPlayer
+			&& !NetPlay.bComms
+			&& NETgetGameFlagsUnjoined(gameNumber,1) == SKIRMISH                                  // the LAST bug...
+			&& NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers - 1))
+	{
+		iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+		// FIXME: We should really use another way to indicate that the game is full than our current big fat cross.
+		// need some sort of closed thing here!
+		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
+	}
+	else if ( strcmp(VersionString, NetPlay.games[i].versionstring) == 0)
+	{
+		if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
+		{
+			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+		}
+		else
+		{
+			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		}
+		iV_DrawText(_("Players"), x + 5, y + 18);
+		ssprintf(tmp, "%d/%d", NetPlay.games[i].desc.dwCurrentPlayers, NetPlay.games[i].desc.dwMaxPlayers);
+		iV_DrawText(tmp, x + 17, y + 33);
+	}
+	else
+	{	//don't allow people to join games frome a different version of the game.
+		iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+		// FIXME: Need a Wrong version icon!
+		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
+	}
+	
 	//draw type overlay.
 	if( NETgetGameFlagsUnjoined(i,1) == CAMPAIGN)
 	{
 		iV_DrawImage(FrontImages, IMAGE_ARENA_OVER, x + 59, y + 3);
 	}
 	else if (NetPlay.games[i].privateGame)	// check to see if it is a private game
-		{
-			iV_DrawImage(FrontImages, IMAGE_LOCKED_NOBG, x+62, y+3);	// lock icon
-		}
+	{
+		iV_DrawImage(FrontImages, IMAGE_LOCKED_NOBG, x+62, y+3);	// lock icon
+	}
 	else
 	{
-			iV_DrawImage(FrontImages, IMAGE_SKIRMISH_OVER, x+62, y+3);	// SKIRMISH
+		iV_DrawImage(FrontImages, IMAGE_SKIRMISH_OVER, x+62, y+3);	// SKIRMISH
 	}
 
 	// ping rating
@@ -3284,31 +3338,6 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		NetPlay.games[i].name[strlen(NetPlay.games[i].name)-1]='\0';
 	}
 	iV_DrawText(NetPlay.games[i].name, x + 100, y + 18);	// name
-
-	// get game info.
-	// TODO: Check whether this code is used at all in skirmish games, if not, remove it.
-	if ((NetPlay.games[i].desc.dwFlags & SESSION_JOINDISABLED)
-	 || NetPlay.games[i].desc.dwCurrentPlayers >= NetPlay.games[i].desc.dwMaxPlayers        // if not joinable
-	 || (bMultiPlayer
-	  && !NetPlay.bComms
-	  && NETgetGameFlagsUnjoined(gameNumber,1) == SKIRMISH                                  // the LAST bug...
-	  && NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers - 1))
-	{
-		// FIXME: We should really use another way to indicate that the game is full than our current big fat cross.
-		// need some sort of closed thing here!
-		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
-	}
-	else if ( strcmp(VersionString, NetPlay.games[i].versionstring) == 0)
-	{
-		iV_DrawText(_("Players"), x + 5, y + 18);
-		ssprintf(tmp, "%d/%d", NetPlay.games[i].desc.dwCurrentPlayers, NetPlay.games[i].desc.dwMaxPlayers);
-		iV_DrawText(tmp, x + 17, y + 33);
-	}
-	else
-	{	//don't allow people to join games frome a different version of the game.
-		// FIXME: Need a Wrong version icon!
-		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
-	}
 
 	iV_SetFont(font_small);											// font
 	iV_DrawText(NetPlay.games[i].versionstring, x + 100, y + 32);	// version
