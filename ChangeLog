@@ -28,7 +28,6 @@
    * New: Add a host has dropped dialog when the host drops (r8717)
    * New: Add a host only dialog that warns them they are about to kill the game if they quit (r8717)
    * Change: Fix the hash routines to use network byte order (r8762)
-   * Change: People can now choose whatever position they want - workaround for when games are full (r8774, ticket:1241)
    * Change: Host can change position and color of other players (r8805)
    * Fix: Enforce default limits if host did not enter limits in the limits screen (r8713)
  * AI:
