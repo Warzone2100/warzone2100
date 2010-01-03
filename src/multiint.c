@@ -1037,8 +1037,6 @@ static void showPasswordLabel( WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 void startGameFind(void)
 {
 	W_FORMINIT	sFormInit;
-	const char	*txt;
-	W_BUTINIT	sButInit;
 	W_EDBINIT	sEdInit;
 	W_LABINIT	sLabInit;
 
