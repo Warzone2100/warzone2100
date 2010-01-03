@@ -18,6 +18,18 @@
 			name = "Configure Popt";
 			productName = "Configure Popt";
 		};
+		43F77C7710F0125E00E04615 /* Make DMGs for Release */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 43F77C8A10F0126F00E04615 /* Build configuration list for PBXAggregateTarget "Make DMGs for Release" */;
+			buildPhases = (
+				43F77C7610F0125E00E04615 /* ShellScript */,
+			);
+			dependencies = (
+				43AE78FD10F0F4F500FED5D3 /* PBXTargetDependency */,
+			);
+			name = "Make DMGs for Release";
+			productName = "Make DMGs for Release";
+		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
@@ -724,6 +736,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 221052010E3D21E80057CD9C;
 			remoteInfo = Bison;
+		};
+		43AE78FC10F0F4F500FED5D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 02356D740BD3BB3400E9A019;
+			remoteInfo = Warzone;
 		};
 		97AEAAEC0E8C1B5200A10721 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3361,6 +3380,7 @@
 				971177490F87A677000C8A96 /* Pixman */,
 				02CDDCF30D159BC300722688 /* Autorevision */,
 				221052010E3D21E80057CD9C /* Bison */,
+				43F77C7710F0125E00E04615 /* Make DMGs for Release */,
 			);
 		};
 /* End PBXProject section */
@@ -3634,7 +3654,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ..\n./macosx/build/${CONFIGURATION}/Autorevision +cstr . src/autorevision.h\nsed -n 's:#define:&:p' src/autorevision.h | sed 's:\"::' | sed 's:\"::' >macosx/build/autorevision.h";
+			shellScript = "cd ..\n./macosx/build/${CONFIGURATION}/Autorevision +cstr . src/autorevision.h\nsed -n 's:#define:&:p' src/autorevision.h | sed 's:\"::g' >macosx/build/autorevision.h";
 		};
 		43F3011910D3572400707B6E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3648,6 +3668,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# shell script goes here\n\ncd external/popt\n\n./configure > log\n\nexit 0";
+		};
+		43F77C7610F0125E00E04615 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "# Config\nsimgfl=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/wztemplate.sparseimage\"\nsimgflnme=\"wztemplate.sparseimage\"\nsequence=\"http://www.il.fontys.nl/~giel/warzone/videos/latest/en/hi/sequences.wz\"\nsequencenme=\"sequences.wz\"\nsequencelo=\"http://www.il.fontys.nl/~giel/warzone/videos/latest/en/lo/sequences.wz\"\nsequencelonme=\"sequences-lo.wz\"\nrelbuild=\"build/Release/Warzone.app\"\ndmgout=\"build/dmgout\"\n\n# Fail if not release\nif [ ! -d \"$relbuild\" ]; then\n    echo \"This should only be run as Release\"\n    exit 1\nfi\n\n# Make a dir and get the sparseimage\nmkdir -p \"$dmgout\"\ncd  \"$dmgout\"\nif [ ! -f \"$simgflnme\" ]; then\n    echo \"Fetching $simgfl\"\n    if ! curl -L -O --connect-timeout \"30\" \"$simgfl\"; then\n        echo \"Unable to fetch $simgfl\"\n        exit 1\n    fi\nelse\n    echo \"$simgflnme already exists, skipping\"\nfi\n\n# Get the sequences\n# if [ ! -f \"$sequencenme\" ]; then\n#     if ! curl -L -O --connect-timeout \"30\" \"$sequence\"; then\n#         echo \"Unable to fetch $sequence\"\n#         exit 1\n#     fi\n# else\n#     echo \"$sequencenme already exists, skipping\"\n# fi\nif [ ! -f \"$sequencelonme\" ]; then\n    if ! curl -L --connect-timeout \"30\" -o \"$sequencelonme\" \"$sequencelo\"; then\n        echo \"Unable to fetch $sequencelo\"\n        exit 1\n    fi\nelse\n    echo \"$sequencelonme already exists, skipping\"\nfi\n\n# Copy over the app\ncd ../../\necho \"Copying the app cleanly.\"\nif ! tar -c --exclude .svn --exclude 'Makefile*' --exclude 'makefile*' -C build/Release Warzone.app | tar -xC $dmgout; then\n    echo \"Unable to copy the app\"\n    exit 1\nfi\ncd \"$dmgout\"\n\n# mkredist.bash\necho \"== Compressing base.zip ==\"\ncd Warzone.app/Contents/Resources/data/\nif [ -d base/ ]\nthen\n  cd base/\n  zip -r ../base.wz *\n  cd ..\n  rm -rf base/\nfi\n\necho \"== Compressing mp.zip ==\"\nif [ -d mp/ ]\nthen\n  cd mp/\n  zip -r ../mp.wz *\n  cd ..\n  rm -rf mp/\nfi\n\n# rm sequences.wz\n\ncd ../../../../\n\nmkdir temp/\nmkdir out/\n\necho \"== Creating DMG ==\"\ncp wztemplate.sparseimage temp/wztemplatecopy.sparseimage\nhdiutil resize -size 150m temp/wztemplatecopy.sparseimage\nmountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\ncp -r Warzone.app/* /Volumes/Warzone\\ 2100/Warzone.app\n# hdiutil detach `expr match \"$mountpt\" '\\(^[^ ]*\\)'`\nhdiutil detach \"$mountpt\"\nhdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-novideo.dmg\n\necho \"== Creating LQ DMG ==\"\nhdiutil resize -size 350m temp/wztemplatecopy.sparseimage\nmountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\ncp sequences-lo.wz /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n# hdiutil detach `expr match \"$mountpt\" '\\(^[^ ]*\\)'`\nhdiutil detach \"$mountpt\"\nhdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-lqvideo.dmg\n\n# echo \"== Creating HQ DMG ==\"\n# hdiutil resize -size 700m temp/wztemplatecopy.sparseimage\n# mountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'``\n# rm /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n# cp sequences.wz /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n# hdiutil detach \"$mountpt\"\n# hdiutil converttemp/wztemplatecopy.sparseimage -format UDZO  -o out/warzone2100-hqvideo.dmg\n\necho \"== Cleaning up ==\"\nrm -f temp/wztemplatecopy.sparseimage\nrmdir temp/\n\n# Open the dir\nopen \"$dmgout/out\"\n\nexit 0";
 		};
 		9711774C0F87A677000C8A96 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4240,6 +4273,11 @@
 			target = 221052010E3D21E80057CD9C /* Bison */;
 			targetProxy = 221052AB0E3D369C0057CD9C /* PBXContainerItemProxy */;
 		};
+		43AE78FD10F0F4F500FED5D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 02356D740BD3BB3400E9A019 /* Warzone */;
+			targetProxy = 43AE78FC10F0F4F500FED5D3 /* PBXContainerItemProxy */;
+		};
 		97AEAAEB0E8C1B5200A10721 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 02356E080BD3BCFE00E9A019 /* Ogg */;
@@ -4508,6 +4546,8 @@
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/prebuilt/SDL\"";
 				OTHER_CFLAGS = "$(inherited)";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				WARNING_CFLAGS = "";
+				WARNING_LDFLAGS = "-Wno-mlong-branch";
 			};
 			name = Debug;
 		};
@@ -4532,6 +4572,8 @@
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/prebuilt/SDL\"";
 				OTHER_CFLAGS = "$(inherited)";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				WARNING_CFLAGS = "";
+				WARNING_LDFLAGS = "-Wno-mlong-branch";
 			};
 			name = Release;
 		};
@@ -5084,6 +5126,27 @@
 			};
 			name = Release;
 		};
+		43F77C8110F0125F00E04615 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "Make DMGs for Release";
+			};
+			name = Debug;
+		};
+		43F77C8210F0125F00E04615 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Make DMGs for Release";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		971177620F87A677000C8A96 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5327,6 +5390,15 @@
 			buildConfigurations = (
 				43F3011B10D3572400707B6E /* Debug */,
 				43F3011C10D3572400707B6E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		43F77C8A10F0126F00E04615 /* Build configuration list for PBXAggregateTarget "Make DMGs for Release" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43F77C8110F0125F00E04615 /* Debug */,
+				43F77C8210F0125F00E04615 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
