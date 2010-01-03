@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import address
+from email.utils import parseaddr
+import re
 from trac.core import *
 from trac.ticket import ITicketManipulator
 
@@ -11,6 +13,8 @@ class TicketValidEmail(Component):
     """
 
     implements(ITicketManipulator)
+
+    reject_emails_re = re.compile(r'^\w+@example\.(org|net|com)$')
 
     # ITicketManipulator methods
     def prepare_ticket(self, req, ticket, fields, actions):
@@ -24,8 +28,13 @@ class TicketValidEmail(Component):
         Must return a list of `(field, message)` tuples, one for each problem
         detected. `field` can be `None` to indicate an overall problem with the
         ticket. Therefore, a return value of `[]` means everything is OK."""
-        if req.authname and req.authname != 'anonymous' or address.valid(ticket['reporter']):
+
+        mail = parseaddr(ticket['reporter'])[1]
+        if self.reject_emails_re.match(mail.lower()):
+            return [('reporter', '"%s" isn\'t acceptable as e-mail address' % (mail))]
+        elif req.authname and req.authname != 'anonymous' or address.valid(ticket['reporter']):
             return []
         else:
-            return [('reporter', \
+            return [(None, 'Either use a valid reporter address or log in.'),
+                    ('reporter', \
                 'should contain a valid e-mail address. E.g. "Nickname <user@example.org>"')]
