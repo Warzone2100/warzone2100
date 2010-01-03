@@ -811,11 +811,17 @@ static void addGames(void)
 				}
 				else
 				{
-				sButInit.pTip = NetPlay.games[i].name;
-			}
-			sButInit.UserData = i;
+					sButInit.pTip = NetPlay.games[i].name;
+				}
+				sButInit.UserData = i;
 
-			widgAddButton(psWScreen, &sButInit);
+				widgAddButton(psWScreen, &sButInit);
+				if (NetPlay.games[i].desc.dwMaxPlayers == NetPlay.games[i].desc.dwCurrentPlayers ||
+				    strcmp(VersionString, NetPlay.games[i].versionstring) != 0)
+				{
+					// disabled - can't be joined
+					widgSetButtonState(psWScreen, GAMES_GAMESTART+i, WBUT_DISABLE);
+				}
 			}
 		}
 	}
@@ -845,6 +851,7 @@ static void addGames(void)
 			 txt = _("Wrong data/mod detected by Host.");
 			 break;
 		// AFAIK, the only way this can really happy is if the Host's file is named wrong, or a client side error.
+		// In other words, it happens all the time when people put their maps in the wrong directory. :P
 		case ERROR_UNKNOWNFILEISSUE: 
 			 txt = _("Host couldn't send file?");
 			 debug(LOG_POPUP, "Warzone couldn't complete a file request.\n\nPossibly, Host's file is incorrect. Check your logs for more details.");
@@ -860,9 +867,6 @@ static void addGames(void)
 			txt = _("Connection Error");
 			break;
 		}
-
-		// delete old widget if necessary
-		widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE);
 
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID = FRONTEND_BOTFORM;
@@ -1198,17 +1202,32 @@ static void addGameOptions(BOOL bRedo)
 
 	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX-3 , MULTIOP_OPTIONSY,_("OPTIONS"));
 
-	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), game.name, IMAGE_EDIT_GAME, IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
+	// game name box
+	if (!NetPlay.bComms)
+	{
+		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), _("One-Player Skirmish"), IMAGE_EDIT_GAME, IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
+		// disable for one-player skirmish
+		widgSetButtonState(psWScreen, MULTIOP_GNAME, WEDBS_DISABLE);
+		widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON, WBUT_DISABLE);
+	}
+	else
+	{
+		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), game.name, IMAGE_EDIT_GAME, IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
+	}
+	// map chooser
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_MAP  , MCOL0, MROW3, _("Select Map"), game.map, IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, MULTIOP_MAP_ICON);
+	// disable for challenges
 	if (challengeActive)
 	{
+		widgSetButtonState(psWScreen, MULTIOP_MAP, WEDBS_DISABLE);
 		widgSetButtonState(psWScreen, MULTIOP_MAP_ICON, WBUT_DISABLE);
 	}
 	// password box
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT  , MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE , MULTIOP_PASSWORD_BUT);
-	// Disable Password button for skirmish games
+	// disable for one-player skirmish
 	if (!NetPlay.bComms)
 	{
+		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, WEDBS_DISABLE);
 		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_DISABLE);
 	}
 	// buttons.
@@ -1244,6 +1263,7 @@ static void addGameOptions(BOOL bRedo)
 	{
 		widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_LOCK);
 		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);	// full, cannot enable scavenger player
+		game.scavengers = false;
 	}
 
 	//just display the game options.
