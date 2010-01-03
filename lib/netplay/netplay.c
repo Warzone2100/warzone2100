@@ -2058,7 +2058,7 @@ int NETinit(BOOL bFirstCall)
 		NetPlay.isHostAlive = false;
 		NetPlay.gamePassword[0] = '\0';
 		NetPlay.MOTD = strdup("");
-		sstrcpy(NetPlay.gamePassword,_("Enter password here)");
+		sstrcpy(NetPlay.gamePassword,_("Enter password here)"));
 		NETstartLogging();
 	}
 
