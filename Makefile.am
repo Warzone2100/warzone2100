@@ -11,5 +11,6 @@ ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST= \
 	autogen.sh \
+	autorevision.conf \
 	config.rpath \
 	configure.ac
