@@ -64,6 +64,8 @@ void loadMapPreview(bool hideInterface);
 #define CON_SETTINGSWIDTH	200
 #define CON_SETTINGSHEIGHT	100
 
+#define CON_PASSWORD_LABEL	10132
+
 #define CON_OK				10101
 #define CON_OKX				CON_SETTINGSWIDTH-MULTIOP_OKW-3
 #define CON_OKY				CON_SETTINGSHEIGHT-MULTIOP_OKH-3
@@ -82,6 +84,8 @@ void loadMapPreview(bool hideInterface);
 #define CON_PASSWORD		10139
 #define CON_PASSWORDX		20
 #define CON_PASSWORDY		110
+#define CON_PASSWORDYES		10141
+#define CON_PASSWORDNO		10142
 // for hosts
 #define CON_H_PASSWORD		10140
 #define CON_H_PASSWORDX		MCOL2
