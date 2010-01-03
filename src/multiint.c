@@ -1084,7 +1084,7 @@ void startGameFind(void)
 	sLabInit.height = 20;
 	sLabInit.pText	= _("Enter Password:");
 	sLabInit.FontID = font_regular;
-	sLabInit.pDisplay = FlashPasswordLabel;
+	sLabInit.pDisplay = showPasswordLabel;
 	widgAddLabel(psWScreen, &sLabInit);
 
 	// and finally draw the password entry box
