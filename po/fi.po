@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-01 20:47+0100\n"
+"POT-Creation-Date: 2010-01-03 22:13+0100\n"
 "PO-Revision-Date: 2008-05-09 10:33+0000\n"
 "Last-Translator: Lartza <lartza@wippies.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -11019,6 +11019,11 @@ msgstr "latina"
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr ""
 
+#: lib/netplay/netplay.c:1252
+#: lib/netplay/netplay.c:2061
+msgid "Enter password here"
+msgstr ""
+
 #: lib/netplay/netplay.c:1290
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
@@ -11180,7 +11185,7 @@ msgstr "Pelaaja"
 
 #: src/design.c:457
 #: src/design.c:478
-#: src/design.c:3574
+#: src/design.c:3547
 msgid "New Vehicle"
 msgstr ""
 
@@ -11221,18 +11226,18 @@ msgstr ""
 
 #: src/design.c:729
 #: src/design.c:784
-#: src/design.c:1601
-#: src/design.c:1638
-#: src/design.c:1659
-#: src/design.c:1677
-#: src/design.c:1698
-#: src/design.c:1716
-#: src/design.c:1754
-#: src/design.c:1789
-#: src/design.c:1924
-#: src/design.c:1941
-#: src/design.c:1976
-#: src/design.c:2012
+#: src/design.c:1574
+#: src/design.c:1611
+#: src/design.c:1632
+#: src/design.c:1650
+#: src/design.c:1671
+#: src/design.c:1689
+#: src/design.c:1727
+#: src/design.c:1762
+#: src/design.c:1897
+#: src/design.c:1914
+#: src/design.c:1949
+#: src/design.c:1985
 msgid "Weight"
 msgstr "Paino"
 
@@ -11251,73 +11256,73 @@ msgstr ""
 msgid "Power Usage"
 msgstr ""
 
-#: src/design.c:1364
+#: src/design.c:1337
 msgid "Transporter"
 msgstr ""
 
-#: src/design.c:1386
+#: src/design.c:1359
 msgid "Hydra "
 msgstr ""
 
-#: src/design.c:1583
+#: src/design.c:1556
 msgid "Sensor Range"
 msgstr ""
 
-#: src/design.c:1592
+#: src/design.c:1565
 msgid "Sensor Power"
 msgstr ""
 
-#: src/design.c:1629
+#: src/design.c:1602
 msgid "ECM Power"
 msgstr ""
 
-#: src/design.c:1651
-#: src/design.c:1668
-#: src/design.c:1690
-#: src/design.c:1707
+#: src/design.c:1624
+#: src/design.c:1641
+#: src/design.c:1663
+#: src/design.c:1680
 msgid "Build Points"
 msgstr ""
 
-#: src/design.c:1730
-#: src/design.c:1762
+#: src/design.c:1703
+#: src/design.c:1735
 msgid "Range"
 msgstr ""
 
-#: src/design.c:1738
-#: src/design.c:1771
+#: src/design.c:1711
+#: src/design.c:1744
 msgid "Damage"
 msgstr "Vahinko"
 
-#: src/design.c:1746
-#: src/design.c:1780
+#: src/design.c:1719
+#: src/design.c:1753
 msgid "Rate-of-Fire"
 msgstr ""
 
-#: src/design.c:1916
-#: src/design.c:1932
+#: src/design.c:1889
+#: src/design.c:1905
 msgid "Air Speed"
 msgstr ""
 
-#: src/design.c:1952
-#: src/design.c:1985
+#: src/design.c:1925
+#: src/design.c:1958
 msgid "Road Speed"
 msgstr ""
 
-#: src/design.c:1960
-#: src/design.c:1994
+#: src/design.c:1933
+#: src/design.c:1967
 msgid "Off-Road Speed"
 msgstr ""
 
-#: src/design.c:1968
-#: src/design.c:2003
+#: src/design.c:1941
+#: src/design.c:1976
 msgid "Water Speed"
 msgstr ""
 
-#: src/design.c:2137
+#: src/design.c:2110
 msgid "Weapons"
 msgstr ""
 
-#: src/design.c:2159
+#: src/design.c:2132
 msgid "Systems"
 msgstr ""
 
@@ -11502,8 +11507,8 @@ msgstr "YKSINPELI"
 
 #: src/frontend.c:469
 #: src/ingameop.c:519
-#: src/mission.c:2536
-#: src/mission.c:2641
+#: src/mission.c:2541
+#: src/mission.c:2646
 msgid "Load Saved Game"
 msgstr "Lataa tallennettu peli"
 
@@ -11520,7 +11525,7 @@ msgid "Join Game"
 msgstr "Liity peliin"
 
 #: src/frontend.c:577
-#: src/multiint.c:1193
+#: src/multiint.c:1240
 msgid "OPTIONS"
 msgstr "ASETUKSET"
 
@@ -11618,7 +11623,7 @@ msgid "Off"
 msgstr "Pois päältä"
 
 #: src/frontend.c:679
-#: src/multiint.c:1247
+#: src/multiint.c:1309
 msgid "Fog"
 msgstr "Sumu"
 
@@ -11629,7 +11634,7 @@ msgstr ""
 
 #: src/frontend.c:686
 #: src/frontend.c:761
-#: src/multiint.c:1249
+#: src/multiint.c:1311
 msgid "Fog Of War"
 msgstr ""
 
@@ -11838,7 +11843,7 @@ msgid "Build (F3)"
 msgstr "Rakenna (F3)"
 
 #: src/hci.c:3861
-#: src/multiint.c:1294
+#: src/multiint.c:1356
 #: src/multimenu.c:763
 msgid "Power"
 msgstr ""
@@ -11939,8 +11944,8 @@ msgstr ""
 
 #: src/ingameop.c:295
 #: src/ingameop.c:523
-#: src/mission.c:2526
-#: src/mission.c:2644
+#: src/mission.c:2531
+#: src/mission.c:2649
 msgid "Save Game"
 msgstr "Tallenna peli"
 
@@ -12360,10 +12365,10 @@ msgid "KEY MAPPING"
 msgstr ""
 
 #: src/keyedit.c:386
-#: src/multiint.c:618
-#: src/multiint.c:660
-#: src/multiint.c:1060
-#: src/multiint.c:1380
+#: src/multiint.c:633
+#: src/multiint.c:675
+#: src/multiint.c:1058
+#: src/multiint.c:1442
 msgid "Return To Previous Screen"
 msgstr ""
 
@@ -12737,37 +12742,37 @@ msgstr ""
 msgid "Could not save game!"
 msgstr "Lataa tallennettu peli"
 
-#: src/mission.c:2079
+#: src/mission.c:2084
 msgid "Load Transport"
 msgstr "Lastaa kuljetus"
 
-#: src/mission.c:2473
+#: src/mission.c:2478
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr ""
 
-#: src/mission.c:2473
+#: src/mission.c:2478
 msgid "OBJECTIVE ACHIEVED"
 msgstr ""
 
-#: src/mission.c:2479
+#: src/mission.c:2484
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr ""
 
-#: src/mission.c:2479
+#: src/mission.c:2484
 msgid "OBJECTIVE FAILED"
 msgstr ""
 
-#: src/mission.c:2505
-#: src/mission.c:2542
-#: src/mission.c:2660
+#: src/mission.c:2510
+#: src/mission.c:2547
+#: src/mission.c:2665
 msgid "Quit To Main Menu"
 msgstr "Poistu päävalikkoon"
 
-#: src/mission.c:2513
+#: src/mission.c:2518
 msgid "Continue Game"
 msgstr "Jatka peliä"
 
-#: src/mission.c:2607
+#: src/mission.c:2612
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "Peli tallennettu"
@@ -12828,233 +12833,247 @@ msgstr ""
 msgid "You Discover Blueprints For %s"
 msgstr ""
 
-#: src/multiint.c:563
+#: src/multiint.c:569
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Hyväksy asetukset"
 
-#: src/multiint.c:574
+#: src/multiint.c:580
 msgid "IP Address or Machine Name"
 msgstr ""
 
-#: src/multiint.c:615
+#: src/multiint.c:630
 msgid "CONNECTION"
 msgstr "YHTEYS"
 
-#: src/multiint.c:628
+#: src/multiint.c:643
 msgid "Lobby"
 msgstr "Aula"
 
-#: src/multiint.c:629
+#: src/multiint.c:644
 msgid "IP"
 msgstr ""
 
-#: src/multiint.c:826
+#: src/multiint.c:824
 msgid "No games are available"
 msgstr ""
 
-#: src/multiint.c:829
+#: src/multiint.c:827
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.c:833
+#: src/multiint.c:831
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.c:836
+#: src/multiint.c:834
 msgid "Wrong Game Version!"
 msgstr ""
 
-#: src/multiint.c:839
+#: src/multiint.c:837
 msgid "Wrong data/mod detected by Host."
 msgstr ""
 
-#: src/multiint.c:843
+#: src/multiint.c:841
 msgid "Host couldn't send file?"
 msgstr ""
 
-#: src/multiint.c:847
+#: src/multiint.c:845
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:850
+#: src/multiint.c:848
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.c:854
+#: src/multiint.c:852
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:952
+#: src/multiint.c:999
 msgid "Searching"
 msgstr "Etsitään"
 
-#: src/multiint.c:1057
+#: src/multiint.c:1055
 msgid "GAMES"
 msgstr ""
 
-#: src/multiint.c:1067
+#: src/multiint.c:1063
 msgid "Refresh Games List"
 msgstr ""
 
-#: src/multiint.c:1088
-msgid "Enter Password First "
+#: src/multiint.c:1083
+msgid "Enter Password:"
 msgstr ""
 
-#: src/multiint.c:1195
+#: src/multiint.c:1104
+msgid "OK"
+msgstr ""
+
+#: src/multiint.c:1106
+#, fuzzy
+msgid "Cancel"
+msgstr "Syaani"
+
+#: src/multiint.c:1245
+#: src/multiint.c:1252
 msgid "Select Game Name"
 msgstr ""
 
-#: src/multiint.c:1196
+#: src/multiint.c:1245
+msgid "One-Player Skirmish"
+msgstr ""
+
+#: src/multiint.c:1255
 msgid "Select Map"
 msgstr "Valitse kartta"
 
-#: src/multiint.c:1202
+#: src/multiint.c:1263
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.c:1211
-#: src/multiint.c:1212
+#: src/multiint.c:1273
+#: src/multiint.c:1274
 msgid "Scavengers"
 msgstr ""
 
-#: src/multiint.c:1214
+#: src/multiint.c:1276
 msgid "No Scavengers"
 msgstr ""
 
-#: src/multiint.c:1244
+#: src/multiint.c:1306
 #, fuzzy
 msgid "Select Player Name"
 msgstr "Valitse pelaajan nimi"
 
-#: src/multiint.c:1250
+#: src/multiint.c:1312
 msgid "Distance Fog"
 msgstr ""
 
-#: src/multiint.c:1261
+#: src/multiint.c:1323
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Liittoumat"
 
-#: src/multiint.c:1264
+#: src/multiint.c:1326
 msgid "No Alliances"
 msgstr "Ei liittoumia"
 
-#: src/multiint.c:1266
+#: src/multiint.c:1328
 msgid "Allow Alliances"
 msgstr "Salli liittoumat"
 
-#: src/multiint.c:1270
+#: src/multiint.c:1332
 msgid "Locked Teams"
 msgstr ""
 
-#: src/multiint.c:1296
+#: src/multiint.c:1358
 msgid "Low Power Levels"
 msgstr ""
 
-#: src/multiint.c:1298
+#: src/multiint.c:1360
 msgid "Medium Power Levels"
 msgstr ""
 
-#: src/multiint.c:1300
+#: src/multiint.c:1362
 msgid "High Power Levels"
 msgstr ""
 
-#: src/multiint.c:1332
+#: src/multiint.c:1394
 msgid "Base"
 msgstr "Tukikohta"
 
-#: src/multiint.c:1334
+#: src/multiint.c:1396
 msgid "Start with No Bases"
 msgstr "Aloita ilman tukikohtaa"
 
-#: src/multiint.c:1336
+#: src/multiint.c:1398
 msgid "Start with Bases"
 msgstr ""
 
-#: src/multiint.c:1338
+#: src/multiint.c:1400
 msgid "Start with Advanced Bases"
 msgstr ""
 
-#: src/multiint.c:1370
+#: src/multiint.c:1432
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.c:1372
+#: src/multiint.c:1434
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.c:1386
+#: src/multiint.c:1448
 msgid "Start Hosting Game"
 msgstr ""
 
-#: src/multiint.c:1394
+#: src/multiint.c:1456
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "Omat rakennukset: %u"
 
-#: src/multiint.c:1394
+#: src/multiint.c:1456
 msgid "Set Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1812
+#: src/multiint.c:1874
 msgid "Team"
 msgstr ""
 
-#: src/multiint.c:1845
+#: src/multiint.c:1907
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/multiint.c:1851
+#: src/multiint.c:1913
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.c:1855
+#: src/multiint.c:1917
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.c:1892
+#: src/multiint.c:1954
 msgid "PLAYERS"
 msgstr "PELAAJAT"
 
-#: src/multiint.c:2070
+#: src/multiint.c:2132
 msgid "CHAT"
 msgstr ""
 
-#: src/multiint.c:2245
+#: src/multiint.c:2307
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2252
+#: src/multiint.c:2314
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2494
+#: src/multiint.c:2556
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2579
+#: src/multiint.c:2641
 msgid "'Locked Teams' mode enabled"
 msgstr ""
 
-#: src/multiint.c:2618
+#: src/multiint.c:2680
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr ""
 
-#: src/multiint.c:2620
+#: src/multiint.c:2682
 msgid "you are unwanted by the host"
 msgstr ""
 
-#: src/multiint.c:2719
+#: src/multiint.c:2781
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:3282
+#: src/multiint.c:3315
 msgid "Players"
 msgstr "Pelaajat"
 
-#: src/multiint.c:3361
+#: src/multiint.c:3431
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
@@ -13450,7 +13469,7 @@ msgstr ""
 msgid "Launch Transport"
 msgstr "Laukaise kuljetus"
 
-#: src/transporter.c:1741
+#: src/transporter.c:1742
 msgid "Reinforcements landing"
 msgstr "Lisäjoukot laskeutuvat"
 
