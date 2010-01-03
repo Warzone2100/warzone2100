@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-01 20:42+0100\n"
+"POT-Creation-Date: 2010-01-03 21:16+0100\n"
 "PO-Revision-Date: 2009-05-13 16:12+0800\n"
 "Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -11114,6 +11114,10 @@ msgstr ""
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr ""
 
+#: lib/netplay/netplay.c:2060
+msgid "Enter password here"
+msgstr ""
+
 #: lib/netplay/netplay.c:3009
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
@@ -11271,7 +11275,7 @@ msgstr "玩家"
 
 #: src/design.c:455
 #: src/design.c:476
-#: src/design.c:3573
+#: src/design.c:3546
 msgid "New Vehicle"
 msgstr "设计新单位"
 
@@ -11310,18 +11314,18 @@ msgstr "发动机输出功率"
 
 #: src/design.c:727
 #: src/design.c:782
-#: src/design.c:1599
-#: src/design.c:1636
-#: src/design.c:1657
-#: src/design.c:1675
-#: src/design.c:1696
-#: src/design.c:1714
-#: src/design.c:1752
-#: src/design.c:1787
-#: src/design.c:1922
-#: src/design.c:1939
-#: src/design.c:1974
-#: src/design.c:2010
+#: src/design.c:1572
+#: src/design.c:1609
+#: src/design.c:1630
+#: src/design.c:1648
+#: src/design.c:1669
+#: src/design.c:1687
+#: src/design.c:1725
+#: src/design.c:1760
+#: src/design.c:1895
+#: src/design.c:1912
+#: src/design.c:1947
+#: src/design.c:1983
 msgid "Weight"
 msgstr "重量"
 
@@ -11340,73 +11344,73 @@ msgstr "总体成本"
 msgid "Power Usage"
 msgstr "能源占用"
 
-#: src/design.c:1362
+#: src/design.c:1335
 msgid "Transporter"
 msgstr "运输占位"
 
-#: src/design.c:1384
+#: src/design.c:1357
 msgid "Hydra "
 msgstr ""
 
-#: src/design.c:1581
+#: src/design.c:1554
 msgid "Sensor Range"
 msgstr "传感器半径"
 
-#: src/design.c:1590
+#: src/design.c:1563
 msgid "Sensor Power"
 msgstr "传感器能源"
 
-#: src/design.c:1627
+#: src/design.c:1600
 msgid "ECM Power"
 msgstr "ECM 能源"
 
-#: src/design.c:1649
-#: src/design.c:1666
-#: src/design.c:1688
-#: src/design.c:1705
+#: src/design.c:1622
+#: src/design.c:1639
+#: src/design.c:1661
+#: src/design.c:1678
 msgid "Build Points"
 msgstr "生产成本"
 
-#: src/design.c:1728
-#: src/design.c:1760
+#: src/design.c:1701
+#: src/design.c:1733
 msgid "Range"
 msgstr "攻击范围"
 
-#: src/design.c:1736
-#: src/design.c:1769
+#: src/design.c:1709
+#: src/design.c:1742
 msgid "Damage"
 msgstr "攻击力"
 
-#: src/design.c:1744
-#: src/design.c:1778
+#: src/design.c:1717
+#: src/design.c:1751
 msgid "Rate-of-Fire"
 msgstr "火力评估"
 
-#: src/design.c:1914
-#: src/design.c:1930
+#: src/design.c:1887
+#: src/design.c:1903
 msgid "Air Speed"
 msgstr "飞行移动速度"
 
-#: src/design.c:1950
-#: src/design.c:1983
+#: src/design.c:1923
+#: src/design.c:1956
 msgid "Road Speed"
 msgstr "公路移动速度"
 
-#: src/design.c:1958
-#: src/design.c:1992
+#: src/design.c:1931
+#: src/design.c:1965
 msgid "Off-Road Speed"
 msgstr "野地移动速度"
 
-#: src/design.c:1966
-#: src/design.c:2001
+#: src/design.c:1939
+#: src/design.c:1974
 msgid "Water Speed"
 msgstr "水面移动速度"
 
-#: src/design.c:2135
+#: src/design.c:2108
 msgid "Weapons"
 msgstr "武器"
 
-#: src/design.c:2157
+#: src/design.c:2130
 msgid "Systems"
 msgstr "系统"
 
@@ -11588,8 +11592,8 @@ msgstr "单人游戏"
 
 #: src/frontend.c:469
 #: src/ingameop.c:507
-#: src/mission.c:2836
-#: src/mission.c:2941
+#: src/mission.c:2841
+#: src/mission.c:2946
 msgid "Load Saved Game"
 msgstr "载入游戏"
 
@@ -11606,7 +11610,7 @@ msgid "Join Game"
 msgstr "加入游戏"
 
 #: src/frontend.c:580
-#: src/multiint.c:1199
+#: src/multiint.c:1244
 msgid "OPTIONS"
 msgstr "选项"
 
@@ -11703,7 +11707,7 @@ msgid "Off"
 msgstr "关"
 
 #: src/frontend.c:682
-#: src/multiint.c:1253
+#: src/multiint.c:1314
 msgid "Fog"
 msgstr "迷雾"
 
@@ -11714,7 +11718,7 @@ msgstr "薄雾（可以看见地形）"
 
 #: src/frontend.c:689
 #: src/frontend.c:764
-#: src/multiint.c:1255
+#: src/multiint.c:1316
 msgid "Fog Of War"
 msgstr "战争迷雾"
 
@@ -11875,7 +11879,7 @@ msgstr "游戏已保存! "
 #: src/hci.c:1702
 #: src/loop.c:535
 #: src/loop.c:551
-#: src/mission.c:2907
+#: src/mission.c:2912
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "游戏已保存! "
@@ -11924,7 +11928,7 @@ msgid "Build (F3)"
 msgstr "建造建筑 (F3)"
 
 #: src/hci.c:3906
-#: src/multiint.c:1300
+#: src/multiint.c:1361
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "能源"
@@ -12016,8 +12020,8 @@ msgstr ""
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2826
-#: src/mission.c:2944
+#: src/mission.c:2831
+#: src/mission.c:2949
 msgid "Save Game"
 msgstr "保存游戏"
 
@@ -12428,10 +12432,10 @@ msgid "KEY MAPPING"
 msgstr "按键设置"
 
 #: src/keyedit.c:386
-#: src/multiint.c:624
-#: src/multiint.c:666
-#: src/multiint.c:1066
-#: src/multiint.c:1386
+#: src/multiint.c:639
+#: src/multiint.c:681
+#: src/multiint.c:1062
+#: src/multiint.c:1447
 msgid "Return To Previous Screen"
 msgstr "返回到前一个屏幕"
 
@@ -12806,35 +12810,35 @@ msgstr ""
 msgid "Could not save game!"
 msgstr "载入游戏"
 
-#: src/mission.c:2379
+#: src/mission.c:2384
 msgid "Load Transport"
 msgstr "登陆运输飞船"
 
-#: src/mission.c:2773
+#: src/mission.c:2778
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "任务目标完成"
 
-#: src/mission.c:2773
+#: src/mission.c:2778
 msgid "OBJECTIVE ACHIEVED"
 msgstr "任务目标完成"
 
-#: src/mission.c:2779
+#: src/mission.c:2784
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "任务目标失败"
 
-#: src/mission.c:2779
+#: src/mission.c:2784
 msgid "OBJECTIVE FAILED"
 msgstr "任务目标失败"
 
-#: src/mission.c:2805
-#: src/mission.c:2842
-#: src/mission.c:2960
+#: src/mission.c:2810
+#: src/mission.c:2847
+#: src/mission.c:2965
 msgid "Quit To Main Menu"
 msgstr "退回到主菜单"
 
-#: src/mission.c:2813
+#: src/mission.c:2818
 msgid "Continue Game"
 msgstr "继续游戏"
 
@@ -12898,234 +12902,250 @@ msgstr ""
 msgid "You Discover Blueprints For %s"
 msgstr ""
 
-#: src/multiint.c:569
+#: src/multiint.c:575
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "确认设置"
 
-#: src/multiint.c:580
+#: src/multiint.c:586
 msgid "IP Address or Machine Name"
 msgstr "IP地址或计算机名称"
 
-#: src/multiint.c:621
+#: src/multiint.c:636
 msgid "CONNECTION"
 msgstr "连接"
 
-#: src/multiint.c:634
+#: src/multiint.c:649
 msgid "Lobby"
 msgstr "游戏大厅"
 
-#: src/multiint.c:635
+#: src/multiint.c:650
 msgid "IP"
 msgstr "IP直连"
 
-#: src/multiint.c:832
+#: src/multiint.c:830
 msgid "No games are available"
 msgstr ""
 
-#: src/multiint.c:835
+#: src/multiint.c:833
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.c:839
+#: src/multiint.c:837
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.c:842
+#: src/multiint.c:840
 msgid "Wrong Game Version!"
 msgstr ""
 
-#: src/multiint.c:845
+#: src/multiint.c:843
 msgid "Wrong data/mod detected by Host."
 msgstr ""
 
-#: src/multiint.c:849
+#: src/multiint.c:848
 msgid "Host couldn't send file?"
 msgstr ""
 
-#: src/multiint.c:853
+#: src/multiint.c:852
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:856
+#: src/multiint.c:855
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.c:860
+#: src/multiint.c:859
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:958
+#: src/multiint.c:1003
 msgid "Searching"
 msgstr "正在搜索"
 
-#: src/multiint.c:1063
+#: src/multiint.c:1059
 msgid "GAMES"
 msgstr "游戏"
 
-#: src/multiint.c:1073
+#: src/multiint.c:1067
 msgid "Refresh Games List"
 msgstr "刷新游戏列表"
 
-#: src/multiint.c:1094
-msgid "Enter Password First "
+#: src/multiint.c:1087
+#, fuzzy
+msgid "Enter Password:"
+msgstr "点击查看地图"
+
+#: src/multiint.c:1108
+msgid "OK"
 msgstr ""
 
-#: src/multiint.c:1201
+#: src/multiint.c:1110
+#, fuzzy
+msgid "Cancel"
+msgstr "青绿色"
+
+#: src/multiint.c:1249
+#: src/multiint.c:1256
 msgid "Select Game Name"
 msgstr "选择游戏名称"
 
-#: src/multiint.c:1202
+#: src/multiint.c:1249
+#, fuzzy
+msgid "One-Player Skirmish"
+msgstr "单人的人机对战"
+
+#: src/multiint.c:1259
 msgid "Select Map"
 msgstr "选择地图"
 
-#: src/multiint.c:1208
+#: src/multiint.c:1267
 #, fuzzy
 msgid "Click to set Password"
 msgstr "点击查看地图"
 
-#: src/multiint.c:1217
-#: src/multiint.c:1218
+#: src/multiint.c:1277
+#: src/multiint.c:1278
 msgid "Scavengers"
 msgstr ""
 
-#: src/multiint.c:1220
+#: src/multiint.c:1280
 msgid "No Scavengers"
 msgstr ""
 
-#: src/multiint.c:1250
+#: src/multiint.c:1311
 msgid "Select Player Name"
 msgstr "选择玩家名字"
 
-#: src/multiint.c:1256
+#: src/multiint.c:1317
 msgid "Distance Fog"
 msgstr "薄雾（可以看见地形）"
 
-#: src/multiint.c:1267
+#: src/multiint.c:1328
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.c:1270
+#: src/multiint.c:1331
 msgid "No Alliances"
 msgstr "无同盟"
 
-#: src/multiint.c:1272
+#: src/multiint.c:1333
 msgid "Allow Alliances"
 msgstr "允许同盟"
 
-#: src/multiint.c:1276
+#: src/multiint.c:1337
 msgid "Locked Teams"
 msgstr "已锁定团队"
 
-#: src/multiint.c:1302
+#: src/multiint.c:1363
 msgid "Low Power Levels"
 msgstr "低能源水平"
 
-#: src/multiint.c:1304
+#: src/multiint.c:1365
 msgid "Medium Power Levels"
 msgstr "中等能源水平"
 
-#: src/multiint.c:1306
+#: src/multiint.c:1367
 msgid "High Power Levels"
 msgstr "高能源水平"
 
-#: src/multiint.c:1338
+#: src/multiint.c:1399
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.c:1340
+#: src/multiint.c:1401
 msgid "Start with No Bases"
 msgstr "开始时没有基地"
 
-#: src/multiint.c:1342
+#: src/multiint.c:1403
 msgid "Start with Bases"
 msgstr "开始时有基地"
 
-#: src/multiint.c:1344
+#: src/multiint.c:1405
 msgid "Start with Advanced Bases"
 msgstr "开始时有高级基地"
 
-#: src/multiint.c:1376
+#: src/multiint.c:1437
 msgid "Map Preview"
 msgstr "地图预览"
 
-#: src/multiint.c:1378
+#: src/multiint.c:1439
 msgid "Click to see Map"
 msgstr "点击查看地图"
 
-#: src/multiint.c:1392
+#: src/multiint.c:1453
 msgid "Start Hosting Game"
 msgstr "开始建立游戏"
 
-#: src/multiint.c:1400
+#: src/multiint.c:1461
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "设置建筑数量限制"
 
-#: src/multiint.c:1400
+#: src/multiint.c:1461
 msgid "Set Structure Limits"
 msgstr "设置建筑数量限制"
 
-#: src/multiint.c:1818
+#: src/multiint.c:1879
 msgid "Team"
 msgstr "团队"
 
-#: src/multiint.c:1851
+#: src/multiint.c:1912
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
-#: src/multiint.c:1857
+#: src/multiint.c:1918
 msgid "Click when ready"
 msgstr "点击准备开始游戏"
 
-#: src/multiint.c:1861
+#: src/multiint.c:1922
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.c:1898
+#: src/multiint.c:1959
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.c:2076
+#: src/multiint.c:2137
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.c:2251
+#: src/multiint.c:2312
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2258
+#: src/multiint.c:2319
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2500
+#: src/multiint.c:2561
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2585
+#: src/multiint.c:2646
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "已锁定团队"
 
-#: src/multiint.c:2624
+#: src/multiint.c:2685
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家将 %s 踢出游戏!"
 
-#: src/multiint.c:2626
+#: src/multiint.c:2687
 msgid "you are unwanted by the host"
 msgstr ""
 
-#: src/multiint.c:2720
+#: src/multiint.c:2781
 msgid "Host is Starting Game"
 msgstr "主玩家正在开始游戏"
 
-#: src/multiint.c:3282
+#: src/multiint.c:3314
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.c:3361
+#: src/multiint.c:3430
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
@@ -13523,7 +13543,7 @@ msgstr ""
 msgid "Launch Transport"
 msgstr "发射运输飞船"
 
-#: src/transporter.c:1747
+#: src/transporter.c:1748
 msgid "Reinforcements landing"
 msgstr ""
 
@@ -13650,9 +13670,6 @@ msgstr ""
 
 #~ msgid "Load Campaign"
 #~ msgstr "载入战役"
-
-#~ msgid "One Player Skirmish"
-#~ msgstr "单人的人机对战"
 
 #~ msgid "Full"
 #~ msgstr "全屏"
