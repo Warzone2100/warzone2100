@@ -3,10 +3,13 @@ UPDATERFILE=$(PACKAGE)-$(VERSION).update.exe
 
 CLEANFILES=$(INSTALLERFILE)
 
+if INSTALLER
 GMOFILES = $(addprefix $(top_builddir)/po/,$(addsuffix .gmo,$(basename $(notdir $(wildcard $(top_srcdir)/po/*.po)))))
 
-if INSTALLER
 all: $(INSTALLERFILE)
+
+else
+GMOFILES =
 endif
 
 $(top_builddir)/po/%.gmo: $(top_srcdir)/po/%.po
