@@ -1780,11 +1780,13 @@ void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 	psLab = (W_LABEL *)psWidget;
 
 	iV_SetFont(font_large);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	fx = xOffset + psWidget->x;
 	fy = yOffset + psWidget->y + iV_GetTextWidth(psLab->aText) ;
 
+	iV_SetTextColour(WZCOL_GREY);
+	iV_DrawTextRotated(psLab->aText, fx+2, fy+2, 270.f);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	iV_DrawTextRotated(psLab->aText, fx, fy, 270.f);
 }
 
