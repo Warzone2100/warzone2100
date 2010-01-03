@@ -720,7 +720,7 @@ LOBBY_ERROR_TYPES getLobbyError(void)
 void setLobbyError (LOBBY_ERROR_TYPES error_type)
 {
 	LobbyError = error_type;
-	if (LobbyError <= ERROR_CONNECTION)
+	if (LobbyError <= ERROR_FULL)
 	{
 		disableLobbyRefresh = false;
 	}
@@ -946,10 +946,21 @@ void runGameFind(void )
 			{
 				ingame.localOptionsReceived = false;			// note we are awaiting options
 				sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
-				
-				joinCampaign(gameNumber,(char*)sPlayer);
-				
-				changeTitleMode(MULTIOPTION);
+
+				if (joinCampaign(gameNumber,(char*)sPlayer))
+				{
+					changeTitleMode(MULTIOPTION);
+				}
+				else if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
+				{
+					setLobbyError(ERROR_FULL);
+					addGames();
+				}
+				else
+				{
+					setLobbyError(ERROR_CONNECTION);
+					addGames();
+				}
 			}
 		}
 
@@ -958,10 +969,21 @@ void runGameFind(void )
 	{
 		ingame.localOptionsReceived = false;			// note we are awaiting options
 		sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
-		
-		joinCampaign(gameNumber,(char*)sPlayer);
-		
-		changeTitleMode(MULTIOPTION);
+
+		if (joinCampaign(gameNumber,(char*)sPlayer))
+		{
+			changeTitleMode(MULTIOPTION);
+		}
+		else if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
+		{
+			setLobbyError(ERROR_FULL);
+			hidePasswordForm();
+		}
+		else
+		{
+			setLobbyError(ERROR_CONNECTION);
+			hidePasswordForm();
+		}
 	}
 	else if (id == CON_PASSWORDNO)
 	{

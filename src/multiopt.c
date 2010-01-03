@@ -290,18 +290,19 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 
 	if(!ingame.localJoiningInProgress)
 	{
-		NETjoinGame(gameNumber, sPlayer);	// join
+		if (!NETjoinGame(gameNumber, sPlayer))	// join
+		{
+			return false;
+		}
 		ingame.localJoiningInProgress	= true;
 
 		loadMultiStats(sPlayer,&playerStats);
 		setMultiStats(selectedPlayer, playerStats, false);
 		setMultiStats(selectedPlayer, playerStats, true);
-		return false;
+		return true;
 	}
 
-	bMultiPlayer = true;
-	multiMsgOff = 0;
-	return true;
+	return false;
 }
 
 // ////////////////////////////////////////////////////////////////////////////

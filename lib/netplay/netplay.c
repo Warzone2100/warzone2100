@@ -1498,9 +1498,9 @@ void NETBroadcastPlayerInfo(uint32_t index)
 	NETend();
 }
 
-static unsigned int NET_CreatePlayer(const char* name)
+static signed int NET_CreatePlayer(const char* name)
 {
-	unsigned int index;
+	signed int index;
 
 	for (index = 0; index < MAX_CONNECTED_PLAYERS; index++)
 	{
@@ -1516,7 +1516,7 @@ static unsigned int NET_CreatePlayer(const char* name)
 	}
 
 	debug(LOG_ERROR, "Could not find place for player %s", name);
-	return 0;
+	return -1;
 }
 
 static void NET_DestroyPlayer(unsigned int index)
@@ -3254,12 +3254,21 @@ static void NETallowJoining(void)
 				{
 					char name[64];
 					uint8_t j;
-					uint8_t index;
+					int8_t index;
 
 					NETbeginDecode(NET_JOIN);
 						NETstring(name, sizeof(name));
 					NETend();
 					index = NET_CreatePlayer(name);
+
+					if (index == -1)
+					{
+						// FIXME: No room. Dropping the player without warning since protocol doesn't seem to support rejection for some reason.
+						delSocket(tmp_socket_set, tmp_socket[i]);
+						socketClose(tmp_socket[i]);
+						tmp_socket[i] = NULL;
+						return;
+					}
 
 					delSocket(tmp_socket_set, tmp_socket[i]);
 					NET_initBufferedSocket(connected_bsocket[index], tmp_socket[i]);
@@ -3273,7 +3282,7 @@ static void NETallowJoining(void)
 					gamestruct.desc.dwCurrentPlayers++;
 
 					NETbeginEncode(NET_ACCEPTED, index);
-						NETuint8_t(&index);
+						NETuint8_t((uint8_t *)&index);
 					NETend();
 
 					MultiPlayerJoin(index);
@@ -3291,7 +3300,7 @@ static void NETallowJoining(void)
 
 					// Send info about newcomer to all players.
 					NETbeginEncode(NET_PLAYER_JOINED, NET_ALL_PLAYERS);
-						NETuint8_t(&index);
+						NETuint8_t((uint8_t *)&index);
 					NETend();
 
 					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
@@ -3668,6 +3677,15 @@ connect_succesfull:
 		addressToText(cur->ai_addr, NetPlay.games[gameNumber].desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
 	}
 	freeaddrinfo(hosts);
+	if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
+	{
+		// Shouldn't join; game is full
+		delSocket(socket_set, tcp_socket);
+		socketClose(tcp_socket);
+		free(socket_set);
+		socket_set = NULL;
+		return false;
+	}
 	// Allocate memory for a new socket
 	bsocket = NET_createBufferedSocket();
 	// NOTE: tcp_socket = bsocket->socket now!
@@ -3680,6 +3698,7 @@ connect_succesfull:
 		NETstring((char*)playername, 64);
 	NETend();
 
+	i = SDL_GetTicks();
 	// Loop until we've been accepted into the game
 	for (;;)
 	{
@@ -3687,6 +3706,12 @@ connect_succesfull:
 
 		NETrecv(&type);
 
+		// FIXME: shouldn't there be some sort of rejection message?
+		if (SDL_GetTicks() > i + 10000)
+		{
+			// timeout
+			return false;
+		}
 		if (type == NET_ACCEPTED)
 		{
 			uint8_t index;
