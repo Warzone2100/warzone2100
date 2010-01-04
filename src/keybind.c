@@ -1219,21 +1219,18 @@ void	kf_ToggleDebugMappings( void )
 	}
 #endif
 
-	if (bAllowDebugMode)
+	if (getDebugMappingStatus())
 	{
-		if(getDebugMappingStatus())
-		{
-			processDebugMappings(false);
-		}
-		else
-		{
-			game_SetValidityKey(VALIDITYKEY_CHEAT_MODE);
-			processDebugMappings(true);
-		}
-		sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"), selectedPlayer,
-			 getDebugMappingStatus() ? _("CHEATS ARE NOW ENABLED!") : _("CHEATS ARE NOW DISABLED!"));
-		sendTextMessage(cmsg, true);
+		processDebugMappings(false);
 	}
+	else
+	{
+		game_SetValidityKey(VALIDITYKEY_CHEAT_MODE);
+		processDebugMappings(true);
+	}
+	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"), selectedPlayer,
+		 getDebugMappingStatus() ? _("CHEATS ARE NOW ENABLED!") : _("CHEATS ARE NOW DISABLED!"));
+	sendTextMessage(cmsg, true);
 }
 // --------------------------------------------------------------------------
 
@@ -1977,10 +1974,7 @@ void kf_SendTextMessage(void)
 			if (runningMultiplayer())
 			{
 				sendTextMessage(sTextToSend,false);
-				if (getDebugMappingStatus())
-				{
-					attemptCheatCode(sTextToSend);
-				}
+				attemptCheatCode(sTextToSend);
 			}
 			else
 			{
@@ -2002,10 +1996,7 @@ void kf_SendTextMessage(void)
 					}
 				}
 
-				if (getDebugMappingStatus())
-				{
-					attemptCheatCode(sTextToSend);
-				}
+				attemptCheatCode(sTextToSend);
 			}
 			return;
 		}
