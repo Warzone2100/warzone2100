@@ -797,7 +797,7 @@ static void addGames(void)
 					}
 				}
 				// display the correct tooltip message.
-				if (strcmp(VersionString, NetPlay.games[i].versionstring) != 0)
+				if (!NETgameIsCorrectVersion(&NetPlay.games[i]))
 				{
 					sButInit.pTip = wrongVersionTip;
 				}
@@ -933,7 +933,7 @@ void runGameFind(void )
 			 && !NetPlay.bComms
 			 && NETgetGameFlagsUnjoined(gameNumber,1) == SKIRMISH
 			 && (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers - 1))
-			 || (strcmp(VersionString, NetPlay.games[gameNumber].versionstring) != 0 ))
+			 || (!NETgameIsCorrectVersion(&NetPlay.games[gameNumber]) != 0 ))
 			{
 				goto FAIL;
 			}
@@ -3304,7 +3304,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		// need some sort of closed thing here!
 		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
 	}
-	else if ( strcmp(VersionString, NetPlay.games[i].versionstring) == 0)
+	else if (NETgameIsCorrectVersion(&NetPlay.games[i]))
 	{
 		if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
 		{
