@@ -2188,7 +2188,7 @@ INT_RETVAL intRunWidgets(void)
 		retCode = INT_INTERCEPT;
 	}
 
-	if(	(testPlayerHasLost() || (testPlayerHasWon() && !bMultiPlayer)) && // yeah yeah yeah - I know....
+	if(	(testPlayerHasLost() || testPlayerHasWon()) && !bMultiPlayer && // yeah yeah yeah - I know....
         (intMode != INT_MISSIONRES) && !getDebugMappingStatus())
 
 	{
