@@ -265,9 +265,9 @@ static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk-check"; 
-static int NETCODE_VERSION_MAJOR = 2;	// unused for now
-static int NETCODE_VERSION_MINOR = 24;	// unused for now
+char VersionString[VersionStringSize] = "trunk, netcode 2.31";
+static int NETCODE_VERSION_MAJOR = 2;
+static int NETCODE_VERSION_MINOR = 31;
 static int NUMBER_OF_MODS = 0;			// unused for now
 static int NETCODE_HASH = 0;			// unused for now
 
@@ -1167,9 +1167,9 @@ static void recvVersionCheck()
 		NETint32_t(&Hash_Data);		// NETCODE_HASH
 	NETend();
 
-	if (strcmp(VersionString,playersVersion) != 0)
+	if (NETisCorrectVersion(MajorVersion, MinorVersion))
 	{
-		debug(LOG_NET, "Received *wrong* version string [%s] from player %u. Expected [%s]", playersVersion, victim, VersionString);
+		debug(LOG_NET, "Received wrong version string [%s, %d.%d] from player %u. Expected [%s, %d.%d]", playersVersion, MajorVersion, MinorVersion, victim, VersionString, NETCODE_VERSION_MAJOR, NETCODE_VERSION_MINOR);
 
 		sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victim);
 		sendTextMessage(msg, true);
@@ -1229,6 +1229,15 @@ void NETCheckVersion(uint32_t player)
 			VersionCheckTimeOut(player);
 		}
 	}
+}
+
+bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
+{
+	return (NETCODE_VERSION_MAJOR == game_version_major && NETCODE_VERSION_MINOR == game_version_minor);
+}
+bool NETgameIsCorrectVersion(GAMESTRUCT* check_game)
+{
+	return (NETCODE_VERSION_MAJOR == check_game->game_version_major && NETCODE_VERSION_MINOR == check_game->game_version_minor);
 }
 
 //	Sets if the game is password protected or not
