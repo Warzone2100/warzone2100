@@ -29,6 +29,7 @@
 #include "cheat.h"
 #include "console.h"
 #include "keybind.h"
+#include "keymap.h"
 
 typedef struct _cheat_entry
 {
@@ -84,6 +85,24 @@ BOOL attemptCheatCode(const char* cheat_name)
 	const CHEAT_ENTRY * curCheat;
 	static const CHEAT_ENTRY * const EndCheat = &cheatCodes[ARRAY_SIZE(cheatCodes)];
 
+	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)
+	{
+		if (!getDebugMappingStatus())
+		{
+			kf_ToggleDebugMappings();
+		}
+		return true;
+	}
+	if (strcmp(cheat_name, "cheat off") == 0 && getDebugMappingStatus())
+	{
+		kf_ToggleDebugMappings();
+		return true;
+	}
+	if (!getDebugMappingStatus())
+	{
+		return false;
+	}
+
 	for (curCheat = cheatCodes; curCheat != EndCheat; ++curCheat)
 	{
 		if (strcmp(cheat_name, curCheat->pName) == 0)
@@ -109,7 +128,7 @@ BOOL attemptCheatCode(const char* cheat_name)
 		char	errorString[255];
 
 		sstrcpy(errorString, cheat_name);
-		sstrcat(errorString, "?");
+		sstrcat(errorString, _(": Unknown cheat code."));
 
 		addConsoleMessage(errorString, LEFT_JUSTIFY,SYSTEM_MESSAGE);
 	}
