@@ -309,6 +309,16 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 	}
 }
 
+void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj)
+{
+	if (psObj->watchedTiles && psObj->numWatchedTiles > 0)
+	{
+		free(psObj->watchedTiles);
+		psObj->watchedTiles = NULL;
+		psObj->numWatchedTiles = 0;
+	}
+}
+
 /* Check which tiles can be seen by an object */
 void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
 {

@@ -1523,7 +1523,14 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	{
 		debug(LOG_ERROR,"droid %d not found, so nothing added to transporter!",psDroidToAdd->id);
 	}
-	visRemoveVisibility((BASE_OBJECT *)psDroidToAdd);
+	if (onMission)
+	{
+		visRemoveVisibilityOffWorld((BASE_OBJECT *)psDroidToAdd);
+	}
+	else
+	{
+		visRemoveVisibility((BASE_OBJECT *)psDroidToAdd);
+	}
 
 	//this is called by droidRemove
 	//intRefreshScreen();
