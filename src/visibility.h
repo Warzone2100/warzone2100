@@ -59,6 +59,7 @@ extern void visUpdateLevel(void);
 extern void setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player);
 
 void visRemoveVisibility(BASE_OBJECT *psObj);
+void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj);
 
 extern bool scrTileIsVisible(SDWORD player, SDWORD x, SDWORD y);
 extern void scrResetPlayerTileVisibility(SDWORD player);
