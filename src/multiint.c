@@ -778,14 +778,14 @@ static void addGames(void)
 
 				sButInit.id = GAMES_GAMESTART+i;
 
-				if (gcount < 6)							// only center column needed.
+				if (gcount < 9)							// only center column needed.
 				{
 					sButInit.x = 165;
 					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
 				}
 				else
 				{
-					if (i<6)		//column 1
+					if (i<9)		//column 1
 					{
 						sButInit.x = 50;
 						sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
@@ -793,7 +793,7 @@ static void addGames(void)
 					else		//column 2
 					{
 						sButInit.x = 60+GAMES_GAMEWIDTH;
-						sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*(i-6) ) );
+						sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*(i-9) ) );
 					}
 				}
 				// display the correct tooltip message.
