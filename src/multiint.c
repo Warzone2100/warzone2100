@@ -3135,6 +3135,8 @@ BOOL startMultiOptions(BOOL bReenter)
 	PLAYERSTATS		nullStats;
 	UBYTE i;
 
+	netPlayersUpdated = true;
+
 	addBackdrop();
 	addTopForm();
 
