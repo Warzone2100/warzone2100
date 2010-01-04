@@ -1991,9 +1991,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroidLoc(psDroid, DACTION_MOVE, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
 		break;
 	case DORDER_DISEMBARK:
-        //only valid in multiPlayer mode - cannot use the check on bMultiPlayer since it has been
-        //set to false before this function call
-        if (game.maxPlayers > 0)
+        //only valid in multiPlayer mode
+        if (bMultiPlayer)
         {
             //this order can only be given to Transporter droids
             if (psDroid->droidType == DROID_TRANSPORTER)

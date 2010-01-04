@@ -1120,7 +1120,8 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 // Inform other players that a droid has been destroyed
 BOOL SendDestroyDroid(const DROID* psDroid)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
+	//if (multiMsgOff) // don't send if multiMsgs are off
+	if (!bMultiPlayer) // HACK: send droid deaths even if we've turned off multi messages.
 	{
 		return true;
 	}
