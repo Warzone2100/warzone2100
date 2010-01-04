@@ -2202,10 +2202,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			}
 
 			// Inform all other players
-			if (bMultiPlayer)
-			{
-				sendDroidDisEmbark(psDroid, psTransporter);
-			}
+			sendDroidDisEmbark(psDroid, psTransporter);
 		}
 
 		/* trigger script callback detailing group about to disembark */

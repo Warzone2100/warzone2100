@@ -2514,10 +2514,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 		//set the droids order to that of the factory - AB 22/04/99
 		psNewDroid->secondaryOrder = psStructure->pFunctionality->factory.secondaryOrder;
 
-		if(bMultiPlayer)
-		{
-			sendDroidSecondaryAll(psNewDroid);
-		}
+		sendDroidSecondaryAll(psNewDroid);
 
 		if(psStructure->visible[selectedPlayer])
 		{
@@ -3309,10 +3306,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					(RESEARCH *)pSubject)->researchPoints)
 
 				{
-					if(bMultiPlayer)
-					{
-						SendResearch(psStructure->player,pSubject->ref - REF_RESEARCH_START);
-					}
+					SendResearch(psStructure->player,pSubject->ref - REF_RESEARCH_START);
 
 					//store the last topic researched - if its the best
 					if (psResFacility->psBestTopic == NULL)
@@ -3692,10 +3686,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				//check for fully armed and fully repaired
 				if (vtolHappy(psDroid))
 				{
-					if( bMultiPlayer)
-					{
-						sendHappyVtol(psDroid);
-					}
+					sendHappyVtol(psDroid);
 
 					//clear the rearm pad
 					psDroid->action = DACTION_NONE;
@@ -4970,10 +4961,7 @@ BOOL destroyStruct(STRUCTURE *psDel)
 
 	CHECK_STRUCTURE(psDel);
 
-	if (bMultiPlayer)
-	{
-		SendDestroyStructure(psDel);
-	}
+	SendDestroyStructure(psDel);
 
 //---------------------------------------
 	/* Only add if visible */
@@ -6243,7 +6231,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				(void)giftSingleDroid(psDroid, attackPlayer);
 
 				// tell the world!
-				if (bMultiPlayer)
+				if (!multiMsgOff)
 				{
 					uint8_t giftType = DROID_GIFT, droid_count = 1;
 

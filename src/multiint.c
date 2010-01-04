@@ -669,6 +669,7 @@ void runConnectionScreen(void )
 		case CON_CANCEL: //cancel
 			changeTitleMode(MULTI);
 			bMultiPlayer = false;
+			multiMsgOff = 1;
 			break;
 		case CON_TYPESID_MORE:
 			widgDelete(psWScreen,FRONTEND_BOTFORM);
@@ -2744,6 +2745,7 @@ void startMultiplayerGame(void)
 {
 	decideWRF();										// set up swrf & game.map
 	bMultiPlayer = true;
+	multiMsgOff = 0;
 
 	if (NetPlay.isHost)
 	{
@@ -2926,6 +2928,7 @@ void frontendMultiMessages(void)
 				war_SetFog(!game.fog);
 
 				bMultiPlayer = true;
+				multiMsgOff = 0;
 				changeTitleMode(STARTGAME);
 				bHosted = false;
 				break;
