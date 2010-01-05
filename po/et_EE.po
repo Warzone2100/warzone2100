@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-03 22:13+0100\n"
+"POT-Creation-Date: 2010-01-05 18:33+0100\n"
 "PO-Revision-Date: 2009-10-12 23:24+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -11006,32 +11006,41 @@ msgstr "Traditsiooniline Hiina Keel"
 msgid "Latin"
 msgstr "Ladina Keel"
 
-#: lib/netplay/netplay.c:1174
-#: lib/netplay/netplay.c:1209
+#: lib/netplay/netplay.c:1175
+#, fuzzy, c-format
+msgid "Player %u has the wrong game version. Auto kicking."
+msgstr "Mängijal %u on vale mänguversioon. Automaatne minemalöömine"
+
+#: lib/netplay/netplay.c:1210
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr "Mängijal %u on vale mänguversioon. Automaatne minemalöömine"
 
-#: lib/netplay/netplay.c:1252
-#: lib/netplay/netplay.c:2061
+#: lib/netplay/netplay.c:1262
+#: lib/netplay/netplay.c:2078
 #, fuzzy
 msgid "Enter password here"
 msgstr "Sisesta Enne Salasõna"
 
-#: lib/netplay/netplay.c:1290
-#, c-format
-msgid "Player %u has the wrong password.  Auto kicking."
+#: lib/netplay/netplay.c:1300
+#, fuzzy, c-format
+msgid "Player %u has the wrong password. Auto kicking."
 msgstr "Mängijal %u  on vale salasõna. Automaatne minemalöömine"
 
-#: lib/netplay/netplay.c:3003
+#: lib/netplay/netplay.c:3020
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Ei suuda peaserveri nime lahendada (%s)!"
 
-#: lib/netplay/netplay.c:3028
+#: lib/netplay/netplay.c:3045
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Ei suuda lobby serveriga suhelda! Kas port TCP 9990 on avatud?"
+
+#: src/cheat.c:132
+#, fuzzy
+msgid ": Unknown cheat code."
+msgstr "Sohi mode Käivitatud"
 
 #: src/clparse.c:99
 msgid "Run in cheat mode"
@@ -11957,7 +11966,7 @@ msgid "Power Accrued"
 msgstr "Energia Kogunenud"
 
 #: src/intelmap.c:247
-#: src/keybind.c:1333
+#: src/keybind.c:1330
 msgid "PAUSED"
 msgstr "PAUSED"
 
@@ -12107,12 +12116,12 @@ msgstr "Suurepärane, relva & sensori kuvar on väljas!"
 #: src/keybind.c:534
 #: src/keybind.c:574
 #: src/keybind.c:680
-#: src/keybind.c:1233
-#: src/keybind.c:1291
-#: src/keybind.c:1382
-#: src/keybind.c:1477
-#: src/keybind.c:1828
-#: src/keybind.c:1868
+#: src/keybind.c:1231
+#: src/keybind.c:1288
+#: src/keybind.c:1379
+#: src/keybind.c:1474
+#: src/keybind.c:1825
+#: src/keybind.c:1865
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Mängija %u) teeb sohki:%s"
@@ -12192,153 +12201,153 @@ msgstr "Warning!  This cheat can cause dire problems later on! [%s]"
 msgid "Ending Mission."
 msgstr "Missiooni Lõpp"
 
-#: src/keybind.c:1234
+#: src/keybind.c:1232
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "PETTUSED ON NÜÜD LUBATUD!"
 
-#: src/keybind.c:1234
+#: src/keybind.c:1232
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "PETTUSED ON NÜÜD KEELATUD!"
 
-#: src/keybind.c:1292
+#: src/keybind.c:1289
 msgid "God Mode ON"
 msgstr "Jumala mode sees"
 
-#: src/keybind.c:1292
+#: src/keybind.c:1289
 msgid "God Mode OFF"
 msgstr "Jumala mode väljas"
 
-#: src/keybind.c:1304
+#: src/keybind.c:1301
 msgid "View Aligned to North"
 msgstr "View Aligned to North"
 
-#: src/keybind.c:1383
+#: src/keybind.c:1380
 msgid "Researched EVERYTHING for you!"
 msgstr "Researched EVERYTHING for you!"
 
-#: src/keybind.c:1414
+#: src/keybind.c:1411
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Mängija %u) kasutab pettust :%s %s"
 
-#: src/keybind.c:1415
+#: src/keybind.c:1412
 msgid "Researched"
 msgstr "Uuritud"
 
-#: src/keybind.c:1435
+#: src/keybind.c:1432
 msgid "Only displaying energy bars when selected"
 msgstr "Näitab energjaribasid kui valitud"
 
-#: src/keybind.c:1438
+#: src/keybind.c:1435
 msgid "Always displaying energy bars for units"
 msgstr "Näitab alati üksuste energiaribasid"
 
-#: src/keybind.c:1441
+#: src/keybind.c:1438
 msgid "Always displaying energy bars for units and structures"
 msgstr "Näitab alati üksuste ja ehitiste energiaribasid"
 
-#: src/keybind.c:1463
+#: src/keybind.c:1460
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Demo mode off - Returning to normal game mode"
 
-#: src/keybind.c:1478
+#: src/keybind.c:1475
 msgid "Debug menu is Open"
 msgstr "Debug menüü on avatud"
 
-#: src/keybind.c:1509
+#: src/keybind.c:1506
 msgid "Unable to locate any resource extractors!"
 msgstr "Unable to locate any resource extractors!"
 
-#: src/keybind.c:1730
+#: src/keybind.c:1727
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, the weather outside is frightful... SNOW"
 
-#: src/keybind.c:1736
+#: src/keybind.c:1733
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Singing in the rain, I'm singing in the rain... RAIN"
 
-#: src/keybind.c:1742
+#: src/keybind.c:1739
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Forecast : Clear skies for all areas... NO WEATHER"
 
-#: src/keybind.c:1827
+#: src/keybind.c:1824
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Warning! This can have drastic consequences if used incorrectly in missions."
 
-#: src/keybind.c:1829
+#: src/keybind.c:1826
 msgid "All enemies destroyed by cheating!"
 msgstr "Kõik vaenlased pettusega hävitatud"
 
-#: src/keybind.c:1869
+#: src/keybind.c:1866
 msgid "Destroying selected droids and structures!"
 msgstr "Hävitab valitud  üksused ja ehitised"
 
-#: src/keybind.c:2399
+#: src/keybind.c:2390
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Mängija HQ Keskel, Suund PÕHI"
 
-#: src/keybind.c:2411
+#: src/keybind.c:2402
 msgid "Unable to locate HQ!"
 msgstr "Võimetu HQ leidma!"
 
-#: src/keybind.c:2422
+#: src/keybind.c:2413
 msgid "Formation speed limiting OFF"
 msgstr "Formation speed limiting OFF"
 
-#: src/keybind.c:2426
+#: src/keybind.c:2417
 msgid "Formation speed limiting ON"
 msgstr "Formation speed limiting ON"
 
-#: src/keybind.c:2556
-#: src/keybind.c:2597
-#: src/keybind.c:2619
+#: src/keybind.c:2547
+#: src/keybind.c:2588
+#: src/keybind.c:2610
 msgid "Game Speed Reset"
 msgstr "Mängu Kiirus Taastatud"
 
-#: src/keybind.c:2560
+#: src/keybind.c:2551
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Mängu Kiirus Suurendatud %3.1f"
 
-#: src/keybind.c:2601
+#: src/keybind.c:2592
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Mängu Kiirus Vähendatud %3.1f"
 
-#: src/keybind.c:2631
+#: src/keybind.c:2622
 msgid "Build menu will reopen"
 msgstr "Build menu will reopen"
 
-#: src/keybind.c:2635
+#: src/keybind.c:2626
 msgid "Build menu will not reopen"
 msgstr "Build menu will not reopen"
 
-#: src/keybind.c:2647
+#: src/keybind.c:2638
 msgid "Radar showing friend-foe colors"
 msgstr "Radar showing friend-foe colours"
 
-#: src/keybind.c:2651
+#: src/keybind.c:2642
 msgid "Radar showing player colors"
 msgstr "Radar showing player colours"
 
-#: src/keybind.c:2672
+#: src/keybind.c:2663
 msgid "Radar showing only objects"
 msgstr "Radar näitab ainult objekte"
 
-#: src/keybind.c:2675
+#: src/keybind.c:2666
 msgid "Radar blending terrain and height"
 msgstr "Radar blending terrain and height"
 
-#: src/keybind.c:2678
+#: src/keybind.c:2669
 msgid "Radar showing terrain"
 msgstr "Radar näitab terraini"
 
-#: src/keybind.c:2681
+#: src/keybind.c:2672
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar näitab terraini"
 
-#: src/keybind.c:2684
+#: src/keybind.c:2675
 msgid "Radar showing height"
 msgstr "Radar näitab kõrgust"
 
@@ -13000,64 +13009,60 @@ msgstr "Sea Ehitiste Limiidid"
 msgid "Set Structure Limits"
 msgstr "Sea Ehitiste Limiidid"
 
-#: src/multiint.c:1874
+#: src/multiint.c:1897
 msgid "Team"
 msgstr "Tiim"
 
-#: src/multiint.c:1907
+#: src/multiint.c:1930
 msgid "Waiting for other players"
 msgstr "Teiste mängijate ootamine"
 
-#: src/multiint.c:1913
+#: src/multiint.c:1936
 msgid "Click when ready"
 msgstr "Vajuta kui valmis"
 
-#: src/multiint.c:1917
+#: src/multiint.c:1940
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.c:1954
+#: src/multiint.c:1977
 msgid "PLAYERS"
 msgstr "MÄNGIJAD"
 
-#: src/multiint.c:2132
+#: src/multiint.c:2155
 msgid "CHAT"
 msgstr "VESTLUS"
 
-#: src/multiint.c:2307
+#: src/multiint.c:2330
 msgid "*** password is now required! ***"
 msgstr "*** salasõna on vajalik! ***"
 
-#: src/multiint.c:2314
+#: src/multiint.c:2337
 msgid "*** password is NOT required! ***"
 msgstr "*** salasõna pole vaja! ***"
 
-#: src/multiint.c:2556
+#: src/multiint.c:2579
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2641
+#: src/multiint.c:2664
 msgid "'Locked Teams' mode enabled"
 msgstr "Lukustatud Tiimid, mode lubatud"
 
-#: src/multiint.c:2680
+#: src/multiint.c:2703
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Võõrustaja lõi %s mängust välja!"
 
-#: src/multiint.c:2682
-msgid "you are unwanted by the host"
-msgstr "sa oled võõrustaja poolt soovimatu isik"
-
-#: src/multiint.c:2781
+#: src/multiint.c:2804
 msgid "Host is Starting Game"
 msgstr "Võõrustaja Alustab Mängu"
 
-#: src/multiint.c:3315
+#: src/multiint.c:3340
 msgid "Players"
 msgstr "Mängijad"
 
-#: src/multiint.c:3431
+#: src/multiint.c:3456
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
@@ -13073,13 +13078,9 @@ msgid "%s has Left the Game"
 msgstr "%s Lahkus mängust"
 
 #: src/multijoin.c:330
-#, c-format
-msgid "Kicking player, %s, because data doesn't match!"
+#, fuzzy, c-format
+msgid "Kicking player %s, game data doesn't match!"
 msgstr "Mängija %s väljalöömine, sest info ei klapi!"
-
-#: src/multijoin.c:334
-msgid "Data doesn't match!"
-msgstr "Info ei klapi!"
 
 #: src/multijoin.c:366
 #, c-format
@@ -13168,10 +13169,6 @@ msgstr "Anna Mängijale Energiat"
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Mängija %s väljalöömine, sest ta proovis infokontrollist mõõda pääseda!"
-
-#: src/multiplay.c:283
-msgid "It is not nice to cheat!"
-msgstr "Pole ilus sohki teha"
 
 #: src/multiplay.c:1082
 #, fuzzy
@@ -13454,7 +13451,7 @@ msgstr "Remontimiskeskuse Autasu - Midagi"
 msgid "Launch Transport"
 msgstr "Saada Transport Teele"
 
-#: src/transporter.c:1742
+#: src/transporter.c:1749
 msgid "Reinforcements landing"
 msgstr "Abiväed Maanduvad"
 
@@ -13485,6 +13482,15 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versioon %s%s%s%s"
+
+#~ msgid "you are unwanted by the host"
+#~ msgstr "sa oled võõrustaja poolt soovimatu isik"
+
+#~ msgid "Data doesn't match!"
+#~ msgstr "Info ei klapi!"
+
+#~ msgid "It is not nice to cheat!"
+#~ msgstr "Pole ilus sohki teha"
 
 #, fuzzy
 #~ msgid "Player %u found %u power in an oil drum"
