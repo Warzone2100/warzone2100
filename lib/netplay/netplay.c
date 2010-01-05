@@ -132,6 +132,7 @@ extern LOBBY_ERROR_TYPES getLobbyError(void);										// from src/multiinit.c
 // Function prototypes
 void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
 void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
+static void NETregisterServer(int state);
 static void NETallowJoining(void);
 static void sendVersionCheck(void);
 static void recvVersionCheck(void);
@@ -1536,6 +1537,13 @@ static void NET_DestroyPlayer(unsigned int index)
 		NetPlay.players[index].allocated = false;
 		NetPlay.playercount--;
 		gamestruct.desc.dwCurrentPlayers = NetPlay.playercount;
+		if (allow_joining && NetPlay.isHost)
+		{
+			// Update player count in the lobby by disconnecting
+			// and reconnecting
+			NETregisterServer(0);
+			NETregisterServer(1);
+		}
 	}
 }
 
