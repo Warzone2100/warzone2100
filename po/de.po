@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-01-05 18:45+0100\n"
-"PO-Revision-Date: 2010-01-02 20:05+0100\n"
+"PO-Revision-Date: 2010-01-05 19:09+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -11035,7 +11035,7 @@ msgid "Latin"
 msgstr "Latein"
 
 #: lib/netplay/netplay.c:1174
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u has the wrong game version. Auto kicking."
 msgstr "Spieler %u hat die falsche Spielversion. Automatischer Rauswurf."
 
@@ -11045,14 +11045,13 @@ msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr "Spieler %u hat die falsche Spielversion. Automatischer Rauswurf."
 
 #: lib/netplay/netplay.c:1299
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u has the wrong password. Auto kicking."
 msgstr "Spieler %u gibt ein falsches Passwort an. Automatischer Rauswurf."
 
 #: lib/netplay/netplay.c:2077
-#, fuzzy
 msgid "Enter password here"
-msgstr "Zuerst Passwort eingeben "
+msgstr "Passwort hier eingeben"
 
 #: lib/netplay/netplay.c:3026
 #, c-format
@@ -11065,9 +11064,8 @@ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing
 msgstr "Konnte nicht mit Lobbyserver kommunizieren! Ist der TCP-Port %u für ausgehenden Verkehr geöffnet?"
 
 #: src/cheat.c:131
-#, fuzzy
 msgid ": Unknown cheat code."
-msgstr "Laufe im Cheatmodus"
+msgstr ": Unbekannter Cheatcode."
 
 #: src/clparse.c:99
 msgid "Run in cheat mode"
@@ -12901,18 +12899,16 @@ msgid "Refresh Games List"
 msgstr "Spieleliste aktualisieren"
 
 #: src/multiint.c:1088
-#, fuzzy
 msgid "Enter Password:"
-msgstr "Zuerst Passwort eingeben "
+msgstr "Passwort eingeben:"
 
 #: src/multiint.c:1109
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/multiint.c:1111
-#, fuzzy
 msgid "Cancel"
-msgstr "Lancer"
+msgstr "Abbrechen"
 
 #: src/multiint.c:1250
 #: src/multiint.c:1257
@@ -12920,7 +12916,6 @@ msgid "Select Game Name"
 msgstr "Spielname auswählen"
 
 #: src/multiint.c:1250
-#, fuzzy
 msgid "One-Player Skirmish"
 msgstr "Einzelspieler-Geplänkel"
 
@@ -13085,9 +13080,9 @@ msgid "%s has Left the Game"
 msgstr "%s hat das Spiel verlassen"
 
 #: src/multijoin.c:330
-#, fuzzy, c-format
+#, c-format
 msgid "Kicking player %s, game data doesn't match!"
-msgstr "Werfe Spieler %s hinaus, da Daten nicht übereinstimmen!"
+msgstr "Werfe Spieler %s hinaus, da Spieldaten nicht übereinstimmen!"
 
 #: src/multijoin.c:366
 #, c-format
