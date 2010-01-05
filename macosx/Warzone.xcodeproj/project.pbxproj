@@ -3528,7 +3528,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p build/${CONFIGURATION}/Warzone.app/Contents/Resources\nrm -rf build/${CONFIGURATION}/Warzone.app/Contents/Resources/data\ncd ..\ntar -c --exclude .svn --exclude 'Makefile*' data | tar -xC macosx/build/${CONFIGURATION}/Warzone.app/Contents/Resources";
+			shellScript = "mkdir -p build/${CONFIGURATION}/Warzone.app/Contents/Resources\n# rm -rf build/${CONFIGURATION}/Warzone.app/Contents/Resources/data\ncd ..\n# tar -c --exclude .svn --exclude 'Makefile*' data | tar -xC macosx/build/${CONFIGURATION}/Warzone.app/Contents/Resources\ncp -R -p -f data macosx/build/${CONFIGURATION}/Warzone.app/Contents/Resources";
 		};
 		02F5CC4F0D148FC30000A2D0 /* Create database.c */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4467,6 +4467,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "LIBDIR=\\\"/usr/lib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "LOCALEDIR=\\\"/usr/share/locale\\\"";
 				GCC_VERSION = 4.0;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -4511,6 +4512,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "LIBDIR=\\\"/usr/lib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "LOCALEDIR=\\\"/usr/share/locale\\\"";
 				GCC_VERSION = 4.0;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -4542,6 +4544,11 @@
 					"$(inherited)",
 				);
 				GCC_VERSION = 4.0;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_LABEL = NO;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/prebuilt/SDL/SDL.framework/Headers\"";
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/prebuilt/SDL\"";
 				OTHER_CFLAGS = "$(inherited)";
@@ -4568,6 +4575,11 @@
 					"$(inherited)",
 				);
 				GCC_VERSION = 4.0;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_LABEL = NO;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/prebuilt/SDL/SDL.framework/Headers\"";
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/prebuilt/SDL\"";
 				OTHER_CFLAGS = "$(inherited)";
@@ -4604,6 +4616,11 @@
 					DEBUG,
 					"$(inherited)",
 				);
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					..,
 					"$(inherited)",
@@ -4649,6 +4666,11 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					..,
 					"$(inherited)",
@@ -4864,9 +4886,11 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				INSTALL_PATH = "$(HOME)/bin";
 				PREBINDING = NO;
 				PRODUCT_NAME = Autorevision;
+				WARNING_LDFLAGS = "";
 				ZERO_LINK = YES;
 			};
 			name = Debug;
@@ -4878,9 +4902,11 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				INSTALL_PATH = "$(HOME)/bin";
 				PREBINDING = NO;
 				PRODUCT_NAME = Autorevision;
+				WARNING_LDFLAGS = "";
 				ZERO_LINK = NO;
 			};
 			name = Release;
