@@ -167,8 +167,8 @@ BOOL mapNew(UDWORD width, UDWORD height)
 		psTile->illumination = 255;
 		psTile->level = psTile->illumination;
 		memset(psTile->watchers, 0, sizeof(psTile->watchers));
-		psTile->bMaxed = true;
 		psTile->colour= WZCOL_WHITE;
+		CLEAR_TILE_EXPLORED(psTile);
 		psTile++;
 	}
 

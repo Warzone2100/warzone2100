@@ -765,24 +765,7 @@ static void drawTiles(iView *player)
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
 
 				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
-
-				if (getRevealStatus())
-				{
-					TileIllum = pal_SetBrightness(psTile->level < 0 ? 1 : psTile->level);
-				}
-				else
-				{
-					TileIllum = pal_SetBrightness(psTile->illumination);
-				}
-
-				// Real fog of war - darken where we cannot see enemy units moving around
-				if (!hasSensorOnTile(psTile, selectedPlayer))
-				{
-					TileIllum.byte.r = TileIllum.byte.r / 2;
-					TileIllum.byte.g = TileIllum.byte.g / 2;
-					TileIllum.byte.b = TileIllum.byte.b / 2;
-				}
-
+				TileIllum = pal_SetBrightness(psTile->level);
 				setTileColour(playerXTile + j, playerZTile + i, TileIllum);
 			}
 			// hack since tileScreenInfo[i][j].screen is Vector3i and pie_RotateProject takes Vector2i as 2nd param
@@ -797,11 +780,7 @@ static void drawTiles(iView *player)
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	processEffects();
 	atmosUpdateSystem();
-
-	if(getRevealStatus())
-	{
-		avUpdateTiles();
-	}
+	avUpdateTiles();
 
 	// now we are about to draw the terrain
 	pie_SetAlphaTest(false);

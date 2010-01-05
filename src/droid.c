@@ -532,11 +532,6 @@ void destroyDroid(DROID *psDel)
 				if(TEST_TILE_VISIBLE(selectedPlayer, psTile))
 				{
 					psTile->illumination /= 2;
-					if(psTile->bMaxed && psTile->level > 0) //only do one's already seen
-					{
-						psTile->level/=2;
-					}
-
 				}
 			}
 		}

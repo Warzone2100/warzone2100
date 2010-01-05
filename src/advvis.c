@@ -35,9 +35,6 @@
 #define FADE_IN_TIME	(GAME_TICKS_PER_SEC/10)
 #define	START_DIVIDE	(8)
 
-static UDWORD avConsidered;
-static UDWORD avCalculated;
-static UDWORD avIgnored;
 static BOOL bRevealActive = false;
 
 
@@ -50,59 +47,36 @@ void	avSetStatus(BOOL var)
 
 void	avInformOfChange(SDWORD x, SDWORD y)
 {
-MAPTILE	*psTile;
-SDWORD	lowerX,upperX,lowerY,upperY;
+	MAPTILE	*psTile = mapTile(x, y);
 
-	psTile= mapTile(x,y);
-	if(psTile->level < 0)
+	if (!tileIsExplored(psTile))
 	{
-		lowerX = player.p.x/TILE_UNITS;
-		upperX = lowerX + visibleTiles.x;
-		lowerY = player.p.z/TILE_UNITS;
-		upperY = lowerY + visibleTiles.y;
-		if(lowerX<0) lowerX = 0;
-		if(lowerY<0) lowerY = 0;
-		if(x>lowerX && x<upperX && y>lowerY && y<upperY)
-		{
-			/* tile is on grid - so initiate fade up */
-			psTile->level = 0;
-		}
-		else
-		{
-			/* tile is off the grid, so force to maximum and finish */
-			psTile->level = psTile->illumination;
-			psTile->bMaxed = true;
-		}
-	}
-	else
-	{
-		/* Already know about this one - so exit */
-		return;
+		SET_TILE_EXPLORED(psTile);
 	}
 }
 
 
 // ------------------------------------------------------------------------------------
-static void processAVTile(UDWORD x, UDWORD y)
+static void processAVTile(UDWORD x, UDWORD y, float increment)
 {
-	MAPTILE *psTile;
-	float newLevel;
+	MAPTILE	*psTile = mapTile(x, y);
+	float	maxLevel = psTile->illumination;
 
-	psTile = mapTile(x, y);
-	if (psTile->level < 0 || psTile->bMaxed)
+	if (bRevealActive && psTile->level == 0 && !tileIsExplored(psTile))	// stay unexplored
 	{
 		return;
 	}
-
-	newLevel = psTile->level + timeAdjustedIncrement(FADE_IN_TIME, true);
-	if (newLevel >= psTile->illumination)
+	if (!hasSensorOnTile(psTile, selectedPlayer))
 	{
-		psTile->level = psTile->illumination;
-		psTile->bMaxed = true;
+		maxLevel /= 2;
 	}
-	else
+	if (psTile->level > maxLevel)
 	{
-		psTile->level = newLevel;
+		psTile->level = MAX(psTile->level - increment, 0);
+	}
+	else if (psTile->level < maxLevel)
+	{
+		psTile->level = MIN(psTile->level + increment, maxLevel);
 	}
 }
 
@@ -110,52 +84,17 @@ static void processAVTile(UDWORD x, UDWORD y)
 // ------------------------------------------------------------------------------------
 void	avUpdateTiles( void )
 {
-SDWORD	startX,startY,endX,endY;
-UDWORD	i,j;
+	UDWORD	i, j;
+	float	increment = timeAdjustedIncrement(FADE_IN_TIME, true);	// call once per frame
 
-	/* Clear stats */
-	avConsidered = 0;
-	avCalculated = 0;
-	avIgnored = 0;
-
-  	/* Only process the ones on the grid. Find top left */
-	if(player.p.x>=0)
+	/* Go through the tiles */
+	for (i = 0; i < mapWidth; i++)
 	{
-		startX = player.p.x/TILE_UNITS;
-	}
-	else
-	{
-		startX = 0;
-	}
-	if(player.p.z >= 0)
-	{
-		startY = player.p.z/TILE_UNITS;
-	}
-	else
-	{
-		startY = 0;
-	}
-
-	/* Find bottom right */
-	endX = startX + visibleTiles.x;
-	endY = startY + visibleTiles.y;
-
-	/* Clip, as we may be off map */
-	if(startX<0) startX = 0;
-	if(startY<0) startY = 0;
-	if(endX>(SDWORD)(mapWidth-1))  endX = (SDWORD)(mapWidth-1);
-	if(endY>(SDWORD)(mapHeight-1)) endY =(SDWORD)(mapHeight-1);
-
-	/* Go through the grid */
-	for(i=startY; i<(UDWORD)endY; i++)
-	{
-		for(j=startX; j<(UDWORD)endX; j++)
+		for (j = 0; j < mapHeight; j++)
 		{
-			processAVTile(j,i);
+			processAVTile(i, j, increment);
 		}
 	}
-
-	avConsidered = (visibleTiles.x * visibleTiles.y);
 }
 
 
@@ -173,14 +112,6 @@ UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
 	}
 
 	return newLevel;
-}
-
-// ------------------------------------------------------------------------------------
-void	avGetStats(UDWORD *considered, UDWORD *ignored, UDWORD *calculated)
-{
-	*considered = avConsidered;
-	*ignored	= avIgnored;
-	*calculated = avCalculated;
 }
 
 // ------------------------------------------------------------------------------------
@@ -207,15 +138,16 @@ MAPTILE		*psTile;
 		for(j=0; j<mapHeight; j++)
 		{
 			psTile = mapTile(i,j);
+		 	psTile->level = 0;
 		   	if(TEST_TILE_VISIBLE(selectedPlayer,psTile))
 		  	{
-				psTile->bMaxed = true;
-				psTile->level = psTile->illumination;
+				processAVTile(i, j, UBYTE_MAX);
+				SET_TILE_EXPLORED(psTile);
 		  	}
 			else
 			{
-			 	psTile->level = -1;
-				psTile->bMaxed = false;
+				CLEAR_TILE_EXPLORED(psTile);
+			 	psTile->level = 0;
 			}
 		}
 	}

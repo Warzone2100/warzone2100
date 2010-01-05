@@ -214,11 +214,7 @@ bool rayTerrainCallback(Vector3i pos, int distSq, void * data)
 		    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
 			&& aiCheckAlliances(selectedPlayer, rayPlayer)))
 		{
-			// can see opponent moving
-			if(getRevealStatus())
-			{
-				avInformOfChange(map_coord(pos.x), map_coord(pos.y));		//reveal map
-			}
+			avInformOfChange(map_coord(pos.x), map_coord(pos.y));		//reveal map
 		}
 	}
 
