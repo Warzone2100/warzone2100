@@ -280,7 +280,7 @@ BOOL multiPlayerLoop(void)
 							sendTextMessage(msg, true);
 							addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
-							kickPlayer(index, _("It is not nice to cheat!"), ERROR_CHEAT);
+							kickPlayer(index, "it is not nice to cheat!", ERROR_CHEAT);
 							debug(LOG_WARNING, "Kicking Player %s (%u), they tried to bypass data integrity check!", getPlayerName(index), index);
 						}
 					}
@@ -767,7 +767,7 @@ BOOL recvMessage(void)
 
 			if (selectedPlayer == player_id)  // we've been told to leave.
 			{
-				debug(LOG_ERROR, "You were kicked because, %s", reason);
+				debug(LOG_ERROR, "You were kicked because %s", reason);
 				setPlayerHasLost(true);
 			}
 			break;
