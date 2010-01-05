@@ -102,9 +102,8 @@ static UDWORD				PingSend[MAX_PLAYERS];	//stores the time the ping was called.
 // test traffic level.
 static BOOL okToSend(void)
 {
-	//update checks	& go no further if any exceeded.
-	// NOTE: for this BETA test, just testing bytes sent!
-	if (NETgetRecentBytesSent() >= MAX_BYTESPERSEC)		// + NETgetRecentBytesRecvd()
+	// Update checks and go no further if any exceeded.
+	if (NETgetRecentBytesSent() + NETgetRecentBytesRecvd() >= MAX_BYTESPERSEC)
 	{
 		return false;
 	}
