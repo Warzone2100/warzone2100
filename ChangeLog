@@ -2,7 +2,6 @@
  * General:
    * Change: "--cheat" command line option no longer necessary for cheat codes. (r8976)
    * Change: New codes "cheat on" and "debug" for turning on debug mode, and "cheat off" for turning it off, in case Shift+Backspace isn't working. (r8976)
-   * Change: Future versions of 2.3 are now compatible with 3.0 pre-alphas. (r8972)
    * Change: Do soft fading of fog of war. (r9008)
    * Fix: Crash when recalling reinforcements in campaign. (r8966)
    * Fix: "make dist" now includes autorevision.conf in the tarball, so the version is displayed correctly when compiling from source. (r8957)
@@ -15,6 +14,7 @@
    * Fix: Players list didn't appear when exiting from limits screen. (r8962)
    * Fix: Change all missile upgrades to use Scourge icon, since the Avenger icons were somewhat confusing. (r8959)
  * Multiplayer:
+   * Fix: Host can change position and color of other players, really this time. (r8991)
    * Fix: Players will not automatically quit and disconnect after losing a multiplayer game. (r8969)
    * Fix: Give an error message when joining a multiplayer game is unsuccessful, instead of crashing or causing others to crash. (r8937)
    * Fix: Sync improvements. (r8975)
