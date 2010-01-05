@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-01-05 18:33+0100\n"
-"PO-Revision-Date: 2009-02-01 20:57+0100\n"
-"Last-Translator: Makary155 <makary155@wp.pl>\n"
+"PO-Revision-Date: 2010-01-05 10:47+0100\n"
+"Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Warzone PL Team <makary155@wp.pl>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: data/base/messages/messages.rmsg:4
 msgid "Structure Research Completed"
-msgstr "Badania nad strukturą zakończone"
+msgstr "Badania nad budynkiem zakończone"
 
 #: data/base/messages/messages.rmsg:14
 msgid "Power Research Completed"
@@ -207,7 +207,7 @@ msgstr "Nowy budynek obronny dostępny"
 
 #: data/base/messages/resmessages12.rmsg:5
 msgid "Armored Mortar battery pit"
-msgstr "Umocnienie uzbrojone w moździeż"
+msgstr "Umocnienie uzbrojone w moździerz"
 
 #: data/base/messages/resmessages12.rmsg:6
 #: data/base/messages/resmessages12.rmsg:19
@@ -944,7 +944,7 @@ msgstr "Punkty zdrowia: Bardzo niskie"
 #: data/mp/messages/resmessages3.rmsg:1187
 #: data/mp/messages/strings/resstrings.txt:948
 msgid "Mortar Upgrade"
-msgstr "Ulepszenie moździeża"
+msgstr "Ulepszenie moździerza"
 
 #: data/base/messages/resmessages12.rmsg:161
 msgid "Targeting systems compensate for distance and weather conditions"
@@ -956,7 +956,7 @@ msgstr "System celowania bierze pod uwagę odległość i warunki pogodowe"
 #: data/mp/messages/resmessages23.rmsg:188
 #: data/mp/messages/resmessages3.rmsg:1176
 msgid "Increases Mortar accuracy"
-msgstr "Zwiększa celność moździeża"
+msgstr "Zwiększa celność moździerza"
 
 #: data/base/messages/resmessages12.rmsg:163
 #: data/base/messages/resmessages12.rmsg:176
@@ -973,7 +973,7 @@ msgstr "Zwiększa celność moździeża"
 #: data/mp/messages/resmessages3.rmsg:1190
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "All mortars upgraded automatically"
-msgstr "Wszystkie możdzieże ulepszone automatycznie"
+msgstr "Wszystkie moździerze ulepszone automatycznie"
 
 #: data/base/messages/resmessages12.rmsg:174
 msgid "Automatic loader replaces manual feed"
@@ -983,7 +983,7 @@ msgstr "Mechanizm automatyczny zastępuje ładowanie manualne"
 #: data/base/messages/resmessages3.rmsg:1189
 #: data/mp/messages/resmessages3.rmsg:1189
 msgid "Increases Mortar ROF"
-msgstr "Zwiększa szybkosztrzelność moździeża"
+msgstr "Zwiększa szybkostrzelność moździerza"
 
 #: data/base/messages/resmessages12.rmsg:186
 #: data/base/messages/resmessages12.rmsg:251
@@ -2180,7 +2180,7 @@ msgstr "Może strzelać samodzielnie lub z pomocą sensora lub wieży"
 #: data/base/messages/resmessages1.rmsg:681
 #: data/mp/messages/resmessages1.rmsg:681
 msgid "Improved high explosive shells"
-msgstr "Ulepszone wybuchowe pociski moździeżowe"
+msgstr "Ulepszone wybuchowe pociski moździerzowe"
 
 #: data/base/messages/resmessages1.rmsg:682
 #: data/base/messages/resmessages2.rmsg:916
@@ -2189,7 +2189,7 @@ msgstr "Ulepszone wybuchowe pociski moździeżowe"
 #: data/mp/messages/resmessages2.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:950
 msgid "Increases Mortar damage"
-msgstr "Zwiększa obrażenia zadawane przez moździeż"
+msgstr "Zwiększa obrażenia zadawane przez moździerz"
 
 #: data/base/messages/resmessages1.rmsg:694
 #: data/mp/messages/resmessages1.rmsg:694
@@ -2817,7 +2817,7 @@ msgstr "Bateria rakiet artyleryjskich"
 #: data/mp/messages/resmessages2.rmsg:135
 #: data/mp/messages/strings/resstrings.txt:174
 msgid "Armored Bombard battery pit"
-msgstr "Umocnienie uzbrojone w moździeż Bombard"
+msgstr "Umocnienie uzbrojone w moździerz Bombard"
 
 #: data/base/messages/resmessages2.rmsg:148
 #: data/base/messages/strings/resstrings.txt:168
@@ -2838,7 +2838,7 @@ msgstr "Umocnienie uzbrojone haubicę Ground Shaker"
 #: data/mp/messages/resmessages2.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:180
 msgid "Armored Pepperpot mortar battery pit"
-msgstr "Umocnienie uzbrojone w moździeż Pepperpot"
+msgstr "Umocnienie uzbrojone w moździerz Pepperpot"
 
 #: data/base/messages/resmessages2.rmsg:187
 #: data/base/messages/resmessages2.rmsg:200
@@ -3716,7 +3716,7 @@ msgstr "Uzbrojony w rakiety ziemia-powietrze Mściciel"
 #: data/mp/messages/resmessages3.rmsg:109
 #: data/mp/messages/resmessages3.rmsg:174
 msgid "Armed with Needle Gun"
-msgstr "Uzbrojony w wyrzutnię kolców"
+msgstr "Uzbrojony w wyrzutnię ostrz"
 
 #: data/base/messages/resmessages3.rmsg:122
 #: data/base/messages/resmessages3.rmsg:187
@@ -3824,7 +3824,7 @@ msgstr "Wieża strażnicza uzbrojona w rakiety Scourge"
 #: data/base/messages/resmessages3.rmsg:356
 #: data/mp/messages/resmessages3.rmsg:356
 msgid "Armored guard tower with Needle Gun"
-msgstr "Wieża strażnicza uzbrojona w wyrzutnię kolców"
+msgstr "Wieża strażnicza uzbrojona w wyrzutnię ostrz"
 
 #: data/base/messages/resmessages3.rmsg:369
 #: data/mp/messages/resmessages3.rmsg:369
@@ -4351,17 +4351,17 @@ msgstr "Nowy Railgun dostępny"
 #: data/base/messages/resmessages3.rmsg:1201
 #: data/mp/messages/resmessages3.rmsg:1201
 msgid "Rapid fire rail gun firing needle darts"
-msgstr "Szybkostrzelny Railgun strzela metalowymi kolcami"
+msgstr "Szybkostrzelny Railgun strzela metalowymi ostrzami"
 
 #: data/base/messages/resmessages3.rmsg:1214
 #: data/mp/messages/resmessages3.rmsg:1214
 msgid "Rail gun firing armor-piercing darts"
-msgstr "Railgun strzelający kolcami przebijające pancerz"
+msgstr "Railgun strzelający ostrzami przebijającymi pancerz"
 
 #: data/base/messages/resmessages3.rmsg:1227
 #: data/mp/messages/resmessages3.rmsg:1227
 msgid "Heavy rail gun firing large kinetic energy darts"
-msgstr "Ciężki Railgun strzelający dużymi kinetycznymi kolcami"
+msgstr "Ciężki Railgun strzelający ostrzami z dużą energią kinetyczną"
 
 #: data/base/messages/resmessages3.rmsg:1239
 #: data/base/messages/resmessages3.rmsg:1252
@@ -4596,15 +4596,15 @@ msgstr "Ta struktura zawiera technologię potrzebną by Projekt osiągnął sukc
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "MISJA BAZY ALFA: Jeźdźcy Scavengerów"
+msgstr "MISJA BAZY ALFA: Jeźdźcy Padlinożerców"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr "Jeźdźcy Scavengerów zbliżają się do naszej bazy."
+msgstr "Jeźdźcy Padlinożerców zbliżają się do naszej bazy."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr "Obroń bazę, następnie zniszcz obozy Scavengerów."
+msgstr "Obroń bazę, następnie zniszcz obozy Padlinożerców."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
@@ -4924,11 +4924,11 @@ msgstr "Potem użyj ciężarówki aby ulepszyć twój Generator tym modułem."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
-msgstr "WYKRYTO BAZĘ SCAVENGERÓW"
+msgstr "WYKRYTO BAZĘ PADLINOŻERCÓW"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr "Pokonaj Scavengerów i odzyskaj jakiekolwiek artefakty."
+msgstr "Pokonaj padlinożerców i odzyskaj wszystkie artefakty."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
@@ -5670,7 +5670,7 @@ msgstr "Aktualne cele:"
 
 #: data/base/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
-msgstr "Posterunek Scavengerów"
+msgstr "Posterunek Padlinożerców"
 
 #: data/base/messages/strings/genstrings.txt:8
 msgid "Power Resource"
@@ -5759,25 +5759,21 @@ msgstr "Żmija karabin na kołach"
 
 #: data/base/messages/strings/names.txt:143
 #: data/mp/messages/strings/names.txt:143
-#, fuzzy
 msgid "Light Cannon Viper Wheels"
 msgstr "Żmija z lekkim działem na kołach"
 
 #: data/base/messages/strings/names.txt:144
 #: data/mp/messages/strings/names.txt:145
-#, fuzzy
 msgid "Flamer Viper Wheels"
-msgstr "Żmija karabin na kołach"
+msgstr "Żmija miotacz ognia na kołach"
 
 #: data/base/messages/strings/names.txt:145
 #: data/mp/messages/strings/names.txt:146
-#, fuzzy
 msgid "Sensor Turret Viper Wheels"
-msgstr "Wieżyczka radarowa"
+msgstr "Żmija wieżyczka radarowa na kołach"
 
 #: data/base/messages/strings/names.txt:146
 #: data/mp/messages/strings/names.txt:147
-#, fuzzy
 msgid "Light Cannon Viper Tracks"
 msgstr "Żmija z lekkim działem na gąsienicach"
 
@@ -5785,97 +5781,81 @@ msgstr "Żmija z lekkim działem na gąsienicach"
 #: data/base/messages/strings/names.txt:1421
 #: data/mp/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:1434
-#, fuzzy
 msgid "Heavy Machinegun Cobra Half-tracks"
 msgstr "Kobra z ciężkim karabinem na pół-gąsienicach"
 
 #: data/base/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:150
-#, fuzzy
 msgid "Mortar Cobra Half-tracks"
-msgstr "Kobra z ciężkim karabinem na pół-gąsienicach"
+msgstr "Kobra z moździerzem na pół-gąsienicach"
 
 #: data/base/messages/strings/names.txt:150
 #: data/mp/messages/strings/names.txt:151
-#, fuzzy
 msgid "Light Cannon Cobra Tracks"
-msgstr "Żmija z lekkim działem na gąsienicach"
+msgstr "Kobra z lekkim działem na gąsienicach"
 
 #: data/base/messages/strings/names.txt:170
 #: data/mp/messages/strings/names.txt:173
-#, fuzzy
 msgid "Medium Cannon Viper Tracks"
-msgstr "Kobra ze średnim działem na gąsienicach"
+msgstr "Żmija ze średnim działem na gąsienicach"
 
 #: data/base/messages/strings/names.txt:171
 #: data/mp/messages/strings/names.txt:174
-#, fuzzy
 msgid "Repair Turret Viper Wheels"
-msgstr "Żmija karabin na kołach"
+msgstr "Żmija naprawcza na kołach"
 
 #: data/base/messages/strings/names.txt:172
-#, fuzzy
 msgid "Repair Turret Viper Half-tracks"
-msgstr "Zmija naprawcza na pół-gąsienicach"
+msgstr "Żmija naprawcza na pół-gąsienicach"
 
 #: data/base/messages/strings/names.txt:174
 #: data/mp/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:1830
-#, fuzzy
 msgid "Twin Machinegun Viper Wheels"
-msgstr "Żmija karabin na kołach"
+msgstr "Żmija podwójny karabin na kołach"
 
 #: data/base/messages/strings/names.txt:175
 #: data/mp/messages/strings/names.txt:178
-#, fuzzy
 msgid "Twin Machinegun Viper Half-tracks"
 msgstr "Żmija podwójny karabin na pół-gąsienicach"
 
 #: data/base/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:179
-#, fuzzy
 msgid "Heavy Machinegun Viper Half-tracks"
-msgstr "Kobra z ciężkim karabinem na pół-gąsienicach"
+msgstr "Żmija z ciężkim karabinem na pół-gąsienicach"
 
 #: data/base/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:180
 #: data/mp/messages/strings/names.txt:1837
-#, fuzzy
 msgid "Heavy Machinegun Viper Tracks"
 msgstr "Żmija ciężki karabin na gąsienicach"
 
 #: data/base/messages/strings/names.txt:178
 #: data/mp/messages/strings/names.txt:181
-#, fuzzy
 msgid "Lancer Viper Wheels"
-msgstr "Żmija karabin na kołach"
+msgstr "Żmija Lancer na kołach"
 
 #: data/base/messages/strings/names.txt:179
 #: data/mp/messages/strings/names.txt:182
-#, fuzzy
 msgid "Mini-Rocket Viper Wheels"
-msgstr "Żmija z artylerią minirakiet na kołach"
+msgstr "Żmija z minirakietami na kołach"
 
 #: data/base/messages/strings/names.txt:180
-#, fuzzy
 msgid "Mini-Rocket Artillery Viper Wheels"
 msgstr "Żmija z artylerią minirakiet na kołach"
 
 #: data/base/messages/strings/names.txt:181
-#, fuzzy
 msgid "Bunker Buster Viper Wheels"
 msgstr "Żmija Bunker Buster na kołach"
 
 #: data/base/messages/strings/names.txt:183
 #: data/mp/messages/strings/names.txt:186
 #: data/mp/messages/strings/names.txt:1359
-#, fuzzy
 msgid "Medium Cannon Cobra Tracks"
 msgstr "Kobra ze średnim działem na gąsienicach"
 
 #: data/base/messages/strings/names.txt:184
 #: data/mp/messages/strings/names.txt:187
-#, fuzzy
 msgid "Heavy Cannon Cobra Tracks"
 msgstr "Kobra z ciężkim działem na gąsienicach"
 
@@ -5887,26 +5867,22 @@ msgid "Cobra Truck"
 msgstr "Kobra ciężarówka"
 
 #: data/base/messages/strings/names.txt:186
-#, fuzzy
 msgid "Sensor Cobra Half-tracks"
-msgstr "Kobra Lancer na pół-gąsienicach"
+msgstr "Kobra z radarem na pół-gąsienicach"
 
 #: data/base/messages/strings/names.txt:187
 #: data/mp/messages/strings/names.txt:190
 #: data/mp/messages/strings/names.txt:1358
-#, fuzzy
 msgid "Flamer Cobra Tracks"
-msgstr "Kobra naprawiająca na gąsienicach"
+msgstr "Kobra z miotaczem ognia na gąsienicach"
 
 #: data/base/messages/strings/names.txt:188
 #: data/mp/messages/strings/names.txt:191
-#, fuzzy
 msgid "Bombard Cobra Half-tracks"
-msgstr "Kobra Lancer na pół-gąsienicach"
+msgstr "Kobra Bombard na pół-gąsienicach"
 
 #: data/base/messages/strings/names.txt:189
 #: data/mp/messages/strings/names.txt:192
-#, fuzzy
 msgid "Command Turret Cobra Half-tracks"
 msgstr "Kobra dowodząca na pół-gąsienicach"
 
@@ -5918,45 +5894,40 @@ msgid "Lancer Cobra Half-tracks"
 msgstr "Kobra Lancer na pół-gąsienicach"
 
 #: data/base/messages/strings/names.txt:191
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
-msgstr "Kobra atyleria minirakiet na pół-gąsienicach"
+msgstr "Kobra z artylerią minirakiet na pół-gąsienicach"
 
 #: data/base/messages/strings/names.txt:193
 #: data/mp/messages/strings/names.txt:196
-#, fuzzy
 msgid "Light Cannon Python Tracks"
-msgstr "Pyton z działem HPV na gąsienicach"
+msgstr "Pyton z lekkim działem na gąsienicach"
 
 #: data/base/messages/strings/names.txt:194
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1331
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1920
-#, fuzzy
 msgid "Medium Cannon Python Tracks"
-msgstr "Pyton z działem HPV na gąsienicach"
+msgstr "Pyton z lekkim działem na gąsienicach"
 
 #: data/base/messages/strings/names.txt:195
 #: data/mp/messages/strings/names.txt:198
 #: data/mp/messages/strings/names.txt:1356
 #: data/mp/messages/strings/names.txt:1510
 #: data/mp/messages/strings/names.txt:1845
-#, fuzzy
 msgid "Heavy Cannon Python Tracks"
-msgstr "Pyton z działem HPV na gąsienicach"
+msgstr "Pyton z ciężkim działem na gąsienicach"
 
 #: data/base/messages/strings/names.txt:196
 #: data/base/messages/strings/names.txt:1422
 #: data/mp/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:1435
-#, fuzzy
 msgid "Command Turret Python Tracks"
 msgstr "Pyton wieżyczka dowodząca na gąsienicach"
 
 #: data/base/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:202
 msgid "Scavenger"
-msgstr "Scavenger"
+msgstr "Padlinożerca"
 
 #: data/base/messages/strings/names.txt:200
 #: data/mp/messages/strings/names.txt:203
@@ -6283,9 +6254,8 @@ msgstr "Z NULL REPAIR"
 
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
-#, fuzzy
 msgid "Repair Turret"
-msgstr "Ciężka wieżyczka naprawiająca"
+msgstr "Wieżyczka naprawiająca"
 
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:352
@@ -6457,7 +6427,7 @@ msgstr "Umocnienie z miotaczem Inferno"
 #: data/mp/messages/strings/names.txt:411
 #: data/mp/messages/strings/names.txt:758
 msgid "Pepperpot Pit"
-msgstr "Stanowisko moździeża Pepperpot"
+msgstr "Stanowisko moździerza Pepperpot"
 
 #: data/base/messages/strings/names.txt:405
 #: data/base/messages/strings/names.txt:488
@@ -6599,7 +6569,6 @@ msgstr "Wieża strażnicza z podwójnym karabinem"
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:447
 #: data/mp/messages/strings/names.txt:767
-#, fuzzy
 msgid "Heavy Machinegun Tower"
 msgstr "Wieża strażnicza z ciężkim karabinem"
 
@@ -6613,16 +6582,14 @@ msgstr "Wieża strażnicza z miotaczem ognia"
 #: data/mp/messages/strings/names.txt:449
 #: data/mp/messages/strings/names.txt:748
 #: data/mp/messages/strings/names.txt:769
-#, fuzzy
 msgid "Lancer Tower"
 msgstr "Wieża strażnicza z rakietami Lancer"
 
 #: data/base/messages/strings/names.txt:443
 #: data/mp/messages/strings/names.txt:450
 #: data/mp/messages/strings/names.txt:770
-#, fuzzy
 msgid "Mini-Rocket Tower"
-msgstr "Bateria minirakiet"
+msgstr "Bateria Wieża z minirakietami"
 
 #: data/base/messages/strings/names.txt:446
 #: data/base/messages/strings/names.txt:496
@@ -6736,7 +6703,7 @@ msgstr "Wieża z rakietami Scourge"
 #: data/mp/messages/strings/names.txt:477
 #: data/mp/messages/strings/names.txt:773
 msgid "Needle Gun Tower"
-msgstr "Wieża z wyrzutnią kolców"
+msgstr "Wieża z wyrzutnią ostrz"
 
 #: data/base/messages/strings/names.txt:471
 #: data/base/messages/strings/names.txt:743
@@ -6891,12 +6858,12 @@ msgstr "Rakiety Scourge VTOL"
 #: data/mp/messages/strings/names.txt:520
 #: data/mp/messages/strings/names.txt:1151
 msgid "Mortar"
-msgstr "Moździeż"
+msgstr "Moździerz"
 
 #: data/base/messages/strings/names.txt:514
 #: data/mp/messages/strings/names.txt:521
 msgid "Mortar Emplacement"
-msgstr "Stanowisko moździeża"
+msgstr "Stanowisko moździerza"
 
 #: data/base/messages/strings/names.txt:515
 #: data/mp/messages/strings/names.txt:522
@@ -6906,7 +6873,7 @@ msgstr "Bombard"
 #: data/base/messages/strings/names.txt:516
 #: data/mp/messages/strings/names.txt:523
 msgid "Bombard Emplacement"
-msgstr "Stanowisko moździeża Bombard"
+msgstr "Stanowisko moździerza Bombard"
 
 #: data/base/messages/strings/names.txt:517
 #: data/mp/messages/strings/names.txt:524
@@ -6916,14 +6883,14 @@ msgstr "Pepperpot"
 #: data/base/messages/strings/names.txt:518
 #: data/mp/messages/strings/names.txt:525
 msgid "Pepperpot Emplacement"
-msgstr "Stanowisko moździeża Pepperpot"
+msgstr "Stanowisko moździerza Pepperpot"
 
 #: data/base/messages/strings/names.txt:519
 #: data/base/messages/strings/names.txt:1142
 #: data/mp/messages/strings/names.txt:526
 #: data/mp/messages/strings/names.txt:1155
 msgid "Needle Gun"
-msgstr "Wyrzutnia kolców"
+msgstr "Wyrzutnia ostrz"
 
 #: data/base/messages/strings/names.txt:520
 #: data/base/messages/strings/names.txt:1143
@@ -6953,9 +6920,8 @@ msgstr "Bunker Buster"
 #: data/base/messages/strings/names.txt:1183
 #: data/mp/messages/strings/names.txt:533
 #: data/mp/messages/strings/names.txt:1196
-#, fuzzy
 msgid "Mini-Rocket Pod"
-msgstr "Ulepszenie minirakiet"
+msgstr "Minirakiety"
 
 #: data/base/messages/strings/names.txt:527
 #: data/base/messages/strings/names.txt:1184
@@ -6976,9 +6942,8 @@ msgstr "Bunker Buster VTOL"
 
 #: data/base/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:537
-#, fuzzy
 msgid "VTOL Mini-Rocket"
-msgstr "Minirakiety HE"
+msgstr "Minirakiety VTOL"
 
 #: data/base/messages/strings/names.txt:531
 #: data/mp/messages/strings/names.txt:538
@@ -7065,7 +7030,7 @@ msgstr "Karabin szturmowy VTOL"
 #: data/base/messages/strings/names.txt:569
 #: data/mp/messages/strings/names.txt:576
 msgid "VTOL Needle Gun"
-msgstr "Wyrzutnia kolców VTOL"
+msgstr "Wyrzutnia ostrz VTOL"
 
 #: data/base/messages/strings/names.txt:570
 #: data/mp/messages/strings/names.txt:577
@@ -7290,50 +7255,46 @@ msgstr "Utwardzone pancerze kompozytowe Cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:673
 #: data/mp/messages/strings/names.txt:682
-#, fuzzy
 msgid "Bunker Blaster Cyborg"
-msgstr "Bunker Blaster"
+msgstr "Cyborg Bunker Blaster"
 
 #: data/base/messages/strings/names.txt:674
 #: data/mp/messages/strings/names.txt:683
 msgid "Heavy Gunner Cyborg"
-msgstr ""
+msgstr "Cyborg z ciężkim karabinem"
 
 #: data/base/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:684
 msgid "Flamer Cyborg"
-msgstr ""
+msgstr "Cyborg miotacz"
 
 #: data/base/messages/strings/names.txt:676
 #: data/mp/messages/strings/names.txt:685
 msgid "Machinegunner Cyborg"
-msgstr ""
+msgstr "Cyborg karabinier"
 
 #: data/base/messages/strings/names.txt:677
 #: data/mp/messages/strings/names.txt:686
 msgid "Lancer Cyborg"
-msgstr ""
+msgstr "Cyborg lancer"
 
 #: data/base/messages/strings/names.txt:678
 #: data/mp/messages/strings/names.txt:687
 msgid "Assault Gunner Cyborg"
-msgstr ""
+msgstr "[Cyborg szturmowy karabinier"
 
 #: data/base/messages/strings/names.txt:679
 #: data/mp/messages/strings/names.txt:688
-#, fuzzy
 msgid "Needle Gunner Cyborg"
-msgstr "Cyborg z wyrzutnią kolców"
+msgstr "Cyborg z wyrzutnią ostrz"
 
 #: data/base/messages/strings/names.txt:680
 #: data/mp/messages/strings/names.txt:689
-#, fuzzy
 msgid "Scourge Cyborg"
-msgstr "Super Cyborg z wyrzutnią Scourge"
+msgstr "Cyborg z wyrzutnią Scourge"
 
 #: data/base/messages/strings/names.txt:681
 #: data/mp/messages/strings/names.txt:690
-#, fuzzy
 msgid "Flashlight Gunner Cyborg"
 msgstr "Cyborg z laserem Flashlight"
 
@@ -7360,7 +7321,7 @@ msgstr "Skaczący karabinier szturmowy"
 #: data/base/messages/strings/names.txt:687
 #: data/mp/messages/strings/names.txt:696
 msgid "Jump Needle Gunner"
-msgstr "Skaczący cyborg z wyrzutnią kolców"
+msgstr "Skaczący cyborg z wyrzutnią ostrz"
 
 #: data/base/messages/strings/names.txt:688
 #: data/mp/messages/strings/names.txt:697
@@ -7448,7 +7409,7 @@ msgstr "Stanowisko rakiet Tank Killer"
 #: data/mp/messages/strings/names.txt:734
 #: data/mp/messages/strings/names.txt:1465
 msgid "Bombard Pit"
-msgstr "Stanowisko moździeża Bombard"
+msgstr "Stanowisko moździerza Bombard"
 
 #: data/base/messages/strings/names.txt:728
 msgid "Angel Missile Battery"
@@ -7464,7 +7425,7 @@ msgstr "Bateria rakiet Archangel"
 #: data/mp/messages/strings/names.txt:741
 #: data/mp/messages/strings/names.txt:1229
 msgid "Mortar Pit"
-msgstr "Stanowisko moździeża"
+msgstr "Stanowisko moździerza"
 
 #: data/base/messages/strings/names.txt:731
 #: data/mp/messages/strings/names.txt:742
@@ -7517,7 +7478,7 @@ msgstr "Wieża strażnicza z rakietami Lancer"
 
 #: data/base/messages/strings/names.txt:759
 msgid "Mini-Rocket Guard Tower"
-msgstr ""
+msgstr "Wieża strażnicza z minirakietami"
 
 #: data/base/messages/strings/names.txt:772
 #: data/base/messages/strings/names.txt:1382
@@ -7669,15 +7630,15 @@ msgstr "Stacja Naprawcza"
 #: data/base/messages/strings/names.txt:821
 #: data/mp/messages/strings/names.txt:832
 msgid "Automated Repair Facility"
-msgstr "Automatyzowana Stacja Naprawcza"
+msgstr "Zautomatyzowana Stacja Naprawcza"
 
 #: data/base/messages/strings/names.txt:822
 msgid "Automated Repair Facility Upgrade Mk2"
-msgstr "Automatyzowana Stacja Naprawcza Mk2"
+msgstr "Zautomatyzowana Stacja Naprawcza Mk2"
 
 #: data/base/messages/strings/names.txt:823
 msgid "Automated Repair Facility Upgrade Mk3"
-msgstr "Automatyzowana Stacja Naprawcza Mk3"
+msgstr "Zautomatyzowana Stacja Naprawcza Mk3"
 
 #: data/base/messages/strings/names.txt:824
 msgid "Robotic Repair Facility Upgrade"
@@ -8687,12 +8648,12 @@ msgstr "Ulepszony system ładowania rakiet"
 #: data/base/messages/strings/names.txt:1125
 #: data/mp/messages/strings/names.txt:1138
 msgid "Mortar Targeting Computer"
-msgstr "Komputer celowniczy moździeża"
+msgstr "Komputer celowniczy moździerza"
 
 #: data/base/messages/strings/names.txt:1126
 #: data/mp/messages/strings/names.txt:1139
 msgid "Thermal Imaging Mortar Shells"
-msgstr "Namierzanie termiczne pocisków moździeżowych"
+msgstr "Namierzanie termiczne pocisków moździeowych"
 
 #: data/base/messages/strings/names.txt:1127
 #: data/mp/messages/strings/names.txt:1140
@@ -8763,21 +8724,20 @@ msgstr "Obrotowy moździeż - Pepperpot"
 msgid "Target Prediction Computer"
 msgstr "Komputer przewidywania celów"
 
-# I translated 'Dart' into 'Needle' for better understand
 #: data/base/messages/strings/names.txt:1146
 #: data/mp/messages/strings/names.txt:1159
 msgid "Hardened Rail Dart"
-msgstr "Utwardzony kolec Railguna"
+msgstr "Utwardzone ostrze Railguna"
 
 #: data/base/messages/strings/names.txt:1147
 #: data/mp/messages/strings/names.txt:1160
 msgid "Hardened Rail Dart Mk2"
-msgstr "Utwardzony kolec Railguna Mk2"
+msgstr "Utwardzone ostrze Railguna Mk2"
 
 #: data/base/messages/strings/names.txt:1148
 #: data/mp/messages/strings/names.txt:1161
 msgid "Hardened Rail Dart Mk3"
-msgstr "Utwardzony kolec Railguna Mk3"
+msgstr "Utwardzone ostrze Railguna Mk3"
 
 #: data/base/messages/strings/names.txt:1149
 #: data/mp/messages/strings/names.txt:1162
@@ -8941,7 +8901,6 @@ msgstr "Rakieta Tank Killer"
 
 #: data/base/messages/strings/names.txt:1187
 #: data/mp/messages/strings/names.txt:1200
-#, fuzzy
 msgid "Machinegun Artifact"
 msgstr "Artefakt karabinu"
 
@@ -8958,52 +8917,52 @@ msgstr "Kwatera główna Collective"
 #: data/base/messages/strings/names.txt:1201
 #: data/mp/messages/strings/names.txt:1214
 msgid "Scavenger Factory"
-msgstr "Fabryka Scavengerów"
+msgstr "Fabryka Padlinożerców"
 
 #: data/base/messages/strings/names.txt:1202
 #: data/mp/messages/strings/names.txt:1215
 msgid "Scavenger Gun Tower"
-msgstr "Wieża strażnicza Scavengerów"
+msgstr "Wieża strażnicza Padlinożerców"
 
 #: data/base/messages/strings/names.txt:1203
 #: data/mp/messages/strings/names.txt:1216
 msgid "Scavenger Horizontal Wall"
-msgstr "Pozioma ściana Scavengerów"
+msgstr "Pozioma ściana Padlinożerców"
 
 #: data/base/messages/strings/names.txt:1204
 #: data/mp/messages/strings/names.txt:1217
 msgid "Scavenger Power Generator"
-msgstr "Generator Scavengerów"
+msgstr "Generator Padlinożerców"
 
 #: data/base/messages/strings/names.txt:1205
 #: data/mp/messages/strings/names.txt:1218
 msgid "Scavenger Rocket Pit"
-msgstr "Umocnienie rakietowe Scavengerów"
+msgstr "Umocnienie rakietowe Padlinożerców"
 
 #: data/base/messages/strings/names.txt:1206
 #: data/mp/messages/strings/names.txt:1219
 msgid "Scavenger AT-Rocket Pit"
-msgstr "Umocnienie AT Scavengerów"
+msgstr "Umocnienie AT Padlinożerców"
 
 #: data/base/messages/strings/names.txt:1207
 #: data/mp/messages/strings/names.txt:1220
 msgid "Scavenger Bunker"
-msgstr "Bunkier Scavengerów"
+msgstr "Bunkier Padlinożerców"
 
 #: data/base/messages/strings/names.txt:1208
 #: data/mp/messages/strings/names.txt:1221
 msgid "Scavenger CornerWall"
-msgstr "Narożnik ściany Scavengerów"
+msgstr "Narożnik ściany Padlinożerców"
 
 #: data/base/messages/strings/names.txt:1209
 #: data/mp/messages/strings/names.txt:1222
 msgid "Scavenger Flame Tower"
-msgstr "Wieża ogniowa Scavengerów"
+msgstr "Wieża ogniowa Padlinożerców"
 
 #: data/base/messages/strings/names.txt:1210
 #: data/mp/messages/strings/names.txt:1223
 msgid "Scavenger Flame Tower End"
-msgstr "Zakończenie wieży ogniowej Scavengerów"
+msgstr "Zakończenie wieży ogniowej Padlinożerców"
 
 #: data/base/messages/strings/names.txt:1211
 #: data/mp/messages/strings/names.txt:1224
@@ -9162,7 +9121,6 @@ msgstr "Stanowisko rakiet Archangel"
 
 #: data/base/messages/strings/names.txt:1423
 #: data/mp/messages/strings/names.txt:1878
-#, fuzzy
 msgid "Repair Turret Cobra Tracks"
 msgstr "Kobra naprawiająca na gąsienicach"
 
@@ -9187,7 +9145,7 @@ msgstr "Cyborg z laserem Flashlight"
 #: data/mp/messages/strings/names.txt:1452
 #: data/mp/messages/strings/names.txt:1605
 msgid "Needle Gunner"
-msgstr "Cyborg z wyrzutnią kolców"
+msgstr "Cyborg z wyrzutnią ostrz"
 
 #: data/base/messages/strings/names.txt:1440
 #: data/mp/messages/strings/names.txt:1453
@@ -9693,40 +9651,34 @@ msgid "Viper Flamer Half-Track"
 msgstr "Żmija miotacz na pół-gąsienicach"
 
 #: data/mp/messages/resmessages1.rmsg:148
-#, fuzzy
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "Wzmocniona wieża strażnicza uzbrojona w rakiety AT Lancer"
+msgstr "Wzmocniona wieża strażnicza z rakietami AT Lancer"
 
 #: data/mp/messages/resmessages1.rmsg:552
 #: data/mp/messages/resmessages1.rmsg:565
 #: data/mp/messages/resmessages2.rmsg:747
-#, fuzzy
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr "Najlepsze cele: Pojazdy i Stanowiska ogniowe"
+msgstr "Najlepsze cele: Pojazdy i Umocnienia"
 
 #: data/mp/messages/resmessages23.rmsg:160
 #: data/mp/messages/resmessages2.rmsg:732
 #: data/mp/messages/resmessages3.rmsg:862
-#, fuzzy
 msgid "Bomb Upgrade"
-msgstr "Namierzanie bomb ulepszone"
+msgstr "Ulepszenie bomb"
 
 #: data/mp/messages/resmessages23.rmsg:161
-#, fuzzy
 msgid "Improved trinitramine explosive formula"
-msgstr "Ulepszone wybuchowe pociski moździeżowe"
+msgstr "Ulepszona formuła ładunków wybuchowych"
 
 #: data/mp/messages/resmessages23.rmsg:162
 #: data/mp/messages/resmessages2.rmsg:734
 #: data/mp/messages/resmessages3.rmsg:864
-#, fuzzy
 msgid "Increases Bombing damage"
-msgstr "Zwiększa obrażenia dział"
+msgstr "Zwiększa obrażenia bombardowania"
 
 #: data/mp/messages/resmessages3.rmsg:304
-#, fuzzy
 msgid "Armored guard tower with Pulse Laser"
-msgstr "Wieża strażnicza uzbrojona w miotacz ognia"
+msgstr "Wieża strażnicza uzbrojona w laser pulsacyjny"
 
 #: data/mp/messages/resmessagesall.rmsg:186
 msgid "Cyborg Transport Available"
@@ -9895,7 +9847,7 @@ msgstr "Uzbrojony w wyrzutnię rakiet Scourge"
 
 #: data/mp/messages/resmessagesall.rmsg:603
 msgid "Uses advanced mass driver railgun technology"
-msgstr "Używa zaawansowanej technologii railguna"
+msgstr "Używa zaawansowanej technologii Railguna"
 
 #: data/mp/messages/resmessagesall.rmsg:605
 #: data/mp/messages/resmessagesall.rmsg:618
@@ -9929,9 +9881,8 @@ msgid "Medium Super Heavy Body"
 msgstr "Średni super-ciężki kadłub "
 
 #: data/mp/messages/resmessagesall.rmsg:681
-#, fuzzy
 msgid "More armor and body points than Vengeance"
-msgstr "Więcej pancerza i punktów zdrowia niż Zemsta"
+msgstr "Więcej pancerza i punktów zdrowia niż Zemsty"
 
 #: data/mp/messages/resmessagesall.rmsg:682
 msgid "Slow moving Body"
@@ -10020,49 +9971,41 @@ msgid "Cyborg Transport"
 msgstr "Cyborg Transport"
 
 #: data/mp/messages/strings/names.txt:144
-#, fuzzy
 msgid "Light Cannon Viper Half-tracks"
 msgstr "Żmija z lekkim działem na pół-gąsienicach"
 
 #: data/mp/messages/strings/names.txt:175
-#, fuzzy
 msgid "Repair Turret Viper Half-track"
-msgstr "Zmija naprawcza na pół-gąsienicach"
+msgstr "Żmija naprawcza na pół-gąsienicach"
 
 #: data/mp/messages/strings/names.txt:183
-#, fuzzy
 msgid "Mini-Rocket Array Viper Wheels"
 msgstr "Żmija z artylerią minirakiet na kołach"
 
 #: data/mp/messages/strings/names.txt:184
-#, fuzzy
 msgid "Bunker Buster Rockets Viper Wheels"
-msgstr "Żmija Bunker Buster na kołach"
+msgstr "Żmija rakiety Bunker Buster na kołach"
 
 #: data/mp/messages/strings/names.txt:189
-#, fuzzy
 msgid "Sensor Turret Cobra Half-tracks"
-msgstr "Kobra Lancer na pół-gąsienicach"
+msgstr "Kobra z radarem na pół-gąsienicach"
 
 #: data/mp/messages/strings/names.txt:194
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr "Kobra atyleria minirakiet na pół-gąsienicach"
+msgstr "Kobra artyleria minirakiet na pół-gąsienicach"
 
 #: data/mp/messages/strings/names.txt:372
 #: data/mp/messages/strings/names.txt:1702
 msgid "Radar Detector"
-msgstr ""
+msgstr "Wykrywacz radaru"
 
 #: data/mp/messages/strings/names.txt:380
-#, fuzzy
 msgid "Radar Detector Tower"
-msgstr "Wieża radarowa VTOL"
+msgstr "Wieża wykrywacza radaru"
 
 #: data/mp/messages/strings/names.txt:385
-#, fuzzy
 msgid "Nexus Link"
-msgstr "Wieżyczka NEXUS Link"
+msgstr "NEXUS Link"
 
 #: data/mp/messages/strings/names.txt:387
 #: data/mp/messages/strings/names.txt:922
@@ -10071,9 +10014,8 @@ msgstr "Wieżyczka NEXUS Link"
 
 #: data/mp/messages/strings/names.txt:409
 #: data/mp/messages/strings/names.txt:732
-#, fuzzy
 msgid "Inferno Bunker"
-msgstr "Bunkier z rakietami Lancer"
+msgstr "Bunkier z miotaczem Inferno"
 
 #: data/mp/messages/strings/names.txt:416
 msgid "Tornado AA Site"
@@ -10086,25 +10028,21 @@ msgstr "Stanowisko AA Cyclone"
 
 #: data/mp/messages/strings/names.txt:473
 #: data/mp/messages/strings/names.txt:787
-#, fuzzy
 msgid "Pulse Laser Hardpoint"
-msgstr "Umocnienie z miotaczem ognia"
+msgstr "Umocnienie z laserem pulsacyjnym"
 
 #: data/mp/messages/strings/names.txt:475
 #: data/mp/messages/strings/names.txt:749
-#, fuzzy
 msgid "Pulse Laser Tower"
-msgstr "Laser pulsacyjny"
+msgstr "Wieża z laserem pulsacyjnym"
 
 #: data/mp/messages/strings/names.txt:512
 #: data/mp/messages/strings/names.txt:1134
-#, fuzzy
 msgid "Seraph Missile Array"
-msgstr "Zwiększa celność rakiet"
+msgstr "Artyleria rakiet Serafin"
 
 #: data/mp/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:1194
-#, fuzzy
 msgid "Mini-Rocket Array"
 msgstr "Artyleria minirakiet"
 
@@ -10115,29 +10053,24 @@ msgid "Laser Satellite Command Post"
 msgstr "Przekaźnik satelity laserowego"
 
 #: data/mp/messages/strings/names.txt:582
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay"
-msgstr "Przedział bomb odłamkowych"
+msgstr "Przedział bomb odłamkowych VTOL"
 
 #: data/mp/messages/strings/names.txt:589
-#, fuzzy
 msgid "Collective Corner Wall"
 msgstr "Narożnik muru Collective"
 
 #: data/mp/messages/strings/names.txt:611
-#, fuzzy
 msgid "Nexus Wall"
 msgstr "Mur NEXUS"
 
 #: data/mp/messages/strings/names.txt:612
-#, fuzzy
 msgid "Nexus Corner Wall"
-msgstr "Betonowy narożnik"
+msgstr "Narożnik muru NEXUS"
 
 #: data/mp/messages/strings/names.txt:718
-#, fuzzy
 msgid "Plascrete Mk3"
-msgstr "Plasbeton Mk2"
+msgstr "Plasbeton Mk3"
 
 #: data/mp/messages/strings/names.txt:719
 msgid "Plasteel"
@@ -10153,114 +10086,92 @@ msgstr "Utwardzona stal Mk3"
 
 #: data/mp/messages/strings/names.txt:728
 #: data/mp/messages/strings/names.txt:1386
-#, fuzzy
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "Działo HPV"
+msgstr "Umocnienie z działem HPV"
 
 #: data/mp/messages/strings/names.txt:739
 #: data/mp/messages/strings/names.txt:1389
-#, fuzzy
 msgid "Seraph Missile Battery"
-msgstr "Bateria rakiet Angel"
+msgstr "Bateria rakiet Serafin"
 
 #: data/mp/messages/strings/names.txt:768
-#, fuzzy
 msgid "Flamer Tower"
 msgstr "Wieża strażnicza z miotaczem ognia"
 
 #: data/mp/messages/strings/names.txt:786
 #: data/mp/messages/strings/names.txt:1394
-#, fuzzy
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Działo HPV"
+msgstr "Umocnienie z działem HPV"
 
 #: data/mp/messages/strings/names.txt:805
-#, fuzzy
 msgid "Automated Manufacturing"
-msgstr "Automatyczne dozbrajanie VTOL"
+msgstr "Automatyczna produkcja Fabryki"
 
 #: data/mp/messages/strings/names.txt:806
-#, fuzzy
 msgid "Automated Manufacturing Mk2"
-msgstr "Automatyczne dozbrajanie VTOL Mk2"
+msgstr "Automatyczna produkcja Fabryki Mk2"
 
 #: data/mp/messages/strings/names.txt:807
-#, fuzzy
 msgid "Automated Manufacturing Mk3"
-msgstr "Automatyczne dozbrajanie VTOL Mk3"
+msgstr "Automatyczna produkcja Fabryki Mk3"
 
 #: data/mp/messages/strings/names.txt:808
-#, fuzzy
 msgid "Robotic Manufacturing"
-msgstr "Produkcja"
+msgstr "Robotyczna produkcja Fabryki"
 
 #: data/mp/messages/strings/names.txt:809
-#, fuzzy
 msgid "Robotic Manufacturing Mk2"
-msgstr "Robotyczne dozbrajanie VTOL Mk2"
+msgstr "Robotyczna produkcja Fabryki Mk2"
 
 #: data/mp/messages/strings/names.txt:810
-#, fuzzy
 msgid "Robotic Manufacturing Mk3"
-msgstr "Robotyczne dozbrajanie VTOL Mk3"
+msgstr "Robotyczna produkcja Fabryki Mk3"
 
 #: data/mp/messages/strings/names.txt:811
-#, fuzzy
 msgid "Advanced Manufacturing"
-msgstr "Zaawansowana wojna"
+msgstr "Zaawansowana produkcja Fabryki"
 
 #: data/mp/messages/strings/names.txt:812
-#, fuzzy
 msgid "Advanced Manufacturing Mk2"
 msgstr "Zaawansowana produkcja Fabryki Mk2"
 
 #: data/mp/messages/strings/names.txt:813
-#, fuzzy
 msgid "Self-Replicating Manufacturing"
 msgstr "Samoreplikująca produkcja Fabryki"
 
 #: data/mp/messages/strings/names.txt:814
-#, fuzzy
 msgid "Advanced Manufacturing Mk3"
 msgstr "Zaawansowana produkcja Fabryki Mk3"
 
 #: data/mp/messages/strings/names.txt:833
-#, fuzzy
 msgid "Automated Repair Facility Mk2"
-msgstr "Automatyzowana Stacja Naprawcza"
+msgstr "Zautomatyzowana Stacja Naprawcza Mk2"
 
 #: data/mp/messages/strings/names.txt:834
-#, fuzzy
 msgid "Automated Repair Facility Mk3"
-msgstr "Automatyzowana Stacja Naprawcza"
+msgstr "Zautomatyzowana Stacja Naprawcza Mk3"
 
 #: data/mp/messages/strings/names.txt:835
-#, fuzzy
 msgid "Robotic Repair Facility"
 msgstr "Robotyczna Stacja Naprawcza"
 
 #: data/mp/messages/strings/names.txt:836
-#, fuzzy
 msgid "Robotic Repair Facility Mk2"
 msgstr "Robotyczna Stacja Naprawcza Mk2"
 
 #: data/mp/messages/strings/names.txt:837
-#, fuzzy
 msgid "Advanced Repair Facility"
 msgstr "Zaawansowana Stacja Naprawcza"
 
 #: data/mp/messages/strings/names.txt:838
-#, fuzzy
 msgid "Robotic Repair Facility Mk3"
 msgstr "Robotyczna Stacja Naprawcza Mk3"
 
 #: data/mp/messages/strings/names.txt:839
-#, fuzzy
 msgid "Advanced Repair Facility Mk2"
 msgstr "Zaawansowana Stacja Naprawcza Mk2"
 
 #: data/mp/messages/strings/names.txt:840
-#, fuzzy
 msgid "Advanced Repair Facility Mk3"
 msgstr "Zaawansowana Stacja Naprawcza Mk3"
 
@@ -10276,50 +10187,41 @@ msgid "Heavy Repair Turret"
 msgstr "Ciężka wieżyczka naprawiająca"
 
 #: data/mp/messages/strings/names.txt:926
-#, fuzzy
 msgid "Nexus Intruder Program"
 msgstr "Program intruz NEXUS"
 
 #: data/mp/messages/strings/names.txt:927
 #: data/mp/messages/strings/names.txt:1685
-#, fuzzy
 msgid "Nexus Resistance Circuits"
-msgstr "Ochrona elektroniczna"
+msgstr "Ochrona elektroniczna NEXUS"
 
 #: data/mp/messages/strings/names.txt:928
-#, fuzzy
 msgid "Nexus Resistance Circuits Mk2"
-msgstr "Systemy obronne elektroniki Mk2"
+msgstr "Ochrona elektroniczna NEXUS Mk2"
 
 #: data/mp/messages/strings/names.txt:929
-#, fuzzy
 msgid "Nexus Resistance Circuits Mk3"
-msgstr "Systemy obronne elektroniki Mk3"
+msgstr "Ochrona elektroniczna NEXUS Mk3"
 
 #: data/mp/messages/strings/names.txt:1016
-#, fuzzy
 msgid "Cluster Bomb Bay"
 msgstr "Przedział bomb odłamkowych"
 
 #: data/mp/messages/strings/names.txt:1021
-#, fuzzy
 msgid "HE Bomb Shells"
-msgstr "Pociski moździeżowe HE"
+msgstr "Bomby HE"
 
 #: data/mp/messages/strings/names.txt:1022
-#, fuzzy
 msgid "Improved Bomb Warhead"
-msgstr "Ulepszony kształt głowic rakietowych"
+msgstr "Ulepszona głowica bomb"
 
 #: data/mp/messages/strings/names.txt:1023
-#, fuzzy
 msgid "Advanced Bomb Warhead"
-msgstr "Zaawansowana głowica rakiet"
+msgstr "Zaawansowana głowica bomb"
 
 #: data/mp/messages/strings/names.txt:1093
-#, fuzzy
 msgid "Howitzer Fast Loader"
-msgstr "Szybkie ładowanie moździeża"
+msgstr "Szybkie ładowanie haubicy"
 
 #: data/mp/messages/strings/names.txt:1109
 msgid "Rapid Fire Chaingun"
@@ -10331,7 +10233,6 @@ msgid "Rail Target Prediction Computer"
 msgstr "Komputer przewidywania celów"
 
 #: data/mp/messages/strings/names.txt:1382
-#, fuzzy
 msgid "Assault Gun Tower"
 msgstr "Wieża strażnicza z karabinem szturmowym"
 
@@ -10340,58 +10241,48 @@ msgid "Repair Cobra Tracks"
 msgstr "Kobra naprawiająca na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1472
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "Pyton z działem HPV na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1511
-#, fuzzy
 msgid "Bunker Buster Cobra Hover"
 msgstr "Kobra poduszkowiec Bunker Buster"
 
 #: data/mp/messages/strings/names.txt:1513
-#, fuzzy
 msgid "Sensor Upgrade Mk2"
-msgstr "Ulepszenie sensora"
+msgstr "Ulepszenie sensora Mk2"
 
 #: data/mp/messages/strings/names.txt:1514
-#, fuzzy
 msgid "Sensor Upgrade Mk3"
-msgstr "Ulepszenie sensora"
+msgstr "Ulepszenie sensora Mk3"
 
 #: data/mp/messages/strings/names.txt:1515
-#, fuzzy
 msgid "Vapor Turbine Generator Mk2"
-msgstr "Turbina oparowa Generatora"
+msgstr "Turbina oparowa Generatora Mk2"
 
 #: data/mp/messages/strings/names.txt:1519
-#, fuzzy
 msgid "Gas Turbine Generator Mk2"
-msgstr "Turbina gazowa Generatora"
+msgstr "Turbina gazowa Generatora Mk2"
 
 #: data/mp/messages/strings/names.txt:1520
-#, fuzzy
 msgid "Gas Turbine Generator Mk3"
-msgstr "Turbina gazowa Generatora"
+msgstr "Turbina gazowa Generatora Mk3"
 
 #: data/mp/messages/strings/names.txt:1523
-#, fuzzy
 msgid "Vapor Turbine Generator Mk3"
-msgstr "Turbina oparowa Generatora"
+msgstr "Turbina oparowa Generatora Mk3"
 
 #: data/mp/messages/strings/names.txt:1608
-#, fuzzy
 msgid "Thermite Flamer Cyborg"
-msgstr "Cyborg z miotaczem termitowym"
+msgstr "Cyborg z miotaczem termicznym"
 
 #: data/mp/messages/strings/names.txt:1611
 msgid "Thermite Flamer"
 msgstr "Cyborg z miotaczem termitowym"
 
 #: data/mp/messages/strings/names.txt:1613
-#, fuzzy
 msgid "Grenadier Cyborg"
-msgstr "Grenadier"
+msgstr "Cyborg grenadier"
 
 #: data/mp/messages/strings/names.txt:1616
 msgid "Grenadier"
@@ -10409,40 +10300,33 @@ msgstr "Cyborg Mechanik"
 
 #: data/mp/messages/strings/names.txt:1632
 #: data/mp/messages/strings/names.txt:1633
-#, fuzzy
 msgid "Incendiary Howitzer"
-msgstr "Ognista haubica"
+msgstr "Haubica podpalająca"
 
 #: data/mp/messages/strings/names.txt:1634
 #: data/mp/messages/strings/names.txt:1635
-#, fuzzy
 msgid "Incendiary Howitzer Emplacement"
-msgstr "Stanowisko ognistej haubicy"
+msgstr "Stanowisko haubicy podpalającej"
 
-# 'Plasmite' has no meaning in Polish. So I used neologizm.
 #: data/mp/messages/strings/names.txt:1636
 #: data/mp/messages/strings/names.txt:1637
 msgid "Plasmite Flamer"
-msgstr "Plasmitowy miotacz ognia"
+msgstr "Plazmowy miotacz ognia"
 
-# 'Plasmite' has no meaning in Polish. So I used neologizm.
 #: data/mp/messages/strings/names.txt:1638
 #: data/mp/messages/strings/names.txt:1639
-#, fuzzy
 msgid "Plasmite Flamer Bunker"
-msgstr "Plasmitowy miotacz ognia"
+msgstr "Bunkier z miotaczem plazmowym"
 
 #: data/mp/messages/strings/names.txt:1640
 #: data/mp/messages/strings/names.txt:1641
-#, fuzzy
 msgid "Incendiary Mortar"
-msgstr "Ognisty moździeż"
+msgstr "Moździerz podpalający"
 
 #: data/mp/messages/strings/names.txt:1642
 #: data/mp/messages/strings/names.txt:1643
-#, fuzzy
 msgid "Incendiary Mortar Pit"
-msgstr "Ognisty moździeż"
+msgstr "Stanowisko moździerza podpalającego"
 
 # I had translated 'Superdense' into 'Hardened' because I can't find better word for this
 #: data/mp/messages/strings/names.txt:1647
@@ -10503,9 +10387,8 @@ msgid "Heavy Laser"
 msgstr "Ciężki laser"
 
 #: data/mp/messages/strings/names.txt:1679
-#, fuzzy
 msgid "VTOL Heavy Laser"
-msgstr "Ciężki laser"
+msgstr "VTOL Ciężki laser"
 
 #: data/mp/messages/strings/names.txt:1680
 #: data/mp/messages/strings/names.txt:1681
@@ -10571,7 +10454,6 @@ msgstr "Super Cyborg z wyrzutnią Scourge"
 
 #: data/mp/messages/strings/names.txt:1733
 #: data/mp/messages/strings/names.txt:1734
-#, fuzzy
 msgid "Nexus Link Tower"
 msgstr "Wieżyczka NEXUS Link"
 
@@ -10593,9 +10475,8 @@ msgstr "Forteca z działem gaussa"
 
 # Translated as 'Fortress with Gauss Canonn'. Contact me if this causes confusing.
 #: data/mp/messages/strings/names.txt:1744
-#, fuzzy
 msgid "Mass Driver"
-msgstr "Forteca z działem gaussa"
+msgstr "Forteca z działem Gaussa"
 
 #: data/mp/messages/strings/names.txt:1747
 #: data/mp/messages/strings/names.txt:1748
@@ -10646,13 +10527,12 @@ msgstr "Supergorący żel Plasmitowy Mk3"
 #: data/mp/messages/strings/names.txt:1773
 #: data/mp/messages/strings/names.txt:1775
 msgid "EMP Mortar"
-msgstr "Możdzież EMP"
+msgstr "Moździerz EMP"
 
 #: data/mp/messages/strings/names.txt:1774
 #: data/mp/messages/strings/names.txt:1776
-#, fuzzy
 msgid "EMP Mortar Pit"
-msgstr "Stanowisko moździeża"
+msgstr "Stanowisko moździerza EMP"
 
 #: data/mp/messages/strings/names.txt:1777
 #: data/mp/messages/strings/names.txt:1779
@@ -10661,9 +10541,8 @@ msgstr "Laser AA Strombringer"
 
 #: data/mp/messages/strings/names.txt:1778
 #: data/mp/messages/strings/names.txt:1780
-#, fuzzy
 msgid "Stormbringer Emplacement"
-msgstr "Stanowisko moździeża Bombard"
+msgstr "Stanowisko lasera Stormbringer"
 
 #: data/mp/messages/strings/names.txt:1781
 #: data/mp/messages/strings/names.txt:1782
@@ -10692,23 +10571,20 @@ msgstr "Podwójny karabin szturmowy"
 
 #: data/mp/messages/strings/names.txt:1794
 #: data/mp/messages/strings/names.txt:1795
-#, fuzzy
 msgid "Twin Assault Gun Hardpoint"
-msgstr "Umocnienie z karabinem szturmowym"
+msgstr "Umocnienie z podwójnym karabinem szturmowym"
 
 #: data/mp/messages/strings/names.txt:1797
-#, fuzzy
 msgid "VTOL Plasmite Bomb Bay"
-msgstr "Przedział bomb odłamkowych"
+msgstr "VTOL Przedział bomb plazmowych"
 
 #: data/mp/messages/strings/names.txt:1798
 msgid "Plasmite Bomb"
 msgstr "Bomba Plasmitowa"
 
 #: data/mp/messages/strings/names.txt:1799
-#, fuzzy
 msgid "VTOL EMP Missile Launcher"
-msgstr "Wyrzutnia rakiet EMP"
+msgstr "VTOL wyrzutnia rakiet EMP"
 
 #: data/mp/messages/strings/names.txt:1800
 msgid "EMP Missile Launcher"
@@ -10716,392 +10592,316 @@ msgstr "Wyrzutnia rakiet EMP"
 
 #: data/mp/messages/strings/names.txt:1804
 #: data/mp/messages/strings/names.txt:1805
-#, fuzzy
 msgid "Command Turret II"
-msgstr "Wieżyczka dowodząca"
+msgstr "Wieżyczka dowodząca II"
 
 #: data/mp/messages/strings/names.txt:1806
 #: data/mp/messages/strings/names.txt:1807
-#, fuzzy
 msgid "Command Turret III"
-msgstr "Wieżyczka dowodząca MkIII"
+msgstr "Wieżyczka dowodząca III"
 
 #: data/mp/messages/strings/names.txt:1808
 #: data/mp/messages/strings/names.txt:1809
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "Wieżyczka dowodząca"
+msgstr "Wieżyczka dowodząca IV"
 
 #: data/mp/messages/strings/names.txt:1819
-#, fuzzy
 msgid "Heavy Repair Turret Cobra Hover"
-msgstr "Ciężka wieżyczka naprawiająca"
+msgstr "Kobra poduszkowiec ciężka wieżyczka naprawiająca"
 
 #: data/mp/messages/strings/names.txt:1820
 #: data/mp/messages/strings/names.txt:1831
-#, fuzzy
 msgid "Heavy Machinegun Viper Wheels"
-msgstr "Żmija karabin na kołach"
+msgstr "Żmija ciężki karabin na kołach"
 
 #: data/mp/messages/strings/names.txt:1822
-#, fuzzy
 msgid "Tank Killer Mantis Hover"
-msgstr "Modliszka ciężarówka poduszkowiec"
+msgstr "Modliszka poduszkowiec Tank Killer"
 
 #: data/mp/messages/strings/names.txt:1823
 #: data/mp/messages/strings/names.txt:1838
-#, fuzzy
 msgid "Heavy Machinegun Cobra Tracks"
-msgstr "Żmija ciężki karabin na gąsienicach"
+msgstr "Kobra ciężki karabin na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1824
-#, fuzzy
 msgid "Heavy Cannon Cobra Hover"
-msgstr "Ciężkie działo"
+msgstr "Kobra poduszkowiec z ciężkim działem"
 
 #: data/mp/messages/strings/names.txt:1832
-#, fuzzy
 msgid "Heavy Machinegun Cobra Wheels"
-msgstr "Żmija karabin na kołach"
+msgstr "Kobra ciężki karabin na kołach"
 
 #: data/mp/messages/strings/names.txt:1833
-#, fuzzy
 msgid "Heavy Machinegun Cobra Hover"
-msgstr "Wieża strażnicza z ciężkim karabinem"
+msgstr "Kobra poduszkowiec z ciężkim karabinem"
 
 #: data/mp/messages/strings/names.txt:1835
-#, fuzzy
 msgid "Machinegun Viper Tracks"
-msgstr "Żmija karabin na kołach"
+msgstr "Żmija karabin na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1836
-#, fuzzy
 msgid "Twin Machinegun Viper Tracks"
-msgstr "Wieża strażnicza z podwójnym karabinem"
+msgstr "Żmija z z podwójnym karabinem na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1840
-#, fuzzy
 msgid "Medium Cannon Cobra Hover"
-msgstr "Średnie działo"
+msgstr "Kobra poduszkowiec z średnim działem"
 
 #: data/mp/messages/strings/names.txt:1841
-#, fuzzy
 msgid "Medium Cannon Scorpion Hover"
-msgstr "Umocnienie ze średnim działem"
+msgstr "Skorpion poduszkowiec ze średnim działem"
 
 #: data/mp/messages/strings/names.txt:1842
-#, fuzzy
 msgid "Medium Cannon Scorpion Tracks"
-msgstr "Kobra ze średnim działem na gąsienicach"
+msgstr "Skorpion ze średnim działem na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1843
-#, fuzzy
 msgid "Medium Cannon Python Hover"
-msgstr "Średnie działo"
+msgstr "Pyton poduszkowiec ze średnim działem"
 
 #: data/mp/messages/strings/names.txt:1844
-#, fuzzy
 msgid "Heavy Cannon Python Hover"
-msgstr "Pyton z działem HPV na gąsienicach"
+msgstr "Pyton poduszkowiec z ciężkim"
 
 #: data/mp/messages/strings/names.txt:1846
-#, fuzzy
 msgid "Rail Gun Mantis Tracks"
-msgstr "Pyton z karabinem szturmowym na gąsienicach"
+msgstr "Modliszka z Railgunem na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1847
-#, fuzzy
 msgid "Pulse Laser Mantis Tracks"
-msgstr "Tygrys z laserem pulsacyjnym na gąsienicach"
+msgstr "Modliszka z laserem pulsacyjnym na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1848
-#, fuzzy
 msgid "Lancer Python Tracks"
-msgstr "Pyton wieżyczka dowodząca na gąsienicach"
+msgstr "Pyton Lancer na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1849
-#, fuzzy
 msgid "Lancer Mantis Tracks"
-msgstr "Kobra Lancer na gąsienicach"
+msgstr "Modliszka Lancer na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1850
-#, fuzzy
 msgid "Tank Killer Vengeance Tracks"
-msgstr "Pyton Tank Killer na gąsienicach"
+msgstr "Zemsta Tank Killer na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1855
-#, fuzzy
 msgid "Heavy Cannon Tiger Tracks"
-msgstr "Kobra z ciężkim działem na gąsienicach"
+msgstr "Tygrys z ciężkim działem na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1856
-#, fuzzy
 msgid "Needle Gun Tiger Tracks"
-msgstr "Wieża z wyrzutnią kolców"
+msgstr "Tygrys z wyrzutnią ostrz na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1857
-#, fuzzy
 msgid "Needle Gun Retribution Tracks"
-msgstr "Odwet wyrzutnia kolców na gąsienicach"
+msgstr "Odwet z wyrzutnią ostrz na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1858
-#, fuzzy
 msgid "Needle Gun Vengeance Tracks"
-msgstr "Cyborg z wyrzutnią kolców"
+msgstr "Zemsta z wyrzutnią ostrz na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1859
 msgid "Vengeance Tracks Rail Gun"
 msgstr "Zemsta Rail Gun na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1860
-#, fuzzy
 msgid "Vengeance Tracks Gauss Cannon"
 msgstr "Zemsta działo Gaussa na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1861
-#, fuzzy
 msgid "Vengeance Tracks Gauss Scourge"
 msgstr "Zemsta Gauss Scourge na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1864
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "Przedział bomb odłamkowych"
+msgstr "Robal przedział bomb odłamkowych"
 
 #: data/mp/messages/strings/names.txt:1865
-#, fuzzy
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "Bunker Buster VTOL"
+msgstr "Robal Bunker Buster VTOL"
 
 #: data/mp/messages/strings/names.txt:1866
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "Przedział bomb odłamkowych"
+msgstr "Skorpion przedział bomb odłamkowych VTOL"
 
 #: data/mp/messages/strings/names.txt:1867
-#, fuzzy
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "Bunker Buster VTOL"
-
-#: data/mp/messages/strings/names.txt:1870
-#, fuzzy
-msgid "VTOL Lancer Bug VTOL"
-msgstr "Lancer VTOL"
-
-#: data/mp/messages/strings/names.txt:1871
-#, fuzzy
-msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "Działo HPV VTOL"
-
-#: data/mp/messages/strings/names.txt:1872
-#, fuzzy
-msgid "VTOL Lancer Scorpion VTOL"
 msgstr "Skorpion Bunker Buster VTOL"
 
+#: data/mp/messages/strings/names.txt:1870
+msgid "VTOL Lancer Bug VTOL"
+msgstr "Robal Lancer VTOL"
+
+#: data/mp/messages/strings/names.txt:1871
+msgid "VTOL Hyper Velocity Cannon Bug VTOL"
+msgstr "VTOL Robal działo HPV VTOL"
+
+#: data/mp/messages/strings/names.txt:1872
+msgid "VTOL Lancer Scorpion VTOL"
+msgstr "VTOL Skorpion Lancer VTOL"
+
 #: data/mp/messages/strings/names.txt:1873
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "Umocnienie z działem HPV"
+msgstr "VTOL Skorpion działo HPV VOL"
 
 #: data/mp/messages/strings/names.txt:1874
-#, fuzzy
 msgid "VTOL Lancer Mantis VTOL"
-msgstr "Lancer VTOL"
+msgstr "VTOL Modliszka Lancer VTOL"
 
 #: data/mp/messages/strings/names.txt:1875
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "Działo HPV VTOL"
+msgstr "VTOL Modliszka działo HPV VTOL"
 
 #: data/mp/messages/strings/names.txt:1879
-#, fuzzy
 msgid "Repair Turret Mantis Tracks"
-msgstr "Kobra naprawiająca na gąsienicach"
+msgstr "Modliszka naprawiająca na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1881
-#, fuzzy
 msgid "Lancer Scorpion Tracks"
 msgstr "Skorpion Lancer na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1882
-#, fuzzy
 msgid "Heavy Cannon Scorpion Tracks"
-msgstr "Kobra z ciężkim działem na gąsienicach"
+msgstr "Skorpion z ciężkim działem na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1883
-#, fuzzy
 msgid "Lancer Scorpion VTOL"
-msgstr "Skorpion Bunker Buster VTOL"
+msgstr "Skorpion Lamcer VTOL"
 
 #: data/mp/messages/strings/names.txt:1884
-#, fuzzy
 msgid "Bunker Buster Scorpion VTOL"
-msgstr "Robal Bunker Buster VTOL"
+msgstr "Skorpion Bunker Buster VTOL"
 
 #: data/mp/messages/strings/names.txt:1886
-#, fuzzy
 msgid "Command Turret Viper Tracks"
 msgstr "Żmija dowodząca na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1887
-#, fuzzy
 msgid "Command Turret Cobra Tracks"
-msgstr "Żmija dowodząca na gąsienicach"
+msgstr "Kobra dowodząca na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1888
-#, fuzzy
 msgid "Command Turret Scorpion Tracks"
-msgstr "Żmija dowodząca na gąsienicach"
+msgstr "Skorpion dowodzący na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1889
-#, fuzzy
 msgid "Command Turret Mantis Tracks"
-msgstr "Żmija dowodząca na gąsienicach"
+msgstr "Modliszka dowodząca na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1891
-#, fuzzy
 msgid "Lancer Cobra Tracks"
-msgstr "Kobra Lancer na pół-gąsienicach"
+msgstr "Kobra Lancer na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1892
-#, fuzzy
 msgid "Heavy Cannon Mantis Tracks"
-msgstr "Kobra z ciężkim działem na gąsienicach"
+msgstr "Modliszka z ciężkim działem na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1893
-#, fuzzy
 msgid "Tank Killer Mantis Tracks"
-msgstr "Pyton Tank Killer na gąsienicach"
+msgstr "Modliszka Tank Killer na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1894
-#, fuzzy
 msgid "Scourge Mantis Tracks"
-msgstr "Modliszka poduszkowiec Scourge"
+msgstr "Modliszka Scourge na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1895
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Żmija ciężki karabin na gąsienicach"
+msgstr "Skorpion ciężki karabin na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1897
-#, fuzzy
 msgid "Repair Scorpion Tracks"
-msgstr "Kobra naprawiająca na gąsienicach"
+msgstr "Skorpion naprawiający na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1898
-#, fuzzy
 msgid "Heavy Repair Scorpion Hover"
 msgstr "Skorpion ciężki naprawczy poduszkowiec"
 
 #: data/mp/messages/strings/names.txt:1901
-#, fuzzy
 msgid "Truck Cobra Hover"
-msgstr "Kobra poduszkowiec z ciężkim działem"
+msgstr "Kobra ciężarówka poduszkowiec"
 
 #: data/mp/messages/strings/names.txt:1902
-#, fuzzy
 msgid "Truck Scorpion Hover"
-msgstr "Skorpion ciężarówka-poduszkowiec"
+msgstr "Skorpion ciężarówka poduszkowiec"
 
 #: data/mp/messages/strings/names.txt:1903
-#, fuzzy
 msgid "Truck Mantis Hover"
 msgstr "Modliszka ciężarówka poduszkowiec"
 
 #: data/mp/messages/strings/names.txt:1906
-#, fuzzy
 msgid "Bunker Buster Cobra Tracks"
 msgstr "Kobra Bunker Buster na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1907
-#, fuzzy
 msgid "Bunker Buster Scorpion Tracks"
-msgstr "Kobra Bunker Buster na gąsienicach"
+msgstr "Skorpion Bunker Buster na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1908
-#, fuzzy
 msgid "Bunker Buster Mantis Tracks"
-msgstr "Kobra Bunker Buster na gąsienicach"
+msgstr "Modliszka Bunker Buster na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1910
-#, fuzzy
 msgid "Lancer Viper Tracks"
-msgstr "Kobra Lancer na gąsienicach"
+msgstr "Żmija Lancer na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1912
-#, fuzzy
 msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr "Kobra Lancer na pół-gąsienicach"
+msgstr "Kobra minirakiety na pół-gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1913
-#, fuzzy
 msgid "Mini-Rocket Cobra Tracks"
-msgstr "Kobra naprawiająca na gąsienicach"
+msgstr "Kobra minirakiety na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1914
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr "Artyleria minirakiet"
+msgstr "Kobra artyleria minirakiet na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1916
-#, fuzzy
 msgid "Inferno Cobra Half-Tracks"
-msgstr "Kobra Lancer na pół-gąsienicach"
+msgstr "Kobra miotacz Inferno na pół-gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Pyton z działem HPV na gąsienicach"
+msgstr "Pyton poduszkowiec z działem HPV"
 
 #: data/mp/messages/strings/names.txt:1921
-#, fuzzy
 msgid "Scourge Python Tracks"
-msgstr "Pyton wieżyczka dowodząca na gąsienicach"
+msgstr "Pyton z rakietami Scourge na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1922
-#, fuzzy
 msgid "Gauss Cannon Python Tracks"
-msgstr "Pyton z działem HPV na gąsienicach"
+msgstr "Pyton z działem Gaussa na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1923
-#, fuzzy
 msgid "Pulse Laser Python Tracks"
-msgstr "Tygrys z laserem pulsacyjnym na gąsienicach"
+msgstr "Pyton z laserem pulsacyjnym na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1924
-#, fuzzy
 msgid "Pulse Laser Tiger Tracks"
 msgstr "Tygrys z laserem pulsacyjnym na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1925
-#, fuzzy
 msgid "Heavy Laser Tiger Tracks"
-msgstr "Tygrys ciężki laser na gąsienicach"
+msgstr "Tygrys z ciężkim laserem na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1926
-#, fuzzy
 msgid "Gauss Cannon Wyvern Tracks"
-msgstr "Pyton z działem gaussa na gąsienicach"
+msgstr "Wiwern z działem Gaussa na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1927
-#, fuzzy
 msgid "Pulse Laser Wyvern Tracks"
-msgstr "Tygrys z laserem pulsacyjnym na gąsienicach"
+msgstr "Wiwern z laserem pulsacyjnym na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1928
-#, fuzzy
 msgid "Heavy Laser Wyvern Tracks"
-msgstr "Tygrys ciężki laser na gąsienicach"
+msgstr "Wiwern z ciężkim laserem na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1930
-#, fuzzy
 msgid "Machinegun Viper Half-Tracks"
 msgstr "Żmija karabin na pół-gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1931
-#, fuzzy
 msgid "Flamer Viper Half-Tracks"
-msgstr "Żmija miotacz na pół-gąsienicach"
+msgstr "Żmija miotacz ognia na pół-gąsienicach"
 
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:99
@@ -11135,9 +10935,8 @@ msgstr "Hiszpański"
 
 #: lib/framework/i18n.c:53
 #: lib/framework/i18n.c:107
-#, fuzzy
 msgid "Estonian"
-msgstr "Rumuński"
+msgstr "Estoński"
 
 #: lib/framework/i18n.c:55
 #: lib/framework/i18n.c:109
@@ -11191,7 +10990,6 @@ msgstr "Portugalski(Brazylia)"
 
 #: lib/framework/i18n.c:75
 #: lib/framework/i18n.c:129
-#, fuzzy
 msgid "Portuguese"
 msgstr "Portugalski"
 
@@ -11218,41 +11016,41 @@ msgstr "Uproszczony chiński"
 #: lib/framework/i18n.c:88
 #: lib/framework/i18n.c:138
 msgid "Traditional Chinese"
-msgstr ""
+msgstr "Chiński tradycyjny"
 
 #: lib/framework/i18n.c:121
 msgid "Latin"
 msgstr "Łacina"
 
 #: lib/netplay/netplay.c:1175
-#, c-format
+#, fuzzy, c-format
 msgid "Player %u has the wrong game version. Auto kicking."
-msgstr ""
+msgstr "Gracz %u ma niewłaściwą wersję gry.  Automatyczne wyrzucenie."
 
 #: lib/netplay/netplay.c:1210
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
-msgstr ""
+msgstr "Gracz %u ma niewłaściwą wersję gry.  Automatyczne wyrzucenie."
 
 #: lib/netplay/netplay.c:1262
 #: lib/netplay/netplay.c:2078
 msgid "Enter password here"
-msgstr ""
+msgstr "Wpisz hasło tutaj"
 
 #: lib/netplay/netplay.c:1300
-#, c-format
+#, fuzzy, c-format
 msgid "Player %u has the wrong password. Auto kicking."
-msgstr ""
+msgstr "Gracz %u ma niewłaściwe hasło.  Automatyczne wyrzucenie."
 
 #: lib/netplay/netplay.c:3020
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
-msgstr ""
+msgstr "Nie można rozwinąć nazwy głównego serwera (%s)!"
 
 #: lib/netplay/netplay.c:3045
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-msgstr ""
+msgstr "Nie można skomunikować się z serwerem lobby! Czy port %u TCP jest otwarty dla ruchu wychodzącego?"
 
 #: src/cheat.c:132
 #, fuzzy
@@ -11334,9 +11132,8 @@ msgid "Enable a multiplay only mod"
 msgstr "Włącz mod do multi"
 
 #: src/clparse.c:111
-#, fuzzy
 msgid "Disable asserts"
-msgstr "Wyłącz cienie"
+msgstr ""
 
 #: src/clparse.c:112
 msgid "Causes a crash to test the crash handler"
@@ -11392,7 +11189,7 @@ msgstr "Połącz od razu przez IP/nazwę hosta"
 
 #: src/clparse.c:124
 msgid "host"
-msgstr ""
+msgstr "host"
 
 #: src/clparse.c:125
 msgid "go directly to host screen"
@@ -11481,7 +11278,7 @@ msgstr "Transportowiec"
 
 #: src/design.c:1359
 msgid "Hydra "
-msgstr ""
+msgstr "Hydra"
 
 #: src/design.c:1556
 msgid "Sensor Range"
@@ -11546,14 +11343,12 @@ msgid "Systems"
 msgstr "Systemy"
 
 #: src/display3d.c:507
-#, fuzzy
 msgid "Player left"
-msgstr "Gracz"
+msgstr "Gracz opuścił grę"
 
 #: src/display3d.c:507
-#, fuzzy
 msgid "Player dropped"
-msgstr "Gracz"
+msgstr "Gracz odrzucony"
 
 #: src/display.c:1732
 msgid "Cannot Build. Oil Resource Burning."
@@ -11566,9 +11361,9 @@ msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Obrażenia %d%% - Doświadczenie %d, %s"
 
 #: src/display.c:1952
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
-msgstr "%s - Obrażenia %d%% - Doświadczenie %d, %s"
+msgstr "%s - Sojusznik - Obrażenia %d%% - Doświadczenie %d, %s"
 
 #: src/display.c:2158
 msgid "Truck ordered to build Oil Derrick"
@@ -11653,12 +11448,10 @@ msgid "Hero"
 msgstr "Bohater"
 
 #: src/frontend.c:251
-#, fuzzy
 msgid "Single Player"
 msgstr "Kampania dla jednego gracza"
 
 #: src/frontend.c:252
-#, fuzzy
 msgid "Multi Player"
 msgstr "Gra wieloosobowa"
 
@@ -11672,9 +11465,8 @@ msgid "Options"
 msgstr "Opcje"
 
 #: src/frontend.c:255
-#, fuzzy
 msgid "View Intro"
-msgstr "Pokaż następnego budowniczego"
+msgstr "Zobacz intro"
 
 #: src/frontend.c:257
 msgid "Quit Game"
@@ -11711,14 +11503,12 @@ msgid "New Campaign"
 msgstr "Nowa kampania"
 
 #: src/frontend.c:368
-#, fuzzy
 msgid "Start Skirmish Game"
-msgstr "Rozpocznij grę jako Host"
+msgstr "Rozpocznij potyczkę"
 
 #: src/frontend.c:369
-#, fuzzy
 msgid "Challenges"
-msgstr "Scavenger"
+msgstr "Wyzwania"
 
 #: src/frontend.c:370
 #: src/ingameop.c:293
@@ -11771,9 +11561,8 @@ msgid "Audio Options"
 msgstr "Ustawienia dźwięku"
 
 #: src/frontend.c:582
-#, fuzzy
 msgid "Mouse Options"
-msgstr "Ustawienia gry"
+msgstr "Ustawienia myszki"
 
 #: src/frontend.c:583
 msgid "Key Mappings"
@@ -11786,12 +11575,12 @@ msgstr "Odtwarzanie filmów"
 #: src/frontend.c:649
 #: src/frontend.c:819
 msgid "1X"
-msgstr ""
+msgstr "1X"
 
 #: src/frontend.c:653
 #: src/frontend.c:809
 msgid "2X"
-msgstr ""
+msgstr "2X"
 
 #: src/frontend.c:657
 #: src/frontend.c:814
@@ -11872,9 +11661,8 @@ msgid "Shadows"
 msgstr "Cienie"
 
 #: src/frontend.c:722
-#, fuzzy
 msgid "GRAPHICS OPTIONS"
-msgstr "Ustawienia gry"
+msgstr "USTAWIENIA GRAFIKI"
 
 #: src/frontend.c:853
 #: src/ingameop.c:177
@@ -11892,9 +11680,8 @@ msgid "Music Volume"
 msgstr "Głośność muzyki"
 
 #: src/frontend.c:868
-#, fuzzy
 msgid "AUDIO OPTIONS"
-msgstr "Ustawienia gry"
+msgstr "USTAWIENIA DŹWIĘKU"
 
 #: src/frontend.c:933
 msgid "Graphics Mode*"
@@ -11915,21 +11702,19 @@ msgstr "Rozmiar tekstury"
 
 #: src/frontend.c:954
 msgid "Vertical sync*"
-msgstr ""
+msgstr "Synchronizacja pionowa*"
 
 #: src/frontend.c:966
 msgid "* Takes effect on game restart"
 msgstr "* Działa po ponownym uruchomieniu gry"
 
 #: src/frontend.c:969
-#, fuzzy
 msgid "VIDEO OPTIONS"
-msgstr "Ustawienia gry"
+msgstr "USTAWIENIA WIDEO"
 
 #: src/frontend.c:1127
-#, fuzzy
 msgid "Reverse Rotation"
-msgstr "Odwróć mysz"
+msgstr "Odwróć rotację"
 
 #: src/frontend.c:1138
 msgid "Trap Cursor"
@@ -11937,21 +11722,19 @@ msgstr "Złap kursor"
 
 #: src/frontend.c:1150
 msgid "Colored Cursors*"
-msgstr ""
+msgstr "Kolorowe kursory*"
 
 #: src/frontend.c:1163
-#, fuzzy
 msgid "Switch Mouse Buttons"
-msgstr "Ustawienia gry"
+msgstr "Odwróć przyciski myszki"
 
 #: src/frontend.c:1173
 msgid "* May negatively affect performance"
-msgstr ""
+msgstr "* Może mieć negatywny wpływ na wydajność."
 
 #: src/frontend.c:1176
-#, fuzzy
 msgid "MOUSE OPTIONS"
-msgstr "Ustawienia gry"
+msgstr "USTAWIENIA MYSZKI"
 
 #: src/frontend.c:1277
 #: src/frontend.c:1343
@@ -12013,16 +11796,15 @@ msgid "Close"
 msgstr "Zamknij"
 
 #: src/hci.c:1356
-#, fuzzy
 msgid "MAP SAVED!"
-msgstr "Gra zapisana!"
+msgstr "MAPA ZAPISANA!"
 
 #: src/hci.c:1703
 #: src/loop.c:526
 #: src/loop.c:542
 #, fuzzy
 msgid "GAME SAVED: "
-msgstr "Gra zapisana!"
+msgstr "GRA ZAPISANA :"
 
 #: src/hci.c:2110
 msgid "Failed to create building"
@@ -12153,7 +11935,7 @@ msgstr "Powrót do gry"
 
 #: src/ingameop.c:142
 msgid "Warning, if Host quits, the game ends for everyone!"
-msgstr ""
+msgstr "Ostrzeżenie, po wyjściu hosta gra zostaje zakończona dla wszystkich!"
 
 #: src/ingameop.c:195
 #: src/ingameop.c:548
@@ -12173,13 +11955,12 @@ msgid "Save Game"
 msgstr "Zapisz grę"
 
 #: src/ingameop.c:364
-#, fuzzy
 msgid "Host has quit the game!"
-msgstr "Gospodarz opuścił grę!"
+msgstr "Host opuścił grę!"
 
 #: src/ingameop.c:370
 msgid "The game can't continue without the host."
-msgstr ""
+msgstr "Gra nie może być kontynuowana bez hosta."
 
 #: src/ingameop.c:376
 msgid "-->  QUIT  <--"
@@ -12217,7 +11998,6 @@ msgid "Current Objective"
 msgstr "Obecny cel"
 
 #: src/intelmap.c:1516
-#, fuzzy
 msgid "New Intelligence Report"
 msgstr "Przyszły dane wywiadu"
 
@@ -12334,16 +12114,15 @@ msgstr "Przepraszamy, ten kod jest zablokowany w grze multiplayer"
 
 #: src/keybind.c:139
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
-msgstr ""
+msgstr "Ostrzeżenie! To oszustwo zawiera błędy. Nie zalecamy używania go."
 
 #: src/keybind.c:198
 msgid "Lets us see what you see!"
 msgstr "Zobaczmy to co ty widzisz!"
 
 #: src/keybind.c:200
-#, fuzzy
 msgid "Fine, weapon & sensor display is off!"
-msgstr "Dobra, pokazywanie sensorów wyłączone!"
+msgstr "Dobra, pokazywanie broni i sensorów wyłączone!"
 
 #: src/keybind.c:338
 #: src/keybind.c:368
@@ -12360,7 +12139,7 @@ msgstr "Dobra, pokazywanie sensorów wyłączone!"
 #: src/keybind.c:1865
 #, c-format
 msgid "(Player %u) is using cheat :%s"
-msgstr ""
+msgstr "(Gracz %u) używa oszustwa :%s"
 
 #: src/keybind.c:339
 msgid "Hard as nails!!!"
@@ -12406,7 +12185,7 @@ msgstr "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 #: src/keybind.c:498
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr ""
+msgstr "(Gracz %u) używa oszustwa :Liczba droidów: %d  Liczba konstrukcji: %d  Liczba obiektów: %d"
 
 #: src/keybind.c:535
 msgid "Infinite power disabled"
@@ -12431,20 +12210,19 @@ msgstr "Mgła wyłączona"
 #: src/keybind.c:1120
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
-msgstr ""
+msgstr "Ostrzeżenie! To oszustwo może powodować poważne problemy w przyszłości! [%s]"
 
 #: src/keybind.c:1120
-#, fuzzy
 msgid "Ending Mission."
-msgstr "Transmisja przychodząca..."
+msgstr "Zakończenie misji."
 
 #: src/keybind.c:1232
 msgid "CHEATS ARE NOW ENABLED!"
-msgstr ""
+msgstr "OSZUKIWANIE JEST TERAZ AKTYWNE!"
 
 #: src/keybind.c:1232
 msgid "CHEATS ARE NOW DISABLED!"
-msgstr ""
+msgstr "OSZUKIWANIE JEST TERAZ WYŁĄCZONE!"
 
 #: src/keybind.c:1289
 msgid "God Mode ON"
@@ -12465,33 +12243,31 @@ msgstr "WSZYSTKIE badania ukończone!"
 #: src/keybind.c:1411
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
-msgstr ""
+msgstr "(Gracz %u) używa oszustwa :%s %s"
 
 #: src/keybind.c:1412
-#, fuzzy
 msgid "Researched"
-msgstr "Badania"
+msgstr "Zbadane"
 
 #: src/keybind.c:1432
 msgid "Only displaying energy bars when selected"
-msgstr ""
+msgstr "Wyświetlaj pasek energii tylko przy zaznaczaniu"
 
 #: src/keybind.c:1435
 msgid "Always displaying energy bars for units"
-msgstr ""
+msgstr "Zawsze wyświetlaj pasek energii dla jednostek"
 
 #: src/keybind.c:1438
 msgid "Always displaying energy bars for units and structures"
-msgstr ""
+msgstr "Zawsze wyświetlaj pasek energii dla jednostek oraz struktur"
 
 #: src/keybind.c:1460
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Tryb demo wyłączony - Powrót do normalnego trybu gry"
 
 #: src/keybind.c:1475
-#, fuzzy
 msgid "Debug menu is Open"
-msgstr "Menu budowania zostanie ponownie otwarte"
+msgstr "Menu odpluskwiania jest otwarte"
 
 #: src/keybind.c:1506
 msgid "Unable to locate any resource extractors!"
@@ -12511,12 +12287,11 @@ msgstr "Prognoza: Czyste niebo na całym obszarze... BRAK POGODY"
 
 #: src/keybind.c:1824
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
-msgstr ""
+msgstr "Ostrzeżenie! Może to mieć drastyczne konsekwencje w przypadku niewłaściwego użycia w misjach."
 
 #: src/keybind.c:1826
-#, fuzzy
 msgid "All enemies destroyed by cheating!"
-msgstr "Przeciwnik zniszczony przy użyciu kodów!"
+msgstr "Wszyscy przeciwnicy zniszczoni przy użyciu kodów!"
 
 #: src/keybind.c:1866
 msgid "Destroying selected droids and structures!"
@@ -12777,9 +12552,8 @@ msgid "Select Commander 9"
 msgstr "Zaznacz dowódcę 9"
 
 #: src/keymap.c:349
-#, fuzzy
 msgid "Multiplayer Options / Alliance dialog"
-msgstr "Opcje gry dla wielu graczy"
+msgstr "Dialog opcji gry wieloosobowej  / sojuszy"
 
 #: src/keymap.c:352
 msgid "Snap View to North"
@@ -12946,7 +12720,6 @@ msgid "Select all Wheels"
 msgstr "Zaznacz wszystkie jednostki kołowe"
 
 #: src/keymap.c:425
-#, fuzzy
 msgid "Select all Similar Units"
 msgstr "Zaznacz wszystkie podobne jednostki"
 
@@ -12972,27 +12745,24 @@ msgstr "Przełącz otwieranie menu budowania"
 
 #: src/loop.c:533
 #: src/loop.c:549
-#, fuzzy
 msgid "Could not save game!"
-msgstr "Wczytaj zapisaną grę"
+msgstr "Niemożna zapisać gry!"
 
 #: src/mission.c:2084
 msgid "Load Transport"
 msgstr "Ładuj transport"
 
 #: src/mission.c:2478
-#, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr "CEL OSIĄGNIĘTY"
+msgstr "CEL OSIĄGNIĘTY przez oszukiwanie!"
 
 #: src/mission.c:2478
 msgid "OBJECTIVE ACHIEVED"
 msgstr "CEL OSIĄGNIĘTY"
 
 #: src/mission.c:2484
-#, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "CEL NIE OSIĄGNIĘTY"
+msgstr "CEL NIE OSIĄGNIĘTY--chociaż oszukiwałeś!"
 
 #: src/mission.c:2484
 msgid "OBJECTIVE FAILED"
@@ -13009,15 +12779,14 @@ msgid "Continue Game"
 msgstr "Kontynuuj grę"
 
 #: src/mission.c:2612
-#, fuzzy
 msgid "GAME SAVED :"
-msgstr "Gra zapisana!"
+msgstr "GRA ZAPISANA :"
 
 #: src/move.c:2909
 #: src/move.c:2925
 #, c-format
 msgid "You found %u power in an oil drum."
-msgstr ""
+msgstr "Znalazłeś %u energii w beczce z ropą."
 
 #: src/multigifts.c:169
 #, c-format
@@ -13040,9 +12809,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s Przesyła ci plany technologii"
 
 #: src/multigifts.c:337
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %u Power"
-msgstr "%s Przesyła ci %s"
+msgstr "%s przesyła ci %u energii"
 
 #: src/multigifts.c:357
 #, c-format
@@ -13091,25 +12860,24 @@ msgid "IP"
 msgstr "IP"
 
 #: src/multiint.c:824
-#, fuzzy
 msgid "No games are available"
-msgstr "Nowe technologie są dostępne."
+msgstr "Brak dostępnych gier"
 
 #: src/multiint.c:827
 msgid "Game is full"
-msgstr ""
+msgstr "Brak miejsc"
 
 #: src/multiint.c:831
 msgid "You were kicked!"
-msgstr ""
+msgstr "Zostałeś wyrzucony!"
 
 #: src/multiint.c:834
 msgid "Wrong Game Version!"
-msgstr ""
+msgstr "Niewłaściwa wersja gry!"
 
 #: src/multiint.c:837
 msgid "Wrong data/mod detected by Host."
-msgstr ""
+msgstr "Niewłaściwe dane / mod wykryte przez host."
 
 #: src/multiint.c:841
 msgid "Host couldn't send file?"
@@ -13117,15 +12885,15 @@ msgstr ""
 
 #: src/multiint.c:845
 msgid "Incorrect Password!"
-msgstr ""
+msgstr "Niewłaściwe hasło!"
 
 #: src/multiint.c:848
 msgid "Host has dropped connection!"
-msgstr ""
+msgstr "Host zerwał połączenie!"
 
 #: src/multiint.c:852
 msgid "Connection Error"
-msgstr ""
+msgstr "Błąd połączenia"
 
 #: src/multiint.c:999
 msgid "Searching"
@@ -13140,18 +12908,16 @@ msgid "Refresh Games List"
 msgstr "Odśwież listę gier"
 
 #: src/multiint.c:1083
-#, fuzzy
 msgid "Enter Password:"
-msgstr "Kliknij by obejrzeć mapę"
+msgstr "Wpisz hasło:"
 
 #: src/multiint.c:1104
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/multiint.c:1106
-#, fuzzy
 msgid "Cancel"
-msgstr "Lancer"
+msgstr "Anuluj"
 
 #: src/multiint.c:1245
 #: src/multiint.c:1252
@@ -13159,7 +12925,6 @@ msgid "Select Game Name"
 msgstr "Wybierz grę"
 
 #: src/multiint.c:1245
-#, fuzzy
 msgid "One-Player Skirmish"
 msgstr "Potyczka"
 
@@ -13168,20 +12933,17 @@ msgid "Select Map"
 msgstr "Wybór mapy"
 
 #: src/multiint.c:1263
-#, fuzzy
 msgid "Click to set Password"
-msgstr "Kliknij by obejrzeć mapę"
+msgstr "Kliknij by ustawić hasło"
 
 #: src/multiint.c:1273
 #: src/multiint.c:1274
-#, fuzzy
 msgid "Scavengers"
-msgstr "Scavenger"
+msgstr "Padlinożercy"
 
 #: src/multiint.c:1276
-#, fuzzy
 msgid "No Scavengers"
-msgstr "Scavenger"
+msgstr "Brak Padlinożerców"
 
 #: src/multiint.c:1306
 msgid "Select Player Name"
@@ -13249,9 +13011,8 @@ msgid "Start Hosting Game"
 msgstr "Rozpocznij grę jako Host"
 
 #: src/multiint.c:1456
-#, fuzzy
 msgid "Show Structure Limits"
-msgstr "Ustaw limit budowli"
+msgstr "Pokaż limit budowli"
 
 #: src/multiint.c:1456
 msgid "Set Structure Limits"
@@ -13271,7 +13032,7 @@ msgstr "Kliknij kiedy jesteś gotowy"
 
 #: src/multiint.c:1940
 msgid "READY?"
-msgstr ""
+msgstr "GOTOWY?"
 
 #: src/multiint.c:1977
 msgid "PLAYERS"
@@ -13283,15 +13044,15 @@ msgstr "Chat"
 
 #: src/multiint.c:2330
 msgid "*** password is now required! ***"
-msgstr ""
+msgstr "*** hasło jest teraz wymagane! ***"
 
 #: src/multiint.c:2337
 msgid "*** password is NOT required! ***"
-msgstr ""
+msgstr "*** hasło jest teraz niewymagane! ***"
 
 #: src/multiint.c:2579
 msgid "Sorry! Failed to host the game."
-msgstr ""
+msgstr "Przepraszamy! Nie udało się utworzyć serwera gry."
 
 #: src/multiint.c:2664
 msgid "'Locked Teams' mode enabled"
@@ -13313,7 +13074,7 @@ msgstr "Gracze"
 #: src/multiint.c:3456
 #, c-format
 msgid "Map: %d%% downloaded"
-msgstr ""
+msgstr "Mapa: %d%% pobrane"
 
 #: src/multijoin.c:98
 #: src/multijoin.c:99
@@ -13336,14 +13097,12 @@ msgid "%s is Joining the Game"
 msgstr "%s dołącza do gry"
 
 #: src/multijoin.c:376
-#, fuzzy
 msgid "System message:"
-msgstr "Język"
+msgstr "Wiadomość systemowa:"
 
 #: src/multilimit.c:185
-#, fuzzy
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "Wstecz"
+msgstr "Zastosuj wartości domyślne i powróć do poprzedniego ekranu"
 
 #: src/multimenu.c:609
 msgid "Technology level 1"
@@ -13383,16 +13142,14 @@ msgstr "Zabójstwa"
 
 #: src/multimenu.c:762
 #: src/multimenu.c:767
-#, fuzzy
 msgid "Units"
-msgstr "Jednostka"
+msgstr "Jednostki"
 
 #: src/multimenu.c:772
 msgid "Ping"
 msgstr "Ping"
 
 #: src/multimenu.c:776
-#, fuzzy
 msgid "Structs"
 msgstr "Konstrukcje"
 
@@ -13419,16 +13176,15 @@ msgstr "Przesyła energię graczowi"
 #: src/multiplay.c:279
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr ""
+msgstr "Gracz %s wyrzucony z powodu próby pominięcia sprawdzenia integralności danych!"
 
 #: src/multiplay.c:1082
-#, fuzzy
 msgid "(allies"
-msgstr "Sojusze"
+msgstr "(sojusznicy"
 
 #: src/multiplay.c:1090
 msgid "(private to "
-msgstr ""
+msgstr "(prywatny dla"
 
 #: src/multiplay.c:1103
 msgid "[invalid]"
@@ -13595,7 +13351,7 @@ msgstr "Całkowity czas gry - %s"
 #: src/scores.c:448
 #, c-format
 msgid "You cheated!"
-msgstr ""
+msgstr "Oszukiwałeś!"
 
 #: src/scriptfuncs.c:3237
 msgid "YOU ARE VICTORIOUS!"
@@ -13642,8 +13398,9 @@ msgid "Unable to locate any Commanders!"
 msgstr "Brak dowódców!"
 
 #: src/structure.c:2825
+#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
-msgstr "Przekroczony limit Kwatery Głównej - produkcja wstrzymana"
+msgstr "Limit kontrolny osiągnięty - produkcja wstrzymana"
 
 #: src/structure.c:6068
 #: src/structure.c:6093
@@ -13737,15 +13494,29 @@ msgstr " - Built %s"
 msgid "Version %s%s%s%s"
 msgstr "Wersja %s%s%s%s"
 
+#~ msgid "You found %u power in an oil drum"
+#~ msgstr "Znalazłeś %u energii w beczce z ropą"
+
+#~ msgid "you are unwanted by the host"
+#~ msgstr "jesteś niechciany przez host"
+
+#~ msgid "It is not nice to cheat!"
+#~ msgstr "Nieładnie oszukiwać!"
+
 #~ msgid "Start Multiplayer Audio"
 #~ msgstr "Włącz multiplayer audio"
 
 #~ msgid "Stop Multiplayer Audio"
 #~ msgstr "Zatrzymaj multiplayer audio"
 
-#, fuzzy
-#~ msgid "Hardware"
-#~ msgstr "Beton"
+#~ msgid "Game"
+#~ msgstr "Gra"
+
+#~ msgid "Mayhem"
+#~ msgstr "Chaos"
+
+#~ msgid "Skirmish"
+#~ msgstr "Potyczka"
 
 #, fuzzy
 #~ msgid "VTOL HPV Cannon Bug VTOL"
@@ -13796,14 +13567,9 @@ msgstr "Wersja %s%s%s%s"
 #~ msgid "Cursor Mode"
 #~ msgstr "Moduł energetyczny"
 
-#~ msgid "Game"
-#~ msgstr "Gra"
-
-#~ msgid "Mayhem"
-#~ msgstr "Chaos"
-
-#~ msgid "Skirmish"
-#~ msgstr "Potyczka"
+#, fuzzy
+#~ msgid "Hardware"
+#~ msgstr "Beton"
 
 #~ msgid "Viper Flamer Wheels"
 #~ msgstr "Żmija z miotaczem ognia na kołach"
@@ -13852,9 +13618,6 @@ msgstr "Wersja %s%s%s%s"
 
 #~ msgid "Python Commander Tracks"
 #~ msgstr "Pyton dowodzący na gąsienicach"
-
-#~ msgid "Mini-Pod Rocket Guard Tower"
-#~ msgstr "Wieża strażnicza z minirakietami"
 
 #~ msgid "Mini-Pod"
 #~ msgstr "Minirakiety"
