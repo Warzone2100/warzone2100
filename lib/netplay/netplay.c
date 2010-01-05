@@ -1173,7 +1173,7 @@ static void recvVersionCheck()
 
 		sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victim);
 		sendTextMessage(msg, true);
-		sasprintf((char**)&msg, "you have the wrong version; update it! (You have [%s], we expect [%s].)", playersVersion, VersionString);
+		sasprintf((char**)&msg, "you have version [%s], we expect [%s].", playersVersion, VersionString);
 
 		if (NetPlay.isHost)
 		{
