@@ -1,20 +1,27 @@
-0000-00-00: Version 2.3 beta 5
+2010-01-06: Version 2.3 beta 6
  * General:
    * Change: "--cheat" command line option no longer necessary for cheat codes. (r8976)
    * Change: New codes "cheat on" and "debug" for turning on debug mode, and "cheat off" for turning it off, in case Shift+Backspace isn't working. (r8976)
    * Change: Future versions of 2.3 are now compatible with 3.0 pre-alphas. (r8972)
+   * Change: Do soft fading of fog of war. (r9008)
    * Fix: Crash when recalling reinforcements in campaign. (r8966)
+   * Fix: "make dist" now includes autorevision.conf in the tarball, so the version is displayed correctly when compiling from source. (r8957)
  * UI:
    * Change: Game lobby is now bigger. (r8936)
    * Change: Password is asked in a separate dialog, instead of below lobby. (r8936)
    * Change: Do not display the two Warzone logo backdrops. (r8934)
    * Change: Add a shadow to the sideways text to make it more readable. (r8931)
+   * Fix: Crash when trying to join a game via IP. (r8999)
    * Fix: Players list didn't appear when exiting from limits screen. (r8962)
    * Fix: Change all missile upgrades to use Scourge icon, since the Avenger icons were somewhat confusing. (r8959)
  * Multiplayer:
    * Fix: Players will not automatically quit and disconnect after losing a multiplayer game. (r8969)
    * Fix: Give an error message when joining a multiplayer game is unsuccessful, instead of crashing or causing others to crash. (r8937)
    * Fix: Sync improvements. (r8975)
+   * Change: Readd outgoing traffic shaping. (r9006)
+   * Change: Remove excessive log messages. (r9005)
+ * Translations:
+   * Updated: Estonian (r9001), Polish (r9002), German (r9003)
 
 2010-01-02: Version 2.3 beta 5
  * General:
