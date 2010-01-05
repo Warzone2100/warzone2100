@@ -2026,6 +2026,11 @@ void NETremRedirects(void)
 	}
 }
 
+void NETdiscoverUPnPDevices(void)
+{
+	upnpdiscover = SDL_CreateThread(&upnp_init, NULL);
+}
+
 // ////////////////////////////////////////////////////////////////////////
 // setup stuff
 int NETinit(BOOL bFirstCall)
@@ -2059,8 +2064,6 @@ int NETinit(BOOL bFirstCall)
 		// Determine major Windows version
 		major_windows_version = LOBYTE(LOWORD(GetVersion()));
 #endif
-
-		upnpdiscover = SDL_CreateThread(&upnp_init, NULL);
 
 		for(i = 0; i < MAX_PLAYERS; i++)
 		{

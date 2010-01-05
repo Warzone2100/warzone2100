@@ -536,6 +536,7 @@ BOOL runMultiPlayerMenu(void)
 	switch(id)
 	{
 	case FRONTEND_HOST:
+		NETdiscoverUPnPDevices();
 		ingame.bHostSetup = true;
 		bMultiPlayer = true;
 		multiMsgOff = 0;

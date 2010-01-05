@@ -278,6 +278,7 @@ extern int NETshutdown(void);					// leave the game in play.
 
 extern void NETaddRedirects(void);
 extern void NETremRedirects(void);
+extern void NETdiscoverUPnPDevices(void);
 
 extern UDWORD	NETgetBytesSent(void);				// return bytes sent/recv.  call regularly for good results
 extern UDWORD	NETgetPacketsSent(void);			// return packets sent/recv.  call regularly for good results
