@@ -134,50 +134,26 @@ BOOL sendCheck(void)
 
 	// send Checks. note each send has it's own send criteria, so might not send anything.
 	// Priority is droids -> structures -> power -> score -> ping
-/*
- *	!!!NOTE!!!	For this BETA release, we want to see when(if?) we hit the limits!
- *  The LOG_INFO will be reverted back to LOG_SYNC when BETA is done.
-*/
 
 	if(okToSend())
 	{
 		sendDroidCheck();
 	}
-	else
-	{
-		debug(LOG_INFO, "Couldn't sendDroidCheck()  Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
-	}
 	if(okToSend())
 	{
 		sendStructureCheck();
-	}
-	else
-	{
-		debug(LOG_INFO, "Couldn't sendStructureCheck() Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
 	}
 	if(okToSend())
 	{
 		sendPowerCheck();
 	}
-	else
-	{
-		debug(LOG_INFO, "Couldn't sendPowerCheck() Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
-	}
 	if(okToSend())
 	{
 		sendScoreCheck();
 	}
-	else
-	{
-		debug(LOG_INFO, "Couldn't sendScoreCheck() Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
-	}
 	if(okToSend())
 	{
 		sendPing();
-	}
-	else
-	{
-		debug(LOG_INFO, "Couldn't sendPing() Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
 	}
 	// FIXME: reset flag--For now, we always do this since we have no way of knowing which routine(s) we had to set this flag
 	isMPDirtyBit = false;	
