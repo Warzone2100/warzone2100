@@ -153,7 +153,7 @@ extern void NETGameLocked(bool flag);					// in netplay.c
 
 BOOL						bHosted			= false;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
-static BOOL					bColourChooserUp= false;
+static int					colourChooserUp = -1;
 static int					teamChooserUp = -1;
 static BOOL				SettingsUp		= false;
 static UBYTE				InitialProto	= 0;
@@ -1499,11 +1499,14 @@ static void addColourChooser(UDWORD player)
 	// delete that players box,
 	widgDelete(psWScreen,MULTIOP_PLAYER_START+player);
 
-	// detele team chooser botton
+	// delete team chooser button
 	widgDelete(psWScreen,MULTIOP_TEAMS_START+player);
 
-	// detele 'ready' button
+	// delete 'ready' button
 	widgDelete(psWScreen,MULTIOP_READY_FORM_ID+player);
+
+	// remove colour chooser, if it's already up
+	closeColourChooser();
 
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_COLCHOOSER_FORM,"",
@@ -1538,7 +1541,7 @@ static void addColourChooser(UDWORD player)
 					"Player number", IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
 	}
 
-	if (NetPlay.isHost)
+	if (!NetPlay.isHost)
 	{
 		for (i=0;i<game.maxPlayers;i++)
 		{
@@ -1549,12 +1552,12 @@ static void addColourChooser(UDWORD player)
 		}
 	}
 
-	bColourChooserUp = true;
+	colourChooserUp = player;
 }
 
 static void closeColourChooser(void)
 {
-	bColourChooserUp = false;
+	colourChooserUp = -1;
 
 	widgDelete(psWScreen,MULTIOP_COLCHOOSER_FORM);
 }
@@ -1688,11 +1691,19 @@ static BOOL changePosition(UBYTE player, UBYTE position)
 			NetPlay.players[player].position = position;
 			NETBroadcastPlayerInfo(player);
 			NETBroadcastPlayerInfo(i);
+			netPlayersUpdated = true;
 			return true;
 		}
 	}
 	debug(LOG_ERROR, "Failed to swap positions for player %d, position %d", (int)player, (int)position);
-	netPlayersUpdated = true;
+	if (player < game.maxPlayers && position < game.maxPlayers)
+	{
+		// Positions were corrupted. Attempt to fix.
+		NetPlay.players[player].position = position;
+		NETBroadcastPlayerInfo(player);
+		netPlayersUpdated = true;
+		return true;
+	}
 	return false;
 }
 
@@ -1717,6 +1728,15 @@ static BOOL changeColour(UBYTE player, UBYTE col)
 		}
 	}
 	debug(LOG_ERROR, "Failed to swap colours for player %d, colour %d", (int)player, (int)col);
+	if (player < game.maxPlayers && col < MAX_PLAYERS)
+	{
+		// Colours were corrupted. Attempt to fix.
+		setPlayerColour(player, col);
+		NetPlay.players[player].colour = col;
+		NETBroadcastPlayerInfo(player);
+		netPlayersUpdated = true;
+		return true;
+	}
 	return false;
 }
 
@@ -1819,6 +1839,9 @@ static void addTeamChooser(UDWORD player)
 	SDWORD inSlot[MAX_PLAYERS] = {0};
 
 	debug(LOG_NET, "Opened team chooser for %d, current team: %d", player, NetPlay.players[player].team);
+
+	// delete colour chooser button
+	closeColourChooser();
 
 	// delete team chooser botton
 	widgDelete(psWScreen,MULTIOP_TEAMS_START+player);
@@ -2000,7 +2023,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.pDisplay = displayTeamChooser;
 				sButInit.UserData = i;
 
-				if (teamChooserUp == i && !bColourChooserUp)
+				if (teamChooserUp == i && colourChooserUp < 0)
 				{
 					addTeamChooser(i);
 				}
@@ -2040,7 +2063,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.pDisplay = displayPlayer;
 				sButInit.UserData = i;
 
-				if (bColourChooserUp && teamChooserUp < 0 && i == selectedPlayer)
+				if (teamChooserUp < 0 && i == colourChooserUp)
 				{
 					addColourChooser(i);
 				}
@@ -2615,7 +2638,7 @@ static void processMultiopWidgets(UDWORD id)
 		int clickedMenuID = id - MULTIOP_TEAMS_START;
 
 		//make sure team chooser is not up before adding new one for another player
-		if (teamChooserUp < 0 && !bColourChooserUp && canChooseTeamFor(clickedMenuID))
+		if (teamChooserUp < 0 && colourChooserUp < 0 && canChooseTeamFor(clickedMenuID))
 		{
 			addTeamChooser(clickedMenuID);
 		}
@@ -2724,7 +2747,7 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		resetReadyStatus(false);		// will reset only locally if not a host
 
-		SendColourRequest(selectedPlayer, id - MULTIOP_COLCHOOSER);
+		SendColourRequest(colourChooserUp, id - MULTIOP_COLCHOOSER);
 		closeColourChooser();
 		addPlayerBox(  !ingame.bHostSetup || bHosted);
 	}
@@ -2734,7 +2757,7 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		resetReadyStatus(false);		// will reset only locally if not a host
 
-		SendPositionRequest(selectedPlayer, id - MULTIOP_PLAYCHOOSER);
+		SendPositionRequest(colourChooserUp, id - MULTIOP_PLAYCHOOSER);
 		closeColourChooser();
 		addPlayerBox(  !ingame.bHostSetup || bHosted);
 	}
