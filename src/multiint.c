@@ -606,7 +606,7 @@ static BOOL OptionsInet(void)			//internet options
 	sContext.yOffset	= 0;
 	sContext.mx			= 0;
 	sContext.my			= 0;
-	editBoxClicked((W_EDITBOX*)widgGetFromID(psWScreen,CON_PASSWORD), &sContext);
+	editBoxClicked((W_EDITBOX*)widgGetFromID(psWScreen,CON_IP), &sContext);
 
 	SettingsUp = true;
 	return true;
