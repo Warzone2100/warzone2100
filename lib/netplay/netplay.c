@@ -2013,7 +2013,6 @@ void NETaddRedirects(void)
 	}
 	if (upnp) {
 		upnp_add_redirect(2100);
-		upnp_add_redirect(9990);
 	}
 }
 
@@ -2023,7 +2022,6 @@ void NETremRedirects(void)
 	if (upnp)
 	{
 		upnp_rem_redirect(2100);
-		upnp_rem_redirect(9990);
 	}
 }
 
