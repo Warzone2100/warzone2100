@@ -3397,7 +3397,7 @@ BOOL intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 	if (psTempl->numWeaps != 0 &&
 	    (psTempl->asParts[COMP_SENSOR] ||
 	     psTempl->asParts[COMP_ECM] ||
-	     psTempl->asParts[COMP_REPAIRUNIT] ||
+	     (psTempl->asParts[COMP_REPAIRUNIT] && psTempl->asParts[COMP_REPAIRUNIT] != aDefaultRepair[selectedPlayer]) ||
 	     psTempl->asParts[COMP_CONSTRUCT]))
 	{
 		return false;
