@@ -267,7 +267,7 @@ static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
  ************************************************************************************
 **/
 char VersionString[VersionStringSize] = "trunk, netcode 2.31";
-static int NETCODE_VERSION_MAJOR = 2;
+static int NETCODE_VERSION_MAJOR = 3;
 static int NETCODE_VERSION_MINOR = 31;
 static int NUMBER_OF_MODS = 0;			// unused for now
 static int NETCODE_HASH = 0;			// unused for now
