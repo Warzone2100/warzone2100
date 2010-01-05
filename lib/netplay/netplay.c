@@ -1167,7 +1167,7 @@ static void recvVersionCheck()
 		NETint32_t(&Hash_Data);		// NETCODE_HASH
 	NETend();
 
-	if (NETisCorrectVersion(MajorVersion, MinorVersion))
+	if (!NETisCorrectVersion(MajorVersion, MinorVersion))
 	{
 		debug(LOG_NET, "Received wrong version string [%s, %d.%d] from player %u. Expected [%s, %d.%d]", playersVersion, MajorVersion, MinorVersion, victim, VersionString, NETCODE_VERSION_MAJOR, NETCODE_VERSION_MINOR);
 
