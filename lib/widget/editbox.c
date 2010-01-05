@@ -603,7 +603,7 @@ void editBoxClicked(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 {
 	UDWORD		len;
 
-	if(psWidget->state & WEDBS_DISABLE)	// disabled button.
+	if(!psWidget || (psWidget->state & WEDBS_DISABLE))	// disabled button.
 	{
 		return;
 	}
