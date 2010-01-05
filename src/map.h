@@ -76,11 +76,12 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 	return tilenumber & ~TILE_NUMMASK;
 }
 
-#define BITS_NOTBLOCKING 0x01 // units can drive on this even if there is a structure or feature on it
-#define BITS_FPATHBLOCK	0x10		// bit set temporarily by find path to mark a blocking tile
-#define BITS_ON_FIRE	0x20		// cache whether tile is burning
-#define BITS_GATEWAY	0x40		// bit set to show a gateway on the tile
-#define BITS_TALLSTRUCTURE 0x80		// bit set to show a tall structure which camera needs to avoid.
+#define BITS_NOTBLOCKING	0x01	///< Units can drive on this even if there is a structure or feature on it
+#define BITS_EXPLORED		0x02	///< Tile has been explored
+#define BITS_FPATHBLOCK		0x10	///< Bit set temporarily by find path to mark a blocking tile
+#define BITS_ON_FIRE		0x20	///< Cache whether tile is burning
+#define BITS_GATEWAY		0x40	///< Bit set to show a gateway on the tile
+#define BITS_TALLSTRUCTURE	0x80	///< Bit set to show a tall structure which camera needs to avoid.
 
 /* Information stored with each tile */
 typedef struct _maptile
@@ -90,7 +91,6 @@ typedef struct _maptile
 	UBYTE			height;			// The height at the top left of the tile
 	UBYTE			illumination;	// How bright is this tile?
 	UWORD			texture;		// Which graphics texture is on this tile
-	bool			bMaxed;
 	UBYTE			watchers[MAX_PLAYERS];		// player sees through fog of war here with this many objects
 	float			level;
 	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
@@ -139,6 +139,12 @@ static inline bool TileIsBurning(const MAPTILE *tile)
 	return tile->tileInfoBits & BITS_ON_FIRE;
 }
 
+/** Check if tile has been explored. */
+static inline bool tileIsExplored(const MAPTILE *psTile)
+{
+	return psTile->tileInfoBits & BITS_EXPLORED;
+}
+
 /** Check if tile is highlighted by the user. Function is thread-safe. */
 static inline bool TileIsHighlighted(const MAPTILE* tile)
 {
@@ -163,6 +169,9 @@ static inline bool TileHasSmallStructure(const MAPTILE* tile)
 	return TileHasStructure(tile)
 	    && ((STRUCTURE*)tile->psObject)->pStructureType->height == 1;
 }
+
+#define SET_TILE_EXPLORED(x) ((x)->tileInfoBits |= BITS_EXPLORED)
+#define CLEAR_TILE_EXPLORED(x) ((x)->tileInfoBits &= ~BITS_EXPLORED)
 
 #define SET_TILE_NOTBLOCKING(x)	((x)->tileInfoBits |= BITS_NOTBLOCKING)
 #define CLEAR_TILE_NOTBLOCKING(x)	((x)->tileInfoBits &= ~BITS_NOTBLOCKING)

@@ -803,23 +803,7 @@ static void drawTiles(iView *player)
 				float distToEdge,distA,distB,distC,distD;
 
 				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
-
-				if (getRevealStatus())
-				{
-					TileIllum = pal_SetBrightness(psTile->level < 0 ? 1 : psTile->level);
-				}
-				else
-				{
-					TileIllum = pal_SetBrightness(psTile->illumination);
-				}
-
-				// Real fog of war - darken where we cannot see enemy units moving around
-				if (!hasSensorOnTile(psTile, selectedPlayer))
-				{
-					TileIllum.byte.r = TileIllum.byte.r / 2;
-					TileIllum.byte.g = TileIllum.byte.g / 2;
-					TileIllum.byte.b = TileIllum.byte.b / 2;
-				}
+				TileIllum = pal_SetBrightness(psTile->level);
 
 				if ( playerXTile+j <= 1 ||
 					 playerZTile+i <= 1 ||
@@ -896,11 +880,7 @@ static void drawTiles(iView *player)
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	processEffects();
 	atmosUpdateSystem();
-
-	if(getRevealStatus())
-	{
-		avUpdateTiles();
-	}
+	avUpdateTiles();
 
 	// Draw all the normal tiles
 	pie_SetAlphaTest(false);
