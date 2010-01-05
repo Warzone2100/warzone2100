@@ -276,7 +276,7 @@ BOOL MultiPlayerJoin(UDWORD playerIndex)
 		// if skirmish and game full, then kick...
 		if (NetPlay.playercount > game.maxPlayers)
 		{
-			kickPlayer(playerIndex, "Sorry, game is full!", ERROR_FULL);
+			kickPlayer(playerIndex, "the game is already full.", ERROR_FULL);
 		}
 	}
 	return true;
@@ -327,12 +327,12 @@ bool recvDataCheck(void)
 		{
 			char msg[256] = {'\0'};
 
-			sprintf(msg, _("Kicking player, %s, because data doesn't match!"), getPlayerName(i));
+			sprintf(msg, _("Kicking player %s, game data doesn't match!"), getPlayerName(i));
 			sendTextMessage(msg, true);
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
-			kickPlayer(player, _("Data doesn't match!"), ERROR_WRONGDATA);
-			debug(LOG_WARNING, "Kicking Player %s,(%u), they are using a mod or have modified their data.", getPlayerName(i), player);
+			kickPlayer(player, "your data doesn't match the host's!", ERROR_WRONGDATA);
+			debug(LOG_WARNING, "Kicking Player %s (%u), they are using a mod or have modified their data.", getPlayerName(i), player);
 		}
 		else
 		{

@@ -2702,7 +2702,7 @@ static void processMultiopWidgets(UDWORD id)
 				}
 				sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(j));
 				sendTextMessage(msg, true);
-				kickPlayer(victim, _("you are unwanted by the host"), ERROR_KICKED );
+				kickPlayer(victim, "you are unwanted by the host.", ERROR_KICKED);
 				resetReadyStatus(true);		//reset and send notification to all clients
 			}
 		}
@@ -2842,14 +2842,14 @@ void frontendMultiMessages(void)
 				{
 					case STUCK_IN_FILE_LOOP:
 						debug(LOG_WARNING, "Received file cancel request from player %u, They are stuck in a loop?", victim);
-						kickPlayer(victim, "couldn't upload file for some reason. ", ERROR_UNKNOWNFILEISSUE);
+						kickPlayer(victim, "the host couldn't send a file for some reason.", ERROR_UNKNOWNFILEISSUE);
 						NetPlay.players[victim].wzFile.isCancelled = true;
 						NetPlay.players[victim].wzFile.isSending = false;
 						break;
 
 					case ALREADY_HAVE_FILE:
 					default:
-						debug(LOG_WARNING, "Received file cancel request from player %u, They already have the file ?", victim);
+						debug(LOG_WARNING, "Received file cancel request from player %u, they already have the file.", victim);
 						NetPlay.players[victim].wzFile.isCancelled = true;
 						NetPlay.players[victim].wzFile.isSending = false;
 						break;

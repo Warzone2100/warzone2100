@@ -1172,7 +1172,7 @@ static void recvVersionCheck()
 	{
 		debug(LOG_NET, "Received wrong version string [%s, %d.%d] from player %u. Expected [%s, %d.%d]", playersVersion, MajorVersion, MinorVersion, victim, VersionString, NETCODE_VERSION_MAJOR, NETCODE_VERSION_MINOR);
 
-		sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victim);
+		sasprintf((char**)&msg, _("Player %u has the wrong game version. Auto kicking."), victim);
 		sendTextMessage(msg, true);
 		sasprintf((char**)&msg, "you have version [%s], we expect [%s].", playersVersion, VersionString);
 
@@ -1195,9 +1195,9 @@ static void recvVersionCheck()
 	if (NetPlay.GamePassworded && playerVersionFlag[victim] && !playerPasswordFlag[victim])
 	{
 		// really should ban them. :P
-		debug(LOG_ERROR, "Received correct version string [%s] from player %u", playersVersion, victim);
-		debug(LOG_ERROR, "Did NOT receive passowrd from them --Autokicking ip %s", "123" );
-		kickPlayer(victim, "you  have attempted to thwart the security measuers.  Entry denied!", ERROR_CHEAT);
+		debug(LOG_NET, "Received correct version string [%s] from player %u", playersVersion, victim);
+		debug(LOG_NET, "Did NOT receive password from them, auto kicking.");
+		kickPlayer(victim, "you have attempted to thwart the security measures. Entry denied!", ERROR_CHEAT);
 	}
 }
 
@@ -1212,7 +1212,7 @@ static void VersionCheckTimeOut(uint32_t victim)
 
 	if(NetPlay.isHost)
 	{
-		kickPlayer( victim, "you have the wrong version; update it! (Version string never received.)", ERROR_WRONGVERSION );
+		kickPlayer(victim, "you have the wrong version (version string never received).", ERROR_WRONGVERSION);
 
 		// reset flags /time after we kick them
 		NetPlay.players[victim].versionCheckTime = -1;
@@ -1297,12 +1297,12 @@ void recvPasswordCheck(void)
 	{
 		debug(LOG_NET, "Received *wrong* password [%s] from player %u. Expected [%s]", passwordreceived, victim, NetPlay.gamePassword);
 
-		sasprintf((char**)&msg, _("Player %u has the wrong password.  Auto kicking."), victim );
+		sasprintf((char**)&msg, _("Player %u has the wrong password. Auto kicking."), victim );
 		sendTextMessage(msg, true);
 
 		if (NetPlay.isHost)
 		{
-			kickPlayer(victim, "you have the wrong password! Entry denied!", ERROR_WRONGPASSWORD);
+			kickPlayer(victim, "you entered the wrong password. Entry denied!", ERROR_WRONGPASSWORD);
 			playerPasswordFlag[victim] = false;
 		}
 	}
