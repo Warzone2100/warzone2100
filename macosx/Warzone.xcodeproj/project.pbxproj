@@ -3654,7 +3654,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ..\n./macosx/build/${CONFIGURATION}/Autorevision +cstr . src/autorevision.h\nsed -n 's:#define:&:p' src/autorevision.h | sed 's:\"::g' | sed 's:tags/::' | sed 's:beta:Beta :' | sed 's:rc:RC :' >macosx/build/autorevision.h";
+			shellScript = "cd ..\n./macosx/build/${CONFIGURATION}/Autorevision +cstr . src/autorevision.h\nsed -n 's:#define:&:p' src/autorevision.h | sed 's:\"::g' | sed 's:tags/::' | sed 's:_beta: Beta :' | sed 's:_rc: RC :' >macosx/build/autorevision.h";
 		};
 		43F3011910D3572400707B6E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
