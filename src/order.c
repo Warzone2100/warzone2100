@@ -1368,6 +1368,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 			}
 		}
 	}
+	turnOffMultiMsg(false); 
 }
 
 
@@ -2790,7 +2791,7 @@ void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 		}
 	}
 
-	if (!add)
+	//if (!add)
 	{
 		turnOffMultiMsg(false);	// msgs back on...
 	}
@@ -3154,7 +3155,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 
 	orderPlayOrderObjAudio( player, psObj );
 
-	if (!add)
+	//if (!add)
 	{
 		turnOffMultiMsg(false); //msgs back on.
 	}
