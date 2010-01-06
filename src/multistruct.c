@@ -178,14 +178,14 @@ BOOL recvBuildStarted()
 // INFORM others that a building has been completed.
 BOOL SendBuildFinished(STRUCTURE *psStruct)
 {
+	uint32_t power = getPower( (uint32_t) psStruct->player);
+	uint8_t player = psStruct->player;
+	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
+
 	if (multiMsgOff) // don't send if multiMsgs are off
 	{
 		return true;
 	}
-
-	uint32_t power = getPower( (uint32_t) psStruct->player);
-	uint8_t player = psStruct->player;
-	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
 
 	NETbeginEncode(NET_BUILDFINISHED, NET_ALL_PLAYERS);
 		NETuint32_t(&power);			// send how much power we got.
