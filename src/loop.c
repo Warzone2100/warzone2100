@@ -147,7 +147,7 @@ GAMECODE gameLoop(void)
 	INT_RETVAL	intRetVal;
 	int	        clearMode = 0;
 
-	if (!NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
+	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
 	{
 		intAddInGamePopup();
 	}
