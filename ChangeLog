@@ -3,7 +3,7 @@
    * Change: "--cheat" command line option no longer necessary for cheat codes. (r8976)
    * Change: New codes "cheat on" and "debug" for turning on debug mode, and "cheat off" for turning it off, in case Shift+Backspace isn't working. (r8976)
    * Change: Do soft fading of fog of war. (r9008)
-   * Fix: Crash when recalling reinforcements in campaign. (r8966)
+   * Fix: Crash when calling in reinforcements in campaign. (r8966)
    * Fix: "make dist" now includes autorevision.conf in the tarball, so the version is displayed correctly when compiling from source. (r8957)
  * UI:
    * Change: Game lobby is now bigger. (r8936)
@@ -13,6 +13,7 @@
    * Fix: Crash when trying to join a game via IP. (r8999)
    * Fix: Players list didn't appear when exiting from limits screen. (r8962)
    * Fix: Change all missile upgrades to use Scourge icon, since the Avenger icons were somewhat confusing. (r8959)
+   * Fix: Always save changed droid templates. (r9014)
  * Multiplayer:
    * Fix: Host can change position and color of other players, really this time. (r8991)
    * Fix: Players will not automatically quit and disconnect after losing a multiplayer game. (r8969)
@@ -20,6 +21,8 @@
    * Fix: Sync improvements. (r8975)
    * Change: Readd outgoing traffic shaping. (r9006)
    * Change: Remove excessive log messages. (r9005)
+   * Change: Don't forward port 9990, we only need 2100. (r9012)
+   * Change: Do UPnP device detection only when going to the "Host Game" menu. (r9013)
  * Translations:
    * Updated: Estonian (r9001), Polish (r9002), German (r9003)
 
