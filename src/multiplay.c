@@ -131,11 +131,12 @@ BOOL turnOffMultiMsg(BOOL bDoit)
 	{
 		if (multiMsgOff)
 		{
-			multiMsgOff--;
+			//multiMsgOff--;
+			multiMsgOff = 0;
 		}
 		else
 		{
-			ASSERT_OR_RETURN(false, false, "MultiMessages turned on when they were never off.");
+			//ASSERT_OR_RETURN(false, false, "MultiMessages turned on when they were never off.");
 		}
 	}
 	return true;
