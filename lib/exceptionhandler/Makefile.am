@@ -1,5 +1,5 @@
 AM_CPPFLAGS = $(SDL_CFLAGS) $(WZ_CPPFLAGS)
-AM_CFLAGS = $(WZ_CFLAGS)
+AM_CFLAGS = $(WZ_CFLAGS) -Wno-declaration-after-statement
 noinst_LIBRARIES = libexceptionhandler.a
 noinst_HEADERS = \
 	dumpinfo.h \
