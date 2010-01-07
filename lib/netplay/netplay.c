@@ -266,9 +266,9 @@ static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "2.3 test1";
-static int NETCODE_VERSION_MAJOR = 2;	// unused for now
-static int NETCODE_VERSION_MINOR = 31;	// unused for now
+char VersionString[VersionStringSize] = "2.3 test1"; // used for display in the lobby, not the actual version check
+static int NETCODE_VERSION_MAJOR = 2;                // major netcode version, used for compatibility check
+static int NETCODE_VERSION_MINOR = 32;               // minor netcode version, used for compatibility check
 static int NUMBER_OF_MODS = 0;			// unused for now
 static int NETCODE_HASH = 0;			// unused for now
 
