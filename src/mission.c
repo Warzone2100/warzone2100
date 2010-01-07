@@ -1905,7 +1905,10 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			}
 
 			// Inform all other players
-			sendDroidDisEmbark(psDroid, psTransporter);
+			if (bMultiPlayer)
+			{
+				sendDroidDisEmbark(psDroid, psTransporter);
+			}
 		}
 
 		/* trigger script callback detailing group about to disembark */
@@ -1937,7 +1940,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 
 			// Set the launch time so the transporter doesn't just disappear for CAMSTART/CAMCHANGE
 			transporterSetLaunchTime(gameTime);
-		}
+        	}
 	}
 }
 

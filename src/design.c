@@ -4081,7 +4081,11 @@ void intProcessDesign(UDWORD id)
 			/* remove template if found */
 			if ( psTempl )
 			{
-				SendDestroyTemplate(psTempl);
+
+				if (bMultiPlayer)		//ajl. inform others of template destruction.
+				{
+					SendDestroyTemplate(psTempl);
+				}
 
 				//update player template list.
 				{
@@ -4654,7 +4658,10 @@ static BOOL saveTemplate(void)
 		ASSERT_OR_RETURN( false, psTempl != NULL, "Template is NULL in saveTemplate()!");
 		psTempl->multiPlayerID = (objID<<3)|selectedPlayer;
 		objID++;
-		sendTemplate(psTempl);
+		if (bMultiPlayer)
+		{
+			sendTemplate(psTempl);
+		}
 	}
 
 	return stored;

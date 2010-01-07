@@ -74,7 +74,6 @@ extern BOOL					bMultiPlayer;				// true when more than 1 player.
 extern UDWORD				selectedPlayer;
 extern BOOL					openchannels[MAX_PLAYERS];
 extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
-extern int					multiMsgOff;				// see turnOffMultiMsg() in multiplay.c
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines

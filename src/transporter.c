@@ -1421,7 +1421,10 @@ void transporterRemoveDroid(UDWORD id)
 			addDroid(psDroid, apsDroidLists);
 
 			//inform all other players about that
-			sendDroidDisEmbark(psDroid,psCurrTransporter);
+			if (bMultiPlayer)
+			{
+				sendDroidDisEmbark(psDroid,psCurrTransporter);
+			}
 		}
 
 		// We can update the orders now, since everyone has been
@@ -1516,8 +1519,11 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		// adding to transporter unit's group list
 		grpJoin(psTransporter->psGroup, psDroidToAdd);
 		
-		//inform all other players to update their local lists
-		sendDroidEmbark(psDroidToAdd,psTransporter);
+		if (bMultiPlayer)
+		{
+			//inform all other players to update their local lists
+			sendDroidEmbark(psDroidToAdd,psTransporter);
+		}
 	}
 	else
 	{
