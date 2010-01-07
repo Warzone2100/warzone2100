@@ -1468,11 +1468,11 @@ BOOL recvTemplate()
 
 BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 {
+	uint8_t player = selectedPlayer;
 	if (multiMsgOff) // don't send if multiMsgs are off
 	{
 		return true;
 	}
-	uint8_t player = selectedPlayer;
 
 	NETbeginEncode(NET_TEMPLATEDEST, NET_ALL_PLAYERS);
 		NETuint8_t(&player);
