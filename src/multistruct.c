@@ -177,11 +177,6 @@ BOOL SendBuildFinished(STRUCTURE *psStruct)
 	uint8_t player = psStruct->player;
 	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
 
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
-		return true;
-	}
-
 	NETbeginEncode(NET_BUILDFINISHED, NET_ALL_PLAYERS);
 		NETuint32_t(&power);			// send how much power we got.
 		NETuint32_t(&psStruct->id);		// ID of building
