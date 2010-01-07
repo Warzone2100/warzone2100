@@ -64,10 +64,8 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWOR
 // happy vtol = vtol ready to go back to attack.
 BOOL sendHappyVtol(const DROID* psDroid)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
+	if (!bMultiPlayer)
 		return true;
-	}
 
 	if (!myResponsibility(psDroid->player))
 	{
@@ -125,10 +123,8 @@ BOOL recvHappyVtol()
 // Send
 BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
+	if (!bMultiPlayer)
 		return true;
-	}
 
 	NETbeginEncode(NET_SECONDARY, NET_ALL_PLAYERS);
 	{
@@ -204,10 +200,8 @@ BOOL recvDroidSecondary()
 
 BOOL sendDroidSecondaryAll(const DROID* psDroid)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
+	if (!bMultiPlayer)
 		return true;
-	}
 
 	NETbeginEncode(NET_SECONDARY_ALL, NET_ALL_PLAYERS);
 	{
@@ -257,10 +251,8 @@ BOOL recvDroidSecondaryAll()
  */
 BOOL sendDroidEmbark(const DROID* psDroid, const DROID* psTransporter)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
+	if (!bMultiPlayer)
 		return true;
-	}
 
 	NETbeginEncode(NET_DROIDEMBARK, NET_ALL_PLAYERS);
 	{
@@ -346,10 +338,8 @@ BOOL recvDroidEmbark()
  */
 BOOL sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
+	if (!bMultiPlayer)
 		return true;
-	}
 
 	NETbeginEncode(NET_DROIDDISEMBARK, NET_ALL_PLAYERS);
 	{
@@ -450,10 +440,8 @@ BOOL recvDroidDisEmbark()
 // posibly Send an updated droid movement order.
 BOOL SendDroidMove(const DROID* psDroid, uint32_t x, uint32_t y, BOOL formation)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
+	if (!bMultiPlayer)
 		return true;
-	}
 
 	ASSERT(x > 0 && y > 0, "SendDroidMove: Invalid move order");
 
@@ -536,10 +524,8 @@ BOOL recvDroidMove()
 // Send a new Droid to the other players
 BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
+	if (!bMultiPlayer)
 		return true;
-	}
 
 	ASSERT(x != 0 && y != 0, "SendDroid: Invalid droid coordinates");
 	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
@@ -664,10 +650,8 @@ typedef enum {
  */
 BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
+	if (!bMultiPlayer)
 		return true;
-	}
 
 	NETbeginEncode(NET_GROUPORDER, NET_ALL_PLAYERS);
 	{
@@ -740,10 +724,8 @@ BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t
 		return false;
 	}
 
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
+	if (!bMultiPlayer)
 		return true;
-	}
 
 	NETbeginEncode(NET_GROUPORDER, NET_ALL_PLAYERS);
 	{
@@ -940,10 +922,8 @@ BOOL recvGroupOrder()
 // Droid update information
 BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
+	if (!bMultiPlayer)
 		return true;
-	}
 
 	if (!myResponsibility(psDroid->player))
 	{
@@ -1120,12 +1100,11 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 // Inform other players that a droid has been destroyed
 BOOL SendDestroyDroid(const DROID* psDroid)
 {
-	//if (multiMsgOff) // don't send if multiMsgs are off
-	if (!bMultiPlayer) // HACK: send droid deaths even if we've turned off multi messages.
+	if (!bMultiPlayer)
 	{
 		return true;
 	}
-	
+
 	NETbeginEncode(NET_DROIDDEST, NET_ALL_PLAYERS);
 	{
 		uint32_t id = psDroid->id;

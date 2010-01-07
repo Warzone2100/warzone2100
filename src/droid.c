@@ -383,7 +383,8 @@ void	removeDroidBase(DROID *psDel)
 	}
 
 	//ajl, inform others of destruction.
-	if (!(psDel->player != selectedPlayer && psDel->order == DORDER_RECYCLE))
+	if (bMultiPlayer
+	 && !(psDel->player != selectedPlayer && psDel->order == DORDER_RECYCLE))
 	{
 		ASSERT_OR_RETURN( , droidOnMap(psDel), "Asking other players to destroy droid driving off the map");
 		SendDestroyDroid(psDel);
@@ -1096,9 +1097,12 @@ BOOL droidStartBuild(DROID *psDroid)
 			return false;
 		}
 
-		if(myResponsibility(psDroid->player) )
+		if (bMultiPlayer)
 		{
-			sendBuildStarted(psStruct, psDroid);
+			if(myResponsibility(psDroid->player) )
+			{
+				sendBuildStarted(psStruct, psDroid);
+			}
 		}
 
 	}
@@ -1226,7 +1230,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 
 		intBuildFinished(psDroid);
 
-		if (myResponsibility(psStruct->player))
+		if((bMultiPlayer) && myResponsibility(psStruct->player))
 		{
 			SendBuildFinished(psStruct);
 		}
@@ -1330,7 +1334,10 @@ BOOL droidUpdateDemolishing( DROID *psDroid )
 	if ( psStruct->currentBuildPts <= 0 )
 	{
 
-		SendDemolishFinished(psStruct,psDroid);
+		if(bMultiPlayer)
+		{
+			SendDemolishFinished(psStruct,psDroid);
+		}
 
 
 		if(psStruct->pStructureType->type == REF_POWER_GEN)

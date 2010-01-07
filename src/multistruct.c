@@ -54,11 +54,6 @@
 // INFORM others that a building has been started, and base plate should be put down.
 BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
-		return true;
-	}
-
 	NETbeginEncode(NET_BUILD, NET_ALL_PLAYERS);
 
 		// Who is building it
@@ -288,11 +283,6 @@ BOOL recvBuildFinished()
 // demolish message.
 BOOL SendDemolishFinished(STRUCTURE *psStruct, DROID *psDroid)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
-		return true;
-	}
-
 	NETbeginEncode(NET_DEMOLISH, NET_ALL_PLAYERS);
 
 		// Send what is being demolish and who is doing it
@@ -339,11 +329,6 @@ BOOL recvDemolishFinished()
 // Inform others that a structure has been destroyed
 BOOL SendDestroyStructure(STRUCTURE *s)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
-		return true;
-	}
-
 	technologyGiveAway(s);
 	NETbeginEncode(NET_STRUCTDEST, NET_ALL_PLAYERS);
 
@@ -385,11 +370,6 @@ BOOL recvDestroyStructure()
 
 BOOL sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
-		return true;
-	}
-
 	NETbeginEncode(NET_LASSAT, NET_ALL_PLAYERS);
 
 		NETuint8_t(&player);

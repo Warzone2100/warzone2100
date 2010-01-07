@@ -1368,7 +1368,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 			}
 		}
 	}
-	turnOffMultiMsg(false); 
+	turnOffMultiMsg(false);
 }
 
 
@@ -1989,8 +1989,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroidLoc(psDroid, DACTION_MOVE, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
 		break;
 	case DORDER_DISEMBARK:
-        //only valid in multiPlayer mode
-        if (bMultiPlayer)
+        //only valid in multiPlayer mode - cannot use the check on bMultiPlayer since it has been
+        //set to false before this function call
+        if (game.maxPlayers > 0)
         {
             //this order can only be given to Transporter droids
             if (psDroid->droidType == DROID_TRANSPORTER)
@@ -2145,7 +2146,10 @@ void orderDroid(DROID *psDroid, DROID_ORDER order)
 	sOrder.order = order;
 	orderDroidBase(psDroid, &sOrder);
 
-	SendDroidInfo(psDroid,  order,  0,  0, NULL);
+	if(bMultiPlayer)
+	{
+		SendDroidInfo(psDroid,  order,  0,  0, NULL);
+	}
 }
 
 /* Check the order state of a droid */
@@ -2178,8 +2182,11 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 
 	orderClearDroidList(psDroid);
 
-	SendDroidInfo(psDroid,  order,  x,  y, NULL);
-	turnOffMultiMsg(true);	// msgs off.
+	if(bMultiPlayer) //ajl
+	{
+		SendDroidInfo(psDroid,  order,  x,  y, NULL);
+		turnOffMultiMsg(true);	// msgs off.
+	}
 
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
@@ -2237,7 +2244,10 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj)
 
 	orderClearDroidList(psDroid);
 
-	SendDroidInfo(psDroid, order, 0, 0, psObj);
+	if(bMultiPlayer) //ajl
+	{
+		SendDroidInfo(psDroid, order, 0, 0, psObj);
+	}
 
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
@@ -2568,7 +2578,7 @@ BOOL orderDroidList(DROID *psDroid)
 		orderDroidBase(psDroid, &sOrder);
 
         //don't send BUILD orders in multiplayer
-		if (!(sOrder.order == DORDER_BUILD || sOrder.order == DORDER_LINEBUILD))
+		if(bMultiPlayer && !(sOrder.order == DORDER_BUILD || sOrder.order == DORDER_LINEBUILD))
 		{
 			SendDroidInfo(psDroid,  sOrder.order , sOrder.x, sOrder.y,sOrder.psObj);
 		}
@@ -2751,9 +2761,8 @@ void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 		return;
 	}
 
-	if (!add)
+	if (!add && bMultiPlayer && SendGroupOrderSelected((UBYTE)player,x,y,NULL) )
 	{	// turn off multiplay messages,since we've send a group one instead.
-		SendGroupOrderSelected((UBYTE)player,x,y,NULL);
 		turnOffMultiMsg(true);
 	}
 
@@ -2791,10 +2800,7 @@ void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 		}
 	}
 
-	//if (!add)
-	{
-		turnOffMultiMsg(false);	// msgs back on...
-	}
+	turnOffMultiMsg(false);	// msgs back on...
 }
 
 
@@ -3115,9 +3121,8 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 	DROID		*psCurr, *psDemolish;
 	DROID_ORDER	order;
 
-	if (!add)
+	if (!add && bMultiPlayer && SendGroupOrderSelected((UBYTE)player,0,0,psObj) )
 	{	// turn off multiplay messages,since we've send a group one instead.
-		SendGroupOrderSelected((UBYTE)player,0,0,psObj);
 		turnOffMultiMsg(true);
 	}
 
@@ -3152,14 +3157,11 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 			}
 		}
 	}
-
+	
 	orderPlayOrderObjAudio( player, psObj );
-
-	//if (!add)
-	{
-		turnOffMultiMsg(false); //msgs back on.
-	}
-
+	
+	turnOffMultiMsg(false); //msgs back on.
+	
     //This feels like the wrong place but it has to be done once the order has been received...
     //demolish queuing...need to bring the interface back up
     if (psDemolish && player == psObj->player)
@@ -3544,12 +3546,19 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	UDWORD		CurrState, factType, prodType;
 	STRUCTURE	*psStruct;
 	SDWORD		factoryInc, order;
-	BOOL		retVal;
+	BOOL		retVal, bMultiPlayGame = false;
 	DROID		*psTransport, *psCurr, *psNext;
 
-	//store the value before overwriting
-	sendDroidSecondary(psDroid,sec,State);
-	turnOffMultiMsg(true);		// msgs off.
+
+
+	if(bMultiPlayer)
+	{
+        //store the value before overwriting
+        bMultiPlayGame = bMultiPlayer;
+		sendDroidSecondary(psDroid,sec,State);
+		turnOffMultiMsg(true);		// msgs off.
+	}
+
 
 	// set the state for any droids in the command group
 	if ((sec != DSO_RECYCLE) &&
@@ -3818,7 +3827,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 					if (psTransport != NULL)
 					{
                         //in multiPlayer can only put cyborgs onto a Transporter
-                        if (bMultiPlayer && !cyborgDroid(psDroid))
+                        if (bMultiPlayGame && !cyborgDroid(psDroid))
                         {
                             retVal = false;
                         }
@@ -4337,7 +4346,10 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 
 
 			// send the weapon fire
-			sendLasSat(player,psStruct,psObj);
+			if(bMultiPlayer)
+			{
+				sendLasSat(player,psStruct,psObj);
+			}
 
 			break;
 		}

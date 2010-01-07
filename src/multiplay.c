@@ -76,7 +76,6 @@ bool						isMPDirtyBit = false;		// When we are forced to use turnOffMultiMsg() 
 BOOL						bMultiPlayer				= false;	// true when more than 1 player.
 BOOL						openchannels[MAX_PLAYERS]={true};
 UBYTE						bDisplayMultiJoiningStatus;
-int							multiMsgOff = 1;						// see turnOffMultiMsg() in multiplay.c
 
 MULTIPLAYERGAME				game;									//info to describe game.
 MULTIPLAYERINGAME			ingame;
@@ -118,25 +117,28 @@ void		startMultiplayerGame		(void);
 // temporarily disable multiplayer mode.
 BOOL turnOffMultiMsg(BOOL bDoit)
 {
-	if (!bMultiPlayer)
+	static BOOL bTemp;
+
+	if(bDoit)	// turn off msgs.
 	{
-		return true;
-	}
-	if (bDoit)	// turn off msgs.
-	{
-		multiMsgOff++;
-		isMPDirtyBit = true;
+		if(bTemp == true)
+		{
+			// This is spammed multiple times.
+			debug(LOG_NEVER, "multiple calls to turn off");
+		}
+		if(bMultiPlayer)
+		{
+			bMultiPlayer = false;
+			bTemp = true;
+			isMPDirtyBit = true;
+		}
 	}
 	else	// turn on msgs.
 	{
-		if (multiMsgOff)
+		if(bTemp)
 		{
-			//multiMsgOff--;
-			multiMsgOff = 0;
-		}
-		else
-		{
-			//ASSERT_OR_RETURN(false, false, "MultiMessages turned on when they were never off.");
+			bMultiPlayer = true;
+			bTemp = false;
 		}
 	}
 	return true;
@@ -797,11 +799,6 @@ BOOL SendResearch(uint8_t player, uint32_t index)
 	UBYTE i;
 	PLAYER_RESEARCH *pPlayerRes;
 
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
-		return true;
-	}
-	
 	// Send the player that is researching the topic and the topic itself
 	NETbeginEncode(NET_RESEARCH, NET_ALL_PLAYERS);
 		NETuint8_t(&player);
@@ -1369,11 +1366,6 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 	int i;
 	uint8_t player = selectedPlayer;
 
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
-		return true;
-	}
-
 	ASSERT(pTempl != NULL, "sendTemplate: Old Pumpkin bug");
 	if (!pTempl) return true; /* hack */
 
@@ -1469,11 +1461,6 @@ BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 {
 	uint8_t player = selectedPlayer;
 
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
-		return true;
-	}
-
 	NETbeginEncode(NET_TEMPLATEDEST, NET_ALL_PLAYERS);
 		NETuint8_t(&player);
 		NETuint32_t(&t->multiPlayerID);
@@ -1533,11 +1520,6 @@ static BOOL recvDestroyTemplate()
 // send a destruct feature message.
 BOOL SendDestroyFeature(FEATURE *pF)
 {
-	if (multiMsgOff) // don't send if multiMsgs are off
-	{
-		return true;
-	}
-
 	NETbeginEncode(NET_FEATUREDEST, NET_ALL_PLAYERS);
 		NETuint32_t(&pF->id);
 	return NETend();

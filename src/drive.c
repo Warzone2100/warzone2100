@@ -511,7 +511,7 @@ void driveUpdate(void)
 
 	if(DirectControl) {
 		if(psDrivenDroid != NULL) {
-			if (driveBumpTime < gameTime)	// send latest info about driven droid.
+			if(bMultiPlayer && (driveBumpTime < gameTime))	// send latest info about driven droid.
 			{
 				SendDroidInfo(psDrivenDroid,DORDER_MOVE,psDrivenDroid->pos.x,psDrivenDroid->pos.y, NULL);
 			}
