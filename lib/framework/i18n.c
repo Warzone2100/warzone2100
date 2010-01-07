@@ -84,6 +84,7 @@ static const struct
 //	{ "sv", N_("Swedish"), LANG_SWEDISH, SUBLANG_DEFAULT },
 //	{ "tr", N_("Turkish"), LANG_TURKISH, SUBLANG_DEFAULT },
 //	{ "uz", N_("Uzbek (Cyrillic)"), LANG_UZBEK, SUBLANG_UZBEK_CYRILLIC },
+	{ "uk_UA", N_("Ukrainian"), LANG_UKRAINIAN, SUBLANG_DEFAULT },
 	{ "zh_CN", N_("Simplified Chinese"), LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED },
 	{ "zh_TW", N_("Traditional Chinese"), LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL },
 #  endif
@@ -134,6 +135,7 @@ static const struct
 //	{ "sv", N_("Swedish"), "sv.UTF-8", "sv" },
 //	{ "tr", N_("Turkish"), "tr.UTF-8", "tr" },
 //	{ "uz", N_("Uzbek (Cyrillic)"), "uz.UTF-8", "uz" },
+	{ "uk_UA", N_("Ukrainian"), "uk_UA.UTF-8", "uk_UA" },
 	{ "zh_CN", N_("Simplified Chinese"), "zh_CN.UTF-8", "zh_CN" },
 	{ "zh_TW", N_("Traditional Chinese"), "zh_TW.UTF-8", "zh_TW" },
 #  endif
