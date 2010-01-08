@@ -1,3 +1,13 @@
+2010-01-10: Version 2.3 beta 7
+ * General:
+   * Change: No longer always show all oil derricks in skirmish since it was leaking too much information about where the enemy expands (ticket:1087, r9060)
+   * Fix: Improve challenges (r9057)
+   * Fix: Transporter crashes (r9053
+   * Fix: UPnP related crash (r9042)
+   * Fix: Tutorial could not be finished (r9034, ticket:1361)
+ * Multiplayer:
+   * Fix: Revert new sync code to fix sync issues (r9043) 
+
 2010-01-06: Version 2.3 beta 6
  * General:
    * Change: "--cheat" command line option no longer necessary for cheat codes. (r8976)
