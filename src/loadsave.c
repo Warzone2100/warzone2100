@@ -474,7 +474,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 			}
 			else
 			{
-				goto failure;				// clicked on an empty box
+				return false;				// clicked on an empty box
 			}
 
 			if( bLoadSaveMode == LOAD_FORCE || bLoadSaveMode ==SAVE_FORCE )
