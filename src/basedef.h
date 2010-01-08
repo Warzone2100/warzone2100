@@ -38,6 +38,7 @@ typedef enum _object_type
 	OBJ_FEATURE,    ///< Things like roads, trees, bridges, fires
 	OBJ_PROJECTILE, ///< Comes out of guns, stupid :-)
 	OBJ_TARGET,     ///< for the camera tracking
+	OBJ_NUM_TYPES,  ///< number of object types - MUST BE LAST
 } OBJECT_TYPE;
 
 typedef struct _tilePos
