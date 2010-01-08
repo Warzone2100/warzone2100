@@ -2201,8 +2201,9 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 static inline void dealWithLMBObject(BASE_OBJECT* psClickedOn)
 {
 	SELECTION_TYPE selection = establishSelection(selectedPlayer);
+	OBJECT_TYPE type = psClickedOn->type;
 
-	switch (psClickedOn->type)
+	switch (type)
 	{
 		case OBJ_DROID:
 			dealWithLMBDroid((DROID*)psClickedOn, selection);
@@ -2217,7 +2218,8 @@ static inline void dealWithLMBObject(BASE_OBJECT* psClickedOn)
 			break;
 
 		default:
-			ASSERT(false, "Weird selection from LMB - type of clicked object is %d", (int)psClickedOn->type);
+			// assert only when the value is outside of the valid range
+			ASSERT((type >= 0 && type < OBJ_NUM_TYPES), "Weird selection from LMB - type of clicked object is %d", (int)type);
 			break;
 	}
 }
