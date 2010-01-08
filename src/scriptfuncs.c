@@ -1410,7 +1410,6 @@ BOOL scrRemoveMessage(void)
 
 	//find the message
 	psMessage = findMessage((MSG_VIEWDATA *)psViewData, msgType, player);
-	ASSERT(psMessage, "cannot find message - %s", psViewData->pName);
 	if (psMessage)
 	{
 		//delete it
@@ -1419,7 +1418,7 @@ BOOL scrRemoveMessage(void)
 	}
 	else
 	{
-		return false;
+		debug(LOG_ERROR, "cannot find message - %s", psViewData->pName);
 	}
 
 	return true;
