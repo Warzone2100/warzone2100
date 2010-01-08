@@ -437,7 +437,7 @@ static void DrawRadarObjects(void)
 		for (y = scrollMinY; y < scrollMaxY; y++)
 		{
 			MAPTILE		*psTile = mapTile(x, y);
-			STRUCTURE	*psStruct;
+			STRUCTURE	*psStruct = (STRUCTURE *)psTile->psObject;
 			size_t		pos = (x - scrollMinX) + (y - scrollMinY) * radarTexWidth;
 
 			ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
@@ -445,7 +445,6 @@ static void DrawRadarObjects(void)
 			{
 				continue;
 			}
-			psStruct = (STRUCTURE *)psTile->psObject;
 			clan = psStruct->player;
 
 			//see if have to draw enemy/ally color
