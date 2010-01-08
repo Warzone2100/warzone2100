@@ -1427,9 +1427,12 @@ void transporterRemoveDroid(UDWORD id)
 			}
 		}
 
-		// We can update the orders now, since everyone has been
-		// notified of the droid exiting the transporter
-		updateDroidOrientation(psDroid);
+		if (psDroid->pos.x != INVALID_XY)
+		{
+			// We can update the orders now, since everyone has been
+			// notified of the droid exiting the transporter
+			updateDroidOrientation(psDroid);
+		}
 		//initialise the movement data
 		initDroidMovement(psDroid);
 		//reset droid orders
