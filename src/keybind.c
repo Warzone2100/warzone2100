@@ -2571,8 +2571,12 @@ void kf_ToggleRadarAllyEnemy(void)
 
 void kf_ToggleRadarTerrain(void)
 {
-	radarDrawMode = radarDrawMode + 1;
+	radarDrawMode++;
 
+	if (radarDrawMode == RADAR_MODE_TERRAIN_SEEN && getRevealStatus())
+	{
+		radarDrawMode++;	// skip this radar mode for fog of war mode
+	}
 	if (radarDrawMode >= NUM_RADAR_MODES)
 	{
 		radarDrawMode = 0;
@@ -2588,6 +2592,9 @@ void kf_ToggleRadarTerrain(void)
 		case RADAR_MODE_TERRAIN:
 			CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing terrain")));
 			break;
+		case RADAR_MODE_TERRAIN_SEEN:
+			CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing revealed terrain")));
+			break;
 		case RADAR_MODE_HEIGHT_MAP:
 			CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing height")));
 			break;
@@ -2595,8 +2602,6 @@ void kf_ToggleRadarTerrain(void)
 			assert(false);
 			break;
 	}
-
-	resetRadarRedraw();
 }
 
 

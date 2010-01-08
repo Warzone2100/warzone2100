@@ -49,6 +49,7 @@ typedef enum _radar_draw_mode
 {
 	RADAR_MODE_TERRAIN,				///< Draw terrain map
 	RADAR_MODE_DEFAULT = RADAR_MODE_TERRAIN,	///< Default is terrain map
+	RADAR_MODE_TERRAIN_SEEN,			///< Terrain map, showing only explored tiles
 	RADAR_MODE_HEIGHT_MAP,				///< Draw height map
 	RADAR_MODE_COMBINED,
 	RADAR_MODE_NO_TERRAIN,				///< Only display objects
