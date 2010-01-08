@@ -1069,7 +1069,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 			curStr++;
 			for (i = 0; i < game.maxPlayers; i++)
 			{
-				if (aiCheckAlliances(selectedPlayer, i))
+				if (i != selectedPlayer && aiCheckAlliances(selectedPlayer, i))
 				{
 					sendto[i] = true;
 				}
