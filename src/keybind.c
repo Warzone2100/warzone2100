@@ -2678,8 +2678,6 @@ void kf_ToggleRadarTerrain(void)
 			assert(false);
 			break;
 	}
-
-	resetRadarRedraw();
 }
 
 

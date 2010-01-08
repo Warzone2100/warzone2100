@@ -289,31 +289,30 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 {
 	PIELIGHT WScr = WZCOL_BLACK;	// squelch warning
 
+	// draw radar terrain on/off feature
+	if ((getRevealStatus() || radarDrawMode == RADAR_MODE_TERRAIN_SEEN) && !TEST_TILE_VISIBLE(selectedPlayer, WTile))
+	{
+		return WZCOL_RADAR_BACKGROUND;
+	}
+
 	switch(radarDrawMode)
 	{
 		case RADAR_MODE_TERRAIN:
 		case RADAR_MODE_TERRAIN_SEEN:
 		{
-			if ((getRevealStatus() || radarDrawMode == RADAR_MODE_TERRAIN_SEEN) && !TEST_TILE_VISIBLE(selectedPlayer, WTile))
-			{
-				WScr = WZCOL_RADAR_BACKGROUND;
-			}
-			else
-			{
-				// draw radar terrain on/off feature
-				PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
+			// draw radar terrain on/off feature
+			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
 
-				col.byte.r = sqrtf(col.byte.r * WTile->illumination);
-				col.byte.b = sqrtf(col.byte.b * WTile->illumination);
-				col.byte.g = sqrtf(col.byte.g * WTile->illumination);
-				if (!hasSensorOnTile(WTile, selectedPlayer))
-				{
-					col.byte.r /= 2;
-					col.byte.b /= 2;
-					col.byte.g /= 2;
-				}
-				WScr = col;
+			col.byte.r = sqrtf(col.byte.r * WTile->illumination);
+			col.byte.b = sqrtf(col.byte.b * WTile->illumination);
+			col.byte.g = sqrtf(col.byte.g * WTile->illumination);
+			if (!hasSensorOnTile(WTile, selectedPlayer))
+			{
+				col.byte.r /= 2;
+				col.byte.b /= 2;
+				col.byte.g /= 2;
 			}
+			WScr = col;
 		}
 		break;
 		case RADAR_MODE_COMBINED:
@@ -324,12 +323,17 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			col.byte.r = sqrtf(col.byte.r * (WTile->illumination + WTile->height) / 2);
 			col.byte.b = sqrtf(col.byte.b * (WTile->illumination + WTile->height) / 2);
 			col.byte.g = sqrtf(col.byte.g * (WTile->illumination + WTile->height) / 2);
+			if (!hasSensorOnTile(WTile, selectedPlayer))
+			{
+				col.byte.r /= 2;
+				col.byte.b /= 2;
+				col.byte.g /= 2;
+			}
 			WScr = col;
 		}
 		break;
 		case RADAR_MODE_HEIGHT_MAP:
 		{
-			// draw radar terrain on/off feature
 			WScr.byte.r = WScr.byte.g = WScr.byte.b = WTile->height;
 		}
 		break;
