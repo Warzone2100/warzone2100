@@ -166,6 +166,7 @@ static UDWORD hideTime=0;
 static bool EnablePasswordPrompt = false;	// if we need the password prompt
 extern int NET_PlayerConnectionStatus;		// from src/display3d.c
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
+static BOOL allowChangePosition = true;
 
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
@@ -1530,7 +1531,7 @@ static void addColourChooser(UDWORD player)
 	}
 
 	//add the position chooser.
-	for (i=0;i<game.maxPlayers;i++)
+	for (i = 0; i < game.maxPlayers && allowChangePosition; i++)
 	{
 		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_PLAYCHOOSER+i,
 					(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7),//x
@@ -2752,7 +2753,7 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 	// request a player number.
-	if((id >= MULTIOP_PLAYCHOOSER) && (id <= MULTIOP_PLAYCHOOSER_END)) // chose a new starting position
+	if((id >= MULTIOP_PLAYCHOOSER) && (id <= MULTIOP_PLAYCHOOSER_END) && allowChangePosition) // chose a new starting position
 	{
 		resetReadyStatus(false);		// will reset only locally if not a host
 
@@ -3183,6 +3184,7 @@ BOOL startMultiOptions(BOOL bReenter)
 	if(!bReenter)
 	{
 		teamChooserUp = -1;
+		allowChangePosition = true;
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
 			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);	// reset AI (turn it on again)
@@ -3224,12 +3226,19 @@ BOOL startMultiOptions(BOOL bReenter)
 			mapDownloadProgress = 100;
 			game.power = iniparser_getint(dict, "challenge:Power", game.power);
 			game.base = iniparser_getint(dict, "challenge:Bases", game.base + 1) - 1;		// count from 1 like the humans do
+			allowChangePosition = iniparser_getboolean(dict, "challenge:AllowPositionChange", false);
+
 			for (i = 0; i < MAX_PLAYERS; i++)
 			{
 				char key[64];
 
 				ssprintf(key, "player_%d:team", i + 1);
 				NetPlay.players[i].team = iniparser_getint(dict, key, NetPlay.players[i].team + 1) - 1;
+				ssprintf(key, "player_%d:position", i + 1);
+				if (iniparser_find_entry(dict, key))
+				{
+					changePosition(i, iniparser_getint(dict, key, NetPlay.players[i].position));
+				}
 				if (i != 0)
 				{
 					ssprintf(key, "player_%d:difficulty", i + 1);
