@@ -456,7 +456,7 @@ BOOL runLoadSave(BOOL bResetMissionWidgets)
 			}
 			else
 			{
-				goto cleanup;				// clicked on an empty box
+				return false;				// clicked on an empty box
 			}
 
 			goto success;
