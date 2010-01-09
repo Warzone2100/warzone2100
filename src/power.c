@@ -49,6 +49,7 @@
 #define EASY_POWER_MOD      110
 #define NORMAL_POWER_MOD    100
 #define HARD_POWER_MOD      90
+#define MAX_POWER           100000
 
 //flag used to check for power calculations to be done or not
 BOOL	powerCalculated;
@@ -139,6 +140,10 @@ void addPower(UDWORD player, UDWORD quantity)
 	ASSERT(player < MAX_PLAYERS, "addPower: Bad player (%u)", player);
 
 	asPower[player].currentPower += quantity;
+	if (asPower[player].currentPower > MAX_POWER)
+	{
+		asPower[player].currentPower = MAX_POWER;
+	}
 }
 
 /*resets the power calc flag for all players*/
@@ -286,6 +291,10 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 	{
 		asPower[player].currentPower += power;
 		asPower[player].extractedPower = 0;
+		if (asPower[player].currentPower > MAX_POWER)
+		{
+			asPower[player].currentPower = MAX_POWER;
+		}
 	}
 }
 
