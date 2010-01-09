@@ -381,7 +381,7 @@ void	kf_MaxPower( void )
 		noMPCheatMsg();
 		return;
 	}
-	addPower(selectedPlayer, SDWORD_MAX / 2);
+	setPower(selectedPlayer, 100000);
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"),
 				selectedPlayer, _("Power overwhelming"));
 	sendTextMessage(cmsg, true);
