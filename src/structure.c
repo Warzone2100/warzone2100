@@ -2676,7 +2676,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			}
 			//if vtol droid - send it to ReArm Pad if one exists
 			placed = false;
-			if (isVtolDroid(psNewDroid))
+			if (isVtolDroid(psNewDroid) && psNewDroid->droidType != DROID_TRANSPORTER)
 			{
 				moveToRearm(psNewDroid);
 			}
@@ -2688,13 +2688,13 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 						&&(psFlag->factoryType == factoryType)); // correct type
 					psFlag = psFlag->psNext);
 
-				if (psNewDroid->droidType == DROID_TRANSPORTER)
+				if (isVtolDroid(psNewDroid))
 				{
 					UDWORD droidX = psFlag->coords.x;
 					UDWORD droidY = psFlag->coords.y;
 					//find a suitable location near the delivery point
 					actionVTOLLandingPos(psNewDroid, &droidX, &droidY);
-					actionDroidLoc(psNewDroid, DACTION_MOVE, droidX,droidY);
+					orderDroidLoc(psNewDroid,DORDER_MOVE,droidX,droidY);
 				}
 				else
 				{
