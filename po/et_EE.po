@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-09 17:23+0100\n"
-"PO-Revision-Date: 2010-01-04 13:14+0200\n"
+"POT-Creation-Date: 2010-01-09 23:10+0100\n"
+"PO-Revision-Date: 2010-01-09 23:58+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -10994,9 +10994,8 @@ msgstr "Sloveenia Keel"
 
 #: lib/framework/i18n.c:87
 #: lib/framework/i18n.c:138
-#, fuzzy
 msgid "Ukrainian"
-msgstr "Friisi Keel"
+msgstr "Ukraina Keel"
 
 #: lib/framework/i18n.c:88
 #: lib/framework/i18n.c:139
@@ -11013,7 +11012,7 @@ msgid "Latin"
 msgstr "Ladina Keel"
 
 #: lib/netplay/netplay.c:1175
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u has the wrong game version. Auto kicking."
 msgstr "Mängijal %u on vale mänguversioon. Automaatne minemalöömine"
 
@@ -11028,7 +11027,7 @@ msgid "Enter password here"
 msgstr "Sisesta salasõna siia"
 
 #: lib/netplay/netplay.c:1300
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u has the wrong password. Auto kicking."
 msgstr "Mängijal %u  on vale salasõna. Automaatne minemalöömine"
 
@@ -11043,9 +11042,8 @@ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing
 msgstr "Ei suuda lobby serveriga suhelda! Kas port %u on väljaminevale liiklusele avatud?"
 
 #: src/cheat.c:132
-#, fuzzy
 msgid ": Unknown cheat code."
-msgstr "Sohi mode Käivitatud"
+msgstr ": Tundmatu sohikood"
 
 #: src/clparse.c:99
 msgid "Run in cheat mode"
@@ -12342,9 +12340,8 @@ msgid "Radar showing terrain"
 msgstr "Radar näitab terraini"
 
 #: src/keybind.c:2672
-#, fuzzy
 msgid "Radar showing revealed terrain"
-msgstr "Radar näitab terraini"
+msgstr "Radar näitab paljastatud terraini"
 
 #: src/keybind.c:2675
 msgid "Radar showing height"
@@ -13002,19 +12999,16 @@ msgid "Set Structure Limits"
 msgstr "Sea Ehitiste Limiidid"
 
 #: src/multiint.c:1520
-#, fuzzy
 msgid "Player colour"
-msgstr "Mängija lahkus"
+msgstr "Mängija värv"
 
 #: src/multiint.c:1536
-#, fuzzy
 msgid "Kick player"
-msgstr "2 mängijat"
+msgstr "Löö mängija välja"
 
 #: src/multiint.c:1547
-#, fuzzy
 msgid "Player number"
-msgstr "Mängija lahkus"
+msgstr "Mängija number"
 
 #: src/multiint.c:1909
 msgid "Team"
@@ -13086,9 +13080,9 @@ msgid "%s has Left the Game"
 msgstr "%s Lahkus mängust"
 
 #: src/multijoin.c:330
-#, fuzzy, c-format
+#, c-format
 msgid "Kicking player %s, game data doesn't match!"
-msgstr "Mängija %s väljalöömine, sest info ei klapi!"
+msgstr "Mängija %s väljalöömine,mängu info ei klapi!"
 
 #: src/multijoin.c:366
 #, c-format
