@@ -288,6 +288,8 @@ extern UDWORD	NETgetRecentBytesSent(void);		// more immediate functions.
 extern UDWORD	NETgetRecentPacketsSent(void);
 extern UDWORD	NETgetRecentBytesRecvd(void);
 
+extern void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
+
 // from netjoin.c
 extern SDWORD	NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
 extern int32_t	NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag);	// return one of the four flags(dword) about the game.

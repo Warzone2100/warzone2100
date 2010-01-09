@@ -227,6 +227,7 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_COLCHOOSER_FORM	10280
 #define MULTIOP_COLCHOOSER		10281
 #define MULTIOP_COLCHOOSER_END	10288
+#define MULTIOP_COLCHOOSER_KICK	10289
 
 #define MULTIOP_LIMIT			10292	// 2 for this (+label)
 #define MULTIOP_GAMETYPE		10294
