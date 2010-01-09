@@ -268,7 +268,7 @@ static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
 **/
 char VersionString[VersionStringSize] = "trunk, netcode 2.31";
 static int NETCODE_VERSION_MAJOR = 3;
-static int NETCODE_VERSION_MINOR = 31;
+static int NETCODE_VERSION_MINOR = 32;
 static int NUMBER_OF_MODS = 0;			// unused for now
 static int NETCODE_HASH = 0;			// unused for now
 
@@ -1589,6 +1589,21 @@ void NETplayerDropped(UDWORD index)
 	NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
 }
 
+/**
+ * @note Cleanup for when a player is kicked.
+ * \param index
+ */
+void NETplayerKicked(UDWORD index)
+{
+	// kicking a player counts as "leaving nicely", since "nicely" in this case
+	// simply means "there wasn't a connection error."
+
+	NET_DestroyPlayer(index);		// sets index player's array to false
+	MultiPlayerLeave(index);		// more cleanup
+	NETplayerLeaving(index);		// need to close socket for the player that left.
+	NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
+}
+
 // ////////////////////////////////////////////////////////////////////////
 // rename the local player
 BOOL NETchangePlayerName(UDWORD index, char *newName)
@@ -2652,8 +2667,11 @@ receive_message:
 					{
 						// we received some data, add to buffer
 						received = NET_recvMessage(connected_bsocket[i]);
-						current = i;
-						break;
+						if (i == pMsg->source) // prevent spoofing
+						{
+							current = i;
+							break;
+						}
 					}
 					else if (connected_bsocket[i]->socket == NULL)
 					{

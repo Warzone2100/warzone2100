@@ -1514,10 +1514,10 @@ static void addColourChooser(UDWORD player)
 	{
 		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER+i,
 			(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7) ,//x
-			4,/*9,*/													  //y
+			4,													  //y
 			iV_GetImageWidth(FrontImages,IMAGE_PLAYER0),		  //w
 			iV_GetImageHeight(FrontImages,IMAGE_PLAYER0),		  //h
-			"Player colour", IMAGE_PLAYER0 + i, IMAGE_PLAYER0_HI + i, IMAGE_PLAYER0_HI + i);
+			_("Player colour"), IMAGE_PLAYER0 + i, IMAGE_PLAYER0_HI + i, IMAGE_PLAYER0_HI + i);
 
 			if( !safeToUseColour(selectedPlayer,i))
 			{
@@ -1525,6 +1525,17 @@ static void addColourChooser(UDWORD player)
 			}
 	}
 
+	// add a kick button
+	if (player != selectedPlayer)
+	{
+		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER_KICK,
+					(8*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7) ,//x
+					4,													  //y
+					iV_GetImageWidth(FrontImages,IMAGE_NOJOIN),		  //w
+					iV_GetImageHeight(FrontImages,IMAGE_NOJOIN),		  //h
+					_("Kick player"), IMAGE_NOJOIN, IMAGE_NOJOIN, IMAGE_NOJOIN);
+	}
+	
 	//add the position chooser.
 	for (i = 0; i < game.maxPlayers && allowChangePosition; i++)
 	{
@@ -1533,7 +1544,7 @@ static void addColourChooser(UDWORD player)
 			23,													  //y
 			iV_GetImageWidth(FrontImages,IMAGE_WEE_GUY)+7,		  //w
 			iV_GetImageHeight(FrontImages,IMAGE_WEE_GUY),		  //h
-			"Player number", IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
+			_("Player number"), IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
 	}
 
 	if (!NetPlay.isHost)
@@ -2123,6 +2134,11 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 		NETstring( (char *) reason, MAX_KICK_REASON);
 		NETenum(&type);
 	NETend();
+
+	debug(LOG_NET, "Kicking player %u (%s).",
+	      (unsigned int)player_id, getPlayerName(player_id));
+
+	NETplayerKicked(player_id);
 }
 
 static void addChatBox(void)
@@ -2747,6 +2763,17 @@ static void processMultiopWidgets(UDWORD id)
 		addPlayerBox(  !ingame.bHostSetup || bHosted);
 	}
 
+	if (id == MULTIOP_COLCHOOSER_KICK)
+	{
+		char *msg;
+
+		sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(colourChooserUp));
+		sendTextMessage(msg, true);
+		kickPlayer(colourChooserUp, "you are unwanted by the host.", ERROR_KICKED);
+		resetReadyStatus(true);		//reset and send notification to all clients
+		closeColourChooser();
+	}
+
 	// request a player number.
 	if((id >= MULTIOP_PLAYCHOOSER) && (id <= MULTIOP_PLAYCHOOSER_END) && allowChangePosition) // chose a new starting position
 	{
@@ -2763,6 +2790,7 @@ void startMultiplayerGame(void)
 {
 	decideWRF();										// set up swrf & game.map
 	bMultiPlayer = true;
+	NET_PlayerConnectionStatus = 0; // reset disconnect conditions
 
 	if (NetPlay.isHost)
 	{
@@ -2975,6 +3003,10 @@ void frontendMultiMessages(void)
 				// maybe we want a custom 'kick' backdrop instead?
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 				debug(LOG_ERROR, "You have been kicked, because %s ", reason );
+			}
+			else
+			{
+				NETplayerKicked(player_id);
 			}
 			break;
 		}
