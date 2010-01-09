@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-01-09 17:14+0100\n"
-"PO-Revision-Date: 2010-01-05 19:09+0100\n"
+"PO-Revision-Date: 2010-01-09 17:52+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -11022,9 +11022,8 @@ msgstr "Slowenisch"
 
 #: lib/framework/i18n.c:87
 #: lib/framework/i18n.c:138
-#, fuzzy
 msgid "Ukrainian"
-msgstr "Friesisch"
+msgstr "Ukrainisch"
 
 #: lib/framework/i18n.c:88
 #: lib/framework/i18n.c:139
@@ -12361,9 +12360,8 @@ msgid "Radar showing terrain"
 msgstr "Radar zeigt Gelände"
 
 #: src/keybind.c:2596
-#, fuzzy
 msgid "Radar showing revealed terrain"
-msgstr "Radar zeigt Gelände"
+msgstr "Radar zeigt aufgedecktes Gelände"
 
 #: src/keybind.c:2599
 msgid "Radar showing height"
@@ -13022,19 +13020,16 @@ msgid "Set Structure Limits"
 msgstr "Gebäudebeschränkungen einstellen"
 
 #: src/multiint.c:1525
-#, fuzzy
 msgid "Player colour"
-msgstr "Spieler hat das Spiel verlassen"
+msgstr "Spielerfarbe"
 
 #: src/multiint.c:1541
-#, fuzzy
 msgid "Kick player"
-msgstr "2 Spieler"
+msgstr "Spieler rauswerfen"
 
 #: src/multiint.c:1552
-#, fuzzy
 msgid "Player number"
-msgstr "Spieler hat das Spiel verlassen"
+msgstr "Spielernummer"
 
 #: src/multiint.c:1914
 msgid "Team"
