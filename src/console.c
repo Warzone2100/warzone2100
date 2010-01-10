@@ -236,6 +236,8 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 		jusType = defJustification;
 	}
 
+	debug(LOG_CONSOLE, "(to player %d): %s", (int)player, messageText);
+
 	consoleStorage[messageIndex].player = player;
 
 	/* Precalculate and store (quicker!) the indent for justified text */

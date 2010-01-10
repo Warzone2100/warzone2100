@@ -78,6 +78,7 @@ static const char *code_part_names[] = {
 	"fatal",
 	"input",
 	"popup",
+	"console",
 	"last"
 };
 
