@@ -802,12 +802,29 @@ BOOL reloadMPConfig(void)
 
 	debug( LOG_WZ, "Reloading prefs prefs to registry\n" );
 
+	// If we're in-game, we already have our own configuration set, so no need to reload it.
+
+	if (NetPlay.isHost && !ingame.localJoiningInProgress)
+	{
+		if (bMultiPlayer && !NetPlay.bComms && openWarzoneKey())
+		{
+			// one-player skirmish mode sets game name to "One Player Skirmish", so
+			// reset the name
+			if (getWarzoneKeyString("gameName", sBuf))
+			{
+				sstrcpy(game.name, sBuf);
+			}
+			return closeWarzoneKey();
+		}
+		return true;
+	}
+
 	if(!openWarzoneKey())
 	{
 		return false;
 	}
 
-	// save
+	// If we're host and not in-game, we can safely save our settings and return.
 
 	if (NetPlay.isHost && ingame.localJoiningInProgress)
 	{
@@ -817,6 +834,8 @@ BOOL reloadMPConfig(void)
 		}
 		else
 		{
+			// One-player skirmish mode sets game name to "One Player Skirmish", so
+			// reset the name
 			if (getWarzoneKeyString("gameName", sBuf))
 			{
 				sstrcpy(game.name, sBuf);
@@ -832,19 +851,7 @@ BOOL reloadMPConfig(void)
 		return closeWarzoneKey();
 	}
 
-	// load
-
-	if (NetPlay.isHost)
-	{
-		if (bMultiPlayer && !NetPlay.bComms)
-		{
-			if (getWarzoneKeyString("gameName", sBuf))
-			{
-				sstrcpy(game.name, sBuf);
-			}
-		}
-		return closeWarzoneKey();
-	}
+	// We're not host, so let's get rid of the host's game settings and restore our own.
 
 	// game name
 	if (getWarzoneKeyString("gameName", sBuf))
