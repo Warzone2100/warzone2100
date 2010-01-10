@@ -32,6 +32,7 @@
 
 #include <SDL.h>
 #include "types.h"
+#include "lib/framework/utf.h"
 
 /** Defines for all the key codes used. */
 typedef enum _key_code
@@ -155,9 +156,6 @@ extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
 /** Initialise the input module. */
 extern void inputInitialise(void);
 
-/** Add a key press to the key buffer. */
-extern void inputAddBuffer(UDWORD code, char char_code, UDWORD count);
-
 /** This returns true if the key is currently depressed. */
 extern BOOL keyDown(KEY_CODE code);
 
@@ -219,13 +217,13 @@ extern void SetMousePos(Uint16 x, Uint16 y);
 #define INPBUF_ESC		0x00001b
 
 /** Return the next key press or 0 if no key in the buffer.
- * The key returned will have been remaped to the correct ascii code for the
- * windows key map.
- * All key presses are buffered up (including windows auto repeat).
+ * The key returned will have been remapped to the correct ascii code for the
+ * US layout (approximately) key map.
+ * All key presses are buffered up (including auto repeat).
+ * @param unicode is filled (unless NULL) with the unicode character corresponding
+ * to the key press (using the user's native layout).
  */
-extern UDWORD inputGetKey(void);
-
-extern char inputGetCharKey(void);
+extern UDWORD inputGetKey(utf_32_char *unicode);
 
 /** Clear the input buffer. */
 extern void inputClearBuffer(void);

@@ -24,6 +24,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "lib/framework/frameint.h"
+#include "lib/framework/utf.h"
 #include "lib/ivis_common/textdraw.h"
 
 #include "widget.h"
@@ -1145,8 +1146,12 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 				}
 				break;
 			case WIDG_EDITBOX:
-				sstrcpy(aStringRetBuffer, ((W_EDITBOX *)psWidget)->aText);
+			{
+				char *utf = UTF32toUTF8(((W_EDITBOX *)psWidget)->aText, NULL);
+				sstrcpy(aStringRetBuffer, utf);
+				free(utf);
 				break;
+			}
 			case WIDG_BARGRAPH:
 				ASSERT( false, "widgGetString: Bar Graphs do not have a string" );
 				aStringRetBuffer[0] = '\0';

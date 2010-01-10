@@ -22,6 +22,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
+#include "lib/framework/utf.h"
 #include "objects.h"
 #include "basedef.h"
 #include "map.h"
@@ -1924,11 +1925,11 @@ void kf_GiveTemplateSet(void)
 
 // --------------------------------------------------------------------------
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
-// FIXME: We need unicode support for text entry!
 void kf_SendTextMessage(void)
 {
 	UDWORD	ch;
 	char tmp[MAX_CONSOLE_STRING_LENGTH + 100];
+	utf_32_char unicode;
 
 	if(bAllowOtherKeyPresses)									// just starting.
 	{
@@ -1938,7 +1939,7 @@ void kf_SendTextMessage(void)
 		inputClearBuffer();
 	}
 
-	ch = inputGetKey();
+	ch = inputGetKey(&unicode);
 	while (ch != 0)												// in progress
 	{
 		// FIXME: Why are we using duplicate defines? INPBUF_CR == KEY_RETURN == SDLK_RETURN
@@ -2004,7 +2005,10 @@ void kf_SendTextMessage(void)
 		{
 			if(sTextToSend[0] != '\0')							// cant delete nothing!
 			{
-				sTextToSend[strlen(sTextToSend)-1]= '\0';
+				size_t newlen = strlen(sTextToSend) - 1;
+				while(newlen > 0 && (sTextToSend[newlen]&0xC0) == 0x80)
+				    --newlen;  // Don't delete half a unicode character.
+				sTextToSend[newlen]= '\0';
 				sstrcpy(sCurrentConsoleText, sTextToSend);		//beacons
 			}
 		}
@@ -2017,13 +2021,14 @@ void kf_SendTextMessage(void)
 		}
 		else							 						// display
 		{
-			// FIXME: we need to support unicode here
-			const char input_char[2] = { inputGetCharKey(), '\0' };
-			sstrcat(sTextToSend, input_char);
+			const utf_32_char input_char[2] = { unicode, '\0' };
+			char *utf = UTF32toUTF8(input_char, NULL);
+			sstrcat(sTextToSend, utf);
+			free(utf);
 			sstrcpy(sCurrentConsoleText, sTextToSend);
 		}
 
-		ch = inputGetKey();
+		ch = inputGetKey(&unicode);
 	}
 
 	// macro store stuff
