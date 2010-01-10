@@ -118,7 +118,7 @@ static BOOL addQuitOptions(void)
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 
-	if (NetPlay.isHost && NetPlay.bComms)		// only show for real MP games
+	if (NetPlay.isHost && bMultiPlayer && NetPlay.bComms)		// only show for real MP games
 	{
 		sFormInit.id		= INTINGAMEPOPUP;
 		sFormInit.width		= 600;
@@ -139,7 +139,7 @@ static BOOL addQuitOptions(void)
 		sButInit.y			= 8;
 		sButInit.pDisplay	= displayTextOption;
 		sButInit.id			= INTINGAMEOP_POPUP_MSG3;
-		sButInit.pText		= _("Warning, if Host quits, the game ends for everyone!");
+		sButInit.pText		= _("WARNING: You're the host. If you quit, the game ends for everyone!");
 
 		widgAddButton(psWScreen, &sButInit);
 	}
