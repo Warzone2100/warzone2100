@@ -2465,10 +2465,12 @@ void	kf_ToggleMouseInvert( void )
 	if(getInvertMouseStatus())
 	{
 		setInvertMouseStatus(false);
+		CONPRINTF(ConsoleString,(ConsoleString,_("Vertical rotation direction: Normal")));
 	}
 	else
 	{
 		setInvertMouseStatus(true);
+		CONPRINTF(ConsoleString,(ConsoleString,_("Vertical rotation direction: Flipped")));
 	}
 }
 // --------------------------------------------------------------------------
@@ -2477,10 +2479,12 @@ void	kf_ToggleShakeStatus( void )
 	if(getShakeStatus())
 	{
 		setShakeStatus(false);
+		CONPRINTF(ConsoleString,(ConsoleString,_("Screen shake when things die: Off")));
 	}
 	else
 	{
 		setShakeStatus(true);
+		CONPRINTF(ConsoleString,(ConsoleString,_("Screen shake when things die: On")));
 	}
 }
 // --------------------------------------------------------------------------
