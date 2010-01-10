@@ -369,6 +369,8 @@ extern BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid);
 
 // return whether a droid has a CB sensor on it
 extern BOOL cbSensorDroid(DROID *psDroid);
+// return whether a droid has a standard sensor on it (standard, VTOL strike, or wide spectrum)
+extern BOOL standardSensorDroid(DROID *psDroid);
 
 // give a droid from one player to another - used in Electronic Warfare and multiplayer
 extern DROID * giftSingleDroid(DROID *psD, UDWORD to);
