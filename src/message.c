@@ -349,8 +349,11 @@ static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 	apsProxDisp[player] = psToAdd;
 
 	//add a button to the interface
-	intAddProximityButton(psToAdd, currentNumProxDisplays);
-	currentNumProxDisplays++;
+	if (player == selectedPlayer)
+	{
+		intAddProximityButton(psToAdd, currentNumProxDisplays);
+		currentNumProxDisplays++;
+	}
 }
 
 /*remove a message */
