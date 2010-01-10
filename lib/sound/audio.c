@@ -543,8 +543,8 @@ void audio_Update()
 		// remove finished samples from list
 		if ( psSample->bFinishedPlaying == true )
 		{
-			audio_RemoveSample( &g_psSampleList, psSample );
 			psSampleTemp = psSample->psNext;
+			audio_RemoveSample( &g_psSampleList, psSample );
 			free(psSample);
 			psSample = psSampleTemp;
 		}
