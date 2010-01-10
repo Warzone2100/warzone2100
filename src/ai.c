@@ -1061,9 +1061,8 @@ void aiUpdateDroid(DROID *psDroid)
 		updateTarget = false;
 	}
 
-	// only computer sensor droids in the single player game aquire targets
-	if ((psDroid->droidType == DROID_SENSOR && psDroid->player == selectedPlayer)
-	    && !bMultiPlayer)
+	// CB and VTOL CB droids can't autotarget.
+	if (psDroid->droidType == DROID_SENSOR && !standardSensorDroid(psDroid))
 	{
 		lookForTarget = false;
 		updateTarget = false;
