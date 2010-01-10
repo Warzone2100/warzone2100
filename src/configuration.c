@@ -768,9 +768,59 @@ BOOL saveConfig(void)
 	else
 	{
 		debug( LOG_NEVER, "Writing multiplay prefs to registry\n" );
-		if(NetPlay.isHost && NetPlay.bComms && ingame.localJoiningInProgress)
+		if (NetPlay.isHost && ingame.localJoiningInProgress)
+		{
+			if (bMultiPlayer && NetPlay.bComms)
+			{
+				setWarzoneKeyString("gameName", game.name);			//  last hosted game
+			}
+			setWarzoneKeyString("mapName", game.map);				//  map name
+			setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);		// maxPlayers
+			setWarzoneKeyNumeric("power", game.power);				// power
+			setWarzoneKeyNumeric("type", game.type);				// game type
+			setWarzoneKeyNumeric("base", game.base);				// size of base
+			setWarzoneKeyNumeric("fog", game.fog);					// fog 'o war
+			setWarzoneKeyNumeric("alliance", game.alliance);		// allow alliances
+		}
+		setWarzoneKeyString("playerName",(char*)sPlayer);		// player name
+		setWarzoneKeyString("phrase0", ingame.phrases[0]);		// phrases
+		setWarzoneKeyString("phrase1", ingame.phrases[1]);
+		setWarzoneKeyString("phrase2", ingame.phrases[2]);
+		setWarzoneKeyString("phrase3", ingame.phrases[3]);
+		setWarzoneKeyString("phrase4", ingame.phrases[4]);
+	}
+
+	return closeWarzoneKey();
+}
+
+// Saves and loads the relevant part of the config files for MP games
+// Ensures that others' games don't change our own configuration settings
+BOOL reloadMPConfig(void)
+{
+	int val;
+	char	sBuf[255];
+
+	debug( LOG_WZ, "Reloading prefs prefs to registry\n" );
+
+	if(!openWarzoneKey())
+	{
+		return false;
+	}
+
+	// save
+
+	if (NetPlay.isHost && ingame.localJoiningInProgress)
+	{
+		if (bMultiPlayer && NetPlay.bComms)
 		{
 			setWarzoneKeyString("gameName", game.name);			//  last hosted game
+		}
+		else
+		{
+			if (getWarzoneKeyString("gameName", sBuf))
+			{
+				sstrcpy(game.name, sBuf);
+			}
 		}
 		setWarzoneKeyString("mapName", game.map);				//  map name
 		setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);		// maxPlayers
@@ -779,12 +829,71 @@ BOOL saveConfig(void)
 		setWarzoneKeyNumeric("base", game.base);				// size of base
 		setWarzoneKeyNumeric("fog", game.fog);					// fog 'o war
 		setWarzoneKeyNumeric("alliance", game.alliance);		// allow alliances
-		setWarzoneKeyString("playerName",(char*)sPlayer);		// player name
-		setWarzoneKeyString("phrase0", ingame.phrases[0]);		// phrases
-		setWarzoneKeyString("phrase1", ingame.phrases[1]);
-		setWarzoneKeyString("phrase2", ingame.phrases[2]);
-		setWarzoneKeyString("phrase3", ingame.phrases[3]);
-		setWarzoneKeyString("phrase4", ingame.phrases[4]);
+		return closeWarzoneKey();
+	}
+
+	// load
+
+	if (NetPlay.isHost)
+	{
+		if (bMultiPlayer && !NetPlay.bComms)
+		{
+			if (getWarzoneKeyString("gameName", sBuf))
+			{
+				sstrcpy(game.name, sBuf);
+			}
+		}
+		return closeWarzoneKey();
+	}
+
+	// game name
+	if (getWarzoneKeyString("gameName", sBuf))
+	{
+		sstrcpy(game.name, sBuf);
+	}
+
+	// map name
+	if(getWarzoneKeyString("mapName", sBuf))
+	{
+		/* FIXME: Get rid of storing the max-player count in the config
+		 *        file. Instead we should parse the map *before*
+		 *        showing the skirmish/multiplayer setup screen.
+		 */
+		if (getWarzoneKeyNumeric("maxPlayers", &val))
+		{
+			sstrcpy(game.map, sBuf);
+			game.maxPlayers = val;
+		}
+	}
+
+	// power
+	if(getWarzoneKeyNumeric("power", &val))
+	{
+		game.power = val;
+	}
+
+	// fog
+	if(getWarzoneKeyNumeric("fog", &val))
+	{
+		game.fog= val;
+	}
+
+	//type
+	if(getWarzoneKeyNumeric("type", &val))
+	{
+		game.type =(UBYTE)val;
+	}
+
+	//base
+	if(getWarzoneKeyNumeric("base", &val))
+	{
+		game.base =(UBYTE)val;
+	}
+
+	//alliance
+	if(getWarzoneKeyNumeric("alliance", &val))
+	{
+		game.alliance =(UBYTE)val;
 	}
 
 	return closeWarzoneKey();

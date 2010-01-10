@@ -619,6 +619,7 @@ static void stopGameLoop(void)
 				debug(LOG_ERROR, "levReleaseAll failed!");
 			}
 		}
+		reloadMPConfig();
 	}
 
 	// Disable cursor trapping

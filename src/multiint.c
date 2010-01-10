@@ -2249,7 +2249,7 @@ static void disableMultiButs(void)
 static void stopJoining(void)
 {
 	dwSelectedGame	 = 0;
-	saveConfig();
+	reloadMPConfig(); // reload own settings
 
 	debug(LOG_NET,"player %u (Host is %s) stopping.", selectedPlayer, NetPlay.isHost ? "true" : "false");
 
