@@ -438,9 +438,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 			break;
 		}
 		default:
-			ASSERT( false,
-				"visibleObject: visibility checking is only implemented for"
-				"units and structures" );
+			ASSERT(false, "Visibility checking is only implemented for units and structures");
 			return 0;
 			break;
 	}
