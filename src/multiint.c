@@ -568,6 +568,8 @@ static BOOL OptionsInet(void)			//internet options
 
 	addMultiBut(psConScreen, CON_SETTINGS,CON_OK,CON_OKX,CON_OKY,MULTIOP_OKW,MULTIOP_OKH,
 				_("Accept Settings"),IMAGE_OK,IMAGE_OK,true);
+	addMultiBut(psConScreen, CON_SETTINGS,CON_IP_CANCEL,CON_OKX+MULTIOP_OKW+10,CON_OKY,MULTIOP_OKW,MULTIOP_OKH,
+				_("Cancel"),IMAGE_NO,IMAGE_NO,true);
 
 	//label.
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
@@ -601,14 +603,14 @@ static BOOL OptionsInet(void)			//internet options
 		return false;
 	}
 	// auto click in the text box
-	sContext.psScreen	= psWScreen;
-	sContext.psForm		= (W_FORM *)psWScreen->psForm;
+	sContext.psScreen	= psConScreen;
+	sContext.psForm		= (W_FORM *)psConScreen->psForm;
 	sContext.xOffset	= 0;
 	sContext.yOffset	= 0;
 	sContext.mx			= 0;
 	sContext.my			= 0;
-	editBoxClicked((W_EDITBOX*)widgGetFromID(psWScreen,CON_IP), &sContext);
-
+	editBoxClicked((W_EDITBOX*)widgGetFromID(psConScreen,CON_IP), &sContext);
+	
 	SettingsUp = true;
 	return true;
 }
@@ -688,10 +690,9 @@ void runConnectionScreen(void )
 		case CON_TYPESID_START+1: // IP button
 			OptionsInet();
 			break;
-		case CON_IP: // ip entered
-			sstrcpy(addr, widgGetString(psConScreen, CON_IP));
-			break;
 		case CON_OK:
+			sstrcpy(addr, widgGetString(psConScreen, CON_IP));
+
 			if(SettingsUp == true)
 			{
 				widgReleaseScreen(psConScreen);
@@ -701,6 +702,13 @@ void runConnectionScreen(void )
 			NETsetupTCPIP(addr); //inet
 
 			changeTitleMode(GAMEFIND);
+			break;
+		case CON_IP_CANCEL:
+			if (SettingsUp == true)
+			{
+				widgReleaseScreen(psConScreen);
+				SettingsUp = false;
+			}
 			break;
 	}
 

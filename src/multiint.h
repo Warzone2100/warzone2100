@@ -67,7 +67,7 @@ void loadMapPreview(bool hideInterface);
 #define CON_PASSWORD_LABEL	10132
 
 #define CON_OK				10101
-#define CON_OKX				CON_SETTINGSWIDTH-MULTIOP_OKW-3
+#define CON_OKX				CON_SETTINGSWIDTH-MULTIOP_OKW*2-13
 #define CON_OKY				CON_SETTINGSHEIGHT-MULTIOP_OKH-3
 
 #define CON_CANCEL			10102
@@ -79,6 +79,8 @@ void loadMapPreview(bool hideInterface);
 #define CON_IP				10133
 #define CON_IPX				20
 #define CON_IPY				45
+
+#define CON_IP_CANCEL		10134
 
 //for clients
 #define CON_PASSWORD		10139
