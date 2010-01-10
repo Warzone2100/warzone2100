@@ -332,7 +332,7 @@ bool recvDataCheck(void)
 				i = 0;
 			}
 
-			sprintf(msg, _("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player));
+			sprintf(msg, _("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
 			sendTextMessage(msg, true);
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
