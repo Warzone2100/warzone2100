@@ -4384,6 +4384,28 @@ BOOL cbSensorDroid(DROID *psDroid)
 	return false;
 }
 
+// return whether a droid has a standard sensor on it (standard, VTOL strike, or wide spectrum)
+BOOL standardSensorDroid(DROID *psDroid)
+{
+	if (psDroid->droidType != DROID_SENSOR)
+	{
+		return false;
+	}
+	
+	/*Super Sensor works as any type*/
+	if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
+		VTOL_INTERCEPT_SENSOR ||
+		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
+		STANDARD_SENSOR ||
+		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
+		SUPER_SENSOR)
+	{
+		return true;
+	}
+	
+	return false;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // give a droid from one player to another - used in Electronic Warfare and multiplayer
 //returns the droid created - for single player
