@@ -3646,10 +3646,10 @@ BOOL	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
 BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
 					 SDWORD player, BOOL (*function)(UDWORD x, UDWORD y))
 {
-SDWORD	i,j;
-SDWORD	startX,endX,startY,endY;
-UDWORD	passes;
-
+	SDWORD		i, j;
+	SDWORD		startX, endX, startY, endY;
+	UDWORD		passes;
+	Vector2i	origin = { *x, *y };
 
 	ASSERT_OR_RETURN(false, *x<mapWidth,"x coordinate is off-map for pickATileGen" );
 	ASSERT_OR_RETURN(false, *y<mapHeight,"y coordinate is off-map for pickATileGen" );
@@ -3673,8 +3673,12 @@ UDWORD	passes;
 				/* Test only perimeter as internal tested previous iteration */
 				if(i==startX || i==endX || j==startY || j==endY)
 				{
+					Vector2i newPos = { i, j };
+
 					/* Good enough? */
-					if(function(i,j) && ((threatRange <=0) || (!ThreatInRange(player, threatRange, world_coord(i), world_coord(j), false))))		//TODO: vtols check really not needed?
+					if (function(i, j)
+					    && fpathCheck(origin, newPos, PROPULSION_TYPE_WHEELED)
+					    && ((threatRange <= 0) || (!ThreatInRange(player, threatRange, world_coord(i), world_coord(j), false))))
 					{
 						/* Set exit conditions and get out NOW */
 						*x = i;	*y = j;
