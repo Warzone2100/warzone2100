@@ -77,6 +77,11 @@ static BOOL aiDroidHasRange(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_sl
 	WEAPON_STATS		*psWStats;
 	SDWORD			xdiff, ydiff, longRange;
 
+	if (psDroid->droidType == DROID_SENSOR)
+	{
+		return psDroid->sensorRange;
+	}
+
 	if (psDroid->numWeaps == 0 || psDroid->asWeaps[0].nStat == 0)
 	{
 		// Can't attack without a weapon
@@ -258,7 +263,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 
 	/* Return if have no weapons */
 	// The ai orders a non-combat droid to patrol = crash without it...
-	if(psDroid->asWeaps[0].nStat == 0 || psDroid->numWeaps == 0)
+	if ((psDroid->asWeaps[0].nStat == 0 || psDroid->numWeaps == 0) && psDroid->droidType != DROID_SENSOR)
 	{
 		return failure;
 	}
@@ -1122,8 +1127,8 @@ void aiUpdateDroid(DROID *psDroid)
 /* Set of rules which determine whether the weapon associated with the object can fire on the propulsion type of the target. */
 BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 {
-	BOOL	bTargetInAir, bValidTarget = false;
-	UBYTE	surfaceToAir;
+	BOOL	bTargetInAir = false, bValidTarget = false;
+	UBYTE	surfaceToAir = 0;
 
 	if (!psTarget)
 	{
@@ -1134,8 +1139,7 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 	switch (psTarget->type)
 	{
 	case OBJ_DROID:
-		if (asPropulsionTypes[asPropulsionStats[((DROID *)psTarget)->asBits[
-		                                            COMP_PROPULSION].nStat].propulsionType].travel == AIR)
+		if (asPropulsionTypes[asPropulsionStats[((DROID *)psTarget)->asBits[COMP_PROPULSION].nStat].propulsionType].travel == AIR)
 		{
 			if (((DROID *)psTarget)->sMove.Status != MOVEINACTIVE)
 			{
@@ -1162,10 +1166,13 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 	switch (psObject->type)
 	{
 	case OBJ_DROID:
+		if (((DROID *)psObject)->droidType == DROID_SENSOR)
+		{
+			return !bTargetInAir;  // Sensor droids should not target anything in the air.
+		}
+
 		// Can't attack without a weapon
-		//Watermelon:re-enabled if (((DROID *)psObject)->numWeaps != 0) to prevent crash
-		if (((DROID *)psObject)->numWeaps != 0 &&
-		        ((DROID *)psObject)->asWeaps[weapon_slot].nStat != 0)
+		if (((DROID *)psObject)->numWeaps != 0 && ((DROID *)psObject)->asWeaps[weapon_slot].nStat != 0)
 		{
 			surfaceToAir = asWeaponStats[((DROID *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
 			if (((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir))
@@ -1177,16 +1184,6 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 		{
 			return false;
 		}
-		/*
-		if (((DROID *)psObject)->asWeaps[0].nStat != 0 && ((DROID *)psObject)->numWeaps > 0)
-		{
-		    surfaceToAir = asWeaponStats[((DROID *)psObject)->asWeaps[0].nStat].surfaceToAir;
-		}
-		else
-		{
-			 surfaceToAir = 0;
-		}
-		*/
 		break;
 	case OBJ_STRUCTURE:
 		// Can't attack without a weapon
