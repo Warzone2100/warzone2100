@@ -1469,7 +1469,7 @@ BOOL scrBuildDroid(void)
 	}
 
 	ASSERT_OR_RETURN(false, psFactory != NULL, "NULL factory object");
-	ASSERT_OR_RETURN(false, psTemplate != NULL, "NULL factory object");
+	ASSERT_OR_RETURN(false, psTemplate != NULL, "NULL template object sent to %s", objInfo((BASE_OBJECT *)psFactory));
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player number");
 	ASSERT_OR_RETURN(false, productionRun <= UBYTE_MAX, "Production run too high");
 	ASSERT_OR_RETURN(false, (psFactory->pStructureType->type == REF_FACTORY ||
