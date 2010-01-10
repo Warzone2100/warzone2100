@@ -312,27 +312,35 @@ bool recvDataCheck(void)
 		NETuint32_t(&player);
 	NETend();
 
+	if (player >= MAX_PLAYERS) // invalid player number.
+	{
+		return false;
+	}
+	
 	if (NetPlay.isHost)
 	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			if (i == player)
-			{
-				break;
-			}
-		}
-		ASSERT_OR_RETURN(false , i <= MAX_PLAYERS, "We could not find this player (%u)!", player );
-
 		if (memcmp(DataHash, tempBuffer, sizeof(DataHash)))
 		{
 			char msg[256] = {'\0'};
 
-			sprintf(msg, _("Kicking player %s, game data doesn't match!"), getPlayerName(i));
+			for (i=0; i<DATA_MAXDATA; i++)
+			{
+				if (DataHash[i] != tempBuffer[i]) break;
+			}
+			if (i >= DATA_MAXDATA) // bug in memcmp?
+			{
+				i = 0;
+			}
+
+			sprintf(msg, _("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player));
 			sendTextMessage(msg, true);
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 			kickPlayer(player, "your data doesn't match the host's!", ERROR_WRONGDATA);
-			debug(LOG_WARNING, "Kicking Player %s (%u), they are using a mod or have modified their data.", getPlayerName(i), player);
+			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
+			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
+
+			return false;
 		}
 		else
 		{
