@@ -1962,7 +1962,7 @@ static void drawReadyButton(UDWORD player)
 
 static bool canChooseTeamFor(int i)
 {
-	return (i == selectedPlayer || (!isHumanPlayer(i) && NetPlay.isHost));
+	return (i == selectedPlayer || NetPlay.isHost);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
