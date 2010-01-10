@@ -773,6 +773,10 @@ BOOL recvMessage(void)
 				debug(LOG_ERROR, "You were kicked because %s", reason);
 				setPlayerHasLost(true);
 			}
+			else
+			{
+				NETplayerKicked(player_id);
+			}
 			break;
 		}
 		case NET_FIREUP:				// frontend only
