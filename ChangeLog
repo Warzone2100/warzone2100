@@ -1,18 +1,21 @@
 2010-01-10: Version 2.3 beta 7
  * General:
    * Change: No longer always show all oil derricks in skirmish since it was leaking too much information about where the enemy expands (ticket:1087, r9060)
-   * Fix: Improve challenges (r9057)
+   * Fix: Some challenges placed players on the wrong positions (r9057)
    * Fix: Tutorial could not be finished (r9034, ticket:1361)
    * Fix: Tutorial / Fast Play works again (r9029)
    * Fix: Fog of War now shown in all radar modes (r9059)
    * Fix: Messages sent to allies no longer appear twice (r9055)
-   * Fix: Assorted bugfixes and crash fixes (r9069, r9063, r9053, r9042, r9048)
+   * Fix: Audio queue not being cleared properly (r9107, ticket:1391)
+   * Fix: Various bugs and crashes (r9069, r9063, r9053, r9042, r9048, 9095, 9098, 9105, ticket:1392, r9108, ticket:1383, r9113, ticket:1334)
  * Gameplay:
    * Change: Power now limited to 100000 (r9073)
    * Fix: Transporters didn't fly to delivery point (r9066)
  * Multiplayer:
    * Fix: Do not allow kicks to be ignored (r9064, ticket:1375)
    * Fix: Revert new sync code to fix sync issues (r9043, r9044)
+   * Fix: Make sure only beacons are only seen by those who should (r9083, ticket:1250)
+   * Fix: Allow host to choose teams for any player (r9094)
  * Translations:
    * New: Ukrainian (r9040)
    * Updated: German (r9072), Estonian (r9079)
