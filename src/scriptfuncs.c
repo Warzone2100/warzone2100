@@ -1460,52 +1460,24 @@ BOOL scrRemoveMessage(void)
 BOOL scrBuildDroid(void)
 {
 	SDWORD			player, productionRun;
-//	INTERP_VAL		sVal, sVal2;
 	STRUCTURE		*psFactory;
 	DROID_TEMPLATE	*psTemplate;
 
-	if (!stackPopParams(4, ST_TEMPLATE, &psTemplate, ST_STRUCTURE, &psFactory,
-					VAL_INT, &player, VAL_INT, &productionRun))
+	if (!stackPopParams(4, ST_TEMPLATE, &psTemplate, ST_STRUCTURE, &psFactory, VAL_INT, &player, VAL_INT, &productionRun))
 	{
 		return false;
 	}
 
-	if (psFactory == NULL)
-	{
-		ASSERT( false, "scrBuildUnit: NULL factory object" );
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrBuildUnit:player number is too high" );
-		return false;
-	}
-
-	if (productionRun > UBYTE_MAX)
-	{
-		ASSERT( false, "scrBuildUnit: production run too high" );
-		return false;
-	}
-
-	ASSERT( psFactory != NULL,
-		"scrBuildUnit: Invalid structure pointer" );
-	ASSERT( (psFactory->pStructureType->type == REF_FACTORY ||
-		psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
-		psFactory->pStructureType->type == REF_VTOL_FACTORY),
-		"scrBuildUnit: structure is not a factory" );
-	ASSERT( psTemplate != NULL,
-		"scrBuildUnit: Invalid template pointer" );
-
-	//check building the right sort of droid for the factory
-	if (!validTemplateForFactory(psTemplate, psFactory))
-	{
-
-		ASSERT( false, "scrBuildUnit: invalid template - %s for factory - %s",
-			psTemplate->aName, psFactory->pStructureType->pName );
-
-		return false;
-	}
+	ASSERT_OR_RETURN(false, psFactory != NULL, "NULL factory object");
+	ASSERT_OR_RETURN(false, psTemplate != NULL, "NULL factory object");
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player number");
+	ASSERT_OR_RETURN(false, productionRun <= UBYTE_MAX, "Production run too high");
+	ASSERT_OR_RETURN(false, (psFactory->pStructureType->type == REF_FACTORY ||
+	                         psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
+	                         psFactory->pStructureType->type == REF_VTOL_FACTORY),
+	                 "Structure is not a factory");
+	ASSERT_OR_RETURN(false, validTemplateForFactory(psTemplate, psFactory), "Invalid template - %s for factory - %s",
+	                 psTemplate->aName, psFactory->pStructureType->pName);
 
 	structSetManufacture(psFactory, psTemplate, (UBYTE)productionRun);
 
