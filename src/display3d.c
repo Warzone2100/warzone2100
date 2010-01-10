@@ -1327,6 +1327,7 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 	                           world_coord(left)+world_coord(sBuildDetails.width)/2,
 	                           world_coord(up)+world_coord(sBuildDetails.height)/2,
 	                           state);
+	ASSERT_OR_RETURN(, blueprint != NULL, "No blueprint created");
 
 	if (psStats->type == REF_WALL &&
 		left == right && up != down)
@@ -1422,12 +1423,10 @@ void displayBlueprints(void)
 	// now we draw the blueprints for all ordered buildings
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
-		//psDroid = (DROID *)psObj;
-		if (psDroid->droidType == DROID_CONSTRUCT ||
-			psDroid->droidType == DROID_CYBORG_CONSTRUCT)
+		if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 		{
 			//draw the current build site if its a line of structures
-			if (psDroid->order == DORDER_LINEBUILD)
+			if (psDroid->order == DORDER_LINEBUILD && psDroid->psTarStats)
 			{
 				int left, right, up, down;
 				// a wall (or something like that)
@@ -1439,7 +1438,7 @@ void displayBlueprints(void)
 
 				drawWallDrag((STRUCTURE_STATS *)psDroid->psTarStats, left, right, up, down, SS_BLUEPRINT_PLANNED);
 			}
-			if (psDroid->order == DORDER_BUILD)
+			if (psDroid->order == DORDER_BUILD && psDroid->psTarStats)
 			{
 				if (!TileHasStructure(mapTile(map_coord(psDroid->orderX),map_coord(psDroid->orderY))))
 				{

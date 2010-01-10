@@ -2078,7 +2078,12 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STATES state)
 {
-	STRUCTURE *blueprint = malloc(sizeof(STRUCTURE));
+	STRUCTURE *blueprint;
+
+	ASSERT_OR_RETURN(NULL, psStats != NULL, "No blueprint stats");
+	ASSERT_OR_RETURN(NULL, psStats->pIMD, "No blueprint model for %s", getStatName(psStats));
+
+	blueprint = malloc(sizeof(STRUCTURE));
 	// construct the fake structure
 	psStats = (STRUCTURE_STATS *)psStats;
 	blueprint->pStructureType = psStats;
