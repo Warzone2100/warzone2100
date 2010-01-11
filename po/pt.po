@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-09 17:23+0100\n"
+"POT-Creation-Date: 2010-01-12 00:35+0100\n"
 "PO-Revision-Date: 2009-08-04 22:59+0100\n"
 "Last-Translator: Pedro Miguel Martins da Silva Caetano <pedro.m.caetano@netcabo.pt>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
@@ -11566,7 +11566,7 @@ msgid "Join Game"
 msgstr "Juntar-se a Jogo"
 
 #: src/frontend.c:576
-#: src/multiint.c:1241
+#: src/multiint.c:1249
 msgid "OPTIONS"
 msgstr "OPÇÕES"
 
@@ -11662,7 +11662,7 @@ msgid "Off"
 msgstr "Desligado"
 
 #: src/frontend.c:678
-#: src/multiint.c:1310
+#: src/multiint.c:1318
 msgid "Fog"
 msgstr "Nevoeiro"
 
@@ -11673,7 +11673,7 @@ msgstr "Nevoeiro"
 
 #: src/frontend.c:685
 #: src/frontend.c:760
-#: src/multiint.c:1312
+#: src/multiint.c:1320
 msgid "Fog Of War"
 msgstr "Nevoeiro de guerra"
 
@@ -11811,10 +11811,10 @@ msgid "GAME OPTIONS"
 msgstr "OPÇÕES DE JOGO"
 
 #: src/hci.c:1010
-#: src/hci.c:3799
-#: src/hci.c:3950
-#: src/hci.c:4403
-#: src/hci.c:5607
+#: src/hci.c:3798
+#: src/hci.c:3949
+#: src/hci.c:4402
+#: src/hci.c:5606
 #: src/intelmap.c:543
 #: src/intorder.c:661
 #: src/loadsave.c:256
@@ -11826,135 +11826,135 @@ msgstr "OPÇÕES DE JOGO"
 msgid "Close"
 msgstr "Fechar"
 
-#: src/hci.c:1356
+#: src/hci.c:1355
 msgid "MAP SAVED!"
 msgstr "MAPA GRAVADO!"
 
-#: src/hci.c:1703
+#: src/hci.c:1702
 #: src/loop.c:526
 #: src/loop.c:542
 msgid "GAME SAVED: "
 msgstr "JOGO GRAVADO!"
 
-#: src/hci.c:2110
+#: src/hci.c:2109
 msgid "Failed to create building"
 msgstr "Não foi possível criar o edifício"
 
-#: src/hci.c:2133
+#: src/hci.c:2132
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Jogador %u está a fazer batota (menu debug) para obter uma nova estrutura %s."
 
-#: src/hci.c:2148
+#: src/hci.c:2147
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Jogador %u está a fazer batota (menu debug) para obter uma nova característica %s."
 
-#: src/hci.c:2169
+#: src/hci.c:2168
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Jogador %u está a fazer batota (menu debug) para obter um novo droid %s."
 
-#: src/hci.c:3701
+#: src/hci.c:3700
 msgid "Commanders (F6)"
 msgstr "Comandantes (F6)"
 
-#: src/hci.c:3717
+#: src/hci.c:3716
 msgid "Intelligence Display (F5)"
 msgstr "Ecrã de Informação"
 
-#: src/hci.c:3733
+#: src/hci.c:3732
 msgid "Manufacture (F1)"
 msgstr "Produção (F1)"
 
-#: src/hci.c:3749
+#: src/hci.c:3748
 msgid "Design (F4)"
 msgstr "Desenho (F4)"
 
-#: src/hci.c:3765
+#: src/hci.c:3764
 msgid "Research (F2)"
 msgstr "Investigação (F2)"
 
-#: src/hci.c:3781
+#: src/hci.c:3780
 msgid "Build (F3)"
 msgstr "Construir (F3)"
 
-#: src/hci.c:3861
-#: src/multiint.c:1357
+#: src/hci.c:3860
+#: src/multiint.c:1365
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.c:4045
+#: src/hci.c:4044
 msgid "Tile"
 msgstr "Mosaico"
 
-#: src/hci.c:4046
+#: src/hci.c:4045
 msgid "Place tiles on map"
 msgstr "Coloca mosaicos no mapa"
 
-#: src/hci.c:4055
+#: src/hci.c:4054
 msgid "Unit"
 msgstr "Unidade"
 
-#: src/hci.c:4056
+#: src/hci.c:4055
 msgid "Place Unit on map"
 msgstr "Colocar Unidade no mapa"
 
-#: src/hci.c:4064
+#: src/hci.c:4063
 msgid "Struct"
 msgstr "Estrutura"
 
-#: src/hci.c:4065
+#: src/hci.c:4064
 msgid "Place Structures on map"
 msgstr "Colocar Estruturas no mapa"
 
-#: src/hci.c:4073
+#: src/hci.c:4072
 msgid "Feat"
 msgstr "Característica"
 
-#: src/hci.c:4074
+#: src/hci.c:4073
 #, fuzzy
 msgid "Place Features on map"
 msgstr "Colocar ?recursos/características? no mapa"
 
-#: src/hci.c:4085
+#: src/hci.c:4084
 msgid "Pause or unpause the game"
 msgstr "Pausa ou retira de pausa o jogo"
 
-#: src/hci.c:4099
+#: src/hci.c:4098
 msgid "Align height of all map objects"
 msgstr "Alinhar altura de todos os objectos do mapa"
 
-#: src/hci.c:4124
+#: src/hci.c:4123
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "Sair"
 
-#: src/hci.c:4125
+#: src/hci.c:4124
 msgid "Exit Game"
 msgstr "Sair do Jogo"
 
-#: src/hci.c:4488
+#: src/hci.c:4487
 #: src/intdisplay.c:267
 msgid "Progress Bar"
 msgstr "Barra de Progresso"
 
-#: src/hci.c:5522
+#: src/hci.c:5521
 msgid "Factory Delivery Point"
 msgstr "Ponto de Destino da Fábrica"
 
-#: src/hci.c:5541
+#: src/hci.c:5540
 msgid "Loop Production"
 msgstr "Produção Pontínua"
 
-#: src/hci.c:5632
+#: src/hci.c:5631
 msgid "Tab Scroll left"
 msgstr "Tab Scroll esquerda"
 
-#: src/hci.c:5649
+#: src/hci.c:5648
 msgid "Tab Scroll right"
 msgstr "Tab Scroll direita"
 
@@ -11965,7 +11965,7 @@ msgid "Resume Game"
 msgstr "Retomar Jogo"
 
 #: src/ingameop.c:142
-msgid "Warning, if Host quits, the game ends for everyone!"
+msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr ""
 
 #: src/ingameop.c:195
@@ -12011,7 +12011,7 @@ msgid "Power Accrued"
 msgstr "Energia resultante"
 
 #: src/intelmap.c:247
-#: src/keybind.c:1330
+#: src/keybind.c:1331
 msgid "PAUSED"
 msgstr "EM PAUSA"
 
@@ -12139,262 +12139,278 @@ msgstr "Designar produção de Fábrica de VTOLs"
 msgid "Circle"
 msgstr "Círculo"
 
-#: src/keybind.c:133
+#: src/keybind.c:134
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Esta cheat está bloqueada nos jogos multiplayer."
 
-#: src/keybind.c:139
+#: src/keybind.c:140
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "Aviso! Esta batota tem bugs. NÃO recomendamos o seu uso."
 
-#: src/keybind.c:198
+#: src/keybind.c:199
 msgid "Lets us see what you see!"
 msgstr "Deixa-nos ver o que vês!"
 
-#: src/keybind.c:200
+#: src/keybind.c:201
 msgid "Fine, weapon & sensor display is off!"
 msgstr "OK, o painel de armas e sensores está desligado!"
 
-#: src/keybind.c:338
-#: src/keybind.c:368
-#: src/keybind.c:385
-#: src/keybind.c:429
-#: src/keybind.c:534
-#: src/keybind.c:574
-#: src/keybind.c:680
-#: src/keybind.c:1231
-#: src/keybind.c:1288
-#: src/keybind.c:1379
-#: src/keybind.c:1474
-#: src/keybind.c:1825
-#: src/keybind.c:1865
+#: src/keybind.c:339
+#: src/keybind.c:369
+#: src/keybind.c:386
+#: src/keybind.c:430
+#: src/keybind.c:535
+#: src/keybind.c:575
+#: src/keybind.c:681
+#: src/keybind.c:1232
+#: src/keybind.c:1289
+#: src/keybind.c:1380
+#: src/keybind.c:1475
+#: src/keybind.c:1826
+#: src/keybind.c:1866
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Jogador %u) está a usar batotas :%s"
 
-#: src/keybind.c:339
+#: src/keybind.c:340
 msgid "Hard as nails!!!"
 msgstr "Rijos como betão!!!"
 
-#: src/keybind.c:353
+#: src/keybind.c:354
 msgid "Takings thing easy!"
 msgstr "A levar as coisas nas calmas!"
 
-#: src/keybind.c:369
+#: src/keybind.c:370
 msgid "1000 big ones!!!"
 msgstr "1000 dos grandes!!!"
 
-#: src/keybind.c:386
+#: src/keybind.c:387
 msgid "Power overwhelming"
 msgstr "Energia avassaladora"
 
-#: src/keybind.c:401
+#: src/keybind.c:402
 msgid "Back to normality!"
 msgstr "De volta à normalidade!"
 
-#: src/keybind.c:414
+#: src/keybind.c:415
 msgid "Getting tricky!"
 msgstr "A ficar matreiro!"
 
-#: src/keybind.c:430
+#: src/keybind.c:431
 msgid "Twice as nice!"
 msgstr "Duplamente simpático!"
 
-#: src/keybind.c:441
+#: src/keybind.c:442
 msgid "FPS display is enabled."
 msgstr "Mostrar FPS: Activado."
 
-#: src/keybind.c:445
+#: src/keybind.c:446
 msgid "FPS display is disabled."
 msgstr "Mostrar FPS: Desactivado."
 
-#: src/keybind.c:466
+#: src/keybind.c:467
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; Limite-FPS: %d PIEs %d; polys %d; Terr. polys %d; States %d"
 
-#: src/keybind.c:498
+#: src/keybind.c:499
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(Jogador %u) está a usar uma batota :Num Droids: %d  Num Structures: %d  Num Features: %d"
 
-#: src/keybind.c:535
+#: src/keybind.c:536
 msgid "Infinite power disabled"
 msgstr "Energia infinita desactivada"
 
-#: src/keybind.c:535
+#: src/keybind.c:536
 msgid "Infinite power enabled"
 msgstr "Energia infinita activada"
 
-#: src/keybind.c:575
+#: src/keybind.c:576
 msgid "All items made available"
 msgstr "Todos os items estão disponíveis"
 
-#: src/keybind.c:681
+#: src/keybind.c:682
 msgid "Fog on"
 msgstr "Fog ligado"
 
-#: src/keybind.c:681
+#: src/keybind.c:682
 msgid "Fog off"
 msgstr "Fog desligado"
 
-#: src/keybind.c:1120
+#: src/keybind.c:1121
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "Aviso! Esta batota pode causar graves problemas mais tarde! [%s]"
 
-#: src/keybind.c:1120
+#: src/keybind.c:1121
 msgid "Ending Mission."
 msgstr "A Terminar Missão"
 
-#: src/keybind.c:1232
+#: src/keybind.c:1233
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "AS BATOTAS ESTÃO AGORA ACTIVADAS!"
 
-#: src/keybind.c:1232
+#: src/keybind.c:1233
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "AS BATOTAS ESTÃO AGORA DESACTIVADAS!"
 
-#: src/keybind.c:1289
+#: src/keybind.c:1290
 msgid "God Mode ON"
 msgstr "Modo God Activado"
 
-#: src/keybind.c:1289
+#: src/keybind.c:1290
 msgid "God Mode OFF"
 msgstr "Modo God Desactivado"
 
-#: src/keybind.c:1301
+#: src/keybind.c:1302
 msgid "View Aligned to North"
 msgstr "Vista alinahada para Norte"
 
-#: src/keybind.c:1380
+#: src/keybind.c:1381
 msgid "Researched EVERYTHING for you!"
 msgstr "Pesquisei TUDO para ti!"
 
-#: src/keybind.c:1411
+#: src/keybind.c:1412
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Jogador %u) está a fazer batota :%s %s"
 
-#: src/keybind.c:1412
+#: src/keybind.c:1413
 msgid "Researched"
 msgstr "Investigado"
 
 # energy=health?
-#: src/keybind.c:1432
+#: src/keybind.c:1433
 msgid "Only displaying energy bars when selected"
 msgstr "Mostrar barras de saúde apenas quando seleccionadas"
 
-#: src/keybind.c:1435
+#: src/keybind.c:1436
 msgid "Always displaying energy bars for units"
 msgstr "Mostrar sempre barras de saúde das unidades"
 
-#: src/keybind.c:1438
+#: src/keybind.c:1439
 msgid "Always displaying energy bars for units and structures"
 msgstr "Mostrar sempre barras de saúde das unidades e estruturas"
 
-#: src/keybind.c:1460
+#: src/keybind.c:1461
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Modo demo desligado - A voltar ao modo de jogo normal"
 
-#: src/keybind.c:1475
+#: src/keybind.c:1476
 msgid "Debug menu is Open"
 msgstr "Menu de Debug Aberto"
 
-#: src/keybind.c:1506
+#: src/keybind.c:1507
 msgid "Unable to locate any resource extractors!"
 msgstr "Incapaz de localizar qualquer extractor de recursos!"
 
-#: src/keybind.c:1727
+#: src/keybind.c:1728
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "E o tempo está tão frio lá fora... NEVE"
 
-#: src/keybind.c:1733
+#: src/keybind.c:1734
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Singing in the rain, I'm singing in the rain... CHUVA"
 
-#: src/keybind.c:1739
+#: src/keybind.c:1740
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Previsão do Tempo: Céu limpo para todas as áreas... Sem Tempo"
 
-#: src/keybind.c:1824
+#: src/keybind.c:1825
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Aviso! Isto pode ter consequências graves se for usado incorrectamente nas missões."
 
-#: src/keybind.c:1826
+#: src/keybind.c:1827
 msgid "All enemies destroyed by cheating!"
 msgstr "Inimigo destruído por batota."
 
-#: src/keybind.c:1866
+#: src/keybind.c:1867
 msgid "Destroying selected droids and structures!"
 msgstr "A destruir droides e estruturas seleccionadas!"
 
-#: src/keybind.c:2390
+#: src/keybind.c:2395
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Centrado no QG dos jogador, direcção NORTE"
 
-#: src/keybind.c:2402
+#: src/keybind.c:2407
 msgid "Unable to locate HQ!"
 msgstr "Incapaz de localizar o QG!"
 
-#: src/keybind.c:2413
+#: src/keybind.c:2418
 msgid "Formation speed limiting OFF"
 msgstr "Limite de velocidade de formação OFF"
 
-#: src/keybind.c:2417
+#: src/keybind.c:2422
 msgid "Formation speed limiting ON"
 msgstr "Limite de velocidade de formação ON"
 
-#: src/keybind.c:2547
-#: src/keybind.c:2588
-#: src/keybind.c:2610
+#: src/keybind.c:2473
+msgid "Vertical rotation direction: Normal"
+msgstr ""
+
+#: src/keybind.c:2478
+msgid "Vertical rotation direction: Flipped"
+msgstr ""
+
+#: src/keybind.c:2487
+msgid "Screen shake when things die: Off"
+msgstr ""
+
+#: src/keybind.c:2492
+msgid "Screen shake when things die: On"
+msgstr ""
+
+#: src/keybind.c:2556
+#: src/keybind.c:2597
+#: src/keybind.c:2619
 msgid "Game Speed Reset"
 msgstr "Velocidade de jogo reposta"
 
-#: src/keybind.c:2551
+#: src/keybind.c:2560
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Velocidade de jogo aumentada para %3.1f"
 
-#: src/keybind.c:2592
+#: src/keybind.c:2601
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Velocidade de jogo reduzida para %3.1f"
 
-#: src/keybind.c:2622
+#: src/keybind.c:2631
 msgid "Build menu will reopen"
 msgstr "Menu de construção vai reabrir"
 
-#: src/keybind.c:2626
+#: src/keybind.c:2635
 msgid "Build menu will not reopen"
 msgstr "Menu de construção não vai reabrir"
 
-#: src/keybind.c:2638
+#: src/keybind.c:2647
 msgid "Radar showing friend-foe colors"
 msgstr "Radar a mostrar cores de amigo/inimigo"
 
-#: src/keybind.c:2642
+#: src/keybind.c:2651
 msgid "Radar showing player colors"
 msgstr "Radar a mostrar cores de jogador"
 
-#: src/keybind.c:2663
+#: src/keybind.c:2672
 msgid "Radar showing only objects"
 msgstr "Radar a mostrar apenas objectos"
 
-#: src/keybind.c:2666
+#: src/keybind.c:2675
 msgid "Radar blending terrain and height"
 msgstr "Radar a misturar terreno e altura"
 
-#: src/keybind.c:2669
+#: src/keybind.c:2678
 msgid "Radar showing terrain"
 msgstr "Radar a mostrar terreno"
 
-#: src/keybind.c:2672
+#: src/keybind.c:2681
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar a mostrar terreno"
 
-#: src/keybind.c:2675
+#: src/keybind.c:2684
 msgid "Radar showing height"
 msgstr "Radar a mostrar altura"
 
@@ -12403,10 +12419,10 @@ msgid "KEY MAPPING"
 msgstr "DEFINIÇÃO DE TECLAS"
 
 #: src/keyedit.c:386
-#: src/multiint.c:634
-#: src/multiint.c:676
-#: src/multiint.c:1059
-#: src/multiint.c:1443
+#: src/multiint.c:636
+#: src/multiint.c:678
+#: src/multiint.c:1067
+#: src/multiint.c:1451
 msgid "Return To Previous Screen"
 msgstr "Voltar ao ecrâ anterior"
 
@@ -12876,255 +12892,256 @@ msgstr "Descobriste esquemas para %s"
 msgid "Accept Settings"
 msgstr "Aceitar definições"
 
-#: src/multiint.c:581
-msgid "IP Address or Machine Name"
-msgstr "Endereço IP ou nome do Computador"
-
-#: src/multiint.c:631
-msgid "CONNECTION"
-msgstr "Conexão"
-
-#: src/multiint.c:644
-msgid "Lobby"
-msgstr "Lobby"
-
-#: src/multiint.c:645
-msgid "IP"
-msgstr "IP"
-
-#: src/multiint.c:825
-msgid "No games are available"
-msgstr "Não há jogos disponíveis"
-
-#: src/multiint.c:828
-msgid "Game is full"
-msgstr "Jogo cheio"
-
-#: src/multiint.c:832
-msgid "You were kicked!"
-msgstr "Foste expulso!"
-
-#: src/multiint.c:835
-msgid "Wrong Game Version!"
-msgstr "Versão Errada do Jogo!"
-
-#: src/multiint.c:838
-msgid "Wrong data/mod detected by Host."
-msgstr ""
-
-#: src/multiint.c:842
-msgid "Host couldn't send file?"
-msgstr ""
-
-#: src/multiint.c:846
-msgid "Incorrect Password!"
-msgstr "Palavra-passe incorrecta!"
-
-#: src/multiint.c:849
-msgid "Host has dropped connection!"
-msgstr ""
-
-#: src/multiint.c:853
-msgid "Connection Error"
-msgstr "Erro de conexão"
-
-#: src/multiint.c:1000
-msgid "Searching"
-msgstr "A Procurar"
-
-#: src/multiint.c:1056
-msgid "GAMES"
-msgstr "JOGOS"
-
-#: src/multiint.c:1064
-msgid "Refresh Games List"
-msgstr "Actualizar Lista de Jogos"
-
-#: src/multiint.c:1084
-#, fuzzy
-msgid "Enter Password:"
-msgstr "Insere Primeiro a Palavra-passe"
-
-#: src/multiint.c:1105
-msgid "OK"
-msgstr ""
-
-#: src/multiint.c:1107
+#: src/multiint.c:572
+#: src/multiint.c:1115
 #, fuzzy
 msgid "Cancel"
 msgstr "Lancer"
 
-#: src/multiint.c:1246
-#: src/multiint.c:1253
+#: src/multiint.c:583
+msgid "IP Address or Machine Name"
+msgstr "Endereço IP ou nome do Computador"
+
+#: src/multiint.c:633
+msgid "CONNECTION"
+msgstr "Conexão"
+
+#: src/multiint.c:646
+msgid "Lobby"
+msgstr "Lobby"
+
+#: src/multiint.c:647
+msgid "IP"
+msgstr "IP"
+
+#: src/multiint.c:833
+msgid "No games are available"
+msgstr "Não há jogos disponíveis"
+
+#: src/multiint.c:836
+msgid "Game is full"
+msgstr "Jogo cheio"
+
+#: src/multiint.c:840
+msgid "You were kicked!"
+msgstr "Foste expulso!"
+
+#: src/multiint.c:843
+msgid "Wrong Game Version!"
+msgstr "Versão Errada do Jogo!"
+
+#: src/multiint.c:846
+msgid "Wrong data/mod detected by Host."
+msgstr ""
+
+#: src/multiint.c:850
+msgid "Host couldn't send file?"
+msgstr ""
+
+#: src/multiint.c:854
+msgid "Incorrect Password!"
+msgstr "Palavra-passe incorrecta!"
+
+#: src/multiint.c:857
+msgid "Host has dropped connection!"
+msgstr ""
+
+#: src/multiint.c:861
+msgid "Connection Error"
+msgstr "Erro de conexão"
+
+#: src/multiint.c:1008
+msgid "Searching"
+msgstr "A Procurar"
+
+#: src/multiint.c:1064
+msgid "GAMES"
+msgstr "JOGOS"
+
+#: src/multiint.c:1072
+msgid "Refresh Games List"
+msgstr "Actualizar Lista de Jogos"
+
+#: src/multiint.c:1092
+#, fuzzy
+msgid "Enter Password:"
+msgstr "Insere Primeiro a Palavra-passe"
+
+#: src/multiint.c:1113
+msgid "OK"
+msgstr ""
+
+#: src/multiint.c:1254
+#: src/multiint.c:1261
 msgid "Select Game Name"
 msgstr "Seleccionar Nome do Jogo"
 
-#: src/multiint.c:1246
+#: src/multiint.c:1254
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "Skirmish de Um Jogador"
 
-#: src/multiint.c:1256
+#: src/multiint.c:1264
 msgid "Select Map"
 msgstr "Seleccionar Mapa"
 
-#: src/multiint.c:1264
+#: src/multiint.c:1272
 msgid "Click to set Password"
 msgstr "Clica para definir Palavra-passe"
 
-#: src/multiint.c:1274
-#: src/multiint.c:1275
+#: src/multiint.c:1282
+#: src/multiint.c:1283
 msgid "Scavengers"
 msgstr "Saqueadores"
 
-#: src/multiint.c:1277
+#: src/multiint.c:1285
 msgid "No Scavengers"
 msgstr "Sem Saqueadores"
 
-#: src/multiint.c:1307
+#: src/multiint.c:1315
 msgid "Select Player Name"
 msgstr "Seleccionar Nome de Jogador"
 
-#: src/multiint.c:1313
+#: src/multiint.c:1321
 msgid "Distance Fog"
 msgstr "Nevoeiro de distância"
 
-#: src/multiint.c:1324
+#: src/multiint.c:1332
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Alianças"
 
-#: src/multiint.c:1327
+#: src/multiint.c:1335
 msgid "No Alliances"
 msgstr "Sem Alianças"
 
-#: src/multiint.c:1329
+#: src/multiint.c:1337
 msgid "Allow Alliances"
 msgstr "Permitir Alianças"
 
-#: src/multiint.c:1333
+#: src/multiint.c:1341
 msgid "Locked Teams"
 msgstr "Equipas Fixas"
 
-#: src/multiint.c:1359
+#: src/multiint.c:1367
 msgid "Low Power Levels"
 msgstr "Níveis de Energia Baixos"
 
-#: src/multiint.c:1361
+#: src/multiint.c:1369
 msgid "Medium Power Levels"
 msgstr "Níveis de Energia Médios"
 
-#: src/multiint.c:1363
+#: src/multiint.c:1371
 msgid "High Power Levels"
 msgstr "Níveis de Energia Altos"
 
-#: src/multiint.c:1395
+#: src/multiint.c:1403
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.c:1397
+#: src/multiint.c:1405
 msgid "Start with No Bases"
 msgstr "Começar sem Bases"
 
-#: src/multiint.c:1399
+#: src/multiint.c:1407
 msgid "Start with Bases"
 msgstr "Começar com Bases"
 
-#: src/multiint.c:1401
+#: src/multiint.c:1409
 msgid "Start with Advanced Bases"
 msgstr "Começar com Bases Avançadas"
 
-#: src/multiint.c:1433
+#: src/multiint.c:1441
 msgid "Map Preview"
 msgstr "Pré-visualizar o mapa"
 
-#: src/multiint.c:1435
+#: src/multiint.c:1443
 msgid "Click to see Map"
 msgstr "Clica para ver o mapa"
 
-#: src/multiint.c:1449
+#: src/multiint.c:1457
 msgid "Start Hosting Game"
 msgstr "Iniciar Servidor de Jogo"
 
-#: src/multiint.c:1457
+#: src/multiint.c:1465
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "Ajustar Limites de Estrutura"
 
-#: src/multiint.c:1457
+#: src/multiint.c:1465
 msgid "Set Structure Limits"
 msgstr "Ajustar Limites de Estrutura"
 
-#: src/multiint.c:1520
+#: src/multiint.c:1528
 #, fuzzy
 msgid "Player colour"
 msgstr "Jogador Saiu"
 
-#: src/multiint.c:1536
+#: src/multiint.c:1544
 #, fuzzy
 msgid "Kick player"
 msgstr "2 jogadores"
 
-#: src/multiint.c:1547
+#: src/multiint.c:1555
 #, fuzzy
 msgid "Player number"
 msgstr "Jogador Saiu"
 
-#: src/multiint.c:1909
+#: src/multiint.c:1917
 msgid "Team"
 msgstr "Equipa"
 
-#: src/multiint.c:1942
+#: src/multiint.c:1950
 msgid "Waiting for other players"
 msgstr "À espera dos outros jogadores"
 
-#: src/multiint.c:1948
+#: src/multiint.c:1956
 msgid "Click when ready"
 msgstr "Clica quando estiveres pronto"
 
-#: src/multiint.c:1952
+#: src/multiint.c:1960
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.c:1989
+#: src/multiint.c:1997
 msgid "PLAYERS"
 msgstr "JOGADORES"
 
-#: src/multiint.c:2172
+#: src/multiint.c:2180
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:2347
+#: src/multiint.c:2355
 msgid "*** password is now required! ***"
 msgstr "*** É agora necessária uma Palavra-passe! ***"
 
-#: src/multiint.c:2354
+#: src/multiint.c:2362
 msgid "*** password is NOT required! ***"
 msgstr "*** NÃO é necessária Palavra-passe ***"
 
-#: src/multiint.c:2596
+#: src/multiint.c:2604
 msgid "Sorry! Failed to host the game."
 msgstr "Desculpa! Não foi possível criar o jogo."
 
-#: src/multiint.c:2681
+#: src/multiint.c:2689
 msgid "'Locked Teams' mode enabled"
 msgstr "Modo \"Equipas Fixas\" activado"
 
-#: src/multiint.c:2720
-#: src/multiint.c:2770
+#: src/multiint.c:2728
+#: src/multiint.c:2778
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "O servidor kickou %s do jogo!"
 
-#: src/multiint.c:2832
+#: src/multiint.c:2840
 msgid "Host is Starting Game"
 msgstr "O servidor está a começar o jogo"
 
-#: src/multiint.c:3379
+#: src/multiint.c:3387
 msgid "Players"
 msgstr "Jogadores"
 
-#: src/multiint.c:3495
+#: src/multiint.c:3503
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
@@ -13139,17 +13156,17 @@ msgstr "Os jogadores ainda estão a entrar."
 msgid "%s has Left the Game"
 msgstr "%s abandonou o Jogo"
 
-#: src/multijoin.c:330
+#: src/multijoin.c:335
 #, c-format
-msgid "Kicking player %s, game data doesn't match!"
+msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.c:366
+#: src/multijoin.c:374
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s está a juntar-se ao Jogo"
 
-#: src/multijoin.c:376
+#: src/multijoin.c:384
 msgid "System message:"
 msgstr "Mensagem de Sistema:"
 
@@ -13233,48 +13250,48 @@ msgstr "Dar Energia ao Jogador"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1080
+#: src/multiplay.c:1084
 #, fuzzy
 msgid "(allies"
 msgstr "Alianças"
 
-#: src/multiplay.c:1088
+#: src/multiplay.c:1092
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1101
+#: src/multiplay.c:1105
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1957
+#: src/multiplay.c:1961
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.c:1958
+#: src/multiplay.c:1962
 msgid "Orange"
 msgstr "Laranja"
 
-#: src/multiplay.c:1959
+#: src/multiplay.c:1963
 msgid "Grey"
 msgstr "Cinzento"
 
-#: src/multiplay.c:1960
+#: src/multiplay.c:1964
 msgid "Black"
 msgstr "Preto"
 
-#: src/multiplay.c:1961
+#: src/multiplay.c:1965
 msgid "Red"
 msgstr "Vermelho"
 
-#: src/multiplay.c:1962
+#: src/multiplay.c:1966
 msgid "Blue"
 msgstr "Azul"
 
-#: src/multiplay.c:1963
+#: src/multiplay.c:1967
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.c:1964
+#: src/multiplay.c:1968
 msgid "Cyan"
 msgstr "Ciano"
 
@@ -13409,20 +13426,20 @@ msgstr "Tempo de Jogo Total - %s"
 msgid "You cheated!"
 msgstr "Fizeste batota!"
 
-#: src/scriptfuncs.c:3236
+#: src/scriptfuncs.c:3208
 msgid "YOU ARE VICTORIOUS!"
 msgstr "FOSTE VITORIOSO!"
 
-#: src/scriptfuncs.c:3240
+#: src/scriptfuncs.c:3212
 msgid "YOU WERE DEFEATED!"
 msgstr "FOSTE DERROTADO"
 
-#: src/scriptfuncs.c:10195
+#: src/scriptfuncs.c:10167
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sinalizador recebido de %s!"
 
-#: src/scriptfuncs.c:10241
+#: src/scriptfuncs.c:10213
 #, c-format
 msgid "Beacon %d"
 msgstr "Sinalizador %d"
@@ -13451,60 +13468,60 @@ msgstr "Incapaz de localizar qualquer unidade de Sensor"
 msgid "Unable to locate any Commanders!"
 msgstr "Incapaz de localizar qualquer Comandante!"
 
-#: src/structure.c:2828
+#: src/structure.c:2833
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite de Controlo de Comando Alcançado - Produção Parada"
 
-#: src/structure.c:6076
-#: src/structure.c:6101
+#: src/structure.c:6081
+#: src/structure.c:6106
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u unidade atribuída"
 msgstr[1] "%s - %u unidades atribuídas"
 
-#: src/structure.c:6106
-#: src/structure.c:6170
+#: src/structure.c:6111
+#: src/structure.c:6175
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Dano %3.0f%%"
 
-#: src/structure.c:6156
+#: src/structure.c:6161
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Ligado a %u de %u"
 
-#: src/structure.c:6286
-#: src/structure.c:6331
+#: src/structure.c:6291
+#: src/structure.c:6336
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danificado Electronicamente"
 
-#: src/structure.c:6566
+#: src/structure.c:6571
 msgid "Electronic Reward - Visibility Report"
 msgstr "Recompensa Electrónica - Relatório de Visibilidade"
 
-#: src/structure.c:6606
+#: src/structure.c:6611
 msgid "Factory Reward - Propulsion"
 msgstr "Recompensa de Fábrica - Propulsão"
 
-#: src/structure.c:6630
+#: src/structure.c:6635
 msgid "Factory Reward - Body"
 msgstr "Recompensa de Fábrica - Corpo"
 
-#: src/structure.c:6654
+#: src/structure.c:6659
 msgid "Factory Reward - Weapon"
 msgstr "Recompensa de Fábrica - Arma"
 
-#: src/structure.c:6663
+#: src/structure.c:6668
 msgid "Factory Reward - Nothing"
 msgstr "Recompensa de Fábrica - Nada"
 
-#: src/structure.c:6691
+#: src/structure.c:6696
 msgid "Repair Facility Award - Repair"
 msgstr "Recompensa de Posto de Reparação - Reparações"
 
-#: src/structure.c:6698
+#: src/structure.c:6703
 msgid "Repair Facility Award - Nothing"
 msgstr "Recompensa de Posto de Reparação - Nada"
 
