@@ -2533,6 +2533,9 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 			sButInit.y			= MISSION_1_Y;
 			sButInit.pText		= _("Save Game");//"Save Game";
 			widgAddButton(psWScreen, &sButInit);
+
+			// automatically save the game to be able to restart a mission
+			saveGame((char *)"savegame/Autosave.gam", GTYPE_SAVE_START);
 		}
 	}
 	else
