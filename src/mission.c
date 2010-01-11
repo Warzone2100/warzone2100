@@ -2500,21 +2500,21 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	sButInit.FontID		= font_regular;
 	sButInit.pTip		= NULL;
 	sButInit.pDisplay	= displayTextOption;
-    //if won or in debug mode
+	// If won or in debug mode
 	if(result || getDebugMappingStatus() || bMultiPlayer)
 	{
 		//continue
 		sButInit.x			= MISSION_2_X;
-        // Won the game, so display "Quit to main menu"
+        	// Won the game, so display "Quit to main menu"
 		if(testPlayerHasWon() && !bMultiPlayer)
-        {
+        	{
 			sButInit.id			= IDMISSIONRES_QUIT;
 			sButInit.y			= MISSION_2_Y-8;
 			sButInit.pText		= _("Quit To Main Menu");
 			widgAddButton(psWScreen, &sButInit);
 		}
-        else
-        {
+	        else
+        	{
 			// Finished the mission, so display "Continue Game"
 			sButInit.y			= MISSION_2_Y;
 			sButInit.id			= IDMISSIONRES_CONTINUE;
@@ -2523,8 +2523,8 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 		}
 
 		/* Only add save option if in the game for real, ie, not fastplay.
-        And the player hasn't just completed the whole game
-        Don't add save option if just lost and in debug mode*/
+	         * And the player hasn't just completed the whole game
+        	 * Don't add save option if just lost and in debug mode. */
 		if (!bMultiPlayer && !testPlayerHasWon() && !(testPlayerHasLost() && getDebugMappingStatus()))
 		{
 			//save

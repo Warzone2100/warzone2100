@@ -1149,7 +1149,6 @@ void intResetScreen(BOOL NoAnim)
 		widgSetButtonState(psWScreen, IDRET_INTEL_MAP, 0);
 		widgSetButtonState(psWScreen, IDRET_RESEARCH, 0);
 		widgSetButtonState(psWScreen, IDRET_DESIGN, 0);
-
 	}
 
 	/* Remove whatever extra screen was displayed */
@@ -3812,12 +3811,12 @@ BOOL intAddReticule(void)
 
 void intRemoveReticule(void)
 {
-	if(ReticuleUp == true) {
-		widgDelete(psWScreen,IDRET_FORM);		// remove reticule
+	if (ReticuleUp == true)
+	{
+		widgDelete(psWScreen, IDRET_FORM);		// remove reticule
 		ReticuleUp = false;
 	}
 }
-
 
 //toggles the Power Bar display on and off
 void togglePowerBar(void)

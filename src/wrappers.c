@@ -393,14 +393,6 @@ void closeLoadingScreen(void)
 
 BOOL displayGameOver(BOOL bDidit)
 {
-// AlexL says take this out......
-//	setConsolePermanence(true,true);
-//	flushConsoleMessages( );
-
-//	addConsoleMessage(" ", CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-//	addConsoleMessage(_("Game Over"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-//	addConsoleMessage(" ", CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-
 	if(bDidit)
 	{
 		setPlayerHasWon(true);

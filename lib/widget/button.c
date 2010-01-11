@@ -175,8 +175,7 @@ void buttonClearFlash(W_BUTTON *psButton)
 /* Set a button's state */
 void buttonSetState(W_BUTTON *psButton, UDWORD state)
 {
-	ASSERT( !((state & WBUT_LOCK) && (state & WBUT_CLICKLOCK)),
-		"widgSetButtonState: Cannot have WBUT_LOCK and WBUT_CLICKLOCK" );
+	ASSERT(!((state & WBUT_LOCK) && (state & WBUT_CLICKLOCK)), "Cannot have both WBUT_LOCK and WBUT_CLICKLOCK");
 
 	if (state & WBUT_DISABLE)
 	{
