@@ -646,7 +646,7 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 
 			if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 			{
-				ASSERT(false, "Unable to find a free location");
+				debug(LOG_FEATURE, "Unable to find a free location.");
 				break;
 			}
 
