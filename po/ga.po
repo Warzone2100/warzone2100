@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-09 17:14+0100\n"
+"POT-Creation-Date: 2010-01-12 00:15+0100\n"
 "PO-Revision-Date: 2008-05-08 17:14+0000\n"
 "Last-Translator: Seanan <Unknown>\n"
 "Language-Team: Irish <ga@li.org>\n"
@@ -11534,7 +11534,7 @@ msgid "Join Game"
 msgstr ""
 
 #: src/frontend.c:581
-#: src/multiint.c:1245
+#: src/multiint.c:1253
 msgid "OPTIONS"
 msgstr "ROGHANNA"
 
@@ -11630,7 +11630,7 @@ msgid "Off"
 msgstr ""
 
 #: src/frontend.c:683
-#: src/multiint.c:1315
+#: src/multiint.c:1323
 msgid "Fog"
 msgstr "Ceo"
 
@@ -11641,7 +11641,7 @@ msgstr ""
 
 #: src/frontend.c:690
 #: src/frontend.c:765
-#: src/multiint.c:1317
+#: src/multiint.c:1325
 msgid "Fog Of War"
 msgstr ""
 
@@ -11848,7 +11848,7 @@ msgid "Build (F3)"
 msgstr "Tógáil (F3)"
 
 #: src/hci.c:3906
-#: src/multiint.c:1362
+#: src/multiint.c:1370
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Cumhacht"
@@ -11935,7 +11935,7 @@ msgid "Resume Game"
 msgstr ""
 
 #: src/ingameop.c:142
-msgid "Warning, if Host quits, the game ends for everyone!"
+msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr ""
 
 #: src/ingameop.c:283
@@ -12298,55 +12298,71 @@ msgstr ""
 msgid "Formation speed limiting ON"
 msgstr ""
 
-#: src/keybind.c:2471
-#: src/keybind.c:2512
-#: src/keybind.c:2534
-msgid "Game Speed Reset"
+#: src/keybind.c:2392
+msgid "Vertical rotation direction: Normal"
+msgstr ""
+
+#: src/keybind.c:2397
+msgid "Vertical rotation direction: Flipped"
+msgstr ""
+
+#: src/keybind.c:2406
+msgid "Screen shake when things die: Off"
+msgstr ""
+
+#: src/keybind.c:2411
+msgid "Screen shake when things die: On"
 msgstr ""
 
 #: src/keybind.c:2475
+#: src/keybind.c:2516
+#: src/keybind.c:2538
+msgid "Game Speed Reset"
+msgstr ""
+
+#: src/keybind.c:2479
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2516
+#: src/keybind.c:2520
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2546
+#: src/keybind.c:2550
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2550
+#: src/keybind.c:2554
 msgid "Build menu will not reopen"
 msgstr ""
 
-#: src/keybind.c:2562
+#: src/keybind.c:2566
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2566
+#: src/keybind.c:2570
 msgid "Radar showing player colors"
 msgstr ""
 
-#: src/keybind.c:2587
+#: src/keybind.c:2591
 msgid "Radar showing only objects"
 msgstr ""
 
-#: src/keybind.c:2590
+#: src/keybind.c:2594
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2593
+#: src/keybind.c:2597
 msgid "Radar showing terrain"
 msgstr ""
 
-#: src/keybind.c:2596
+#: src/keybind.c:2600
 msgid "Radar showing revealed terrain"
 msgstr ""
 
-#: src/keybind.c:2599
+#: src/keybind.c:2603
 msgid "Radar showing height"
 msgstr ""
 
@@ -12355,10 +12371,10 @@ msgid "KEY MAPPING"
 msgstr ""
 
 #: src/keyedit.c:386
-#: src/multiint.c:640
-#: src/multiint.c:682
-#: src/multiint.c:1063
-#: src/multiint.c:1448
+#: src/multiint.c:642
+#: src/multiint.c:684
+#: src/multiint.c:1071
+#: src/multiint.c:1456
 msgid "Return To Previous Screen"
 msgstr "Fill Chuig An Scáileán Roimhe"
 
@@ -12826,252 +12842,253 @@ msgstr ""
 msgid "Accept Settings"
 msgstr "Glac Leis Na Socruithe"
 
-#: src/multiint.c:587
-msgid "IP Address or Machine Name"
-msgstr ""
-
-#: src/multiint.c:637
-msgid "CONNECTION"
-msgstr "NASC"
-
-#: src/multiint.c:650
-msgid "Lobby"
-msgstr "Brústocaireacht"
-
-#: src/multiint.c:651
-msgid "IP"
-msgstr "IP"
-
-#: src/multiint.c:831
-msgid "No games are available"
-msgstr ""
-
-#: src/multiint.c:834
-msgid "Game is full"
-msgstr ""
-
-#: src/multiint.c:838
-msgid "You were kicked!"
-msgstr ""
-
-#: src/multiint.c:841
-msgid "Wrong Game Version!"
-msgstr ""
-
-#: src/multiint.c:844
-msgid "Wrong data/mod detected by Host."
-msgstr ""
-
-#: src/multiint.c:849
-msgid "Host couldn't send file?"
-msgstr ""
-
-#: src/multiint.c:853
-msgid "Incorrect Password!"
-msgstr ""
-
-#: src/multiint.c:856
-msgid "Host has dropped connection!"
-msgstr ""
-
-#: src/multiint.c:860
-msgid "Connection Error"
-msgstr ""
-
-#: src/multiint.c:1004
-msgid "Searching"
-msgstr "Á Chuardach"
-
-#: src/multiint.c:1060
-msgid "GAMES"
-msgstr "CLUICHÍ"
-
-#: src/multiint.c:1068
-msgid "Refresh Games List"
-msgstr ""
-
-#: src/multiint.c:1088
-msgid "Enter Password:"
-msgstr ""
-
-#: src/multiint.c:1109
-msgid "OK"
-msgstr ""
-
-#: src/multiint.c:1111
+#: src/multiint.c:578
+#: src/multiint.c:1119
 #, fuzzy
 msgid "Cancel"
 msgstr "Cian"
 
-#: src/multiint.c:1250
-#: src/multiint.c:1257
+#: src/multiint.c:589
+msgid "IP Address or Machine Name"
+msgstr ""
+
+#: src/multiint.c:639
+msgid "CONNECTION"
+msgstr "NASC"
+
+#: src/multiint.c:652
+msgid "Lobby"
+msgstr "Brústocaireacht"
+
+#: src/multiint.c:653
+msgid "IP"
+msgstr "IP"
+
+#: src/multiint.c:839
+msgid "No games are available"
+msgstr ""
+
+#: src/multiint.c:842
+msgid "Game is full"
+msgstr ""
+
+#: src/multiint.c:846
+msgid "You were kicked!"
+msgstr ""
+
+#: src/multiint.c:849
+msgid "Wrong Game Version!"
+msgstr ""
+
+#: src/multiint.c:852
+msgid "Wrong data/mod detected by Host."
+msgstr ""
+
+#: src/multiint.c:857
+msgid "Host couldn't send file?"
+msgstr ""
+
+#: src/multiint.c:861
+msgid "Incorrect Password!"
+msgstr ""
+
+#: src/multiint.c:864
+msgid "Host has dropped connection!"
+msgstr ""
+
+#: src/multiint.c:868
+msgid "Connection Error"
+msgstr ""
+
+#: src/multiint.c:1012
+msgid "Searching"
+msgstr "Á Chuardach"
+
+#: src/multiint.c:1068
+msgid "GAMES"
+msgstr "CLUICHÍ"
+
+#: src/multiint.c:1076
+msgid "Refresh Games List"
+msgstr ""
+
+#: src/multiint.c:1096
+msgid "Enter Password:"
+msgstr ""
+
+#: src/multiint.c:1117
+msgid "OK"
+msgstr ""
+
+#: src/multiint.c:1258
+#: src/multiint.c:1265
 msgid "Select Game Name"
 msgstr "Roghnaigh Ainm don Cluiche"
 
-#: src/multiint.c:1250
+#: src/multiint.c:1258
 msgid "One-Player Skirmish"
 msgstr ""
 
-#: src/multiint.c:1260
+#: src/multiint.c:1268
 msgid "Select Map"
 msgstr "Roghnaigh Léarscáil"
 
-#: src/multiint.c:1268
+#: src/multiint.c:1276
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.c:1278
-#: src/multiint.c:1279
+#: src/multiint.c:1286
+#: src/multiint.c:1287
 msgid "Scavengers"
 msgstr ""
 
-#: src/multiint.c:1281
+#: src/multiint.c:1289
 msgid "No Scavengers"
 msgstr ""
 
-#: src/multiint.c:1312
+#: src/multiint.c:1320
 msgid "Select Player Name"
 msgstr "Roghnaigh Ainm Imreora"
 
-#: src/multiint.c:1318
+#: src/multiint.c:1326
 msgid "Distance Fog"
 msgstr ""
 
-#: src/multiint.c:1329
+#: src/multiint.c:1337
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Comhbhánna"
 
-#: src/multiint.c:1332
+#: src/multiint.c:1340
 msgid "No Alliances"
 msgstr "Gan Comhbhánna"
 
-#: src/multiint.c:1334
+#: src/multiint.c:1342
 msgid "Allow Alliances"
 msgstr "Ceadaigh Comhbhánna"
 
-#: src/multiint.c:1338
+#: src/multiint.c:1346
 msgid "Locked Teams"
 msgstr ""
 
-#: src/multiint.c:1364
+#: src/multiint.c:1372
 msgid "Low Power Levels"
 msgstr ""
 
-#: src/multiint.c:1366
+#: src/multiint.c:1374
 msgid "Medium Power Levels"
 msgstr ""
 
-#: src/multiint.c:1368
+#: src/multiint.c:1376
 msgid "High Power Levels"
 msgstr ""
 
-#: src/multiint.c:1400
+#: src/multiint.c:1408
 msgid "Base"
 msgstr "Bunáit"
 
-#: src/multiint.c:1402
+#: src/multiint.c:1410
 msgid "Start with No Bases"
 msgstr "Tosaigh Gan Bunáiteanna"
 
-#: src/multiint.c:1404
+#: src/multiint.c:1412
 msgid "Start with Bases"
 msgstr "Tosaigh le Bunáiteanna"
 
-#: src/multiint.c:1406
+#: src/multiint.c:1414
 msgid "Start with Advanced Bases"
 msgstr ""
 
-#: src/multiint.c:1438
+#: src/multiint.c:1446
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.c:1440
+#: src/multiint.c:1448
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.c:1454
+#: src/multiint.c:1462
 msgid "Start Hosting Game"
 msgstr ""
 
-#: src/multiint.c:1462
+#: src/multiint.c:1470
 msgid "Show Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1462
+#: src/multiint.c:1470
 msgid "Set Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1525
+#: src/multiint.c:1533
 #, fuzzy
 msgid "Player colour"
 msgstr "Imreoir"
 
-#: src/multiint.c:1541
+#: src/multiint.c:1549
 #, fuzzy
 msgid "Kick player"
 msgstr "Imreoir"
 
-#: src/multiint.c:1552
+#: src/multiint.c:1560
 #, fuzzy
 msgid "Player number"
 msgstr "Imreoir"
 
-#: src/multiint.c:1914
+#: src/multiint.c:1922
 msgid "Team"
 msgstr ""
 
-#: src/multiint.c:1947
+#: src/multiint.c:1955
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/multiint.c:1953
+#: src/multiint.c:1961
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.c:1957
+#: src/multiint.c:1965
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.c:1994
+#: src/multiint.c:2002
 msgid "PLAYERS"
 msgstr "IMREOIRÍ"
 
-#: src/multiint.c:2177
+#: src/multiint.c:2185
 msgid "CHAT"
 msgstr "DÉAN COMHRÁ"
 
-#: src/multiint.c:2352
+#: src/multiint.c:2360
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2359
+#: src/multiint.c:2367
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2601
+#: src/multiint.c:2609
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2686
+#: src/multiint.c:2694
 msgid "'Locked Teams' mode enabled"
 msgstr ""
 
-#: src/multiint.c:2725
-#: src/multiint.c:2775
+#: src/multiint.c:2733
+#: src/multiint.c:2783
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr ""
 
-#: src/multiint.c:2833
+#: src/multiint.c:2841
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:3380
+#: src/multiint.c:3388
 msgid "Players"
 msgstr "Imreoirí"
 
-#: src/multiint.c:3496
+#: src/multiint.c:3504
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
@@ -13086,17 +13103,17 @@ msgstr ""
 msgid "%s has Left the Game"
 msgstr ""
 
-#: src/multijoin.c:330
+#: src/multijoin.c:335
 #, c-format
-msgid "Kicking player %s, game data doesn't match!"
+msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.c:366
+#: src/multijoin.c:374
 #, c-format
 msgid "%s is Joining the Game"
 msgstr ""
 
-#: src/multijoin.c:376
+#: src/multijoin.c:384
 msgid "System message:"
 msgstr ""
 
@@ -13180,48 +13197,48 @@ msgstr ""
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1080
+#: src/multiplay.c:1084
 #, fuzzy
 msgid "(allies"
 msgstr "Comhbhánna"
 
-#: src/multiplay.c:1088
+#: src/multiplay.c:1092
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1101
+#: src/multiplay.c:1105
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1957
+#: src/multiplay.c:1961
 msgid "Green"
 msgstr "Uaine"
 
-#: src/multiplay.c:1958
+#: src/multiplay.c:1962
 msgid "Orange"
 msgstr "Flannbhuí"
 
-#: src/multiplay.c:1959
+#: src/multiplay.c:1963
 msgid "Grey"
 msgstr "Liath"
 
-#: src/multiplay.c:1960
+#: src/multiplay.c:1964
 msgid "Black"
 msgstr "Dubh"
 
-#: src/multiplay.c:1961
+#: src/multiplay.c:1965
 msgid "Red"
 msgstr "Dearg"
 
-#: src/multiplay.c:1962
+#: src/multiplay.c:1966
 msgid "Blue"
 msgstr "Gorm"
 
-#: src/multiplay.c:1963
+#: src/multiplay.c:1967
 msgid "Pink"
 msgstr "Bándearg"
 
-#: src/multiplay.c:1964
+#: src/multiplay.c:1968
 msgid "Cyan"
 msgstr "Cian"
 
@@ -13356,20 +13373,20 @@ msgstr ""
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3238
+#: src/scriptfuncs.c:3210
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3242
+#: src/scriptfuncs.c:3214
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10201
+#: src/scriptfuncs.c:10173
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10247
+#: src/scriptfuncs.c:10219
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -13398,60 +13415,60 @@ msgstr ""
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
-#: src/structure.c:2752
+#: src/structure.c:2757
 msgid "Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5955
-#: src/structure.c:5980
+#: src/structure.c:5960
+#: src/structure.c:5985
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5985
-#: src/structure.c:6049
+#: src/structure.c:5990
+#: src/structure.c:6054
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.c:6035
+#: src/structure.c:6040
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:6170
-#: src/structure.c:6219
+#: src/structure.c:6175
+#: src/structure.c:6224
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6454
+#: src/structure.c:6459
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6494
+#: src/structure.c:6499
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6518
+#: src/structure.c:6523
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6542
+#: src/structure.c:6547
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6551
+#: src/structure.c:6556
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6579
+#: src/structure.c:6584
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6586
+#: src/structure.c:6591
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
