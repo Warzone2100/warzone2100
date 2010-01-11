@@ -221,9 +221,10 @@ trigger manageAllyHelpTr			(every, 80);
 trigger everySec					(every, 10);
 trigger manageDefendLocationTr		(every, 70);
 trigger startLevelTr				(CALL_START_NEXT_LEVEL);
-trigger launchFundamentalsTr			(wait, 1);
+trigger chainloadTr				(wait, 1);
 
 /* Events */
+event	conDroids;
 event	multiMsgEv;
 event	beaconEv;
 event	watchBaseThreat;
@@ -277,7 +278,6 @@ function int numEnemyAAInRange(int _x, int _y, int _range);
 function BASEOBJ chooseVtolTarget(bool bExclusiveTarget);
 function int getVtolTargetWeight(BASEOBJ _target);
 function bool vtolTargetAssigned(BASEOBJ _target);
-function void buildTruck();
 function int numBuildSameBuilding(STRUCTURESTAT _checkStat, int _x, int _y);
 function void expandBase(DROID _truck);
 function int totalVtols();
@@ -382,19 +382,18 @@ event initialisedEvent(CALL_GAMEINIT)
 
 	fundamentalBeingBuilt = derrick;	// to avoid ever being null
 	
-	bRunning = false;
-
 	if(aiResponsibleForPlayer(me))
 	{
 		bRunning = true;
 	}
 	else
 	{
+		bRunning = false;
 		shutDownAI();
 	}
 }
 
-function void buildFundamentals()
+event buildFundamentals(inactive)
 {
 	count = 0;
 	while (count < numFundamental)
@@ -428,18 +427,14 @@ function void buildFundamentals()
 		count = count + 1;
 	}
 	fundamentalBeingBuilt = derrick;
-}
-
-event launchFundamentals(inactive)
-{
-	buildFundamentals();
-	setEventTrigger(launchFundamentals, inactive);
+	setEventTrigger(buildFundamentals, inactive);
 }
 
 event startLevel(startLevelTr)
 {
-	buildFundamentals();
-	buildTruck();
+	setEventTrigger(buildFundamentals, chainloadTr);
+	setEventTrigger(conDroids, chainloadTr);
+	setEventTrigger(startLevel, inactive);
 }
 
 // decide what technology branch we will use
@@ -1386,7 +1381,7 @@ event structBuilt(structBuiltTr)
 		}
 		else
 		{
-			buildTruck();
+			setEventTrigger(conDroids, chainloadTr);
 		}
 	}
 	/* vtol factory or vtol factory module */
@@ -1414,7 +1409,7 @@ event structBuilt(structBuiltTr)
 
 	// Check if available trucks need to build more absolute necessities right away. We need a trigger here because
 	// droids involved in building have not yet come out of their build orders.
-	setEventTrigger(launchFundamentals, launchFundamentalsTr);
+	setEventTrigger(buildFundamentals, chainloadTr);
 
 	//see if we have just rebuilt a destroyed structure
 	_count = 0;
@@ -1481,11 +1476,6 @@ event droidDestroyed(droidDestroyedTr)
 // build more con droids.
 event conDroids(conDroidsTr)
 {
-	buildTruck();
-}
-
-function void buildTruck()
-{
 	local 	int			_maxTrucks;
 	local 	STRUCTURE	_factory;
 	local	int 		_numBuilding,_haveTrucks,_maxTruckFactories,_totalTrucks;
@@ -1545,8 +1535,8 @@ function void buildTruck()
 
 		_factory = enumStruct();
 	}
+	setEventTrigger(conDroids, conDroidsTr);
 }
-
 
 //Build a droid
 function bool buildUnit(TEMPLATE _tankTemplate, STRUCTURE _factory, STRUCTURESTAT _factoryType, bool _bIdleOnly)
@@ -4136,8 +4126,8 @@ event consoleEv(consoleTr)
 				if(not bRunning)		//make sure current machine is responsible for this AI and it's not already active
 				{
 					console(getPlayerName(me) & " is active");
-
 					reassignAI();
+					setEventTrigger(startLevel, chainloadTr);
 				}
 			}
 		}
