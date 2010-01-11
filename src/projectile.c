@@ -579,6 +579,8 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		counterBatteryFire(psAttacker, psTarget);
 	}
 
+	initObjectPosition((BASE_OBJECT *)psProj, gameTime);
+
 	CHECK_PROJECTILE(psProj);
 
 	return true;
@@ -1121,21 +1123,14 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		}
 		else
 		{
-			if (psObj->psDest == NULL)
-			{
-				audio_PlayStaticTrack(psObj->tarX, psObj->tarY, psStats->iAudioImpactID);
-			}
-			else
-			{
-				audio_PlayStaticTrack(psObj->psDest->pos.x, psObj->psDest->pos.y, psStats->iAudioImpactID);
-			}
+			audio_PlayStaticTrack(psObj->pos.x, psObj->pos.y, psStats->iAudioImpactID);
 		}
 
 		/* Shouldn't need to do this check but the stats aren't all at a value yet... */ // FIXME
 		if (psStats->incenRadius && psStats->incenTime)
 		{
-			position.x = psObj->tarX;
-			position.z = psObj->tarY;
+			position.x = psObj->pos.x;
+			position.z = psObj->pos.y; // z = y [sic] intentional
 			position.y = map_Height(position.x, position.z);
 			effectGiveAuxVar(psStats->incenRadius);
 			effectGiveAuxVarSec(psStats->incenTime);
@@ -1158,8 +1153,8 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 	// Set the effects position and radius
 	position.x = psObj->pos.x;
-	position.z = psObj->pos.y;
-	position.y = psObj->pos.z;//map_Height(psObj->pos.x, psObj->pos.y) + 24;
+	position.z = psObj->pos.y; // z = y [sic] intentional
+	position.y = psObj->pos.z; // y = z [sic] intentional
 	scatter.x = psStats->radius;
 	scatter.y = 0;
 	scatter.z = psStats->radius;
