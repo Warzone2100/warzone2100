@@ -579,8 +579,6 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		counterBatteryFire(psAttacker, psTarget);
 	}
 
-	initObjectPosition((BASE_OBJECT *)psProj, gameTime);
-
 	CHECK_PROJECTILE(psProj);
 
 	return true;
