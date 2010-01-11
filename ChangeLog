@@ -7,13 +7,15 @@
    * Fix: Fog of War now shown in all radar modes (r9059)
    * Fix: Messages sent to allies no longer appear twice (r9055)
    * Fix: Audio queue not being cleared properly (r9107, ticket:1391)
-   * Fix: Various bugs and crashes (r9069, r9063, r9053, r9042, r9048, r9095, r9098, r9108, ticket:1383, r9113, ticket:1334)
+   * Fix: Incendiary weapon fire could appear in the wrong place (r9126)
+   * Fix: Various bugs and crashes (r9069, r9063, r9053, r9042, r9048, r9095, r9098, r9108, ticket:1383, r9113, ticket:1334, r9129)
  * Gameplay:
    * Change: Sensor tanks now target automatically. (r9105, ticket:1392)
    * Change: Power now limited to 100000 (r9073)
    * Fix: Transporters didn't fly to delivery point (r9066)
  * Multiplayer:
    * Change: Allow host to choose teams for any player (r9094)
+   * Change: Revert outgoing traffic shaping again (r9134)
    * Fix: Do not allow kicks to be ignored (r9064, ticket:1375)
    * Fix: Revert new sync code to fix sync issues (r9043, r9044)
    * Fix: Make sure beacons are only seen by those who should (r9083, ticket:1250)
