@@ -103,7 +103,8 @@ static UDWORD				PingSend[MAX_PLAYERS];	//stores the time the ping was called.
 static BOOL okToSend(void)
 {
 	// Update checks and go no further if any exceeded.
-	if (NETgetRecentBytesSent() + NETgetRecentBytesRecvd() >= MAX_BYTESPERSEC)
+	// removing the received check again ... add NETgetRecentBytesRecvd() to left hand side of equation if this works badly
+	if (NETgetRecentBytesSent() >= MAX_BYTESPERSEC)
 	{
 		return false;
 	}
