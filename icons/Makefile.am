@@ -4,8 +4,7 @@ dist_noinst_DATA = \
 	warzone2100.png \
 	warzone2100.splash.png \
 	warzone2100.uninstall.ico \
-	wz2100header.bmp \
-	wz2100welcome.bmp
+	wz2100header.bmp
 
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(icondir)
