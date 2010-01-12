@@ -8,7 +8,6 @@ file		SMSG		"multiplay.txt"
 directory		"multiplay/skirmish"
 file		SCRIPT		"rules.slo"
 file		SCRIPT		"ai.slo"
-file		SCRIPT		"ai.slo"
 
 file		SCRIPTVAL	"rules.vlo"
 file		SCRIPTVAL	"ai.vlo"
