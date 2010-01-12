@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <SDL.h>
 #include <time.h>
+#include "../lib/framework/frame.h"
 #include "../lib/framework/types.h"
 #include "../lib/framework/macros.h"
 #include "../lib/framework/vector.h"
