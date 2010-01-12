@@ -54,20 +54,6 @@ event startLevel(CALL_START_NEXT_LEVEL)
 	}
 }
 
-// Startup
-event startup(init)
-{
-	if (!scavengersActive() or !myResponsibility(enemy1))
-	{
-		setEventTrigger(startLevel, inactive);
-		setEventTrigger(droidbuilt, inactive);
-		setEventTrigger(structureAttacked, inactive);
-	}
-	lastAttack = 0;
-
-	groupAddArea(attackGroup, enemy1, 0, 0, (mapWidth * 128), (mapHeight * 128));
-}
-
 // deal with a droid being built by us
 event droidbuilt(CALL_NEWDROID, enemy1, ref newDroid, ref fac1)
 {
@@ -112,3 +98,16 @@ event structureAttacked(CALL_STRUCT_ATTACKED, enemy1, ref structure, ref attacke
 	}
 }
 
+// Startup
+event startup(CALL_GAMEINIT)
+{
+	if (!scavengersActive() or !myResponsibility(enemy1))
+	{
+		setEventTrigger(startLevel, inactive);
+		setEventTrigger(droidbuilt, inactive);
+		setEventTrigger(structureAttacked, inactive);
+	}
+	lastAttack = 0;
+
+	groupAddArea(attackGroup, enemy1, 0, 0, (mapWidth * 128), (mapHeight * 128));
+}
