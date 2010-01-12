@@ -14,7 +14,8 @@ noinst_HEADERS = \
 	igd_desc_parse.h \
 	upnpreplyparse.h \
 	upnperrors.h \
-	declspec.h
+	declspec.h \
+	bsdqueue.h
 
 libminiupnpc_a_SOURCES = \
 	miniwget.c \
