@@ -1,16 +1,13 @@
 /////////////////////////////////////////////////////////////////////
 // ai for skirmish game
-// Generic vlo for each computer player
 /////////////////////////////////////////////////////////////////////
 
-script "player3.slo"
+script "ai.slo"
 run
 {
 	// research branches
 	branchDefault	int					0
 	branchVTOL		int					1
-
-	me		int					3			// this player is player x.
 
 	//default branch
 	numScouts[0]	int					3			// min number of droids in group to aim for.

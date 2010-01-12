@@ -34,6 +34,9 @@
 struct BASE_OBJECT;
 struct DROID;
 
+extern BOOL scriptInit(void);
+extern BOOL scrGetPlayer(void);
+
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);
 

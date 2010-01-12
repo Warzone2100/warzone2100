@@ -53,6 +53,7 @@
 #include "aiexperience.h"	//for beacon messages
 #include "multiint.h"
 #include "multirecv.h"
+#include "scriptfuncs.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
@@ -662,6 +663,8 @@ static BOOL cleanMap(UDWORD player)
 static BOOL gameInit(void)
 {
 	UDWORD			player;
+
+	scriptInit();
 
 	// If this is from a savegame, stop here!
 	if((getSaveGameType() == GTYPE_SAVE_START)

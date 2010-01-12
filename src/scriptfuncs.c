@@ -111,8 +111,30 @@ static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 
 extern	UDWORD				objID;					// unique ID creation thing..
 
+/// Hold the previously assigned player
+static int nextPlayer = 0;
+
+BOOL scriptInit()
+{
+	nextPlayer = 0;
+	return true;
+}
+
+BOOL scrGetPlayer()
+{
+	ASSERT_OR_RETURN(false, nextPlayer < MAX_PLAYERS, "Invalid player");
+
+	scrFunctionResult.v.ival = nextPlayer++;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
 /******************************************************************************************/
 /*                 Check for objects in areas                                             */
+
 
 // check for a base object being in range of a point
 BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range)
