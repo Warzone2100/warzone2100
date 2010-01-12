@@ -120,6 +120,16 @@ BOOL scriptInit()
 	return true;
 }
 
+BOOL scrScavengersActive()
+{
+	scrFunctionResult.v.bval = game.scavengers;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
 BOOL scrGetPlayer()
 {
 	ASSERT_OR_RETURN(false, nextPlayer < MAX_PLAYERS, "Invalid player");

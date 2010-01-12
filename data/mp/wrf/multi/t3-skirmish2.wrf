@@ -16,3 +16,7 @@ file		SCRIPTVAL	"rules.vlo"
 file		SCRIPTVAL	"sk3tech.vlo"
 file		SCRIPTVAL	"ai.vlo"
 file		SCRIPTVAL	"ai.vlo"
+
+directory	"multiplay/script"
+file		SCRIPT	"scavfact.slo"
+file		SCRIPTVAL	"scavfact.vlo"

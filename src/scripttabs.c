@@ -1488,6 +1488,10 @@ FUNC_SYMBOL asFuncTable[] =
 		0, { VAL_VOID },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "scavengersActive", scrScavengersActive, VAL_BOOL,
+		0, { VAL_VOID },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
 	/* END new functions */
 
     /* This final entry marks the end of the function list */
