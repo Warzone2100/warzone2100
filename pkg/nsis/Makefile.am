@@ -1,6 +1,10 @@
 INSTALLERFILE=$(PACKAGE)-$(VERSION).exe
 UPDATERFILE=$(PACKAGE)-$(VERSION).update.exe
 
+EXTRA_DIST = fonts.conf.wd_enable \
+	     fonts.conf.wd_disable \
+	     warzone2100.nsi
+
 CLEANFILES=$(INSTALLERFILE)
 
 if INSTALLER

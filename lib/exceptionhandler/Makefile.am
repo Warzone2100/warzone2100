@@ -4,7 +4,10 @@ noinst_LIBRARIES = libexceptionhandler.a
 noinst_HEADERS = \
 	dumpinfo.h \
 	exceptionhandler.h \
-	exchndl.h
+	exchndl.h \
+	include/coff/internal.h \
+	include/demangle.h \
+	include/libcoff.h
 
 libexceptionhandler_a_SOURCES = \
 	dumpinfo.cpp \
@@ -13,3 +16,4 @@ libexceptionhandler_a_SOURCES = \
 if MINGW32
 libexceptionhandler_a_SOURCES += exchndl.c
 endif
+
