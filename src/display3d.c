@@ -3186,7 +3186,6 @@ static void drawStructureHealth(STRUCTURE *psStruct)
 static void drawStructureBuildProgress(STRUCTURE *psStruct)
 {
 	SDWORD		scrX,scrY,scrR;
-	PIELIGHT	powerCol = WZCOL_BLACK;
 	UDWORD		health,width;
 	UDWORD		scale;
 
@@ -3196,11 +3195,11 @@ static void drawStructureBuildProgress(STRUCTURE *psStruct)
 	scrY = psStruct->sDisplay.screenY + (scale*10);
 	scrR = width;
 	health =  PERCENT(psStruct->currentBuildPts , psStruct->pStructureType->buildPoints);
-	powerCol = WZCOL_YELLOW;
 	health = (((width*10000)/100)*health)/10000;
 	health*=2;
 	pie_BoxFill(scrX - scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 3, WZCOL_RELOAD_BACKGROUND);
-	pie_BoxFill(scrX - scrR, scrY, scrX - scrR + health, scrY + 2, powerCol);
+	pie_BoxFill(scrX - scrR, scrY + 5, scrX - scrR + health, scrY + 1+5, WZCOL_HEALTH_MEDIUM_SHADOW);
+	pie_BoxFill(scrX - scrR, scrY + 1+5, scrX - scrR + health, scrY + 2+5, WZCOL_HEALTH_MEDIUM);
 }
 
 /// Draw the health of structures and show enemy structures being targetted
