@@ -915,7 +915,10 @@ static void intDoScreenRefresh(void)
 				 (widgGetFromID(psWScreen,IDORDER_FORM) != NULL) )
 			{
 				intRemoveOrderNoAnim();
-				widgSetButtonState(psWScreen, statID, 0);
+				if (statID)
+				{
+					widgSetButtonState(psWScreen, statID, 0);
+				}
 			}
 		}
 
