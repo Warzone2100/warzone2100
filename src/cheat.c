@@ -123,16 +123,5 @@ BOOL attemptCheatCode(const char* cheat_name)
 		}
 	}
 
-	/* We didn't find it. Report only for single player games. */
-	if (!runningMultiplayer())
-	{
-		char	errorString[255];
-
-		sstrcpy(errorString, cheat_name);
-		sstrcat(errorString, _(": Unknown cheat code."));
-
-		addConsoleMessage(errorString, LEFT_JUSTIFY,SYSTEM_MESSAGE);
-	}
-
 	return false;
 }
