@@ -2852,12 +2852,10 @@ static void intProcessStats(UDWORD id)
 			{
 				/* See if this was a click on an already selected stat */
 				psStats = objGetStatsFunc(psObjSelected);
-                //only do the cancel operation if not trying to add to the build list
-				if (psStats == ppsStatsList[id - IDSTAT_START] &&
-                    !(objMode == IOBJ_BUILD && ctrlShiftDown()))
+				// only do the cancel operation if not trying to add to the build list
+				if (psStats == ppsStatsList[id - IDSTAT_START] && objMode != IOBJ_BUILD)
 				{
-                    //this needs to be done before the topic is cancelled from the structure
-                    //research works differently now! - AB 5/2/99
+					// this needs to be done before the topic is cancelled from the structure
 					/* If Research then need to set topic to be cancelled */
 					if (objMode == IOBJ_RESEARCH)
 					{
@@ -2875,16 +2873,6 @@ static void intProcessStats(UDWORD id)
 
 					/* Unlock the button on the stats form */
 					widgSetButtonState(psWScreen, id, 0);
-
-                    //research works differently now! - AB 5/2/99
-					/* If Research then need to set topic to be cancelled */
-					/*if (objMode == IOBJ_RESEARCH)
-					{
-						if (psObjSelected->type == OBJ_STRUCTURE )
-						{
-							cancelResearch((STRUCTURE *)psObjSelected);
-						}
-					}*/
 				}
 				else
 				{
