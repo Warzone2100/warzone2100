@@ -164,17 +164,15 @@ void powerCalc(BOOL on)
 UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 {
 	RES_EXTRACTOR		*pResExtractor;
-	UDWORD				pointsToAdd, extractedPoints, timeDiff;
+	UDWORD				pointsToAdd, extractedPoints;
 	UBYTE			modifier;
 
 	pResExtractor = (RES_EXTRACTOR *) psBuilding->pFunctionality;
 	extractedPoints = 0;
 
 	//only extracts points whilst its active ie associated with a power gen
-	//and has got some power to extract
-	if (pResExtractor->active && pResExtractor->power)
+	if (pResExtractor->active)
 	{
-		timeDiff = gameTime - pResExtractor->timeLastUpdated;
 		// Add modifier according to difficulty level
 		if (getDifficultyLevel() == DL_EASY)
 		{
@@ -189,11 +187,17 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 			modifier = NORMAL_POWER_MOD;
 		}
 		// include modifier as a %
-		pointsToAdd = (modifier * EXTRACT_POINTS * timeDiff) / (GAME_TICKS_PER_SEC * 100);
+		// Written this way to prevent rounding errors - do not "simplify"
+		pointsToAdd = (modifier * EXTRACT_POINTS * gameTime) / (GAME_TICKS_PER_SEC * 100)
+		            - (modifier * EXTRACT_POINTS * pResExtractor->timeLastUpdated) / (GAME_TICKS_PER_SEC * 100);
 		if (pointsToAdd)
 		{
-			// Lose a lot on rounding this way
 			pResExtractor->timeLastUpdated = gameTime;
+			extractedPoints += pointsToAdd;
+
+			// If not having unlimited power, uncomment the following lines.
+
+			/*
 			if (pResExtractor->power > pointsToAdd)
 			{
 				extractedPoints += pointsToAdd;
@@ -207,16 +211,12 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 
 			if (pResExtractor->power == 0)
 			{
-				// If not having unlimited power, put the 2 lines below back in
-				//set the extractor to be inactive
-				//pResExtractor->active = false;
-				//break the link between the power gen and the res extractor
-				//releaseResExtractor(psBuilding);
-
-				//for now, when the power = 0 set it back to the max level!
-				pResExtractor->power = ((RESOURCE_FUNCTION*)psBuilding->pStructureType->
-					asFuncList[0])->maxPower;
+				// set the extractor to be inactive
+				pResExtractor->active = false;
+				// break the link between the power gen and the res extractor
+				releaseResExtractor(psBuilding);
 			}
+			*/
 		}
 	}
 	return extractedPoints;
@@ -285,16 +285,19 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 		}
 	}
 
-	asPower[player].extractedPower += extractedPower ;
-	power = (asPower[player].extractedPower * psPowerGen->multiplier) / 100;
-	if (power)
+	// Written this way to prevent rounding errors - do not "simplify"
+	power = ((asPower[player].extractedPower + extractedPower) * psPowerGen->multiplier) / 100
+	      - (asPower[player].extractedPower * psPowerGen->multiplier) / 100;
+	asPower[player].extractedPower += extractedPower;
+	if (asPower[player].extractedPower > 100)
 	{
-		asPower[player].currentPower += power;
-		asPower[player].extractedPower = 0;
-		if (asPower[player].currentPower > MAX_POWER)
-		{
-			asPower[player].currentPower = MAX_POWER;
-		}
+		asPower[player].extractedPower -= 100; // just to prevent integer overflow
+	}
+
+	asPower[player].currentPower += power;
+	if (asPower[player].currentPower > MAX_POWER)
+	{
+		asPower[player].currentPower = MAX_POWER;
 	}
 }
 
