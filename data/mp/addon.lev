@@ -475,7 +475,7 @@ players		2
 type		19
 dataset		MULTI_T3_C1
 game		"multiplay/maps/2c-startup.gam"
-#data		"wrf/multi/t3-skirmish2.wrf"
+data		"wrf/multi/t3-skirmish2.wrf"
 data		"wrf/multi/fog1.wrf"
 
 level 		Sk-MizaMaze-T3
