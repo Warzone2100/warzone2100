@@ -659,8 +659,7 @@ static BOOL cleanMap(UDWORD player)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// setup a campaign game
-static BOOL campInit(void)
+static BOOL gameInit(void)
 {
 	UDWORD			player;
 
@@ -690,10 +689,15 @@ static BOOL campInit(void)
 			// we want to remove disabled AI & all the other players that don't belong
 			if (game.skDiff[player] == 0 || player >= game.maxPlayers)
 			{
-			clearPlayer(player, true, false);
-				debug(LOG_NET, "removing disabled AI (%d) from map.", player);
+				clearPlayer(player, true, false);
+				debug(LOG_NET, "Removing disabled AI (%d) from map.", player);
+			}
 		}
 	}
+	else
+	{
+		// ugly hack for now
+		game.skDiff[7] = DIFF_SLIDER_STOPS / 2;
 	}
 
 	if (NetPlay.isHost)	// add oil drums
@@ -734,7 +738,7 @@ BOOL multiGameInit(void)
 		openchannels[player] =true;								//open comms to this player.
 	}
 
-	campInit();
+	gameInit();
 
 	InitializeAIExperience();
 	msgStackReset();	//for multiplayer msgs, reset message stack
