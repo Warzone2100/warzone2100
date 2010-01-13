@@ -16,14 +16,6 @@ data/base/messages/strings/scrstrings.txt
 data/base/multiplay/script/multilim.slo
 data/base/multiplay/script/multiplay.slo
 data/base/multiplay/script/scavfact.slo
-data/base/multiplay/skirmish/player0.slo
-data/base/multiplay/skirmish/player1.slo
-data/base/multiplay/skirmish/player2.slo
-data/base/multiplay/skirmish/player3.slo
-data/base/multiplay/skirmish/player4.slo
-data/base/multiplay/skirmish/player5.slo
-data/base/multiplay/skirmish/player6.slo
-data/base/multiplay/skirmish/player7.slo
 data/base/multiplay/skirmish/rules.slo
 data/base/multiplay/skirmish/sktech.slo
 data/base/script/demo/demo_global.slo
