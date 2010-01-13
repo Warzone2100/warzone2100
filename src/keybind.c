@@ -2533,7 +2533,9 @@ void kf_SpeedUp( void )
 	if (runningMultiplayer() || bInTutorial)
 	{
 		if (!bInTutorial)
-			noMPCheatMsg();
+		{
+			addConsoleMessage(_("Sorry, but game speed cannot be changed in multiplayer."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
 		return;
 	}
 
@@ -2574,7 +2576,9 @@ void kf_SlowDown( void )
 	if (runningMultiplayer() || bInTutorial)
 	{
 		if (!bInTutorial)
-			noMPCheatMsg();
+		{
+			addConsoleMessage(_("Sorry, but game speed cannot be changed in multiplayer."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
 		return;
 	}
 
