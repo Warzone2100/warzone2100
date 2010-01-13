@@ -469,8 +469,8 @@ void processInput(void)
 	/* Process all of our key mappings */
 	if (mousePressed(MOUSE_WUP))
 	{
-		/* CTRL+WheelUp makes game speed up */
-		if (keyDown(KEY_LCTRL))
+		/* Ctrl+Alt+WheelUp makes game speed up */
+		if (keyDown(KEY_LCTRL) && keyDown(KEY_LALT))
 		{
 			kf_SpeedUp();
 		}
@@ -488,8 +488,8 @@ void processInput(void)
 
 	if (mousePressed(MOUSE_WDN))
 	{
-		/* CTRL+WheelDown makes game slow down */
-		if (keyDown(KEY_LCTRL))
+		/* Ctrl+Alt+WheelDown makes game slow down */
+		if (keyDown(KEY_LCTRL) && keyDown(KEY_LALT))
 		{
 			kf_SlowDown();
 		}
