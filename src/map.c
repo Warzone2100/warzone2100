@@ -1841,15 +1841,16 @@ extern SWORD map_Height(int x, int y)
 	float onBottom, result;
 	float towardsCenter, towardsRight;
 
-	// make sure we have valid coordinates
-	if (x < 0 ||
-	    y < 0 ||
-	    x >= world_coord(mapWidth-1) ||
-	    y >= world_coord(mapHeight-1))
-	{
-		// we don't so give an arbitrary height
-		return 0;
-	}
+	// Clamp x and y values to actual ones
+	// Give one tile worth of leeway before asserting, for units/transporters coming in from off-map.
+	ASSERT(x >= -TILE_UNITS, "map_Height: x value is too small (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	ASSERT(y >= -TILE_UNITS, "map_Height: y value is too small (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	x = (x < 0 ? 0 : x);
+	y = (y < 0 ? 0 : y);
+	ASSERT(x < world_coord(mapWidth)+TILE_UNITS, "map_Height: x value is too big (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	ASSERT(y < world_coord(mapHeight)+TILE_UNITS, "map_Height: y value is too big (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	x = (x >= world_coord(mapWidth) ? world_coord(mapWidth) - 1 : x);
+	y = (y >= world_coord(mapHeight) ? world_coord(mapHeight) - 1 : y);
 
 	// on which tile are these coords?
 	tileX = map_coord(x);
