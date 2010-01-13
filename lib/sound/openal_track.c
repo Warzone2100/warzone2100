@@ -1180,7 +1180,7 @@ static void sound_DestroyStream(AUDIO_STREAM* stream)
  */
 static void sound_UpdateStreams()
 {
-	AUDIO_STREAM *stream = active_streams, *previous = NULL;
+	AUDIO_STREAM *stream = active_streams, *previous = NULL, *next = NULL;
 
 	while (stream != NULL)
 	{
@@ -1188,24 +1188,26 @@ static void sound_UpdateStreams()
 		// destroy it instead.
 		if (!sound_UpdateStream(stream))
 		{
+			next = stream->next;
+
 			// First remove our current stream from the linked list
 			if (previous)
 			{
 				// Make the previous item skip over the current to the next item
-				previous->next = stream->next;
+				previous->next = next;
 			}
 			else
 			{
 				// Apparently this is the first item in the list, so make the
 				// next item the list-head.
-				active_streams = stream->next;
+				active_streams = next;
 			}
 
 			// Now actually destroy the current stream
 			sound_DestroyStream(stream);
 
 			// Make sure the current stream pointer is intact again
-			stream = (previous != NULL) ? previous->next : active_streams;
+			stream = next;
 
 			// Skip regular style iterator incrementing
 			continue;
