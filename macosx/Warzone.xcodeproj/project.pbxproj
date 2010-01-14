@@ -4594,8 +4594,8 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/prebuilt/SDL/SDL.framework/Headers\"";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/prebuilt/SDL\"";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL/SDL.framework/Headers\"";
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
 				OTHER_CFLAGS = "$(inherited)";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				WARNING_CFLAGS = "";
@@ -4623,8 +4623,8 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/prebuilt/SDL/SDL.framework/Headers\"";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/prebuilt/SDL\"";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL/SDL.framework/Headers\"";
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
 				OTHER_CFLAGS = "$(inherited)";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				WARNING_CFLAGS = "";
