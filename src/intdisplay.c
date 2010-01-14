@@ -3161,8 +3161,8 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
 		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
 		// everything outside the box.
-		if ( (x+radarX) < width && (x+radarX) > -width 
-			&& (y+radarY) < height && (y+radarY) > -height)
+		if ( (x+radarX) < width*pixSizeV/2 && (x+radarX) > -width*pixSizeV/2 
+			&& (y+radarY) < height*pixSizeH/2 && (y+radarY) > -height*pixSizeH/2)
 		{
 			// Draw the 'blip'
 			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY);
