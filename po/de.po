@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-01-14 19:42+0100\n"
-"PO-Revision-Date: 2010-01-09 17:52+0100\n"
+"PO-Revision-Date: 2010-01-14 21:05+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -10508,18 +10508,16 @@ msgid "Missile Fortress"
 msgstr "Raketenfestung"
 
 #: data/mp/messages/strings/names.txt:1761
-#, fuzzy
 msgid "Heavy Body - Wyvern"
-msgstr "Superschwerer Rumpf - Wyvern"
+msgstr "Schwerer Rumpf - Wyvern"
 
 #: data/mp/messages/strings/names.txt:1762
 msgid "Wyvern"
 msgstr "Wyvern"
 
 #: data/mp/messages/strings/names.txt:1764
-#, fuzzy
 msgid "Multi Turret Body - Dragon"
-msgstr "Superschwerer Rumpf - Dragon"
+msgstr "Mehrturmrumpf - Dragon"
 
 #: data/mp/messages/strings/names.txt:1765
 msgid "Dragon"
@@ -11950,9 +11948,8 @@ msgid "Resume Game"
 msgstr "Spiel fortsetzen"
 
 #: src/ingameop.c:142
-#, fuzzy
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr "Warnung: Wenn der Spielleiter das Spiel verlässt, endet es für alle!"
+msgstr "Warnung: Sie sind Spielleiter. Wenn Sie das Spiel verlassen, endet es für alle!"
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
@@ -12320,25 +12317,24 @@ msgstr "Geschwindigkeitsbegrenzung für Formationen aktiviert"
 
 #: src/keybind.c:2392
 msgid "Vertical rotation direction: Normal"
-msgstr ""
+msgstr "Richtung vertikaler Drehung: Normal"
 
 #: src/keybind.c:2397
 msgid "Vertical rotation direction: Flipped"
-msgstr ""
+msgstr "Richtung vertikaler Drehung: Vertauscht"
 
 #: src/keybind.c:2406
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "Bildschirm wackelt bei Zerstörung: Aus"
 
 #: src/keybind.c:2411
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "Bildschirm wackelt bei Zerstörung: An"
 
 #: src/keybind.c:2456
 #: src/keybind.c:2499
-#, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "Entschuldige, dieser Cheat ist in Mehrspieler-Spielen deaktiviert."
+msgstr "Entschuldige, aber die Spielgeschwindigkeit kann im Mehrspielermodus nicht verändert werden."
 
 #: src/keybind.c:2477
 #: src/keybind.c:2520
@@ -13130,7 +13126,7 @@ msgstr "%s hat das Spiel verlassen"
 #: src/multijoin.c:335
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
-msgstr ""
+msgstr "%s (%u) hat einen inkompatiblen Mod und wurde rausgeschmissen."
 
 #: src/multijoin.c:374
 #, c-format
