@@ -1632,9 +1632,6 @@ BOOL scrDestroyFeature(void)
 	return true;
 }
 
-
-
-
 // -----------------------------------------------------------------------------------------
 // static vars to enum features.
 static	FEATURE_STATS	*psFeatureStatToFind[MAX_PLAYERS];
@@ -1643,21 +1640,18 @@ static  SDWORD			getFeatureCount[MAX_PLAYERS]={0};
 static	FEATURE			*psCurrEnumFeature[MAX_PLAYERS];
 
 // -----------------------------------------------------------------------------------------
-// init enum visible features.
+// Init enum visible features. May use player==-1 to ignore visibility check.
 BOOL scrInitGetFeature(void)
 {
 	SDWORD			player,iFeat,bucket;
 
-	if ( !stackPopParams(3, ST_FEATURESTAT, &iFeat,  VAL_INT, &player,VAL_INT,&bucket) )
+	if (!stackPopParams(3, ST_FEATURESTAT, &iFeat, VAL_INT, &player, VAL_INT, &bucket))
 	{
 		return false;
 	}
 
-	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
-		"scrInitGetFeature: bucket out of bounds: %d", bucket);
-
-	ASSERT(player >= 0 && player < MAX_PLAYERS,
-		"scrInitGetFeature: player out of bounds: %d", player);
+	ASSERT_OR_RETURN(false, bucket >= 0 && bucket < MAX_PLAYERS, "Bucket out of bounds: %d", bucket);
+	ASSERT_OR_RETURN(false, (player >= 0 || player == -1) && player < MAX_PLAYERS, "Player out of bounds: %d", player);
 
 	psFeatureStatToFind[bucket]		= (FEATURE_STATS *)(asFeatureStats + iFeat);				// find this stat
 	playerToEnum[bucket]			= player;				// that this player can see
@@ -1721,7 +1715,7 @@ BOOL scrGetFeature(void)
 	while(psFeat)
 	{
 		if (psFeat->psStats->subType == psFeatureStatToFind[bucket]->subType
-		 && psFeat->visible[playerToEnum[bucket]] != 0
+		 && (playerToEnum[bucket] < 0 || psFeat->visible[playerToEnum[bucket]] != 0)
 		 && !TileHasStructure(mapTile(map_coord(psFeat->pos.x), map_coord(psFeat->pos.y)))
 		 && !fireOnLocation(psFeat->pos.x,psFeat->pos.y)		// not burning.
 		   )
@@ -1750,10 +1744,7 @@ BOOL scrGetFeature(void)
 	return true;
 }
 
-/* Faster implementation of scrGetFeature -  assumes no features
- * are deleted between calls, unlike scrGetFeature also returns
- * burning features (mainly relevant for burning oil resources)
- */
+/* Faster implementation of scrGetFeature -  assumes no features are deleted between calls */
 BOOL scrGetFeatureB(void)
 {
 	SDWORD	bucket;
@@ -1783,10 +1774,10 @@ BOOL scrGetFeatureB(void)
 	// begin searching the feature list for the required stat.
 	while(psCurrEnumFeature[bucket])
 	{
-		if(	( psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType)
-			&&( psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]]	!= 0)
-			&&!TileHasStructure(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
-			&&!fireOnLocation(psCurrEnumFeature[bucket]->pos.x,psCurrEnumFeature[bucket]->pos.y )		// not burning.
+		if (psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType
+		    && (playerToEnum[bucket] < 0 || psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]] != 0)
+		    && !TileHasStructure(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
+		    && !fireOnLocation(psCurrEnumFeature[bucket]->pos.x,psCurrEnumFeature[bucket]->pos.y )		// not burning.
 			)
 		{
 			scrFunctionResult.v.oval = psCurrEnumFeature[bucket];
@@ -1811,49 +1802,6 @@ BOOL scrGetFeatureB(void)
 	}
 	return true;
 }
-
-
-/*
-// -----------------------------------------------------------------------------------------
-// enum next visible feature of required type.
-// note: wont return features covered by structures (ie oil resources)
-// YUK NASTY BUG. CANT RELY ON THE FEATURE LIST BETWEEN CALLS.
-BOOL scrGetFeature(void)
-{
-	SDWORD	bucket;
-
-	if ( !stackPopParams(1,VAL_INT,&bucket) )
-	{
-		return false;
-	}
-
-	while(psCurrEnumFeature[bucket])
-	{
-		if(	( psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType)
-			&&
-			( psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]]	!= 0)
-			&&
-			!TileHasStructure(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
-		   )
-		{
-			if (!stackPushResult(ST_FEATURE,(UDWORD) psCurrEnumFeature[bucket]))			//	push scrFunctionResult
-			{
-				return false;
-			}
-			psCurrEnumFeature[bucket] = psCurrEnumFeature[bucket]->psNext;
-			return true;
-		}
-
-		psCurrEnumFeature[bucket] = psCurrEnumFeature[bucket]->psNext;
-	}
-	// push NULL, none found;
-	if (!stackPushResult(ST_FEATURE, (UDWORD)NULL))
-	{
-		return false;
-	}
-	return true;
-}
-*/
 
 // -----------------------------------------------------------------------------------------
 //Add a feature
