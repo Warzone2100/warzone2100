@@ -624,7 +624,7 @@ static const char *feature_names[] =
 // splatter artifact gifts randomly about.
 void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 {
-	FEATURE		*pF;
+	FEATURE		*pF = NULL;
 	int			i, featureStat, count;
 	uint32_t	x, y;
 	uint8_t		player = ANYPLAYER;
