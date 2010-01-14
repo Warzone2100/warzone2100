@@ -334,7 +334,6 @@ event initialisedEvent(CALL_GAMEINIT)
 
 	// setup build group - all initial droids are in buildgroup!
 	groupAddArea(buildGroup, me, 0, 0, (mapWidth*128), (mapHeight*128));
-	initGetFeature(oilRes,me,me);		// use bucket = player
 
 	// note where our base is.
 	initIterateGroup(buildGroup);		// find idle droids in build group.
@@ -3863,7 +3862,7 @@ function FEATURE closestOil(int _x, int _y, bool _bAvoidThreat)
 	_bestDist = 99999;
 	_closestOil = NULLOBJECT;
 
-	initGetFeature(oilRes,me,me);
+	initGetFeature(oilRes, -1, me);
 	_oil = getFeatureB(me);
 	while(_oil != NULLOBJECT)
 	{
