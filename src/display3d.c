@@ -1013,7 +1013,8 @@ static void display3DProjectiles( void )
 	{
 		switch(psObj->state)
 		{
-		case PROJ_INFLIGHT:
+		case PROJ_INFLIGHTDIRECT:
+		case PROJ_INFLIGHTINDIRECT:
 			// if source or destination is visible
 			if(gfxVisible(psObj))
 			{

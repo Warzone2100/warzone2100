@@ -28,7 +28,8 @@
 
 typedef enum PROJ_STATE
 {
-	PROJ_INFLIGHT,
+	PROJ_INFLIGHTDIRECT,
+	PROJ_INFLIGHTINDIRECT,
 	PROJ_IMPACT,
 	PROJ_POSTIMPACT
 } PROJ_STATE;
@@ -51,8 +52,6 @@ typedef struct PROJECTILE
 	SDWORD          altChange;              ///< Change in altitude
 	UDWORD          born;
 	UDWORD          died;
-
-	void (*pInFlightFunc)(struct PROJECTILE* psObj);
 } PROJECTILE;
 
 #endif // __INCLUDED_PROJECTILEDEF_H__
