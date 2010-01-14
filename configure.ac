@@ -1,7 +1,7 @@
 AC_PREREQ([2.56])
 AC_INIT([Warzone 2100],[TRUNK],[http://wz2100.net/],[warzone2100])
 
-AM_INIT_AUTOMAKE([1.10])
+AM_INIT_AUTOMAKE([1.10 tar-ustar])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
