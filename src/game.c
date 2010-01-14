@@ -8373,7 +8373,7 @@ BOOL loadStructSetPointers(void)
 						psReArmPad = ((REARM_PAD *)psStruct->pFunctionality);
 						if (saveGameVersion >= VERSION_26)//version 26
 						{
-							FIXME_CAST_ASSIGN(UDWORD, _tmpid, psReArmPad->psObj)
+							FIXME_CAST_ASSIGN(UDWORD, _tmpid, psReArmPad->psObj);
 							if (_tmpid == NULL_ID)
 							{
 								psReArmPad->psObj = NULL;
