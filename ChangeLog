@@ -1,3 +1,10 @@
+2010-00-00: Version 2.3 ...?
+ * General:
+   * Fix: Unitialized variables in network code (r9192)
+   * Fix: Game could assert if commander becomes deselected in an unusual way (ticket:1219, r9153)
+   * Fix: Could send incorrect number of oil barrel artifacts (ticket:1402, r9152)
+   * Fix: Make build progress bar look nicer (r9157)
+
 2010-01-10: Version 2.3 beta 7
  * General:
    * Change: No longer always show all oil derricks in skirmish since it was leaking too much information about where the enemy expands (ticket:1087, r9060)
