@@ -158,6 +158,7 @@ BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_S
 {
 	int		longRange = proj_GetLongRange(psWStats);
 	int		tarDist = longRange * longRange;
+	BOOL		foundCB = false;
 	int		minDist = psWStats->minRange * psWStats->minRange;
 	BASE_OBJECT	*psSensor, *psTarget = NULL;
 
@@ -198,7 +199,7 @@ BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_S
 			isCB = structCBSensor(psCStruct);
 			isRD = objRadarDetector((BASE_OBJECT *)psCStruct);
 		}
-		if (!psTemp || psTemp->died || !validTarget(psObj, psTemp, 0) || aiCheckAlliances(psTemp->player, psObj->player))
+		if (!psTemp || aiObjectIsProbablyDoomed(psTemp) || !validTarget(psObj, psTemp, 0) || aiCheckAlliances(psTemp->player, psObj->player))
 		{
 			continue;
 		}
@@ -207,7 +208,7 @@ BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_S
 			int distSq = objPosDiffSq(psTemp->pos, psObj->pos);
 
 			// Need to be in range, prefer closer targets or CB targets
-			if ((isCB || distSq < tarDist) && distSq > minDist)
+			if ((isCB > foundCB || (isCB == foundCB && distSq < tarDist)) && distSq > minDist)
 			{
 				tarDist = distSq;
 				psTarget = psTemp;
@@ -222,7 +223,7 @@ BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_S
 					{
 						*targetOrigin = ORIGIN_CB_SENSOR;
 					}
-					break;	// got CB target, drop everything and shoot!
+					foundCB = true;  // got CB target, drop everything and shoot!
 				}
 				else if (isRD)
 				{
@@ -300,7 +301,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 
 					/* See if friendly droid has a target */
 					tempTarget = friendlyDroid->psActionTarget[0];
-					if(tempTarget && !tempTarget->died)
+					if(tempTarget && !aiObjectIsProbablyDoomed(tempTarget))
 					{
 						//make sure a weapon droid is targeting it
 						if(friendlyDroid->numWeaps > 0)
@@ -320,7 +321,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 				else if(friendlyObj->type == OBJ_STRUCTURE)
 				{
 					tempTarget = ((STRUCTURE*)friendlyObj)->psTarget[0];
-					if (tempTarget && !tempTarget->died && aiDroidHasRange(psDroid, tempTarget, weapon_slot))
+					if (tempTarget && !aiObjectIsProbablyDoomed(tempTarget) && aiDroidHasRange(psDroid, tempTarget, weapon_slot))
 					{
 						targetInQuestion = tempTarget;
 					}
@@ -429,6 +430,58 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 	return failure;
 }
 
+// Are there a lot of bullets heading towards the droid?
+static BOOL aiDroidIsProbablyDoomed(DROID *psDroid)
+{
+	return psDroid->expectedDamage > psDroid->body
+		&& psDroid->expectedDamage - psDroid->body > psDroid->body/5;  // Doomed if projectiles will damage 120% of remaining body points.
+}
+
+// Are there a lot of bullets heading towards the structure?
+static BOOL aiStructureIsProbablyDoomed(STRUCTURE *psStructure)
+{
+	return psStructure->expectedDamage > psStructure->body
+		&& psStructure->expectedDamage - psStructure->body > psStructure->body/15;  // Doomed if projectiles will damage 106.6666666667% of remaining body points.
+}
+
+// Are there a lot of bullets heading towards the object?
+BOOL aiObjectIsProbablyDoomed(BASE_OBJECT *psObject)
+{
+	if (psObject->died)
+		return true;  // Was definitely doomed.
+
+	switch (psObject->type)
+	{
+		case OBJ_DROID:
+			return aiDroidIsProbablyDoomed((DROID *)psObject);
+		case OBJ_STRUCTURE:
+			return aiStructureIsProbablyDoomed((STRUCTURE *)psObject);
+		default:
+			return false;
+	}
+}
+
+// Update the expected damage of the object.
+void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage)
+{
+	if (psObject == NULL)
+		return;  // Hard to destroy the ground.
+
+	switch (psObject->type)
+	{
+		case OBJ_DROID:
+			((DROID *)psObject)->expectedDamage += damage;
+			ASSERT((SDWORD)((DROID *)psObject)->expectedDamage >= 0, "aiObjectAddExpectedDamage: Negative amount of projectiles heading towards droid.");
+			break;
+		case OBJ_STRUCTURE:
+			((STRUCTURE *)psObject)->expectedDamage += damage;
+			ASSERT((SDWORD)((STRUCTURE *)psObject)->expectedDamage >= 0, "aiObjectAddExpectedDamage: Negative amount of projectiles heading towards droid.");
+			break;
+		default:
+			break;
+	}
+}
+
 /* Calculates attack priority for a certain target */
 static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot)
 {
@@ -440,7 +493,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	WEAPON_STATS	*attackerWeapon;
 	BOOL			bEmpWeap=false,bCmdAttached=false,bTargetingCmd=false;
 
-	if (psTarget == NULL || psAttacker == NULL)
+	if (psTarget == NULL || psAttacker == NULL || aiObjectIsProbablyDoomed(psTarget))
 	{
 		return noTarget;
 	}
@@ -621,7 +674,6 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		{
 			attackWeight /= EMP_STRUCT_PENALTY_F;
 		}
-
 	}
 	else	//a feature
 	{
@@ -777,7 +829,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 
 			if (psCommander->action == DACTION_ATTACK
 			    && psCommander->psActionTarget[0] != NULL
-			    && !psCommander->psActionTarget[0]->died)
+			    && !aiObjectIsProbablyDoomed(psCommander->psActionTarget[0]))
 			{
 				// the commander has a target to fire on
 				if (aiStructHasRange((STRUCTURE *)psObj, psCommander->psActionTarget[0], weapon_slot))
@@ -810,7 +862,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			while (psCurr != NULL)
 			{
 				/* Check that it is a valid target */
-				if (psCurr->type != OBJ_FEATURE && !psCurr->died && aiStructHasRange((STRUCTURE *)psObj, psCurr, weapon_slot)
+				if (psCurr->type != OBJ_FEATURE && !aiObjectIsProbablyDoomed(psCurr) && aiStructHasRange((STRUCTURE *)psObj, psCurr, weapon_slot)
 				    && !aiCheckAlliances(psCurr->player, psObj->player)
 				    && validTarget(psObj, psCurr, weapon_slot) && psCurr->visible[psObj->player])
 				{
@@ -869,7 +921,8 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		psCurr = gridIterate();
 		while (psCurr != NULL)
 		{
-			if (psCurr->type == OBJ_STRUCTURE || psCurr->type == OBJ_DROID)
+			if ((psCurr->type == OBJ_STRUCTURE || psCurr->type == OBJ_DROID) &&
+			    !aiObjectIsProbablyDoomed(psCurr))
 			{
 				if (!aiCheckAlliances(psCurr->player,psObj->player)
 				    && objActiveRadar(psCurr))
@@ -930,8 +983,8 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		psCurr = gridIterate();
 		while (psCurr != NULL)
 		{
-			// Don't target features or dead objects
-			if (psCurr->type != OBJ_FEATURE && !psCurr->died)
+			// Don't target features or doomed/dead objects
+			if (psCurr->type != OBJ_FEATURE && !aiObjectIsProbablyDoomed(psCurr))
 			{
 				if (!aiCheckAlliances(psCurr->player,psObj->player) && !aiObjIsWall(psCurr))
 				{

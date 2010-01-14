@@ -193,7 +193,8 @@ typedef struct DROID
 	UDWORD          actionStarted;                  ///< Game time action started
 	UDWORD          actionPoints;                   ///< number of points done by action since start
 
-	UWORD           UNUSED_powerAccrued;
+	UDWORD          expectedDamage;                 ///< Expected damage to be caused by all currently incoming projectiles. This info is shared between all players,
+	                                                ///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 
 	UBYTE           illumination;
 	UBYTE           updateFlags;

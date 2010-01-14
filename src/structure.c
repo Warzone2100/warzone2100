@@ -1862,6 +1862,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		}
 
 		psBuilding->body = (UWORD)structureBody(psBuilding);
+		psBuilding->expectedDamage = 0;  // Begin life optimistially.
 
 		//add the structure to the list - this enables it to be drawn whilst being built
 		addStructure(psBuilding);
@@ -2109,6 +2110,8 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STA
 	blueprint->asWeaps[0].recoilValue = 0;
 	blueprint->asWeaps[0].pitch = 0;
 	blueprint->asWeaps[0].rotation = 0;
+
+	blueprint->expectedDamage = 0;
 
 	blueprint->status = state;
 	return blueprint;
@@ -2910,7 +2913,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 			if (psStructure->asWeaps[i].nStat > 0 &&
 				asWeaponStats[psStructure->asWeaps[i].nStat].weaponSubClass != WSC_LAS_SAT)
 			{
-				if ((psStructure->id % 20) == (frameGetFrameNumber() % 20))
+				if ((psStructure->id % 20) == (frameGetFrameNumber() % 20)
+				    || (psStructure->psTarget[i] != NULL && aiObjectIsProbablyDoomed(psStructure->psTarget[i])))
 				{
 					if (aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[i], i, true, &tmpOrigin) )
 					{
@@ -2947,7 +2951,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					psChosenObjs[i] = psStructure->psTarget[0];
 				}
 
-				if (psChosenObjs[i] != NULL)
+				if (psChosenObjs[i] != NULL && !aiObjectIsProbablyDoomed(psChosenObjs[i]))
 				{
 					// get the weapon stat to see if there is a visible turret to rotate
 					psWStats = asWeaponStats + psStructure->asWeaps[i].nStat;

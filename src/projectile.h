@@ -81,11 +81,6 @@ extern BOOL gfxVisible(PROJECTILE *psObj);
 
 extern void	objectShimmy	( BASE_OBJECT *psObj );
 
-static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
-{
-	psProj->psDest = psObj;
-}
-
 static inline void setProjectileSource(PROJECTILE *psProj, BASE_OBJECT *psObj)
 {
 	// use the source of the source of psProj if psAttacker is a projectile

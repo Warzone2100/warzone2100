@@ -303,7 +303,7 @@ void droidRelease(DROID *psDroid)
 	// remove the object from the grid
 	gridRemoveObject((BASE_OBJECT *)psDroid);
 
-	// remove the droid from the cluster systerm
+	// remove the droid from the cluster system
 	clustRemoveObject((BASE_OBJECT *)psDroid);
 
 	if (psDroid->sMove.asPath)
@@ -2625,7 +2625,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	droidSetName(psDroid, pTemplate->aName);
 
 	// Set the droids type
-	psDroid->droidType = droidTemplateType(pTemplate);
+	psDroid->droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.
 
 	psDroid->pos.x = (UWORD)x;
 	psDroid->pos.y = (UWORD)y;
@@ -2666,6 +2666,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->psTarget = NULL;
 	psDroid->lastFrustratedTime = 0;
 
+	// Is setting asWeaps here needed? The first numWeaps entries are set in droidSetBits, too.)
 	for(i = 0;i < DROID_MAXWEAPS;i++)
 	{
 		psDroid->psActionTarget[i] = NULL;
@@ -2723,9 +2724,9 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 
 	initDroidMovement(psDroid);
 
-	psDroid->direction = 0;
-	psDroid->pitch =  0;
-	psDroid->roll = 0;
+	psDroid->direction = 0;  // Redundant? (Is set in droidSetBits, too.)
+	psDroid->pitch =  0;  // Redundant? (Is set in droidSetBits, too.)
+	psDroid->roll = 0;  // Redundant? (Is set in droidSetBits, too.)
 	psDroid->selected = false;
 	psDroid->lastEmission = 0;
 	psDroid->bTargetted = false;
@@ -2738,8 +2739,8 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	//allocate 'easy-access' data!
 	objSensorCache((BASE_OBJECT *)psDroid, asSensorStats + pTemplate->asParts[COMP_SENSOR]);
 	objEcmCache((BASE_OBJECT *)psDroid, asECMStats + pTemplate->asParts[COMP_ECM]);
-	psDroid->body = calcTemplateBody(pTemplate, (UBYTE)player);
-	psDroid->originalBody = psDroid->body;
+	psDroid->body = calcTemplateBody(pTemplate, (UBYTE)player);  // Redundant? (Is set in droidSetBits, too.)
+	psDroid->originalBody = psDroid->body;  // Redundant? (Is set in droidSetBits, too.)
 
 	if (cyborgDroid(psDroid))
 	{
@@ -2851,6 +2852,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->numWeaps = pTemplate->numWeaps;
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
 	psDroid->originalBody = psDroid->body;
+	psDroid->expectedDamage = 0;  // Begin life optimistically.
 
 	//create the droids weapons
 	if (pTemplate->numWeaps > 0)
@@ -3549,8 +3551,8 @@ BOOL noDroid(UDWORD x, UDWORD y)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// returns true when one droid on x,y square.
-static BOOL oneDroid(UDWORD x, UDWORD y)
+// returns true when at most one droid on x,y square.
+static BOOL oneDroidMax(UDWORD x, UDWORD y)
 {
 	UDWORD i;
 	BOOL bFound = false;
@@ -3632,7 +3634,7 @@ BOOL	zonedPAT(UDWORD x, UDWORD y)
 
 static BOOL canFitDroid(UDWORD x, UDWORD y)
 {
-	return sensiblePlace(x, y, PROPULSION_TYPE_WHEELED) && (noDroid(x,y) || oneDroid(x, y));
+	return sensiblePlace(x, y, PROPULSION_TYPE_WHEELED) && oneDroidMax(x, y);
 }
 
 /// find a tile for which the function will return true

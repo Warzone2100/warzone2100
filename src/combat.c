@@ -91,6 +91,8 @@ BOOL combShutdown(void)
 	return true;
 }
 
+unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE impactSide);
+
 // Watermelon:real projectile
 /* Fire a weapon at something */
 void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
@@ -399,7 +401,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 		objTrace(psAttacker->id, "combFire: [%s]->%u: resultHitChance=%d, visibility=%hhu : ",
 			psStats->pName, psTarget->id, resultHitChance, psTarget->visible[psAttacker->player]);
-		
+
 		if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player, predict, psTarget, false, weapon_slot))
 		{
 			/* Out of memory - we can safely ignore this */
@@ -433,8 +435,10 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	/*if a null target is passed in ignore - this will be the case when a 'miss'
 	projectile is sent - we may have to cater for these at some point*/
 	// also ignore cases where you attack your own player
+	// Also ignore cases where there are already 1000 missiles heading towards the attacker.
 	if ((psTarget == NULL) ||
-		((psAttacker != NULL) && (psAttacker->player == psTarget->player)))
+		((psAttacker != NULL) && (psAttacker->player == psTarget->player)) ||
+		aiObjectIsProbablyDoomed(psAttacker))
 	{
 		return;
 	}
@@ -576,4 +580,72 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 	psObj->body -= actualDamage;
 
 	return (float) actualDamage / (float) originalhp;
+}
+
+/* Guesses how damage a shot might do.
+ * \param psObj object that might be hit
+ * \param damage amount of damage to deal
+ * \param weaponClass the class of the weapon that deals the damage
+ * \param weaponSubClass the subclass of the weapon that deals the damage
+ * \param angle angle of impact (from the damage dealing projectile in relation to this object)
+ * \return guess at amount of damage
+ */
+unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE i)
+{
+	unsigned int damage;
+
+	int	actualDamage, armour = 0, level = 1;
+
+	if (psTarget == NULL)
+		return 0;  // Hard to destroy the ground. The armour on the mud is very strong and blocks all damage.
+
+	damage = calcDamage(weaponDamage(psStats, player), psStats->weaponEffect, psTarget);
+
+	// EMP cannons do no damage, if we are one return now
+	if (psStats->weaponSubClass == WSC_EMP)
+	{
+		return 0;
+	}
+
+
+	// apply game difficulty setting
+	if(!NetPlay.bComms)		// ignore multiplayer games
+	{
+		if (psTarget->player != selectedPlayer)
+		{
+			// Player inflicting damage on enemy.
+			damage = (UDWORD) modifyForDifficultyLevel(damage,true);
+		}
+		else
+		{
+			// Enemy inflicting damage on player.
+			damage = (UDWORD) modifyForDifficultyLevel(damage,false);
+		}
+	}
+
+	for (int impactSide = 0; impactSide != NUM_HIT_SIDES; ++impactSide)
+		armour = MAX(armour, psTarget->armour[impactSide][psStats->weaponClass]);
+
+	//debug(LOG_ATTACK, "objGuessFutureDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
+
+	if (psTarget->type == OBJ_DROID)
+	{
+		DROID *psDroid = (DROID *)psTarget;
+
+		// Retrieve highest, applicable, experience level
+		level = getDroidEffectiveLevel(psDroid);
+	}
+
+	// Reduce damage taken by EXP_REDUCE_DAMAGE % for each experience level
+	actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
+
+	// You always do at least a third of the experience modified damage
+	actualDamage = MAX(actualDamage - armour, actualDamage / 3);
+
+	// And at least MIN_WEAPON_DAMAGE points
+	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);
+
+	//objTrace(psObj->id, "objGuessFutureDamage: Would penetrate %d", actualDamage);
+
+	return actualDamage;
 }

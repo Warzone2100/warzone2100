@@ -289,6 +289,9 @@ typedef struct _structure
 	int				targetLine[STRUCT_MAXWEAPS];
 #endif
 
+	UDWORD          expectedDamage;                 ///< Expected damage to be caused by all currently incoming projectiles. This info is shared between all players,
+	                                                ///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
+
 	/* anim data */
 	ANIM_OBJECT	*psCurAnim;
 

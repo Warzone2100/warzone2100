@@ -107,6 +107,14 @@ static HIT_SIDE getHitSide (PROJECTILE *psObj, BASE_OBJECT *psTarget);
 static void projGetNaybors(PROJECTILE *psObj);
 
 
+static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
+{
+	aiObjectAddExpectedDamage(psProj->psDest, -psProj->expectedDamageCaused);  // The old target shouldn't be expecting any more damage from this projectile.
+	psProj->psDest = psObj;
+	aiObjectAddExpectedDamage(psProj->psDest, psProj->expectedDamageCaused);  // Let the new target know to say its prayers.
+}
+
+
 /***************************************************************************/
 BOOL gfxVisible(PROJECTILE *psObj)
 {
@@ -377,7 +385,10 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 
 	psProj->died = 0;
 
-	setProjectileDestination(psProj, psTarget);
+	// Must set ->psDest and ->expectedDamageCaused before first call to setProjectileDestination().
+	psProj->psDest = NULL;
+	psProj->expectedDamageCaused = objGuessFutureDamage(psStats, player, psTarget, HIT_SIDE_FRONT);  // Guessing front impact.
+	setProjectileDestination(psProj, psTarget);  // Updates expected damage of psProj->psDest, using psProj->expectedDamageCaused.
 
 	/*
 	When we have been created by penetration (spawned from another projectile),
@@ -909,6 +920,9 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		// We hit!
 		psProj->pos = closestCollisionPos;
 
+		setProjectileDestination(psProj, NULL);
+		// No more damage expected from this projectile. (Ignore burning.)
+		psProj->expectedDamageCaused = 0;
 		setProjectileDestination(psProj, closestCollisionObject);
 
 		/* Buildings cannot be penetrated and we need a penetrating weapon */

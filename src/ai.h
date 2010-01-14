@@ -81,7 +81,7 @@ extern BOOL aiInitialise(void);
 extern BOOL aiShutdown(void);
 
 /* Initialise a droid structure for AI */
-extern BOOL aiInitDroid(DROID *psDroid);
+//extern BOOL aiInitDroid(DROID *psDroid);
 
 /* Do the AI for a droid */
 extern void aiUpdateDroid(DROID *psDroid);
@@ -89,6 +89,12 @@ extern void aiUpdateDroid(DROID *psDroid);
 // Find the nearest best target for a droid
 // returns integer representing quality of choice, -1 if failed
 extern SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, UWORD *targetOrigin);
+
+// Are there a lot of bullets heading towards the structure?
+extern BOOL aiObjectIsProbablyDoomed(BASE_OBJECT *psObject);
+
+// Update the expected damage of the object.
+extern void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage);
 
 /* See if there is a target in range added int weapon_slot*/
 extern BOOL aiChooseTarget(BASE_OBJECT *psObj,

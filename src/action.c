@@ -1234,6 +1234,11 @@ void actionUpdateDroid(DROID *psDroid)
 		//loop through weapons and look for target for each weapon
 		for (i = 0; i < psDroid->numWeaps; ++i)
 		{
+			if (psDroid->psActionTarget[i] != NULL && aiObjectIsProbablyDoomed(psDroid->psActionTarget[i]))
+			{
+				setDroidActionTarget(psDroid, NULL, i);  // Target not worth shooting at anymore.
+			}
+
 			if (psDroid->psActionTarget[i] == NULL)
 			{
 				BASE_OBJECT *psTemp;
@@ -1395,18 +1400,26 @@ void actionUpdateDroid(DROID *psDroid)
 					setDroidActionTarget(psDroid, psDroid->psActionTarget[0], i);
 				}
 				// If we still don't have a target, try to find one
-				else if (psDroid->psActionTarget[i] == NULL &&
-					aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false, NULL))
+				else
 				{
-					setDroidActionTarget(psDroid, psTargets[i], i);
+					if (psDroid->psActionTarget[i] == NULL &&
+					aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false, NULL))  // Can probably just use psTarget instead of psTargets[i], and delete the psTargets variable.
+					{
+						setDroidActionTarget(psDroid, psTargets[i], i);
+					}
 				}
 			}
-			// Main turret lost its target, but we're not ordered to attack any specific
-			// target, so try to find a new one
+			// If main turret lost its target, but we're not ordered to attack any specific
+			// target, try to find a new one.
 			else if (psDroid->psActionTarget[0] == NULL &&
-			          psDroid->order != DORDER_ATTACK &&
-			          aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false, NULL))
+				    psDroid->order != DORDER_ATTACK &&
+				    aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false, NULL))
 			{
+				// FIXME What is this code path for?
+				// FIXME If psDroid->psActionTarget[0] == NULL, then actionVisibleTarget(psDroid, psActionTarget, i) crashes.
+				// FIXME And if aiChooseTarget above fails, psActionTarget stays NULL.
+				// FIXME So, assuming the game can't crash, psDroid->psActionTarget[0] is never NULL.
+				debug(LOG_NEVER, "Can this happen?");
 				setDroidActionTarget(psDroid, psTargets[i], i);
 			}
 
@@ -1421,7 +1434,10 @@ void actionUpdateDroid(DROID *psDroid)
 
 			if (nonNullWeapon[i]
 			 && actionVisibleTarget(psDroid, psActionTarget, i)
-			 && actionInRange(psDroid, psActionTarget, i))
+			 && actionInRange(psDroid, psActionTarget, i)
+			 && (psDroid->order == DORDER_ATTACK
+			  || psDroid->order == DORDER_ATTACKTARGET
+			  || !aiObjectIsProbablyDoomed(psActionTarget)))
 			{
 				WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 				bHasTarget = true;

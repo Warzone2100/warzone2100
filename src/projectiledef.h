@@ -52,6 +52,7 @@ typedef struct PROJECTILE
 	SDWORD          altChange;              ///< Change in altitude
 	UDWORD          born;
 	UDWORD          died;
+	UDWORD          expectedDamageCaused;   ///< Expected damage that this projectile will cause to the target.
 } PROJECTILE;
 
 #endif // __INCLUDED_PROJECTILEDEF_H__
