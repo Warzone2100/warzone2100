@@ -61,9 +61,9 @@ int SDL_getFramerate(FPSmanager * manager)
 
 void SDL_framerateDelay(FPSmanager * manager)
 {
-    Uint32 current_ticks;
-    Uint32 target_ticks;
-    Uint32 the_delay;
+    uint32_t current_ticks;
+    uint32_t target_ticks;
+    uint32_t the_delay;
 
     /*
      * Next frame 
@@ -74,7 +74,7 @@ void SDL_framerateDelay(FPSmanager * manager)
      * Get/calc ticks 
      */
     current_ticks = wzGetTicks();
-    target_ticks = manager->lastticks + (Uint32) ((float) manager->framecount * manager->rateticks);
+    target_ticks = manager->lastticks + (uint32_t) ((float) manager->framecount * manager->rateticks);
 
 	if (current_ticks <= target_ticks)
 	{

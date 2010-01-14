@@ -30,7 +30,6 @@
 #include "file.h"
 #include "wzapp_c.h"
 
-#include <SDL.h>
 #include <physfs.h>
 
 #include "frameint.h"
@@ -68,14 +67,14 @@ UDWORD		selectedPlayer = 0; 	/**< Current player */
 #define  IN_A_FRAME 70
 
 /* Global variables for the frame rate stuff */
-static Uint32	FrameCounts[TIMESPAN] = { 0 };
-static Uint32	FrameIndex = 0;
-static Uint64	curFrames = 0; // Number of frames elapsed since start
-static Uint64	lastFrames = 0;
-static Uint32	curTicks = 0; // Number of ticks since execution started
-static Uint32	lastTicks = 0;
+static uint32_t FrameCounts[TIMESPAN] = { 0 };
+static uint32_t FrameIndex = 0;
+static uint64_t curFrames = 0; // Number of frames elapsed since start
+static uint64_t lastFrames = 0;
+static uint32_t curTicks = 0; // Number of ticks since execution started
+static uint32_t lastTicks = 0;
 static FPSmanager wzFPSmanager;
-static BOOL	initFPSmanager = false;
+static BOOL initFPSmanager = false;
 
 void setFramerateLimit(int fpsLimit)
 {
@@ -208,12 +207,6 @@ static void freeCursors(void)
  */
 BOOL frameInitialise()
 {
-	if (SDL_Init(SDL_INIT_TIMER) != 0)
-	{
-		debug( LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError() );
-		return false;
-	}
-
 	/* Initialise the trig stuff */
 	if (!trigInitialise())
 	{
@@ -266,10 +259,6 @@ void frameShutDown(void)
 	/* Free all cursors */
 	debug(LOG_NEVER, "Free the cursors!");
 	freeCursors();
-
-	/* Destroy the Application window */
-	debug(LOG_NEVER, "Destroy SDL!");
-	SDL_Quit();
 
 	/* shutdown the trig stuff */
 	debug(LOG_NEVER, "Down with trigonometry!");
