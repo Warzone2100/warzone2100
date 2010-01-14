@@ -81,7 +81,7 @@
 #include "multistat.h"
 #include "wrappers.h"
 #include "scriptfuncs.h"
-
+#include "challenge.h"
 
 #define MAX_SAVE_NAME_SIZE_V19	40
 #define MAX_SAVE_NAME_SIZE	60
@@ -451,8 +451,10 @@ static bool serializeMultiplayerGame(PHYSFS_file* fileHandle, const MULTIPLAYERG
 	 || !PHYSFS_writeUBE8(fileHandle, 0)
 	 || !PHYSFS_writeUBE16(fileHandle, 0)	// dummy, was bytesPerSec
 	 || !PHYSFS_writeUBE8(fileHandle, 0)	// dummy, was packetsPerSec
-	 || !PHYSFS_writeUBE8(fileHandle, 0))	// dummy, was encryptKey
+	 || !PHYSFS_writeUBE8(fileHandle, challengeActive))	// reuse available field, was encryptKey
+	{
 		return false;
+	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
@@ -483,8 +485,11 @@ static bool deserializeMultiplayerGame(PHYSFS_file* fileHandle, MULTIPLAYERGAME*
 	 || !PHYSFS_readUBE8(fileHandle, &dummy8)
 	 || !PHYSFS_readUBE16(fileHandle, &dummy16)	// dummy, was bytesPerSec
 	 || !PHYSFS_readUBE8(fileHandle, &dummy8)	// dummy, was packetsPerSec
-	 || !PHYSFS_readUBE8(fileHandle, &dummy8))	// dummy, was encryptKey
+	 || !PHYSFS_readUBE8(fileHandle, &dummy8))	// reused for challenge, was encryptKey
+	{
 		return false;
+	}
+	challengeActive = dummy8;	// hack
 
 	serializeMulti->fog = boolFog;
 

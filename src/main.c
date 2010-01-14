@@ -663,6 +663,10 @@ static bool initSaveGameLoad(void)
 	{
 		SDL_WM_GrabInput(SDL_GRAB_ON);
 	}
+	if (challengeActive)
+	{
+		addMissionTimerInterface();
+	}
 
 	return true;
 }
