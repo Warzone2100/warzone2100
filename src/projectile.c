@@ -920,11 +920,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		// We hit!
 		psProj->pos = closestCollisionPos;
 
-		setProjectileDestination(psProj, NULL);
-		// No more damage expected from this projectile. (Ignore burning.)
-		psProj->expectedDamageCaused = 0;
-		setProjectileDestination(psProj, closestCollisionObject);
-
 		/* Buildings cannot be penetrated and we need a penetrating weapon */
 		if (closestCollisionObject->type == OBJ_DROID && psStats->penetrate)
 		{
@@ -1009,18 +1004,18 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 
 static void proj_ImpactFunc( PROJECTILE *psObj )
 {
-	WEAPON_STATS	*psStats;
-	SDWORD			i, iAudioImpactID;
-	float			relativeDamage;
-	Vector3i position,scatter;
+	WEAPON_STATS    *psStats;
+	SDWORD          i, iAudioImpactID;
+	float           relativeDamage;
+	Vector3i        position, scatter;
 	iIMDShape       *imd;
-	HIT_SIDE	impactSide = HIT_SIDE_FRONT;
+	HIT_SIDE        impactSide = HIT_SIDE_FRONT;
+	BASE_OBJECT     *temp;
 
 	CHECK_PROJECTILE(psObj);
 
 	psStats = psObj->psWStats;
-	ASSERT( psStats != NULL,
-		"proj_ImpactFunc: Invalid weapon stats pointer" );
+	ASSERT(psStats != NULL, "proj_ImpactFunc: Invalid weapon stats pointer");
 
 	// note the attacker if any
 	g_pProjLastAttacker = psObj->psSource;
@@ -1201,6 +1196,12 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			}
 		}
 	}
+
+	temp = psObj->psDest;
+	setProjectileDestination(psObj, NULL);
+	// The damage has been done, no more damage expected from this projectile. (Ignore burning.)
+	psObj->expectedDamageCaused = 0;
+	setProjectileDestination(psObj, temp);
 
 	// If the projectile does no splash damage and does not set fire to things
 	if ((psStats->radius == 0) && (psStats->incenTime == 0) )
