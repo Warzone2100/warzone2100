@@ -281,8 +281,16 @@ void WzMainWindow::setFontSize(float size)
 
 void WzMainWindow::mouseMoveEvent(QMouseEvent *event)
 {
-	mouseXPos = event->x();
-	mouseYPos = event->y();
+	if (event->x() < 0 || event->y() < 0 || event->x() >= width() || event->y() >= height())
+	{
+		mouseXPos = width()/2;  // Don't scroll when mouse is outside window.
+		mouseYPos = height()/2;
+	}
+	else
+	{
+		mouseXPos = event->x();
+		mouseYPos = event->y();
+	}
 
 	if (!mouseDown(MOUSE_MMB))
 	{
