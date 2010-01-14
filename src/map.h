@@ -28,6 +28,7 @@
 #include "lib/framework/debug.h"
 #include "objects.h"
 #include "terrain.h"
+#include "multiplay.h"
 
 /* The different types of terrain as far as the game is concerned */
 typedef enum _terrain_type
@@ -435,12 +436,15 @@ static inline bool hasSensorOnTile(MAPTILE *psTile, int player)
 
 	if (psTile->watchers[selectedPlayer] == 0)
 	{
-		// Check if an ally can provide us with vision on this tile
-		for (k = 0; k < MAX_PLAYERS; k++)
+		if (game.alliance == ALLIANCES_TEAMS)
 		{
-			if (psTile->watchers[k] > 0 && aiCheckAlliances(k, selectedPlayer))
+			// Check if an ally can provide us with vision on this tile
+			for (k = 0;  k < MAX_PLAYERS; k++)
 			{
-				seen = true;
+				if (psTile->watchers[k] > 0 && aiCheckAlliances(k, selectedPlayer))
+				{
+					seen = true;
+				}
 			}
 		}
 		return seen;
