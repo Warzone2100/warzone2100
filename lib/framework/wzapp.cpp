@@ -1017,7 +1017,9 @@ bool wzIsThreadDone(WZ_THREAD *thread)
 
 void wzYieldCurrentThread()
 {
+#if QT_VERSION >= 0x040500
 	QThread::yieldCurrentThread();
+#endif
 }
 
 WZ_MUTEX *wzMutexCreate()
