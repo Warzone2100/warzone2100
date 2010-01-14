@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-12 00:15+0100\n"
+"POT-Creation-Date: 2010-01-14 19:42+0100\n"
 "PO-Revision-Date: 2009-11-14 17:51-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@hotmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
@@ -10478,7 +10478,8 @@ msgid "Missile Fortress"
 msgstr "Fortaleza de Mísseis"
 
 #: data/mp/messages/strings/names.txt:1761
-msgid "Super Heavy Body - Wyvern"
+#, fuzzy
+msgid "Heavy Body - Wyvern"
 msgstr "Chassis Super Pesado - Dragonete"
 
 #: data/mp/messages/strings/names.txt:1762
@@ -10486,7 +10487,8 @@ msgid "Wyvern"
 msgstr "Dragonete"
 
 #: data/mp/messages/strings/names.txt:1764
-msgid "Super Heavy Body - Dragon"
+#, fuzzy
+msgid "Multi Turret Body - Dragon"
 msgstr "Chassis Extremo - Dragão"
 
 #: data/mp/messages/strings/names.txt:1765
@@ -11503,8 +11505,8 @@ msgstr "UM JOGADOR"
 
 #: src/frontend.c:469
 #: src/ingameop.c:507
-#: src/mission.c:2841
-#: src/mission.c:2946
+#: src/mission.c:2844
+#: src/mission.c:2949
 msgid "Load Saved Game"
 msgstr "Carregar Jogo Salvo"
 
@@ -11765,11 +11767,11 @@ msgstr "Cor das Unidades"
 msgid "GAME OPTIONS"
 msgstr "OPÇÕES DE JOGO"
 
-#: src/hci.c:1009
-#: src/hci.c:3844
-#: src/hci.c:3995
-#: src/hci.c:4448
-#: src/hci.c:5652
+#: src/hci.c:1012
+#: src/hci.c:3835
+#: src/hci.c:3986
+#: src/hci.c:4439
+#: src/hci.c:5643
 #: src/intelmap.c:541
 #: src/intorder.c:661
 #: src/loadsave.c:267
@@ -11781,137 +11783,137 @@ msgstr "OPÇÕES DE JOGO"
 msgid "Close"
 msgstr "Fechar"
 
-#: src/hci.c:1355
+#: src/hci.c:1358
 msgid "MAP SAVED!"
 msgstr "MAPA SALVO!"
 
-#: src/hci.c:1702
+#: src/hci.c:1705
 #: src/loop.c:535
 #: src/loop.c:551
-#: src/mission.c:2912
+#: src/mission.c:2915
 msgid "GAME SAVED :"
 msgstr "JOGO SALVO :"
 
-#: src/hci.c:2109
+#: src/hci.c:2112
 msgid "Failed to create building"
 msgstr "Impossível criar edifício"
 
-#: src/hci.c:2132
+#: src/hci.c:2135
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Jogador %u é batota (debug menu) ele/ela mesma é uma nova estrutura: %s."
 
-#: src/hci.c:2147
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Jogador %u é batota (debug menu) ele/ela mesma é uma nova característica: %s."
 
-#: src/hci.c:2168
+#: src/hci.c:2171
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Jogador %u é batota (debug menu) ele/ela mesma é um novo droid: %s."
 
-#: src/hci.c:3746
+#: src/hci.c:3737
 msgid "Commanders (F6)"
 msgstr "Comandos (F6)"
 
-#: src/hci.c:3762
+#: src/hci.c:3753
 msgid "Intelligence Display (F5)"
 msgstr "Mostrar Inteligência (F5)"
 
-#: src/hci.c:3778
+#: src/hci.c:3769
 msgid "Manufacture (F1)"
 msgstr "Desenvolvedor (F1)"
 
-#: src/hci.c:3794
+#: src/hci.c:3785
 msgid "Design (F4)"
 msgstr "Padrão (F4)"
 
-#: src/hci.c:3810
+#: src/hci.c:3801
 msgid "Research (F2)"
 msgstr "Pesquisa (F2)"
 
-#: src/hci.c:3826
+#: src/hci.c:3817
 msgid "Build (F3)"
 msgstr "Construir (F3)"
 
-#: src/hci.c:3906
+#: src/hci.c:3897
 #: src/multiint.c:1370
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.c:4090
+#: src/hci.c:4081
 msgid "Tile"
 msgstr "Espaço"
 
-#: src/hci.c:4091
+#: src/hci.c:4082
 msgid "Place tiles on map"
 msgstr "Colocar Espaços no mapa"
 
-#: src/hci.c:4100
+#: src/hci.c:4091
 msgid "Unit"
 msgstr "Unidade"
 
-#: src/hci.c:4101
+#: src/hci.c:4092
 msgid "Place Unit on map"
 msgstr "Colocar Unidade no mapa"
 
-#: src/hci.c:4109
+#: src/hci.c:4100
 msgid "Struct"
 msgstr "Estrutura"
 
-#: src/hci.c:4110
+#: src/hci.c:4101
 msgid "Place Structures on map"
 msgstr "Colocar estruturas no mapa"
 
-#: src/hci.c:4118
+#: src/hci.c:4109
 msgid "Feat"
 msgstr "Feito"
 
-#: src/hci.c:4119
+#: src/hci.c:4110
 msgid "Place Features on map"
 msgstr "Colocar Artefatos no mapa"
 
-#: src/hci.c:4130
+#: src/hci.c:4121
 msgid "Pause or unpause the game"
 msgstr "Pausar ou resumir o jogo"
 
-#: src/hci.c:4144
+#: src/hci.c:4135
 msgid "Align height of all map objects"
 msgstr "Alinhar a altitude dos objetos e do mapa"
 
-#: src/hci.c:4169
+#: src/hci.c:4160
 #: src/ingameop.c:119
 #: src/ingameop.c:264
 #: src/ingameop.c:269
 msgid "Quit"
 msgstr "Sair"
 
-#: src/hci.c:4170
+#: src/hci.c:4161
 msgid "Exit Game"
 msgstr "Sair do Jogo"
 
-#: src/hci.c:4533
+#: src/hci.c:4524
 #: src/intdisplay.c:212
 #: src/intdisplay.c:255
 #: src/intdisplay.c:306
 msgid "Progress Bar"
 msgstr "Barra de Progresso"
 
-#: src/hci.c:5567
+#: src/hci.c:5558
 msgid "Factory Delivery Point"
 msgstr "Ponto de Entrega da Fábrica"
 
-#: src/hci.c:5586
+#: src/hci.c:5577
 msgid "Loop Production"
 msgstr "Prender Produção"
 
-#: src/hci.c:5677
+#: src/hci.c:5668
 msgid "Tab Scroll left"
 msgstr "Tab mover para esquerda"
 
-#: src/hci.c:5694
+#: src/hci.c:5685
 msgid "Tab Scroll right"
 msgstr "Tab mover para direita"
 
@@ -11928,7 +11930,7 @@ msgstr ""
 #: src/ingameop.c:283
 #: src/ingameop.c:511
 #: src/mission.c:2831
-#: src/mission.c:2949
+#: src/mission.c:2952
 msgid "Save Game"
 msgstr "Salvar"
 
@@ -12300,56 +12302,62 @@ msgstr ""
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2475
-#: src/keybind.c:2516
-#: src/keybind.c:2538
+#: src/keybind.c:2456
+#: src/keybind.c:2499
+#, fuzzy
+msgid "Sorry, but game speed cannot be changed in multiplayer."
+msgstr "Desculpe, as trapaças estão desativadas em jogos multiplayer."
+
+#: src/keybind.c:2477
+#: src/keybind.c:2520
+#: src/keybind.c:2542
 msgid "Game Speed Reset"
 msgstr "Velocidade do Jogo Restaurada"
 
-#: src/keybind.c:2479
+#: src/keybind.c:2481
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Velocidade do Jogo Aumentada para %3.1f"
 
-#: src/keybind.c:2520
+#: src/keybind.c:2524
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Velocidade do Jogo Diminuída para %3.1f"
 
-#: src/keybind.c:2550
+#: src/keybind.c:2554
 msgid "Build menu will reopen"
 msgstr "Menu de construção reabrirá"
 
-#: src/keybind.c:2554
+#: src/keybind.c:2558
 msgid "Build menu will not reopen"
 msgstr "Menu de construção não reabrirá"
 
-#: src/keybind.c:2566
+#: src/keybind.c:2570
 msgid "Radar showing friend-foe colors"
 msgstr "Radar exibe cores de aliados-inimigos"
 
-#: src/keybind.c:2570
+#: src/keybind.c:2574
 msgid "Radar showing player colors"
 msgstr "Radar exibe cores dos jogadores"
 
-#: src/keybind.c:2591
+#: src/keybind.c:2595
 msgid "Radar showing only objects"
 msgstr "Radar exibe apenas objetos"
 
-#: src/keybind.c:2594
+#: src/keybind.c:2598
 msgid "Radar blending terrain and height"
 msgstr "Radar exibe terreno e altitudes"
 
-#: src/keybind.c:2597
+#: src/keybind.c:2601
 msgid "Radar showing terrain"
 msgstr "Radar exibe terreno"
 
-#: src/keybind.c:2600
+#: src/keybind.c:2604
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar exibe terreno"
 
-#: src/keybind.c:2603
+#: src/keybind.c:2607
 msgid "Radar showing height"
 msgstr "Radar exibe altitudes"
 
@@ -12756,8 +12764,8 @@ msgid "OBJECTIVE FAILED"
 msgstr "FLAHA NO OBJETIVO"
 
 #: src/mission.c:2810
-#: src/mission.c:2847
-#: src/mission.c:2965
+#: src/mission.c:2850
+#: src/mission.c:2968
 msgid "Quit To Main Menu"
 msgstr "Sair para o Menu Principal"
 
@@ -12775,52 +12783,52 @@ msgstr "Você obteve %u de energia de um tambor de petróleo."
 msgid "You found %u power in an oil drum"
 msgstr "Você obteve %u de energia de um tambor de petróleo."
 
-#: src/multigifts.c:169
+#: src/multigifts.c:170
 #, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s Dar-lhe um relatório de visibilidade"
 
-#: src/multigifts.c:189
+#: src/multigifts.c:190
 #, c-format
 msgid "%s Gives you a %s"
 msgstr "%s Dar-lhe um %s"
 
-#: src/multigifts.c:240
+#: src/multigifts.c:241
 #, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
 msgstr "Tentativa de dar um %s não-vazio não foi permitida."
 
-#: src/multigifts.c:299
+#: src/multigifts.c:300
 #, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s Dar-lhe documentos de tecnologia"
 
-#: src/multigifts.c:337
+#: src/multigifts.c:338
 #, c-format
 msgid "%s Gives You %u Power"
 msgstr "%s Te Dá %u de Energia"
 
-#: src/multigifts.c:357
+#: src/multigifts.c:358
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s Solicita uma aliança com você"
 
-#: src/multigifts.c:366
+#: src/multigifts.c:367
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Você convida %s para formar uma aliança"
 
-#: src/multigifts.c:386
+#: src/multigifts.c:387
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s Quebrar a allança com %s"
 
-#: src/multigifts.c:412
+#: src/multigifts.c:413
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s Formar uma alliança com %s"
 
-#: src/multigifts.c:749
+#: src/multigifts.c:773
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Você descobre projetos para %s"
@@ -13361,20 +13369,20 @@ msgstr "Tempo Total de Jogo - %s"
 msgid "You cheated!"
 msgstr "Você trapaceou!"
 
-#: src/scriptfuncs.c:3210
+#: src/scriptfuncs.c:3158
 msgid "YOU ARE VICTORIOUS!"
 msgstr "VOCÊ FOI VITORIOSO"
 
-#: src/scriptfuncs.c:3214
+#: src/scriptfuncs.c:3162
 msgid "YOU WERE DEFEATED!"
 msgstr "VOCÊ FOI DERROTADO"
 
-#: src/scriptfuncs.c:10173
+#: src/scriptfuncs.c:10121
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sinal recebido de %s!"
 
-#: src/scriptfuncs.c:10219
+#: src/scriptfuncs.c:10167
 #, c-format
 msgid "Beacon %d"
 msgstr "Sinal %d"

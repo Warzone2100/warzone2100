@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-12 00:15+0100\n"
+"POT-Creation-Date: 2010-01-14 19:42+0100\n"
 "PO-Revision-Date: 2009-10-31 12:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -10561,15 +10561,16 @@ msgid "Missile Fortress"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1761
-msgid "Super Heavy Body - Wyvern"
-msgstr ""
+#, fuzzy
+msgid "Heavy Body - Wyvern"
+msgstr "Zware carrosserie - Tijger"
 
 #: data/mp/messages/strings/names.txt:1762
 msgid "Wyvern"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1764
-msgid "Super Heavy Body - Dragon"
+msgid "Multi Turret Body - Dragon"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1765
@@ -11641,8 +11642,8 @@ msgstr "EEN SPELER"
 
 #: src/frontend.c:469
 #: src/ingameop.c:507
-#: src/mission.c:2841
-#: src/mission.c:2946
+#: src/mission.c:2844
+#: src/mission.c:2949
 msgid "Load Saved Game"
 msgstr "Opgeslagen spel laden"
 
@@ -11904,11 +11905,11 @@ msgstr "Speelkleur"
 msgid "GAME OPTIONS"
 msgstr "SPELINSTELLINGEN"
 
-#: src/hci.c:1009
-#: src/hci.c:3844
-#: src/hci.c:3995
-#: src/hci.c:4448
-#: src/hci.c:5652
+#: src/hci.c:1012
+#: src/hci.c:3835
+#: src/hci.c:3986
+#: src/hci.c:4439
+#: src/hci.c:5643
 #: src/intelmap.c:541
 #: src/intorder.c:661
 #: src/loadsave.c:267
@@ -11920,138 +11921,138 @@ msgstr "SPELINSTELLINGEN"
 msgid "Close"
 msgstr "Sluiten"
 
-#: src/hci.c:1355
+#: src/hci.c:1358
 msgid "MAP SAVED!"
 msgstr "MAP OPGESLAGEN!"
 
-#: src/hci.c:1702
+#: src/hci.c:1705
 #: src/loop.c:535
 #: src/loop.c:551
-#: src/mission.c:2912
+#: src/mission.c:2915
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "SPEL OPGESLAGEN!"
 
-#: src/hci.c:2109
+#: src/hci.c:2112
 msgid "Failed to create building"
 msgstr "Gebouw neerzetten mislukt"
 
-#: src/hci.c:2132
+#: src/hci.c:2135
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Speler %u heeft zichzelf met cheats (debugmenu) een nieuw gebouw gegeven: %s."
 
-#: src/hci.c:2147
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Speler %u heeft zichzelf met cheats (debugmenu) een nieuw voorwerp gegeven: %s."
 
-#: src/hci.c:2168
+#: src/hci.c:2171
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Speler %u heeft zichzelf met cheats (debugmenu) een nieuw eenheid gegeven: %s."
 
-#: src/hci.c:3746
+#: src/hci.c:3737
 msgid "Commanders (F6)"
 msgstr "Commandanten (F6)"
 
-#: src/hci.c:3762
+#: src/hci.c:3753
 msgid "Intelligence Display (F5)"
 msgstr "Inlichtingen (F5)"
 
-#: src/hci.c:3778
+#: src/hci.c:3769
 msgid "Manufacture (F1)"
 msgstr "Produceer (F1)"
 
-#: src/hci.c:3794
+#: src/hci.c:3785
 msgid "Design (F4)"
 msgstr "Ontwerp (F4)"
 
-#: src/hci.c:3810
+#: src/hci.c:3801
 msgid "Research (F2)"
 msgstr "Onderzoek (F2)"
 
-#: src/hci.c:3826
+#: src/hci.c:3817
 msgid "Build (F3)"
 msgstr "Bouw (F3)"
 
-#: src/hci.c:3906
+#: src/hci.c:3897
 #: src/multiint.c:1370
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Energie"
 
-#: src/hci.c:4090
+#: src/hci.c:4081
 msgid "Tile"
 msgstr "Tegel"
 
-#: src/hci.c:4091
+#: src/hci.c:4082
 msgid "Place tiles on map"
 msgstr "Tegels op kaart plaatsen"
 
-#: src/hci.c:4100
+#: src/hci.c:4091
 msgid "Unit"
 msgstr "Eenheid"
 
-#: src/hci.c:4101
+#: src/hci.c:4092
 msgid "Place Unit on map"
 msgstr "Eenheid op kaart plaatsen"
 
-#: src/hci.c:4109
+#: src/hci.c:4100
 msgid "Struct"
 msgstr "Gebouw"
 
-#: src/hci.c:4110
+#: src/hci.c:4101
 msgid "Place Structures on map"
 msgstr "Gebouwen op kaart plaatsen"
 
-#: src/hci.c:4118
+#: src/hci.c:4109
 msgid "Feat"
 msgstr "Kenm."
 
-#: src/hci.c:4119
+#: src/hci.c:4110
 msgid "Place Features on map"
 msgstr "Kenmerken op kaart plaatsen"
 
-#: src/hci.c:4130
+#: src/hci.c:4121
 msgid "Pause or unpause the game"
 msgstr "Spel pauzeren of verdergaan"
 
-#: src/hci.c:4144
+#: src/hci.c:4135
 msgid "Align height of all map objects"
 msgstr "Hoogte van alle kaartobjecten uitlijnen"
 
-#: src/hci.c:4169
+#: src/hci.c:4160
 #: src/ingameop.c:119
 #: src/ingameop.c:264
 #: src/ingameop.c:269
 msgid "Quit"
 msgstr "Afsluiten"
 
-#: src/hci.c:4170
+#: src/hci.c:4161
 msgid "Exit Game"
 msgstr "Spel verlaten"
 
-#: src/hci.c:4533
+#: src/hci.c:4524
 #: src/intdisplay.c:212
 #: src/intdisplay.c:255
 #: src/intdisplay.c:306
 msgid "Progress Bar"
 msgstr "Voortgangsbalk"
 
-#: src/hci.c:5567
+#: src/hci.c:5558
 msgid "Factory Delivery Point"
 msgstr "Fabrieksafleverpunt"
 
-#: src/hci.c:5586
+#: src/hci.c:5577
 msgid "Loop Production"
 msgstr "Productie herhalen"
 
-#: src/hci.c:5677
+#: src/hci.c:5668
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5694
+#: src/hci.c:5685
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -12068,7 +12069,7 @@ msgstr ""
 #: src/ingameop.c:283
 #: src/ingameop.c:511
 #: src/mission.c:2831
-#: src/mission.c:2949
+#: src/mission.c:2952
 msgid "Save Game"
 msgstr "Spel opslaan"
 
@@ -12442,56 +12443,62 @@ msgstr ""
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2475
-#: src/keybind.c:2516
-#: src/keybind.c:2538
+#: src/keybind.c:2456
+#: src/keybind.c:2499
+#, fuzzy
+msgid "Sorry, but game speed cannot be changed in multiplayer."
+msgstr "Het spijt me, maar vals spelen mag niet in spelletjes met meerdere spelers."
+
+#: src/keybind.c:2477
+#: src/keybind.c:2520
+#: src/keybind.c:2542
 msgid "Game Speed Reset"
 msgstr "Speelsnelheid herstellen"
 
-#: src/keybind.c:2479
+#: src/keybind.c:2481
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Speelsnelheid toegenomen tot %3.1f"
 
-#: src/keybind.c:2520
+#: src/keybind.c:2524
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Speelsnelheid verminderd tot %3.1f"
 
-#: src/keybind.c:2550
+#: src/keybind.c:2554
 msgid "Build menu will reopen"
 msgstr "Bouwmenu zal opnieuw openen"
 
-#: src/keybind.c:2554
+#: src/keybind.c:2558
 msgid "Build menu will not reopen"
 msgstr "Bouwmenu zal niet opnieuw openen"
 
-#: src/keybind.c:2566
+#: src/keybind.c:2570
 msgid "Radar showing friend-foe colors"
 msgstr "Radar toont vriend-en-vijand-kleuren"
 
-#: src/keybind.c:2570
+#: src/keybind.c:2574
 msgid "Radar showing player colors"
 msgstr "Radar toont spelerskleuren"
 
-#: src/keybind.c:2591
+#: src/keybind.c:2595
 msgid "Radar showing only objects"
 msgstr "Radar toont enkel objecten"
 
-#: src/keybind.c:2594
+#: src/keybind.c:2598
 msgid "Radar blending terrain and height"
 msgstr "Radar toon terrein en hoogte"
 
-#: src/keybind.c:2597
+#: src/keybind.c:2601
 msgid "Radar showing terrain"
 msgstr "Radar toont terrein"
 
-#: src/keybind.c:2600
+#: src/keybind.c:2604
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar toont terrein"
 
-#: src/keybind.c:2603
+#: src/keybind.c:2607
 msgid "Radar showing height"
 msgstr "Radar toont hoogte"
 
@@ -12899,8 +12906,8 @@ msgid "OBJECTIVE FAILED"
 msgstr "DOEL MISLUKT"
 
 #: src/mission.c:2810
-#: src/mission.c:2847
-#: src/mission.c:2965
+#: src/mission.c:2850
+#: src/mission.c:2968
 msgid "Quit To Main Menu"
 msgstr "Afsluiten naar hoofdmenu"
 
@@ -12918,52 +12925,52 @@ msgstr "jij hebt %u energie gevonden in een olie ton"
 msgid "You found %u power in an oil drum"
 msgstr "jij hebt %u energie gevonden in een olie ton"
 
-#: src/multigifts.c:169
+#: src/multigifts.c:170
 #, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s geeft je een kaart"
 
-#: src/multigifts.c:189
+#: src/multigifts.c:190
 #, c-format
 msgid "%s Gives you a %s"
 msgstr "%s geeft je een %s"
 
-#: src/multigifts.c:240
+#: src/multigifts.c:241
 #, fuzzy, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
 msgstr "Geprobeerd om een %s weg te geven - dit is echter niet toegelaten."
 
-#: src/multigifts.c:299
+#: src/multigifts.c:300
 #, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s geeft je onderzoeksrapporten"
 
-#: src/multigifts.c:337
+#: src/multigifts.c:338
 #, fuzzy, c-format
 msgid "%s Gives You %u Power"
 msgstr "%s geeft je energie"
 
-#: src/multigifts.c:357
+#: src/multigifts.c:358
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s wil een bondgenootschap met je vormen."
 
-#: src/multigifts.c:366
+#: src/multigifts.c:367
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Je hebt %s uitgenodigd voor een bondgenootschap"
 
-#: src/multigifts.c:386
+#: src/multigifts.c:387
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s verbreekt het bondgenootschap met %s"
 
-#: src/multigifts.c:412
+#: src/multigifts.c:413
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s vormt een bondgenootschap met %s"
 
-#: src/multigifts.c:749
+#: src/multigifts.c:773
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Je ontdekt blauwdrukken voor %s"
@@ -13509,20 +13516,20 @@ msgstr "Totale speeltijd - %s"
 msgid "You cheated!"
 msgstr "Je hebt valsgespeeld!"
 
-#: src/scriptfuncs.c:3210
+#: src/scriptfuncs.c:3158
 msgid "YOU ARE VICTORIOUS!"
 msgstr "JE HEBT GEWONNEN!"
 
-#: src/scriptfuncs.c:3214
+#: src/scriptfuncs.c:3162
 msgid "YOU WERE DEFEATED!"
 msgstr "JE BENT VERSLAGEN!"
 
-#: src/scriptfuncs.c:10173
+#: src/scriptfuncs.c:10121
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Baken ontvangen  van %s!"
 
-#: src/scriptfuncs.c:10219
+#: src/scriptfuncs.c:10167
 #, c-format
 msgid "Beacon %d"
 msgstr "Baken %d"
