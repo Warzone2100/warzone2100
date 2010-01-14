@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-12 00:35+0100\n"
+"POT-Creation-Date: 2010-01-14 20:22+0100\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -10498,7 +10498,7 @@ msgid "Missile Fortress"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1761
-msgid "Super Heavy Body - Wyvern"
+msgid "Heavy Body - Wyvern"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1762
@@ -10506,7 +10506,7 @@ msgid "Wyvern"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1764
-msgid "Super Heavy Body - Dragon"
+msgid "Multi Turret Body - Dragon"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1765
@@ -11072,10 +11072,6 @@ msgstr ""
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: src/cheat.c:132
-msgid ": Unknown cheat code."
-msgstr ""
-
 #: src/clparse.c:99
 msgid "Run in cheat mode"
 msgstr ""
@@ -11551,8 +11547,8 @@ msgstr "HRA JEDNOHO HRÁČE"
 
 #: src/frontend.c:468
 #: src/ingameop.c:519
-#: src/mission.c:2544
-#: src/mission.c:2649
+#: src/mission.c:2547
+#: src/mission.c:2652
 msgid "Load Saved Game"
 msgstr "Načti Uloženou Hru"
 
@@ -11816,11 +11812,11 @@ msgstr "Barva jednotky"
 msgid "GAME OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
-#: src/hci.c:1010
-#: src/hci.c:3798
-#: src/hci.c:3949
-#: src/hci.c:4402
-#: src/hci.c:5606
+#: src/hci.c:1013
+#: src/hci.c:3789
+#: src/hci.c:3940
+#: src/hci.c:4393
+#: src/hci.c:5597
 #: src/intelmap.c:543
 #: src/intorder.c:661
 #: src/loadsave.c:256
@@ -11832,142 +11828,142 @@ msgstr "HERNÍ NASTAVENÍ"
 msgid "Close"
 msgstr "Zavřít"
 
-#: src/hci.c:1355
+#: src/hci.c:1358
 #, fuzzy
 msgid "MAP SAVED!"
 msgstr "HRA ULOŽENA!"
 
-#: src/hci.c:1702
+#: src/hci.c:1705
 #: src/loop.c:526
 #: src/loop.c:542
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "HRA ULOŽENA!"
 
-#: src/hci.c:2109
+#: src/hci.c:2112
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2132
+#: src/hci.c:2135
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Hráč %u podvádí ( ladící menu ) sebe sama novou budovou: %s"
 
-#: src/hci.c:2147
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.c:2168
+#: src/hci.c:2171
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:3700
+#: src/hci.c:3691
 msgid "Commanders (F6)"
 msgstr "Velitelé (F6)"
 
-#: src/hci.c:3716
+#: src/hci.c:3707
 msgid "Intelligence Display (F5)"
 msgstr "Zpravodajský display (F5)"
 
-#: src/hci.c:3732
+#: src/hci.c:3723
 msgid "Manufacture (F1)"
 msgstr "Výroba (F1)"
 
-#: src/hci.c:3748
+#: src/hci.c:3739
 msgid "Design (F4)"
 msgstr "Konstrukce (F4)"
 
-#: src/hci.c:3764
+#: src/hci.c:3755
 msgid "Research (F2)"
 msgstr "Výzkum (F2)"
 
-#: src/hci.c:3780
+#: src/hci.c:3771
 msgid "Build (F3)"
 msgstr "Stavba (F3)"
 
-#: src/hci.c:3860
+#: src/hci.c:3851
 #: src/multiint.c:1365
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Energie"
 
-#: src/hci.c:4044
+#: src/hci.c:4035
 #, fuzzy
 msgid "Tile"
 msgstr "soubor"
 
-#: src/hci.c:4045
+#: src/hci.c:4036
 #, fuzzy
 msgid "Place tiles on map"
 msgstr "Nastavení limitu budov"
 
-#: src/hci.c:4054
+#: src/hci.c:4045
 msgid "Unit"
 msgstr "Jednotka"
 
-#: src/hci.c:4055
+#: src/hci.c:4046
 #, fuzzy
 msgid "Place Unit on map"
 msgstr "Nastavení limitu budov"
 
-#: src/hci.c:4063
+#: src/hci.c:4054
 msgid "Struct"
 msgstr "Stavba"
 
-#: src/hci.c:4064
+#: src/hci.c:4055
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Nastavení limitu budov"
 
-#: src/hci.c:4072
+#: src/hci.c:4063
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4073
+#: src/hci.c:4064
 #, fuzzy
 msgid "Place Features on map"
 msgstr "Nastavení limitu budov"
 
-#: src/hci.c:4084
+#: src/hci.c:4075
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "Hostitel opustil hru!"
 
-#: src/hci.c:4098
+#: src/hci.c:4089
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4123
+#: src/hci.c:4114
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "Ukončit"
 
-#: src/hci.c:4124
+#: src/hci.c:4115
 msgid "Exit Game"
 msgstr "Ukončit hru"
 
-#: src/hci.c:4487
+#: src/hci.c:4478
 #: src/intdisplay.c:267
 msgid "Progress Bar"
 msgstr "Panel průběhu"
 
-#: src/hci.c:5521
+#: src/hci.c:5512
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci.c:5540
+#: src/hci.c:5531
 msgid "Loop Production"
 msgstr "Opakovat výrobu"
 
-#: src/hci.c:5631
+#: src/hci.c:5622
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5648
+#: src/hci.c:5639
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -11994,7 +11990,7 @@ msgstr ""
 #: src/ingameop.c:295
 #: src/ingameop.c:523
 #: src/mission.c:2534
-#: src/mission.c:2652
+#: src/mission.c:2655
 msgid "Save Game"
 msgstr "Uložit hru"
 
@@ -12382,57 +12378,63 @@ msgstr ""
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2556
-#: src/keybind.c:2597
-#: src/keybind.c:2619
+#: src/keybind.c:2537
+#: src/keybind.c:2580
+#, fuzzy
+msgid "Sorry, but game speed cannot be changed in multiplayer."
+msgstr "Omlouváme se, ale tento podvod je vypnutý ve hře pro více hráčů."
+
+#: src/keybind.c:2558
+#: src/keybind.c:2601
+#: src/keybind.c:2623
 #, fuzzy
 msgid "Game Speed Reset"
 msgstr "Restartování herní rychlosti"
 
-#: src/keybind.c:2560
+#: src/keybind.c:2562
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Rychlost Hry Zvýšena na %3.1f"
 
-#: src/keybind.c:2601
+#: src/keybind.c:2605
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Rychlost Hry Snížena na %3.1f"
 
-#: src/keybind.c:2631
+#: src/keybind.c:2635
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2635
+#: src/keybind.c:2639
 msgid "Build menu will not reopen"
 msgstr ""
 
-#: src/keybind.c:2647
+#: src/keybind.c:2651
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2651
+#: src/keybind.c:2655
 msgid "Radar showing player colors"
 msgstr "Radar ukazuje barvy hráčů"
 
-#: src/keybind.c:2672
+#: src/keybind.c:2676
 msgid "Radar showing only objects"
 msgstr "Radar ukazuje pouze objekty"
 
-#: src/keybind.c:2675
+#: src/keybind.c:2679
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2678
+#: src/keybind.c:2682
 msgid "Radar showing terrain"
 msgstr "Radar ukazuje terén"
 
-#: src/keybind.c:2681
+#: src/keybind.c:2685
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar ukazuje terén"
 
-#: src/keybind.c:2684
+#: src/keybind.c:2688
 msgid "Radar showing height"
 msgstr "Radar ukazuje výšku"
 
@@ -12852,8 +12854,8 @@ msgid "OBJECTIVE FAILED"
 msgstr "SELHÁNÍ"
 
 #: src/mission.c:2513
-#: src/mission.c:2550
-#: src/mission.c:2668
+#: src/mission.c:2553
+#: src/mission.c:2671
 msgid "Quit To Main Menu"
 msgstr "Vyskočit do hlavního menu"
 
@@ -12861,7 +12863,7 @@ msgstr "Vyskočit do hlavního menu"
 msgid "Continue Game"
 msgstr "Pokračovat ve hře"
 
-#: src/mission.c:2615
+#: src/mission.c:2618
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "HRA ULOŽENA!"
@@ -12872,52 +12874,52 @@ msgstr "HRA ULOŽENA!"
 msgid "You found %u power in an oil drum."
 msgstr ""
 
-#: src/multigifts.c:169
+#: src/multigifts.c:170
 #, fuzzy, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s dá ti viditelnou zprávu"
 
-#: src/multigifts.c:189
+#: src/multigifts.c:190
 #, fuzzy, c-format
 msgid "%s Gives you a %s"
 msgstr "%s ti dá %s"
 
-#: src/multigifts.c:240
+#: src/multigifts.c:241
 #, fuzzy, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
 msgstr "Zkouší dát pryč %s - ale to není umožněno"
 
-#: src/multigifts.c:299
+#: src/multigifts.c:300
 #, fuzzy, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s ti á technickou dokumentaci"
 
-#: src/multigifts.c:337
+#: src/multigifts.c:338
 #, fuzzy, c-format
 msgid "%s Gives You %u Power"
 msgstr "%s dá ti sílu"
 
-#: src/multigifts.c:357
+#: src/multigifts.c:358
 #, fuzzy, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s požaduje s tebou spolčení"
 
-#: src/multigifts.c:366
+#: src/multigifts.c:367
 #, fuzzy, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Jsi pozván %s ze spolku"
 
-#: src/multigifts.c:386
+#: src/multigifts.c:387
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s přerušil spolek s %s"
 
-#: src/multigifts.c:412
+#: src/multigifts.c:413
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s uzavřel spojenectví s %s"
 
-#: src/multigifts.c:749
+#: src/multigifts.c:773
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Nalezl jsi plány na %s"
@@ -13468,20 +13470,20 @@ msgstr "Celkový Čas Hry - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3208
+#: src/scriptfuncs.c:3188
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3212
+#: src/scriptfuncs.c:3192
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10167
+#: src/scriptfuncs.c:10147
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10213
+#: src/scriptfuncs.c:10193
 #, c-format
 msgid "Beacon %d"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-12 00:35+0100\n"
+"POT-Creation-Date: 2010-01-14 20:22+0100\n"
 "PO-Revision-Date: 2008-05-05 12:29+0000\n"
 "Last-Translator: Jen Ockwell <jenfraggleubuntu@googlemail.com>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -10609,7 +10609,8 @@ msgid "Missile Fortress"
 msgstr "Missile Fortress"
 
 #: data/mp/messages/strings/names.txt:1761
-msgid "Super Heavy Body - Wyvern"
+#, fuzzy
+msgid "Heavy Body - Wyvern"
 msgstr "Super Heavy Body - Wyvern"
 
 #: data/mp/messages/strings/names.txt:1762
@@ -10617,7 +10618,8 @@ msgid "Wyvern"
 msgstr "Wyvern"
 
 #: data/mp/messages/strings/names.txt:1764
-msgid "Super Heavy Body - Dragon"
+#, fuzzy
+msgid "Multi Turret Body - Dragon"
 msgstr "Super Heavy Body - Dragon"
 
 #: data/mp/messages/strings/names.txt:1765
@@ -11256,11 +11258,6 @@ msgstr ""
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: src/cheat.c:132
-#, fuzzy
-msgid ": Unknown cheat code."
-msgstr "Run in cheat mode"
-
 #: src/clparse.c:99
 msgid "Run in cheat mode"
 msgstr "Run in cheat mode"
@@ -11728,8 +11725,8 @@ msgstr "SINGLE PLAYER"
 
 #: src/frontend.c:468
 #: src/ingameop.c:519
-#: src/mission.c:2544
-#: src/mission.c:2649
+#: src/mission.c:2547
+#: src/mission.c:2652
 msgid "Load Saved Game"
 msgstr "Load Saved Game"
 
@@ -11993,11 +11990,11 @@ msgstr "Unit Colour"
 msgid "GAME OPTIONS"
 msgstr "GAME OPTIONS"
 
-#: src/hci.c:1010
-#: src/hci.c:3798
-#: src/hci.c:3949
-#: src/hci.c:4402
-#: src/hci.c:5606
+#: src/hci.c:1013
+#: src/hci.c:3789
+#: src/hci.c:3940
+#: src/hci.c:4393
+#: src/hci.c:5597
 #: src/intelmap.c:543
 #: src/intorder.c:661
 #: src/loadsave.c:256
@@ -12009,139 +12006,139 @@ msgstr "GAME OPTIONS"
 msgid "Close"
 msgstr "Close"
 
-#: src/hci.c:1355
+#: src/hci.c:1358
 #, fuzzy
 msgid "MAP SAVED!"
 msgstr "GAME SAVED!"
 
-#: src/hci.c:1702
+#: src/hci.c:1705
 #: src/loop.c:526
 #: src/loop.c:542
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "GAME SAVED!"
 
-#: src/hci.c:2109
+#: src/hci.c:2112
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2132
+#: src/hci.c:2135
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Player %u is cheating (debug menu) him/herself a new structure: %s."
 
-#: src/hci.c:2147
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Player %u is cheating (debug menu) him/herself a new feature: %s."
 
-#: src/hci.c:2168
+#: src/hci.c:2171
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Player %u is cheating (debug menu) him/herself a new droid: %s."
 
-#: src/hci.c:3700
+#: src/hci.c:3691
 msgid "Commanders (F6)"
 msgstr "Commanders (F6)"
 
-#: src/hci.c:3716
+#: src/hci.c:3707
 msgid "Intelligence Display (F5)"
 msgstr "Intelligence Display (F5)"
 
-#: src/hci.c:3732
+#: src/hci.c:3723
 msgid "Manufacture (F1)"
 msgstr "Manufacture (F1)"
 
-#: src/hci.c:3748
+#: src/hci.c:3739
 msgid "Design (F4)"
 msgstr "Design (F4)"
 
-#: src/hci.c:3764
+#: src/hci.c:3755
 msgid "Research (F2)"
 msgstr "Research (F2)"
 
-#: src/hci.c:3780
+#: src/hci.c:3771
 msgid "Build (F3)"
 msgstr "Build (F3)"
 
-#: src/hci.c:3860
+#: src/hci.c:3851
 #: src/multiint.c:1365
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Power"
 
-#: src/hci.c:4044
+#: src/hci.c:4035
 #, fuzzy
 msgid "Tile"
 msgstr "file"
 
-#: src/hci.c:4045
+#: src/hci.c:4036
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.c:4054
+#: src/hci.c:4045
 msgid "Unit"
 msgstr "Unit"
 
-#: src/hci.c:4055
+#: src/hci.c:4046
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.c:4063
+#: src/hci.c:4054
 msgid "Struct"
 msgstr "Struct"
 
-#: src/hci.c:4064
+#: src/hci.c:4055
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Set Structure Limits"
 
-#: src/hci.c:4072
+#: src/hci.c:4063
 msgid "Feat"
 msgstr "Feat"
 
-#: src/hci.c:4073
+#: src/hci.c:4064
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.c:4084
+#: src/hci.c:4075
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "The host has left the game!"
 
-#: src/hci.c:4098
+#: src/hci.c:4089
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4123
+#: src/hci.c:4114
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "Quit"
 
-#: src/hci.c:4124
+#: src/hci.c:4115
 msgid "Exit Game"
 msgstr "Exit Game"
 
-#: src/hci.c:4487
+#: src/hci.c:4478
 #: src/intdisplay.c:267
 msgid "Progress Bar"
 msgstr "Progress Bar"
 
-#: src/hci.c:5521
+#: src/hci.c:5512
 msgid "Factory Delivery Point"
 msgstr "Factory Delivery Point"
 
-#: src/hci.c:5540
+#: src/hci.c:5531
 msgid "Loop Production"
 msgstr "Loop Production"
 
-#: src/hci.c:5631
+#: src/hci.c:5622
 msgid "Tab Scroll left"
 msgstr "Tab Scroll left"
 
-#: src/hci.c:5648
+#: src/hci.c:5639
 msgid "Tab Scroll right"
 msgstr "Tab Scroll right"
 
@@ -12168,7 +12165,7 @@ msgstr ""
 #: src/ingameop.c:295
 #: src/ingameop.c:523
 #: src/mission.c:2534
-#: src/mission.c:2652
+#: src/mission.c:2655
 msgid "Save Game"
 msgstr "Save Game"
 
@@ -12555,56 +12552,62 @@ msgstr ""
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2556
-#: src/keybind.c:2597
-#: src/keybind.c:2619
+#: src/keybind.c:2537
+#: src/keybind.c:2580
+#, fuzzy
+msgid "Sorry, but game speed cannot be changed in multiplayer."
+msgstr "Sorry, that cheat is disabled in multiplayer games."
+
+#: src/keybind.c:2558
+#: src/keybind.c:2601
+#: src/keybind.c:2623
 msgid "Game Speed Reset"
 msgstr "Game Speed Reset"
 
-#: src/keybind.c:2560
+#: src/keybind.c:2562
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Game Speed Increased to %3.1f"
 
-#: src/keybind.c:2601
+#: src/keybind.c:2605
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Game Speed Reduced to %3.1f"
 
-#: src/keybind.c:2631
+#: src/keybind.c:2635
 msgid "Build menu will reopen"
 msgstr "Build menu will reopen"
 
-#: src/keybind.c:2635
+#: src/keybind.c:2639
 msgid "Build menu will not reopen"
 msgstr "Build menu will not reopen"
 
-#: src/keybind.c:2647
+#: src/keybind.c:2651
 msgid "Radar showing friend-foe colors"
 msgstr "Radar showing friend-foe colours"
 
-#: src/keybind.c:2651
+#: src/keybind.c:2655
 msgid "Radar showing player colors"
 msgstr "Radar showing player colours"
 
-#: src/keybind.c:2672
+#: src/keybind.c:2676
 msgid "Radar showing only objects"
 msgstr "Radar showing only objects"
 
-#: src/keybind.c:2675
+#: src/keybind.c:2679
 msgid "Radar blending terrain and height"
 msgstr "Radar blending terrain and height"
 
-#: src/keybind.c:2678
+#: src/keybind.c:2682
 msgid "Radar showing terrain"
 msgstr "Radar showing terrain"
 
-#: src/keybind.c:2681
+#: src/keybind.c:2685
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar showing terrain"
 
-#: src/keybind.c:2684
+#: src/keybind.c:2688
 msgid "Radar showing height"
 msgstr "Radar showing height"
 
@@ -13015,8 +13018,8 @@ msgid "OBJECTIVE FAILED"
 msgstr "OBJECTIVE FAILED"
 
 #: src/mission.c:2513
-#: src/mission.c:2550
-#: src/mission.c:2668
+#: src/mission.c:2553
+#: src/mission.c:2671
 msgid "Quit To Main Menu"
 msgstr "Quit To Main Menu"
 
@@ -13024,7 +13027,7 @@ msgstr "Quit To Main Menu"
 msgid "Continue Game"
 msgstr "Continue Game"
 
-#: src/mission.c:2615
+#: src/mission.c:2618
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "GAME SAVED!"
@@ -13035,52 +13038,52 @@ msgstr "GAME SAVED!"
 msgid "You found %u power in an oil drum."
 msgstr ""
 
-#: src/multigifts.c:169
+#: src/multigifts.c:170
 #, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s Gives You A Visibility Report"
 
-#: src/multigifts.c:189
+#: src/multigifts.c:190
 #, c-format
 msgid "%s Gives you a %s"
 msgstr "%s Gives you a %s"
 
-#: src/multigifts.c:240
+#: src/multigifts.c:241
 #, fuzzy, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
 msgstr "Tried to give away a %s - but this is not allowed."
 
-#: src/multigifts.c:299
+#: src/multigifts.c:300
 #, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s Gives You Technology Documents"
 
-#: src/multigifts.c:337
+#: src/multigifts.c:338
 #, fuzzy, c-format
 msgid "%s Gives You %u Power"
 msgstr "%s Gives You Power"
 
-#: src/multigifts.c:357
+#: src/multigifts.c:358
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s Requests An Alliance With You"
 
-#: src/multigifts.c:366
+#: src/multigifts.c:367
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "You Invite %s To Form An Alliance"
 
-#: src/multigifts.c:386
+#: src/multigifts.c:387
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s Breaks The Alliance With %s"
 
-#: src/multigifts.c:412
+#: src/multigifts.c:413
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s Forms An Alliance With %s"
 
-#: src/multigifts.c:749
+#: src/multigifts.c:773
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "You Discover Blueprints For %s"
@@ -13629,21 +13632,21 @@ msgstr "Total Game Time - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3208
+#: src/scriptfuncs.c:3188
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3212
+#: src/scriptfuncs.c:3192
 #, fuzzy
 msgid "YOU WERE DEFEATED!"
 msgstr "NEXUS DEFEATED"
 
-#: src/scriptfuncs.c:10167
+#: src/scriptfuncs.c:10147
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10213
+#: src/scriptfuncs.c:10193
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -13765,6 +13768,10 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
+
+#, fuzzy
+#~ msgid ": Unknown cheat code."
+#~ msgstr "Run in cheat mode"
 
 #~ msgid "Start Multiplayer Audio"
 #~ msgstr "Start Multiplayer Audio"
