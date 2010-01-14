@@ -291,7 +291,7 @@ fi
 
 # Checks for modules:
 
-PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
+#PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
 PKG_CHECK_MODULES([THEORA], [theora >= 1.0])
 
@@ -315,8 +315,8 @@ AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found.]))
 AC_CHECK_LIB(physfs, PHYSFS_init, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS not found.]), [${WIN32_LIBS}])
 
 # Look for OpenGL
-AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
-	AC_MSG_ERROR([SDL OpenGL header not found. Please install SDL with OpenGL support.]))
+#AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
+#	AC_MSG_ERROR([SDL OpenGL header not found. Please install SDL with OpenGL support.]))
 AC_CHECK_LIB(GL, main,
 	OPENGL_LIBS="-lGL",
 	AC_CHECK_LIB(opengl32, main,

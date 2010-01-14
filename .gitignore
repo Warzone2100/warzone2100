@@ -45,6 +45,7 @@ win32/release/*
 # Generated executables:
 /build_tools/autorevision/autorevision
 /src/warzone2100
+/tests/astartest
 /tests/maptest
 
 # Autotool files:
@@ -90,3 +91,10 @@ Makefile.in
 # Waf:
 /waf
 /.waf-*
+
+# KDevelop4
+/.kdev4/
+/warzone.kdev4
+
+# Qt
+lib/framework/wzapp_moc.cpp
