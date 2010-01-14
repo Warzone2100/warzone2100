@@ -29,6 +29,7 @@
 #include "objects.h"
 #include "terrain.h"
 #include "multiplay.h"
+#include "display.h"
 
 /* The different types of terrain as far as the game is concerned */
 typedef enum _terrain_type
@@ -432,7 +433,14 @@ extern bool fireOnLocation(unsigned int x, unsigned int y);
 static inline bool hasSensorOnTile(MAPTILE *psTile, int player)
 {
 	int k;
-	
+
+	// if a player has a SAT_UPLINK structure, or has godMode enabled,
+	// they can see everything!
+	if (getSatUplinkExists(player) || (player == selectedPlayer && godMode))
+	{
+		return true;
+	}
+
 	if (psTile->watchers[selectedPlayer] == 0)
 	{
 		if (game.type != CAMPAIGN && game.alliance == ALLIANCES_TEAMS)
@@ -440,7 +448,8 @@ static inline bool hasSensorOnTile(MAPTILE *psTile, int player)
 			// Check if an ally can provide us with vision on this tile
 			for (k = 0; k < MAX_PLAYERS; k++)
 			{
-				if (psTile->watchers[k] > 0 && aiCheckAlliances(k, selectedPlayer))
+				if (getSatUplinkExists(k) ||
+				    (psTile->watchers[k] > 0 && aiCheckAlliances(k, selectedPlayer)))
 				{
 					return true;
 				}
