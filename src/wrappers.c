@@ -273,17 +273,12 @@ void loadingScreenCallback(void)
 	UDWORD			currTick;
 	PIELIGHT		colour;
 
-	if (wzGetTicks()-lastTick < 16)
+	currTick = wzGetTicks();
+	if (currTick - lastTick < 50)
 	{
 		return;
 	}
-	currTick = wzGetTicks();
-	if ((currTick - lastTick) > 500)
-	{
-		currTick -= lastTick;
-		debug( LOG_NEVER, "loadingScreenCallback: pause %d\n", currTick );
-	}
-	lastTick = wzGetTicks();
+	lastTick = currTick;
 	colour.byte.r = 1;
 	colour.byte.g = 1;
 	colour.byte.b = 1;

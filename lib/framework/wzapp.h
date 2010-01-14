@@ -36,6 +36,7 @@ private:
 	QTimer *timer;
 	QTime tickCount;
 	QFont regular, bold;
+	enum iV_fonts fontID;
 	static WzMainWindow *myself;
 
 public:
@@ -48,6 +49,7 @@ public:
 	void setCursor(CURSOR index);
 	void setCursor(QCursor cursor);
 	void setFontType(enum iV_fonts FontID);
+	void setFontSize(float size);
 	int ticks() { return tickCount.elapsed(); }
 
 public slots:

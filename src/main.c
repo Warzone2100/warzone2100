@@ -684,7 +684,7 @@ static void runGameLoop(void)
 			stopGameLoop();
 			startGameLoop(); // Restart gameloop
 			break;
-		// Never trown:
+		// Never thrown:
 		case GAMECODE_FASTEXIT:
 		case GAMECODE_RESTARTGAME:
 			break;

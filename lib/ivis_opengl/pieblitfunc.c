@@ -65,6 +65,7 @@ static GLfloat radarTexX, radarTexY;
 
 void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
+	int prevTexPage = rendStates.texPage;
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetAlphaTest(false);
 
@@ -73,6 +74,7 @@ void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 	glVertex2f(x0, y0);
 	glVertex2f(x1, y1);
 	glEnd();
+	pie_SetTexturePage(prevTexPage);  // HACK Why is this only needed in the Qt port branch?
 }
 
 /**
@@ -96,6 +98,7 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 
 void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
+	int prevTexPage = rendStates.texPage;
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetAlphaTest(false);
 
@@ -122,15 +125,18 @@ void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 	glVertex2f(x0, y1);
 	glVertex2f(x0, y0);
 	glEnd();
+	pie_SetTexturePage(prevTexPage);  // HACK Why is this only needed in the Qt port branch?
 }
 
 /***************************************************************************/
 
 void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
+	int prevTexPage = rendStates.texPage;
 	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_DrawRect(x0, y0, x1, y1, colour);
+	pie_SetTexturePage(prevTexPage);  // HACK Why is this only needed in the Qt port branch?
 }
 
 /***************************************************************************/
