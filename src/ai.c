@@ -79,20 +79,23 @@ static BOOL aiDroidHasRange(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_sl
 
 	if (psDroid->droidType == DROID_SENSOR)
 	{
-		return psDroid->sensorRange;
+		longRange = psDroid->sensorRange;
 	}
-
-	if (psDroid->numWeaps == 0 || psDroid->asWeaps[0].nStat == 0)
+	else if (psDroid->numWeaps == 0 || psDroid->asWeaps[0].nStat == 0)
 	{
 		// Can't attack without a weapon
 		return false;
 	}
+	else
+	{
+		psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
 
-	psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
+		xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psTarget->pos.x;
+		ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psTarget->pos.y;
 
-	xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psTarget->pos.x;
-	ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psTarget->pos.y;
-	longRange = proj_GetLongRange(psWStats);
+		longRange = proj_GetLongRange(psWStats);
+	}
+
 	if (xdiff*xdiff + ydiff*ydiff < longRange*longRange)
 	{
 		// in range
