@@ -20,17 +20,6 @@
  *  Qt-related functions.
  */
 
-#include <QImageReader>
-#include <QBitmap>
-#include <QPainter>
-#include <QMouseEvent>
-#include <QClipboard>
-#include <QThread>
-#include <QMutex>
-#include <QSemaphore>
-#include "wzapp.h"
-#include <QDesktopWidget>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -50,6 +39,14 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+#include <QImageReader>
+#include <QBitmap>
+#include <QPainter>
+#include <QMouseEvent>
+#include <QClipboard>
+#include "wzapp.h"
+#include <QDesktopWidget>
 
 /* The possible states for keys */
 typedef enum _key_state
@@ -994,28 +991,6 @@ BOOL keyReleased(KEY_CODE code)
 /**************************/
 /***    Thread support  ***/
 /**************************/
-
-struct _wzThread : public QThread
-{
-	_wzThread(int (*threadFunc_)(void *), void *data_) : threadFunc(threadFunc_), data(data_) {}
-	void run()
-	{
-		ret = (*threadFunc)(data);
-	}
-	int (*threadFunc)(void *);
-	void *data;
-	int ret;
-};
-
-// This one couldn't be easier...
-struct _wzMutex : public QMutex
-{
-};
-
-struct _wzSemaphore : public QSemaphore
-{
-	_wzSemaphore(int startValue = 0) : QSemaphore(startValue) {}
-};
 
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data)
 {

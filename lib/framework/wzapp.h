@@ -1,12 +1,6 @@
 #ifndef WZAPP_H
 #define WZAPP_H
 
-#include <QApplication>
-#include <QTimer>
-#include <QGLWidget>
-#include <QBuffer>
-#include <QTime>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -16,6 +10,15 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+#include <QApplication>
+#include <QTimer>
+#include <QGLWidget>
+#include <QBuffer>
+#include <QTime>
+#include <QThread>
+#include <QMutex>
+#include <QSemaphore>
 
 class WzMainWindow : public QGLWidget
 {
@@ -56,5 +59,27 @@ public slots:
 	void tick();
 	void close();
 };
-         
+
+struct _wzThread : public QThread
+{
+	_wzThread(int (*threadFunc_)(void *), void *data_) : threadFunc(threadFunc_), data(data_) {}
+	void run()
+	{
+		ret = (*threadFunc)(data);
+	}
+	int (*threadFunc)(void *);
+	void *data;
+	int ret;
+};
+
+// This one couldn't be easier...
+struct _wzMutex : public QMutex
+{
+};
+
+struct _wzSemaphore : public QSemaphore
+{
+	_wzSemaphore(int startValue = 0) : QSemaphore(startValue) {}
+};
+
 #endif

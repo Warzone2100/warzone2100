@@ -66,7 +66,13 @@
 
 #include "multiplay.h"
 #include "lib/netplay/netplay.h"
-#include <SDL.h>
+
+#ifndef WZ_OS_WIN
+#include <arpa/inet.h>
+#else
+#include <Winsock2.h>
+#endif
+
 /**********************************************************
  *
  * Local Variables
@@ -151,7 +157,8 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 	while (pt < newsize )
 	{
 		val = (uint32_t *)(NewData+pt);
-		hashval = SDL_SwapBE32(hashval ^ SDL_SwapBE32((*val)));		// I hope this is correct...can't test since no PPC machine
+		hashval ^= *val;
+
 		// spams a ton--but useful for debugging.
 		//	debug(LOG_NET, "hash %08x pt %08x val is %08x", hashval, pt, *val);
 		pt += 4;
@@ -173,8 +180,9 @@ void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 	}
 
 	// create the hash for that data block.
-	DataHash[index] = SDL_SwapBE32(DataHash[index] ^ hashBuffer(pBuffer, size));	// check endian issues?
-	debug(LOG_NET, "DataHash[%2u] = %08x\n", index, DataHash[index]); 
+	DataHash[index] ^= htonl(hashBuffer(pBuffer, size));
+
+	debug(LOG_NET, "DataHash[%2u] = %08x\n", index, DataHash[index]);
 	return;
 }
 
