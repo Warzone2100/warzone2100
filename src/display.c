@@ -216,7 +216,7 @@ BOOL	rotActive = false;
 BOOL	gameStats = false;
 
 /* Mouse x and y - no point checking them more than once per frame */
-Uint16 mouseXPos = OFF_SCREEN, mouseYPos = OFF_SCREEN;
+uint16_t mouseXPos = OFF_SCREEN, mouseYPos = OFF_SCREEN;
 
 /* Hackety hack hack hack */
 SDWORD	screenShakeTable[100] =
