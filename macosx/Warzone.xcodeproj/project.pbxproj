@@ -3551,7 +3551,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p build/${CONFIGURATION}/Warzone.app/Contents/Resources\n# rm -rf build/${CONFIGURATION}/Warzone.app/Contents/Resources/data\ncd ..\n# tar -c --exclude .svn --exclude 'Makefile*' data | tar -xC macosx/build/${CONFIGURATION}/Warzone.app/Contents/Resources\ncp -R -p -f data macosx/build/${CONFIGURATION}/Warzone.app/Contents/Resources";
+			shellScript = "mkdir -p build/${CONFIGURATION}/Warzone.app/Contents/Resources\n# rm -rf build/${CONFIGURATION}/Warzone.app/Contents/Resources/data\ncd ..\ntar -c --exclude '.svn' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store' data | tar -xC macosx/build/${CONFIGURATION}/Warzone.app/Contents/Resources\n# cp -R -p -f data macosx/build/${CONFIGURATION}/Warzone.app/Contents/Resources";
 		};
 		02F5CC4F0D148FC30000A2D0 /* Create database.c */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4583,17 +4583,10 @@
 					"$(inherited)",
 				);
 				GCC_VERSION = 4.0;
-				GCC_WARN_UNUSED_FUNCTION = NO;
-				GCC_WARN_UNUSED_LABEL = NO;
-				GCC_WARN_UNUSED_PARAMETER = NO;
-				GCC_WARN_UNUSED_VALUE = NO;
-				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL/SDL.framework/Headers\"";
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
 				OTHER_CFLAGS = "$(inherited)";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				WARNING_CFLAGS = "";
-				WARNING_LDFLAGS = "";
 			};
 			name = Debug;
 		};
@@ -4612,17 +4605,10 @@
 					"$(inherited)",
 				);
 				GCC_VERSION = 4.0;
-				GCC_WARN_UNUSED_FUNCTION = NO;
-				GCC_WARN_UNUSED_LABEL = NO;
-				GCC_WARN_UNUSED_PARAMETER = NO;
-				GCC_WARN_UNUSED_VALUE = NO;
-				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL/SDL.framework/Headers\"";
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
 				OTHER_CFLAGS = "$(inherited)";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				WARNING_CFLAGS = "";
-				WARNING_LDFLAGS = "";
 			};
 			name = Release;
 		};
