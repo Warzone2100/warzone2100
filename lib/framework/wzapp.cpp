@@ -26,7 +26,6 @@
 #include <QMouseEvent>
 #include <QClipboard>
 #include <QThread>
-#include <memory>
 #include "wzapp.h"
 #include <QDesktopWidget>
 
@@ -1093,14 +1092,13 @@ void iV_SetTextColour(PIELIGHT colour)
 	fontColor = QColor(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
 }
 
-// FIXME - offset hack is bad, rotated text appears in slightly wrong position
 void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotation)
 {
-       std::auto_ptr<QPainter> painter(new QPainter(WzMainWindow::instance()->context()->device()));
-       painter->translate(XPos, YPos);
-       painter->rotate(rotation);
-       painter->setPen(fontColor);
-       painter->drawText(0, 0, string);
+	QPainter painter(WzMainWindow::instance()->context()->device());
+	painter.translate(XPos, YPos);
+	painter.rotate(rotation);
+	painter.setPen(fontColor);
+	painter.drawText(0, 0, string);
 }
 
 void iV_SetTextSize(float size)
