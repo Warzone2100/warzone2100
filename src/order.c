@@ -2163,7 +2163,7 @@ BOOL validOrderForLoc(DROID_ORDER order)
 		order == DORDER_SCOUT || order == DORDER_RUN || order == DORDER_PATROL ||
 		order == DORDER_TRANSPORTOUT || order == DORDER_TRANSPORTIN  ||
 		order == DORDER_TRANSPORTRETURN || order == DORDER_DISEMBARK ||
-		order == DORDER_CIRCLE || order == DORDER_TEMP_HOLD);
+		order == DORDER_CIRCLE);
 }
 
 /* Give a droid an order with a location target */
