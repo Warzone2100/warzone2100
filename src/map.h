@@ -432,22 +432,21 @@ extern bool fireOnLocation(unsigned int x, unsigned int y);
 static inline bool hasSensorOnTile(MAPTILE *psTile, int player)
 {
 	int k;
-	bool seen = false;
-
+	
 	if (psTile->watchers[selectedPlayer] == 0)
 	{
-		if (game.alliance == ALLIANCES_TEAMS)
+		if (game.type != CAMPAIGN && game.alliance == ALLIANCES_TEAMS)
 		{
 			// Check if an ally can provide us with vision on this tile
-			for (k = 0;  k < MAX_PLAYERS; k++)
+			for (k = 0; k < MAX_PLAYERS; k++)
 			{
 				if (psTile->watchers[k] > 0 && aiCheckAlliances(k, selectedPlayer))
 				{
-					seen = true;
+					return true;
 				}
 			}
 		}
-		return seen;
+		return false;
 	}
 	return true;
 }
