@@ -625,7 +625,9 @@ BOOL recvDroid()
 	{
 		debug(LOG_ERROR, "Packet from %d cannot create droid for p%d (%s)!", NETgetSource(),
 			player, isHumanPlayer(player) ? "Human" : "AI");
-		DBCONPRINTF(ConsoleString, (ConsoleString, "MULTIPLAYER: Couldn't build a remote droid, relying on checking to resync"));
+#ifdef DEBUG
+		CONPRINTF(ConsoleString, (ConsoleString, "MULTIPLAYER: Couldn't build a remote droid, relying on checking to resync"));
+#endif
 		return false;
 	}
 

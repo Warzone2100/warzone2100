@@ -95,24 +95,12 @@ extern	void	toggleConsoleDrop( void );
 # define debug_console(...) (void)0
 #endif // !defined(DEBUG)
 
-extern void console(const char *pFormat, ...); /// Print allways to the ingame console
+extern void console(const char *pFormat, ...); /// Print always to the ingame console
 
-/* Basic wrapper to sprintf - allows convenient printf style game info to be displayed */
-
-
-//	#ifdef DEBUG
-//	#define DBCONPRINTF(x)			consolePrintf x
-//	#else
-//	#define DBCONPRINTF(x)
-//	#endif
-//
-//	#define CONPRINTF(x)			consolePrintf x
-
-/*
+/**
  Usage:
 
   CONPRINTF(StringPointer,(StringPointer,"format",data));
-  DBCONPRINTF(StringPointer,(StringPointer,"format",data));
 
   StringPointer should always be ConsoleString.
 
@@ -125,17 +113,8 @@ extern void console(const char *pFormat, ...); /// Print allways to the ingame c
 	Be very carefull that the resulting string is no longer
 	than MAX_CONSOLE_TMP_STRING_LENGTH.
 */
-
 #define CONPRINTF(s,x) \
 	sprintf x; \
 	addConsoleMessage(s,DEFAULT_JUSTIFY,SYSTEM_MESSAGE)
-
-#ifdef DEBUG
-#define DBCONPRINTF(s,x) \
-	sprintf x; \
-	addConsoleMessage(s,DEFAULT_JUSTIFY,SYSTEM_MESSAGE)
-#else
-#define DBCONPRINTF(s,x)
-#endif
 
 #endif // __INCLUDED_SRC_CONSOLE_H__

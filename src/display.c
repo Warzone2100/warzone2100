@@ -2285,7 +2285,7 @@ void	dealWithLMB( void )
 			{
 				MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
 
-				DBCONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d", 
+				CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d", 
 				            tileIsExplored(psTile) ? "Explored" : "Unexplored",
 				            mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
 				            (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination));
