@@ -32,7 +32,7 @@
 
 /***************************************************************************/
 
-#include <SDL/SDL_opengl.h>
+#include <GL/glu.h>
 
 #include "lib/framework/frame.h"
 #include "piedef.h"

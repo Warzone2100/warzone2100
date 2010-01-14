@@ -21,6 +21,14 @@
 #ifndef __INCLUDED_WZAPP_C_H__
 #define __INCLUDED_WZAPP_C_H__
 
+struct _wzThread;
+struct _wzMutex;
+struct _wzSemaphore;
+
+typedef struct _wzThread WZ_THREAD;
+typedef struct _wzMutex WZ_MUTEX;
+typedef struct _wzSemaphore WZ_SEMAPHORE;
+
 int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool fullscreen);
 int wzQuit(void);		///< Quit game
 void wzCreateCursor(CURSOR index, uint8_t *data, uint8_t *mask, int w, int h, int hot_x, int hot_y);
@@ -31,9 +39,21 @@ void wzReleaseMouse(void);	///< Undo the wzGrabMouse operation
 bool wzActiveWindow(void);	///< Whether application currently has the mouse pointer over it
 int wzGetTicks(void);		///< Milliseconds since start of game
 const char *wzGetClipboard(void); ///< Get reference to static string of clipboard contents; not reentrant!
-void *wzThreadCreate(int (*threadFunc)(void *), void *data);
-void wzThreadStart(void *thread);
-bool wzIsThreadDone(void *thread);
-int wzThreadJoin(void *thread);
+
+// Thread related
+WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
+int wzThreadJoin(WZ_THREAD *thread);
+void wzThreadStart(WZ_THREAD *thread);
+bool wzIsThreadDone(WZ_THREAD *thread);
+void wzYieldCurrentThread(void);
+WZ_MUTEX *wzMutexCreate(void);
+void wzMutexDestroy(WZ_MUTEX *mutex);
+void wzMutexLock(WZ_MUTEX *mutex);
+void wzMutexUnlock(WZ_MUTEX *mutex);
+WZ_SEMAPHORE *wzSemaphoreCreate(int startValue);
+void wzSemaphoreDestroy(WZ_SEMAPHORE *semaphore);
+void wzSemaphoreWait(WZ_SEMAPHORE *semaphore);
+void wzSemaphorePost(WZ_SEMAPHORE *semaphore);
+int wzSemaphoreAvailable(WZ_SEMAPHORE *semaphore);
 
 #endif

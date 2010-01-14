@@ -26,6 +26,8 @@
 #include <QMouseEvent>
 #include <QClipboard>
 #include <QThread>
+#include <QMutex>
+#include <QSemaphore>
 #include "wzapp.h"
 #include <QDesktopWidget>
 
@@ -993,9 +995,9 @@ BOOL keyReleased(KEY_CODE code)
 /***    Thread support  ***/
 /**************************/
 
-struct WzThread : public QThread
+struct _wzThread : public QThread
 {
-	WzThread(int (*threadFunc_)(void *), void *data_) : threadFunc(threadFunc_), data(data_) {}
+	_wzThread(int (*threadFunc_)(void *), void *data_) : threadFunc(threadFunc_), data(data_) {}
 	void run()
 	{
 		ret = (*threadFunc)(data);
@@ -1005,29 +1007,87 @@ struct WzThread : public QThread
 	int ret;
 };
 
-void *wzThreadCreate(int (*threadFunc)(void *), void *data)
+// This one couldn't be easier...
+struct _wzMutex : public QMutex
 {
-	WzThread *thread = new WzThread(threadFunc, data);
-	return thread;
+};
+
+struct _wzSemaphore : public QSemaphore
+{
+	_wzSemaphore(int startValue = 0) : QSemaphore(startValue) {}
+};
+
+WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data)
+{
+	return new WZ_THREAD(threadFunc, data);
 }
 
-void wzThreadStart(void *thread)
+int wzThreadJoin(WZ_THREAD *thread)
 {
-	static_cast<WzThread *>(thread)->start();
-}
-
-bool wzIsThreadDone(void *thread)
-{
-	return static_cast<WzThread *>(thread)->isFinished();
-}
-
-int wzThreadJoin(void *thread_)
-{
-	WzThread *thread = static_cast<WzThread *>(thread_);
 	thread->wait();
 	int ret = thread->ret;
 	delete thread;
 	return ret;
+}
+
+void wzThreadStart(WZ_THREAD *thread)
+{
+	thread->start();
+}
+
+bool wzIsThreadDone(WZ_THREAD *thread)
+{
+	return thread->isFinished();
+}
+
+void wzYieldCurrentThread()
+{
+	QThread::yieldCurrentThread();
+}
+
+WZ_MUTEX *wzMutexCreate()
+{
+	return new WZ_MUTEX;
+}
+
+void wzMutexDestroy(WZ_MUTEX *mutex)
+{
+	delete mutex;
+}
+
+void wzMutexLock(WZ_MUTEX *mutex)
+{
+	mutex->lock();
+}
+
+void wzMutexUnlock(WZ_MUTEX *mutex)
+{
+	mutex->unlock();
+}
+
+WZ_SEMAPHORE *wzSemaphoreCreate(int startValue)
+{
+	return new WZ_SEMAPHORE(startValue);
+}
+
+void wzSemaphoreDestroy(WZ_SEMAPHORE *semaphore)
+{
+	delete semaphore;
+}
+
+void wzSemaphoreWait(WZ_SEMAPHORE *semaphore)
+{
+	semaphore->acquire();
+}
+
+void wzSemaphorePost(WZ_SEMAPHORE *semaphore)
+{
+	semaphore->release();
+}
+
+int wzSemaphoreAvailable(WZ_SEMAPHORE *semaphore)
+{
+	return semaphore->available();
 }
 
 /**************************/
