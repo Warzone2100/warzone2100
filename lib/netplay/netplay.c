@@ -3628,8 +3628,8 @@ BOOL NETfindGame(void)
 // Functions used to setup and join games.
 BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 {
-	struct addrinfo* cur;
-	struct addrinfo* hosts;
+	struct addrinfo *cur = NULL;
+	struct addrinfo *hosts = NULL;
 	unsigned int i;
 
 	debug(LOG_NET, "resetting sockets.");
@@ -3650,9 +3650,13 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	{
 		free(hostname);
 		if (i > 0)
+		{
 			hostname = strdup(NetPlay.games[gameNumber].secondaryHosts[i - 1]);
+		}
 		else
+		{
 			hostname = strdup(NetPlay.games[gameNumber].desc.host);
+		}
 
 		hosts = resolveHost(hostname, gameserver_port);
 		if (hosts == NULL)
@@ -3670,7 +3674,9 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		{
 			tcp_socket = SocketOpen(cur, 15000);
 			if (tcp_socket)
+			{
 				goto connect_succesfull;
+			}
 		}
 
 		freeaddrinfo(hosts);
