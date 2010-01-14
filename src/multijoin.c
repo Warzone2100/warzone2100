@@ -344,8 +344,8 @@ bool recvDataCheck(void)
 		}
 		else
 		{
-			debug(LOG_NET, "DataCheck message received and verified for player %s (slot=%u)", getPlayerName(i), player);
-			ingame.DataIntegrity[i] = true;
+			debug(LOG_NET, "DataCheck message received and verified for player %s (slot=%u)", getPlayerName(player), player);
+			ingame.DataIntegrity[player] = true;
 		}
 	}
 	return true;
