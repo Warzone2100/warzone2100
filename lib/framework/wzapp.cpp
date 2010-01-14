@@ -28,6 +28,7 @@
 #include <QThread>
 #include <memory>
 #include "wzapp.h"
+#include <QDesktopWidget>
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,9 +36,11 @@ extern "C" {
 
 // Get platform defines before checking for them!
 #include "frame.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 #include "file.h"
 #include "configfile.h"
 #include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_opengl/screen.h"
 #include "wzapp_c.h"
 #include "src/main.h"
@@ -601,8 +604,9 @@ void WzMainWindow::close()
 /***                              ***/
 /************************************/
 
-int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h)
+int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool fullscreen)
 {
+	char buf[256];
 	QApplication app(argc, argv);
 
 	// Setting up OpenGL
@@ -619,9 +623,26 @@ int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h)
 		format.setSamples(fsaa);
 	}
 	WzMainWindow mainwindow(format);
+	if (fullscreen)
+	{
+		QDesktopWidget *desktop = qApp->desktop();
+		w = desktop->width();
+		h = desktop->height();
+		pie_SetVideoBufferWidth(w);
+		pie_SetVideoBufferHeight(h);
+	}
 	mainwindow.setMinimumSize(w, h);
 	mainwindow.setMaximumSize(w, h);
+	if (fullscreen)
+	{
+		WzMainWindow::instance()->showFullScreen();
+	}
+	screenWidth = w;
+	screenHeight = h;
 	mainwindow.show();
+
+	ssprintf(buf, "Video Mode %d x %d (%s)", w, h, fullscreen ? "fullscreen" : "window");
+	addDumpInfo(buf);
 
 	debug(LOG_MAIN, "Final initialization");
 	if (finalInitialization() != 0)

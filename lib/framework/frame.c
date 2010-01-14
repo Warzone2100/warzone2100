@@ -206,14 +206,7 @@ static void freeCursors(void)
  *
  * Initialise the framework library. - PC version
  */
-BOOL frameInitialise(
-					const char *pWindowName,// The text to appear in the window title bar
-					UDWORD width,			// The display width
-					UDWORD height,			// The display height
-					UDWORD bitDepth,		// The display bit depth
-					unsigned int fsaa,      // FSAA anti aliasing level
-					BOOL fullScreen,		// Whether to start full screen or windowed
-					BOOL vsync)				// If to sync to vblank or not
+BOOL frameInitialise()
 {
 	if (SDL_Init(SDL_INIT_TIMER) != 0)
 	{
@@ -230,7 +223,7 @@ BOOL frameInitialise(
 	/* initialise all cursors */
 	initCursors();
 
-	if (!screenInitialise(width, height, bitDepth, fsaa, fullScreen, vsync))
+	if (!screenInitialise())
 	{
 		return false;
 	}

@@ -21,7 +21,7 @@
 #ifndef __INCLUDED_WZAPP_C_H__
 #define __INCLUDED_WZAPP_C_H__
 
-int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h);
+int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool fullscreen);
 int wzQuit(void);		///< Quit game
 void wzCreateCursor(CURSOR index, uint8_t *data, uint8_t *mask, int w, int h, int hot_x, int hot_y);
 void wzSetCursor(CURSOR index);

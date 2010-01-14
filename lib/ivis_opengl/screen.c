@@ -60,14 +60,7 @@ static BOOL FBOinit = false;
 BOOL bFboProblem = false;	// hack to work around people with bad drivers. (*cough*intel*cough*)
 
 /* Initialise the double buffered display */
-BOOL screenInitialise(
-			UDWORD		width,		// Display width
-			UDWORD		height,		// Display height
-			UDWORD		bitDepth,	// Display bit depth
-			unsigned int fsaa,      // FSAA anti aliasing level
-			BOOL		fullScreen,	// Whether to start windowed
-							// or full screen
-			BOOL		vsync)		// If to sync to vblank or not
+BOOL screenInitialise()
 {
 		char buf[256];
 
@@ -83,8 +76,6 @@ BOOL screenInitialise(
 			ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 			addDumpInfo(buf);
 		}
-		ssprintf(buf, "Video Mode %d x %d (%s)", width, height, fullScreen ? "fullscreen" : "window");
-		addDumpInfo(buf);
 		/* Dump information about OpenGL implementation to the console */
 		debug(LOG_3D, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
 		debug(LOG_3D, "OpenGL Renderer : %s", glGetString(GL_RENDERER));

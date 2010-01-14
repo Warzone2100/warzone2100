@@ -1007,13 +1007,13 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	return wzInit(argc, argv, war_getFSAA(), war_GetVsync(), pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight());
+	return wzInit(argc, argv, war_getFSAA(), war_GetVsync(), pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), war_getFullscreen());
 }
 
 // Called from wzInit after graphics initialized
 int finalInitialization()
 {
-	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFSAA(), war_getFullscreen(), war_GetVsync()))
+	if (!frameInitialise())
 	{
 		return -1;
 	}
