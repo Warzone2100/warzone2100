@@ -127,7 +127,8 @@ private GROUP			defendGroup;
 private bool			defendbusy;
 private BASEOBJ			defendObj;
 
-public  RESEARCHSTAT	nexusDefence;
+public  RESEARCHSTAT		nexusDefence;
+private  RESEARCHSTAT		research;
 
 //build
 private GROUP			buildGroup;
@@ -200,7 +201,7 @@ trigger attackStuffTr				(every, 300	);
 trigger allOutAttackTr				(every, 4000);
 trigger defendWatchTr				(CALL_STRUCT_ATTACKED, me, ref structure, ref baseobj);
 trigger defendReturnTr				(every,	500	);
-trigger doResearchTr				(every, 400 );
+trigger doResearchTr				(CALL_RESEARCHCOMPLETED, ref research, ref structure, me);
 trigger vtolDefendTr				(CALL_STRUCT_ATTACKED, me, ref structure, ref baseobj);
 trigger vtolStructsTr				(every, 290);
 trigger buildVtolsTr				(every, 360);
@@ -233,6 +234,7 @@ event	everySecEv;
 event	manageDefendLocationEv;
 event	structureDestroyed;
 event	rebuildStructureEv;
+event	doResearch;
 
 /* Function prototypes */
 function bool haveBeacon(int _player);
@@ -279,7 +281,6 @@ function BASEOBJ chooseVtolTarget(bool bExclusiveTarget);
 function int getVtolTargetWeight(BASEOBJ _target);
 function bool vtolTargetAssigned(BASEOBJ _target);
 function int numBuildSameBuilding(STRUCTURESTAT _checkStat, int _x, int _y);
-function void expandBase(DROID _truck);
 function int totalVtols();
 function bool needTank();
 function void setTechBranch(int _tech);
@@ -435,6 +436,7 @@ event startLevel(startLevelTr)
 {
 	setEventTrigger(buildFundamentals, chainloadTr);
 	setEventTrigger(conDroids, chainloadTr);
+	setEventTrigger(doResearch, chainloadTr);
 	setEventTrigger(startLevel, inactive);
 }
 
@@ -953,12 +955,12 @@ event buildBase(buildBaseTr)
 //  build other stuff, grow the base slowly...
 event buildExpand( buildExpandTr )
 {
-	expandBase(NULLOBJECT);
-}
-
-function void expandBase(DROID _truck)
-{
 	local	int		_numBuilders,_maxBuilders;
+
+	if (playerPower(me) < LOW_POWER)
+	{
+		exit;	// do not expand base with low power
+	}
 
 	if(extraStruct == numExtraStructs[curTech])	// loop round
 	{
@@ -976,27 +978,16 @@ function void expandBase(DROID _truck)
 			_numBuilders = numBuildSameBuilding(extraStructs[curTech][extraStruct], buildX, buildY);
 			_maxBuilders = 2;
 
-			if(_truck != NULLOBJECT)
+			initIterateGroup(buildGroup);				// find idle droids in build group.
+			droid = iterateGroup(buildGroup);
+			while((droid != NULLOBJECT) and (_numBuilders < _maxBuilders))
 			{
-				if ((_truck.order != DORDER_BUILD) and (_truck.order != DORDER_LINEBUILD) and droidCanReach(_truck, buildX, buildY))
+				if ((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD) and droidCanReach(droid, buildX, buildY))
 				{
-					orderDroidStatsLoc(_truck, DORDER_BUILD,extraStructs[curTech][extraStruct], buildX,buildY);// build it.
+					orderDroidStatsLoc(droid, DORDER_BUILD,extraStructs[curTech][extraStruct], buildX,buildY);// build it.
 					_numBuilders++;
 				}
-			}
-			else
-			{
-				initIterateGroup(buildGroup);				// find idle droids in build group.
 				droid = iterateGroup(buildGroup);
-				while((droid != NULLOBJECT) and (_numBuilders < _maxBuilders))
-				{
-					if ((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD) and droidCanReach(droid, buildX, buildY))
-					{
-						orderDroidStatsLoc(droid, DORDER_BUILD,extraStructs[curTech][extraStruct], buildX,buildY);// build it.
-						_numBuilders++;
-					}
-					droid = iterateGroup(buildGroup);
-				}
 			}
 		}
 	}
@@ -1406,6 +1397,10 @@ event structBuilt(structBuiltTr)
 				orderDroidStatsLoc(droid, DORDER_BUILD, derrick, _oilResource.x, _oilResource.y);	//build a derick
 			}
 		}
+	}
+	else if (structure.stattype == REF_RESEARCH)
+	{
+		setEventTrigger(doResearch, chainloadTr);
 	}
 
 	// Check if available trucks need to build more absolute necessities right away. We need a trigger here because
@@ -2166,6 +2161,7 @@ event doResearch(doResearchTr)
 
 		structure = enumStruct();
 	}
+	setEventTrigger(doResearch, doResearchTr);
 }
 
 // find next available research of our research branch
@@ -3854,7 +3850,7 @@ function FEATURE closestOil(int _x, int _y, bool _bAvoidThreat)
 	_bestDist = 99999;
 	_closestOil = NULLOBJECT;
 
-	initGetFeature(oilRes,me,me);
+	initGetFeature(oilRes, -1, me);
 	_oil = getFeatureB(me);
 	while(_oil != NULLOBJECT)
 	{
