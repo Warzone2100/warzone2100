@@ -360,7 +360,7 @@ void WzMainWindow::mousePressEvent(QMouseEvent *event)
 			aMouseState[idx].lastdown = 0;
 		}
 
-		if (idx < 2) // Not the mousewheel
+		if (idx == MOUSE_LMB || idx == MOUSE_RMB)  // Not the mousewheel. I'm running around in the mouse wheel, but not getting anywhere. Squeak!
 		{
 			dragKey = idx;
 			dragX = mouseX();
