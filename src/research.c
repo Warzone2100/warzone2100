@@ -1772,7 +1772,6 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 	}
 	if ((bMultiPlayer || player == selectedPlayer) && bDisplay)
 	{
-		debug(LOG_ERROR, "psResearchFacility=%p idle=%d", psResearchFacility, psResearchFacility ? (int)structureIdle(psResearchFacility) : -1);
 		psCBLastResearch = pResearch;
 		CBResFacilityOwner = player;
 		psCBLastResStructure = psResearchFacility;
