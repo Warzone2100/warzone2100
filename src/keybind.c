@@ -1408,7 +1408,7 @@ void	kf_FinishResearch( void )
 			pSubject = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject;
 			if (pSubject)
 			{
-				researchResult((RESEARCH*)pSubject - asResearch, selectedPlayer, false, NULL);
+				researchResult((RESEARCH*)pSubject - asResearch, selectedPlayer, true, psCurr);
 				sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s %s"),
 					selectedPlayer, _("Researched"), getName(pSubject->pName) );
 				sendTextMessage(cmsg, true);

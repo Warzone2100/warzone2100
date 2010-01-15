@@ -1766,16 +1766,21 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 		}
 	}
 
-    if ((bMultiPlayer || player == selectedPlayer) && bDisplay)
-    {
-        psCBLastResearch = pResearch;
+	if (psResearchFacility)
+	{
+		psResearchFacility->pFunctionality->researchFacility.psSubject = NULL;		// Make sure topic is cleared
+	}
+	if ((bMultiPlayer || player == selectedPlayer) && bDisplay)
+	{
+		debug(LOG_ERROR, "psResearchFacility=%p idle=%d", psResearchFacility, psResearchFacility ? (int)structureIdle(psResearchFacility) : -1);
+		psCBLastResearch = pResearch;
 		CBResFacilityOwner = player;
 		psCBLastResStructure = psResearchFacility;
-	    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCHCOMPLETED);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCHCOMPLETED);
 		psCBLastResStructure = NULL;
-        CBResFacilityOwner = -1;
+		CBResFacilityOwner = -1;
 		psCBLastResearch = NULL;
-    }
+	}
 
 #ifdef DEBUG
     /*this just checks that there are not more than 32 weapons now available for
