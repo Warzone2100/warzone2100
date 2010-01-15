@@ -1552,7 +1552,6 @@ BOOL	scrSetAssemblyPoint(void)
 // test for structure is idle or not
 BOOL	scrStructureIdle(void)
 {
-//	INTERP_VAL	sVal;
 	STRUCTURE	*psBuilding;
 	BOOL		idle;
 
@@ -1560,24 +1559,13 @@ BOOL	scrStructureIdle(void)
 	{
 		return false;
 	}
-//	DBPRINTF(("scrStructureIdle called\n"));
-
 	if (psBuilding == NULL)
 	{
 		ASSERT( false, "scrStructureIdle: NULL structure" );
 		return false;
 	}
 
-	//test for idle
-	idle = false;
-	if (structureIdle(psBuilding))
-	{
-		idle = true;
-	}
-
-
-//	DBPRINTF(("structure %p is %d\n",psBuilding,idle));
-
+	idle = structureIdle(psBuilding);
 	scrFunctionResult.v.bval = idle;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
