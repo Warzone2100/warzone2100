@@ -3427,8 +3427,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					}
 					psResFacility->psSubject = NULL;
 					intResearchFinished(psStructure);
-					researchResult(pSubject->ref - REF_RESEARCH_START,
-						psStructure->player, true,psStructure);
+					researchResult(pSubject->ref - REF_RESEARCH_START, psStructure->player, true, psStructure, true);
 					//check if this result has enabled another topic
 					intCheckResearchButton();
 				}

@@ -10155,7 +10155,7 @@ BOOL loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords)
 			//for any research that has been completed - perform so that upgrade values are set up
 			if (psSaveResearch->researched[playerInc] == RESEARCHED)
 			{
-				researchResult(statInc, playerInc, false, NULL);
+				researchResult(statInc, playerInc, false, NULL, false);
 			}
 		}
 	}
@@ -10232,7 +10232,7 @@ BOOL loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords)
 			//for any research that has been completed - perform so that upgrade values are set up
 			if (psSaveResearch->researched[playerInc] == RESEARCHED)
 			{
-				researchResult(statInc, playerInc, false, NULL);
+				researchResult(statInc, playerInc, false, NULL, false);
 			}
 		}
 	}

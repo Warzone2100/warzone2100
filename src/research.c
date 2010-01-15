@@ -1140,8 +1140,7 @@ add_research: //if passed all the tests - add it to the list
 }
 
 /* process the results of a completed research topic */
-void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
-					STRUCTURE *psResearchFacility)
+void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE *psResearchFacility, BOOL bTrigger)
 {
 	RESEARCH					*pResearch = asResearch + researchIndex;
 	UDWORD						type, inc;//, upgrade;
@@ -1770,7 +1769,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 	{
 		psResearchFacility->pFunctionality->researchFacility.psSubject = NULL;		// Make sure topic is cleared
 	}
-	if ((bMultiPlayer || player == selectedPlayer) && bDisplay)
+	if ((bMultiPlayer || player == selectedPlayer) && bTrigger)
 	{
 		psCBLastResearch = pResearch;
 		CBResFacilityOwner = player;
@@ -2569,7 +2568,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	//if a topic was found give the reward player the results of that research
 	if (rewardID)
 	{
-		researchResult(rewardID, rewardPlayer, true, NULL);
+		researchResult(rewardID, rewardPlayer, true, NULL, true);
 		if (rewardPlayer == selectedPlayer)
 		{
 			//name the actual reward

@@ -1632,6 +1632,7 @@ BOOL skTopicAvail(UWORD inc, UDWORD player)
 	}
 	return false;
 }
+
 // ********************************************************************************************
 BOOL scrSkDoResearch(void)
 {
@@ -1660,7 +1661,7 @@ BOOL scrSkDoResearch(void)
 	// choose a topic to complete.
 	for(i=0;i<numResearch;i++)
 	{
-		if( skTopicAvail(i,player) )
+		if (skTopicAvail(i, player) && (!bMultiPlayer || !beingResearchedByAlly(i, player)))
 		{
 			break;
 		}

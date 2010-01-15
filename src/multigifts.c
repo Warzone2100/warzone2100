@@ -280,7 +280,7 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 		 && !IsResearchCompleted(&pRto[i]))
 		{
 			MakeResearchCompleted(&pRto[i]);
-			researchResult(i, to, false, NULL);
+			researchResult(i, to, false, NULL, true);
 		}
 	}
 

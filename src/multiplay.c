@@ -827,7 +827,7 @@ BOOL SendResearch(uint8_t player, uint32_t index)
 				{
 					// Do the research for that player
 					MakeResearchCompleted(pPlayerRes);
-					researchResult(index, i, false, NULL);
+					researchResult(index, i, false, NULL, true);
 				}
 			}
 		}
@@ -861,7 +861,7 @@ static BOOL recvResearch()
 	if (!IsResearchCompleted(pPlayerRes))
 	{
 		MakeResearchCompleted(pPlayerRes);
-		researchResult(index, player, false, NULL);
+		researchResult(index, player, false, NULL, true);
 
 		// Take off the power if available
 		pResearch = asResearch + index;
@@ -881,7 +881,7 @@ static BOOL recvResearch()
 				{
 					// Do the research for that player
 					MakeResearchCompleted(pPlayerRes);
-					researchResult(index, i, false, NULL);
+					researchResult(index, i, false, NULL, true);
 				}
 			}
 		}

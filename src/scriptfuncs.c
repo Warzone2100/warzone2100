@@ -4449,7 +4449,7 @@ BOOL scrCompleteResearch(void)
 		return false;
 	}
 
-	researchResult(researchIndex, (UBYTE)player, false, NULL);
+	researchResult(researchIndex, (UBYTE)player, false, NULL, false);
 
 
 	if(bMultiPlayer && (gameTime > 2 ))
@@ -10688,6 +10688,7 @@ BOOL scrPursueResearch(void)
 	{
 		return false;
 	}
+	intRefreshScreen();
 
 	return true;
 }
