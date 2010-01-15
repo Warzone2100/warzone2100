@@ -61,6 +61,4 @@ extern BOOL formationGetPos(FORMATION *psFormation, DROID* psDroid,
 // See if a unit is a member of a formation (i.e. it has a position assigned)
 extern BOOL formationMember(FORMATION *psFormation, const DROID* psDroid);
 
-extern SDWORD formationGetSpeed( FORMATION *psFormation );
-
 #endif // __INCLUDED_SRC_FORMATION_H__

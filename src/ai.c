@@ -42,6 +42,8 @@
 /* Calculates attack priority for a certain target */
 static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot);
 
+static BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot);
+
 // alliances
 UBYTE	alliances[MAX_PLAYERS][MAX_PLAYERS];
 
@@ -1279,7 +1281,7 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 }
 
 /* Make droid/structure look for a better target */
-BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
+static BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 {
 	BASE_OBJECT		*psBetterTarget=NULL;
 	UWORD			tmpOrigin = ORIGIN_UNKNOWN;

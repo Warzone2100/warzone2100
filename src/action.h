@@ -171,9 +171,6 @@ bool spiralSearch(int startX, int startY, int max_radius, tileMatchFunction matc
 /** Choose a landing position for a VTOL when it goes to rearm. */
 bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py);
 
-/** Try to find a better target. */
-extern BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot);
-
 /** How many frames to skip before updating naybors. */
 #define NAYBOR_SKIP_FRAMES 8
 
