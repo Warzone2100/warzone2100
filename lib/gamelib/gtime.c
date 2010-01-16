@@ -165,7 +165,7 @@ void gameTimeUpdate(void)
 	// Precision seems to drop too low after this.
 	// It's probably time to rebase
 	// This is a temporary solution
-	if (gameTime > baseTime + 1<<18)
+	if (gameTime > baseTime + (1<<18))
 	{
 		timeOffset = gameTime;
 		timeOffset2 = gameTime2;
