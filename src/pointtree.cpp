@@ -17,16 +17,6 @@ The coloured areas are the points in the ranges (note that each range also conta
 outside the rectangles). The orange points are the search results.
 */
 
-typedef std::pair<uint64_t, void *> POINT;
-
-struct _pointTree
-{
-	std::vector<POINT> points;
-
-	std::vector<void *> lastQueryResults;
-};
-
-
 // Expands bit pattern abcd efgh to 0a0b 0c0d 0e0f 0g0h
 static uint64_t expand(uint32_t x)
 {
@@ -66,29 +56,19 @@ static uint64_t interleave(int32_t x, int32_t y)
 	return expandX(x) | expandY(y);
 }
 
-POINT_TREE *pointTreeCreate(void)
+void PointTree::insert(void *pointData, int32_t x, int32_t y)
 {
-	return new POINT_TREE;
+	points.push_back(Point(interleave(x, y), pointData));
 }
 
-void pointTreeDestroy(POINT_TREE *pointTree)
+void PointTree::clear()
 {
-	delete pointTree;
+	points.clear();
 }
 
-void pointTreeInsert(POINT_TREE *pointTree, void *point, int32_t x, int32_t y)
+void PointTree::sort()
 {
-	pointTree->points.push_back(POINT(interleave(x, y), point));
-}
-
-void pointTreeClear(POINT_TREE *pointTree)
-{
-	pointTree->points.clear();
-}
-
-void pointTreeSort(POINT_TREE *pointTree)
-{
-	std::sort(pointTree->points.begin(), pointTree->points.end());
+	std::sort(points.begin(), points.end());
 }
 
 //#define DUMP_IMAGE  // All x and y coordinates must be in range -500 to 499, if dumping an image.
@@ -98,7 +78,12 @@ uint8_t ppm[1000][1000][3];
 int doDump = false;
 #endif //DUMP_IMAGE
 
-void **pointTreeQuery(POINT_TREE *pointTree, int32_t x, int32_t y, int32_t radius)
+struct PointTreeRange
+{
+	uint64_t a, z;
+};
+
+PointTree::ResultVector &PointTree::query(int32_t x, int32_t y, uint32_t radius)
 {
 	int32_t minXo = x - radius;
 	int32_t maxXo = x + radius;
@@ -117,11 +102,11 @@ void **pointTreeQuery(POINT_TREE *pointTree, int32_t x, int32_t y, int32_t radiu
 	uint64_t splitY1 = expandY(splitYo - 1);
 	uint64_t splitY2 = expandY(splitYo);
 
-	uint64_t ranges[4][2] = {{minX    | minY,    splitX1 | splitY1},
-	                         {splitX2 | minY,    maxX    | splitY1},
-	                         {minX    | splitY2, splitX1 | maxY},
-	                         {splitX2 | splitY2, maxX    | maxY}
-	                        };
+	PointTreeRange ranges[4] = {{minX    | minY,    splitX1 | splitY1},
+	                            {splitX2 | minY,    maxX    | splitY1},
+	                            {minX    | splitY2, splitX1 | maxY},
+	                            {splitX2 | splitY2, maxX    | maxY}
+	                           };
 	int numRanges = 4;
 
 #ifdef DUMP_IMAGE
@@ -130,8 +115,7 @@ void **pointTreeQuery(POINT_TREE *pointTree, int32_t x, int32_t y, int32_t radiu
 	{
 		f = fopen("pointtree.ppm", "wb");
 		fprintf(f, "P6\n1000 1000\n255\n");
-		int px, py;
-		for (py = 0; py != 1000; ++py) for (px = 0; px != 1000; ++px)
+		for (int py = 0; py != 1000; ++py) for (int px = 0; px != 1000; ++px)
 		{
 			int ax = px - 500, ay = py-500;
 			double dx = ax - x, dy = ay - y;
@@ -152,19 +136,19 @@ void **pointTreeQuery(POINT_TREE *pointTree, int32_t x, int32_t y, int32_t radiu
 				ppm[py][px][2] /= 2;
 			}
 			uint64_t nn = expandX(ax) | expandY(ay);
-			if (ranges[0][0] <= nn && nn <= ranges[0][1])
+			if (ranges[0].a <= nn && nn <= ranges[0].z)
 			{
 				ppm[py][px][0] /= 2;
 			}
-			if (ranges[1][0] <= nn && nn <= ranges[1][1])
+			if (ranges[1].a <= nn && nn <= ranges[1].z)
 			{
 				ppm[py][px][1] /= 2;
 			}
-			if (ranges[2][0] <= nn && nn <= ranges[2][1])
+			if (ranges[2].a <= nn && nn <= ranges[2].z)
 			{
 				ppm[py][px][2] /= 2;
 			}
-			if (ranges[3][0] <= nn && nn <= ranges[3][1] && ((ax ^ ay) & 2))
+			if (ranges[3].a <= nn && nn <= ranges[3].z && ((ax ^ ay) & 2))
 			{
 				ppm[py][px][0] /= 2;
 				ppm[py][px][1] /= 2;
@@ -174,45 +158,43 @@ void **pointTreeQuery(POINT_TREE *pointTree, int32_t x, int32_t y, int32_t radiu
 	}
 #endif //DUMP_IMAGE
 
-	if (ranges[1][0] > ranges[2][0])
+	// Sort ranges ready to be merged.
+	if (ranges[1].a > ranges[2].a)
 	{
-		std::swap(ranges[1][0], ranges[2][0]);
-		std::swap(ranges[1][1], ranges[2][1]);
+		std::swap(ranges[1], ranges[2]);
 	}
-	if (ranges[2][1] + 1 >= ranges[3][0])
+	// Merge ranges if needed.
+	if (ranges[2].z + 1 >= ranges[3].a)
 	{
-		ranges[2][1] = ranges[3][1];
+		ranges[2].z = ranges[3].z;
 		--numRanges;
 	}
-	if (ranges[1][1] + 1 >= ranges[2][0])
+	if (ranges[1].z + 1 >= ranges[2].a)
 	{
-		ranges[1][1] = ranges[2][1];
-		ranges[2][0] = ranges[3][0];
-		ranges[2][1] = ranges[3][1];
+		ranges[1].z = ranges[2].z;
+		ranges[2] = ranges[3];
 		--numRanges;
 	}
-	if (ranges[0][1] + 1 >= ranges[1][0])
+	if (ranges[0].z + 1 >= ranges[1].a)
 	{
-		ranges[0][1] = ranges[1][1];
-		ranges[1][0] = ranges[2][0];
-		ranges[1][1] = ranges[2][1];
-		ranges[2][0] = ranges[3][0];
-		ranges[2][1] = ranges[3][1];
+		ranges[0].z = ranges[1].z;
+		ranges[1] = ranges[2];
+		ranges[2] = ranges[3];
 		--numRanges;
 	}
 
-	pointTree->lastQueryResults.clear();
+	lastQueryResults.clear();
 	for (unsigned r = 0; r != numRanges; ++r)
 	{
-		std::vector<POINT>::iterator i1 = std::lower_bound(pointTree->points.begin(), pointTree->points.end(), POINT(ranges[r][0],     NULL));
-		std::vector<POINT>::iterator i2 = std::lower_bound(i1,                        pointTree->points.end(), POINT(ranges[r][1] + 1, NULL));
-		for (std::vector<POINT>::const_iterator i = i1; i != i2; ++i)
+		Vector::iterator i1 = std::lower_bound(points.begin(), points.end(), Point(ranges[r].a,     NULL));
+		Vector::iterator i2 = std::lower_bound(i1,             points.end(), Point(ranges[r].z + 1, NULL));
+		for (Vector::const_iterator i = i1; i != i2; ++i)
 		{
 			uint64_t px = i->first & 0xAAAAAAAAAAAAAAAA;
 			uint64_t py = i->first & 0x5555555555555555;
 			if (px >= minX && px <= maxX && py >= minY && py <= maxY)  // Only add point if it's at least in the desired square.
 			{
-				pointTree->lastQueryResults.push_back(i->second);
+				lastQueryResults.push_back(i->second);
 #ifdef DUMP_IMAGE
 				if (doDump)
 				{
@@ -225,8 +207,6 @@ void **pointTreeQuery(POINT_TREE *pointTree, int32_t x, int32_t y, int32_t radiu
 		}
 	}
 
-	pointTree->lastQueryResults.push_back(NULL);  // So it's possible to know when the list ends.
-
 #ifdef DUMP_IMAGE
 	if (doDump)
 	{
@@ -235,5 +215,41 @@ void **pointTreeQuery(POINT_TREE *pointTree, int32_t x, int32_t y, int32_t radiu
 	}
 #endif //DUMP_IMAGE
 
+	return lastQueryResults;
+}
+
+/////////////////
+// C interface //
+/////////////////
+
+PointTree *pointTreeCreate(void)
+{
+	return new PointTree;
+}
+
+void pointTreeDestroy(PointTree *pointTree)
+{
+	delete pointTree;
+}
+
+void pointTreeInsert(PointTree *pointTree, void *pointData, int32_t x, int32_t y)
+{
+	pointTree->insert(pointData, x, y);
+}
+
+void pointTreeClear(POINT_TREE *pointTree)
+{
+	pointTree->clear();
+}
+
+void pointTreeSort(POINT_TREE *pointTree)
+{
+	pointTree->sort();
+}
+
+void **pointTreeQuery(POINT_TREE *pointTree, int32_t x, int32_t y, uint32_t radius)
+{
+	pointTree->query(x, y, radius);
+	pointTree->lastQueryResults.push_back(NULL);  // So it's possible to know when the list ends.
 	return &pointTree->lastQueryResults[0];
 }

@@ -35,6 +35,11 @@
 #include "function.h"
 #include "stats.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Initialise the object system */
 extern BOOL objInitialise(void);
 
@@ -47,5 +52,9 @@ extern void reverseObjectList(BASE_OBJECT **ppsList);
 
 /** Output an informative string about this object. For debugging. */
 const char *objInfo(const BASE_OBJECT *psObj);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_OBJECTS_H__

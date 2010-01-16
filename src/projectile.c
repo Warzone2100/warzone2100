@@ -223,7 +223,6 @@ static void proj_Free(PROJECTILE *psObj)
 	/* Decrement any reference counts the projectile may have increased */
 	setProjectileDamaged(psObj, NULL);
 	setProjectileSource(psObj, NULL);
-	setProjectileDestination(psObj, NULL);
 
 	free(psObj);
 }

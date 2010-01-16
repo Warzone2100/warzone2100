@@ -230,7 +230,7 @@ warzone2100_SOURCES = \
 	main.c \
 	map.c \
 	mapdisplay.c \
-	mapgrid.c \
+	mapgrid.cpp \
 	mechanics.c \
 	message.c \
 	message_lexer.lex.c \

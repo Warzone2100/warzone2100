@@ -18,29 +18,19 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file
- *  Definitions for storing objects in a grid over the map.
- *  The objects are stored in every grid over which they might have some influence.
+ *  Allows querying which objects are within a given radius of a given location.
  */
 
 #ifndef __INCLUDED_SRC_MAPGRID_H__
 #define __INCLUDED_SRC_MAPGRID_H__
 
-/** Number of objects in each chunk of the grid array. */
-#define MAX_GRID_ARRAY_CHUNK 32
-
-// Objects are stored in an extensible array for each grid
-typedef struct _grid_array
+#ifdef __cplusplus
+extern "C"
 {
-	BASE_OBJECT *apsObjects[MAX_GRID_ARRAY_CHUNK];
+#endif //__cplusplus
 
-	struct _grid_array *psNext;
-} GRID_ARRAY;
+extern void **gridIterator;  ///< The iterator.
 
-
-/** The number of tiles per grid. */
-#define GRID_SIZE	8
-
-#define GRID_MAXAREA (MAP_MAXAREA/(GRID_SIZE*GRID_SIZE))
 
 // initialise the grid system
 extern BOOL gridInitialise(void);
@@ -48,34 +38,37 @@ extern BOOL gridInitialise(void);
 // shutdown the grid system
 extern void gridShutDown(void);
 
-//clear the grid of everything on it
-extern void gridClear(void);
-
 // reset the grid system
 extern void gridReset(void);
 
-// add an object to the grid system
+// TODO THIS FUNCTION DOES NOT DO ANYTHING ANYMORE. Delete this function
 extern void gridAddObject(BASE_OBJECT *psObj);
 
-// move a DROID within the grid
-// oldX,oldY are the old position of the object in world coords
+// TODO THIS FUNCTION DOES NOT DO ANYTHING ANYMORE. Delete this function
 extern void gridMoveDroid(DROID* psDroid, SDWORD oldX, SDWORD oldY);
 
-// remove an object from the grid system
+// TODO THIS FUNCTION DOES NOT DO ANYTHING ANYMORE. Delete this function
 extern void gridRemoveObject(BASE_OBJECT *psObj);
 
-// compact some of the grid arrays
+// Calls gridReset().
+// TODO Remove this function, call gridReset() directly.
 extern void gridGarbageCollect(void);
 
 // Display all the grid's an object is a member of
+// TODO This function doesn't do anything, should probably be deleted.
 extern void gridDisplayCoverage(BASE_OBJECT *psObj);
 
-// initialise the grid system to start iterating through units that
-// could affect a location (x,y in world coords)
-extern void gridStartIterate(SDWORD x, SDWORD y);
+/// Find all objects within radius r = 20*TILE_UNITS. Call gridIterate() to get the search results.
+extern void gridStartIterate(int32_t x, int32_t y/*, uint32_t radius*/);
 
-// get the next object that could affect a location,
-// should only be called after gridStartIterate
-extern BASE_OBJECT *gridIterate(void);
+/// Get the next search result from gridStartIterate, or NULL if finished.
+static inline BASE_OBJECT *gridIterate(void)
+{
+	return (BASE_OBJECT *)*gridIterator++;
+}
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MAPGRID_H__
