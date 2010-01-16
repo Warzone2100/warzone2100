@@ -1863,6 +1863,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		}
 		if (bSensorAssigned)
 		{
+			clearSelection();
 			assignSensorTarget((BASE_OBJECT *)psDroid);
 		}
 	}
