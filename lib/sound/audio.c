@@ -527,9 +527,9 @@ void audio_Update()
 	{
 		return;
 	}
-	sound_GetError();	// clear error codes
+	alGetError();	// clear error codes
 	audio_UpdateQueue();
-	sound_GetError();	// clear error codes
+	alGetError();	// clear error codes
 	// get player position
 	playerPos = audio_GetPlayerPos();
 	audio_Get3DPlayerRotAboutVerticalAxis(&angle);

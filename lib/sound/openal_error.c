@@ -73,7 +73,7 @@ ALenum __sound_GetError(const char* location_description)
 	return error;
 }
 
-ALenum __sound_GetDeviceError(ALCdevice* device, const char* location_description)
+ALenum __sound_GetContextError(ALCdevice* device, const char* location_description)
 {
 	const char* errorString;
 	ALCenum error = alcGetError(device);
