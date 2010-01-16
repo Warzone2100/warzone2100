@@ -903,50 +903,40 @@ static SDWORD moveObjRadius(const BASE_OBJECT* psObj)
 // see if a Droid has run over a person
 static void moveCheckSquished(DROID *psDroid, float mx,float my)
 {
-	SDWORD		i, droidR, rad, radSq;
-	SDWORD		objR;
-	SDWORD		xdiff,ydiff, distSq;
-	NAYBOR_INFO	*psInfo;
+	SDWORD          droidR, rad, radSq;
+	SDWORD          objR;
+	SDWORD          xdiff, ydiff, distSq;
+	BASE_OBJECT     *psObj;
 
 	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
 
-	for(i=0; i<(SDWORD)numNaybors; i++)
+	gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS);
+	for (psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
 	{
-		psInfo = asDroidNaybors + i;
-		if (psInfo->psObj->type != OBJ_DROID ||
-			((DROID *)psInfo->psObj)->droidType != DROID_PERSON)
+		if (psObj->type != OBJ_DROID || ((DROID *)psObj)->droidType != DROID_PERSON)
 		{
 			// ignore everything but people
 			continue;
 		}
 
-		ASSERT( psInfo->psObj->type == OBJ_DROID &&
-				((DROID *)psInfo->psObj)->droidType == DROID_PERSON,
-			"squished - eerk" );
+		ASSERT(psObj->type == OBJ_DROID && ((DROID *)psObj)->droidType == DROID_PERSON, "squished - eerk");
 
-		objR = moveObjRadius(psInfo->psObj);
+		objR = moveObjRadius(psObj);
 		rad = droidR + objR;
 		radSq = rad*rad;
 
-		xdiff = (SDWORD)psDroid->pos.x + mx - psInfo->psObj->pos.x;
-		ydiff = (SDWORD)psDroid->pos.y + my - psInfo->psObj->pos.y;
+		xdiff = psDroid->pos.x + mx - psObj->pos.x;
+		ydiff = psDroid->pos.y + my - psObj->pos.y;
 		distSq = xdiff*xdiff + ydiff*ydiff;
 
 		if (((2*radSq)/3) > distSq)
 		{
-			if ( (psDroid->player != psInfo->psObj->player) &&
-				 !aiCheckAlliances(psDroid->player, psInfo->psObj->player) )
+			if ((psDroid->player != psObj->player) && !aiCheckAlliances(psDroid->player, psObj->player))
 			{
 				// run over a bloke - kill him
-				destroyDroid((DROID*)psInfo->psObj);
+				destroyDroid((DROID *)psObj);
 				scoreUpdateVar(WD_BARBARIANS_MOWED_DOWN);
-				continue;
 			}
-		}
-		else if (psInfo->distSqr > OBJ_MAXRADIUS*OBJ_MAXRADIUS)
-		{
-			// object is too far away to be hit
-			break;
 		}
 	}
 }
@@ -1351,12 +1341,11 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 // Only consider stationery droids
 static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 {
-	SDWORD		i, droidR, rad, radSq;
-	SDWORD		objR;
-	SDWORD		xdiff,ydiff, distSq;
-	NAYBOR_INFO	*psInfo;
-	BASE_OBJECT	*psObst;
-	BOOL		bLegs;
+	SDWORD          droidR, rad, radSq;
+	SDWORD          objR;
+	SDWORD          xdiff, ydiff, distSq;
+	BASE_OBJECT     *psObj, *psObst;
+	BOOL            bLegs;
 
 	CHECK_DROID(psDroid);
 
@@ -1368,26 +1357,24 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 
 	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
 	psObst = NULL;
-	for(i=0; i<(SDWORD)numNaybors; i++)
+	gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS);
+	for (psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
 	{
-		psInfo = asDroidNaybors + i;
-		if (psInfo->psObj->type == OBJ_DROID)
+		if (psObj->type == OBJ_DROID)
 		{
-			if ( ((DROID *)psInfo->psObj)->droidType == DROID_TRANSPORTER )
+			if (((DROID *)psObj)->droidType == DROID_TRANSPORTER)
 			{
 				// ignore transporters
 				continue;
 			}
 
-			if (bLegs
-			 && ((DROID *)psInfo->psObj)->droidType != DROID_PERSON
-			 && !cyborgDroid((DROID *)psInfo->psObj))
+			if (bLegs && ((DROID *)psObj)->droidType != DROID_PERSON
+			          && !cyborgDroid((DROID *)psObj))
 			{
 				// cyborgs/people only avoid other cyborgs/people
 				continue;
 			}
-			if (!bLegs &&
-				(((DROID *)psInfo->psObj)->droidType == DROID_PERSON))
+			if (!bLegs && ((DROID *)psObj)->droidType == DROID_PERSON)
 			{
 				// everything else doesn't avoid people
 				continue;
@@ -1399,12 +1386,12 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 			continue;
 		}
 
-		objR = moveObjRadius(psInfo->psObj);
+		objR = moveObjRadius(psObj);
 		rad = droidR + objR;
 		radSq = rad*rad;
 
-		xdiff = psDroid->sMove.fx + *pmx - psInfo->psObj->pos.x;
-		ydiff = psDroid->sMove.fy + *pmy - psInfo->psObj->pos.y;
+		xdiff = psDroid->sMove.fx + *pmx - psObj->pos.x;
+		ydiff = psDroid->sMove.fy + *pmy - psObj->pos.y;
 		distSq = xdiff * xdiff + ydiff * ydiff;
 		if ((float)xdiff * *pmx + (float)ydiff * *pmy >= 0)
 		{
@@ -1414,7 +1401,7 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 
 		if (radSq > distSq)
 		{
-			if (psObst != NULL || !aiCheckAlliances(psInfo->psObj->player, psDroid->player))
+			if (psObst != NULL || !aiCheckAlliances(psObj->player, psDroid->player))
 			{
 				// hit more than one droid - stop
 				*pmx = (float)0;
@@ -1424,7 +1411,7 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 			}
 			else
 			{
-				psObst = psInfo->psObj;
+				psObst = psObj;
 
 				// note the bump time and position if necessary
 				if (psDroid->sMove.bumpTime == 0)
@@ -1466,11 +1453,6 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 				}
 			}
 		}
-		else if (psInfo->distSqr > OBJ_MAXRADIUS*OBJ_MAXRADIUS)
-		{
-			// object is too far away to be hit
-			break;
-		}
 	}
 
 	if (psObst != NULL)
@@ -1484,7 +1466,7 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 // get an obstacle avoidance vector
 static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 {
-	SDWORD				i, xdiff, ydiff, absx, absy, dist;
+	SDWORD				xdiff, ydiff, absx, absy, dist;
 	BASE_OBJECT			*psObj;
 	SDWORD				numObst = 0, distTot = 0;
 	float				dirX = 0, dirY = 0;
@@ -1495,16 +1477,13 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 
 	ASSERT(psPropStats, "invalid propulsion stats pointer");
 
-	droidGetNaybors(psDroid);
-
 	// scan the neighbours for obstacles
-	for(i = 0; i < (SDWORD)numNaybors; i++)
+	gridStartIterate(psDroid->pos.x, psDroid->pos.y, AVOID_DIST);
+	for (psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
 	{
-		psObj = asDroidNaybors[i].psObj;
-		if (psObj->type != OBJ_DROID ||
-			asDroidNaybors[i].distSqr >= AVOID_DIST*AVOID_DIST)
+		if (psObj->type != OBJ_DROID)
 		{
-			// object too far away to worry about
+			// Object wrong type to worry about.
 			continue;
 		}
 
@@ -2220,8 +2199,7 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, SDWORD direction
 		return;
 	}
 
-	// update the naybors list
-	droidGetNaybors(psDroid);
+	// Used to update some kind of weird neighbour list here.
 
 	moveCheckFinalWaypoint( psDroid, &speed );
 
@@ -2300,8 +2278,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction
 		return;
 	}
 
-	// update the naybors list
-	droidGetNaybors(psDroid);
+	// Used to update some kind of weird neighbour list here.
 
 	moveUpdateDroidDirection( psDroid, &speed, direction, PERSON_SPIN_ANGLE,
 				PERSON_SPIN_SPEED, PERSON_TURN_SPEED, &iDroidDir, &fSpeed );
@@ -2425,8 +2402,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 		return;
 	}
 
-	// update the naybors list
-	droidGetNaybors(psDroid);
+	// Used to update some kind of weird neighbour list here.
 
 	moveCheckFinalWaypoint( psDroid, &speed );
 
@@ -2534,8 +2510,7 @@ static void moveUpdateJumpCyborgModel(DROID *psDroid, SDWORD speed, SDWORD direc
 		return;
 	}
 
-	// update the naybors list
-	droidGetNaybors(psDroid);
+	// Used to update some kind of weird neighbour list here.
 
 	moveUpdateDroidDirection( psDroid, &speed, direction, VTOL_SPIN_ANGLE,
 				psDroid->baseSpeed, psDroid->baseSpeed/3, &iDroidDir, &fSpeed );
@@ -2874,7 +2849,6 @@ static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, S
 // use to pick up oil, etc..
 static void checkLocalFeatures(DROID *psDroid)
 {
-	SDWORD			i;
 	BASE_OBJECT		*psObj;
 	static int oilTimer = 0;
 	static bool GenerateDrum = false;
@@ -2882,24 +2856,19 @@ static void checkLocalFeatures(DROID *psDroid)
 
 	// NOTE: Why not do this for AI units also?
 	// only do for players droids.
-	if (psDroid->player != selectedPlayer)
+	if (psDroid->player != selectedPlayer || isVtolDroid(psDroid))  // VTOLs can't pick up features!
 	{
 		return;
 	}
 
-	droidGetNaybors(psDroid);// update naybor list.
-	ASSERT( numNaybors <= MAX_NAYBORS, "numNaybors is %d, out of range of %d!", numNaybors, MAX_NAYBORS);
 	// scan the neighbours
-	for(i=0; i<(SDWORD)numNaybors; i++)
+#define DROIDDIST ((TILE_UNITS*5)/2)
+	gridStartIterate(psDroid->pos.x, psDroid->pos.y, DROIDDIST);
+	for (psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
 	{
-#define DROIDDIST (((TILE_UNITS*5)/2) * ((TILE_UNITS*5)/2))
-		psObj = asDroidNaybors[i].psObj;
-		if (   psObj->type != OBJ_FEATURE
-			|| ((FEATURE *)psObj)->psStats->subType != FEAT_OIL_DRUM
-			|| asDroidNaybors[i].distSqr >= DROIDDIST
-			|| isVtolDroid(psDroid))	// VTOLs can't pick up features!
+		if (psObj->type != OBJ_FEATURE || ((FEATURE *)psObj)->psStats->subType != FEAT_OIL_DRUM || psObj->died)
 		{
-			// object too far away to worry about
+			// Object is not a living oil drum.
 			continue;
 		}
 

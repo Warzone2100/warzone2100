@@ -247,9 +247,8 @@ BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_S
 // Returns integer representing target priority, -1 if failed
 SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, UWORD *targetOrigin)
 {
-	UDWORD				i;
 	SDWORD				bestMod = 0,newMod, failure = -1;
-	BASE_OBJECT			*psTarget = NULL, *friendlyObj, *bestTarget = NULL, *targetInQuestion, *tempTarget;
+	BASE_OBJECT			*psTarget = NULL, *friendlyObj, *bestTarget = NULL, *iter, *targetInQuestion, *tempTarget;
 	BOOL				electronic = false;
 	STRUCTURE			*targetStructure;
 	WEAPON_EFFECT			weaponEffect;
@@ -281,15 +280,17 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 		bestTarget = aiSearchSensorTargets((BASE_OBJECT *)psDroid, weapon_slot, psWStats, &tmpOrigin);
 		bestMod = targetAttackWeight(bestTarget, (BASE_OBJECT *)psDroid, weapon_slot);
 	}
-	droidGetNaybors(psDroid);
 
 	weaponEffect = ((WEAPON_STATS *)(asWeaponStats + psDroid->asWeaps[weapon_slot].nStat))->weaponEffect;
 
 	electronic = electronicDroid(psDroid);
-	for (i=0; i< numNaybors; i++)
+
+	// Range was previously 9*TILE_UNITS. Increasing this doesn't seem to help much, though. Not sure why.
+	gridStartIterate(psDroid->pos.x, psDroid->pos.y, psDroid->sensorRange + 6*TILE_UNITS);
+	for (iter = gridIterate(); iter != NULL; iter = gridIterate())
 	{
 		friendlyObj = NULL;
-		targetInQuestion = asDroidNaybors[i].psObj;
+		targetInQuestion = iter;
 
 		/* This is a friendly unit, check if we can reuse its target */
 		if(aiCheckAlliances(targetInQuestion->player,psDroid->player))
@@ -862,7 +863,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		{
 			BASE_OBJECT *psCurr;
 
-			gridStartIterate((SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y);
+			gridStartIterate(psObj->pos.x, psObj->pos.y, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS);
 			psCurr = gridIterate();
 			while (psCurr != NULL)
 			{
@@ -922,7 +923,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		BASE_OBJECT	*psCurr, *psTemp = NULL;
 		int		tarDist = SDWORD_MAX;
 
-		gridStartIterate((SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y);
+		gridStartIterate(psObj->pos.x, psObj->pos.y, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS);
 		psCurr = gridIterate();
 		while (psCurr != NULL)
 		{
@@ -984,7 +985,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		BASE_OBJECT	*psCurr, *psTemp = NULL;
 		int		tarDist = SDWORD_MAX;
 
-		gridStartIterate((SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y);
+		gridStartIterate(psObj->pos.x, psObj->pos.y, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS);
 		psCurr = gridIterate();
 		while (psCurr != NULL)
 		{

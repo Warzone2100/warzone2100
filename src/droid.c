@@ -103,14 +103,9 @@ UDWORD	selectedCommander = UBYTE_MAX;
 /** Height the transporter hovers at above the terrain. */
 #define TRANSPORTER_HOVER_HEIGHT	10
 
-/** How far round a repair droid looks for a damaged droid. */
-#define REPAIR_DIST		(TILE_UNITS * 4)//8)
-
-/* Store for the objects near the droid currently being updated
+/* Sorry, Keith.
  * NAYBOR = neighbour - thanks to Keith for a great abreviation
  */
-NAYBOR_INFO			asDroidNaybors[MAX_NAYBORS];
-UDWORD				numNaybors=0;
 
 // the structure that was last hit
 DROID	*psLastDroidHit;
@@ -675,109 +670,6 @@ void droidBurn(DROID *psDroid)
 
 	/* set droid running */
 	orderDroid( psDroid, DORDER_RUNBURN );
-}
-
-/* Add a new object to the naybor list */
-static void addNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
-{
-	UDWORD	pos;
-
-	if (numNaybors == 0)
-	{
-		// No objects in the list
-		asDroidNaybors[0].psObj = psObj;
-		asDroidNaybors[0].distSqr = distSqr;
-		numNaybors++;
-	}
-	else if (distSqr >= asDroidNaybors[numNaybors-1].distSqr)
-	{
-		// Simple case - this is the most distant object
-		asDroidNaybors[numNaybors].psObj = psObj;
-		asDroidNaybors[numNaybors].distSqr = distSqr;
-		numNaybors++;
-	}
-	else
-	{
-		// Move all the objects further away up the list
-		for (pos = numNaybors; pos && asDroidNaybors[pos - 1].distSqr > distSqr; pos--)
-		{
-			memcpy(asDroidNaybors + pos, asDroidNaybors + (pos - 1), sizeof(NAYBOR_INFO));
-		}
-
-		// Insert the object at the correct position
-		asDroidNaybors[pos].psObj = psObj;
-		asDroidNaybors[pos].distSqr = distSqr;
-		numNaybors++;
-	}
-}
-
-
-static DROID	*CurrentNaybors = NULL;
-static UDWORD	nayborTime = 0;
-
-/* Find all the objects close to the droid */
-void droidGetNaybors(DROID *psDroid)
-{
-	SDWORD		xdiff, ydiff;
-	UDWORD		dx,dy, distSqr;
-	BASE_OBJECT	*psObj;
-
-	CHECK_DROID(psDroid);
-
-	// Ensure only called max of once per droid per game cycle.
-	if (CurrentNaybors == psDroid && nayborTime == gameTime)
-	{
-		return;
-	}
-	CurrentNaybors = psDroid;
-	nayborTime = gameTime;
-
-	// reset the naybor array
-	numNaybors = 0;
-
-	// search for naybor objects
-	dx = psDroid->pos.x;
-	dy = psDroid->pos.y;
-
-	gridStartIterate((SDWORD)dx, (SDWORD)dy);
-	for (psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
-	{
-		if (psObj != (BASE_OBJECT *)psDroid && !psObj->died)
-		{
-			xdiff = dx - (SDWORD)psObj->pos.x;
-			if (xdiff < 0)
-			{
-				xdiff = -xdiff;
-			}
-			if (xdiff > NAYBOR_RANGE)
-			{
-				continue;
-			}
-
-			ydiff = dy - (SDWORD)psObj->pos.y;
-			if (ydiff < 0)
-			{
-				ydiff = -ydiff;
-			}
-			if (ydiff > NAYBOR_RANGE)
-			{
-				continue;
-			}
-
-			distSqr = xdiff*xdiff + ydiff*ydiff;
-			if (distSqr > NAYBOR_RANGE*NAYBOR_RANGE)
-			{
-				continue;
-			}
-
-			addNaybor(psObj, distSqr);
-			if (numNaybors >= MAX_NAYBORS)
-			{
-				break;
-			}
-
-		}
-	}
 }
 
 /* The main update routine for all droids */

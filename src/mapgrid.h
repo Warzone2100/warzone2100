@@ -58,8 +58,9 @@ extern void gridGarbageCollect(void);
 // TODO This function doesn't do anything, should probably be deleted.
 extern void gridDisplayCoverage(BASE_OBJECT *psObj);
 
-/// Find all objects within radius r = 20*TILE_UNITS. Call gridIterate() to get the search results.
-extern void gridStartIterate(int32_t x, int32_t y/*, uint32_t radius*/);
+#define PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS (20*TILE_UNITS)
+/// Find all objects within radius. Call gridIterate() to get the search results.
+extern void gridStartIterate(int32_t x, int32_t y, uint32_t radius);
 
 /// Get the next search result from gridStartIterate, or NULL if finished.
 static inline BASE_OBJECT *gridIterate(void)

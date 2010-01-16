@@ -564,9 +564,6 @@ void processVisibility(BASE_OBJECT *psObj)
 		memcpy(currVis, prevVis, sizeof(*prevVis) * MAX_PLAYERS);
 	}
 
-	// get all the objects from the grid the droid is in
-	gridStartIterate(psObj->pos.x, psObj->pos.y);
-
 	// Make sure allies can see us
 	if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
 	{
@@ -604,6 +601,8 @@ void processVisibility(BASE_OBJECT *psObj)
 	}
 	else
 	{
+		// get all the objects from the grid the droid is in
+		gridStartIterate(psObj->pos.x, psObj->pos.y, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS);
 		while (psViewer = gridIterate(), psViewer != NULL)
 		{
 			int val;

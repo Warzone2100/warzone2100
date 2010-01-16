@@ -89,11 +89,6 @@ typedef enum
 	HALF_FREE_TILE
 } PICKTILE;
 
-/* Store for the objects near the droid currently being updated */
-#define MAX_NAYBORS		120
-extern NAYBOR_INFO		asDroidNaybors[MAX_NAYBORS];
-extern UDWORD			numNaybors;
-
 // the structure that was last hit
 extern DROID	*psLastDroidHit;
 
@@ -103,11 +98,7 @@ extern UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
 // initialise droid module
 extern BOOL droidInit(void);
 
-extern void	removeDroidBase(DROID *psDel);
-
-// refresh the naybor list
-// this only does anything if the naybor list is out of date
-extern void droidGetNaybors(DROID *psDroid);
+extern void removeDroidBase(DROID *psDel);
 
 extern BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize);
 extern BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);

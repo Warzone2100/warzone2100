@@ -102,19 +102,32 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 	//gridCalcCoverage(psObj, (SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y, GRID_REMOVEOBJECT);
 }
 
+static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
+{
+	return x*x + y*y <= radius*radius;
+}
+
 // initialise the grid system to start iterating through units that
 // could affect a location (x,y in world coords)
-void gridStartIterate(SDWORD x, SDWORD y/*, uint32_t radius*/)
+void gridStartIterate(int32_t x, int32_t y, uint32_t radius)
 {
-	uint32_t radius = 20*TILE_UNITS;
-
-	gridIterator = pointTreeQuery(gridPointTree, x, y, radius);  // Use the C interface, for NULL termination.
+	gridPointTree->query(x, y, radius);
+	PointTree::ResultVector::iterator w = gridPointTree->lastQueryResults.begin(), i;
+	for (i = gridPointTree->lastQueryResults.begin(); i != gridPointTree->lastQueryResults.end(); ++i)
+	{
+		BASE_OBJECT *obj = static_cast<BASE_OBJECT *>(*i);
+		if (isInRadius(obj->pos.x - x, obj->pos.y - y, radius))  // Check that search result is less than radius (since they can be up to a factor of sqrt(2) more).
+		{
+			*w = *i;
+			++w;
+		}
+	}
+	gridPointTree->lastQueryResults.erase(w, i);  // Erase all points that were a bit too far.
+	gridPointTree->lastQueryResults.push_back(NULL);  // NULL-terminate the result.
+	gridIterator = &gridPointTree->lastQueryResults[0];
 	/*
 	// In case you are curious.
-	int len = 0;
-	for(void **x = gridIterator; *x != NULL; ++x)
-		++len;
-	debug(LOG_WARNING, "gridStartIterate found %d objects", len);
+	debug(LOG_WARNING, "gridStartIterate(%d, %d, %u) found %u objects", x, y, radius, (unsigned)gridPointTree->lastQueryResults.size() - 1);
 	*/
 }
 

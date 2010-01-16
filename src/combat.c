@@ -445,7 +445,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 
 	CHECK_OBJECT(psTarget);
 
-	gridStartIterate((SDWORD)psTarget->pos.x, (SDWORD)psTarget->pos.y);
+	gridStartIterate(psTarget->pos.x, psTarget->pos.y, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS);
 	for (psViewer = gridIterate(); psViewer != NULL; psViewer = gridIterate())
 	{
 		STRUCTURE	*psStruct;

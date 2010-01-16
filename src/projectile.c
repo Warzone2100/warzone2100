@@ -75,6 +75,7 @@ typedef struct _interval
 // used to create a specific ID for projectile objects to facilitate tracking them.
 static const UDWORD ProjectileTrackerID =	0xdead0000;
 // Watermelon:neighbour global info ripped from droid.c
+#define MAX_NAYBORS 120
 static PROJ_NAYBOR_INFO	asProjNaybors[MAX_NAYBORS];
 static UDWORD		numProjNaybors = 0;
 
@@ -1933,7 +1934,7 @@ static void projGetNaybors(PROJECTILE *psObj)
 	// reset the naybor array
 	numProjNaybors = 0;
 
-	gridStartIterate(psObj->pos.x, psObj->pos.y);
+	gridStartIterate(psObj->pos.x, psObj->pos.y, PROJ_NAYBOR_RANGE);
 	while ((psTempObj = gridIterate()) != NULL)
 	{
 		if (psTempObj != (BASE_OBJECT *)psObj && !psTempObj->died)
