@@ -66,7 +66,7 @@ BOOL gameTimeInit(void)
     	/* Start the timer off at 2 so that when the scripts strip the map of objects
 	 * for multiPlayer they will be processed as if they died. */
 	gameTime = 2;
-	timeOffset = 0;
+	timeOffset = 2;
 	baseTime = SDL_GetTicks();
 
 	gameTime2 = 0;
