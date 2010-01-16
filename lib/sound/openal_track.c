@@ -183,7 +183,7 @@ BOOL sound_InitLibrary( void )
 	
 	alcMakeContextCurrent(context);
 
-	err = sound_GetDeviceError(device);
+	err = sound_GetContextError(device);
 	if (err != ALC_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Couldn't initialize audio context: %s", alcGetString(device, err));
@@ -249,17 +249,21 @@ void sound_ShutdownLibrary( void )
 		sound_StopStream(stream);
 	}
 	sound_UpdateStreams();
+	
+	alcGetError(device);	// clear error codes
 
 	/* On Linux since this caused some versions of OpenAL to hang on exit. - Per */
 	debug(LOG_SOUND, "make default context NULL");
 	alcMakeContextCurrent(NULL);
+	sound_GetContextError(device);
 
 	debug(LOG_SOUND, "destroy previous context");
 	alcDestroyContext(context); // this gives a long delay on some impl.
+	sound_GetContextError(device);
 
 	debug(LOG_SOUND, "close device");
 	alcCloseDevice(device);
-	sound_GetError();
+	sound_GetContextError(device);
 #endif
 
 	while( aSample )
@@ -390,7 +394,7 @@ void sound_Update()
 
 	alcProcessContext(context);
 
-	err = sound_GetDeviceError(device);
+	err = sound_GetContextError(device);
 	if (err != ALC_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Error while processing audio context: %s", alGetString(err));
@@ -954,7 +958,7 @@ void sound_StopStream(AUDIO_STREAM* stream)
 	assert(stream != NULL);
 
 #if !defined(WZ_NOSOUND)
-	sound_GetError();	// clear error codes
+	alGetError();	// clear error codes
 	// Tell OpenAL to stop playing on the given source
 	alSourceStop(stream->source);
 	sound_GetError();
@@ -1229,7 +1233,7 @@ void sound_StopSample(AUDIO_SAMPLE* psSample)
 		debug(LOG_SOUND, "sound_StopSample: sample number (%u) out of range, we probably have run out of available OpenAL sources", psSample->iSample);
 		return;
 	}
-	sound_GetError();	// clear error codes
+	alGetError();	// clear error codes
 	// Tell OpenAL to stop playing the given sample
 	alSourceStop(psSample->iSample);
 	sound_GetError();

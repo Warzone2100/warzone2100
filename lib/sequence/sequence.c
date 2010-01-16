@@ -228,9 +228,8 @@ static void open_audio(void)
 	alGenBuffers(1, &audiodata.buffer1);
 	sound_GetError();
 	alGenBuffers(1, &audiodata.buffer2);
-	sound_GetError();
-	// Clear Error Codes
-	alGetError();
+	sound_GetError();	// Log and clear error codes
+
 	audiodata.totbufstarted = 0;
 
 	// set the volume of the FMV based on the user's preferences
