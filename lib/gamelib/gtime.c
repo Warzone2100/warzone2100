@@ -165,8 +165,7 @@ void gameTimeUpdate(void)
 	// It's probably time to rebase
 	// This is a temporary solution
 
-	// Commented out in trunk so that perhaps we can track down and fix this bug
-	if (gameTime > baseTime + 1<<18)
+	if (gameTime > baseTime + (1<<18))
 	{
 		timeOffset = gameTime;
 		timeOffset2 = gameTime2;
