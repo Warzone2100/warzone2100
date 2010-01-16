@@ -79,7 +79,10 @@ win32/libs/zlib/zlib-1.2.3
 # Generated executables:
 /build_tools/autorevision/autorevision
 /src/warzone2100
+/tests/astartest
 /tests/maptest
+/tests/pointtree.ppm
+/tests/pointtreetest
 
 # Autotool files:
 .deps
@@ -96,6 +99,7 @@ Makefile.in
 /stamp-h1
 /po/POTFILES
 /po/remove-potcdate.sed
+/po/stamp-po
 /po/warzone2100.pot
 
 # Betawidget autotools and libtool files:
@@ -125,3 +129,10 @@ cscope.out
 # Waf:
 /waf
 /.waf-*
+
+# KDevelop4
+/.kdev4/
+/warzone.kdev4
+
+# Qt
+lib/framework/wzapp_moc.cpp
