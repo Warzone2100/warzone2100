@@ -959,7 +959,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 			return true;
 		}
 	}
-	else if (psObj->type == OBJ_DROID && CAN_UPDATE_NAYBORS((DROID *)psObj))
+	else if (psObj->type == OBJ_DROID)
 	{
 		BASE_OBJECT	*psTarget = NULL;
 
@@ -1130,12 +1130,6 @@ void aiUpdateDroid(DROID *psDroid)
 
 	// do not attack if the attack level is wrong
 	if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) != DSS_ALEV_ALWAYS)
-	{
-		lookForTarget = false;
-	}
-
-	/* Don't rebuild 'Naybor' list too often */
-	if(!CAN_UPDATE_NAYBORS(psDroid))
 	{
 		lookForTarget = false;
 	}

@@ -103,7 +103,7 @@ UDWORD	selectedCommander = UBYTE_MAX;
 /** Height the transporter hovers at above the terrain. */
 #define TRANSPORTER_HOVER_HEIGHT	10
 
-/* Sorry, Keith.
+/* Sorry, Keith, your abreviation [sic] is gone.
  * NAYBOR = neighbour - thanks to Keith for a great abreviation
  */
 

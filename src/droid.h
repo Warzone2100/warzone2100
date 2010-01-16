@@ -52,9 +52,6 @@ back when building is destroyed*/
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
 extern bool runningMultiplayer(void);
 
-/* The range for neighbouring objects */
-#define NAYBOR_RANGE		(TILE_UNITS*9)	//range of lancer, BB, TK etc
-
 //used to stop structures being built too near the edge and droids being placed down - pickATile
 #define TOO_NEAR_EDGE	3
 
@@ -73,14 +70,6 @@ extern bool runningMultiplayer(void);
 
 /* Minumum number of droids a commander can control in its group */
 #define	MIN_CMD_GROUP_DROIDS	6
-
-/* Info stored for each droid neighbour */
-typedef struct _naybor_info
-{
-	BASE_OBJECT		*psObj;			// The neighbouring object
-	UDWORD			distSqr;		// The square of the distance to the object
-	//UDWORD			dist;			// The distance to the object
-} NAYBOR_INFO;
 
 typedef enum
 {

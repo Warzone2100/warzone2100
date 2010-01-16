@@ -551,7 +551,6 @@ void orderUpdateDroid(DROID *psDroid)
 				}
 			}
 			if (!tooFarFromPath &&
-			    CAN_UPDATE_NAYBORS(psDroid) &&
 			    (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS) &&
 			    (aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0))
 			{
@@ -629,9 +628,9 @@ void orderUpdateDroid(DROID *psDroid)
 		break;
 	case DORDER_CIRCLE:
 		// if there is an enemy around, attack it
-		if ( (psDroid->action == DACTION_MOVE) && CAN_UPDATE_NAYBORS(psDroid) &&
-			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS) &&
-			 (aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0) )
+		if (psDroid->action == DACTION_MOVE &&
+		    secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS &&
+		    aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0)
 		{
 			switch (psDroid->droidType)
 			{

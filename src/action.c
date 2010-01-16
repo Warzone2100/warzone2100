@@ -1074,9 +1074,8 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_WAITFORREPAIR:
 		// doing nothing
 		// see if there's anything to shoot.
-		if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid) && CAN_UPDATE_NAYBORS(psDroid)
-		    && (psDroid->order == DORDER_NONE || psDroid->order == DORDER_TEMP_HOLD ||
-		        psDroid->order == DORDER_RTR))
+		if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid)
+		    && (psDroid->order == DORDER_NONE || psDroid->order == DORDER_TEMP_HOLD || psDroid->order == DORDER_RTR))
 		{
 			for (i = 0;i < psDroid->numWeaps;i++)
 			{
@@ -1198,7 +1197,6 @@ void actionUpdateDroid(DROID *psDroid)
 					 && psDroid->asWeaps[i].nStat > 0
 					 && psWeapStats->rotate
 					 && psWeapStats->fireOnMove != FOM_NO
-					 && CAN_UPDATE_NAYBORS(psDroid)
 					 && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
@@ -2390,9 +2388,8 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		// Just self-repairing.
 		// See if there's anything to shoot.
-		else if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid) && CAN_UPDATE_NAYBORS(psDroid)
-		          && (psDroid->order == DORDER_NONE || psDroid->order == DORDER_TEMP_HOLD ||
-		              psDroid->order == DORDER_RTR))
+		else if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid)
+		          && (psDroid->order == DORDER_NONE || psDroid->order == DORDER_TEMP_HOLD || psDroid->order == DORDER_RTR))
 		{
 			for (i = 0;i < psDroid->numWeaps;i++)
 			{

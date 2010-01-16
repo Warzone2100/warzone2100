@@ -1387,7 +1387,7 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 	SDWORD		xdiff,ydiff, x,y;
 	STRUCTURE	*psStruct;
 	STRUCTURE	*apsStructs[5][5];
-	SDWORD		nayborType, scanType;
+	SDWORD		neighbourType, scanType;
 	STRUCTURE_STATS	*psStats;
 	UDWORD		sx,sy;
 	UDWORD		oldBuildPoints;
@@ -1427,11 +1427,11 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 				{
 					if ( (int)psStruct->direction == 90 )
 					{
-						nayborType = WALL_VERT;
+						neighbourType = WALL_VERT;
 					}
 					else
 					{
-						nayborType = WALL_HORIZ;
+						neighbourType = WALL_HORIZ;
 					}
 				}
 				else
@@ -1443,7 +1443,7 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 				// see what type the wall should be
 				scanType = structWallScan(aWallPresent, x,y);
 
-				if (nayborType != scanType)
+				if (neighbourType != scanType)
 				{
 					// Got to change the wall
 					if (scanType == WALL_CORNER)
@@ -1862,7 +1862,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		}
 
 		psBuilding->body = (UWORD)structureBody(psBuilding);
-		psBuilding->expectedDamage = 0;  // Begin life optimistially.
+		psBuilding->expectedDamage = 0;  // Begin life optimistically.
 
 		//add the structure to the list - this enables it to be drawn whilst being built
 		addStructure(psBuilding);
