@@ -71,16 +71,9 @@ typedef struct _interval
 
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
-#define PROJ_NAYBOR_RANGE		(TILE_UNITS*4)
+#define PROJ_NEIGHBOUR_RANGE (TILE_UNITS*4)
 // used to create a specific ID for projectile objects to facilitate tracking them.
 static const UDWORD ProjectileTrackerID =	0xdead0000;
-// Watermelon:neighbour global info ripped from droid.c
-#define MAX_NAYBORS 120
-static PROJ_NAYBOR_INFO	asProjNaybors[MAX_NAYBORS];
-static UDWORD		numProjNaybors = 0;
-
-static BASE_OBJECT	*CurrentProjNaybors = NULL;
-static UDWORD	projnayborTime = 0;
 
 /* The list of projectiles in play */
 static PROJECTILE *psProjectileList = NULL;
@@ -104,8 +97,6 @@ static void	proj_Free(PROJECTILE *psObj);
 
 static float objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide);
 static HIT_SIDE getHitSide (PROJECTILE *psObj, BASE_OBJECT *psTarget);
-
-static void projGetNaybors(PROJECTILE *psObj);
 
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
@@ -689,14 +680,13 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	float distanceRatio; /* How far we are, 1.0==at target */
 	float distanceExtensionFactor; /* Extended lifespan */
 	Vector3i move;
-	unsigned int i;
 	// Projectile is missile:
 	bool bMissile = false;
 	WEAPON_STATS *psStats;
 	Vector3uw prevPos, nextPos;
 	unsigned int targetDistance, currentDistance;
 	int32_t closestCollision = 1<<30;
-	BASE_OBJECT *closestCollisionObject = NULL;
+	BASE_OBJECT *psTempObj, *closestCollisionObject = NULL;
 	Vector3uw closestCollisionPos;
 
 	CHECK_PROJECTILE(psProj);
@@ -834,10 +824,9 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	}
 
 	/* Check nearby objects for possible collisions */
-	for (i = 0; i < numProjNaybors; i++)
+	gridStartIterate(psProj->pos.x, psProj->pos.y, PROJ_NEIGHBOUR_RANGE);
+	for (psTempObj = gridIterate(); psTempObj != NULL; psTempObj = gridIterate())
 	{
-		BASE_OBJECT *psTempObj = asProjNaybors[i].psObj;
-
 		CHECK_OBJECT(psTempObj);
 
 		if (psTempObj == psProj->psDamaged)
@@ -1440,8 +1429,6 @@ static void proj_Update(PROJECTILE *psObj)
 		return;
 	}
 
-	projGetNaybors((PROJECTILE *)psObj);
-
 	switch (psObj->state)
 	{
 		case PROJ_INFLIGHTDIRECT:
@@ -1872,90 +1859,6 @@ void	objectShimmy(BASE_OBJECT *psObj)
 		if(psObj->type == OBJ_DROID)
 		{
 			iV_TRANSLATE(1-rand()%3,0,1-rand()%3);
-		}
-	}
-}
-
-// Watermelon:addProjNaybor ripped from droid.c
-/* Add a new object to the projectile naybor list */
-static void addProjNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
-{
-	UDWORD	pos;
-
-	if (numProjNaybors == 0)
-	{
-		// No objects in the list
-		asProjNaybors[0].psObj = psObj;
-		asProjNaybors[0].distSqr = distSqr;
-		numProjNaybors++;
-	}
-	else if (distSqr >= asProjNaybors[numProjNaybors-1].distSqr)
-	{
-		// Simple case - this is the most distant object
-		asProjNaybors[numProjNaybors].psObj = psObj;
-		asProjNaybors[numProjNaybors].distSqr = distSqr;
-		numProjNaybors++;
-	}
-	else
-	{
-		// Move all the objects further away up the list
-		pos = numProjNaybors;
-		while (pos > 0 && asProjNaybors[pos - 1].distSqr > distSqr)
-		{
-			memcpy(asProjNaybors + pos, asProjNaybors + (pos - 1), sizeof(PROJ_NAYBOR_INFO));
-			pos --;
-		}
-
-		// Insert the object at the correct position
-		asProjNaybors[pos].psObj = psObj;
-		asProjNaybors[pos].distSqr = distSqr;
-		numProjNaybors++;
-	}
-}
-
-//Watermelon: projGetNaybors ripped from droid.c
-/* Find all the objects close to the projectile */
-static void projGetNaybors(PROJECTILE *psObj)
-{
-	SDWORD		xdiff, ydiff;
-	UDWORD		distSqr;
-	BASE_OBJECT	*psTempObj;
-
-	CHECK_PROJECTILE(psObj);
-
-	// Ensure only called max of once per droid per game cycle.
-	if (CurrentProjNaybors == (BASE_OBJECT *)psObj && projnayborTime == gameTime)
-	{
-		return;
-	}
-	CurrentProjNaybors = (BASE_OBJECT *)psObj;
-	projnayborTime = gameTime;
-
-	// reset the naybor array
-	numProjNaybors = 0;
-
-	gridStartIterate(psObj->pos.x, psObj->pos.y, PROJ_NAYBOR_RANGE);
-	while ((psTempObj = gridIterate()) != NULL)
-	{
-		if (psTempObj != (BASE_OBJECT *)psObj && !psTempObj->died)
-		{
-			// See if an object is in NAYBOR_RANGE
-			xdiff = (SDWORD) psObj->pos.x - (SDWORD) psTempObj->pos.x;
-			ydiff = (SDWORD) psObj->pos.y - (SDWORD) psTempObj->pos.y;
-
-			// Compute the distance squared
-			distSqr = xdiff*xdiff + ydiff*ydiff;
-			if (distSqr <= PROJ_NAYBOR_RANGE*PROJ_NAYBOR_RANGE)
-			{
-				// Add psTempObj as a naybor
-				addProjNaybor(psTempObj, distSqr);
-
-				// If the naybors array is full, break early
-				if (numProjNaybors >= MAX_NAYBORS)
-				{
-					break;
-				}
-			}
 		}
 	}
 }
