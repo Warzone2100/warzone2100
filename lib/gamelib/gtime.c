@@ -102,13 +102,13 @@ UDWORD	getStaticTimeValueRange(UDWORD tickFrequency, UDWORD requiredRange)
 void gameTimeUpdate(void)
 {
 	unsigned int currTime = SDL_GetTicks();
-	unsigned long long newTime;
+	long long newTime;
 
 	// Do not update the game time if gameTimeStop has been called
 	if (stopCount == 0)
 	{
 		// Calculate the new game time
-		newTime = ( currTime - baseTime ) * modifier + timeOffset;
+		newTime = (long long)(( currTime - baseTime ) * (double)modifier) + timeOffset;
 
 		ASSERT(newTime >= gameTime, "Time travel is occurring!");
 		if (newTime < gameTime)
@@ -166,14 +166,14 @@ void gameTimeUpdate(void)
 	// This is a temporary solution
 
 	// Commented out in trunk so that perhaps we can track down and fix this bug
-	/* if (gameTime > baseTime + 1<<18)
-	 {
-	 timeOffset = gameTime;
-	 timeOffset2 = gameTime2;
+	if (gameTime > baseTime + 1<<18)
+	{
+		timeOffset = gameTime;
+		timeOffset2 = gameTime2;
 
-	 baseTime = SDL_GetTicks();
-	 baseTime2 = baseTime;
-	 } */
+		baseTime = SDL_GetTicks();
+		baseTime2 = baseTime;
+	}
 }
 
 // reset the game time modifiers
