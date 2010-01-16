@@ -110,6 +110,21 @@ void gameTimeUpdate(void)
 		// Calculate the new game time
 		newTime = ( currTime - baseTime ) * modifier + timeOffset;
 
+		ASSERT(newTime >= gameTime, "Time travel is occurring!");
+		if (newTime < gameTime)
+		{
+			// Warzone 2100, the first relativistic computer game!
+			// Exhibit A: Time travel
+			// force a rebase
+			timeOffset = gameTime;
+			timeOffset2 = gameTime2;
+
+			baseTime = currTime;
+			baseTime2 = baseTime;
+
+			newTime = gameTime;
+		}
+
 		// Calculate the time for this frame
 		frameTime = (newTime - gameTime);
 
@@ -145,6 +160,20 @@ void gameTimeUpdate(void)
 	// Pre-calculate fraction used in timeAdjustedIncrement
 	frameTimeFraction = (float)frameTime / (float)GAME_TICKS_PER_SEC;
 	frameTimeFraction2 = (float)frameTime / (float)GAME_TICKS_PER_SEC;
+
+	// Game precision seems to drop too low after this.
+	// It's probably time to rebase
+	// This is a temporary solution
+
+	// Commented out in trunk so that perhaps we can track down and fix this bug
+	/* if (gameTime > baseTime + 1<<18)
+	 {
+	 timeOffset = gameTime;
+	 timeOffset2 = gameTime2;
+
+	 baseTime = SDL_GetTicks();
+	 baseTime2 = baseTime;
+	 } */
 }
 
 // reset the game time modifiers
