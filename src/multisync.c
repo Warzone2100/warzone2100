@@ -592,7 +592,6 @@ static void offscreenUpdate(DROID *psDroid,
 							UWORD dir,
 							DROID_ORDER order)
 {
-	UDWORD				oldx,oldy;
 	PROPULSION_STATS	*psPropStats;
  	SDWORD			xdiff,ydiff, distSq;
 
@@ -613,16 +612,13 @@ static void offscreenUpdate(DROID *psDroid,
 		{
 			if( ((UDWORD)fx != 0) && ((UDWORD)fy != 0) )
 			{
-				oldx = psDroid->pos.x;
-				oldy = psDroid->pos.y;
-				debug(LOG_SYNC, "Jumping droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
+				debug(LOG_SYNC, "Jumping droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, psDroid->pos.x, psDroid->pos.y, (UDWORD)fx, (UDWORD)fy);
 
 				psDroid->sMove.fx = fx;							//update x
 				psDroid->sMove.fy = fy;							//update y
 
 				psDroid->pos.x		 = (UWORD) fx;					//update move progress
 				psDroid->pos.y		 = (UWORD) fy;
-				gridMoveDroid(psDroid, (SDWORD)oldx,(SDWORD)oldy);
 
 				psDroid->direction = dir % 360;		// update rotation
 
@@ -635,12 +631,9 @@ static void offscreenUpdate(DROID *psDroid,
 	}
 	else
 	{
-		oldx = psDroid->pos.x;
-		oldy = psDroid->pos.y;
-		debug(LOG_SYNC, "Moving droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
+		debug(LOG_SYNC, "Moving droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, psDroid->pos.x, psDroid->pos.y, (UDWORD)fx, (UDWORD)fy);
 		psDroid->pos.x		 = (UWORD)x;						//update x
 		psDroid->pos.y		 = (UWORD)y;						//update y
-		gridMoveDroid(psDroid, (SDWORD)oldx,(SDWORD)oldy);
 		psDroid->direction = dir % 360;				// update rotation
 	}
 

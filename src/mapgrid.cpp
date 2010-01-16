@@ -58,7 +58,10 @@ void gridReset(void)
 		{
 			for (BASE_OBJECT *psObj = start[type]; psObj != NULL; psObj = psObj->psNext)
 			{
-				gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
+				if (!psObj->died)
+				{
+					gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
+				}
 			}
 		}
 	}
@@ -71,35 +74,6 @@ void gridShutDown(void)
 {
 	delete gridPointTree;
 	gridPointTree = NULL;
-}
-
-// add an object to the grid system
-void gridAddObject(BASE_OBJECT *psObj)
-{
-	ASSERT_OR_RETURN(, psObj != NULL, "Attempted to add a NULL pointer");
-	ASSERT_OR_RETURN(, !isDead(psObj), "Attempted to add dead object %s(%d) to the map grid!", objInfo(psObj), (int)psObj->id);
-	//gridCalcCoverage(psObj, (SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y, GRID_ADDOBJECT);
-}
-
-// move an object within the grid
-// oldX,oldY are the old position of the object in world coords
-void gridMoveDroid(DROID* psDroid, SDWORD oldX, SDWORD oldY)
-{
-	if (map_coord(psDroid->pos.x) == map_coord(oldX)
-	 && map_coord(psDroid->pos.y) == map_coord(oldY))
-	{
-		// havn't changed the tile the object is on, don't bother updating
-		return;
-	}
-
-	//gridCalcCoverage((BASE_OBJECT*)psDroid, oldX,oldY, GRID_REMOVEOBJECT);
-	//gridCalcCoverage((BASE_OBJECT*)psDroid, psDroid->pos.x, psDroid->pos.y, GRID_ADDOBJECT);
-}
-
-// remove an object from the grid system
-void gridRemoveObject(BASE_OBJECT *psObj)
-{
-	//gridCalcCoverage(psObj, (SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y, GRID_REMOVEOBJECT);
 }
 
 static bool isInRadius(int32_t x, int32_t y, uint32_t radius)

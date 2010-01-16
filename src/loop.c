@@ -242,8 +242,8 @@ GAMECODE gameLoop(void)
 			// Update the visibility change stuff
 			visUpdateLevel();
 
-			// do the grid garbage collection
-			gridGarbageCollect();
+			// Put all droids/structures/features into the grid.
+			gridReset();
 
 			if (!editPaused())
 			{

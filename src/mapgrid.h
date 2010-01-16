@@ -38,25 +38,8 @@ extern BOOL gridInitialise(void);
 // shutdown the grid system
 extern void gridShutDown(void);
 
-// reset the grid system
+// Reset the grid system. Called once per update.
 extern void gridReset(void);
-
-// TODO THIS FUNCTION DOES NOT DO ANYTHING ANYMORE. Delete this function
-extern void gridAddObject(BASE_OBJECT *psObj);
-
-// TODO THIS FUNCTION DOES NOT DO ANYTHING ANYMORE. Delete this function
-extern void gridMoveDroid(DROID* psDroid, SDWORD oldX, SDWORD oldY);
-
-// TODO THIS FUNCTION DOES NOT DO ANYTHING ANYMORE. Delete this function
-extern void gridRemoveObject(BASE_OBJECT *psObj);
-
-// Calls gridReset().
-// TODO Remove this function, call gridReset() directly.
-extern void gridGarbageCollect(void);
-
-// Display all the grid's an object is a member of
-// TODO This function doesn't do anything, should probably be deleted.
-extern void gridDisplayCoverage(BASE_OBJECT *psObj);
 
 #define PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS (20*TILE_UNITS)
 /// Find all objects within radius. Call gridIterate() to get the search results.

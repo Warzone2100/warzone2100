@@ -185,14 +185,8 @@ BOOL recvDroidSecondary()
 	if (abs(pos.x - psDroid->pos.x) > (TILE_UNITS * 2)
 	 || abs(pos.y - psDroid->pos.y) > (TILE_UNITS * 2))
 	{
-		int oldx = psDroid->pos.x;
-		int oldy = psDroid->pos.y;
-
 		// Jump it, even if it is on screen (may want to change this)
 		psDroid->pos = pos;
-
-		// Tell the grid system that the object has moved
-		gridMoveDroid(psDroid, oldx, oldy);
 	}
 
 	return true;
@@ -426,8 +420,6 @@ BOOL recvDroidDisEmbark()
 
 		// Initialise the movement data
 		initDroidMovement(psFoundDroid);
-		// must add it to the grid for targeting to work
-		gridAddObject((BASE_OBJECT *)psFoundDroid);
 	}
 	return true;
 }
@@ -906,14 +898,8 @@ BOOL recvGroupOrder()
 		if (abs(pos.x - psDroid->pos.x) > (TILE_UNITS * 2)
 		 || abs(pos.y - psDroid->pos.y) > (TILE_UNITS * 2))
 		{
-			int oldx = psDroid->pos.x;
-			int oldy = psDroid->pos.y;
-
 			// Jump it, even if it is on screen (may want to change this)
 			psDroid->pos = pos;
-
-			// Tell the grid system that the object has moved
-			gridMoveDroid(psDroid, oldx, oldy);
 		}
 	}
 

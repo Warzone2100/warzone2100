@@ -658,11 +658,6 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 			// Check that this transporter actually contains some droids
 			if (psTransporter->psGroup && psTransporter->psGroup->refCount > 1)
 			{
-				// Remove map information from previous map
-				free(psTransporter->watchedTiles);
-				psTransporter->watchedTiles = NULL;
-				psTransporter->numWatchedTiles = 0;
-
 				// Remove out of stored list and add to current Droid list
 				if (droidRemove(psTransporter, mission.apsDroidLists))
 				{
@@ -867,22 +862,13 @@ void restoreMissionData(void)
 		for(psObj = (BASE_OBJECT *)apsDroidLists[inc]; psObj; psObj=psObj->psNext)
 		{
 			psObj->died = false;	//make sure the died flag is not set
-			gridAddObject(psObj);
 		}
 
 		apsStructLists[inc] = mission.apsStructLists[inc];
 		mission.apsStructLists[inc] = NULL;
-		for(psObj = (BASE_OBJECT *)apsStructLists[inc]; psObj; psObj=psObj->psNext)
-		{
-			gridAddObject(psObj);
-		}
 
 		apsFeatureLists[inc] = mission.apsFeatureLists[inc];
 		mission.apsFeatureLists[inc] = NULL;
-		for(psObj = (BASE_OBJECT *)apsFeatureLists[inc]; psObj; psObj=psObj->psNext)
-		{
-			gridAddObject(psObj);
-		}
 
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = NULL;
@@ -1047,7 +1033,6 @@ void restoreMissionLimboData(void)
         {
     		addDroid(psDroid, apsDroidLists);
 	    	psDroid->cluster = 0;
-            gridAddObject((BASE_OBJECT *)psDroid);
     		//reset droid orders
 	    	orderDroid(psDroid, DORDER_STOP);
             //the location of the droid should be valid!
@@ -1890,7 +1875,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 
 			//reset droid orders
 			orderDroid(psDroid, DORDER_STOP);
-			gridAddObject((BASE_OBJECT *)psDroid);
 			psDroid->selected = false;
 			if (!bMultiPlayer)
 			{

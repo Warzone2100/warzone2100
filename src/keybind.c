@@ -1888,7 +1888,7 @@ void kf_KillSelected(void)
 	}
 }
 
-
+#if 0  // There's no gridDisplayCoverage anymore.
 // --------------------------------------------------------------------------
 // display the grid info for all the selected objects
 void kf_ShowGridInfo(void)
@@ -1913,6 +1913,7 @@ void kf_ShowGridInfo(void)
 		}
 	}
 }
+#endif
 
 
 // --------------------------------------------------------------------------

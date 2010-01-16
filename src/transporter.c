@@ -1437,7 +1437,6 @@ void transporterRemoveDroid(UDWORD id)
 		initDroidMovement(psDroid);
 		//reset droid orders
 		orderDroid(psDroid, DORDER_STOP);
-		gridAddObject((BASE_OBJECT *)psDroid);
 		psDroid->cluster = 0;
 		// check if it is a commander
 		if (psDroid->droidType == DROID_COMMAND)

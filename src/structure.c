@@ -1874,8 +1874,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			SET_TILE_NOTBLOCKING(psTile);
 		}
 
-		gridAddObject((BASE_OBJECT *)psBuilding);
-
 		clustNewStruct(psBuilding);
 		asStructLimits[player][max].currentQuantity++;
 	}
@@ -5036,9 +5034,6 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		}
 	}
 
-	// remove the structure from the grid
-	gridRemoveObject((BASE_OBJECT *)psDel);
-
 	// remove the structure from the cluster
 	cluster = psDel->cluster;
 	clustRemoveObject((BASE_OBJECT *)psDel);
@@ -7746,9 +7741,6 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 
 			//add back into cluster system
 			clustNewStruct(psStructure);
-
-			//add back into the grid system
-			gridAddObject((BASE_OBJECT *)psStructure);
 
 			if (psStructure->status == SS_BUILT)
 			{

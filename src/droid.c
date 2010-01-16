@@ -295,9 +295,6 @@ void droidRelease(DROID *psDroid)
 		grpLeave(psDroid->psGroup, psDroid);
 	}
 
-	// remove the object from the grid
-	gridRemoveObject((BASE_OBJECT *)psDroid);
-
 	// remove the droid from the cluster system
 	clustRemoveObject((BASE_OBJECT *)psDroid);
 
@@ -460,9 +457,6 @@ void	removeDroidBase(DROID *psDel)
 		}
 	}
 
-	// remove the droid from the grid
-	gridRemoveObject((BASE_OBJECT *)psDel);
-
 	// remove the droid from the cluster systerm
 	clustRemoveObject((BASE_OBJECT *)psDel);
 
@@ -577,9 +571,6 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 
 	// remove the droid from the cluster systerm
 	clustRemoveObject((BASE_OBJECT *)psDroid);
-
-	// remove the droid from the grid
-	gridRemoveObject((BASE_OBJECT *)psDroid);
 
 	removeDroid(psDroid, pList);
 
@@ -2683,7 +2674,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 			updateDroidOrientation(psDroid);
 		}
 		visTilesUpdate((BASE_OBJECT *)psDroid, rayTerrainCallback);
-		gridAddObject((BASE_OBJECT *)psDroid);
  		clustNewDroid(psDroid);
 	}
 
@@ -4368,9 +4358,6 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 
 		// Update visibility
 		visTilesUpdate((BASE_OBJECT*)psD, rayTerrainCallback);
-
-		// add back into the grid system
-		gridAddObject((BASE_OBJECT *)psD);
 
 		// check through the 'to' players list of droids to see if any are targetting it
 		for (psCurr = apsDroidLists[to]; psCurr != NULL; psCurr = psCurr->psNext)

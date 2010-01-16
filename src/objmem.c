@@ -618,9 +618,6 @@ void killStruct(STRUCTURE *psBuilding)
 		}
 	}
 
-	// remove the object from the grid
-	gridRemoveObject((BASE_OBJECT *)psBuilding);
-
 	destroyObject((BASE_OBJECT**)apsStructLists, (BASE_OBJECT*)psBuilding);
 }
 

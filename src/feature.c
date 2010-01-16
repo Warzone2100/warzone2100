@@ -445,9 +445,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 //		psFeature->sDisplay.imd = psStats->psImd;
 // 	}
 
-	// add the feature to the grid
-	gridAddObject((BASE_OBJECT *)psFeature);
-
 	return psFeature;
 }
 
@@ -455,7 +452,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 /* Release the resources associated with a feature */
 void featureRelease(FEATURE *psFeature)
 {
-	gridRemoveObject((BASE_OBJECT *)psFeature);
 }
 
 
@@ -539,9 +535,6 @@ bool removeFeature(FEATURE *psDel)
 			}
 		}
 	}
-
-	// remove the feature from the grid
-	gridRemoveObject((BASE_OBJECT *)psDel);
 
 	killFeature(psDel);
 
