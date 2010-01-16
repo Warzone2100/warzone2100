@@ -1159,6 +1159,9 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 			widgSetButtonState(psWScreen, IDDES_BODYFORM, 0);
 			widgSetButtonState(psWScreen, IDDES_PROPFORM, 0);
 			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, 0);
+			widgHide(psWScreen, IDDES_BODYFORM);
+			widgHide(psWScreen, IDDES_PROPFORM);
+			widgHide(psWScreen, IDDES_SYSTEMFORM);
 
 			widgSetButtonState(psWScreen, IDDES_BODYBUTTON, 0);
 			widgSetButtonState(psWScreen, IDDES_PROPBUTTON, 0);
@@ -1194,6 +1197,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 			intAddSystemButtons(IDES_SYSTEM);
 			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 			widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
+			widgReveal(psWScreen, IDDES_SYSTEMFORM);
 			break;
 		case IDES_TURRET:
 			intAddComponentForm(
@@ -1207,6 +1211,8 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 			intAddSystemButtons(IDES_TURRET);
 			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 			widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
+			widgReveal(psWScreen, IDDES_SYSTEMFORM);
+			intSetSystemForm((COMPONENT_STATS *)(asWeaponStats + sCurrDesign.asWeaps[0])); // in case previous was a different slot
 			break;
 		case IDES_BODY:
 			intAddComponentForm(
@@ -1218,6 +1224,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 								   numBodyStats, sCurrDesign.asParts[COMP_BODY],TAB_USEMAJOR);
 			widgSetButtonState(psWScreen, IDDES_BODYFORM, WBUT_LOCK);
 			widgSetButtonState(psWScreen, IDDES_BODYBUTTON, WBUT_CLICKLOCK);
+			widgReveal(psWScreen, IDDES_BODYFORM);
 			break;
 		case IDES_PROPULSION:
 			intAddComponentForm(
@@ -1231,6 +1238,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 								   TAB_USEMAJOR);
 			widgSetButtonState(psWScreen, IDDES_PROPFORM, WBUT_LOCK);
 			widgSetButtonState(psWScreen, IDDES_PROPBUTTON, WBUT_CLICKLOCK);
+			widgReveal(psWScreen, IDDES_PROPFORM);
 			break;
 		case IDES_TURRET_A:
 			intAddComponentForm(
@@ -1244,6 +1252,8 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 			intAddSystemButtons(IDES_TURRET_A);
 			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 			widgSetButtonState(psWScreen, IDDES_WPABUTTON, WBUT_CLICKLOCK);
+			widgReveal(psWScreen, IDDES_SYSTEMFORM);
+			intSetSystemForm((COMPONENT_STATS *)(asWeaponStats + sCurrDesign.asWeaps[1])); // in case previous was a different slot
 			// Stop the button flashing
 			intSetButtonFlash( IDDES_WPABUTTON,   false );
 			break;
@@ -1259,6 +1269,8 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 			intAddSystemButtons(IDES_TURRET_B);
 			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 			widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_CLICKLOCK);
+			widgReveal(psWScreen, IDDES_SYSTEMFORM);
+			intSetSystemForm((COMPONENT_STATS *)(asWeaponStats + sCurrDesign.asWeaps[2])); // in case previous was a different slot
 			// Stop the button flashing
 			intSetButtonFlash( IDDES_WPBBUTTON,   false );
 			break;
