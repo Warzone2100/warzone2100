@@ -4,8 +4,8 @@
    * Fix: Game could assert if commander becomes deselected in an unusual way (ticket:1219, r9153)
    * Fix: Could send incorrect number of oil barrel artifacts (ticket:1402, r9152)
    * Fix: Make build progress bar look nicer (r9157)
-   * Fix: Non-ascii characters now work, instead of appearing to clear all text (ticket:1330, r9282)
-   * Fix: Better projectile collision detection (r9283)
+   * Fix: Non-ascii characters now work, instead of appearing to clear all text (ticket:1330, r9287)
+   * Fix: Better projectile collision detection (r9288)
 
 2010-01-10: Version 2.3 beta 7
  * General:
