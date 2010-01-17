@@ -6869,7 +6869,15 @@ void cancelProduction(STRUCTURE *psBuilding)
 		// give the power back that was used until now
 		int secondsToBuild = ((DROID_TEMPLATE*)psFactory->psSubject)->buildPoints/psFactory->productionOutput;
 		int secondsElapsed = secondsToBuild - psFactory->timeToBuild;
-		int powerUsed = (((DROID_TEMPLATE *)psFactory->psSubject)->powerPoints*secondsElapsed)/secondsToBuild;
+		int powerUsed = 0;
+		if (secondsElapsed > secondsToBuild) // can happen if factory's been upgraded since droid was created
+		{
+			secondsElapsed = secondsToBuild;
+		}
+		if (secondsElapsed > 0)
+		{
+			powerUsed = (int)(((DROID_TEMPLATE *)psFactory->psSubject)->powerPoints*secondsElapsed)/secondsToBuild;
+		}
 		addPower(psBuilding->player, powerUsed);
 
 		//clear the production run for this factory
