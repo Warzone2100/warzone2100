@@ -60,6 +60,7 @@ extern void		audio_QueueTrackGroupPos( SDWORD iTrack, SDWORD iGroup,
 										SDWORD iX, SDWORD iY, SDWORD iZ );
 extern BOOL		audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY,
 											SDWORD *iZ );
+extern BOOL		audio_GetPreviousQueueTrackRadarBlipPos( SDWORD *iX, SDWORD *iY);
 extern void		audio_PauseAll( void );
 extern void		audio_ResumeAll( void );
 extern void		audio_StopAll( void );
