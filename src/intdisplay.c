@@ -3058,6 +3058,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 	UDWORD			delay = 150;
 	UDWORD			i;
 	SDWORD width, height;
+	int		x = 0, y = 0;
 
 	// store the width & height of the radar/mini-map
 	width = scrollMaxX - scrollMinX;
@@ -3094,7 +3095,6 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL; psProxDisp = psProxDisp->psNext)
 	{
 		PROX_TYPE	proxType;
-		int		x = 0, y = 0;
 
 		if (psProxDisp->type == POS_PROXDATA)
 		{
@@ -3158,6 +3158,23 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 			continue;
 		}
 
+		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
+		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
+		// everything outside the box.
+		if ( (x+radarX) < width*pixSizeV/2 && (x+radarX) > -width*pixSizeV/2 
+			&& (y+radarY) < height*pixSizeH/2 && (y+radarY) > -height*pixSizeH/2)
+		{
+			// Draw the 'blip'
+			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY);
+		}
+	}
+	if (audio_GetPreviousQueueTrackRadarBlipPos(&x, &y))
+	{
+		int strobe = (gameTime2/delay)%NUM_PULSES;
+		x = (x / TILE_UNITS - scrollMinX) * pixSizeH;
+		y = (y / TILE_UNITS - scrollMinY) * pixSizeV;
+		imageID = (UWORD)(IMAGE_RAD_ENM1 + strobe + (PROX_ENEMY * (NUM_PULSES + 1)));
+		
 		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
 		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
 		// everything outside the box.

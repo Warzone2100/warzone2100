@@ -38,6 +38,7 @@ static AUDIO_SAMPLE *g_psSampleQueue = NULL;
 static BOOL			g_bAudioEnabled = false;
 static BOOL			g_bAudioPaused = false;
 static AUDIO_SAMPLE g_sPreviousSample;
+static int			g_iPreviousSampleTime;
 
 /** Counts the number of samples in the SampleQueue
  *  \return the number of samples in the SampleQueue
@@ -170,6 +171,30 @@ BOOL audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY, SDWORD *iZ )
 	*iY = g_sPreviousSample.y;
 	*iZ = g_sPreviousSample.z;
 
+	return true;
+}
+
+BOOL audio_GetPreviousQueueTrackRadarBlipPos( SDWORD *iX, SDWORD *iY )
+{
+	if (g_sPreviousSample.x == SAMPLE_COORD_INVALID
+		|| g_sPreviousSample.y == SAMPLE_COORD_INVALID)
+	{
+		return false;
+	}
+	
+	if (g_sPreviousSample.iTrack != ID_SOUND_STRUCTURE_UNDER_ATTACK && g_sPreviousSample.iTrack != ID_SOUND_UNIT_UNDER_ATTACK)
+	{
+		return false;
+	}
+	
+	if (gameTime2 > g_iPreviousSampleTime + 5*GAME_TICKS_PER_SEC)
+	{
+		return false;
+	}
+	
+	*iX = g_sPreviousSample.x;
+	*iY = g_sPreviousSample.y;
+	
 	return true;
 }
 
@@ -511,6 +536,8 @@ static void audio_UpdateQueue( void )
 		g_sPreviousSample.x = psSample->x;
 		g_sPreviousSample.y = psSample->y;
 		g_sPreviousSample.z = psSample->z;
+		g_sPreviousSample.iTrack = psSample->iTrack;
+		g_iPreviousSampleTime = gameTime2;
 	}
 }
 
