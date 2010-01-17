@@ -27,6 +27,7 @@
 #include "widget.h"
 #include "widgbase.h"
 #include "lib/ivis_common/textdraw.h"
+#include "lib/framework/utf.h"
 
 /* Edit Box states */
 #define WEDBS_FIXED		0x0001		// No editing is going on
@@ -42,8 +43,10 @@ typedef struct _w_editbox
 	WIDGET_BASE;
 
 	UDWORD		state;						// The current edit box state
-	char		aText[WIDG_MAXSTR];			// The text in the edit box
+	utf_32_char	*aText;			// The text in the edit box
+	size_t		aTextAllocated;		// Allocated bytes.
 	enum iV_fonts FontID;
+	int 		blinkOffset;		// Cursor should be visible at time blinkOffset.
 	UWORD		insPos;						// The insertion point in the buffer
 	UWORD		printStart;					// Where in the string appears at the far left of the box
 	UWORD		printChars;					// The number of characters appearing in the box

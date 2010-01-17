@@ -546,9 +546,8 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 		}
 
 
-		// scan to see if that game exists in another slot, if
-		// so then fail.
-		sstrcpy(sTemp, ((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText);
+		// scan to see if that game exists in another slot, if so then fail.
+		sstrcpy(sTemp, widgGetString(psRequestScreen, id));
 
 		for(i=LOADENTRY_START;i<LOADENTRY_END;i++)
 		{
@@ -570,9 +569,9 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 
 
 		// return with this name, as we've edited it.
-		if (strlen(((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText))
+		if (strlen(widgGetString(psRequestScreen, id)))
 		{
-			sstrcpy(sTemp, ((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText);
+			sstrcpy(sTemp, widgGetString(psRequestScreen, id));
 			removeWildcards(sTemp);
 			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s.%s", sPath, sTemp, sExt);
 			if (strlen(sDelete) != 0)
@@ -636,7 +635,7 @@ void removeWildcards(char *pStr)
 	// Remember never to allow: < > : " / \ | ? *
 
 	// Whitelist: Get rid of any characters except:
-	// a-z A-Z 0-9 - + ! , = ^ @ # $ % & ' ( ) [ ] (and space)
+	// a-z A-Z 0-9 - + ! , = ^ @ # $ % & ' ( ) [ ] (and space and unicode characters ≥ 0x80)
 	for (i=0; i<strlen(pStr); i++)
 	{
 		if (!isalnum(pStr[i])
@@ -651,6 +650,7 @@ void removeWildcards(char *pStr)
 		    && pStr[i] != '@'
 		    && (pStr[i]<35 || pStr[i]>41) // # $ % & ' ( )
 		    && pStr[i] != '[' && pStr[i] != ']'
+		    && (pStr[i]&0x80) != 0x80  // á é í ó ú α β γ δ ε
 		   )
 		{
 			pStr[i] = '_';
