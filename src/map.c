@@ -50,6 +50,7 @@
 #include "astar.h"
 #include "fpath.h"
 #include "levels.h"
+#include "scriptfuncs.h"
 
 struct ffnode
 {
@@ -2137,6 +2138,7 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 	clock_t		start = clock();
 	bool		retval;
 
+	scriptInit();
 	retval = levLoadData(name, NULL, 0);
 	ASSERT(retval, "Could not load %s", name);
 	route.asPath = NULL;
@@ -2171,8 +2173,8 @@ void mapTest()
 {
 	fprintf(stdout, "\tMap self-test...\n");
 
-	astarTest("BeggarsKanyon-T1", 16, 5, 119, 182);
-	astarTest("MizaMaze-T3", 5, 5, 108, 112);
+	astarTest("Sk-BeggarsKanyon-T1", 16, 5, 119, 182);
+	astarTest("Sk-MizaMaze-T3", 5, 5, 108, 112);
 
 	fprintf(stdout, "\tMap self-test: PASSED\n");
 }
