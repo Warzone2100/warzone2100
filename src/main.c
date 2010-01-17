@@ -108,6 +108,10 @@ char * global_mods[MAX_MODS] = { NULL };
 char * campaign_mods[MAX_MODS] = { NULL };
 char * multiplay_mods[MAX_MODS] = { NULL };
 
+char * loaded_mods[MAX_MODS] = { NULL };
+char * mod_list = NULL;
+int num_loaded_mods = 0;
+
 
 // Warzone 2100 . Pumpkin Studios
 
@@ -155,7 +159,7 @@ static BOOL inList( char * list[], const char * item )
  * \param appendToPath Whether to append or prepend
  * \param checkList List of directories to check. NULL means any.
  */
-void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToPath, char * checkList[] )
+void addSubdirs( const char * basedir, const char * subdir, const bool appendToPath, char * checkList[], bool addToModList )
 {
 	char tmpstr[PATH_MAX];
 	char ** subdirlist = PHYSFS_enumerateFiles( subdir );
@@ -171,6 +175,10 @@ void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToP
 #ifdef DEBUG
 			debug( LOG_NEVER, "addSubdirs: Adding [%s] to search path", tmpstr );
 #endif // DEBUG
+			if (addToModList)
+			{
+				addLoadedMod(*i);
+			}
 			PHYSFS_addToSearchPath( tmpstr, appendToPath );
 		}
 		i++;
@@ -211,6 +219,92 @@ void printSearchPath( void )
 		debug(LOG_WZ, "    [%s]", *i);
 	}
 	PHYSFS_freeList( searchPath );
+}
+
+void addLoadedMod(const char * modname)
+{
+	char * mod = strdup(modname);
+	int i, modlen;
+	if (num_loaded_mods >= MAX_MODS)
+	{
+		// mod list full
+		return;
+	}
+	modlen = strlen(mod);
+	if (modlen >= 3 && strcmp(&mod[modlen-3], ".wz")==0)
+	{
+		// remove ".wz" from end
+		mod[modlen-3] = 0;
+		modlen -= 3;
+	}
+	if (modlen >= 4 && strcmp(&mod[modlen-4], ".cam")==0)
+	{
+		// remove ".cam.wz" from end
+		mod[modlen-4] = 0;
+		modlen -= 4;
+	}
+	else if (modlen >= 4 && strcmp(&mod[modlen-4], ".mod")==0)
+	{
+		// remove ".mod.wz" from end
+		mod[modlen-4] = 0;
+		modlen -= 4;
+	}
+	else if (modlen >= 5 && strcmp(&mod[modlen-5], ".gmod")==0)
+	{
+		// remove ".gmod.wz" from end
+		mod[modlen-5] = 0;
+		modlen -= 5;
+	}
+	// Yes, this is an online insertion sort.
+	// I swear, for the numbers of mods this is going to be dealing with
+	// (i.e. 0 to 2), it really is faster than, say, Quicksort.
+	for (i=0; i<num_loaded_mods && strcmp(loaded_mods[i], mod)>0; i++);
+	if (i < num_loaded_mods)
+	{
+		if (strcmp(loaded_mods[i], mod) == 0)
+		{
+			// mod already in list
+			free(mod);
+			return;
+		}
+		memmove(&loaded_mods[i+1], &loaded_mods[i], (num_loaded_mods-i)*sizeof(char*));
+	}
+	loaded_mods[i] = mod;
+	num_loaded_mods++;
+}
+void clearLoadedMods(void)
+{
+	int i;
+	for (i=0; i<num_loaded_mods; i++)
+	{
+		free(loaded_mods[i]);
+	}
+	num_loaded_mods = 0;
+	if (mod_list)
+	{
+		free(mod_list);
+		mod_list = NULL;
+	}
+}
+char * getModList(void)
+{
+	int i;
+	if (mod_list)
+	{
+		// mod list already constructed
+		return mod_list;
+	}
+	mod_list = malloc(modlist_string_size);
+	mod_list[0] = 0; //initialize
+	for (i=0; i<num_loaded_mods; i++)
+	{
+		if (i != 0)
+		{
+			strlcat(mod_list, ", ", modlist_string_size);
+		}
+		strlcat(mod_list, loaded_mods[i], modlist_string_size);
+	}
+	return mod_list;
 }
 
 
