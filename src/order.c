@@ -2698,6 +2698,12 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 	DROID_ORDER		order = DORDER_NONE;
 	PROPULSION_TYPE		propulsion = getPropulsionStats(psDroid)->propulsionType;
 
+	if (psCurr->droidType == DROID_TRANSPORTER && game.type == CAMPAIGN)
+	{
+		// transports can't be controlled in campaign
+		return DORDER_NONE;
+	}
+
 	// default to move; however, we can only end up on a tile
 	// where can stay, ie VTOLs must be able to land as well
 	if (isVtolDroid(psDroid))
@@ -2719,7 +2725,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 			order = DORDER_PATROL;
 		}
 	}
-	
+
 	// and now we want Transporters to fly! - in multiPlayer!!
 	if (psDroid->droidType == DROID_TRANSPORTER && game.maxPlayers != 0)
 	{
