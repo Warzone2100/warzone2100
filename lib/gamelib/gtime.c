@@ -141,7 +141,7 @@ void gameTimeUpdate(void)
 	}
 
 	// now update gameTime2 which does not pause
-	newTime = currTime - baseTime2 + timeOffset;
+	newTime = currTime - baseTime2 + timeOffset2;
 
 	// Calculate the time for this frame
 	frameTime2 = newTime - gameTime2;
