@@ -409,7 +409,7 @@ void draw3DScene( void )
 
 	bPlayerHasHQ = getHQExists(selectedPlayer);
 
-	if(radarOnScreen && bPlayerHasHQ)
+	if (radarOnScreen && bPlayerHasHQ && getWidgetsStatus())
 	{
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 		pie_SetFogStatus(false);
@@ -418,7 +418,7 @@ void draw3DScene( void )
 		pie_SetFogStatus(true);
 	}
 
-	if(!bRender3DOnly)
+	if (!bRender3DOnly && getWidgetsStatus())
 	{
 		/* Ensure that any text messages are displayed at bottom of screen */
 		pie_SetFogStatus(false);
@@ -535,14 +535,14 @@ void draw3DScene( void )
 			}
 		}
 	}
-	if(getDebugMappingStatus() && !demoGetStatus() && !gamePaused())
+	if (getWidgetsStatus() && getDebugMappingStatus() && !demoGetStatus() && !gamePaused())
 	{
 		iV_DrawText( "DEBUG ", RET_X + 134, 440 + E_H );
 	}
 	else
 	{
 #ifdef DEBUG
-		if(!gamePaused())
+		if (getWidgetsStatus() && !gamePaused())
 		{
 			char buildInfo[255];
 			iV_DrawText( getLevelName(), RET_X + 134, 420 + E_H );
