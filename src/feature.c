@@ -525,17 +525,16 @@ bool removeFeature(FEATURE *psDel)
 		intRefreshScreen();
 	}
 
-	if (  (psDel->psStats->subType == FEAT_GEN_ARTE)
-		||(psDel->psStats->subType == FEAT_OIL_RESOURCE))
+	if (psDel->psStats->subType == FEAT_GEN_ARTE || psDel->psStats->subType == FEAT_OIL_RESOURCE)
 	{
 		// have to check all players cos if you cheat you'll get em.
-		for (player=0; player<MAX_PLAYERS; player ++)
+		for (player = 0; player < MAX_PLAYERS; player++)
 		{
 			//see if there is a proximity message FOR THE SELECTED PLAYER at this location
-			psMessage = findMessage((MSG_VIEWDATA *)psDel, MSG_PROXIMITY, selectedPlayer);
+			psMessage = findMessage((MSG_VIEWDATA *)psDel, MSG_PROXIMITY, player);
 			while (psMessage)
 			{
-				removeMessage(psMessage, selectedPlayer);
+				removeMessage(psMessage, player);
 				psMessage = findMessage((MSG_VIEWDATA *)psDel, MSG_PROXIMITY, player);
 			}
 		}
