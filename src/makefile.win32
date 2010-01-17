@@ -70,7 +70,7 @@ SRC= \
 	main.c \
 	map.c \
 	mapdisplay.c \
-	mapgrid.c \
+	mapgrid.cpp \
 	mechanics.c \
 	message.c \
 	miscimd.c \
