@@ -3687,7 +3687,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ..\n./macosx/build/${CONFIGURATION}/Autorevision +cstr . src/autorevision.h\nsed -n 's:#define:&:p' src/autorevision.h | sed 's:\"::g' | sed 's:tags/::' | sed 's:_beta: Beta :' | sed 's:trunk:Trunk:' | sed 's:_rc: RC :' >macosx/build/autorevision.h";
+			shellScript = "cd ..\n./macosx/build/${CONFIGURATION}/Autorevision +cstr . src/autorevision.h\nsed -n 's:#define:&:p' src/autorevision.h | sed 's:\"::g' | sed 's:tags/::' | sed 's:_beta: Beta :' | sed 's:trunk:Trunk (SVN_REV):' | sed 's:_rc: RC :' >macosx/build/autorevision.h";
 		};
 		43F3011910D3572400707B6E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4649,6 +4649,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					VORBIS_NEEDS_HACK,
 					DEBUG,
 					"$(inherited)",
 				);
@@ -4665,7 +4666,6 @@
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = "$(SRCROOT)/build/autorevision.h";
 				INFOPLIST_PREPROCESS = YES;
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4701,7 +4701,10 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					VORBIS_NEEDS_HACK,
+					"$(inherited)",
+				);
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
@@ -4715,7 +4718,6 @@
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = "$(SRCROOT)/build/autorevision.h";
 				INFOPLIST_PREPROCESS = YES;
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4889,7 +4891,7 @@
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/prebuilt/SDL\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/external/SDL\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
@@ -4904,6 +4906,7 @@
 		02CDDCFB0D159BE000722688 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -4912,6 +4915,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				INSTALL_PATH = "$(HOME)/bin";
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH_ACTUAL)";
 				PREBINDING = NO;
 				PRODUCT_NAME = Autorevision;
 				WARNING_LDFLAGS = "";
@@ -4922,12 +4926,14 @@
 		02CDDCFC0D159BE000722688 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				INSTALL_PATH = "$(HOME)/bin";
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH_ACTUAL)";
 				PREBINDING = NO;
 				PRODUCT_NAME = Autorevision;
 				WARNING_LDFLAGS = "";
