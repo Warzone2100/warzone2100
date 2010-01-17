@@ -27,6 +27,7 @@
 #include "lib/framework/string_ext.h"
 #include "lib/gamelib/gtime.h"
 #include "src/component.h"		// FIXME: we need to handle this better
+#include "src/modding.h"		// FIXME: we need to handle this better
 #include <time.h>			// for stats
 #include <SDL_timer.h>
 #include <SDL_thread.h>
@@ -3444,8 +3445,13 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	gamestruct.desc.dwUserFlags[3] = four;
 	memset(gamestruct.secondaryHosts, 0, sizeof(gamestruct.secondaryHosts));
 	sstrcpy(gamestruct.extra, "Extra");						// extra string (future use)
-	sstrcpy(gamestruct.versionstring, VersionString);			// version (string)
-	sstrcpy(gamestruct.modlist, "Mod list");					// List of mods
+	sstrcpy(gamestruct.versionstring, VersionString);		// version (string)
+	if (*getModList())
+	{
+		sstrcat(gamestruct.versionstring, _(", mods: "));	// version (string)
+		sstrcat(gamestruct.versionstring, getModList());	// version (string)
+	}
+	sstrcpy(gamestruct.modlist, getModList());				// List of mods
 	gamestruct.GAMESTRUCT_VERSION = 3;						// version of this structure
 	gamestruct.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
 	gamestruct.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
@@ -3725,9 +3731,10 @@ connect_succesfull:
 		addressToText(cur->ai_addr, NetPlay.games[gameNumber].desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
 	}
 	freeaddrinfo(hosts);
-	if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
+	if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers ||
+	    strcmp(NetPlay.games[gameNumber].modlist, getModList()) != 0)
 	{
-		// Shouldn't join; game is full
+		// Shouldn't join; game is full or we have an incompatible mod
 		delSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
 		free(socket_set);

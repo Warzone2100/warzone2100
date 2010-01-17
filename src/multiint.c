@@ -79,6 +79,7 @@
 #include "keymap.h"
 #include "game.h"
 #include "warzoneconfig.h"
+#include "modding.h"
 
 #include "multiplay.h"
 #include "multiint.h"
@@ -753,6 +754,7 @@ static void addGames(void)
 	UDWORD i,gcount=0;
 	W_BUTINIT	sButInit;
 	static const char *wrongVersionTip = "Your version of Warzone is incompatible with this game.";
+	static const char *badModTip = "Your loaded mods are incompatible with this game. (Check mods/autoload/?)";
 
 	//count games to see if need two columns.
 	for(i=0;i<MaxGames;i++)							// draw games
@@ -816,6 +818,10 @@ static void addGames(void)
 				{
 					sButInit.pTip = wrongVersionTip;
 				}
+				else if (strcmp(NetPlay.games[i].modlist,getModList()) != 0)
+				{
+					sButInit.pTip = badModTip;
+				}
 				else
 				{
 					sButInit.pTip = NetPlay.games[i].name;
@@ -849,8 +855,8 @@ static void addGames(void)
 			txt = _("Wrong Game Version!");
 			break;
 		case ERROR_WRONGDATA: 
-			 txt = _("Wrong data/mod detected by Host.");
-			 break;
+			txt = _("You have an incompatible mod.");
+			break;
 		// AFAIK, the only way this can really happy is if the Host's file is named wrong, or a client side error.
 		// In other words, it happens all the time when people put their maps in the wrong directory. :P
 		case ERROR_UNKNOWNFILEISSUE: 
@@ -967,6 +973,11 @@ void runGameFind(void )
 				else if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
 				{
 					setLobbyError(ERROR_FULL);
+					addGames();
+				}
+				else if (strcmp(NetPlay.games[gameNumber].modlist, getModList()) != 0)
+				{
+					setLobbyError(ERROR_WRONGDATA);
 					addGames();
 				}
 				else
@@ -2208,6 +2219,18 @@ static void addChatBox(void)
 
 	widgAddEditBox(psWScreen, &sEdInit);
 
+	if (*getModList())
+	{
+		char modListMessage[WIDG_MAXSTR] = "";
+		sstrcat(modListMessage, _("Active mods: "));
+		sstrcat(modListMessage, getModList());
+		addConsoleMessage(modListMessage,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		if (NetPlay.bComms)
+		{
+			addConsoleMessage(_("All players need to have the same mods to join your game."),DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+	}
+
 	return;
 }
 
@@ -3365,6 +3388,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	// get game info.
 	// TODO: Check whether this code is used at all in skirmish games, if not, remove it.
 	if ((NetPlay.games[i].desc.dwFlags & SESSION_JOINDISABLED)
+		|| strcmp(NetPlay.games[i].modlist,getModList()) != 0
 		|| (bMultiPlayer
 			&& !NetPlay.bComms
 			&& NETgetGameFlagsUnjoined(gameNumber,1) == SKIRMISH                                  // the LAST bug...
