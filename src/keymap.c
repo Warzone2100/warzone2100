@@ -539,6 +539,7 @@ KEY_MAPPING	*newMapping;
 	if(metaCode == KEY_LCTRL) {newMapping->altMetaKeyCode = KEY_RCTRL;}
 	else if(metaCode == KEY_LALT) {newMapping->altMetaKeyCode = KEY_RALT;}
 	else if(metaCode == KEY_LSHIFT) {newMapping->altMetaKeyCode = KEY_RSHIFT;}
+	else if(metaCode == KEY_LMETA) {newMapping->altMetaKeyCode = KEY_RMETA;}
 
 	/* Set it to be active */
 	newMapping->active = true;
@@ -705,8 +706,9 @@ SDWORD		i;
   	(void) checkQwertyKeys();
 
 	/* Check for the meta keys */
-	if(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LALT)
-		|| keyDown(KEY_RALT) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
+	if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LALT)
+	 || keyDown(KEY_RALT) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)
+	 || keyDown(KEY_LMETA) || keyDown(KEY_RMETA))
 	{
 		bMetaKeyDown = true;
 	}
@@ -825,6 +827,10 @@ SDWORD		i;
 		cbPressedMetaKey = KEY_LSHIFT;
 	else if(keyDown(KEY_RSHIFT))
 		cbPressedMetaKey = KEY_RSHIFT;
+	else if(keyDown(KEY_LMETA))
+		cbPressedMetaKey = KEY_LMETA;
+	else if(keyDown(KEY_RMETA))
+		cbPressedMetaKey = KEY_RMETA;
 
 	/* Find out what keys were pressed */
 	for(i=0; i<KEY_MAXSCAN;i++)
@@ -838,6 +844,8 @@ SDWORD		i;
 			case KEY_RALT:
 			case KEY_LSHIFT:
 			case KEY_RSHIFT:
+			case KEY_LMETA:
+			case KEY_RMETA:
 				continue;
 			break;
 		}

@@ -163,6 +163,13 @@ static BOOL pushedKeyCombo(KEY_CODE subkey)
 		alt = KEY_RSHIFT;
 	}
 
+	// meta (cmd)
+	else if( keyDown(KEY_RMETA) || keyDown(KEY_LMETA) )
+	{
+		metakey = KEY_LMETA;
+		alt = KEY_RMETA;
+	}
+
 	// check if bound to a fixed combo.
 	pExist = keyFindMapping(  metakey,  subkey );
 	if(pExist && (pExist->status == KEYMAP_ALWAYS || pExist->status == KEYMAP_ALWAYS_PROCESS))
@@ -235,6 +242,8 @@ static UDWORD scanKeyBoardForBinding(void)
 			&& i != KEY_LCTRL
 			&& i != KEY_RSHIFT
 			&& i != KEY_LSHIFT
+			&& i != KEY_LMETA
+			&& i != KEY_RMETA
 			)
 			{
 				return i;	// top row key pressed
@@ -302,7 +311,7 @@ static BOOL keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 	}
 	else
 	{
-		sprintf(pStr,"%s - %s",asciiMeta,asciiSub);
+		sprintf(pStr,"%s + %s",asciiMeta,asciiSub);
 	}
 	return true;
 }
