@@ -105,8 +105,41 @@ void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 		strcpy(ascii,"???");
 		return;
 	}
+	else if (code == KEY_LCTRL)
+	{
+		// shortcuts with modifier keys work with either key.
+		strcpy(ascii, "Ctrl");
+		return;
+	}
+	else if (code == KEY_LSHIFT)
+	{
+		// shortcuts with modifier keys work with either key.
+		strcpy(ascii, "Shift");
+		return;
+	}
+	else if (code == KEY_LALT)
+	{
+		// shortcuts with modifier keys work with either key.
+		strcpy(ascii, "Alt");
+		return;
+	}
+	else if (code == KEY_LMETA)
+	{
+		// shortcuts with modifier keys work with either key.
+#ifdef WZ_OS_MAC
+		strcpy(ascii, "Cmd");
+#else
+		strcpy(ascii, "Meta");
+#endif
+		return;
+	}
 	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
 	snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
+	if (ascii[0] >= 'a' && ascii[0] <= 'z' && ascii[1] != 0)
+	{
+		// capitalize
+		ascii[0] += 'A'-'a';
+	}
 }
 
 
