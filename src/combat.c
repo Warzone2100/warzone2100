@@ -593,7 +593,7 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE i)
 {
 	unsigned int damage;
-
+	int impactSide;
 	int	actualDamage, armour = 0, level = 1;
 
 	if (psTarget == NULL)
@@ -623,7 +623,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 		}
 	}
 
-	for (int impactSide = 0; impactSide != NUM_HIT_SIDES; ++impactSide)
+	for (impactSide = 0; impactSide != NUM_HIT_SIDES; ++impactSide)
 		armour = MAX(armour, psTarget->armour[impactSide][psStats->weaponClass]);
 
 	//debug(LOG_ATTACK, "objGuessFutureDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
