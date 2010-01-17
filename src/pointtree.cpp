@@ -21,11 +21,11 @@ outside the rectangles). The orange points are the search results.
 static uint64_t expand(uint32_t x)
 {
 	uint64_t r = x;
-	r = (r | r<<16) & 0x0000FFFF0000FFFF;
-	r = (r | r<<8)  & 0x00FF00FF00FF00FF;
-	r = (r | r<<4)  & 0x0F0F0F0F0F0F0F0F;
-	r = (r | r<<2)  & 0x3333333333333333;
-	r = (r | r<<1)  & 0x5555555555555555;
+	r = (r | r<<16) & 0x0000FFFF0000FFFFULL;
+	r = (r | r<<8)  & 0x00FF00FF00FF00FFULL;
+	r = (r | r<<4)  & 0x0F0F0F0F0F0F0F0FULL;
+	r = (r | r<<2)  & 0x3333333333333333ULL;
+	r = (r | r<<1)  & 0x5555555555555555ULL;
 	return r;
 }
 
@@ -190,8 +190,8 @@ PointTree::ResultVector &PointTree::query(int32_t x, int32_t y, uint32_t radius)
 		Vector::iterator i2 = std::lower_bound(i1,             points.end(), Point(ranges[r].z + 1, NULL));
 		for (Vector::const_iterator i = i1; i != i2; ++i)
 		{
-			uint64_t px = i->first & 0xAAAAAAAAAAAAAAAA;
-			uint64_t py = i->first & 0x5555555555555555;
+			uint64_t px = i->first & 0xAAAAAAAAAAAAAAAAULL;
+			uint64_t py = i->first & 0x5555555555555555ULL;
 			if (px >= minX && px <= maxX && py >= minY && py <= maxY)  // Only add point if it's at least in the desired square.
 			{
 				lastQueryResults.push_back(i->second);
