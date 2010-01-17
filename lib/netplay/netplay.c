@@ -102,7 +102,7 @@ static void setSockErr(int error)
 
 // WARNING !!! This is initialised via configuration.c !!!
 char masterserver_name[255] = {'\0'};
-unsigned int masterserver_port = 0, gameserver_port = 0;
+static unsigned int masterserver_port = 0, gameserver_port = 0;
 
 #define MAX_CONNECTED_PLAYERS	8
 #define MAX_TMP_SOCKETS		16
@@ -2028,7 +2028,7 @@ void NETaddRedirects(void)
 		upnp_done = true;
 	}
 	if (upnp) {
-		upnp_add_redirect(2100);
+		upnp_add_redirect(gameserver_port);
 	}
 }
 
@@ -2037,7 +2037,7 @@ void NETremRedirects(void)
 	debug(LOG_NET, "%s\n", __FUNCTION__);
 	if (upnp)
 	{
-		upnp_rem_redirect(2100);
+		upnp_rem_redirect(gameserver_port);
 	}
 }
 
