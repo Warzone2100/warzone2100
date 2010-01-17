@@ -2690,7 +2690,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 	DROID_ORDER		order = DORDER_NONE;
 	PROPULSION_TYPE		propulsion = getPropulsionStats(psDroid)->propulsionType;
 
-	if (psCurr->droidType == DROID_TRANSPORTER && game.type == CAMPAIGN)
+	if (psDroid->droidType == DROID_TRANSPORTER && game.type == CAMPAIGN)
 	{
 		// transports can't be controlled in campaign
 		return DORDER_NONE;
