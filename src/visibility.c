@@ -602,7 +602,7 @@ void processVisibility(BASE_OBJECT *psObj)
 	else
 	{
 		// get all the objects from the grid the droid is in
-		gridStartIterate(psObj->pos.x, psObj->pos.y, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS);
+		gridStartIterate(psObj->pos.x, psObj->pos.y, psObj->sensorRange);
 		while (psViewer = gridIterate(), psViewer != NULL)
 		{
 			int val;
