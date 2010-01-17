@@ -1076,6 +1076,12 @@ void aiUpdateDroid(DROID *psDroid)
 	{
 		updateTarget = true;
 	}
+	if ((orderState(psDroid, DORDER_OBSERVE) || orderState(psDroid, DORDER_ATTACKTARGET)) &&
+	    psDroid->psTarget && aiObjectIsProbablyDoomed(psDroid->psTarget))
+	{
+		lookForTarget = true;
+		updateTarget = false;
+	}
 
 	/* Don't update target if we are sent to attack and reached
 		attack destination (attacking our target) */
