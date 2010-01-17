@@ -602,7 +602,10 @@ void processVisibility(BASE_OBJECT *psObj)
 	else
 	{
 		// get all the objects from the grid the droid is in
-		gridStartIterate(psObj->pos.x, psObj->pos.y, psObj->sensorRange);
+		// HACK Search radius should be psViewer->sensorRange! So it should be the viewer iterating, not the viewee!
+		// HACK Note: This viewer/viewee relationship is exactly the opposite of what you would normally expect, and violates the principle of minimum astonishment.
+#define HACK_MAXIMUM_VIEWING_RANGE_HACK (psObj->type == OBJ_STRUCTURE ? 32 : 27)*TILE_UNITS
+		gridStartIterate(psObj->pos.x, psObj->pos.y, HACK_MAXIMUM_VIEWING_RANGE_HACK);
 		while (psViewer = gridIterate(), psViewer != NULL)
 		{
 			int val;
