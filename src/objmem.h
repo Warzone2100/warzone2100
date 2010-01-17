@@ -26,6 +26,11 @@
 
 #include "objectdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /* The lists of objects allocated */
 extern DROID			*apsDroidLists[MAX_PLAYERS];
 extern STRUCTURE		*apsStructLists[MAX_PLAYERS];
@@ -51,7 +56,7 @@ extern DROID* createDroid(UDWORD player);
 /* add the droid to the Droid Lists */
 extern void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS]);
 
- /*destroy a droid */
+/*destroy a droid */
 void killDroid(DROID *psDel);
 
 /* Remove all droids */
@@ -70,7 +75,7 @@ extern void freeAllLimboDroids(void);
 extern STRUCTURE* createStruct(UDWORD player);
 
 /* add the structure to the Structure Lists */
- extern void addStructure(STRUCTURE *psStructToAdd);
+extern void addStructure(STRUCTURE *psStructToAdd);
 
 /* Destroy a structure */
 void killStruct(STRUCTURE *psDel);
@@ -114,6 +119,10 @@ void objCount(int *droids, int *structures, int *features);
 
 #ifdef DEBUG
 extern void checkFactoryFlags(void);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif // __INCLUDED_SRC_OBJMEM_H__
