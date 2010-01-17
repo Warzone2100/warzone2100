@@ -18,6 +18,7 @@ data/base/multiplay/script/multiplay.slo
 data/base/multiplay/script/scavfact.slo
 data/base/multiplay/skirmish/rules.slo
 data/base/multiplay/skirmish/sktech.slo
+data/base/multiplay/skirmish/ai.slo 
 data/base/script/demo/demo_global.slo
 data/base/script/demo/demo_p0.slo
 data/base/script/demo/demo_p1.slo
