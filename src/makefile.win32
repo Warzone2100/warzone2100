@@ -92,6 +92,7 @@ SRC= \
 	oprint.c \
 	order.c \
 	parsetest.c \
+	pointtree.cpp \
 	power.c \
 	projectile.c \
 	radar.c \
