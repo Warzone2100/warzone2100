@@ -219,7 +219,7 @@ static void	moveCalcBoundary(DROID *psDroid);
 /* Turn a vector into an angle - returns a float (!) */
 static float vectorToAngle(float vx, float vy);
 
-static BOOL	g_bFormationSpeedLimitingOn = true;
+static BOOL	g_bFormationSpeedLimitingOn = false;
 
 /* Return the difference in directions */
 static UDWORD moveDirDiff(SDWORD start, SDWORD end)

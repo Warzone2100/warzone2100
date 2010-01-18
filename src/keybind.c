@@ -2403,17 +2403,7 @@ UDWORD		xJump = 0, yJump = 0;
 // --------------------------------------------------------------------------
 void kf_ToggleFormationSpeedLimiting( void )
 {
-	// THIS IS NOT A CHEAT
-
-	if ( moveFormationSpeedLimitingOn() )
-	{
-		addConsoleMessage(_("Formation speed limiting OFF"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
-	}
-	else
-	{
-		addConsoleMessage(_("Formation speed limiting ON"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
-	}
-	moveToggleFormationSpeedLimiting();
+	addConsoleMessage(_("Formation speed limiting has been removed from the game due to bugs."), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
