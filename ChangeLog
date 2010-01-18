@@ -1,32 +1,50 @@
 2010-00-00: Version 2.3 beta 8
  * General:
-   * Change: Formation speed limiter has been removed due to bugs and sync issues (r9331,  ticket:1177, ticket:1167)
-   * Change: Darken features and buildings that you cannot see due to fog of war (r9322)
-   * Change: Laser satellite firing and structure under attack now generate a radar blip (r9313, r9292, ticket:1134)
-   * Change: Autoload of mods in autoload folder is enabled again (r9290, ticket:1415)
-   * Fix: Support for unicode characters (r9287, ticket:1330)
+   * New: Mod files in mods/autoload/ are now autoloaded - note that this is NOT the previous autoload location (r9290, ticket:1415)
    * Fix: Crash when switching between players in ctrl+o cheat menu (r9283)
-   * Fix: Bugs with game speed changing abruptly should be fixed (r9280, r9251)
-   * Fix: Widget ID corruption leading to various strange bugs in GUI (r9325)
-   * Fix: Unitialized variables in network code (r9192)
-   * Fix: Game could assert if commander becomes deselected in an unusual way (ticket:1219, r9153)
-   * Fix: Could send incorrect number of oil barrel artifacts (ticket:1402, r9152)
-   * Fix: Make build progress bar look nicer (r9157)
-   * Fix: Non-ascii characters now work, instead of appearing to clear all text (ticket:1330, r9287)
    * Fix: Better projectile collision detection (r9288)
-   * Fix: Audio issues (r9248, 
    * Fix: Remove all fog of war darkening when satellite uplink built (r9216)
-   * Fix: In non-fixed alliances mode, do not lift fog of war for allies (r9199)
-   * Fix: Radar blips should no longer disappear with some zoom levels (r9197)
-   * Fix: Rounding errors in power code (r9172)
    * Fix: Faster game loading when vsync enabled (r9167, r9163)
+   * Fix: Widget ID corruption leading to disappearing reticule and other GUI bugs (r9325)
+   * Fix: Miscellaneous crashes and asserts (r9153, ticket:1219, r9192, r9152, ticket: 1402, r9248, r9181, r9174)
+ * Graphics:
+   * Change: Darken features and buildings that you cannot see due to fog of war (r9322, r9343)
+   * Fix: Only lift fog of war for what you can see (r9199, r9204, r9216)
+ * UI:
+   * Change: "HOST" appears below host (r9340)
+   * Change: Laser satellite firing and structure under attack now generate a radar blip (r9313, r9292, ticket:1134)
+   * Fix: The hide interface keyboard shortcut (Tab, by default) now hides the minimap and console, as well (r9273)
+   * Fix: Non-ascii characters now work, instead of appearing to clear all text (r9287, ticket:1330)
+   * Fix: Radar blips should no longer disappear with some zoom levels (r9197)
+   * Fix: Make build progress bars look nicer by adding a gradient (r9157)
+   * Fix: Design form sometimes displayed incorrect component (r9255)
+ * Balance: (r9339)
+   * Pulse Laser range decreased to 14
+   * Heavy Laser range increased to 16 (and damage toned down to match)
+   * Prices of Pulse Laser Tower, Pulse Laser Hardpoint, Pulse Laser Emplacement, Lancer Hardpoint increased to match weapon changes
+   * Scourge Missile range decreased to 14
+   * Seraph Missile Array range increased to 15
+   * Short-range accuracy of Mini-Pod, Lancer, Tank Killer, and Scourge Missile decreased - long range-accuracy remains unchanged
+   * Lancer price increased to 150
+   * Lancer no longer prerequires Mini-Rocket Array
+   * Mini-Rocket Array damage increased
+   * Splash radius of mortars, howitzers, cannons, and rails increased
+   * Damage of cannons and rails against cyborgs and tanks increased
+   * Damage of artillery against tracked tanks decreased
+   * Damage of artillery against hover tanks increased
+ * Gameplay:
+   * Change: Ctrl + Alt + mouse wheel to change game speed (r9178)
+   * Change: Formation speed limiter has been removed due to bugs and sync issues (r9331,  ticket:1177, ticket:1167)
+   * Fix: Templates created with the design screen started at 1 power/HP instead of 0 (r9159)
+   * Fix: Changing speed no longer gives a "cheating" warning (r9177)
+   * Fix: Bugs with game speed changing abruptly should be fixed (r9280, r9251)
+   * Fix: Rounding errors in power code (r9172)
+   * Fix: Tank Killer didn't fire sometimes (r9339)
+   * Fix: Some structures should be obsoleted by others (r9339)
  * Challenges:
    * Fix: Restore challenge timer when loading a challenge savegame (r9207)
  * Campaign:
-   * Change: Ctrl + Alt + mouse wheel to change game speed (r9178)
-   * Change: Changing speed no longer counts as cheating (r9177)
    * Fix: Transports in campaign could be controlled sometimes (ticket:1418, r9297)
-   * Fix: Only lift fog of war for what you can see (r9204)
  * Skirmish:
    * Change: Rename Dragon from "Super Heavy Body" to "Multi Turret Body" (r9194)
    * Fix: Allow the AI to know where the game's starting resources are (r9203, r9202)
