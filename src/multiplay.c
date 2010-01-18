@@ -798,7 +798,7 @@ BOOL recvMessage(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Research Stuff. Nat games only send the result of research procedures.
-BOOL SendResearch(uint8_t player, uint32_t index)
+BOOL SendResearch(uint8_t player, uint32_t index, bool trigger)
 {
 	UBYTE i;
 	PLAYER_RESEARCH *pPlayerRes;
@@ -827,7 +827,7 @@ BOOL SendResearch(uint8_t player, uint32_t index)
 				{
 					// Do the research for that player
 					MakeResearchCompleted(pPlayerRes);
-					researchResult(index, i, false, NULL, true);
+					researchResult(index, i, false, NULL, trigger);
 				}
 			}
 		}

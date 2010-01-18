@@ -140,7 +140,7 @@ extern BOOL	multiPlayerLoop		(void);							// for loop.c
 extern BOOL recvMessage			(void);
 extern BOOL sendTemplate		(DROID_TEMPLATE *t);
 extern BOOL SendDestroyTemplate (DROID_TEMPLATE *t);
-extern BOOL SendResearch		(UBYTE player,UDWORD index);
+extern BOOL SendResearch(uint8_t player, uint32_t index, bool trigger);
 extern BOOL SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.
 extern BOOL sendTextMessage		(const char *pStr,BOOL cast);		// send a text message
 extern BOOL sendAIMessage		(char *pStr, UDWORD player, UDWORD to);	//send AI message

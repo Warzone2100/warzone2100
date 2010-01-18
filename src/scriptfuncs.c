@@ -4454,7 +4454,7 @@ BOOL scrCompleteResearch(void)
 
 	if(bMultiPlayer && (gameTime > 2 ))
 	{
-		SendResearch((UBYTE)player,researchIndex );
+		SendResearch((UBYTE)player, researchIndex, false);
 	}
 
 

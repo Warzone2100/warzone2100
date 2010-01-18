@@ -3386,7 +3386,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				{
 					if(bMultiPlayer)
 					{
-						SendResearch(psStructure->player,pSubject->ref - REF_RESEARCH_START);
+						SendResearch(psStructure->player, pSubject->ref - REF_RESEARCH_START, true);
 					}
 
 					//store the last topic researched - if its the best
