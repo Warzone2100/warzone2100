@@ -2813,7 +2813,7 @@ bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect)
 	{
 		*effect = WE_FLAMER;
 	}
-	else if (strcmp(weaponEffect, "ANTI AIRCRAFT") == 0)
+	else if (strcmp(weaponEffect, "ANTI AIRCRAFT") == 0 || strcmp(weaponEffect, "ALL ROUNDER") == 0)
 	{
 		*effect = WE_ANTI_AIRCRAFT;
 	}
