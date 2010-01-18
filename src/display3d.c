@@ -402,7 +402,6 @@ void draw3DScene( void )
 	displayTerrain();
 
 	pie_BeginInterface();
-	updateLightLevels();
 	drawDroidSelections();
 
 	drawStructureSelections();
@@ -594,12 +593,6 @@ void draw3DScene( void )
 		addConsoleMessage("Warzone 2100 : Pumpkin Studios ", RIGHT_JUSTIFY,SYSTEM_MESSAGE);
 		permitNewConsoleMessages(false);
 	}
-
-#ifdef ALEXM
-	iV_DrawTextF(100, 200, "Skipped effects : %d", getNumSkippedEffects());
-	iV_DrawTextF(100, 220, "Miss Count : %d", getMissCount());
-	iV_DrawTextF(100, 240, "Even effects : %d", getNumEvenEffects());
-#endif
 
 	processDemoCam();
 	processSensorTarget();

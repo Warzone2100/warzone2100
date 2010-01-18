@@ -157,10 +157,6 @@ void	addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 
 void	renderEffect(const EFFECT *psEffect);
 void	effectResetUpdates(void);
-UDWORD	getNumActiveEffects(void);
-UDWORD	getMissCount(void);
-UDWORD	getNumSkippedEffects(void);
-UDWORD	getNumEvenEffects(void);
 
 void	initPerimeterSmoke(iIMDShape *pImd, Vector3i base);
 
