@@ -188,8 +188,6 @@ extern BOOL joinCampaign		(UDWORD gameNumber, char *playername);
 extern void	playerResponding	(void);
 extern BOOL multiGameInit		(void);
 extern BOOL multiGameShutdown	(void);
-extern BOOL copyTemplateSet		(UDWORD from,UDWORD to);
-extern BOOL addTemplateSet		(UDWORD from,UDWORD to);
 extern BOOL addTemplate			(UDWORD	player,DROID_TEMPLATE *psNew);
 
 // syncing.

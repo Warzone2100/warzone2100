@@ -6554,12 +6554,6 @@ BOOL scrTutorialTemplates(void)
 
 	// find ViperLtMGWheels
 	sstrcpy(pName, "ViperLtMGWheels");
-	if (!getResourceName(pName))
-	{
-		debug( LOG_FATAL, "tutorial template setup failed" );
-		abort();
-		return false;
-	}
 
 	getDroidResourceName(pName);
 

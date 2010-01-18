@@ -28,6 +28,7 @@
 #include "map.h"
 
 #include "lib/script/script.h"
+#include "lib/netplay/netplay.h"
 #include "scripttabs.h"
 #include "scriptextern.h"
 
@@ -193,6 +194,12 @@ BOOL scrGenExternSet(UDWORD index)
 			return false;
 		}
 		bInTutorial = val;
+		if (val)
+		{
+			// Since tutorial is skirmish
+			NetPlay.players[0].allocated = true;
+debug(LOG_ERROR, "tutorial turned %s", val ? "on" : "off");
+		}
 		break;
 	case EXTID_EXTRAVICTORYFLAG:
 		if (type != VAL_BOOL)

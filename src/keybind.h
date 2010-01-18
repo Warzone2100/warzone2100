@@ -120,7 +120,6 @@ extern void	kf_ChooseCancel( void );
 extern void	kf_ToggleWeather( void );
 extern void	kf_KillSelected(void);
 extern void	kf_ShowGridInfo(void);
-extern void	kf_GiveTemplateSet(void);
 extern void	kf_SendTextMessage(void);
 extern void	kf_SelectPlayer( void );
 extern void	kf_ToggleDrivingMode( void );

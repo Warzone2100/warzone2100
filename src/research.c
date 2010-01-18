@@ -555,15 +555,6 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 		PRName[0] = '\0';
 		sscanf(pPRData,"%[^','],%[^','],%*d", ResearchName, PRName);
 
-		if (!getResourceName(ResearchName))
-		{
-			return false;
-		}
-		if (!getResourceName(PRName))
-		{
-			return false;
-		}
-
 		//loop through each Research to compare the name
 		for (incR=0; incR < numResearch; incR++)
 		{
@@ -671,15 +662,6 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 		//increment the data pointer
 		pArteData += (strlen(ResearchName)+1+strlen(ArteName)+1+strlen(TypeName)+1);
 
-		if (!getResourceName(ResearchName))
-		{
-			return false;
-		}
-		if (!getResourceName(ArteName))
-		{
-			return false;
-		}
-
 		pArtefact = getComponentDetails(TypeName, ArteName);
 		if (pArtefact == NULL)
 		{
@@ -731,10 +713,6 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 				}
 				else
 				{
-					if (!getResourceName(ArteName))
-					{
-						return false;
-					}
 					pArtefact = getComponentDetails(TypeName, ArteName);
 					if (pArtefact == NULL)
 					{
@@ -828,15 +806,6 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 		ResearchName[0] = '\0';
 		StructureName[0] = '\0';
 		sscanf(pStructData,"%[^','],%[^','],%*d,%*d", ResearchName, StructureName);
-
-		if (!getResourceName(ResearchName))
-		{
-			return false;
-		}
-		if (!getResourceName(StructureName))
-		{
-			return false;
-		}
 
 		//loop through each Research to compare the name
 		for (incR = 0; incR < numResearch; incR++)
@@ -956,11 +925,6 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 		ResearchName[0] = '\0';
 		FunctionName[0] = '\0';
 		sscanf(pFunctionData,"%[^','],%[^','],%*d", ResearchName, FunctionName);
-
-		if (!getResourceName(ResearchName))
-		{
-			return false;
-		}
 
 		//loop through each Research to compare the name
 		for (incR=0; incR < numResearch; incR++)
@@ -2378,13 +2342,6 @@ COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName)
 RESEARCH * getResearch(const char *pName, BOOL resName)
 {
 	unsigned int inc = 0;
-
-	//need to get the in game name if a resource name has been passed in
-	if (resName && !getResourceName(pName))
-	{
-		debug(LOG_ERROR, "getResearch: resource not found");
-		return NULL;
-	}
 
 	for (inc = 0; inc < numResearch; inc++)
 	{

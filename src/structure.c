@@ -608,10 +608,6 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 		else
 		{
 			pECMType = asECMStats;
-			if (!getResourceName(ecmType))
-			{
-				return false;
-			}
 
 			for (inc=0; inc < numECMStats; inc++)
 			{
@@ -631,10 +627,6 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 		}
 		else
 		{
-			if (!getResourceName(sensorType))
-			{
-				return false;
-			}
 			pSensorType = asSensorStats;
 			for (inc=0; inc < numSensorStats; inc++)
 			{
@@ -818,14 +810,6 @@ BOOL loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize)
 
 		sscanf(pWeaponData, "%[^','],%[^','],%[^','],%[^','],%[^','],%*d", StructureName, WeaponName[0], WeaponName[1], WeaponName[2], WeaponName[3]);
 
-		if (!getResourceName(StructureName))
-		{
-			return false;
-		}
-		if (!getResourceName(WeaponName[0]))
-		{
-			return false;
-		}
 		weaponFound = structureFound = false;
 		//loop through each Structure_Stat to compare the name
 
@@ -888,11 +872,6 @@ BOOL loadStructureFunctions(const char *pFunctionData, UDWORD bufferSize)
 		FunctionName[0] = '\0';
 		sscanf(pFunctionData, "%[^','],%[^','],%*d", StructureName, FunctionName);
 		functionFound = structureFound = false;
-
-		if (!getResourceName(StructureName))
-		{
-			return false;
-		}
 
 		//loop through each Structure_Stat to compare the name
 		for (incS=0; incS < numStructureStats; incS++)

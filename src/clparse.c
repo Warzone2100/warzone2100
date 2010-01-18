@@ -352,6 +352,17 @@ bool ParseCommandLine(int argc, const char** argv)
 					return false;
 				}
 				NetPlay.bComms = false;
+				bMultiPlayer = false;
+				NetPlay.players[0].allocated = true;
+				if (strcmp(token, "CAM_1A") && strcmp(token, "CAM_2A") && strcmp(token, "CAM_3A"))
+				{
+					game.type = CAMPAIGN;
+				}
+				else
+				{
+					game.type = SKIRMISH; // tutorial is skirmish for some reason
+				}
+				game.type = CAMPAIGN;
 				sstrcpy(aLevelName, token);
 				SetGameMode(GS_NORMAL);
 				break;

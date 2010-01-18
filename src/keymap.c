@@ -232,7 +232,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_AddMissionOffWorld,
 	kf_KillSelected,
 	kf_ShowMappings,
-	kf_GiveTemplateSet,
+	kf_NOOP, // unused
 	kf_ToggleVisibility,
 	kf_FinishResearch,
 	kf_LowerTile,

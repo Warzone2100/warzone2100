@@ -326,15 +326,15 @@ BOOL runTutorialMenu(void)
 	switch(id)
 	{
 		case FRONTEND_TUTORIAL:
+			NetPlay.players[0].allocated = true;
 			sstrcpy(aLevelName, TUTORIAL_LEVEL);
 			changeTitleMode(STARTGAME);
-
 			break;
 
 		case FRONTEND_FASTPLAY:
+			NetPlay.players[0].allocated = true;
 			sstrcpy(aLevelName, "FASTPLAY");
 			changeTitleMode(STARTGAME);
-
 			break;
 
 		case FRONTEND_QUIT:
@@ -380,11 +380,9 @@ static void frontEndNewGame( void )
 		case 1:
 			sstrcpy(aLevelName, DEFAULT_LEVEL);
 			seq_ClearSeqList();
-
 			seq_AddSeqToList("cam1/c001.ogg",NULL,"cam1/c001.txa",false);
-
 			seq_StartNextFullScreenVideo();
-            break;
+			break;
 
 		case 2:
 			sstrcpy(aLevelName, "CAM_2A");
@@ -431,6 +429,7 @@ BOOL runSinglePlayerMenu(void)
 		NetPlay.bComms = false;
 		bMultiPlayer = false;
 		game.type = CAMPAIGN;
+		NetPlay.players[0].allocated = true;
 		// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
 		playercolor = getPlayerColour(0);
 		if (playercolor >= 1 && playercolor <= 3)
