@@ -2197,53 +2197,34 @@ void	renderStructure(STRUCTURE *psStructure)
 			}
 			//get an imd to draw on the connector priority is weapon, ECM, sensor
 			//check for weapon
-			if (psStructure->numWeaps > 0)
+			for (i = 0; i < MAX(1, psStructure->numWeaps); i++)
 			{
-				for (i = 0; i < psStructure->numWeaps; i++)
+				if (psStructure->asWeaps[i].nStat > 0)
 				{
-					if (psStructure->asWeaps[i].nStat > 0)
-					{
-						nWeaponStat = psStructure->asWeaps[i].nStat;
-						weaponImd[i] =  asWeaponStats[nWeaponStat].pIMD;
-						mountImd[i] =  asWeaponStats[nWeaponStat].pMountGraphic;
-						flashImd[i] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
-					}
-				}
-			}
-			else
-			{
-				if (psStructure->asWeaps[0].nStat > 0)
-				{
-					nWeaponStat = psStructure->asWeaps[0].nStat;
-					weaponImd[0] =  asWeaponStats[nWeaponStat].pIMD;
-					mountImd[0] =  asWeaponStats[nWeaponStat].pMountGraphic;
-					flashImd[0] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
+					nWeaponStat = psStructure->asWeaps[i].nStat;
+					weaponImd[i] =  asWeaponStats[nWeaponStat].pIMD;
+					mountImd[i] =  asWeaponStats[nWeaponStat].pMountGraphic;
+					flashImd[i] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
 				}
 			}
 
-			if (weaponImd[0] == NULL)
+			// check for ECM
+			if (weaponImd[0] == NULL && psStructure->pStructureType->pECM != NULL)
 			{
-				//check for ECM
-				if (psStructure->pStructureType->pECM != NULL)
-				{
-					weaponImd[0] =  psStructure->pStructureType->pECM->pIMD;
-					mountImd[0] =  psStructure->pStructureType->pECM->pMountGraphic;
-					flashImd[0] = NULL;
-				}
+				weaponImd[0] =  psStructure->pStructureType->pECM->pIMD;
+				mountImd[0] =  psStructure->pStructureType->pECM->pMountGraphic;
+				flashImd[0] = NULL;
 			}
-			if (weaponImd[0] == NULL)	// not set above
+			// check for sensor (or repair center)
+			if (weaponImd[0] == NULL && psStructure->pStructureType->pSensor != NULL)
 			{
-				//check for sensor (or repair center)
-				if (psStructure->pStructureType->pSensor != NULL)
-				{
-					weaponImd[0] =  psStructure->pStructureType->pSensor->pIMD;
-					/* No recoil for sensors */
-					psStructure->asWeaps[0].recoilValue = 0;
-					mountImd[0]  =  psStructure->pStructureType->pSensor->pMountGraphic;
-					flashImd[0] = NULL;
-				}
+				weaponImd[0] =  psStructure->pStructureType->pSensor->pIMD;
+				/* No recoil for sensors */
+				psStructure->asWeaps[0].recoilValue = 0;
+				mountImd[0]  =  psStructure->pStructureType->pSensor->pMountGraphic;
+				flashImd[0] = NULL;
 			}
-			
+
 			// flags for drawing weapons
 			if (structureIsBlueprint(psStructure))
 			{
