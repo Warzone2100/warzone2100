@@ -28,6 +28,11 @@
 #include "displaydef.h"
 #include "statsdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 //the died flag for a droid is set to this when it gets added to the non-current list
 #define NOT_CURRENT_LIST 1
 
@@ -119,6 +124,10 @@ static inline int objPosDiffSq(Vector3uw pos1, Vector3uw pos2)
 	const int ydiff = pos1.y - pos2.y;
 	return (xdiff * xdiff + ydiff * ydiff);
 }
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 // Must be #included __AFTER__ the definition of BASE_OBJECT
 #include "baseobject.h"

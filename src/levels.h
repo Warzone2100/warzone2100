@@ -27,6 +27,11 @@
 #include "init.h"
 #include "game.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // maximum number of WRF/WDG files
 
 #define LEVEL_MAXFILES	9
@@ -100,5 +105,9 @@ extern SDWORD getLevelLoadType(void);
 extern char *getLevelName( void );
 
 extern void levTest(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_LEVELS_H__

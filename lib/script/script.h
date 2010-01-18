@@ -32,6 +32,11 @@
 #include "event.h"
 #include "eventsave.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Whether to include debug info when compiling */
 typedef enum _scr_debugtype
 {
@@ -223,5 +228,8 @@ extern BOOL eventSetTrigger(void);
 //   3 - as 2 but show tested but not fired triggers as well
 extern BOOL eventSetTraceLevel(void);
 
-#endif
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
+#endif

@@ -26,6 +26,11 @@
 
 #include "formationdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef enum _formation_type
 {
 	FT_LINE,
@@ -60,5 +65,9 @@ extern BOOL formationGetPos(FORMATION *psFormation, DROID* psDroid,
 
 // See if a unit is a member of a formation (i.e. it has a position assigned)
 extern BOOL formationMember(FORMATION *psFormation, const DROID* psDroid);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_FORMATION_H__

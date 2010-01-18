@@ -21,6 +21,11 @@
 #ifndef __INCLUDED_SRC_BRIDGE_H__
 #define __INCLUDED_SRC_BRIDGE_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define MINIMUM_BRIDGE_SPAN	2
 #define MAXIMUM_BRIDGE_SPAN	12
 #define BRIDGE_END_HORIZ	1
@@ -48,5 +53,9 @@ extern void	getBridgeInfo(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY
 
 /* FIX ME - this is used in debug to test the bridge build code */
 extern void	testBuildBridge(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_BRIDGE_H__

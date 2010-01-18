@@ -29,6 +29,11 @@
 
 #include "message.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // store the objects that are being used for the object bar
 #define MAX_OBJECTS 15 //10 we need at least 15 for the 3 different types of factory
 
@@ -456,5 +461,9 @@ void intReopenBuild(BOOL reopen);
 BOOL intGetReopenBuild(void);
 
 extern void intDemolishCancel(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_HCI_H__

@@ -26,6 +26,11 @@
 #ifndef _codeprint_h
 #define _codeprint_h
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Display the contents of a program in readable form */
 extern void cpPrintProgram(SCRIPT_CODE *psProg);
 
@@ -38,5 +43,8 @@ extern void cpPrintPackedVal(INTERP_VAL *ip);
 /* Print a variable access function name */
 extern void cpPrintVarFunc(SCRIPT_VARFUNC pFunc, UDWORD index);
 
-#endif
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
+#endif

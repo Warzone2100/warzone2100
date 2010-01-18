@@ -31,6 +31,11 @@
 #include "stats.h"
 #include "visibility.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define OFF_SCREEN 9999		// world->screen check - alex
 
 #define REPAIRLEV_LOW	50	// percentage of body points remaining at which to repair droid automatically.
@@ -547,5 +552,9 @@ int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj);
 #define	MIN_WEAPON_DAMAGE	1
 
 void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_DROID_H__

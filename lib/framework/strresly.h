@@ -25,6 +25,11 @@
 
 #include "lib/framework/lexer_input.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Set the current input buffer for the lexer - used by strresLoad */
 extern void strres_set_extra(YY_EXTRA_TYPE user_defined);
 
@@ -39,5 +44,8 @@ void strres_error(const char* msg);
 /* Store a string */
 extern BOOL strresStoreString(struct STR_RES *psRes, const char* pID, const char* pString);
 
-#endif
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
+#endif

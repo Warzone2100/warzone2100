@@ -21,6 +21,11 @@
 
 #include <physfs.h>
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /*! Open a file for reading */
 extern PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail);
 
@@ -42,5 +47,8 @@ extern BOOL loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bu
 extern BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize,
                              UDWORD *pSize);
 
-#endif // _file_h
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
+#endif // _file_h

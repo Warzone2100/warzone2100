@@ -27,6 +27,11 @@
 #include "orderdef.h"
 #include "action.h" //Watermelon:needs DROID_OACTION_INFO
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 //turn off the build queue availability until desired release date!
 //#define DISABLE_BUILD_QUEUE
 
@@ -265,5 +270,9 @@ static inline void removeDroidOrderTarget(DROID *psDroid, SDWORD idx)
 
 extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y);
 extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ORDER_H__

@@ -25,6 +25,11 @@
 #ifndef _stack_h
 #define _stack_h
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 //String support
 //-----------------------------
 #define MAXSTRLEN	255					//Max len of a single string
@@ -76,6 +81,8 @@ extern BOOL stackCastTop(INTERP_TYPE neededType);
 /* Reset the stack to an empty state */
 extern void stackReset(void);
 
-
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

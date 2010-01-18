@@ -26,6 +26,11 @@
 #include "intimage.h"
 #include "droid.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define NUM_OBJECTSURFACES		(100)
 #define NUM_TOPICSURFACES		(50)
 #define NUM_STATSURFACES		(200)
@@ -301,5 +306,9 @@ extern void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffs
 extern void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 extern void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_INTDISPLAY_H__

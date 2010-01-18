@@ -34,6 +34,11 @@
 #include "types.h"
 #include "lib/framework/utf.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /** Defines for all the key codes used. */
 typedef enum _key_code
 {
@@ -231,5 +236,9 @@ extern UDWORD inputGetKey(utf_32_char *unicode);
 
 /** Clear the input buffer. */
 extern void inputClearBuffer(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

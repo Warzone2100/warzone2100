@@ -27,6 +27,11 @@
 #include "droiddef.h"
 #include "structuredef.h" //STRUCT_MAXWEAPS
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /**
  *	@file action.h
  *	Droid actions.
@@ -175,5 +180,9 @@ bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py);
 #define TARGET_UPD_SKIP_FRAMES 1000
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ACTION_H__

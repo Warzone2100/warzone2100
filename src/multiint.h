@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_MULTIINT_H__
 #define __INCLUDED_SRC_MULTIINT_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 extern LOBBY_ERROR_TYPES getLobbyError(void);
 extern void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
@@ -279,5 +284,9 @@ void loadMapPreview(bool hideInterface);
 
 #define MULTIOP_BUTW			35
 #define MULTIOP_BUTH			24
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIINT_H__

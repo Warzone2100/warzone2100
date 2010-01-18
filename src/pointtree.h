@@ -4,6 +4,7 @@
 #include "lib/framework/types.h"
 
 #ifdef __cplusplus
+
 #include <vector>
 
 class PointTree

@@ -23,6 +23,11 @@
 
 #include "lib/ivis_common/pietypes.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define BUFFER_GRIDX	22
 #define BUFFER_GRIDY	22
 
@@ -42,5 +47,9 @@ extern void renderIMDToBuffer(iSurface *pSurface, iIMDShape *pIMD,
 							  UDWORD OriginX,UDWORD OriginY);
 extern void renderResearchToBuffer(RESEARCH *psResearch,
                             UDWORD OriginX, UDWORD OriginY);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MAPDISPLAY_H__

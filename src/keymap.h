@@ -23,6 +23,11 @@
 
 #include "lib/framework/input.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define NO_META_KEY				9999
 #define KEYFUNC_TOGGLE_RADAR	20
 
@@ -99,5 +104,9 @@ extern KEY_MAPPING	*keyMappings;
 
 //remove this one below
 extern void	keyShowMappings				( void );
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_KEYMAP_H__

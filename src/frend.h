@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_FREND_H__
 #define __INCLUDED_SRC_FREND_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 enum {
 	IMAGE_FE_LOGO,
 	IMAGE_COM1,
@@ -263,5 +268,9 @@ enum {
 	IMAGE_SCAVENGERS_ON_HI,
 	IMAGE_SCAVENGERS_OFF_HI,
 };
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_FREND_H__

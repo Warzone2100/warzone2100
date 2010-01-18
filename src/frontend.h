@@ -23,6 +23,11 @@
 
 #include "lib/widget/widgbase.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // determines which option screen to use. when in GS_TITLE_SCREEN mode.
 typedef enum _title_mode {
 	TITLE,			// 0 intro mode
@@ -243,5 +248,8 @@ enum
 
 };
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_FRONTEND_H__

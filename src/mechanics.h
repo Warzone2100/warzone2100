@@ -35,6 +35,11 @@
 #include "research.h"
 #include "visibility.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Shutdown the mechanics system */
 extern bool mechanicsShutdown(void);
 
@@ -52,5 +57,9 @@ extern void freeStructureLists(void);
 
 //TEST FUNCTION - MAKE EVERYTHING AVAILABLE
 extern void makeAllAvailable(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MECHANICS_H__

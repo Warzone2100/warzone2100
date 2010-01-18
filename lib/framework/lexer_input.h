@@ -4,6 +4,11 @@
 #include <physfs.h>
 #include <stdio.h>
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 enum lexinput_type
 {
 	LEXINPUT_STDIO,
@@ -39,5 +44,9 @@ do \
 { \
 	result = lexer_input(yyextra, buf, max_size, YY_NULL); \
 } while(0)
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_FRAMEWORK_LEXER_INPUT_H__

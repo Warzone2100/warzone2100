@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_ORDERDEF_H__
 #define __INCLUDED_SRC_ORDERDEF_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // data for barbarians retreating
 typedef struct _run_data
 {
@@ -45,5 +50,9 @@ typedef struct _droid_order_data
 
 extern RUN_DATA asRunData[MAX_PLAYERS]; // retreat positions for the players
 extern void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ORDERDEF_H__

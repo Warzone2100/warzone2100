@@ -29,7 +29,7 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif
+#endif //__cplusplus
 
 /* The lists of objects allocated */
 extern DROID			*apsDroidLists[MAX_PLAYERS];
@@ -123,6 +123,6 @@ extern void checkFactoryFlags(void);
 
 #ifdef __cplusplus
 }
-#endif
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_OBJMEM_H__

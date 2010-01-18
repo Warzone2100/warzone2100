@@ -30,6 +30,11 @@
 #include "structuredef.h"
 #include "visibility.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // how long to wait between CALL_STRUCT_ATTACKED's - plus how long to flash on radar for
 #define ATTACK_CB_PAUSE		5000
 
@@ -456,5 +461,9 @@ void checkStructure(const STRUCTURE* psStructure, const char * const location_de
 #define CHECK_STRUCTURE(object) checkStructure((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
 
 extern void     structureInitVars(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_STRUCTURE_H__

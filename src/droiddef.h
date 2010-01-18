@@ -32,6 +32,11 @@
 #include "statsdef.h"
 #include "weapondef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /*!
  * The number of components in the asParts / asBits arrays.
  * Weapons are stored seperately, thus the maximum index into the array
@@ -206,5 +211,9 @@ typedef struct DROID
 	ANIM_OBJECT     *psCurAnim;
 	SDWORD          iAudioID;
 } WZ_DECL_MAY_ALIAS DROID;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_DROIDDEF_H__

@@ -24,6 +24,11 @@
 #include "lib/framework/types.h"
 #include "basedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 extern void	avInformOfChange(SDWORD x, SDWORD y);
 extern void	avUpdateTiles( void );
 extern UDWORD avGetObjLightLevel( BASE_OBJECT *psObj, UDWORD origLevel);
@@ -31,5 +36,9 @@ extern void	setRevealStatus( BOOL val );
 extern BOOL	getRevealStatus( void );
 extern void	preProcessVisibility( void );
 extern void	avSetStatus(BOOL var);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ADVVIS_H__

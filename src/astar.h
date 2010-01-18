@@ -23,6 +23,11 @@
 
 #include "fpath.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /** return codes for astar
  *
  *  @ingroup pathfinding
@@ -47,5 +52,9 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob);
  *  @ingroup pathfinding
  */
 extern void fpathHardTableReset(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ASTART_H__

@@ -24,6 +24,11 @@
 #include "console.h"
 #include "lib/framework/fixedpoint.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // --------------- All those keyboard mappable functions */
 extern void	kf_HalveHeights( void );
 extern void	kf_DebugDroidInfo( void );
@@ -244,5 +249,9 @@ void kf_NoAssert(void);
 extern void	kf_ToggleWatchWindow( void );
 
 bool runningMultiplayer(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_KEYBIND_H__

@@ -32,6 +32,10 @@
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_common/pietypes.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
 #define SHOCK_WAVE_HEIGHT	(64)
 
@@ -164,5 +168,9 @@ bool	readFXData(const char* fileName);
 bool	writeFXData(const char* fileName);
 void	effectSetSize(UDWORD size);
 void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_EFFECTS_H__

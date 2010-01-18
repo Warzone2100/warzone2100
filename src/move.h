@@ -26,6 +26,11 @@
 
 #include "objectdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* The base movement speed */
 extern float	baseSpeed;
 
@@ -78,5 +83,9 @@ extern BOOL moveCheckDroidMovingAndVisible( void *psObj );
 
 // set a vtol to be hovering in the air
 void moveMakeVtolHover( DROID *psDroid );
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MOVE_H__

@@ -27,6 +27,11 @@
 #include "order.h"
 #include "orderdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef enum _group_type
 {
 	GT_NORMAL,			// standard group
@@ -79,5 +84,9 @@ extern void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *
 
 /* set the secondary state for a group of droids */
 extern void grpSetSecondary(DROID_GROUP *psGroup, SECONDARY_ORDER sec, SECONDARY_STATE state);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_GROUP_H__

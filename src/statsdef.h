@@ -26,6 +26,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 #include "lib/ivis_common/ivisdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /*
 if any types are added BEFORE 'COMP_BODY' - then Save/Load Game will have to be
 altered since it loops through the components from 1->MAX_COMP
@@ -512,4 +517,9 @@ typedef struct _body_upgrade
 	UWORD	body;
 	UWORD	armourValue[WC_NUM_WEAPON_CLASSES];
 } BODY_UPGRADE;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
+
 #endif // __INCLUDED_STATSDEF_H__

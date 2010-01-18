@@ -29,6 +29,11 @@
 #include "nettypes.h"
 #include <physfs.h>
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // Lobby Connection errors
 
 typedef enum
@@ -317,5 +322,9 @@ extern void NETCheckVersion(uint32_t player);
 extern bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
 extern bool NETgameIsCorrectVersion(GAMESTRUCT* check_game);
 extern void NET_InitPlayers(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

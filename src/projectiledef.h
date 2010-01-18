@@ -26,6 +26,11 @@
 
 #include "basedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef enum PROJ_STATE
 {
 	PROJ_INFLIGHTDIRECT,
@@ -54,5 +59,9 @@ typedef struct PROJECTILE
 	UDWORD          died;
 	UDWORD          expectedDamageCaused;   ///< Expected damage that this projectile will cause to the target.
 } PROJECTILE;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_PROJECTILEDEF_H__

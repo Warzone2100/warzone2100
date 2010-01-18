@@ -25,6 +25,11 @@
 #include "structuredef.h"
 #include "messagedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 extern BOOL initMiscImds( void );
 extern iIMDShape	*getImdFromIndex(UDWORD	index);
 extern iIMDShape	*getRandomWreckageImd( void );
@@ -130,5 +135,9 @@ MI_FIREWORK,
 
 MI_TOO_MANY
 };
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MISCIMD_H__

@@ -27,6 +27,11 @@
 #ifndef __INCLUDED_SRC_MULTIRECV_H__
 #define __INCLUDED_SRC_MULTIRECV_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 extern BOOL recvDroid				(void);
 extern BOOL recvDroidInfo			(void);
 extern BOOL recvDestroyDroid		(void);
@@ -64,5 +69,9 @@ extern BOOL	recvMapFileRequested		(void);
 extern BOOL recvTextMessageAI		(void);		//AI multiplayer message
 extern BOOL	recvTeamRequest		(void);
 extern BOOL	recvReadyRequest		(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIRECV_H__

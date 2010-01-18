@@ -31,6 +31,11 @@
 #include "multiplay.h"
 #include "display.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* The different types of terrain as far as the game is concerned */
 typedef enum _terrain_type
 {
@@ -459,5 +464,9 @@ static inline bool hasSensorOnTile(MAPTILE *psTile, int player)
 	}
 	return true;
 }
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MAP_H__

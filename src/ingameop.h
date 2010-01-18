@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_INGAMEOP_H__
 #define __INCLUDED_SRC_INGAMEOP_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // functions
 extern BOOL intAddInGameOptions			(void);
 extern BOOL intCloseInGameOptions		(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets);
@@ -124,5 +129,9 @@ enum
 #define	INTINGAMEOP_6_Y		120
 
 #define OPALIGN		(WBUT_PLAIN | WBUT_TXTCENTRE)
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_INGAMEOP_H__

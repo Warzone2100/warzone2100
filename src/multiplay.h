@@ -26,6 +26,11 @@
 
 #include "group.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Game Options Structure. Enough info to completely describe the static stuff in amultiplay game.
 typedef struct {
@@ -222,5 +227,9 @@ extern	void resetReadyStatus		(bool bSendOptions);
 
 extern	BOOL bPlayerReadyGUI[MAX_PLAYERS];
 extern bool isMPDirtyBit;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

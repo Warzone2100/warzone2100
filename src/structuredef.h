@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_STRUCTUREDEF_H__
 #define __INCLUDED_STRUCTUREDEF_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #include "lib/gamelib/animobj.h"
 #include "positiondef.h"
 #include "basedef.h"
@@ -354,5 +359,9 @@ typedef UPGRADE		PRODUCTION_UPGRADE;
 typedef UPGRADE		REPAIR_FACILITY_UPGRADE;
 typedef UPGRADE		POWER_UPGRADE;
 typedef UPGRADE		REARM_UPGRADE;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_STRUCTUREDEF_H__

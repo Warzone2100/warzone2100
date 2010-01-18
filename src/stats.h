@@ -24,6 +24,12 @@
 #define __INCLUDED_SRC_STATS_H__
 
 #include "objectdef.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /**************************************************************************************
  *
  * Function prototypes and data storage for the stats
@@ -366,5 +372,9 @@ SENSOR_STATS *objActiveRadar(BASE_OBJECT *psObj);
 
 /** Returns whether object has a radar detector sensor. */
 bool objRadarDetector(BASE_OBJECT *psObj);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_STATS_H__

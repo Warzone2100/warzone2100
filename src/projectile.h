@@ -27,6 +27,11 @@
 #include "movedef.h"
 #include "lib/gamelib/anim.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /**
  *	@file projectile.h
  *	Projectile types and function headers
@@ -105,5 +110,9 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 
 /* assert if projectile is bad */
 #define CHECK_PROJECTILE(object) checkProjectile((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_PROJECTILE_H__

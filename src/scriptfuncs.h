@@ -26,6 +26,11 @@
 
 #include "messagedef.h"			//for VIEWDATA
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // AI won't build there if there are more than
 // MAX_BLOCKING_TILES on some location
 #define MAX_BLOCKING_TILES		1
@@ -687,5 +692,9 @@ extern BOOL scrLog(void);
 
 extern BOOL addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg);
 extern VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SCRIPTFUNCS_H__
