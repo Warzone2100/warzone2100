@@ -344,15 +344,18 @@ static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 	psToAdd->selected = false;
 	psToAdd->strobe = 0;
 
-	//now add it to the top of the list
-	psToAdd->psNext = apsProxDisp[player];
-	apsProxDisp[player] = psToAdd;
-
 	//add a button to the interface
 	if (player == selectedPlayer)
 	{
-		intAddProximityButton(psToAdd, currentNumProxDisplays);
-		currentNumProxDisplays++;
+		if (intAddProximityButton(psToAdd, currentNumProxDisplays))
+		{
+			// Now add it to the top of the list. Be aware that this
+			// check means that messages and proximity displays can
+			// become out of sync, usually because we ran out of display IDs.
+			psToAdd->psNext = apsProxDisp[player];
+			apsProxDisp[player] = psToAdd;
+			currentNumProxDisplays++;
+		}
 	}
 }
 
@@ -377,6 +380,11 @@ void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 
 	ASSERT_OR_RETURN( , player < MAX_PLAYERS, "Bad player");
 	ASSERT_OR_RETURN( , psMessage != NULL, "Bad message");
+
+	if (!apsProxDisp[player])
+	{
+		return;	// no corresponding proximity display
+	}
 
 	//find the proximity display for this message
 	if (apsProxDisp[player]->psMessage == psMessage)

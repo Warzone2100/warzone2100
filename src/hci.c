@@ -6770,8 +6770,7 @@ BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 	//store the ID so we can detect which one has been clicked on
 	psProxDisp->buttonID = sBFormInit.id;
 
-//	loop back and find a free one!
-//	ASSERT( sBFormInit.id < IDPROX_END,"Too many proximity message buttons" );
+	// loop back and find a free one!
 	if(sBFormInit.id >= IDPROX_END)
 	{
 		for(cnt = IDPROX_START;cnt<IDPROX_END;cnt++)
@@ -6791,6 +6790,7 @@ BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 			return false;			// no slot was found.
 		}
 	}
+	ASSERT(sBFormInit.id < IDPROX_END, "Invalid proximity message button ID %d", (int)sBFormInit.id);
 
 	sBFormInit.majorID = 0;
 	sBFormInit.minorID = 0;
@@ -6816,6 +6816,7 @@ BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 /*Remove a Proximity Button - when the message is deleted*/
 void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp)
 {
+	ASSERT(psProxDisp->buttonID >= IDPROX_START && psProxDisp->buttonID <= IDPROX_END, "Invalid proximity ID");
 	widgDelete(psWScreen, psProxDisp->buttonID);
 }
 
