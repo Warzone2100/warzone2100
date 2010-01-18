@@ -409,21 +409,38 @@ void draw3DScene( void )
 
 	bPlayerHasHQ = getHQExists(selectedPlayer);
 
-	if (radarOnScreen && bPlayerHasHQ && getWidgetsStatus())
+	if (radarOnScreen && bPlayerHasHQ)
 	{
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 		pie_SetFogStatus(false);
-		drawRadar();
+		if (getWidgetsStatus())
+		{
+			drawRadar();
+		}
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 		pie_SetFogStatus(true);
 	}
 
-	if (!bRender3DOnly && getWidgetsStatus())
+	if (!bRender3DOnly)
 	{
 		/* Ensure that any text messages are displayed at bottom of screen */
 		pie_SetFogStatus(false);
-		displayConsoleMessages();
+		if (getWidgetsStatus())
+		{
+			displayConsoleMessages();
+		}
 	}
+
+	// FIXME: a hack that just happens to work.
+	// Please don't ask me why.
+	if (!getWidgetsStatus())
+	{
+		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
+		pie_SetFogStatus(false);
+		pie_SetTexturePage(TEXPAGE_FONT);
+	}
+
+	//iV_DrawFormattedText(" ", 5, 5, 5, FTEXT_LEFTJUSTIFY);
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
 	pie_SetFogStatus(false);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
