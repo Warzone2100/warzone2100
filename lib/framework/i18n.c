@@ -35,6 +35,11 @@
 
 
 #if defined(WZ_OS_WIN)
+/*
+ *  See msdn.microsoft.com for this stuff, esp.
+ *  http://msdn.microsoft.com/en-us/library/ms693062%28VS.85,printer%29.aspx
+ *  http://msdn.microsoft.com/en-us/library/dd318693%28VS.85,printer%29.aspx
+ */
 static const struct
 {
 	const char * language;
@@ -46,14 +51,14 @@ static const struct
 #  if defined(ENABLE_NLS)
 	{ "cs", N_("Czech"), LANG_CZECH, SUBLANG_DEFAULT },
 	{ "da", N_("Danish"), LANG_DANISH, SUBLANG_DEFAULT },
-	{ "de", N_("German"), LANG_GERMAN, SUBLANG_DEFAULT },
+	{ "de", N_("German"), LANG_GERMAN, SUBLANG_GERMAN },
 //	{ "en", N_("English"), LANG_ENGLISH, SUBLANG_DEFAULT },
-	{ "en_GB", N_("English (United Kingdom)"), LANG_ENGLISH, SUBLANG_DEFAULT },
-	{ "es", N_("Spanish"), LANG_SPANISH, SUBLANG_DEFAULT },
+	{ "en_GB", N_("English (United Kingdom)"), LANG_ENGLISH, SUBLANG_ENGLISH_UK },
+	{ "es", N_("Spanish"), LANG_SPANISH, SUBLANG_SPANISH },
 	{ "et_EE", N_("Estonian"), LANG_ESTONIAN, SUBLANG_DEFAULT },
 //	{ "eu", N_("Basque"), LANG_BASQUE, SUBLANG_DEFAULT },
 	{ "fi", N_("Finnish"), LANG_FINNISH, SUBLANG_DEFAULT },
-	{ "fr", N_("French"), LANG_FRENCH, SUBLANG_DEFAULT },
+	{ "fr", N_("French"), LANG_FRENCH, SUBLANG_FRENCH },
 	/* Our Frisian translation is the "West Frisian" variation of it. This
 	 * variation is mostly spoken in the Dutch province Friesland (Fryslân
 	 * in Frisian) and has ISO 639-3 code "fry".
@@ -62,14 +67,15 @@ static const struct
 	 *        fy_XX.
 	 */
 	{ "fy", N_("Frisian"), LANG_FRISIAN, SUBLANG_FRISIAN_NETHERLANDS },
-	{ "ga", N_("Irish"), LANG_IRISH, SUBLANG_DEFAULT },
-	{ "it", N_("Italian"), LANG_ITALIAN, SUBLANG_DEFAULT },
+	{ "ga", N_("Irish"), LANG_IRISH, SUBLANG_IRISH_IRELAND },
+	{ "it", N_("Italian"), LANG_ITALIAN, SUBLANG_ITALIAN },
 //	{ "la", N_("Latin"), LANG_LATIN, SUBLANG_DEFAULT },
 	{ "lt", N_("Lithuanian"), LANG_LITHUANIAN, SUBLANG_DEFAULT },
 //	{ "lv", N_("Latvian"), LANG_LATVIAN, SUBLANG_DEFAULT },
+	// MSDN uses "no"...
 	{ "nb", N_("Norwegian"), LANG_NORWEGIAN, SUBLANG_DEFAULT },
 //	{ "nn", N_("Norwegian (Nynorsk)"), LANG_NORWEGIAN, SUBLANG_NORWEGIAN_NYNORSK },
-	{ "nl", N_("Dutch"), LANG_DUTCH, SUBLANG_DEFAULT },
+	{ "nl", N_("Dutch"), LANG_DUTCH, SUBLANG_DUTCH },
 	{ "pl", N_("Polish"), LANG_POLISH, SUBLANG_DEFAULT },
 	{ "pt_BR", N_("Brazilian Portuguese"), LANG_PORTUGUESE, SUBLANG_PORTUGUESE_BRAZILIAN },
 	{ "pt", N_("Portuguese"), LANG_PORTUGUESE, SUBLANG_DEFAULT },
