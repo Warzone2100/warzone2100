@@ -1,4 +1,6 @@
 R-Defense-AASite-QuadRotMg,AASite-QuadMg1,189
+R-Defense-AASite-QuadRotMg,AASite-QuadBof,1337
+R-Defense-AASite-QuadBof,AASite-QuadMg1,1337
 R-Defense-Emplacement-HPVcannon,PillBox4,130
 R-Defense-GuardTower-ATMiss,GuardTower5,123
 R-Defense-GuardTower-Rail1,GuardTower1,119
@@ -21,5 +23,8 @@ R-Defense-WallTower-A-Tmiss,WallTower06,163
 R-Defense-WallTower-HPVcannon,WallTower02,101
 R-Defense-WallTower-SamHvy,WallTower-SamSite,344
 R-Defense-WallTower-TwinAGun,CO-Tower-RotMG,231
+R-Defense-WallTower-QuadRotAA,WallTower-DoubleAAGun,1337
 R-Defense-WallTower03,WallTower02,101
+R-Defense-Rail3,Emplacement-Rail2,1337
+R-Defense-WallTower-Rail3,WallTower-Rail2,1337
 R-Sys-Sensor-Tower02,Sys-SensoTower01,89
