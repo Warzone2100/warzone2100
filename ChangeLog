@@ -13,11 +13,13 @@
  * UI:
    * Change: "HOST" appears below host (r9340)
    * Change: Laser satellite firing and structure under attack now generate a radar blip (r9313, r9292, ticket:1134)
+   * Change: Allow keyboard shortcuts to use the Cmd key as a modifier (r9307)
    * Fix: The hide interface keyboard shortcut (Tab, by default) now hides the minimap and console, as well (r9273)
    * Fix: Non-ascii characters now work, instead of appearing to clear all text (r9287, ticket:1330)
    * Fix: Radar blips should no longer disappear with some zoom levels (r9197)
    * Fix: Make build progress bars look nicer by adding a gradient (r9157)
    * Fix: Design form sometimes displayed incorrect component (r9255)
+   * Fix: Make keyboard shortcuts look nicer: "Ctrl + F11" instead of "lctrl - f11" (r9307)
  * Balance: (r9339)
    * Pulse Laser range decreased to 14
    * Heavy Laser range increased to 16 (and damage toned down to match)
