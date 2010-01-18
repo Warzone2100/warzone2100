@@ -1789,6 +1789,12 @@ void	renderFeature(FEATURE *psFeature)
 	{
 		brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psFeature, brightness.byte.r));
 	}
+	if (!hasSensorOnTile(mapTile(map_coord(psFeature->pos.x), map_coord(psFeature->pos.y)), psFeature->player))
+	{
+		brightness.byte.r /= 2;
+		brightness.byte.g /= 2;
+		brightness.byte.b /= 2;
+	}
 
 	if (psFeature->psStats->subType == FEAT_BUILDING
 		|| psFeature->psStats->subType == FEAT_SKYSCRAPER
@@ -2115,6 +2121,12 @@ void	renderStructure(STRUCTURE *psStructure)
 		if (!demoGetStatus() && getRevealStatus())
 		{
 			buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
+		}
+		if (!hasSensorOnTile(mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y)), psStructure->player))
+		{
+			buildingBrightness.byte.r /= 2;
+			buildingBrightness.byte.g /= 2;
+			buildingBrightness.byte.b /= 2;
 		}
 	}
 
@@ -2537,6 +2549,12 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			else if(getRevealStatus())
 			{
 				buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
+			}
+			if (!hasSensorOnTile(mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y)), psStructure->player))
+			{
+				buildingBrightness.byte.r /= 2;
+				buildingBrightness.byte.g /= 2;
+				buildingBrightness.byte.b /= 2;
 			}
 		}
 
