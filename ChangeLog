@@ -1,6 +1,12 @@
 2010-00-00: Version 2.3 beta 8
  * General:
    * Change: Formation speed limiter has been removed due to bugs and sync issues (r9331,  ticket:1177, ticket:1167)
+   * Change: Darken features and buildings that you cannot see due to fog of war (r9322)
+   * Change: Laser satellite firing and structure under attack now generate a radar blip (r9313, r9292, ticket:1134)
+   * Change: Autoload of mods in autoload folder is enabled again (r9290, ticket:1415)
+   * Fix: Support for unicode characters (r9287, ticket:1330)
+   * Fix: Crash when switching between players in ctrl+o cheat menu (r9283)
+   * Fix: Bugs with game speed changing abruptly should be fixed (r9280, r9251)
    * Fix: Widget ID corruption leading to various strange bugs in GUI (r9325)
    * Fix: Unitialized variables in network code (r9192)
    * Fix: Game could assert if commander becomes deselected in an unusual way (ticket:1219, r9153)
@@ -8,6 +14,22 @@
    * Fix: Make build progress bar look nicer (r9157)
    * Fix: Non-ascii characters now work, instead of appearing to clear all text (ticket:1330, r9287)
    * Fix: Better projectile collision detection (r9288)
+   * Fix: Audio issues (r9248, 
+   * Fix: Remove all fog of war darkening when satellite uplink built (r9216)
+   * Fix: In non-fixed alliances mode, do not lift fog of war for allies (r9199)
+   * Fix: Radar blips should no longer disappear with some zoom levels (r9197)
+   * Fix: Rounding errors in power code (r9172)
+   * Fix: Faster game loading when vsync enabled (r9167, r9163)
+ * Challenges:
+   * Fix: Restore challenge timer when loading a challenge savegame (r9207)
+ * Campaign:
+   * Change: Ctrl + Alt + mouse wheel to change game speed (r9178)
+   * Change: Changing speed no longer counts as cheating (r9177)
+   * Fix: Transports in campaign could be controlled sometimes (ticket:1418, r9297)
+   * Fix: Only lift fog of war for what you can see (r9204)
+ * Skirmish:
+   * Change: Rename Dragon from "Super Heavy Body" to "Multi Turret Body" (r9194)
+   * Fix: Allow the AI to know where the game's starting resources are (r9203, r9202)
 
 2010-01-10: Version 2.3 beta 7
  * General:
