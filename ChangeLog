@@ -1,4 +1,4 @@
-2010-00-00: Version 2.3 beta 8
+2010-01-19: Version 2.3 beta 8
  * General:
    * New: Mod files in mods/autoload/ are now autoloaded - note that this is NOT the previous autoload location (r9290, ticket:1415)
    * Fix: Crash when switching between players in ctrl+o cheat menu (r9283)
@@ -46,6 +46,7 @@
  * Challenges:
    * Fix: Restore challenge timer when loading a challenge savegame (r9207)
  * Campaign:
+   * Change: Save an "Autosave" game when a mission is finished (r9145)
    * Fix: Transports in campaign could be controlled sometimes (ticket:1418, r9297)
  * Skirmish:
    * Change: Rename Dragon from "Super Heavy Body" to "Multi Turret Body" (r9194)
