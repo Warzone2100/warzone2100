@@ -1,5 +1,7 @@
-2010-00-00: Version 2.3 ...?
+2010-00-00: Version 2.3 beta 8
  * General:
+   * Change: Formation speed limiter has been removed due to bugs and sync issues (r9331,  ticket:1177, ticket:1167)
+   * Fix: Widget ID corruption leading to various strange bugs in GUI (r9325)
    * Fix: Unitialized variables in network code (r9192)
    * Fix: Game could assert if commander becomes deselected in an unusual way (ticket:1219, r9153)
    * Fix: Could send incorrect number of oil barrel artifacts (ticket:1402, r9152)
