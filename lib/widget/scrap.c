@@ -189,6 +189,7 @@ convert_data(int type, char *dst, char *src, int srclen)
 }
 
 /* Convert scrap data to internal format */
+#if (defined(WZ_WS_X11) || defined(WZ_WS_WIN) || defined(WZ_WS_QNX))
 static int
 convert_scrap(int type, char *dst, char *src, int srclen)
 {
@@ -255,6 +256,7 @@ switch (type)
 	}
 return dstlen;
 }
+#endif
 
 #if defined(WZ_WS_X11)
 /* The system message filter function -- handle clipboard messages */
@@ -331,7 +333,9 @@ put_scrap(int type, int srclen, char *src)
 {
 	scrap_type format;
 	int dstlen;
+#if (defined(WZ_WS_X11) || defined(WZ_WS_WIN) || defined(WZ_WS_QNX))
 	char *dst;
+#endif
 
 	format = convert_format(type);
 	dstlen = convert_data(type, NULL, src, srclen);

@@ -32,11 +32,7 @@
 #include "lib/framework/frame.h"
 #include "pietypes.h"
 
-#if defined __APPLE__ && defined __MACH__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include <SDL_opengl.h>
 
 //*************************************************************************
 //
