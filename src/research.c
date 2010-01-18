@@ -241,7 +241,7 @@ BOOL researchInitVars(void)
 /*Load the research stats from the file exported from Access*/
 BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 {
-	const unsigned int researchCount = numCR(pResearchData, bufferSize);
+	unsigned int researchCount = numCR(pResearchData, bufferSize);
 	RESEARCH *pResearch;
 	COMPONENT_STATS *psComp;
 	SDWORD structID;
@@ -251,6 +251,13 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 	char imdName[MAX_STR_LENGTH], imdName2[MAX_STR_LENGTH];
 	char structName[MAX_STR_LENGTH], compName[MAX_STR_LENGTH],
 		compType[MAX_STR_LENGTH];
+
+	// Skip descriptive header
+	if (strncmp(pResearchData,"Research ",9)==0)
+	{
+		pResearchData = strchr(pResearchData,'\n') + 1;
+		researchCount--;
+	}
 
 	numResearch = researchCount;
 
