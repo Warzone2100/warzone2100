@@ -3545,8 +3545,20 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		{
 			NetPlay.players[j].name[strlen(NetPlay.players[j].name) - 1] = '\0';
 		}
-		iV_DrawText(NetPlay.players[j].name, x + 65, y + 22);
-
+		if (j == NET_HOST_ONLY && NetPlay.bComms)
+		{
+			iV_DrawText(NetPlay.players[j].name, x + 65, y + 18);
+			iV_SetFont(font_small);
+			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+			iV_DrawText(_("HOST"), x + 65, y + 28);
+			iV_SetFont(font_regular);
+			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		}
+		else
+		{
+			iV_DrawText(NetPlay.players[j].name, x + 65, y + 22);
+		}
+		
 		// ping rating
 		if(ingame.PingTimes[j] >= PING_LO && ingame.PingTimes[j] < PING_MED)
 		{
