@@ -397,23 +397,26 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 		}
 
 		//draw Weapon/ECM/Sensor for structure
-		for (i = 0; i < MAX(weaponImd[0] != NULL, Stats->numWeaps);i++)
+		if (weaponImd[0] != NULL)
 		{
-			iV_MatrixBegin();
-			iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
-			pie_MatRotY(DEG(0));
-			if (mountImd[i] != NULL)
+			for (i = 0; i < MAX(1, Stats->numWeaps); i++)
 			{
-				pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
-				if(mountImd[i]->nconnectors)
+				iV_MatrixBegin();
+				iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
+				pie_MatRotY(DEG(0));
+				if (mountImd[i] != NULL)
 				{
-					iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
+					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
+					if(mountImd[i]->nconnectors)
+					{
+						iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
+					}
 				}
+				iV_MatrixRotateX(DEG(0));
+				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
+				//we have a droid weapon so do we draw a muzzle flash
+				iV_MatrixEnd();
 			}
-			iV_MatrixRotateX(DEG(0));
-			pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
-			//we have a droid weapon so do we draw a muzzle flash
-			iV_MatrixEnd();
 		}
 	}
 
