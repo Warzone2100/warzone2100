@@ -51,6 +51,9 @@
  * Skirmish:
    * Change: Rename Dragon from "Super Heavy Body" to "Multi Turret Body" (r9194)
    * Fix: Allow the AI to know where the game's starting resources are (r9203, r9202)
+ * Translations:
+   * Fix: Actually include Ukrainian translation in the Windows installer (r9329)
+   * Updated: German (r9228)
 
 2010-01-10: Version 2.3 beta 7
  * General:
