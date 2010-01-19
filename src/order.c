@@ -531,14 +531,18 @@ void orderUpdateDroid(DROID *psDroid)
 				SDWORD deltaX, deltaY;
 				deltaX = (SDWORD)psDroid->orderX - (SDWORD)psDroid->orderX2;
 				deltaY = (SDWORD)psDroid->orderY - (SDWORD)psDroid->orderY2;
-				if (deltaX >= deltaY &&
+				if (deltaX == 0 && deltaY == 0)
+				{
+					tooFarFromPath = false;
+				}
+				else if (deltaX >= deltaY &&
 				    (SDWORD)MIN(psDroid->orderX, psDroid->orderX2)-SCOUT_DIST <= psDroid->pos.x &&
 				    psDroid->pos.x <= (SDWORD)MAX(psDroid->orderX, psDroid->orderX2)+SCOUT_DIST)
 				{
 					tooFarFromPath = (abs(((SDWORD)psDroid->pos.x - (SDWORD)psDroid->orderX) * deltaY/deltaX +
 					                      (SDWORD)psDroid->orderY - (SDWORD)psDroid->pos.y) > SCOUT_DIST);
 				}
-				if (deltaX <= deltaY &&
+				else if (deltaX <= deltaY &&
 				    (SDWORD)MIN(psDroid->orderY, psDroid->orderY2)-SCOUT_DIST <= psDroid->pos.y &&
 				    psDroid->pos.y <= (SDWORD)MAX(psDroid->orderY, psDroid->orderY2)+SCOUT_DIST)
 				{
