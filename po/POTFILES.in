@@ -260,7 +260,7 @@ src/loop.c
 src/main.c
 src/map.c
 src/mapdisplay.c
-src/mapgrid.c
+src/mapgrid.cpp
 src/mechanics.c
 src/message.c
 src/miscimd.c
@@ -282,6 +282,7 @@ src/objmem.c
 src/oprint.c
 src/order.c
 src/parsetest.c
+src/pointtree.cpp
 src/power.c
 src/projectile.c
 src/radar.c
