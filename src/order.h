@@ -191,8 +191,8 @@ extern void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order,
 extern void orderDroidStatsTwoLocAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
 
 /* Give selected droids an order with a location target */
-extern void orderSelectedLoc(UDWORD player, UDWORD x, UDWORD y);
-extern void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add);
+// Only called from UI.
+extern void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add);
 
 /* Give selected droids an order with an object target */
 extern void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj);

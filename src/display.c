@@ -393,7 +393,7 @@ void ProcessRadarInput(void)
 						// MARKER
 						// Send all droids to that location
 						orderSelectedLoc(selectedPlayer, (PosX*TILE_UNITS)+TILE_UNITS/2,
-							(PosY*TILE_UNITS)+TILE_UNITS/2);
+						                                 (PosY*TILE_UNITS)+TILE_UNITS/2, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
 
 
 					}
@@ -2266,31 +2266,24 @@ void	dealWithLMB( void )
 	if (psLocation == NULL || driveModeActive() || selNumSelected(selectedPlayer))
 	{
 		// now changed to use the multiple order stuff
-		if (ctrlShiftDown())		// ctrl clicked a destination, add an order
+		// clicked on a destination.
+		orderSelectedLoc(selectedPlayer, mouseTileX*TILE_UNITS+TILE_UNITS/2,
+		                                 mouseTileY*TILE_UNITS+TILE_UNITS/2, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
+		/* Otherwise send them all */
+		if(getNumDroidsSelected())
 		{
-			orderSelectedLocAdd(selectedPlayer,
-								mouseTileX*TILE_UNITS+TILE_UNITS/2,
-								mouseTileY*TILE_UNITS+TILE_UNITS/2, true);
+			assignDestTarget();
+			audio_PlayTrack(ID_SOUND_SELECT);
 		}
-		else		// clicked on a destination.
+
+		if (getDebugMappingStatus() && tileOnMap(mouseTileX, mouseTileY))
 		{
-			/* Otherwise send them all */
-			orderSelectedLoc(selectedPlayer, mouseTileX*TILE_UNITS+TILE_UNITS/2,mouseTileY*TILE_UNITS+TILE_UNITS/2);
-			if(getNumDroidsSelected())
-			{
-				assignDestTarget();
-				audio_PlayTrack( ID_SOUND_SELECT );
-			}
+			MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
 
-			if (getDebugMappingStatus() && tileOnMap(mouseTileX, mouseTileY))
-			{
-				MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
-
-				CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d", 
-				            tileIsExplored(psTile) ? "Explored" : "Unexplored",
-				            mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
-				            (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination));
-			}
+			CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d",
+			          tileIsExplored(psTile) ? "Explored" : "Unexplored",
+			          mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
+			          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination));
 		}
 
 		driveDisableTactical();

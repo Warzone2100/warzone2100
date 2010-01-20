@@ -738,7 +738,7 @@ void driveProcessRadarInput(int x,int y)
 	// when drive mode is active, clicking on the radar orders all selected droids
 	// to move to this position.
 	CalcRadarPosition(x, y, &PosX, &PosY);
-	orderSelectedLoc(selectedPlayer, PosX*TILE_UNITS,PosY*TILE_UNITS);
+	orderSelectedLoc(selectedPlayer, PosX*TILE_UNITS, PosY*TILE_UNITS, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
 }
 /*
 void driveMarkTarget(void)

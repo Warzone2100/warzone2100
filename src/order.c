@@ -2752,7 +2752,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 
    If add is true then the order is queued in the droid
 */
-void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
+void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 {
 	DROID			*psCurr;
 	DROID_ORDER		order;
@@ -2803,12 +2803,6 @@ void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 	}
 
 	turnOffMultiMsg(false);	// msgs back on...
-}
-
-
-void orderSelectedLoc(UDWORD player, UDWORD x, UDWORD y)
-{
-	orderSelectedLocAdd(player, x,y, false);
 }
 
 
