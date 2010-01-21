@@ -776,14 +776,10 @@ BOOL stageOneInitialise(void)
 		return false;
 	}
 
-
-    if (!environInit())
-    {
-        return false;
-    }
-	// reset speed limiter
-	moveSetFormationSpeedLimiting(true);
-
+	if (!environInit())
+	{
+		return false;
+	}
 
 	initMission();
 	initTransporters();

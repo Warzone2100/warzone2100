@@ -74,10 +74,6 @@ extern void moveUpdateTracked(DROID *psDroid);
 /* update body and turret to local slope */
 extern void updateDroidOrientation(DROID *psDroid);
 
-extern void moveSetFormationSpeedLimiting( BOOL );
-extern void moveToggleFormationSpeedLimiting( void );
-extern BOOL moveFormationSpeedLimitingOn( void );
-
 /* audio callback used to kill movement sounds */
 extern BOOL moveCheckDroidMovingAndVisible( void *psObj );
 

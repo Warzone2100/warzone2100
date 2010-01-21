@@ -219,8 +219,6 @@ static void	moveCalcBoundary(DROID *psDroid);
 /* Turn a vector into an angle - returns a float (!) */
 static float vectorToAngle(float vx, float vy);
 
-static BOOL	g_bFormationSpeedLimitingOn = false;
-
 /* Return the difference in directions */
 static UDWORD moveDirDiff(SDWORD start, SDWORD end)
 {
@@ -1793,19 +1791,9 @@ static BOOL moveReachedWayPoint(DROID *psDroid)
 	return false;
 }
 
-void moveToggleFormationSpeedLimiting( void )
+static BOOL moveFormationSpeedLimitingOn( void )
 {
-	g_bFormationSpeedLimitingOn = !g_bFormationSpeedLimitingOn;
-}
-
-void moveSetFormationSpeedLimiting( BOOL bVal )
-{
-	g_bFormationSpeedLimitingOn = bVal;
-}
-
-BOOL moveFormationSpeedLimitingOn( void )
-{
-	return g_bFormationSpeedLimitingOn;
+	return false;
 }
 
 #define MAX_SPEED_PITCH  60
