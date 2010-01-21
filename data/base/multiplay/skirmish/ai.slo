@@ -177,7 +177,6 @@ trigger fortifyTr					(every,	1000);
 trigger upgradeStructuresTr			(every, 400 );
 trigger conDroidsTr					(every, 900);	// was 1400
 trigger repairDroidsTr				(every, 2600);
-trigger	managePowerTr				(every, 1500);
 trigger basedetailsTr				(every, 600	);
 trigger buildDerrickTr				(every, 80	);
 trigger buildOilDefenseOrRetreatTr	(every, 120	);
@@ -310,7 +309,6 @@ event initialisedEvent(CALL_GAMEINIT)
 	extraStruct = 0;
 	numRepairUnits = 0;
 	allOutAttack = NULLOBJECT;
-	powerSave = FALSE;
 
 	tLastHelpRequest = -1;	//when we requested help for the last time
 	lastHelpPlayer = -1;		//we are not currently helping anyone
@@ -1000,7 +998,6 @@ event buildExpand( buildExpandTr )
 //	Structure (fac/res/pow) upgrades
 event upgradeStructures(upgradeStructuresTr )
 {
-
 	initIterateGroup(buildGroup);				// find idle droids in build group.
 	droid = iterateGroup(buildGroup);
 	while(droid != NULLOBJECT)
@@ -1478,7 +1475,8 @@ event conDroids(conDroidsTr)
 	local	bool		_bStartedBuilding;
 
 	_maxTrucks = MAX_TRUCKS;
-	if(powerSave){
+	if (playerPower(me) < LOW_POWER)
+	{
 		_maxTrucks = MIN_TRUCKS;
 	}
 
@@ -1604,7 +1602,6 @@ event repairDroids(repairDroidsTr)
 /////////////////////////////////////////////////////////////////////
 event factoryEvent(factoryEventTr)
 {
-
 	// for each factory....
 	initEnumStruct(FALSE,factory,me,me);
 	structure = enumStruct();								// find factory.
@@ -1936,7 +1933,6 @@ event takeoverDefend(takeoverTr)
 
 event useLassat(useLassatTr)
 {
-
 	// find my lassat
 	// fire it at my attack objective.
 	if(allOutAttack != NULLOBJECT)
@@ -2192,7 +2188,6 @@ function int findResearch(int _searchStart, int _techTree)
 // form alliances
 event formAllianceEvent(formAllianceEventTr)
 {
-
 	count = 0;
 	while(count < MAX_PLAYERS)
 	{
@@ -2348,35 +2343,6 @@ event consolidateEvent(consolidateEventTr)
 }
 
 /////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-// power management.
-
-// if running low on power put some power eating stuff on hold for a while.
-event managePower(managePowerTr)
-{
-	if( playerPower(me) < LOW_POWER )	// turn off some events.
-	{
-		powerSave = TRUE;
-
-//			setEventTrigger(fortify,			inactive);	// stop building defenses.
-		setEventTrigger(upgradeStructures,	inactive);	// stop building oil defenses.
-	//	setEventTrigger(buildExpand,		inactive);	// stop building extra buildings.
-	//	setEventTrigger(conDroids,			inactive);	// stop building more construct droids.
-	}
-	else
-	{
-		if(powerSave == TRUE)		// turn events back on.
-		{
-			powerSave = FALSE;
-
-//				setEventTrigger(fortify,			fortifyTr);			 //  building defenses.
-			setEventTrigger(upgradeStructures,	upgradeStructuresTr);//  building oil defenses.
-	//		setEventTrigger(buildExpand,		buildExpandTr);		 //  building extra buildings.
-	//		setEventTrigger(conDroids,			conDroidsTr);	  	 //  building more construct droids.
-		}
-	}
-}
-/////////////////////////////////////////////////////////////////////
 
 event difficultyModifier(difficultyModifierTr)
 {
@@ -2496,7 +2462,6 @@ function void buildRearmPads()
 
 event buildVtols(inactive)
 {
-
 	// got enough vtols?
 	if((vtolDefendGr.members >= maxVTOLs[curTech]) or (getDroidCount(me) >= MAX_DROIDS)){
 		dbg("CAN'T BUILD VTOLS - TOO MANY UNITS", me);
@@ -2881,8 +2846,6 @@ event vtolDefend(vtolDefendTr)
 {
 	local	int		_numBuilders,_maxBuilders;
 
-
-//		boolResult2 = FALSE;					// if attacked by a vtol.
 	if(baseobj != NULLOBJECT)
 	{
 		if(baseobj.type == OBJ_DROID)
@@ -2900,7 +2863,6 @@ event vtolDefend(vtolDefendTr)
 				// build defenses.
 				initIterateGroup(buildGroup);		// find idle droids in build group.
 				droid = iterateGroup(buildGroup);
-//					while( (boolResult2 != TRUE) and (droid != NULLOBJECT))
 				while( droid != NULLOBJECT)
 				{
 					if( (structure != NULLOBJECT) and (droid.order != DORDER_BUILD) )
@@ -2927,7 +2889,6 @@ event vtolDefend(vtolDefendTr)
 							{
 								orderDroidStatsLoc(droid, DORDER_BUILD,vtolDefStruct[count2],buildX,buildY);
 								_numBuilders++;
-//									boolResult2 = TRUE;
 							}
 						}
 
@@ -2992,7 +2953,6 @@ function void shutDownAI()
 	setEventTrigger(breakAllianceEvent,	inactive);
 	setEventTrigger(formHumanAlliances,	inactive);
 	setEventTrigger(consolidateEvent,	inactive);
-	setEventTrigger(managePower,	inactive);
 	setEventTrigger(vtolStructs,inactive);
 	setEventTrigger(buildVtols,inactive);
 	setEventTrigger(vtolAttack,inactive);
@@ -3007,11 +2967,6 @@ function void shutDownAI()
 	setEventTrigger(structureDestroyed,inactive);
 	setEventTrigger(rebuildStructureEv,inactive);
 	setEventTrigger(startLevel, inactive);
-}
-
-event reassignPlayers(reassignTr)
-{
-	dbg("Reassign event is ignored", me);
 }
 
 function void reassignAI()
@@ -3049,7 +3004,6 @@ function void reassignAI()
 	setEventTrigger(formAllianceEvent,formAllianceEventTr);
 	setEventTrigger(breakAllianceEvent,breakAllianceEventTr);
 	setEventTrigger(consolidateEvent,consolidateEventTr);
-	setEventTrigger(managePower,managePowerTr);
 	setEventTrigger(vtolStructs,inactive);
 	setEventTrigger(buildVtols,inactive);
 	//setEventTrigger(vtolAttack,inactive);
@@ -3993,7 +3947,6 @@ function int numGroupSameOrder(GROUP _group, int _orderIndex)
 event structureDestroyed(structureDestroyedTr)
 {
 	local	int	_count;
-
 
 	// add certain structures to the rebuild list
 	_count = 0;
