@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-14 19:42+0100\n"
+"POT-Creation-Date: 2010-01-20 20:11+0100\n"
 "PO-Revision-Date: 2009-05-13 16:12+0800\n"
 "Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -10979,163 +10979,167 @@ msgstr "轮式蝰蛇坦克（机枪）"
 msgid "Flamer Viper Half-Tracks"
 msgstr ""
 
-#: lib/framework/i18n.c:45
-#: lib/framework/i18n.c:100
+#: lib/framework/i18n.c:50
+#: lib/framework/i18n.c:106
 msgid "System locale"
 msgstr "系统语言"
 
-#: lib/framework/i18n.c:47
-#: lib/framework/i18n.c:102
+#: lib/framework/i18n.c:52
+#: lib/framework/i18n.c:108
 msgid "Czech"
 msgstr ""
 
-#: lib/framework/i18n.c:48
-#: lib/framework/i18n.c:103
+#: lib/framework/i18n.c:53
+#: lib/framework/i18n.c:109
 msgid "Danish"
 msgstr "丹麦语"
 
-#: lib/framework/i18n.c:49
-#: lib/framework/i18n.c:104
+#: lib/framework/i18n.c:54
+#: lib/framework/i18n.c:110
 msgid "German"
 msgstr "德语"
 
-#: lib/framework/i18n.c:51
-#: lib/framework/i18n.c:106
+#: lib/framework/i18n.c:56
+#: lib/framework/i18n.c:112
 msgid "English (United Kingdom)"
 msgstr ""
 
-#: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:107
+#: lib/framework/i18n.c:57
+#: lib/framework/i18n.c:113
 #, fuzzy
 msgid "Spanish"
 msgstr "丹麦语"
 
-#: lib/framework/i18n.c:53
-#: lib/framework/i18n.c:108
+#: lib/framework/i18n.c:58
+#: lib/framework/i18n.c:114
 msgid "Estonian"
 msgstr ""
 
-#: lib/framework/i18n.c:55
-#: lib/framework/i18n.c:110
+#: lib/framework/i18n.c:60
+#: lib/framework/i18n.c:116
 #, fuzzy
 msgid "Finnish"
 msgstr "丹麦语"
 
-#: lib/framework/i18n.c:56
-#: lib/framework/i18n.c:111
+#: lib/framework/i18n.c:61
+#: lib/framework/i18n.c:117
 msgid "French"
 msgstr "法语"
 
-#: lib/framework/i18n.c:64
-#: lib/framework/i18n.c:119
+#: lib/framework/i18n.c:69
+#: lib/framework/i18n.c:125
 msgid "Frisian"
 msgstr ""
 
-#: lib/framework/i18n.c:65
-#: lib/framework/i18n.c:120
+#: lib/framework/i18n.c:70
+#: lib/framework/i18n.c:126
 #, fuzzy
 msgid "Irish"
 msgstr "人机对战"
 
-#: lib/framework/i18n.c:66
-#: lib/framework/i18n.c:121
+#: lib/framework/i18n.c:71
+#: lib/framework/i18n.c:127
 msgid "Italian"
 msgstr "意大利语"
 
-#: lib/framework/i18n.c:68
-#: lib/framework/i18n.c:123
+#: lib/framework/i18n.c:73
+#: lib/framework/i18n.c:129
 msgid "Lithuanian"
 msgstr ""
 
-#: lib/framework/i18n.c:70
-#: lib/framework/i18n.c:125
+#: lib/framework/i18n.c:76
+#: lib/framework/i18n.c:131
 msgid "Norwegian"
 msgstr "挪威语"
 
-#: lib/framework/i18n.c:72
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:78
+#: lib/framework/i18n.c:133
 msgid "Dutch"
 msgstr "荷兰语"
 
-#: lib/framework/i18n.c:73
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:79
+#: lib/framework/i18n.c:134
 #, fuzzy
 msgid "Polish"
 msgstr "拆除"
 
-#: lib/framework/i18n.c:74
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:80
+#: lib/framework/i18n.c:135
 #, fuzzy
 msgid "Brazilian Portuguese"
 msgstr "葡萄牙语"
 
-#: lib/framework/i18n.c:75
-#: lib/framework/i18n.c:130
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:136
 #, fuzzy
 msgid "Portuguese"
 msgstr "葡萄牙语"
 
-#: lib/framework/i18n.c:76
-#: lib/framework/i18n.c:131
+#: lib/framework/i18n.c:82
+#: lib/framework/i18n.c:137
 msgid "Romanian"
 msgstr ""
 
-#: lib/framework/i18n.c:77
-#: lib/framework/i18n.c:132
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:138
 msgid "Russian"
 msgstr "俄语"
 
-#: lib/framework/i18n.c:78
-#: lib/framework/i18n.c:133
+#: lib/framework/i18n.c:84
+#: lib/framework/i18n.c:139
 msgid "Slovenian"
 msgstr ""
 
-#: lib/framework/i18n.c:87
-#: lib/framework/i18n.c:138
+#: lib/framework/i18n.c:93
+#: lib/framework/i18n.c:144
 msgid "Ukrainian"
 msgstr ""
 
-#: lib/framework/i18n.c:88
-#: lib/framework/i18n.c:139
+#: lib/framework/i18n.c:94
+#: lib/framework/i18n.c:145
 msgid "Simplified Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:89
-#: lib/framework/i18n.c:140
+#: lib/framework/i18n.c:95
+#: lib/framework/i18n.c:146
 msgid "Traditional Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:122
+#: lib/framework/i18n.c:128
 msgid "Latin"
 msgstr "拉丁语"
 
-#: lib/netplay/netplay.c:1174
+#: lib/netplay/netplay.c:1175
 #, c-format
 msgid "Player %u has the wrong game version. Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:1209
+#: lib/netplay/netplay.c:1210
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:1299
+#: lib/netplay/netplay.c:1300
 #, c-format
 msgid "Player %u has the wrong password. Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:2093
+#: lib/netplay/netplay.c:2094
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3045
+#: lib/netplay/netplay.c:3046
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3070
+#: lib/netplay/netplay.c:3071
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
+msgstr ""
+
+#: lib/netplay/netplay.c:3451
+msgid ", mods: "
 msgstr ""
 
 #: src/cheat.c:131
@@ -11290,7 +11294,7 @@ msgstr "玩家"
 
 #: src/design.c:455
 #: src/design.c:476
-#: src/design.c:3546
+#: src/design.c:3558
 msgid "New Vehicle"
 msgstr "设计新单位"
 
@@ -11329,18 +11333,18 @@ msgstr "发动机输出功率"
 
 #: src/design.c:727
 #: src/design.c:782
-#: src/design.c:1572
-#: src/design.c:1609
-#: src/design.c:1630
-#: src/design.c:1648
-#: src/design.c:1669
-#: src/design.c:1687
-#: src/design.c:1725
-#: src/design.c:1760
-#: src/design.c:1895
-#: src/design.c:1912
-#: src/design.c:1947
-#: src/design.c:1983
+#: src/design.c:1584
+#: src/design.c:1621
+#: src/design.c:1642
+#: src/design.c:1660
+#: src/design.c:1681
+#: src/design.c:1699
+#: src/design.c:1737
+#: src/design.c:1772
+#: src/design.c:1907
+#: src/design.c:1924
+#: src/design.c:1959
+#: src/design.c:1995
 msgid "Weight"
 msgstr "重量"
 
@@ -11359,73 +11363,73 @@ msgstr "总体成本"
 msgid "Power Usage"
 msgstr "能源占用"
 
-#: src/design.c:1335
+#: src/design.c:1347
 msgid "Transporter"
 msgstr "运输占位"
 
-#: src/design.c:1357
+#: src/design.c:1369
 msgid "Hydra "
 msgstr ""
 
-#: src/design.c:1554
+#: src/design.c:1566
 msgid "Sensor Range"
 msgstr "传感器半径"
 
-#: src/design.c:1563
+#: src/design.c:1575
 msgid "Sensor Power"
 msgstr "传感器能源"
 
-#: src/design.c:1600
+#: src/design.c:1612
 msgid "ECM Power"
 msgstr "ECM 能源"
 
-#: src/design.c:1622
-#: src/design.c:1639
-#: src/design.c:1661
-#: src/design.c:1678
+#: src/design.c:1634
+#: src/design.c:1651
+#: src/design.c:1673
+#: src/design.c:1690
 msgid "Build Points"
 msgstr "生产成本"
 
-#: src/design.c:1701
-#: src/design.c:1733
+#: src/design.c:1713
+#: src/design.c:1745
 msgid "Range"
 msgstr "攻击范围"
 
-#: src/design.c:1709
-#: src/design.c:1742
+#: src/design.c:1721
+#: src/design.c:1754
 msgid "Damage"
 msgstr "攻击力"
 
-#: src/design.c:1717
-#: src/design.c:1751
+#: src/design.c:1729
+#: src/design.c:1763
 msgid "Rate-of-Fire"
 msgstr "火力评估"
 
-#: src/design.c:1887
-#: src/design.c:1903
+#: src/design.c:1899
+#: src/design.c:1915
 msgid "Air Speed"
 msgstr "飞行移动速度"
 
-#: src/design.c:1923
-#: src/design.c:1956
+#: src/design.c:1935
+#: src/design.c:1968
 msgid "Road Speed"
 msgstr "公路移动速度"
 
-#: src/design.c:1931
-#: src/design.c:1965
+#: src/design.c:1943
+#: src/design.c:1977
 msgid "Off-Road Speed"
 msgstr "野地移动速度"
 
-#: src/design.c:1939
-#: src/design.c:1974
+#: src/design.c:1951
+#: src/design.c:1986
 msgid "Water Speed"
 msgstr "水面移动速度"
 
-#: src/design.c:2108
+#: src/design.c:2120
 msgid "Weapons"
 msgstr "武器"
 
-#: src/design.c:2130
+#: src/design.c:2142
 msgid "Systems"
 msgstr "系统"
 
@@ -11443,18 +11447,18 @@ msgstr "玩家"
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油井在燃烧, 无法建造钻油塔"
 
-#: src/display.c:1938
-#: src/display.c:2583
+#: src/display.c:1939
+#: src/display.c:2584
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - 损伤 %d%% - 经验 %d, %s"
 
-#: src/display.c:1954
+#: src/display.c:1955
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 损伤 %d%% - 经验 %d, %s"
 
-#: src/display.c:2161
+#: src/display.c:2162
 msgid "Truck ordered to build Oil Derrick"
 msgstr "命令工程车建造钻油塔"
 
@@ -11532,343 +11536,348 @@ msgstr "特种部队"
 msgid "Hero"
 msgstr "英雄部队"
 
-#: src/frontend.c:252
+#: src/frontend.c:253
 msgid "Single Player"
 msgstr "单人游戏"
 
-#: src/frontend.c:253
+#: src/frontend.c:254
 msgid "Multi Player"
 msgstr "多人游戏"
 
-#: src/frontend.c:254
-#: src/frontend.c:312
+#: src/frontend.c:255
+#: src/frontend.c:313
 msgid "Tutorial"
 msgstr "游戏教程"
 
-#: src/frontend.c:255
+#: src/frontend.c:256
 msgid "Options"
 msgstr "选项设置"
 
-#: src/frontend.c:256
+#: src/frontend.c:257
 #, fuzzy
 msgid "View Intro"
 msgstr "查看下一个工程车"
 
-#: src/frontend.c:258
+#: src/frontend.c:259
 msgid "Quit Game"
 msgstr "退出游戏"
 
-#: src/frontend.c:260
+#: src/frontend.c:261
 msgid "MAIN MENU"
 msgstr "主菜单"
 
-#: src/frontend.c:313
+#: src/frontend.c:314
 msgid "Fast Play"
 msgstr "快速开始"
 
-#: src/frontend.c:314
+#: src/frontend.c:315
 msgid "TUTORIALS"
 msgstr "游戏教程"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:316
-#: src/frontend.c:374
-#: src/frontend.c:527
-#: src/frontend.c:588
-#: src/frontend.c:730
-#: src/frontend.c:869
-#: src/frontend.c:976
-#: src/frontend.c:1183
-#: src/frontend.c:1326
+#: src/frontend.c:317
+#: src/frontend.c:375
+#: src/frontend.c:528
+#: src/frontend.c:591
+#: src/frontend.c:733
+#: src/frontend.c:872
+#: src/frontend.c:979
+#: src/frontend.c:1186
+#: src/frontend.c:1329
 msgctxt "menu"
 msgid "Return"
 msgstr "返回"
 
-#: src/frontend.c:368
+#: src/frontend.c:369
 msgid "New Campaign"
 msgstr "新的战役"
 
-#: src/frontend.c:369
+#: src/frontend.c:370
 msgid "Start Skirmish Game"
 msgstr "人机对战"
 
-#: src/frontend.c:370
+#: src/frontend.c:371
 msgid "Challenges"
 msgstr ""
 
-#: src/frontend.c:371
+#: src/frontend.c:372
 #: src/ingameop.c:281
 msgid "Load Game"
 msgstr "载入游戏"
 
-#: src/frontend.c:373
+#: src/frontend.c:374
 msgid "SINGLE PLAYER"
 msgstr "单人游戏"
 
-#: src/frontend.c:469
+#: src/frontend.c:470
 #: src/ingameop.c:507
 #: src/mission.c:2844
 #: src/mission.c:2949
 msgid "Load Saved Game"
 msgstr "载入游戏"
 
-#: src/frontend.c:522
+#: src/frontend.c:523
 msgid "MULTI PLAYER"
 msgstr "多人游戏"
 
-#: src/frontend.c:524
+#: src/frontend.c:525
 msgid "Host Game"
 msgstr "建立游戏"
 
-#: src/frontend.c:525
+#: src/frontend.c:526
 msgid "Join Game"
 msgstr "加入游戏"
 
-#: src/frontend.c:581
-#: src/multiint.c:1253
+#: src/frontend.c:584
+#: src/multiint.c:1264
 msgid "OPTIONS"
 msgstr "选项"
 
-#: src/frontend.c:582
+#: src/frontend.c:585
 msgid "Game Options"
 msgstr "游戏选项"
 
-#: src/frontend.c:583
+#: src/frontend.c:586
 msgid "Graphics Options"
 msgstr "图形选项"
 
-#: src/frontend.c:584
+#: src/frontend.c:587
 msgid "Video Options"
 msgstr "视频选项"
 
-#: src/frontend.c:585
+#: src/frontend.c:588
 #: src/ingameop.c:276
 msgid "Audio Options"
 msgstr "音频选项"
 
-#: src/frontend.c:586
+#: src/frontend.c:589
 #, fuzzy
 msgid "Mouse Options"
 msgstr "游戏选项"
 
-#: src/frontend.c:587
+#: src/frontend.c:590
 msgid "Key Mappings"
 msgstr "按键设置"
 
-#: src/frontend.c:649
+#: src/frontend.c:652
 msgid "Video Playback"
 msgstr "视频回放"
 
-#: src/frontend.c:653
-#: src/frontend.c:823
+#: src/frontend.c:656
+#: src/frontend.c:826
 msgid "1X"
 msgstr ""
 
-#: src/frontend.c:657
-#: src/frontend.c:813
+#: src/frontend.c:660
+#: src/frontend.c:816
 msgid "2X"
 msgstr ""
 
-#: src/frontend.c:661
-#: src/frontend.c:818
-#: src/frontend.c:941
-#: src/frontend.c:999
+#: src/frontend.c:664
+#: src/frontend.c:821
+#: src/frontend.c:944
+#: src/frontend.c:1002
 msgid "Fullscreen"
 msgstr "全屏显示"
 
-#: src/frontend.c:671
+#: src/frontend.c:674
 msgid "Screen Shake"
 msgstr "屏幕震动"
 
-#: src/frontend.c:674
-#: src/frontend.c:704
-#: src/frontend.c:718
-#: src/frontend.c:754
-#: src/frontend.c:790
-#: src/frontend.c:799
-#: src/frontend.c:962
-#: src/frontend.c:1060
-#: src/frontend.c:1098
-#: src/frontend.c:1134
-#: src/frontend.c:1146
-#: src/frontend.c:1158
-#: src/frontend.c:1170
-#: src/frontend.c:1206
-#: src/frontend.c:1219
-#: src/frontend.c:1233
-#: src/frontend.c:1247
+#: src/frontend.c:677
+#: src/frontend.c:707
+#: src/frontend.c:721
+#: src/frontend.c:757
+#: src/frontend.c:793
+#: src/frontend.c:802
+#: src/frontend.c:965
+#: src/frontend.c:1063
+#: src/frontend.c:1101
+#: src/frontend.c:1137
+#: src/frontend.c:1149
+#: src/frontend.c:1161
+#: src/frontend.c:1173
+#: src/frontend.c:1209
+#: src/frontend.c:1222
+#: src/frontend.c:1236
+#: src/frontend.c:1250
 msgid "On"
 msgstr "开"
 
-#: src/frontend.c:678
-#: src/frontend.c:700
-#: src/frontend.c:710
-#: src/frontend.c:722
-#: src/frontend.c:749
-#: src/frontend.c:785
-#: src/frontend.c:803
-#: src/frontend.c:966
-#: src/frontend.c:1055
-#: src/frontend.c:1093
-#: src/frontend.c:1138
-#: src/frontend.c:1150
-#: src/frontend.c:1162
-#: src/frontend.c:1174
-#: src/frontend.c:1201
-#: src/frontend.c:1214
-#: src/frontend.c:1228
-#: src/frontend.c:1242
+#: src/frontend.c:681
+#: src/frontend.c:703
+#: src/frontend.c:713
+#: src/frontend.c:725
+#: src/frontend.c:752
+#: src/frontend.c:788
+#: src/frontend.c:806
+#: src/frontend.c:969
+#: src/frontend.c:1058
+#: src/frontend.c:1096
+#: src/frontend.c:1141
+#: src/frontend.c:1153
+#: src/frontend.c:1165
+#: src/frontend.c:1177
+#: src/frontend.c:1204
+#: src/frontend.c:1217
+#: src/frontend.c:1231
+#: src/frontend.c:1245
 msgid "Off"
 msgstr "关"
 
-#: src/frontend.c:683
-#: src/multiint.c:1323
+#: src/frontend.c:686
+#: src/multiint.c:1334
 msgid "Fog"
 msgstr "迷雾"
 
-#: src/frontend.c:686
-#: src/frontend.c:772
+#: src/frontend.c:689
+#: src/frontend.c:775
 msgid "Mist"
 msgstr "薄雾（可以看见地形）"
 
-#: src/frontend.c:690
-#: src/frontend.c:765
-#: src/multiint.c:1325
+#: src/frontend.c:693
+#: src/frontend.c:768
+#: src/multiint.c:1336
 msgid "Fog Of War"
 msgstr "战争迷雾"
 
-#: src/frontend.c:697
-#: src/frontend.c:709
+#: src/frontend.c:700
+#: src/frontend.c:712
 msgid "Subtitles"
 msgstr "字幕"
 
-#: src/frontend.c:715
+#: src/frontend.c:718
 msgid "Shadows"
 msgstr "阴影"
 
-#: src/frontend.c:726
+#: src/frontend.c:729
 #, fuzzy
 msgid "GRAPHICS OPTIONS"
 msgstr "游戏选项"
 
-#: src/frontend.c:857
+#: src/frontend.c:860
 #: src/ingameop.c:179
 msgid "Voice Volume"
 msgstr "语音音量"
 
-#: src/frontend.c:861
+#: src/frontend.c:864
 #: src/ingameop.c:184
 msgid "FX Volume"
 msgstr "声效音量"
 
-#: src/frontend.c:865
+#: src/frontend.c:868
 #: src/ingameop.c:189
 msgid "Music Volume"
 msgstr "音乐音量"
 
-#: src/frontend.c:872
+#: src/frontend.c:875
 #, fuzzy
 msgid "AUDIO OPTIONS"
 msgstr "游戏选项"
 
-#: src/frontend.c:937
+#: src/frontend.c:940
 msgid "Graphics Mode*"
 msgstr "图形模式*"
 
-#: src/frontend.c:945
-#: src/frontend.c:994
+#: src/frontend.c:948
+#: src/frontend.c:997
 msgid "Windowed"
 msgstr "窗口"
 
-#: src/frontend.c:949
+#: src/frontend.c:952
 msgid "Resolution*"
 msgstr "屏幕分辨率*"
 
-#: src/frontend.c:954
+#: src/frontend.c:957
 msgid "Texture size"
 msgstr "质材尺寸"
 
-#: src/frontend.c:958
+#: src/frontend.c:961
 msgid "Vertical sync*"
 msgstr ""
 
-#: src/frontend.c:970
+#: src/frontend.c:973
 msgid "* Takes effect on game restart"
 msgstr "* 重启游戏后生效"
 
-#: src/frontend.c:973
+#: src/frontend.c:976
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "游戏选项"
 
-#: src/frontend.c:1131
+#: src/frontend.c:1134
 #, fuzzy
 msgid "Reverse Rotation"
 msgstr "翻转鼠标"
 
-#: src/frontend.c:1142
+#: src/frontend.c:1145
 msgid "Trap Cursor"
 msgstr ""
 
-#: src/frontend.c:1154
+#: src/frontend.c:1157
 msgid "Colored Cursors*"
 msgstr ""
 
-#: src/frontend.c:1167
+#: src/frontend.c:1170
 msgid "Switch Mouse Buttons"
 msgstr ""
 
-#: src/frontend.c:1177
+#: src/frontend.c:1180
 msgid "* May negatively affect performance"
 msgstr ""
 
-#: src/frontend.c:1180
+#: src/frontend.c:1183
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "游戏选项"
 
-#: src/frontend.c:1281
-#: src/frontend.c:1347
+#: src/frontend.c:1284
+#: src/frontend.c:1350
 msgid "Difficulty"
 msgstr "游戏难度"
 
-#: src/frontend.c:1285
-#: src/frontend.c:1355
-#: src/frontend.c:1386
+#: src/frontend.c:1288
+#: src/frontend.c:1358
+#: src/frontend.c:1389
 msgid "Easy"
 msgstr "容易"
 
-#: src/frontend.c:1288
-#: src/frontend.c:1358
-#: src/frontend.c:1378
+#: src/frontend.c:1291
+#: src/frontend.c:1361
+#: src/frontend.c:1381
 msgid "Normal"
 msgstr "正常"
 
-#: src/frontend.c:1292
-#: src/frontend.c:1361
-#: src/frontend.c:1382
+#: src/frontend.c:1295
+#: src/frontend.c:1364
+#: src/frontend.c:1385
 msgid "Hard"
 msgstr "困难"
 
-#: src/frontend.c:1297
-#: src/frontend.c:1348
+#: src/frontend.c:1300
+#: src/frontend.c:1351
 msgid "Scroll Speed"
 msgstr "屏幕卷动速度"
 
-#: src/frontend.c:1311
-#: src/frontend.c:1345
+#: src/frontend.c:1314
+#: src/frontend.c:1348
 msgid "Language"
 msgstr "语言"
 
-#: src/frontend.c:1323
-#: src/frontend.c:1346
+#: src/frontend.c:1326
+#: src/frontend.c:1349
 msgid "Unit Colour"
 msgstr "单位颜色"
 
-#: src/frontend.c:1329
-#: src/frontend.c:1349
+#: src/frontend.c:1332
+#: src/frontend.c:1352
 msgid "GAME OPTIONS"
 msgstr "游戏选项"
+
+#: src/frontend.c:1702
+#: src/multiint.c:2225
+msgid "Active mods: "
+msgstr ""
 
 #: src/hci.c:1012
 #: src/hci.c:3835
@@ -11943,7 +11952,7 @@ msgid "Build (F3)"
 msgstr "建造建筑 (F3)"
 
 #: src/hci.c:3897
-#: src/multiint.c:1370
+#: src/multiint.c:1381
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "能源"
@@ -12060,7 +12069,7 @@ msgid "Power Accrued"
 msgstr ""
 
 #: src/intelmap.c:245
-#: src/keybind.c:1292
+#: src/keybind.c:1293
 msgid "PAUSED"
 msgstr "暂停"
 
@@ -12188,299 +12197,295 @@ msgstr ""
 msgid "Circle"
 msgstr ""
 
-#: src/keybind.c:133
+#: src/keybind.c:134
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "抱歉, 多人游戏时无法使用作弊码"
 
-#: src/keybind.c:139
+#: src/keybind.c:140
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr ""
 
-#: src/keybind.c:198
+#: src/keybind.c:199
 msgid "Lets us see what you see!"
 msgstr ""
 
-#: src/keybind.c:200
+#: src/keybind.c:201
 msgid "Fine, weapon & sensor display is off!"
 msgstr ""
 
-#: src/keybind.c:300
-#: src/keybind.c:330
-#: src/keybind.c:347
-#: src/keybind.c:391
-#: src/keybind.c:496
-#: src/keybind.c:536
-#: src/keybind.c:642
-#: src/keybind.c:1193
-#: src/keybind.c:1250
-#: src/keybind.c:1341
-#: src/keybind.c:1438
-#: src/keybind.c:1749
-#: src/keybind.c:1789
+#: src/keybind.c:301
+#: src/keybind.c:331
+#: src/keybind.c:348
+#: src/keybind.c:392
+#: src/keybind.c:497
+#: src/keybind.c:537
+#: src/keybind.c:643
+#: src/keybind.c:1194
+#: src/keybind.c:1251
+#: src/keybind.c:1342
+#: src/keybind.c:1439
+#: src/keybind.c:1750
+#: src/keybind.c:1790
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
 
-#: src/keybind.c:301
+#: src/keybind.c:302
 msgid "Hard as nails!!!"
 msgstr ""
 
-#: src/keybind.c:315
+#: src/keybind.c:316
 msgid "Takings thing easy!"
 msgstr ""
 
-#: src/keybind.c:331
+#: src/keybind.c:332
 msgid "1000 big ones!!!"
 msgstr ""
 
-#: src/keybind.c:348
+#: src/keybind.c:349
 msgid "Power overwhelming"
 msgstr ""
 
-#: src/keybind.c:363
+#: src/keybind.c:364
 msgid "Back to normality!"
 msgstr ""
 
-#: src/keybind.c:376
+#: src/keybind.c:377
 msgid "Getting tricky!"
 msgstr ""
 
-#: src/keybind.c:392
+#: src/keybind.c:393
 msgid "Twice as nice!"
 msgstr ""
 
-#: src/keybind.c:403
+#: src/keybind.c:404
 msgid "FPS display is enabled."
 msgstr "开启 FPS 显示"
 
-#: src/keybind.c:407
+#: src/keybind.c:408
 msgid "FPS display is disabled."
 msgstr "关闭 FPS 显示"
 
-#: src/keybind.c:428
+#: src/keybind.c:429
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; FPS上限: %d; PIEs %d; polys %d; Terr. polys %d; 状态 %d"
 
-#: src/keybind.c:460
+#: src/keybind.c:461
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr ""
 
-#: src/keybind.c:497
+#: src/keybind.c:498
 msgid "Infinite power disabled"
 msgstr ""
 
-#: src/keybind.c:497
+#: src/keybind.c:498
 msgid "Infinite power enabled"
 msgstr ""
 
-#: src/keybind.c:537
+#: src/keybind.c:538
 msgid "All items made available"
 msgstr ""
 
-#: src/keybind.c:643
+#: src/keybind.c:644
 msgid "Fog on"
 msgstr "迷雾 开"
 
-#: src/keybind.c:643
+#: src/keybind.c:644
 msgid "Fog off"
 msgstr "迷雾 关"
 
-#: src/keybind.c:1082
+#: src/keybind.c:1083
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1082
+#: src/keybind.c:1083
 msgid "Ending Mission."
 msgstr ""
 
-#: src/keybind.c:1194
+#: src/keybind.c:1195
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1194
+#: src/keybind.c:1195
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1251
+#: src/keybind.c:1252
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1251
+#: src/keybind.c:1252
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1263
+#: src/keybind.c:1264
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1342
+#: src/keybind.c:1343
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1375
+#: src/keybind.c:1376
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1376
+#: src/keybind.c:1377
 #, fuzzy
 msgid "Researched"
 msgstr "研究科技"
 
-#: src/keybind.c:1396
+#: src/keybind.c:1397
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1399
+#: src/keybind.c:1400
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1402
+#: src/keybind.c:1403
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1424
+#: src/keybind.c:1425
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "演示模式关闭 - 正在返回正常游戏模式"
 
-#: src/keybind.c:1439
+#: src/keybind.c:1440
 msgid "Debug menu is Open"
 msgstr ""
 
-#: src/keybind.c:1470
+#: src/keybind.c:1471
 msgid "Unable to locate any resource extractors!"
 msgstr ""
 
-#: src/keybind.c:1691
+#: src/keybind.c:1692
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.c:1697
+#: src/keybind.c:1698
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.c:1703
+#: src/keybind.c:1704
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.c:1748
+#: src/keybind.c:1749
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1750
+#: src/keybind.c:1751
 msgid "All enemies destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.c:1790
+#: src/keybind.c:1791
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2314
+#: src/keybind.c:2319
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2326
+#: src/keybind.c:2331
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.c:2337
-msgid "Formation speed limiting OFF"
+#: src/keybind.c:2338
+msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2341
-msgid "Formation speed limiting ON"
-msgstr ""
-
-#: src/keybind.c:2392
+#: src/keybind.c:2387
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2397
+#: src/keybind.c:2392
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2406
+#: src/keybind.c:2401
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2411
+#: src/keybind.c:2406
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2456
-#: src/keybind.c:2499
+#: src/keybind.c:2451
+#: src/keybind.c:2494
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "抱歉, 多人游戏时无法使用作弊码"
 
-#: src/keybind.c:2477
-#: src/keybind.c:2520
-#: src/keybind.c:2542
+#: src/keybind.c:2472
+#: src/keybind.c:2515
+#: src/keybind.c:2537
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.c:2481
+#: src/keybind.c:2476
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2524
+#: src/keybind.c:2519
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2554
+#: src/keybind.c:2549
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2558
+#: src/keybind.c:2553
 msgid "Build menu will not reopen"
 msgstr ""
 
-#: src/keybind.c:2570
+#: src/keybind.c:2565
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2574
+#: src/keybind.c:2569
 msgid "Radar showing player colors"
 msgstr ""
 
-#: src/keybind.c:2595
+#: src/keybind.c:2590
 msgid "Radar showing only objects"
 msgstr ""
 
-#: src/keybind.c:2598
+#: src/keybind.c:2593
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2601
+#: src/keybind.c:2596
 msgid "Radar showing terrain"
 msgstr ""
 
-#: src/keybind.c:2604
+#: src/keybind.c:2599
 msgid "Radar showing revealed terrain"
 msgstr ""
 
-#: src/keybind.c:2607
+#: src/keybind.c:2602
 msgid "Radar showing height"
 msgstr ""
 
-#: src/keyedit.c:364
+#: src/keyedit.c:373
 msgid "KEY MAPPING"
 msgstr "按键设置"
 
-#: src/keyedit.c:386
-#: src/multiint.c:642
-#: src/multiint.c:684
-#: src/multiint.c:1071
-#: src/multiint.c:1456
+#: src/keyedit.c:395
+#: src/multiint.c:643
+#: src/multiint.c:685
+#: src/multiint.c:1082
+#: src/multiint.c:1467
 msgid "Return To Previous Screen"
 msgstr "返回到前一个屏幕"
 
-#: src/keyedit.c:391
+#: src/keyedit.c:400
 msgid "Select Default"
 msgstr "还原到默认按键设置"
 
@@ -12943,265 +12948,273 @@ msgstr ""
 msgid "You Discover Blueprints For %s"
 msgstr ""
 
-#: src/multiint.c:576
+#: src/multiint.c:577
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "确认设置"
 
-#: src/multiint.c:578
-#: src/multiint.c:1119
+#: src/multiint.c:579
+#: src/multiint.c:1130
 #, fuzzy
 msgid "Cancel"
 msgstr "青绿色"
 
-#: src/multiint.c:589
+#: src/multiint.c:590
 msgid "IP Address or Machine Name"
 msgstr "IP地址或计算机名称"
 
-#: src/multiint.c:639
+#: src/multiint.c:640
 msgid "CONNECTION"
 msgstr "连接"
 
-#: src/multiint.c:652
+#: src/multiint.c:653
 msgid "Lobby"
 msgstr "游戏大厅"
 
-#: src/multiint.c:653
+#: src/multiint.c:654
 msgid "IP"
 msgstr "IP直连"
 
-#: src/multiint.c:839
+#: src/multiint.c:845
 msgid "No games are available"
 msgstr ""
 
-#: src/multiint.c:842
+#: src/multiint.c:848
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.c:846
+#: src/multiint.c:852
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.c:849
+#: src/multiint.c:855
 msgid "Wrong Game Version!"
 msgstr ""
 
-#: src/multiint.c:852
-msgid "Wrong data/mod detected by Host."
+#: src/multiint.c:858
+msgid "You have an incompatible mod."
 msgstr ""
 
-#: src/multiint.c:857
+#: src/multiint.c:863
 msgid "Host couldn't send file?"
 msgstr ""
 
-#: src/multiint.c:861
+#: src/multiint.c:867
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:864
+#: src/multiint.c:870
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.c:868
+#: src/multiint.c:874
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:1012
+#: src/multiint.c:1023
 msgid "Searching"
 msgstr "正在搜索"
 
-#: src/multiint.c:1068
+#: src/multiint.c:1079
 msgid "GAMES"
 msgstr "游戏"
 
-#: src/multiint.c:1076
+#: src/multiint.c:1087
 msgid "Refresh Games List"
 msgstr "刷新游戏列表"
 
-#: src/multiint.c:1096
+#: src/multiint.c:1107
 #, fuzzy
 msgid "Enter Password:"
 msgstr "点击查看地图"
 
-#: src/multiint.c:1117
+#: src/multiint.c:1128
 msgid "OK"
 msgstr ""
 
-#: src/multiint.c:1258
-#: src/multiint.c:1265
+#: src/multiint.c:1269
+#: src/multiint.c:1276
 msgid "Select Game Name"
 msgstr "选择游戏名称"
 
-#: src/multiint.c:1258
+#: src/multiint.c:1269
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "单人的人机对战"
 
-#: src/multiint.c:1268
+#: src/multiint.c:1279
 msgid "Select Map"
 msgstr "选择地图"
 
-#: src/multiint.c:1276
+#: src/multiint.c:1287
 #, fuzzy
 msgid "Click to set Password"
 msgstr "点击查看地图"
 
-#: src/multiint.c:1286
-#: src/multiint.c:1287
+#: src/multiint.c:1297
+#: src/multiint.c:1298
 msgid "Scavengers"
 msgstr ""
 
-#: src/multiint.c:1289
+#: src/multiint.c:1300
 msgid "No Scavengers"
 msgstr ""
 
-#: src/multiint.c:1320
+#: src/multiint.c:1331
 msgid "Select Player Name"
 msgstr "选择玩家名字"
 
-#: src/multiint.c:1326
+#: src/multiint.c:1337
 msgid "Distance Fog"
 msgstr "薄雾（可以看见地形）"
 
-#: src/multiint.c:1337
+#: src/multiint.c:1348
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.c:1340
+#: src/multiint.c:1351
 msgid "No Alliances"
 msgstr "无同盟"
 
-#: src/multiint.c:1342
+#: src/multiint.c:1353
 msgid "Allow Alliances"
 msgstr "允许同盟"
 
-#: src/multiint.c:1346
+#: src/multiint.c:1357
 msgid "Locked Teams"
 msgstr "已锁定团队"
 
-#: src/multiint.c:1372
+#: src/multiint.c:1383
 msgid "Low Power Levels"
 msgstr "低能源水平"
 
-#: src/multiint.c:1374
+#: src/multiint.c:1385
 msgid "Medium Power Levels"
 msgstr "中等能源水平"
 
-#: src/multiint.c:1376
+#: src/multiint.c:1387
 msgid "High Power Levels"
 msgstr "高能源水平"
 
-#: src/multiint.c:1408
+#: src/multiint.c:1419
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.c:1410
+#: src/multiint.c:1421
 msgid "Start with No Bases"
 msgstr "开始时没有基地"
 
-#: src/multiint.c:1412
+#: src/multiint.c:1423
 msgid "Start with Bases"
 msgstr "开始时有基地"
 
-#: src/multiint.c:1414
+#: src/multiint.c:1425
 msgid "Start with Advanced Bases"
 msgstr "开始时有高级基地"
 
-#: src/multiint.c:1446
+#: src/multiint.c:1457
 msgid "Map Preview"
 msgstr "地图预览"
 
-#: src/multiint.c:1448
+#: src/multiint.c:1459
 msgid "Click to see Map"
 msgstr "点击查看地图"
 
-#: src/multiint.c:1462
+#: src/multiint.c:1473
 msgid "Start Hosting Game"
 msgstr "开始建立游戏"
 
-#: src/multiint.c:1470
+#: src/multiint.c:1481
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "设置建筑数量限制"
 
-#: src/multiint.c:1470
+#: src/multiint.c:1481
 msgid "Set Structure Limits"
 msgstr "设置建筑数量限制"
 
-#: src/multiint.c:1533
+#: src/multiint.c:1544
 #, fuzzy
 msgid "Player colour"
 msgstr "玩家"
 
-#: src/multiint.c:1549
+#: src/multiint.c:1560
 #, fuzzy
 msgid "Kick player"
 msgstr "2个玩家"
 
-#: src/multiint.c:1560
+#: src/multiint.c:1571
 #, fuzzy
 msgid "Player number"
 msgstr "玩家"
 
-#: src/multiint.c:1922
+#: src/multiint.c:1933
 msgid "Team"
 msgstr "团队"
 
-#: src/multiint.c:1955
+#: src/multiint.c:1966
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
-#: src/multiint.c:1961
+#: src/multiint.c:1972
 msgid "Click when ready"
 msgstr "点击准备开始游戏"
 
-#: src/multiint.c:1965
+#: src/multiint.c:1976
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.c:2002
+#: src/multiint.c:2013
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.c:2185
+#: src/multiint.c:2196
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.c:2360
+#: src/multiint.c:2230
+msgid "All players need to have the same mods to join your game."
+msgstr ""
+
+#: src/multiint.c:2383
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2367
+#: src/multiint.c:2390
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2609
+#: src/multiint.c:2632
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2694
+#: src/multiint.c:2717
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "已锁定团队"
 
-#: src/multiint.c:2733
-#: src/multiint.c:2783
+#: src/multiint.c:2756
+#: src/multiint.c:2806
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家将 %s 踢出游戏!"
 
-#: src/multiint.c:2841
+#: src/multiint.c:2864
 msgid "Host is Starting Game"
 msgstr "主玩家正在开始游戏"
 
-#: src/multiint.c:3388
+#: src/multiint.c:3412
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.c:3504
+#: src/multiint.c:3528
 #, c-format
 msgid "Map: %d%% downloaded"
+msgstr ""
+
+#: src/multiint.c:3554
+msgid "HOST"
 msgstr ""
 
 #: src/multijoin.c:98
@@ -13355,16 +13368,16 @@ msgstr "粉红色"
 msgid "Cyan"
 msgstr "青绿色"
 
-#: src/research.c:1844
+#: src/research.c:1851
 #, c-format
 msgid "Research completed: %s"
 msgstr "科技研发已完成: %s"
 
-#: src/research.c:1849
+#: src/research.c:1856
 msgid "Research Completed"
 msgstr "研究已完成"
 
-#: src/research.c:2657
+#: src/research.c:2664
 msgid "Research Award"
 msgstr "科技研发中心"
 
