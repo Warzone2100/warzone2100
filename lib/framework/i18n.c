@@ -110,7 +110,7 @@ static const struct
 	{ "de", N_("German"), "de_DE.UTF-8", "de_DE" },
 //	{ "en", N_("English"), "en_US.UTF-8", "en_US" },
 	{ "en_GB", N_("English (United Kingdom)"), "en_GB.UTF-8", "en_GB" },
-	{ "es", N_("Spanish"), "es.UTF-8", "es" },
+	{ "es", N_("Spanish"), "es_ES.UTF-8", "es_ES" },
 	{ "et_EE", N_("Estonian"), "et_EE.UTF-8", "et_EE" },
 //	{ "eu", N_("Basque"), "eu.UTF-8", "eu" },
 	{ "fi", N_("Finnish"), "fi.UTF-8", "fi" },
