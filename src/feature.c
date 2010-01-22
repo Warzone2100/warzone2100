@@ -490,7 +490,7 @@ bool removeFeature(FEATURE *psDel)
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
 	ASSERT_OR_RETURN(false, !psDel->died, "Feature already dead");
 
-	if(bMultiPlayer && !ingame.localJoiningInProgress)
+	if(bMultiMessages && !ingame.localJoiningInProgress)
 	{
 		SendDestroyFeature(psDel);	// inform other players of destruction
 	}

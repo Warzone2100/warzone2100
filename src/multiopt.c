@@ -266,7 +266,8 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
-	bMultiPlayer = true;								// enable messages
+	bMultiPlayer = true;
+	bMultiMessages = true; // enable messages
 
 	loadMultiStats(sPlayer,&playerStats);				// stats stuff
 	setMultiStats(selectedPlayer, playerStats, false);
@@ -385,6 +386,7 @@ static BOOL cleanMap(UDWORD player)
 	BOOL		firstFact,firstRes;
 
 	bMultiPlayer = false;
+	bMultiMessages = false;
 
 	firstFact = true;
 	firstRes = true;
@@ -510,6 +512,7 @@ static BOOL cleanMap(UDWORD player)
 //	reverseObjectList((BASE_OBJECT**)&apsStructLists[player]);
 
 	bMultiPlayer = true;
+	bMultiMessages = true;
 	return true;
 }
 
@@ -635,6 +638,7 @@ BOOL multiGameShutdown(void)
 	ingame.bHostSetup = false;	// Dont attempt a host
 	NetPlay.isHost					= false;
 	bMultiPlayer					= false;	// Back to single player mode
+	bMultiMessages					= false;
 	selectedPlayer					= 0;		// Back to use player 0 (single player friendly)
 
 	return true;

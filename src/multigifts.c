@@ -422,7 +422,7 @@ void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allow
 		audio_QueueTrack(ID_ALLIANCE_ACC);
 	}
 
-	if (bMultiPlayer && prop)
+	if (bMultiMessages && prop)
 	{
 		sendAlliance(p1, p2, ALLIANCE_FORMED, false);
 	}

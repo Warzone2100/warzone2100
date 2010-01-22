@@ -2594,6 +2594,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			game			= saveGameData.sGame;
 			productionPlayer= selectedPlayer;
 			bMultiPlayer	= saveGameData.multiPlayer;
+			bMultiMessages	= bMultiPlayer;
 			cmdDroidMultiExpBoost(true);
 
 			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
@@ -3426,11 +3427,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	//after the clock has been reset need to check if any res_extractors are active
 	checkResExtractorsActive();
 
-//	if (multiPlayerInUse)
-//	{
-//		bMultiPlayer = true;				// reenable multi player messages.
-//		multiPlayerInUse = false;
-//	}
 //	initViewPosition();
 
 	//check if limbo_expand mission has changed to an expand mission for user save game (mid-mission)
@@ -3479,11 +3475,6 @@ error:
 
 	/* Start the game clock */
 	gameTimeStart();
-//	if (multiPlayerInUse)
-//	{
-//		bMultiPlayer = true;				// reenable multi player messages.
-//		multiPlayerInUse = false;
-//	}
 
 	return false;
 }
@@ -4732,6 +4723,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			PLAYERSTATS		playerStats;
 
 			bMultiPlayer	= saveGameData.multiPlayer;
+			bMultiMessages	= bMultiPlayer;
 			productionPlayer = selectedPlayer;
 			game			= saveGameData.sGame;
 			cmdDroidMultiExpBoost(true);

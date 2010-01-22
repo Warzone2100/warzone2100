@@ -74,6 +74,7 @@
 // globals.
 bool						isMPDirtyBit = false;		// When we are forced to use turnOffMultiMsg() we set this
 BOOL						bMultiPlayer				= false;	// true when more than 1 player.
+BOOL						bMultiMessages				= false;	// == bMultiPlayer unless multimessages are disabled
 BOOL						openchannels[MAX_PLAYERS]={true};
 UBYTE						bDisplayMultiJoiningStatus;
 
@@ -126,18 +127,18 @@ BOOL turnOffMultiMsg(BOOL bDoit)
 			// This is spammed multiple times.
 			debug(LOG_NEVER, "multiple calls to turn off");
 		}
-		if(bMultiPlayer)
+		if(bMultiMessages)
 		{
-			bMultiPlayer = false;
+			bMultiMessages = false;
 			bTemp = true;
-			isMPDirtyBit = true;
+			bMultiMessages = true;
 		}
 	}
 	else	// turn on msgs.
 	{
 		if(bTemp)
 		{
-			bMultiPlayer = true;
+			bMultiMessages = true;
 			bTemp = false;
 		}
 	}

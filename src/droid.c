@@ -383,7 +383,7 @@ void	removeDroidBase(DROID *psDel)
 	}
 
 	//ajl, inform others of destruction.
-	if (bMultiPlayer
+	if (bMultiMessages
 	 && !(psDel->player != selectedPlayer && psDel->order == DORDER_RECYCLE))
 	{
 		ASSERT_OR_RETURN( , droidOnMap(psDel), "Asking other players to destroy droid driving off the map");
@@ -984,7 +984,7 @@ BOOL droidStartBuild(DROID *psDroid)
 		}
 		psStruct->body /= 10; // structures start at 10% health
 
-		if (bMultiPlayer)
+		if (bMultiMessages)
 		{
 			if(myResponsibility(psDroid->player) )
 			{
@@ -2560,7 +2560,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	}
 
 	// ajl. droid will be created, so inform others
-	if(bMultiPlayer)
+	if(bMultiMessages)
 	{
 		if (SendDroid(pTemplate,  x,  y,  (UBYTE)player, psDroid->id) == false)
 		{

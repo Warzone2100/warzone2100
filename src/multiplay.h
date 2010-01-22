@@ -76,6 +76,7 @@ extern MULTIPLAYERGAME		game;						// the game description.
 extern MULTIPLAYERINGAME	ingame;						// the game description.
 
 extern BOOL					bMultiPlayer;				// true when more than 1 player.
+extern BOOL					bMultiMessages;				// == bMultiPlayer unless multi messages are disabled
 extern UDWORD				selectedPlayer;
 extern BOOL					openchannels[MAX_PLAYERS];
 extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
