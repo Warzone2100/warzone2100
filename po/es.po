@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-01-22 18:44+0100\n"
-"PO-Revision-Date: 2010-01-21 22:32+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2008-05-09 17:09+0000\n"
+"Last-Translator: Samuel G. I. <amuchamu@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6240,9 +6240,8 @@ msgstr "Z NULL REPAIR"
 
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
-#, fuzzy
 msgid "Repair Turret"
-msgstr "Torreta Pesada de Reparación"
+msgstr "Torreta de Reparación"
 
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:352
@@ -7464,9 +7463,8 @@ msgid "Lancer Guard Tower"
 msgstr "Torre de Guardia Lanzadera"
 
 #: data/base/messages/strings/names.txt:759
-#, fuzzy
 msgid "Mini-Rocket Guard Tower"
-msgstr "Torre de Guardia Mini-Pod"
+msgstr "Torre de Guardia Mini-Cohetes"
 
 #: data/base/messages/strings/names.txt:772
 #: data/base/messages/strings/names.txt:1382
@@ -9834,9 +9832,8 @@ msgid "Bomb Upgrade"
 msgstr "Mejora de Bombas"
 
 #: data/mp/messages/resmessages23.rmsg:161
-#, fuzzy
 msgid "Improved trinitramine explosive formula"
-msgstr "Munición altamente explosiva mejorada"
+msgstr "Mejora de Munición altamente explosiva"
 
 #: data/mp/messages/resmessages23.rmsg:162
 #: data/mp/messages/resmessages2.rmsg:734
@@ -10210,7 +10207,6 @@ msgid "Medium Super Heavy Body"
 msgstr "Carrocería Súper Pesada Media"
 
 #: data/mp/messages/resmessagesall.rmsg:720
-#, fuzzy
 msgid "More armor and body points than Vengeance"
 msgstr "Más defensa y puntos estructurales que Venganza"
 
@@ -10368,9 +10364,8 @@ msgstr "Torre de Láser de Pulsos"
 
 #: data/mp/messages/strings/names.txt:512
 #: data/mp/messages/strings/names.txt:1134
-#, fuzzy
 msgid "Seraph Missile Array"
-msgstr "Mejora precisión de Misiles"
+msgstr "Batería de Misiles Ángel"
 
 #: data/mp/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:1194
@@ -10388,9 +10383,8 @@ msgid "VTOL Cluster Bomb Bay"
 msgstr "ADV Bahía de Bombas de Racimo"
 
 #: data/mp/messages/strings/names.txt:589
-#, fuzzy
 msgid "Collective Corner Wall"
-msgstr "CMuro Colectivo"
+msgstr "Esquina de Muro Colectivo"
 
 #: data/mp/messages/strings/names.txt:611
 msgid "Nexus Wall"
@@ -10423,7 +10417,6 @@ msgstr "Emplazamiento de Cañón de Hiper Velocidad"
 
 #: data/mp/messages/strings/names.txt:739
 #: data/mp/messages/strings/names.txt:1389
-#, fuzzy
 msgid "Seraph Missile Battery"
 msgstr "Batería de Misiles Ángel"
 
@@ -10540,9 +10533,8 @@ msgid "Cluster Bomb Bay"
 msgstr "Bahía de Bombas de Racimo"
 
 #: data/mp/messages/strings/names.txt:1021
-#, fuzzy
 msgid "HE Bomb Shells"
-msgstr "Munición HE Mortero"
+msgstr "Munición HE Bombas"
 
 #: data/mp/messages/strings/names.txt:1022
 msgid "Improved Bomb Warhead"
@@ -10553,9 +10545,8 @@ msgid "Advanced Bomb Warhead"
 msgstr "Ojivas Avanzadas de Misiles"
 
 #: data/mp/messages/strings/names.txt:1093
-#, fuzzy
 msgid "Howitzer Fast Loader"
-msgstr "Recarga Rápida de Mortero"
+msgstr "Recarga Rápida de Azote"
 
 #: data/mp/messages/strings/names.txt:1109
 msgid "Rapid Fire Chaingun"
@@ -10633,15 +10624,13 @@ msgstr "Mecánico Cyborg"
 
 #: data/mp/messages/strings/names.txt:1632
 #: data/mp/messages/strings/names.txt:1633
-#, fuzzy
 msgid "Incendiary Howitzer"
-msgstr "Lanza-obuses Incendiario"
+msgstr "Azote Incendiario"
 
 #: data/mp/messages/strings/names.txt:1634
 #: data/mp/messages/strings/names.txt:1635
-#, fuzzy
 msgid "Incendiary Howitzer Emplacement"
-msgstr "Emplazamiento Lanza-obuses Incendiario"
+msgstr "Emplazamiento Azote Incendiario"
 
 #: data/mp/messages/strings/names.txt:1636
 #: data/mp/messages/strings/names.txt:1637
@@ -10804,12 +10793,11 @@ msgstr "Torre Cañón PEM"
 #: data/mp/messages/strings/names.txt:1743
 #: data/mp/messages/strings/names.txt:1745
 msgid "Mass Driver Fortress"
-msgstr "Fuerte Impulso Masivo"
+msgstr "Fuerte de Disrupción de Masa"
 
 #: data/mp/messages/strings/names.txt:1744
-#, fuzzy
 msgid "Mass Driver"
-msgstr "Fuerte Impulso Masivo"
+msgstr "Disrupción de Masa"
 
 #: data/mp/messages/strings/names.txt:1747
 #: data/mp/messages/strings/names.txt:1748
@@ -10870,13 +10858,12 @@ msgstr "Foso Mortero EMP"
 #: data/mp/messages/strings/names.txt:1777
 #: data/mp/messages/strings/names.txt:1779
 msgid "Stormbringer AA Laser"
-msgstr "Nido AA Láser Tormenta"
+msgstr "AA Láser Tormenta"
 
 #: data/mp/messages/strings/names.txt:1778
 #: data/mp/messages/strings/names.txt:1780
-#, fuzzy
 msgid "Stormbringer Emplacement"
-msgstr "Emplazamiento Bombardero"
+msgstr "Emplazamiento AA Láser Tormenta"
 
 #: data/mp/messages/strings/names.txt:1781
 #: data/mp/messages/strings/names.txt:1782
@@ -11218,19 +11205,16 @@ msgid "Heavy Laser Tiger Tracks"
 msgstr "Tigre Láser Pesado Oruga"
 
 #: data/mp/messages/strings/names.txt:1926
-#, fuzzy
 msgid "Gauss Cannon Wyvern Tracks"
-msgstr "Pitón Cañón de Gauss Oruga"
+msgstr "Cañón Gauss Dragón Heráldico Oruga"
 
 #: data/mp/messages/strings/names.txt:1927
-#, fuzzy
 msgid "Pulse Laser Wyvern Tracks"
-msgstr "Tigre Láser de Pulsos Oruga"
+msgstr "Láser de Pulsos Dragón Heráldico Oruga"
 
 #: data/mp/messages/strings/names.txt:1928
-#, fuzzy
 msgid "Heavy Laser Wyvern Tracks"
-msgstr "Tigre Láser Pesado Oruga"
+msgstr "Láser Pesado Dragón Heráldico Oruga"
 
 #: data/mp/messages/strings/names.txt:1930
 msgid "Machinegun Viper Half-Tracks"
@@ -11267,9 +11251,8 @@ msgstr "Inglés (Reino Unido)"
 
 #: lib/framework/i18n.c:57
 #: lib/framework/i18n.c:113
-#, fuzzy
 msgid "Spanish"
-msgstr "Danés"
+msgstr "Español"
 
 #: lib/framework/i18n.c:58
 #: lib/framework/i18n.c:114
@@ -11278,7 +11261,6 @@ msgstr "Estonio"
 
 #: lib/framework/i18n.c:60
 #: lib/framework/i18n.c:116
-#, fuzzy
 msgid "Finnish"
 msgstr "Danés"
 
@@ -11290,13 +11272,12 @@ msgstr "Francés"
 #: lib/framework/i18n.c:69
 #: lib/framework/i18n.c:125
 msgid "Frisian"
-msgstr ""
+msgstr "Frisón"
 
 #: lib/framework/i18n.c:70
 #: lib/framework/i18n.c:126
-#, fuzzy
 msgid "Irish"
-msgstr "Escaramuza"
+msgstr "Irlandés"
 
 #: lib/framework/i18n.c:71
 #: lib/framework/i18n.c:127
@@ -11320,19 +11301,16 @@ msgstr "Holandés"
 
 #: lib/framework/i18n.c:79
 #: lib/framework/i18n.c:134
-#, fuzzy
 msgid "Polish"
-msgstr "Demoler"
+msgstr "Pulir"
 
 #: lib/framework/i18n.c:80
 #: lib/framework/i18n.c:135
-#, fuzzy
 msgid "Brazilian Portuguese"
-msgstr "Portugués"
+msgstr "Portugués Brasileño"
 
 #: lib/framework/i18n.c:81
 #: lib/framework/i18n.c:136
-#, fuzzy
 msgid "Portuguese"
 msgstr "Portugués"
 
@@ -11401,7 +11379,7 @@ msgstr "No se pudo comunicar con el servidor! Está el puerto TCP %u abierto par
 
 #: lib/netplay/netplay.c:3451
 msgid ", mods: "
-msgstr ""
+msgstr ", mods: "
 
 #: src/cheat.c:131
 msgid ": Unknown cheat code."
@@ -11445,7 +11423,7 @@ msgstr "fichero"
 
 #: src/clparse.c:104
 msgid "Flush all debug output written to stderr"
-msgstr ""
+msgstr "Desechar todo el debug escrito en stderr"
 
 #: src/clparse.c:105
 msgid "Play in fullscreen mode"
@@ -11628,7 +11606,7 @@ msgstr "Transporte"
 
 #: src/design.c:1369
 msgid "Hydra "
-msgstr ""
+msgstr "Hidra"
 
 #: src/design.c:1566
 msgid "Sensor Range"
@@ -11711,9 +11689,9 @@ msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Daño %d%% - Experiencia %d, %s"
 
 #: src/display.c:1955
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
-msgstr "%s - Daño %d%% - Experiencia %d, %s"
+msgstr "%s Aliado - Daño %d%% - Experiencia %d, %s"
 
 #: src/display.c:2162
 msgid "Truck ordered to build Oil Derrick"
@@ -11920,12 +11898,12 @@ msgstr "Reproducción de Vídeo"
 #: src/frontend.c:656
 #: src/frontend.c:826
 msgid "1X"
-msgstr ""
+msgstr "1X"
 
 #: src/frontend.c:660
 #: src/frontend.c:816
 msgid "2X"
-msgstr ""
+msgstr "2X"
 
 #: src/frontend.c:664
 #: src/frontend.c:821
@@ -12046,7 +12024,7 @@ msgstr "Tamaño de las texturas"
 
 #: src/frontend.c:961
 msgid "Vertical sync*"
-msgstr ""
+msgstr "Sincronización Vertical"
 
 #: src/frontend.c:973
 msgid "* Takes effect on game restart"
@@ -12234,7 +12212,7 @@ msgstr "Hazaña"
 
 #: src/hci.c:4110
 msgid "Place Features on map"
-msgstr ""
+msgstr "Colocar Características en el mapa"
 
 #: src/hci.c:4121
 msgid "Pause or unpause the game"
@@ -12640,15 +12618,15 @@ msgstr "¡Incapazde encontrar el CG!"
 
 #: src/keybind.c:2338
 msgid "Formation speed limiting has been removed from the game due to bugs."
-msgstr ""
+msgstr "La limitación de velocidad de formación ha sido deshabilitado debido a errores"
 
 #: src/keybind.c:2387
 msgid "Vertical rotation direction: Normal"
-msgstr ""
+msgstr "Dirección de Rotación Vertical: Normal"
 
 #: src/keybind.c:2392
 msgid "Vertical rotation direction: Flipped"
-msgstr ""
+msgstr "Dirección de Rotación Vertical: Invertida"
 
 #: src/keybind.c:2401
 msgid "Screen shake when things die: Off"
@@ -13147,9 +13125,9 @@ msgid "%s Gives you a %s"
 msgstr "%s te da un %s"
 
 #: src/multigifts.c:241
-#, fuzzy, c-format
+#, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
-msgstr "Se intentó repartir %s - pero no está permitido."
+msgstr "Se intentó regalar un %s no vacío - pero no está permitido."
 
 #: src/multigifts.c:300
 #, c-format
@@ -13157,9 +13135,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s te da Documentos Tecnológicos"
 
 #: src/multigifts.c:338
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %u Power"
-msgstr "%s te da Energía"
+msgstr "%s te da %u de Energía"
 
 #: src/multigifts.c:358
 #, c-format
@@ -13558,7 +13536,7 @@ msgstr "Privado"
 
 #: src/multiplay.c:1105
 msgid "[invalid]"
-msgstr ""
+msgstr "[inválido]"
 
 #: src/multiplay.c:1961
 msgid "Green"
@@ -13651,7 +13629,7 @@ msgid "Rookie: %u"
 msgstr "Novato: %u"
 
 #: src/scores.c:109
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
 msgstr "Principiante: %u"
@@ -13766,7 +13744,6 @@ msgid "Unable to locate any Commanders!"
 msgstr "¡Imposible localizar ningún Comandante!"
 
 #: src/structure.c:2757
-#, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Alcanzado Límite de Control de Comandantes - Producción Detenida"
 
@@ -13780,7 +13757,7 @@ msgstr[1] "%s - %u Unidades asignadas"
 
 #: src/structure.c:5990
 #: src/structure.c:6054
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Daño %3.0f%%"
 
@@ -13887,24 +13864,20 @@ msgstr "Versión: %s%s%s%s"
 #~ msgid "Skirmish"
 #~ msgstr "Escaramuza"
 
-#, fuzzy
 #~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "ADV Cañón"
+#~ msgstr "Cañón Pesado Bicho ADV"
 
-#, fuzzy
 #~ msgid "HPV Cannon Python Hover"
-#~ msgstr "Cañón HPV Pitón Oruga"
+#~ msgstr "Cañón Pesado Pitón Deslizador"
 
 #~ msgid "English"
 #~ msgstr "Inglés"
 
-#, fuzzy
 #~ msgid "Basque"
 #~ msgstr "Vasco"
 
-#, fuzzy
 #~ msgid "Latvian"
-#~ msgstr "Latino"
+#~ msgstr "Letón"
 
 #~ msgid "Norwegian (Nynorsk)"
 #~ msgstr "Noruego"
@@ -13918,7 +13891,6 @@ msgstr "Versión: %s%s%s%s"
 #~ msgid "Turkish"
 #~ msgstr "Turco"
 
-#, fuzzy
 #~ msgid "Heavy Machinegun Cobra Half-trackS"
 #~ msgstr "Cobra Ametralladora Pesada Semi-oruga"
 
@@ -13931,13 +13903,11 @@ msgstr "Versión: %s%s%s%s"
 #~ msgid "Command turret MkIV"
 #~ msgstr "Torreta Comandante MkIV"
 
-#, fuzzy
 #~ msgid "Cursor Mode"
-#~ msgstr "Módulo de Energía"
+#~ msgstr "Modo de Cursor"
 
-#, fuzzy
 #~ msgid "Hardware"
-#~ msgstr "Hormigón Duro"
+#~ msgstr "Hardware"
 
 #~ msgid "Viper Light Cannon Wheels"
 #~ msgstr "Víbora Cañón Ligero Ruedas"
@@ -14056,9 +14026,8 @@ msgstr "Versión: %s%s%s%s"
 #~ msgid "Stabilized Mini-Pods Mk2"
 #~ msgstr "Mini-Cohetes Estabilizados Mk2"
 
-#, fuzzy
 #~ msgid "HE Mini-Pods"
-#~ msgstr "Mini-Pod"
+#~ msgstr "Mini-Cohetes HE"
 
 #~ msgid "HE Mini-Pods Mk2"
 #~ msgstr "HE Mini-Cohetes Mk2"
@@ -14204,9 +14173,8 @@ msgstr "Versión: %s%s%s%s"
 #~ msgid "Mantis Repair Tracks"
 #~ msgstr "Mantis Reparador Oruga"
 
-#, fuzzy
 #~ msgid "Python Tank Killer Tracks"
-#~ msgstr "Mantis Mata Tanque Oruga"
+#~ msgstr "Pitón Mata Tanque Oruga"
 
 #~ msgid "Load Campaign"
 #~ msgstr "Cargar Campaña"
