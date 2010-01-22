@@ -32,4 +32,4 @@ EXTRA_DIST= \
 # HACK Don't give make errors when switching between trunk and branches.
 all: fixdeps
 fixdeps:
-	cd "$(top_srcdir)/src" ; for ext in c cpp ; do for a in *.$$ext ; do grep -q "\b$$a\b" "$(abs_top_builddir)/src/.deps/$${a/.$$ext/.Po}" > /dev/null || echo "$${a/.$$ext/.o}: ../$(top_srcdir)/src/$$a" | tee "$(abs_top_builddir)/src/.deps/$${a/.$$ext/.Po}" ; done ; done
+	cd "$(top_srcdir)/src" ; mkdir -p "$(abs_top_builddir)/src/.deps" ; for ext in c cpp ; do for a in *.$$ext ; do grep -q "\b$$a\b" "$(abs_top_builddir)/src/.deps/$${a/.$$ext/.Po}" 2> /dev/null || echo "$${a/.$$ext/.o}: ../$(top_srcdir)/src/$$a" | tee "$(abs_top_builddir)/src/.deps/$${a/.$$ext/.Po}" ; done ; done
