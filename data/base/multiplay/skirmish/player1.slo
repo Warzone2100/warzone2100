@@ -127,7 +127,8 @@ private GROUP			defendGroup;
 private bool			defendbusy;
 private BASEOBJ			defendObj;
 
-public  RESEARCHSTAT	nexusDefence;
+public  RESEARCHSTAT		nexusDefence;
+private  RESEARCHSTAT		research;
 
 //build
 private GROUP			buildGroup;
@@ -200,7 +201,8 @@ trigger attackStuffTr				(every, 300	);
 trigger allOutAttackTr				(every, 4000);
 trigger defendWatchTr				(CALL_STRUCT_ATTACKED, me, ref structure, ref baseobj);
 trigger defendReturnTr				(every,	500	);
-trigger doResearchTr				(every, 400 );
+trigger doResearchTr				(CALL_RESEARCHCOMPLETED, ref research, ref structure, me);
+trigger checkResearchTr				(every, 400);
 trigger vtolDefendTr				(CALL_STRUCT_ATTACKED, me, ref structure, ref baseobj);
 trigger vtolStructsTr				(every, 290);
 trigger buildVtolsTr				(every, 360);
@@ -221,9 +223,10 @@ trigger manageAllyHelpTr			(every, 80);
 trigger everySec					(every, 10);
 trigger manageDefendLocationTr		(every, 70);
 trigger startLevelTr				(CALL_START_NEXT_LEVEL);
-trigger launchFundamentalsTr			(wait, 1);
+trigger chainloadTr				(wait, 1);
 
 /* Events */
+event	conDroids;
 event	multiMsgEv;
 event	beaconEv;
 event	watchBaseThreat;
@@ -232,6 +235,7 @@ event	everySecEv;
 event	manageDefendLocationEv;
 event	structureDestroyed;
 event	rebuildStructureEv;
+event	doResearch;
 
 /* Function prototypes */
 function bool haveBeacon(int _player);
@@ -277,9 +281,7 @@ function int numEnemyAAInRange(int _x, int _y, int _range);
 function BASEOBJ chooseVtolTarget(bool bExclusiveTarget);
 function int getVtolTargetWeight(BASEOBJ _target);
 function bool vtolTargetAssigned(BASEOBJ _target);
-function void buildTruck();
 function int numBuildSameBuilding(STRUCTURESTAT _checkStat, int _x, int _y);
-function void expandBase(DROID _truck);
 function int totalVtols();
 function bool needTank();
 function void setTechBranch(int _tech);
@@ -381,19 +383,18 @@ event initialisedEvent(CALL_GAMEINIT)
 
 	fundamentalBeingBuilt = derrick;	// to avoid ever being null
 	
-	bRunning = false;
-
 	if(aiResponsibleForPlayer(me))
 	{
 		bRunning = true;
 	}
 	else
 	{
+		bRunning = false;
 		shutDownAI();
 	}
 }
 
-function void buildFundamentals()
+event buildFundamentals(inactive)
 {
 	count = 0;
 	while (count < numFundamental)
@@ -427,18 +428,15 @@ function void buildFundamentals()
 		count = count + 1;
 	}
 	fundamentalBeingBuilt = derrick;
-}
-
-event launchFundamentals(inactive)
-{
-	buildFundamentals();
-	setEventTrigger(launchFundamentals, inactive);
+	setEventTrigger(buildFundamentals, inactive);
 }
 
 event startLevel(startLevelTr)
 {
-	buildFundamentals();
-	buildTruck();
+	setEventTrigger(buildFundamentals, chainloadTr);
+	setEventTrigger(conDroids, chainloadTr);
+	setEventTrigger(doResearch, chainloadTr);
+	setEventTrigger(startLevel, inactive);
 }
 
 // decide what technology branch we will use
@@ -582,7 +580,7 @@ event buildDerrick(buildDerrickTr)
 			boolResult = FALSE;							// only send 1 droid to each derrick
 			while( (boolResult == FALSE) and (droid != NULLOBJECT) )
 			{
-				if( (droid.order == DORDER_NONE) or (droid.order == DORDER_RTB))
+				if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
 				{
 					orderDroidStatsLoc(droid, DORDER_BUILD,derrick, buildX,buildY);	//build a derick
 					boolResult = TRUE;
@@ -662,7 +660,7 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 
 						_numBuilders = numBuildSameBuilding(NULLSTRUCTURESTAT, buildX, buildY);
 
-						if((boolResult == TRUE) and (_numBuilders < _maxBuilders))
+						if((boolResult == TRUE) and (_numBuilders < _maxBuilders) and droidCanReach(droid, buildX, buildY))
 						{
 							// build it.
 							orderDroidStatsLoc(droid, DORDER_BUILD,structChoice[count], buildX,buildY);
@@ -764,9 +762,9 @@ event incendry(incendryTr)
 				droid = iterateGroup(buildGroup);
 				while(droid != NULLOBJECT)
 				{
-					if(droid.order == DORDER_NONE or droid.order == DORDER_RTB)
+					if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
 					{
-						orderDroidStatsLoc(droid, DORDER_BUILD,sensorTower, buildX,buildY);
+						orderDroidStatsLoc(droid, DORDER_BUILD, sensorTower, buildX, buildY);
 						droid = NULLOBJECT;
 					}
 					else
@@ -843,7 +841,7 @@ event incendry(incendryTr)
 
 					while(droid != NULLOBJECT and (not boolResult))
 					{
-						if(droid.order == DORDER_NONE or droid.order == DORDER_RTB)
+						if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
 						{
 							orderDroidStatsLoc(droid, DORDER_BUILD,incendrys[result], buildX,buildY);
 							boolResult = TRUE;	//only 1 truck
@@ -895,7 +893,7 @@ event buildPowerGenerators(buildPowerGeneratorsTr)
 			droid = iterateGroup(buildGroup);
 			while(droid != NULLOBJECT)
 			{
-				if(droid.order == DORDER_NONE or droid.order == DORDER_RTB)
+				if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
 				{
 					orderDroidStatsLoc(droid, DORDER_BUILD,powGen, buildX,buildY);
 				}
@@ -937,7 +935,7 @@ event buildBase(buildBaseTr)
 						droid = iterateGroup(buildGroup);
 						while((droid != NULLOBJECT) and (_numBuilders < _maxBuilders))
 						{
-							if((droid.order == DORDER_NONE) or (droid.order == DORDER_RTB))
+							if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
 							{
 								orderDroidStatsLoc(droid, DORDER_BUILD,structs[count], buildX,buildY);	// build it
 								_numBuilders++;
@@ -956,12 +954,12 @@ event buildBase(buildBaseTr)
 //  build other stuff, grow the base slowly...
 event buildExpand( buildExpandTr )
 {
-	expandBase(NULLOBJECT);
-}
-
-function void expandBase(DROID _truck)
-{
 	local	int		_numBuilders,_maxBuilders;
+
+	if (playerPower(me) < LOW_POWER)
+	{
+		exit;	// do not expand base with low power
+	}
 
 	if(extraStruct == numExtraStructs[curTech])	// loop round
 	{
@@ -979,27 +977,16 @@ function void expandBase(DROID _truck)
 			_numBuilders = numBuildSameBuilding(extraStructs[curTech][extraStruct], buildX, buildY);
 			_maxBuilders = 2;
 
-			if(_truck != NULLOBJECT)
+			initIterateGroup(buildGroup);				// find idle droids in build group.
+			droid = iterateGroup(buildGroup);
+			while((droid != NULLOBJECT) and (_numBuilders < _maxBuilders))
 			{
-				if((_truck.order != DORDER_BUILD) and (_truck.order != DORDER_LINEBUILD))
+				if ((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD) and droidCanReach(droid, buildX, buildY))
 				{
-					orderDroidStatsLoc(_truck, DORDER_BUILD,extraStructs[curTech][extraStruct], buildX,buildY);// build it.
+					orderDroidStatsLoc(droid, DORDER_BUILD,extraStructs[curTech][extraStruct], buildX,buildY);// build it.
 					_numBuilders++;
 				}
-			}
-			else
-			{
-				initIterateGroup(buildGroup);				// find idle droids in build group.
 				droid = iterateGroup(buildGroup);
-				while((droid != NULLOBJECT) and (_numBuilders < _maxBuilders))
-				{
-					if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
-					{
-						orderDroidStatsLoc(droid, DORDER_BUILD,extraStructs[curTech][extraStruct], buildX,buildY);// build it.
-						_numBuilders++;
-					}
-					droid = iterateGroup(buildGroup);
-				}
 			}
 		}
 	}
@@ -1017,7 +1004,7 @@ event upgradeStructures(upgradeStructuresTr )
 	droid = iterateGroup(buildGroup);
 	while(droid != NULLOBJECT)
 	{
-		if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
+		if ((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
 		{
 			boolResult = FALSE;
 
@@ -1075,7 +1062,7 @@ function bool upgradeFactory(DROID _truck, int _maxBuilders)
 	while(_factory != NULLOBJECT)
 	{
 		// if upgrade is available && struct is not upgraded
-		if( isStructureAvailable(facModule,me) and (skGetFactoryCapacity(_factory) < 2 ))
+		if( isStructureAvailable(facModule,me) and (skGetFactoryCapacity(_factory) < 2 ) and droidCanReach(_truck, _factory.x, _factory.y))
 		{
 			if((numBuildSameBuilding(facModule, _factory.x, _factory.y) +
 			    numBuildSameBuilding(vtolFactory, _factory.x, _factory.y)) < _maxBuilders)
@@ -1099,7 +1086,7 @@ function bool upgradeVtolFactory(DROID _truck, int _maxBuilders)
 	while(_factory != NULLOBJECT)
 	{
 		// if upgrade is available && struct is not upgraded
-		if( isStructureAvailable(facModule,me) and (skGetFactoryCapacity(_factory) < 2 ))
+		if( isStructureAvailable(facModule,me) and (skGetFactoryCapacity(_factory) < 2 ) and droidCanReach(_truck, _factory.x, _factory.y))
 		{
 			if((numBuildSameBuilding(facModule, _factory.x, _factory.y) +
 			    numBuildSameBuilding(factory, _factory.x, _factory.y)) < _maxBuilders)
@@ -1123,7 +1110,7 @@ function bool upgradeResearch(DROID _truck, int _maxBuilders)
 	while(_resFac != NULLOBJECT)
 	{
 		// if upgrade is available && struct is not upgraded
-		if( isStructureAvailable(resModule,me) and (not testStructureModule(me, _resFac, 0)))
+		if( isStructureAvailable(resModule,me) and (not testStructureModule(me, _resFac, 0)) and droidCanReach(_truck, _resFac.x, _resFac.y))
 		{
 			if((numBuildSameBuilding(resModule, _resFac.x, _resFac.y) +
 			    numBuildSameBuilding(resLab, _resFac.x, _resFac.y)) < _maxBuilders)
@@ -1147,7 +1134,7 @@ function bool upgradePowGen(DROID _truck, int _maxBuilders)
 	while(_powGen != NULLOBJECT)
 	{
 		// if upgrade is available && struct is not upgraded
-		if( isStructureAvailable(powModule,me) and (not testStructureModule(me, _powGen, 0)))
+		if( isStructureAvailable(powModule,me) and (not testStructureModule(me, _powGen, 0)) and droidCanReach(_truck, _powGen.x, _powGen.y))
 		{
 			if((numBuildSameBuilding(powModule, _powGen.x,_powGen.y) +
 			    numBuildSameBuilding(powGen, _powGen.x,_powGen.y)) < _maxBuilders)
@@ -1177,7 +1164,7 @@ event finishStructs(finishStructsTr)
 			droid = iterateGroup(buildGroup);
 			while(droid != NULLOBJECT)
 			{
-				if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
+				if ((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD) and droidCanReach(droid, structure.x, structure.y))
 				{
 					orderDroidObj(droid,DORDER_HELPBUILD,structure);
 				}
@@ -1385,7 +1372,7 @@ event structBuilt(structBuiltTr)
 		}
 		else
 		{
-			buildTruck();
+			setEventTrigger(conDroids, chainloadTr);
 		}
 	}
 	/* vtol factory or vtol factory module */
@@ -1410,10 +1397,14 @@ event structBuilt(structBuiltTr)
 			}
 		}
 	}
+	else if (structure.stattype == REF_RESEARCH)
+	{
+		setEventTrigger(doResearch, chainloadTr);
+	}
 
 	// Check if available trucks need to build more absolute necessities right away. We need a trigger here because
 	// droids involved in building have not yet come out of their build orders.
-	setEventTrigger(launchFundamentals, launchFundamentalsTr);
+	setEventTrigger(buildFundamentals, chainloadTr);
 
 	//see if we have just rebuilt a destroyed structure
 	_count = 0;
@@ -1480,11 +1471,6 @@ event droidDestroyed(droidDestroyedTr)
 // build more con droids.
 event conDroids(conDroidsTr)
 {
-	buildTruck();
-}
-
-function void buildTruck()
-{
 	local 	int			_maxTrucks;
 	local 	STRUCTURE	_factory;
 	local	int 		_numBuilding,_haveTrucks,_maxTruckFactories,_totalTrucks;
@@ -1544,8 +1530,8 @@ function void buildTruck()
 
 		_factory = enumStruct();
 	}
+	setEventTrigger(conDroids, conDroidsTr);
 }
-
 
 //Build a droid
 function bool buildUnit(TEMPLATE _tankTemplate, STRUCTURE _factory, STRUCTURESTAT _factoryType, bool _bIdleOnly)
@@ -2174,6 +2160,13 @@ event doResearch(doResearchTr)
 
 		structure = enumStruct();
 	}
+	setEventTrigger(doResearch, doResearchTr);
+}
+
+// We need this hack since I did not dare to try to backport all the trigger fixed with research to 2.3
+event checkResearch(doResearchTr)
+{
+	setEventTrigger(doResearch, chainloadTr);
 }
 
 // find next available research of our research branch
@@ -2441,7 +2434,7 @@ event vtolStructs(inactive)
 			_numTrucks = 0;							// only send _maxTrucks to do the job
 			while( (_numTrucks < _maxTrucks) and (droid != NULLOBJECT))
 			{
-				if( (droid.order == DORDER_NONE) or (droid.order == DORDER_RTB))
+				if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
 				{
 					orderDroidStatsLoc(droid, DORDER_BUILD,vtolFactory, buildX,buildY);
 					_numTrucks++;
@@ -2492,7 +2485,7 @@ function void buildRearmPads()
 		_buildOK = FALSE;
 		while(_truck != NULLOBJECT and _buildOK == FALSE)
 		{
-			if((_truck.order != DORDER_BUILD) and (_truck.order != DORDER_LINEBUILD))
+			if((_truck.order != DORDER_BUILD) and (_truck.order != DORDER_LINEBUILD) and droidCanReach(_truck, _buildX, _buildY))
 			{
 				orderDroidStatsLoc(_truck, DORDER_BUILD,vtolPad, _buildX,_buildY);
 				_buildOK = TRUE;
@@ -2935,7 +2928,7 @@ event vtolDefend(vtolDefendTr)
 						if(count2 != (-1) )
 						{
 							boolResult = pickStructLocation(vtolDefStruct[count2], ref buildX, ref buildY,me);
-							if((boolResult == TRUE) and (_numBuilders < _maxBuilders))	// build a vtol defense near the attacked struct...
+							if((boolResult == TRUE) and (_numBuilders < _maxBuilders) and droidCanReach(droid, buildX, buildY))	// build a vtol defense near the attacked struct...
 							{
 								orderDroidStatsLoc(droid, DORDER_BUILD,vtolDefStruct[count2],buildX,buildY);
 								_numBuilders++;
@@ -3000,6 +2993,7 @@ function void shutDownAI()
 	setEventTrigger(defendWatch,	inactive);
 	setEventTrigger(defendReturn,	inactive);
 	setEventTrigger(doResearch,	inactive);
+	setEventTrigger(checkResearch,	inactive);
 	setEventTrigger(formAllianceEvent,	inactive);
 	setEventTrigger(breakAllianceEvent,	inactive);
 	setEventTrigger(formHumanAlliances,	inactive);
@@ -3023,7 +3017,7 @@ function void shutDownAI()
 
 event reassignPlayers(reassignTr)
 {
-	dbg("reassignPlayers", me);
+	dbg("Reassign event is ignored", me);
 }
 
 function void reassignAI()
@@ -3058,6 +3052,7 @@ function void reassignAI()
 	setEventTrigger(defendWatch,defendWatchTr);
 	setEventTrigger(defendReturn,defendReturnTr);
 	setEventTrigger(doResearch,doResearchTr);
+	setEventTrigger(checkResearch,checkResearchTr);
 	setEventTrigger(formAllianceEvent,formAllianceEventTr);
 	setEventTrigger(breakAllianceEvent,breakAllianceEventTr);
 	setEventTrigger(consolidateEvent,consolidateEventTr);
@@ -4085,7 +4080,7 @@ function void buildOnExactLocation(DROID _truck, int _x, int _y, STRUCTURESTAT _
 	{
 		dbg("trying to rebuild on (" & _newX & "/" & _newY & ")", me);
 
-		if((_x != _newX) or (_y != _newY))
+		if((_x != _newX) or (_y != _newY) or !droidCanReach(_truck, _x, _y))
 		{
 			return;
 		}
@@ -4135,8 +4130,8 @@ event consoleEv(consoleTr)
 				if(not bRunning)		//make sure current machine is responsible for this AI and it's not already active
 				{
 					console(getPlayerName(me) & " is active");
-
 					reassignAI();
+					setEventTrigger(startLevel, chainloadTr);
 				}
 			}
 		}
