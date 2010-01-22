@@ -73,7 +73,7 @@
 #include "multigifts.h"
 #include "multilimit.h"
 #include "advvis.h"
-
+#include "mapgrid.h"
 #include "lib/ivis_common/piestate.h"
 #include "wrappers.h"
 #include "order.h"
@@ -4265,81 +4265,48 @@ BOOL scrMyResponsibility(void)
 }
 
 // -----------------------------------------------------------------------------------------
-/*checks to see if a structure of the type specified exists within the
-specified range of an XY location */
+/**
+ * Checks to see if a structure of the type specified exists within the specified range of an XY location.
+ * Use player -1 to find structures owned by any player. In this case, ignore if they are completed.
+ */
 BOOL scrStructureBuiltInRange(void)
 {
 	SDWORD		player, index, x, y, range;
-	SDWORD		rangeSquared;
-	STRUCTURE	*psCurr;
-	BOOL		found;
-	SDWORD		xdiff, ydiff;
+	BASE_OBJECT	*psCurr;
+	STRUCTURE	*psStruct = NULL;
 	STRUCTURE_STATS *psTarget;
 
-	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_INT, &x, VAL_INT, &y,
-		VAL_INT, &range, VAL_INT, &player))
+	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range, VAL_INT, &player))
 	{
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructureBuiltInRange:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Player index out of bounds");
+	ASSERT_OR_RETURN(false, x >= 0 && map_coord(x) < mapWidth, "Invalid X coord");
+	ASSERT_OR_RETURN(false, y >= 0 && map_coord(y) < mapHeight, "Invalid Y coord");
+	ASSERT_OR_RETURN(false, index >= 0 && index < numStructureStats, "Invalid structure stat");
+	ASSERT_OR_RETURN(false, range >= 0, "Negative range");
 
-	if (x < 0
-	 || map_coord(x) > (SDWORD)mapWidth)
-	{
-		ASSERT( false, "scrStructureBuiltInRange : invalid X coord" );
-		return false;
-	}
-	if (y < 0
-	 || map_coord(y) > (SDWORD)mapHeight)
-	{
-		ASSERT( false,"scrStructureBuiltInRange : invalid Y coord" );
-		return false;
-	}
-	if (index < (SDWORD)0 || index > (SDWORD)numStructureStats)
-	{
-		ASSERT( false, "scrStructureBuiltInRange : Invalid structure stat" );
-		return false;
-	}
-	if (range < (SDWORD)0)
-	{
-		ASSERT( false, "scrStructureBuiltInRange : Rnage is less than zero" );
-		return false;
-	}
-
-	//now look through the players list of structures to see if this type
-	//exists within range
+	// Now look through the players list of structures to see if this type exists within range
 	psTarget = &asStructureStats[index];
-	rangeSquared = range * range;
-	found = false;
-	for(psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
-	{
-		xdiff = (SDWORD)psCurr->pos.x - x;
-		ydiff = (SDWORD)psCurr->pos.y - y;
-		if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
-		{
 
-			if( strcmp(psCurr->pStructureType->pName,psTarget->pName) == 0 )
+	gridStartIterate(x, y, range);
+	for (psCurr = gridIterate(); psCurr; psCurr = gridIterate())
+	{
+		if (psCurr->type == OBJ_STRUCTURE)
+		{
+			psStruct = (STRUCTURE *)psCurr;
+			if ((psStruct->status == SS_BUILT || player == -1)
+			    && (player == -1 || psStruct->player == player)
+			    && strcmp(psStruct->pStructureType->pName, psTarget->pName) == 0)
 			{
-				if (psCurr->status == SS_BUILT)
-				{
-					found = true;
-					break;
-				}
+				break;
 			}
 		}
-	}
-	//make sure pass NULL back if not got one
-	if (!found)
-	{
-		psCurr = NULL;
+		psStruct = NULL;
 	}
 
-	scrFunctionResult.v.oval = psCurr;
+	scrFunctionResult.v.oval = psStruct;
 	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return false;
