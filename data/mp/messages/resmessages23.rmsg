@@ -28,8 +28,8 @@ RES_POWU1
 {
 	{
 		_("Improved Power Generator Performance"),
-		_("New Power Generation Technology"),
 		_("Gas turbine boosts power output"),
+		_("Power output +25%"),
 		_("All power generators upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -42,7 +42,7 @@ RES_ENGIN2
 	{
 		_("Research Breakthrough Improves Construction Rates"),
 		_("Improved Engineering Techniques"),
-		_("Increases construction speed"),
+		_("Construction speed +20%"),
 		_("All trucks upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -133,7 +133,7 @@ RES_W_AAAC2
 	{
 		_("AA Upgrade"),
 		_("Self-guided rocket powered shells"),
-		_("Increases AA accuracy"),
+		_("AA accuracy +10%"),
 		_("All AA weapons upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -159,7 +159,7 @@ RES_W_BAC2
 	{
 		_("Bomb Upgrade"),
 		_("Improved trinitramine explosive formula"),
-		_("Increases Bombing damage"),
+		_("Bomb damage +25%"),
 		_("All bomb bays upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -172,7 +172,7 @@ RES_W_MG_ROF3
 	{
 		_("Machinegun Upgrade"),
 		_("Robotic advances make new chaingun upgrade available"),
-		_("Increases Machinegun ROF"),
+		_("Machinegun reload time -15%"),
 		_("All machineguns upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -185,7 +185,7 @@ RES_W_M_AC2
 	{
 		_("Mortar Upgrade"),
 		_("Shells detect and home to thermal heat signatures"),
-		_("Increases Mortar accuracy"),
+		_("Mortar accuracy +10%"),
 		_("All mortars upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",

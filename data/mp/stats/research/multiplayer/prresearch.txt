@@ -430,6 +430,7 @@ R-Wpn-Flamer-Damage08,R-Wpn-Flamer-Damage07,1142
 R-Wpn-Flamer-Damage09,R-Wpn-Flamer-Damage08,1143
 R-Wpn-Flamer-ROF01,R-Wpn-Flamer-Damage02,388
 R-Wpn-Flamer-ROF02,R-Wpn-Flame2,389
+R-Wpn-Flamer-ROF02,R-Wpn-Flamer-ROF01,1337
 R-Wpn-Flamer-ROF03,R-Wpn-Flamer-ROF02,390
 R-Wpn-Flamer01Mk1,R-Wpn-MG1Mk1,216
 R-Wpn-Flamer01Mk1,R-Vehicle-Engine01,216
