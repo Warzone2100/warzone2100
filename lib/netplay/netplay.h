@@ -113,11 +113,11 @@ typedef enum
 	NET_PLAYER_DROPPED,		//57 notice about player dropped / disconnected
 	NET_GAME_FLAGS,			//58 game flags
 	NET_READY_REQUEST,		//59 player ready to start an mp game
-							//60 to prevent conflict
-	NET_VERSION_CHECK = 61,	//61 version check
-	NET_REQUEST_VERSION,	//62 Host requests version check
-	NET_REQUEST_PASSWORD,	//63 Host requests password
-	NET_PASSWORD_CHECK,		//64 password check
+	NET_NEVERUSE,			//60 
+	NET_REJECTED,			//61 nope, you can't join
+	NET_UNUSED_62,			//62 
+	NET_UNUSED_63,			//63 
+	NET_UNUSED_64,			//64 
 	NET_POSITIONREQUEST,	//65 position in GUI player list
 	NET_DATA_CHECK,			//66 Data integrity check
 	NET_HOST_DROPPED,		//67 Host has dropped
@@ -137,6 +137,7 @@ typedef enum
 #define MaxGames		12			// max number of concurrently playable games to allow.
 #define extra_string_size	239		// extra 255 char for future use
 #define modlist_string_size	255		// For a concatenated list of mods
+#define password_string_size 64		// longer passwords slow down the join code
 
 #define SESSION_JOINDISABLED	1
 
@@ -233,8 +234,8 @@ typedef struct
 	int32_t		connection;		///< Index into connection list
 	int32_t		team;			///< Which team we are on
 	BOOL		ready;			///< player ready to start?
-	uint32_t	versionCheckTime;	///< Time when check sent. Uses 0xffffffff for nothing sent yet
-	BOOL		playerVersionFlag;	///< We kick on false
+	uint32_t	unused_1;	///< for future usage
+	BOOL		unused_2;	///< for future usage
 	BOOL		needFile;			///< if We need a file sent to us
 	WZFile		wzFile;				///< for each player, we keep track of map progress
 } PLAYER;
@@ -251,7 +252,7 @@ typedef struct {
 	int32_t		maxPlayers;		///< Maximum number of players in this game
 	BOOL		isUPNP;					// if we want the UPnP detection routines to run
 	BOOL		isHostAlive;	/// if the host is still alive
-	char gamePassword[StringSize];		//
+	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
 	char MOTDbuffer[255];				// buffer for MOTD
@@ -318,7 +319,6 @@ extern unsigned int NETgetGameserverPort(void);
 extern BOOL NETsetupTCPIP(const char *machine);
 extern void NETsetGamePassword(const char *password);
 extern void NETBroadcastPlayerInfo(uint32_t index);
-extern void NETCheckVersion(uint32_t player);
 extern bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
 extern bool NETgameIsCorrectVersion(GAMESTRUCT* check_game);
 extern void NET_InitPlayers(void);

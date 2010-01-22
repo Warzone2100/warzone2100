@@ -966,19 +966,12 @@ void runGameFind(void )
 				{
 					changeTitleMode(MULTIOPTION);
 				}
-				else if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
-				{
-					setLobbyError(ERROR_FULL);
-					addGames();
-				}
-				else if (strcmp(NetPlay.games[gameNumber].modlist, getModList()) != 0)
-				{
-					setLobbyError(ERROR_WRONGDATA);
-					addGames();
-				}
 				else
 				{
-					setLobbyError(ERROR_CONNECTION);
+					if (!getLobbyError())
+					{
+						setLobbyError(ERROR_CONNECTION);
+					}
 					addGames();
 				}
 			}
@@ -994,14 +987,12 @@ void runGameFind(void )
 		{
 			changeTitleMode(MULTIOPTION);
 		}
-		else if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
-		{
-			setLobbyError(ERROR_FULL);
-			hidePasswordForm();
-		}
 		else
 		{
-			setLobbyError(ERROR_CONNECTION);
+			if (!getLobbyError())
+			{
+				setLobbyError(ERROR_CONNECTION);
+			}
 			hidePasswordForm();
 		}
 	}

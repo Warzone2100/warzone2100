@@ -135,20 +135,13 @@ void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nic
 void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETregisterServer(int state);
 static void NETallowJoining(void);
-static void sendVersionCheck(void);
-static void recvVersionCheck(void);
-static void VersionCheckTimeOut( uint32_t victim );
 
 
 void NETGameLocked( bool flag);
 void NETresetGamePassword(void);
-void sendPasswordCheck(void);
-void recvPasswordCheck(void);
 
 void NETGameLocked( bool flag);
 void NETresetGamePassword(void);
-void sendPasswordCheck(void);
-void recvPasswordCheck(void);
 /*
  * Network globals, these are part of the new network API
  */
@@ -256,10 +249,6 @@ char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
 extern int NET_PlayerConnectionStatus;		// from src/display3d.c
 extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
 
-//time when check sent. Note, using 0xffffffff to signal nothing sent yet.
-uint32_t VersionCheckTime[MAX_PLAYERS] = {-1, -1, -1, -1, -1, -1, -1, -1};
-static BOOL playerVersionFlag[MAX_PLAYERS] = {false};	// we kick on false
-static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
 // ////////////////////////////////////////////////////////////////////////////
 #define VersionStringSize 80
 /************************************************************************************
@@ -269,8 +258,7 @@ static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
 **/
 char VersionString[VersionStringSize] = "trunk, netcode 3.32";
 static int NETCODE_VERSION_MAJOR = 2;
-static int NETCODE_VERSION_MINOR = 33;
-static int NUMBER_OF_MODS = 0;			// unused for now
+static int NETCODE_VERSION_MINOR = 35;
 static int NETCODE_HASH = 0;			// unused for now
 
 #if defined(WZ_OS_WIN)
@@ -1143,107 +1131,6 @@ static struct addrinfo* resolveHost(const char* host, unsigned int port)
 	return results;
 }
 
-void sendVersionCheck( void )
-{
-	NETlogEntry("Sending version check", 0, 0);
-	NETbeginEncode(NET_VERSION_CHECK, NET_ALL_PLAYERS);
-		NETuint32_t(&selectedPlayer);
-		NETstring(VersionString, sizeof(VersionString));
-		NETint32_t(&NETCODE_VERSION_MAJOR);
-		NETint32_t(&NETCODE_VERSION_MINOR);
-		NETint32_t(&NUMBER_OF_MODS);
-		NETint32_t(&NETCODE_HASH);
-	NETend();
-
-	debug(LOG_NET, "sending player %u, version string [%s]", selectedPlayer, VersionString);
-}
-
-// Checks the version string, and if they are not the same, we auto-kick the player.
-static void recvVersionCheck()
-{
-	uint32_t victim = 0;
-	char playersVersion[VersionStringSize] = { '\0' };
-	const char* msg;
-	int32_t MajorVersion = 0;			// Not currently used
-	int32_t MinorVersion = 0;			// Not currently used
-	int32_t ModCount = 0;				// Not currently used
-	int32_t Hash_Data = 0;				// Not currently used
-
-	NETlogEntry("Receiving version check", 0, 0);
-
-	NETbeginDecode(NET_VERSION_CHECK);
-		NETuint32_t(&victim);
-		NETstring(playersVersion, sizeof(playersVersion));
-		NETint32_t(&MajorVersion);	// NETCODE_VERSION_MAJOR
-		NETint32_t(&MinorVersion);	// NETCODE_VERSION_MINOR
-		NETint32_t(&ModCount);		// NUMBER_OF_MODS
-		NETint32_t(&Hash_Data);		// NETCODE_HASH
-	NETend();
-
-	if (!NETisCorrectVersion(MajorVersion, MinorVersion))
-	{
-		debug(LOG_NET, "Received wrong version string [%s, %d.%d] from player %u. Expected [%s, %d.%d]", playersVersion, MajorVersion, MinorVersion, victim, VersionString, NETCODE_VERSION_MAJOR, NETCODE_VERSION_MINOR);
-
-		sasprintf((char**)&msg, _("Player %u has the wrong game version. Auto kicking."), victim);
-		sendTextMessage(msg, true);
-		sasprintf((char**)&msg, "you have version [%s], we expect [%s].", playersVersion, VersionString);
-
-		if (NetPlay.isHost)
-		{
-			kickPlayer( victim, msg, ERROR_WRONGVERSION );
-
-			// reset flags /time after we kick them
-			NetPlay.players[victim].versionCheckTime = -1;
-			NetPlay.players[victim].playerVersionFlag = false;
-		}
-	}
-	else
-	{
-		NetPlay.players[victim].playerVersionFlag = true;
-		debug(LOG_NET, "Received correct version string [%s] from player %u", playersVersion, victim);
-	}
-	// just in case someone has the bright idea of trying to fool us...
-
-	if (NetPlay.GamePassworded && playerVersionFlag[victim] && !playerPasswordFlag[victim])
-	{
-		// really should ban them. :P
-		debug(LOG_NET, "Received correct version string [%s] from player %u", playersVersion, victim);
-		debug(LOG_NET, "Did NOT receive password from them, auto kicking.");
-		kickPlayer(victim, "you have attempted to thwart the security measures. Entry denied!", ERROR_CHEAT);
-	}
-}
-
-static void VersionCheckTimeOut(uint32_t victim)
-{
-	const char* msg;
-
-	debug(LOG_NET, "version string was never received from player %u. Auto kicking at %u", victim, gameTime2);
-
-	sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victim);
-	sendTextMessage(msg, true);
-
-	if(NetPlay.isHost)
-	{
-		kickPlayer(victim, "you have the wrong version (version string never received).", ERROR_WRONGVERSION);
-
-		// reset flags /time after we kick them
-		NetPlay.players[victim].versionCheckTime = -1;
-		NetPlay.players[victim].playerVersionFlag = false;
-	}
-}
-
-void NETCheckVersion(uint32_t player)
-{
-	// When flag is true, means we have received the check OK
-	if (NetPlay.players[player].playerVersionFlag == false)
-	{
-		if (player != NET_HOST_ONLY)
-		{
-			VersionCheckTimeOut(player);
-		}
-	}
-}
-
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
 	return (NETCODE_VERSION_MAJOR == game_version_major && NETCODE_VERSION_MINOR == game_version_minor);
@@ -1274,55 +1161,6 @@ void NETresetGamePassword(void)
 	sstrcpy(NetPlay.gamePassword, _("Enter password here"));
 	debug(LOG_NET, "password reset to 'Enter password here'");
 	NETGameLocked(false);
-}
-
-//	send our password to host
-void sendPasswordCheck(void)
-{
-	uint32_t player = selectedPlayer;
-
-	NETlogEntry("Sending password check", 0, 0);
-	NETbeginEncode(NET_PASSWORD_CHECK, NET_HOST_ONLY);
-		NETuint32_t(&player);
-		NETstring( NetPlay.gamePassword, sizeof(NetPlay.gamePassword) );
-	NETend();
-
-	debug(LOG_NET, "sending player %u, password [%s]", player, NetPlay.gamePassword);
-}
-
-// Checks the password, and if they are not the same, we auto-kick the player.
-void recvPasswordCheck(void)
-{
-	uint32_t victim = 0;
-
-	char passwordreceived[StringSize];
-	const char* msg;
-
-	NETlogEntry("Receiving password check", 0, 0);
-
-	NETbeginDecode(NET_PASSWORD_CHECK);
-		NETuint32_t(&victim);
-		NETstring( passwordreceived, sizeof(passwordreceived) );
-	NETend();
-
-	if (strcmp(NetPlay.gamePassword, passwordreceived) != 0)
-	{
-		debug(LOG_NET, "Received *wrong* password [%s] from player %u. Expected [%s]", passwordreceived, victim, NetPlay.gamePassword);
-
-		sasprintf((char**)&msg, _("Player %u has the wrong password. Auto kicking."), victim );
-		sendTextMessage(msg, true);
-
-		if (NetPlay.isHost)
-		{
-			kickPlayer(victim, "you entered the wrong password. Entry denied!", ERROR_WRONGPASSWORD);
-			playerPasswordFlag[victim] = false;
-		}
-	}
-	else
-	{
-		playerPasswordFlag[victim] = true;
-		debug(LOG_NET, "Received correct password [%s] from player %u", passwordreceived, victim);
-	}
 }
 
 // *********** Socket with buffer that read NETMSGs ******************
@@ -1492,8 +1330,6 @@ void NET_InitPlayers()
 		NetPlay.players[i].position = i;
 		NetPlay.players[i].team = i;
 		NetPlay.players[i].ready = false;
-		NetPlay.players[i].versionCheckTime = 0xffffffff;
-		NetPlay.players[i].playerVersionFlag = false;
 		NetPlay.players[i].needFile = false;
 		NetPlay.players[i].wzFile.isCancelled = false;
 		NetPlay.players[i].wzFile.isSending = false;
@@ -2561,26 +2397,6 @@ static BOOL NETprocessSystemMessage(void)
 			}
 			break;
 		}
-		case NET_PASSWORD_CHECK:
-		{
-			recvPasswordCheck();
-			break;
-		}
-		case NET_REQUEST_PASSWORD:
-		{
-			sendPasswordCheck();
-			break;
-		}
-		case NET_VERSION_CHECK:
-		{
-			recvVersionCheck();
-			break;
-		}
-		case NET_REQUEST_VERSION:
-		{
-			sendVersionCheck();
-			break;
-		}
 
 		default:
 			return false;
@@ -3182,14 +2998,6 @@ static void NETallowJoining(void)
 		NetPlay.ShowedMOTD = true;
 	}
 
-	// Version check - make sure we sent the check, then check for timelimit
-	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
-	{
-		if (NetPlay.players[i].versionCheckTime != 0xffffffff && NetPlay.players[i].versionCheckTime < gameTime2)
-		{
-			NETCheckVersion(i);
-		}
-	}
 	if (tmp_socket_set == NULL)
 	{
 		// initialize server socket set
@@ -3300,18 +3108,31 @@ static void NETallowJoining(void)
 				}
 				else if (NetMsg.type == NET_JOIN)
 				{
-					char name[64];
 					uint8_t j;
 					int8_t index;
+					uint8_t rejected = 0;
+
+					char name[64];
+					int32_t MajorVersion = 0;
+					int32_t MinorVersion = 0;
+					char ModList[modlist_string_size] = { '\0' };
+					char GamePassword[password_string_size] = { '\0' };
+					int32_t Hash_Data = 0;				// Not currently used
 
 					NETbeginDecode(NET_JOIN);
 						NETstring(name, sizeof(name));
+						NETint32_t(&MajorVersion);	// NETCODE_VERSION_MAJOR
+						NETint32_t(&MinorVersion);	// NETCODE_VERSION_MINOR
+						NETstring(ModList, sizeof(ModList));
+						NETstring(GamePassword, sizeof(GamePassword));
+						NETint32_t(&Hash_Data);		// NETCODE_HASH, not currently used
 					NETend();
+
 					index = NET_CreatePlayer(name);
 
 					if (index == -1)
 					{
-						// FIXME: No room. Dropping the player without warning since protocol doesn't seem to support rejection for some reason.
+						// FIXME: No room. Dropping the player without warning since protocol doesn't seem to support rejection at this point
 						delSocket(tmp_socket_set, tmp_socket[i]);
 						socketClose(tmp_socket[i]);
 						tmp_socket[i] = NULL;
@@ -3323,15 +3144,52 @@ static void NETallowJoining(void)
 					addSocket(socket_set, connected_bsocket[index]->socket);
 					tmp_socket[i] = NULL;
 
+					if (!NETisCorrectVersion(MajorVersion, MinorVersion))
+					{
+						// Wrong version. Reject.
+						rejected = (uint8_t)ERROR_WRONGVERSION;
+					}
+					else if (NetPlay.GamePassworded && strcmp(NetPlay.gamePassword, GamePassword) != 0)
+					{
+						// Wrong password. Reject.
+						rejected = (uint8_t)ERROR_WRONGPASSWORD;
+					}
+					else if (NetPlay.playercount > gamestruct.desc.dwMaxPlayers)
+					{
+						// Game full. Reject.
+						rejected = (uint8_t)ERROR_FULL;
+					}
+					else if (strcmp(getModList(), ModList) != 0)
+					{
+						// Incompatible mods. Reject.
+						rejected = (uint8_t)ERROR_WRONGDATA;
+					}
+
+					if (rejected)
+					{
+						NETbeginEncode(NET_REJECTED, index);
+							NETuint8_t(&rejected);
+						NETend();
+
+						allow_joining = false; // no need to inform master server
+						NET_DestroyPlayer(index);
+						allow_joining = true;
+
+						delSocket(socket_set, connected_bsocket[index]->socket);
+						socketClose(connected_bsocket[index]->socket);
+						connected_bsocket[index]->socket = NULL;
+						return;
+					}
+
+					NETbeginEncode(NET_ACCEPTED, index);
+					NETuint8_t((uint8_t *)&index);
+					NETend();
+
 					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name,
 					      (unsigned int)index, connected_bsocket[index]->socket);
 
 					// Increment player count
 					gamestruct.desc.dwCurrentPlayers++;
-
-					NETbeginEncode(NET_ACCEPTED, index);
-						NETuint8_t((uint8_t *)&index);
-					NETend();
 
 					MultiPlayerJoin(index);
 
@@ -3359,24 +3217,10 @@ static void NETallowJoining(void)
 					// Make sure the master server gets updated by disconnecting from it
 					// NETallowJoining will reconnect
 					NETregisterServer(0);
-					// if this is a password locked game then ask for password.
-					if (NetPlay.GamePassworded)
-					{
-						debug(LOG_NET, "Requesting password from %u", index);
-						NETbeginEncode(NET_REQUEST_PASSWORD, index);
-						NETend();
-					}
 					// reset flags for new players
 					NetPlay.players[index].wzFile.isCancelled = false;
 					NetPlay.players[index].wzFile.isSending = false;
 					NetPlay.players[index].needFile = false;
-					// and now, request version from new person
-					NETbeginEncode(NET_REQUEST_VERSION, index);
-					NETend();
-					NetPlay.players[index].versionCheckTime = gameTime2;		// Time we sent the msg
-					// add 7 sec delay factor for lag/slow modems?
-					NetPlay.players[index].versionCheckTime += GAME_TICKS_PER_SEC * 7;
-					debug(LOG_NET, "Requesting Version check @(+7) %u from %u", NetPlay.players[index].versionCheckTime, index);
 				}
 			}
 		}
@@ -3736,14 +3580,14 @@ connect_succesfull:
 		addressToText(cur->ai_addr, NetPlay.games[gameNumber].desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
 	}
 	freeaddrinfo(hosts);
-	if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers ||
-	    strcmp(NetPlay.games[gameNumber].modlist, getModList()) != 0)
+	if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
 	{
-		// Shouldn't join; game is full or we have an incompatible mod
+		// Shouldn't join; game is full
 		delSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
 		free(socket_set);
 		socket_set = NULL;
+		setLobbyError(ERROR_FULL);
 		return false;
 	}
 	// Allocate memory for a new socket
@@ -3756,6 +3600,11 @@ connect_succesfull:
 		// Casting constness away, because NETstring is const-incorrect
 		// when sending/encoding a packet.
 		NETstring((char*)playername, 64);
+		NETint32_t(&NETCODE_VERSION_MAJOR);
+		NETint32_t(&NETCODE_VERSION_MINOR);
+		NETstring(getModList(), modlist_string_size);
+		NETstring(NetPlay.gamePassword, sizeof(NetPlay.gamePassword));
+		NETint32_t(&NETCODE_HASH); //unused
 	NETend();
 
 	i = SDL_GetTicks();
@@ -3767,13 +3616,14 @@ connect_succesfull:
 		NETrecv(&type);
 
 		// FIXME: shouldn't there be some sort of rejection message?
-		if (SDL_GetTicks() > i + 10000)
+		if (SDL_GetTicks() > i + 5000)
 		{
 			// timeout
 			return false;
 		}
 		if (type == NET_ACCEPTED)
 		{
+			// :)
 			uint8_t index;
 
 			NETbeginDecode(NET_ACCEPTED);
@@ -3798,6 +3648,20 @@ connect_succesfull:
 			NetPlay.players[index].heartbeat = true;
 
 			return true;
+		}
+		else if (type == NET_REJECTED)
+		{
+			// :(
+			uint8_t rejection = 0;
+
+			NETbeginDecode(NET_REJECTED);
+				// WRY???
+				NETuint8_t(&rejection);
+			NETend();
+
+			debug(LOG_NET, "NET_REJECTED received. Better luck next time?");
+
+			setLobbyError((LOBBY_ERROR_TYPES)rejection);
 		}
 	}
 }
