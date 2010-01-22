@@ -987,6 +987,7 @@ static Socket* socketListen(unsigned int port)
 	struct sockaddr_in addr4;
 	struct sockaddr_in6 addr6;
 	unsigned int i;
+	int opt = 1;
 
 	Socket* const conn = malloc(sizeof(*conn));
 	if (conn == NULL)
@@ -1057,6 +1058,11 @@ static Socket* socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
+		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == SOCKET_ERROR)
+		{
+			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv4 socket. Error: %s", strSockError(getSockErr()));
+		}
+
 		if (bind(conn->fd[SOCK_IPV4_LISTEN], (const struct sockaddr*)&addr4, sizeof(addr4)) == SOCKET_ERROR
 		 || listen(conn->fd[SOCK_IPV4_LISTEN], 5) == SOCKET_ERROR
 		 || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false))
@@ -1073,6 +1079,11 @@ static Socket* socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
+		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == SOCKET_ERROR)
+		{
+			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
+		}
+
 		if (bind(conn->fd[SOCK_IPV6_LISTEN], (const struct sockaddr*)&addr6, sizeof(addr6)) == SOCKET_ERROR
 		 || listen(conn->fd[SOCK_IPV6_LISTEN], 5) == SOCKET_ERROR
 		 || !setSocketBlocking(conn->fd[SOCK_IPV6_LISTEN], false))
