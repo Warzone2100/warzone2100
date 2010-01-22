@@ -167,11 +167,13 @@ private	int				defendX,defendY,defendRadius,tDefendStart,tDefendTimeout,
 private	STRUCTURESTAT	rebuildStructStat[MAX_REBUILD_STRUCT];
 
 private STRUCTURESTAT		fundamentalBeingBuilt;
+private int			order;	// callback global
 
 /////////////////////////////////////////////////////////////////////
 // triggers.
 
 #region triggers
+trigger reachedTr				(CALL_DROID_REACH_LOCATION, me, ref droid, ref order);
 trigger buildExpandTr				(every, 600);
 trigger fortifyTr					(every,	1000);
 trigger upgradeStructuresTr			(every, 400 );
@@ -334,7 +336,6 @@ event initialisedEvent(CALL_GAMEINIT)
 
 	// setup build group - all initial droids are in buildgroup!
 	groupAddArea(buildGroup, me, 0, 0, (mapWidth*128), (mapHeight*128));
-	initGetFeature(oilRes,me,me);		// use bucket = player
 
 	// note where our base is.
 	initIterateGroup(buildGroup);		// find idle droids in build group.
@@ -390,6 +391,55 @@ event initialisedEvent(CALL_GAMEINIT)
 	{
 		bRunning = false;
 		shutDownAI();
+	}
+}
+
+event arrived(reachedTr)
+{
+	local bool found;
+	local STRUCTURESTAT myChoice;
+
+	if (droid.droidType == DROID_CONSTRUCT or droid.droidType == DROID_CYBORG_CONSTRUCT)
+	{
+		// Check if at oil well, and it was taken by enemy
+		structure = structureBuiltInRange(derrick, droid.x, droid.y, (5 * 128), -1);
+		if (structure != NULLOBJECT)
+		{
+			if (not friendlyPlayer(structure.player) and droid.health == 100)
+			{
+				// Ok, at enemy derrick, and nobody has hurt us yet. Start being nasty.
+				count = 0;
+				found = false;
+				// find simplest/cheapest one available to build
+				while (count < numDefStructs and not found)
+				{
+					if (isStructureAvailable(defStructs[count], me))
+					{
+						found = true;
+					}
+					else
+					{
+						count++;
+					}
+				}
+				if (found)
+				{
+					buildX = droid.x;
+					buildY = droid.y;
+					found = pickStructLocationB(defStructs[count], ref buildX, ref buildY, me, -1);
+					if (found and droidCanReach(droid, buildX, buildY))
+					{
+						orderDroidStatsLoc(droid, DORDER_BUILD, defStructs[count], buildX, buildY);
+					}
+				}
+				exit;
+			}
+			else if (droid.health < 100 and !insideBase(droid.x, droid.y))
+			{
+				orderDroid(droid, DORDER_RTB);		// bolt back to base now!
+				exit;
+			}
+		}
 	}
 }
 
