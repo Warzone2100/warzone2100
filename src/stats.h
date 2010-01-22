@@ -104,6 +104,7 @@ extern UBYTE		*apStructTypeLists[MAX_PLAYERS];
 #define AVAILABLE				0x01		//this item can be used to design droids
 #define UNAVAILABLE				0x02		//the player does not know about this item
 #define FOUND					0x04		//this item has been found, but is unresearched
+#define REDUNDANT				0x0A		//the player no longer needs this item
 
 /*******************************************************************************
 *		Allocate stats functions
