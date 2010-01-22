@@ -512,9 +512,6 @@ BOOL startMission(LEVEL_TYPE missionType, char *pGame)
 
 	scoreInitSystem();
 
-	// add proximity messages for all untapped VISIBLE oil resources
-	addOilResourceProximities();
-
 	return true;
 }
 

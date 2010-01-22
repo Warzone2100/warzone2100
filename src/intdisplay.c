@@ -3096,6 +3096,11 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 	{
 		PROX_TYPE	proxType;
 
+		if (psProxDisp->psMessage->player != selectedPlayer)
+		{
+			continue;
+		}
+
 		if (psProxDisp->type == POS_PROXDATA)
 		{
 			proxType = ((VIEW_PROXIMITY*)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->proxType;
@@ -3200,7 +3205,7 @@ void intDisplayProximityBlips(WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset,
 	ASSERT( psMsg->type == MSG_PROXIMITY, "Invalid message type" );
 
 	//if no data - ignore message
-	if (psMsg->pViewData == NULL)
+	if (psMsg->pViewData == NULL || psMsg->player != selectedPlayer)
 	{
 		return;
 	}

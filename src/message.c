@@ -309,7 +309,7 @@ MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
 	return psMsgToAdd;
 }
 
-/* adds a proximity display - holds varaibles that enable the message to be
+/* adds a proximity display - holds variables that enable the message to be
  displayed in the Intelligence Screen*/
 static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 {
@@ -345,17 +345,18 @@ static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 	psToAdd->strobe = 0;
 
 	//add a button to the interface
-	if (player == selectedPlayer)
+	if (intAddProximityButton(psToAdd, currentNumProxDisplays))
 	{
-		if (intAddProximityButton(psToAdd, currentNumProxDisplays))
-		{
-			// Now add it to the top of the list. Be aware that this
-			// check means that messages and proximity displays can
-			// become out of sync, usually because we ran out of display IDs.
-			psToAdd->psNext = apsProxDisp[player];
-			apsProxDisp[player] = psToAdd;
-			currentNumProxDisplays++;
-		}
+		// Now add it to the top of the list. Be aware that this
+		// check means that messages and proximity displays can
+		// become out of sync - but this should never happen.
+		psToAdd->psNext = apsProxDisp[player];
+		apsProxDisp[player] = psToAdd;
+		currentNumProxDisplays++;
+	}
+	else
+	{
+		free(psToAdd);	// clean up
 	}
 }
 
@@ -1047,36 +1048,6 @@ void checkMessages(MSG_VIEWDATA *psViewData)
 			if (psCurr->pViewData == psViewData)
 			{
 				removeMessage(psCurr, i);
-			}
-		}
-	}
-}
-
-//add proximity messages for all untapped VISIBLE oil resources
-void addOilResourceProximities(void)
-{
-	FEATURE     *psFeat;
-	MESSAGE     *psMessage;
-
-	//look thru the features to find oil resources
-	for (psFeat = apsFeatureLists[0]; psFeat != NULL; psFeat = psFeat->psNext)
-	{
-		if (psFeat->psStats->subType == FEAT_OIL_RESOURCE)
-		{
-			//check to see if the feature is visible to the selected player
-			if (psFeat->visible[selectedPlayer])
-			{
-				//if there isn't an oil derrick built on it
-				if (!TileHasStructure(mapTile(map_coord(psFeat->pos.x),
-					map_coord(psFeat->pos.y))))
-				{
-					//add a proximity message
-					psMessage = addMessage(MSG_PROXIMITY, true, selectedPlayer);
-					if (psMessage)
-					{
-						psMessage->pViewData = (MSG_VIEWDATA *)psFeat;
-					}
-				}
 			}
 		}
 	}

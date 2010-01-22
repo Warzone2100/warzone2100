@@ -202,8 +202,8 @@ BOOL Refreshing = false;
 //LOADSAVE uses				21000
 //MULTILIMITS uses			22000
 
-#define	IDPROX_START		12000		//The first proximity button
-#define	IDPROX_END			12019		//The last proximity button - max of 20
+#define	IDPROX_START		120000		// The first proximity button
+#define	IDPROX_END		129999		// The last proximity button
 
 #define PROX_BUTWIDTH		9
 #define PROX_BUTHEIGHT		9
@@ -6785,10 +6785,7 @@ BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 				break;
 			}
 		}
-		if(cnt == IDPROX_END)
-		{
-			return false;			// no slot was found.
-		}
+		ASSERT_OR_RETURN(false, cnt != IDPROX_END, "Ran out of proximity displays");
 	}
 	ASSERT(sBFormInit.id < IDPROX_END, "Invalid proximity message button ID %d", (int)sBFormInit.id);
 

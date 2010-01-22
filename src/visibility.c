@@ -697,43 +697,47 @@ void processVisibility(BASE_OBJECT *psObj)
 		}
 	}
 
-	// if a feature has just become visible set the tile flags
-	if (psObj->type == OBJ_FEATURE && !prevVis[selectedPlayer] && psObj->visible[selectedPlayer])
+	// if a feature has just become visible set the message blips
+	if (psObj->type == OBJ_FEATURE)
 	{
-		/*if this is an oil resource we want to add a proximity message for
-		the selected Player - if there isn't an Resource Extractor on it*/
-		if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
+		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			if (!TileHasStructure(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y))))
+			if (!prevVis[player] && psObj->visible[player])
 			{
-				psMessage = addMessage(MSG_PROXIMITY, true, selectedPlayer);
-				if (psMessage)
+				/* If this is an oil resource we want to add a proximity message for
+				 * the selected Player - if there isn't an Resource Extractor on it. */
+				if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
 				{
-					psMessage->pViewData = (MSG_VIEWDATA *)psObj;
+					if (!TileHasStructure(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y))))
+					{
+						psMessage = addMessage(MSG_PROXIMITY, true, player);
+						if (psMessage)
+						{
+							psMessage->pViewData = (MSG_VIEWDATA *)psObj;
+						}
+						if (!bInTutorial)
+						{
+							//play message to indicate been seen
+							audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE, psObj->pos.x, psObj->pos.y, psObj->pos.z );
+						}
+						debug(LOG_MSG, "Added message for oil well, pViewData=%p", psMessage->pViewData);
+					}
 				}
-				if (!bInTutorial && game.type != SKIRMISH)
+				else if (((FEATURE *)psObj)->psStats->subType == FEAT_GEN_ARTE)
 				{
-					//play message to indicate been seen
-					audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE,
-										psObj->pos.x, psObj->pos.y, psObj->pos.z );
+					psMessage = addMessage(MSG_PROXIMITY, true, player);
+					if (psMessage)
+					{
+						psMessage->pViewData = (MSG_VIEWDATA *)psObj;
+					}
+					if (!bInTutorial)
+					{
+						// play message to indicate been seen
+						audio_QueueTrackPos( ID_SOUND_ARTEFACT_DISC, psObj->pos.x, psObj->pos.y, psObj->pos.z );
+					}
+					debug(LOG_MSG, "Added message for artefact, pViewData=%p", psMessage->pViewData);
 				}
-				debug(LOG_MSG, "Added message for oil well, pViewData=%p", psMessage->pViewData);
 			}
-		}
-		else if (((FEATURE *)psObj)->psStats->subType == FEAT_GEN_ARTE)
-		{
-			psMessage = addMessage(MSG_PROXIMITY, true, selectedPlayer);
-			if (psMessage)
-			{
-				psMessage->pViewData = (MSG_VIEWDATA *)psObj;
-			}
-			if (!bInTutorial)
-			{
-				//play message to indicate been seen
-				audio_QueueTrackPos( ID_SOUND_ARTEFACT_DISC,
-								psObj->pos.x, psObj->pos.y, psObj->pos.z );
-			}
-			debug(LOG_MSG, "Added message for artefact, pViewData=%p", psMessage->pViewData);
 		}
 	}
 }

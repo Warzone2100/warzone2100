@@ -89,9 +89,6 @@ extern MESSAGE* findMessage(MSG_VIEWDATA *pViewdata, MESSAGE_TYPE type, UDWORD p
 /** 'Displays' a proximity display. */
 extern void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp);
 
-/** Add proximity messages for all untapped VISIBLE oil resources. */
-extern void addOilResourceProximities(void);
-
 extern BOOL messageInitVars(void);
 
 #ifdef __cplusplus
