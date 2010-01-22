@@ -3217,8 +3217,8 @@ static void drawStructureBuildProgress(STRUCTURE *psStruct)
 	health = (((width*10000)/100)*health)/10000;
 	health*=2;
 	pie_BoxFill(scrX - scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 3, WZCOL_RELOAD_BACKGROUND);
-	pie_BoxFill(scrX - scrR, scrY + 5, scrX - scrR + health, scrY + 1+5, WZCOL_HEALTH_MEDIUM_SHADOW);
-	pie_BoxFill(scrX - scrR, scrY + 1+5, scrX - scrR + health, scrY + 2+5, WZCOL_HEALTH_MEDIUM);
+	pie_BoxFill(scrX - scrR, scrY, scrX - scrR + health, scrY + 1, WZCOL_HEALTH_MEDIUM_SHADOW);
+	pie_BoxFill(scrX - scrR, scrY + 1, scrX - scrR + health, scrY + 2, WZCOL_HEALTH_MEDIUM);
 }
 
 /// Draw the health of structures and show enemy structures being targetted
