@@ -116,6 +116,17 @@ void	groupConsoleInformOfCreation( UDWORD groupNumber );
 void	groupConsoleInformOfCentering( UDWORD groupNumber );
 void	droidUpdateRecoil( DROID *psDroid );
 
+static void cancelBuild(DROID *psDroid)
+{
+	psDroid->action = DACTION_NONE;
+
+	/* Notify scripts we just became idle */
+	psScrCBOrderDroid = psDroid;
+	psScrCBOrder = psDroid->order;
+	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
+	psScrCBOrderDroid = NULL;
+	psScrCBOrder = DORDER_NONE;
+}
 
 // initialise droid module
 BOOL droidInit(void)
@@ -953,12 +964,14 @@ BOOL droidStartBuild(DROID *psDroid)
 		if (structLimit->currentQuantity >= structLimit->limit)
 		{
 			intBuildFinished(psDroid);
+			cancelBuild(psDroid);
 			return false;
 		}
 		// Can't build on burning oil derricks.
 		if (psStructStat->type == REF_RESOURCE_EXTRACTOR && fireOnLocation(psDroid->orderX,psDroid->orderY))
 		{
 			intBuildFinished(psDroid);
+			cancelBuild(psDroid);
 			return false;
 		}
 		//ok to build
@@ -966,6 +979,7 @@ BOOL droidStartBuild(DROID *psDroid)
 		if (!psStruct)
 		{
 			intBuildFinished(psDroid);
+			cancelBuild(psDroid);
 			return false;
 		}
 		psStruct->body /= 10; // structures start at 10% health
@@ -977,7 +991,6 @@ BOOL droidStartBuild(DROID *psDroid)
 				sendBuildStarted(psStruct, psDroid);
 			}
 		}
-
 	}
 	else
 	{
@@ -1063,15 +1076,14 @@ BOOL droidUpdateBuild(DROID *psDroid)
 		// Update the interface
 		intBuildFinished(psDroid);
 
-		psDroid->action = DACTION_NONE;
-
+		cancelBuild(psDroid);
 		return false;
 	}
 
 	// make sure we still 'own' the building in question
 	if (!aiCheckAlliances(psStruct->player, psDroid->player))
 	{
-		psDroid->action = DACTION_NONE;		// stop what you are doing fool it isn't ours anymore!
+		cancelBuild(psDroid);		// stop what you are doing fool it isn't ours anymore!
 		return false;
 	}
 
@@ -1087,7 +1099,6 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	psDroid->actionPoints = pointsToAdd;
 
 	addConstructorEffect(psStruct);
-
 
 	return true;
 }
@@ -3577,7 +3588,7 @@ void setUpBuildModule(DROID *psDroid)
 	if (psStruct)
 	{	// if a droid is currently building, or building is in progress of being built/upgraded the droid's order should be DORDER_HELPBUILD
 		if (checkDroidsBuilding(psStruct) || !psStruct->status )
-	{
+		{
 			//set up the help build scenario
 			psDroid->order = DORDER_HELPBUILD;
 			setDroidTarget(psDroid, (BASE_OBJECT *)psStruct);
@@ -3588,7 +3599,7 @@ void setUpBuildModule(DROID *psDroid)
 			}
 			else
 			{
-				psDroid->action = DACTION_NONE;
+				cancelBuild(psDroid);
 			}
 		}
 		else
@@ -3603,19 +3614,19 @@ void setUpBuildModule(DROID *psDroid)
 				}
 				else
 				{
-					psDroid->action = DACTION_NONE;
+					cancelBuild(psDroid);
 				}
 			}
 			else
 			{
-				psDroid->action = DACTION_NONE;
+				cancelBuild(psDroid);
 			}
 		}
 	}
 	else
 	{
 		//we've got a problem if it didn't find a structure
-		psDroid->action = DACTION_NONE;
+		cancelBuild(psDroid);
 	}
 }
 
