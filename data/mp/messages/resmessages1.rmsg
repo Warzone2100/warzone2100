@@ -29,7 +29,7 @@ RES_CYMET1
 	{
 		_("Cyborg Materials Improved"),
 		_("Layered composite alloys and energy-absorbing fibres"),
-		_("Increases Kinetic Armor and Body Points"),
+		_("Kinetic Armor +35%, Body Points +35%"),
 		_("All Cyborgs upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -94,7 +94,7 @@ RES_DF_WU1
 	{
 		_("Defenses Improved"),
 		_("Improved Titanium-reinforced concrete"),
-		_("Increases Armour and Body Points"),
+		_("Armour +35%, Body Points +30%"),
 		_("All defenses and walls upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -250,7 +250,7 @@ RES_ST_RFU1
 	{
 		_("Repair Facility Improved"),
 		_("New automated repair techniques"),
-		_("Increases Repair Speed"),
+		_("Repair Speed +100%"),
 		_("All repair facilities upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -302,7 +302,7 @@ RES_ST_FM1
 	{
 		_("Production Improved"),
 		_("Factory module enables medium and large bodies"),
-		_("Increases factory output"),
+		_("Factory output speed +100% per module"),
 		_("Use a truck to add modules to a factory"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -315,7 +315,7 @@ RES_ST_FU1
 	{
 		_("Vehicle Production Improved"),
 		_("Automated Factory Production"),
-		_("Increases factory output"),
+		_("Factory output speed +60%"),
 		_("All vehicle factories upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -341,7 +341,7 @@ RES_ST_RM1
 	{
 		_("Research Module Available"),
 		_("Research module expands research facilities"),
-		_("Increases research speed"),
+		_("Research speed +85%"),
 		_("Use a truck to add the module to a research facility"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -354,7 +354,7 @@ RES_ST_RU1
 	{
 		_("Research Improved"),
 		_("Synaptic link data analysis"),
-		_("Increases research speed"),
+		_("Research speed +30%"),
 		_("All research facilities upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -367,7 +367,7 @@ RES_ST_MAT1
 	{
 		_("Increases Damage Resistance"),
 		_("Reinforced Base Structure Materials"),
-		_("Increases Armor and Body Points"),
+		_("Armor +35%, Body Points +30%"),
 		_("All base structures upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -458,7 +458,7 @@ RES_V_EN1
 	{
 		_("Vehicle Engine Upgrade"),
 		_("Fuel Injection Engine"),
-		_("Improves vehicle speed"),
+		_("Vehicle speed +5%"),
 		_("All vehicles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -471,7 +471,7 @@ RES_V_MET1
 	{
 		_("Vehicle Bodies Improved"),
 		_("Layered composite alloys and energy-absorbing fibres"),
-		_("Increases kinetic armor and body points"),
+		_("Kinetic armor +30%, body points +30%"),
 		_("All vehicles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -575,7 +575,7 @@ RES_W_CN_D1
 	{
 		_("Cannon Upgrade"),
 		_("High Explosive Anti-Tank Cannon Shells"),
-		_("Increases Cannon damage"),
+		_("Cannon damage +25%"),
 		_("All cannons upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -601,7 +601,7 @@ RES_W_FL_D1
 	{
 		_("Flamer Upgrade"),
 		_("Propylene Oxide gel treated to burn at higher temperatures"),
-		_("Increases Flamer damage"),
+		_("Flamer damage +25%"),
 		_("All flamers upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -640,7 +640,7 @@ RES_W_MG_D1
 	{
 		_("Machinegun Upgrade"),
 		_("Hardened case machinegun bullets"),
-		_("Increases Machinegun damage"),
+		_("Machinegun damage +25%"),
 		_("All machineguns upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -653,7 +653,7 @@ RES_W_MG_D2
 	{
 		_("Machinegun Upgrade"),
 		_("Armor-Piercing Discard Sabot Bullets"),
-		_("Increases Machinegun damage"),
+		_("Machinegun damage +25%"),
 		_("All machineguns upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -679,7 +679,7 @@ RES_W_M_D1
 	{
 		_("Mortar Upgrade"),
 		_("Improved high explosive shells"),
-		_("Increases Mortar damage"),
+		_("Mortar damage +25%"),
 		_("All mortars upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -705,7 +705,7 @@ RES_W_RK_AC1
 	{
 		_("Mini-Rocket Upgrade"),
 		_("Fin-stabilization improves flight trajectory"),
-		_("Increases Mini-Rocket accuracy"),
+		_("Mini-Rocket accuracy +10%"),
 		_("All mini-rockets upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -718,7 +718,7 @@ RES_W_RK_D1
 	{
 		_("Mini-Rocket Upgrade"),
 		_("Improved shaped charge warhead"),
-		_("Increases Mini-Rocket damage"),
+		_("Mini-Rocket damage +25%"),
 		_("All mini-rockets upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -731,7 +731,7 @@ RES_W_RK_ROF1
 	{
 		_("Mini-Rocket Upgrade"),
 		_("Automated reload system"),
-		_("Increases Mini-Rockets ROF"),
+		_("Mini-Rocket reload time -15%"),
 		_("All mini-rockets upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -744,7 +744,7 @@ RES_W_SRK_AC1
 	{
 		_("Rocket Upgrade"),
 		_("Tracks and directs in-flight rocket to target"),
-		_("Increases Rocket accuracy"),
+		_("Rocket accuracy +10%"),
 		_("All rockets upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -757,7 +757,7 @@ RES_W_SRK_D1
 	{
 		_("Rocket Upgrade"),
 		_("High Explosive Anti-Tank warhead"),
-		_("Increases Rocket damage"),
+		_("Rocket damage +25%"),
 		_("All rockets upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",

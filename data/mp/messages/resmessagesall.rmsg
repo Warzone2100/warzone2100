@@ -81,7 +81,33 @@ RES_SY_SU1
 	{
 		_("Sensors Improved"),
 		_("New Thermal Emissions detection"),
-		_("Extends Sensor Range"),
+		_("Sensor Range +25%"),
+		_("All sensors upgraded automatically"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.ogg",
+	.audioName = NULL,
+};
+RES_SY_SU2
+{
+	{
+		_("Sensors Improved"),
+		_("Improved Thermal Emissions detection"),
+		_("Sensor Range +15%"),
+		_("All sensors upgraded automatically"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.ogg",
+	.audioName = NULL,
+};
+RES_SY_SU3
+{
+	{
+		_("Sensors Improved"),
+		_("Advanced Thermal Emissions detection"),
+		_("Sensor Range +10%"),
 		_("All sensors upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -96,6 +122,19 @@ RES_SY_CBSTW1
 		_("Counter-battery tower detects enemy indirect fire batteries"),
 		_("Orders assigned indirect fire units to fire at the enemy batteries"),
 		_("Counter-battery fire continues until enemy battery is suppressed"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.ogg",
+	.audioName = NULL,
+};
+RES_SY_RDST1
+{
+	{
+		_("New Systems Tower Available"),
+		_("Radar detector tower detects enemy sensors"),
+		_("Orders assigned indirect fire units to fire at the enemy sensors"),
+		_("Counter-battery fire continues until enemy sensor is suppressed"),
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
@@ -133,7 +172,7 @@ RES_W_SRK_AC3
 	{
 		_("Rocket Upgrade"),
 		_("Rocket detects and locks on to engine emissions"),
-		_("Increases Rocket accuracy"),
+		_("Rocket accuracy +10%"),
 		_("All rockets upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -172,7 +211,7 @@ RES_W_CNAC2
 	{
 		_("Cannon Upgrade"),
 		_("Laser designator paints and guides rounds to the target"),
-		_("Increases Cannon accuracy"),
+		_("Cannon accuracy +10%"),
 		_("All cannons upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -459,7 +498,7 @@ RES_SY_S_UP
 		_("New Systems Structure Available"),
 		_("Complete battlefield visibility"),
 		_("Keeps map areas under constant surveillance"),
-		_("The ultimate in sensor technology"),
+		_("Does not offer sensor targeting"),
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
@@ -485,7 +524,7 @@ RES_W_LASSAT
 		_("New Advanced Weapon Available"),
 		_("Very slow recharge time"),
 		_("Immense damage infliction capability"),
-		_("Narrow area of affect"),
+		_("Narrow area of effect"),
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
@@ -731,7 +770,7 @@ RES_W_FL_D7
 	{
 		_("Flamer Upgrade"),
 		_("Propylene Oxide treated to burn at superhot temperatures"),
-		_("Increases Flamer damage"),
+		_("Flamer damage +25%"),
 		_("All flamers upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -742,10 +781,10 @@ RES_W_FL_D7
 RES_ST_FU7
 {
 	{
-		_("Vehicle Production Improved"),
+		_("Production Improved"),
 		_("Advanced Factory Production"),
-		_("Increases factory output"),
-		_("All vehicle factories upgraded automatically"),
+		_("Factory output speed +60%"),
+		_("All factories upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
@@ -796,7 +835,7 @@ RES_V_AH7
 	{
 		_("Vehicle Thermal Armor Improved"),
 		_("Heat-resistant armored layers"),
-		_("Increases Thermal Armor"),
+		_("Thermal Armor +40%"),
 		_("All vehicles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
