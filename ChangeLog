@@ -1,3 +1,10 @@
+2010-00-00: Version 2.3 beta 9
+ * General:
+   * Fix: Formation speed limiting should be off (r9372)
+   * Fix: Saving games would often crash, and proximity blips not display (r9382, ticket:1443)
+ * Skirmish:
+   * Change: AI is now more efficient at research (r9384)
+
 2010-01-19: Version 2.3 beta 8
  * General:
    * New: Mod files in mods/autoload/ are now autoloaded - note that this is NOT the previous autoload location (r9290, ticket:1415)
