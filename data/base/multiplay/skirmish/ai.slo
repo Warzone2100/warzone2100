@@ -1245,7 +1245,9 @@ event finishStructs(finishStructsTr)
 			droid = iterateGroup(buildGroup);
 			while(droid != NULLOBJECT)
 			{
-				if ((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD) and droidCanReach(droid, structure.x, structure.y))
+				if (droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD
+				    and droidCanReach(droid, structure.x, structure.y)
+				    and distBetweenTwoPoints(droid.x, droid.y, structure.x, structure.y) < 20 * TILE)
 				{
 					orderDroidObj(droid,DORDER_HELPBUILD,structure);
 				}
@@ -2435,7 +2437,8 @@ event vtolStructs(inactive)
 	local	int		_numVtolFacs,_numRearmPads;
 
 	// got any idle trucks?
-	if(idleGroup(buildGroup) < 1){
+	if (idleGroup(buildGroup) < 1)
+	{
 		exit;
 	}
 
@@ -2448,6 +2451,11 @@ event vtolStructs(inactive)
 	{
 		dbg("NEED REARM PADS", me);
 		buildRearmPads();
+	}
+
+	if (_numVtolFacs > 0 and playerPower(me) < LOW_POWER)
+	{
+		exit;	// Throttle expansion to avoid waste
 	}
 
 	// calculate how many trucks we want to use for construction
@@ -2925,11 +2933,6 @@ event vtolDefend(vtolDefendTr)
 		{
 			if(isVtol(objToDroid(baseobj)))
 			{
-				// activate other vtol functions..
-				setEventTrigger(vtolStructs,vtolStructsTr);
-				setEventTrigger(buildVtols,	buildVtolsTr);
-				setEventTrigger(vtolAttack,	vtolAttackTr);
-
 				_numBuilders = 0;
 				_maxBuilders = 2;
 
