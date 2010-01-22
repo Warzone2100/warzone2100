@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-20 20:15+0100\n"
+"POT-Creation-Date: 2010-01-22 18:41+0100\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -121,6 +121,10 @@ msgstr "武器科技研發完成"
 #: data/base/messages/strings/resstrings.txt:301
 #: data/base/messages/strings/resstrings.txt:307
 #: data/base/messages/strings/resstrings.txt:323
+#: data/mp/messages/resmessages12.rmsg:4
+#: data/mp/messages/resmessages12.rmsg:17
+#: data/mp/messages/resmessages12.rmsg:30
+#: data/mp/messages/resmessages12.rmsg:43
 #: data/mp/messages/resmessages1.rmsg:108
 #: data/mp/messages/resmessages1.rmsg:121
 #: data/mp/messages/resmessages1.rmsg:134
@@ -166,18 +170,18 @@ msgstr "武器科技研發完成"
 #: data/mp/messages/resmessages3.rmsg:381
 #: data/mp/messages/resmessages3.rmsg:394
 #: data/mp/messages/resmessages3.rmsg:407
-#: data/mp/messages/resmessagesall.rmsg:199
-#: data/mp/messages/resmessagesall.rmsg:212
-#: data/mp/messages/resmessagesall.rmsg:225
-#: data/mp/messages/resmessagesall.rmsg:498
-#: data/mp/messages/resmessagesall.rmsg:524
+#: data/mp/messages/resmessagesall.rmsg:238
+#: data/mp/messages/resmessagesall.rmsg:251
+#: data/mp/messages/resmessagesall.rmsg:264
 #: data/mp/messages/resmessagesall.rmsg:537
-#: data/mp/messages/resmessagesall.rmsg:550
-#: data/mp/messages/resmessagesall.rmsg:602
-#: data/mp/messages/resmessagesall.rmsg:615
-#: data/mp/messages/resmessagesall.rmsg:628
+#: data/mp/messages/resmessagesall.rmsg:563
+#: data/mp/messages/resmessagesall.rmsg:576
+#: data/mp/messages/resmessagesall.rmsg:589
 #: data/mp/messages/resmessagesall.rmsg:641
-#: data/mp/messages/resmessagesall.rmsg:771
+#: data/mp/messages/resmessagesall.rmsg:654
+#: data/mp/messages/resmessagesall.rmsg:667
+#: data/mp/messages/resmessagesall.rmsg:680
+#: data/mp/messages/resmessagesall.rmsg:810
 #: data/mp/messages/strings/resstrings.txt:131
 #: data/mp/messages/strings/resstrings.txt:137
 #: data/mp/messages/strings/resstrings.txt:143
@@ -208,6 +212,7 @@ msgid "New Defensive Structure Available"
 msgstr "可建造新的防禦工事"
 
 #: data/base/messages/resmessages12.rmsg:5
+#: data/mp/messages/resmessages12.rmsg:5
 msgid "Armored Mortar battery pit"
 msgstr "裝備有迫擊砲之砲坑"
 
@@ -229,6 +234,8 @@ msgstr "裝備有迫擊砲之砲坑"
 #: data/base/messages/strings/resstrings.txt:175
 #: data/base/messages/strings/resstrings.txt:181
 #: data/base/messages/strings/resstrings.txt:187
+#: data/mp/messages/resmessages12.rmsg:6
+#: data/mp/messages/resmessages12.rmsg:19
 #: data/mp/messages/resmessages2.rmsg:123
 #: data/mp/messages/resmessages2.rmsg:136
 #: data/mp/messages/resmessages2.rmsg:149
@@ -238,9 +245,9 @@ msgstr "裝備有迫擊砲之砲坑"
 #: data/mp/messages/resmessages2.rmsg:201
 #: data/mp/messages/resmessages3.rmsg:266
 #: data/mp/messages/resmessages3.rmsg:279
-#: data/mp/messages/resmessagesall.rmsg:201
-#: data/mp/messages/resmessagesall.rmsg:214
-#: data/mp/messages/resmessagesall.rmsg:773
+#: data/mp/messages/resmessagesall.rmsg:240
+#: data/mp/messages/resmessagesall.rmsg:253
+#: data/mp/messages/resmessagesall.rmsg:812
 #: data/mp/messages/strings/resstrings.txt:161
 #: data/mp/messages/strings/resstrings.txt:175
 #: data/mp/messages/strings/resstrings.txt:181
@@ -292,6 +299,8 @@ msgstr "自動指派給最近的雷達或反砲兵雷達"
 #: data/base/messages/strings/resstrings.txt:236
 #: data/base/messages/strings/resstrings.txt:242
 #: data/base/messages/strings/resstrings.txt:248
+#: data/mp/messages/resmessages12.rmsg:7
+#: data/mp/messages/resmessages12.rmsg:20
 #: data/mp/messages/resmessages1.rmsg:124
 #: data/mp/messages/resmessages1.rmsg:150
 #: data/mp/messages/resmessages1.rmsg:228
@@ -316,15 +325,15 @@ msgstr "自動指派給最近的雷達或反砲兵雷達"
 #: data/mp/messages/resmessages3.rmsg:306
 #: data/mp/messages/resmessages3.rmsg:345
 #: data/mp/messages/resmessagesall.rmsg:7
-#: data/mp/messages/resmessagesall.rmsg:202
-#: data/mp/messages/resmessagesall.rmsg:215
-#: data/mp/messages/resmessagesall.rmsg:228
-#: data/mp/messages/resmessagesall.rmsg:501
-#: data/mp/messages/resmessagesall.rmsg:527
+#: data/mp/messages/resmessagesall.rmsg:241
+#: data/mp/messages/resmessagesall.rmsg:254
+#: data/mp/messages/resmessagesall.rmsg:267
 #: data/mp/messages/resmessagesall.rmsg:540
-#: data/mp/messages/resmessagesall.rmsg:553
-#: data/mp/messages/resmessagesall.rmsg:657
-#: data/mp/messages/resmessagesall.rmsg:774
+#: data/mp/messages/resmessagesall.rmsg:566
+#: data/mp/messages/resmessagesall.rmsg:579
+#: data/mp/messages/resmessagesall.rmsg:592
+#: data/mp/messages/resmessagesall.rmsg:696
+#: data/mp/messages/resmessagesall.rmsg:813
 #: data/mp/messages/strings/resstrings.txt:134
 #: data/mp/messages/strings/resstrings.txt:140
 #: data/mp/messages/strings/resstrings.txt:146
@@ -346,10 +355,12 @@ msgid "Defensive Strength: Medium"
 msgstr "防禦力：中"
 
 #: data/base/messages/resmessages12.rmsg:18
+#: data/mp/messages/resmessages12.rmsg:18
 msgid "Mini-rocket armored strongpoint"
 msgstr "裝備有迷你火箭砲之據點"
 
 #: data/base/messages/resmessages12.rmsg:31
+#: data/mp/messages/resmessages12.rmsg:31
 msgid "Armored hardpoint with Heavy Machinegun"
 msgstr "裝備有重機槍之要塞"
 
@@ -384,6 +395,8 @@ msgstr "裝備有重機槍之要塞"
 #: data/base/messages/strings/resstrings.txt:295
 #: data/base/messages/strings/resstrings.txt:303
 #: data/base/messages/strings/resstrings.txt:309
+#: data/mp/messages/resmessages12.rmsg:32
+#: data/mp/messages/resmessages12.rmsg:45
 #: data/mp/messages/resmessages1.rmsg:110
 #: data/mp/messages/resmessages1.rmsg:123
 #: data/mp/messages/resmessages1.rmsg:136
@@ -404,8 +417,8 @@ msgstr "裝備有重機槍之要塞"
 #: data/mp/messages/resmessages3.rmsg:383
 #: data/mp/messages/resmessages3.rmsg:396
 #: data/mp/messages/resmessages3.rmsg:409
-#: data/mp/messages/resmessagesall.rmsg:500
-#: data/mp/messages/resmessagesall.rmsg:552
+#: data/mp/messages/resmessagesall.rmsg:539
+#: data/mp/messages/resmessagesall.rmsg:591
 #: data/mp/messages/strings/resstrings.txt:261
 #: data/mp/messages/strings/resstrings.txt:267
 #: data/mp/messages/strings/resstrings.txt:273
@@ -452,6 +465,8 @@ msgstr "自動攻擊雷達範圍內所有敵人"
 #: data/base/messages/strings/resstrings.txt:304
 #: data/base/messages/strings/resstrings.txt:310
 #: data/base/messages/strings/resstrings.txt:326
+#: data/mp/messages/resmessages12.rmsg:33
+#: data/mp/messages/resmessages12.rmsg:46
 #: data/mp/messages/resmessages1.rmsg:137
 #: data/mp/messages/resmessages1.rmsg:163
 #: data/mp/messages/resmessages1.rmsg:176
@@ -486,12 +501,14 @@ msgid "Defensive Strength: High"
 msgstr "防禦力：高"
 
 #: data/base/messages/resmessages12.rmsg:44
+#: data/mp/messages/resmessages12.rmsg:44
 msgid "Armored hardpoint with Lancer AT missile"
 msgstr "裝備有槍騎兵火箭之要塞"
 
 #: data/base/messages/resmessages12.rmsg:56
 #: data/base/messages/resmessages23.rmsg:43
 #: data/base/messages/resmessages3.rmsg:511
+#: data/mp/messages/resmessages12.rmsg:56
 #: data/mp/messages/resmessages23.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:511
 msgid "Research Breakthrough Improves Construction Rates"
@@ -499,6 +516,7 @@ msgstr "研究的突破改善了建築的速度"
 
 #: data/base/messages/resmessages12.rmsg:57
 #: data/base/messages/resmessages23.rmsg:44
+#: data/mp/messages/resmessages12.rmsg:57
 #: data/mp/messages/resmessages23.rmsg:44
 msgid "Improved Engineering Techniques"
 msgstr "改善工程科技"
@@ -506,14 +524,13 @@ msgstr "改善工程科技"
 #: data/base/messages/resmessages12.rmsg:58
 #: data/base/messages/resmessages23.rmsg:45
 #: data/base/messages/resmessages3.rmsg:513
-#: data/mp/messages/resmessages23.rmsg:45
-#: data/mp/messages/resmessages3.rmsg:513
 msgid "Increases construction speed"
 msgstr "增加建築速度"
 
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages23.rmsg:46
 #: data/base/messages/resmessages3.rmsg:514
+#: data/mp/messages/resmessages12.rmsg:59
 #: data/mp/messages/resmessages23.rmsg:46
 #: data/mp/messages/resmessages3.rmsg:514
 msgid "All trucks upgraded automatically"
@@ -521,29 +538,34 @@ msgstr "自動升級所有工程車"
 
 #: data/base/messages/resmessages12.rmsg:69
 #: data/base/messages/resmessages1.rmsg:4
+#: data/mp/messages/resmessages12.rmsg:69
 #: data/mp/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
 msgstr "可搭載新的系統裝備"
 
 #: data/base/messages/resmessages12.rmsg:70
+#: data/mp/messages/resmessages12.rmsg:70
 msgid "Counter-battery turret detects enemy indirect fire batteries"
 msgstr "反砲兵雷達可以偵測到敵軍的非直射型砲兵攻擊"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessagesall.rmsg:97
-#: data/mp/messages/resmessagesall.rmsg:97
+#: data/mp/messages/resmessages12.rmsg:71
+#: data/mp/messages/resmessagesall.rmsg:123
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
 msgstr "命令指定的非直射武裝部隊攻擊敵軍的砲兵部隊"
 
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessagesall.rmsg:98
-#: data/mp/messages/resmessagesall.rmsg:98
+#: data/mp/messages/resmessages12.rmsg:72
+#: data/mp/messages/resmessagesall.rmsg:124
 msgid "Counter-battery fire continues until enemy battery is suppressed"
 msgstr "直到敵軍的砲火被壓制住為止"
 
 #: data/base/messages/resmessages12.rmsg:82
 #: data/base/messages/resmessages23.rmsg:56
 #: data/base/messages/resmessages3.rmsg:524
+#: data/mp/messages/resmessages12.rmsg:82
 #: data/mp/messages/resmessages23.rmsg:56
 #: data/mp/messages/resmessages3.rmsg:524
 msgid "CB Sensor Improved"
@@ -552,6 +574,7 @@ msgstr "改善反砲兵雷達"
 #: data/base/messages/resmessages12.rmsg:83
 #: data/base/messages/resmessages2.rmsg:447
 #: data/base/messages/strings/resstrings.txt:486
+#: data/mp/messages/resmessages12.rmsg:83
 #: data/mp/messages/resmessages2.rmsg:447
 #: data/mp/messages/strings/resstrings.txt:514
 msgid "New fire detection systems"
@@ -560,6 +583,7 @@ msgstr "新的火焰偵測系統"
 #: data/base/messages/resmessages12.rmsg:84
 #: data/base/messages/resmessages23.rmsg:58
 #: data/base/messages/resmessages3.rmsg:526
+#: data/mp/messages/resmessages12.rmsg:84
 #: data/mp/messages/resmessages23.rmsg:58
 #: data/mp/messages/resmessages3.rmsg:526
 msgid "Extends CB Range"
@@ -568,6 +592,7 @@ msgstr "延伸反砲兵雷達測距離"
 #: data/base/messages/resmessages12.rmsg:85
 #: data/base/messages/resmessages23.rmsg:59
 #: data/base/messages/resmessages3.rmsg:527
+#: data/mp/messages/resmessages12.rmsg:85
 #: data/mp/messages/resmessages23.rmsg:59
 #: data/mp/messages/resmessages3.rmsg:527
 msgid "All CB sensors upgraded automatically"
@@ -580,20 +605,23 @@ msgstr "所有反砲兵雷達自動升級"
 #: data/base/messages/resmessages3.rmsg:875
 #: data/base/messages/resmessages3.rmsg:888
 #: data/base/messages/resmessagesall.rmsg:173
+#: data/mp/messages/resmessages12.rmsg:95
+#: data/mp/messages/resmessages12.rmsg:212
+#: data/mp/messages/resmessages12.rmsg:225
 #: data/mp/messages/resmessages1.rmsg:576
 #: data/mp/messages/resmessages3.rmsg:875
 #: data/mp/messages/resmessages3.rmsg:888
-#: data/mp/messages/resmessagesall.rmsg:173
+#: data/mp/messages/resmessagesall.rmsg:212
 msgid "Cannon Upgrade"
 msgstr "加農砲武器升級"
 
 #: data/base/messages/resmessages12.rmsg:96
+#: data/mp/messages/resmessages12.rmsg:96
 msgid "Determines range to target"
 msgstr "偵測至目標的射程"
 
 #: data/base/messages/resmessages12.rmsg:97
 #: data/base/messages/resmessagesall.rmsg:175
-#: data/mp/messages/resmessagesall.rmsg:175
 msgid "Increases Cannon accuracy"
 msgstr "增加加農砲系武器準確率"
 
@@ -604,10 +632,13 @@ msgstr "增加加農砲系武器準確率"
 #: data/base/messages/resmessages3.rmsg:878
 #: data/base/messages/resmessages3.rmsg:891
 #: data/base/messages/resmessagesall.rmsg:176
+#: data/mp/messages/resmessages12.rmsg:98
+#: data/mp/messages/resmessages12.rmsg:215
+#: data/mp/messages/resmessages12.rmsg:228
 #: data/mp/messages/resmessages1.rmsg:579
 #: data/mp/messages/resmessages3.rmsg:878
 #: data/mp/messages/resmessages3.rmsg:891
-#: data/mp/messages/resmessagesall.rmsg:176
+#: data/mp/messages/resmessagesall.rmsg:215
 msgid "All cannons upgraded automatically"
 msgstr "自動升級所有加農砲系武器"
 
@@ -615,9 +646,10 @@ msgstr "自動升級所有加農砲系武器"
 #: data/base/messages/resmessages1.rmsg:602
 #: data/base/messages/resmessages2.rmsg:784
 #: data/base/messages/strings/resstrings.txt:765
+#: data/mp/messages/resmessages12.rmsg:108
 #: data/mp/messages/resmessages1.rmsg:602
 #: data/mp/messages/resmessages2.rmsg:784
-#: data/mp/messages/resmessagesall.rmsg:732
+#: data/mp/messages/resmessagesall.rmsg:771
 #: data/mp/messages/strings/resstrings.txt:802
 msgid "Flamer Upgrade"
 msgstr "火焰噴射升級"
@@ -626,6 +658,8 @@ msgstr "火焰噴射升級"
 #: data/base/messages/resmessages12.rmsg:213
 #: data/base/messages/resmessages2.rmsg:863
 #: data/base/messages/strings/resstrings.txt:810
+#: data/mp/messages/resmessages12.rmsg:109
+#: data/mp/messages/resmessages12.rmsg:213
 #: data/mp/messages/resmessages2.rmsg:863
 #: data/mp/messages/strings/resstrings.txt:849
 msgid "Automatic loading mechanism replaces manual loader"
@@ -639,9 +673,10 @@ msgstr "增加火焰噴射射速"
 #: data/base/messages/resmessages1.rmsg:605
 #: data/base/messages/resmessages2.rmsg:787
 #: data/base/messages/strings/resstrings.txt:768
+#: data/mp/messages/resmessages12.rmsg:111
 #: data/mp/messages/resmessages1.rmsg:605
 #: data/mp/messages/resmessages2.rmsg:787
-#: data/mp/messages/resmessagesall.rmsg:735
+#: data/mp/messages/resmessagesall.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "All flamers upgraded automatically"
 msgstr "自動升級所有火焰噴射系武器"
@@ -660,6 +695,7 @@ msgstr "自動升級所有火焰噴射系武器"
 #: data/base/messages/strings/resstrings.txt:729
 #: data/base/messages/strings/resstrings.txt:735
 #: data/base/messages/strings/resstrings.txt:757
+#: data/mp/messages/resmessages12.rmsg:121
 #: data/mp/messages/resmessages1.rmsg:537
 #: data/mp/messages/resmessages1.rmsg:550
 #: data/mp/messages/resmessages1.rmsg:563
@@ -670,11 +706,11 @@ msgstr "自動升級所有火焰噴射系武器"
 #: data/mp/messages/resmessages2.rmsg:745
 #: data/mp/messages/resmessages2.rmsg:758
 #: data/mp/messages/resmessages2.rmsg:771
-#: data/mp/messages/resmessagesall.rmsg:329
-#: data/mp/messages/resmessagesall.rmsg:446
-#: data/mp/messages/resmessagesall.rmsg:511
-#: data/mp/messages/resmessagesall.rmsg:654
-#: data/mp/messages/resmessagesall.rmsg:836
+#: data/mp/messages/resmessagesall.rmsg:368
+#: data/mp/messages/resmessagesall.rmsg:485
+#: data/mp/messages/resmessagesall.rmsg:550
+#: data/mp/messages/resmessagesall.rmsg:693
+#: data/mp/messages/resmessagesall.rmsg:875
 #: data/mp/messages/strings/resstrings.txt:762
 #: data/mp/messages/strings/resstrings.txt:768
 #: data/mp/messages/strings/resstrings.txt:794
@@ -682,6 +718,7 @@ msgid "New Weapon Turret Available"
 msgstr "可搭載新的武器裝備"
 
 #: data/base/messages/resmessages12.rmsg:122
+#: data/mp/messages/resmessages12.rmsg:122
 msgid ".50-calibre heavy machinegun"
 msgstr "口徑50釐米、重型機槍"
 
@@ -689,11 +726,12 @@ msgstr "口徑50釐米、重型機槍"
 #: data/base/messages/resmessages1.rmsg:617
 #: data/base/messages/resmessages1.rmsg:630
 #: data/base/messages/resmessages23.rmsg:214
+#: data/mp/messages/resmessages12.rmsg:123
 #: data/mp/messages/resmessages1.rmsg:617
 #: data/mp/messages/resmessages1.rmsg:630
 #: data/mp/messages/resmessages23.rmsg:214
-#: data/mp/messages/resmessagesall.rmsg:838
-#: data/mp/messages/resmessagesall.rmsg:851
+#: data/mp/messages/resmessagesall.rmsg:877
+#: data/mp/messages/resmessagesall.rmsg:890
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
 msgstr "最佳目標：步兵、基本建築物與輪式坦克"
 
@@ -736,6 +774,7 @@ msgstr "最佳目標：步兵、基本建築物與輪式坦克"
 #: data/base/messages/strings/resstrings.txt:656
 #: data/base/messages/strings/resstrings.txt:688
 #: data/base/messages/strings/resstrings.txt:694
+#: data/mp/messages/resmessages12.rmsg:124
 #: data/mp/messages/resmessages1.rmsg:45
 #: data/mp/messages/resmessages1.rmsg:58
 #: data/mp/messages/resmessages1.rmsg:71
@@ -764,25 +803,25 @@ msgstr "最佳目標：步兵、基本建築物與輪式坦克"
 #: data/mp/messages/resmessages3.rmsg:956
 #: data/mp/messages/resmessages3.rmsg:1203
 #: data/mp/messages/resmessages3.rmsg:1216
-#: data/mp/messages/resmessagesall.rmsg:188
-#: data/mp/messages/resmessagesall.rmsg:240
-#: data/mp/messages/resmessagesall.rmsg:253
-#: data/mp/messages/resmessagesall.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:227
 #: data/mp/messages/resmessagesall.rmsg:279
-#: data/mp/messages/resmessagesall.rmsg:383
-#: data/mp/messages/resmessagesall.rmsg:396
-#: data/mp/messages/resmessagesall.rmsg:409
+#: data/mp/messages/resmessagesall.rmsg:292
+#: data/mp/messages/resmessagesall.rmsg:305
+#: data/mp/messages/resmessagesall.rmsg:318
 #: data/mp/messages/resmessagesall.rmsg:422
-#: data/mp/messages/resmessagesall.rmsg:436
-#: data/mp/messages/resmessagesall.rmsg:514
-#: data/mp/messages/resmessagesall.rmsg:565
-#: data/mp/messages/resmessagesall.rmsg:578
-#: data/mp/messages/resmessagesall.rmsg:591
-#: data/mp/messages/resmessagesall.rmsg:709
-#: data/mp/messages/resmessagesall.rmsg:722
-#: data/mp/messages/resmessagesall.rmsg:787
-#: data/mp/messages/resmessagesall.rmsg:813
+#: data/mp/messages/resmessagesall.rmsg:435
+#: data/mp/messages/resmessagesall.rmsg:448
+#: data/mp/messages/resmessagesall.rmsg:461
+#: data/mp/messages/resmessagesall.rmsg:475
+#: data/mp/messages/resmessagesall.rmsg:553
+#: data/mp/messages/resmessagesall.rmsg:604
+#: data/mp/messages/resmessagesall.rmsg:617
+#: data/mp/messages/resmessagesall.rmsg:630
+#: data/mp/messages/resmessagesall.rmsg:748
+#: data/mp/messages/resmessagesall.rmsg:761
 #: data/mp/messages/resmessagesall.rmsg:826
+#: data/mp/messages/resmessagesall.rmsg:852
+#: data/mp/messages/resmessagesall.rmsg:865
 #: data/mp/messages/strings/resstrings.txt:53
 #: data/mp/messages/strings/resstrings.txt:85
 #: data/mp/messages/strings/resstrings.txt:97
@@ -806,6 +845,7 @@ msgstr "HP：中"
 #: data/base/messages/resmessages3.rmsg:1018
 #: data/base/messages/strings/resstrings.txt:845
 #: data/base/messages/strings/resstrings.txt:857
+#: data/mp/messages/resmessages12.rmsg:134
 #: data/mp/messages/resmessages1.rmsg:641
 #: data/mp/messages/resmessages1.rmsg:654
 #: data/mp/messages/resmessages23.rmsg:173
@@ -819,6 +859,7 @@ msgid "Machinegun Upgrade"
 msgstr "機槍系武器升級"
 
 #: data/base/messages/resmessages12.rmsg:135
+#: data/mp/messages/resmessages12.rmsg:135
 msgid "Chaingun mechanism replaces belt-feed"
 msgstr "鍊槍機構取代舊有的傳送"
 
@@ -826,8 +867,6 @@ msgstr "鍊槍機構取代舊有的傳送"
 #: data/base/messages/resmessages23.rmsg:175
 #: data/base/messages/resmessages2.rmsg:890
 #: data/base/messages/strings/resstrings.txt:859
-#: data/mp/messages/resmessages23.rmsg:175
-#: data/mp/messages/resmessages2.rmsg:890
 #: data/mp/messages/strings/resstrings.txt:900
 msgid "Increases Machinegun ROF"
 msgstr "增加機槍系武器射速"
@@ -842,6 +881,7 @@ msgstr "增加機槍系武器射速"
 #: data/base/messages/resmessages3.rmsg:1021
 #: data/base/messages/strings/resstrings.txt:848
 #: data/base/messages/strings/resstrings.txt:860
+#: data/mp/messages/resmessages12.rmsg:137
 #: data/mp/messages/resmessages1.rmsg:644
 #: data/mp/messages/resmessages1.rmsg:657
 #: data/mp/messages/resmessages23.rmsg:176
@@ -865,14 +905,15 @@ msgstr "自動升級所有機槍系武器"
 #: data/base/messages/strings/resstrings.txt:779
 #: data/base/messages/strings/resstrings.txt:787
 #: data/base/messages/strings/resstrings.txt:891
+#: data/mp/messages/resmessages12.rmsg:147
 #: data/mp/messages/resmessages1.rmsg:667
 #: data/mp/messages/resmessages23.rmsg:199
 #: data/mp/messages/resmessages2.rmsg:797
 #: data/mp/messages/resmessages2.rmsg:810
 #: data/mp/messages/resmessages2.rmsg:823
 #: data/mp/messages/resmessages2.rmsg:901
-#: data/mp/messages/resmessagesall.rmsg:290
-#: data/mp/messages/resmessagesall.rmsg:303
+#: data/mp/messages/resmessagesall.rmsg:329
+#: data/mp/messages/resmessagesall.rmsg:342
 #: data/mp/messages/strings/resstrings.txt:810
 #: data/mp/messages/strings/resstrings.txt:818
 #: data/mp/messages/strings/resstrings.txt:826
@@ -883,6 +924,7 @@ msgstr "可使用新的非直射型武器"
 #: data/base/messages/resmessages12.rmsg:148
 #: data/base/messages/resmessages2.rmsg:902
 #: data/base/messages/strings/resstrings.txt:892
+#: data/mp/messages/resmessages12.rmsg:148
 #: data/mp/messages/resmessages2.rmsg:902
 #: data/mp/messages/strings/resstrings.txt:933
 msgid "May be assigned to a sensor"
@@ -892,9 +934,10 @@ msgstr "可指派給雷達導引"
 #: data/base/messages/resmessages1.rmsg:669
 #: data/base/messages/resmessages2.rmsg:903
 #: data/base/messages/strings/resstrings.txt:893
+#: data/mp/messages/resmessages12.rmsg:149
 #: data/mp/messages/resmessages1.rmsg:669
 #: data/mp/messages/resmessages2.rmsg:903
-#: data/mp/messages/resmessagesall.rmsg:305
+#: data/mp/messages/resmessagesall.rmsg:344
 #: data/mp/messages/strings/resstrings.txt:934
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "最佳目標：基本建築物、步兵及輪式坦克"
@@ -915,6 +958,10 @@ msgstr "最佳目標：基本建築物、步兵及輪式坦克"
 #: data/base/messages/resmessagesall.rmsg:150
 #: data/base/messages/resmessagesall.rmsg:163
 #: data/base/messages/strings/resstrings.txt:894
+#: data/mp/messages/resmessages12.rmsg:150
+#: data/mp/messages/resmessages12.rmsg:189
+#: data/mp/messages/resmessages12.rmsg:254
+#: data/mp/messages/resmessages12.rmsg:267
 #: data/mp/messages/resmessages1.rmsg:670
 #: data/mp/messages/resmessages1.rmsg:696
 #: data/mp/messages/resmessages2.rmsg:904
@@ -924,9 +971,9 @@ msgstr "最佳目標：基本建築物、步兵及輪式坦克"
 #: data/mp/messages/resmessages3.rmsg:1112
 #: data/mp/messages/resmessages3.rmsg:1125
 #: data/mp/messages/resmessages3.rmsg:1138
-#: data/mp/messages/resmessagesall.rmsg:150
-#: data/mp/messages/resmessagesall.rmsg:163
-#: data/mp/messages/resmessagesall.rmsg:306
+#: data/mp/messages/resmessagesall.rmsg:189
+#: data/mp/messages/resmessagesall.rmsg:202
+#: data/mp/messages/resmessagesall.rmsg:345
 #: data/mp/messages/strings/resstrings.txt:935
 msgid "Body Points: Very Low"
 msgstr "HP：非常低"
@@ -939,6 +986,8 @@ msgstr "HP：非常低"
 #: data/base/messages/resmessages3.rmsg:1174
 #: data/base/messages/resmessages3.rmsg:1187
 #: data/base/messages/strings/resstrings.txt:905
+#: data/mp/messages/resmessages12.rmsg:160
+#: data/mp/messages/resmessages12.rmsg:173
 #: data/mp/messages/resmessages1.rmsg:680
 #: data/mp/messages/resmessages23.rmsg:186
 #: data/mp/messages/resmessages2.rmsg:914
@@ -949,14 +998,13 @@ msgid "Mortar Upgrade"
 msgstr "迫擊砲升級"
 
 #: data/base/messages/resmessages12.rmsg:161
+#: data/mp/messages/resmessages12.rmsg:161
 msgid "Targeting systems compensate for distance and weather conditions"
 msgstr "目標鎖定系統會自動運算目標的距離並補償天氣所造成的誤差"
 
 #: data/base/messages/resmessages12.rmsg:162
 #: data/base/messages/resmessages23.rmsg:188
 #: data/base/messages/resmessages3.rmsg:1176
-#: data/mp/messages/resmessages23.rmsg:188
-#: data/mp/messages/resmessages3.rmsg:1176
 msgid "Increases Mortar accuracy"
 msgstr "增加迫擊砲準確率"
 
@@ -968,6 +1016,8 @@ msgstr "增加迫擊砲準確率"
 #: data/base/messages/resmessages3.rmsg:1177
 #: data/base/messages/resmessages3.rmsg:1190
 #: data/base/messages/strings/resstrings.txt:908
+#: data/mp/messages/resmessages12.rmsg:163
+#: data/mp/messages/resmessages12.rmsg:176
 #: data/mp/messages/resmessages1.rmsg:683
 #: data/mp/messages/resmessages23.rmsg:189
 #: data/mp/messages/resmessages2.rmsg:917
@@ -978,12 +1028,12 @@ msgid "All mortars upgraded automatically"
 msgstr "自動升級所有迫擊砲系武器"
 
 #: data/base/messages/resmessages12.rmsg:174
+#: data/mp/messages/resmessages12.rmsg:174
 msgid "Automatic loader replaces manual feed"
 msgstr "自動化裝載機構取代人工裝載彈藥"
 
 #: data/base/messages/resmessages12.rmsg:175
 #: data/base/messages/resmessages3.rmsg:1189
-#: data/mp/messages/resmessages3.rmsg:1189
 msgid "Increases Mortar ROF"
 msgstr "增加迫擊砲射速"
 
@@ -993,17 +1043,22 @@ msgstr "增加迫擊砲射速"
 #: data/base/messages/resmessages1.rmsg:693
 #: data/base/messages/resmessagesall.rmsg:147
 #: data/base/messages/resmessagesall.rmsg:160
+#: data/mp/messages/resmessages12.rmsg:186
+#: data/mp/messages/resmessages12.rmsg:251
+#: data/mp/messages/resmessages12.rmsg:264
 #: data/mp/messages/resmessages1.rmsg:693
-#: data/mp/messages/resmessagesall.rmsg:147
-#: data/mp/messages/resmessagesall.rmsg:160
+#: data/mp/messages/resmessagesall.rmsg:186
+#: data/mp/messages/resmessagesall.rmsg:199
 msgid "New Rocket Available"
 msgstr "可搭載新的火箭系武器"
 
 #: data/base/messages/resmessages12.rmsg:187
+#: data/mp/messages/resmessages12.rmsg:187
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "火箭炮部隊，可指派給雷達導引"
 
 #: data/base/messages/resmessages12.rmsg:188
+#: data/mp/messages/resmessages12.rmsg:188
 msgid "Best Targets: Vehicles and Emplacements"
 msgstr "最佳目標：坦克與砲台"
 
@@ -1014,15 +1069,18 @@ msgstr "最佳目標：坦克與砲台"
 #: data/base/messages/resmessages2.rmsg:940
 #: data/base/messages/resmessagesall.rmsg:134
 #: data/base/messages/strings/resstrings.txt:965
+#: data/mp/messages/resmessages12.rmsg:199
+#: data/mp/messages/resmessages12.rmsg:238
 #: data/mp/messages/resmessages1.rmsg:745
 #: data/mp/messages/resmessages1.rmsg:758
 #: data/mp/messages/resmessages2.rmsg:940
-#: data/mp/messages/resmessagesall.rmsg:134
+#: data/mp/messages/resmessagesall.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:1008
 msgid "Rocket Upgrade"
 msgstr "火箭系武器升級"
 
 #: data/base/messages/resmessages12.rmsg:200
+#: data/mp/messages/resmessages12.rmsg:200
 msgid "Autoloader increases reload rate"
 msgstr "自動裝載系統增加武器重新裝載彈藥的速率"
 
@@ -1037,45 +1095,45 @@ msgstr "增加火箭系武器射速"
 #: data/base/messages/resmessages2.rmsg:943
 #: data/base/messages/resmessagesall.rmsg:137
 #: data/base/messages/strings/resstrings.txt:968
+#: data/mp/messages/resmessages12.rmsg:202
+#: data/mp/messages/resmessages12.rmsg:241
 #: data/mp/messages/resmessages1.rmsg:748
 #: data/mp/messages/resmessages1.rmsg:761
 #: data/mp/messages/resmessages2.rmsg:943
-#: data/mp/messages/resmessagesall.rmsg:137
+#: data/mp/messages/resmessagesall.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "All rockets upgraded automatically"
 msgstr "自動升級所有火箭系武器"
 
 #: data/base/messages/resmessages12.rmsg:214
 #: data/base/messages/resmessages3.rmsg:890
-#: data/mp/messages/resmessages3.rmsg:890
 msgid "Increases Cannon ROF"
 msgstr "增加加農砲系武器攻速"
 
 #: data/base/messages/resmessages12.rmsg:226
+#: data/mp/messages/resmessages12.rmsg:226
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "尾翼穩定脫殼穿甲彈(APFDS)"
 
 #: data/base/messages/resmessages12.rmsg:227
 #: data/base/messages/resmessages1.rmsg:578
 #: data/base/messages/resmessages3.rmsg:877
-#: data/mp/messages/resmessages1.rmsg:578
-#: data/mp/messages/resmessages3.rmsg:877
 msgid "Increases Cannon damage"
 msgstr "增加加農砲系武器傷害"
 
 #: data/base/messages/resmessages12.rmsg:239
+#: data/mp/messages/resmessages12.rmsg:239
 msgid "Rocket tracks the laser designator to the target"
 msgstr "火箭會跟隨雷射指向器的軌跡攻擊目標"
 
 #: data/base/messages/resmessages12.rmsg:240
 #: data/base/messages/resmessages1.rmsg:747
 #: data/base/messages/resmessagesall.rmsg:136
-#: data/mp/messages/resmessages1.rmsg:747
-#: data/mp/messages/resmessagesall.rmsg:136
 msgid "Increases Rocket accuracy"
 msgstr "增加火箭系武器準確率"
 
 #: data/base/messages/resmessages12.rmsg:252
+#: data/mp/messages/resmessages12.rmsg:252
 msgid "Heavy anti-tank rocket"
 msgstr "重型反坦克火箭"
 
@@ -1092,26 +1150,29 @@ msgstr "重型反坦克火箭"
 #: data/base/messages/resmessagesall.rmsg:149
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
+#: data/mp/messages/resmessages12.rmsg:253
 #: data/mp/messages/resmessages1.rmsg:539
 #: data/mp/messages/resmessages2.rmsg:760
 #: data/mp/messages/resmessages3.rmsg:1033
 #: data/mp/messages/resmessages3.rmsg:1202
 #: data/mp/messages/resmessages3.rmsg:1215
 #: data/mp/messages/resmessages3.rmsg:1228
-#: data/mp/messages/resmessagesall.rmsg:149
-#: data/mp/messages/resmessagesall.rmsg:448
-#: data/mp/messages/resmessagesall.rmsg:513
-#: data/mp/messages/resmessagesall.rmsg:877
+#: data/mp/messages/resmessagesall.rmsg:188
+#: data/mp/messages/resmessagesall.rmsg:487
+#: data/mp/messages/resmessagesall.rmsg:552
+#: data/mp/messages/resmessagesall.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:764
 #: data/mp/messages/strings/resstrings.txt:770
 msgid "Best Targets: Vehicles"
 msgstr "最佳目標：坦克"
 
 #: data/base/messages/resmessages12.rmsg:265
+#: data/mp/messages/resmessages12.rmsg:265
 msgid "Fires salvoes of mini-rockets"
 msgstr "發射多管齊射式的迷你火箭"
 
 #: data/base/messages/resmessages12.rmsg:266
+#: data/mp/messages/resmessages12.rmsg:266
 msgid "Best Targets: Base structures"
 msgstr "最佳目標：基本建築物"
 
@@ -1122,9 +1183,9 @@ msgstr "新的戰場電腦系統"
 
 #: data/base/messages/resmessages1.rmsg:6
 #: data/mp/messages/resmessages1.rmsg:6
-#: data/mp/messages/resmessagesall.rmsg:890
-#: data/mp/messages/resmessagesall.rmsg:903
-#: data/mp/messages/resmessagesall.rmsg:916
+#: data/mp/messages/resmessagesall.rmsg:929
+#: data/mp/messages/resmessagesall.rmsg:942
+#: data/mp/messages/resmessagesall.rmsg:955
 msgid "Commander leads groups acts as factory delivery point"
 msgstr "指揮官車可以統領部隊攻擊目標，回到修理工廠修理完成會自動歸隊"
 
@@ -1139,10 +1200,10 @@ msgstr "指揮官車可以統領部隊攻擊目標，回到修理工廠修理完
 #: data/mp/messages/resmessages1.rmsg:566
 #: data/mp/messages/resmessages2.rmsg:761
 #: data/mp/messages/resmessages3.rmsg:1229
-#: data/mp/messages/resmessagesall.rmsg:449
-#: data/mp/messages/resmessagesall.rmsg:891
-#: data/mp/messages/resmessagesall.rmsg:904
-#: data/mp/messages/resmessagesall.rmsg:917
+#: data/mp/messages/resmessagesall.rmsg:488
+#: data/mp/messages/resmessagesall.rmsg:930
+#: data/mp/messages/resmessagesall.rmsg:943
+#: data/mp/messages/resmessagesall.rmsg:956
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "Body Points: High"
 msgstr "HP：高"
@@ -1196,10 +1257,6 @@ msgstr "層狀複合合金和能量吸收纖維"
 #: data/base/messages/resmessages3.rmsg:71
 #: data/base/messages/resmessages3.rmsg:84
 #: data/base/messages/strings/resstrings.txt:33
-#: data/mp/messages/resmessages1.rmsg:32
-#: data/mp/messages/resmessages2.rmsg:19
-#: data/mp/messages/resmessages3.rmsg:71
-#: data/mp/messages/resmessages3.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:35
 msgid "Increases Kinetic Armor and Body Points"
 msgstr "增加熱能防禦及HP"
@@ -1249,17 +1306,17 @@ msgstr "自動升級所有生化人步兵"
 #: data/mp/messages/resmessages3.rmsg:108
 #: data/mp/messages/resmessages3.rmsg:121
 #: data/mp/messages/resmessages3.rmsg:134
-#: data/mp/messages/resmessagesall.rmsg:238
-#: data/mp/messages/resmessagesall.rmsg:251
-#: data/mp/messages/resmessagesall.rmsg:264
 #: data/mp/messages/resmessagesall.rmsg:277
-#: data/mp/messages/resmessagesall.rmsg:381
-#: data/mp/messages/resmessagesall.rmsg:394
-#: data/mp/messages/resmessagesall.rmsg:407
+#: data/mp/messages/resmessagesall.rmsg:290
+#: data/mp/messages/resmessagesall.rmsg:303
+#: data/mp/messages/resmessagesall.rmsg:316
 #: data/mp/messages/resmessagesall.rmsg:420
-#: data/mp/messages/resmessagesall.rmsg:563
-#: data/mp/messages/resmessagesall.rmsg:576
-#: data/mp/messages/resmessagesall.rmsg:589
+#: data/mp/messages/resmessagesall.rmsg:433
+#: data/mp/messages/resmessagesall.rmsg:446
+#: data/mp/messages/resmessagesall.rmsg:459
+#: data/mp/messages/resmessagesall.rmsg:602
+#: data/mp/messages/resmessagesall.rmsg:615
+#: data/mp/messages/resmessagesall.rmsg:628
 #: data/mp/messages/strings/resstrings.txt:51
 #: data/mp/messages/strings/resstrings.txt:83
 msgid "New Cyborg Available"
@@ -1302,17 +1359,17 @@ msgstr "裝備有機槍之生化人步兵"
 #: data/mp/messages/resmessages3.rmsg:163
 #: data/mp/messages/resmessages3.rmsg:176
 #: data/mp/messages/resmessages3.rmsg:189
-#: data/mp/messages/resmessagesall.rmsg:241
-#: data/mp/messages/resmessagesall.rmsg:254
-#: data/mp/messages/resmessagesall.rmsg:267
 #: data/mp/messages/resmessagesall.rmsg:280
-#: data/mp/messages/resmessagesall.rmsg:384
-#: data/mp/messages/resmessagesall.rmsg:397
-#: data/mp/messages/resmessagesall.rmsg:410
+#: data/mp/messages/resmessagesall.rmsg:293
+#: data/mp/messages/resmessagesall.rmsg:306
+#: data/mp/messages/resmessagesall.rmsg:319
 #: data/mp/messages/resmessagesall.rmsg:423
-#: data/mp/messages/resmessagesall.rmsg:566
-#: data/mp/messages/resmessagesall.rmsg:579
-#: data/mp/messages/resmessagesall.rmsg:592
+#: data/mp/messages/resmessagesall.rmsg:436
+#: data/mp/messages/resmessagesall.rmsg:449
+#: data/mp/messages/resmessagesall.rmsg:462
+#: data/mp/messages/resmessagesall.rmsg:605
+#: data/mp/messages/resmessagesall.rmsg:618
+#: data/mp/messages/resmessagesall.rmsg:631
 #: data/mp/messages/strings/resstrings.txt:54
 #: data/mp/messages/strings/resstrings.txt:86
 #: data/mp/messages/strings/resstrings.txt:98
@@ -1354,7 +1411,6 @@ msgid "Improved Titanium-reinforced concrete"
 msgstr "改良後的鈦鋼筋強化混凝土牆"
 
 #: data/base/messages/resmessages1.rmsg:97
-#: data/mp/messages/resmessages1.rmsg:97
 msgid "Increases Armour and Body Points"
 msgstr "增加物理防禦及HP"
 
@@ -1482,9 +1538,6 @@ msgstr "新的自動化維修技術"
 #: data/base/messages/resmessages2.rmsg:331
 #: data/base/messages/resmessages3.rmsg:422
 #: data/base/messages/strings/resstrings.txt:335
-#: data/mp/messages/resmessages1.rmsg:253
-#: data/mp/messages/resmessages2.rmsg:331
-#: data/mp/messages/resmessages3.rmsg:422
 #: data/mp/messages/strings/resstrings.txt:361
 msgid "Increases Repair Speed"
 msgstr "加快修理速度"
@@ -1521,7 +1574,7 @@ msgstr "最多可控制五輛指揮官車"
 #: data/base/messages/strings/resstrings.txt:355
 #: data/mp/messages/resmessages1.rmsg:277
 #: data/mp/messages/resmessages2.rmsg:342
-#: data/mp/messages/resmessagesall.rmsg:758
+#: data/mp/messages/resmessagesall.rmsg:797
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:381
 msgid "Cyborg Production Improved"
@@ -1540,7 +1593,7 @@ msgstr "初階自動化生化人生產"
 #: data/base/messages/strings/resstrings.txt:357
 #: data/mp/messages/resmessages1.rmsg:279
 #: data/mp/messages/resmessages2.rmsg:344
-#: data/mp/messages/resmessagesall.rmsg:760
+#: data/mp/messages/resmessagesall.rmsg:799
 #: data/mp/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:383
 msgid "Increases Cyborg factory output"
@@ -1552,7 +1605,7 @@ msgstr "增加生化人工廠產能"
 #: data/base/messages/strings/resstrings.txt:358
 #: data/mp/messages/resmessages1.rmsg:280
 #: data/mp/messages/resmessages2.rmsg:345
-#: data/mp/messages/resmessagesall.rmsg:761
+#: data/mp/messages/resmessagesall.rmsg:800
 #: data/mp/messages/strings/resstrings.txt:376
 #: data/mp/messages/strings/resstrings.txt:384
 msgid "All Cyborg factories upgraded automatically"
@@ -1582,8 +1635,10 @@ msgstr "持續研發科技可以生產更多種類的生化人步兵"
 #: data/base/messages/resmessages3.rmsg:485
 #: data/base/messages/strings/resstrings.txt:411
 #: data/mp/messages/resmessages1.rmsg:303
+#: data/mp/messages/resmessages2.rmsg:355
 #: data/mp/messages/resmessages2.rmsg:394
 #: data/mp/messages/resmessages3.rmsg:485
+#: data/mp/messages/resmessagesall.rmsg:784
 #: data/mp/messages/strings/resstrings.txt:437
 msgid "Production Improved"
 msgstr "改善生產能力"
@@ -1596,9 +1651,6 @@ msgstr "工廠模組讓工廠得以生產中量級及更大的車身"
 #: data/base/messages/resmessages1.rmsg:305
 #: data/base/messages/resmessages1.rmsg:318
 #: data/base/messages/strings/resstrings.txt:375
-#: data/mp/messages/resmessages1.rmsg:305
-#: data/mp/messages/resmessages1.rmsg:318
-#: data/mp/messages/resmessagesall.rmsg:747
 #: data/mp/messages/strings/resstrings.txt:401
 msgid "Increases factory output"
 msgstr "增加工廠產能"
@@ -1613,8 +1665,6 @@ msgstr "利用工程車將此模組加裝在工廠中"
 #: data/base/messages/strings/resstrings.txt:365
 #: data/base/messages/strings/resstrings.txt:373
 #: data/mp/messages/resmessages1.rmsg:316
-#: data/mp/messages/resmessages2.rmsg:355
-#: data/mp/messages/resmessagesall.rmsg:745
 #: data/mp/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:399
 msgid "Vehicle Production Improved"
@@ -1631,8 +1681,6 @@ msgstr "初階自動化生產工廠"
 #: data/base/messages/strings/resstrings.txt:368
 #: data/base/messages/strings/resstrings.txt:376
 #: data/mp/messages/resmessages1.rmsg:319
-#: data/mp/messages/resmessages2.rmsg:358
-#: data/mp/messages/resmessagesall.rmsg:748
 #: data/mp/messages/strings/resstrings.txt:394
 #: data/mp/messages/strings/resstrings.txt:402
 msgid "All vehicle factories upgraded automatically"
@@ -1677,10 +1725,6 @@ msgstr "研發模組用以擴展研發中心"
 #: data/base/messages/resmessages2.rmsg:370
 #: data/base/messages/resmessages3.rmsg:448
 #: data/base/messages/strings/resstrings.txt:391
-#: data/mp/messages/resmessages1.rmsg:344
-#: data/mp/messages/resmessages1.rmsg:357
-#: data/mp/messages/resmessages2.rmsg:370
-#: data/mp/messages/resmessages3.rmsg:448
 #: data/mp/messages/strings/resstrings.txt:417
 msgid "Increases research speed"
 msgstr "增加研發速度"
@@ -1746,13 +1790,6 @@ msgstr "初階強化建材一型"
 #: data/base/messages/resmessages3.rmsg:474
 #: data/base/messages/strings/resstrings.txt:105
 #: data/base/messages/strings/resstrings.txt:401
-#: data/mp/messages/resmessages1.rmsg:370
-#: data/mp/messages/resmessages2.rmsg:58
-#: data/mp/messages/resmessages2.rmsg:383
-#: data/mp/messages/resmessages3.rmsg:214
-#: data/mp/messages/resmessages3.rmsg:227
-#: data/mp/messages/resmessages3.rmsg:461
-#: data/mp/messages/resmessages3.rmsg:474
 #: data/mp/messages/strings/resstrings.txt:123
 #: data/mp/messages/strings/resstrings.txt:427
 msgid "Increases Armor and Body Points"
@@ -1922,10 +1959,6 @@ msgstr "燃油噴射引擎一型"
 #: data/base/messages/resmessages3.rmsg:669
 #: data/base/messages/resmessages3.rmsg:682
 #: data/base/messages/strings/resstrings.txt:561
-#: data/mp/messages/resmessages1.rmsg:461
-#: data/mp/messages/resmessages2.rmsg:500
-#: data/mp/messages/resmessages3.rmsg:669
-#: data/mp/messages/resmessages3.rmsg:682
 #: data/mp/messages/strings/resstrings.txt:594
 msgid "Improves vehicle speed"
 msgstr "增加車輛移動速度"
@@ -1953,7 +1986,7 @@ msgstr "增加車輛移動速度"
 #: data/mp/messages/resmessages3.rmsg:696
 #: data/mp/messages/resmessages3.rmsg:709
 #: data/mp/messages/resmessages3.rmsg:722
-#: data/mp/messages/resmessagesall.rmsg:800
+#: data/mp/messages/resmessagesall.rmsg:839
 #: data/mp/messages/strings/resstrings.txt:595
 #: data/mp/messages/strings/resstrings.txt:607
 #: data/mp/messages/strings/resstrings.txt:617
@@ -1978,10 +2011,6 @@ msgstr "改善車身"
 #: data/base/messages/resmessages3.rmsg:695
 #: data/base/messages/resmessages3.rmsg:708
 #: data/base/messages/strings/resstrings.txt:573
-#: data/mp/messages/resmessages1.rmsg:474
-#: data/mp/messages/resmessages2.rmsg:513
-#: data/mp/messages/resmessages3.rmsg:695
-#: data/mp/messages/resmessages3.rmsg:708
 #: data/mp/messages/strings/resstrings.txt:606
 msgid "Increases kinetic armor and body points"
 msgstr "增加物理防禦及HP"
@@ -2052,10 +2081,10 @@ msgstr "移動速度：快"
 #: data/mp/messages/resmessages2.rmsg:813
 #: data/mp/messages/resmessages2.rmsg:826
 #: data/mp/messages/resmessages3.rmsg:852
-#: data/mp/messages/resmessagesall.rmsg:124
-#: data/mp/messages/resmessagesall.rmsg:293
-#: data/mp/messages/resmessagesall.rmsg:865
-#: data/mp/messages/resmessagesall.rmsg:878
+#: data/mp/messages/resmessagesall.rmsg:163
+#: data/mp/messages/resmessagesall.rmsg:332
+#: data/mp/messages/resmessagesall.rmsg:904
+#: data/mp/messages/resmessagesall.rmsg:917
 #: data/mp/messages/strings/resstrings.txt:733
 #: data/mp/messages/strings/resstrings.txt:739
 #: data/mp/messages/strings/resstrings.txt:797
@@ -2112,14 +2141,14 @@ msgstr "可以發射環氧丙烷凝膠的火焰塔"
 #: data/base/messages/strings/resstrings.txt:759
 #: data/mp/messages/resmessages1.rmsg:591
 #: data/mp/messages/resmessages2.rmsg:773
-#: data/mp/messages/resmessagesall.rmsg:331
+#: data/mp/messages/resmessagesall.rmsg:370
 #: data/mp/messages/strings/resstrings.txt:796
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr "最佳目標：碉堡、輪式坦克以及氣墊船"
 
 #: data/base/messages/resmessages1.rmsg:592
 #: data/mp/messages/resmessages1.rmsg:592
-#: data/mp/messages/resmessagesall.rmsg:332
+#: data/mp/messages/resmessagesall.rmsg:371
 msgid "Body Points: Very low"
 msgstr "HP：非常低"
 
@@ -2131,9 +2160,6 @@ msgstr "環氧丙烷凝膠可在更高的溫度下燃燒"
 #: data/base/messages/resmessages1.rmsg:604
 #: data/base/messages/resmessages2.rmsg:786
 #: data/base/messages/strings/resstrings.txt:767
-#: data/mp/messages/resmessages1.rmsg:604
-#: data/mp/messages/resmessages2.rmsg:786
-#: data/mp/messages/resmessagesall.rmsg:734
 #: data/mp/messages/strings/resstrings.txt:804
 msgid "Increases Flamer damage"
 msgstr "增加火焰噴射傷害"
@@ -2159,11 +2185,6 @@ msgstr "強化外殼的機槍子彈"
 #: data/base/messages/resmessages3.rmsg:1007
 #: data/base/messages/resmessages3.rmsg:1020
 #: data/base/messages/strings/resstrings.txt:847
-#: data/mp/messages/resmessages1.rmsg:643
-#: data/mp/messages/resmessages1.rmsg:656
-#: data/mp/messages/resmessages2.rmsg:877
-#: data/mp/messages/resmessages3.rmsg:1007
-#: data/mp/messages/resmessages3.rmsg:1020
 #: data/mp/messages/strings/resstrings.txt:888
 msgid "Increases Machinegun damage"
 msgstr "增加機槍系武器攻擊力"
@@ -2175,7 +2196,7 @@ msgstr "穿甲脫殼彈（APDSB）"
 
 #: data/base/messages/resmessages1.rmsg:668
 #: data/mp/messages/resmessages1.rmsg:668
-#: data/mp/messages/resmessagesall.rmsg:304
+#: data/mp/messages/resmessagesall.rmsg:343
 msgid "May be targeted directly or assigned to a sensor turret or tower"
 msgstr "可直接攻擊目標或指派給雷達鎖定目標"
 
@@ -2187,8 +2208,6 @@ msgstr "改善高爆性彈頭"
 #: data/base/messages/resmessages1.rmsg:682
 #: data/base/messages/resmessages2.rmsg:916
 #: data/base/messages/strings/resstrings.txt:907
-#: data/mp/messages/resmessages1.rmsg:682
-#: data/mp/messages/resmessages2.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:950
 msgid "Increases Mortar damage"
 msgstr "增加迫擊砲攻擊力"
@@ -2224,7 +2243,6 @@ msgid "Fin-stabilization improves flight trajectory"
 msgstr "尾翼穩定裝置改善了飛行的軌跡"
 
 #: data/base/messages/resmessages1.rmsg:708
-#: data/mp/messages/resmessages1.rmsg:708
 msgid "Increases Mini-Rocket accuracy"
 msgstr "增加迷你火箭準確率"
 
@@ -2251,8 +2269,6 @@ msgstr "改善彈頭外型及裝填效能"
 #: data/base/messages/resmessages1.rmsg:721
 #: data/base/messages/resmessages2.rmsg:929
 #: data/base/messages/strings/resstrings.txt:945
-#: data/mp/messages/resmessages1.rmsg:721
-#: data/mp/messages/resmessages2.rmsg:929
 #: data/mp/messages/strings/resstrings.txt:988
 msgid "Increases Mini-Rocket damage"
 msgstr "增加迷你火箭攻擊力"
@@ -2263,7 +2279,6 @@ msgid "Automated reload system"
 msgstr "彈藥自動裝填系統"
 
 #: data/base/messages/resmessages1.rmsg:734
-#: data/mp/messages/resmessages1.rmsg:734
 msgid "Increases Mini-Rockets ROF"
 msgstr "增加迷你火箭射速"
 
@@ -2280,8 +2295,6 @@ msgstr "高爆性反坦克彈頭"
 #: data/base/messages/resmessages1.rmsg:760
 #: data/base/messages/resmessages2.rmsg:942
 #: data/base/messages/strings/resstrings.txt:967
-#: data/mp/messages/resmessages1.rmsg:760
-#: data/mp/messages/resmessages2.rmsg:942
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Increases Rocket damage"
 msgstr "增加火箭系武器攻擊力"
@@ -2362,13 +2375,11 @@ msgstr "裝備有高速加農砲之要塞"
 
 #: data/base/messages/resmessages23.rmsg:31
 #: data/base/messages/resmessages3.rmsg:434
-#: data/mp/messages/resmessages23.rmsg:31
-#: data/mp/messages/resmessages3.rmsg:434
 msgid "New Power Generation Technology"
 msgstr "新的發電科技"
 
 #: data/base/messages/resmessages23.rmsg:32
-#: data/mp/messages/resmessages23.rmsg:32
+#: data/mp/messages/resmessages23.rmsg:31
 msgid "Gas turbine boosts power output"
 msgstr "燃氣渦輪增進能量的輸出"
 
@@ -2395,7 +2406,8 @@ msgstr "改善的火焰偵測系統"
 #: data/mp/messages/resmessages23.rmsg:69
 #: data/mp/messages/resmessages23.rmsg:95
 #: data/mp/messages/resmessagesall.rmsg:69
-#: data/mp/messages/resmessagesall.rmsg:95
+#: data/mp/messages/resmessagesall.rmsg:121
+#: data/mp/messages/resmessagesall.rmsg:134
 msgid "New Systems Tower Available"
 msgstr "可建造新的系統防禦工事"
 
@@ -2480,8 +2492,8 @@ msgstr "攻擊任務會持續至敵軍被消滅或撤退為止"
 #: data/mp/messages/resmessages2.rmsg:433
 #: data/mp/messages/resmessages3.rmsg:563
 #: data/mp/messages/resmessagesall.rmsg:43
-#: data/mp/messages/resmessagesall.rmsg:316
-#: data/mp/messages/resmessagesall.rmsg:342
+#: data/mp/messages/resmessagesall.rmsg:355
+#: data/mp/messages/resmessagesall.rmsg:381
 #: data/mp/messages/strings/resstrings.txt:469
 #: data/mp/messages/strings/resstrings.txt:507
 msgid "New Systems Turret Available"
@@ -2570,9 +2582,6 @@ msgstr "利用自動導向火箭所推動的彈殼"
 #: data/base/messages/resmessages2.rmsg:643
 #: data/base/messages/resmessages3.rmsg:812
 #: data/base/messages/strings/resstrings.txt:661
-#: data/mp/messages/resmessages23.rmsg:136
-#: data/mp/messages/resmessages2.rmsg:643
-#: data/mp/messages/resmessages3.rmsg:812
 #: data/mp/messages/strings/resstrings.txt:694
 msgid "Increases AA accuracy"
 msgstr "增加防空武器準確率"
@@ -2604,7 +2613,7 @@ msgstr "自動升級所有防空武器"
 #: data/mp/messages/resmessages2.rmsg:706
 #: data/mp/messages/resmessages2.rmsg:719
 #: data/mp/messages/resmessages3.rmsg:849
-#: data/mp/messages/resmessagesall.rmsg:862
+#: data/mp/messages/resmessagesall.rmsg:901
 #: data/mp/messages/strings/resstrings.txt:730
 #: data/mp/messages/strings/resstrings.txt:736
 msgid "New Bomb Bay Available"
@@ -2674,7 +2683,7 @@ msgstr "口徑105釐米、多管榴彈砲、可指派給雷達導引"
 #: data/mp/messages/resmessages23.rmsg:201
 #: data/mp/messages/resmessages2.rmsg:799
 #: data/mp/messages/resmessages2.rmsg:812
-#: data/mp/messages/resmessagesall.rmsg:292
+#: data/mp/messages/resmessagesall.rmsg:331
 #: data/mp/messages/strings/resstrings.txt:812
 #: data/mp/messages/strings/resstrings.txt:820
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
@@ -2687,8 +2696,8 @@ msgstr "多管高速發射的機槍"
 
 #: data/base/messages/resmessages23.rmsg:215
 #: data/mp/messages/resmessages23.rmsg:215
-#: data/mp/messages/resmessagesall.rmsg:839
-#: data/mp/messages/resmessagesall.rmsg:852
+#: data/mp/messages/resmessagesall.rmsg:878
+#: data/mp/messages/resmessagesall.rmsg:891
 msgid "Replaces all machineguns"
 msgstr "取代所有機槍武器"
 
@@ -2713,8 +2722,6 @@ msgstr "阻熱裝甲層"
 #: data/base/messages/resmessages2.rmsg:6
 #: data/base/messages/resmessages3.rmsg:6
 #: data/base/messages/strings/resstrings.txt:43
-#: data/mp/messages/resmessages2.rmsg:6
-#: data/mp/messages/resmessages3.rmsg:6
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Thermal Armor increased"
 msgstr "增加熱能防禦能力"
@@ -2883,8 +2890,8 @@ msgstr "裝備有火箭（坦克殺手）之據點"
 #: data/mp/messages/resmessages3.rmsg:305
 #: data/mp/messages/resmessages3.rmsg:318
 #: data/mp/messages/resmessages3.rmsg:331
-#: data/mp/messages/resmessagesall.rmsg:227
-#: data/mp/messages/resmessagesall.rmsg:539
+#: data/mp/messages/resmessagesall.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:578
 #: data/mp/messages/strings/resstrings.txt:215
 #: data/mp/messages/strings/resstrings.txt:221
 #: data/mp/messages/strings/resstrings.txt:227
@@ -2974,7 +2981,6 @@ msgstr "新的機械人科技改善了工廠產能"
 
 #: data/base/messages/resmessages2.rmsg:357
 #: data/base/messages/strings/resstrings.txt:367
-#: data/mp/messages/resmessages2.rmsg:357
 #: data/mp/messages/strings/resstrings.txt:393
 msgid "Increases factory production rate"
 msgstr "工廠生產速率增加"
@@ -3045,8 +3051,6 @@ msgstr "初階自動化VTOL補給一型"
 #: data/base/messages/resmessages2.rmsg:409
 #: data/base/messages/resmessages3.rmsg:500
 #: data/base/messages/strings/resstrings.txt:423
-#: data/mp/messages/resmessages2.rmsg:409
-#: data/mp/messages/resmessages3.rmsg:500
 #: data/mp/messages/strings/resstrings.txt:449
 msgid "Reduces rearming time"
 msgstr "減少重新裝載彈藥時間"
@@ -3180,7 +3184,7 @@ msgstr "渦輪增壓引擎一型"
 #: data/base/messages/strings/resstrings.txt:581
 #: data/mp/messages/resmessages2.rmsg:524
 #: data/mp/messages/resmessages3.rmsg:719
-#: data/mp/messages/resmessagesall.rmsg:797
+#: data/mp/messages/resmessagesall.rmsg:836
 #: data/mp/messages/strings/resstrings.txt:614
 msgid "Vehicle Thermal Armor Improved"
 msgstr "改善車輛熱能防禦"
@@ -3190,7 +3194,7 @@ msgstr "改善車輛熱能防禦"
 #: data/base/messages/strings/resstrings.txt:582
 #: data/mp/messages/resmessages2.rmsg:525
 #: data/mp/messages/resmessages3.rmsg:720
-#: data/mp/messages/resmessagesall.rmsg:798
+#: data/mp/messages/resmessagesall.rmsg:837
 #: data/mp/messages/strings/resstrings.txt:615
 msgid "Heat-resistant armored layers"
 msgstr "阻熱裝甲層"
@@ -3198,9 +3202,6 @@ msgstr "阻熱裝甲層"
 #: data/base/messages/resmessages2.rmsg:526
 #: data/base/messages/resmessages3.rmsg:721
 #: data/base/messages/strings/resstrings.txt:583
-#: data/mp/messages/resmessages2.rmsg:526
-#: data/mp/messages/resmessages3.rmsg:721
-#: data/mp/messages/resmessagesall.rmsg:799
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Increases Thermal Armor"
 msgstr "熱能防禦能力增加"
@@ -3310,9 +3311,9 @@ msgstr "雙管、口徑80釐米、防空火砲武器"
 #: data/mp/messages/resmessages2.rmsg:604
 #: data/mp/messages/resmessages2.rmsg:617
 #: data/mp/messages/resmessages2.rmsg:630
-#: data/mp/messages/resmessagesall.rmsg:721
-#: data/mp/messages/resmessagesall.rmsg:786
+#: data/mp/messages/resmessagesall.rmsg:760
 #: data/mp/messages/resmessagesall.rmsg:825
+#: data/mp/messages/resmessagesall.rmsg:864
 #: data/mp/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:676
 #: data/mp/messages/strings/resstrings.txt:682
@@ -3337,7 +3338,7 @@ msgstr "口徑30釐米、防空機槍"
 #: data/base/messages/resmessages2.rmsg:629
 #: data/base/messages/strings/resstrings.txt:654
 #: data/mp/messages/resmessages2.rmsg:629
-#: data/mp/messages/resmessagesall.rmsg:720
+#: data/mp/messages/resmessagesall.rmsg:759
 #: data/mp/messages/strings/resstrings.txt:687
 msgid "Quad 30mm Anti-Aircraft machinegun"
 msgstr "四管、口徑30釐米、防空機槍"
@@ -3368,8 +3369,6 @@ msgstr "高爆性防空砲彈殼"
 #: data/base/messages/resmessages2.rmsg:656
 #: data/base/messages/resmessages3.rmsg:825
 #: data/base/messages/strings/resstrings.txt:671
-#: data/mp/messages/resmessages2.rmsg:656
-#: data/mp/messages/resmessages3.rmsg:825
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "Increases AA Flak damage"
 msgstr "增加防空高射砲攻擊力"
@@ -3393,8 +3392,6 @@ msgstr "回彈加載式防空火砲彈藥送料斗"
 #: data/base/messages/resmessages2.rmsg:669
 #: data/base/messages/resmessages3.rmsg:838
 #: data/base/messages/strings/resstrings.txt:679
-#: data/mp/messages/resmessages2.rmsg:669
-#: data/mp/messages/resmessages3.rmsg:838
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "Increases AA ROF"
 msgstr "增加防空武器射速"
@@ -3500,7 +3497,7 @@ msgstr "可以發射環氧丙烷凝膠的高溫火焰塔"
 #: data/base/messages/resmessages2.rmsg:785
 #: data/base/messages/strings/resstrings.txt:766
 #: data/mp/messages/resmessages2.rmsg:785
-#: data/mp/messages/resmessagesall.rmsg:733
+#: data/mp/messages/resmessagesall.rmsg:772
 #: data/mp/messages/strings/resstrings.txt:803
 msgid "Propylene Oxide treated to burn at superhot temperatures"
 msgstr "環氧丙烷凝膠可在超高的溫度下燃燒"
@@ -3557,8 +3554,6 @@ msgstr "榴彈砲升級"
 #: data/base/messages/resmessages2.rmsg:838
 #: data/base/messages/resmessages3.rmsg:903
 #: data/base/messages/strings/resstrings.txt:795
-#: data/mp/messages/resmessages2.rmsg:838
-#: data/mp/messages/resmessages3.rmsg:903
 #: data/mp/messages/strings/resstrings.txt:834
 msgid "Increases Howitzer accuracy"
 msgstr "增加榴彈砲系武器準確率"
@@ -3595,8 +3590,6 @@ msgstr "高爆性彈殼"
 #: data/base/messages/resmessages2.rmsg:851
 #: data/base/messages/resmessages3.rmsg:916
 #: data/base/messages/strings/resstrings.txt:803
-#: data/mp/messages/resmessages2.rmsg:851
-#: data/mp/messages/resmessages3.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:842
 msgid "Increases Howitzer damage"
 msgstr "增加榴彈砲攻擊力"
@@ -3604,8 +3597,6 @@ msgstr "增加榴彈砲攻擊力"
 #: data/base/messages/resmessages2.rmsg:864
 #: data/base/messages/resmessages3.rmsg:929
 #: data/base/messages/strings/resstrings.txt:811
-#: data/mp/messages/resmessages2.rmsg:864
-#: data/mp/messages/resmessages3.rmsg:929
 #: data/mp/messages/strings/resstrings.txt:850
 msgid "Increases Howitzer ROF"
 msgstr "增加榴彈砲系武器攻速"
@@ -3854,7 +3845,7 @@ msgid "Advanced repair techniques"
 msgstr "高階修理科技"
 
 #: data/base/messages/resmessages3.rmsg:435
-#: data/mp/messages/resmessages3.rmsg:435
+#: data/mp/messages/resmessages3.rmsg:434
 msgid "Vapor Turbine boosts power output"
 msgstr "蒸氣渦輪增加能源輸出效率"
 
@@ -3908,13 +3899,13 @@ msgstr "高階目標確認系統"
 
 #: data/base/messages/resmessages3.rmsg:564
 #: data/mp/messages/resmessages3.rmsg:564
-#: data/mp/messages/resmessagesall.rmsg:343
+#: data/mp/messages/resmessagesall.rmsg:382
 msgid "Synaptic Link Scrambler technology"
 msgstr "突觸連結擾頻科技"
 
 #: data/base/messages/resmessages3.rmsg:565
 #: data/mp/messages/resmessages3.rmsg:565
-#: data/mp/messages/resmessagesall.rmsg:344
+#: data/mp/messages/resmessagesall.rmsg:383
 msgid "Electronically attacks and disrupts enemy structures"
 msgstr "對敵方建築進行電子攻擊及干擾"
 
@@ -3931,7 +3922,7 @@ msgstr "從敵軍處竊取科技"
 #: data/mp/messages/resmessages3.rmsg:589
 #: data/mp/messages/resmessages3.rmsg:602
 #: data/mp/messages/resmessages3.rmsg:615
-#: data/mp/messages/resmessagesall.rmsg:368
+#: data/mp/messages/resmessagesall.rmsg:407
 msgid "New Repair Technology Discovered"
 msgstr "發現新的修理技術"
 
@@ -3943,8 +3934,8 @@ msgstr "發現新的修理技術"
 #: data/mp/messages/resmessages3.rmsg:590
 #: data/mp/messages/resmessages3.rmsg:603
 #: data/mp/messages/resmessages3.rmsg:616
-#: data/mp/messages/resmessagesall.rmsg:356
-#: data/mp/messages/resmessagesall.rmsg:369
+#: data/mp/messages/resmessagesall.rmsg:395
+#: data/mp/messages/resmessagesall.rmsg:408
 msgid "Synaptic Link technology breakthrough"
 msgstr "突觸連結科技的突破"
 
@@ -3952,7 +3943,7 @@ msgstr "突觸連結科技的突破"
 #: data/base/messages/resmessages3.rmsg:617
 #: data/mp/messages/resmessages3.rmsg:578
 #: data/mp/messages/resmessages3.rmsg:617
-#: data/mp/messages/resmessagesall.rmsg:370
+#: data/mp/messages/resmessagesall.rmsg:409
 msgid "On-board diagnostic and repair systems"
 msgstr "裝載診斷及修理系統"
 
@@ -4011,14 +4002,14 @@ msgstr "NEXUS的重量級車身"
 #: data/base/messages/resmessages3.rmsg:655
 #: data/base/messages/resmessagesall.rmsg:109
 #: data/mp/messages/resmessages3.rmsg:655
-#: data/mp/messages/resmessagesall.rmsg:109
+#: data/mp/messages/resmessagesall.rmsg:148
 msgid "More armor and body points than Python"
 msgstr "比蟒蛇強的防禦力及HP"
 
 #: data/base/messages/resmessages3.rmsg:657
 #: data/mp/messages/resmessages3.rmsg:657
-#: data/mp/messages/resmessagesall.rmsg:683
-#: data/mp/messages/resmessagesall.rmsg:696
+#: data/mp/messages/resmessagesall.rmsg:722
+#: data/mp/messages/resmessagesall.rmsg:735
 msgid "Very expensive to produce"
 msgstr "非常貴..."
 
@@ -4080,8 +4071,8 @@ msgstr "投擲高強度鋁熱反應炸彈"
 #: data/base/messages/resmessagesall.rmsg:162
 #: data/mp/messages/resmessages3.rmsg:851
 #: data/mp/messages/resmessages3.rmsg:1046
-#: data/mp/messages/resmessagesall.rmsg:162
-#: data/mp/messages/resmessagesall.rmsg:864
+#: data/mp/messages/resmessagesall.rmsg:201
+#: data/mp/messages/resmessagesall.rmsg:903
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "最佳目標：碉堡與要塞"
 
@@ -4117,7 +4108,7 @@ msgstr "高爆性穿甲彈殼（HEAP Shells）"
 #: data/base/messages/resmessages3.rmsg:953
 #: data/mp/messages/resmessages3.rmsg:940
 #: data/mp/messages/resmessages3.rmsg:953
-#: data/mp/messages/resmessagesall.rmsg:433
+#: data/mp/messages/resmessagesall.rmsg:472
 msgid "New Laser Weapon Available"
 msgstr "可搭載新的雷射武器"
 
@@ -4153,7 +4144,6 @@ msgid "Improvement in laser optics reduces light dispersal"
 msgstr "改善雷射系統的光學結構使之不易發散"
 
 #: data/base/messages/resmessages3.rmsg:968
-#: data/mp/messages/resmessages3.rmsg:968
 msgid "Increases Laser accuracy"
 msgstr "增加雷射系武器準確率"
 
@@ -4172,7 +4162,6 @@ msgid "Improvement in laser emission density"
 msgstr "改善雷射系統的發射極之密度"
 
 #: data/base/messages/resmessages3.rmsg:981
-#: data/mp/messages/resmessages3.rmsg:981
 msgid "Increases Laser damage"
 msgstr "增加雷射攻擊力"
 
@@ -4182,7 +4171,6 @@ msgid "Improved Energizer reduces laser recharge time"
 msgstr "改善雷射系統的能量系統減少重新充填的時間"
 
 #: data/base/messages/resmessages3.rmsg:994
-#: data/mp/messages/resmessages3.rmsg:994
 msgid "Increases Laser ROF"
 msgstr "增加雷射系武器射速"
 
@@ -4233,8 +4221,6 @@ msgstr "搭載可預測目標移動路徑之電腦系統"
 
 #: data/base/messages/resmessages3.rmsg:1059
 #: data/base/messages/resmessages3.rmsg:1072
-#: data/mp/messages/resmessages3.rmsg:1059
-#: data/mp/messages/resmessages3.rmsg:1072
 msgid "Increases Missile accuracy"
 msgstr "增加飛彈準確率"
 
@@ -4263,7 +4249,6 @@ msgid "Low yield thermonuclear warhead"
 msgstr "低效益之熱核反應彈頭"
 
 #: data/base/messages/resmessages3.rmsg:1085
-#: data/mp/messages/resmessages3.rmsg:1085
 msgid "Increases Missile damage"
 msgstr "增加飛彈攻擊力"
 
@@ -4276,7 +4261,7 @@ msgstr "可搭載新的武器裝備：地對空飛彈"
 
 #: data/base/messages/resmessages3.rmsg:1097
 #: data/mp/messages/resmessages3.rmsg:1097
-#: data/mp/messages/resmessagesall.rmsg:811
+#: data/mp/messages/resmessagesall.rmsg:850
 msgid "Surface-to-air missile"
 msgstr "地對空飛彈（Surface-to-air missile）"
 
@@ -4284,14 +4269,14 @@ msgstr "地對空飛彈（Surface-to-air missile）"
 #: data/base/messages/resmessages3.rmsg:1111
 #: data/mp/messages/resmessages3.rmsg:1098
 #: data/mp/messages/resmessages3.rmsg:1111
-#: data/mp/messages/resmessagesall.rmsg:708
-#: data/mp/messages/resmessagesall.rmsg:812
+#: data/mp/messages/resmessagesall.rmsg:747
+#: data/mp/messages/resmessagesall.rmsg:851
 msgid "Best Targets: Aerial targets only"
 msgstr "最佳目標：僅限於空中部隊"
 
 #: data/base/messages/resmessages3.rmsg:1110
 #: data/mp/messages/resmessages3.rmsg:1110
-#: data/mp/messages/resmessagesall.rmsg:707
+#: data/mp/messages/resmessagesall.rmsg:746
 msgid "Heavy surface-to-air missile"
 msgstr "重型地對空飛彈"
 
@@ -4326,8 +4311,6 @@ msgstr "當裝載飛彈時即自動偵測並鎖定目標"
 
 #: data/base/messages/resmessages3.rmsg:1150
 #: data/base/messages/resmessages3.rmsg:1163
-#: data/mp/messages/resmessages3.rmsg:1150
-#: data/mp/messages/resmessages3.rmsg:1163
 msgid "Increases Missile ROF"
 msgstr "增加飛彈射速"
 
@@ -4380,7 +4363,6 @@ msgid "Computer predicts and compensates for target's movement"
 msgstr "電腦自動預測並計算補償目標位置的移動"
 
 #: data/base/messages/resmessages3.rmsg:1241
-#: data/mp/messages/resmessages3.rmsg:1241
 msgid "Increases Rail Gun accuracy"
 msgstr "增加軌道砲系武器準確率"
 
@@ -4399,7 +4381,6 @@ msgid "Improved armor-piercing dart"
 msgstr "改進的穿甲彈頭"
 
 #: data/base/messages/resmessages3.rmsg:1254
-#: data/mp/messages/resmessages3.rmsg:1254
 msgid "Increases Rail Gun damage"
 msgstr "增加軌道砲系武器攻擊力"
 
@@ -4409,7 +4390,6 @@ msgid "Increased gauss output speeds up reload time"
 msgstr "增加軌道砲輸出能量並加快充填時間"
 
 #: data/base/messages/resmessages3.rmsg:1267
-#: data/mp/messages/resmessages3.rmsg:1267
 msgid "Increases Rail Gun ROF"
 msgstr "增加軌道砲系武器射速"
 
@@ -4466,7 +4446,7 @@ msgstr "戰場修理單位"
 #: data/base/messages/resmessagesall.rmsg:45
 #: data/base/messages/strings/resstrings.txt:445
 #: data/mp/messages/resmessagesall.rmsg:45
-#: data/mp/messages/resmessagesall.rmsg:318
+#: data/mp/messages/resmessagesall.rmsg:357
 #: data/mp/messages/strings/resstrings.txt:471
 msgid "Automatically Repairs Damaged Units"
 msgstr "自動修理受損的單位"
@@ -4474,7 +4454,7 @@ msgstr "自動修理受損的單位"
 #: data/base/messages/resmessagesall.rmsg:46
 #: data/base/messages/strings/resstrings.txt:446
 #: data/mp/messages/resmessagesall.rmsg:46
-#: data/mp/messages/resmessagesall.rmsg:319
+#: data/mp/messages/resmessagesall.rmsg:358
 #: data/mp/messages/strings/resstrings.txt:472
 msgid "Or damaged units may be selected as target"
 msgstr "受損的單位可以被指定為其目標"
@@ -4486,8 +4466,8 @@ msgstr "可在設計選單中使用新的系統裝備"
 
 #: data/base/messages/resmessagesall.rmsg:57
 #: data/mp/messages/resmessagesall.rmsg:57
-#: data/mp/messages/resmessagesall.rmsg:475
-#: data/mp/messages/resmessagesall.rmsg:670
+#: data/mp/messages/resmessagesall.rmsg:514
+#: data/mp/messages/resmessagesall.rmsg:709
 msgid "Improved sensor range"
 msgstr "改善雷達偵測距離"
 
@@ -4503,14 +4483,16 @@ msgstr "延伸雷達偵測距離"
 
 #: data/base/messages/resmessagesall.rmsg:71
 #: data/mp/messages/resmessagesall.rmsg:71
-#: data/mp/messages/resmessagesall.rmsg:461
-#: data/mp/messages/resmessagesall.rmsg:474
-#: data/mp/messages/resmessagesall.rmsg:669
+#: data/mp/messages/resmessagesall.rmsg:500
+#: data/mp/messages/resmessagesall.rmsg:513
+#: data/mp/messages/resmessagesall.rmsg:708
 msgid "Keeps map areas under constant surveillance"
 msgstr "不斷監控地圖上的區域"
 
 #: data/base/messages/resmessagesall.rmsg:82
 #: data/mp/messages/resmessagesall.rmsg:82
+#: data/mp/messages/resmessagesall.rmsg:95
+#: data/mp/messages/resmessagesall.rmsg:108
 msgid "Sensors Improved"
 msgstr "改善雷達"
 
@@ -4520,67 +4502,68 @@ msgid "New Thermal Emissions detection"
 msgstr "可偵測熱能放射"
 
 #: data/base/messages/resmessagesall.rmsg:84
-#: data/mp/messages/resmessagesall.rmsg:84
 msgid "Extends Sensor Range"
 msgstr "擴展雷達偵測距離"
 
 #: data/base/messages/resmessagesall.rmsg:85
 #: data/mp/messages/resmessagesall.rmsg:85
+#: data/mp/messages/resmessagesall.rmsg:98
+#: data/mp/messages/resmessagesall.rmsg:111
 msgid "All sensors upgraded automatically"
 msgstr "所有雷達自動升級"
 
 #: data/base/messages/resmessagesall.rmsg:96
-#: data/mp/messages/resmessagesall.rmsg:96
+#: data/mp/messages/resmessagesall.rmsg:122
 msgid "Counter-battery tower detects enemy indirect fire batteries"
 msgstr "反砲兵雷達可以偵測到敵軍的非直射型砲兵攻擊"
 
 #: data/base/messages/resmessagesall.rmsg:108
-#: data/mp/messages/resmessagesall.rmsg:108
+#: data/mp/messages/resmessagesall.rmsg:147
 msgid "Collective Heavy Body"
 msgstr "Collective的重量級車身"
 
 #: data/base/messages/resmessagesall.rmsg:110
-#: data/mp/messages/resmessagesall.rmsg:110
+#: data/mp/messages/resmessagesall.rmsg:149
 msgid "Slower than Python"
 msgstr "移動速度比蟒蛇慢"
 
 #: data/base/messages/resmessagesall.rmsg:111
-#: data/mp/messages/resmessagesall.rmsg:111
+#: data/mp/messages/resmessagesall.rmsg:150
 msgid "High power costs and slow to produce"
 msgstr "需要較多的製造資源及緩慢的生產時間"
 
 #: data/base/messages/resmessagesall.rmsg:121
-#: data/mp/messages/resmessagesall.rmsg:121
+#: data/mp/messages/resmessagesall.rmsg:160
 msgid "New Propulsion Available for Design"
 msgstr "可在設計選單中選用新的推進動力"
 
 #: data/base/messages/resmessagesall.rmsg:122
-#: data/mp/messages/resmessagesall.rmsg:122
+#: data/mp/messages/resmessagesall.rmsg:161
 msgid "Vertical Take Off and Landing Propulsion"
 msgstr "垂直起飛及降落推進動力"
 
 #: data/base/messages/resmessagesall.rmsg:123
-#: data/mp/messages/resmessagesall.rmsg:123
+#: data/mp/messages/resmessagesall.rmsg:162
 msgid "Speed: VTOL"
 msgstr "移動速度：飛行（VTOL）"
 
 #: data/base/messages/resmessagesall.rmsg:135
-#: data/mp/messages/resmessagesall.rmsg:135
+#: data/mp/messages/resmessagesall.rmsg:174
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "火箭會自動偵測與鎖定引擎發出的熱源"
 
 #: data/base/messages/resmessagesall.rmsg:148
-#: data/mp/messages/resmessagesall.rmsg:148
+#: data/mp/messages/resmessagesall.rmsg:187
 msgid "Anti-tank rocket"
 msgstr "反坦克火箭"
 
 #: data/base/messages/resmessagesall.rmsg:161
-#: data/mp/messages/resmessagesall.rmsg:161
+#: data/mp/messages/resmessagesall.rmsg:200
 msgid "High explosive shaped charge missile"
 msgstr "高爆性錐形裝填飛彈"
 
 #: data/base/messages/resmessagesall.rmsg:174
-#: data/mp/messages/resmessagesall.rmsg:174
+#: data/mp/messages/resmessagesall.rmsg:213
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "雷射指向器提供武器導引指向目標功能"
 
@@ -7544,7 +7527,7 @@ msgid "Robotic Cyborg Production Mk3"
 msgstr "中階自動化生化人生產三型"
 
 #: data/base/messages/strings/names.txt:789
-#: data/mp/messages/resmessagesall.rmsg:759
+#: data/mp/messages/resmessagesall.rmsg:798
 #: data/mp/messages/strings/names.txt:800
 msgid "Advanced Cyborg Production"
 msgstr "高階自動化生化人生產一型"
@@ -7580,7 +7563,7 @@ msgid "Robotic Factory Production Mk3"
 msgstr "中階自動化生產工廠三型"
 
 #: data/base/messages/strings/names.txt:800
-#: data/mp/messages/resmessagesall.rmsg:746
+#: data/mp/messages/resmessagesall.rmsg:785
 msgid "Advanced Factory Production"
 msgstr "高階自動化生產工廠一型"
 
@@ -9238,7 +9221,7 @@ msgid "Self-Replicating Factory Production"
 msgstr "自我複製工廠製造"
 
 #: data/base/messages/strings/resstrings.txt:444
-#: data/mp/messages/resmessagesall.rmsg:317
+#: data/mp/messages/resmessagesall.rmsg:356
 #: data/mp/messages/strings/resstrings.txt:470
 msgid "Heavy repair unit"
 msgstr "重型修理單位"
@@ -9653,10 +9636,139 @@ msgstr "半履帶式響尾蛇坦克（雙管機槍）"
 msgid "Viper Flamer Half-Track"
 msgstr "半履帶式響尾蛇坦克（火焰噴射）"
 
+#: data/mp/messages/resmessages12.rmsg:58
+#, fuzzy
+msgid "Construction speed +10%"
+msgstr "增加建築速度"
+
+#: data/mp/messages/resmessages12.rmsg:97
+#: data/mp/messages/resmessagesall.rmsg:214
+#, fuzzy
+msgid "Cannon accuracy +10%"
+msgstr "增加加農砲系武器準確率"
+
+#: data/mp/messages/resmessages12.rmsg:110
+#, fuzzy
+msgid "Flamer reload time -15%"
+msgstr "自動裝填噴射一型"
+
+#: data/mp/messages/resmessages12.rmsg:136
+#: data/mp/messages/resmessages23.rmsg:175
+#: data/mp/messages/resmessages2.rmsg:890
+#, fuzzy
+msgid "Machinegun reload time -15%"
+msgstr "機槍系武器升級"
+
+#: data/mp/messages/resmessages12.rmsg:162
+#: data/mp/messages/resmessages23.rmsg:188
+#: data/mp/messages/resmessages3.rmsg:1176
+#, fuzzy
+msgid "Mortar accuracy +10%"
+msgstr "增加迫擊砲準確率"
+
+#: data/mp/messages/resmessages12.rmsg:175
+#: data/mp/messages/resmessages3.rmsg:1189
+#, fuzzy
+msgid "Mortar reload time -10%"
+msgstr "迫擊砲自動裝載系統一型"
+
+#: data/mp/messages/resmessages12.rmsg:201
+#, fuzzy
+msgid "Rocket reload time -15%"
+msgstr "火箭自動裝載系統一型"
+
+#: data/mp/messages/resmessages12.rmsg:214
+#: data/mp/messages/resmessages3.rmsg:890
+#, fuzzy
+msgid "Cannon reload time -10%"
+msgstr "加農砲自動裝填系統一型"
+
+#: data/mp/messages/resmessages12.rmsg:227
+#: data/mp/messages/resmessages1.rmsg:578
+#: data/mp/messages/resmessages3.rmsg:877
+#, fuzzy
+msgid "Cannon damage +25%"
+msgstr "增加加農砲系武器傷害"
+
+#: data/mp/messages/resmessages12.rmsg:240
+#: data/mp/messages/resmessages1.rmsg:747
+#: data/mp/messages/resmessagesall.rmsg:175
+#, fuzzy
+msgid "Rocket accuracy +10%"
+msgstr "增加火箭系武器準確率"
+
+#: data/mp/messages/resmessages1.rmsg:32
+#: data/mp/messages/resmessages3.rmsg:71
+#: data/mp/messages/resmessages3.rmsg:84
+#, fuzzy
+msgid "Kinetic Armor +35%, Body Points +35%"
+msgstr "增加熱能防禦及HP"
+
+#: data/mp/messages/resmessages1.rmsg:97
+#, fuzzy
+msgid "Armour +35%, Body Points +30%"
+msgstr "增加物理防禦及HP"
+
 #: data/mp/messages/resmessages1.rmsg:148
 #, fuzzy
 msgid "Armored guard tower with Lancer AT rocket"
 msgstr "裝備有槍騎兵反坦克火箭的防衛塔"
+
+#: data/mp/messages/resmessages1.rmsg:253
+#: data/mp/messages/resmessages2.rmsg:331
+#: data/mp/messages/resmessages3.rmsg:422
+#, fuzzy
+msgid "Repair Speed +100%"
+msgstr "加快修理速度"
+
+#: data/mp/messages/resmessages1.rmsg:305
+#, c-format
+msgid "Factory output speed +100% per module"
+msgstr ""
+
+#: data/mp/messages/resmessages1.rmsg:318
+#: data/mp/messages/resmessagesall.rmsg:786
+msgid "Factory output speed +60%"
+msgstr ""
+
+#: data/mp/messages/resmessages1.rmsg:344
+#, fuzzy
+msgid "Research speed +85%"
+msgstr "已研發完成： %s"
+
+#: data/mp/messages/resmessages1.rmsg:357
+#: data/mp/messages/resmessages2.rmsg:370
+#: data/mp/messages/resmessages3.rmsg:448
+#, fuzzy
+msgid "Research speed +30%"
+msgstr "已研發完成： %s"
+
+#: data/mp/messages/resmessages1.rmsg:370
+#: data/mp/messages/resmessages2.rmsg:58
+#: data/mp/messages/resmessages2.rmsg:383
+#: data/mp/messages/resmessages3.rmsg:214
+#: data/mp/messages/resmessages3.rmsg:227
+#: data/mp/messages/resmessages3.rmsg:461
+#: data/mp/messages/resmessages3.rmsg:474
+#, fuzzy
+msgid "Armor +35%, Body Points +30%"
+msgstr "增加防禦力及HP"
+
+#: data/mp/messages/resmessages1.rmsg:461
+#: data/mp/messages/resmessages2.rmsg:500
+#: data/mp/messages/resmessages3.rmsg:669
+#: data/mp/messages/resmessages3.rmsg:682
+#, fuzzy
+msgid "Vehicle speed +5%"
+msgstr "車身"
+
+#: data/mp/messages/resmessages1.rmsg:474
+#: data/mp/messages/resmessages2.rmsg:513
+#: data/mp/messages/resmessages3.rmsg:695
+#: data/mp/messages/resmessages3.rmsg:708
+#, fuzzy
+msgid "Kinetic armor +30%, body points +30%"
+msgstr "增加物理防禦及HP"
 
 #: data/mp/messages/resmessages1.rmsg:552
 #: data/mp/messages/resmessages1.rmsg:565
@@ -9664,6 +9776,66 @@ msgstr "裝備有槍騎兵反坦克火箭的防衛塔"
 #, fuzzy
 msgid "Best Targets: Vehicles, Hardpoints"
 msgstr "最佳目標：坦克與砲台"
+
+#: data/mp/messages/resmessages1.rmsg:604
+#: data/mp/messages/resmessages2.rmsg:786
+#: data/mp/messages/resmessagesall.rmsg:773
+#, fuzzy
+msgid "Flamer damage +25%"
+msgstr "增加火焰噴射傷害"
+
+#: data/mp/messages/resmessages1.rmsg:643
+#: data/mp/messages/resmessages1.rmsg:656
+#: data/mp/messages/resmessages2.rmsg:877
+#: data/mp/messages/resmessages3.rmsg:1007
+#: data/mp/messages/resmessages3.rmsg:1020
+#, fuzzy
+msgid "Machinegun damage +25%"
+msgstr "增加機槍系武器攻擊力"
+
+#: data/mp/messages/resmessages1.rmsg:682
+#: data/mp/messages/resmessages2.rmsg:916
+#, fuzzy
+msgid "Mortar damage +25%"
+msgstr "增加迫擊砲攻擊力"
+
+#: data/mp/messages/resmessages1.rmsg:708
+#, fuzzy
+msgid "Mini-Rocket accuracy +10%"
+msgstr "增加迷你火箭準確率"
+
+#: data/mp/messages/resmessages1.rmsg:721
+#: data/mp/messages/resmessages2.rmsg:929
+#, fuzzy
+msgid "Mini-Rocket damage +25%"
+msgstr "增加迷你火箭攻擊力"
+
+#: data/mp/messages/resmessages1.rmsg:734
+#, fuzzy
+msgid "Mini-Rocket reload time -15%"
+msgstr "迷你火箭升級"
+
+#: data/mp/messages/resmessages1.rmsg:760
+#: data/mp/messages/resmessages2.rmsg:942
+#, fuzzy
+msgid "Rocket damage +25%"
+msgstr "增加火箭系武器攻擊力"
+
+#: data/mp/messages/resmessages23.rmsg:32
+msgid "Power output +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages23.rmsg:45
+#: data/mp/messages/resmessages3.rmsg:513
+#, fuzzy
+msgid "Construction speed +20%"
+msgstr "增加建築速度"
+
+#: data/mp/messages/resmessages23.rmsg:136
+#: data/mp/messages/resmessages2.rmsg:643
+#: data/mp/messages/resmessages3.rmsg:812
+msgid "AA accuracy +10%"
+msgstr ""
 
 #: data/mp/messages/resmessages23.rmsg:160
 #: data/mp/messages/resmessages2.rmsg:732
@@ -9680,298 +9852,458 @@ msgstr "改善高爆性彈頭"
 #: data/mp/messages/resmessages23.rmsg:162
 #: data/mp/messages/resmessages2.rmsg:734
 #: data/mp/messages/resmessages3.rmsg:864
+msgid "Bomb damage +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages2.rmsg:6
 #, fuzzy
-msgid "Increases Bombing damage"
-msgstr "增加加農砲系武器傷害"
+msgid "Thermal Armor +45%"
+msgstr "熱能裝甲一型"
+
+#: data/mp/messages/resmessages2.rmsg:19
+#, fuzzy
+msgid "Kinetic Armor +35%, and Body Points +35%"
+msgstr "增加熱能防禦及HP"
+
+#: data/mp/messages/resmessages2.rmsg:357
+#, fuzzy
+msgid "Factory production rate +60%"
+msgstr "工廠生產速率增加"
+
+#: data/mp/messages/resmessages2.rmsg:358
+#: data/mp/messages/resmessagesall.rmsg:787
+#, fuzzy
+msgid "All factories upgraded automatically"
+msgstr "自動升級所有VTOL工廠"
+
+#: data/mp/messages/resmessages2.rmsg:409
+#: data/mp/messages/resmessages3.rmsg:500
+msgid "Rearming speed +30%"
+msgstr ""
+
+#: data/mp/messages/resmessages2.rmsg:526
+#, fuzzy
+msgid "Thermal armor +40%"
+msgstr "熱能裝甲一型"
+
+#: data/mp/messages/resmessages2.rmsg:656
+#: data/mp/messages/resmessages3.rmsg:825
+#, fuzzy
+msgid "AA Flak damage +25%"
+msgstr "增加防空高射砲攻擊力"
+
+#: data/mp/messages/resmessages2.rmsg:669
+#: data/mp/messages/resmessages3.rmsg:838
+msgid "AA reload time -15%"
+msgstr ""
+
+#: data/mp/messages/resmessages2.rmsg:838
+#: data/mp/messages/resmessages3.rmsg:903
+#, fuzzy
+msgid "Howitzer accuracy +10%"
+msgstr "增加榴彈砲系武器準確率"
+
+#: data/mp/messages/resmessages2.rmsg:851
+#: data/mp/messages/resmessages3.rmsg:916
+#, fuzzy
+msgid "Howitzer damage +25%"
+msgstr "增加榴彈砲攻擊力"
+
+#: data/mp/messages/resmessages2.rmsg:864
+#: data/mp/messages/resmessages3.rmsg:929
+#, fuzzy
+msgid "Howitzer reload time -10%"
+msgstr "榴彈砲自動裝填器一型"
+
+#: data/mp/messages/resmessages3.rmsg:6
+#, fuzzy
+msgid "Thermal Armor +35%"
+msgstr "熱能裝甲三型"
 
 #: data/mp/messages/resmessages3.rmsg:304
 #, fuzzy
 msgid "Armored guard tower with Pulse Laser"
 msgstr "裝備有火焰噴射的防衛塔"
 
-#: data/mp/messages/resmessagesall.rmsg:186
+#: data/mp/messages/resmessages3.rmsg:435
+msgid "Power output +30%"
+msgstr ""
+
+#: data/mp/messages/resmessages3.rmsg:721
+#: data/mp/messages/resmessagesall.rmsg:838
+#, fuzzy
+msgid "Thermal Armor +40%"
+msgstr "熱能裝甲一型"
+
+#: data/mp/messages/resmessages3.rmsg:968
+#, fuzzy
+msgid "Laser accuracy +10%"
+msgstr "增加雷射系武器準確率"
+
+#: data/mp/messages/resmessages3.rmsg:981
+#, fuzzy
+msgid "Laser damage +25%"
+msgstr "增加雷射攻擊力"
+
+#: data/mp/messages/resmessages3.rmsg:994
+msgid "Laser reload time -15%"
+msgstr ""
+
+#: data/mp/messages/resmessages3.rmsg:1059
+#: data/mp/messages/resmessages3.rmsg:1072
+#, fuzzy
+msgid "Missile accuracy +10%"
+msgstr "增加飛彈準確率"
+
+#: data/mp/messages/resmessages3.rmsg:1085
+#, fuzzy
+msgid "Missile damage +25%"
+msgstr "增加飛彈攻擊力"
+
+#: data/mp/messages/resmessages3.rmsg:1150
+#: data/mp/messages/resmessages3.rmsg:1163
+#, fuzzy
+msgid "Missile reload time -15%"
+msgstr "任務進行時間 - %s"
+
+#: data/mp/messages/resmessages3.rmsg:1241
+#, fuzzy
+msgid "Rail Gun accuracy +10%"
+msgstr "增加軌道砲系武器準確率"
+
+#: data/mp/messages/resmessages3.rmsg:1254
+#, fuzzy
+msgid "Rail Gun damage +25%"
+msgstr "增加軌道砲系武器攻擊力"
+
+#: data/mp/messages/resmessages3.rmsg:1267
+#, fuzzy
+msgid "Rail Gun reload time -15%"
+msgstr "軌道砲系武器升級"
+
+#: data/mp/messages/resmessagesall.rmsg:84
+#, fuzzy
+msgid "Sensor Range +25%"
+msgstr "雷達可視距離"
+
+#: data/mp/messages/resmessagesall.rmsg:96
+#, fuzzy
+msgid "Improved Thermal Emissions detection"
+msgstr "可偵測熱能放射"
+
+#: data/mp/messages/resmessagesall.rmsg:97
+#, fuzzy
+msgid "Sensor Range +15%"
+msgstr "雷達可視距離"
+
+#: data/mp/messages/resmessagesall.rmsg:109
+#, fuzzy
+msgid "Advanced Thermal Emissions detection"
+msgstr "可偵測熱能放射"
+
+#: data/mp/messages/resmessagesall.rmsg:110
+#, fuzzy
+msgid "Sensor Range +10%"
+msgstr "雷達可視距離"
+
+#: data/mp/messages/resmessagesall.rmsg:135
+msgid "Radar detector tower detects enemy sensors"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:136
+#, fuzzy
+msgid "Orders assigned indirect fire units to fire at the enemy sensors"
+msgstr "命令指定的非直射武裝部隊攻擊敵軍的砲兵部隊"
+
+#: data/mp/messages/resmessagesall.rmsg:137
+#, fuzzy
+msgid "Counter-battery fire continues until enemy sensor is suppressed"
+msgstr "直到敵軍的砲火被壓制住為止"
+
+#: data/mp/messages/resmessagesall.rmsg:225
 msgid "Cyborg Transport Available"
 msgstr "可使用生化人步兵運輸艦"
 
-#: data/mp/messages/resmessagesall.rmsg:187
+#: data/mp/messages/resmessagesall.rmsg:226
 msgid "Armed with Machinegun"
 msgstr "裝備機槍"
 
-#: data/mp/messages/resmessagesall.rmsg:189
+#: data/mp/messages/resmessagesall.rmsg:228
 msgid "Requires heavy VTOL factory to produce"
 msgstr "需要重型VTOL工廠才可以製造"
 
-#: data/mp/messages/resmessagesall.rmsg:200
+#: data/mp/messages/resmessagesall.rmsg:239
 msgid "Incendiary howitzer emplacement"
 msgstr "燃燒榴彈砲砲台"
 
-#: data/mp/messages/resmessagesall.rmsg:213
+#: data/mp/messages/resmessagesall.rmsg:252
 msgid "Armored Incendiary Mortar battery pit"
 msgstr "裝備燃燒迫擊砲砲坑"
 
-#: data/mp/messages/resmessagesall.rmsg:226
+#: data/mp/messages/resmessagesall.rmsg:265
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "裝備有等離子火焰噴射之據點"
 
-#: data/mp/messages/resmessagesall.rmsg:239
+#: data/mp/messages/resmessagesall.rmsg:278
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "裝備有鋁熱火焰噴射的生化人步兵"
 
-#: data/mp/messages/resmessagesall.rmsg:252
+#: data/mp/messages/resmessagesall.rmsg:291
 msgid "Armed with grenades"
 msgstr "裝備手榴彈"
 
-#: data/mp/messages/resmessagesall.rmsg:265
+#: data/mp/messages/resmessagesall.rmsg:304
 msgid "Combat engineer with construction ability"
 msgstr "工程生化人步兵擁有建築的能力"
 
-#: data/mp/messages/resmessagesall.rmsg:278
+#: data/mp/messages/resmessagesall.rmsg:317
 msgid "Mechanic with repair ability"
 msgstr "維修生化人步兵擁有修理受損單位的能力"
 
-#: data/mp/messages/resmessagesall.rmsg:291
+#: data/mp/messages/resmessagesall.rmsg:330
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "燃燒榴彈砲可以指派給一座雷達"
 
-#: data/mp/messages/resmessagesall.rmsg:330
+#: data/mp/messages/resmessagesall.rmsg:369
 msgid "Plasmite Flame-thrower"
 msgstr "噴射出等離子火焰"
 
-#: data/mp/messages/resmessagesall.rmsg:345
+#: data/mp/messages/resmessagesall.rmsg:384
 msgid "Steals technology from structures and takes control of weapons"
 msgstr "由建築物偷取對方的科技，並可控制對方武器"
 
-#: data/mp/messages/resmessagesall.rmsg:355
+#: data/mp/messages/resmessagesall.rmsg:394
 msgid "New Electronic Technology Discovered"
 msgstr "發現新的電子科技"
 
-#: data/mp/messages/resmessagesall.rmsg:357
+#: data/mp/messages/resmessagesall.rmsg:396
 msgid "On-board resistance circuit systems"
 msgstr "搭載阻抗線圈系統"
 
-#: data/mp/messages/resmessagesall.rmsg:358
+#: data/mp/messages/resmessagesall.rmsg:397
 msgid "Enables resistance to Nexus Link technology"
 msgstr "可以阻擋NEXUS Link科技"
 
-#: data/mp/messages/resmessagesall.rmsg:371
+#: data/mp/messages/resmessagesall.rmsg:410
 msgid "Enables self-repair"
 msgstr "可使單位進行自行修理"
 
-#: data/mp/messages/resmessagesall.rmsg:382
+#: data/mp/messages/resmessagesall.rmsg:421
 msgid "Armed with medium cannon"
 msgstr "裝備中型加農砲"
 
-#: data/mp/messages/resmessagesall.rmsg:395
-#: data/mp/messages/resmessagesall.rmsg:408
+#: data/mp/messages/resmessagesall.rmsg:434
+#: data/mp/messages/resmessagesall.rmsg:447
 msgid "Armed with hyper velocity cannon"
 msgstr "裝備有高速加農砲的生化人步兵"
 
-#: data/mp/messages/resmessagesall.rmsg:421
+#: data/mp/messages/resmessagesall.rmsg:460
 msgid "Armed with tank killer rockets"
 msgstr "裝備有火箭（坦克殺手）的生化人步兵"
 
-#: data/mp/messages/resmessagesall.rmsg:434
+#: data/mp/messages/resmessagesall.rmsg:473
 msgid "Fires heavy pulses of laser light"
 msgstr "發射高能脈衝雷射光"
 
-#: data/mp/messages/resmessagesall.rmsg:435
+#: data/mp/messages/resmessagesall.rmsg:474
 msgid "Best Targets: Heavy cyborgs"
 msgstr "最佳目標：重裝生化人步兵"
 
-#: data/mp/messages/resmessagesall.rmsg:447
+#: data/mp/messages/resmessagesall.rmsg:486
 msgid "76mm twin-barrel automatic-cannon"
 msgstr "口徑76釐米、雙管自動加農砲"
 
-#: data/mp/messages/resmessagesall.rmsg:459
-#: data/mp/messages/resmessagesall.rmsg:472
+#: data/mp/messages/resmessagesall.rmsg:498
+#: data/mp/messages/resmessagesall.rmsg:511
 msgid "New Systems Structure Available"
 msgstr "可建築新的系統建築"
 
-#: data/mp/messages/resmessagesall.rmsg:460
+#: data/mp/messages/resmessagesall.rmsg:499
 msgid "Complete battlefield visibility"
 msgstr "可觀測到整個戰場"
 
-#: data/mp/messages/resmessagesall.rmsg:462
-msgid "The ultimate in sensor technology"
-msgstr "最高等級的雷達科技"
+#: data/mp/messages/resmessagesall.rmsg:501
+msgid "Does not offer sensor targeting"
+msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:473
-#: data/mp/messages/resmessagesall.rmsg:668
+#: data/mp/messages/resmessagesall.rmsg:512
+#: data/mp/messages/resmessagesall.rmsg:707
 msgid "Combines standard, counter battery and VTOL sensors"
 msgstr "包涵了標準雷達、反砲兵雷達及VTOL偵測雷達的功能"
 
-#: data/mp/messages/resmessagesall.rmsg:485
+#: data/mp/messages/resmessagesall.rmsg:524
 msgid "New Advanced Weapon Available"
 msgstr "可使用新的高階武器"
 
-#: data/mp/messages/resmessagesall.rmsg:486
+#: data/mp/messages/resmessagesall.rmsg:525
 msgid "Very slow recharge time"
 msgstr "需要非常長的充填時間"
 
-#: data/mp/messages/resmessagesall.rmsg:487
+#: data/mp/messages/resmessagesall.rmsg:526
 msgid "Immense damage infliction capability"
 msgstr "攻擊威力強大"
 
-#: data/mp/messages/resmessagesall.rmsg:488
-msgid "Narrow area of affect"
+#: data/mp/messages/resmessagesall.rmsg:527
+#, fuzzy
+msgid "Narrow area of effect"
 msgstr "但攻擊範圍狹小"
 
-#: data/mp/messages/resmessagesall.rmsg:499
+#: data/mp/messages/resmessagesall.rmsg:538
 msgid "Armored guard tower with Nexus Link"
 msgstr "裝備有NEXUS Link的防衛塔"
 
-#: data/mp/messages/resmessagesall.rmsg:512
-#: data/mp/messages/resmessagesall.rmsg:525
+#: data/mp/messages/resmessagesall.rmsg:551
+#: data/mp/messages/resmessagesall.rmsg:564
 msgid "Plasma Cannon firing plasma"
 msgstr "發射離子砲"
 
-#: data/mp/messages/resmessagesall.rmsg:526
-#: data/mp/messages/resmessagesall.rmsg:604
-#: data/mp/messages/resmessagesall.rmsg:617
-#: data/mp/messages/resmessagesall.rmsg:630
+#: data/mp/messages/resmessagesall.rmsg:565
 #: data/mp/messages/resmessagesall.rmsg:643
 #: data/mp/messages/resmessagesall.rmsg:656
+#: data/mp/messages/resmessagesall.rmsg:669
+#: data/mp/messages/resmessagesall.rmsg:682
+#: data/mp/messages/resmessagesall.rmsg:695
 msgid "Best Targets : Vehicles"
 msgstr "最佳目標：坦克"
 
-#: data/mp/messages/resmessagesall.rmsg:538
+#: data/mp/messages/resmessagesall.rmsg:577
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "裝備有高能雷射之據點"
 
-#: data/mp/messages/resmessagesall.rmsg:551
+#: data/mp/messages/resmessagesall.rmsg:590
 msgid "Armored guard tower with EMP Cannon"
 msgstr "裝備有電磁脈衝加農砲的防衛塔"
 
-#: data/mp/messages/resmessagesall.rmsg:564
+#: data/mp/messages/resmessagesall.rmsg:603
 msgid "Armed with Cyborg Pulse Laser"
 msgstr "裝備有脈衝雷射之生化人步兵"
 
-#: data/mp/messages/resmessagesall.rmsg:577
+#: data/mp/messages/resmessagesall.rmsg:616
 msgid "Armed with Cyborg Rail Gun"
 msgstr "裝備有軌道砲之生化人步兵"
 
-#: data/mp/messages/resmessagesall.rmsg:590
+#: data/mp/messages/resmessagesall.rmsg:629
 msgid "Armed with Cyborg Scourge Missile Launcher"
 msgstr "裝備有天譴飛彈發射器之生化人步兵"
 
-#: data/mp/messages/resmessagesall.rmsg:603
+#: data/mp/messages/resmessagesall.rmsg:642
 msgid "Uses advanced mass driver railgun technology"
 msgstr "使用高階的質量投射軌道砲科技"
 
-#: data/mp/messages/resmessagesall.rmsg:605
-#: data/mp/messages/resmessagesall.rmsg:618
-#: data/mp/messages/resmessagesall.rmsg:631
 #: data/mp/messages/resmessagesall.rmsg:644
+#: data/mp/messages/resmessagesall.rmsg:657
+#: data/mp/messages/resmessagesall.rmsg:670
+#: data/mp/messages/resmessagesall.rmsg:683
 msgid "Defensive Strength : High"
 msgstr "防禦力：高"
 
-#: data/mp/messages/resmessagesall.rmsg:616
+#: data/mp/messages/resmessagesall.rmsg:655
 msgid "Uses advanced cannon technology"
 msgstr "使用高階的加農砲科技"
 
-#: data/mp/messages/resmessagesall.rmsg:629
+#: data/mp/messages/resmessagesall.rmsg:668
 msgid "Uses advanced rocket gun technology"
 msgstr "使用高階的火箭砲科技"
 
-#: data/mp/messages/resmessagesall.rmsg:642
+#: data/mp/messages/resmessagesall.rmsg:681
 msgid "Uses advanced missile gun technology"
 msgstr "使用高階的飛彈科技"
 
-#: data/mp/messages/resmessagesall.rmsg:655
+#: data/mp/messages/resmessagesall.rmsg:694
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "強力的電磁脈衝武器"
 
-#: data/mp/messages/resmessagesall.rmsg:667
+#: data/mp/messages/resmessagesall.rmsg:706
 msgid "New System Available"
 msgstr "可使用新系統"
 
-#: data/mp/messages/resmessagesall.rmsg:680
+#: data/mp/messages/resmessagesall.rmsg:719
 msgid "Medium Super Heavy Body"
 msgstr "中型超重量級車身"
 
-#: data/mp/messages/resmessagesall.rmsg:681
+#: data/mp/messages/resmessagesall.rmsg:720
 #, fuzzy
 msgid "More armor and body points than Vengeance"
 msgstr "比復仇者更強的防禦與HP"
 
-#: data/mp/messages/resmessagesall.rmsg:682
+#: data/mp/messages/resmessagesall.rmsg:721
 msgid "Slow moving Body"
 msgstr "移動速度緩慢"
 
-#: data/mp/messages/resmessagesall.rmsg:693
+#: data/mp/messages/resmessagesall.rmsg:732
 msgid "Large Super Heavy Body"
 msgstr "大型超重量級車身"
 
-#: data/mp/messages/resmessagesall.rmsg:694
+#: data/mp/messages/resmessagesall.rmsg:733
 msgid "Maximum armor and body points"
 msgstr "擁有最強大的防禦能力及HP"
 
-#: data/mp/messages/resmessagesall.rmsg:695
+#: data/mp/messages/resmessagesall.rmsg:734
 msgid "Very slow moving Body"
 msgstr "移動非常緩慢"
 
-#: data/mp/messages/resmessagesall.rmsg:706
+#: data/mp/messages/resmessagesall.rmsg:745
 msgid "Hardpoint Vindicator SAM Site Available"
 msgstr "可建造裝備有擁護者級地對空飛彈之要塞"
 
-#: data/mp/messages/resmessagesall.rmsg:719
+#: data/mp/messages/resmessagesall.rmsg:758
 msgid "Hardpoint Whirlwind AA Gun Available"
 msgstr "可建造裝備有旋風級高射砲之要塞"
 
-#: data/mp/messages/resmessagesall.rmsg:772
+#: data/mp/messages/resmessagesall.rmsg:811
 msgid "Armored EMP Mortar battery pit"
 msgstr "裝備電磁脈衝迫擊砲砲坑"
 
-#: data/mp/messages/resmessagesall.rmsg:784
+#: data/mp/messages/resmessagesall.rmsg:823
 msgid "Laser AA Gun Available"
 msgstr "可使用防空雷射武器"
 
-#: data/mp/messages/resmessagesall.rmsg:785
+#: data/mp/messages/resmessagesall.rmsg:824
 msgid "Twin Medium Anti-Aircraft Laser"
 msgstr "雙管中級的防空雷射砲（取代旋風級防空砲）"
 
-#: data/mp/messages/resmessagesall.rmsg:810
+#: data/mp/messages/resmessagesall.rmsg:849
 msgid "Hardpoint Avenger SAM Site Available"
 msgstr "可建造裝備有復仇者級地對空飛彈之要塞"
 
-#: data/mp/messages/resmessagesall.rmsg:823
+#: data/mp/messages/resmessagesall.rmsg:862
 msgid "Hardpoint Cyclone AA Gun Available"
 msgstr "可建造裝備有暴風級高射砲之要塞"
 
-#: data/mp/messages/resmessagesall.rmsg:824
+#: data/mp/messages/resmessagesall.rmsg:863
 msgid "Quad 80mm Anti-Aircraft machinegun"
 msgstr "四管、口徑80釐米、防空機槍"
 
-#: data/mp/messages/resmessagesall.rmsg:837
-#: data/mp/messages/resmessagesall.rmsg:850
+#: data/mp/messages/resmessagesall.rmsg:876
+#: data/mp/messages/resmessagesall.rmsg:889
 msgid "Twin Multi-barrel, rapid-fire machinegun"
 msgstr "雙管多膛快速擊發的機槍"
 
-#: data/mp/messages/resmessagesall.rmsg:849
+#: data/mp/messages/resmessagesall.rmsg:888
 msgid "Hardpoint Twin Assault Gun Available"
 msgstr "可建造裝備有雙管突擊槍之要塞"
 
-#: data/mp/messages/resmessagesall.rmsg:863
+#: data/mp/messages/resmessagesall.rmsg:902
 msgid "Drops high intensity Plasmite bombs"
 msgstr "投擲高強度等離子炸彈"
 
-#: data/mp/messages/resmessagesall.rmsg:875
+#: data/mp/messages/resmessagesall.rmsg:914
 msgid "New VTOL Missile Launcher"
 msgstr "可搭載新的VTOL飛彈"
 
-#: data/mp/messages/resmessagesall.rmsg:876
+#: data/mp/messages/resmessagesall.rmsg:915
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "發射電磁脈衝飛彈"
 
-#: data/mp/messages/resmessagesall.rmsg:888
-#: data/mp/messages/resmessagesall.rmsg:901
-#: data/mp/messages/resmessagesall.rmsg:914
+#: data/mp/messages/resmessagesall.rmsg:927
+#: data/mp/messages/resmessagesall.rmsg:940
+#: data/mp/messages/resmessagesall.rmsg:953
 msgid "Stronger Commander Turret Available for Design"
 msgstr "更強力的指揮官車可供使用"
 
-#: data/mp/messages/resmessagesall.rmsg:889
-#: data/mp/messages/resmessagesall.rmsg:902
-#: data/mp/messages/resmessagesall.rmsg:915
+#: data/mp/messages/resmessagesall.rmsg:928
+#: data/mp/messages/resmessagesall.rmsg:941
+#: data/mp/messages/resmessagesall.rmsg:954
 msgid "Upgraded battlefield computer system"
 msgstr "戰場電腦系統升級"
 
@@ -11094,37 +11426,37 @@ msgstr ""
 msgid "Latin"
 msgstr "拉丁語"
 
-#: lib/netplay/netplay.c:1176
+#: lib/netplay/netplay.c:1187
 #, c-format
 msgid "Player %u has the wrong game version. Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:1211
+#: lib/netplay/netplay.c:1222
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:1263
-#: lib/netplay/netplay.c:2095
+#: lib/netplay/netplay.c:1274
+#: lib/netplay/netplay.c:2106
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:1301
+#: lib/netplay/netplay.c:1312
 #, c-format
 msgid "Player %u has the wrong password. Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:3040
+#: lib/netplay/netplay.c:3051
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3065
+#: lib/netplay/netplay.c:3076
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: lib/netplay/netplay.c:3445
+#: lib/netplay/netplay.c:3456
 msgid ", mods: "
 msgstr ""
 
@@ -11442,72 +11774,72 @@ msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
 msgid "Truck ordered to build Oil Derrick"
 msgstr "命令工程車建造鑽油井"
 
-#: src/droid.c:187
+#: src/droid.c:198
 msgid "Unit Lost!"
 msgstr "損失單位！"
 
-#: src/droid.c:1319
+#: src/droid.c:1330
 msgid "Structure Restored"
 msgstr "建築物重建"
 
-#: src/droid.c:2902
+#: src/droid.c:2913
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "第 %u 隊聽令 - 共 %u  單位"
 
-#: src/droid.c:2915
+#: src/droid.c:2926
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "共 %u 單位 被指派為 第 %u 隊"
 
-#: src/droid.c:2928
+#: src/droid.c:2939
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "視角移動至第 %u  隊 - 共 %u 單位"
 
-#: src/droid.c:2932
+#: src/droid.c:2943
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u 單位"
 
-#: src/droid.c:3173
+#: src/droid.c:3184
 msgid "Rookie"
 msgstr "菜鳥"
 
-#: src/droid.c:3174
+#: src/droid.c:3185
 msgctxt "rank"
 msgid "Green"
 msgstr "青澀"
 
-#: src/droid.c:3175
+#: src/droid.c:3186
 msgid "Trained"
 msgstr "訓練有素的"
 
-#: src/droid.c:3176
+#: src/droid.c:3187
 msgid "Regular"
 msgstr "好樣的"
 
-#: src/droid.c:3177
+#: src/droid.c:3188
 msgid "Professional"
 msgstr "專家"
 
-#: src/droid.c:3178
+#: src/droid.c:3189
 msgid "Veteran"
 msgstr "老手"
 
-#: src/droid.c:3179
+#: src/droid.c:3190
 msgid "Elite"
 msgstr "菁英"
 
-#: src/droid.c:3180
+#: src/droid.c:3191
 msgid "Special"
 msgstr "特務"
 
-#: src/droid.c:3181
+#: src/droid.c:3192
 msgid "Hero"
 msgstr "英雄"
 
@@ -11586,8 +11918,8 @@ msgstr "SINGLE PLAYER"
 
 #: src/frontend.c:468
 #: src/ingameop.c:519
-#: src/mission.c:2531
-#: src/mission.c:2636
+#: src/mission.c:2528
+#: src/mission.c:2633
 msgid "Load Saved Game"
 msgstr "載入已儲存的遊戲"
 
@@ -12025,8 +12357,8 @@ msgstr ""
 
 #: src/ingameop.c:295
 #: src/ingameop.c:523
-#: src/mission.c:2518
-#: src/mission.c:2639
+#: src/mission.c:2515
+#: src/mission.c:2636
 msgid "Save Game"
 msgstr "儲存遊戲"
 
@@ -12849,45 +13181,45 @@ msgstr "開啟或關閉建築選單"
 msgid "Could not save game!"
 msgstr "載入已儲存的遊戲"
 
-#: src/mission.c:2071
+#: src/mission.c:2068
 msgid "Load Transport"
 msgstr "送上運輸艦"
 
-#: src/mission.c:2465
+#: src/mission.c:2462
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "任務完成"
 
-#: src/mission.c:2465
+#: src/mission.c:2462
 msgid "OBJECTIVE ACHIEVED"
 msgstr "任務完成"
 
-#: src/mission.c:2471
+#: src/mission.c:2468
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "任務失敗"
 
-#: src/mission.c:2471
+#: src/mission.c:2468
 msgid "OBJECTIVE FAILED"
 msgstr "任務失敗"
 
-#: src/mission.c:2497
-#: src/mission.c:2537
-#: src/mission.c:2655
+#: src/mission.c:2494
+#: src/mission.c:2534
+#: src/mission.c:2652
 msgid "Quit To Main Menu"
 msgstr "退出至主選單"
 
-#: src/mission.c:2505
+#: src/mission.c:2502
 msgid "Continue Game"
 msgstr "繼續遊戲"
 
-#: src/mission.c:2602
+#: src/mission.c:2599
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "遊戲已儲存"
 
-#: src/move.c:2878
-#: src/move.c:2894
+#: src/move.c:2866
+#: src/move.c:2882
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -13501,12 +13833,12 @@ msgstr "你獲勝了！"
 msgid "YOU WERE DEFEATED!"
 msgstr "你被打敗了！"
 
-#: src/scriptfuncs.c:10129
+#: src/scriptfuncs.c:10096
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "由 %s 獲得引導指標"
 
-#: src/scriptfuncs.c:10175
+#: src/scriptfuncs.c:10142
 #, c-format
 msgid "Beacon %d"
 msgstr "引導指標 %d"
@@ -13626,6 +13958,13 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "版本 %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Increases Bombing damage"
+#~ msgstr "增加加農砲系武器傷害"
+
+#~ msgid "The ultimate in sensor technology"
+#~ msgstr "最高等級的雷達科技"
 
 #~ msgid "Formation speed limiting OFF"
 #~ msgstr "成型速度限制關閉"
