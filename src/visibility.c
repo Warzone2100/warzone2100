@@ -373,11 +373,6 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 		return 0;
 	}
 
-	if (game.type == SKIRMISH && psTarget->type == OBJ_FEATURE && ((FEATURE *)psTarget)->psStats->subType == FEAT_OIL_RESOURCE)
-	{
-		return UBYTE_MAX;
-	}
-
 	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
 	pos = Vector3uw_To3i(psViewer->pos);
 	dest = Vector3uw_To3i(psTarget->pos);
@@ -591,16 +586,6 @@ void processVisibility(BASE_OBJECT *psObj)
 		}
 	}
 
-	if (game.type == SKIRMISH && psObj->type == OBJ_FEATURE && ((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
-	{
-		// everyone can see oil resources in skirmish!
-		for (player = 0; player < MAX_PLAYERS; player++)
-		{
-			psObj->visible[player] = UBYTE_MAX;
-		}
-	}
-	else
-	{
 		// get all the objects from the grid the droid is in
 		// HACK Search radius should be psViewer->sensorRange! So it should be the viewer iterating, not the viewee!
 		// HACK Note: This viewer/viewee relationship is exactly the opposite of what you would normally expect, and violates the principle of minimum astonishment.
@@ -684,7 +669,6 @@ void processVisibility(BASE_OBJECT *psObj)
 				}
 			}
 		}
-	}
 
 	/* Make sure all tiles under a feature/structure become visible when you see it */
 	for (player = 0; player < MAX_PLAYERS; player++)

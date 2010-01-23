@@ -3121,12 +3121,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		}
 
 		// Draw the 'blips' on the radar - use same timings as radar blips if the message is read - don't animate
-		if (game.type == SKIRMISH && proxType == PROX_RESOURCE)
-		{
-			// Don't blink oil resources in skirmish
-			imageID = (UWORD)(IMAGE_RAD_ENM1 + 0 + (proxType * (NUM_PULSES + 1)));
-		}
-		else if (psProxDisp->psMessage->read)
+		if (psProxDisp->psMessage->read)
 		{
 			imageID = IMAGE_RAD_ENM3 + (proxType * (NUM_PULSES + 1));
 		}
