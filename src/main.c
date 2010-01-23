@@ -877,6 +877,7 @@ static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 			}
 			// enable scrolling
 			setScrollPause(false);
+			resetScroll();
 		}
 	}
 	else
