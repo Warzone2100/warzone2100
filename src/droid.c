@@ -3514,7 +3514,7 @@ DROID_TEMPLATE * getTemplateFromTranslatedNameNoPlayer(char *pName)
 		{
 			if (strcmp(psCurr->aName, pName) == 0)
 			{
-				//if template is a human player's it must be a CYBORG or we ignore it
+				// if template is a human player's it must be a CYBORG or we ignore it
 				if (isHumanPlayer(player)
 				 && !(psCurr->droidType == DROID_CYBORG
 				   || psCurr->droidType == DROID_CYBORG_SUPER
