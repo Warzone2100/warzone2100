@@ -1250,6 +1250,15 @@ void scroll(void)
 	edgeOfMap = CheckScrollLimits();
 }
 
+/*
+ * Reset scrolling, so we don't jump around after unpausing.
+ */
+void resetScroll(void)
+{
+	scrollRefTime = SDL_GetTicks();
+	scrollSpeedUpDown = 0.0f;
+	scrollSpeedLeftRight = 0.0f;
+}
 
 // Check a coordinate is within the scroll limits, SDWORD version.
 // Returns true if edge hit.
