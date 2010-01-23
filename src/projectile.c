@@ -908,6 +908,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	{
 		// We hit!
 		psProj->pos = closestCollisionPos;
+		setProjectileDestination(psProj, closestCollisionObject);  // We hit something.
 
 		/* Buildings cannot be penetrated and we need a penetrating weapon */
 		if (closestCollisionObject->type == OBJ_DROID && psStats->penetrate)
