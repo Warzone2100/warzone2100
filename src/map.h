@@ -306,7 +306,7 @@ BOOL mapSaveTagged(char *pFileName);
 BOOL mapLoadTagged(char *pFileName);
 
 /* Return a pointer to the tile structure at x,y */
-static inline WZ_DECL_PURE MAPTILE *mapTile(UDWORD x, UDWORD y)
+static inline WZ_DECL_PURE MAPTILE *mapTile(SDWORD x, SDWORD y)
 {
 	// Clamp x and y values to actual ones
 	// Give one tile worth of leeway before asserting, for units/transporters coming in from off-map.
