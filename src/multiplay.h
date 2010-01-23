@@ -151,7 +151,7 @@ extern BOOL SendDestroyFeature  (FEATURE *pF);					// send a destruct feature me
 extern BOOL sendTextMessage		(const char *pStr,BOOL cast);		// send a text message
 extern BOOL sendAIMessage		(char *pStr, UDWORD player, UDWORD to);	//send AI message
 
-extern BOOL turnOffMultiMsg		(BOOL bDoit);
+extern void turnOffMultiMsg		(BOOL bDoit);
 
 extern void sendMap(void);
 extern BOOL multiplayerWinSequence(BOOL firstCall);
