@@ -118,17 +118,13 @@ void		startMultiplayerGame		(void);
 // temporarily disable multiplayer mode.
 void turnOffMultiMsg(BOOL bDoit)
 {
-	static BOOL bTemp;
-
-	if(bDoit && bTemp)  // turn off msgs.
+	if (!bMultiPlayer)
 	{
-		// This is spammed multiple times.
-		debug(LOG_NEVER, "multiple calls to turn off");
+		return true;
 	}
 
 	bMultiMessages = !bDoit;
-	bTemp = bDoit;
-	isMPDirtyBit = isMPDirtyBit || (bDoit && bMultiMessages);
+	return true;
 }
 
 
