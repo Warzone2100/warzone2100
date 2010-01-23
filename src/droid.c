@@ -3069,50 +3069,32 @@ DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int playe
 	return NULL;
 }
 
-
 /*!
- * Gets a template from its name
- * relies on the name being unique (or it will return the first one it finds!)
+ * Gets a template from its name, irrespective of owner. This is really, really ugly, but
+ * when reading from a VLO file we do not know its future owner. We must never read templates
+ * from a human player, and we must never let AIs delete their templates, or this will break
+ * horribly.
  * \param pName Template name
  * \pre pName has to be the unique, untranslated name!
  * \post pName will be translated via getDroidResourceName()!
- * \warning IF YOU USE THIS FUNCTION - NOTE THAT selectedPlayer's TEMPLATES ARE NOT USED!!!!
  */
-DROID_TEMPLATE * getTemplateFromTranslatedNameNoPlayer(char *pName)
+DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char *pName)
 {
-	unsigned int player;
-
-	/*all droid and template names are now stored as the translated
-	name regardless of RESOURCE_NAMES and STORE_RESOURCE_ID! - AB 26/06/98*/
-	getDroidResourceName(pName);
+	int player;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		DROID_TEMPLATE *psCurr;
-		// OK so we want selectedPlayer's CYBORG templates since they cannot be edited
-		// and we don't want to duplicate them for the sake of it! (ha!)
-		// don't use selectedPlayer's templates if not multiplayer
-		// this was written for use in the scripts and we don't want the scripts to use
-		// selectedPlayer's templates because we cannot guarentee they will exist!
+
 		for (psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			if (strcmp(psCurr->aName, pName) == 0)
+			if (!isHumanPlayer(player) && strcmp(psCurr->pName, pName) == 0)
 			{
-				//if template is selectedPlayers' it must be a CYBORG or we ignore it
-				if (!bMultiPlayer
-				 && player == selectedPlayer
-				 && !(psCurr->droidType == DROID_CYBORG
-				   || psCurr->droidType == DROID_CYBORG_SUPER
-				   || psCurr->droidType == DROID_CYBORG_CONSTRUCT
-				   || psCurr->droidType == DROID_CYBORG_REPAIR))
-				{
-					//ignore
-					continue;
-				}
 				return psCurr;
 			}
 		}
 	}
+
 	return NULL;
 }
 
