@@ -283,7 +283,7 @@ BOOL mapSaveTagged(char *pFileName);
 BOOL mapLoadTagged(char *pFileName);
 
 /* Return a pointer to the tile structure at x,y */
-static inline WZ_DECL_PURE MAPTILE *mapTile(UDWORD x, UDWORD y)
+static inline WZ_DECL_PURE MAPTILE *mapTile(SDWORD x, SDWORD y)
 {
 	// Clamp x and y values to actual ones
 	// Give one tile worth of leeway before asserting, for units/transporters coming in from off-map.
@@ -291,8 +291,8 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(UDWORD x, UDWORD y)
 	ASSERT(y >= -1, "mapTile: y value is too small (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
 	x = (x < 0 ? 0 : x);
 	y = (y < 0 ? 0 : y);
-	ASSERT(x < world_coord(mapWidth)+TILE_UNITS, "mapTile: x value is too big (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
-	ASSERT(y < world_coord(mapHeight)+TILE_UNITS, "mapTile: y value is too big (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
+	ASSERT(x < mapWidth + 1, "mapTile: x value is too big (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
+	ASSERT(y < mapHeight + 1, "mapTile: y value is too big (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
 	x = (x >= mapWidth ? mapWidth - 1 : x);
 	y = (y >= mapHeight ? mapHeight - 1 : y);
 
