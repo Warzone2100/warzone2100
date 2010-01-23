@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 45;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -3387,10 +3387,10 @@
 		02356D660BD3BB2600E9A019 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = NO;
+				BuildIndependentTargetsInParallel = YES;
 			};
 			buildConfigurationList = 02356D670BD3BB2600E9A019 /* Build configuration list for PBXProject "Warzone" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 0;
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
@@ -3398,21 +3398,21 @@
 			projectRoot = ..;
 			targets = (
 				02356D740BD3BB3400E9A019 /* Warzone */,
+				221052010E3D21E80057CD9C /* Bison */,
+				02CDDCF30D159BC300722688 /* Autorevision */,
 				43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */,
-				0223BBD00CFE3D5C0056EF85 /* QuesoGLC */,
-				02356D820BD3BB4100E9A019 /* Zlib */,
-				02356DC10BD3BBFC00E9A019 /* Png */,
-				02356E080BD3BCFE00E9A019 /* Ogg */,
-				02DDA7ED0BD3C03F0049AB60 /* Vorbis */,
-				97AEAAEA0E8C1B5200A10721 /* Theora */,
-				02DDA8B00BD3C2F20049AB60 /* PhysFS */,
-				022B2F210BD55814002E64E3 /* Gettext */,
 				02581C5C0BD5A94A00957CBC /* SDLmain */,
+				022B2F210BD55814002E64E3 /* Gettext */,
+				02356D820BD3BB4100E9A019 /* Zlib */,
+				02356E080BD3BCFE00E9A019 /* Ogg */,
+				02356DC10BD3BBFC00E9A019 /* Png */,
+				02DDA7ED0BD3C03F0049AB60 /* Vorbis */,
+				02DDA8B00BD3C2F20049AB60 /* PhysFS */,
 				43F3011A10D3572400707B6E /* Configure Popt */,
 				02F5CC6C0D1494AA0000A2D0 /* Popt */,
+				0223BBD00CFE3D5C0056EF85 /* QuesoGLC */,
+				97AEAAEA0E8C1B5200A10721 /* Theora */,
 				971177490F87A677000C8A96 /* Pixman */,
-				02CDDCF30D159BC300722688 /* Autorevision */,
-				221052010E3D21E80057CD9C /* Bison */,
 				43F77C7710F0125E00E04615 /* Make DMGs for Release */,
 			);
 		};
@@ -4583,30 +4583,7 @@
 		02356D680BD3BB2600E9A019 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
-				GCC_ALTIVEC_EXTENSIONS = YES;
-				GCC_AUTO_VECTORIZATION = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MACOSX__,
-					"$(inherited)",
-				);
-				GCC_VERSION = 4.0;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL/SDL.framework/Headers\"";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
-				OTHER_CFLAGS = "$(inherited)";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-			};
-			name = Debug;
-		};
-		02356D690BD3BB2600E9A019 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
@@ -4621,7 +4598,29 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL/SDL.framework/Headers\"";
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
 				OTHER_CFLAGS = "$(inherited)";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = macosx10.4;
+			};
+			name = Debug;
+		};
+		02356D690BD3BB2600E9A019 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__MACOSX__,
+					"$(inherited)",
+				);
+				GCC_VERSION = 4.0;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL/SDL.framework/Headers\"";
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
+				OTHER_CFLAGS = "$(inherited)";
+				SDKROOT = macosx10.4;
 			};
 			name = Release;
 		};
@@ -4904,7 +4903,7 @@
 		02CDDCFB0D159BE000722688 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -4913,7 +4912,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				INSTALL_PATH = "$(HOME)/bin";
-				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH_ACTUAL)";
+				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				PRODUCT_NAME = Autorevision;
 				WARNING_LDFLAGS = "";
@@ -4924,14 +4923,14 @@
 		02CDDCFC0D159BE000722688 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				INSTALL_PATH = "$(HOME)/bin";
-				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH_ACTUAL)";
+				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				PRODUCT_NAME = Autorevision;
 				WARNING_LDFLAGS = "";
