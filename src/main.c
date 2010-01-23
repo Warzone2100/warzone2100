@@ -868,36 +868,41 @@ static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 
 	if ( activeEvent->gain == 1 )
 	{
-		debug( LOG_NEVER, "WM_SETFOCUS\n");
+		debug( LOG_NEVER, "WM_SETFOCUS");
 		if (focusState != FOCUS_IN)
 		{
 			focusState = FOCUS_IN;
 
-			gameTimeStart();
-			// Should be: audio_ResumeAll();
+			// Don't pause in multiplayer!
+			if (war_GetPauseOnFocusLoss() && !NetPlay.bComms)
+			{
+				gameTimeStart();
+				audio_ResumeAll();
+				cdAudio_Resume();
+			}
+			// enable scrolling
+			setScrollPause(false);
 		}
-
-		// Resume playing audio.
-		cdAudio_Resume();
 	}
-	// Only loose focus when the config settings allow us to
-	else if (war_GetPauseOnFocusLoss())
+	else
 	{
-		debug( LOG_NEVER, "WM_KILLFOCUS\n");
+		debug( LOG_NEVER, "WM_KILLFOCUS");
 		if (focusState != FOCUS_OUT)
 		{
 			focusState = FOCUS_OUT;
 
-			gameTimeStop();
-			// Should be: audio_PauseAll();
-			audio_StopAll();
+			// Don't pause in multiplayer!
+			if (war_GetPauseOnFocusLoss() && !NetPlay.bComms)
+			{
+				gameTimeStop();
+				audio_PauseAll();
+				cdAudio_Pause();
+			}
+			/* Have to tell the input system that we've lost focus */
+			inputLooseFocus();
+			// stop scrolling
+			setScrollPause(true);
 		}
-		/* Have to tell the input system that we've lost focus */
-		inputLooseFocus();
-
-		// Need to pause playing to prevent the audio code from
-		// thinking playing has finished.
-		cdAudio_Pause();
 	}
 }
 
@@ -931,11 +936,7 @@ static void mainLoop(void)
 					inputHandleMouseMotionEvent(&event.motion);
 					break;
 				case SDL_ACTIVEEVENT:
-					 // Ignore this event during multiplayer games since it breaks the game when one player suddenly pauses!
-					if (!bMultiPlayer)
-					{
-						handleActiveEvent(&event.active);
-					}
+					handleActiveEvent(&event.active);
 					break;
 				case SDL_QUIT:
 					return;
@@ -950,7 +951,8 @@ static void mainLoop(void)
 			inputLooseFocus();		// remove it from input stream
 		}
 
-		if (focusState == FOCUS_IN)
+		// only pause when not in multiplayer, no focus, and we actually want to pause
+		if (NetPlay.bComms || focusState == FOCUS_IN || !war_GetPauseOnFocusLoss())
 		{
 			if (loop_GetVideoStatus())
 			{
