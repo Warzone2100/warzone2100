@@ -2074,6 +2074,9 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STA
 	blueprint->direction = 0;
 	blueprint->selected = false;
 
+	blueprint->timeLastHit = 0;
+	blueprint->lastHitWeapon = UDWORD_MAX;  // Noone attacked the blueprint. Do not render special effects.
+
 	blueprint->numWeaps = 0;
 	blueprint->asWeaps[0].nStat = 0;
 
