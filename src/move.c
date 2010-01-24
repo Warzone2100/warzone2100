@@ -2378,10 +2378,11 @@ void moveMakeVtolHover( DROID *psDroid )
 
 static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 {
-	float	fPerpSpeed, fNormalSpeed, dx, dy, fSpeed;
-	float	iDroidDir;
-	SDWORD	iMapZ, iRoll, slideDir, iSpinSpeed, iTurnSpeed;
-	float	fDZ, fDroidZ, fMapZ;
+	float   fPerpSpeed, fNormalSpeed, dx, dy, fSpeed;
+	float   iDroidDir;
+	SDWORD  iMapZ, slideDir, iSpinSpeed, iTurnSpeed;
+	float   fDZ, fDroidZ, fMapZ, targetRoll, currentRoll;
+	int     newRoll;
 
 	CHECK_DROID(psDroid);
 
@@ -2404,8 +2405,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	{
 		iSpinSpeed = (psDroid->baseSpeed/2 > VTOL_SPIN_SPEED) ? psDroid->baseSpeed/2 : VTOL_SPIN_SPEED;
 		iTurnSpeed = (psDroid->baseSpeed/8 > VTOL_TURN_SPEED) ? psDroid->baseSpeed/8 : VTOL_TURN_SPEED;
-		moveUpdateDroidDirection( psDroid, &speed, direction, VTOL_SPIN_ANGLE,
-				iSpinSpeed, iTurnSpeed, &iDroidDir, &fSpeed );
+		moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, iSpinSpeed, iTurnSpeed, &iDroidDir, &fSpeed);
 	}
 
 	fNormalSpeed = moveCalcNormalSpeed( psDroid, fSpeed, iDroidDir,
@@ -2426,12 +2426,18 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	moveUpdateDroidPos( psDroid, dx, dy );
 
 	/* update vtol orientation */
-	iRoll = (psDroid->sMove.moveDir - psDroid->direction) / 3;
-	if ( iRoll < 0 )
+	targetRoll = MIN(MAX((psDroid->sMove.moveDir - psDroid->direction)*4, -60), 60);
+	currentRoll = psDroid->roll;
+	if (currentRoll > 180)
 	{
-		iRoll += 360;
+		currentRoll -= 360;
 	}
-	psDroid->roll = (UWORD) iRoll;
+	newRoll = currentRoll + timeAdjustedIncrement(3*(targetRoll - currentRoll), true) + 0.5f;
+	if (newRoll < 0 )
+	{
+		newRoll += 360;
+	}
+	psDroid->roll = newRoll;
 
 	iMapZ = map_Height(psDroid->pos.x, psDroid->pos.y);
 
