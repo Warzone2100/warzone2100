@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-24 18:57+0100\n"
+"POT-Creation-Date: 2010-01-24 19:58+0100\n"
 "PO-Revision-Date: 2010-01-23 12:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -11184,126 +11184,132 @@ msgid "Flamer Viper Half-Tracks"
 msgstr "Żmija miotacz ognia na pół-gąsienicach"
 
 #: lib/framework/i18n.c:50
-#: lib/framework/i18n.c:106
+#: lib/framework/i18n.c:107
 msgid "System locale"
 msgstr "Język systemowy"
 
 #: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:108
+#: lib/framework/i18n.c:109
 msgid "Czech"
 msgstr "Czeski"
 
 #: lib/framework/i18n.c:53
-#: lib/framework/i18n.c:109
+#: lib/framework/i18n.c:110
 msgid "Danish"
 msgstr "Duński"
 
 #: lib/framework/i18n.c:54
-#: lib/framework/i18n.c:110
+#: lib/framework/i18n.c:111
 msgid "German"
 msgstr "Niemiecki"
 
 #: lib/framework/i18n.c:56
-#: lib/framework/i18n.c:112
+#: lib/framework/i18n.c:113
 msgid "English (United Kingdom)"
 msgstr "Angielski (Wlk. Brytania)"
 
 #: lib/framework/i18n.c:57
-#: lib/framework/i18n.c:113
+#: lib/framework/i18n.c:114
 msgid "Spanish"
 msgstr "Hiszpański"
 
 #: lib/framework/i18n.c:58
-#: lib/framework/i18n.c:114
+#: lib/framework/i18n.c:115
 msgid "Estonian"
 msgstr "Estoński"
 
 #: lib/framework/i18n.c:60
-#: lib/framework/i18n.c:116
+#: lib/framework/i18n.c:117
 msgid "Finnish"
 msgstr "Fiński"
 
 #: lib/framework/i18n.c:61
-#: lib/framework/i18n.c:117
+#: lib/framework/i18n.c:118
 msgid "French"
 msgstr "Francuski"
 
 #: lib/framework/i18n.c:69
-#: lib/framework/i18n.c:125
+#: lib/framework/i18n.c:126
 msgid "Frisian"
 msgstr "Frisian"
 
 #: lib/framework/i18n.c:70
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:127
 msgid "Irish"
 msgstr "Irlański"
 
 #: lib/framework/i18n.c:71
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:128
+#, fuzzy
+msgid "Croatian"
+msgstr "Łotewski"
+
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:129
 msgid "Italian"
 msgstr "Włoski"
 
-#: lib/framework/i18n.c:73
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:131
 msgid "Lithuanian"
 msgstr "Litewski"
 
-#: lib/framework/i18n.c:76
-#: lib/framework/i18n.c:131
+#: lib/framework/i18n.c:77
+#: lib/framework/i18n.c:133
 msgid "Norwegian"
 msgstr "Norweski"
 
-#: lib/framework/i18n.c:78
-#: lib/framework/i18n.c:133
+#: lib/framework/i18n.c:79
+#: lib/framework/i18n.c:135
 msgid "Dutch"
 msgstr "Holenderski"
 
-#: lib/framework/i18n.c:79
-#: lib/framework/i18n.c:134
+#: lib/framework/i18n.c:80
+#: lib/framework/i18n.c:136
 msgid "Polish"
 msgstr "Polski"
 
-#: lib/framework/i18n.c:80
-#: lib/framework/i18n.c:135
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:137
 msgid "Brazilian Portuguese"
 msgstr "Portugalski (Brazylia)"
 
-#: lib/framework/i18n.c:81
-#: lib/framework/i18n.c:136
+#: lib/framework/i18n.c:82
+#: lib/framework/i18n.c:138
 msgid "Portuguese"
 msgstr "Portugalski"
 
-#: lib/framework/i18n.c:82
-#: lib/framework/i18n.c:137
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:139
 msgid "Romanian"
 msgstr "Rumuński"
 
-#: lib/framework/i18n.c:83
-#: lib/framework/i18n.c:138
+#: lib/framework/i18n.c:84
+#: lib/framework/i18n.c:140
 msgid "Russian"
 msgstr "Rosyjski"
 
-#: lib/framework/i18n.c:84
-#: lib/framework/i18n.c:139
+#: lib/framework/i18n.c:85
+#: lib/framework/i18n.c:141
 msgid "Slovenian"
 msgstr "Słoweński"
 
-#: lib/framework/i18n.c:93
-#: lib/framework/i18n.c:144
+#: lib/framework/i18n.c:94
+#: lib/framework/i18n.c:146
 msgid "Ukrainian"
 msgstr "Ukraiński"
 
-#: lib/framework/i18n.c:94
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:95
+#: lib/framework/i18n.c:147
 msgid "Simplified Chinese"
 msgstr "Uproszczony chiński"
 
-#: lib/framework/i18n.c:95
-#: lib/framework/i18n.c:146
+#: lib/framework/i18n.c:96
+#: lib/framework/i18n.c:148
 msgid "Traditional Chinese"
 msgstr "Chiński tradycyjny"
 
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:130
 msgid "Latin"
 msgstr "Łacina"
 
@@ -13072,8 +13078,8 @@ msgstr "Kontynuuj grę"
 msgid "GAME SAVED :"
 msgstr "GRA ZAPISANA :"
 
-#: src/move.c:2866
-#: src/move.c:2882
+#: src/move.c:2870
+#: src/move.c:2886
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Znalazłeś %u energii w beczce z ropą."
@@ -13870,9 +13876,6 @@ msgstr "Wersja %s%s%s%s"
 
 #~ msgid "Basque"
 #~ msgstr "Baskański"
-
-#~ msgid "Latvian"
-#~ msgstr "Łotewski"
 
 #~ msgid "Norwegian (Nynorsk)"
 #~ msgstr "Norweski(Nynorsk)"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-24 18:57+0100\n"
+"POT-Creation-Date: 2010-01-24 19:58+0100\n"
 "PO-Revision-Date: 2008-05-09 17:09+0000\n"
 "Last-Translator: Samuel G. I. <amuchamu@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -11172,126 +11172,132 @@ msgid "Flamer Viper Half-Tracks"
 msgstr "Víbora Incendiario Semi-oruga"
 
 #: lib/framework/i18n.c:50
-#: lib/framework/i18n.c:106
+#: lib/framework/i18n.c:107
 msgid "System locale"
 msgstr "Idioma del sistema"
 
 #: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:108
+#: lib/framework/i18n.c:109
 msgid "Czech"
 msgstr "Checo"
 
 #: lib/framework/i18n.c:53
-#: lib/framework/i18n.c:109
+#: lib/framework/i18n.c:110
 msgid "Danish"
 msgstr "Danés"
 
 #: lib/framework/i18n.c:54
-#: lib/framework/i18n.c:110
+#: lib/framework/i18n.c:111
 msgid "German"
 msgstr "Alemán"
 
 #: lib/framework/i18n.c:56
-#: lib/framework/i18n.c:112
+#: lib/framework/i18n.c:113
 msgid "English (United Kingdom)"
 msgstr "Inglés (Reino Unido)"
 
 #: lib/framework/i18n.c:57
-#: lib/framework/i18n.c:113
+#: lib/framework/i18n.c:114
 msgid "Spanish"
 msgstr "Español"
 
 #: lib/framework/i18n.c:58
-#: lib/framework/i18n.c:114
+#: lib/framework/i18n.c:115
 msgid "Estonian"
 msgstr "Estonio"
 
 #: lib/framework/i18n.c:60
-#: lib/framework/i18n.c:116
+#: lib/framework/i18n.c:117
 msgid "Finnish"
 msgstr "Danés"
 
 #: lib/framework/i18n.c:61
-#: lib/framework/i18n.c:117
+#: lib/framework/i18n.c:118
 msgid "French"
 msgstr "Francés"
 
 #: lib/framework/i18n.c:69
-#: lib/framework/i18n.c:125
+#: lib/framework/i18n.c:126
 msgid "Frisian"
 msgstr "Frisón"
 
 #: lib/framework/i18n.c:70
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:127
 msgid "Irish"
 msgstr "Irlandés"
 
 #: lib/framework/i18n.c:71
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:128
+#, fuzzy
+msgid "Croatian"
+msgstr "Letón"
+
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:129
 msgid "Italian"
 msgstr "Italiano"
 
-#: lib/framework/i18n.c:73
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:131
 msgid "Lithuanian"
 msgstr "Lituano"
 
-#: lib/framework/i18n.c:76
-#: lib/framework/i18n.c:131
+#: lib/framework/i18n.c:77
+#: lib/framework/i18n.c:133
 msgid "Norwegian"
 msgstr "Noruego"
 
-#: lib/framework/i18n.c:78
-#: lib/framework/i18n.c:133
+#: lib/framework/i18n.c:79
+#: lib/framework/i18n.c:135
 msgid "Dutch"
 msgstr "Holandés"
 
-#: lib/framework/i18n.c:79
-#: lib/framework/i18n.c:134
+#: lib/framework/i18n.c:80
+#: lib/framework/i18n.c:136
 msgid "Polish"
 msgstr "Pulir"
 
-#: lib/framework/i18n.c:80
-#: lib/framework/i18n.c:135
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:137
 msgid "Brazilian Portuguese"
 msgstr "Portugués Brasileño"
 
-#: lib/framework/i18n.c:81
-#: lib/framework/i18n.c:136
+#: lib/framework/i18n.c:82
+#: lib/framework/i18n.c:138
 msgid "Portuguese"
 msgstr "Portugués"
 
-#: lib/framework/i18n.c:82
-#: lib/framework/i18n.c:137
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:139
 msgid "Romanian"
 msgstr "Rumano"
 
-#: lib/framework/i18n.c:83
-#: lib/framework/i18n.c:138
+#: lib/framework/i18n.c:84
+#: lib/framework/i18n.c:140
 msgid "Russian"
 msgstr "Ruso"
 
-#: lib/framework/i18n.c:84
-#: lib/framework/i18n.c:139
+#: lib/framework/i18n.c:85
+#: lib/framework/i18n.c:141
 msgid "Slovenian"
 msgstr "Eslovenio"
 
-#: lib/framework/i18n.c:93
-#: lib/framework/i18n.c:144
+#: lib/framework/i18n.c:94
+#: lib/framework/i18n.c:146
 msgid "Ukrainian"
 msgstr "Ucraniano"
 
-#: lib/framework/i18n.c:94
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:95
+#: lib/framework/i18n.c:147
 msgid "Simplified Chinese"
 msgstr "Chino Simplificado"
 
-#: lib/framework/i18n.c:95
-#: lib/framework/i18n.c:146
+#: lib/framework/i18n.c:96
+#: lib/framework/i18n.c:148
 msgid "Traditional Chinese"
 msgstr "Chino Tradicional"
 
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:130
 msgid "Latin"
 msgstr "Latino"
 
@@ -13053,8 +13059,8 @@ msgstr "Continuar Partida"
 msgid "GAME SAVED :"
 msgstr "¡PARTIDA GUARDADA!"
 
-#: src/move.c:2866
-#: src/move.c:2882
+#: src/move.c:2870
+#: src/move.c:2886
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Encontraste %u energía en un barril de petróleo"
@@ -13836,9 +13842,6 @@ msgstr "Versión: %s%s%s%s"
 
 #~ msgid "Basque"
 #~ msgstr "Vasco"
-
-#~ msgid "Latvian"
-#~ msgstr "Letón"
 
 #~ msgid "Norwegian (Nynorsk)"
 #~ msgstr "Noruego"
