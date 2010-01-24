@@ -68,6 +68,7 @@ static const struct
 	 */
 	{ "fy", N_("Frisian"), LANG_FRISIAN, SUBLANG_FRISIAN_NETHERLANDS },
 	{ "ga", N_("Irish"), LANG_IRISH, SUBLANG_IRISH_IRELAND },
+	{ "hr", N_("Croatian"), LANG_CROATIAN, SUBLANG_DEFAULT },
 	{ "it", N_("Italian"), LANG_ITALIAN, SUBLANG_ITALIAN },
 //	{ "la", N_("Latin"), LANG_LATIN, SUBLANG_DEFAULT },
 	{ "lt", N_("Lithuanian"), LANG_LITHUANIAN, SUBLANG_DEFAULT },
@@ -124,6 +125,7 @@ static const struct
 	 */
 	{ "fy", N_("Frisian"), "fy.UTF-8", "fy" },
 	{ "ga", N_("Irish"), "ga.UTF-8", "ga" },
+	{ "hr", N_("Croatian"), "hr_HR.UTF-8", "hr_HR" },
 	{ "it", N_("Italian"), "it_IT.UTF-8", "it_IT" },
 	{ "la", N_("Latin"), "la.UTF-8", "la" },
 	{ "lt", N_("Lithuanian"), "lt.UTF-8", "lt" },
