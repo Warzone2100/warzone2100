@@ -169,7 +169,7 @@ void addSubdirs( const char * basedir, const char * subdir, const bool appendToP
 #ifdef DEBUG
 		debug( LOG_NEVER, "addSubdirs: Examining subdir: [%s]", *i );
 #endif // DEBUG
-		if( !checkList || inList( checkList, *i ) )
+		if (*i[0] != '.' && (!checkList || inList(checkList, *i)))
 		{
 			snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir, PHYSFS_getDirSeparator(), *i);
 #ifdef DEBUG
