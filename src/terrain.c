@@ -121,7 +121,7 @@ static bool terrainInitalised = false;
 #define glError() { \
         GLenum err = glGetError(); \
         while (err != GL_NO_ERROR) { \
-                debug(LOG_ERROR, "OpenGL error %i caught at %s:%u\n", err, __FILE__, __LINE__); \
+                debug(LOG_ERROR, "OpenGL error %i caught at %s:%u\n", (int)err, __FILE__, __LINE__); \
                 err = glGetError(); \
         } \
 }
@@ -143,8 +143,8 @@ static void finishDrawRangeElements(void)
 {
 	if (drawRangeElementsStarted && dreCount > 0)
 	{
-		ASSERT(dreEnd - dreStart + 1 <= GLmaxElementsVertices, "too many vertices (%i)", dreEnd - dreStart + 1);
-		ASSERT(dreCount <= GLmaxElementsIndices, "too many indices (%i)", dreCount);
+		ASSERT(dreEnd - dreStart + 1 <= GLmaxElementsVertices, "too many vertices (%i)", (int)(dreEnd - dreStart + 1));
+		ASSERT(dreCount <= GLmaxElementsIndices, "too many indices (%i)", (int)dreCount);
 		glDrawRangeElements(GL_TRIANGLES,
 							dreStart,
 							dreEnd,
@@ -205,8 +205,8 @@ static void addDrawRangeElements(GLenum mode,
 		dreEnd = end;
 	}
 	// make sure we did everything right
-	ASSERT(dreEnd - dreStart + 1 <= GLmaxElementsVertices, "too many vertices (%i)", dreEnd - dreStart + 1);
-	ASSERT(dreCount <= GLmaxElementsIndices, "too many indices (%i)", dreCount);
+	ASSERT(dreEnd - dreStart + 1 <= GLmaxElementsVertices, "too many vertices (%i)", (int)(dreEnd - dreStart + 1));
+	ASSERT(dreCount <= GLmaxElementsIndices, "too many indices (%i)", (int)(dreCount));
 }
 
 /// Get the colour of the terrain tile at the specified position
