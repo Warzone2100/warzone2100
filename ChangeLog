@@ -1,11 +1,13 @@
-2010-00-00: Version 2.3 beta 9
+2010-01-24: Version 2.3 beta 9
  * General:
+   * Change: Add key mapping to trap/untrap cursor, alt-t by default (r9481)
+   * Change: Stop scrolling when the mouse leaves the window (r9428, r9438, r9449)
+   * Change: Increase the scroll area from 16 to 22 pixels (r9443)
    * Fix: Formation speed limiting should be off (r9372)
    * Fix: Saving games would often crash, and proximity blips not display (r9382, ticket:1443)
    * Fix: AIs would use host's truck templates (r9426)
    * Fix: Miscellaneous bugs and crashes (r9354, r9412, r9425, r9434, r9450, r9479)
- * GUI:
-   * Fix: Switching between Warzone and other windows should now behave better (r9428, r9438)
+ * UI:
    * Fix: No longer possible to start a game with everyone on the same team (r9457)
    * Fix: Speeding up the game sped up some of the GUI (r9462)
  * Multiplayer:
@@ -24,7 +26,8 @@
    * Fix: Some numbers were unnecessarily specific: 99% instead of 100%, 999 instead of 1000 (r9394)
    * Fix: Flamer Autoloader Mk2 doesn't prerequire Flamer Autoloader (r9394)
  * Translations:
-   * Updated: Spanish (r9421)
+   * Fix: Spanish locale didn't work on Linux (r9371)
+   * Updated: Spanish (r9366, r9369, r9410, r9421, r9470)
    * Updated: Polish (r9471)
    * New: Croatian (r9476)
 
