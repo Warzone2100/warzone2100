@@ -151,16 +151,16 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 
 	png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 
-	image->width = info_ptr->width;
-	image->height = info_ptr->height;
-	image->depth = info_ptr->channels;
-	image->bmp = malloc(info_ptr->height * info_ptr->rowbytes);
+	image->width = png_get_image_width(png_ptr, info_ptr);
+	image->height = png_get_image_height(png_ptr, info_ptr);
+	image->depth = png_get_channels(png_ptr, info_ptr);
+	image->bmp = malloc(image->height * png_get_rowbytes(png_ptr, info_ptr));
 
 	{
 		unsigned int i = 0;
 		png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
-		for ( i = 0; i < info_ptr->height; i++ )
-			memcpy( image->bmp + (info_ptr->rowbytes * i), row_pointers[i], info_ptr->rowbytes );
+		for ( i = 0; i < png_get_image_height(png_ptr, info_ptr); i++ )
+			memcpy( image->bmp + (png_get_rowbytes(png_ptr, info_ptr) * i), row_pointers[i], png_get_rowbytes(png_ptr, info_ptr) );
 	}
 
 	PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
