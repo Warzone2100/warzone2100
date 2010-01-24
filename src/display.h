@@ -43,6 +43,7 @@ extern void processMouseClickInput(void);
 
 extern void	scroll(void);
 extern void resetScroll(void);
+extern void setMouseScroll(bool);
 
 extern BOOL DrawnInLastFrame(SDWORD Frame);
 
