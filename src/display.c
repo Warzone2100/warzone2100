@@ -1036,7 +1036,6 @@ void scroll(void)
 	float	cosine, sine;
 	SDWORD	xDif,yDif;
 	UDWORD	timeDiff;
-	BOOL	bRetardScroll = false;
 	BOOL mouseAtLeft = false, mouseAtRight = false,
 		mouseAtTop = false, mouseAtBottom = false;
 	float scroll_zoom_factor = 1+2*((getViewDistance()-MINDISTANCE)/((float)(MAXDISTANCE-MINDISTANCE)));
@@ -1054,41 +1053,24 @@ void scroll(void)
 		if (keyDown(KEY_LEFTARROW) || mouseXPos < BOUNDARY_X)
 		{
 			mouseAtLeft = true;
-			if(!keyDown(KEY_LEFTARROW) && mouseXPos > BOUNDARY_X/2)
-			{
-				bRetardScroll = true;
-			}
 		}
 
 		/* Scroll right */
 		if ( keyDown(KEY_RIGHTARROW) || mouseXPos > (pie_GetVideoBufferWidth() - BOUNDARY_X) )
 		{
 			mouseAtRight = true;
-			if( !keyDown(KEY_RIGHTARROW) && mouseXPos < (pie_GetVideoBufferWidth() - BOUNDARY_X/2) )
-			{
-				bRetardScroll = true;
-			}
 		}
 
 		/* Scroll up */
 		if (keyDown(KEY_UPARROW) || (mouseYPos < BOUNDARY_Y))
 		{
 			mouseAtBottom = true;
-			if(!keyDown(KEY_UPARROW) && mouseYPos > BOUNDARY_Y/2)
-			{
-				bRetardScroll = true;
-			}
 		}
 
 		/* Scroll down */
 		if ( keyDown(KEY_DOWNARROW) || mouseYPos > (pie_GetVideoBufferHeight() - BOUNDARY_Y) )
 		{
 			mouseAtTop = true;
-			if( !keyDown(KEY_DOWNARROW) && mouseYPos < (pie_GetVideoBufferHeight() - BOUNDARY_Y/2) )
-			{
-				bRetardScroll = true;
-			}
-
 		}
 	}
 	else
@@ -1097,53 +1079,29 @@ void scroll(void)
 		if (mouseXPos < BOUNDARY_X)
 		{
 			mouseAtLeft = true;
-			if(!keyDown(KEY_LEFTARROW) && mouseXPos > BOUNDARY_X/2)
-			{
-				bRetardScroll = true;
-			}
 		}
 
 		/* Scroll right */
 		if (mouseXPos > (pie_GetVideoBufferWidth() - BOUNDARY_X))
 		{
 			mouseAtRight = true;
-			if( !keyDown(KEY_RIGHTARROW) && mouseXPos < (pie_GetVideoBufferWidth() - BOUNDARY_X/2) )
-			{
-				bRetardScroll = true;
-			}
 		}
 
 		/* Scroll up */
 		if (mouseYPos < BOUNDARY_Y)
 		{
 			mouseAtBottom = true;
-			if(!keyDown(KEY_UPARROW) && mouseYPos > BOUNDARY_Y/2)
-			{
-				bRetardScroll = true;
-			}
 		}
 
 		/* Scroll down */
 		if (mouseYPos > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
 		{
 			mouseAtTop = true;
-			if(!keyDown(KEY_DOWNARROW) && mouseYPos < (pie_GetVideoBufferHeight() - BOUNDARY_Y/2) )
-			{
-				bRetardScroll = true;
-			}
-
 		}
 	}
 	/* Time to update scroll - change to should be time */
 	timeDiff = SDL_GetTicks() - scrollRefTime;
 
-	// WHEN its fixed - you can uncomment it!
-	/*
-	if(bRetardScroll && false)	//temp until fixed
-	{
-		timeDiff/=2;
-	}
-	*/
 	/* Store reference time */
 	scrollRefTime = SDL_GetTicks();
 
