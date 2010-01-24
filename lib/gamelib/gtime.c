@@ -160,7 +160,7 @@ void gameTimeUpdate(void)
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
 	frameTimeFraction = (float)frameTime / (float)GAME_TICKS_PER_SEC;
-	frameTimeFraction2 = (float)frameTime / (float)GAME_TICKS_PER_SEC;
+	frameTimeFraction2 = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
 
 	// Precision seems to drop too low after this.
 	// It's probably time to rebase
