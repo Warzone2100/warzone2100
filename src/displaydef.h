@@ -32,8 +32,8 @@ extern "C"
 {
 #endif //__cplusplus
 
-#define	BOUNDARY_X			(16)
-#define BOUNDARY_Y			(16)
+#define	BOUNDARY_X			(22)
+#define BOUNDARY_Y			(22)
 //#define BOUNDARY_X		(DISP_WIDTH/20)	   // proportional to resolution - Alex M
 //#define	BOUNDARY_Y		(DISP_WIDTH/16)
 
