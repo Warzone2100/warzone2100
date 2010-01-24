@@ -2001,7 +2001,8 @@ UDWORD addPlayerBox(BOOL players)
 
 	if(players)
 	{
-		int numPlayers = 0;
+		int numPlayers = 0, team = -1;
+		bool allOnSameTeam = true;
 
 		for (i=0;i<game.maxPlayers;i++)
 		{
@@ -2011,6 +2012,26 @@ UDWORD addPlayerBox(BOOL players)
 				if (numPlayers > 2)
 				{
 					break; // We just need to know if we have enough to start a game
+				}
+			}
+		}
+
+		if (game.alliance != ALLIANCES_TEAMS)
+		{
+			allOnSameTeam = false;
+		}
+		else for (i=0; i<game.maxPlayers; i++)
+		{
+			if (game.skDiff[i] || isHumanPlayer(i))
+			{
+				if (team == -1)
+				{
+					team = NetPlay.players[i].team;
+				}
+				else if (NetPlay.players[i].team != team)
+				{
+					allOnSameTeam = false;
+					break;
 				}
 			}
 		}
@@ -2054,7 +2075,7 @@ UDWORD addPlayerBox(BOOL players)
 			if (ingame.localOptionsReceived && NetPlay.players[i].allocated)	// only draw if real player!
 			{
 				// add a 'ready' button
-				if (numPlayers > 1) // only if we have enough players to start
+				if (numPlayers > 1 && !allOnSameTeam) // only if we have enough players to start
 				{
 					drawReadyButton(i);
 				}
