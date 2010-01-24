@@ -477,7 +477,7 @@
 		02DDA8D10BD3C3600049AB60 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CF0BD3C3600049AB60 /* unix.c */; };
 		02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
 		02DDA8E10BD3C3CC0049AB60 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8E00BD3C3CC0049AB60 /* IOKit.framework */; };
-		02DE76060DC3B84900D48F58 /* GLee.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DE76040DC3B84800D48F58 /* GLee.c */; };
+		02DE76060DC3B84900D48F58 /* GLee.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DE76040DC3B84800D48F58 /* GLee.c */; settings = {COMPILER_FLAGS = "-Wno-missing-declarations"; }; };
 		02DE76070DC3B84900D48F58 /* GLee.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02DE76050DC3B84800D48F58 /* GLee.h */; };
 		02F5CC570D1490620000A2D0 /* database.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC560D1490620000A2D0 /* database.c */; };
 		02F5CC8B0D1496580000A2D0 /* popt.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC820D1496580000A2D0 /* popt.c */; };
@@ -4652,9 +4652,10 @@
 					DEBUG,
 					"$(inherited)",
 				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -4671,9 +4672,27 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Debug\"";
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = (
+					"-Wno-pointer-to-int-cast",
+					"-Wmissing-declarations",
+					"-Wstrict-prototypes",
+					"-Wdeclaration-after-statement",
+					"$(inherited)",
+				);
+				OTHER_CPLUSPLUSFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = Warzone;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wno-unused-label",
+					"-Wno-format-security",
+					"-Wno-strict-aliasing",
+					"-Wmissing-field-initializers",
+					"-Wcast-align",
+					"-Wwrite-strings",
+					"-Wpointer-arith",
+					"-Wreturn-type",
+				);
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -4697,15 +4716,17 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					VORBIS_NEEDS_HACK,
 					"$(inherited)",
 				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -4722,8 +4743,27 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Release\"";
+				OTHER_CFLAGS = (
+					"-Wno-pointer-to-int-cast",
+					"-Wmissing-declarations",
+					"-Wstrict-prototypes",
+					"-Wdeclaration-after-statement",
+					"$(inherited)",
+				);
+				OTHER_CPLUSPLUSFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = Warzone;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wno-unused-label",
+					"-Wno-format-security",
+					"-Wno-strict-aliasing",
+					"-Wmissing-field-initializers",
+					"-Wcast-align",
+					"-Wwrite-strings",
+					"-Wpointer-arith",
+					"-Wreturn-type",
+				);
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
