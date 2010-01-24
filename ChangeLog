@@ -2,8 +2,31 @@
  * General:
    * Fix: Formation speed limiting should be off (r9372)
    * Fix: Saving games would often crash, and proximity blips not display (r9382, ticket:1443)
+   * Fix: AIs would use host's truck templates (r9426)
+   * Fix: Miscellaneous bugs and crashes (r9354, r9412, r9425, r9434, r9450, r9479)
+ * GUI:
+   * Fix: Switching between Warzone and other windows should now behave better (r9428, r9438)
+   * Fix: No longer possible to start a game with everyone on the same team (r9457)
+   * Fix: Speeding up the game sped up some of the GUI (r9462)
+ * Multiplayer:
+   * Change: Players will no longer appear in games for a split second if they have the wrong password (r9425)
+   * Fix: Players would sometimes be kicked out after one minute, even if they had the same data (r9378)
+ * Gameplay:
+   * Fix: Shift+click on radar now queues orders as well (r9361)
+   * Fix: Projectiles that hit wrong target now do damage to the wrong target (r9430)
+ * Graphics:
+   * Fix: Build progress bar is in the right place now (r9374)
+   * Fix: Some water tiles looked weird in 8c-Manhattan (r9418)
+   * Fix: Factory had visible seams in some places (r9404)
  * Skirmish:
    * Change: AI is now more efficient at research (r9384)
+   * Change: Research messages are now more specific: "Machinegun damage +25%" instead of "upgrades machinegun damage" (r9393)
+   * Fix: Some numbers were unnecessarily specific: 99% instead of 100%, 999 instead of 1000 (r9394)
+   * Fix: Flamer Autoloader Mk2 doesn't prerequire Flamer Autoloader (r9394)
+ * Translations:
+   * Updated: Spanish (r9421)
+   * Updated: Polish (r9471)
+   * New: Croatian (r9476)
 
 2010-01-19: Version 2.3 beta 8
  * General:
