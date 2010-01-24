@@ -120,11 +120,11 @@ void turnOffMultiMsg(BOOL bDoit)
 {
 	if (!bMultiPlayer)
 	{
-		return true;
+		return;
 	}
 
 	bMultiMessages = !bDoit;
-	return true;
+	return;
 }
 
 
