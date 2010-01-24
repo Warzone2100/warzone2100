@@ -40,8 +40,10 @@ struct BASE_OBJECT;
 struct DROID;
 
 extern BOOL scriptInit(void);
+extern void scriptSetStartPos(int position, int x, int	y);
 extern BOOL scrGetPlayer(void);
 extern BOOL scrScavengersActive(void);
+extern BOOL scrGetPlayerStartPosition(void);
 
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);

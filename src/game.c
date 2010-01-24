@@ -7031,6 +7031,11 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 			buildingComplete(psStructure);
 		}
 
+		if (psStructure->pStructureType->type == REF_HQ)
+		{
+			scriptSetStartPos(psSaveStructure->player, psStructure->pos.x, psStructure->pos.y);
+		}
+
 		//if not a save game, don't want to overwrite any of the stats so continue
 		if (gameType != GTYPE_SAVE_START)
 		{
@@ -7316,6 +7321,11 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 		if (psStructure->status ==SS_BUILT)
 		{
 			buildingComplete(psStructure);
+		}
+
+		if (psStructure->pStructureType->type == REF_HQ)
+		{
+			scriptSetStartPos(psSaveStructure->player, psStructure->pos.x, psStructure->pos.y);
 		}
 
 		//if not a save game, don't want to overwrite any of the stats so continue
@@ -7749,6 +7759,11 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		if (psStructure->status ==SS_BUILT)
 		{
 			buildingComplete(psStructure);
+		}
+
+		if (psStructure->pStructureType->type == REF_HQ)
+		{
+			scriptSetStartPos(psSaveStructure->player, psStructure->pos.x, psStructure->pos.y);
 		}
 
 		//if not a save game, don't want to overwrite any of the stats so continue

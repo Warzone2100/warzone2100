@@ -1488,6 +1488,10 @@ FUNC_SYMBOL asFuncTable[] =
 		0, { VAL_VOID },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "getPlayerStartPosition", scrGetPlayerStartPosition, VAL_BOOL,
+		3, { VAL_INT, VAL_INT|VAL_REF, VAL_INT|VAL_REF },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
 	{ "scavengersActive", scrScavengersActive, VAL_BOOL,
 		0, { VAL_VOID },
 		false, 0, NULL, 0, 0, NULL, NULL },

@@ -339,18 +339,7 @@ event initialisedEvent(CALL_GAMEINIT)
 	groupAddArea(buildGroup, me, 0, 0, (mapWidth*128), (mapHeight*128));
 
 	// note where our base is.
-	initIterateGroup(buildGroup);		// find idle droids in build group.
-	droid = iterateGroup(buildGroup);
-	if(droid != NULLOBJECT)
-	{
-		baseX = droid.x;
-		baseY = droid.y;
-	}
-	else
-	{
-		baseX = (128*mapWidth)/2;
-		baseY = (128*mapHeight)/2;
-	}
+	getPlayerStartPosition(me, ref baseX, ref baseY);
 
 	// defence.
 	defendbusy = FALSE;

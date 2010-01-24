@@ -113,6 +113,14 @@ extern	UDWORD				objID;					// unique ID creation thing..
 
 /// Hold the previously assigned player
 static int nextPlayer = 0;
+static Vector2i positions[MAX_PLAYERS];
+
+void scriptSetStartPos(int position, int x, int y)
+{
+	debug(LOG_ERROR, "Setting start position %d to (%d, %d)", position, x, y);
+	positions[position].x = x;
+	positions[position].y = y;
+}
 
 BOOL scriptInit()
 {
@@ -136,6 +144,35 @@ BOOL scrGetPlayer()
 
 	scrFunctionResult.v.ival = nextPlayer++;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
+BOOL scrGetPlayerStartPosition(void)
+{
+	SDWORD	*x, *y, player;
+
+	if (!stackPopParams(3, VAL_INT, &player, VAL_REF|VAL_INT, &x, VAL_REF|VAL_INT, &y))
+	{
+		return false;
+	}
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player %d", player);
+	if (player < NetPlay.maxPlayers)
+	{
+		*x = positions[player].x;
+		*y = positions[player].y;
+		scrFunctionResult.v.bval = true;
+	}
+	else
+	{
+		*x = 0;
+		*y = 0;
+		scrFunctionResult.v.bval = false;
+	}
+
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return false;
 	}
