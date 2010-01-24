@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-22 18:44+0100\n"
+"POT-Creation-Date: 2010-01-24 19:43+0100\n"
 "PO-Revision-Date: 2009-10-31 12:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -11337,163 +11337,154 @@ msgid "Flamer Viper Half-Tracks"
 msgstr "Vlammewerper Adder Halfband"
 
 #: lib/framework/i18n.c:50
-#: lib/framework/i18n.c:106
+#: lib/framework/i18n.c:107
 msgid "System locale"
 msgstr "Systeemtaal"
 
 #: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:108
+#: lib/framework/i18n.c:109
 msgid "Czech"
 msgstr "Tsjechisch"
 
 #: lib/framework/i18n.c:53
-#: lib/framework/i18n.c:109
+#: lib/framework/i18n.c:110
 msgid "Danish"
 msgstr "Deens"
 
 #: lib/framework/i18n.c:54
-#: lib/framework/i18n.c:110
+#: lib/framework/i18n.c:111
 msgid "German"
 msgstr "Duits"
 
 #: lib/framework/i18n.c:56
-#: lib/framework/i18n.c:112
+#: lib/framework/i18n.c:113
 msgid "English (United Kingdom)"
 msgstr "Engels"
 
 #: lib/framework/i18n.c:57
-#: lib/framework/i18n.c:113
+#: lib/framework/i18n.c:114
 msgid "Spanish"
 msgstr "Spaans"
 
 #: lib/framework/i18n.c:58
-#: lib/framework/i18n.c:114
+#: lib/framework/i18n.c:115
 #, fuzzy
 msgid "Estonian"
 msgstr "Roemenisch"
 
 #: lib/framework/i18n.c:60
-#: lib/framework/i18n.c:116
+#: lib/framework/i18n.c:117
 msgid "Finnish"
 msgstr "Fins"
 
 #: lib/framework/i18n.c:61
-#: lib/framework/i18n.c:117
+#: lib/framework/i18n.c:118
 msgid "French"
 msgstr "Frans"
 
 #: lib/framework/i18n.c:69
-#: lib/framework/i18n.c:125
+#: lib/framework/i18n.c:126
 msgid "Frisian"
 msgstr "Friesch"
 
 #: lib/framework/i18n.c:70
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:127
 msgid "Irish"
 msgstr "Iers"
 
 #: lib/framework/i18n.c:71
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:128
+#, fuzzy
+msgid "Croatian"
+msgstr "Lets"
+
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:129
 msgid "Italian"
 msgstr "Italiaans"
 
-#: lib/framework/i18n.c:73
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:131
 msgid "Lithuanian"
 msgstr "Litouws"
 
-#: lib/framework/i18n.c:76
-#: lib/framework/i18n.c:131
+#: lib/framework/i18n.c:77
+#: lib/framework/i18n.c:133
 msgid "Norwegian"
 msgstr "Noors"
 
-#: lib/framework/i18n.c:78
-#: lib/framework/i18n.c:133
+#: lib/framework/i18n.c:79
+#: lib/framework/i18n.c:135
 msgid "Dutch"
 msgstr "Nederlands"
 
-#: lib/framework/i18n.c:79
-#: lib/framework/i18n.c:134
+#: lib/framework/i18n.c:80
+#: lib/framework/i18n.c:136
 msgid "Polish"
 msgstr "Pools"
 
-#: lib/framework/i18n.c:80
-#: lib/framework/i18n.c:135
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:137
 msgid "Brazilian Portuguese"
 msgstr "Braziliaans Portugees"
 
-#: lib/framework/i18n.c:81
-#: lib/framework/i18n.c:136
+#: lib/framework/i18n.c:82
+#: lib/framework/i18n.c:138
 #, fuzzy
 msgid "Portuguese"
 msgstr "Portugees"
 
-#: lib/framework/i18n.c:82
-#: lib/framework/i18n.c:137
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:139
 msgid "Romanian"
 msgstr "Roemenisch"
 
-#: lib/framework/i18n.c:83
-#: lib/framework/i18n.c:138
+#: lib/framework/i18n.c:84
+#: lib/framework/i18n.c:140
 msgid "Russian"
 msgstr "Russisch"
 
-#: lib/framework/i18n.c:84
-#: lib/framework/i18n.c:139
+#: lib/framework/i18n.c:85
+#: lib/framework/i18n.c:141
 msgid "Slovenian"
 msgstr "Sloveens"
 
-#: lib/framework/i18n.c:93
-#: lib/framework/i18n.c:144
+#: lib/framework/i18n.c:94
+#: lib/framework/i18n.c:146
 #, fuzzy
 msgid "Ukrainian"
 msgstr "Friesch"
 
-#: lib/framework/i18n.c:94
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:95
+#: lib/framework/i18n.c:147
 msgid "Simplified Chinese"
 msgstr "Vereenvoudigd Chinees"
 
-#: lib/framework/i18n.c:95
-#: lib/framework/i18n.c:146
+#: lib/framework/i18n.c:96
+#: lib/framework/i18n.c:148
 msgid "Traditional Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:130
 msgid "Latin"
 msgstr "Latijn"
 
-#: lib/netplay/netplay.c:1175
-#, fuzzy, c-format
-msgid "Player %u has the wrong game version. Auto kicking."
-msgstr "Speler %u Heeft de verkeerde versie van het spel. Automatisch verwijderd van het spel."
-
-#: lib/netplay/netplay.c:1210
-#, c-format
-msgid "Player %u has the wrong game version.  Auto kicking."
-msgstr "Speler %u Heeft de verkeerde versie van het spel. Automatisch verwijderd van het spel."
-
-#: lib/netplay/netplay.c:1300
-#, fuzzy, c-format
-msgid "Player %u has the wrong password. Auto kicking."
-msgstr "Speler %u heeft het verkeerde wachtwoord.  Automatisch verwijderd van het spel."
-
-#: lib/netplay/netplay.c:2094
+#: lib/netplay/netplay.c:1941
 #, fuzzy
 msgid "Enter password here"
 msgstr "Vul eerst het wachtwoord in"
 
-#: lib/netplay/netplay.c:3046
+#: lib/netplay/netplay.c:2873
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3071
+#: lib/netplay/netplay.c:2898
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Kan niet communiceren met de lobby server! is TCP port 9990 open?"
 
-#: lib/netplay/netplay.c:3451
+#: lib/netplay/netplay.c:3306
 msgid ", mods: "
 msgstr ""
 
@@ -11796,22 +11787,22 @@ msgstr "Speler verliet het spel"
 msgid "Player dropped"
 msgstr "Speler gevallen"
 
-#: src/display.c:1734
+#: src/display.c:1706
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kan niet bouwen. De oliebron staat in brand."
 
-#: src/display.c:1939
-#: src/display.c:2577
+#: src/display.c:1911
+#: src/display.c:2549
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Schade %d%% - Ervaring %d, %s"
 
-#: src/display.c:1955
+#: src/display.c:1927
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Schade %d%% - Ervaring %d, %s"
 
-#: src/display.c:2162
+#: src/display.c:2134
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Vrachtwagen bevel gegeven om jaknikker te bouwen."
 
@@ -11851,40 +11842,40 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3600
+#: src/droid.c:3599
 msgid "Rookie"
 msgstr "Rekruut"
 
-#: src/droid.c:3601
+#: src/droid.c:3600
 msgctxt "rank"
 msgid "Green"
 msgstr "Groen"
 
-#: src/droid.c:3602
+#: src/droid.c:3601
 msgid "Trained"
 msgstr "Geoefend"
 
-#: src/droid.c:3603
+#: src/droid.c:3602
 msgid "Regular"
 msgstr "Beroeps"
 
-#: src/droid.c:3604
+#: src/droid.c:3603
 msgid "Professional"
 msgstr "Professioneel"
 
-#: src/droid.c:3605
+#: src/droid.c:3604
 msgid "Veteran"
 msgstr "Veteraan"
 
-#: src/droid.c:3606
+#: src/droid.c:3605
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3607
+#: src/droid.c:3606
 msgid "Special"
 msgstr "Speciaal"
 
-#: src/droid.c:3608
+#: src/droid.c:3607
 msgid "Hero"
 msgstr "Held"
 
@@ -11963,8 +11954,8 @@ msgstr "EEN SPELER"
 
 #: src/frontend.c:470
 #: src/ingameop.c:507
-#: src/mission.c:2841
-#: src/mission.c:2946
+#: src/mission.c:2842
+#: src/mission.c:2947
 msgid "Load Saved Game"
 msgstr "Opgeslagen spel laden"
 
@@ -11981,7 +11972,7 @@ msgid "Join Game"
 msgstr "Deelnemen aan spel"
 
 #: src/frontend.c:584
-#: src/multiint.c:1264
+#: src/multiint.c:1255
 msgid "OPTIONS"
 msgstr "OPTIES"
 
@@ -12077,7 +12068,7 @@ msgid "Off"
 msgstr "Uit"
 
 #: src/frontend.c:686
-#: src/multiint.c:1334
+#: src/multiint.c:1325
 msgid "Fog"
 msgstr "Mist"
 
@@ -12088,7 +12079,7 @@ msgstr "Nevel"
 
 #: src/frontend.c:693
 #: src/frontend.c:768
-#: src/multiint.c:1336
+#: src/multiint.c:1327
 msgid "Fog Of War"
 msgstr "Oorlogsmist"
 
@@ -12227,7 +12218,7 @@ msgid "GAME OPTIONS"
 msgstr "SPELINSTELLINGEN"
 
 #: src/frontend.c:1702
-#: src/multiint.c:2225
+#: src/multiint.c:2237
 msgid "Active mods: "
 msgstr ""
 
@@ -12254,7 +12245,7 @@ msgstr "MAP OPGESLAGEN!"
 #: src/hci.c:1705
 #: src/loop.c:535
 #: src/loop.c:551
-#: src/mission.c:2912
+#: src/mission.c:2913
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "SPEL OPGESLAGEN!"
@@ -12303,7 +12294,7 @@ msgid "Build (F3)"
 msgstr "Bouw (F3)"
 
 #: src/hci.c:3897
-#: src/multiint.c:1381
+#: src/multiint.c:1372
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Energie"
@@ -12394,8 +12385,8 @@ msgstr ""
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2828
-#: src/mission.c:2949
+#: src/mission.c:2829
+#: src/mission.c:2950
 msgid "Save Game"
 msgstr "Spel opslaan"
 
@@ -12831,8 +12822,8 @@ msgstr ""
 #: src/keyedit.c:395
 #: src/multiint.c:643
 #: src/multiint.c:685
-#: src/multiint.c:1082
-#: src/multiint.c:1467
+#: src/multiint.c:1073
+#: src/multiint.c:1458
 msgid "Return To Previous Screen"
 msgstr "Terug naar vorig scherm"
 
@@ -13207,33 +13198,33 @@ msgstr "Bouwmenu heropenen"
 msgid "Could not save game!"
 msgstr "Kon het spel NIET opslaan!"
 
-#: src/mission.c:2381
+#: src/mission.c:2382
 msgid "Load Transport"
 msgstr "Vervoer inladen"
 
-#: src/mission.c:2775
+#: src/mission.c:2776
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "DOEL BEHAALD door vals spelen!"
 
-#: src/mission.c:2775
+#: src/mission.c:2776
 msgid "OBJECTIVE ACHIEVED"
 msgstr "DOEL BEHAALD"
 
-#: src/mission.c:2781
+#: src/mission.c:2782
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "DOEL MISLUKT-- en je hebt valsgespeeld!"
 
-#: src/mission.c:2781
+#: src/mission.c:2782
 msgid "OBJECTIVE FAILED"
 msgstr "DOEL MISLUKT"
 
-#: src/mission.c:2807
-#: src/mission.c:2847
-#: src/mission.c:2965
+#: src/mission.c:2808
+#: src/mission.c:2848
+#: src/mission.c:2966
 msgid "Quit To Main Menu"
 msgstr "Afsluiten naar hoofdmenu"
 
-#: src/mission.c:2815
+#: src/mission.c:2816
 msgid "Continue Game"
 msgstr "Spel vervolgen"
 
@@ -13303,7 +13294,7 @@ msgid "Accept Settings"
 msgstr "Accepteer instellingen"
 
 #: src/multiint.c:579
-#: src/multiint.c:1130
+#: src/multiint.c:1121
 #, fuzzy
 msgid "Cancel"
 msgstr "Lansier"
@@ -13361,209 +13352,209 @@ msgstr "Gastheer heeft de connectie verbroken!"
 msgid "Connection Error"
 msgstr "Connectie fout"
 
-#: src/multiint.c:1023
+#: src/multiint.c:1014
 msgid "Searching"
 msgstr "Zoeken"
 
-#: src/multiint.c:1079
+#: src/multiint.c:1070
 msgid "GAMES"
 msgstr "SPELLEN"
 
-#: src/multiint.c:1087
+#: src/multiint.c:1078
 msgid "Refresh Games List"
 msgstr "Ververs lijst met spellen"
 
-#: src/multiint.c:1107
+#: src/multiint.c:1098
 #, fuzzy
 msgid "Enter Password:"
 msgstr "Vul eerst het wachtwoord in"
 
-#: src/multiint.c:1128
+#: src/multiint.c:1119
 msgid "OK"
 msgstr ""
 
-#: src/multiint.c:1269
-#: src/multiint.c:1276
+#: src/multiint.c:1260
+#: src/multiint.c:1267
 msgid "Select Game Name"
 msgstr "Kies spelnaam"
 
-#: src/multiint.c:1269
+#: src/multiint.c:1260
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "Schermutseling voor 1 speler"
 
-#: src/multiint.c:1279
+#: src/multiint.c:1270
 msgid "Select Map"
 msgstr "Kies kaart"
 
-#: src/multiint.c:1287
+#: src/multiint.c:1278
 msgid "Click to set Password"
 msgstr "Klik om wachtwoord intevullen"
 
-#: src/multiint.c:1297
-#: src/multiint.c:1298
+#: src/multiint.c:1288
+#: src/multiint.c:1289
 #, fuzzy
 msgid "Scavengers"
 msgstr "Aaseter"
 
-#: src/multiint.c:1300
+#: src/multiint.c:1291
 #, fuzzy
 msgid "No Scavengers"
 msgstr "Aaseter"
 
-#: src/multiint.c:1331
+#: src/multiint.c:1322
 msgid "Select Player Name"
 msgstr "Kies spelernaam"
 
-#: src/multiint.c:1337
+#: src/multiint.c:1328
 msgid "Distance Fog"
 msgstr "Afstandsmist"
 
-#: src/multiint.c:1348
+#: src/multiint.c:1339
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Bondgenootschappen toestaan"
 
-#: src/multiint.c:1351
+#: src/multiint.c:1342
 msgid "No Alliances"
 msgstr "Geen bondgenootschappen toestaan"
 
-#: src/multiint.c:1353
+#: src/multiint.c:1344
 msgid "Allow Alliances"
 msgstr "Bondgenootschappen toestaan"
 
-#: src/multiint.c:1357
+#: src/multiint.c:1348
 msgid "Locked Teams"
 msgstr "Vergrendelde ploegen"
 
-#: src/multiint.c:1383
+#: src/multiint.c:1374
 msgid "Low Power Levels"
 msgstr "Lage energieniveaus"
 
-#: src/multiint.c:1385
+#: src/multiint.c:1376
 msgid "Medium Power Levels"
 msgstr "Normale energieniveaus"
 
-#: src/multiint.c:1387
+#: src/multiint.c:1378
 msgid "High Power Levels"
 msgstr "Hoge energieniveaus"
 
-#: src/multiint.c:1419
+#: src/multiint.c:1410
 msgid "Base"
 msgstr "Basis"
 
-#: src/multiint.c:1421
+#: src/multiint.c:1412
 msgid "Start with No Bases"
 msgstr "Start zonder basis"
 
-#: src/multiint.c:1423
+#: src/multiint.c:1414
 msgid "Start with Bases"
 msgstr "Start met basis"
 
-#: src/multiint.c:1425
+#: src/multiint.c:1416
 msgid "Start with Advanced Bases"
 msgstr "Start met gevanceerde basis"
 
-#: src/multiint.c:1457
+#: src/multiint.c:1448
 msgid "Map Preview"
 msgstr "Kaartvoorbeeld"
 
-#: src/multiint.c:1459
+#: src/multiint.c:1450
 msgid "Click to see Map"
 msgstr "Klik om kaart te zien"
 
-#: src/multiint.c:1473
+#: src/multiint.c:1464
 msgid "Start Hosting Game"
 msgstr "Optreden als gastheer"
 
-#: src/multiint.c:1481
+#: src/multiint.c:1472
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "Gebouwlimiet instellen"
 
-#: src/multiint.c:1481
+#: src/multiint.c:1472
 msgid "Set Structure Limits"
 msgstr "Gebouwlimiet instellen"
 
-#: src/multiint.c:1544
+#: src/multiint.c:1535
 #, fuzzy
 msgid "Player colour"
 msgstr "Speler verliet het spel"
 
-#: src/multiint.c:1560
+#: src/multiint.c:1551
 #, fuzzy
 msgid "Kick player"
 msgstr "2 spelers"
 
-#: src/multiint.c:1571
+#: src/multiint.c:1562
 #, fuzzy
 msgid "Player number"
 msgstr "Speler verliet het spel"
 
-#: src/multiint.c:1933
+#: src/multiint.c:1924
 msgid "Team"
 msgstr "Ploeg"
 
-#: src/multiint.c:1966
+#: src/multiint.c:1957
 msgid "Waiting for other players"
 msgstr "Op andere spelers wachten"
 
-#: src/multiint.c:1972
+#: src/multiint.c:1963
 msgid "Click when ready"
 msgstr "Klik zodra klaar"
 
-#: src/multiint.c:1976
+#: src/multiint.c:1967
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.c:2013
+#: src/multiint.c:2004
 msgid "PLAYERS"
 msgstr "SPELERS"
 
-#: src/multiint.c:2196
+#: src/multiint.c:2208
 msgid "CHAT"
 msgstr "BABBEL"
 
-#: src/multiint.c:2230
+#: src/multiint.c:2242
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
-#: src/multiint.c:2383
+#: src/multiint.c:2395
 msgid "*** password is now required! ***"
 msgstr "*** wachtwoord is NU nodig! ***"
 
-#: src/multiint.c:2390
+#: src/multiint.c:2402
 msgid "*** password is NOT required! ***"
 msgstr "*** Er is GEEN wachtwoord nodig! ***"
 
-#: src/multiint.c:2632
+#: src/multiint.c:2644
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2717
+#: src/multiint.c:2729
 msgid "'Locked Teams' mode enabled"
 msgstr "Vergrendelde ploegen"
 
-#: src/multiint.c:2756
-#: src/multiint.c:2806
+#: src/multiint.c:2768
+#: src/multiint.c:2818
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "De gastheer heeft %s uit het spel verwijderd!"
 
-#: src/multiint.c:2864
+#: src/multiint.c:2876
 msgid "Host is Starting Game"
 msgstr "Gastheer start spel"
 
-#: src/multiint.c:3412
+#: src/multiint.c:3424
 msgid "Players"
 msgstr "Spelers"
 
-#: src/multiint.c:3528
+#: src/multiint.c:3540
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3554
+#: src/multiint.c:3566
 msgid "HOST"
 msgstr ""
 
@@ -13888,61 +13879,61 @@ msgstr "Kon geen sensoreenheden vinden!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kon geen commandanten vinden!"
 
-#: src/structure.c:2757
+#: src/structure.c:2760
 #, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Commando controlelimiet bereikt - Productie gestopt"
 
-#: src/structure.c:5960
-#: src/structure.c:5985
+#: src/structure.c:5963
+#: src/structure.c:5988
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Eenheid toegewezen"
 msgstr[1] "%s - %u Eenheden toegewezen"
 
-#: src/structure.c:5990
-#: src/structure.c:6054
+#: src/structure.c:5993
+#: src/structure.c:6057
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schade %3.0f%%"
 
-#: src/structure.c:6040
+#: src/structure.c:6043
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Verbonden met %u van %u"
 
-#: src/structure.c:6175
-#: src/structure.c:6224
+#: src/structure.c:6178
+#: src/structure.c:6227
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschadigd"
 
-#: src/structure.c:6459
+#: src/structure.c:6462
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronische onderscheiding - Zichtbaarheidsverslag"
 
-#: src/structure.c:6499
+#: src/structure.c:6502
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrieksonderscheiding - Aandrijving"
 
-#: src/structure.c:6523
+#: src/structure.c:6526
 msgid "Factory Reward - Body"
 msgstr "Fabrieksonderscheiding - Carrosserie"
 
-#: src/structure.c:6547
+#: src/structure.c:6550
 msgid "Factory Reward - Weapon"
 msgstr "Fabrieksonderscheiding - Wapen"
 
-#: src/structure.c:6556
+#: src/structure.c:6559
 msgid "Factory Reward - Nothing"
 msgstr "Fabrieksonderscheiding - Niets"
 
-#: src/structure.c:6584
+#: src/structure.c:6587
 msgid "Repair Facility Award - Repair"
 msgstr "Reparatie-onderscheiding - Reparatie"
 
-#: src/structure.c:6591
+#: src/structure.c:6594
 msgid "Repair Facility Award - Nothing"
 msgstr "Reparatie-onderscheiding - Niets"
 
@@ -13982,6 +13973,17 @@ msgstr " - Gebouwd %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versie %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Player %u has the wrong game version. Auto kicking."
+#~ msgstr "Speler %u Heeft de verkeerde versie van het spel. Automatisch verwijderd van het spel."
+
+#~ msgid "Player %u has the wrong game version.  Auto kicking."
+#~ msgstr "Speler %u Heeft de verkeerde versie van het spel. Automatisch verwijderd van het spel."
+
+#, fuzzy
+#~ msgid "Player %u has the wrong password. Auto kicking."
+#~ msgstr "Speler %u heeft het verkeerde wachtwoord.  Automatisch verwijderd van het spel."
 
 #, fuzzy
 #~ msgid "Increases Bombing damage"
@@ -14043,9 +14045,6 @@ msgstr "Versie %s%s%s%s"
 
 #~ msgid "Basque"
 #~ msgstr "Baskisch"
-
-#~ msgid "Latvian"
-#~ msgstr "Lets"
 
 #~ msgid "Norwegian (Nynorsk)"
 #~ msgstr "Noors"

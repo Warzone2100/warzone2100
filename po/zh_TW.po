@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-22 18:44+0100\n"
+"POT-Creation-Date: 2010-01-24 19:43+0100\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -11300,162 +11300,153 @@ msgid "Flamer Viper Half-Tracks"
 msgstr "半履帶式響尾蛇坦克（火焰噴射）"
 
 #: lib/framework/i18n.c:50
-#: lib/framework/i18n.c:106
+#: lib/framework/i18n.c:107
 msgid "System locale"
 msgstr "系統語系"
 
 #: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:108
+#: lib/framework/i18n.c:109
 msgid "Czech"
 msgstr "捷克語"
 
 #: lib/framework/i18n.c:53
-#: lib/framework/i18n.c:109
+#: lib/framework/i18n.c:110
 msgid "Danish"
 msgstr "丹麥語"
 
 #: lib/framework/i18n.c:54
-#: lib/framework/i18n.c:110
+#: lib/framework/i18n.c:111
 msgid "German"
 msgstr "德語"
 
 #: lib/framework/i18n.c:56
-#: lib/framework/i18n.c:112
+#: lib/framework/i18n.c:113
 msgid "English (United Kingdom)"
 msgstr "英語（UK）"
 
 #: lib/framework/i18n.c:57
-#: lib/framework/i18n.c:113
+#: lib/framework/i18n.c:114
 msgid "Spanish"
 msgstr "西班牙語"
 
 #: lib/framework/i18n.c:58
-#: lib/framework/i18n.c:114
+#: lib/framework/i18n.c:115
 #, fuzzy
 msgid "Estonian"
 msgstr "羅馬尼亞語"
 
 #: lib/framework/i18n.c:60
-#: lib/framework/i18n.c:116
+#: lib/framework/i18n.c:117
 msgid "Finnish"
 msgstr "芬蘭語"
 
 #: lib/framework/i18n.c:61
-#: lib/framework/i18n.c:117
+#: lib/framework/i18n.c:118
 msgid "French"
 msgstr "法語"
 
 #: lib/framework/i18n.c:69
-#: lib/framework/i18n.c:125
+#: lib/framework/i18n.c:126
 msgid "Frisian"
 msgstr "弗里西語"
 
 #: lib/framework/i18n.c:70
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:127
 msgid "Irish"
 msgstr "愛爾蘭語"
 
 #: lib/framework/i18n.c:71
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:128
+#, fuzzy
+msgid "Croatian"
+msgstr "拉托維亞語"
+
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:129
 msgid "Italian"
 msgstr "義大利語"
 
-#: lib/framework/i18n.c:73
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:131
 msgid "Lithuanian"
 msgstr "立陶宛語"
 
-#: lib/framework/i18n.c:76
-#: lib/framework/i18n.c:131
+#: lib/framework/i18n.c:77
+#: lib/framework/i18n.c:133
 msgid "Norwegian"
 msgstr "挪威語"
 
-#: lib/framework/i18n.c:78
-#: lib/framework/i18n.c:133
+#: lib/framework/i18n.c:79
+#: lib/framework/i18n.c:135
 msgid "Dutch"
 msgstr "荷蘭語"
 
-#: lib/framework/i18n.c:79
-#: lib/framework/i18n.c:134
+#: lib/framework/i18n.c:80
+#: lib/framework/i18n.c:136
 msgid "Polish"
 msgstr "波蘭語"
 
-#: lib/framework/i18n.c:80
-#: lib/framework/i18n.c:135
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:137
 msgid "Brazilian Portuguese"
 msgstr "巴西葡萄牙語"
 
-#: lib/framework/i18n.c:81
-#: lib/framework/i18n.c:136
+#: lib/framework/i18n.c:82
+#: lib/framework/i18n.c:138
 #, fuzzy
 msgid "Portuguese"
 msgstr "葡萄牙語"
 
-#: lib/framework/i18n.c:82
-#: lib/framework/i18n.c:137
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:139
 msgid "Romanian"
 msgstr "羅馬尼亞語"
 
-#: lib/framework/i18n.c:83
-#: lib/framework/i18n.c:138
+#: lib/framework/i18n.c:84
+#: lib/framework/i18n.c:140
 msgid "Russian"
 msgstr "俄語"
 
-#: lib/framework/i18n.c:84
-#: lib/framework/i18n.c:139
+#: lib/framework/i18n.c:85
+#: lib/framework/i18n.c:141
 msgid "Slovenian"
 msgstr "斯洛凡尼亞語"
 
-#: lib/framework/i18n.c:93
-#: lib/framework/i18n.c:144
+#: lib/framework/i18n.c:94
+#: lib/framework/i18n.c:146
 #, fuzzy
 msgid "Ukrainian"
 msgstr "弗里西語"
 
-#: lib/framework/i18n.c:94
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:95
+#: lib/framework/i18n.c:147
 msgid "Simplified Chinese"
 msgstr "簡體中文"
 
-#: lib/framework/i18n.c:95
-#: lib/framework/i18n.c:146
+#: lib/framework/i18n.c:96
+#: lib/framework/i18n.c:148
 msgid "Traditional Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:130
 msgid "Latin"
 msgstr "拉丁語"
 
-#: lib/netplay/netplay.c:1175
-#, c-format
-msgid "Player %u has the wrong game version. Auto kicking."
-msgstr ""
-
-#: lib/netplay/netplay.c:1210
-#, c-format
-msgid "Player %u has the wrong game version.  Auto kicking."
-msgstr ""
-
-#: lib/netplay/netplay.c:1300
-#, c-format
-msgid "Player %u has the wrong password. Auto kicking."
-msgstr ""
-
-#: lib/netplay/netplay.c:2094
+#: lib/netplay/netplay.c:1941
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3046
+#: lib/netplay/netplay.c:2873
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3071
+#: lib/netplay/netplay.c:2898
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: lib/netplay/netplay.c:3451
+#: lib/netplay/netplay.c:3306
 msgid ", mods: "
 msgstr ""
 
@@ -11759,22 +11750,22 @@ msgstr "玩家"
 msgid "Player dropped"
 msgstr "玩家"
 
-#: src/display.c:1734
+#: src/display.c:1706
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃燒中，無法建築鑽油井"
 
-#: src/display.c:1939
-#: src/display.c:2577
+#: src/display.c:1911
+#: src/display.c:2549
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
 
-#: src/display.c:1955
+#: src/display.c:1927
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
 
-#: src/display.c:2162
+#: src/display.c:2134
 msgid "Truck ordered to build Oil Derrick"
 msgstr "命令工程車建造鑽油井"
 
@@ -11810,40 +11801,40 @@ msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u 單位"
 
-#: src/droid.c:3600
+#: src/droid.c:3599
 msgid "Rookie"
 msgstr "菜鳥"
 
-#: src/droid.c:3601
+#: src/droid.c:3600
 msgctxt "rank"
 msgid "Green"
 msgstr "青澀"
 
-#: src/droid.c:3602
+#: src/droid.c:3601
 msgid "Trained"
 msgstr "訓練有素的"
 
-#: src/droid.c:3603
+#: src/droid.c:3602
 msgid "Regular"
 msgstr "好樣的"
 
-#: src/droid.c:3604
+#: src/droid.c:3603
 msgid "Professional"
 msgstr "專家"
 
-#: src/droid.c:3605
+#: src/droid.c:3604
 msgid "Veteran"
 msgstr "老手"
 
-#: src/droid.c:3606
+#: src/droid.c:3605
 msgid "Elite"
 msgstr "菁英"
 
-#: src/droid.c:3607
+#: src/droid.c:3606
 msgid "Special"
 msgstr "特務"
 
-#: src/droid.c:3608
+#: src/droid.c:3607
 msgid "Hero"
 msgstr "英雄"
 
@@ -11922,8 +11913,8 @@ msgstr "SINGLE PLAYER"
 
 #: src/frontend.c:470
 #: src/ingameop.c:507
-#: src/mission.c:2841
-#: src/mission.c:2946
+#: src/mission.c:2842
+#: src/mission.c:2947
 msgid "Load Saved Game"
 msgstr "載入已儲存的遊戲"
 
@@ -11940,7 +11931,7 @@ msgid "Join Game"
 msgstr "加入遊戲"
 
 #: src/frontend.c:584
-#: src/multiint.c:1264
+#: src/multiint.c:1255
 msgid "OPTIONS"
 msgstr "選項"
 
@@ -12036,7 +12027,7 @@ msgid "Off"
 msgstr "關閉"
 
 #: src/frontend.c:686
-#: src/multiint.c:1334
+#: src/multiint.c:1325
 msgid "Fog"
 msgstr "迷霧"
 
@@ -12047,7 +12038,7 @@ msgstr "迷霧"
 
 #: src/frontend.c:693
 #: src/frontend.c:768
-#: src/multiint.c:1336
+#: src/multiint.c:1327
 msgid "Fog Of War"
 msgstr "完全迷霧"
 
@@ -12186,7 +12177,7 @@ msgid "GAME OPTIONS"
 msgstr "遊戲選項"
 
 #: src/frontend.c:1702
-#: src/multiint.c:2225
+#: src/multiint.c:2237
 msgid "Active mods: "
 msgstr ""
 
@@ -12214,7 +12205,7 @@ msgstr "遊戲已儲存"
 #: src/hci.c:1705
 #: src/loop.c:535
 #: src/loop.c:551
-#: src/mission.c:2912
+#: src/mission.c:2913
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "遊戲已儲存"
@@ -12263,7 +12254,7 @@ msgid "Build (F3)"
 msgstr "建造新的建築物 （F3）"
 
 #: src/hci.c:3897
-#: src/multiint.c:1381
+#: src/multiint.c:1372
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "能源"
@@ -12354,8 +12345,8 @@ msgstr ""
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2828
-#: src/mission.c:2949
+#: src/mission.c:2829
+#: src/mission.c:2950
 msgid "Save Game"
 msgstr "儲存遊戲"
 
@@ -12793,8 +12784,8 @@ msgstr "鍵盤配置"
 #: src/keyedit.c:395
 #: src/multiint.c:643
 #: src/multiint.c:685
-#: src/multiint.c:1082
-#: src/multiint.c:1467
+#: src/multiint.c:1073
+#: src/multiint.c:1458
 msgid "Return To Previous Screen"
 msgstr "回到前一個畫面"
 
@@ -13170,35 +13161,35 @@ msgstr "開啟或關閉建築選單"
 msgid "Could not save game!"
 msgstr "載入已儲存的遊戲"
 
-#: src/mission.c:2381
+#: src/mission.c:2382
 msgid "Load Transport"
 msgstr "送上運輸艦"
 
-#: src/mission.c:2775
+#: src/mission.c:2776
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "任務完成"
 
-#: src/mission.c:2775
+#: src/mission.c:2776
 msgid "OBJECTIVE ACHIEVED"
 msgstr "任務完成"
 
-#: src/mission.c:2781
+#: src/mission.c:2782
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "任務失敗"
 
-#: src/mission.c:2781
+#: src/mission.c:2782
 msgid "OBJECTIVE FAILED"
 msgstr "任務失敗"
 
-#: src/mission.c:2807
-#: src/mission.c:2847
-#: src/mission.c:2965
+#: src/mission.c:2808
+#: src/mission.c:2848
+#: src/mission.c:2966
 msgid "Quit To Main Menu"
 msgstr "退出至主選單"
 
-#: src/mission.c:2815
+#: src/mission.c:2816
 msgid "Continue Game"
 msgstr "繼續遊戲"
 
@@ -13268,7 +13259,7 @@ msgid "Accept Settings"
 msgstr "接受設定"
 
 #: src/multiint.c:579
-#: src/multiint.c:1130
+#: src/multiint.c:1121
 #, fuzzy
 msgid "Cancel"
 msgstr "槍騎兵火箭"
@@ -13326,210 +13317,210 @@ msgstr ""
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:1023
+#: src/multiint.c:1014
 msgid "Searching"
 msgstr "搜尋"
 
-#: src/multiint.c:1079
+#: src/multiint.c:1070
 msgid "GAMES"
 msgstr "遊戲"
 
-#: src/multiint.c:1087
+#: src/multiint.c:1078
 msgid "Refresh Games List"
 msgstr "重新整理遊戲清單"
 
-#: src/multiint.c:1107
+#: src/multiint.c:1098
 #, fuzzy
 msgid "Enter Password:"
 msgstr "按一下看地圖"
 
-#: src/multiint.c:1128
+#: src/multiint.c:1119
 msgid "OK"
 msgstr ""
 
-#: src/multiint.c:1269
-#: src/multiint.c:1276
+#: src/multiint.c:1260
+#: src/multiint.c:1267
 msgid "Select Game Name"
 msgstr "選擇遊戲名稱"
 
-#: src/multiint.c:1269
+#: src/multiint.c:1260
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "單人戰役模式"
 
-#: src/multiint.c:1279
+#: src/multiint.c:1270
 msgid "Select Map"
 msgstr "選擇地圖"
 
-#: src/multiint.c:1287
+#: src/multiint.c:1278
 #, fuzzy
 msgid "Click to set Password"
 msgstr "按一下看地圖"
 
-#: src/multiint.c:1297
-#: src/multiint.c:1298
+#: src/multiint.c:1288
+#: src/multiint.c:1289
 #, fuzzy
 msgid "Scavengers"
 msgstr "拾荒者"
 
-#: src/multiint.c:1300
+#: src/multiint.c:1291
 #, fuzzy
 msgid "No Scavengers"
 msgstr "拾荒者"
 
-#: src/multiint.c:1331
+#: src/multiint.c:1322
 msgid "Select Player Name"
 msgstr "選擇玩家名稱"
 
-#: src/multiint.c:1337
+#: src/multiint.c:1328
 msgid "Distance Fog"
 msgstr "迷霧（看得見地形）"
 
-#: src/multiint.c:1348
+#: src/multiint.c:1339
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.c:1351
+#: src/multiint.c:1342
 msgid "No Alliances"
 msgstr "不允許同盟"
 
-#: src/multiint.c:1353
+#: src/multiint.c:1344
 msgid "Allow Alliances"
 msgstr "允許同盟"
 
-#: src/multiint.c:1357
+#: src/multiint.c:1348
 msgid "Locked Teams"
 msgstr "鎖定同盟模式"
 
-#: src/multiint.c:1383
+#: src/multiint.c:1374
 msgid "Low Power Levels"
 msgstr "生產能源速度：慢"
 
-#: src/multiint.c:1385
+#: src/multiint.c:1376
 msgid "Medium Power Levels"
 msgstr "生產能源速度：中"
 
-#: src/multiint.c:1387
+#: src/multiint.c:1378
 msgid "High Power Levels"
 msgstr "生產能源速度：快"
 
-#: src/multiint.c:1419
+#: src/multiint.c:1410
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.c:1421
+#: src/multiint.c:1412
 msgid "Start with No Bases"
 msgstr "開始時無基地"
 
-#: src/multiint.c:1423
+#: src/multiint.c:1414
 msgid "Start with Bases"
 msgstr "開始時有基地"
 
-#: src/multiint.c:1425
+#: src/multiint.c:1416
 msgid "Start with Advanced Bases"
 msgstr "開始時具規模基地"
 
-#: src/multiint.c:1457
+#: src/multiint.c:1448
 msgid "Map Preview"
 msgstr "預覽地圖"
 
-#: src/multiint.c:1459
+#: src/multiint.c:1450
 msgid "Click to see Map"
 msgstr "按一下看地圖"
 
-#: src/multiint.c:1473
+#: src/multiint.c:1464
 msgid "Start Hosting Game"
 msgstr "開始遊戲"
 
-#: src/multiint.c:1481
+#: src/multiint.c:1472
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "設定建築物數量限制"
 
-#: src/multiint.c:1481
+#: src/multiint.c:1472
 msgid "Set Structure Limits"
 msgstr "設定建築物數量限制"
 
-#: src/multiint.c:1544
+#: src/multiint.c:1535
 #, fuzzy
 msgid "Player colour"
 msgstr "玩家"
 
-#: src/multiint.c:1560
+#: src/multiint.c:1551
 #, fuzzy
 msgid "Kick player"
 msgstr "2 玩家"
 
-#: src/multiint.c:1571
+#: src/multiint.c:1562
 #, fuzzy
 msgid "Player number"
 msgstr "玩家"
 
-#: src/multiint.c:1933
+#: src/multiint.c:1924
 msgid "Team"
 msgstr "隊伍"
 
-#: src/multiint.c:1966
+#: src/multiint.c:1957
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
-#: src/multiint.c:1972
+#: src/multiint.c:1963
 msgid "Click when ready"
 msgstr "按一下開始"
 
-#: src/multiint.c:1976
+#: src/multiint.c:1967
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.c:2013
+#: src/multiint.c:2004
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.c:2196
+#: src/multiint.c:2208
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.c:2230
+#: src/multiint.c:2242
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
-#: src/multiint.c:2383
+#: src/multiint.c:2395
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2390
+#: src/multiint.c:2402
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2632
+#: src/multiint.c:2644
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2717
+#: src/multiint.c:2729
 msgid "'Locked Teams' mode enabled"
 msgstr "鎖定同盟模式"
 
-#: src/multiint.c:2756
-#: src/multiint.c:2806
+#: src/multiint.c:2768
+#: src/multiint.c:2818
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家將 %s 踢出遊戲！"
 
-#: src/multiint.c:2864
+#: src/multiint.c:2876
 msgid "Host is Starting Game"
 msgstr "主玩家已開始遊戲"
 
-#: src/multiint.c:3412
+#: src/multiint.c:3424
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.c:3528
+#: src/multiint.c:3540
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3554
+#: src/multiint.c:3566
 msgid "HOST"
 msgstr ""
 
@@ -13854,60 +13845,60 @@ msgstr "找不到任何雷達單位！"
 msgid "Unable to locate any Commanders!"
 msgstr "找不到任何指揮官車！"
 
-#: src/structure.c:2757
+#: src/structure.c:2760
 #, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "已達到可控制單位總數上限，停止生產新單位"
 
-#: src/structure.c:5960
-#: src/structure.c:5985
+#: src/structure.c:5963
+#: src/structure.c:5988
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - 已指派 %u  單位"
 
-#: src/structure.c:5990
-#: src/structure.c:6054
+#: src/structure.c:5993
+#: src/structure.c:6057
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 損傷 %3.0f%%"
 
-#: src/structure.c:6040
+#: src/structure.c:6043
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - 連接鑽油井數量 %u of %u"
 
-#: src/structure.c:6175
-#: src/structure.c:6224
+#: src/structure.c:6178
+#: src/structure.c:6227
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s -電子傷害"
 
-#: src/structure.c:6459
+#: src/structure.c:6462
 msgid "Electronic Reward - Visibility Report"
 msgstr "電子回饋—可檢視報告"
 
-#: src/structure.c:6499
+#: src/structure.c:6502
 msgid "Factory Reward - Propulsion"
 msgstr "工廠獎勵—推進動力"
 
-#: src/structure.c:6523
+#: src/structure.c:6526
 msgid "Factory Reward - Body"
 msgstr "工廠獎勵—車身"
 
-#: src/structure.c:6547
+#: src/structure.c:6550
 msgid "Factory Reward - Weapon"
 msgstr "工廠獎勵—武器"
 
-#: src/structure.c:6556
+#: src/structure.c:6559
 msgid "Factory Reward - Nothing"
 msgstr "工廠獎勵—無"
 
-#: src/structure.c:6584
+#: src/structure.c:6587
 msgid "Repair Facility Award - Repair"
 msgstr "修理中心獎勵—修理"
 
-#: src/structure.c:6591
+#: src/structure.c:6594
 msgid "Repair Facility Award - Nothing"
 msgstr "修理工廠回饋—無"
 
@@ -13990,9 +13981,6 @@ msgstr "版本 %s%s%s%s"
 
 #~ msgid "Basque"
 #~ msgstr "巴斯克語"
-
-#~ msgid "Latvian"
-#~ msgstr "拉托維亞語"
 
 #~ msgid "Norwegian (Nynorsk)"
 #~ msgstr "挪威語"

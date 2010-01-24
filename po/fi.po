@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-22 18:44+0100\n"
+"POT-Creation-Date: 2010-01-24 19:43+0100\n"
 "PO-Revision-Date: 2010-01-01 21:08+0200\n"
 "Last-Translator: Tefa <muu_posti@hotamil.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -11176,160 +11176,151 @@ msgid "Flamer Viper Half-Tracks"
 msgstr ""
 
 #: lib/framework/i18n.c:50
-#: lib/framework/i18n.c:106
+#: lib/framework/i18n.c:107
 msgid "System locale"
 msgstr ""
 
 #: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:108
+#: lib/framework/i18n.c:109
 msgid "Czech"
 msgstr ""
 
 #: lib/framework/i18n.c:53
-#: lib/framework/i18n.c:109
+#: lib/framework/i18n.c:110
 msgid "Danish"
 msgstr "tanska"
 
 #: lib/framework/i18n.c:54
-#: lib/framework/i18n.c:110
+#: lib/framework/i18n.c:111
 msgid "German"
 msgstr "saksa"
 
 #: lib/framework/i18n.c:56
-#: lib/framework/i18n.c:112
+#: lib/framework/i18n.c:113
 msgid "English (United Kingdom)"
 msgstr ""
 
 #: lib/framework/i18n.c:57
-#: lib/framework/i18n.c:113
+#: lib/framework/i18n.c:114
 msgid "Spanish"
 msgstr "espanja"
 
 #: lib/framework/i18n.c:58
-#: lib/framework/i18n.c:114
+#: lib/framework/i18n.c:115
 msgid "Estonian"
 msgstr ""
 
 #: lib/framework/i18n.c:60
-#: lib/framework/i18n.c:116
+#: lib/framework/i18n.c:117
 msgid "Finnish"
 msgstr "suomi"
 
 #: lib/framework/i18n.c:61
-#: lib/framework/i18n.c:117
+#: lib/framework/i18n.c:118
 msgid "French"
 msgstr "ranska"
 
 #: lib/framework/i18n.c:69
-#: lib/framework/i18n.c:125
+#: lib/framework/i18n.c:126
 msgid "Frisian"
 msgstr ""
 
 #: lib/framework/i18n.c:70
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:127
 msgid "Irish"
 msgstr ""
 
 #: lib/framework/i18n.c:71
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:128
+#, fuzzy
+msgid "Croatian"
+msgstr "latina"
+
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:129
 msgid "Italian"
 msgstr "italia"
 
-#: lib/framework/i18n.c:73
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:131
 msgid "Lithuanian"
 msgstr ""
 
-#: lib/framework/i18n.c:76
-#: lib/framework/i18n.c:131
+#: lib/framework/i18n.c:77
+#: lib/framework/i18n.c:133
 msgid "Norwegian"
 msgstr "norja"
 
-#: lib/framework/i18n.c:78
-#: lib/framework/i18n.c:133
+#: lib/framework/i18n.c:79
+#: lib/framework/i18n.c:135
 msgid "Dutch"
 msgstr "hollanti"
 
-#: lib/framework/i18n.c:79
-#: lib/framework/i18n.c:134
+#: lib/framework/i18n.c:80
+#: lib/framework/i18n.c:136
 msgid "Polish"
 msgstr "puola"
 
-#: lib/framework/i18n.c:80
-#: lib/framework/i18n.c:135
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:137
 msgid "Brazilian Portuguese"
 msgstr "Brasilian portugali"
 
-#: lib/framework/i18n.c:81
-#: lib/framework/i18n.c:136
+#: lib/framework/i18n.c:82
+#: lib/framework/i18n.c:138
 #, fuzzy
 msgid "Portuguese"
 msgstr "portugali"
 
-#: lib/framework/i18n.c:82
-#: lib/framework/i18n.c:137
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:139
 msgid "Romanian"
 msgstr ""
 
-#: lib/framework/i18n.c:83
-#: lib/framework/i18n.c:138
+#: lib/framework/i18n.c:84
+#: lib/framework/i18n.c:140
 msgid "Russian"
 msgstr "venäjä"
 
-#: lib/framework/i18n.c:84
-#: lib/framework/i18n.c:139
+#: lib/framework/i18n.c:85
+#: lib/framework/i18n.c:141
 msgid "Slovenian"
 msgstr ""
 
-#: lib/framework/i18n.c:93
-#: lib/framework/i18n.c:144
+#: lib/framework/i18n.c:94
+#: lib/framework/i18n.c:146
 msgid "Ukrainian"
 msgstr ""
 
-#: lib/framework/i18n.c:94
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:95
+#: lib/framework/i18n.c:147
 msgid "Simplified Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:95
-#: lib/framework/i18n.c:146
+#: lib/framework/i18n.c:96
+#: lib/framework/i18n.c:148
 msgid "Traditional Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:130
 msgid "Latin"
 msgstr "latina"
 
-#: lib/netplay/netplay.c:1175
-#, c-format
-msgid "Player %u has the wrong game version. Auto kicking."
-msgstr ""
-
-#: lib/netplay/netplay.c:1210
-#, c-format
-msgid "Player %u has the wrong game version.  Auto kicking."
-msgstr ""
-
-#: lib/netplay/netplay.c:1300
-#, c-format
-msgid "Player %u has the wrong password. Auto kicking."
-msgstr ""
-
-#: lib/netplay/netplay.c:2094
+#: lib/netplay/netplay.c:1941
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3046
+#: lib/netplay/netplay.c:2873
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3071
+#: lib/netplay/netplay.c:2898
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: lib/netplay/netplay.c:3451
+#: lib/netplay/netplay.c:3306
 msgid ", mods: "
 msgstr ""
 
@@ -11634,22 +11625,22 @@ msgstr "Pelaaja"
 msgid "Player dropped"
 msgstr "Pelaaja"
 
-#: src/display.c:1734
+#: src/display.c:1706
 msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
-#: src/display.c:1939
-#: src/display.c:2577
+#: src/display.c:1911
+#: src/display.c:2549
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Vahinko %d%% - Kokemus %d, %s"
 
-#: src/display.c:1955
+#: src/display.c:1927
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Vahinko %d%% - Kokemus %d, %s"
 
-#: src/display.c:2162
+#: src/display.c:2134
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
@@ -11689,43 +11680,43 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3600
+#: src/droid.c:3599
 msgid "Rookie"
 msgstr "Aloittelija"
 
-#: src/droid.c:3601
+#: src/droid.c:3600
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:3602
+#: src/droid.c:3601
 msgid "Trained"
 msgstr "Koulutettu"
 
-#: src/droid.c:3603
+#: src/droid.c:3602
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:3604
+#: src/droid.c:3603
 #, fuzzy
 msgid "Professional"
 msgstr "Ammattilainen"
 
-#: src/droid.c:3605
+#: src/droid.c:3604
 #, fuzzy
 msgid "Veteran"
 msgstr "Veteraani"
 
-#: src/droid.c:3606
+#: src/droid.c:3605
 #, fuzzy
 msgid "Elite"
 msgstr "Eliitti"
 
-#: src/droid.c:3607
+#: src/droid.c:3606
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:3608
+#: src/droid.c:3607
 msgid "Hero"
 msgstr "Sankari"
 
@@ -11805,8 +11796,8 @@ msgstr "YKSINPELI"
 
 #: src/frontend.c:470
 #: src/ingameop.c:507
-#: src/mission.c:2841
-#: src/mission.c:2946
+#: src/mission.c:2842
+#: src/mission.c:2947
 msgid "Load Saved Game"
 msgstr "Lataa tallennettu peli"
 
@@ -11823,7 +11814,7 @@ msgid "Join Game"
 msgstr "Liity peliin"
 
 #: src/frontend.c:584
-#: src/multiint.c:1264
+#: src/multiint.c:1255
 msgid "OPTIONS"
 msgstr "ASETUKSET"
 
@@ -11919,7 +11910,7 @@ msgid "Off"
 msgstr "Pois päältä"
 
 #: src/frontend.c:686
-#: src/multiint.c:1334
+#: src/multiint.c:1325
 msgid "Fog"
 msgstr "Sumu"
 
@@ -11930,7 +11921,7 @@ msgstr ""
 
 #: src/frontend.c:693
 #: src/frontend.c:768
-#: src/multiint.c:1336
+#: src/multiint.c:1327
 msgid "Fog Of War"
 msgstr ""
 
@@ -12063,7 +12054,7 @@ msgid "GAME OPTIONS"
 msgstr "PELIASETUKSET"
 
 #: src/frontend.c:1702
-#: src/multiint.c:2225
+#: src/multiint.c:2237
 msgid "Active mods: "
 msgstr ""
 
@@ -12090,7 +12081,7 @@ msgstr "Kartta tallennettu"
 #: src/hci.c:1705
 #: src/loop.c:535
 #: src/loop.c:551
-#: src/mission.c:2912
+#: src/mission.c:2913
 msgid "GAME SAVED :"
 msgstr "PELI TALLENNETTU :"
 
@@ -12138,7 +12129,7 @@ msgid "Build (F3)"
 msgstr "Rakenna (F3)"
 
 #: src/hci.c:3897
-#: src/multiint.c:1381
+#: src/multiint.c:1372
 #: src/multimenu.c:763
 msgid "Power"
 msgstr ""
@@ -12230,8 +12221,8 @@ msgstr ""
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2828
-#: src/mission.c:2949
+#: src/mission.c:2829
+#: src/mission.c:2950
 msgid "Save Game"
 msgstr "Tallenna peli"
 
@@ -12662,8 +12653,8 @@ msgstr ""
 #: src/keyedit.c:395
 #: src/multiint.c:643
 #: src/multiint.c:685
-#: src/multiint.c:1082
-#: src/multiint.c:1467
+#: src/multiint.c:1073
+#: src/multiint.c:1458
 msgid "Return To Previous Screen"
 msgstr ""
 
@@ -13038,33 +13029,33 @@ msgstr ""
 msgid "Could not save game!"
 msgstr "Peliä ei voitu tallentaa!"
 
-#: src/mission.c:2381
+#: src/mission.c:2382
 msgid "Load Transport"
 msgstr "Lastaa kuljetus"
 
-#: src/mission.c:2775
+#: src/mission.c:2776
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr ""
 
-#: src/mission.c:2775
+#: src/mission.c:2776
 msgid "OBJECTIVE ACHIEVED"
 msgstr ""
 
-#: src/mission.c:2781
+#: src/mission.c:2782
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr ""
 
-#: src/mission.c:2781
+#: src/mission.c:2782
 msgid "OBJECTIVE FAILED"
 msgstr ""
 
-#: src/mission.c:2807
-#: src/mission.c:2847
-#: src/mission.c:2965
+#: src/mission.c:2808
+#: src/mission.c:2848
+#: src/mission.c:2966
 msgid "Quit To Main Menu"
 msgstr "Poistu päävalikkoon"
 
-#: src/mission.c:2815
+#: src/mission.c:2816
 msgid "Continue Game"
 msgstr "Jatka peliä"
 
@@ -13134,7 +13125,7 @@ msgid "Accept Settings"
 msgstr "Hyväksy asetukset"
 
 #: src/multiint.c:579
-#: src/multiint.c:1130
+#: src/multiint.c:1121
 #, fuzzy
 msgid "Cancel"
 msgstr "Syaani"
@@ -13191,205 +13182,205 @@ msgstr ""
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:1023
+#: src/multiint.c:1014
 msgid "Searching"
 msgstr "Etsitään"
 
-#: src/multiint.c:1079
+#: src/multiint.c:1070
 msgid "GAMES"
 msgstr "PELIT"
 
-#: src/multiint.c:1087
+#: src/multiint.c:1078
 msgid "Refresh Games List"
 msgstr "Päivitä Pelien Lista"
 
-#: src/multiint.c:1107
+#: src/multiint.c:1098
 msgid "Enter Password:"
 msgstr ""
 
-#: src/multiint.c:1128
+#: src/multiint.c:1119
 msgid "OK"
 msgstr ""
 
-#: src/multiint.c:1269
-#: src/multiint.c:1276
+#: src/multiint.c:1260
+#: src/multiint.c:1267
 msgid "Select Game Name"
 msgstr "Valitse Pelin Nimi"
 
-#: src/multiint.c:1269
+#: src/multiint.c:1260
 msgid "One-Player Skirmish"
 msgstr ""
 
-#: src/multiint.c:1279
+#: src/multiint.c:1270
 msgid "Select Map"
 msgstr "Valitse kartta"
 
-#: src/multiint.c:1287
+#: src/multiint.c:1278
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.c:1297
-#: src/multiint.c:1298
+#: src/multiint.c:1288
+#: src/multiint.c:1289
 msgid "Scavengers"
 msgstr ""
 
-#: src/multiint.c:1300
+#: src/multiint.c:1291
 msgid "No Scavengers"
 msgstr ""
 
-#: src/multiint.c:1331
+#: src/multiint.c:1322
 #, fuzzy
 msgid "Select Player Name"
 msgstr "Valitse pelaajan nimi"
 
-#: src/multiint.c:1337
+#: src/multiint.c:1328
 msgid "Distance Fog"
 msgstr ""
 
-#: src/multiint.c:1348
+#: src/multiint.c:1339
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Liittoumat"
 
-#: src/multiint.c:1351
+#: src/multiint.c:1342
 msgid "No Alliances"
 msgstr "Ei liittoumia"
 
-#: src/multiint.c:1353
+#: src/multiint.c:1344
 msgid "Allow Alliances"
 msgstr "Salli liittoumat"
 
-#: src/multiint.c:1357
+#: src/multiint.c:1348
 msgid "Locked Teams"
 msgstr "Lukitut Joukkueet"
 
-#: src/multiint.c:1383
+#: src/multiint.c:1374
 msgid "Low Power Levels"
 msgstr ""
 
-#: src/multiint.c:1385
+#: src/multiint.c:1376
 msgid "Medium Power Levels"
 msgstr ""
 
-#: src/multiint.c:1387
+#: src/multiint.c:1378
 msgid "High Power Levels"
 msgstr ""
 
-#: src/multiint.c:1419
+#: src/multiint.c:1410
 msgid "Base"
 msgstr "Tukikohta"
 
-#: src/multiint.c:1421
+#: src/multiint.c:1412
 msgid "Start with No Bases"
 msgstr "Aloita ilman tukikohtaa"
 
-#: src/multiint.c:1423
+#: src/multiint.c:1414
 msgid "Start with Bases"
 msgstr ""
 
-#: src/multiint.c:1425
+#: src/multiint.c:1416
 msgid "Start with Advanced Bases"
 msgstr ""
 
-#: src/multiint.c:1457
+#: src/multiint.c:1448
 msgid "Map Preview"
 msgstr "Kartan esikatselu"
 
-#: src/multiint.c:1459
+#: src/multiint.c:1450
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.c:1473
+#: src/multiint.c:1464
 msgid "Start Hosting Game"
 msgstr ""
 
-#: src/multiint.c:1481
+#: src/multiint.c:1472
 msgid "Show Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1481
+#: src/multiint.c:1472
 msgid "Set Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1544
+#: src/multiint.c:1535
 #, fuzzy
 msgid "Player colour"
 msgstr "Pelaaja"
 
-#: src/multiint.c:1560
+#: src/multiint.c:1551
 #, fuzzy
 msgid "Kick player"
 msgstr "2 pelaajaa"
 
-#: src/multiint.c:1571
+#: src/multiint.c:1562
 #, fuzzy
 msgid "Player number"
 msgstr "Pelaaja"
 
-#: src/multiint.c:1933
+#: src/multiint.c:1924
 msgid "Team"
 msgstr "Joukkue"
 
-#: src/multiint.c:1966
+#: src/multiint.c:1957
 msgid "Waiting for other players"
 msgstr "Odotetaan muita pelaajia"
 
-#: src/multiint.c:1972
+#: src/multiint.c:1963
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.c:1976
+#: src/multiint.c:1967
 msgid "READY?"
 msgstr "VALMIS?"
 
-#: src/multiint.c:2013
+#: src/multiint.c:2004
 msgid "PLAYERS"
 msgstr "PELAAJAT"
 
-#: src/multiint.c:2196
+#: src/multiint.c:2208
 msgid "CHAT"
 msgstr ""
 
-#: src/multiint.c:2230
+#: src/multiint.c:2242
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
-#: src/multiint.c:2383
+#: src/multiint.c:2395
 msgid "*** password is now required! ***"
 msgstr "*** salasana vaaditaan ***"
 
-#: src/multiint.c:2390
+#: src/multiint.c:2402
 msgid "*** password is NOT required! ***"
 msgstr "*** salasanaa ei vaadita ***"
 
-#: src/multiint.c:2632
+#: src/multiint.c:2644
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2717
+#: src/multiint.c:2729
 msgid "'Locked Teams' mode enabled"
 msgstr ""
 
-#: src/multiint.c:2756
-#: src/multiint.c:2806
+#: src/multiint.c:2768
+#: src/multiint.c:2818
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr ""
 
-#: src/multiint.c:2864
+#: src/multiint.c:2876
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:3412
+#: src/multiint.c:3424
 msgid "Players"
 msgstr "Pelaajat"
 
-#: src/multiint.c:3528
+#: src/multiint.c:3540
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Kartta: %d%% ladattu"
 
-#: src/multiint.c:3554
+#: src/multiint.c:3566
 msgid "HOST"
 msgstr ""
 
@@ -13713,60 +13704,60 @@ msgstr ""
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
-#: src/structure.c:2757
+#: src/structure.c:2760
 msgid "Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5960
-#: src/structure.c:5985
+#: src/structure.c:5963
+#: src/structure.c:5988
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5990
-#: src/structure.c:6054
+#: src/structure.c:5993
+#: src/structure.c:6057
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.c:6040
+#: src/structure.c:6043
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:6175
-#: src/structure.c:6224
+#: src/structure.c:6178
+#: src/structure.c:6227
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6459
+#: src/structure.c:6462
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6499
+#: src/structure.c:6502
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6523
+#: src/structure.c:6526
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6547
+#: src/structure.c:6550
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6556
+#: src/structure.c:6559
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6584
+#: src/structure.c:6587
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6591
+#: src/structure.c:6594
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
@@ -13816,10 +13807,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Basque"
 #~ msgstr "Tukikohta"
-
-#, fuzzy
-#~ msgid "Latvian"
-#~ msgstr "latina"
 
 #, fuzzy
 #~ msgid "Norwegian (Nynorsk)"
