@@ -391,9 +391,6 @@ static BOOL cleanMap(UDWORD player)
 	firstFact = true;
 	firstRes = true;
 
-	// reverse so we always remove the last object. re-reverse afterwards.
-//	reverseObjectList((BASE_OBJECT**)&apsStructLists[player]);
-
 	switch(game.base)
 	{
 	case CAMP_CLEAN:									//clean map
@@ -405,9 +402,7 @@ static BOOL cleanMap(UDWORD player)
 		while(psD)
 		{
 			psD2=psD->psNext;
-			//if(psD->droidType != DROID_CONSTRUCT)
-            if (!(psD->droidType == DROID_CONSTRUCT ||
-                psD->droidType == DROID_CYBORG_CONSTRUCT))
+			if (psD->droidType != DROID_CONSTRUCT && psD->droidType != DROID_CYBORG_CONSTRUCT)
 			{
 				killDroid(psD);
 			}
@@ -424,13 +419,11 @@ static BOOL cleanMap(UDWORD player)
 			   ||(psStruct->pStructureType->type == REF_DEFENSE)
 			   ||(psStruct->pStructureType->type == REF_BLASTDOOR)
 			   ||(psStruct->pStructureType->type == REF_CYBORG_FACTORY)
-			   ||(psStruct->pStructureType->type == REF_COMMAND_CONTROL)
-			   )
+			   ||(psStruct->pStructureType->type == REF_COMMAND_CONTROL))
 			{
 				removeStruct(psStruct, true);
 				psStruct= apsStructLists[player];			//restart,(list may have changed).
 			}
-
 			else if( (psStruct->pStructureType->type == REF_FACTORY)
 				   ||(psStruct->pStructureType->type == REF_RESEARCH)
 				   ||(psStruct->pStructureType->type == REF_POWER_GEN))
@@ -508,9 +501,6 @@ static BOOL cleanMap(UDWORD player)
 		break;
 	}
 
-	// rerev list to get back to normal.
-//	reverseObjectList((BASE_OBJECT**)&apsStructLists[player]);
-
 	bMultiPlayer = true;
 	bMultiMessages = true;
 	return true;
@@ -524,8 +514,7 @@ static BOOL gameInit(void)
 	scriptInit();
 
 	// If this is from a savegame, stop here!
-	if((getSaveGameType() == GTYPE_SAVE_START)
-	|| (getSaveGameType() == GTYPE_SAVE_MIDMISSION)	)
+	if (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION)
 	{
 		// these two lines are the biggest hack in the world.
 		// the reticule seems to get detached from 'reticuleup'
@@ -602,7 +591,6 @@ BOOL multiGameInit(void)
 
 	InitializeAIExperience();
 	msgStackReset();	//for multiplayer msgs, reset message stack
-
 
 	return true;
 }
