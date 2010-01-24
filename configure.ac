@@ -30,9 +30,6 @@ fi
 AC_PROG_VERSION_CHECK([bison], [1.31])
 
 AC_PROG_LEX
-if test `basename "$LEX"` != "flex" ; then
-	AC_MSG_ERROR([Flex is not installed])
-fi
 AC_PROG_VERSION_CHECK([${LEX}], [2.5.33], [2.5.34])
 
 AX_WITH_PROG([PERL], [perl])
@@ -206,6 +203,7 @@ if test "x$enable_debug" = "xyes" ; then
 	else
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wall -Werror -Wno-unused-label -Wno-pointer-to-int-cast -Wmissing-field-initializers -Wcast-align -Wwrite-strings"
 		WZ_CFLAGS="${WZ_CFLAGS} -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith -Wno-format-security -Wdeclaration-after-statement"
+		WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
 elif test "x$enable_debug" = "xrelaxed" ; then
@@ -368,6 +366,7 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 
 AC_SUBST([WZ_CPPFLAGS], [${WZ_CPPFLAGS}])
 AC_SUBST([WZ_CFLAGS], [${WZ_CFLAGS}])
+AC_SUBST([WZ_C99FLAGS], [${WZ_C99FLAGS}])
 
 
 AC_CONFIG_HEADER([config.h])
