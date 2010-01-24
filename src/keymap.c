@@ -253,6 +253,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_MapCheck,
 	kf_SetDroidGoToTransport,
 	kf_SetDroidMoveGuard,
+	kf_toggleTrapCursor,
 	NULL		// last function!
 };
 
@@ -400,6 +401,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_SensorDisplayOn,		"Sensor display On");
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_RELEASED,kf_SensorDisplayOff,	"Sensor display Off");
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_S,KEYMAP_PRESSED,kf_ToggleShadows, "Toggles shadows");
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_T, KEYMAP_PRESSED, kf_toggleTrapCursor, "Trap cursor");
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarTerrain,         "Toggle radar terrain");
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LSHIFT,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarAllyEnemy,      "Toggle ally-enemy radar view");
 

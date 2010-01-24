@@ -1302,6 +1302,17 @@ void	kf_SeekNorth( void )
 	CONPRINTF(ConsoleString,(ConsoleString,_("View Aligned to North")));
 }
 
+void kf_toggleTrapCursor(void)
+{
+	const char *msg;
+	bool trap = !war_GetTrapCursor();
+	war_SetTrapCursor(trap);
+	SDL_WM_GrabInput(trap);
+	sasprintf((char**)&msg, _("Trap cursor %s"), trap ? "ON" : "OFF");
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+}
+
+
 // --------------------------------------------------------------------------
 void	kf_TogglePauseMode( void )
 {
