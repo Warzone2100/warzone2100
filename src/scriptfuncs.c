@@ -117,7 +117,6 @@ static Vector2i positions[MAX_PLAYERS];
 
 void scriptSetStartPos(int position, int x, int y)
 {
-	debug(LOG_ERROR, "Setting start position %d to (%d, %d)", position, x, y);
 	positions[position].x = x;
 	positions[position].y = y;
 }
