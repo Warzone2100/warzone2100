@@ -3081,6 +3081,7 @@ DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int playe
 DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char *pName)
 {
 	int player;
+	const char *rName;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
@@ -3088,7 +3089,8 @@ DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char *pName)
 
 		for (psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			if (!isHumanPlayer(player) && strcmp(psCurr->pName, pName) == 0)
+			rName = psCurr->pName ? psCurr->pName : psCurr->aName;
+			if (!isHumanPlayer(player) && strcmp(rName, pName) == 0)
 			{
 				return psCurr;
 			}
