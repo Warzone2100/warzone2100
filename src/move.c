@@ -659,9 +659,10 @@ void updateDroidOrientation(DROID *psDroid)
 	double dx, dy;
 	double direction, pitch, roll;
 
-	if(psDroid->droidType == DROID_PERSON || cyborgDroid(psDroid) || psDroid->droidType == DROID_TRANSPORTER)
+	if(psDroid->droidType == DROID_PERSON || cyborgDroid(psDroid) || psDroid->droidType == DROID_TRANSPORTER
+		|| isFlying(psDroid))
 	{
-		/* These guys always stand upright */
+		/* The ground doesn't affect the pitch/roll of these droids*/
 		return;
 	}
 
@@ -2671,9 +2672,6 @@ static BOOL moveDescending( DROID *psDroid )
 		/* on floor - stop */
 		psDroid->sMove.iVertSpeed = 0;
 
-		/* conform to terrain */
-		updateDroidOrientation(psDroid);
-
 		/* return false to show stopped descending */
 		return false;
 	}
@@ -3157,6 +3155,9 @@ void moveUpdateDroid(DROID *psDroid)
 		{
 			/* reset move state */
 			psDroid->sMove.Status = MOVEINACTIVE;
+
+			/* conform to terrain */
+			updateDroidOrientation(psDroid);
 		}
 		break;
 	// Driven around by the player.

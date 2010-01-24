@@ -319,6 +319,8 @@ extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
 
 //access function
 extern BOOL isVtolDroid(const DROID* psDroid);
+/*returns true if the droid has lift propulsion and is above the ground level*/
+extern BOOL isFlying(const DROID* psDroid);
 /*returns true if a VTOL weapon droid which has completed all runs*/
 extern BOOL vtolEmpty(DROID *psDroid);
 /*returns true if a VTOL weapon droid which still has full ammo*/
