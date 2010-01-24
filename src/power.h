@@ -88,9 +88,6 @@ void powerCalc(BOOL on);
 /** Temp function to give all players some power when a new game has been loaded. */
 void newGameInitPower(void);
 
-/** Accrue the power in the facilities that require it. */
-extern BOOL accruePower(BASE_OBJECT *psObject);
-
 /**	Returns the next res. Ext. in the list from the one passed in. returns 1st one
 	in list if passed in is NULL and NULL if there's none?
 */

@@ -313,12 +313,6 @@ void newGameInitPower(void)
 	}
 }
 
-/*accrue the power in the facilities that require it - returns true if use some power*/
-BOOL accruePower(BASE_OBJECT *psObject)
-{
-	return false;
-}
-
 STRUCTURE *getRExtractor(STRUCTURE *psStruct)
 {
 STRUCTURE	*psCurr;

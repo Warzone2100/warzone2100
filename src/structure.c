@@ -3006,8 +3006,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 		return;
 	}
 
-	accruePower((BASE_OBJECT *)psStructure);
-
 	/* Process the functionality according to type
 	* determine the subject stats (for research or manufacture)
 	* or base object (for repair) or update power levels for resourceExtractor

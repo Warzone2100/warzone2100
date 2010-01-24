@@ -1990,9 +1990,6 @@ void cancelResearch(STRUCTURE *psBuilding)
 
 		// Initialise the research facility's subject
 		psResFac->psSubject = NULL;
-
-		//set the researched flag - only set the flag to cancelled if it got past the accruePower stage
-		//pPlayerRes->researched = CANCELLED_RESEARCH;
 	}
 }
 
