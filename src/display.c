@@ -210,6 +210,7 @@ static BOOL	ignoreRMBC	= true;
 static DROID	*psSelectedVtol;
 static DROID	*psDominantSelected;
 static BOOL bRadarDragging = false;
+static bool mouseScroll = true;
 
 BOOL	rotActive = false;
 BOOL	gameStats = false;
@@ -243,6 +244,10 @@ static BOOL bLasSatStruct;
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
 static BOOL	bShakingPermitted = true;
 
+void setMouseScroll(bool scroll)
+{
+	mouseScroll = scroll;
+}
 
 void	setRadarJump(BOOL	val)
 {
@@ -1047,33 +1052,7 @@ void scroll(void)
 		return;
 	}
 
-	if(!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL))
-	{
-		/* Scroll left */
-		if (keyDown(KEY_LEFTARROW) || mouseXPos < BOUNDARY_X)
-		{
-			mouseAtLeft = true;
-		}
-
-		/* Scroll right */
-		if ( keyDown(KEY_RIGHTARROW) || mouseXPos > (pie_GetVideoBufferWidth() - BOUNDARY_X) )
-		{
-			mouseAtRight = true;
-		}
-
-		/* Scroll up */
-		if (keyDown(KEY_UPARROW) || (mouseYPos < BOUNDARY_Y))
-		{
-			mouseAtBottom = true;
-		}
-
-		/* Scroll down */
-		if ( keyDown(KEY_DOWNARROW) || mouseYPos > (pie_GetVideoBufferHeight() - BOUNDARY_Y) )
-		{
-			mouseAtTop = true;
-		}
-	}
-	else
+	if (mouseScroll)
 	{
 		/* Scroll left */
 		if (mouseXPos < BOUNDARY_X)
@@ -1095,6 +1074,32 @@ void scroll(void)
 
 		/* Scroll down */
 		if (mouseYPos > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
+		{
+			mouseAtTop = true;
+		}
+	}
+	if (!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL))
+	{
+		/* Scroll left */
+		if (keyDown(KEY_LEFTARROW))
+		{
+			mouseAtLeft = true;
+		}
+
+		/* Scroll right */
+		if (keyDown(KEY_RIGHTARROW))
+		{
+			mouseAtRight = true;
+		}
+
+		/* Scroll up */
+		if (keyDown(KEY_UPARROW))
+		{
+			mouseAtBottom = true;
+		}
+
+		/* Scroll down */
+		if ( keyDown(KEY_DOWNARROW))
 		{
 			mouseAtTop = true;
 		}

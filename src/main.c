@@ -864,7 +864,10 @@ static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 	// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
 	// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
 	if ( activeEvent->state == SDL_APPMOUSEFOCUS )
+	{
+		setMouseScroll(activeEvent->gain);
 		return;
+	}
 
 	if ( activeEvent->gain == 1 )
 	{
