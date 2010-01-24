@@ -40,7 +40,11 @@ UDWORD traceID = -1;
 
 static debug_callback * callbackRegistry = NULL;
 bool enabled_debug[LOG_LAST]; // global
+#ifdef DEBUG
 bool assertEnabled = true;
+#else
+bool assertEnabled = false;
+#endif
 
 /*
  * This list _must_ match the enum in debug.h!
