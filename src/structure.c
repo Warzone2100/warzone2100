@@ -3473,7 +3473,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				{
 					progress = requestPowerFor(psStructure->player, powerNeeded, secondsElapsed);
 					psFactory->timeToBuild -= progress;
-					psFactory->timeStarted = psFactory->timeStarted + secondsElapsed*1000;
+					psFactory->timeStarted = psFactory->timeStarted + secondsElapsed*GAME_TICKS_PER_SEC;
 				}
 			}
 

@@ -1057,7 +1057,7 @@ int main(int argc, char *argv[])
 		fprintf(stdout, "Carrying out self-test:\n");
 		playListTest();
 		audioTest();
-		//soundTest();
+		soundTest();
 	}
 
 	// Now we check the mods to see if they exsist or not (specified on the command line)

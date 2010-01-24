@@ -684,7 +684,7 @@ void updateDroidOrientation(DROID *psDroid)
 	dx = (double)(hx0 - hx1) / ((double)w * 2.0);
 	dy = (double)(hy0 - hy1) / ((double)w * 2.0);
 	//dx is atan of angle of elevation along x axis
-	//dx is atan of angle of elevation along y axis
+	//dy is atan of angle of elevation along y axis
 	//body
 	direction = (M_PI * psDroid->direction) / 180.0;
 	pitch = sin(direction) * dx + cos(direction) * dy;
@@ -2655,9 +2655,9 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 	psDroid->roll  = 0;
 }
 
-static BOOL moveDescending( DROID *psDroid, UDWORD iMapHeight )
+static BOOL moveDescending( DROID *psDroid )
 {
-	if ( psDroid->pos.z > iMapHeight )
+	if ( psDroid->pos.z > map_Height( psDroid->pos.x , psDroid->pos.y ) )
 	{
 		/* descending */
 		psDroid->sMove.iVertSpeed = (SWORD)-VTOL_VERTICAL_SPEED;
@@ -2900,12 +2900,12 @@ void moveUpdateDroid(DROID *psDroid)
 {
 	float				tangle;		// thats DROID angle and TARGET angle - not some bizzare pun :-)
 									// doesn't matter - they're still shit names...! :-)
-	UDWORD				oldx, oldy, iZ;
+	UDWORD				oldx, oldy;
 	UBYTE				oldStatus = psDroid->sMove.Status;
 	SDWORD				moveSpeed;
 	float				moveDir;
 	PROPULSION_STATS	*psPropStats;
-	Vector3i pos;
+	Vector3i 			pos;
 	BOOL				bStarted = false, bStopped;
 	Vector2f			target;
 
@@ -2933,9 +2933,6 @@ void moveUpdateDroid(DROID *psDroid)
 
 	moveSpeed = 0;
 	moveDir = psDroid->direction;
-
-	/* get droid height */
-	iZ = map_Height(psDroid->pos.x, psDroid->pos.y);
 
 	switch (psDroid->sMove.Status)
 	{
@@ -3156,7 +3153,7 @@ void moveUpdateDroid(DROID *psDroid)
 		ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
 		break;
 	case MOVEHOVER:
-		if (moveDescending(psDroid, iZ) == false)
+		if (moveDescending(psDroid) == false)
 		{
 			/* reset move state */
 			psDroid->sMove.Status = MOVEINACTIVE;

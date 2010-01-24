@@ -227,7 +227,10 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				//and change the tool tip
 				widgSetTipText((WIDGET*)BarGraph, _("Construction Progress"));
 
-				if (BuildPoints > Range)
+				if((int) BuildPoints < 0){
+					BuildPoints=0;
+				}
+				else if (BuildPoints > Range)
 				{
 					BuildPoints = Range;
 				}
