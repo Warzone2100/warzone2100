@@ -149,7 +149,7 @@ static int visObjHeight(const BASE_OBJECT * psObject)
  * once. Note that there is both a limit to how many objects can watch any given
  * tile, and a limit to how many tiles each object can watch. Strange but non fatal
  * things will happen if these limits are exceeded. This function uses icky globals. */
-static void visMarkTile(int mapX, int mapY, MAPTILE *psTile)
+static inline void visMarkTile(int mapX, int mapY, MAPTILE *psTile)
 {
 	bool alreadySeen = false;
 	int i;

@@ -45,7 +45,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 static BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot);
 
 // alliances
-UBYTE	alliances[MAX_PLAYERS][MAX_PLAYERS];
+UBYTE	alliances[MAX_PLAYERS + 1][MAX_PLAYERS + 1];
 
 
 // see if a structure has the range to fire on a target
@@ -120,32 +120,17 @@ static BOOL aiObjHasRange(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, int weapon_
 	return false;
 }
 
-/* alliance code for ai. return true if an alliance has formed. */
-BOOL aiCheckAlliances(UDWORD s1,UDWORD s2)
-{
-	// features have their player number set to (MAX_PLAYERS + 1)
-	if (s1 == (MAX_PLAYERS + 1) || s2 == (MAX_PLAYERS + 1))
-	{
-		return false;
-	}
-	if (s1 == s2 || alliances[s1][s2] == ALLIANCE_FORMED)
-	{
-		return true;
-	}
-
-	return false;
-}
-
 /* Initialise the AI system */
 BOOL aiInitialise(void)
 {
 	SDWORD		i,j;
 
-	for(i=0; i<MAX_PLAYERS; i++)
+	// The +1 is for features, that are owned by player 9 for hackish reasons
+	for (i = 0; i < MAX_PLAYERS + 1; i++)
 	{
-		for(j=0; j<MAX_PLAYERS; j++)
+		for (j = 0; j < MAX_PLAYERS + 1; j++)
 		{
-			alliances[i][j] = ALLIANCE_BROKEN;
+			alliances[i][j] = (i == j) ? ALLIANCE_FORMED : ALLIANCE_BROKEN;
 		}
 	}
 

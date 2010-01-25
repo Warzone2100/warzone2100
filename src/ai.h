@@ -74,10 +74,10 @@ extern "C"
 #define	WEIGHT_CMD_SAME_TARGET		WEIGHT_DIST_TILE				//Don't want this to be too high, since a commander can have many units assigned
 
 // alliances
-extern UBYTE alliances[MAX_PLAYERS][MAX_PLAYERS];
+extern UBYTE alliances[MAX_PLAYERS + 1][MAX_PLAYERS + 1];
 
-/* Check no alliance has formed*/
-extern BOOL aiCheckAlliances(UDWORD s1,UDWORD s2);
+/** Check no alliance has formed. This is a define to make sure we inline it. */
+#define aiCheckAlliances(_s1, _s2) (alliances[_s1][_s2] == ALLIANCE_FORMED)
 
 /* Initialise the AI system */
 extern BOOL aiInitialise(void);
