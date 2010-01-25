@@ -45,7 +45,8 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 static BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot);
 
 // alliances
-UBYTE	alliances[MAX_PLAYERS + 1][MAX_PLAYERS + 1];
+// players are 0-7; player 8 appears to be unused; player 9 is features
+UBYTE	alliances[MAX_PLAYERS + 2][MAX_PLAYERS + 2];
 
 
 // see if a structure has the range to fire on a target
@@ -126,11 +127,12 @@ BOOL aiInitialise(void)
 	SDWORD		i,j;
 
 	// The +1 is for features, that are owned by player 9 for hackish reasons
-	for (i = 0; i < MAX_PLAYERS + 1; i++)
+	// Yes, we do mean "player 9", as in "the players are 0-7, and we skip over player 8"
+	for (i = 0; i < MAX_PLAYERS+2; i++)
 	{
-		for (j = 0; j < MAX_PLAYERS + 1; j++)
+		for (j = 0; j < MAX_PLAYERS+2; j++)
 		{
-			alliances[i][j] = (i == j) ? ALLIANCE_FORMED : ALLIANCE_BROKEN;
+			alliances[i][j] = (i < MAX_PLAYERS && i == j) ? ALLIANCE_FORMED : ALLIANCE_BROKEN;
 		}
 	}
 
