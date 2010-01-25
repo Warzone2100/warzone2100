@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-24 19:58+0100\n"
-"PO-Revision-Date: 2010-01-09 23:58+0200\n"
+"POT-Creation-Date: 2010-01-25 19:25+0100\n"
+"PO-Revision-Date: 2010-01-25 17:41+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -605,7 +605,7 @@ msgstr "Kõik CB sensorid uuendatakse automaatselt"
 #: data/mp/messages/resmessages12.rmsg:95
 #: data/mp/messages/resmessages12.rmsg:212
 #: data/mp/messages/resmessages12.rmsg:225
-#: data/mp/messages/resmessages1.rmsg:576
+#: data/mp/messages/resmessages1.rmsg:577
 #: data/mp/messages/resmessages3.rmsg:875
 #: data/mp/messages/resmessages3.rmsg:888
 #: data/mp/messages/resmessagesall.rmsg:212
@@ -632,7 +632,7 @@ msgstr "Suurendab Kahuri Täpsust"
 #: data/mp/messages/resmessages12.rmsg:98
 #: data/mp/messages/resmessages12.rmsg:215
 #: data/mp/messages/resmessages12.rmsg:228
-#: data/mp/messages/resmessages1.rmsg:579
+#: data/mp/messages/resmessages1.rmsg:580
 #: data/mp/messages/resmessages3.rmsg:878
 #: data/mp/messages/resmessages3.rmsg:891
 #: data/mp/messages/resmessagesall.rmsg:215
@@ -644,7 +644,7 @@ msgstr "Kõik kahurid uuendati automaatselt"
 #: data/base/messages/resmessages2.rmsg:784
 #: data/base/messages/strings/resstrings.txt:765
 #: data/mp/messages/resmessages12.rmsg:108
-#: data/mp/messages/resmessages1.rmsg:602
+#: data/mp/messages/resmessages1.rmsg:603
 #: data/mp/messages/resmessages2.rmsg:784
 #: data/mp/messages/resmessagesall.rmsg:771
 #: data/mp/messages/strings/resstrings.txt:802
@@ -671,7 +671,7 @@ msgstr "Suurendab Leegiheitja Laskekiirust"
 #: data/base/messages/resmessages2.rmsg:787
 #: data/base/messages/strings/resstrings.txt:768
 #: data/mp/messages/resmessages12.rmsg:111
-#: data/mp/messages/resmessages1.rmsg:605
+#: data/mp/messages/resmessages1.rmsg:606
 #: data/mp/messages/resmessages2.rmsg:787
 #: data/mp/messages/resmessagesall.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:805
@@ -693,12 +693,12 @@ msgstr "Kõik leegiheitjad uuendati automaatselt"
 #: data/base/messages/strings/resstrings.txt:735
 #: data/base/messages/strings/resstrings.txt:757
 #: data/mp/messages/resmessages12.rmsg:121
-#: data/mp/messages/resmessages1.rmsg:537
-#: data/mp/messages/resmessages1.rmsg:550
-#: data/mp/messages/resmessages1.rmsg:563
-#: data/mp/messages/resmessages1.rmsg:589
-#: data/mp/messages/resmessages1.rmsg:615
-#: data/mp/messages/resmessages1.rmsg:628
+#: data/mp/messages/resmessages1.rmsg:538
+#: data/mp/messages/resmessages1.rmsg:551
+#: data/mp/messages/resmessages1.rmsg:564
+#: data/mp/messages/resmessages1.rmsg:590
+#: data/mp/messages/resmessages1.rmsg:616
+#: data/mp/messages/resmessages1.rmsg:629
 #: data/mp/messages/resmessages23.rmsg:212
 #: data/mp/messages/resmessages2.rmsg:745
 #: data/mp/messages/resmessages2.rmsg:758
@@ -724,8 +724,8 @@ msgstr ".50-kaliibriline raskekuulipilduja"
 #: data/base/messages/resmessages1.rmsg:630
 #: data/base/messages/resmessages23.rmsg:214
 #: data/mp/messages/resmessages12.rmsg:123
-#: data/mp/messages/resmessages1.rmsg:617
-#: data/mp/messages/resmessages1.rmsg:630
+#: data/mp/messages/resmessages1.rmsg:618
+#: data/mp/messages/resmessages1.rmsg:631
 #: data/mp/messages/resmessages23.rmsg:214
 #: data/mp/messages/resmessagesall.rmsg:877
 #: data/mp/messages/resmessagesall.rmsg:890
@@ -776,9 +776,9 @@ msgstr "Parimad sihtmärgid: Jalavägi, baasi ehitised, ratastega sõidukid"
 #: data/mp/messages/resmessages1.rmsg:58
 #: data/mp/messages/resmessages1.rmsg:71
 #: data/mp/messages/resmessages1.rmsg:84
-#: data/mp/messages/resmessages1.rmsg:488
-#: data/mp/messages/resmessages1.rmsg:540
-#: data/mp/messages/resmessages1.rmsg:553
+#: data/mp/messages/resmessages1.rmsg:489
+#: data/mp/messages/resmessages1.rmsg:541
+#: data/mp/messages/resmessages1.rmsg:554
 #: data/mp/messages/resmessages2.rmsg:32
 #: data/mp/messages/resmessages2.rmsg:45
 #: data/mp/messages/resmessages2.rmsg:592
@@ -843,8 +843,8 @@ msgstr "Kere Punktid: Keskmine"
 #: data/base/messages/strings/resstrings.txt:845
 #: data/base/messages/strings/resstrings.txt:857
 #: data/mp/messages/resmessages12.rmsg:134
-#: data/mp/messages/resmessages1.rmsg:641
-#: data/mp/messages/resmessages1.rmsg:654
+#: data/mp/messages/resmessages1.rmsg:642
+#: data/mp/messages/resmessages1.rmsg:655
 #: data/mp/messages/resmessages23.rmsg:173
 #: data/mp/messages/resmessages2.rmsg:875
 #: data/mp/messages/resmessages2.rmsg:888
@@ -879,8 +879,8 @@ msgstr "Suurendab Kuulipilduja Laskekiirust"
 #: data/base/messages/strings/resstrings.txt:848
 #: data/base/messages/strings/resstrings.txt:860
 #: data/mp/messages/resmessages12.rmsg:137
-#: data/mp/messages/resmessages1.rmsg:644
-#: data/mp/messages/resmessages1.rmsg:657
+#: data/mp/messages/resmessages1.rmsg:645
+#: data/mp/messages/resmessages1.rmsg:658
 #: data/mp/messages/resmessages23.rmsg:176
 #: data/mp/messages/resmessages2.rmsg:878
 #: data/mp/messages/resmessages2.rmsg:891
@@ -903,7 +903,7 @@ msgstr "Kõik kuulipildujad uuendati automaatselt"
 #: data/base/messages/strings/resstrings.txt:787
 #: data/base/messages/strings/resstrings.txt:891
 #: data/mp/messages/resmessages12.rmsg:147
-#: data/mp/messages/resmessages1.rmsg:667
+#: data/mp/messages/resmessages1.rmsg:668
 #: data/mp/messages/resmessages23.rmsg:199
 #: data/mp/messages/resmessages2.rmsg:797
 #: data/mp/messages/resmessages2.rmsg:810
@@ -932,7 +932,7 @@ msgstr "Võib-olla määratud sensoriga"
 #: data/base/messages/resmessages2.rmsg:903
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/resmessages12.rmsg:149
-#: data/mp/messages/resmessages1.rmsg:669
+#: data/mp/messages/resmessages1.rmsg:670
 #: data/mp/messages/resmessages2.rmsg:903
 #: data/mp/messages/resmessagesall.rmsg:344
 #: data/mp/messages/strings/resstrings.txt:934
@@ -959,8 +959,8 @@ msgstr "Parimad Sihtmärgid: Baas ehitised, jalavägi, ratastega sõidukid"
 #: data/mp/messages/resmessages12.rmsg:189
 #: data/mp/messages/resmessages12.rmsg:254
 #: data/mp/messages/resmessages12.rmsg:267
-#: data/mp/messages/resmessages1.rmsg:670
-#: data/mp/messages/resmessages1.rmsg:696
+#: data/mp/messages/resmessages1.rmsg:671
+#: data/mp/messages/resmessages1.rmsg:697
 #: data/mp/messages/resmessages2.rmsg:904
 #: data/mp/messages/resmessages3.rmsg:1034
 #: data/mp/messages/resmessages3.rmsg:1047
@@ -985,7 +985,7 @@ msgstr "Kere Punktid: Väga Madal"
 #: data/base/messages/strings/resstrings.txt:905
 #: data/mp/messages/resmessages12.rmsg:160
 #: data/mp/messages/resmessages12.rmsg:173
-#: data/mp/messages/resmessages1.rmsg:680
+#: data/mp/messages/resmessages1.rmsg:681
 #: data/mp/messages/resmessages23.rmsg:186
 #: data/mp/messages/resmessages2.rmsg:914
 #: data/mp/messages/resmessages3.rmsg:1174
@@ -1015,7 +1015,7 @@ msgstr "Suurendab Mortiiri täpsust"
 #: data/base/messages/strings/resstrings.txt:908
 #: data/mp/messages/resmessages12.rmsg:163
 #: data/mp/messages/resmessages12.rmsg:176
-#: data/mp/messages/resmessages1.rmsg:683
+#: data/mp/messages/resmessages1.rmsg:684
 #: data/mp/messages/resmessages23.rmsg:189
 #: data/mp/messages/resmessages2.rmsg:917
 #: data/mp/messages/resmessages3.rmsg:1177
@@ -1043,7 +1043,7 @@ msgstr "Suurendab Mortiiri Laskekiirust"
 #: data/mp/messages/resmessages12.rmsg:186
 #: data/mp/messages/resmessages12.rmsg:251
 #: data/mp/messages/resmessages12.rmsg:264
-#: data/mp/messages/resmessages1.rmsg:693
+#: data/mp/messages/resmessages1.rmsg:694
 #: data/mp/messages/resmessagesall.rmsg:186
 #: data/mp/messages/resmessagesall.rmsg:199
 msgid "New Rocket Available"
@@ -1068,8 +1068,8 @@ msgstr "Parimad Sihtmärgid: Sõidukid ja Kaitsvad Paigaldused"
 #: data/base/messages/strings/resstrings.txt:965
 #: data/mp/messages/resmessages12.rmsg:199
 #: data/mp/messages/resmessages12.rmsg:238
-#: data/mp/messages/resmessages1.rmsg:745
-#: data/mp/messages/resmessages1.rmsg:758
+#: data/mp/messages/resmessages1.rmsg:746
+#: data/mp/messages/resmessages1.rmsg:759
 #: data/mp/messages/resmessages2.rmsg:940
 #: data/mp/messages/resmessagesall.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:1008
@@ -1094,8 +1094,8 @@ msgstr "Suurendab Raketi Laskekiirust"
 #: data/base/messages/strings/resstrings.txt:968
 #: data/mp/messages/resmessages12.rmsg:202
 #: data/mp/messages/resmessages12.rmsg:241
-#: data/mp/messages/resmessages1.rmsg:748
-#: data/mp/messages/resmessages1.rmsg:761
+#: data/mp/messages/resmessages1.rmsg:749
+#: data/mp/messages/resmessages1.rmsg:762
 #: data/mp/messages/resmessages2.rmsg:943
 #: data/mp/messages/resmessagesall.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:1011
@@ -1148,7 +1148,7 @@ msgstr "Raske tankivastane rakett"
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
 #: data/mp/messages/resmessages12.rmsg:253
-#: data/mp/messages/resmessages1.rmsg:539
+#: data/mp/messages/resmessages1.rmsg:540
 #: data/mp/messages/resmessages2.rmsg:760
 #: data/mp/messages/resmessages3.rmsg:1033
 #: data/mp/messages/resmessages3.rmsg:1202
@@ -1193,8 +1193,8 @@ msgstr "Komandör juhib grupi käitumist nagu tehase saatmis koht"
 #: data/base/messages/resmessages3.rmsg:1229
 #: data/base/messages/strings/resstrings.txt:738
 #: data/mp/messages/resmessages1.rmsg:7
-#: data/mp/messages/resmessages1.rmsg:514
-#: data/mp/messages/resmessages1.rmsg:566
+#: data/mp/messages/resmessages1.rmsg:515
+#: data/mp/messages/resmessages1.rmsg:567
 #: data/mp/messages/resmessages2.rmsg:761
 #: data/mp/messages/resmessages3.rmsg:1229
 #: data/mp/messages/resmessagesall.rmsg:488
@@ -1245,7 +1245,7 @@ msgstr "Küborgi Materjalid Täiustunud"
 #: data/base/messages/resmessages1.rmsg:31
 #: data/base/messages/resmessages1.rmsg:473
 #: data/mp/messages/resmessages1.rmsg:31
-#: data/mp/messages/resmessages1.rmsg:473
+#: data/mp/messages/resmessages1.rmsg:474
 msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr "Kihiline komposiit sulamid ning energiat neelavad kiud"
 
@@ -1653,7 +1653,7 @@ msgid "Increases factory output"
 msgstr "Suurendab tehase võimsust"
 
 #: data/base/messages/resmessages1.rmsg:306
-#: data/mp/messages/resmessages1.rmsg:306
+#: data/mp/messages/resmessages1.rmsg:307
 msgid "Use a truck to add modules to a factory"
 msgstr "Kasuta veoautot tehasele mooduli lisamiseks"
 
@@ -1661,7 +1661,7 @@ msgstr "Kasuta veoautot tehasele mooduli lisamiseks"
 #: data/base/messages/resmessages2.rmsg:355
 #: data/base/messages/strings/resstrings.txt:365
 #: data/base/messages/strings/resstrings.txt:373
-#: data/mp/messages/resmessages1.rmsg:316
+#: data/mp/messages/resmessages1.rmsg:317
 #: data/mp/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:399
 msgid "Vehicle Production Improved"
@@ -1669,7 +1669,7 @@ msgstr "Sõidukite Tootmine Täiustunud"
 
 #: data/base/messages/resmessages1.rmsg:317
 #: data/base/messages/strings/names.txt:794
-#: data/mp/messages/resmessages1.rmsg:317
+#: data/mp/messages/resmessages1.rmsg:318
 msgid "Automated Factory Production"
 msgstr "Automatiseeritud Tehase Tootmine"
 
@@ -1677,43 +1677,43 @@ msgstr "Automatiseeritud Tehase Tootmine"
 #: data/base/messages/resmessages2.rmsg:358
 #: data/base/messages/strings/resstrings.txt:368
 #: data/base/messages/strings/resstrings.txt:376
-#: data/mp/messages/resmessages1.rmsg:319
+#: data/mp/messages/resmessages1.rmsg:320
 #: data/mp/messages/strings/resstrings.txt:394
 #: data/mp/messages/strings/resstrings.txt:402
 msgid "All vehicle factories upgraded automatically"
 msgstr "Kõik sõidukite tehased uuentati automaatselt"
 
 #: data/base/messages/resmessages1.rmsg:329
-#: data/mp/messages/resmessages1.rmsg:329
+#: data/mp/messages/resmessages1.rmsg:330
 msgid "Power Module Available"
 msgstr "Energia Moodul Kasutatav"
 
 #: data/base/messages/resmessages1.rmsg:330
 #: data/base/messages/resmessages23.rmsg:30
 #: data/base/messages/resmessages3.rmsg:433
-#: data/mp/messages/resmessages1.rmsg:330
+#: data/mp/messages/resmessages1.rmsg:331
 #: data/mp/messages/resmessages23.rmsg:30
 #: data/mp/messages/resmessages3.rmsg:433
 msgid "Improved Power Generator Performance"
 msgstr "Täiustunud Energia Generaatori Jõudlus"
 
 #: data/base/messages/resmessages1.rmsg:331
-#: data/mp/messages/resmessages1.rmsg:331
+#: data/mp/messages/resmessages1.rmsg:332
 msgid "Burns oil more efficiently"
 msgstr "Põletab naftat efektiivsemalt"
 
 #: data/base/messages/resmessages1.rmsg:332
-#: data/mp/messages/resmessages1.rmsg:332
+#: data/mp/messages/resmessages1.rmsg:333
 msgid "Use a truck to add the module to a power generator"
 msgstr "Kasuta veoautot et moodul energiageneraatorile lisada"
 
 #: data/base/messages/resmessages1.rmsg:342
-#: data/mp/messages/resmessages1.rmsg:342
+#: data/mp/messages/resmessages1.rmsg:343
 msgid "Research Module Available"
 msgstr "Uurimismoodul Kasutatav"
 
 #: data/base/messages/resmessages1.rmsg:343
-#: data/mp/messages/resmessages1.rmsg:343
+#: data/mp/messages/resmessages1.rmsg:344
 msgid "Research module expands research facilities"
 msgstr "Uurimismoodul laiendab uurimiskeskust"
 
@@ -1727,7 +1727,7 @@ msgid "Increases research speed"
 msgstr "Suurendab Uurimise kiirust"
 
 #: data/base/messages/resmessages1.rmsg:345
-#: data/mp/messages/resmessages1.rmsg:345
+#: data/mp/messages/resmessages1.rmsg:346
 msgid "Use a truck to add the module to a research facility"
 msgstr "Kasuta veoautot et moodul Uurimiskeskusele lisada"
 
@@ -1735,7 +1735,7 @@ msgstr "Kasuta veoautot et moodul Uurimiskeskusele lisada"
 #: data/base/messages/resmessages2.rmsg:368
 #: data/base/messages/resmessages3.rmsg:446
 #: data/base/messages/strings/resstrings.txt:389
-#: data/mp/messages/resmessages1.rmsg:355
+#: data/mp/messages/resmessages1.rmsg:356
 #: data/mp/messages/resmessages2.rmsg:368
 #: data/mp/messages/resmessages3.rmsg:446
 #: data/mp/messages/strings/resstrings.txt:415
@@ -1743,7 +1743,7 @@ msgid "Research Improved"
 msgstr "Uurimine Täiustunud"
 
 #: data/base/messages/resmessages1.rmsg:356
-#: data/mp/messages/resmessages1.rmsg:356
+#: data/mp/messages/resmessages1.rmsg:357
 msgid "Synaptic link data analysis"
 msgstr "Sünaptiline liidese andmete analüüs"
 
@@ -1751,7 +1751,7 @@ msgstr "Sünaptiline liidese andmete analüüs"
 #: data/base/messages/resmessages2.rmsg:371
 #: data/base/messages/resmessages3.rmsg:449
 #: data/base/messages/strings/resstrings.txt:392
-#: data/mp/messages/resmessages1.rmsg:358
+#: data/mp/messages/resmessages1.rmsg:359
 #: data/mp/messages/resmessages2.rmsg:371
 #: data/mp/messages/resmessages3.rmsg:449
 #: data/mp/messages/strings/resstrings.txt:418
@@ -1763,7 +1763,7 @@ msgstr "Kõik uurimiskeskused uuendati automaatselt"
 #: data/base/messages/resmessages3.rmsg:459
 #: data/base/messages/resmessages3.rmsg:472
 #: data/base/messages/strings/resstrings.txt:399
-#: data/mp/messages/resmessages1.rmsg:368
+#: data/mp/messages/resmessages1.rmsg:369
 #: data/mp/messages/resmessages2.rmsg:381
 #: data/mp/messages/resmessages3.rmsg:459
 #: data/mp/messages/resmessages3.rmsg:472
@@ -1773,7 +1773,7 @@ msgstr "Suurendab Vastupanu Kahju Vastu"
 
 #: data/base/messages/resmessages1.rmsg:369
 #: data/base/messages/strings/names.txt:805
-#: data/mp/messages/resmessages1.rmsg:369
+#: data/mp/messages/resmessages1.rmsg:370
 #: data/mp/messages/strings/names.txt:816
 msgid "Reinforced Base Structure Materials"
 msgstr "Tugendatud Baas Ehitiste Materialid"
@@ -1797,7 +1797,7 @@ msgstr "Suurendab Soomuse ja Kere Punkte"
 #: data/base/messages/resmessages3.rmsg:462
 #: data/base/messages/resmessages3.rmsg:475
 #: data/base/messages/strings/resstrings.txt:402
-#: data/mp/messages/resmessages1.rmsg:371
+#: data/mp/messages/resmessages1.rmsg:372
 #: data/mp/messages/resmessages2.rmsg:384
 #: data/mp/messages/resmessages3.rmsg:462
 #: data/mp/messages/resmessages3.rmsg:475
@@ -1806,128 +1806,128 @@ msgid "All base structures upgraded automatically"
 msgstr "Kõik baas ehitised uuendati automaatselt"
 
 #: data/base/messages/resmessages1.rmsg:381
-#: data/mp/messages/resmessages1.rmsg:381
+#: data/mp/messages/resmessages1.rmsg:382
 msgid "Project Light Body"
 msgstr "Projekti Kerge Kere"
 
 #: data/base/messages/resmessages1.rmsg:382
-#: data/mp/messages/resmessages1.rmsg:382
+#: data/mp/messages/resmessages1.rmsg:383
 msgid "Light body vulnerable to heavy weapons"
 msgstr "Kerge kere on nõrk raskerelvade vastu"
 
 #: data/base/messages/resmessages1.rmsg:383
-#: data/mp/messages/resmessages1.rmsg:383
+#: data/mp/messages/resmessages1.rmsg:384
 msgid "Good scout vehicle"
 msgstr "Hea luuresõiduk"
 
 #: data/base/messages/resmessages1.rmsg:384
-#: data/mp/messages/resmessages1.rmsg:384
+#: data/mp/messages/resmessages1.rmsg:385
 msgid "Low power cost and low production times"
 msgstr "Madal energiakulu ja madal tootmisaeg"
 
 #: data/base/messages/resmessages1.rmsg:394
-#: data/mp/messages/resmessages1.rmsg:394
+#: data/mp/messages/resmessages1.rmsg:395
 msgid "New Paradigm Light Body"
 msgstr "Uus Paradigmi Kerge Kere"
 
 #: data/base/messages/resmessages1.rmsg:395
-#: data/mp/messages/resmessages1.rmsg:395
+#: data/mp/messages/resmessages1.rmsg:396
 msgid "Inferior armor and body points to Viper"
 msgstr "Vähem soomust ja kere punkte kui Viperil"
 
 #: data/base/messages/resmessages1.rmsg:396
 #: data/base/messages/resmessages3.rmsg:630
-#: data/mp/messages/resmessages1.rmsg:396
+#: data/mp/messages/resmessages1.rmsg:397
 #: data/mp/messages/resmessages3.rmsg:630
 msgid "Faster than Viper"
 msgstr "Kiirem kui Viper"
 
 #: data/base/messages/resmessages1.rmsg:397
-#: data/mp/messages/resmessages1.rmsg:397
+#: data/mp/messages/resmessages1.rmsg:398
 msgid "Power cost and production time similar to Viper"
 msgstr "Energiakulu ja tootmisaeg Viperiga sarnane"
 
 #: data/base/messages/resmessages1.rmsg:407
-#: data/mp/messages/resmessages1.rmsg:407
+#: data/mp/messages/resmessages1.rmsg:408
 msgid "Project Medium Body"
 msgstr "Projekti Keskmine Kere"
 
 #: data/base/messages/resmessages1.rmsg:408
-#: data/mp/messages/resmessages1.rmsg:408
+#: data/mp/messages/resmessages1.rmsg:409
 msgid "Medium body increases armor and body points"
 msgstr "Keskmine kere suurendab soomust ja kere punkte"
 
 #: data/base/messages/resmessages1.rmsg:409
-#: data/mp/messages/resmessages1.rmsg:409
+#: data/mp/messages/resmessages1.rmsg:410
 msgid "Good medium tank and support vehicle"
 msgstr "Hea keskmine tank ja toetav sõiduk"
 
 #: data/base/messages/resmessages1.rmsg:410
-#: data/mp/messages/resmessages1.rmsg:410
+#: data/mp/messages/resmessages1.rmsg:411
 msgid "Average power costs and production times"
 msgstr "Keskmine energiakulu ja tootmisaeg"
 
 #: data/base/messages/resmessages1.rmsg:420
-#: data/mp/messages/resmessages1.rmsg:420
+#: data/mp/messages/resmessages1.rmsg:421
 msgid "New Paradigm Medium body"
 msgstr "Uus Paradigmi Keskmine Kere"
 
 #: data/base/messages/resmessages1.rmsg:421
-#: data/mp/messages/resmessages1.rmsg:421
+#: data/mp/messages/resmessages1.rmsg:422
 msgid "Inferior armor and body points to Cobra"
 msgstr "Vähem soomust ja kere punkte kui Cobral"
 
 #: data/base/messages/resmessages1.rmsg:422
 #: data/base/messages/resmessages3.rmsg:643
-#: data/mp/messages/resmessages1.rmsg:422
+#: data/mp/messages/resmessages1.rmsg:423
 #: data/mp/messages/resmessages3.rmsg:643
 msgid "Faster than Cobra"
 msgstr "Kiirem kui Cobra"
 
 #: data/base/messages/resmessages1.rmsg:423
-#: data/mp/messages/resmessages1.rmsg:423
+#: data/mp/messages/resmessages1.rmsg:424
 msgid "Power cost and production time similar to Cobra"
 msgstr "Energiakulu ja tootmiskiirus Cobraga sarnane"
 
 #: data/base/messages/resmessages1.rmsg:433
-#: data/mp/messages/resmessages1.rmsg:433
+#: data/mp/messages/resmessages1.rmsg:434
 msgid "Project Heavy Body"
 msgstr "Projekti Raske Kere"
 
 #: data/base/messages/resmessages1.rmsg:434
-#: data/mp/messages/resmessages1.rmsg:434
+#: data/mp/messages/resmessages1.rmsg:435
 msgid "Heavy body increases armor and body points"
 msgstr "Raske kere suurendab soomus ja kerepunkte"
 
 #: data/base/messages/resmessages1.rmsg:435
-#: data/mp/messages/resmessages1.rmsg:435
+#: data/mp/messages/resmessages1.rmsg:436
 msgid "Good main battle tank and heavy artillery platform"
 msgstr "Hea põhilahingutank ja raskekahuriväe platvorm"
 
 #: data/base/messages/resmessages1.rmsg:436
-#: data/mp/messages/resmessages1.rmsg:436
+#: data/mp/messages/resmessages1.rmsg:437
 msgid "Very high power costs and very slow to produce"
 msgstr "Väga kõrge energiakulu ja väga aeglane tootmine"
 
 #: data/base/messages/resmessages1.rmsg:446
-#: data/mp/messages/resmessages1.rmsg:446
+#: data/mp/messages/resmessages1.rmsg:447
 msgid "New Paradigm Heavy Body"
 msgstr "Uus Paradigmi Raske Kere"
 
 #: data/base/messages/resmessages1.rmsg:447
-#: data/mp/messages/resmessages1.rmsg:447
+#: data/mp/messages/resmessages1.rmsg:448
 msgid "Less armor and body points than Python"
 msgstr "Vähem soomust ja kerepunkte kui Pythonil"
 
 #: data/base/messages/resmessages1.rmsg:448
 #: data/base/messages/resmessages3.rmsg:656
-#: data/mp/messages/resmessages1.rmsg:448
+#: data/mp/messages/resmessages1.rmsg:449
 #: data/mp/messages/resmessages3.rmsg:656
 msgid "Faster than Python"
 msgstr "Kiirem kui Python"
 
 #: data/base/messages/resmessages1.rmsg:449
-#: data/mp/messages/resmessages1.rmsg:449
+#: data/mp/messages/resmessages1.rmsg:450
 msgid "Power cost and production time the same as Python"
 msgstr "Energiakulu ja tootmisaeg sama kui Pythonil"
 
@@ -1936,7 +1936,7 @@ msgstr "Energiakulu ja tootmisaeg sama kui Pythonil"
 #: data/base/messages/resmessages3.rmsg:667
 #: data/base/messages/resmessages3.rmsg:680
 #: data/base/messages/strings/resstrings.txt:559
-#: data/mp/messages/resmessages1.rmsg:459
+#: data/mp/messages/resmessages1.rmsg:460
 #: data/mp/messages/resmessages2.rmsg:498
 #: data/mp/messages/resmessages3.rmsg:667
 #: data/mp/messages/resmessages3.rmsg:680
@@ -1946,7 +1946,7 @@ msgstr "Sõiduki Mootori Uuendus"
 
 #: data/base/messages/resmessages1.rmsg:460
 #: data/base/messages/strings/names.txt:942
-#: data/mp/messages/resmessages1.rmsg:460
+#: data/mp/messages/resmessages1.rmsg:461
 #: data/mp/messages/strings/names.txt:955
 msgid "Fuel Injection Engine"
 msgstr "Kütuse Sisestamis Mootor"
@@ -1973,8 +1973,8 @@ msgstr "Täiustab sõiduki kiirust"
 #: data/base/messages/strings/resstrings.txt:562
 #: data/base/messages/strings/resstrings.txt:574
 #: data/base/messages/strings/resstrings.txt:584
-#: data/mp/messages/resmessages1.rmsg:462
-#: data/mp/messages/resmessages1.rmsg:475
+#: data/mp/messages/resmessages1.rmsg:463
+#: data/mp/messages/resmessages1.rmsg:476
 #: data/mp/messages/resmessages2.rmsg:501
 #: data/mp/messages/resmessages2.rmsg:514
 #: data/mp/messages/resmessages2.rmsg:527
@@ -1995,7 +1995,7 @@ msgstr "Kõik sõidukid uuendati automaatselt"
 #: data/base/messages/resmessages3.rmsg:693
 #: data/base/messages/resmessages3.rmsg:706
 #: data/base/messages/strings/resstrings.txt:571
-#: data/mp/messages/resmessages1.rmsg:472
+#: data/mp/messages/resmessages1.rmsg:473
 #: data/mp/messages/resmessages2.rmsg:511
 #: data/mp/messages/resmessages3.rmsg:693
 #: data/mp/messages/resmessages3.rmsg:706
@@ -2016,32 +2016,32 @@ msgstr "Suurendab kineetilist soomust ja kerepunkte"
 #: data/base/messages/resmessages1.rmsg:498
 #: data/base/messages/resmessages1.rmsg:511
 #: data/base/messages/resmessages1.rmsg:524
-#: data/mp/messages/resmessages1.rmsg:485
-#: data/mp/messages/resmessages1.rmsg:498
-#: data/mp/messages/resmessages1.rmsg:511
-#: data/mp/messages/resmessages1.rmsg:524
+#: data/mp/messages/resmessages1.rmsg:486
+#: data/mp/messages/resmessages1.rmsg:499
+#: data/mp/messages/resmessages1.rmsg:512
+#: data/mp/messages/resmessages1.rmsg:525
 msgid "New Propulsion Available"
 msgstr "Uus Liikumissüsteem Kasutatav"
 
 #: data/base/messages/resmessages1.rmsg:486
-#: data/mp/messages/resmessages1.rmsg:486
+#: data/mp/messages/resmessages1.rmsg:487
 msgid "Armored Half-tracks"
 msgstr "Soomustatud Pool-Roomikud"
 
 #: data/base/messages/resmessages1.rmsg:487
-#: data/mp/messages/resmessages1.rmsg:487
+#: data/mp/messages/resmessages1.rmsg:488
 msgid "Speed: Medium"
 msgstr "Kiirus: Keskmine"
 
 #: data/base/messages/resmessages1.rmsg:499
-#: data/mp/messages/resmessages1.rmsg:499
+#: data/mp/messages/resmessages1.rmsg:500
 msgid "Amphibious hover propulsion"
 msgstr "Amfiibhõljuki Liikumissüsteem"
 
 #: data/base/messages/resmessages1.rmsg:500
 #: data/base/messages/resmessages1.rmsg:526
-#: data/mp/messages/resmessages1.rmsg:500
-#: data/mp/messages/resmessages1.rmsg:526
+#: data/mp/messages/resmessages1.rmsg:501
+#: data/mp/messages/resmessages1.rmsg:527
 msgid "Speed: Fast"
 msgstr "Kiirus: Kiire"
 
@@ -2065,10 +2065,10 @@ msgstr "Kiirus: Kiire"
 #: data/base/messages/strings/resstrings.txt:776
 #: data/base/messages/strings/resstrings.txt:782
 #: data/base/messages/strings/resstrings.txt:790
-#: data/mp/messages/resmessages1.rmsg:501
-#: data/mp/messages/resmessages1.rmsg:527
-#: data/mp/messages/resmessages1.rmsg:618
-#: data/mp/messages/resmessages1.rmsg:631
+#: data/mp/messages/resmessages1.rmsg:502
+#: data/mp/messages/resmessages1.rmsg:528
+#: data/mp/messages/resmessages1.rmsg:619
+#: data/mp/messages/resmessages1.rmsg:632
 #: data/mp/messages/resmessages23.rmsg:150
 #: data/mp/messages/resmessages23.rmsg:202
 #: data/mp/messages/resmessages2.rmsg:709
@@ -2092,51 +2092,51 @@ msgid "Body Points: Low"
 msgstr "Kerepunktid: Madal"
 
 #: data/base/messages/resmessages1.rmsg:512
-#: data/mp/messages/resmessages1.rmsg:512
+#: data/mp/messages/resmessages1.rmsg:513
 msgid "Armored Tracks"
 msgstr "Soomustatud Roomikud"
 
 #: data/base/messages/resmessages1.rmsg:513
-#: data/mp/messages/resmessages1.rmsg:513
+#: data/mp/messages/resmessages1.rmsg:514
 msgid "Speed: Slow"
 msgstr "Kiirus: Aeglane"
 
 #: data/base/messages/resmessages1.rmsg:525
 #: data/base/messages/strings/names.txt:976
-#: data/mp/messages/resmessages1.rmsg:525
+#: data/mp/messages/resmessages1.rmsg:526
 #: data/mp/messages/strings/names.txt:989
 msgid "Wheeled Propulsion"
 msgstr "Ratastega Liikumissüsteem"
 
 #: data/base/messages/resmessages1.rmsg:538
-#: data/mp/messages/resmessages1.rmsg:538
+#: data/mp/messages/resmessages1.rmsg:539
 msgid "Light Cannon firing 40mm rounds"
 msgstr "Kergekahur tulistab 40mm mürske"
 
 #: data/base/messages/resmessages1.rmsg:551
-#: data/mp/messages/resmessages1.rmsg:551
+#: data/mp/messages/resmessages1.rmsg:552
 msgid "Medium Cannon firing 76mm rounds"
 msgstr "Keskkahur tulistab 76mm mürske"
 
 #: data/base/messages/resmessages1.rmsg:564
-#: data/mp/messages/resmessages1.rmsg:564
+#: data/mp/messages/resmessages1.rmsg:565
 msgid "Heavy Cannon firing 120 mm rounds"
 msgstr "Raskekahur tulistab 120mm mürske"
 
 #: data/base/messages/resmessages1.rmsg:577
-#: data/mp/messages/resmessages1.rmsg:577
+#: data/mp/messages/resmessages1.rmsg:578
 msgid "High Explosive Anti-Tank Cannon Shells"
 msgstr "Võimsaplahvatuslikud Tanki-Vastased Kahuri Mürsud"
 
 #: data/base/messages/resmessages1.rmsg:590
-#: data/mp/messages/resmessages1.rmsg:590
+#: data/mp/messages/resmessages1.rmsg:591
 msgid "Flame-thrower firing Propylene Oxide gel"
 msgstr "Leegiheitja tulistab Propüleenoksiidi geeli"
 
 #: data/base/messages/resmessages1.rmsg:591
 #: data/base/messages/resmessages2.rmsg:773
 #: data/base/messages/strings/resstrings.txt:759
-#: data/mp/messages/resmessages1.rmsg:591
+#: data/mp/messages/resmessages1.rmsg:592
 #: data/mp/messages/resmessages2.rmsg:773
 #: data/mp/messages/resmessagesall.rmsg:370
 #: data/mp/messages/strings/resstrings.txt:796
@@ -2144,13 +2144,13 @@ msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr "Parimad Sihtmärgid: Punkrid, ratastega-ja hõljuksõidukid"
 
 #: data/base/messages/resmessages1.rmsg:592
-#: data/mp/messages/resmessages1.rmsg:592
+#: data/mp/messages/resmessages1.rmsg:593
 #: data/mp/messages/resmessagesall.rmsg:371
 msgid "Body Points: Very low"
 msgstr "Kere Punktid: Väga madal"
 
 #: data/base/messages/resmessages1.rmsg:603
-#: data/mp/messages/resmessages1.rmsg:603
+#: data/mp/messages/resmessages1.rmsg:604
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "Propüleenoksiidi geel põleb kõrgema temperatuuriga"
 
@@ -2162,17 +2162,17 @@ msgid "Increases Flamer damage"
 msgstr "Suurendab Leegiheitja kahju"
 
 #: data/base/messages/resmessages1.rmsg:616
-#: data/mp/messages/resmessages1.rmsg:616
+#: data/mp/messages/resmessages1.rmsg:617
 msgid "7.62mm machinegun"
 msgstr "7.62mm kuulipilduja"
 
 #: data/base/messages/resmessages1.rmsg:629
-#: data/mp/messages/resmessages1.rmsg:629
+#: data/mp/messages/resmessages1.rmsg:630
 msgid "Twin 7.62mm machineguns"
 msgstr "Topelt 7.62mm kuulipilduja"
 
 #: data/base/messages/resmessages1.rmsg:642
-#: data/mp/messages/resmessages1.rmsg:642
+#: data/mp/messages/resmessages1.rmsg:643
 msgid "Hardened case machinegun bullets"
 msgstr "Tugevntatud kuulipilduja kuulid"
 
@@ -2187,18 +2187,18 @@ msgid "Increases Machinegun damage"
 msgstr "Suurendab Kuulipilduja kahju"
 
 #: data/base/messages/resmessages1.rmsg:655
-#: data/mp/messages/resmessages1.rmsg:655
+#: data/mp/messages/resmessages1.rmsg:656
 msgid "Armor-Piercing Discard Sabot Bullets"
 msgstr "Soomust Läbistavate Hülsside Äraviskaja"
 
 #: data/base/messages/resmessages1.rmsg:668
-#: data/mp/messages/resmessages1.rmsg:668
+#: data/mp/messages/resmessages1.rmsg:669
 #: data/mp/messages/resmessagesall.rmsg:343
 msgid "May be targeted directly or assigned to a sensor turret or tower"
 msgstr "Võib-olla otse sihitud või määratud sensortornile või tornile"
 
 #: data/base/messages/resmessages1.rmsg:681
-#: data/mp/messages/resmessages1.rmsg:681
+#: data/mp/messages/resmessages1.rmsg:682
 msgid "Improved high explosive shells"
 msgstr "Täiustunud lõhkeaine mürsud"
 
@@ -2210,12 +2210,12 @@ msgid "Increases Mortar damage"
 msgstr "Suurendab Mortiiri kahju"
 
 #: data/base/messages/resmessages1.rmsg:694
-#: data/mp/messages/resmessages1.rmsg:694
+#: data/mp/messages/resmessages1.rmsg:695
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "Kiirestitulistavad kerged sõidukitevastased raketid"
 
 #: data/base/messages/resmessages1.rmsg:695
-#: data/mp/messages/resmessages1.rmsg:695
+#: data/mp/messages/resmessages1.rmsg:696
 msgid "Best Targets: Wheeled and hover vehicles"
 msgstr "Parimad Sihtmärgid: Ratastega-ja hõljuk sõidukid"
 
@@ -2225,9 +2225,9 @@ msgstr "Parimad Sihtmärgid: Ratastega-ja hõljuk sõidukid"
 #: data/base/messages/resmessages2.rmsg:927
 #: data/base/messages/strings/resstrings.txt:943
 #: data/base/messages/strings/resstrings.txt:951
-#: data/mp/messages/resmessages1.rmsg:706
-#: data/mp/messages/resmessages1.rmsg:719
-#: data/mp/messages/resmessages1.rmsg:732
+#: data/mp/messages/resmessages1.rmsg:707
+#: data/mp/messages/resmessages1.rmsg:720
+#: data/mp/messages/resmessages1.rmsg:733
 #: data/mp/messages/resmessages2.rmsg:927
 #: data/mp/messages/strings/resstrings.txt:986
 #: data/mp/messages/strings/resstrings.txt:994
@@ -2235,7 +2235,7 @@ msgid "Mini-Rocket Upgrade"
 msgstr "Mini-Raketi Uuendus"
 
 #: data/base/messages/resmessages1.rmsg:707
-#: data/mp/messages/resmessages1.rmsg:707
+#: data/mp/messages/resmessages1.rmsg:708
 msgid "Fin-stabilization improves flight trajectory"
 msgstr "Uime-stabilisaator parandab lennutrajektoori"
 
@@ -2249,9 +2249,9 @@ msgstr "Suurendab Mini-Raketi täpsust"
 #: data/base/messages/resmessages2.rmsg:930
 #: data/base/messages/strings/resstrings.txt:946
 #: data/base/messages/strings/resstrings.txt:954
-#: data/mp/messages/resmessages1.rmsg:709
-#: data/mp/messages/resmessages1.rmsg:722
-#: data/mp/messages/resmessages1.rmsg:735
+#: data/mp/messages/resmessages1.rmsg:710
+#: data/mp/messages/resmessages1.rmsg:723
+#: data/mp/messages/resmessages1.rmsg:736
 #: data/mp/messages/resmessages2.rmsg:930
 #: data/mp/messages/strings/resstrings.txt:989
 #: data/mp/messages/strings/resstrings.txt:997
@@ -2259,7 +2259,7 @@ msgid "All mini-rockets upgraded automatically"
 msgstr "Kõik mini-raketid uuendati automaatselt"
 
 #: data/base/messages/resmessages1.rmsg:720
-#: data/mp/messages/resmessages1.rmsg:720
+#: data/mp/messages/resmessages1.rmsg:721
 msgid "Improved shaped charge warhead"
 msgstr "Täiustunud lõhkelaengu kuju"
 
@@ -2271,7 +2271,7 @@ msgid "Increases Mini-Rocket damage"
 msgstr "Suurendab Mini-Raketi kahju"
 
 #: data/base/messages/resmessages1.rmsg:733
-#: data/mp/messages/resmessages1.rmsg:733
+#: data/mp/messages/resmessages1.rmsg:734
 msgid "Automated reload system"
 msgstr "Automatiseeritud laadimissüsteem"
 
@@ -2280,12 +2280,12 @@ msgid "Increases Mini-Rockets ROF"
 msgstr "Suurendab Mini-Raketi Laskekiirust"
 
 #: data/base/messages/resmessages1.rmsg:746
-#: data/mp/messages/resmessages1.rmsg:746
+#: data/mp/messages/resmessages1.rmsg:747
 msgid "Tracks and directs in-flight rocket to target"
 msgstr "Jälitab ja suunab lennul raketti sihtmärgini"
 
 #: data/base/messages/resmessages1.rmsg:759
-#: data/mp/messages/resmessages1.rmsg:759
+#: data/mp/messages/resmessages1.rmsg:760
 msgid "High Explosive Anti-Tank warhead"
 msgstr "Tanki-Vastane  Võimsaplahvatuslik lõhkepea"
 
@@ -9623,77 +9623,65 @@ msgid "Viper Flamer Half-Track"
 msgstr "Pool-Roomikutega Viper Leegiheitja"
 
 #: data/mp/messages/resmessages12.rmsg:58
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "Suurenenud ehitamis kiirus"
+msgstr "Ehitamis kiirus +10%"
 
 #: data/mp/messages/resmessages12.rmsg:97
 #: data/mp/messages/resmessagesall.rmsg:214
-#, fuzzy
 msgid "Cannon accuracy +10%"
-msgstr "Suurendab Kahuri Täpsust"
+msgstr "Kahuri täpsus +10%"
 
 #: data/mp/messages/resmessages12.rmsg:110
-#, fuzzy
 msgid "Flamer reload time -15%"
-msgstr "Leegiheitja Autolaadija"
+msgstr "Leegiheitja laadimisaeg -15%"
 
 #: data/mp/messages/resmessages12.rmsg:136
 #: data/mp/messages/resmessages23.rmsg:175
 #: data/mp/messages/resmessages2.rmsg:890
-#, fuzzy
 msgid "Machinegun reload time -15%"
-msgstr "Kuulipilduja Uuendus"
+msgstr "Kuulipilduja laadimisaeg -15%"
 
 #: data/mp/messages/resmessages12.rmsg:162
 #: data/mp/messages/resmessages23.rmsg:188
 #: data/mp/messages/resmessages3.rmsg:1176
-#, fuzzy
 msgid "Mortar accuracy +10%"
-msgstr "Suurendab Mortiiri täpsust"
+msgstr "Mortiiri täpsus +10%"
 
 #: data/mp/messages/resmessages12.rmsg:175
 #: data/mp/messages/resmessages3.rmsg:1189
-#, fuzzy
 msgid "Mortar reload time -10%"
-msgstr "Mortiiri Autolaadija"
+msgstr "Mortiiri laadimiskiirus -10%"
 
 #: data/mp/messages/resmessages12.rmsg:201
-#, fuzzy
 msgid "Rocket reload time -15%"
-msgstr "Rakettide Autolaadija"
+msgstr "Rakettide laadimiskiirus -15%"
 
 #: data/mp/messages/resmessages12.rmsg:214
 #: data/mp/messages/resmessages3.rmsg:890
-#, fuzzy
 msgid "Cannon reload time -10%"
-msgstr "Kahuri Autolaadija"
+msgstr "Kahuri laadimiskiirus -10%"
 
 #: data/mp/messages/resmessages12.rmsg:227
-#: data/mp/messages/resmessages1.rmsg:578
+#: data/mp/messages/resmessages1.rmsg:579
 #: data/mp/messages/resmessages3.rmsg:877
-#, fuzzy
 msgid "Cannon damage +25%"
-msgstr "Suurendab Kahuri tehtavat kahju"
+msgstr "Kahuri kahju +25%"
 
 #: data/mp/messages/resmessages12.rmsg:240
-#: data/mp/messages/resmessages1.rmsg:747
+#: data/mp/messages/resmessages1.rmsg:748
 #: data/mp/messages/resmessagesall.rmsg:175
-#, fuzzy
 msgid "Rocket accuracy +10%"
-msgstr "Suurendab Raketi täpsust"
+msgstr "Raketi täpsus +10%"
 
 #: data/mp/messages/resmessages1.rmsg:32
 #: data/mp/messages/resmessages3.rmsg:71
 #: data/mp/messages/resmessages3.rmsg:84
-#, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "Suurendab Kineetilist Soomust ja Kere Punkte"
+msgstr "Kineetiline soomus +35%,  Kerepunkte +35%"
 
 #: data/mp/messages/resmessages1.rmsg:97
-#, fuzzy
 msgid "Armour +35%, Body Points +30%"
-msgstr "Suurendab Soomust ja Kere Punkte"
+msgstr "Soomus +35%, Kerepunktid +35%"
 
 #: data/mp/messages/resmessages1.rmsg:148
 msgid "Armored guard tower with Lancer AT rocket"
@@ -9702,124 +9690,110 @@ msgstr "Soomustatud valvetorn Lancer AT Raketiga"
 #: data/mp/messages/resmessages1.rmsg:253
 #: data/mp/messages/resmessages2.rmsg:331
 #: data/mp/messages/resmessages3.rmsg:422
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "Suurendab Parandamise Kiirust"
+msgstr "Remontimiskiirus +100%"
 
-#: data/mp/messages/resmessages1.rmsg:305
-#, c-format
+#: data/mp/messages/resmessages1.rmsg:306
+#, no-c-format
 msgid "Factory output speed +100% per module"
-msgstr ""
+msgstr "Tehase tootmiskiirus +100% mooduli kohta"
 
-#: data/mp/messages/resmessages1.rmsg:318
+#: data/mp/messages/resmessages1.rmsg:319
 #: data/mp/messages/resmessagesall.rmsg:786
 msgid "Factory output speed +60%"
-msgstr ""
+msgstr "Tehase tootmiskiirus +60%"
 
-#: data/mp/messages/resmessages1.rmsg:344
-#, fuzzy
+#: data/mp/messages/resmessages1.rmsg:345
 msgid "Research speed +85%"
-msgstr "Uurimine Lõpetatud: %s"
+msgstr "Uurimiskiirus +85%"
 
-#: data/mp/messages/resmessages1.rmsg:357
+#: data/mp/messages/resmessages1.rmsg:358
 #: data/mp/messages/resmessages2.rmsg:370
 #: data/mp/messages/resmessages3.rmsg:448
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "Uurimine Lõpetatud: %s"
+msgstr "Uurimiskiirus +30%"
 
-#: data/mp/messages/resmessages1.rmsg:370
+#: data/mp/messages/resmessages1.rmsg:371
 #: data/mp/messages/resmessages2.rmsg:58
 #: data/mp/messages/resmessages2.rmsg:383
 #: data/mp/messages/resmessages3.rmsg:214
 #: data/mp/messages/resmessages3.rmsg:227
 #: data/mp/messages/resmessages3.rmsg:461
 #: data/mp/messages/resmessages3.rmsg:474
-#, fuzzy
 msgid "Armor +35%, Body Points +30%"
-msgstr "Suurendab Soomuse ja Kere Punkte"
+msgstr "Soomus +35%, Kerepunktid +30%"
 
-#: data/mp/messages/resmessages1.rmsg:461
+#: data/mp/messages/resmessages1.rmsg:462
 #: data/mp/messages/resmessages2.rmsg:500
 #: data/mp/messages/resmessages3.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:682
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "Masina Kere"
+msgstr "Masina kiirus +5%"
 
-#: data/mp/messages/resmessages1.rmsg:474
+#: data/mp/messages/resmessages1.rmsg:475
 #: data/mp/messages/resmessages2.rmsg:513
 #: data/mp/messages/resmessages3.rmsg:695
 #: data/mp/messages/resmessages3.rmsg:708
-#, fuzzy
 msgid "Kinetic armor +30%, body points +30%"
-msgstr "Suurendab kineetilist soomust ja kerepunkte"
+msgstr "Kineetiline soomus +30%, kerepunktid +30%"
 
-#: data/mp/messages/resmessages1.rmsg:552
-#: data/mp/messages/resmessages1.rmsg:565
+#: data/mp/messages/resmessages1.rmsg:553
+#: data/mp/messages/resmessages1.rmsg:566
 #: data/mp/messages/resmessages2.rmsg:747
 msgid "Best Targets: Vehicles, Hardpoints"
 msgstr "Parimad Sihtmärgid: Sõidukid ja Kaitsvad Paigaldused"
 
-#: data/mp/messages/resmessages1.rmsg:604
+#: data/mp/messages/resmessages1.rmsg:605
 #: data/mp/messages/resmessages2.rmsg:786
 #: data/mp/messages/resmessagesall.rmsg:773
-#, fuzzy
 msgid "Flamer damage +25%"
-msgstr "Suurendab Leegiheitja kahju"
+msgstr "Leegiheitja kahju +25%"
 
-#: data/mp/messages/resmessages1.rmsg:643
-#: data/mp/messages/resmessages1.rmsg:656
+#: data/mp/messages/resmessages1.rmsg:644
+#: data/mp/messages/resmessages1.rmsg:657
 #: data/mp/messages/resmessages2.rmsg:877
 #: data/mp/messages/resmessages3.rmsg:1007
 #: data/mp/messages/resmessages3.rmsg:1020
-#, fuzzy
 msgid "Machinegun damage +25%"
-msgstr "Suurendab Kuulipilduja kahju"
+msgstr "Kuulipilduja kahju +25%"
 
-#: data/mp/messages/resmessages1.rmsg:682
+#: data/mp/messages/resmessages1.rmsg:683
 #: data/mp/messages/resmessages2.rmsg:916
-#, fuzzy
 msgid "Mortar damage +25%"
-msgstr "Suurendab Mortiiri kahju"
+msgstr "Mortiiri kahju +25%"
 
-#: data/mp/messages/resmessages1.rmsg:708
-#, fuzzy
+#: data/mp/messages/resmessages1.rmsg:709
 msgid "Mini-Rocket accuracy +10%"
-msgstr "Suurendab Mini-Raketi täpsust"
+msgstr "Mini-Raketi täpsus +10%"
 
-#: data/mp/messages/resmessages1.rmsg:721
+#: data/mp/messages/resmessages1.rmsg:722
 #: data/mp/messages/resmessages2.rmsg:929
-#, fuzzy
 msgid "Mini-Rocket damage +25%"
-msgstr "Suurendab Mini-Raketi kahju"
+msgstr "Mini-Raketi kahju +25%"
 
-#: data/mp/messages/resmessages1.rmsg:734
-#, fuzzy
+#: data/mp/messages/resmessages1.rmsg:735
 msgid "Mini-Rocket reload time -15%"
-msgstr "Mini-Raketi Uuendus"
+msgstr "Mini-Raketi laadimisaeg -15%"
 
-#: data/mp/messages/resmessages1.rmsg:760
+#: data/mp/messages/resmessages1.rmsg:761
 #: data/mp/messages/resmessages2.rmsg:942
-#, fuzzy
 msgid "Rocket damage +25%"
-msgstr "Suurendab Raketi kahju"
+msgstr "Raketi kahju +25%"
 
 #: data/mp/messages/resmessages23.rmsg:32
 msgid "Power output +25%"
-msgstr ""
+msgstr "Energia tootlus +25%"
 
 #: data/mp/messages/resmessages23.rmsg:45
 #: data/mp/messages/resmessages3.rmsg:513
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "Suurenenud ehitamis kiirus"
+msgstr "Ehituskiirus +20%"
 
 #: data/mp/messages/resmessages23.rmsg:136
 #: data/mp/messages/resmessages2.rmsg:643
 #: data/mp/messages/resmessages3.rmsg:812
 msgid "AA accuracy +10%"
-msgstr ""
+msgstr "AA täpsus +10%"
 
 #: data/mp/messages/resmessages23.rmsg:160
 #: data/mp/messages/resmessages2.rmsg:732
@@ -9835,72 +9809,62 @@ msgstr "Täiustunud trinitramine plahvatav valem"
 #: data/mp/messages/resmessages2.rmsg:734
 #: data/mp/messages/resmessages3.rmsg:864
 msgid "Bomb damage +25%"
-msgstr ""
+msgstr "Pommi kahju +25%"
 
 #: data/mp/messages/resmessages2.rmsg:6
-#, fuzzy
 msgid "Thermal Armor +45%"
-msgstr "Soojussoomus"
+msgstr "Soojussoomus +45%"
 
 #: data/mp/messages/resmessages2.rmsg:19
-#, fuzzy
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "Suurendab Kineetilist Soomust ja Kere Punkte"
+msgstr "Kineetiline soomus +35%, Kerepunktid +35%"
 
 #: data/mp/messages/resmessages2.rmsg:357
-#, fuzzy
 msgid "Factory production rate +60%"
-msgstr "Suurendab tehase tootmiskiirust"
+msgstr "Tehase tootmiskiirus +60%"
 
 #: data/mp/messages/resmessages2.rmsg:358
 #: data/mp/messages/resmessagesall.rmsg:787
-#, fuzzy
 msgid "All factories upgraded automatically"
-msgstr "Kõik VTOL tehased uuendati automaatselt"
+msgstr "Kõik tehased uuendati automaatselt"
 
 #: data/mp/messages/resmessages2.rmsg:409
 #: data/mp/messages/resmessages3.rmsg:500
 msgid "Rearming speed +30%"
-msgstr ""
+msgstr "Laadimiskiirus +30%"
 
 #: data/mp/messages/resmessages2.rmsg:526
-#, fuzzy
 msgid "Thermal armor +40%"
-msgstr "Soojussoomus"
+msgstr "Soojussoomus +40%"
 
 #: data/mp/messages/resmessages2.rmsg:656
 #: data/mp/messages/resmessages3.rmsg:825
-#, fuzzy
 msgid "AA Flak damage +25%"
-msgstr "Suurendab AA Õhutõrje kahju"
+msgstr "AA Õhutõrje kahju +25%"
 
 #: data/mp/messages/resmessages2.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:838
 msgid "AA reload time -15%"
-msgstr ""
+msgstr "AA laadimisaeg -15%"
 
 #: data/mp/messages/resmessages2.rmsg:838
 #: data/mp/messages/resmessages3.rmsg:903
-#, fuzzy
 msgid "Howitzer accuracy +10%"
-msgstr "Suurendab Haubitsa täpsust"
+msgstr "Haubitsa täpsus +10%"
 
 #: data/mp/messages/resmessages2.rmsg:851
 #: data/mp/messages/resmessages3.rmsg:916
-#, fuzzy
 msgid "Howitzer damage +25%"
-msgstr "Suurendab Haubitsa kahju"
+msgstr "Haubitsa kahju +25%"
 
 #: data/mp/messages/resmessages2.rmsg:864
 #: data/mp/messages/resmessages3.rmsg:929
-#, fuzzy
 msgid "Howitzer reload time -10%"
-msgstr "Haubitsa Autolaadija"
+msgstr "Haubitsa laadimisaeg -10%"
 
 #: data/mp/messages/resmessages3.rmsg:6
-#, fuzzy
 msgid "Thermal Armor +35%"
-msgstr "Soojussoomus Mk3"
+msgstr "Soojussoomus +35%"
 
 #: data/mp/messages/resmessages3.rmsg:304
 msgid "Armored guard tower with Pulse Laser"
@@ -9908,98 +9872,82 @@ msgstr "Soomustatud valvetorn Impulsslaseriga"
 
 #: data/mp/messages/resmessages3.rmsg:435
 msgid "Power output +30%"
-msgstr ""
+msgstr "Energia tootlus +30%"
 
 #: data/mp/messages/resmessages3.rmsg:721
 #: data/mp/messages/resmessagesall.rmsg:838
-#, fuzzy
 msgid "Thermal Armor +40%"
-msgstr "Soojussoomus"
+msgstr "Soojussoomus +40%"
 
 #: data/mp/messages/resmessages3.rmsg:968
-#, fuzzy
 msgid "Laser accuracy +10%"
-msgstr "Suurendab Laseri täpsust"
+msgstr "Laseri täpsus +10%"
 
 #: data/mp/messages/resmessages3.rmsg:981
-#, fuzzy
 msgid "Laser damage +25%"
-msgstr "Suurendab Laseri kahju"
+msgstr "Laseri kahju +25%"
 
 #: data/mp/messages/resmessages3.rmsg:994
 msgid "Laser reload time -15%"
-msgstr ""
+msgstr "Laseri laadimisaeg -15%"
 
 #: data/mp/messages/resmessages3.rmsg:1059
 #: data/mp/messages/resmessages3.rmsg:1072
-#, fuzzy
 msgid "Missile accuracy +10%"
-msgstr "Suurendab Raketi täpsust"
+msgstr "Raketi täpsus +10%"
 
 #: data/mp/messages/resmessages3.rmsg:1085
-#, fuzzy
 msgid "Missile damage +25%"
-msgstr "Suurendab Raketi kahju"
+msgstr "Raketi kahju +25%"
 
 #: data/mp/messages/resmessages3.rmsg:1150
 #: data/mp/messages/resmessages3.rmsg:1163
-#, fuzzy
 msgid "Missile reload time -15%"
-msgstr "Missiooni Aeg - %s"
+msgstr "Raketi laadimisaeg -15%"
 
 #: data/mp/messages/resmessages3.rmsg:1241
-#, fuzzy
 msgid "Rail Gun accuracy +10%"
-msgstr "Suurendab Railkahuri täpsust"
+msgstr "Railkahuri täpsus +10%"
 
 #: data/mp/messages/resmessages3.rmsg:1254
-#, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "Suurendab Railkahuri kahju"
+msgstr "Railkahuri kahju +25%"
 
 #: data/mp/messages/resmessages3.rmsg:1267
-#, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "Railkahuri Uuendus"
+msgstr "Railkahuri laadimisaeg -15%"
 
 #: data/mp/messages/resmessagesall.rmsg:84
-#, fuzzy
 msgid "Sensor Range +25%"
-msgstr "Sensori Ulatus"
+msgstr "Sensori Ulatus +25%"
 
 #: data/mp/messages/resmessagesall.rmsg:96
-#, fuzzy
 msgid "Improved Thermal Emissions detection"
-msgstr "Uus Soojusväljalaske avastamine"
+msgstr "Parantatud Soojusväljalaske avastamine"
 
 #: data/mp/messages/resmessagesall.rmsg:97
-#, fuzzy
 msgid "Sensor Range +15%"
-msgstr "Sensori Ulatus"
+msgstr "Sensori Ulatus +15%"
 
 #: data/mp/messages/resmessagesall.rmsg:109
-#, fuzzy
 msgid "Advanced Thermal Emissions detection"
-msgstr "Uus Soojusväljalaske avastamine"
+msgstr "Arenenud Soojusväljalaske avastamine"
 
 #: data/mp/messages/resmessagesall.rmsg:110
-#, fuzzy
 msgid "Sensor Range +10%"
-msgstr "Sensori Ulatus"
+msgstr "Sensori Ulatus +10%"
 
 #: data/mp/messages/resmessagesall.rmsg:135
 msgid "Radar detector tower detects enemy sensors"
-msgstr ""
+msgstr "Radari dedektori torn avastab vaenlase sensoreid"
 
 #: data/mp/messages/resmessagesall.rmsg:136
-#, fuzzy
 msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-msgstr "Käsib määratud kaudse tule üksustel tulistada vaenlase patareisid"
+msgstr "Käsib määratud kaudsetule üksustel tulistada vaenlase sensoreid"
 
 #: data/mp/messages/resmessagesall.rmsg:137
-#, fuzzy
 msgid "Counter-battery fire continues until enemy sensor is suppressed"
-msgstr "Patarei-vastane tuli kestab kuni vaenlase patarei on hävitatud"
+msgstr "Patarei-vastane tuli kestab kuni vaenlase sensor on hävitatud"
 
 #: data/mp/messages/resmessagesall.rmsg:225
 msgid "Cyborg Transport Available"
@@ -10105,7 +10053,7 @@ msgstr "Täielik lahinguvälja nägemisulatus"
 
 #: data/mp/messages/resmessagesall.rmsg:501
 msgid "Does not offer sensor targeting"
-msgstr ""
+msgstr "Ei paku sensori sihtimist"
 
 #: data/mp/messages/resmessagesall.rmsg:512
 #: data/mp/messages/resmessagesall.rmsg:707
@@ -10125,9 +10073,8 @@ msgid "Immense damage infliction capability"
 msgstr "Tohutu kahju tekitamise võime"
 
 #: data/mp/messages/resmessagesall.rmsg:527
-#, fuzzy
 msgid "Narrow area of effect"
-msgstr "Kitsas ala mõju"
+msgstr "Kitsa ala mõju"
 
 #: data/mp/messages/resmessagesall.rmsg:538
 msgid "Armored guard tower with Nexus Link"
@@ -10814,18 +10761,16 @@ msgid "Missile Fortress"
 msgstr "Raketi Kindlus"
 
 #: data/mp/messages/strings/names.txt:1761
-#, fuzzy
 msgid "Heavy Body - Wyvern"
-msgstr "Super Raske Kere - Wyvern"
+msgstr "Raske Kere - Wyvern"
 
 #: data/mp/messages/strings/names.txt:1762
 msgid "Wyvern"
 msgstr "Wyvern"
 
 #: data/mp/messages/strings/names.txt:1764
-#, fuzzy
 msgid "Multi Turret Body - Dragon"
-msgstr "Super Raske Kere - Dragon"
+msgstr "Mitmetorni Kere - Dragon"
 
 #: data/mp/messages/strings/names.txt:1765
 msgid "Dragon"
@@ -11279,9 +11224,8 @@ msgstr "Iiri Keel"
 
 #: lib/framework/i18n.c:71
 #: lib/framework/i18n.c:128
-#, fuzzy
 msgid "Croatian"
-msgstr "Läti Keel"
+msgstr "Horvaatia keel"
 
 #: lib/framework/i18n.c:72
 #: lib/framework/i18n.c:129
@@ -11369,7 +11313,7 @@ msgstr "Ei suuda lobby serveriga suhelda! Kas port %u on väljaminevale liikluse
 
 #: lib/netplay/netplay.c:3300
 msgid ", mods: "
-msgstr ""
+msgstr ", mods:"
 
 #: src/clparse.c:99
 msgid "Run in cheat mode"
@@ -12090,7 +12034,7 @@ msgstr "MÄNGU SEADED"
 #: src/frontend.c:1698
 #: src/multiint.c:2233
 msgid "Active mods: "
-msgstr ""
+msgstr "Aktiivsed mods:"
 
 #: src/hci.c:1013
 #: src/hci.c:3789
@@ -12247,9 +12191,8 @@ msgid "Resume Game"
 msgstr "Jätka Mängu"
 
 #: src/ingameop.c:142
-#, fuzzy
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr "Hoiatus, kui Võõrustaja lahkub, lõpeb mäng kõigi jaoks!"
+msgstr "HOIATUS: sa oled võõrustaja. Kui sa lahkud, lõpeb mäng kõigi jaoks"
 
 #: src/ingameop.c:195
 #: src/ingameop.c:548
@@ -12295,7 +12238,7 @@ msgid "Power Accrued"
 msgstr "Energia Kogunenud"
 
 #: src/intelmap.c:247
-#: src/keybind.c:1331
+#: src/keybind.c:1342
 msgid "PAUSED"
 msgstr "PAUSED"
 
@@ -12316,32 +12259,32 @@ msgid "New Intelligence Report"
 msgstr "Uus Intelligentsus Raport."
 
 #: src/intorder.c:179
-#: src/keymap.c:389
+#: src/keymap.c:390
 msgid "Short Range"
 msgstr "Lühike Ulatus"
 
 #: src/intorder.c:180
-#: src/keymap.c:396
+#: src/keymap.c:397
 msgid "Long Range"
 msgstr "Kauge Ulatus"
 
 #: src/intorder.c:181
-#: src/keymap.c:388
+#: src/keymap.c:389
 msgid "Optimum Range"
 msgstr "Optimaalne Ulatus"
 
 #: src/intorder.c:182
-#: src/keymap.c:407
+#: src/keymap.c:409
 msgid "Retreat at Medium Damage"
 msgstr "Tagane Keskmise Kahjuga"
 
 #: src/intorder.c:183
-#: src/keymap.c:408
+#: src/keymap.c:410
 msgid "Retreat at Heavy Damage"
 msgstr "Tagane Raske Kahjuga"
 
 #: src/intorder.c:184
-#: src/keymap.c:409
+#: src/keymap.c:411
 msgid "Do or Die!"
 msgstr "Tee või Sure!"
 
@@ -12350,37 +12293,37 @@ msgid "Fire-At-Will"
 msgstr "Vaba Tuli"
 
 #: src/intorder.c:186
-#: src/keymap.c:384
+#: src/keymap.c:385
 msgid "Return Fire"
 msgstr "Vastu Tuli"
 
 #: src/intorder.c:187
-#: src/keymap.c:382
+#: src/keymap.c:383
 msgid "Hold Fire"
 msgstr "Hoidke Tuld"
 
 #: src/intorder.c:188
-#: src/keymap.c:391
+#: src/keymap.c:392
 msgid "Patrol"
 msgstr "Patrull"
 
 #: src/intorder.c:189
-#: src/keymap.c:390
+#: src/keymap.c:391
 msgid "Pursue"
 msgstr "Jälita"
 
 #: src/intorder.c:190
-#: src/keymap.c:386
+#: src/keymap.c:387
 msgid "Guard Position"
 msgstr "Kaitse Positsiooni"
 
 #: src/intorder.c:191
-#: src/keymap.c:393
+#: src/keymap.c:394
 msgid "Hold Position"
 msgstr "Hoia Positsiooni"
 
 #: src/intorder.c:192
-#: src/keymap.c:392
+#: src/keymap.c:393
 msgid "Return For Repair"
 msgstr "Tagane Remontimisele"
 
@@ -12389,12 +12332,12 @@ msgid "Return To HQ"
 msgstr "Tagane HQ Juurde"
 
 #: src/intorder.c:194
-#: src/keymap.c:394
+#: src/keymap.c:395
 msgid "Go to Transport"
 msgstr "Mine Transporti"
 
 #: src/intorder.c:195
-#: src/keymap.c:418
+#: src/keymap.c:420
 msgid "Return for Recycling"
 msgstr "Tagane Taaskäitluseks"
 
@@ -12447,10 +12390,10 @@ msgstr "Suurepärane, relva & sensori kuvar on väljas!"
 #: src/keybind.c:681
 #: src/keybind.c:1232
 #: src/keybind.c:1289
-#: src/keybind.c:1380
-#: src/keybind.c:1476
-#: src/keybind.c:1827
-#: src/keybind.c:1867
+#: src/keybind.c:1391
+#: src/keybind.c:1487
+#: src/keybind.c:1838
+#: src/keybind.c:1878
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Mängija %u) teeb sohki:%s"
@@ -12550,150 +12493,154 @@ msgstr "Jumala mode väljas"
 msgid "View Aligned to North"
 msgstr "View Aligned to North"
 
-#: src/keybind.c:1381
+#: src/keybind.c:1311
+#, fuzzy, c-format
+msgid "Trap cursor %s"
+msgstr "Püüniskursor"
+
+#: src/keybind.c:1392
 msgid "Researched EVERYTHING for you!"
 msgstr "Researched EVERYTHING for you!"
 
-#: src/keybind.c:1412
+#: src/keybind.c:1423
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Mängija %u) kasutab pettust :%s %s"
 
-#: src/keybind.c:1413
+#: src/keybind.c:1424
 msgid "Researched"
 msgstr "Uuritud"
 
-#: src/keybind.c:1434
+#: src/keybind.c:1445
 msgid "Only displaying energy bars when selected"
 msgstr "Näitab energjaribasid kui valitud"
 
-#: src/keybind.c:1437
+#: src/keybind.c:1448
 msgid "Always displaying energy bars for units"
 msgstr "Näitab alati üksuste energiaribasid"
 
-#: src/keybind.c:1440
+#: src/keybind.c:1451
 msgid "Always displaying energy bars for units and structures"
 msgstr "Näitab alati üksuste ja ehitiste energiaribasid"
 
-#: src/keybind.c:1462
+#: src/keybind.c:1473
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Demo mode off - Returning to normal game mode"
 
-#: src/keybind.c:1477
+#: src/keybind.c:1488
 msgid "Debug menu is Open"
 msgstr "Debug menüü on avatud"
 
-#: src/keybind.c:1508
+#: src/keybind.c:1519
 msgid "Unable to locate any resource extractors!"
 msgstr "Unable to locate any resource extractors!"
 
-#: src/keybind.c:1729
+#: src/keybind.c:1740
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, the weather outside is frightful... SNOW"
 
-#: src/keybind.c:1735
+#: src/keybind.c:1746
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Singing in the rain, I'm singing in the rain... RAIN"
 
-#: src/keybind.c:1741
+#: src/keybind.c:1752
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Forecast : Clear skies for all areas... NO WEATHER"
 
-#: src/keybind.c:1826
+#: src/keybind.c:1837
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Warning! This can have drastic consequences if used incorrectly in missions."
 
-#: src/keybind.c:1828
+#: src/keybind.c:1839
 msgid "All enemies destroyed by cheating!"
 msgstr "Kõik vaenlased pettusega hävitatud"
 
-#: src/keybind.c:1868
+#: src/keybind.c:1879
 msgid "Destroying selected droids and structures!"
 msgstr "Hävitab valitud  üksused ja ehitised"
 
-#: src/keybind.c:2387
+#: src/keybind.c:2398
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Mängija HQ Keskel, Suund PÕHI"
 
-#: src/keybind.c:2399
+#: src/keybind.c:2410
 msgid "Unable to locate HQ!"
 msgstr "Võimetu HQ leidma!"
 
-#: src/keybind.c:2406
+#: src/keybind.c:2417
 msgid "Formation speed limiting has been removed from the game due to bugs."
-msgstr ""
+msgstr "Formatsiooni kiiruse limiit eemaldati mängust vea tõttu"
 
-#: src/keybind.c:2455
+#: src/keybind.c:2466
 msgid "Vertical rotation direction: Normal"
-msgstr ""
+msgstr "Vertikaalse pöörlemise suund: Normaalne"
 
-#: src/keybind.c:2460
+#: src/keybind.c:2471
 msgid "Vertical rotation direction: Flipped"
-msgstr ""
+msgstr "Vertikaalse pöörlemise suund: Flipped"
 
-#: src/keybind.c:2469
+#: src/keybind.c:2480
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "Ekraani värin, kui miski sureb: Väljas"
 
-#: src/keybind.c:2474
+#: src/keybind.c:2485
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "Ekraani värin, kui miski sureb: Sees"
 
-#: src/keybind.c:2519
-#: src/keybind.c:2562
-#, fuzzy
+#: src/keybind.c:2530
+#: src/keybind.c:2573
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "Sorry, see sohk on mitmikmängust eemaltatud."
+msgstr "Sorry, aga mängu kiirust ei saa mitmikmängus muuta."
 
-#: src/keybind.c:2540
-#: src/keybind.c:2583
-#: src/keybind.c:2605
+#: src/keybind.c:2551
+#: src/keybind.c:2594
+#: src/keybind.c:2616
 msgid "Game Speed Reset"
 msgstr "Mängu Kiirus Taastatud"
 
-#: src/keybind.c:2544
+#: src/keybind.c:2555
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Mängu Kiirus Suurendatud %3.1f"
 
-#: src/keybind.c:2587
+#: src/keybind.c:2598
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Mängu Kiirus Vähendatud %3.1f"
 
-#: src/keybind.c:2617
+#: src/keybind.c:2628
 msgid "Build menu will reopen"
 msgstr "Build menu will reopen"
 
-#: src/keybind.c:2621
+#: src/keybind.c:2632
 msgid "Build menu will not reopen"
 msgstr "Build menu will not reopen"
 
-#: src/keybind.c:2633
+#: src/keybind.c:2644
 msgid "Radar showing friend-foe colors"
 msgstr "Radar showing friend-foe colours"
 
-#: src/keybind.c:2637
+#: src/keybind.c:2648
 msgid "Radar showing player colors"
 msgstr "Radar showing player colours"
 
-#: src/keybind.c:2658
+#: src/keybind.c:2669
 msgid "Radar showing only objects"
 msgstr "Radar näitab ainult objekte"
 
-#: src/keybind.c:2661
+#: src/keybind.c:2672
 msgid "Radar blending terrain and height"
 msgstr "Radar blending terrain and height"
 
-#: src/keybind.c:2664
+#: src/keybind.c:2675
 msgid "Radar showing terrain"
 msgstr "Radar näitab terraini"
 
-#: src/keybind.c:2667
+#: src/keybind.c:2678
 msgid "Radar showing revealed terrain"
 msgstr "Radar näitab paljastatud terraini"
 
-#: src/keybind.c:2670
+#: src/keybind.c:2681
 msgid "Radar showing height"
 msgstr "Radar näitab kõrgust"
 
@@ -12713,363 +12660,363 @@ msgstr "Naase Eelmisele Ekraanile"
 msgid "Select Default"
 msgstr "Vali Algne"
 
-#: src/keymap.c:294
+#: src/keymap.c:295
 msgid "Manufacture"
 msgstr "Tootmine"
 
-#: src/keymap.c:295
+#: src/keymap.c:296
 msgid "Research"
 msgstr "Uurimine"
 
-#: src/keymap.c:296
+#: src/keymap.c:297
 msgid "Build"
 msgstr "Ehita"
 
-#: src/keymap.c:297
+#: src/keymap.c:298
 msgid "Design"
 msgstr "Konstrueerimine"
 
-#: src/keymap.c:298
+#: src/keymap.c:299
 msgid "Intelligence Display"
 msgstr "Intelligentsus Ekraan"
 
-#: src/keymap.c:299
+#: src/keymap.c:300
 msgid "Commanders"
 msgstr "Komandörid"
 
-#: src/keymap.c:300
+#: src/keymap.c:301
 msgid "Toggle Radar"
 msgstr "Vaheta Radar"
 
-#: src/keymap.c:301
+#: src/keymap.c:302
 msgid "Toggle Console Display"
 msgstr "Vaheta Konsooli Näitamist"
 
-#: src/keymap.c:302
+#: src/keymap.c:303
 msgid "Toggle Damage Bars On/Off"
 msgstr "Vaheta Kahju Ribad Sisse/Välja"
 
-#: src/keymap.c:303
+#: src/keymap.c:304
 msgid "Take Screen Shot"
 msgstr "Tee Screen Shot"
 
-#: src/keymap.c:304
+#: src/keymap.c:305
 msgid "Toggle Formation Speed Limiting"
 msgstr "Toggle Formation Speed Limiting"
 
-#: src/keymap.c:305
+#: src/keymap.c:306
 msgid "View Location of Previous Message"
 msgstr "Näita Eelmise Sõnumi Asukohta"
 
-#: src/keymap.c:310
+#: src/keymap.c:311
 msgid "Assign Group 0"
 msgstr "Määra Grupp 0"
 
-#: src/keymap.c:311
+#: src/keymap.c:312
 msgid "Assign Group 1"
 msgstr "Määra Grupp 1"
 
-#: src/keymap.c:312
+#: src/keymap.c:313
 msgid "Assign Group 2"
 msgstr "Määra Grupp 2"
 
-#: src/keymap.c:313
+#: src/keymap.c:314
 msgid "Assign Group 3"
 msgstr "Määra Grupp 3"
 
-#: src/keymap.c:314
+#: src/keymap.c:315
 msgid "Assign Group 4"
 msgstr "Määra Grupp 4"
 
-#: src/keymap.c:315
+#: src/keymap.c:316
 msgid "Assign Group 5"
 msgstr "Määra Grupp 5"
 
-#: src/keymap.c:316
+#: src/keymap.c:317
 msgid "Assign Group 6"
 msgstr "Määra Grupp 6"
 
-#: src/keymap.c:317
+#: src/keymap.c:318
 msgid "Assign Group 7"
 msgstr "Määra Grupp 7"
 
-#: src/keymap.c:318
+#: src/keymap.c:319
 msgid "Assign Group 8"
 msgstr "Määra Grupp 8"
 
-#: src/keymap.c:319
+#: src/keymap.c:320
 msgid "Assign Group 9"
 msgstr "Määra Grupp 9"
 
-#: src/keymap.c:323
+#: src/keymap.c:324
 msgid "Select Group 0"
 msgstr "Vali Grupp 0"
 
-#: src/keymap.c:324
+#: src/keymap.c:325
 msgid "Select Group 1"
 msgstr "Vali Grupp 1"
 
-#: src/keymap.c:325
+#: src/keymap.c:326
 msgid "Select Group 2"
 msgstr "Vali Grupp 2"
 
-#: src/keymap.c:326
+#: src/keymap.c:327
 msgid "Select Group 3"
 msgstr "Vali Grupp 3"
 
-#: src/keymap.c:327
+#: src/keymap.c:328
 msgid "Select Group 4"
 msgstr "Vali Grupp 4"
 
-#: src/keymap.c:328
+#: src/keymap.c:329
 msgid "Select Group 5"
 msgstr "Vali Grupp 5"
 
-#: src/keymap.c:329
+#: src/keymap.c:330
 msgid "Select Group 6"
 msgstr "Vali Grupp 6"
 
-#: src/keymap.c:330
+#: src/keymap.c:331
 msgid "Select Group 7"
 msgstr "Vali Grupp 7"
 
-#: src/keymap.c:331
+#: src/keymap.c:332
 msgid "Select Group 8"
 msgstr "Vali Grupp 8"
 
-#: src/keymap.c:332
+#: src/keymap.c:333
 msgid "Select Group 9"
 msgstr "Vali Grupp 9"
 
-#: src/keymap.c:336
+#: src/keymap.c:337
 msgid "Select Commander 0"
 msgstr "Vali Komandör 0"
 
-#: src/keymap.c:337
+#: src/keymap.c:338
 msgid "Select Commander 1"
 msgstr "Vali Komandör 1"
 
-#: src/keymap.c:338
+#: src/keymap.c:339
 msgid "Select Commander 2"
 msgstr "Vali Komandör 2"
 
-#: src/keymap.c:339
+#: src/keymap.c:340
 msgid "Select Commander 3"
 msgstr "Vali Komandör 3"
 
-#: src/keymap.c:340
+#: src/keymap.c:341
 msgid "Select Commander 4"
 msgstr "Vali Komandör 4"
 
-#: src/keymap.c:341
+#: src/keymap.c:342
 msgid "Select Commander 5"
 msgstr "Vali Komandör 5"
 
-#: src/keymap.c:342
+#: src/keymap.c:343
 msgid "Select Commander 6"
 msgstr "Vali Komandör 6"
 
-#: src/keymap.c:343
+#: src/keymap.c:344
 msgid "Select Commander 7"
 msgstr "Vali Komandör 7"
 
-#: src/keymap.c:344
+#: src/keymap.c:345
 msgid "Select Commander 8"
 msgstr "Vali Komandör 8"
 
-#: src/keymap.c:345
+#: src/keymap.c:346
 msgid "Select Commander 9"
 msgstr "Vali Komandör 9"
 
-#: src/keymap.c:349
+#: src/keymap.c:350
 msgid "Multiplayer Options / Alliance dialog"
 msgstr "Mitmikmängu Seaded / Liitlus kõnelus"
 
-#: src/keymap.c:352
+#: src/keymap.c:353
 msgid "Snap View to North"
 msgstr "Kiir Vaade Põhjapoole"
 
-#: src/keymap.c:353
+#: src/keymap.c:354
 msgid "Toggle Tracking Camera"
 msgstr "Toggle Tracking Camera"
 
-#: src/keymap.c:354
+#: src/keymap.c:355
 msgid "Display In-Game Options"
 msgstr "Näita Mängusiseseid Seadeid"
 
-#: src/keymap.c:355
+#: src/keymap.c:356
 msgid "Zoom Radar Out"
 msgstr "Zoomi Radar Välja"
 
-#: src/keymap.c:356
+#: src/keymap.c:357
 msgid "Zoom Radar In"
 msgstr "Zoomi Radar Sisse"
 
-#: src/keymap.c:357
+#: src/keymap.c:358
 msgid "Zoom In"
 msgstr "Zoomi Välja"
 
-#: src/keymap.c:358
+#: src/keymap.c:359
 msgid "Zoom Out"
 msgstr "Zoomi Sisse"
 
-#: src/keymap.c:359
+#: src/keymap.c:360
 msgid "Pitch Forward"
 msgstr "Liigu Edasi"
 
-#: src/keymap.c:360
+#: src/keymap.c:361
 msgid "Rotate Left"
 msgstr "Keera Vasakule"
 
-#: src/keymap.c:361
+#: src/keymap.c:362
 msgid "Reset Pitch"
 msgstr "Tühista Liikumine"
 
-#: src/keymap.c:362
+#: src/keymap.c:363
 msgid "Rotate Right"
 msgstr "Keera Paremale"
 
-#: src/keymap.c:363
+#: src/keymap.c:364
 msgid "Pitch Back"
 msgstr "Liigu Tagasi"
 
-#: src/keymap.c:364
+#: src/keymap.c:365
 msgid "Orders Menu"
 msgstr "Käskude Menüü"
 
-#: src/keymap.c:365
+#: src/keymap.c:366
 msgid "Decrease Game Speed"
 msgstr "Vähenda Mängu Kiirust"
 
-#: src/keymap.c:366
+#: src/keymap.c:367
 msgid "Increase Game Speed"
 msgstr "Suurenda Mängukiirust"
 
-#: src/keymap.c:367
+#: src/keymap.c:368
 msgid "Reset Game Speed"
 msgstr "Taasta Mängukiirus"
 
-#: src/keymap.c:368
+#: src/keymap.c:369
 msgid "View North"
 msgstr "Vaata Põhja"
 
-#: src/keymap.c:369
+#: src/keymap.c:370
 msgid "View South"
 msgstr "Vaat Lõunasse"
 
-#: src/keymap.c:370
+#: src/keymap.c:371
 msgid "View East"
 msgstr "Vaata Itta"
 
-#: src/keymap.c:371
+#: src/keymap.c:372
 msgid "View West"
 msgstr "Vaata Läände"
 
-#: src/keymap.c:372
+#: src/keymap.c:373
 msgid "View next Oil Derrick"
 msgstr "Näita Järgmist Naftapuurtorni"
 
-#: src/keymap.c:373
+#: src/keymap.c:374
 msgid "View next Repair Unit"
 msgstr "Näita järgmist Remondi Üksust"
 
-#: src/keymap.c:374
+#: src/keymap.c:375
 msgid "View next Truck"
 msgstr "Näita järgmist Veoautot"
 
-#: src/keymap.c:375
+#: src/keymap.c:376
 msgid "View next Sensor Unit"
 msgstr "Näita järgmist Sensorüksust"
 
-#: src/keymap.c:376
+#: src/keymap.c:377
 msgid "View next Commander"
 msgstr "Näita järgmist Komandöri"
 
-#: src/keymap.c:377
+#: src/keymap.c:378
 msgid "Toggle Overlays"
 msgstr "Toggle Overlays"
 
-#: src/keymap.c:378
+#: src/keymap.c:379
 msgid "Console On/Off"
 msgstr "Konsool Sisse/Välja"
 
-#: src/keymap.c:381
+#: src/keymap.c:382
 msgid "Center View on HQ"
 msgstr "Kesk vaade Juhtimiskeskusele"
 
-#: src/keymap.c:383
+#: src/keymap.c:384
 msgid "View Unassigned Units"
 msgstr "Näita määramata üksusi"
 
-#: src/keymap.c:385
+#: src/keymap.c:386
 msgid "Fire at Will"
 msgstr "Vaba Tuli"
 
-#: src/keymap.c:387
+#: src/keymap.c:388
 msgid "Return to HQ"
 msgstr "Naase Juhtimiskeskuse Juurde"
 
-#: src/keymap.c:395
+#: src/keymap.c:396
 msgid "Send Text Message"
 msgstr "Saada Teksti Sõnum"
 
-#: src/keymap.c:413
+#: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr "Vali Kõik Lahinguüksused"
 
-#: src/keymap.c:414
+#: src/keymap.c:416
 msgid "Select all Heavily Damaged Units"
 msgstr "Vali kõok raskesti kahjustatud üksused"
 
-#: src/keymap.c:416
+#: src/keymap.c:418
 msgid "Select all Half-tracks"
 msgstr "Vali kõik pool-roomikud"
 
-#: src/keymap.c:417
+#: src/keymap.c:419
 msgid "Select all Hovers"
 msgstr "Vali kõik hõljukid"
 
-#: src/keymap.c:419
+#: src/keymap.c:421
 msgid "Select all Units on Screen"
 msgstr "Vali kõik üksused Ekraanil"
 
-#: src/keymap.c:420
+#: src/keymap.c:422
 msgid "Select all Tracks"
 msgstr "Vali kõik Roomikud"
 
-#: src/keymap.c:421
+#: src/keymap.c:423
 msgid "Select EVERY unit"
 msgstr "Vali KÕIK üksused"
 
-#: src/keymap.c:422
+#: src/keymap.c:424
 msgid "Select all VTOLs"
 msgstr "Vali kõik VTOLid"
 
-#: src/keymap.c:423
+#: src/keymap.c:425
 msgid "Select all Wheels"
 msgstr "Vali kõik Rattad"
 
-#: src/keymap.c:425
+#: src/keymap.c:427
 msgid "Select all Similar Units"
 msgstr "Vali kõik sarnased üksused"
 
-#: src/keymap.c:429
+#: src/keymap.c:431
 msgid "Select next Factory"
 msgstr "Vali järgmine tehas"
 
-#: src/keymap.c:430
+#: src/keymap.c:432
 msgid "Select next Research Facility"
 msgstr "Vali järgmine uurimiskeskus"
 
-#: src/keymap.c:431
+#: src/keymap.c:433
 msgid "Select next Power Generator"
 msgstr "Vali järgmine energiageneraator"
 
-#: src/keymap.c:432
+#: src/keymap.c:434
 msgid "Select next Cyborg Factory"
 msgstr "Vali järgmine küborgi tehas"
 
-#: src/keymap.c:433
+#: src/keymap.c:435
 msgid "Toggle reopening the build menu"
 msgstr "Toggle reopening the build menu"
 
@@ -13212,7 +13159,7 @@ msgstr "Vale Mängu versioon"
 
 #: src/multiint.c:853
 msgid "You have an incompatible mod."
-msgstr ""
+msgstr "Sul on vastuolus mod."
 
 #: src/multiint.c:857
 msgid "Host couldn't send file?"
@@ -13387,7 +13334,7 @@ msgstr "VESTLUS"
 
 #: src/multiint.c:2238
 msgid "All players need to have the same mods to join your game."
-msgstr ""
+msgstr "Kõigil mängijatel peab olema sama mod, et sinu mänguga liituda"
 
 #: src/multiint.c:2391
 msgid "*** password is now required! ***"
@@ -13426,7 +13373,7 @@ msgstr "Kaart: %d%% allalaaditud"
 
 #: src/multiint.c:3568
 msgid "HOST"
-msgstr ""
+msgstr "VÕÕRUSTJA"
 
 #: src/multijoin.c:98
 #: src/multijoin.c:99
@@ -13441,7 +13388,7 @@ msgstr "%s Lahkus mängust"
 #: src/multijoin.c:335
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
-msgstr ""
+msgstr "Mängijal %s (%u) on vale mod ja ta löödi mängust välja"
 
 #: src/multijoin.c:374
 #, c-format
@@ -13583,7 +13530,7 @@ msgstr "Uurimine Lõpetatud: %s"
 msgid "Research Completed"
 msgstr "Uurimine Lõpetatud"
 
-#: src/research.c:2546
+#: src/research.c:2543
 msgid "Research Award"
 msgstr "Uurimise Auhind"
 
@@ -13705,20 +13652,20 @@ msgstr "Totaalne Mänguaeg - %s"
 msgid "You cheated!"
 msgstr "Sa Tegid Sohki!"
 
-#: src/scriptfuncs.c:3212
+#: src/scriptfuncs.c:3213
 msgid "YOU ARE VICTORIOUS!"
 msgstr "SA OLED VÕIDUKAS"
 
-#: src/scriptfuncs.c:3216
+#: src/scriptfuncs.c:3217
 msgid "YOU WERE DEFEATED!"
 msgstr "SIND VÕIDETI!"
 
-#: src/scriptfuncs.c:10132
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Signaal saadud %s -lt!"
 
-#: src/scriptfuncs.c:10178
+#: src/scriptfuncs.c:10179
 #, c-format
 msgid "Beacon %d"
 msgstr "Signaal %d"
@@ -13752,56 +13699,56 @@ msgstr "Võimetu leidma Komandöre!"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kontroll Limiit Saavutatud - Tootmine Peatatud"
 
-#: src/structure.c:6061
-#: src/structure.c:6086
+#: src/structure.c:6059
+#: src/structure.c:6084
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Üksus määratud"
 msgstr[1] "%s - %u Üksused määratud"
 
-#: src/structure.c:6091
-#: src/structure.c:6155
+#: src/structure.c:6089
+#: src/structure.c:6153
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Kahju %3.0f%%"
 
-#: src/structure.c:6141
+#: src/structure.c:6139
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u Ühendatud %u -st"
 
-#: src/structure.c:6271
-#: src/structure.c:6316
+#: src/structure.c:6269
+#: src/structure.c:6314
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektrooniliselt Kahjustatud"
 
-#: src/structure.c:6551
+#: src/structure.c:6549
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektrooniline Autasu - Nägemis Raport"
 
-#: src/structure.c:6591
+#: src/structure.c:6589
 msgid "Factory Reward - Propulsion"
 msgstr "Tehase Auhind - Liikumissüsteem"
 
-#: src/structure.c:6615
+#: src/structure.c:6613
 msgid "Factory Reward - Body"
 msgstr "Tehase Autasu - Kere"
 
-#: src/structure.c:6639
+#: src/structure.c:6637
 msgid "Factory Reward - Weapon"
 msgstr "Tehase Autasu - Relv"
 
-#: src/structure.c:6648
+#: src/structure.c:6646
 msgid "Factory Reward - Nothing"
 msgstr "Tehase Autasu - Midagi"
 
-#: src/structure.c:6676
+#: src/structure.c:6674
 msgid "Repair Facility Award - Repair"
 msgstr "Remontimiskeskuse Autasu - Remont"
 
-#: src/structure.c:6683
+#: src/structure.c:6681
 msgid "Repair Facility Award - Nothing"
 msgstr "Remontimiskeskuse Autasu - Midagi"
 
@@ -13842,6 +13789,12 @@ msgstr " - Built %s"
 msgid "Version %s%s%s%s"
 msgstr "Versioon %s%s%s%s"
 
+#~ msgid ": Unknown cheat code."
+#~ msgstr ": Tundmatu sohikood"
+
+#~ msgid "You found %u power in an oil drum"
+#~ msgstr "Sa leidsid naftatünnist %u energiat"
+
 #~ msgid "Player %u has the wrong game version. Auto kicking."
 #~ msgstr "Mängijal %u on vale mänguversioon. Automaatne minemalöömine"
 
@@ -13866,14 +13819,8 @@ msgstr "Versioon %s%s%s%s"
 #~ msgid "Wrong data/mod detected by Host."
 #~ msgstr "Vale info/mode võõrustaja poolt avastatud"
 
-#~ msgid ": Unknown cheat code."
-#~ msgstr ": Tundmatu sohikood"
-
 #~ msgid "Kicking player %s, game data doesn't match!"
 #~ msgstr "Mängija %s väljalöömine,mängu info ei klapi!"
-
-#~ msgid "You found %u power in an oil drum"
-#~ msgstr "Sa leidsid naftatünnist %u energiat"
 
 #~ msgid "you are unwanted by the host"
 #~ msgstr "sa oled võõrustaja poolt soovimatu isik"
