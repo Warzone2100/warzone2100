@@ -85,7 +85,6 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 }
 
 #define BITS_NOTBLOCKING	0x01	///< Units can drive on this even if there is a structure or feature on it
-#define BITS_EXPLORED		0x02	///< Tile has been explored
 #define BITS_FPATHBLOCK		0x10	///< Bit set temporarily by find path to mark a blocking tile
 #define BITS_ON_FIRE		0x20	///< Cache whether tile is burning
 #define BITS_GATEWAY		0x40	///< Bit set to show a gateway on the tile
@@ -102,6 +101,7 @@ typedef struct _maptile
 {
 	uint8_t			tileInfoBits;
 	uint8_t			tileVisBits;	// COMPRESSED - bit per player
+	uint8_t			tileExploredBits;
 	UBYTE			height;			// The height at the top left of the tile
 	UBYTE			illumination;	// How bright is this tile?
 	UWORD			texture;		// Which graphics texture is on this tile
@@ -160,7 +160,7 @@ static inline bool TileIsBurning(const MAPTILE *tile)
 /** Check if tile has been explored. */
 static inline bool tileIsExplored(const MAPTILE *psTile)
 {
-	return psTile->tileInfoBits & BITS_EXPLORED;
+	return psTile->tileExploredBits & (1 << selectedPlayer);
 }
 
 /** Check if tile is highlighted by the user. Function is thread-safe. */
@@ -188,9 +188,6 @@ static inline bool TileHasSmallStructure(const MAPTILE* tile)
 	    && ((STRUCTURE*)tile->psObject)->pStructureType->height == 1;
 }
 
-#define SET_TILE_EXPLORED(x) ((x)->tileInfoBits |= BITS_EXPLORED)
-#define CLEAR_TILE_EXPLORED(x) ((x)->tileInfoBits &= ~BITS_EXPLORED)
-
 #define SET_TILE_NOTBLOCKING(x)	((x)->tileInfoBits |= BITS_NOTBLOCKING)
 #define CLEAR_TILE_NOTBLOCKING(x)	((x)->tileInfoBits &= ~BITS_NOTBLOCKING)
 
@@ -212,7 +209,7 @@ static inline bool TileHasSmallStructure(const MAPTILE* tile)
 #define TEST_TILE_VISIBLE(p,t)	((t)->tileVisBits & (1<<(p)))
 
 /* Set a tile to be visible for a player */
-#define SET_TILE_VISIBLE(p,t) ((t)->tileVisBits |= 1<<(p))
+#define SET_TILE_VISIBLE(p,t) ((t)->tileVisBits |= alliancebits[p])
 
 /* Arbitrary maximum number of terrain textures - used in look up table for terrain type */
 #define MAX_TILE_TEXTURES	255

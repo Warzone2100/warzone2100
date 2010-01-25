@@ -169,7 +169,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 		psTile->level = psTile->illumination;
 		memset(psTile->watchers, 0, sizeof(psTile->watchers));
 		psTile->colour= WZCOL_WHITE;
-		CLEAR_TILE_EXPLORED(psTile);
+		psTile->tileExploredBits = 0;
 		psTile++;
 	}
 

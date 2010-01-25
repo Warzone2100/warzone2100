@@ -6692,23 +6692,17 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	UDWORD	x,y,i;
 	MAPTILE	*psTile;
 
-	//tiles
+	// share exploration info - pretty useless but perhaps a nice touch?
 	for(x = 0; x < mapWidth; x++)
 	{
 		for(y = 0; y < mapHeight; y++)
 		{
-			psTile = mapTile(x,y);
-
-			if(TEST_TILE_VISIBLE(losingPlayer,psTile))
+			if (TEST_TILE_VISIBLE(losingPlayer, psTile))
 			{
-				SET_TILE_VISIBLE(rewardPlayer,psTile);
-
-				if(getRevealStatus())
+				psTile = mapTile(x, y);
+				if (psTile)
 				{
-					if(rewardPlayer == selectedPlayer)
-					{
-						avInformOfChange(x,y);
-					}
+					psTile->tileExploredBits |= alliancebits[rewardPlayer];
 				}
 			}
 		}
@@ -8027,8 +8021,8 @@ void revealAll(UBYTE player)
 		for(j=0; j<mapHeight; j++)
 		{
 			psTile = mapTile(i,j);
-			SET_TILE_VISIBLE(player, psTile);
-			avInformOfChange(i,j);
+			psTile->tileVisBits |= alliancebits[player];
+			psTile->tileExploredBits |= alliancebits[player];
 		}
 	}
 

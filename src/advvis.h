@@ -29,7 +29,6 @@ extern "C"
 {
 #endif //__cplusplus
 
-extern void	avInformOfChange(SDWORD x, SDWORD y);
 extern void	avUpdateTiles( void );
 extern UDWORD avGetObjLightLevel( BASE_OBJECT *psObj, UDWORD origLevel);
 extern void	setRevealStatus( BOOL val );

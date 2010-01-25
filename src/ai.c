@@ -48,6 +48,8 @@ static BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot);
 // players are 0-7; player 8 appears to be unused; player 9 is features
 UBYTE	alliances[MAX_PLAYERS + 2][MAX_PLAYERS + 2];
 
+/// A bitfield of vision sharing in alliances, for quick manipulation of vision information
+uint8_t	alliancebits[MAX_PLAYERS + 2];
 
 // see if a structure has the range to fire on a target
 static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int weapon_slot)
@@ -128,11 +130,15 @@ BOOL aiInitialise(void)
 
 	// The +1 is for features, that are owned by player 9 for hackish reasons
 	// Yes, we do mean "player 9", as in "the players are 0-7, and we skip over player 8"
-	for (i = 0; i < MAX_PLAYERS+2; i++)
+	for (i = 0; i < MAX_PLAYERS + 2; i++)
 	{
-		for (j = 0; j < MAX_PLAYERS+2; j++)
+		alliancebits[i] = 0;
+		for (j = 0; j < MAX_PLAYERS + 2; j++)
 		{
-			alliances[i][j] = (i < MAX_PLAYERS && i == j) ? ALLIANCE_FORMED : ALLIANCE_BROKEN;
+			bool valid = (i == j && i < MAX_PLAYERS);
+
+			alliances[i][j] = valid ? ALLIANCE_FORMED : ALLIANCE_BROKEN;
+			alliancebits[i] |= valid << j;
 		}
 	}
 

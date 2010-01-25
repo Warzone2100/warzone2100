@@ -44,7 +44,6 @@
 
 #include "display.h"
 #include "multiplay.h"
-#include "advvis.h"
 
 
 // accuracy for the height gradient
@@ -181,45 +180,18 @@ bool rayTerrainCallback(Vector3i pos, int distSq, void * data)
 	const int mapY = map_coord(pos.y);
 	int dist = sqrtf(distSq);
 	int newH, newG; // The new gradient
-	MAPTILE *psTile;
+	MAPTILE *psTile = mapTile(mapX, mapY);
 
-	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
-		&& pos.y >= 0 && pos.y < world_coord(mapHeight),
-			"rayTerrainCallback: coords off map" );
-
-	psTile = mapTile(mapX, mapY);
-
-	/* Not true visibility - done on sensor range */
-
-	if (dist == 0)
-	{
-		debug(LOG_ERROR, "rayTerrainCallback: dist is 0, which is not a valid distance");
-		dist = 1;
-	}
+	dist = MAX(dist, 1);	// simple precaution
 
 	newH = psTile->height * ELEVATION_SCALE;
 	newG = (newH - startH) * GRAD_MUL / dist;
 	if (newG >= currG)
 	{
 		currG = newG;
-
-		SET_TILE_VISIBLE(rayPlayer, psTile);
-
-		if (selectedPlayer != rayPlayer && bMultiPlayer && game.alliance == ALLIANCES_TEAMS
-		    && aiCheckAlliances(selectedPlayer, rayPlayer))
-		{
-			SET_TILE_VISIBLE(selectedPlayer,psTile);		//reveal radar
-		}
-
-		visMarkTile(mapX, mapY, psTile);	// Mark this tile as seen by our sensor
-
-		/* Single player visibility system - fix me one day to work properly in MP */
-		if (rayPlayer == selectedPlayer
-		    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
-			&& aiCheckAlliances(selectedPlayer, rayPlayer)))
-		{
-			avInformOfChange(map_coord(pos.x), map_coord(pos.y));		//reveal map
-		}
+		psTile->tileVisBits |= alliancebits[rayPlayer];		// Share vision to allies
+		psTile->tileExploredBits |= alliancebits[rayPlayer];	// Share exploring with allies too
+		visMarkTile(mapX, mapY, psTile);			// Mark this tile as seen by our sensor
 	}
 
 	return true;
@@ -785,18 +757,12 @@ MAPTILE		*psTile;
 	{
 		for (j = 0; j < breadth; j++)
 		{
-
-			/* Slow fade up */
-			if(getRevealStatus())
-			{
-				if(player == selectedPlayer)
-				{
-					avInformOfChange(mapX+i,mapY+j);
-				}
-			}
-
 			psTile = mapTile(mapX+i,mapY+j);
-			SET_TILE_VISIBLE(player, psTile);
+			if (psTile)
+			{
+				psTile->tileVisBits |= alliancebits[player];
+				psTile->tileExploredBits |= alliancebits[player];
+			}
 		}
 	}
 }

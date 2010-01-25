@@ -394,6 +394,8 @@ void breakAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio)
 
 	alliances[p1][p2] = ALLIANCE_BROKEN;
 	alliances[p2][p1] = ALLIANCE_BROKEN;
+	alliancebits[p1] &= ~(1 << p2);
+	alliancebits[p2] &= ~(1 << p1);
 
 	if (prop)
 	{
@@ -415,7 +417,11 @@ void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allow
 
 	alliances[p1][p2] = ALLIANCE_FORMED;
 	alliances[p2][p1] = ALLIANCE_FORMED;
-
+	if (game.alliance == ALLIANCES_TEAMS)	// this is for shared vision only
+	{
+		alliancebits[p1] |= 1 << p2;
+		alliancebits[p2] |= 1 << p1;
+	}
 
 	if (allowAudio && (p1 == selectedPlayer || p2== selectedPlayer))
 	{

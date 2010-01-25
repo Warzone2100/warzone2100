@@ -45,17 +45,6 @@ void	avSetStatus(BOOL var)
 	bRevealActive = var;
 }
 
-void	avInformOfChange(SDWORD x, SDWORD y)
-{
-	MAPTILE	*psTile = mapTile(x, y);
-
-	if (!tileIsExplored(psTile))
-	{
-		SET_TILE_EXPLORED(psTile);
-	}
-}
-
-
 // ------------------------------------------------------------------------------------
 static void processAVTile(UDWORD x, UDWORD y, float increment)
 {
@@ -102,7 +91,6 @@ void	avUpdateTiles( void )
 UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
 {
 	float div = (float)psObj->visible[selectedPlayer] / 255.f;
-
 	unsigned int lowest = origLevel / START_DIVIDE;
 	unsigned int newLevel = div * origLevel;
 
@@ -138,17 +126,14 @@ MAPTILE		*psTile;
 		for(j=0; j<mapHeight; j++)
 		{
 			psTile = mapTile(i,j);
-		 	psTile->level = 0;
-		   	if(TEST_TILE_VISIBLE(selectedPlayer,psTile))
+			psTile->level = 0;
+			psTile->tileExploredBits = 0;
+
+			if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
 		  	{
+				psTile->tileExploredBits = 1 << selectedPlayer;
 				processAVTile(i, j, UBYTE_MAX);
-				SET_TILE_EXPLORED(psTile);
 		  	}
-			else
-			{
-				CLEAR_TILE_EXPLORED(psTile);
-			 	psTile->level = 0;
-			}
 		}
 	}
 
