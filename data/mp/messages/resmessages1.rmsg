@@ -302,6 +302,7 @@ RES_ST_FM1
 	{
 		_("Production Improved"),
 		_("Factory module enables medium and large bodies"),
+		/* xgettext:no-c-format */
 		_("Factory output speed +100% per module"),
 		_("Use a truck to add modules to a factory"),
 	},
