@@ -60,9 +60,6 @@ static float			visLevelIncAcc, visLevelDecAcc;
 // integer amount to change visiblility this turn
 static SDWORD			visLevelInc, visLevelDec;
 
-// alexl's sensor range.
-BOOL bDisplaySensorRange;
-
 // horrible hack because this code is full of them and I ain't rewriting it all - Per
 #define MAX_SEEN_TILES 1024
 static TILEPOS recordTilePos[MAX_SEEN_TILES];
@@ -148,15 +145,43 @@ static int visObjHeight(const BASE_OBJECT * psObject)
 	}
 }
 
+/* Record all tiles that some object confers visibility to. Only record each tile
+ * once. Note that there is both a limit to how many objects can watch any given
+ * tile, and a limit to how many tiles each object can watch. Strange but non fatal
+ * things will happen if these limits are exceeded. This function uses icky globals. */
+static void visMarkTile(int mapX, int mapY, MAPTILE *psTile)
+{
+	bool alreadySeen = false;
+	int i;
+
+	if (psTile->watchers[rayPlayer] < UBYTE_MAX && lastRecordTilePos < MAX_SEEN_TILES)
+	{
+		for (i = 0; i < lastRecordTilePos; i++)
+		{
+			if (recordTilePos[i].x == mapX && recordTilePos[i].y == mapY)
+			{
+				alreadySeen = true;
+				break;
+			}
+		}
+		if (!alreadySeen)
+		{
+			psTile->watchers[rayPlayer]++;			// we see this tile
+			recordTilePos[lastRecordTilePos].x = mapX;	// record having seen it
+			recordTilePos[lastRecordTilePos].y = mapY;
+			lastRecordTilePos++;
+		}
+	}
+}
+
 /* The terrain revealing ray callback */
 bool rayTerrainCallback(Vector3i pos, int distSq, void * data)
 {
 	const int mapX = map_coord(pos.x);
 	const int mapY = map_coord(pos.y);
-	int i, dist = sqrtf(distSq);
+	int dist = sqrtf(distSq);
 	int newH, newG; // The new gradient
 	MAPTILE *psTile;
-	bool alreadySeen = false;
 
 	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
 		&& pos.y >= 0 && pos.y < world_coord(mapHeight),
@@ -186,28 +211,7 @@ bool rayTerrainCallback(Vector3i pos, int distSq, void * data)
 			SET_TILE_VISIBLE(selectedPlayer,psTile);		//reveal radar
 		}
 
-		/* Record all tiles that this object confers visibility to. Only record each tile
-		 * once. Note that there is both a limit to how many objects can watch any given
-		 * tile, and a limit to how many tiles each object can watch. Strange but non fatal
-		 * things will happen if these limits are exceeded. */
-		if (psTile->watchers[rayPlayer] < UBYTE_MAX && lastRecordTilePos < MAX_SEEN_TILES)
-		{
-			for (i = 0; i < lastRecordTilePos; i++)
-			{
-				if (recordTilePos[i].x == mapX && recordTilePos[i].y == mapY)
-				{
-					alreadySeen = true;
-					break;
-				}
-			}
-			if (!alreadySeen)
-			{
-				psTile->watchers[rayPlayer]++;			// we see this tile
-				recordTilePos[lastRecordTilePos].x = mapX;	// record having seen it
-				recordTilePos[lastRecordTilePos].y = mapY;
-				lastRecordTilePos++;
-			}
-		}
+		visMarkTile(mapX, mapY, psTile);	// Mark this tile as seen by our sensor
 
 		/* Single player visibility system - fix me one day to work properly in MP */
 		if (rayPlayer == selectedPlayer
@@ -339,6 +343,32 @@ void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
 
 		// Cast the rays from the viewer
 		rayCast(pos, dir, range, callback, NULL);
+	}
+
+	// Make sure we also watch tiles underneath ourselves
+	if (psObj->type == OBJ_STRUCTURE)
+	{
+		int i, j;
+
+		for (i = 0; i <= ((STRUCTURE *)psObj)->pStructureType->baseBreadth; i++)
+		{
+			for (j = 0; j <= ((STRUCTURE *)psObj)->pStructureType->baseWidth; j++)
+			{
+				int	mapX = map_coord(psObj->pos.x) + i;
+				int	mapY = map_coord(psObj->pos.y) + j;
+				MAPTILE	*psTile = mapTile(mapX, mapY);
+
+				visMarkTile(mapX, mapY, psTile);
+			}
+		}
+	}
+	else
+	{
+		MAPTILE	*psTile = mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y));
+		int	mapX = map_coord(psObj->pos.x);
+		int	mapY = map_coord(psObj->pos.y);
+
+		visMarkTile(mapX, mapY, psTile);
 	}
 
 	// Record new map visibility provided by object

@@ -479,6 +479,7 @@ void pie_CleanUp( void )
 
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData)
 {
+	ASSERT_OR_RETURN(, shape, "Attempting to draw null sprite");
 	pieCount++;
 
 	if (frame == 0)
