@@ -107,7 +107,7 @@ typedef struct _zonemap_save_header {
 #define	ROOT_TABLE_SIZE		1024
 
 /* The size and contents of the map */
-UDWORD	mapWidth = 0, mapHeight = 0;
+SDWORD	mapWidth = 0, mapHeight = 0;
 MAPTILE	*psMapTiles = NULL;
 
 #define WATER_DEPTH	180

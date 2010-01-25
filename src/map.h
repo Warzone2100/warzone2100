@@ -235,7 +235,7 @@ static inline unsigned char terrainType(const MAPTILE * tile)
 #define TILE_MIN_HEIGHT 0
 
 /* The size and contents of the map */
-extern UDWORD	mapWidth, mapHeight;
+extern SDWORD	mapWidth, mapHeight;
 extern MAPTILE *psMapTiles;
 extern float waterLevel;
 
@@ -323,7 +323,7 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(SDWORD x, SDWORD y)
 }
 
 /* Return height of tile at x,y */
-static inline WZ_DECL_PURE float map_TileHeight(UDWORD x, UDWORD y)
+static inline WZ_DECL_PURE float map_TileHeight(SDWORD x, SDWORD y)
 {
 	if ( x >= mapWidth || y >= mapHeight )
 	{
@@ -333,7 +333,7 @@ static inline WZ_DECL_PURE float map_TileHeight(UDWORD x, UDWORD y)
 }
 
 /* Return height of tile at x,y, uses float height_new */
-static inline WZ_DECL_PURE float map_TileHeight_new(UDWORD x, UDWORD y)
+static inline WZ_DECL_PURE float map_TileHeight_new(SDWORD x, SDWORD y)
 {
 	if ( x >= mapWidth || y >= mapHeight )
 	{
@@ -343,7 +343,7 @@ static inline WZ_DECL_PURE float map_TileHeight_new(UDWORD x, UDWORD y)
 }
 
 /* Return height of tile at x,y */
-static inline WZ_DECL_PURE float map_WaterHeight(UDWORD x, UDWORD y)
+static inline WZ_DECL_PURE float map_WaterHeight(SDWORD x, SDWORD y)
 {
 	if ( x >= mapWidth || y >= mapHeight )
 	{
@@ -354,7 +354,7 @@ static inline WZ_DECL_PURE float map_WaterHeight(UDWORD x, UDWORD y)
 
 
 /*sets the tile height */
-static inline void setTileHeight(UDWORD x, UDWORD y, float height)
+static inline void setTileHeight(SDWORD x, SDWORD y, float height)
 {
 	ASSERT_OR_RETURN( , x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
 	ASSERT_OR_RETURN( , y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);

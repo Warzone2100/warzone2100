@@ -101,7 +101,7 @@ static inline void iV_printFontList(void)
 		 * same buffer (according to GLC specs).
 		 */
 		char prBuffer[1024];
-		snprintf(prBuffer, sizeof(prBuffer), "Font #%d : %s ", font, (const char*)glcGetFontc(font, GLC_FAMILY));
+		snprintf(prBuffer, sizeof(prBuffer), "Font #%d : %s ", (int)font, (const char*)glcGetFontc(font, GLC_FAMILY));
 		prBuffer[sizeof(prBuffer) - 1] = 0;
 		sstrcat(prBuffer, glcGetFontFace(font));
 		debug(LOG_NEVER, "%s", prBuffer);
@@ -122,7 +122,7 @@ static void iV_initializeGLC(void)
 	}
 	else
 	{
-		debug(LOG_NEVER, "Successfully initialized. _glcContext = %d", _glcContext);
+		debug(LOG_NEVER, "Successfully initialized. _glcContext = %d", (int)_glcContext);
 	}
 
 	glcContext(_glcContext);

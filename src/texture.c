@@ -256,12 +256,12 @@ bool texLoad(const char *fileName)
 				xOffset = 0;
 				yOffset = 0;
 				debug(LOG_TEXTURE, "texLoad: Extra page added at %d for %s, was page %d, opengl id %u",
-				      k, partialPath, texPage, _TEX_PAGE[texPage].id);
+				      k, partialPath, texPage, (unsigned int)_TEX_PAGE[texPage].id);
 				texPage = newPage(fileName, j, xSize, ySize, k);
 			}
 		}
 		debug(LOG_TEXTURE, "texLoad: Found %d textures for %s mipmap level %d, added to page %d, opengl id %u",
-		      k, partialPath, i, texPage, _TEX_PAGE[texPage].id);
+		      k, partialPath, i, texPage, (unsigned int)_TEX_PAGE[texPage].id);
 		i /= 2;	// halve the dimensions for the next series; OpenGL mipmaps start with largest at level zero
 	}
 

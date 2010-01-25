@@ -184,7 +184,7 @@ PointTree::ResultVector &PointTree::query(int32_t x, int32_t y, uint32_t radius)
 	}
 
 	lastQueryResults.clear();
-	for (unsigned r = 0; r != numRanges; ++r)
+	for (int r = 0; r != numRanges; ++r)
 	{
 		Vector::iterator i1 = std::lower_bound(points.begin(), points.end(), Point(ranges[r].a,     NULL));
 		Vector::iterator i2 = std::lower_bound(i1,             points.end(), Point(ranges[r].z + 1, NULL));
