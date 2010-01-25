@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-24 19:58+0100\n"
+"POT-Creation-Date: 2010-01-25 19:25+0100\n"
 "PO-Revision-Date: 2009-10-14 16:59+0600\n"
 "Last-Translator: Max <Raptor9000@yandex.ru>\n"
 "Language-Team: Russian <>\n"
@@ -610,7 +610,7 @@ msgstr "Все КБ башни автоматически улучшаются"
 #: data/mp/messages/resmessages12.rmsg:95
 #: data/mp/messages/resmessages12.rmsg:212
 #: data/mp/messages/resmessages12.rmsg:225
-#: data/mp/messages/resmessages1.rmsg:576
+#: data/mp/messages/resmessages1.rmsg:577
 #: data/mp/messages/resmessages3.rmsg:875
 #: data/mp/messages/resmessages3.rmsg:888
 #: data/mp/messages/resmessagesall.rmsg:212
@@ -637,7 +637,7 @@ msgstr "Увеличение точности пушки"
 #: data/mp/messages/resmessages12.rmsg:98
 #: data/mp/messages/resmessages12.rmsg:215
 #: data/mp/messages/resmessages12.rmsg:228
-#: data/mp/messages/resmessages1.rmsg:579
+#: data/mp/messages/resmessages1.rmsg:580
 #: data/mp/messages/resmessages3.rmsg:878
 #: data/mp/messages/resmessages3.rmsg:891
 #: data/mp/messages/resmessagesall.rmsg:215
@@ -649,7 +649,7 @@ msgstr "Все пушки автоматически улучшены"
 #: data/base/messages/resmessages2.rmsg:784
 #: data/base/messages/strings/resstrings.txt:765
 #: data/mp/messages/resmessages12.rmsg:108
-#: data/mp/messages/resmessages1.rmsg:602
+#: data/mp/messages/resmessages1.rmsg:603
 #: data/mp/messages/resmessages2.rmsg:784
 #: data/mp/messages/resmessagesall.rmsg:771
 #: data/mp/messages/strings/resstrings.txt:802
@@ -676,7 +676,7 @@ msgstr "Увеличение скорострельности огнемёта"
 #: data/base/messages/resmessages2.rmsg:787
 #: data/base/messages/strings/resstrings.txt:768
 #: data/mp/messages/resmessages12.rmsg:111
-#: data/mp/messages/resmessages1.rmsg:605
+#: data/mp/messages/resmessages1.rmsg:606
 #: data/mp/messages/resmessages2.rmsg:787
 #: data/mp/messages/resmessagesall.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:805
@@ -698,12 +698,12 @@ msgstr "Все огнемёты автоматически улучшены"
 #: data/base/messages/strings/resstrings.txt:735
 #: data/base/messages/strings/resstrings.txt:757
 #: data/mp/messages/resmessages12.rmsg:121
-#: data/mp/messages/resmessages1.rmsg:537
-#: data/mp/messages/resmessages1.rmsg:550
-#: data/mp/messages/resmessages1.rmsg:563
-#: data/mp/messages/resmessages1.rmsg:589
-#: data/mp/messages/resmessages1.rmsg:615
-#: data/mp/messages/resmessages1.rmsg:628
+#: data/mp/messages/resmessages1.rmsg:538
+#: data/mp/messages/resmessages1.rmsg:551
+#: data/mp/messages/resmessages1.rmsg:564
+#: data/mp/messages/resmessages1.rmsg:590
+#: data/mp/messages/resmessages1.rmsg:616
+#: data/mp/messages/resmessages1.rmsg:629
 #: data/mp/messages/resmessages23.rmsg:212
 #: data/mp/messages/resmessages2.rmsg:745
 #: data/mp/messages/resmessages2.rmsg:758
@@ -729,8 +729,8 @@ msgstr "Тяжелый пулемет 0,5 калибра"
 #: data/base/messages/resmessages1.rmsg:630
 #: data/base/messages/resmessages23.rmsg:214
 #: data/mp/messages/resmessages12.rmsg:123
-#: data/mp/messages/resmessages1.rmsg:617
-#: data/mp/messages/resmessages1.rmsg:630
+#: data/mp/messages/resmessages1.rmsg:618
+#: data/mp/messages/resmessages1.rmsg:631
 #: data/mp/messages/resmessages23.rmsg:214
 #: data/mp/messages/resmessagesall.rmsg:877
 #: data/mp/messages/resmessagesall.rmsg:890
@@ -781,9 +781,9 @@ msgstr "Лучшие цели: пехота, постройки, колесны�
 #: data/mp/messages/resmessages1.rmsg:58
 #: data/mp/messages/resmessages1.rmsg:71
 #: data/mp/messages/resmessages1.rmsg:84
-#: data/mp/messages/resmessages1.rmsg:488
-#: data/mp/messages/resmessages1.rmsg:540
-#: data/mp/messages/resmessages1.rmsg:553
+#: data/mp/messages/resmessages1.rmsg:489
+#: data/mp/messages/resmessages1.rmsg:541
+#: data/mp/messages/resmessages1.rmsg:554
 #: data/mp/messages/resmessages2.rmsg:32
 #: data/mp/messages/resmessages2.rmsg:45
 #: data/mp/messages/resmessages2.rmsg:592
@@ -848,8 +848,8 @@ msgstr "Бронирование: среднее"
 #: data/base/messages/strings/resstrings.txt:845
 #: data/base/messages/strings/resstrings.txt:857
 #: data/mp/messages/resmessages12.rmsg:134
-#: data/mp/messages/resmessages1.rmsg:641
-#: data/mp/messages/resmessages1.rmsg:654
+#: data/mp/messages/resmessages1.rmsg:642
+#: data/mp/messages/resmessages1.rmsg:655
 #: data/mp/messages/resmessages23.rmsg:173
 #: data/mp/messages/resmessages2.rmsg:875
 #: data/mp/messages/resmessages2.rmsg:888
@@ -884,8 +884,8 @@ msgstr "Увеличение скорострельности пулемёта"
 #: data/base/messages/strings/resstrings.txt:848
 #: data/base/messages/strings/resstrings.txt:860
 #: data/mp/messages/resmessages12.rmsg:137
-#: data/mp/messages/resmessages1.rmsg:644
-#: data/mp/messages/resmessages1.rmsg:657
+#: data/mp/messages/resmessages1.rmsg:645
+#: data/mp/messages/resmessages1.rmsg:658
 #: data/mp/messages/resmessages23.rmsg:176
 #: data/mp/messages/resmessages2.rmsg:878
 #: data/mp/messages/resmessages2.rmsg:891
@@ -908,7 +908,7 @@ msgstr "Все пулемёты автоматически улучшены"
 #: data/base/messages/strings/resstrings.txt:787
 #: data/base/messages/strings/resstrings.txt:891
 #: data/mp/messages/resmessages12.rmsg:147
-#: data/mp/messages/resmessages1.rmsg:667
+#: data/mp/messages/resmessages1.rmsg:668
 #: data/mp/messages/resmessages23.rmsg:199
 #: data/mp/messages/resmessages2.rmsg:797
 #: data/mp/messages/resmessages2.rmsg:810
@@ -937,7 +937,7 @@ msgstr "Можно привязать к сенсору"
 #: data/base/messages/resmessages2.rmsg:903
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/resmessages12.rmsg:149
-#: data/mp/messages/resmessages1.rmsg:669
+#: data/mp/messages/resmessages1.rmsg:670
 #: data/mp/messages/resmessages2.rmsg:903
 #: data/mp/messages/resmessagesall.rmsg:344
 #: data/mp/messages/strings/resstrings.txt:934
@@ -964,8 +964,8 @@ msgstr "Лучшие цели: постройки, пехота, колесны�
 #: data/mp/messages/resmessages12.rmsg:189
 #: data/mp/messages/resmessages12.rmsg:254
 #: data/mp/messages/resmessages12.rmsg:267
-#: data/mp/messages/resmessages1.rmsg:670
-#: data/mp/messages/resmessages1.rmsg:696
+#: data/mp/messages/resmessages1.rmsg:671
+#: data/mp/messages/resmessages1.rmsg:697
 #: data/mp/messages/resmessages2.rmsg:904
 #: data/mp/messages/resmessages3.rmsg:1034
 #: data/mp/messages/resmessages3.rmsg:1047
@@ -990,7 +990,7 @@ msgstr "Бронирование: очень низкое"
 #: data/base/messages/strings/resstrings.txt:905
 #: data/mp/messages/resmessages12.rmsg:160
 #: data/mp/messages/resmessages12.rmsg:173
-#: data/mp/messages/resmessages1.rmsg:680
+#: data/mp/messages/resmessages1.rmsg:681
 #: data/mp/messages/resmessages23.rmsg:186
 #: data/mp/messages/resmessages2.rmsg:914
 #: data/mp/messages/resmessages3.rmsg:1174
@@ -1020,7 +1020,7 @@ msgstr "Увеличение точности миномёта"
 #: data/base/messages/strings/resstrings.txt:908
 #: data/mp/messages/resmessages12.rmsg:163
 #: data/mp/messages/resmessages12.rmsg:176
-#: data/mp/messages/resmessages1.rmsg:683
+#: data/mp/messages/resmessages1.rmsg:684
 #: data/mp/messages/resmessages23.rmsg:189
 #: data/mp/messages/resmessages2.rmsg:917
 #: data/mp/messages/resmessages3.rmsg:1177
@@ -1048,7 +1048,7 @@ msgstr "Увеличение скорострельности миномёта"
 #: data/mp/messages/resmessages12.rmsg:186
 #: data/mp/messages/resmessages12.rmsg:251
 #: data/mp/messages/resmessages12.rmsg:264
-#: data/mp/messages/resmessages1.rmsg:693
+#: data/mp/messages/resmessages1.rmsg:694
 #: data/mp/messages/resmessagesall.rmsg:186
 #: data/mp/messages/resmessagesall.rmsg:199
 msgid "New Rocket Available"
@@ -1073,8 +1073,8 @@ msgstr "лучшие цели: наземный транспорт и оруди
 #: data/base/messages/strings/resstrings.txt:965
 #: data/mp/messages/resmessages12.rmsg:199
 #: data/mp/messages/resmessages12.rmsg:238
-#: data/mp/messages/resmessages1.rmsg:745
-#: data/mp/messages/resmessages1.rmsg:758
+#: data/mp/messages/resmessages1.rmsg:746
+#: data/mp/messages/resmessages1.rmsg:759
 #: data/mp/messages/resmessages2.rmsg:940
 #: data/mp/messages/resmessagesall.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:1008
@@ -1099,8 +1099,8 @@ msgstr "Увеличение скорострельности ракет"
 #: data/base/messages/strings/resstrings.txt:968
 #: data/mp/messages/resmessages12.rmsg:202
 #: data/mp/messages/resmessages12.rmsg:241
-#: data/mp/messages/resmessages1.rmsg:748
-#: data/mp/messages/resmessages1.rmsg:761
+#: data/mp/messages/resmessages1.rmsg:749
+#: data/mp/messages/resmessages1.rmsg:762
 #: data/mp/messages/resmessages2.rmsg:943
 #: data/mp/messages/resmessagesall.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:1011
@@ -1153,7 +1153,7 @@ msgstr "Тяжёлая противотанковая ракета"
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
 #: data/mp/messages/resmessages12.rmsg:253
-#: data/mp/messages/resmessages1.rmsg:539
+#: data/mp/messages/resmessages1.rmsg:540
 #: data/mp/messages/resmessages2.rmsg:760
 #: data/mp/messages/resmessages3.rmsg:1033
 #: data/mp/messages/resmessages3.rmsg:1202
@@ -1198,8 +1198,8 @@ msgstr "Командир указывает группам к точкек сб�
 #: data/base/messages/resmessages3.rmsg:1229
 #: data/base/messages/strings/resstrings.txt:738
 #: data/mp/messages/resmessages1.rmsg:7
-#: data/mp/messages/resmessages1.rmsg:514
-#: data/mp/messages/resmessages1.rmsg:566
+#: data/mp/messages/resmessages1.rmsg:515
+#: data/mp/messages/resmessages1.rmsg:567
 #: data/mp/messages/resmessages2.rmsg:761
 #: data/mp/messages/resmessages3.rmsg:1229
 #: data/mp/messages/resmessagesall.rmsg:488
@@ -1250,7 +1250,7 @@ msgstr "Киберматериал улучшен"
 #: data/base/messages/resmessages1.rmsg:31
 #: data/base/messages/resmessages1.rmsg:473
 #: data/mp/messages/resmessages1.rmsg:31
-#: data/mp/messages/resmessages1.rmsg:473
+#: data/mp/messages/resmessages1.rmsg:474
 msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr "Слоистый композитный сплав и энергоабсорбирующие волокна"
 
@@ -1658,7 +1658,7 @@ msgid "Increases factory output"
 msgstr "повышает выход фабрики"
 
 #: data/base/messages/resmessages1.rmsg:306
-#: data/mp/messages/resmessages1.rmsg:306
+#: data/mp/messages/resmessages1.rmsg:307
 msgid "Use a truck to add modules to a factory"
 msgstr "используй строительный бульдозер чтобы достроить модули заводу"
 
@@ -1666,7 +1666,7 @@ msgstr "используй строительный бульдозер чтоб�
 #: data/base/messages/resmessages2.rmsg:355
 #: data/base/messages/strings/resstrings.txt:365
 #: data/base/messages/strings/resstrings.txt:373
-#: data/mp/messages/resmessages1.rmsg:316
+#: data/mp/messages/resmessages1.rmsg:317
 #: data/mp/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:399
 msgid "Vehicle Production Improved"
@@ -1674,7 +1674,7 @@ msgstr "производство транспорта улучшено"
 
 #: data/base/messages/resmessages1.rmsg:317
 #: data/base/messages/strings/names.txt:794
-#: data/mp/messages/resmessages1.rmsg:317
+#: data/mp/messages/resmessages1.rmsg:318
 msgid "Automated Factory Production"
 msgstr "Автоматизированное производство"
 
@@ -1682,43 +1682,43 @@ msgstr "Автоматизированное производство"
 #: data/base/messages/resmessages2.rmsg:358
 #: data/base/messages/strings/resstrings.txt:368
 #: data/base/messages/strings/resstrings.txt:376
-#: data/mp/messages/resmessages1.rmsg:319
+#: data/mp/messages/resmessages1.rmsg:320
 #: data/mp/messages/strings/resstrings.txt:394
 #: data/mp/messages/strings/resstrings.txt:402
 msgid "All vehicle factories upgraded automatically"
 msgstr "все заводы улучшаются автоматически"
 
 #: data/base/messages/resmessages1.rmsg:329
-#: data/mp/messages/resmessages1.rmsg:329
+#: data/mp/messages/resmessages1.rmsg:330
 msgid "Power Module Available"
 msgstr "Модуль генератора"
 
 #: data/base/messages/resmessages1.rmsg:330
 #: data/base/messages/resmessages23.rmsg:30
 #: data/base/messages/resmessages3.rmsg:433
-#: data/mp/messages/resmessages1.rmsg:330
+#: data/mp/messages/resmessages1.rmsg:331
 #: data/mp/messages/resmessages23.rmsg:30
 #: data/mp/messages/resmessages3.rmsg:433
 msgid "Improved Power Generator Performance"
 msgstr "Повышена производительность генератора"
 
 #: data/base/messages/resmessages1.rmsg:331
-#: data/mp/messages/resmessages1.rmsg:331
+#: data/mp/messages/resmessages1.rmsg:332
 msgid "Burns oil more efficiently"
 msgstr "Сжигает горючее более эфффективно"
 
 #: data/base/messages/resmessages1.rmsg:332
-#: data/mp/messages/resmessages1.rmsg:332
+#: data/mp/messages/resmessages1.rmsg:333
 msgid "Use a truck to add the module to a power generator"
 msgstr "используй бульдозер чтобы добавить модуль к генератору"
 
 #: data/base/messages/resmessages1.rmsg:342
-#: data/mp/messages/resmessages1.rmsg:342
+#: data/mp/messages/resmessages1.rmsg:343
 msgid "Research Module Available"
 msgstr "доступен модуль лаборатории"
 
 #: data/base/messages/resmessages1.rmsg:343
-#: data/mp/messages/resmessages1.rmsg:343
+#: data/mp/messages/resmessages1.rmsg:344
 msgid "Research module expands research facilities"
 msgstr "модуль лаборатории расширяет возможности исследования"
 
@@ -1732,7 +1732,7 @@ msgid "Increases research speed"
 msgstr "повышает скорость исследований"
 
 #: data/base/messages/resmessages1.rmsg:345
-#: data/mp/messages/resmessages1.rmsg:345
+#: data/mp/messages/resmessages1.rmsg:346
 msgid "Use a truck to add the module to a research facility"
 msgstr "используй бульдозер для добавки модуля к лаборатории"
 
@@ -1740,7 +1740,7 @@ msgstr "используй бульдозер для добавки модуля
 #: data/base/messages/resmessages2.rmsg:368
 #: data/base/messages/resmessages3.rmsg:446
 #: data/base/messages/strings/resstrings.txt:389
-#: data/mp/messages/resmessages1.rmsg:355
+#: data/mp/messages/resmessages1.rmsg:356
 #: data/mp/messages/resmessages2.rmsg:368
 #: data/mp/messages/resmessages3.rmsg:446
 #: data/mp/messages/strings/resstrings.txt:415
@@ -1748,7 +1748,7 @@ msgid "Research Improved"
 msgstr "исследование завершено"
 
 #: data/base/messages/resmessages1.rmsg:356
-#: data/mp/messages/resmessages1.rmsg:356
+#: data/mp/messages/resmessages1.rmsg:357
 msgid "Synaptic link data analysis"
 msgstr "анализ синаптической связи"
 
@@ -1756,7 +1756,7 @@ msgstr "анализ синаптической связи"
 #: data/base/messages/resmessages2.rmsg:371
 #: data/base/messages/resmessages3.rmsg:449
 #: data/base/messages/strings/resstrings.txt:392
-#: data/mp/messages/resmessages1.rmsg:358
+#: data/mp/messages/resmessages1.rmsg:359
 #: data/mp/messages/resmessages2.rmsg:371
 #: data/mp/messages/resmessages3.rmsg:449
 #: data/mp/messages/strings/resstrings.txt:418
@@ -1768,7 +1768,7 @@ msgstr "Все исследовательские лаборатории улу�
 #: data/base/messages/resmessages3.rmsg:459
 #: data/base/messages/resmessages3.rmsg:472
 #: data/base/messages/strings/resstrings.txt:399
-#: data/mp/messages/resmessages1.rmsg:368
+#: data/mp/messages/resmessages1.rmsg:369
 #: data/mp/messages/resmessages2.rmsg:381
 #: data/mp/messages/resmessages3.rmsg:459
 #: data/mp/messages/resmessages3.rmsg:472
@@ -1778,7 +1778,7 @@ msgstr "Увеличивает прочность"
 
 #: data/base/messages/resmessages1.rmsg:369
 #: data/base/messages/strings/names.txt:805
-#: data/mp/messages/resmessages1.rmsg:369
+#: data/mp/messages/resmessages1.rmsg:370
 #: data/mp/messages/strings/names.txt:816
 msgid "Reinforced Base Structure Materials"
 msgstr "Улучшенные стройматериалы"
@@ -1802,7 +1802,7 @@ msgstr "Увеличивает броню и общее здоровье"
 #: data/base/messages/resmessages3.rmsg:462
 #: data/base/messages/resmessages3.rmsg:475
 #: data/base/messages/strings/resstrings.txt:402
-#: data/mp/messages/resmessages1.rmsg:371
+#: data/mp/messages/resmessages1.rmsg:372
 #: data/mp/messages/resmessages2.rmsg:384
 #: data/mp/messages/resmessages3.rmsg:462
 #: data/mp/messages/resmessages3.rmsg:475
@@ -1811,128 +1811,128 @@ msgid "All base structures upgraded automatically"
 msgstr "Все постройки улучшаются автоматически"
 
 #: data/base/messages/resmessages1.rmsg:381
-#: data/mp/messages/resmessages1.rmsg:381
+#: data/mp/messages/resmessages1.rmsg:382
 msgid "Project Light Body"
 msgstr "Легкий корпус Проекта"
 
 #: data/base/messages/resmessages1.rmsg:382
-#: data/mp/messages/resmessages1.rmsg:382
+#: data/mp/messages/resmessages1.rmsg:383
 msgid "Light body vulnerable to heavy weapons"
 msgstr "Легкая рама уязвима против тяжелых орудий"
 
 #: data/base/messages/resmessages1.rmsg:383
-#: data/mp/messages/resmessages1.rmsg:383
+#: data/mp/messages/resmessages1.rmsg:384
 msgid "Good scout vehicle"
 msgstr "Хороший разведывательный транспорт"
 
 #: data/base/messages/resmessages1.rmsg:384
-#: data/mp/messages/resmessages1.rmsg:384
+#: data/mp/messages/resmessages1.rmsg:385
 msgid "Low power cost and low production times"
 msgstr "Низкая стоимоть и быстро производится."
 
 #: data/base/messages/resmessages1.rmsg:394
-#: data/mp/messages/resmessages1.rmsg:394
+#: data/mp/messages/resmessages1.rmsg:395
 msgid "New Paradigm Light Body"
 msgstr "Легкий корпус Новой Парадигмы"
 
 #: data/base/messages/resmessages1.rmsg:395
-#: data/mp/messages/resmessages1.rmsg:395
+#: data/mp/messages/resmessages1.rmsg:396
 msgid "Inferior armor and body points to Viper"
 msgstr "Броня меньше чем у Гадюки"
 
 #: data/base/messages/resmessages1.rmsg:396
 #: data/base/messages/resmessages3.rmsg:630
-#: data/mp/messages/resmessages1.rmsg:396
+#: data/mp/messages/resmessages1.rmsg:397
 #: data/mp/messages/resmessages3.rmsg:630
 msgid "Faster than Viper"
 msgstr "Быстрее Гадюки"
 
 #: data/base/messages/resmessages1.rmsg:397
-#: data/mp/messages/resmessages1.rmsg:397
+#: data/mp/messages/resmessages1.rmsg:398
 msgid "Power cost and production time similar to Viper"
 msgstr "Стоимость и корость производства как у Гадюки"
 
 #: data/base/messages/resmessages1.rmsg:407
-#: data/mp/messages/resmessages1.rmsg:407
+#: data/mp/messages/resmessages1.rmsg:408
 msgid "Project Medium Body"
 msgstr "Средняя рама Проекта"
 
 #: data/base/messages/resmessages1.rmsg:408
-#: data/mp/messages/resmessages1.rmsg:408
+#: data/mp/messages/resmessages1.rmsg:409
 msgid "Medium body increases armor and body points"
 msgstr "Средняя рама обладает повышенной бронёй"
 
 #: data/base/messages/resmessages1.rmsg:409
-#: data/mp/messages/resmessages1.rmsg:409
+#: data/mp/messages/resmessages1.rmsg:410
 msgid "Good medium tank and support vehicle"
 msgstr "Хороший средний танк и транспорт поддержки"
 
 #: data/base/messages/resmessages1.rmsg:410
-#: data/mp/messages/resmessages1.rmsg:410
+#: data/mp/messages/resmessages1.rmsg:411
 msgid "Average power costs and production times"
 msgstr "Средняя стоимость и скорость производства"
 
 #: data/base/messages/resmessages1.rmsg:420
-#: data/mp/messages/resmessages1.rmsg:420
+#: data/mp/messages/resmessages1.rmsg:421
 msgid "New Paradigm Medium body"
 msgstr "Средний корпус Новой Парадигмы"
 
 #: data/base/messages/resmessages1.rmsg:421
-#: data/mp/messages/resmessages1.rmsg:421
+#: data/mp/messages/resmessages1.rmsg:422
 msgid "Inferior armor and body points to Cobra"
 msgstr "Броня меньше чем у кобры"
 
 #: data/base/messages/resmessages1.rmsg:422
 #: data/base/messages/resmessages3.rmsg:643
-#: data/mp/messages/resmessages1.rmsg:422
+#: data/mp/messages/resmessages1.rmsg:423
 #: data/mp/messages/resmessages3.rmsg:643
 msgid "Faster than Cobra"
 msgstr "Быстрее Кобры"
 
 #: data/base/messages/resmessages1.rmsg:423
-#: data/mp/messages/resmessages1.rmsg:423
+#: data/mp/messages/resmessages1.rmsg:424
 msgid "Power cost and production time similar to Cobra"
 msgstr "Стоимость и Время производства как у Кобры"
 
 #: data/base/messages/resmessages1.rmsg:433
-#: data/mp/messages/resmessages1.rmsg:433
+#: data/mp/messages/resmessages1.rmsg:434
 msgid "Project Heavy Body"
 msgstr "Тяжелый корпус Проекта"
 
 #: data/base/messages/resmessages1.rmsg:434
-#: data/mp/messages/resmessages1.rmsg:434
+#: data/mp/messages/resmessages1.rmsg:435
 msgid "Heavy body increases armor and body points"
 msgstr "Тяжелая рама повышает броню"
 
 #: data/base/messages/resmessages1.rmsg:435
-#: data/mp/messages/resmessages1.rmsg:435
+#: data/mp/messages/resmessages1.rmsg:436
 msgid "Good main battle tank and heavy artillery platform"
 msgstr "Хорошая платформа для основных боевых танков и тяжелой артиллерии"
 
 #: data/base/messages/resmessages1.rmsg:436
-#: data/mp/messages/resmessages1.rmsg:436
+#: data/mp/messages/resmessages1.rmsg:437
 msgid "Very high power costs and very slow to produce"
 msgstr "Дорого и долго производить"
 
 #: data/base/messages/resmessages1.rmsg:446
-#: data/mp/messages/resmessages1.rmsg:446
+#: data/mp/messages/resmessages1.rmsg:447
 msgid "New Paradigm Heavy Body"
 msgstr "Тяжелый корпус Новой Парадигмы"
 
 #: data/base/messages/resmessages1.rmsg:447
-#: data/mp/messages/resmessages1.rmsg:447
+#: data/mp/messages/resmessages1.rmsg:448
 msgid "Less armor and body points than Python"
 msgstr "Менее бронированный и чем Питон"
 
 #: data/base/messages/resmessages1.rmsg:448
 #: data/base/messages/resmessages3.rmsg:656
-#: data/mp/messages/resmessages1.rmsg:448
+#: data/mp/messages/resmessages1.rmsg:449
 #: data/mp/messages/resmessages3.rmsg:656
 msgid "Faster than Python"
 msgstr "Быстрее Питона"
 
 #: data/base/messages/resmessages1.rmsg:449
-#: data/mp/messages/resmessages1.rmsg:449
+#: data/mp/messages/resmessages1.rmsg:450
 msgid "Power cost and production time the same as Python"
 msgstr "стоимость и время производства как у Питона"
 
@@ -1941,7 +1941,7 @@ msgstr "стоимость и время производства как у Пи
 #: data/base/messages/resmessages3.rmsg:667
 #: data/base/messages/resmessages3.rmsg:680
 #: data/base/messages/strings/resstrings.txt:559
-#: data/mp/messages/resmessages1.rmsg:459
+#: data/mp/messages/resmessages1.rmsg:460
 #: data/mp/messages/resmessages2.rmsg:498
 #: data/mp/messages/resmessages3.rmsg:667
 #: data/mp/messages/resmessages3.rmsg:680
@@ -1951,7 +1951,7 @@ msgstr "Улучшение двигателя"
 
 #: data/base/messages/resmessages1.rmsg:460
 #: data/base/messages/strings/names.txt:942
-#: data/mp/messages/resmessages1.rmsg:460
+#: data/mp/messages/resmessages1.rmsg:461
 #: data/mp/messages/strings/names.txt:955
 msgid "Fuel Injection Engine"
 msgstr "Инжекторный двигатель"
@@ -1978,8 +1978,8 @@ msgstr "Повышает скорость машин"
 #: data/base/messages/strings/resstrings.txt:562
 #: data/base/messages/strings/resstrings.txt:574
 #: data/base/messages/strings/resstrings.txt:584
-#: data/mp/messages/resmessages1.rmsg:462
-#: data/mp/messages/resmessages1.rmsg:475
+#: data/mp/messages/resmessages1.rmsg:463
+#: data/mp/messages/resmessages1.rmsg:476
 #: data/mp/messages/resmessages2.rmsg:501
 #: data/mp/messages/resmessages2.rmsg:514
 #: data/mp/messages/resmessages2.rmsg:527
@@ -2000,7 +2000,7 @@ msgstr "Все машины улучшаются автоматически"
 #: data/base/messages/resmessages3.rmsg:693
 #: data/base/messages/resmessages3.rmsg:706
 #: data/base/messages/strings/resstrings.txt:571
-#: data/mp/messages/resmessages1.rmsg:472
+#: data/mp/messages/resmessages1.rmsg:473
 #: data/mp/messages/resmessages2.rmsg:511
 #: data/mp/messages/resmessages3.rmsg:693
 #: data/mp/messages/resmessages3.rmsg:706
@@ -2021,32 +2021,32 @@ msgstr "Повышает кинетическую броню и здоровье
 #: data/base/messages/resmessages1.rmsg:498
 #: data/base/messages/resmessages1.rmsg:511
 #: data/base/messages/resmessages1.rmsg:524
-#: data/mp/messages/resmessages1.rmsg:485
-#: data/mp/messages/resmessages1.rmsg:498
-#: data/mp/messages/resmessages1.rmsg:511
-#: data/mp/messages/resmessages1.rmsg:524
+#: data/mp/messages/resmessages1.rmsg:486
+#: data/mp/messages/resmessages1.rmsg:499
+#: data/mp/messages/resmessages1.rmsg:512
+#: data/mp/messages/resmessages1.rmsg:525
 msgid "New Propulsion Available"
 msgstr "Доступен новый движитель"
 
 #: data/base/messages/resmessages1.rmsg:486
-#: data/mp/messages/resmessages1.rmsg:486
+#: data/mp/messages/resmessages1.rmsg:487
 msgid "Armored Half-tracks"
 msgstr "Бронированные полугусенницы"
 
 #: data/base/messages/resmessages1.rmsg:487
-#: data/mp/messages/resmessages1.rmsg:487
+#: data/mp/messages/resmessages1.rmsg:488
 msgid "Speed: Medium"
 msgstr "Скорость: средняя"
 
 #: data/base/messages/resmessages1.rmsg:499
-#: data/mp/messages/resmessages1.rmsg:499
+#: data/mp/messages/resmessages1.rmsg:500
 msgid "Amphibious hover propulsion"
 msgstr "Амфибия движитель - Ховер"
 
 #: data/base/messages/resmessages1.rmsg:500
 #: data/base/messages/resmessages1.rmsg:526
-#: data/mp/messages/resmessages1.rmsg:500
-#: data/mp/messages/resmessages1.rmsg:526
+#: data/mp/messages/resmessages1.rmsg:501
+#: data/mp/messages/resmessages1.rmsg:527
 msgid "Speed: Fast"
 msgstr "Скорость: быстрая"
 
@@ -2070,10 +2070,10 @@ msgstr "Скорость: быстрая"
 #: data/base/messages/strings/resstrings.txt:776
 #: data/base/messages/strings/resstrings.txt:782
 #: data/base/messages/strings/resstrings.txt:790
-#: data/mp/messages/resmessages1.rmsg:501
-#: data/mp/messages/resmessages1.rmsg:527
-#: data/mp/messages/resmessages1.rmsg:618
-#: data/mp/messages/resmessages1.rmsg:631
+#: data/mp/messages/resmessages1.rmsg:502
+#: data/mp/messages/resmessages1.rmsg:528
+#: data/mp/messages/resmessages1.rmsg:619
+#: data/mp/messages/resmessages1.rmsg:632
 #: data/mp/messages/resmessages23.rmsg:150
 #: data/mp/messages/resmessages23.rmsg:202
 #: data/mp/messages/resmessages2.rmsg:709
@@ -2097,51 +2097,51 @@ msgid "Body Points: Low"
 msgstr "Бронирование: низкое"
 
 #: data/base/messages/resmessages1.rmsg:512
-#: data/mp/messages/resmessages1.rmsg:512
+#: data/mp/messages/resmessages1.rmsg:513
 msgid "Armored Tracks"
 msgstr "Бронированные гусеницы"
 
 #: data/base/messages/resmessages1.rmsg:513
-#: data/mp/messages/resmessages1.rmsg:513
+#: data/mp/messages/resmessages1.rmsg:514
 msgid "Speed: Slow"
 msgstr "Скорость: низкая"
 
 #: data/base/messages/resmessages1.rmsg:525
 #: data/base/messages/strings/names.txt:976
-#: data/mp/messages/resmessages1.rmsg:525
+#: data/mp/messages/resmessages1.rmsg:526
 #: data/mp/messages/strings/names.txt:989
 msgid "Wheeled Propulsion"
 msgstr "Движитель - колеса"
 
 #: data/base/messages/resmessages1.rmsg:538
-#: data/mp/messages/resmessages1.rmsg:538
+#: data/mp/messages/resmessages1.rmsg:539
 msgid "Light Cannon firing 40mm rounds"
 msgstr "40 мм снаряды для мелкокалиберной пушки"
 
 #: data/base/messages/resmessages1.rmsg:551
-#: data/mp/messages/resmessages1.rmsg:551
+#: data/mp/messages/resmessages1.rmsg:552
 msgid "Medium Cannon firing 76mm rounds"
 msgstr "76 мм снаряды для среднекалиберной пушки"
 
 #: data/base/messages/resmessages1.rmsg:564
-#: data/mp/messages/resmessages1.rmsg:564
+#: data/mp/messages/resmessages1.rmsg:565
 msgid "Heavy Cannon firing 120 mm rounds"
 msgstr "120 мм снаряды для Тяжелой пушки"
 
 #: data/base/messages/resmessages1.rmsg:577
-#: data/mp/messages/resmessages1.rmsg:577
+#: data/mp/messages/resmessages1.rmsg:578
 msgid "High Explosive Anti-Tank Cannon Shells"
 msgstr "Взврывчатые противотанковые снаряды"
 
 #: data/base/messages/resmessages1.rmsg:590
-#: data/mp/messages/resmessages1.rmsg:590
+#: data/mp/messages/resmessages1.rmsg:591
 msgid "Flame-thrower firing Propylene Oxide gel"
 msgstr "Огнемётный гель оксида пропилена"
 
 #: data/base/messages/resmessages1.rmsg:591
 #: data/base/messages/resmessages2.rmsg:773
 #: data/base/messages/strings/resstrings.txt:759
-#: data/mp/messages/resmessages1.rmsg:591
+#: data/mp/messages/resmessages1.rmsg:592
 #: data/mp/messages/resmessages2.rmsg:773
 #: data/mp/messages/resmessagesall.rmsg:370
 #: data/mp/messages/strings/resstrings.txt:796
@@ -2149,13 +2149,13 @@ msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr "Лучшие цели: Бункеры, колесный транспорт, амфибии"
 
 #: data/base/messages/resmessages1.rmsg:592
-#: data/mp/messages/resmessages1.rmsg:592
+#: data/mp/messages/resmessages1.rmsg:593
 #: data/mp/messages/resmessagesall.rmsg:371
 msgid "Body Points: Very low"
 msgstr "Броня: очень низкое"
 
 #: data/base/messages/resmessages1.rmsg:603
-#: data/mp/messages/resmessages1.rmsg:603
+#: data/mp/messages/resmessages1.rmsg:604
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "Смесь оксида пропилена горит при гораздо более высокой температуре"
 
@@ -2167,17 +2167,17 @@ msgid "Increases Flamer damage"
 msgstr "Увеличение урона огнемёта"
 
 #: data/base/messages/resmessages1.rmsg:616
-#: data/mp/messages/resmessages1.rmsg:616
+#: data/mp/messages/resmessages1.rmsg:617
 msgid "7.62mm machinegun"
 msgstr "7,62 мм пулемёт"
 
 #: data/base/messages/resmessages1.rmsg:629
-#: data/mp/messages/resmessages1.rmsg:629
+#: data/mp/messages/resmessages1.rmsg:630
 msgid "Twin 7.62mm machineguns"
 msgstr "Спаренный 7,62 мм пулемёт"
 
 #: data/base/messages/resmessages1.rmsg:642
-#: data/mp/messages/resmessages1.rmsg:642
+#: data/mp/messages/resmessages1.rmsg:643
 msgid "Hardened case machinegun bullets"
 msgstr "Пули с твердой оболочкой"
 
@@ -2192,18 +2192,18 @@ msgid "Increases Machinegun damage"
 msgstr "Увеличение урона пулемёта"
 
 #: data/base/messages/resmessages1.rmsg:655
-#: data/mp/messages/resmessages1.rmsg:655
+#: data/mp/messages/resmessages1.rmsg:656
 msgid "Armor-Piercing Discard Sabot Bullets"
 msgstr "Бронебойные пули с отбрасываемым поддоном"
 
 #: data/base/messages/resmessages1.rmsg:668
-#: data/mp/messages/resmessages1.rmsg:668
+#: data/mp/messages/resmessages1.rmsg:669
 #: data/mp/messages/resmessagesall.rmsg:343
 msgid "May be targeted directly or assigned to a sensor turret or tower"
 msgstr "Может использоваться непосредственно или привязанным к датчику или к башне."
 
 #: data/base/messages/resmessages1.rmsg:681
-#: data/mp/messages/resmessages1.rmsg:681
+#: data/mp/messages/resmessages1.rmsg:682
 msgid "Improved high explosive shells"
 msgstr "Улучшенные взрывчатые снаряды"
 
@@ -2215,12 +2215,12 @@ msgid "Increases Mortar damage"
 msgstr "Увеличение урона миномёта"
 
 #: data/base/messages/resmessages1.rmsg:694
-#: data/mp/messages/resmessages1.rmsg:694
+#: data/mp/messages/resmessages1.rmsg:695
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "Легкие скорострельные ракеты"
 
 #: data/base/messages/resmessages1.rmsg:695
-#: data/mp/messages/resmessages1.rmsg:695
+#: data/mp/messages/resmessages1.rmsg:696
 msgid "Best Targets: Wheeled and hover vehicles"
 msgstr "Лучшие цели: колесный транспорт и амфибии"
 
@@ -2230,9 +2230,9 @@ msgstr "Лучшие цели: колесный транспорт и амфиб
 #: data/base/messages/resmessages2.rmsg:927
 #: data/base/messages/strings/resstrings.txt:943
 #: data/base/messages/strings/resstrings.txt:951
-#: data/mp/messages/resmessages1.rmsg:706
-#: data/mp/messages/resmessages1.rmsg:719
-#: data/mp/messages/resmessages1.rmsg:732
+#: data/mp/messages/resmessages1.rmsg:707
+#: data/mp/messages/resmessages1.rmsg:720
+#: data/mp/messages/resmessages1.rmsg:733
 #: data/mp/messages/resmessages2.rmsg:927
 #: data/mp/messages/strings/resstrings.txt:986
 #: data/mp/messages/strings/resstrings.txt:994
@@ -2240,7 +2240,7 @@ msgid "Mini-Rocket Upgrade"
 msgstr "Улучшение миниракет"
 
 #: data/base/messages/resmessages1.rmsg:707
-#: data/mp/messages/resmessages1.rmsg:707
+#: data/mp/messages/resmessages1.rmsg:708
 msgid "Fin-stabilization improves flight trajectory"
 msgstr "Стабилизаторы улучшают траекторию полёта"
 
@@ -2254,9 +2254,9 @@ msgstr "Увеличение точности миниракеты"
 #: data/base/messages/resmessages2.rmsg:930
 #: data/base/messages/strings/resstrings.txt:946
 #: data/base/messages/strings/resstrings.txt:954
-#: data/mp/messages/resmessages1.rmsg:709
-#: data/mp/messages/resmessages1.rmsg:722
-#: data/mp/messages/resmessages1.rmsg:735
+#: data/mp/messages/resmessages1.rmsg:710
+#: data/mp/messages/resmessages1.rmsg:723
+#: data/mp/messages/resmessages1.rmsg:736
 #: data/mp/messages/resmessages2.rmsg:930
 #: data/mp/messages/strings/resstrings.txt:989
 #: data/mp/messages/strings/resstrings.txt:997
@@ -2264,7 +2264,7 @@ msgid "All mini-rockets upgraded automatically"
 msgstr "Все миниракеты автоматически улучшены"
 
 #: data/base/messages/resmessages1.rmsg:720
-#: data/mp/messages/resmessages1.rmsg:720
+#: data/mp/messages/resmessages1.rmsg:721
 msgid "Improved shaped charge warhead"
 msgstr "Улучшение состава заряда боеголовки"
 
@@ -2276,7 +2276,7 @@ msgid "Increases Mini-Rocket damage"
 msgstr "Увеличение урона миниракеты"
 
 #: data/base/messages/resmessages1.rmsg:733
-#: data/mp/messages/resmessages1.rmsg:733
+#: data/mp/messages/resmessages1.rmsg:734
 msgid "Automated reload system"
 msgstr "Автоматизированная система перезарядки"
 
@@ -2285,12 +2285,12 @@ msgid "Increases Mini-Rockets ROF"
 msgstr "Увеличение скорострельности миниракет"
 
 #: data/base/messages/resmessages1.rmsg:746
-#: data/mp/messages/resmessages1.rmsg:746
+#: data/mp/messages/resmessages1.rmsg:747
 msgid "Tracks and directs in-flight rocket to target"
 msgstr "Направляет ракету к цели во время полёта"
 
 #: data/base/messages/resmessages1.rmsg:759
-#: data/mp/messages/resmessages1.rmsg:759
+#: data/mp/messages/resmessages1.rmsg:760
 msgid "High Explosive Anti-Tank warhead"
 msgstr "Взрывчатая противотанковая боеголовка"
 
@@ -9675,14 +9675,14 @@ msgid "Cannon reload time -10%"
 msgstr "Автозарядка Пушки"
 
 #: data/mp/messages/resmessages12.rmsg:227
-#: data/mp/messages/resmessages1.rmsg:578
+#: data/mp/messages/resmessages1.rmsg:579
 #: data/mp/messages/resmessages3.rmsg:877
 #, fuzzy
 msgid "Cannon damage +25%"
 msgstr "Увеличение урона пушки"
 
 #: data/mp/messages/resmessages12.rmsg:240
-#: data/mp/messages/resmessages1.rmsg:747
+#: data/mp/messages/resmessages1.rmsg:748
 #: data/mp/messages/resmessagesall.rmsg:175
 #, fuzzy
 msgid "Rocket accuracy +10%"
@@ -9711,29 +9711,29 @@ msgstr "бронированная охранная вышка с ракетни
 msgid "Repair Speed +100%"
 msgstr "повышает скорость ремонта"
 
-#: data/mp/messages/resmessages1.rmsg:305
-#, c-format
+#: data/mp/messages/resmessages1.rmsg:306
+#, no-c-format
 msgid "Factory output speed +100% per module"
 msgstr ""
 
-#: data/mp/messages/resmessages1.rmsg:318
+#: data/mp/messages/resmessages1.rmsg:319
 #: data/mp/messages/resmessagesall.rmsg:786
 msgid "Factory output speed +60%"
 msgstr ""
 
-#: data/mp/messages/resmessages1.rmsg:344
+#: data/mp/messages/resmessages1.rmsg:345
 #, fuzzy
 msgid "Research speed +85%"
 msgstr "Завершено исследование: %s"
 
-#: data/mp/messages/resmessages1.rmsg:357
+#: data/mp/messages/resmessages1.rmsg:358
 #: data/mp/messages/resmessages2.rmsg:370
 #: data/mp/messages/resmessages3.rmsg:448
 #, fuzzy
 msgid "Research speed +30%"
 msgstr "Завершено исследование: %s"
 
-#: data/mp/messages/resmessages1.rmsg:370
+#: data/mp/messages/resmessages1.rmsg:371
 #: data/mp/messages/resmessages2.rmsg:58
 #: data/mp/messages/resmessages2.rmsg:383
 #: data/mp/messages/resmessages3.rmsg:214
@@ -9744,7 +9744,7 @@ msgstr "Завершено исследование: %s"
 msgid "Armor +35%, Body Points +30%"
 msgstr "Увеличивает броню и общее здоровье"
 
-#: data/mp/messages/resmessages1.rmsg:461
+#: data/mp/messages/resmessages1.rmsg:462
 #: data/mp/messages/resmessages2.rmsg:500
 #: data/mp/messages/resmessages3.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:682
@@ -9752,7 +9752,7 @@ msgstr "Увеличивает броню и общее здоровье"
 msgid "Vehicle speed +5%"
 msgstr "Корпус машины"
 
-#: data/mp/messages/resmessages1.rmsg:474
+#: data/mp/messages/resmessages1.rmsg:475
 #: data/mp/messages/resmessages2.rmsg:513
 #: data/mp/messages/resmessages3.rmsg:695
 #: data/mp/messages/resmessages3.rmsg:708
@@ -9760,21 +9760,21 @@ msgstr "Корпус машины"
 msgid "Kinetic armor +30%, body points +30%"
 msgstr "Повышает кинетическую броню и здоровье"
 
-#: data/mp/messages/resmessages1.rmsg:552
-#: data/mp/messages/resmessages1.rmsg:565
+#: data/mp/messages/resmessages1.rmsg:553
+#: data/mp/messages/resmessages1.rmsg:566
 #: data/mp/messages/resmessages2.rmsg:747
 msgid "Best Targets: Vehicles, Hardpoints"
 msgstr "лучшие цели: наземный транспорт и орудийные установки"
 
-#: data/mp/messages/resmessages1.rmsg:604
+#: data/mp/messages/resmessages1.rmsg:605
 #: data/mp/messages/resmessages2.rmsg:786
 #: data/mp/messages/resmessagesall.rmsg:773
 #, fuzzy
 msgid "Flamer damage +25%"
 msgstr "Увеличение урона огнемёта"
 
-#: data/mp/messages/resmessages1.rmsg:643
-#: data/mp/messages/resmessages1.rmsg:656
+#: data/mp/messages/resmessages1.rmsg:644
+#: data/mp/messages/resmessages1.rmsg:657
 #: data/mp/messages/resmessages2.rmsg:877
 #: data/mp/messages/resmessages3.rmsg:1007
 #: data/mp/messages/resmessages3.rmsg:1020
@@ -9782,29 +9782,29 @@ msgstr "Увеличение урона огнемёта"
 msgid "Machinegun damage +25%"
 msgstr "Увеличение урона пулемёта"
 
-#: data/mp/messages/resmessages1.rmsg:682
+#: data/mp/messages/resmessages1.rmsg:683
 #: data/mp/messages/resmessages2.rmsg:916
 #, fuzzy
 msgid "Mortar damage +25%"
 msgstr "Увеличение урона миномёта"
 
-#: data/mp/messages/resmessages1.rmsg:708
+#: data/mp/messages/resmessages1.rmsg:709
 #, fuzzy
 msgid "Mini-Rocket accuracy +10%"
 msgstr "Увеличение точности миниракеты"
 
-#: data/mp/messages/resmessages1.rmsg:721
+#: data/mp/messages/resmessages1.rmsg:722
 #: data/mp/messages/resmessages2.rmsg:929
 #, fuzzy
 msgid "Mini-Rocket damage +25%"
 msgstr "Увеличение урона миниракеты"
 
-#: data/mp/messages/resmessages1.rmsg:734
+#: data/mp/messages/resmessages1.rmsg:735
 #, fuzzy
 msgid "Mini-Rocket reload time -15%"
 msgstr "Улучшение миниракет"
 
-#: data/mp/messages/resmessages1.rmsg:760
+#: data/mp/messages/resmessages1.rmsg:761
 #: data/mp/messages/resmessages2.rmsg:942
 #, fuzzy
 msgid "Rocket damage +25%"
@@ -12309,7 +12309,7 @@ msgid "Power Accrued"
 msgstr "накопленная энергия"
 
 #: src/intelmap.c:247
-#: src/keybind.c:1331
+#: src/keybind.c:1342
 msgid "PAUSED"
 msgstr "ПАУЗА"
 
@@ -12330,32 +12330,32 @@ msgid "New Intelligence Report"
 msgstr "Поступил доклад разведки"
 
 #: src/intorder.c:179
-#: src/keymap.c:389
+#: src/keymap.c:390
 msgid "Short Range"
 msgstr "Малый радиус действия"
 
 #: src/intorder.c:180
-#: src/keymap.c:396
+#: src/keymap.c:397
 msgid "Long Range"
 msgstr "Дальний радиус действия"
 
 #: src/intorder.c:181
-#: src/keymap.c:388
+#: src/keymap.c:389
 msgid "Optimum Range"
 msgstr "Оптимальный радиус действия"
 
 #: src/intorder.c:182
-#: src/keymap.c:407
+#: src/keymap.c:409
 msgid "Retreat at Medium Damage"
 msgstr "Отступление при среднем уроне"
 
 #: src/intorder.c:183
-#: src/keymap.c:408
+#: src/keymap.c:410
 msgid "Retreat at Heavy Damage"
 msgstr "Отступление при тяжелом уроне"
 
 #: src/intorder.c:184
-#: src/keymap.c:409
+#: src/keymap.c:411
 msgid "Do or Die!"
 msgstr "Сделай или умри!"
 
@@ -12364,37 +12364,37 @@ msgid "Fire-At-Will"
 msgstr "Произвольный огонь"
 
 #: src/intorder.c:186
-#: src/keymap.c:384
+#: src/keymap.c:385
 msgid "Return Fire"
 msgstr "Ответный огонь"
 
 #: src/intorder.c:187
-#: src/keymap.c:382
+#: src/keymap.c:383
 msgid "Hold Fire"
 msgstr "Не стрелять"
 
 #: src/intorder.c:188
-#: src/keymap.c:391
+#: src/keymap.c:392
 msgid "Patrol"
 msgstr "Патрулировать"
 
 #: src/intorder.c:189
-#: src/keymap.c:390
+#: src/keymap.c:391
 msgid "Pursue"
 msgstr "Преследовать"
 
 #: src/intorder.c:190
-#: src/keymap.c:386
+#: src/keymap.c:387
 msgid "Guard Position"
 msgstr "Охранять позиции"
 
 #: src/intorder.c:191
-#: src/keymap.c:393
+#: src/keymap.c:394
 msgid "Hold Position"
 msgstr "Держать позицию"
 
 #: src/intorder.c:192
-#: src/keymap.c:392
+#: src/keymap.c:393
 msgid "Return For Repair"
 msgstr "Вернуться для починки"
 
@@ -12403,12 +12403,12 @@ msgid "Return To HQ"
 msgstr "Вернуться к штабу"
 
 #: src/intorder.c:194
-#: src/keymap.c:394
+#: src/keymap.c:395
 msgid "Go to Transport"
 msgstr "Идти к транспорту"
 
 #: src/intorder.c:195
-#: src/keymap.c:418
+#: src/keymap.c:420
 msgid "Return for Recycling"
 msgstr "Вернуться для утилизации"
 
@@ -12461,10 +12461,10 @@ msgstr "Отлично, сенсорный дисплей выключен!"
 #: src/keybind.c:681
 #: src/keybind.c:1232
 #: src/keybind.c:1289
-#: src/keybind.c:1380
-#: src/keybind.c:1476
-#: src/keybind.c:1827
-#: src/keybind.c:1867
+#: src/keybind.c:1391
+#: src/keybind.c:1487
+#: src/keybind.c:1838
+#: src/keybind.c:1878
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Игрок %u) использует чит :%s"
@@ -12564,151 +12564,156 @@ msgstr "режим бога выключен"
 msgid "View Aligned to North"
 msgstr "Вид выровнен по северу"
 
-#: src/keybind.c:1381
+#: src/keybind.c:1311
+#, fuzzy, c-format
+msgid "Trap cursor %s"
+msgstr "Захват курсора"
+
+#: src/keybind.c:1392
 msgid "Researched EVERYTHING for you!"
 msgstr "Все исследования доступны!"
 
-#: src/keybind.c:1412
+#: src/keybind.c:1423
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Игрок %u) использует чит :%s %s"
 
-#: src/keybind.c:1413
+#: src/keybind.c:1424
 msgid "Researched"
 msgstr "Исследовано"
 
-#: src/keybind.c:1434
+#: src/keybind.c:1445
 msgid "Only displaying energy bars when selected"
 msgstr "отображать панель прогресса только для выбранных единиц"
 
-#: src/keybind.c:1437
+#: src/keybind.c:1448
 msgid "Always displaying energy bars for units"
 msgstr "Всегда отображать панеот прогресса для юнитов"
 
-#: src/keybind.c:1440
+#: src/keybind.c:1451
 msgid "Always displaying energy bars for units and structures"
 msgstr "Всегда отображать панел прогресса для юнитов и построек"
 
-#: src/keybind.c:1462
+#: src/keybind.c:1473
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Демо-режим выключен - возвращение к нормальному режиму игры"
 
-#: src/keybind.c:1477
+#: src/keybind.c:1488
 msgid "Debug menu is Open"
 msgstr "Открыто меню отладки"
 
-#: src/keybind.c:1508
+#: src/keybind.c:1519
 msgid "Unable to locate any resource extractors!"
 msgstr "Невозможно найти Нефтевышки"
 
-#: src/keybind.c:1729
+#: src/keybind.c:1740
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "О!, погода снаружи ужасна... СНЕГ"
 
-#: src/keybind.c:1735
+#: src/keybind.c:1746
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "ну а дождь все льет и льет..."
 
-#: src/keybind.c:1741
+#: src/keybind.c:1752
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "прогноз на сегодня: осадков не ожидается!"
 
-#: src/keybind.c:1826
+#: src/keybind.c:1837
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "внимание! при неправильном использовании в миссиях могут возниктуть серьезные последствия"
 
-#: src/keybind.c:1828
+#: src/keybind.c:1839
 msgid "All enemies destroyed by cheating!"
 msgstr "Враги уничтожены с помощью читов!"
 
-#: src/keybind.c:1868
+#: src/keybind.c:1879
 msgid "Destroying selected droids and structures!"
 msgstr "Уничтожаю выбранные постройки и машины"
 
-#: src/keybind.c:2387
+#: src/keybind.c:2398
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Фокус на штабе, вид на СЕВЕР"
 
-#: src/keybind.c:2399
+#: src/keybind.c:2410
 msgid "Unable to locate HQ!"
 msgstr "Невозможно найти штаб!"
 
-#: src/keybind.c:2406
+#: src/keybind.c:2417
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2455
+#: src/keybind.c:2466
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2460
+#: src/keybind.c:2471
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2469
+#: src/keybind.c:2480
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2474
+#: src/keybind.c:2485
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2519
-#: src/keybind.c:2562
+#: src/keybind.c:2530
+#: src/keybind.c:2573
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Извините, в мультиплеере читы отключены."
 
-#: src/keybind.c:2540
-#: src/keybind.c:2583
-#: src/keybind.c:2605
+#: src/keybind.c:2551
+#: src/keybind.c:2594
+#: src/keybind.c:2616
 msgid "Game Speed Reset"
 msgstr "Скорость Игры Сброшена"
 
-#: src/keybind.c:2544
+#: src/keybind.c:2555
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Скорость игры увеличена в %3.1f"
 
-#: src/keybind.c:2587
+#: src/keybind.c:2598
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Скорость игры уменьшена в %3.1f"
 
-#: src/keybind.c:2617
+#: src/keybind.c:2628
 msgid "Build menu will reopen"
 msgstr "меню постройки снова откроется"
 
-#: src/keybind.c:2621
+#: src/keybind.c:2632
 msgid "Build menu will not reopen"
 msgstr "меню постройки е откроется"
 
-#: src/keybind.c:2633
+#: src/keybind.c:2644
 msgid "Radar showing friend-foe colors"
 msgstr "Радар отображает цвета свой-чужой"
 
-#: src/keybind.c:2637
+#: src/keybind.c:2648
 msgid "Radar showing player colors"
 msgstr "Радар отображает цвета игрока"
 
-#: src/keybind.c:2658
+#: src/keybind.c:2669
 msgid "Radar showing only objects"
 msgstr "Радар отображает только объекты"
 
-#: src/keybind.c:2661
+#: src/keybind.c:2672
 msgid "Radar blending terrain and height"
 msgstr "радар не различает ландшафт и рельеф"
 
-#: src/keybind.c:2664
+#: src/keybind.c:2675
 msgid "Radar showing terrain"
 msgstr "Радар отображает поверхность"
 
-#: src/keybind.c:2667
+#: src/keybind.c:2678
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Радар отображает поверхность"
 
-#: src/keybind.c:2670
+#: src/keybind.c:2681
 msgid "Radar showing height"
 msgstr "радар показывает рельеф"
 
@@ -12728,364 +12733,364 @@ msgstr "Назад"
 msgid "Select Default"
 msgstr "Выбрать по умолчанию"
 
-#: src/keymap.c:294
+#: src/keymap.c:295
 msgid "Manufacture"
 msgstr "Производство"
 
-#: src/keymap.c:295
+#: src/keymap.c:296
 msgid "Research"
 msgstr "Исследования"
 
-#: src/keymap.c:296
+#: src/keymap.c:297
 msgid "Build"
 msgstr "Строительство"
 
-#: src/keymap.c:297
+#: src/keymap.c:298
 msgid "Design"
 msgstr "Дизайн"
 
-#: src/keymap.c:298
+#: src/keymap.c:299
 msgid "Intelligence Display"
 msgstr "Экран разведки"
 
-#: src/keymap.c:299
+#: src/keymap.c:300
 msgid "Commanders"
 msgstr "Командиры"
 
-#: src/keymap.c:300
+#: src/keymap.c:301
 msgid "Toggle Radar"
 msgstr "Переключатель радара"
 
-#: src/keymap.c:301
+#: src/keymap.c:302
 msgid "Toggle Console Display"
 msgstr "Переключатель консоли"
 
-#: src/keymap.c:302
+#: src/keymap.c:303
 msgid "Toggle Damage Bars On/Off"
 msgstr "Переключатель панелей урона вкл./выкл."
 
-#: src/keymap.c:303
+#: src/keymap.c:304
 msgid "Take Screen Shot"
 msgstr "Сделать скриншот"
 
-#: src/keymap.c:304
+#: src/keymap.c:305
 msgid "Toggle Formation Speed Limiting"
 msgstr "ограничения скорости"
 
-#: src/keymap.c:305
+#: src/keymap.c:306
 msgid "View Location of Previous Message"
 msgstr "Обзор места предыдущего сообщения"
 
-#: src/keymap.c:310
+#: src/keymap.c:311
 msgid "Assign Group 0"
 msgstr "Назначить группу 0"
 
-#: src/keymap.c:311
+#: src/keymap.c:312
 msgid "Assign Group 1"
 msgstr "Назначить группу 1"
 
-#: src/keymap.c:312
+#: src/keymap.c:313
 msgid "Assign Group 2"
 msgstr "Назначить группу 2"
 
-#: src/keymap.c:313
+#: src/keymap.c:314
 msgid "Assign Group 3"
 msgstr "Назначить группу 3"
 
-#: src/keymap.c:314
+#: src/keymap.c:315
 msgid "Assign Group 4"
 msgstr "Назначить группу 4"
 
-#: src/keymap.c:315
+#: src/keymap.c:316
 msgid "Assign Group 5"
 msgstr "Назначить группу 5"
 
-#: src/keymap.c:316
+#: src/keymap.c:317
 msgid "Assign Group 6"
 msgstr "Назначить группу 6"
 
-#: src/keymap.c:317
+#: src/keymap.c:318
 msgid "Assign Group 7"
 msgstr "Назначить группу 7"
 
-#: src/keymap.c:318
+#: src/keymap.c:319
 msgid "Assign Group 8"
 msgstr "Назначить группу 8"
 
-#: src/keymap.c:319
+#: src/keymap.c:320
 msgid "Assign Group 9"
 msgstr "Назначить группу 9"
 
-#: src/keymap.c:323
+#: src/keymap.c:324
 msgid "Select Group 0"
 msgstr "Выделить группу 0"
 
-#: src/keymap.c:324
+#: src/keymap.c:325
 msgid "Select Group 1"
 msgstr "Выделить группу 1"
 
-#: src/keymap.c:325
+#: src/keymap.c:326
 msgid "Select Group 2"
 msgstr "Выделить группу 2"
 
-#: src/keymap.c:326
+#: src/keymap.c:327
 msgid "Select Group 3"
 msgstr "Выделить группу 3"
 
-#: src/keymap.c:327
+#: src/keymap.c:328
 msgid "Select Group 4"
 msgstr "Выделить группу 4"
 
-#: src/keymap.c:328
+#: src/keymap.c:329
 msgid "Select Group 5"
 msgstr "Выделить группу 5"
 
-#: src/keymap.c:329
+#: src/keymap.c:330
 msgid "Select Group 6"
 msgstr "Выделить группу 6"
 
-#: src/keymap.c:330
+#: src/keymap.c:331
 msgid "Select Group 7"
 msgstr "Выделить группу 7"
 
-#: src/keymap.c:331
+#: src/keymap.c:332
 msgid "Select Group 8"
 msgstr "Выделить группу 8"
 
-#: src/keymap.c:332
+#: src/keymap.c:333
 msgid "Select Group 9"
 msgstr "Выделить группу 9"
 
-#: src/keymap.c:336
+#: src/keymap.c:337
 msgid "Select Commander 0"
 msgstr "Выделить командующего 0"
 
-#: src/keymap.c:337
+#: src/keymap.c:338
 msgid "Select Commander 1"
 msgstr "Выделить командующего 1"
 
-#: src/keymap.c:338
+#: src/keymap.c:339
 msgid "Select Commander 2"
 msgstr "Выделить командующего 2"
 
-#: src/keymap.c:339
+#: src/keymap.c:340
 msgid "Select Commander 3"
 msgstr "Выделить командующего 3"
 
-#: src/keymap.c:340
+#: src/keymap.c:341
 msgid "Select Commander 4"
 msgstr "Выделить командующего 4"
 
-#: src/keymap.c:341
+#: src/keymap.c:342
 msgid "Select Commander 5"
 msgstr "Выделить командующего 5"
 
-#: src/keymap.c:342
+#: src/keymap.c:343
 msgid "Select Commander 6"
 msgstr "Выделить командующего 6"
 
-#: src/keymap.c:343
+#: src/keymap.c:344
 msgid "Select Commander 7"
 msgstr "Выделить командующего 7"
 
-#: src/keymap.c:344
+#: src/keymap.c:345
 msgid "Select Commander 8"
 msgstr "Выделить командующего 8"
 
-#: src/keymap.c:345
+#: src/keymap.c:346
 msgid "Select Commander 9"
 msgstr "Выделить командующего 9"
 
-#: src/keymap.c:349
+#: src/keymap.c:350
 #, fuzzy
 msgid "Multiplayer Options / Alliance dialog"
 msgstr "Настройка многопользовательской игры"
 
-#: src/keymap.c:352
+#: src/keymap.c:353
 msgid "Snap View to North"
 msgstr "Сориентировать вид на север"
 
-#: src/keymap.c:353
+#: src/keymap.c:354
 msgid "Toggle Tracking Camera"
 msgstr "включение камеры слежения"
 
-#: src/keymap.c:354
+#: src/keymap.c:355
 msgid "Display In-Game Options"
 msgstr "показывать игровые опции"
 
-#: src/keymap.c:355
+#: src/keymap.c:356
 msgid "Zoom Radar Out"
 msgstr "Отдалить радар"
 
-#: src/keymap.c:356
+#: src/keymap.c:357
 msgid "Zoom Radar In"
 msgstr "Приблизить радар"
 
-#: src/keymap.c:357
+#: src/keymap.c:358
 msgid "Zoom In"
 msgstr "Приблизить"
 
-#: src/keymap.c:358
+#: src/keymap.c:359
 msgid "Zoom Out"
 msgstr "Отдалить"
 
-#: src/keymap.c:359
+#: src/keymap.c:360
 msgid "Pitch Forward"
 msgstr "бросок вперед"
 
-#: src/keymap.c:360
+#: src/keymap.c:361
 msgid "Rotate Left"
 msgstr "Повернуть влево"
 
-#: src/keymap.c:361
+#: src/keymap.c:362
 msgid "Reset Pitch"
 msgstr "сброс броска"
 
-#: src/keymap.c:362
+#: src/keymap.c:363
 msgid "Rotate Right"
 msgstr "Повернуть вправо"
 
-#: src/keymap.c:363
+#: src/keymap.c:364
 msgid "Pitch Back"
 msgstr "бросок назад"
 
-#: src/keymap.c:364
+#: src/keymap.c:365
 msgid "Orders Menu"
 msgstr "Меню приказов"
 
-#: src/keymap.c:365
+#: src/keymap.c:366
 msgid "Decrease Game Speed"
 msgstr "Уменьшить скорость игры"
 
-#: src/keymap.c:366
+#: src/keymap.c:367
 msgid "Increase Game Speed"
 msgstr "Увеличить скорость игры"
 
-#: src/keymap.c:367
+#: src/keymap.c:368
 msgid "Reset Game Speed"
 msgstr "Стандартная скорость игры"
 
-#: src/keymap.c:368
+#: src/keymap.c:369
 msgid "View North"
 msgstr "показать север"
 
-#: src/keymap.c:369
+#: src/keymap.c:370
 msgid "View South"
 msgstr "показать юг"
 
-#: src/keymap.c:370
+#: src/keymap.c:371
 msgid "View East"
 msgstr "показать восток"
 
-#: src/keymap.c:371
+#: src/keymap.c:372
 msgid "View West"
 msgstr "показать запад"
 
-#: src/keymap.c:372
+#: src/keymap.c:373
 msgid "View next Oil Derrick"
 msgstr "Отобразить следующую нефтяную вышку"
 
-#: src/keymap.c:373
+#: src/keymap.c:374
 msgid "View next Repair Unit"
 msgstr "Отобразить следующего ремонтного юнита"
 
-#: src/keymap.c:374
+#: src/keymap.c:375
 msgid "View next Truck"
 msgstr "Отобразить следующий грузовик"
 
-#: src/keymap.c:375
+#: src/keymap.c:376
 msgid "View next Sensor Unit"
 msgstr "Отобразить следующего сенсорного юнита"
 
-#: src/keymap.c:376
+#: src/keymap.c:377
 msgid "View next Commander"
 msgstr "Отобразить следующего командующего"
 
-#: src/keymap.c:377
+#: src/keymap.c:378
 msgid "Toggle Overlays"
 msgstr "перекрытия"
 
-#: src/keymap.c:378
+#: src/keymap.c:379
 msgid "Console On/Off"
 msgstr "Консоль вкл/выкл"
 
-#: src/keymap.c:381
+#: src/keymap.c:382
 msgid "Center View on HQ"
 msgstr "центрировать на командном центре"
 
-#: src/keymap.c:383
+#: src/keymap.c:384
 msgid "View Unassigned Units"
 msgstr "показать неназначенных юнитов"
 
-#: src/keymap.c:385
+#: src/keymap.c:386
 msgid "Fire at Will"
 msgstr "Огонь по желанию"
 
-#: src/keymap.c:387
+#: src/keymap.c:388
 msgid "Return to HQ"
 msgstr "Вернуться к штабу"
 
-#: src/keymap.c:395
+#: src/keymap.c:396
 msgid "Send Text Message"
 msgstr "Отправить сообщение"
 
-#: src/keymap.c:413
+#: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr "Выделить все боевые юниты"
 
-#: src/keymap.c:414
+#: src/keymap.c:416
 msgid "Select all Heavily Damaged Units"
 msgstr "Выделить всю сильно поврежденную технику"
 
-#: src/keymap.c:416
+#: src/keymap.c:418
 msgid "Select all Half-tracks"
 msgstr "Выделить всю технику на полугусеничном ходу"
 
-#: src/keymap.c:417
+#: src/keymap.c:419
 msgid "Select all Hovers"
 msgstr "Выделить всю технику на воздушной подушке"
 
-#: src/keymap.c:419
+#: src/keymap.c:421
 msgid "Select all Units on Screen"
 msgstr "Выделить все технику на экране"
 
-#: src/keymap.c:420
+#: src/keymap.c:422
 msgid "Select all Tracks"
 msgstr "Выделить всю технику на гусеничном ходу"
 
-#: src/keymap.c:421
+#: src/keymap.c:423
 msgid "Select EVERY unit"
 msgstr "выделить КАЖДОГО юнита"
 
-#: src/keymap.c:422
+#: src/keymap.c:424
 msgid "Select all VTOLs"
 msgstr "Выделить всю воздушную технику"
 
-#: src/keymap.c:423
+#: src/keymap.c:425
 msgid "Select all Wheels"
 msgstr "Выделить всю технику на колесах"
 
-#: src/keymap.c:425
+#: src/keymap.c:427
 msgid "Select all Similar Units"
 msgstr "Выделить всех похожих юнитов"
 
-#: src/keymap.c:429
+#: src/keymap.c:431
 msgid "Select next Factory"
 msgstr "Выбрать следующий завод техники"
 
-#: src/keymap.c:430
+#: src/keymap.c:432
 msgid "Select next Research Facility"
 msgstr "Выбрать следующую исследовательскую лабораторию"
 
-#: src/keymap.c:431
+#: src/keymap.c:433
 msgid "Select next Power Generator"
 msgstr "Выбрать следующий генератор энергии"
 
-#: src/keymap.c:432
+#: src/keymap.c:434
 msgid "Select next Cyborg Factory"
 msgstr "Выбрать следующий завод киборгов"
 
-#: src/keymap.c:433
+#: src/keymap.c:435
 msgid "Toggle reopening the build menu"
 msgstr "открыть заново меню постройки"
 
@@ -13609,7 +13614,7 @@ msgstr "Завершено исследование: %s"
 msgid "Research Completed"
 msgstr "Исследование закончено"
 
-#: src/research.c:2546
+#: src/research.c:2543
 msgid "Research Award"
 msgstr "награда исследования"
 
@@ -13731,20 +13736,20 @@ msgstr "Общее время игры: %s"
 msgid "You cheated!"
 msgstr "вас обманули"
 
-#: src/scriptfuncs.c:3212
+#: src/scriptfuncs.c:3213
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ПОБЕДА!"
 
-#: src/scriptfuncs.c:3216
+#: src/scriptfuncs.c:3217
 msgid "YOU WERE DEFEATED!"
 msgstr "ВЫ ПРОИГРАЛИ!"
 
-#: src/scriptfuncs.c:10132
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Маяк получен от %s!"
 
-#: src/scriptfuncs.c:10178
+#: src/scriptfuncs.c:10179
 #, c-format
 msgid "Beacon %d"
 msgstr "Маяк %d"
@@ -13779,8 +13784,8 @@ msgstr "невозможно найти ни одного командира"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Достигнут Предел - Производство Остановлено"
 
-#: src/structure.c:6061
-#: src/structure.c:6086
+#: src/structure.c:6059
+#: src/structure.c:6084
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
@@ -13788,48 +13793,48 @@ msgstr[0] "%s - %u Юнит назначен"
 msgstr[1] "%s - %u Юнитов назначено"
 msgstr[2] "%s - %u Юнита назначено"
 
-#: src/structure.c:6091
-#: src/structure.c:6155
+#: src/structure.c:6089
+#: src/structure.c:6153
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - повреждение %3.0f%%"
 
-#: src/structure.c:6141
+#: src/structure.c:6139
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - подключено %u из %u"
 
-#: src/structure.c:6271
-#: src/structure.c:6316
+#: src/structure.c:6269
+#: src/structure.c:6314
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Электронные повреждения"
 
-#: src/structure.c:6551
+#: src/structure.c:6549
 msgid "Electronic Reward - Visibility Report"
 msgstr "награда - доклад о местоположении"
 
-#: src/structure.c:6591
+#: src/structure.c:6589
 msgid "Factory Reward - Propulsion"
 msgstr "награда завода - движитель"
 
-#: src/structure.c:6615
+#: src/structure.c:6613
 msgid "Factory Reward - Body"
 msgstr "награда завода - рама"
 
-#: src/structure.c:6639
+#: src/structure.c:6637
 msgid "Factory Reward - Weapon"
 msgstr "награда завода - оружие"
 
-#: src/structure.c:6648
+#: src/structure.c:6646
 msgid "Factory Reward - Nothing"
 msgstr "награда завода - ШИШ"
 
-#: src/structure.c:6676
+#: src/structure.c:6674
 msgid "Repair Facility Award - Repair"
 msgstr "награда мастерской - ремонт"
 
-#: src/structure.c:6683
+#: src/structure.c:6681
 msgid "Repair Facility Award - Nothing"
 msgstr "награда мастерской  - ШИШ"
 

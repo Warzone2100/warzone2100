@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-24 19:58+0100\n"
+"POT-Creation-Date: 2010-01-25 19:25+0100\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -608,7 +608,7 @@ msgstr "所有反砲兵雷達自動升級"
 #: data/mp/messages/resmessages12.rmsg:95
 #: data/mp/messages/resmessages12.rmsg:212
 #: data/mp/messages/resmessages12.rmsg:225
-#: data/mp/messages/resmessages1.rmsg:576
+#: data/mp/messages/resmessages1.rmsg:577
 #: data/mp/messages/resmessages3.rmsg:875
 #: data/mp/messages/resmessages3.rmsg:888
 #: data/mp/messages/resmessagesall.rmsg:212
@@ -635,7 +635,7 @@ msgstr "增加加農砲系武器準確率"
 #: data/mp/messages/resmessages12.rmsg:98
 #: data/mp/messages/resmessages12.rmsg:215
 #: data/mp/messages/resmessages12.rmsg:228
-#: data/mp/messages/resmessages1.rmsg:579
+#: data/mp/messages/resmessages1.rmsg:580
 #: data/mp/messages/resmessages3.rmsg:878
 #: data/mp/messages/resmessages3.rmsg:891
 #: data/mp/messages/resmessagesall.rmsg:215
@@ -647,7 +647,7 @@ msgstr "自動升級所有加農砲系武器"
 #: data/base/messages/resmessages2.rmsg:784
 #: data/base/messages/strings/resstrings.txt:765
 #: data/mp/messages/resmessages12.rmsg:108
-#: data/mp/messages/resmessages1.rmsg:602
+#: data/mp/messages/resmessages1.rmsg:603
 #: data/mp/messages/resmessages2.rmsg:784
 #: data/mp/messages/resmessagesall.rmsg:771
 #: data/mp/messages/strings/resstrings.txt:802
@@ -674,7 +674,7 @@ msgstr "增加火焰噴射射速"
 #: data/base/messages/resmessages2.rmsg:787
 #: data/base/messages/strings/resstrings.txt:768
 #: data/mp/messages/resmessages12.rmsg:111
-#: data/mp/messages/resmessages1.rmsg:605
+#: data/mp/messages/resmessages1.rmsg:606
 #: data/mp/messages/resmessages2.rmsg:787
 #: data/mp/messages/resmessagesall.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:805
@@ -696,12 +696,12 @@ msgstr "自動升級所有火焰噴射系武器"
 #: data/base/messages/strings/resstrings.txt:735
 #: data/base/messages/strings/resstrings.txt:757
 #: data/mp/messages/resmessages12.rmsg:121
-#: data/mp/messages/resmessages1.rmsg:537
-#: data/mp/messages/resmessages1.rmsg:550
-#: data/mp/messages/resmessages1.rmsg:563
-#: data/mp/messages/resmessages1.rmsg:589
-#: data/mp/messages/resmessages1.rmsg:615
-#: data/mp/messages/resmessages1.rmsg:628
+#: data/mp/messages/resmessages1.rmsg:538
+#: data/mp/messages/resmessages1.rmsg:551
+#: data/mp/messages/resmessages1.rmsg:564
+#: data/mp/messages/resmessages1.rmsg:590
+#: data/mp/messages/resmessages1.rmsg:616
+#: data/mp/messages/resmessages1.rmsg:629
 #: data/mp/messages/resmessages23.rmsg:212
 #: data/mp/messages/resmessages2.rmsg:745
 #: data/mp/messages/resmessages2.rmsg:758
@@ -727,8 +727,8 @@ msgstr "口徑50釐米、重型機槍"
 #: data/base/messages/resmessages1.rmsg:630
 #: data/base/messages/resmessages23.rmsg:214
 #: data/mp/messages/resmessages12.rmsg:123
-#: data/mp/messages/resmessages1.rmsg:617
-#: data/mp/messages/resmessages1.rmsg:630
+#: data/mp/messages/resmessages1.rmsg:618
+#: data/mp/messages/resmessages1.rmsg:631
 #: data/mp/messages/resmessages23.rmsg:214
 #: data/mp/messages/resmessagesall.rmsg:877
 #: data/mp/messages/resmessagesall.rmsg:890
@@ -779,9 +779,9 @@ msgstr "最佳目標：步兵、基本建築物與輪式坦克"
 #: data/mp/messages/resmessages1.rmsg:58
 #: data/mp/messages/resmessages1.rmsg:71
 #: data/mp/messages/resmessages1.rmsg:84
-#: data/mp/messages/resmessages1.rmsg:488
-#: data/mp/messages/resmessages1.rmsg:540
-#: data/mp/messages/resmessages1.rmsg:553
+#: data/mp/messages/resmessages1.rmsg:489
+#: data/mp/messages/resmessages1.rmsg:541
+#: data/mp/messages/resmessages1.rmsg:554
 #: data/mp/messages/resmessages2.rmsg:32
 #: data/mp/messages/resmessages2.rmsg:45
 #: data/mp/messages/resmessages2.rmsg:592
@@ -846,8 +846,8 @@ msgstr "HP：中"
 #: data/base/messages/strings/resstrings.txt:845
 #: data/base/messages/strings/resstrings.txt:857
 #: data/mp/messages/resmessages12.rmsg:134
-#: data/mp/messages/resmessages1.rmsg:641
-#: data/mp/messages/resmessages1.rmsg:654
+#: data/mp/messages/resmessages1.rmsg:642
+#: data/mp/messages/resmessages1.rmsg:655
 #: data/mp/messages/resmessages23.rmsg:173
 #: data/mp/messages/resmessages2.rmsg:875
 #: data/mp/messages/resmessages2.rmsg:888
@@ -882,8 +882,8 @@ msgstr "增加機槍系武器射速"
 #: data/base/messages/strings/resstrings.txt:848
 #: data/base/messages/strings/resstrings.txt:860
 #: data/mp/messages/resmessages12.rmsg:137
-#: data/mp/messages/resmessages1.rmsg:644
-#: data/mp/messages/resmessages1.rmsg:657
+#: data/mp/messages/resmessages1.rmsg:645
+#: data/mp/messages/resmessages1.rmsg:658
 #: data/mp/messages/resmessages23.rmsg:176
 #: data/mp/messages/resmessages2.rmsg:878
 #: data/mp/messages/resmessages2.rmsg:891
@@ -906,7 +906,7 @@ msgstr "自動升級所有機槍系武器"
 #: data/base/messages/strings/resstrings.txt:787
 #: data/base/messages/strings/resstrings.txt:891
 #: data/mp/messages/resmessages12.rmsg:147
-#: data/mp/messages/resmessages1.rmsg:667
+#: data/mp/messages/resmessages1.rmsg:668
 #: data/mp/messages/resmessages23.rmsg:199
 #: data/mp/messages/resmessages2.rmsg:797
 #: data/mp/messages/resmessages2.rmsg:810
@@ -935,7 +935,7 @@ msgstr "可指派給雷達導引"
 #: data/base/messages/resmessages2.rmsg:903
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/resmessages12.rmsg:149
-#: data/mp/messages/resmessages1.rmsg:669
+#: data/mp/messages/resmessages1.rmsg:670
 #: data/mp/messages/resmessages2.rmsg:903
 #: data/mp/messages/resmessagesall.rmsg:344
 #: data/mp/messages/strings/resstrings.txt:934
@@ -962,8 +962,8 @@ msgstr "最佳目標：基本建築物、步兵及輪式坦克"
 #: data/mp/messages/resmessages12.rmsg:189
 #: data/mp/messages/resmessages12.rmsg:254
 #: data/mp/messages/resmessages12.rmsg:267
-#: data/mp/messages/resmessages1.rmsg:670
-#: data/mp/messages/resmessages1.rmsg:696
+#: data/mp/messages/resmessages1.rmsg:671
+#: data/mp/messages/resmessages1.rmsg:697
 #: data/mp/messages/resmessages2.rmsg:904
 #: data/mp/messages/resmessages3.rmsg:1034
 #: data/mp/messages/resmessages3.rmsg:1047
@@ -988,7 +988,7 @@ msgstr "HP：非常低"
 #: data/base/messages/strings/resstrings.txt:905
 #: data/mp/messages/resmessages12.rmsg:160
 #: data/mp/messages/resmessages12.rmsg:173
-#: data/mp/messages/resmessages1.rmsg:680
+#: data/mp/messages/resmessages1.rmsg:681
 #: data/mp/messages/resmessages23.rmsg:186
 #: data/mp/messages/resmessages2.rmsg:914
 #: data/mp/messages/resmessages3.rmsg:1174
@@ -1018,7 +1018,7 @@ msgstr "增加迫擊砲準確率"
 #: data/base/messages/strings/resstrings.txt:908
 #: data/mp/messages/resmessages12.rmsg:163
 #: data/mp/messages/resmessages12.rmsg:176
-#: data/mp/messages/resmessages1.rmsg:683
+#: data/mp/messages/resmessages1.rmsg:684
 #: data/mp/messages/resmessages23.rmsg:189
 #: data/mp/messages/resmessages2.rmsg:917
 #: data/mp/messages/resmessages3.rmsg:1177
@@ -1046,7 +1046,7 @@ msgstr "增加迫擊砲射速"
 #: data/mp/messages/resmessages12.rmsg:186
 #: data/mp/messages/resmessages12.rmsg:251
 #: data/mp/messages/resmessages12.rmsg:264
-#: data/mp/messages/resmessages1.rmsg:693
+#: data/mp/messages/resmessages1.rmsg:694
 #: data/mp/messages/resmessagesall.rmsg:186
 #: data/mp/messages/resmessagesall.rmsg:199
 msgid "New Rocket Available"
@@ -1071,8 +1071,8 @@ msgstr "最佳目標：坦克與砲台"
 #: data/base/messages/strings/resstrings.txt:965
 #: data/mp/messages/resmessages12.rmsg:199
 #: data/mp/messages/resmessages12.rmsg:238
-#: data/mp/messages/resmessages1.rmsg:745
-#: data/mp/messages/resmessages1.rmsg:758
+#: data/mp/messages/resmessages1.rmsg:746
+#: data/mp/messages/resmessages1.rmsg:759
 #: data/mp/messages/resmessages2.rmsg:940
 #: data/mp/messages/resmessagesall.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:1008
@@ -1097,8 +1097,8 @@ msgstr "增加火箭系武器射速"
 #: data/base/messages/strings/resstrings.txt:968
 #: data/mp/messages/resmessages12.rmsg:202
 #: data/mp/messages/resmessages12.rmsg:241
-#: data/mp/messages/resmessages1.rmsg:748
-#: data/mp/messages/resmessages1.rmsg:761
+#: data/mp/messages/resmessages1.rmsg:749
+#: data/mp/messages/resmessages1.rmsg:762
 #: data/mp/messages/resmessages2.rmsg:943
 #: data/mp/messages/resmessagesall.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:1011
@@ -1151,7 +1151,7 @@ msgstr "重型反坦克火箭"
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
 #: data/mp/messages/resmessages12.rmsg:253
-#: data/mp/messages/resmessages1.rmsg:539
+#: data/mp/messages/resmessages1.rmsg:540
 #: data/mp/messages/resmessages2.rmsg:760
 #: data/mp/messages/resmessages3.rmsg:1033
 #: data/mp/messages/resmessages3.rmsg:1202
@@ -1196,8 +1196,8 @@ msgstr "指揮官車可以統領部隊攻擊目標，回到修理工廠修理完
 #: data/base/messages/resmessages3.rmsg:1229
 #: data/base/messages/strings/resstrings.txt:738
 #: data/mp/messages/resmessages1.rmsg:7
-#: data/mp/messages/resmessages1.rmsg:514
-#: data/mp/messages/resmessages1.rmsg:566
+#: data/mp/messages/resmessages1.rmsg:515
+#: data/mp/messages/resmessages1.rmsg:567
 #: data/mp/messages/resmessages2.rmsg:761
 #: data/mp/messages/resmessages3.rmsg:1229
 #: data/mp/messages/resmessagesall.rmsg:488
@@ -1248,7 +1248,7 @@ msgstr "改善生化人裝甲材料"
 #: data/base/messages/resmessages1.rmsg:31
 #: data/base/messages/resmessages1.rmsg:473
 #: data/mp/messages/resmessages1.rmsg:31
-#: data/mp/messages/resmessages1.rmsg:473
+#: data/mp/messages/resmessages1.rmsg:474
 msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr "層狀複合合金和能量吸收纖維"
 
@@ -1656,7 +1656,7 @@ msgid "Increases factory output"
 msgstr "增加工廠產能"
 
 #: data/base/messages/resmessages1.rmsg:306
-#: data/mp/messages/resmessages1.rmsg:306
+#: data/mp/messages/resmessages1.rmsg:307
 msgid "Use a truck to add modules to a factory"
 msgstr "利用工程車將此模組加裝在工廠中"
 
@@ -1664,7 +1664,7 @@ msgstr "利用工程車將此模組加裝在工廠中"
 #: data/base/messages/resmessages2.rmsg:355
 #: data/base/messages/strings/resstrings.txt:365
 #: data/base/messages/strings/resstrings.txt:373
-#: data/mp/messages/resmessages1.rmsg:316
+#: data/mp/messages/resmessages1.rmsg:317
 #: data/mp/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:399
 msgid "Vehicle Production Improved"
@@ -1672,7 +1672,7 @@ msgstr "改善車輛生產效能"
 
 #: data/base/messages/resmessages1.rmsg:317
 #: data/base/messages/strings/names.txt:794
-#: data/mp/messages/resmessages1.rmsg:317
+#: data/mp/messages/resmessages1.rmsg:318
 msgid "Automated Factory Production"
 msgstr "初階自動化生產工廠"
 
@@ -1680,43 +1680,43 @@ msgstr "初階自動化生產工廠"
 #: data/base/messages/resmessages2.rmsg:358
 #: data/base/messages/strings/resstrings.txt:368
 #: data/base/messages/strings/resstrings.txt:376
-#: data/mp/messages/resmessages1.rmsg:319
+#: data/mp/messages/resmessages1.rmsg:320
 #: data/mp/messages/strings/resstrings.txt:394
 #: data/mp/messages/strings/resstrings.txt:402
 msgid "All vehicle factories upgraded automatically"
 msgstr "自動升級所有車輛工廠"
 
 #: data/base/messages/resmessages1.rmsg:329
-#: data/mp/messages/resmessages1.rmsg:329
+#: data/mp/messages/resmessages1.rmsg:330
 msgid "Power Module Available"
 msgstr "可使用能源模組"
 
 #: data/base/messages/resmessages1.rmsg:330
 #: data/base/messages/resmessages23.rmsg:30
 #: data/base/messages/resmessages3.rmsg:433
-#: data/mp/messages/resmessages1.rmsg:330
+#: data/mp/messages/resmessages1.rmsg:331
 #: data/mp/messages/resmessages23.rmsg:30
 #: data/mp/messages/resmessages3.rmsg:433
 msgid "Improved Power Generator Performance"
 msgstr "改善發電廠效能"
 
 #: data/base/messages/resmessages1.rmsg:331
-#: data/mp/messages/resmessages1.rmsg:331
+#: data/mp/messages/resmessages1.rmsg:332
 msgid "Burns oil more efficiently"
 msgstr "更有效率的燃燒石油"
 
 #: data/base/messages/resmessages1.rmsg:332
-#: data/mp/messages/resmessages1.rmsg:332
+#: data/mp/messages/resmessages1.rmsg:333
 msgid "Use a truck to add the module to a power generator"
 msgstr "利用工程車將此模組加裝在發電廠中"
 
 #: data/base/messages/resmessages1.rmsg:342
-#: data/mp/messages/resmessages1.rmsg:342
+#: data/mp/messages/resmessages1.rmsg:343
 msgid "Research Module Available"
 msgstr "可使用研發模組"
 
 #: data/base/messages/resmessages1.rmsg:343
-#: data/mp/messages/resmessages1.rmsg:343
+#: data/mp/messages/resmessages1.rmsg:344
 msgid "Research module expands research facilities"
 msgstr "研發模組用以擴展研發中心"
 
@@ -1730,7 +1730,7 @@ msgid "Increases research speed"
 msgstr "增加研發速度"
 
 #: data/base/messages/resmessages1.rmsg:345
-#: data/mp/messages/resmessages1.rmsg:345
+#: data/mp/messages/resmessages1.rmsg:346
 msgid "Use a truck to add the module to a research facility"
 msgstr "利用工程車將此模組加裝在工廠中"
 
@@ -1738,7 +1738,7 @@ msgstr "利用工程車將此模組加裝在工廠中"
 #: data/base/messages/resmessages2.rmsg:368
 #: data/base/messages/resmessages3.rmsg:446
 #: data/base/messages/strings/resstrings.txt:389
-#: data/mp/messages/resmessages1.rmsg:355
+#: data/mp/messages/resmessages1.rmsg:356
 #: data/mp/messages/resmessages2.rmsg:368
 #: data/mp/messages/resmessages3.rmsg:446
 #: data/mp/messages/strings/resstrings.txt:415
@@ -1746,7 +1746,7 @@ msgid "Research Improved"
 msgstr "改善研發科技能力"
 
 #: data/base/messages/resmessages1.rmsg:356
-#: data/mp/messages/resmessages1.rmsg:356
+#: data/mp/messages/resmessages1.rmsg:357
 msgid "Synaptic link data analysis"
 msgstr "突觸連結資料分析"
 
@@ -1754,7 +1754,7 @@ msgstr "突觸連結資料分析"
 #: data/base/messages/resmessages2.rmsg:371
 #: data/base/messages/resmessages3.rmsg:449
 #: data/base/messages/strings/resstrings.txt:392
-#: data/mp/messages/resmessages1.rmsg:358
+#: data/mp/messages/resmessages1.rmsg:359
 #: data/mp/messages/resmessages2.rmsg:371
 #: data/mp/messages/resmessages3.rmsg:449
 #: data/mp/messages/strings/resstrings.txt:418
@@ -1766,7 +1766,7 @@ msgstr "自動升級所有研發中心"
 #: data/base/messages/resmessages3.rmsg:459
 #: data/base/messages/resmessages3.rmsg:472
 #: data/base/messages/strings/resstrings.txt:399
-#: data/mp/messages/resmessages1.rmsg:368
+#: data/mp/messages/resmessages1.rmsg:369
 #: data/mp/messages/resmessages2.rmsg:381
 #: data/mp/messages/resmessages3.rmsg:459
 #: data/mp/messages/resmessages3.rmsg:472
@@ -1776,7 +1776,7 @@ msgstr "增加攻擊抵抗能力"
 
 #: data/base/messages/resmessages1.rmsg:369
 #: data/base/messages/strings/names.txt:805
-#: data/mp/messages/resmessages1.rmsg:369
+#: data/mp/messages/resmessages1.rmsg:370
 #: data/mp/messages/strings/names.txt:816
 msgid "Reinforced Base Structure Materials"
 msgstr "初階強化建材一型"
@@ -1800,7 +1800,7 @@ msgstr "增加防禦力及HP"
 #: data/base/messages/resmessages3.rmsg:462
 #: data/base/messages/resmessages3.rmsg:475
 #: data/base/messages/strings/resstrings.txt:402
-#: data/mp/messages/resmessages1.rmsg:371
+#: data/mp/messages/resmessages1.rmsg:372
 #: data/mp/messages/resmessages2.rmsg:384
 #: data/mp/messages/resmessages3.rmsg:462
 #: data/mp/messages/resmessages3.rmsg:475
@@ -1809,128 +1809,128 @@ msgid "All base structures upgraded automatically"
 msgstr "自動升級所有基本建築物"
 
 #: data/base/messages/resmessages1.rmsg:381
-#: data/mp/messages/resmessages1.rmsg:381
+#: data/mp/messages/resmessages1.rmsg:382
 msgid "Project Light Body"
 msgstr "Project的輕量級車身"
 
 #: data/base/messages/resmessages1.rmsg:382
-#: data/mp/messages/resmessages1.rmsg:382
+#: data/mp/messages/resmessages1.rmsg:383
 msgid "Light body vulnerable to heavy weapons"
 msgstr "輕量型車身，容易遭受重型武器攻擊"
 
 #: data/base/messages/resmessages1.rmsg:383
-#: data/mp/messages/resmessages1.rmsg:383
+#: data/mp/messages/resmessages1.rmsg:384
 msgid "Good scout vehicle"
 msgstr "優秀的偵查車輛"
 
 #: data/base/messages/resmessages1.rmsg:384
-#: data/mp/messages/resmessages1.rmsg:384
+#: data/mp/messages/resmessages1.rmsg:385
 msgid "Low power cost and low production times"
 msgstr "較低的資源需求及較短的生產時間"
 
 #: data/base/messages/resmessages1.rmsg:394
-#: data/mp/messages/resmessages1.rmsg:394
+#: data/mp/messages/resmessages1.rmsg:395
 msgid "New Paradigm Light Body"
 msgstr "New Paradigm的輕量級車身"
 
 #: data/base/messages/resmessages1.rmsg:395
-#: data/mp/messages/resmessages1.rmsg:395
+#: data/mp/messages/resmessages1.rmsg:396
 msgid "Inferior armor and body points to Viper"
 msgstr "防禦能力及HP較響尾蛇差"
 
 #: data/base/messages/resmessages1.rmsg:396
 #: data/base/messages/resmessages3.rmsg:630
-#: data/mp/messages/resmessages1.rmsg:396
+#: data/mp/messages/resmessages1.rmsg:397
 #: data/mp/messages/resmessages3.rmsg:630
 msgid "Faster than Viper"
 msgstr "移動速度比響尾蛇快"
 
 #: data/base/messages/resmessages1.rmsg:397
-#: data/mp/messages/resmessages1.rmsg:397
+#: data/mp/messages/resmessages1.rmsg:398
 msgid "Power cost and production time similar to Viper"
 msgstr "所需能源及生產時間接近於響尾蛇"
 
 #: data/base/messages/resmessages1.rmsg:407
-#: data/mp/messages/resmessages1.rmsg:407
+#: data/mp/messages/resmessages1.rmsg:408
 msgid "Project Medium Body"
 msgstr "Project的中量級車身"
 
 #: data/base/messages/resmessages1.rmsg:408
-#: data/mp/messages/resmessages1.rmsg:408
+#: data/mp/messages/resmessages1.rmsg:409
 msgid "Medium body increases armor and body points"
 msgstr "中量級的車身增加了防禦能力及HP"
 
 #: data/base/messages/resmessages1.rmsg:409
-#: data/mp/messages/resmessages1.rmsg:409
+#: data/mp/messages/resmessages1.rmsg:410
 msgid "Good medium tank and support vehicle"
 msgstr "良好的中量級坦克車身"
 
 #: data/base/messages/resmessages1.rmsg:410
-#: data/mp/messages/resmessages1.rmsg:410
+#: data/mp/messages/resmessages1.rmsg:411
 msgid "Average power costs and production times"
 msgstr "平均的製造需求能源及時間"
 
 #: data/base/messages/resmessages1.rmsg:420
-#: data/mp/messages/resmessages1.rmsg:420
+#: data/mp/messages/resmessages1.rmsg:421
 msgid "New Paradigm Medium body"
 msgstr "New Paradigm的中量級車身"
 
 #: data/base/messages/resmessages1.rmsg:421
-#: data/mp/messages/resmessages1.rmsg:421
+#: data/mp/messages/resmessages1.rmsg:422
 msgid "Inferior armor and body points to Cobra"
 msgstr "比眼鏡蛇較差的防禦力及HP"
 
 #: data/base/messages/resmessages1.rmsg:422
 #: data/base/messages/resmessages3.rmsg:643
-#: data/mp/messages/resmessages1.rmsg:422
+#: data/mp/messages/resmessages1.rmsg:423
 #: data/mp/messages/resmessages3.rmsg:643
 msgid "Faster than Cobra"
 msgstr "移動速度比眼鏡蛇快"
 
 #: data/base/messages/resmessages1.rmsg:423
-#: data/mp/messages/resmessages1.rmsg:423
+#: data/mp/messages/resmessages1.rmsg:424
 msgid "Power cost and production time similar to Cobra"
 msgstr "需要的資源及生產時間相當於眼鏡蛇"
 
 #: data/base/messages/resmessages1.rmsg:433
-#: data/mp/messages/resmessages1.rmsg:433
+#: data/mp/messages/resmessages1.rmsg:434
 msgid "Project Heavy Body"
 msgstr "Project的重量級車身"
 
 #: data/base/messages/resmessages1.rmsg:434
-#: data/mp/messages/resmessages1.rmsg:434
+#: data/mp/messages/resmessages1.rmsg:435
 msgid "Heavy body increases armor and body points"
 msgstr "重量級的車身增加了防禦能力及HP"
 
 #: data/base/messages/resmessages1.rmsg:435
-#: data/mp/messages/resmessages1.rmsg:435
+#: data/mp/messages/resmessages1.rmsg:436
 msgid "Good main battle tank and heavy artillery platform"
 msgstr "是主要且好用的重型武力搭載平台"
 
 #: data/base/messages/resmessages1.rmsg:436
-#: data/mp/messages/resmessages1.rmsg:436
+#: data/mp/messages/resmessages1.rmsg:437
 msgid "Very high power costs and very slow to produce"
 msgstr "需要非常高的資源，生產速度非常緩慢"
 
 #: data/base/messages/resmessages1.rmsg:446
-#: data/mp/messages/resmessages1.rmsg:446
+#: data/mp/messages/resmessages1.rmsg:447
 msgid "New Paradigm Heavy Body"
 msgstr "New Paradigm的重量級車身"
 
 #: data/base/messages/resmessages1.rmsg:447
-#: data/mp/messages/resmessages1.rmsg:447
+#: data/mp/messages/resmessages1.rmsg:448
 msgid "Less armor and body points than Python"
 msgstr "防禦力及HP比蟒蛇低"
 
 #: data/base/messages/resmessages1.rmsg:448
 #: data/base/messages/resmessages3.rmsg:656
-#: data/mp/messages/resmessages1.rmsg:448
+#: data/mp/messages/resmessages1.rmsg:449
 #: data/mp/messages/resmessages3.rmsg:656
 msgid "Faster than Python"
 msgstr "移動速度比蟒蛇快"
 
 #: data/base/messages/resmessages1.rmsg:449
-#: data/mp/messages/resmessages1.rmsg:449
+#: data/mp/messages/resmessages1.rmsg:450
 msgid "Power cost and production time the same as Python"
 msgstr "製造成本及所需時間與蟒蛇相同"
 
@@ -1939,7 +1939,7 @@ msgstr "製造成本及所需時間與蟒蛇相同"
 #: data/base/messages/resmessages3.rmsg:667
 #: data/base/messages/resmessages3.rmsg:680
 #: data/base/messages/strings/resstrings.txt:559
-#: data/mp/messages/resmessages1.rmsg:459
+#: data/mp/messages/resmessages1.rmsg:460
 #: data/mp/messages/resmessages2.rmsg:498
 #: data/mp/messages/resmessages3.rmsg:667
 #: data/mp/messages/resmessages3.rmsg:680
@@ -1949,7 +1949,7 @@ msgstr "車輛引擎升級"
 
 #: data/base/messages/resmessages1.rmsg:460
 #: data/base/messages/strings/names.txt:942
-#: data/mp/messages/resmessages1.rmsg:460
+#: data/mp/messages/resmessages1.rmsg:461
 #: data/mp/messages/strings/names.txt:955
 msgid "Fuel Injection Engine"
 msgstr "燃油噴射引擎一型"
@@ -1976,8 +1976,8 @@ msgstr "增加車輛移動速度"
 #: data/base/messages/strings/resstrings.txt:562
 #: data/base/messages/strings/resstrings.txt:574
 #: data/base/messages/strings/resstrings.txt:584
-#: data/mp/messages/resmessages1.rmsg:462
-#: data/mp/messages/resmessages1.rmsg:475
+#: data/mp/messages/resmessages1.rmsg:463
+#: data/mp/messages/resmessages1.rmsg:476
 #: data/mp/messages/resmessages2.rmsg:501
 #: data/mp/messages/resmessages2.rmsg:514
 #: data/mp/messages/resmessages2.rmsg:527
@@ -1998,7 +1998,7 @@ msgstr "所有車輛自動升級"
 #: data/base/messages/resmessages3.rmsg:693
 #: data/base/messages/resmessages3.rmsg:706
 #: data/base/messages/strings/resstrings.txt:571
-#: data/mp/messages/resmessages1.rmsg:472
+#: data/mp/messages/resmessages1.rmsg:473
 #: data/mp/messages/resmessages2.rmsg:511
 #: data/mp/messages/resmessages3.rmsg:693
 #: data/mp/messages/resmessages3.rmsg:706
@@ -2019,32 +2019,32 @@ msgstr "增加物理防禦及HP"
 #: data/base/messages/resmessages1.rmsg:498
 #: data/base/messages/resmessages1.rmsg:511
 #: data/base/messages/resmessages1.rmsg:524
-#: data/mp/messages/resmessages1.rmsg:485
-#: data/mp/messages/resmessages1.rmsg:498
-#: data/mp/messages/resmessages1.rmsg:511
-#: data/mp/messages/resmessages1.rmsg:524
+#: data/mp/messages/resmessages1.rmsg:486
+#: data/mp/messages/resmessages1.rmsg:499
+#: data/mp/messages/resmessages1.rmsg:512
+#: data/mp/messages/resmessages1.rmsg:525
 msgid "New Propulsion Available"
 msgstr "可搭載新的推進動力"
 
 #: data/base/messages/resmessages1.rmsg:486
-#: data/mp/messages/resmessages1.rmsg:486
+#: data/mp/messages/resmessages1.rmsg:487
 msgid "Armored Half-tracks"
 msgstr "裝備半履帶推進系統"
 
 #: data/base/messages/resmessages1.rmsg:487
-#: data/mp/messages/resmessages1.rmsg:487
+#: data/mp/messages/resmessages1.rmsg:488
 msgid "Speed: Medium"
 msgstr "移動速度：中"
 
 #: data/base/messages/resmessages1.rmsg:499
-#: data/mp/messages/resmessages1.rmsg:499
+#: data/mp/messages/resmessages1.rmsg:500
 msgid "Amphibious hover propulsion"
 msgstr "水陸兩用氣墊推進動力"
 
 #: data/base/messages/resmessages1.rmsg:500
 #: data/base/messages/resmessages1.rmsg:526
-#: data/mp/messages/resmessages1.rmsg:500
-#: data/mp/messages/resmessages1.rmsg:526
+#: data/mp/messages/resmessages1.rmsg:501
+#: data/mp/messages/resmessages1.rmsg:527
 msgid "Speed: Fast"
 msgstr "移動速度：快"
 
@@ -2068,10 +2068,10 @@ msgstr "移動速度：快"
 #: data/base/messages/strings/resstrings.txt:776
 #: data/base/messages/strings/resstrings.txt:782
 #: data/base/messages/strings/resstrings.txt:790
-#: data/mp/messages/resmessages1.rmsg:501
-#: data/mp/messages/resmessages1.rmsg:527
-#: data/mp/messages/resmessages1.rmsg:618
-#: data/mp/messages/resmessages1.rmsg:631
+#: data/mp/messages/resmessages1.rmsg:502
+#: data/mp/messages/resmessages1.rmsg:528
+#: data/mp/messages/resmessages1.rmsg:619
+#: data/mp/messages/resmessages1.rmsg:632
 #: data/mp/messages/resmessages23.rmsg:150
 #: data/mp/messages/resmessages23.rmsg:202
 #: data/mp/messages/resmessages2.rmsg:709
@@ -2095,51 +2095,51 @@ msgid "Body Points: Low"
 msgstr "HP：低"
 
 #: data/base/messages/resmessages1.rmsg:512
-#: data/mp/messages/resmessages1.rmsg:512
+#: data/mp/messages/resmessages1.rmsg:513
 msgid "Armored Tracks"
 msgstr "裝備履帶推進系統"
 
 #: data/base/messages/resmessages1.rmsg:513
-#: data/mp/messages/resmessages1.rmsg:513
+#: data/mp/messages/resmessages1.rmsg:514
 msgid "Speed: Slow"
 msgstr "移動速度：慢"
 
 #: data/base/messages/resmessages1.rmsg:525
 #: data/base/messages/strings/names.txt:976
-#: data/mp/messages/resmessages1.rmsg:525
+#: data/mp/messages/resmessages1.rmsg:526
 #: data/mp/messages/strings/names.txt:989
 msgid "Wheeled Propulsion"
 msgstr "推進動力：輪"
 
 #: data/base/messages/resmessages1.rmsg:538
-#: data/mp/messages/resmessages1.rmsg:538
+#: data/mp/messages/resmessages1.rmsg:539
 msgid "Light Cannon firing 40mm rounds"
 msgstr "輕型加農砲，裝載40釐米彈藥"
 
 #: data/base/messages/resmessages1.rmsg:551
-#: data/mp/messages/resmessages1.rmsg:551
+#: data/mp/messages/resmessages1.rmsg:552
 msgid "Medium Cannon firing 76mm rounds"
 msgstr "中型加農砲，裝載76釐米彈藥"
 
 #: data/base/messages/resmessages1.rmsg:564
-#: data/mp/messages/resmessages1.rmsg:564
+#: data/mp/messages/resmessages1.rmsg:565
 msgid "Heavy Cannon firing 120 mm rounds"
 msgstr "重型加農砲，裝載120釐米彈藥"
 
 #: data/base/messages/resmessages1.rmsg:577
-#: data/mp/messages/resmessages1.rmsg:577
+#: data/mp/messages/resmessages1.rmsg:578
 msgid "High Explosive Anti-Tank Cannon Shells"
 msgstr "高爆性反坦克加農砲彈（HEAT）"
 
 #: data/base/messages/resmessages1.rmsg:590
-#: data/mp/messages/resmessages1.rmsg:590
+#: data/mp/messages/resmessages1.rmsg:591
 msgid "Flame-thrower firing Propylene Oxide gel"
 msgstr "可以發射環氧丙烷凝膠的火焰塔"
 
 #: data/base/messages/resmessages1.rmsg:591
 #: data/base/messages/resmessages2.rmsg:773
 #: data/base/messages/strings/resstrings.txt:759
-#: data/mp/messages/resmessages1.rmsg:591
+#: data/mp/messages/resmessages1.rmsg:592
 #: data/mp/messages/resmessages2.rmsg:773
 #: data/mp/messages/resmessagesall.rmsg:370
 #: data/mp/messages/strings/resstrings.txt:796
@@ -2147,13 +2147,13 @@ msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr "最佳目標：碉堡、輪式坦克以及氣墊船"
 
 #: data/base/messages/resmessages1.rmsg:592
-#: data/mp/messages/resmessages1.rmsg:592
+#: data/mp/messages/resmessages1.rmsg:593
 #: data/mp/messages/resmessagesall.rmsg:371
 msgid "Body Points: Very low"
 msgstr "HP：非常低"
 
 #: data/base/messages/resmessages1.rmsg:603
-#: data/mp/messages/resmessages1.rmsg:603
+#: data/mp/messages/resmessages1.rmsg:604
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "環氧丙烷凝膠可在更高的溫度下燃燒"
 
@@ -2165,17 +2165,17 @@ msgid "Increases Flamer damage"
 msgstr "增加火焰噴射傷害"
 
 #: data/base/messages/resmessages1.rmsg:616
-#: data/mp/messages/resmessages1.rmsg:616
+#: data/mp/messages/resmessages1.rmsg:617
 msgid "7.62mm machinegun"
 msgstr "口徑 7.62釐米 機槍"
 
 #: data/base/messages/resmessages1.rmsg:629
-#: data/mp/messages/resmessages1.rmsg:629
+#: data/mp/messages/resmessages1.rmsg:630
 msgid "Twin 7.62mm machineguns"
 msgstr "口徑 7.62釐米 雙管機槍"
 
 #: data/base/messages/resmessages1.rmsg:642
-#: data/mp/messages/resmessages1.rmsg:642
+#: data/mp/messages/resmessages1.rmsg:643
 msgid "Hardened case machinegun bullets"
 msgstr "強化外殼的機槍子彈"
 
@@ -2190,18 +2190,18 @@ msgid "Increases Machinegun damage"
 msgstr "增加機槍系武器攻擊力"
 
 #: data/base/messages/resmessages1.rmsg:655
-#: data/mp/messages/resmessages1.rmsg:655
+#: data/mp/messages/resmessages1.rmsg:656
 msgid "Armor-Piercing Discard Sabot Bullets"
 msgstr "穿甲脫殼彈（APDSB）"
 
 #: data/base/messages/resmessages1.rmsg:668
-#: data/mp/messages/resmessages1.rmsg:668
+#: data/mp/messages/resmessages1.rmsg:669
 #: data/mp/messages/resmessagesall.rmsg:343
 msgid "May be targeted directly or assigned to a sensor turret or tower"
 msgstr "可直接攻擊目標或指派給雷達鎖定目標"
 
 #: data/base/messages/resmessages1.rmsg:681
-#: data/mp/messages/resmessages1.rmsg:681
+#: data/mp/messages/resmessages1.rmsg:682
 msgid "Improved high explosive shells"
 msgstr "改善高爆性彈頭"
 
@@ -2213,12 +2213,12 @@ msgid "Increases Mortar damage"
 msgstr "增加迫擊砲攻擊力"
 
 #: data/base/messages/resmessages1.rmsg:694
-#: data/mp/messages/resmessages1.rmsg:694
+#: data/mp/messages/resmessages1.rmsg:695
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "能夠快速射擊的輕型反車輛火箭"
 
 #: data/base/messages/resmessages1.rmsg:695
-#: data/mp/messages/resmessages1.rmsg:695
+#: data/mp/messages/resmessages1.rmsg:696
 msgid "Best Targets: Wheeled and hover vehicles"
 msgstr "最佳目標：輪式坦克與氣墊船"
 
@@ -2228,9 +2228,9 @@ msgstr "最佳目標：輪式坦克與氣墊船"
 #: data/base/messages/resmessages2.rmsg:927
 #: data/base/messages/strings/resstrings.txt:943
 #: data/base/messages/strings/resstrings.txt:951
-#: data/mp/messages/resmessages1.rmsg:706
-#: data/mp/messages/resmessages1.rmsg:719
-#: data/mp/messages/resmessages1.rmsg:732
+#: data/mp/messages/resmessages1.rmsg:707
+#: data/mp/messages/resmessages1.rmsg:720
+#: data/mp/messages/resmessages1.rmsg:733
 #: data/mp/messages/resmessages2.rmsg:927
 #: data/mp/messages/strings/resstrings.txt:986
 #: data/mp/messages/strings/resstrings.txt:994
@@ -2238,7 +2238,7 @@ msgid "Mini-Rocket Upgrade"
 msgstr "迷你火箭升級"
 
 #: data/base/messages/resmessages1.rmsg:707
-#: data/mp/messages/resmessages1.rmsg:707
+#: data/mp/messages/resmessages1.rmsg:708
 msgid "Fin-stabilization improves flight trajectory"
 msgstr "尾翼穩定裝置改善了飛行的軌跡"
 
@@ -2252,9 +2252,9 @@ msgstr "增加迷你火箭準確率"
 #: data/base/messages/resmessages2.rmsg:930
 #: data/base/messages/strings/resstrings.txt:946
 #: data/base/messages/strings/resstrings.txt:954
-#: data/mp/messages/resmessages1.rmsg:709
-#: data/mp/messages/resmessages1.rmsg:722
-#: data/mp/messages/resmessages1.rmsg:735
+#: data/mp/messages/resmessages1.rmsg:710
+#: data/mp/messages/resmessages1.rmsg:723
+#: data/mp/messages/resmessages1.rmsg:736
 #: data/mp/messages/resmessages2.rmsg:930
 #: data/mp/messages/strings/resstrings.txt:989
 #: data/mp/messages/strings/resstrings.txt:997
@@ -2262,7 +2262,7 @@ msgid "All mini-rockets upgraded automatically"
 msgstr "自動升級所有迷你火箭系武器"
 
 #: data/base/messages/resmessages1.rmsg:720
-#: data/mp/messages/resmessages1.rmsg:720
+#: data/mp/messages/resmessages1.rmsg:721
 msgid "Improved shaped charge warhead"
 msgstr "改善彈頭外型及裝填效能"
 
@@ -2274,7 +2274,7 @@ msgid "Increases Mini-Rocket damage"
 msgstr "增加迷你火箭攻擊力"
 
 #: data/base/messages/resmessages1.rmsg:733
-#: data/mp/messages/resmessages1.rmsg:733
+#: data/mp/messages/resmessages1.rmsg:734
 msgid "Automated reload system"
 msgstr "彈藥自動裝填系統"
 
@@ -2283,12 +2283,12 @@ msgid "Increases Mini-Rockets ROF"
 msgstr "增加迷你火箭射速"
 
 #: data/base/messages/resmessages1.rmsg:746
-#: data/mp/messages/resmessages1.rmsg:746
+#: data/mp/messages/resmessages1.rmsg:747
 msgid "Tracks and directs in-flight rocket to target"
 msgstr "導引飛行中的火箭指向目標"
 
 #: data/base/messages/resmessages1.rmsg:759
-#: data/mp/messages/resmessages1.rmsg:759
+#: data/mp/messages/resmessages1.rmsg:760
 msgid "High Explosive Anti-Tank warhead"
 msgstr "高爆性反坦克彈頭"
 
@@ -9684,14 +9684,14 @@ msgid "Cannon reload time -10%"
 msgstr "加農砲自動裝填系統一型"
 
 #: data/mp/messages/resmessages12.rmsg:227
-#: data/mp/messages/resmessages1.rmsg:578
+#: data/mp/messages/resmessages1.rmsg:579
 #: data/mp/messages/resmessages3.rmsg:877
 #, fuzzy
 msgid "Cannon damage +25%"
 msgstr "增加加農砲系武器傷害"
 
 #: data/mp/messages/resmessages12.rmsg:240
-#: data/mp/messages/resmessages1.rmsg:747
+#: data/mp/messages/resmessages1.rmsg:748
 #: data/mp/messages/resmessagesall.rmsg:175
 #, fuzzy
 msgid "Rocket accuracy +10%"
@@ -9721,29 +9721,29 @@ msgstr "裝備有槍騎兵反坦克火箭的防衛塔"
 msgid "Repair Speed +100%"
 msgstr "加快修理速度"
 
-#: data/mp/messages/resmessages1.rmsg:305
-#, c-format
+#: data/mp/messages/resmessages1.rmsg:306
+#, no-c-format
 msgid "Factory output speed +100% per module"
 msgstr ""
 
-#: data/mp/messages/resmessages1.rmsg:318
+#: data/mp/messages/resmessages1.rmsg:319
 #: data/mp/messages/resmessagesall.rmsg:786
 msgid "Factory output speed +60%"
 msgstr ""
 
-#: data/mp/messages/resmessages1.rmsg:344
+#: data/mp/messages/resmessages1.rmsg:345
 #, fuzzy
 msgid "Research speed +85%"
 msgstr "已研發完成： %s"
 
-#: data/mp/messages/resmessages1.rmsg:357
+#: data/mp/messages/resmessages1.rmsg:358
 #: data/mp/messages/resmessages2.rmsg:370
 #: data/mp/messages/resmessages3.rmsg:448
 #, fuzzy
 msgid "Research speed +30%"
 msgstr "已研發完成： %s"
 
-#: data/mp/messages/resmessages1.rmsg:370
+#: data/mp/messages/resmessages1.rmsg:371
 #: data/mp/messages/resmessages2.rmsg:58
 #: data/mp/messages/resmessages2.rmsg:383
 #: data/mp/messages/resmessages3.rmsg:214
@@ -9754,7 +9754,7 @@ msgstr "已研發完成： %s"
 msgid "Armor +35%, Body Points +30%"
 msgstr "增加防禦力及HP"
 
-#: data/mp/messages/resmessages1.rmsg:461
+#: data/mp/messages/resmessages1.rmsg:462
 #: data/mp/messages/resmessages2.rmsg:500
 #: data/mp/messages/resmessages3.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:682
@@ -9762,7 +9762,7 @@ msgstr "增加防禦力及HP"
 msgid "Vehicle speed +5%"
 msgstr "車身"
 
-#: data/mp/messages/resmessages1.rmsg:474
+#: data/mp/messages/resmessages1.rmsg:475
 #: data/mp/messages/resmessages2.rmsg:513
 #: data/mp/messages/resmessages3.rmsg:695
 #: data/mp/messages/resmessages3.rmsg:708
@@ -9770,22 +9770,22 @@ msgstr "車身"
 msgid "Kinetic armor +30%, body points +30%"
 msgstr "增加物理防禦及HP"
 
-#: data/mp/messages/resmessages1.rmsg:552
-#: data/mp/messages/resmessages1.rmsg:565
+#: data/mp/messages/resmessages1.rmsg:553
+#: data/mp/messages/resmessages1.rmsg:566
 #: data/mp/messages/resmessages2.rmsg:747
 #, fuzzy
 msgid "Best Targets: Vehicles, Hardpoints"
 msgstr "最佳目標：坦克與砲台"
 
-#: data/mp/messages/resmessages1.rmsg:604
+#: data/mp/messages/resmessages1.rmsg:605
 #: data/mp/messages/resmessages2.rmsg:786
 #: data/mp/messages/resmessagesall.rmsg:773
 #, fuzzy
 msgid "Flamer damage +25%"
 msgstr "增加火焰噴射傷害"
 
-#: data/mp/messages/resmessages1.rmsg:643
-#: data/mp/messages/resmessages1.rmsg:656
+#: data/mp/messages/resmessages1.rmsg:644
+#: data/mp/messages/resmessages1.rmsg:657
 #: data/mp/messages/resmessages2.rmsg:877
 #: data/mp/messages/resmessages3.rmsg:1007
 #: data/mp/messages/resmessages3.rmsg:1020
@@ -9793,29 +9793,29 @@ msgstr "增加火焰噴射傷害"
 msgid "Machinegun damage +25%"
 msgstr "增加機槍系武器攻擊力"
 
-#: data/mp/messages/resmessages1.rmsg:682
+#: data/mp/messages/resmessages1.rmsg:683
 #: data/mp/messages/resmessages2.rmsg:916
 #, fuzzy
 msgid "Mortar damage +25%"
 msgstr "增加迫擊砲攻擊力"
 
-#: data/mp/messages/resmessages1.rmsg:708
+#: data/mp/messages/resmessages1.rmsg:709
 #, fuzzy
 msgid "Mini-Rocket accuracy +10%"
 msgstr "增加迷你火箭準確率"
 
-#: data/mp/messages/resmessages1.rmsg:721
+#: data/mp/messages/resmessages1.rmsg:722
 #: data/mp/messages/resmessages2.rmsg:929
 #, fuzzy
 msgid "Mini-Rocket damage +25%"
 msgstr "增加迷你火箭攻擊力"
 
-#: data/mp/messages/resmessages1.rmsg:734
+#: data/mp/messages/resmessages1.rmsg:735
 #, fuzzy
 msgid "Mini-Rocket reload time -15%"
 msgstr "迷你火箭升級"
 
-#: data/mp/messages/resmessages1.rmsg:760
+#: data/mp/messages/resmessages1.rmsg:761
 #: data/mp/messages/resmessages2.rmsg:942
 #, fuzzy
 msgid "Rocket damage +25%"
@@ -12381,7 +12381,7 @@ msgid "Power Accrued"
 msgstr "能量增加"
 
 #: src/intelmap.c:247
-#: src/keybind.c:1331
+#: src/keybind.c:1342
 msgid "PAUSED"
 msgstr "暫停"
 
@@ -12402,32 +12402,32 @@ msgid "New Intelligence Report"
 msgstr "新的智能情報"
 
 #: src/intorder.c:179
-#: src/keymap.c:389
+#: src/keymap.c:390
 msgid "Short Range"
 msgstr "短距離"
 
 #: src/intorder.c:180
-#: src/keymap.c:396
+#: src/keymap.c:397
 msgid "Long Range"
 msgstr "長距離"
 
 #: src/intorder.c:181
-#: src/keymap.c:388
+#: src/keymap.c:389
 msgid "Optimum Range"
 msgstr "最適距離"
 
 #: src/intorder.c:182
-#: src/keymap.c:407
+#: src/keymap.c:409
 msgid "Retreat at Medium Damage"
 msgstr "中度損傷時撤退"
 
 #: src/intorder.c:183
-#: src/keymap.c:408
+#: src/keymap.c:410
 msgid "Retreat at Heavy Damage"
 msgstr "重度損傷時撤退"
 
 #: src/intorder.c:184
-#: src/keymap.c:409
+#: src/keymap.c:411
 msgid "Do or Die!"
 msgstr "奮戰到底！"
 
@@ -12436,37 +12436,37 @@ msgid "Fire-At-Will"
 msgstr "接觸時開火"
 
 #: src/intorder.c:186
-#: src/keymap.c:384
+#: src/keymap.c:385
 msgid "Return Fire"
 msgstr "遭受攻擊時還擊"
 
 #: src/intorder.c:187
-#: src/keymap.c:382
+#: src/keymap.c:383
 msgid "Hold Fire"
 msgstr "停火"
 
 #: src/intorder.c:188
-#: src/keymap.c:391
+#: src/keymap.c:392
 msgid "Patrol"
 msgstr "巡邏模式"
 
 #: src/intorder.c:189
-#: src/keymap.c:390
+#: src/keymap.c:391
 msgid "Pursue"
 msgstr "追蹤模式"
 
 #: src/intorder.c:190
-#: src/keymap.c:386
+#: src/keymap.c:387
 msgid "Guard Position"
 msgstr "保持戒備"
 
 #: src/intorder.c:191
-#: src/keymap.c:393
+#: src/keymap.c:394
 msgid "Hold Position"
 msgstr "保持原位"
 
 #: src/intorder.c:192
-#: src/keymap.c:392
+#: src/keymap.c:393
 msgid "Return For Repair"
 msgstr "返回修理"
 
@@ -12475,12 +12475,12 @@ msgid "Return To HQ"
 msgstr "回到主基地"
 
 #: src/intorder.c:194
-#: src/keymap.c:394
+#: src/keymap.c:395
 msgid "Go to Transport"
 msgstr "前往運輸艦位置"
 
 #: src/intorder.c:195
-#: src/keymap.c:418
+#: src/keymap.c:420
 msgid "Return for Recycling"
 msgstr "返回回收"
 
@@ -12533,10 +12533,10 @@ msgstr "關閉細節、武器及雷達顯示"
 #: src/keybind.c:681
 #: src/keybind.c:1232
 #: src/keybind.c:1289
-#: src/keybind.c:1380
-#: src/keybind.c:1476
-#: src/keybind.c:1827
-#: src/keybind.c:1867
+#: src/keybind.c:1391
+#: src/keybind.c:1487
+#: src/keybind.c:1838
+#: src/keybind.c:1878
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
@@ -12637,154 +12637,159 @@ msgstr ""
 msgid "View Aligned to North"
 msgstr "View Aligned to North"
 
-#: src/keybind.c:1381
+#: src/keybind.c:1311
+#, fuzzy, c-format
+msgid "Trap cursor %s"
+msgstr "捕捉滑鼠"
+
+#: src/keybind.c:1392
 msgid "Researched EVERYTHING for you!"
 msgstr "替你研發所有科技！"
 
-#: src/keybind.c:1412
+#: src/keybind.c:1423
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1413
+#: src/keybind.c:1424
 #, fuzzy
 msgid "Researched"
 msgstr "研發新科技"
 
-#: src/keybind.c:1434
+#: src/keybind.c:1445
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1437
+#: src/keybind.c:1448
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1440
+#: src/keybind.c:1451
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1462
+#: src/keybind.c:1473
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "關閉展示模式—回到正常遊戲模式"
 
-#: src/keybind.c:1477
+#: src/keybind.c:1488
 #, fuzzy
 msgid "Debug menu is Open"
 msgstr "建築選單將重新開啟"
 
-#: src/keybind.c:1508
+#: src/keybind.c:1519
 msgid "Unable to locate any resource extractors!"
 msgstr "無法找到任何資源（resource extractors）"
 
-#: src/keybind.c:1729
+#: src/keybind.c:1740
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "喔，外面的天氣真糟...下雪"
 
-#: src/keybind.c:1735
+#: src/keybind.c:1746
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "下雨啦～下雨啦～"
 
-#: src/keybind.c:1741
+#: src/keybind.c:1752
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "天氣預報：一整片晴朗的天空。"
 
-#: src/keybind.c:1826
+#: src/keybind.c:1837
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1828
+#: src/keybind.c:1839
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "敵軍已經死了...由於你作弊的關係.."
 
-#: src/keybind.c:1868
+#: src/keybind.c:1879
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2387
+#: src/keybind.c:2398
 msgid "Centered on player HQ, direction NORTH"
 msgstr "視角移至主基地，面向北方"
 
-#: src/keybind.c:2399
+#: src/keybind.c:2410
 msgid "Unable to locate HQ!"
 msgstr "無法定位至主基地"
 
-#: src/keybind.c:2406
+#: src/keybind.c:2417
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2455
+#: src/keybind.c:2466
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2460
+#: src/keybind.c:2471
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2469
+#: src/keybind.c:2480
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2474
+#: src/keybind.c:2485
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2519
-#: src/keybind.c:2562
+#: src/keybind.c:2530
+#: src/keybind.c:2573
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "抱歉，多人遊戲中無法使用此作弊碼"
 
-#: src/keybind.c:2540
-#: src/keybind.c:2583
-#: src/keybind.c:2605
+#: src/keybind.c:2551
+#: src/keybind.c:2594
+#: src/keybind.c:2616
 msgid "Game Speed Reset"
 msgstr "重設遊戲速度"
 
-#: src/keybind.c:2544
+#: src/keybind.c:2555
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "遊戲速度增加至 %3.1f"
 
-#: src/keybind.c:2587
+#: src/keybind.c:2598
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "遊戲速度減少至 %3.1f"
 
-#: src/keybind.c:2617
+#: src/keybind.c:2628
 msgid "Build menu will reopen"
 msgstr "建築選單將重新開啟"
 
-#: src/keybind.c:2621
+#: src/keybind.c:2632
 msgid "Build menu will not reopen"
 msgstr "建造選單將不會開啟"
 
-#: src/keybind.c:2633
+#: src/keybind.c:2644
 msgid "Radar showing friend-foe colors"
 msgstr "雷達顯示友軍顏色"
 
-#: src/keybind.c:2637
+#: src/keybind.c:2648
 msgid "Radar showing player colors"
 msgstr "雷達顯示玩家顏色"
 
-#: src/keybind.c:2658
+#: src/keybind.c:2669
 msgid "Radar showing only objects"
 msgstr "雷達僅顯示物件"
 
-#: src/keybind.c:2661
+#: src/keybind.c:2672
 msgid "Radar blending terrain and height"
 msgstr "雷達描繪地形及高度"
 
-#: src/keybind.c:2664
+#: src/keybind.c:2675
 msgid "Radar showing terrain"
 msgstr "雷達顯示地形"
 
-#: src/keybind.c:2667
+#: src/keybind.c:2678
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "雷達顯示地形"
 
-#: src/keybind.c:2670
+#: src/keybind.c:2681
 msgid "Radar showing height"
 msgstr "雷達顯示高度"
 
@@ -12804,365 +12809,365 @@ msgstr "回到前一個畫面"
 msgid "Select Default"
 msgstr "選擇預設"
 
-#: src/keymap.c:294
+#: src/keymap.c:295
 msgid "Manufacture"
 msgstr "生產新單位"
 
-#: src/keymap.c:295
+#: src/keymap.c:296
 msgid "Research"
 msgstr "研發新科技"
 
-#: src/keymap.c:296
+#: src/keymap.c:297
 msgid "Build"
 msgstr "建築新建築物"
 
-#: src/keymap.c:297
+#: src/keymap.c:298
 msgid "Design"
 msgstr "設計新單位"
 
-#: src/keymap.c:298
+#: src/keymap.c:299
 msgid "Intelligence Display"
 msgstr "檢視情報及任務目標"
 
-#: src/keymap.c:299
+#: src/keymap.c:300
 msgid "Commanders"
 msgstr "指揮官"
 
-#: src/keymap.c:300
+#: src/keymap.c:301
 msgid "Toggle Radar"
 msgstr "開啟或關閉雷達"
 
-#: src/keymap.c:301
+#: src/keymap.c:302
 msgid "Toggle Console Display"
 msgstr "開啟或關閉主控台"
 
-#: src/keymap.c:302
+#: src/keymap.c:303
 msgid "Toggle Damage Bars On/Off"
 msgstr "開啟或關閉損傷顯示"
 
-#: src/keymap.c:303
+#: src/keymap.c:304
 msgid "Take Screen Shot"
 msgstr "抓取螢幕截圖"
 
-#: src/keymap.c:304
+#: src/keymap.c:305
 msgid "Toggle Formation Speed Limiting"
 msgstr "開啟或關閉成型速度限制"
 
-#: src/keymap.c:305
+#: src/keymap.c:306
 msgid "View Location of Previous Message"
 msgstr "檢視前一訊息發生位置"
 
-#: src/keymap.c:310
+#: src/keymap.c:311
 msgid "Assign Group 0"
 msgstr "指定為第0隊"
 
-#: src/keymap.c:311
+#: src/keymap.c:312
 msgid "Assign Group 1"
 msgstr "指定為第1隊"
 
-#: src/keymap.c:312
+#: src/keymap.c:313
 msgid "Assign Group 2"
 msgstr "指定為第2隊"
 
-#: src/keymap.c:313
+#: src/keymap.c:314
 msgid "Assign Group 3"
 msgstr "指定為第3隊"
 
-#: src/keymap.c:314
+#: src/keymap.c:315
 msgid "Assign Group 4"
 msgstr "指定為第4隊"
 
-#: src/keymap.c:315
+#: src/keymap.c:316
 msgid "Assign Group 5"
 msgstr "指定為第5隊"
 
-#: src/keymap.c:316
+#: src/keymap.c:317
 msgid "Assign Group 6"
 msgstr "指定為第6隊"
 
-#: src/keymap.c:317
+#: src/keymap.c:318
 msgid "Assign Group 7"
 msgstr "指定為第7隊"
 
-#: src/keymap.c:318
+#: src/keymap.c:319
 msgid "Assign Group 8"
 msgstr "指定為第8隊"
 
-#: src/keymap.c:319
+#: src/keymap.c:320
 msgid "Assign Group 9"
 msgstr "指定為第隊"
 
-#: src/keymap.c:323
+#: src/keymap.c:324
 msgid "Select Group 0"
 msgstr "選擇第0隊"
 
-#: src/keymap.c:324
+#: src/keymap.c:325
 msgid "Select Group 1"
 msgstr "選擇第1隊"
 
-#: src/keymap.c:325
+#: src/keymap.c:326
 msgid "Select Group 2"
 msgstr "選擇第2隊"
 
-#: src/keymap.c:326
+#: src/keymap.c:327
 msgid "Select Group 3"
 msgstr "選擇第3隊"
 
-#: src/keymap.c:327
+#: src/keymap.c:328
 msgid "Select Group 4"
 msgstr "選擇第4隊"
 
-#: src/keymap.c:328
+#: src/keymap.c:329
 msgid "Select Group 5"
 msgstr "選擇第5隊"
 
-#: src/keymap.c:329
+#: src/keymap.c:330
 msgid "Select Group 6"
 msgstr "選擇第6隊"
 
-#: src/keymap.c:330
+#: src/keymap.c:331
 msgid "Select Group 7"
 msgstr "選擇第7隊"
 
-#: src/keymap.c:331
+#: src/keymap.c:332
 msgid "Select Group 8"
 msgstr "選擇第8隊"
 
-#: src/keymap.c:332
+#: src/keymap.c:333
 msgid "Select Group 9"
 msgstr "選擇第9隊"
 
-#: src/keymap.c:336
+#: src/keymap.c:337
 msgid "Select Commander 0"
 msgstr "選擇命令0"
 
-#: src/keymap.c:337
+#: src/keymap.c:338
 msgid "Select Commander 1"
 msgstr "選擇命令1"
 
-#: src/keymap.c:338
+#: src/keymap.c:339
 msgid "Select Commander 2"
 msgstr "選擇命令2"
 
-#: src/keymap.c:339
+#: src/keymap.c:340
 msgid "Select Commander 3"
 msgstr "選擇命令3"
 
-#: src/keymap.c:340
+#: src/keymap.c:341
 msgid "Select Commander 4"
 msgstr "選擇命令4"
 
-#: src/keymap.c:341
+#: src/keymap.c:342
 msgid "Select Commander 5"
 msgstr "選擇命令5"
 
-#: src/keymap.c:342
+#: src/keymap.c:343
 msgid "Select Commander 6"
 msgstr "選擇命令6"
 
-#: src/keymap.c:343
+#: src/keymap.c:344
 msgid "Select Commander 7"
 msgstr "選擇命令7"
 
-#: src/keymap.c:344
+#: src/keymap.c:345
 msgid "Select Commander 8"
 msgstr "選擇命令8"
 
-#: src/keymap.c:345
+#: src/keymap.c:346
 msgid "Select Commander 9"
 msgstr "選擇命令9"
 
-#: src/keymap.c:349
+#: src/keymap.c:350
 #, fuzzy
 msgid "Multiplayer Options / Alliance dialog"
 msgstr "多人遊戲選項"
 
-#: src/keymap.c:352
+#: src/keymap.c:353
 msgid "Snap View to North"
 msgstr "Snap View to North"
 
-#: src/keymap.c:353
+#: src/keymap.c:354
 msgid "Toggle Tracking Camera"
 msgstr "開啟或關閉追蹤視角"
 
-#: src/keymap.c:354
+#: src/keymap.c:355
 msgid "Display In-Game Options"
 msgstr "顯示遊戲中選項"
 
-#: src/keymap.c:355
+#: src/keymap.c:356
 msgid "Zoom Radar Out"
 msgstr "縮小雷達視野"
 
-#: src/keymap.c:356
+#: src/keymap.c:357
 msgid "Zoom Radar In"
 msgstr "放大雷達視野"
 
-#: src/keymap.c:357
+#: src/keymap.c:358
 msgid "Zoom In"
 msgstr "視角拉近"
 
-#: src/keymap.c:358
+#: src/keymap.c:359
 msgid "Zoom Out"
 msgstr "視角拉遠"
 
-#: src/keymap.c:359
+#: src/keymap.c:360
 msgid "Pitch Forward"
 msgstr "視角前進"
 
-#: src/keymap.c:360
+#: src/keymap.c:361
 msgid "Rotate Left"
 msgstr "向左旋轉"
 
-#: src/keymap.c:361
+#: src/keymap.c:362
 msgid "Reset Pitch"
 msgstr "重設視角"
 
-#: src/keymap.c:362
+#: src/keymap.c:363
 msgid "Rotate Right"
 msgstr "向右旋轉"
 
-#: src/keymap.c:363
+#: src/keymap.c:364
 msgid "Pitch Back"
 msgstr "視角後退"
 
-#: src/keymap.c:364
+#: src/keymap.c:365
 msgid "Orders Menu"
 msgstr "命令選單"
 
-#: src/keymap.c:365
+#: src/keymap.c:366
 msgid "Decrease Game Speed"
 msgstr "降低遊戲速度"
 
-#: src/keymap.c:366
+#: src/keymap.c:367
 msgid "Increase Game Speed"
 msgstr "增加遊戲速度"
 
-#: src/keymap.c:367
+#: src/keymap.c:368
 msgid "Reset Game Speed"
 msgstr "重設遊戲速度"
 
-#: src/keymap.c:368
+#: src/keymap.c:369
 msgid "View North"
 msgstr "面向北方"
 
-#: src/keymap.c:369
+#: src/keymap.c:370
 msgid "View South"
 msgstr "面向南方"
 
-#: src/keymap.c:370
+#: src/keymap.c:371
 msgid "View East"
 msgstr "面向東方"
 
-#: src/keymap.c:371
+#: src/keymap.c:372
 msgid "View West"
 msgstr "面向西方"
 
-#: src/keymap.c:372
+#: src/keymap.c:373
 msgid "View next Oil Derrick"
 msgstr "檢視下一座鑽油井"
 
-#: src/keymap.c:373
+#: src/keymap.c:374
 msgid "View next Repair Unit"
 msgstr "檢視下一座修理單位"
 
-#: src/keymap.c:374
+#: src/keymap.c:375
 msgid "View next Truck"
 msgstr "檢視下一部工程車"
 
-#: src/keymap.c:375
+#: src/keymap.c:376
 msgid "View next Sensor Unit"
 msgstr "檢視下一座雷達單位"
 
-#: src/keymap.c:376
+#: src/keymap.c:377
 msgid "View next Commander"
 msgstr "檢視下一部指揮車"
 
-#: src/keymap.c:377
+#: src/keymap.c:378
 msgid "Toggle Overlays"
 msgstr "開啟或關閉疊層顯示"
 
-#: src/keymap.c:378
+#: src/keymap.c:379
 msgid "Console On/Off"
 msgstr "開啟或關閉主控台"
 
-#: src/keymap.c:381
+#: src/keymap.c:382
 msgid "Center View on HQ"
 msgstr "視角移至主基地"
 
-#: src/keymap.c:383
+#: src/keymap.c:384
 msgid "View Unassigned Units"
 msgstr "檢視未指定的單位"
 
-#: src/keymap.c:385
+#: src/keymap.c:386
 msgid "Fire at Will"
 msgstr "接觸時開火"
 
-#: src/keymap.c:387
+#: src/keymap.c:388
 msgid "Return to HQ"
 msgstr "回到主基地"
 
-#: src/keymap.c:395
+#: src/keymap.c:396
 msgid "Send Text Message"
 msgstr "送出文字訊息"
 
-#: src/keymap.c:413
+#: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr "選擇所有戰鬥單位"
 
-#: src/keymap.c:414
+#: src/keymap.c:416
 msgid "Select all Heavily Damaged Units"
 msgstr "選擇所有重度損傷單位"
 
-#: src/keymap.c:416
+#: src/keymap.c:418
 msgid "Select all Half-tracks"
 msgstr "選擇所有半履帶單位"
 
-#: src/keymap.c:417
+#: src/keymap.c:419
 msgid "Select all Hovers"
 msgstr "選擇所有氣墊船單位"
 
-#: src/keymap.c:419
+#: src/keymap.c:421
 msgid "Select all Units on Screen"
 msgstr "選擇所有螢幕上單位"
 
-#: src/keymap.c:420
+#: src/keymap.c:422
 msgid "Select all Tracks"
 msgstr "選擇所有履帶單位"
 
-#: src/keymap.c:421
+#: src/keymap.c:423
 msgid "Select EVERY unit"
 msgstr "選擇所有單位"
 
-#: src/keymap.c:422
+#: src/keymap.c:424
 msgid "Select all VTOLs"
 msgstr "選擇所有VTOL 單位"
 
-#: src/keymap.c:423
+#: src/keymap.c:425
 msgid "Select all Wheels"
 msgstr "選擇所有輪系單位"
 
-#: src/keymap.c:425
+#: src/keymap.c:427
 #, fuzzy
 msgid "Select all Similar Units"
 msgstr "選擇所有類似單位"
 
-#: src/keymap.c:429
+#: src/keymap.c:431
 msgid "Select next Factory"
 msgstr "選擇下一個工廠"
 
-#: src/keymap.c:430
+#: src/keymap.c:432
 msgid "Select next Research Facility"
 msgstr "選擇下一個研發中心"
 
-#: src/keymap.c:431
+#: src/keymap.c:433
 msgid "Select next Power Generator"
 msgstr "選擇下一個發電廠"
 
-#: src/keymap.c:432
+#: src/keymap.c:434
 msgid "Select next Cyborg Factory"
 msgstr "選擇下一個生化人工廠"
 
-#: src/keymap.c:433
+#: src/keymap.c:435
 msgid "Toggle reopening the build menu"
 msgstr "開啟或關閉建築選單"
 
@@ -13694,7 +13699,7 @@ msgstr "已研發完成： %s"
 msgid "Research Completed"
 msgstr "已研發完成"
 
-#: src/research.c:2546
+#: src/research.c:2543
 msgid "Research Award"
 msgstr "研發中心獎勵"
 
@@ -13816,20 +13821,20 @@ msgstr "全部遊戲時間 - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3212
+#: src/scriptfuncs.c:3213
 msgid "YOU ARE VICTORIOUS!"
 msgstr "你獲勝了！"
 
-#: src/scriptfuncs.c:3216
+#: src/scriptfuncs.c:3217
 msgid "YOU WERE DEFEATED!"
 msgstr "你被打敗了！"
 
-#: src/scriptfuncs.c:10132
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "由 %s 獲得引導指標"
 
-#: src/scriptfuncs.c:10178
+#: src/scriptfuncs.c:10179
 #, c-format
 msgid "Beacon %d"
 msgstr "引導指標 %d"
@@ -13861,55 +13866,55 @@ msgstr "找不到任何指揮官車！"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "已達到可控制單位總數上限，停止生產新單位"
 
-#: src/structure.c:6061
-#: src/structure.c:6086
+#: src/structure.c:6059
+#: src/structure.c:6084
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - 已指派 %u  單位"
 
-#: src/structure.c:6091
-#: src/structure.c:6155
+#: src/structure.c:6089
+#: src/structure.c:6153
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 損傷 %3.0f%%"
 
-#: src/structure.c:6141
+#: src/structure.c:6139
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - 連接鑽油井數量 %u of %u"
 
-#: src/structure.c:6271
-#: src/structure.c:6316
+#: src/structure.c:6269
+#: src/structure.c:6314
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s -電子傷害"
 
-#: src/structure.c:6551
+#: src/structure.c:6549
 msgid "Electronic Reward - Visibility Report"
 msgstr "電子回饋—可檢視報告"
 
-#: src/structure.c:6591
+#: src/structure.c:6589
 msgid "Factory Reward - Propulsion"
 msgstr "工廠獎勵—推進動力"
 
-#: src/structure.c:6615
+#: src/structure.c:6613
 msgid "Factory Reward - Body"
 msgstr "工廠獎勵—車身"
 
-#: src/structure.c:6639
+#: src/structure.c:6637
 msgid "Factory Reward - Weapon"
 msgstr "工廠獎勵—武器"
 
-#: src/structure.c:6648
+#: src/structure.c:6646
 msgid "Factory Reward - Nothing"
 msgstr "工廠獎勵—無"
 
-#: src/structure.c:6676
+#: src/structure.c:6674
 msgid "Repair Facility Award - Repair"
 msgstr "修理中心獎勵—修理"
 
-#: src/structure.c:6683
+#: src/structure.c:6681
 msgid "Repair Facility Award - Nothing"
 msgstr "修理工廠回饋—無"
 
