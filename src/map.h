@@ -459,8 +459,7 @@ static inline bool hasSensorOnTile(MAPTILE *psTile, int player)
 			// Check if an ally can provide us with vision on this tile
 			for (k = 0; k < MAX_PLAYERS; k++)
 			{
-				if (getSatUplinkExists(k) ||
-				    (psTile->watchers[k] > 0 && aiCheckAlliances(k, selectedPlayer)))
+				if (aiCheckAlliances(k, selectedPlayer) && (getSatUplinkExists(k) || psTile->watchers[k] > 0))
 				{
 					return true;
 				}
