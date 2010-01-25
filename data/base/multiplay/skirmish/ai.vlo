@@ -325,6 +325,7 @@ run
 	// SENSORS / REPAIR TEMPLATES
 
 	constructor	TEMPLATE	"ConstructorDroid"
+	hovertruck	TEMPLATE	"CobraHoverTruck"
 	repairUnit	TEMPLATE	"ViperRepairHalftrack"
 
 	numSenseTemplates		int		10

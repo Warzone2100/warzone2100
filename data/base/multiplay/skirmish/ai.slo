@@ -111,7 +111,7 @@ public	int				numTemplates[TECHS];
 public	TEMPLATE		tmpl[TECHS][70];
 private	TEMPLATE		tmplChoice[5];
 
-public	TEMPLATE		cybTempl[10],superCyb[4],cybMechanic,cybEngineer;
+public	TEMPLATE		cybTempl[10],superCyb[4],cybMechanic,cybEngineer,hovertruck;
 
 public	TEMPLATE		vtols[18];
 public	int				numVtolTemplates;
@@ -1557,11 +1557,17 @@ event conDroids(conDroidsTr)
 	initEnumStruct(FALSE,factory,me,me);
 	_factory = enumStruct();
 	
-	while((_factory != NULLOBJECT) and (_numBuilding < _maxTruckFactories)
-		and (_totalTrucks < _maxTrucks))
+	while ((_factory != NULLOBJECT) and (_numBuilding < _maxTruckFactories) and (_totalTrucks < _maxTrucks))
 	{
 		//Try to build a truck
-		_bStartedBuilding = buildUnit(constructor, _factory, factory, FALSE);	//build truck even if not idle
+		if (skCanBuildTemplate(me, _factory, hovertruck))
+		{
+			_bStartedBuilding = buildUnit(hovertruck, _factory, factory, FALSE);	//build truck even if not idle
+		}
+		else
+		{
+			_bStartedBuilding = buildUnit(constructor, _factory, factory, FALSE);	//build truck even if not idle
+		}
 		
 		//Update statistics if started building a truck
 		if(_bStartedBuilding)
