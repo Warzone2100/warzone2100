@@ -199,7 +199,7 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 			scoreUpdateVar(WD_UNITS_KILLED);
 		}
 
-		// If this is droid is a person and was destroyed by flames,
+		// If this droid is a person and was destroyed by flames,
 		// show it nicely by burning him/her to death.
 		if (psDroid->droidType == DROID_PERSON && weaponClass == WC_HEAT)
 		{
