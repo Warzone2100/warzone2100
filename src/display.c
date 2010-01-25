@@ -2273,15 +2273,17 @@ void	dealWithLMB( void )
 			audio_PlayTrack(ID_SOUND_SELECT);
 		}
 
+#ifdef DEBUG
 		if (getDebugMappingStatus() && tileOnMap(mouseTileX, mouseTileY))
 		{
 			MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
 
-			DBCONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d",
 			            tileIsExplored(psTile) ? "Explored" : "Unexplored",
 			            mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
 			            (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination));
 		}
+#endif
 
 		driveDisableTactical();
 
