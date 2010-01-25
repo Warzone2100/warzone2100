@@ -7,7 +7,7 @@ Edit password at top of r.inc.php
 Log in by posting an empty comment to any comment form, using the password instead of
 "MG" for the captcha
 
-Open generator.php
+Open generate.php
 
 Click "next" once
 
