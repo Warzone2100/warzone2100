@@ -1173,7 +1173,8 @@ BOOL scrIsStructureAvailable(void)
 	{
 		return false;
 	}
-	if(	apStructTypeLists[player][index] == AVAILABLE)
+	if (apStructTypeLists[player][index] == AVAILABLE
+	    && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit)
 	{
 		bResult = true;
 	}
