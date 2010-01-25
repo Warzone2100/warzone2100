@@ -1254,13 +1254,16 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 	//check for structures to be made available
 	for (inc = 0; inc < pResearch->numStructResults; inc++)
 	{
-		apStructTypeLists[player][pResearch->pStructureResults[inc]] = AVAILABLE;
+		if (apStructTypeLists[player][pResearch->pStructureResults[inc]] != REDUNDANT)
+		{
+			apStructTypeLists[player][pResearch->pStructureResults[inc]] = AVAILABLE;
+		}
 	}
 
 	//check for structures to be made redundant
 	for (inc = 0; inc < pResearch->numRedStructs; inc++)
 	{
-		apStructTypeLists[player][pResearch->pRedStructs[inc]] = UNAVAILABLE;
+		apStructTypeLists[player][pResearch->pRedStructs[inc]] = REDUNDANT;
 	}
 
 	//check for artefacts to be made available
@@ -1270,7 +1273,10 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 		type = statType(pResearch->pArtefactResults[inc]->ref);
 		//set the component state to AVAILABLE
 		compInc = pResearch->pArtefactResults[inc]->ref - statRefStart(type);
-		apCompLists[player][type][compInc] = AVAILABLE;
+		if (apCompLists[player][type][compInc] != REDUNDANT)
+		{
+			apCompLists[player][type][compInc] = AVAILABLE;
+		}
 		//check for default sensor
 		if (type == COMP_SENSOR)
 		{
@@ -1304,7 +1310,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 			type = statType(pResearch->pReplacedArtefacts[inc]->ref);
 			//set the component state to AVAILABLE
 			compInc = pResearch->pReplacedArtefacts[inc]->ref - statRefStart(type);
-			apCompLists[player][type][compInc] = UNAVAILABLE;
+			apCompLists[player][type][compInc] = REDUNDANT;
 		}
 		//check if the component is a brain
 		if (type == COMP_BRAIN)
@@ -1326,9 +1332,9 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 	{
 		//determine the type of artefact
 		type = statType(pResearch->pRedArtefacts[inc]->ref);
-		//set the component state to UNAVAILABLE
+		//set the component state to REDUNDANT
 		apCompLists[player][type][pResearch->pRedArtefacts[inc]->ref -
-			statRefStart(type)] = UNAVAILABLE;
+			statRefStart(type)] = REDUNDANT;
 	}
 
 	//check for technology effects

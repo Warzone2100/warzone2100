@@ -90,7 +90,7 @@ static UDWORD	maxWeaponDamage;
 static UDWORD	maxWeaponROF;
 static UDWORD	maxPropulsionSpeed;
 
-//stores for each players component states - can be either UNAVAILABLE, FOUND or AVAILABLE
+//stores for each players component states - can be either UNAVAILABLE, REDUNDANT, FOUND or AVAILABLE
 UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 
 //store for each players Structure states
@@ -174,7 +174,7 @@ void statsInitVars(void)
 	numConstructStats = 0;
 	numSpecialAbility = 0;
 
-	//stores for each players component states - can be either UNAVAILABLE, FOUND or AVAILABLE
+	//stores for each players component states - can be either UNAVAILABLE, REDUNDANT, FOUND or AVAILABLE
 	for(i=0; i<MAX_PLAYERS; i++) {
 		for(j=0; j<COMP_NUMCOMPONENTS; j++) {
 			apCompLists[i][j] = NULL;

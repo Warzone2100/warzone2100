@@ -9571,7 +9571,7 @@ BOOL loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecords, UDW
 			continue;
 		}
 		if (psSaveCompList->state != UNAVAILABLE && psSaveCompList->state !=
-			AVAILABLE && psSaveCompList->state != FOUND)
+			AVAILABLE && psSaveCompList->state != FOUND && psSaveCompList->state != REDUNDANT)
 		{
 			//ignore this record
 			continue;
@@ -9623,7 +9623,7 @@ BOOL loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWO
 			continue;
 		}
 		if (psSaveCompList->state != UNAVAILABLE && psSaveCompList->state !=
-			AVAILABLE && psSaveCompList->state != FOUND)
+			AVAILABLE && psSaveCompList->state != FOUND && psSaveCompList->state != REDUNDANT)
 		{
 			//ignore this record
 			continue;
@@ -9877,7 +9877,7 @@ BOOL loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecord
 			continue;
 		}
 		if (psSaveStructList->state != UNAVAILABLE && psSaveStructList->state !=
-			AVAILABLE && psSaveStructList->state != FOUND)
+			AVAILABLE && psSaveStructList->state != FOUND && psSaveStructList->state != REDUNDANT)
 		{
 			//ignore this record
 			continue;
@@ -9936,7 +9936,7 @@ BOOL loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords
 			continue;
 		}
 		if (psSaveStructList->state != UNAVAILABLE && psSaveStructList->state !=
-			AVAILABLE && psSaveStructList->state != FOUND)
+			AVAILABLE && psSaveStructList->state != FOUND && psSaveStructList->state != REDUNDANT)
 		{
 			//ignore this record
 			continue;
