@@ -43,6 +43,7 @@
 static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot);
 
 // alliances
+// players are 0-7; player 8 appears to be unused; player 9 is features
 UBYTE	alliances[MAX_PLAYERS + 2][MAX_PLAYERS + 2];
 
 
@@ -126,6 +127,7 @@ BOOL aiInitialise(void)
 	SDWORD		i,j;
 
 	// The +1 is for features, that are owned by player 9 for hackish reasons
+	// Yes, we do mean "player 9", as in "the players are 0-7, and we skip over player 8"
 	for (i = 0; i < MAX_PLAYERS+2; i++)
 	{
 		for (j = 0; j < MAX_PLAYERS+2; j++)
