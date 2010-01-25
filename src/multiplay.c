@@ -263,6 +263,9 @@ BOOL multiPlayerLoop(void)
 				ingame.TimeEveryoneIsInGame = gameTime;
 				if (!NetPlay.isHost)
 				{
+#ifdef DEBUG
+					addConsoleMessage("Sending data check...", LEFT_JUSTIFY, NOTIFY_MESSAGE);
+#endif
 					sendDataCheck();
 				}
 			}
