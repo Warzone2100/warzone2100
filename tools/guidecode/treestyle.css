@@ -1,0 +1,93 @@
+body,html,div,p,h1,h2,h3,h4,form,table,tr,td,th
+{
+	margin: 0;
+	padding: 0;
+}
+
+body
+{
+	font-size: 9px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+img
+{
+	display: block;
+}
+
+a
+{
+	background-color: #E0E0E0;
+	margin:0;
+	padding:0;
+	border: 1px solid #999999;
+	color: #111111;
+	text-align:center;
+	text-decoration:none;
+}
+
+a span
+{
+	display:block;
+	padding-top:6px;
+}
+
+a:hover
+{
+	border-color: #666666;
+	background-color: #CCCCCC;
+}
+
+a.struct
+{
+	border-color: #9494A9;
+	background-color: #D8D8F0;
+}
+a.struct:hover
+{
+	border-color: #606077;
+	background-color: #C5C5DD;
+}
+
+a.weapon
+{
+	border-color: #A99494;
+	background-color: #F0D8D8;
+}
+a.weapon:hover
+{
+	border-color: #776060;
+	background-color: #DDC5C5;
+}
+
+a.component
+{
+	border-color: #94A994;
+	background-color: #D8F0D8;
+}
+a.component:hover
+{
+	border-color: #607760;
+	background-color: #C5DDC5;
+}
+
+#linkbar
+{
+display:block;position:fixed;_position:absolute;top:0;left:10px;padding-top:2px;
+}
+#linkbar a
+{
+font-size:10pt;padding:3px 5px;
+background-color: #eaefff;
+border-color: #bbc4ee;
+border-top: 0;
+color: #556699;
+}
+#linkbar a:hover
+{
+padding:3px 5px;
+background-color: #dfe4ff;
+border-color: #556699;
+border-top: 0;
+color: #556699;
+}
