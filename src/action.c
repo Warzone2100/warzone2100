@@ -1962,7 +1962,6 @@ void actionUpdateDroid(DROID *psDroid)
 			!actionReachedBuildPos(psDroid,
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 		{
-//			psDroid->action = DACTION_MOVETOBUILD;
 			moveDroidToNoFormation(psDroid, psDroid->orderX, psDroid->orderY);
 		}
 		else if (!DROID_STOPPED(psDroid) &&
@@ -1974,13 +1973,8 @@ void actionUpdateDroid(DROID *psDroid)
 			moveStopDroid(psDroid);
 		}
 
-		if (droidUpdateBuild(psDroid))
+		if (psDroid->action == DACTION_BUILD && droidUpdateBuild(psDroid))
 		{
-/*			if ( (psDroid->psTarget) && (psDroid->sMove.Status != MOVESHUFFLE) )
-			{
-				moveTurnDroid(psDroid,psDroid->psTarget->pos.x,psDroid->psTarget->pos.y);
-			}*/
-			// make construct droid to use turretRotation[0]
 			actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 		}
 		break;
