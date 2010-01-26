@@ -6690,20 +6690,16 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	FEATURE	  *psFeat;
 	DROID	  *psDroid;
 	UDWORD	x,y,i;
-	MAPTILE	*psTile;
 
 	// share exploration info - pretty useless but perhaps a nice touch?
 	for(x = 0; x < mapWidth; x++)
 	{
 		for(y = 0; y < mapHeight; y++)
 		{
+			MAPTILE *psTile = mapTile(x, y);
 			if (TEST_TILE_VISIBLE(losingPlayer, psTile))
 			{
-				psTile = mapTile(x, y);
-				if (psTile)
-				{
-					psTile->tileExploredBits |= alliancebits[rewardPlayer];
-				}
+				psTile->tileExploredBits |= alliancebits[rewardPlayer];
 			}
 		}
 	}
