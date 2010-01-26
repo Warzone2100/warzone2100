@@ -262,8 +262,10 @@ void sound_ShutdownLibrary( void )
 	sound_GetContextError(device);
 
 	debug(LOG_SOUND, "close device");
-	alcCloseDevice(device);
-	sound_GetContextError(device);
+	if (alcCloseDevice(device) == ALC_FALSE)
+	{
+		debug(LOG_SOUND, "OpenAl could not close the audio device." ); 
+	}
 #endif
 
 	while( aSample )
