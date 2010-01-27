@@ -2164,7 +2164,7 @@ event doResearch(doResearchTr)
 }
 
 // We need this hack since I did not dare to try to backport all the trigger fixed with research to 2.3
-event checkResearch(doResearchTr)
+event checkResearch(checkResearchTr)
 {
 	setEventTrigger(doResearch, chainloadTr);
 }
