@@ -225,6 +225,7 @@ trigger manageDefendLocationTr		(every, 70);
 trigger startLevelTr				(CALL_START_NEXT_LEVEL);
 trigger chainloadTr				(wait, 1);
 trigger slowloadTr				(wait, 13);
+trigger checkResearchTr				(every, 400);
 
 /* Events */
 event	conDroids;
@@ -382,6 +383,12 @@ event initialisedEvent(CALL_GAMEINIT)
 		bRunning = false;
 		shutDownAI();
 	}
+}
+
+// I am not sure why we need this hack, but the AI can still end up not researching anything at times
+event checkResearch(checkResearchTr)
+{
+	setEventTrigger(doResearch, chainloadTr);
 }
 
 event arrived(reachedTr)
@@ -3039,6 +3046,7 @@ function void shutDownAI()
 	setEventTrigger(rebuildStructureEv,inactive);
 	setEventTrigger(startLevel, inactive);
 	setEventTrigger(arrived, inactive);
+	setEventTrigger(checkResearchTr, inactive);
 }
 
 function void reassignAI()
@@ -3094,6 +3102,7 @@ function void reassignAI()
 	setEventTrigger(rebuildStructureEv, rebuildStructureTr);
 	setEventTrigger(startLevel, startLevelTr);
 	setEventTrigger(arrived, reachedTr);
+	setEventTrigger(checkResearch, checkResearchTr);
 }
 
 /* Returns true if we just received a beacon from a certain player */
