@@ -79,8 +79,7 @@ static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 
 static BOOL aiDroidHasRange(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 {
-	WEAPON_STATS		*psWStats;
-	SDWORD			xdiff, ydiff, longRange;
+	int32_t xdiff, ydiff, longRange;
 
 	if (psDroid->droidType == DROID_SENSOR)
 	{
@@ -93,14 +92,12 @@ static BOOL aiDroidHasRange(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_sl
 	}
 	else
 	{
-		psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
-
-		xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psTarget->pos.x;
-		ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psTarget->pos.y;
-
+		WEAPON_STATS *psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
 		longRange = proj_GetLongRange(psWStats);
 	}
 
+	xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psTarget->pos.x;
+	ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psTarget->pos.y;
 	if (xdiff*xdiff + ydiff*ydiff < longRange*longRange)
 	{
 		// in range
