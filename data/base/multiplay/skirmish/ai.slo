@@ -3038,6 +3038,7 @@ function void shutDownAI()
 	setEventTrigger(structureDestroyed,inactive);
 	setEventTrigger(rebuildStructureEv,inactive);
 	setEventTrigger(startLevel, inactive);
+	setEventTrigger(arrived, inactive);
 }
 
 function void reassignAI()
@@ -3092,6 +3093,7 @@ function void reassignAI()
 	setEventTrigger(structureDestroyed, structureDestroyedTr);
 	setEventTrigger(rebuildStructureEv, rebuildStructureTr);
 	setEventTrigger(startLevel, startLevelTr);
+	setEventTrigger(arrived, reachedTr);
 }
 
 /* Returns true if we just received a beacon from a certain player */
