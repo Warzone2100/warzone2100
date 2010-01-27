@@ -3046,7 +3046,7 @@ function void shutDownAI()
 	setEventTrigger(rebuildStructureEv,inactive);
 	setEventTrigger(startLevel, inactive);
 	setEventTrigger(arrived, inactive);
-	setEventTrigger(checkResearchTr, inactive);
+	setEventTrigger(checkResearch, inactive);
 }
 
 function void reassignAI()
