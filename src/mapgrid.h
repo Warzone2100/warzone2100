@@ -39,11 +39,15 @@ extern BOOL gridInitialise(void);
 extern void gridShutDown(void);
 
 // Reset the grid system. Called once per update.
+// Resets seenThisTick[] to false.
 extern void gridReset(void);
 
 #define PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS (20*TILE_UNITS)
 /// Find all objects within radius. Call gridIterate() to get the search results.
 extern void gridStartIterate(int32_t x, int32_t y, uint32_t radius);
+
+/// Find all objects within radius where object->seenThisTick[player] != 255. Call gridIterate() to get the search results.
+extern void gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, int player);
 
 /// Get the next search result from gridStartIterate, or NULL if finished.
 static inline BASE_OBJECT *gridIterate(void)

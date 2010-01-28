@@ -750,7 +750,7 @@ void droidUpdate(DROID *psDroid)
 		}
 	}
 
-	processVisibility((BASE_OBJECT*)psDroid);
+	processVisibilityLevel((BASE_OBJECT*)psDroid);
 
 	// -----------------
 	/* Are we a sensor droid or a command droid? */

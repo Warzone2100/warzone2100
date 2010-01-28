@@ -35,12 +35,14 @@
 void **gridIterator;
 
 PointTree *gridPointTree = NULL;  // A quad-tree-like object.
+PointTree::Filter *gridFiltersSeen;
 
 // initialise the grid system
 BOOL gridInitialise(void)
 {
 	ASSERT(gridPointTree == NULL, "gridInitialise already called, without calling gridShutDown.");
 	gridPointTree = new PointTree;
+	gridFiltersSeen = new PointTree::Filter[MAX_PLAYERS];
 
 	return true;  // Yay, nothing failed!
 }
@@ -61,12 +63,21 @@ void gridReset(void)
 				if (!psObj->died)
 				{
 					gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
+					for (unsigned viewer = 0; viewer < MAX_PLAYERS; ++viewer)
+					{
+						psObj->seenThisTick[viewer] = 0;
+					}
 				}
 			}
 		}
 	}
 
 	gridPointTree->sort();
+
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	{
+		gridFiltersSeen[player].reset(*gridPointTree);
+	}
 }
 
 // shutdown the grid system
@@ -74,6 +85,8 @@ void gridShutDown(void)
 {
 	delete gridPointTree;
 	gridPointTree = NULL;
+	delete[] gridFiltersSeen;
+	gridFiltersSeen = NULL;
 }
 
 static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
@@ -87,7 +100,7 @@ void gridStartIterate(int32_t x, int32_t y, uint32_t radius)
 {
 	gridPointTree->query(x, y, radius);
 	PointTree::ResultVector::iterator w = gridPointTree->lastQueryResults.begin(), i;
-	for (i = gridPointTree->lastQueryResults.begin(); i != gridPointTree->lastQueryResults.end(); ++i)
+	for (i = w; i != gridPointTree->lastQueryResults.end(); ++i)
 	{
 		BASE_OBJECT *obj = static_cast<BASE_OBJECT *>(*i);
 		if (isInRadius(obj->pos.x - x, obj->pos.y - y, radius))  // Check that search result is less than radius (since they can be up to a factor of sqrt(2) more).
@@ -105,13 +118,29 @@ void gridStartIterate(int32_t x, int32_t y, uint32_t radius)
 	*/
 }
 
-// compact some of the grid arrays
-void gridGarbageCollect(void)
+// Sorry for the duplicate code.
+void gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, int player)
 {
-	gridReset();
-}
-
-// Display all the grid's an object is a member of
-void gridDisplayCoverage(BASE_OBJECT *psObj)
-{
+	gridPointTree->query(gridFiltersSeen[player], x, y, radius);
+	PointTree::ResultVector::iterator w = gridPointTree->lastQueryResults.begin(), i;
+	for (i = w; i != gridPointTree->lastQueryResults.end(); ++i)
+	{
+		BASE_OBJECT *obj = static_cast<BASE_OBJECT *>(*i);
+		if (obj->seenThisTick[player] == 255)  // Check if we should skip this object.
+		{
+			gridFiltersSeen[player].erase(gridPointTree->lastFilteredQueryIndices[i - gridPointTree->lastQueryResults.begin()]);  // Stop the object from appearing in future searches.
+		}
+		else if (isInRadius(obj->pos.x - x, obj->pos.y - y, radius))  // Check that search result is less than radius (since they can be up to a factor of sqrt(2) more).
+		{
+			*w = *i;
+			++w;
+		}
+	}
+	gridPointTree->lastQueryResults.erase(w, i);  // Erase all points that were a bit too far.
+	gridPointTree->lastQueryResults.push_back(NULL);  // NULL-terminate the result.
+	gridIterator = &gridPointTree->lastQueryResults[0];
+	/*
+	// In case you are curious.
+	debug(LOG_WARNING, "gridStartIterateUnseen(%d, %d, %u) found %u objects", x, y, radius, (unsigned)gridPointTree->lastQueryResults.size() - 1);
+	*/
 }

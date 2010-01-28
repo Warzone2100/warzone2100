@@ -83,7 +83,27 @@ struct PointTreeRange
 	uint64_t a, z;
 };
 
-PointTree::ResultVector &PointTree::query(int32_t x, int32_t y, uint32_t radius)
+// If !IsFiltered, function is trivially optimised to "return i;".
+template<bool IsFiltered>
+static unsigned current(std::vector<unsigned> &filterData, unsigned i)
+{
+	unsigned ret = i;
+	while (IsFiltered && filterData[ret])
+	{
+		ret += filterData[ret];
+	}
+	while (IsFiltered && filterData[i])
+	{
+		unsigned next = i + filterData[i];
+		filterData[i] = ret - i;
+		i = next;
+	}
+
+	return ret;
+}
+
+template<bool IsFiltered>
+PointTree::ResultVector &PointTree::queryMaybeFilter(Filter &filter, int32_t x, int32_t y, uint32_t radius)
 {
 	int32_t minXo = x - radius;
 	int32_t maxXo = x + radius;
@@ -184,23 +204,31 @@ PointTree::ResultVector &PointTree::query(int32_t x, int32_t y, uint32_t radius)
 	}
 
 	lastQueryResults.clear();
+	if (IsFiltered)
+	{
+		lastFilteredQueryIndices.clear();
+	}
 	for (int r = 0; r != numRanges; ++r)
 	{
-		Vector::iterator i1 = std::lower_bound(points.begin(), points.end(), Point(ranges[r].a,     NULL));
-		Vector::iterator i2 = std::lower_bound(i1,             points.end(), Point(ranges[r].z + 1, NULL));
-		for (Vector::const_iterator i = i1; i != i2; ++i)
+		unsigned i1 = std::lower_bound(points.begin(),      points.end(), Point(ranges[r].a,     NULL)) - points.begin();
+		unsigned i2 = std::lower_bound(points.begin() + i1, points.end(), Point(ranges[r].z + 1, NULL)) - points.begin();
+		for (unsigned i = current<IsFiltered>(filter.data, i1); i < i2; i = current<IsFiltered>(filter.data, i + 1))
 		{
-			uint64_t px = i->first & 0xAAAAAAAAAAAAAAAAULL;
-			uint64_t py = i->first & 0x5555555555555555ULL;
+			uint64_t px = points[i].first & 0xAAAAAAAAAAAAAAAAULL;
+			uint64_t py = points[i].first & 0x5555555555555555ULL;
 			if (px >= minX && px <= maxX && py >= minY && py <= maxY)  // Only add point if it's at least in the desired square.
 			{
-				lastQueryResults.push_back(i->second);
+				lastQueryResults.push_back(points[i].second);
+				if (IsFiltered)
+				{
+					lastFilteredQueryIndices.push_back(i);
+				}
 #ifdef DUMP_IMAGE
 				if (doDump)
 				{
-					ppm[((int32_t *)i->second)[1] + 500][((int32_t *)i->second)[0] + 500][0] = 192;
-					ppm[((int32_t *)i->second)[1] + 500][((int32_t *)i->second)[0] + 500][1] = 128;
-					ppm[((int32_t *)i->second)[1] + 500][((int32_t *)i->second)[0] + 500][2] = 0;
+					ppm[((int32_t *)points[i].second)[1] + 500][((int32_t *)points[i].second)[0] + 500][0] = 192;
+					ppm[((int32_t *)points[i].second)[1] + 500][((int32_t *)points[i].second)[0] + 500][1] = 128;
+					ppm[((int32_t *)points[i].second)[1] + 500][((int32_t *)points[i].second)[0] + 500][2] = 0;
 				}
 #endif //DUMP_IMAGE
 			}
@@ -216,6 +244,17 @@ PointTree::ResultVector &PointTree::query(int32_t x, int32_t y, uint32_t radius)
 #endif //DUMP_IMAGE
 
 	return lastQueryResults;
+}
+
+PointTree::ResultVector &PointTree::query(int32_t x, int32_t y, uint32_t radius)
+{
+	Filter unused;
+	return queryMaybeFilter<false>(unused, x, y, radius);
+}
+
+PointTree::ResultVector &PointTree::query(Filter &filter, int32_t x, int32_t y, uint32_t radius)
+{
+	return queryMaybeFilter<true>(filter, x, y, radius);
 }
 
 /////////////////

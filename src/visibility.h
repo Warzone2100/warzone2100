@@ -48,7 +48,11 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 // Find the wall that is blocking LOS to a target (if any)
 extern STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget);
 
-extern void processVisibility(BASE_OBJECT *psCurr);
+extern void processVisibilitySelf(BASE_OBJECT *psObj);
+extern void processVisibilityVision(BASE_OBJECT *psViewer);
+extern void processVisibilityLevel(BASE_OBJECT *psObj);
+
+extern void processVisibility();  ///< Calls processVisibilitySelf and processVisibilityVision on all objects.
 
 // update the visibility reduction
 extern void visUpdateLevel(void);

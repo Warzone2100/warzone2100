@@ -3878,7 +3878,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 
 	if (!mission && (psBuilding->id % 10) == (frameGetFrameNumber() % 10))
 	{
-		processVisibility((BASE_OBJECT*)psBuilding);
+		processVisibilityLevel((BASE_OBJECT*)psBuilding);
 	}
 
 	/* Update the fire damage data */

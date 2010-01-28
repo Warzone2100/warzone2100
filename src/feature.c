@@ -461,7 +461,7 @@ void featureUpdate(FEATURE *psFeat)
    //	if(getRevealStatus())
    //	{
 		// update the visibility for the feature
-		processVisibility((BASE_OBJECT *)psFeat);
+		processVisibilityLevel((BASE_OBJECT *)psFeat);
    //	}
 
 	switch (psFeat->psStats->subType)

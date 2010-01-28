@@ -529,195 +529,187 @@ STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* ps
 	return NULL;
 }
 
-/* Find out what can see this object */
-void processVisibility(BASE_OBJECT *psObj)
+static bool hasSharedVision(unsigned viewer, unsigned ally)
 {
-	int		prevVis[MAX_PLAYERS], currVis[MAX_PLAYERS];
-	BASE_OBJECT	*psViewer;
-	MESSAGE		*psMessage;
-	unsigned int player;
+	ASSERT_OR_RETURN(false, viewer < MAX_PLAYERS && ally < MAX_PLAYERS, "Bad viewer %u or ally %u.", viewer, ally);
 
-	// initialise the visibility array
-	for (player = 0; player < MAX_PLAYERS; player++)
-	{
-		prevVis[player] = psObj->visible[player];
-	}
+	return viewer == ally || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS && aiCheckAlliances(viewer, ally));
+}
 
-	// Droids can vanish from view, other objects will stay
-	if (psObj->type == OBJ_DROID)
+static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX*/)
+{
+	//forward out vision to our allies
+	int ally;
+	for (ally = 0; ally < MAX_PLAYERS; ++ally)
 	{
-		memset(currVis, 0, sizeof(*currVis) * MAX_PLAYERS);
-
-		// one can trivially see oneself
-		currVis[psObj->player] = UBYTE_MAX;
-	}
-	else
-	{
-		memcpy(currVis, prevVis, sizeof(*prevVis) * MAX_PLAYERS);
-	}
-
-	// Make sure allies can see us
-	if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
-	{
-		unsigned int player;
-		for (player = 0; player < MAX_PLAYERS; player++)
+		if (hasSharedVision(viewer, ally))
 		{
-			if (player != psObj->player && aiCheckAlliances(player, psObj->player))
-			{
-				currVis[player] = UBYTE_MAX;
-			}
+			psObj->seenThisTick[ally] = MAX(psObj->seenThisTick[ally], val);
 		}
+	}
+}
+
+// Calculate which objects we should know about based on alliances and satellite view.
+void processVisibilitySelf(BASE_OBJECT *psObj)
+{
+	int viewer;
+
+	if (psObj->type == OBJ_DROID)  // Why only droids? Would psObj->type != OBJ_FEATURE && psObj->sensorRange != 0 be a better check?
+	{
+		// one can trivially see oneself
+		setSeenBy(psObj, psObj->player, UBYTE_MAX);
 	}
 
 	// if a player has a SAT_UPLINK structure, or has godMode enabled,
 	// they can see everything!
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (viewer = 0; viewer < MAX_PLAYERS; viewer++)
 	{
-		if (getSatUplinkExists(player) || (player == selectedPlayer && godMode))
+		if (getSatUplinkExists(viewer) || (viewer == selectedPlayer && godMode))
 		{
-			currVis[player] = UBYTE_MAX;
-			if (psObj->visible[player] == 0)
+			setSeenBy(psObj, viewer, UBYTE_MAX);
+		}
+	}
+}
+
+// Calculate which objects we can see. Better to call after processVisibilitySelf, since that check is cheaper.
+void processVisibilityVision(BASE_OBJECT *psViewer)
+{
+	BASE_OBJECT *psObj;
+
+	if (psViewer->type == OBJ_FEATURE)
+	{
+		return;
+	}
+
+	// get all the objects from the grid the droid is in
+	// Will give inconsistent results if hasSharedVision is not an equivalence relation.
+	gridStartIterateUnseen(psViewer->pos.x, psViewer->pos.y, psViewer->sensorRange, psViewer->player);
+	while (psObj = gridIterate(), psObj != NULL)
+	{
+		int val = visibleObject(psViewer, psObj, false);
+
+		// If we've got ranged line of sight...
+		if (val > 0)
+		{
+			// Tell system that this side can see this object
+			setSeenBy(psObj, psViewer->player, val);
+
+			// This looks like some kind of weird hack.
+			if(psObj->type != OBJ_FEATURE && psObj->visible[psViewer->player] <= 0)
 			{
-				psObj->visible[player] = 1;
+				// features are not in the cluster system
+				clustObjectSeen(psObj, psViewer);
 			}
 		}
 	}
+}
 
-		// get all the objects from the grid the droid is in
-		// HACK Search radius should be psViewer->sensorRange! So it should be the viewer iterating, not the viewee!
-		// HACK Note: This viewer/viewee relationship is exactly the opposite of what you would normally expect, and violates the principle of minimum astonishment.
-#define HACK_MAXIMUM_VIEWING_RANGE_HACK (psObj->type == OBJ_STRUCTURE ? 32 : 27)*TILE_UNITS
-		gridStartIterate(psObj->pos.x, psObj->pos.y, HACK_MAXIMUM_VIEWING_RANGE_HACK);
-		while (psViewer = gridIterate(), psViewer != NULL)
-		{
-			int val;
+/* Find out what can see this object */
+// Fade in/out of view. Must be called after calculation of which objects are seen.
+void processVisibilityLevel(BASE_OBJECT *psObj)
+{
+	int player;
 
-			// If we've got ranged line of sight...
-			if (psViewer->type != OBJ_FEATURE && currVis[psViewer->player] < UBYTE_MAX
-				&& (val = visibleObject(psViewer, psObj, false)))
-			{
-				// Tell system that this side can see this object
-				currVis[psViewer->player] = val;
-				if (prevVis[psViewer->player] < currVis[psViewer->player])
-				{
-					if (psObj->visible[psViewer->player] < val)
-					{
-						psObj->visible[psViewer->player] = val;
-					}
-					if(psObj->type != OBJ_FEATURE)
-					{
-						// features are not in the cluster system
-						clustObjectSeen(psObj, psViewer);
-					}
-				}
-			}
-		}
-
-		//forward out vision to our allies
-		if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
-		{
-			unsigned int player;
-			for (player = 0; player < MAX_PLAYERS; player++)
-			{
-				unsigned int ally;
-				for (ally = 0; ally < MAX_PLAYERS; ally++)
-				{
-					if (currVis[player] && aiCheckAlliances(player, ally))
-					{
-						currVis[ally] = currVis[player];
-					}
-				}
-			}
-		}
-
-		// update the visibility levels
-		for (player = 0; player < MAX_PLAYERS; player++)
-		{
-			SDWORD	visLevel = currVis[player];
-
-			if (player == psObj->player)
-			{
-				// owner can always see it fully
-				psObj->visible[player] = UBYTE_MAX;
-				continue;
-			}
-
-			// Droids can vanish from view, other objects will stay
-			if (visLevel < psObj->visible[player] && psObj->type == OBJ_DROID)
-			{
-				if (psObj->visible[player] <= visLevelDec)
-				{
-					psObj->visible[player] = 0;
-				}
-				else
-				{
-					psObj->visible[player] -= visLevelDec;
-				}
-			}
-			else if (visLevel > psObj->visible[player])
-			{
-				if (psObj->visible[player] + visLevelInc >= UBYTE_MAX)
-				{
-					psObj->visible[player] = UBYTE_MAX;
-				}
-				else
-				{
-					psObj->visible[player] += visLevelInc;
-				}
-			}
-		}
-
-	/* Make sure all tiles under a feature/structure become visible when you see it */
+	// update the visibility levels
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		if ( (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_FEATURE) &&
-			!prevVis[player] && psObj->visible[player] &&
-			!godMode )
-		{
-			setUnderTilesVis(psObj, player);
-		}
-	}
+		bool justBecameVisible = false;
+		int visLevel = psObj->seenThisTick[player];
 
-	// if a feature has just become visible set the message blips
-	if (psObj->type == OBJ_FEATURE)
-	{
-		for (player = 0; player < MAX_PLAYERS; player++)
+		if (player == psObj->player)
 		{
-			if (!prevVis[player] && psObj->visible[player])
+			// owner can always see it fully
+			psObj->visible[player] = UBYTE_MAX;
+			continue;
+		}
+
+		// Droids can vanish from view, other objects will stay
+		if (psObj->type != OBJ_DROID)
+		{
+			visLevel = MAX(visLevel, psObj->visible[player]);
+		}
+
+		if (visLevel > psObj->visible[player])
+		{
+			justBecameVisible = psObj->visible[player] <= 0;
+
+			psObj->visible[player] = MIN(psObj->visible[player] + visLevelInc, visLevel);
+		}
+		else if(visLevel < psObj->visible[player])
+		{
+			psObj->visible[player] = MAX(psObj->visible[player] - visLevelDec, visLevel);
+		}
+
+		if (justBecameVisible)
+		{
+			/* Make sure all tiles under a feature/structure become visible when you see it */
+			if (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_FEATURE)
 			{
+				setUnderTilesVis(psObj, player);
+			}
+
+			// if a feature has just become visible set the message blips
+			if (psObj->type == OBJ_FEATURE)
+			{
+				MESSAGE *psMessage;
+				INGAME_AUDIO type = NO_SOUND;
+
 				/* If this is an oil resource we want to add a proximity message for
 				 * the selected Player - if there isn't an Resource Extractor on it. */
-				if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
+				if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE && !TileHasStructure(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y))))
 				{
-					if (!TileHasStructure(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y))))
-					{
-						psMessage = addMessage(MSG_PROXIMITY, true, player);
-						if (psMessage)
-						{
-							psMessage->pViewData = (MSG_VIEWDATA *)psObj;
-						}
-						if (!bInTutorial)
-						{
-							//play message to indicate been seen
-							audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE, psObj->pos.x, psObj->pos.y, psObj->pos.z );
-						}
-						debug(LOG_MSG, "Added message for oil well, pViewData=%p", psMessage->pViewData);
-					}
+					type = ID_SOUND_RESOURCE_HERE;
 				}
 				else if (((FEATURE *)psObj)->psStats->subType == FEAT_GEN_ARTE)
+				{
+					type = ID_SOUND_ARTEFACT_DISC;
+				}
+
+				if (type != NO_SOUND)
 				{
 					psMessage = addMessage(MSG_PROXIMITY, true, player);
 					if (psMessage)
 					{
 						psMessage->pViewData = (MSG_VIEWDATA *)psObj;
 					}
-					if (!bInTutorial)
+					if (!bInTutorial && player == selectedPlayer)
 					{
 						// play message to indicate been seen
-						audio_QueueTrackPos( ID_SOUND_ARTEFACT_DISC, psObj->pos.x, psObj->pos.y, psObj->pos.z );
+						audio_QueueTrackPos(type, psObj->pos.x, psObj->pos.y, psObj->pos.z);
 					}
-					debug(LOG_MSG, "Added message for artefact, pViewData=%p", psMessage->pViewData);
+					debug(LOG_MSG, "Added message for oil well or artefact, pViewData=%p", psMessage->pViewData);
 				}
+			}
+		}
+	}
+}
+
+void processVisibility()
+{
+	int player;
+	for (player = 0; player < MAX_PLAYERS; ++player)
+	{
+		BASE_OBJECT *lists[] = {(BASE_OBJECT *)apsDroidLists[player], (BASE_OBJECT *)apsStructLists[player], (BASE_OBJECT *)apsFeatureLists[player]};
+		unsigned list;
+		for (list = 0; list < sizeof(lists)/sizeof(*lists); ++list)
+		{
+			BASE_OBJECT *psObj;
+			for (psObj = lists[list]; psObj != NULL; psObj = psObj->psNext)
+			{
+				processVisibilitySelf(psObj);
+			}
+		}
+	}
+	for (player = 0; player < MAX_PLAYERS; ++player)
+	{
+		BASE_OBJECT *lists[] = {(BASE_OBJECT *)apsDroidLists[player], (BASE_OBJECT *)apsStructLists[player]};
+		unsigned list;
+		for (list = 0; list < sizeof(lists)/sizeof(*lists); ++list)
+		{
+			BASE_OBJECT *psObj;
+			for (psObj = lists[list]; psObj != NULL; psObj = psObj->psNext)
+			{
+				processVisibilityVision(psObj);
 			}
 		}
 	}

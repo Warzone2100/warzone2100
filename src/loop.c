@@ -245,6 +245,9 @@ GAMECODE gameLoop(void)
 			// Put all droids/structures/features into the grid.
 			gridReset();
 
+			// Check which objects are visible.
+			processVisibility();
+
 			if (!editPaused())
 			{
 				//update the findpath system
@@ -454,14 +457,14 @@ GAMECODE gameLoop(void)
 						/* Copy the next pointer - not 100% sure if the droid could get destroyed
 						but this covers us anyway */
 						psNext = psCurr->psNext;
-						processVisibility((BASE_OBJECT *)psCurr);
+						processVisibilityLevel((BASE_OBJECT *)psCurr);
 						calcDroidIllumination(psCurr);
 					}
 					for (psCBuilding = apsStructLists[i]; psCBuilding; psCBuilding = psNBuilding)
 					{
 						/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
 						psNBuilding = psCBuilding->psNext;
-						processVisibility((BASE_OBJECT *)psCBuilding);
+						processVisibilityLevel((BASE_OBJECT *)psCBuilding);
 					}
 				}
 			}

@@ -75,6 +75,7 @@ typedef struct _tilePos
 	UBYTE               selected;                   /**< Whether the object is selected (might want this elsewhere) */ \
 	UBYTE               cluster;                    /**< Which cluster the object is a member of */ \
 	UBYTE               visible[MAX_PLAYERS];       /**< Whether object is visible to specific player */ \
+	UBYTE               seenThisTick[MAX_PLAYERS];  /**< Whether object has been seen this tick by the specific player. */ \
 	UDWORD              died;                       /**< When an object was destroyed, if 0 still alive */ \
 	UDWORD              lastEmission;               /**< When did it last puff out smoke? */ \
 	UDWORD              lastHitWeapon;		/**< The weapon that last hit it */ \
