@@ -161,6 +161,31 @@ void	kf_ToggleRadarJump( void )
 
 // --------------------------------------------------------------------------
 
+void	kf_ForceSync( void )
+{
+	DROID		*psCDroid, *psNDroid;
+
+	for(psCDroid = apsDroidLists[selectedPlayer]; psCDroid; psCDroid = psNDroid)
+	{
+		psNDroid = psCDroid->psNext;
+		if (psCDroid->selected)
+		{
+			ForceDroidSync(psCDroid);
+		}
+	}
+	
+}
+
+void	kf_PowerInfo( void )
+{
+	int i;
+
+	for (i = 0; i < NetPlay.maxPlayers; i++)
+	{
+		console("Player %d: %d power", i, (int)getPower(i));
+	}
+}
+
 void	kf_TraceObject( void )
 {
 	DROID		*psCDroid, *psNDroid;
