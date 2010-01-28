@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-25 19:19+0100\n"
+"POT-Creation-Date: 2010-01-28 17:07+0100\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -11687,11 +11687,11 @@ msgstr "Orožja"
 msgid "Systems"
 msgstr "Sistemi"
 
-#: src/display3d.c:518
+#: src/display3d.c:564
 msgid "Player left"
 msgstr "Igralec odšel"
 
-#: src/display3d.c:518
+#: src/display3d.c:564
 msgid "Player dropped"
 msgstr "Igralec izpadel"
 
@@ -12159,8 +12159,8 @@ msgid "MAP SAVED!"
 msgstr "MAPA SHRANJENA!"
 
 #: src/hci.c:1705
-#: src/loop.c:535
-#: src/loop.c:551
+#: src/loop.c:536
+#: src/loop.c:552
 #: src/mission.c:2913
 msgid "GAME SAVED :"
 msgstr "IGRA SHRANJENA:"
@@ -13111,8 +13111,8 @@ msgstr "Izberi naslednjo tovarno kiborgov"
 msgid "Toggle reopening the build menu"
 msgstr "Nastavi ponovno odpiranje gradbenega menija"
 
-#: src/loop.c:542
-#: src/loop.c:558
+#: src/loop.c:543
+#: src/loop.c:559
 msgid "Could not save game!"
 msgstr "Ni bilo mogoče shraniti igre!"
 
@@ -13575,7 +13575,7 @@ msgstr "Daj igralcu moč"
 
 #: src/multiplay.c:285
 #, c-format
-msgid "Kicking player %s, because they tried to bypass data integrity check!"
+msgid "Warning: Player %s did not send a data check, and may be cheating."
 msgstr ""
 
 #: src/multiplay.c:1087
@@ -13803,8 +13803,8 @@ msgstr "Ni mogoče najti nobenih poveljnikov!"
 msgid "Control Limit Reached - Production Halted"
 msgstr "Meja poveljniškega nadzora dosežena - izdelava ustavljena"
 
-#: src/structure.c:5963
-#: src/structure.c:5988
+#: src/structure.c:5965
+#: src/structure.c:5990
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
@@ -13813,48 +13813,48 @@ msgstr[1] "%s - %u enota dodeljena"
 msgstr[2] "%s - %u enoti dodeljeni"
 msgstr[3] "%s - %u enote dodeljene"
 
-#: src/structure.c:5993
-#: src/structure.c:6057
+#: src/structure.c:5995
+#: src/structure.c:6059
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Poškodbe %3.0f%%"
 
-#: src/structure.c:6043
+#: src/structure.c:6045
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - povezane %u od %u"
 
-#: src/structure.c:6178
-#: src/structure.c:6227
+#: src/structure.c:6180
+#: src/structure.c:6229
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - elektronsko poškodovan"
 
-#: src/structure.c:6462
+#: src/structure.c:6464
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronska nagrada - poročilo o vidljivosti"
 
-#: src/structure.c:6502
+#: src/structure.c:6504
 msgid "Factory Reward - Propulsion"
 msgstr "Nagrada tovarne - pogon"
 
-#: src/structure.c:6526
+#: src/structure.c:6528
 msgid "Factory Reward - Body"
 msgstr "Nagrada tovarne - telo"
 
-#: src/structure.c:6550
+#: src/structure.c:6552
 msgid "Factory Reward - Weapon"
 msgstr "Nagrada tovarne - orožje"
 
-#: src/structure.c:6559
+#: src/structure.c:6561
 msgid "Factory Reward - Nothing"
 msgstr "Nagrada tovarne - nič"
 
-#: src/structure.c:6587
+#: src/structure.c:6589
 msgid "Repair Facility Award - Repair"
 msgstr "Nagrada stavbe za popravila - popravilo"
 
-#: src/structure.c:6594
+#: src/structure.c:6596
 msgid "Repair Facility Award - Nothing"
 msgstr "Nagrada stavbe za popravila - nič"
 

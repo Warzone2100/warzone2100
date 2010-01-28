@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-25 19:19+0100\n"
+"POT-Creation-Date: 2010-01-28 17:07+0100\n"
 "PO-Revision-Date: 2009-12-08 18:03+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -11668,11 +11668,11 @@ msgstr "Armi"
 msgid "Systems"
 msgstr "Sistemi"
 
-#: src/display3d.c:518
+#: src/display3d.c:564
 msgid "Player left"
 msgstr "Un giocatore ha lasciato la partita"
 
-#: src/display3d.c:518
+#: src/display3d.c:564
 msgid "Player dropped"
 msgstr "Giocatore"
 
@@ -12130,8 +12130,8 @@ msgid "MAP SAVED!"
 msgstr "MAPPA SALVATA!"
 
 #: src/hci.c:1705
-#: src/loop.c:535
-#: src/loop.c:551
+#: src/loop.c:536
+#: src/loop.c:552
 #: src/mission.c:2913
 msgid "GAME SAVED :"
 msgstr "PARTITA SALVATA!"
@@ -13081,8 +13081,8 @@ msgstr "Seleziona la prossima Fabbrica di Cyborg"
 msgid "Toggle reopening the build menu"
 msgstr "Attiva la riapertura del menu di costruzione"
 
-#: src/loop.c:542
-#: src/loop.c:558
+#: src/loop.c:543
+#: src/loop.c:559
 msgid "Could not save game!"
 msgstr "Non posso salvare la partita!"
 
@@ -13545,8 +13545,8 @@ msgstr "Invia Energia al Giocatore"
 
 #: src/multiplay.c:285
 #, c-format
-msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr "Il giocatore %s sarà kickato perchè hanno cercato di bypassare il controllo dell'integrità dei dati!"
+msgid "Warning: Player %s did not send a data check, and may be cheating."
+msgstr ""
 
 #: src/multiplay.c:1087
 #, fuzzy
@@ -13770,56 +13770,56 @@ msgstr "Impossibile localizzare alcun Comandante!"
 msgid "Control Limit Reached - Production Halted"
 msgstr "Limite di Controllo Raggiunto - Produzione Bloccata"
 
-#: src/structure.c:5963
-#: src/structure.c:5988
+#: src/structure.c:5965
+#: src/structure.c:5990
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unità Assegnata"
 msgstr[1] "%s - %u Unità Assegnate"
 
-#: src/structure.c:5993
-#: src/structure.c:6057
+#: src/structure.c:5995
+#: src/structure.c:6059
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Danno %3.0f%%"
 
-#: src/structure.c:6043
+#: src/structure.c:6045
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Collegati %u di %u"
 
-#: src/structure.c:6178
-#: src/structure.c:6227
+#: src/structure.c:6180
+#: src/structure.c:6229
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danneggiato Elettronicamente"
 
-#: src/structure.c:6462
+#: src/structure.c:6464
 msgid "Electronic Reward - Visibility Report"
 msgstr "Premio Elettronico - Rapporto di Visibilità"
 
-#: src/structure.c:6502
+#: src/structure.c:6504
 msgid "Factory Reward - Propulsion"
 msgstr "Premio della Fabbrica - Propulsione"
 
-#: src/structure.c:6526
+#: src/structure.c:6528
 msgid "Factory Reward - Body"
 msgstr "Premio della Fabbrica - Corpo"
 
-#: src/structure.c:6550
+#: src/structure.c:6552
 msgid "Factory Reward - Weapon"
 msgstr "Premio della Fabbrica - Arma"
 
-#: src/structure.c:6559
+#: src/structure.c:6561
 msgid "Factory Reward - Nothing"
 msgstr "Premio della Fabbrica - Niente"
 
-#: src/structure.c:6587
+#: src/structure.c:6589
 msgid "Repair Facility Award - Repair"
 msgstr "Premio della Struttura di Riparazione - Ripara"
 
-#: src/structure.c:6594
+#: src/structure.c:6596
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio della Struttura di Riparazione - Niente"
 
@@ -13859,6 +13859,9 @@ msgstr " - Costruito %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versione %s%s%s%s"
+
+#~ msgid "Kicking player %s, because they tried to bypass data integrity check!"
+#~ msgstr "Il giocatore %s sarà kickato perchè hanno cercato di bypassare il controllo dell'integrità dei dati!"
 
 #, fuzzy
 #~ msgid "Player %u has the wrong game version. Auto kicking."

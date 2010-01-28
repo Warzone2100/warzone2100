@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-25 19:19+0100\n"
+"POT-Creation-Date: 2010-01-28 17:07+0100\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -11651,12 +11651,12 @@ msgstr "Zbraně"
 msgid "Systems"
 msgstr ""
 
-#: src/display3d.c:518
+#: src/display3d.c:564
 #, fuzzy
 msgid "Player left"
 msgstr "Hráč"
 
-#: src/display3d.c:518
+#: src/display3d.c:564
 #, fuzzy
 msgid "Player dropped"
 msgstr "Hráč"
@@ -12130,8 +12130,8 @@ msgid "MAP SAVED!"
 msgstr "HRA ULOŽENA!"
 
 #: src/hci.c:1705
-#: src/loop.c:535
-#: src/loop.c:551
+#: src/loop.c:536
+#: src/loop.c:552
 #: src/mission.c:2913
 #, fuzzy
 msgid "GAME SAVED :"
@@ -13108,8 +13108,8 @@ msgstr ""
 msgid "Toggle reopening the build menu"
 msgstr ""
 
-#: src/loop.c:542
-#: src/loop.c:558
+#: src/loop.c:543
+#: src/loop.c:559
 #, fuzzy
 msgid "Could not save game!"
 msgstr "Nahrát uloženou hru"
@@ -13581,7 +13581,7 @@ msgstr ""
 
 #: src/multiplay.c:285
 #, c-format
-msgid "Kicking player %s, because they tried to bypass data integrity check!"
+msgid "Warning: Player %s did not send a data check, and may be cheating."
 msgstr ""
 
 #: src/multiplay.c:1087
@@ -13807,56 +13807,56 @@ msgstr "Nemohu nalézt žádného velitele!"
 msgid "Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5963
-#: src/structure.c:5988
+#: src/structure.c:5965
+#: src/structure.c:5990
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "Jednotka přiřazena"
 msgstr[1] "Jednotky přiřazeny"
 
-#: src/structure.c:5993
-#: src/structure.c:6057
+#: src/structure.c:5995
+#: src/structure.c:6059
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Poškození %3.0f%%"
 
-#: src/structure.c:6043
+#: src/structure.c:6045
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Připojeno %u z %u"
 
-#: src/structure.c:6178
-#: src/structure.c:6227
+#: src/structure.c:6180
+#: src/structure.c:6229
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6462
+#: src/structure.c:6464
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6502
+#: src/structure.c:6504
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6526
+#: src/structure.c:6528
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6550
+#: src/structure.c:6552
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6559
+#: src/structure.c:6561
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6587
+#: src/structure.c:6589
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6594
+#: src/structure.c:6596
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 

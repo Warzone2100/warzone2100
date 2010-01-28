@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-25 19:19+0100\n"
+"POT-Creation-Date: 2010-01-28 17:07+0100\n"
 "PO-Revision-Date: 2010-01-23 12:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -11620,11 +11620,11 @@ msgstr "Bronie"
 msgid "Systems"
 msgstr "Systemy"
 
-#: src/display3d.c:518
+#: src/display3d.c:564
 msgid "Player left"
 msgstr "Gracz opuścił grę"
 
-#: src/display3d.c:518
+#: src/display3d.c:564
 msgid "Player dropped"
 msgstr "Gracz odrzucony"
 
@@ -12083,8 +12083,8 @@ msgid "MAP SAVED!"
 msgstr "MAPA ZAPISANA!"
 
 #: src/hci.c:1705
-#: src/loop.c:535
-#: src/loop.c:551
+#: src/loop.c:536
+#: src/loop.c:552
 #: src/mission.c:2913
 msgid "GAME SAVED :"
 msgstr "GRA ZAPISANA :"
@@ -13031,8 +13031,8 @@ msgstr "Zaznacz następną Fabrykę Cyborgów"
 msgid "Toggle reopening the build menu"
 msgstr "Przełącz otwieranie menu budowania"
 
-#: src/loop.c:542
-#: src/loop.c:558
+#: src/loop.c:543
+#: src/loop.c:559
 msgid "Could not save game!"
 msgstr "Niemożna zapisać gry!"
 
@@ -13485,8 +13485,8 @@ msgstr "Przesyła energię graczowi"
 
 #: src/multiplay.c:285
 #, c-format
-msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr "Gracz %s wyrzucony z powodu próby pominięcia sprawdzenia integralności danych!"
+msgid "Warning: Player %s did not send a data check, and may be cheating."
+msgstr ""
 
 #: src/multiplay.c:1087
 msgid "(allies"
@@ -13711,8 +13711,8 @@ msgstr "Niemożna odnaleźć dowódców!"
 msgid "Control Limit Reached - Production Halted"
 msgstr "Limit kontrolny osiągnięty - produkcja wstrzymana"
 
-#: src/structure.c:5963
-#: src/structure.c:5988
+#: src/structure.c:5965
+#: src/structure.c:5990
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
@@ -13720,49 +13720,49 @@ msgstr[0] "%s - %u Jednostka przydzielona"
 msgstr[1] "%s - %u Jednostki przydzielone"
 msgstr[2] "%s - %u Jednostek przydzielonych"
 
-#: src/structure.c:5993
-#: src/structure.c:6057
+#: src/structure.c:5995
+#: src/structure.c:6059
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Uszkodzenia %3.0f%%"
 
-#: src/structure.c:6043
+#: src/structure.c:6045
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Połączony %u z %u"
 
-#: src/structure.c:6178
-#: src/structure.c:6227
+#: src/structure.c:6180
+#: src/structure.c:6229
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Uszkodzony elektronicznie"
 
 # This maybe sound weird, but I translated this as 'stolen technology'
-#: src/structure.c:6462
+#: src/structure.c:6464
 msgid "Electronic Reward - Visibility Report"
 msgstr "Technologia skradziona - raport widoczności"
 
-#: src/structure.c:6502
+#: src/structure.c:6504
 msgid "Factory Reward - Propulsion"
 msgstr "Technologia skradziona - Napęd"
 
-#: src/structure.c:6526
+#: src/structure.c:6528
 msgid "Factory Reward - Body"
 msgstr "Technologia skradziona - kadłub"
 
-#: src/structure.c:6550
+#: src/structure.c:6552
 msgid "Factory Reward - Weapon"
 msgstr "Technologia skradziona - Broń"
 
-#: src/structure.c:6559
+#: src/structure.c:6561
 msgid "Factory Reward - Nothing"
 msgstr "Technologia skradziona - Brak"
 
-#: src/structure.c:6587
+#: src/structure.c:6589
 msgid "Repair Facility Award - Repair"
 msgstr "Technologia skradziona - Naprawa"
 
-#: src/structure.c:6594
+#: src/structure.c:6596
 msgid "Repair Facility Award - Nothing"
 msgstr "Technologia skradziona - Brak"
 
@@ -13802,6 +13802,9 @@ msgstr "- Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Wersja %s%s%s%s"
+
+#~ msgid "Kicking player %s, because they tried to bypass data integrity check!"
+#~ msgstr "Gracz %s wyrzucony z powodu próby pominięcia sprawdzenia integralności danych!"
 
 #~ msgid "Player %u has the wrong game version. Auto kicking."
 #~ msgstr "Gracz %u ma niewłaściwą wersję gry. Automatyczne wyrzucenie."

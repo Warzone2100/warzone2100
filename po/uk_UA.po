@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-25 19:19+0100\n"
+"POT-Creation-Date: 2010-01-28 17:07+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Кізенко Гнат <darkfoton@ukr.net>\n"
 "Language-Team: \n"
@@ -11628,11 +11628,11 @@ msgstr ""
 msgid "Systems"
 msgstr ""
 
-#: src/display3d.c:518
+#: src/display3d.c:564
 msgid "Player left"
 msgstr ""
 
-#: src/display3d.c:518
+#: src/display3d.c:564
 msgid "Player dropped"
 msgstr ""
 
@@ -12089,8 +12089,8 @@ msgid "MAP SAVED!"
 msgstr ""
 
 #: src/hci.c:1705
-#: src/loop.c:535
-#: src/loop.c:551
+#: src/loop.c:536
+#: src/loop.c:552
 #: src/mission.c:2913
 msgid "GAME SAVED :"
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
@@ -13038,8 +13038,8 @@ msgstr ""
 msgid "Toggle reopening the build menu"
 msgstr ""
 
-#: src/loop.c:542
-#: src/loop.c:558
+#: src/loop.c:543
+#: src/loop.c:559
 msgid "Could not save game!"
 msgstr ""
 
@@ -13500,7 +13500,7 @@ msgstr "Надати Енергію Гравцю"
 
 #: src/multiplay.c:285
 #, c-format
-msgid "Kicking player %s, because they tried to bypass data integrity check!"
+msgid "Warning: Player %s did not send a data check, and may be cheating."
 msgstr ""
 
 #: src/multiplay.c:1087
@@ -13726,56 +13726,56 @@ msgstr "Не можу знайти  жодного Командира!"
 msgid "Control Limit Reached - Production Halted"
 msgstr "Межі Контролю Досягнуто - Виробництво Зупинене"
 
-#: src/structure.c:5963
-#: src/structure.c:5988
+#: src/structure.c:5965
+#: src/structure.c:5990
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Підрозділ призначено"
 msgstr[1] "%s - %u Підрозділ призначено"
 
-#: src/structure.c:5993
-#: src/structure.c:6057
+#: src/structure.c:5995
+#: src/structure.c:6059
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Пошкоджено %3.0f%%"
 
-#: src/structure.c:6043
+#: src/structure.c:6045
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Підключено %u з %u"
 
-#: src/structure.c:6178
-#: src/structure.c:6227
+#: src/structure.c:6180
+#: src/structure.c:6229
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Електронно Пошкоджено"
 
-#: src/structure.c:6462
+#: src/structure.c:6464
 msgid "Electronic Reward - Visibility Report"
 msgstr "Електронна винагорода - Доповідь про Помітність"
 
-#: src/structure.c:6502
+#: src/structure.c:6504
 msgid "Factory Reward - Propulsion"
 msgstr "Винагорода заводу - Силова установка"
 
-#: src/structure.c:6526
+#: src/structure.c:6528
 msgid "Factory Reward - Body"
 msgstr "Винагорода заводу - Корпус"
 
-#: src/structure.c:6550
+#: src/structure.c:6552
 msgid "Factory Reward - Weapon"
 msgstr "Винагорода заводу - Озброєння"
 
-#: src/structure.c:6559
+#: src/structure.c:6561
 msgid "Factory Reward - Nothing"
 msgstr "Винагорода Фабрики - Нічого"
 
-#: src/structure.c:6587
+#: src/structure.c:6589
 msgid "Repair Facility Award - Repair"
 msgstr "Винагорода Ремонтної Бази - Ремонт"
 
-#: src/structure.c:6594
+#: src/structure.c:6596
 msgid "Repair Facility Award - Nothing"
 msgstr "Винагорода Ремонтної Бази - Нічого"
 

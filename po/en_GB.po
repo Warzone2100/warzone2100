@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-25 19:19+0100\n"
+"POT-Creation-Date: 2010-01-28 17:07+0100\n"
 "PO-Revision-Date: 2008-05-05 12:29+0000\n"
 "Last-Translator: Jen Ockwell <jenfraggleubuntu@googlemail.com>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -11875,12 +11875,12 @@ msgstr "Weapons"
 msgid "Systems"
 msgstr "Systems"
 
-#: src/display3d.c:518
+#: src/display3d.c:564
 #, fuzzy
 msgid "Player left"
 msgstr "Player"
 
-#: src/display3d.c:518
+#: src/display3d.c:564
 #, fuzzy
 msgid "Player dropped"
 msgstr "Player"
@@ -12348,8 +12348,8 @@ msgid "MAP SAVED!"
 msgstr "GAME SAVED!"
 
 #: src/hci.c:1705
-#: src/loop.c:535
-#: src/loop.c:551
+#: src/loop.c:536
+#: src/loop.c:552
 #: src/mission.c:2913
 #, fuzzy
 msgid "GAME SAVED :"
@@ -13311,8 +13311,8 @@ msgstr "Select next Cyborg Factory"
 msgid "Toggle reopening the build menu"
 msgstr "Toggle reopening the build menu"
 
-#: src/loop.c:542
-#: src/loop.c:558
+#: src/loop.c:543
+#: src/loop.c:559
 #, fuzzy
 msgid "Could not save game!"
 msgstr "Load a saved game"
@@ -13782,7 +13782,7 @@ msgstr "Give Power To Player"
 
 #: src/multiplay.c:285
 #, c-format
-msgid "Kicking player %s, because they tried to bypass data integrity check!"
+msgid "Warning: Player %s did not send a data check, and may be cheating."
 msgstr ""
 
 #: src/multiplay.c:1087
@@ -14009,56 +14009,56 @@ msgstr "Unable to locate any Commanders!"
 msgid "Control Limit Reached - Production Halted"
 msgstr "Command Control Limit Reached - Production Halted"
 
-#: src/structure.c:5963
-#: src/structure.c:5988
+#: src/structure.c:5965
+#: src/structure.c:5990
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unit assigned"
 msgstr[1] "%s - %u Units assigned"
 
-#: src/structure.c:5993
-#: src/structure.c:6057
+#: src/structure.c:5995
+#: src/structure.c:6059
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Damage %3.0f%%"
 
-#: src/structure.c:6043
+#: src/structure.c:6045
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Connected %u of %u"
 
-#: src/structure.c:6178
-#: src/structure.c:6227
+#: src/structure.c:6180
+#: src/structure.c:6229
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Electronically Damaged"
 
-#: src/structure.c:6462
+#: src/structure.c:6464
 msgid "Electronic Reward - Visibility Report"
 msgstr "Electronic Reward - Visibility Report"
 
-#: src/structure.c:6502
+#: src/structure.c:6504
 msgid "Factory Reward - Propulsion"
 msgstr "Factory Reward - Propulsion"
 
-#: src/structure.c:6526
+#: src/structure.c:6528
 msgid "Factory Reward - Body"
 msgstr "Factory Reward - Body"
 
-#: src/structure.c:6550
+#: src/structure.c:6552
 msgid "Factory Reward - Weapon"
 msgstr "Factory Reward - Weapon"
 
-#: src/structure.c:6559
+#: src/structure.c:6561
 msgid "Factory Reward - Nothing"
 msgstr "Factory Reward - Nothing"
 
-#: src/structure.c:6587
+#: src/structure.c:6589
 msgid "Repair Facility Award - Repair"
 msgstr "Repair Facility Award - Repair"
 
-#: src/structure.c:6594
+#: src/structure.c:6596
 msgid "Repair Facility Award - Nothing"
 msgstr "Repair Facility Award - Nothing"
 
