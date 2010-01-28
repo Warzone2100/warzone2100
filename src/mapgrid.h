@@ -46,6 +46,11 @@ extern void gridReset(void);
 /// Find all objects within radius. Call gridIterate() to get the search results.
 extern void gridStartIterate(int32_t x, int32_t y, uint32_t radius);
 
+// Isn't, but could be used by some cluster system. Don't really understand what cluster.c is for.
+/// Find all objects within radius where object->type == OBJ_DROID && object->player == player. Call gridIterate() to get the search results.
+extern void gridStartIterateDroidsByPlayer(int32_t x, int32_t y, uint32_t radius, int player);
+
+// Used for visibility.
 /// Find all objects within radius where object->seenThisTick[player] != 255. Call gridIterate() to get the search results.
 extern void gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, int player);
 
@@ -54,6 +59,10 @@ static inline BASE_OBJECT *gridIterate(void)
 {
 	return (BASE_OBJECT *)*gridIterator++;
 }
+
+// Isn't, but could be used by some weird recursive calls in cluster.c.
+/// Make a copy of the list. Free with free().
+BASE_OBJECT **gridIterateDup(void);
 
 #ifdef __cplusplus
 }
