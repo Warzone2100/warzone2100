@@ -5935,6 +5935,8 @@ void buildingComplete(STRUCTURE *psBuilding)
 	psBuilding->currentBuildPts = (SWORD)psBuilding->pStructureType->buildPoints;
 	psBuilding->status = SS_BUILT;
 
+	visTilesUpdate((BASE_OBJECT *)psBuilding, rayTerrainCallback);
+
 	switch (psBuilding->pStructureType->type)
 	{
 		case REF_POWER_GEN:

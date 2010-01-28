@@ -304,6 +304,17 @@ void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
 	// Remove previous map visibility provided by object
 	visRemoveVisibility(psObj);
 
+	if (psObj->type == OBJ_STRUCTURE)
+	{
+		STRUCTURE * psStruct = (STRUCTURE *)psObj;
+		if (psStruct->status != SS_BUILT ||
+		    psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER)
+		{
+			// unbuilt structures and walls do not confer visibility.
+			return;
+		}
+	}
+
 	// Do the whole circle in 80 steps
 	for (ray = 0; ray < NUM_RAYS; ray += NUM_RAYS / 80)
 	{
