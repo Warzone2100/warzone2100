@@ -108,13 +108,13 @@ typedef struct {
 } BUTOFFSET;
 
 BUTOFFSET ReticuleOffsets[NUMRETBUTS] = {	// Reticule button form relative positions.
-	{48,49},	// RETBUT_CANCEL,
-	{53,17},	// RETBUT_FACTORY,
-	{87,35},	// RETBUT_RESEARCH,
-	{87,70},	// RETBUT_BUILD,
-	{53,88},	// RETBUT_DESIGN,
-	{19,70},	// RETBUT_INTELMAP,
-	{19,35},	// RETBUT_COMMAND,
+	{48,47},	// RETBUT_CANCEL,
+	{53,15},	// RETBUT_FACTORY,
+	{87,33},	// RETBUT_RESEARCH,
+	{87,68},	// RETBUT_BUILD,
+	{53,86},	// RETBUT_DESIGN,
+	{19,68},	// RETBUT_INTELMAP,
+	{19,33},	// RETBUT_COMMAND,
 };
 
 BUTSTATE ReticuleEnabled[NUMRETBUTS] = {	// Reticule button enable states.

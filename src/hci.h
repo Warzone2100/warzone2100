@@ -115,7 +115,7 @@ extern "C"
 #define IDSTAT_ALLYEND			4900
 
 // Reticule position.
-#define RET_X				23
+#define RET_X				24
 #define RET_Y				(324+E_H)
 #define RET_FORMWIDTH		132
 #define RET_FORMHEIGHT		132
