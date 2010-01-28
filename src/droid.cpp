@@ -3361,9 +3361,7 @@ bool cbSensorDroid(DROID *psDroid)
 	if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
 		VTOL_CB_SENSOR ||
 		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-		INDIRECT_CB_SENSOR ||
-		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-		SUPER_SENSOR)
+		INDIRECT_CB_SENSOR)
 	{
 		return true;
 	}
