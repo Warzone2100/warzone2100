@@ -1,3 +1,8 @@
+The minimum requirements to build Warzone are System 10.5 and Xcode 3.1.
+If you do not have Xcode 3.1 you can get it for free at Apple's website.
+http://developer.apple.com/technology/xcode.html
+You will need a free ADC Membership to download Xcode.
+
 This directory contains support files for the Mac OS X port of Warzone 2100.
 Since April, 2007, The Mac OS X port has been built using an Xcode project
 that automatically downloads and builds all necessary external libraries.
@@ -6,10 +11,6 @@ and has required Mac OS X 10.4 "Tiger" to run.
 
 To build the game, just run the following command:
   xcodebuild -project Warzone.xcodeproj -target Warzone -configuration Release
-
-You will also need a recent version of GNU bison to complete the build
-process.  The version included with Mac OS X 10.4 "Tiger" is not capable
-of properly processing the grammars that Warzone 2100 uses.
 
 There are two build configurations available.  'Release' is compiled
 normally, while 'Debug' sets the DEBUG preprocessor flag and automatically

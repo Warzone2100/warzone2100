@@ -32,7 +32,12 @@
 
 /***************************************************************************/
 
-#include <GL/glu.h>
+#if defined(__MACOSX__)
+#include <OpenGL/glu.h>	/* Header File For The GLU Library */
+#else
+#include <GL/glu.h>	/* Header File For The GLU Library */
+#endif
+
 
 #include "lib/framework/frame.h"
 #include "piedef.h"
