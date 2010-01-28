@@ -2534,6 +2534,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->resistance = ACTION_START_TIME;
 
 	memset(psDroid->visible, 0, sizeof(psDroid->visible));
+	memset(psDroid->visible, 0, sizeof(psDroid->seenThisTick));
 	psDroid->visible[psDroid->player] = UBYTE_MAX;
 	psDroid->died = 0;
 	psDroid->inFire = false;

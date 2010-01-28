@@ -354,12 +354,10 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		}
 	}
 
-	for(i=0; i<MAX_PLAYERS; i++)
-	{
-		psFeature->visible[i] = 0;//vis;
-	}
-	//load into the map data
+	memset(psFeature->seenThisTick, 0, sizeof(psFeature->seenThisTick));
+	memset(psFeature->visible, 0, sizeof(psFeature->visible));
 
+	//load into the map data
 	if(FromSave) {
 		mapX = map_coord(x) - psStats->baseWidth / 2;
 		mapY = map_coord(y) - psStats->baseBreadth / 2;
@@ -523,10 +521,8 @@ bool removeFeature(FEATURE *psDel)
 
 	if (psDel->psStats->subType == FEAT_GEN_ARTE || psDel->psStats->subType == FEAT_OIL_RESOURCE)
 	{
-		// have to check all players cos if you cheat you'll get em.
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			//see if there is a proximity message FOR THE SELECTED PLAYER at this location
 			psMessage = findMessage((MSG_VIEWDATA *)psDel, MSG_PROXIMITY, player);
 			while (psMessage)
 			{

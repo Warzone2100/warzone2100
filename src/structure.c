@@ -1783,8 +1783,9 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		psBuilding->resistance = (UWORD)structureResistance(pStructureType, (UBYTE)player);
 		psBuilding->lastResistance = ACTION_START_TIME;
 
-		//do the visiblilty stiff before setFunctionality - so placement of DP's can work
-		memset(psBuilding->visible, 0, (sizeof(UBYTE) * MAX_PLAYERS) );
+		// Do the visibility stuff before setFunctionality - so placement of DP's can work
+		memset(psBuilding->visible, 0, sizeof(psBuilding->visible));
+		memset(psBuilding->seenThisTick, 0, sizeof(psBuilding->seenThisTick));
 
 		/* Structure is trivially visible to the builder (owner) */
 		psBuilding->visible[player] = UBYTE_MAX;
