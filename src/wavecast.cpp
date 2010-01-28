@@ -73,7 +73,7 @@ static std::vector<WavecastTile> generateWavecastTable(unsigned radius)
 				{
 					continue;
 				}
-				tile.invRadius = 92681 / sqrt(tileRadiusSq) + 0.5;  // +0.5 = round to nearest. Result is at most 92681 / sqrt(2), approximately 65536.
+				tile.invRadius = 92681 / sqrt((double)tileRadiusSq) + 0.5;  // +0.5 = round to nearest. Result is at most 92681 / sqrt(2), approximately 65536.
 
 				const int minCorner[4][2] = {{1, 0}, {1, 1}, {0, 1}, {0, 0}};
 				const int mcdx = minCorner[quadrant][0], mcdy = minCorner[quadrant][1];  // Corner of the tile which the minimum angle.

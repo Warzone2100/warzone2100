@@ -89,4 +89,12 @@ typedef int32_t  SDWORD;
 typedef int BOOL;
 #endif // WZ_OS_WIN
 
+// Work around ridiculous major bug in Microsoft headers.
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif
+
 #endif // __INCLUDED_LIB_FRAMEWORK_TYPES_H__
