@@ -293,12 +293,14 @@ Section $(TEXT_SecOriginalMod) SecOriginalMod
 
   SetOutPath "$INSTDIR\mods\multiplay"
 
-  File "${TOP_BUILDDIR}\data\mods\multiplay\original.wz"
+  File "${TOP_BUILDDIR}\data\mods\multiplay\old-1.10-balance.wz"
+  Delete "${TOP_BUILDDIR}\data\mods\multiplay\original.wz"
 
   SetOutPath "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Original.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp original.wz"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Old 1.10 Balance.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp old-1.10-balance.wz"
+    Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Original.lnk"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -553,8 +555,8 @@ FunctionEnd
   LangString TEXT_SecNTWMod ${LANG_ENGLISH} "NTW"
   LangString DESC_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod. Modifies most of the weapons and research."
 
-  LangString TEXT_SecOriginalMod ${LANG_ENGLISH} "1.10 balance"
-  LangString DESC_SecOriginalMod ${LANG_ENGLISH} "Play the game with the original 1.10 version balance stats."
+  LangString TEXT_SecOriginalMod ${LANG_ENGLISH} "Old 1.10 balance"
+  LangString DESC_SecOriginalMod ${LANG_ENGLISH} "Play the game as it was back in the 1.10 days."
 
   LangString TEXT_RunWarzone ${LANG_ENGLISH} "Run ${PACKAGE_NAME}"
   LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.html"
@@ -764,7 +766,7 @@ Section "Uninstall"
 
   Delete "$INSTDIR\mods\multiplay\ntw.wz"
   Delete "$INSTDIR\mods\multiplay\aivolution.wz"
-  Delete "$INSTDIR\mods\multiplay\original.wz"
+  Delete "$INSTDIR\mods\multiplay\old-1.10-balance.wz"
 
   RMDir "$INSTDIR\mods\multiplay"
   RMDir "$INSTDIR\mods\music"
@@ -891,7 +893,7 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME}.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Aivolution.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - NTW.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Original.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Old 1.10 Balance.lnk"
 ;  RMDir "$SMPROGRAMS\$STARTMENU_FOLDER"
 
   ;Delete empty start menu parent diretories
