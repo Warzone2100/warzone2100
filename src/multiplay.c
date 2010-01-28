@@ -124,6 +124,10 @@ void turnOffMultiMsg(BOOL bDoit)
 	}
 
 	bMultiMessages = !bDoit;
+	if (bDoit)
+	{
+		isMPDirtyBit = true;
+	}
 	return;
 }
 
@@ -266,7 +270,9 @@ BOOL multiPlayerLoop(void)
 							sendTextMessage(msg, true);
 							addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
+#ifndef DEBUG
 							kickPlayer(index, "it is not nice to cheat!", ERROR_CHEAT);
+#endif
 							debug(LOG_WARNING, "Kicking Player %s (%u), they tried to bypass data integrity check!", getPlayerName(index), index);
 						}
 					}
