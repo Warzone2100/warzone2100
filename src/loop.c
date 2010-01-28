@@ -513,6 +513,7 @@ GAMECODE gameLoop(void)
 			if(bRequestLoad)
 			{
 				loopMissionState = LMS_LOADGAME;
+				NET_InitPlayers();			// otherwise alliances were not cleared
 				sstrcpy(saveGameName, sRequestResult);
 			}
 			else

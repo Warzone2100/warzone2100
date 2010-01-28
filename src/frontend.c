@@ -430,6 +430,7 @@ BOOL runSinglePlayerMenu(void)
 		bMultiPlayer = false;
 		bMultiMessages = false;
 		game.type = CAMPAIGN;
+		NET_InitPlayers();
 		NetPlay.players[0].allocated = true;
 		// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
 		playercolor = getPlayerColour(0);
