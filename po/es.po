@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-28 17:07+0100\n"
-"PO-Revision-Date: 2010-01-25 15:53+0100\n"
+"POT-Creation-Date: 2010-01-28 19:59+0100\n"
+"PO-Revision-Date: 2010-01-28 19:14+0100\n"
 "Last-Translator: Saber Nyoki <saberuneko@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -12485,9 +12485,9 @@ msgid "View Aligned to North"
 msgstr "Vista Alineada al Norte"
 
 #: src/keybind.c:1273
-#, fuzzy, c-format
+#, c-format
 msgid "Trap cursor %s"
-msgstr "Capturar Cursor"
+msgstr "Capturar Cursor %s"
 
 #: src/keybind.c:1354
 msgid "Researched EVERYTHING for you!"
@@ -13466,7 +13466,7 @@ msgstr "Dar Energía al Jugador"
 #: src/multiplay.c:285
 #, c-format
 msgid "Warning: Player %s did not send a data check, and may be cheating."
-msgstr ""
+msgstr "Atención: El Jugador %s no envió un chequeo de datos y puede que haga trampas."
 
 #: src/multiplay.c:1087
 msgid "(allies"
