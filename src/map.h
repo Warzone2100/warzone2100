@@ -102,6 +102,7 @@ typedef struct _maptile
 	uint8_t			tileInfoBits;
 	uint8_t			tileVisBits;	// COMPRESSED - bit per player
 	uint8_t			tileExploredBits;
+	uint8_t			sensorBits;		// bit per player, who can see tile with sensor
 	UBYTE			height;			// The height at the top left of the tile
 	UBYTE			illumination;	// How bright is this tile?
 	UWORD			texture;		// Which graphics texture is on this tile
@@ -440,31 +441,7 @@ extern bool fireOnLocation(unsigned int x, unsigned int y);
  */
 static inline bool hasSensorOnTile(MAPTILE *psTile, int player)
 {
-	int k;
-
-	// if a player has a SAT_UPLINK structure, or has godMode enabled,
-	// they can see everything!
-	if (getSatUplinkExists(player) || (player == selectedPlayer && godMode))
-	{
-		return true;
-	}
-
-	if (psTile->watchers[selectedPlayer] == 0)
-	{
-		if (game.type != CAMPAIGN && game.alliance == ALLIANCES_TEAMS)
-		{
-			// Check if an ally can provide us with vision on this tile
-			for (k = 0; k < MAX_PLAYERS; k++)
-			{
-				if (aiCheckAlliances(k, selectedPlayer) && (getSatUplinkExists(k) || psTile->watchers[k] > 0))
-				{
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	return true;
+	return ((player == selectedPlayer && godMode) || (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)));
 }
 
 #ifdef __cplusplus

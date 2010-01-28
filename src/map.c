@@ -170,6 +170,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 		memset(psTile->watchers, 0, sizeof(psTile->watchers));
 		psTile->colour= WZCOL_WHITE;
 		psTile->tileExploredBits = 0;
+		psTile->sensorBits = 0;
 		psTile++;
 	}
 
@@ -911,6 +912,7 @@ BOOL mapLoad(char *filename)
 
 		// Visibility stuff
 		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
+		psMapTiles[i].sensorBits = 0;
 		for (j = 0; j < MAX_PLAYERS; j++)
 		{
 			psMapTiles[i].tileVisBits =(UBYTE)(psMapTiles[i].tileVisBits &~ (UBYTE)(1 << j));

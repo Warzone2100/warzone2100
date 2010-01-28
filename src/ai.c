@@ -51,6 +51,9 @@ UBYTE	alliances[MAX_PLAYERS + 2][MAX_PLAYERS + 2];
 /// A bitfield of vision sharing in alliances, for quick manipulation of vision information
 uint8_t	alliancebits[MAX_PLAYERS + 2];
 
+/// A bitfield for the satellite uplink
+uint8_t satuplinkbits;
+
 // see if a structure has the range to fire on a target
 static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int weapon_slot)
 {
@@ -138,6 +141,7 @@ BOOL aiInitialise(void)
 			alliancebits[i] |= valid << j;
 		}
 	}
+	satuplinkbits = 0;
 
 	return true;
 }

@@ -74,8 +74,9 @@ extern "C"
 #define	WEIGHT_CMD_SAME_TARGET		WEIGHT_DIST_TILE				//Don't want this to be too high, since a commander can have many units assigned
 
 // alliances
-extern uint8_t alliances[MAX_PLAYERS + 2][MAX_PLAYERS + 2];
-extern uint8_t alliancebits[MAX_PLAYERS + 2];
+extern uint8_t alliances[MAX_PLAYER_SLOTS][MAX_PLAYER_SLOTS];
+extern uint8_t alliancebits[MAX_PLAYER_SLOTS];
+extern uint8_t satuplinkbits;
 
 /** Check no alliance has formed. This is a define to make sure we inline it. */
 #define aiCheckAlliances(_s1, _s2) (alliances[_s1][_s2] == ALLIANCE_FORMED)

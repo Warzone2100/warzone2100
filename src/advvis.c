@@ -46,43 +46,36 @@ void	avSetStatus(BOOL var)
 }
 
 // ------------------------------------------------------------------------------------
-static void processAVTile(UDWORD x, UDWORD y, float increment)
-{
-	MAPTILE	*psTile = mapTile(x, y);
-	float	maxLevel = psTile->illumination;
-
-	if (bRevealActive && psTile->level == 0 && !tileIsExplored(psTile))	// stay unexplored
-	{
-		return;
-	}
-	if (!hasSensorOnTile(psTile, selectedPlayer))
-	{
-		maxLevel /= 2;
-	}
-	if (psTile->level > maxLevel)
-	{
-		psTile->level = MAX(psTile->level - increment, 0);
-	}
-	else if (psTile->level < maxLevel)
-	{
-		psTile->level = MIN(psTile->level + increment, maxLevel);
-	}
-}
-
-
-// ------------------------------------------------------------------------------------
 void	avUpdateTiles( void )
 {
-	UDWORD	i, j;
-	float	increment = timeAdjustedIncrement(FADE_IN_TIME, true);	// call once per frame
+	const int len = mapHeight * mapWidth;
+	const int playermask = 1 << selectedPlayer;
+	UDWORD i = 0;
+	float maxLevel, increment = timeAdjustedIncrement(FADE_IN_TIME, true);	// call once per frame
+	MAPTILE *psTile;
 
 	/* Go through the tiles */
-	for (i = 0; i < mapWidth; i++)
+	for (psTile = psMapTiles; i < len; i++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		maxLevel = psTile->illumination;
+
+		if (psTile->level > 0 || psTile->tileExploredBits & playermask)	// seen
 		{
-			processAVTile(i, j, increment);
+			// If we are not omniscient, and we are not seeing the tile, and none of our allies see the tile...
+			if (!godMode && !(alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)))
+			{
+				maxLevel /= 2;
+			}
+			if (psTile->level > maxLevel)
+			{
+				psTile->level = MAX(psTile->level - increment, 0);
+			}
+			else if (psTile->level < maxLevel)
+			{
+				psTile->level = MIN(psTile->level + increment, maxLevel);
+			}
 		}
+		psTile++;
 	}
 }
 
@@ -132,8 +125,11 @@ MAPTILE		*psTile;
 			if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
 		  	{
 				psTile->tileExploredBits = 1 << selectedPlayer;
-				processAVTile(i, j, UBYTE_MAX);
 		  	}
+			if (!bRevealActive || TEST_TILE_VISIBLE(selectedPlayer, psTile))
+			{
+				psTile->level = psTile->illumination;
+			}
 		}
 	}
 

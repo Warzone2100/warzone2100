@@ -51,7 +51,8 @@ extern "C"
 #endif //__cplusplus
 
 extern UDWORD selectedPlayer;
-#define MAX_PLAYERS	8	/**< Maximum number of players in the game. */
+#define MAX_PLAYERS		8	/**< Maximum number of players in the game. */
+#define MAX_PLAYER_SLOTS	10	/**< 8 players, 1 baba and 1 reserved for features. */
 
 /** Initialise the framework library
  *  @param pWindowName the text to appear in the window title bar

@@ -5588,6 +5588,14 @@ BOOL getHQExists(UDWORD player)
 void setSatUplinkExists(BOOL state, UDWORD player)
 {
 	satUplinkExists[player] = (UBYTE)state;
+	if (state)
+	{
+		satuplinkbits |= (1 << player);
+	}
+	else
+	{
+		satuplinkbits &= ~(1 << player);
+	}
 }
 
 

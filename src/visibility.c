@@ -148,6 +148,7 @@ static inline void visMarkTile(int mapX, int mapY, MAPTILE *psTile, int rayPlaye
 	{
 		TILEPOS tilePos = {mapX, mapY};
 		psTile->watchers[rayPlayer]++;                  // we see this tile
+		psTile->sensorBits |= (1 << rayPlayer);		// mark it as being seen
 		recordTilePos[*lastRecordTilePos] = tilePos;    // record having seen it
 		++*lastRecordTilePos;
 	}
@@ -302,6 +303,10 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 
 			ASSERT(psTile->watchers > 0, "Not watching watched tile (%d, %d)", (int)pos.x, (int)pos.y);
 			psTile->watchers[psObj->player]--;
+			if (psTile->watchers[psObj->player] == 0)
+			{
+				psTile->sensorBits &= ~(1 << psObj->player);
+			}
 		}
 		free(psObj->watchedTiles);
 		psObj->watchedTiles = NULL;
