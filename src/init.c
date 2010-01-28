@@ -601,13 +601,6 @@ BOOL frontendInitialise(const char *ResourceFile)
 		return false;
 	}
 
-#ifdef BUCKET
-	if ( !bucketSetupList() )				// reset object list
-	{
-		return false;
-	}
-#endif
-
 	FrontImages = (IMAGEFILE*)resGetData("IMG", "frontend.img");
    	/* Shift the interface initialisation here temporarily so that it
    		can pick up the stats after they have been loaded */
@@ -910,13 +903,6 @@ BOOL stageTwoInitialise(void)
 	{
 		return false;
 	}
-
-#ifdef BUCKET
-	if ( !bucketSetupList() )	/* reset object list */
-	{
-		return false;
-	}
-#endif
 
    	/* Shift the interface initialisation here temporarily so that it
    		can pick up the stats after they have been loaded */

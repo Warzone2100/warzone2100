@@ -42,11 +42,6 @@
 #include "console.h"
 #include "atmos.h"
 
-#define NUM_BUCKETS		1000
-#define NUM_OBJECTS		4000
-#define BUCKET_OFFSET	0
-#define BUCKET_RANGE	32000
-
 #define CLIP_LEFT	((SDWORD)0)
 #define CLIP_RIGHT	((SDWORD)pie_GetVideoBufferWidth())
 #define CLIP_TOP	((SDWORD)0)
@@ -56,213 +51,142 @@
 // someone needs to take a good look at the radius calculation
 #define SCALE_DEPTH (FP12_MULTIPLIER*7)
 
-typedef struct _tile_bucket
-{
-	UDWORD	i;
-	UDWORD	j;
-	SDWORD	depth;
-}
-TILE_BUCKET;
-
 typedef struct _bucket_tag
 {
-	struct _bucket_tag* psNextTag;
-	RENDER_TYPE			objectType; //type of object held
-	void*				pObject; //pointer to the object
-	SDWORD				actualZ;
+	RENDER_TYPE     objectType; //type of object held
+	void *          pObject;    //pointer to the object
+	int32_t         actualZ;
 } BUCKET_TAG;
 
-static BUCKET_TAG tagResource[NUM_OBJECTS];
-static BUCKET_TAG* bucketArray[NUM_BUCKETS];
-static UDWORD resourceCounter;
-static SDWORD zMax;
-static SDWORD zMin;
-static SDWORD worldMax,worldMin;
+// C version of std::vector<BUCKET_TAG>.
+static BUCKET_TAG *bucketArrayS = NULL;
+static BUCKET_TAG *bucketArrayF = NULL;
+static BUCKET_TAG *bucketArrayEOS = NULL;
 
 /* function prototypes */
 static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject);
 static SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject);
 
-/* reset object list */
-BOOL bucketSetupList(void)
+// C version of BUCKET_TAG::operator <().
+static int bucketArray_less_than(const void *av, const void *bv)
 {
-	UDWORD i;
-
-	zMax = SDWORD_MIN;
-	zMin = SDWORD_MAX;
-	worldMax = SDWORD_MIN;
-	worldMin = SDWORD_MAX;
-	//reset resource
-	resourceCounter = 0;
-	//reset buckets
-	for (i = 0; i < NUM_BUCKETS; i++)
-	{
-		bucketArray[i] = NULL;
-	}
-	return true;
+	BUCKET_TAG *a = (BUCKET_TAG *)av;
+	BUCKET_TAG *b = (BUCKET_TAG *)bv;
+	return (a->actualZ < b->actualZ) - (a->actualZ > b->actualZ);  // Sort in reverse z order.
 }
 
 /* add an object to the current render list */
-extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
+extern void bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 {
-	BUCKET_TAG* newTag;
-	SDWORD z;
+	BUCKET_TAG newTag;
+	int32_t    z;
+	bool       useCalculateZ = false;
 
-	//get next Tag
-	newTag = &tagResource[resourceCounter];
-	if(resourceCounter>=NUM_OBJECTS)
+	switch (objectType)
 	{
-		debug(LOG_NEVER, "bucket sort too many objects");
-		/* Just get out if there's too much to render already...! */
-		return(true);
+		case RENDER_EFFECT:
+			switch (((EFFECT*)pObject)->group)
+			{
+				case EFFECT_EXPLOSION:
+				case EFFECT_CONSTRUCTION:
+				case EFFECT_SMOKE:
+				case EFFECT_FIREWORK:
+					useCalculateZ = true;
+					break;
+				default: break;
+			}
+			break;
+		case RENDER_SHADOW:
+		case RENDER_PROJECTILE:
+		case RENDER_PROXMSG:
+			useCalculateZ = true;
+			break;
+		default: break;
 	}
-	resourceCounter++;
-	ASSERT( resourceCounter <= NUM_OBJECTS, "bucketAddTypeToList: too many objects" );
-
-	//put the object data into the tag
-	newTag->objectType = objectType;
-	newTag->pObject = pObject;
-	{
-		if ((objectType == RENDER_EFFECT) && ((((EFFECT*)pObject)->group == EFFECT_EXPLOSION) ||
-			(((EFFECT*)pObject)->group == EFFECT_CONSTRUCTION) ||
-			(((EFFECT*)pObject)->group == EFFECT_SMOKE) ||
-			(((EFFECT*)pObject)->group == EFFECT_FIREWORK)))
-		{
-
-			z = bucketCalculateZ(objectType, pObject);
-		}
-		else if(objectType == RENDER_SHADOW)
-		{
-			z = bucketCalculateZ(objectType, pObject);
-		}
-		else if(objectType == RENDER_PROJECTILE)
-		{
-			z = bucketCalculateZ(objectType, pObject);
-		}
-		else if(objectType == RENDER_PROXMSG)
-		{
-			z = bucketCalculateZ(objectType, pObject);
-		}
-		else
-		{
-			z = bucketCalculateState(objectType, pObject);
-		}
-	}
+	// TODO Merge bucketCalculateZ and bucketCalculateState.
+	z = useCalculateZ ? bucketCalculateZ(objectType, pObject) : bucketCalculateState(objectType, pObject);
 
 	if (z < 0)
 	{
 		/* Object will not be render - has been clipped! */
-		if(objectType == RENDER_DROID)
+		if(objectType == RENDER_DROID || objectType == RENDER_STRUCTURE)
 		{
 			/* Won't draw selection boxes */
-			DROID *psDroid = (DROID*)pObject;
-
-			psDroid->sDisplay.frameNumber = 0;
-		}
-		else if(objectType == RENDER_STRUCTURE)
-		{
-			/* Won't draw selection boxes */
-			STRUCTURE *psStructure = (STRUCTURE*)pObject;
-
-			psStructure->sDisplay.frameNumber = 0;
+			((BASE_OBJECT *)pObject)->sDisplay.frameNumber = 0;
 		}
 
-		return true;
+		return;
 	}
 
-	/* Maintain biggest*/
-	if(z>worldMax)
-	{
-		worldMax = z;
-	}
-	else if(z<worldMin)
-	{
-		worldMin = z;
-	}
-
-	/* get min and max */
-	if (z > zMax)
-	{
-		zMax = z;
-	}
-	else if (z < zMin)
-	{
-		zMin = z;
-	}
-
-	z = (z * NUM_BUCKETS)/BUCKET_RANGE;
-
-	if (z >= NUM_BUCKETS)
-	{
-		z = NUM_BUCKETS - 1;
-	}
+	//put the object data into the tag
+	newTag.objectType = objectType;
+	newTag.pObject = pObject;
+	newTag.actualZ = z;
 
 	//add tag to bucketArray
-	newTag->psNextTag = bucketArray[z];
-	newTag->actualZ = z;
-	bucketArray[z] = newTag;
-
-	return true;
+	// C version of std::vector<BUCKET_TAG>::push_back().
+	if (bucketArrayF == bucketArrayEOS)
+	{
+		BUCKET_TAG *old = bucketArrayS;
+		size_t reserve = (bucketArrayEOS - old)*2 + 1;
+		bucketArrayS = realloc(old, reserve*sizeof(*old));
+		bucketArrayF = bucketArrayS + (bucketArrayF - old);
+		bucketArrayEOS = bucketArrayS + reserve;
+	}
+	*bucketArrayF++ = newTag;
 }
 
 
 /* render Objects in list */
-extern BOOL bucketRenderCurrentList(void)
+extern void bucketRenderCurrentList(void)
 {
-	SDWORD z;
 	BUCKET_TAG* thisTag;
 
-	for (z = NUM_BUCKETS - 1; z >= 0; z--) // render from back to front
+	// C version of std::sort().
+	qsort(bucketArrayS, bucketArrayF - bucketArrayS, sizeof(*bucketArrayS), &bucketArray_less_than);
+
+	// C version of for (std::vector<BUCKET_TAG>::iterator thisTag = bucketArray.begin(); thisTag != bucketArray.end(); ++thisTag). C wins!
+	for (thisTag = bucketArrayS; thisTag != bucketArrayF; ++thisTag) // render from back to front
 	{
-		thisTag = bucketArray[z];
-		while(thisTag != NULL)
+		switch(thisTag->objectType)
 		{
-			switch(thisTag->objectType)
-			{
-				case RENDER_PARTICLE:
-	  				renderParticle((ATPART*)thisTag->pObject);
+			case RENDER_PARTICLE:
+				renderParticle((ATPART*)thisTag->pObject);
 				break;
-				case RENDER_EFFECT:
-					renderEffect((EFFECT*)thisTag->pObject);
-					break;
-				case RENDER_DROID:
-					renderDroid((DROID*)thisTag->pObject);
+			case RENDER_EFFECT:
+				renderEffect((EFFECT*)thisTag->pObject);
 				break;
-				case RENDER_SHADOW:
-					renderShadow((DROID*)thisTag->pObject,getImdFromIndex(MI_SHADOW));
+			case RENDER_DROID:
+				renderDroid((DROID*)thisTag->pObject);
 				break;
-				case RENDER_STRUCTURE:
-					renderStructure((STRUCTURE*)thisTag->pObject);
+			case RENDER_SHADOW:
+				renderShadow((DROID*)thisTag->pObject, getImdFromIndex(MI_SHADOW));
 				break;
-				case RENDER_FEATURE:
-					renderFeature((FEATURE*)thisTag->pObject);
+			case RENDER_STRUCTURE:
+				renderStructure((STRUCTURE*)thisTag->pObject);
 				break;
-				case RENDER_PROXMSG:
-					renderProximityMsg((PROXIMITY_DISPLAY*)thisTag->pObject);
+			case RENDER_FEATURE:
+				renderFeature((FEATURE*)thisTag->pObject);
 				break;
-				case RENDER_PROJECTILE:
-					renderProjectile((PROJECTILE*)thisTag->pObject);
+			case RENDER_PROXMSG:
+				renderProximityMsg((PROXIMITY_DISPLAY*)thisTag->pObject);
 				break;
-				case RENDER_ANIMATION:
-					renderAnimComponent((COMPONENT_OBJECT*)thisTag->pObject);
+			case RENDER_PROJECTILE:
+				renderProjectile((PROJECTILE*)thisTag->pObject);
 				break;
-				case RENDER_DELIVPOINT:
-					renderDeliveryPoint((FLAG_POSITION*)thisTag->pObject, false);
+			case RENDER_ANIMATION:
+				renderAnimComponent((COMPONENT_OBJECT*)thisTag->pObject);
 				break;
-			}
-			thisTag = thisTag->psNextTag;
+			case RENDER_DELIVPOINT:
+				renderDeliveryPoint((FLAG_POSITION*)thisTag->pObject, false);
+				break;
 		}
-		//reset the bucket array as we go
-		bucketArray[z] = NULL;
 	}
 
+	//reset the bucket array as we go
 	//reset the tag array
-	resourceCounter = 0;
-	zMax = SDWORD_MIN;
-	zMin = SDWORD_MAX;
-	worldMax = SDWORD_MIN;
-	worldMin = SDWORD_MAX;
-	return true;
+	// C version of bucketArray.clear().
+	bucketArrayF = bucketArrayS;
 }
 
 static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
@@ -623,7 +547,7 @@ static SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject)
 				case EFFECT_EXPLOSION:
 				case EFFECT_CONSTRUCTION:
 					pie = ((EFFECT*)pObject)->imd;
-					z = NUM_BUCKETS - pie->texpage;
+					z = INT32_MAX - pie->texpage;
 				break;
 
 				case EFFECT_SMOKE:
@@ -632,42 +556,41 @@ static SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject)
 				case EFFECT_STRUCTURE:
 				case EFFECT_DESTRUCTION:
 				default:
-					z = NUM_BUCKETS - 42;
+					z = INT32_MAX - 42;
 				break;
 			}
 		break;
 		case RENDER_DROID:
 			pie = BODY_IMD(((DROID*)pObject),0);
-			z = NUM_BUCKETS - pie->texpage;
+			z = INT32_MAX - pie->texpage;
 		break;
 		case RENDER_STRUCTURE:
 			pie = ((STRUCTURE*)pObject)->sDisplay.imd;
-			z = NUM_BUCKETS - pie->texpage;
+			z = INT32_MAX - pie->texpage;
 		break;
 		case RENDER_FEATURE:
 			pie = ((FEATURE*)pObject)->sDisplay.imd;
-			z = NUM_BUCKETS - pie->texpage;
+			z = INT32_MAX - pie->texpage;
 		break;
 		case RENDER_PROXMSG:
-			z = NUM_BUCKETS - 40;
+			z = INT32_MAX - 40;
 		break;
 		case RENDER_PROJECTILE:
 			pie = ((PROJECTILE*)pObject)->psWStats->pInFlightGraphic;
-			z = NUM_BUCKETS - pie->texpage;
+			z = INT32_MAX - pie->texpage;
 		break;
 		case RENDER_ANIMATION:
 			pie = ((COMPONENT_OBJECT*)pObject)->psShape;
-			z = NUM_BUCKETS - pie->texpage;
+			z = INT32_MAX - pie->texpage;
 		break;
 		case RENDER_DELIVPOINT:
 			pie = pAssemblyPointIMDs[((FLAG_POSITION*)pObject)->
 				factoryType][((FLAG_POSITION*)pObject)->factoryInc];
-			z = NUM_BUCKETS - pie->texpage;
+			z = INT32_MAX - pie->texpage;
 		break;
 		default:
 		break;
 	}
 
-	z *= (BUCKET_RANGE/NUM_BUCKETS);//stretch the dummy depth so its right when its compressed into the bucket array
 	return z;
 }

@@ -26,8 +26,6 @@ extern "C"
 {
 #endif //__cplusplus
 
-#define		BUCKET
-
 typedef enum _render_type
 {
 	RENDER_DROID,
@@ -44,14 +42,11 @@ typedef enum _render_type
 
 //function prototypes
 
-/* reset object list */
-extern BOOL bucketSetupList(void);
-
 /* add an object to the current render list */
-extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* object);
+extern void bucketAddTypeToList(RENDER_TYPE objectType, void *object);
 
 /* render Objects in list */
-extern BOOL bucketRenderCurrentList(void);
+extern void bucketRenderCurrentList(void);
 
 #ifdef __cplusplus
 }
