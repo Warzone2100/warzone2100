@@ -119,6 +119,7 @@ SRC= \
 	visibility.c \
 	warcam.c \
 	warzoneconfig.c \
+	wavecast.cpp \
 	wrappers.c
 
 LIBS=$(top_builddir)/lib/libgamelib.a \

@@ -1081,14 +1081,14 @@ BOOL stageThreeInitialise(void)
 				for(psStr=apsStructLists[i]; psStr; psStr=psStr->psNext)
 				{
 					if(aiCheckAlliances(psStr->player,selectedPlayer))
-					visTilesUpdate((BASE_OBJECT *)psStr, rayTerrainCallback);
+					visTilesUpdate((BASE_OBJECT *)psStr);
 				}
 
 				/* Droids */
 				for(psDroid=apsDroidLists[i]; psDroid; psDroid=psDroid->psNext)
 				{
 					if(aiCheckAlliances(psDroid->player,selectedPlayer))
-					visTilesUpdate((BASE_OBJECT *)psDroid, rayTerrainCallback);
+					visTilesUpdate((BASE_OBJECT *)psDroid);
 				}
 			}
 		}

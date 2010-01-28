@@ -45,6 +45,7 @@
 #include "display.h"
 #include "multiplay.h"
 
+#include "wavecast.h"
 
 // accuracy for the height gradient
 #define GRAD_MUL	10000
@@ -60,9 +61,7 @@ static float			visLevelIncAcc, visLevelDecAcc;
 static SDWORD			visLevelInc, visLevelDec;
 
 // horrible hack because this code is full of them and I ain't rewriting it all - Per
-#define MAX_SEEN_TILES 1024
-static TILEPOS recordTilePos[MAX_SEEN_TILES];
-static int lastRecordTilePos = -1;
+#define MAX_SEEN_TILES (29*29 * 355/113)  // Increased hack to support 28 tile sensor radius. - Cyp
 
 typedef struct {
 	bool rayStart; // Whether this is the first point on the ray
@@ -80,11 +79,6 @@ typedef struct {
 static int *gNumWalls = NULL;
 static Vector2i *gWall = NULL;
 
-
-/* Variables for the visibility callback / visTilesUpdate */
-static SDWORD		rayPlayer;				// The player the ray is being cast for
-static SDWORD		startH;					// The height at the view point
-static SDWORD		currG;					// The current obscuring gradient
 
 // initialise the visibility stuff
 BOOL visInitialise(void)
@@ -148,53 +142,97 @@ static int visObjHeight(const BASE_OBJECT * psObject)
  * once. Note that there is both a limit to how many objects can watch any given
  * tile, and a limit to how many tiles each object can watch. Strange but non fatal
  * things will happen if these limits are exceeded. This function uses icky globals. */
-static inline void visMarkTile(int mapX, int mapY, MAPTILE *psTile)
+static inline void visMarkTile(int mapX, int mapY, MAPTILE *psTile, int rayPlayer, TILEPOS *recordTilePos, int *lastRecordTilePos)
 {
-	bool alreadySeen = false;
-	int i;
-
-	if (psTile->watchers[rayPlayer] < UBYTE_MAX && lastRecordTilePos < MAX_SEEN_TILES)
+	if (psTile->watchers[rayPlayer] < UBYTE_MAX && *lastRecordTilePos < MAX_SEEN_TILES)
 	{
-		for (i = 0; i < lastRecordTilePos; i++)
-		{
-			if (recordTilePos[i].x == mapX && recordTilePos[i].y == mapY)
-			{
-				alreadySeen = true;
-				break;
-			}
-		}
-		if (!alreadySeen)
-		{
-			psTile->watchers[rayPlayer]++;			// we see this tile
-			recordTilePos[lastRecordTilePos].x = mapX;	// record having seen it
-			recordTilePos[lastRecordTilePos].y = mapY;
-			lastRecordTilePos++;
-		}
+		TILEPOS tilePos = {mapX, mapY};
+		psTile->watchers[rayPlayer]++;                  // we see this tile
+		recordTilePos[*lastRecordTilePos] = tilePos;    // record having seen it
+		++*lastRecordTilePos;
 	}
 }
 
 /* The terrain revealing ray callback */
-bool rayTerrainCallback(Vector3i pos, int distSq, void * data)
+static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer, TILEPOS *recordTilePos, int *lastRecordTilePos)
 {
-	const int mapX = map_coord(pos.x);
-	const int mapY = map_coord(pos.y);
-	int dist = sqrtf(distSq);
-	int newH, newG; // The new gradient
-	MAPTILE *psTile = mapTile(mapX, mapY);
+	size_t i;
+	size_t size;
+	const WAVECAST_TILE *tiles = getWavecastTable(radius, &size);
+	int tileHeight, perspectiveHeight;
+#define MAX_WAVECAST_LIST_SIZE 1360  // Trivial upper bound to what a fully upgraded WSS can use (its number of angles). Should probably be some factor times the maximum possible radius. Is probably a lot more than needed. Tested to need at least 180.
+	int heights[2][MAX_WAVECAST_LIST_SIZE];
+	int angles[2][MAX_WAVECAST_LIST_SIZE + 1];
+	int readListSize, readListPos, writeListPos = 0;
+	int readList = 0;  // Reading from this list, writing to the other. Could also initialise to rand()%2.
+	int lastHeight;
+	int lastAngle = 0x7FFFFFFF;
 
-	dist = MAX(dist, 1);	// simple precaution
+	// Start with full vision of all angles. (If someday wanting to make droids that can only look in one direction, change here, after getting the original angle values saved in the wavecast table.)
+	heights[!readList][writeListPos] = -0x7FFFFFFF-1;  // Smallest integer.
+	angles[!readList][writeListPos] = 0;               // Smallest angle.
+	++writeListPos;
 
-	newH = psTile->height * ELEVATION_SCALE;
-	newG = (newH - startH) * GRAD_MUL / dist;
-	if (newG >= currG)
+	for (i = 0; i < size; ++i)
 	{
-		currG = newG;
-		psTile->tileVisBits |= alliancebits[rayPlayer];		// Share vision to allies
-		psTile->tileExploredBits |= alliancebits[rayPlayer];	// Share exploring with allies too
-		visMarkTile(mapX, mapY, psTile);			// Mark this tile as seen by our sensor
-	}
+		const int mapX = map_coord(sx) + tiles[i].dx;
+		const int mapY = map_coord(sy) + tiles[i].dy;
+		MAPTILE *psTile;
+		bool seen = false;
 
-	return true;
+		if (mapX < 0 || mapX >= mapWidth || mapY < 0 || mapY >= mapHeight)
+		{
+			continue;
+		}
+		psTile = mapTile(mapX, mapY);
+
+		tileHeight = psTile->height * ELEVATION_SCALE;
+		perspectiveHeight = (tileHeight - sz) * tiles[i].invRadius;
+
+		if (tiles[i].angBegin < lastAngle)
+		{
+			// Gone around the circle. (Or just started scan.)
+			angles[!readList][writeListPos] = lastAngle;
+
+			// Flip the lists.
+			readList = !readList;
+			readListPos = 0;
+			readListSize = writeListPos;
+			writeListPos = 0;
+			lastHeight = 1;  // Impossible value since tiles[i].invRadius > 1 for all i, so triggers writing first entry in list.
+		}
+		lastAngle = tiles[i].angEnd;
+
+		while (angles[readList][readListPos + 1] <= tiles[i].angBegin && readListPos < readListSize)
+		{
+			++readListPos;  // Skip, not relevant.
+		}
+
+		while (angles[readList][readListPos] < tiles[i].angEnd && readListPos < readListSize)
+		{
+			int oldHeight = heights[readList][readListPos];
+			int newHeight = MAX(oldHeight, perspectiveHeight);
+			seen = seen || perspectiveHeight >= oldHeight;
+			if (newHeight != lastHeight)
+			{
+				heights[!readList][writeListPos] = newHeight;
+				angles[!readList][writeListPos] = MAX(angles[readList][readListPos], tiles[i].angBegin);
+				lastHeight = newHeight;
+				++writeListPos;
+				ASSERT_OR_RETURN( , writeListPos <= MAX_WAVECAST_LIST_SIZE, "Visibility too complicated! Need to increase MAX_WAVECAST_LIST_SIZE.");
+			}
+			++readListPos;
+		}
+		--readListPos;
+
+		if (seen)
+		{
+			// Can see this tile.
+			psTile->tileVisBits |= alliancebits[rayPlayer];                                 // Share vision with allies
+			psTile->tileExploredBits |= alliancebits[rayPlayer];                            // Share exploration with allies too
+			visMarkTile(mapX, mapY, psTile, rayPlayer, recordTilePos, lastRecordTilePos);   // Mark this tile as seen by our sensor
+		}
+	}
 }
 
 /* The los ray callback */
@@ -250,16 +288,6 @@ static bool rayLOSCallback(Vector3i pos, int distSq, void *data)
 	return true;
 }
 
-#define VTRAYSTEP	(NUM_RAYS/120)
-#define	DUPF_SCANTERRAIN 0x01
-
-BOOL visTilesPending(BASE_OBJECT *psObj)
-{
-	ASSERT( psObj->type == OBJ_DROID,"visTilesPending : Only implemented for droids" );
-
-	return (((DROID*)psObj)->updateFlags & DUPF_SCANTERRAIN);
-}
-
 /* Remove tile visibility from object */
 void visRemoveVisibility(BASE_OBJECT *psObj)
 {
@@ -289,17 +317,12 @@ void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj)
 }
 
 /* Check which tiles can be seen by an object */
-void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
+void visTilesUpdate(BASE_OBJECT *psObj)
 {
-	Vector3i pos = { psObj->pos.x, psObj->pos.y, 0 };
-	int range = objSensorRange(psObj);
-	int ray;
+	TILEPOS recordTilePos[MAX_SEEN_TILES];
+	int lastRecordTilePos = 0;
 
 	ASSERT(psObj->type != OBJ_FEATURE, "visTilesUpdate: visibility updates are not for features!");
-
-	lastRecordTilePos = 0;
-	memset(recordTilePos, 0, sizeof(recordTilePos));
-	rayPlayer = psObj->player;
 
 	// Remove previous map visibility provided by object
 	visRemoveVisibility(psObj);
@@ -315,49 +338,13 @@ void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
 		}
 	}
 
-	// Do the whole circle in 80 steps
-	for (ray = 0; ray < NUM_RAYS; ray += NUM_RAYS / 80)
-	{
-		Vector3i dir = rayAngleToVector3i(ray);
-
-		// initialise the callback variables
-		startH = psObj->pos.z + visObjHeight(psObj);
-		currG = -UBYTE_MAX * GRAD_MUL;
-
-		// Cast the rays from the viewer
-		rayCast(pos, dir, range, callback, NULL);
-	}
-
-	// Make sure we also watch tiles underneath ourselves
-	if (psObj->type == OBJ_STRUCTURE)
-	{
-		int i, j;
-
-		for (i = 0; i <= ((STRUCTURE *)psObj)->pStructureType->baseBreadth; i++)
-		{
-			for (j = 0; j <= ((STRUCTURE *)psObj)->pStructureType->baseWidth; j++)
-			{
-				int	mapX = map_coord(psObj->pos.x) + i;
-				int	mapY = map_coord(psObj->pos.y) + j;
-				MAPTILE	*psTile = mapTile(mapX, mapY);
-
-				visMarkTile(mapX, mapY, psTile);
-			}
-		}
-	}
-	else
-	{
-		MAPTILE	*psTile = mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y));
-		int	mapX = map_coord(psObj->pos.x);
-		int	mapY = map_coord(psObj->pos.y);
-
-		visMarkTile(mapX, mapY, psTile);
-	}
+	// Do the whole circle in ∞ steps. No more pretty moiré patterns.
+	doWaveTerrain(psObj->pos.x, psObj->pos.y, psObj->pos.z + visObjHeight(psObj), objSensorRange(psObj), psObj->player, recordTilePos, &lastRecordTilePos);
 
 	// Record new map visibility provided by object
 	if (lastRecordTilePos > 0)
 	{
-		psObj->watchedTiles = calloc(lastRecordTilePos, sizeof(*psObj->watchedTiles));
+		psObj->watchedTiles = malloc(lastRecordTilePos * sizeof(*psObj->watchedTiles));
 		psObj->numWatchedTiles = lastRecordTilePos;
 		memcpy(psObj->watchedTiles, recordTilePos, lastRecordTilePos * sizeof(*psObj->watchedTiles));
 	}
@@ -764,9 +751,9 @@ MAPTILE		*psTile;
 		mapY = map_coord(psStructure->pos.y - breadth * TILE_UNITS / 2);
 	}
 
-	for (i = 0; i < width; i++)
+	for (i = 0; i < width + 1; i++)  // + 1 because visibility is for top left of tile.
 	{
-		for (j = 0; j < breadth; j++)
+		for (j = 0; j < breadth + 1; j++)  // + 1 because visibility is for top left of tile.
 		{
 			psTile = mapTile(mapX+i,mapY+j);
 			if (psTile)

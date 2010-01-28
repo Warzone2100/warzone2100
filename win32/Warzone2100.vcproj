@@ -463,7 +463,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\mapgrid.c"
+					RelativePath="..\src\mapgrid.cpp"
 					>
 				</File>
 				<File
@@ -556,6 +556,10 @@
 				</File>
 				<File
 					RelativePath="..\src\parsetest.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\pointtree.cpp"
 					>
 				</File>
 				<File
@@ -668,6 +672,10 @@
 				</File>
 				<File
 					RelativePath="..\src\warzoneconfig.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\wavecast.cpp"
 					>
 				</File>
 				<File
@@ -1086,6 +1094,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\pointtree.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\positiondef.h"
 				>
 			</File>
@@ -1231,6 +1243,10 @@
 			</File>
 			<File
 				RelativePath="..\src\warzoneconfig.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wavecast.h"
 				>
 			</File>
 			<File

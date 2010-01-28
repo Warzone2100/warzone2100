@@ -2555,7 +2555,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		{
 			updateDroidOrientation(psDroid);
 		}
-		visTilesUpdate((BASE_OBJECT *)psDroid, rayTerrainCallback);
+		visTilesUpdate((BASE_OBJECT *)psDroid);
  		clustNewDroid(psDroid);
 	}
 
@@ -4230,7 +4230,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		clustNewDroid(psD);
 
 		// Update visibility
-		visTilesUpdate((BASE_OBJECT*)psD, rayTerrainCallback);
+		visTilesUpdate((BASE_OBJECT*)psD);
 
 		// check through the 'to' players list of droids to see if any are targetting it
 		for (psCurr = apsDroidLists[to]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -4589,7 +4589,7 @@ void droidSetPosition(DROID *psDroid, int x, int y)
 	psDroid->pos.y = y;
 	psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 	initDroidMovement(psDroid);
-	visTilesUpdate((BASE_OBJECT *)psDroid, rayTerrainCallback);
+	visTilesUpdate((BASE_OBJECT *)psDroid);
 }
 
 /** Check validity of a droid. Crash hard if it fails. */

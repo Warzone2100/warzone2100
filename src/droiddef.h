@@ -202,7 +202,6 @@ typedef struct DROID
 	                                                ///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 
 	UBYTE           illumination;
-	UBYTE           updateFlags;
 
 	/* Movement control data */
 	MOVE_CONTROL    sMove;

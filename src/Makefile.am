@@ -168,6 +168,7 @@ noinst_HEADERS = \
 	version.h \
 	warcam.h \
 	warzoneconfig.h \
+	wavecast.h \
 	weapondef.h \
 	wrappers.h
 
@@ -283,6 +284,7 @@ warzone2100_SOURCES = \
 	visibility.c \
 	warcam.c \
 	warzoneconfig.c \
+	wavecast.cpp \
 	wrappers.c
 
 warzone2100_LDADD = \
