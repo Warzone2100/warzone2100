@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-25 19:25+0100\n"
-"PO-Revision-Date: 2010-01-25 15:53+0100\n"
+"POT-Creation-Date: 2010-01-28 20:01+0100\n"
+"PO-Revision-Date: 2010-01-28 19:14+0100\n"
 "Last-Translator: Saber Nyoki <saberuneko@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -11604,11 +11604,11 @@ msgstr "Armas"
 msgid "Systems"
 msgstr "Sistemas"
 
-#: src/display3d.c:523
+#: src/display3d.c:569
 msgid "Player left"
 msgstr "Jugador Salió"
 
-#: src/display3d.c:523
+#: src/display3d.c:569
 msgid "Player dropped"
 msgstr "Jugador Desconectado"
 
@@ -11639,68 +11639,68 @@ msgstr "¡Unidad destruída!"
 msgid "Structure Restored"
 msgstr "Estructura Restaurada"
 
-#: src/droid.c:2913
+#: src/droid.c:2912
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u seleccionado - %u Unidad"
 msgstr[1] "Grupo %u seleccionado - %u Unidades"
 
-#: src/droid.c:2926
+#: src/droid.c:2925
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidad asignada al Grupo %u"
 msgstr[1] "%u unidades asignadas al Grupo %u"
 
-#: src/droid.c:2939
+#: src/droid.c:2938
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado en el Grupo %u - %u Unidad"
 msgstr[1] "Centrado en el Grupo %u - %u Unidades"
 
-#: src/droid.c:2943
+#: src/droid.c:2942
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alineando con el Grupo %u - %u Unidad"
 msgstr[1] "Alineando con el Grupo %u - %u Unidades"
 
-#: src/droid.c:3168
+#: src/droid.c:3167
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.c:3169
+#: src/droid.c:3168
 msgctxt "rank"
 msgid "Green"
 msgstr "Principiante"
 
-#: src/droid.c:3170
+#: src/droid.c:3169
 msgid "Trained"
 msgstr "Entrenado"
 
-#: src/droid.c:3171
+#: src/droid.c:3170
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3172
+#: src/droid.c:3171
 msgid "Professional"
 msgstr "Profesional"
 
-#: src/droid.c:3173
+#: src/droid.c:3172
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3174
+#: src/droid.c:3173
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.c:3175
+#: src/droid.c:3174
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.c:3176
+#: src/droid.c:3175
 msgid "Hero"
 msgstr "Héroe"
 
@@ -11744,13 +11744,13 @@ msgstr "TUTORIALES"
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.c:316
 #: src/frontend.c:374
-#: src/frontend.c:525
-#: src/frontend.c:587
-#: src/frontend.c:729
-#: src/frontend.c:868
-#: src/frontend.c:975
-#: src/frontend.c:1182
-#: src/frontend.c:1325
+#: src/frontend.c:526
+#: src/frontend.c:588
+#: src/frontend.c:730
+#: src/frontend.c:869
+#: src/frontend.c:976
+#: src/frontend.c:1183
+#: src/frontend.c:1326
 msgctxt "menu"
 msgid "Return"
 msgstr "Volver"
@@ -11776,266 +11776,266 @@ msgstr "Cargar Partida"
 msgid "SINGLE PLAYER"
 msgstr "UN JUGADOR"
 
-#: src/frontend.c:469
+#: src/frontend.c:470
 #: src/ingameop.c:519
 #: src/mission.c:2529
 #: src/mission.c:2634
 msgid "Load Saved Game"
 msgstr "Cargar Partida Guardada"
 
-#: src/frontend.c:520
+#: src/frontend.c:521
 msgid "MULTI PLAYER"
 msgstr "MULTIJUGADOR"
 
-#: src/frontend.c:522
+#: src/frontend.c:523
 msgid "Host Game"
 msgstr "Hospedar Partida"
 
-#: src/frontend.c:523
+#: src/frontend.c:524
 msgid "Join Game"
 msgstr "Unirse a una Partida"
 
-#: src/frontend.c:580
+#: src/frontend.c:581
 #: src/multiint.c:1252
 msgid "OPTIONS"
 msgstr "OPCIONES"
 
-#: src/frontend.c:581
+#: src/frontend.c:582
 msgid "Game Options"
 msgstr "Opciones de juego"
 
-#: src/frontend.c:582
+#: src/frontend.c:583
 msgid "Graphics Options"
 msgstr "Opciones Gráficas"
 
-#: src/frontend.c:583
+#: src/frontend.c:584
 msgid "Video Options"
 msgstr "Opciones de Vídeo"
 
-#: src/frontend.c:584
+#: src/frontend.c:585
 #: src/ingameop.c:288
 msgid "Audio Options"
 msgstr "Opciones de Audio"
 
-#: src/frontend.c:585
+#: src/frontend.c:586
 msgid "Mouse Options"
 msgstr "Opciones de ratón"
 
-#: src/frontend.c:586
+#: src/frontend.c:587
 msgid "Key Mappings"
 msgstr "Mapeos de teclas"
 
-#: src/frontend.c:648
+#: src/frontend.c:649
 msgid "Video Playback"
 msgstr "Reproducción de Vídeo"
 
-#: src/frontend.c:652
-#: src/frontend.c:822
+#: src/frontend.c:653
+#: src/frontend.c:823
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.c:656
-#: src/frontend.c:812
+#: src/frontend.c:657
+#: src/frontend.c:813
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.c:660
-#: src/frontend.c:817
-#: src/frontend.c:940
-#: src/frontend.c:998
+#: src/frontend.c:661
+#: src/frontend.c:818
+#: src/frontend.c:941
+#: src/frontend.c:999
 msgid "Fullscreen"
 msgstr "Pantalla Completa"
 
-#: src/frontend.c:670
+#: src/frontend.c:671
 msgid "Screen Shake"
 msgstr "Agitar pantalla"
 
-#: src/frontend.c:673
-#: src/frontend.c:703
-#: src/frontend.c:717
-#: src/frontend.c:753
-#: src/frontend.c:789
-#: src/frontend.c:798
-#: src/frontend.c:961
-#: src/frontend.c:1059
-#: src/frontend.c:1097
-#: src/frontend.c:1133
-#: src/frontend.c:1145
-#: src/frontend.c:1157
-#: src/frontend.c:1169
-#: src/frontend.c:1205
-#: src/frontend.c:1218
-#: src/frontend.c:1232
-#: src/frontend.c:1246
+#: src/frontend.c:674
+#: src/frontend.c:704
+#: src/frontend.c:718
+#: src/frontend.c:754
+#: src/frontend.c:790
+#: src/frontend.c:799
+#: src/frontend.c:962
+#: src/frontend.c:1060
+#: src/frontend.c:1098
+#: src/frontend.c:1134
+#: src/frontend.c:1146
+#: src/frontend.c:1158
+#: src/frontend.c:1170
+#: src/frontend.c:1206
+#: src/frontend.c:1219
+#: src/frontend.c:1233
+#: src/frontend.c:1247
 msgid "On"
 msgstr "Activado"
 
-#: src/frontend.c:677
-#: src/frontend.c:699
-#: src/frontend.c:709
-#: src/frontend.c:721
-#: src/frontend.c:748
-#: src/frontend.c:784
-#: src/frontend.c:802
-#: src/frontend.c:965
-#: src/frontend.c:1054
-#: src/frontend.c:1092
-#: src/frontend.c:1137
-#: src/frontend.c:1149
-#: src/frontend.c:1161
-#: src/frontend.c:1173
-#: src/frontend.c:1200
-#: src/frontend.c:1213
-#: src/frontend.c:1227
-#: src/frontend.c:1241
+#: src/frontend.c:678
+#: src/frontend.c:700
+#: src/frontend.c:710
+#: src/frontend.c:722
+#: src/frontend.c:749
+#: src/frontend.c:785
+#: src/frontend.c:803
+#: src/frontend.c:966
+#: src/frontend.c:1055
+#: src/frontend.c:1093
+#: src/frontend.c:1138
+#: src/frontend.c:1150
+#: src/frontend.c:1162
+#: src/frontend.c:1174
+#: src/frontend.c:1201
+#: src/frontend.c:1214
+#: src/frontend.c:1228
+#: src/frontend.c:1242
 msgid "Off"
 msgstr "Desactivado"
 
-#: src/frontend.c:682
+#: src/frontend.c:683
 #: src/multiint.c:1321
 msgid "Fog"
 msgstr "Niebla"
 
-#: src/frontend.c:685
-#: src/frontend.c:771
+#: src/frontend.c:686
+#: src/frontend.c:772
 msgid "Mist"
 msgstr "Neblina"
 
-#: src/frontend.c:689
-#: src/frontend.c:764
+#: src/frontend.c:690
+#: src/frontend.c:765
 #: src/multiint.c:1323
 msgid "Fog Of War"
 msgstr "Niebla de Guerra"
 
-#: src/frontend.c:696
-#: src/frontend.c:708
+#: src/frontend.c:697
+#: src/frontend.c:709
 msgid "Subtitles"
 msgstr "Subtítulos"
 
-#: src/frontend.c:714
+#: src/frontend.c:715
 msgid "Shadows"
 msgstr "Sombras"
 
-#: src/frontend.c:725
+#: src/frontend.c:726
 msgid "GRAPHICS OPTIONS"
 msgstr "OPCIONES GRÁFICAS"
 
-#: src/frontend.c:856
+#: src/frontend.c:857
 #: src/ingameop.c:177
 msgid "Voice Volume"
 msgstr "Volumen de Voces"
 
-#: src/frontend.c:860
+#: src/frontend.c:861
 #: src/ingameop.c:182
 msgid "FX Volume"
 msgstr "Volumen de Sonidos"
 
-#: src/frontend.c:864
+#: src/frontend.c:865
 #: src/ingameop.c:187
 msgid "Music Volume"
 msgstr "Volumen de Música"
 
-#: src/frontend.c:871
+#: src/frontend.c:872
 msgid "AUDIO OPTIONS"
 msgstr "OPCIONES DE AUDIO"
 
-#: src/frontend.c:936
+#: src/frontend.c:937
 msgid "Graphics Mode*"
 msgstr "Modo Gráfico*"
 
-#: src/frontend.c:944
-#: src/frontend.c:993
+#: src/frontend.c:945
+#: src/frontend.c:994
 msgid "Windowed"
 msgstr "En ventana"
 
-#: src/frontend.c:948
+#: src/frontend.c:949
 msgid "Resolution*"
 msgstr "Resolución*"
 
-#: src/frontend.c:953
+#: src/frontend.c:954
 msgid "Texture size"
 msgstr "Tamaño de las texturas"
 
-#: src/frontend.c:957
+#: src/frontend.c:958
 msgid "Vertical sync*"
 msgstr "Sincronización Vertical"
 
-#: src/frontend.c:969
+#: src/frontend.c:970
 msgid "* Takes effect on game restart"
 msgstr "* Tendrá efecto al reiniciar el juego"
 
-#: src/frontend.c:972
+#: src/frontend.c:973
 msgid "VIDEO OPTIONS"
 msgstr "OPCIONES DE VIDEO"
 
-#: src/frontend.c:1130
+#: src/frontend.c:1131
 msgid "Reverse Rotation"
 msgstr "Invertir Rotación"
 
-#: src/frontend.c:1141
+#: src/frontend.c:1142
 msgid "Trap Cursor"
 msgstr "Capturar Cursor"
 
-#: src/frontend.c:1153
+#: src/frontend.c:1154
 msgid "Colored Cursors*"
 msgstr "Cursores de colores"
 
-#: src/frontend.c:1166
+#: src/frontend.c:1167
 msgid "Switch Mouse Buttons"
 msgstr "Cambiar botones del ratón"
 
-#: src/frontend.c:1176
+#: src/frontend.c:1177
 msgid "* May negatively affect performance"
 msgstr "* Puede afectar negativamente al rendimiento"
 
-#: src/frontend.c:1179
+#: src/frontend.c:1180
 msgid "MOUSE OPTIONS"
 msgstr "OPCIONES DE RATÓN"
 
-#: src/frontend.c:1280
-#: src/frontend.c:1346
+#: src/frontend.c:1281
+#: src/frontend.c:1347
 msgid "Difficulty"
 msgstr "Dificultad"
 
-#: src/frontend.c:1284
-#: src/frontend.c:1354
-#: src/frontend.c:1385
+#: src/frontend.c:1285
+#: src/frontend.c:1355
+#: src/frontend.c:1386
 msgid "Easy"
 msgstr "Fácil"
 
-#: src/frontend.c:1287
-#: src/frontend.c:1357
-#: src/frontend.c:1377
+#: src/frontend.c:1288
+#: src/frontend.c:1358
+#: src/frontend.c:1378
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.c:1291
-#: src/frontend.c:1360
-#: src/frontend.c:1381
+#: src/frontend.c:1292
+#: src/frontend.c:1361
+#: src/frontend.c:1382
 msgid "Hard"
 msgstr "Difícil"
 
-#: src/frontend.c:1296
-#: src/frontend.c:1347
+#: src/frontend.c:1297
+#: src/frontend.c:1348
 msgid "Scroll Speed"
 msgstr "Velocidad de desplazamiento"
 
-#: src/frontend.c:1310
-#: src/frontend.c:1344
+#: src/frontend.c:1311
+#: src/frontend.c:1345
 msgid "Language"
 msgstr "Idioma"
 
-#: src/frontend.c:1322
-#: src/frontend.c:1345
+#: src/frontend.c:1323
+#: src/frontend.c:1346
 msgid "Unit Colour"
 msgstr "Color de las unidades"
 
-#: src/frontend.c:1328
-#: src/frontend.c:1348
+#: src/frontend.c:1329
+#: src/frontend.c:1349
 msgid "GAME OPTIONS"
 msgstr "OPCIONES DE JUEGO"
 
-#: src/frontend.c:1698
+#: src/frontend.c:1699
 #: src/multiint.c:2233
 msgid "Active mods: "
 msgstr "Mods activos: "
@@ -12061,8 +12061,8 @@ msgid "MAP SAVED!"
 msgstr "¡MAPA GUARDADO!"
 
 #: src/hci.c:1705
-#: src/loop.c:526
-#: src/loop.c:542
+#: src/loop.c:530
+#: src/loop.c:546
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "¡PARTIDA GUARDADA!"
@@ -12498,9 +12498,9 @@ msgid "View Aligned to North"
 msgstr "Vista Alineada al Norte"
 
 #: src/keybind.c:1311
-#, fuzzy, c-format
+#, c-format
 msgid "Trap cursor %s"
-msgstr "Capturar Cursor"
+msgstr "Capturar Cursor %s"
 
 #: src/keybind.c:1392
 msgid "Researched EVERYTHING for you!"
@@ -13024,8 +13024,8 @@ msgstr "Seleccionar Siguiente Fábrica de Cyborgs"
 msgid "Toggle reopening the build menu"
 msgstr "Alternar Reabrir el menú de construción"
 
-#: src/loop.c:533
-#: src/loop.c:549
+#: src/loop.c:537
+#: src/loop.c:553
 msgid "Could not save game!"
 msgstr "¡No se pudo guardar la partida!"
 
@@ -13109,12 +13109,12 @@ msgstr "Invitas a %s a formar una Alianza"
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s rompe la Alianza con %s"
 
-#: src/multigifts.c:413
+#: src/multigifts.c:415
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s forma una Alianza con %s"
 
-#: src/multigifts.c:773
+#: src/multigifts.c:779
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Descubres los planos de %s"
@@ -13698,61 +13698,61 @@ msgstr "¡Imposible localizar ninguna unidad de sensores!"
 msgid "Unable to locate any Commanders!"
 msgstr "¡Imposible localizar ningún Comandante!"
 
-#: src/structure.c:2816
+#: src/structure.c:2817
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Alcanzado Límite de Control de Comandantes - Producción Detenida"
 
-#: src/structure.c:6059
-#: src/structure.c:6084
+#: src/structure.c:6062
+#: src/structure.c:6087
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unidad asignada"
 msgstr[1] "%s - %u Unidades asignadas"
 
-#: src/structure.c:6089
-#: src/structure.c:6153
+#: src/structure.c:6092
+#: src/structure.c:6156
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Daño %3.0f%%"
 
-#: src/structure.c:6139
+#: src/structure.c:6142
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Conectado %u de %u"
 
-#: src/structure.c:6269
-#: src/structure.c:6314
+#: src/structure.c:6272
+#: src/structure.c:6317
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Dañado Electrónicamente"
 
-#: src/structure.c:6549
+#: src/structure.c:6552
 msgid "Electronic Reward - Visibility Report"
 msgstr "Recompensa de Electrónica - Informe de Visibilidad"
 
-#: src/structure.c:6589
+#: src/structure.c:6592
 msgid "Factory Reward - Propulsion"
 msgstr "Recompensa de Fábrica - Propulsión"
 
-#: src/structure.c:6613
+#: src/structure.c:6616
 msgid "Factory Reward - Body"
 msgstr "Recompensa de Fábrica - Carrocería"
 
-#: src/structure.c:6637
+#: src/structure.c:6640
 msgid "Factory Reward - Weapon"
 msgstr "Recompensa de Fábrica - Arma"
 
-#: src/structure.c:6646
+#: src/structure.c:6649
 msgid "Factory Reward - Nothing"
 msgstr "Recompensa de Fábrica - Nada"
 
-#: src/structure.c:6674
+#: src/structure.c:6677
 msgid "Repair Facility Award - Repair"
 msgstr "Premio de Instalación de Reparación - Reparación"
 
-#: src/structure.c:6681
+#: src/structure.c:6684
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio de Instalación de Reparación - Nada"
 
@@ -13798,6 +13798,9 @@ msgstr "Versión: %s%s%s%s"
 
 #~ msgid "You found %u power in an oil drum"
 #~ msgstr "Encontraste %u energía en un barril de petróleo"
+
+#~ msgid "Warning: Player %s did not send a data check, and may be cheating."
+#~ msgstr "Atención: El Jugador %s no envió un chequeo de datos y puede que haga trampas."
 
 #~ msgid "Player %u has the wrong game version. Auto kicking."
 #~ msgstr "El jugador %u tiene una versión errónea. Auto kicking."
