@@ -264,19 +264,19 @@ void drawRadar(void)
 			DrawNorth();
 		}
 		// draw the box at the dimensions of the map
-		iV_TransBoxFill(-radarWidth/2.0,
-						-radarHeight/2.0,
+		iV_TransBoxFill(-radarWidth/2.0 - 1,
+						-radarHeight/2.0 - 1,
 						 radarWidth/2.0,
 						 radarHeight/2.0);
-		pie_RenderRadar(-radarWidth/2.0,
-						-radarHeight/2.0,
+		pie_RenderRadar(-radarWidth/2.0 - 1,
+						-radarHeight/2.0 - 1,
 						 radarWidth,
 						 radarHeight);
         pie_MatBegin();
             pie_TRANSLATE(-radarWidth/2 - 1, -radarHeight/2 - 1, 0);
             DrawRadarExtras(0, 0, pixSizeH, pixSizeV);
         pie_MatEnd();
-		drawRadarBlips(-radarWidth/2.0, -radarHeight/2.0, pixSizeH, pixSizeV);
+		drawRadarBlips(-radarWidth/2.0 - 1, -radarHeight/2.0 - 1, pixSizeH, pixSizeV);
 	pie_MatEnd();
 }
 
