@@ -1687,9 +1687,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		if (getTemplateFromUniqueName(pDroidDesign->pName, player))
 		{
 			debug( LOG_ERROR, "Duplicate template %s", pDroidDesign->pName );
-			free(pDroidDesign->pName);
-			free(pDroidDesign);
-			return false;
+			continue;
 		}
 
 		//read in Propulsion Name
