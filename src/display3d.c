@@ -125,6 +125,7 @@ static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
 static void	calcAverageTerrainHeight(iView *player);
 BOOL	doWeDrawProximitys(void);
+static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
 static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
@@ -258,6 +259,51 @@ static UDWORD	destTileX=0,destTileY=0;
 static const int BLUEPRINT_OPACITY=120;
 
 /********************  Functions  ********************/
+
+static PIELIGHT structureBrightness(STRUCTURE *psStructure)
+{
+	PIELIGHT buildingBrightness;
+
+	if (structureIsBlueprint(psStructure))
+	{
+		buildingBrightness = getBlueprintColour(psStructure->status);
+	}
+	else
+	{
+		buildingBrightness = pal_SetBrightness(200 - 100 * getStructureDamage(psStructure));
+
+		/* If it's selected, then it's brighter */
+		if (psStructure->selected)
+		{
+			SDWORD brightVar;
+
+			if (!gamePaused())
+			{
+				brightVar = getStaticTimeValueRange(990, 110);
+				if (brightVar > 55)
+				{
+					brightVar = 110 - brightVar;
+				}
+			}
+			else
+			{
+				brightVar = 55;
+			}
+			buildingBrightness = pal_SetBrightness(200 + brightVar);
+		}
+		if (!demoGetStatus() && getRevealStatus())
+		{
+			buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
+		}
+		if (!hasSensorOnTile(mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y)), selectedPlayer))
+		{
+			buildingBrightness.byte.r /= 2;
+			buildingBrightness.byte.g /= 2;
+			buildingBrightness.byte.b /= 2;
+		}
+	}
+	return buildingBrightness;
+}
 
 /// Display the multiplayer chat box
 static void displayMultiChat(void)
@@ -1226,7 +1272,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 			Vector2i s = {0, 0};
 			STRUCTURE *psStructure = (STRUCTURE*)psParentObj;
 
-			brightness = pal_SetBrightness(200 - 100 * getStructureDamage(psStructure));
+			brightness = structureBrightness(psStructure);
 
 			pie_RotateProject( &zero, &s );
 			psStructure->sDisplay.screenX = s.x;
@@ -1237,11 +1283,10 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		else
 		{
 			brightness = pal_SetBrightness(UBYTE_MAX);
-		}
-
-		if(getRevealStatus())
-		{
-			brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psParentObj, brightness.byte.r));
+			if(getRevealStatus())
+			{
+				brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psParentObj, brightness.byte.r));
+			}
 		}
 
 		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, WZCOL_BLACK, pie_NO_BILINEAR|pie_STATIC_SHADOW, 0);
@@ -2091,44 +2136,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		bHitByElectronic = true;
 	}
 
-	if (structureIsBlueprint(psStructure))
-	{
-		buildingBrightness = getBlueprintColour(psStructure->status);
-	}
-	else
-	{
-		buildingBrightness = pal_SetBrightness(200 - 100 * getStructureDamage(psStructure));
-
-		/* If it's selected, then it's brighter */
-		if (psStructure->selected)
-		{
-			SDWORD brightVar;
-
-			if (!gamePaused())
-			{
-				brightVar = getStaticTimeValueRange(990, 110);
-				if (brightVar > 55)
-				{
-					brightVar = 110 - brightVar;
-				}
-			}
-			else
-			{
-				brightVar = 55;
-			}
-			buildingBrightness = pal_SetBrightness(200 + brightVar);
-		}
-		if (!demoGetStatus() && getRevealStatus())
-		{
-			buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
-		}
-		if (!hasSensorOnTile(mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y)), selectedPlayer))
-		{
-			buildingBrightness.byte.r /= 2;
-			buildingBrightness.byte.g /= 2;
-			buildingBrightness.byte.b /= 2;
-		}
-	}
+	buildingBrightness = structureBrightness(psStructure);
 
 	if (!defensive)
 	{
@@ -2501,7 +2509,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, BOOL blueprint)
 static BOOL	renderWallSection(STRUCTURE *psStructure)
 {
 	SDWORD			structX, structY, rx, rz;
-	PIELIGHT		brightness, specular = WZCOL_BLACK, buildingBrightness;
+	PIELIGHT		brightness, specular = WZCOL_BLACK;
 	iIMDShape		*imd;
 	SDWORD			rotation;
 	Vector3i			dv;
@@ -2516,49 +2524,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		structX = psStructure->pos.x;
 		structY = psStructure->pos.y;
 
-		if (structureIsBlueprint(psStructure))
-		{
-			buildingBrightness = getBlueprintColour(psStructure->status);
-		}
-		else
-		{
-			buildingBrightness = pal_SetBrightness(200 - 100 * getStructureDamage(psStructure));
-
-			if(psStructure->selected)
-			{
-				SDWORD brightVar;
-
-				if(!gamePaused())
-				{
-					brightVar = getStaticTimeValueRange(990,110);
-					if(brightVar>55) brightVar = 110-brightVar;
-				}
-				else
-				{
-					brightVar = 55;
-				}
-
-
-				buildingBrightness = pal_SetBrightness(200 + brightVar);
-			}
-
-			if(demoGetStatus())
-			{
-				/* NOP */
-			}
-			else if(getRevealStatus())
-			{
-				buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
-			}
-			if (!hasSensorOnTile(mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y)), selectedPlayer))
-			{
-				buildingBrightness.byte.r /= 2;
-				buildingBrightness.byte.g /= 2;
-				buildingBrightness.byte.b /= 2;
-			}
-		}
-
-		brightness = buildingBrightness;
+		brightness = structureBrightness(psStructure);
 
 		/*
 		Right, now the tricky bit, we need to bugger about with the coordinates of the imd to make it
