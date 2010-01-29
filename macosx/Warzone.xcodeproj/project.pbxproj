@@ -249,7 +249,7 @@
 		0246A2C60BD3CCDC004D1C70 /* lighting.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2170BD3CCDB004D1C70 /* lighting.c */; };
 		0246A2C70BD3CCDC004D1C70 /* loadsave.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2190BD3CCDB004D1C70 /* loadsave.c */; };
 		0246A2C80BD3CCDC004D1C70 /* loop.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A21B0BD3CCDB004D1C70 /* loop.c */; };
-		0246A2C90BD3CCDC004D1C70 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A21D0BD3CCDB004D1C70 /* main.c */; };
+		0246A2C90BD3CCDC004D1C70 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A21D0BD3CCDB004D1C70 /* main.cpp */; };
 		0246A2CA0BD3CCDC004D1C70 /* map.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A21E0BD3CCDB004D1C70 /* map.c */; };
 		0246A2CB0BD3CCDC004D1C70 /* mapdisplay.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2200BD3CCDB004D1C70 /* mapdisplay.c */; };
 		0246A2CC0BD3CCDC004D1C70 /* mapgrid.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2220BD3CCDB004D1C70 /* mapgrid.c */; };
@@ -431,6 +431,7 @@
 		2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 2244463B0E3EB7CB004D0F1F /* messagely.h */; };
 		22E244D70E65361800EC2B3E /* baseobject.c in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.c */; };
 		22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 22E244D50E65361800EC2B3E /* baseobject.h */; };
+		439A199C1113347200B9186B /* SDL_framerate.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B30BD3CBD5004D1C70 /* SDL_framerate.c */; };
 		43BE71A911120A69007DF934 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43BE719E11120A4F007DF934 /* InfoPlist.strings */; };
 		43BE71C011120C11007DF934 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43BE71A611120A4F007DF934 /* InfoPlist.strings */; };
 		43BE71E611120EF8007DF934 /* macosx.c in Sources */ = {isa = PBXBuildFile; fileRef = 43BE71E511120EF8007DF934 /* macosx.c */; };
@@ -682,14 +683,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 02356D740BD3BB3400E9A019 /* Warzone */;
+			remoteGlobalIDString = 02356D740BD3BB3400E9A019;
 			remoteInfo = Warzone;
 		};
 		43BE7B5611126F07007DF934 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 43BE7B5311126EF1007DF934 /* Setup Prebuilt Components */;
+			remoteGlobalIDString = 43BE7B5311126EF1007DF934;
 			remoteInfo = "Setup Prebuilt Components";
 		};
 		97AEAAEC0E8C1B5200A10721 /* PBXContainerItemProxy */ = {
@@ -1107,7 +1108,7 @@
 		0246A21A0BD3CCDB004D1C70 /* loadsave.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = loadsave.h; path = ../src/loadsave.h; sourceTree = SOURCE_ROOT; };
 		0246A21B0BD3CCDB004D1C70 /* loop.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = loop.c; path = ../src/loop.c; sourceTree = SOURCE_ROOT; };
 		0246A21C0BD3CCDB004D1C70 /* loop.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = loop.h; path = ../src/loop.h; sourceTree = SOURCE_ROOT; };
-		0246A21D0BD3CCDB004D1C70 /* main.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = main.c; path = ../src/main.c; sourceTree = SOURCE_ROOT; };
+		0246A21D0BD3CCDB004D1C70 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../src/main.cpp; sourceTree = SOURCE_ROOT; };
 		0246A21E0BD3CCDB004D1C70 /* map.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = map.c; path = ../src/map.c; sourceTree = SOURCE_ROOT; };
 		0246A21F0BD3CCDB004D1C70 /* map.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = map.h; path = ../src/map.h; sourceTree = SOURCE_ROOT; };
 		0246A2200BD3CCDB004D1C70 /* mapdisplay.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = mapdisplay.c; path = ../src/mapdisplay.c; sourceTree = SOURCE_ROOT; };
@@ -2111,7 +2112,7 @@
 				0246A21A0BD3CCDB004D1C70 /* loadsave.h */,
 				0246A21B0BD3CCDB004D1C70 /* loop.c */,
 				0246A21C0BD3CCDB004D1C70 /* loop.h */,
-				0246A21D0BD3CCDB004D1C70 /* main.c */,
+				0246A21D0BD3CCDB004D1C70 /* main.cpp */,
 				0246A21E0BD3CCDB004D1C70 /* map.c */,
 				0246A21F0BD3CCDB004D1C70 /* map.h */,
 				0246A2200BD3CCDB004D1C70 /* mapdisplay.c */,
@@ -3127,7 +3128,6 @@
 			targets = (
 				02356D740BD3BB3400E9A019 /* Warzone */,
 				02CDDCF30D159BC300722688 /* Autorevision */,
-				43BE7B5311126EF1007DF934 /* Setup Prebuilt Components */,
 				221052010E3D21E80057CD9C /* Bison */,
 				022B2F210BD55814002E64E3 /* Gettext */,
 				02356D820BD3BB4100E9A019 /* Zlib */,
@@ -3137,6 +3137,7 @@
 				02DDA8B00BD3C2F20049AB60 /* PhysFS */,
 				02F5CC6C0D1494AA0000A2D0 /* Popt */,
 				97AEAAEA0E8C1B5200A10721 /* Theora */,
+				43BE7B5311126EF1007DF934 /* Setup Prebuilt Components */,
 				971177490F87A677000C8A96 /* Pixman */,
 				43BE71601111E14A007DF934 /* Make DMGs for Release */,
 			);
@@ -3601,7 +3602,7 @@
 				0246A2C60BD3CCDC004D1C70 /* lighting.c in Sources */,
 				0246A2C70BD3CCDC004D1C70 /* loadsave.c in Sources */,
 				0246A2C80BD3CCDC004D1C70 /* loop.c in Sources */,
-				0246A2C90BD3CCDC004D1C70 /* main.c in Sources */,
+				0246A2C90BD3CCDC004D1C70 /* main.cpp in Sources */,
 				0246A2CA0BD3CCDC004D1C70 /* map.c in Sources */,
 				0246A2CB0BD3CCDC004D1C70 /* mapdisplay.c in Sources */,
 				0246A2CC0BD3CCDC004D1C70 /* mapgrid.c in Sources */,
@@ -3691,6 +3692,7 @@
 				EFBC96C010B92A9C009C6753 /* upnpreplyparse.c in Sources */,
 				43BE759811123F77007DF934 /* challenge.c in Sources */,
 				43BE75AF11124048007DF934 /* wzapp.cpp in Sources */,
+				439A199C1113347200B9186B /* SDL_framerate.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
