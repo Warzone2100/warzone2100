@@ -26,11 +26,20 @@
 
 #include "basedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 static const unsigned int max_check_object_recursion = 4;
 
 void checkObject(const BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse);
 
 /* assert if object is bad */
 #define CHECK_OBJECT(object) checkObject((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_BASEOBJECT_H__

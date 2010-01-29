@@ -27,6 +27,11 @@
 #include "basedef.h"
 #include "structure.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Initialise the display system */
 extern BOOL dispInitialise(void);
 
@@ -220,5 +225,9 @@ void AddDerrickBurningMessage(void);
 extern BOOL ctrlShiftDown(void);
 
 extern UDWORD getTargetType(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_DISPLAY_H__

@@ -24,6 +24,11 @@
 #include "map.h"
 #include "hci.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef struct _t_quad
 {
 	Vector2i coords[4];
@@ -69,5 +74,9 @@ static inline BASE_OBJECT *getTileOccupier(UDWORD x, UDWORD y)
 		return NULL;
 	}
 }
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_GEOMETRY_H__

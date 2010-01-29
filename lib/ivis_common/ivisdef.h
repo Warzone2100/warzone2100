@@ -32,6 +32,11 @@
 #include "lib/framework/frame.h"
 #include "pietypes.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 //*************************************************************************
 //
 // screen surface structure
@@ -130,5 +135,9 @@ typedef struct {
 	int TPageIDs[MAX_NUM_TPAGEIDS];	/**< OpenGL Texture IDs */
 	IMAGEDEF *ImageDefs;    /**< Stored images */
 } IMAGEFILE;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // _ivisdef_h

@@ -28,6 +28,11 @@
 
 #include "interpreter.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* The number of values in a context value chunk */
 #define CONTEXT_VALS 20
 
@@ -157,6 +162,8 @@ extern void eventTimeReset(UDWORD initTime);
 extern const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event);
 extern const char *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger);
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus
+
 #endif
-
-

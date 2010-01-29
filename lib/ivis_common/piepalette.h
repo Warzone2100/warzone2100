@@ -22,6 +22,11 @@
 
 #include "lib/ivis_common/piedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define WZCOL_BLACK					psPalette[0]
 #define WZCOL_WHITE					psPalette[1]
 #define WZCOL_RELOAD_BACKGROUND		psPalette[2]
@@ -108,5 +113,9 @@ static inline PIELIGHT pal_SetBrightness(UBYTE brightness)
 
 	return c;
 }
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

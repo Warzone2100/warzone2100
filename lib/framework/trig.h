@@ -29,6 +29,11 @@
 #include "frame.h"
 #include "math_ext.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* The number of units around a full circle */
 #define TRIG_DEGREES	360
 
@@ -48,5 +53,8 @@ extern float trigInvCos(float val) WZ_DECL_CONST;
 /* Supposedly fast lookup sqrt - unfortunately it's probably slower than the FPU sqrt :-( */
 extern float trigIntSqrt(unsigned int val);
 
-#endif
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
+#endif

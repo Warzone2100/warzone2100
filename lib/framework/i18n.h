@@ -29,6 +29,11 @@
 
 #include "gettext.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // Enable NLS for our parsers when it's enabled for us
 #define YYENABLE_NLS ENABLE_NLS
 
@@ -54,5 +59,9 @@ extern WZ_DECL_CONST const char* getLanguageName(void);
 extern BOOL setLanguage(const char *name);
 extern void setNextLanguage(void);
 extern void initI18n(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // _i18n_h

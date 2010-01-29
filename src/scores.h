@@ -21,6 +21,11 @@
 #ifndef __INCLUDED_SRC_SCORES_H__
 #define __INCLUDED_SRC_SCORES_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef enum data_index
 {
 WD_UNITS_BUILT,
@@ -96,5 +101,9 @@ extern void	scoreDataToScreen		( void );
 extern void	getAsciiTime			( char *psText, UDWORD time );
 extern bool readScoreData			( const char* fileName );
 extern bool writeScoreData			( const char* fileName );
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SCORES_H__

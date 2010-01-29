@@ -27,6 +27,11 @@
 #include "lib/framework/frame.h"
 #include "objects.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* The range out of which the random number for the to hit should be taken */
 #define HIT_DICE	100
 
@@ -65,5 +70,9 @@ extern void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget);
 
 extern float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD weaponClass,
                        UDWORD weaponSubClass, HIT_SIDE impactSide);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_COMBAT_H__

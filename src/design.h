@@ -23,6 +23,11 @@
 
 #include "lib/widget/widgbase.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Design screen ID's */
 #define IDDES_FORM			5000		// The base form for the design screen
 #define IDDES_STATSFORM		5001		// The design screen stats form
@@ -156,5 +161,9 @@ extern void reverseTemplateList(DROID_TEMPLATE **ppsList);
 extern const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate);
 
 extern BOOL intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_DESIGN_H__

@@ -24,6 +24,11 @@
 #include "droiddef.h"
 #include "structuredef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /*
 	Header file for component.c
 	Pumpkin Studios, EIDOS Interactive.
@@ -102,5 +107,9 @@ extern void	updateLightLevels(void);
 extern SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius);
 
 extern void	destroyFXDroid(DROID	*psDroid);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_COMPONENT_H__

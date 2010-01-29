@@ -21,6 +21,11 @@
 #ifndef __INCLUDED_WZAPP_C_H__
 #define __INCLUDED_WZAPP_C_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 struct _wzThread;
 struct _wzMutex;
 struct _wzSemaphore;
@@ -55,5 +60,9 @@ void wzSemaphoreDestroy(WZ_SEMAPHORE *semaphore);
 void wzSemaphoreWait(WZ_SEMAPHORE *semaphore);
 void wzSemaphorePost(WZ_SEMAPHORE *semaphore);
 int wzSemaphoreAvailable(WZ_SEMAPHORE *semaphore);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

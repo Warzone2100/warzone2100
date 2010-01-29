@@ -35,6 +35,11 @@
 #include "ivisdef.h"
 #include "ivispatch.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /***************************************************************************/
 /*
  *	Global Definitions (CONSTANTS)
@@ -113,5 +118,9 @@ void pie_EndLighting(void);
 void pie_RemainingPasses(void);
 
 void pie_CleanUp( void );
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // _piedef_h

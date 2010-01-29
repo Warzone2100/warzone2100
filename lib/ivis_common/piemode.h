@@ -33,6 +33,10 @@
 
 #include "lib/framework/frame.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
 /***************************************************************************/
 /*
@@ -52,5 +56,9 @@ extern BOOL pie_Initialise(void);
 extern void pie_ShutDown(void);
 extern void pie_ScreenFlip(int ClearMode);
 extern UDWORD	pie_GetResScalingFactor( void );
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

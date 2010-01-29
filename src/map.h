@@ -29,6 +29,11 @@
 #include "objects.h"
 #include "terrain.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* The different types of terrain as far as the game is concerned */
 typedef enum _terrain_type
 {
@@ -412,5 +417,9 @@ void mapFloodFillContinents(void);
 extern void mapTest(void);
 
 extern bool fireOnLocation(unsigned int x, unsigned int y);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MAP_H__

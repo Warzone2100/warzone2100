@@ -21,8 +21,21 @@
  * multilimit.h
  */
 
+#ifndef __INCLUDED_MULTILIMIT_H__
+#define __INCLUDED_MULTILIMIT_H__
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
 extern BOOL startLimitScreen	(void);
 extern void runLimitScreen		(void);
 extern void applyLimitSet		(void);
 extern void createLimitSet		(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
+
+#endif //__cplusplus //__INCLUDED_MULTILIMIT_H__

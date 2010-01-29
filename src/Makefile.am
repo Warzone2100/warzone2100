@@ -218,7 +218,7 @@ warzone2100_SOURCES = \
 	lighting.c \
 	loadsave.c \
 	loop.c \
-	main.c \
+	main.cpp \
 	map.c \
 	mapdisplay.c \
 	mapgrid.c \

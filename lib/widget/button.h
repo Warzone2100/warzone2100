@@ -28,6 +28,11 @@
 #include "widgbase.h"
 #include "lib/ivis_common/textdraw.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Button states */
 #define WBUTS_NORMAL	0x0000
 #define WBUTS_DOWN		0x0001		// Button is down
@@ -90,5 +95,9 @@ extern void buttonClearFlash(W_BUTTON *psButton);
 
 /* The button display function */
 extern void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_BUTTON_H__

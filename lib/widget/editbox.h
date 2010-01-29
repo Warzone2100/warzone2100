@@ -28,6 +28,11 @@
 #include "widgbase.h"
 #include "lib/ivis_common/textdraw.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Edit Box states */
 #define WEDBS_FIXED		0x0001		// No editing is going on
 #define WEDBS_INSERT	0x0002		// Insertion editing
@@ -90,5 +95,9 @@ extern void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 
 /* set state of edit box */
 extern void editBoxSetState(W_EDITBOX *psEditBox, UDWORD state);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__

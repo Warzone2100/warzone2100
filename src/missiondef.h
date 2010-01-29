@@ -30,6 +30,10 @@
 #include "featuredef.h"
 #include "power.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
 //mission types
 
@@ -87,5 +91,9 @@ typedef struct _mission
 	UWORD				iTranspExitTileY[MAX_PLAYERS];
 
 } MISSION;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_MISSIONDEF_H__

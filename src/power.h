@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_POWER_H__
 #define __INCLUDED_SRC_POWER_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /** Free power on collection of oildrum. */
 #define OILDRUM_POWER		100
 
@@ -101,5 +106,9 @@ extern BOOL droidUsesPower(DROID *psDroid);
 extern	BOOL			powerCalculated;
 
 extern void throttleEconomy(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_POWER_H__

@@ -42,6 +42,11 @@
 #include "lib/framework/frame.h"
 #include "piedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -147,5 +152,8 @@ extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
 
 extern bool _glerrors(const char *, const char *, int);
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // _pieState_h

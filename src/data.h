@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_DATA_H__
 #define __INCLUDED_SRC_DATA_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // used for multiplayer data integrity check.
 enum {
 DATA_SWEAPON,
@@ -65,5 +70,9 @@ extern BOOL dataInitLoadFuncs(void);
 
 extern void dataSetSaveFlag(void);
 extern void dataClearSaveFlag(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_DATA_H__

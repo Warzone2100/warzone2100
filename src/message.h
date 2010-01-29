@@ -27,6 +27,11 @@
 #include "structure.h"
 #include "messagedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define NO_AUDIO_MSG		-1
 
 /** The lists of messages allocated. */
@@ -88,5 +93,9 @@ extern void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp);
 extern void addOilResourceProximities(void);
 
 extern BOOL messageInitVars(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MESSAGE_H__

@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_LIB_WIDGET_FORM_H__
 #define __INCLUDED_LIB_WIDGET_FORM_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* The basic form data */
 #define FORM_BASE \
 	WIDGET_BASE;				/* The common widget data */ \
@@ -184,5 +189,9 @@ extern void formHiLiteLost(W_FORM *psWidget, W_CONTEXT *psContext);
 extern void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 extern void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 extern void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_FORM_H__

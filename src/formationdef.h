@@ -26,6 +26,11 @@
 
 #include "droiddef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // maximum number of lines in a formation
 #define F_MAXLINES		4
 // maximum number of unit members of a formation (cannot be more that 128)
@@ -75,5 +80,9 @@ typedef struct _formation
 
 	struct _formation	*psNext;
 } FORMATION;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_FORMATIONDEF_H__

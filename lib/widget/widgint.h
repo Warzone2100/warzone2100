@@ -27,6 +27,11 @@
 #include "lib/framework/input.h"
 #include "widgbase.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Set the id number for widgRunScreen to return */
 extern void widgSetReturn(W_SCREEN* psScreen, WIDGET *psWidget);
 
@@ -47,5 +52,9 @@ extern void screenSetFocus(W_SCREEN *psScreen, WIDGET *psWidget);
 
 /* Clear the keyboard focus */
 extern void screenClearFocus(W_SCREEN *psScreen);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_WIDGINT_H__

@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_SCRIPTOBJ_H__
 #define __INCLUDED_SRC_SCRIPTOBJ_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // id's for object variables
 enum _objids
 {
@@ -97,5 +102,9 @@ extern BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
 
 // default value load routine
 extern BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SCRIPTOBJ_H__

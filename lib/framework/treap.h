@@ -32,6 +32,11 @@
 #include "types.h"
 #include "debug.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /// Forward declarations to allow pointers to these types
 struct TREAP_NODE;
 
@@ -55,5 +60,9 @@ extern const char* treapFindKey(struct TREAP_NODE** psTreap, const char* string)
 
 /* Destroy a treap and release all the memory associated with it */
 extern void treapDestroy(struct TREAP_NODE** psTreap);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

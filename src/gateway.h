@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_GATEWAY_H__
 #define __INCLUDED_SRC_GATEWAY_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef struct _gateway
 {
 	UBYTE			x1,y1, x2,y2;
@@ -50,5 +55,9 @@ GATEWAY *gwGetGateways(void);
 
 /// Set gateway list
 void gwSetGateways(GATEWAY *ps);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_GATEWAY_H__

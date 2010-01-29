@@ -30,6 +30,11 @@
 
 #include "types.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /** Used to store a UTF-32 character in
  */
 typedef uint32_t utf_32_char;
@@ -85,5 +90,9 @@ utf_16_char *UTF8toUTF16(const char *utf8_string, size_t *nbytes);
 
 char *UTF8CharacterAtOffset(const char *utf8_string, size_t index);
 utf_16_char *UTF16CharacterAtOffset(const utf_16_char *utf16_string, size_t index);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDE_LIB_FRAMEWORK_UTF8_H__

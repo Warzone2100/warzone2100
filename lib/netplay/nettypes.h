@@ -28,6 +28,11 @@
 #include "netplay.h"
 #include "lib/framework/vector.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef enum packetDirectionEnum
 {
 	PACKET_ENCODE,
@@ -72,5 +77,9 @@ BOOL NETVector3uw(Vector3uw* vp);
 int NETgetSource(void);
 
 void NETtest(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

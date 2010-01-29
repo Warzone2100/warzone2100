@@ -24,6 +24,11 @@
 #include "lib/ivis_common/pietypes.h"
 #include "objectdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define X_UPDATE 0x1
 #define Y_UPDATE 0x2
 #define Z_UPDATE 0x4
@@ -87,5 +92,9 @@ extern DROID *getTrackingDroid( void );
 extern SDWORD	getPresAngle( void );
 extern UDWORD	getNumDroidsSelected( void );
 extern void	camAllignWithTarget(BASE_OBJECT *psTarget);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_WARCAM_H__

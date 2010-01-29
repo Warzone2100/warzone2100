@@ -20,6 +20,11 @@
 #ifndef ENDIAN_HACK_H
 #define ENDIAN_HACK_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Endianness hacks */
 
 static inline void endian_uword(UWORD* uword)
@@ -87,5 +92,9 @@ static inline void endian_sdword(SDWORD* sdword)
   (void)sdword;
 #endif
 }
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // ENDIAN_HACK_H

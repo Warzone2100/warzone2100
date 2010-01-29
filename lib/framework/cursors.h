@@ -24,6 +24,12 @@
 #ifndef __INCLUDED_LIB_FRAMEWORK_CURSORS_H__
 #define __INCLUDED_LIB_FRAMEWORK_CURSORS_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
+
 typedef enum
 {
 	CURSOR_ARROW,
@@ -65,5 +71,9 @@ enum CURSOR_TYPE
 void init_system_cursor(CURSOR cur, enum CURSOR_TYPE type);
 void init_system_cursor32(CURSOR cur);
 void init_system_cursor16(CURSOR cur);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_FRAMEWORK_CURSORS_H__

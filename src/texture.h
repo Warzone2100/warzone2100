@@ -23,6 +23,11 @@
 
 #include "display3ddef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 bool texLoad(const char *fileName);
 
 typedef struct _tileTexInfo
@@ -44,5 +49,9 @@ extern int terrainPage;
 
 void setTextureSize(int texSize);
 int getTextureSize(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_TEXTURE_H__

@@ -28,6 +28,11 @@
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/textdraw.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Button colours */
 #define WBUTC_TEXT		0			// Colour for button text
 #define WBUTC_BKGRND	1			// Colour for button background
@@ -102,5 +107,9 @@ typedef struct _w_context
 	SDWORD		xOffset,yOffset;	// Screen offset of the parent form
 	SDWORD		mx,my;				// mouse position on the form
 } W_CONTEXT;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_WIDGBASE_H__

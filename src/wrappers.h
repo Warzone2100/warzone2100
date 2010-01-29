@@ -21,6 +21,11 @@
 #ifndef __INCLUDED_SRC_WRAPPERS_H__
 #define __INCLUDED_SRC_WRAPPERS_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef enum {
 	TITLECODE_CONTINUE,
 	TITLECODE_STARTGAME,
@@ -54,5 +59,9 @@ extern BOOL			testPlayerHasWon  	    ( void );
 extern void			setPlayerHasWon		    ( BOOL val );
 extern void         setScriptWinLoseVideo   ( UBYTE val );
 extern UBYTE        getScriptWinLoseVideo   ( void );
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_WRAPPERS_H__

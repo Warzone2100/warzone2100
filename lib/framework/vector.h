@@ -28,6 +28,10 @@
 #include "types.h"
 #include "math_ext.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
 typedef struct { int x, y; } Vector2i;
 typedef struct { float x, y; } Vector2f;
@@ -861,5 +865,8 @@ static inline WZ_DECL_CONST Vector3f Vector3uw_To3f(const Vector3uw v)
 	return dest;
 }
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // VECTOR_H

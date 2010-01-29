@@ -21,10 +21,19 @@
 #ifndef __INCLUDED_SRC_E3DEMO_H__
 #define __INCLUDED_SRC_E3DEMO_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 extern	void	initDemoCamera		( void );
 extern	void	processDemoCam		( void );
 extern	void	toggleDemoStatus	( void );
 extern	BOOL	demoGetStatus		( void );
 extern	void	setFindNewTarget	( void );
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif //__INCLUDED_SRC_E3DEMO_H__ 

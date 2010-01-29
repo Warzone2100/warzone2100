@@ -23,6 +23,11 @@
 #ifndef MACROS_H
 #define MACROS_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define ABS(a) (((a) < 0) ? (-(a)) : (a))
@@ -153,5 +158,9 @@ static inline float arrayMaxF(const float *array, const size_t n, size_t *index)
 
 #define MKID(a) MKID_(a, __LINE__)
 #define MKID_(a, b) a ## b
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // MACROS_H

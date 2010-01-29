@@ -23,6 +23,11 @@
 
 #include "lib/ivis_common/piedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define MAX_CONSOLE_MESSAGES			(64)
 #define MAX_CONSOLE_STRING_LENGTH		(255)
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
@@ -137,5 +142,9 @@ extern void console(const char *pFormat, ...); /// Print allways to the ingame c
 #else
 #define DBCONPRINTF(s,x)
 #endif
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_CONSOLE_H__

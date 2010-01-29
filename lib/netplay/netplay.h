@@ -28,6 +28,11 @@
 
 #include "nettypes.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // Lobby Connection errors
 
 typedef enum
@@ -274,5 +279,9 @@ extern void NETsetGamePassword(const char *password);
 extern void NETBroadcastPlayerInfo(uint32_t index);
 extern void NETCheckVersion(uint32_t player);
 extern void NET_InitPlayers(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

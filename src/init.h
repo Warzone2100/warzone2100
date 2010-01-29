@@ -26,6 +26,11 @@
 
 #include "lib/ivis_common/ivisdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // the size of the file loading buffer
 // FIXME Totally inappropriate place for this.
 #define FILE_LOAD_BUFFER_SIZE (1024*1024*4)
@@ -63,5 +68,9 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force );
 BOOL buildMapList(void);
 
 extern IMAGEFILE	*FrontImages;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_INIT_H__

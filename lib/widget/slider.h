@@ -27,6 +27,11 @@
 #include "widget.h"
 #include "widgbase.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Slider state */
 #define SLD_DRAG		0x0001		// Slider is being dragged
 #define SLD_HILITE		0x0002		// Slider is hilited
@@ -70,5 +75,9 @@ extern void sliderHiLiteLost(W_SLIDER *psWidget);
 
 /* The slider display function */
 extern void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_SLIDER_H__

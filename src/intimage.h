@@ -22,6 +22,11 @@
 
 #include "intfac.h" // Interface image id's.
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define FILLRED 16
 #define FILLGREEN 16
 #define FILLBLUE 128
@@ -70,5 +75,9 @@ extern void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width,
 
 /** Called by RenderWindowFrame and RenderOpaqueWindow but you can call it yourself if you want. */
 extern void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, BOOL Opaque);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

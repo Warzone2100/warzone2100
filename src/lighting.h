@@ -23,6 +23,11 @@
 
 #include "lib/ivis_common/pietypes.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define FOG_FLAGS		7
 #define FOG_BACKGROUND	1
 #define FOG_DISTANCE	2
@@ -62,5 +67,9 @@ extern void	calcDroidIllumination(DROID *psDroid);
 extern void setScrollLimitLighting(void);
 
 extern void	findSunVector(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_LIGHTNING_H__

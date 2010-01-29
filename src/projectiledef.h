@@ -26,6 +26,11 @@
 
 #include "basedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef enum PROJ_STATE
 {
 	PROJ_INFLIGHT,
@@ -60,5 +65,9 @@ typedef struct PROJECTILE
 
 	void (*pInFlightFunc)(struct PROJECTILE* psObj);
 } PROJECTILE;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_PROJECTILEDEF_H__

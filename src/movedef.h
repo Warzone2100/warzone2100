@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_MOVEDEF_H__
 #define __INCLUDED_MOVEDEF_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 //Watermelon:num of VTOL weapons should be same as DROID_MAXWEAPS
 #define VTOL_MAXWEAPS		3
 
@@ -77,5 +82,9 @@ typedef struct _move_control
 	// added for vtol movement
 	float	fz;
 } MOVE_CONTROL;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_MOVEDEF_H__

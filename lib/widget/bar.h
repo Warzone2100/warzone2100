@@ -26,6 +26,11 @@
 
 #include "widget.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef struct _w_bargraph
 {
 	/* The common widget data */
@@ -76,5 +81,9 @@ extern void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffs
 
 /* The trough bar graph display function */
 extern void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_BAR_H__

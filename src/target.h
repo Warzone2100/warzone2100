@@ -23,6 +23,11 @@
 
 #include "basedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 void targetInitialise(void);
 void targetOpenList(BASE_OBJECT *psTargeting);
 void targetCloseList(void);
@@ -31,5 +36,9 @@ BASE_OBJECT *targetAquireNearestObjView(BASE_OBJECT *psObj);
 BASE_OBJECT *targetGetCurrent(void);
 void targetStartAnim(void);
 void targetMarkCurrent(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_TARGET_H__

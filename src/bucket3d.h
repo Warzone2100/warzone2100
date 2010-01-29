@@ -21,6 +21,11 @@
 #ifndef __INCLUDED_SRC_BUCKET3D_H__
 #define __INCLUDED_SRC_BUCKET3D_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define		BUCKET
 
 typedef enum _render_type
@@ -47,5 +52,9 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* object);
 
 /* render Objects in list */
 extern BOOL bucketRenderCurrentList(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_BUCKET3D_H__

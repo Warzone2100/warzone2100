@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_LEVELINT_H__
 #define __INCLUDED_SRC_LEVELINT_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // return values from the lexer
 enum _token_type
 {
@@ -53,5 +58,9 @@ extern SDWORD levVal;
 
 // error report function for the level parser
 extern void lev_error(const char* msg);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_LEVELINT_H__

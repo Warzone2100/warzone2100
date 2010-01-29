@@ -27,6 +27,11 @@
 #include "droiddef.h"
 #include "structuredef.h" //STRUCT_MAXWEAPS
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /**
  *	@file action.h
  *	Droid actions.
@@ -185,5 +190,9 @@ extern BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot);
 (((object)->id % NAYBOR_SKIP_FRAMES) == (frameGetFrameNumber() % NAYBOR_SKIP_FRAMES))
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ACTION_H__

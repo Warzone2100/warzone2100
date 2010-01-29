@@ -45,6 +45,11 @@
 #include "trig.h"
 #include "cursors.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 extern UDWORD selectedPlayer;
 #define MAX_PLAYERS	8	/**< Maximum number of players in the game. */
 
@@ -98,6 +103,10 @@ extern UDWORD frameGetAverageRate(void);
 
 extern UDWORD HashString( const char *String );
 extern UDWORD HashStringIgnoreCase( const char *String );
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #if defined(WZ_OS_WIN)
 # include <winsock2.h> /* for struct timeval */
