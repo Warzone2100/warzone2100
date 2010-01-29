@@ -19,6 +19,17 @@
 			name = "Make DMGs for Release";
 			productName = "Make DMGs for Release";
 		};
+		43BE7B5311126EF1007DF934 /* Setup Prebuilt Components */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 43BE7B7211126F1D007DF934 /* Build configuration list for PBXAggregateTarget "Setup Prebuilt Components" */;
+			buildPhases = (
+				43BE7B5211126EF1007DF934 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "Setup Prebuilt Components";
+			productName = "Setup Prebuilt Components";
+		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
@@ -521,6 +532,12 @@
 		43BE73EE11121A54007DF934 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177E70F87A926000C8A96 /* config.h */; };
 		43BE759811123F77007DF934 /* challenge.c in Sources */ = {isa = PBXBuildFile; fileRef = 43BE759611123F77007DF934 /* challenge.c */; };
 		43BE75AF11124048007DF934 /* wzapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BE75AD11124048007DF934 /* wzapp.cpp */; };
+		43BE760311125E2C007DF934 /* QtGui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE760211125E2C007DF934 /* QtGui.framework */; };
+		43BE760E11125E5A007DF934 /* QtGui.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 43BE760211125E2C007DF934 /* QtGui.framework */; };
+		43BE794811126381007DF934 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE794711126381007DF934 /* QtCore.framework */; };
+		43BE794D11126394007DF934 /* QtCore.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 43BE794711126381007DF934 /* QtCore.framework */; };
+		43BE7B19111267A6007DF934 /* QtOpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE7B18111267A6007DF934 /* QtOpenGL.framework */; };
+		43BE7B33111267AF007DF934 /* QtOpenGL.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 43BE7B18111267A6007DF934 /* QtOpenGL.framework */; };
 		647D9C531039288D006D37CF /* dictionary.c in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C4F1039288D006D37CF /* dictionary.c */; };
 		647D9C541039288D006D37CF /* iniparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C511039288D006D37CF /* iniparser.c */; };
 		9711775E0F87A677000C8A96 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
@@ -668,6 +685,13 @@
 			remoteGlobalIDString = 02356D740BD3BB3400E9A019 /* Warzone */;
 			remoteInfo = Warzone;
 		};
+		43BE7B5611126F07007DF934 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43BE7B5311126EF1007DF934 /* Setup Prebuilt Components */;
+			remoteInfo = "Setup Prebuilt Components";
+		};
 		97AEAAEC0E8C1B5200A10721 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -698,6 +722,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				43BE7B33111267AF007DF934 /* QtOpenGL.framework in Copy frameworks (36) */,
+				43BE794D11126394007DF934 /* QtCore.framework in Copy frameworks (36) */,
+				43BE760E11125E5A007DF934 /* QtGui.framework in Copy frameworks (36) */,
 				023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks (36) */,
 				02548E070D159F4000B4B3B9 /* Popt.framework in Copy frameworks (36) */,
 				02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks (36) */,
@@ -1416,6 +1443,9 @@
 		43BE75AC11124048007DF934 /* wzapp_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzapp_c.h; path = ../lib/framework/wzapp_c.h; sourceTree = SOURCE_ROOT; };
 		43BE75AD11124048007DF934 /* wzapp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wzapp.cpp; path = ../lib/framework/wzapp.cpp; sourceTree = SOURCE_ROOT; };
 		43BE75AE11124048007DF934 /* wzapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzapp.h; path = ../lib/framework/wzapp.h; sourceTree = SOURCE_ROOT; };
+		43BE760211125E2C007DF934 /* QtGui.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtGui.framework; sourceTree = "<group>"; };
+		43BE794711126381007DF934 /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtCore.framework; sourceTree = "<group>"; };
+		43BE7B18111267A6007DF934 /* QtOpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtOpenGL.framework; sourceTree = "<group>"; };
 		647D9C4F1039288D006D37CF /* dictionary.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dictionary.c; path = ../lib/iniparser/dictionary.c; sourceTree = SOURCE_ROOT; };
 		647D9C501039288D006D37CF /* dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dictionary.h; path = ../lib/iniparser/dictionary.h; sourceTree = SOURCE_ROOT; };
 		647D9C511039288D006D37CF /* iniparser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = iniparser.c; path = ../lib/iniparser/iniparser.c; sourceTree = SOURCE_ROOT; };
@@ -1507,6 +1537,9 @@
 				0246A3B60BD3CD0B004D1C70 /* Vorbis.framework in Frameworks */,
 				0246A3B70BD3CD0B004D1C70 /* PhysFS.framework in Frameworks */,
 				97F013D80EDEAE98004947E5 /* Cocoa.framework in Frameworks */,
+				43BE760311125E2C007DF934 /* QtGui.framework in Frameworks */,
+				43BE794811126381007DF934 /* QtCore.framework in Frameworks */,
+				43BE7B19111267A6007DF934 /* QtOpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1648,7 +1681,8 @@
 				0246A0980BD3CB97004D1C70 /* Warzone sources */,
 				023A1D4F0D2DAEC900EFEB37 /* Resources */,
 				43BE71041111DEF9007DF934 /* Third Party */,
-				02DDA8DF0BD3C3A80049AB60 /* External frameworks */,
+				43BE760011125DBD007DF934 /* External frameworks */,
+				02DDA8DF0BD3C3A80049AB60 /* System frameworks */,
 				02356D760BD3BB3400E9A019 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -2359,7 +2393,7 @@
 			name = "PhysFS sources";
 			sourceTree = "<group>";
 		};
-		02DDA8DF0BD3C3A80049AB60 /* External frameworks */ = {
+		02DDA8DF0BD3C3A80049AB60 /* System frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				97AEA9550E8C182B00A10721 /* Foundation.framework */,
@@ -2377,7 +2411,7 @@
 				0246A3B80BD3CD1F004D1C70 /* OpenAL.framework */,
 				02DDA8E00BD3C3CC0049AB60 /* IOKit.framework */,
 			);
-			name = "External frameworks";
+			name = "System frameworks";
 			sourceTree = "<group>";
 		};
 		02F5CC7F0D1495EB0000A2D0 /* Popt sources */ = {
@@ -2591,6 +2625,25 @@
 				647D9C521039288D006D37CF /* iniparser.h */,
 			);
 			name = iniparser;
+			sourceTree = "<group>";
+		};
+		43BE760011125DBD007DF934 /* External frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				43BE760111125E2C007DF934 /* QT */,
+			);
+			name = "External frameworks";
+			sourceTree = "<group>";
+		};
+		43BE760111125E2C007DF934 /* QT */ = {
+			isa = PBXGroup;
+			children = (
+				43BE7B18111267A6007DF934 /* QtOpenGL.framework */,
+				43BE794711126381007DF934 /* QtCore.framework */,
+				43BE760211125E2C007DF934 /* QtGui.framework */,
+			);
+			name = QT;
+			path = external/QT;
 			sourceTree = "<group>";
 		};
 		971177840F87A6D9000C8A96 /* Pixman sources */ = {
@@ -2860,6 +2913,7 @@
 				0246A3070BD3CCF9004D1C70 /* PBXTargetDependency */,
 				02F5CCC40D1498BB0000A2D0 /* PBXTargetDependency */,
 				97AEAC550E8C261600A10721 /* PBXTargetDependency */,
+				43BE7B5711126F07007DF934 /* PBXTargetDependency */,
 			);
 			name = Warzone;
 			productName = Warzone;
@@ -3073,6 +3127,7 @@
 			targets = (
 				02356D740BD3BB3400E9A019 /* Warzone */,
 				02CDDCF30D159BC300722688 /* Autorevision */,
+				43BE7B5311126EF1007DF934 /* Setup Prebuilt Components */,
 				221052010E3D21E80057CD9C /* Bison */,
 				022B2F210BD55814002E64E3 /* Gettext */,
 				02356D820BD3BB4100E9A019 /* Zlib */,
@@ -3336,6 +3391,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Config\nsimgfl=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/wztemplate.sparseimage\"\nsimgflnme=\"wztemplate.sparseimage\"\nsequence=\"http://www.il.fontys.nl/~giel/warzone/videos/latest/en/hi/sequences.wz\"\nsequencenme=\"sequences.wz\"\nsequencelo=\"http://www.il.fontys.nl/~giel/warzone/videos/latest/en/lo/sequences.wz\"\nsequencelonme=\"sequences-lo.wz\"\nrelbuild=\"build/Release/Warzone.app\"\ndmgout=\"build/dmgout\"\n\n# Fail if not release\nif [ ! -d \"$relbuild\" ]; then\n    echo \"This should only be run as Release\"\n    exit 1\nfi\n\n# Make a dir and get the sparseimage\nmkdir -p \"$dmgout\"\ncd  \"$dmgout\"\nif [ ! -f \"$simgflnme\" ]; then\n    echo \"Fetching $simgfl\"\n    if ! curl -L -O --connect-timeout \"30\" \"$simgfl\"; then\n        echo \"Unable to fetch $simgfl\"\n        exit 1\n    fi\nelse\n    echo \"$simgflnme already exists, skipping\"\nfi\n\n# Get the sequences\n\n# Comment out the following to skip the high qual seq\n# if [ ! -f \"$sequencenme\" ]; then\n#     echo \"Fetching $sequencenme\"\n#     if ! curl -L -O --connect-timeout \"30\" \"$sequence\"; then\n#         echo \"Unable to fetch $sequence\"\n#         exit 1\n#     fi\n# else\n#     echo \"$sequencenme already exists, skipping\"\n# fi\n# \n\n# Comment out the following to skip the low qual seq\nif [ ! -f \"$sequencelonme\" ]; then\n    echo \"Fetching $sequencelonme\"\n    if [ -f \"${HOME}/Applications/Build/wz2100/dmgmaker/sequences-lo.wz\" ]; then\n        cp \"${HOME}/Applications/Build/wz2100/dmgmaker/sequences-lo.wz\" \"$sequencelonme\"\n    elif [ -f \"${HOME}/Library/Application Support/Warzone 2100 Trunk/sequences-lq.wz\" ]; then\n        cp \"${HOME}/Library/Application Support/Warzone 2100 Trunk/sequences-lq.wz\" \"$sequencelonme\"\n    else\n        if ! curl -L --connect-timeout \"30\" -o \"$sequencelonme\" \"$sequencelo\"; then\n            echo \"Unable to fetch $sequencelo\"\n            exit 1\n        fi\n    fi\nelse\n    echo \"$sequencelonme already exists, skipping\"\nfi\n# \n\n# Copy over the app\ncd ../../\necho \"Copying the app cleanly.\"\nrm -r -f $dmgout/Warzone.app\nif ! tar -c --exclude '.svn' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store' -C build/Release Warzone.app | tar -xC $dmgout; then\n    echo \"Unable to copy the app\"\n    exit 1\nfi\ncd \"$dmgout\"\n\n# mkredist.bash\n\ncd Warzone.app/Contents/Resources/data/\n\necho \"== Compressing base.zip ==\"\nif [ -d base/ ]\nthen\n  cd base/\n  zip -r ../base.wz *\n  cd ..\n  rm -rf base/\nfi\n\necho \"== Compressing mp.zip ==\"\nif [ -d mp/ ]\nthen\n  cd mp/\n  zip -r ../mp.wz *\n  cd ..\n  rm -rf mp/\nfi\n\ncd ../../../../\n\nrm -r -f ./out ./temp\nmkdir temp/\nmkdir out/\n\necho \"== Creating DMG ==\"\ncp wztemplate.sparseimage temp/wztemplatecopy.sparseimage\nhdiutil resize -size 150m temp/wztemplatecopy.sparseimage\nmountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\ncp -r Warzone.app/* /Volumes/Warzone\\ 2100/Warzone.app\n# hdiutil detach `expr match \"$mountpt\" '\\(^[^ ]*\\)'`\nhdiutil detach \"$mountpt\"\nhdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-novideo.dmg\n\nif [ -f \"$sequencelonme\" ]; then\n    echo \"== Creating LQ DMG ==\"\n    hdiutil resize -size 350m temp/wztemplatecopy.sparseimage\n    mountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\n    cp sequences-lo.wz /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n    # hdiutil detach `expr match \"$mountpt\" '\\(^[^ ]*\\)'`\n    hdiutil detach \"$mountpt\"\n    hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-lqvideo.dmg\nelse\n    echo \"$sequencelonme does not exist, skipping\"\nfi\n\n\nif [ -f \"$sequencenme\" ]; then\n    echo \"== Creating HQ DMG ==\"\n    hdiutil resize -size 700m temp/wztemplatecopy.sparseimage\n    mountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\n    rm /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n    cp sequences.wz /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n    hdiutil detach \"$mountpt\"\n    hdiutil converttemp/wztemplatecopy.sparseimage -format UDZO  -o out/warzone2100-hqvideo.dmg\nelse\n    echo \"$sequencenme does not exist, skipping\"\nfi\n\necho \"== Cleaning up ==\"\nrm -f temp/wztemplatecopy.sparseimage\nrmdir temp/\n\n# Open the dir\nopen \"out\"\n\nexit 0";
+		};
+		43BE7B5211126EF1007DF934 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# QT\nQT_DIRECTORY=\"QT_\"\nQT_OUTDIR=\"QT\"\nQT_FILENAME=\"QT.tar.gz\"\n\n# Checks\nif [ -d \"external/${QT_OUTDIR}\" ]; then\n  echo \"$QT_OUTDIR exists, skipping\"\n  exit 0\nelif [ -d \"prebuilt/${QT_DIRECTORY}\" ]; then\n  echo \"$QT_DIRECTORY exists, probably from an earlier failed run\"\n  exit 1\nfi\n\n# Unpack \ncd prebuilt\nif ! tar -zxf \"${QT_FILENAME}\"; then\n    echo \"Unpacking $QT_FILENAME failed\"\n    exit 1\nfi\n\n# Move\nif [ ! -d \"${QT_DIRECTORY}\" ]; then\n    echo \"Can't find $QT_DIRECTORY to rename\"\n    exit 1\nelse\n    cd ..\n    mv \"prebuilt/${QT_DIRECTORY}\" \"external/${QT_OUTDIR}\"\nfi\n\nexit 0";
 		};
 		9711774C0F87A677000C8A96 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3886,6 +3954,11 @@
 			target = 02356D740BD3BB3400E9A019 /* Warzone */;
 			targetProxy = 43BE71631111E152007DF934 /* PBXContainerItemProxy */;
 		};
+		43BE7B5711126F07007DF934 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43BE7B5311126EF1007DF934 /* Setup Prebuilt Components */;
+			targetProxy = 43BE7B5611126F07007DF934 /* PBXContainerItemProxy */;
+		};
 		97AEAAEB0E8C1B5200A10721 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 02356E080BD3BCFE00E9A019 /* Ogg */;
@@ -4066,9 +4139,10 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
+					"\"$(SRCROOT)/external/QT\"",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/build/Debug\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/build/$(CONFIGURATION)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -4103,7 +4177,7 @@
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Debug\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/$(CONFIGURATION)\"";
 				OTHER_CFLAGS = (
 					"-Wno-pointer-to-int-cast",
 					"-Wmissing-declarations",
@@ -4137,9 +4211,10 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
+					"\"$(SRCROOT)/external/QT\"",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/build/$(CONFIGURATION)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -4170,7 +4245,7 @@
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/$(CONFIGURATION)\"";
 				OTHER_CFLAGS = (
 					"-Wno-pointer-to-int-cast",
 					"-Wmissing-declarations",
@@ -4596,6 +4671,27 @@
 			};
 			name = Release;
 		};
+		43BE7B5411126EF2007DF934 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "Setup Prebuilt Components";
+			};
+			name = Debug;
+		};
+		43BE7B5511126EF2007DF934 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Setup Prebuilt Components";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		971177620F87A677000C8A96 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4815,6 +4911,15 @@
 			buildConfigurations = (
 				43BE71611111E14A007DF934 /* Debug */,
 				43BE71621111E14A007DF934 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		43BE7B7211126F1D007DF934 /* Build configuration list for PBXAggregateTarget "Setup Prebuilt Components" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43BE7B5411126EF2007DF934 /* Debug */,
+				43BE7B5511126EF2007DF934 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

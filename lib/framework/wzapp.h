@@ -11,6 +11,16 @@ extern "C" {
 }
 #endif
 
+#if defined(__MACOSX__)
+#include <QtGui/QApplication>
+#include <QtCore/QTimer>
+#include <QtOpenGL/QGLWidget>
+#include <QtCore/QBuffer>
+#include <QtCore/QTime>
+#include <QtCore/QThread>
+#include <QtCore/QMutex>
+#include <QtCore/QSemaphore>
+#else
 #include <QApplication>
 #include <QTimer>
 #include <QGLWidget>
@@ -19,6 +29,7 @@ extern "C" {
 #include <QThread>
 #include <QMutex>
 #include <QSemaphore>
+#endif
 
 class WzMainWindow : public QGLWidget
 {

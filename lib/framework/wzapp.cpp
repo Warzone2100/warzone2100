@@ -40,6 +40,15 @@ extern "C" {
 }
 #endif
 
+#if defined(__MACOSX__)
+#include <QtGui/QImageReader>
+#include <QtGui/QBitmap>
+#include <QtGui/QPainter>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QClipboard>
+#include "wzapp.h"
+#include <QtGui/QDesktopWidget>
+#else
 #include <QImageReader>
 #include <QBitmap>
 #include <QPainter>
@@ -47,6 +56,7 @@ extern "C" {
 #include <QClipboard>
 #include "wzapp.h"
 #include <QDesktopWidget>
+#endif
 
 /* The possible states for keys */
 typedef enum _key_state
