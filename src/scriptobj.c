@@ -1464,12 +1464,11 @@ int luaWZObj_checkfeaturestat(lua_State *L, int pos)
 
 BASE_OBJECT *luaWZObj_checkobject(lua_State *L, int pos, int type)
 {
-	int objectType;
 	BASE_OBJECT *object = luaWZObj_checkbaseobject(L, pos);
 	
 	if (object->type != type)
 	{
-		luaL_error(L, "type of argument %d is %d instead of %d", pos, objectType, type);
+		luaL_error(L, "type of argument %d is %d instead of %d", pos, object->type, type);
 		return NULL; // not reached
 	}
 	return object;
