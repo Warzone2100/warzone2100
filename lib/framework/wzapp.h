@@ -1,15 +1,9 @@
 #ifndef WZAPP_H
 #define WZAPP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "lib/framework/cursors.h"
 #include "lib/ivis_common/textdraw.h"
 #include "input.h"
-#ifdef __cplusplus
-}
-#endif
 
 #if defined(__MACOSX__)
 #include <QtGui/QApplication>
