@@ -146,7 +146,7 @@ void NETresetGamePassword(void);
  * Network globals, these are part of the new network API
  */
 NETMSG NetMsg;
-
+SYNC_COUNTER sync_counter;		// keeps track on how well we are in sync
 // ////////////////////////////////////////////////////////////////////////
 // Types
 
@@ -1945,6 +1945,7 @@ int NETinit(BOOL bFirstCall)
 
 	NetPlay.ShowedMOTD = false;
 	NetPlay.GamePassworded = false;
+	memset(&sync_counter, 0x0, sizeof(sync_counter));	//clear counters
 
 	return 0;
 }
