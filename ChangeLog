@@ -3,6 +3,17 @@
    * Fix: In fixed teams mode, if you built satellite uplink, enemy players could also see the entire map (r9496)
    * Fix: Various warnings and asserts (r9494, r9500)
    * Fix: Redundant components being still available if researched after being made redundant (ticket:1462, r9492)
+   * Fix: Now also oil derricks are darkened by true fog of war and pulse when selected (r9543)
+   * Fix: Clear teams when loading from in-game menu (r9541)
+   * Fix: Unbuilt structures and walls should not confer visibility (r9537, ticket:1483)
+   * Fix: Sensor in range check bug (r9531)
+   * Fix: Sound related crash on exit (r9528, ticket:1444)
+   * Fix: Structures popping in and out of true fog of war darkness (r9502)
+ * Multiplayer:
+   * Fix: Disable kicking for wrong data hash for now (r9526)
+ * Skirmish:
+   * Fix: The Wide Spectrum Sensor no longer works as a Counterbattery sensor as this allowed cheating (r9560)
+   * Fix: Workaround for bug that made AI stop research sometimes fixed (r9534)
 
 2010-01-24: Version 2.3 beta 9
  * General:
