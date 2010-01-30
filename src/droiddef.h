@@ -189,8 +189,6 @@ typedef struct DROID
 	// secondary order data
 	UDWORD          secondaryOrder;
 
-	UDWORD          lastSync;                       ///< multiplayer synchronization value.
-
 	/* Action data */
 	SDWORD          action;
 	UDWORD          actionX, actionY;
