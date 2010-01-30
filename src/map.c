@@ -979,7 +979,6 @@ failure:
 static void objectSaveTagged(BASE_OBJECT *psObj)
 {
 	uint16_t v[MAX_PLAYERS], i;
-	uint8_t unused = 0;
 
 	// not written: sDisplay
 
@@ -996,7 +995,7 @@ static void objectSaveTagged(BASE_OBJECT *psObj)
 	tagWrite(0x07, psObj->player);
 	tagWrite(0x08, psObj->group);
 	tagWrite(0x09, psObj->selected);
-	tagWrite(0x0a, unused);  // Was psObj->cluster.
+	tagWrite(0x0a, psObj->cluster);
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		v[i] = psObj->visible[i];

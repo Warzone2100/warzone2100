@@ -23,8 +23,6 @@
  * Form droids and structures into clusters
  *
  */
-// TODO Delete this file after merge.
-#if 0
 #include <string.h>
 
 // cluster empty printf's
@@ -706,4 +704,3 @@ void clustResetVisibility(SDWORD player)
 		aClusterVisibility[i] &= ~(1 << player);
 	}
 }
-#endif

@@ -93,6 +93,7 @@
 #include "levels.h"
 #include "mission.h"
 #include "projectile.h"
+#include "cluster.h"
 #include "multigifts.h"			//because of giftRadar()
 #include "aiexperience.h"
 #include "display3d.h"			//for showRangeAtPos()
@@ -5265,6 +5266,8 @@ WZ_DECL_UNUSED static BOOL scrResetPlayerVisibility(void)
 	{
 		psObj->visible[player] = 0;
 	}
+
+	clustResetVisibility(player);
 
 	return true;
 }

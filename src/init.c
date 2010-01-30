@@ -48,6 +48,7 @@
 #include "advvis.h"
 #include "atmos.h"
 #include "challenge.h"
+#include "cluster.h"
 #include "cmddroid.h"
 #include "component.h"
 #include "configuration.h"
@@ -1033,6 +1034,8 @@ BOOL stageThreeInitialise(void)
 	{
 		return false;
 	}
+
+	clustInitialise();
 
 	gridReset();
 

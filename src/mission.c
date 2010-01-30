@@ -70,6 +70,7 @@
 #include "loop.h"
 #include "visibility.h"
 #include "mapgrid.h"
+#include "cluster.h"
 #include "gateway.h"
 #include "selection.h"
 #include "scores.h"
@@ -403,6 +404,7 @@ BOOL startMission(LEVEL_TYPE missionType, char *pGame)
 	}
 
 	// reset the cluster stuff
+	clustInitialise();
 	initEffectsSystem();
 
 	//load the game file for all types of mission except a Between Mission
@@ -1009,6 +1011,7 @@ void placeLimboDroids(void)
 		    psDroid->selected = false;
             //this is mainly for VTOLs
 			setDroidBase(psDroid, NULL);
+		    psDroid->cluster = 0;
 		    //initialise the movement data
 		    initDroidMovement(psDroid);
             //make sure the died flag is not set
@@ -1038,6 +1041,7 @@ void restoreMissionLimboData(void)
 		if (droidRemove(psDroid, mission.apsDroidLists))
         {
     		addDroid(psDroid, apsDroidLists);
+	    	psDroid->cluster = 0;
             gridAddObject((BASE_OBJECT *)psDroid);
     		//reset droid orders
 	    	orderDroid(psDroid, DORDER_STOP);
@@ -1365,6 +1369,7 @@ static void processMission(void)
 			psDroid->selected = false;
 			// This is mainly for VTOLs
 			setDroidBase(psDroid, NULL);
+			psDroid->cluster = 0;
 		}
 	}
 }
@@ -1404,6 +1409,7 @@ void processMissionLimbo(void)
 					addDroid(psDroid, apsLimboDroids);
 					// This is mainly for VTOLs
 					setDroidBase(psDroid, NULL);
+					psDroid->cluster = 0;
 					orderDroid(psDroid, DORDER_STOP);
 					numDroidsAddedToLimboList++;
 				}
@@ -1844,6 +1850,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 		}
 
 		// reset the transporter cluster
+		psTransporter->cluster = 0;
 		for (psDroid = psTransporter->psGroup->psList; psDroid != NULL
 				&& psDroid != psTransporter; psDroid = psNext)
 		{
@@ -1882,6 +1889,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			psDroid->selected = false;
 			// This is mainly for VTOLs
 			setDroidBase(psDroid, NULL);
+			psDroid->cluster = 0;
 			if (goingHome)
 			{
 				//swap the droid and map pointers

@@ -73,6 +73,7 @@
 #include "feature.h"
 #include "mapgrid.h"
 #include "projectile.h"
+#include "cluster.h"
 #include "intdisplay.h"
 #include "display.h"
 #include "difficulty.h"
@@ -1709,6 +1710,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		psBuilding->status = SS_BEING_BUILT;
 		psBuilding->currentBuildPts = 0;
 		psBuilding->currentPowerAccrued = 0;
+		psBuilding->cluster = 0;
 
 		// rotate a wall if necessary
 		if (!FromSave && pStructureType->type == REF_WALL && wallType == WALL_VERT)
@@ -1846,6 +1848,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 		gridAddObject((BASE_OBJECT *)psBuilding);
 
+		clustNewStruct(psBuilding);
 		asStructLimits[player][max].currentQuantity++;
 	}
 	else //its an upgrade
@@ -4841,6 +4844,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	BOOL		resourceFound = false;
 	UBYTE		mask;
 	FACTORY		*psFactory;
+	SDWORD		cluster;
 	FLAG_POSITION	*psAssemblyPoint=NULL;
 
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid structure pointer");
@@ -4931,6 +4935,10 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	// remove the structure from the grid
 	gridRemoveObject((BASE_OBJECT *)psDel);
 
+	// remove the structure from the cluster
+	cluster = psDel->cluster;
+	clustRemoveObject((BASE_OBJECT *)psDel);
+
 	if (bDestroy)
 	{
 		killStruct(psDel);
@@ -4942,6 +4950,8 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		animObj_Remove(psDel->psCurAnim, psDel->psCurAnim->psAnim->uwID);
 		psDel->psCurAnim = NULL;
 	}
+
+	clustUpdateCluster((BASE_OBJECT *)apsStructLists[psDel->player], cluster);
 
 	if(psDel->player==selectedPlayer)
 	{
@@ -6165,6 +6175,9 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 
 			psStructure->lastHitWeapon = WSC_ELECTRONIC;
 
+			// tell the cluster system it has been attacked
+			clustObjectAttacked((BASE_OBJECT *)psStructure);
+
 			psStructure->resistance = (SWORD)(psStructure->resistance - damage);
 
 			if (psStructure->resistance < 0)
@@ -6208,6 +6221,9 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		}
 		else
 		{
+			// tell the cluster system it has been attacked
+			clustObjectAttacked((BASE_OBJECT *)psDroid);
+
 			psDroid->resistance = (SWORD)(psDroid->resistance - damage);
 
 			if (psDroid->resistance <= 0)
@@ -7421,6 +7437,7 @@ STRUCTURE *	findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, BOOL bClear
 	for(psStruct = apsStructLists[psDroid->player]; psStruct; psStruct=psStruct->psNext)
 	{
 		if ((psStruct->pStructureType->type == REF_REARM_PAD) &&
+			(psTarget == NULL || psTarget->cluster == psStruct->cluster) &&
 			(!bClear || clearRearmPad(psStruct)))
 		{
 			xdiff = (SDWORD)psStruct->pos.x - cx;
@@ -7609,6 +7626,9 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 					setStructureTarget(psStruct, NULL, 0, ORIGIN_UNKNOWN);
 				}
 			}
+
+			//add back into cluster system
+			clustNewStruct(psStructure);
 
 			//add back into the grid system
 			gridAddObject((BASE_OBJECT *)psStructure);
