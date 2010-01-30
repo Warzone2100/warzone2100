@@ -644,6 +644,7 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 	if (!count)
 		return 0;
 
+	do
 	{
 		struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
 
