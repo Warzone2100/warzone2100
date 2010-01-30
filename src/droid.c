@@ -2877,8 +2877,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	memset(psDroid->asOrderList, 0, sizeof(ORDER_LIST)*ORDER_LIST_MAX);
 
 	psDroid->iAudioID = NO_SOUND;
-	psDroid->lastSync = 0;
-
 	psDroid->psCurAnim = NULL;
 	psDroid->group = UBYTE_MAX;
 	psDroid->psBaseStruct = NULL;
