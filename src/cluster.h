@@ -24,6 +24,10 @@
 #ifndef __INCLUDED_SRC_CLUSTER_H__
 #define __INCLUDED_SRC_CLUSTER_H__
 
+#error Clusters disabled due to disuse and wasting cpu time.
+
+// TODO Delete this file after merge.
+#if 0
 #include "droiddef.h"
 #include "structuredef.h"
 
@@ -100,5 +104,6 @@ extern BASE_OBJECT *clustIterate(void);
 
 // reset the visibility for all clusters for a particular player
 extern void clustResetVisibility(SDWORD player);
+#endif
 
 #endif // __INCLUDED_SRC_CLUSTER_H__

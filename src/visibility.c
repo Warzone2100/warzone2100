@@ -37,7 +37,6 @@
 #include "geometry.h"
 #include "hci.h"
 #include "mapgrid.h"
-#include "cluster.h"
 #include "research.h"
 #include "scriptextern.h"
 #include "structure.h"
@@ -543,11 +542,6 @@ void processVisibility(BASE_OBJECT *psObj)
 				if (psObj->visible[psViewer->player] < val)
 				{
 					psObj->visible[psViewer->player] = val;
-				}
-				if(psObj->type != OBJ_FEATURE)
-				{
-					// features are not in the cluster system
-					clustObjectSeen(psObj, psViewer);
 				}
 			}
  		}

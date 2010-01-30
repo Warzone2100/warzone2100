@@ -80,7 +80,6 @@
 #include "target.h"
 #include "fpath.h"
 #include "scriptextern.h"
-#include "cluster.h"
 #include "cmddroid.h"
 #include "keybind.h"
 #include "wrappers.h"
@@ -248,9 +247,6 @@ GAMECODE gameLoop(void)
 				//update the findpath system
 				fpathUpdate();
 			}
-
-			// update the cluster system
-			clusterUpdate();
 
 			if (!editPaused())
 			{

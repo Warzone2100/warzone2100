@@ -42,8 +42,6 @@ extern BOOL		audio_PlayObjStaticTrackCallback( void * psObj, int iTrack,
 									AUDIO_CALLBACK pUserCallback );
 extern BOOL		audio_PlayObjDynamicTrack( void * psObj, int iTrack,
 											AUDIO_CALLBACK pUserCallback );
-extern BOOL		audio_PlayClusterDynamicTrack( void * psClusterObj,
-								int iTrack, AUDIO_CALLBACK pUserCallback );
 extern void		audio_StopObjTrack( void * psObj, int iTrack );
 extern void		audio_PlayTrack( int iTrack );
 extern void		audio_PlayCallbackTrack( int iTrack,

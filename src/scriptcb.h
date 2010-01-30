@@ -75,9 +75,6 @@ extern BASE_OBJECT		*psScrCBObjSeen;
 // the object that saw psScrCBObjSeen for a CALL_OBJ_SEEN
 extern BASE_OBJECT		*psScrCBObjViewer;
 
-// tell the scripts when a cluster is no longer valid
-extern SDWORD	scrCBEmptyClusterID;
-
 // note when a vtol has finished returning to base - used to vanish
 // vtols when they are attacking from off map
 extern DROID *psScrCBVtolOffMap;

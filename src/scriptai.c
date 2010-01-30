@@ -32,7 +32,6 @@
 #include "scriptai.h"
 #include "order.h"
 #include "map.h"
-#include "cluster.h"
 #include "lib/netplay/netplay.h"
 #include "cmddroid.h"
 #include "projectile.h"
@@ -286,7 +285,7 @@ WZ_DECL_UNUSED static BOOL scrInitIterateCluster(void)
 		return false;
 	}
 
-	clustInitIterate(clusterID);
+	ASSERT(false, "cluster system disabled due to disuse and using too much cpu");
 
 	return true;
 }
@@ -297,7 +296,8 @@ WZ_DECL_UNUSED static BOOL scrIterateCluster(void)
 {
 	BASE_OBJECT		*psObj;
 
-	psObj = clustIterate();
+	ASSERT(false, "cluster system disabled due to disuse and using too much cpu");
+	psObj = NULL;
 
 	scrFunctionResult.v.oval = psObj;
 	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
@@ -1046,6 +1046,8 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 		return NULL;
 	}
 
+	ASSERT(cluster == 0, "Clusters are disabled due to disuse and wasting lots of cpu time.");
+
 	if (x1 > x2)
 	{
 		temp = x2;
@@ -1096,7 +1098,6 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 	for(; psCurr; psCurr=psCurr->psNext)
 	{
 		if ((!bVisCheck || psCurr->visible[visPlayer]) &&
-			(cluster == 0 || psCurr->cluster == cluster) &&
 			((SDWORD)psCurr->pos.x >= x1) &&
 			((SDWORD)psCurr->pos.x <= x2) &&
 			((SDWORD)psCurr->pos.y >= y1) &&
@@ -1223,35 +1224,15 @@ WZ_DECL_UNUSED static BOOL scrDroidTargetOnMap(void)
 // get a target from a cluster using the preferences
 WZ_DECL_UNUSED static BOOL scrTargetInCluster(void)
 {
-	SDWORD		tarPlayer, tarType, visPlayer, clusterID, cluster;
-	BASE_OBJECT	*psTarget;
+	SDWORD          visPlayer, clusterID;
 
 	if (!stackPopParams(2, VAL_INT, &clusterID, VAL_INT, &visPlayer))
 	{
 		return false;
 	}
 
-	if (clusterID < 0 || clusterID >= CLUSTER_MAX)
-	{
-		ASSERT( false, "scrTargetInCluster: invalid clusterID" );
-		return false;
-	}
-
-	cluster = aClusterMap[clusterID];
-	tarPlayer = aClusterInfo[cluster] & CLUSTER_PLAYER_MASK;
-	tarType = (aClusterInfo[cluster] & CLUSTER_DROID) ? SCR_TAR_DROID : SCR_TAR_STRUCT;
-
-	psTarget = scrTargetInArea(tarPlayer, visPlayer, tarType, cluster,
-							scrollMinX*TILE_UNITS,scrollMinY*TILE_UNITS,
-							scrollMaxX*TILE_UNITS,scrollMaxY*TILE_UNITS);
-
-	scrFunctionResult.v.oval = psTarget;
-	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	ASSERT( false, "scrTargetInCluster: cluster system disabled due to disuse and using too much cpu" );
+	return false;
 }
 
 // ********************************************************************************************

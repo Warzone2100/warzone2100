@@ -71,7 +71,6 @@
 #include "fpath.h"
 #include "mapgrid.h"
 #include "projectile.h"
-#include "cluster.h"
 #include "mission.h"
 #include "levels.h"
 #include "transporter.h"
@@ -303,9 +302,6 @@ void droidRelease(DROID *psDroid)
 	// remove the object from the grid
 	gridRemoveObject((BASE_OBJECT *)psDroid);
 
-	// remove the droid from the cluster systerm
-	clustRemoveObject((BASE_OBJECT *)psDroid);
-
 	if (psDroid->sMove.asPath)
 	{
 		free(psDroid->sMove.asPath);
@@ -468,9 +464,6 @@ void	removeDroidBase(DROID *psDel)
 	// remove the droid from the grid
 	gridRemoveObject((BASE_OBJECT *)psDel);
 
-	// remove the droid from the cluster systerm
-	clustRemoveObject((BASE_OBJECT *)psDel);
-
 	if (psDel->player == selectedPlayer)
 	{
 		intRefreshScreen();
@@ -585,9 +578,6 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 
 	// reset the baseStruct
 	setDroidBase(psDroid, NULL);
-
-	// remove the droid from the cluster systerm
-	clustRemoveObject((BASE_OBJECT *)psDroid);
 
 	// remove the droid from the grid
 	gridRemoveObject((BASE_OBJECT *)psDroid);
@@ -810,12 +800,6 @@ void droidUpdate(DROID *psDroid)
 		       droidGetName(psDroid), psDroid);
 	}
 #endif
-
-	// update the cluster of the droid
-	if (psDroid->id % 20 == frameGetFrameNumber() % 20)
-	{
-		clustUpdateObject((BASE_OBJECT *)psDroid);
-	}
 
 	// ai update droid
 	aiUpdateDroid(psDroid);
@@ -2643,7 +2627,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 	}
 
-	psDroid->cluster = 0;
 	psDroid->psGroup = NULL;
 	psDroid->psGrpNext = NULL;
 	if ( (psDroid->droidType == DROID_TRANSPORTER) ||
@@ -2796,7 +2779,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		}
 		visTilesUpdate((BASE_OBJECT *)psDroid, rayTerrainCallback);
 		gridAddObject((BASE_OBJECT *)psDroid);
- 		clustNewDroid(psDroid);
 	}
 
 	// ajl. droid will be created, so inform others
@@ -4027,6 +4009,11 @@ BOOL vtolEmpty(DROID *psDroid)
 	return bEmpty;
 }
 
+static inline int squared(int x)
+{
+	return x*x;
+}
+
 // true if a vtol is waiting to be rearmed by a particular rearm pad
 BOOL vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 {
@@ -4058,8 +4045,8 @@ BOOL vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 		return false;
 	}
 
-	if ((psDroid->psActionTarget[0] != NULL) &&
-		(psDroid->psActionTarget[0]->cluster != psStruct->cluster))
+#define REARM_MAX_DIST 16*TILE_UNITS  // Arbitrary.
+	if (psDroid->psActionTarget[0] != NULL && squared(psDroid->psActionTarget[0]->pos.x - psStruct->pos.x) + squared(psDroid->psActionTarget[0]->pos.y - psStruct->pos.y) > REARM_MAX_DIST*REARM_MAX_DIST)
 	{
 		// vtol is rearming at a different base
 		return false;
@@ -4433,8 +4420,6 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 				}
 			}
 			}
-		// add back into cluster system
-		clustNewDroid(psD);
 
 		// Update visibility
 		visTilesUpdate((BASE_OBJECT*)psD, rayTerrainCallback);

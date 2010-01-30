@@ -35,7 +35,6 @@
 #include "scriptobj.h"
 #include "group.h"
 #include "lib/gamelib/gtime.h"
-#include "cluster.h"
 #include "messagedef.h"
 #include "message.h"
 #include "researchdef.h"
@@ -182,15 +181,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		}
 		type = VAL_INT;
 		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->droidType;
-		break;
-	case OBJID_CLUSTERID:
-		if (psObj->type == OBJ_FEATURE)
-		{
-			debug(LOG_ERROR, "scrBaseObjGet: clusterID not valid for features");
-			return false;
-		}
-		type = VAL_INT;
-		scrFunctionResult.v.ival = clustGetClusterID(psObj);
 		break;
 	case OBJID_HEALTH:
 		switch (psObj->type)

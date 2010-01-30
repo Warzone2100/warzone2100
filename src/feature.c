@@ -256,9 +256,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		debug(LOG_WARNING, "Feature couldn't be built.");
 		return NULL;
 	}
-	// features are not in the cluster system
-	// this will cause an assert when they still end up there
-	psFeature->cluster = ~0;
 	//add the feature to the list - this enables it to be drawn whilst being built
 	addFeature(psFeature);
 

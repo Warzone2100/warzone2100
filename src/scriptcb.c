@@ -669,29 +669,6 @@ WZ_DECL_UNUSED static BOOL scrCBTransporterLandedB( void )
 	return true;
 }
 
-
-// tell the scripts when a cluster is no longer valid
-SDWORD	scrCBEmptyClusterID;
-WZ_DECL_UNUSED static BOOL scrCBClusterEmpty( void )
-{
-	SDWORD		*pClusterID;
-
-	if (!stackPopParams(1, VAL_REF|VAL_INT, &pClusterID))
-	{
-		return false;
-	}
-
-	*pClusterID = scrCBEmptyClusterID;
-
-	scrFunctionResult.v.bval = true;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
 // note when a vtol has finished returning to base - used to vanish
 // vtols when they are attacking from off map
 DROID *psScrCBVtolOffMap;
@@ -1214,10 +1191,6 @@ void eventFireCallbackTrigger(TRIGGER_TYPE trigger)
 					lua_pushnil(L);
 				}
 				args += 2;
-				break;
-			case CALL_CLUSTER_EMPTY:
-				lua_pushinteger(L, scrCBEmptyClusterID);
-				args += 1;
 				break;
 			case CALL_DROID_SEEN:
 			case CALL_STRUCT_SEEN:

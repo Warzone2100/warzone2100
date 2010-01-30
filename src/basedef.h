@@ -62,7 +62,6 @@ typedef enum _object_type
 	UBYTE               player;                     /**< Which player the object belongs to */ \
 	UBYTE               group;                      /**< Which group selection is the droid currently in? */ \
 	UBYTE               selected;                   /**< Whether the object is selected (might want this elsewhere) */ \
-	UBYTE               cluster;                    /**< Which cluster the object is a member of */ \
 	UBYTE               visible[MAX_PLAYERS];       /**< Whether object is visible to specific player */ \
 	UDWORD              died;                       /**< When an object was destroyed, if 0 still alive */ \
 	UDWORD              lastEmission;               /**< When did it last puff out smoke? */ \

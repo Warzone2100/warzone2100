@@ -35,7 +35,6 @@
 #include "lib/gamelib/gtime.h"
 #include "map.h"
 #include "move.h"
-#include "cluster.h"
 #include "messagedef.h"
 #include "miscimd.h"
 #include "projectile.h"
@@ -542,12 +541,6 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 	armour = psObj->armour[impactSide][weaponClass];
 
 	debug(LOG_ATTACK, "objDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
-
-	if (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_DROID)
-	{
-		clustObjectAttacked((BASE_OBJECT *)psObj);
-	}
-
 
 	if (psObj->type == OBJ_DROID)
 	{

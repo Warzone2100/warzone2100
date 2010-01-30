@@ -37,7 +37,6 @@ enum _objids
 	OBJID_TYPE,			// type of a base object
 	OBJID_ORDER,		// current droid order
 	OBJID_DROIDTYPE,	// what type of droid
-	OBJID_CLUSTERID,	// which cluster the object is a member of
 	OBJID_HEALTH,		// %age damage level
 	OBJID_BODY,			// the body component
 	OBJID_PROPULSION,	// the propulsion component
