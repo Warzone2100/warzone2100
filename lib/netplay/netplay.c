@@ -470,6 +470,7 @@ static ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 		return SOCKET_ERROR;
 	}
 
+	do
 	{
 		received = recv(sock->fd[SOCK_CONNECTION], buf, max_size, 0);
 	} while (received == SOCKET_ERROR && getSockErr() == EINTR);
@@ -906,6 +907,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 			return NULL;
 		}
 
+		do
 		{
 			struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
 
