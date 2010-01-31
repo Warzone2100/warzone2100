@@ -282,11 +282,11 @@ BOOL multiPlayerLoop(void)
 						{
 							char msg[256] = {'\0'};
 
-							sprintf(msg, _("Warning: Player %s did not send a data check, and may be cheating."), getPlayerName(index));
+							sprintf(msg, _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
 							sendTextMessage(msg, true);
 							addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
-							//kickPlayer(index, "it is not nice to cheat!", ERROR_CHEAT);
+							kickPlayer(index, "it is not nice to cheat!", ERROR_CHEAT);
 							debug(LOG_WARNING, "Kicking Player %s (%u), they tried to bypass data integrity check!", getPlayerName(index), index);
 						}
 					}
