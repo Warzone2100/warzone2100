@@ -711,7 +711,7 @@ void processVisibility(BASE_OBJECT *psObj)
 						{
 							psMessage->pViewData = (MSG_VIEWDATA *)psObj;
 						}
-						if (!bInTutorial)
+						if (!bInTutorial && player == selectedPlayer)
 						{
 							//play message to indicate been seen
 							audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE, psObj->pos.x, psObj->pos.y, psObj->pos.z );
