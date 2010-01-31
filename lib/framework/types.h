@@ -43,6 +43,9 @@
 # define UINT8_MAX              (255)
 # define UINT16_MAX             (65535)
 # define UINT32_MAX             (4294967295U)
+#ifdef WZ_CC_MSVC
+#define PRIu64  "I64u"
+#endif
 #endif // WZ_C99
 
 /* Basic numeric types */
