@@ -144,18 +144,21 @@ BOOL sendCheck(void)
 	if(okToSend())
 	{
 		sendStructureCheck();
+		sync_counter.sentStructureCheck++;
+
 	}
 	else
 	{
-		sync_counter.unsentDroidCheck++;
+		sync_counter.unsentStructureCheck++;
 	}
 	if(okToSend())
 	{
 		sendPowerCheck();
+		sync_counter.sentPowerCheck++;
 	}
 	else
 	{
-		sync_counter.unsentDroidCheck++;
+		sync_counter.unsentPowerCheck++;
 	}
 	if(okToSend())
 	{
