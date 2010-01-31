@@ -661,8 +661,7 @@ BOOL recvMessage(void)
 			case NET_GIFT:						// an alliance gift from one player to another.
 				recvGift();
 				break;
-			case NET_SCORESUBMIT:				//  a score update from another player
-				recvScoreSubmission();
+			case NET_SCORESUBMIT:				//  a score update from another player [UNUSED] see NET_PLAYER_STATS
 				break;
 			case NET_VTOL:
 				recvHappyVtol();

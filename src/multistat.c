@@ -102,16 +102,20 @@ void recvMultiStats()
 		// update the stats
 		NETuint32_t(&playerIndex);
 
-		// Retrieve the actual stats
-		NETuint32_t(&playerStats[playerIndex].played);
-		NETuint32_t(&playerStats[playerIndex].wins);
-		NETuint32_t(&playerStats[playerIndex].losses);
-		NETuint32_t(&playerStats[playerIndex].totalKills);
-		NETuint32_t(&playerStats[playerIndex].totalScore);
-		NETuint32_t(&playerStats[playerIndex].recentKills);
-		NETuint32_t(&playerStats[playerIndex].recentScore);
-		NETuint32_t(&playerStats[playerIndex].killsToAdd);
-		NETuint32_t(&playerStats[playerIndex].scoreToAdd);
+		// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
+		if (!myResponsibility(playerIndex))
+		{
+			// Retrieve the actual stats
+			NETuint32_t(&playerStats[playerIndex].played);
+			NETuint32_t(&playerStats[playerIndex].wins);
+			NETuint32_t(&playerStats[playerIndex].losses);
+			NETuint32_t(&playerStats[playerIndex].totalKills);
+			NETuint32_t(&playerStats[playerIndex].totalScore);
+			NETuint32_t(&playerStats[playerIndex].recentKills);
+			NETuint32_t(&playerStats[playerIndex].recentScore);
+			NETuint32_t(&playerStats[playerIndex].killsToAdd);
+			NETuint32_t(&playerStats[playerIndex].scoreToAdd);
+		}
 	NETend();
 }
 
@@ -209,8 +213,9 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 	{
 		return;
 	}
-	
-	if(isHumanPlayer(attacker))
+	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
+	// Host controls self + AI, so update the scores for them as well.
+	if(myResponsibility(attacker) && NetPlay.bComms)
 	{
 		st = getMultiStats(attacker,true);	// get stats
 		if(NetPlay.bComms)
@@ -228,8 +233,9 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 		ingame.skScores[attacker][0] += (2*inflicted);	// increment skirmish players rough score.
 	}
 
-
-	if(isHumanPlayer(defender))
+	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
+	// Host controls self + AI, so update the scores for them as well.
+	if(myResponsibility(defender) && NetPlay.bComms)
 	{
 		st = getMultiStats(defender,true);	// get stats
 		if(NetPlay.bComms)
@@ -297,7 +303,9 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 	{
 		return;
 	}
-	if(isHumanPlayer(player))
+	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
+	// Host controls self + AI, so update the scores for them as well.
+	if(myResponsibility(player) && NetPlay.bComms)
 	{
 		st  = getMultiStats(player,true);
 

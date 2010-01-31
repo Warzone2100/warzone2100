@@ -58,7 +58,7 @@ extern BOOL recvColourRequest		(void);
 extern BOOL recvPositionRequest		(void);
 extern void recvOptions				(void);
 extern void sendOptions				(void);
-extern BOOL recvScoreSubmission		(void);
+
 extern BOOL recvHappyVtol			(void);
 extern BOOL recvResearchStatus		(void);
 extern BOOL recvLasSat				(void);
