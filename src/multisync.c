@@ -1054,12 +1054,10 @@ BOOL recvPowerCheck()
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Score
+// We use setMultiStats() to broadcast the score when needed.
 BOOL sendScoreCheck(void)
 {
 	static UDWORD	lastsent = 0;
-	uint8_t			i;
-	BOOL			isData = false;
-	PLAYERSTATS		stats;
 
 	if (lastsent > gameTime)
 	{
@@ -1073,92 +1071,33 @@ BOOL sendScoreCheck(void)
 
 	lastsent = gameTime;
 
-	// Update local score
-	stats = getMultiStats(selectedPlayer, true);
-
-	// Add recently scored points
-	stats.recentKills += stats.killsToAdd;
-	stats.totalKills  += stats.killsToAdd;
-	stats.recentScore += stats.scoreToAdd;
-	stats.totalScore  += stats.scoreToAdd;
-
-	// Zero them now added
-	stats.killsToAdd = stats.scoreToAdd = 0;
-
-	// Store local version
-	setMultiStats(selectedPlayer, stats, true);
-
-	// Send score to the ether
-	setMultiStats(selectedPlayer, stats, false);
-
 	// Broadcast any changes in other players, but not in FRONTEND!!!
 	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT)
 	{
-		NETbeginEncode(NET_SCORESUBMIT, NET_ALL_PLAYERS);
+		uint8_t			i;
 
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			if (isHumanPlayer(i) && i != selectedPlayer)
+			PLAYERSTATS		stats;
+
+			// Host controls AI's scores + his own...
+			if (myResponsibility(i))
 			{
+				// Update local score
 				stats = getMultiStats(i, true);
 
-				if (stats.killsToAdd || stats.scoreToAdd  )
-				{
-					NETuint8_t(&i);
+				// Add recently scored points
+				stats.recentKills += stats.killsToAdd;
+				stats.totalKills  += stats.killsToAdd;
+				stats.recentScore += stats.scoreToAdd;
+				stats.totalScore  += stats.scoreToAdd;
 
-					NETuint32_t(&stats.killsToAdd);
-					NETuint32_t(&stats.scoreToAdd);
+				// Zero them out
+				stats.killsToAdd = stats.scoreToAdd = 0;
 
-					isData = true;
-				}
+				// Send score to everyone else
+				setMultiStats(i, stats, false);
 			}
-		}
-
-		// If we added any data to the packet
-		if (isData)
-		{
-			// Terminate the message with ANYPLAYER
-			uint8_t player = ANYPLAYER;
-			NETuint8_t(&player);
-
-			// Send the message
-			NETend();
-		}
-	}
-
-	// Get global versions of scores
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		if (isHumanPlayer(i))
-		{
-			setMultiStats(i, getMultiStats(i, false), true);
-		}
-	}
-
-	return true;
-}
-
-
-BOOL recvScoreSubmission()
-{
-	uint8_t		player;
-	uint32_t	kills, score;
-	PLAYERSTATS	stats;
-
-	NETbeginDecode(NET_SCORESUBMIT);
-
-	for (NETuint8_t(&player); player != ANYPLAYER; NETuint8_t(&player))
-	{
-		if (player == selectedPlayer)
-		{
-			NETuint32_t(&kills);
-			NETuint32_t(&score);
-
-			stats = getMultiStats(player, true);
-			stats.killsToAdd += kills;
-			stats.scoreToAdd += score;
-
-			break;
 		}
 	}
 

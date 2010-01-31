@@ -867,13 +867,26 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	{
 		SetPlayerTextColor(alliances[selectedPlayer][player], player);
 
-		//c8:score,
-		sprintf(str,"%d",getMultiStats(player,true).recentScore);
-		iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
+		// Let's use the real score for MP games
+		if (NetPlay.bComms)
+		{
+			//c8:score,
+			sprintf(str,"%d",getMultiStats(player,true).recentScore);
+			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
 
-		//c9:kills,
-		sprintf(str,"%d",getMultiStats(player,true).recentKills);
-		iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+			//c9:kills,
+			sprintf(str,"%d",getMultiStats(player,true).recentKills);
+			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+		}
+		else
+		{
+			// estimate of score for skirmish games
+			sprintf(str,"%d",ingame.skScores[player][0]);
+			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
+			// estimated kills
+			sprintf(str,"%d",ingame.skScores[player][1]);
+			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+		}
 
 		if(!getDebugMappingStatus())
 		{
@@ -918,12 +931,26 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	{
 		SetPlayerTextColor(alliances[selectedPlayer][player], player);
 
-		// estimate of score.
-		sprintf(str,"%d",ingame.skScores[player][0]);
-		iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
-		// estimated kills
-		sprintf(str,"%d",ingame.skScores[player][1]);
-		iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+		// Let's use the real score for MP games
+		if (NetPlay.bComms)
+		{
+			//c8:score,
+			sprintf(str,"%d",getMultiStats(player,true).recentScore);
+			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
+
+			//c9:kills,
+			sprintf(str,"%d",getMultiStats(player,true).recentKills);
+			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+		}
+		else
+		{
+			// estimate of score for skirmish games
+			sprintf(str,"%d",ingame.skScores[player][0]);
+			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
+			// estimated kills
+			sprintf(str,"%d",ingame.skScores[player][1]);
+			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+		}
 	}
 
 	/* Display player power instead of number of played games
