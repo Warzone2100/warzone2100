@@ -186,6 +186,21 @@ typedef struct
 
 #define NET_ALL_PLAYERS 255
 #define NET_HOST_ONLY 0
+// the following structure is going to be used to track if we sync or not
+typedef struct {
+	uint64_t	sentDroidCheck;
+	uint64_t	unsentDroidCheck;
+	uint64_t	sentStructureCheck;
+	uint64_t	unsentStructureCheck;
+	uint64_t	sentPowerCheck;
+	uint64_t	unsentPowerCheck;
+	uint64_t	sentScoreCheck;
+	uint64_t	unsentScoreCheck;
+	uint64_t	sentPing;
+	uint64_t	unsentPing;
+	uint64_t	sentisMPDirtyBit;
+	uint64_t	unsentisMPDirtyBit;
+} SYNC_COUNTER;
 
 typedef struct {
 	uint16_t	size;				// used size of body
@@ -264,7 +279,7 @@ typedef struct {
 
 extern NETPLAY				NetPlay;
 extern NETMSG NetMsg;
-
+extern SYNC_COUNTER sync_counter;
 // update flags
 extern bool netPlayersUpdated;
 extern int mapDownloadProgress;

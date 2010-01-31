@@ -146,6 +146,7 @@ BOOL NETstartLogging(void)
 
 BOOL NETstopLogging(void)
 {
+	static const char dash_line[] = "-----------------------------------------------------------\n";
 	char buf[256];
 	int i;
 
@@ -161,6 +162,22 @@ BOOL NETstopLogging(void)
 			packetcount[0][i], packetsize[0][i], packetcount[1][i], packetsize[1][i]);
 		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	}
+	snprintf(buf, sizeof(buf), "\n-Sync statistics -\n");
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
+	snprintf(buf, sizeof(buf), "sent/unsent DroidCheck %llu / %llu\n", sync_counter.sentDroidCheck, sync_counter.unsentDroidCheck);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	snprintf(buf, sizeof(buf), "sent/unsent StructureCheck %llu / %llu\n", sync_counter.sentStructureCheck, sync_counter.unsentStructureCheck);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	snprintf(buf, sizeof(buf), "sent/unsent PowerCheck %llu / %llu\n", sync_counter.sentPowerCheck, sync_counter.unsentPowerCheck);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	snprintf(buf, sizeof(buf), "sent/unsent ScoreCheck %llu / %llu\n", sync_counter.sentScoreCheck, sync_counter.unsentScoreCheck);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	snprintf(buf, sizeof(buf), "sent/unsent Ping %llu / %llu\n", sync_counter.sentPing, sync_counter.unsentPing);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	snprintf(buf, sizeof(buf), "sent/unsent isMPDirtyBit %llu / %llu\n", sync_counter.sentisMPDirtyBit, sync_counter.unsentisMPDirtyBit);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
 
 	if (!PHYSFS_close(pFileHandle))
 	{

@@ -134,22 +134,57 @@ BOOL sendCheck(void)
 	if(okToSend())
 	{
 		sendDroidCheck();
+		sync_counter.sentDroidCheck++;
+	}
+	else
+	{
+		sync_counter.unsentDroidCheck++;
 	}
 	if(okToSend())
 	{
 		sendStructureCheck();
+		sync_counter.sentStructureCheck++;
+
+	}
+	else
+	{
+		sync_counter.unsentStructureCheck++;
 	}
 	if(okToSend())
 	{
 		sendPowerCheck();
+		sync_counter.sentPowerCheck++;
+	}
+	else
+	{
+		sync_counter.unsentPowerCheck++;
 	}
 	if(okToSend())
 	{
 		sendScoreCheck();
+		sync_counter.sentScoreCheck++;
+	}
+	else
+	{
+		sync_counter.unsentScoreCheck++;
 	}
 	if(okToSend())
 	{
 		sendPing();
+		sync_counter.sentPing++;
+	}
+	else
+	{
+		sync_counter.unsentPing++;
+	}
+
+	if (isMPDirtyBit)
+	{
+		sync_counter.sentisMPDirtyBit++;
+	}
+	else
+	{
+		sync_counter.unsentisMPDirtyBit++;
 	}
 	// FIXME: reset flag--For now, we always do this since we have no way of knowing which routine(s) we had to set this flag
 	isMPDirtyBit = false;	
