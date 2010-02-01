@@ -8928,7 +8928,7 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 
 		// ignore brains and programs for now
 		psTemplate->asParts[COMP_BRAIN] = 0;
-
+		psTemplate->prefab = false;		// not AI template
 
 		//calculate the total build points
 		psTemplate->buildPoints = calcTemplateBuild(psTemplate);
@@ -8937,9 +8937,6 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		//store it in the apropriate player' list
 		psTemplate->psNext = apsDroidTemplates[psSaveTemplate->player];
 		apsDroidTemplates[psSaveTemplate->player] = psTemplate;
-
-
-
 	}
 
 	return true;
@@ -9058,6 +9055,7 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 
 		// ignore brains and programs for now
 		psTemplate->asParts[COMP_BRAIN] = 0;
+		psTemplate->prefab = false;		// not AI template
 
 		//calculate the total build points
 		psTemplate->buildPoints = calcTemplateBuild(psTemplate);
@@ -9229,6 +9227,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 
 		//no! put brains back in 10Feb //ignore brains and programs for now
 		//psTemplate->asParts[COMP_BRAIN] = 0;
+		psTemplate->prefab = false;		// not AI template
 
 		//calculate the total build points
 		psTemplate->buildPoints = calcTemplateBuild(psTemplate);
@@ -9259,10 +9258,6 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			psTemplate->psNext = apsDroidTemplates[psSaveTemplate->player];
 			apsDroidTemplates[psSaveTemplate->player] = psTemplate;
 		}
-
-
-
-
 	}
 
 	return true;

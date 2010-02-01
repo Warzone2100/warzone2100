@@ -55,6 +55,8 @@ back when building is destroyed*/
 
 //storage
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
+extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
+
 extern bool runningMultiplayer(void);
 
 //used to stop structures being built too near the edge and droids being placed down - pickATile
@@ -227,8 +229,6 @@ extern BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon
 extern DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player);
 /* gets a template from its name - relies on the name being unique */
 extern DROID_TEMPLATE* getTemplateFromTranslatedNameNoPlayer(char *pName);
-/*getTemplateFromSinglePlayerID gets template for unique ID  searching one players list */
-extern DROID_TEMPLATE* getTemplateFromSinglePlayerID(UDWORD multiPlayerID, UDWORD player);
 /*getTemplateFromMultiPlayerID gets template for unique ID  searching all lists */
 extern DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID);
 

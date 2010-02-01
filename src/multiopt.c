@@ -345,8 +345,8 @@ BOOL multiShutdown(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// copy tempates from one player to another.
-BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
+// copy templates from one player to another.
+BOOL addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
 {
 	DROID_TEMPLATE *psTempl = malloc(sizeof(DROID_TEMPLATE));
 
@@ -363,10 +363,17 @@ BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 		psTempl->pName = strdup(psNew->pName);
 	}
 
-	psTempl->psNext = apsDroidTemplates[player];
-	apsDroidTemplates[player] = psTempl;
+	psTempl->psNext = *ppList;
+	*ppList = psTempl;
 
 	return true;
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+// copy templates from one player to another.
+BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
+{
+	return addTemplateToList(psNew, &apsDroidTemplates[player]);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

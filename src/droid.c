@@ -94,6 +94,7 @@ extern DROID_TEMPLATE	sDefaultDesignTemplate;
 
 // Template storage
 DROID_TEMPLATE		*apsDroidTemplates[MAX_PLAYERS];
+DROID_TEMPLATE		*apsStaticTemplates;	// for AIs and scripts
 
 // store the experience of recently recycled droids
 UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
@@ -1834,15 +1835,18 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		{
 			int i;
 
-			// Give AI players all templates, and only those meant for humans (player 0)
-			// to human players.
+			// Give those meant for humans (player 0) to all human players.
 			for (i = 0; i < MAX_PLAYERS; i++)
 			{
-				if (!NetPlay.players[i].allocated || player == 0)
+				if (player == 0 && NetPlay.players[i].allocated)	// human prototype template
 				{
-					addTemplate(i, pDroidDesign);
+					pDroidDesign->prefab = false;
+					addTemplateToList(pDroidDesign, &apsDroidTemplates[i]);
 				}
 			}
+			// Add all templates to static template list
+			pDroidDesign->prefab = true;			// prefabricated templates referenced from VLOs
+			addTemplateToList(pDroidDesign, &apsStaticTemplates);
 		}
 
 		//increment the pointer to the start of the next record
@@ -1870,6 +1874,13 @@ void initTemplatePoints(void)
 			//calc the total power points
 			pDroidDesign->powerPoints = calcTemplatePower(pDroidDesign);
 		}
+	}
+	for (pDroidDesign = apsStaticTemplates; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
+	{
+		//calculate the total build points
+		pDroidDesign->buildPoints = calcTemplateBuild(pDroidDesign);
+		//calc the total power points
+		pDroidDesign->powerPoints = calcTemplatePower(pDroidDesign);
 	}
 }
 
@@ -2040,6 +2051,10 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 				                 pTemplate->aName);
 				pTemplate->storeCount++;
 			}
+			if (!isHumanPlayer(i))
+			{
+				break;	// only one list to add to
+			}
 		}
 
 		//increment the pointer to the start of the next record
@@ -2055,24 +2070,33 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 BOOL droidTemplateShutDown(void)
 {
 	unsigned int player;
+	DROID_TEMPLATE *pTemplate, *pNext;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		DROID_TEMPLATE *pTemplate, *pNext;
-
 		for (pTemplate = apsDroidTemplates[player]; pTemplate != NULL; pTemplate = pNext)
 		{
 			pNext = pTemplate->psNext;
-			//FIX ME:
-			ASSERT(sDefaultDesignTemplate.pName != pTemplate->pName, "We'll soon be getting a double free()!!!");
-			if (pTemplate->pName != sDefaultDesignTemplate.pName)
+			if (pTemplate->pName != sDefaultDesignTemplate.pName)	// sanity check probably no longer necessary
 			{
 				free(pTemplate->pName);
 			}
+			ASSERT(!pTemplate->prefab, "Static template %s in player template list!", pTemplate->aName);
 			free(pTemplate);
 		}
 		apsDroidTemplates[player] = NULL;
 	}
+	for (pTemplate = apsStaticTemplates; pTemplate != NULL; pTemplate = pNext)
+	{
+		pNext = pTemplate->psNext;
+		if (pTemplate->pName != sDefaultDesignTemplate.pName)		// sanity check probably no longer necessary
+		{
+			free(pTemplate->pName);
+		}
+		ASSERT(pTemplate->prefab, "Player template %s in static template list!", pTemplate->aName);
+		free(pTemplate);
+	}
+	apsStaticTemplates = NULL;
 	free(sDefaultDesignTemplate.pName);
 	sDefaultDesignTemplate.pName = NULL;
 
@@ -3056,8 +3080,14 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player)
 {
 	DROID_TEMPLATE *psCurr;
+	DROID_TEMPLATE *list = apsStaticTemplates;	// assume AI
 
-	for (psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	if (isHumanPlayer(player))
+	{
+		list = apsDroidTemplates[player];	// was human
+	}
+	
+	for (psCurr = list; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		if (strcmp(psCurr->pName, pName) == 0)
 		{
@@ -3069,63 +3099,42 @@ DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int playe
 }
 
 /*!
- * Gets a template from its name, irrespective of owner. This is really, really ugly, but
- * when reading from a VLO file we do not know its future owner. We must never read templates
- * from a human player, and we must never let AIs delete their templates, or this will break
- * horribly.
+ * Get a static template from its name. This is used from scripts. These templates must
+ * never be changed or deleted.
  * \param pName Template name
  * \pre pName has to be the unique, untranslated name!
- * \post pName will be translated via getDroidResourceName()!
  */
 DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char *pName)
 {
-	int player;
 	const char *rName;
+	DROID_TEMPLATE *psCurr;
 
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (psCurr = apsStaticTemplates; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		DROID_TEMPLATE *psCurr;
-
-		for (psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
+		rName = psCurr->pName ? psCurr->pName : psCurr->aName;
+		if (strcmp(rName, pName) == 0)
 		{
-			rName = psCurr->pName ? psCurr->pName : psCurr->aName;
-			if (!isHumanPlayer(player) && strcmp(rName, pName) == 0)
-			{
-				return psCurr;
-			}
+			return psCurr;
 		}
 	}
 
-	return NULL;
-}
-
-/*getTemplatefFromSinglePlayerID gets template for unique ID  searching one players list */
-DROID_TEMPLATE* getTemplateFromSinglePlayerID(UDWORD multiPlayerID, UDWORD player)
-{
-	DROID_TEMPLATE	*pDroidDesign;
-
-	for(pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
-	{
-		if (pDroidDesign->multiPlayerID == multiPlayerID)
-		{
-			return pDroidDesign;
-		}
-	}
 	return NULL;
 }
 
 /*getTemplatefFromMultiPlayerID gets template for unique ID  searching all lists */
 DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 {
-	UDWORD			player;
+	UDWORD		player;
 	DROID_TEMPLATE	*pDroidDesign;
 
-	for (player=0; player < MAX_PLAYERS; player++)
+	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		pDroidDesign = getTemplateFromSinglePlayerID(multiPlayerID, player);
-		if (pDroidDesign != NULL)
+		for(pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
 		{
-			return pDroidDesign;
+			if (pDroidDesign->multiPlayerID == multiPlayerID)
+			{
+				return pDroidDesign;
+			}
 		}
 	}
 	return NULL;
