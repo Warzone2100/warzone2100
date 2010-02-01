@@ -14,6 +14,7 @@
  * Skirmish:
    * Fix: The Wide Spectrum Sensor no longer works as a Counterbattery sensor as this allowed cheating (r9560)
    * Fix: Workaround for bug that made AI stop research sometimes fixed (r9534)
+   * Fix: Some AI unit templates had multiple turrets, but shouldn't have (r9605, ticket:1510)
 
 2010-01-24: Version 2.3 beta 9
  * General:

@@ -15,7 +15,7 @@ CO-H-Command-Track,CommandTurret1,NULL,NULL,2
 CO-H-How105-Tracks,Howitzer105Mk1,NULL,NULL,2
 CO-H-How150-Tracks,Howitzer150Mk1,NULL,NULL,2
 CO-H-HPVCannon-Tracks,Cannon4AUTOMk1,NULL,NULL,2
-CO-H-HvyCan-Tracks,Cannon375mmMk1,Cannon375mmMk1,NULL,2
+CO-H-HvyCan-Tracks,Cannon375mmMk1,NULL,NULL,2
 CO-H-QuadBofAA-T,AAGun2Mk1,NULL,NULL,2
 CO-H-QuadRotAA-T,QuadRotAAGun,NULL,NULL,2
 CO-H-Rkt-BB-T,Rocket-BB,NULL,NULL,2
@@ -75,8 +75,8 @@ MP-Cyb-ATmiss-GRD,Cyb-Wpn-Atmiss,NULL,NULL,5
 MP-Cyb-Laser1-GRD,Cyb-Wpn-Laser,NULL,NULL,5
 MP-Cyb-Needle-GRD,Cyb-Wpn-Rail1,NULL,NULL,5
 NP-H-HvyCannon-Hover,Cannon375mmMk1,NULL,NULL,1
-NP-H-HvyCannon-Tracks,Cannon375mmMk1,Cannon375mmMk1,NULL,1
-NP-H-MdCannon-Tracks,Cannon2A-TMk1,Cannon2A-TMk1,NULL,1
+NP-H-HvyCannon-Tracks,Cannon375mmMk1,NULL,NULL,1
+NP-H-MdCannon-Tracks,Cannon2A-TMk1,NULL,NULL,1
 NP-L-HMG-Halftrack,MG3Mk1,NULL,NULL,1
 NP-L-LtAT-Halftrack,Rocket-LtA-T,NULL,NULL,1
 NP-L-LtCannon-Halftrack,Cannon1Mk1,NULL,NULL,1
@@ -126,7 +126,7 @@ P6-L-Bomb1-V,Bomb1-VTOL-LtHE,NULL,NULL,6
 P6-L-LTAT-V,Rocket-VTOL-LtA-T,NULL,NULL,6
 P6-M-QMG1-HT,QuadMg1AAGun,NULL,NULL,6
 PythonComTracks,CommandTurret1,NULL,NULL,6
-PythonHvyCnTrks,Cannon375mmMk1,Cannon375mmMk1,NULL,6
+PythonHvyCnTrks,Cannon375mmMk1,NULL,NULL,6
 PythonLtCnTrks,Cannon1Mk1,NULL,NULL,6
 PythonMedCnTrks,Cannon2A-TMk1,NULL,NULL,6
 SK-Bug-Hover-HMG,MG3Mk1,NULL,NULL,6
