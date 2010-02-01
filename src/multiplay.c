@@ -250,15 +250,16 @@ BOOL multiPlayerLoop(void)
 				ingame.TimeEveryoneIsInGame = gameTime;
 				if (!NetPlay.isHost)
 				{
+					debug(LOG_NET, "=== Sending hash to host ===");
 					sendDataCheck();
 				}
 			}
 			// Only have to do this on a true MP game
 			if (NetPlay.isHost && !ingame.isAllPlayersDataOK && NetPlay.bComms)
 			{
-				if (gameTime - ingame.TimeEveryoneIsInGame > GAME_TICKS_PER_SEC * 30)
+				if (gameTime - ingame.TimeEveryoneIsInGame > GAME_TICKS_PER_SEC * 60)
 				{
-					// we waited 30 secs to make sure people didn't bypass the data integrity checks
+					// we waited 60 secs to make sure people didn't bypass the data integrity checks
 					int index;
 					for (index=0; index < MAX_PLAYERS; index++)
 					{
@@ -768,6 +769,7 @@ BOOL recvMessage(void)
 			break;
 		}
 		case NET_FIREUP:				// frontend only
+			debug(LOG_NET, "NET_FIREUP was received (frontend only?)"); 
 			break;
 		case NET_RESEARCHSTATUS:
 			recvResearchStatus();

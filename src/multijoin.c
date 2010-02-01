@@ -294,7 +294,7 @@ bool sendDataCheck(void)
 	}
 		NETuint32_t(&player);
 	NETend();
-	debug(LOG_NET, "sending hash to host");
+	debug(LOG_NET, "sent hash to host");
 	return true;
 }
 
@@ -314,9 +314,12 @@ bool recvDataCheck(void)
 
 	if (player >= MAX_PLAYERS) // invalid player number.
 	{
+		debug(LOG_ERROR, "invalid player number (%u) detected.", player);
 		return false;
 	}
-	
+
+	debug(LOG_NET, "** Received NET_DATA_CHECK from player %u", player);
+
 	if (NetPlay.isHost)
 	{
 		if (memcmp(DataHash, tempBuffer, sizeof(DataHash)))
@@ -326,10 +329,6 @@ bool recvDataCheck(void)
 			for (i=0; i<DATA_MAXDATA; i++)
 			{
 				if (DataHash[i] != tempBuffer[i]) break;
-			}
-			if (i >= DATA_MAXDATA) // bug in memcmp?
-			{
-				i = 0;
 			}
 
 			sprintf(msg, _("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);

@@ -3012,8 +3012,11 @@ void frontendMultiMessages(void)
 			break;
 		}
 		case NET_FIREUP:					// campaign game started.. can fire the whole shebang up...
+			debug(LOG_NET, "NET_FIREUP was received ..."); 
 			if(ingame.localOptionsReceived)
 			{
+				debug(LOG_NET, "& local Options Received (MP game)");
+				ingame.TimeEveryoneIsInGame = 0;			// reset time
 				resetDataHash();
 				decideWRF();
 

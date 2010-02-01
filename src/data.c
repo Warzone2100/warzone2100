@@ -189,6 +189,7 @@ void resetDataHash(void)
 	{
 		DataHash[i] = 0;
 	}
+	debug(LOG_NET, "== Hash is reset ==");
 }
 
 /**********************************************************/
