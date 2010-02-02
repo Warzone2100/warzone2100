@@ -709,7 +709,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 43EC03E311178E35005D5E3E /* Meta Object Compiler */;
+			remoteGlobalIDString = 43EC03E311178E35005D5E3E;
 			remoteInfo = "Meta Object Compiler";
 		};
 		97AEAAEC0E8C1B5200A10721 /* PBXContainerItemProxy */ = {
