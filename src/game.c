@@ -1075,7 +1075,9 @@ static bool deserializeSaveGameV19Data(PHYSFS_file* fileHandle, SAVE_GAME_V19* s
 		for (j = 0; j < MAX_PLAYERS; ++j)
 		{
 			if (!PHYSFS_readUBE8(fileHandle, &serializeGame->alliances[i][j]))
+			{
 				return false;
+			}
 		}
 	}
 
@@ -2501,9 +2503,14 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		{
 			for(i=0; i<MAX_PLAYERS; i++)
 			{
+		                alliancebits[i] |= 0;
 				for(j=0; j<MAX_PLAYERS; j++)
 				{
 					alliances[i][j] = saveGameData.alliances[i][j];
+					if (game.alliance == ALLIANCES_TEAMS && alliances[i][j] == ALLIANCE_FORMED)
+					{
+			                	alliancebits[i] |= 1 << j;
+					}
 				}
 			}
 			for(i=0; i<MAX_PLAYERS; i++)
