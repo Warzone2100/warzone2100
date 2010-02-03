@@ -131,8 +131,8 @@ extern void setLobbyError (LOBBY_ERROR_TYPES error_type);							// from src/mult
 extern LOBBY_ERROR_TYPES getLobbyError(void);										// from src/multiinit.c
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
-void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
-void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
+static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
+static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETregisterServer(int state);
 static void NETallowJoining(void);
 
@@ -1398,11 +1398,39 @@ static void NET_DestroyPlayer(unsigned int index)
 }
 
 /**
+ * @note Connection dropped. Handle it gracefully.
+ * \param index
+ */
+static void NETplayerClientDisconnect(uint32_t index)
+{
+	if(connected_bsocket[index])
+	{
+		debug(LOG_NET, "Player (%u) has left unexpectedly, closing socket %p",
+			index, connected_bsocket[index]->socket);
+
+		// Although we can get a error result from DelSocket, it don't really matter here.
+		delSocket(socket_set, connected_bsocket[index]->socket);
+		socketClose(connected_bsocket[index]->socket);
+		connected_bsocket[index]->socket = NULL;
+		NetPlay.players[index].heartbeat = false;
+
+		// Announce to the world
+		NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
+			NETuint32_t(&index);
+		NETend();
+	}
+	else
+	{
+		debug(LOG_ERROR, "Player (%u) has left unexpectedly - but socket already closed?", index);
+	}
+}
+
+/**
  * @note When a player leaves nicely (ie, we got a NET_PLAYER_LEAVING
  *       message), we clean up the socket that we used.
  * \param index
  */
-void NETplayerLeaving(UDWORD index)
+static void NETplayerLeaving(UDWORD index)
 {
 	if(connected_bsocket[index])
 	{
@@ -1425,7 +1453,7 @@ void NETplayerLeaving(UDWORD index)
  *       message.
  * \param index
  */
-void NETplayerDropped(UDWORD index)
+static void NETplayerDropped(UDWORD index)
 {
 	uint32_t id = index;
 
@@ -2180,8 +2208,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 		{
 			// Write error, most likely client disconnect.
 			debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-			socketClose(connected_bsocket[player]->socket);
-			connected_bsocket[player]->socket = NULL;
+			NETplayerClientDisconnect(player);
 		}
 	}
 	else
@@ -2243,10 +2270,7 @@ BOOL NETbcast(NETMSG *msg)
 				{
 					// Write error, most likely client disconnect.
 					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-					NetPlay.players[i].heartbeat = false;	//mark them dead
-					debug(LOG_WARNING, "Player (player %u) connection was broken.", i);
-					socketClose(connected_bsocket[i]->socket);
-					connected_bsocket[i]->socket = NULL;
+					NETplayerClientDisconnect(i);
 				}
 			}
 		}
