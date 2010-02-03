@@ -957,14 +957,13 @@ BOOL mapLoad(char *filename)
 	{
 		for (j=0;j<mapHeight;j++)
 		{
-			// copy over to height_new
-			setTileHeight(i,j, map_TileHeight(i, j));
+			setTileHeight(i, j, map_TileHeight(i, j));
 			// FIXME: magic number
-			mapTile(i,j)->waterLevel = mapTile(i,j)->height_new - world_coord(1)/3.0f/(float)ELEVATION_SCALE;
-			// lower riverbed (only for height_new)
-			if (mapTile(i,j)->ground == waterGroundType)
+			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3.0f / (float)ELEVATION_SCALE;
+			// lower riverbed
+			if (mapTile(i, j)->ground == waterGroundType)
 			{
-				mapTile(i,j)->height_new = mapTile(i,j)->height_new - (WATER_DEPTH - 2.0f*environGetData(i, j)) / (float)ELEVATION_SCALE;
+				mapTile(i, j)->height = mapTile(i, j)->height - (WATER_DEPTH - 2.0f * environGetData(i, j)) / (float)ELEVATION_SCALE;
 			}
 		}
 	}
