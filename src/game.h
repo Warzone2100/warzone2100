@@ -107,21 +107,6 @@ typedef struct _vis_save_header
 	uint32_t    version;
 } VIS_SAVEHEADER;
 
-typedef struct _fx_save_header
-{
-	char		aFileType[4];
-	UDWORD		version;
-	UDWORD		entries;
-
-}FX_SAVEHEADER;
-
-typedef struct _score_save_header
-{
-	char		aFileType[4];
-	uint32_t    version;
-	uint32_t    entries;	// should always be one for this?
-
-} SCORE_SAVEHEADER;
 
 /***************************************************************************/
 /*
@@ -143,7 +128,7 @@ extern BOOL loadScriptState(char *pFileName);
 /// Load the terrain types
 extern BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize);
 
-extern BOOL saveGame(char *aFileName, SDWORD saveType);
+extern BOOL saveGame(char *aFileName, GAME_TYPE saveType);
 
 // Get the campaign number for loadGameInit game
 extern UDWORD getCampaign(const char* fileName);
