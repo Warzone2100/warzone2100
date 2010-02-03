@@ -808,21 +808,24 @@ static BOOL hasRockiesDecal(UDWORD i, UDWORD j)
 static BOOL mapSetGroundTypes(void)
 {
 	int i,j;
+
 	for (i=0;i<mapWidth;i++)
 	{
 		for (j=0;j<mapHeight;j++)
 		{
-			mapTile(i,j)->ground = determineGroundType(i,j,tileset);
-			mapTile(i,j)->decal = false;
-			if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
+			MAPTILE *psTile = mapTile(i, j);
+
+			psTile->ground = determineGroundType(i,j,tileset);
+
+			if ((strcmp(tileset, "texpages/tertilesc1hw") == 0 && hasArizonaDecal(i, j))
+			    || (strcmp(tileset, "texpages/tertilesc2hw") == 0 && hasUrbanDecal(i, j))
+			    || (strcmp(tileset, "texpages/tertilesc3hw") == 0 && hasRockiesDecal(i, j)))
 			{
-				mapTile(i,j)->decal = hasArizonaDecal(i,j);
-			} else if (strcmp(tileset, "texpages/tertilesc2hw") == 0)
+				SET_TILE_DECAL(psTile);
+			}
+			else
 			{
-				mapTile(i,j)->decal = hasUrbanDecal(i,j);
-			} else if (strcmp(tileset, "texpages/tertilesc3hw") == 0)
-			{
-				mapTile(i,j)->decal = hasRockiesDecal(i,j);
+				CLEAR_TILE_DECAL(psTile);
 			}
 		}
 	}
