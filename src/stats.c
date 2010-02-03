@@ -918,11 +918,6 @@ BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 		}
 		else
 		{
-			//get the weapon stat
-			if (!getResourceName(weaponName))
-			{
-				return false;
-			}
 			weapon = getCompFromName(COMP_WEAPON, weaponName);
 
 			//if weapon not found - error
@@ -1819,10 +1814,6 @@ BOOL loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize)
 
 		//get the body stats
 		found = false;
-		if (!getResourceName(bodyName))
-		{
-			return false;
-		}
 
 		for (numStats = 0; numStats < numBodyStats; numStats++)
 		{
@@ -1842,10 +1833,6 @@ BOOL loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize)
 
 		//get the propulsion stats
 		found = false;
-		if (!getResourceName(propulsionName))
-		{
-			return false;
-		}
 
 		for (numStats = 0; numStats < numPropulsionStats; numStats++)
 		{
@@ -1947,7 +1934,6 @@ BOOL loadWeaponSounds(const char *pSoundData, UDWORD bufferSize)
 	SDWORD i, weaponSoundID, explosionSoundID, inc, iDum;
 	char			WeaponName[MAX_STR_LENGTH];
 	char			szWeaponWav[MAX_STR_LENGTH],	szExplosionWav[MAX_STR_LENGTH];
-	BOOL 	Ok = true;
 
 	ASSERT( asWeaponStats != NULL, "loadWeaponSounds: Weapon stats not loaded" );
 
@@ -1970,12 +1956,6 @@ BOOL loadWeaponSounds(const char *pSoundData, UDWORD bufferSize)
 			return false;
 		}
 
-		//find the weapon stat
-		if (!getResourceName(WeaponName))
-		{
-			return false;
-		}
-
 		for (inc = 0; inc < (SDWORD)numWeaponStats; inc++)
 		{
 			if (!strcmp(asWeaponStats[inc].pName, WeaponName))
@@ -1985,13 +1965,8 @@ BOOL loadWeaponSounds(const char *pSoundData, UDWORD bufferSize)
 				break;
 			}
 		}
-		if (inc == (SDWORD)numWeaponStats)
-		{
-			debug( LOG_FATAL, "loadWeaponSounds: Weapon stat not found - %s", WeaponName );
-			abort();
-			Ok = false;
-//			return false;
-		}
+		ASSERT_OR_RETURN(false, inc != (SDWORD)numWeaponStats, "Weapon stat not found - %s", WeaponName);
+
 		//increment the pointer to the start of the next record
 		pSoundData = strchr(pSoundData,'\n') + 1;
 	}
@@ -2620,13 +2595,6 @@ SDWORD getCompFromName(UDWORD compType, const char *pName)
 
 	//return -1 if record not found or an invalid component type is passed in
 	return -1;
-}
-
-
-//converts the name read in from Access into the name which is used in the Stat lists
-BOOL getResourceName(const char *pName)
-{
-	return true;
 }
 
 /*return the name to display for the interface - valid for OBJECTS and STATS*/

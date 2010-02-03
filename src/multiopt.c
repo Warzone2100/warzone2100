@@ -343,8 +343,8 @@ BOOL multiShutdown(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// copy tempates from one player to another.
-BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
+// copy templates from one player to another.
+BOOL addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
 {
 	DROID_TEMPLATE *psTempl = malloc(sizeof(DROID_TEMPLATE));
 
@@ -361,162 +361,23 @@ BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 		psTempl->pName = strdup(psNew->pName);
 	}
 
-	psTempl->psNext = apsDroidTemplates[player];
-	apsDroidTemplates[player] = psTempl;
+	psTempl->psNext = *ppList;
+	*ppList = psTempl;
 
 	return true;
 }
 
-BOOL addTemplateSet(UDWORD from,UDWORD to)
+// ////////////////////////////////////////////////////////////////////////////
+// copy templates from one player to another.
+BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 {
-	DROID_TEMPLATE	*psCurr;
-
-	if(from == to)
-	{
-		return true;
-	}
-
-	for(psCurr = apsDroidTemplates[from];psCurr;psCurr= psCurr->psNext)
-	{
-		addTemplate(to, psCurr);
-	}
-
-	return true;
-}
-
-BOOL copyTemplateSet(UDWORD from,UDWORD to)
-{
-	DROID_TEMPLATE	*psTempl;
-
-	if(from == to)
-	{
-		return true;
-	}
-
-	while(apsDroidTemplates[to])				// clear the old template out.
-	{
-		psTempl = apsDroidTemplates[to]->psNext;
-		free(apsDroidTemplates[to]->pName);
-		free(apsDroidTemplates[to]);
-		apsDroidTemplates[to] = psTempl;
-	}
-
-	return 	addTemplateSet(from,to);
+	return addTemplateToList(psNew, &apsDroidTemplates[player]);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // setup templates
 BOOL multiTemplateSetup(void)
 {
-	UDWORD player;
-
-	// Yes, this code really *is* as hacky as it looks.
-	// Fortunately, a recent patch makes it slightly less hacky,
-	// but still really hacky.
-	// I'm going to try to narrate what's going on.
-
-	// First, let's give these two some better names.
-
-#define AI_TEMPLATES DEATHMATCHTEMPLATES // 4
-#define HUMAN_TEMPLATES CAMPAIGNTEMPLATES // 5
-
-	// We build our template sets.
-
-	// * Humans only start with a truck, in player 5.
-	//   We don't need to worry about that.
-
-	// * AI units are stored in players 2, 4, and 6, for some reason.
-	//   We consolidate all the AI units in player 4.
-	//   We also add the human players' truck to the AIs.
-	//   (Not that most AI scripts actually use the truck in their
-	//   own template set...)
-	addTemplateSet(HUMAN_TEMPLATES, AI_TEMPLATES);
-	addTemplateSet(6, AI_TEMPLATES);
-	addTemplateSet(2, AI_TEMPLATES);
-
-	// To reiterate:
-	// Player 5 (HUMAN_TEMPLATES) contains the human player template set.
-	// Player 4 (AI_TEMPLATES) contains the AI player template set.
-
-	// Now, we need to make sure all human players end up with the
-	// human templates, and all AI players end up with the AI templates.
-	// Which turns out to be pretty complicated, if for some reason
-	// player 5 (HUMAN_TEMPLATES) is an AI, or player 4 (AI_TEMPLATES)
-	// is a human.
-
-	if (isHumanPlayer(HUMAN_TEMPLATES))
-	{
-		// Player 5 is a human.
-		// We just copy player 4's templates onto all the AI's,
-		// then copy player 5's template onto all the humans.
-
-		// AIs first
-		for (player=0;player<game.maxPlayers;player++)
-		{
-			if (!isHumanPlayer(player))
-			{
-				copyTemplateSet(AI_TEMPLATES, player);
-			}
-		}
-		// Now humans
-		for (player=0;player<game.maxPlayers;player++)
-		{
-			if (isHumanPlayer(player))
-			{
-				copyTemplateSet(HUMAN_TEMPLATES, player);
-			}
-		}
-	}
-	else if (!isHumanPlayer(AI_TEMPLATES))
-	{
-		// Player 4 is an AI.
-		// Like the above, except in the opposite order.
-
-		// Humans first
-		for (player = 0; player < game.maxPlayers; player++)
-		{
-			if (isHumanPlayer(player))
-			{
-				copyTemplateSet(HUMAN_TEMPLATES, player);
-			}
-		}
-		// Now AIs
-		for (player = 0; player < game.maxPlayers; player++)
-		{
-			if (!isHumanPlayer(player))
-			{
-				copyTemplateSet(AI_TEMPLATES, player);
-			}
-		}
-	}
-	else
-	{
-		// Player 5 is an AI player, and player 4 is a human player.
-		// The best way to deal with this is to swap them.
-		// We'll use player 6 for temporary storage.
-		copyTemplateSet(AI_TEMPLATES, 6);
-		copyTemplateSet(HUMAN_TEMPLATES, AI_TEMPLATES);
-		copyTemplateSet(6, HUMAN_TEMPLATES);
-
-		// Now, we can copy all the player 5 templates (now AI
-		// templates) to the other AIs, and the player 4 templates
-		// (now human templates) to humans
-
-		// Since players 4 and 5 both have the templates they
-		// should end up with, we can now do this in one pass.
-		for (player=0;player<game.maxPlayers;player++)
-		{
-			if (isHumanPlayer(player))
-			{
-				copyTemplateSet(AI_TEMPLATES, player);
-			}
-			else
-			{
-				copyTemplateSet(HUMAN_TEMPLATES, player);
-			}
-		}
-	}
-
 	return true;
 }
 

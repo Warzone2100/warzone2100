@@ -40,14 +40,6 @@ typedef struct _cheat_entry
 bool Cheated = false;
 static CHEAT_ENTRY cheatCodes[] =
 {
-//	{"VQKZMY^\\Z",kf_ToggleOverlays},//interface
-//	{"LWPH R^OOVQXL",kf_ShowMappings},//show mappings
-//	{"KZROS^KZL",kf_GiveTemplateSet},//templates
-//	{"LZSZ\\K ^SS",kf_SelectAllCombatUnits},//select all
-//	{"SZK KWZMZ ]Z SVXWK",kf_RecalcLighting},//let there be light
-//	{"PJKSVQZ,",kf_ToggleOutline},
-//	{"L\\MZZQ[JRO",kf_ScreenDump},	//screendump
-
 	{"noassert", kf_NoAssert}, // turn off asserts
 	{"count me", kf_ShowNumObjects}, // give a count of objects in the world
 	{"give all", kf_AllAvailable},	// give all

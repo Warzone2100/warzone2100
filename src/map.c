@@ -1528,6 +1528,7 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 		job.destY = endy;
 		job.propulsion = PROPULSION_TYPE_WHEELED;
 		job.droidID = 1;
+		job.owner = 0;
 		asret = fpathAStarRoute(&route, &job);
 		free(route.asPath);
 		route.asPath = NULL;

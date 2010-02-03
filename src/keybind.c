@@ -1848,16 +1848,6 @@ void kf_ShowGridInfo(void)
 	}
 }
 
-
-// --------------------------------------------------------------------------
-void kf_GiveTemplateSet(void)
-{
-	addTemplateSet(4,0);
-	addTemplateSet(4,1);
-	addTemplateSet(4,2);
-	addTemplateSet(4,3);
-}
-
 // --------------------------------------------------------------------------
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendTextMessage(void)

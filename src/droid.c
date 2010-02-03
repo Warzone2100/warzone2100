@@ -35,6 +35,7 @@
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
+#include "lib/netplay/netplay.h"
 
 #include "objects.h"
 #include "loop.h"
@@ -83,7 +84,6 @@
 #include "combat.h"
 #include "scriptfuncs.h"			//for ThreatInRange()
 
-
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
 #define	DROID_DAMAGE_SPREAD	(16 - rand()%32)
 #define	DROID_REPAIR_SPREAD	(20 - rand()%40)
@@ -92,8 +92,9 @@
 /* default droid design template */
 extern DROID_TEMPLATE	sDefaultDesignTemplate;
 
-//storage
+// Template storage
 DROID_TEMPLATE		*apsDroidTemplates[MAX_PLAYERS];
+DROID_TEMPLATE		*apsStaticTemplates;	// for AIs and scripts
 
 // store the experience of recently recycled droids
 UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
@@ -1838,15 +1839,13 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 	for (line = 0; line < NumDroids; line++)
 	{
+		char templName[MAX_STR_LENGTH];
 		char componentName[MAX_STR_LENGTH];
 		unsigned int player;
 		int cnt;
-		DROID_TEMPLATE *pDroidDesign = malloc(sizeof(DROID_TEMPLATE));
-		if (pDroidDesign == NULL)
-		{
-			debug(LOG_ERROR, "pDroidDesign: Out of memory");
-			return false;
-		}
+		DROID_TEMPLATE design;
+		DROID_TEMPLATE *pDroidDesign = &design;
+
 		memset(pDroidDesign, 0, sizeof(DROID_TEMPLATE));
 
 		//read the data into the storage - the data is delimited using comma's
@@ -1854,13 +1853,12 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		pDroidData += cnt;
 
 		// Store unique name in pName
-		pDroidDesign->pName = strdup(componentName);
+		pDroidDesign->pName = templName;
+		sstrcpy(templName, componentName);
 
 		// Store translated name in aName
 		if (!getDroidResourceName(componentName))
 		{
-			free(pDroidDesign->pName);
-			free(pDroidDesign);
 			return false;
 		}
 		sstrcpy(pDroidDesign->aName, componentName);
@@ -1881,13 +1879,6 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			unsigned int inc = 0;
 			BOOL found = false;
 
-			if (!getResourceName(componentName))
-			{
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
-
 			for (inc = 0; inc < numBodyStats; inc++)
 			{
 				//compare the names
@@ -1899,18 +1890,12 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 				}
 				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
-			if (!found)
-			{
-				debug( LOG_ERROR, "Body component not found for droid %s", getTemplateName(pDroidDesign) );
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
+			ASSERT_OR_RETURN(false, found, "Body component not found for droid %s", getTemplateName(pDroidDesign));
 		}
 
 		//read in Brain Name
 		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
-				pDroidData += cnt;
+		pDroidData += cnt;
 
 		//get the Brain stats pointer
 		if (!strcmp(componentName,"0"))
@@ -1924,13 +1909,6 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			unsigned int inc = 0;
 			BOOL found = false;
 
-			if (!getResourceName(componentName))
-			{
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
-
 			for (inc=0; inc < numBrainStats; inc++)
 			{
 				//compare the names
@@ -1942,14 +1920,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 				}
 				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
-			if (!found)
-			{
-				debug( LOG_ERROR, "Brain component not found for droid %s", getTemplateName(pDroidDesign) );
-//				DBERROR(("Brain component not found for droid %s", pDroidDesign->pName));
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
+			ASSERT_OR_RETURN(false, found,"Brain component not found for droid %s", getTemplateName(pDroidDesign));
 		}
 
 		//read in Construct Name
@@ -1968,12 +1939,6 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			unsigned int inc = 0;
 			BOOL found = false;
 
-			if (!getResourceName(componentName))
-			{
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
 			for (inc=0; inc < numConstructStats; inc++)
 			{
 				//compare the names
@@ -1985,18 +1950,12 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 				}
 				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
-			if (!found)
-			{
-				debug( LOG_ERROR, "Construct component not found for droid %s", getTemplateName(pDroidDesign) );
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
+			ASSERT_OR_RETURN(false, found, "Construct component not found for droid %s", getTemplateName(pDroidDesign));
 		}
 
 		//read in Ecm Name
 		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
-				pDroidData += cnt;
+		pDroidData += cnt;
 
 		//get the Ecm stats pointer
 		if (!strcmp(componentName,"0"))
@@ -2010,12 +1969,6 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			unsigned int inc = 0;
 			BOOL found = false;
 
-			if (!getResourceName(componentName))
-			{
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
 			for (inc=0; inc < numECMStats; inc++)
 			{
 				//compare the names
@@ -2027,13 +1980,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 				}
 				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
-			if (!found)
-			{
-				debug( LOG_ERROR, "ECM component not found for droid %s", getTemplateName(pDroidDesign) );
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
+			ASSERT_OR_RETURN(false, found, "ECM component not found for droid %s", getTemplateName(pDroidDesign));
 		}
 
 		//read in player id - Access decides the order -crap hey?
@@ -2043,9 +1990,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		if (getTemplateFromUniqueName(pDroidDesign->pName, player))
 		{
 			debug( LOG_ERROR, "Duplicate template %s", pDroidDesign->pName );
-			free(pDroidDesign->pName);
-			free(pDroidDesign);
-			return false;
+			continue;
 		}
 
 		//read in Propulsion Name
@@ -2064,12 +2009,6 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			unsigned int inc = 0;
 			BOOL found = false;
 
-			if (!getResourceName(componentName))
-			{
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
 			for (inc=0; inc < numPropulsionStats; inc++)
 			{
 				//compare the names
@@ -2081,13 +2020,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 				}
 				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
-			if (!found)
-			{
-				debug( LOG_ERROR, "Propulsion component not found for droid %s", getTemplateName(pDroidDesign) );
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
+			ASSERT_OR_RETURN(false, found, "Propulsion component not found for droid %s", getTemplateName(pDroidDesign));
 		}
 
 		//read in Repair Name
@@ -2106,12 +2039,6 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			unsigned int inc = 0;
 			BOOL found = false;
 
-			if (!getResourceName(componentName))
-			{
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
 			for (inc=0; inc < numRepairStats; inc++)
 			{
 				//compare the names
@@ -2123,13 +2050,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 				}
 				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
-			if (!found)
-			{
-				debug( LOG_ERROR, "Repair component not found for droid %s", getTemplateName(pDroidDesign) );
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
+			ASSERT_OR_RETURN(false, found, "Repair component not found for droid %s", getTemplateName(pDroidDesign));
 		}
 
 		//read in droid type - only interested if set to PERSON
@@ -2168,7 +2089,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 		//read in Sensor Name
 		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
-				pDroidData += cnt;
+		pDroidData += cnt;
 
 		//get the Sensor stats pointer
 		if (!strcmp(componentName,"0"))
@@ -2182,13 +2103,6 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			unsigned int inc = 0;
 			BOOL found = false;
 
-			if (!getResourceName(componentName))
-			{
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
-
 			for (inc=0; inc < numSensorStats; inc++)
 			{
 				//compare the names
@@ -2200,34 +2114,16 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 				}
 				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
-			if (!found)
-			{
-				debug( LOG_ERROR, "Sensor not found for droid Template: %s", pDroidDesign->aName );
-				free(pDroidDesign->pName);
-				free(pDroidDesign);
-				return false;
-			}
+			ASSERT_OR_RETURN(false, found, "Sensor not found for droid Template: %s", pDroidDesign->aName);
 		}
 
 		//read in totals
 		sscanf(pDroidData,"%d", &pDroidDesign->numWeaps);
 		//check that not allocating more weapons than allowed
-		if (pDroidDesign->numWeaps > DROID_MAXWEAPS)
-		{
-			debug( LOG_ERROR, "Too many weapons have been allocated for droid Template: %s", pDroidDesign->aName );
-			free(pDroidDesign->pName);
-			free(pDroidDesign);
-			return false;
-		}
-
+		ASSERT_OR_RETURN(false, pDroidDesign->numWeaps <= DROID_MAXWEAPS, "Too many weapons have been allocated for droid Template: %s", pDroidDesign->aName);
 
 		pDroidDesign->ref = REF_TEMPLATE_START + line;
-/*	Loaded in from the database now AB 29/10/98
-			pDroidDesign->multiPlayerID = line;			// another unique number, just for multiplayer stuff.
-*/
-		/* store global default design if found else
-		* store in the appropriate array
-		*/
+		// Store global default design if found else store in the appropriate array
 		if ( pDroidDesign->droidType == DROID_DEFAULT )
 		{
 			// NOTE: sDefaultDesignTemplate.pName takes ownership
@@ -2235,23 +2131,31 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			//       here. Which is good because pDroidDesign leaves
 			//       scope here anyway.
 			memcpy( &sDefaultDesignTemplate, pDroidDesign, sizeof(DROID_TEMPLATE) );
-			free(pDroidDesign);
+			sDefaultDesignTemplate.pName = strdup(pDroidDesign->pName);
 		}
 		else
 		{
-			pDroidDesign->psNext = apsDroidTemplates[player];
-			apsDroidTemplates[player] = pDroidDesign;
+			int i;
+
+			// Give those meant for humans (player 0) to all human players.
+			for (i = 0; i < MAX_PLAYERS; i++)
+			{
+				if (player == 0 && NetPlay.players[i].allocated)	// human prototype template
+				{
+					pDroidDesign->prefab = false;
+					addTemplateToList(pDroidDesign, &apsDroidTemplates[i]);
+				}
+			}
+			// Add all templates to static template list
+			pDroidDesign->prefab = true;			// prefabricated templates referenced from VLOs
+			addTemplateToList(pDroidDesign, &apsStaticTemplates);
 		}
 
 		//increment the pointer to the start of the next record
 		pDroidData = strchr(pDroidData,'\n') + 1;
 	}
 
-	if ( bDefaultTemplateFound == false )
-	{
-		debug( LOG_ERROR, "default template not found" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, bDefaultTemplateFound, "Default template not found");
 
 	return true;
 }
@@ -2272,6 +2176,13 @@ void initTemplatePoints(void)
 			//calc the total power points
 			pDroidDesign->powerPoints = calcTemplatePower(pDroidDesign);
 		}
+	}
+	for (pDroidDesign = apsStaticTemplates; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
+	{
+		//calculate the total build points
+		pDroidDesign->buildPoints = calcTemplateBuild(pDroidDesign);
+		//calc the total power points
+		pDroidDesign->powerPoints = calcTemplatePower(pDroidDesign);
 	}
 }
 
@@ -2389,15 +2300,15 @@ DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate)
 //Load the weapons assigned to Droids in the Access database
 BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 {
-	unsigned int NumWeapons = numCR(pWeaponData, bufferSize);
-	unsigned int SkippedWeaponCount = 0;
-	unsigned int line = 0;
+	int NumWeapons = numCR(pWeaponData, bufferSize);
+	int SkippedWeaponCount = 0;
+	int line = 0;
 
 	ASSERT_OR_RETURN(false, NumWeapons > 0, "template without weapons");
 
 	for (line = 0; line < NumWeapons; line++)
 	{
-		unsigned int player;
+		int player, i;
 		char WeaponName[DROID_MAXWEAPS][MAX_STR_LENGTH] = {{'\0'}},
 			TemplateName[MAX_STR_LENGTH] = {'\0'};
 
@@ -2405,11 +2316,11 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 		sscanf(pWeaponData, "%[^','],%[^','],%[^','],%[^','],%d",
 			TemplateName, WeaponName[0], WeaponName[1], WeaponName[2], &player);
 
-		if (player < MAX_PLAYERS)
+		for (i = 0; i < MAX_PLAYERS; i++)
 		{
 			unsigned int j;
 
-			DROID_TEMPLATE *pTemplate = getTemplateFromUniqueName(TemplateName, player);
+			DROID_TEMPLATE *pTemplate = getTemplateFromUniqueName(TemplateName, i);
 
 			/* if Template not found - try default design */
 			if (!pTemplate)
@@ -2420,8 +2331,7 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 				}
 				else
 				{
-					debug( LOG_ERROR, "Unable to find Template - %s", TemplateName );
-					return false;
+					continue;	// ok, this player did not have this template. that's fine.
 				}
 			}
 
@@ -2429,57 +2339,31 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 
 			for (j = 0; j < pTemplate->numWeaps; j++)
 			{
-				int incWpn;
+				int incWpn = getCompFromName(COMP_WEAPON, WeaponName[j]);
 
-				if (!getResourceName(WeaponName[j]))
-				{
-					return false;
-				}
+				ASSERT_OR_RETURN(false, incWpn != -1, "Unable to find Weapon %s for template %s", WeaponName[j], TemplateName);
 
-				incWpn = getCompFromName(COMP_WEAPON, WeaponName[j]);
+				//Weapon found, alloc this to the current Template
+				pTemplate->asWeaps[pTemplate->storeCount] = incWpn;
 
-				//if weapon not found - error
-				if (incWpn == -1)
-				{
-					debug( LOG_ERROR, "Unable to find Weapon %s for template %s", WeaponName[j], TemplateName );
-					return false;
-				}
-				else
-				{
-					//Weapon found, alloc this to the current Template
-					pTemplate->asWeaps[pTemplate->storeCount] = incWpn;
-
-					//check not allocating more than allowed
-					if (pTemplate->storeCount > pTemplate->numWeaps)
-					{
-						debug( LOG_ERROR, "Trying to allocate more weapons than allowed for Template - %s", TemplateName );
-						return false;
-					}
-					//check valid weapon/propulsion
-					if (!checkValidWeaponForProp(pTemplate))
-					{
-						debug( LOG_ERROR, "Weapon is invalid for air propulsion for template %s", pTemplate->aName );
-						return false;
-					}
-
-					pTemplate->storeCount++;
-				}
+				//check valid weapon/propulsion
+				ASSERT_OR_RETURN(false, pTemplate->storeCount <= pTemplate->numWeaps, "Allocating more weapons than allowed for Template %s",
+				                 TemplateName);
+				ASSERT_OR_RETURN(false, checkValidWeaponForProp(pTemplate), "Weapon is invalid for air propulsion for template %s", 
+				                 pTemplate->aName);
+				pTemplate->storeCount++;
 			}
-		}
-		else
-		{
-			SkippedWeaponCount++;
+			if (!isHumanPlayer(i))
+			{
+				break;	// only one list to add to
+			}
 		}
 
 		//increment the pointer to the start of the next record
 		pWeaponData = strchr(pWeaponData, '\n') + 1;
 	}
 
-	if (SkippedWeaponCount > 0)
-	{
-		debug( LOG_ERROR, "Illegal player number in %d droid weapons", SkippedWeaponCount );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, SkippedWeaponCount == 0, "Illegal player number in %d droid weapons", SkippedWeaponCount);
 
 	return true;
 }
@@ -2488,24 +2372,33 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 BOOL droidTemplateShutDown(void)
 {
 	unsigned int player;
+	DROID_TEMPLATE *pTemplate, *pNext;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		DROID_TEMPLATE *pTemplate, *pNext;
-
 		for (pTemplate = apsDroidTemplates[player]; pTemplate != NULL; pTemplate = pNext)
 		{
 			pNext = pTemplate->psNext;
-			//FIX ME:
-			ASSERT(sDefaultDesignTemplate.pName != pTemplate->pName, "We'll soon be getting a double free()!!!");
-			if (pTemplate->pName != sDefaultDesignTemplate.pName)
+			if (pTemplate->pName != sDefaultDesignTemplate.pName)	// sanity check probably no longer necessary
 			{
 				free(pTemplate->pName);
 			}
+			ASSERT(!pTemplate->prefab, "Static template %s in player template list!", pTemplate->aName);
 			free(pTemplate);
 		}
 		apsDroidTemplates[player] = NULL;
 	}
+	for (pTemplate = apsStaticTemplates; pTemplate != NULL; pTemplate = pNext)
+	{
+		pNext = pTemplate->psNext;
+		if (pTemplate->pName != sDefaultDesignTemplate.pName)		// sanity check probably no longer necessary
+		{
+			free(pTemplate->pName);
+		}
+		ASSERT(pTemplate->prefab, "Player template %s in static template list!", pTemplate->aName);
+		free(pTemplate);
+	}
+	apsStaticTemplates = NULL;
 	free(sDefaultDesignTemplate.pName);
 	sDefaultDesignTemplate.pName = NULL;
 
@@ -3473,8 +3366,14 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player)
 {
 	DROID_TEMPLATE *psCurr;
+	DROID_TEMPLATE *list = apsStaticTemplates;	// assume AI
 
-	for (psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	if (isHumanPlayer(player))
+	{
+		list = apsDroidTemplates[player];	// was human
+	}
+	
+	for (psCurr = list; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		if (strcmp(psCurr->pName, pName) == 0)
 		{
@@ -3485,79 +3384,43 @@ DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int playe
 	return NULL;
 }
 
-
 /*!
- * Gets a template from its name
- * relies on the name being unique (or it will return the first one it finds!)
+ * Get a static template from its name. This is used from scripts. These templates must
+ * never be changed or deleted.
  * \param pName Template name
  * \pre pName has to be the unique, untranslated name!
- * \post pName will be translated via getDroidResourceName()!
- * \warning IF YOU USE THIS FUNCTION - NOTE THAT selectedPlayer's TEMPLATES ARE NOT USED!!!!
  */
-DROID_TEMPLATE * getTemplateFromTranslatedNameNoPlayer(char *pName)
+DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char *pName)
 {
-	unsigned int player;
+	const char *rName;
+	DROID_TEMPLATE *psCurr;
 
-	/*all droid and template names are now stored as the translated
-	name regardless of RESOURCE_NAMES and STORE_RESOURCE_ID! - AB 26/06/98*/
-	getDroidResourceName(pName);
-
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (psCurr = apsStaticTemplates; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		DROID_TEMPLATE *psCurr;
-		// OK so we want selectedPlayer's CYBORG templates since they cannot be edited
-		// and we don't want to duplicate them for the sake of it! (ha!)
-		// don't use selectedPlayer's templates if not multiplayer
-		// this was written for use in the scripts and we don't want the scripts to use
-		// selectedPlayer's templates because we cannot guarentee they will exist!
-		for (psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
+		rName = psCurr->pName ? psCurr->pName : psCurr->aName;
+		if (strcmp(rName, pName) == 0)
 		{
-			if (strcmp(psCurr->aName, pName) == 0)
-			{
-				// if template is a human player's it must be a CYBORG or we ignore it
-				if (isHumanPlayer(player)
-				 && !(psCurr->droidType == DROID_CYBORG
-				   || psCurr->droidType == DROID_CYBORG_SUPER
-				   || psCurr->droidType == DROID_CYBORG_CONSTRUCT
-				   || psCurr->droidType == DROID_CYBORG_REPAIR))
-				{
-					//ignore
-					continue;
-				}
-				return psCurr;
-			}
+			return psCurr;
 		}
 	}
-	return NULL;
-}
 
-/*getTemplatefFromSinglePlayerID gets template for unique ID  searching one players list */
-DROID_TEMPLATE* getTemplateFromSinglePlayerID(UDWORD multiPlayerID, UDWORD player)
-{
-	DROID_TEMPLATE	*pDroidDesign;
-
-	for(pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
-	{
-		if (pDroidDesign->multiPlayerID == multiPlayerID)
-		{
-			return pDroidDesign;
-		}
-	}
 	return NULL;
 }
 
 /*getTemplatefFromMultiPlayerID gets template for unique ID  searching all lists */
 DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 {
-	UDWORD			player;
+	UDWORD		player;
 	DROID_TEMPLATE	*pDroidDesign;
 
-	for (player=0; player < MAX_PLAYERS; player++)
+	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		pDroidDesign = getTemplateFromSinglePlayerID(multiPlayerID, player);
-		if (pDroidDesign != NULL)
+		for(pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
 		{
-			return pDroidDesign;
+			if (pDroidDesign->multiPlayerID == multiPlayerID)
+			{
+				return pDroidDesign;
+			}
 		}
 	}
 	return NULL;

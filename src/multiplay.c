@@ -401,40 +401,29 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
 {
 	DROID_TEMPLATE *psTempl = NULL;
 	UDWORD		i;
-	if(player != ANYPLAYER)
+
+	// Check if we know which player this is from, in that case, assume it is a player template
+	if (player != ANYPLAYER)
 	{
 		for (psTempl = apsDroidTemplates[player];			// follow templates
 		(psTempl && (psTempl->multiPlayerID != tempId ));
 		 psTempl = psTempl->psNext);
+
+		return psTempl;
 	}
-	else
+
+	// If not, first try static templates from AI control (could potentially also happen for currently human controlled players)
+	for (psTempl = apsStaticTemplates; psTempl && psTempl->multiPlayerID != tempId; psTempl = psTempl->psNext) ;
+	if (psTempl) return psTempl;
+
+	// We really have no idea, but it is not a static template, so search through every player template
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		// REALLY DANGEROUS!!! ID's are NOT assumed to be unique for TEMPLATES.
-		debug( LOG_NEVER, "Really Dodgy Check performed for a template" );
-		for(i=0;i<MAX_PLAYERS;i++)
-		{
-			for (psTempl = apsDroidTemplates[i];			// follow templates
-			(psTempl && (psTempl->multiPlayerID != tempId ));
-			 psTempl = psTempl->psNext);
-			if(psTempl)
-			{
-				return psTempl;
-			}
-		}
+		for (psTempl = apsDroidTemplates[i]; psTempl && psTempl->multiPlayerID != tempId; psTempl = psTempl->psNext) ;
+		if (psTempl) return psTempl;
 	}
-	return psTempl;
-}
 
-// the same as above, but only checks names in similarity.
-DROID_TEMPLATE *NameToTemplate(const char *sName,UDWORD player)
-{
-	DROID_TEMPLATE *psTempl = NULL;
-
-	for (psTempl = apsDroidTemplates[player];			// follow templates
-		(psTempl && (strcmp(psTempl->aName,sName) != 0) );
-		 psTempl = psTempl->psNext);
-
-	 return psTempl;
+	return NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
