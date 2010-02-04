@@ -476,16 +476,6 @@ void draw3DScene( void )
 		}
 	}
 
-	// FIXME: a hack that just happens to work.
-	// Please don't ask me why.
-	if (!getWidgetsStatus())
-	{
-		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-		pie_SetFogStatus(false);
-		pie_SetTexturePage(TEXPAGE_FONT);
-	}
-
-	//iV_DrawFormattedText(" ", 5, 5, 5, FTEXT_LEFTJUSTIFY);
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
 	pie_SetFogStatus(false);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
@@ -3336,6 +3326,9 @@ static void	drawDroidSelections( void )
 		}
 	}
 
+	// Reset color to white so that features textures are rendered as expected
+	glColor3ub(0xFF,0xFF,0xFF);
+	
 	for(psFeature = apsFeatureLists[0]; psFeature; psFeature = psFeature->psNext)
 	{
 		if(!psFeature->died && psFeature->sDisplay.frameNumber == currentGameFrame)
