@@ -116,18 +116,15 @@ void pie_SetRendMode(REND_MODE rendMode)
 		rendStates.rendMode = rendMode;
 		switch (rendMode)
 		{
-			case REND_FLAT:
-			case REND_GOURAUD_TEX:
+			case REND_OPAQUE:
 				pie_SetTranslucencyMode(TRANS_DECAL);
 				break;
 
-			case REND_ALPHA_TEX:
-			case REND_ALPHA_FLAT:
+			case REND_ALPHA:
 				pie_SetTranslucencyMode(TRANS_ALPHA);
 				break;
 
-			case REND_ADDITIVE_TEX:
-			case REND_ALPHA_ITERATED:
+			case REND_ADDITIVE:
 				pie_SetTranslucencyMode(TRANS_ADDITIVE);
 				break;
 

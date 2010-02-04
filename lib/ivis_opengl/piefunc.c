@@ -55,7 +55,7 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 	SDWORD i;
 
 	pie_SetTexturePage(TEXPAGE_NONE);
-	pie_SetRendMode(REND_ALPHA_FLAT);
+	pie_SetRendMode(REND_ALPHA);
 
 	pieVrts[0].pos.x = v[1].x;
 	pieVrts[0].pos.y = v[1].y;
@@ -103,7 +103,7 @@ void pie_TransColouredTriangle(CLIP_VERTEX *vrt, PIELIGHT c)
 	UDWORD i;
 
 	pie_SetTexturePage(TEXPAGE_NONE);
-	pie_SetRendMode(REND_ALPHA_ITERATED);
+	pie_SetRendMode(REND_ADDITIVE);
 
 	glColor4ub(c.byte.r, c.byte.g, c.byte.b, 128);
 
@@ -171,7 +171,7 @@ void pie_DrawFogBox(float left, float right, float front, float back, float heig
 
 	glColor4ub(fog_colour.byte.r,fog_colour.byte.g,fog_colour.byte.b,0xFF);
 
-	pie_SetRendMode(REND_FLAT);
+	pie_SetRendMode(REND_OPAQUE);
 
 	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
 	// no use in updating the depth buffer
