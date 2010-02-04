@@ -18,27 +18,6 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef __INCLUDED_SRC_TARGET_H__
-#define __INCLUDED_SRC_TARGET_H__
-
-#include "basedef.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
-void targetInitialise(void);
-void targetOpenList(BASE_OBJECT *psTargeting);
-void targetCloseList(void);
-void targetAdd(BASE_OBJECT *psObj);
-BASE_OBJECT *targetAquireNearestObjView(BASE_OBJECT *psObj);
-BASE_OBJECT *targetGetCurrent(void);
-void targetStartAnim(void);
-void targetMarkCurrent(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
-
-#endif // __INCLUDED_SRC_TARGET_H__
+// All functions returned void or NULL, and had no side effects, and used no non-constant
+// globals. They were therefore pure functional code. Functional code is good code - isn't it?
+#error TODO Delete this header

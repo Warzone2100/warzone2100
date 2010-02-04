@@ -68,7 +68,6 @@
 #include "scripttabs.h"
 #include "scriptextern.h"
 #include "scriptcb.h"
-#include "target.h"
 #include "drive.h"
 #include "cmddroid.h"
 #include "selection.h"
@@ -2214,7 +2213,7 @@ void	dealWithLMB( void )
 	/* What have we clicked on? */
 	if(driveModeActive() && !driveTacticalActive())
 	{
-		psClickedOn = targetGetCurrent();
+		psClickedOn = NULL;  //targetGetCurrent();
 		if (psClickedOn)
 		{
 			dealWithLMBObject(psClickedOn);
@@ -2841,7 +2840,7 @@ STRUCTURE	*psStructure;
 	/*	Not a droid, so maybe a structure or feature?
 		If still NULL after this then nothing */
 	if(driveModeActive() && !driveTacticalActive()) {
-		psNotDroid = targetGetCurrent();
+		psNotDroid = NULL;  //targetGetCurrent();
 	} else {
 		psNotDroid = getTileOccupier(mouseTileX, mouseTileY);
 	}

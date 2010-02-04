@@ -78,7 +78,6 @@
 #include "mapgrid.h"
 #include "edit3d.h"
 #include "drive.h"
-#include "target.h"
 #include "fpath.h"
 #include "scriptextern.h"
 #include "cluster.h"

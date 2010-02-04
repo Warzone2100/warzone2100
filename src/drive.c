@@ -58,7 +58,6 @@
 #include "console.h"
 #include "intdisplay.h"
 #include "multiplay.h"
-#include "target.h"
 
 // all the bollox needed for script callbacks
 #include "lib/script/parse.h"				// needed to define types in scripttabs.h (Arse!)
@@ -667,8 +666,8 @@ void driveProcessAquireButton(void)
 {
 	if(mouseReleased(MOUSE_RMB) || keyPressed(KEY_S))
 	{
-		BASE_OBJECT	*psObj;
-		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid);
+//		BASE_OBJECT	*psObj;
+//		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid);
 //		driveMarkTarget();
 //		pie_SetMouse(CURSOR_ATTACK, true);
 	}

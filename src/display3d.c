@@ -74,7 +74,6 @@
 #include "scripttabs.h"
 #include "scriptextern.h"
 #include "scriptcb.h"
-#include "target.h"
 #include "keymap.h"
 #include "drive.h"
 #include "gateway.h"
@@ -867,8 +866,6 @@ static void drawTiles(iView *player)
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetAlphaTest(true);
 
-	targetOpenList((BASE_OBJECT*)driveGetDriven());
-
 	/* ---------------------------------------------------------------- */
 	/* Now display all the static objects                               */
 	/* ---------------------------------------------------------------- */
@@ -911,13 +908,11 @@ static void drawTiles(iView *player)
 
 	pie_EndLighting();
 
-	targetCloseList();
-
 	if(driveModeActive()) {
 		// If were in driving mode then mark the current target.
-		if(targetGetCurrent() != NULL) {
+		/*if(targetGetCurrent() != NULL) {
 			targetMarkCurrent();
-		}
+		}*/
 	}
 	if(!gamePaused())
 	{
@@ -975,8 +970,6 @@ BOOL init3DView(void)
 	imdRot2.z = 0;
 
 	bRender3DOnly = false;
-
-	targetInitialise();
 
 	pie_InitSkybox(iV_GetTexture(skyboxPageName));
 
@@ -1240,7 +1233,6 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 
 			/* Get the onscreen coordinates so we can draw a bounding box */
 			calcScreenCoords( psDroid );
-			targetAdd((BASE_OBJECT*)psDroid);
 		}
 		else
 		{
@@ -1259,8 +1251,6 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 			pie_RotateProject( &zero, &s );
 			psStructure->sDisplay.screenX = s.x;
 			psStructure->sDisplay.screenY = s.y;
-
-			targetAdd((BASE_OBJECT*)psStructure);
 		}
 		else
 		{
@@ -1859,8 +1849,6 @@ void	renderFeature(FEATURE *psFeature)
 		pie_RotateProject( &zero, &s );
 		psFeature->sDisplay.screenX = s.x;
 		psFeature->sDisplay.screenY = s.y;
-
-		targetAdd((BASE_OBJECT*)psFeature);
 	}
 
 	iV_MatrixEnd();
@@ -2399,8 +2387,6 @@ void	renderStructure(STRUCTURE *psStructure)
 		pie_RotateProject(&zero, &s);
 		psStructure->sDisplay.screenX = s.x;
 		psStructure->sDisplay.screenY = s.y;
-
-		targetAdd((BASE_OBJECT*)psStructure);
 	}
 
 	iV_MatrixEnd();
@@ -2660,7 +2646,6 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 void renderDroid( DROID *psDroid )
 {
 	displayComponentObject( (BASE_OBJECT *) psDroid);
-	targetAdd((BASE_OBJECT*)psDroid);
 }
 
 /// Draws the strobing 3D drag box that is used for multiple selection
