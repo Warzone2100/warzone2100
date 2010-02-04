@@ -1234,14 +1234,6 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		imdRot2.x = DEG(psParentObj->pitch);
 		iV_MatrixRotateX(imdRot2.x);
 
-		/* object (animation) translations - ivis z and y flipped */
-		iV_TRANSLATE( psObj->position.x, psObj->position.z, psObj->position.y );
-
-		/* object (animation) rotations */
-		iV_MatrixRotateY( -psObj->orientation.z );
-		iV_MatrixRotateZ( -psObj->orientation.y );
-		iV_MatrixRotateX( -psObj->orientation.x );
-
 		/* Set frame numbers - look into this later?? FIXME!!!!!!!! */
 		if( psParentObj->type == OBJ_DROID )
 		{
@@ -1288,6 +1280,14 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 				brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psParentObj, brightness.byte.r));
 			}
 		}
+
+		// Do translation and rotation after setting sDisplay.screen[XY], so that the health bars for animated objects (such as oil derricks and cyborgs) will show on the stationary part.
+		// object (animation) translations - ivis z and y flipped
+		iV_TRANSLATE(psObj->position.x, psObj->position.z, psObj->position.y);
+		// object (animation) rotations
+		iV_MatrixRotateY(-psObj->orientation.z);
+		iV_MatrixRotateZ(-psObj->orientation.y);
+		iV_MatrixRotateX(-psObj->orientation.x);
 
 		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, WZCOL_BLACK, pie_NO_BILINEAR|pie_STATIC_SHADOW, 0);
 
