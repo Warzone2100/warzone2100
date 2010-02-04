@@ -45,12 +45,9 @@
 
 typedef	enum	REND_MODE
 				{
-					REND_GOURAUD_TEX,
-					REND_ALPHA_TEX,
-					REND_ADDITIVE_TEX,
-					REND_FLAT,
-					REND_ALPHA_FLAT,
-					REND_ALPHA_ITERATED
+					REND_ALPHA,
+					REND_ADDITIVE,
+					REND_OPAQUE,
 				}
 				REND_MODE;
 
@@ -66,21 +63,11 @@ typedef	enum	DEPTH_MODE
 typedef	enum	TRANSLUCENCY_MODE
 				{
 					TRANS_DECAL,
-					TRANS_DECAL_FOG,
 					TRANS_FILTER,
 					TRANS_ALPHA,
 					TRANS_ADDITIVE
 				}
 				TRANSLUCENCY_MODE;
-
-typedef	enum	COLOUR_MODE
-				{
-					COLOUR_FLAT_CONSTANT,
-					COLOUR_FLAT_ITERATED,
-					COLOUR_TEX_ITERATED,
-					COLOUR_TEX_CONSTANT
-				}
-				COLOUR_MODE;
 
 typedef struct	RENDER_STATE
 				{

@@ -874,7 +874,7 @@ static void drawTiles(iView *player)
 	}
 
 	// and prepare for rendering the models
-	pie_SetRendMode(REND_GOURAUD_TEX);
+	pie_SetRendMode(REND_OPAQUE);
 	pie_SetAlphaTest(true);
 
 	targetOpenList((BASE_OBJECT*)driveGetDriven());
