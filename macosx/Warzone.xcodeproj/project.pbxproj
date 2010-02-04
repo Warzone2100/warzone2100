@@ -3467,7 +3467,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p build/moc/lib/framework/\nmake -f- <<'EOF'\nall: build/moc/lib/framework/wzapp_moc.cpp\n\nbuild/moc/%_moc.cpp: ../%.h\n\tmoc -o $@ $<\nEOF\n\nexit 0";
+			shellScript = "echo \"Checking for moc...\"\nif ! type -aP moc; then\n    echo \"Fatal inability to properly moc the code.\"\n    exit 1\nfi\n\nmkdir -p build/moc/lib/framework/\nmake -f- <<'EOF'\nall: build/moc/lib/framework/wzapp_moc.cpp\n\nbuild/moc/%_moc.cpp: ../%.h\n\tmoc -o $@ $<\nEOF\n\nexit 0";
 		};
 		9711774C0F87A677000C8A96 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
