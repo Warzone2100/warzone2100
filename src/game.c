@@ -2161,7 +2161,6 @@ static bool writeMapFile(const char* fileName);
 static BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity);
 
 static BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize);
-static DROID_TEMPLATE *FindDroidTemplate(const char * const name);
 
 static BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists);
 static BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
@@ -5036,7 +5035,6 @@ BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-// Used for all droids
 BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 {
 	SAVE_DROIDINIT *pDroidInit;
@@ -5060,87 +5058,44 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 		endian_udword(&pDroidInit->burnStart);
 		endian_udword(&pDroidInit->burnDamage);
 
-		pDroidInit->player=RemapPlayerNumber(pDroidInit->player);
-
-		if (pDroidInit->player >= MAX_PLAYERS) {
+		pDroidInit->player = RemapPlayerNumber(pDroidInit->player);
+		if (pDroidInit->player >= MAX_PLAYERS)
+		{
 			pDroidInit->player = MAX_PLAYERS-1;	// now don't lose any droids ... force them to be the last player
 			NumberOfSkippedDroids++;
 		}
 
-
-		psTemplate = (DROID_TEMPLATE *)FindDroidTemplate(pDroidInit->name);
-
-		if(psTemplate==NULL)
+		psTemplate = getTemplateFromTranslatedNameNoPlayer(pDroidInit->name);
+		if (psTemplate == NULL)
 		{
-			debug( LOG_NEVER, "loadSaveUnitInitV2:\nUnable to find template for %s player %d", pDroidInit->name,pDroidInit->player );
+			debug(LOG_ERROR, "Unable to find template for %s for player %d", pDroidInit->name, pDroidInit->player);
 		}
 		else
 		{
-			ASSERT( psTemplate != NULL,
-				"loadSaveUnitInitV2: Invalid template pointer" );
+			ASSERT(psTemplate != NULL, "Invalid template pointer");
+			psDroid = buildDroid(psTemplate, (pDroidInit->x & (~TILE_MASK)) + TILE_UNITS/2, (pDroidInit->y  & (~TILE_MASK)) + TILE_UNITS/2,	pDroidInit->player, false);
 
-// Need to set apCompList[pDroidInit->player][componenttype][compid] = AVAILABLE for each droid.
-
+			if (psDroid)
 			{
-
-				psDroid = buildDroid(psTemplate, (pDroidInit->x & (~TILE_MASK)) + TILE_UNITS/2, (pDroidInit->y  & (~TILE_MASK)) + TILE_UNITS/2,
-					pDroidInit->player, false);
-
-				if (psDroid) {
-					psDroid->id = pDroidInit->id;
-					psDroid->direction = pDroidInit->direction;
-					addDroid(psDroid, apsDroidLists);
-				}
-				else
-				{
-
-					debug( LOG_ERROR, "This droid cannot be built - %s", pDroidInit->name );
-					return false;
-				}
+				psDroid->id = pDroidInit->id;
+				psDroid->direction = pDroidInit->direction;
+				addDroid(psDroid, apsDroidLists);
+			}
+			else
+			{
+				debug(LOG_ERROR, "This droid cannot be built - %s", pDroidInit->name);
+				return false;
 			}
 		}
 		pDroidInit++;
 	}
 	if(NumberOfSkippedDroids)
 	{
-		debug( LOG_ERROR, "unitLoad: Bad Player number in %d unit(s)... assigned to the last player!\n", NumberOfSkippedDroids );
+		debug(LOG_ERROR, "Bad Player number in %d unit(s)... assigned to the last player!", NumberOfSkippedDroids);
 		return false;
 	}
 	return true;
 }
-
-
-// -----------------------------------------------------------------------------------------
-DROID_TEMPLATE *FindDroidTemplate(const char * const name)
-{
-	UDWORD			TempPlayer;
-	DROID_TEMPLATE *Template;
-
-	// get the name from the resource associated with it
-	const char * const nameStr = strresGetString(psStringRes, name);
-	if (!nameStr)
-	{
-		debug( LOG_ERROR, "Cannot find resource for template - %s", name );
-		return NULL;
-	}
-
-	for(TempPlayer=0; TempPlayer<MAX_PLAYERS; TempPlayer++) {
-		Template = apsDroidTemplates[TempPlayer];
-
-		while(Template) {
-
-			//if(strcmp(nameStr,Template->pName)==0) {
-			if(strcmp(nameStr,Template->aName)==0) {
-				return Template;
-			}
-			Template = Template->psNext;
-		}
-	}
-
-	return NULL;
-}
-
-
 
 // -----------------------------------------------------------------------------------------
 // Remaps old player number based on position on map to new owner
