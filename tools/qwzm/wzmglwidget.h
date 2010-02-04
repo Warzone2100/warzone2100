@@ -18,7 +18,7 @@
 #ifndef QWZMGL_H
 #define QWZMGL_H
 
-#include <QGLViewer/qglviewer.h>
+#include <qglviewer.h>
 extern "C" {
 #include "wzmutils.h"
 }
