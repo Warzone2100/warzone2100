@@ -301,7 +301,6 @@ src/selection.c
 src/seqdisp.c
 src/stats.c
 src/structure.c
-src/target.c
 src/text.c
 src/texture.c
 src/transporter.c

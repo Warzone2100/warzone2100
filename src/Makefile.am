@@ -159,7 +159,6 @@ noinst_HEADERS = \
 	stringdef.h \
 	structuredef.h \
 	structure.h \
-	target.h \
 	terrain.h \
 	text.h \
 	texture.h \
@@ -275,7 +274,6 @@ warzone2100_SOURCES = \
 	seqdisp.c \
 	stats.c \
 	structure.c \
-	target.c \
 	terrain.c \
 	text.c \
 	texture.c \

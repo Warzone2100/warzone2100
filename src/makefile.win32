@@ -110,7 +110,6 @@ SRC= \
 	seqdisp.c \
 	stats.c \
 	structure.c \
-	target.c \
 	terrain.c \
 	text.c \
 	texture.c \

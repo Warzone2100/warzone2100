@@ -350,7 +350,6 @@
 		0246A2F30BD3CCDC004D1C70 /* seqdisp.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2730BD3CCDC004D1C70 /* seqdisp.c */; };
 		0246A2F40BD3CCDC004D1C70 /* stats.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2750BD3CCDC004D1C70 /* stats.c */; };
 		0246A2F50BD3CCDC004D1C70 /* structure.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2780BD3CCDC004D1C70 /* structure.c */; };
-		0246A2F60BD3CCDC004D1C70 /* target.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A27B0BD3CCDC004D1C70 /* target.c */; };
 		0246A2F70BD3CCDC004D1C70 /* text.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A27D0BD3CCDC004D1C70 /* text.c */; };
 		0246A2F80BD3CCDC004D1C70 /* texture.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A27F0BD3CCDC004D1C70 /* texture.c */; };
 		0246A2F90BD3CCDC004D1C70 /* transporter.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2810BD3CCDC004D1C70 /* transporter.c */; };
@@ -1329,8 +1328,6 @@
 		0246A2780BD3CCDC004D1C70 /* structure.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = structure.c; path = ../src/structure.c; sourceTree = SOURCE_ROOT; };
 		0246A2790BD3CCDC004D1C70 /* structure.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = structure.h; path = ../src/structure.h; sourceTree = SOURCE_ROOT; };
 		0246A27A0BD3CCDC004D1C70 /* structuredef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = structuredef.h; path = ../src/structuredef.h; sourceTree = SOURCE_ROOT; };
-		0246A27B0BD3CCDC004D1C70 /* target.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = target.c; path = ../src/target.c; sourceTree = SOURCE_ROOT; };
-		0246A27C0BD3CCDC004D1C70 /* target.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = target.h; path = ../src/target.h; sourceTree = SOURCE_ROOT; };
 		0246A27D0BD3CCDC004D1C70 /* text.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = text.c; path = ../src/text.c; sourceTree = SOURCE_ROOT; };
 		0246A27E0BD3CCDC004D1C70 /* text.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = text.h; path = ../src/text.h; sourceTree = SOURCE_ROOT; };
 		0246A27F0BD3CCDC004D1C70 /* texture.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = texture.c; path = ../src/texture.c; sourceTree = SOURCE_ROOT; };
@@ -2417,8 +2414,6 @@
 				0246A2780BD3CCDC004D1C70 /* structure.c */,
 				0246A2790BD3CCDC004D1C70 /* structure.h */,
 				0246A27A0BD3CCDC004D1C70 /* structuredef.h */,
-				0246A27B0BD3CCDC004D1C70 /* target.c */,
-				0246A27C0BD3CCDC004D1C70 /* target.h */,
 				974EDB360EDC818D00A25352 /* terrain.c */,
 				974EDB370EDC818D00A25352 /* terrain.h */,
 				0246A27D0BD3CCDC004D1C70 /* text.c */,
@@ -4031,7 +4026,6 @@
 				0246A2F30BD3CCDC004D1C70 /* seqdisp.c in Sources */,
 				0246A2F40BD3CCDC004D1C70 /* stats.c in Sources */,
 				0246A2F50BD3CCDC004D1C70 /* structure.c in Sources */,
-				0246A2F60BD3CCDC004D1C70 /* target.c in Sources */,
 				0246A2F70BD3CCDC004D1C70 /* text.c in Sources */,
 				0246A2F80BD3CCDC004D1C70 /* texture.c in Sources */,
 				0246A2F90BD3CCDC004D1C70 /* transporter.c in Sources */,
