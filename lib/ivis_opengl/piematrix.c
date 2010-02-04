@@ -318,10 +318,10 @@ void pie_TranslateTextureEnd(void)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-
 void pie_Begin3DScene(void)
 {
 	glDepthRange(0.1, 1);
+	glEnable(GL_CULL_FACE);
 	drawing_interface = false;
 }
 
