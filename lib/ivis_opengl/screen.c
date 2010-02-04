@@ -245,6 +245,7 @@ BOOL screenInitialise(
 	glEnable(GL_CULL_FACE);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	glErrors();
 	return true;
@@ -254,6 +255,8 @@ BOOL screenInitialise(
 /* Release the DD objects */
 void screenShutDown(void)
 {
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	if (screen != NULL)
 	{
 		SDL_FreeSurface(screen);
