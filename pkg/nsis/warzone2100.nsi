@@ -294,7 +294,7 @@ Section $(TEXT_SecOriginalMod) SecOriginalMod
   SetOutPath "$INSTDIR\mods\multiplay"
 
   File "${TOP_BUILDDIR}\data\mods\multiplay\old-1.10-balance.wz"
-  Delete "${TOP_BUILDDIR}\data\mods\multiplay\original.wz"
+  Delete "${TOP_BUILDDIR}\data\mods\multiplay\old-1.10-balance.wz"
 
   SetOutPath "$INSTDIR"
 
