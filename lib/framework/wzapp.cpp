@@ -191,12 +191,12 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 
 	// Fonts
 	regular.setFamily("DejaVu Sans");
-	regular.setPointSize(12);
+	regular.setPixelSize(12);
 	bold.setFamily("DejaVu Sans");
-	bold.setPointSize(21);
+	bold.setPixelSize(21);
 	bold.setBold(true);
 	small.setFamily("DejaVu Sans");
-	small.setPointSize(6);
+	small.setPixelSize(9);
 
 	// Want focusOutEvent messages.
 	setFocusPolicy(Qt::ClickFocus);
@@ -262,11 +262,9 @@ void WzMainWindow::setCursor(QCursor cursor)
 
 WzMainWindow *WzMainWindow::myself = NULL;
 
-void WzMainWindow::setFontType(enum iV_fonts FontID)
+void WzMainWindow::setFontType(enum iV_fonts fontID)
 {
-	fontID = FontID;
-
-	switch (FontID)
+	switch (fontID)
 	{
 	case font_regular:
 		setFont(regular);
@@ -284,11 +282,9 @@ void WzMainWindow::setFontType(enum iV_fonts FontID)
 
 void WzMainWindow::setFontSize(float size)
 {
-	// WARNING Completely untested function, and is unlikely to to whatever you expect it to do.
-	regular.setPointSizeF(size);
-	bold.setPointSizeF(size);
-	small.setPointSizeF(size);
-	setFontType(fontID);
+	QFont theFont = font();
+	theFont.setPixelSize(size);
+	setFont(theFont);
 }
 
 void WzMainWindow::mouseMoveEvent(QMouseEvent *event)
@@ -1142,6 +1138,5 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 
 void iV_SetTextSize(float size)
 {
-	// Hmmm, implementing this was useless, since it's never called anyway.
 	WzMainWindow::instance()->setFontSize(size);
 }

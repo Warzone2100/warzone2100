@@ -35,7 +35,6 @@ private:
 	QTimer *timer;
 	QTime tickCount;
 	QFont regular, bold, small;
-	enum iV_fonts fontID;
 	static WzMainWindow *myself;
 
 public:
