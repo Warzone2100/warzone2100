@@ -207,7 +207,7 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 
 WzMainWindow::~WzMainWindow()
 {
-	for (int i = 0; i < CURSOR_MAX; free(cursors[i++])) ;
+	for (int i = 0; i < CURSOR_MAX; delete cursors[i++]) ;
 }
 
 WzMainWindow *WzMainWindow::instance()
