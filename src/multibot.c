@@ -535,7 +535,7 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 		return false;
 	}
 
-	debug(LOG_SYNC, "Droid created with id of %u", id);
+	debug(LOG_SYNC, "Droid sent with id of %u", id);
 	NETbeginEncode(NET_DROID, NET_ALL_PLAYERS);
 	{
 		Vector3uw pos = { x, y, 0 };
