@@ -9,10 +9,10 @@
    * Fix: Sensor in range check bug (r9531)
    * Fix: Sound related crash on exit (r9528, ticket:1444)
    * Fix: Structures popping in and out of true fog of war darkness (r9502)
-   * Fix: Only play detection samples when that person found the power resource / artifact (ticket:1496, r9596, r9643)
+   * Fix: Only play detection samples when that person found the power resource / artifact (r9596, r9643, ticket:1496 )
    * Change: Add mod list to crash report file (r9651)
  * Multiplayer:
-   * Fix: When player drops, make sure to destroy everything they had (ticket:1020, r9644)
+   * Fix: When player drops, make sure to destroy everything they had (r9644, ticket:1020)
    * Fix: Fix kicking issues when players tried to play a game when they came from a previous game (r9603)
    * Change: Add sync counters to help diagnose when we can't sync anymore due to the packet size exceeding our limits. This is in netplay-xxxx_yyyy.log in your config directory! (r9584)
    * Change: "netplay.log" to now be "netplay-xxxx_yyyyyy.log" where xxxx = month&day and yyyyyy = hour&min&sec (r9645)
@@ -20,6 +20,7 @@
    * Fix: The Wide Spectrum Sensor no longer works as a Counterbattery sensor as this allowed cheating (r9560)
    * Fix: Workaround for bug that made AI stop research sometimes fixed (r9534)
    * Fix: Some AI unit templates had multiple turrets, but shouldn't have (r9605, ticket:1510)
+   * Fix: Scoreboard should be more accurate (r9587, ticket:1500)
 
 2010-01-24: Version 2.3 beta 9
  * General:
