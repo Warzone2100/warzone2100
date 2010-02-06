@@ -3608,7 +3608,7 @@ static void renderSurroundings(void)
 
 	if(!gamePaused())
 	{
-		wind = wrapf(wind + timeAdjustedIncrement(0.5f, false), 360.0f);
+		wind = wrapf(wind + graphicsTimeAdjustedIncrement(0.5f), 360.0f);
 	}
 	pie_DrawSkybox(skybox_scale, 0, 0, 256, 256);
 
@@ -3708,10 +3708,10 @@ static void trackHeight( float desiredHeight )
 	float acceleration = ACCEL_CONSTANT * separation - VELOCITY_CONSTANT * heightSpeed; // Work out accelertion
 
 	/* ...and now speed */
-	heightSpeed += timeAdjustedIncrement(acceleration, false);
+	heightSpeed += graphicsTimeAdjustedIncrement(acceleration);
 
 	/* Adjust the height accordingly */
-	player.p.y += timeAdjustedIncrement(heightSpeed, false);
+	player.p.y += graphicsTimeAdjustedIncrement(heightSpeed);
 }
 
 /// Select the next energy bar display mode
