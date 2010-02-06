@@ -160,7 +160,10 @@ static void insertChar(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD *
 		/* Buffer is full */
 		utf_32_char *newBuffer = realloc(*pBuffer, *pBufferAllocated*2);
 		if (!newBuffer)
+		{
+			debug(LOG_ERROR, "Couldn't realloc() string?");
 			return;
+		}
 		*pBuffer = newBuffer;
 		*pBufferAllocated *= 2;
 	}
