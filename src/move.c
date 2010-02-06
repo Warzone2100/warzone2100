@@ -278,8 +278,8 @@ void moveUpdateBaseSpeed(void)
 {
 	if (logicalUpdates)
 	{
-		baseSpeed = (float)BASE_SPEED * GAME_UNITS_PER_TICK / GAME_UNITS_PER_SEC;
-		baseTurn  = (float)BASE_TURN  * GAME_UNITS_PER_TICK / GAME_UNITS_PER_SEC;
+		baseSpeed = (float)BASE_SPEED / GAME_UPDATES_PER_SEC;
+		baseTurn  = (float)BASE_TURN  / GAME_UPDATES_PER_SEC;
 	}
 	else
 	{

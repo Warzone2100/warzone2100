@@ -811,7 +811,7 @@ void displayCompObj(DROID *psDroid, BOOL bButton)
 
 			if ( psJet != NULL )
 			{
-				pie_Draw3DShape(psJet, getStaticTimeValueRange(100,psJet->numFrames), colour, brightness, specular, pie_ADDITIVE, 200);
+				pie_Draw3DShape(psJet, getModularScaledGraphicsTime(100, psJet->numFrames), colour, brightness, specular, pie_ADDITIVE, 200);
 			}
 		}
 	}
@@ -1171,7 +1171,7 @@ void displayCompObj(DROID *psDroid, BOOL bButton)
 						iV_MatrixRotateX(-player.r.x);
 							/* Dither on software */
 
-						pie_Draw3DShape(psShape, getStaticTimeValueRange(100,psShape->numFrames), 0, brightness, WZCOL_BLACK, pie_ADDITIVE, 140);
+						pie_Draw3DShape(psShape, getModularScaledGraphicsTime(100, psShape->numFrames), 0, brightness, WZCOL_BLACK, pie_ADDITIVE, 140);
 							/* Dither off software */
 
 						iV_MatrixRotateX(player.r.x);

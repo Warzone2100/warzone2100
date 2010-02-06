@@ -24,17 +24,13 @@
 #ifndef _gtime_h
 #define _gtime_h
 
-/// FIXME
-/// FIXME Should anything to do with the real time even be in here?
-/// FIXME It's only purpose on being here seemed to be to speed up/slow down the GUI to match the game speed.
-/// FIXME Please forgive me for removing that feature.
-/// FIXME
 
-/// The number of time units per second for the game clock. FIXME Rename to GAME_UNITS_PER_SEC.
-#define GAME_UNITS_PER_SEC 1000
-#define GAME_TICKS_PER_SEC GAME_UNITS_PER_SEC  // Should actually be 3...
+/// The number of time units per second of the game clock.
+#define GAME_TICKS_PER_SEC 1000
+/// The number of game state updates per second of the game clock.
+#define GAME_UPDATES_PER_SEC 3
 /// The number of time units per game tick.
-#define GAME_UNITS_PER_TICK (GAME_UNITS_PER_SEC/3)
+#define GAME_TICKS_PER_UPDATE (GAME_TICKS_PER_SEC/GAME_UPDATES_PER_SEC)
 
 /** The maximum time for one frame (stops the clock running away when debugging)
  * changed to /6 by ajl. if this needs to go back to ticks/10 then tell me. */
@@ -76,7 +72,7 @@ extern void setGameTime(uint32_t newGameTime);
  * @returns true iff the game time ticked.
  */
 extern void gameTimeUpdate(void);
-extern bool logicalUpdates;  ///< Separate logical from graphical updates. FIXME Should be consant true. But first it needs to work perfectly.
+extern bool logicalUpdates;  ///< Separate logical from graphical updates. FIXME Should be constant true. But first it needs to work perfectly.
 
 /* Returns true if gameTime is stopped. */
 extern BOOL gameTimeIsStopped(void);
@@ -109,10 +105,9 @@ void gameTimeGetMod(float *pMod);
  * Useful for periodic stuff.
  *
  * Operates on game time, which can be paused, and increases in GAME_UNITS_PER_TICK increments.
- * FIXME Rename to getModularScaledGameTime.
+ * NOTE Currently unused – turns out only getModularScaledGraphicsTime was appropriate in the places this was previously used.
  */
 extern UDWORD getModularScaledGameTime(UDWORD timePeriod, UDWORD requiredRange);
-#define getStaticTimeValueRange getModularScaledGameTime
 /**
  * Returns the graphics time, modulo the time period, scaled to 0..requiredRange.
  * For instance getModularScaledGraphicsTime(4096,256) will return a number that cycles through the values
@@ -129,10 +124,8 @@ extern UDWORD getModularScaledGraphicsTime(UDWORD timePeriod, UDWORD requiredRan
  * Useful for periodical stuff.
  *
  * Operates on real time, which can't be paused.
- * FIXME Rename to getModularScaledRealTime.
  */
 extern UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange);
-#define getTimeValueRange getModularScaledRealTime
 
 
 /** Break down given time into its constituent components. */

@@ -1959,14 +1959,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	iV_MatrixRotateY(-player.r.y);
 	iV_MatrixRotateX(-player.r.x);
 
-	if(!gamePaused())
-	{
-		pie_Draw3DShape(proxImd, getTimeValueRange(1000,4), 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, 192);
-	}
-	else
-	{
-		pie_Draw3DShape(proxImd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, 192);
-	}
+	pie_Draw3DShape(proxImd, getModularScaledGraphicsTime(1000, 4), 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, 192);
 
 	//get the screen coords for determining when clicked on
 	calcFlagPosScreenCoords(&x, &y, &r);
@@ -3039,7 +3032,7 @@ static UDWORD	getTargettingGfx( void )
 {
 UDWORD	index;
 
-	index = getTimeValueRange(1000,10);
+	index = getModularScaledRealTime(1000, 10);
 
 	switch(index)
 	{
@@ -3309,7 +3302,7 @@ static void	drawDroidSelections( void )
 					psDroid->bTargetted = false;
 					scrX = psDroid->sDisplay.screenX;
 					scrY = psDroid->sDisplay.screenY - 8;
-					index = IMAGE_BLUE1+getTimeValueRange(1020,5);
+					index = IMAGE_BLUE1 + getModularScaledRealTime(1020, 5);
 					iV_DrawImage(IntImages,index,scrX,scrY);
 				}
 			}
@@ -3966,14 +3959,7 @@ static void structureEffectsPlayer( UDWORD player )
 
 						}
 						/* Then it's repairing...? */
-						if(!gamePaused())
-						{
-							val = lastSpinVal = getTimeValueRange(720,360);	// grab an angle - 4 seconds cyclic
-						}
-						else
-						{
-							val = lastSpinVal;
-						}
+						val = lastSpinVal = getModularScaledGraphicsTime(720, 360);  // grab an angle - 4 seconds cyclic
 						radius = psStructure->sDisplay.imd->radius;
 						xDif = radius * (SIN(DEG(val)));
 						yDif = radius * (COS(DEG(val)));

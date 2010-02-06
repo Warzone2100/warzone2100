@@ -141,15 +141,15 @@ void gameTimeUpdate()
 		{
 			if (scaledCurrTime >= gameTime)
 			{
-				if (scaledCurrTime > gameTime + GAME_UNITS_PER_TICK)
+				if (scaledCurrTime > gameTime + GAME_TICKS_PER_UPDATE)
 				{
 					// Game isn't updating fast enough...
-					uint32_t slideBack = deltaGameTime - GAME_UNITS_PER_TICK;
+					uint32_t slideBack = deltaGraphicsTime - GAME_TICKS_PER_UPDATE;
 					baseTime += slideBack / modifier;  // adjust the addition to base time
 					deltaGraphicsTime -= slideBack;
 				}
 
-				deltaGameTime = GAME_UNITS_PER_TICK;
+				deltaGameTime = GAME_TICKS_PER_UPDATE;
 			}
 			else
 			{
@@ -181,8 +181,10 @@ void gameTimeUpdate()
 	realTime += deltaRealTime;
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
-	gameTimeFraction = (float)deltaGameTime / (float)GAME_UNITS_PER_SEC;
-	realTimeFraction = (float)deltaRealTime / (float)GAME_UNITS_PER_SEC;
+	gameTimeFraction = (float)deltaGameTime / (float)GAME_TICKS_PER_SEC;
+	realTimeFraction = (float)deltaRealTime / (float)GAME_TICKS_PER_SEC;
+
+	ASSERT(graphicsTime <= gameTime, "Trying to see the future.");
 }
 
 // reset the game time modifiers
@@ -255,7 +257,7 @@ void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWORD *seco
 	UDWORD	ticks_per_hour, ticks_per_minute;
 
 	/* Ticks in a minute */
-	ticks_per_minute = GAME_UNITS_PER_SEC * 60;
+	ticks_per_minute = GAME_TICKS_PER_SEC * 60;
 
 	/* Ticks in an hour */
 	ticks_per_hour = ticks_per_minute * 60;
