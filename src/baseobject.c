@@ -75,6 +75,17 @@ SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)
 	                         );
 }
 
+SPACETIME interpolateObjectSpacetime(SIMPLE_OBJECT *obj, uint32_t t)
+{
+	switch (obj->type)
+	{
+		default:
+			return GET_SPACETIME(obj);
+		case OBJ_DROID:
+			return interpolateSpacetime(((DROID *)obj)->prevSpacetime, GET_SPACETIME(obj), t);
+	}
+}
+
 void checkObject(const BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse)
 {
 	if (recurse < 0)

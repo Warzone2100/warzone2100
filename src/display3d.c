@@ -1176,8 +1176,9 @@ void	renderProjectile(PROJECTILE *psCurr)
 void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 {
 	BASE_OBJECT *psParentObj = (BASE_OBJECT*)psObj->psParent;
-	const SDWORD posX = psParentObj->pos.x + psObj->position.x,
-		posY = psParentObj->pos.y + psObj->position.y;
+	SPACETIME spacetime = interpolateObjectSpacetime((SIMPLE_OBJECT *)psParentObj, graphicsTime);
+	const SDWORD posX = spacetime.pos.x + psObj->position.x,
+	             posY = spacetime.pos.y + psObj->position.y;
 	SWORD rx, rz;
 
 	ASSERT( psParentObj != NULL, "renderAnimComponent: invalid parent object pointer" );
@@ -1194,9 +1195,9 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 	{
 		/* get parent object translation */
 		const Vector3i dv = {
-			(psParentObj->pos.x - player.p.x) - terrainMidX * TILE_UNITS,
-			psParentObj->pos.z,
-			terrainMidY * TILE_UNITS - (psParentObj->pos.y - player.p.z)
+			(spacetime.pos.x - player.p.x) - terrainMidX * TILE_UNITS,
+			spacetime.pos.z,
+			terrainMidY * TILE_UNITS - (spacetime.pos.y - player.p.z)
 		};
 		SDWORD iPlayer;
 		PIELIGHT brightness;
@@ -1217,9 +1218,9 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		iV_TRANSLATE(rx, 0, -rz);
 
 		/* parent object rotations */
-		imdRot2.y = DEG( (int)psParentObj->direction );
+		imdRot2.y = DEG(spacetime.direction);
 		iV_MatrixRotateY(-imdRot2.y);
-		imdRot2.x = DEG(psParentObj->pitch);
+		imdRot2.x = DEG(spacetime.pitch);
 		iV_MatrixRotateX(imdRot2.x);
 
 		/* Set frame numbers - look into this later?? FIXME!!!!!!!! */

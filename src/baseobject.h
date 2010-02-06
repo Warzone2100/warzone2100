@@ -39,14 +39,16 @@ static inline unsigned interpolateInt(int32_t v1, int32_t v2, uint32_t t1, uint3
 	return v1 + (v2 - v1) * numer/denom;
 }
 
-/// Get interpolated object position at time curTime.
+/// Get interpolated position at time t.
 Vector3uw interpolatePos(Vector3uw p1, Vector3uw p2, uint32_t t1, uint32_t t2, uint32_t t);
-/// Get interpolated object direction at time curTime.
+/// Get interpolated direction at time t.
 float interpolateDirection(float v1, float v2, uint32_t t1, uint32_t t2, uint32_t t);
-/// Get interpolated object pitch at time curTime.
+/// Get interpolated pitch at time t.
 int16_t interpolateCyclicInt16(int16_t v1, int16_t v2, uint32_t t1, uint32_t t2, uint32_t t);
-/// Get interpolated object roll at time curTime.
+/// Get interpolated spacetime at time t.
 SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t);
+/// Get interpolated object spacetime at time t.
+SPACETIME interpolateObjectSpacetime(SIMPLE_OBJECT *obj, uint32_t t);
 
 void checkObject(const BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse);
 

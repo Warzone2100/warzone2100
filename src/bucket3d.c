@@ -103,7 +103,7 @@ extern void bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 			break;
 		default: break;
 	}
-	// TODO Merge bucketCalculateZ and bucketCalculateState.
+	// NOTE bucketCalculateState calls bucketCalculateZ, don't know why not just use bucketCalculateZ.
 	z = useCalculateZ ? bucketCalculateZ(objectType, pObject) : bucketCalculateState(objectType, pObject);
 
 	if (z < 0)
@@ -201,6 +201,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 	SIMPLE_OBJECT		*psSimpObj;
 	COMPONENT_OBJECT	*psCompObj;
 	const iIMDShape		*pImd;
+	SPACETIME               spacetime;
 
    	iV_MatrixBegin();
 
@@ -356,10 +357,10 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
    			iV_TRANSLATE(px,0,-pz);
 
 			psCompObj = (COMPONENT_OBJECT *) pObject;
-			psSimpObj = (SIMPLE_OBJECT *) psCompObj->psParent;
-			position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
-			position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
-			position.y = psSimpObj->pos.z;
+			spacetime = interpolateObjectSpacetime((SIMPLE_OBJECT *)psCompObj->psParent, graphicsTime);
+			position.x = (spacetime.pos.x - player.p.x) - terrainMidX*TILE_UNITS;
+			position.z = terrainMidY*TILE_UNITS - (spacetime.pos.y - player.p.z);
+			position.y = spacetime.pos.z;
 
 			/* object offset translation */
 			position.x += psCompObj->psShape->ocen.x;

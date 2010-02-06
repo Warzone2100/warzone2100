@@ -69,7 +69,6 @@ typedef struct _tilePos
 	SWORD           pitch;                          /**< Object's pitch +ve rotation around right-axis (nose up/down) */ \
 	UBYTE           player;                         /**< Which player the object belongs to */ \
 	SWORD           roll;                           /**< Object's roll +ve rotation around forward-axis (left wing up/down) */ \
-	SWORD           prevRoll;                       /**< Object's roll +ve rotation around forward-axis (left wing up/down), previous tick */ \
 	uint32_t        time;                           /**< Game time of given space-time position. */
 
 #define BASE_ELEMENTS2(pointerType) \
