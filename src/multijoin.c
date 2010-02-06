@@ -238,6 +238,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 	CBPlayerLeft = playerIndex;
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
 
+	netPlayersUpdated = true;
 	return true;
 }
 
@@ -275,7 +276,7 @@ BOOL MultiPlayerJoin(UDWORD playerIndex)
 		// if skirmish and game full, then kick...
 		if (NetPlay.playercount > game.maxPlayers)
 		{
-			kickPlayer(playerIndex, "Sorry, game is full!", ERROR_FULL);
+			kickPlayer(playerIndex, "the game is already full.", ERROR_FULL);
 		}
 	}
 	return true;
@@ -293,7 +294,7 @@ bool sendDataCheck(void)
 	}
 		NETuint32_t(&player);
 	NETend();
-	debug(LOG_NET, "sending hash to host");
+	debug(LOG_NET, "sent hash to host");
 	return true;
 }
 
@@ -311,32 +312,39 @@ bool recvDataCheck(void)
 		NETuint32_t(&player);
 	NETend();
 
+	if (player >= MAX_PLAYERS) // invalid player number.
+	{
+		debug(LOG_ERROR, "invalid player number (%u) detected.", player);
+		return false;
+	}
+
+	debug(LOG_NET, "** Received NET_DATA_CHECK from player %u", player);
+
 	if (NetPlay.isHost)
 	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			if (i == player)
-			{
-				break;
-			}
-		}
-		ASSERT_OR_RETURN(false , i <= MAX_PLAYERS, "We could not find this player (%u)!", player );
-
 		if (memcmp(DataHash, tempBuffer, sizeof(DataHash)))
 		{
 			char msg[256] = {'\0'};
 
-			sprintf(msg, _("Kicking player, %s, because data doesn't match!"), getPlayerName(i));
+			for (i=0; i<DATA_MAXDATA; i++)
+			{
+				if (DataHash[i] != tempBuffer[i]) break;
+			}
+
+			sprintf(msg, _("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
 			sendTextMessage(msg, true);
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
-			kickPlayer(player, _("Data doesn't match!"), ERROR_WRONGDATA);
-			debug(LOG_WARNING, "Kicking Player %s,(%u), they are using a mod or have modified their data.", getPlayerName(i), player);
+			kickPlayer(player, "your data doesn't match the host's!", ERROR_WRONGDATA);
+			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
+			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
+
+			return false;
 		}
 		else
 		{
-			debug(LOG_NET, "DataCheck message received and verified for player %s (dpid=%u)", getPlayerName(i), player);
-			ingame.DataIntegrity[i] = true;
+			debug(LOG_NET, "DataCheck message received and verified for player %s (slot=%u)", getPlayerName(player), player);
+			ingame.DataIntegrity[player] = true;
 		}
 	}
 	return true;

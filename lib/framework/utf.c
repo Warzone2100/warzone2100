@@ -440,3 +440,91 @@ utf_16_char *UTF16CharacterAtOffset(const utf_16_char *utf16_string, size_t inde
 
 	return (utf_16_char*)utf16_string;
 }
+
+
+static size_t utf32_utf8_buffer_length(const utf_32_char* unicode_string)
+{
+	const utf_32_char* curChar;
+
+	// Determine length of string (in octets) when encoded in UTF-8
+	size_t length = 0;
+	for (curChar = unicode_string; *curChar != '\0'; ++curChar)
+	{
+		length += unicode_utf8_char_length(*curChar);
+	}
+
+	return length;
+}
+
+char *UTF32toUTF8(const utf_32_char *unicode_string, size_t *nbytes)
+{
+	const utf_32_char* curChar;
+
+	const size_t utf8_length = utf32_utf8_buffer_length(unicode_string);
+
+	// Allocate memory to hold the UTF-8 encoded string (plus a terminating nul char)
+	char* utf8_string = malloc(utf8_length + 1);
+	char* curOutPos = utf8_string;
+
+	if (utf8_string == NULL)
+	{
+		debug(LOG_ERROR, "Out of memory");
+		return NULL;
+	}
+
+	for (curChar = unicode_string; *curChar != 0; ++curChar)
+	{
+		curOutPos = encode_utf8_char(*curChar, curOutPos);
+	}
+
+	// Terminate the string with a nul character
+	utf8_string[utf8_length] = '\0';
+
+	// Set the number of bytes allocated
+	if (nbytes)
+	{
+		*nbytes = utf8_length + 1;
+	}
+
+	return utf8_string;
+}
+
+utf_32_char *UTF8toUTF32(const char *utf8_string, size_t *nbytes)
+{
+	const char* curChar = utf8_string;
+	const size_t unicode_length = UTF8CharacterCount(utf8_string);
+
+	// Allocate memory to hold the UTF-32 encoded string (plus a terminating nul)
+	utf_32_char* unicode_string = malloc(sizeof(utf_32_char) * (unicode_length + 1));
+	utf_32_char* curOutPos = unicode_string;
+
+	if (unicode_string == NULL)
+	{
+		debug(LOG_ERROR, "Out of memory");
+		return NULL;
+	}
+
+	while (*curChar != '\0')
+	{
+		*(curOutPos++) = UTF8DecodeChar(curChar, &curChar);
+	}
+
+	// Terminate the string with a nul
+	unicode_string[unicode_length] = '\0';
+
+	// Set the number of bytes allocated
+	if (nbytes)
+	{
+		*nbytes = sizeof(utf_32_char) * (unicode_length + 1);
+	}
+
+	return unicode_string;
+}
+
+size_t utf32len(const utf_32_char *unicode_string)
+{
+	size_t ret = 0;
+	while (*unicode_string++)
+		++ret;
+	return ret;
+}

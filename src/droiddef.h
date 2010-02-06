@@ -124,6 +124,7 @@ typedef struct _droid_template
 	DROID_TYPE      droidType;                  ///< The type of droid
 	UDWORD          multiPlayerID;              ///< multiplayer unique descriptor(cant use id's for templates). Used for save games as well now - AB 29/10/98
 	struct _droid_template* psNext;             ///< Pointer to next template
+	bool		prefab;                     ///< Not player designed, not saved, never delete or change
 } WZ_DECL_MAY_ALIAS DROID_TEMPLATE;
 
 typedef struct DROID
@@ -151,6 +152,8 @@ typedef struct DROID
 	UDWORD          originalBody;                   ///< the original body points
 	float           experience;
 	UBYTE           NameVersion;                    ///< Version number used for generating on-the-fly names (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied from droid template
+
+	UDWORD		lastFrustratedTime;		///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way
 
 	SWORD           resistance;                     ///< used in Electronic Warfare
 
@@ -196,10 +199,10 @@ typedef struct DROID
 	UDWORD          actionStarted;                  ///< Game time action started
 	UDWORD          actionPoints;                   ///< number of points done by action since start
 
-	UWORD           UNUSED_powerAccrued;
+	UDWORD          expectedDamage;                 ///< Expected damage to be caused by all currently incoming projectiles. This info is shared between all players,
+	                                                ///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 
 	UBYTE           illumination;
-	UBYTE           updateFlags;
 
 	/* Movement control data */
 	MOVE_CONTROL    sMove;

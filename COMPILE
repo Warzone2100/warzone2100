@@ -27,7 +27,7 @@ Windows Compilation:
 
 	You may find a more up to date version at http://wz.rootzilla.de/wiki/user:windows_compile_guide
 
-	Prerequesites:
+	Prerequisites:
 		- Warzone Developer's Package (http://download.gna.org/warzone/development/warzone-devpkg.7z)
 		- Only when using the SVN version: TortoiseSVN (http://tortoisesvn.tigris.org/)
 

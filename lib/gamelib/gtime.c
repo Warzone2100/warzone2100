@@ -66,7 +66,7 @@ BOOL gameTimeInit(void)
     	/* Start the timer off at 2 so that when the scripts strip the map of objects
 	 * for multiPlayer they will be processed as if they died. */
 	gameTime = 2;
-	timeOffset = 0;
+	timeOffset = 2;
 	baseTime = wzGetTicks();
 
 	gameTime2 = 0;
@@ -102,13 +102,28 @@ UDWORD	getStaticTimeValueRange(UDWORD tickFrequency, UDWORD requiredRange)
 void gameTimeUpdate(void)
 {
 	unsigned int currTime = wzGetTicks();
-	unsigned long long newTime;
+	long long newTime;
 
 	// Do not update the game time if gameTimeStop has been called
 	if (stopCount == 0)
 	{
 		// Calculate the new game time
-		newTime = ( currTime - baseTime ) * modifier + timeOffset;
+		newTime = (long long)(( currTime - baseTime ) * (double)modifier) + timeOffset;
+
+		ASSERT(newTime >= gameTime, "Time travel is occurring!");
+		if (newTime < gameTime)
+		{
+			// Warzone 2100, the first relativistic computer game!
+			// Exhibit A: Time travel
+			// force a rebase
+			timeOffset = gameTime;
+			timeOffset2 = gameTime2;
+
+			baseTime = currTime;
+			baseTime2 = baseTime;
+
+			newTime = gameTime;
+		}
 
 		// Calculate the time for this frame
 		frameTime = (newTime - gameTime);
@@ -126,7 +141,7 @@ void gameTimeUpdate(void)
 	}
 
 	// now update gameTime2 which does not pause
-	newTime = currTime - baseTime2 + timeOffset;
+	newTime = currTime - baseTime2 + timeOffset2;
 
 	// Calculate the time for this frame
 	frameTime2 = newTime - gameTime2;
@@ -144,7 +159,20 @@ void gameTimeUpdate(void)
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
 	frameTimeFraction = (float)frameTime / (float)GAME_TICKS_PER_SEC;
-	frameTimeFraction2 = (float)frameTime / (float)GAME_TICKS_PER_SEC;
+	frameTimeFraction2 = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
+
+	// Game precision seems to drop too low after this.
+	// It's probably time to rebase
+	// This is a temporary solution
+
+	if (gameTime > baseTime + (1<<18))
+	{
+		timeOffset = gameTime;
+		timeOffset2 = gameTime2;
+
+		baseTime = wzGetTicks();
+		baseTime2 = baseTime;
+	}
 }
 
 // reset the game time modifiers

@@ -29,6 +29,7 @@ EXTRA_DIST= \
 	macosx/Warzone.xcodeproj/project.pbxproj
 
 # HACK Don't give make errors when switching between trunk and branches.
+# Now with PD-ksh support.
 all: fixdeps
 fixdeps:
-	cd "$(top_srcdir)/src" ; mkdir -p "$(abs_top_builddir)/src/.deps" ; for ext in c cpp ; do for a in *.$$ext ; do grep -q "\b$$a\b" "$(abs_top_builddir)/src/.deps/$${a/.$$ext/.Po}" 2> /dev/null || echo "$${a/.$$ext/.o}: ../$(top_srcdir)/src/$$a" | tee "$(abs_top_builddir)/src/.deps/$${a/.$$ext/.Po}" ; done ; done
+	cd "$(top_srcdir)/src" ; mkdir -p "$(abs_top_builddir)/src/.deps" ; for ext in c cpp ; do for a in *.$$ext ; do grep -q "\b$$a\b" "$(abs_top_builddir)/src/.deps/`echo "$$a" | sed s/\.$$ext/.Po/`" 2> /dev/null || echo "`echo "$$a" | sed s/\.$$ext/.o/`: ../$(top_srcdir)/src/$$a" | tee "$(abs_top_builddir)/src/.deps/`echo "$$a" | sed s/\.$$ext/.Po/`" ; done ; done

@@ -108,13 +108,13 @@ typedef struct {
 } BUTOFFSET;
 
 BUTOFFSET ReticuleOffsets[NUMRETBUTS] = {	// Reticule button form relative positions.
-	{48,49},	// RETBUT_CANCEL,
-	{53,17},	// RETBUT_FACTORY,
-	{87,35},	// RETBUT_RESEARCH,
-	{87,70},	// RETBUT_BUILD,
-	{53,88},	// RETBUT_DESIGN,
-	{19,70},	// RETBUT_INTELMAP,
-	{19,35},	// RETBUT_COMMAND,
+	{48,47},	// RETBUT_CANCEL,
+	{53,15},	// RETBUT_FACTORY,
+	{87,33},	// RETBUT_RESEARCH,
+	{87,68},	// RETBUT_BUILD,
+	{53,86},	// RETBUT_DESIGN,
+	{19,68},	// RETBUT_INTELMAP,
+	{19,33},	// RETBUT_COMMAND,
 };
 
 BUTSTATE ReticuleEnabled[NUMRETBUTS] = {	// Reticule button enable states.
@@ -202,8 +202,8 @@ BOOL Refreshing = false;
 //LOADSAVE uses				21000
 //MULTILIMITS uses			22000
 
-#define	IDPROX_START		12000		//The first proximity button
-#define	IDPROX_END			12019		//The last proximity button - max of 20
+#define	IDPROX_START		120000		// The first proximity button
+#define	IDPROX_END		129999		// The last proximity button
 
 #define PROX_BUTWIDTH		9
 #define PROX_BUTHEIGHT		9
@@ -915,7 +915,10 @@ static void intDoScreenRefresh(void)
 				 (widgGetFromID(psWScreen,IDORDER_FORM) != NULL) )
 			{
 				intRemoveOrderNoAnim();
-				widgSetButtonState(psWScreen, statID, 0);
+				if (statID)
+				{
+					widgSetButtonState(psWScreen, statID, 0);
+				}
 			}
 		}
 
@@ -1149,7 +1152,6 @@ void intResetScreen(BOOL NoAnim)
 		widgSetButtonState(psWScreen, IDRET_INTEL_MAP, 0);
 		widgSetButtonState(psWScreen, IDRET_RESEARCH, 0);
 		widgSetButtonState(psWScreen, IDRET_DESIGN, 0);
-
 	}
 
 	/* Remove whatever extra screen was displayed */
@@ -1872,6 +1874,7 @@ INT_RETVAL intRunWidgets(void)
 		break;
 
 	/* Catch the quit button here */
+	case INTINGAMEOP_POPUP_QUIT:
 	case IDMISSIONRES_QUIT:			// mission quit
 	case INTINGAMEOP_QUIT_CONFIRM:			// esc quit confrim
 	case IDOPT_QUIT:						// options screen quit
@@ -2187,7 +2190,7 @@ INT_RETVAL intRunWidgets(void)
 		retCode = INT_INTERCEPT;
 	}
 
-	if(	(testPlayerHasLost() || (testPlayerHasWon() && !bMultiPlayer)) && // yeah yeah yeah - I know....
+	if(	(testPlayerHasLost() || testPlayerHasWon()) && !bMultiPlayer && // yeah yeah yeah - I know....
         (intMode != INT_MISSIONRES) && !getDebugMappingStatus())
 
 	{
@@ -2849,12 +2852,10 @@ static void intProcessStats(UDWORD id)
 			{
 				/* See if this was a click on an already selected stat */
 				psStats = objGetStatsFunc(psObjSelected);
-                //only do the cancel operation if not trying to add to the build list
-				if (psStats == ppsStatsList[id - IDSTAT_START] &&
-                    !(objMode == IOBJ_BUILD && ctrlShiftDown()))
+				// only do the cancel operation if not trying to add to the build list
+				if (psStats == ppsStatsList[id - IDSTAT_START] && objMode != IOBJ_BUILD)
 				{
-                    //this needs to be done before the topic is cancelled from the structure
-                    //research works differently now! - AB 5/2/99
+					// this needs to be done before the topic is cancelled from the structure
 					/* If Research then need to set topic to be cancelled */
 					if (objMode == IOBJ_RESEARCH)
 					{
@@ -2872,16 +2873,6 @@ static void intProcessStats(UDWORD id)
 
 					/* Unlock the button on the stats form */
 					widgSetButtonState(psWScreen, id, 0);
-
-                    //research works differently now! - AB 5/2/99
-					/* If Research then need to set topic to be cancelled */
-					/*if (objMode == IOBJ_RESEARCH)
-					{
-						if (psObjSelected->type == OBJ_STRUCTURE )
-						{
-							cancelResearch((STRUCTURE *)psObjSelected);
-						}
-					}*/
 				}
 				else
 				{
@@ -3811,12 +3802,12 @@ BOOL intAddReticule(void)
 
 void intRemoveReticule(void)
 {
-	if(ReticuleUp == true) {
-		widgDelete(psWScreen,IDRET_FORM);		// remove reticule
+	if (ReticuleUp == true)
+	{
+		widgDelete(psWScreen, IDRET_FORM);		// remove reticule
 		ReticuleUp = false;
 	}
 }
-
 
 //toggles the Power Bar display on and off
 void togglePowerBar(void)
@@ -6779,8 +6770,7 @@ BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 	//store the ID so we can detect which one has been clicked on
 	psProxDisp->buttonID = sBFormInit.id;
 
-//	loop back and find a free one!
-//	ASSERT( sBFormInit.id < IDPROX_END,"Too many proximity message buttons" );
+	// loop back and find a free one!
 	if(sBFormInit.id >= IDPROX_END)
 	{
 		for(cnt = IDPROX_START;cnt<IDPROX_END;cnt++)
@@ -6795,11 +6785,9 @@ BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 				break;
 			}
 		}
-		if(cnt == IDPROX_END)
-		{
-			return false;			// no slot was found.
-		}
+		ASSERT_OR_RETURN(false, cnt != IDPROX_END, "Ran out of proximity displays");
 	}
+	ASSERT(sBFormInit.id < IDPROX_END, "Invalid proximity message button ID %d", (int)sBFormInit.id);
 
 	sBFormInit.majorID = 0;
 	sBFormInit.minorID = 0;
@@ -6825,6 +6813,7 @@ BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 /*Remove a Proximity Button - when the message is deleted*/
 void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp)
 {
+	ASSERT(psProxDisp->buttonID >= IDPROX_START && psProxDisp->buttonID <= IDPROX_END, "Invalid proximity ID");
 	widgDelete(psWScreen, psProxDisp->buttonID);
 }
 

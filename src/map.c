@@ -50,6 +50,7 @@
 #include "astar.h"
 #include "fpath.h"
 #include "levels.h"
+#include "scriptfuncs.h"
 
 struct ffnode
 {
@@ -106,7 +107,7 @@ typedef struct _zonemap_save_header {
 #define	ROOT_TABLE_SIZE		1024
 
 /* The size and contents of the map */
-UDWORD	mapWidth = 0, mapHeight = 0;
+SDWORD	mapWidth = 0, mapHeight = 0;
 MAPTILE	*psMapTiles = NULL;
 
 #define WATER_DEPTH	180
@@ -166,8 +167,10 @@ BOOL mapNew(UDWORD width, UDWORD height)
 		psTile->height = MAX_HEIGHT / 4;
 		psTile->illumination = 255;
 		psTile->level = psTile->illumination;
-		psTile->bMaxed = true;
+		memset(psTile->watchers, 0, sizeof(psTile->watchers));
 		psTile->colour= WZCOL_WHITE;
+		psTile->tileExploredBits = 0;
+		psTile->sensorBits = 0;
 		psTile++;
 	}
 
@@ -906,6 +909,10 @@ BOOL mapLoad(char *filename)
 
 		psMapTiles[i].texture = texture;
 		psMapTiles[i].height = height;
+
+		// Visibility stuff
+		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
+		psMapTiles[i].sensorBits = 0;
 		for (j = 0; j < MAX_PLAYERS; j++)
 		{
 			psMapTiles[i].tileVisBits =(UBYTE)(psMapTiles[i].tileVisBits &~ (UBYTE)(1 << j));
@@ -1305,7 +1312,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 			tagWriteEnter(0x12, 1);
 			tagWrite(0x01, psRearm->reArmPoints);
 			tagWrite(0x02, psRearm->timeStarted);
-			tagWrite(0x03, psRearm->currentPtsAdded);
+			tagWrite(0x03, psRearm->timeLastUpdated);
 			if (psRearm->psObj)
 			{
 				tagWrites(0x04, psRearm->psObj->id);
@@ -1837,15 +1844,16 @@ extern SWORD map_Height(int x, int y)
 	float onBottom, result;
 	float towardsCenter, towardsRight;
 
-	// make sure we have valid coordinates
-	if (x < 0 ||
-	    y < 0 ||
-	    x >= world_coord(mapWidth-1) ||
-	    y >= world_coord(mapHeight-1))
-	{
-		// we don't so give an arbitrary height
-		return 0;
-	}
+	// Clamp x and y values to actual ones
+	// Give one tile worth of leeway before asserting, for units/transporters coming in from off-map.
+	ASSERT(x >= -TILE_UNITS, "map_Height: x value is too small (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	ASSERT(y >= -TILE_UNITS, "map_Height: y value is too small (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	x = (x < 0 ? 0 : x);
+	y = (y < 0 ? 0 : y);
+	ASSERT(x < world_coord(mapWidth)+TILE_UNITS, "map_Height: x value is too big (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	ASSERT(y < world_coord(mapHeight)+TILE_UNITS, "map_Height: y value is too big (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	x = (x >= world_coord(mapWidth) ? world_coord(mapWidth) - 1 : x);
+	y = (y >= world_coord(mapHeight) ? world_coord(mapHeight) - 1 : y);
 
 	// on which tile are these coords?
 	tileX = map_coord(x);
@@ -2132,6 +2140,7 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 	clock_t		start = clock();
 	bool		retval;
 
+	scriptInit();
 	retval = levLoadData(name, NULL, 0);
 	ASSERT(retval, "Could not load %s", name);
 	route.asPath = NULL;
@@ -2146,6 +2155,7 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 		job.destY = endy;
 		job.propulsion = PROPULSION_TYPE_WHEELED;
 		job.droidID = 1;
+		job.owner = 0;
 		asret = fpathAStarRoute(&route, &job);
 		free(route.asPath);
 		route.asPath = NULL;
@@ -2166,8 +2176,8 @@ void mapTest()
 {
 	fprintf(stdout, "\tMap self-test...\n");
 
-	astarTest("BeggarsKanyon-T1", 16, 5, 119, 182);
-	astarTest("MizaMaze-T3", 5, 5, 108, 112);
+	astarTest("Sk-BeggarsKanyon-T1", 16, 5, 119, 182);
+	astarTest("Sk-MizaMaze-T3", 5, 5, 108, 112);
 
 	fprintf(stdout, "\tMap self-test: PASSED\n");
 }

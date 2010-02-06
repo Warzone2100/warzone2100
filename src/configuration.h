@@ -32,6 +32,7 @@ extern "C"
 extern BOOL loadConfig(void);
 extern BOOL loadRenderMode(void);
 extern BOOL saveConfig(void);
+extern BOOL reloadMPConfig(void);
 extern void closeConfig( void );
 extern void setSinglePlayerFrameLimit(SDWORD limit);
 extern SDWORD getSinglePlayerFrameLimit(void);

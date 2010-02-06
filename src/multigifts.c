@@ -45,6 +45,7 @@
 #include "scriptcb.h"
 #include "loop.h"
 #include "transporter.h"
+#include "mission.h" // for INVALID_XY
 
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
@@ -279,7 +280,7 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 		 && !IsResearchCompleted(&pRto[i]))
 		{
 			MakeResearchCompleted(&pRto[i]);
-			researchResult(i, to, false, NULL);
+			researchResult(i, to, false, NULL, true);
 		}
 	}
 
@@ -311,7 +312,6 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 	if (from == ANYPLAYER)
 	{
 		gifval = OILDRUM_POWER;
-		CONPRINTF(ConsoleString,(ConsoleString,_("Player %u found %u power in an oil drum"), to, gifval));
 	}
 	else
 	{
@@ -394,6 +394,8 @@ void breakAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio)
 
 	alliances[p1][p2] = ALLIANCE_BROKEN;
 	alliances[p2][p1] = ALLIANCE_BROKEN;
+	alliancebits[p1] &= ~(1 << p2);
+	alliancebits[p2] &= ~(1 << p1);
 
 	if (prop)
 	{
@@ -415,14 +417,18 @@ void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allow
 
 	alliances[p1][p2] = ALLIANCE_FORMED;
 	alliances[p2][p1] = ALLIANCE_FORMED;
-
+	if (game.alliance == ALLIANCES_TEAMS)	// this is for shared vision only
+	{
+		alliancebits[p1] |= 1 << p2;
+		alliancebits[p2] |= 1 << p1;
+	}
 
 	if (allowAudio && (p1 == selectedPlayer || p2== selectedPlayer))
 	{
 		audio_QueueTrack(ID_ALLIANCE_ACC);
 	}
 
-	if (bMultiPlayer && prop)
+	if (bMultiMessages && prop)
 	{
 		sendAlliance(p1, p2, ALLIANCE_FORMED, false);
 	}
@@ -624,8 +630,8 @@ static const char *feature_names[] =
 // splatter artifact gifts randomly about.
 void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 {
-	FEATURE		*pF;
-	int			i, count;
+	FEATURE		*pF = NULL;
+	int			i, featureStat, count;
 	uint32_t	x, y;
 	uint8_t		player = ANYPLAYER;
 
@@ -634,34 +640,53 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 		NETuint8_t(&quantity);
 		NETenum(&type);
 
-		for(i = 0; i < numFeatureStats && asFeatureStats[i].subType != type; i++);
+		for(featureStat = 0; featureStat < numFeatureStats && asFeatureStats[featureStat].subType != type; featureStat++);
 
 		ASSERT(mapWidth > 20, "map not big enough");
 		ASSERT(mapHeight > 20, "map not big enough");
 
 		for (count = 0; count < quantity; count++)
 		{
-			// Between 10 and mapwidth - 10
-			x = (rand() % (mapWidth - 20)) + 10;
-			y = (rand() % (mapHeight - 20)) + 10;
-
-			if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
+			for (i = 0; i < 3; i++) // try three times
 			{
-				ASSERT(false, "Unable to find a free location");
-				break;
-			}
+				// Between 10 and mapwidth - 10
+				x = (rand() % (mapWidth - 20)) + 10;
+				y = (rand() % (mapHeight - 20)) + 10;
 
-			pF = buildFeature(asFeatureStats + i, world_coord(x), world_coord(y), false);
+				if (pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
+				{
+					break;
+				}
+				else if (i == 2)
+				{
+					debug(LOG_FEATURE, "Unable to find a free location after 3 tries; giving up.");
+					x = INVALID_XY;
+				}
+			}
+			if (x != INVALID_XY) // at least one of the tries succeeded
+			{
+				pF = buildFeature(asFeatureStats + featureStat, world_coord(x), world_coord(y), false);
+				if (pF)
+				{
+					pF->player = player;
+				}
+				else
+				{
+					x = INVALID_XY;
+				}
+			}
 
 			NETuint32_t(&x);
 			NETuint32_t(&y);
-			NETuint32_t(&pF->id);
-			NETuint8_t(&player);
-
 			if (pF)
 			{
-				pF->player = player;
+				NETuint32_t(&pF->id);
 			}
+			else
+			{
+				NETuint32_t(&x); // just give them a dummy value; it'll never be used
+			}
+			NETuint8_t(&player);
 		}
 
 	NETend();
@@ -701,7 +726,11 @@ void recvMultiPlayerRandomArtifacts()
 		NETuint32_t(&ref);
 		NETuint8_t(&player);
 
-		if (!tileOnMap(tx, ty))
+		if (tx == INVALID_XY)
+		{
+			continue;
+		}
+		else if (!tileOnMap(tx, ty))
 		{
 			debug(LOG_ERROR, "Bad tile coordinates (%u,%u)", tx, ty);
 			continue;

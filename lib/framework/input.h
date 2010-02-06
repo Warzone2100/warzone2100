@@ -31,6 +31,7 @@
 #endif
 
 #include "types.h"
+#include "lib/framework/utf.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -82,6 +83,8 @@ typedef enum _key_code
 	KEY_QUOTE       = '\'',
 	KEY_BACKQUOTE   = '`',
 	KEY_LSHIFT      = 304,
+	KEY_LMETA       = 309,  // TODO Added after Qt branched.
+	KEY_LSUPER      = 310,  // TODO Added after Qt branched.
 	KEY_BACKSLASH   = '\\',
 	KEY_Z           = 'z',
 	KEY_X           = 'x',
@@ -94,6 +97,8 @@ typedef enum _key_code
 	KEY_FULLSTOP    = '.',
 	KEY_FORWARDSLASH= '/',
 	KEY_RSHIFT      = 303,
+	KEY_RMETA       = 311,  // TODO Added after Qt branched.
+	KEY_RSUPER      = 312,  // TODO Added after Qt branched.
 	KEY_KP_STAR     = 268,
 	KEY_LALT        = 308,
 	KEY_SPACE       = ' ',
@@ -153,9 +158,6 @@ extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
 
 /** Initialise the input module. */
 extern void inputInitialise(void);
-
-/** Add a key press to the key buffer. */
-extern void inputAddBuffer(UDWORD code, char char_code, UDWORD count);
 
 /** This returns true if the key is currently depressed. */
 extern BOOL keyDown(KEY_CODE code);
@@ -219,13 +221,13 @@ extern void SetMousePos(uint16_t x, uint16_t y);
 #define INPBUF_ESC		KEY_ESC
 
 /** Return the next key press or 0 if no key in the buffer.
- * The key returned will have been remaped to the correct ascii code for the
- * windows key map.
- * All key presses are buffered up (including windows auto repeat).
+ * The key returned will have been remapped to the correct ascii code for the
+ * US layout (approximately) key map.
+ * All key presses are buffered up (including auto repeat).
+ * @param unicode is filled (unless NULL) with the unicode character corresponding
+ * to the key press (using the user's native layout).
  */
-extern UDWORD inputGetKey(void);
-
-extern char inputGetCharKey(void);
+extern UDWORD inputGetKey(utf_32_char *unicode);
 
 /** Clear the input buffer. */
 extern void inputClearBuffer(void);

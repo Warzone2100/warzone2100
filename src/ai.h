@@ -74,10 +74,12 @@ extern "C"
 #define	WEIGHT_CMD_SAME_TARGET		WEIGHT_DIST_TILE				//Don't want this to be too high, since a commander can have many units assigned
 
 // alliances
-extern UBYTE alliances[MAX_PLAYERS][MAX_PLAYERS];
+extern uint8_t alliances[MAX_PLAYER_SLOTS][MAX_PLAYER_SLOTS];
+extern uint8_t alliancebits[MAX_PLAYER_SLOTS];
+extern uint8_t satuplinkbits;
 
-/* Check no alliance has formed*/
-extern BOOL aiCheckAlliances(UDWORD s1,UDWORD s2);
+/** Check no alliance has formed. This is a define to make sure we inline it. */
+#define aiCheckAlliances(_s1, _s2) (alliances[_s1][_s2] == ALLIANCE_FORMED)
 
 /* Initialise the AI system */
 extern BOOL aiInitialise(void);
@@ -86,7 +88,7 @@ extern BOOL aiInitialise(void);
 extern BOOL aiShutdown(void);
 
 /* Initialise a droid structure for AI */
-extern BOOL aiInitDroid(DROID *psDroid);
+//extern BOOL aiInitDroid(DROID *psDroid);
 
 /* Do the AI for a droid */
 extern void aiUpdateDroid(DROID *psDroid);
@@ -94,6 +96,12 @@ extern void aiUpdateDroid(DROID *psDroid);
 // Find the nearest best target for a droid
 // returns integer representing quality of choice, -1 if failed
 extern SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, UWORD *targetOrigin);
+
+// Are there a lot of bullets heading towards the structure?
+extern BOOL aiObjectIsProbablyDoomed(BASE_OBJECT *psObject);
+
+// Update the expected damage of the object.
+extern void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage);
 
 /* See if there is a target in range added int weapon_slot*/
 extern BOOL aiChooseTarget(BASE_OBJECT *psObj,

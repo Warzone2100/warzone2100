@@ -74,13 +74,12 @@
 // globals.
 bool						isMPDirtyBit = false;		// When we are forced to use turnOffMultiMsg() we set this
 BOOL						bMultiPlayer				= false;	// true when more than 1 player.
+BOOL						bMultiMessages				= false;	// == bMultiPlayer unless multimessages are disabled
 BOOL						openchannels[MAX_PLAYERS]={true};
 UBYTE						bDisplayMultiJoiningStatus;
 
 MULTIPLAYERGAME				game;									//info to describe game.
 MULTIPLAYERINGAME			ingame;
-
-BOOL						bSendingMap					= false;	// map broadcasting.
 
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
 char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
@@ -117,33 +116,19 @@ void		startMultiplayerGame		(void);
 
 // ////////////////////////////////////////////////////////////////////////////
 // temporarily disable multiplayer mode.
-BOOL turnOffMultiMsg(BOOL bDoit)
+void turnOffMultiMsg(BOOL bDoit)
 {
-	static BOOL bTemp;
+	if (!bMultiPlayer)
+	{
+		return;
+	}
 
-	if(bDoit)	// turn off msgs.
+	bMultiMessages = !bDoit;
+	if (bDoit)
 	{
-		if(bTemp == true)
-		{
-			// This is spammed multiple times.
-			debug(LOG_NEVER, "multiple calls to turn off");
-		}
-		if(bMultiPlayer)
-		{
-			bMultiPlayer = false;
-			bTemp = true;
-			isMPDirtyBit = true;
-		}
+		isMPDirtyBit = true;
 	}
-	else	// turn on msgs.
-	{
-		if(bTemp)
-		{
-			bMultiPlayer = true;
-			bTemp = false;
-		}
-	}
-	return true;
+	return;
 }
 
 
@@ -257,17 +242,18 @@ BOOL multiPlayerLoop(void)
 		{
 			if(bDisplayMultiJoiningStatus)
 			{
-				if (!NetPlay.isHost)
-				{
-					sendDataCheck();
-				}
 				bDisplayMultiJoiningStatus = 0;
 				setWidgetsStatus(true);
 			}
 			if (!ingame.TimeEveryoneIsInGame)
 			{
 				ingame.TimeEveryoneIsInGame = gameTime;
-		}
+				if (!NetPlay.isHost)
+				{
+					debug(LOG_NET, "=== Sending hash to host ===");
+					sendDataCheck();
+				}
+			}
 			// Only have to do this on a true MP game
 			if (NetPlay.isHost && !ingame.isAllPlayersDataOK && NetPlay.bComms)
 			{
@@ -285,7 +271,9 @@ BOOL multiPlayerLoop(void)
 							sendTextMessage(msg, true);
 							addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
-							kickPlayer(index, _("It is not nice to cheat!"), ERROR_CHEAT);
+#ifndef DEBUG
+							kickPlayer(index, "it is not nice to cheat!", ERROR_CHEAT);
+#endif
 							debug(LOG_WARNING, "Kicking Player %s (%u), they tried to bypass data integrity check!", getPlayerName(index), index);
 						}
 					}
@@ -398,40 +386,29 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
 {
 	DROID_TEMPLATE *psTempl = NULL;
 	UDWORD		i;
-	if(player != ANYPLAYER)
+
+	// Check if we know which player this is from, in that case, assume it is a player template
+	if (player != ANYPLAYER)
 	{
 		for (psTempl = apsDroidTemplates[player];			// follow templates
 		(psTempl && (psTempl->multiPlayerID != tempId ));
 		 psTempl = psTempl->psNext);
+
+		return psTempl;
 	}
-	else
+
+	// If not, first try static templates from AI control (could potentially also happen for currently human controlled players)
+	for (psTempl = apsStaticTemplates; psTempl && psTempl->multiPlayerID != tempId; psTempl = psTempl->psNext) ;
+	if (psTempl) return psTempl;
+
+	// We really have no idea, but it is not a static template, so search through every player template
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		// REALLY DANGEROUS!!! ID's are NOT assumed to be unique for TEMPLATES.
-		debug( LOG_NEVER, "Really Dodgy Check performed for a template" );
-		for(i=0;i<MAX_PLAYERS;i++)
-		{
-			for (psTempl = apsDroidTemplates[i];			// follow templates
-			(psTempl && (psTempl->multiPlayerID != tempId ));
-			 psTempl = psTempl->psNext);
-			if(psTempl)
-			{
-				return psTempl;
-			}
-		}
+		for (psTempl = apsDroidTemplates[i]; psTempl && psTempl->multiPlayerID != tempId; psTempl = psTempl->psNext) ;
+		if (psTempl) return psTempl;
 	}
-	return psTempl;
-}
 
-// the same as above, but only checks names in similarity.
-DROID_TEMPLATE *NameToTemplate(const char *sName,UDWORD player)
-{
-	DROID_TEMPLATE *psTempl = NULL;
-
-	for (psTempl = apsDroidTemplates[player];			// follow templates
-		(psTempl && (strcmp(psTempl->aName,sName) != 0) );
-		 psTempl = psTempl->psNext);
-
-	 return psTempl;
+	return NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -674,8 +651,7 @@ BOOL recvMessage(void)
 			case NET_GIFT:						// an alliance gift from one player to another.
 				recvGift();
 				break;
-			case NET_SCORESUBMIT:				//  a score update from another player
-				recvScoreSubmission();
+			case NET_SCORESUBMIT:				//  a score update from another player [UNUSED] see NET_PLAYER_STATS
 				break;
 			case NET_VTOL:
 				recvHappyVtol();
@@ -731,6 +707,7 @@ BOOL recvMessage(void)
 			ingame.JoiningInProgress[player_id] = false;
 			break;
 		}
+		// FIXME: the next 4 cases might not belong here --check (we got two loops for this)
 		case NET_COLOURREQUEST:
 			recvColourRequest();
 			break;
@@ -771,12 +748,17 @@ BOOL recvMessage(void)
 
 			if (selectedPlayer == player_id)  // we've been told to leave.
 			{
-				debug(LOG_ERROR, "You were kicked because, %s", reason);
+				debug(LOG_ERROR, "You were kicked because %s", reason);
 				setPlayerHasLost(true);
+			}
+			else
+			{
+				NETplayerKicked(player_id);
 			}
 			break;
 		}
 		case NET_FIREUP:				// frontend only
+			debug(LOG_NET, "NET_FIREUP was received (frontend only?)"); 
 			break;
 		case NET_RESEARCHSTATUS:
 			recvResearchStatus();
@@ -795,7 +777,7 @@ BOOL recvMessage(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Research Stuff. Nat games only send the result of research procedures.
-BOOL SendResearch(uint8_t player, uint32_t index)
+BOOL SendResearch(uint8_t player, uint32_t index, bool trigger)
 {
 	UBYTE i;
 	PLAYER_RESEARCH *pPlayerRes;
@@ -824,7 +806,7 @@ BOOL SendResearch(uint8_t player, uint32_t index)
 				{
 					// Do the research for that player
 					MakeResearchCompleted(pPlayerRes);
-					researchResult(index, i, false, NULL);
+					researchResult(index, i, false, NULL, trigger);
 				}
 			}
 		}
@@ -858,7 +840,7 @@ static BOOL recvResearch()
 	if (!IsResearchCompleted(pPlayerRes))
 	{
 		MakeResearchCompleted(pPlayerRes);
-		researchResult(index, player, false, NULL);
+		researchResult(index, player, false, NULL, true);
 
 		// Take off the power if available
 		pResearch = asResearch + index;
@@ -878,7 +860,7 @@ static BOOL recvResearch()
 				{
 					// Do the research for that player
 					MakeResearchCompleted(pPlayerRes);
-					researchResult(index, i, false, NULL);
+					researchResult(index, i, false, NULL, true);
 				}
 			}
 		}
@@ -1030,21 +1012,23 @@ BOOL recvResearchStatus()
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between players. proceed string with players to send to.
-// eg "123 hi there" sends "hi there" to players 1,2 and 3.
+// eg "123hi there" sends "hi there" to players 1,2 and 3.
 BOOL sendTextMessage(const char *pStr, BOOL all)
 {
 	BOOL				normal = true;
 	BOOL				sendto[MAX_PLAYERS];
+	int					posTable[MAX_PLAYERS];
 	UDWORD				i;
 	char				display[MAX_CONSOLE_STRING_LENGTH];
 	char				msg[MAX_CONSOLE_STRING_LENGTH];
+	char*				curStr = (char*)pStr;
 
 	if (!ingame.localOptionsReceived)
 	{
 		if(!bMultiPlayer)
 		{
 			// apparently we are not in a mp game, so dump the message to the console.
-			addConsoleMessage(pStr,LEFT_JUSTIFY, SYSTEM_MESSAGE);
+			addConsoleMessage(curStr,LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 		return true;
 	}
@@ -1052,24 +1036,72 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 	memset(display,0x0, sizeof(display));	//clear buffer
 	memset(msg,0x0, sizeof(display));		//clear buffer
 	memset(sendto,0x0, sizeof(sendto));		//clear private flag
-	sstrcpy(msg, pStr);
-	for (i = 0; pStr[i] >= '0' && pStr[i] <= '7' && i < MAX_PLAYERS; i++)		// for each 0..7 numeric char encountered
-	{
-		sendto[ pStr[i]-'0' ] = true;
-		normal = false;
-	}
+	memset(posTable,0x0, sizeof(posTable));		//clear buffer
+	sstrcpy(msg, curStr);
 
-	if (!all && !normal)	// lets user know it is a private message
+	if (!all)
 	{
-		sstrcpy(display, "(private)");
-		sstrcat(display, pStr);
+		// create a position table
+		for (i = 0; i < game.maxPlayers; i++)
+		{
+			posTable[NetPlay.players[i].position] = i;
+		}
+
+		if (curStr[0] == '.')
+		{
+			curStr++;
+			for (i = 0; i < game.maxPlayers; i++)
+			{
+				if (i != selectedPlayer && aiCheckAlliances(selectedPlayer, i))
+				{
+					sendto[i] = true;
+				}
+			}
+			normal = false;
+			if (!all)
+			{
+				sstrcpy(display, _("(allies"));
+			}
+		}
+		for (; curStr[0] >= '0' && curStr[0] <= '7'; curStr++)		// for each 0..7 numeric char encountered
+		{
+			i = posTable[curStr[0]-'0'];
+			if (normal)
+			{
+				sstrcpy(display, _("(private to "));
+			}
+			else
+			{
+				sstrcat(display, ", ");
+			}
+			if ((isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ) ))
+			{
+				sstrcat(display, getPlayerName(posTable[curStr[0]-'0']));
+				sendto[i] = true;
+			}
+			else
+			{
+				sstrcat(display, _("[invalid]"));
+			}
+			normal = false;
+		}
+
+		if (!normal)	// lets user know it is a private message
+		{
+			if (curStr[0] == ' ')
+			{
+				curStr++;
+			}
+			sstrcat(display, ") ");
+			sstrcat(display, curStr);
+		}
 	}
 
 	if (all)	//broadcast
 	{
 		NETbeginEncode(NET_TEXTMSG, NET_ALL_PLAYERS);
-			NETuint32_t(&selectedPlayer);		// who this msg is from
-			NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
+		NETuint32_t(&selectedPlayer);		// who this msg is from
+		NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 		NETend();
 	}
 	else if (normal)
@@ -1081,8 +1113,8 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 				if (isHumanPlayer(i))
 				{
 					NETbeginEncode(NET_TEXTMSG, i);
-						NETuint32_t(&selectedPlayer);		// who this msg is from
-						NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
+					NETuint32_t(&selectedPlayer);		// who this msg is from
+					NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
 				else	//also send to AIs now (non-humans), needed for AI
@@ -1101,25 +1133,24 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 				if (isHumanPlayer(i))
 				{
 					NETbeginEncode(NET_TEXTMSG, i);
-						NETuint32_t(&selectedPlayer);				// who this msg is from
-						NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
+					NETuint32_t(&selectedPlayer);				// who this msg is from
+					NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
 				else	//also send to AIs now (non-humans), needed for AI
 				{
-					sendAIMessage(display, selectedPlayer, i);
+					sendAIMessage(curStr, selectedPlayer, i);
 				}
 			}
 		}
-		sprintf(display,"(private)");
 	}
 
 	//This is for local display
-	sstrcat(display, NetPlay.players[selectedPlayer].name);		// name
-	sstrcat(display, ": ");						// seperator
-	sstrcat(display, pStr);						// add message
+	sstrcpy(msg, NetPlay.players[selectedPlayer].name);		// name
+	sstrcat(msg, ": ");						// seperator
+	sstrcat(msg, (normal?curStr:display));						// add message
 
-	addConsoleMessage(display, DEFAULT_JUSTIFY, selectedPlayer);	// display
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, selectedPlayer);	// display
 
 	return true;
 }
@@ -1127,7 +1158,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 //AI multiplayer message, send from a certain player index to another player index
 BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 {
-	UDWORD	sendPlayer;		//dpidPlayer is a uint32_t, not int32_t!
+	UDWORD	sendPlayer;
 
 	//check if this is one of the local players, don't need net send then
 	if (to == selectedPlayer || myResponsibility(to))	//(the only) human on this machine or AI on this machine
@@ -1508,26 +1539,42 @@ BOOL recvDestroyFeature()
 BOOL recvMapFileRequested()
 {
 	char mapStr[256],mapName[256],fixedname[256];
+	uint32_t player;
 
-	// another player is requesting the map
+	PHYSFS_sint64 fileSize_64;
+	PHYSFS_file	*pFileHandle;
+
+	// We are not the host, so we don't care. (in fact, this would be a error)
 	if(!NetPlay.isHost)
 	{
 		return true;
 	}
 
-	// start sending the map to the other players.
-	if(!bSendingMap)
+	//	Check to see who wants the file
+	NETbeginDecode(NET_FILE_REQUESTED);
+	NETuint32_t(&player);
+	NETend();
+
+	if (!NetPlay.players[player].wzFile.isSending)
 	{
+		NetPlay.players[player].needFile = true;
+		NetPlay.players[player].wzFile.isCancelled = false;
+		NetPlay.players[player].wzFile.isSending = true;
+
 		memset(mapStr,0,256);
 		memset(mapName,0,256);
 		memset(fixedname,0,256);
-		bSendingMap = true;
+
 		addConsoleMessage("Map was requested: SENDING MAP!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
 		sstrcpy(mapName, game.map);
-		// chop off the -T1
+		if (	strstr(mapName,"-T1") != 0
+			|| strstr(mapName,"-T2") != 0
+			|| strstr(mapName,"-T3") != 0)
+		{
+		// chop off the -T1 *only when needed!*
 		mapName[strlen(game.map)-3] = 0;		// chop off the -T1 etc..
-
+		}
 		// chop off the sk- if required.
 		if(strncmp(mapName,"Sk-",3) == 0)
 		{
@@ -1538,48 +1585,66 @@ BOOL recvMapFileRequested()
 		snprintf(mapStr, sizeof(mapStr), "%dc-%s.wz", game.maxPlayers, mapName);
 		snprintf(fixedname, sizeof(fixedname), "maps/%s", mapStr);		//We know maps are in /maps dir...now. fix for linux -Q
 		sstrcpy(mapStr, fixedname);
-		NETsendFile(true,mapStr,0);
+		debug(LOG_NET, "Map was requested. Looking for %s", mapStr);
+
+		// Checking to see if file is available...
+		pFileHandle = PHYSFS_openRead(mapStr);
+		if (pFileHandle == NULL)
+		{
+			debug(LOG_ERROR, "Failed to open %s for reading: %s", mapStr, PHYSFS_getLastError());
+			debug(LOG_FATAL, "You have a map (%s) that can't be located.\n\nMake sure it is in the correct directory and or format!", mapStr);
+			// NOTE: if we get here, then the game is basically over, The host can't send the file for whatever reason...
+			// Which also means, that we can't continue.
+			debug(LOG_NET, "***Host has a file issue, and is being forced to quit!***");
+			NETbeginEncode(NET_HOST_DROPPED, NET_ALL_PLAYERS);
+			NETend();
+			abort();
 	}
 
+		// get the file's size.
+		fileSize_64 = PHYSFS_fileLength(pFileHandle);
+		debug(LOG_NET, "File is valid, sending [directory: %s] %s to client %u", PHYSFS_getRealDir(mapStr), mapStr, player);
+
+		NetPlay.players[player].wzFile.pFileHandle = pFileHandle;
+		NetPlay.players[player].wzFile.fileSize_32 = (int32_t) fileSize_64;		//we don't support 64bit int nettypes.
+		NetPlay.players[player].wzFile.currPos = 0;
+
+		NETsendFile(mapStr, player);
+	}
 	return true;
 }
 
 // continue sending the map
-UBYTE sendMap(void)
+void sendMap(void)
 {
+	int i = 0;
 	UBYTE done;
-	static UDWORD lastCall;
 
-
-	if(lastCall > gameTime)lastCall= 0;
-	if ( (gameTime - lastCall) <200)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		return 0;
-	}
-	lastCall = gameTime;
-
-
-	done = NETsendFile(false,game.map,0);
-
-	if(done == 100)
+		if (NetPlay.players[i].wzFile.isSending)
 	{
+			done = NETsendFile(game.map, i);
+			if (done == 100)
+			{
 		addConsoleMessage("MAP SENT!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-		bSendingMap = false;
+				debug(LOG_NET, "=== File has been sent to player %d ===", i);
+				NetPlay.players[i].wzFile.isSending = false;
+				NetPlay.players[i].needFile = false;
 	}
-
-	return done;
+		}
+	}
 }
 
 // Another player is broadcasting a map, recv a chunk. Returns false if not yet done.
 BOOL recvMapFileData()
 {
-	UBYTE done;
-
-	done =  NETrecvFile();
-	if(done == 100)
+	mapDownloadProgress = NETrecvFile();
+	if (mapDownloadProgress == 100)
 	{
 		addConsoleMessage("MAP DOWNLOADED!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		sendTextMessage("MAP DOWNLOADED",true);					//send
+		debug(LOG_NET, "=== File has been received. ===");
 
 		// clear out the old level list.
 		levShutDown();
@@ -1590,11 +1655,6 @@ BOOL recvMapFileData()
 			return false;
 		}
 		return true;
-	}
-	else
-	{
-		flushConsoleMessages();
-		CONPRINTF(ConsoleString,(ConsoleString,"MAP:%d%%",done));
 	}
 
 	return false;
@@ -1912,4 +1972,5 @@ void resetReadyStatus(bool bSendOptions)
 	{
 		sendOptions();
 	}
+	netPlayersUpdated = true;
 }

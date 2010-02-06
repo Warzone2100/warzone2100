@@ -34,6 +34,8 @@ extern "C"
 	Pumpkin Studios, EIDOS Interactive.
 */
 
+extern UBYTE PlayerColour[MAX_PLAYERS];
+extern void initPlayerColours(void);
 extern BOOL setPlayerColour(UDWORD player, UDWORD col);
 extern UBYTE getPlayerColour(UDWORD pl);
 
@@ -103,7 +105,6 @@ extern void	compPersonToBits(DROID *psDroid);
 #define MUZZLE_FLASH_PIE(DROID,WEAPON_NUM)	(asWeaponStats[DROID->asWeaps[WEAPON_NUM].nStat].pMuzzleGraphic)
 
 /* Don't know what these might be? */
-extern void	updateLightLevels(void);
 extern SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius);
 
 extern void	destroyFXDroid(DROID	*psDroid);

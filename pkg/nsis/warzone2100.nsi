@@ -1,5 +1,5 @@
 ;  This file is part of Warzone 2100.
-;  Copyright (C) 2006-2009  Warzone Resurrection Project
+;  Copyright (C) 2006-2009  Warzone 2100 Project
 ;  Copyright (C) 2006       Dennis Schridde
 ;
 ;  Warzone 2100 is free software; you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 ;  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 ;
 ;  NSIS Modern User Interface
-;  Warzone 2100 Resurrection Installer script
+;  Warzone 2100 Project Installer script
 ;
 
 ;--------------------------------
@@ -45,11 +45,11 @@
 ;Versioninfo
 
 VIProductVersion "${VERSIONNUM}"
-VIAddVersionKey "CompanyName"		"Warzone Resurrection Project"
+VIAddVersionKey "CompanyName"		"Warzone 2100 Project"
 VIAddVersionKey "FileDescription"	"${PACKAGE_NAME} Installer"
 VIAddVersionKey "FileVersion"		"${PACKAGE_VERSION}"
 VIAddVersionKey "InternalName"		"${PACKAGE_NAME}"
-VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2009 Warzone Resurrection Project"
+VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2009 Warzone 2100 Project"
 VIAddVersionKey "OriginalFilename"	"${PACKAGE}-${PACKAGE_VERSION}.exe"
 VIAddVersionKey "ProductName"		"${PACKAGE_NAME}"
 VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
@@ -130,11 +130,6 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 
   !insertmacro MUI_RESERVEFILE_LANGDLL
 
-;-------------------------------
-; for the message box
-LangString DIALOG_MSG ${LANG_ENGLISH} "Do you want to play the game in Chinese?$\r$\n$\r$\n$\r$\nImportant: This requires a different font, which may cause Warzone 2100 to take a long time to start on Windows Vista and later." 
-LangString DIALOG_MSG ${LANG_GERMAN} "Möchten Sie das Spiel auf Chinesisch spielen?$\r$\n$\r$\n$\r$\nWichtig: Dies benötigt eine andere Schriftart, was dazu führen könnte, dass Warzone 2100 unter Windows Vista und später sehr viel Zeit zum Starten benötigt."
-LangString DIALOG_MSG ${LANG_DUTCH}  "Do you want to play the game in Chinese?$\r$\n$\r$\n$\r$\nImportant: This requires a different font, which may cause Warzone 2100 to take a long time to start on Windows Vista and later." 
 ;--------------------------------
 ;Installer Sections
 
@@ -185,13 +180,7 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=readme.screen.css" "${TOP_SRCDIR}\doc\styles\readme.screen.css"
 
   SetOutPath "$INSTDIR\fonts"
-  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 $(DIALOG_MSG) IDYES WINDOWSFONT_ENABLED IDNO WINDOWSFONT_DISABLED
-WINDOWSFONT_ENABLED:
-  File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_enable" 
-  goto FONT_DONE
-WINDOWSFONT_DISABLED:
   File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_disable"
-FONT_DONE:
   File "${EXTDIR}\etc\fonts\DejaVuSans.ttf"
   File "${EXTDIR}\etc\fonts\DejaVuSans-Bold.ttf"
 
@@ -202,7 +191,7 @@ FONT_DONE:
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "DisplayName" "${PACKAGE_NAME}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "DisplayVersion" "${PACKAGE_VERSION}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "DisplayIcon" "$INSTDIR\${PACKAGE}.exe,0"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "Publisher" "Warzone Resurrection Project"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "Publisher" "Warzone 2100 Project"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "URLInfoAbout" "${PACKAGE_BUGREPORT}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "UninstallString" "$INSTDIR\uninstall.exe"
@@ -285,97 +274,127 @@ Section $(TEXT_SecNTWMod) SecNTWMod
 
 SectionEnd
 
+Section $(TEXT_SecOriginalMod) SecOriginalMod
+
+  SetOutPath "$INSTDIR\mods\multiplay"
+
+  File "${TOP_BUILDDIR}\data\mods\multiplay\original.wz"
+
+  SetOutPath "$INSTDIR"
+
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Original.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp original.wz"
+  !insertmacro MUI_STARTMENU_WRITE_END
+
+SectionEnd
+
+
 SectionGroupEnd
 
 Section $(TEXT_SecFMVs) SecFMVs
 
   IfFileExists "sequences.wz" +5
-    NSISdl::download "http://download.gna.org/warzone/videos/sequences-2.2.wz"               "sequences.wz"
+    NSISdl::download "http://www.il.fontys.nl/~giel/warzone/videos/warzone2100-sequences-en-hi-2.2-1.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
       MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
 
 SectionEnd
 
-Section $(TEXT_SecNLS) SecNLS
+SectionGroup $(TEXT_SecNLS) SecNLS
 
+Section "-NLS files" SecNLS_files
   SetOutPath "$INSTDIR\locale\cs\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\cs.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\cs.gmo"
 
   SetOutPath "$INSTDIR\locale\da\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\da.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\da.gmo"
 
   SetOutPath "$INSTDIR\locale\de\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\de.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\de.gmo"
 
   SetOutPath "$INSTDIR\locale\en_GB\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\en_GB.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\en_GB.gmo"
 
   SetOutPath "$INSTDIR\locale\es\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\es.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\es.gmo"
+
+  SetOutPath "$INSTDIR\locale\et\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\et_EE.gmo"
 
   SetOutPath "$INSTDIR\locale\fi\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fi.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\fi.gmo"
 
   SetOutPath "$INSTDIR\locale\fr\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fr.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\fr.gmo"
 
   SetOutPath "$INSTDIR\locale\fy\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fy.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\fy.gmo"
 
   SetOutPath "$INSTDIR\locale\ga\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ga.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ga.gmo"
+
+  SetOutPath "$INSTDIR\locale\hr\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\hr.gmo"
 
   SetOutPath "$INSTDIR\locale\it\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\it.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\it.gmo"
 
   SetOutPath "$INSTDIR\locale\la\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\la.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\la.gmo"
 
   SetOutPath "$INSTDIR\locale\lt\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\lt.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\lt.gmo"
 
   SetOutPath "$INSTDIR\locale\nb\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\nb.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\nb.gmo"
 
   SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\nl.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\nl.gmo"
 
   SetOutPath "$INSTDIR\locale\pl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\pl.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\pl.gmo"
 
   SetOutPath "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\pt_BR.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\pt_BR.gmo"
 
   SetOutPath "$INSTDIR\locale\pt\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\pt.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\pt.gmo"
 
   SetOutPath "$INSTDIR\locale\ro\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ro.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ro.gmo"
 
   SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ru.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ru.gmo"
 
   SetOutPath "$INSTDIR\locale\sl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\sl.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\sl.gmo"
+
+  SetOutPath "$INSTDIR\locale\uk\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\uk_UA.gmo"
 
   SetOutPath "$INSTDIR\locale\zh_TW\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\zh_TW.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\zh_TW.gmo"
 
   SetOutPath "$INSTDIR\locale\zh_CN\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\zh_CN.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\zh_CN.gmo"
 
 SectionEnd
 
+;Replace fonts.conf with Windows 'fonts' enabled one
+Section /o $(TEXT_SecNLS_WinFonts) SecNLS_WinFonts
+  SetOutPath "$INSTDIR\fonts"
+  Delete "$INSTDIR\fonts\fonts.conf"
+  File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_enable" 
+SectionEnd
 
+SectionGroupEnd
 
 ;--------------------------------
 ;Installer Functions
 
 Function .onInit
-
   !insertmacro MUI_LANGDLL_DISPLAY
-
 FunctionEnd
 
 Function LaunchLink
@@ -402,14 +421,19 @@ FunctionEnd
 ;  LangString DESC_SecMusicMod ${LANG_ENGLISH} "Download and install music."
 
   LangString TEXT_SecFMVs ${LANG_ENGLISH} "Videos"
-  LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install videos (in-game cutscenes)."
+  LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install Hi-quality videos (in-game cutscenes). 545 MB  A Low-quality version is available at http://wz2100.net/download and the German versions are available at http://warzone2100.de"
 
   LangString TEXT_SecNLS ${LANG_ENGLISH} "NLS"
   LangString DESC_SecNLS ${LANG_ENGLISH} "Support for languages other than English."
 
+  LangString TEXT_SecNLS_WinFonts ${LANG_ENGLISH} "WinFonts"
+  LangString DESC_SecNLS_WinFonts ${LANG_ENGLISH} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+  
   LangString TEXT_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod"
   LangString DESC_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod. Modifies most of the weapons and research."
 
+  LangString TEXT_SecOriginalMod ${LANG_ENGLISH} "Original 1.10 balance"
+  LangString DESC_SecOriginalMod ${LANG_ENGLISH} "Play the game with the original 1.10 version balance stats."
 
 
   LangString TEXT_SecBase ${LANG_DUTCH} "Standaard installatie"
@@ -428,14 +452,19 @@ FunctionEnd
 ;  LangString DESC_SecMusicMod ${LANG_DUTCH} "Muziek downloaden en installeren."
 
   LangString TEXT_SecFMVs ${LANG_DUTCH} "FMV"
-  LangString DESC_SecFMVs ${LANG_DUTCH} "FMV downloaden en installeren."
+  LangString DESC_SecFMVs ${LANG_DUTCH} "Download en installeer hoge kwaliteits videos (in-game cutscenes). 545 MiB  Een lage kwaliteits versie is beschikbaar op http://wz2100.net/download en de Duitse versies zijn beschikbaar op http://warzone2100.de"
 
   LangString TEXT_SecNLS ${LANG_DUTCH} "NLS"
   LangString DESC_SecNLS ${LANG_DUTCH} "Ondersteuning voor andere talen dan Engels (Nederlands inbegrepen)."
 
+  LangString TEXT_SecNLS_WinFonts ${LANG_DUTCH} "WinFonts"
+  LangString DESC_SecNLS_WinFonts ${LANG_DUTCH} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+  
   LangString TEXT_SecNTWMod ${LANG_DUTCH} "NTW: New Team War mod"
   LangString DESC_SecNTWMod ${LANG_DUTCH} "NTW: New Team War mod. Wijzigd de meeste wapens en onderzoeken."
 
+  LangString TEXT_SecOriginalMod ${LANG_DUTCH} "Original 1.10 balance"
+  LangString DESC_SecOriginalMod ${LANG_DUTCH} "Speel het spel met de originele 1.10 versie balans stats."
 
 
   LangString TEXT_SecBase ${LANG_GERMAN} "Standardinstallation"
@@ -454,14 +483,19 @@ FunctionEnd
 ;  LangString DESC_SecMusicMod ${LANG_GERMAN} "Musik herunterladen und installieren."
 
   LangString TEXT_SecFMVs ${LANG_GERMAN} "FMV"
-  LangString DESC_SecFMVs ${LANG_GERMAN} "FMV herunterladen und installieren."
+  LangString DESC_SecFMVs ${LANG_GERMAN} "Englische Videosequenzen herunterladen und installieren (545 MiB). Die deutschen Videos gibt es auf http://warzone2100.de/, kleinere englische in schlechterer QualitÃ¤t auf http://wz2100.net/download."
 
   LangString TEXT_SecNLS ${LANG_GERMAN} "NLS"
   LangString DESC_SecNLS ${LANG_GERMAN} "Unterstützung für Sprachen außer Englisch (Deutsch inbegriffen)."
 
+  LangString TEXT_SecNLS_WinFonts ${LANG_GERMAN} "WinFonts"
+  LangString DESC_SecNLS_WinFonts ${LANG_GERMAN} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+  
   LangString TEXT_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod"
   LangString DESC_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod. Verändert die meisten Forschungen und Waffen."
 
+  LangString TEXT_SecOriginalMod ${LANG_GERMAN} "Original 1.10 balance"
+  LangString DESC_SecOriginalMod ${LANG_GERMAN} "Spielen Sie das Spiel mit dem Balancing aus der Originalversion 1.10."
 
 
   LangString TEXT_RunWarzone ${LANG_ENGLISH} "Run ${PACKAGE_NAME}"
@@ -485,8 +519,10 @@ FunctionEnd
 ;    !insertmacro MUI_DESCRIPTION_TEXT ${SecMusicMod} $(DESC_SecMusicMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNTWMod} $(DESC_SecNTWMod)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecOriginalMod} $(DESC_SecOriginalMod)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS} $(DESC_SecNLS)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS_WinFonts} $(DESC_SecNLS_WinFonts)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -546,6 +582,7 @@ Section "Uninstall"
 
   Delete "$INSTDIR\mods\multiplay\ntw.wz"
   Delete "$INSTDIR\mods\multiplay\aivolution.wz"
+  Delete "$INSTDIR\mods\multiplay\original.wz"
 
   RMDir "$INSTDIR\mods\multiplay"
   RMDir "$INSTDIR\mods\music"
@@ -577,6 +614,10 @@ Section "Uninstall"
   RMDir "$INSTDIR\locale\es\LC_MESSAGES"
   RMDir "$INSTDIR\locale\es"
 
+  Delete "$INSTDIR\locale\et\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\et\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\et"
+
   Delete "$INSTDIR\locale\fi\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\fi\LC_MESSAGES"
   RMDir "$INSTDIR\locale\fi"
@@ -592,6 +633,10 @@ Section "Uninstall"
   Delete "$INSTDIR\locale\ga\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\ga\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ga"
+
+  Delete "$INSTDIR\locale\hr\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\hr\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\hr"
 
   Delete "$INSTDIR\locale\it\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\it\LC_MESSAGES"
@@ -637,6 +682,10 @@ Section "Uninstall"
   RMDir "$INSTDIR\locale\sl\LC_MESSAGES"
   RMDir "$INSTDIR\locale\sl"
 
+  Delete "$INSTDIR\locale\uk\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\uk\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\uk"
+
   Delete "$INSTDIR\locale\zh_TW\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\zh_TW\LC_MESSAGES"
   RMDir "$INSTDIR\locale\zh_TW"
@@ -660,6 +709,7 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME}.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Aivolution.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - NTW.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Original.lnk"
 ;  RMDir "$SMPROGRAMS\$STARTMENU_FOLDER"
 
   ;Delete empty start menu parent diretories
@@ -693,4 +743,3 @@ Function un.onInit
   !insertmacro MUI_UNGETLANGUAGE
 
 FunctionEnd
-

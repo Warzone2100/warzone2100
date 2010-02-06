@@ -1419,14 +1419,6 @@ FUNC_SYMBOL asFuncTable[] =
 		1, { (INTERP_TYPE)ST_DROID },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "updatePlayerTileVis",	scrUpdateVisibleTiles,		VAL_VOID,
-		1, { VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "checkVisibleTile",		scrCheckVisibleTile,		VAL_BOOL,
-		3, { VAL_INT, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
 	{ "assembleWeaponTemplate",		scrAssembleWeaponTemplate,		(INTERP_TYPE)ST_TEMPLATE,
 		4, { VAL_INT, (INTERP_TYPE)ST_BODY, (INTERP_TYPE)ST_PROPULSION, (INTERP_TYPE)ST_WEAPON },
 		0, 0, NULL, 0, 0, NULL, NULL },
@@ -1490,6 +1482,18 @@ FUNC_SYMBOL asFuncTable[] =
 
 	{ "droidCanReach", scrDroidCanReach, VAL_BOOL,
 		3, { (INTERP_TYPE)ST_DROID, VAL_INT, VAL_INT },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "getPlayer", scrGetPlayer, VAL_INT,
+		0, { VAL_VOID },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "getPlayerStartPosition", scrGetPlayerStartPosition, VAL_BOOL,
+		3, { VAL_INT, VAL_INT|VAL_REF, VAL_INT|VAL_REF },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "scavengersActive", scrScavengersActive, VAL_BOOL,
+		0, { VAL_VOID },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
 	/* END new functions */
@@ -2117,7 +2121,6 @@ CALLBACK_SYMBOL asCallbackTable[] =
 	{ "CALL_GAMEINIT",			(TRIGGER_TYPE)CALL_GAMEINIT,			NULL, 0, {VAL_VOID} },
 	{ "CALL_DELIVPOINTMOVED",	(TRIGGER_TYPE)CALL_DELIVPOINTMOVED,		NULL, 0, {VAL_VOID} },
 	{ "CALL_DROIDDESIGNED",		(TRIGGER_TYPE)CALL_DROIDDESIGNED,		NULL, 0, {VAL_VOID} },
-	//{ "CALL_RESEARCHCOMPLETED",	(TRIGGER_TYPE)CALL_RESEARCHCOMPLETED,	NULL, 0, {VAL_VOID} }, - callback function added
 	{ "CALL_DROIDBUILT",		(TRIGGER_TYPE)CALL_DROIDBUILT,			NULL, 0, {VAL_VOID} },
 	{ "CALL_POWERGEN_BUILT",	(TRIGGER_TYPE)CALL_POWERGEN_BUILT,		NULL, 0, {VAL_VOID} },
 	{ "CALL_RESEX_BUILT",		(TRIGGER_TYPE)CALL_RESEX_BUILT,			NULL, 0, {VAL_VOID} },
@@ -2149,7 +2152,7 @@ CALLBACK_SYMBOL asCallbackTable[] =
 	{ "CALL_DESIGN_PROPULSION",	(TRIGGER_TYPE)CALL_DESIGN_PROPULSION,	NULL, 0, {VAL_VOID} },
 
 	// callback triggers with parameters
-    { "CALL_RESEARCHCOMPLETED",	(TRIGGER_TYPE)CALL_RESEARCHCOMPLETED,
+	{ "CALL_RESEARCHCOMPLETED",	(TRIGGER_TYPE)CALL_RESEARCHCOMPLETED,
 		scrCBResCompleted,	3,	{ VAL_REF|(INTERP_TYPE)ST_RESEARCH, VAL_REF|(INTERP_TYPE)ST_STRUCTURE, VAL_INT } },
 
 	{ "CALL_NEWDROID",			(TRIGGER_TYPE)CALL_NEWDROID,

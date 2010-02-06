@@ -123,7 +123,7 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 	{
 		newsize = (size - CRtoStrip) + (4- fillbytes);
 		fillbytes = newsize % 4;
-		debug(LOG_NET, "The size of the buffer (%u bytes) is not on a 4 byte boundry, compensating to a new buffer size of %u bytes.", size, newsize);
+		debug(LOG_NET, "The size of the buffer (%u bytes - stripped %d) is not on a 4 byte boundry, compensating to a new buffer size of %u bytes.", size, CRtoStrip, newsize);
 	}
 
 	NewData = malloc(newsize * sizeof(uint8_t));
@@ -172,6 +172,8 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 	return hashval;
 }
 
+// create the hash for that data block.
+// Data should be converted to Network byte order
 void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 {
 	if (!bMultiPlayer)
@@ -193,6 +195,7 @@ void resetDataHash(void)
 	{
 		DataHash[i] = 0;
 	}
+	debug(LOG_NET, "== Hash is reset ==");
 }
 
 /**********************************************************/

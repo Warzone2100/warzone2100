@@ -211,6 +211,7 @@ static BOOL	ignoreRMBC	= true;
 static DROID	*psSelectedVtol;
 static DROID	*psDominantSelected;
 static BOOL bRadarDragging = false;
+static bool mouseScroll = true;
 
 BOOL	rotActive = false;
 BOOL	gameStats = false;
@@ -244,6 +245,10 @@ static BOOL bLasSatStruct;
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
 static BOOL	bShakingPermitted = true;
 
+void setMouseScroll(bool scroll)
+{
+	mouseScroll = scroll;
+}
 
 void	setRadarJump(BOOL	val)
 {
@@ -394,7 +399,7 @@ void ProcessRadarInput(void)
 						// MARKER
 						// Send all droids to that location
 						orderSelectedLoc(selectedPlayer, (PosX*TILE_UNITS)+TILE_UNITS/2,
-							(PosY*TILE_UNITS)+TILE_UNITS/2);
+						                                 (PosY*TILE_UNITS)+TILE_UNITS/2, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
 
 
 					}
@@ -470,8 +475,8 @@ void processInput(void)
 	/* Process all of our key mappings */
 	if (mousePressed(MOUSE_WUP))
 	{
-		/* CTRL+WheelUp makes game speed up */
-		if (keyDown(KEY_LCTRL))
+		/* Ctrl+Alt+WheelUp makes game speed up */
+		if (keyDown(KEY_LCTRL) && keyDown(KEY_LALT))
 		{
 			kf_SpeedUp();
 		}
@@ -489,8 +494,8 @@ void processInput(void)
 
 	if (mousePressed(MOUSE_WDN))
 	{
-		/* CTRL+WheelDown makes game slow down */
-		if (keyDown(KEY_LCTRL))
+		/* Ctrl+Alt+WheelDown makes game slow down */
+		if (keyDown(KEY_LCTRL) && keyDown(KEY_LALT))
 		{
 			kf_SlowDown();
 		}
@@ -875,7 +880,7 @@ void processMouseClickInput(void)
 				{
 					for (i=0;(i<numStructureStats)&&(asStructureStats[i].type != REF_RESOURCE_EXTRACTOR);i++);	// find resource stat
 					{
-						if( (i < numStructureStats) && (apStructTypeLists[selectedPlayer][i] == UNAVAILABLE))		// check if you can build it!
+						if( (i < numStructureStats) && (apStructTypeLists[selectedPlayer][i] != AVAILABLE))		// check if you can build it!
 						{
 							item = MT_BLOCKING;				// don't allow build pointer.
 						}
@@ -960,7 +965,7 @@ void processMouseClickInput(void)
 			}
 			
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && selection == SC_DROID_TRANSPORTER &&
-				arnMPointers[item][selection] == CURSOR_MOVE)
+				arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
 				// Alt+move = disembark transporter
 				pie_SetMouse(CURSOR_EMBARK, war_GetColouredCursor());
@@ -969,7 +974,7 @@ void processMouseClickInput(void)
 				arnMPointers[item][selection] == CURSOR_MOVE)
 			{
 				// Alt+move = scout
-				pie_SetMouse(CURSOR_LOCKON, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_JAM, war_GetColouredCursor());
 			}
 			else if (arnMPointers[item][selection] == CURSOR_NOTPOSSIBLE &&
 			         ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
@@ -1037,114 +1042,72 @@ void scroll(void)
 	float	cosine, sine;
 	SDWORD	xDif,yDif;
 	UDWORD	timeDiff;
-	BOOL	bRetardScroll = false;
 	BOOL mouseAtLeft = false, mouseAtRight = false,
 		mouseAtTop = false, mouseAtBottom = false;
 	float scroll_zoom_factor = 1+2*((getViewDistance()-MINDISTANCE)/((float)(MAXDISTANCE-MINDISTANCE)));
 	float scaled_max_scroll_speed = scroll_zoom_factor * MAX_SCROLL_SPEED;
 	float scaled_accel;
 
-	if(InGameOpUp || bDisplayMultiJoiningStatus )		// cant scroll when menu up. or when over radar
+	if(InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
 	{
 		return;
 	}
 
-	if(!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL))
-	{
-		/* Scroll left */
-		if (keyDown(KEY_LEFTARROW) || mouseXPos < BOUNDARY_X)
-		{
-			mouseAtLeft = true;
-			if(!keyDown(KEY_LEFTARROW) && mouseXPos > BOUNDARY_X/2)
-			{
-				bRetardScroll = true;
-			}
-		}
-
-		/* Scroll right */
-		if ( keyDown(KEY_RIGHTARROW) || mouseXPos > (pie_GetVideoBufferWidth() - BOUNDARY_X) )
-		{
-			mouseAtRight = true;
-			if( !keyDown(KEY_RIGHTARROW) && mouseXPos < (pie_GetVideoBufferWidth() - BOUNDARY_X/2) )
-			{
-				bRetardScroll = true;
-			}
-		}
-
-		/* Scroll up */
-		if (keyDown(KEY_UPARROW) || (mouseYPos < BOUNDARY_Y))
-		{
-			mouseAtBottom = true;
-			if(!keyDown(KEY_UPARROW) && mouseYPos > BOUNDARY_Y/2)
-			{
-				bRetardScroll = true;
-			}
-		}
-
-		/* Scroll down */
-		if ( keyDown(KEY_DOWNARROW) || mouseYPos > (pie_GetVideoBufferHeight() - BOUNDARY_Y) )
-		{
-			mouseAtTop = true;
-			if( !keyDown(KEY_DOWNARROW) && mouseYPos < (pie_GetVideoBufferHeight() - BOUNDARY_Y/2) )
-			{
-				bRetardScroll = true;
-			}
-
-		}
-	}
-	else
+	if (mouseScroll)
 	{
 		/* Scroll left */
 		if (mouseXPos < BOUNDARY_X)
 		{
 			mouseAtLeft = true;
-			if(!keyDown(KEY_LEFTARROW) && mouseXPos > BOUNDARY_X/2)
-			{
-				bRetardScroll = true;
-			}
 		}
 
 		/* Scroll right */
 		if (mouseXPos > (pie_GetVideoBufferWidth() - BOUNDARY_X))
 		{
 			mouseAtRight = true;
-			if( !keyDown(KEY_RIGHTARROW) && mouseXPos < (pie_GetVideoBufferWidth() - BOUNDARY_X/2) )
-			{
-				bRetardScroll = true;
-			}
 		}
 
 		/* Scroll up */
 		if (mouseYPos < BOUNDARY_Y)
 		{
 			mouseAtBottom = true;
-			if(!keyDown(KEY_UPARROW) && mouseYPos > BOUNDARY_Y/2)
-			{
-				bRetardScroll = true;
-			}
 		}
 
 		/* Scroll down */
 		if (mouseYPos > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
 		{
 			mouseAtTop = true;
-			if(!keyDown(KEY_DOWNARROW) && mouseYPos < (pie_GetVideoBufferHeight() - BOUNDARY_Y/2) )
-			{
-				bRetardScroll = true;
-			}
+		}
+	}
+	if (!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL))
+	{
+		/* Scroll left */
+		if (keyDown(KEY_LEFTARROW))
+		{
+			mouseAtLeft = true;
+		}
 
+		/* Scroll right */
+		if (keyDown(KEY_RIGHTARROW))
+		{
+			mouseAtRight = true;
+		}
+
+		/* Scroll up */
+		if (keyDown(KEY_UPARROW))
+		{
+			mouseAtBottom = true;
+		}
+
+		/* Scroll down */
+		if ( keyDown(KEY_DOWNARROW))
+		{
+			mouseAtTop = true;
 		}
 	}
 	/* Time to update scroll - change to should be time */
 	timeDiff = wzGetTicks() - scrollRefTime;
 
-	// WHEN its fixed - you can uncomment it!
-	/*
-	if(bRetardScroll && false)	//temp until fixed
-	{
-		timeDiff/=2;
-	}
-	*/
 	/* Store reference time */
 	scrollRefTime = wzGetTicks();
 
@@ -1251,6 +1214,15 @@ void scroll(void)
 	edgeOfMap = CheckScrollLimits();
 }
 
+/*
+ * Reset scrolling, so we don't jump around after unpausing.
+ */
+void resetScroll(void)
+{
+	scrollRefTime = wzGetTicks();
+	scrollSpeedUpDown = 0.0f;
+	scrollSpeedLeftRight = 0.0f;
+}
 
 // Check a coordinate is within the scroll limits, SDWORD version.
 // Returns true if edge hit.
@@ -1816,7 +1788,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 				addTransporterInterface(psDroid, false);
 			}
 		}
-		else if (cyborgDroidSelected(selectedPlayer))
+		else if (!bMultiPlayer || cyborgDroidSelected(selectedPlayer))
 		{
 			orderSelectedObj(selectedPlayer, (BASE_OBJECT*)psDroid);
 			FeedbackOrderGiven();
@@ -1864,6 +1836,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		}
 		if (bSensorAssigned)
 		{
+			clearSelection();
 			assignSensorTarget((BASE_OBJECT *)psDroid);
 		}
 	}
@@ -2202,8 +2175,9 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 static inline void dealWithLMBObject(BASE_OBJECT* psClickedOn)
 {
 	SELECTION_TYPE selection = establishSelection(selectedPlayer);
+	OBJECT_TYPE type = psClickedOn->type;
 
-	switch (psClickedOn->type)
+	switch (type)
 	{
 		case OBJ_DROID:
 			dealWithLMBDroid((DROID*)psClickedOn, selection);
@@ -2218,7 +2192,8 @@ static inline void dealWithLMBObject(BASE_OBJECT* psClickedOn)
 			break;
 
 		default:
-			ASSERT(false, "Weird selection from LMB - type of clicked object is %d", (int)psClickedOn->type);
+			// assert only when the value is outside of the valid range
+			ASSERT((type >= 0 && type < OBJ_NUM_TYPES), "Weird selection from LMB - type of clicked object is %d", (int)type);
 			break;
 	}
 }
@@ -2264,30 +2239,24 @@ void	dealWithLMB( void )
 	if (psLocation == NULL || driveModeActive() || selNumSelected(selectedPlayer))
 	{
 		// now changed to use the multiple order stuff
-		if (ctrlShiftDown())		// ctrl clicked a destination, add an order
+		// clicked on a destination.
+		orderSelectedLoc(selectedPlayer, mouseTileX*TILE_UNITS+TILE_UNITS/2,
+		                                 mouseTileY*TILE_UNITS+TILE_UNITS/2, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
+		/* Otherwise send them all */
+		if(getNumDroidsSelected())
 		{
-			orderSelectedLocAdd(selectedPlayer,
-								mouseTileX*TILE_UNITS+TILE_UNITS/2,
-								mouseTileY*TILE_UNITS+TILE_UNITS/2, true);
+			assignDestTarget();
+			audio_PlayTrack(ID_SOUND_SELECT);
 		}
-		else		// clicked on a destination.
+
+		if (getDebugMappingStatus() && tileOnMap(mouseTileX, mouseTileY))
 		{
-			/* Otherwise send them all */
-			orderSelectedLoc(selectedPlayer, mouseTileX*TILE_UNITS+TILE_UNITS/2,mouseTileY*TILE_UNITS+TILE_UNITS/2);
-			if(getNumDroidsSelected())
-			{
-				assignDestTarget();
-				audio_PlayTrack( ID_SOUND_SELECT );
-			}
+			MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
 
-			if (getDebugMappingStatus() && tileOnMap(mouseTileX, mouseTileY))
-			{
-				MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
-
-				DBCONPRINTF(ConsoleString, (ConsoleString, "Tile Coords : %d, %d [%d, %d] continent(l%d, h%d)", 
-				            mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
-				            (int)psTile->limitedContinent, (int)psTile->hoverContinent));
-			}
+			CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d",
+			          tileIsExplored(psTile) ? "Explored" : "Unexplored",
+			          mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
+			          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination));
 		}
 
 		driveDisableTactical();

@@ -29,7 +29,6 @@ extern "C"
 {
 #endif //__cplusplus
 
-
 typedef enum
 {
 	CURSOR_ARROW,

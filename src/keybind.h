@@ -106,6 +106,7 @@ extern void	kf_SeekNorth( void );
 extern void	kf_MaxScrollLimits( void );
 extern void	kf_LevelSea( void );
 extern void	kf_TestWater( void );
+extern void	kf_toggleTrapCursor(void);
 extern void	kf_TogglePauseMode( void );
 extern void	kf_ToggleDemoMode( void );
 extern void	kf_ToggleRadarAllign( void );
@@ -125,7 +126,6 @@ extern void	kf_ChooseCancel( void );
 extern void	kf_ToggleWeather( void );
 extern void	kf_KillSelected(void);
 extern void	kf_ShowGridInfo(void);
-extern void	kf_GiveTemplateSet(void);
 extern void	kf_SendTextMessage(void);
 extern void	kf_SelectPlayer( void );
 extern void	kf_ToggleDrivingMode( void );
@@ -250,6 +250,9 @@ void kf_NoAssert(void);
 extern void	kf_ToggleWatchWindow( void );
 
 bool runningMultiplayer(void);
+
+void	kf_ForceSync( void );
+void	kf_PowerInfo( void );
 
 #ifdef __cplusplus
 }

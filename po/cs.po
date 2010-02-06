@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-11-21 16:59+0100\n"
+"POT-Creation-Date: 2010-01-25 19:25+0100\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -118,6 +118,10 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:301
 #: data/base/messages/strings/resstrings.txt:307
 #: data/base/messages/strings/resstrings.txt:323
+#: data/mp/messages/resmessages12.rmsg:4
+#: data/mp/messages/resmessages12.rmsg:17
+#: data/mp/messages/resmessages12.rmsg:30
+#: data/mp/messages/resmessages12.rmsg:43
 #: data/mp/messages/resmessages1.rmsg:108
 #: data/mp/messages/resmessages1.rmsg:121
 #: data/mp/messages/resmessages1.rmsg:134
@@ -163,18 +167,18 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:381
 #: data/mp/messages/resmessages3.rmsg:394
 #: data/mp/messages/resmessages3.rmsg:407
-#: data/mp/messages/resmessagesall.rmsg:199
-#: data/mp/messages/resmessagesall.rmsg:212
-#: data/mp/messages/resmessagesall.rmsg:225
-#: data/mp/messages/resmessagesall.rmsg:498
-#: data/mp/messages/resmessagesall.rmsg:524
+#: data/mp/messages/resmessagesall.rmsg:238
+#: data/mp/messages/resmessagesall.rmsg:251
+#: data/mp/messages/resmessagesall.rmsg:264
 #: data/mp/messages/resmessagesall.rmsg:537
-#: data/mp/messages/resmessagesall.rmsg:550
-#: data/mp/messages/resmessagesall.rmsg:602
-#: data/mp/messages/resmessagesall.rmsg:615
-#: data/mp/messages/resmessagesall.rmsg:628
+#: data/mp/messages/resmessagesall.rmsg:563
+#: data/mp/messages/resmessagesall.rmsg:576
+#: data/mp/messages/resmessagesall.rmsg:589
 #: data/mp/messages/resmessagesall.rmsg:641
-#: data/mp/messages/resmessagesall.rmsg:771
+#: data/mp/messages/resmessagesall.rmsg:654
+#: data/mp/messages/resmessagesall.rmsg:667
+#: data/mp/messages/resmessagesall.rmsg:680
+#: data/mp/messages/resmessagesall.rmsg:810
 #: data/mp/messages/strings/resstrings.txt:131
 #: data/mp/messages/strings/resstrings.txt:137
 #: data/mp/messages/strings/resstrings.txt:143
@@ -205,6 +209,7 @@ msgid "New Defensive Structure Available"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:5
+#: data/mp/messages/resmessages12.rmsg:5
 msgid "Armored Mortar battery pit"
 msgstr ""
 
@@ -226,6 +231,8 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:175
 #: data/base/messages/strings/resstrings.txt:181
 #: data/base/messages/strings/resstrings.txt:187
+#: data/mp/messages/resmessages12.rmsg:6
+#: data/mp/messages/resmessages12.rmsg:19
 #: data/mp/messages/resmessages2.rmsg:123
 #: data/mp/messages/resmessages2.rmsg:136
 #: data/mp/messages/resmessages2.rmsg:149
@@ -235,9 +242,9 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:201
 #: data/mp/messages/resmessages3.rmsg:266
 #: data/mp/messages/resmessages3.rmsg:279
-#: data/mp/messages/resmessagesall.rmsg:201
-#: data/mp/messages/resmessagesall.rmsg:214
-#: data/mp/messages/resmessagesall.rmsg:773
+#: data/mp/messages/resmessagesall.rmsg:240
+#: data/mp/messages/resmessagesall.rmsg:253
+#: data/mp/messages/resmessagesall.rmsg:812
 #: data/mp/messages/strings/resstrings.txt:161
 #: data/mp/messages/strings/resstrings.txt:175
 #: data/mp/messages/strings/resstrings.txt:181
@@ -289,6 +296,8 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:236
 #: data/base/messages/strings/resstrings.txt:242
 #: data/base/messages/strings/resstrings.txt:248
+#: data/mp/messages/resmessages12.rmsg:7
+#: data/mp/messages/resmessages12.rmsg:20
 #: data/mp/messages/resmessages1.rmsg:124
 #: data/mp/messages/resmessages1.rmsg:150
 #: data/mp/messages/resmessages1.rmsg:228
@@ -313,15 +322,15 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:306
 #: data/mp/messages/resmessages3.rmsg:345
 #: data/mp/messages/resmessagesall.rmsg:7
-#: data/mp/messages/resmessagesall.rmsg:202
-#: data/mp/messages/resmessagesall.rmsg:215
-#: data/mp/messages/resmessagesall.rmsg:228
-#: data/mp/messages/resmessagesall.rmsg:501
-#: data/mp/messages/resmessagesall.rmsg:527
+#: data/mp/messages/resmessagesall.rmsg:241
+#: data/mp/messages/resmessagesall.rmsg:254
+#: data/mp/messages/resmessagesall.rmsg:267
 #: data/mp/messages/resmessagesall.rmsg:540
-#: data/mp/messages/resmessagesall.rmsg:553
-#: data/mp/messages/resmessagesall.rmsg:657
-#: data/mp/messages/resmessagesall.rmsg:774
+#: data/mp/messages/resmessagesall.rmsg:566
+#: data/mp/messages/resmessagesall.rmsg:579
+#: data/mp/messages/resmessagesall.rmsg:592
+#: data/mp/messages/resmessagesall.rmsg:696
+#: data/mp/messages/resmessagesall.rmsg:813
 #: data/mp/messages/strings/resstrings.txt:134
 #: data/mp/messages/strings/resstrings.txt:140
 #: data/mp/messages/strings/resstrings.txt:146
@@ -343,10 +352,12 @@ msgid "Defensive Strength: Medium"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:18
+#: data/mp/messages/resmessages12.rmsg:18
 msgid "Mini-rocket armored strongpoint"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:31
+#: data/mp/messages/resmessages12.rmsg:31
 msgid "Armored hardpoint with Heavy Machinegun"
 msgstr ""
 
@@ -381,6 +392,8 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:295
 #: data/base/messages/strings/resstrings.txt:303
 #: data/base/messages/strings/resstrings.txt:309
+#: data/mp/messages/resmessages12.rmsg:32
+#: data/mp/messages/resmessages12.rmsg:45
 #: data/mp/messages/resmessages1.rmsg:110
 #: data/mp/messages/resmessages1.rmsg:123
 #: data/mp/messages/resmessages1.rmsg:136
@@ -401,8 +414,8 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:383
 #: data/mp/messages/resmessages3.rmsg:396
 #: data/mp/messages/resmessages3.rmsg:409
-#: data/mp/messages/resmessagesall.rmsg:500
-#: data/mp/messages/resmessagesall.rmsg:552
+#: data/mp/messages/resmessagesall.rmsg:539
+#: data/mp/messages/resmessagesall.rmsg:591
 #: data/mp/messages/strings/resstrings.txt:261
 #: data/mp/messages/strings/resstrings.txt:267
 #: data/mp/messages/strings/resstrings.txt:273
@@ -449,6 +462,8 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:304
 #: data/base/messages/strings/resstrings.txt:310
 #: data/base/messages/strings/resstrings.txt:326
+#: data/mp/messages/resmessages12.rmsg:33
+#: data/mp/messages/resmessages12.rmsg:46
 #: data/mp/messages/resmessages1.rmsg:137
 #: data/mp/messages/resmessages1.rmsg:163
 #: data/mp/messages/resmessages1.rmsg:176
@@ -483,12 +498,14 @@ msgid "Defensive Strength: High"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:44
+#: data/mp/messages/resmessages12.rmsg:44
 msgid "Armored hardpoint with Lancer AT missile"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:56
 #: data/base/messages/resmessages23.rmsg:43
 #: data/base/messages/resmessages3.rmsg:511
+#: data/mp/messages/resmessages12.rmsg:56
 #: data/mp/messages/resmessages23.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:511
 msgid "Research Breakthrough Improves Construction Rates"
@@ -496,6 +513,7 @@ msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:57
 #: data/base/messages/resmessages23.rmsg:44
+#: data/mp/messages/resmessages12.rmsg:57
 #: data/mp/messages/resmessages23.rmsg:44
 msgid "Improved Engineering Techniques"
 msgstr ""
@@ -503,14 +521,13 @@ msgstr ""
 #: data/base/messages/resmessages12.rmsg:58
 #: data/base/messages/resmessages23.rmsg:45
 #: data/base/messages/resmessages3.rmsg:513
-#: data/mp/messages/resmessages23.rmsg:45
-#: data/mp/messages/resmessages3.rmsg:513
 msgid "Increases construction speed"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages23.rmsg:46
 #: data/base/messages/resmessages3.rmsg:514
+#: data/mp/messages/resmessages12.rmsg:59
 #: data/mp/messages/resmessages23.rmsg:46
 #: data/mp/messages/resmessages3.rmsg:514
 msgid "All trucks upgraded automatically"
@@ -518,29 +535,34 @@ msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:69
 #: data/base/messages/resmessages1.rmsg:4
+#: data/mp/messages/resmessages12.rmsg:69
 #: data/mp/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:70
+#: data/mp/messages/resmessages12.rmsg:70
 msgid "Counter-battery turret detects enemy indirect fire batteries"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessagesall.rmsg:97
-#: data/mp/messages/resmessagesall.rmsg:97
+#: data/mp/messages/resmessages12.rmsg:71
+#: data/mp/messages/resmessagesall.rmsg:123
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessagesall.rmsg:98
-#: data/mp/messages/resmessagesall.rmsg:98
+#: data/mp/messages/resmessages12.rmsg:72
+#: data/mp/messages/resmessagesall.rmsg:124
 msgid "Counter-battery fire continues until enemy battery is suppressed"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:82
 #: data/base/messages/resmessages23.rmsg:56
 #: data/base/messages/resmessages3.rmsg:524
+#: data/mp/messages/resmessages12.rmsg:82
 #: data/mp/messages/resmessages23.rmsg:56
 #: data/mp/messages/resmessages3.rmsg:524
 msgid "CB Sensor Improved"
@@ -549,6 +571,7 @@ msgstr ""
 #: data/base/messages/resmessages12.rmsg:83
 #: data/base/messages/resmessages2.rmsg:447
 #: data/base/messages/strings/resstrings.txt:486
+#: data/mp/messages/resmessages12.rmsg:83
 #: data/mp/messages/resmessages2.rmsg:447
 #: data/mp/messages/strings/resstrings.txt:514
 msgid "New fire detection systems"
@@ -557,6 +580,7 @@ msgstr ""
 #: data/base/messages/resmessages12.rmsg:84
 #: data/base/messages/resmessages23.rmsg:58
 #: data/base/messages/resmessages3.rmsg:526
+#: data/mp/messages/resmessages12.rmsg:84
 #: data/mp/messages/resmessages23.rmsg:58
 #: data/mp/messages/resmessages3.rmsg:526
 msgid "Extends CB Range"
@@ -565,6 +589,7 @@ msgstr ""
 #: data/base/messages/resmessages12.rmsg:85
 #: data/base/messages/resmessages23.rmsg:59
 #: data/base/messages/resmessages3.rmsg:527
+#: data/mp/messages/resmessages12.rmsg:85
 #: data/mp/messages/resmessages23.rmsg:59
 #: data/mp/messages/resmessages3.rmsg:527
 msgid "All CB sensors upgraded automatically"
@@ -577,20 +602,23 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:875
 #: data/base/messages/resmessages3.rmsg:888
 #: data/base/messages/resmessagesall.rmsg:173
-#: data/mp/messages/resmessages1.rmsg:576
+#: data/mp/messages/resmessages12.rmsg:95
+#: data/mp/messages/resmessages12.rmsg:212
+#: data/mp/messages/resmessages12.rmsg:225
+#: data/mp/messages/resmessages1.rmsg:577
 #: data/mp/messages/resmessages3.rmsg:875
 #: data/mp/messages/resmessages3.rmsg:888
-#: data/mp/messages/resmessagesall.rmsg:173
+#: data/mp/messages/resmessagesall.rmsg:212
 msgid "Cannon Upgrade"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:96
+#: data/mp/messages/resmessages12.rmsg:96
 msgid "Determines range to target"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:97
 #: data/base/messages/resmessagesall.rmsg:175
-#: data/mp/messages/resmessagesall.rmsg:175
 msgid "Increases Cannon accuracy"
 msgstr ""
 
@@ -601,10 +629,13 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:878
 #: data/base/messages/resmessages3.rmsg:891
 #: data/base/messages/resmessagesall.rmsg:176
-#: data/mp/messages/resmessages1.rmsg:579
+#: data/mp/messages/resmessages12.rmsg:98
+#: data/mp/messages/resmessages12.rmsg:215
+#: data/mp/messages/resmessages12.rmsg:228
+#: data/mp/messages/resmessages1.rmsg:580
 #: data/mp/messages/resmessages3.rmsg:878
 #: data/mp/messages/resmessages3.rmsg:891
-#: data/mp/messages/resmessagesall.rmsg:176
+#: data/mp/messages/resmessagesall.rmsg:215
 msgid "All cannons upgraded automatically"
 msgstr ""
 
@@ -612,9 +643,10 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:602
 #: data/base/messages/resmessages2.rmsg:784
 #: data/base/messages/strings/resstrings.txt:765
-#: data/mp/messages/resmessages1.rmsg:602
+#: data/mp/messages/resmessages12.rmsg:108
+#: data/mp/messages/resmessages1.rmsg:603
 #: data/mp/messages/resmessages2.rmsg:784
-#: data/mp/messages/resmessagesall.rmsg:732
+#: data/mp/messages/resmessagesall.rmsg:771
 #: data/mp/messages/strings/resstrings.txt:802
 msgid "Flamer Upgrade"
 msgstr ""
@@ -623,6 +655,8 @@ msgstr ""
 #: data/base/messages/resmessages12.rmsg:213
 #: data/base/messages/resmessages2.rmsg:863
 #: data/base/messages/strings/resstrings.txt:810
+#: data/mp/messages/resmessages12.rmsg:109
+#: data/mp/messages/resmessages12.rmsg:213
 #: data/mp/messages/resmessages2.rmsg:863
 #: data/mp/messages/strings/resstrings.txt:849
 msgid "Automatic loading mechanism replaces manual loader"
@@ -636,9 +670,10 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:605
 #: data/base/messages/resmessages2.rmsg:787
 #: data/base/messages/strings/resstrings.txt:768
-#: data/mp/messages/resmessages1.rmsg:605
+#: data/mp/messages/resmessages12.rmsg:111
+#: data/mp/messages/resmessages1.rmsg:606
 #: data/mp/messages/resmessages2.rmsg:787
-#: data/mp/messages/resmessagesall.rmsg:735
+#: data/mp/messages/resmessagesall.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "All flamers upgraded automatically"
 msgstr ""
@@ -657,21 +692,22 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:729
 #: data/base/messages/strings/resstrings.txt:735
 #: data/base/messages/strings/resstrings.txt:757
-#: data/mp/messages/resmessages1.rmsg:537
-#: data/mp/messages/resmessages1.rmsg:550
-#: data/mp/messages/resmessages1.rmsg:563
-#: data/mp/messages/resmessages1.rmsg:589
-#: data/mp/messages/resmessages1.rmsg:615
-#: data/mp/messages/resmessages1.rmsg:628
+#: data/mp/messages/resmessages12.rmsg:121
+#: data/mp/messages/resmessages1.rmsg:538
+#: data/mp/messages/resmessages1.rmsg:551
+#: data/mp/messages/resmessages1.rmsg:564
+#: data/mp/messages/resmessages1.rmsg:590
+#: data/mp/messages/resmessages1.rmsg:616
+#: data/mp/messages/resmessages1.rmsg:629
 #: data/mp/messages/resmessages23.rmsg:212
 #: data/mp/messages/resmessages2.rmsg:745
 #: data/mp/messages/resmessages2.rmsg:758
 #: data/mp/messages/resmessages2.rmsg:771
-#: data/mp/messages/resmessagesall.rmsg:329
-#: data/mp/messages/resmessagesall.rmsg:446
-#: data/mp/messages/resmessagesall.rmsg:511
-#: data/mp/messages/resmessagesall.rmsg:654
-#: data/mp/messages/resmessagesall.rmsg:836
+#: data/mp/messages/resmessagesall.rmsg:368
+#: data/mp/messages/resmessagesall.rmsg:485
+#: data/mp/messages/resmessagesall.rmsg:550
+#: data/mp/messages/resmessagesall.rmsg:693
+#: data/mp/messages/resmessagesall.rmsg:875
 #: data/mp/messages/strings/resstrings.txt:762
 #: data/mp/messages/strings/resstrings.txt:768
 #: data/mp/messages/strings/resstrings.txt:794
@@ -679,6 +715,7 @@ msgid "New Weapon Turret Available"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:122
+#: data/mp/messages/resmessages12.rmsg:122
 msgid ".50-calibre heavy machinegun"
 msgstr ""
 
@@ -686,11 +723,12 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:617
 #: data/base/messages/resmessages1.rmsg:630
 #: data/base/messages/resmessages23.rmsg:214
-#: data/mp/messages/resmessages1.rmsg:617
-#: data/mp/messages/resmessages1.rmsg:630
+#: data/mp/messages/resmessages12.rmsg:123
+#: data/mp/messages/resmessages1.rmsg:618
+#: data/mp/messages/resmessages1.rmsg:631
 #: data/mp/messages/resmessages23.rmsg:214
-#: data/mp/messages/resmessagesall.rmsg:838
-#: data/mp/messages/resmessagesall.rmsg:851
+#: data/mp/messages/resmessagesall.rmsg:877
+#: data/mp/messages/resmessagesall.rmsg:890
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
 msgstr ""
 
@@ -733,13 +771,14 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:656
 #: data/base/messages/strings/resstrings.txt:688
 #: data/base/messages/strings/resstrings.txt:694
+#: data/mp/messages/resmessages12.rmsg:124
 #: data/mp/messages/resmessages1.rmsg:45
 #: data/mp/messages/resmessages1.rmsg:58
 #: data/mp/messages/resmessages1.rmsg:71
 #: data/mp/messages/resmessages1.rmsg:84
-#: data/mp/messages/resmessages1.rmsg:488
-#: data/mp/messages/resmessages1.rmsg:540
-#: data/mp/messages/resmessages1.rmsg:553
+#: data/mp/messages/resmessages1.rmsg:489
+#: data/mp/messages/resmessages1.rmsg:541
+#: data/mp/messages/resmessages1.rmsg:554
 #: data/mp/messages/resmessages2.rmsg:32
 #: data/mp/messages/resmessages2.rmsg:45
 #: data/mp/messages/resmessages2.rmsg:592
@@ -761,25 +800,25 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:956
 #: data/mp/messages/resmessages3.rmsg:1203
 #: data/mp/messages/resmessages3.rmsg:1216
-#: data/mp/messages/resmessagesall.rmsg:188
-#: data/mp/messages/resmessagesall.rmsg:240
-#: data/mp/messages/resmessagesall.rmsg:253
-#: data/mp/messages/resmessagesall.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:227
 #: data/mp/messages/resmessagesall.rmsg:279
-#: data/mp/messages/resmessagesall.rmsg:383
-#: data/mp/messages/resmessagesall.rmsg:396
-#: data/mp/messages/resmessagesall.rmsg:409
+#: data/mp/messages/resmessagesall.rmsg:292
+#: data/mp/messages/resmessagesall.rmsg:305
+#: data/mp/messages/resmessagesall.rmsg:318
 #: data/mp/messages/resmessagesall.rmsg:422
-#: data/mp/messages/resmessagesall.rmsg:436
-#: data/mp/messages/resmessagesall.rmsg:514
-#: data/mp/messages/resmessagesall.rmsg:565
-#: data/mp/messages/resmessagesall.rmsg:578
-#: data/mp/messages/resmessagesall.rmsg:591
-#: data/mp/messages/resmessagesall.rmsg:709
-#: data/mp/messages/resmessagesall.rmsg:722
-#: data/mp/messages/resmessagesall.rmsg:787
-#: data/mp/messages/resmessagesall.rmsg:813
+#: data/mp/messages/resmessagesall.rmsg:435
+#: data/mp/messages/resmessagesall.rmsg:448
+#: data/mp/messages/resmessagesall.rmsg:461
+#: data/mp/messages/resmessagesall.rmsg:475
+#: data/mp/messages/resmessagesall.rmsg:553
+#: data/mp/messages/resmessagesall.rmsg:604
+#: data/mp/messages/resmessagesall.rmsg:617
+#: data/mp/messages/resmessagesall.rmsg:630
+#: data/mp/messages/resmessagesall.rmsg:748
+#: data/mp/messages/resmessagesall.rmsg:761
 #: data/mp/messages/resmessagesall.rmsg:826
+#: data/mp/messages/resmessagesall.rmsg:852
+#: data/mp/messages/resmessagesall.rmsg:865
 #: data/mp/messages/strings/resstrings.txt:53
 #: data/mp/messages/strings/resstrings.txt:85
 #: data/mp/messages/strings/resstrings.txt:97
@@ -803,8 +842,9 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1018
 #: data/base/messages/strings/resstrings.txt:845
 #: data/base/messages/strings/resstrings.txt:857
-#: data/mp/messages/resmessages1.rmsg:641
-#: data/mp/messages/resmessages1.rmsg:654
+#: data/mp/messages/resmessages12.rmsg:134
+#: data/mp/messages/resmessages1.rmsg:642
+#: data/mp/messages/resmessages1.rmsg:655
 #: data/mp/messages/resmessages23.rmsg:173
 #: data/mp/messages/resmessages2.rmsg:875
 #: data/mp/messages/resmessages2.rmsg:888
@@ -816,6 +856,7 @@ msgid "Machinegun Upgrade"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:135
+#: data/mp/messages/resmessages12.rmsg:135
 msgid "Chaingun mechanism replaces belt-feed"
 msgstr ""
 
@@ -823,8 +864,6 @@ msgstr ""
 #: data/base/messages/resmessages23.rmsg:175
 #: data/base/messages/resmessages2.rmsg:890
 #: data/base/messages/strings/resstrings.txt:859
-#: data/mp/messages/resmessages23.rmsg:175
-#: data/mp/messages/resmessages2.rmsg:890
 #: data/mp/messages/strings/resstrings.txt:900
 msgid "Increases Machinegun ROF"
 msgstr ""
@@ -839,8 +878,9 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1021
 #: data/base/messages/strings/resstrings.txt:848
 #: data/base/messages/strings/resstrings.txt:860
-#: data/mp/messages/resmessages1.rmsg:644
-#: data/mp/messages/resmessages1.rmsg:657
+#: data/mp/messages/resmessages12.rmsg:137
+#: data/mp/messages/resmessages1.rmsg:645
+#: data/mp/messages/resmessages1.rmsg:658
 #: data/mp/messages/resmessages23.rmsg:176
 #: data/mp/messages/resmessages2.rmsg:878
 #: data/mp/messages/resmessages2.rmsg:891
@@ -862,14 +902,15 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:779
 #: data/base/messages/strings/resstrings.txt:787
 #: data/base/messages/strings/resstrings.txt:891
-#: data/mp/messages/resmessages1.rmsg:667
+#: data/mp/messages/resmessages12.rmsg:147
+#: data/mp/messages/resmessages1.rmsg:668
 #: data/mp/messages/resmessages23.rmsg:199
 #: data/mp/messages/resmessages2.rmsg:797
 #: data/mp/messages/resmessages2.rmsg:810
 #: data/mp/messages/resmessages2.rmsg:823
 #: data/mp/messages/resmessages2.rmsg:901
-#: data/mp/messages/resmessagesall.rmsg:290
-#: data/mp/messages/resmessagesall.rmsg:303
+#: data/mp/messages/resmessagesall.rmsg:329
+#: data/mp/messages/resmessagesall.rmsg:342
 #: data/mp/messages/strings/resstrings.txt:810
 #: data/mp/messages/strings/resstrings.txt:818
 #: data/mp/messages/strings/resstrings.txt:826
@@ -880,6 +921,7 @@ msgstr ""
 #: data/base/messages/resmessages12.rmsg:148
 #: data/base/messages/resmessages2.rmsg:902
 #: data/base/messages/strings/resstrings.txt:892
+#: data/mp/messages/resmessages12.rmsg:148
 #: data/mp/messages/resmessages2.rmsg:902
 #: data/mp/messages/strings/resstrings.txt:933
 msgid "May be assigned to a sensor"
@@ -889,9 +931,10 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:669
 #: data/base/messages/resmessages2.rmsg:903
 #: data/base/messages/strings/resstrings.txt:893
-#: data/mp/messages/resmessages1.rmsg:669
+#: data/mp/messages/resmessages12.rmsg:149
+#: data/mp/messages/resmessages1.rmsg:670
 #: data/mp/messages/resmessages2.rmsg:903
-#: data/mp/messages/resmessagesall.rmsg:305
+#: data/mp/messages/resmessagesall.rmsg:344
 #: data/mp/messages/strings/resstrings.txt:934
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr ""
@@ -912,8 +955,12 @@ msgstr ""
 #: data/base/messages/resmessagesall.rmsg:150
 #: data/base/messages/resmessagesall.rmsg:163
 #: data/base/messages/strings/resstrings.txt:894
-#: data/mp/messages/resmessages1.rmsg:670
-#: data/mp/messages/resmessages1.rmsg:696
+#: data/mp/messages/resmessages12.rmsg:150
+#: data/mp/messages/resmessages12.rmsg:189
+#: data/mp/messages/resmessages12.rmsg:254
+#: data/mp/messages/resmessages12.rmsg:267
+#: data/mp/messages/resmessages1.rmsg:671
+#: data/mp/messages/resmessages1.rmsg:697
 #: data/mp/messages/resmessages2.rmsg:904
 #: data/mp/messages/resmessages3.rmsg:1034
 #: data/mp/messages/resmessages3.rmsg:1047
@@ -921,9 +968,9 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:1112
 #: data/mp/messages/resmessages3.rmsg:1125
 #: data/mp/messages/resmessages3.rmsg:1138
-#: data/mp/messages/resmessagesall.rmsg:150
-#: data/mp/messages/resmessagesall.rmsg:163
-#: data/mp/messages/resmessagesall.rmsg:306
+#: data/mp/messages/resmessagesall.rmsg:189
+#: data/mp/messages/resmessagesall.rmsg:202
+#: data/mp/messages/resmessagesall.rmsg:345
 #: data/mp/messages/strings/resstrings.txt:935
 msgid "Body Points: Very Low"
 msgstr ""
@@ -936,7 +983,9 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1174
 #: data/base/messages/resmessages3.rmsg:1187
 #: data/base/messages/strings/resstrings.txt:905
-#: data/mp/messages/resmessages1.rmsg:680
+#: data/mp/messages/resmessages12.rmsg:160
+#: data/mp/messages/resmessages12.rmsg:173
+#: data/mp/messages/resmessages1.rmsg:681
 #: data/mp/messages/resmessages23.rmsg:186
 #: data/mp/messages/resmessages2.rmsg:914
 #: data/mp/messages/resmessages3.rmsg:1174
@@ -946,14 +995,13 @@ msgid "Mortar Upgrade"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:161
+#: data/mp/messages/resmessages12.rmsg:161
 msgid "Targeting systems compensate for distance and weather conditions"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:162
 #: data/base/messages/resmessages23.rmsg:188
 #: data/base/messages/resmessages3.rmsg:1176
-#: data/mp/messages/resmessages23.rmsg:188
-#: data/mp/messages/resmessages3.rmsg:1176
 msgid "Increases Mortar accuracy"
 msgstr ""
 
@@ -965,7 +1013,9 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1177
 #: data/base/messages/resmessages3.rmsg:1190
 #: data/base/messages/strings/resstrings.txt:908
-#: data/mp/messages/resmessages1.rmsg:683
+#: data/mp/messages/resmessages12.rmsg:163
+#: data/mp/messages/resmessages12.rmsg:176
+#: data/mp/messages/resmessages1.rmsg:684
 #: data/mp/messages/resmessages23.rmsg:189
 #: data/mp/messages/resmessages2.rmsg:917
 #: data/mp/messages/resmessages3.rmsg:1177
@@ -975,12 +1025,12 @@ msgid "All mortars upgraded automatically"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:174
+#: data/mp/messages/resmessages12.rmsg:174
 msgid "Automatic loader replaces manual feed"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:175
 #: data/base/messages/resmessages3.rmsg:1189
-#: data/mp/messages/resmessages3.rmsg:1189
 msgid "Increases Mortar ROF"
 msgstr ""
 
@@ -990,17 +1040,22 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:693
 #: data/base/messages/resmessagesall.rmsg:147
 #: data/base/messages/resmessagesall.rmsg:160
-#: data/mp/messages/resmessages1.rmsg:693
-#: data/mp/messages/resmessagesall.rmsg:147
-#: data/mp/messages/resmessagesall.rmsg:160
+#: data/mp/messages/resmessages12.rmsg:186
+#: data/mp/messages/resmessages12.rmsg:251
+#: data/mp/messages/resmessages12.rmsg:264
+#: data/mp/messages/resmessages1.rmsg:694
+#: data/mp/messages/resmessagesall.rmsg:186
+#: data/mp/messages/resmessagesall.rmsg:199
 msgid "New Rocket Available"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:187
+#: data/mp/messages/resmessages12.rmsg:187
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:188
+#: data/mp/messages/resmessages12.rmsg:188
 msgid "Best Targets: Vehicles and Emplacements"
 msgstr ""
 
@@ -1011,15 +1066,18 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:940
 #: data/base/messages/resmessagesall.rmsg:134
 #: data/base/messages/strings/resstrings.txt:965
-#: data/mp/messages/resmessages1.rmsg:745
-#: data/mp/messages/resmessages1.rmsg:758
+#: data/mp/messages/resmessages12.rmsg:199
+#: data/mp/messages/resmessages12.rmsg:238
+#: data/mp/messages/resmessages1.rmsg:746
+#: data/mp/messages/resmessages1.rmsg:759
 #: data/mp/messages/resmessages2.rmsg:940
-#: data/mp/messages/resmessagesall.rmsg:134
+#: data/mp/messages/resmessagesall.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:1008
 msgid "Rocket Upgrade"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:200
+#: data/mp/messages/resmessages12.rmsg:200
 msgid "Autoloader increases reload rate"
 msgstr ""
 
@@ -1034,45 +1092,45 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:943
 #: data/base/messages/resmessagesall.rmsg:137
 #: data/base/messages/strings/resstrings.txt:968
-#: data/mp/messages/resmessages1.rmsg:748
-#: data/mp/messages/resmessages1.rmsg:761
+#: data/mp/messages/resmessages12.rmsg:202
+#: data/mp/messages/resmessages12.rmsg:241
+#: data/mp/messages/resmessages1.rmsg:749
+#: data/mp/messages/resmessages1.rmsg:762
 #: data/mp/messages/resmessages2.rmsg:943
-#: data/mp/messages/resmessagesall.rmsg:137
+#: data/mp/messages/resmessagesall.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "All rockets upgraded automatically"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:214
 #: data/base/messages/resmessages3.rmsg:890
-#: data/mp/messages/resmessages3.rmsg:890
 msgid "Increases Cannon ROF"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:226
+#: data/mp/messages/resmessages12.rmsg:226
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:227
 #: data/base/messages/resmessages1.rmsg:578
 #: data/base/messages/resmessages3.rmsg:877
-#: data/mp/messages/resmessages1.rmsg:578
-#: data/mp/messages/resmessages3.rmsg:877
 msgid "Increases Cannon damage"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:239
+#: data/mp/messages/resmessages12.rmsg:239
 msgid "Rocket tracks the laser designator to the target"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:240
 #: data/base/messages/resmessages1.rmsg:747
 #: data/base/messages/resmessagesall.rmsg:136
-#: data/mp/messages/resmessages1.rmsg:747
-#: data/mp/messages/resmessagesall.rmsg:136
 msgid "Increases Rocket accuracy"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:252
+#: data/mp/messages/resmessages12.rmsg:252
 msgid "Heavy anti-tank rocket"
 msgstr ""
 
@@ -1089,26 +1147,29 @@ msgstr ""
 #: data/base/messages/resmessagesall.rmsg:149
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
-#: data/mp/messages/resmessages1.rmsg:539
+#: data/mp/messages/resmessages12.rmsg:253
+#: data/mp/messages/resmessages1.rmsg:540
 #: data/mp/messages/resmessages2.rmsg:760
 #: data/mp/messages/resmessages3.rmsg:1033
 #: data/mp/messages/resmessages3.rmsg:1202
 #: data/mp/messages/resmessages3.rmsg:1215
 #: data/mp/messages/resmessages3.rmsg:1228
-#: data/mp/messages/resmessagesall.rmsg:149
-#: data/mp/messages/resmessagesall.rmsg:448
-#: data/mp/messages/resmessagesall.rmsg:513
-#: data/mp/messages/resmessagesall.rmsg:877
+#: data/mp/messages/resmessagesall.rmsg:188
+#: data/mp/messages/resmessagesall.rmsg:487
+#: data/mp/messages/resmessagesall.rmsg:552
+#: data/mp/messages/resmessagesall.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:764
 #: data/mp/messages/strings/resstrings.txt:770
 msgid "Best Targets: Vehicles"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:265
+#: data/mp/messages/resmessages12.rmsg:265
 msgid "Fires salvoes of mini-rockets"
 msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:266
+#: data/mp/messages/resmessages12.rmsg:266
 msgid "Best Targets: Base structures"
 msgstr ""
 
@@ -1119,9 +1180,9 @@ msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:6
 #: data/mp/messages/resmessages1.rmsg:6
-#: data/mp/messages/resmessagesall.rmsg:890
-#: data/mp/messages/resmessagesall.rmsg:903
-#: data/mp/messages/resmessagesall.rmsg:916
+#: data/mp/messages/resmessagesall.rmsg:929
+#: data/mp/messages/resmessagesall.rmsg:942
+#: data/mp/messages/resmessagesall.rmsg:955
 msgid "Commander leads groups acts as factory delivery point"
 msgstr ""
 
@@ -1132,14 +1193,14 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1229
 #: data/base/messages/strings/resstrings.txt:738
 #: data/mp/messages/resmessages1.rmsg:7
-#: data/mp/messages/resmessages1.rmsg:514
-#: data/mp/messages/resmessages1.rmsg:566
+#: data/mp/messages/resmessages1.rmsg:515
+#: data/mp/messages/resmessages1.rmsg:567
 #: data/mp/messages/resmessages2.rmsg:761
 #: data/mp/messages/resmessages3.rmsg:1229
-#: data/mp/messages/resmessagesall.rmsg:449
-#: data/mp/messages/resmessagesall.rmsg:891
-#: data/mp/messages/resmessagesall.rmsg:904
-#: data/mp/messages/resmessagesall.rmsg:917
+#: data/mp/messages/resmessagesall.rmsg:488
+#: data/mp/messages/resmessagesall.rmsg:930
+#: data/mp/messages/resmessagesall.rmsg:943
+#: data/mp/messages/resmessagesall.rmsg:956
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "Body Points: High"
 msgstr ""
@@ -1184,7 +1245,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:31
 #: data/base/messages/resmessages1.rmsg:473
 #: data/mp/messages/resmessages1.rmsg:31
-#: data/mp/messages/resmessages1.rmsg:473
+#: data/mp/messages/resmessages1.rmsg:474
 msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr ""
 
@@ -1193,10 +1254,6 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:71
 #: data/base/messages/resmessages3.rmsg:84
 #: data/base/messages/strings/resstrings.txt:33
-#: data/mp/messages/resmessages1.rmsg:32
-#: data/mp/messages/resmessages2.rmsg:19
-#: data/mp/messages/resmessages3.rmsg:71
-#: data/mp/messages/resmessages3.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:35
 msgid "Increases Kinetic Armor and Body Points"
 msgstr ""
@@ -1246,17 +1303,17 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:108
 #: data/mp/messages/resmessages3.rmsg:121
 #: data/mp/messages/resmessages3.rmsg:134
-#: data/mp/messages/resmessagesall.rmsg:238
-#: data/mp/messages/resmessagesall.rmsg:251
-#: data/mp/messages/resmessagesall.rmsg:264
 #: data/mp/messages/resmessagesall.rmsg:277
-#: data/mp/messages/resmessagesall.rmsg:381
-#: data/mp/messages/resmessagesall.rmsg:394
-#: data/mp/messages/resmessagesall.rmsg:407
+#: data/mp/messages/resmessagesall.rmsg:290
+#: data/mp/messages/resmessagesall.rmsg:303
+#: data/mp/messages/resmessagesall.rmsg:316
 #: data/mp/messages/resmessagesall.rmsg:420
-#: data/mp/messages/resmessagesall.rmsg:563
-#: data/mp/messages/resmessagesall.rmsg:576
-#: data/mp/messages/resmessagesall.rmsg:589
+#: data/mp/messages/resmessagesall.rmsg:433
+#: data/mp/messages/resmessagesall.rmsg:446
+#: data/mp/messages/resmessagesall.rmsg:459
+#: data/mp/messages/resmessagesall.rmsg:602
+#: data/mp/messages/resmessagesall.rmsg:615
+#: data/mp/messages/resmessagesall.rmsg:628
 #: data/mp/messages/strings/resstrings.txt:51
 #: data/mp/messages/strings/resstrings.txt:83
 msgid "New Cyborg Available"
@@ -1299,17 +1356,17 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:163
 #: data/mp/messages/resmessages3.rmsg:176
 #: data/mp/messages/resmessages3.rmsg:189
-#: data/mp/messages/resmessagesall.rmsg:241
-#: data/mp/messages/resmessagesall.rmsg:254
-#: data/mp/messages/resmessagesall.rmsg:267
 #: data/mp/messages/resmessagesall.rmsg:280
-#: data/mp/messages/resmessagesall.rmsg:384
-#: data/mp/messages/resmessagesall.rmsg:397
-#: data/mp/messages/resmessagesall.rmsg:410
+#: data/mp/messages/resmessagesall.rmsg:293
+#: data/mp/messages/resmessagesall.rmsg:306
+#: data/mp/messages/resmessagesall.rmsg:319
 #: data/mp/messages/resmessagesall.rmsg:423
-#: data/mp/messages/resmessagesall.rmsg:566
-#: data/mp/messages/resmessagesall.rmsg:579
-#: data/mp/messages/resmessagesall.rmsg:592
+#: data/mp/messages/resmessagesall.rmsg:436
+#: data/mp/messages/resmessagesall.rmsg:449
+#: data/mp/messages/resmessagesall.rmsg:462
+#: data/mp/messages/resmessagesall.rmsg:605
+#: data/mp/messages/resmessagesall.rmsg:618
+#: data/mp/messages/resmessagesall.rmsg:631
 #: data/mp/messages/strings/resstrings.txt:54
 #: data/mp/messages/strings/resstrings.txt:86
 #: data/mp/messages/strings/resstrings.txt:98
@@ -1351,7 +1408,6 @@ msgid "Improved Titanium-reinforced concrete"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:97
-#: data/mp/messages/resmessages1.rmsg:97
 msgid "Increases Armour and Body Points"
 msgstr ""
 
@@ -1479,9 +1535,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:331
 #: data/base/messages/resmessages3.rmsg:422
 #: data/base/messages/strings/resstrings.txt:335
-#: data/mp/messages/resmessages1.rmsg:253
-#: data/mp/messages/resmessages2.rmsg:331
-#: data/mp/messages/resmessages3.rmsg:422
 #: data/mp/messages/strings/resstrings.txt:361
 msgid "Increases Repair Speed"
 msgstr ""
@@ -1518,7 +1571,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:355
 #: data/mp/messages/resmessages1.rmsg:277
 #: data/mp/messages/resmessages2.rmsg:342
-#: data/mp/messages/resmessagesall.rmsg:758
+#: data/mp/messages/resmessagesall.rmsg:797
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:381
 msgid "Cyborg Production Improved"
@@ -1537,7 +1590,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:357
 #: data/mp/messages/resmessages1.rmsg:279
 #: data/mp/messages/resmessages2.rmsg:344
-#: data/mp/messages/resmessagesall.rmsg:760
+#: data/mp/messages/resmessagesall.rmsg:799
 #: data/mp/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:383
 msgid "Increases Cyborg factory output"
@@ -1549,7 +1602,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:358
 #: data/mp/messages/resmessages1.rmsg:280
 #: data/mp/messages/resmessages2.rmsg:345
-#: data/mp/messages/resmessagesall.rmsg:761
+#: data/mp/messages/resmessagesall.rmsg:800
 #: data/mp/messages/strings/resstrings.txt:376
 #: data/mp/messages/strings/resstrings.txt:384
 msgid "All Cyborg factories upgraded automatically"
@@ -1579,8 +1632,10 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:485
 #: data/base/messages/strings/resstrings.txt:411
 #: data/mp/messages/resmessages1.rmsg:303
+#: data/mp/messages/resmessages2.rmsg:355
 #: data/mp/messages/resmessages2.rmsg:394
 #: data/mp/messages/resmessages3.rmsg:485
+#: data/mp/messages/resmessagesall.rmsg:784
 #: data/mp/messages/strings/resstrings.txt:437
 msgid "Production Improved"
 msgstr ""
@@ -1593,15 +1648,12 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:305
 #: data/base/messages/resmessages1.rmsg:318
 #: data/base/messages/strings/resstrings.txt:375
-#: data/mp/messages/resmessages1.rmsg:305
-#: data/mp/messages/resmessages1.rmsg:318
-#: data/mp/messages/resmessagesall.rmsg:747
 #: data/mp/messages/strings/resstrings.txt:401
 msgid "Increases factory output"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:306
-#: data/mp/messages/resmessages1.rmsg:306
+#: data/mp/messages/resmessages1.rmsg:307
 msgid "Use a truck to add modules to a factory"
 msgstr ""
 
@@ -1609,9 +1661,7 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:355
 #: data/base/messages/strings/resstrings.txt:365
 #: data/base/messages/strings/resstrings.txt:373
-#: data/mp/messages/resmessages1.rmsg:316
-#: data/mp/messages/resmessages2.rmsg:355
-#: data/mp/messages/resmessagesall.rmsg:745
+#: data/mp/messages/resmessages1.rmsg:317
 #: data/mp/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:399
 msgid "Vehicle Production Improved"
@@ -1619,7 +1669,7 @@ msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:317
 #: data/base/messages/strings/names.txt:794
-#: data/mp/messages/resmessages1.rmsg:317
+#: data/mp/messages/resmessages1.rmsg:318
 msgid "Automated Factory Production"
 msgstr ""
 
@@ -1627,45 +1677,43 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:358
 #: data/base/messages/strings/resstrings.txt:368
 #: data/base/messages/strings/resstrings.txt:376
-#: data/mp/messages/resmessages1.rmsg:319
-#: data/mp/messages/resmessages2.rmsg:358
-#: data/mp/messages/resmessagesall.rmsg:748
+#: data/mp/messages/resmessages1.rmsg:320
 #: data/mp/messages/strings/resstrings.txt:394
 #: data/mp/messages/strings/resstrings.txt:402
 msgid "All vehicle factories upgraded automatically"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:329
-#: data/mp/messages/resmessages1.rmsg:329
+#: data/mp/messages/resmessages1.rmsg:330
 msgid "Power Module Available"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:330
 #: data/base/messages/resmessages23.rmsg:30
 #: data/base/messages/resmessages3.rmsg:433
-#: data/mp/messages/resmessages1.rmsg:330
+#: data/mp/messages/resmessages1.rmsg:331
 #: data/mp/messages/resmessages23.rmsg:30
 #: data/mp/messages/resmessages3.rmsg:433
 msgid "Improved Power Generator Performance"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:331
-#: data/mp/messages/resmessages1.rmsg:331
+#: data/mp/messages/resmessages1.rmsg:332
 msgid "Burns oil more efficiently"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:332
-#: data/mp/messages/resmessages1.rmsg:332
+#: data/mp/messages/resmessages1.rmsg:333
 msgid "Use a truck to add the module to a power generator"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:342
-#: data/mp/messages/resmessages1.rmsg:342
+#: data/mp/messages/resmessages1.rmsg:343
 msgid "Research Module Available"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:343
-#: data/mp/messages/resmessages1.rmsg:343
+#: data/mp/messages/resmessages1.rmsg:344
 msgid "Research module expands research facilities"
 msgstr ""
 
@@ -1674,16 +1722,12 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:370
 #: data/base/messages/resmessages3.rmsg:448
 #: data/base/messages/strings/resstrings.txt:391
-#: data/mp/messages/resmessages1.rmsg:344
-#: data/mp/messages/resmessages1.rmsg:357
-#: data/mp/messages/resmessages2.rmsg:370
-#: data/mp/messages/resmessages3.rmsg:448
 #: data/mp/messages/strings/resstrings.txt:417
 msgid "Increases research speed"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:345
-#: data/mp/messages/resmessages1.rmsg:345
+#: data/mp/messages/resmessages1.rmsg:346
 msgid "Use a truck to add the module to a research facility"
 msgstr ""
 
@@ -1691,7 +1735,7 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:368
 #: data/base/messages/resmessages3.rmsg:446
 #: data/base/messages/strings/resstrings.txt:389
-#: data/mp/messages/resmessages1.rmsg:355
+#: data/mp/messages/resmessages1.rmsg:356
 #: data/mp/messages/resmessages2.rmsg:368
 #: data/mp/messages/resmessages3.rmsg:446
 #: data/mp/messages/strings/resstrings.txt:415
@@ -1699,7 +1743,7 @@ msgid "Research Improved"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:356
-#: data/mp/messages/resmessages1.rmsg:356
+#: data/mp/messages/resmessages1.rmsg:357
 msgid "Synaptic link data analysis"
 msgstr ""
 
@@ -1707,7 +1751,7 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:371
 #: data/base/messages/resmessages3.rmsg:449
 #: data/base/messages/strings/resstrings.txt:392
-#: data/mp/messages/resmessages1.rmsg:358
+#: data/mp/messages/resmessages1.rmsg:359
 #: data/mp/messages/resmessages2.rmsg:371
 #: data/mp/messages/resmessages3.rmsg:449
 #: data/mp/messages/strings/resstrings.txt:418
@@ -1719,7 +1763,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:459
 #: data/base/messages/resmessages3.rmsg:472
 #: data/base/messages/strings/resstrings.txt:399
-#: data/mp/messages/resmessages1.rmsg:368
+#: data/mp/messages/resmessages1.rmsg:369
 #: data/mp/messages/resmessages2.rmsg:381
 #: data/mp/messages/resmessages3.rmsg:459
 #: data/mp/messages/resmessages3.rmsg:472
@@ -1729,7 +1773,7 @@ msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:369
 #: data/base/messages/strings/names.txt:805
-#: data/mp/messages/resmessages1.rmsg:369
+#: data/mp/messages/resmessages1.rmsg:370
 #: data/mp/messages/strings/names.txt:816
 msgid "Reinforced Base Structure Materials"
 msgstr ""
@@ -1743,13 +1787,6 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:474
 #: data/base/messages/strings/resstrings.txt:105
 #: data/base/messages/strings/resstrings.txt:401
-#: data/mp/messages/resmessages1.rmsg:370
-#: data/mp/messages/resmessages2.rmsg:58
-#: data/mp/messages/resmessages2.rmsg:383
-#: data/mp/messages/resmessages3.rmsg:214
-#: data/mp/messages/resmessages3.rmsg:227
-#: data/mp/messages/resmessages3.rmsg:461
-#: data/mp/messages/resmessages3.rmsg:474
 #: data/mp/messages/strings/resstrings.txt:123
 #: data/mp/messages/strings/resstrings.txt:427
 msgid "Increases Armor and Body Points"
@@ -1760,7 +1797,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:462
 #: data/base/messages/resmessages3.rmsg:475
 #: data/base/messages/strings/resstrings.txt:402
-#: data/mp/messages/resmessages1.rmsg:371
+#: data/mp/messages/resmessages1.rmsg:372
 #: data/mp/messages/resmessages2.rmsg:384
 #: data/mp/messages/resmessages3.rmsg:462
 #: data/mp/messages/resmessages3.rmsg:475
@@ -1769,128 +1806,128 @@ msgid "All base structures upgraded automatically"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:381
-#: data/mp/messages/resmessages1.rmsg:381
+#: data/mp/messages/resmessages1.rmsg:382
 msgid "Project Light Body"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:382
-#: data/mp/messages/resmessages1.rmsg:382
+#: data/mp/messages/resmessages1.rmsg:383
 msgid "Light body vulnerable to heavy weapons"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:383
-#: data/mp/messages/resmessages1.rmsg:383
+#: data/mp/messages/resmessages1.rmsg:384
 msgid "Good scout vehicle"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:384
-#: data/mp/messages/resmessages1.rmsg:384
+#: data/mp/messages/resmessages1.rmsg:385
 msgid "Low power cost and low production times"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:394
-#: data/mp/messages/resmessages1.rmsg:394
+#: data/mp/messages/resmessages1.rmsg:395
 msgid "New Paradigm Light Body"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:395
-#: data/mp/messages/resmessages1.rmsg:395
+#: data/mp/messages/resmessages1.rmsg:396
 msgid "Inferior armor and body points to Viper"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:396
 #: data/base/messages/resmessages3.rmsg:630
-#: data/mp/messages/resmessages1.rmsg:396
+#: data/mp/messages/resmessages1.rmsg:397
 #: data/mp/messages/resmessages3.rmsg:630
 msgid "Faster than Viper"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:397
-#: data/mp/messages/resmessages1.rmsg:397
+#: data/mp/messages/resmessages1.rmsg:398
 msgid "Power cost and production time similar to Viper"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:407
-#: data/mp/messages/resmessages1.rmsg:407
+#: data/mp/messages/resmessages1.rmsg:408
 msgid "Project Medium Body"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:408
-#: data/mp/messages/resmessages1.rmsg:408
+#: data/mp/messages/resmessages1.rmsg:409
 msgid "Medium body increases armor and body points"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:409
-#: data/mp/messages/resmessages1.rmsg:409
+#: data/mp/messages/resmessages1.rmsg:410
 msgid "Good medium tank and support vehicle"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:410
-#: data/mp/messages/resmessages1.rmsg:410
+#: data/mp/messages/resmessages1.rmsg:411
 msgid "Average power costs and production times"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:420
-#: data/mp/messages/resmessages1.rmsg:420
+#: data/mp/messages/resmessages1.rmsg:421
 msgid "New Paradigm Medium body"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:421
-#: data/mp/messages/resmessages1.rmsg:421
+#: data/mp/messages/resmessages1.rmsg:422
 msgid "Inferior armor and body points to Cobra"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:422
 #: data/base/messages/resmessages3.rmsg:643
-#: data/mp/messages/resmessages1.rmsg:422
+#: data/mp/messages/resmessages1.rmsg:423
 #: data/mp/messages/resmessages3.rmsg:643
 msgid "Faster than Cobra"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:423
-#: data/mp/messages/resmessages1.rmsg:423
+#: data/mp/messages/resmessages1.rmsg:424
 msgid "Power cost and production time similar to Cobra"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:433
-#: data/mp/messages/resmessages1.rmsg:433
+#: data/mp/messages/resmessages1.rmsg:434
 msgid "Project Heavy Body"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:434
-#: data/mp/messages/resmessages1.rmsg:434
+#: data/mp/messages/resmessages1.rmsg:435
 msgid "Heavy body increases armor and body points"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:435
-#: data/mp/messages/resmessages1.rmsg:435
+#: data/mp/messages/resmessages1.rmsg:436
 msgid "Good main battle tank and heavy artillery platform"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:436
-#: data/mp/messages/resmessages1.rmsg:436
+#: data/mp/messages/resmessages1.rmsg:437
 msgid "Very high power costs and very slow to produce"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:446
-#: data/mp/messages/resmessages1.rmsg:446
+#: data/mp/messages/resmessages1.rmsg:447
 msgid "New Paradigm Heavy Body"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:447
-#: data/mp/messages/resmessages1.rmsg:447
+#: data/mp/messages/resmessages1.rmsg:448
 msgid "Less armor and body points than Python"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:448
 #: data/base/messages/resmessages3.rmsg:656
-#: data/mp/messages/resmessages1.rmsg:448
+#: data/mp/messages/resmessages1.rmsg:449
 #: data/mp/messages/resmessages3.rmsg:656
 msgid "Faster than Python"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:449
-#: data/mp/messages/resmessages1.rmsg:449
+#: data/mp/messages/resmessages1.rmsg:450
 msgid "Power cost and production time the same as Python"
 msgstr ""
 
@@ -1899,7 +1936,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:667
 #: data/base/messages/resmessages3.rmsg:680
 #: data/base/messages/strings/resstrings.txt:559
-#: data/mp/messages/resmessages1.rmsg:459
+#: data/mp/messages/resmessages1.rmsg:460
 #: data/mp/messages/resmessages2.rmsg:498
 #: data/mp/messages/resmessages3.rmsg:667
 #: data/mp/messages/resmessages3.rmsg:680
@@ -1909,7 +1946,7 @@ msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:460
 #: data/base/messages/strings/names.txt:942
-#: data/mp/messages/resmessages1.rmsg:460
+#: data/mp/messages/resmessages1.rmsg:461
 #: data/mp/messages/strings/names.txt:955
 msgid "Fuel Injection Engine"
 msgstr ""
@@ -1919,10 +1956,6 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:669
 #: data/base/messages/resmessages3.rmsg:682
 #: data/base/messages/strings/resstrings.txt:561
-#: data/mp/messages/resmessages1.rmsg:461
-#: data/mp/messages/resmessages2.rmsg:500
-#: data/mp/messages/resmessages3.rmsg:669
-#: data/mp/messages/resmessages3.rmsg:682
 #: data/mp/messages/strings/resstrings.txt:594
 msgid "Improves vehicle speed"
 msgstr ""
@@ -1940,8 +1973,8 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:562
 #: data/base/messages/strings/resstrings.txt:574
 #: data/base/messages/strings/resstrings.txt:584
-#: data/mp/messages/resmessages1.rmsg:462
-#: data/mp/messages/resmessages1.rmsg:475
+#: data/mp/messages/resmessages1.rmsg:463
+#: data/mp/messages/resmessages1.rmsg:476
 #: data/mp/messages/resmessages2.rmsg:501
 #: data/mp/messages/resmessages2.rmsg:514
 #: data/mp/messages/resmessages2.rmsg:527
@@ -1950,7 +1983,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:696
 #: data/mp/messages/resmessages3.rmsg:709
 #: data/mp/messages/resmessages3.rmsg:722
-#: data/mp/messages/resmessagesall.rmsg:800
+#: data/mp/messages/resmessagesall.rmsg:839
 #: data/mp/messages/strings/resstrings.txt:595
 #: data/mp/messages/strings/resstrings.txt:607
 #: data/mp/messages/strings/resstrings.txt:617
@@ -1962,7 +1995,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:693
 #: data/base/messages/resmessages3.rmsg:706
 #: data/base/messages/strings/resstrings.txt:571
-#: data/mp/messages/resmessages1.rmsg:472
+#: data/mp/messages/resmessages1.rmsg:473
 #: data/mp/messages/resmessages2.rmsg:511
 #: data/mp/messages/resmessages3.rmsg:693
 #: data/mp/messages/resmessages3.rmsg:706
@@ -1975,10 +2008,6 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:695
 #: data/base/messages/resmessages3.rmsg:708
 #: data/base/messages/strings/resstrings.txt:573
-#: data/mp/messages/resmessages1.rmsg:474
-#: data/mp/messages/resmessages2.rmsg:513
-#: data/mp/messages/resmessages3.rmsg:695
-#: data/mp/messages/resmessages3.rmsg:708
 #: data/mp/messages/strings/resstrings.txt:606
 msgid "Increases kinetic armor and body points"
 msgstr ""
@@ -1987,32 +2016,32 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:498
 #: data/base/messages/resmessages1.rmsg:511
 #: data/base/messages/resmessages1.rmsg:524
-#: data/mp/messages/resmessages1.rmsg:485
-#: data/mp/messages/resmessages1.rmsg:498
-#: data/mp/messages/resmessages1.rmsg:511
-#: data/mp/messages/resmessages1.rmsg:524
+#: data/mp/messages/resmessages1.rmsg:486
+#: data/mp/messages/resmessages1.rmsg:499
+#: data/mp/messages/resmessages1.rmsg:512
+#: data/mp/messages/resmessages1.rmsg:525
 msgid "New Propulsion Available"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:486
-#: data/mp/messages/resmessages1.rmsg:486
+#: data/mp/messages/resmessages1.rmsg:487
 msgid "Armored Half-tracks"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:487
-#: data/mp/messages/resmessages1.rmsg:487
+#: data/mp/messages/resmessages1.rmsg:488
 msgid "Speed: Medium"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:499
-#: data/mp/messages/resmessages1.rmsg:499
+#: data/mp/messages/resmessages1.rmsg:500
 msgid "Amphibious hover propulsion"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:500
 #: data/base/messages/resmessages1.rmsg:526
-#: data/mp/messages/resmessages1.rmsg:500
-#: data/mp/messages/resmessages1.rmsg:526
+#: data/mp/messages/resmessages1.rmsg:501
+#: data/mp/messages/resmessages1.rmsg:527
 msgid "Speed: Fast"
 msgstr ""
 
@@ -2036,10 +2065,10 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:776
 #: data/base/messages/strings/resstrings.txt:782
 #: data/base/messages/strings/resstrings.txt:790
-#: data/mp/messages/resmessages1.rmsg:501
-#: data/mp/messages/resmessages1.rmsg:527
-#: data/mp/messages/resmessages1.rmsg:618
-#: data/mp/messages/resmessages1.rmsg:631
+#: data/mp/messages/resmessages1.rmsg:502
+#: data/mp/messages/resmessages1.rmsg:528
+#: data/mp/messages/resmessages1.rmsg:619
+#: data/mp/messages/resmessages1.rmsg:632
 #: data/mp/messages/resmessages23.rmsg:150
 #: data/mp/messages/resmessages23.rmsg:202
 #: data/mp/messages/resmessages2.rmsg:709
@@ -2049,10 +2078,10 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:813
 #: data/mp/messages/resmessages2.rmsg:826
 #: data/mp/messages/resmessages3.rmsg:852
-#: data/mp/messages/resmessagesall.rmsg:124
-#: data/mp/messages/resmessagesall.rmsg:293
-#: data/mp/messages/resmessagesall.rmsg:865
-#: data/mp/messages/resmessagesall.rmsg:878
+#: data/mp/messages/resmessagesall.rmsg:163
+#: data/mp/messages/resmessagesall.rmsg:332
+#: data/mp/messages/resmessagesall.rmsg:904
+#: data/mp/messages/resmessagesall.rmsg:917
 #: data/mp/messages/strings/resstrings.txt:733
 #: data/mp/messages/strings/resstrings.txt:739
 #: data/mp/messages/strings/resstrings.txt:797
@@ -2063,90 +2092,87 @@ msgid "Body Points: Low"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:512
-#: data/mp/messages/resmessages1.rmsg:512
+#: data/mp/messages/resmessages1.rmsg:513
 msgid "Armored Tracks"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:513
-#: data/mp/messages/resmessages1.rmsg:513
+#: data/mp/messages/resmessages1.rmsg:514
 msgid "Speed: Slow"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:525
 #: data/base/messages/strings/names.txt:976
-#: data/mp/messages/resmessages1.rmsg:525
+#: data/mp/messages/resmessages1.rmsg:526
 #: data/mp/messages/strings/names.txt:989
 msgid "Wheeled Propulsion"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:538
-#: data/mp/messages/resmessages1.rmsg:538
+#: data/mp/messages/resmessages1.rmsg:539
 msgid "Light Cannon firing 40mm rounds"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:551
-#: data/mp/messages/resmessages1.rmsg:551
+#: data/mp/messages/resmessages1.rmsg:552
 msgid "Medium Cannon firing 76mm rounds"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:564
-#: data/mp/messages/resmessages1.rmsg:564
+#: data/mp/messages/resmessages1.rmsg:565
 msgid "Heavy Cannon firing 120 mm rounds"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:577
-#: data/mp/messages/resmessages1.rmsg:577
+#: data/mp/messages/resmessages1.rmsg:578
 msgid "High Explosive Anti-Tank Cannon Shells"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:590
-#: data/mp/messages/resmessages1.rmsg:590
+#: data/mp/messages/resmessages1.rmsg:591
 msgid "Flame-thrower firing Propylene Oxide gel"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:591
 #: data/base/messages/resmessages2.rmsg:773
 #: data/base/messages/strings/resstrings.txt:759
-#: data/mp/messages/resmessages1.rmsg:591
+#: data/mp/messages/resmessages1.rmsg:592
 #: data/mp/messages/resmessages2.rmsg:773
-#: data/mp/messages/resmessagesall.rmsg:331
+#: data/mp/messages/resmessagesall.rmsg:370
 #: data/mp/messages/strings/resstrings.txt:796
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:592
-#: data/mp/messages/resmessages1.rmsg:592
-#: data/mp/messages/resmessagesall.rmsg:332
+#: data/mp/messages/resmessages1.rmsg:593
+#: data/mp/messages/resmessagesall.rmsg:371
 msgid "Body Points: Very low"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:603
-#: data/mp/messages/resmessages1.rmsg:603
+#: data/mp/messages/resmessages1.rmsg:604
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:604
 #: data/base/messages/resmessages2.rmsg:786
 #: data/base/messages/strings/resstrings.txt:767
-#: data/mp/messages/resmessages1.rmsg:604
-#: data/mp/messages/resmessages2.rmsg:786
-#: data/mp/messages/resmessagesall.rmsg:734
 #: data/mp/messages/strings/resstrings.txt:804
 msgid "Increases Flamer damage"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:616
-#: data/mp/messages/resmessages1.rmsg:616
+#: data/mp/messages/resmessages1.rmsg:617
 msgid "7.62mm machinegun"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:629
-#: data/mp/messages/resmessages1.rmsg:629
+#: data/mp/messages/resmessages1.rmsg:630
 msgid "Twin 7.62mm machineguns"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:642
-#: data/mp/messages/resmessages1.rmsg:642
+#: data/mp/messages/resmessages1.rmsg:643
 msgid "Hardened case machinegun bullets"
 msgstr ""
 
@@ -2156,47 +2182,40 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1007
 #: data/base/messages/resmessages3.rmsg:1020
 #: data/base/messages/strings/resstrings.txt:847
-#: data/mp/messages/resmessages1.rmsg:643
-#: data/mp/messages/resmessages1.rmsg:656
-#: data/mp/messages/resmessages2.rmsg:877
-#: data/mp/messages/resmessages3.rmsg:1007
-#: data/mp/messages/resmessages3.rmsg:1020
 #: data/mp/messages/strings/resstrings.txt:888
 msgid "Increases Machinegun damage"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:655
-#: data/mp/messages/resmessages1.rmsg:655
+#: data/mp/messages/resmessages1.rmsg:656
 msgid "Armor-Piercing Discard Sabot Bullets"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:668
-#: data/mp/messages/resmessages1.rmsg:668
-#: data/mp/messages/resmessagesall.rmsg:304
+#: data/mp/messages/resmessages1.rmsg:669
+#: data/mp/messages/resmessagesall.rmsg:343
 msgid "May be targeted directly or assigned to a sensor turret or tower"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:681
-#: data/mp/messages/resmessages1.rmsg:681
+#: data/mp/messages/resmessages1.rmsg:682
 msgid "Improved high explosive shells"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:682
 #: data/base/messages/resmessages2.rmsg:916
 #: data/base/messages/strings/resstrings.txt:907
-#: data/mp/messages/resmessages1.rmsg:682
-#: data/mp/messages/resmessages2.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:950
 msgid "Increases Mortar damage"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:694
-#: data/mp/messages/resmessages1.rmsg:694
+#: data/mp/messages/resmessages1.rmsg:695
 msgid "Fast firing light anti-vehicle rockets"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:695
-#: data/mp/messages/resmessages1.rmsg:695
+#: data/mp/messages/resmessages1.rmsg:696
 msgid "Best Targets: Wheeled and hover vehicles"
 msgstr ""
 
@@ -2206,9 +2225,9 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:927
 #: data/base/messages/strings/resstrings.txt:943
 #: data/base/messages/strings/resstrings.txt:951
-#: data/mp/messages/resmessages1.rmsg:706
-#: data/mp/messages/resmessages1.rmsg:719
-#: data/mp/messages/resmessages1.rmsg:732
+#: data/mp/messages/resmessages1.rmsg:707
+#: data/mp/messages/resmessages1.rmsg:720
+#: data/mp/messages/resmessages1.rmsg:733
 #: data/mp/messages/resmessages2.rmsg:927
 #: data/mp/messages/strings/resstrings.txt:986
 #: data/mp/messages/strings/resstrings.txt:994
@@ -2216,12 +2235,11 @@ msgid "Mini-Rocket Upgrade"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:707
-#: data/mp/messages/resmessages1.rmsg:707
+#: data/mp/messages/resmessages1.rmsg:708
 msgid "Fin-stabilization improves flight trajectory"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:708
-#: data/mp/messages/resmessages1.rmsg:708
 msgid "Increases Mini-Rocket accuracy"
 msgstr ""
 
@@ -2231,9 +2249,9 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:930
 #: data/base/messages/strings/resstrings.txt:946
 #: data/base/messages/strings/resstrings.txt:954
-#: data/mp/messages/resmessages1.rmsg:709
-#: data/mp/messages/resmessages1.rmsg:722
-#: data/mp/messages/resmessages1.rmsg:735
+#: data/mp/messages/resmessages1.rmsg:710
+#: data/mp/messages/resmessages1.rmsg:723
+#: data/mp/messages/resmessages1.rmsg:736
 #: data/mp/messages/resmessages2.rmsg:930
 #: data/mp/messages/strings/resstrings.txt:989
 #: data/mp/messages/strings/resstrings.txt:997
@@ -2241,44 +2259,39 @@ msgid "All mini-rockets upgraded automatically"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:720
-#: data/mp/messages/resmessages1.rmsg:720
+#: data/mp/messages/resmessages1.rmsg:721
 msgid "Improved shaped charge warhead"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:721
 #: data/base/messages/resmessages2.rmsg:929
 #: data/base/messages/strings/resstrings.txt:945
-#: data/mp/messages/resmessages1.rmsg:721
-#: data/mp/messages/resmessages2.rmsg:929
 #: data/mp/messages/strings/resstrings.txt:988
 msgid "Increases Mini-Rocket damage"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:733
-#: data/mp/messages/resmessages1.rmsg:733
+#: data/mp/messages/resmessages1.rmsg:734
 msgid "Automated reload system"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:734
-#: data/mp/messages/resmessages1.rmsg:734
 msgid "Increases Mini-Rockets ROF"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:746
-#: data/mp/messages/resmessages1.rmsg:746
+#: data/mp/messages/resmessages1.rmsg:747
 msgid "Tracks and directs in-flight rocket to target"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:759
-#: data/mp/messages/resmessages1.rmsg:759
+#: data/mp/messages/resmessages1.rmsg:760
 msgid "High Explosive Anti-Tank warhead"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:760
 #: data/base/messages/resmessages2.rmsg:942
 #: data/base/messages/strings/resstrings.txt:967
-#: data/mp/messages/resmessages1.rmsg:760
-#: data/mp/messages/resmessages2.rmsg:942
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Increases Rocket damage"
 msgstr ""
@@ -2359,13 +2372,11 @@ msgstr ""
 
 #: data/base/messages/resmessages23.rmsg:31
 #: data/base/messages/resmessages3.rmsg:434
-#: data/mp/messages/resmessages23.rmsg:31
-#: data/mp/messages/resmessages3.rmsg:434
 msgid "New Power Generation Technology"
 msgstr ""
 
 #: data/base/messages/resmessages23.rmsg:32
-#: data/mp/messages/resmessages23.rmsg:32
+#: data/mp/messages/resmessages23.rmsg:31
 msgid "Gas turbine boosts power output"
 msgstr ""
 
@@ -2392,7 +2403,8 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:69
 #: data/mp/messages/resmessages23.rmsg:95
 #: data/mp/messages/resmessagesall.rmsg:69
-#: data/mp/messages/resmessagesall.rmsg:95
+#: data/mp/messages/resmessagesall.rmsg:121
+#: data/mp/messages/resmessagesall.rmsg:134
 msgid "New Systems Tower Available"
 msgstr ""
 
@@ -2477,8 +2489,8 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:433
 #: data/mp/messages/resmessages3.rmsg:563
 #: data/mp/messages/resmessagesall.rmsg:43
-#: data/mp/messages/resmessagesall.rmsg:316
-#: data/mp/messages/resmessagesall.rmsg:342
+#: data/mp/messages/resmessagesall.rmsg:355
+#: data/mp/messages/resmessagesall.rmsg:381
 #: data/mp/messages/strings/resstrings.txt:469
 #: data/mp/messages/strings/resstrings.txt:507
 msgid "New Systems Turret Available"
@@ -2567,9 +2579,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:643
 #: data/base/messages/resmessages3.rmsg:812
 #: data/base/messages/strings/resstrings.txt:661
-#: data/mp/messages/resmessages23.rmsg:136
-#: data/mp/messages/resmessages2.rmsg:643
-#: data/mp/messages/resmessages3.rmsg:812
 #: data/mp/messages/strings/resstrings.txt:694
 msgid "Increases AA accuracy"
 msgstr ""
@@ -2601,7 +2610,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:706
 #: data/mp/messages/resmessages2.rmsg:719
 #: data/mp/messages/resmessages3.rmsg:849
-#: data/mp/messages/resmessagesall.rmsg:862
+#: data/mp/messages/resmessagesall.rmsg:901
 #: data/mp/messages/strings/resstrings.txt:730
 #: data/mp/messages/strings/resstrings.txt:736
 msgid "New Bomb Bay Available"
@@ -2671,7 +2680,7 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:201
 #: data/mp/messages/resmessages2.rmsg:799
 #: data/mp/messages/resmessages2.rmsg:812
-#: data/mp/messages/resmessagesall.rmsg:292
+#: data/mp/messages/resmessagesall.rmsg:331
 #: data/mp/messages/strings/resstrings.txt:812
 #: data/mp/messages/strings/resstrings.txt:820
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
@@ -2684,8 +2693,8 @@ msgstr ""
 
 #: data/base/messages/resmessages23.rmsg:215
 #: data/mp/messages/resmessages23.rmsg:215
-#: data/mp/messages/resmessagesall.rmsg:839
-#: data/mp/messages/resmessagesall.rmsg:852
+#: data/mp/messages/resmessagesall.rmsg:878
+#: data/mp/messages/resmessagesall.rmsg:891
 msgid "Replaces all machineguns"
 msgstr ""
 
@@ -2710,8 +2719,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:6
 #: data/base/messages/resmessages3.rmsg:6
 #: data/base/messages/strings/resstrings.txt:43
-#: data/mp/messages/resmessages2.rmsg:6
-#: data/mp/messages/resmessages3.rmsg:6
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Thermal Armor increased"
 msgstr ""
@@ -2880,8 +2887,8 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:305
 #: data/mp/messages/resmessages3.rmsg:318
 #: data/mp/messages/resmessages3.rmsg:331
-#: data/mp/messages/resmessagesall.rmsg:227
-#: data/mp/messages/resmessagesall.rmsg:539
+#: data/mp/messages/resmessagesall.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:578
 #: data/mp/messages/strings/resstrings.txt:215
 #: data/mp/messages/strings/resstrings.txt:221
 #: data/mp/messages/strings/resstrings.txt:227
@@ -2971,7 +2978,6 @@ msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:357
 #: data/base/messages/strings/resstrings.txt:367
-#: data/mp/messages/resmessages2.rmsg:357
 #: data/mp/messages/strings/resstrings.txt:393
 msgid "Increases factory production rate"
 msgstr ""
@@ -3042,8 +3048,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:409
 #: data/base/messages/resmessages3.rmsg:500
 #: data/base/messages/strings/resstrings.txt:423
-#: data/mp/messages/resmessages2.rmsg:409
-#: data/mp/messages/resmessages3.rmsg:500
 #: data/mp/messages/strings/resstrings.txt:449
 msgid "Reduces rearming time"
 msgstr ""
@@ -3177,7 +3181,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:581
 #: data/mp/messages/resmessages2.rmsg:524
 #: data/mp/messages/resmessages3.rmsg:719
-#: data/mp/messages/resmessagesall.rmsg:797
+#: data/mp/messages/resmessagesall.rmsg:836
 #: data/mp/messages/strings/resstrings.txt:614
 msgid "Vehicle Thermal Armor Improved"
 msgstr ""
@@ -3187,7 +3191,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:582
 #: data/mp/messages/resmessages2.rmsg:525
 #: data/mp/messages/resmessages3.rmsg:720
-#: data/mp/messages/resmessagesall.rmsg:798
+#: data/mp/messages/resmessagesall.rmsg:837
 #: data/mp/messages/strings/resstrings.txt:615
 msgid "Heat-resistant armored layers"
 msgstr ""
@@ -3195,9 +3199,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:526
 #: data/base/messages/resmessages3.rmsg:721
 #: data/base/messages/strings/resstrings.txt:583
-#: data/mp/messages/resmessages2.rmsg:526
-#: data/mp/messages/resmessages3.rmsg:721
-#: data/mp/messages/resmessagesall.rmsg:799
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Increases Thermal Armor"
 msgstr ""
@@ -3307,9 +3308,9 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:604
 #: data/mp/messages/resmessages2.rmsg:617
 #: data/mp/messages/resmessages2.rmsg:630
-#: data/mp/messages/resmessagesall.rmsg:721
-#: data/mp/messages/resmessagesall.rmsg:786
+#: data/mp/messages/resmessagesall.rmsg:760
 #: data/mp/messages/resmessagesall.rmsg:825
+#: data/mp/messages/resmessagesall.rmsg:864
 #: data/mp/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:676
 #: data/mp/messages/strings/resstrings.txt:682
@@ -3334,7 +3335,7 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:629
 #: data/base/messages/strings/resstrings.txt:654
 #: data/mp/messages/resmessages2.rmsg:629
-#: data/mp/messages/resmessagesall.rmsg:720
+#: data/mp/messages/resmessagesall.rmsg:759
 #: data/mp/messages/strings/resstrings.txt:687
 msgid "Quad 30mm Anti-Aircraft machinegun"
 msgstr ""
@@ -3365,8 +3366,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:656
 #: data/base/messages/resmessages3.rmsg:825
 #: data/base/messages/strings/resstrings.txt:671
-#: data/mp/messages/resmessages2.rmsg:656
-#: data/mp/messages/resmessages3.rmsg:825
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "Increases AA Flak damage"
 msgstr ""
@@ -3390,8 +3389,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:669
 #: data/base/messages/resmessages3.rmsg:838
 #: data/base/messages/strings/resstrings.txt:679
-#: data/mp/messages/resmessages2.rmsg:669
-#: data/mp/messages/resmessages3.rmsg:838
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "Increases AA ROF"
 msgstr ""
@@ -3497,7 +3494,7 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:785
 #: data/base/messages/strings/resstrings.txt:766
 #: data/mp/messages/resmessages2.rmsg:785
-#: data/mp/messages/resmessagesall.rmsg:733
+#: data/mp/messages/resmessagesall.rmsg:772
 #: data/mp/messages/strings/resstrings.txt:803
 msgid "Propylene Oxide treated to burn at superhot temperatures"
 msgstr ""
@@ -3554,8 +3551,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:838
 #: data/base/messages/resmessages3.rmsg:903
 #: data/base/messages/strings/resstrings.txt:795
-#: data/mp/messages/resmessages2.rmsg:838
-#: data/mp/messages/resmessages3.rmsg:903
 #: data/mp/messages/strings/resstrings.txt:834
 msgid "Increases Howitzer accuracy"
 msgstr ""
@@ -3592,8 +3587,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:851
 #: data/base/messages/resmessages3.rmsg:916
 #: data/base/messages/strings/resstrings.txt:803
-#: data/mp/messages/resmessages2.rmsg:851
-#: data/mp/messages/resmessages3.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:842
 msgid "Increases Howitzer damage"
 msgstr ""
@@ -3601,8 +3594,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:864
 #: data/base/messages/resmessages3.rmsg:929
 #: data/base/messages/strings/resstrings.txt:811
-#: data/mp/messages/resmessages2.rmsg:864
-#: data/mp/messages/resmessages3.rmsg:929
 #: data/mp/messages/strings/resstrings.txt:850
 msgid "Increases Howitzer ROF"
 msgstr ""
@@ -3851,7 +3842,7 @@ msgid "Advanced repair techniques"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:435
-#: data/mp/messages/resmessages3.rmsg:435
+#: data/mp/messages/resmessages3.rmsg:434
 msgid "Vapor Turbine boosts power output"
 msgstr ""
 
@@ -3905,13 +3896,13 @@ msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:564
 #: data/mp/messages/resmessages3.rmsg:564
-#: data/mp/messages/resmessagesall.rmsg:343
+#: data/mp/messages/resmessagesall.rmsg:382
 msgid "Synaptic Link Scrambler technology"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:565
 #: data/mp/messages/resmessages3.rmsg:565
-#: data/mp/messages/resmessagesall.rmsg:344
+#: data/mp/messages/resmessagesall.rmsg:383
 msgid "Electronically attacks and disrupts enemy structures"
 msgstr ""
 
@@ -3928,7 +3919,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:589
 #: data/mp/messages/resmessages3.rmsg:602
 #: data/mp/messages/resmessages3.rmsg:615
-#: data/mp/messages/resmessagesall.rmsg:368
+#: data/mp/messages/resmessagesall.rmsg:407
 msgid "New Repair Technology Discovered"
 msgstr ""
 
@@ -3940,8 +3931,8 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:590
 #: data/mp/messages/resmessages3.rmsg:603
 #: data/mp/messages/resmessages3.rmsg:616
-#: data/mp/messages/resmessagesall.rmsg:356
-#: data/mp/messages/resmessagesall.rmsg:369
+#: data/mp/messages/resmessagesall.rmsg:395
+#: data/mp/messages/resmessagesall.rmsg:408
 msgid "Synaptic Link technology breakthrough"
 msgstr ""
 
@@ -3949,7 +3940,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:617
 #: data/mp/messages/resmessages3.rmsg:578
 #: data/mp/messages/resmessages3.rmsg:617
-#: data/mp/messages/resmessagesall.rmsg:370
+#: data/mp/messages/resmessagesall.rmsg:409
 msgid "On-board diagnostic and repair systems"
 msgstr ""
 
@@ -4008,14 +3999,14 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:655
 #: data/base/messages/resmessagesall.rmsg:109
 #: data/mp/messages/resmessages3.rmsg:655
-#: data/mp/messages/resmessagesall.rmsg:109
+#: data/mp/messages/resmessagesall.rmsg:148
 msgid "More armor and body points than Python"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:657
 #: data/mp/messages/resmessages3.rmsg:657
-#: data/mp/messages/resmessagesall.rmsg:683
-#: data/mp/messages/resmessagesall.rmsg:696
+#: data/mp/messages/resmessagesall.rmsg:722
+#: data/mp/messages/resmessagesall.rmsg:735
 msgid "Very expensive to produce"
 msgstr ""
 
@@ -4077,8 +4068,8 @@ msgstr ""
 #: data/base/messages/resmessagesall.rmsg:162
 #: data/mp/messages/resmessages3.rmsg:851
 #: data/mp/messages/resmessages3.rmsg:1046
-#: data/mp/messages/resmessagesall.rmsg:162
-#: data/mp/messages/resmessagesall.rmsg:864
+#: data/mp/messages/resmessagesall.rmsg:201
+#: data/mp/messages/resmessagesall.rmsg:903
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr ""
 
@@ -4114,7 +4105,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:953
 #: data/mp/messages/resmessages3.rmsg:940
 #: data/mp/messages/resmessages3.rmsg:953
-#: data/mp/messages/resmessagesall.rmsg:433
+#: data/mp/messages/resmessagesall.rmsg:472
 msgid "New Laser Weapon Available"
 msgstr ""
 
@@ -4150,7 +4141,6 @@ msgid "Improvement in laser optics reduces light dispersal"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:968
-#: data/mp/messages/resmessages3.rmsg:968
 msgid "Increases Laser accuracy"
 msgstr ""
 
@@ -4169,7 +4159,6 @@ msgid "Improvement in laser emission density"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:981
-#: data/mp/messages/resmessages3.rmsg:981
 msgid "Increases Laser damage"
 msgstr ""
 
@@ -4179,7 +4168,6 @@ msgid "Improved Energizer reduces laser recharge time"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:994
-#: data/mp/messages/resmessages3.rmsg:994
 msgid "Increases Laser ROF"
 msgstr ""
 
@@ -4230,8 +4218,6 @@ msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1059
 #: data/base/messages/resmessages3.rmsg:1072
-#: data/mp/messages/resmessages3.rmsg:1059
-#: data/mp/messages/resmessages3.rmsg:1072
 msgid "Increases Missile accuracy"
 msgstr ""
 
@@ -4260,7 +4246,6 @@ msgid "Low yield thermonuclear warhead"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1085
-#: data/mp/messages/resmessages3.rmsg:1085
 msgid "Increases Missile damage"
 msgstr ""
 
@@ -4273,7 +4258,7 @@ msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1097
 #: data/mp/messages/resmessages3.rmsg:1097
-#: data/mp/messages/resmessagesall.rmsg:811
+#: data/mp/messages/resmessagesall.rmsg:850
 msgid "Surface-to-air missile"
 msgstr ""
 
@@ -4281,14 +4266,14 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1111
 #: data/mp/messages/resmessages3.rmsg:1098
 #: data/mp/messages/resmessages3.rmsg:1111
-#: data/mp/messages/resmessagesall.rmsg:708
-#: data/mp/messages/resmessagesall.rmsg:812
+#: data/mp/messages/resmessagesall.rmsg:747
+#: data/mp/messages/resmessagesall.rmsg:851
 msgid "Best Targets: Aerial targets only"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1110
 #: data/mp/messages/resmessages3.rmsg:1110
-#: data/mp/messages/resmessagesall.rmsg:707
+#: data/mp/messages/resmessagesall.rmsg:746
 msgid "Heavy surface-to-air missile"
 msgstr ""
 
@@ -4323,8 +4308,6 @@ msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1150
 #: data/base/messages/resmessages3.rmsg:1163
-#: data/mp/messages/resmessages3.rmsg:1150
-#: data/mp/messages/resmessages3.rmsg:1163
 msgid "Increases Missile ROF"
 msgstr ""
 
@@ -4377,7 +4360,6 @@ msgid "Computer predicts and compensates for target's movement"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1241
-#: data/mp/messages/resmessages3.rmsg:1241
 msgid "Increases Rail Gun accuracy"
 msgstr ""
 
@@ -4396,7 +4378,6 @@ msgid "Improved armor-piercing dart"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1254
-#: data/mp/messages/resmessages3.rmsg:1254
 msgid "Increases Rail Gun damage"
 msgstr ""
 
@@ -4406,7 +4387,6 @@ msgid "Increased gauss output speeds up reload time"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1267
-#: data/mp/messages/resmessages3.rmsg:1267
 msgid "Increases Rail Gun ROF"
 msgstr ""
 
@@ -4463,7 +4443,7 @@ msgstr ""
 #: data/base/messages/resmessagesall.rmsg:45
 #: data/base/messages/strings/resstrings.txt:445
 #: data/mp/messages/resmessagesall.rmsg:45
-#: data/mp/messages/resmessagesall.rmsg:318
+#: data/mp/messages/resmessagesall.rmsg:357
 #: data/mp/messages/strings/resstrings.txt:471
 msgid "Automatically Repairs Damaged Units"
 msgstr ""
@@ -4471,7 +4451,7 @@ msgstr ""
 #: data/base/messages/resmessagesall.rmsg:46
 #: data/base/messages/strings/resstrings.txt:446
 #: data/mp/messages/resmessagesall.rmsg:46
-#: data/mp/messages/resmessagesall.rmsg:319
+#: data/mp/messages/resmessagesall.rmsg:358
 #: data/mp/messages/strings/resstrings.txt:472
 msgid "Or damaged units may be selected as target"
 msgstr ""
@@ -4483,8 +4463,8 @@ msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:57
 #: data/mp/messages/resmessagesall.rmsg:57
-#: data/mp/messages/resmessagesall.rmsg:475
-#: data/mp/messages/resmessagesall.rmsg:670
+#: data/mp/messages/resmessagesall.rmsg:514
+#: data/mp/messages/resmessagesall.rmsg:709
 msgid "Improved sensor range"
 msgstr ""
 
@@ -4500,14 +4480,16 @@ msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:71
 #: data/mp/messages/resmessagesall.rmsg:71
-#: data/mp/messages/resmessagesall.rmsg:461
-#: data/mp/messages/resmessagesall.rmsg:474
-#: data/mp/messages/resmessagesall.rmsg:669
+#: data/mp/messages/resmessagesall.rmsg:500
+#: data/mp/messages/resmessagesall.rmsg:513
+#: data/mp/messages/resmessagesall.rmsg:708
 msgid "Keeps map areas under constant surveillance"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:82
 #: data/mp/messages/resmessagesall.rmsg:82
+#: data/mp/messages/resmessagesall.rmsg:95
+#: data/mp/messages/resmessagesall.rmsg:108
 msgid "Sensors Improved"
 msgstr ""
 
@@ -4517,67 +4499,68 @@ msgid "New Thermal Emissions detection"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:84
-#: data/mp/messages/resmessagesall.rmsg:84
 msgid "Extends Sensor Range"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:85
 #: data/mp/messages/resmessagesall.rmsg:85
+#: data/mp/messages/resmessagesall.rmsg:98
+#: data/mp/messages/resmessagesall.rmsg:111
 msgid "All sensors upgraded automatically"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:96
-#: data/mp/messages/resmessagesall.rmsg:96
+#: data/mp/messages/resmessagesall.rmsg:122
 msgid "Counter-battery tower detects enemy indirect fire batteries"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:108
-#: data/mp/messages/resmessagesall.rmsg:108
+#: data/mp/messages/resmessagesall.rmsg:147
 msgid "Collective Heavy Body"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:110
-#: data/mp/messages/resmessagesall.rmsg:110
+#: data/mp/messages/resmessagesall.rmsg:149
 msgid "Slower than Python"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:111
-#: data/mp/messages/resmessagesall.rmsg:111
+#: data/mp/messages/resmessagesall.rmsg:150
 msgid "High power costs and slow to produce"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:121
-#: data/mp/messages/resmessagesall.rmsg:121
+#: data/mp/messages/resmessagesall.rmsg:160
 msgid "New Propulsion Available for Design"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:122
-#: data/mp/messages/resmessagesall.rmsg:122
+#: data/mp/messages/resmessagesall.rmsg:161
 msgid "Vertical Take Off and Landing Propulsion"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:123
-#: data/mp/messages/resmessagesall.rmsg:123
+#: data/mp/messages/resmessagesall.rmsg:162
 msgid "Speed: VTOL"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:135
-#: data/mp/messages/resmessagesall.rmsg:135
+#: data/mp/messages/resmessagesall.rmsg:174
 msgid "Rocket detects and locks on to engine emissions"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:148
-#: data/mp/messages/resmessagesall.rmsg:148
+#: data/mp/messages/resmessagesall.rmsg:187
 msgid "Anti-tank rocket"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:161
-#: data/mp/messages/resmessagesall.rmsg:161
+#: data/mp/messages/resmessagesall.rmsg:200
 msgid "High explosive shaped charge missile"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:174
-#: data/mp/messages/resmessagesall.rmsg:174
+#: data/mp/messages/resmessagesall.rmsg:213
 msgid "Laser designator paints and guides rounds to the target"
 msgstr ""
 
@@ -7538,7 +7521,7 @@ msgid "Robotic Cyborg Production Mk3"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:789
-#: data/mp/messages/resmessagesall.rmsg:759
+#: data/mp/messages/resmessagesall.rmsg:798
 #: data/mp/messages/strings/names.txt:800
 msgid "Advanced Cyborg Production"
 msgstr ""
@@ -7574,7 +7557,7 @@ msgid "Robotic Factory Production Mk3"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:800
-#: data/mp/messages/resmessagesall.rmsg:746
+#: data/mp/messages/resmessagesall.rmsg:785
 msgid "Advanced Factory Production"
 msgstr ""
 
@@ -9232,7 +9215,7 @@ msgid "Self-Replicating Factory Production"
 msgstr ""
 
 #: data/base/messages/strings/resstrings.txt:444
-#: data/mp/messages/resmessagesall.rmsg:317
+#: data/mp/messages/resmessagesall.rmsg:356
 #: data/mp/messages/strings/resstrings.txt:470
 msgid "Heavy repair unit"
 msgstr ""
@@ -9333,8 +9316,8 @@ msgid "The oil derrick is currently dormant. Build a power generator to convert 
 msgstr "Ropný vrt je v současnosti nevyužitý. Postav generátor energie, který přemění ropu na energii"
 
 #: data/base/script/text/tutorial3.slo:370
-#: data/base/script/text/tutorial3.slo:576
-#: data/base/script/text/tutorial3.slo:867
+#: data/base/script/text/tutorial3.slo:580
+#: data/base/script/text/tutorial3.slo:871
 msgid "Left click the flashing BUILD icon"
 msgstr "Levým tlačítkem klikni na blikající ikonu STAVBA"
 
@@ -9358,119 +9341,119 @@ msgstr "Nyní klikni levým tlačítkem na místo generátoru"
 msgid "The other truck will now help to build the power generator"
 msgstr "Další náklaďák bude nyní pomáhat se stavbou generátoru energie"
 
-#: data/base/script/text/tutorial3.slo:506
+#: data/base/script/text/tutorial3.slo:510
 msgid "During missions you need to locate and recover technologies from before the Collapse"
 msgstr "Během misí potřebuješ nalézt a získat technologie z doby před Kolapsem"
 
-#: data/base/script/text/tutorial3.slo:516
+#: data/base/script/text/tutorial3.slo:519
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
 msgstr "Použij náklaďák k hledání artefaktu označeného radarovým pulzem"
 
-#: data/base/script/text/tutorial3.slo:519
+#: data/base/script/text/tutorial3.slo:523
 msgid "Move the pointer over the artifact and left click to recover it"
 msgstr "Přesuň ukazatel nad artefakt a kliknutím levého tlačítka ho získáš"
 
-#: data/base/script/text/tutorial3.slo:562
+#: data/base/script/text/tutorial3.slo:566
 msgid "A research facility is required to research artifacts"
 msgstr "Výzkumná laboratoř je potřebná k probádání artefaktů"
 
-#: data/base/script/text/tutorial3.slo:604
+#: data/base/script/text/tutorial3.slo:608
 msgid "Now left click the research facility and position it at your base"
 msgstr "Nyní klikni levým tlačítkem na výzkumnou laboratoř a umísti ji u své základny"
 
-#: data/base/script/text/tutorial3.slo:627
+#: data/base/script/text/tutorial3.slo:631
 msgid "Use your other truck to help build the research facility"
 msgstr "Pomoz svým dalším náklaďákem se stavbou výzkumné laboratoře"
 
-#: data/base/script/text/tutorial3.slo:650
+#: data/base/script/text/tutorial3.slo:657
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
 msgstr "K prozkoumání artefaktu klikni levým tlačítkem na blikající ikonu VÝZKUM"
 
-#: data/base/script/text/tutorial3.slo:675
+#: data/base/script/text/tutorial3.slo:679
 msgid "Now left click the machinegun artifact"
 msgstr "Nyní klikni levým tlačítkem na artefakt kulometu"
 
-#: data/base/script/text/tutorial3.slo:688
+#: data/base/script/text/tutorial3.slo:692
 msgid "The artifact is now being researched by the facility"
 msgstr "Artefakt je nyní prozkoumáván laboratoří"
 
-#: data/base/script/text/tutorial3.slo:709
+#: data/base/script/text/tutorial3.slo:713
 msgid "The researched machinegun can now be used to design a new vehicle"
 msgstr "Objevený kulomet nyní může posloužit ke konstrukci nového vozidla"
 
-#: data/base/script/text/tutorial3.slo:726
+#: data/base/script/text/tutorial3.slo:730
 msgid "Left click the flashing DESIGN icon"
 msgstr "Levým tlačítkem klikni na blikající ikonu KONSTRUKCE"
 
-#: data/base/script/text/tutorial3.slo:742
+#: data/base/script/text/tutorial3.slo:746
 msgid "To start your design, left click the NEW DESIGN icon"
 msgstr "Začni novou konstrukci kliknutím levého tlačítka na ikonu NOVÁ KONSTRUKCE"
 
-#: data/base/script/text/tutorial3.slo:757
+#: data/base/script/text/tutorial3.slo:761
 msgid "Now left click the Vehicle Body icon"
 msgstr ""
 
-#: data/base/script/text/tutorial3.slo:771
+#: data/base/script/text/tutorial3.slo:775
 msgid "Then left click the Viper body"
 msgstr ""
 
-#: data/base/script/text/tutorial3.slo:783
+#: data/base/script/text/tutorial3.slo:787
 msgid "Left click the Wheels icon"
 msgstr ""
 
-#: data/base/script/text/tutorial3.slo:795
+#: data/base/script/text/tutorial3.slo:799
 msgid "Then left click the machinegun to complete your design"
 msgstr ""
 
-#: data/base/script/text/tutorial3.slo:826
+#: data/base/script/text/tutorial3.slo:832
 msgid "To finalize your design, left click the CLOSE icon"
 msgstr "Konstrukci dokončíš kliknutím levého tlačítka na ikonu ZAVŘÍT"
 
-#: data/base/script/text/tutorial3.slo:855
+#: data/base/script/text/tutorial3.slo:859
 msgid "A factory is now required to manufacture your new vehicle"
 msgstr "Nyní potřebuješ továrnu, která by vyrobila tvé nové vozidlo"
 
-#: data/base/script/text/tutorial3.slo:890
+#: data/base/script/text/tutorial3.slo:894
 msgid "Now left click the factory icon and position it at your base"
 msgstr "Nyní levým tlačítkem klikni na ikonu továrny a umísti ji u své základny"
 
-#: data/base/script/text/tutorial3.slo:910
+#: data/base/script/text/tutorial3.slo:914
 msgid "Select a location for your factory"
 msgstr "Vyber místo pro svou továrnu"
 
-#: data/base/script/text/tutorial3.slo:929
+#: data/base/script/text/tutorial3.slo:933
 msgid "The delivery point is indicated by the number 1"
 msgstr "Místo dodání je označeno číslem 1"
 
-#: data/base/script/text/tutorial3.slo:932
+#: data/base/script/text/tutorial3.slo:936
 msgid "All new units will drive to this location once built"
 msgstr "Všechny nové jednotky budou jezdit na toto místo, jakmile budou vyrobeny"
 
-#: data/base/script/text/tutorial3.slo:934
+#: data/base/script/text/tutorial3.slo:938
 msgid "You can move the delivery point at any time by left clicking it"
 msgstr "Kdykoli můžeš přesunout místo dodání, když na něj klikneš levým tlačítkem"
 
-#: data/base/script/text/tutorial3.slo:948
+#: data/base/script/text/tutorial3.slo:952
 msgid "Now click where you want to position the delivery point"
 msgstr "Nyní klikni tam, kde chceš umístit dodací místo"
 
-#: data/base/script/text/tutorial3.slo:965
+#: data/base/script/text/tutorial3.slo:969
 msgid "The factory can now be ordered to build a new unit"
 msgstr "Nyní můžeš továrně nařídit výrobu nové jednotky"
 
-#: data/base/script/text/tutorial3.slo:991
+#: data/base/script/text/tutorial3.slo:995
 msgid "Left click the flashing MANUFACTURE icon"
 msgstr "Levým tlačítkem klikni na blikající ikonu VÝROBA"
 
-#: data/base/script/text/tutorial3.slo:1009
+#: data/base/script/text/tutorial3.slo:1013
 msgid "Now left click the units you want to build from the menu at the left"
 msgstr "Nyní klikni levým tlačítkem na jednotky, které chceš vyrobit z nabídky nalevo"
 
-#: data/base/script/text/tutorial3.slo:1023
+#: data/base/script/text/tutorial3.slo:1027
 msgid "Please wait whilst the factory manufactures the new unit(s)"
 msgstr "Počkej prosím, zatímco továrna vyrobí nové jednotky"
 
-#: data/base/script/text/tutorial3.slo:1048
+#: data/base/script/text/tutorial3.slo:1052
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Blahopřeji veliteli - jsi připraven na svou první misi"
 
@@ -9647,16 +9630,185 @@ msgstr ""
 msgid "Viper Flamer Half-Track"
 msgstr ""
 
+#: data/mp/messages/resmessages12.rmsg:58
+msgid "Construction speed +10%"
+msgstr ""
+
+#: data/mp/messages/resmessages12.rmsg:97
+#: data/mp/messages/resmessagesall.rmsg:214
+msgid "Cannon accuracy +10%"
+msgstr ""
+
+#: data/mp/messages/resmessages12.rmsg:110
+msgid "Flamer reload time -15%"
+msgstr ""
+
+#: data/mp/messages/resmessages12.rmsg:136
+#: data/mp/messages/resmessages23.rmsg:175
+#: data/mp/messages/resmessages2.rmsg:890
+msgid "Machinegun reload time -15%"
+msgstr ""
+
+#: data/mp/messages/resmessages12.rmsg:162
+#: data/mp/messages/resmessages23.rmsg:188
+#: data/mp/messages/resmessages3.rmsg:1176
+msgid "Mortar accuracy +10%"
+msgstr ""
+
+#: data/mp/messages/resmessages12.rmsg:175
+#: data/mp/messages/resmessages3.rmsg:1189
+msgid "Mortar reload time -10%"
+msgstr ""
+
+#: data/mp/messages/resmessages12.rmsg:201
+msgid "Rocket reload time -15%"
+msgstr ""
+
+#: data/mp/messages/resmessages12.rmsg:214
+#: data/mp/messages/resmessages3.rmsg:890
+msgid "Cannon reload time -10%"
+msgstr ""
+
+#: data/mp/messages/resmessages12.rmsg:227
+#: data/mp/messages/resmessages1.rmsg:579
+#: data/mp/messages/resmessages3.rmsg:877
+msgid "Cannon damage +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages12.rmsg:240
+#: data/mp/messages/resmessages1.rmsg:748
+#: data/mp/messages/resmessagesall.rmsg:175
+msgid "Rocket accuracy +10%"
+msgstr ""
+
+#: data/mp/messages/resmessages1.rmsg:32
+#: data/mp/messages/resmessages3.rmsg:71
+#: data/mp/messages/resmessages3.rmsg:84
+msgid "Kinetic Armor +35%, Body Points +35%"
+msgstr ""
+
+#: data/mp/messages/resmessages1.rmsg:97
+msgid "Armour +35%, Body Points +30%"
+msgstr ""
+
 #: data/mp/messages/resmessages1.rmsg:148
 msgid "Armored guard tower with Lancer AT rocket"
 msgstr ""
 
-#: data/mp/messages/resmessages1.rmsg:552
-#: data/mp/messages/resmessages1.rmsg:565
+#: data/mp/messages/resmessages1.rmsg:253
+#: data/mp/messages/resmessages2.rmsg:331
+#: data/mp/messages/resmessages3.rmsg:422
+msgid "Repair Speed +100%"
+msgstr ""
+
+#: data/mp/messages/resmessages1.rmsg:306
+#, no-c-format
+msgid "Factory output speed +100% per module"
+msgstr ""
+
+#: data/mp/messages/resmessages1.rmsg:319
+#: data/mp/messages/resmessagesall.rmsg:786
+msgid "Factory output speed +60%"
+msgstr ""
+
+#: data/mp/messages/resmessages1.rmsg:345
+#, fuzzy
+msgid "Research speed +85%"
+msgstr "Výzkum dokončen: %s"
+
+#: data/mp/messages/resmessages1.rmsg:358
+#: data/mp/messages/resmessages2.rmsg:370
+#: data/mp/messages/resmessages3.rmsg:448
+#, fuzzy
+msgid "Research speed +30%"
+msgstr "Výzkum dokončen: %s"
+
+#: data/mp/messages/resmessages1.rmsg:371
+#: data/mp/messages/resmessages2.rmsg:58
+#: data/mp/messages/resmessages2.rmsg:383
+#: data/mp/messages/resmessages3.rmsg:214
+#: data/mp/messages/resmessages3.rmsg:227
+#: data/mp/messages/resmessages3.rmsg:461
+#: data/mp/messages/resmessages3.rmsg:474
+msgid "Armor +35%, Body Points +30%"
+msgstr ""
+
+#: data/mp/messages/resmessages1.rmsg:462
+#: data/mp/messages/resmessages2.rmsg:500
+#: data/mp/messages/resmessages3.rmsg:669
+#: data/mp/messages/resmessages3.rmsg:682
+#, fuzzy
+msgid "Vehicle speed +5%"
+msgstr "Tělo vozidla"
+
+#: data/mp/messages/resmessages1.rmsg:475
+#: data/mp/messages/resmessages2.rmsg:513
+#: data/mp/messages/resmessages3.rmsg:695
+#: data/mp/messages/resmessages3.rmsg:708
+msgid "Kinetic armor +30%, body points +30%"
+msgstr ""
+
+#: data/mp/messages/resmessages1.rmsg:553
+#: data/mp/messages/resmessages1.rmsg:566
 #: data/mp/messages/resmessages2.rmsg:747
 #, fuzzy
 msgid "Best Targets: Vehicles, Hardpoints"
 msgstr "Nejlepší cíle : Vozidla"
+
+#: data/mp/messages/resmessages1.rmsg:605
+#: data/mp/messages/resmessages2.rmsg:786
+#: data/mp/messages/resmessagesall.rmsg:773
+msgid "Flamer damage +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages1.rmsg:644
+#: data/mp/messages/resmessages1.rmsg:657
+#: data/mp/messages/resmessages2.rmsg:877
+#: data/mp/messages/resmessages3.rmsg:1007
+#: data/mp/messages/resmessages3.rmsg:1020
+msgid "Machinegun damage +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages1.rmsg:683
+#: data/mp/messages/resmessages2.rmsg:916
+msgid "Mortar damage +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages1.rmsg:709
+#, fuzzy
+msgid "Mini-Rocket accuracy +10%"
+msgstr "Vybrat všechny Pásové Jednotky"
+
+#: data/mp/messages/resmessages1.rmsg:722
+#: data/mp/messages/resmessages2.rmsg:929
+#, fuzzy
+msgid "Mini-Rocket damage +25%"
+msgstr "Vybrat všechny Pásové Jednotky"
+
+#: data/mp/messages/resmessages1.rmsg:735
+#, fuzzy
+msgid "Mini-Rocket reload time -15%"
+msgstr "Vybrat všechny Pásové Jednotky"
+
+#: data/mp/messages/resmessages1.rmsg:761
+#: data/mp/messages/resmessages2.rmsg:942
+msgid "Rocket damage +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages23.rmsg:32
+msgid "Power output +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages23.rmsg:45
+#: data/mp/messages/resmessages3.rmsg:513
+msgid "Construction speed +20%"
+msgstr ""
+
+#: data/mp/messages/resmessages23.rmsg:136
+#: data/mp/messages/resmessages2.rmsg:643
+#: data/mp/messages/resmessages3.rmsg:812
+msgid "AA accuracy +10%"
+msgstr ""
 
 #: data/mp/messages/resmessages23.rmsg:160
 #: data/mp/messages/resmessages2.rmsg:732
@@ -9672,295 +9824,437 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:162
 #: data/mp/messages/resmessages2.rmsg:734
 #: data/mp/messages/resmessages3.rmsg:864
-msgid "Increases Bombing damage"
+msgid "Bomb damage +25%"
 msgstr ""
+
+#: data/mp/messages/resmessages2.rmsg:6
+#, fuzzy
+msgid "Thermal Armor +45%"
+msgstr "Tepelné brnění"
+
+#: data/mp/messages/resmessages2.rmsg:19
+msgid "Kinetic Armor +35%, and Body Points +35%"
+msgstr ""
+
+#: data/mp/messages/resmessages2.rmsg:357
+msgid "Factory production rate +60%"
+msgstr ""
+
+#: data/mp/messages/resmessages2.rmsg:358
+#: data/mp/messages/resmessagesall.rmsg:787
+msgid "All factories upgraded automatically"
+msgstr ""
+
+#: data/mp/messages/resmessages2.rmsg:409
+#: data/mp/messages/resmessages3.rmsg:500
+msgid "Rearming speed +30%"
+msgstr ""
+
+#: data/mp/messages/resmessages2.rmsg:526
+#, fuzzy
+msgid "Thermal armor +40%"
+msgstr "Tepelné brnění"
+
+#: data/mp/messages/resmessages2.rmsg:656
+#: data/mp/messages/resmessages3.rmsg:825
+msgid "AA Flak damage +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages2.rmsg:669
+#: data/mp/messages/resmessages3.rmsg:838
+msgid "AA reload time -15%"
+msgstr ""
+
+#: data/mp/messages/resmessages2.rmsg:838
+#: data/mp/messages/resmessages3.rmsg:903
+msgid "Howitzer accuracy +10%"
+msgstr ""
+
+#: data/mp/messages/resmessages2.rmsg:851
+#: data/mp/messages/resmessages3.rmsg:916
+msgid "Howitzer damage +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages2.rmsg:864
+#: data/mp/messages/resmessages3.rmsg:929
+msgid "Howitzer reload time -10%"
+msgstr ""
+
+#: data/mp/messages/resmessages3.rmsg:6
+#, fuzzy
+msgid "Thermal Armor +35%"
+msgstr "Tepelné brnění"
 
 #: data/mp/messages/resmessages3.rmsg:304
 msgid "Armored guard tower with Pulse Laser"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:186
+#: data/mp/messages/resmessages3.rmsg:435
+msgid "Power output +30%"
+msgstr ""
+
+#: data/mp/messages/resmessages3.rmsg:721
+#: data/mp/messages/resmessagesall.rmsg:838
+#, fuzzy
+msgid "Thermal Armor +40%"
+msgstr "Tepelné brnění"
+
+#: data/mp/messages/resmessages3.rmsg:968
+msgid "Laser accuracy +10%"
+msgstr ""
+
+#: data/mp/messages/resmessages3.rmsg:981
+msgid "Laser damage +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages3.rmsg:994
+msgid "Laser reload time -15%"
+msgstr ""
+
+#: data/mp/messages/resmessages3.rmsg:1059
+#: data/mp/messages/resmessages3.rmsg:1072
+msgid "Missile accuracy +10%"
+msgstr ""
+
+#: data/mp/messages/resmessages3.rmsg:1085
+msgid "Missile damage +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages3.rmsg:1150
+#: data/mp/messages/resmessages3.rmsg:1163
+#, fuzzy
+msgid "Missile reload time -15%"
+msgstr "Čas Mise - %s"
+
+#: data/mp/messages/resmessages3.rmsg:1241
+msgid "Rail Gun accuracy +10%"
+msgstr ""
+
+#: data/mp/messages/resmessages3.rmsg:1254
+msgid "Rail Gun damage +25%"
+msgstr ""
+
+#: data/mp/messages/resmessages3.rmsg:1267
+msgid "Rail Gun reload time -15%"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:84
+#, fuzzy
+msgid "Sensor Range +25%"
+msgstr "Dosah snímačů"
+
+#: data/mp/messages/resmessagesall.rmsg:96
+msgid "Improved Thermal Emissions detection"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:97
+#, fuzzy
+msgid "Sensor Range +15%"
+msgstr "Dosah snímačů"
+
+#: data/mp/messages/resmessagesall.rmsg:109
+msgid "Advanced Thermal Emissions detection"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:110
+#, fuzzy
+msgid "Sensor Range +10%"
+msgstr "Dosah snímačů"
+
+#: data/mp/messages/resmessagesall.rmsg:135
+msgid "Radar detector tower detects enemy sensors"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:136
+msgid "Orders assigned indirect fire units to fire at the enemy sensors"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:137
+msgid "Counter-battery fire continues until enemy sensor is suppressed"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:225
 msgid "Cyborg Transport Available"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:187
+#: data/mp/messages/resmessagesall.rmsg:226
 msgid "Armed with Machinegun"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:189
+#: data/mp/messages/resmessagesall.rmsg:228
 msgid "Requires heavy VTOL factory to produce"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:200
+#: data/mp/messages/resmessagesall.rmsg:239
 msgid "Incendiary howitzer emplacement"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:213
+#: data/mp/messages/resmessagesall.rmsg:252
 msgid "Armored Incendiary Mortar battery pit"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:226
+#: data/mp/messages/resmessagesall.rmsg:265
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:239
+#: data/mp/messages/resmessagesall.rmsg:278
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:252
+#: data/mp/messages/resmessagesall.rmsg:291
 msgid "Armed with grenades"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:265
+#: data/mp/messages/resmessagesall.rmsg:304
 msgid "Combat engineer with construction ability"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:278
+#: data/mp/messages/resmessagesall.rmsg:317
 msgid "Mechanic with repair ability"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:291
+#: data/mp/messages/resmessagesall.rmsg:330
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:330
+#: data/mp/messages/resmessagesall.rmsg:369
 msgid "Plasmite Flame-thrower"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:345
+#: data/mp/messages/resmessagesall.rmsg:384
 msgid "Steals technology from structures and takes control of weapons"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:355
+#: data/mp/messages/resmessagesall.rmsg:394
 msgid "New Electronic Technology Discovered"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:357
+#: data/mp/messages/resmessagesall.rmsg:396
 msgid "On-board resistance circuit systems"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:358
+#: data/mp/messages/resmessagesall.rmsg:397
 msgid "Enables resistance to Nexus Link technology"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:371
+#: data/mp/messages/resmessagesall.rmsg:410
 msgid "Enables self-repair"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:382
+#: data/mp/messages/resmessagesall.rmsg:421
 msgid "Armed with medium cannon"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:395
-#: data/mp/messages/resmessagesall.rmsg:408
+#: data/mp/messages/resmessagesall.rmsg:434
+#: data/mp/messages/resmessagesall.rmsg:447
 msgid "Armed with hyper velocity cannon"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:421
+#: data/mp/messages/resmessagesall.rmsg:460
 msgid "Armed with tank killer rockets"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:434
+#: data/mp/messages/resmessagesall.rmsg:473
 msgid "Fires heavy pulses of laser light"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:435
+#: data/mp/messages/resmessagesall.rmsg:474
 msgid "Best Targets: Heavy cyborgs"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:447
+#: data/mp/messages/resmessagesall.rmsg:486
 msgid "76mm twin-barrel automatic-cannon"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:459
-#: data/mp/messages/resmessagesall.rmsg:472
+#: data/mp/messages/resmessagesall.rmsg:498
+#: data/mp/messages/resmessagesall.rmsg:511
 msgid "New Systems Structure Available"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:460
+#: data/mp/messages/resmessagesall.rmsg:499
 msgid "Complete battlefield visibility"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:462
-msgid "The ultimate in sensor technology"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:473
-#: data/mp/messages/resmessagesall.rmsg:668
-msgid "Combines standard, counter battery and VTOL sensors"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:485
-msgid "New Advanced Weapon Available"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:486
-msgid "Very slow recharge time"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:487
-msgid "Immense damage infliction capability"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:488
-msgid "Narrow area of affect"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:499
-msgid "Armored guard tower with Nexus Link"
+#: data/mp/messages/resmessagesall.rmsg:501
+msgid "Does not offer sensor targeting"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:512
+#: data/mp/messages/resmessagesall.rmsg:707
+msgid "Combines standard, counter battery and VTOL sensors"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:524
+msgid "New Advanced Weapon Available"
+msgstr ""
+
 #: data/mp/messages/resmessagesall.rmsg:525
-msgid "Plasma Cannon firing plasma"
-msgstr "Plazmový kanón střílející plazmu"
+msgid "Very slow recharge time"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:526
-#: data/mp/messages/resmessagesall.rmsg:604
-#: data/mp/messages/resmessagesall.rmsg:617
-#: data/mp/messages/resmessagesall.rmsg:630
-#: data/mp/messages/resmessagesall.rmsg:643
-#: data/mp/messages/resmessagesall.rmsg:656
-msgid "Best Targets : Vehicles"
-msgstr "Nejlepší cíle : Vozidla"
+msgid "Immense damage infliction capability"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:527
+msgid "Narrow area of effect"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:538
-msgid "Armored strongpoint with Heavy Laser"
+msgid "Armored guard tower with Nexus Link"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:551
-msgid "Armored guard tower with EMP Cannon"
-msgstr ""
-
 #: data/mp/messages/resmessagesall.rmsg:564
-msgid "Armed with Cyborg Pulse Laser"
-msgstr ""
+msgid "Plasma Cannon firing plasma"
+msgstr "Plazmový kanón střílející plazmu"
+
+#: data/mp/messages/resmessagesall.rmsg:565
+#: data/mp/messages/resmessagesall.rmsg:643
+#: data/mp/messages/resmessagesall.rmsg:656
+#: data/mp/messages/resmessagesall.rmsg:669
+#: data/mp/messages/resmessagesall.rmsg:682
+#: data/mp/messages/resmessagesall.rmsg:695
+msgid "Best Targets : Vehicles"
+msgstr "Nejlepší cíle : Vozidla"
 
 #: data/mp/messages/resmessagesall.rmsg:577
-msgid "Armed with Cyborg Rail Gun"
+msgid "Armored strongpoint with Heavy Laser"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:590
-msgid "Armed with Cyborg Scourge Missile Launcher"
+msgid "Armored guard tower with EMP Cannon"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:603
-msgid "Uses advanced mass driver railgun technology"
+msgid "Armed with Cyborg Pulse Laser"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:605
-#: data/mp/messages/resmessagesall.rmsg:618
-#: data/mp/messages/resmessagesall.rmsg:631
-#: data/mp/messages/resmessagesall.rmsg:644
-msgid "Defensive Strength : High"
-msgstr "Síla obrany : Vysoká"
-
 #: data/mp/messages/resmessagesall.rmsg:616
-msgid "Uses advanced cannon technology"
-msgstr "Použivá pokročilou technologii kanónu"
+msgid "Armed with Cyborg Rail Gun"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:629
-msgid "Uses advanced rocket gun technology"
+msgid "Armed with Cyborg Scourge Missile Launcher"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:642
-msgid "Uses advanced missile gun technology"
+msgid "Uses advanced mass driver railgun technology"
 msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:644
+#: data/mp/messages/resmessagesall.rmsg:657
+#: data/mp/messages/resmessagesall.rmsg:670
+#: data/mp/messages/resmessagesall.rmsg:683
+msgid "Defensive Strength : High"
+msgstr "Síla obrany : Vysoká"
 
 #: data/mp/messages/resmessagesall.rmsg:655
-msgid "Powerful Electronic magnetic pulse weapon"
-msgstr ""
+msgid "Uses advanced cannon technology"
+msgstr "Použivá pokročilou technologii kanónu"
 
-#: data/mp/messages/resmessagesall.rmsg:667
-msgid "New System Available"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:680
-msgid "Medium Super Heavy Body"
+#: data/mp/messages/resmessagesall.rmsg:668
+msgid "Uses advanced rocket gun technology"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:681
-msgid "More armor and body points than Vengeance"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:682
-msgid "Slow moving Body"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:693
-msgid "Large Super Heavy Body"
+msgid "Uses advanced missile gun technology"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:694
-msgid "Maximum armor and body points"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:695
-msgid "Very slow moving Body"
+msgid "Powerful Electronic magnetic pulse weapon"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:706
-msgid "Hardpoint Vindicator SAM Site Available"
+msgid "New System Available"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:719
+msgid "Medium Super Heavy Body"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:720
+msgid "More armor and body points than Vengeance"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:721
+msgid "Slow moving Body"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:732
+msgid "Large Super Heavy Body"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:733
+msgid "Maximum armor and body points"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:734
+msgid "Very slow moving Body"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:745
+msgid "Hardpoint Vindicator SAM Site Available"
+msgstr ""
+
+#: data/mp/messages/resmessagesall.rmsg:758
 msgid "Hardpoint Whirlwind AA Gun Available"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:772
+#: data/mp/messages/resmessagesall.rmsg:811
 msgid "Armored EMP Mortar battery pit"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:784
+#: data/mp/messages/resmessagesall.rmsg:823
 msgid "Laser AA Gun Available"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:785
+#: data/mp/messages/resmessagesall.rmsg:824
 msgid "Twin Medium Anti-Aircraft Laser"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:810
+#: data/mp/messages/resmessagesall.rmsg:849
 msgid "Hardpoint Avenger SAM Site Available"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:823
+#: data/mp/messages/resmessagesall.rmsg:862
 msgid "Hardpoint Cyclone AA Gun Available"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:824
+#: data/mp/messages/resmessagesall.rmsg:863
 msgid "Quad 80mm Anti-Aircraft machinegun"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:837
-#: data/mp/messages/resmessagesall.rmsg:850
+#: data/mp/messages/resmessagesall.rmsg:876
+#: data/mp/messages/resmessagesall.rmsg:889
 msgid "Twin Multi-barrel, rapid-fire machinegun"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:849
+#: data/mp/messages/resmessagesall.rmsg:888
 msgid "Hardpoint Twin Assault Gun Available"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:863
+#: data/mp/messages/resmessagesall.rmsg:902
 msgid "Drops high intensity Plasmite bombs"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:875
+#: data/mp/messages/resmessagesall.rmsg:914
 msgid "New VTOL Missile Launcher"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:876
+#: data/mp/messages/resmessagesall.rmsg:915
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:888
-#: data/mp/messages/resmessagesall.rmsg:901
-#: data/mp/messages/resmessagesall.rmsg:914
+#: data/mp/messages/resmessagesall.rmsg:927
+#: data/mp/messages/resmessagesall.rmsg:940
+#: data/mp/messages/resmessagesall.rmsg:953
 msgid "Stronger Commander Turret Available for Design"
 msgstr ""
 
-#: data/mp/messages/resmessagesall.rmsg:889
-#: data/mp/messages/resmessagesall.rmsg:902
-#: data/mp/messages/resmessagesall.rmsg:915
+#: data/mp/messages/resmessagesall.rmsg:928
+#: data/mp/messages/resmessagesall.rmsg:941
+#: data/mp/messages/resmessagesall.rmsg:954
 msgid "Upgraded battlefield computer system"
 msgstr ""
 
@@ -10498,7 +10792,7 @@ msgid "Missile Fortress"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1761
-msgid "Super Heavy Body - Wyvern"
+msgid "Heavy Body - Wyvern"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1762
@@ -10506,7 +10800,7 @@ msgid "Wyvern"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1764
-msgid "Super Heavy Body - Dragon"
+msgid "Multi Turret Body - Dragon"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1765
@@ -10912,150 +11206,159 @@ msgstr ""
 msgid "Flamer Viper Half-Tracks"
 msgstr "Vybrat všechny Kolopásové Jednotky"
 
-#: lib/framework/i18n.c:45
-#: lib/framework/i18n.c:99
+#: lib/framework/i18n.c:50
+#: lib/framework/i18n.c:107
 msgid "System locale"
 msgstr "Systémové místo"
 
-#: lib/framework/i18n.c:47
-#: lib/framework/i18n.c:101
+#: lib/framework/i18n.c:52
+#: lib/framework/i18n.c:109
 msgid "Czech"
 msgstr ""
 
-#: lib/framework/i18n.c:48
-#: lib/framework/i18n.c:102
+#: lib/framework/i18n.c:53
+#: lib/framework/i18n.c:110
 msgid "Danish"
 msgstr "Dánsky"
 
-#: lib/framework/i18n.c:49
-#: lib/framework/i18n.c:103
+#: lib/framework/i18n.c:54
+#: lib/framework/i18n.c:111
 msgid "German"
 msgstr "Německy"
 
-#: lib/framework/i18n.c:51
-#: lib/framework/i18n.c:105
+#: lib/framework/i18n.c:56
+#: lib/framework/i18n.c:113
 msgid "English (United Kingdom)"
 msgstr ""
 
-#: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:106
+#: lib/framework/i18n.c:57
+#: lib/framework/i18n.c:114
 #, fuzzy
 msgid "Spanish"
 msgstr "Dánsky"
 
-#: lib/framework/i18n.c:53
-#: lib/framework/i18n.c:107
+#: lib/framework/i18n.c:58
+#: lib/framework/i18n.c:115
 msgid "Estonian"
 msgstr ""
 
-#: lib/framework/i18n.c:55
-#: lib/framework/i18n.c:109
+#: lib/framework/i18n.c:60
+#: lib/framework/i18n.c:117
 #, fuzzy
 msgid "Finnish"
 msgstr "Dánsky"
 
-#: lib/framework/i18n.c:56
-#: lib/framework/i18n.c:110
+#: lib/framework/i18n.c:61
+#: lib/framework/i18n.c:118
 msgid "French"
 msgstr "Francouzsky"
 
-#: lib/framework/i18n.c:64
-#: lib/framework/i18n.c:118
+#: lib/framework/i18n.c:69
+#: lib/framework/i18n.c:126
 msgid "Frisian"
 msgstr ""
 
-#: lib/framework/i18n.c:65
-#: lib/framework/i18n.c:119
+#: lib/framework/i18n.c:70
+#: lib/framework/i18n.c:127
 #, fuzzy
 msgid "Irish"
 msgstr "Šarvátka"
 
-#: lib/framework/i18n.c:66
-#: lib/framework/i18n.c:120
+#: lib/framework/i18n.c:71
+#: lib/framework/i18n.c:128
+#, fuzzy
+msgid "Croatian"
+msgstr "Latinsky"
+
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:129
 msgid "Italian"
 msgstr "Italsky"
 
-#: lib/framework/i18n.c:68
-#: lib/framework/i18n.c:122
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:131
 msgid "Lithuanian"
 msgstr ""
 
-#: lib/framework/i18n.c:70
-#: lib/framework/i18n.c:124
+#: lib/framework/i18n.c:77
+#: lib/framework/i18n.c:133
 msgid "Norwegian"
 msgstr "Norsky"
 
-#: lib/framework/i18n.c:72
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:79
+#: lib/framework/i18n.c:135
 msgid "Dutch"
 msgstr "Holandsky"
 
-#: lib/framework/i18n.c:73
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:80
+#: lib/framework/i18n.c:136
 #, fuzzy
 msgid "Polish"
 msgstr "Anglicky"
 
-#: lib/framework/i18n.c:74
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:137
 #, fuzzy
 msgid "Brazilian Portuguese"
 msgstr "Portugalsky"
 
-#: lib/framework/i18n.c:75
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:82
+#: lib/framework/i18n.c:138
 #, fuzzy
 msgid "Portuguese"
 msgstr "Portugalsky"
 
-#: lib/framework/i18n.c:76
-#: lib/framework/i18n.c:130
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:139
 msgid "Romanian"
 msgstr ""
 
-#: lib/framework/i18n.c:77
-#: lib/framework/i18n.c:131
+#: lib/framework/i18n.c:84
+#: lib/framework/i18n.c:140
 msgid "Russian"
 msgstr "Rusky"
 
-#: lib/framework/i18n.c:78
-#: lib/framework/i18n.c:132
+#: lib/framework/i18n.c:85
+#: lib/framework/i18n.c:141
 msgid "Slovenian"
 msgstr ""
 
-#: lib/framework/i18n.c:87
-#: lib/framework/i18n.c:137
+#: lib/framework/i18n.c:94
+#: lib/framework/i18n.c:146
+msgid "Ukrainian"
+msgstr ""
+
+#: lib/framework/i18n.c:95
+#: lib/framework/i18n.c:147
 msgid "Simplified Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:88
-#: lib/framework/i18n.c:138
+#: lib/framework/i18n.c:96
+#: lib/framework/i18n.c:148
 msgid "Traditional Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:121
+#: lib/framework/i18n.c:130
 msgid "Latin"
 msgstr "Latinsky"
 
-#: lib/netplay/netplay.c:1112
-#: lib/netplay/netplay.c:1147
-#, c-format
-msgid "Player %u has the wrong game version.  Auto kicking."
+#: lib/netplay/netplay.c:1161
+#: lib/netplay/netplay.c:1942
+msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:1228
-#, c-format
-msgid "Player %u has the wrong password.  Auto kicking."
-msgstr ""
-
-#: lib/netplay/netplay.c:2759
+#: lib/netplay/netplay.c:2867
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2784
+#: lib/netplay/netplay.c:2892
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
+msgstr ""
+
+#: lib/netplay/netplay.c:3300
+msgid ", mods: "
 msgstr ""
 
 #: src/clparse.c:99
@@ -11204,188 +11507,188 @@ msgstr ""
 msgid "Player"
 msgstr "Hráč"
 
-#: src/design.c:455
-#: src/design.c:476
-#: src/design.c:3514
+#: src/design.c:457
+#: src/design.c:478
+#: src/design.c:3559
 msgid "New Vehicle"
 msgstr "Nové vozidlo"
 
-#: src/design.c:523
+#: src/design.c:525
 msgid "Vehicle Body"
 msgstr "Tělo vozidla"
 
-#: src/design.c:545
+#: src/design.c:547
 msgid "Vehicle Propulsion"
 msgstr "Pohon vozidla"
 
-#: src/design.c:568
-#: src/design.c:593
-#: src/design.c:619
+#: src/design.c:570
+#: src/design.c:595
+#: src/design.c:621
 msgid "Vehicle Turret"
 msgstr "Věž vozidla"
 
-#: src/design.c:640
+#: src/design.c:642
 msgid "Delete Design"
 msgstr "Smazat náčrtek"
 
-#: src/design.c:694
-#: src/design.c:742
+#: src/design.c:696
+#: src/design.c:744
 msgid "Kinetic Armour"
 msgstr "Pohybové brnění"
 
-#: src/design.c:703
-#: src/design.c:753
+#: src/design.c:705
+#: src/design.c:755
 msgid "Thermal Armour"
 msgstr "Tepelné brnění"
 
-#: src/design.c:719
-#: src/design.c:773
+#: src/design.c:721
+#: src/design.c:775
 #, fuzzy
 msgid "Engine Output"
 msgstr "Výfuk"
 
-#: src/design.c:727
-#: src/design.c:782
-#: src/design.c:1583
-#: src/design.c:1620
-#: src/design.c:1641
-#: src/design.c:1659
-#: src/design.c:1680
-#: src/design.c:1698
-#: src/design.c:1736
-#: src/design.c:1771
-#: src/design.c:1906
-#: src/design.c:1923
-#: src/design.c:1958
-#: src/design.c:1994
+#: src/design.c:729
+#: src/design.c:784
+#: src/design.c:1586
+#: src/design.c:1623
+#: src/design.c:1644
+#: src/design.c:1662
+#: src/design.c:1683
+#: src/design.c:1701
+#: src/design.c:1739
+#: src/design.c:1774
+#: src/design.c:1909
+#: src/design.c:1926
+#: src/design.c:1961
+#: src/design.c:1997
 msgid "Weight"
 msgstr "Hmotnost"
 
-#: src/design.c:813
-#: src/design.c:833
+#: src/design.c:815
+#: src/design.c:835
 msgid "Total Power Required"
 msgstr "Celkem požadovaná energie"
 
-#: src/design.c:846
-#: src/design.c:867
+#: src/design.c:848
+#: src/design.c:869
 msgid "Total Body Points"
 msgstr ""
 
-#: src/design.c:1063
-#: src/design.c:1095
+#: src/design.c:1065
+#: src/design.c:1097
 msgid "Power Usage"
 msgstr "Použitá energie"
 
-#: src/design.c:1346
+#: src/design.c:1349
 msgid "Transporter"
 msgstr "Transportér"
 
-#: src/design.c:1368
+#: src/design.c:1371
 msgid "Hydra "
 msgstr ""
 
-#: src/design.c:1565
+#: src/design.c:1568
 msgid "Sensor Range"
 msgstr "Dosah snímačů"
 
-#: src/design.c:1574
+#: src/design.c:1577
 msgid "Sensor Power"
 msgstr ""
 
-#: src/design.c:1611
+#: src/design.c:1614
 msgid "ECM Power"
 msgstr ""
 
-#: src/design.c:1633
-#: src/design.c:1650
-#: src/design.c:1672
-#: src/design.c:1689
+#: src/design.c:1636
+#: src/design.c:1653
+#: src/design.c:1675
+#: src/design.c:1692
 msgid "Build Points"
 msgstr ""
 
-#: src/design.c:1712
-#: src/design.c:1744
+#: src/design.c:1715
+#: src/design.c:1747
 msgid "Range"
 msgstr "Rozsah"
 
-#: src/design.c:1720
-#: src/design.c:1753
+#: src/design.c:1723
+#: src/design.c:1756
 msgid "Damage"
 msgstr "Poškození"
 
-#: src/design.c:1728
-#: src/design.c:1762
+#: src/design.c:1731
+#: src/design.c:1765
 msgid "Rate-of-Fire"
 msgstr ""
 
-#: src/design.c:1898
-#: src/design.c:1914
+#: src/design.c:1901
+#: src/design.c:1917
 msgid "Air Speed"
 msgstr "Rychlost letu"
 
-#: src/design.c:1934
-#: src/design.c:1967
+#: src/design.c:1937
+#: src/design.c:1970
 msgid "Road Speed"
 msgstr "Rychlost po cestě"
 
-#: src/design.c:1942
-#: src/design.c:1976
+#: src/design.c:1945
+#: src/design.c:1979
 msgid "Off-Road Speed"
 msgstr "Rychlost v terénu"
 
-#: src/design.c:1950
-#: src/design.c:1985
+#: src/design.c:1953
+#: src/design.c:1988
 msgid "Water Speed"
 msgstr "Rychlost po vodě"
 
-#: src/design.c:2119
+#: src/design.c:2122
 msgid "Weapons"
 msgstr "Zbraně"
 
-#: src/design.c:2143
+#: src/design.c:2144
 msgid "Systems"
 msgstr ""
 
-#: src/display3d.c:507
+#: src/display3d.c:523
 #, fuzzy
 msgid "Player left"
 msgstr "Hráč"
 
-#: src/display3d.c:507
+#: src/display3d.c:523
 #, fuzzy
 msgid "Player dropped"
 msgstr "Hráč"
 
-#: src/display.c:1732
+#: src/display.c:1704
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nemohu stavět. Ropný vrt hoří."
 
-#: src/display.c:1936
-#: src/display.c:2555
+#: src/display.c:1909
+#: src/display.c:2524
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Poškození %d%% - Zkušenosti %d, %s"
 
-#: src/display.c:1952
+#: src/display.c:1925
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Poškození %d%% - Zkušenosti %d, %s"
 
-#: src/display.c:2158
+#: src/display.c:2131
 #, fuzzy
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Nákladní auto dostalo rozkaz postavit ropnou věž"
 
-#: src/droid.c:192
+#: src/droid.c:198
 msgid "Unit Lost!"
 msgstr "Jednotka ztracena!"
 
-#: src/droid.c:1443
+#: src/droid.c:1330
 #, fuzzy
 msgid "Structure Restored"
 msgstr "Budova obnovena"
 
-#: src/droid.c:3153
+#: src/droid.c:2913
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -11393,7 +11696,7 @@ msgstr[0] "Skupina %u vybrána - %u Jednotka"
 msgstr[1] "Skupina %u vybrána - %u Jednotky"
 msgstr[2] "Skupina %u vybrána - %u Jednotek"
 
-#: src/droid.c:3166
+#: src/droid.c:2926
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -11401,7 +11704,7 @@ msgstr[0] "%u jednotka začleněna do Skupiny %u"
 msgstr[1] "%u jednotky začleněny do Skupiny %u"
 msgstr[2] "%u jednotek začleněno do Skupiny %u"
 
-#: src/droid.c:3179
+#: src/droid.c:2939
 #, fuzzy, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -11409,7 +11712,7 @@ msgstr[0] "Zameřeno na skupinu %u - %u jednotka"
 msgstr[1] "Zameřeno na skupinu %u - %u jednotky"
 msgstr[2] "Zameřeno na skupinu %u - %u jednotek"
 
-#: src/droid.c:3183
+#: src/droid.c:2943
 #, fuzzy, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -11417,125 +11720,124 @@ msgstr[0] "Vyrovnání se skupinou %u - %u jednotka"
 msgstr[1] "Vyrovnání se skupinou %u - %u jednotky"
 msgstr[2] "Vyrovnání se skupinou %u - %u jednotek"
 
-#: src/droid.c:3424
+#: src/droid.c:3168
 msgid "Rookie"
 msgstr "Nováček"
 
-#: src/droid.c:3425
+#: src/droid.c:3169
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelenáč"
 
-#: src/droid.c:3426
+#: src/droid.c:3170
 #, fuzzy
 msgid "Trained"
 msgstr "Trénovaný"
 
-#: src/droid.c:3427
+#: src/droid.c:3171
 msgid "Regular"
 msgstr "Běžný"
 
-#: src/droid.c:3428
+#: src/droid.c:3172
 msgid "Professional"
 msgstr "Profesionální"
 
-#: src/droid.c:3429
+#: src/droid.c:3173
 msgid "Veteran"
 msgstr "Veterán"
 
-#: src/droid.c:3430
+#: src/droid.c:3174
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3431
+#: src/droid.c:3175
 msgid "Special"
 msgstr "Speciální"
 
-#: src/droid.c:3432
+#: src/droid.c:3176
 msgid "Hero"
 msgstr "Hrdina"
 
-#: src/frontend.c:250
+#: src/frontend.c:252
 #, fuzzy
 msgid "Single Player"
 msgstr "Kampaň pro Jednoho Hráče"
 
-#: src/frontend.c:251
+#: src/frontend.c:253
 #, fuzzy
 msgid "Multi Player"
 msgstr "Hra pro Více Hráčů"
 
-#: src/frontend.c:252
-#: src/frontend.c:310
+#: src/frontend.c:254
+#: src/frontend.c:312
 msgid "Tutorial"
 msgstr "Tutoriál"
 
-#: src/frontend.c:253
-#: src/ingameop.c:264
+#: src/frontend.c:255
 msgid "Options"
 msgstr "Nastavení"
 
-#: src/frontend.c:254
+#: src/frontend.c:256
 #, fuzzy
 msgid "View Intro"
 msgstr "Pohled na východ"
 
-#: src/frontend.c:256
+#: src/frontend.c:258
 msgid "Quit Game"
 msgstr "Ukončit Hru"
 
-#: src/frontend.c:258
+#: src/frontend.c:260
 msgid "MAIN MENU"
 msgstr "HLAVNÍ MENU"
 
-#: src/frontend.c:311
+#: src/frontend.c:313
 msgid "Fast Play"
 msgstr "Rychlá hra"
 
-#: src/frontend.c:312
+#: src/frontend.c:314
 msgid "TUTORIALS"
 msgstr "TUTORIÁLY"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:314
-#: src/frontend.c:372
+#: src/frontend.c:316
+#: src/frontend.c:374
 #: src/frontend.c:525
-#: src/frontend.c:583
-#: src/frontend.c:744
-#: src/frontend.c:883
-#: src/frontend.c:990
-#: src/frontend.c:1189
-#: src/frontend.c:1332
+#: src/frontend.c:587
+#: src/frontend.c:729
+#: src/frontend.c:868
+#: src/frontend.c:975
+#: src/frontend.c:1182
+#: src/frontend.c:1325
 msgctxt "menu"
 msgid "Return"
 msgstr "Zpět"
 
-#: src/frontend.c:366
+#: src/frontend.c:368
 msgid "New Campaign"
 msgstr "Nová kampaň"
 
-#: src/frontend.c:367
+#: src/frontend.c:369
 #, fuzzy
 msgid "Start Skirmish Game"
 msgstr "Začni hostovat hru"
 
-#: src/frontend.c:368
+#: src/frontend.c:370
 msgid "Challenges"
 msgstr ""
 
-#: src/frontend.c:369
-#: src/ingameop.c:269
+#: src/frontend.c:371
+#: src/ingameop.c:293
 msgid "Load Game"
 msgstr "Nahraj Hru"
 
-#: src/frontend.c:371
+#: src/frontend.c:373
 msgid "SINGLE PLAYER"
 msgstr "HRA JEDNOHO HRÁČE"
 
-#: src/frontend.c:467
-#: src/ingameop.c:406
-#: src/mission.c:2539
-#: src/mission.c:2644
+#: src/frontend.c:469
+#: src/ingameop.c:519
+#: src/mission.c:2529
+#: src/mission.c:2634
 msgid "Load Saved Game"
 msgstr "Načti Uloženou Hru"
 
@@ -11551,437 +11853,453 @@ msgstr ""
 msgid "Join Game"
 msgstr "Připojit se ke hře"
 
-#: src/frontend.c:576
-#: src/multiint.c:1187
+#: src/frontend.c:580
+#: src/multiint.c:1252
 msgid "OPTIONS"
 msgstr "NASTAVENÍ"
 
-#: src/frontend.c:577
+#: src/frontend.c:581
 msgid "Game Options"
 msgstr "Herní nastavení"
 
-#: src/frontend.c:578
+#: src/frontend.c:582
 msgid "Graphics Options"
 msgstr "Grafická nastavení"
 
-#: src/frontend.c:579
+#: src/frontend.c:583
 #, fuzzy
 msgid "Video Options"
 msgstr "Zvuková nastavení"
 
-#: src/frontend.c:580
+#: src/frontend.c:584
+#: src/ingameop.c:288
 msgid "Audio Options"
 msgstr "Zvuková nastavení"
 
-#: src/frontend.c:581
+#: src/frontend.c:585
 #, fuzzy
 msgid "Mouse Options"
 msgstr "Herní nastavení"
 
-#: src/frontend.c:582
+#: src/frontend.c:586
 msgid "Key Mappings"
 msgstr "Mapování kláves"
 
-#: src/frontend.c:656
+#: src/frontend.c:648
 msgid "Video Playback"
 msgstr "Přehrávání videa"
 
-#: src/frontend.c:660
-#: src/frontend.c:837
+#: src/frontend.c:652
+#: src/frontend.c:822
 msgid "1X"
 msgstr ""
 
-#: src/frontend.c:664
-#: src/frontend.c:827
+#: src/frontend.c:656
+#: src/frontend.c:812
 msgid "2X"
 msgstr ""
 
-#: src/frontend.c:668
-#: src/frontend.c:832
-#: src/frontend.c:955
-#: src/frontend.c:1013
+#: src/frontend.c:660
+#: src/frontend.c:817
+#: src/frontend.c:940
+#: src/frontend.c:998
 msgid "Fullscreen"
 msgstr "Celá obrazovka"
 
-#: src/frontend.c:678
+#: src/frontend.c:670
 msgid "Screen Shake"
 msgstr ""
 
-#: src/frontend.c:681
-#: src/frontend.c:719
-#: src/frontend.c:732
-#: src/frontend.c:768
-#: src/frontend.c:804
-#: src/frontend.c:813
-#: src/frontend.c:976
-#: src/frontend.c:1066
-#: src/frontend.c:1104
-#: src/frontend.c:1140
-#: src/frontend.c:1152
-#: src/frontend.c:1164
-#: src/frontend.c:1176
-#: src/frontend.c:1212
-#: src/frontend.c:1225
-#: src/frontend.c:1253
+#: src/frontend.c:673
+#: src/frontend.c:703
+#: src/frontend.c:717
+#: src/frontend.c:753
+#: src/frontend.c:789
+#: src/frontend.c:798
+#: src/frontend.c:961
+#: src/frontend.c:1059
+#: src/frontend.c:1097
+#: src/frontend.c:1133
+#: src/frontend.c:1145
+#: src/frontend.c:1157
+#: src/frontend.c:1169
+#: src/frontend.c:1205
+#: src/frontend.c:1218
+#: src/frontend.c:1232
+#: src/frontend.c:1246
 msgid "On"
 msgstr "Zapnuto"
 
-#: src/frontend.c:685
-#: src/frontend.c:715
-#: src/frontend.c:724
-#: src/frontend.c:736
-#: src/frontend.c:763
-#: src/frontend.c:799
-#: src/frontend.c:817
-#: src/frontend.c:980
-#: src/frontend.c:1061
-#: src/frontend.c:1099
-#: src/frontend.c:1144
-#: src/frontend.c:1156
-#: src/frontend.c:1168
-#: src/frontend.c:1180
-#: src/frontend.c:1207
-#: src/frontend.c:1220
-#: src/frontend.c:1248
+#: src/frontend.c:677
+#: src/frontend.c:699
+#: src/frontend.c:709
+#: src/frontend.c:721
+#: src/frontend.c:748
+#: src/frontend.c:784
+#: src/frontend.c:802
+#: src/frontend.c:965
+#: src/frontend.c:1054
+#: src/frontend.c:1092
+#: src/frontend.c:1137
+#: src/frontend.c:1149
+#: src/frontend.c:1161
+#: src/frontend.c:1173
+#: src/frontend.c:1200
+#: src/frontend.c:1213
+#: src/frontend.c:1227
+#: src/frontend.c:1241
 msgid "Off"
 msgstr "Vypnuto"
 
-#: src/frontend.c:690
-#: src/multiint.c:1239
+#: src/frontend.c:682
+#: src/multiint.c:1321
 msgid "Fog"
 msgstr "Mlha"
 
-#: src/frontend.c:693
-#: src/frontend.c:786
+#: src/frontend.c:685
+#: src/frontend.c:771
 msgid "Mist"
 msgstr "Mlha"
 
-#: src/frontend.c:697
-#: src/frontend.c:779
-#: src/multiint.c:1241
+#: src/frontend.c:689
+#: src/frontend.c:764
+#: src/multiint.c:1323
 msgid "Fog Of War"
 msgstr "Válečná mlha"
 
-#: src/frontend.c:704
+#: src/frontend.c:696
 #: src/frontend.c:708
 msgid "Subtitles"
 msgstr "Titulky"
 
-#: src/frontend.c:729
+#: src/frontend.c:714
 msgid "Shadows"
 msgstr "Stíny"
 
-#: src/frontend.c:740
+#: src/frontend.c:725
 #, fuzzy
 msgid "GRAPHICS OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
-#: src/frontend.c:871
-#: src/ingameop.c:153
+#: src/frontend.c:856
+#: src/ingameop.c:177
 msgid "Voice Volume"
 msgstr "Hlasitost řeči"
 
-#: src/frontend.c:875
-#: src/ingameop.c:158
+#: src/frontend.c:860
+#: src/ingameop.c:182
 msgid "FX Volume"
 msgstr "Hlasitost efektů"
 
-#: src/frontend.c:879
-#: src/ingameop.c:163
+#: src/frontend.c:864
+#: src/ingameop.c:187
 msgid "Music Volume"
 msgstr "Hlasitost hudby"
 
-#: src/frontend.c:886
+#: src/frontend.c:871
 #, fuzzy
 msgid "AUDIO OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
-#: src/frontend.c:951
+#: src/frontend.c:936
 msgid "Graphics Mode*"
 msgstr "Grafický mód*"
 
-#: src/frontend.c:959
-#: src/frontend.c:1008
+#: src/frontend.c:944
+#: src/frontend.c:993
 msgid "Windowed"
 msgstr ""
 
-#: src/frontend.c:963
+#: src/frontend.c:948
 msgid "Resolution*"
 msgstr "Rozlišení*"
 
-#: src/frontend.c:968
+#: src/frontend.c:953
 msgid "Texture size"
 msgstr "Velikost textury"
 
-#: src/frontend.c:972
+#: src/frontend.c:957
 msgid "Vertical sync*"
 msgstr ""
 
-#: src/frontend.c:984
+#: src/frontend.c:969
 msgid "* Takes effect on game restart"
 msgstr "* Projeví se až po restartu hry"
 
-#: src/frontend.c:987
+#: src/frontend.c:972
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
-#: src/frontend.c:1137
+#: src/frontend.c:1130
 #, fuzzy
 msgid "Reverse Rotation"
 msgstr "Obrať myš"
 
-#: src/frontend.c:1148
+#: src/frontend.c:1141
 msgid "Trap Cursor"
 msgstr ""
 
-#: src/frontend.c:1160
-msgid "Colored Cursors *"
+#: src/frontend.c:1153
+msgid "Colored Cursors*"
 msgstr ""
 
-#: src/frontend.c:1173
+#: src/frontend.c:1166
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Herní nastavení"
 
-#: src/frontend.c:1183
+#: src/frontend.c:1176
 msgid "* May negatively affect performance"
 msgstr ""
 
-#: src/frontend.c:1186
+#: src/frontend.c:1179
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
-#: src/frontend.c:1234
-#, fuzzy
-msgid "Hardware"
-msgstr "Těžká"
-
-#: src/frontend.c:1239
-msgid "Software (coloured)"
-msgstr ""
-
-#: src/frontend.c:1287
-#: src/frontend.c:1353
+#: src/frontend.c:1280
+#: src/frontend.c:1346
 msgid "Difficulty"
 msgstr "Obtížnost"
 
-#: src/frontend.c:1291
-#: src/frontend.c:1361
-#: src/frontend.c:1393
+#: src/frontend.c:1284
+#: src/frontend.c:1354
+#: src/frontend.c:1385
 msgid "Easy"
 msgstr "Snadná"
 
-#: src/frontend.c:1294
-#: src/frontend.c:1364
-#: src/frontend.c:1385
+#: src/frontend.c:1287
+#: src/frontend.c:1357
+#: src/frontend.c:1377
 msgid "Normal"
 msgstr "Normální"
 
-#: src/frontend.c:1298
-#: src/frontend.c:1367
-#: src/frontend.c:1389
+#: src/frontend.c:1291
+#: src/frontend.c:1360
+#: src/frontend.c:1381
 msgid "Hard"
 msgstr "Těžká"
 
-#: src/frontend.c:1303
-#: src/frontend.c:1354
+#: src/frontend.c:1296
+#: src/frontend.c:1347
 msgid "Scroll Speed"
 msgstr "Rychlost rolování"
 
-#: src/frontend.c:1317
-#: src/frontend.c:1351
+#: src/frontend.c:1310
+#: src/frontend.c:1344
 msgid "Language"
 msgstr "Jazyk"
 
-#: src/frontend.c:1329
-#: src/frontend.c:1352
+#: src/frontend.c:1322
+#: src/frontend.c:1345
 msgid "Unit Colour"
 msgstr "Barva jednotky"
 
-#: src/frontend.c:1335
-#: src/frontend.c:1355
+#: src/frontend.c:1328
+#: src/frontend.c:1348
 msgid "GAME OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
-#: src/hci.c:1010
-#: src/hci.c:3798
-#: src/hci.c:3949
-#: src/hci.c:4402
-#: src/hci.c:5606
-#: src/intelmap.c:532
+#: src/frontend.c:1698
+#: src/multiint.c:2233
+msgid "Active mods: "
+msgstr ""
+
+#: src/hci.c:1013
+#: src/hci.c:3789
+#: src/hci.c:3940
+#: src/hci.c:4393
+#: src/hci.c:5597
+#: src/intelmap.c:543
 #: src/intorder.c:661
 #: src/loadsave.c:256
 #: src/multimenu.c:479
-#: src/multimenu.c:1338
+#: src/multimenu.c:1329
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
 msgid "Close"
 msgstr "Zavřít"
 
-#: src/hci.c:1356
+#: src/hci.c:1358
 #, fuzzy
 msgid "MAP SAVED!"
 msgstr "HRA ULOŽENA!"
 
-#: src/hci.c:1703
-#: src/loop.c:520
-#: src/loop.c:536
+#: src/hci.c:1705
+#: src/loop.c:526
+#: src/loop.c:542
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "HRA ULOŽENA!"
 
-#: src/hci.c:2109
+#: src/hci.c:2112
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2132
+#: src/hci.c:2135
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Hráč %u podvádí ( ladící menu ) sebe sama novou budovou: %s"
 
-#: src/hci.c:2147
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.c:2168
+#: src/hci.c:2171
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:3700
+#: src/hci.c:3691
 msgid "Commanders (F6)"
 msgstr "Velitelé (F6)"
 
-#: src/hci.c:3716
+#: src/hci.c:3707
 msgid "Intelligence Display (F5)"
 msgstr "Zpravodajský display (F5)"
 
-#: src/hci.c:3732
+#: src/hci.c:3723
 msgid "Manufacture (F1)"
 msgstr "Výroba (F1)"
 
-#: src/hci.c:3748
+#: src/hci.c:3739
 msgid "Design (F4)"
 msgstr "Konstrukce (F4)"
 
-#: src/hci.c:3764
+#: src/hci.c:3755
 msgid "Research (F2)"
 msgstr "Výzkum (F2)"
 
-#: src/hci.c:3780
+#: src/hci.c:3771
 msgid "Build (F3)"
 msgstr "Stavba (F3)"
 
-#: src/hci.c:3860
-#: src/multiint.c:1286
+#: src/hci.c:3851
+#: src/multiint.c:1368
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Energie"
 
-#: src/hci.c:4044
+#: src/hci.c:4035
 #, fuzzy
 msgid "Tile"
 msgstr "soubor"
 
-#: src/hci.c:4045
+#: src/hci.c:4036
 #, fuzzy
 msgid "Place tiles on map"
 msgstr "Nastavení limitu budov"
 
-#: src/hci.c:4054
+#: src/hci.c:4045
 msgid "Unit"
 msgstr "Jednotka"
 
-#: src/hci.c:4055
+#: src/hci.c:4046
 #, fuzzy
 msgid "Place Unit on map"
 msgstr "Nastavení limitu budov"
 
-#: src/hci.c:4063
+#: src/hci.c:4054
 msgid "Struct"
 msgstr "Stavba"
 
-#: src/hci.c:4064
+#: src/hci.c:4055
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Nastavení limitu budov"
 
-#: src/hci.c:4072
+#: src/hci.c:4063
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4073
+#: src/hci.c:4064
 #, fuzzy
 msgid "Place Features on map"
 msgstr "Nastavení limitu budov"
 
-#: src/hci.c:4084
+#: src/hci.c:4075
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "Hostitel opustil hru!"
 
-#: src/hci.c:4098
+#: src/hci.c:4089
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4123
-#: src/ingameop.c:121
-#: src/ingameop.c:252
-#: src/ingameop.c:257
+#: src/hci.c:4114
+#: src/ingameop.c:119
+#: src/ingameop.c:276
+#: src/ingameop.c:281
 msgid "Quit"
 msgstr "Ukončit"
 
-#: src/hci.c:4124
+#: src/hci.c:4115
 msgid "Exit Game"
 msgstr "Ukončit hru"
 
-#: src/hci.c:4487
-#: src/intdisplay.c:267
+#: src/hci.c:4478
+#: src/intdisplay.c:270
 msgid "Progress Bar"
 msgstr "Panel průběhu"
 
-#: src/hci.c:5521
+#: src/hci.c:5512
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci.c:5540
+#: src/hci.c:5531
 msgid "Loop Production"
 msgstr "Opakovat výrobu"
 
-#: src/hci.c:5631
+#: src/hci.c:5622
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5648
+#: src/hci.c:5639
 msgid "Tab Scroll right"
 msgstr ""
 
 #: src/ingameop.c:118
-#: src/ingameop.c:179
-#: src/ingameop.c:261
+#: src/ingameop.c:203
+#: src/ingameop.c:285
 msgid "Resume Game"
 msgstr "Pokračovat ve hře"
 
-#: src/ingameop.c:171
-#: src/ingameop.c:435
+#: src/ingameop.c:142
+msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
+msgstr ""
+
+#: src/ingameop.c:195
+#: src/ingameop.c:548
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr ""
 
-#: src/ingameop.c:176
-#: src/ingameop.c:439
+#: src/ingameop.c:200
+#: src/ingameop.c:552
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr ""
 
-#: src/ingameop.c:271
-#: src/ingameop.c:410
-#: src/mission.c:2529
-#: src/mission.c:2647
+#: src/ingameop.c:295
+#: src/ingameop.c:523
+#: src/mission.c:2516
+#: src/mission.c:2637
 msgid "Save Game"
 msgstr "Uložit hru"
+
+#: src/ingameop.c:364
+#, fuzzy
+msgid "Host has quit the game!"
+msgstr "Hostitel opustil hru!"
+
+#: src/ingameop.c:370
+msgid "The game can't continue without the host."
+msgstr ""
+
+#: src/ingameop.c:376
+msgid "-->  QUIT  <--"
+msgstr ""
 
 #: src/intdisplay.c:197
 #, fuzzy
@@ -11992,44 +12310,44 @@ msgstr "Panel průběhu"
 msgid "Construction Progress"
 msgstr ""
 
-#: src/intdisplay.c:260
+#: src/intdisplay.c:263
 msgid "Power Accrued"
 msgstr ""
 
-#: src/intelmap.c:245
-#: src/keybind.c:1330
+#: src/intelmap.c:247
+#: src/keybind.c:1342
 msgid "PAUSED"
 msgstr "PAUZA"
 
-#: src/intelmap.c:406
+#: src/intelmap.c:413
 msgid "Research Update"
 msgstr ""
 
-#: src/intelmap.c:410
+#: src/intelmap.c:417
 msgid "Project Goals"
 msgstr "Cíle projektu"
 
-#: src/intelmap.c:413
+#: src/intelmap.c:420
 msgid "Current Objective"
 msgstr ""
 
-#: src/intelmap.c:1487
+#: src/intelmap.c:1516
 msgid "New Intelligence Report"
 msgstr ""
 
 #: src/intorder.c:179
-#: src/keymap.c:391
+#: src/keymap.c:390
 #, fuzzy
 msgid "Short Range"
 msgstr "Krátký dostřel"
 
 #: src/intorder.c:180
-#: src/keymap.c:398
+#: src/keymap.c:397
 msgid "Long Range"
 msgstr "Dlouhý dostřel"
 
 #: src/intorder.c:181
-#: src/keymap.c:390
+#: src/keymap.c:389
 msgid "Optimum Range"
 msgstr "optimální dostřel"
 
@@ -12053,37 +12371,37 @@ msgid "Fire-At-Will"
 msgstr ""
 
 #: src/intorder.c:186
-#: src/keymap.c:386
+#: src/keymap.c:385
 msgid "Return Fire"
 msgstr "Opětuj palbu"
 
 #: src/intorder.c:187
-#: src/keymap.c:384
+#: src/keymap.c:383
 msgid "Hold Fire"
 msgstr "Nestřílej"
 
 #: src/intorder.c:188
-#: src/keymap.c:393
+#: src/keymap.c:392
 msgid "Patrol"
 msgstr ""
 
 #: src/intorder.c:189
-#: src/keymap.c:392
+#: src/keymap.c:391
 msgid "Pursue"
 msgstr ""
 
 #: src/intorder.c:190
-#: src/keymap.c:388
+#: src/keymap.c:387
 msgid "Guard Position"
 msgstr "Braň pozici"
 
 #: src/intorder.c:191
-#: src/keymap.c:395
+#: src/keymap.c:394
 msgid "Hold Position"
 msgstr "Drž pozici"
 
 #: src/intorder.c:192
-#: src/keymap.c:394
+#: src/keymap.c:393
 msgid "Return For Repair"
 msgstr ""
 
@@ -12092,7 +12410,7 @@ msgid "Return To HQ"
 msgstr ""
 
 #: src/intorder.c:194
-#: src/keymap.c:396
+#: src/keymap.c:395
 msgid "Go to Transport"
 msgstr "Nastup do Transportu"
 
@@ -12126,598 +12444,618 @@ msgstr ""
 msgid "Circle"
 msgstr "soubor"
 
-#: src/keybind.c:133
+#: src/keybind.c:134
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Omlouváme se, ale tento podvod je vypnutý ve hře pro více hráčů."
 
-#: src/keybind.c:139
+#: src/keybind.c:140
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr ""
 
-#: src/keybind.c:198
+#: src/keybind.c:199
 msgid "Lets us see what you see!"
 msgstr "Ukaž nám co vidíš!"
 
-#: src/keybind.c:200
+#: src/keybind.c:201
 #, fuzzy
 msgid "Fine, weapon & sensor display is off!"
 msgstr "Fine, snímač displeje je vypnutý!"
 
-#: src/keybind.c:338
-#: src/keybind.c:368
-#: src/keybind.c:385
-#: src/keybind.c:429
-#: src/keybind.c:534
-#: src/keybind.c:574
-#: src/keybind.c:680
-#: src/keybind.c:1230
-#: src/keybind.c:1288
-#: src/keybind.c:1379
-#: src/keybind.c:1474
-#: src/keybind.c:1825
-#: src/keybind.c:1865
+#: src/keybind.c:339
+#: src/keybind.c:369
+#: src/keybind.c:386
+#: src/keybind.c:430
+#: src/keybind.c:535
+#: src/keybind.c:575
+#: src/keybind.c:681
+#: src/keybind.c:1232
+#: src/keybind.c:1289
+#: src/keybind.c:1391
+#: src/keybind.c:1487
+#: src/keybind.c:1838
+#: src/keybind.c:1878
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
 
-#: src/keybind.c:339
+#: src/keybind.c:340
 #, fuzzy
 msgid "Hard as nails!!!"
 msgstr "jako ocel"
 
-#: src/keybind.c:353
+#: src/keybind.c:354
 #, fuzzy
 msgid "Takings thing easy!"
 msgstr "Věci jdou lehce!"
 
-#: src/keybind.c:369
+#: src/keybind.c:370
 msgid "1000 big ones!!!"
 msgstr ""
 
-#: src/keybind.c:386
+#: src/keybind.c:387
 msgid "Power overwhelming"
 msgstr "Ohromující výkon"
 
-#: src/keybind.c:401
+#: src/keybind.c:402
 msgid "Back to normality!"
 msgstr "Zpátky do normálu!"
 
-#: src/keybind.c:414
+#: src/keybind.c:415
 msgid "Getting tricky!"
 msgstr ""
 
-#: src/keybind.c:430
+#: src/keybind.c:431
 msgid "Twice as nice!"
 msgstr ""
 
-#: src/keybind.c:441
+#: src/keybind.c:442
 msgid "FPS display is enabled."
 msgstr "Zobrazení FPS je zapnuté."
 
-#: src/keybind.c:445
+#: src/keybind.c:446
 msgid "FPS display is disabled."
 msgstr "Zobrazení FPS je vypnuté."
 
-#: src/keybind.c:466
+#: src/keybind.c:467
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr ""
 
-#: src/keybind.c:498
+#: src/keybind.c:499
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr ""
 
-#: src/keybind.c:535
+#: src/keybind.c:536
 msgid "Infinite power disabled"
 msgstr ""
 
-#: src/keybind.c:535
+#: src/keybind.c:536
 msgid "Infinite power enabled"
 msgstr ""
 
-#: src/keybind.c:575
+#: src/keybind.c:576
 msgid "All items made available"
 msgstr ""
 
-#: src/keybind.c:681
+#: src/keybind.c:682
 msgid "Fog on"
 msgstr "Zapnutá mlha"
 
-#: src/keybind.c:681
+#: src/keybind.c:682
 #, fuzzy
 msgid "Fog off"
 msgstr "Vypnutá mlha"
 
-#: src/keybind.c:1117
+#: src/keybind.c:1121
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1117
+#: src/keybind.c:1121
 msgid "Ending Mission."
 msgstr ""
 
-#: src/keybind.c:1231
+#: src/keybind.c:1233
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1231
+#: src/keybind.c:1233
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1289
+#: src/keybind.c:1290
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1289
+#: src/keybind.c:1290
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1301
+#: src/keybind.c:1302
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1380
+#: src/keybind.c:1311
+#, c-format
+msgid "Trap cursor %s"
+msgstr ""
+
+#: src/keybind.c:1392
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1411
+#: src/keybind.c:1423
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1412
+#: src/keybind.c:1424
 #, fuzzy
 msgid "Researched"
 msgstr "Výzkum"
 
-#: src/keybind.c:1432
+#: src/keybind.c:1445
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1435
+#: src/keybind.c:1448
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1438
+#: src/keybind.c:1451
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1460
+#: src/keybind.c:1473
 msgid "Demo mode off - Returning to normal game mode"
 msgstr ""
 
-#: src/keybind.c:1475
+#: src/keybind.c:1488
 msgid "Debug menu is Open"
 msgstr ""
 
-#: src/keybind.c:1506
+#: src/keybind.c:1519
 #, fuzzy
 msgid "Unable to locate any resource extractors!"
 msgstr "Nelze lokalizovat žádný sběrač surovin!"
 
-#: src/keybind.c:1727
+#: src/keybind.c:1740
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.c:1733
+#: src/keybind.c:1746
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.c:1739
+#: src/keybind.c:1752
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.c:1824
+#: src/keybind.c:1837
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1826
+#: src/keybind.c:1839
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "Nepřítel zničen podváděním!"
 
-#: src/keybind.c:1866
+#: src/keybind.c:1879
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2393
+#: src/keybind.c:2398
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2405
+#: src/keybind.c:2410
 msgid "Unable to locate HQ!"
 msgstr "Nelze nalézt HQ!"
 
-#: src/keybind.c:2416
-msgid "Formation speed limiting OFF"
+#: src/keybind.c:2417
+msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2420
-msgid "Formation speed limiting ON"
+#: src/keybind.c:2466
+msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2550
-#: src/keybind.c:2591
-#: src/keybind.c:2613
+#: src/keybind.c:2471
+msgid "Vertical rotation direction: Flipped"
+msgstr ""
+
+#: src/keybind.c:2480
+msgid "Screen shake when things die: Off"
+msgstr ""
+
+#: src/keybind.c:2485
+msgid "Screen shake when things die: On"
+msgstr ""
+
+#: src/keybind.c:2530
+#: src/keybind.c:2573
+#, fuzzy
+msgid "Sorry, but game speed cannot be changed in multiplayer."
+msgstr "Omlouváme se, ale tento podvod je vypnutý ve hře pro více hráčů."
+
+#: src/keybind.c:2551
+#: src/keybind.c:2594
+#: src/keybind.c:2616
 #, fuzzy
 msgid "Game Speed Reset"
 msgstr "Restartování herní rychlosti"
 
-#: src/keybind.c:2554
+#: src/keybind.c:2555
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Rychlost Hry Zvýšena na %3.1f"
 
-#: src/keybind.c:2595
+#: src/keybind.c:2598
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Rychlost Hry Snížena na %3.1f"
 
-#: src/keybind.c:2625
+#: src/keybind.c:2628
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2629
+#: src/keybind.c:2632
 msgid "Build menu will not reopen"
 msgstr ""
 
-#: src/keybind.c:2641
+#: src/keybind.c:2644
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2645
+#: src/keybind.c:2648
 msgid "Radar showing player colors"
 msgstr "Radar ukazuje barvy hráčů"
 
-#: src/keybind.c:2662
+#: src/keybind.c:2669
 msgid "Radar showing only objects"
 msgstr "Radar ukazuje pouze objekty"
 
-#: src/keybind.c:2665
+#: src/keybind.c:2672
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2668
+#: src/keybind.c:2675
 msgid "Radar showing terrain"
 msgstr "Radar ukazuje terén"
 
-#: src/keybind.c:2671
+#: src/keybind.c:2678
+#, fuzzy
+msgid "Radar showing revealed terrain"
+msgstr "Radar ukazuje terén"
+
+#: src/keybind.c:2681
 msgid "Radar showing height"
 msgstr "Radar ukazuje výšku"
 
-#: src/keyedit.c:357
+#: src/keyedit.c:373
 msgid "KEY MAPPING"
 msgstr "MAPOVÁNÍ KLÁVES"
 
-#: src/keyedit.c:379
-#: src/multiint.c:617
-#: src/multiint.c:659
-#: src/multiint.c:1054
-#: src/multiint.c:1372
+#: src/keyedit.c:395
+#: src/multiint.c:637
+#: src/multiint.c:680
+#: src/multiint.c:1070
+#: src/multiint.c:1454
 msgid "Return To Previous Screen"
 msgstr "Zpět na Předchozí Obrazovku"
 
-#: src/keyedit.c:384
+#: src/keyedit.c:400
 msgid "Select Default"
 msgstr "Obnovit Původní"
 
-#: src/keymap.c:294
+#: src/keymap.c:295
 msgid "Manufacture"
 msgstr ""
 
-#: src/keymap.c:295
+#: src/keymap.c:296
 msgid "Research"
 msgstr "Výzkum"
 
-#: src/keymap.c:296
+#: src/keymap.c:297
 msgid "Build"
 msgstr "Stavět"
 
-#: src/keymap.c:297
+#: src/keymap.c:298
 msgid "Design"
 msgstr "Návrh"
 
-#: src/keymap.c:298
+#: src/keymap.c:299
 msgid "Intelligence Display"
 msgstr ""
 
-#: src/keymap.c:299
+#: src/keymap.c:300
 msgid "Commanders"
 msgstr ""
 
-#: src/keymap.c:300
+#: src/keymap.c:301
 msgid "Toggle Radar"
 msgstr ""
 
-#: src/keymap.c:301
+#: src/keymap.c:302
 msgid "Toggle Console Display"
 msgstr ""
 
-#: src/keymap.c:302
+#: src/keymap.c:303
 msgid "Toggle Damage Bars On/Off"
 msgstr ""
 
-#: src/keymap.c:303
+#: src/keymap.c:304
 msgid "Take Screen Shot"
 msgstr "Pořídit snímek obrazovky"
 
-#: src/keymap.c:304
+#: src/keymap.c:305
 msgid "Toggle Formation Speed Limiting"
 msgstr ""
 
-#: src/keymap.c:305
+#: src/keymap.c:306
 msgid "View Location of Previous Message"
 msgstr "Zobrazit pozici předchozí zprávy"
 
-#: src/keymap.c:310
+#: src/keymap.c:311
 #, fuzzy
 msgid "Assign Group 0"
 msgstr "Přiřadit skupině 0"
 
-#: src/keymap.c:311
+#: src/keymap.c:312
 #, fuzzy
 msgid "Assign Group 1"
 msgstr "Přiřadit skupině 1"
 
-#: src/keymap.c:312
+#: src/keymap.c:313
 msgid "Assign Group 2"
 msgstr "Přiřadit skupině 2"
 
-#: src/keymap.c:313
+#: src/keymap.c:314
 #, fuzzy
 msgid "Assign Group 3"
 msgstr "Přiřadit skupině 3"
 
-#: src/keymap.c:314
+#: src/keymap.c:315
 #, fuzzy
 msgid "Assign Group 4"
 msgstr "Přiřadit skupině 4"
 
-#: src/keymap.c:315
+#: src/keymap.c:316
 #, fuzzy
 msgid "Assign Group 5"
 msgstr "Přiřadit skupině 5"
 
-#: src/keymap.c:316
+#: src/keymap.c:317
 #, fuzzy
 msgid "Assign Group 6"
 msgstr "Přiřadit skupině 6"
 
-#: src/keymap.c:317
+#: src/keymap.c:318
 #, fuzzy
 msgid "Assign Group 7"
 msgstr "Přiřadit skupině 7"
 
-#: src/keymap.c:318
+#: src/keymap.c:319
 #, fuzzy
 msgid "Assign Group 8"
 msgstr "Přiřadit skupině 8"
 
-#: src/keymap.c:319
+#: src/keymap.c:320
 #, fuzzy
 msgid "Assign Group 9"
 msgstr "Přiřadit skupině 9"
 
-#: src/keymap.c:323
+#: src/keymap.c:324
 msgid "Select Group 0"
 msgstr "Vybrat Skupinu 0"
 
-#: src/keymap.c:324
+#: src/keymap.c:325
 msgid "Select Group 1"
 msgstr "Vybrat Skupinu 1"
 
-#: src/keymap.c:325
+#: src/keymap.c:326
 msgid "Select Group 2"
 msgstr "Vybrat Skupinu 2"
 
-#: src/keymap.c:326
+#: src/keymap.c:327
 msgid "Select Group 3"
 msgstr "Vybrat Skupinu 3"
 
-#: src/keymap.c:327
+#: src/keymap.c:328
 msgid "Select Group 4"
 msgstr "Vybrat Skupinu 4"
 
-#: src/keymap.c:328
+#: src/keymap.c:329
 msgid "Select Group 5"
 msgstr "Vybrat Skupinu 5"
 
-#: src/keymap.c:329
+#: src/keymap.c:330
 msgid "Select Group 6"
 msgstr "Vybrat Skupinu 6"
 
-#: src/keymap.c:330
+#: src/keymap.c:331
 msgid "Select Group 7"
 msgstr "Vybrat Skupinu 7"
 
-#: src/keymap.c:331
+#: src/keymap.c:332
 msgid "Select Group 8"
 msgstr "Vybrat Skupinu 8"
 
-#: src/keymap.c:332
+#: src/keymap.c:333
 msgid "Select Group 9"
 msgstr "Vybrat Skupinu 9"
 
-#: src/keymap.c:336
+#: src/keymap.c:337
 msgid "Select Commander 0"
 msgstr "Vybrat Velitele 0"
 
-#: src/keymap.c:337
+#: src/keymap.c:338
 msgid "Select Commander 1"
 msgstr "Vybrat Velitele 1"
 
-#: src/keymap.c:338
+#: src/keymap.c:339
 msgid "Select Commander 2"
 msgstr "Vybrat Velitele 2"
 
-#: src/keymap.c:339
+#: src/keymap.c:340
 msgid "Select Commander 3"
 msgstr "Vybrat Velitele 3"
 
-#: src/keymap.c:340
+#: src/keymap.c:341
 msgid "Select Commander 4"
 msgstr "Vybrat Velitele 4"
 
-#: src/keymap.c:341
+#: src/keymap.c:342
 msgid "Select Commander 5"
 msgstr "Vybrat Velitele 5"
 
-#: src/keymap.c:342
+#: src/keymap.c:343
 msgid "Select Commander 6"
 msgstr "Vybrat Velitele 6"
 
-#: src/keymap.c:343
+#: src/keymap.c:344
 msgid "Select Commander 7"
 msgstr "Vybrat Velitele 7"
 
-#: src/keymap.c:344
+#: src/keymap.c:345
 msgid "Select Commander 8"
 msgstr "Vybrat Velitele 8"
 
-#: src/keymap.c:345
+#: src/keymap.c:346
 msgid "Select Commander 9"
 msgstr "Vybrat Velitele 9"
 
-#: src/keymap.c:349
-msgid "Multiplayer Options"
-msgstr ""
-
 #: src/keymap.c:350
-msgid "Start Multiplayer Audio"
+msgid "Multiplayer Options / Alliance dialog"
 msgstr ""
 
-#: src/keymap.c:351
-msgid "Stop Multiplayer Audio"
-msgstr ""
-
-#: src/keymap.c:354
+#: src/keymap.c:353
 msgid "Snap View to North"
 msgstr ""
 
-#: src/keymap.c:355
+#: src/keymap.c:354
 msgid "Toggle Tracking Camera"
 msgstr ""
 
-#: src/keymap.c:356
+#: src/keymap.c:355
 msgid "Display In-Game Options"
 msgstr ""
 
-#: src/keymap.c:357
+#: src/keymap.c:356
 msgid "Zoom Radar Out"
 msgstr ""
 
-#: src/keymap.c:358
+#: src/keymap.c:357
 msgid "Zoom Radar In"
 msgstr ""
 
-#: src/keymap.c:359
+#: src/keymap.c:358
 msgid "Zoom In"
 msgstr "Přiblížit"
 
-#: src/keymap.c:360
+#: src/keymap.c:359
 msgid "Zoom Out"
 msgstr "Oddálit"
 
-#: src/keymap.c:361
+#: src/keymap.c:360
 msgid "Pitch Forward"
 msgstr ""
 
-#: src/keymap.c:362
+#: src/keymap.c:361
 msgid "Rotate Left"
 msgstr "Otočit doleva"
 
-#: src/keymap.c:363
+#: src/keymap.c:362
 msgid "Reset Pitch"
 msgstr ""
 
-#: src/keymap.c:364
+#: src/keymap.c:363
 msgid "Rotate Right"
 msgstr "Otočit doprava"
 
-#: src/keymap.c:365
+#: src/keymap.c:364
 msgid "Pitch Back"
 msgstr ""
 
-#: src/keymap.c:366
+#: src/keymap.c:365
 msgid "Orders Menu"
 msgstr ""
 
-#: src/keymap.c:367
+#: src/keymap.c:366
 msgid "Decrease Game Speed"
 msgstr "Snížit rychlost hry"
 
-#: src/keymap.c:368
+#: src/keymap.c:367
 msgid "Increase Game Speed"
 msgstr "Zvýšit rychlost hry"
 
-#: src/keymap.c:369
+#: src/keymap.c:368
 msgid "Reset Game Speed"
 msgstr "Resetovat rychlost hry"
 
-#: src/keymap.c:370
+#: src/keymap.c:369
 msgid "View North"
 msgstr "Pohled na sever"
 
-#: src/keymap.c:371
+#: src/keymap.c:370
 msgid "View South"
 msgstr "Pohled na jih"
 
-#: src/keymap.c:372
+#: src/keymap.c:371
 msgid "View East"
 msgstr "Pohled na východ"
 
-#: src/keymap.c:373
+#: src/keymap.c:372
 msgid "View West"
 msgstr "Pohled na západ"
 
-#: src/keymap.c:374
+#: src/keymap.c:373
 #, fuzzy
 msgid "View next Oil Derrick"
 msgstr "Zobrazit další ropnou věž"
 
-#: src/keymap.c:375
+#: src/keymap.c:374
 msgid "View next Repair Unit"
 msgstr ""
 
-#: src/keymap.c:376
+#: src/keymap.c:375
 msgid "View next Truck"
 msgstr ""
 
-#: src/keymap.c:377
+#: src/keymap.c:376
 msgid "View next Sensor Unit"
 msgstr ""
 
-#: src/keymap.c:378
+#: src/keymap.c:377
 msgid "View next Commander"
 msgstr ""
 
-#: src/keymap.c:379
+#: src/keymap.c:378
 msgid "Toggle Overlays"
 msgstr ""
 
-#: src/keymap.c:380
+#: src/keymap.c:379
 msgid "Console On/Off"
 msgstr ""
 
-#: src/keymap.c:383
+#: src/keymap.c:382
 msgid "Center View on HQ"
 msgstr ""
 
-#: src/keymap.c:385
+#: src/keymap.c:384
 msgid "View Unassigned Units"
 msgstr ""
 
-#: src/keymap.c:387
+#: src/keymap.c:386
 msgid "Fire at Will"
 msgstr ""
 
-#: src/keymap.c:389
+#: src/keymap.c:388
 msgid "Return to HQ"
 msgstr "Zpět na HQ"
 
-#: src/keymap.c:397
+#: src/keymap.c:396
 msgid "Send Text Message"
 msgstr "Poslat textovou zprávu"
 
@@ -12782,78 +13120,74 @@ msgstr ""
 msgid "Toggle reopening the build menu"
 msgstr ""
 
-#: src/loop.c:527
-#: src/loop.c:543
+#: src/loop.c:533
+#: src/loop.c:549
 #, fuzzy
 msgid "Could not save game!"
 msgstr "Nahrát uloženou hru"
 
-#: src/mission.c:2082
+#: src/mission.c:2069
 msgid "Load Transport"
 msgstr "Naložit transport"
 
-#: src/mission.c:2476
+#: src/mission.c:2463
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "CÍL SPLNĚN"
 
-#: src/mission.c:2476
+#: src/mission.c:2463
 msgid "OBJECTIVE ACHIEVED"
 msgstr "CÍL SPLNĚN"
 
-#: src/mission.c:2482
+#: src/mission.c:2469
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "SELHÁNÍ"
 
-#: src/mission.c:2482
+#: src/mission.c:2469
 msgid "OBJECTIVE FAILED"
 msgstr "SELHÁNÍ"
 
-#: src/mission.c:2508
-#: src/mission.c:2545
-#: src/mission.c:2663
+#: src/mission.c:2495
+#: src/mission.c:2535
+#: src/mission.c:2653
 msgid "Quit To Main Menu"
 msgstr "Vyskočit do hlavního menu"
 
-#: src/mission.c:2516
+#: src/mission.c:2503
 msgid "Continue Game"
 msgstr "Pokračovat ve hře"
 
-#: src/mission.c:2610
+#: src/mission.c:2600
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "HRA ULOŽENA!"
 
-#: src/move.c:2923
+#: src/move.c:2870
+#: src/move.c:2886
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
 
-#: src/multigifts.c:169
+#: src/multigifts.c:170
 #, fuzzy, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s dá ti viditelnou zprávu"
 
-#: src/multigifts.c:189
+#: src/multigifts.c:190
 #, fuzzy, c-format
 msgid "%s Gives you a %s"
 msgstr "%s ti dá %s"
 
-#: src/multigifts.c:240
+#: src/multigifts.c:241
 #, fuzzy, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
 msgstr "Zkouší dát pryč %s - ale to není umožněno"
 
-#: src/multigifts.c:299
+#: src/multigifts.c:300
 #, fuzzy, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s ti á technickou dokumentaci"
-
-#: src/multigifts.c:314
-#, c-format
-msgid "Player %u found %u power in an oil drum"
-msgstr ""
 
 #: src/multigifts.c:338
 #, fuzzy, c-format
@@ -12880,234 +13214,282 @@ msgstr "%s přerušil spolek s %s"
 msgid "%s Forms An Alliance With %s"
 msgstr "%s uzavřel spojenectví s %s"
 
-#: src/multigifts.c:750
+#: src/multigifts.c:773
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Nalezl jsi plány na %s"
 
-#: src/multiint.c:562
+#: src/multiint.c:571
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Potvrď nastavení"
 
 #: src/multiint.c:573
+#: src/multiint.c:1118
+#, fuzzy
+msgid "Cancel"
+msgstr "Azurová"
+
+#: src/multiint.c:584
 msgid "IP Address or Machine Name"
 msgstr "IP Adresa nebo Jméno Stroje"
 
-#: src/multiint.c:614
+#: src/multiint.c:634
 msgid "CONNECTION"
 msgstr "SPOJENÍ"
 
-#: src/multiint.c:627
+#: src/multiint.c:647
 msgid "Lobby"
 msgstr "Lobby"
 
-#: src/multiint.c:628
+#: src/multiint.c:648
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:825
+#: src/multiint.c:840
 #, fuzzy
 msgid "No games are available"
 msgstr "Posily jsou k dispozici."
 
-#: src/multiint.c:828
+#: src/multiint.c:843
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.c:832
+#: src/multiint.c:847
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.c:835
+#: src/multiint.c:850
 msgid "Wrong Game Version!"
 msgstr ""
 
-#: src/multiint.c:838
-msgid "Wrong data/mod detected by Host."
+#: src/multiint.c:853
+msgid "You have an incompatible mod."
 msgstr ""
 
-#: src/multiint.c:841
+#: src/multiint.c:857
+msgid "Host couldn't send file?"
+msgstr ""
+
+#: src/multiint.c:861
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:844
+#: src/multiint.c:864
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.c:848
+#: src/multiint.c:868
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:946
+#: src/multiint.c:1011
 msgid "Searching"
 msgstr "Hledám"
 
-#: src/multiint.c:1051
+#: src/multiint.c:1067
 msgid "GAMES"
 msgstr "HRY"
 
-#: src/multiint.c:1061
+#: src/multiint.c:1075
 msgid "Refresh Games List"
 msgstr "Aktualizuj Seznam Her"
 
-#: src/multiint.c:1082
-msgid "Enter Password First "
+#: src/multiint.c:1095
+msgid "Enter Password:"
 msgstr ""
 
-#: src/multiint.c:1189
+#: src/multiint.c:1116
+msgid "OK"
+msgstr ""
+
+#: src/multiint.c:1257
+#: src/multiint.c:1264
 msgid "Select Game Name"
 msgstr "Vyber jméno hry"
 
-#: src/multiint.c:1190
+#: src/multiint.c:1257
+msgid "One-Player Skirmish"
+msgstr ""
+
+#: src/multiint.c:1267
 msgid "Select Map"
 msgstr "Vyber Mapu"
 
-#: src/multiint.c:1196
+#: src/multiint.c:1275
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.c:1205
-#: src/multiint.c:1206
+#: src/multiint.c:1285
+#: src/multiint.c:1286
 msgid "Scavengers"
 msgstr ""
 
-#: src/multiint.c:1207
+#: src/multiint.c:1288
 msgid "No Scavengers"
 msgstr ""
 
-#: src/multiint.c:1236
+#: src/multiint.c:1318
 msgid "Select Player Name"
 msgstr "Vyber jméno hráče"
 
-#: src/multiint.c:1242
+#: src/multiint.c:1324
 #, fuzzy
 msgid "Distance Fog"
 msgstr "vzdálená mlha"
 
-#: src/multiint.c:1253
+#: src/multiint.c:1335
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Spojenectví"
 
-#: src/multiint.c:1256
+#: src/multiint.c:1338
 msgid "No Alliances"
 msgstr "Bez Spojenectví"
 
-#: src/multiint.c:1258
+#: src/multiint.c:1340
 msgid "Allow Alliances"
 msgstr "Povolená Spojenectví"
 
-#: src/multiint.c:1262
+#: src/multiint.c:1344
 msgid "Locked Teams"
 msgstr "Pevné Týmy"
 
-#: src/multiint.c:1288
+#: src/multiint.c:1370
 #, fuzzy
 msgid "Low Power Levels"
 msgstr "Nízkoenergetické úrovně"
 
-#: src/multiint.c:1290
+#: src/multiint.c:1372
 #, fuzzy
 msgid "Medium Power Levels"
 msgstr "Středně energetické úrovně"
 
-#: src/multiint.c:1292
+#: src/multiint.c:1374
 #, fuzzy
 msgid "High Power Levels"
 msgstr "Vysokoenergetické úrovně"
 
-#: src/multiint.c:1324
+#: src/multiint.c:1406
 msgid "Base"
 msgstr "Základna"
 
-#: src/multiint.c:1326
+#: src/multiint.c:1408
 msgid "Start with No Bases"
 msgstr "Začni bez Základen"
 
-#: src/multiint.c:1328
+#: src/multiint.c:1410
 msgid "Start with Bases"
 msgstr "Začni se Základnami"
 
-#: src/multiint.c:1330
+#: src/multiint.c:1412
 msgid "Start with Advanced Bases"
 msgstr "Začni s Rozvinutými Základnami"
 
-#: src/multiint.c:1362
+#: src/multiint.c:1444
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.c:1364
+#: src/multiint.c:1446
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.c:1378
+#: src/multiint.c:1460
 #, fuzzy
 msgid "Start Hosting Game"
 msgstr "Začni hostovat hru"
 
-#: src/multiint.c:1386
+#: src/multiint.c:1468
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "Nastavení limitu budov"
 
-#: src/multiint.c:1386
+#: src/multiint.c:1468
 msgid "Set Structure Limits"
 msgstr "Nastavení limitu budov"
 
-#: src/multiint.c:1783
+#: src/multiint.c:1531
+#, fuzzy
+msgid "Player colour"
+msgstr "Hráč"
+
+#: src/multiint.c:1547
+#, fuzzy
+msgid "Kick player"
+msgstr "2 hráči"
+
+#: src/multiint.c:1558
+#, fuzzy
+msgid "Player number"
+msgstr "Hráč"
+
+#: src/multiint.c:1920
 msgid "Team"
 msgstr ""
 
-#: src/multiint.c:1816
+#: src/multiint.c:1953
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/multiint.c:1822
+#: src/multiint.c:1959
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.c:1860
+#: src/multiint.c:1963
+msgid "READY?"
+msgstr ""
+
+#: src/multiint.c:2000
 msgid "PLAYERS"
 msgstr "HRÁČI"
 
-#: src/multiint.c:2020
+#: src/multiint.c:2204
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:2190
+#: src/multiint.c:2238
+msgid "All players need to have the same mods to join your game."
+msgstr ""
+
+#: src/multiint.c:2391
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2197
+#: src/multiint.c:2398
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2437
+#: src/multiint.c:2640
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2539
+#: src/multiint.c:2725
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "Pevné Týmy"
 
-#: src/multiint.c:2584
+#: src/multiint.c:2764
+#: src/multiint.c:2814
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Hostitel vyhodil %s ze hry!"
 
-#: src/multiint.c:2586
-msgid "you are being a jerk."
-msgstr ""
-
-#: src/multiint.c:2672
+#: src/multiint.c:2877
 msgid "Host is Starting Game"
 msgstr "Host začíná hru"
 
-#: src/multiint.c:3198
+#: src/multiint.c:3426
 msgid "Players"
 msgstr "Hráči"
+
+#: src/multiint.c:3542
+#, c-format
+msgid "Map: %d%% downloaded"
+msgstr ""
+
+#: src/multiint.c:3568
+msgid "HOST"
+msgstr ""
 
 #: src/multijoin.c:98
 #: src/multijoin.c:99
@@ -13119,28 +13501,24 @@ msgstr ""
 msgid "%s has Left the Game"
 msgstr ""
 
-#: src/multijoin.c:329
+#: src/multijoin.c:335
 #, c-format
-msgid "Kicking player, %s, because data doesn't match!"
+msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.c:333
-msgid "Data doesn't match!"
-msgstr ""
-
-#: src/multijoin.c:365
+#: src/multijoin.c:374
 #, c-format
 msgid "%s is Joining the Game"
 msgstr ""
 
-#: src/multijoin.c:375
+#: src/multijoin.c:384
 #, fuzzy
 msgid "System message:"
 msgstr "Systémové místo"
 
 #: src/multilimit.c:185
 #, fuzzy
-msgid "Apply the Default values and Return To Previous Screen"
+msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Zpět na Předchozí Obrazovku"
 
 #: src/multimenu.c:609
@@ -13214,57 +13592,66 @@ msgstr ""
 msgid "Give Power To Player"
 msgstr ""
 
-#: src/multiplay.c:282
+#: src/multiplay.c:265
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:286
-msgid "It is not nice to cheat!"
+#: src/multiplay.c:1067
+#, fuzzy
+msgid "(allies"
+msgstr "Spojenectví"
+
+#: src/multiplay.c:1075
+msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1878
+#: src/multiplay.c:1088
+msgid "[invalid]"
+msgstr ""
+
+#: src/multiplay.c:1944
 msgid "Green"
 msgstr "Zelená"
 
-#: src/multiplay.c:1879
+#: src/multiplay.c:1945
 msgid "Orange"
 msgstr "Oranžová"
 
-#: src/multiplay.c:1880
+#: src/multiplay.c:1946
 msgid "Grey"
 msgstr "Šedá"
 
-#: src/multiplay.c:1881
+#: src/multiplay.c:1947
 msgid "Black"
 msgstr "Černá"
 
-#: src/multiplay.c:1882
+#: src/multiplay.c:1948
 msgid "Red"
 msgstr "Červená"
 
-#: src/multiplay.c:1883
+#: src/multiplay.c:1949
 msgid "Blue"
 msgstr "Modrá"
 
-#: src/multiplay.c:1884
+#: src/multiplay.c:1950
 msgid "Pink"
 msgstr "Růžová"
 
-#: src/multiplay.c:1885
+#: src/multiplay.c:1951
 msgid "Cyan"
 msgstr "Azurová"
 
-#: src/research.c:1760
+#: src/research.c:1736
 #, c-format
 msgid "Research completed: %s"
 msgstr "Výzkum dokončen: %s"
 
-#: src/research.c:1765
+#: src/research.c:1741
 msgid "Research Completed"
 msgstr "Výzkum Dokončen"
 
-#: src/research.c:2573
+#: src/research.c:2543
 msgid "Research Award"
 msgstr ""
 
@@ -13386,20 +13773,20 @@ msgstr "Celkový Čas Hry - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3237
+#: src/scriptfuncs.c:3213
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3241
+#: src/scriptfuncs.c:3217
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10202
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10248
+#: src/scriptfuncs.c:10179
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -13433,56 +13820,56 @@ msgstr "Nemohu nalézt žádného velitele!"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:6046
-#: src/structure.c:6071
+#: src/structure.c:6059
+#: src/structure.c:6084
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "Jednotka přiřazena"
 msgstr[1] "Jednotky přiřazeny"
 
-#: src/structure.c:6076
-#: src/structure.c:6140
+#: src/structure.c:6089
+#: src/structure.c:6153
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Poškození %3.0f%%"
 
-#: src/structure.c:6126
+#: src/structure.c:6139
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Připojeno %u z %u"
 
-#: src/structure.c:6256
-#: src/structure.c:6301
+#: src/structure.c:6269
+#: src/structure.c:6314
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6536
+#: src/structure.c:6549
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6576
+#: src/structure.c:6589
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6600
+#: src/structure.c:6613
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6624
+#: src/structure.c:6637
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6633
+#: src/structure.c:6646
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6661
+#: src/structure.c:6674
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6668
+#: src/structure.c:6681
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
@@ -13491,7 +13878,7 @@ msgstr ""
 msgid "Launch Transport"
 msgstr "Spustit transport"
 
-#: src/transporter.c:1747
+#: src/transporter.c:1757
 msgid "Reinforcements landing"
 msgstr "Posily přistály"
 
@@ -13523,16 +13910,16 @@ msgstr ""
 msgid "Version %s%s%s%s"
 msgstr ""
 
+#, fuzzy
+#~ msgid "Hardware"
+#~ msgstr "Těžká"
+
 #~ msgid "English"
 #~ msgstr "Anglicky"
 
 #, fuzzy
 #~ msgid "Basque"
 #~ msgstr "Základna"
-
-#, fuzzy
-#~ msgid "Latvian"
-#~ msgstr "Latinsky"
 
 #, fuzzy
 #~ msgid "Norwegian (Nynorsk)"
@@ -13558,9 +13945,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Skirmish"
 #~ msgstr "Šarvátka"
-
-#~ msgid "The host has left the game!"
-#~ msgstr "Hostitel opustil hru!"
 
 #~ msgid "Load Campaign"
 #~ msgstr "Nahrát kampaň"

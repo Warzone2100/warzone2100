@@ -73,7 +73,7 @@
 #include "multigifts.h"
 #include "multilimit.h"
 #include "advvis.h"
-
+#include "mapgrid.h"
 #include "lib/ivis_common/piestate.h"
 #include "wrappers.h"
 #include "order.h"
@@ -111,8 +111,76 @@ static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 
 extern	UDWORD				objID;					// unique ID creation thing..
 
+/// Hold the previously assigned player
+static int nextPlayer = 0;
+static Vector2i positions[MAX_PLAYERS];
+
+void scriptSetStartPos(int position, int x, int y)
+{
+	positions[position].x = x;
+	positions[position].y = y;
+}
+
+BOOL scriptInit()
+{
+	nextPlayer = 0;
+	return true;
+}
+
+BOOL scrScavengersActive()
+{
+	scrFunctionResult.v.bval = game.scavengers;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
+BOOL scrGetPlayer()
+{
+	ASSERT_OR_RETURN(false, nextPlayer < MAX_PLAYERS, "Invalid player");
+
+	scrFunctionResult.v.ival = nextPlayer++;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
+BOOL scrGetPlayerStartPosition(void)
+{
+	SDWORD	*x, *y, player;
+
+	if (!stackPopParams(3, VAL_INT, &player, VAL_REF|VAL_INT, &x, VAL_REF|VAL_INT, &y))
+	{
+		return false;
+	}
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player %d", player);
+	if (player < NetPlay.maxPlayers)
+	{
+		*x = positions[player].x;
+		*y = positions[player].y;
+		scrFunctionResult.v.bval = true;
+	}
+	else
+	{
+		*x = 0;
+		*y = 0;
+		scrFunctionResult.v.bval = false;
+	}
+
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
 /******************************************************************************************/
 /*                 Check for objects in areas                                             */
+
 
 // check for a base object being in range of a point
 BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range)
@@ -1105,7 +1173,8 @@ BOOL scrIsStructureAvailable(void)
 	{
 		return false;
 	}
-	if(	apStructTypeLists[player][index] == AVAILABLE)
+	if (apStructTypeLists[player][index] == AVAILABLE
+	    && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit)
 	{
 		bResult = true;
 	}
@@ -1410,7 +1479,6 @@ BOOL scrRemoveMessage(void)
 
 	//find the message
 	psMessage = findMessage((MSG_VIEWDATA *)psViewData, msgType, player);
-	ASSERT(psMessage, "cannot find message - %s", psViewData->pName);
 	if (psMessage)
 	{
 		//delete it
@@ -1419,7 +1487,7 @@ BOOL scrRemoveMessage(void)
 	}
 	else
 	{
-		return false;
+		debug(LOG_ERROR, "cannot find message - %s", psViewData->pName);
 	}
 
 	return true;
@@ -1461,52 +1529,24 @@ BOOL scrRemoveMessage(void)
 BOOL scrBuildDroid(void)
 {
 	SDWORD			player, productionRun;
-//	INTERP_VAL		sVal, sVal2;
 	STRUCTURE		*psFactory;
 	DROID_TEMPLATE	*psTemplate;
 
-	if (!stackPopParams(4, ST_TEMPLATE, &psTemplate, ST_STRUCTURE, &psFactory,
-					VAL_INT, &player, VAL_INT, &productionRun))
+	if (!stackPopParams(4, ST_TEMPLATE, &psTemplate, ST_STRUCTURE, &psFactory, VAL_INT, &player, VAL_INT, &productionRun))
 	{
 		return false;
 	}
 
-	if (psFactory == NULL)
-	{
-		ASSERT( false, "scrBuildUnit: NULL factory object" );
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrBuildUnit:player number is too high" );
-		return false;
-	}
-
-	if (productionRun > UBYTE_MAX)
-	{
-		ASSERT( false, "scrBuildUnit: production run too high" );
-		return false;
-	}
-
-	ASSERT( psFactory != NULL,
-		"scrBuildUnit: Invalid structure pointer" );
-	ASSERT( (psFactory->pStructureType->type == REF_FACTORY ||
-		psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
-		psFactory->pStructureType->type == REF_VTOL_FACTORY),
-		"scrBuildUnit: structure is not a factory" );
-	ASSERT( psTemplate != NULL,
-		"scrBuildUnit: Invalid template pointer" );
-
-	//check building the right sort of droid for the factory
-	if (!validTemplateForFactory(psTemplate, psFactory))
-	{
-
-		ASSERT( false, "scrBuildUnit: invalid template - %s for factory - %s",
-			psTemplate->aName, psFactory->pStructureType->pName );
-
-		return false;
-	}
+	ASSERT_OR_RETURN(false, psFactory != NULL, "NULL factory object");
+	ASSERT_OR_RETURN(false, psTemplate != NULL, "NULL template object sent to %s", objInfo((BASE_OBJECT *)psFactory));
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player number");
+	ASSERT_OR_RETURN(false, productionRun <= UBYTE_MAX, "Production run too high");
+	ASSERT_OR_RETURN(false, (psFactory->pStructureType->type == REF_FACTORY ||
+	                         psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
+	                         psFactory->pStructureType->type == REF_VTOL_FACTORY),
+	                 "Structure is not a factory");
+	ASSERT_OR_RETURN(false, validTemplateForFactory(psTemplate, psFactory), "Invalid template - %s for factory - %s",
+	                 psTemplate->aName, psFactory->pStructureType->pName);
 
 	structSetManufacture(psFactory, psTemplate, (UBYTE)productionRun);
 
@@ -1549,7 +1589,6 @@ BOOL	scrSetAssemblyPoint(void)
 // test for structure is idle or not
 BOOL	scrStructureIdle(void)
 {
-//	INTERP_VAL	sVal;
 	STRUCTURE	*psBuilding;
 	BOOL		idle;
 
@@ -1557,24 +1596,13 @@ BOOL	scrStructureIdle(void)
 	{
 		return false;
 	}
-//	DBPRINTF(("scrStructureIdle called\n"));
-
 	if (psBuilding == NULL)
 	{
 		ASSERT( false, "scrStructureIdle: NULL structure" );
 		return false;
 	}
 
-	//test for idle
-	idle = false;
-	if (structureIdle(psBuilding))
-	{
-		idle = true;
-	}
-
-
-//	DBPRINTF(("structure %p is %d\n",psBuilding,idle));
-
+	idle = structureIdle(psBuilding);
 	scrFunctionResult.v.bval = idle;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
@@ -1629,9 +1657,6 @@ BOOL scrDestroyFeature(void)
 	return true;
 }
 
-
-
-
 // -----------------------------------------------------------------------------------------
 // static vars to enum features.
 static	FEATURE_STATS	*psFeatureStatToFind[MAX_PLAYERS];
@@ -1640,21 +1665,18 @@ static  SDWORD			getFeatureCount[MAX_PLAYERS]={0};
 static	FEATURE			*psCurrEnumFeature[MAX_PLAYERS];
 
 // -----------------------------------------------------------------------------------------
-// init enum visible features.
+// Init enum visible features. May use player==-1 to ignore visibility check.
 BOOL scrInitGetFeature(void)
 {
 	SDWORD			player,iFeat,bucket;
 
-	if ( !stackPopParams(3, ST_FEATURESTAT, &iFeat,  VAL_INT, &player,VAL_INT,&bucket) )
+	if (!stackPopParams(3, ST_FEATURESTAT, &iFeat, VAL_INT, &player, VAL_INT, &bucket))
 	{
 		return false;
 	}
 
-	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
-		"scrInitGetFeature: bucket out of bounds: %d", bucket);
-
-	ASSERT(player >= 0 && player < MAX_PLAYERS,
-		"scrInitGetFeature: player out of bounds: %d", player);
+	ASSERT_OR_RETURN(false, bucket >= 0 && bucket < MAX_PLAYERS, "Bucket out of bounds: %d", bucket);
+	ASSERT_OR_RETURN(false, (player >= 0 || player == -1) && player < MAX_PLAYERS, "Player out of bounds: %d", player);
 
 	psFeatureStatToFind[bucket]		= (FEATURE_STATS *)(asFeatureStats + iFeat);				// find this stat
 	playerToEnum[bucket]			= player;				// that this player can see
@@ -1718,7 +1740,7 @@ BOOL scrGetFeature(void)
 	while(psFeat)
 	{
 		if (psFeat->psStats->subType == psFeatureStatToFind[bucket]->subType
-		 && psFeat->visible[playerToEnum[bucket]] != 0
+		 && (playerToEnum[bucket] < 0 || psFeat->visible[playerToEnum[bucket]] != 0)
 		 && !TileHasStructure(mapTile(map_coord(psFeat->pos.x), map_coord(psFeat->pos.y)))
 		 && !fireOnLocation(psFeat->pos.x,psFeat->pos.y)		// not burning.
 		   )
@@ -1747,10 +1769,7 @@ BOOL scrGetFeature(void)
 	return true;
 }
 
-/* Faster implementation of scrGetFeature -  assumes no features
- * are deleted between calls, unlike scrGetFeature also returns
- * burning features (mainly relevant for burning oil resources)
- */
+/* Faster implementation of scrGetFeature -  assumes no features are deleted between calls */
 BOOL scrGetFeatureB(void)
 {
 	SDWORD	bucket;
@@ -1780,10 +1799,10 @@ BOOL scrGetFeatureB(void)
 	// begin searching the feature list for the required stat.
 	while(psCurrEnumFeature[bucket])
 	{
-		if(	( psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType)
-			&&( psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]]	!= 0)
-			&&!TileHasStructure(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
-			&&!fireOnLocation(psCurrEnumFeature[bucket]->pos.x,psCurrEnumFeature[bucket]->pos.y )		// not burning.
+		if (psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType
+		    && (playerToEnum[bucket] < 0 || psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]] != 0)
+		    && !TileHasStructure(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
+		    && !fireOnLocation(psCurrEnumFeature[bucket]->pos.x,psCurrEnumFeature[bucket]->pos.y )		// not burning.
 			)
 		{
 			scrFunctionResult.v.oval = psCurrEnumFeature[bucket];
@@ -1808,49 +1827,6 @@ BOOL scrGetFeatureB(void)
 	}
 	return true;
 }
-
-
-/*
-// -----------------------------------------------------------------------------------------
-// enum next visible feature of required type.
-// note: wont return features covered by structures (ie oil resources)
-// YUK NASTY BUG. CANT RELY ON THE FEATURE LIST BETWEEN CALLS.
-BOOL scrGetFeature(void)
-{
-	SDWORD	bucket;
-
-	if ( !stackPopParams(1,VAL_INT,&bucket) )
-	{
-		return false;
-	}
-
-	while(psCurrEnumFeature[bucket])
-	{
-		if(	( psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType)
-			&&
-			( psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]]	!= 0)
-			&&
-			!TileHasStructure(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
-		   )
-		{
-			if (!stackPushResult(ST_FEATURE,(UDWORD) psCurrEnumFeature[bucket]))			//	push scrFunctionResult
-			{
-				return false;
-			}
-			psCurrEnumFeature[bucket] = psCurrEnumFeature[bucket]->psNext;
-			return true;
-		}
-
-		psCurrEnumFeature[bucket] = psCurrEnumFeature[bucket]->psNext;
-	}
-	// push NULL, none found;
-	if (!stackPushResult(ST_FEATURE, (UDWORD)NULL))
-	{
-		return false;
-	}
-	return true;
-}
-*/
 
 // -----------------------------------------------------------------------------------------
 //Add a feature
@@ -4326,81 +4302,48 @@ BOOL scrMyResponsibility(void)
 }
 
 // -----------------------------------------------------------------------------------------
-/*checks to see if a structure of the type specified exists within the
-specified range of an XY location */
+/**
+ * Checks to see if a structure of the type specified exists within the specified range of an XY location.
+ * Use player -1 to find structures owned by any player. In this case, ignore if they are completed.
+ */
 BOOL scrStructureBuiltInRange(void)
 {
 	SDWORD		player, index, x, y, range;
-	SDWORD		rangeSquared;
-	STRUCTURE	*psCurr;
-	BOOL		found;
-	SDWORD		xdiff, ydiff;
+	BASE_OBJECT	*psCurr;
+	STRUCTURE	*psStruct = NULL;
 	STRUCTURE_STATS *psTarget;
 
-	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_INT, &x, VAL_INT, &y,
-		VAL_INT, &range, VAL_INT, &player))
+	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range, VAL_INT, &player))
 	{
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructureBuiltInRange:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Player index out of bounds");
+	ASSERT_OR_RETURN(false, x >= 0 && map_coord(x) < mapWidth, "Invalid X coord");
+	ASSERT_OR_RETURN(false, y >= 0 && map_coord(y) < mapHeight, "Invalid Y coord");
+	ASSERT_OR_RETURN(false, index >= 0 && index < numStructureStats, "Invalid structure stat");
+	ASSERT_OR_RETURN(false, range >= 0, "Negative range");
 
-	if (x < 0
-	 || map_coord(x) > (SDWORD)mapWidth)
-	{
-		ASSERT( false, "scrStructureBuiltInRange : invalid X coord" );
-		return false;
-	}
-	if (y < 0
-	 || map_coord(y) > (SDWORD)mapHeight)
-	{
-		ASSERT( false,"scrStructureBuiltInRange : invalid Y coord" );
-		return false;
-	}
-	if (index < (SDWORD)0 || index > (SDWORD)numStructureStats)
-	{
-		ASSERT( false, "scrStructureBuiltInRange : Invalid structure stat" );
-		return false;
-	}
-	if (range < (SDWORD)0)
-	{
-		ASSERT( false, "scrStructureBuiltInRange : Rnage is less than zero" );
-		return false;
-	}
-
-	//now look through the players list of structures to see if this type
-	//exists within range
+	// Now look through the players list of structures to see if this type exists within range
 	psTarget = &asStructureStats[index];
-	rangeSquared = range * range;
-	found = false;
-	for(psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
-	{
-		xdiff = (SDWORD)psCurr->pos.x - x;
-		ydiff = (SDWORD)psCurr->pos.y - y;
-		if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
-		{
 
-			if( strcmp(psCurr->pStructureType->pName,psTarget->pName) == 0 )
+	gridStartIterate(x, y, range);
+	for (psCurr = gridIterate(); psCurr; psCurr = gridIterate())
+	{
+		if (psCurr->type == OBJ_STRUCTURE)
+		{
+			psStruct = (STRUCTURE *)psCurr;
+			if ((psStruct->status == SS_BUILT || player == -1)
+			    && (player == -1 || psStruct->player == player)
+			    && strcmp(psStruct->pStructureType->pName, psTarget->pName) == 0)
 			{
-				if (psCurr->status == SS_BUILT)
-				{
-					found = true;
-					break;
-				}
+				break;
 			}
 		}
-	}
-	//make sure pass NULL back if not got one
-	if (!found)
-	{
-		psCurr = NULL;
+		psStruct = NULL;
 	}
 
-	scrFunctionResult.v.oval = psCurr;
+	scrFunctionResult.v.oval = psStruct;
 	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return false;
@@ -4510,12 +4453,12 @@ BOOL scrCompleteResearch(void)
 		return false;
 	}
 
-	researchResult(researchIndex, (UBYTE)player, false, NULL);
+	researchResult(researchIndex, (UBYTE)player, false, NULL, false);
 
 
-	if(bMultiPlayer && (gameTime > 2 ))
+	if(bMultiMessages && (gameTime > 2 ))
 	{
-		SendResearch((UBYTE)player,researchIndex );
+		SendResearch((UBYTE)player, researchIndex, false);
 	}
 
 
@@ -5222,14 +5165,8 @@ BOOL scrGetNearestGateway( void )
 		return(false);
 	}
 
-	if (gwGetGateways() == NULL)
-	{
-		ASSERT( false,"SCRIPT : No gateways found in getNearestGatway" );
-		return(false);
-	}
-
 	nearestSoFar = UDWORD_MAX;
-	retX = retY = 0;
+	retX = retY = -1;
 	success = false;
 	for (psGateway = gwGetGateways(); psGateway; psGateway = psGateway->psNext)
 	{
@@ -6470,7 +6407,7 @@ BOOL scrSetDroidKills(void)
 		return false;
 	}
 
-	psDroid->experience = (UWORD)kills * 100;
+	psDroid->experience = (float)kills * 100.0;
 
 	return true;
 }
@@ -6621,12 +6558,6 @@ BOOL scrTutorialTemplates(void)
 
 	// find ViperLtMGWheels
 	sstrcpy(pName, "ViperLtMGWheels");
-	if (!getResourceName(pName))
-	{
-		debug( LOG_FATAL, "tutorial template setup failed" );
-		abort();
-		return false;
-	}
 
 	getDroidResourceName(pName);
 
@@ -10755,6 +10686,7 @@ BOOL scrPursueResearch(void)
 	{
 		return false;
 	}
+	intRefreshScreen();
 
 	return true;
 }
@@ -11430,64 +11362,6 @@ BOOL scrGetDroidLevel(void)
 	return true;
 }
 
-/*
- * Updates tile visibility for all map tiles for a given player,
- * to be used with scrCheckVisibleTile()
- */
-BOOL scrUpdateVisibleTiles(void)
-{
-	DROID		*psDroid;
-	STRUCTURE	*psStruct;
-	SDWORD		player;
-
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	scrResetPlayerTileVisibility(player);
-
-	for(psDroid = apsDroidLists[player];psDroid;psDroid=psDroid->psNext)
-	{
-		visTilesUpdate((BASE_OBJECT*)psDroid, scrRayTerrainCallback);
-	}
-
-	for(psStruct = apsStructLists[player];psStruct;psStruct=psStruct->psNext)
-	{
-		if (psStruct->pStructureType->type != REF_WALL
- 		    && psStruct->pStructureType->type != REF_WALLCORNER)
-		{
-			visTilesUpdate((BASE_OBJECT*)psStruct, scrRayTerrainCallback);
-		}
-	}
-
-	return true;
-}
-
-/*
- * Check is a given tile is visible for by a given player.
- * Should be used after a call to scrUpdateVisibleTiles().
- */
-BOOL scrCheckVisibleTile(void)
-{
-	int			x,y;
-	SDWORD		player;
-
-	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y))
-	{
-		return false;
-	}
-
-	scrFunctionResult.v.bval = scrTileIsVisible(player, x, y);
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrCheckVisibleTile(): failed to push result");
-		return false;
-	}
-
-	return true;
-}
-
 /* Assembles a template from components and returns it */
 BOOL scrAssembleWeaponTemplate(void)
 {
@@ -11556,7 +11430,7 @@ BOOL scrAssembleWeaponTemplate(void)
 			pNewTemplate->psNext = apsDroidTemplates[player];
 			apsDroidTemplates[player] = pNewTemplate;		//apsTemplateList?
 
-			if (bMultiPlayer)
+			if (bMultiMessages)
 			{
 				sendTemplate(pNewTemplate);
 			}

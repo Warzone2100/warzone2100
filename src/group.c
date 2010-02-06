@@ -103,10 +103,10 @@ void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
 {
 	ASSERT(grpInitialized, "Group code not initialized yet");
 
-	psGroup->refCount += 1;
-
-	ASSERT( psGroup != NULL,
+	ASSERT_OR_RETURN(, psGroup != NULL,
 		"grpJoin: invalid group pointer" );
+
+	psGroup->refCount += 1;
 
 	// if psDroid == NULL just increase the refcount don't add anything to the list
 	if (psDroid != NULL)
@@ -126,7 +126,7 @@ void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
 
 		if (psDroid->droidType == DROID_TRANSPORTER)
 		{
-			ASSERT( (psGroup->type == GT_NORMAL),
+			ASSERT_OR_RETURN(, (psGroup->type == GT_NORMAL),
 				"grpJoin: Cannot have two transporters in a group" );
 			psGroup->type = GT_TRANSPORTER;
 			psDroid->psGrpNext = psGroup->psList;
@@ -135,7 +135,7 @@ void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
 		else if ((psDroid->droidType == DROID_COMMAND) &&
 				 (psGroup->type != GT_TRANSPORTER))
 		{
-			ASSERT( (psGroup->type == GT_NORMAL) && (psGroup->psCommander == NULL),
+			ASSERT_OR_RETURN(, (psGroup->type == GT_NORMAL) && (psGroup->psCommander == NULL),
 				"grpJoin: Cannot have two command droids in a group" );
 			psGroup->type = GT_COMMAND;
 			psGroup->psCommander = psDroid;
@@ -153,11 +153,11 @@ void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid)
 {
 	DROID		*psPrev, *psCurr;
 
-	psGroup->refCount += 1;
-
 	ASSERT(grpInitialized, "Group code not initialized yet");
-	ASSERT( psGroup != NULL,
+	ASSERT_OR_RETURN(, psGroup != NULL,
 		"grpJoin: invalid group pointer" );
+
+	psGroup->refCount += 1;
 
 	// if psDroid == NULL just increase the refcount don't add anything to the list
 	if (psDroid != NULL)
@@ -177,7 +177,7 @@ void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid)
 
 		if (psDroid->droidType == DROID_COMMAND)
 		{
-			ASSERT( (psGroup->type == GT_NORMAL) && (psGroup->psCommander == NULL),
+			ASSERT_OR_RETURN(, (psGroup->type == GT_NORMAL) && (psGroup->psCommander == NULL),
 				"grpJoin: Cannot have two command droids in a group" );
 			psGroup->type = GT_COMMAND;
 			psGroup->psCommander = psDroid;
@@ -292,7 +292,7 @@ unsigned int grpNumMembers(const DROID_GROUP* psGroup)
 	unsigned int num;
 
 	ASSERT(grpInitialized, "Group code not initialized yet");
-	ASSERT(psGroup != NULL, "invalid droid group");
+	ASSERT_OR_RETURN(0, psGroup != NULL, "invalid droid group");
 
 	num = 0;
 	for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
@@ -309,7 +309,7 @@ void grpReset(DROID_GROUP *psGroup)
 	DROID	*psCurr, *psNext;
 
 	ASSERT(grpInitialized, "Group code not initialized yet");
-	ASSERT( psGroup != NULL,
+	ASSERT_OR_RETURN(, psGroup != NULL,
 		"grpReset: invalid droid group" );
 
 	for(psCurr = psGroup->psList; psCurr; psCurr = psNext)
@@ -325,7 +325,7 @@ void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order)
 	DROID *psCurr;
 
 	ASSERT(grpInitialized, "Group code not initialized yet");
-	ASSERT( psGroup != NULL,
+	ASSERT_OR_RETURN(, psGroup != NULL,
 		"orderGroup: invalid droid group" );
 
 	for (psCurr = psGroup->psList; psCurr; psCurr=psCurr->psGrpNext)
@@ -340,20 +340,20 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 	DROID	*psCurr;
 
 	ASSERT(grpInitialized, "Group code not initialized yet");
-	ASSERT( psGroup != NULL,
+	ASSERT_OR_RETURN(, psGroup != NULL,
 		"orderGroupLoc: invalid droid group" );
 
-	if(bMultiPlayer)
+	if(bMultiMessages)
 	{
 		SendGroupOrderGroup(psGroup,order,x,y,NULL);
-		bMultiPlayer = false;
+		bMultiMessages = false;
 
 		for(psCurr=psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			orderDroidLoc(psCurr, order, x,y);
 		}
 
-		bMultiPlayer = true;
+		bMultiMessages = true;
 	}
 	else
 	{
@@ -369,20 +369,20 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 {
 	DROID	*psCurr;
 
-	ASSERT( psGroup != NULL,
+	ASSERT_OR_RETURN(, psGroup != NULL,
 		"orderGroupObj: invalid droid group" );
 
-	if(bMultiPlayer)
+	if(bMultiMessages)
 	{
 		SendGroupOrderGroup(psGroup,order,0,0,psObj);
-		bMultiPlayer = false;
+		bMultiMessages = false;
 
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			orderDroidObj(psCurr, order, (BASE_OBJECT *)psObj);
 		}
 
-		bMultiPlayer = true;
+		bMultiMessages = true;
 	}
 	else
 	{
@@ -399,7 +399,7 @@ void grpSetSecondary(DROID_GROUP *psGroup, SECONDARY_ORDER sec, SECONDARY_STATE 
 	DROID	*psCurr;
 
 	ASSERT(grpInitialized, "Group code not initialized yet");
-	ASSERT( psGroup != NULL,
+	ASSERT_OR_RETURN(, psGroup != NULL,
 		"grpSetSecondary: invalid droid group" );
 
 	for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)

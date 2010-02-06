@@ -68,6 +68,7 @@
 #include "wrappers.h"
 #include "version.h"
 #include "configuration.h"
+#include "modding.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -104,6 +105,7 @@ void		removeBottomForm		(void);
 void		removeBackdrop			(void);
 
 static void	displayTitleBitmap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void		displayText				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 void		displayTextAt270		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void	displayBigSlider		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
@@ -247,13 +249,13 @@ BOOL startTitleMenu(void)
 	addTopForm();
 	addBottomForm();
 
-	addTextButton(FRONTEND_SINGLEPLAYER, FRONTEND_POS2X, FRONTEND_POS2Y, _("Single Player"), false, false);
-	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player"), false, false);
-	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial") ,false,false);
-	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options") ,false,false);
-	addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), false, false);
+	addTextButton(FRONTEND_SINGLEPLAYER, FRONTEND_POS2X, FRONTEND_POS2Y, _("Single Player"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE);
 
-	addTextButton(FRONTEND_QUIT, FRONTEND_POS7X, FRONTEND_POS7Y, _("Quit Game"), false, false);
+	addTextButton(FRONTEND_QUIT, FRONTEND_POS7X, FRONTEND_POS7Y, _("Quit Game"), WBUT_TXTCENTRE);
 
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
 
@@ -307,8 +309,8 @@ BOOL startTutorialMenu(void)
 	addBottomForm();
 
 
-	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS3X,FRONTEND_POS3Y, _("Tutorial"),false,false);
-	addTextButton(FRONTEND_FASTPLAY, FRONTEND_POS4X,FRONTEND_POS4Y, _("Fast Play"),false,false);
+	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS3X,FRONTEND_POS3Y, _("Tutorial"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_FASTPLAY, FRONTEND_POS4X,FRONTEND_POS4Y, _("Fast Play"), WBUT_TXTCENTRE);
 	addSideText	 (FRONTEND_SIDETEXT ,FRONTEND_SIDEX,FRONTEND_SIDEY,_("TUTORIALS"));
 	// TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -324,15 +326,15 @@ BOOL runTutorialMenu(void)
 	switch(id)
 	{
 		case FRONTEND_TUTORIAL:
+			NetPlay.players[0].allocated = true;
 			sstrcpy(aLevelName, TUTORIAL_LEVEL);
 			changeTitleMode(STARTGAME);
-
 			break;
 
 		case FRONTEND_FASTPLAY:
+			NetPlay.players[0].allocated = true;
 			sstrcpy(aLevelName, "FASTPLAY");
 			changeTitleMode(STARTGAME);
-
 			break;
 
 		case FRONTEND_QUIT:
@@ -363,10 +365,10 @@ void startSinglePlayerMenu(void)
 	addTopForm();
 	addBottomForm();
 
-	addTextButton(FRONTEND_NEWGAME,  FRONTEND_POS2X,FRONTEND_POS2Y,_("New Campaign") ,false,false);
-	addTextButton(FRONTEND_SKIRMISH, FRONTEND_POS3X,FRONTEND_POS3Y, _("Start Skirmish Game"),false,false);
-	addTextButton(FRONTEND_CHALLENGES, FRONTEND_POS4X, FRONTEND_POS4Y, _("Challenges"), false, false);
-	addTextButton(FRONTEND_LOADGAME, FRONTEND_POS5X,FRONTEND_POS5Y, _("Load Game"),false,false);
+	addTextButton(FRONTEND_NEWGAME,  FRONTEND_POS2X,FRONTEND_POS2Y,_("New Campaign") , WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_SKIRMISH, FRONTEND_POS3X,FRONTEND_POS3Y, _("Start Skirmish Game"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_CHALLENGES, FRONTEND_POS4X, FRONTEND_POS4Y, _("Challenges"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_LOADGAME, FRONTEND_POS5X,FRONTEND_POS5Y, _("Load Game"), WBUT_TXTCENTRE);
 
 	addSideText	 (FRONTEND_SIDETEXT ,FRONTEND_SIDEX,FRONTEND_SIDEY,_("SINGLE PLAYER"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -378,11 +380,9 @@ static void frontEndNewGame( void )
 		case 1:
 			sstrcpy(aLevelName, DEFAULT_LEVEL);
 			seq_ClearSeqList();
-
 			seq_AddSeqToList("cam1/c001.ogg",NULL,"cam1/c001.txa",false);
-
 			seq_StartNextFullScreenVideo();
-            break;
+			break;
 
 		case 2:
 			sstrcpy(aLevelName, "CAM_2A");
@@ -428,7 +428,10 @@ BOOL runSinglePlayerMenu(void)
 		// game.type is switched to SKIRMISH in startMultiOptions()
 		NetPlay.bComms = false;
 		bMultiPlayer = false;
+		bMultiMessages = false;
 		game.type = CAMPAIGN;
+		NET_InitPlayers();
+		NetPlay.players[0].allocated = true;
 		// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
 		playercolor = getPlayerColour(0);
 		if (playercolor >= 1 && playercolor <= 3)
@@ -484,13 +487,11 @@ BOOL runSinglePlayerMenu(void)
 				break;
 		}
 
-	if(CancelPressed())
-	{
-		changeTitleMode(TITLE);
+		if(CancelPressed())
+		{
+			changeTitleMode(TITLE);
+		}
 	}
-
-	}
-
 
 	if (!bLoadSaveUp && !challengesUp)						// if save/load screen is up
 	{
@@ -519,8 +520,8 @@ BOOL startMultiPlayerMenu(void)
 
 	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY,_("MULTI PLAYER"));
 
-	addTextButton(FRONTEND_HOST,     FRONTEND_POS2X,FRONTEND_POS2Y, _("Host Game"),false,false);
-	addTextButton(FRONTEND_JOIN,     FRONTEND_POS3X,FRONTEND_POS3Y, _("Join Game"),false,false);
+	addTextButton(FRONTEND_HOST,     FRONTEND_POS2X,FRONTEND_POS2Y, _("Host Game"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_JOIN,     FRONTEND_POS3X,FRONTEND_POS3Y, _("Join Game"), WBUT_TXTCENTRE);
 
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
@@ -536,8 +537,12 @@ BOOL runMultiPlayerMenu(void)
 	switch(id)
 	{
 	case FRONTEND_HOST:
+		// don't pretend we are running a network game. Really do it!
+		NetPlay.bComms = true; // use network = true
+		NETdiscoverUPnPDevices();
 		ingame.bHostSetup = true;
 		bMultiPlayer = true;
+		bMultiMessages = true;
 		game.type = SKIRMISH;		// needed?
 		changeTitleMode(MULTIOPTION);
 		break;
@@ -574,12 +579,12 @@ BOOL startOptionsMenu(void)
 	addBottomForm();
 
 	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY, _("OPTIONS"));
-	addTextButton(FRONTEND_GAMEOPTIONS,	FRONTEND_POS2X,FRONTEND_POS2Y, _("Game Options"),false,false);
-	addTextButton(FRONTEND_GAMEOPTIONS2,FRONTEND_POS3X,FRONTEND_POS3Y, _("Graphics Options"),false,false);
-	addTextButton(FRONTEND_GAMEOPTIONS4, FRONTEND_POS4X,FRONTEND_POS4Y, _("Video Options"), false, false);
-	addTextButton(FRONTEND_GAMEOPTIONS3,	FRONTEND_POS5X,FRONTEND_POS5Y, _("Audio Options"),false,false);
-	addTextButton(FRONTEND_GAMEOPTIONS5,	FRONTEND_POS6X,FRONTEND_POS6Y, _("Mouse Options"),false,false);
-	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X,FRONTEND_POS7Y, _("Key Mappings"),false,false);
+	addTextButton(FRONTEND_GAMEOPTIONS,	FRONTEND_POS2X,FRONTEND_POS2Y, _("Game Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_GAMEOPTIONS2,FRONTEND_POS3X,FRONTEND_POS3Y, _("Graphics Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_GAMEOPTIONS4, FRONTEND_POS4X,FRONTEND_POS4Y, _("Video Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_GAMEOPTIONS3,	FRONTEND_POS5X,FRONTEND_POS5Y, _("Audio Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_GAMEOPTIONS5,	FRONTEND_POS6X,FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X,FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	return true;
@@ -609,12 +614,6 @@ BOOL runOptionsMenu(void)
 	case FRONTEND_GAMEOPTIONS5:
 		changeTitleMode(GAME5);
 		break;
-//	case FRONTEND_VIDEO:
-//		changeTitleMode(VIDEO);
-//		break;
-//	case FRONTEND_GRAPHICS:
-//		changeTitleMode(GRAPHICS);
-//		break;
 	case FRONTEND_KEYMAP:
 		changeTitleMode(KEYMAP);
 		break;
@@ -622,20 +621,14 @@ BOOL runOptionsMenu(void)
 	case FRONTEND_QUIT:
 		changeTitleMode(TITLE);
 		break;
-
-
 	default:
 		break;
 	}
 
-
-
 	// If close button pressed then return from this menu.
-	if(CancelPressed()) {
-
-
+	if (CancelPressed())
+	{
 		changeTitleMode(TITLE);
-
 	}
 
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
@@ -653,19 +646,19 @@ BOOL startGameOptions2Menu(void)
 
 	////////////
 	//FMV mode.
-	addTextButton(FRONTEND_FMVMODE,	FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Video Playback"), true, false);
+	addTextButton(FRONTEND_FMVMODE,	FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Video Playback"), 0);
 	switch (war_GetFMVmode())
 	{
 		case FMV_1X:
-			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55,FRONTEND_POS2Y, _("1X"), true, false);
+			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55,FRONTEND_POS2Y, _("1X"), 0);
 			break;
 
 		case FMV_2X:
-			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55,FRONTEND_POS2Y, _("2X"), true, false);
+			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55,FRONTEND_POS2Y, _("2X"), 0);
 			break;
 
 		case FMV_FULLSCREEN:
-			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55,FRONTEND_POS2Y, _("Fullscreen"), true, false);
+			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55,FRONTEND_POS2Y, _("Fullscreen"), 0);
 			break;
 
 		default:
@@ -675,65 +668,58 @@ BOOL startGameOptions2Menu(void)
 
 	////////////
 	// screenshake
-	addTextButton(FRONTEND_SSHAKE,	 FRONTEND_POS3X-35,   FRONTEND_POS3Y, _("Screen Shake"),true,false);
+	addTextButton(FRONTEND_SSHAKE,	 FRONTEND_POS3X-35,   FRONTEND_POS3Y, _("Screen Shake"), 0);
 	if(getShakeStatus())
 	{// shaking on
-		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS3M-55,  FRONTEND_POS3Y, _("On"),true,false);
+		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS3M-55,  FRONTEND_POS3Y, _("On"), 0);
 	}
 	else
 	{//shaking off.
-		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS3M-55,  FRONTEND_POS3Y, _("Off"),true,false);
+		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS3M-55,  FRONTEND_POS3Y, _("Off"), 0);
 	}
 
 	////////////
 	// fog
-	addTextButton(FRONTEND_FOGTYPE,	 FRONTEND_POS4X-35,   FRONTEND_POS4Y, _("Fog"),true,false);
+	addTextButton(FRONTEND_FOGTYPE,	 FRONTEND_POS4X-35,   FRONTEND_POS4Y, _("Fog"), 0);
 	if(war_GetFog())
 	{
-		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS4Y, _("Mist"),true,false);
+		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS4Y, _("Mist"), 0);
 	}
 	else
 	{
-		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS4Y, _("Fog Of War"),true,false);
+		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS4Y, _("Fog Of War"), 0);
 	}
 
 	////////////
 	//subtitle mode.
 	if(war_GetAllowSubtitles())
 	{
-		addTextButton(FRONTEND_SUBTITLES,	FRONTEND_POS5X-35,FRONTEND_POS5Y, _("Subtitles"),true,false);
-	}
-	else
-	{
-		addTextButton(FRONTEND_SUBTITLES,	FRONTEND_POS5X-35,FRONTEND_POS5Y, _("Subtitles"),true,true);
-	}
-
-	if(war_GetAllowSubtitles())
-	{
+		addTextButton(FRONTEND_SUBTITLES,	FRONTEND_POS5X-35,FRONTEND_POS5Y, _("Subtitles"), 0);
 		if ( !seq_GetSubtitles() )
 		{
-			addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS5M-55,FRONTEND_POS5Y, _("Off"),true,false);
+			addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS5M-55,FRONTEND_POS5Y, _("Off"), 0);
 		}
 		else
 		{
-			addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS5M-55,FRONTEND_POS5Y, _("On"),true,false);
+			addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS5M-55,FRONTEND_POS5Y, _("On"), 0);
 		}
 	}
 	else
 	{
-		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, _("Off"), true, true);
+		addTextButton(FRONTEND_SUBTITLES,	FRONTEND_POS5X-35, FRONTEND_POS5Y, _("Subtitles"), WBUT_DISABLE);
+		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, _("Off"), WBUT_DISABLE);
 	}
 
 	////////////
 	//shadows
-	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Shadows"), true, false);
+	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Shadows"), 0);
 	if (getDrawShadows())
 	{
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS6M - 55,  FRONTEND_POS6Y, _("On"), true, false);
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS6M - 55,  FRONTEND_POS6Y, _("On"), 0);
 	}
 	else
 	{	// not flipped
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS6M - 55,  FRONTEND_POS6Y, _("Off"), true, false);
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS6M - 55,  FRONTEND_POS6Y, _("Off"), 0);
 	}
 
 	// Add some text down the side of the form
@@ -868,15 +854,15 @@ BOOL startGameOptions3Menu(void)
 	addBottomForm();
 
 	// 2d audio
-	addTextButton(FRONTEND_FX, FRONTEND_POS2X-25,FRONTEND_POS2Y, _("Voice Volume"),true,false);
+	addTextButton(FRONTEND_FX, FRONTEND_POS2X-25,FRONTEND_POS2Y, _("Voice Volume"), 0);
 	addFESlider(FRONTEND_FX_SL, FRONTEND_BOTFORM, FRONTEND_POS2M, FRONTEND_POS2Y+5, AUDIO_VOL_MAX, sound_GetUIVolume() * 100.0);
 
 	// 3d audio
-	addTextButton(FRONTEND_3D_FX, FRONTEND_POS3X-25,FRONTEND_POS3Y, _("FX Volume"),true,false);
+	addTextButton(FRONTEND_3D_FX, FRONTEND_POS3X-25,FRONTEND_POS3Y, _("FX Volume"), 0);
 	addFESlider(FRONTEND_3D_FX_SL, FRONTEND_BOTFORM, FRONTEND_POS3M, FRONTEND_POS3Y+5, AUDIO_VOL_MAX, sound_GetEffectsVolume() * 100.0);
 
 	// cd audio
-	addTextButton(FRONTEND_MUSIC, FRONTEND_POS4X-25,FRONTEND_POS4Y, _("Music Volume"),true,false);
+	addTextButton(FRONTEND_MUSIC, FRONTEND_POS4X-25,FRONTEND_POS4Y, _("Music Volume"), 0);
 	addFESlider(FRONTEND_MUSIC_SL, FRONTEND_BOTFORM, FRONTEND_POS4M, FRONTEND_POS4Y+5, AUDIO_VOL_MAX, sound_GetMusicVolume() * 100.0);
 
 	// quit.
@@ -948,40 +934,40 @@ BOOL startGameOptions4Menu(void)
 	addBottomForm();
 
 	// Fullscreen/windowed
-	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X-35, FRONTEND_POS2Y, _("Graphics Mode*"), true, false);
+	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X-35, FRONTEND_POS2Y, _("Graphics Mode*"), 0);
 
 	if (war_getFullscreen())
 	{
-		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M-55, FRONTEND_POS2Y, _("Fullscreen"), true, false);
+		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M-55, FRONTEND_POS2Y, _("Fullscreen"), 0);
 	}
 	else
 	{
-		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M-55, FRONTEND_POS2Y, _("Windowed"), true, false);
+		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M-55, FRONTEND_POS2Y, _("Windowed"), 0);
 	}
 
 	// Resolution
-	addTextButton(FRONTEND_RESOLUTION, FRONTEND_POS3X-35, FRONTEND_POS3Y, _("Resolution*"), true, false);
-	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M-55, FRONTEND_POS3Y, resolution, true, false);
+	addTextButton(FRONTEND_RESOLUTION, FRONTEND_POS3X-35, FRONTEND_POS3Y, _("Resolution*"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M-55, FRONTEND_POS3Y, resolution, WBUT_SECONDARY);
 	widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
 
 	// Texture size
-	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Texture size"), true, false);
-	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS4M-55, FRONTEND_POS4Y, textureSize, true, false);
+	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Texture size"), 0);
+	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS4M-55, FRONTEND_POS4Y, textureSize, 0);
 
 	// Vsync
-	addTextButton(FRONTEND_VSYNC, FRONTEND_POS5X-35, FRONTEND_POS5Y, _("Vertical sync*"), true, false);
+	addTextButton(FRONTEND_VSYNC, FRONTEND_POS5X-35, FRONTEND_POS5Y, _("Vertical sync*"), 0);
 
 	if (war_GetVsync())
 	{
-		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, _("On"), true, false);
+		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, _("On"), 0);
 	}
 	else
 	{
-		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, _("Off"), true, false);
+		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, _("Off"), 0);
 	}
 
 	// Add a note about changes taking effect on restart for certain options
-	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("* Takes effect on game restart"), true, true);
+	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("* Takes effect on game restart"), WBUT_DISABLE);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("VIDEO OPTIONS"));
@@ -1038,10 +1024,18 @@ BOOL runGameOptions4Menu(void)
 			oldcurrent = current;
 			do
 			{
-				if (++current == count)
-					current = 0;
-			} while (modes[current]->w < 640 &&
-			          modes[current]->h < 400 && current != oldcurrent);
+				if (!mouseReleased(MOUSE_RMB))
+				{
+					if (--current < 0)
+						current = count - 1;
+				}
+				else
+				{
+					if (++current == count)
+						current = 0;
+				}	
+			} while ((modes[current]->w < 640 || modes[current]->h < 480)
+				&& current != oldcurrent);
 
 			// Set the new width and height (takes effect on restart)
 			war_SetWidth(modes[current]->w);
@@ -1138,53 +1132,53 @@ BOOL startGameOptions5Menu(void)
 
 	////////////
 	// mouseflip
-	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X-35,   FRONTEND_POS2Y, _("Reverse Rotation"),true,false);
+	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X-35,   FRONTEND_POS2Y, _("Reverse Rotation"), 0);
 	if( getInvertMouseStatus() )
 	{	// flipped
-		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-25,  FRONTEND_POS2Y, _("On"),true,false);
+		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-25,  FRONTEND_POS2Y, _("On"), 0);
 	}
 	else
 	{	// not flipped
-		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-25,  FRONTEND_POS2Y, _("Off"),true,false);
+		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-25,  FRONTEND_POS2Y, _("Off"), 0);
 	}
 
 	// Cursor trapping
-	addTextButton(FRONTEND_TRAP, FRONTEND_POS3X-35, FRONTEND_POS3Y, _("Trap Cursor"), true, false);
+	addTextButton(FRONTEND_TRAP, FRONTEND_POS3X-35, FRONTEND_POS3Y, _("Trap Cursor"), 0);
 
 	if (war_GetTrapCursor())
 	{
-		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-25, FRONTEND_POS3Y, _("On"), true, false);
+		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-25, FRONTEND_POS3Y, _("On"), 0);
 	}
 	else
 	{
-		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-25, FRONTEND_POS3Y, _("Off"), true, false);
+		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-25, FRONTEND_POS3Y, _("Off"), 0);
 	}
 	
 	// Hardware / software cursor toggle
-	addTextButton(FRONTEND_CURSORMODE, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Colored Cursors *"), true, false);
+	addTextButton(FRONTEND_CURSORMODE, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Colored Cursors*"), 0);
 
 	if (war_GetColouredCursor())
 	{
-		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-25, FRONTEND_POS4Y, _("On"), true, false);
+		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-25, FRONTEND_POS4Y, _("On"), 0);
 	}
 	else
 	{
-		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-25, FRONTEND_POS4Y, _("Off"), true, false);
+		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-25, FRONTEND_POS4Y, _("Off"), 0);
 	}
 
 	////////////
 	// left-click orders
-	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X-35,   FRONTEND_POS5Y, _("Switch Mouse Buttons"),true,false);
+	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X-35,   FRONTEND_POS5Y, _("Switch Mouse Buttons"), 0);
 	if( getRightClickOrders() )
 	{	// right-click orders
-		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("On"),true,false);
+		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("On"), 0);
 	}
 	else
 	{	// left-click orders
-		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("Off"),true,false);
+		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("Off"), 0);
 	}
 
-	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("* May negatively affect performance"), true, true);
+	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("* May negatively affect performance"), WBUT_DISABLE);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MOUSE OPTIONS"));
@@ -1235,12 +1229,12 @@ BOOL runGameOptions5Menu(void)
 			if (war_GetColouredCursor())
 			{
 				war_SetColouredCursor(false);
-				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Hardware"));
+				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Off"));
 			}
 			else
 			{
 				war_SetColouredCursor(true);
-				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Software (coloured)"));
+				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("On"));
 			}
 			break;
 
@@ -1288,23 +1282,23 @@ BOOL startGameOptionsMenu(void)
 	addBottomForm();
 
 	// Difficulty
-	addTextButton(FRONTEND_DIFFICULTY, FRONTEND_POS2X-25, FRONTEND_POS2Y, _("Difficulty"), true, false);
+	addTextButton(FRONTEND_DIFFICULTY, FRONTEND_POS2X-25, FRONTEND_POS2Y, _("Difficulty"), 0);
 	switch (getDifficultyLevel())
 	{
 		case DL_EASY:
-			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS2M-25, FRONTEND_POS2Y, _("Easy"), true, false);
+			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS2M-25, FRONTEND_POS2Y, _("Easy"), 0);
 			break;
 		case DL_NORMAL:
-			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS2M-25,FRONTEND_POS2Y, _("Normal"), true, false);
+			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS2M-25,FRONTEND_POS2Y, _("Normal"), 0);
 			break;
 		case DL_HARD:
 		default:
-			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS2M-25, FRONTEND_POS2Y, _("Hard"), true, false);
+			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS2M-25, FRONTEND_POS2Y, _("Hard"), 0);
 			break;
 	}
 
 	// Scroll speed
-	addTextButton(FRONTEND_SCROLLSPEED, FRONTEND_POS3X-25, FRONTEND_POS3Y, _("Scroll Speed"), true, false);
+	addTextButton(FRONTEND_SCROLLSPEED, FRONTEND_POS3X-25, FRONTEND_POS3Y, _("Scroll Speed"), 0);
 	addFESlider(FRONTEND_SCROLLSPEED_SL, FRONTEND_BOTFORM, FRONTEND_POS3M, FRONTEND_POS3Y+5, 16, scroll_speed_accel / 100);
 
 	// Colour stuff
@@ -1318,8 +1312,8 @@ BOOL startGameOptionsMenu(void)
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P7, FRONTEND_POS4M+(4*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYER7, IMAGE_PLAYERX, true);
 
 	// language
-	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS5Y, _("Language"), true, false);
-	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS5Y, getLanguageName(), true, false);
+	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS5Y, _("Language"), 0);
+	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS5Y, getLanguageName(), 0);
 
 	// FIXME: if playercolor = 1-3, then we Assert in widgSetButtonState() since we don't define FE_P1 - FE_P3
 	// I assume the reason is that in SP games, those are reserved for the AI?  Valid values are 0, 4-7.
@@ -1330,7 +1324,7 @@ BOOL startGameOptionsMenu(void)
 		playercolor = 0;
 	}
 	widgSetButtonState(psWScreen, FE_P0 + playercolor, WBUT_LOCK);
-	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour"), true, false);
+	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour"), 0);
 
 	// Quit
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -1376,7 +1370,6 @@ BOOL runGameOptionsMenu(void)
 			break;
 		}
 		break;
-//	case FRONTEND_GAMMA:
 	case FRONTEND_SCROLLSPEED:
 		break;
 
@@ -1574,7 +1567,7 @@ void removeTopForm( void )
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt,BOOL bAlign,BOOL bGrey)
+void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)
 {
 	W_BUTINIT		sButInit;
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
@@ -1583,32 +1576,62 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt,BOOL bA
 	sButInit.id = id;
 	sButInit.x = (short)PosX;
 	sButInit.y = (short)PosY;
+	sButInit.style = WBUT_PLAIN;
 
-	if(bAlign)
+	// Align
+	if ( !(style & WBUT_TXTCENTRE) )
 	{
-		sButInit.style = WBUT_PLAIN;
-		sButInit.width = (short)(iV_GetTextWidth(txt)+10);//FRONTEND_BUTWIDTH;
-
+		sButInit.width = (short)(iV_GetTextWidth(txt)+10);
 		sButInit.x+=35;
 	}
 	else
 	{
-		sButInit.style = WBUT_PLAIN | WBUT_TXTCENTRE;
+		sButInit.style |= WBUT_TXTCENTRE;
 		sButInit.width = FRONTEND_BUTWIDTH;
 	}
 
-	sButInit.UserData = bGrey; // store disable state
+	// Enable right clicks
+	if (style & WBUT_SECONDARY)
+	{
+		sButInit.style |= WBUT_SECONDARY;
+	}
+
+	sButInit.UserData = (style & WBUT_DISABLE); // store disable state
 
 	sButInit.height = FRONTEND_BUTHEIGHT;
 	sButInit.pDisplay = displayTextOption;
 	sButInit.FontID = font_large;
 	sButInit.pText = txt;
 	widgAddButton(psWScreen, &sButInit);
-
-	if(bGrey)										// dont allow clicks to this button...
+	
+	// Disable button
+	if (style & WBUT_DISABLE)									
 	{
-		widgSetButtonState(psWScreen,id,WBUT_DISABLE);
+		widgSetButtonState(psWScreen, id, WBUT_DISABLE);
 	}
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+void addText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
+{
+	W_LABINIT		sLabInit;
+	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	
+	sLabInit.formID = formID;
+	sLabInit.id = id;
+	sLabInit.x = (short)PosX;
+	sLabInit.y = (short)PosY;
+	sLabInit.style = (WLAB_PLAIN | WLAB_ALIGNCENTRE);
+	
+	// Align
+	sLabInit.width = MULTIOP_READY_WIDTH;
+	//sButInit.x+=35;
+	
+	sLabInit.height = FRONTEND_BUTHEIGHT;
+	sLabInit.pDisplay = displayText;
+	sLabInit.FontID = font_small;
+	sLabInit.pText = txt;
+	widgAddLabel(psWScreen, &sLabInit);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1661,8 +1684,9 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	iV_SetFont(font_regular);
+	iV_SetTextColour(WZCOL_GREY);
+	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 9, pie_GetVideoBufferHeight() - 14, 270.f);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-
 	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
 }
 
@@ -1671,6 +1695,19 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	iV_DrawImage(FrontImages,IMAGE_FE_LOGO,xOffset+psWidget->x,yOffset+psWidget->y);
+
+	if (*getModList())
+	{
+		// show the mod list
+		char modListText[WIDG_MAXSTR] = "";
+		sstrcat(modListText, _("Active mods: "));
+		sstrcat(modListText, getModList());
+		iV_SetFont(font_regular);
+		iV_SetTextColour(WZCOL_GREY);
+		iV_DrawText(modListText, xOffset+psWidget->x-9, yOffset+psWidget->y-19);
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_DrawText(modListText, xOffset+psWidget->x-10, yOffset+psWidget->y-20);
+	}
 }
 
 
@@ -1727,6 +1764,35 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 
 
 // ////////////////////////////////////////////////////////////////////////////
+// show text.
+void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	SDWORD			fx,fy, fw;
+	W_LABEL		*psLab;
+	
+	psLab = (W_LABEL *)psWidget;
+	iV_SetFont(psLab->FontID);
+	
+  	fw = iV_GetTextWidth(psLab->aText);
+	fy = yOffset + psWidget->y;
+	
+	if (psWidget->style & WLAB_ALIGNCENTRE)	//check for centering, calculate offset.
+	{
+		fx = xOffset + psWidget->x + ((psWidget->width - fw) / 2);
+	}
+	else
+	{
+		fx = xOffset + psWidget->x;
+	}
+	
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_DrawText( psLab->aText, fx, fy);
+	
+	return;
+}
+
+
+// ////////////////////////////////////////////////////////////////////////////
 // show text written on its side.
 void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
@@ -1736,11 +1802,13 @@ void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 	psLab = (W_LABEL *)psWidget;
 
 	iV_SetFont(font_large);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	fx = xOffset + psWidget->x;
 	fy = yOffset + psWidget->y + iV_GetTextWidth(psLab->aText) ;
 
+	iV_SetTextColour(WZCOL_GREY);
+	iV_DrawTextRotated(psLab->aText, fx+2, fy+2, 270.f);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	iV_DrawTextRotated(psLab->aText, fx, fy, 270.f);
 }
 

@@ -34,7 +34,7 @@
 
 #ifndef _MSC_VER
 /* Compilers that have support for C99 have all values below defined in stdint.h */
-# include <stdint.h>
+# include <inttypes.h>
 #else // !_MSC_VER
 // Defines C99 types for C99 incompatible compilers (e.g. MSVC)
 //BEGIN Hope this is right.
@@ -57,6 +57,7 @@ typedef signed   long long int64_t;
 # define UINT8_MAX              (255)
 # define UINT16_MAX             (65535)
 # define UINT32_MAX             (4294967295U)
+#define PRIu64  "I64u"
 #endif // !_MSC_VER
 
 /* Basic numeric types */

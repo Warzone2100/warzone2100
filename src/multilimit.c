@@ -182,7 +182,7 @@ BOOL startLimitScreen(void)
 					LIMITS_OKX-40,LIMITS_OKY,
 					iV_GetImageWidth(FrontImages,IMAGE_RETURN),
 					iV_GetImageHeight(FrontImages,IMAGE_RETURN),
-					_("Apply the Default values and Return To Previous Screen"),IMAGE_NO,IMAGE_NO,true);
+					_("Apply Defaults and Return To Previous Screen"),IMAGE_NO,IMAGE_NO,true);
 
 	// ok button
 	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_OK,

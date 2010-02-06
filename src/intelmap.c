@@ -65,6 +65,8 @@
 
 #include "scriptextern.h"
 
+#include "multimenu.h"
+
 //#define NO_VIDEO
 
 /* Intelligence Map screen IDs */
@@ -289,6 +291,11 @@ BOOL intAddIntelMap(void)
 		return false;
 	}
 
+	if (bMultiPlayer && !MultiMenuUp && !playCurrent)
+	{
+		intAddMultiMenu();
+	}
+
 	return true;
 }
 
@@ -490,6 +497,10 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	{
 		intRemoveMessageView(false);
 		Animate = false;
+	}
+	if (MultiMenuUp)
+	{
+		intCloseMultiMenuNoAnim();
 	}
 
 	/* Add the base form */
@@ -704,6 +715,14 @@ void intProcessIntelMap(UDWORD id)
 		//if close button pressed on 3D View then close the view only
 		psCurrentMsg = NULL;
 		intRemoveMessageView(true);
+		if (bMultiPlayer && !MultiMenuUp)
+		{
+			intAddMultiMenu();
+		}
+	}
+	else if (MultiMenuUp)
+	{
+		intProcessMultiMenu(id);
 	}
 }
 
@@ -1050,6 +1069,11 @@ void intRemoveIntelMap(void)
 	//remove the text label
 	widgDelete(psWScreen, IDINTMAP_PAUSELABEL);
 
+	if (bMultiPlayer && MultiMenuUp)
+	{
+		intCloseMultiMenu();
+	}
+	
 	intCleanUpIntelMap();
 }
 
@@ -1069,6 +1093,11 @@ void intRemoveIntelMapNoAnim(void)
 	//remove the text label
 	widgDelete(psWScreen, IDINTMAP_PAUSELABEL);
 
+	if (bMultiPlayer && MultiMenuUp)
+	{
+		intCloseMultiMenuNoAnim();
+	}
+	
 	intCleanUpIntelMap();
 }
 
@@ -1131,7 +1160,7 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 
 	// Get the object associated with this widget.
 	psMsg = (MESSAGE *)psBuffer->Data;
-	ASSERT( psMsg != NULL, "psBuffer->Data empty. Why?" );
+	ASSERT_OR_RETURN( , psMsg != NULL, "psBuffer->Data empty. Why?" );
 	//shouldn't have any proximity messages here...
 	if (psMsg->type == MSG_PROXIMITY)
 	{

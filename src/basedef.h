@@ -43,7 +43,13 @@ typedef enum _object_type
 	OBJ_FEATURE,    ///< Things like roads, trees, bridges, fires
 	OBJ_PROJECTILE, ///< Comes out of guns, stupid :-)
 	OBJ_TARGET,     ///< for the camera tracking
+	OBJ_NUM_TYPES,  ///< number of object types - MUST BE LAST
 } OBJECT_TYPE;
+
+typedef struct _tilePos
+{
+	UBYTE x, y;
+} TILEPOS;
 
 /*
  Coordinate system used for objects in Warzone 2100:
@@ -60,15 +66,16 @@ typedef enum _object_type
 	Vector3uw       pos;                            /**< Position of the object */ \
 	float           direction;                      /**< Object's yaw +ve rotation around up-axis */ \
 	SWORD           pitch;                          /**< Object's pitch +ve rotation around right-axis (nose up/down) */ \
+	UBYTE           player;                         /**< Which player the object belongs to */ \
 	SWORD           roll                            /**< Object's roll +ve rotation around forward-axis (left wing up/down) */
 
 #define BASE_ELEMENTS2(pointerType) \
 	SCREEN_DISP_DATA    sDisplay;                   /**< screen coordinate details */ \
-	UBYTE               player;                     /**< Which player the object belongs to */ \
 	UBYTE               group;                      /**< Which group selection is the droid currently in? */ \
 	UBYTE               selected;                   /**< Whether the object is selected (might want this elsewhere) */ \
 	UBYTE               cluster;                    /**< Which cluster the object is a member of */ \
 	UBYTE               visible[MAX_PLAYERS];       /**< Whether object is visible to specific player */ \
+	UBYTE               seenThisTick[MAX_PLAYERS];  /**< Whether object has been seen this tick by the specific player. */ \
 	UDWORD              died;                       /**< When an object was destroyed, if 0 still alive */ \
 	UDWORD              lastEmission;               /**< When did it last puff out smoke? */ \
 	UDWORD              lastHitWeapon;		/**< The weapon that last hit it */ \
@@ -80,6 +87,8 @@ typedef enum _object_type
 	SDWORD              sensorPower;		/**< Active sensor power */ \
 	SDWORD              sensorRange;		/**< Range of sensor */ \
 	SDWORD              ECMMod;			/**< Ability to conceal oneself from sensors */ \
+	UWORD               numWatchedTiles;		/**< Number of watched tiles, zero for features */ \
+	TILEPOS             *watchedTiles;		/**< Variable size array of watched tiles, NULL for features */ \
 	UDWORD              armour[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES]
 
 #define NEXTOBJ(pointerType) \

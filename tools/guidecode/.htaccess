@@ -1,0 +1,32 @@
+<IfModule mod_rewrite.c>
+RewriteEngine on
+
+#RewriteLog "/home/wz/public_html/cache/rewrite.log"
+#RewriteLogLevel 5
+
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+ErrorDocument 404 /404
+
+DirectoryIndex index.html index.php /fileman/dirindex.php
+
+# Root
+
+RewriteRule ^index(\.php|\.html)?$ / [R=301,L]
+RewriteRule ^(w|r|c)/([a-z0-9-]+)/$ /$1/$2 [R=301,L]
+RewriteRule ^r/tech\-tree\-chart/?$ /r/tech-tree [R=301,L]
+
+RewriteRule ^([a-z0-9]+)$ $1.php [L,QSA]
+RewriteRule ^w/([a-z0-9]+)$ w/w.php?$1 [L,QSA]
+RewriteRule ^r/([a-z0-9]+)$ r/r.php?$1 [L,QSA]
+RewriteRule ^c/([a-z0-9]+)$ c/c.php?$1 [L,QSA]
+RewriteRule ^c/([a-z0-9]+)\-([a-z0-9]+)\-([a-z0-9]+)$ c/t.php?w=$1&b=$2&p=$3&cyborg [L,QSA]
+RewriteRule ^u/([a-z0-9]+)\-([a-z0-9]+)\-([a-z0-9]+)$ c/t.php?w=$1&b=$2&p=$3 [L,QSA]
+RewriteRule ^b/([a-z0-9]+)$ b/b.php?$1 [L,QSA]
+RewriteRule ^d/([a-z0-9]+)$ d/d.php?$1 [L,QSA]
+RewriteRule ^bp/([a-z0-9]+)$ bp/bp.php?$1 [L,QSA]
+RewriteRule ^r/tech\-tree$ r/graphicaltechtree.html [L,QSA]
+RewriteRule ^r/tech\-tree-linear$ r/techtree.html [L,QSA]
+
+</IfModule>

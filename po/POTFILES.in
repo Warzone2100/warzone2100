@@ -16,16 +16,9 @@ data/base/messages/strings/scrstrings.txt
 data/base/multiplay/script/multilim.slo
 data/base/multiplay/script/multiplay.slo
 data/base/multiplay/script/scavfact.slo
-data/base/multiplay/skirmish/player0.slo
-data/base/multiplay/skirmish/player1.slo
-data/base/multiplay/skirmish/player2.slo
-data/base/multiplay/skirmish/player3.slo
-data/base/multiplay/skirmish/player4.slo
-data/base/multiplay/skirmish/player5.slo
-data/base/multiplay/skirmish/player6.slo
-data/base/multiplay/skirmish/player7.slo
 data/base/multiplay/skirmish/rules.slo
 data/base/multiplay/skirmish/sktech.slo
+data/base/multiplay/skirmish/ai.slo 
 data/base/script/demo/demo_global.slo
 data/base/script/demo/demo_p0.slo
 data/base/script/demo/demo_p1.slo
@@ -117,6 +110,7 @@ data/mods/multiplay/ntw/multiplay/skirmish/player6.slo
 data/mods/multiplay/ntw/multiplay/skirmish/player7.slo
 data/mods/multiplay/ntw/multiplay/skirmish/rules.slo
 data/mods/multiplay/ntw/multiplay/skirmish/sktech.slo
+data/mp/messages/resmessages12.rmsg
 data/mp/messages/resmessages1.rmsg
 data/mp/messages/resmessages23.rmsg
 data/mp/messages/resmessages2.rmsg
@@ -265,7 +259,7 @@ src/loop.c
 src/main.cpp
 src/map.c
 src/mapdisplay.c
-src/mapgrid.c
+src/mapgrid.cpp
 src/mechanics.c
 src/message.c
 src/miscimd.c
@@ -287,6 +281,7 @@ src/objmem.c
 src/oprint.c
 src/order.c
 src/parsetest.c
+src/pointtree.cpp
 src/power.c
 src/projectile.c
 src/radar.c

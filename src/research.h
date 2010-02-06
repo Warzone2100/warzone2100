@@ -108,7 +108,7 @@ extern UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic,
                               UWORD limit);
 
 /* process the results of a completed research topic */
-extern void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE *psResearchFacility);
+extern void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE *psResearchFacility, BOOL bTrigger);
 
 //this just inits all the research arrays
 extern BOOL ResearchShutDown(void);

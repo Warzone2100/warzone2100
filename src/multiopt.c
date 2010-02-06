@@ -53,6 +53,7 @@
 #include "aiexperience.h"	//for beacon messages
 #include "multiint.h"
 #include "multirecv.h"
+#include "scriptfuncs.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
@@ -174,6 +175,7 @@ void recvOptions()
 			NETuint8_t(&alliances[i][j]);
 		}
 	}
+	netPlayersUpdated = true;
 
 	// Free any structure limits we may have in-place
 	if (ingame.numStructureLimits)
@@ -206,14 +208,20 @@ void recvOptions()
 			widgSetSliderPos(psWScreen, MULTIOP_SKSLIDE + i, game.skDiff[i]);
 		}
 	}
-
+	debug(LOG_NET, "Rebuilding map list");
+	// clear out the old level list.
+	levShutDown();
+	levInitialise();
+	rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
+	buildMapList();
 	// See if we have the map or not
 	if (!checkGameWdg(game.map))
 	{
 		uint32_t player = selectedPlayer;
 
+		debug(LOG_NET, "Map was not found, requesting map %s from host.", game.map);
 		// Request the map from the host
-		NETbeginEncode(NET_REQUESTMAP, NET_HOST_ONLY);
+		NETbeginEncode(NET_FILE_REQUESTED, NET_HOST_ONLY);
 		NETuint32_t(&player);
 		NETend();
 
@@ -258,7 +266,8 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
-	bMultiPlayer = true;								// enable messages
+	bMultiPlayer = true;
+	bMultiMessages = true; // enable messages
 
 	loadMultiStats(sPlayer,&playerStats);				// stats stuff
 	setMultiStats(selectedPlayer, playerStats, false);
@@ -282,17 +291,19 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 
 	if(!ingame.localJoiningInProgress)
 	{
-		NETjoinGame(gameNumber, sPlayer);	// join
+		if (!NETjoinGame(gameNumber, sPlayer))	// join
+		{
+			return false;
+		}
 		ingame.localJoiningInProgress	= true;
 
 		loadMultiStats(sPlayer,&playerStats);
 		setMultiStats(selectedPlayer, playerStats, false);
 		setMultiStats(selectedPlayer, playerStats, true);
-		return false;
+		return true;
 	}
 
-	bMultiPlayer = true;
-	return true;
+	return false;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -334,8 +345,8 @@ BOOL multiShutdown(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// copy tempates from one player to another.
-BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
+// copy templates from one player to another.
+BOOL addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
 {
 	DROID_TEMPLATE *psTempl = malloc(sizeof(DROID_TEMPLATE));
 
@@ -352,165 +363,26 @@ BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 		psTempl->pName = strdup(psNew->pName);
 	}
 
-	psTempl->psNext = apsDroidTemplates[player];
-	apsDroidTemplates[player] = psTempl;
+	psTempl->psNext = *ppList;
+	*ppList = psTempl;
 
 	return true;
 }
 
-BOOL addTemplateSet(UDWORD from,UDWORD to)
+// ////////////////////////////////////////////////////////////////////////////
+// copy templates from one player to another.
+BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 {
-	DROID_TEMPLATE	*psCurr;
-
-	if(from == to)
-	{
-		return true;
-	}
-
-	for(psCurr = apsDroidTemplates[from];psCurr;psCurr= psCurr->psNext)
-	{
-		addTemplate(to, psCurr);
-	}
-
-	return true;
-}
-
-BOOL copyTemplateSet(UDWORD from,UDWORD to)
-{
-	DROID_TEMPLATE	*psTempl;
-
-	if(from == to)
-	{
-		return true;
-	}
-
-	while(apsDroidTemplates[to])				// clear the old template out.
-	{
-		psTempl = apsDroidTemplates[to]->psNext;
-		free(apsDroidTemplates[to]);
-		apsDroidTemplates[to] = psTempl;
-	}
-
-	return 	addTemplateSet(from,to);
+	return addTemplateToList(psNew, &apsDroidTemplates[player]);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // setup templates
 BOOL multiTemplateSetup(void)
 {
-	UDWORD player;
-
-	// Yes, this code really *is* as hacky as it looks.
-	// Fortunately, a recent patch makes it slightly less hacky,
-	// but still really hacky.
-	// I'm going to try to narrate what's going on.
-
-	// First, let's give these two some better names.
-
-#define AI_TEMPLATES DEATHMATCHTEMPLATES // 4
-#define HUMAN_TEMPLATES CAMPAIGNTEMPLATES // 5
-
-	// We build our template sets.
-
-	// * Humans only start with a truck, in player 5.
-	//   We don't need to worry about that.
-
-	// * AI units are stored in players 2, 4, and 6, for some reason.
-	//   We consolidate all the AI units in player 4.
-	//   We also add the human players' truck to the AIs.
-	//   (Not that most AI scripts actually use the truck in their
-	//   own template set...)
-	addTemplateSet(HUMAN_TEMPLATES, AI_TEMPLATES);
-	addTemplateSet(6, AI_TEMPLATES);
-	addTemplateSet(2, AI_TEMPLATES);
-
-	// To reiterate:
-	// Player 5 (HUMAN_TEMPLATES) contains the human player template set.
-	// Player 4 (AI_TEMPLATES) contains the AI player template set.
-
-	// Now, we need to make sure all human players end up with the
-	// human templates, and all AI players end up with the AI templates.
-	// Which turns out to be pretty complicated, if for some reason
-	// player 5 (HUMAN_TEMPLATES) is an AI, or player 4 (AI_TEMPLATES)
-	// is a human.
-
-	if (isHumanPlayer(HUMAN_TEMPLATES))
-	{
-		// Player 5 is a human.
-		// We just copy player 4's templates onto all the AI's,
-		// then copy player 5's template onto all the humans.
-
-		// AIs first
-		for (player=0;player<game.maxPlayers;player++)
-		{
-			if (!isHumanPlayer(player))
-			{
-				copyTemplateSet(AI_TEMPLATES, player);
-			}
-		}
-		// Now humans
-		for (player=0;player<game.maxPlayers;player++)
-		{
-			if (isHumanPlayer(player))
-			{
-				copyTemplateSet(HUMAN_TEMPLATES, player);
-			}
-		}
-	}
-	else if (!isHumanPlayer(AI_TEMPLATES))
-	{
-		// Player 4 is an AI.
-		// Like the above, except in the opposite order.
-
-		// Humans first
-		for (player = 0; player < game.maxPlayers; player++)
-		{
-			if (isHumanPlayer(player))
-			{
-				copyTemplateSet(HUMAN_TEMPLATES, player);
-			}
-		}
-		// Now AIs
-		for (player = 0; player < game.maxPlayers; player++)
-		{
-			if (!isHumanPlayer(player))
-			{
-				copyTemplateSet(AI_TEMPLATES, player);
-			}
-		}
-	}
-	else
-	{
-		// Player 5 is an AI player, and player 4 is a human player.
-		// The best way to deal with this is to swap them.
-		// We'll use player 6 for temporary storage.
-		copyTemplateSet(AI_TEMPLATES, 6);
-		copyTemplateSet(HUMAN_TEMPLATES, AI_TEMPLATES);
-		copyTemplateSet(6, HUMAN_TEMPLATES);
-
-		// Now, we can copy all the player 5 templates (now AI
-		// templates) to the other AIs, and the player 4 templates
-		// (now human templates) to humans
-
-		// Since players 4 and 5 both have the templates they
-		// should end up with, we can now do this in one pass.
-		for (player=0;player<game.maxPlayers;player++)
-		{
-			if (isHumanPlayer(player))
-			{
-				copyTemplateSet(AI_TEMPLATES, player);
-			}
-			else
-			{
-				copyTemplateSet(HUMAN_TEMPLATES, player);
-			}
-		}
-	}
-
+	// do nothing now
 	return true;
 }
-
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // remove structures from map before campaign play.
@@ -521,12 +393,10 @@ static BOOL cleanMap(UDWORD player)
 	BOOL		firstFact,firstRes;
 
 	bMultiPlayer = false;
+	bMultiMessages = false;
 
 	firstFact = true;
 	firstRes = true;
-
-	// reverse so we always remove the last object. re-reverse afterwards.
-//	reverseObjectList((BASE_OBJECT**)&apsStructLists[player]);
 
 	switch(game.base)
 	{
@@ -539,9 +409,7 @@ static BOOL cleanMap(UDWORD player)
 		while(psD)
 		{
 			psD2=psD->psNext;
-			//if(psD->droidType != DROID_CONSTRUCT)
-            if (!(psD->droidType == DROID_CONSTRUCT ||
-                psD->droidType == DROID_CYBORG_CONSTRUCT))
+			if (psD->droidType != DROID_CONSTRUCT && psD->droidType != DROID_CYBORG_CONSTRUCT)
 			{
 				killDroid(psD);
 			}
@@ -558,13 +426,11 @@ static BOOL cleanMap(UDWORD player)
 			   ||(psStruct->pStructureType->type == REF_DEFENSE)
 			   ||(psStruct->pStructureType->type == REF_BLASTDOOR)
 			   ||(psStruct->pStructureType->type == REF_CYBORG_FACTORY)
-			   ||(psStruct->pStructureType->type == REF_COMMAND_CONTROL)
-			   )
+			   ||(psStruct->pStructureType->type == REF_COMMAND_CONTROL))
 			{
 				removeStruct(psStruct, true);
 				psStruct= apsStructLists[player];			//restart,(list may have changed).
 			}
-
 			else if( (psStruct->pStructureType->type == REF_FACTORY)
 				   ||(psStruct->pStructureType->type == REF_RESEARCH)
 				   ||(psStruct->pStructureType->type == REF_POWER_GEN))
@@ -642,22 +508,20 @@ static BOOL cleanMap(UDWORD player)
 		break;
 	}
 
-	// rerev list to get back to normal.
-//	reverseObjectList((BASE_OBJECT**)&apsStructLists[player]);
-
 	bMultiPlayer = true;
+	bMultiMessages = true;
 	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// setup a campaign game
-static BOOL campInit(void)
+static BOOL gameInit(void)
 {
 	UDWORD			player;
 
+	scriptInit();
+
 	// If this is from a savegame, stop here!
-	if((getSaveGameType() == GTYPE_SAVE_START)
-	|| (getSaveGameType() == GTYPE_SAVE_MIDMISSION)	)
+	if (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION)
 	{
 		// these two lines are the biggest hack in the world.
 		// the reticule seems to get detached from 'reticuleup'
@@ -676,10 +540,20 @@ static BOOL campInit(void)
 	// Remove baba player for skirmish
 	if (!game.scavengers)
 	{
-		for (player = game.maxPlayers; player < MAX_PLAYERS; player++)
+		for (player = 1; player < MAX_PLAYERS; player++)
 		{
-			clearPlayer(player, true, false);
+			// we want to remove disabled AI & all the other players that don't belong
+			if (game.skDiff[player] == 0 || player >= game.maxPlayers)
+			{
+				clearPlayer(player, true, false);
+				debug(LOG_NET, "Removing disabled AI (%d) from map.", player);
+			}
 		}
+	}
+	else
+	{
+		// ugly hack for now
+		game.skDiff[7] = DIFF_SLIDER_STOPS / 2;
 	}
 
 	if (NetPlay.isHost)	// add oil drums
@@ -720,11 +594,10 @@ BOOL multiGameInit(void)
 		openchannels[player] =true;								//open comms to this player.
 	}
 
-	campInit();
+	gameInit();
 
 	InitializeAIExperience();
 	msgStackReset();	//for multiplayer msgs, reset message stack
-
 
 	return true;
 }
@@ -760,6 +633,7 @@ BOOL multiGameShutdown(void)
 	ingame.bHostSetup = false;	// Dont attempt a host
 	NetPlay.isHost					= false;
 	bMultiPlayer					= false;	// Back to single player mode
+	bMultiMessages					= false;
 	selectedPlayer					= 0;		// Back to use player 0 (single player friendly)
 
 	return true;

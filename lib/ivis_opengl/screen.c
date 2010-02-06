@@ -400,7 +400,7 @@ BOOL Init_FBO(unsigned int width, unsigned int height)
 				debug(LOG_ERROR, "Error: FBO Non-framebuffer passed to glCheckFramebufferStatusEXT()!");
 				break;
 			default:
-				debug(LOG_ERROR, "*UNKNOWN FBO ERROR* reported from glCheckFramebufferStatusEXT() for %x!", status);
+				debug(LOG_ERROR, "*UNKNOWN FBO ERROR* reported from glCheckFramebufferStatusEXT() for %x!", (unsigned int)status);
 				break;
 		}
 		FBOinit = false;	//we have a error with the FBO setup

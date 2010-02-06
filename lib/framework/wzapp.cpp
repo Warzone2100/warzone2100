@@ -20,10 +20,6 @@
  *  Qt-related functions.
  */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // Get platform defines before checking for them!
 #include "frame.h"
 #include "lib/exceptionhandler/dumpinfo.h"
@@ -35,12 +31,8 @@ extern "C" {
 #include "wzapp_c.h"
 #include "src/main.h"
 #include "lib/gamelib/gtime.h"
+#include <deque>
 
-#ifdef __cplusplus
-}
-#endif
-
-#if defined(__MACOSX__)
 #include <QtGui/QImageReader>
 #include <QtGui/QBitmap>
 #include <QtGui/QPainter>
@@ -48,15 +40,6 @@ extern "C" {
 #include <QtGui/QClipboard>
 #include "wzapp.h"
 #include <QtGui/QDesktopWidget>
-#else
-#include <QImageReader>
-#include <QBitmap>
-#include <QPainter>
-#include <QMouseEvent>
-#include <QClipboard>
-#include "wzapp.h"
-#include <QDesktopWidget>
-#endif
 
 /* The possible states for keys */
 typedef enum _key_state
@@ -98,18 +81,23 @@ static INPUT_STATE aMouseState[6];
 #define INPUT_MAXSTR	512
 
 /** The input string buffer */
-static UDWORD	pInputBuffer[INPUT_MAXSTR];
+struct InputKey
+{
+	InputKey(UDWORD key_ = 0, utf_32_char unicode_ = 0) : key(key_), unicode(unicode_) {}
 
-static UDWORD	*pStartBuffer, *pEndBuffer;
-static char	pCharInputBuffer[INPUT_MAXSTR];
-static char	*pCharStartBuffer, *pCharEndBuffer;
-static char	currentChar;
+	UDWORD key;
+	utf_32_char unicode;
+};
+static std::deque<InputKey> inputBuffer;
+
 static QColor fontColor;
 static uint16_t mouseXPos = 0, mouseYPos = 0;
 static CURSOR lastCursor = CURSOR_ARROW;
 
 unsigned int screenWidth = 0;
 unsigned int screenHeight = 0;
+
+static void inputAddBuffer(UDWORD key, utf_32_char unicode);
 
 #define gl_errors() really_report_gl_errors(__FILE__, __LINE__)
 static void really_report_gl_errors (const char *file, int line)
@@ -586,7 +574,7 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 
 	if (pressed)
 	{
-		inputAddBuffer(lastKey, event->text().unicode()->toAscii(), 1);
+		inputAddBuffer(lastKey, event->text().unicode()->unicode());
 	}
 }
 
@@ -834,10 +822,7 @@ void inputInitialise(void)
 		aMouseState[i].state = KEY_UP;
 	}
 
-	pStartBuffer = pInputBuffer;
-	pEndBuffer = pInputBuffer;
-	pCharStartBuffer = pCharInputBuffer;
-	pCharEndBuffer = pCharInputBuffer;
+	inputBuffer.clear();
 
 	dragX = screenWidth / 2;
 	dragY = screenHeight / 2;
@@ -845,47 +830,15 @@ void inputInitialise(void)
 }
 
 /* add count copies of the characater code to the input buffer */
-void inputAddBuffer(UDWORD code, char char_code, UDWORD count)
+static void inputAddBuffer(UDWORD key, utf_32_char unicode)
 {
-	UDWORD	*pNext;
-	char	*pCharNext;
-
-	/* Calculate what pEndBuffer will be set to next */
-	pNext = pEndBuffer + 1;
-	pCharNext = pCharEndBuffer + 1;
-	if (pNext >= pInputBuffer + INPUT_MAXSTR)
-	{
-		pNext = pInputBuffer;
-		pCharNext = pCharInputBuffer;
-	}
-
-	while (pNext != pStartBuffer && count > 0)
-	{
-		/* Store the character */
-		*pEndBuffer = code;
-		*pCharEndBuffer = char_code;
-		pEndBuffer = pNext;
-		pCharEndBuffer = pCharNext;
-		count -= 1;
-
-		/* Calculate what pEndBuffer will be set to next */
-		pNext = pEndBuffer + 1;
-		pCharNext = pCharEndBuffer + 1;
-		if (pNext >= pInputBuffer + INPUT_MAXSTR)
-		{
-			pNext = pInputBuffer;
-			pCharNext = pCharInputBuffer;
-		}
-	}
+	inputBuffer.push_back(InputKey(key, unicode));
 }
 
 /* Clear the input buffer */
 void inputClearBuffer(void)
 {
-	pStartBuffer = pInputBuffer;
-	pEndBuffer = pInputBuffer;
-	pCharStartBuffer = pCharInputBuffer;
-	pCharEndBuffer = pCharInputBuffer;
+	inputBuffer.clear();
 }
 
 /* Return the next key press or 0 if no key in the buffer.
@@ -893,34 +846,27 @@ void inputClearBuffer(void)
  * windows key map.
  * All key presses are buffered up (including windows auto repeat).
  */
-UDWORD inputGetKey(void)
+UDWORD inputGetKey(utf_32_char *unicode)
 {
-	UDWORD	retVal;
-
-	if (pStartBuffer != pEndBuffer)
+	if (inputBuffer.empty())
 	{
-		retVal = *pStartBuffer;
-		currentChar = *pCharStartBuffer;
-		pStartBuffer += 1;
-		pCharStartBuffer += 1;
+		return 0;
+	}
 
-		if (pStartBuffer >= pInputBuffer + INPUT_MAXSTR)
-		{
-			pStartBuffer = pInputBuffer;
-			pCharStartBuffer = pCharInputBuffer;
-		}
-	}
-	else
+	UDWORD retVal = inputBuffer.front().key;
+	if (retVal == 0)
 	{
-		retVal = 0;
+		retVal = ' ';  // Don't return 0 if we got a virtual key, since that's interpreted as no input.
 	}
+
+	if (unicode != NULL)
+	{
+		*unicode = inputBuffer.front().unicode;
+	}
+
+	inputBuffer.pop_front();
 
 	return retVal;
-}
-
-char inputGetCharKey(void)
-{
-	return currentChar;
 }
 
 /*!

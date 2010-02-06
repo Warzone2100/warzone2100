@@ -1758,10 +1758,10 @@ R-Defense-Super-Missile 		_("Missile Fortress")
 
 // added by Marc 1st September - Super Heavy bodies, Flamer Upgrades
 
-R-Vehicle-Body13				_("Super Heavy Body - Wyvern")
+R-Vehicle-Body13				_("Heavy Body - Wyvern")
 Body13SUP					_("Wyvern")
 
-R-Vehicle-Body14				_("Super Heavy Body - Dragon")
+R-Vehicle-Body14				_("Multi Turret Body - Dragon")
 Body14SUP					_("Dragon")
 
 R-Wpn-Flamer-Damage07			_("Superhot Plasmite gel")

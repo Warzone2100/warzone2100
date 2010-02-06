@@ -27,7 +27,8 @@
 #include "lib/framework/wzapp_c.h"
 #include "lib/framework/string_ext.h"
 #include "lib/gamelib/gtime.h"
-
+#include "src/component.h"		// FIXME: we need to handle this better
+#include "src/modding.h"		// FIXME: we need to handle this better
 #include <time.h>			// for stats
 #include <physfs.h>
 #include <string.h>
@@ -38,6 +39,7 @@
 #include "miniupnpc/miniwget.h"
 #include "miniupnpc/miniupnpc.h"
 #include "miniupnpc/upnpcommands.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
@@ -47,6 +49,7 @@
 # include <netinet/in.h>
 # include <sys/socket.h>
 # include <sys/types.h>
+# include <sys/select.h>
 # include <unistd.h>
 typedef int SOCKET;
 static const SOCKET INVALID_SOCKET = -1;
@@ -55,6 +58,7 @@ static const int SOCKET_ERROR = -1;
 # include <winsock2.h>
 # include <ws2tcpip.h>
 # undef EAGAIN
+# undef EBADF
 # undef ECONNRESET
 # undef EINPROGRESS
 # undef EINTR
@@ -62,6 +66,7 @@ static const int SOCKET_ERROR = -1;
 # undef ETIMEDOUT
 # undef EWOULDBLOCK
 # define EAGAIN      WSAEWOULDBLOCK
+# define EBADF       WSAEBADF
 # define ECONNRESET  WSAECONNRESET
 # define EINPROGRESS WSAEINPROGRESS
 # define EINTR       WSAEINTR
@@ -97,7 +102,7 @@ static void setSockErr(int error)
 
 // WARNING !!! This is initialised via configuration.c !!!
 char masterserver_name[255] = {'\0'};
-unsigned int masterserver_port = 0, gameserver_port = 0;
+static unsigned int masterserver_port = 0, gameserver_port = 0;
 
 #define MAX_CONNECTED_PLAYERS	8
 #define MAX_TMP_SOCKETS		16
@@ -105,15 +110,14 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 #define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity
 #define NET_READ_TIMEOUT	0
 /*
-*
+*	=== Using new socket code, this might not hold true any longer ===
 *	NOTE /rant:  If the buffer size isn't big enough, it will invalidate the socket.
 *	Which means that we need to allocate a buffer big enough to handle worst case
 *	situations.
+*	reference: MaxMsgSize in netplay.h  (currently set to 16K)
 *
-*	reference: MaxMsgSize in netplay.h  (currently set to 8192)
-*	
 */
-#define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 8K
+#define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 16K
 
 // HACK(s) to allow us to call a src/multi*.c function
 extern void recvMultiStats(void);								// from src/multistat.c
@@ -126,28 +130,22 @@ extern void setLobbyError (LOBBY_ERROR_TYPES error_type);							// from src/mult
 extern LOBBY_ERROR_TYPES getLobbyError(void);										// from src/multiinit.c
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
-void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
-void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
+static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
+static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
+static void NETregisterServer(int state);
 static void NETallowJoining(void);
-static void sendVersionCheck(void);
-static void recvVersionCheck(void);
-static void VersionCheckTimeOut( uint32_t victim );
 
 
 void NETGameLocked( bool flag);
 void NETresetGamePassword(void);
-void sendPasswordCheck(void);
-void recvPasswordCheck(void);
 
 void NETGameLocked( bool flag);
 void NETresetGamePassword(void);
-void sendPasswordCheck(void);
-void recvPasswordCheck(void);
 /*
  * Network globals, these are part of the new network API
  */
 NETMSG NetMsg;
-
+SYNC_COUNTER sync_counter;		// keeps track on how well we are in sync
 // ////////////////////////////////////////////////////////////////////////
 // Types
 
@@ -200,8 +198,6 @@ typedef struct
 	Socket** fds;
 } SocketSet;
 
-#define PLAYER_HOST		1
-
 // ////////////////////////////////////////////////////////////////////////
 // Variables
 
@@ -209,7 +205,11 @@ NETPLAY	NetPlay;
 
 static BOOL		allow_joining = false;
 static	bool server_not_there = false;
-static GAMESTRUCT	game;
+static GAMESTRUCT	gamestruct;
+
+// update flags
+bool netPlayersUpdated;
+int mapDownloadProgress;
 
 /**
  * Socket used for these purposes:
@@ -225,6 +225,8 @@ static SocketSet* socket_set = NULL;
 
 // UPnP
 static int upnp = false;
+static bool upnp_done = false;
+WZ_THREAD *upnpdiscover;
 
 static struct UPNPUrls urls;
 static struct IGDdatas data;
@@ -246,10 +248,6 @@ char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
 extern int NET_PlayerConnectionStatus;		// from src/display3d.c
 extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
 
-//time when check sent. Note, using 0xffffffff to signal nothing sent yet.
-uint32_t VersionCheckTime[MAX_PLAYERS] = {-1, -1, -1, -1, -1, -1, -1, -1};
-static BOOL playerVersionFlag[MAX_PLAYERS] = {false};	// we kick on false
-static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
 // ////////////////////////////////////////////////////////////////////////////
 #define VersionStringSize 80
 /************************************************************************************
@@ -257,10 +255,9 @@ static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk-check"; 
-static int NETCODE_VERSION_MAJOR = 2;	// unused for now
-static int NETCODE_VERSION_MINOR = 24;	// unused for now
-static int NUMBER_OF_MODS = 0;			// unused for now
+char VersionString[VersionStringSize] = "trunk, netcode 3.32";
+static int NETCODE_VERSION_MAJOR = 2;
+static int NETCODE_VERSION_MINOR = 35;
 static int NETCODE_HASH = 0;			// unused for now
 
 #if defined(WZ_OS_WIN)
@@ -465,6 +462,14 @@ static ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 {
 	ssize_t received;
 
+	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	{
+		debug(LOG_ERROR, "Invalid socket");
+		setSockErr(EBADF);
+		return SOCKET_ERROR;
+	}
+
+	do
 	{
 		received = recv(sock->fd[SOCK_CONNECTION], buf, max_size, 0);
 	} while (received == SOCKET_ERROR && getSockErr() == EINTR);
@@ -483,6 +488,14 @@ static ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 {
 	size_t written = 0;
+
+	if (!sock
+	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	{
+		debug(LOG_ERROR, "Invalid socket");
+		setSockErr(EBADF);
+		return SOCKET_ERROR;
+	}
 
 	while (written < size)
 	{
@@ -524,6 +537,8 @@ static SocketSet* allocSocketSet(size_t count)
 }
 
 /**
+ * Add the given socket to the given socket set.
+ *
  * @return true if @c socket is succesfully added to @set.
  */
 static bool addSocket(SocketSet* set, Socket* socket)
@@ -557,13 +572,13 @@ static bool addSocket(SocketSet* set, Socket* socket)
 }
 
 /**
- * @return true if @c socket is succesfully added to @set.
+ * Remove the given socket from the given socket set.
  */
 static void delSocket(SocketSet* set, Socket* socket)
 {
 	size_t i;
 
-	ASSERT(set != NULL, "NULL SocketSet provided");
+	ASSERT_OR_RETURN(, set != NULL, "NULL SocketSet provided");
 	ASSERT(socket != NULL, "NULL Socket provided");
 
 	for (i = 0; i < set->len; ++i)
@@ -630,6 +645,7 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 	if (!count)
 		return 0;
 
+	do
 	{
 		struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
 
@@ -681,6 +697,14 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 
 	size_t received = 0;
 
+	if (!sock
+	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	{
+		debug(LOG_ERROR, "Invalid socket");
+		setSockErr(EBADF);
+		return SOCKET_ERROR;
+	}
+
 	while (received < size)
 	{
 		ssize_t ret;
@@ -729,20 +753,34 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 static void socketClose(Socket* sock)
 {
 	unsigned int i;
+	int err = 0;
 
-	for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
+	if (sock)
 	{
-		if (sock->fd[i] != INVALID_SOCKET)
+		for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
 		{
+			if (sock->fd[i] != INVALID_SOCKET)
+			{
 #if   defined(WZ_OS_WIN)
-			closesocket(sock->fd[i]);
+				err = closesocket(sock->fd[i]);
 #else
-			close(sock->fd[i]);
+				err = close(sock->fd[i]);
 #endif
-		}
-	}
+				if (err)
+				{
+					debug(LOG_ERROR, "Failed to close socket: %s", strSockError(getSockErr()));
+				}
 
-	free(sock);
+				/* Make sure that dangling pointers to this
+				 * structure don't think they've got their
+				 * hands on a valid socket.
+				 */
+				sock->fd[i] = INVALID_SOCKET;
+			}
+		}
+		free(sock);
+		sock = NULL;
+	}
 }
 
 static Socket* socketAccept(Socket* sock)
@@ -868,6 +906,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 			return NULL;
 		}
 
+		do
 		{
 			struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
 
@@ -938,6 +977,7 @@ static Socket* socketListen(unsigned int port)
 	struct sockaddr_in addr4;
 	struct sockaddr_in6 addr6;
 	unsigned int i;
+	int opt = 1;
 
 	Socket* const conn = malloc(sizeof(*conn));
 	if (conn == NULL)
@@ -978,12 +1018,12 @@ static Socket* socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
-		debug(LOG_NET, "Succesfully created an IPv4 socket");
+		debug(LOG_NET, "Successfully created an IPv4 socket");
 	}
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		debug(LOG_NET, "Succesfully created an IPv6 socket");
+		debug(LOG_NET, "Successfully created an IPv6 socket");
 	}
 
 #if defined(IPV6_V6ONLY)
@@ -995,7 +1035,7 @@ static Socket* socketListen(unsigned int port)
 		}
 		else
 		{
-			debug(LOG_NET, "Succesfully enabled IPv4 to IPv6 mapping. Cleaning up IPv4 socket.");
+			debug(LOG_NET, "Successfully enabled IPv4 to IPv6 mapping. Cleaning up IPv4 socket.");
 #if   defined(WZ_OS_WIN)
 			closesocket(conn->fd[SOCK_IPV4_LISTEN]);
 #else
@@ -1008,6 +1048,11 @@ static Socket* socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
+		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == SOCKET_ERROR)
+		{
+			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv4 socket. Error: %s", strSockError(getSockErr()));
+		}
+
 		if (bind(conn->fd[SOCK_IPV4_LISTEN], (const struct sockaddr*)&addr4, sizeof(addr4)) == SOCKET_ERROR
 		 || listen(conn->fd[SOCK_IPV4_LISTEN], 5) == SOCKET_ERROR
 		 || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false))
@@ -1024,6 +1069,11 @@ static Socket* socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
+		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == SOCKET_ERROR)
+		{
+			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
+		}
+
 		if (bind(conn->fd[SOCK_IPV6_LISTEN], (const struct sockaddr*)&addr6, sizeof(addr6)) == SOCKET_ERROR
 		 || listen(conn->fd[SOCK_IPV6_LISTEN], 5) == SOCKET_ERROR
 		 || !setSocketBlocking(conn->fd[SOCK_IPV6_LISTEN], false))
@@ -1054,12 +1104,18 @@ static struct addrinfo* resolveHost(const char* host, unsigned int port)
 	struct addrinfo* results;
 	char* service;
 	struct addrinfo hint;
-	int error;
+	int error, flags = 0;
 
 	hint.ai_family    = AF_UNSPEC;
 	hint.ai_socktype  = SOCK_STREAM;
 	hint.ai_protocol  = 0;
-	hint.ai_flags     = (AI_V4MAPPED | AI_ADDRCONFIG);
+#ifdef AI_V4MAPPED
+	flags             |= AI_V4MAPPED;
+#endif
+#ifdef AI_ADDRCONFIG
+	flags             |= AI_ADDRCONFIG;
+#endif
+	hint.ai_flags     = flags;
 	hint.ai_addrlen   = 0;
 	hint.ai_addr      = NULL;
 	hint.ai_canonname = NULL;
@@ -1077,112 +1133,20 @@ static struct addrinfo* resolveHost(const char* host, unsigned int port)
 	return results;
 }
 
-void sendVersionCheck( void )
+bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
-	NETlogEntry("Sending version check", 0, 0);
-	NETbeginEncode(NET_VERSION_CHECK, NET_ALL_PLAYERS);
-		NETuint32_t(&selectedPlayer);
-		NETstring(VersionString, sizeof(VersionString));
-		NETint32_t(&NETCODE_VERSION_MAJOR);
-		NETint32_t(&NETCODE_VERSION_MINOR);
-		NETint32_t(&NUMBER_OF_MODS);
-		NETint32_t(&NETCODE_HASH);
-	NETend();
-
-	debug(LOG_NET, "sending player %u, version string [%s]", selectedPlayer, VersionString);
+	return (NETCODE_VERSION_MAJOR == game_version_major && NETCODE_VERSION_MINOR == game_version_minor);
 }
-
-// Checks the version string, and if they are not the same, we auto-kick the player.
-static void recvVersionCheck()
+bool NETgameIsCorrectVersion(GAMESTRUCT* check_game)
 {
-	uint32_t victim = 0;
-	char playersVersion[VersionStringSize] = { '\0' };
-	const char* msg;
-	int32_t MajorVersion = 0;			// Not currently used
-	int32_t MinorVersion = 0;			// Not currently used
-	int32_t ModCount = 0;				// Not currently used
-	int32_t Hash_Data = 0;				// Not currently used
-
-	NETlogEntry("Receiving version check", 0, 0);
-
-	NETbeginDecode(NET_VERSION_CHECK);
-		NETuint32_t(&victim);
-		NETstring(playersVersion, sizeof(playersVersion));
-		NETint32_t(&MajorVersion);	// NETCODE_VERSION_MAJOR
-		NETint32_t(&MinorVersion);	// NETCODE_VERSION_MINOR
-		NETint32_t(&ModCount);		// NUMBER_OF_MODS
-		NETint32_t(&Hash_Data);		// NETCODE_HASH
-	NETend();
-
-	if (strcmp(VersionString,playersVersion) != 0)
-	{
-		debug(LOG_NET, "Received *wrong* version string [%s] from player %u. Expected [%s]", playersVersion, victim, VersionString);
-
-		sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victim);
-		sendTextMessage(msg, true);
-		sasprintf((char**)&msg, "you have the wrong version; update it! (You have [%s], we expect [%s].)", playersVersion, VersionString);
-		
-		if (NetPlay.isHost)
-		{
-			kickPlayer( victim, msg, ERROR_WRONGVERSION );
-			
-			// reset flags /time after we kick them
-			NetPlay.players[victim].versionCheckTime = -1;
-			NetPlay.players[victim].playerVersionFlag = false;
-		}
-	}
-	else
-	{
-		NetPlay.players[victim].playerVersionFlag = true;
-		debug(LOG_NET, "Received correct version string [%s] from player %u", playersVersion, victim);
-	}
-	// just in case someone has the bright idea of trying to fool us...
-
-	if (NetPlay.GamePassworded && playerVersionFlag[victim] && !playerPasswordFlag[victim])
-	{
-		// really should ban them. :P
-		debug(LOG_ERROR, "Received correct version string [%s] from player %u", playersVersion, victim);
-		debug(LOG_ERROR, "Did NOT receive passowrd from them --Autokicking ip %s", "123" );
-		kickPlayer(victim, "you  have attempted to thwart the security measuers.  Entry denied!", ERROR_CHEAT);
-	}
-}
-
-static void VersionCheckTimeOut(uint32_t victim)
-{
-	const char* msg;
-
-	debug(LOG_NET, "version string was never received from player %u. Auto kicking at %u", victim, gameTime2);
-
-	sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victim);
-	sendTextMessage(msg, true);
-
-	if(NetPlay.isHost)
-	{
-		kickPlayer( victim, "you have the wrong version; update it! (Version string never received.)", ERROR_WRONGVERSION );
-
-		// reset flags /time after we kick them
-		NetPlay.players[victim].versionCheckTime = -1;
-		NetPlay.players[victim].playerVersionFlag = false;
-	}
-}
-
-void NETCheckVersion(uint32_t player)
-{
-	// When flag is true, means we have received the check OK
-	if (NetPlay.players[player].playerVersionFlag == false)
-	{
-		if (player != NET_HOST_ONLY)
-		{
-			VersionCheckTimeOut(player);
-		}
-	}
+	return (NETCODE_VERSION_MAJOR == check_game->game_version_major && NETCODE_VERSION_MINOR == check_game->game_version_minor);
 }
 
 //	Sets if the game is password protected or not
 void NETGameLocked( bool flag)
 {
 	NetPlay.GamePassworded = flag;
-	game.privateGame = flag;
+	gamestruct.privateGame = flag;
 	debug(LOG_NET, "Passworded game is %s", NetPlay.GamePassworded ? "TRUE" : "FALSE" );
 }
 
@@ -1196,58 +1160,9 @@ void NETsetGamePassword(const char *password)
 //	Resets the game password
 void NETresetGamePassword(void)
 {
-	sstrcpy(NetPlay.gamePassword, "Enter Password Here");
-	debug(LOG_NET, "password reset to 'Enter Password here'");
+	sstrcpy(NetPlay.gamePassword, _("Enter password here"));
+	debug(LOG_NET, "password reset to 'Enter password here'");
 	NETGameLocked(false);
-}
-
-//	send our password to host
-void sendPasswordCheck(void)
-{
-	uint32_t player = selectedPlayer;
-
-	NETlogEntry("Sending password check", 0, 0);
-	NETbeginEncode(NET_PASSWORD_CHECK, NET_HOST_ONLY);
-		NETuint32_t(&player);
-		NETstring( NetPlay.gamePassword, sizeof(NetPlay.gamePassword) );
-	NETend();
-
-	debug(LOG_NET, "sending player %u, password [%s]", player, NetPlay.gamePassword);
-}
-
-// Checks the password, and if they are not the same, we auto-kick the player.
-void recvPasswordCheck(void)
-{
-	uint32_t victim = 0;
-
-	char passwordreceived[StringSize];
-	const char* msg;
-
-	NETlogEntry("Receiving password check", 0, 0);
-
-	NETbeginDecode(NET_PASSWORD_CHECK);
-		NETuint32_t(&victim);
-		NETstring( passwordreceived, sizeof(passwordreceived) );
-	NETend();
-
-	if (strcmp(NetPlay.gamePassword, passwordreceived) != 0)
-	{
-		debug(LOG_NET, "Received *wrong* password [%s] from player %u. Expected [%s]", passwordreceived, victim, NetPlay.gamePassword);
-
-		sasprintf((char**)&msg, _("Player %u has the wrong password.  Auto kicking."), victim );
-		sendTextMessage(msg, true);
-
-		if (NetPlay.isHost)
-		{
-			kickPlayer(victim, "you have the wrong password! Entry denied!", ERROR_WRONGPASSWORD);
-			playerPasswordFlag[victim] = false;
-		}
-	}
-	else
-	{
-		playerPasswordFlag[victim] = true;
-		debug(LOG_NET, "Received correct password [%s] from player %u", passwordreceived, victim);
-	}
 }
 
 // *********** Socket with buffer that read NETMSGs ******************
@@ -1282,7 +1197,7 @@ static void NET_initBufferedSocket(NETBUFSOCKET* bs, Socket* s)
 
 static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 {
-	int size;
+	ssize_t size;
 	char* bufstart = bs->buffer + bs->buffer_start + bs->bytes;
 	const int bufsize = NET_BUFFER_SIZE - bs->buffer_start - bs->bytes;
 
@@ -1295,23 +1210,41 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 
 	size = readNoInt(bs->socket, bufstart, bufsize);
 
-	if (size > 0)
+	if (size != 0 && size != SOCKET_ERROR)
 	{
 		bs->bytes += size;
 		return true;
 	}
 	else
-	{	// an error occured, or the remote host has closed the connection.
+	{
+		if (size == 0)
+		{
+			debug(LOG_NET, "Connection closed from the other side");
+		}
+		else
+		{
+			debug(LOG_WARNING, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), bs->socket);
+		}
+
+		// an error occured, or the remote host has closed the connection.
 		if (socket_set != NULL)
 		{
 			delSocket(socket_set, bs->socket);
 		}
-		ASSERT( bs->bytes < NET_BUFFER_SIZE, "Socket buffer is too small!");
-		if( bs->bytes > NET_BUFFER_SIZE)
+
+		ASSERT(bs->bytes < NET_BUFFER_SIZE, "Socket buffer is too small!");
+
+		if (bs->bytes > NET_BUFFER_SIZE)
 		{
 			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %d", NET_BUFFER_SIZE, bs->bytes);
 		}
-		debug(LOG_WARNING, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), bs->socket);
+		if (tcp_socket == bs->socket)
+		{
+			debug(LOG_NET, "Host connection was lost!");
+			tcp_socket = NULL;
+			//Game is pretty much over --should just end everything when HOST dies.
+			NetPlay.isHostAlive = false;
+		}
 		socketClose(bs->socket);
 		bs->socket = NULL;
 	}
@@ -1399,8 +1332,9 @@ void NET_InitPlayers()
 		NetPlay.players[i].position = i;
 		NetPlay.players[i].team = i;
 		NetPlay.players[i].ready = false;
-		NetPlay.players[i].versionCheckTime = 0xffffffff;
-		NetPlay.players[i].playerVersionFlag = false;
+		NetPlay.players[i].needFile = false;
+		NetPlay.players[i].wzFile.isCancelled = false;
+		NetPlay.players[i].wzFile.isSending = false;
 	}
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
@@ -1417,15 +1351,16 @@ void NETBroadcastPlayerInfo(uint32_t index)
 		NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 		NETuint32_t(&NetPlay.players[index].heartattacktime);
 		NETint32_t(&NetPlay.players[index].colour);
+		NETint32_t(&NetPlay.players[index].position);
 		NETint32_t(&NetPlay.players[index].team);
 		NETbool(&NetPlay.players[index].ready);
 		NETuint32_t(&NetPlay.hostPlayer);
 	NETend();
 }
 
-static unsigned int NET_CreatePlayer(const char* name)
+static signed int NET_CreatePlayer(const char* name)
 {
-	unsigned int index;
+	signed int index;
 
 	for (index = 0; index < MAX_CONNECTED_PLAYERS; index++)
 	{
@@ -1441,7 +1376,7 @@ static unsigned int NET_CreatePlayer(const char* name)
 	}
 
 	debug(LOG_ERROR, "Could not find place for player %s", name);
-	return 0;
+	return -1;
 }
 
 static void NET_DestroyPlayer(unsigned int index)
@@ -1451,6 +1386,43 @@ static void NET_DestroyPlayer(unsigned int index)
 	{
 		NetPlay.players[index].allocated = false;
 		NetPlay.playercount--;
+		gamestruct.desc.dwCurrentPlayers = NetPlay.playercount;
+		if (allow_joining && NetPlay.isHost)
+		{
+			// Update player count in the lobby by disconnecting
+			// and reconnecting
+			NETregisterServer(0);
+			NETregisterServer(1);
+		}
+	}
+}
+
+/**
+ * @note Connection dropped. Handle it gracefully.
+ * \param index
+ */
+static void NETplayerClientDisconnect(uint32_t index)
+{
+	if(connected_bsocket[index])
+	{
+		debug(LOG_NET, "Player (%u) has left unexpectedly, closing socket %p",
+			index, connected_bsocket[index]->socket);
+
+		// Although we can get a error result from DelSocket, it don't really matter here.
+		delSocket(socket_set, connected_bsocket[index]->socket);
+		socketClose(connected_bsocket[index]->socket);
+		connected_bsocket[index]->socket = NULL;
+		NetPlay.players[index].heartbeat = false;
+
+		// Announce to the world. This is really icky, because we may be calling the send
+		// function recursively. We really ought to have a send queue...
+		NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
+			NETuint32_t(&index);
+		NETend();
+	}
+	else
+	{
+		debug(LOG_ERROR, "Player (%u) has left unexpectedly - but socket already closed?", index);
 	}
 }
 
@@ -1459,7 +1431,7 @@ static void NET_DestroyPlayer(unsigned int index)
  *       message), we clean up the socket that we used.
  * \param index
  */
-void NETplayerLeaving(UDWORD index)
+static void NETplayerLeaving(UDWORD index)
 {
 	if(connected_bsocket[index])
 	{
@@ -1482,7 +1454,7 @@ void NETplayerLeaving(UDWORD index)
  *       message.
  * \param index
  */
-void NETplayerDropped(UDWORD index)
+static void NETplayerDropped(UDWORD index)
 {
 	uint32_t id = index;
 
@@ -1490,10 +1462,25 @@ void NETplayerDropped(UDWORD index)
 	NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
 		NETuint32_t(&id);
 	NETend();
-	
+	debug(LOG_NET, "NET_PLAYER_DROPPED received for player %d", id);
 	NET_DestroyPlayer(id);		// just clears array
 	MultiPlayerLeave(id);			// more cleanup
 	NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
+}
+
+/**
+ * @note Cleanup for when a player is kicked.
+ * \param index
+ */
+void NETplayerKicked(UDWORD index)
+{
+	// kicking a player counts as "leaving nicely", since "nicely" in this case
+	// simply means "there wasn't a connection error."
+
+	NET_DestroyPlayer(index);		// sets index player's array to false
+	MultiPlayerLeave(index);		// more cleanup
+	NETplayerLeaving(index);		// need to close socket for the player that left.
+	NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -1569,104 +1556,106 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
  *       The implementation of NETsendGAMESTRUCT <em>must</em> guarantee to
  *       pack it in network byte order (big-endian).
  *
+ * @return true on success, false when a socket error has occurred
+ *
  * @see GAMESTRUCT,NETrecvGAMESTRUCT
  */
-static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
+static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).  Initialise
 	// to zero so that we can be sure we're not sending any (undefined)
 	// memory content across the network.
-	char buf[sizeof(game->GAMESTRUCT_VERSION) + sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(game->secondaryHosts) + sizeof(game->extra) + sizeof(game->versionstring) +
-		sizeof(game->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
+	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
+		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->versionstring) +
+		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
-	int result;
+	ssize_t result;
 
 	// Now dump the data into the buffer
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->GAMESTRUCT_VERSION);
+	*(uint32_t*)buffer = htonl(ourgamestruct->GAMESTRUCT_VERSION);
 	buffer += sizeof(uint32_t);
 
 	// Copy a string
-	strlcpy(buffer, game->name, sizeof(game->name));
-	buffer += sizeof(game->name);
+	strlcpy(buffer, ourgamestruct->name, sizeof(ourgamestruct->name));
+	buffer += sizeof(ourgamestruct->name);
 
 	// Copy 32bit large big endian numbers
-	*(int32_t*)buffer = htonl(game->desc.dwSize);
+	*(int32_t*)buffer = htonl(ourgamestruct->desc.dwSize);
 	buffer += sizeof(int32_t);
-	*(int32_t*)buffer = htonl(game->desc.dwFlags);
+	*(int32_t*)buffer = htonl(ourgamestruct->desc.dwFlags);
 	buffer += sizeof(int32_t);
 
 	// Copy yet another string
-	strlcpy(buffer, game->desc.host, sizeof(game->desc.host));
-	buffer += sizeof(game->desc.host);
+	strlcpy(buffer, ourgamestruct->desc.host, sizeof(ourgamestruct->desc.host));
+	buffer += sizeof(ourgamestruct->desc.host);
 
 	// Copy 32bit large big endian numbers
-	*(int32_t*)buffer = htonl(game->desc.dwMaxPlayers);
+	*(int32_t*)buffer = htonl(ourgamestruct->desc.dwMaxPlayers);
 	buffer += sizeof(int32_t);
-	*(int32_t*)buffer = htonl(game->desc.dwCurrentPlayers);
+	*(int32_t*)buffer = htonl(ourgamestruct->desc.dwCurrentPlayers);
 	buffer += sizeof(int32_t);
-	for (i = 0; i < ARRAY_SIZE(game->desc.dwUserFlags); ++i)
+	for (i = 0; i < ARRAY_SIZE(ourgamestruct->desc.dwUserFlags); ++i)
 	{
-		*(int32_t*)buffer = htonl(game->desc.dwUserFlags[i]);
+		*(int32_t*)buffer = htonl(ourgamestruct->desc.dwUserFlags[i]);
 		buffer += sizeof(int32_t);
 	}
 
 	// Copy a string
-	for (i = 0; i <ARRAY_SIZE(game->secondaryHosts); ++i)
+	for (i = 0; i <ARRAY_SIZE(ourgamestruct->secondaryHosts); ++i)
 	{
-		strlcpy(buffer, game->secondaryHosts[i], sizeof(game->secondaryHosts[i]));
-		buffer += sizeof(game->secondaryHosts[i]);
+		strlcpy(buffer, ourgamestruct->secondaryHosts[i], sizeof(ourgamestruct->secondaryHosts[i]));
+		buffer += sizeof(ourgamestruct->secondaryHosts[i]);
 	}
 
 	// Copy a string
-	strlcpy(buffer, game->extra, sizeof(game->extra));
-	buffer += sizeof(game->extra);
+	strlcpy(buffer, ourgamestruct->extra, sizeof(ourgamestruct->extra));
+	buffer += sizeof(ourgamestruct->extra);
 
 	// Copy a string
-	strlcpy(buffer, game->versionstring, sizeof(game->versionstring));
-	buffer += sizeof(game->versionstring);
+	strlcpy(buffer, ourgamestruct->versionstring, sizeof(ourgamestruct->versionstring));
+	buffer += sizeof(ourgamestruct->versionstring);
 
 	// Copy a string
-	strlcpy(buffer, game->modlist, sizeof(game->modlist));
-	buffer += sizeof(game->modlist);
+	strlcpy(buffer, ourgamestruct->modlist, sizeof(ourgamestruct->modlist));
+	buffer += sizeof(ourgamestruct->modlist);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->game_version_major);
+	*(uint32_t*)buffer = htonl(ourgamestruct->game_version_major);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->game_version_minor);
+	*(uint32_t*)buffer = htonl(ourgamestruct->game_version_minor);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->privateGame);
+	*(uint32_t*)buffer = htonl(ourgamestruct->privateGame);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->pureGame);
+	*(uint32_t*)buffer = htonl(ourgamestruct->pureGame);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->Mods);
+	*(uint32_t*)buffer = htonl(ourgamestruct->Mods);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->gameId);
+	*(uint32_t*)buffer = htonl(ourgamestruct->gameId);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->future2);
+	*(uint32_t*)buffer = htonl(ourgamestruct->future2);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->future3);
+	*(uint32_t*)buffer = htonl(ourgamestruct->future3);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->future4);
+	*(uint32_t*)buffer = htonl(ourgamestruct->future4);
 	buffer += sizeof(uint32_t);
 
 
@@ -1674,10 +1663,17 @@ static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
 	result = writeAll(sock, buf, sizeof(buf));
 	if (result == SOCKET_ERROR)
 	{
+		const int err = getSockErr();
+
 		// If packet could not be sent, we should inform user of the error.
 		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", strSockError(getSockErr()));
 		debug(LOG_ERROR, "Please make sure TCP ports %u & %u are open!", masterserver_port, gameserver_port);
+
+		setSockErr(err);
+		return false;
 	}
+
+	return true;
 }
 
 /**
@@ -1687,16 +1683,16 @@ static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
  *
  * @see GAMESTRUCT,NETsendGAMESTRUCT
  */
-static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
+static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
-	char buf[sizeof(game->GAMESTRUCT_VERSION) + sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(game->secondaryHosts) + sizeof(game->extra) + sizeof(game->versionstring) +
-		sizeof(game->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
+	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
+		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->versionstring) +
+		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char* buffer = buf;
 	unsigned int i;
-	int result = 0;
+	ssize_t result = 0;
 
 	// Read a GAMESTRUCT from the connection
 	if (tcp_socket == NULL
@@ -1717,9 +1713,13 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 		while (i < sizeof(buf) && wzGetTicks() < time + 2500)
 		{
 			result = readNoInt(tcp_socket, buf+i, sizeof(buf)-i);
-			if (result == SOCKET_ERROR || result <= 0)
+			if (result == SOCKET_ERROR
+			 || result == 0)
 			{
+				debug(LOG_WARNING, "Server socket ecountered error: %s", strSockError(getSockErr()));
 				debug(LOG_WARNING, "GAMESTRUCT recv failed; received %u bytes out of %d", i, (int)sizeof(buf));
+				socketClose(tcp_socket);
+				tcp_socket = NULL;
 				return false;
 			}
 			i += result;
@@ -1733,70 +1733,70 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 
 	// Now dump the data into the game struct
 	// Copy 32bit large big endian numbers
-	game->GAMESTRUCT_VERSION = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->GAMESTRUCT_VERSION = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
 	// Copy a string
-	sstrcpy(game->name, buffer);
-	buffer += sizeof(game->name);
+	sstrcpy(ourgamestruct->name, buffer);
+	buffer += sizeof(ourgamestruct->name);
 
 	// Copy 32bit large big endian numbers
-	game->desc.dwSize = ntohl(*(int32_t*)buffer);
+	ourgamestruct->desc.dwSize = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
-	game->desc.dwFlags = ntohl(*(int32_t*)buffer);
+	ourgamestruct->desc.dwFlags = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
 
 	// Copy yet another string
-	sstrcpy(game->desc.host, buffer);
-	buffer += sizeof(game->desc.host);
+	sstrcpy(ourgamestruct->desc.host, buffer);
+	buffer += sizeof(ourgamestruct->desc.host);
 
 	// Copy 32bit large big endian numbers
-	game->desc.dwMaxPlayers = ntohl(*(int32_t*)buffer);
+	ourgamestruct->desc.dwMaxPlayers = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
-	game->desc.dwCurrentPlayers = ntohl(*(int32_t*)buffer);
+	ourgamestruct->desc.dwCurrentPlayers = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
-	for (i = 0; i < ARRAY_SIZE(game->desc.dwUserFlags); ++i)
+	for (i = 0; i < ARRAY_SIZE(ourgamestruct->desc.dwUserFlags); ++i)
 	{
-		game->desc.dwUserFlags[i] = ntohl(*(int32_t*)buffer);
+		ourgamestruct->desc.dwUserFlags[i] = ntohl(*(int32_t*)buffer);
 		buffer += sizeof(int32_t);
 	}
 
 	// Copy a string
-	for (i = 0; i < ARRAY_SIZE(game->secondaryHosts); ++i)
+	for (i = 0; i < ARRAY_SIZE(ourgamestruct->secondaryHosts); ++i)
 	{
-		sstrcpy(game->secondaryHosts[i], buffer);
-		buffer += sizeof(game->secondaryHosts[i]);
+		sstrcpy(ourgamestruct->secondaryHosts[i], buffer);
+		buffer += sizeof(ourgamestruct->secondaryHosts[i]);
 	}
 
 	// Copy a string
-	sstrcpy(game->extra, buffer);
-	buffer += sizeof(game->extra);
+	sstrcpy(ourgamestruct->extra, buffer);
+	buffer += sizeof(ourgamestruct->extra);
 
 	// Copy a string
-	sstrcpy(game->versionstring, buffer);
-	buffer += sizeof(game->versionstring);
+	sstrcpy(ourgamestruct->versionstring, buffer);
+	buffer += sizeof(ourgamestruct->versionstring);
 
 	// Copy a string
-	sstrcpy(game->modlist, buffer);
-	buffer += sizeof(game->modlist);
+	sstrcpy(ourgamestruct->modlist, buffer);
+	buffer += sizeof(ourgamestruct->modlist);
 
 	// Copy 32bit large big endian numbers
-	game->game_version_major = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->game_version_major = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->game_version_minor = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->game_version_minor = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->privateGame = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->privateGame = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->pureGame = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->pureGame = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->Mods = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->Mods = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->gameId = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->gameId = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
-	game->future2 = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->future2 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
-	game->future3 = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->future3 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
-	game->future4 = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->future4 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
 	
 	return true;
@@ -1810,47 +1810,64 @@ static int upnp_init(void *asdf)
 	struct UPNPDev *dev;
 	char *descXML;
 	int descXMLsize = 0;
+	char buf[255];
 
 	memset(&urls, 0, sizeof(struct UPNPUrls));
 	memset(&data, 0, sizeof(struct IGDdatas));
 
-	debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
-	devlist = upnpDiscover(500, NULL, NULL, 0);
-	debug(LOG_NET, "UPnP device search finished.");
-	if (devlist)
+	if (NetPlay.isUPNP)
 	{
-		dev = devlist;
-		while (dev)
+		debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
+		devlist = upnpDiscover(2000, NULL, NULL, 0);
+		debug(LOG_NET, "UPnP device search finished.");
+		if (devlist)
 		{
-			if (strstr(dev->st, "InternetGatewayDevice"))
-				break;
-			dev = dev->pNext;
-		}
-		if (!dev)
-		{
-			dev = devlist; /* defaulting to first device */
-		}
+			dev = devlist;
+			while (dev)
+			{
+				if (strstr(dev->st, "InternetGatewayDevice"))
+					break;
+				dev = dev->pNext;
+			}
+			if (!dev)
+			{
+				dev = devlist; /* defaulting to first device */
+			}
 
-		debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
+			debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
 
-		descXML = miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr));
-		debug(LOG_NET, "LAN address: %s", lanaddr);
-		if (descXML)
-		{
-			parserootdesc (descXML, descXMLsize, &data);
-			free (descXML); descXML = 0;
-			GetUPNPUrls (&urls, &data, dev->descURL);
-		}
-		freeUPNPDevlist(devlist);
+			descXML = miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr));
+			debug(LOG_NET, "LAN address: %s", lanaddr);
+			if (descXML)
+			{
+				parserootdesc (descXML, descXMLsize, &data);
+				free (descXML); descXML = 0;
+				GetUPNPUrls (&urls, &data, dev->descURL);
+			}
+			ssprintf(buf, "UPnP device found: %s %s LAN address %s", dev->descURL, dev->st, lanaddr);
+			addDumpInfo(buf);
+			freeUPNPDevlist(devlist);
 
-		if (!urls.controlURL || urls.controlURL[0] == '\0')
-		{
-			return false;
+			if (!urls.controlURL || urls.controlURL[0] == '\0')
+			{
+				ssprintf(buf, "controlURL not available, UPnP disabled");
+				addDumpInfo(buf);
+				return false;
+			}
+			return true;
 		}
-		return true;
+		ssprintf(buf, "UPnP device not found.");
+		addDumpInfo(buf);
+		debug(LOG_NET, "No UPnP devices found.");
+		return false;
 	}
-	debug(LOG_NET, "No UPnP devices found.");
-	return false;
+	else
+	{
+		ssprintf(buf, "UPnP detection routine disabled by user.");
+		addDumpInfo(buf);
+		debug(LOG_NET, "UPnP detection routine disabled by user.");
+		return false;
+	}
 }
 
 static bool upnp_add_redirect(int port)
@@ -1884,9 +1901,13 @@ static void upnp_rem_redirect(int port)
 void NETaddRedirects(void)
 {
 	debug(LOG_NET, "%s\n", __FUNCTION__);
+	if (!upnp_done)
+	{
+		upnp = wzThreadJoin(upnpdiscover);
+		upnp_done = true;
+	}
 	if (upnp) {
-		upnp_add_redirect(2100);
-		upnp_add_redirect(9990);
+		upnp_add_redirect(gameserver_port);
 	}
 }
 
@@ -1895,9 +1916,13 @@ void NETremRedirects(void)
 	debug(LOG_NET, "%s\n", __FUNCTION__);
 	if (upnp)
 	{
-		upnp_rem_redirect(2100);
-		upnp_rem_redirect(9990);
+		upnp_rem_redirect(gameserver_port);
 	}
+}
+
+void NETdiscoverUPnPDevices(void)
+{
+	upnpdiscover = wzThreadCreate(&upnp_init, NULL);
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -1934,23 +1959,24 @@ int NETinit(BOOL bFirstCall)
 		major_windows_version = LOBYTE(LOWORD(GetVersion()));
 #endif
 
-		upnp = upnp_init(NULL);
-
 		for(i = 0; i < MAX_PLAYERS; i++)
 		{
 			memset(&NetPlay.games[i], 0, sizeof(NetPlay.games[i]));
 		}
+		// NOTE NetPlay.isUPNP is already set in configuration.c!
 		NetPlay.bComms = true;
 		NetPlay.GamePassworded = false;
 		NetPlay.ShowedMOTD = false;
+		NetPlay.isHostAlive = false;
 		NetPlay.gamePassword[0] = '\0';
 		NetPlay.MOTD = strdup("");
-		sstrcpy(NetPlay.gamePassword,"Enter Password First");
+		sstrcpy(NetPlay.gamePassword,_("Enter password here"));
 		NETstartLogging();
 	}
 
 	NetPlay.ShowedMOTD = false;
 	NetPlay.GamePassworded = false;
+	memset(&sync_counter, 0x0, sizeof(sync_counter));	//clear counters
 
 	return 0;
 }
@@ -1976,8 +2002,10 @@ int NETshutdown(void)
 	}
 #endif
 
-	NETremRedirects();
-
+	if (NetPlay.bComms && NetPlay.isUPNP)
+	{
+		NETremRedirects();
+	}
 	return 0;
 }
 
@@ -1995,7 +2023,7 @@ int NETclose(void)
 
 	NetPlay.isHost = false;
 	server_not_there = false;
-	server_not_there = false;
+	allow_joining = false;
 
 	if(bsocket)
 	{	// need delSocket() as well, socket_set or tmp_socket_set?
@@ -2041,7 +2069,10 @@ int NETclose(void)
 	if (socket_set)
 	{
 		// checking to make sure tcp_socket is still valid
-		delSocket(socket_set, tcp_socket);
+		if (tcp_socket)
+		{
+			delSocket(socket_set, tcp_socket);
+		}
 		debug(LOG_NET, "Freeing socket_set %p", socket_set);
 		free(socket_set);
 		socket_set=NULL;
@@ -2145,7 +2176,7 @@ UDWORD NETgetPacketsRecvd(void)
 BOOL NETsend(NETMSG *msg, UDWORD player)
 {
 	int size;
-	int result = 0;
+	ssize_t result = 0;
 
 	if(!NetPlay.bComms)
 	{
@@ -2177,8 +2208,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 		{
 			// Write error, most likely client disconnect.
 			debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-			socketClose(connected_bsocket[player]->socket);
-			connected_bsocket[player]->socket = NULL;
+			NETplayerClientDisconnect(player);
 		}
 	}
 	else
@@ -2236,17 +2266,14 @@ BOOL NETbcast(NETMSG *msg)
 				{
 					// Write error, most likely client disconnect.
 					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-					NetPlay.players[i].heartbeat = false;	//mark them dead
-					debug(LOG_WARNING, "Player (player %u) connection was broken.", i);
-					socketClose(connected_bsocket[i]->socket);
-					connected_bsocket[i]->socket = NULL;
+					NETplayerClientDisconnect(i);
 				}
 			}
 		}
 	}
 	else
 	{
-		if (tcp_socket == NULL)
+		if (!tcp_socket)
 		{
 			return false;
 		}
@@ -2259,6 +2286,7 @@ BOOL NETbcast(NETMSG *msg)
 			tcp_socket = NULL;
 			NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
 			//Game is pretty much over --should just end everything when HOST dies.
+			NetPlay.isHostAlive = false;
 			return false;
 		}
 	}
@@ -2280,6 +2308,7 @@ static BOOL NETprocessSystemMessage(void)
 		case NET_PLAYER_STATS:
 		{
 			recvMultiStats();
+			netPlayersUpdated = true;
 			break;
 		}
 		case NET_PLAYER_INFO:
@@ -2305,11 +2334,14 @@ static BOOL NETprocessSystemMessage(void)
 				NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 				NETuint32_t(&NetPlay.players[index].heartattacktime);
 				NETint32_t(&NetPlay.players[index].colour);
+				NETint32_t(&NetPlay.players[index].position);
 				NETint32_t(&NetPlay.players[index].team);
 				NETbool(&NetPlay.players[index].ready);
 				NETuint32_t(&NetPlay.hostPlayer);
 			NETend();
 			debug(LOG_NET, "Receiving MSG_PLAYER_INFO for player %u (%s)", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
+			// update the color to the local array
+			setPlayerColour(index, NetPlay.players[index].colour);
 
 			// If we're the game host make sure to send the updated
 			// data to all other clients as well.
@@ -2317,6 +2349,7 @@ static BOOL NETprocessSystemMessage(void)
 			{
 				NETBroadcastPlayerInfo(index);
 			}
+			netPlayersUpdated = true;
 			break;
 		}
 		case NET_PLAYER_JOINED:
@@ -2331,6 +2364,7 @@ static BOOL NETprocessSystemMessage(void)
 				(unsigned int)index, tcp_socket);
 
 			MultiPlayerJoin(index);
+			netPlayersUpdated = true;
 			break;
 		}
 		// This message type is when player is leaving 'nicely', and socket is still valid.
@@ -2389,26 +2423,6 @@ static BOOL NETprocessSystemMessage(void)
  			{
 				NETsendGameFlags();
 			}
-			break;
-		}
-		case NET_PASSWORD_CHECK:
-		{
-			recvPasswordCheck();
-			break;
-		}
-		case NET_REQUEST_PASSWORD:
-		{
-			sendPasswordCheck();
-			break;
-		}
-		case NET_VERSION_CHECK:
-		{
-			recvVersionCheck();
-			break;
-		}
-		case NET_REQUEST_VERSION:
-		{
-			sendVersionCheck();
 			break;
 		}
 
@@ -2509,8 +2523,11 @@ receive_message:
 					{
 						// we received some data, add to buffer
 						received = NET_recvMessage(connected_bsocket[i]);
-						current = i;
-						break;
+						if (i == pMsg->source) // prevent spoofing
+						{
+							current = i;
+							break;
+						}
 					}
 					else if (connected_bsocket[i]->socket == NULL)
 					{
@@ -2522,7 +2539,7 @@ receive_message:
 						NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
 							NETuint32_t(&i);
 						NETend();
-	
+						debug(LOG_NET, "sending NET_PLAYER_DROPPED for player %d", i);
 						NET_DestroyPlayer(i);			// just clears array
 						MultiPlayerLeave(i);			// more cleanup
 						NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
@@ -2593,8 +2610,8 @@ receive_message:
 						{
 							// Write error, most likely client disconnect.
 							debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-							socketClose(connected_bsocket[pMsg->destination]->socket);
-							connected_bsocket[pMsg->destination]->socket = NULL;
+							socketClose(connected_bsocket[j]->socket);
+							connected_bsocket[j]->socket = NULL;
 						}
 					}
 				}
@@ -2664,107 +2681,122 @@ BOOL NETsetupTCPIP(const char *machine)
 // ////////////////////////////////////////////////////////////////////////
 // File Transfer programs.
 /** Send file. It returns % of file sent when 100 it's complete. Call until it returns 100. 
- * @TODO Needs to be rewritten. See issue #215. */
-#define MAX_FILE_TRANSFER_PACKET 1024
-UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
+*  @TODO: more error checking (?) different file types (?)
+*          Maybe should close file handle, and seek each time?
+*     
+*  @NOTE: MAX_FILE_TRANSFER_PACKET is set to 2k per packet since 7*2 = 14K which is pretty
+*         much our limit.  Don't screw with that without having a bigger buffer!
+*         NET_BUFFER_SIZE is at 16k.  (also remember text chat, plus all the other cruff)
+*/
+#define MAX_FILE_TRANSFER_PACKET 2048
+UBYTE NETsendFile(char *fileName, UDWORD player)
 {
-	static int32_t  	fileSize,currPos;
-	static PHYSFS_file	*pFileHandle;
-	int32_t  		bytesRead;
-	char			inBuff[MAX_FILE_TRANSFER_PACKET];
-	uint8_t			sendto = 0;
+	int32_t		bytesRead = 0;
+	uint8_t		sendto = 0;
+	char	inBuff[MAX_FILE_TRANSFER_PACKET];
+
+	// We are not the host, so we don't care. (in fact, this would be a error)
+	if (!NetPlay.isHost)
+	{
+		return true;
+	}
 
 	memset(inBuff, 0x0, sizeof(inBuff));
-	if (newFile)
-	{
-		// open the file.
-		pFileHandle = PHYSFS_openRead(fileName);			// check file exists
-		debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
-		if (pFileHandle == NULL)
-		{
-			debug(LOG_ERROR, "Failed to open %s for reading: %s", fileName, PHYSFS_getLastError());
-			return 0; // failed
-		}
-		// get the file's size.
-		fileSize = 0;
-		currPos = 0;
-		do
-		{
-			bytesRead = PHYSFS_read(pFileHandle, inBuff, 1, MAX_FILE_TRANSFER_PACKET);
-			fileSize += bytesRead;
-		} while(bytesRead != 0);
 
-		PHYSFS_seek(pFileHandle, 0);
-	}
 	// read some bytes.
-	if (!pFileHandle)
-	{
-		debug(LOG_ERROR, "No filehandle");
-		return 0; // failed
-	}
-	bytesRead = PHYSFS_read(pFileHandle, inBuff,1, MAX_FILE_TRANSFER_PACKET);
+	bytesRead = PHYSFS_read(NetPlay.players[player].wzFile.pFileHandle, inBuff,1, MAX_FILE_TRANSFER_PACKET);
+	sendto = (uint8_t) player;
 
-	if (player == 0)
-	{	// FIXME: why would you send (map) file to everyone ??
-		// even if they already have it? multiplay.c 1529 & 1550 are both
-		// NETsendFile(true,mapStr,0); & NETsendFile(false,game.map,0);
-		// so we ALWAYS send it, it seems?
-		NETbeginEncode(FILEMSG, NET_ALL_PLAYERS);	// send it.
-	}
-	else
-	{
-		sendto = (uint8_t) player;
-		NETbeginEncode(FILEMSG,sendto);
-	}
-
-	// form a message
-	NETint32_t(&fileSize);		// total bytes in this file.
-	NETint32_t(&bytesRead);	// bytes in this packet
-	NETint32_t(&currPos);		// start byte
-
-	NETstring(fileName, 256);	//256 = max filename size
-	NETbin(inBuff, bytesRead);
+	NETbeginEncode(NET_FILE_PAYLOAD, sendto);
+		NETint32_t(&NetPlay.players[player].wzFile.fileSize_32);		// total bytes in this file. (we don't support 64bit yet)
+		NETint32_t(&bytesRead);											// bytes in this packet
+		NETint32_t(&NetPlay.players[player].wzFile.currPos);			// start byte
+		NETstring(fileName, 256);										//256 = max filename size
+		NETbin(inBuff, bytesRead);
 	NETend();
 
-	currPos += bytesRead;		// update position!
-	if(currPos == fileSize)
+	NetPlay.players[player].wzFile.currPos += bytesRead;		// update position!
+	if(NetPlay.players[player].wzFile.currPos == NetPlay.players[player].wzFile.fileSize_32)
 	{
-		PHYSFS_close(pFileHandle);
+		PHYSFS_close(NetPlay.players[player].wzFile.pFileHandle);
+		NetPlay.players[player].wzFile.isSending = false;	// we are done sending to this client.
+		NetPlay.players[player].needFile = false;
 	}
 
-	return (currPos * 100) / fileSize;
+	return (NetPlay.players[player].wzFile.currPos * 100) / NetPlay.players[player].wzFile.fileSize_32;
 }
 
-
+/* @TODO more error checking (?) different file types (?) */
 // recv file. it returns % of the file so far recvd.
 UBYTE NETrecvFile(void)
 {
-	int32_t		fileSize, currPos, bytesRead;
+	int32_t		fileSize = 0, currPos = 0, bytesRead = 0;
 	char		fileName[256];
 	char		outBuff[MAX_FILE_TRANSFER_PACKET];
 	static PHYSFS_file	*pFileHandle;
+	static bool isLoop = false;
 
 	memset(fileName, 0x0, sizeof(fileName));
 	memset(outBuff, 0x0, sizeof(outBuff));
 
 	//read incoming bytes.
-	NETbeginDecode(FILEMSG);
+	NETbeginDecode(NET_FILE_PAYLOAD);
 	NETint32_t(&fileSize);		// total bytes in this file.
 	NETint32_t(&bytesRead);		// bytes in this packet
 	NETint32_t(&currPos);		// start byte
-
-	// read filename
-	NETstring(fileName, 256);	// Ugh. 256 = max array size
-	debug(LOG_NET, "Creating new file %s", fileName);
+	NETstring(fileName, 256);	// read filename (only valid on 1st packet)
+	debug(LOG_NET, "Creating new file %s, position is %d", fileName, currPos);
 
 	if (currPos == 0)	// first packet!
 	{
+		if (PHYSFS_exists(fileName))
+		{
+			PHYSFS_file *fin;
+			PHYSFS_sint64 fsize;
+			fin = PHYSFS_openRead(fileName);
+			fsize = PHYSFS_fileLength(fin);
+			if ((int32_t) fsize == fileSize)
+			{
+				uint32_t reason = ALREADY_HAVE_FILE;
+				debug(LOG_NET, "We already have the file %s! ", fileName);
+				PHYSFS_close(fin);
+				NETend();
+
+				NETbeginEncode(NET_FILE_CANCELLED, NET_HOST_ONLY);
+					NETuint32_t(&selectedPlayer);
+					NETuint32_t(&reason);
+				NETend();
+				if (!isLoop)
+				{
+					isLoop = true;
+				}
+				else
+				{
+					uint32_t reason = STUCK_IN_FILE_LOOP;
+	
+					NETend();
+					// we should never get here, it means, that the game can't detect the level, but we have the file.
+					// so we kick this player out.
+					NETbeginEncode(NET_FILE_CANCELLED, NET_HOST_ONLY);
+						NETuint32_t(&selectedPlayer);
+						NETuint32_t(&reason);
+					NETend();
+					debug(LOG_FATAL, "Something is really wrong with the file's (%s) data, game can't detect it?", fileName);
+					return 100;
+				}
+			}
+			PHYSFS_close(fin);
+
+			debug(LOG_NET, "We already have the file %s, but different size %d vs %d.  Redownloading", fileName, (int32_t) fsize, fileSize);
+
+		}
 		pFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
 	}
 
 	if (!pFileHandle) // file can't be opened
 	{
 		debug(LOG_FATAL, "Fatal error while creating file: %s", PHYSFS_getLastError());
+		debug(LOG_FATAL, "Either we do not have write permission, or the Host sent us a invalid file (%s)!", fileName);
 		abort();
 	}
 
@@ -2891,8 +2923,8 @@ static void NETregisterServer(int state)
 				}
 
 				// Get a game ID
-				writeAll(rs_socket[0], "gaId", sizeof("gaId"));
-				if (readAll(rs_socket[0], &gameId, sizeof(gameId), 10000) != sizeof(gameId))
+				if (writeAll(rs_socket[0], "gaId", sizeof("gaId")) == SOCKET_ERROR
+				 || readAll(rs_socket[0], &gameId, sizeof(gameId), 10000) != sizeof(gameId))
 				{
 					free(NetPlay.MOTD);
 					asprintf(&NetPlay.MOTD, "Failed to retrieve a game ID: %s", strSockError(getSockErr()));
@@ -2911,8 +2943,8 @@ static void NETregisterServer(int state)
 					return;
 				}
 
-				game.gameId = ntohl(gameId);
-				debug(LOG_NET, "Using game ID: %u", (unsigned int)game.gameId);
+				gamestruct.gameId = ntohl(gameId);
+				debug(LOG_NET, "Using game ID: %u", (unsigned int)gamestruct.gameId);
 
 				// Register our game with the server for all available address families
 				for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
@@ -2920,9 +2952,14 @@ static void NETregisterServer(int state)
 					if (rs_socket[i] == NULL)
 						continue;
 
-					writeAll(rs_socket[i], "addg", sizeof("addg"));
-					// and now send what the server wants
-					NETsendGAMESTRUCT(rs_socket[i], &game);
+					if (writeAll(rs_socket[i], "addg", sizeof("addg")) == SOCKET_ERROR
+					    // and now send what the server wants
+					 || !NETsendGAMESTRUCT(rs_socket[i], &gamestruct))
+					{
+						debug(LOG_ERROR, "Failed to register game with server: %s", strSockError(getSockErr()));
+						socketClose(rs_socket[i]);
+						rs_socket[i] = NULL;
+					}
 				}
 
 				// Get the return codes
@@ -2974,7 +3011,7 @@ static void NETallowJoining(void)
 	unsigned int i;
 	UDWORD numgames = htonl(1);	// always 1 on normal server
 	char buffer[5];
-	int recv_result = 9999;
+	ssize_t recv_result = 0;
 
 	if (allow_joining == false) return;
 	ASSERT(NetPlay.isHost, "Cannot receive joins if not host!");
@@ -2989,14 +3026,6 @@ static void NETallowJoining(void)
 		NetPlay.ShowedMOTD = true;
 	}
 
-	// Version check - make sure we sent the check, then check for timelimit
-	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
-	{
-		if (NetPlay.players[i].versionCheckTime != 0xffffffff && NetPlay.players[i].versionCheckTime < gameTime2)
-		{
-			NETCheckVersion(i);
-		}
-	}
 	if (tmp_socket_set == NULL)
 	{
 		// initialize server socket set
@@ -3030,7 +3059,8 @@ static void NETallowJoining(void)
 		addSocket(tmp_socket_set, tmp_socket[i]);
 		if (checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
 		    && tmp_socket[i]->ready
-		    && (recv_result = readNoInt(tmp_socket[i], buffer, 5)))
+		    && (recv_result = readNoInt(tmp_socket[i], buffer, 5))
+		    && recv_result != SOCKET_ERROR)
 		{
 			if(strcmp(buffer, "list")==0)
 			{
@@ -3044,8 +3074,9 @@ static void NETallowJoining(void)
 				else
 				{
 					// get the correct player count after kicks / leaves
-					game.desc.dwCurrentPlayers = NetPlay.playercount;
-					NETsendGAMESTRUCT(tmp_socket[i], &game);
+					gamestruct.desc.dwCurrentPlayers = NetPlay.playercount;
+					debug(LOG_NET, "Sending update to server to reflect new player count %d", NetPlay.playercount);
+					NETsendGAMESTRUCT(tmp_socket[i], &gamestruct);
 				}
 
 				delSocket(tmp_socket_set, tmp_socket[i]);
@@ -3055,7 +3086,13 @@ static void NETallowJoining(void)
 			else if (strcmp(buffer, "join") == 0)
 			{
 				debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
-				NETsendGAMESTRUCT(tmp_socket[i], &game);
+				if (!NETsendGAMESTRUCT(tmp_socket[i], &gamestruct))
+				{
+					debug(LOG_ERROR, "Failed to respond (with GAMESTRUCT) to 'join' command: %s", strSockError(getSockErr()));
+					delSocket(tmp_socket_set, tmp_socket[i]);
+					socketClose(tmp_socket[i]);
+					tmp_socket[i] = NULL;
+				}
 			}
 			else
 			{
@@ -3079,9 +3116,9 @@ static void NETallowJoining(void)
 			if (   tmp_socket[i] != NULL
 			    && tmp_socket[i]->ready)
 			{
-				int size = readNoInt(tmp_socket[i], &NetMsg, sizeof(NetMsg));
+				ssize_t size = readNoInt(tmp_socket[i], &NetMsg, sizeof(NetMsg));
 
-				if (size <= 0)
+				if (size == 0 || size == SOCKET_ERROR)
 				{
 					// disconnect or programmer error
 					if (size == 0)
@@ -3099,29 +3136,88 @@ static void NETallowJoining(void)
 				}
 				else if (NetMsg.type == NET_JOIN)
 				{
-					char name[64];
 					uint8_t j;
-					uint8_t index;
+					int8_t index;
+					uint8_t rejected = 0;
+
+					char name[64];
+					int32_t MajorVersion = 0;
+					int32_t MinorVersion = 0;
+					char ModList[modlist_string_size] = { '\0' };
+					char GamePassword[password_string_size] = { '\0' };
+					int32_t Hash_Data = 0;				// Not currently used
 
 					NETbeginDecode(NET_JOIN);
 						NETstring(name, sizeof(name));
+						NETint32_t(&MajorVersion);	// NETCODE_VERSION_MAJOR
+						NETint32_t(&MinorVersion);	// NETCODE_VERSION_MINOR
+						NETstring(ModList, sizeof(ModList));
+						NETstring(GamePassword, sizeof(GamePassword));
+						NETint32_t(&Hash_Data);		// NETCODE_HASH, not currently used
 					NETend();
+
 					index = NET_CreatePlayer(name);
+
+					if (index == -1)
+					{
+						// FIXME: No room. Dropping the player without warning since protocol doesn't seem to support rejection at this point
+						delSocket(tmp_socket_set, tmp_socket[i]);
+						socketClose(tmp_socket[i]);
+						tmp_socket[i] = NULL;
+						return;
+					}
 
 					delSocket(tmp_socket_set, tmp_socket[i]);
 					NET_initBufferedSocket(connected_bsocket[index], tmp_socket[i]);
 					addSocket(socket_set, connected_bsocket[index]->socket);
 					tmp_socket[i] = NULL;
 
+					if (!NETisCorrectVersion(MajorVersion, MinorVersion))
+					{
+						// Wrong version. Reject.
+						rejected = (uint8_t)ERROR_WRONGVERSION;
+					}
+					else if (NetPlay.GamePassworded && strcmp(NetPlay.gamePassword, GamePassword) != 0)
+					{
+						// Wrong password. Reject.
+						rejected = (uint8_t)ERROR_WRONGPASSWORD;
+					}
+					else if (NetPlay.playercount > gamestruct.desc.dwMaxPlayers)
+					{
+						// Game full. Reject.
+						rejected = (uint8_t)ERROR_FULL;
+					}
+					else if (strcmp(getModList(), ModList) != 0)
+					{
+						// Incompatible mods. Reject.
+						rejected = (uint8_t)ERROR_WRONGDATA;
+					}
+
+					if (rejected)
+					{
+						NETbeginEncode(NET_REJECTED, index);
+							NETuint8_t(&rejected);
+						NETend();
+
+						allow_joining = false; // no need to inform master server
+						NET_DestroyPlayer(index);
+						allow_joining = true;
+
+						delSocket(socket_set, connected_bsocket[index]->socket);
+						socketClose(connected_bsocket[index]->socket);
+						connected_bsocket[index]->socket = NULL;
+						return;
+					}
+
+					NETbeginEncode(NET_ACCEPTED, index);
+					NETuint8_t((uint8_t *)&index);
+					NETend();
+
 					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name,
 					      (unsigned int)index, connected_bsocket[index]->socket);
 
 					// Increment player count
-					game.desc.dwCurrentPlayers++;
-
-					NETbeginEncode(NET_ACCEPTED, index);
-						NETuint8_t(&index);
-					NETend();
+					gamestruct.desc.dwCurrentPlayers++;
 
 					MultiPlayerJoin(index);
 
@@ -3138,7 +3234,7 @@ static void NETallowJoining(void)
 
 					// Send info about newcomer to all players.
 					NETbeginEncode(NET_PLAYER_JOINED, NET_ALL_PLAYERS);
-						NETuint8_t(&index);
+						NETuint8_t((uint8_t *)&index);
 					NETend();
 
 					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
@@ -3149,20 +3245,10 @@ static void NETallowJoining(void)
 					// Make sure the master server gets updated by disconnecting from it
 					// NETallowJoining will reconnect
 					NETregisterServer(0);
-					// if this is a password locked game then ask for password.
-					if (NetPlay.GamePassworded)
-					{
-						debug(LOG_NET, "Requesting password from %u", index);
-						NETbeginEncode(NET_REQUEST_PASSWORD, index);
-						NETend();
-					}
-					// and now, request version from new person
-					NETbeginEncode(NET_REQUEST_VERSION, index);
-					NETend();
-					NetPlay.players[index].versionCheckTime = gameTime2;		// Time we sent the msg
-					// add 7 sec delay factor for lag/slow modems?
-					NetPlay.players[index].versionCheckTime += GAME_TICKS_PER_SEC * 7;
-					debug(LOG_NET, "Requesting Version check @(+7) %u from %u", NetPlay.players[index].versionCheckTime, index);
+					// reset flags for new players
+					NetPlay.players[index].wzFile.isCancelled = false;
+					NetPlay.players[index].wzFile.isSending = false;
+					NetPlay.players[index].needFile = false;
 				}
 			}
 		}
@@ -3178,7 +3264,13 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	debug(LOG_NET, "NEThostGame(%s, %s, %d, %d, %d, %d, %u)", SessionName, PlayerName,
 	      one, two, three, four, plyrs);
 
-	NETaddRedirects();
+	mapDownloadProgress = 100;
+	netPlayersUpdated = true;
+
+	if (NetPlay.bComms && NetPlay.isUPNP)
+	{
+		NETaddRedirects();
+	}
 	NET_InitPlayers();
 	NetPlay.maxPlayers = MAX_PLAYERS;
 	if(!NetPlay.bComms)
@@ -3216,35 +3308,41 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 
 	NetPlay.isHost = true;
 
-	sstrcpy(game.name, SessionName);
-	memset(&game.desc, 0, sizeof(game.desc));
-	game.desc.dwSize = sizeof(game.desc);
-	//game.desc.guidApplication = GAME_GUID;
-	memset(game.desc.host, 0, sizeof(game.desc.host));
-	game.desc.dwCurrentPlayers = 1;
-	game.desc.dwMaxPlayers = plyrs;
-	game.desc.dwFlags = 0;
-	game.desc.dwUserFlags[0] = one;
-	game.desc.dwUserFlags[1] = two;
-	game.desc.dwUserFlags[2] = three;
-	game.desc.dwUserFlags[3] = four;
-	memset(game.secondaryHosts, 0, sizeof(game.secondaryHosts));
-	sstrcpy(game.extra, "Extra");						// extra string (future use)
-	sstrcpy(game.versionstring, VersionString);			// version (string)
-	sstrcpy(game.modlist, "Mod list");					// List of mods
-	game.GAMESTRUCT_VERSION = 3;						// version of this structure
-	game.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
-	game.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
-//	game.privateGame = 0;								// if true, it is a private game
-	game.pureGame = 0;									// NO mods allowed if true
-	game.Mods = 0;										// number of concatenated mods?
-	game.gameId  = 0;
-	game.future2 = 0xBAD02;								// for future use
-	game.future3 = 0xBAD03;								// for future use
-	game.future4 = 0xBAD04;								// for future use
+	sstrcpy(gamestruct.name, SessionName);
+	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
+	gamestruct.desc.dwSize = sizeof(gamestruct.desc);
+	//gamestruct.desc.guidApplication = GAME_GUID;
+	memset(gamestruct.desc.host, 0, sizeof(gamestruct.desc.host));
+	gamestruct.desc.dwCurrentPlayers = 1;
+	gamestruct.desc.dwMaxPlayers = plyrs;
+	gamestruct.desc.dwFlags = 0;
+	gamestruct.desc.dwUserFlags[0] = one;
+	gamestruct.desc.dwUserFlags[1] = two;
+	gamestruct.desc.dwUserFlags[2] = three;
+	gamestruct.desc.dwUserFlags[3] = four;
+	memset(gamestruct.secondaryHosts, 0, sizeof(gamestruct.secondaryHosts));
+	sstrcpy(gamestruct.extra, "Extra");						// extra string (future use)
+	sstrcpy(gamestruct.versionstring, VersionString);		// version (string)
+	if (*getModList())
+	{
+		sstrcat(gamestruct.versionstring, _(", mods: "));	// version (string)
+		sstrcat(gamestruct.versionstring, getModList());	// version (string)
+	}
+	sstrcpy(gamestruct.modlist, getModList());				// List of mods
+	gamestruct.GAMESTRUCT_VERSION = 3;						// version of this structure
+	gamestruct.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
+	gamestruct.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
+//	gamestruct.privateGame = 0;								// if true, it is a private game
+	gamestruct.pureGame = 0;									// NO mods allowed if true
+	gamestruct.Mods = 0;										// number of concatenated mods?
+	gamestruct.gameId  = 0;
+	gamestruct.future2 = 0xBAD02;								// for future use
+	gamestruct.future3 = 0xBAD03;								// for future use
+	gamestruct.future4 = 0xBAD04;								// for future use
 
 	selectedPlayer= NET_CreatePlayer(PlayerName);
 	NetPlay.isHost	= true;
+	NetPlay.isHostAlive = true;
 	NetPlay.hostPlayer	= NET_HOST_ONLY;
 	ASSERT(selectedPlayer == NET_HOST_ONLY, "For now, host must start at player index zero, was %d", (int)selectedPlayer);
 
@@ -3283,7 +3381,7 @@ BOOL NETfindGame(void)
 	int result = 0;
 	debug(LOG_NET, "Looking for games...");
 	
-	if (getLobbyError() > ERROR_CONNECTION)
+	if (getLobbyError() == ERROR_CHEAT || getLobbyError() == ERROR_KICKED)
 	{
 		return false;
 	}
@@ -3362,9 +3460,9 @@ BOOL NETfindGame(void)
 	addSocket(socket_set, tcp_socket);
 
 	debug(LOG_NET, "Sending list cmd");
-	writeAll(tcp_socket, "list", sizeof("list"));
 
-	if (checkSockets(socket_set, NET_TIMEOUT_DELAY) > 0
+	if (writeAll(tcp_socket, "list", sizeof("list")) != SOCKET_ERROR
+	 && checkSockets(socket_set, NET_TIMEOUT_DELAY) > 0
 	 && tcp_socket->ready
 	 && (result = readNoInt(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
 	{
@@ -3419,14 +3517,17 @@ BOOL NETfindGame(void)
 // Functions used to setup and join games.
 BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 {
-	struct addrinfo* cur;
-	struct addrinfo* hosts;
+	struct addrinfo *cur = NULL;
+	struct addrinfo *hosts = NULL;
 	unsigned int i;
 
 	debug(LOG_NET, "resetting sockets.");
 	NETclose();	// just to be sure :)
 
 	debug(LOG_NET, "Trying to join gameNumber (%u)...", gameNumber);
+
+	mapDownloadProgress = 100;
+	netPlayersUpdated = true;
 
 	if (hostname == masterserver_name)
 	{
@@ -3438,9 +3539,13 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	{
 		free(hostname);
 		if (i > 0)
+		{
 			hostname = strdup(NetPlay.games[gameNumber].secondaryHosts[i - 1]);
+		}
 		else
+		{
 			hostname = strdup(NetPlay.games[gameNumber].desc.host);
+		}
 
 		hosts = resolveHost(hostname, gameserver_port);
 		if (hosts == NULL)
@@ -3458,7 +3563,9 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		{
 			tcp_socket = SocketOpen(cur, 15000);
 			if (tcp_socket)
+			{
 				goto connect_succesfull;
+			}
 		}
 
 		freeaddrinfo(hosts);
@@ -3484,7 +3591,16 @@ connect_succesfull:
 	// tcp_socket is used to talk to host machine
 	addSocket(socket_set, tcp_socket);
 
-	writeAll(tcp_socket, "join", sizeof("join"));
+	if (writeAll(tcp_socket, "join", sizeof("join")) == SOCKET_ERROR)
+	{
+		debug(LOG_ERROR, "Failed to send 'join' command: %s", strSockError(getSockErr()));
+		freeaddrinfo(hosts);
+		delSocket(socket_set, tcp_socket);
+		socketClose(tcp_socket);
+		free(socket_set);
+		socket_set = NULL;
+		return false;
+	}
 
 	if (NETrecvGAMESTRUCT(&NetPlay.games[gameNumber])
 	 && NetPlay.games[gameNumber].desc.host[0] == '\0')
@@ -3492,6 +3608,16 @@ connect_succesfull:
 		addressToText(cur->ai_addr, NetPlay.games[gameNumber].desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
 	}
 	freeaddrinfo(hosts);
+	if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
+	{
+		// Shouldn't join; game is full
+		delSocket(socket_set, tcp_socket);
+		socketClose(tcp_socket);
+		free(socket_set);
+		socket_set = NULL;
+		setLobbyError(ERROR_FULL);
+		return false;
+	}
 	// Allocate memory for a new socket
 	bsocket = NET_createBufferedSocket();
 	// NOTE: tcp_socket = bsocket->socket now!
@@ -3502,8 +3628,14 @@ connect_succesfull:
 		// Casting constness away, because NETstring is const-incorrect
 		// when sending/encoding a packet.
 		NETstring((char*)playername, 64);
+		NETint32_t(&NETCODE_VERSION_MAJOR);
+		NETint32_t(&NETCODE_VERSION_MINOR);
+		NETstring(getModList(), modlist_string_size);
+		NETstring(NetPlay.gamePassword, sizeof(NetPlay.gamePassword));
+		NETint32_t(&NETCODE_HASH); //unused
 	NETend();
 
+	i = wzGetTicks();
 	// Loop until we've been accepted into the game
 	for (;;)
 	{
@@ -3511,8 +3643,15 @@ connect_succesfull:
 
 		NETrecv(&type);
 
+		// FIXME: shouldn't there be some sort of rejection message?
+		if (wzGetTicks() > i + 5000)
+		{
+			// timeout
+			return false;
+		}
 		if (type == NET_ACCEPTED)
 		{
+			// :)
 			uint8_t index;
 
 			NETbeginDecode(NET_ACCEPTED);
@@ -3524,6 +3663,7 @@ connect_succesfull:
 			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p, tcp_socket=%p",
 				(unsigned int)index, bsocket->socket, tcp_socket);
 			NetPlay.isHost = false;
+			NetPlay.isHostAlive = true;
 
 			if (index >= MAX_CONNECTED_PLAYERS)
 			{
@@ -3536,6 +3676,20 @@ connect_succesfull:
 			NetPlay.players[index].heartbeat = true;
 
 			return true;
+		}
+		else if (type == NET_REJECTED)
+		{
+			// :(
+			uint8_t rejection = 0;
+
+			NETbeginDecode(NET_REJECTED);
+				// WRY???
+				NETuint8_t(&rejection);
+			NETend();
+
+			debug(LOG_NET, "NET_REJECTED received. Better luck next time?");
+
+			setLobbyError((LOBBY_ERROR_TYPES)rejection);
 		}
 	}
 }

@@ -70,7 +70,7 @@ SRC= \
 	main.cpp \
 	map.c \
 	mapdisplay.c \
-	mapgrid.c \
+	mapgrid.cpp \
 	mechanics.c \
 	message.c \
 	miscimd.c \
@@ -92,6 +92,7 @@ SRC= \
 	oprint.c \
 	order.c \
 	parsetest.c \
+	pointtree.cpp \
 	power.c \
 	projectile.c \
 	radar.c \
@@ -118,6 +119,7 @@ SRC= \
 	visibility.c \
 	warcam.c \
 	warzoneconfig.c \
+	wavecast.cpp \
 	wrappers.c
 
 LIBS=$(top_builddir)/lib/libgamelib.a \

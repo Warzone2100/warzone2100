@@ -241,7 +241,7 @@ BOOL researchInitVars(void)
 /*Load the research stats from the file exported from Access*/
 BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 {
-	const unsigned int researchCount = numCR(pResearchData, bufferSize);
+	unsigned int researchCount = numCR(pResearchData, bufferSize);
 	RESEARCH *pResearch;
 	COMPONENT_STATS *psComp;
 	SDWORD structID;
@@ -252,6 +252,13 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 	char structName[MAX_STR_LENGTH], compName[MAX_STR_LENGTH],
 		compType[MAX_STR_LENGTH];
 
+	// Skip descriptive header
+	if (strncmp(pResearchData,"Research ",9)==0)
+	{
+		pResearchData = strchr(pResearchData,'\n') + 1;
+		researchCount--;
+	}
+	
 	numResearch = researchCount;
 
 	ASSERT(numResearch <= MAX_RESEARCH, "Too many ResearchStats! - max allowed %d", MAX_RESEARCH);
@@ -555,15 +562,6 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 		PRName[0] = '\0';
 		sscanf(pPRData,"%[^','],%[^','],%*d", ResearchName, PRName);
 
-		if (!getResourceName(ResearchName))
-		{
-			return false;
-		}
-		if (!getResourceName(PRName))
-		{
-			return false;
-		}
-
 		//loop through each Research to compare the name
 		for (incR=0; incR < numResearch; incR++)
 		{
@@ -671,15 +669,6 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 		//increment the data pointer
 		pArteData += (strlen(ResearchName)+1+strlen(ArteName)+1+strlen(TypeName)+1);
 
-		if (!getResourceName(ResearchName))
-		{
-			return false;
-		}
-		if (!getResourceName(ArteName))
-		{
-			return false;
-		}
-
 		pArtefact = getComponentDetails(TypeName, ArteName);
 		if (pArtefact == NULL)
 		{
@@ -731,10 +720,6 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 				}
 				else
 				{
-					if (!getResourceName(ArteName))
-					{
-						return false;
-					}
 					pArtefact = getComponentDetails(TypeName, ArteName);
 					if (pArtefact == NULL)
 					{
@@ -828,15 +813,6 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 		ResearchName[0] = '\0';
 		StructureName[0] = '\0';
 		sscanf(pStructData,"%[^','],%[^','],%*d,%*d", ResearchName, StructureName);
-
-		if (!getResourceName(ResearchName))
-		{
-			return false;
-		}
-		if (!getResourceName(StructureName))
-		{
-			return false;
-		}
 
 		//loop through each Research to compare the name
 		for (incR = 0; incR < numResearch; incR++)
@@ -956,11 +932,6 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 		ResearchName[0] = '\0';
 		FunctionName[0] = '\0';
 		sscanf(pFunctionData,"%[^','],%[^','],%*d", ResearchName, FunctionName);
-
-		if (!getResourceName(ResearchName))
-		{
-			return false;
-		}
 
 		//loop through each Research to compare the name
 		for (incR=0; incR < numResearch; incR++)
@@ -1140,8 +1111,7 @@ add_research: //if passed all the tests - add it to the list
 }
 
 /* process the results of a completed research topic */
-void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
-					STRUCTURE *psResearchFacility)
+void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE *psResearchFacility, BOOL bTrigger)
 {
 	RESEARCH					*pResearch = asResearch + researchIndex;
 	UDWORD						type, inc;//, upgrade;
@@ -1163,13 +1133,16 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 	//check for structures to be made available
 	for (inc = 0; inc < pResearch->numStructResults; inc++)
 	{
-		apStructTypeLists[player][pResearch->pStructureResults[inc]] = AVAILABLE;
+		if (apStructTypeLists[player][pResearch->pStructureResults[inc]] != REDUNDANT)
+		{
+			apStructTypeLists[player][pResearch->pStructureResults[inc]] = AVAILABLE;
+		}
 	}
 
 	//check for structures to be made redundant
 	for (inc = 0; inc < pResearch->numRedStructs; inc++)
 	{
-		apStructTypeLists[player][pResearch->pRedStructs[inc]] = UNAVAILABLE;
+		apStructTypeLists[player][pResearch->pRedStructs[inc]] = REDUNDANT;
 	}
 
 	//check for artefacts to be made available
@@ -1179,7 +1152,10 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 		type = statType(pResearch->pArtefactResults[inc]->ref);
 		//set the component state to AVAILABLE
 		compInc = pResearch->pArtefactResults[inc]->ref - statRefStart(type);
-		apCompLists[player][type][compInc] = AVAILABLE;
+		if (apCompLists[player][type][compInc] != REDUNDANT)
+		{
+			apCompLists[player][type][compInc] = AVAILABLE;
+		}
 		//check for default sensor
 		if (type == COMP_SENSOR)
 		{
@@ -1211,9 +1187,9 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 				pReplacedArtefacts[inc], player);
 			//set the 'old' component to unavailable
 			type = statType(pResearch->pReplacedArtefacts[inc]->ref);
-			//set the component state to AVAILABLE
+			//set the component state to REDUNDANT
 			compInc = pResearch->pReplacedArtefacts[inc]->ref - statRefStart(type);
-			apCompLists[player][type][compInc] = UNAVAILABLE;
+			apCompLists[player][type][compInc] = REDUNDANT;
 		}
 		//check if the component is a brain
 		if (type == COMP_BRAIN)
@@ -1235,9 +1211,9 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 	{
 		//determine the type of artefact
 		type = statType(pResearch->pRedArtefacts[inc]->ref);
-		//set the component state to UNAVAILABLE
+		//set the component state to REDUNDANT
 		apCompLists[player][type][pResearch->pRedArtefacts[inc]->ref -
-			statRefStart(type)] = UNAVAILABLE;
+			statRefStart(type)] = REDUNDANT;
 	}
 
 	//check for technology effects
@@ -1766,16 +1742,20 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 		}
 	}
 
-    if ((bMultiPlayer || player == selectedPlayer) && bDisplay)
-    {
-        psCBLastResearch = pResearch;
+	if (psResearchFacility)
+	{
+		psResearchFacility->pFunctionality->researchFacility.psSubject = NULL;		// Make sure topic is cleared
+	}
+	if ((bMultiPlayer || player == selectedPlayer) && bTrigger)
+	{
+		psCBLastResearch = pResearch;
 		CBResFacilityOwner = player;
 		psCBLastResStructure = psResearchFacility;
-	    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCHCOMPLETED);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCHCOMPLETED);
 		psCBLastResStructure = NULL;
-        CBResFacilityOwner = -1;
+		CBResFacilityOwner = -1;
 		psCBLastResearch = NULL;
-    }
+	}
 
 #ifdef DEBUG
     /*this just checks that there are not more than 32 weapons now available for
@@ -2010,9 +1990,6 @@ void cancelResearch(STRUCTURE *psBuilding)
 
 		// Initialise the research facility's subject
 		psResFac->psSubject = NULL;
-
-		//set the researched flag - only set the flag to cancelled if it got past the accruePower stage
-		//pPlayerRes->researched = CANCELLED_RESEARCH;
 	}
 }
 
@@ -2376,13 +2353,6 @@ RESEARCH * getResearch(const char *pName, BOOL resName)
 {
 	unsigned int inc = 0;
 
-	//need to get the in game name if a resource name has been passed in
-	if (resName && !getResourceName(pName))
-	{
-		debug(LOG_ERROR, "getResearch: resource not found");
-		return NULL;
-	}
-
 	for (inc = 0; inc < numResearch; inc++)
 	{
 		if (!strcasecmp(asResearch[inc].pName, pName))
@@ -2565,7 +2535,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	//if a topic was found give the reward player the results of that research
 	if (rewardID)
 	{
-		researchResult(rewardID, rewardPlayer, true, NULL);
+		researchResult(rewardID, rewardPlayer, true, NULL, true);
 		if (rewardPlayer == selectedPlayer)
 		{
 			//name the actual reward

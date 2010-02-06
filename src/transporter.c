@@ -56,7 +56,7 @@
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "mapgrid.h"
-
+#include "visibility.h"
 #include "multiplay.h"
 
 //#define IDTRANS_FORM			9000	//The Transporter base form
@@ -1421,20 +1421,22 @@ void transporterRemoveDroid(UDWORD id)
 			addDroid(psDroid, apsDroidLists);
 
 			//inform all other players about that
-			if (bMultiPlayer)
+			if (bMultiMessages)
 			{
 				sendDroidDisEmbark(psDroid,psCurrTransporter);
 			}
 		}
 
-		// We can update the orders now, since everyone has been
-		// notified of the droid exiting the transporter
-		updateDroidOrientation(psDroid);
+		if (psDroid->pos.x != INVALID_XY)
+		{
+			// We can update the orders now, since everyone has been
+			// notified of the droid exiting the transporter
+			updateDroidOrientation(psDroid);
+		}
 		//initialise the movement data
 		initDroidMovement(psDroid);
 		//reset droid orders
 		orderDroid(psDroid, DORDER_STOP);
-		gridAddObject((BASE_OBJECT *)psDroid);
 		psDroid->cluster = 0;
 		// check if it is a commander
 		if (psDroid->droidType == DROID_COMMAND)
@@ -1519,7 +1521,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		// adding to transporter unit's group list
 		grpJoin(psTransporter->psGroup, psDroidToAdd);
 		
-		if (bMultiPlayer)
+		if (bMultiMessages)
 		{
 			//inform all other players to update their local lists
 			sendDroidEmbark(psDroidToAdd,psTransporter);
@@ -1528,6 +1530,14 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	else
 	{
 		debug(LOG_ERROR,"droid %d not found, so nothing added to transporter!",psDroidToAdd->id);
+	}
+	if (onMission)
+	{
+		visRemoveVisibilityOffWorld((BASE_OBJECT *)psDroidToAdd);
+	}
+	else
+	{
+		visRemoveVisibility((BASE_OBJECT *)psDroidToAdd);
 	}
 
 	//this is called by droidRemove
@@ -1917,7 +1927,7 @@ BOOL transporterFlying(DROID *psTransporter)
         (bMultiPlayer && psTransporter->order == DORDER_MOVE) ||
         //in multiPlayer mode the Transporter can be moved and emptied!
         (bMultiPlayer && psTransporter->order == DORDER_DISEMBARK) ||
-        //in multiPlayer, cannot select transporter whilst flying
+        //in multiPlayer, descending still counts as flying
         (bMultiPlayer && psTransporter->order == DORDER_NONE &&
         psTransporter->sMove.iVertSpeed != 0))
     {

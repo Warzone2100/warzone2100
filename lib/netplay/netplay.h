@@ -27,6 +27,12 @@
 #define _netplay_h
 
 #include "nettypes.h"
+#include <physfs.h>
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
 #ifdef __cplusplus
 extern "C"
@@ -45,7 +51,8 @@ typedef enum
 	ERROR_WRONGVERSION,
 	ERROR_WRONGPASSWORD,				// NOTE WRONG_PASSWORD results in conflict
 	ERROR_HOSTDROPPED,
-	ERROR_WRONGDATA
+	ERROR_WRONGDATA,
+	ERROR_UNKNOWNFILEISSUE
 } LOBBY_ERROR_TYPES;
 
 
@@ -97,7 +104,7 @@ typedef enum
 	NET_DROIDDISEMBARK,		//43 droid disembarked from a Transporter
 	NET_RESEARCHSTATUS,		//44 research state.
 	NET_LASSAT,				//45 lassat firing.
-	NET_REQUESTMAP,			//46 dont have map, please send it.
+	NET_UNUSED_46,			//46 old map request, now unused.
 	NET_AITEXTMSG,			//47 chat between AIs
 	NET_TEAMS_ON,			//48 locked teams mode
 	NET_BEACONMSG,			//49 place beacon
@@ -111,23 +118,31 @@ typedef enum
 	NET_PLAYER_DROPPED,		//57 notice about player dropped / disconnected
 	NET_GAME_FLAGS,			//58 game flags
 	NET_READY_REQUEST,		//59 player ready to start an mp game
-							//60 to prevent conflict
-	NET_VERSION_CHECK = 61,	//61 version check
-	NET_REQUEST_VERSION,	//62 Host requests version check
-	NET_REQUEST_PASSWORD,	//63 Host requests password
-	NET_PASSWORD_CHECK,		//64 password check
+	NET_NEVERUSE,			//60 
+	NET_REJECTED,			//61 nope, you can't join
+	NET_UNUSED_62,			//62 
+	NET_UNUSED_63,			//63 
+	NET_UNUSED_64,			//64 
 	NET_POSITIONREQUEST,	//65 position in GUI player list
 	NET_DATA_CHECK,			//66 Data integrity check
+	NET_HOST_DROPPED,		//67 Host has dropped
+	NET_FUTURE1,			//68	future use
+	NET_FUTURE2,			//69		"
+	NET_FUTURE3,			//70		"
+	NET_FILE_REQUESTED,		//71 Player has requested a file (map/mod/?)
+	NET_FILE_CANCELLED,		//72 Player cancelled a file request
+	NET_FILE_PAYLOAD,		//73 sending file to the player that needs it
 	NUM_GAME_PACKETS		//   *MUST* be last.
 } MESSAGE_TYPES;
 
 // Constants
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
-#define MaxMsgSize		8192		// max size of a message in bytes.
+#define MaxMsgSize		16384		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define MaxGames		12			// max number of concurrently playable games to allow.
 #define extra_string_size	239		// extra 255 char for future use
 #define modlist_string_size	255		// For a concatenated list of mods
+#define password_string_size 64		// longer passwords slow down the join code
 
 #define SESSION_JOINDISABLED	1
 
@@ -176,6 +191,21 @@ typedef struct
 
 #define NET_ALL_PLAYERS 255
 #define NET_HOST_ONLY 0
+// the following structure is going to be used to track if we sync or not
+typedef struct {
+	uint64_t	sentDroidCheck;
+	uint64_t	unsentDroidCheck;
+	uint64_t	sentStructureCheck;
+	uint64_t	unsentStructureCheck;
+	uint64_t	sentPowerCheck;
+	uint64_t	unsentPowerCheck;
+	uint64_t	sentScoreCheck;
+	uint64_t	unsentScoreCheck;
+	uint64_t	sentPing;
+	uint64_t	unsentPing;
+	uint64_t	sentisMPDirtyBit;
+	uint64_t	unsentisMPDirtyBit;
+} SYNC_COUNTER;
 
 typedef struct {
 	uint16_t	size;				// used size of body
@@ -186,8 +216,29 @@ typedef struct {
 	BOOL		status;				// If the packet compiled or not (this is _not_ sent!)
 } NETMSG;
 
-#define		FILEMSG			254		// a file packet
+typedef struct
+{
+	PHYSFS_file	*pFileHandle;		// handle
+	PHYSFS_sint32 fileSize_32;		// size
+	int32_t		currPos;			// current position
+	BOOL	isSending;				// sending to this player
+	BOOL	isCancelled;			// player cancelled
+	int32_t	filetype;				// future use (1=map 2=mod 3=...)
+}	WZFile;
 
+typedef struct
+{
+	int32_t player;					// the client we sent data to
+	int32_t done;					// how far done we are (100= finished)
+	int32_t byteCount;				// current byte count
+}	wzFileStatus;
+
+typedef enum
+{
+	WZ_FILE_OK,
+	ALREADY_HAVE_FILE,
+	STUCK_IN_FILE_LOOP
+}	wzFileEnum;
 // ////////////////////////////////////////////////////////////////////////
 // Player information. Filled when players join, never re-ordered. selectedPlayer global points to 
 // currently controlled player. This array is indexed by GUI slots in pregame.
@@ -203,8 +254,10 @@ typedef struct
 	int32_t		connection;		///< Index into connection list
 	int32_t		team;			///< Which team we are on
 	BOOL		ready;			///< player ready to start?
-	uint32_t	versionCheckTime;	///< Time when check sent. Uses 0xffffffff for nothing sent yet
-	BOOL		playerVersionFlag;	///< We kick on false
+	uint32_t	unused_1;	///< for future usage
+	BOOL		unused_2;	///< for future usage
+	BOOL		needFile;			///< if We need a file sent to us
+	WZFile		wzFile;				///< for each player, we keep track of map progress
 } PLAYER;
 
 // ////////////////////////////////////////////////////////////////////////
@@ -217,7 +270,9 @@ typedef struct {
 	uint32_t	bComms;			///< Actually do the comms?
 	BOOL		isHost;			///< True if we are hosting the game
 	int32_t		maxPlayers;		///< Maximum number of players in this game
-	char gamePassword[StringSize];		//
+	BOOL		isUPNP;					// if we want the UPnP detection routines to run
+	BOOL		isHostAlive;	/// if the host is still alive
+	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
 	char MOTDbuffer[255];				// buffer for MOTD
@@ -229,6 +284,10 @@ typedef struct {
 
 extern NETPLAY				NetPlay;
 extern NETMSG NetMsg;
+extern SYNC_COUNTER sync_counter;
+// update flags
+extern bool netPlayersUpdated;
+extern int mapDownloadProgress;
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
@@ -237,7 +296,7 @@ extern BOOL   NETsend(NETMSG *msg, UDWORD player);	// send to player
 extern BOOL   NETbcast(NETMSG *msg);				// broadcast to everyone
 extern BOOL   NETrecv(uint8_t *type);				// recv a message if possible
 
-extern UBYTE   NETsendFile(BOOL newFile, char *fileName, UDWORD player);	// send file chunk.
+extern UBYTE   NETsendFile(char *fileName, UDWORD player);	// send file chunk.
 extern UBYTE   NETrecvFile(void);			// recv file chunk
 
 extern int NETclose(void);					// close current game
@@ -245,6 +304,7 @@ extern int NETshutdown(void);					// leave the game in play.
 
 extern void NETaddRedirects(void);
 extern void NETremRedirects(void);
+extern void NETdiscoverUPnPDevices(void);
 
 extern UDWORD	NETgetBytesSent(void);				// return bytes sent/recv.  call regularly for good results
 extern UDWORD	NETgetPacketsSent(void);			// return packets sent/recv.  call regularly for good results
@@ -253,6 +313,8 @@ extern UDWORD	NETgetPacketsRecvd(void);			// return packets sent/recv.  call reg
 extern UDWORD	NETgetRecentBytesSent(void);		// more immediate functions.
 extern UDWORD	NETgetRecentPacketsSent(void);
 extern UDWORD	NETgetRecentBytesRecvd(void);
+
+extern void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
 
 // from netjoin.c
 extern SDWORD	NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
@@ -277,7 +339,8 @@ extern unsigned int NETgetGameserverPort(void);
 extern BOOL NETsetupTCPIP(const char *machine);
 extern void NETsetGamePassword(const char *password);
 extern void NETBroadcastPlayerInfo(uint32_t index);
-extern void NETCheckVersion(uint32_t player);
+extern bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
+extern bool NETgameIsCorrectVersion(GAMESTRUCT* check_game);
 extern void NET_InitPlayers(void);
 
 #ifdef __cplusplus

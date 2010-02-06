@@ -91,7 +91,7 @@ static void initStars(void)
 	for(i = 0; i < MAX_STARS; ++i)
 	{
 		stars[i].xPos = (UWORD)(rand()%598);		// scatter them
-		stars[i].speed = rand()%10+2;	// always move
+		stars[i].speed = rand() % 30 + 6;	// always move
 	}
 }
 
@@ -127,6 +127,7 @@ TITLECODE titleLoop(void)
 		{
 			ingame.bHostSetup = true;
 			bMultiPlayer = true;
+			bMultiMessages = true;
 			game.type = SKIRMISH;		// needed?
 			changeTitleMode(MULTIOPTION);
 			hostlaunch = false;			// reset the bool to default state.
@@ -308,7 +309,7 @@ void loadingScreenCallback(void)
 		colour.byte.g = 200;
 		colour.byte.b = 200;
 		colour.byte.a = 255;
-		pie_UniTransBoxFill(10 + stars[i].xPos+D_W, 450 + i + D_H, 10 + stars[i].xPos + (2 * stars[i].speed) + D_W, 450 + i + 2 + D_H, colour);
+		pie_UniTransBoxFill(10 + stars[i].xPos + D_W, 450 + i + D_H, 10 + stars[i].xPos + stars[i].speed + D_W, 450 + i + 2 + D_H, colour);
    	}
 
 	pie_ScreenFlip(CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD);//loading callback		// dont clear.
@@ -387,14 +388,6 @@ void closeLoadingScreen(void)
 
 BOOL displayGameOver(BOOL bDidit)
 {
-// AlexL says take this out......
-//	setConsolePermanence(true,true);
-//	flushConsoleMessages( );
-
-//	addConsoleMessage(" ", CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-//	addConsoleMessage(_("Game Over"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-//	addConsoleMessage(" ", CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-
 	if(bDidit)
 	{
 		setPlayerHasWon(true);

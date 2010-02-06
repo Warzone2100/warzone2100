@@ -25,9 +25,6 @@
 #include "lib/framework/frame.h"
 
 #if defined(WZ_OS_WIN)
-// FIXME HACK Workaround DATADIR definition in objbase.h
-// This works since DATADIR is never used on Windows.
-#  undef DATADIR
 #  include <shlobj.h> /* For SHGetFolderPath */
 #elif defined(WZ_OS_UNIX)
 #  include <errno.h>
@@ -68,6 +65,7 @@
 #include "modding.h"
 #include "multiplay.h"
 #include "research.h"
+#include "scripttabs.h"
 #include "seqdisp.h"
 #include "warzoneconfig.h"
 #include "main.h"
@@ -79,11 +77,11 @@
 
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)
-#  undef DATADIR
+#  undef WZ_DATADIR
 #endif
 
-#if !defined(DATADIR)
-#  define DATADIR "data"
+#if !defined(WZ_DATADIR)
+#  define WZ_DATADIR "data"
 #endif
 
 typedef enum _focus_state
@@ -108,6 +106,10 @@ char configdir[PATH_MAX] = ""; // specifies custom USER directory. Same rules ap
 char * global_mods[MAX_MODS] = { NULL };
 char * campaign_mods[MAX_MODS] = { NULL };
 char * multiplay_mods[MAX_MODS] = { NULL };
+
+char * loaded_mods[MAX_MODS] = { NULL };
+char * mod_list = NULL;
+int num_loaded_mods = 0;
 
 
 // Warzone 2100 . Pumpkin Studios
@@ -156,7 +158,7 @@ static BOOL inList( char * list[], const char * item )
  * \param appendToPath Whether to append or prepend
  * \param checkList List of directories to check. NULL means any.
  */
-void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToPath, char * checkList[] )
+void addSubdirs( const char * basedir, const char * subdir, const bool appendToPath, char * checkList[], bool addToModList )
 {
 	char tmpstr[PATH_MAX];
 	char ** subdirlist = PHYSFS_enumerateFiles( subdir );
@@ -166,12 +168,16 @@ void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToP
 #ifdef DEBUG
 		debug( LOG_NEVER, "addSubdirs: Examining subdir: [%s]", *i );
 #endif // DEBUG
-		if( !checkList || inList( checkList, *i ) )
+		if (*i[0] != '.' && (!checkList || inList(checkList, *i)))
 		{
 			snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir, PHYSFS_getDirSeparator(), *i);
 #ifdef DEBUG
 			debug( LOG_NEVER, "addSubdirs: Adding [%s] to search path", tmpstr );
 #endif // DEBUG
+			if (addToModList)
+			{
+				addLoadedMod(*i);
+			}
 			PHYSFS_addToSearchPath( tmpstr, appendToPath );
 		}
 		i++;
@@ -212,6 +218,92 @@ void printSearchPath( void )
 		debug(LOG_WZ, "    [%s]", *i);
 	}
 	PHYSFS_freeList( searchPath );
+}
+
+void addLoadedMod(const char * modname)
+{
+	char * mod = strdup(modname);
+	int i, modlen;
+	if (num_loaded_mods >= MAX_MODS)
+	{
+		// mod list full
+		return;
+	}
+	modlen = strlen(mod);
+	if (modlen >= 3 && strcmp(&mod[modlen-3], ".wz")==0)
+	{
+		// remove ".wz" from end
+		mod[modlen-3] = 0;
+		modlen -= 3;
+	}
+	if (modlen >= 4 && strcmp(&mod[modlen-4], ".cam")==0)
+	{
+		// remove ".cam.wz" from end
+		mod[modlen-4] = 0;
+		modlen -= 4;
+	}
+	else if (modlen >= 4 && strcmp(&mod[modlen-4], ".mod")==0)
+	{
+		// remove ".mod.wz" from end
+		mod[modlen-4] = 0;
+		modlen -= 4;
+	}
+	else if (modlen >= 5 && strcmp(&mod[modlen-5], ".gmod")==0)
+	{
+		// remove ".gmod.wz" from end
+		mod[modlen-5] = 0;
+		modlen -= 5;
+	}
+	// Yes, this is an online insertion sort.
+	// I swear, for the numbers of mods this is going to be dealing with
+	// (i.e. 0 to 2), it really is faster than, say, Quicksort.
+	for (i=0; i<num_loaded_mods && strcmp(loaded_mods[i], mod)>0; i++);
+	if (i < num_loaded_mods)
+	{
+		if (strcmp(loaded_mods[i], mod) == 0)
+		{
+			// mod already in list
+			free(mod);
+			return;
+		}
+		memmove(&loaded_mods[i+1], &loaded_mods[i], (num_loaded_mods-i)*sizeof(char*));
+	}
+	loaded_mods[i] = mod;
+	num_loaded_mods++;
+}
+void clearLoadedMods(void)
+{
+	int i;
+	for (i=0; i<num_loaded_mods; i++)
+	{
+		free(loaded_mods[i]);
+	}
+	num_loaded_mods = 0;
+	if (mod_list)
+	{
+		free(mod_list);
+		mod_list = NULL;
+	}
+}
+char * getModList(void)
+{
+	int i;
+	if (mod_list)
+	{
+		// mod list already constructed
+		return mod_list;
+	}
+	mod_list = (char *)malloc(modlist_string_size);
+	mod_list[0] = 0; //initialize
+	for (i=0; i<num_loaded_mods; i++)
+	{
+		if (i != 0)
+		{
+			strlcat(mod_list, ", ", modlist_string_size);
+		}
+		strlcat(mod_list, loaded_mods[i], modlist_string_size);
+	}
+	return mod_list;
 }
 
 
@@ -454,7 +546,7 @@ static void scanDataDirs( void )
 				if( !PHYSFS_exists("gamedesc.lev") )
 				{
 					// Guessed fallback default datadir on Unix
-					registerSearchPath( DATADIR, 6 );
+					registerSearchPath( WZ_DATADIR, 6 );
 					rebuildSearchPath( mod_multiplay, true );
 				}
 			}
@@ -595,6 +687,10 @@ static void startGameLoop(void)
 	{
 		addMissionTimerInterface();
 	}
+	if (game.type == SKIRMISH)
+	{
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
+	}
 }
 
 
@@ -616,6 +712,7 @@ static void stopGameLoop(void)
 				debug(LOG_ERROR, "levReleaseAll failed!");
 			}
 		}
+		reloadMPConfig();
 	}
 
 	// Disable cursor trapping
@@ -641,7 +738,13 @@ static bool initSaveGameLoad(void)
 	if (!loadGameInit(saveGameName))
 	{
 		// FIXME: we really should throw up a error window, but we can't (easily) so I won't.
-		debug( LOG_ERROR, "Trying to load Game %s failed!", saveGameName);
+		debug(LOG_ERROR, "Trying to load Game %s failed!", saveGameName);
+		debug(LOG_POPUP, "Failed to load a save game! It is either corrupted or a unsupported format.\n\nRestarting main menu.");
+		// FIXME: If we bomb out on a in game load, then we would crash if we don't do the next two calls
+		// Doesn't seem to be a way to tell where we are in game loop to determine if/when we should do the two calls.
+		gameLoopStatus = GAMECODE_FASTEXIT;	// clear out all old data
+		stopGameLoop();
+		startTitleLoop(); // Restart into titleloop
 		SetGameMode(GS_TITLE_SCREEN);
 		return false;
 	}
@@ -652,6 +755,10 @@ static bool initSaveGameLoad(void)
 	if (war_GetTrapCursor())
 	{
 		wzGrabMouse();
+	}
+	if (challengeActive)
+	{
+		addMissionTimerInterface();
 	}
 
 	return true;
@@ -751,40 +858,49 @@ static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 	// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
 	// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
 	if ( activeEvent->state == SDL_APPMOUSEFOCUS )
+	{
+		setMouseScroll(activeEvent->gain);
 		return;
+	}
 
 	if ( activeEvent->gain == 1 )
 	{
-		debug( LOG_NEVER, "WM_SETFOCUS\n");
+		debug( LOG_NEVER, "WM_SETFOCUS");
 		if (focusState != FOCUS_IN)
 		{
 			focusState = FOCUS_IN;
 
-			gameTimeStart();
-			// Should be: audio_ResumeAll();
+			// Don't pause in multiplayer!
+			if (war_GetPauseOnFocusLoss() && !NetPlay.bComms)
+			{
+				gameTimeStart();
+				audio_ResumeAll();
+				cdAudio_Resume();
+			}
+			// enable scrolling
+			setScrollPause(false);
+			resetScroll();
 		}
-
-		// Resume playing audio.
-		cdAudio_Resume();
 	}
-	// Only loose focus when the config settings allow us to
-	else if (war_GetPauseOnFocusLoss())
+	else
 	{
-		debug( LOG_NEVER, "WM_KILLFOCUS\n");
+		debug( LOG_NEVER, "WM_KILLFOCUS");
 		if (focusState != FOCUS_OUT)
 		{
 			focusState = FOCUS_OUT;
 
-			gameTimeStop();
-			// Should be: audio_PauseAll();
-			audio_StopAll();
+			// Don't pause in multiplayer!
+			if (war_GetPauseOnFocusLoss() && !NetPlay.bComms)
+			{
+				gameTimeStop();
+				audio_PauseAll();
+				cdAudio_Pause();
+			}
+			/* Have to tell the input system that we've lost focus */
+			inputLooseFocus();
+			// stop scrolling
+			setScrollPause(true);
 		}
-		/* Have to tell the input system that we've lost focus */
-		inputLooseFocus();
-
-		// Need to pause playing to prevent the audio code from
-		// thinking playing has finished.
-		cdAudio_Pause();
 	}
 }
 #endif
@@ -814,11 +930,7 @@ void mainLoop(void)
 					inputHandleMouseMotionEvent(&event.motion);
 					break;
 				case SDL_ACTIVEEVENT:
-					 // Ignore this event during multiplayer games since it breaks the game when one player suddenly pauses!
-					if (!bMultiPlayer)
-					{
-						handleActiveEvent(&event.active);
-					}
+					handleActiveEvent(&event.active);
 					break;
 				case SDL_QUIT:
 					return;
@@ -834,7 +946,7 @@ void mainLoop(void)
 		inputLooseFocus();		// remove it from input stream
 	}
 
-	if (focusState == FOCUS_IN)
+	if (NetPlay.bComms || focusState == FOCUS_IN || !war_GetPauseOnFocusLoss())
 	{
 		if (loop_GetVideoStatus())
 		{
@@ -891,7 +1003,7 @@ int main(int argc, char *argv[])
 	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
 
 	/*** Initialize directory structure ***/
-	make_dir(ScreenDumpPath, "screendumps", NULL);
+	make_dir(ScreenDumpPath, "screenshots", NULL);
 	make_dir(SaveGamePath, "savegame", NULL);
 	PHYSFS_mkdir("maps");		// MUST have this to prevent crashes when getting map
 	PHYSFS_mkdir("music");

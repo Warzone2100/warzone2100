@@ -227,7 +227,10 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				//and change the tool tip
 				widgSetTipText((WIDGET*)BarGraph, _("Construction Progress"));
 
-				if (BuildPoints > Range)
+				if((int) BuildPoints < 0){
+					BuildPoints=0;
+				}
+				else if (BuildPoints > Range)
 				{
 					BuildPoints = Range;
 				}
@@ -1514,19 +1517,20 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, W
 
 }
 
-// Flash one of two images depending on if the widget is hilighted by the mouse.
-//
+// Flash one of two images, regardless of whether or not it is highlighted
+// Commented-out portions are retained because I am planning on making the intensity of the
+// flash depend on whether or not the button is highlighted.
 void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
-	BOOL Hilight = false;
-	UDWORD Down = 0;
+	//BOOL Hilight = false;
+	//UDWORD Down = 0;
 	UWORD ImageID;
 
 	ASSERT( psWidget->type == WIDG_BUTTON,"intDisplayButtonFlash : Not a button" );
 
-	if( ((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
+	/* if( ((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
 	{
 		Hilight = true;
 	}
@@ -1534,13 +1538,13 @@ void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 	if( ((W_BUTTON*)psWidget)->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
 	{
 		Down = 1;
-	}
+	} */
 
-	if ( Down && ((gameTime2/250) % 2 == 0) )
+	if ( /* Down && */ (gameTime2/250) % 2 == 0 )
 	{
 		ImageID = UNPACKDWORD_TRI_B(psWidget->UserData);
-		Hilight = false;
-	} else
+	}
+	else
 	{
 		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
 	}
@@ -3057,6 +3061,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 	UDWORD			delay = 150;
 	UDWORD			i;
 	SDWORD width, height;
+	int		x = 0, y = 0;
 
 	// store the width & height of the radar/mini-map
 	width = scrollMaxX - scrollMinX;
@@ -3093,7 +3098,11 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL; psProxDisp = psProxDisp->psNext)
 	{
 		PROX_TYPE	proxType;
-		int		x = 0, y = 0;
+
+		if (psProxDisp->psMessage->player != selectedPlayer)
+		{
+			continue;
+		}
 
 		if (psProxDisp->type == POS_PROXDATA)
 		{
@@ -3155,8 +3164,25 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
 		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
 		// everything outside the box.
-		if ( (x+radarX) < width && (x+radarX) > -width 
-			&& (y+radarY) < height && (y+radarY) > -height)
+		if ( (x+radarX) < width*pixSizeV/2 && (x+radarX) > -width*pixSizeV/2 
+			&& (y+radarY) < height*pixSizeH/2 && (y+radarY) > -height*pixSizeH/2)
+		{
+			// Draw the 'blip'
+			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY);
+		}
+	}
+	if (audio_GetPreviousQueueTrackRadarBlipPos(&x, &y))
+	{
+		int strobe = (gameTime2/delay)%NUM_PULSES;
+		x = (x / TILE_UNITS - scrollMinX) * pixSizeH;
+		y = (y / TILE_UNITS - scrollMinY) * pixSizeV;
+		imageID = (UWORD)(IMAGE_RAD_ENM1 + strobe + (PROX_ENEMY * (NUM_PULSES + 1)));
+		
+		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
+		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
+		// everything outside the box.
+		if ( (x+radarX) < width*pixSizeV/2 && (x+radarX) > -width*pixSizeV/2 
+			&& (y+radarY) < height*pixSizeH/2 && (y+radarY) > -height*pixSizeH/2)
 		{
 			// Draw the 'blip'
 			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY);
@@ -3177,7 +3203,7 @@ void intDisplayProximityBlips(WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset,
 	ASSERT( psMsg->type == MSG_PROXIMITY, "Invalid message type" );
 
 	//if no data - ignore message
-	if (psMsg->pViewData == NULL)
+	if (psMsg->pViewData == NULL || psMsg->player != selectedPlayer)
 	{
 		return;
 	}

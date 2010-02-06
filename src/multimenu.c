@@ -153,8 +153,13 @@ char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH];
  */
 static void SetPlayerTextColor( int mode, UDWORD player )
 {
+	// override color if they are dead...
+	if (!apsDroidLists[player] && !apsStructLists[player])
+	{
+		iV_SetTextColour(WZCOL_GREY);			// dead text color
+	}
 	// the colors were chosen to match the FRIEND/FOE radar map colors.
-	if (mode == ALLIANCE_FORMED)
+	else if (mode == ALLIANCE_FORMED)
 	{
 		iV_SetTextColour(WZCOL_YELLOW);			// Human alliance text color
 	}
@@ -165,11 +170,6 @@ static void SetPlayerTextColor( int mode, UDWORD player )
 	else
 	{
 		iV_SetTextColour(WZCOL_RED);			// Enemy color
-	}
-	// override color if they are dead...
-	if (!apsDroidLists[player] && !apsStructLists[player])
-	{
-		iV_SetTextColour(WZCOL_GREY);			// dead text color
 	}
 }
 // ////////////////////////////////////////////////////////////////////////////
@@ -811,7 +811,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 	if(isHumanPlayer(player) || (game.type == SKIRMISH && player<game.maxPlayers) )
 	{
-		ssprintf(str, "%d:%s", player, getPlayerName(player));
+		ssprintf(str, "%d: %s", NetPlay.players[player].position, getPlayerName(player));
 		if (isHumanPlayer(player))
 		{
 			SetPlayerTextColor(alliances[selectedPlayer][player], player);
@@ -867,13 +867,26 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	{
 		SetPlayerTextColor(alliances[selectedPlayer][player], player);
 
-		//c8:score,
-		sprintf(str,"%d",getMultiStats(player,true).recentScore);
-		iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
+		// Let's use the real score for MP games
+		if (NetPlay.bComms)
+		{
+			//c8:score,
+			sprintf(str,"%d",getMultiStats(player,true).recentScore);
+			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
 
-		//c9:kills,
-		sprintf(str,"%d",getMultiStats(player,true).recentKills);
-		iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+			//c9:kills,
+			sprintf(str,"%d",getMultiStats(player,true).recentKills);
+			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+		}
+		else
+		{
+			// estimate of score for skirmish games
+			sprintf(str,"%d",ingame.skScores[player][0]);
+			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
+			// estimated kills
+			sprintf(str,"%d",ingame.skScores[player][1]);
+			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+		}
 
 		if(!getDebugMappingStatus())
 		{
@@ -918,12 +931,26 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	{
 		SetPlayerTextColor(alliances[selectedPlayer][player], player);
 
-		// estimate of score.
-		sprintf(str,"%d",ingame.skScores[player][0]);
-		iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
-		// estimated kills
-		sprintf(str,"%d",ingame.skScores[player][1]);
-		iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+		// Let's use the real score for MP games
+		if (NetPlay.bComms)
+		{
+			//c8:score,
+			sprintf(str,"%d",getMultiStats(player,true).recentScore);
+			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
+
+			//c9:kills,
+			sprintf(str,"%d",getMultiStats(player,true).recentKills);
+			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+		}
+		else
+		{
+			// estimate of score for skirmish games
+			sprintf(str,"%d",ingame.skScores[player][0]);
+			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
+			// estimated kills
+			sprintf(str,"%d",ingame.skScores[player][1]);
+			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+		}
 	}
 
 	/* Display player power instead of number of played games
@@ -1277,7 +1304,7 @@ BOOL intAddMultiMenu(void)
 {
 	W_FORMINIT		sFormInit;
 	W_BUTINIT		sButInit;
-	UDWORD			i,pos = 0,formHeight=0;
+	UDWORD			i;
 
 	//check for already open.
 	if(widgGetFromID(psWScreen,MULTIMENU_FORM))
@@ -1286,17 +1313,9 @@ BOOL intAddMultiMenu(void)
 		return true;
 	}
 
-	intResetScreen(false);
-
-
-	// calculate required height.
-	formHeight = MULTIMENU_PLAYER_H+7;
-	for(i=0;i<MAX_PLAYERS;i++)
+	if (intMode != INT_INTELMAP)
 	{
-		if(isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ))
-		{
-			formHeight += MULTIMENU_PLAYER_H;
-		}
+		intResetScreen(false);
 	}
 
 	// add form
@@ -1307,7 +1326,7 @@ BOOL intAddMultiMenu(void)
 	sFormInit.x				  =(SWORD)(MULTIMENU_FORM_X);
 	sFormInit.y				  =(SWORD)(MULTIMENU_FORM_Y);
 	sFormInit.width			  = MULTIMENU_FORM_W;
-	sFormInit.height		  = (UWORD)formHeight;			//MULTIMENU_FORM_H;
+	sFormInit.height		  = (UWORD)(MULTIMENU_PLAYER_H*game.maxPlayers + MULTIMENU_PLAYER_H+7);	//MULTIMENU_FORM_H;
 	sFormInit.pDisplay		  = intOpenPlainForm;
 	sFormInit.disableChildren = true;
 
@@ -1321,8 +1340,7 @@ BOOL intAddMultiMenu(void)
 	{
 		if(isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ) )
 		{
-			addMultiPlayer(i,pos);
-			pos++;
+			addMultiPlayer(i,NetPlay.players[i].position);
 		}
 	}
 
@@ -1346,7 +1364,10 @@ BOOL intAddMultiMenu(void)
 
 	intShowPowerBar();						// add power bar
 
-	intMode		= INT_MULTIMENU;			// change interface mode.
+	if (intMode != INT_INTELMAP)
+	{
+		intMode		= INT_MULTIMENU;			// change interface mode.
+	}
 	MultiMenuUp = true;
 	return true;
 }
@@ -1354,10 +1375,17 @@ BOOL intAddMultiMenu(void)
 // ////////////////////////////////////////////////////////////////////////////
 void intCloseMultiMenuNoAnim(void)
 {
+	if (!MultiMenuUp && !ClosingMultiMenu)
+	{
+		return;
+	}
 	widgDelete(psWScreen, MULTIMENU_CLOSE);
 	widgDelete(psWScreen, MULTIMENU_FORM);
 	MultiMenuUp = false;
-	intMode		= INT_NORMAL;
+	if (intMode != INT_INTELMAP)
+	{
+		intMode		= INT_NORMAL;
+	}
 }
 
 
@@ -1365,6 +1393,11 @@ void intCloseMultiMenuNoAnim(void)
 BOOL intCloseMultiMenu(void)
 {
 	W_TABFORM *Form;
+
+	if (!MultiMenuUp)
+	{
+		return true;
+	}
 
 	widgDelete(psWScreen, MULTIMENU_CLOSE);
 
@@ -1378,7 +1411,10 @@ BOOL intCloseMultiMenu(void)
 		MultiMenuUp  = false;
 	}
 
-	intMode		= INT_NORMAL;
+	if (intMode != INT_INTELMAP)
+	{
+		intMode		= INT_NORMAL;
+	}
 	return true;
 }
 

@@ -38,7 +38,7 @@ extern "C"
 #endif
 
 extern ALenum __sound_GetError(const char* location_description);
-extern ALenum __sound_GetDeviceError(ALCdevice* device, const char* location_description);
+extern ALenum __sound_GetContextError(ALCdevice* device, const char* location_description);
 
 /** Check whether an error occurred in OpenAL's current sound context. If one
  *  did occur, print an error message and return the error code.
@@ -52,12 +52,12 @@ extern ALenum __sound_GetDeviceError(ALCdevice* device, const char* location_des
  *  \param device the OpenAL device (ALCdevice* pointer) to check for errors on
  *  \return the OpenAL error code
  */
-#define sound_GetDeviceError(device) \
-	__sound_GetDeviceError(device, AT_MACRO)
+#define sound_GetContextError(device) \
+	__sound_GetContextError(device, AT_MACRO)
 
 #else // !defined(WZ_NOSOUND)
 # define sound_GetError(err_code)       AL_NO_ERROR
-# define sound_GetDeviceError(err_code) ALC_NO_ERROR
+# define sound_GetContextError(err_code) ALC_NO_ERROR
 #endif // !defined(WZ_NOSOUND)
 
 #if defined(__cplusplus)

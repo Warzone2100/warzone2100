@@ -43,7 +43,7 @@ typedef struct {
 	uint32_t    power;						// power level for arena game
 	uint8_t		base;						// clean/base/base&defence
 	uint8_t		alliance;					// no/yes/AIs vs Humans
-	uint8_t		skDiff[MAX_PLAYERS];			// skirmish game difficulty settings.
+	uint8_t		skDiff[MAX_PLAYERS];		// skirmish game difficulty settings. 0x0=OFF 0xff=HUMAN
 } MULTIPLAYERGAME;
 
 typedef struct
@@ -76,6 +76,7 @@ extern MULTIPLAYERGAME		game;						// the game description.
 extern MULTIPLAYERINGAME	ingame;						// the game description.
 
 extern BOOL					bMultiPlayer;				// true when more than 1 player.
+extern BOOL					bMultiMessages;				// == bMultiPlayer unless multi messages are disabled
 extern UDWORD				selectedPlayer;
 extern BOOL					openchannels[MAX_PLAYERS];
 extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
@@ -83,13 +84,13 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
-// NOTE: MaxMsgSize is currently set to 8K.  When MAX_BYTESPERSEC has been reached (sent + recv!), then we do NOT
+// NOTE: MaxMsgSize is currently set to 16K.  When MAX_BYTESPERSEC has been reached (sent + recv!), then we do NOT
 //       do the sync code checks anymore(!), needless to say, this can and does cause issues.
 // FIXME: We should define this externally so people with dial-up modems can configure this
 // FIXME: Use possible compression on the packets.
 // NOTE: Remember, we (now) allow 150 units max * 7 (1 human, 6 AI possible for Host) to send to the other player.
 
-#define MAX_BYTESPERSEC			6144		// bump up to 6K
+#define MAX_BYTESPERSEC			14336
 
 #define ANYPLAYER				99
 #define ONEPLAYER				98
@@ -128,7 +129,6 @@ extern WZ_DECL_WARN_UNUSED_RESULT STRUCTURE		*IdToStruct(UDWORD id,UDWORD player
 extern WZ_DECL_WARN_UNUSED_RESULT BOOL			IdToDroid(UDWORD id, UDWORD player, DROID **psDroid);
 extern WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id,UDWORD player);
 extern WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId,UDWORD player);
-extern WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*NameToTemplate(const char *sName,UDWORD player);
 
 extern const char* getPlayerName(unsigned int player);
 extern BOOL setPlayerName		(UDWORD player, const char *sName);
@@ -145,15 +145,14 @@ extern BOOL	multiPlayerLoop		(void);							// for loop.c
 extern BOOL recvMessage			(void);
 extern BOOL sendTemplate		(DROID_TEMPLATE *t);
 extern BOOL SendDestroyTemplate (DROID_TEMPLATE *t);
-extern BOOL SendResearch		(UBYTE player,UDWORD index);
+extern BOOL SendResearch(uint8_t player, uint32_t index, bool trigger);
 extern BOOL SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.
 extern BOOL sendTextMessage		(const char *pStr,BOOL cast);		// send a text message
 extern BOOL sendAIMessage		(char *pStr, UDWORD player, UDWORD to);	//send AI message
 
-extern BOOL turnOffMultiMsg		(BOOL bDoit);
+extern void turnOffMultiMsg		(BOOL bDoit);
 
-extern UBYTE sendMap			(void);
-
+extern void sendMap(void);
 extern BOOL multiplayerWinSequence(BOOL firstCall);
 
 /////////////////////////////////////////////////////////
@@ -194,9 +193,8 @@ extern BOOL joinCampaign		(UDWORD gameNumber, char *playername);
 extern void	playerResponding	(void);
 extern BOOL multiGameInit		(void);
 extern BOOL multiGameShutdown	(void);
-extern BOOL copyTemplateSet		(UDWORD from,UDWORD to);
-extern BOOL addTemplateSet		(UDWORD from,UDWORD to);
 extern BOOL addTemplate			(UDWORD	player,DROID_TEMPLATE *psNew);
+extern BOOL addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList);
 
 // syncing.
 extern BOOL sendCheck			(void);							//send/recv  check info

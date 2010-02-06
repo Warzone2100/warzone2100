@@ -131,6 +131,9 @@ BOOL sound_InitLibrary( void )
 	char buf[512];
 	const ALCchar *deviceName;
 
+#if 0
+	// This code is disabled because enumerating devices apparently crashes PulseAudio on Fedora12
+
 	/* Get the available devices and print them.
 	 * Devices are separated by NUL chars ('\0') and the list of devices is
 	 * terminated by two NUL chars.
@@ -141,6 +144,7 @@ BOOL sound_InitLibrary( void )
 		debug(LOG_SOUND, "available OpenAL device(s) are: %s", deviceName);
 		deviceName += strlen(deviceName) + 1;
 	}
+#endif
 
 #ifdef WZ_OS_WIN
 	/* HACK: Select the "software" OpenAL device on Windows because it
@@ -179,7 +183,7 @@ BOOL sound_InitLibrary( void )
 	
 	alcMakeContextCurrent(context);
 
-	err = sound_GetDeviceError(device);
+	err = sound_GetContextError(device);
 	if (err != ALC_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Couldn't initialize audio context: %s", alcGetString(device, err));
@@ -245,17 +249,23 @@ void sound_ShutdownLibrary( void )
 		sound_StopStream(stream);
 	}
 	sound_UpdateStreams();
+	
+	alcGetError(device);	// clear error codes
 
 	/* On Linux since this caused some versions of OpenAL to hang on exit. - Per */
 	debug(LOG_SOUND, "make default context NULL");
 	alcMakeContextCurrent(NULL);
+	sound_GetContextError(device);
 
 	debug(LOG_SOUND, "destroy previous context");
 	alcDestroyContext(context); // this gives a long delay on some impl.
+	sound_GetContextError(device);
 
 	debug(LOG_SOUND, "close device");
-	alcCloseDevice(device);
-	sound_GetError();
+	if (alcCloseDevice(device) == ALC_FALSE)
+	{
+		debug(LOG_SOUND, "OpenAl could not close the audio device." ); 
+	}
 #endif
 
 	while( aSample )
@@ -386,7 +396,7 @@ void sound_Update()
 
 	alcProcessContext(context);
 
-	err = sound_GetDeviceError(device);
+	err = sound_GetContextError(device);
 	if (err != ALC_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Error while processing audio context: %s", alGetString(err));
@@ -950,7 +960,7 @@ void sound_StopStream(AUDIO_STREAM* stream)
 	assert(stream != NULL);
 
 #if !defined(WZ_NOSOUND)
-	sound_GetError();	// clear error codes
+	alGetError();	// clear error codes
 	// Tell OpenAL to stop playing on the given source
 	alSourceStop(stream->source);
 	sound_GetError();
@@ -1173,10 +1183,12 @@ static void sound_DestroyStream(AUDIO_STREAM* stream)
  */
 static void sound_UpdateStreams()
 {
-	AUDIO_STREAM *stream = active_streams, *previous = NULL;
+	AUDIO_STREAM *stream = active_streams, *previous = NULL, *next = NULL;
 
 	while (stream != NULL)
 	{
+		next = stream->next;
+
 		// Attempt to update the current stream, if we find that impossible,
 		// destroy it instead.
 		if (!sound_UpdateStream(stream))
@@ -1185,21 +1197,21 @@ static void sound_UpdateStreams()
 			if (previous)
 			{
 				// Make the previous item skip over the current to the next item
-				previous->next = stream->next;
+				previous->next = next;
 			}
 			else
 			{
 				// Apparently this is the first item in the list, so make the
 				// next item the list-head.
-				active_streams = stream->next;
+				active_streams = next;
 			}
 
 			// Now actually destroy the current stream
 			sound_DestroyStream(stream);
 
 			// Make sure the current stream pointer is intact again
-			stream = (previous != NULL) ? previous->next : active_streams;
-
+			stream = next;
+			
 			// Skip regular style iterator incrementing
 			continue;
 		}
@@ -1223,7 +1235,7 @@ void sound_StopSample(AUDIO_SAMPLE* psSample)
 		debug(LOG_SOUND, "sound_StopSample: sample number (%u) out of range, we probably have run out of available OpenAL sources", psSample->iSample);
 		return;
 	}
-	sound_GetError();	// clear error codes
+	alGetError();	// clear error codes
 	// Tell OpenAL to stop playing the given sample
 	alSourceStop(psSample->iSample);
 	sound_GetError();

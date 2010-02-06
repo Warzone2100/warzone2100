@@ -3,6 +3,25 @@
 
 dist_noinst_DATA = warzone2100.rc
 
+EXTRA_DIST = __BUILD_SCRIPT \
+	     rules.mk \
+	     libs/Makefile \
+	     libs/dejavu/Makefile \
+	     libs/devpkg/Makefile \
+	     libs/expat/Makefile \
+	     libs/fontconfig/Makefile \
+	     libs/freetype2/Makefile \
+	     libs/gettext/Makefile \
+	     libs/iconv/Makefile \
+	     libs/ogg/Makefile \
+	     libs/png/Makefile \
+	     libs/popt/Makefile \
+	     libs/quesoglc/Makefile \
+	     libs/sdl/Makefile \
+	     libs/theora/Makefile \
+	     libs/vorbis/Makefile \
+	     libs/zlib/Makefile
+
 if MINGW32
 nodist_noinst_DATA = \
 		warzone2100.o

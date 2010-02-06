@@ -276,7 +276,7 @@ void pie_UploadDisplayBuffer()
 BOOL pie_InitRadar(void)
 {
 	radarTexture = _TEX_INDEX;
-	glGenTextures(1, (GLuint *) &_TEX_PAGE[_TEX_INDEX].id);
+	glGenTextures(1, &_TEX_PAGE[_TEX_INDEX].id);
 	_TEX_INDEX++;
 	return true;
 }
@@ -336,7 +336,7 @@ void pie_LoadBackDrop(SCREENTYPE screenType)
 	switch (screenType)
 	{
 		case SCREEN_RANDOMBDROP:
-			snprintf(backd, sizeof(backd), "texpages/bdrops/backdrop%i.png", rand() % 8); // Range: 0-7
+			snprintf(backd, sizeof(backd), "texpages/bdrops/backdrop%i.png", rand() % NUM_BACKDROPS); // Range: 0 to (NUM_BACKDROPS-1)
 			break;
 		case SCREEN_MISSIONEND:
 			sstrcpy(backd, "texpages/bdrops/missionend.png");

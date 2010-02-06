@@ -46,4 +46,8 @@ extern UDWORD		screenWidth;
 extern UDWORD		screenHeight;
 extern UDWORD		screenDepth;
 
-#endif
+#ifdef __cplusplus
+}
+#endif //__cplusplus
+
+#endif //_frameint_h

@@ -2174,7 +2174,7 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
-		<Unit filename="src/mapgrid.c">
+		<Unit filename="src/mapgrid.cpp">
 			<Option compilerVar="CC" />
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />
@@ -2896,6 +2896,18 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
+		<Unit filename="src/wavecast.cpp">
+			<Option compilerVar="CC" />
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="src/wavecast.h">
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
 		<Unit filename="src/weapondef.h">
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />

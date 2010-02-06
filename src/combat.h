@@ -71,6 +71,8 @@ extern void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget);
 extern float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD weaponClass,
                        UDWORD weaponSubClass, HIT_SIDE impactSide);
 
+extern unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE impactSide);
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus

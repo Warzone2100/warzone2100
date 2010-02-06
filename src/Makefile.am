@@ -126,6 +126,7 @@ noinst_HEADERS = \
 	orderdef.h \
 	order.h \
 	parsetest.h \
+	pointtree.h \
 	positiondef.h \
 	power.h \
 	projectiledef.h \
@@ -159,6 +160,7 @@ noinst_HEADERS = \
 	version.h \
 	warcam.h \
 	warzoneconfig.h \
+	wavecast.h \
 	weapondef.h \
 	wrappers.h
 
@@ -221,7 +223,7 @@ warzone2100_SOURCES = \
 	main.cpp \
 	map.c \
 	mapdisplay.c \
-	mapgrid.c \
+	mapgrid.cpp \
 	mechanics.c \
 	message.c \
 	message_lexer.lex.c \
@@ -245,6 +247,7 @@ warzone2100_SOURCES = \
 	oprint.c \
 	order.c \
 	parsetest.c \
+	pointtree.cpp \
 	power.c \
 	projectile.c \
 	radar.c \
@@ -273,6 +276,7 @@ warzone2100_SOURCES = \
 	visibility.c \
 	warcam.c \
 	warzoneconfig.c \
+	wavecast.cpp \
 	wrappers.c
 
 warzone2100_LDADD = \

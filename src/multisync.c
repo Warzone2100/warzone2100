@@ -87,12 +87,12 @@ static UDWORD averagePing(void);
 // Defined numeric values
 // NOTE / FIXME: Current MP games are locked at 45ms
 #define MP_FPS_LOCK			45			
-#define AV_PING_FREQUENCY	MP_FPS_LOCK * 4			// how often to update average pingtimes. in approx millisecs.
-#define PING_FREQUENCY		MP_FPS_LOCK * 4			// how often to update pingtimes. in approx millisecs.
-#define STRUCT_FREQUENCY	MP_FPS_LOCK * 3			// how often (ms) to send a structure check.
-#define DROID_FREQUENCY		MP_FPS_LOCK * 3			// how ofter (ms) to send droid checks
-#define POWER_FREQUENCY		MP_FPS_LOCK * 3			// how often to send power levels
-#define SCORE_FREQUENCY		MP_FPS_LOCK * 5			// how often to update global score.
+#define AV_PING_FREQUENCY	MP_FPS_LOCK * 1000		// how often to update average pingtimes. in approx millisecs.
+#define PING_FREQUENCY		MP_FPS_LOCK * 600		// how often to update pingtimes. in approx millisecs.
+#define STRUCT_FREQUENCY	MP_FPS_LOCK * 10		// how often (ms) to send a structure check.
+#define DROID_FREQUENCY		MP_FPS_LOCK * 7			// how ofter (ms) to send droid checks
+#define POWER_FREQUENCY		MP_FPS_LOCK * 14		// how often to send power levels
+#define SCORE_FREQUENCY		MP_FPS_LOCK * 2400		// how often to update global score.
 
 #define SYNC_PANIC			40000					// maximum time before doing a dirty fix. [not even used!]
 
@@ -102,7 +102,7 @@ static UDWORD				PingSend[MAX_PLAYERS];	//stores the time the ping was called.
 // test traffic level.
 static BOOL okToSend(void)
 {
-	//update checks	& go no further if any exceeded.
+	// Update checks and go no further if any exceeded.
 	if (NETgetRecentBytesSent() + NETgetRecentBytesRecvd() >= MAX_BYTESPERSEC)
 	{
 		return false;
@@ -133,46 +133,62 @@ BOOL sendCheck(void)
 
 	// send Checks. note each send has it's own send criteria, so might not send anything.
 	// Priority is droids -> structures -> power -> score -> ping
-/*
- *	!!!NOTE!!!	For this BETA release, we want to see when(if?) we hit the limits!
- *  The LOG_INFO will be reverted back to LOG_SYNC when BETA is done.
-*/
 
 	if(okToSend())
 	{
 		sendDroidCheck();
+		sync_counter.sentDroidCheck++;
 	}
 	else
 	{
-		debug(LOG_INFO, "Couldn't sendDroidCheck()  Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
+		sync_counter.unsentDroidCheck++;
 	}
 	if(okToSend())
 	{
 		sendStructureCheck();
+		sync_counter.sentStructureCheck++;
+
 	}
 	else
 	{
-		debug(LOG_INFO, "Couldn't sendStructureCheck() Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
+		sync_counter.unsentStructureCheck++;
 	}
 	if(okToSend())
 	{
 		sendPowerCheck();
+		sync_counter.sentPowerCheck++;
 	}
 	else
 	{
-		debug(LOG_INFO, "Couldn't sendPowerCheck() Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
+		sync_counter.unsentPowerCheck++;
 	}
 	if(okToSend())
 	{
 		sendScoreCheck();
+		sync_counter.sentScoreCheck++;
 	}
 	else
 	{
-		debug(LOG_INFO, "Couldn't sendScoreCheck() Sent = %d, Recv = %d", NETgetRecentBytesSent(), NETgetRecentBytesRecvd());
+		sync_counter.unsentScoreCheck++;
+	}
+	if(okToSend())
+	{
+		sendPing();
+		sync_counter.sentPing++;
+	}
+	else
+	{
+		sync_counter.unsentPing++;
 	}
 
-	sendPing();
-
+	if (isMPDirtyBit)
+	{
+		sync_counter.sentisMPDirtyBit++;
+	}
+	else
+	{
+		sync_counter.unsentisMPDirtyBit++;
+	}
 	// FIXME: reset flag--For now, we always do this since we have no way of knowing which routine(s) we had to set this flag
 	isMPDirtyBit = false;	
 	return true;
@@ -611,7 +627,6 @@ static void offscreenUpdate(DROID *psDroid,
 							UWORD dir,
 							DROID_ORDER order)
 {
-	UDWORD				oldx,oldy;
 	PROPULSION_STATS	*psPropStats;
  	SDWORD			xdiff,ydiff, distSq;
 
@@ -632,16 +647,13 @@ static void offscreenUpdate(DROID *psDroid,
 		{
 			if( ((UDWORD)fx != 0) && ((UDWORD)fy != 0) )
 			{
-				oldx = psDroid->pos.x;
-				oldy = psDroid->pos.y;
-				debug(LOG_SYNC, "Jumping droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
+				debug(LOG_SYNC, "Jumping droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, psDroid->pos.x, psDroid->pos.y, (UDWORD)fx, (UDWORD)fy);
 
 				psDroid->sMove.fx = fx;							//update x
 				psDroid->sMove.fy = fy;							//update y
 
 				psDroid->pos.x		 = (UWORD) fx;					//update move progress
 				psDroid->pos.y		 = (UWORD) fy;
-				gridMoveDroid(psDroid, (SDWORD)oldx,(SDWORD)oldy);
 
 				psDroid->direction = dir % 360;		// update rotation
 
@@ -654,12 +666,9 @@ static void offscreenUpdate(DROID *psDroid,
 	}
 	else
 	{
-		oldx = psDroid->pos.x;
-		oldy = psDroid->pos.y;
-		debug(LOG_SYNC, "Moving droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
+		debug(LOG_SYNC, "Moving droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, psDroid->pos.x, psDroid->pos.y, (UDWORD)fx, (UDWORD)fy);
 		psDroid->pos.x		 = (UWORD)x;						//update x
 		psDroid->pos.y		 = (UWORD)y;						//update y
-		gridMoveDroid(psDroid, (SDWORD)oldx,(SDWORD)oldy);
 		psDroid->direction = dir % 360;				// update rotation
 	}
 
@@ -1037,12 +1046,10 @@ BOOL recvPowerCheck()
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Score
+// We use setMultiStats() to broadcast the score when needed.
 BOOL sendScoreCheck(void)
 {
 	static UDWORD	lastsent = 0;
-	uint8_t			i;
-	BOOL			isData = false;
-	PLAYERSTATS		stats;
 
 	if (lastsent > gameTime)
 	{
@@ -1056,92 +1063,33 @@ BOOL sendScoreCheck(void)
 
 	lastsent = gameTime;
 
-	// Update local score
-	stats = getMultiStats(selectedPlayer, true);
-
-	// Add recently scored points
-	stats.recentKills += stats.killsToAdd;
-	stats.totalKills  += stats.killsToAdd;
-	stats.recentScore += stats.scoreToAdd;
-	stats.totalScore  += stats.scoreToAdd;
-
-	// Zero them now added
-	stats.killsToAdd = stats.scoreToAdd = 0;
-
-	// Store local version
-	setMultiStats(selectedPlayer, stats, true);
-
-	// Send score to the ether
-	setMultiStats(selectedPlayer, stats, false);
-
 	// Broadcast any changes in other players, but not in FRONTEND!!!
 	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT)
 	{
-		NETbeginEncode(NET_SCORESUBMIT, NET_ALL_PLAYERS);
+		uint8_t			i;
 
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			if (isHumanPlayer(i) && i != selectedPlayer)
+			PLAYERSTATS		stats;
+
+			// Host controls AI's scores + his own...
+			if (myResponsibility(i))
 			{
+				// Update local score
 				stats = getMultiStats(i, true);
 
-				if (stats.killsToAdd || stats.scoreToAdd  )
-				{
-					NETuint8_t(&i);
+				// Add recently scored points
+				stats.recentKills += stats.killsToAdd;
+				stats.totalKills  += stats.killsToAdd;
+				stats.recentScore += stats.scoreToAdd;
+				stats.totalScore  += stats.scoreToAdd;
 
-					NETuint32_t(&stats.killsToAdd);
-					NETuint32_t(&stats.scoreToAdd);
+				// Zero them out
+				stats.killsToAdd = stats.scoreToAdd = 0;
 
-					isData = true;
-				}
+				// Send score to everyone else
+				setMultiStats(i, stats, false);
 			}
-		}
-
-		// If we added any data to the packet
-		if (isData)
-		{
-			// Terminate the message with ANYPLAYER
-			uint8_t player = ANYPLAYER;
-			NETuint8_t(&player);
-
-			// Send the message
-			NETend();
-		}
-	}
-
-	// Get global versions of scores
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		if (isHumanPlayer(i))
-		{
-			setMultiStats(i, getMultiStats(i, false), true);
-		}
-	}
-
-	return true;
-}
-
-
-BOOL recvScoreSubmission()
-{
-	uint8_t		player;
-	uint32_t	kills, score;
-	PLAYERSTATS	stats;
-
-	NETbeginDecode(NET_SCORESUBMIT);
-
-	for (NETuint8_t(&player); player != ANYPLAYER; NETuint8_t(&player))
-	{
-		if (player == selectedPlayer)
-		{
-			NETuint32_t(&kills);
-			NETuint32_t(&score);
-
-			stats = getMultiStats(player, true);
-			stats.killsToAdd += kills;
-			stats.scoreToAdd += score;
-
-			break;
 		}
 	}
 

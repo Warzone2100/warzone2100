@@ -3,7 +3,7 @@ RES_CY_AH4
 	{
 		_("Cyborg Thermal Armor Improved"),
 		_("Heat resistant armored layers"),
-		_("Thermal Armor increased"),
+		_("Thermal Armor +35%"),
 		_("All Cyborgs upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -68,7 +68,7 @@ RES_CYMET7
 	{
 		_("Cyborg Materials Improved"),
 		_("Superdense composite alloys and energy-absorbing fibres"),
-		_("Increases Kinetic Armor and Body Points"),
+		_("Kinetic Armor +35%, Body Points +35%"),
 		_("All Cyborgs upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -81,7 +81,7 @@ RES_CYMET10
 	{
 		_("Cyborg Materials Improved"),
 		_("Laminated alloys bonded with energy-deflecting optic bundles"),
-		_("Increases Kinetic Armor and Body Points"),
+		_("Kinetic Armor +35%, Body Points +35%"),
 		_("All Cyborgs upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -211,7 +211,7 @@ RES_DF_WU7
 	{
 		_("Defenses Improved"),
 		_("High tensile concrete-plastic composite"),
-		_("Increases Armor and Body Points"),
+		_("Armor +35%, Body Points +30%"),
 		_("All defenses and walls upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -224,7 +224,7 @@ RES_DF_WU10
 	{
 		_("Defenses Improved"),
 		_("Bonded metallic laminates formed into walls and defenses"),
-		_("Increases Armor and Body Points"),
+		_("Armor +35%, Body Points +30%"),
 		_("All defenses and walls upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -419,7 +419,7 @@ RES_ST_RFU7
 	{
 		_("Repair Facility Improved"),
 		_("Advanced repair techniques"),
-		_("Increases Repair Speed"),
+		_("Repair Speed +100%"),
 		_("All repair facilities upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -431,8 +431,8 @@ RES_POWU2
 {
 	{
 		_("Improved Power Generator Performance"),
-		_("New Power Generation Technology"),
 		_("Vapor Turbine boosts power output"),
+		_("Power output +30%"),
 		_("All power generators upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -445,7 +445,7 @@ RES_ST_RU7
 	{
 		_("Research Improved"),
 		_("Neural Synapse Research Brain"),
-		_("Increases research speed"),
+		_("Research speed +30%"),
 		_("All research facilities upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -458,7 +458,7 @@ RES_ST_MAT7
 	{
 		_("Increases Damage Resistance"),
 		_("Advanced Base Structure Materials"),
-		_("Increases Armor and Body Points"),
+		_("Armor +35%, Body Points +30%"),
 		_("All base structures upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -471,7 +471,7 @@ RES_ST_MAT10
 	{
 		_("Increases Damage Resistance"),
 		_("High Density Base Structure Materials"),
-		_("Increases Armor and Body Points"),
+		_("Armor +35%, Body Points +30%"),
 		_("All base structures upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -497,7 +497,7 @@ RES_ST_VPU4
 	{
 		_("VTOL Rearming Times Reduced"),
 		_("Robotic VTOL Rearming"),
-		_("Reduces rearming time"),
+		_("Rearming speed +30%"),
 		_("All rearming pads upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -510,7 +510,7 @@ RES_ENGIN3
 	{
 		_("Research Breakthrough Improves Construction Rates"),
 		_("Advanced Engineering Techniques"),
-		_("Increases construction speed"),
+		_("Construction speed +20%"),
 		_("All trucks upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -666,7 +666,7 @@ RES_V_EN7
 	{
 		_("Vehicle Engine Upgrade"),
 		_("Gas Turbine Engine"),
-		_("Improves vehicle speed"),
+		_("Vehicle speed +5%"),
 		_("All vehicles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -679,7 +679,7 @@ RES_V_EN10
 	{
 		_("Vehicle Engine Upgrade"),
 		_("Ionizing Turbine Engine"),
-		_("Improves vehicle speed"),
+		_("Vehicle speed +5%"),
 		_("All vehicles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -692,7 +692,7 @@ RES_V_MET7
 	{
 		_("Vehicle Bodies Improved"),
 		_("Superdense composite alloys and energy-absorbing fibres"),
-		_("Increases kinetic armor and body points"),
+		_("Kinetic armor +30%, body points +30%"),
 		_("All vehicles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -705,7 +705,7 @@ RES_V_MET10
 	{
 		_("Vehicle Bodies Improved"),
 		_("Laminated alloys bonded with energy-deflecting optic bundles"),
-		_("Increases kinetic armor and body points"),
+		_("Kinetic armor +30%, body points +30%"),
 		_("All vehicles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -718,7 +718,7 @@ RES_V_AH4
 	{
 		_("Vehicle Thermal Armor Improved"),
 		_("Heat-resistant armored layers"),
-		_("Increases Thermal Armor"),
+		_("Thermal Armor +40%"),
 		_("All vehicles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.pie",
@@ -809,7 +809,7 @@ RES_W_AAAC3
 	{
 		_("AA Upgrade"),
 		_("Computer plots and guides shell to target's position"),
-		_("Increases AA accuracy"),
+		_("AA accuracy +10%"),
 		_("All AA weapons upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -822,7 +822,7 @@ RES_W_AAD4
 	{
 		_("AA Flak Upgrade"),
 		_("High Explosive Armor Piercing Flak"),
-		_("Increases AA Flak damage"),
+		_("AA Flak damage +25%"),
 		_("All AA flak weapons upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -835,7 +835,7 @@ RES_W_AAROF4
 	{
 		_("AA Upgrade"),
 		_("Chainfeed loader eradicates jams and improves performance"),
-		_("Increases AA ROF"),
+		_("AA reload time -15%"),
 		_("All AA weapons upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -861,7 +861,7 @@ RES_W_BAC3
 	{
 		_("Bomb Upgrade"),
 		_("Low yield thermonuclear warhead"),
-		_("Increases Bombing damage"),
+		_("Bomb damage +25%"),
 		_("All bomb bays upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -874,7 +874,7 @@ RES_W_CN_D7
 	{
 		_("Cannon Upgrade"),
 		_("High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"),
-		_("Increases Cannon damage"),
+		_("Cannon damage +25%"),
 		_("All cannons upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -887,7 +887,7 @@ RES_W_CN_ROF4
 	{
 		_("Cannon Upgrade"),
 		_("Robotic loading system feeds rounds into breech"),
-		_("Increases Cannon ROF"),
+		_("Cannon reload time -10%"),
 		_("All cannons upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -900,7 +900,7 @@ RES_W_HOWAC3
 	{
 		_("Howitzer Upgrade"),
 		_("Computer guided shells"),
-		_("Increases Howitzer accuracy"),
+		_("Howitzer accuracy +10%"),
 		_("All howitzers upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -913,7 +913,7 @@ RES_W_HOWD4
 	{
 		_("Howitzer Upgrade"),
 		_("High Explosive Armor Piercing Shells"),
-		_("Increases Howitzer damage"),
+		_("Howitzer damage +25%"),
 		_("All howitzers upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -926,7 +926,7 @@ RES_W_HOWRF4
 	{
 		_("Howitzer Upgrade"),
 		_("Robotic loading system feeds rounds into breech"),
-		_("Increases Howitzer ROF"),
+		_("Howitzer reload time -10%"),
 		_("All howitzers upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -965,7 +965,7 @@ RES_LASAC1
 	{
 		_("Laser Upgrade"),
 		_("Improvement in laser optics reduces light dispersal"),
-		_("Increases Laser accuracy"),
+		_("Laser accuracy +10%"),
 		_("All lasers upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -978,7 +978,7 @@ RES_LASD1
 	{
 		_("Laser Upgrade"),
 		_("Improvement in laser emission density"),
-		_("Increases Laser damage"),
+		_("Laser damage +25%"),
 		_("All lasers upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -991,7 +991,7 @@ RES_LASROF1
 	{
 		_("Laser Upgrade"),
 		_("Improved Energizer reduces laser recharge time"),
-		_("Increases Laser ROF"),
+		_("Laser reload time -15%"),
 		_("All lasers upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -1004,7 +1004,7 @@ RES_W_MG_D8
 	{
 		_("Machinegun Upgrade"),
 		_("Depleted uranium kinetic energy bullets"),
-		_("Increases Machinegun damage"),
+		_("Machinegun damage +25%"),
 		_("All machineguns upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -1017,7 +1017,7 @@ RES_W_MG_D10
 	{
 		_("Machinegun Upgrade"),
 		_("Collapsing Plutonium kinetic energy bullets"),
-		_("Increases Machinegun damage"),
+		_("Machinegun damage +25%"),
 		_("All machineguns upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -1056,7 +1056,7 @@ RES_W_MS_AC1
 	{
 		_("Missile Upgrade"),
 		_("On-board computer predicts target movement"),
-		_("Increases Missile accuracy"),
+		_("Missile accuracy +10%"),
 		_("All missiles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -1069,7 +1069,7 @@ RES_W_MS_AC2
 	{
 		_("Missile Upgrade"),
 		_("Missile actively seeks and homes on targets"),
-		_("Increases Missile accuracy"),
+		_("Missile accuracy +10%"),
 		_("All missiles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -1082,7 +1082,7 @@ RES_W_MS_D1
 	{
 		_("Missile Upgrade"),
 		_("Low yield thermonuclear warhead"),
-		_("Increases Missile damage"),
+		_("Missile damage +25%"),
 		_("All missiles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -1147,7 +1147,7 @@ RES_W_MS_ROF1
 	{
 		_("Missile Upgrade"),
 		_("Missiles detect and lock-on to targets while loading"),
-		_("Increases Missile ROF"),
+		_("Missile reload time -15%"),
 		_("All missiles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -1160,7 +1160,7 @@ RES_W_SMS_ROF1
 	{
 		_("Missile Upgrade"),
 		_("Racked missile dispensers allow for fast reloading"),
-		_("Increases Missile ROF"),
+		_("Missile reload time -15%"),
 		_("All missiles upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -1173,7 +1173,7 @@ RES_W_M_AC3
 	{
 		_("Mortar Upgrade"),
 		_("Self-guided rocket-powered shells"),
-		_("Increases Mortar accuracy"),
+		_("Mortar accuracy +10%"),
 		_("All mortars upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -1186,7 +1186,7 @@ RES_W_M_ROF4
 	{
 		_("Mortar Upgrade"),
 		_("Robotic loading system feeds rounds into breech"),
-		_("Increases Mortar ROF"),
+		_("Mortar reload time -10%"),
 		_("All mortars upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -1238,7 +1238,7 @@ RES_W_RAIL_AC1
 	{
 		_("Rail Gun Upgrade"),
 		_("Computer predicts and compensates for target's movement"),
-		_("Increases Rail Gun accuracy"),
+		_("Rail Gun accuracy +10%"),
 		_("All rail guns upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -1251,7 +1251,7 @@ RES_W_RAIL_D1
 	{
 		_("Rail Gun Upgrade"),
 		_("Improved armor-piercing dart"),
-		_("Increases Rail Gun damage"),
+		_("Rail Gun damage +25%"),
 		_("All rail guns upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
@@ -1264,7 +1264,7 @@ RES_W_RAIL_ROF1
 	{
 		_("Rail Gun Upgrade"),
 		_("Increased gauss output speeds up reload time"),
-		_("Increases Rail Gun ROF"),
+		_("Rail Gun reload time -15%"),
 		_("All rail guns upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",

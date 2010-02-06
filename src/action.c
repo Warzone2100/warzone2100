@@ -1012,15 +1012,23 @@ void actionUpdateDroid(DROID *psDroid)
 			setDroidActionTarget(psDroid, NULL, i);
 			if (i == 0)
 			{
-				if ( (psDroid->action != DACTION_MOVEFIRE) &&
-					(psDroid->action != DACTION_TRANSPORTIN) &&
-					(psDroid->action != DACTION_TRANSPORTOUT)   )
+				if (psDroid->action != DACTION_MOVEFIRE &&
+				    psDroid->action != DACTION_TRANSPORTIN &&
+				    psDroid->action != DACTION_TRANSPORTOUT)
 				{
 					psDroid->action = DACTION_NONE;
-					//if Vtol - return to rearm pad
+					// if VTOL - return to rearm pad if not patrolling
 					if (isVtolDroid(psDroid))
 					{
-						moveToRearm(psDroid);
+						if (psDroid->order == DORDER_PATROL)
+						{
+							// Back to the patrol.
+							actionDroidLoc(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
+						}
+						else
+						{
+							moveToRearm(psDroid);
+						}
 					}
 				}
 			}
@@ -1066,9 +1074,8 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_WAITFORREPAIR:
 		// doing nothing
 		// see if there's anything to shoot.
-		if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid) && CAN_UPDATE_NAYBORS(psDroid)
-		    && (psDroid->order == DORDER_NONE || psDroid->order == DORDER_TEMP_HOLD ||
-		        psDroid->order == DORDER_RTR))
+		if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid)
+		    && (psDroid->order == DORDER_NONE || psDroid->order == DORDER_TEMP_HOLD || psDroid->order == DORDER_RTR))
 		{
 			for (i = 0;i < psDroid->numWeaps;i++)
 			{
@@ -1190,7 +1197,6 @@ void actionUpdateDroid(DROID *psDroid)
 					 && psDroid->asWeaps[i].nStat > 0
 					 && psWeapStats->rotate
 					 && psWeapStats->fireOnMove != FOM_NO
-					 && CAN_UPDATE_NAYBORS(psDroid)
 					 && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
@@ -1226,6 +1232,11 @@ void actionUpdateDroid(DROID *psDroid)
 		//loop through weapons and look for target for each weapon
 		for (i = 0; i < psDroid->numWeaps; ++i)
 		{
+			if (psDroid->psActionTarget[i] != NULL && aiObjectIsProbablyDoomed(psDroid->psActionTarget[i]))
+			{
+				setDroidActionTarget(psDroid, NULL, i);  // Target not worth shooting at anymore.
+			}
+
 			if (psDroid->psActionTarget[i] == NULL)
 			{
 				BASE_OBJECT *psTemp;
@@ -1387,18 +1398,26 @@ void actionUpdateDroid(DROID *psDroid)
 					setDroidActionTarget(psDroid, psDroid->psActionTarget[0], i);
 				}
 				// If we still don't have a target, try to find one
-				else if (psDroid->psActionTarget[i] == NULL &&
-					aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false, NULL))
+				else
 				{
-					setDroidActionTarget(psDroid, psTargets[i], i);
+					if (psDroid->psActionTarget[i] == NULL &&
+					aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false, NULL))  // Can probably just use psTarget instead of psTargets[i], and delete the psTargets variable.
+					{
+						setDroidActionTarget(psDroid, psTargets[i], i);
+					}
 				}
 			}
-			// Main turret lost its target, but we're not ordered to attack any specific
-			// target, so try to find a new one
+			// If main turret lost its target, but we're not ordered to attack any specific
+			// target, try to find a new one.
 			else if (psDroid->psActionTarget[0] == NULL &&
-			          psDroid->order != DORDER_ATTACK &&
-			          aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false, NULL))
+				    psDroid->order != DORDER_ATTACK &&
+				    aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false, NULL))
 			{
+				// FIXME What is this code path for?
+				// FIXME If psDroid->psActionTarget[0] == NULL, then actionVisibleTarget(psDroid, psActionTarget, i) crashes.
+				// FIXME And if aiChooseTarget above fails, psActionTarget stays NULL.
+				// FIXME So, assuming the game can't crash, psDroid->psActionTarget[0] is never NULL.
+				debug(LOG_NEVER, "Can this happen?");
 				setDroidActionTarget(psDroid, psTargets[i], i);
 			}
 
@@ -1413,7 +1432,10 @@ void actionUpdateDroid(DROID *psDroid)
 
 			if (nonNullWeapon[i]
 			 && actionVisibleTarget(psDroid, psActionTarget, i)
-			 && actionInRange(psDroid, psActionTarget, i))
+			 && actionInRange(psDroid, psActionTarget, i)
+			 && (psDroid->order == DORDER_ATTACK
+			  || psDroid->order == DORDER_ATTACKTARGET
+			  || !aiObjectIsProbablyDoomed(psActionTarget)))
 			{
 				WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 				bHasTarget = true;
@@ -1954,7 +1976,6 @@ void actionUpdateDroid(DROID *psDroid)
 			!actionReachedBuildPos(psDroid,
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 		{
-//			psDroid->action = DACTION_MOVETOBUILD;
 			moveDroidToNoFormation(psDroid, psDroid->orderX, psDroid->orderY);
 		}
 		else if (!DROID_STOPPED(psDroid) &&
@@ -2366,9 +2387,8 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		// Just self-repairing.
 		// See if there's anything to shoot.
-		else if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid) && CAN_UPDATE_NAYBORS(psDroid)
-		          && (psDroid->order == DORDER_NONE || psDroid->order == DORDER_TEMP_HOLD ||
-		              psDroid->order == DORDER_RTR))
+		else if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid)
+		          && (psDroid->order == DORDER_NONE || psDroid->order == DORDER_TEMP_HOLD || psDroid->order == DORDER_RTR))
 		{
 			for (i = 0;i < psDroid->numWeaps;i++)
 			{
@@ -2858,6 +2878,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
 		//initialise the action points
 		psDroid->actionPoints  = 0;
+		psDroid->actionStarted = gameTime;
 		if (secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD &&
 		    (psDroid->order == DORDER_NONE || psDroid->order == DORDER_TEMP_HOLD))
 		{

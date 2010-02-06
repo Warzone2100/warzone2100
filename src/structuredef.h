@@ -245,8 +245,7 @@ typedef struct _rearm_pad
 	UDWORD				reArmPoints;		/* rearm points per cycle				 */
 	UDWORD				timeStarted;		/* Time reArm started on current object	 */
 	BASE_OBJECT			*psObj;				/* Object being rearmed		             */
-    UDWORD              currentPtsAdded;    /* stores the amount of body points added to the unit
-                                               that is being worked on */
+    UDWORD              timeLastUpdated;    /* Time rearm was last updated */
 } REARM_PAD;
 
 typedef union
@@ -294,6 +293,9 @@ typedef struct _structure
 	char				targetFunc[STRUCT_MAXWEAPS][MAX_EVENT_NAME_LEN];
 	int				targetLine[STRUCT_MAXWEAPS];
 #endif
+
+	UDWORD          expectedDamage;                 ///< Expected damage to be caused by all currently incoming projectiles. This info is shared between all players,
+	                                                ///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 
 	/* anim data */
 	ANIM_OBJECT	*psCurAnim;

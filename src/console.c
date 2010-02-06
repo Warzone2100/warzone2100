@@ -129,10 +129,19 @@ void	setConsoleTextColor			( SDWORD player );
 /** Sets the system up */
 void	initConsoleMessages( void )
 {
+	int TextLineSize = iV_GetTextLineSize();
 	messageIndex = 0;
 
 	/* Console can extend to half screen height */
-	maxDrop = ((pie_GetVideoBufferHeight()/iV_GetTextLineSize())/2);
+	if (TextLineSize)
+	{
+		maxDrop = ((pie_GetVideoBufferHeight() / TextLineSize)/2);
+	}
+	else
+	{
+		debug(LOG_FATAL, "Something is wrong with the fonts? Aborting.");
+		abort();
+	}
 
 	if(maxDrop>32) maxDrop = 32;
 
@@ -226,6 +235,8 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 		/* Then set it */
 		jusType = defJustification;
 	}
+
+	debug(LOG_CONSOLE, "(to player %d): %s", (int)player, messageText);
 
 	consoleStorage[messageIndex].player = player;
 

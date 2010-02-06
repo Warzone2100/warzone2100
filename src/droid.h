@@ -55,10 +55,9 @@ back when building is destroyed*/
 
 //storage
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
-extern bool runningMultiplayer(void);
+extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
 
-/* The range for neighbouring objects */
-#define NAYBOR_RANGE		(TILE_UNITS*9)	//range of lancer, BB, TK etc
+extern bool runningMultiplayer(void);
 
 //used to stop structures being built too near the edge and droids being placed down - pickATile
 #define TOO_NEAR_EDGE	3
@@ -79,25 +78,12 @@ extern bool runningMultiplayer(void);
 /* Minumum number of droids a commander can control in its group */
 #define	MIN_CMD_GROUP_DROIDS	6
 
-/* Info stored for each droid neighbour */
-typedef struct _naybor_info
-{
-	BASE_OBJECT		*psObj;			// The neighbouring object
-	UDWORD			distSqr;		// The square of the distance to the object
-	//UDWORD			dist;			// The distance to the object
-} NAYBOR_INFO;
-
 typedef enum
 {
 	NO_FREE_TILE,
 	FREE_TILE,
 	HALF_FREE_TILE
 } PICKTILE;
-
-/* Store for the objects near the droid currently being updated */
-#define MAX_NAYBORS		120
-extern NAYBOR_INFO		asDroidNaybors[MAX_NAYBORS];
-extern UDWORD			numNaybors;
 
 // the structure that was last hit
 extern DROID	*psLastDroidHit;
@@ -108,11 +94,7 @@ extern UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
 // initialise droid module
 extern BOOL droidInit(void);
 
-extern void	removeDroidBase(DROID *psDel);
-
-// refresh the naybor list
-// this only does anything if the naybor list is out of date
-extern void droidGetNaybors(DROID *psDroid);
+extern void removeDroidBase(DROID *psDel);
 
 extern BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize);
 extern BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);
@@ -247,8 +229,6 @@ extern BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon
 extern DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player);
 /* gets a template from its name - relies on the name being unique */
 extern DROID_TEMPLATE* getTemplateFromTranslatedNameNoPlayer(char *pName);
-/*getTemplateFromSinglePlayerID gets template for unique ID  searching one players list */
-extern DROID_TEMPLATE* getTemplateFromSinglePlayerID(UDWORD multiPlayerID, UDWORD player);
 /*getTemplateFromMultiPlayerID gets template for unique ID  searching all lists */
 extern DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID);
 
@@ -339,8 +319,12 @@ extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
 
 //access function
 extern BOOL isVtolDroid(const DROID* psDroid);
-/*returns true if a VTOL Weapon Droid which has completed all runs*/
+/*returns true if the droid has lift propulsion and is above the ground level*/
+extern BOOL isFlying(const DROID* psDroid);
+/*returns true if a VTOL weapon droid which has completed all runs*/
 extern BOOL vtolEmpty(DROID *psDroid);
+/*returns true if a VTOL weapon droid which still has full ammo*/
+extern BOOL vtolFull(DROID *psDroid);
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
 extern BOOL  vtolHappy(const DROID* psDroid);
@@ -369,6 +353,8 @@ extern BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid);
 
 // return whether a droid has a CB sensor on it
 extern BOOL cbSensorDroid(DROID *psDroid);
+// return whether a droid has a standard sensor on it (standard, VTOL strike, or wide spectrum)
+extern BOOL standardSensorDroid(DROID *psDroid);
 
 // give a droid from one player to another - used in Electronic Warfare and multiplayer
 extern DROID * giftSingleDroid(DROID *psD, UDWORD to);

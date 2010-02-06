@@ -40,6 +40,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
+#include "lib/netplay/netplay.h"
 
 #include "loop.h"
 #include "objects.h"
@@ -146,6 +147,11 @@ GAMECODE gameLoop(void)
 	INT_RETVAL	intRetVal;
 	int	        clearMode = 0;
 
+	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
+	{
+		intAddInGamePopup();
+	}
+
 	if (!war_GetFog())
 	{
 		PIELIGHT black;
@@ -236,8 +242,11 @@ GAMECODE gameLoop(void)
 			// Update the visibility change stuff
 			visUpdateLevel();
 
-			// do the grid garbage collection
-			gridGarbageCollect();
+			// Put all droids/structures/features into the grid.
+			gridReset();
+
+			// Check which objects are visible.
+			processVisibility();
 
 			if (!editPaused())
 			{
@@ -309,16 +318,16 @@ GAMECODE gameLoop(void)
 								DROID *psDroid = NULL;
 
 								numTransporterDroids[i] += psCurr->psGroup->refCount-1;
-								// and count the units inside it...for MP games only(?)
-								if (bMultiPlayer)
-								{
+								// and count the units inside it...
 									for (psDroid = psCurr->psGroup->psList; psDroid != NULL && psDroid != psCurr; psDroid = psDroid->psGrpNext)
 									{
-										// since in MP we can only have cyborgs in transport, don't need to count DROID_CONSTRUCT as well.
-										if (psDroid->droidType == DROID_CYBORG_CONSTRUCT)
+									if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
 										{
 											numConstructorDroids[i] += 1;
 										}
+									if (psDroid->droidType == DROID_COMMAND)
+									{
+										numCommandDroids[i] += 1;
 									}
 								}
 							}
@@ -448,14 +457,14 @@ GAMECODE gameLoop(void)
 						/* Copy the next pointer - not 100% sure if the droid could get destroyed
 						but this covers us anyway */
 						psNext = psCurr->psNext;
-						processVisibility((BASE_OBJECT *)psCurr);
+						processVisibilityLevel((BASE_OBJECT *)psCurr);
 						calcDroidIllumination(psCurr);
 					}
 					for (psCBuilding = apsStructLists[i]; psCBuilding; psCBuilding = psNBuilding)
 					{
 						/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
 						psNBuilding = psCBuilding->psNext;
-						processVisibility((BASE_OBJECT *)psCBuilding);
+						processVisibilityLevel((BASE_OBJECT *)psCBuilding);
 					}
 				}
 			}
@@ -487,11 +496,11 @@ GAMECODE gameLoop(void)
 			scroll();
 		}
 
-		if(InGameOpUp)		// ingame options menu up, run it!
+		if(InGameOpUp || isInGamePopupUp)		// ingame options menu up, run it!
 		{
 			widgval = widgRunScreen(psWScreen);
 			intProcessInGameOptions(widgval);
-			if(widgval == INTINGAMEOP_QUIT_CONFIRM)
+			if(widgval == INTINGAMEOP_QUIT_CONFIRM || widgval == INTINGAMEOP_POPUP_QUIT)
 			{
 				if(gamePaused())
 				{
@@ -507,6 +516,7 @@ GAMECODE gameLoop(void)
 			if(bRequestLoad)
 			{
 				loopMissionState = LMS_LOADGAME;
+				NET_InitPlayers();			// otherwise alliances were not cleared
 				sstrcpy(saveGameName, sRequestResult);
 			}
 			else
@@ -577,7 +587,7 @@ GAMECODE gameLoop(void)
 			processInput();
 
 			//no key clicks or in Intelligence Screen
-			if (intRetVal == INT_NONE && !InGameOpUp)
+			if (intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
 			{
 				processMouseClickInput();
 			}

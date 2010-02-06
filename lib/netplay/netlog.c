@@ -51,11 +51,12 @@ static const char *packetname[NUM_GAME_PACKETS] =
 	"NET_BUILDFINISHED",
 	"NET_RESEARCH",
 	"NET_TEXTMSG",
-	"NET_REQUESTDROID",
+	"NET_UNUSED_18",
+	"NET_UNUSED_19",
 	"NET_PLAYERCOMPLETE",
-	"NET_REQUESTPLAYER",
+	"NET_UNUSED_21",
 	"NET_STRUCT",
-	"NET_WHOLEDROID",
+	"NET_UNUSED_23",
 	"NET_FEATURES",
 	"NET_PLAYERRESPONDING",
 	"NET_OPTIONS",
@@ -78,7 +79,7 @@ static const char *packetname[NUM_GAME_PACKETS] =
 	"NET_DROIDDISEMBARK",
 	"NET_RESEARCHSTATUS",
 	"NET_LASSAT",
-	"NET_REQUESTMAP",
+	"NET_UNUSED_46",
 	"NET_AITEXTMSG",
 	"NET_TEAMS_ON",
 	"NET_BEACONMSG",
@@ -92,12 +93,20 @@ static const char *packetname[NUM_GAME_PACKETS] =
 	"NET_PLAYER_DROPPED",
 	"NET_GAME_FLAGS",
 	"NET_READY_REQUEST",
-	"UNUSED",
-	"NET_VERSION_CHECK",
-	"NET_REQUEST_VERSION",
-	"NET_REQUEST_PASSWORD",
-	"NET_PASSWORD_CHECK",
+	"NET_NEVERUSE",
+	"NET_REJECTED",
+	"NET_UNUSED_62",
+	"NET_UNUSED_63",
+	"NET_UNUSED_64",
 	"NET_POSITIONREQUEST",
+	"NET_DATA_CHECK",
+	"NET_HOST_DROPPED",
+	"NET_FUTURE1",
+	"NET_FUTURE2",
+	"NET_FUTURE3",
+	"NET_FILE_REQUESTED",
+	"NET_FILE_CANCELLED",
+	"NET_FILE_PAYLOAD"
 };
 
 static PHYSFS_file	*pFileHandle = NULL;
@@ -137,6 +146,7 @@ BOOL NETstartLogging(void)
 
 BOOL NETstopLogging(void)
 {
+	static const char dash_line[] = "-----------------------------------------------------------\n";
 	char buf[256];
 	int i;
 
@@ -152,6 +162,22 @@ BOOL NETstopLogging(void)
 			packetcount[0][i], packetsize[0][i], packetcount[1][i], packetsize[1][i]);
 		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	}
+	snprintf(buf, sizeof(buf), "\n-Sync statistics -\n");
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
+	snprintf(buf, sizeof(buf), "sent/unsent DroidCheck %"PRIu64" / %"PRIu64"\n", sync_counter.sentDroidCheck, sync_counter.unsentDroidCheck);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	snprintf(buf, sizeof(buf), "sent/unsent StructureCheck %"PRIu64" / %"PRIu64"\n", sync_counter.sentStructureCheck, sync_counter.unsentStructureCheck);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	snprintf(buf, sizeof(buf), "sent/unsent PowerCheck %"PRIu64" / %"PRIu64"\n", sync_counter.sentPowerCheck, sync_counter.unsentPowerCheck);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	snprintf(buf, sizeof(buf), "sent/unsent ScoreCheck %"PRIu64" / %"PRIu64"\n", sync_counter.sentScoreCheck, sync_counter.unsentScoreCheck);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	snprintf(buf, sizeof(buf), "sent/unsent Ping %"PRIu64" / %"PRIu64"\n", sync_counter.sentPing, sync_counter.unsentPing);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	snprintf(buf, sizeof(buf), "sent/unsent isMPDirtyBit %"PRIu64" / %"PRIu64"\n", sync_counter.sentisMPDirtyBit, sync_counter.unsentisMPDirtyBit);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
 
 	if (!PHYSFS_close(pFileHandle))
 	{

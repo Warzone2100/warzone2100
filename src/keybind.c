@@ -22,6 +22,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
+#include "lib/framework/utf.h"
 #include "lib/framework/wzapp_c.h"
 #include "objects.h"
 #include "basedef.h"
@@ -160,6 +161,31 @@ void	kf_ToggleRadarJump( void )
 }
 
 // --------------------------------------------------------------------------
+
+void	kf_ForceSync( void )
+{
+	DROID		*psCDroid, *psNDroid;
+
+	for(psCDroid = apsDroidLists[selectedPlayer]; psCDroid; psCDroid = psNDroid)
+	{
+		psNDroid = psCDroid->psNext;
+		if (psCDroid->selected)
+		{
+			ForceDroidSync(psCDroid);
+		}
+	}
+	
+}
+
+void	kf_PowerInfo( void )
+{
+	int i;
+
+	for (i = 0; i < NetPlay.maxPlayers; i++)
+	{
+		console("Player %d: %d power", i, (int)getPower(i));
+	}
+}
 
 void	kf_TraceObject( void )
 {
@@ -382,7 +408,7 @@ void	kf_MaxPower( void )
 		noMPCheatMsg();
 		return;
 	}
-	addPower(selectedPlayer, SDWORD_MAX / 2);
+	setPower(selectedPlayer, 100000);
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"),
 				selectedPlayer, _("Power overwhelming"));
 	sendTextMessage(cmsg, true);
@@ -1082,7 +1108,10 @@ void	kf_ToggleDroidInfo( void )
 void	kf_addInGameOptions( void )
 {
 		setWidgetsStatus(true);
+		if (!isInGamePopupUp)	// they can *only* quit when popup is up.
+		{
 		intAddInGameOptions();
+		}
 }
 // --------------------------------------------------------------------------
 /* Tell the scripts to start a mission*/
@@ -1217,21 +1246,18 @@ void	kf_ToggleDebugMappings( void )
 	}
 #endif
 
-	if (bAllowDebugMode)
+	if (getDebugMappingStatus())
 	{
-		if(getDebugMappingStatus())
-		{
-			processDebugMappings(false);
-		}
-		else
-		{
-			game_SetValidityKey(VALIDITYKEY_CHEAT_MODE);
-			processDebugMappings(true);
-		}
-		sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"), selectedPlayer,
-			 getDebugMappingStatus() ? _("CHEATS ARE NOW ENABLED!") : _("CHEATS ARE NOW DISABLED!"));
-		sendTextMessage(cmsg, true);
+		processDebugMappings(false);
 	}
+	else
+	{
+		game_SetValidityKey(VALIDITYKEY_CHEAT_MODE);
+		processDebugMappings(true);
+	}
+	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"), selectedPlayer,
+		 getDebugMappingStatus() ? _("CHEATS ARE NOW ENABLED!") : _("CHEATS ARE NOW DISABLED!"));
+	sendTextMessage(cmsg, true);
 }
 // --------------------------------------------------------------------------
 
@@ -1301,6 +1327,16 @@ void	kf_SeekNorth( void )
 	}
 	CONPRINTF(ConsoleString,(ConsoleString,_("View Aligned to North")));
 }
+
+void kf_toggleTrapCursor(void)
+{
+	const char *msg;
+	bool trap = !war_GetTrapCursor();
+	war_SetTrapCursor(trap);
+	sasprintf((char**)&msg, _("Trap cursor %s"), trap ? "ON" : "OFF");
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+}
+
 
 // --------------------------------------------------------------------------
 void	kf_TogglePauseMode( void )
@@ -1374,7 +1410,7 @@ void	kf_FinishAllResearch(void)
 		if (IsResearchCompleted(pPlayerRes) == false)
 		{
 			MakeResearchCompleted(pPlayerRes);
-			researchResult(j, selectedPlayer, false, NULL);
+			researchResult(j, selectedPlayer, false, NULL, false);
 		}
 	}
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"),
@@ -1408,10 +1444,11 @@ void	kf_FinishResearch( void )
 			pSubject = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject;
 			if (pSubject)
 			{
-				researchResult((RESEARCH*)pSubject - asResearch, selectedPlayer, false, NULL);
+				researchResult((RESEARCH*)pSubject - asResearch, selectedPlayer, true, psCurr, true);
 				sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s %s"),
 					selectedPlayer, _("Researched"), getName(pSubject->pName) );
 				sendTextMessage(cmsg, true);
+				intResearchFinished(psCurr);
 			}
 		}
 	}
@@ -1560,12 +1597,12 @@ void	kf_ToggleOverlays( void )
 
 void	kf_SensorDisplayOn( void )
 {
-	bDisplaySensorRange = true;
+	// Now a placeholder for future stuff
 }
 
 void	kf_SensorDisplayOff( void )
 {
-	bDisplaySensorRange = false;
+	// Now a placeholder for future stuff
 }
 
 
@@ -1887,7 +1924,7 @@ void kf_KillSelected(void)
 	}
 }
 
-
+#if 0  // There's no gridDisplayCoverage anymore.
 // --------------------------------------------------------------------------
 // display the grid info for all the selected objects
 void kf_ShowGridInfo(void)
@@ -1912,23 +1949,15 @@ void kf_ShowGridInfo(void)
 		}
 	}
 }
-
-
-// --------------------------------------------------------------------------
-void kf_GiveTemplateSet(void)
-{
-	addTemplateSet(4,0);
-	addTemplateSet(4,1);
-	addTemplateSet(4,2);
-	addTemplateSet(4,3);
-}
+#endif
 
 // --------------------------------------------------------------------------
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendTextMessage(void)
 {
-	char	ch;
+	UDWORD	ch;
 	char tmp[MAX_CONSOLE_STRING_LENGTH + 100];
+	utf_32_char unicode;
 
 	if(bAllowOtherKeyPresses)									// just starting.
 	{
@@ -1938,11 +1967,13 @@ void kf_SendTextMessage(void)
 		inputClearBuffer();
 	}
 
-	ch = (char)inputGetKey();
+	ch = inputGetKey(&unicode);
 	while (ch != 0)												// in progress
 	{
-		// Kill if they hit return - it maxes out console or it's more than one line long
-		if ((ch == INPBUF_CR) || (strlen(sTextToSend)>=MAX_CONSOLE_STRING_LENGTH-16) // Prefixes with ERROR: and terminates with '?'
+		// FIXME: Why are we using duplicate defines? INPBUF_CR == KEY_RETURN == SDLK_RETURN
+
+		// Kill if they hit return or keypad enter or it maxes out console or it's more than one line long
+		if ((ch == INPBUF_CR) || (ch == KEY_KPENTER) || (strlen(sTextToSend)>=MAX_CONSOLE_STRING_LENGTH-16) // Prefixes with ERROR: and terminates with '?'
 		 || iV_GetTextWidth(sTextToSend) > (pie_GetVideoBufferWidth()-64))// sendit
 		{
 			bAllowOtherKeyPresses = true;
@@ -1972,10 +2003,7 @@ void kf_SendTextMessage(void)
 			if (runningMultiplayer())
 			{
 				sendTextMessage(sTextToSend,false);
-				if (getDebugMappingStatus())
-				{
-					attemptCheatCode(sTextToSend);
-				}
+				attemptCheatCode(sTextToSend);
 			}
 			else
 			{
@@ -1997,10 +2025,7 @@ void kf_SendTextMessage(void)
 					}
 				}
 
-				if (getDebugMappingStatus())
-				{
-					attemptCheatCode(sTextToSend);
-				}
+				attemptCheatCode(sTextToSend);
 			}
 			return;
 		}
@@ -2008,7 +2033,10 @@ void kf_SendTextMessage(void)
 		{
 			if(sTextToSend[0] != '\0')							// cant delete nothing!
 			{
-				sTextToSend[strlen(sTextToSend)-1]= '\0';
+				size_t newlen = strlen(sTextToSend) - 1;
+				while(newlen > 0 && (sTextToSend[newlen]&0xC0) == 0x80)
+				    --newlen;  // Don't delete half a unicode character.
+				sTextToSend[newlen]= '\0';
 				sstrcpy(sCurrentConsoleText, sTextToSend);		//beacons
 			}
 		}
@@ -2021,13 +2049,14 @@ void kf_SendTextMessage(void)
 		}
 		else							 						// display
 		{
-			const char input_char[2] = { inputGetCharKey(), '\0' };
-
-			sstrcat(sTextToSend, input_char);
+			const utf_32_char input_char[2] = { unicode, '\0' };
+			char *utf = UTF32toUTF8(input_char, NULL);
+			sstrcat(sTextToSend, utf);
+			free(utf);
 			sstrcpy(sCurrentConsoleText, sTextToSend);
 		}
 
-		ch = (char)inputGetKey();
+		ch = inputGetKey(&unicode);
 	}
 
 	// macro store stuff
@@ -2410,17 +2439,7 @@ UDWORD		xJump = 0, yJump = 0;
 // --------------------------------------------------------------------------
 void kf_ToggleFormationSpeedLimiting( void )
 {
-	// THIS IS NOT A CHEAT
-
-	if ( moveFormationSpeedLimitingOn() )
-	{
-		addConsoleMessage(_("Formation speed limiting OFF"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
-	}
-	else
-	{
-		addConsoleMessage(_("Formation speed limiting ON"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
-	}
-	moveToggleFormationSpeedLimiting();
+	addConsoleMessage(_("Formation speed limiting has been removed from the game due to bugs."), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -2469,10 +2488,12 @@ void	kf_ToggleMouseInvert( void )
 	if(getInvertMouseStatus())
 	{
 		setInvertMouseStatus(false);
+		CONPRINTF(ConsoleString,(ConsoleString,_("Vertical rotation direction: Normal")));
 	}
 	else
 	{
 		setInvertMouseStatus(true);
+		CONPRINTF(ConsoleString,(ConsoleString,_("Vertical rotation direction: Flipped")));
 	}
 }
 // --------------------------------------------------------------------------
@@ -2481,10 +2502,12 @@ void	kf_ToggleShakeStatus( void )
 	if(getShakeStatus())
 	{
 		setShakeStatus(false);
+		CONPRINTF(ConsoleString,(ConsoleString,_("Screen shake when things die: Off")));
 	}
 	else
 	{
 		setShakeStatus(true);
+		CONPRINTF(ConsoleString,(ConsoleString,_("Screen shake when things die: On")));
 	}
 }
 // --------------------------------------------------------------------------
@@ -2528,7 +2551,9 @@ void kf_SpeedUp( void )
 	if (runningMultiplayer() || bInTutorial)
 	{
 		if (!bInTutorial)
-			noMPCheatMsg();
+		{
+			addConsoleMessage(_("Sorry, but game speed cannot be changed in multiplayer."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
 		return;
 	}
 
@@ -2569,7 +2594,9 @@ void kf_SlowDown( void )
 	if (runningMultiplayer() || bInTutorial)
 	{
 		if (!bInTutorial)
-			noMPCheatMsg();
+		{
+			addConsoleMessage(_("Sorry, but game speed cannot be changed in multiplayer."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
 		return;
 	}
 
@@ -2651,8 +2678,12 @@ void kf_ToggleRadarAllyEnemy(void)
 
 void kf_ToggleRadarTerrain(void)
 {
-	radarDrawMode = radarDrawMode + 1;
+	radarDrawMode++;
 
+	if (radarDrawMode == RADAR_MODE_TERRAIN_SEEN && getRevealStatus())
+	{
+		radarDrawMode++;	// skip this radar mode for fog of war mode
+	}
 	if (radarDrawMode >= NUM_RADAR_MODES)
 	{
 		radarDrawMode = 0;
@@ -2668,6 +2699,9 @@ void kf_ToggleRadarTerrain(void)
 		case RADAR_MODE_TERRAIN:
 			CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing terrain")));
 			break;
+		case RADAR_MODE_TERRAIN_SEEN:
+			CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing revealed terrain")));
+			break;
 		case RADAR_MODE_HEIGHT_MAP:
 			CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing height")));
 			break;
@@ -2675,8 +2709,6 @@ void kf_ToggleRadarTerrain(void)
 			assert(false);
 			break;
 	}
-
-	resetRadarRedraw();
 }
 
 

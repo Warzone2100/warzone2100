@@ -6,8 +6,8 @@ SYS_BISON="bison"
 LOCAL_BISON="`pwd`/external/bison/built/bin/bison" 
 
 # If a Warzone Bison executable exists, use instead of the system executable
-if [ -e $LOCAL_BISON ]; then
-	$LOCAL_BISON $*
+if [ -e "$LOCAL_BISON" ]; then
+	$LOCAL_BISON "$@"
 else
-	$SYS_BISON $*
+	$SYS_BISON "$@"
 fi

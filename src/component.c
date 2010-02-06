@@ -72,11 +72,9 @@ static iIMDShape *getRightPropulsionIMD(DROID *psDroid);
 static UDWORD getStructureHeight(STRUCTURE *psStructure);
 
 static BOOL		leftFirst;
-static SDWORD		droidLightLevel = 224;
-static UDWORD		lightInterval = 15;
-static UDWORD		lightLastChanged;
-SDWORD		lightSpeed=2;
 extern UDWORD selectedPlayer;
+
+UBYTE		PlayerColour[MAX_PLAYERS] = {0,1,2,3,4,5,6,7};
 
 // Colour Lookups
 // use col = MAX_PLAYERS for anycolour (see multiint.c)
@@ -90,26 +88,6 @@ BOOL setPlayerColour(UDWORD player, UDWORD col)
 UBYTE getPlayerColour(UDWORD pl)
 {
 	return NetPlay.players[pl].colour;
-}
-
-void updateLightLevels(void)
-{
-	if(gameTime>(lightLastChanged+lightInterval))
-	{
-		droidLightLevel+=lightSpeed;
-		lightLastChanged = gameTime;
-		if(droidLightLevel>255 || droidLightLevel<128)
-		{
-			if(lightSpeed>0)
-			{
-					lightSpeed = -lightSpeed;
-			}
-			else
-			{
-					lightSpeed = -lightSpeed;
-			}
-		}
-	}
 }
 
 
@@ -286,110 +264,55 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i
 		strImd = psStructure->sDisplay.imd;
 		//get an imd to draw on the connector priority is weapon, ECM, sensor
 		//check for weapon
-		//re-enabled if (psStructure->numWeaps > 0)
-		if (psStructure->numWeaps > 0)
+		for (i = 0; i < MAX(1, psStructure->numWeaps); i++)
 		{
-			for (i = 0;i < psStructure->numWeaps;i++)
+			if (psStructure->asWeaps[i].nStat > 0)
 			{
-				if (psStructure->asWeaps[i].nStat > 0)
-				{
-					nWeaponStat = psStructure->asWeaps[i].nStat;
-					weaponImd[i] =  asWeaponStats[nWeaponStat].pIMD;
-					mountImd[i] =  asWeaponStats[nWeaponStat].pMountGraphic;
-				}
-
-				if (weaponImd[i] == NULL)
-				{
-					//check for ECM
-					if (psStructure->pStructureType->pECM != NULL)
-					{
-						weaponImd[i] =  psStructure->pStructureType->pECM->pIMD;
-						mountImd[i] =  psStructure->pStructureType->pECM->pMountGraphic;
-					}
-				}
-
-				if (weaponImd[i] == NULL)
-				{
-					//check for sensor
-					if (psStructure->pStructureType->pSensor != NULL)
-					{
-						weaponImd[i] =  psStructure->pStructureType->pSensor->pIMD;
-						mountImd[i]  =  psStructure->pStructureType->pSensor->pMountGraphic;
-					}
-				}
-			}
-		}
-		else
-		{
-			if (psStructure->asWeaps[0].nStat > 0)
-			{
-				nWeaponStat = psStructure->asWeaps[0].nStat;
-				weaponImd[0] =  asWeaponStats[nWeaponStat].pIMD;
-				mountImd[0] =  asWeaponStats[nWeaponStat].pMountGraphic;
+				nWeaponStat = psStructure->asWeaps[i].nStat;
+				weaponImd[i] =  asWeaponStats[nWeaponStat].pIMD;
+				mountImd[i] =  asWeaponStats[nWeaponStat].pMountGraphic;
 			}
 
-			if (weaponImd[0] == NULL)
+			if (weaponImd[i] == NULL)
 			{
 				//check for ECM
 				if (psStructure->pStructureType->pECM != NULL)
 				{
-					weaponImd[0] =  psStructure->pStructureType->pECM->pIMD;
-					mountImd[0] =  psStructure->pStructureType->pECM->pMountGraphic;
+					weaponImd[i] =  psStructure->pStructureType->pECM->pIMD;
+					mountImd[i] =  psStructure->pStructureType->pECM->pMountGraphic;
 				}
 			}
 
-			if (weaponImd[0] == NULL)
+			if (weaponImd[i] == NULL)
 			{
 				//check for sensor
 				if (psStructure->pStructureType->pSensor != NULL)
 				{
-					weaponImd[0] =  psStructure->pStructureType->pSensor->pIMD;
-					mountImd[0]  =  psStructure->pStructureType->pSensor->pMountGraphic;
+					weaponImd[i] =  psStructure->pStructureType->pSensor->pIMD;
+					mountImd[i]  =  psStructure->pStructureType->pSensor->pMountGraphic;
 				}
 			}
-
 		}
 
 		//draw Weapon/ECM/Sensor for structure
 		//uses 0
-		if(weaponImd[0] != NULL)
+		if (weaponImd[0] != NULL)
 		{
-			if (psStructure->numWeaps > 0)
-			{
-				for (i = 0;i < psStructure->numWeaps;i++)
-				{
-					iV_MatrixBegin();
-					iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
-					pie_MatRotY(DEG(-((SDWORD)psStructure->asWeaps[i].rotation)));
-					if (mountImd[i] != NULL)
-					{
-						pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
-						if(mountImd[i]->nconnectors)
-						{
-							iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
-						}
-					}
-					iV_MatrixRotateX(DEG(psStructure->asWeaps[i].pitch));
-					pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
-					//we have a droid weapon so do we draw a muzzle flash
-					iV_MatrixEnd();
-				}
-			}
-			else
+			for (i = 0; i < MAX(1, psStructure->numWeaps); i++)
 			{
 				iV_MatrixBegin();
-				iV_TRANSLATE(strImd->connectors->x,strImd->connectors->z,strImd->connectors->y);
-				pie_MatRotY(DEG(-((SDWORD)psStructure->asWeaps[0].rotation)));
-				if (mountImd[0] != NULL)
+				iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
+				pie_MatRotY(DEG(-((SDWORD)psStructure->asWeaps[i].rotation)));
+				if (mountImd[i] != NULL)
 				{
-					pie_Draw3DShape(mountImd[0], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
-					if(mountImd[0]->nconnectors)
+					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
+					if(mountImd[i]->nconnectors)
 					{
-						iV_TRANSLATE(mountImd[0]->connectors->x,mountImd[0]->connectors->z,mountImd[0]->connectors->y);
+						iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
 					}
 				}
-				iV_MatrixRotateX(DEG(psStructure->asWeaps[0].pitch));
-				pie_Draw3DShape(weaponImd[0], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
+				iV_MatrixRotateX(DEG(psStructure->asWeaps[i].pitch));
+				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 				//we have a droid weapon so do we draw a muzzle flash
 				iV_MatrixEnd();
 			}
@@ -446,106 +369,54 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 		//get an imd to draw on the connector priority is weapon, ECM, sensor
 		//check for weapon
 		//can only have the STRUCT_MAXWEAPS
-		if (Stats->numWeaps > 0)
+		for (i = 0; i < MAX(1, Stats->numWeaps); i++)
 		{
-			for (i = 0;i < Stats->numWeaps;i++)
+			//can only have the one
+			if (Stats->psWeapStat[i] != NULL)
 			{
-				//can only have the one
-				if (Stats->psWeapStat[i] != NULL)
-				{
-					weaponImd[i] = Stats->psWeapStat[i]->pIMD;
-					mountImd[i] = Stats->psWeapStat[i]->pMountGraphic;
-				}
-
-				if (weaponImd[i] == NULL)
-				{
-					//check for ECM
-					if (Stats->pECM != NULL)
-					{
-						weaponImd[i] =  Stats->pECM->pIMD;
-						mountImd[i] =  Stats->pECM->pMountGraphic;
-					}
-				}
-
-				if (weaponImd[i] == NULL)
-				{
-					//check for sensor
-					if (Stats->pSensor != NULL)
-					{
-						weaponImd[i] =  Stats->pSensor->pIMD;
-						mountImd[i]  =  Stats->pSensor->pMountGraphic;
-					}
-				}
-			}
-		}
-		else
-		{
-			if (Stats->psWeapStat[0] != NULL)
-			{
-				weaponImd[0] = Stats->psWeapStat[0]->pIMD;
-				mountImd[0] = Stats->psWeapStat[0]->pMountGraphic;
+				weaponImd[i] = Stats->psWeapStat[i]->pIMD;
+				mountImd[i] = Stats->psWeapStat[i]->pMountGraphic;
 			}
 
-			if (weaponImd[0] == NULL)
+			if (weaponImd[i] == NULL)
 			{
 				//check for ECM
 				if (Stats->pECM != NULL)
 				{
-					weaponImd[0] =  Stats->pECM->pIMD;
-					mountImd[0] =  Stats->pECM->pMountGraphic;
+					weaponImd[i] =  Stats->pECM->pIMD;
+					mountImd[i] =  Stats->pECM->pMountGraphic;
 				}
 			}
 
-			if (weaponImd[0] == NULL)
+			if (weaponImd[i] == NULL)
 			{
 				//check for sensor
 				if (Stats->pSensor != NULL)
 				{
-					weaponImd[0] =  Stats->pSensor->pIMD;
-					mountImd[0]  =  Stats->pSensor->pMountGraphic;
+					weaponImd[i] =  Stats->pSensor->pIMD;
+					mountImd[i]  =  Stats->pSensor->pMountGraphic;
 				}
 			}
 		}
 
 		//draw Weapon/ECM/Sensor for structure
-		if(weaponImd[0] != NULL)
+		if (weaponImd[0] != NULL)
 		{
-			if (Stats->numWeaps > 0)
-			{
-				for (i = 0;i < Stats->numWeaps;i++)
-				{
-					iV_MatrixBegin();
-					iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
-					pie_MatRotY(DEG(0));
-					if (mountImd[i] != NULL)
-					{
-						pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
-						if(mountImd[i]->nconnectors)
-						{
-							iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
-						}
-					}
-					iV_MatrixRotateX(DEG(0));
-					pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
-					//we have a droid weapon so do we draw a muzzle flash
-					iV_MatrixEnd();
-				}
-			}
-			else
+			for (i = 0; i < MAX(1, Stats->numWeaps); i++)
 			{
 				iV_MatrixBegin();
-				iV_TRANSLATE(strImd->connectors[0].x,strImd->connectors[0].z,strImd->connectors[0].y);
+				iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
 				pie_MatRotY(DEG(0));
-				if (mountImd[0] != NULL)
+				if (mountImd[i] != NULL)
 				{
-					pie_Draw3DShape(mountImd[0], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
-					if(mountImd[0]->nconnectors)
+					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
+					if(mountImd[i]->nconnectors)
 					{
-						iV_TRANSLATE(mountImd[0]->connectors->x,mountImd[0]->connectors->z,mountImd[0]->connectors->y);
+						iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
 					}
 				}
 				iV_MatrixRotateX(DEG(0));
-				pie_Draw3DShape(weaponImd[0], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
+				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 				//we have a droid weapon so do we draw a muzzle flash
 				iV_MatrixEnd();
 			}
@@ -684,14 +555,7 @@ void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *
 // Decide how to sort it.
 	difference = Rotation->y%360;
 
-	if((difference>0 && difference <180) || difference<-180)
-	{
-		leftFirst = false;
-	}
-	else
-	{
-		leftFirst = true;
-	}
+	leftFirst = !((difference > 0 && difference < 180) || difference < -180);
 
 // And render the composite object.
 	//draw multi component object as a button object
@@ -720,14 +584,7 @@ void displayComponentObject(BASE_OBJECT *psObj)
 	worldAngle = (UDWORD)(player.r.y / DEG_1) % 360;
 	difference = worldAngle - psObj->direction;
 
-	if((difference>0 && difference <180) || difference<-180)
-	{
-		leftFirst = false;
-	}
-	else
-	{
-		leftFirst = true;
-	}
+	leftFirst = !((difference> 0 && difference < 180) || difference < -180);
 
 	/* Push the matrix */
 	pie_MatBegin();

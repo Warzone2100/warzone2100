@@ -162,6 +162,13 @@ static BOOL pushedKeyCombo(KEY_CODE subkey)
 		alt = KEY_RSHIFT;
 	}
 
+	// meta (cmd)
+	else if( keyDown(KEY_RMETA) || keyDown(KEY_LMETA) )
+	{
+		metakey = KEY_LMETA;
+		alt = KEY_RMETA;
+	}
+
 	// check if bound to a fixed combo.
 	pExist = keyFindMapping(  metakey,  subkey );
 	if(pExist && (pExist->status == KEYMAP_ALWAYS || pExist->status == KEYMAP_ALWAYS_PROCESS))
@@ -234,6 +241,8 @@ static UDWORD scanKeyBoardForBinding(void)
 			&& i != KEY_LCTRL
 			&& i != KEY_RSHIFT
 			&& i != KEY_LSHIFT
+			&& i != KEY_LMETA
+			&& i != KEY_RMETA
 			)
 			{
 				return i;	// top row key pressed
@@ -301,7 +310,7 @@ static BOOL keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 	}
 	else
 	{
-		sprintf(pStr,"%s - %s",asciiMeta,asciiSub);
+		sprintf(pStr,"%s + %s",asciiMeta,asciiSub);
 	}
 	return true;
 }
@@ -323,6 +332,7 @@ void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNU
 	}
 	else if(psMapping->status == KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
 	{
+		// when user can't edit something...
 		pie_BoxFill(x, y , x + w, y + h, WZCOL_KEYMAP_FIXED);
 	}
 	else
@@ -331,14 +341,20 @@ void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNU
 	}
 
 	// draw name
-	iV_SetFont(font_regular);											// font
+	iV_SetFont(font_regular);											// font type
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	iV_DrawText(psMapping->pName, x + 2, y + (psWidget->height / 2) + 3);
 
 	// draw binding
 	keyMapToString(sKey,psMapping);
-	iV_DrawText(sKey, x + 370, y + (psWidget->height / 2) + 3);
+	// Check to see if key is on the numpad, if so tell user and change color
+	if (psMapping->subKeyCode >= KEY_KP_0 && psMapping->subKeyCode <= KEY_KPENTER)
+	{
+		iV_SetTextColour(WZCOL_YELLOW);
+		//ssprintf(sKey, "(numpad)%s", SDL_GetKeyName(psMapping->subKeyCode));
+	}
+	iV_DrawText(sKey, x + 364, y + (psWidget->height / 2) + 3);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -516,16 +532,16 @@ BOOL saveKeyMap(void)
   // KeyMapPath
 	debug(LOG_WZ, "We are to write %s for keymap info", KeyMapPath);
 	pfile = PHYSFS_openWrite(KeyMapPath);
-	if (!pfile) {
-		debug(LOG_ERROR, "saveKeyMap: %s could not be created: %s", KeyMapPath,
-		      PHYSFS_getLastError());
+	if (!pfile)
+	{	// NOTE: Changed to LOG_FATAL, since we want to inform user via pop-up (windows only)
+		debug(LOG_FATAL, "saveKeyMap: %s could not be created: %s", KeyMapPath, PHYSFS_getLastError());
 		assert(false);
 		return false;
 	}
 
 #define WRITE(var, size)                                               \
 	if (PHYSFS_write(pfile, var, 1, size) != size) {                     \
-		debug(LOG_ERROR, "saveKeyMap: could not write to %s %d bytes: %s", \
+		debug(LOG_FATAL, "saveKeyMap: could not write to %s %d bytes: %s", \
 		      KeyMapPath, (int)size, PHYSFS_getLastError());                    \
 		assert(false);                                                     \
 		return false;                                                      \
@@ -533,7 +549,8 @@ BOOL saveKeyMap(void)
 
 	// write out number of entries.
 	count = 0;
-	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext) {
+	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
+	{
 		count++;
 	}
 	WRITE(&count, sizeof(count));
@@ -557,15 +574,14 @@ BOOL saveKeyMap(void)
 			count++);
 		if(keyMapSaveTable[count] == NULL)
 		{
-			debug( LOG_FATAL, "can't find keymapped function %s in the keymap "
-			       "save table at %d!", name, count );
+			debug( LOG_FATAL, "can't find keymapped function %s in the keymap save table at %d!", name, count );
 			abort();
 		}
 		WRITE(&count, sizeof(count));
 	}
-	if (!PHYSFS_close(pfile)) {
-		debug(LOG_ERROR, "saveKeyMap: Error closing %s: %s", KeyMapPath,
-		      PHYSFS_getLastError());
+	if (!PHYSFS_close(pfile))
+	{
+		debug(LOG_FATAL, "Error closing %s: %s", KeyMapPath, PHYSFS_getLastError());
 		assert(false);
 		return false;
 	}
@@ -594,13 +610,17 @@ BOOL loadKeyMap(void)
 	// throw away any keymaps!!
 	keyClearMappings();
 
-	if (!PHYSFS_exists(KeyMapPath)) {
-		debug(LOG_WZ, "loadKeyMap: %s not found", KeyMapPath);
+	if (!PHYSFS_exists(KeyMapPath))
+	{
+		// NOTE: Changed to LOG_FATAL, since we want to inform user via pop-up (windows only)
+		debug(LOG_FATAL, "%s not found", KeyMapPath);
 		return false;
 	}
 	pfile = PHYSFS_openRead(KeyMapPath);
-	if (!pfile) {
-		debug(LOG_ERROR, "loadKeyMap: [directory: %s] %s could not be opened: %s", PHYSFS_getRealDir(KeyMapPath),
+	if (!pfile)
+	{
+		// NOTE: Changed to LOG_FATAL, since we want to inform user via pop-up (windows only)
+		debug(LOG_FATAL, "loadKeyMap: [directory: %s] %s could not be opened: %s", PHYSFS_getRealDir(KeyMapPath),
 			KeyMapPath, PHYSFS_getLastError());
 		assert(false);
 		return false;
@@ -611,7 +631,7 @@ BOOL loadKeyMap(void)
 	length_read = PHYSFS_read(pfile, var, 1, size);             \
 	countsize += length_read;                                   \
 	if (length_read != size) {                                  \
-		debug(LOG_ERROR, "loadKeyMap: Reading %s short: %s",      \
+		debug(LOG_FATAL, "loadKeyMap: Reading %s short: %s",      \
 		      KeyMapPath, PHYSFS_getLastError());                 \
 		assert(false);                                            \
 		(void) PHYSFS_close(pfile);                               \
@@ -621,7 +641,8 @@ BOOL loadKeyMap(void)
 	READ(&count, sizeof(count));
 	READ(&ver, 8);	// get version number.
 
-	if (strncmp(ver, keymapVersion, 8) != 0) {
+	if (strncmp(ver, keymapVersion, 8) != 0)
+	{
 		/* If wrong version, create a new one instead. */
 		PHYSFS_close(pfile);
 		return false;
@@ -639,14 +660,15 @@ BOOL loadKeyMap(void)
 		keyAddMapping( status, metaCode, subCode, action, keyMapSaveTable[funcmap],(char*)&name);
 	}
 
-	if (!PHYSFS_close(pfile)) {
-		debug(LOG_ERROR, "loadKeyMap: Error closing %s: %s", KeyMapPath,
-		      PHYSFS_getLastError());
+	if (!PHYSFS_close(pfile))
+	{
+		debug(LOG_ERROR, "Error closing %s: %s", KeyMapPath, PHYSFS_getLastError());
 		assert(false);
 		return false;
 	}
-	if (countsize != filesize) {
-		debug(LOG_ERROR, "loadKeyMap: File size different from bytes read!");
+	if (countsize != filesize)
+	{
+		debug(LOG_FATAL, "File size different from bytes read!");
 		assert(false);
 	}
 	return true;

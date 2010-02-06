@@ -32,16 +32,8 @@ extern "C"
 // initialise the visibility stuff
 extern BOOL visInitialise(void);
 
-extern BOOL visTilesPending(BASE_OBJECT *psObj);
-
-/* The terrain revealing ray callback */
-extern bool rayTerrainCallback(Vector3i pos, int dist, void* data);
-
-/* Ray callback for scripts */
-extern bool scrRayTerrainCallback(Vector3i pos, int dist, void *data);
-
 /* Check which tiles can be seen by an object */
-extern void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback);
+extern void visTilesUpdate(BASE_OBJECT *psObj);
 
 /* Check whether psViewer can see psTarget
  * psViewer should be an object that has some form of sensor,
@@ -56,56 +48,26 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 // Find the wall that is blocking LOS to a target (if any)
 extern STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget);
 
-extern void processVisibility(BASE_OBJECT *psCurr);
+extern void processVisibilitySelf(BASE_OBJECT *psObj);
+extern void processVisibilityVision(BASE_OBJECT *psViewer);
+extern void processVisibilityLevel(BASE_OBJECT *psObj);
+
+extern void processVisibility(void);  ///< Calls processVisibilitySelf and processVisibilityVision on all objects.
 
 // update the visibility reduction
 extern void visUpdateLevel(void);
 
 extern void setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player);
 
-// sensor range display
-extern BOOL	bDisplaySensorRange;
-extern void updateSensorDisplay(void);
-
-extern bool scrTileIsVisible(SDWORD player, SDWORD x, SDWORD y);
-extern void scrResetPlayerTileVisibility(SDWORD player);
+void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj);
+void visRemoveVisibility(BASE_OBJECT *psObj);
 
 // fast test for whether obj2 is in range of obj1
 static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWORD range)
 {
-	SDWORD	xdiff,ydiff, distSq, rangeSq;
+	int32_t xdiff = psObj1->pos.x - psObj2->pos.x, ydiff = psObj1->pos.y - psObj2->pos.y;
 
-	xdiff = (SDWORD)psObj1->pos.x - (SDWORD)psObj2->pos.x;
-	if (xdiff < 0)
-	{
-		xdiff = -xdiff;
-	}
-	if (xdiff > range)
-	{
-		// too far away, reject
-		return false;
-	}
-
-	ydiff = (SDWORD)psObj1->pos.y - (SDWORD)psObj2->pos.y;
-	if (ydiff < 0)
-	{
-		ydiff = -ydiff;
-	}
-	if (ydiff > range)
-	{
-		// too far away, reject
-		return false;
-	}
-
-	distSq = xdiff*xdiff + ydiff*ydiff;
-	rangeSq = range*range;
-	if (distSq > rangeSq)
-	{
-		// too far away, reject
-		return false;
-	}
-
-	return true;
+	return abs(xdiff) <= range && abs(ydiff) <= range && xdiff*xdiff + ydiff*ydiff <= range;
 }
 
 static inline int objSensorRange(const BASE_OBJECT* psObj)

@@ -368,9 +368,10 @@ static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, vo
  * check if given file exists in a locale dependend subdir
  * if so, modify given fileName to hold the locale dep. file,
  * else do not change given fileName
- * \param[out] fileName must be at least MAX_PATH bytes large
+ * \param[in,out] fileName must be at least PATH_MAX bytes large
+ * \param maxlen indicates the maximum buffer size of \c fileName
  */
-static void makeLocaleFile(char fileName[])  // given string must have MAX_PATH size
+static void makeLocaleFile(char* fileName, size_t maxlen)  // given string must have PATH_MAX size
 {
 #ifdef ENABLE_NLS
 	const char * language = getLanguage();
@@ -386,7 +387,7 @@ static void makeLocaleFile(char fileName[])  // given string must have MAX_PATH 
 
 	if ( PHYSFS_exists(localeFile) )
 	{
-		sstrcpy(fileName, localeFile);
+		strlcpy(fileName, localeFile, maxlen);
 		debug(LOG_WZ, "Found translated file: %s", fileName);
 	}
 #endif // ENABLE_NLS
@@ -445,7 +446,7 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 	sstrcpy(aFileName, aCurrResDir);
 	sstrcat(aFileName, pFile);
 
-	makeLocaleFile(aFileName);  // check for translated file
+	makeLocaleFile(aFileName, sizeof(aFileName));  // check for translated file
 
 	SetLastResourceFilename(pFile); // Save the filename in case any routines need it
 

@@ -1,7 +1,7 @@
 AC_PREREQ([2.56])
 AC_INIT([Warzone 2100],[TRUNK],[http://wz2100.net/],[warzone2100])
 
-AM_INIT_AUTOMAKE([1.10])
+AM_INIT_AUTOMAKE([1.10 tar-ustar])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
@@ -30,9 +30,6 @@ fi
 AC_PROG_VERSION_CHECK([bison], [1.31])
 
 AC_PROG_LEX
-if test `basename "$LEX"` != "flex" ; then
-	AC_MSG_ERROR([Flex is not installed])
-fi
 AC_PROG_VERSION_CHECK([${LEX}], [2.5.33], [2.5.34])
 
 AX_WITH_PROG([PERL], [perl])
@@ -148,6 +145,10 @@ AS_IF([test -n "$PKGCONFIG_PREFIX"],[
 	PKG_CONFIG="${PKG_CONFIG} --define-variable=prefix=${PKGCONFIG_PREFIX}"
 ])
 
+AC_ARG_VAR([PKGCONFIG_DEFAULT_PREFIX], [Prefix path to look in for pkg-config templates])
+AS_IF([test -n "$PKGCONFIG_DEFAULT_PREFIX"],[
+	PKG_CONFIG="${PKG_CONFIG} --define-variable=__PREFIX__=${PKGCONFIG_DEFAULT_PREFIX}"
+])
 
 # Variable fixes for older autoconf versions:
 
@@ -214,7 +215,8 @@ if test "x$enable_debug" = "xyes" ; then
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wall -Werror -Wno-unused-label -Wno-pointer-to-int-cast -Wmissing-field-initializers -Wcast-align -Wwrite-strings"
-		WZ_CFLAGS="${WZ_CFLAGS} -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith -Wno-format-security"
+		WZ_CFLAGS="${WZ_CFLAGS} -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith -Wno-format-security -Wdeclaration-after-statement"
+		WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
 elif test "x$enable_debug" = "xrelaxed" ; then
@@ -306,6 +308,14 @@ AS_IF([test "x$enable_sound" = "xyes"],[
 # check for nearbyint()
 AC_CHECK_LIB(m, nearbyint, [MATH_LIB=""], AC_MSG_ERROR([nearbyint not found.]))
 
+# When (cross-)compiling for Windows (MinGW) we need to link in iberty for Popt
+# and the Dr. MinGW derived exception handler.
+if test "x$host_os_mingw32" = "xyes" ; then
+    AC_CHECK_LIB(iberty, main, AC_SUBST([IBERTY_LIBS], [-liberty]), AC_MSG_ERROR([libiberty not found.]))
+
+    WIN32_LIBS="${WIN32_LIBS} ${IBERTY_LIBS}"
+fi
+
 # Look for Popt
 AC_CHECK_HEADER(popt.h, , AC_MSG_ERROR([Popt header not found.]))
 AC_CHECK_LIB(popt, poptGetContext, AC_SUBST([POPT_LIBS], [-lpopt]), AC_MSG_ERROR([Popt not found.]), [${WIN32_LIBS}])
@@ -330,24 +340,23 @@ AC_CHECK_LIB(GLU, main,
 		[${OPENGL_LIBS} -lm]), [${OPENGL_LIBS} -lm])
 AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
 
-# When (cross-)compiling for Windows (MinGW) we need to link in BFD and iberty
-# for the Dr. MinGW derived exception handler.
+# When (cross-)compiling for Windows (MinGW) we need to link in BFD for the Dr.
+# MinGW derived exception handler.
 if test "x$host_os_mingw32" = "xyes" ; then
-    AC_CHECK_LIB(iberty, main, AC_SUBST([IBERTY_LIBS], [-liberty]), AC_MSG_ERROR([libiberty not found.]))
-
     AC_CHECK_HEADER(bfd.h, , AC_MSG_ERROR([BFD header not found.]))
     AC_CHECK_LIB(bfd, bfd_openr, AC_SUBST([BFD_LIBS], [-lbfd]), AC_MSG_ERROR([BFD not found.]), [${IBERTY_LIBS}])
 
     WIN32_LIBS="${WIN32_LIBS} ${BFD_LIBS} ${IBERTY_LIBS} -lstdc++"
 fi
 
-WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -DWZ_DATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 
 
 AC_SUBST([WZ_CPPFLAGS], [${WZ_CPPFLAGS}])
 AC_SUBST([WZ_CFLAGS], [${WZ_CFLAGS}])
+AC_SUBST([WZ_C99FLAGS], [${WZ_C99FLAGS}])
 
 
 AC_CONFIG_HEADER([config.h])

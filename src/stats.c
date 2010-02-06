@@ -90,7 +90,7 @@ static UDWORD	maxWeaponDamage;
 static UDWORD	maxWeaponROF;
 static UDWORD	maxPropulsionSpeed;
 
-//stores for each players component states - can be either UNAVAILABLE, FOUND or AVAILABLE
+//stores for each players component states - can be either UNAVAILABLE, REDUNDANT, FOUND or AVAILABLE
 UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 
 //store for each players Structure states
@@ -174,7 +174,7 @@ void statsInitVars(void)
 	numConstructStats = 0;
 	numSpecialAbility = 0;
 
-	//stores for each players component states - can be either UNAVAILABLE, FOUND or AVAILABLE
+	//stores for each players component states - can be either UNAVAILABLE, REDUNDANT, FOUND or AVAILABLE
 	for(i=0; i<MAX_PLAYERS; i++) {
 		for(j=0; j<COMP_NUMCOMPONENTS; j++) {
 			apCompLists[i][j] = NULL;
@@ -340,7 +340,7 @@ const char *getStatName(const void * Stat)
 /*Load the weapon stats from the file exported from Access*/
 BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 {
-	const unsigned int NumWeapons = numCR(pWeaponData, bufferSize);
+	unsigned int	NumWeapons = numCR(pWeaponData, bufferSize);
 	WEAPON_STATS	sStats, * const psStats = &sStats;
 	UDWORD			i, rotate, maxElevation, surfaceToAir;
 	SDWORD			minElevation;
@@ -358,6 +358,13 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 	char			*StatsName;
 	UDWORD			penetrate;
 	UDWORD dummyVal;
+
+	// Skip descriptive header
+	if (strncmp(pWeaponData,"Weapon ",7)==0)
+	{
+		pWeaponData = strchr(pWeaponData,'\n') + 1;
+		NumWeapons--;
+	}
 
 	if (!statsAllocWeapons(NumWeapons))
 	{
@@ -754,20 +761,24 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 {
 	BODY_STATS sStats, * const psStats = &sStats;
-	const unsigned int NumBody = numCR(pBodyData, bufferSize) - 1;
+	unsigned int NumBody = numCR(pBodyData, bufferSize);
 	unsigned int i, designable;
 	char BodyName[MAX_STR_LENGTH], size[MAX_STR_LENGTH],
 		GfxFile[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
 		flameIMD[MAX_STR_LENGTH];
 	UDWORD dummyVal;
 
+	// Skip descriptive header
+	if (strncmp(pBodyData,"Body ",5)==0)
+	{
+		pBodyData = strchr(pBodyData,'\n') + 1;
+		NumBody--;
+	}
+
 	if (!statsAllocBody(NumBody))
 	{
 		return false;
 	}
-
-	// Skip descriptive header
-	pBodyData = strchr(pBodyData,'\n') + 1;
 
 	for (i = 0; i < NumBody; i++)
 	{
@@ -907,11 +918,6 @@ BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 		}
 		else
 		{
-			//get the weapon stat
-			if (!getResourceName(weaponName))
-			{
-				return false;
-			}
 			weapon = getCompFromName(COMP_WEAPON, weaponName);
 
 			//if weapon not found - error
@@ -1104,7 +1110,7 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 /*Load the Sensor stats from the file exported from Access*/
 BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 {
-	const unsigned int NumSensor = numCR(pSensorData, bufferSize) - 1;
+	unsigned int NumSensor = numCR(pSensorData, bufferSize);
 	SENSOR_STATS sStats, * const psStats = &sStats;
 	unsigned int i = 0, designable;
 	char			SensorName[MAX_STR_LENGTH], location[MAX_STR_LENGTH],
@@ -1112,13 +1118,17 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 	char			mountGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
 	UDWORD dummyVal;
 
+	// Skip descriptive header
+	if (strncmp(pSensorData,"Sensor ",7)==0)
+	{
+		pSensorData = strchr(pSensorData,'\n') + 1;
+		NumSensor--;
+	}
+	
 	if (!statsAllocSensor(NumSensor))
 	{
 		return false;
 	}
-
-	// Skip header
-	pSensorData = strchr(pSensorData,'\n') + 1;
 
 	for (i = 0; i < NumSensor; i++)
 	{
@@ -1804,10 +1814,6 @@ BOOL loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize)
 
 		//get the body stats
 		found = false;
-		if (!getResourceName(bodyName))
-		{
-			return false;
-		}
 
 		for (numStats = 0; numStats < numBodyStats; numStats++)
 		{
@@ -1827,10 +1833,6 @@ BOOL loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize)
 
 		//get the propulsion stats
 		found = false;
-		if (!getResourceName(propulsionName))
-		{
-			return false;
-		}
 
 		for (numStats = 0; numStats < numPropulsionStats; numStats++)
 		{
@@ -1932,7 +1934,6 @@ BOOL loadWeaponSounds(const char *pSoundData, UDWORD bufferSize)
 	SDWORD i, weaponSoundID, explosionSoundID, inc, iDum;
 	char			WeaponName[MAX_STR_LENGTH];
 	char			szWeaponWav[MAX_STR_LENGTH],	szExplosionWav[MAX_STR_LENGTH];
-	BOOL 	Ok = true;
 
 	ASSERT( asWeaponStats != NULL, "loadWeaponSounds: Weapon stats not loaded" );
 
@@ -1955,12 +1956,6 @@ BOOL loadWeaponSounds(const char *pSoundData, UDWORD bufferSize)
 			return false;
 		}
 
-		//find the weapon stat
-		if (!getResourceName(WeaponName))
-		{
-			return false;
-		}
-
 		for (inc = 0; inc < (SDWORD)numWeaponStats; inc++)
 		{
 			if (!strcmp(asWeaponStats[inc].pName, WeaponName))
@@ -1970,13 +1965,8 @@ BOOL loadWeaponSounds(const char *pSoundData, UDWORD bufferSize)
 				break;
 			}
 		}
-		if (inc == (SDWORD)numWeaponStats)
-		{
-			debug( LOG_FATAL, "loadWeaponSounds: Weapon stat not found - %s", WeaponName );
-			abort();
-			Ok = false;
-//			return false;
-		}
+		ASSERT_OR_RETURN(false, inc != (SDWORD)numWeaponStats, "Weapon stat not found - %s", WeaponName);
+
 		//increment the pointer to the start of the next record
 		pSoundData = strchr(pSoundData,'\n') + 1;
 	}
@@ -2607,13 +2597,6 @@ SDWORD getCompFromName(UDWORD compType, const char *pName)
 	return -1;
 }
 
-
-//converts the name read in from Access into the name which is used in the Stat lists
-BOOL getResourceName(const char *pName)
-{
-	return true;
-}
-
 /*return the name to display for the interface - valid for OBJECTS and STATS*/
 const char* getName(const char *pNameID)
 {
@@ -2798,7 +2781,7 @@ bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect)
 	{
 		*effect = WE_FLAMER;
 	}
-	else if (strcmp(weaponEffect, "ANTI AIRCRAFT") == 0)
+	else if (strcmp(weaponEffect, "ANTI AIRCRAFT") == 0 || strcmp(weaponEffect, "ALL ROUNDER") == 0)
 	{
 		*effect = WE_ANTI_AIRCRAFT;
 	}
