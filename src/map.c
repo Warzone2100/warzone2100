@@ -310,7 +310,30 @@ static BOOL mapLoadGroundTypes(void)
 	else
 	{
 		debug(LOG_ERROR, "unsupported tileset: %s", tileset);
-		return false;
+		debug(LOG_POPUP, "This is a UNSUPPORTED map with a custom tileset.\nDefaulting to tertilesc1hw -- map may look strange!");
+		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
+		free(tileset);
+		tileset = strdup("texpages/tertilesc1hw");
+		numGroundTypes = 7;
+		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
+		
+		psGroundTypes[a_yellow].textureName = "page-45";
+		psGroundTypes[a_yellow].textureSize = 4.6;
+		psGroundTypes[a_red].textureName = "page-44";
+		psGroundTypes[a_red].textureSize = 6.2;
+		psGroundTypes[a_concrete].textureName = "page-47";
+		psGroundTypes[a_concrete].textureSize = 3.2;
+		psGroundTypes[a_cliff].textureName = "page-46";
+		psGroundTypes[a_cliff].textureSize = 5.8;
+		psGroundTypes[a_water].textureName = "page-42";
+		psGroundTypes[a_water].textureSize = 7.3;
+		
+		psGroundTypes[a_mud] = psGroundTypes[a_red];
+		psGroundTypes[a_green] = psGroundTypes[a_red];
+		
+		waterGroundType = a_water;
+		cliffGroundType = a_cliff;
+
 	}
 	return true;
 }
