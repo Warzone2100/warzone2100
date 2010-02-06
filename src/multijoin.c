@@ -108,13 +108,21 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 	return true;
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-// when a remote player leaves an arena game do this!
+//////////////////////////////////////////////////////////////////////////////
+/*
+** when a remote player leaves an arena game do this!
+**
+** @param player -- the one we need to clear
+** @param quietly -- true means without any visible effects
+** @param removeOil -- true means remove all their (oil) feature(s) on map
+*/
 void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 {
 	UDWORD			i;
 	BOOL			bTemp;
 	STRUCTURE		*psStruct,*psNext;
+
+	debug(LOG_INFO, "R.I.P. %s (%u). params: (%d:%d)", getPlayerName(player), player, quietly, removeOil);
 
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
@@ -133,7 +141,9 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 		if(quietly)
 		{
 			killDroid(apsDroidLists[player]);
-		}else{
+		}
+		else
+		{
 			destroyDroid(apsDroidLists[player]);
 		}
 	}
@@ -158,8 +168,6 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 		}
 		else
 		{
-			// NOTE: when a player leaves, we should destroy everything, including the walls
-			// Is there any reason why not to do this? (removed wall check code)
 			destroyStruct(psStruct);
 		}
 
@@ -222,7 +230,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
 
 	turnOffMultiMsg(true);
-	clearPlayer(playerIndex, false, false);
+	clearPlayer(playerIndex, false, true);		// don't do it quietly and kill their oil
 	game.skDiff[playerIndex] = DIFF_SLIDER_STOPS / 2;
 
 	turnOffMultiMsg(false);
