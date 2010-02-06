@@ -684,4 +684,6 @@ extern BOOL scrLog(void);
 extern BOOL addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg);
 extern VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 
+extern BOOL scrScavengersActive(void);
+
 #endif // __INCLUDED_SRC_SCRIPTFUNCS_H__

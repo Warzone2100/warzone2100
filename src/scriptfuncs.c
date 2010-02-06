@@ -114,6 +114,17 @@ extern	UDWORD				objID;					// unique ID creation thing..
 /******************************************************************************************/
 /*                 Check for objects in areas                                             */
 
+BOOL scrScavengersActive()
+{
+	scrFunctionResult.v.bval = game.scavengers;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
+
 // check for a base object being in range of a point
 BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range)
 {
