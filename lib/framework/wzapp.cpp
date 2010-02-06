@@ -197,6 +197,12 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	bold.setBold(true);
 	small.setFamily("DejaVu Sans");
 	small.setPointSize(6);
+
+	// Want focusOutEvent messages.
+	setFocusPolicy(Qt::ClickFocus);
+
+	// Want áéíóú inputMethodEvent messages.
+	setAttribute(Qt::WA_InputMethodEnabled);
 }
 
 WzMainWindow::~WzMainWindow()
@@ -445,6 +451,21 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 
 	bool isKeypad = event->modifiers() & Qt::KeypadModifier;
 
+	switch (event->text().size())
+	{
+		case 0:
+			debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d", pressed ? "Down" : "Up  ", event->key(), isKeypad);
+		case 1:
+			debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d, 0x%04X", pressed ? "Down" : "Up  ", event->key(), isKeypad, event->text().unicode()[0].unicode());
+			break;
+		case 2:
+			debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d, 0x%04X, 0x%04X", pressed ? "Down" : "Up  ", event->key(), isKeypad, event->text().unicode()[0].unicode(), event->text().unicode()[1].unicode());
+			break;
+		case 3:
+			debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d, 0x%04X, 0x%04X, ...", pressed ? "Down" : "Up  ", event->key(), isKeypad, event->text().unicode()[0].unicode(), event->text().unicode()[1].unicode());
+			break;
+	}
+
 	if (!isKeypad)
 	{
 		switch (event->key())
@@ -583,6 +604,8 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 	{
 		inputAddBuffer(lastKey, event->text().unicode()->unicode());
 	}
+
+	event->accept();
 }
 
 void WzMainWindow::keyReleaseEvent(QKeyEvent *event)
@@ -593,6 +616,22 @@ void WzMainWindow::keyReleaseEvent(QKeyEvent *event)
 void WzMainWindow::keyPressEvent(QKeyEvent *event)
 {
 	realHandleKeyEvent(event, true);
+}
+
+void WzMainWindow::inputMethodEvent(QInputMethodEvent *event)
+{
+	// Foward all "committed" characters. Should be more advanced than that, but better than nothing.
+	for (int i = 0; i < event->commitString().size(); ++i)
+	{
+		inputAddBuffer(' ', event->commitString()[i].unicode());
+	}
+	QWidget::inputMethodEvent(event);
+}
+
+void WzMainWindow::focusOutEvent(QFocusEvent *event)
+{
+	debug(LOG_INPUT, "Main window lost focus.");
+	inputLoseFocus();
 }
 
 void WzMainWindow::close()
@@ -915,10 +954,10 @@ void inputNewFrame(void)
 }
 
 /*!
- * Release all keys (and buttons) when we loose focus
+ * Release all keys (and buttons) when we lose focus
  */
 // FIXME This seems to be totally ignored! (Try switching focus while the dragbox is open)
-void inputLooseFocus(void)
+void inputLoseFocus()
 {
 	unsigned int i;
 
