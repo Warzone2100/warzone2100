@@ -6918,7 +6918,8 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 
         psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y,
 			psSaveStructure->player,true);
-	ASSERT_OR_RETURN(false, psStructure, "Unable to create structure");
+		ASSERT(psStructure, "Unable to create structure");
+		if (!psStructure) continue;
 
         /*The original code here didn't work and so the scriptwriters worked
         round it by using the module ID - so making it work now will screw up
@@ -7193,7 +7194,8 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
         }
 
 	psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y, psSaveStructure->player,true);
-	ASSERT_OR_RETURN(false, psStructure, "Unable to create structure");
+		ASSERT(psStructure, "Unable to create structure");
+		if (!psStructure) continue;
 
         /*The original code here didn't work and so the scriptwriters worked
         round it by using the module ID - so making it work now will screw up
@@ -7626,7 +7628,8 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
         }
 
 	psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y, psSaveStructure->player, true);
-	ASSERT_OR_RETURN(false, psStructure, "Unable to create structure");
+		ASSERT(psStructure, "Unable to create structure");
+		if (!psStructure) continue;
 
         /*The original code here didn't work and so the scriptwriters worked
         round it by using the module ID - so making it work now will screw up
