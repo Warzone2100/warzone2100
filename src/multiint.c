@@ -263,7 +263,7 @@ void loadMapPreview(bool hideInterface)
 	MAPTILE			*psTile,*WTile;
 	UDWORD oursize;
 	Vector2i playerpos[MAX_PLAYERS];	// Will hold player positions
-	char  *ptr = NULL, *imageData = NULL, *fboData = NULL;
+	char  *ptr = NULL, *imageData = NULL;
 
 	if(psMapTiles)
 	{
@@ -360,14 +360,6 @@ void loadMapPreview(bool hideInterface)
 		abort();	// should be a fatal error ?
 		return;
 	}
-	fboData = (char*)malloc(oursize* 3);		// used for the FBO texture
-	if( !fboData )
-	{
-		debug(LOG_FATAL,"Out of memory for FBO texture!");
-		free(imageData);
-		abort();	// should be a fatal error?
-		return ;
-	}
 	ptr = imageData;
 	memset(ptr, 0x45, sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
 	psTile = psMapTiles;
@@ -420,91 +412,44 @@ void loadMapPreview(bool hideInterface)
 	memset(playerpos,0x77,sizeof(playerpos));
 	// color our texture with clancolors @ correct position
 	plotStructurePreview16(imageData, scale, offX2, offY2,playerpos);
-	glErrors();					// clear openGL errorcodes
-	// and now, for those that have FBO available on their card
-	// added hack to work around bad drivers that report FBO available, when it is not.
-	if(Init_FBO(BACKDROP_HACK_WIDTH,BACKDROP_HACK_HEIGHT) && !bFboProblem)
+	for(i = 0; i < MAX_PLAYERS; i++)
 	{
-		// Save the view port and set it to the size of the texture
-		glPushAttrib(GL_VIEWPORT_BIT);
+		float fx,fy;
+		int sx, sy, x, y;
+		if (playerpos[i].x == 0x77777777) continue;  // no player is available, so skip
+		fx  = playerpos[i].x + 0.5f;
+		fy  = playerpos[i].y + 0.5f;
+		fx *= scale;
+		fy *= scale;
+		fx += offX2;
+		fy += offY2;
+		sx = fx - 2;
+		sy = fy - 4;
 
-		// First we bind the FBO so we can render to it
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
-		bFboProblem |= glErrors();
-
-		//set up projection & model matrix for the texture(!)
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		glOrtho(0.0f,(double)BACKDROP_HACK_HEIGHT,0,(double)BACKDROP_HACK_WIDTH,-1.0f,1.0f);
-
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-		glViewport( 0, 0, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT );
-		// Then render as normal
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT );		//| GL_DEPTH_BUFFER_BIT);	
-		glLoadIdentity();
-		// and start drawing here
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, FBOtexture);
-		//upload the texture to the FBO
-		glTexSubImage2D(GL_TEXTURE_2D,0,0,0,BACKDROP_HACK_WIDTH,BACKDROP_HACK_HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,imageData);
-
-		iV_SetFont(font_large);
-		glDisable(GL_CULL_FACE);
-		for(i=0;i < MAX_PLAYERS;i++)//
+		// TODO Draw bigger numbers without resorting to major platform-dependent hacks.
+		for (y = MAX(0, sy); y < MIN(BACKDROP_HACK_HEIGHT - 1, sy + 9); ++y)
 		{
-			float fx,fy;
-			if(playerpos[i].x==0x77777777) continue;	// no player is available, so skip
-			fx =(float)playerpos[i].x;
-			fy =(float)playerpos[i].y;
-			fx*=(float)scale;
-			fy*=(float)scale;
-			fx+=(float)offX2;
-			fy+=(float)offY2;
-
-			// first draw a slightly bigger font of the number using said color
-			iV_SetTextColour(WZCOL_DBLUE);
-			iV_SetTextSize(28.f);
-			iV_DrawTextF(fx,fy,"%d",i);
-			// now draw it again using smaller font and said color
-			iV_SetTextColour(WZCOL_LBLUE);
-			iV_SetTextSize(24.f);
-			iV_DrawTextF(fx,fy,"%d",i);
+			for (x = MAX(0, sx); x < MIN(BACKDROP_HACK_WIDTH - 1, sx + 5); ++x)
+			{
+				char *const p1 = imageData + ( x      +  y     *BACKDROP_HACK_WIDTH)*3;
+				char *const p2 = imageData + ((x + 1) + (y + 1)*BACKDROP_HACK_WIDTH)*3;
+				int dx = x - sx, dy = y - sy;
+				const uint64_t digits[10] = {0x0EDC6318C76EULL, 0x0E21084214C4ULL, 0x1F888888422EULL, 0x0E8C20E4422EULL, 0x0847D2A53188ULL, 0x0ECC2187085CULL, 0x0E9C639788D8ULL, 0x02108844223FULL, 0x0E8C72E9C62EULL, 0x03623D38C72EULL};
+				if (i < sizeof(digits)/sizeof(*digits) && (digits[i] & (uint64_t)1<<(dx + dy*5)))
+				{
+					p1[0] = WZCOL_LBLUE.byte.r;
+					p1[1] = WZCOL_LBLUE.byte.g;
+					p1[2] = WZCOL_LBLUE.byte.b;
+					p2[0] = WZCOL_DBLUE.byte.r;
+					p2[1] = WZCOL_DBLUE.byte.g;
+					p2[2] = WZCOL_DBLUE.byte.b;
+				}
+			}
 		}
-
-		// set rendering back to default frame buffer
-		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
-		glReadPixels(0, 0, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,fboData);
-
-		//done with the FBO, so unbind it.
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
-		glPopAttrib();
-		bFboProblem |= glErrors();
-		// if we detected a error, then we must fallback to old texture, or user will not see anything.
-		if(!bFboProblem)
-		{
-			screen_Upload(fboData);
-		}
-		else
-		{
-			screen_Upload(imageData);
-		}
-		bFboProblem |= glErrors();
 	}
-	else
-	{
-		// no FBO was available, just show them what we got.
-		screen_Upload(imageData);
-	}
+	// no weird FBO hacks were done, just show them what we got.
+	screen_Upload(imageData);
 
-	free(fboData);
 	free(imageData);
 
 	if (hideInterface)
