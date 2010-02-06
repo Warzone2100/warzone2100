@@ -500,6 +500,7 @@
 		432BE3F810D9CD4000A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3EE10D9CB4D00A486AB /* InfoPlist.strings */; };
 		432BE40210D9CF6F00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3FE10D9CF1300A486AB /* InfoPlist.strings */; };
 		432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 432BE34C10D9C21900A486AB /* SDL.framework */; };
+		4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8A8111DDF0F0012E8E4 /* random.cpp */; };
 		43488CFD10D61654001660EB /* pixman-access-accessors.c in Sources */ = {isa = PBXBuildFile; fileRef = 43488CD410D61653001660EB /* pixman-access-accessors.c */; };
 		43488CFE10D61654001660EB /* pixman-access.c in Sources */ = {isa = PBXBuildFile; fileRef = 43488CD510D61653001660EB /* pixman-access.c */; };
 		43488CFF10D61654001660EB /* pixman-accessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 43488CD610D61653001660EB /* pixman-accessor.h */; };
@@ -1478,6 +1479,8 @@
 		432BE3FF10D9CF1300A486AB /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		432BE40010D9CF1300A486AB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		432BE52210D9DD8700A486AB /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		4336D8A8111DDF0F0012E8E4 /* random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = random.cpp; path = ../src/random.cpp; sourceTree = SOURCE_ROOT; };
+		4336D8A9111DDF0F0012E8E4 /* random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = random.h; path = ../src/random.h; sourceTree = SOURCE_ROOT; };
 		43488CD410D61653001660EB /* pixman-access-accessors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-access-accessors.c"; path = "external/pixman/pixman/pixman-access-accessors.c"; sourceTree = "<group>"; };
 		43488CD510D61653001660EB /* pixman-access.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-access.c"; path = "external/pixman/pixman/pixman-access.c"; sourceTree = "<group>"; };
 		43488CD610D61653001660EB /* pixman-accessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "pixman-accessor.h"; path = "external/pixman/pixman/pixman-accessor.h"; sourceTree = "<group>"; };
@@ -2193,6 +2196,8 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				4336D8A8111DDF0F0012E8E4 /* random.cpp */,
+				4336D8A9111DDF0F0012E8E4 /* random.h */,
 				43BE75E811124BB4007DF934 /* wavecast.cpp */,
 				43BE75E911124BB4007DF934 /* wavecast.h */,
 				647D9C551039289A006D37CF /* challenge.c */,
@@ -4073,6 +4078,7 @@
 				EFBC96C010B92A9C009C6753 /* upnpreplyparse.c in Sources */,
 				43A8417811028EDD00733CCB /* pointtree.cpp in Sources */,
 				43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */,
+				4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
