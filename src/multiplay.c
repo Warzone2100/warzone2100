@@ -1433,6 +1433,7 @@ BOOL recvTemplate()
 
 	t.psNext = NULL;
 	t.pName = NULL;
+	t.prefab = false;
 
 	psTempl = IdToTemplate(t.multiPlayerID,player);
 
