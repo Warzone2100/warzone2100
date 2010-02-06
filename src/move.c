@@ -60,6 +60,7 @@
 #include "scores.h"
 #include "multiplay.h"
 #include "multigifts.h"
+#include "random.h"
 
 #include "drive.h"
 
@@ -1142,7 +1143,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 		if (fpathBlockingTile(horizX, horizY, propulsion) && fpathBlockingTile(vertX, vertY, propulsion))
 		{
 			// in a corner - choose an arbitrary slide
-			if (ONEINTWO)
+			if (gameRand(2) == 0)
 			{
 				*pmx = 0;
 				*pmy = -*pmy;

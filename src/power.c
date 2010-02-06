@@ -42,6 +42,7 @@
 #include "intdisplay.h"
 #include "action.h"
 #include "difficulty.h"
+#include "random.h"
 
 
 #define EXTRACT_POINTS	    1
@@ -420,11 +421,12 @@ float requestPower(int player, float amount)
 	return 0; // no power this frame
 }
 
+// Why is there randomity in the power code?
 static int randomRound(float val)
 {
 	int intPart = val;
 	float floatPart = val - intPart;
-	if (rand()%100 < floatPart*100)
+	if (gameRand(100) < floatPart*100)
 	{
 		return intPart + 1;
 	}

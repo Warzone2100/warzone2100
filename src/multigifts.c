@@ -53,6 +53,7 @@
 #include "multiint.h"			// for force name.
 #include "multimenu.h"			// for multimenu
 #include "multistat.h"
+#include "random.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // prototypes
@@ -650,8 +651,8 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 			for (i = 0; i < 3; i++) // try three times
 			{
 				// Between 10 and mapwidth - 10
-				x = (rand() % (mapWidth - 20)) + 10;
-				y = (rand() % (mapHeight - 20)) + 10;
+				x = (gameRand(mapWidth - 20)) + 10;
+				y = (gameRand(mapHeight - 20)) + 10;
 
 				if (pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 				{

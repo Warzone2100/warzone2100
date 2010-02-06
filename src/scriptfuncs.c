@@ -96,6 +96,7 @@
 #include "keymap.h"
 #include "visibility.h"
 #include "design.h"
+#include "random.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
@@ -4368,13 +4369,9 @@ BOOL scrRandom(void)
 	{
 		iResult = 0;
 	}
-	else if (range > 0)
-	{
-		iResult = rand() % range;
-	}
 	else
 	{
-		iResult = rand() % (-range);
+		iResult = gameRand(abs(range));
 	}
 
 	scrFunctionResult.v.ival = iResult;
@@ -4390,8 +4387,11 @@ BOOL scrRandom(void)
 // randomise the random number seed
 BOOL scrRandomiseSeed(void)
 {
-	srand((UDWORD)clock());
+	// Why? What's the point? What on earth were they thinking, exactly? If the numbers don't have enough randominess, just set the random seed again and again until the numbers are double-plus super-duper full of randonomium?
+	debug(LOG_ERROR, "A script is trying to set the random seed with srand(). That just doesn't make sense.");
+	//srand((UDWORD)clock());
 
+	// Resisting the urge to return a random number here. Afraid of triggering some sort of fallback mechanism in the scripts for when setting the random seed somehow fails.
 	return true;
 }
 

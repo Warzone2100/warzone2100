@@ -90,6 +90,8 @@
 #include "scores.h"
 #include "gateway.h"
 
+#include "random.h"
+
 // Possible types of wall to build
 #define WALL_HORIZ		0
 #define WALL_VERT		1
@@ -4711,7 +4713,7 @@ to and return this as the destination for the droid.
 BOOL getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 	UDWORD structY, UDWORD *pDroidX, UDWORD *pDroidY)
 {
-	UWORD				start;
+	int32_t                         start;
 	UDWORD				structTileX, structTileY, width = 0, breadth = 0;
 
 	if (StatIsStructure(psStats))
@@ -4727,9 +4729,10 @@ BOOL getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 	ASSERT_OR_RETURN(false, width + breadth > 0, "Weird droid destination");
 
 	//get a random starting place 0=top left
-	start = (UWORD)(rand() % ((width + breadth) * 2));
+	start = gameRand((width + breadth) * 2);
 
 	//search in a clockwise direction around the structure from the starting point
+	// TODO Fix 4x code duplication.
 	if (start == 0 || start < width)
 	{
 		//top side first

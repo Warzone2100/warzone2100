@@ -62,6 +62,8 @@
 #include "display3d.h"
 #include "combat.h"
 
+#include "random.h"
+
 // how long to run for
 #define RUN_TIME		8000
 #define RUN_BURN_TIME	10000
@@ -4032,7 +4034,7 @@ void orderMoralCheck(UDWORD player)
 			continue;
 		}
 
-		check = rand() % 100;
+		check = gameRand(100);
 		if (psCurr->droidType == DROID_PERSON)
 		{
 			if (check > personLShip)
@@ -4053,6 +4055,7 @@ void orderMoralCheck(UDWORD player)
 }
 
 // do a moral check for a group
+// Near-duplicate of orderMoralCheck().
 void orderGroupMoralCheck(DROID_GROUP *psGroup)
 {
 	DROID		*psCurr;
@@ -4096,7 +4099,7 @@ void orderGroupMoralCheck(DROID_GROUP *psGroup)
 			continue;
 		}
 
-		check = rand() % 100;
+		check = gameRand(100);
 		if (psCurr->droidType == DROID_PERSON)
 		{
 			if (check > personLShip)

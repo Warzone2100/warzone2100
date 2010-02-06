@@ -140,6 +140,7 @@ noinst_HEADERS = \
 	projectiledef.h \
 	projectile.h \
 	radar.h \
+	random.h \
 	raycast.h \
 	researchdef.h \
 	research.h \
@@ -258,6 +259,7 @@ warzone2100_SOURCES = \
 	power.c \
 	projectile.c \
 	radar.c \
+	random.cpp \
 	raycast.c \
 	research.c \
 	scores.c \

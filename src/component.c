@@ -690,13 +690,11 @@ void displayCompObj(DROID *psDroid, BOOL bButton)
 	PIELIGHT			brightness;
 	const PIELIGHT			specular = WZCOL_BLACK;
 	UDWORD				colour;
-	UDWORD				bDarkSide = false;
 	UBYTE	i;
 
 	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC/4 ) && psDroid->lastHitWeapon == WSC_ELECTRONIC && !gamePaused())
 	{
 		colour = getPlayerColour(rand()%MAX_PLAYERS);
-		bDarkSide = true;
 	}
 	else
 	{

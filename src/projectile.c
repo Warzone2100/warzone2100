@@ -59,6 +59,7 @@
 #include "multiplay.h"
 #include "multistat.h"
 #include "mapgrid.h"
+#include "random.h"
 
 #define	PROJ_MAX_PITCH			30
 #define	DIRECT_PROJ_SPEED		500
@@ -403,12 +404,9 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 
 	if (psTarget)
 	{
-		const float maxHeight = establishTargetHeight(psTarget);
-		unsigned int heightVariance = frandom() * maxHeight;
-
 		scoreUpdateVar(WD_SHOTS_ON_TARGET);
 
-		tarHeight = psTarget->pos.z + heightVariance;
+		tarHeight = psTarget->pos.z + gameRand(establishTargetHeight(psTarget));
 	}
 	else
 	{
@@ -1241,8 +1239,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 						 (psStats->surfaceToAir == SHOOT_ON_GROUND && bTargetInAir)) &&
 					    Vector3i_InSphere(Vector3uw_To3i(psCurrD->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
 					{
-						int dice;
-						HIT_ROLL(dice);
+						int dice = gameRand(100);
 						if (dice < weaponRadiusHit(psStats, psObj->player))
 						{
 							unsigned int damage = calcDamage(
@@ -1292,8 +1289,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 						// Check whether it is in hit radius
 						if (Vector3i_InCircle(Vector3uw_To3i(psCurrS->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
 						{
-							int dice;
-							HIT_ROLL(dice);
+							int dice = gameRand(100);
 							if (dice < weaponRadiusHit(psStats, psObj->player))
 							{
 								unsigned int damage = calcDamage(weaponRadDamage(psStats, psObj->player), psStats->weaponEffect, (BASE_OBJECT *)psCurrS);
@@ -1339,8 +1335,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 				// Check whether it is in hit radius
 				if (Vector3i_InCircle(Vector3uw_To3i(psCurrF->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
 				{
-					int dice;
-					HIT_ROLL(dice);
+					int dice = gameRand(100);
 					if (dice < weaponRadiusHit(psStats, psObj->player))
 					{
 						debug(LOG_NEVER, "Damage to object %d, player %d\n",

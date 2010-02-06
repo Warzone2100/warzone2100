@@ -42,8 +42,6 @@ extern "C"
 #define ASSEMBLY_POINT_Z_PADDING 10
 
 #define	STRUCTURE_DAMAGE_SCALING	400
-// This should really be logarithmic
-#define	STRUCTURE_HEIGHT_SCATTER	(rand()%300)
 
 /* explosion data for when a structure is blown up - used by features as well*/
 #define	FLAME_MAX_ANIMS		4

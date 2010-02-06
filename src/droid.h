@@ -41,14 +41,6 @@ extern "C"
 #define REPAIRLEV_LOW	50	// percentage of body points remaining at which to repair droid automatically.
 #define REPAIRLEV_HIGH	75	// ditto, but this will repair much sooner..
 
-#define	DROID_EXPLOSION_SPREAD_X	(TILE_UNITS/2 - (rand()%TILE_UNITS))
-#define	DROID_EXPLOSION_SPREAD_Y	(rand()%TILE_UNITS)
-#define	DROID_EXPLOSION_SPREAD_Z	(TILE_UNITS/2 - (rand()%TILE_UNITS))
-
-/*defines the % to decrease the illumination of a tile when building - gets set
-back when building is destroyed*/
-//#define FOUNDATION_ILLUMIN		50
-
 #define DROID_RESISTANCE_FACTOR     30
 
 #define MAX_RECYCLED_DROIDS		32

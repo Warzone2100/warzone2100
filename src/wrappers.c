@@ -62,8 +62,9 @@
 
 typedef struct _star
 {
-	UWORD	xPos;
-	SDWORD	speed;
+	int      xPos;
+	int      speed;
+	PIELIGHT colour;
 } STAR;
 
 #define MAX_STARS 20
@@ -83,6 +84,22 @@ static	UDWORD	lastChange = 0;
 extern char iptoconnect[PATH_MAX];		// holds our ip/hostname from the command line
 BOOL hostlaunch = false;				// used to detect if we are hosting a game via command line option.
 
+static PIELIGHT randColour(void)
+{
+	PIELIGHT colour;
+	colour.byte.r = 200;
+	colour.byte.g = 200;
+	colour.byte.b = 200;
+	colour.byte.a = 255;
+	if (rand()%15 == 0)
+	{
+		colour.byte.r = rand()%256;
+		colour.byte.g = rand()%256;
+		colour.byte.b = rand()%256;
+	}
+	return colour;
+}
+
 static void initStars(void)
 {
 	unsigned int i;
@@ -91,6 +108,7 @@ static void initStars(void)
 	{
 		stars[i].xPos = (UWORD)(rand()%598);		// scatter them
 		stars[i].speed = rand() % 30 + 6;	// always move
+		stars[i].colour = randColour();
 	}
 }
 
@@ -300,16 +318,14 @@ void loadingScreenCallback(void)
 	   	if(stars[i].xPos + stars[i].speed >=598)
 		{
 			stars[i].xPos = 1;
+			stars[i].colour = randColour();
 		}
 		else
 		{
 			stars[i].xPos = (UWORD)(stars[i].xPos + stars[i].speed);
 		}
 
-		colour.byte.r = 200;
-		colour.byte.g = 200;
-		colour.byte.b = 200;
-		colour.byte.a = 255;
+		colour = stars[i].colour;
 		pie_UniTransBoxFill(10 + stars[i].xPos + D_W, 450 + i + D_H, 10 + stars[i].xPos + stars[i].speed + D_W, 450 + i + 2 + D_H, colour);
    	}
 
