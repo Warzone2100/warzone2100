@@ -738,9 +738,9 @@ static void updateFirework(EFFECT *psEffect)
 	UDWORD	drop;
 
 	/* Move it */
-	psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, true);
-	psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
-	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, true);
+	psEffect->position.x += graphicsTimeAdjustedIncrement(psEffect->velocity.x);
+	psEffect->position.y += graphicsTimeAdjustedIncrement(psEffect->velocity.y);
+	psEffect->position.z += graphicsTimeAdjustedIncrement(psEffect->velocity.z);
 
 	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
 	{
@@ -975,7 +975,7 @@ static void updateExplosion(EFFECT *psEffect)
 
 	if (psEffect->type == EXPLOSION_TYPE_SHOCKWAVE)
 	{
-		psEffect->size += timeAdjustedIncrement(SHOCKWAVE_SPEED, true);
+		psEffect->size += graphicsTimeAdjustedIncrement(SHOCKWAVE_SPEED);
 		scaling = (float)psEffect->size / (float)MAX_SHOCKWAVE_SIZE;
 		psEffect->frameNumber = scaling * effectGetNumFrames(psEffect);
 
@@ -1019,7 +1019,7 @@ static void updateExplosion(EFFECT *psEffect)
 		/* Tesla explosions are the only ones that rise, or indeed move */
 		if(psEffect->type == EXPLOSION_TYPE_TESLA)
 		{
-			psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
+			psEffect->position.y += graphicsTimeAdjustedIncrement(psEffect->velocity.y);
 		}
 	}
 }
@@ -1041,9 +1041,9 @@ static void updateBlood(EFFECT *psEffect)
 		}
 	}
 	/* Move it about in the world */
-	psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, true);
-	psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
-	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, true);
+	psEffect->position.x += graphicsTimeAdjustedIncrement(psEffect->velocity.x);
+	psEffect->position.y += graphicsTimeAdjustedIncrement(psEffect->velocity.y);
+	psEffect->position.z += graphicsTimeAdjustedIncrement(psEffect->velocity.z);
 }
 
 /** Processes all the drifting smoke
@@ -1084,9 +1084,9 @@ static void updatePolySmoke(EFFECT *psEffect)
 	}
 
 	/* Update position */
-	psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, true);
-	psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
-	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, true);
+	psEffect->position.x += graphicsTimeAdjustedIncrement(psEffect->velocity.x);
+	psEffect->position.y += graphicsTimeAdjustedIncrement(psEffect->velocity.y);
+	psEffect->position.z += graphicsTimeAdjustedIncrement(psEffect->velocity.z);
 
 	/* If it doesn't get killed by frame number, then by age */
 	if(TEST_CYCLIC(psEffect))
@@ -1129,9 +1129,9 @@ static void updateGraviton(EFFECT *psEffect)
 	}
 	/* Move it about in the world */
 
-		psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, true);
-		psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
-		psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, true);
+	psEffect->position.x += graphicsTimeAdjustedIncrement(psEffect->velocity.x);
+	psEffect->position.y += graphicsTimeAdjustedIncrement(psEffect->velocity.y);
+	psEffect->position.z += graphicsTimeAdjustedIncrement(psEffect->velocity.z);
 
 	/* If it's bounced/drifted off the map then kill it */
 	if (map_coord(psEffect->position.x) >= mapWidth
@@ -1189,12 +1189,12 @@ static void updateGraviton(EFFECT *psEffect)
 	}
 
 	/* Spin it round a bit */
-	psEffect->rotation.x += timeAdjustedIncrement(psEffect->spin.x, true);
-	psEffect->rotation.y += timeAdjustedIncrement(psEffect->spin.y, true);
-	psEffect->rotation.z += timeAdjustedIncrement(psEffect->spin.z, true);
+	psEffect->rotation.x += graphicsTimeAdjustedIncrement(psEffect->spin.x);
+	psEffect->rotation.y += graphicsTimeAdjustedIncrement(psEffect->spin.y);
+	psEffect->rotation.z += graphicsTimeAdjustedIncrement(psEffect->spin.z);
 
 	/* Update velocity (and retarding of descent) according to present frame rate */
-	accel = timeAdjustedIncrement(GRAVITON_GRAVITY, true);
+	accel = graphicsTimeAdjustedIncrement(GRAVITON_GRAVITY);
 	psEffect->velocity.y += accel;
 
 	/* If it's bounced/drifted off the map then kill it */
@@ -1452,9 +1452,9 @@ static void updateConstruction(EFFECT *psEffect)
 
 	/* Move it about in the world */
 
-	psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, true);
-	psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
-	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, true);
+	psEffect->position.x += graphicsTimeAdjustedIncrement(psEffect->velocity.x);
+	psEffect->position.y += graphicsTimeAdjustedIncrement(psEffect->velocity.y);
+	psEffect->position.z += graphicsTimeAdjustedIncrement(psEffect->velocity.z);
 
 
 	/* If it doesn't get killed by frame number, then by height */

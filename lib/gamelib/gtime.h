@@ -134,23 +134,35 @@ extern void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWOR
 
 
 extern float gameTimeFraction;  ///< Private performance calculation. Do not use.
+extern float graphicsTimeFraction;  ///< Private performance calculation. Do not use.
 extern float realTimeFraction;  ///< Private performance calculation. Do not use.
+
+/// Returns the value times deltaGraphicsTime, converted to seconds.
+static inline float gameTimeAdjustedIncrement(float value)
+{
+	return value * gameTimeFraction;
+}
+/// Returns the value times deltaGraphicsTime, converted to seconds.
+static inline float graphicsTimeAdjustedIncrement(float value)
+{
+	return value * graphicsTimeFraction;
+}
+/// Returns the value times deltaGraphicsTime, converted to seconds.
+static inline float realTimeAdjustedIncrement(float value)
+{
+	return value * realTimeFraction;
+}
+
 /**
  * Returns value times deltaGameTime (pauseTime = true) or deltaRealTime (pauseTime = false), converted to seconds.
  * @param value Amount to change something in a second.
  * @param pauseTime If true, adjust also for pause of game time. Generally use true in-game, false for GUI.
  * @return Amount to change this frame.
+ * TODO Replace all calls to this function with gameTimeAdjustedIncrement or realTimeAdjustedIncrement, and delete this function.
  */
 static inline float timeAdjustedIncrement(float value, BOOL pauseTime)
 {
-	if (pauseTime)
-	{
-		return (value * gameTimeFraction);
-	}
-	else
-	{
-		return (value * realTimeFraction);
-	}
+	return (pauseTime ? gameTimeAdjustedIncrement : realTimeAdjustedIncrement)(value);
 }
 
 #endif

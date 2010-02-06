@@ -34,7 +34,7 @@
 
 /* See header file for documentation */
 UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0;
-float gameTimeFraction = 0.0, realTimeFraction = 0.0;
+float gameTimeFraction = 0.0, graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
 
 /** The current clock modifier. Set to speed up the game. */
 static float modifier;
@@ -82,6 +82,7 @@ extern void setGameTime(uint32_t newGameTime)
 	// Setting graphics time to game time.
 	graphicsTime = gameTime;
 	deltaGraphicsTime = gameTime;
+	graphicsTimeFraction = 0.f;
 	timeOffset = graphicsTime;
 	baseTime = SDL_GetTicks();
 
@@ -182,6 +183,7 @@ void gameTimeUpdate()
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
 	gameTimeFraction = (float)deltaGameTime / (float)GAME_TICKS_PER_SEC;
+	graphicsTimeFraction = (float)deltaGraphicsTime / (float)GAME_TICKS_PER_SEC;
 	realTimeFraction = (float)deltaRealTime / (float)GAME_TICKS_PER_SEC;
 
 	ASSERT(graphicsTime <= gameTime, "Trying to see the future.");
