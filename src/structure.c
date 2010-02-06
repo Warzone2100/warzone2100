@@ -1696,6 +1696,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		{
 			psBuilding->asWeaps[i].rotation = 0;
 			psBuilding->asWeaps[i].pitch = 0;
+			psBuilding->asWeaps[i].prevRotation = 0;
+			psBuilding->asWeaps[i].prevPitch = 0;
 			psBuilding->psTarget[i] = NULL;
 			psBuilding->targetOrigin[i] = ORIGIN_UNKNOWN;
 		}
@@ -2094,6 +2096,8 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STA
 	blueprint->asWeaps[0].recoilValue = 0;
 	blueprint->asWeaps[0].pitch = 0;
 	blueprint->asWeaps[0].rotation = 0;
+	blueprint->asWeaps[0].prevPitch = 0;
+	blueprint->asWeaps[0].prevRotation = 0;
 
 	blueprint->expectedDamage = 0;
 

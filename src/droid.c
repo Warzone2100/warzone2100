@@ -2665,6 +2665,8 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->asWeaps[inc].nStat)->numRounds;
 			psDroid->asWeaps[inc].rotation = 0;
 			psDroid->asWeaps[inc].pitch = 0;
+			psDroid->asWeaps[inc].prevRotation = 0;
+			psDroid->asWeaps[inc].prevPitch = 0;
 		}
 	}
 	else
