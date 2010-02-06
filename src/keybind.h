@@ -236,6 +236,8 @@ extern void kf_NormalSpeed( void );
 
 extern void kf_CloneSelected( void );
 
+extern void kf_ToggleLogical(void);
+
 #define SPIN_SCALING	(360*DEG_1)
 #define	SECS_PER_SPIN	2
 #define MAP_SPIN_RATE	(SPIN_SCALING/SECS_PER_SPIN)

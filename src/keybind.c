@@ -2857,3 +2857,9 @@ void kf_NoAssert()
 	console("Asserts turned off");
 	debug(LOG_ERROR, "Asserts turned off");
 }
+
+void kf_ToggleLogical()
+{
+	logicalUpdates = !logicalUpdates;
+	console(logicalUpdates ? "Logical update separation on" : "Logical update separation off");
+}

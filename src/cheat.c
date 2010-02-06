@@ -71,6 +71,8 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"showfps", kf_ToggleFPS},	//displays your average FPS
 	{"showsamples", kf_ToggleSamples}, //displays the # of Sound samples in Queue & List
 	{"showorders", kf_ToggleOrders}, //displays unit order/action state.
+	{"logical", kf_ToggleLogical}, //logical game updates separated from graphics updates.
+	{"pause", kf_TogglePauseMode}, // Pause the game.
 	{"sync me", kf_ForceSync},
 	{"power info", kf_PowerInfo},
 };

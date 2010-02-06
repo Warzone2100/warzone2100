@@ -276,27 +276,35 @@ BOOL moveInitialise(void)
  */
 void moveUpdateBaseSpeed(void)
 {
-	UDWORD	totalTime=0, i;
-
-	// Update the list of frame times
-	for(i=0; i<BASE_FRAMES-1; i++)
+	if (logicalUpdates)
 	{
-		baseTimes[i]= baseTimes[i+1];
+		baseSpeed = (float)BASE_SPEED * GAME_UNITS_PER_TICK / GAME_UNITS_PER_SEC;
+		baseTurn  = (float)BASE_TURN  * GAME_UNITS_PER_TICK / GAME_UNITS_PER_SEC;
 	}
-	baseTimes[BASE_FRAMES-1] = frameTime;
-
-	// Add up the time for the last few frames
-	for(i=0; i<BASE_FRAMES; i++)
+	else
 	{
-		totalTime += baseTimes[i];
+		UDWORD	totalTime=0, i;
+
+		// Update the list of frame times
+		for(i=0; i<BASE_FRAMES-1; i++)
+		{
+			baseTimes[i]= baseTimes[i+1];
+		}
+		baseTimes[BASE_FRAMES-1] = frameTime;
+
+		// Add up the time for the last few frames
+		for(i=0; i<BASE_FRAMES; i++)
+		{
+			totalTime += baseTimes[i];
+		}
+
+		// Set the base speed
+		// here is the original calculation before the fract stuff
+		baseSpeed = ((float)totalTime * BASE_SPEED) / (GAME_TICKS_PER_SEC * BASE_FRAMES);
+
+		// Set the base turn rate
+		baseTurn = ((float)totalTime * BASE_TURN) / (GAME_TICKS_PER_SEC * BASE_FRAMES);
 	}
-
-	// Set the base speed
-	// here is the original calculation before the fract stuff
-	baseSpeed = ((float)totalTime * BASE_SPEED) / (GAME_TICKS_PER_SEC * BASE_FRAMES);
-
-	// Set the base turn rate
-	baseTurn = ((float)totalTime * BASE_TURN) / (GAME_TICKS_PER_SEC * BASE_FRAMES);
 }
 
 /** Set a target location in world coordinates for a droid to move to

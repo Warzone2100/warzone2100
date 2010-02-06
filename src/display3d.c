@@ -278,7 +278,7 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 
 			if (!gamePaused())
 			{
-				brightVar = getStaticTimeValueRange(990, 110);
+				brightVar = getModularScaledGraphicsTime(990, 110);
 				if (brightVar > 55)
 				{
 					brightVar = 110 - brightVar;
@@ -1058,7 +1058,7 @@ static void display3DProjectiles( void )
 			if(gfxVisible(psObj))
 			{
 				/* don't display first frame of trajectory (projectile on firing object) */
-				if ( gameTime != psObj->born )
+				if ( graphicsTime != psObj->born )
 				{
 					/* Draw a bullet at psObj->pos.x for X coord
 										psObj->pos.y for Z coord
@@ -1610,7 +1610,7 @@ static void displayAnimation( ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame )
 		}
 		else
 		{
-			uwFrame = anim_GetFrame3D( psAnimObj->psAnim, i, gameTime, psAnimObj->udwStartTime, psAnimObj->udwStartDelay, &vecPos, &vecRot, &vecScale );
+			uwFrame = anim_GetFrame3D( psAnimObj->psAnim, i, graphicsTime, psAnimObj->udwStartTime, psAnimObj->udwStartDelay, &vecPos, &vecRot, &vecScale );
 		}
 
 		if ( uwFrame != ANIM_DELAYED )
@@ -2020,7 +2020,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	if (!defensive && psStructure->sDisplay.imd->numFrames > 0 && !(bMultiPlayer && psStructure->pStructureType->type == REF_BLASTDOOR))
 	{
 		// Calculate an animation frame
-		animFrame = (gameTime % (STRUCTURE_ANIM_RATE * GAME_TICKS_PER_SEC)) / GAME_TICKS_PER_SEC;
+		animFrame = getModularScaledGraphicsTime(STRUCTURE_ANIM_RATE*GAME_TICKS_PER_SEC, STRUCTURE_ANIM_RATE);
 	}
 
 	// -------------------------------------------------------------------------------
@@ -2259,7 +2259,7 @@ void	renderStructure(STRUCTURE *psStructure)
 
 									iV_MatrixRotateY(-player.r.y);
 									iV_MatrixRotateX(-player.r.x);
-									pie_Draw3DShape(pRepImd, getStaticTimeValueRange(100, pRepImd->numFrames), colour, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 192);
+									pie_Draw3DShape(pRepImd, getModularScaledGraphicsTime(100, pRepImd->numFrames), colour, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 192);
 
 									iV_MatrixRotateX(player.r.x);
 									iV_MatrixRotateY(player.r.y);
@@ -2288,7 +2288,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							if (flashImd[i]->numFrames == 0 || flashImd[i]->animInterval <= 0)
 							{
 								// no anim so display one frame for a fixed time
-								if (gameTime < (psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
+								if (graphicsTime < (psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
 								{
 									pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 								}
@@ -2296,7 +2296,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							else
 							{
 								// animated muzzle
-								frame = (gameTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
+								frame = (graphicsTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
 								if (frame < flashImd[i]->numFrames)
 								{
 									pie_Draw3DShape(flashImd[i], frame, colour, buildingBrightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
@@ -2343,14 +2343,14 @@ void	renderStructure(STRUCTURE *psStructure)
 								if (flashImd[i]->numFrames == 0 || flashImd[i]->animInterval <= 0)
 								{
 									// no anim so display one frame for a fixed time
-									if (gameTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
+									if (graphicsTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
 									{
 										pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
 									}
 								}
 								else
 								{
-									frame = (gameTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
+									frame = (graphicsTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
 									if (frame < flashImd[i]->numFrames)
 									{
 										pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
@@ -2372,7 +2372,7 @@ void	renderStructure(STRUCTURE *psStructure)
 						iV_TRANSLATE(psStructure->sDisplay.imd->connectors->x, psStructure->sDisplay.imd->connectors->z,
 						             psStructure->sDisplay.imd->connectors->y);
 						lImd = getImdFromIndex(MI_LANDING);
-						pie_Draw3DShape(lImd, getStaticTimeValueRange(1024, lImd->numFrames), colour, buildingBrightness, WZCOL_BLACK, 0, 0);
+						pie_Draw3DShape(lImd, getModularScaledGraphicsTime(1024, lImd->numFrames), colour, buildingBrightness, WZCOL_BLACK, 0, 0);
 						iV_MatrixEnd();
 					}
 				}
@@ -2656,14 +2656,14 @@ static void	drawDragBox( void )
 
 	if(dragBox3D.status == DRAG_DRAGGING && buildState == BUILD3D_NONE)
 	{
-		if(gameTime - dragBox3D.lastTime > BOX_PULSE_SPEED)
+		if(graphicsTime - dragBox3D.lastTime > BOX_PULSE_SPEED)
 		{
 			dragBox3D.pulse++;
 			if (dragBox3D.pulse >= BOX_PULSE_SIZE)
 			{
 				dragBox3D.pulse = 0;
 			}
-			dragBox3D.lastTime = gameTime;
+			dragBox3D.lastTime = graphicsTime;
 		}
 
 		// SHURCOOL: Determine the 4 corners of the selection box, and use them for consistent selection box rendering
@@ -2756,7 +2756,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		}
 		else
 		{
-			firingStage = gameTime - psWeap->lastFired;
+			firingStage = graphicsTime - psWeap->lastFired;
 			if (bSalvo)
 			{
 				interval = weaponReloadTime(psStats, psObj->player);
@@ -3763,7 +3763,7 @@ static void	processSensorTarget( void )
 				y = (SWORD)psSensorObj->sDisplay.screenY;
 				if(!gamePaused())
 				{
-					index = IMAGE_BLUE1+getStaticTimeValueRange(1020,5);
+					index = IMAGE_BLUE1+getModularScaledGraphicsTime(1020, 5);
 				}
 				else
 				{
