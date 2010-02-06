@@ -551,7 +551,7 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	psEffect->type = type;
 
 	/* Set when it entered the world */
-	psEffect->birthTime = psEffect->lastFrame = gameTime;
+	psEffect->birthTime = psEffect->lastFrame = graphicsTime;
 
 	if(group == EFFECT_GRAVITON && (type == GRAVITON_TYPE_GIBLET || type == GRAVITON_TYPE_EMITTING_DR))
 	{
@@ -809,10 +809,10 @@ static void updateFirework(EFFECT *psEffect)
 	else	// must be a startburst
 	{
 		/* Time to update the frame number on the smoke sprite */
-		if(gameTime - psEffect->lastFrame > psEffect->frameDelay)
+		if(graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 		{
 			/* Store away last frame change time */
-			psEffect->lastFrame = gameTime;
+			psEffect->lastFrame = graphicsTime;
 
 			/* Are we on the last frame? */
 			if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
@@ -835,7 +835,7 @@ static void updateFirework(EFFECT *psEffect)
 		if(TEST_CYCLIC(psEffect))
 		{
 			/* Has it overstayed it's welcome? */
-			if(gameTime - psEffect->birthTime > psEffect->lifeSpan)
+			if(graphicsTime - psEffect->birthTime > psEffect->lifeSpan)
 			{
 				/* Kill it */
 				killEffect(psEffect);
@@ -921,7 +921,7 @@ static void updateSatLaser(EFFECT *psEffect)
 		}
 	}
 
-	if(gameTime-psEffect->birthTime < 1000)
+	if(graphicsTime - psEffect->birthTime < 1000)
 	{
   		light.position.x = xPos;
 		light.position.y = startHeight;
@@ -949,7 +949,7 @@ static void updateExplosion(EFFECT *psEffect)
 	{
 		if (psEffect->lifeSpan)
 		{
-			percent = PERCENT(gameTime-psEffect->birthTime, psEffect->lifeSpan);
+			percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan);
 			if (percent > 100)
 			{
 				percent = 100;
@@ -994,9 +994,9 @@ static void updateExplosion(EFFECT *psEffect)
 		}
 	}
 	/* Time to update the frame number on the explosion */
-	else if (gameTime - psEffect->lastFrame > psEffect->frameDelay)
+	else if (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
-		psEffect->lastFrame = gameTime;
+		psEffect->lastFrame = graphicsTime;
 		/* Are we on the last frame? */
 
 		if (++psEffect->frameNumber >= effectGetNumFrames(psEffect))
@@ -1029,9 +1029,9 @@ static void updateExplosion(EFFECT *psEffect)
 static void updateBlood(EFFECT *psEffect)
 {
 	/* Time to update the frame number on the blood */
-	if(gameTime - psEffect->lastFrame > psEffect->frameDelay)
+	if(graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
-		psEffect->lastFrame = gameTime;
+		psEffect->lastFrame = graphicsTime;
 		/* Are we on the last frame? */
 		if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 		{
@@ -1052,10 +1052,10 @@ static void updatePolySmoke(EFFECT *psEffect)
 {
 
 	/* Time to update the frame number on the smoke sprite */
-	if(gameTime - psEffect->lastFrame > psEffect->frameDelay)
+	if(graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
 		/* Store away last frame change time */
-		psEffect->lastFrame = gameTime;
+		psEffect->lastFrame = graphicsTime;
 
 		/* Are we on the last frame? */
 		if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
@@ -1092,7 +1092,7 @@ static void updatePolySmoke(EFFECT *psEffect)
 	if(TEST_CYCLIC(psEffect))
 	{
 		/* Has it overstayed it's welcome? */
-		if(gameTime - psEffect->birthTime > psEffect->lifeSpan)
+		if(graphicsTime - psEffect->birthTime > psEffect->lifeSpan)
 		{
 			/* Kill it */
 			killEffect(psEffect);
@@ -1157,10 +1157,10 @@ static void updateGraviton(EFFECT *psEffect)
 		&& (psEffect->position.y>(groundHeight+10))))
 	{
 		/* Time to add another trail 'thing'? */
-		if(gameTime>psEffect->lastFrame+psEffect->frameDelay)
+		if(graphicsTime > psEffect->lastFrame + psEffect->frameDelay)
 		{
 			/* Store away last update */
-			psEffect->lastFrame = gameTime;
+			psEffect->lastFrame = graphicsTime;
 
 			/* Add an effect at the gravitons's position */
 			dv.x = psEffect->position.x;
@@ -1175,10 +1175,10 @@ static void updateGraviton(EFFECT *psEffect)
 	else if(psEffect->type == GRAVITON_TYPE_GIBLET && (psEffect->position.y>(groundHeight+5)))
 	{
 		/* Time to add another trail 'thing'? */
-		if(gameTime>psEffect->lastFrame+psEffect->frameDelay)
+		if(graphicsTime > psEffect->lastFrame + psEffect->frameDelay)
 		{
 			/* Store away last update */
-			psEffect->lastFrame = gameTime;
+			psEffect->lastFrame = graphicsTime;
 
 			/* Add an effect at the gravitons's position */
 			dv.x = psEffect->position.x;
@@ -1262,7 +1262,7 @@ static void updateDestruction(EFFECT *psEffect)
 	float	div;
 	UDWORD	height;
 
-	percent = PERCENT(gameTime-psEffect->birthTime,psEffect->lifeSpan);
+	percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan);
 	if(percent > 100)
 	{
 		percent = 100;
@@ -1291,7 +1291,7 @@ static void updateDestruction(EFFECT *psEffect)
 	}
 	processLight(&light);
 
-	if(gameTime > (psEffect->birthTime + psEffect->lifeSpan))
+	if(graphicsTime > psEffect->birthTime + psEffect->lifeSpan)
 	{
 		/* Kill it - it's too old */
 		killEffect(psEffect);
@@ -1301,7 +1301,7 @@ static void updateDestruction(EFFECT *psEffect)
 	if(psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
 	{
 
-		if((gameTime - psEffect->birthTime) > (unsigned int)((9*psEffect->lifeSpan)/10))
+		if(graphicsTime - psEffect->birthTime > psEffect->lifeSpan * 9/10)
 		{
 			pos.x = psEffect->position.x;
 			pos.z = psEffect->position.z;
@@ -1311,7 +1311,7 @@ static void updateDestruction(EFFECT *psEffect)
 			return;
 		}
 
-		div = 1.f - (float)(gameTime - psEffect->birthTime) / psEffect->lifeSpan;
+		div = 1.f - (float)(graphicsTime - psEffect->birthTime) / psEffect->lifeSpan;
 		if(div < 0.f)
 			div = 0.f;
 		height = div * psEffect->imd->max.y;
@@ -1323,9 +1323,9 @@ static void updateDestruction(EFFECT *psEffect)
 
 
 	/* Time to add another effect? */
-	if((gameTime - psEffect->lastFrame) > psEffect->frameDelay)
+	if((graphicsTime - psEffect->lastFrame) > psEffect->frameDelay)
 	{
-		psEffect->lastFrame = gameTime;
+		psEffect->lastFrame = graphicsTime;
 		switch(psEffect->type)
 		{
 		case DESTRUCTION_TYPE_SKYSCRAPER:
@@ -1414,7 +1414,7 @@ static void updateDestruction(EFFECT *psEffect)
 			break;
 		case 14:
 			/* Add sound effect, but only if we're less than 3/4 of the way thru' destruction */
-			if( gameTime < ((3*(psEffect->birthTime + psEffect->lifeSpan)/4)) )
+			if (graphicsTime < (psEffect->birthTime + psEffect->lifeSpan) * 3/4)
 			{
 				iX = psEffect->position.x;
 				iY = psEffect->position.z;
@@ -1431,9 +1431,9 @@ static void updateConstruction(EFFECT *psEffect)
 {
 
 	/* Time to update the frame number on the construction sprite */
-	if(gameTime - psEffect->lastFrame > psEffect->frameDelay)
+	if(graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
-		psEffect->lastFrame = gameTime;
+		psEffect->lastFrame = graphicsTime;
 		/* Are we on the last frame? */
 		if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 		{
@@ -1468,7 +1468,7 @@ static void updateConstruction(EFFECT *psEffect)
 			return;
 		}
 
-		if(gameTime - psEffect->birthTime > psEffect->lifeSpan)
+		if (graphicsTime - psEffect->birthTime > psEffect->lifeSpan)
 		{
 			killEffect(psEffect);
 			return;
@@ -1483,7 +1483,7 @@ static void updateFire(EFFECT *psEffect)
 	LIGHT	light;
 	UDWORD	percent;
 
-	percent = PERCENT(gameTime-psEffect->birthTime,psEffect->lifeSpan);
+	percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan);
 	if(percent > 100)
 	{
 		percent = 100;
@@ -1497,9 +1497,9 @@ static void updateFire(EFFECT *psEffect)
 	processLight(&light);
 
 	/* Time to update the frame number on the construction sprite */
-	if(gameTime - psEffect->lastFrame > psEffect->frameDelay)
+	if (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
-		psEffect->lastFrame = gameTime;
+		psEffect->lastFrame = graphicsTime;
 		pos.x = (psEffect->position.x + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 		pos.z = (psEffect->position.z + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 
@@ -1555,7 +1555,7 @@ static void updateFire(EFFECT *psEffect)
 
 	}
 
-	if(gameTime - psEffect->birthTime > psEffect->lifeSpan)
+	if (graphicsTime - psEffect->birthTime > psEffect->lifeSpan)
 	{
 		killEffect(psEffect);
 		return;
@@ -1676,7 +1676,7 @@ static void renderDestructionEffect(const EFFECT *psEffect)
 
 	positionEffect(psEffect);
 
-	div = (float)(gameTime - psEffect->birthTime) / psEffect->lifeSpan;
+	div = (float)(graphicsTime - psEffect->birthTime) / psEffect->lifeSpan;
 	if(div>1.0)	div = 1.0;	//temporary!
 	{
 		div = 1.0 - div;
@@ -1696,7 +1696,7 @@ static void renderDestructionEffect(const EFFECT *psEffect)
 
 static bool rejectLandLight(LAND_LIGHT_SPEC type)
 {
-	unsigned int timeSlice = gameTime%2000;
+	unsigned int timeSlice = graphicsTime%2000;
 
 	if (timeSlice < 400)
 	{
@@ -1747,14 +1747,14 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 	/* Tesla explosions diminish in size */
 	if(psEffect->type == EXPLOSION_TYPE_TESLA)
 	{
-		percent = PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan);
+		percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan);
 		if(percent<0) percent = 0;
 		if(percent>45) percent = 45;
 		pie_MatScale(psEffect->size - percent);
 	}
 	else if(psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
-		percent = PERCENT(gameTime - psEffect->birthTime, psEffect->lifeSpan) / 3;
+		percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan) / 3;
 		pie_MatScale(BASE_PLASMA_SIZE + percent);
 	}
 	else
@@ -1825,7 +1825,7 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 	}
 
 	/* Scale size according to age */
-	percent = PERCENT(gameTime - psEffect->birthTime, psEffect->lifeSpan);
+	percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan);
 	if(percent<0) percent = 0;
 	if(percent>100) percent = 100;
 
@@ -1871,15 +1871,15 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 
 	if(TEST_SCALED(psEffect))
 	{
-		const unsigned int lifetime = gameTime - psEffect->birthTime;
+		const unsigned int lifetime = graphicsTime - psEffect->birthTime;
 		unsigned int percent;
 
-		// Since psEffect->birthTime will be set to gameTime on
-		// creation, and gameTime only increments, birthTime should be
-		// smaller than or equal to gameTime. As a great man once said
+		// Since psEffect->birthTime will be set to graphicsTime on
+		// creation, and graphicsTime only increments, birthTime should be
+		// smaller than or equal to graphicsTime. As a great man once said
 		// though (hehe, I just love exaggarating ;-) -- Giel):
 		// "Always assert your assumptions!". So here it goes:
-		assert(psEffect->birthTime <= gameTime);
+		assert(psEffect->birthTime <= graphicsTime);
 
 		ASSERT(psEffect->lifeSpan != 0, "Effect lifespan is zero (seconds); it really should be non-zero!");
 
@@ -2278,7 +2278,7 @@ void	effectSetupFire(EFFECT *psEffect)
 	psEffect->frameDelay = 300;	   // needs to be investigated...
 	psEffect->radius = auxVar;	// needs to be investigated
 	psEffect->lifeSpan = (UWORD)auxVarSec;
-	psEffect->birthTime = gameTime;
+	psEffect->birthTime = graphicsTime;
 	SET_ESSENTIAL(psEffect);
 
 }
@@ -2446,10 +2446,10 @@ static void effectDroidUpdates(void)
 			if (partition == frameGetFrameNumber() % EFFECT_DROID_DIVISION && ONEINFOUR)
 			{
 				/* Sufficent time since last update? - The EQUALS comparison is needed */
-				if (gameTime >= (lastUpdateDroids[partition] + DROID_UPDATE_INTERVAL))
+				if (graphicsTime >= lastUpdateDroids[partition] + DROID_UPDATE_INTERVAL)
 				{
 					/* Store away when we last processed this group */
-					lastUpdateDroids[partition] = gameTime;
+					lastUpdateDroids[partition] = graphicsTime;
 
 					/*	Now add some dust at it's arse end if it's moving or skidding.
 						The check that it's not 0 is probably not sufficient.
@@ -2497,10 +2497,10 @@ static void effectStructureUpdates(void)
 			if (partition == frameGetFrameNumber() % EFFECT_STRUCTURE_DIVISION)
 			{
 				/* Is it the right time? */
-				if (gameTime > (lastUpdateStructures[partition] + STRUCTURE_UPDATE_INTERVAL))
+				if (graphicsTime > lastUpdateStructures[partition] + STRUCTURE_UPDATE_INTERVAL)
 				{
 					/* Store away the last update time */
-					lastUpdateStructures[partition] = gameTime;
+					lastUpdateStructures[partition] = graphicsTime;
 
 					/* Factories puff out smoke, power stations puff out tesla stuff */
 					if ( (psStructure->pStructureType->type == REF_FACTORY
