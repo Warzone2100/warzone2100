@@ -18,7 +18,6 @@ public	STRUCTURESTAT		lassat;
 event initialisedEvent(init)
 {
 	setStructureLimits(factory, 	5,	0);
-	setStructureLimits(oilDerrick, 	30,	0);
 	setStructureLimits(powerGen, 10, 	0);
 	setStructureLimits(research, 	5, 	0);
 	setStructureLimits(comdroid, 	1, 	0);
