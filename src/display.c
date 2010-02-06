@@ -1382,21 +1382,12 @@ void displayWorld(void)
 
 static BOOL mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 {
-	if(mouseXPos > x0 && mouseXPos < x1 && mouseYPos > y0 && mouseYPos < y1)
-	{
-		return true;
-	}
-
-	return false;
+	return mouseXPos > x0 && mouseXPos < x1 && mouseYPos > y0 && mouseYPos < y1;
 }
 
-BOOL DrawnInLastFrame(SDWORD Frame)
+BOOL DrawnInLastFrame(int32_t frame)
 {
-	if (Frame>=(SDWORD)StartOfLastFrame)
-	{
-		return true;
-	}
-	return false;
+	return frame >= (int32_t)StartOfLastFrame;
 }
 
 

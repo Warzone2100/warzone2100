@@ -240,23 +240,20 @@ GAMECODE gameLoop(void)
 			// Update the visibility change stuff
 			visUpdateLevel();
 
-			// Put all droids/structures/features into the grid.
-			gridReset();
-
-			// Check which objects are visible.
-			processVisibility();
-
 			if (!editPaused() && gameTicked)
 			{
+				// Put all droids/structures/features into the grid.
+				gridReset();
+
+				// Check which objects are visible.
+				processVisibility();
+
 				//update the findpath system
 				fpathUpdate();
-			}
 
-			// update the cluster system
-			clusterUpdate();
+				// update the cluster system
+				clusterUpdate();
 
-			if (!editPaused() && gameTicked)
-			{
 				// update the command droids
 				cmdDroidUpdate();
 				if(getDrivingStatus())

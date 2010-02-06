@@ -2999,7 +2999,6 @@ static void	drawStructureSelections( void )
 						if(psStruct->sDisplay.frameNumber == currentGameFrame)
 
 						{
-							psStruct->targetted = 0;
 							scrX = psStruct->sDisplay.screenX;
 							scrY = psStruct->sDisplay.screenY - (psStruct->sDisplay.imd->max.y / 4);
 							iV_DrawImage(IntImages,getTargettingGfx(),scrX,scrY);
@@ -3300,7 +3299,6 @@ static void	drawDroidSelections( void )
 				/* If it's selected */
 				if(psDroid->bTargetted && (psDroid->visible[selectedPlayer] == UBYTE_MAX))
 				{
-					psDroid->bTargetted = false;
 					scrX = psDroid->sDisplay.screenX;
 					scrY = psDroid->sDisplay.screenY - 8;
 					index = IMAGE_BLUE1 + getModularScaledRealTime(1020, 5);
@@ -3319,7 +3317,6 @@ static void	drawDroidSelections( void )
 		{
 			if(psFeature->bTargetted)
 			{
-				psFeature->bTargetted = false;
 				scrX = psFeature->sDisplay.screenX;
 				scrY = psFeature->sDisplay.screenY - (psFeature->sDisplay.imd->max.y / 4);
 				iV_DrawImage(IntImages,getTargettingGfx(),scrX,scrY);
