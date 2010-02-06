@@ -134,6 +134,7 @@ void WzMainWindow::loadCursor(CURSOR cursor, int x, int y, QBuffer &buffer)
 WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget(format, parent)
 {
 	myself = this;
+	notReadyToPaint = true;
 	timer = new QTimer(this);
 	tickCount.start();
 	connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
@@ -244,6 +245,11 @@ void WzMainWindow::resizeGL(int width, int height)
 
 void WzMainWindow::paintGL()
 {
+	if (notReadyToPaint)
+	{
+		return;
+	}
+
 	mainLoop();
 
 	// Tell the input system about the start of another frame
@@ -678,6 +684,7 @@ int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool full
 	screenWidth = w;
 	screenHeight = h;
 	mainwindow.show();
+	mainwindow.setReadyToPaint();
 
 	ssprintf(buf, "Video Mode %d x %d (%s)", w, h, fullscreen ? "fullscreen" : "window");
 	addDumpInfo(buf);

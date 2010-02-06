@@ -35,6 +35,7 @@ private:
 	QTimer *timer;
 	QTime tickCount;
 	QFont regular, bold, small;
+	bool notReadyToPaint;  ///< HACK Don't draw during initial show(), since some global variables apparently aren't set up.
 	static WzMainWindow *myself;
 
 public:
@@ -49,6 +50,7 @@ public:
 	void setFontType(enum iV_fonts FontID);
 	void setFontSize(float size);
 	int ticks() { return tickCount.elapsed(); }
+	void setReadyToPaint() { notReadyToPaint = false; }
 
 public slots:
 	void tick();
