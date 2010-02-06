@@ -2913,31 +2913,22 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 			if (psStructure->asWeaps[i].nStat > 0 &&
 				asWeaponStats[psStructure->asWeaps[i].nStat].weaponSubClass != WSC_LAS_SAT)
 			{
-				if ((psStructure->id % 20) == (frameGetFrameNumber() % 20)
-				    || (psStructure->psTarget[i] != NULL && aiObjectIsProbablyDoomed(psStructure->psTarget[i])))
+				if (aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[i], i, true, &tmpOrigin) )
 				{
-					if (aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[i], i, true, &tmpOrigin) )
+					objTrace(psStructure->id, "Weapon %d is targeting %d at (%d, %d)", i, psChosenObjs[i]->id,
+						psChosenObjs[i]->pos.x, psChosenObjs[i]->pos.y);
+					setStructureTarget(psStructure, psChosenObjs[i], i, tmpOrigin);
+				}
+				else
+				{
+					if ( aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[0], 0, true, &tmpOrigin) )
 					{
-						objTrace(psStructure->id, "Weapon %d is targeting %d at (%d, %d)", i, psChosenObjs[i]->id,
-							psChosenObjs[i]->pos.x, psChosenObjs[i]->pos.y);
-						setStructureTarget(psStructure, psChosenObjs[i], i, tmpOrigin);
-					}
-					else
-					{
-						if ( aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[0], 0, true, &tmpOrigin) )
+						if (psChosenObjs[0])
 						{
-							if (psChosenObjs[0])
-							{
-								objTrace(psStructure->id, "Weapon %d is supporting main weapon: %d at (%d, %d)", i,
-									psChosenObjs[0]->id, psChosenObjs[0]->pos.x, psChosenObjs[0]->pos.y);
-								setStructureTarget(psStructure, psChosenObjs[0], i, tmpOrigin);
-								psChosenObjs[i] = psChosenObjs[0];
-							}
-							else
-							{
-								setStructureTarget(psStructure, NULL, i, ORIGIN_UNKNOWN);
-								psChosenObjs[i] = NULL;
-							}
+							objTrace(psStructure->id, "Weapon %d is supporting main weapon: %d at (%d, %d)", i,
+								psChosenObjs[0]->id, psChosenObjs[0]->pos.x, psChosenObjs[0]->pos.y);
+							setStructureTarget(psStructure, psChosenObjs[0], i, tmpOrigin);
+							psChosenObjs[i] = psChosenObjs[0];
 						}
 						else
 						{
@@ -2945,10 +2936,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 							psChosenObjs[i] = NULL;
 						}
 					}
-				}
-				else
-				{
-					psChosenObjs[i] = psStructure->psTarget[0];
+					else
+					{
+						setStructureTarget(psStructure, NULL, i, ORIGIN_UNKNOWN);
+						psChosenObjs[i] = NULL;
+					}
 				}
 
 				if (psChosenObjs[i] != NULL && !aiObjectIsProbablyDoomed(psChosenObjs[i]))
@@ -2985,24 +2977,21 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 	{
 		if (structStandardSensor(psStructure) || structVTOLSensor(psStructure) || objRadarDetector((BASE_OBJECT *)psStructure))
 		{
-			if ((psStructure->id % 20) == (frameGetFrameNumber() % 20))
+			if (aiChooseSensorTarget((BASE_OBJECT *)psStructure, &psChosenObj))
 			{
-				if (aiChooseSensorTarget((BASE_OBJECT *)psStructure, &psChosenObj))
+				objTrace(psStructure->id, "Sensing (%d)", psChosenObj->id);
+				if (objRadarDetector((BASE_OBJECT *)psStructure))
 				{
-					objTrace(psStructure->id, "Sensing (%d)", psChosenObj->id);
-					if (objRadarDetector((BASE_OBJECT *)psStructure))
-					{
-						setStructureTarget(psStructure, psChosenObj, 0, ORIGIN_RADAR_DETECTOR);
-					}
-					else
-					{
-						setStructureTarget(psStructure, psChosenObj, 0, ORIGIN_SENSOR);
-					}
+					setStructureTarget(psStructure, psChosenObj, 0, ORIGIN_RADAR_DETECTOR);
 				}
 				else
 				{
-					setStructureTarget(psStructure, NULL, 0, ORIGIN_UNKNOWN);
+					setStructureTarget(psStructure, psChosenObj, 0, ORIGIN_SENSOR);
 				}
+			}
+			else
+			{
+				setStructureTarget(psStructure, NULL, 0, ORIGIN_UNKNOWN);
 			}
 			psChosenObj = psStructure->psTarget[0];
 		}
@@ -3896,7 +3885,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		}
 	}
 
-	if (!mission && (psBuilding->id % 10) == (frameGetFrameNumber() % 10))
+	if (!mission)
 	{
 		processVisibilityLevel((BASE_OBJECT*)psBuilding);
 	}
