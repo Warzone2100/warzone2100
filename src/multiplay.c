@@ -1416,6 +1416,7 @@ BOOL recvTemplate()
 		NETuint32_t(&pT->multiPlayerID);
 	NETend();
 
+	t.prefab = false;
 	t.psNext = NULL;
 	t.pName = NULL;
 
