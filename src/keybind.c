@@ -2861,5 +2861,6 @@ void kf_NoAssert()
 void kf_ToggleLogical()
 {
 	logicalUpdates = !logicalUpdates;
+	graphicsTime = gameTime;
 	console(logicalUpdates ? "Logical update separation on" : "Logical update separation off");
 }

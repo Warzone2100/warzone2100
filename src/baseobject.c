@@ -62,6 +62,11 @@ int16_t interpolateCyclicInt16(int16_t v1, int16_t v2, uint32_t t1, uint32_t t2,
 
 SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)
 {
+	if (st1.time == st2.time)
+	{
+		debug(LOG_WARNING, "st1.time = %u, st2.time = %u, t = %u\n", (unsigned)st1.time, (unsigned)st2.time, (unsigned)t);
+		return st2;
+	}
 	return constructSpacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t),
 	                          interpolateDirection(st1.direction, st2.direction, st1.time, st2.time, t),
 	                          interpolateCyclicInt16(st1.pitch, st2.pitch, st1.time, st2.time, t),
