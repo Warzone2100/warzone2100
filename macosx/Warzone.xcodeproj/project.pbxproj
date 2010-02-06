@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 44;
+	objectVersion = 42;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -3377,7 +3377,7 @@
 		02356D660BD3BB2600E9A019 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = YES;
+				BuildIndependentTargetsInParallel = NO;
 			};
 			buildConfigurationList = 02356D670BD3BB2600E9A019 /* Build configuration list for PBXProject "Warzone" */;
 			compatibilityVersion = "Xcode 2.4";
@@ -4587,7 +4587,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL/SDL.framework/Headers\"";
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
 				OTHER_CFLAGS = "$(inherited)";
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;
 		};
@@ -4610,7 +4610,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL/SDL.framework/Headers\"";
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
 				OTHER_CFLAGS = "$(inherited)";
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Release;
 		};
