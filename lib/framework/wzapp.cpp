@@ -195,6 +195,8 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	bold.setFamily("DejaVu Sans");
 	bold.setPointSize(21);
 	bold.setBold(true);
+	small.setFamily("DejaVu Sans");
+	small.setPointSize(6);
 }
 
 WzMainWindow::~WzMainWindow()
@@ -266,6 +268,9 @@ void WzMainWindow::setFontType(enum iV_fonts FontID)
 	case font_large:
 		setFont(bold);
 		break;
+	case font_small:
+		setFont(small);
+		break;
 	default:
 		break;
 	}
@@ -273,8 +278,10 @@ void WzMainWindow::setFontType(enum iV_fonts FontID)
 
 void WzMainWindow::setFontSize(float size)
 {
+	// WARNING Completely untested function, and is unlikely to to whatever you expect it to do.
 	regular.setPointSizeF(size);
 	bold.setPointSizeF(size);
+	small.setPointSizeF(size);
 	setFontType(fontID);
 }
 
@@ -677,7 +684,7 @@ const char *wzGetClipboard()
 
 	text = clipboard->text(QClipboard::Selection);				// try X11 specific buffer first
 	if (text.isEmpty()) text = clipboard->text(QClipboard::Clipboard);	// if not, try generic clipboard
-	sstrcpy(clipText, text.toAscii().constData());
+	sstrcpy(clipText, text.toUtf8().constData());
 	return clipText;
 }
 
@@ -1047,17 +1054,17 @@ void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBol
 
 unsigned int iV_GetTextWidth(const char* string)
 {
-	return WzMainWindow::instance()->fontMetrics().width(string, -1);
+	return WzMainWindow::instance()->fontMetrics().width(QString::fromUtf8(string), -1);
 }
 
 unsigned int iV_GetCountedTextWidth(const char* string, size_t string_length)
 {
-	return WzMainWindow::instance()->fontMetrics().width(string, string_length);
+	return WzMainWindow::instance()->fontMetrics().width(QString::fromUtf8(string), string_length);
 }
 
 unsigned int iV_GetTextHeight(const char* string)
 {
-	return WzMainWindow::instance()->fontMetrics().boundingRect(string).height();
+	return WzMainWindow::instance()->fontMetrics().boundingRect(QString::fromUtf8(string)).height();
 }
 
 unsigned int iV_GetCharWidth(uint32_t charCode)
@@ -1091,7 +1098,7 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	painter.translate(XPos, YPos);
 	painter.rotate(rotation);
 	painter.setPen(fontColor);
-	painter.drawText(0, 0, string);
+	painter.drawText(0, 0, QString::fromUtf8(string));
 }
 
 void iV_SetTextSize(float size)

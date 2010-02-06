@@ -43,7 +43,7 @@ private:
 	QCursor *cursors[CURSOR_MAX];
 	QTimer *timer;
 	QTime tickCount;
-	QFont regular, bold;
+	QFont regular, bold, small;
 	enum iV_fonts fontID;
 	static WzMainWindow *myself;
 
