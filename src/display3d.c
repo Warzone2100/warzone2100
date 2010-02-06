@@ -2225,7 +2225,7 @@ void	renderStructure(STRUCTURE *psStructure)
 				{
 					iV_MatrixBegin();
 					iV_TRANSLATE(strImd->connectors[i].x, strImd->connectors[i].z, strImd->connectors[i].y);
-					pie_MatRotY(DEG(-((SDWORD)psStructure->asWeaps[i].rotation)));
+					pie_MatRotY(DEG(-structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
 					if (mountImd[i] != NULL)
 					{
 						pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue / 3);
@@ -2236,7 +2236,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							iV_TRANSLATE(mountImd[i]->connectors->x, mountImd[i]->connectors->z, mountImd[i]->connectors->y);
 						}
 					}
-					iV_MatrixRotateX(DEG(psStructure->asWeaps[i].pitch));
+					iV_MatrixRotateX(DEG(structureGetInterpolatedWeaponPitch(psStructure, i, graphicsTime)));
 					pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue);
 
 					pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
@@ -2260,7 +2260,7 @@ void	renderStructure(STRUCTURE *psStructure)
 									iV_TRANSLATE(weaponImd[i]->connectors->x,weaponImd[i]->connectors->z-12,weaponImd[i]->connectors->y);
 									pRepImd = getImdFromIndex(MI_FLAME);
 
-									pie_MatRotY(DEG((SDWORD)psStructure->asWeaps[i].rotation));
+									pie_MatRotY(DEG(structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
 
 									iV_MatrixRotateY(-player.r.y);
 									iV_MatrixRotateX(-player.r.x);
@@ -2268,7 +2268,7 @@ void	renderStructure(STRUCTURE *psStructure)
 
 									iV_MatrixRotateX(player.r.x);
 									iV_MatrixRotateY(player.r.y);
-									pie_MatRotY(DEG((SDWORD)psStructure->asWeaps[i].rotation));
+									pie_MatRotY(DEG(structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
 								}
 							}
 						}
@@ -2330,16 +2330,16 @@ void	renderStructure(STRUCTURE *psStructure)
 							if (strImd->max.y > 80) // babatower
 							{
 								iV_TRANSLATE(0, 80, 0);
-								pie_MatRotY(DEG(-((SDWORD)psStructure->asWeaps[i].rotation)));
+								pie_MatRotY(DEG(-structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
 								iV_TRANSLATE(0, 0, -20);
 							}
 							else//baba bunker
 							{
 								iV_TRANSLATE(0, 10, 0);
-								pie_MatRotY(DEG(-((SDWORD)psStructure->asWeaps[i].rotation)));
+								pie_MatRotY(DEG(-structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
 								iV_TRANSLATE(0, 0, -40);
 							}
-							iV_MatrixRotateX(DEG(psStructure->asWeaps[i].pitch));
+							pie_MatRotX(DEG(structureGetInterpolatedWeaponPitch(psStructure, i, graphicsTime)));
 							// draw the muzzle flash?
 							if (psStructure && psStructure->visible[selectedPlayer] > UBYTE_MAX / 2)
 							{
@@ -2650,7 +2650,7 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 /// Draw all pieces of a droid and register it as a target
 void renderDroid( DROID *psDroid )
 {
-	displayComponentObject( (BASE_OBJECT *) psDroid);
+	displayComponentObject(psDroid);
 }
 
 /// Draws the strobing 3D drag box that is used for multiple selection

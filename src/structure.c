@@ -2052,6 +2052,9 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 	/* why is this necessary - it makes tiles under the structure visible */
 	setUnderTilesVis((BASE_OBJECT*)psBuilding,player);
 
+	psBuilding->time = gameTime;
+	psBuilding->prevTime = gameTime - MAX(1, deltaGameTime);
+
 	return psBuilding;
 }
 
@@ -2093,6 +2096,10 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STA
 	blueprint->asWeaps[0].rotation = 0;
 
 	blueprint->expectedDamage = 0;
+
+	// Times must be different, but don't otherwise matter.
+	blueprint->time = 23;
+	blueprint->prevTime = 42;
 
 	blueprint->status = state;
 	return blueprint;
@@ -2852,6 +2859,14 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 	UWORD 				tmpOrigin = ORIGIN_UNKNOWN;
 
 	CHECK_STRUCTURE(psStructure);
+
+	psStructure->prevTime = psStructure->time;
+	psStructure->time = gameTime;
+	for (i = 0; i < MAX(1, psStructure->numWeaps); ++i)
+	{
+		psStructure->asWeaps[i].prevRotation = psStructure->asWeaps[i].rotation;
+		psStructure->asWeaps[i].prevPitch    = psStructure->asWeaps[i].pitch;
+	}
 
 	if (mission)
 	{

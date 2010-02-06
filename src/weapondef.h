@@ -32,12 +32,14 @@ extern "C"
 typedef struct _weapon
 {
 	unsigned int    nStat;		///< Index into the asWeaponStats global array
-	UDWORD          ammo;
-	UDWORD          lastFired;	///< The gametime when this weapon last fired
-	UDWORD          shotsFired;
-	UDWORD          recoilValue;
-	UWORD		pitch;
-	UWORD		rotation;
+	uint32_t        ammo;
+	uint32_t        lastFired;	///< The gametime when this weapon last fired
+	uint32_t        shotsFired;
+	uint32_t        recoilValue;
+	uint16_t        pitch;
+	uint16_t        rotation;
+	uint16_t        prevPitch;
+	uint16_t        prevRotation;
 } WEAPON;
 
 #ifdef __cplusplus

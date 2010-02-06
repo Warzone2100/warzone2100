@@ -439,6 +439,17 @@ static inline int structConcealment(const STRUCTURE* psObj)
 	return objConcealment((const BASE_OBJECT*)psObj);
 }
 
+static inline float structureGetInterpolatedWeaponRotation(STRUCTURE *psStructure, int weaponSlot, uint32_t time)
+{
+	return interpolateDirection(psStructure->asWeaps[weaponSlot].prevRotation, psStructure->asWeaps[weaponSlot].rotation, psStructure->prevTime, psStructure->time, time);
+}
+
+static inline float structureGetInterpolatedWeaponPitch(STRUCTURE *psStructure, int weaponSlot, uint32_t time)
+{
+	// Aaargh, Direction[sic]. Angles can be 16-bit (65536 "degrees" in circle), or can be floats (360.0f degrees). Except here, where they are _unsigned_ integers from 0 to 360. All hail consistency!
+	return interpolateDirection(psStructure->asWeaps[weaponSlot].prevPitch, psStructure->asWeaps[weaponSlot].pitch, psStructure->prevTime, psStructure->time, time);
+}
+
 #define setStructureTarget(_psBuilding, _psNewTarget, _idx, _targetOrigin) _setStructureTarget(_psBuilding, _psNewTarget, _idx, _targetOrigin, __LINE__, __FUNCTION__)
 static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNewTarget, UWORD idx, UWORD targetOrigin, int line, const char *func)
 {

@@ -678,10 +678,11 @@ void droidBurn(DROID *psDroid)
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid)
 {
-	Vector3i dv;
-	UDWORD	percentDamage, emissionInterval;
-	BASE_OBJECT	*psBeingTargetted = NULL;
-	SDWORD	damageToDo;
+	Vector3i        dv;
+	UDWORD          percentDamage, emissionInterval;
+	BASE_OBJECT     *psBeingTargetted = NULL;
+	SDWORD          damageToDo;
+	unsigned        i;
 
 	CHECK_DROID(psDroid);
 
@@ -699,6 +700,15 @@ void droidUpdate(DROID *psDroid)
 		       droidGetName(psDroid), psDroid);
 	}
 #endif
+
+	// Save old droid position, update time.
+	psDroid->prevSpacetime = GET_SPACETIME(psDroid);
+	psDroid->time = gameTime;
+	for (i = 0; i < MAX(1, psDroid->numWeaps); ++i)
+	{
+		psDroid->asWeaps[i].prevRotation = psDroid->asWeaps[i].rotation;
+		psDroid->asWeaps[i].prevPitch    = psDroid->asWeaps[i].pitch;
+	}
 
 	// update the cluster of the droid
 	if (psDroid->id % 20 == frameGetFrameNumber() % 20)
@@ -2640,6 +2650,8 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
 	psDroid->originalBody = psDroid->body;
 	psDroid->expectedDamage = 0;  // Begin life optimistically.
+	psDroid->time = gameTime;
+	psDroid->prevSpacetime.time = gameTime - MAX(1, deltaGameTime);
 
 	//create the droids weapons
 	if (pTemplate->numWeaps > 0)
@@ -2650,8 +2662,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 			psDroid->asWeaps[inc].shotsFired=0;
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
 			psDroid->asWeaps[inc].recoilValue = 0;
-			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->
-				asWeaps[inc].nStat)->numRounds;
+			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->asWeaps[inc].nStat)->numRounds;
 			psDroid->asWeaps[inc].rotation = 0;
 			psDroid->asWeaps[inc].pitch = 0;
 		}

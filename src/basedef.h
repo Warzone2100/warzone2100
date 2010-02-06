@@ -119,7 +119,7 @@ typedef struct SIMPLE_OBJECT
 } SIMPLE_OBJECT;
 
 /// Space-time coordinate.
-typedef struct SPACETIME
+typedef struct SpaceTime
 {
 	uint32_t  time;        ///< Game time
 

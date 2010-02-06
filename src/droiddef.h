@@ -206,6 +206,7 @@ typedef struct DROID
 
 	/* Movement control data */
 	MOVE_CONTROL    sMove;
+	SPACETIME       prevSpacetime;                  ///< Location of droid in previous tick.
 
 	/* anim data */
 	ANIM_OBJECT     *psCurAnim;

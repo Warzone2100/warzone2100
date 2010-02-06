@@ -465,6 +465,17 @@ static inline WEAPON_STATS *getWeaponStats(DROID *psDroid, int weapon_slot)
 	return asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
 }
 
+static inline float getInterpolatedWeaponRotation(DROID *psDroid, int weaponSlot, uint32_t time)
+{
+	return interpolateDirection(psDroid->asWeaps[weaponSlot].prevRotation, psDroid->asWeaps[weaponSlot].rotation, psDroid->prevSpacetime.time, psDroid->time, time);
+}
+
+static inline float getInterpolatedWeaponPitch(DROID *psDroid, int weaponSlot, uint32_t time)
+{
+	// Aaargh, Direction[sic]. Angles can be 16-bit (65536 "degrees" in circle), or can be floats (360.0f degrees). Except here, where they are _unsigned_ integers from 0 to 360. All hail consistency!
+	return interpolateDirection(psDroid->asWeaps[weaponSlot].prevPitch, psDroid->asWeaps[weaponSlot].pitch, psDroid->prevSpacetime.time, psDroid->time, time);
+}
+
 /** helper functions for future refcount patch **/
 
 #define setDroidTarget(_psDroid, _psNewTarget) _setDroidTarget(_psDroid, _psNewTarget, __LINE__, __FUNCTION__)
