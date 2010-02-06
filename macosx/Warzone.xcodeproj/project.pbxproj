@@ -263,7 +263,7 @@
 		0246A2C90BD3CCDC004D1C70 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A21D0BD3CCDB004D1C70 /* main.cpp */; };
 		0246A2CA0BD3CCDC004D1C70 /* map.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A21E0BD3CCDB004D1C70 /* map.c */; };
 		0246A2CB0BD3CCDC004D1C70 /* mapdisplay.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2200BD3CCDB004D1C70 /* mapdisplay.c */; };
-		0246A2CC0BD3CCDC004D1C70 /* mapgrid.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2220BD3CCDB004D1C70 /* mapgrid.c */; };
+		0246A2CC0BD3CCDC004D1C70 /* mapgrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2220BD3CCDB004D1C70 /* mapgrid.cpp */; };
 		0246A2CD0BD3CCDC004D1C70 /* mechanics.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2240BD3CCDB004D1C70 /* mechanics.c */; };
 		0246A2CE0BD3CCDC004D1C70 /* message.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2260BD3CCDB004D1C70 /* message.c */; };
 		0246A2CF0BD3CCDC004D1C70 /* miscimd.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2290BD3CCDB004D1C70 /* miscimd.c */; };
@@ -442,6 +442,8 @@
 		2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 2244463B0E3EB7CB004D0F1F /* messagely.h */; };
 		22E244D70E65361800EC2B3E /* baseobject.c in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.c */; };
 		22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 22E244D50E65361800EC2B3E /* baseobject.h */; };
+		4336D8BF111DFD520012E8E4 /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8BB111DFD520012E8E4 /* pointtree.cpp */; };
+		4336D8C0111DFD520012E8E4 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8BD111DFD520012E8E4 /* wavecast.cpp */; };
 		439A199C1113347200B9186B /* SDL_framerate.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B30BD3CBD5004D1C70 /* SDL_framerate.c */; };
 		43BE71A911120A69007DF934 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43BE719E11120A4F007DF934 /* InfoPlist.strings */; };
 		43BE71C011120C11007DF934 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43BE71A611120A4F007DF934 /* InfoPlist.strings */; };
@@ -1132,7 +1134,7 @@
 		0246A21F0BD3CCDB004D1C70 /* map.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = map.h; path = ../src/map.h; sourceTree = SOURCE_ROOT; };
 		0246A2200BD3CCDB004D1C70 /* mapdisplay.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = mapdisplay.c; path = ../src/mapdisplay.c; sourceTree = SOURCE_ROOT; };
 		0246A2210BD3CCDB004D1C70 /* mapdisplay.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mapdisplay.h; path = ../src/mapdisplay.h; sourceTree = SOURCE_ROOT; };
-		0246A2220BD3CCDB004D1C70 /* mapgrid.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = mapgrid.c; path = ../src/mapgrid.c; sourceTree = SOURCE_ROOT; };
+		0246A2220BD3CCDB004D1C70 /* mapgrid.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = mapgrid.cpp; path = ../src/mapgrid.cpp; sourceTree = SOURCE_ROOT; };
 		0246A2230BD3CCDB004D1C70 /* mapgrid.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mapgrid.h; path = ../src/mapgrid.h; sourceTree = SOURCE_ROOT; };
 		0246A2240BD3CCDB004D1C70 /* mechanics.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = mechanics.c; path = ../src/mechanics.c; sourceTree = SOURCE_ROOT; };
 		0246A2250BD3CCDB004D1C70 /* mechanics.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mechanics.h; path = ../src/mechanics.h; sourceTree = SOURCE_ROOT; };
@@ -1356,6 +1358,10 @@
 		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = baseobject.c; path = ../src/baseobject.c; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
+		4336D8BB111DFD520012E8E4 /* pointtree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pointtree.cpp; path = ../src/pointtree.cpp; sourceTree = SOURCE_ROOT; };
+		4336D8BC111DFD520012E8E4 /* pointtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pointtree.h; path = ../src/pointtree.h; sourceTree = SOURCE_ROOT; };
+		4336D8BD111DFD520012E8E4 /* wavecast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wavecast.cpp; path = ../src/wavecast.cpp; sourceTree = SOURCE_ROOT; };
+		4336D8BE111DFD520012E8E4 /* wavecast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wavecast.h; path = ../src/wavecast.h; sourceTree = SOURCE_ROOT; };
 		43BE719C11120A4F007DF934 /* GenericFramework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GenericFramework-Info.plist"; path = "Resources/GenericFramework-Info.plist"; sourceTree = "<group>"; };
 		43BE719F11120A4F007DF934 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43BE71A011120A4F007DF934 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2009,6 +2015,10 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				4336D8BB111DFD520012E8E4 /* pointtree.cpp */,
+				4336D8BC111DFD520012E8E4 /* pointtree.h */,
+				4336D8BD111DFD520012E8E4 /* wavecast.cpp */,
+				4336D8BE111DFD520012E8E4 /* wavecast.h */,
 				43BE759611123F77007DF934 /* challenge.c */,
 				43BE759711123F77007DF934 /* challenge.h */,
 				9749641E0F5ABB9E00A38899 /* stringdef.h */,
@@ -2139,7 +2149,7 @@
 				0246A21F0BD3CCDB004D1C70 /* map.h */,
 				0246A2200BD3CCDB004D1C70 /* mapdisplay.c */,
 				0246A2210BD3CCDB004D1C70 /* mapdisplay.h */,
-				0246A2220BD3CCDB004D1C70 /* mapgrid.c */,
+				0246A2220BD3CCDB004D1C70 /* mapgrid.cpp */,
 				0246A2230BD3CCDB004D1C70 /* mapgrid.h */,
 				224446390E3EB7CB004D0F1F /* message_lexer.l */,
 				2244463A0E3EB7CB004D0F1F /* message_parser.y */,
@@ -3668,7 +3678,7 @@
 				0246A2C90BD3CCDC004D1C70 /* main.cpp in Sources */,
 				0246A2CA0BD3CCDC004D1C70 /* map.c in Sources */,
 				0246A2CB0BD3CCDC004D1C70 /* mapdisplay.c in Sources */,
-				0246A2CC0BD3CCDC004D1C70 /* mapgrid.c in Sources */,
+				0246A2CC0BD3CCDC004D1C70 /* mapgrid.cpp in Sources */,
 				0246A2CD0BD3CCDC004D1C70 /* mechanics.c in Sources */,
 				0246A2CE0BD3CCDC004D1C70 /* message.c in Sources */,
 				0246A2CF0BD3CCDC004D1C70 /* miscimd.c in Sources */,
@@ -3757,6 +3767,8 @@
 				43BE75AF11124048007DF934 /* wzapp.cpp in Sources */,
 				439A199C1113347200B9186B /* SDL_framerate.c in Sources */,
 				43EC04051117A029005D5E3E /* wzapp_moc.cpp in Sources */,
+				4336D8BF111DFD520012E8E4 /* pointtree.cpp in Sources */,
+				4336D8C0111DFD520012E8E4 /* wavecast.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
