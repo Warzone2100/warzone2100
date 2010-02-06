@@ -963,7 +963,7 @@ void orderUpdateDroid(DROID *psDroid)
 		else if (psDroid->order == DORDER_RTR &&
 				 (psDroid->action == DACTION_MOVE ||
 				  psDroid->action == DACTION_MOVEFIRE) &&
-				  ((psDroid->id % 50) == (frameGetFrameNumber() % 50)))
+				  ((psDroid->id + gameTime)/GAME_TICKS_PER_SEC != (psDroid->id + gameTime - deltaGameTime)/GAME_TICKS_PER_SEC))
 		{
 			// see if there is a repair facility nearer than the one currently selected
 			orderDroid(psDroid, DORDER_RTR);

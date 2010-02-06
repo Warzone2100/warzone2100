@@ -711,7 +711,7 @@ void droidUpdate(DROID *psDroid)
 	}
 
 	// update the cluster of the droid
-	if (psDroid->id % 20 == frameGetFrameNumber() % 20)
+	if ((psDroid->id + gameTime)/2000 != (psDroid->id + gameTime - deltaGameTime)/2000)
 	{
 		clustUpdateObject((BASE_OBJECT *)psDroid);
 	}
@@ -856,7 +856,7 @@ void droidUpdate(DROID *psDroid)
 	calcDroidIllumination(psDroid);
 
 	// Check the resistance level of the droid
-	if (psDroid->id % 50 == frameGetFrameNumber() % 50)
+	if ((psDroid->id + gameTime)/833 != (psDroid->id + gameTime - deltaGameTime)/833)
 	{
 		// Zero resistance means not currently been attacked - ignore these
 		if (psDroid->resistance && psDroid->resistance < droidResistance(psDroid))
