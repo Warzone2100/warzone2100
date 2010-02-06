@@ -25,6 +25,51 @@
 #include "projectile.h"
 #include "structure.h"
 
+static inline float interpolateFloat(float v1, float v2, uint32_t t1, uint32_t t2, uint32_t t)
+{
+	int32_t numer = t - t1, denom = t2 - t1;
+	return v1 + (v2 - v1) * numer/denom;
+}
+
+Vector3uw interpolatePos(Vector3uw p1, Vector3uw p2, uint32_t t1, uint32_t t2, uint32_t t)
+{
+	Vector3uw ret = { interpolateInt(p1.x, p2.x, t1, t2, t),
+	                  interpolateInt(p1.y, p2.y, t1, t2, t),
+	                  interpolateInt(p1.z, p2.z, t1, t2, t)
+	                };
+	return ret;
+}
+
+float interpolateDirection(float v1, float v2, uint32_t t1, uint32_t t2, uint32_t t)
+{
+	if (v1 > v2 + 180)
+	{
+		v2 += 360;
+	}
+	else if(v2 > v1 + 180)
+	{
+		v1 += 360;
+	}
+	return interpolateFloat(v1, v2, t1, t2, t);
+}
+
+int16_t interpolateCyclicInt16(int16_t v1, int16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
+{
+	int i1 = (uint16_t)v1;                          // i1: [0; 0xFFFF] v2: [-0x8000; 0x7FFF]
+	int i2 = v2 + ((v2 + 0x8000 - i1) & 0x10000);  // i2: [i1 - 0x8000; i1 + 0x7FFF]
+	return interpolateInt(i1, i2, t1, t2, t);
+}
+
+SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)
+{
+	return constructSpacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t),
+	                          interpolateDirection(st1.direction, st2.direction, st1.time, st2.time, t),
+	                          interpolateCyclicInt16(st1.pitch, st2.pitch, st1.time, st2.time, t),
+	                          interpolateCyclicInt16(st1.roll, st2.roll, st1.time, st2.time, t),
+	                          t
+	                         );
+}
+
 void checkObject(const BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse)
 {
 	if (recurse < 0)

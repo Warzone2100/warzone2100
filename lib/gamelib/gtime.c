@@ -104,7 +104,7 @@ UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange)
 }
 
 /* Call this each loop to update the game timer */
-bool logicalUpdates = false;
+bool logicalUpdates = true;
 void gameTimeUpdate()
 {
 	uint32_t currTime = SDL_GetTicks();
@@ -134,18 +134,17 @@ void gameTimeUpdate()
 		}
 
 		// Calculate the time for this frame
-		deltaGameTime     = scaledCurrTime - gameTime;
 		deltaGraphicsTime = scaledCurrTime - graphicsTime;
 
 		// Adjust deltas.
 		if (sane)
 		{
-			if (deltaGameTime > GAME_UNITS_PER_TICK)
+			if (scaledCurrTime >= gameTime)
 			{
-				if (deltaGameTime >= GAME_UNITS_PER_TICK*2)
+				if (scaledCurrTime > gameTime + GAME_UNITS_PER_TICK)
 				{
 					// Game isn't updating fast enough...
-					uint32_t slideBack = deltaGameTime - GAME_UNITS_PER_TICK*2;
+					uint32_t slideBack = deltaGameTime - GAME_UNITS_PER_TICK;
 					baseTime += slideBack / modifier;  // adjust the addition to base time
 					deltaGraphicsTime -= slideBack;
 				}
@@ -159,12 +158,15 @@ void gameTimeUpdate()
 		}
 		else
 		{
+			deltaGameTime     = scaledCurrTime - gameTime;
+
 			// Limit the frame time
 			if (deltaGraphicsTime > GTIME_MAXFRAME)
 			{
 				uint32_t slideBack = deltaGraphicsTime - GTIME_MAXFRAME;
 				baseTime += slideBack / modifier;  // adjust the addition to base time
 				deltaGraphicsTime -= slideBack;
+				deltaGameTime     -= slideBack;  // If !sane, then deltaGameTime == deltaGraphicsTime.
 			}
 		}
 

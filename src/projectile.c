@@ -582,6 +582,9 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		counterBatteryFire(psAttacker, psTarget);
 	}
 
+	psProj->time = gameTime;
+	psProj->prevSpacetime.time = gameTime;
+
 	CHECK_PROJECTILE(psProj);
 
 	return true;
@@ -683,15 +686,21 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	// Projectile is missile:
 	bool bMissile = false;
 	WEAPON_STATS *psStats;
-	Vector3uw prevPos, nextPos;
+	Vector3uw nextPos;
 	unsigned int targetDistance, currentDistance;
-	int32_t closestCollision = 1<<30;
 	BASE_OBJECT *psTempObj, *closestCollisionObject = NULL;
-	Vector3uw closestCollisionPos;
+	SPACETIME closestCollisionSpacetime;
 
 	CHECK_PROJECTILE(psProj);
 
+	if (psProj->prevSpacetime.time == gameTime)
+	{
+		return;  // Not in flight yet.
+	}
+
 	timeSoFar = gameTime - psProj->born;
+
+	psProj->time = gameTime;
 
 	psStats = psProj->psWStats;
 	ASSERT(psStats != NULL, "proj_InFlightDirectFunc: Invalid weapon stats pointer");
@@ -814,7 +823,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	}
 
 	/* Update position */
-	prevPos = psProj->pos;
 	psProj->pos = nextPos;
 
 	if (bIndirect)
@@ -822,6 +830,8 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		/* Update pitch */
 		psProj->pitch = rad2degf(atan2f(psProj->vZ - (timeSoFar * ACC_GRAVITY / GAME_TICKS_PER_SEC), psProj->vXY));
 	}
+
+	closestCollisionSpacetime.time = 0xFFFFFFFF;
 
 	/* Check nearby objects for possible collisions */
 	gridStartIterate(psProj->pos.x, psProj->pos.y, PROJ_NEIGHBOUR_RANGE);
@@ -877,7 +887,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
 			Vector3i
 				posProj = {psProj->pos.x, psProj->pos.y, nextPosZ},  // HACK psProj->pos.z may have been set to 0, since psProj->pos.z can't be negative. So can't use Vector3uw_To3i.
-				prevPosProj = Vector3uw_To3i(prevPos),
+				prevPosProj = Vector3uw_To3i(psProj->prevSpacetime.pos),
 				posTemp = Vector3uw_To3i(psTempObj->pos);
 
 			Vector3i diff = Vector3i_Sub(posProj, posTemp);
@@ -887,17 +897,15 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			unsigned int targetRadius = establishTargetRadius(psTempObj);
 
 			int32_t collision = collisionXYZ(prevDiff, diff, targetRadius, targetHeight);
+			uint32_t collisionTime = psProj->prevSpacetime.time + (psProj->time - psProj->prevSpacetime.time)*collision/1024;
 
-			if (collision >= 0 && collision < closestCollision)
+			if (collision >= 0 && collisionTime < closestCollisionSpacetime.time)
 			{
 				// We hit!
-				//exactHitPos = prevPosProj + (posProj - prevPosProj)*collision/1024;
-				Vector3i exactHitPos = Vector3i_Add(prevPosProj, Vector3i_Div(Vector3i_Mult(Vector3i_Sub(posProj, prevPosProj), collision), 1024));
-				exactHitPos.z = MAX(0, exactHitPos.z);  // Clamp before casting to unsigned.
-				closestCollisionPos = Vector3i_To3uw(exactHitPos);
-
-				closestCollision = collision;
+				closestCollisionSpacetime = interpolateSpacetime(psProj->prevSpacetime, GET_SPACETIME(psProj), collisionTime);
 				closestCollisionObject = psTempObj;
+
+				closestCollisionSpacetime.pos.z = MAX(0, interpolateInt(psProj->prevSpacetime.pos.z, nextPosZ, psProj->prevSpacetime.time, psProj->time, collisionTime));
 
 				// Keep testing for more collisions, in case there was a closer target.
 			}
@@ -907,7 +915,11 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	if (closestCollisionObject != NULL)
 	{
 		// We hit!
-		psProj->pos = closestCollisionPos;
+		SET_SPACETIME(psProj, closestCollisionSpacetime);
+		if(psProj->time == psProj->prevSpacetime.time)
+		{
+			--psProj->prevSpacetime.time;
+		}
 		setProjectileDestination(psProj, closestCollisionObject);  // We hit something.
 
 		/* Buildings cannot be penetrated and we need a penetrating weapon */
@@ -1042,11 +1054,11 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		// may want to add both a fire effect and the las sat effect
 		if (psStats->weaponSubClass == WSC_LAS_SAT)
 		{
-			position.x = psObj->tarX;
-			position.z = psObj->tarY;
+			position.x = psObj->pos.x;
+			position.z = psObj->pos.y;  // z = y [sic] intentional
 			position.y = map_Height(position.x, position.z);
 			addEffect(&position, EFFECT_SAT_LASER, SAT_LASER_STANDARD, false, NULL, 0);
-			if (clipXY(psObj->tarX, psObj->tarY))
+			if (clipXY(psObj->pos.x, psObj->pos.y))
 			{
 				shakeStart();
 			}
@@ -1406,6 +1418,8 @@ static void proj_PostImpactFunc( PROJECTILE *psObj )
 static void proj_Update(PROJECTILE *psObj)
 {
 	CHECK_PROJECTILE(psObj);
+
+	psObj->prevSpacetime = GET_SPACETIME(psObj);
 
 	/* See if any of the stored objects have died
 	 * since the projectile was created

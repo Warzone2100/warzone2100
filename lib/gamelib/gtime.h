@@ -44,7 +44,7 @@
 /// Changes in GAME_UNITS_PER_TICK increments.
 extern UDWORD gameTime;
 /// The current time in the graphical display of the game world.
-/// Should be close to gameTime, up to GAME_UNITS_PER_TICK ahead.
+/// Should be close to gameTime, up to GAME_UNITS_PER_TICK behind.
 extern UDWORD graphicsTime;
 /** The current time in the game world - never stops.
  * FIXME Then isn't it the real time, not the game time? Rename from gameTime2 to realTime?

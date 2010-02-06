@@ -1052,13 +1052,19 @@ static void display3DProjectiles( void )
 	{
 		switch(psObj->state)
 		{
+		case PROJ_IMPACT:
+			if (graphicsTime > psObj->time)
+			{
+				break;  // Projectile has impacted.
+			}
+			// Projectile not quite impacted, so don't break.
 		case PROJ_INFLIGHTDIRECT:
 		case PROJ_INFLIGHTINDIRECT:
 			// if source or destination is visible
 			if(gfxVisible(psObj))
 			{
-				/* don't display first frame of trajectory (projectile on firing object) */
-				if ( graphicsTime != psObj->born )
+				// Only display once projectile is supposed to have been spawned.
+				if (graphicsTime >= psObj->prevSpacetime.time)
 				{
 					/* Draw a bullet at psObj->pos.x for X coord
 										psObj->pos.y for Z coord
@@ -1083,9 +1089,6 @@ static void display3DProjectiles( void )
 			}
 			break;
 
-		case PROJ_IMPACT:
-			break;
-
 		case PROJ_POSTIMPACT:
 			break;
 
@@ -1103,6 +1106,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 	Vector3i			dv;
 	iIMDShape		*pIMD;
 	SDWORD			rx, rz;
+	SPACETIME       st;
 
 	psStats = psCurr->psWStats;
 	/* Reject flame or command since they have interim drawn fx */
@@ -1116,22 +1120,23 @@ void	renderProjectile(PROJECTILE *psCurr)
 		return;
 	}
 
+	st = interpolateSpacetime(psCurr->prevSpacetime, GET_SPACETIME(psCurr), graphicsTime);
 
 	//the weapon stats holds the reference to which graphic to use
 	/*Need to draw the graphic depending on what the projectile is doing - hitting target,
 	missing target, in flight etc - JUST DO IN FLIGHT FOR NOW! */
 	pIMD = psStats->pInFlightGraphic;
 
-	if (clipXY(psCurr->pos.x,psCurr->pos.y))
+	if (clipXY(st.pos.x, st.pos.y))
 	{
 		/* Get bullet's x coord */
-		dv.x = (psCurr->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
+		dv.x = (st.pos.x - player.p.x) - terrainMidX*TILE_UNITS;
 
 		/* Get it's y coord (z coord in the 3d world */
-		dv.z = terrainMidY*TILE_UNITS - (psCurr->pos.y - player.p.z);
+		dv.z = terrainMidY*TILE_UNITS - (st.pos.y - player.p.z);
 
 		/* What's the present height of the bullet? */
-		dv.y = psCurr->pos.z;
+		dv.y = st.pos.z;
 		/* Set up the matrix */
 		iV_MatrixBegin();
 
@@ -1145,11 +1150,11 @@ void	renderProjectile(PROJECTILE *psCurr)
 		iV_TRANSLATE(rx,0,-rz);
 
 		/* Rotate it to the direction it's facing */
-		imdRot2.y = DEG( (int)psCurr->direction );
+		imdRot2.y = DEG(st.direction);
 		iV_MatrixRotateY(-imdRot2.y);
 
 		/* pitch it */
-		imdRot2.x = DEG(psCurr->pitch);
+		imdRot2.x = DEG(st.pitch);
 		iV_MatrixRotateX(imdRot2.x);
 
 		if (psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE
