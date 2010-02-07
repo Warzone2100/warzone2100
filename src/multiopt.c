@@ -544,19 +544,16 @@ static BOOL campInit(void)
 		cleanMap(player);
 	}
 
-	// Remove baba player for skirmish
-	if (!game.scavengers)
+	for (player = 1; player < MAX_PLAYERS; player++)
 	{
-		for (player = 1; player < MAX_PLAYERS; player++)
+		// we want to remove disabled AI & all the other players that don't belong
+		if ((game.skDiff[player] == 0 || player >= game.maxPlayers) && (!game.scavengers || player != 7))
 		{
-			// we want to remove disabled AI & all the other players that don't belong
-			if (game.skDiff[player] == 0 || player >= game.maxPlayers)
-			{
-				clearPlayer(player, true, false);
-				debug(LOG_NET, "removing disabled AI (%d) from map.", player);
-			}
+			clearPlayer(player, true, false);
+			debug(LOG_NET, "removing disabled AI (%d) from map.", player);
 		}
 	}
+
 
 	if (NetPlay.isHost)	// add oil drums
 	{
