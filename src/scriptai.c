@@ -1777,9 +1777,9 @@ BOOL scrSkDifficultyModifier(void)
 	}
 
 	/* Skip cheats if difficulty modifier slider is set to minimum.
-	 * (0 - player disabled, 20 - max value)
+	 * (0 - player disabled, 20 - max value, UBYTE_MAX = autogame human)
 	 */
-	if(game.skDiff[player] <= 1)
+	if (game.skDiff[player] <= 1 || game.skDiff[player] == UBYTE_MAX)
 	{
 		return true;
 	}
