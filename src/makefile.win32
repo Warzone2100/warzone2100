@@ -9,7 +9,8 @@ PARSERS= \
 	message_parser.tab.c \
 	message_lexer.lex.c \
 	scriptvals_parser.tab.c \
-	scriptvals_lexer.lex.c
+	scriptvals_lexer.lex.c \
+	level_lexer.lex.c
 
 SRC= \
 	$(PARSERS) \
@@ -62,7 +63,6 @@ SRC= \
 	keybind.c \
 	keyedit.c \
 	keymap.c \
-	level_lexer.lex.c \
 	levels.c \
 	lighting.c \
 	loadsave.c \
@@ -96,6 +96,7 @@ SRC= \
 	power.c \
 	projectile.c \
 	radar.c \
+	random.cpp \
 	raycast.c \
 	research.c \
 	scores.c \
@@ -140,6 +141,6 @@ endif
 
 EXE=warzone2100
 
-CLEANFILES=message_parser.tab.h scriptvals_parser.tab.h
+CLEANFILES=message_parser.tab.h scriptvals_parser.tab.h $(PARSERS)
 
 include $(top_srcdir)/makerules/exe.mk
