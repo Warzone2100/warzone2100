@@ -151,7 +151,8 @@ REARM_UPGRADE		asReArmUpgrade[MAX_PLAYERS];
 STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRUCT_STRENGTH];
 
 //specifies which numbers have been allocated for the assembly points for the factories
-UBYTE				factoryNumFlag[MAX_PLAYERS][NUM_FLAG_TYPES];
+// Is a bitmask, holding up to MAX_FACTORIES bits.
+uint32_t                factoryNumFlag[MAX_PLAYERS][NUM_FLAG_TYPES];
 
 // the number of different (types of) droids that can be put into a production run
 #define MAX_IN_RUN		9
@@ -267,6 +268,8 @@ void structureInitVars(void)
 		MAX_FACTORY * MAX_PROD_RUN);
 	//set up at beginning of game which player will have a production list
 	productionPlayer = (SBYTE)selectedPlayer;
+
+	STATIC_ASSERT(MAX_FACTORY <= 8*sizeof(**factoryNumFlag));  // MAX_FACTORY too big for the 'factoryNumFlag' bitmask. (If changing 'factoryNumFlag', change 'mask' everywhere in this file, too.)
 }
 
 /*Initialise the production list and set up the production player*/
@@ -299,7 +302,7 @@ void initFactoryNumFlag(void)
 void resetFactoryNumFlag(void)
 {
 	STRUCTURE*   psStruct;
-	uint8_t      mask = 0;
+	uint32_t     mask = 0;
 	unsigned int i;
 
 	for(i = 0; i < MAX_PLAYERS; i++)
@@ -4936,7 +4939,7 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 {
 	BOOL		resourceFound = false;
-	UBYTE		mask;
+	uint32_t        mask;
 	FACTORY		*psFactory;
 	SDWORD		cluster;
 	FLAG_POSITION	*psAssemblyPoint=NULL;
@@ -5008,7 +5011,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 
 	if (psAssemblyPoint != NULL)
 	{
-		mask = (UBYTE)(1 << psAssemblyPoint->factoryInc);
+		mask = 1 << psAssemblyPoint->factoryInc;
 		factoryNumFlag[psDel->player][psAssemblyPoint->factoryType] ^= mask;
 
 		//need to cancel the repositioning of the DP if selectedPlayer and currently moving
@@ -5467,7 +5470,7 @@ void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
 void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE factoryType)
 {
 	UBYTE			inc;
-	UBYTE			mask = 1;
+	uint32_t                mask = 1;
 	FACTORY			*psFactory;
 	REPAIR_FACILITY *psRepair;
 
@@ -7160,7 +7163,8 @@ are being built*/
 UBYTE checkProductionForCommand(UBYTE player)
 {
 	UBYTE		factoryInc, inc, factoryType;
-	UBYTE		mask = 1, quantity = 0;
+	uint32_t        mask = 1;
+	UBYTE           quantity = 0;
 
 	if (player == productionPlayer)
 	{
@@ -7198,7 +7202,8 @@ UBYTE checkProductionForCommand(UBYTE player)
 UWORD countAssignableFactories(UBYTE player,UWORD factoryType)
 {
 	UWORD		factoryInc;
-	UBYTE		mask = 1, quantity = 0;
+	uint32_t        mask = 1;
+	UBYTE           quantity = 0;
 
 	ASSERT_OR_RETURN(0, player == selectedPlayer, "%s should only be called for selectedPlayer", __FUNCTION__);
 
