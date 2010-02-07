@@ -13,7 +13,7 @@ OLD110LIST = \
 	stats \
 	wrf
 	
-OLD110ARCHIVE = original.wz
+OLD110ARCHIVE = old-1.10-balance.wz
 
 
 NTWLIST = \
