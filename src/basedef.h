@@ -129,10 +129,15 @@ typedef struct SpaceTime
 } SPACETIME;
 
 static inline SPACETIME constructSpacetime(Vector3uw pos, float direction, int16_t pitch, int16_t roll, uint32_t time)
-{
-	SPACETIME ret = {time, 0, pitch, direction, roll};
-	// we don't support C99 struct assignments
-	ret.pos = pos;
+{	// we don't support C99 struct assignments
+	SPACETIME ret;
+	ret.time = time;
+	ret.pos.x = pos.x;
+	ret.pos.y = pos.y;
+	ret.pos.z = pos.z;
+	ret.pitch = pitch;
+	ret.direction = direction;
+	ret.roll = roll;
 
 	return ret;
 }
