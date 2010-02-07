@@ -21,16 +21,15 @@
 #ifndef STRING_EXT_H
 #define STRING_EXT_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "frame.h"
 #include "debug.h"
 #include <string.h>
 #include <stddef.h>
 #include <assert.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*!
  * Safe variant of strlen.

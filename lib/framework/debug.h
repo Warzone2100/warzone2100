@@ -117,8 +117,18 @@ extern bool assertEnabled;
  *
  * \note BUILD_BUG_ON_ZERO from <linux/kernel.h>
  */
+#ifndef __cplusplus
 #define STATIC_ASSERT_EXPR( expr ) \
 	(sizeof(struct { int:-!(expr); }))
+#else //cplusplus
+}
+template<bool> class StaticAssert;
+template<> class StaticAssert<true>{};
+#define STATIC_ASSERT_EXPR(expr) \
+	(sizeof(StaticAssert<(expr)>))
+extern "C"
+{
+#endif //cplusplus
 /**
  * Compile time assert
  * Not to be used in global context!
