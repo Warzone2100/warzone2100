@@ -277,13 +277,11 @@ SectionEnd
 Section $(TEXT_SecOriginalMod) SecOriginalMod
 
   SetOutPath "$INSTDIR\mods\multiplay"
-
-  File "${TOP_BUILDDIR}\data\mods\multiplay\original.wz"
-
+  File "${TOP_BUILDDIR}\data\mods\multiplay\old-1.10-balance.wz"
   SetOutPath "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Original.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp original.wz"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Old 1.10 Balance.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp old-1.10-balance.wz"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
