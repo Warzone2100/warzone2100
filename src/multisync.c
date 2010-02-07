@@ -579,7 +579,6 @@ static void offscreenUpdate(DROID *psDroid,
 							DROID_ORDER order)
 {
 	PROPULSION_STATS	*psPropStats;
-	int			oldX, oldY;
 
 	if (fabs((float)psDroid->pos.x - fx) > TILE_UNITS || fabs((float)psDroid->pos.y - fy) > TILE_UNITS)
 	{
@@ -587,18 +586,12 @@ static void offscreenUpdate(DROID *psDroid,
 		      (int)psDroid->id, psDroid->pos.x, psDroid->pos.y, (UDWORD)fx, (UDWORD)fy, getDroidOrderName(order));
 	}
 
-	oldX			= psDroid->pos.x;
-	oldY			= psDroid->pos.y;
 	psDroid->pos.x		= fx;				// update x
 	psDroid->pos.y		= fy;				// update y
 	psDroid->sMove.fx	= fx;
 	psDroid->sMove.fy	= fy;
 	psDroid->direction	= dir % 360;			// update rotation
 	psDroid->body		= dam;								// update damage
-	if (oldX != psDroid->pos.x || oldY != psDroid->pos.y)
-	{
-		gridMoveDroid(psDroid, oldX, oldY);
-	}
 
 	// stage one, update the droid's position & info, LOW LEVEL STUFF.
 	if(	   order == DORDER_ATTACK
