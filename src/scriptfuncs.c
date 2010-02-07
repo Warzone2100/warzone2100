@@ -120,6 +120,7 @@ void scriptSetStartPos(int position, int x, int y)
 {
 	positions[position].x = x;
 	positions[position].y = y;
+	debug(LOG_SCRIPT, "Setting start position %d to (%d, %d)", position, x, y);
 }
 
 BOOL scriptInit()
@@ -142,9 +143,13 @@ BOOL scrGetPlayer()
 {
 	ASSERT_OR_RETURN(false, nextPlayer < MAX_PLAYERS, "Invalid player");
 
-	scrFunctionResult.v.ival = nextPlayer++;
+	scrFunctionResult.v.ival = nextPlayer;
+	debug(LOG_SCRIPT, "Initialized player %d, starts at position (%d, %d), max %d players", nextPlayer, 
+	      positions[nextPlayer].x, positions[nextPlayer].y, NetPlay.maxPlayers);
+	nextPlayer++;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
+		ASSERT(false, "Failed to initialize player");
 		return false;
 	}
 	return true;
@@ -158,7 +163,6 @@ BOOL scrGetPlayerStartPosition(void)
 	{
 		return false;
 	}
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player %d", player);
 	if (player < NetPlay.maxPlayers)
 	{
 		*x = positions[player].x;

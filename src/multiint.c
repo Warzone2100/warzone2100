@@ -3300,6 +3300,7 @@ BOOL startMultiOptions(BOOL bReenter)
 
 			sstrcpy(game.map, iniparser_getstring(dict, "challenge:Map", game.map));
 			game.maxPlayers = iniparser_getint(dict, "challenge:MaxPlayers", game.maxPlayers);	// TODO, read from map itself, not here!!
+			NetPlay.maxPlayers = game.maxPlayers;
 			game.scavengers = iniparser_getboolean(dict, "challenge:Scavengers", game.scavengers);
 			game.alliance = ALLIANCES_TEAMS;
 			netPlayersUpdated = true;
