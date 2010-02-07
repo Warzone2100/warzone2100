@@ -2465,7 +2465,7 @@ event vtolStructs(inactive)
 	_maxBuildTrucks = 3;
 	_maxTrucks = min(_maxBuildTrucks, max(_minBuildTrucks, idleGroup(buildGroup) / 2));
 
-	if(_numVtolFacs < maxVtolFacs[curTech])			// if not enough
+	if (isStructureAvailable(vtolFactory, me) and _numVtolFacs < maxVtolFacs[curTech])			// if not enough
 	{
 		// build factory
 		buildX = baseX;								// pick a location
