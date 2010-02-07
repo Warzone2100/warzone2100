@@ -2986,9 +2986,9 @@ void frontendMultiMessages(void)
 			}
 			NETend();
 
-			debug(LOG_WARNING,"** player %u has dropped! Host is %s",player_id,host?"true":"false");
+			debug(LOG_INFO,"** player %u has dropped! Host is %s", player_id, host?"true":"false");
 
-			MultiPlayerLeave(player_id);
+			MultiPlayerLeave(player_id);		// get rid of their stuff
 			NET_PlayerConnectionStatus = 2;		//DROPPED_CONNECTION
 			if (host)					// host has quit, need to quit too.
 			{
