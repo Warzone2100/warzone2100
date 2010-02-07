@@ -17,6 +17,7 @@
    * Fix: When player drops, make sure to destroy everything they had (r9644, ticket:1020)
    * Fix: Fix kicking issues when players tried to play a game when they came from a previous game (r9603)
    * Fix: Network synchronization updates was broken for most orders (r9681, ticket:1505, ticket:1516)
+   * Fix: Remove disabled players from skirmish games with scavengers turned on (r9724)
  * Skirmish:
    * Fix: The Wide Spectrum Sensor no longer works as a Counterbattery sensor as this allowed cheating (r9560)
    * Fix: Workaround for bug that made AI stop research sometimes fixed (r9534)
