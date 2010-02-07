@@ -162,8 +162,10 @@ static BOOL inList( char * list[], const char * item )
 void addSubdirs( const char * basedir, const char * subdir, const bool appendToPath, char * checkList[], bool addToModList )
 {
 	char tmpstr[PATH_MAX];
+	char buf[256];
 	char ** subdirlist = PHYSFS_enumerateFiles( subdir );
 	char ** i = subdirlist;
+
 	while( *i != NULL )
 	{
 #ifdef DEBUG
@@ -178,6 +180,8 @@ void addSubdirs( const char * basedir, const char * subdir, const bool appendToP
 			if (addToModList)
 			{
 				addLoadedMod(*i);
+				snprintf(buf, sizeof(buf), "mod: %s", *i);
+				addDumpInfo(buf);
 			}
 			PHYSFS_addToSearchPath( tmpstr, appendToPath );
 		}
