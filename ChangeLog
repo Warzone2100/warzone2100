@@ -24,6 +24,12 @@
    * Fix: Some AI unit templates had multiple turrets, but shouldn't have (r9605, ticket:1510)
    * Fix: Scoreboard should be more accurate (r9587, ticket:1500)
    * Fix: Scavenger AI is now active again (r9692, ticket:1550)
+ * Graphics:
+   * Change: Clear frame buffer on start and exit (r9634)
+   * Fix: Use correct coordinates for menu, radar, selection box (r9555)
+ * Translations:
+   * Fix a string for translating (r9511)
+   * Updated: Spanish (r9512, r9558), Estonian (r9513, r9613), Russian (r9552), Ukrainian (r9601), Croatian (r9653)
 
 2010-01-24: Version 2.3 beta 9
  * General:
