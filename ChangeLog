@@ -1,7 +1,6 @@
 2010-02-07: Version 2.3 beta 10
  * General:
    * Change: Add mod list to crash report file (r9651)
-   * Fix: In fixed teams mode, if you built satellite uplink, enemy players could also see the entire map (r9496)
    * Fix: Various warnings and asserts (r9494, r9500)
    * Fix: Redundant components being still available if researched after being made redundant (ticket:1462, r9492)
    * Fix: Now also oil derricks are darkened by true fog of war and pulse when selected (r9543)
