@@ -69,7 +69,7 @@ typedef struct _tilePos
 	SWORD           pitch;                          /**< Object's pitch +ve rotation around right-axis (nose up/down) */ \
 	UBYTE           player;                         /**< Which player the object belongs to */ \
 	SWORD           roll;                           /**< Object's roll +ve rotation around forward-axis (left wing up/down) */ \
-	uint32_t        time;                           /**< Game time of given space-time position. */
+	uint32_t        time                           /**< Game time of given space-time position. */
 
 #define BASE_ELEMENTS2(pointerType) \
 	SCREEN_DISP_DATA    sDisplay;                   /**< screen coordinate details */ \
@@ -130,7 +130,10 @@ typedef struct SpaceTime
 
 static inline SPACETIME constructSpacetime(Vector3uw pos, float direction, int16_t pitch, int16_t roll, uint32_t time)
 {
-	SPACETIME ret = {time, pos, pitch, direction, roll};
+	SPACETIME ret = {time, 0, pitch, direction, roll};
+	// we don't support C99 struct assignments
+	ret.pos = pos;
+
 	return ret;
 }
 
