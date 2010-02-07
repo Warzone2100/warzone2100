@@ -1020,7 +1020,7 @@ int main(int argc, char *argv[])
 	PHYSFS_mkdir("music");
 	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
-	make_dir(MultiCustomMapsPath, "multiplay", "custommaps");
+	sstrcpy(MultiCustomMapsPath, "maps");
 
 	/* Put these files in the writedir root */
 	setRegistryFilePath("config");
