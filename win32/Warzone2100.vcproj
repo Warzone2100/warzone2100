@@ -575,6 +575,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\random.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\src\raycast.c"
 					>
 				</File>
