@@ -15,7 +15,7 @@ EXTRA_DIST= \
 	config.rpath \
 	configure.ac \
 	macosx/external/bison.sh \
-	macosx/prebuilt/SDL.tar.gz \
+	macosx/prebuilt/ \
 	macosx/README.BUILD.txt \
 	macosx/README.txt \
 	macosx/Resources/GenericFramework-Info.plist \
@@ -27,6 +27,33 @@ EXTRA_DIST= \
 	macosx/Resources/vorbis/Info.plist \
 	macosx/Resources/Warzone.icns \
 	macosx/Resources/Warzone-Info.plist \
+	macosx/Resources/wzlocal/cs.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/da.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/de.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/en_GB.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/English.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/English.lproj/locale/ \
+	macosx/Resources/wzlocal/es.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/et_EE.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/fi.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/fr.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/fy.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/ga.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/hr.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/it.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/la.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/lt.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/nb.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/nl.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/pl.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/pt_BR.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/pt.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/ro.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/ru.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/sl.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/uk_UA.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/zh_CN.lproj/InfoPlist.strings \
+	macosx/Resources/wzlocal/zh_TW.lproj/InfoPlist.strings \
 	macosx/Warzone.xcodeproj/project.pbxproj
 
 # HACK Don't give make errors when switching between trunk and branches.
