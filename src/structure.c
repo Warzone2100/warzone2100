@@ -1200,15 +1200,26 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 		     in order to be able to start a new built task, doubled in actionUpdateDroid() */
 		if (psDroid)
 		{
-			psDroid->action = DACTION_NONE;
-			psDroid->order = DORDER_NONE;
-			setDroidTarget(psDroid, NULL);
-			setDroidActionTarget(psDroid, NULL, 0);
-			psDroid->psTarStats = NULL;
+			DROID	*psIter;
+
+			// Clear all orders for helping hands. Needed for AI script which runs next frame.
+			for (psIter = apsDroidLists[psDroid->player]; psIter; psIter = psIter->psNext)
+			{
+				if ((psIter->order == DORDER_BUILD || psIter->order == DORDER_HELPBUILD || psIter->order == DORDER_LINEBUILD)
+				    && psIter->psTarget == (BASE_OBJECT *)psStruct)
+				{
+					objTrace(psIter->id, "Construction complete");
+					psIter->action = DACTION_NONE;
+					psIter->order = DORDER_NONE;
+					setDroidTarget(psIter, NULL);
+					setDroidActionTarget(psIter, NULL, 0);
+					psIter->psTarStats = NULL;
+				}
+			}
 
 			/* Notify scripts we just finished building a structure, pass builder and what was built */
 			psScrCBNewStruct	= psStruct;
-			psScrCBNewStructTruck= psDroid;
+			psScrCBNewStructTruck	= psDroid;
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCTBUILT);
 
 			audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
