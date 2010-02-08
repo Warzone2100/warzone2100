@@ -3774,7 +3774,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Config\nexport PATH=$PATH:/opt/local/bin:/sw/bin\npodir=\"../po\"\naresdir=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/\"\nbresdir=\".lproj/locale\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\n\n# San check\necho \"Checking for msgfmt...\"\nif ! type -aP msgfmt; then\n    echo \"Fatal inability to properly translate messages.\"\n    exit 1\nfi\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${lang}${bresdir}\"\n        $msgfmtpth -v -o \"${aresdir}${lang}${bresdir}/${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
+			shellScript = "# Config\nexport PATH=$PATH:/opt/local/bin:/sw/bin:${SRCROOT}/external/gettext-bin\npodir=\"../po\"\naresdir=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/\"\nbresdir=\".lproj/locale\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\n\n# San check\necho \"Checking for msgfmt...\"\nif ! type -aP msgfmt; then\n    echo \"Fatal inability to properly translate messages.\"\n    exit 1\nfi\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${lang}${bresdir}\"\n        $msgfmtpth -v -o \"${aresdir}${lang}${bresdir}/${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
 		};
 		43095E9A10EEA8630067E86B /* Run autorevision */ = {
 			isa = PBXShellScriptBuildPhase;
