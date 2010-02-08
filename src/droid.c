@@ -3750,7 +3750,7 @@ BOOL isVtolDroid(const DROID* psDroid)
 	    && psDroid->droidType != DROID_TRANSPORTER;
 }
 
-/*returns true if the droid has lift propulsion and is above the ground level*/
+// returns true if the droid has lift propulsion and is moving
 BOOL isFlying(const DROID* psDroid)
 {
 	return (asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->propulsionType == PROPULSION_TYPE_LIFT

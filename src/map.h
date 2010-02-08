@@ -321,24 +321,34 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(SDWORD x, SDWORD y)
 	return &psMapTiles[x + (y * mapWidth)];
 }
 
-/* Return height of tile at x,y */
+/// Return ground height of top-left corner of tile at x,y
 static inline WZ_DECL_PURE float map_TileHeight(SDWORD x, SDWORD y)
 {
 	if ( x >= mapWidth || y >= mapHeight )
 	{
 		return 0;
 	}
-	return ((float)psMapTiles[x + (y * mapWidth)].height * ELEVATION_SCALE);
+	return psMapTiles[x + (y * mapWidth)].height * ELEVATION_SCALE;
 }
 
-/* Return height of tile at x,y */
+/// Return water height of top-left corner of tile at x,y
 static inline WZ_DECL_PURE float map_WaterHeight(SDWORD x, SDWORD y)
 {
 	if ( x >= mapWidth || y >= mapHeight )
 	{
 		return 0;
 	}
-	return ((float)psMapTiles[x + (y * mapWidth)].waterLevel * ELEVATION_SCALE);
+	return psMapTiles[x + (y * mapWidth)].waterLevel * ELEVATION_SCALE;
+}
+
+/// Return max(ground, water) height of top-left corner of tile at x,y
+static inline WZ_DECL_PURE float map_TileHeightSurface(SDWORD x, SDWORD y)
+{
+	if ( x >= mapWidth || y >= mapHeight )
+	{
+		return 0;
+	}
+	return MAX(psMapTiles[x + (y * mapWidth)].height, psMapTiles[x + (y * mapWidth)].waterLevel) * ELEVATION_SCALE;
 }
 
 
@@ -401,7 +411,7 @@ typedef struct _tile_coord
 	MAPTILE	*psTile;
 } TILE_COORD;
 
-/* Return height of x,y */
+/// The max height of the terrain and water at the specified world coordinates
 extern SWORD map_Height(int x, int y);
 
 /* returns true if object is above ground */

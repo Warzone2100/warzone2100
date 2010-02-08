@@ -974,23 +974,22 @@ BOOL mapLoad(char *filename)
 
 	// reset the random water bottom heights
 	environReset();
-	
+
 	// set the river bed
 	for (i=0;i<mapWidth;i++)
 	{
 		for (j=0;j<mapHeight;j++)
 		{
-			setTileHeight(i, j, map_TileHeight(i, j));
 			// FIXME: magic number
 			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3.0f / (float)ELEVATION_SCALE;
 			// lower riverbed
 			if (mapTile(i, j)->ground == waterGroundType)
 			{
-				mapTile(i, j)->height = mapTile(i, j)->height - (WATER_DEPTH - 2.0f * environGetData(i, j)) / (float)ELEVATION_SCALE;
+				mapTile(i, j)->height -= (WATER_DEPTH - 2.0f * environGetData(i, j)) / (float)ELEVATION_SCALE;
 			}
 		}
 	}
-	
+
 	/* set up the scroll mins and maxs - set values to valid ones for any new map */
 	scrollMinX = scrollMinY = 0;
 	scrollMaxX = mapWidth;
@@ -1858,7 +1857,7 @@ BOOL mapShutdown(void)
 	return true;
 }
 
-/// The height of the terrain at the specified world coordinates
+/// The max height of the terrain and water at the specified world coordinates
 extern SWORD map_Height(int x, int y)
 {
 	int tileX, tileY;
@@ -1894,7 +1893,7 @@ extern SWORD map_Height(int x, int y)
 	{
 		for (j = 0; j < 2; j++)
 		{
-			height[i][j] = map_TileHeight(tileX+i, tileY+j);
+			height[i][j] = map_TileHeightSurface(tileX+i, tileY+j);
 			center += height[i][j];
 		}
 	}
@@ -1957,6 +1956,7 @@ extern SWORD map_Height(int x, int y)
 	onBottom = left * (1 - towardsRight) + right * towardsRight;
 	result = onBottom + (center - middle) * towardsCenter * 2;
 
+	result = MAX(result, 0);  // HACK Avoid unsigned underflow, when this is squashed into a Vector3uw later.
 	return (SDWORD)(result+0.5f);
 }
 
@@ -1964,15 +1964,16 @@ extern SWORD map_Height(int x, int y)
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 {
 	// min is used to make sure we don't go over array bounds!
+	// TODO Using the corner of the map instead doesn't make sense. Fix this...
 	SDWORD	iZ,
 			tileX = map_coord(psObj->pos.x),
 			tileY = map_coord(psObj->pos.y),
 			tileYOffset1 = (tileY * mapWidth),
 			tileYOffset2 = ((tileY+1) * mapWidth),
-			h1 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX)    ].height,
-			h2 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX + 1)].height,
-			h3 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX)    ].height,
-			h4 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX + 1)].height;
+			h1 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset1 + tileX)    ].height,
+			h2 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset1 + tileX + 1)].height,
+			h3 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset2 + tileX)    ].height,
+			h4 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset2 + tileX + 1)].height;
 
 	/* trivial test above */
 	if ( (psObj->pos.z > h1) && (psObj->pos.z > h2) &&
