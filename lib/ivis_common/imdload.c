@@ -22,15 +22,6 @@
  * \file imdload.c
  *
  * Load IMD (.pie) files
- *
- * - Changes at version 4:
- *   - pcx name as string
- *   - pcx filepath
- *   - cut down vertex list
- *
- * - Changes at version 5_pre:
- *   - float coordinate support
- *   - ...
  */
 
 #include "lib/framework/frame.h"
