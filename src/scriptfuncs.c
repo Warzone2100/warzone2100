@@ -2351,6 +2351,35 @@ BOOL scrCentreViewPos(void)
 	return true;
 }
 
+static STRUCTURE *unbuiltIter = NULL;
+static int unbuiltPlayer = -1;
+
+BOOL scrEnumUnbuilt(void)
+{
+	if (!stackPopParams(1, VAL_INT, &unbuiltPlayer))
+	{
+		return false;
+	}
+	ASSERT_OR_RETURN(false, unbuiltPlayer < MAX_PLAYERS && unbuiltPlayer >= 0, "Player number %d out of bounds", unbuiltPlayer);
+	unbuiltIter = apsStructLists[unbuiltPlayer];
+	return true;
+}
+
+BOOL scrIterateUnbuilt(void)
+{
+	for (; unbuiltIter && unbuiltIter->status != SS_BEING_BUILT; unbuiltIter = unbuiltIter->psNext) ;
+	scrFunctionResult.v.oval = unbuiltIter;
+	if (unbuiltIter)
+	{
+		unbuiltIter = unbuiltIter->psNext;	// proceed to next, so we do not report same twice (or infinitely loop)
+	}
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
 // -----------------------------------------------------------------------------------------
 // Get a pointer to a structure based on a stat - returns NULL if cannot find one
 BOOL scrGetStructure(void)

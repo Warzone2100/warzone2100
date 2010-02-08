@@ -1496,6 +1496,9 @@ FUNC_SYMBOL asFuncTable[] =
 		0, { VAL_VOID },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "initEnumUnbuilt", scrEnumUnbuilt, VAL_VOID, 1, { VAL_INT }, false, 0, NULL, 0, 0, NULL, NULL },
+	{ "enumUnbuilt", scrIterateUnbuilt, (INTERP_TYPE)ST_STRUCTURE, 0, { VAL_VOID }, false, 0, NULL, 0, 0, NULL, NULL },
+
 	/* END new functions */
 
     /* This final entry marks the end of the function list */
