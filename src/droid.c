@@ -120,6 +120,9 @@ void	droidUpdateRecoil( DROID *psDroid );
 static void cancelBuild(DROID *psDroid)
 {
 	psDroid->action = DACTION_NONE;
+	psDroid->order = DORDER_NONE;
+	setDroidTarget(psDroid, NULL);
+	setDroidActionTarget(psDroid, NULL, 0);
 
 	/* Notify scripts we just became idle */
 	psScrCBOrderDroid = psDroid;

@@ -1196,14 +1196,15 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 			intRefreshScreen();		// update any open interface bars.
 		}
 
-		/* Not needed, but left for backward compatibility */
-		structureCompletedCallback(psStruct->pStructureType);
-
 		/* must reset here before the callback, droid must have DACTION_NONE
 		     in order to be able to start a new built task, doubled in actionUpdateDroid() */
 		if (psDroid)
 		{
 			psDroid->action = DACTION_NONE;
+			psDroid->order = DORDER_NONE;
+			setDroidTarget(psDroid, NULL);
+			setDroidActionTarget(psDroid, NULL, 0);
+			psDroid->psTarStats = NULL;
 
 			/* Notify scripts we just finished building a structure, pass builder and what was built */
 			psScrCBNewStruct	= psStruct;
@@ -1212,6 +1213,9 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 
 			audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
 		}
+
+		/* Not needed, but left for backward compatibility */
+		structureCompletedCallback(psStruct->pStructureType);
 	}
 	else
 	{
