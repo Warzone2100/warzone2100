@@ -68,7 +68,7 @@ void sendOptions()
 {
 	unsigned int i;
 
-	NETbeginEncode(NET_OPTIONS, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_OPTIONS);
 
 	// First send information about the game
 	NETuint8_t(&game.type);
@@ -137,11 +137,11 @@ static BOOL checkGameWdg(const char *nm)
 
 // ////////////////////////////////////////////////////////////////////////////
 // options for a game. (usually recvd in frontend)
-void recvOptions()
+void recvOptions(NETQUEUE queue)
 {
 	unsigned int i;
 
-	NETbeginDecode(NET_OPTIONS);
+	NETbeginDecode(queue, NET_OPTIONS);
 
 	// Get general information about the game
 	NETuint8_t(&game.type);
@@ -221,7 +221,7 @@ void recvOptions()
 
 		debug(LOG_NET, "Map was not found, requesting map %s from host.", game.map);
 		// Request the map from the host
-		NETbeginEncode(NET_FILE_REQUESTED, NET_HOST_ONLY);
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_REQUESTED);
 		NETuint32_t(&player);
 		NETend();
 
@@ -312,7 +312,7 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 BOOL sendLeavingMsg(void)
 {
 	debug(LOG_NET, "We are leaving 'nicely'");
-	NETbeginEncode(NET_PLAYER_LEAVING, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_LEAVING);
 	{
 		BOOL host = NetPlay.isHost;
 		uint32_t id = selectedPlayer;
@@ -518,6 +518,12 @@ static BOOL gameInit(void)
 {
 	UDWORD			player;
 
+	// Setup game queues.
+	for (player = 0; player < MAX_PLAYERS; ++player)
+	{
+		NETinitQueue(NETgameQueue(player));
+	}
+
 	scriptInit();
 
 	// If this is from a savegame, stop here!
@@ -575,7 +581,7 @@ void playerResponding(void)
 	cameraToHome(selectedPlayer, false);
 
 	// Tell the world we're here
-	NETbeginEncode(NET_PLAYERRESPONDING, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_PLAYERRESPONDING);
 	NETuint32_t(&selectedPlayer);
 	NETend();
 }

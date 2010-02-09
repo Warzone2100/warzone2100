@@ -190,7 +190,7 @@ BOOL NETstopLogging(void)
 	return true;
 }
 
-void NETlogPacket(NETMSG *msg, BOOL received)
+/*void NETlogPacket(NETMSG *msg, BOOL received)
 {
 	if (msg->type >= NUM_GAME_PACKETS)
 	{
@@ -198,7 +198,7 @@ void NETlogPacket(NETMSG *msg, BOOL received)
 	}
 	packetcount[received][msg->type]++;
 	packetsize[received][msg->type] += msg->size;
-}
+}*/
 
 BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 {

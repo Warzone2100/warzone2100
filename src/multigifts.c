@@ -65,13 +65,13 @@ static void		giftResearch					(uint8_t from, uint8_t to, BOOL send);
 ///////////////////////////////////////////////////////////////////////////////
 // gifts..
 
-BOOL recvGift(void)
+BOOL recvGift(NETQUEUE queue)
 {
 	uint8_t	type, from, to;
 	int		audioTrack;
 	uint32_t droidID;
 
-	NETbeginDecode(NET_GIFT);
+	NETbeginDecode(queue, NET_GIFT);
 		NETuint8_t(&type);
 		NETuint8_t(&from);
 		NETuint8_t(&to);
@@ -158,7 +158,7 @@ void giftRadar(uint8_t from, uint8_t to, BOOL send)
 	{
 		uint8_t subType = RADAR_GIFT;
 
-		NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
+		NETbeginEncode(NETgameQueue(selectedPlayer), NET_GIFT);
 			NETuint8_t(&subType);
 			NETuint8_t(&from);
 			NETuint8_t(&to);
@@ -244,7 +244,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 		}
 		if (psD->selected)
 		{
-			NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
+			NETbeginEncode(NETgameQueue(selectedPlayer), NET_GIFT);
 			NETuint8_t(&giftType);
 			NETuint8_t(&from);
 			NETuint8_t(&to);
@@ -289,7 +289,7 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 	{
 		uint8_t giftType = RESEARCH_GIFT;
 
-		NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
+		NETbeginEncode(NETgameQueue(selectedPlayer), NET_GIFT);
 			NETuint8_t(&giftType);
 			NETuint8_t(&from);
 			NETuint8_t(&to);
@@ -327,7 +327,7 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 	{
 		uint8_t giftType = POWER_GIFT;
 
-		NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
+		NETbeginEncode(NETgameQueue(selectedPlayer), NET_GIFT);
 			NETuint8_t(&giftType);
 			NETuint8_t(&from);
 			NETuint8_t(&to);
@@ -470,7 +470,7 @@ void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allow
 
 void sendAlliance(uint8_t from, uint8_t to, uint8_t state, int32_t value)
 {
-	NETbeginEncode(NET_ALLIANCE, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_ALLIANCE);
 		NETuint8_t(&from);
 		NETuint8_t(&to);
 		NETuint8_t(&state);
@@ -478,12 +478,12 @@ void sendAlliance(uint8_t from, uint8_t to, uint8_t state, int32_t value)
 	NETend();
 }
 
-BOOL recvAlliance(BOOL allowAudio)
+BOOL recvAlliance(NETQUEUE queue, BOOL allowAudio)
 {
 	uint8_t to, from, state;
 	int32_t value;
 
-	NETbeginDecode(NET_ALLIANCE);
+	NETbeginDecode(queue, NET_ALLIANCE);
 		NETuint8_t(&from);
 		NETuint8_t(&to);
 		NETuint8_t(&state);
@@ -546,7 +546,7 @@ void  technologyGiveAway(const STRUCTURE *pS)
 			pF->player = pS->player;
 		}
 
-		NETbeginEncode(NET_ARTIFACTS, NET_ALL_PLAYERS);
+		NETbeginEncode(NETgameQueue(selectedPlayer), NET_ARTIFACTS);
 		{
 			/* Make sure that we don't have to violate the constness of pS.
 			 * Since the nettype functions aren't const correct when sending
@@ -572,7 +572,7 @@ void  technologyGiveAway(const STRUCTURE *pS)
  */
 void sendMultiPlayerFeature(FEATURE_TYPE subType, uint32_t x, uint32_t y, uint32_t id)
 {
-	NETbeginEncode(NET_FEATURES, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_FEATURES);
 	{
 		NETenum(&subType);
 		NETuint32_t(&x);
@@ -582,13 +582,13 @@ void sendMultiPlayerFeature(FEATURE_TYPE subType, uint32_t x, uint32_t y, uint32
 	NETend();
 }
 
-void recvMultiPlayerFeature()
+void recvMultiPlayerFeature(NETQUEUE queue)
 {
 	FEATURE_TYPE subType;
 	uint32_t     x, y, id;
 	unsigned int i;
 
-	NETbeginDecode(NET_FEATURES);
+	NETbeginDecode(queue, NET_FEATURES);
 	{
 		NETenum(&subType);
 		NETuint32_t(&x);
@@ -637,7 +637,7 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 	uint8_t		player = ANYPLAYER;
 
 	debug(LOG_FEATURE, "Sending %u artifact(s) type: (%s)", quantity, feature_names[type]);
-	NETbeginEncode(NET_ARTIFACTS, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_ARTIFACTS);
 		NETuint8_t(&quantity);
 		NETenum(&type);
 
@@ -702,7 +702,7 @@ BOOL addOilDrum(uint8_t count)
 
 // ///////////////////////////////////////////////////////////////
 // receive splattered artifacts
-void recvMultiPlayerRandomArtifacts()
+void recvMultiPlayerRandomArtifacts(NETQUEUE queue)
 {
 	int				count, i;
 	uint8_t			quantity, player;
@@ -711,7 +711,7 @@ void recvMultiPlayerRandomArtifacts()
 	FEATURE_TYPE	type;
 	FEATURE 		*pF;
 
-	NETbeginDecode(NET_ARTIFACTS);
+	NETbeginDecode(queue, NET_ARTIFACTS);
 		NETuint8_t(&quantity);
 		NETenum(&type);
 

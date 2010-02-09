@@ -73,7 +73,7 @@ BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats, BOOL bLocal)
 	if (!bLocal)
 	{
 		// Now send it to all other players
-		NETbeginEncode(NET_PLAYER_STATS, NET_ALL_PLAYERS);
+		NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_STATS);
 			// Send the ID of the player's stats we're updating
 			NETuint32_t(&playerIndex);
 
@@ -93,11 +93,11 @@ BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats, BOOL bLocal)
 	return true;
 }
 
-void recvMultiStats()
+void recvMultiStats(NETQUEUE queue)
 {
 	uint32_t playerIndex;
 
-	NETbeginDecode(NET_PLAYER_STATS);
+	NETbeginDecode(queue, NET_PLAYER_STATS);
 		// Retrieve the ID number of the player for which we need to
 		// update the stats
 		NETuint32_t(&playerIndex);

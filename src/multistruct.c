@@ -54,7 +54,7 @@
 // INFORM others that a building has been started, and base plate should be put down.
 BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 {
-	NETbeginEncode(NET_BUILD, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_BUILD);
 
 		// Who is building it
 		NETuint8_t(&psDroid->player);
@@ -94,7 +94,7 @@ BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 
 // ////////////////////////////////////////////////////////////////////////////
 // put down a base plate and start droid building it!
-BOOL recvBuildStarted()
+BOOL recvBuildStarted(NETQUEUE queue)
 {
 	STRUCTURE_STATS *psStats;
 	DROID			*psDroid;
@@ -105,7 +105,7 @@ BOOL recvBuildStarted()
 	int32_t			order;
 	uint32_t		structRef, structId, targetId,droidID;
 
-	NETbeginDecode(NET_BUILD);
+	NETbeginDecode(queue, NET_BUILD);
 		NETuint8_t(&player);
 		NETuint32_t(&structRef);
 		NETuint16_t(&x);
@@ -177,7 +177,7 @@ BOOL SendBuildFinished(STRUCTURE *psStruct)
 	uint8_t player = psStruct->player;
 	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
 
-	NETbeginEncode(NET_BUILDFINISHED, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_BUILDFINISHED);
 		NETuint32_t(&power);			// send how much power we got.
 		NETuint32_t(&psStruct->id);		// ID of building
 
@@ -191,7 +191,7 @@ BOOL SendBuildFinished(STRUCTURE *psStruct)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL recvBuildFinished()
+BOOL recvBuildFinished(NETQUEUE queue)
 {
 	uint32_t	structId;
 	STRUCTURE	*psStruct;
@@ -200,7 +200,7 @@ BOOL recvBuildFinished()
 	uint8_t		player;
 	uint32_t	power;
 
-	NETbeginDecode(NET_BUILDFINISHED);
+	NETbeginDecode(queue, NET_BUILDFINISHED);
 		NETuint32_t(&power);	// get the player's power level
 		NETuint32_t(&structId);	// get the struct id.
 		NETuint32_t(&type); 	// Kind of building.
@@ -278,7 +278,7 @@ BOOL recvBuildFinished()
 // demolish message.
 BOOL SendDemolishFinished(STRUCTURE *psStruct, DROID *psDroid)
 {
-	NETbeginEncode(NET_DEMOLISH, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_DEMOLISH);
 
 		// Send what is being demolish and who is doing it
 		NETuint32_t(&psStruct->id);
@@ -287,13 +287,13 @@ BOOL SendDemolishFinished(STRUCTURE *psStruct, DROID *psDroid)
 	return NETend();
 }
 
-BOOL recvDemolishFinished()
+BOOL recvDemolishFinished(NETQUEUE queue)
 {
 	STRUCTURE	*psStruct;
 	DROID		*psDroid;
 	uint32_t	structID, droidID;
 
-	NETbeginDecode(NET_DEMOLISH);
+	NETbeginDecode(queue, NET_DEMOLISH);
 		NETuint32_t(&structID);
 		NETuint32_t(&droidID);
 	NETend();
@@ -325,7 +325,7 @@ BOOL recvDemolishFinished()
 BOOL SendDestroyStructure(STRUCTURE *s)
 {
 	technologyGiveAway(s);
-	NETbeginEncode(NET_STRUCTDEST, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_STRUCTDEST);
 
 	// Struct to destroy
 	NETuint32_t(&s->id);
@@ -335,12 +335,12 @@ BOOL SendDestroyStructure(STRUCTURE *s)
 
 // ////////////////////////////////////////////////////////////////////////////
 // acknowledge the destruction of a structure, from another player.
-BOOL recvDestroyStructure()
+BOOL recvDestroyStructure(NETQUEUE queue)
 {
 	uint32_t structID;
 	STRUCTURE *psStruct;
 
-	NETbeginDecode(NET_STRUCTDEST);
+	NETbeginDecode(queue, NET_STRUCTDEST);
 		NETuint32_t(&structID);
 	NETend();
 
@@ -365,7 +365,7 @@ BOOL recvDestroyStructure()
 
 BOOL sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 {
-	NETbeginEncode(NET_LASSAT, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_LASSAT);
 
 		NETuint8_t(&player);
 		NETuint32_t(&psStruct->id);
@@ -376,14 +376,15 @@ BOOL sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 }
 
 // recv lassat info on the receiving end.
-BOOL recvLasSat()
+BOOL recvLasSat(NETQUEUE queue)
 {
 	BASE_OBJECT	*psObj;
 	UBYTE		player,targetplayer;
 	STRUCTURE	*psStruct;
 	uint32_t	id,targetid;
 
-	NETbeginDecode(NET_LASSAT);
+	// TODO Add some kind of checking, so that things don't get lasatted by bunkers.
+	NETbeginDecode(queue, NET_LASSAT);
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETuint32_t(&targetid);

@@ -121,7 +121,7 @@ typedef enum
 	NET_POSITIONREQUEST,	//65 position in GUI player list
 	NET_DATA_CHECK,			//66 Data integrity check
 	NET_HOST_DROPPED,		//67 Host has dropped
-	NET_FUTURE1,			//68	future use
+	NET_SEND_TO_PLAYER,             //68 Was future use, now actually using! (Normally, things marked "for future use" never ever get used.)
 	NET_FUTURE2,			//69		"
 	NET_FUTURE3,			//70		"
 	NET_FILE_REQUESTED,		//71 Player has requested a file (map/mod/?)
@@ -140,6 +140,9 @@ typedef enum
 #define password_string_size 64		// longer passwords slow down the join code
 
 #define SESSION_JOINDISABLED	1
+
+#define MAX_CONNECTED_PLAYERS   8
+#define MAX_TMP_SOCKETS         16
 
 typedef struct {					//Available game storage... JUST FOR REFERENCE!
 	int32_t dwSize;
@@ -202,14 +205,14 @@ typedef struct {
 	uint64_t	unsentisMPDirtyBit;
 } SYNC_COUNTER;
 
-typedef struct {
+/*typedef struct {
 	uint16_t	size;				// used size of body
 	uint8_t		type;				// type of packet
 	uint8_t		destination;		// player to send to, or NET_ALL_PLAYERS
 	uint8_t		source;				// player it is sent from
 	char 		body[MaxMsgSize];	// msg buffer
 	BOOL		status;				// If the packet compiled or not (this is _not_ sent!)
-} NETMSG;
+} NETMSG;*/
 
 typedef struct
 {
@@ -278,7 +281,7 @@ typedef struct {
 // variables
 
 extern NETPLAY				NetPlay;
-extern NETMSG NetMsg;
+//extern NETMSG NetMsg;
 extern SYNC_COUNTER sync_counter;
 // update flags
 extern bool netPlayersUpdated;
@@ -287,12 +290,12 @@ extern int mapDownloadProgress;
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern int   NETinit(BOOL bFirstCall);				// init
-extern BOOL   NETsend(NETMSG *msg, UDWORD player);	// send to player
-extern BOOL   NETbcast(NETMSG *msg);				// broadcast to everyone
-extern BOOL   NETrecv(uint8_t *type);				// recv a message if possible
+BOOL NETsend(uint8_t player, const uint8_t *rawData, ssize_t rawLen); ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+extern BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type);               ///< recv a message from the net queues if possible.
+extern BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type);              ///< recv a message from the game queues if possible.
 
 extern UBYTE   NETsendFile(char *fileName, UDWORD player);	// send file chunk.
-extern UBYTE   NETrecvFile(void);			// recv file chunk
+extern UBYTE   NETrecvFile(NETQUEUE queue);                     // recv file chunk
 
 extern int NETclose(void);					// close current game
 extern int NETshutdown(void);					// leave the game in play.

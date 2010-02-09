@@ -1,14 +1,12 @@
 #include "netqueue.h"
 #include "lib/framework/frame.h"
-#include <cstring>
 #ifdef USE_ZLIB
 #include "zlib.h"
 #endif //USE_ZLIB
 
-NetQueue multiQueues[MAX_PLAYERS];
-
 NetQueue::NetQueue(UsagePattern p)
 	: deserialiseUnderflow(false)
+	, isCompressed(false)
 	, readOffset(0)
 	, readSuccessOffset(0)
 	, netOffset(0)
@@ -18,13 +16,16 @@ NetQueue::NetQueue(UsagePattern p)
 {
 	switch (p)
 	{
+		case Unused:      canSerialise = false; canDeserialise = false; canWriteRaw = false; canReadRaw = false; canCompress = false; break;
+
 		case NetSend:     canSerialise = true;  canDeserialise = false; canWriteRaw = false; canReadRaw = true;  canCompress = true;  break;
 		case NetReceive:  canSerialise = false; canDeserialise = true;  canWriteRaw = true;  canReadRaw = false; canCompress = true;  break;
+
 		case GameSend:    canSerialise = true;  canDeserialise = true;  canWriteRaw = false; canReadRaw = true;  canCompress = false; break;
 		case GameReceive: canSerialise = false; canDeserialise = true;  canWriteRaw = true;  canReadRaw = false; canCompress = false; break;
 		case GameSolo:    canSerialise = true;  canDeserialise = true;  canWriteRaw = false; canReadRaw = false; canCompress = false; break;
 	}
-	ASSERT(canSerialise == !canWriteRaw, "Can't insert both objects and raw data into the same NetQueue.");
+	ASSERT(!canSerialise || !canWriteRaw, "Can't insert both objects and raw data into the same NetQueue.");
 	ASSERT(!canWriteRaw || canDeserialise, "No point being able to write data into the NetQueue if we can't deserialise it.");
 }
 
@@ -133,6 +134,14 @@ void NetQueue::popRawData(size_t netLen)
 	popOldData();
 }
 
+void NetQueue::endSerialiseLength()
+{
+	uint32_t len = data.size() - beginSerialiseOffset - 4;
+	data[beginSerialiseOffset  ] = len>>24 & 0xFF;
+	data[beginSerialiseOffset+1] = len>>16 & 0xFF;
+	data[beginSerialiseOffset+2] = len>> 8 & 0xFF;
+	data[beginSerialiseOffset+3] = len     & 0xFF;
+}
 
 bool NetQueue::endDeserialise()
 {
@@ -155,6 +164,29 @@ bool NetQueue::endDeserialise()
 bool NetQueue::isDeserialiseError() const
 {
 	return deserialiseUnderflow;
+}
+
+void NetQueue::serialiseLength()
+{
+	beginSerialiseOffset = data.size();
+
+	// Reserve room for length.
+	data.resize(data.size() + 4);
+}
+
+bool NetQueue::deserialiseHaveLength()
+{
+	if (readOffset + 4 > data.size())
+	{
+		return false;
+	}
+	uint32_t len = data[readOffset]<<24 | data[readOffset+1]<<16 | data[readOffset+2]<<8 | data[readOffset+3];
+	return len < data.size() && readOffset + 4 <= data.size() - len;
+}
+
+uint8_t NetQueue::deserialiseGetType()
+{
+	return readOffset + 5 > data.size() ? 0 : data[readOffset+4];
 }
 
 void NetQueue::popOldData()
@@ -197,7 +229,7 @@ void NetQueue::deserialise(uint8_t &v)
 	}
 
 	// Deserialise.
-	if (readOffset >= data.size())
+	if (readOffset + 1 > data.size())
 	{
 		deserialiseUnderflow = true;
 		return;  // Not enough data.
@@ -206,16 +238,22 @@ void NetQueue::deserialise(uint8_t &v)
 	v = data[readOffset++];
 }
 
-#ifdef USE_ZLIB
-void NetQueue::setCompression()
+void NetQueue::setCompression(uint32_t compressionMask)
 {
 	ASSERT(canCompress, "Wrong NetQueue type for setCompression.");
-	if (stream != NULL)
-	{
-		//debug(LOG_WARNING, "Already called setCompression on this NetQueue.");
-		return;  // Been there, done that.
-	}
 
+#ifdef USE_ZLIB
+	if (!isCompressed && (compressionMask & CompressionZlib) != 0)
+	{
+		setCompressionZlib();
+		isCompressed = true;
+	}
+#endif //USE_ZLIB
+}
+
+#ifdef USE_ZLIB
+void NetQueue::setCompressionZlib()
+{
 	stream = new z_stream;
 	stream->zalloc = NULL;
 	stream->zfree = NULL;
@@ -247,93 +285,6 @@ void NetQueue::setCompression()
 }
 #endif //USE_ZLIB
 
-///////////////////
-
-template<class Q>
-void queue(const Q &q, uint8_t &v)
-{
-	q.byte(v);
-}
-
-
-template<class Q>
-void queue(const Q &q, uint16_t &v)
-{
-	uint8_t b[2] = {v>>8, v};
-	queue(q, b[0]);
-	queue(q, b[1]);
-	v = b[0]<<8 | b[1];
-}
-
-template<class Q>
-void queue(const Q &q, uint32_t &v)
-{
-	uint16_t b[2] = {v>>16, v};
-	queue(q, b[0]);
-	queue(q, b[1]);
-	v = b[0]<<16 | b[1];
-}
-
-template<class Q>
-void queue(const Q &q, uint64_t &v)
-{
-	uint32_t b[2] = {v>>32, v};
-	queue(q, b[0]);
-	queue(q, b[1]);
-	v = uint64_t(b[0])<<32 | b[1];
-}
-
-template<class Q>
-void queue(const Q &q, int8_t &v)
-{
-	uint8_t b = v;
-	queue(q, b);
-	v = b;
-
-	STATIC_ASSERT(sizeof(b) == sizeof(v));
-}
-
-template<class Q>
-void queue(const Q &q, int16_t &v)
-{
-	uint16_t b = v;
-	queue(q, b);
-	v = b;
-
-	STATIC_ASSERT(sizeof(b) == sizeof(v));
-}
-
-template<class Q>
-void queue(const Q &q, int32_t &v)
-{
-	uint32_t b = v;
-	queue(q, b);
-	v = b;
-
-	STATIC_ASSERT(sizeof(b) == sizeof(v));
-}
-
-template<class Q>
-void queue(const Q &q, int64_t &v)
-{
-	uint64_t b = v;
-	queue(q, b);
-	v = b;
-
-	STATIC_ASSERT(sizeof(b) == sizeof(v));
-}
-
-template<class Q>
-void queue(const Q &q, float &v)
-{
-	uint32_t b;
-	std::memcpy(&b, &v, sizeof(b));
-	queue(q, b);
-	std::memcpy(&v, &b, sizeof(b));
-
-	STATIC_ASSERT(sizeof(b) == sizeof(v));
-}
-
 #if 0
 extern "C" void testNetQueue()
 {
@@ -353,7 +304,7 @@ extern "C" void testNetQueue()
 			}
 			if (testString[i] == ' ')
 			{
-				write.setCompression();
+				write.setCompression(CompressionMask);
 			}
 			printf("%c", testString[i]);
 		}
@@ -384,7 +335,7 @@ extern "C" void testNetQueue()
 			}
 			if (result == ' ')
 			{
-				read.setCompression();
+				read.setCompression(CompressionMask);
 			}
 			printf("%c", result);
 		}

@@ -40,20 +40,49 @@ typedef enum packetDirectionEnum
 	PACKET_INVALID
 } PACKETDIR;
 
-void NETbeginEncode(uint8_t type, uint8_t player);
-void NETbeginDecode(uint8_t type);
+typedef enum QueueType
+{
+	QUEUE_TMP,
+	QUEUE_NET,
+	QUEUE_GAME,
+	QUEUE_BROADCAST,
+} QUEUETYPE;
+
+typedef struct _netqueue
+{
+	void *queue;  ///< Is either a (NetQueuePair **) or a (NetQueue *). (Note different numbers of *.)
+	BOOL isPair;
+	uint8_t index;
+	uint8_t queueType;
+} NETQUEUE;
+
+NETQUEUE NETnetTmpQueue(unsigned tmpPlayer);  ///< One of the temp queues from before a client has joined the game.
+NETQUEUE NETnetQueue(unsigned player);        ///< The queue pair used for sending and receiving data directly from another client.
+NETQUEUE NETgameQueue(unsigned player);       ///< The game action queue.
+NETQUEUE NETbroadcastQueue(void);             ///< The queue for sending data directly to all clients, not just a specific one.
+
+void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  /// Dump raw data from sockets and raw data sent via host here.
+BOOL NETisMessageReady(NETQUEUE queue);
+uint8_t NETmessageType(NETQUEUE queue);
+
+void NETinitQueue(NETQUEUE queue);
+void NETmoveQueue(NETQUEUE src, NETQUEUE dst);
+
+void NETbeginEncode(NETQUEUE queue, uint8_t type);
+void NETbeginDecode(NETQUEUE queue, uint8_t type);
 BOOL NETend(void);
-BOOL NETint8_t(int8_t *ip);
-BOOL NETuint8_t(uint8_t *ip);
-BOOL NETint16_t(int16_t *ip);
-BOOL NETuint16_t(uint16_t *ip);
-BOOL NETint32_t(int32_t *ip);
-BOOL NETuint32_t(uint32_t *ip);
-BOOL NETfloat(float* fp);
-BOOL NETbool(BOOL *bp);
-BOOL NETnull(void);
-BOOL NETstring(char *str, uint16_t maxlen);
-BOOL NETbin(char *str, uint16_t maxlen);
+
+void NETint8_t(int8_t *ip);
+void NETuint8_t(uint8_t *ip);
+void NETint16_t(int16_t *ip);
+void NETuint16_t(uint16_t *ip);
+void NETint32_t(int32_t *ip);
+void NETuint32_t(uint32_t *ip);
+void NETfloat(float* fp);
+void NETbool(BOOL *bp);
+void NETnull(void);
+void NETstring(char *str, uint16_t maxlen);
+void NETbin(uint8_t *str, uint16_t maxlen);
 
 PACKETDIR NETgetPacketDir(void);
 
@@ -91,13 +120,13 @@ do \
 } while(0)
 #endif
 
-BOOL NETVector3uw(Vector3uw* vp);
+void NETVector3uw(Vector3uw* vp);
 
 /**
  *	Get player who is the source of the current packet.
  *	@see selectedPlayer
  */
-int NETgetSource(void);
+//int NETgetSource(void);
 
 void NETtest(void);
 

@@ -6381,7 +6381,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				{
 					uint8_t giftType = DROID_GIFT, droid_count = 1;
 
-					NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
+					NETbeginEncode(NETgameQueue(selectedPlayer), NET_GIFT);
 					{
 						// We need to distinguish between gift types
 						NETuint8_t(&giftType);

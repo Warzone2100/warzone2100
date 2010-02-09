@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2009  Warzone Resurrection Project
+	Copyright (C) 2007-2010  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,233 +32,118 @@
 #include "../framework/frame.h"
 #include "netplay.h"
 #include "nettypes.h"
+#include "netqueue.h"
+#include <cstring>
+
+
+static NetQueue *gameQueues[MAX_PLAYERS + 1] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};  // The game queues should be used, even in single-player. The +1 is for AIs that don't want to (TODO fix this) use their own queue.
+static NetQueuePair *netQueues[MAX_CONNECTED_PLAYERS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+static NetQueuePair *tmpQueues[MAX_TMP_SOCKETS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+static NetQueue *broadcastQueue = NULL;
+static NetQueue::Writer writer;
+static NetQueue::Reader reader;
+static int writeSocketIndex = -1;
 
 static PACKETDIR NetDir;
 
 static void NETsetPacketDir(PACKETDIR dir)
 {
 	NetDir = dir;
+
+	// Can't put STATIC_ASSERT in global scope, arbitrarily putting it here.
+	STATIC_ASSERT(MAX_PLAYERS == MAX_CONNECTED_PLAYERS);  // Things might break if each connected player doesn't correspond to a player of the same index.
 }
 
 PACKETDIR NETgetPacketDir()
 {
 	return NetDir;
-} 
-
-/*
- * Begin & End functions
- */
-
-void NETbeginEncode(uint8_t type, uint8_t player)
-{
-	NETsetPacketDir(PACKET_ENCODE);
-	NetMsg.type = type;
-	NetMsg.size = 0;
-	NetMsg.status = true;
-	NetMsg.destination = player;
-	memset(&NetMsg.body, '\0', sizeof(NetMsg.body));
 }
 
-void NETbeginDecode(uint8_t type)
+template<class Q>
+static void queue(const Q &q, uint8_t &v)
 {
-	NETsetPacketDir(PACKET_DECODE);
-	assert(type == NetMsg.type);
-	NetMsg.size = 0;
-	NetMsg.status = true;
+	q.byte(v);
 }
 
-BOOL NETend(void)
+template<class Q>
+static void queue(const Q &q, uint16_t &v)
 {
-	assert(NETgetPacketDir() != PACKET_INVALID);
-
-	// If we are decoding just return true
-	if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		return true;
-	}
-
-	// If the packet is invalid or failed to compile
-	if (NETgetPacketDir() != PACKET_ENCODE || !NetMsg.status)
-	{
-		return false;
-	}
-
-	// We have sent the packet, so make it invalid (to prevent re-sending)
-	NETsetPacketDir(PACKET_INVALID);
-
-	// Send the packet, updating the send functions is on my todo list!
-	if (NetMsg.destination == NET_ALL_PLAYERS)
-	{
-		return NETbcast(&NetMsg);
-	}
-	else
-	{
-		return NETsend(&NetMsg, NetMsg.destination);
-	}
+	uint8_t b[2] = {v>>8, v};
+	queue(q, b[0]);
+	queue(q, b[1]);
+	v = b[0]<<8 | b[1];
 }
 
-/*
- * Primitive functions (ints and strings). Due to the lack of C++ and the fact
- * that I hate macros this is a lot longer than it should be.
- */
-
-BOOL NETint8_t(int8_t *ip)
+template<class Q>
+static void queue(const Q &q, uint32_t &v)
 {
-	int8_t *store = (int8_t *) &NetMsg.body[NetMsg.size];
-
-	// Make sure there is enough data/space left in the packet
-	if (sizeof(int8_t) + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
-	{
-		return NetMsg.status = false;
-	}
-
-	// 8-bit (1 byte) integers need no endian-swapping!
-	if (NETgetPacketDir() == PACKET_ENCODE)
-	{
-		*store = *ip;
-	}
-	else if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		*ip = *store;
-	}
-
-	// Increment the size of the message
-	NetMsg.size += sizeof(int8_t);
-
-	return true;
+	uint16_t b[2] = {v>>16, v};
+	queue(q, b[0]);
+	queue(q, b[1]);
+	v = b[0]<<16 | b[1];
 }
 
-BOOL NETuint8_t(uint8_t *ip)
+template<class Q>
+static void queue(const Q &q, uint64_t &v)
 {
-	uint8_t *store = (uint8_t *) &NetMsg.body[NetMsg.size];
-
-	// Make sure there is enough data/space left in the packet
-	if (sizeof(uint8_t) + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
-	{
-		return NetMsg.status = false;
-	}
-
-	// 8-bit (1 byte) integers need no endian-swapping!
-	if (NETgetPacketDir() == PACKET_ENCODE)
-	{
-		*store = *ip;
-	}
-	else if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		*ip = *store;
-	}
-
-	// Increment the size of the message
-	NetMsg.size += sizeof(uint8_t);
-
-	return true;
+	uint32_t b[2] = {v>>32, v};
+	queue(q, b[0]);
+	queue(q, b[1]);
+	v = uint64_t(b[0])<<32 | b[1];
 }
 
-BOOL NETint16_t(int16_t *ip)
+template<class Q>
+static void queue(const Q &q, char &v)
 {
-	int16_t *store = (int16_t *) &NetMsg.body[NetMsg.size];
+	uint8_t b = v;
+	queue(q, b);
+	v = b;
 
-	// Make sure there is enough data/space left in the packet
-	if (sizeof(int16_t) + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
-	{
-		return NetMsg.status = false;
-	}
-
-	// Convert the integer into the network byte order (big endian)
-	if (NETgetPacketDir() == PACKET_ENCODE)
-	{
-		*store = SDL_SwapBE16(*ip);
-	}
-	else if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		*ip = SDL_SwapBE16(*store);
-	}
-
-	// Increment the size of the message
-	NetMsg.size += sizeof(int16_t);
-
-	return true;
+	STATIC_ASSERT(sizeof(b) == sizeof(v));
 }
 
-BOOL NETuint16_t(uint16_t *ip)
+template<class Q>
+static void queue(const Q &q, int8_t &v)
 {
-	uint16_t *store = (uint16_t *) &NetMsg.body[NetMsg.size];
+	uint8_t b = v;
+	queue(q, b);
+	v = b;
 
-	// Make sure there is enough data/space left in the packet
-	if (sizeof(uint16_t) + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
-	{
-		return NetMsg.status = false;
-	}
-
-	// Convert the integer into the network byte order (big endian)
-	if (NETgetPacketDir() == PACKET_ENCODE)
-	{
-		*store = SDL_SwapBE16(*ip);
-	}
-	else if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		*ip = SDL_SwapBE16(*store);
-	}
-
-	// Increment the size of the message
-	NetMsg.size += sizeof(uint16_t);
-
-	return true;
+	STATIC_ASSERT(sizeof(b) == sizeof(v));
 }
 
-BOOL NETint32_t(int32_t *ip)
+template<class Q>
+static void queue(const Q &q, int16_t &v)
 {
-	int32_t *store = (int32_t *) &NetMsg.body[NetMsg.size];
+	uint16_t b = v;
+	queue(q, b);
+	v = b;
 
-	// Make sure there is enough data/space left in the packet
-	if (sizeof(int32_t) + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
-	{
-		return NetMsg.status = false;
-	}
-
-	// Convert the integer into the network byte order (big endian)
-	if (NETgetPacketDir() == PACKET_ENCODE)
-	{
-		*store = SDL_SwapBE32(*ip);
-	}
-	else if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		*ip = SDL_SwapBE32(*store);
-	}
-
-	// Increment the size of the message
-	NetMsg.size += sizeof(int32_t);
-
-	return true;
+	STATIC_ASSERT(sizeof(b) == sizeof(v));
 }
 
-BOOL NETuint32_t(uint32_t *ip)
+template<class Q>
+static void queue(const Q &q, int32_t &v)
 {
-	uint32_t *store = (uint32_t *) &NetMsg.body[NetMsg.size];
+	uint32_t b = v;
+	queue(q, b);
+	v = b;
 
-	// Make sure there is enough data/space left in the packet
-	if (sizeof(uint32_t) + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
-	{
-		return NetMsg.status = false;
-	}
-
-	// Convert the integer into the network byte order (big endian)
-	if (NETgetPacketDir() == PACKET_ENCODE)
-	{
-		*store = SDL_SwapBE32(*ip);
-	}
-	else if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		*ip = SDL_SwapBE32(*store);
-	}
-
-	// Increment the size of the message
-	NetMsg.size += sizeof(uint32_t);
-
-	return true;
+	STATIC_ASSERT(sizeof(b) == sizeof(v));
 }
 
-BOOL NETfloat(float *fp)
+template<class Q>
+static void queue(const Q &q, int64_t &v)
+{
+	uint64_t b = v;
+	queue(q, b);
+	v = b;
+
+	STATIC_ASSERT(sizeof(b) == sizeof(v));
+}
+
+template<class Q>
+void queue(const Q &q, float &v)
 {
 	/*
 	 * NB: Not portable.
@@ -277,34 +162,283 @@ BOOL NETfloat(float *fp)
 
 	// IEEE754 floating point numbers can be treated the same as 32-bit integers
 	// with regards to endian conversion
-	STATIC_ASSERT(sizeof(float) == sizeof(int32_t));
+	uint32_t b;
+	std::memcpy(&b, &v, sizeof(b));
+	queue(q, b);
+	std::memcpy(&v, &b, sizeof(b));
 
-	return NETint32_t((int32_t *) fp);
+	STATIC_ASSERT(sizeof(b) == sizeof(v));
 }
 
-BOOL NETbool(BOOL *bp)
+template<class Q>
+static void queue(const Q &q, Vector3uw &v)
 {
-	// Bools are converted to uint8_ts
-	uint8_t tmp = (uint8_t) *bp;
-	NETuint8_t(&tmp);
+	queue(q, v.x);
+	queue(q, v.y);
+	queue(q, v.z);
+}
 
-	// If we are decoding and managed to extract the value set it
-	if (NETgetPacketDir() == PACKET_DECODE && NetMsg.status)
+// Queue selection functions
+
+static NetQueue *sendQueue(NETQUEUE queue)
+{
+	return queue.isPair ? &(*static_cast<NetQueuePair **>(queue.queue))->send : static_cast<NetQueue *>(queue.queue);
+}
+
+static NetQueue *receiveQueue(NETQUEUE queue)
+{
+	return queue.isPair ? &(*static_cast<NetQueuePair **>(queue.queue))->receive : static_cast<NetQueue *>(queue.queue);
+}
+
+static NetQueuePair *&pairQueue(NETQUEUE queue)
+{
+	ASSERT(queue.isPair, "Huh?");
+	return *static_cast<NetQueuePair **>(queue.queue);
+}
+
+NETQUEUE NETnetTmpQueue(unsigned tmpPlayer)
+{
+	NETQUEUE ret;
+	ASSERT(tmpPlayer < MAX_TMP_SOCKETS, "Huh?");
+	NetQueuePair **queue = &tmpQueues[tmpPlayer];
+	ret.queue = queue;
+	ret.isPair = true;
+	ret.index = tmpPlayer;
+	ret.queueType = QUEUE_TMP;
+	return ret;
+}
+
+NETQUEUE NETnetQueue(unsigned player)
+{
+	NETQUEUE ret;
+
+	if (player == NET_ALL_PLAYERS)
 	{
-		*bp = (BOOL) tmp;
+		return NETbroadcastQueue();
 	}
 
-	return NetMsg.status;
+	ASSERT(player < MAX_CONNECTED_PLAYERS, "Huh?");
+	NetQueuePair **queue = &netQueues[player];
+	ret.queue = queue;
+	ret.isPair = true;
+	ret.index = player;
+	ret.queueType = QUEUE_NET;
+	return ret;
+}
+
+NETQUEUE NETgameQueue(unsigned player)
+{
+	NETQUEUE ret;
+	ASSERT(player < MAX_CONNECTED_PLAYERS + 1, "Huh?");  // + 1 for AIs that don't use their own queue.
+	NetQueue *queue = gameQueues[player];
+	ret.queue = queue;
+	ret.isPair = false;
+	ret.index = player;
+	ret.queueType = QUEUE_GAME;
+	return ret;
+}
+
+NETQUEUE NETbroadcastQueue()
+{
+	NETQUEUE ret;
+	NetQueue *queue = broadcastQueue;
+	ret.queue = queue;
+	ret.isPair = false;
+	ret.index = NET_ALL_PLAYERS;
+	ret.queueType = QUEUE_BROADCAST;
+	return ret;
+}
+
+void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen)
+{
+	receiveQueue(queue)->writeRawData(data, dataLen);
+}
+
+BOOL NETisMessageReady(NETQUEUE queue)
+{
+	return receiveQueue(queue)->deserialiseHaveLength();
+}
+
+uint8_t NETmessageType(NETQUEUE queue)
+{
+	return receiveQueue(queue)->deserialiseGetType();
+}
+
+/*
+ * Begin & End functions
+ */
+
+void NETinitQueue(NETQUEUE queue)
+{
+	if (queue.queueType == QUEUE_BROADCAST)
+	{
+		delete broadcastQueue;
+		broadcastQueue = new NetQueue(NetQueue::NetSend);
+		return;
+	}
+	else if (queue.queueType == QUEUE_GAME)
+	{
+		delete gameQueues[queue.index];
+		gameQueues[queue.index] = new NetQueue(NetQueue::GameSolo);  // TODO Should sometimes be NetQueue::GameSend or NetQueue::GameReceive.
+		return;
+	}
+	else
+	{
+		delete pairQueue(queue);
+		pairQueue(queue) = new NetQueuePair;
+	}
+}
+
+void NETmoveQueue(NETQUEUE src, NETQUEUE dst)
+{
+	ASSERT(src.isPair, "Huh?");
+	ASSERT(dst.isPair, "Huh?");
+	delete pairQueue(dst);
+	pairQueue(dst) = NULL;
+	std::swap(pairQueue(src), pairQueue(dst));
+}
+
+void NETbeginEncode(NETQUEUE cqueue, uint8_t type)
+{
+	NETsetPacketDir(PACKET_ENCODE);
+
+	writer = sendQueue(cqueue);
+	if (cqueue.queueType == QUEUE_NET || cqueue.queueType == QUEUE_BROADCAST)
+	{
+		writeSocketIndex = cqueue.index;
+	}
+	else
+	{
+		writeSocketIndex = -1;
+	}
+
+	writer.queue->serialiseLength();
+	queue(writer, type);
+}
+
+void NETbeginDecode(NETQUEUE cqueue, uint8_t type)
+{
+	NETsetPacketDir(PACKET_DECODE);
+
+	reader = receiveQueue(cqueue);
+
+	uint32_t len;
+	uint8_t readType;
+	queue(reader, len);
+	queue(reader, readType);
+	assert(type == readType);
+}
+
+BOOL NETend()
+{
+	assert(NETgetPacketDir() != PACKET_INVALID);
+
+	// If we are encoding just return true
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		writer.queue->endSerialiseLength();
+		if (writeSocketIndex >= 0)
+		{
+			const uint8_t *data;
+			size_t dataLen;
+			NetQueue *queue = writeSocketIndex == NET_ALL_PLAYERS ? broadcastQueue : &netQueues[writeSocketIndex]->send;
+
+			queue->readRawData(&data, &dataLen);
+			NETsend(writeSocketIndex, data, dataLen);
+			queue->popRawData(dataLen);
+		}
+		NETsetPacketDir(PACKET_INVALID);
+		return true;
+	}
+
+	bool ret = reader.queue->endDeserialise();
+
+	// We have ended the deserialisation, so mark the direction invalid
+	NETsetPacketDir(PACKET_INVALID);
+
+	return ret;
+/*
+	// If the packet is invalid or failed to compile
+	if (NETgetPacketDir() != PACKET_ENCODE || !NetMsg.status)
+	{
+		return false;
+	}
+
+	// Send the packet, updating the send functions is on my todo list!
+	if (NetMsg.destination == NET_ALL_PLAYERS)
+	{
+		return NETbcast(&NetMsg);
+	}
+	else
+	{
+		return NETsend(&NetMsg, NetMsg.destination);
+	}
+	*/
+}
+
+template<class T>
+static void queueAuto(T &v)
+{
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		queue(writer, v);
+	}
+	else if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		queue(reader, v);
+	}
+}
+
+void NETint8_t(int8_t *ip)
+{
+	queueAuto(*ip);
+}
+
+void NETuint8_t(uint8_t *ip)
+{
+	queueAuto(*ip);
+}
+
+void NETint16_t(int16_t *ip)
+{
+	queueAuto(*ip);
+}
+
+void NETuint16_t(uint16_t *ip)
+{
+	queueAuto(*ip);
+}
+
+void NETint32_t(int32_t *ip)
+{
+	queueAuto(*ip);
+}
+
+void NETuint32_t(uint32_t *ip)
+{
+	queueAuto(*ip);
+}
+
+void NETfloat(float *fp)
+{
+	queueAuto(*fp);
+}
+
+void NETbool(BOOL *bp)
+{
+	uint8_t i = !!*bp;
+	queueAuto(i);
+	*bp = !!i;
 }
 
 /*
  * NETnull should be used to either add 4 bytes of padding to a message, or to
  * discard 4 bytes of data from a message.
  */
-BOOL NETnull()
+void NETnull()
 {
 	uint32_t zero = 0;
-	return NETuint32_t(&zero);
+	NETuint32_t(&zero);
 }
 
 /** Sends or receives a string to or from the current network package.
@@ -321,103 +455,65 @@ BOOL NETnull()
  *        string being decoded, the resulting string (in \c str) will be
  *        truncated.
  */
-BOOL NETstring(char *str, uint16_t maxlen)
+void NETstring(char *str, uint16_t maxlen)
 {
 	/*
 	 * Strings sent over the network are prefixed with their length, sent as an
-	 * unsigned 16-bit integer.
+	 * unsigned 16-bit integer, not including \0 termination.
 	 */
 
-	// Work out the length of the string if we are encoding
-	uint16_t len = (NETgetPacketDir() == PACKET_ENCODE) ? strnlen1(str, maxlen) : 0;
-	char *store;
+	uint16_t len = NETgetPacketDir() == PACKET_ENCODE ? strnlen1(str, maxlen) - 1 : 0;
+	queueAuto(len);
 
-	// Add/fetch the length from the packet
-	NETuint16_t(&len);
-
-	// Map store to the message buffer
-	store = (char *) &NetMsg.body[NetMsg.size];
-
-	// Make sure there is enough data/space left in the packet
-	if (len + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
+	// Truncate length if necessary
+	if (len > maxlen - 1)
 	{
-		return NetMsg.status = false;
+		debug(LOG_ERROR, "NETstring: %s packet, length %u truncated at %u", NETgetPacketDir() == PACKET_ENCODE ? "Encoding" : "Decoding", len, maxlen);
+		len = maxlen - 1;
 	}
 
-	if (NETgetPacketDir() == PACKET_ENCODE)
+	for (unsigned i = 0; i < len; ++i)
 	{
-		memcpy(store, str, len);
-	}
-	else if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		// Truncate length if necessary
-		if (len > maxlen)
-		{
-			debug(LOG_ERROR, "NETstring: Decoding packet type %d from %d, buffer size %u truncated at %u", 
-			      NetMsg.type, NetMsg.source, len, maxlen);
-			len = maxlen;
-		}
-		memcpy(str, store, len);
-		// Guarantee NUL-termination
-		str[len - 1] = '\0';
+		queueAuto(str[i]);
 	}
 
-	// Increment the size of the message
-	NetMsg.size += sizeof(len) + len;
-
-	return true;
+	if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		// NUL-terminate
+		str[len] = '\0';
+	}
 }
 
-BOOL NETbin(char *str, uint16_t maxlen)
+void NETbin(uint8_t *str, uint16_t maxlen)
 {
 	/*
-	 * Strings sent over the network are prefixed with their length, sent as an
+	 * Bins sent over the network are prefixed with their length, sent as an
 	 * unsigned 16-bit integer.
 	 */
 
-	// Work out the length of the string if we are encoding
-	uint16_t len = (NETgetPacketDir() == PACKET_ENCODE) ? maxlen : 0;
-	char *store;
+	// Work out the length of the bin if we are encoding
+	uint16_t len = NETgetPacketDir() == PACKET_ENCODE ? maxlen : 0;
+	queueAuto(len);
 
-	// Add/fetch the length from the packet
-	NETuint16_t(&len);
-
-	// Map store to the message buffer
-	store = (char *) &NetMsg.body[NetMsg.size];
-
-	// Make sure there is enough data/space left in the packet
-	if (len + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
+	// Truncate length if necessary
+	if (len > maxlen)
 	{
-		return NetMsg.status = false;
+		debug(LOG_ERROR, "NETbin: Decoding packet, buffer size %u truncated at %u", len, maxlen);
+		len = maxlen;
 	}
 
-	if (NETgetPacketDir() == PACKET_ENCODE)
+	for (unsigned i = 0; i < len; ++i)
 	{
-		memcpy(store, str, len);
-	}
-	else if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		// Truncate length if necessary
-		if (len > maxlen)
-		{
-			debug(LOG_ERROR, "NETbin: Decoding packet type %d from %d, buffer size %u truncated at %u", 
-			      NetMsg.type, NetMsg.source, len, maxlen);
-			len = maxlen;
-		}
-		memcpy(str, store, len);
+		queueAuto(str[i]);
 	}
 
-	// Increment the size of the message
-	NetMsg.size += sizeof(len) + len;
-
-	return true;
+	// Throw away length...
+	//maxlen = len;
 }
 
-BOOL NETVector3uw(Vector3uw* vp)
+void NETVector3uw(Vector3uw *vp)
 {
-	return (NETuint16_t(&vp->x)
-	     && NETuint16_t(&vp->y)
-	     && NETuint16_t(&vp->z));
+	queueAuto(*vp);
 }
 
 typedef enum
@@ -428,7 +524,7 @@ typedef enum
 
 static void NETcoder(PACKETDIR dir)
 {
-	static const char original[] = "THIS IS A TEST STRING";
+/*	static const char original[] = "THIS IS A TEST STRING";
 	char str[sizeof(original)];
 	BOOL b = true;
 	uint32_t u32 = 32;
@@ -442,9 +538,9 @@ static void NETcoder(PACKETDIR dir)
 	sstrcpy(str, original);
 
 	if (dir == PACKET_ENCODE)
-		NETbeginEncode(0, 0);
+		NETbeginEncodeNet(0, 0);
 	else
-		NETbeginDecode(0);
+		NETbeginDecodeNet(0, 0);
 	NETbool(&b);			assert(b == true);
 	NETuint32_t(&u32);  assert(u32 == 32);
 	NETuint16_t(&u16);  assert(u16 == 16);
@@ -453,12 +549,12 @@ static void NETcoder(PACKETDIR dir)
 	NETint16_t(&i16);   assert(i16 == -16);
 	NETint8_t(&i8);     assert(i8 == -8);
 	NETstring(str, sizeof(str)); assert(strncmp(str, original, sizeof(str) - 1) == 0);
-	NETenum(&te);       assert(te == test_b);
+	NETenum(&te);       assert(te == test_b);*/
 }
 
 void NETtest()
 {
-	NETMSG cmp;
+	/*NETMSG cmp;
 
 	memset(&cmp, 0, sizeof(cmp));
 	memset(&NetMsg, 0, sizeof(NetMsg));
@@ -466,10 +562,11 @@ void NETtest()
 	memcpy(&cmp, &NetMsg, sizeof(cmp));
 	NETcoder(PACKET_DECODE);
 	ASSERT(memcmp(&cmp, &NetMsg, sizeof(cmp)) == 0, "nettypes unit test failed");
-	fprintf(stdout, "\tNETtypes self-test: PASSED\n");
+	fprintf(stdout, "\tNETtypes self-test: PASSED\n");*/
+	ASSERT(false, "nettypes test disabled, since it doesn't compile anymore.");
 }
 
-int NETgetSource()
+/*int NETgetSource()
 {
 	return NetMsg.source;
-}
+}*/

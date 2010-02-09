@@ -105,9 +105,6 @@ static void setSockErr(int error)
 char masterserver_name[255] = {'\0'};
 static unsigned int masterserver_port = 0, gameserver_port = 0;
 
-#define MAX_CONNECTED_PLAYERS	8
-#define MAX_TMP_SOCKETS		16
-
 #define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity
 #define NET_READ_TIMEOUT	0
 /*
@@ -145,7 +142,7 @@ void NETresetGamePassword(void);
 /*
  * Network globals, these are part of the new network API
  */
-NETMSG NetMsg;
+//NETMSG NetMsg;
 SYNC_COUNTER sync_counter;		// keeps track on how well we are in sync
 // ////////////////////////////////////////////////////////////////////////
 // Types
@@ -185,13 +182,11 @@ typedef struct
 	bool ready;
 } Socket;
 
-typedef struct
+/*typedef struct
 {
-	Socket* socket;
-	char*		buffer;
-	unsigned int	buffer_start;
-	unsigned int	bytes;
-} NETBUFSOCKET;
+	Socket *        socket;
+	uint8_t *       buffer;
+} NETBUFSOCKET;*/
 
 typedef struct
 {
@@ -220,8 +215,8 @@ int mapDownloadProgress;
  */
 static Socket* tcp_socket = NULL;		//socket used to talk to lobbyserver/ host machine
 
-static NETBUFSOCKET*	bsocket = NULL;		//buffered socket (holds tcp_socket) (clients only?)
-static NETBUFSOCKET*	connected_bsocket[MAX_CONNECTED_PLAYERS] = { NULL };
+static Socket *bsocket = NULL;                  //buffered socket (holds tcp_socket) (clients only?)
+static Socket *connected_bsocket[MAX_CONNECTED_PLAYERS] = { NULL };
 static SocketSet* socket_set = NULL;
 
 // UPnP
@@ -256,9 +251,9 @@ extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk, netcode 3.32";
-static int NETCODE_VERSION_MAJOR = 2;
-static int NETCODE_VERSION_MINOR = 35;
+char VersionString[VersionStringSize] = "trunk, netcode++ 3.36";
+static int NETCODE_VERSION_MAJOR = 3;
+static int NETCODE_VERSION_MINOR = 36;
 static int NETCODE_HASH = 0;			// unused for now
 
 #if defined(WZ_OS_WIN)
@@ -1168,53 +1163,21 @@ void NETresetGamePassword(void)
 
 // *********** Socket with buffer that read NETMSGs ******************
 
-static NETBUFSOCKET* NET_createBufferedSocket(void)
+static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *bufstart, int bufsize)
 {
-	NETBUFSOCKET* bs = (NETBUFSOCKET*)malloc(sizeof(*bs));
-
-	bs->socket = NULL;
-	bs->buffer = NULL;
-	bs->buffer_start = 0;
-	bs->bytes = 0;
-
-	return bs;
-}
-
-static void NET_destroyBufferedSocket(NETBUFSOCKET* bs)
-{
-	free(bs->buffer);
-	free(bs);
-}
-
-static void NET_initBufferedSocket(NETBUFSOCKET* bs, Socket* s)
-{
-	bs->socket = s;
-	if (bs->buffer == NULL) {
-		bs->buffer = (char*)malloc(NET_BUFFER_SIZE);
-	}
-	bs->buffer_start = 0;
-	bs->bytes = 0;
-}
-
-static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
-{
+	Socket *socket = *pSocket;
 	ssize_t size;
-	char* bufstart = bs->buffer + bs->buffer_start + bs->bytes;
-	const int bufsize = NET_BUFFER_SIZE - bs->buffer_start - bs->bytes;
 
-
-	if (bs->buffer_start != 0
-	 || !bs->socket->ready)
+	if (!socket->ready)
 	{
-		return false;
+		return 0;
 	}
 
-	size = readNoInt(bs->socket, bufstart, bufsize);
+	size = readNoInt(socket, bufstart, bufsize);
 
 	if (size != 0 && size != SOCKET_ERROR)
 	{
-		bs->bytes += size;
-		return true;
+		return size;
 	}
 	else
 	{
@@ -1224,98 +1187,33 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 		}
 		else
 		{
-			debug(LOG_WARNING, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), bs->socket);
+			debug(LOG_WARNING, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), socket);
 		}
 
 		// an error occured, or the remote host has closed the connection.
 		if (socket_set != NULL)
 		{
-			delSocket(socket_set, bs->socket);
+			delSocket(socket_set, socket);
 		}
 
-		ASSERT(bs->bytes < NET_BUFFER_SIZE, "Socket buffer is too small!");
+		ASSERT(size <= bufsize, "Socket buffer is too small!");
 
-		if (bs->bytes > NET_BUFFER_SIZE)
+		if (size > bufsize)
 		{
-			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %d", NET_BUFFER_SIZE, bs->bytes);
+			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %zd", bufsize, size);
 		}
-		if (tcp_socket == bs->socket)
+		if (tcp_socket == socket)
 		{
 			debug(LOG_NET, "Host connection was lost!");
 			tcp_socket = NULL;
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
 		}
-		socketClose(bs->socket);
-		bs->socket = NULL;
+		socketClose(socket);
+		*pSocket = NULL;
 	}
 
-	return false;
-}
-
-// Check if we have a full message waiting for us. If not, return false and wait for more data.
-// If there is a data remnant somewhere in the buffer except at its beginning, move it to the
-// beginning.
-static BOOL NET_recvMessage(NETBUFSOCKET* bs)
-{
-	NETMSG *pMsg = &NetMsg;
-	unsigned int size;
-	const NETMSG* message = (NETMSG*)(bs->buffer + bs->buffer_start);
-	const unsigned int headersize =   sizeof(message->size)
-					+ sizeof(message->type)
-					+ sizeof(message->destination)
-					+ sizeof(message->source);
-
-	if (headersize > bs->bytes)
-	{
-		goto error;
-	}
-
-	size = ntohs(message->size) + headersize;
-
-	if (size > bs->bytes)
-	{
-		goto error;
-	}
-
-	memcpy(pMsg, message, size);
-	pMsg->size = ntohs(message->size);
-	bs->buffer_start += size;
-	bs->bytes -= size;
-
-	return true;
-
-error:
-	if (bs->buffer_start != 0)
-	{
-		static char* tmp_buffer = NULL;
-		char* buffer_start = bs->buffer + bs->buffer_start;
-		char* tmp;
-
-		// Create tmp buffer if necessary
-		if (tmp_buffer == NULL)
-		{
-			tmp_buffer = (char*)malloc(NET_BUFFER_SIZE);
-		}
-
-		// Move remaining contents into tmp buffer
-		memcpy(tmp_buffer, buffer_start, bs->bytes);
-
-		// swap tmp buffer with buffer
-		tmp = bs->buffer;
-		bs->buffer = tmp_buffer;
-		tmp_buffer = tmp;
-
-		if (tmp_buffer)
-		{
-			free(tmp_buffer);
-			tmp_buffer = NULL;
-		}
-		// Now data is in the beginning of the buffer
-		bs->buffer_start = 0;
-	}
-
-	return false;
+	return 0;
 }
 
 void NET_InitPlayers()
@@ -1336,7 +1234,9 @@ void NET_InitPlayers()
 		NetPlay.players[i].needFile = false;
 		NetPlay.players[i].wzFile.isCancelled = false;
 		NetPlay.players[i].wzFile.isSending = false;
+		NETinitQueue(NETnetQueue(i));
 	}
+	NETinitQueue(NETbroadcastQueue());
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
 	debug(LOG_NET, "Players initialized");
@@ -1344,7 +1244,7 @@ void NET_InitPlayers()
 
 void NETBroadcastPlayerInfo(uint32_t index)
 {
-	NETbeginEncode(NET_PLAYER_INFO, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_INFO);
 		NETuint32_t(&index);
 		NETbool(&NetPlay.players[index].allocated);
 		NETbool(&NetPlay.players[index].heartbeat);
@@ -1406,18 +1306,17 @@ static void NETplayerClientDisconnect(uint32_t index)
 {
 	if(connected_bsocket[index])
 	{
-		debug(LOG_NET, "Player (%u) has left unexpectedly, closing socket %p",
-			index, connected_bsocket[index]->socket);
+		debug(LOG_NET, "Player (%u) has left unexpectedly, closing socket %p", index, connected_bsocket[index]);
 
 		// Although we can get a error result from DelSocket, it don't really matter here.
-		delSocket(socket_set, connected_bsocket[index]->socket);
-		socketClose(connected_bsocket[index]->socket);
-		connected_bsocket[index]->socket = NULL;
+		delSocket(socket_set, connected_bsocket[index]);
+		socketClose(connected_bsocket[index]);
+		connected_bsocket[index] = NULL;
 		NetPlay.players[index].heartbeat = false;
 
-		// Announce to the world. This is really icky, because we may be calling the send
-		// function recursively. We really ought to have a send queue...
-		NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
+		// Announce to the world. This was really icky, because we may have been calling the send
+		// function recursively. We really ought to have had a send queue, and now we finally do...
+		NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
 			NETuint32_t(&index);
 		NETend();
 	}
@@ -1436,13 +1335,12 @@ static void NETplayerLeaving(UDWORD index)
 {
 	if(connected_bsocket[index])
 	{
-		debug(LOG_NET, "Player (%u) has left nicely, closing socket %p",
-			index, connected_bsocket[index]->socket);
+		debug(LOG_NET, "Player (%u) has left nicely, closing socket %p", index, connected_bsocket[index]);
 
 		// Although we can get a error result from DelSocket, it don't really matter here.
-		delSocket(socket_set, connected_bsocket[index]->socket);
-		socketClose(connected_bsocket[index]->socket);
-		connected_bsocket[index]->socket = NULL;
+		delSocket(socket_set, connected_bsocket[index]);
+		socketClose(connected_bsocket[index]);
+		connected_bsocket[index] = NULL;
 	}
 	else
 	{
@@ -1459,8 +1357,8 @@ static void NETplayerDropped(UDWORD index)
 {
 	uint32_t id = index;
 
-	// Send message type speciffically for dropped / disconnects
-	NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
+	// Send message type specifically for dropped / disconnects
+	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
 		NETuint32_t(&id);
 	NETend();
 	debug(LOG_INFO, "NET_PLAYER_DROPPED received for player %d", id);
@@ -1518,7 +1416,7 @@ SDWORD NETgetGameFlags(UDWORD flag)
 
 static void NETsendGameFlags(void)
 {
-	NETbeginEncode(NET_GAME_FLAGS, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_GAME_FLAGS);
 	{
 		// Send the amount of game flags we're about to send
 		uint8_t i, count = ARRAY_SIZE(NetGameFlags);
@@ -2028,9 +1926,9 @@ int NETclose(void)
 
 	if(bsocket)
 	{	// need delSocket() as well, socket_set or tmp_socket_set?
-		debug(LOG_NET, "Closing bsocket %p socket %p (tcp_socket=%p)", bsocket, bsocket->socket, tcp_socket);
-		//socketClose(bsocket->socket);
-		NET_destroyBufferedSocket(bsocket);
+		debug(LOG_NET, "Closing bsocket %p socket %p (tcp_socket=%p)", bsocket, bsocket, tcp_socket);
+		// Why is there a commeted out socketClose there?
+		//socketClose(bsocket);
 		bsocket=NULL;
 	}
 
@@ -2038,12 +1936,8 @@ int NETclose(void)
 	{
 		if (connected_bsocket[i])
 		{
-			if(connected_bsocket[i]->socket)
-			{
-				debug(LOG_NET, "Closing connected_bsocket[%u], %p", i, connected_bsocket[i]->socket);
-				socketClose(connected_bsocket[i]->socket);
-			}
-			NET_destroyBufferedSocket(connected_bsocket[i]);
+			debug(LOG_NET, "Closing connected_bsocket[%u], %p", i, connected_bsocket[i]);
+			socketClose(connected_bsocket[i]);
 			connected_bsocket[i]=NULL;
 		}
 		NET_DestroyPlayer(i);
@@ -2174,9 +2068,8 @@ UDWORD NETgetPacketsRecvd(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // Send a message to a player, option to guarantee message
-BOOL NETsend(NETMSG *msg, UDWORD player)
+BOOL NETsend(uint8_t player, const uint8_t *rawData, ssize_t rawLen)
 {
-	int size;
 	ssize_t result = 0;
 
 	if(!NetPlay.bComms)
@@ -2184,101 +2077,43 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 		return true;
 	}
 
-	if (player >= MAX_CONNECTED_PLAYERS) return false;
-	msg->destination = player;
-	msg->source = selectedPlayer;
+	if (player >= MAX_CONNECTED_PLAYERS && player != NET_ALL_PLAYERS) return false;
 
-	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination) + sizeof(msg->source);
-
-	NETlogPacket(msg, false);
-	msg->size = htons(msg->size);
+	//NETlogPacket(msg, false);
 
 	if (NetPlay.isHost)
 	{
-		if (   player < MAX_CONNECTED_PLAYERS
-		    && connected_bsocket[player] != NULL
-		    && connected_bsocket[player]->socket != NULL
-		    && (result = writeAll(connected_bsocket[player]->socket,
-				       msg, size) == size))
+		int firstPlayer = player == NET_ALL_PLAYERS ? 0                         : player;
+		int lastPlayer  = player == NET_ALL_PLAYERS ? MAX_CONNECTED_PLAYERS - 1 : player;
+		for (player = firstPlayer; player <= lastPlayer; ++player)
 		{
-			nStats.bytesSent   += size;
-			nStats.packetsSent += 1;
-			return true;
-		}
-		else if (result == SOCKET_ERROR)
-		{
-			// Write error, most likely client disconnect.
-			debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-			NETplayerClientDisconnect(player);
-		}
-	}
-	else
-	{
-			if (tcp_socket && (result = writeAll(tcp_socket, msg, size) == size))
+			// We are the host, send directly to player.
+			if (connected_bsocket[player] != NULL)
 			{
-				return true;
-			}
-			else if (result == SOCKET_ERROR)
-			{
-				// Write error, most likely client disconnect.
-				debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-				socketClose(tcp_socket);
-				tcp_socket = NULL;
-			}
-
-	}
-
-	return false;
-}
-
-// ////////////////////////////////////////////////////////////////////////
-// broadcast a message to all players.
-BOOL NETbcast(NETMSG *msg)
-{
-	int size;
-
-	if(!NetPlay.bComms)
-	{
-		return true;
-	}
-
-	msg->destination = NET_ALL_PLAYERS;
-	msg->source = selectedPlayer;
-
-	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination) + sizeof(msg->source);
-
-	NETlogPacket(msg, false);
-	msg->size = htons(msg->size);
-
-	if (NetPlay.isHost)
-	{
-		unsigned int i;
-
-		for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
-		{
-			if (   connected_bsocket[i] == NULL
-			    || connected_bsocket[i]->socket == NULL)
-			{
-				continue;
-			}
-			else
-			{	
-				if (writeAll(connected_bsocket[i]->socket, msg, size) == SOCKET_ERROR)
+				result = writeAll(connected_bsocket[player], rawData, rawLen);
+				if (result == rawLen)
+				{
+					nStats.bytesSent   += rawLen;
+					nStats.packetsSent += 1;
+				}
+				else if (result == SOCKET_ERROR)
 				{
 					// Write error, most likely client disconnect.
 					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-					NETplayerClientDisconnect(i);
+					NETplayerClientDisconnect(player);
 				}
 			}
 		}
+		return true;
 	}
-	else
+	else if (player == NetPlay.hostPlayer)
 	{
-		if (!tcp_socket)
+		// We are a client, send directly to player, who happens to be the host.
+		if (tcp_socket && (result = writeAll(tcp_socket, rawData, rawLen) == rawLen))
 		{
-			return false;
+			return true;
 		}
-		if (writeAll(tcp_socket, msg, size) == SOCKET_ERROR)
+		else if (result == SOCKET_ERROR)
 		{
 			// Write error, most likely client disconnect.
 			debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
@@ -2288,24 +2123,81 @@ BOOL NETbcast(NETMSG *msg)
 			NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
-			return false;
+		}
+	}
+	else
+	{
+		// We are a client and can't send the data directly, ask the host to send the data to the player.
+		uint8_t sender = selectedPlayer;
+		uint16_t len;
+		while (rawLen > 0)
+		{
+			len = MIN(rawLen, 10000);
+			NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_SEND_TO_PLAYER);
+				NETuint8_t(&sender);
+				NETuint8_t(&player);
+				NETuint16_t(&len);                // Send length.
+				NETbin((uint8_t *)rawData, len);  // Sends length again. Cast away const.
+			NETend();
+			rawData += len;
+			rawLen  -= len;
 		}
 	}
 
-	nStats.bytesSent   += size;
-	nStats.packetsSent += 1;
-
-	return true;
+	return false;
 }
+
 
 ///////////////////////////////////////////////////////////////////////////
 // Check if a message is a system message
-static BOOL NETprocessSystemMessage(void)
+static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 {
-	NETMSG *pMsg = &NetMsg;
-
-	switch (pMsg->type)
+	switch (type)
 	{
+		case NET_SEND_TO_PLAYER:
+		{
+			uint8_t sender;
+			uint8_t receiver;
+			uint8_t data[10000];
+			uint16_t len = sizeof(data);
+			NETbeginDecode(playerQueue, NET_SEND_TO_PLAYER);
+				NETuint8_t(&sender);
+				NETuint8_t(&receiver);
+				NETuint16_t(&len);  // Get length.
+				NETbin(data, len);  // Gets and discards length.
+			if (!NETend())
+			{
+				debug(LOG_ERROR, "Incomplete NET_SEND_TO_PLAYER.");
+				break;
+			}
+			if ((receiver == selectedPlayer || receiver == NET_ALL_PLAYERS) && playerQueue.index == NetPlay.hostPlayer)
+			{
+				// Message was sent to us via the host.
+				if (sender != selectedPlayer)  // TODO Tell host not to send us our own broadcast messages.
+				{
+					NETinsertRawData(NETnetQueue(sender), data, len);
+				}
+			}
+			else if (NetPlay.isHost && sender == playerQueue.index)
+			{
+				// We are the host, and player is asking us to send the message to receiver.
+				NETbeginEncode(NETnetQueue(receiver), NET_SEND_TO_PLAYER);
+					NETuint8_t(&sender);
+					NETuint8_t(&receiver);
+					NETuint16_t(&len);  // Send length.
+					NETbin(data, len);  // Sends length again.
+				NETend();
+				if (receiver == NET_ALL_PLAYERS)
+				{
+					NETinsertRawData(NETnetQueue(sender), data, len);  // Message is also for the host.
+				}
+			}
+			else
+			{
+				debug(LOG_ERROR, "Player %d sent us a NET_SEND_TO_PLAYER addressed to %d from %d. We are %d.", playerQueue.index, receiver, sender, selectedPlayer);
+			}
+			break;
+		}
 		case NET_PLAYER_STATS:
 		{
 			recvMultiStats();
@@ -2316,7 +2208,7 @@ static BOOL NETprocessSystemMessage(void)
 		{
 			uint32_t index;
 
-			NETbeginDecode(NET_PLAYER_INFO);
+			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
 				// Retrieve the player's ID
 				NETuint32_t(&index);
 
@@ -2324,6 +2216,12 @@ static BOOL NETprocessSystemMessage(void)
 				if (index >= MAX_CONNECTED_PLAYERS)
 				{
 					debug(LOG_WARNING, "MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", index, (unsigned int)MAX_CONNECTED_PLAYERS);
+					NETend();
+					break;
+				}
+				if (index != playerQueue.index && playerQueue.index != NET_HOST_ONLY)
+				{
+					debug(LOG_WARNING, "MSG_PLAYER_INFO: Player %d trying to change info about player %d.", playerQueue.index, index);
 					NETend();
 					break;
 				}
@@ -2338,8 +2236,14 @@ static BOOL NETprocessSystemMessage(void)
 				NETint32_t(&NetPlay.players[index].position);
 				NETint32_t(&NetPlay.players[index].team);
 				NETbool(&NetPlay.players[index].ready);
-				NETuint32_t(&NetPlay.hostPlayer);
+				NETuint32_t(&NetPlay.hostPlayer);  // Does this make sense at all?
 			NETend();
+			if (NetPlay.hostPlayer != NET_HOST_ONLY)
+			{
+				// Exactly what was the point of letting anyone change the host? This codebase is confusing.
+				debug(LOG_WARNING, "MSG_PLAYER_INFO: Player %d thinks that player %d is the host...", playerQueue.index, NetPlay.hostPlayer);
+				NetPlay.hostPlayer = NET_HOST_ONLY;
+			}
 			debug(LOG_NET, "Receiving MSG_PLAYER_INFO for player %u (%s)", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
 			// update the color to the local array
 			setPlayerColour(index, NetPlay.players[index].colour);
@@ -2357,7 +2261,7 @@ static BOOL NETprocessSystemMessage(void)
 		{
 			uint8_t index;
 
-			NETbeginDecode(NET_PLAYER_JOINED);
+			NETbeginDecode(playerQueue, NET_PLAYER_JOINED);
 				NETuint8_t(&index);
 			NETend();
 
@@ -2373,14 +2277,19 @@ static BOOL NETprocessSystemMessage(void)
 		{
 			uint32_t index;
 
-			NETbeginDecode(NET_PLAYER_LEAVING);
+			NETbeginDecode(playerQueue, NET_PLAYER_LEAVING);
 				NETuint32_t(&index);
 			NETend();
 
+			if (playerQueue.index != NetPlay.hostPlayer && index != playerQueue.index)
+			{
+				debug(LOG_WARNING, "Player %d left, but accidentally set player %d as leaving.", playerQueue.index, index);
+				index = playerQueue.index;
+			}
+
 			if(connected_bsocket[index])
 			{
-				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u on socket %p",
-							(unsigned int)index, connected_bsocket[index]->socket);
+				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u on socket %p", (unsigned int)index, connected_bsocket[index]);
 			}
 			else
 			{	// dropped from join screen most likely
@@ -2397,7 +2306,7 @@ static BOOL NETprocessSystemMessage(void)
 		{
 			debug(LOG_NET, "Receiving game flags");
 
-			NETbeginDecode(NET_GAME_FLAGS);
+			NETbeginDecode(playerQueue, NET_GAME_FLAGS);
 			{
 				static unsigned int max_flags = ARRAY_SIZE(NetGameFlags);
 				// Retrieve the amount of game flags that we should receive
@@ -2472,12 +2381,9 @@ static void NETcheckPlayers(void)
 // Receive a message over the current connection. We return true if there
 // is a message for the higher level code to process, and false otherwise.
 // We should not block here.
-BOOL NETrecv(uint8_t *type)
+BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type)
 {
-	NETMSG *pMsg = &NetMsg;
-	static unsigned int current = 0;
-	BOOL received;
-	int size;
+	uint32_t current;
 
 	if (!NetPlay.bComms)
 	{
@@ -2491,168 +2397,104 @@ BOOL NETrecv(uint8_t *type)
 
 	NETcheckPlayers();		// make sure players are still alive & well
 
-	do {
-receive_message:
-		received = false;
+	if (socket_set == NULL || checkSockets(socket_set, NET_READ_TIMEOUT) <= 0)
+	{
+		return false;
+	}
 
-		if (NetPlay.isHost)
+	for (current = 0; current < MAX_CONNECTED_PLAYERS; ++current)
+	{
+		Socket **pSocket = NetPlay.isHost ? &connected_bsocket[current] : &bsocket;
+		uint8_t buffer[NET_BUFFER_SIZE];
+		size_t dataLen;
+
+		if (!NetPlay.isHost && current != NET_HOST_ONLY)
 		{
-			if (connected_bsocket[current] == NULL)
+			continue;  // Don't have a socket open to this player.
+		}
+
+		if (*pSocket == NULL)
+		{
+			continue;
+		}
+
+		dataLen = NET_fillBuffer(pSocket, socket_set, buffer, sizeof(buffer));
+		if (dataLen > 0)
+		{
+			// we received some data, add to buffer
+			NETinsertRawData(NETnetQueue(current), buffer, dataLen);
+		}
+		else if (*pSocket == NULL)
+		{
+			// If there is a error in NET_fillBuffer() then socket is already invalid.
+			// This means that the player dropped / disconnected for whatever reason. 
+			debug(LOG_WARNING, "Player, (player %u) seems to have dropped/disconnected.", (unsigned)current);
+
+			if (NetPlay.isHost)
 			{
-				return false;
-			}
-
-			received = NET_recvMessage(connected_bsocket[current]);
-
-			if (received == false)
-			{
-				uint32_t i = (current + 1) % 8;
-
-				if (socket_set == NULL
-				    || checkSockets(socket_set, NET_READ_TIMEOUT) <= 0)
-				{
-					return false;
-				}
-				for (;;)
-				{
-					ASSERT(i < MAX_CONNECTED_PLAYERS, "Bad player number %u (current was %u)", i, current);
-					if (connected_bsocket[i] == NULL || connected_bsocket[i]->socket == NULL)
-					{
-						// do nothing
-					}
-					else if (NET_fillBuffer(connected_bsocket[i], socket_set))
-					{
-						// we received some data, add to buffer
-						received = NET_recvMessage(connected_bsocket[i]);
-						if (i == pMsg->source) // prevent spoofing
-						{
-							current = i;
-							break;
-						}
-					}
-					else if (connected_bsocket[i]->socket == NULL)
-					{
-						// If there is a error in NET_fillBuffer() then socket is already invalid.
-						// This means that the player dropped / disconnected for whatever reason. 
-						debug(LOG_WARNING, "Player, (player %u) seems to have dropped/disconnected.", i);
-
-						// Send message type speciffically for dropped / disconnects
-						NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
-							NETuint32_t(&i);
-						NETend();
-						debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d (invalid socket)", i);
-						NET_DestroyPlayer(i);			// just clears array
-						MultiPlayerLeave(i);			// more cleanup
-						NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
-						NetPlay.players[i].kick = true;			//they are going to get kicked.
-					}
-
-					if (++i == MAX_CONNECTED_PLAYERS)
-					{
-						i = 0;
-					}
-
-					if (i == current+1)
-					{
-						return false;
-					}
-				}
+				// Send message type specifically for dropped / disconnects
+				NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
+					NETuint32_t(&current);
+				NETend();
+				debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d (invalid socket)", (int)current);
+				NET_DestroyPlayer(current);                     // just clears array
+				MultiPlayerLeave(current);                      // more cleanup
+				NET_PlayerConnectionStatus = 2;                 // Display DROPPED_CONNECTION icon ingame.
+				NetPlay.players[current].kick = true;           // they are going to get kicked.
 			}
 		}
-		else
+	}
+
+	for (current = 0; current < MAX_CONNECTED_PLAYERS; ++current)
+	{
+		*queue = NETnetQueue(current);
+		while (NETisMessageReady(*queue))
 		{
-			// we are a client
-			if (bsocket == NULL)
+			*type = NETmessageType(*queue);
+			if (!NETprocessSystemMessage(*queue, *type))
 			{
-				return false;
+				return true;  // We couldn't process the message, let the caller deal with it..
+			}
+		}
+	}
+
+	//NETlogPacket(pMsg, true);
+
+	return false;
+}
+
+BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type)
+{
+	uint32_t current;
+	for (current = 0; current < MAX_PLAYERS; ++current)
+	{
+		/* //TODO
+		if (gameQueueTime[current] > gameTime)
+		{
+			continue;  // Any remaining messages are not scheduled yet.
+		}
+		*/
+
+		*queue = NETgameQueue(current);
+		while (NETisMessageReady(*queue))
+		{
+			*type = NETmessageType(*queue);
+			if (!NETprocessSystemMessage(*queue, *type))
+			{
+				return true;  // We couldn't process the message, let the caller deal with it..
 			}
 			else
 			{
-				received = NET_recvMessage(bsocket);
-
-				if (received == false)
-				{
-					if (   socket_set != NULL
-					    && checkSockets(socket_set, NET_READ_TIMEOUT) > 0
-					    && NET_fillBuffer(bsocket, socket_set))
-					{
-						received = NET_recvMessage(bsocket);
-					}
-				}
+				debug(LOG_WARNING, "There was a system message in a game queue...");
 			}
 		}
 
-		if (received == false)
-		{
-			return false;
-		}
-		else
-		{
-			size =	  pMsg->size + sizeof(pMsg->size) + sizeof(pMsg->type)
-				+ sizeof(pMsg->destination) + sizeof(pMsg->source);
-			if (!NetPlay.isHost)
-			{
-				// do nothing
-			}
-			else if (pMsg->destination == NET_ALL_PLAYERS)
-			{
-				unsigned int j;
+		/* //TODO
+		break;  // Still waiting for messages from this player.
+		*/
+	}
 
-				pMsg->size = ntohs(pMsg->size);
-
-				// we are the host, and have received a broadcast packet; distribute it
-				for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
-				{
-					if (   j != current
-					    && connected_bsocket[j] != NULL
-					    && connected_bsocket[j]->socket != NULL)
-					{
-						if (writeAll(connected_bsocket[j]->socket, pMsg, size) == SOCKET_ERROR)
-						{
-							// Write error, most likely client disconnect.
-							debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-							socketClose(connected_bsocket[j]->socket);
-							connected_bsocket[j]->socket = NULL;
-						}
-					}
-				}
-			}
-			else if (pMsg->destination != selectedPlayer)
-			{
-				// message was not meant for us; send it further
-				if (   pMsg->destination < MAX_CONNECTED_PLAYERS
-				    && connected_bsocket[pMsg->destination] != NULL
-				    && connected_bsocket[pMsg->destination]->socket != NULL)
-				{
-					debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
-					pMsg->size = ntohs(pMsg->size);
-
-					if (writeAll(connected_bsocket[pMsg->destination]->socket, pMsg, size) == SOCKET_ERROR)
-					{
-						// Write error, most likely client disconnect.
-						debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-						socketClose(connected_bsocket[pMsg->destination]->socket);
-						connected_bsocket[pMsg->destination]->socket = NULL;
-					}
-				}
-				else
-				{
-					debug(LOG_NET, "Cannot reflect message type %hhu to %hhu", pMsg->type, pMsg->destination);
-				}
-
-				goto receive_message;
-			}
-
-			nStats.bytesRecvd   += size;
-			nStats.packetsRecvd += 1;
-		}
-
-	} while (NETprocessSystemMessage() == true);
-
-	NETlogPacket(pMsg, true);
-
-	*type = pMsg->type;
-	return true;
+	return false;
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -2692,9 +2534,9 @@ BOOL NETsetupTCPIP(const char *machine)
 #define MAX_FILE_TRANSFER_PACKET 2048
 UBYTE NETsendFile(char *fileName, UDWORD player)
 {
-	int32_t		bytesRead = 0;
+	int32_t         bytesRead = 0;
 	uint8_t		sendto = 0;
-	char	inBuff[MAX_FILE_TRANSFER_PACKET];
+	uint8_t         inBuff[MAX_FILE_TRANSFER_PACKET];
 
 	// We are not the host, so we don't care. (in fact, this would be a error)
 	if (!NetPlay.isHost)
@@ -2708,7 +2550,7 @@ UBYTE NETsendFile(char *fileName, UDWORD player)
 	bytesRead = PHYSFS_read(NetPlay.players[player].wzFile.pFileHandle, inBuff,1, MAX_FILE_TRANSFER_PACKET);
 	sendto = (uint8_t) player;
 
-	NETbeginEncode(NET_FILE_PAYLOAD, sendto);
+	NETbeginEncode(NETnetQueue(sendto), NET_FILE_PAYLOAD);
 		NETint32_t(&NetPlay.players[player].wzFile.fileSize_32);		// total bytes in this file. (we don't support 64bit yet)
 		NETint32_t(&bytesRead);											// bytes in this packet
 		NETint32_t(&NetPlay.players[player].wzFile.currPos);			// start byte
@@ -2729,11 +2571,11 @@ UBYTE NETsendFile(char *fileName, UDWORD player)
 
 /* @TODO more error checking (?) different file types (?) */
 // recv file. it returns % of the file so far recvd.
-UBYTE NETrecvFile(void)
+UBYTE NETrecvFile(NETQUEUE queue)
 {
 	int32_t		fileSize = 0, currPos = 0, bytesRead = 0;
 	char		fileName[256];
-	char		outBuff[MAX_FILE_TRANSFER_PACKET];
+	uint8_t         outBuff[MAX_FILE_TRANSFER_PACKET];
 	static PHYSFS_file	*pFileHandle;
 	static bool isLoop = false;
 
@@ -2741,7 +2583,7 @@ UBYTE NETrecvFile(void)
 	memset(outBuff, 0x0, sizeof(outBuff));
 
 	//read incoming bytes.
-	NETbeginDecode(NET_FILE_PAYLOAD);
+	NETbeginDecode(queue, NET_FILE_PAYLOAD);
 	NETint32_t(&fileSize);		// total bytes in this file.
 	NETint32_t(&bytesRead);		// bytes in this packet
 	NETint32_t(&currPos);		// start byte
@@ -2763,7 +2605,7 @@ UBYTE NETrecvFile(void)
 				PHYSFS_close(fin);
 				NETend();
 
-				NETbeginEncode(NET_FILE_CANCELLED, NET_HOST_ONLY);
+				NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_CANCELLED);
 					NETuint32_t(&selectedPlayer);
 					NETuint32_t(&reason);
 				NETend();
@@ -2778,7 +2620,7 @@ UBYTE NETrecvFile(void)
 					NETend();
 					// we should never get here, it means, that the game can't detect the level, but we have the file.
 					// so we kick this player out.
-					NETbeginEncode(NET_FILE_CANCELLED, NET_HOST_ONLY);
+					NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_CANCELLED);
 						NETuint32_t(&selectedPlayer);
 						NETuint32_t(&reason);
 					NETend();
@@ -3057,6 +2899,7 @@ static void NETallowJoining(void)
 	if (tmp_socket[i] == NULL // Make sure that we're not out of sockets
 	 && (tmp_socket[i] = socketAccept(tcp_socket)) != NULL)
 	{
+		NETinitQueue(NETnetTmpQueue(i));
 		addSocket(tmp_socket_set, tmp_socket[i]);
 		if (checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
 		    && tmp_socket[i]->ready
@@ -3117,7 +2960,8 @@ static void NETallowJoining(void)
 			if (   tmp_socket[i] != NULL
 			    && tmp_socket[i]->ready)
 			{
-				ssize_t size = readNoInt(tmp_socket[i], &NetMsg, sizeof(NetMsg));
+				uint8_t buffer[NET_BUFFER_SIZE];
+				ssize_t size = readNoInt(tmp_socket[i], buffer, sizeof(buffer));
 
 				if (size == 0 || size == SOCKET_ERROR)
 				{
@@ -3128,14 +2972,18 @@ static void NETallowJoining(void)
 					}
 					else
 					{
-						debug(LOG_NET, "Client socket ecountered error: %s", strSockError(getSockErr()));
+						debug(LOG_NET, "Client socket encountered error: %s", strSockError(getSockErr()));
 					}
 
 					delSocket(tmp_socket_set, tmp_socket[i]);
 					socketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
+					continue;
 				}
-				else if (NetMsg.type == NET_JOIN)
+
+				NETinsertRawData(NETnetTmpQueue(i), buffer, size);
+
+				if (NETisMessageReady(NETnetTmpQueue(i)) && NETmessageType(NETnetTmpQueue(i)) == NET_JOIN)
 				{
 					uint8_t j;
 					int8_t index;
@@ -3148,7 +2996,7 @@ static void NETallowJoining(void)
 					char GamePassword[password_string_size] = { '\0' };
 					int32_t Hash_Data = 0;				// Not currently used
 
-					NETbeginDecode(NET_JOIN);
+					NETbeginDecode(NETnetTmpQueue(i), NET_JOIN);
 						NETstring(name, sizeof(name));
 						NETint32_t(&MajorVersion);	// NETCODE_VERSION_MAJOR
 						NETint32_t(&MinorVersion);	// NETCODE_VERSION_MINOR
@@ -3169,9 +3017,10 @@ static void NETallowJoining(void)
 					}
 
 					delSocket(tmp_socket_set, tmp_socket[i]);
-					NET_initBufferedSocket(connected_bsocket[index], tmp_socket[i]);
-					addSocket(socket_set, connected_bsocket[index]->socket);
+					connected_bsocket[index] = tmp_socket[i];
 					tmp_socket[i] = NULL;
+					addSocket(socket_set, connected_bsocket[index]);
+					NETmoveQueue(NETnetTmpQueue(i), NETnetQueue(index));
 
 					if (!NETisCorrectVersion(MajorVersion, MinorVersion))
 					{
@@ -3196,7 +3045,7 @@ static void NETallowJoining(void)
 
 					if (rejected)
 					{
-						NETbeginEncode(NET_REJECTED, index);
+						NETbeginEncode(NETnetQueue(index), NET_REJECTED);
 							NETuint8_t(&rejected);
 						NETend();
 
@@ -3204,18 +3053,17 @@ static void NETallowJoining(void)
 						NET_DestroyPlayer(index);
 						allow_joining = true;
 
-						delSocket(socket_set, connected_bsocket[index]->socket);
-						socketClose(connected_bsocket[index]->socket);
-						connected_bsocket[index]->socket = NULL;
+						delSocket(socket_set, connected_bsocket[index]);
+						socketClose(connected_bsocket[index]);
+						connected_bsocket[index] = NULL;
 						return;
 					}
 
-					NETbeginEncode(NET_ACCEPTED, index);
+					NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
 					NETuint8_t((uint8_t *)&index);
 					NETend();
 
-					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name,
-					      (unsigned int)index, connected_bsocket[index]->socket);
+					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name, (unsigned int)index, connected_bsocket[index]);
 
 					// Increment player count
 					gamestruct.desc.dwCurrentPlayers++;
@@ -3227,14 +3075,14 @@ static void NETallowJoining(void)
 					{
 						if (NetPlay.players[j].allocated && index != j)
 						{
-							NETbeginEncode(NET_PLAYER_JOINED, index);
+							NETbeginEncode(NETnetQueue(index), NET_PLAYER_JOINED);
 								NETuint8_t(&j);
 							NETend();
 						}
 					}
 
 					// Send info about newcomer to all players.
-					NETbeginEncode(NET_PLAYER_JOINED, NET_ALL_PLAYERS);
+					NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_JOINED);
 						NETuint8_t((uint8_t *)&index);
 					NETend();
 
@@ -3304,7 +3152,8 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	// allocate socket storage for all possible players
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		connected_bsocket[i] = NET_createBufferedSocket();
+		connected_bsocket[i] = NULL;
+		NETinitQueue(NETnetQueue(i));
 	}
 
 	NetPlay.isHost = true;
@@ -3620,12 +3469,12 @@ connect_succesfull:
 		return false;
 	}
 	// Allocate memory for a new socket
-	bsocket = NET_createBufferedSocket();
-	// NOTE: tcp_socket = bsocket->socket now!
-	NET_initBufferedSocket(bsocket, tcp_socket);
+	NETinitQueue(NETnetQueue(NET_HOST_ONLY));
+	// NOTE: tcp_socket = bsocket now!
+	bsocket = tcp_socket;
 
 	// Send a join message to the host
-	NETbeginEncode(NET_JOIN, NET_HOST_ONLY);
+	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_JOIN);
 		// Casting constness away, because NETstring is const-incorrect
 		// when sending/encoding a packet.
 		NETstring((char*)playername, 64);
@@ -3640,9 +3489,10 @@ connect_succesfull:
 	// Loop until we've been accepted into the game
 	for (;;)
 	{
+		NETQUEUE queue;
 		uint8_t type = NUM_GAME_PACKETS;
 
-		NETrecv(&type);
+		NETrecvNet(&queue, &type);
 
 		// FIXME: shouldn't there be some sort of rejection message?
 		if (SDL_GetTicks() > i + 5000)
@@ -3655,14 +3505,13 @@ connect_succesfull:
 			// :)
 			uint8_t index;
 
-			NETbeginDecode(NET_ACCEPTED);
+			NETbeginDecode(queue, NET_ACCEPTED);
 				// Retrieve the player ID the game host arranged for us
 				NETuint8_t(&index);
 			NETend();
 
 			selectedPlayer = index;
-			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p, tcp_socket=%p",
-				(unsigned int)index, bsocket->socket, tcp_socket);
+			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p, tcp_socket=%p", (unsigned int)index, bsocket, tcp_socket);
 			NetPlay.isHost = false;
 			NetPlay.isHostAlive = true;
 
@@ -3683,8 +3532,9 @@ connect_succesfull:
 			// :(
 			uint8_t rejection = 0;
 
-			NETbeginDecode(NET_REJECTED);
+			NETbeginDecode(queue, NET_REJECTED);
 				// WRY???
+				// And why "wry"?
 				NETuint8_t(&rejection);
 			NETend();
 

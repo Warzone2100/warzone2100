@@ -258,7 +258,7 @@ BOOL ForceDroidSync(const DROID* droidToSend)
 
 	debug(LOG_SYNC, "Force sync of droid %u from player %u", droidToSend->id, droidToSend->player);
 
-	NETbeginEncode(NET_CHECK_DROID, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_CHECK_DROID);
 		NETuint8_t(&count);
 		packageCheck(droidToSend);
 	return NETend();
@@ -286,7 +286,7 @@ static BOOL sendDroidCheck(void)
 
 	lastSent = gameTime;
 
-	NETbeginEncode(NET_CHECK_DROID, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_CHECK_DROID);
 
 		// Allocate space for the list of droids to send
 		ppD = alloca(sizeof(DROID *) * toSend);
@@ -378,12 +378,12 @@ static void packageCheck(const DROID* pD)
 
 // ////////////////////////////////////////////////////////////////////////////
 // receive a check and update the local world state accordingly
-BOOL recvDroidCheck()
+BOOL recvDroidCheck(NETQUEUE queue)
 {
 	uint8_t		count;
 	int		i;
 
-	NETbeginDecode(NET_CHECK_DROID);
+	NETbeginDecode(queue, NET_CHECK_DROID);
 
 		// Get the number of droids to expect
 		NETuint8_t(&count);
@@ -709,7 +709,7 @@ static BOOL sendStructureCheck(void)
 	// Only send info about complete buildings
 	if (pS && (pS->status == SS_BUILT))
 	{
-		NETbeginEncode(NET_CHECK_STRUCT, NET_ALL_PLAYERS);
+		NETbeginEncode(NETgameQueue(selectedPlayer), NET_CHECK_STRUCT);
 			NETuint8_t(&pS->player);
 			NETuint32_t(&pS->id);
 			NETuint32_t(&pS->body);
@@ -745,7 +745,7 @@ static BOOL sendStructureCheck(void)
 }
 
 // receive checking info about a structure and update local world state
-BOOL recvStructureCheck()
+BOOL recvStructureCheck(NETQUEUE queue)
 {
 	STRUCTURE		*pS;
 	STRUCTURE_STATS	*psStats;
@@ -757,7 +757,7 @@ BOOL recvStructureCheck()
 	uint16_t		x, y, z;
 	uint32_t		ref, type;
 
-	NETbeginDecode(NET_CHECK_STRUCT);
+	NETbeginDecode(queue, NET_CHECK_STRUCT);
 		NETuint8_t(&player);
 		NETuint32_t(&ref);
 		NETuint32_t(&body);
@@ -934,18 +934,18 @@ static BOOL sendPowerCheck()
 
 	lastsent = gameTime;
 
-	NETbeginEncode(NET_CHECK_POWER, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_CHECK_POWER);
 		NETuint8_t(&player);
 		NETuint32_t(&power);
 	return NETend();
 }
 
-BOOL recvPowerCheck()
+BOOL recvPowerCheck(NETQUEUE queue)
 {
 	uint8_t		player;
 	uint32_t	power, power2;
 
-	NETbeginDecode(NET_CHECK_POWER);
+	NETbeginDecode(queue, NET_CHECK_POWER);
 		NETuint8_t(&player);
 		NETuint32_t(&power);
 	NETend();
@@ -1098,7 +1098,7 @@ BOOL sendPing(void)
 		}
 	}
 
-	NETbeginEncode(NET_PING, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_PING);
 		NETuint8_t(&player);
 		NETbool(&isNew);
 	NETend();
@@ -1113,12 +1113,12 @@ BOOL sendPing(void)
 }
 
 // accept and process incoming ping messages.
-BOOL recvPing()
+BOOL recvPing(NETQUEUE queue)
 {
 	BOOL	isNew;
 	uint8_t	sender, us = selectedPlayer;
 
-	NETbeginDecode(NET_PING);
+	NETbeginDecode(queue, NET_PING);
 		NETuint8_t(&sender);
 		NETbool(&isNew);
 	NETend();
@@ -1132,7 +1132,7 @@ BOOL recvPing()
 	// If this is a new ping, respond to it
 	if (isNew)
 	{
-		NETbeginEncode(NET_PING, sender);
+		NETbeginEncode(NETnetQueue(sender), NET_PING);
 			// We are responding to a new ping
 			isNew = false;
 

@@ -278,7 +278,7 @@ bool sendDataCheck(void)
 	int i = 0;
 	uint32_t	player = selectedPlayer;
 
-	NETbeginEncode(NET_DATA_CHECK, NET_HOST_ONLY);		// only need to send to HOST
+	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_DATA_CHECK);		// only need to send to HOST
 	for(i = 0; i < DATA_MAXDATA; i++)
 	{
 		NETuint32_t(&DataHash[i]);
@@ -289,13 +289,13 @@ bool sendDataCheck(void)
 	return true;
 }
 
-bool recvDataCheck(void)
+bool recvDataCheck(NETQUEUE queue)
 {
 	int i = 0;
 	uint32_t	player;
 	uint32_t tempBuffer[DATA_MAXDATA] = {0};
 
-	NETbeginDecode(NET_DATA_CHECK);
+	NETbeginDecode(queue, NET_DATA_CHECK);
 	for(i = 0; i < DATA_MAXDATA; i++)
 	{
 		NETuint32_t(&tempBuffer[i]);

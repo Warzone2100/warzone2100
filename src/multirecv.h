@@ -32,43 +32,43 @@ extern "C"
 {
 #endif //__cplusplus
 
-extern BOOL recvDroid				(void);
-extern BOOL recvDroidInfo			(void);
-extern BOOL recvDestroyDroid		(void);
-extern BOOL recvGroupOrder			(void);
-extern BOOL recvDroidMove			(void);
-extern BOOL recvDestroyStructure	(void);
-extern BOOL recvBuildStarted		(void);
-extern BOOL recvBuildFinished		(void);
-extern BOOL recvTemplate			(void);
-extern BOOL recvDestroyFeature		(void);
-extern BOOL recvDemolishFinished	(void);
-extern BOOL recvPing				(void);
-extern BOOL	recvRequestDroid		(void);
-extern BOOL recvTextMessage			(void);
-extern BOOL recvDroidSecondary		(void);
-extern BOOL recvDroidSecondaryAll	(void);
-extern BOOL recvDroidEmbark         (void);
-extern BOOL recvDroidDisEmbark      (void);
-extern BOOL recvDroidCheck			(void);
-extern BOOL recvStructureCheck		(void);
-extern BOOL recvPowerCheck			(void);
-extern BOOL recvAlliance			(BOOL allowAudio);
-extern BOOL recvColourRequest		(void);
-extern BOOL recvPositionRequest		(void);
-extern void recvOptions				(void);
-extern void sendOptions				(void);
+extern BOOL recvDroid               (NETQUEUE queue);
+extern BOOL recvDroidInfo           (NETQUEUE queue);
+extern BOOL recvDestroyDroid        (NETQUEUE queue);
+extern BOOL recvGroupOrder          (NETQUEUE queue);
+extern BOOL recvDroidMove           (NETQUEUE queue);
+extern BOOL recvDestroyStructure    (NETQUEUE queue);
+extern BOOL recvBuildStarted        (NETQUEUE queue);
+extern BOOL recvBuildFinished       (NETQUEUE queue);
+extern BOOL recvTemplate            (NETQUEUE queue);
+extern BOOL recvDestroyFeature      (NETQUEUE queue);
+extern BOOL recvDemolishFinished    (NETQUEUE queue);
+extern BOOL recvPing                (NETQUEUE queue);
+extern BOOL recvRequestDroid        (NETQUEUE queue);
+extern BOOL recvTextMessage         (NETQUEUE queue);
+extern BOOL recvDroidSecondary      (NETQUEUE queue);
+extern BOOL recvDroidSecondaryAll   (NETQUEUE queue);
+extern BOOL recvDroidEmbark         (NETQUEUE queue);
+extern BOOL recvDroidDisEmbark      (NETQUEUE queue);
+extern BOOL recvDroidCheck          (NETQUEUE queue);
+extern BOOL recvStructureCheck      (NETQUEUE queue);
+extern BOOL recvPowerCheck          (NETQUEUE queue);
+//extern BOOL recvAlliance            (NETQUEUE queue, BOOL allowAudio);  // Was declared in multigifts.h, too.
+extern BOOL recvColourRequest       (NETQUEUE queue);
+extern BOOL recvPositionRequest     (NETQUEUE queue);
+extern void recvOptions             (NETQUEUE queue);
+extern void sendOptions             (void);
 
-extern BOOL recvHappyVtol			(void);
-extern BOOL recvResearchStatus		(void);
-extern BOOL recvLasSat				(void);
-extern BOOL	recvMapFileData				(void);
-extern BOOL	recvMapFileRequested		(void);
+extern BOOL recvHappyVtol           (NETQUEUE queue);
+extern BOOL recvResearchStatus      (NETQUEUE queue);
+extern BOOL recvLasSat              (NETQUEUE queue);
+extern BOOL recvMapFileData         (NETQUEUE queue);
+extern BOOL recvMapFileRequested    (NETQUEUE queue);
 
 
-extern BOOL recvTextMessageAI		(void);		//AI multiplayer message
-extern BOOL	recvTeamRequest		(void);
-extern BOOL	recvReadyRequest		(void);
+extern BOOL recvTextMessageAI       (NETQUEUE queue);  //AI multiplayer message
+extern BOOL recvTeamRequest         (NETQUEUE queue);
+extern BOOL recvReadyRequest        (NETQUEUE queue);
 
 #ifdef __cplusplus
 }

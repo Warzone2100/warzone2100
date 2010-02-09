@@ -107,9 +107,9 @@ extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
-static BOOL recvBeacon(void);
-static BOOL recvDestroyTemplate(void);
-static BOOL recvResearch(void);
+static BOOL recvBeacon(NETQUEUE queue);
+static BOOL recvDestroyTemplate(NETQUEUE queue);
+static BOOL recvResearch(NETQUEUE queue);
 
 bool		multiplayPlayersReady		(bool bNotifyStatus);
 void		startMultiplayerGame		(void);
@@ -582,9 +582,11 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 // Recv Messages. Get a message and dispatch to relevant function.
 BOOL recvMessage(void)
 {
+	NETQUEUE queue;
 	uint8_t type;
 
-	while(NETrecv(&type))			// for all incoming messages.
+	// TODO Figure out which messages belong in the game queues, and which are net related.
+	while(NETrecvNet(&queue, &type) || NETrecvGame(&queue, &type))          // for all incoming messages.
 	{
 		// messages only in game.
 		if(!ingame.localJoiningInProgress)
@@ -592,72 +594,72 @@ BOOL recvMessage(void)
 			switch(type)
 			{
 			case NET_DROID:						// new droid of known type
-				recvDroid();
+				recvDroid(queue);
 				break;
 			case NET_DROIDINFO:					//droid update info
-				recvDroidInfo();
+				recvDroidInfo(queue);
 				break;
 			case NET_DROIDDEST:					// droid destroy
-				recvDestroyDroid();
+				recvDestroyDroid(queue);
 				break;
 			case NET_DROIDMOVE:					// move a droid to x,y command.
-				recvDroidMove();
+				recvDroidMove(queue);
 				break;
 			case NET_GROUPORDER:				// an order for more than 1 droid.
-				recvGroupOrder();
+				recvGroupOrder(queue);
 				break;
 			case NET_CHECK_DROID:				// droid damage and position checks
-				recvDroidCheck();
+				recvDroidCheck(queue);
 				break;
 			case NET_CHECK_STRUCT:				// structure damage checks.
-				recvStructureCheck();
+				recvStructureCheck(queue);
 				break;
 			case NET_CHECK_POWER:				// Power level syncing.
-				recvPowerCheck();
+				recvPowerCheck(queue);
 				break;
 			case NET_TEXTMSG:					// simple text message
-				recvTextMessage();
+				recvTextMessage(queue);
 				break;
 			case NET_DATA_CHECK:
-				recvDataCheck();
+				recvDataCheck(queue);
 				break;
 			case NET_AITEXTMSG:					//multiplayer AI text message
-				recvTextMessageAI();
+				recvTextMessageAI(queue);
 				break;
 			case NET_BEACONMSG:					//beacon (blip) message
-				recvBeacon();
+				recvBeacon(queue);
 				break;
 			case NET_BUILD:						// a build order has been sent.
-				recvBuildStarted();
+				recvBuildStarted(queue);
 				break;
 			case NET_BUILDFINISHED:				// a building is complete
-				recvBuildFinished();
+				recvBuildFinished(queue);
 				break;
 			case NET_STRUCTDEST:				// structure destroy
-				recvDestroyStructure();
+				recvDestroyStructure(queue);
 				break;
 			case NET_SECONDARY:					// set a droids secondary order level.
-				recvDroidSecondary();
+				recvDroidSecondary(queue);
 				break;
 			case NET_SECONDARY_ALL:					// set a droids secondary order level.
-				recvDroidSecondaryAll();
+				recvDroidSecondaryAll(queue);
 				break;
 			case NET_DROIDEMBARK:
-				recvDroidEmbark();              //droid has embarked on a Transporter
+				recvDroidEmbark(queue);              //droid has embarked on a Transporter
 				break;
 			case NET_DROIDDISEMBARK:
-				recvDroidDisEmbark();           //droid has disembarked from a Transporter
+				recvDroidDisEmbark(queue);           //droid has disembarked from a Transporter
 				break;
 			case NET_GIFT:						// an alliance gift from one player to another.
-				recvGift();
+				recvGift(queue);
 				break;
 			case NET_SCORESUBMIT:				//  a score update from another player [UNUSED] see NET_PLAYER_STATS
 				break;
 			case NET_VTOL:
-				recvHappyVtol();
+				recvHappyVtol(queue);
 				break;
 			case NET_LASSAT:
-				recvLasSat();
+				recvLasSat(queue);
 				break;
 			default:
 				break;
@@ -668,25 +670,25 @@ BOOL recvMessage(void)
 		switch(type)
 		{
 		case NET_TEMPLATE:					// new template
-			recvTemplate();
+			recvTemplate(queue);
 			break;
 		case NET_TEMPLATEDEST:				// template destroy
-			recvDestroyTemplate();
+			recvDestroyTemplate(queue);
 			break;
 		case NET_FEATUREDEST:				// feature destroy
-			recvDestroyFeature();
+			recvDestroyFeature(queue);
 			break;
 		case NET_PING:						// diagnostic ping msg.
-			recvPing();
+			recvPing(queue);
 			break;
 		case NET_DEMOLISH:					// structure demolished.
-			recvDemolishFinished();
+			recvDemolishFinished(queue);
 			break;
 		case NET_RESEARCH:					// some research has been done.
-			recvResearch();
+			recvResearch(queue);
 			break;
 		case NET_OPTIONS:
-			recvOptions();
+			recvOptions(queue);
 			break;
 		case NET_PLAYERRESPONDING:			// remote player is now playing
 		{
@@ -694,7 +696,7 @@ BOOL recvMessage(void)
 
 			resetReadyStatus(false);
 
-			NETbeginDecode(NET_PLAYERRESPONDING);
+			NETbeginDecode(queue, NET_PLAYERRESPONDING);
 				// the player that has just responded
 				NETuint32_t(&player_id);
 			NETend();
@@ -709,16 +711,16 @@ BOOL recvMessage(void)
 		}
 		// FIXME: the next 4 cases might not belong here --check (we got two loops for this)
 		case NET_COLOURREQUEST:
-			recvColourRequest();
+			recvColourRequest(queue);
 			break;
 		case NET_POSITIONREQUEST:
-			recvPositionRequest();
+			recvPositionRequest(queue);
 			break;
 		case NET_TEAMREQUEST:
-			recvTeamRequest();
+			recvTeamRequest(queue);
 			break;
 		case NET_READY_REQUEST:
-			recvReadyRequest();
+			recvReadyRequest(queue);
 
 			// if hosting try to start the game if everyone is ready
 			if(NetPlay.isHost && multiplayPlayersReady(false))
@@ -727,13 +729,13 @@ BOOL recvMessage(void)
 			}
 			break;
 		case NET_ARTIFACTS:
-			recvMultiPlayerRandomArtifacts();
+			recvMultiPlayerRandomArtifacts(queue);
 			break;
 		case NET_FEATURES:
-			recvMultiPlayerFeature();
+			recvMultiPlayerFeature(queue);
 			break;
 		case NET_ALLIANCE:
-			recvAlliance(true);
+			recvAlliance(queue, true);
 			break;
 		case NET_KICK:
 		{
@@ -741,7 +743,7 @@ BOOL recvMessage(void)
 			uint32_t player_id;
 			char reason[MAX_KICK_REASON];
 
-			NETbeginDecode(NET_KICK);
+			NETbeginDecode(queue, NET_KICK);
 				NETuint32_t(&player_id);
 				NETstring( reason, MAX_KICK_REASON);
 			NETend();
@@ -761,10 +763,10 @@ BOOL recvMessage(void)
 			debug(LOG_NET, "NET_FIREUP was received (frontend only?)"); 
 			break;
 		case NET_RESEARCHSTATUS:
-			recvResearchStatus();
+			recvResearchStatus(queue);
 			break;
 		case NET_PLAYER_STATS:
-			recvMultiStats();
+			recvMultiStats(queue);
 			break;
 		default:
 			break;
@@ -783,7 +785,7 @@ BOOL SendResearch(uint8_t player, uint32_t index, bool trigger)
 	PLAYER_RESEARCH *pPlayerRes;
 
 	// Send the player that is researching the topic and the topic itself
-	NETbeginEncode(NET_RESEARCH, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_RESEARCH);
 		NETuint8_t(&player);
 		NETuint32_t(&index);
 	NETend();
@@ -816,7 +818,7 @@ BOOL SendResearch(uint8_t player, uint32_t index, bool trigger)
 }
 
 // recv a research topic that is now complete.
-static BOOL recvResearch()
+static BOOL recvResearch(NETQUEUE queue)
 {
 	uint8_t			player;
 	uint32_t		index;
@@ -824,7 +826,7 @@ static BOOL recvResearch()
 	PLAYER_RESEARCH	*pPlayerRes;
 	RESEARCH		*pResearch;
 
-	NETbeginDecode(NET_RESEARCH);
+	NETbeginDecode(queue, NET_RESEARCH);
 		NETuint8_t(&player);
 		NETuint32_t(&index);
 	NETend();
@@ -880,7 +882,7 @@ BOOL sendReseachStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BO
 		return true;
 	}
 
-	NETbeginEncode(NET_RESEARCHSTATUS, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_RESEARCHSTATUS);
 		NETuint8_t(&player);
 		NETbool(&bStart);
 
@@ -901,7 +903,7 @@ BOOL sendReseachStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BO
 	return true;
 }
 
-BOOL recvResearchStatus()
+BOOL recvResearchStatus(NETQUEUE queue)
 {
 	STRUCTURE			*psBuilding;
 	PLAYER_RESEARCH		*pPlayerRes;
@@ -911,7 +913,7 @@ BOOL recvResearchStatus()
 	BOOL				bStart;
 	uint32_t			index, structRef;
 
-	NETbeginDecode(NET_RESEARCHSTATUS);
+	NETbeginDecode(queue, NET_RESEARCHSTATUS);
 		NETuint8_t(&player);
 		NETbool(&bStart);
 		NETuint32_t(&structRef);
@@ -1099,7 +1101,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 
 	if (all)	//broadcast
 	{
-		NETbeginEncode(NET_TEXTMSG, NET_ALL_PLAYERS);
+		NETbeginEncode(NETbroadcastQueue(), NET_TEXTMSG);
 		NETuint32_t(&selectedPlayer);		// who this msg is from
 		NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 		NETend();
@@ -1112,7 +1114,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 			{
 				if (isHumanPlayer(i))
 				{
-					NETbeginEncode(NET_TEXTMSG, i);
+					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
 					NETuint32_t(&selectedPlayer);		// who this msg is from
 					NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
@@ -1132,7 +1134,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 			{
 				if (isHumanPlayer(i))
 				{
-					NETbeginEncode(NET_TEXTMSG, i);
+					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
 					NETuint32_t(&selectedPlayer);				// who this msg is from
 					NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
@@ -1198,7 +1200,7 @@ BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 		}
 
 		//send to the player who is hosting 'to' player (might be himself if human and not AI)
-		NETbeginEncode(NET_AITEXTMSG, sendPlayer);
+		NETbeginEncode(NETnetQueue(sendPlayer), NET_AITEXTMSG);
 			NETuint32_t(&player);			//save the actual sender
 			//save the actual player that is to get this msg on the source machine (source can host many AIs)
 			NETuint32_t(&to);				//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
@@ -1227,8 +1229,8 @@ BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 	}
 
 	// I assume this is correct, looks like it sends it to ONLY that person, and the routine
-	// kf_AddHelpBlip() itterates for each player it needs.
-	NETbeginEncode(NET_BEACONMSG, sendPlayer);		// send to the player who is hosting 'to' player (might be himself if human and not AI)
+	// kf_AddHelpBlip() iterates for each player it needs.
+	NETbeginEncode(NETnetQueue(sendPlayer), NET_BEACONMSG);    // send to the player who is hosting 'to' player (might be himself if human and not AI)
 		NETint32_t(&sender);                                // save the actual sender
 
 		// save the actual player that is to get this msg on the source machine (source can host many AIs)
@@ -1258,7 +1260,7 @@ void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
 }
 
 // Write a message to the console.
-BOOL recvTextMessage()
+BOOL recvTextMessage(NETQUEUE queue)
 {
 	UDWORD	playerIndex;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
@@ -1267,7 +1269,7 @@ BOOL recvTextMessage()
 	memset(msg, 0x0, sizeof(msg));
 	memset(newmsg, 0x0, sizeof(newmsg));
 
-	NETbeginDecode(NET_TEXTMSG);
+	NETbeginDecode(queue, NET_TEXTMSG);
 		// Who this msg is from
 		NETuint32_t(&playerIndex);
 		// The message to send
@@ -1309,13 +1311,13 @@ BOOL recvTextMessage()
 }
 
 //AI multiplayer message - received message from AI (from scripts)
-BOOL recvTextMessageAI()
+BOOL recvTextMessageAI(NETQUEUE queue)
 {
 	UDWORD	sender, receiver;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	char	newmsg[MAX_CONSOLE_STRING_LENGTH];
 
-	NETbeginDecode(NET_AITEXTMSG);
+	NETbeginDecode(queue, NET_AITEXTMSG);
 		NETuint32_t(&sender);			//in-game player index ('normal' one)
 		NETuint32_t(&receiver);			//in-game player index
 		NETstring(newmsg,MAX_CONSOLE_STRING_LENGTH);
@@ -1352,7 +1354,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 	ASSERT(pTempl != NULL, "sendTemplate: Old Pumpkin bug");
 	if (!pTempl) return true; /* hack */
 
-	NETbeginEncode(NET_TEMPLATE, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_TEMPLATE);
 		NETuint8_t(&player);
 		NETuint32_t(&pTempl->ref);
 		NETstring(pTempl->aName, sizeof(pTempl->aName));
@@ -1381,14 +1383,14 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 }
 
 // receive a template created by another player
-BOOL recvTemplate()
+BOOL recvTemplate(NETQUEUE queue)
 {
 	uint8_t			player;
 	DROID_TEMPLATE	*psTempl;
 	DROID_TEMPLATE	t, *pT = &t;
 	int				i;
 
-	NETbeginDecode(NET_TEMPLATE);
+	NETbeginDecode(queue, NET_TEMPLATE);
 		NETuint8_t(&player);
 		ASSERT(player < MAX_PLAYERS, "recvtemplate: invalid player size: %d", player);
 
@@ -1447,7 +1449,7 @@ BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 {
 	uint8_t player = selectedPlayer;
 
-	NETbeginEncode(NET_TEMPLATEDEST, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_TEMPLATEDEST);
 		NETuint8_t(&player);
 		NETuint32_t(&t->multiPlayerID);
 	NETend();
@@ -1456,13 +1458,13 @@ BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 }
 
 // acknowledge another player no longer has a template
-static BOOL recvDestroyTemplate()
+static BOOL recvDestroyTemplate(NETQUEUE queue)
 {
 	uint8_t			player;
 	uint32_t		templateID;
 	DROID_TEMPLATE	*psTempl, *psTempPrev = NULL;
 
-	NETbeginDecode(NET_TEMPLATEDEST);
+	NETbeginDecode(queue, NET_TEMPLATEDEST);
 		NETuint8_t(&player);
 		NETuint32_t(&templateID);
 	NETend();
@@ -1506,18 +1508,18 @@ static BOOL recvDestroyTemplate()
 // send a destruct feature message.
 BOOL SendDestroyFeature(FEATURE *pF)
 {
-	NETbeginEncode(NET_FEATUREDEST, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), NET_FEATUREDEST);
 		NETuint32_t(&pF->id);
 	return NETend();
 }
 
 // process a destroy feature msg.
-BOOL recvDestroyFeature()
+BOOL recvDestroyFeature(NETQUEUE queue)
 {
 	FEATURE *pF;
 	uint32_t	id;
 
-	NETbeginDecode(NET_FEATUREDEST);
+	NETbeginDecode(queue, NET_FEATUREDEST);
 		NETuint32_t(&id);
 	NETend();
 
@@ -1539,7 +1541,7 @@ BOOL recvDestroyFeature()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Network File packet processor.
-BOOL recvMapFileRequested()
+BOOL recvMapFileRequested(NETQUEUE queue)
 {
 	char mapStr[256],mapName[256],fixedname[256];
 	uint32_t player;
@@ -1554,7 +1556,7 @@ BOOL recvMapFileRequested()
 	}
 
 	//	Check to see who wants the file
-	NETbeginDecode(NET_FILE_REQUESTED);
+	NETbeginDecode(queue, NET_FILE_REQUESTED);
 	NETuint32_t(&player);
 	NETend();
 
@@ -1599,7 +1601,7 @@ BOOL recvMapFileRequested()
 			// NOTE: if we get here, then the game is basically over, The host can't send the file for whatever reason...
 			// Which also means, that we can't continue.
 			debug(LOG_NET, "***Host has a file issue, and is being forced to quit!***");
-			NETbeginEncode(NET_HOST_DROPPED, NET_ALL_PLAYERS);
+			NETbeginEncode(NETbroadcastQueue(), NET_HOST_DROPPED);
 			NETend();
 			abort();
 	}
@@ -1640,9 +1642,9 @@ void sendMap(void)
 }
 
 // Another player is broadcasting a map, recv a chunk. Returns false if not yet done.
-BOOL recvMapFileData()
+BOOL recvMapFileData(NETQUEUE queue)
 {
-	mapDownloadProgress = NETrecvFile();
+	mapDownloadProgress = NETrecvFile(queue);
 	if (mapDownloadProgress == 100)
 	{
 		addConsoleMessage("MAP DOWNLOADED!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -1915,12 +1917,12 @@ BOOL msgStackFireTop(void)
 	return true;
 }
 
-static BOOL recvBeacon(void)
+static BOOL recvBeacon(NETQUEUE queue)
 {
 	int32_t sender, receiver,locX, locY;
 	char    msg[MAX_CONSOLE_STRING_LENGTH];
 
-	NETbeginDecode(NET_BEACONMSG);
+	NETbeginDecode(queue, NET_BEACONMSG);
 	    NETint32_t(&sender);            // the actual sender
 	    NETint32_t(&receiver);          // the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
 	    NETint32_t(&locX);
