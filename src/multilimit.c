@@ -313,7 +313,7 @@ void runLimitScreen(void)
 			// make some noize.
 			if(!ingame.localOptionsReceived)
 			{
-				addConsoleMessage("Limits Reset To Default Values",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				addConsoleMessage(_("Limits reset to default values"),DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 			}
 			else
 			{
@@ -455,7 +455,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	// draw name
 	iV_SetFont(font_regular);											// font
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText(getName(stat->pName), x+80, y+(psWidget->height/2)+3);
+	iV_DrawText(_(getName(stat->pName)), x + 80, y + (psWidget->height / 2) + 3);
 
 	// draw limit
 	sprintf(str,"%d",((W_SLIDER*)(widgGetFromID(psWScreen,psWidget->id+1)))->pos);
