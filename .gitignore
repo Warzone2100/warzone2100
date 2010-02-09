@@ -137,3 +137,9 @@ cscope.out
 
 # Qt
 lib/framework/wzapp_moc.cpp
+
+# Patches
+*.patch
+*.diff
+*.rej
+*.orig

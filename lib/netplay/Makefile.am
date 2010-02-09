@@ -15,7 +15,7 @@ libnetplay_a_SOURCES = \
 	netlog.c \
 	netplay.c \
 	netqueue.cpp \
-	nettypes.c
+	nettypes.cpp
 
 libnetplay_a_LIBADD = $(top_builddir)/lib/framework/libframework.a $(top_builddir)/lib/netplay/miniupnpc/libminiupnpc.a
 
