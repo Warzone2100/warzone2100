@@ -119,6 +119,7 @@ void	droidUpdateRecoil( DROID *psDroid );
 
 static void cancelBuild(DROID *psDroid)
 {
+	objTrace(psDroid->id, "Droid build order cancelled");
 	psDroid->action = DACTION_NONE;
 	psDroid->order = DORDER_NONE;
 	setDroidTarget(psDroid, NULL);
@@ -1089,8 +1090,17 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	{
 		// Update the interface
 		intBuildFinished(psDroid);
-
-		cancelBuild(psDroid);
+		if ((map_coord(psDroid->orderX) == map_coord(psDroid->orderX2) && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))
+		    || psDroid->order != DORDER_LINEBUILD)
+		{
+			cancelBuild(psDroid);
+		}
+		else
+		{
+			psDroid->action = DACTION_NONE;	// make us continue line build
+			setDroidTarget(psDroid, NULL);
+			setDroidActionTarget(psDroid, NULL, 0);
+		}
 		return false;
 	}
 

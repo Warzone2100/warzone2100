@@ -240,14 +240,11 @@ BOOL scrIdleGroup(void)
 	{
 		return false;
 	}
-
-	ASSERT( psGroup != NULL,
-		"scrIdleGroup: invalid group pointer" );
+	ASSERT_OR_RETURN(false, psGroup, "Invalid group pointer");
 
 	for(psDroid = psGroup->psList;psDroid; psDroid = psDroid->psGrpNext)
 	{
-		if(  psDroid->order == DORDER_NONE
-		  || (psDroid->order == DORDER_GUARD && psDroid->psTarget == NULL))
+		if (psDroid->order == DORDER_NONE || (psDroid->order == DORDER_GUARD && psDroid->psTarget == NULL))
 		{
 			count++;
 		}

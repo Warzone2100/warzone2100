@@ -1206,9 +1206,12 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 			for (psIter = apsDroidLists[psDroid->player]; psIter; psIter = psIter->psNext)
 			{
 				if ((psIter->order == DORDER_BUILD || psIter->order == DORDER_HELPBUILD || psIter->order == DORDER_LINEBUILD)
-				    && psIter->psTarget == (BASE_OBJECT *)psStruct)
+				    && psIter->psTarget == (BASE_OBJECT *)psStruct
+				    && (psIter->order != DORDER_LINEBUILD || (map_coord(psIter->orderX) == map_coord(psIter->orderX2)
+				                                              && map_coord(psIter->orderY) == map_coord(psIter->orderY2))))
 				{
-					objTrace(psIter->id, "Construction complete");
+					objTrace(psIter->id, "Construction order %s complete (%d, %d -> %d, %d)", getDroidOrderName(psDroid->order),
+					         (int)psIter->orderX, (int)psIter->orderY, (int)psIter->orderX2, (int)psIter->orderY2);
 					psIter->action = DACTION_NONE;
 					psIter->order = DORDER_NONE;
 					setDroidTarget(psIter, NULL);

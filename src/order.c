@@ -1709,6 +1709,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->psTarStats = psOrder->psStats;
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
+		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats->pName);
 		break;
 	case DORDER_BUILDMODULE:
 		//build a module onto the structure
@@ -1724,6 +1725,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		ASSERT(psDroid->psTarStats != NULL, "orderUnitBase: should have found a module stats");
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->psObj->pos.x,psOrder->psObj->pos.y);
+		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats->pName);
 		break;
 	case DORDER_LINEBUILD:
 		// build a line of structures
@@ -1742,6 +1744,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->psTarStats = psOrder->psStats;
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
+		objTrace(psDroid->id, "Starting new line construction of %s", psOrder->psStats->pName);
 		break;
 	case DORDER_HELPBUILD:
 		// help to build a structure that is starting to be built
@@ -1756,6 +1759,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->psTarStats = (BASE_STATS *)((STRUCTURE *)psOrder->psObj)->pStructureType;
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psDroid->orderX, psDroid->orderY);
+		objTrace(psDroid->id, "Helping construction of %s", psOrder->psStats->pName);
 		break;
 	case DORDER_DEMOLISH:
 		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
