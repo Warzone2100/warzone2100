@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-03 16:47+0100\n"
+"POT-Creation-Date: 2010-02-09 18:34+0100\n"
 "PO-Revision-Date: 2010-02-03 15:33+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -11600,103 +11600,103 @@ msgstr "Relvad"
 msgid "Systems"
 msgstr "Süsteemid"
 
-#: src/display3d.c:569
+#: src/display3d.c:558
 msgid "Player left"
 msgstr "Mängija lahkus"
 
-#: src/display3d.c:569
+#: src/display3d.c:558
 msgid "Player dropped"
 msgstr "Mängija Väjavisatud"
 
-#: src/display.c:1704
+#: src/display.c:1694
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "EI Saa Ehitada. Naftaresurss Põleb."
 
-#: src/display.c:1909
-#: src/display.c:2524
+#: src/display.c:1899
+#: src/display.c:2514
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Kahju %d%% - Kogemus %d, %s"
 
-#: src/display.c:1925
+#: src/display.c:1915
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s -Liitlane - Kahju %d%% - Kogemus %d, %s"
 
-#: src/display.c:2131
+#: src/display.c:2121
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Veoautol kästi Naftapuurtorn ehitada"
 
-#: src/droid.c:199
+#: src/droid.c:203
 msgid "Unit Lost!"
 msgstr "Üksus Kaotatud!"
 
-#: src/droid.c:1331
+#: src/droid.c:1354
 msgid "Structure Restored"
 msgstr "Ehitis taastatud"
 
-#: src/droid.c:2936
+#: src/droid.c:2960
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupp %u valitud - %u Üksus"
 msgstr[1] "Grupp %u valitud - %u Üksust"
 
-#: src/droid.c:2949
+#: src/droid.c:2973
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u üksus määratud gruppi %u"
 msgstr[1] "%u Üksust määratud Gruppi %u"
 
-#: src/droid.c:2962
+#: src/droid.c:2986
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Grupi %u Vaade - %u Üksus"
 msgstr[1] "Grupi %u Vaade - %u Üksust"
 
-#: src/droid.c:2966
+#: src/droid.c:2990
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u Unit"
 msgstr[1] "Aligning with Group %u - %u Units"
 
-#: src/droid.c:3176
+#: src/droid.c:3200
 msgid "Rookie"
 msgstr "Uustulnuk"
 
-#: src/droid.c:3177
+#: src/droid.c:3201
 msgctxt "rank"
 msgid "Green"
 msgstr "Algaja"
 
-#: src/droid.c:3178
+#: src/droid.c:3202
 msgid "Trained"
 msgstr "Treenitud"
 
-#: src/droid.c:3179
+#: src/droid.c:3203
 msgid "Regular"
 msgstr "Regulaar"
 
-#: src/droid.c:3180
+#: src/droid.c:3204
 msgid "Professional"
 msgstr "Professionaal"
 
-#: src/droid.c:3181
+#: src/droid.c:3205
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3182
+#: src/droid.c:3206
 msgid "Elite"
 msgstr "Eliit"
 
-#: src/droid.c:3183
+#: src/droid.c:3207
 msgid "Special"
 msgstr "Eriline"
 
-#: src/droid.c:3184
+#: src/droid.c:3208
 msgid "Hero"
 msgstr "Kangelane"
 
@@ -12057,8 +12057,8 @@ msgid "MAP SAVED!"
 msgstr "KAART SALVESTATUD!"
 
 #: src/hci.c:1705
-#: src/loop.c:530
-#: src/loop.c:546
+#: src/loop.c:528
+#: src/loop.c:544
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "MÄNG SALVESTATUD!"
@@ -13020,8 +13020,8 @@ msgstr "Vali järgmine küborgi tehas"
 msgid "Toggle reopening the build menu"
 msgstr "Toggle reopening the build menu"
 
-#: src/loop.c:537
-#: src/loop.c:553
+#: src/loop.c:535
+#: src/loop.c:551
 msgid "Could not save game!"
 msgstr "Ei suutnud mängu salvestada"
 
@@ -13065,52 +13065,52 @@ msgstr "MÄNG SALVESTATUD!"
 msgid "You found %u power in an oil drum."
 msgstr "Sa leidsid naftatünnist %u energiat"
 
-#: src/multigifts.c:170
+#: src/multigifts.c:171
 #, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s Annab Sulle Nägemis Raporti"
 
-#: src/multigifts.c:190
+#: src/multigifts.c:191
 #, c-format
 msgid "%s Gives you a %s"
 msgstr "%s Annab sulle %s"
 
-#: src/multigifts.c:241
+#: src/multigifts.c:242
 #, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
 msgstr "Proovisid ära anda mittetühja %s - see pole lubatud "
 
-#: src/multigifts.c:300
+#: src/multigifts.c:301
 #, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s Annab Sulle Tehnoloogia Dokumendid"
 
-#: src/multigifts.c:338
+#: src/multigifts.c:339
 #, c-format
 msgid "%s Gives You %u Power"
 msgstr "%s Annab Sulle %u Energiat"
 
-#: src/multigifts.c:358
+#: src/multigifts.c:359
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s Taotleb Sinuga Liitlust"
 
-#: src/multigifts.c:367
+#: src/multigifts.c:368
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Saa Kutsusid %s Liitu Sõlmima"
 
-#: src/multigifts.c:387
+#: src/multigifts.c:388
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s Lõpetab Liitluse %s -ga"
 
-#: src/multigifts.c:415
+#: src/multigifts.c:416
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s Moodustab %s -ga Liitluse"
 
-#: src/multigifts.c:779
+#: src/multigifts.c:780
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Sa Avastasid %s joonised"
@@ -13362,16 +13362,16 @@ msgstr "Võõrustaja lõi %s mängust välja!"
 msgid "Host is Starting Game"
 msgstr "Võõrustaja Alustab Mängu"
 
-#: src/multiint.c:3429
+#: src/multiint.c:3430
 msgid "Players"
 msgstr "Mängijad"
 
-#: src/multiint.c:3545
+#: src/multiint.c:3546
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Kaart: %d%% allalaaditud"
 
-#: src/multiint.c:3571
+#: src/multiint.c:3572
 msgid "HOST"
 msgstr "VÕÕRUSTJA"
 
@@ -13380,28 +13380,32 @@ msgstr "VÕÕRUSTJA"
 msgid "Players Still Joining"
 msgstr "Mängijad Ikka Liituvad"
 
-#: src/multijoin.c:222
+#: src/multijoin.c:230
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s Lahkus mängust"
 
-#: src/multijoin.c:334
+#: src/multijoin.c:342
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "Mängijal %s (%u) on vale mod ja ta löödi mängust välja"
 
-#: src/multijoin.c:373
+#: src/multijoin.c:381
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s Liitus Mänguga"
 
-#: src/multijoin.c:383
+#: src/multijoin.c:391
 msgid "System message:"
 msgstr "Süsteemi sõnum:"
 
 #: src/multilimit.c:185
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Kohandatakse Vaikimisi ja Naase Eelmisele Ekraanile"
+
+#: src/multilimit.c:316
+msgid "Limits reset to default values"
+msgstr ""
 
 #: src/multimenu.c:609
 msgid "Technology level 1"
@@ -13489,35 +13493,35 @@ msgstr "(eraviisiline"
 msgid "[invalid]"
 msgstr "[kehtetu]"
 
-#: src/multiplay.c:1940
+#: src/multiplay.c:1943
 msgid "Green"
 msgstr "Roheline"
 
-#: src/multiplay.c:1941
+#: src/multiplay.c:1944
 msgid "Orange"
 msgstr "Oranð"
 
-#: src/multiplay.c:1942
+#: src/multiplay.c:1945
 msgid "Grey"
 msgstr "Hall"
 
-#: src/multiplay.c:1943
+#: src/multiplay.c:1946
 msgid "Black"
 msgstr "Must"
 
-#: src/multiplay.c:1944
+#: src/multiplay.c:1947
 msgid "Red"
 msgstr "Punane"
 
-#: src/multiplay.c:1945
+#: src/multiplay.c:1948
 msgid "Blue"
 msgstr "Sinine"
 
-#: src/multiplay.c:1946
+#: src/multiplay.c:1949
 msgid "Pink"
 msgstr "Roosa"
 
-#: src/multiplay.c:1947
+#: src/multiplay.c:1950
 msgid "Cyan"
 msgstr "Helesinine"
 
@@ -13652,20 +13656,20 @@ msgstr "Totaalne Mänguaeg - %s"
 msgid "You cheated!"
 msgstr "Sa Tegid Sohki!"
 
-#: src/scriptfuncs.c:3213
+#: src/scriptfuncs.c:3247
 msgid "YOU ARE VICTORIOUS!"
 msgstr "SA OLED VÕIDUKAS"
 
-#: src/scriptfuncs.c:3217
+#: src/scriptfuncs.c:3251
 msgid "YOU WERE DEFEATED!"
 msgstr "SIND VÕIDETI!"
 
-#: src/scriptfuncs.c:10133
+#: src/scriptfuncs.c:10166
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Signaal saadud %s -lt!"
 
-#: src/scriptfuncs.c:10179
+#: src/scriptfuncs.c:10212
 #, c-format
 msgid "Beacon %d"
 msgstr "Signaal %d"
@@ -13694,61 +13698,61 @@ msgstr "Võimetu leidma Sensorüksusi!"
 msgid "Unable to locate any Commanders!"
 msgstr "Võimetu leidma Komandöre!"
 
-#: src/structure.c:2817
+#: src/structure.c:2851
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kontroll Limiit Saavutatud - Tootmine Peatatud"
 
-#: src/structure.c:6070
-#: src/structure.c:6095
+#: src/structure.c:6102
+#: src/structure.c:6127
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Üksus määratud"
 msgstr[1] "%s - %u Üksused määratud"
 
-#: src/structure.c:6100
-#: src/structure.c:6164
+#: src/structure.c:6132
+#: src/structure.c:6196
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Kahju %3.0f%%"
 
-#: src/structure.c:6150
+#: src/structure.c:6182
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u Ühendatud %u -st"
 
-#: src/structure.c:6280
-#: src/structure.c:6325
+#: src/structure.c:6312
+#: src/structure.c:6357
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektrooniliselt Kahjustatud"
 
-#: src/structure.c:6560
+#: src/structure.c:6592
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektrooniline Autasu - Nägemis Raport"
 
-#: src/structure.c:6600
+#: src/structure.c:6632
 msgid "Factory Reward - Propulsion"
 msgstr "Tehase Auhind - Liikumissüsteem"
 
-#: src/structure.c:6624
+#: src/structure.c:6656
 msgid "Factory Reward - Body"
 msgstr "Tehase Autasu - Kere"
 
-#: src/structure.c:6648
+#: src/structure.c:6680
 msgid "Factory Reward - Weapon"
 msgstr "Tehase Autasu - Relv"
 
-#: src/structure.c:6657
+#: src/structure.c:6689
 msgid "Factory Reward - Nothing"
 msgstr "Tehase Autasu - Midagi"
 
-#: src/structure.c:6685
+#: src/structure.c:6717
 msgid "Repair Facility Award - Repair"
 msgstr "Remontimiskeskuse Autasu - Remont"
 
-#: src/structure.c:6692
+#: src/structure.c:6724
 msgid "Repair Facility Award - Nothing"
 msgstr "Remontimiskeskuse Autasu - Midagi"
 
