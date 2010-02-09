@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-06 13:25+0100\n"
+"POT-Creation-Date: 2010-02-09 18:24+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -11632,68 +11632,68 @@ msgstr "Втрачено Бойову Одиницю!"
 msgid "Structure Restored"
 msgstr "Будівлю Відновлено"
 
-#: src/droid.c:3244
+#: src/droid.c:3242
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Групу %u обрано - %u Підрозділ"
 msgstr[1] "Групу %u обрано - %u Підрозділів"
 
-#: src/droid.c:3257
+#: src/droid.c:3255
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u підрозділ призначено у Групу %u"
 msgstr[1] "%u підрозділів призначено у Групу %u"
 
-#: src/droid.c:3270
+#: src/droid.c:3268
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Центр екрану на Групі %u - %u Підрозділ"
 msgstr[1] "Центр екрану на Групі %u - %u Підрозділів"
 
-#: src/droid.c:3274
+#: src/droid.c:3272
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Вирівнювання з Групою %u - %u Підрозділ"
 msgstr[1] "Вирівнювання з Групою %u - %u Підрозділів"
 
-#: src/droid.c:3462
+#: src/droid.c:3460
 msgid "Rookie"
 msgstr "Новобранець"
 
-#: src/droid.c:3463
+#: src/droid.c:3461
 msgctxt "rank"
 msgid "Green"
 msgstr "Зелений"
 
-#: src/droid.c:3464
+#: src/droid.c:3462
 msgid "Trained"
 msgstr "Рекрут"
 
-#: src/droid.c:3465
+#: src/droid.c:3463
 msgid "Regular"
 msgstr "Досвідчений"
 
-#: src/droid.c:3466
+#: src/droid.c:3464
 msgid "Professional"
 msgstr "Професіонал"
 
-#: src/droid.c:3467
+#: src/droid.c:3465
 msgid "Veteran"
 msgstr "Ветеран"
 
-#: src/droid.c:3468
+#: src/droid.c:3466
 msgid "Elite"
 msgstr "Елітний"
 
-#: src/droid.c:3469
+#: src/droid.c:3467
 msgid "Special"
 msgstr "Особливий"
 
-#: src/droid.c:3470
+#: src/droid.c:3468
 msgid "Hero"
 msgstr "Герой"
 
@@ -13384,6 +13384,10 @@ msgstr "Повідомлення системи:"
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Прийняти Значення за Замовченням та Повернутись до Попереднього Екрану"
 
+#: src/multilimit.c:316
+msgid "Limits reset to default values"
+msgstr ""
+
 #: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Рівень технологій 1"
@@ -13470,35 +13474,35 @@ msgstr "(приватно до"
 msgid "[invalid]"
 msgstr "[невірний]"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1958
 msgid "Green"
 msgstr "Зелений"
 
-#: src/multiplay.c:1956
+#: src/multiplay.c:1959
 msgid "Orange"
 msgstr "Помаранчовий"
 
-#: src/multiplay.c:1957
+#: src/multiplay.c:1960
 msgid "Grey"
 msgstr "Сірий"
 
-#: src/multiplay.c:1958
+#: src/multiplay.c:1961
 msgid "Black"
 msgstr "Чорний"
 
-#: src/multiplay.c:1959
+#: src/multiplay.c:1962
 msgid "Red"
 msgstr "Червоний"
 
-#: src/multiplay.c:1960
+#: src/multiplay.c:1963
 msgid "Blue"
 msgstr "Синій"
 
-#: src/multiplay.c:1961
+#: src/multiplay.c:1964
 msgid "Pink"
 msgstr "Рожевий"
 
-#: src/multiplay.c:1962
+#: src/multiplay.c:1965
 msgid "Cyan"
 msgstr "Блакитний"
 
@@ -13633,20 +13637,20 @@ msgstr "Повний Час Гри - %s"
 msgid "You cheated!"
 msgstr "Ви застосували шахрайство!"
 
-#: src/scriptfuncs.c:3158
+#: src/scriptfuncs.c:3169
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ВИ ПЕРЕМОГЛИ!"
 
-#: src/scriptfuncs.c:3162
+#: src/scriptfuncs.c:3173
 msgid "YOU WERE DEFEATED!"
 msgstr "ВИ ЗАЗНАЛИ ПОРАЗКИ!"
 
-#: src/scriptfuncs.c:10115
+#: src/scriptfuncs.c:10126
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Отримано Сигнал від %s!"
 
-#: src/scriptfuncs.c:10161
+#: src/scriptfuncs.c:10172
 #, c-format
 msgid "Beacon %d"
 msgstr "Сигнал %d"

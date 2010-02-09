@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-06 13:25+0100\n"
+"POT-Creation-Date: 2010-02-09 18:24+0100\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -11777,64 +11777,64 @@ msgstr "損失單位！"
 msgid "Structure Restored"
 msgstr "建築物重建"
 
-#: src/droid.c:3244
+#: src/droid.c:3242
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "第 %u 隊聽令 - 共 %u  單位"
 
-#: src/droid.c:3257
+#: src/droid.c:3255
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "共 %u 單位 被指派為 第 %u 隊"
 
-#: src/droid.c:3270
+#: src/droid.c:3268
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "視角移動至第 %u  隊 - 共 %u 單位"
 
-#: src/droid.c:3274
+#: src/droid.c:3272
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u 單位"
 
-#: src/droid.c:3462
+#: src/droid.c:3460
 msgid "Rookie"
 msgstr "菜鳥"
 
-#: src/droid.c:3463
+#: src/droid.c:3461
 msgctxt "rank"
 msgid "Green"
 msgstr "青澀"
 
-#: src/droid.c:3464
+#: src/droid.c:3462
 msgid "Trained"
 msgstr "訓練有素的"
 
-#: src/droid.c:3465
+#: src/droid.c:3463
 msgid "Regular"
 msgstr "好樣的"
 
-#: src/droid.c:3466
+#: src/droid.c:3464
 msgid "Professional"
 msgstr "專家"
 
-#: src/droid.c:3467
+#: src/droid.c:3465
 msgid "Veteran"
 msgstr "老手"
 
-#: src/droid.c:3468
+#: src/droid.c:3466
 msgid "Elite"
 msgstr "菁英"
 
-#: src/droid.c:3469
+#: src/droid.c:3467
 msgid "Special"
 msgstr "特務"
 
-#: src/droid.c:3470
+#: src/droid.c:3468
 msgid "Hero"
 msgstr "英雄"
 
@@ -13559,6 +13559,10 @@ msgstr "系統語系"
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "回到前一個畫面"
 
+#: src/multilimit.c:316
+msgid "Limits reset to default values"
+msgstr ""
+
 #: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "第一階科技"
@@ -13646,35 +13650,35 @@ msgstr ""
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1958
 msgid "Green"
 msgstr "綠色"
 
-#: src/multiplay.c:1956
+#: src/multiplay.c:1959
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.c:1957
+#: src/multiplay.c:1960
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.c:1958
+#: src/multiplay.c:1961
 msgid "Black"
 msgstr "黑色"
 
-#: src/multiplay.c:1959
+#: src/multiplay.c:1962
 msgid "Red"
 msgstr "紅色"
 
-#: src/multiplay.c:1960
+#: src/multiplay.c:1963
 msgid "Blue"
 msgstr "藍色"
 
-#: src/multiplay.c:1961
+#: src/multiplay.c:1964
 msgid "Pink"
 msgstr "粉紅色"
 
-#: src/multiplay.c:1962
+#: src/multiplay.c:1965
 msgid "Cyan"
 msgstr "青綠色"
 
@@ -13809,20 +13813,20 @@ msgstr "全部遊戲時間 - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3158
+#: src/scriptfuncs.c:3169
 msgid "YOU ARE VICTORIOUS!"
 msgstr "你獲勝了！"
 
-#: src/scriptfuncs.c:3162
+#: src/scriptfuncs.c:3173
 msgid "YOU WERE DEFEATED!"
 msgstr "你被打敗了！"
 
-#: src/scriptfuncs.c:10115
+#: src/scriptfuncs.c:10126
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "由 %s 獲得引導指標"
 
-#: src/scriptfuncs.c:10161
+#: src/scriptfuncs.c:10172
 #, c-format
 msgid "Beacon %d"
 msgstr "引導指標 %d"

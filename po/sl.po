@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-06 13:25+0100\n"
+"POT-Creation-Date: 2010-02-09 18:24+0100\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -11722,7 +11722,7 @@ msgstr "Enota izgubljena!"
 msgid "Structure Restored"
 msgstr "Zgradba obnovljena"
 
-#: src/droid.c:3244
+#: src/droid.c:3242
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -11731,7 +11731,7 @@ msgstr[1] "Skupina %u izbrana - %u enota"
 msgstr[2] "Skupina %u izbrana - %u enoti"
 msgstr[3] "Skupina %u izbrana - %u enote"
 
-#: src/droid.c:3257
+#: src/droid.c:3255
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -11740,7 +11740,7 @@ msgstr[1] "%u enota dodeljena skupini %u"
 msgstr[2] "%u enoti dodeljeni skupini %u"
 msgstr[3] "%u enote dodeljene skupini %u"
 
-#: src/droid.c:3270
+#: src/droid.c:3268
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -11749,7 +11749,7 @@ msgstr[1] "Centriran na skupino %u - %u enota"
 msgstr[2] "Centriran na skupino %u - %u enoti"
 msgstr[3] "Centriran na skupino %u - %u enote"
 
-#: src/droid.c:3274
+#: src/droid.c:3272
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -11758,40 +11758,40 @@ msgstr[1] "Poravnava s skupino %u - %u enota"
 msgstr[2] "Poravnava s skupino %u - %u enoti"
 msgstr[3] "Poravnava s skupino %u - %u enote"
 
-#: src/droid.c:3462
+#: src/droid.c:3460
 msgid "Rookie"
 msgstr "Novinec"
 
-#: src/droid.c:3463
+#: src/droid.c:3461
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelen"
 
-#: src/droid.c:3464
+#: src/droid.c:3462
 msgid "Trained"
 msgstr "Izurjen"
 
-#: src/droid.c:3465
+#: src/droid.c:3463
 msgid "Regular"
 msgstr "Navaden"
 
-#: src/droid.c:3466
+#: src/droid.c:3464
 msgid "Professional"
 msgstr "Poklicni"
 
-#: src/droid.c:3467
+#: src/droid.c:3465
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3468
+#: src/droid.c:3466
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3469
+#: src/droid.c:3467
 msgid "Special"
 msgstr "Poseben"
 
-#: src/droid.c:3470
+#: src/droid.c:3468
 msgid "Hero"
 msgstr "Junak"
 
@@ -13504,6 +13504,10 @@ msgstr "Sistemsko sporočilo:"
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Vrni se na prejšnji zaslon"
 
+#: src/multilimit.c:316
+msgid "Limits reset to default values"
+msgstr ""
+
 #: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Tehnološka stopnja 1"
@@ -13591,35 +13595,35 @@ msgstr ""
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1958
 msgid "Green"
 msgstr "Zelena"
 
-#: src/multiplay.c:1956
+#: src/multiplay.c:1959
 msgid "Orange"
 msgstr "Oranžna"
 
-#: src/multiplay.c:1957
+#: src/multiplay.c:1960
 msgid "Grey"
 msgstr "Siva"
 
-#: src/multiplay.c:1958
+#: src/multiplay.c:1961
 msgid "Black"
 msgstr "Črna"
 
-#: src/multiplay.c:1959
+#: src/multiplay.c:1962
 msgid "Red"
 msgstr "Rdeča"
 
-#: src/multiplay.c:1960
+#: src/multiplay.c:1963
 msgid "Blue"
 msgstr "Modra"
 
-#: src/multiplay.c:1961
+#: src/multiplay.c:1964
 msgid "Pink"
 msgstr "Roza"
 
-#: src/multiplay.c:1962
+#: src/multiplay.c:1965
 msgid "Cyan"
 msgstr "Cijan"
 
@@ -13754,20 +13758,20 @@ msgstr "Celotni čas igranja - %s"
 msgid "You cheated!"
 msgstr "Goljufali ste!"
 
-#: src/scriptfuncs.c:3158
+#: src/scriptfuncs.c:3169
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ZMAGALI STE!"
 
-#: src/scriptfuncs.c:3162
+#: src/scriptfuncs.c:3173
 msgid "YOU WERE DEFEATED!"
 msgstr "BILI STE PREMAGANI!"
 
-#: src/scriptfuncs.c:10115
+#: src/scriptfuncs.c:10126
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Prejet poziv od %s!"
 
-#: src/scriptfuncs.c:10161
+#: src/scriptfuncs.c:10172
 #, c-format
 msgid "Beacon %d"
 msgstr "Poziv %d"

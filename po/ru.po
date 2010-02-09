@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-06 13:25+0100\n"
+"POT-Creation-Date: 2010-02-09 18:24+0100\n"
 "PO-Revision-Date: 2010-01-28 19:50+0600\n"
 "Last-Translator: Maxim <raptor9000@yandex.ru>\n"
 "Language-Team: Russian <>\n"
@@ -11643,7 +11643,7 @@ msgstr "Юнит потерян!"
 msgid "Structure Restored"
 msgstr "постройка восстановлена"
 
-#: src/droid.c:3244
+#: src/droid.c:3242
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -11651,7 +11651,7 @@ msgstr[0] "Выбрана группа %u - %u юнит"
 msgstr[1] "Выбрана группа %u - %u юнита"
 msgstr[2] "Выбрана группа %u - %u юнитов"
 
-#: src/droid.c:3257
+#: src/droid.c:3255
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -11659,7 +11659,7 @@ msgstr[0] "%u юнит назначен группе %u"
 msgstr[1] "%u юнита назначено группе %u"
 msgstr[2] "%u юнитов назначено группе %u"
 
-#: src/droid.c:3270
+#: src/droid.c:3268
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -11667,7 +11667,7 @@ msgstr[0] "Фокус на группе %u - %u юнит"
 msgstr[1] "Фокус на группе %u - %u юнита"
 msgstr[2] "Фокус на группе %u - %u юнитов"
 
-#: src/droid.c:3274
+#: src/droid.c:3272
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -11675,40 +11675,40 @@ msgstr[0] "Соединить с группой %u - %u Юнит"
 msgstr[1] "Соединить с группой %u - %u Юниты"
 msgstr[2] "Соединить с группой %u - %u Юниты"
 
-#: src/droid.c:3462
+#: src/droid.c:3460
 msgid "Rookie"
 msgstr "Новобранец"
 
-#: src/droid.c:3463
+#: src/droid.c:3461
 msgctxt "rank"
 msgid "Green"
 msgstr "Молодой"
 
-#: src/droid.c:3464
+#: src/droid.c:3462
 msgid "Trained"
 msgstr "Тренированный"
 
-#: src/droid.c:3465
+#: src/droid.c:3463
 msgid "Regular"
 msgstr "Опытный"
 
-#: src/droid.c:3466
+#: src/droid.c:3464
 msgid "Professional"
 msgstr "Профессионал"
 
-#: src/droid.c:3467
+#: src/droid.c:3465
 msgid "Veteran"
 msgstr "Ветеран"
 
-#: src/droid.c:3468
+#: src/droid.c:3466
 msgid "Elite"
 msgstr "Элита"
 
-#: src/droid.c:3469
+#: src/droid.c:3467
 msgid "Special"
 msgstr "Специалист"
 
-#: src/droid.c:3470
+#: src/droid.c:3468
 msgid "Hero"
 msgstr "Герой"
 
@@ -13399,6 +13399,10 @@ msgstr "Системное сообщение"
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Применить настройки по умолчанию и вернуться назад"
 
+#: src/multilimit.c:316
+msgid "Limits reset to default values"
+msgstr ""
+
 #: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Уровень технологий 1"
@@ -13485,35 +13489,35 @@ msgstr "(приват"
 msgid "[invalid]"
 msgstr "[неверно]"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1958
 msgid "Green"
 msgstr "Зелёный"
 
-#: src/multiplay.c:1956
+#: src/multiplay.c:1959
 msgid "Orange"
 msgstr "Оранжевый"
 
-#: src/multiplay.c:1957
+#: src/multiplay.c:1960
 msgid "Grey"
 msgstr "Серый"
 
-#: src/multiplay.c:1958
+#: src/multiplay.c:1961
 msgid "Black"
 msgstr "Чёрный"
 
-#: src/multiplay.c:1959
+#: src/multiplay.c:1962
 msgid "Red"
 msgstr "Красный"
 
-#: src/multiplay.c:1960
+#: src/multiplay.c:1963
 msgid "Blue"
 msgstr "Синий"
 
-#: src/multiplay.c:1961
+#: src/multiplay.c:1964
 msgid "Pink"
 msgstr "Розовый"
 
-#: src/multiplay.c:1962
+#: src/multiplay.c:1965
 msgid "Cyan"
 msgstr "Голубой"
 
@@ -13648,20 +13652,20 @@ msgstr "Общее время игры: %s"
 msgid "You cheated!"
 msgstr "вас обманули"
 
-#: src/scriptfuncs.c:3158
+#: src/scriptfuncs.c:3169
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ПОБЕДА!"
 
-#: src/scriptfuncs.c:3162
+#: src/scriptfuncs.c:3173
 msgid "YOU WERE DEFEATED!"
 msgstr "ВЫ ПРОИГРАЛИ!"
 
-#: src/scriptfuncs.c:10115
+#: src/scriptfuncs.c:10126
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Маяк получен от %s!"
 
-#: src/scriptfuncs.c:10161
+#: src/scriptfuncs.c:10172
 #, c-format
 msgid "Beacon %d"
 msgstr "Маяк %d"

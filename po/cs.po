@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-06 13:25+0100\n"
+"POT-Creation-Date: 2010-02-09 18:24+0100\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -11690,7 +11690,7 @@ msgstr "Jednotka ztracena!"
 msgid "Structure Restored"
 msgstr "Budova obnovena"
 
-#: src/droid.c:3244
+#: src/droid.c:3242
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -11698,7 +11698,7 @@ msgstr[0] "Skupina %u vybrána - %u Jednotka"
 msgstr[1] "Skupina %u vybrána - %u Jednotky"
 msgstr[2] "Skupina %u vybrána - %u Jednotek"
 
-#: src/droid.c:3257
+#: src/droid.c:3255
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -11706,7 +11706,7 @@ msgstr[0] "%u jednotka začleněna do Skupiny %u"
 msgstr[1] "%u jednotky začleněny do Skupiny %u"
 msgstr[2] "%u jednotek začleněno do Skupiny %u"
 
-#: src/droid.c:3270
+#: src/droid.c:3268
 #, fuzzy, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -11714,7 +11714,7 @@ msgstr[0] "Zameřeno na skupinu %u - %u jednotka"
 msgstr[1] "Zameřeno na skupinu %u - %u jednotky"
 msgstr[2] "Zameřeno na skupinu %u - %u jednotek"
 
-#: src/droid.c:3274
+#: src/droid.c:3272
 #, fuzzy, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -11722,41 +11722,41 @@ msgstr[0] "Vyrovnání se skupinou %u - %u jednotka"
 msgstr[1] "Vyrovnání se skupinou %u - %u jednotky"
 msgstr[2] "Vyrovnání se skupinou %u - %u jednotek"
 
-#: src/droid.c:3462
+#: src/droid.c:3460
 msgid "Rookie"
 msgstr "Nováček"
 
-#: src/droid.c:3463
+#: src/droid.c:3461
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelenáč"
 
-#: src/droid.c:3464
+#: src/droid.c:3462
 #, fuzzy
 msgid "Trained"
 msgstr "Trénovaný"
 
-#: src/droid.c:3465
+#: src/droid.c:3463
 msgid "Regular"
 msgstr "Běžný"
 
-#: src/droid.c:3466
+#: src/droid.c:3464
 msgid "Professional"
 msgstr "Profesionální"
 
-#: src/droid.c:3467
+#: src/droid.c:3465
 msgid "Veteran"
 msgstr "Veterán"
 
-#: src/droid.c:3468
+#: src/droid.c:3466
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3469
+#: src/droid.c:3467
 msgid "Special"
 msgstr "Speciální"
 
-#: src/droid.c:3470
+#: src/droid.c:3468
 msgid "Hero"
 msgstr "Hrdina"
 
@@ -13508,6 +13508,10 @@ msgstr "Systémové místo"
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Zpět na Předchozí Obrazovku"
 
+#: src/multilimit.c:316
+msgid "Limits reset to default values"
+msgstr ""
+
 #: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Technologická úroveň 1"
@@ -13597,35 +13601,35 @@ msgstr ""
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1958
 msgid "Green"
 msgstr "Zelená"
 
-#: src/multiplay.c:1956
+#: src/multiplay.c:1959
 msgid "Orange"
 msgstr "Oranžová"
 
-#: src/multiplay.c:1957
+#: src/multiplay.c:1960
 msgid "Grey"
 msgstr "Šedá"
 
-#: src/multiplay.c:1958
+#: src/multiplay.c:1961
 msgid "Black"
 msgstr "Černá"
 
-#: src/multiplay.c:1959
+#: src/multiplay.c:1962
 msgid "Red"
 msgstr "Červená"
 
-#: src/multiplay.c:1960
+#: src/multiplay.c:1963
 msgid "Blue"
 msgstr "Modrá"
 
-#: src/multiplay.c:1961
+#: src/multiplay.c:1964
 msgid "Pink"
 msgstr "Růžová"
 
-#: src/multiplay.c:1962
+#: src/multiplay.c:1965
 msgid "Cyan"
 msgstr "Azurová"
 
@@ -13760,20 +13764,20 @@ msgstr "Celkový Čas Hry - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3158
+#: src/scriptfuncs.c:3169
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3162
+#: src/scriptfuncs.c:3173
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10115
+#: src/scriptfuncs.c:10126
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10161
+#: src/scriptfuncs.c:10172
 #, c-format
 msgid "Beacon %d"
 msgstr ""
