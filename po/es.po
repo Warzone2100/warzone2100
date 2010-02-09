@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-06 13:25+0100\n"
-"PO-Revision-Date: 2010-01-28 19:14+0100\n"
+"POT-Creation-Date: 2010-02-09 18:24+0100\n"
+"PO-Revision-Date: 2010-02-09 17:23+0100\n"
 "Last-Translator: Saber Nyoki <saberuneko@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -9371,7 +9371,7 @@ msgstr "Ahora click izquierdo en el artefacto ametralladora"
 
 #: data/base/script/text/tutorial3.slo:692
 msgid "The artifact is now being researched by the facility"
-msgstr "El artefacto está siendo investigadoen la instalación"
+msgstr "El artefacto está siendo investigado en la instalación"
 
 #: data/base/script/text/tutorial3.slo:713
 msgid "The researched machinegun can now be used to design a new vehicle"
@@ -11642,68 +11642,68 @@ msgstr "¡Unidad destruída!"
 msgid "Structure Restored"
 msgstr "Estructura Restaurada"
 
-#: src/droid.c:3244
+#: src/droid.c:3242
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u seleccionado - %u Unidad"
 msgstr[1] "Grupo %u seleccionado - %u Unidades"
 
-#: src/droid.c:3257
+#: src/droid.c:3255
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidad asignada al Grupo %u"
 msgstr[1] "%u unidades asignadas al Grupo %u"
 
-#: src/droid.c:3270
+#: src/droid.c:3268
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado en el Grupo %u - %u Unidad"
 msgstr[1] "Centrado en el Grupo %u - %u Unidades"
 
-#: src/droid.c:3274
+#: src/droid.c:3272
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alineando con el Grupo %u - %u Unidad"
 msgstr[1] "Alineando con el Grupo %u - %u Unidades"
 
-#: src/droid.c:3462
+#: src/droid.c:3460
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.c:3463
+#: src/droid.c:3461
 msgctxt "rank"
 msgid "Green"
 msgstr "Principiante"
 
-#: src/droid.c:3464
+#: src/droid.c:3462
 msgid "Trained"
 msgstr "Entrenado"
 
-#: src/droid.c:3465
+#: src/droid.c:3463
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3466
+#: src/droid.c:3464
 msgid "Professional"
 msgstr "Profesional"
 
-#: src/droid.c:3467
+#: src/droid.c:3465
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3468
+#: src/droid.c:3466
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.c:3469
+#: src/droid.c:3467
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.c:3470
+#: src/droid.c:3468
 msgid "Hero"
 msgstr "Héroe"
 
@@ -13394,6 +13394,10 @@ msgstr "Mensaje del sistema:"
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Restablecer Valores por defecto y Volver a la Pantalla Anterior"
 
+#: src/multilimit.c:316
+msgid "Limits reset to default values"
+msgstr ""
+
 #: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Nivel Tecnológico 1"
@@ -13480,35 +13484,35 @@ msgstr "(privado a "
 msgid "[invalid]"
 msgstr "[inválido]"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1958
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.c:1956
+#: src/multiplay.c:1959
 msgid "Orange"
 msgstr "Naranja"
 
-#: src/multiplay.c:1957
+#: src/multiplay.c:1960
 msgid "Grey"
 msgstr "Gris"
 
-#: src/multiplay.c:1958
+#: src/multiplay.c:1961
 msgid "Black"
 msgstr "Negro"
 
-#: src/multiplay.c:1959
+#: src/multiplay.c:1962
 msgid "Red"
 msgstr "Rojo"
 
-#: src/multiplay.c:1960
+#: src/multiplay.c:1963
 msgid "Blue"
 msgstr "Azul"
 
-#: src/multiplay.c:1961
+#: src/multiplay.c:1964
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.c:1962
+#: src/multiplay.c:1965
 msgid "Cyan"
 msgstr "Cian"
 
@@ -13643,20 +13647,20 @@ msgstr "Tiempo Jugado Total: %s"
 msgid "You cheated!"
 msgstr "¡Hiciste trampa!"
 
-#: src/scriptfuncs.c:3158
+#: src/scriptfuncs.c:3169
 msgid "YOU ARE VICTORIOUS!"
 msgstr "¡ERES EL GANADOR!"
 
-#: src/scriptfuncs.c:3162
+#: src/scriptfuncs.c:3173
 msgid "YOU WERE DEFEATED!"
 msgstr "¡HAS SIDO DERROTADO!"
 
-#: src/scriptfuncs.c:10115
+#: src/scriptfuncs.c:10126
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "¡Baliza recibida de %s!"
 
-#: src/scriptfuncs.c:10161
+#: src/scriptfuncs.c:10172
 #, c-format
 msgid "Beacon %d"
 msgstr "Baliza %d"
