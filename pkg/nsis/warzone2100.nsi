@@ -43,7 +43,7 @@
   InstallDirRegKey HKLM "Software\${PACKAGE_NAME}" ""
 
   ;Request application privileges for Windows Vista
-  ;RequestExecutionLevel user
+  RequestExecutionLevel admin
   
 ;--------------------------------
 ;Versioninfo
@@ -134,6 +134,14 @@ Section $(TEXT_SecBase) SecBase
 
   SetOutPath "$INSTDIR"
 
+  SetShellVarContext all
+  
+  ; Clean-up section for no-longer supported stuff
+  Delete "$INSTDIR\mods\multiplay\original.wz"
+  Delete "$INSTDIR\mods\multiplay\aivolution.wz"
+  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Aivolution.lnk"
+  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Original.lnk"
+  
   ;ADD YOUR OWN FILES HERE...
 
   ; Main executable
@@ -243,37 +251,6 @@ SectionEnd
 
 
 SectionGroup /e $(TEXT_SecMods) secMods
-
-Section $(TEXT_SecAivolutionMod) SecAivolutionMod
-
-  SetOutPath "$INSTDIR\mods\multiplay"
-
-  File "${TOP_BUILDDIR}\data\mods\multiplay\aivolution.wz"
-
-  SetOutPath "$INSTDIR"
-
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Aivolution.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp aivolution.wz"
-  !insertmacro MUI_STARTMENU_WRITE_END
-
-SectionEnd
-
-; This is disabled for now
-;
-;Section $(TEXT_SecMusicMod) SecMusicMod
-;
-;  SetOutPath "$INSTDIR\mods\music"
-;
-;  IfFileExists "music_1.0.wz" +6
-;    NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.1.AUTHORS"          "music_1.1.AUTHORS.txt"
-;    NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.1.wz"               "music_1.1.wz"
-;    Pop $R0 ; Get the return value
-;    StrCmp $R0 "success" +2
-;      MessageBox MB_OK|MB_ICONSTOP "Download of Music mod failed: $R0"
-;
-;  SetOutPath "$INSTDIR"
-;
-;SectionEnd
 
 Section $(TEXT_SecNTWMod) SecNTWMod
 
@@ -524,12 +501,6 @@ FunctionEnd
   LangString TEXT_SecMods ${LANG_ENGLISH} "Mods"
   LangString DESC_SecMods ${LANG_ENGLISH} "Various mods for Warzone 2100."
 
-  LangString TEXT_SecAivolutionMod ${LANG_ENGLISH} "Aivolution"
-  LangString DESC_SecAivolutionMod ${LANG_ENGLISH} "Improved artificial intelligence that learns."
-
-;  LangString TEXT_SecMusicMod ${LANG_ENGLISH} "Music"
-;  LangString DESC_SecMusicMod ${LANG_ENGLISH} "Download and install music."
-
   LangString TEXT_SecFMVs ${LANG_ENGLISH} "Videos"
   LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install in-game cutscenes."
 
@@ -566,12 +537,6 @@ FunctionEnd
 
   LangString TEXT_SecMods ${LANG_DUTCH} "Mods"
   LangString DESC_SecMods ${LANG_DUTCH} "Verschillende mods."
-
-  LangString TEXT_SecAivolutionMod ${LANG_DUTCH} "Aivolution"
-  LangString DESC_SecAivolutionMod ${LANG_DUTCH} "Verbeterde kunstmatige intelligentie die leert."
-
-;  LangString TEXT_SecMusicMod ${LANG_DUTCH} "Muziek"
-;  LangString DESC_SecMusicMod ${LANG_DUTCH} "Muziek downloaden en installeren."
 
   LangString TEXT_SecFMVs ${LANG_DUTCH} "Videos"
   LangString DESC_SecFMVs ${LANG_DUTCH} "Download and install in-game cutscenes."
@@ -610,12 +575,6 @@ FunctionEnd
   LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
 
-  LangString TEXT_SecAivolutionMod ${LANG_GERMAN} "Aivolution"
-  LangString DESC_SecAivolutionMod ${LANG_GERMAN} "Verbesserte kьnstliche Intelligenz, die dazulernt."
-
-;  LangString TEXT_SecMusicMod ${LANG_GERMAN} "Musik"
-;  LangString DESC_SecMusicMod ${LANG_GERMAN} "Musik herunterladen und installieren."
-
   LangString TEXT_SecFMVs ${LANG_GERMAN} "Videos"
   LangString DESC_SecFMVs ${LANG_GERMAN} "Videos herunterladen und installieren."
 
@@ -653,12 +612,6 @@ FunctionEnd
   LangString TEXT_SecMods ${LANG_RUSSIAN} "Модификации"
   LangString DESC_SecMods ${LANG_RUSSIAN} "Различные модификации для Warzone 2100."
 
-  LangString TEXT_SecAivolutionMod ${LANG_RUSSIAN} "Aivolution"
-  LangString DESC_SecAivolutionMod ${LANG_RUSSIAN} "Усовершенствованный искусственный интеллект, способный к обучению."
-
-;  LangString TEXT_SecMusicMod ${LANG_RUSSIAN} "Музыка"
-;  LangString DESC_SecMusicMod ${LANG_RUSSIAN} "Скачать и установить музыку."
-
   LangString TEXT_SecFMVs ${LANG_RUSSIAN} "Видео"
   LangString DESC_SecFMVs ${LANG_RUSSIAN} "Скачать и установить внутриигровые ролики."
 
@@ -693,8 +646,6 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecAivolutionMod} $(DESC_SecAivolutionMod)
-;    !insertmacro MUI_DESCRIPTION_TEXT ${SecMusicMod} $(DESC_SecMusicMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNTWMod} $(DESC_SecNTWMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOriginalMod} $(DESC_SecOriginalMod)
 	
@@ -756,12 +707,10 @@ Section "Uninstall"
   Delete "$INSTDIR\fonts\DejaVuSans-Bold.ttf"
   RMDir "$INSTDIR\fonts"
 
-
   Delete "$INSTDIR\mods\music\music_1.0.AUTHORS.txt"
   Delete "$INSTDIR\mods\music\music_1.0.wz"
 
   Delete "$INSTDIR\mods\multiplay\ntw.wz"
-  Delete "$INSTDIR\mods\multiplay\aivolution.wz"
   Delete "$INSTDIR\mods\multiplay\old-1.10-balance.wz"
 
   RMDir "$INSTDIR\mods\multiplay"
@@ -770,7 +719,6 @@ Section "Uninstall"
   RMDir "$INSTDIR\mods\global"
 
   RMDir "$INSTDIR\mods"
-
 
 ; remove all the locales
 
@@ -877,6 +825,8 @@ Section "Uninstall"
   RMDir "$INSTDIR\locale"
   RMDir "$INSTDIR"
 
+  SetShellVarContext all
+  
 ; remove the desktop shortcut icon
 
   Delete "$DESKTOP\${PACKAGE_NAME}.lnk"
@@ -887,13 +837,10 @@ Section "Uninstall"
 
   Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME}.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Aivolution.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - NTW.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Old 1.10 Balance.lnk"
-;  RMDir "$SMPROGRAMS\$STARTMENU_FOLDER"
 
   ;Delete empty start menu parent diretories
-;  !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
 
   startMenuDeleteLoop:
