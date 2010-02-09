@@ -343,7 +343,7 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	}
 	else
 	{
-		retVal = fpathDroidRoute(psDroid, x, y);
+		retVal = fpathDroidRoute(psDroid, x, y, FMT_MOVE);
 	}
 
 	/* check formations */
@@ -590,21 +590,12 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 	}
 
 	// set up the move state
-	if (psDroid->sMove.Status == MOVEROUTE)
-	{
-		psDroid->sMove.Status = MOVEROUTESHUFFLE;
-	}
-	else
-	{
-		psDroid->sMove.Status = MOVESHUFFLE;
-	}
+	psDroid->sMove.Status = MOVESHUFFLE;
 	psDroid->sMove.shuffleStart = shuffleStart;
 	psDroid->sMove.srcX = (SDWORD)psDroid->pos.x;
 	psDroid->sMove.srcY = (SDWORD)psDroid->pos.y;
 	psDroid->sMove.targetX = tarX;
 	psDroid->sMove.targetY = tarY;
-	// setting the Destination could overwrite a MOVEROUTE's destination
-	// it is not actually needed for a shuffle anyway
 	psDroid->sMove.numPoints = 0;
 	psDroid->sMove.Position = 0;
 	psDroid->sMove.fx = psDroid->pos.x;
@@ -956,8 +947,7 @@ static BOOL moveBlocked(DROID *psDroid)
 	SDWORD	xdiff,ydiff, diffSq;
 	UDWORD	blockTime;
 
-	if ((psDroid->sMove.bumpTime == 0) || (psDroid->sMove.bumpTime > gameTime) ||
-		(psDroid->sMove.Status == MOVEROUTE) || (psDroid->sMove.Status == MOVEROUTESHUFFLE))
+	if (psDroid->sMove.bumpTime == 0 || psDroid->sMove.bumpTime > gameTime)
 	{
 		// no bump - can't be blocked
 		return false;
@@ -1434,7 +1424,7 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 
 					if (aiCheckAlliances(psObst->player, psDroid->player)
 					    && psShuffleDroid->action != DACTION_WAITDURINGREARM
-					    && (psShuffleDroid->sMove.Status == MOVEINACTIVE || psShuffleDroid->sMove.Status == MOVEROUTE))
+					    && psShuffleDroid->sMove.Status == MOVEINACTIVE)
 					{
 						if (psDroid->sMove.Status == MOVESHUFFLE)
 						{
@@ -1885,10 +1875,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
  */
 static BOOL moveDroidStopped(DROID* psDroid, SDWORD speed)
 {
-	if ((psDroid->sMove.Status == MOVEINACTIVE
-	  || psDroid->sMove.Status == MOVEROUTE)
-	 && speed == 0
-	 && psDroid->sMove.speed == 0)
+	if (psDroid->sMove.Status == MOVEINACTIVE && speed == 0 && psDroid->sMove.speed == 0)
 	{
 		return true;
 	}
@@ -2948,62 +2935,30 @@ void moveUpdateDroid(DROID *psDroid)
 			psDroid->psCurAnim->bVisible = false;
 		}
 		break;
-	case MOVEROUTE:
-	case MOVEROUTESHUFFLE:
 	case MOVESHUFFLE:
-		// deal with both waiting for a route (MOVEROUTE) and the droid shuffle (MOVESHUFFLE)
-		// here because droids waiting for a route need to shuffle out of the way (MOVEROUTESHUFFLE)
-		// of those that have already got a route
-
-		if ((psDroid->sMove.Status == MOVEROUTE) ||
-			(psDroid->sMove.Status == MOVEROUTESHUFFLE))
+		if (moveReachedWayPoint(psDroid) || (psDroid->sMove.shuffleStart + MOVE_SHUFFLETIME) < gameTime)
 		{
-			psDroid->sMove.fx = psDroid->pos.x;
-			psDroid->sMove.fy = psDroid->pos.y;
-			psDroid->sMove.fz = psDroid->pos.z;
-
-			turnOffMultiMsg(true);
-			moveDroidTo(psDroid, psDroid->sMove.DestinationX,psDroid->sMove.DestinationY);
-			turnOffMultiMsg(false);
-		}
-		else if ((psDroid->sMove.Status == MOVESHUFFLE) ||
-				 (psDroid->sMove.Status == MOVEROUTESHUFFLE))
-		{
-			if (moveReachedWayPoint(psDroid) ||
-				((psDroid->sMove.shuffleStart + MOVE_SHUFFLETIME) < gameTime))
+			if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 			{
-				if ( psDroid->sMove.Status == MOVEROUTESHUFFLE )
-				{
-					psDroid->sMove.Status = MOVEROUTE;
-				}
-				else if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
-				{
-					psDroid->sMove.Status = MOVEHOVER;
-				}
-				else
-				{
-					psDroid->sMove.Status = MOVEINACTIVE;
-				}
+				psDroid->sMove.Status = MOVEHOVER;
 			}
 			else
 			{
-				// Calculate a target vector
-				Vector2f target = moveGetDirection(psDroid);
-
-				// Turn the droid if necessary
-				tangle = vectorToAngle(target.x, target.y);
-
-				if ( psDroid->droidType == DROID_TRANSPORTER )
-				{
-					debug( LOG_NEVER, "a) dir %g,%g (%g)\n", target.x, target.y, tangle );
-				}
-
-				moveSpeed = moveCalcDroidSpeed(psDroid);
-				moveDir = tangle;
-				ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
+				psDroid->sMove.Status = MOVEINACTIVE;
 			}
 		}
+		else
+		{
+			// Calculate a target vector
+			Vector2f target = moveGetDirection(psDroid);
 
+			// Turn the droid if necessary
+			tangle = vectorToAngle(target.x, target.y);
+
+			moveSpeed = moveCalcDroidSpeed(psDroid);
+			moveDir = tangle;
+			ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
+		}
 		break;
 	case MOVEWAITROUTE:
 		moveDroidTo(psDroid, psDroid->sMove.DestinationX,psDroid->sMove.DestinationY);

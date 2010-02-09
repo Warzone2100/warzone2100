@@ -5639,7 +5639,7 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	if (psDroid->sMove.Status == MOVEWAITROUTE)
 	{
 		psDroid->sMove.Status = MOVEINACTIVE;
-		fpathDroidRoute(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
+		fpathDroidRoute(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY, FMT_MOVE);
 		psDroid->sMove.Status = MOVEWAITROUTE;
 	}
 }
