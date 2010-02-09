@@ -1,0 +1,7 @@
+// Bison settings for all configurations
+
+
+INSTALL_PATH = $(HOME)/bin
+PREBINDING = NO
+PRODUCT_NAME = Bison
+GCC_MODEL_TUNING = G5

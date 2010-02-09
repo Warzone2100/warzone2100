@@ -14,6 +14,47 @@ EXTRA_DIST= \
 	autorevision.conf \
 	config.rpath \
 	configure.ac \
+	macosx/configs/Autorevision-All.xcconfig \
+	macosx/configs/Autorevision-Debug.xcconfig \
+	macosx/configs/Autorevision-Release.xcconfig \
+	macosx/configs/Bison-All.xcconfig \
+	macosx/configs/Bison-Debug.xcconfig \
+	macosx/configs/Bison-Release.xcconfig \
+	macosx/configs/Gettext-All.xcconfig \
+	macosx/configs/Gettext-Debug.xcconfig \
+	macosx/configs/Gettext-Release.xcconfig \
+	macosx/configs/Ogg-All.xcconfig \
+	macosx/configs/Ogg-Debug.xcconfig \
+	macosx/configs/Ogg-Release.xcconfig \
+	macosx/configs/PhysFS-All.xcconfig \
+	macosx/configs/PhysFS-Debug.xcconfig \
+	macosx/configs/PhysFS-Release.xcconfig \
+	macosx/configs/Png-All.xcconfig \
+	macosx/configs/Png-Debug.xcconfig \
+	macosx/configs/Png-Release.xcconfig \
+	macosx/configs/Popt-All.xcconfig \
+	macosx/configs/Popt-Debug.xcconfig \
+	macosx/configs/Popt-Release.xcconfig \
+	macosx/configs/Project-All.xcconfig \
+	macosx/configs/QuesoGLC-All.xcconfig \
+	macosx/configs/QuesoGLC-Debug.xcconfig \
+	macosx/configs/QuesoGLC-Release.xcconfig \
+	macosx/configs/SDLmain-All.xcconfig \
+	macosx/configs/SDLmain-Debug.xcconfig \
+	macosx/configs/SDLmain-Release.xcconfig \
+	macosx/configs/Theora-All.xcconfig \
+	macosx/configs/Theora-Debug.xcconfig \
+	macosx/configs/Theora-Release.xcconfig \
+	macosx/configs/Vorbis-All.xcconfig \
+	macosx/configs/Vorbis-Debug.xcconfig \
+	macosx/configs/Vorbis-Release.xcconfig \
+	macosx/configs/Warzone-All.xcconfig \
+	macosx/configs/warzone-debug.xcconfig \
+	macosx/configs/warzone-release.xcconfig \
+	macosx/configs/Warzone-StaticAnalyzer.xcconfig \
+	macosx/configs/Zlib-All.xcconfig \
+	macosx/configs/Zlib-Debug.xcconfig \
+	macosx/configs/Zlib-Release.xcconfig \
 	macosx/external/bison.sh \
 	macosx/prebuilt/ \
 	macosx/README.BUILD.txt \

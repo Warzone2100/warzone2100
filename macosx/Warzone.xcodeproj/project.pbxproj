@@ -140,7 +140,7 @@
 		022B2FA90BD55B50002E64E3 /* wprintf-parse.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F960BD55B50002E64E3 /* wprintf-parse.h */; };
 		022B2FAA0BD55B50002E64E3 /* xsize.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F970BD55B50002E64E3 /* xsize.h */; };
 		022B2FE20BD55E45002E64E3 /* libgnuintl.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2FE00BD55E45002E64E3 /* libgnuintl.h */; };
-		022B2FE30BD55E45002E64E3 /* libintl.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2FE10BD55E45002E64E3 /* libintl.h */; };
+		022B2FE30BD55E45002E64E3 /* libintl.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2FE10BD55E45002E64E3 /* libintl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		022B30AB0BD564FC002E64E3 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B30AA0BD564FC002E64E3 /* config.h */; };
 		022B30E00BD56618002E64E3 /* plural.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B30DF0BD56618002E64E3 /* plural.c */; };
 		022B31370BD568BA002E64E3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
@@ -1470,20 +1470,61 @@
 		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = baseobject.c; path = ../src/baseobject.c; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
-		43025C33111FB072006C49B1 /* de */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C36111FB072006C49B1 /* en_GB */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = en_GB; path = en_GB.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C39111FB072006C49B1 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C3B111FB072006C49B1 /* es */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C43111FB072006C49B1 /* fr */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C4E111FB072006C49B1 /* it */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C5D111FB072006C49B1 /* pl */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C60111FB072006C49B1 /* pt */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C63111FB072006C49B1 /* pt_BR */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = pt_BR; path = pt_BR.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C69111FB072006C49B1 /* ru */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C6C111FB072006C49B1 /* sl */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = sl; path = sl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C6F111FB072006C49B1 /* uk_UA */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = uk_UA; path = uk_UA.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C75111FB072006C49B1 /* zh_TW */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = zh_TW; path = zh_TW.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025D0C111FC870006C49B1 /* et_EE */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = et_EE; path = et_EE.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C33111FB072006C49B1 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C36111FB072006C49B1 /* en_GB */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = en_GB; path = en_GB.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C39111FB072006C49B1 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C3B111FB072006C49B1 /* es */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C43111FB072006C49B1 /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C4E111FB072006C49B1 /* it */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C5D111FB072006C49B1 /* pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C60111FB072006C49B1 /* pt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C63111FB072006C49B1 /* pt_BR */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = pt_BR; path = pt_BR.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C69111FB072006C49B1 /* ru */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C6C111FB072006C49B1 /* sl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = sl; path = sl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C6F111FB072006C49B1 /* uk_UA */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = uk_UA; path = uk_UA.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025C75111FB072006C49B1 /* zh_TW */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = zh_TW; path = zh_TW.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025D0C111FC870006C49B1 /* et_EE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = et_EE; path = et_EE.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Project-All.xcconfig"; path = "configs/Project-All.xcconfig"; sourceTree = "<group>"; };
+		43025DFF1120A4CA006C49B1 /* Warzone-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-All.xcconfig"; path = "configs/Warzone-All.xcconfig"; sourceTree = "<group>"; };
+		43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-Debug.xcconfig"; path = "configs/Warzone-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025E011120A4CA006C49B1 /* Warzone-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-Release.xcconfig"; path = "configs/Warzone-Release.xcconfig"; sourceTree = "<group>"; };
+		43025E021120A4CA006C49B1 /* Warzone-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-StaticAnalyzer.xcconfig"; path = "configs/Warzone-StaticAnalyzer.xcconfig"; sourceTree = "<group>"; };
+		43025EB31120AD17006C49B1 /* Bison-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Bison-All.xcconfig"; path = "configs/Bison-All.xcconfig"; sourceTree = "<group>"; };
+		43025EB41120AD17006C49B1 /* Bison-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Bison-Debug.xcconfig"; path = "configs/Bison-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025EB51120AD17006C49B1 /* Bison-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Bison-Release.xcconfig"; path = "configs/Bison-Release.xcconfig"; sourceTree = "<group>"; };
+		43025EB61120CD41006C49B1 /* Autorevision-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Autorevision-All.xcconfig"; path = "configs/Autorevision-All.xcconfig"; sourceTree = "<group>"; };
+		43025EB71120CD41006C49B1 /* Autorevision-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Autorevision-Debug.xcconfig"; path = "configs/Autorevision-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025EB81120CD41006C49B1 /* Autorevision-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Autorevision-Release.xcconfig"; path = "configs/Autorevision-Release.xcconfig"; sourceTree = "<group>"; };
+		43025EB91120D338006C49B1 /* SDLmain-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "SDLmain-All.xcconfig"; path = "configs/SDLmain-All.xcconfig"; sourceTree = "<group>"; };
+		43025EBA1120D338006C49B1 /* SDLmain-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "SDLmain-Debug.xcconfig"; path = "configs/SDLmain-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025EBB1120D338006C49B1 /* SDLmain-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "SDLmain-Release.xcconfig"; path = "configs/SDLmain-Release.xcconfig"; sourceTree = "<group>"; };
+		43025EC91120E0C0006C49B1 /* Gettext-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Gettext-All.xcconfig"; path = "configs/Gettext-All.xcconfig"; sourceTree = "<group>"; };
+		43025ECA1120E0C0006C49B1 /* Gettext-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Gettext-Debug.xcconfig"; path = "configs/Gettext-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025ECB1120E0C0006C49B1 /* Gettext-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Gettext-Release.xcconfig"; path = "configs/Gettext-Release.xcconfig"; sourceTree = "<group>"; };
+		43025ED3112144C0006C49B1 /* Zlib-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Zlib-All.xcconfig"; path = "configs/Zlib-All.xcconfig"; sourceTree = "<group>"; };
+		43025ED4112144C0006C49B1 /* Zlib-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Zlib-Debug.xcconfig"; path = "configs/Zlib-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025ED5112144C0006C49B1 /* Zlib-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Zlib-Release.xcconfig"; path = "configs/Zlib-Release.xcconfig"; sourceTree = "<group>"; };
+		43025F051121D267006C49B1 /* Ogg-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Ogg-All.xcconfig"; path = "configs/Ogg-All.xcconfig"; sourceTree = "<group>"; };
+		43025F061121D267006C49B1 /* Ogg-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Ogg-Debug.xcconfig"; path = "configs/Ogg-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025F071121D267006C49B1 /* Ogg-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Ogg-Release.xcconfig"; path = "configs/Ogg-Release.xcconfig"; sourceTree = "<group>"; };
+		43025F221121DC68006C49B1 /* Png-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Png-All.xcconfig"; path = "configs/Png-All.xcconfig"; sourceTree = "<group>"; };
+		43025F231121DC68006C49B1 /* Png-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Png-Debug.xcconfig"; path = "configs/Png-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025F241121DC68006C49B1 /* Png-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Png-Release.xcconfig"; path = "configs/Png-Release.xcconfig"; sourceTree = "<group>"; };
+		43025F2A1121F965006C49B1 /* Vorbis-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Vorbis-All.xcconfig"; path = "configs/Vorbis-All.xcconfig"; sourceTree = "<group>"; };
+		43025F2B1121F965006C49B1 /* Vorbis-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Vorbis-Debug.xcconfig"; path = "configs/Vorbis-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025F2C1121F965006C49B1 /* Vorbis-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Vorbis-Release.xcconfig"; path = "configs/Vorbis-Release.xcconfig"; sourceTree = "<group>"; };
+		43025F2F1121FEC7006C49B1 /* PhysFS-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "PhysFS-All.xcconfig"; path = "configs/PhysFS-All.xcconfig"; sourceTree = "<group>"; };
+		43025F301121FEC7006C49B1 /* PhysFS-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "PhysFS-Debug.xcconfig"; path = "configs/PhysFS-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025F311121FEC7006C49B1 /* PhysFS-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "PhysFS-Release.xcconfig"; path = "configs/PhysFS-Release.xcconfig"; sourceTree = "<group>"; };
+		43025F321122072F006C49B1 /* Popt-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Popt-All.xcconfig"; path = "configs/Popt-All.xcconfig"; sourceTree = "<group>"; };
+		43025F331122072F006C49B1 /* Popt-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Popt-Debug.xcconfig"; path = "configs/Popt-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025F341122072F006C49B1 /* Popt-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Popt-Release.xcconfig"; path = "configs/Popt-Release.xcconfig"; sourceTree = "<group>"; };
+		43025F3511220C46006C49B1 /* QuesoGLC-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-All.xcconfig"; path = "configs/QuesoGLC-All.xcconfig"; sourceTree = "<group>"; };
+		43025F3611220C46006C49B1 /* QuesoGLC-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-Debug.xcconfig"; path = "configs/QuesoGLC-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025F3711220C46006C49B1 /* QuesoGLC-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-Release.xcconfig"; path = "configs/QuesoGLC-Release.xcconfig"; sourceTree = "<group>"; };
+		43025F3C11221017006C49B1 /* Theora-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Theora-All.xcconfig"; path = "configs/Theora-All.xcconfig"; sourceTree = "<group>"; };
+		43025F3D11221018006C49B1 /* Theora-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Theora-Debug.xcconfig"; path = "configs/Theora-Debug.xcconfig"; sourceTree = "<group>"; };
+		43025F3E11221018006C49B1 /* Theora-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Theora-Release.xcconfig"; path = "configs/Theora-Release.xcconfig"; sourceTree = "<group>"; };
 		432BE34A10D9C21900A486AB /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLMain.h; sourceTree = "<group>"; };
 		432BE34B10D9C21900A486AB /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLMain.m; sourceTree = "<group>"; };
 		432BE34C10D9C21900A486AB /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDL.framework; sourceTree = "<group>"; };
@@ -1901,6 +1942,7 @@
 		02356D640BD3BB2600E9A019 = {
 			isa = PBXGroup;
 			children = (
+				43025DEC1120A4B6006C49B1 /* Configurations */,
 				0246A0980BD3CB97004D1C70 /* Warzone sources */,
 				023A1D4F0D2DAEC900EFEB37 /* Resources */,
 				430B59F010D45990008EA88A /* Third Party */,
@@ -2668,6 +2710,54 @@
 			);
 			name = wzlocal;
 			path = Resources/wzlocal;
+			sourceTree = "<group>";
+		};
+		43025DEC1120A4B6006C49B1 /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				43025F3C11221017006C49B1 /* Theora-All.xcconfig */,
+				43025F3D11221018006C49B1 /* Theora-Debug.xcconfig */,
+				43025F3E11221018006C49B1 /* Theora-Release.xcconfig */,
+				43025F3511220C46006C49B1 /* QuesoGLC-All.xcconfig */,
+				43025F3611220C46006C49B1 /* QuesoGLC-Debug.xcconfig */,
+				43025F3711220C46006C49B1 /* QuesoGLC-Release.xcconfig */,
+				43025F321122072F006C49B1 /* Popt-All.xcconfig */,
+				43025F331122072F006C49B1 /* Popt-Debug.xcconfig */,
+				43025F341122072F006C49B1 /* Popt-Release.xcconfig */,
+				43025F2F1121FEC7006C49B1 /* PhysFS-All.xcconfig */,
+				43025F301121FEC7006C49B1 /* PhysFS-Debug.xcconfig */,
+				43025F311121FEC7006C49B1 /* PhysFS-Release.xcconfig */,
+				43025F2A1121F965006C49B1 /* Vorbis-All.xcconfig */,
+				43025F2B1121F965006C49B1 /* Vorbis-Debug.xcconfig */,
+				43025F2C1121F965006C49B1 /* Vorbis-Release.xcconfig */,
+				43025F221121DC68006C49B1 /* Png-All.xcconfig */,
+				43025F231121DC68006C49B1 /* Png-Debug.xcconfig */,
+				43025F241121DC68006C49B1 /* Png-Release.xcconfig */,
+				43025F051121D267006C49B1 /* Ogg-All.xcconfig */,
+				43025F061121D267006C49B1 /* Ogg-Debug.xcconfig */,
+				43025F071121D267006C49B1 /* Ogg-Release.xcconfig */,
+				43025ED3112144C0006C49B1 /* Zlib-All.xcconfig */,
+				43025ED4112144C0006C49B1 /* Zlib-Debug.xcconfig */,
+				43025ED5112144C0006C49B1 /* Zlib-Release.xcconfig */,
+				43025EC91120E0C0006C49B1 /* Gettext-All.xcconfig */,
+				43025ECA1120E0C0006C49B1 /* Gettext-Debug.xcconfig */,
+				43025ECB1120E0C0006C49B1 /* Gettext-Release.xcconfig */,
+				43025EB91120D338006C49B1 /* SDLmain-All.xcconfig */,
+				43025EBA1120D338006C49B1 /* SDLmain-Debug.xcconfig */,
+				43025EBB1120D338006C49B1 /* SDLmain-Release.xcconfig */,
+				43025EB61120CD41006C49B1 /* Autorevision-All.xcconfig */,
+				43025EB71120CD41006C49B1 /* Autorevision-Debug.xcconfig */,
+				43025EB81120CD41006C49B1 /* Autorevision-Release.xcconfig */,
+				43025EB31120AD17006C49B1 /* Bison-All.xcconfig */,
+				43025EB41120AD17006C49B1 /* Bison-Debug.xcconfig */,
+				43025EB51120AD17006C49B1 /* Bison-Release.xcconfig */,
+				43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */,
+				43025DFF1120A4CA006C49B1 /* Warzone-All.xcconfig */,
+				43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */,
+				43025E011120A4CA006C49B1 /* Warzone-Release.xcconfig */,
+				43025E021120A4CA006C49B1 /* Warzone-StaticAnalyzer.xcconfig */,
+			);
+			name = Configurations;
 			sourceTree = "<group>";
 		};
 		430B59F010D45990008EA88A /* Third Party */ = {
@@ -4510,936 +4600,211 @@
 /* Begin XCBuildConfiguration section */
 		0223BBD40CFE3D5C0056EF85 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F3611220C46006C49B1 /* QuesoGLC-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"SIZEOF_INT=4",
-					"SIZEOF_SHORT=2",
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
-					GLEW_DISABLE_VBOS,
-					GLEW_MX,
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "QUESOGLC_VERSION=\"\\\"0.6.5\\\"\"";
-				HEADER_SEARCH_PATHS = (
-					external/quesoglc/src,
-					external/quesoglc/include,
-					/Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/include/freetype2,
-					/Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/include,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib\"";
-				OTHER_LDFLAGS = "-lfontconfig";
-				PREBINDING = NO;
-				PRODUCT_NAME = QuesoGLC;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		0223BBD50CFE3D5C0056EF85 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F3711220C46006C49B1 /* QuesoGLC-Release.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"SIZEOF_INT=4",
-					"SIZEOF_SHORT=2",
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
-					GLEW_DISABLE_VBOS,
-					GLEW_MX,
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "QUESOGLC_VERSION=\"\\\"0.6.5\\\"\"";
-				HEADER_SEARCH_PATHS = (
-					external/quesoglc/src,
-					external/quesoglc/include,
-					/Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/include/freetype2,
-					/Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/include,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib\"";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Carbon,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = QuesoGLC;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		022B2F250BD55816002E64E3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025ECA1120E0C0006C49B1 /* Gettext-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2)",
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3)",
-					BUILDING_LIBINTL,
-					IN_LIBINTL,
-					HAVE_CONFIG_H,
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "LOCALE_ALIAS_PATH=\\\"/usr/share/locale\\\"";
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "LIBDIR=\\\"/usr/lib\\\"";
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "LOCALEDIR=\\\"/usr/share/locale\\\"";
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/usr/lib\"";
-				OTHER_LDFLAGS = "-liconv";
-				PREBINDING = NO;
-				PRODUCT_NAME = Gettext;
 			};
 			name = Debug;
 		};
 		022B2F260BD55816002E64E3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025ECB1120E0C0006C49B1 /* Gettext-Release.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2)",
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3)",
-					BUILDING_LIBINTL,
-					IN_LIBINTL,
-					HAVE_CONFIG_H,
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "LOCALE_ALIAS_PATH=\\\"/usr/share/locale\\\"";
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "LIBDIR=\\\"/usr/lib\\\"";
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "LOCALEDIR=\\\"/usr/share/locale\\\"";
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/usr/lib\"";
-				OTHER_LDFLAGS = "-liconv";
-				PREBINDING = NO;
-				PRODUCT_NAME = Gettext;
 			};
 			name = Release;
 		};
 		02356D680BD3BB2600E9A019 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
-				GCC_ALTIVEC_EXTENSIONS = YES;
-				GCC_AUTO_VECTORIZATION = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MACOSX__,
-					"$(inherited)",
-				);
-				GCC_VERSION = 4.0;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL/SDL.framework/Headers\"";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
-				OTHER_CFLAGS = "$(inherited)";
-				SDKROOT = macosx10.4;
 			};
 			name = Debug;
 		};
 		02356D690BD3BB2600E9A019 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
-				GCC_ALTIVEC_EXTENSIONS = YES;
-				GCC_AUTO_VECTORIZATION = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MACOSX__,
-					"$(inherited)",
-				);
-				GCC_VERSION = 4.0;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL/SDL.framework/Headers\"";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
-				OTHER_CFLAGS = "$(inherited)";
-				SDKROOT = macosx10.4;
 			};
 			name = Release;
 		};
 		02356D7A0BD3BB3600E9A019 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/build/$(CONFIGURATION)\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/external/SDL\"";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					VORBIS_NEEDS_HACK,
-					DEBUG,
-					"$(inherited)",
-				);
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					..,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Resources/Warzone-Info.plist";
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
-				INFOPLIST_PREFIX_HEADER = "$(SRCROOT)/build/autorevision.h";
-				INFOPLIST_PREPROCESS = YES;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/$(CONFIGURATION)\"";
-				OTHER_CFLAGS = (
-					"-Wno-pointer-to-int-cast",
-					"-Wmissing-declarations",
-					"-Wstrict-prototypes",
-					"-Wdeclaration-after-statement",
-					"$(inherited)",
-				);
-				OTHER_CPLUSPLUSFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = Warzone;
-				WARNING_CFLAGS = (
-					"-Wall",
-					"-Wno-unused-label",
-					"-Wno-format-security",
-					"-Wno-strict-aliasing",
-					"-Wmissing-field-initializers",
-					"-Wcast-align",
-					"-Wwrite-strings",
-					"-Wpointer-arith",
-				);
-				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
 		02356D7B0BD3BB3600E9A019 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025E011120A4CA006C49B1 /* Warzone-Release.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/build/$(CONFIGURATION)\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/external/SDL\"";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 2;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					VORBIS_NEEDS_HACK,
-					"$(inherited)",
-				);
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					..,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Resources/Warzone-Info.plist";
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
-				INFOPLIST_PREFIX_HEADER = "$(SRCROOT)/build/autorevision.h";
-				INFOPLIST_PREPROCESS = YES;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/$(CONFIGURATION)\"";
-				OTHER_CFLAGS = (
-					"-Wno-pointer-to-int-cast",
-					"-Wmissing-declarations",
-					"-Wstrict-prototypes",
-					"-Wdeclaration-after-statement",
-					"$(inherited)",
-				);
-				OTHER_CPLUSPLUSFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = Warzone;
-				WARNING_CFLAGS = (
-					"-Wall",
-					"-Wno-unused-label",
-					"-Wno-format-security",
-					"-Wno-strict-aliasing",
-					"-Wmissing-field-initializers",
-					"-Wcast-align",
-					"-Wwrite-strings",
-					"-Wpointer-arith",
-				);
-				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
 		};
 		02356D860BD3BB4200E9A019 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025ED4112144C0006C49B1 /* Zlib-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Zlib;
 			};
 			name = Debug;
 		};
 		02356D870BD3BB4200E9A019 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025ED5112144C0006C49B1 /* Zlib-Release.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Zlib;
 			};
 			name = Release;
 		};
 		02356DC50BD3BBFC00E9A019 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F231121DC68006C49B1 /* Png-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Debug\"";
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Png;
 			};
 			name = Debug;
 		};
 		02356DC60BD3BBFC00E9A019 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F241121DC68006C49B1 /* Png-Release.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Debug\"";
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Png;
 			};
 			name = Release;
 		};
 		02356E0C0BD3BCFF00E9A019 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F061121D267006C49B1 /* Ogg-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = Resources/ogg/Info.plist;
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Ogg;
 			};
 			name = Debug;
 		};
 		02356E0D0BD3BCFF00E9A019 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F071121D267006C49B1 /* Ogg-Release.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = Resources/ogg/Info.plist;
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Ogg;
 			};
 			name = Release;
 		};
 		02581C6C0BD5A9A200957CBC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025EBA1120D338006C49B1 /* SDLmain-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/prebuilt/SDL\"";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "$(inherited)";
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = SDLmain;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		02581C6D0BD5A9A200957CBC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025EBB1120D338006C49B1 /* SDLmain-Release.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/external/SDL\"";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = "$(inherited)";
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = SDLmain;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		02CDDCFB0D159BE000722688 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025EB71120CD41006C49B1 /* Autorevision-Debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
-				INSTALL_PATH = "$(HOME)/bin";
-				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
-				PRODUCT_NAME = Autorevision;
-				WARNING_LDFLAGS = "";
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		02CDDCFC0D159BE000722688 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025EB81120CD41006C49B1 /* Autorevision-Release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
-				INSTALL_PATH = "$(HOME)/bin";
-				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
-				PRODUCT_NAME = Autorevision;
-				WARNING_LDFLAGS = "";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		02DDA7F10BD3C03F0049AB60 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F2B1121F965006C49B1 /* Vorbis-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = (
-					external/libvorbis/lib/,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = Resources/vorbis/Info.plist;
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Vorbis;
 			};
 			name = Debug;
 		};
 		02DDA7F20BD3C03F0049AB60 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F2C1121F965006C49B1 /* Vorbis-Release.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = (
-					external/libvorbis/lib/,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = Resources/vorbis/Info.plist;
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Vorbis;
 			};
 			name = Release;
 		};
 		02DDA8B40BD3C2F20049AB60 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F301121FEC7006C49B1 /* PhysFS-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					PHYSFS_SUPPORTS_GRP,
-					PHYSFS_SUPPORTS_HOG,
-					PHYSFS_SUPPORTS_QPAK,
-					PHYSFS_SUPPORTS_WAD,
-					PHYSFS_SUPPORTS_MVL,
-					PHYSFS_SUPPORTS_ZIP,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = PhysFS;
 			};
 			name = Debug;
 		};
 		02DDA8B50BD3C2F20049AB60 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F311121FEC7006C49B1 /* PhysFS-Release.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					PHYSFS_SUPPORTS_GRP,
-					PHYSFS_SUPPORTS_HOG,
-					PHYSFS_SUPPORTS_QPAK,
-					PHYSFS_SUPPORTS_WAD,
-					PHYSFS_SUPPORTS_MVL,
-					PHYSFS_SUPPORTS_ZIP,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = PhysFS;
 			};
 			name = Release;
 		};
 		02F5CC700D1494AB0000A2D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F331122072F006C49B1 /* Popt-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
-					HAVE_UNISTD_H,
-					HAVE_STPCPY,
-					HAVE_STRERROR,
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "PACKAGE=\\\"popt\\\"";
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Carbon,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = Popt;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		02F5CC710D1494AB0000A2D0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F341122072F006C49B1 /* Popt-Release.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
-					HAVE_UNISTD_H,
-					HAVE_STPCPY,
-					HAVE_STRERROR,
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "PACKAGE=\\\"popt\\\"";
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Carbon,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = Popt;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		221052050E3D220C0057CD9C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025EB41120AD17006C49B1 /* Bison-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
-				PRODUCT_NAME = Bison;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		221052060E3D220C0057CD9C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025EB51120AD17006C49B1 /* Bison-Release.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
-				PRODUCT_NAME = Bison;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		4389DBD4111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
-				GCC_ALTIVEC_EXTENSIONS = YES;
-				GCC_AUTO_VECTORIZATION = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MACOSX__,
-					"$(inherited)",
-				);
-				GCC_VERSION = 4.0;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL/SDL.framework/Headers\"";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/external/SDL\"";
-				OTHER_CFLAGS = "$(inherited)";
-				SDKROOT = macosx10.4;
 			};
 			name = StaticAnalyzer;
 		};
 		4389DBD5111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025E021120A4CA006C49B1 /* Warzone-StaticAnalyzer.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/build/$(CONFIGURATION)\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/external/SDL\"";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 2;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					VORBIS_NEEDS_HACK,
-					"$(inherited)",
-				);
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					..,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Resources/Warzone-Info.plist";
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
-				INFOPLIST_PREFIX_HEADER = "$(SRCROOT)/build/autorevision.h";
-				INFOPLIST_PREPROCESS = YES;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/$(CONFIGURATION)\"";
-				OTHER_CFLAGS = (
-					"-Wno-pointer-to-int-cast",
-					"-Wmissing-declarations",
-					"-Wstrict-prototypes",
-					"-Wdeclaration-after-statement",
-					"$(inherited)",
-				);
-				OTHER_CPLUSPLUSFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = Warzone;
-				RUN_CLANG_STATIC_ANALYZER = YES;
-				WARNING_CFLAGS = (
-					"-Wall",
-					"-Wno-unused-label",
-					"-Wno-format-security",
-					"-Wno-strict-aliasing",
-					"-Wmissing-field-initializers",
-					"-Wcast-align",
-					"-Wwrite-strings",
-					"-Wpointer-arith",
-				);
-				WRAPPER_EXTENSION = app;
 			};
 			name = StaticAnalyzer;
 		};
 		4389DBD6111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025EB41120AD17006C49B1 /* Bison-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
-				PRODUCT_NAME = Bison;
-				ZERO_LINK = NO;
 			};
 			name = StaticAnalyzer;
 		};
 		4389DBD7111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025EB71120CD41006C49B1 /* Autorevision-Debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
-				INSTALL_PATH = "$(HOME)/bin";
-				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
-				PRODUCT_NAME = Autorevision;
-				WARNING_LDFLAGS = "";
-				ZERO_LINK = NO;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5456,184 +4821,50 @@
 		};
 		4389DBD9111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025EBA1120D338006C49B1 /* SDLmain-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/external/SDL\"";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = "$(inherited)";
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = SDLmain;
-				ZERO_LINK = NO;
 			};
 			name = StaticAnalyzer;
 		};
 		4389DBDA111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025ECA1120E0C0006C49B1 /* Gettext-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2)",
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3)",
-					BUILDING_LIBINTL,
-					IN_LIBINTL,
-					HAVE_CONFIG_H,
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "LOCALE_ALIAS_PATH=\\\"/usr/share/locale\\\"";
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "LIBDIR=\\\"/usr/lib\\\"";
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "LOCALEDIR=\\\"/usr/share/locale\\\"";
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/usr/lib\"";
-				OTHER_LDFLAGS = "-liconv";
-				PREBINDING = NO;
-				PRODUCT_NAME = Gettext;
 			};
 			name = StaticAnalyzer;
 		};
 		4389DBDB111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025ED4112144C0006C49B1 /* Zlib-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Zlib;
 			};
 			name = StaticAnalyzer;
 		};
 		4389DBDC111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F061121D267006C49B1 /* Ogg-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = Resources/ogg/Info.plist;
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Ogg;
 			};
 			name = StaticAnalyzer;
 		};
 		4389DBDD111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F231121DC68006C49B1 /* Png-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Debug\"";
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Png;
 			};
 			name = StaticAnalyzer;
 		};
 		4389DBDE111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F2B1121F965006C49B1 /* Vorbis-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = (
-					external/libvorbis/lib/,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = Resources/vorbis/Info.plist;
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Vorbis;
 			};
 			name = StaticAnalyzer;
 		};
 		4389DBDF111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F301121FEC7006C49B1 /* PhysFS-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					PHYSFS_SUPPORTS_GRP,
-					PHYSFS_SUPPORTS_HOG,
-					PHYSFS_SUPPORTS_QPAK,
-					PHYSFS_SUPPORTS_WAD,
-					PHYSFS_SUPPORTS_MVL,
-					PHYSFS_SUPPORTS_ZIP,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = PhysFS;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5650,111 +4881,22 @@
 		};
 		4389DBE1111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F331122072F006C49B1 /* Popt-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
-					HAVE_UNISTD_H,
-					HAVE_STPCPY,
-					HAVE_STRERROR,
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "PACKAGE=\\\"popt\\\"";
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Carbon,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = Popt;
-				ZERO_LINK = NO;
 			};
 			name = StaticAnalyzer;
 		};
 		4389DBE2111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F3611220C46006C49B1 /* QuesoGLC-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"SIZEOF_INT=4",
-					"SIZEOF_SHORT=2",
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
-					GLEW_DISABLE_VBOS,
-					GLEW_MX,
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "QUESOGLC_VERSION=\"\\\"0.6.5\\\"\"";
-				HEADER_SEARCH_PATHS = (
-					external/quesoglc/src,
-					external/quesoglc/include,
-					/Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/include/freetype2,
-					/Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/include,
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Resources/GenericFramework-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib\"";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Carbon,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = QuesoGLC;
-				ZERO_LINK = NO;
 			};
 			name = StaticAnalyzer;
 		};
 		4389DBE3111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F3D11221018006C49B1 /* Theora-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = (
-					external/libtheora/lib,
-					"external/libtheora/include/**",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = Resources/theora/Info.plist;
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Theora;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5929,51 +5071,15 @@
 		};
 		97AEAB310E8C1B5200A10721 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F3D11221018006C49B1 /* Theora-Debug.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = (
-					external/libtheora/lib,
-					"external/libtheora/include/**",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = Resources/theora/Info.plist;
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Theora;
 			};
 			name = Debug;
 		};
 		97AEAB320E8C1B5200A10721 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025F3E11221018006C49B1 /* Theora-Release.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = (
-					external/libtheora/lib,
-					"external/libtheora/include/**",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = Resources/theora/Info.plist;
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PREBINDING = NO;
-				PRODUCT_NAME = Theora;
 			};
 			name = Release;
 		};

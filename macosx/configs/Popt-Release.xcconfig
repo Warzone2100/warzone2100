@@ -1,0 +1,9 @@
+// Popt settings for Release configuration
+
+#include "Popt-All.xcconfig"
+
+
+COPY_PHASE_STRIP = YES
+GCC_ENABLE_FIX_AND_CONTINUE = NO
+GCC_GENERATE_DEBUGGING_SYMBOLS = NO
+ZERO_LINK = NO

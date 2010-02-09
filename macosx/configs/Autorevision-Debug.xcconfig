@@ -1,0 +1,11 @@
+// Autorevision settings for Debug configuration
+
+#include "Autorevision-All.xcconfig"
+
+
+COPY_PHASE_STRIP = NO
+GCC_ENABLE_FIX_AND_CONTINUE = YES
+GCC_GENERATE_DEBUGGING_SYMBOLS = YES
+GCC_DYNAMIC_NO_PIC = NO
+GCC_OPTIMIZATION_LEVEL = 0
+ZERO_LINK = YES
