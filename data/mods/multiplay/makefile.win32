@@ -29,13 +29,7 @@ NTWLIST= \
 
 NTWARCHIVE=ntw.wz
 
-AIVOLUTIONLIST= \
-	commands.txt \
-	multiplay
-
-AIVOLUTIONARCHIVE=aivolution.wz
-
-
+ZIPLIST=$(OLD110ARCHIVE) $(NTWARCHIVE)
 
 CLEANFILES=$(OLD110ARCHIVE) $(NTWARCHIVE) $(AIVOLUTIONARCHIVE) 
 
@@ -55,11 +49,6 @@ $(OLD110ARCHIVE): $(basename $(OLD110ARCHIVE)) stamp $(patsubst %,$(basename $(O
 	$(RM_F) stamp
 
 $(NTWARCHIVE): $(basename $(NTWARCHIVE)) stamp $(patsubst %,$(basename $(NTWARCHIVE))/%,$(NTWLIST))
-	(cd $< && zip -ru0 $@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
-	zip -T $@
-	$(RM_F) stamp
-
-$(AIVOLUTIONARCHIVE): $(basename $(AIVOLUTIONARCHIVE)) stamp $(patsubst %,$(basename $(AIVOLUTIONARCHIVE))/%,$(AIVOLUTIONLIST))
 	(cd $< && zip -ru0 $@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
 	zip -T $@
 	$(RM_F) stamp
