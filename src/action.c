@@ -2566,6 +2566,8 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 
 	CHECK_DROID(psDroid);
 
+	psDroid->actionStarted = gameTime;
+
 	switch (psAction->action)
 	{
 	case DACTION_NONE:
