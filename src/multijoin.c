@@ -114,15 +114,13 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 **
 ** @param player -- the one we need to clear
 ** @param quietly -- true means without any visible effects
-** @param removeOil -- true means remove all their (oil) feature(s) on map
 */
-void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
+void clearPlayer(UDWORD player,BOOL quietly)
 {
 	UDWORD			i;
-	BOOL			bTemp;
 	STRUCTURE		*psStruct,*psNext;
 
-	debug(LOG_INFO, "R.I.P. %s (%u). params: (%d:%d)", getPlayerName(player), player, quietly, removeOil);
+	debug(LOG_INFO, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true":"false");
 
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
@@ -135,49 +133,34 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 		alliances[i][player]	= ALLIANCE_BROKEN;
 	}
 
-	debug(LOG_DEATH, "clearPlayer: killing off all droids");
+	debug(LOG_DEATH, "killing off all droids for player %d", player);
 	while(apsDroidLists[player])				// delete all droids
 	{
-		if(quietly)
+		if(quietly)			// don't show effects
 		{
 			killDroid(apsDroidLists[player]);
 		}
-		else
+		else				// show effects
 		{
 			destroyDroid(apsDroidLists[player]);
 		}
 	}
 
+	debug(LOG_DEATH, "killing off all structures for player %d", player);
 	psStruct = apsStructLists[player];
 	while(psStruct)				// delete all structs
 	{
 		psNext = psStruct->psNext;
-		bTemp = false;
 
-		if(removeOil)
-		{
-			if (psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)
-			{
-				bTemp =  true;
-			}
-		}
-
-		if(quietly)
+		if(quietly)		// don't show effects
 		{
 			removeStruct(psStruct, true);
 		}
-		else
+		else			// show effects
 		{
 			destroyStruct(psStruct);
 		}
 
-		if(bTemp)
-		{
-			if(apsFeatureLists[0]->psStats->subType == FEAT_OIL_RESOURCE)
-			{
-				removeFeature(apsFeatureLists[0]);
-			}
-		}
 		psStruct = psNext;
 	}
 
@@ -230,7 +213,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
 
 	turnOffMultiMsg(true);
-	clearPlayer(playerIndex, false, true);		// don't do it quietly and kill their oil
+	clearPlayer(playerIndex, false);		// don't do it quietly
 	game.skDiff[playerIndex] = DIFF_SLIDER_STOPS / 2;
 
 	turnOffMultiMsg(false);
