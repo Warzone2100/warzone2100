@@ -64,6 +64,7 @@ NETQUEUE NETbroadcastQueue(void);             ///< The queue for sending data di
 void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  /// Dump raw data from sockets and raw data sent via host here.
 BOOL NETisMessageReady(NETQUEUE queue);
 uint8_t NETmessageType(NETQUEUE queue);
+uint32_t NETmessageSize(NETQUEUE queue);
 
 void NETinitQueue(NETQUEUE queue);
 void NETmoveQueue(NETQUEUE src, NETQUEUE dst);
@@ -71,6 +72,7 @@ void NETmoveQueue(NETQUEUE src, NETQUEUE dst);
 void NETbeginEncode(NETQUEUE queue, uint8_t type);
 void NETbeginDecode(NETQUEUE queue, uint8_t type);
 BOOL NETend(void);
+void NETpop(NETQUEUE queue);
 
 void NETint8_t(int8_t *ip);
 void NETuint8_t(uint8_t *ip);

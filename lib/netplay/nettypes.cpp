@@ -40,10 +40,12 @@ static NetQueue *gameQueues[MAX_PLAYERS + 1] = {NULL, NULL, NULL, NULL, NULL, NU
 static NetQueuePair *netQueues[MAX_CONNECTED_PLAYERS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static NetQueuePair *tmpQueues[MAX_TMP_SOCKETS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static NetQueue *broadcastQueue = NULL;
-static NetQueue::Writer writer;
-static NetQueue::Reader reader;
-static int writeSocketIndex = -1;
 
+// Only used between NETbegin{Encode,Decode} and NETend calls.
+static MessageWriter writer;
+static MessageReader reader;
+static NetMessage message;
+static NETQUEUE queueInfo;
 static PACKETDIR NetDir;
 
 static void NETsetPacketDir(PACKETDIR dir)
@@ -256,12 +258,12 @@ void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen)
 
 BOOL NETisMessageReady(NETQUEUE queue)
 {
-	return receiveQueue(queue)->deserialiseHaveLength();
+	return receiveQueue(queue)->haveMessage();
 }
 
 uint8_t NETmessageType(NETQUEUE queue)
 {
-	return receiveQueue(queue)->deserialiseGetType();
+	return receiveQueue(queue)->getMessage().type;
 }
 
 /*
@@ -273,13 +275,14 @@ void NETinitQueue(NETQUEUE queue)
 	if (queue.queueType == QUEUE_BROADCAST)
 	{
 		delete broadcastQueue;
-		broadcastQueue = new NetQueue(NetQueue::NetSend);
+		broadcastQueue = new NetQueue;
+		broadcastQueue->willNeverGetMessages();
 		return;
 	}
 	else if (queue.queueType == QUEUE_GAME)
 	{
 		delete gameQueues[queue.index];
-		gameQueues[queue.index] = new NetQueue(NetQueue::GameSolo);  // TODO Should sometimes be NetQueue::GameSend or NetQueue::GameReceive.
+		gameQueues[queue.index] = new NetQueue;  // TODO Call .willNeverReadRawData() if not sending over net.
 		return;
 	}
 	else
@@ -298,82 +301,70 @@ void NETmoveQueue(NETQUEUE src, NETQUEUE dst)
 	std::swap(pairQueue(src), pairQueue(dst));
 }
 
-void NETbeginEncode(NETQUEUE cqueue, uint8_t type)
+void NETbeginEncode(NETQUEUE queue, uint8_t type)
 {
 	NETsetPacketDir(PACKET_ENCODE);
 
-	writer = sendQueue(cqueue);
-	if (cqueue.queueType == QUEUE_NET || cqueue.queueType == QUEUE_BROADCAST)
-	{
-		writeSocketIndex = cqueue.index;
-	}
-	else
-	{
-		writeSocketIndex = -1;
-	}
-
-	writer.queue->serialiseLength();
-	queue(writer, type);
+	queueInfo = queue;
+	message = type;
+	writer = MessageWriter(message);
 }
 
-void NETbeginDecode(NETQUEUE cqueue, uint8_t type)
+void NETbeginDecode(NETQUEUE queue, uint8_t type)
 {
 	NETsetPacketDir(PACKET_DECODE);
 
-	reader = receiveQueue(cqueue);
+	queueInfo = queue;
+	message = receiveQueue(queueInfo)->getMessage();
+	reader = MessageReader(message);
 
-	uint32_t len;
-	uint8_t readType;
-	queue(reader, len);
-	queue(reader, readType);
-	assert(type == readType);
+	assert(type == message.type);
 }
 
 BOOL NETend()
 {
-	assert(NETgetPacketDir() != PACKET_INVALID);
-
 	// If we are encoding just return true
 	if (NETgetPacketDir() == PACKET_ENCODE)
 	{
-		writer.queue->endSerialiseLength();
-		if (writeSocketIndex >= 0)
+		// Push the message onto the list.
+		NetQueue *queue = sendQueue(queueInfo);
+		queue->pushMessage(message);
+
+		if (queueInfo.queueType == QUEUE_NET || queueInfo.queueType == QUEUE_BROADCAST)
 		{
 			const uint8_t *data;
 			size_t dataLen;
-			NetQueue *queue = writeSocketIndex == NET_ALL_PLAYERS ? broadcastQueue : &netQueues[writeSocketIndex]->send;
 
 			queue->readRawData(&data, &dataLen);
-			NETsend(writeSocketIndex, data, dataLen);
+			NETsend(queueInfo.index, data, dataLen);
 			queue->popRawData(dataLen);
 		}
+
+		// We have ended the serialisation, so mark the direction invalid
 		NETsetPacketDir(PACKET_INVALID);
-		return true;
+
+		return true;  // Serialising never fails.
 	}
 
-	bool ret = reader.queue->endDeserialise();
-
-	// We have ended the deserialisation, so mark the direction invalid
-	NETsetPacketDir(PACKET_INVALID);
-
-	return ret;
-/*
-	// If the packet is invalid or failed to compile
-	if (NETgetPacketDir() != PACKET_ENCODE || !NetMsg.status)
+	if (NETgetPacketDir() == PACKET_DECODE)
 	{
-		return false;
+		bool ret = reader.valid();
+
+		//receiveQueue(queueInfo)->popMessage();  // Moved to NETpop(), since some messages call NETbeginEncode but not NETend, and others call neither.
+
+		// We have ended the deserialisation, so mark the direction invalid
+		NETsetPacketDir(PACKET_INVALID);
+
+		return ret;
 	}
 
-	// Send the packet, updating the send functions is on my todo list!
-	if (NetMsg.destination == NET_ALL_PLAYERS)
-	{
-		return NETbcast(&NetMsg);
-	}
-	else
-	{
-		return NETsend(&NetMsg, NetMsg.destination);
-	}
-	*/
+	assert(false && false && false);
+	return false;
+}
+
+void NETpop(NETQUEUE queue)
+{
+	receiveQueue(queue)->popMessage();
 }
 
 template<class T>

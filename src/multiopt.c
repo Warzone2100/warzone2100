@@ -200,6 +200,8 @@ void recvOptions(NETQUEUE queue)
 		NETuint8_t(&ingame.pStructureLimits[i].limit);
 	}
 
+	NETend();
+
 	// Do the skirmish slider settings if they are up
 	for (i = 0; i < MAX_PLAYERS; i++)
  	{

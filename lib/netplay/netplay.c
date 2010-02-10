@@ -2340,6 +2340,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			return false;
 	}
 
+	NETpop(playerQueue);
 	return true;
 }
 
@@ -2399,7 +2400,7 @@ BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type)
 
 	if (socket_set == NULL || checkSockets(socket_set, NET_READ_TIMEOUT) <= 0)
 	{
-		return false;
+		goto checkMessages;
 	}
 
 	for (current = 0; current < MAX_CONNECTED_PLAYERS; ++current)
@@ -2445,6 +2446,7 @@ BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type)
 		}
 	}
 
+checkMessages:
 	for (current = 0; current < MAX_CONNECTED_PLAYERS; ++current)
 	{
 		*queue = NETnetQueue(current);
@@ -3492,14 +3494,18 @@ connect_succesfull:
 		NETQUEUE queue;
 		uint8_t type = NUM_GAME_PACKETS;
 
-		NETrecvNet(&queue, &type);
-
 		// FIXME: shouldn't there be some sort of rejection message?
 		if (SDL_GetTicks() > i + 5000)
 		{
 			// timeout
 			return false;
 		}
+
+		if (!NETrecvNet(&queue, &type))
+		{
+			continue;
+		}
+
 		if (type == NET_ACCEPTED)
 		{
 			// :)
@@ -3509,6 +3515,7 @@ connect_succesfull:
 				// Retrieve the player ID the game host arranged for us
 				NETuint8_t(&index);
 			NETend();
+			NETpop(queue);
 
 			selectedPlayer = index;
 			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p, tcp_socket=%p", (unsigned int)index, bsocket, tcp_socket);
@@ -3537,11 +3544,14 @@ connect_succesfull:
 				// And why "wry"?
 				NETuint8_t(&rejection);
 			NETend();
+			NETpop(queue);
 
 			debug(LOG_NET, "NET_REJECTED received. Better luck next time?");
 
 			setLobbyError((LOBBY_ERROR_TYPES)rejection);
 		}
+
+		NETpop(queue);
 	}
 }
 

@@ -3076,6 +3076,8 @@ void frontendMultiMessages(void)
 			}
 			break;
 		}
+
+		NETpop(queue);
 	}
 }
 

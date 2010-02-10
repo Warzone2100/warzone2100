@@ -771,6 +771,8 @@ BOOL recvMessage(void)
 		default:
 			break;
 		}
+
+		NETpop(queue);
 	}
 
 	return true;

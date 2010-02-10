@@ -31,7 +31,7 @@
 // Logging for degug only
 // ////////////////////////////////////////////////////////////////////////
 
-static const char *packetname[NUM_GAME_PACKETS] =
+static const char *packetname[NUM_GAME_PACKETS + 1] =
 {
 	"NET_DROID",
 	"NET_DROIDINFO",
@@ -106,12 +106,13 @@ static const char *packetname[NUM_GAME_PACKETS] =
 	"NET_FUTURE3",
 	"NET_FILE_REQUESTED",
 	"NET_FILE_CANCELLED",
-	"NET_FILE_PAYLOAD"
+	"NET_FILE_PAYLOAD",
+	"NET_???"
 };
 
 static PHYSFS_file	*pFileHandle = NULL;
-static uint32_t		packetcount[2][NUM_GAME_PACKETS];
-static uint32_t		packetsize[2][NUM_GAME_PACKETS];
+static uint32_t		packetcount[2][NUM_GAME_PACKETS + 1];
+static uint32_t		packetsize[2][NUM_GAME_PACKETS + 1];
 
 BOOL NETstartLogging(void)
 {
@@ -121,7 +122,7 @@ BOOL NETstartLogging(void)
 	static char filename[256] = {'\0'};
 	int i;
 
-	for (i = 0; i < NUM_GAME_PACKETS; i++)
+	for (i = 0; i < NUM_GAME_PACKETS + 1; i++)
 	{
 		packetcount[0][i] = 0;
 		packetsize[0][i] = 0;
@@ -157,7 +158,7 @@ BOOL NETstopLogging(void)
 	}
 
 	/* Output stats */
-	for (i = 0; i < NUM_GAME_PACKETS; i++)
+	for (i = 0; i < NUM_GAME_PACKETS + 1; i++)
 	{
 		snprintf(buf, sizeof(buf), "%s: received %u times, %u bytes; sent %u times, %u bytes\n", packetname[i],
 			packetcount[0][i], packetsize[0][i], packetcount[1][i], packetsize[1][i]);
@@ -190,14 +191,14 @@ BOOL NETstopLogging(void)
 	return true;
 }
 
-/*void NETlogPacket(NETMSG *msg, BOOL received)
+/*void NETlogPacket(NETQUEUE queue, BOOL received)
 {
-	if (msg->type >= NUM_GAME_PACKETS)
+	if (NETmessageType(queue) >= NUM_GAME_PACKETS)
 	{
-		return;
+		NETmessageType(queue) = NUM_GAME_PACKETS;
 	}
-	packetcount[received][msg->type]++;
-	packetsize[received][msg->type] += msg->size;
+	packetcount[received][NETmessageType(queue)]++;
+	packetsize[received][NETmessageType(queue)] += NETmessageSize(queue);
 }*/
 
 BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
