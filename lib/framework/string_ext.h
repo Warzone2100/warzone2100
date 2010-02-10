@@ -21,7 +21,7 @@
 #ifndef STRING_EXT_H
 #define STRING_EXT_H
 
-#include "frame.h"
+#define FRAME_LIB_INCLUDE
 #include "debug.h"
 #include <string.h>
 #include <stddef.h>
