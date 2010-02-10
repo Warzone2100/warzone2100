@@ -2695,7 +2695,7 @@ static BOOL orderDroidObjAdd(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psO
 }
 
 /* Choose an order for a droid from a location */
-DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
+DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, BOOL altOrder)
 {
 	DROID_ORDER		order = DORDER_NONE;
 	PROPULSION_TYPE		propulsion = getPropulsionStats(psDroid)->propulsionType;
@@ -2718,7 +2718,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 	}
 
 	// scout if alt was pressed
-	if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
+	if (altOrder)
 	{
 		order = DORDER_SCOUT;
 		if (isVtolDroid(psDroid))
@@ -2769,7 +2769,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 		return;
 	}
 
-	if (!add && bMultiMessages && SendGroupOrderSelected((UBYTE)player,x,y,NULL) )
+	if (!add && bMultiMessages && SendGroupOrderSelected((UBYTE)player,x,y,NULL,keyDown(KEY_LALT) || keyDown(KEY_RALT)) )
 	{	// turn off multiplay messages,since we've send a group one instead.
 		turnOffMultiMsg(true);
 	}
@@ -2798,7 +2798,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 				continue;
 			}
 
-			order = chooseOrderLoc(psCurr, x, y);
+			order = chooseOrderLoc(psCurr, x, y, (keyDown(KEY_LALT) || keyDown(KEY_RALT)));
 			// see if the order can be added to the list
 			if (order != DORDER_NONE && !(add && orderDroidLocAdd(psCurr, order, x, y)))
 			{
@@ -2813,7 +2813,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 
 
 /* Choose an order for a droid from an object */
-DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
+DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder)
 {
 	DROID_ORDER		order;
 	STRUCTURE		*psStruct;
@@ -2840,6 +2840,23 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 		return DORDER_NONE;
 	}
 
+	if (altOrder && (psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE) && psDroid->player == psObj->player)
+	{
+		if ((psDroid->droidType == DROID_WEAPON) || cyborgDroid(psDroid) ||
+			(psDroid->droidType == DROID_COMMAND))
+		{
+			return DORDER_ATTACK;
+		}
+		else if (psDroid->droidType == DROID_SENSOR)
+		{
+			return DORDER_OBSERVE;
+		}
+		else if ((psDroid->droidType == DROID_REPAIR ||
+		         psDroid->droidType == DROID_CYBORG_REPAIR) && psObj->type == OBJ_DROID)
+		{
+			return DORDER_REPAIR;
+		}
+	}
 	//check for transporters first
 	if (psObj->type == OBJ_DROID && ((DROID *)psObj)->droidType == DROID_TRANSPORTER
 		&& psObj->player == psDroid->player)
@@ -3123,7 +3140,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 	DROID		*psCurr, *psDemolish;
 	DROID_ORDER	order;
 
-	if (!add && bMultiMessages && SendGroupOrderSelected((UBYTE)player,0,0,psObj) )
+	if (!add && bMultiMessages && SendGroupOrderSelected((UBYTE)player,0,0,psObj,keyDown(KEY_LALT) || keyDown(KEY_RALT)) )
 	{	// turn off multiplay messages,since we've send a group one instead.
 		turnOffMultiMsg(true);
 	}
@@ -3146,7 +3163,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 	{
 		if (psCurr->selected)
 		{
-			order = chooseOrderObj(psCurr, psObj);
+			order = chooseOrderObj(psCurr, psObj, (keyDown(KEY_LALT) || keyDown(KEY_RALT)));
             if (order == DORDER_DEMOLISH && player == selectedPlayer)
             {
                 psDemolish = psCurr;
