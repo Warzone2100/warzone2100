@@ -5587,13 +5587,29 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 	UDWORD		x, y, xTL, yTL, xBR, yBR;
 	UBYTE		count = 0;
 	STRUCTURE_STATS	*psBuilding = (STRUCTURE_STATS *)psStat;
+	GATEWAY		*psGate;
 
 	xTL = xx-1;
 	yTL = yy-1;
 	xBR = (xx + psBuilding->baseWidth );
 	yBR = (yy + psBuilding->baseBreadth );
-	// can you get past it?
 
+	// check against building in a gateway, as this can seriously block AI passages
+	for (psGate = gwGetGateways(); psGate; psGate = psGate->psNext)
+	{
+		for (x = xx; x <= xBR; x++)
+		{
+			for (y =yy; y <= yBR; y++)
+			{
+				if ((x >= psGate->x1 && x <= psGate->x2) && (y >= psGate->y1 && y <= psGate->y2))
+				{
+					return false;
+				}
+			}
+		}
+	}
+
+	// can you get past it?
 	y = yTL;	// top
 	for(x = xTL;x!=xBR+1;x++)
 	{
