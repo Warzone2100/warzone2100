@@ -542,7 +542,7 @@ static BOOL gameInit(void)
 		// we want to remove disabled AI & all the other players that don't belong
 		if ((game.skDiff[player] == 0 || player >= game.maxPlayers) && (!game.scavengers || player != 7))
 		{
-			clearPlayer(player, true, false);
+			clearPlayer(player, true);			// do this quietly
 			debug(LOG_NET, "removing disabled AI (%d) from map.", player);
 		}
 	}
