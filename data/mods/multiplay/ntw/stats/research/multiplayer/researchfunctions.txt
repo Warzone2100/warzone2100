@@ -179,9 +179,9 @@ R-Wpn-Missile-Accuracy02,Wpn-Missile-Accuracy02,865
 R-Wpn-Missile-Damage01,Wpn-Missile-Damage01,867
 R-Wpn-Missile-Damage02,Wpn-Missile-Damage02,868
 R-Wpn-Missile-Damage03,Wpn-Missile-Damage03,869
-R-Wpn-Missile-ROF01,Wpn-Missile-ROF01,870
-R-Wpn-Missile-ROF02,Wpn-Missile-ROF02,871
-R-Wpn-Missile-ROF03,Wpn-Missile-ROF03,872
+R-Wpn-Missile-ROF01,Wpn-RocketSlow-ROF01,870
+R-Wpn-Missile-ROF02,Wpn-RocketSlow-ROF02,871
+R-Wpn-Missile-ROF03,Wpn-RocketSlow-ROF03,872
 R-Wpn-Mortar-Acc01,Wpn-Mortar-Acc01,1012
 R-Wpn-Mortar-Acc02,Wpn-Mortar-Acc02,1013
 R-Wpn-Mortar-Acc03,Wpn-Mortar-Acc03,1014
