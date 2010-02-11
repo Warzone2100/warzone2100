@@ -1023,6 +1023,7 @@ int main(int argc, char *argv[])
 	make_dir(SaveGamePath, "savegame", NULL);
 	PHYSFS_mkdir("maps");		// MUST have this to prevent crashes when getting map
 	PHYSFS_mkdir("music");
+	PHYSFS_mkdir("logs");		// a place to hold our netplay logs
 	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
 	make_dir(MultiCustomMapsPath, "multiplay", "custommaps");
