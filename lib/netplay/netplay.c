@@ -2209,7 +2209,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETuint8_t(&player);
 				NETuint32_t(&size);
 				NETbin(buffer, sizeof(buffer));
-			if (!NETend() || player > MAX_PLAYERS + 1)  // + 1 is for confused AIs.
+			if (!NETend() || player > MAX_PLAYERS)
 			{
 				debug(LOG_ERROR, "Bad NET_SHARE_GAME_QUEUE message.");
 				break;
@@ -2489,7 +2489,7 @@ checkMessages:
 BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type)
 {
 	uint32_t current;
-	for (current = 0; current < MAX_PLAYERS + 1; ++current)  // + 1 is for confused AIs.
+	for (current = 0; current < MAX_PLAYERS; ++current)
 	{
 		*queue = NETgameQueue(current);
 		while (!checkPlayerGameTime(current) && NETisMessageReady(*queue))  // Check for any messages that are scheduled to be read now.

@@ -36,7 +36,7 @@
 #include <cstring>
 
 
-static NetQueue *gameQueues[MAX_PLAYERS + 1] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};  // The game queues should be used, even in single-player. The +1 is for AIs that don't want to (TODO fix this) use their own queue.
+static NetQueue *gameQueues[MAX_PLAYERS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};  // The game queues should be used, even in single-player.
 static NetQueuePair *netQueues[MAX_CONNECTED_PLAYERS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static NetQueuePair *tmpQueues[MAX_TMP_SOCKETS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static NetQueue *broadcastQueue = NULL;
@@ -244,7 +244,7 @@ NETQUEUE NETnetQueue(unsigned player)
 NETQUEUE NETgameQueue(unsigned player)
 {
 	NETQUEUE ret;
-	ASSERT(player < MAX_CONNECTED_PLAYERS + 1, "Huh?");  // + 1 for AIs that don't use their own queue.
+	ASSERT(player < MAX_PLAYERS, "Huh?");
 	NetQueue *queue = gameQueues[player];
 	ret.queue = queue;
 	ret.isPair = false;

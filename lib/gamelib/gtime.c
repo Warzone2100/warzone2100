@@ -57,7 +57,7 @@ static SDWORD	pauseStart;
   **/
 static UDWORD	stopCount;
 
-static uint32_t gameQueueTime[MAX_PLAYERS + 1];  // + 1 is for confused AIs.
+static uint32_t gameQueueTime[MAX_PLAYERS];
 
 /* Initialise the game clock */
 void gameTimeInit(void)
@@ -147,7 +147,7 @@ void gameTimeUpdate()
 			baseTime = currTime;
 			timeOffset = graphicsTime;
 
-			debug(LOG_WARNING, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7], gameQueueTime[8]);
+			debug(LOG_WARNING, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7]);
 			//debug(LOG_WARNING, "Waiting for other players.");
 		}
 
@@ -297,7 +297,7 @@ void sendPlayerGameTime()
 	unsigned player;
 	uint32_t time = gameTime + latency;
 
-	for (player = 0; player < MAX_PLAYERS + 1; ++player)  // +1 is for confused AIs.
+	for (player = 0; player < MAX_PLAYERS; ++player)
 	{
 		if (!myResponsibility(player))
 		{
@@ -325,7 +325,7 @@ bool checkPlayerGameTime(unsigned player)
 {
 	if (player == NET_ALL_PLAYERS)
 	{
-		for (player = 0; player < MAX_PLAYERS + 1; ++player)  // + 1 is for confused AIs.
+		for (player = 0; player < MAX_PLAYERS; ++player)
 		{
 			if (!(gameTime <= gameQueueTime[player]))
 			{
@@ -343,7 +343,7 @@ void setPlayerGameTime(unsigned player, uint32_t time)
 {
 	if (player == NET_ALL_PLAYERS)
 	{
-		for (player = 0; player < MAX_PLAYERS + 1; ++player)  // + 1 is for confused AIs.
+		for (player = 0; player < MAX_PLAYERS; ++player)
 		{
 			gameQueueTime[player] = time;
 		}
