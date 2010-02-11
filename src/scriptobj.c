@@ -48,6 +48,7 @@
 #include "levels.h"
 #include "scriptvals.h"
 #include "research.h"
+#include "map.h"
 
 // Marks a NULL pointer for the script value save/load routines
 static const int UNALLOCATED_OBJECT = -1;
@@ -1445,6 +1446,16 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 
 //////////////////////////////////////////////////////////////////////////
 
+Vector2i luaWZ_checkWorldCoords(lua_State *L, int param)
+{
+	int x = luaL_checkint(L, param + 0);
+	int y = luaL_checkint(L, param + 1);
+	Vector2i v = { x, y };
+
+	ASSERT_OR_RETURN(Vector2i_Init(0, 0), worldOnMap(x, y), "Off map (%d, %d)", x, y);
+	return v;
+}
+
 int luaWZObj_checkstructurestat(lua_State *L, int pos)
 {
 	const char *structure_type = luaL_checkstring(L, pos);
@@ -1465,7 +1476,7 @@ int luaWZObj_checkfeaturestat(lua_State *L, int pos)
 BASE_OBJECT *luaWZObj_checkobject(lua_State *L, int pos, int type)
 {
 	BASE_OBJECT *object = luaWZObj_checkbaseobject(L, pos);
-	
+
 	if (object->type != type)
 	{
 		luaL_error(L, "type of argument %d is %d instead of %d", pos, object->type, type);

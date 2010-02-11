@@ -383,23 +383,12 @@ static int scrOrderGroupLoc(lua_State *L)
 	return 0;
 }
 
-
 // Give a group an order to an object
-WZ_DECL_UNUSED static BOOL scrOrderGroupObj(void)
+static BOOL scrOrderGroupObj(lua_State *L)
 {
-	DROID_GROUP		*psGroup;
-	DROID_ORDER		order;
-	BASE_OBJECT		*psObj;
-
-	if (!stackPopParams(3, ST_GROUP, &psGroup, VAL_INT, &order, ST_BASEOBJECT, &psObj))
-	{
-		return false;
-	}
-
-	ASSERT( psGroup != NULL,
-		"scrOrderGroupObj: Invalid group pointer" );
-	ASSERT( psObj != NULL,
-		"scrOrderGroupObj: Invalid object pointer" );
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
+	DROID_ORDER order = (DROID_ORDER)luaL_checkinteger(L, 2);
+	BASE_OBJECT *psObj = luaWZObj_checkbaseobject(L, 3);
 
 	if (order != DORDER_ATTACK &&
 		order != DORDER_HELPBUILD &&
@@ -1841,16 +1830,10 @@ static int scrSkDefenseLocationB(lua_State *L)
     return defenseLocation(L, true);
 }
 
-
-WZ_DECL_UNUSED static BOOL scrSkFireLassat(void)
+static BOOL scrSkFireLassat(lua_State *L)
 {
-	SDWORD	player;
-	BASE_OBJECT *psObj;
-
-	if (!stackPopParams(2,  VAL_INT, &player, ST_BASEOBJECT, &psObj))
-	{
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	BASE_OBJECT *psObj = luaWZObj_checkbaseobject(L, 2);
 
 	if(psObj)
 	{
@@ -1996,13 +1979,11 @@ void registerScriptAIfuncs(lua_State *L)
 	lua_register(L, "skDefenseLocation", scrSkDefenseLocation);
 	lua_register(L, "skDefenseLocationB", scrSkDefenseLocationB);
 	lua_register(L, "droidCanReach", scrDroidCanReach);
+	lua_register(L, "skFireLassat", scrSkFireLassat);
+	lua_register(L, "orderGroupObj", scrOrderGroupObj);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
-	//lua_register(L, "", );
-	//lua_register(L, "", );
-
 }
-

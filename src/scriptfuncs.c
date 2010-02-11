@@ -761,25 +761,13 @@ static int scrAddDroid(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // Add droid to transporter
-
-WZ_DECL_UNUSED static BOOL scrAddDroidToTransporter(void)
+static BOOL scrAddDroidToTransporter(lua_State *L)
 {
-	DROID	*psTransporter, *psDroid;
+	DROID *psTransporter = (DROID*)luaWZObj_checkobject(L, 2, OBJ_DROID);
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 2, OBJ_DROID);
 
-	if (!stackPopParams(2, ST_DROID, &psTransporter, ST_DROID, &psDroid))
-	{
-		return false;
-	}
-
-	if (psTransporter == NULL || psDroid == NULL)
-	{
-		ASSERT(false, "scrAddUnitToTransporter: null unit passed");
-		return true; // allow to continue
-	}
-
-	ASSERT(psTransporter != NULL, "scrAddUnitToTransporter: invalid transporter pointer");
-	ASSERT(psDroid != NULL, "scrAddUnitToTransporter: invalid unit pointer");
-	ASSERT(psTransporter->droidType == DROID_TRANSPORTER, "scrAddUnitToTransporter: invalid transporter type");
+	ASSERT_OR_RETURN(false, psTransporter && psDroid, "Null unit passed");
+	ASSERT_OR_RETURN(false, psTransporter->droidType == DROID_TRANSPORTER, "Invalid unit type");
 
 	/* check for space */
 	if (checkTransporterSpace(psTransporter, psDroid))
@@ -2559,56 +2547,27 @@ WZ_DECL_UNUSED static BOOL scrResumeCDAudio(void)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat point for a player
-WZ_DECL_UNUSED static BOOL scrSetRetreatPoint(void)
+static BOOL scrSetRetreatPoint(lua_State *L)
 {
-	SDWORD	player, x,y;
+	int player = luaWZ_checkplayer(L, 1);
+	Vector2i coord = luaWZ_checkWorldCoords(L, 2);
 
-	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetRetreatPoint: player out of range" );
-		return false;
-	}
-	if (x < 0 || x >= (SDWORD)mapWidth*TILE_UNITS ||
-		y < 0 || y >= (SDWORD)mapHeight*TILE_UNITS)
-	{
-		ASSERT( false, "scrSetRetreatPoint: coords off map" );
-		return false;
-	}
-
-	asRunData[player].sPos.x = x;
-	asRunData[player].sPos.y = y;
+	asRunData[player].sPos.x = coord.x;
+	asRunData[player].sPos.y = coord.y;
 
 	return true;
 }
 
 // -----------------------------------------------------------------------------------------
 // set the retreat force level
-WZ_DECL_UNUSED static BOOL scrSetRetreatForce(void)
+static BOOL scrSetRetreatForce(lua_State *L)
 {
-	SDWORD	player, level, numDroids;
-	DROID	*psCurr;
+	int player = luaWZ_checkplayer(L, 1);
+	int level = luaL_checkint(L, 2);
+	int numDroids;
+	DROID *psCurr;
 
-	if (!stackPopParams(2, VAL_INT, &player, VAL_INT, &level))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetRetreatForce: player out of range" );
-		return false;
-	}
-
-	if (level > 100 || level < 0)
-	{
-		ASSERT( false, "scrSetRetreatForce: level out of range" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, level <= 100 && level >= 0, "Level out of range");
 
 	// count up the current number of droids
 	numDroids = 0;
@@ -2624,26 +2583,12 @@ WZ_DECL_UNUSED static BOOL scrSetRetreatForce(void)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat leadership
-WZ_DECL_UNUSED static BOOL scrSetRetreatLeadership(void)
+static BOOL scrSetRetreatLeadership(lua_State *L)
 {
-	SDWORD	player, level;
+	int player = luaWZ_checkplayer(L, 1);
+	int level = luaL_checkint(L, 2);
 
-	if (!stackPopParams(2, VAL_INT, &player, VAL_INT, &level))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetRetreatLeadership: player out of range" );
-		return false;
-	}
-
-	if (level > 100 || level < 0)
-	{
-		ASSERT( false, "scrSetRetreatLeadership: level out of range" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, level <= 100 && level >= 0, "Level out of range");
 
 	asRunData[player].leadership = (UBYTE)level;
 
@@ -3402,14 +3347,9 @@ static int scrCompleteResearch(lua_State *L)
 // -----------------------------------------------------------------------------------------
 // This routine used to start just a reticule button flashing
 //   .. now it starts any button flashing (awaiting implmentation from widget library)
-WZ_DECL_UNUSED static BOOL scrFlashOn(void)
+static BOOL scrFlashOn(lua_State *L)
 {
-	SDWORD		button;
-
-	if (!stackPopParams(1, VAL_INT, &button))
-	{
-		return false;
-	}
+	int button = luaL_checkint(L, 1);
 
 	// For the time being ... we will perform the old code for the reticule ...
 	if (button >= IDRET_OPTIONS && button <= IDRET_CANCEL)
@@ -3417,7 +3357,6 @@ WZ_DECL_UNUSED static BOOL scrFlashOn(void)
 		flashReticuleButton((UDWORD)button);
 		return true;
 	}
-
 
 	if(widgGetFromID(psWScreen,button) != NULL)
 	{
@@ -3429,21 +3368,15 @@ WZ_DECL_UNUSED static BOOL scrFlashOn(void)
 
 // -----------------------------------------------------------------------------------------
 // stop a generic button flashing
-WZ_DECL_UNUSED static BOOL scrFlashOff(void)
+static BOOL scrFlashOff(lua_State *L)
 {
-	SDWORD		button;
-
-	if (!stackPopParams(1, VAL_INT, &button))
-	{
-		return false;
-	}
+	int button = luaL_checkint(L, 1);
 
 	if (button >= IDRET_OPTIONS && button <= IDRET_CANCEL)
 	{
 		stopReticuleButtonFlash((UDWORD)button);
 		return true;
 	}
-
 
 	if(widgGetFromID(psWScreen,button) != NULL)
 	{
@@ -4602,35 +4535,28 @@ static int scrPickStructLocationB(lua_State *L) // FIXME, duplicated code
 
 // -----------------------------------------------------------------------------------------
 // Sets the transporter entry and exit points for the map
-WZ_DECL_UNUSED static BOOL scrSetTransporterExit(void)
+static BOOL scrSetTransporterExit(lua_State *L)
 {
-	SDWORD	iPlayer, iExitTileX, iExitTileY;
+	int player = luaWZ_checkplayer(L, 1);
+	int exitTileX = luaL_checkinteger(L, 2);
+	int exitTileY = luaL_checkinteger(L, 3);
 
-	if (!stackPopParams(3, VAL_INT, &iPlayer, VAL_INT, &iExitTileX, VAL_INT, &iExitTileY))
-	{
-		return false;
-	}
-
-	missionSetTransporterExit( iPlayer, iExitTileX, iExitTileY );
+	missionSetTransporterExit(player, exitTileX, exitTileY);
 
 	return true;
 }
 
 // -----------------------------------------------------------------------------------------
 // Fly transporters in at start of map
-WZ_DECL_UNUSED static BOOL scrFlyTransporterIn(void)
+static BOOL scrFlyTransporterIn(lua_State *L)
 {
-	SDWORD	iPlayer, iEntryTileX, iEntryTileY;
-	BOOL	bTrackTransporter;
+	int player = luaWZ_checkplayer(L, 1);
+	int entryTileX = luaL_checkinteger(L, 2);
+	int entryTileY = luaL_checkinteger(L, 3);
+	bool trackTransporter = luaL_checkboolean(L, 4);
 
-	if (!stackPopParams(4, VAL_INT, &iPlayer, VAL_INT, &iEntryTileX, VAL_INT, &iEntryTileY,
-							VAL_BOOL, &bTrackTransporter))
-	{
-		return false;
-	}
-
-	missionSetTransporterEntry( iPlayer, iEntryTileX, iEntryTileY );
-	missionFlyTransportersIn( iPlayer, bTrackTransporter );
+	missionSetTransporterEntry(player, entryTileX, entryTileY);
+	missionFlyTransportersIn(player, trackTransporter);
 
 	return true;
 }
@@ -6561,60 +6487,29 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 }
 
 /* Similar to structureBuiltInRange(), but also returns true if structure is not finished */
-WZ_DECL_UNUSED static BOOL scrNumStructsByStatInRange(void)
+static BOOL scrNumStructsByStatInRange(lua_State *L)
 {
-	SDWORD		player, lookingPlayer, index, x, y, range;
-	SDWORD		rangeSquared,NumStruct;
-	STRUCTURE	*psCurr;
-	SDWORD		xdiff, ydiff;
-	STRUCTURE_STATS *psTarget;
+	int index = luaWZObj_checkstructurestat(L, 1);
+	Vector2i coord = luaWZ_checkWorldCoords(L, 2);
+	int range = luaL_checkint(L, 4);
+	int lookingPlayer = luaWZ_checkplayer(L, 5);
+	int player = luaWZ_checkplayer(L, 6);
 
-	if (!stackPopParams(6, ST_STRUCTURESTAT, &index, VAL_INT, &x, VAL_INT, &y,
-		VAL_INT, &range, VAL_INT, &lookingPlayer, VAL_INT, &player))
-	{
-		debug(LOG_ERROR, "scrNumStructsByStatInRange(): stack failed");
-		return false;
-	}
+	STRUCTURE_STATS *psTarget = &asStructureStats[index];
+	int rangeSquared, NumStruct, xdiff, ydiff;
+	STRUCTURE *psCurr;
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumStructsByStatInRange:player number is too high" );
-		return false;
-	}
-
-	if (x < 0
-	 || map_coord(x) > (SDWORD)mapWidth)
-	{
-		ASSERT( false, "scrNumStructsByStatInRange : invalid X coord" );
-		return false;
-	}
-	if (y < 0
-	 || map_coord(y) > (SDWORD)mapHeight)
-	{
-		ASSERT( false,"scrNumStructsByStatInRange : invalid Y coord" );
-		return false;
-	}
-	if (index < (SDWORD)0 || index > (SDWORD)numStructureStats)
-	{
-		ASSERT( false, "scrNumStructsByStatInRange : Invalid structure stat" );
-		return false;
-	}
-	if (range < (SDWORD)0)
-	{
-		ASSERT( false, "scrNumStructsByStatInRange : Rnage is less than zero" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, range >= 0, "Invalid range");
 
 	NumStruct = 0;
 
 	//now look through the players list of structures to see if this type
 	//exists within range
-	psTarget = &asStructureStats[index];
 	rangeSquared = range * range;
 	for(psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
-		xdiff = (SDWORD)psCurr->pos.x - x;
-		ydiff = (SDWORD)psCurr->pos.y - y;
+		xdiff = (SDWORD)psCurr->pos.x - coord.x;
+		ydiff = (SDWORD)psCurr->pos.y - coord.y;
 		if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
 		{
 			if( strcmp(psCurr->pStructureType->pName,psTarget->pName) == 0 )
@@ -6627,11 +6522,7 @@ WZ_DECL_UNUSED static BOOL scrNumStructsByStatInRange(void)
 		}
 	}
 
-	scrFunctionResult.v.ival = NumStruct;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
+	lua_pushinteger(L, NumStruct);
 
 	return true;
 }
@@ -9043,15 +8934,9 @@ WZ_DECL_UNUSED static BOOL scrPrintCallStack(void)
 /*
  * Returns true if game debug mode is on
  */
-WZ_DECL_UNUSED static BOOL scrDebugModeEnabled(void)
+static BOOL scrDebugModeEnabled(lua_State *L)
 {
-
-	scrFunctionResult.v.bval = getDebugMappingStatus();
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrDebugModeEnabled(): failed to push result");
-		return false;
-	}
+	lua_pushboolean(L, getDebugMappingStatus());
 
 	return true;
 }
@@ -9696,10 +9581,15 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "revealEntireMap", scrRevealEntireMap);
 	lua_register(L, "msg", scrMsg);
 	lua_register(L, "getTileStructure", scrGetTileStructure);
-	//lua_register(L, "", );
-	//lua_register(L, "", );
-	//lua_register(L, "", );
-	//lua_register(L, "", );
-	//lua_register(L, "", );
+	lua_register(L, "setRetreatPoint", scrSetRetreatPoint);
+	lua_register(L, "setRetreatForce", scrSetRetreatForce);
+	lua_register(L, "setRetreatLeadership", scrSetRetreatLeadership);
+	lua_register(L, "setTransporterExit", scrSetTransporterExit);
+	lua_register(L, "flyTransporterIn", scrFlyTransporterIn);
+	lua_register(L, "flashOn", scrFlashOn);
+	lua_register(L, "flashOff", scrFlashOff);
+	lua_register(L, "addDroidToTransporter", scrAddDroidToTransporter);
+	lua_register(L, "numStructsByStatInRange", scrNumStructsByStatInRange);
+	lua_register(L, "debugModeEnabled", scrDebugModeEnabled);
 	//lua_register(L, "", );
 }

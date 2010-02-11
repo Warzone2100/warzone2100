@@ -100,6 +100,7 @@ extern BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
 // default value load routine
 extern BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
 
+extern Vector2i luaWZ_checkWorldCoords(lua_State *L, int param);
 extern int luaWZObj_checkstructurestat(lua_State *L, int pos);
 extern int luaWZObj_checkfeaturestat(lua_State *L, int pos);
 extern BASE_OBJECT *luaWZObj_checkobject(lua_State *L, int pos, int type);
