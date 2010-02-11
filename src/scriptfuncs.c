@@ -679,25 +679,12 @@ static int scrMakeComponentAvailable(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // Add a droid
-WZ_DECL_UNUSED static BOOL scrAddDroidToMissionList(void)
+static BOOL scrAddDroidToMissionList(lua_State *L)
 {
-	SDWORD			player;
-	DROID_TEMPLATE	*psTemplate;
+	DROID_TEMPLATE	*psTemplate = luaWZObj_checktemplate(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+
 	DROID			*psDroid;
-
-	if (!stackPopParams(2, ST_TEMPLATE, &psTemplate, VAL_INT, &player))
-	{
-		return false;
-	}
-
-/*	if ((UBYTE)player == selectedPlayer )
-	{
-		ASSERT( false, "scrAddDroidToMissionList: can't add own player to list" );
-		return false;
-	}*/
-
-	ASSERT( psTemplate != NULL,
-		"scrAddUnitToMissionList: Invalid template pointer" );
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
@@ -710,13 +697,8 @@ WZ_DECL_UNUSED static BOOL scrAddDroidToMissionList(void)
 		psDroid = buildMissionDroid( psTemplate, 128, 128, player );
 	}
 
-	scrFunctionResult.v.oval = psDroid;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	luaWZObj_pushdroid(L, psDroid);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -763,7 +745,7 @@ static int scrAddDroid(lua_State *L)
 // Add droid to transporter
 static BOOL scrAddDroidToTransporter(lua_State *L)
 {
-	DROID *psTransporter = (DROID*)luaWZObj_checkobject(L, 2, OBJ_DROID);
+	DROID *psTransporter = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
 	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 2, OBJ_DROID);
 
 	ASSERT_OR_RETURN(false, psTransporter && psDroid, "Null unit passed");
@@ -778,7 +760,7 @@ static BOOL scrAddDroidToTransporter(lua_State *L)
 		}
 	}
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -959,7 +941,7 @@ static int scrAddReticuleButton(lua_State *L)
 
 	if (selfTest)
 	{
-		return true;	// hack to prevent crashing in self-test
+		return 0;	// hack to prevent crashing in self-test
 	}
 
 	//set the appropriate flag to 'draw' the button
@@ -1006,7 +988,7 @@ static int scrRemoveReticuleButton(lua_State *L)
 
 	if (selfTest)
 	{
-		return true;
+		return 0;
 	}
 
 	if(bInTutorial)
@@ -1356,7 +1338,7 @@ static int scrDestroyStructure(lua_State *L)
 {
 	STRUCTURE *psStruct = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
 	destroyStruct(psStruct);
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -2171,20 +2153,10 @@ static int scrPlaySoundPos(lua_State *L)
 // -----------------------------------------------------------------------------------------
 
 /* add a text message to the top of the screen for the selected player*/
-WZ_DECL_UNUSED static BOOL scrShowConsoleText(void)
+static BOOL scrShowConsoleText(lua_State *L)
 {
-	char				*pText;
-	SDWORD				player;
-
-	if (!stackPopParams(2, ST_TEXTSTRING, &pText, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		return luaL_error(L, "invalid player number" );
-	}
+	const char *pText = luaL_checkstring(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
 
 	if (player == (SDWORD)selectedPlayer)
 	{
@@ -2192,7 +2164,7 @@ WZ_DECL_UNUSED static BOOL scrShowConsoleText(void)
 		addConsoleMessage(pText, CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 	}
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -2333,7 +2305,7 @@ static int scrGameOverMessage(lua_State *L)
 	if (msgType == MSG_PROXIMITY)
 	{
 	    return luaL_error(L, "Bad message type (MSG_PROXIMITY)" );
-    }
+	}
 	if (psMessage)
 	{
 		//set the data
@@ -2398,11 +2370,8 @@ static int scrGameOverMessage(lua_State *L)
 		iniparser_freedict(dict);
 	}
 
-	return true;
-
+	return 0;
 }
-
-
 
 
 // -----------------------------------------------------------------------------------------
@@ -2555,7 +2524,7 @@ static BOOL scrSetRetreatPoint(lua_State *L)
 	asRunData[player].sPos.x = coord.x;
 	asRunData[player].sPos.y = coord.y;
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -2578,7 +2547,7 @@ static BOOL scrSetRetreatForce(lua_State *L)
 
 	asRunData[player].forceLevel = (UBYTE)(level * numDroids / 100);
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -2592,7 +2561,7 @@ static BOOL scrSetRetreatLeadership(lua_State *L)
 
 	asRunData[player].leadership = (UBYTE)level;
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -2749,19 +2718,6 @@ static int scrStartMission(lua_State *L)
 	return 0;
 }
 
-//end a mission - NO LONGER CALLED FROM SCRIPT
-/*WZ_DECL_UNUSED static BOOL scrEndMission(void)
-{
-	BOOL	status;
-
-	if (!stackPopParams(1, VAL_BOOL, &status))
-	{
-		return false;
-	}
-
-	endMission(status);
-	return true;
-}*/
 // -----------------------------------------------------------------------------------------
 //set Snow (enable disable snow)
 WZ_DECL_UNUSED static BOOL scrSetSnow(void)
@@ -3286,11 +3242,11 @@ WZ_DECL_UNUSED static BOOL scrRandom(void)
 
 // -----------------------------------------------------------------------------------------
 // randomise the random number seed
-WZ_DECL_UNUSED static BOOL scrRandomiseSeed(void)
+static BOOL scrRandomiseSeed(lua_State *L)
 {
 	srand((UDWORD)clock());
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -3362,7 +3318,7 @@ static BOOL scrFlashOn(lua_State *L)
 	{
 		widgSetButtonFlash(psWScreen,button);
 	}
-	return true;
+	return 0;
 }
 
 
@@ -3382,7 +3338,7 @@ static BOOL scrFlashOff(lua_State *L)
 	{
 		widgClearButtonFlash(psWScreen,button);
 	}
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -3510,11 +3466,11 @@ WZ_DECL_UNUSED static BOOL scrSetLimboLanding(void)
 
 // -----------------------------------------------------------------------------------------
 //initialises all the no go areas
-WZ_DECL_UNUSED static BOOL scrInitAllNoGoAreas(void)
+static BOOL scrInitAllNoGoAreas(lua_State *L)
 {
 	initNoGoAreas();
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -3753,16 +3709,6 @@ WZ_DECL_UNUSED static BOOL scrSetAllStructureLimits(void)
 		psStructLimits[i].globalLimit = (UBYTE)limit;
 
 	}
-
-	return true;
-}
-
-
-// -----------------------------------------------------------------------------------------
-// clear all the console messages
-WZ_DECL_UNUSED static BOOL scrFlushConsoleMessages(void)
-{
-	flushConsoleMessages();
 
 	return true;
 }
@@ -4543,7 +4489,7 @@ static BOOL scrSetTransporterExit(lua_State *L)
 
 	missionSetTransporterExit(player, exitTileX, exitTileY);
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -4558,7 +4504,7 @@ static BOOL scrFlyTransporterIn(lua_State *L)
 	missionSetTransporterEntry(player, entryTileX, entryTileY);
 	missionFlyTransportersIn(player, trackTransporter);
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -6498,8 +6444,6 @@ static BOOL scrNumStructsByStatInRange(lua_State *L)
 	STRUCTURE_STATS *psTarget = &asStructureStats[index];
 	int rangeSquared, NumStruct, xdiff, ydiff;
 	STRUCTURE *psCurr;
-
-	ASSERT_OR_RETURN(false, range >= 0, "Invalid range");
 
 	NumStruct = 0;
 
@@ -9591,5 +9535,10 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "addDroidToTransporter", scrAddDroidToTransporter);
 	lua_register(L, "numStructsByStatInRange", scrNumStructsByStatInRange);
 	lua_register(L, "debugModeEnabled", scrDebugModeEnabled);
+	lua_register(L, "showConsoleText", scrShowConsoleText);
+	lua_register(L, "flushConsoleMessages", scrClearConsole);	// FIXME duplicate function
+	lua_register(L, "randomiseSeed", scrRandomiseSeed);
+	lua_register(L, "initAllNoGoAreas", scrInitAllNoGoAreas);
+	lua_register(L, "addDroidToMissionList", scrAddDroidToMissionList);
 	//lua_register(L, "", );
 }

@@ -409,7 +409,7 @@ static BOOL scrOrderGroupObj(lua_State *L)
 
 	orderGroupObj(psGroup, order, psObj);
 
-	return true;
+	return 0;
 }
 
 /// Give a droid an order
@@ -1472,7 +1472,7 @@ static int scrSkDoResearch(lua_State *L)
 	if(psResFacilty->psSubject != NULL)
 	{
 		// not finshed yet..
-		return true;
+		return 0;
 	}
 
 	// choose a topic to complete.
@@ -1573,7 +1573,7 @@ static int scrSkDifficultyModifier(lua_State *L)
 	 */
 	if(game.skDiff[player] <= 1)
 	{
-		return true;
+		return 0;
 	}
 
 	// power modifier
@@ -1840,7 +1840,7 @@ static BOOL scrSkFireLassat(lua_State *L)
 		orderStructureObj(player, psObj);
 	}
 
-	return true;
+	return 0;
 }
 
 //-----------------------
