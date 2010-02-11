@@ -51,15 +51,12 @@ GAMEMAP *mapLoad(char *filename)
 	strcpy(path, filename);
 	strcat(path, "/game.map");
 	fp = PHYSFS_openRead(path);
-	if (!map)
-	{
-		return NULL;
-	}
 	map->mGateways = NULL;
 	map->mMapTiles = NULL;
 
 	if (!fp)
 	{
+		debug("Could not open %s", path);
 		map->mapVersion = 0;
 		map->width = UINT32_MAX;
 		map->height = UINT32_MAX;

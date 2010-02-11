@@ -101,7 +101,7 @@ static inline void iV_printFontList(void)
 		 * same buffer (according to GLC specs).
 		 */
 		char prBuffer[1024];
-		snprintf(prBuffer, sizeof(prBuffer), "Font #%d : %s ", font, (const char*)glcGetFontc(font, GLC_FAMILY));
+		snprintf(prBuffer, sizeof(prBuffer), "Font #%d : %s ", (int)font, (const char*)glcGetFontc(font, GLC_FAMILY));
 		prBuffer[sizeof(prBuffer) - 1] = 0;
 		sstrcat(prBuffer, glcGetFontFace(font));
 		debug(LOG_NEVER, "%s", prBuffer);
@@ -122,12 +122,12 @@ static void iV_initializeGLC(void)
 	}
 	else
 	{
-		debug(LOG_NEVER, "Succesfully initialized. _glcContext = %d", _glcContext);
+		debug(LOG_NEVER, "Successfully initialized. _glcContext = %d", (int)_glcContext);
 	}
 
 	glcContext(_glcContext);
 
-	glcDisable(GLC_AUTO_FONT);
+	glcEnable(GLC_AUTO_FONT);		// We *do* want font fall-backs
 	glcRenderStyle(GLC_TEXTURE);
 	glcStringType(GLC_UTF8_QSO); // Set GLC's string type to UTF-8 FIXME should be UCS4 to avoid conversions
 
@@ -215,6 +215,11 @@ void iV_SetFont(enum iV_fonts FontID)
 		case font_large:
 			iV_SetTextSize(21.f);
 			glcFont(_glcFont_Bold);
+			break;
+
+		case font_small:
+			iV_SetTextSize(9.f);
+			glcFont(_glcFont_Regular);
 			break;
 	}
 }

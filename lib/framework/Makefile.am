@@ -4,7 +4,7 @@
 %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(SQLITE_CFLAGS) $(WZ_CPPFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
@@ -46,7 +46,6 @@ noinst_HEADERS = \
 	listmacs.h \
 	math_ext.h \
 	physfs_ext.h \
-	physfs_vfs.h \
 	resly.h \
 	stdio_ext.h \
 	string_ext.h \
@@ -80,7 +79,6 @@ libframework_a_SOURCES = \
 	i18n.c \
 	input.c \
 	lexer_input.c \
-	physfs_vfs.c \
 	SDL_framerate.c \
 	stdio_ext.c \
 	strres.c \

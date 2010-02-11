@@ -4,19 +4,11 @@
 %.lex.h %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
-if PERL_AVAILABLE
-%.c: $(top_srcdir)/build_tools/code-generators/db-lang.pl $(top_srcdir)/build_tools/code-generators/c_sqliteload_cg.pm %.tpl.sql.c %.tpl
-	$(PERL) $^ $@
-
-%.h: $(top_srcdir)/build_tools/code-generators/db-lang.pl $(top_srcdir)/build_tools/code-generators/c_structdef_cg.pm %.tpl.struct.h %.tpl
-	$(PERL) $^ $@
-endif
-
 # Required to force using a C++ linker
 force-linker.cpp:
 	touch $@
 
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(POPT_CFLAGS) $(SQLITE_CFLAGS) $(LUA_CFLAGS) $(WZ_CPPFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(POPT_CFLAGS) $(LUA_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
@@ -30,12 +22,6 @@ BUILT_SOURCES = \
 	scriptvals_lexer.lex.c \
 	scriptvals_parser.tab.c \
 	scriptvals_parser.tab.h
-
-if PERL_AVAILABLE
-BUILT_SOURCES += \
-	stats-db2.c \
-	stats-db2.h
-endif
 
 CLEANFILES = \
 	force-linker.cpp \
@@ -148,11 +134,13 @@ noinst_HEADERS = \
 	orderdef.h \
 	order.h \
 	parsetest.h \
+	pointtree.h \
 	positiondef.h \
 	power.h \
 	projectiledef.h \
 	projectile.h \
 	radar.h \
+	random.h \
 	raycast.h \
 	researchdef.h \
 	research.h \
@@ -167,16 +155,11 @@ noinst_HEADERS = \
 	scriptvals_parser.tab.h \
 	selection.h \
 	seqdisp.h \
-	stats-db2.c \
-	stats-db2.h \
 	statsdef.h \
 	stats.h \
-	stats-db.c \
-	stats-db.h \
 	stringdef.h \
 	structuredef.h \
 	structure.h \
-	target.h \
 	terrain.h \
 	text.h \
 	texture.h \
@@ -185,6 +168,7 @@ noinst_HEADERS = \
 	version.h \
 	warcam.h \
 	warzoneconfig.h \
+	wavecast.h \
 	weapondef.h \
 	wrappers.h
 
@@ -247,7 +231,7 @@ warzone2100_SOURCES = \
 	main.c \
 	map.c \
 	mapdisplay.c \
-	mapgrid.c \
+	mapgrid.cpp \
 	mechanics.c \
 	message.c \
 	message_lexer.lex.c \
@@ -271,9 +255,11 @@ warzone2100_SOURCES = \
 	oprint.c \
 	order.c \
 	parsetest.c \
+	pointtree.cpp \
 	power.c \
 	projectile.c \
 	radar.c \
+	random.cpp \
 	raycast.c \
 	research.c \
 	scores.c \
@@ -290,7 +276,6 @@ warzone2100_SOURCES = \
 	seqdisp.c \
 	stats.c \
 	structure.c \
-	target.c \
 	terrain.c \
 	text.c \
 	texture.c \
@@ -299,6 +284,7 @@ warzone2100_SOURCES = \
 	visibility.c \
 	warcam.c \
 	warzoneconfig.c \
+	wavecast.cpp \
 	wrappers.c
 
 warzone2100_LDADD = \
@@ -307,6 +293,7 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/sound/libsound.a \
 	$(top_builddir)/lib/script/libscript.a \
 	$(top_builddir)/lib/netplay/libnetplay.a \
+	$(top_builddir)/lib/netplay/miniupnpc/libminiupnpc.a \
 	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(top_builddir)/lib/ivis_common/libivis_common.a \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
@@ -315,8 +302,7 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/lua/liblua.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a
 
-warzone2100_LDADD += $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS) $(SQLITE_LIBS) $(LUA_LIBS)
-
+warzone2100_LDADD += $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS) $(LUA_LIBS)
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)
 endif

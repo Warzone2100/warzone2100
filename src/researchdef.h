@@ -26,6 +26,11 @@
 
 #include "lib/framework/frame.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Research struct type definitions */
 typedef enum
 {
@@ -129,5 +134,9 @@ static inline void MakeResearchPossible(PLAYER_RESEARCH* research)
 
 // clear all bits in the status except for the possible bit
 #define ResetResearchStatus(x) ((x)->ResearchStatus&=(~RESBITS))
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_RESEARCHDEF_H__

@@ -78,12 +78,13 @@ static INPUT_STATE aMouseState[6];
 #define INPUT_MAXSTR	512
 
 /* The input string buffer */
-static UDWORD	pInputBuffer[INPUT_MAXSTR];
-static UDWORD	*pStartBuffer, *pEndBuffer;
-
-static char	pCharInputBuffer[INPUT_MAXSTR];
-static char	*pCharStartBuffer, *pCharEndBuffer;
-static char	currentChar;
+typedef struct _InputKey
+{
+	UDWORD key;
+	utf_32_char unicode;
+} InputKey;
+static InputKey	pInputBuffer[INPUT_MAXSTR];
+static InputKey	*pStartBuffer, *pEndBuffer;
 
 
 static KEY_CODE sdlKeyToKeyCode(SDLKey key)
@@ -104,8 +105,41 @@ void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 		strcpy(ascii,"???");
 		return;
 	}
+	else if (code == KEY_LCTRL)
+	{
+		// shortcuts with modifier keys work with either key.
+		strcpy(ascii, "Ctrl");
+		return;
+	}
+	else if (code == KEY_LSHIFT)
+	{
+		// shortcuts with modifier keys work with either key.
+		strcpy(ascii, "Shift");
+		return;
+	}
+	else if (code == KEY_LALT)
+	{
+		// shortcuts with modifier keys work with either key.
+		strcpy(ascii, "Alt");
+		return;
+	}
+	else if (code == KEY_LMETA)
+	{
+		// shortcuts with modifier keys work with either key.
+#ifdef WZ_OS_MAC
+		strcpy(ascii, "Cmd");
+#else
+		strcpy(ascii, "Meta");
+#endif
+		return;
+	}
 	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
 	snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
+	if (ascii[0] >= 'a' && ascii[0] <= 'z' && ascii[1] != 0)
+	{
+		// capitalize
+		ascii[0] += 'A'-'a';
+	}
 }
 
 
@@ -126,8 +160,6 @@ void inputInitialise(void)
 
 	pStartBuffer = pInputBuffer;
 	pEndBuffer = pInputBuffer;
-	pCharStartBuffer = pCharInputBuffer;
-	pCharEndBuffer = pCharInputBuffer;
 
 	dragX = mouseXPos = screenWidth/2;
 	dragY = mouseYPos = screenHeight/2;
@@ -137,39 +169,27 @@ void inputInitialise(void)
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 }
 
-/* add count copies of the characater code to the input buffer */
-void inputAddBuffer(UDWORD code, char char_code, UDWORD count)
+// Cyclic increment.
+static InputKey *inputPointerNext(InputKey *p)
 {
-	UDWORD	*pNext;
-	char	*pCharNext;
+    return p + 1 == pInputBuffer + INPUT_MAXSTR ? pInputBuffer : p + 1;
+}
 
+/* add count copies of the characater code to the input buffer */
+static void inputAddBuffer(UDWORD key, utf_32_char unicode)
+{
 	/* Calculate what pEndBuffer will be set to next */
-	pNext = pEndBuffer + 1;
-	pCharNext = pCharEndBuffer + 1;
-	if (pNext >= pInputBuffer + INPUT_MAXSTR)
+	InputKey	*pNext = inputPointerNext(pEndBuffer);
+
+	if (pNext == pStartBuffer)
 	{
-		pNext = pInputBuffer;
-		pCharNext = pCharInputBuffer;
+		return;  // Buffer full.
 	}
 
-	while (pNext != pStartBuffer && count > 0)
-	{
-		/* Store the character */
-		*pEndBuffer = code;
-		*pCharEndBuffer = char_code;
-		pEndBuffer = pNext;
-		pCharEndBuffer = pCharNext;
-		count -= 1;
-
-		/* Calculate what pEndBuffer will be set to next */
-		pNext = pEndBuffer + 1;
-		pCharNext = pCharEndBuffer + 1;
-		if (pNext >= pInputBuffer + INPUT_MAXSTR)
-		{
-			pNext = pInputBuffer;
-			pCharNext = pCharInputBuffer;
-		}
-	}
+	// Add key to buffer.
+	pEndBuffer->key = key;
+	pEndBuffer->unicode = unicode;
+	pEndBuffer = pNext;
 }
 
 
@@ -178,8 +198,6 @@ void inputClearBuffer(void)
 {
 	pStartBuffer = pInputBuffer;
 	pEndBuffer = pInputBuffer;
-	pCharStartBuffer = pCharInputBuffer;
-	pCharEndBuffer = pCharInputBuffer;
 }
 
 
@@ -188,33 +206,27 @@ void inputClearBuffer(void)
  * windows key map.
  * All key presses are buffered up (including windows auto repeat).
  */
-UDWORD inputGetKey(void)
+UDWORD inputGetKey(utf_32_char *unicode)
 {
 	UDWORD	retVal;
 
-	if (pStartBuffer != pEndBuffer)
+	if (pStartBuffer == pEndBuffer)
 	{
-		retVal = *pStartBuffer;
-		currentChar = *pCharStartBuffer;
-		pStartBuffer += 1;
-		pCharStartBuffer += 1;
+	    return 0;  // Buffer empty.
+	}
 
-		if (pStartBuffer >= pInputBuffer + INPUT_MAXSTR)
-		{
-			pStartBuffer = pInputBuffer;
-			pCharStartBuffer = pCharInputBuffer;
-		}
-	}
-	else
+	retVal = pStartBuffer->key;
+	if (unicode)
 	{
-		retVal = 0;
+	    *unicode = pStartBuffer->unicode;
 	}
+	if (!retVal)
+	{
+	    retVal = ' ';  // Don't return 0 if we got a virtual key, since that's interpreted as no input.
+	}
+	pStartBuffer = inputPointerNext(pStartBuffer);
 
 	return retVal;
-}
-
-char inputGetCharKey(void) {
-	return currentChar;
 }
 
 
@@ -224,7 +236,7 @@ char inputGetCharKey(void) {
 void inputHandleKeyEvent(SDL_KeyboardEvent * keyEvent)
 {
 	UDWORD code, vk;
-	unsigned char char_code = keyEvent->keysym.unicode; // FIXME Discarding last 8 bit of 16bit UNICODE !!!
+	utf_32_char unicode = keyEvent->keysym.unicode;
 
 	switch (keyEvent->type)
 	{
@@ -266,12 +278,12 @@ void inputHandleKeyEvent(SDL_KeyboardEvent * keyEvent)
 					break;
 			}
 
-			debug( LOG_NEVER, "Code: %x\n", vk);
-			if (char_code < 32)
+			debug( LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", vk, vk, (vk < 128) && (vk > 31) ? (char) vk : '?' , SDL_GetKeyName(keyCodeToSDLKey(keyEvent->keysym.sym)));
+			if (unicode < 32)
 			{
-				char_code = 0;
+				unicode = 0;
 			}
-			inputAddBuffer(vk, char_code, 1);
+			inputAddBuffer(vk, unicode);
 
 			code = sdlKeyToKeyCode(keyEvent->keysym.sym);
 			if ( aKeyState[code].state == KEY_UP ||
@@ -439,11 +451,11 @@ void inputLooseFocus(void)
 	/* Lost the window focus, have to take this as a global key up */
 	for(i = 0; i < KEY_MAXSCAN; i++)
 	{
-		aKeyState[i].state = KEY_RELEASED;
+		aKeyState[i].state = KEY_UP;
 	}
 	for (i = 0; i < 6; i++)
 	{
-		aMouseState[i].state = KEY_RELEASED;
+		aMouseState[i].state = KEY_UP;
 	}
 }
 

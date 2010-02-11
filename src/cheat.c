@@ -29,6 +29,7 @@
 #include "cheat.h"
 #include "console.h"
 #include "keybind.h"
+#include "keymap.h"
 
 typedef struct _cheat_entry
 {
@@ -39,14 +40,6 @@ typedef struct _cheat_entry
 bool Cheated = false;
 static CHEAT_ENTRY cheatCodes[] =
 {
-//	{"VQKZMY^\\Z",kf_ToggleOverlays},//interface
-//	{"LWPH R^OOVQXL",kf_ShowMappings},//show mappings
-//	{"KZROS^KZL",kf_GiveTemplateSet},//templates
-//	{"LZSZ\\K ^SS",kf_SelectAllCombatUnits},//select all
-//	{"SZK KWZMZ ]Z SVXWK",kf_RecalcLighting},//let there be light
-//	{"PJKSVQZ,",kf_ToggleOutline},
-//	{"L\\MZZQ[JRO",kf_ScreenDump},	//screendump
-
 	{"clone wars", kf_CloneSelected}, // clone selected units
 	{"noassert", kf_NoAssert}, // turn off asserts
 	{"count me", kf_ShowNumObjects}, // give a count of objects in the world
@@ -78,12 +71,34 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"showfps", kf_ToggleFPS},	//displays your average FPS
 	{"showsamples", kf_ToggleSamples}, //displays the # of Sound samples in Queue & List
 	{"showorders", kf_ToggleOrders}, //displays unit order/action state.
+	{"logical", kf_ToggleLogical}, //logical game updates separated from graphics updates.
+	{"pause", kf_TogglePauseMode}, // Pause the game.
+	{"sync me", kf_ForceSync},
+	{"power info", kf_PowerInfo},
 };
 
 BOOL attemptCheatCode(const char* cheat_name)
 {
 	const CHEAT_ENTRY * curCheat;
 	static const CHEAT_ENTRY * const EndCheat = &cheatCodes[ARRAY_SIZE(cheatCodes)];
+
+	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)
+	{
+		if (!getDebugMappingStatus())
+		{
+			kf_ToggleDebugMappings();
+		}
+		return true;
+	}
+	if (strcmp(cheat_name, "cheat off") == 0 && getDebugMappingStatus())
+	{
+		kf_ToggleDebugMappings();
+		return true;
+	}
+	if (!getDebugMappingStatus())
+	{
+		return false;
+	}
 
 	for (curCheat = cheatCodes; curCheat != EndCheat; ++curCheat)
 	{
@@ -102,17 +117,6 @@ BOOL attemptCheatCode(const char* cheat_name)
 			Cheated = true;
 			return true;
 		}
-	}
-
-	/* We didn't find it. Report only for single player games. */
-	if (!runningMultiplayer())
-	{
-		char	errorString[255];
-
-		sstrcpy(errorString, cheat_name);
-		sstrcat(errorString, "?");
-
-		addConsoleMessage(errorString, LEFT_JUSTIFY,SYSTEM_MESSAGE);
 	}
 
 	return false;

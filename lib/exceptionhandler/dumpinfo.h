@@ -21,12 +21,12 @@
 #ifndef __INCLUDED_LIB_EXCEPTIONHANDLER_DUMPINFO_H__
 #define __INCLUDED_LIB_EXCEPTIONHANDLER_DUMPINFO_H__
 
+#include "lib/framework/frame.h"
+
 #if defined(__cplusplus)
 extern "C"
 {
 #endif
-
-#include "lib/framework/frame.h"
 
 #if defined(WZ_OS_WIN)
 typedef HANDLE DumpFileHandle;
@@ -45,7 +45,7 @@ extern void dbgDumpLog(DumpFileHandle file);
 
 extern void dbgDumpInit(int argc, char* argv[]);
 
-extern void addDumpInfo(char *inbuffer);
+extern void addDumpInfo(const char *inbuffer);
 
 #if defined(__cplusplus)
 }

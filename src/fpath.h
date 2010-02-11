@@ -26,6 +26,11 @@
 
 #include "droiddef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /** Return values for routing
  *
  *  @ingroup pathfinding
@@ -69,7 +74,7 @@ extern void fpathUpdate(void);
 
 /** Find a route for a droid to a location.
  */
-extern FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
+extern FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType);
 
 /** Function pointer to the currently in-use blocking tile check function.
  *  
@@ -105,5 +110,9 @@ bool fpathCheck(Vector2i orig, Vector2i dest, PROPULSION_TYPE propulsion);
 void fpathTest(int x, int y, int x2, int y2);
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_FPATH_H__

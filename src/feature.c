@@ -52,6 +52,7 @@
 
 #include "mapgrid.h"
 #include "display3d.h"
+#include "random.h"
 
 
 /* The statistics for the features */
@@ -127,16 +128,24 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 
 	numFeatureStats = numCR(pFeatureData, bufferSize);
 
+	// Skip descriptive header
+	if (strncmp(pFeatureData,"Feature ",8)==0)
+	{
+		pFeatureData = strchr(pFeatureData,'\n') + 1;
+		numFeatureStats--;
+	}
+	
 	asFeatureStats = (FEATURE_STATS*)malloc(sizeof(FEATURE_STATS) * numFeatureStats);
 
 	if (asFeatureStats == NULL)
 	{
-		debug( LOG_ERROR, "Feature Stats - Out of memory" );
+		debug( LOG_FATAL, "Feature Stats - Out of memory" );
 		abort();
 		return false;
 	}
 
 	psFeature = asFeatureStats;
+
 	for (i = 0; i < numFeatureStats; i++)
 	{
 		UDWORD Width, Breadth;
@@ -147,7 +156,6 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		featureName[0] = '\0';
 		GfxFile[0] = '\0';
 		type[0] = '\0';
-
 
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pFeatureData, "%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
@@ -296,11 +304,11 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	/* Dump down the building wrecks at random angles - still looks shit though */
 	if(psStats->subType == FEAT_BUILD_WRECK)
 	{
-		psFeature->direction = rand() % 360;
+		psFeature->direction = gameRand(360);
 	}
 	else if(psStats->subType == FEAT_TREE)
 	{
-		psFeature->direction = rand() % 360;
+		psFeature->direction = gameRand(360);
 	}
 	else
 	{
@@ -347,12 +355,10 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		}
 	}
 
-	for(i=0; i<MAX_PLAYERS; i++)
-	{
-		psFeature->visible[i] = 0;//vis;
-	}
-	//load into the map data
+	memset(psFeature->seenThisTick, 0, sizeof(psFeature->seenThisTick));
+	memset(psFeature->visible, 0, sizeof(psFeature->visible));
 
+	//load into the map data
 	if(FromSave) {
 		mapX = map_coord(x) - psStats->baseWidth / 2;
 		mapY = map_coord(y) - psStats->baseBreadth / 2;
@@ -438,9 +444,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 //		psFeature->sDisplay.imd = psStats->psImd;
 // 	}
 
-	// add the feature to the grid
-	gridAddObject((BASE_OBJECT *)psFeature);
-
 	return psFeature;
 }
 
@@ -448,7 +451,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 /* Release the resources associated with a feature */
 void featureRelease(FEATURE *psFeature)
 {
-	gridRemoveObject((BASE_OBJECT *)psFeature);
 }
 
 
@@ -458,7 +460,7 @@ void featureUpdate(FEATURE *psFeat)
    //	if(getRevealStatus())
    //	{
 		// update the visibility for the feature
-		processVisibility((BASE_OBJECT *)psFeat);
+		processVisibilityLevel((BASE_OBJECT *)psFeat);
    //	}
 
 	switch (psFeat->psStats->subType)
@@ -487,7 +489,7 @@ bool removeFeature(FEATURE *psDel)
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
 	ASSERT_OR_RETURN(false, !psDel->died, "Feature already dead");
 
-	if(bMultiPlayer && !ingame.localJoiningInProgress)
+	if(bMultiMessages && !ingame.localJoiningInProgress)
 	{
 		SendDestroyFeature(psDel);	// inform other players of destruction
 	}
@@ -518,24 +520,18 @@ bool removeFeature(FEATURE *psDel)
 		intRefreshScreen();
 	}
 
-	if (  (psDel->psStats->subType == FEAT_GEN_ARTE)
-		||(psDel->psStats->subType == FEAT_OIL_RESOURCE))
+	if (psDel->psStats->subType == FEAT_GEN_ARTE || psDel->psStats->subType == FEAT_OIL_RESOURCE)
 	{
-		// have to check all players cos if you cheat you'll get em.
-		for (player=0; player<MAX_PLAYERS; player ++)
+		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			//see if there is a proximity message FOR THE SELECTED PLAYER at this location
-			psMessage = findMessage((MSG_VIEWDATA *)psDel, MSG_PROXIMITY, selectedPlayer);
+			psMessage = findMessage((MSG_VIEWDATA *)psDel, MSG_PROXIMITY, player);
 			while (psMessage)
 			{
-				removeMessage(psMessage, selectedPlayer);
+				removeMessage(psMessage, player);
 				psMessage = findMessage((MSG_VIEWDATA *)psDel, MSG_PROXIMITY, player);
 			}
 		}
 	}
-
-	// remove the feature from the grid
-	gridRemoveObject((BASE_OBJECT *)psDel);
 
 	killFeature(psDel);
 

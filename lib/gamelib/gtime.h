@@ -24,40 +24,55 @@
 #ifndef _gtime_h
 #define _gtime_h
 
-/** The number of ticks per second for the game clock. */
+
+/// The number of time units per second of the game clock.
 #define GAME_TICKS_PER_SEC 1000
+/// The number of game state updates per second of the game clock.
+#define GAME_UPDATES_PER_SEC 10
+/// The number of time units per game tick.
+#define GAME_TICKS_PER_UPDATE (GAME_TICKS_PER_SEC/GAME_UPDATES_PER_SEC)
 
 /** The maximum time for one frame (stops the clock running away when debugging)
  * changed to /6 by ajl. if this needs to go back to ticks/10 then tell me. */
 #define GTIME_MAXFRAME (GAME_TICKS_PER_SEC/6)
 
-/** The current time in the game world. */
+/// The current time in the game world.
+/// Changes in GAME_UNITS_PER_TICK increments.
 extern UDWORD gameTime;
-
-extern float frameTimeFraction;		/**< Private performance calculation. Do not use. */
-extern float frameTimeFraction2;	/**< Private performance calculation. Do not use. */
-
-/** 
- *	The time for the last frame. This tells you the amount of real world time
- *	that is spent by the current slice, or in other words, the time difference
- *	between the current frame and the previous frame. 
+/// The current time in the graphical display of the game world.
+/// Should be close to gameTime, up to GAME_UNITS_PER_TICK behind.
+extern UDWORD graphicsTime;
+/** The current time in the game world - never stops.
+ * FIXME Then isn't it the real time, not the game time? Rename from gameTime2 to realTime?
+ * Think it did stop (opposite of what the above comment says), if the graphics rendering couldn't keep up. If needed, that feature can be added back.
+ * And it was previously affected by the game speed modifier, which explains how the game speed modifier affected the GUI speed...
  */
-extern UDWORD frameTime;
+extern UDWORD realTime;
+#define gameTime2 realTime
 
-/** The current time in the game world - never stops. */
-extern UDWORD gameTime2;
-
-/** 
- *	The time for the last frame - never stops. 
- *	@see frameTime
- */
-extern UDWORD frameTime2;
+/// The difference between the previous and current gameTime.
+/// FIXME This should be renamed from frameTime to deltaGameTime.
+extern UDWORD deltaGameTime;
+#define frameTime deltaGameTime
+/// The difference between the previous and current graphicsTime.
+extern UDWORD deltaGraphicsTime;
+/// The difference between the previous and current gameTime2 (FIXME gameTime2 should be called realTime).
+/// FIXME This should be renamed from frameTime2 to deltaRealTime.
+extern UDWORD deltaRealTime;
+#define frameTime2 deltaRealTime
 
 /** Initialise the game clock. */
-extern BOOL gameTimeInit(void);
+extern void gameTimeInit(void);
 
-/** Call this each loop to update the game timer. */
+/// Changes the game (and graphics) time.
+extern void setGameTime(uint32_t newGameTime);
+
+/** Call this each loop to update the timers.
+ * @param sane If true, then the game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK. If false, the game time is equal to the graphics time, and the game always ticks.
+ * @returns true iff the game time ticked.
+ */
 extern void gameTimeUpdate(void);
+extern bool logicalUpdates;  ///< Separate logical from graphical updates. FIXME Should be constant true. But first it needs to work perfectly.
 
 /* Returns true if gameTime is stopped. */
 extern BOOL gameTimeIsStopped(void);
@@ -68,7 +83,7 @@ extern void gameTimeStop(void);
 /** Call this to restart the game timer after a call to gameTimeStop. */
 extern void gameTimeStart(void);
 
-/** Call this to reset the game timer. */
+/** Call this to set the game time and to reset the time modifier, and to update the real time, setting the delta to 0. */
 extern void gameTimeReset(UDWORD time);
 
 /**
@@ -84,45 +99,70 @@ void gameTimeSetMod(float mod);
 void gameTimeGetMod(float *pMod);
 
 /**
- * Return a number that climbs over tickFrequency game ticks and ends up in the required range.
- * For instance getTimeValueRange(4096,256) will return a number that cycles through the values 
- * 0..256 every 4.096 seconds... Ensure that the first is an integer multiple of the second.
- * Useful for periodical stuff.
+ * Returns the game time, modulo the time period, scaled to 0..requiredRange.
+ * For instance getModularScaledGameTime(4096,256) will return a number that cycles through the values
+ * 0..256 every 4.096 seconds...
+ * Useful for periodic stuff.
  *
- * Unlike getStaticTimeValueRange this function operates on uninterrupted game time.
-*/
-extern UDWORD	getTimeValueRange(UDWORD tickFrequency, UDWORD requiredRange);
-
+ * Operates on game time, which can be paused, and increases in GAME_UNITS_PER_TICK increments.
+ * NOTE Currently unused – turns out only getModularScaledGraphicsTime was appropriate in the places this was previously used.
+ */
+extern UDWORD getModularScaledGameTime(UDWORD timePeriod, UDWORD requiredRange);
 /**
- * Return a number that climbs over tickFrequency game ticks and ends up in the required range.
- * For instance getTimeValueRange(4096,256) will return a number that cycles through the values 
- * 0..256 every 4.096 seconds... Ensure that the first is an integer multiple of the second.
+ * Returns the graphics time, modulo the time period, scaled to 0..requiredRange.
+ * For instance getModularScaledGraphicsTime(4096,256) will return a number that cycles through the values
+ * 0..256 every 4.096 seconds...
+ * Useful for periodic stuff.
+ *
+ * Operates on graphics time, which can be paused.
+ */
+extern UDWORD getModularScaledGraphicsTime(UDWORD timePeriod, UDWORD requiredRange);
+/**
+ * Returns the real time, modulo the time period, scaled to 0..requiredRange.
+ * For instance getModularScaledRealTime(4096,256) will return a number that cycles through the values
+ * 0..256 every 4.096 seconds...
  * Useful for periodical stuff.
  *
- * Operates on game time, which is subject to pause.
-*/
-extern	UDWORD	getStaticTimeValueRange(UDWORD tickFrequency, UDWORD requiredRange);
+ * Operates on real time, which can't be paused.
+ */
+extern UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange);
+
 
 /** Break down given time into its constituent components. */
 extern void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWORD *seconds);
 
-/** 
- * Return an incremental value adjusted for the time we have available this frame. Basically
- * multiplies the passed value by delta time.
+
+
+extern float gameTimeFraction;  ///< Private performance calculation. Do not use.
+extern float graphicsTimeFraction;  ///< Private performance calculation. Do not use.
+extern float realTimeFraction;  ///< Private performance calculation. Do not use.
+
+/// Returns the value times deltaGraphicsTime, converted to seconds.
+static inline float gameTimeAdjustedIncrement(float value)
+{
+	return value * gameTimeFraction;
+}
+/// Returns the value times deltaGraphicsTime, converted to seconds.
+static inline float graphicsTimeAdjustedIncrement(float value)
+{
+	return value * graphicsTimeFraction;
+}
+/// Returns the value times deltaGraphicsTime, converted to seconds.
+static inline float realTimeAdjustedIncrement(float value)
+{
+	return value * realTimeFraction;
+}
+
+/**
+ * Returns value times deltaGameTime (pauseTime = true) or deltaRealTime (pauseTime = false), converted to seconds.
  * @param value Amount to change something in a second.
  * @param pauseTime If true, adjust also for pause of game time. Generally use true in-game, false for GUI.
  * @return Amount to change this frame.
+ * TODO Replace all calls to this function with gameTimeAdjustedIncrement or realTimeAdjustedIncrement, and delete this function.
  */
 static inline float timeAdjustedIncrement(float value, BOOL pauseTime)
 {
-	if (pauseTime)
-	{
-		return (value * frameTimeFraction);
-	}
-	else
-	{
-		return (value * frameTimeFraction2);
-	}
+	return (pauseTime ? gameTimeAdjustedIncrement : realTimeAdjustedIncrement)(value);
 }
 
 #endif

@@ -108,11 +108,34 @@ extern bool assertEnabled;
 
 /**
  * Compile time assert
+ *
+ * Forces a compilation error if condition is true, but also produce a result
+ * (of value 0 and type size_t), so the expression can be used anywhere that
+ * a comma expression isn't permitted.
+ *
+ * \param expr Expression to evaluate
+ *
+ * \note BUILD_BUG_ON_ZERO from <linux/kernel.h>
+ */
+#ifndef __cplusplus
+#define STATIC_ASSERT_EXPR( expr ) \
+	(sizeof(struct { int:-!(expr); }))
+#else //cplusplus
+}
+template<bool> class StaticAssert;
+template<> class StaticAssert<true>{};
+#define STATIC_ASSERT_EXPR(expr) \
+	(sizeof(StaticAssert<(expr)>))
+extern "C"
+{
+#endif //cplusplus
+/**
+ * Compile time assert
  * Not to be used in global context!
  * \param expr Expression to evaluate
  */
 #define STATIC_ASSERT( expr ) \
-	do { enum { assert_static__ = 1/(expr) }; } while(0)
+	(void)STATIC_ASSERT_EXPR(expr)
 
 
 /***
@@ -152,6 +175,10 @@ typedef enum {
   LOG_INFO, /**< special; on by default, for both debug & release builds */
   LOG_TERRAIN,
   LOG_FEATURE,
+  LOG_FATAL,	/**< special; on by default, for both debug & release builds  */
+  LOG_INPUT,	// mouse / keyboard events
+  LOG_POPUP,	// special, on by default, for both debug & release builds (used for OS dependent popup code)
+  LOG_CONSOLE,	// send console messages to file
   LOG_LAST /**< _must_ be last! */
 } code_part;
 

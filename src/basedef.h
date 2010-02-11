@@ -28,6 +28,11 @@
 #include "displaydef.h"
 #include "statsdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 //the died flag for a droid is set to this when it gets added to the non-current list
 #define NOT_CURRENT_LIST 1
 
@@ -38,7 +43,13 @@ typedef enum _object_type
 	OBJ_FEATURE,    ///< Things like roads, trees, bridges, fires
 	OBJ_PROJECTILE, ///< Comes out of guns, stupid :-)
 	OBJ_TARGET,     ///< for the camera tracking
+	OBJ_NUM_TYPES,  ///< number of object types - MUST BE LAST
 } OBJECT_TYPE;
+
+typedef struct _tilePos
+{
+	UBYTE x, y;
+} TILEPOS;
 
 /*
  Coordinate system used for objects in Warzone 2100:
@@ -49,21 +60,24 @@ typedef enum _object_type
   For explanation of yaw/pitch/roll look for "flight dynamics" in your encyclopedia.
 */
 
+/// Along with NEXTOBJ, the elements of the base class SIMPLE_OBJECT. FIXME If converting to C++, this can be a normal base class and a lot less ugly.
 #define BASE_ELEMENTS1(pointerType) \
 	OBJECT_TYPE     type;                           /**< The type of object */ \
 	UDWORD          id;                             /**< ID number of the object */ \
 	Vector3uw       pos;                            /**< Position of the object */ \
 	float           direction;                      /**< Object's yaw +ve rotation around up-axis */ \
 	SWORD           pitch;                          /**< Object's pitch +ve rotation around right-axis (nose up/down) */ \
-	SWORD           roll                            /**< Object's roll +ve rotation around forward-axis (left wing up/down) */
+	UBYTE           player;                         /**< Which player the object belongs to */ \
+	SWORD           roll;                           /**< Object's roll +ve rotation around forward-axis (left wing up/down) */ \
+	uint32_t        time                           /**< Game time of given space-time position. */
 
 #define BASE_ELEMENTS2(pointerType) \
 	SCREEN_DISP_DATA    sDisplay;                   /**< screen coordinate details */ \
-	UBYTE               player;                     /**< Which player the object belongs to */ \
 	UBYTE               group;                      /**< Which group selection is the droid currently in? */ \
 	UBYTE               selected;                   /**< Whether the object is selected (might want this elsewhere) */ \
 	UBYTE               cluster;                    /**< Which cluster the object is a member of */ \
 	UBYTE               visible[MAX_PLAYERS];       /**< Whether object is visible to specific player */ \
+	UBYTE               seenThisTick[MAX_PLAYERS];  /**< Whether object has been seen this tick by the specific player. */ \
 	UDWORD              died;                       /**< When an object was destroyed, if 0 still alive */ \
 	UDWORD              lastEmission;               /**< When did it last puff out smoke? */ \
 	UDWORD              lastHitWeapon;		/**< The weapon that last hit it */ \
@@ -75,12 +89,16 @@ typedef enum _object_type
 	SDWORD              sensorPower;		/**< Active sensor power */ \
 	SDWORD              sensorRange;		/**< Range of sensor */ \
 	SDWORD              ECMMod;			/**< Ability to conceal oneself from sensors */ \
+	UWORD               numWatchedTiles;		/**< Number of watched tiles, zero for features */ \
+	TILEPOS             *watchedTiles;		/**< Variable size array of watched tiles, NULL for features */ \
 	UDWORD              armour[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES]
 
+/// Along with BASE_ELEMENTS1, the elements of the base class BASE_OBJECT. FIXME If converting to C++, this can be a normal base class and a lot less ugly.
 #define NEXTOBJ(pointerType) \
 	pointerType     *psNext;			/**< Pointer to the next object in the object list */ \
 	pointerType     *psNextFunc			/**< Pointer to the next object in the function list */
 
+/// The elements of the base class SIMPLE_ELEMENTS.
 #define SIMPLE_ELEMENTS(pointerType) \
 	BASE_ELEMENTS1(pointerType); \
 	NEXTOBJ(pointerType)
@@ -91,13 +109,41 @@ typedef enum _object_type
 
 typedef struct BASE_OBJECT
 {
-	BASE_ELEMENTS( struct BASE_OBJECT );
+	BASE_ELEMENTS( struct BASE_OBJECT );  ///< FIXME Should be converted to C++, and be written as ": public SIMPLE_OBJECT", avoiding a whole lot of casts.
 } WZ_DECL_MAY_ALIAS BASE_OBJECT;
 
 typedef struct SIMPLE_OBJECT
 {
 	SIMPLE_ELEMENTS( struct SIMPLE_OBJECT );
 } SIMPLE_OBJECT;
+
+/// Space-time coordinate.
+typedef struct SpaceTime
+{
+	uint32_t  time;        ///< Game time
+
+	Vector3uw pos;         ///< Position of the object
+	int16_t   pitch;       ///< Object's pitch +ve rotation around right-axis (nose up/down)
+	float     direction;   ///< Object's yaw +ve rotation around up-axis
+	int16_t   roll;        ///< Object's roll +ve rotation around forward-axis (left wing up/down)
+} SPACETIME;
+
+static inline SPACETIME constructSpacetime(Vector3uw pos, float direction, int16_t pitch, int16_t roll, uint32_t time)
+{	// we don't support C99 struct assignments
+	SPACETIME ret;
+	ret.time = time;
+	ret.pos.x = pos.x;
+	ret.pos.y = pos.y;
+	ret.pos.z = pos.z;
+	ret.pitch = pitch;
+	ret.direction = direction;
+	ret.roll = roll;
+
+	return ret;
+}
+
+#define GET_SPACETIME(psObj) constructSpacetime(psObj->pos, psObj->direction, psObj->pitch, psObj->roll, psObj->time)
+#define SET_SPACETIME(psObj, st) do { psObj->pos = st.pos; psObj->direction = st.direction; psObj->pitch = st.pitch; psObj->roll = st.roll; psObj->time = st.time; } while(0)
 
 static inline bool isDead(const BASE_OBJECT* psObj)
 {
@@ -111,6 +157,10 @@ static inline int objPosDiffSq(Vector3uw pos1, Vector3uw pos2)
 	const int ydiff = pos1.y - pos2.y;
 	return (xdiff * xdiff + ydiff * ydiff);
 }
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 // Must be #included __AFTER__ the definition of BASE_OBJECT
 #include "baseobject.h"

@@ -32,6 +32,11 @@
 #include <lualib.h>
 #include "lib/lua/warzone.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 //console callback stuff
 //---------------------------
 #ifndef MAXSTRLEN
@@ -89,4 +94,8 @@ extern void eventFireCallbackTrigger(TRIGGER_TYPE trigger);
 // player number that left the game
 extern UDWORD	CBPlayerLeft;
 
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 #endif // __INCLUDED_SRC_SCRIPTCB_H__

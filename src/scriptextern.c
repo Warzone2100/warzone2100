@@ -28,6 +28,7 @@
 #include "map.h"
 
 #include "lib/script/script.h"
+#include "lib/netplay/netplay.h"
 #include "scripttabs.h"
 #include "scriptextern.h"
 
@@ -159,6 +160,12 @@ int scrSetCVar(lua_State *L)
 		case EXTID_TUTORIAL:
 			value = luaL_checkboolean(L, 2);
 			bInTutorial = value;
+			if (bInTutorial)
+			{
+				// Since tutorial is skirmish
+				NetPlay.players[0].allocated = true;
+				debug(LOG_ERROR, "tutorial turned %s", bInTutorial ? "on" : "off");
+			}
 			break;
 		case EXTID_CURSOR:
 			return luaL_error(L, "readonly C variable");

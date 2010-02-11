@@ -108,15 +108,22 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 	return true;
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-// when a remote player leaves an arena game do this!
-void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
+//////////////////////////////////////////////////////////////////////////////
+/*
+** when a remote player leaves an arena game do this!
+**
+** @param player -- the one we need to clear
+** @param quietly -- true means without any visible effects
+*/
+void clearPlayer(UDWORD player,BOOL quietly)
 {
 	UDWORD			i;
-	BOOL			bTemp;
 	STRUCTURE		*psStruct,*psNext;
 
+	debug(LOG_INFO, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true":"false");
+
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
+	ingame.DataIntegrity[player] = false;
 
 	(void)setPlayerName(player,"");				//clear custom player name (will use default instead)
 
@@ -126,49 +133,34 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 		alliances[i][player]	= ALLIANCE_BROKEN;
 	}
 
-	debug(LOG_DEATH, "clearPlayer: killing off all droids");
+	debug(LOG_DEATH, "killing off all droids for player %d", player);
 	while(apsDroidLists[player])				// delete all droids
 	{
-		if(quietly)
+		if(quietly)			// don't show effects
 		{
 			killDroid(apsDroidLists[player]);
-		}else{
+		}
+		else				// show effects
+		{
 			destroyDroid(apsDroidLists[player]);
 		}
 	}
 
+	debug(LOG_DEATH, "killing off all structures for player %d", player);
 	psStruct = apsStructLists[player];
 	while(psStruct)				// delete all structs
 	{
 		psNext = psStruct->psNext;
-		bTemp = false;
 
-		if(removeOil)
-		{
-			if (psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)
-			{
-				bTemp =  true;
-			}
-		}
-
-		if(quietly)
+		if(quietly)		// don't show effects
 		{
 			removeStruct(psStruct, true);
 		}
-		else
+		else			// show effects
 		{
-			// NOTE: when a player leaves, we should destroy everything, including the walls
-			// Is there any reason why not to do this? (removed wall check code)
 			destroyStruct(psStruct);
 		}
 
-		if(bTemp)
-		{
-			if(apsFeatureLists[0]->psStats->subType == FEAT_OIL_RESOURCE)
-			{
-				removeFeature(apsFeatureLists[0]);
-			}
-		}
 		psStruct = psNext;
 	}
 
@@ -221,7 +213,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
 
 	turnOffMultiMsg(true);
-	clearPlayer(playerIndex, false, false);
+	clearPlayer(playerIndex, false);		// don't do it quietly
 	game.skDiff[playerIndex] = DIFF_SLIDER_STOPS / 2;
 
 	turnOffMultiMsg(false);
@@ -237,6 +229,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 	CBPlayerLeft = playerIndex;
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
 
+	netPlayersUpdated = true;
 	return true;
 }
 
@@ -274,12 +267,79 @@ BOOL MultiPlayerJoin(UDWORD playerIndex)
 		// if skirmish and game full, then kick...
 		if (NetPlay.playercount > game.maxPlayers)
 		{
-			kickPlayer(playerIndex, "Sorry, game is full!", ERROR_FULL);
+			kickPlayer(playerIndex, "the game is already full.", ERROR_FULL);
 		}
 	}
 	return true;
 }
 
+bool sendDataCheck(void)
+{
+	int i = 0;
+	uint32_t	player = selectedPlayer;
+
+	NETbeginEncode(NET_DATA_CHECK, NET_HOST_ONLY);		// only need to send to HOST
+	for(i = 0; i < DATA_MAXDATA; i++)
+	{
+		NETuint32_t(&DataHash[i]);
+	}
+		NETuint32_t(&player);
+	NETend();
+	debug(LOG_NET, "sent hash to host");
+	return true;
+}
+
+bool recvDataCheck(void)
+{
+	int i = 0;
+	uint32_t	player;
+	uint32_t tempBuffer[DATA_MAXDATA] = {0};
+
+	NETbeginDecode(NET_DATA_CHECK);
+	for(i = 0; i < DATA_MAXDATA; i++)
+	{
+		NETuint32_t(&tempBuffer[i]);
+	}
+		NETuint32_t(&player);
+	NETend();
+
+	if (player >= MAX_PLAYERS) // invalid player number.
+	{
+		debug(LOG_ERROR, "invalid player number (%u) detected.", player);
+		return false;
+	}
+
+	debug(LOG_NET, "** Received NET_DATA_CHECK from player %u", player);
+
+	if (NetPlay.isHost)
+	{
+		if (memcmp(DataHash, tempBuffer, sizeof(DataHash)))
+		{
+			char msg[256] = {'\0'};
+
+			for (i=0; i<DATA_MAXDATA; i++)
+			{
+				if (DataHash[i] != tempBuffer[i]) break;
+			}
+
+			sprintf(msg, _("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
+			sendTextMessage(msg, true);
+			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+
+			kickPlayer(player, "your data doesn't match the host's!", ERROR_WRONGDATA);
+			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
+			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
+
+			return false;
+		}
+		else
+		{
+			debug(LOG_NET, "DataCheck message received and verified for player %s (slot=%u)", getPlayerName(player), player);
+			ingame.DataIntegrity[player] = true;
+		}
+	}
+	return true;
+}
 // ////////////////////////////////////////////////////////////////////////////
 // Setup Stuff for a new player.
 void setupNewPlayer(UDWORD player)
@@ -289,6 +349,7 @@ void setupNewPlayer(UDWORD player)
 
 	ingame.PingTimes[player] = 0;					// Reset ping time
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
+	ingame.DataIntegrity[player] = false;
 
 	for (i = 0; i < MAX_PLAYERS; i++)				// Set all alliances to broken
 	{

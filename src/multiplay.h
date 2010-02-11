@@ -26,6 +26,11 @@
 
 #include "group.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Game Options Structure. Enough info to completely describe the static stuff in amultiplay game.
 typedef struct {
@@ -38,7 +43,7 @@ typedef struct {
 	uint32_t    power;						// power level for arena game
 	uint8_t		base;						// clean/base/base&defence
 	uint8_t		alliance;					// no/yes/AIs vs Humans
-	uint8_t		skDiff[MAX_PLAYERS];			// skirmish game difficulty settings.
+	uint8_t		skDiff[MAX_PLAYERS];		// skirmish game difficulty settings. 0x0=OFF 0xff=HUMAN
 } MULTIPLAYERGAME;
 
 typedef struct
@@ -53,7 +58,10 @@ typedef struct {
 	BOOL				localOptionsReceived;				// used to show if we have game options yet..
 	BOOL				localJoiningInProgress;				// used before we know our player number.
 	BOOL				JoiningInProgress[MAX_PLAYERS];
+	BOOL				DataIntegrity[MAX_PLAYERS];
 	BOOL				bHostSetup;
+	int32_t				TimeEveryoneIsInGame;
+	bool				isAllPlayersDataOK;
 	UDWORD				startTime;
 	UDWORD				numStructureLimits;					// number of limits
 	MULTISTRUCTLIMITS	*pStructureLimits;					// limits chunk.
@@ -68,6 +76,7 @@ extern MULTIPLAYERGAME		game;						// the game description.
 extern MULTIPLAYERINGAME	ingame;						// the game description.
 
 extern BOOL					bMultiPlayer;				// true when more than 1 player.
+extern BOOL					bMultiMessages;				// == bMultiPlayer unless multi messages are disabled
 extern UDWORD				selectedPlayer;
 extern BOOL					openchannels[MAX_PLAYERS];
 extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
@@ -75,9 +84,13 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
-// Max bit-rate, set for a 28.8KB/s modem (we have hardcore fans!)
+// NOTE: MaxMsgSize is currently set to 16K.  When MAX_BYTESPERSEC has been reached (sent + recv!), then we do NOT
+//       do the sync code checks anymore(!), needless to say, this can and does cause issues.
+// FIXME: We should define this externally so people with dial-up modems can configure this
+// FIXME: Use possible compression on the packets.
+// NOTE: Remember, we (now) allow 150 units max * 7 (1 human, 6 AI possible for Host) to send to the other player.
 
-#define MAX_BYTESPERSEC			3400
+#define MAX_BYTESPERSEC			14336
 
 #define ANYPLAYER				99
 #define ONEPLAYER				98
@@ -98,9 +111,9 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define CAMPAIGNTEMPLATES		5
 
 #define PING_LO					0			// this ping is kickin'.
-#define PING_MED				600			// this ping is crusin'.
-#define PING_HI					1200		// this ping is crawlin'.
-#define PING_LIMIT				2000		// if ping is bigger than this, then worry and panic.
+#define PING_MED				200			// this ping is crawlin'
+#define PING_HI					400			// this ping just plain sucks :P
+#define PING_LIMIT				1000		// if ping is bigger than this, then worry and panic.
 
 #define LEV_LOW					400			// how many points to allocate for res levels???
 #define LEV_MED					700
@@ -116,7 +129,6 @@ extern WZ_DECL_WARN_UNUSED_RESULT STRUCTURE		*IdToStruct(UDWORD id,UDWORD player
 extern WZ_DECL_WARN_UNUSED_RESULT BOOL			IdToDroid(UDWORD id, UDWORD player, DROID **psDroid);
 extern WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id,UDWORD player);
 extern WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId,UDWORD player);
-extern WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*NameToTemplate(const char *sName,UDWORD player);
 
 extern const char* getPlayerName(unsigned int player);
 extern BOOL setPlayerName		(UDWORD player, const char *sName);
@@ -133,15 +145,14 @@ extern BOOL	multiPlayerLoop		(void);							// for loop.c
 extern BOOL recvMessage			(void);
 extern BOOL sendTemplate		(DROID_TEMPLATE *t);
 extern BOOL SendDestroyTemplate (DROID_TEMPLATE *t);
-extern BOOL SendResearch		(UBYTE player,UDWORD index);
+extern BOOL SendResearch(uint8_t player, uint32_t index, bool trigger);
 extern BOOL SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.
 extern BOOL sendTextMessage		(const char *pStr,BOOL cast);		// send a text message
 extern BOOL sendAIMessage		(char *pStr, UDWORD player, UDWORD to);	//send AI message
 
-extern BOOL turnOffMultiMsg		(BOOL bDoit);
+extern void turnOffMultiMsg		(BOOL bDoit);
 
-extern UBYTE sendMap			(void);
-
+extern void sendMap(void);
 extern BOOL multiplayerWinSequence(BOOL firstCall);
 
 /////////////////////////////////////////////////////////
@@ -160,7 +171,7 @@ extern BOOL SendDestroyDroid	(const DROID* psDroid);
 extern BOOL SendDemolishFinished(STRUCTURE *psS,DROID *psD);
 extern BOOL SendDroidInfo		(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj);
 extern BOOL SendDroidMove		(const DROID* psDroid, uint32_t x, uint32_t y, BOOL formation);
-extern BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj);
+extern BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, BOOL altOrder);
 extern BOOL SendCmdGroup		(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj);
 
 extern BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj);
@@ -182,9 +193,8 @@ extern BOOL joinCampaign		(UDWORD gameNumber, char *playername);
 extern void	playerResponding	(void);
 extern BOOL multiGameInit		(void);
 extern BOOL multiGameShutdown	(void);
-extern BOOL copyTemplateSet		(UDWORD from,UDWORD to);
-extern BOOL addTemplateSet		(UDWORD from,UDWORD to);
 extern BOOL addTemplate			(UDWORD	player,DROID_TEMPLATE *psNew);
+extern BOOL addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList);
 
 // syncing.
 extern BOOL sendCheck			(void);							//send/recv  check info
@@ -217,5 +227,10 @@ extern	void startMultiplayerGame	(void);
 extern	void resetReadyStatus		(bool bSendOptions);
 
 extern	BOOL bPlayerReadyGUI[MAX_PLAYERS];
+extern bool isMPDirtyBit;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

@@ -27,6 +27,11 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/types.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define MAX_MODS 100
 
 // parse the commandline
@@ -34,5 +39,9 @@ extern bool ParseCommandLine(int argc, const char** argv);
 extern bool ParseCommandLineEarly(int argc, const char** argv);
 
 extern BOOL bAllowDebugMode;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_CLPARSE_H__

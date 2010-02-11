@@ -27,6 +27,11 @@
 #include "statsdef.h"
 #include "droiddef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // the maximum number of command droids per side
 #define MAX_CMDDROIDS	5
 
@@ -42,5 +47,9 @@ typedef struct _command_droid
 	UWORD           kills;
 	DROID*          psDroid;
 } COMMAND_DROID;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_CMDDROIDDEF_H__

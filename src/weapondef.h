@@ -24,24 +24,26 @@
 #ifndef __INCLUDED_WEAPONDEF_H__
 #define __INCLUDED_WEAPONDEF_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef struct _weapon
 {
-	/**
-	 * Index into the global @c asWeaponStats array; thus a "reference" of
-	 * some kind to the associated stats.
-	 */
-	unsigned int    nStat;
-
-	UDWORD          ammo;
-
-	/**
-	 * @c gameTime when this weapon was last fired.
-	 */
-	UDWORD          lastFired;
-	UDWORD          shotsFired;
-	UDWORD          recoilValue;
-	UWORD		pitch;
-	UWORD		rotation;
+	unsigned int    nStat;		///< Index into the asWeaponStats global array
+	uint32_t        ammo;
+	uint32_t        lastFired;	///< The gametime when this weapon last fired
+	uint32_t        shotsFired;
+	uint32_t        recoilValue;
+	uint16_t        pitch;
+	uint16_t        rotation;
+	uint16_t        prevPitch;
+	uint16_t        prevRotation;
 } WEAPON;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_WEAPONDEF_H__

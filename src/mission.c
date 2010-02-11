@@ -512,9 +512,6 @@ BOOL startMission(LEVEL_TYPE missionType, char *pGame)
 
 	scoreInitSystem();
 
-	// add proximity messages for all untapped VISIBLE oil resources
-	addOilResourceProximities();
-
 	return true;
 }
 
@@ -655,15 +652,15 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 		psNext = psTransporter->psNext;
 		if (psTransporter->droidType == DROID_TRANSPORTER)
 		{
-            //check that this transporter actually contains some droids
-            if (psTransporter->psGroup && psTransporter->psGroup->refCount > 1)
-            {
-			    //remove out of stored list and add to current Droid list
-                if (droidRemove(psTransporter, mission.apsDroidLists))
-                {
-                    //don't want to add it unless managed to remove it from the previous list
-			        addDroid(psTransporter, apsDroidLists);
-                }
+			// Check that this transporter actually contains some droids
+			if (psTransporter->psGroup && psTransporter->psGroup->refCount > 1)
+			{
+				// Remove out of stored list and add to current Droid list
+				if (droidRemove(psTransporter, mission.apsDroidLists))
+				{
+					// Do not want to add it unless managed to remove it from the previous list
+					addDroid(psTransporter, apsDroidLists);
+				}
 
 			    /* set start position */
 			    psTransporter->pos.x = iX;
@@ -862,22 +859,13 @@ void restoreMissionData(void)
 		for(psObj = (BASE_OBJECT *)apsDroidLists[inc]; psObj; psObj=psObj->psNext)
 		{
 			psObj->died = false;	//make sure the died flag is not set
-			gridAddObject(psObj);
 		}
 
 		apsStructLists[inc] = mission.apsStructLists[inc];
 		mission.apsStructLists[inc] = NULL;
-		for(psObj = (BASE_OBJECT *)apsStructLists[inc]; psObj; psObj=psObj->psNext)
-		{
-			gridAddObject(psObj);
-		}
 
 		apsFeatureLists[inc] = mission.apsFeatureLists[inc];
 		mission.apsFeatureLists[inc] = NULL;
-		for(psObj = (BASE_OBJECT *)apsFeatureLists[inc]; psObj; psObj=psObj->psNext)
-		{
-			gridAddObject(psObj);
-		}
 
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = NULL;
@@ -1042,7 +1030,6 @@ void restoreMissionLimboData(void)
         {
     		addDroid(psDroid, apsDroidLists);
 	    	psDroid->cluster = 0;
-            gridAddObject((BASE_OBJECT *)psDroid);
     		//reset droid orders
 	    	orderDroid(psDroid, DORDER_STOP);
             //the location of the droid should be valid!
@@ -1322,6 +1309,7 @@ static void clearCampaignUnits(void)
 	{
 		orderDroid(psDroid, DORDER_STOP);
 		setDroidBase(psDroid, NULL);
+		visRemoveVisibilityOffWorld((BASE_OBJECT *)psDroid);
 		CHECK_DROID(psDroid);
 	}
 }
@@ -1546,7 +1534,7 @@ void endMission(void)
 		default:
 		{
 			//error!
-			debug( LOG_ERROR, "Unknown Mission Type" );
+			debug( LOG_FATAL, "Unknown Mission Type" );
 			abort();
 		}
 	}
@@ -1885,10 +1873,12 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 
 			//reset droid orders
 			orderDroid(psDroid, DORDER_STOP);
-			gridAddObject((BASE_OBJECT *)psDroid);
 			psDroid->selected = false;
-			// This is mainly for VTOLs
-			setDroidBase(psDroid, NULL);
+			if (!bMultiPlayer)
+			{
+				// So VTOLs don't try to rearm on another map
+				setDroidBase(psDroid, NULL);
+			}
 			psDroid->cluster = 0;
 			if (goingHome)
 			{
@@ -1897,15 +1887,8 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			}
 
 			// Inform all other players
-			if (bMultiPlayer)
+			if (bMultiMessages)
 			{
-				/* This isn't used for cyborg transports, only
-				 * for "normal" ones, though we shouldn't get
-				 * those in a multiplayer game.
-				 *
-				 * NOTE: Why(!) is this here?
-				 */
-				ASSERT(!"We should never get here", "Apparently we have a \"large\" transporter in a multiplayer game, please make a bugreport from this");
 				sendDroidDisEmbark(psDroid, psTransporter);
 			}
 		}
@@ -1939,7 +1922,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 
 			// Set the launch time so the transporter doesn't just disappear for CAMSTART/CAMCHANGE
 			transporterSetLaunchTime(gameTime);
-        	}
+        }
 	}
 }
 
@@ -2499,21 +2482,21 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	sButInit.FontID		= font_regular;
 	sButInit.pTip		= NULL;
 	sButInit.pDisplay	= displayTextOption;
-    //if won or in debug mode
+	// If won or in debug mode
 	if(result || getDebugMappingStatus() || bMultiPlayer)
 	{
 		//continue
 		sButInit.x			= MISSION_2_X;
-        // Won the game, so display "Quit to main menu"
+        	// Won the game, so display "Quit to main menu"
 		if(testPlayerHasWon() && !bMultiPlayer)
-        {
+        	{
 			sButInit.id			= IDMISSIONRES_QUIT;
 			sButInit.y			= MISSION_2_Y-8;
 			sButInit.pText		= _("Quit To Main Menu");
 			widgAddButton(psWScreen, &sButInit);
 		}
-        else
-        {
+	        else
+        	{
 			// Finished the mission, so display "Continue Game"
 			sButInit.y			= MISSION_2_Y;
 			sButInit.id			= IDMISSIONRES_CONTINUE;
@@ -2522,8 +2505,8 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 		}
 
 		/* Only add save option if in the game for real, ie, not fastplay.
-        And the player hasn't just completed the whole game
-        Don't add save option if just lost and in debug mode*/
+	         * And the player hasn't just completed the whole game
+        	 * Don't add save option if just lost and in debug mode. */
 		if (!bMultiPlayer && !testPlayerHasWon() && !(testPlayerHasLost() && getDebugMappingStatus()))
 		{
 			//save
@@ -2532,6 +2515,9 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 			sButInit.y			= MISSION_1_Y;
 			sButInit.pText		= _("Save Game");//"Save Game";
 			widgAddButton(psWScreen, &sButInit);
+
+			// automatically save the game to be able to restart a mission
+			saveGame((char *)"savegame/Autosave.gam", GTYPE_SAVE_START);
 		}
 	}
 	else

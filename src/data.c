@@ -47,7 +47,6 @@
 
 #include "lib/framework/frameresource.h"
 #include "stats.h"
-#include "stats-db.h"
 #include "structure.h"
 #include "feature.h"
 #include "research.h"
@@ -74,17 +73,131 @@
 
 #include "multiplay.h"
 #include "lib/netplay/netplay.h"
-
+#include <SDL.h>
 /**********************************************************
  *
  * Local Variables
  *
  *********************************************************/
+void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index);
+UDWORD	hashBuffer(uint8_t *pData, uint32_t size);
 
 // whether a save game is currently being loaded
 static BOOL saveFlag = false;
 
 extern int scr_lineno;
+
+uint32_t	DataHash[DATA_MAXDATA]= {0};
+
+/**
+*	hashBuffer()
+*	\param pData pointer to our buffer
+*	\param size the size of the buffer
+*	\return hash calculated from the buffer.
+*
+*	Note, this is obviously not a very complex hash routine.  This most likely has many collisions possible.
+*	The conversion from CRLF | CR to LF is more complex. :P
+*	This is almost the same routine that Pumpkin had, minus the ugly bug :)
+*/
+UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
+{
+	uint32_t hashval = 0,*val;
+	uint32_t pt = 0, newsize, i;
+	int fillbytes = 0, CRtoStrip = 0;
+	uint8_t *NewData = NULL;
+
+	// find out how many CRs are in the buffer
+	for (i=0; i < size; i++)
+	{
+		if (pData[i] == '\r')
+		{
+			CRtoStrip++;
+		}
+	}
+
+	fillbytes = (size - CRtoStrip) % 4;
+	if (fillbytes == 0)
+	{
+		newsize = size - CRtoStrip;	//don't need to do anything
+	}
+	else
+	{
+		newsize = (size - CRtoStrip) + (4- fillbytes);
+		fillbytes = newsize % 4;
+		debug(LOG_NET, "The size of the buffer (%u bytes - stripped %d) is not on a 4 byte boundry, compensating to a new buffer size of %u bytes.", size, CRtoStrip, newsize);
+	}
+
+	NewData = malloc(newsize * sizeof(uint8_t));
+	if (!NewData)
+	{
+		//fatal error...
+		debug(LOG_FATAL, "Out of memory!");
+		abort();
+	}
+	memset(NewData, 0xff, newsize);		// fill the new buffer with bit pattern 0xff
+
+	// convert CRLF (windows) | CR (mac OS9?) to LF
+	for(i = 0; i < size- CRtoStrip; i++, pData++)
+	{
+		if (*(pData) == '\r' && *(pData+1) == '\n')
+		{
+			NewData[i] = *(++pData);						// for windows change CRLF to LF
+		}
+		else if (*(pData) == '\r' && *(pData+1) != '\n')
+		{
+			NewData[i] = '\n';								// for mac change CR to LF
+		}
+		else
+		{
+			NewData[i] = *(pData);							// straight copy
+		}
+	}
+
+	debug(LOG_NEVER, "NewData is {%.10s}\n size is %u bytes \n", NewData, newsize );	// this is a bit spammy...
+
+	while (pt < newsize )
+	{
+		val = (uint32_t *)(NewData+pt);
+
+		hashval ^= (*val);
+
+		// spams a ton--but useful for debugging.
+		//	debug(LOG_NET, "hash %08x pt %08x val is %08x", hashval, pt, *val);
+		pt += 4;
+	}
+
+	if (fillbytes)
+	{
+		free(NewData);
+	}
+
+	return hashval;
+}
+
+// create the hash for that data block.
+// Data should be converted to Network byte order
+void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
+{
+	if (!bMultiPlayer)
+	{
+		return;
+	}
+
+	DataHash[index] ^= SDL_SwapBE32(hashBuffer(pBuffer, size));
+
+	debug(LOG_NET, "DataHash[%2u] = %08x", index, DataHash[index]); 
+	return;
+}
+
+void resetDataHash(void)
+{
+	UDWORD i;
+	for (i = 0; i < DATA_MAXDATA; i++)
+	{
+		DataHash[i] = 0;
+	}
+	debug(LOG_NET, "== Hash is reset ==");
+}
 
 /**********************************************************/
 
@@ -101,20 +214,9 @@ void dataClearSaveFlag(void)
 /* Load the body stats */
 static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SBODY);
+
 	if (!loadBodyStats(pBuffer, size)
-	 || !allocComponentList(COMP_BODY, numBodyStats))
-	{
-		return false;
-	}
-
-	// set a dummy value so the release function gets called
-	*ppData = (void *)1;
-	return true;
-}
-
-static BOOL dataDBBODYLoad(struct sqlite3* db, const char* tableName, void **ppData)
-{
-	if (!loadBodyStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_BODY, numBodyStats))
 	{
 		return false;
@@ -135,20 +237,9 @@ static void dataReleaseStats(WZ_DECL_UNUSED void *pData)
 /* Load the weapon stats */
 static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SWEAPON);
+
 	if (!loadWeaponStats(pBuffer, size)
-	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
-	{
-		return false;
-	}
-
-	// not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-static BOOL dataDBWEAPONLoad(struct sqlite3* db, const char* tableName, void **ppData)
-{
-	if (!loadWeaponStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
 		return false;
@@ -162,20 +253,9 @@ static BOOL dataDBWEAPONLoad(struct sqlite3* db, const char* tableName, void **p
 /* Load the constructor stats */
 static BOOL bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SCONSTR);
+
 	if (!loadConstructStats(pBuffer, size)
-	 || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-static BOOL dataCONSTRLoad(struct sqlite3* db, const char* tableName, void **ppData)
-{
-	if (!loadConstructStatsFromDB(db)
 	 || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
 	{
 		return false;
@@ -189,20 +269,9 @@ static BOOL dataCONSTRLoad(struct sqlite3* db, const char* tableName, void **ppD
 /* Load the ECM stats */
 static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SECM);
+
 	if (!loadECMStats(pBuffer, size)
-	 || !allocComponentList(COMP_ECM, numECMStats))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-static BOOL dataDBECMLoad(struct sqlite3* db, const char* tableName, void **ppData)
-{
-	if (!loadECMStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_ECM, numECMStats))
 	{
 		return false;
@@ -216,6 +285,8 @@ static BOOL dataDBECMLoad(struct sqlite3* db, const char* tableName, void **ppDa
 /* Load the Propulsion stats */
 static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SPROP);
+
 	if (!loadPropulsionStats(pBuffer, size)
 	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
 	{
@@ -227,36 +298,12 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBPROPLoad(struct sqlite3* db, const char* tableName, void **ppData)
-{
-	if (!loadPropulsionStatsFromDB(db)
-	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
-	{
-		return false;
-	}
-
-	// not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
 /* Load the Sensor stats */
 static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SSENSOR);
+
 	if (!loadSensorStats(pBuffer, size)
-	 || !allocComponentList(COMP_SENSOR, numSensorStats))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-static BOOL dataDBSENSORLoad(struct sqlite3* db, const char* tableName, void **ppData)
-{
-	if (!loadSensorStatsFromDB(db)
 	 || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
 		return false;
@@ -270,6 +317,8 @@ static BOOL dataDBSENSORLoad(struct sqlite3* db, const char* tableName, void **p
 /* Load the Repair stats */
 static BOOL bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SREPAIR);
+
 	if (!loadRepairStats(pBuffer, size)
 	 || !allocComponentList(COMP_REPAIRUNIT, numRepairStats))
 	{
@@ -284,20 +333,9 @@ static BOOL bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Brain stats */
 static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SBRAIN);
+
 	if (!loadBrainStats(pBuffer, size)
-	 || !allocComponentList(COMP_BRAIN, numBrainStats))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-static BOOL dataDBBRAINLoad(struct sqlite3* db, const char* tableName, void** ppData)
-{
-	if (!loadBrainStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_BRAIN, numBrainStats))
 	{
 		return false;
@@ -311,6 +349,8 @@ static BOOL dataDBBRAINLoad(struct sqlite3* db, const char* tableName, void** pp
 /* Load the PropulsionType stats */
 static BOOL bufferSPROPTYPESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SPROPTY);
+
 	if (!loadPropulsionTypes(pBuffer, size))
 	{
 		return false;
@@ -351,6 +391,8 @@ static BOOL bufferSSPECABILLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the STERRTABLE stats */
 static BOOL bufferSTERRTABLELoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_STERRT);
+
 	if (!loadTerrainTable(pBuffer, size))
 	{
 		return false;
@@ -390,6 +432,8 @@ static BOOL bufferSWEAPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Weapon Effect modifier stats */
 static BOOL bufferSWEAPMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SWEAPMOD);
+
 	if (!loadWeaponModifiers(pBuffer, size))
 	{
 		return false;
@@ -404,6 +448,8 @@ static BOOL bufferSWEAPMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Template stats */
 static BOOL bufferSTEMPLLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_STEMP);
+
 	if (!loadDroidTemplates(pBuffer, size))
 	{
 		return false;
@@ -424,6 +470,8 @@ static void dataSTEMPLRelease(WZ_DECL_UNUSED void *pData)
 /* Load the Template weapons stats */
 static BOOL bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_STEMPWEAP);
+
 	if (!loadDroidWeapons(pBuffer, size))
 	{
 		return false;
@@ -437,6 +485,8 @@ static BOOL bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Structure stats */
 static BOOL bufferSSTRUCTLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SSTRUCT);
+
 	if (!loadStructureStats(pBuffer, size)
 	 || !allocStructLists())
 	{
@@ -458,6 +508,8 @@ static void dataSSTRUCTRelease(WZ_DECL_UNUSED void *pData)
 /* Load the Structure Weapons stats */
 static BOOL bufferSSTRWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SSTRWEAP);
+
 	if (!loadStructureWeapons(pBuffer, size))
 	{
 		return false;
@@ -471,6 +523,8 @@ static BOOL bufferSSTRWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Structure Functions stats */
 static BOOL bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_STRFUNC);
+
 	if (!loadStructureFunctions(pBuffer, size))
 	{
 		return false;
@@ -484,6 +538,8 @@ static BOOL bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Structure strength modifier stats */
 static BOOL bufferSSTRMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SSTRMOD);
+
 	if (!loadStructureStrengthModifiers(pBuffer, size))
 	{
 		return false;
@@ -497,6 +553,8 @@ static BOOL bufferSSTRMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Feature stats */
 static BOOL bufferSFEATLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SFEAT);
+
 	if (!loadFeatureStats(pBuffer, size))
 	{
 		return false;
@@ -516,6 +574,8 @@ static void dataSFEATRelease(WZ_DECL_UNUSED void *pData)
 /* Load the Functions stats */
 static BOOL bufferSFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_SFUNC);
+
 	if (!loadFunctionStats(pBuffer, size))
 	{
 		return false;
@@ -545,6 +605,8 @@ static void dataRESCHRelease(WZ_DECL_UNUSED void *pData)
 /* Load the Research stats */
 static BOOL bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_RESCH);
+
 	//check to see if already loaded
 	if (numResearch > 0)
 	{
@@ -569,6 +631,8 @@ static BOOL bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research pre-requisites */
 static BOOL bufferRPREREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_RPREREQ);
+
 	if (!loadResearchPR(pBuffer, size))
 	{
 		return false;
@@ -582,6 +646,8 @@ static BOOL bufferRPREREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research components made redundant */
 static BOOL bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_RCOMPRED);
+
 	if (!loadResearchArtefacts(pBuffer, size, RED_LIST))
 	{
 		return false;
@@ -595,6 +661,8 @@ static BOOL bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research component results */
 static BOOL bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_RCOMPRES);
+
 	if (!loadResearchArtefacts(pBuffer, size, RES_LIST))
 	{
 		return false;
@@ -608,6 +676,8 @@ static BOOL bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research structures required */
 static BOOL bufferRSTRREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_RSTRREQ);
+
 	if (!loadResearchStructures(pBuffer, size, REQ_LIST))
 	{
 		return false;
@@ -621,6 +691,8 @@ static BOOL bufferRSTRREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research structures made redundant */
 static BOOL bufferRSTRREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_RSTRRED);
+
 	if (!loadResearchStructures(pBuffer, size, RED_LIST))
 	{
 		return false;
@@ -634,6 +706,8 @@ static BOOL bufferRSTRREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research structure results */
 static BOOL bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_RSTRRES);
+
 	if (!loadResearchStructures(pBuffer, size, RES_LIST))
 	{
 		return false;
@@ -647,6 +721,8 @@ static BOOL bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research functions */
 static BOOL bufferRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
+	calcDataHash((uint8_t *)pBuffer, size, DATA_RFUNC);
+
 	if (!loadResearchFunctions(pBuffer, size))
 	{
 		return false;
@@ -942,6 +1018,8 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	static const bool printHack = false;
 	SCRIPT_CODE** psProg = (SCRIPT_CODE**)ppData;
 	PHYSFS_file* fileHandle;
+	uint8_t *pBuffer;
+	PHYSFS_sint64 fileSize = 0;
 
 	debug(LOG_WZ, "COMPILING SCRIPT ...%s", GetLastResourceFilename());
 	scr_lineno = 1;
@@ -952,6 +1030,24 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	{
 		return false;
 	}
+
+	// due to the changes in r2531 we must do this routine a bit different.
+	fileSize = PHYSFS_fileLength(fileHandle);
+
+	pBuffer = malloc(fileSize * sizeof(char));
+	if (pBuffer == NULL)
+	{
+		debug(LOG_FATAL, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);
+		abort();
+	}
+
+	PHYSFS_read(fileHandle, pBuffer, 1, fileSize);
+
+	calcDataHash(pBuffer, fileSize, DATA_SCRIPT);
+
+	free(pBuffer);
+
+	PHYSFS_seek(fileHandle, 0);		//reset position
 
 	*psProg = scriptCompile(fileHandle, SCRIPTTYPE);
 
@@ -987,10 +1083,6 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 	char *newfilename;
 	char *slopos;
 
-	debug(LOG_WZ, "COMPILING SCRIPT ...%s", GetLastResourceFilename());
-	
-	//////////////////////////
-	
 	// Try to open it as a lua file
 	newfilename = strdup(fileName);
 	slopos = strstr(newfilename, ".vlo");
@@ -1075,27 +1167,11 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{ "RESEARCHMSG", dataResearchMsgLoad, dataSMSGRelease },
 };
 
-typedef struct
-{
-	const char *aType;                      ///< points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
-	RES_TABLELOAD tableLoad;                ///< routine to process the data for this type
-	RES_FREE release;                       ///< routine to release the data (NULL indicates none)
-} RES_TYPE_MIN_TABLE;
-
-static const RES_TYPE_MIN_TABLE TableResourceTypes[] =
-{
-	{"DBWEAPON", dataDBWEAPONLoad, NULL},
-	{"DBBODY", dataDBBODYLoad, dataReleaseStats},
-	{"DBBRAIN", dataDBBRAINLoad, NULL},
-	{"DBPROP", dataDBPROPLoad, NULL},
-	{"DBSENSOR", dataDBSENSORLoad, NULL},
-	{"DBECM", dataDBECMLoad, NULL},
-	{"DBCONSTR", dataCONSTRLoad, NULL},
-};
-
 /* Pass all the data loading functions to the framework library */
 BOOL dataInitLoadFuncs(void)
 {
+	// init the data integrity hash;
+	resetDataHash();
 	// Using iterator style: begin iterator (ResourceTypes),
 	// end iterator (EndType), and current iterator (CurrentType)
 
@@ -1125,21 +1201,6 @@ BOOL dataInitLoadFuncs(void)
 			if(!resAddFileLoad(CurrentType->aType, CurrentType->fileLoad, CurrentType->release))
 			{
 				return false; // error whilst adding a file load
-			}
-		}
-	}
-
-	// iterate through table load functions
-	{
-		const RES_TYPE_MIN_TABLE *CurrentType;
-		// Points just past the last item in the list
-		const RES_TYPE_MIN_TABLE * const EndType = &TableResourceTypes[ARRAY_SIZE(TableResourceTypes)];
-
-		for (CurrentType = TableResourceTypes; CurrentType != EndType; ++CurrentType)
-		{
-			if (!resAddTableLoad(CurrentType->aType, CurrentType->tableLoad, CurrentType->release))
-			{
-				return false; // error whilst adding a table load
 			}
 		}
 	}

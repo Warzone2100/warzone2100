@@ -140,11 +140,11 @@ BOOL screenInitialise(
 				SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 8 );
 				break;
 			case 8:
-				debug( LOG_ERROR, "Error: You don't want to play Warzone with a bit depth of %i, do you?", bpp );
+				debug( LOG_FATAL, "Error: You don't want to play Warzone with a bit depth of %i, do you?", bpp );
 				exit( 1 );
 				break;
 			default:
-				debug( LOG_ERROR, "Error: Unsupported bit depth: %i", bpp );
+				debug( LOG_FATAL, "Error: Unsupported bit depth: %i", bpp );
 				exit( 1 );
 				break;
 		}
@@ -157,7 +157,9 @@ BOOL screenInitialise(
 	}
 	if ( SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1)
 	{
-		debug( LOG_ERROR, "OpenGL initialization did not give double buffering!" );
+		debug( LOG_FATAL, "OpenGL initialization did not give double buffering!" );
+		debug( LOG_FATAL, "Double buffering is required for this game!");
+		exit(1);
 	}
 	
 	{
@@ -169,6 +171,13 @@ BOOL screenInitialise(
 		ssprintf(buf, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
 		addDumpInfo(buf);
 		ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
+		addDumpInfo(buf);
+		if (GLEE_VERSION_2_0)
+		{
+			ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+			addDumpInfo(buf);
+		}
+		ssprintf(buf, "Video Mode %d x %d (%d bpp) (%s)", width, height, bpp, fullScreen ? "fullscreen" : "window");
 		addDumpInfo(buf);
 		/* Dump information about OpenGL implementation to the console */
 		debug(LOG_3D, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
@@ -189,13 +198,19 @@ BOOL screenInitialise(
 		debug(LOG_3D, "  * Stencil wrap %s supported.", GLEE_EXT_stencil_wrap ? "is" : "is NOT");
 		debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
 		debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
-		debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object  ? "is" : "is NOT");
+		debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object ? "is" : "is NOT");
+		debug(LOG_3D, "  * Shader Objects %s supported.", GL_ARB_shader_objects ? "is" : "is NOT");
+		debug(LOG_3D, "  * Vertex Buffer Object (VBO) %s supported.", GL_ARB_vertex_buffer_object ? "is" : "is NOT");
+		if (GLEE_VERSION_2_0)
+		{
+			debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		}
 	}
 	
 #ifndef WZ_OS_MAC
 	// Make OpenGL's VBO functions available under the core names for
 	// implementations that have them only as extensions, namely Mesa.
-	if (!strncmp((const char *)glGetString(GL_RENDERER), "Mesa", 4))
+	if (!GLEE_VERSION_1_5 && !strncmp((const char *)glGetString(GL_RENDERER), "Mesa", 4))
 	{
 		info("Using VBO extension functions under the core names.");
 		// GLee is usually initialized automatically when needed, but
@@ -230,7 +245,9 @@ BOOL screenInitialise(
 	glEnable(GL_CULL_FACE);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+	glErrors();
 	return true;
 }
 
@@ -238,6 +255,8 @@ BOOL screenInitialise(
 /* Release the DD objects */
 void screenShutDown(void)
 {
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	if (screen != NULL)
 	{
 		SDL_FreeSurface(screen);
@@ -444,25 +463,12 @@ void screenDumpToDisk(const char* path)
 		screendump_required = true;
 }
 
-/**
- * Checks if an OpenGL error has occurred.
- * \param label Label to print when an OpenGL occurred.
- */
-void checkGLErrors(const char *label)
-{
-	const GLenum errCode = glGetError();
-
-	if (errCode == GL_NO_ERROR)
-		return;
-
-	debug(LOG_ERROR, "OpenGL ERROR in %s: %s, (0x%0x)", label, gluErrorString(errCode), errCode);
-	bFboProblem = true;		// we have a issue with the FBO, fallback to normal routine
-}
 
 BOOL Init_FBO(unsigned int width, unsigned int height)
 {
 	GLenum status;
 
+	glErrors();
 	// Bail out if FBOs aren't supported
 	if (!GLEE_EXT_framebuffer_object)
 		return false;
@@ -528,7 +534,7 @@ BOOL Init_FBO(unsigned int width, unsigned int height)
 				debug(LOG_ERROR, "Error: FBO Non-framebuffer passed to glCheckFramebufferStatusEXT()!");
 				break;
 			default:
-				debug(LOG_ERROR, "*UNKNOWN FBO ERROR* reported from glCheckFramebufferStatusEXT() for %x!", status);
+				debug(LOG_ERROR, "*UNKNOWN FBO ERROR* reported from glCheckFramebufferStatusEXT() for %x!", (unsigned int)status);
 				break;
 		}
 		FBOinit = false;	//we have a error with the FBO setup
@@ -540,21 +546,20 @@ BOOL Init_FBO(unsigned int width, unsigned int height)
 	}
 
 	glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0); // unbind it for now.
-	checkGLErrors("Init_FBO() Completed");
-	return true;
 
+	bFboProblem |= glErrors(); // don't use FBOs if something here caused an error
+	return true;
 }
 
 void Delete_FBO(void)
 {
 	if(FBOinit)
 	{
+		glErrors();
 		glDeleteFramebuffersEXT(1, &fbo);
-		checkGLErrors("Deleting FBO");
 		glDeleteRenderbuffersEXT(1, &FBOdepthbuffer);
-		checkGLErrors("deleting FBOdepthbuffer");
 		glDeleteTextures(1,&FBOtexture);
-		checkGLErrors("deleting FBOtexture");
+		bFboProblem |= glErrors();
 		fbo = FBOdepthbuffer = FBOtexture = FBOinit = 0;	//reset everything.
 	}
 }

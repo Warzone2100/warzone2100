@@ -39,4 +39,10 @@
 #include "projectiledef.h"
 #include "featuredef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+}
+#endif //__cplusplus
+
 #endif // __INCLUDED_OBJECTDEF_H__

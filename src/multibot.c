@@ -46,7 +46,8 @@
 #include "multirecv.h"
 
 #define ANYPLAYER	99
-#define UNKNOWN		99
+#define DORDER_UNKNOWN		99
+#define DORDER_UNKNOWN_ALT 100
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
@@ -64,7 +65,7 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWOR
 // happy vtol = vtol ready to go back to attack.
 BOOL sendHappyVtol(const DROID* psDroid)
 {
-	if (!bMultiPlayer)
+	if (!bMultiMessages)
 		return true;
 
 	if (!myResponsibility(psDroid->player))
@@ -123,7 +124,7 @@ BOOL recvHappyVtol()
 // Send
 BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state)
 {
-	if (!bMultiPlayer)
+	if (!bMultiMessages)
 		return true;
 
 	NETbeginEncode(NET_SECONDARY, NET_ALL_PLAYERS);
@@ -185,14 +186,8 @@ BOOL recvDroidSecondary()
 	if (abs(pos.x - psDroid->pos.x) > (TILE_UNITS * 2)
 	 || abs(pos.y - psDroid->pos.y) > (TILE_UNITS * 2))
 	{
-		int oldx = psDroid->pos.x;
-		int oldy = psDroid->pos.y;
-
 		// Jump it, even if it is on screen (may want to change this)
 		psDroid->pos = pos;
-
-		// Tell the grid system that the object has moved
-		gridMoveDroid(psDroid, oldx, oldy);
 	}
 
 	return true;
@@ -200,7 +195,7 @@ BOOL recvDroidSecondary()
 
 BOOL sendDroidSecondaryAll(const DROID* psDroid)
 {
-	if (!bMultiPlayer)
+	if (!bMultiMessages)
 		return true;
 
 	NETbeginEncode(NET_SECONDARY_ALL, NET_ALL_PLAYERS);
@@ -251,7 +246,7 @@ BOOL recvDroidSecondaryAll()
  */
 BOOL sendDroidEmbark(const DROID* psDroid, const DROID* psTransporter)
 {
-	if (!bMultiPlayer)
+	if (!bMultiMessages)
 		return true;
 
 	NETbeginEncode(NET_DROIDEMBARK, NET_ALL_PLAYERS);
@@ -338,7 +333,7 @@ BOOL recvDroidEmbark()
  */
 BOOL sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
 {
-	if (!bMultiPlayer)
+	if (!bMultiMessages)
 		return true;
 
 	NETbeginEncode(NET_DROIDDISEMBARK, NET_ALL_PLAYERS);
@@ -426,8 +421,6 @@ BOOL recvDroidDisEmbark()
 
 		// Initialise the movement data
 		initDroidMovement(psFoundDroid);
-		// must add it to the grid for targeting to work
-		gridAddObject((BASE_OBJECT *)psFoundDroid);
 	}
 	return true;
 }
@@ -440,7 +433,7 @@ BOOL recvDroidDisEmbark()
 // posibly Send an updated droid movement order.
 BOOL SendDroidMove(const DROID* psDroid, uint32_t x, uint32_t y, BOOL formation)
 {
-	if (!bMultiPlayer)
+	if (!bMultiMessages)
 		return true;
 
 	ASSERT(x > 0 && y > 0, "SendDroidMove: Invalid move order");
@@ -524,7 +517,7 @@ BOOL recvDroidMove()
 // Send a new Droid to the other players
 BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id)
 {
-	if (!bMultiPlayer)
+	if (!bMultiMessages)
 		return true;
 
 	ASSERT(x != 0 && y != 0, "SendDroid: Invalid droid coordinates");
@@ -543,7 +536,7 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 		return false;
 	}
 
-	debug(LOG_SYNC, "Droid created with id of %u", id);
+	debug(LOG_SYNC, "Droid sent with id of %u", id);
 	NETbeginEncode(NET_DROID, NET_ALL_PLAYERS);
 	{
 		Vector3uw pos = { x, y, 0 };
@@ -625,7 +618,9 @@ BOOL recvDroid()
 	{
 		debug(LOG_ERROR, "Packet from %d cannot create droid for p%d (%s)!", NETgetSource(),
 			player, isHumanPlayer(player) ? "Human" : "AI");
-		DBCONPRINTF(ConsoleString, (ConsoleString, "MULTIPLAYER: Couldn't build a remote droid, relying on checking to resync"));
+#ifdef DEBUG
+		CONPRINTF(ConsoleString, (ConsoleString, "MULTIPLAYER: Couldn't build a remote droid, relying on checking to resync"));
+#endif
 		return false;
 	}
 
@@ -648,14 +643,14 @@ typedef enum {
  * Droid Group/selection orders.
  * Minimises comms by sending orders for whole groups, rather than each droid
  */
-BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj)
+BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, BOOL altOrder)
 {
-	if (!bMultiPlayer)
+	if (!bMultiMessages)
 		return true;
 
 	NETbeginEncode(NET_GROUPORDER, NET_ALL_PLAYERS);
 	{
-		DROID_ORDER order = UNKNOWN;
+		DROID_ORDER order = (altOrder?DORDER_UNKNOWN_ALT:DORDER_UNKNOWN);
 		BOOL subType = (psObj) ? true : false, cmdOrder = false;
 		DROID* psDroid;
 		uint8_t droidCount;
@@ -724,7 +719,7 @@ BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t
 		return false;
 	}
 
-	if (!bMultiPlayer)
+	if (!bMultiMessages)
 		return true;
 
 	NETbeginEncode(NET_GROUPORDER, NET_ALL_PLAYERS);
@@ -850,7 +845,7 @@ BOOL recvGroupOrder()
 	NETend();
 
 	/* Check if the order is valid */
-	if (order != UNKNOWN && ((subType && !validOrderForObj(order)) || (!subType && !validOrderForLoc(order))))
+	if (order != DORDER_UNKNOWN && order != DORDER_UNKNOWN_ALT && ((subType && !validOrderForObj(order)) || (!subType && !validOrderForLoc(order))))
 	{
 		debug(LOG_ERROR, "Invalid group order received from %d, [%s : p%d]", NETgetSource(),
 			isHumanPlayer(player) ? "Human" : "AI", player);
@@ -904,14 +899,8 @@ BOOL recvGroupOrder()
 		if (abs(pos.x - psDroid->pos.x) > (TILE_UNITS * 2)
 		 || abs(pos.y - psDroid->pos.y) > (TILE_UNITS * 2))
 		{
-			int oldx = psDroid->pos.x;
-			int oldy = psDroid->pos.y;
-
 			// Jump it, even if it is on screen (may want to change this)
 			psDroid->pos = pos;
-
-			// Tell the grid system that the object has moved
-			gridMoveDroid(psDroid, oldx, oldy);
 		}
 	}
 
@@ -922,7 +911,7 @@ BOOL recvGroupOrder()
 // Droid update information
 BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj)
 {
-	if (!bMultiPlayer)
+	if (!bMultiMessages)
 		return true;
 
 	if (!myResponsibility(psDroid->player))
@@ -1038,9 +1027,13 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 		}
 
 		// If no specific order was passed work one out based on the location
-		if (order == UNKNOWN)
+		if (order == DORDER_UNKNOWN)
 		{
-			order = chooseOrderLoc(psDroid, x, y);
+			order = chooseOrderLoc(psDroid, x, y, false);
+		}
+		else if (order == DORDER_UNKNOWN_ALT)
+		{
+			order = chooseOrderLoc(psDroid, x, y, true);
 		}
 
 		turnOffMultiMsg(true);
@@ -1084,11 +1077,14 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 		}
 
 		// If we didn't sepcify an order, then pick one
-		if (order == UNKNOWN)
+		if (order == DORDER_UNKNOWN)
 		{
-			order = chooseOrderObj(psDroid, psObj);
+			order = chooseOrderObj(psDroid, psObj, false);
 		}
-
+		else if (order == DORDER_UNKNOWN_ALT)
+		{
+			order = chooseOrderObj(psDroid, psObj, true);
+		}
 		turnOffMultiMsg(true);
 		orderDroidObj(psDroid, order, psObj);
 		turnOffMultiMsg(false);
@@ -1100,11 +1096,11 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 // Inform other players that a droid has been destroyed
 BOOL SendDestroyDroid(const DROID* psDroid)
 {
-	if (!bMultiPlayer)
+	if (!bMultiMessages)
 	{
 		return true;
 	}
-
+	
 	NETbeginEncode(NET_DROIDDEST, NET_ALL_PLAYERS);
 	{
 		uint32_t id = psDroid->id;

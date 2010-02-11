@@ -29,6 +29,11 @@
 
 #include "message.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // store the objects that are being used for the object bar
 #define MAX_OBJECTS 15 //10 we need at least 15 for the 3 different types of factory
 
@@ -110,7 +115,7 @@
 #define IDSTAT_ALLYEND			4900
 
 // Reticule position.
-#define RET_X				23
+#define RET_X				24
 #define RET_Y				(324+E_H)
 #define RET_FORMWIDTH		132
 #define RET_FORMHEIGHT		132
@@ -265,6 +270,7 @@ typedef enum {
 	INT_MISSIONRES,	// Results of a mission display.
 	INT_MULTIMENU,	// multiplayer only, player stats etc...
 	INT_CDCHANGE,		// CD Change message box
+	INT_POPUPMSG,	// Adds a popup message to user
 
     INT_MAXMODE,   //leave as last so we can start the objMode at this value
 } INTMODE;
@@ -455,5 +461,9 @@ void intReopenBuild(BOOL reopen);
 BOOL intGetReopenBuild(void);
 
 extern void intDemolishCancel(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_HCI_H__

@@ -9,6 +9,8 @@ data/mods/global/newst_tiles/
 	- CC BY SA 3.0	- Copyright (c) 1999-2004 N.E.W.S.T., permission by "Frank Lamboy" <rman>
 lib/framework/tagfile.*
 	- Public Domain
+lib/netplay/miniupnpc/*
+	- BSD, copyright Thomas Bernard (http://miniupnp.free.fr)
 data/base/texpages/page-6-features-rockies.png
 	- CC BY SA 3.0	- Copyright (c) 2009 <Mysteryem>
 data/base/texpages/page-17-droid-weapons.png

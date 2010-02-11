@@ -139,7 +139,7 @@ static BOOL storeName(FUNCTION* pFunction, const char* pNameToStore)
 	pFunction->pName = strdup(pNameToStore);
 	if (pFunction->pName == NULL)
 	{
-		debug( LOG_ERROR, "Function Name - Out of memory" );
+		debug( LOG_FATAL, "Function Name - Out of memory" );
 		abort();
 		return false;
 	}
@@ -157,7 +157,7 @@ static BOOL loadProduction(const char *pData)
 	psFunction = (PRODUCTION_FUNCTION *)malloc(sizeof(PRODUCTION_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "Production Function - Out of memory" );
+		debug( LOG_FATAL, "Production Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -216,7 +216,7 @@ static BOOL loadProductionUpgradeFunction(const char *pData)
 		(PRODUCTION_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "Production Upgrade Function - Out of memory" );
+		debug( LOG_FATAL, "Production Upgrade Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -281,7 +281,7 @@ static BOOL loadResearchFunction(const char *pData)
 	psFunction = (RESEARCH_FUNCTION *)malloc(sizeof(RESEARCH_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "Research Function - Out of memory" );
+		debug( LOG_FATAL, "Research Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -315,7 +315,7 @@ static BOOL loadReArmFunction(const char *pData)
 	psFunction = (REARM_FUNCTION *)malloc(sizeof(REARM_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "ReArm Function - Out of memory" );
+		debug( LOG_FATAL, "ReArm Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -352,7 +352,7 @@ static BOOL loadUpgradeFunction(const char *pData, UBYTE type)
 	psFunction = (UPGRADE_FUNCTION *)malloc(sizeof(UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "Upgrade Function - Out of memory" );
+		debug( LOG_FATAL, "Upgrade Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -436,7 +436,7 @@ static BOOL loadDroidBodyUpgradeFunction(const char *pData)
 		sizeof(DROIDBODY_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "UnitBody Upgrade Function - Out of memory" );
+		debug( LOG_FATAL, "UnitBody Upgrade Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -503,7 +503,7 @@ static BOOL loadDroidSensorUpgradeFunction(const char *pData)
 		sizeof(DROIDSENSOR_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "UnitSensor Upgrade Function - Out of memory" );
+		debug( LOG_FATAL, "UnitSensor Upgrade Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -552,7 +552,7 @@ static BOOL loadWeaponUpgradeFunction(const char *pData)
 		(WEAPON_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "Weapon Upgrade Function - Out of memory" );
+		debug( LOG_FATAL, "Weapon Upgrade Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -622,7 +622,7 @@ static BOOL loadStructureUpgradeFunction(const char *pData)
 		(STRUCTURE_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "Structure Upgrade Function - Out of memory" );
+		debug( LOG_FATAL, "Structure Upgrade Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -673,7 +673,7 @@ static BOOL loadWallDefenceUpgradeFunction(const char *pData)
 		(WALLDEFENCE_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "WallDefence Upgrade Function - Out of memory" );
+		debug( LOG_FATAL, "WallDefence Upgrade Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -722,7 +722,7 @@ static BOOL loadPowerGenFunction(const char *pData)
 		(POWER_GEN_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "Power Gen Function - Out of memory" );
+		debug( LOG_FATAL, "Power Gen Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -784,7 +784,7 @@ static BOOL loadResourceFunction(const char *pData)
 		(RESOURCE_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "Resource Function - Out of memory" );
+		debug( LOG_FATAL, "Resource Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -820,7 +820,7 @@ static BOOL loadRepairDroidFunction(const char *pData)
 		(REPAIR_DROID_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "Repair Droid Function - Out of memory" );
+		debug( LOG_FATAL, "Repair Droid Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -860,7 +860,7 @@ static BOOL loadWallFunction(const char *pData)
 	psFunction = (WALL_FUNCTION *)malloc(sizeof(WALL_FUNCTION));
 	if (psFunction == NULL)
 	{
-		debug( LOG_ERROR, "Wall Function - Out of memory" );
+		debug( LOG_FATAL, "Wall Function - Out of memory" );
 		abort();
 		return false;
 	}
@@ -1528,7 +1528,7 @@ BOOL loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
 	asFunctions = (FUNCTION**) malloc(totalFunctions*sizeof(FUNCTION*));
 	if (!asFunctions)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}

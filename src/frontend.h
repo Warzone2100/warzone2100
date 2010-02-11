@@ -23,6 +23,11 @@
 
 #include "lib/widget/widgbase.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // determines which option screen to use. when in GS_TITLE_SCREEN mode.
 typedef enum _title_mode {
 	TITLE,			// 0 intro mode
@@ -77,7 +82,8 @@ extern void processFrontendSnap		(BOOL bHideCursor);
 extern void addTopForm				(void);
 extern void addBottomForm			(void);
 extern void addBackdrop				(void);
-extern void	addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt,BOOL bAlignLeft,BOOL bGrey);
+extern void	addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
+extern void	addText					(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID);
 extern void	addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt);
 extern void addFESlider				(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
 
@@ -163,6 +169,7 @@ enum
 	FRONTEND_SIDETEXT4,					// side-ee-ways text
 	FRONTEND_LOADCAM2,					// loading via --GAME CAM_2A
 	FRONTEND_LOADCAM3,					// loading via --GAME CAM_3A
+	FRONTEND_PASSWORDFORM,
 	// begin menu
 	FRONTEND_SINGLEPLAYER	= 20100,	// title screen
 	FRONTEND_MULTIPLAYER,
@@ -241,5 +248,8 @@ enum
 
 };
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_FRONTEND_H__

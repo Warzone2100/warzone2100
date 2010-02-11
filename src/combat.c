@@ -47,6 +47,7 @@
 #include "ai.h"
 #include "action.h"
 #include "difficulty.h"
+#include "random.h"
 
 /* minimum miss distance */
 #define MIN_MISSDIST	(TILE_UNITS/6)
@@ -91,12 +92,14 @@ BOOL combShutdown(void)
 	return true;
 }
 
+unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE impactSide);
+
 // Watermelon:real projectile
 /* Fire a weapon at something */
 void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	WEAPON_STATS	*psStats;
-	UDWORD			xDiff, yDiff, distSquared;
+	SDWORD			xDiff, yDiff, distSquared;
 	UDWORD			dice, damLevel;
 	SDWORD			resultHitChance=0,baseHitChance=0,fireChance;
 	UDWORD			firePause;
@@ -170,8 +173,10 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	// add a random delay to the fire
+	// With logical updates, a good graphics gard no longer gives a better ROF.
+	// TODO Should still replace this with something saner, such as a ±1% random deviation in reload time.
 	fireChance = gameTime - (psWeap->lastFired + firePause);
-	if (rand() % RANDOM_PAUSE > fireChance)
+	if (gameRand(RANDOM_PAUSE) > fireChance)
 	{
 		return;
 	}
@@ -232,23 +237,21 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	/* Now see if the target is in range  - also check not too near */
-	xDiff = abs(psAttacker->pos.x - psTarget->pos.x);
-	yDiff = abs(psAttacker->pos.y - psTarget->pos.y);
+	xDiff = psAttacker->pos.x - psTarget->pos.x;
+	yDiff = psAttacker->pos.y - psTarget->pos.y;
 	distSquared = xDiff*xDiff + yDiff*yDiff;
 	dist = sqrtf(distSquared);
 	longRange = proj_GetLongRange(psStats);
 
-	if (distSquared <= (psStats->shortRange * psStats->shortRange) &&
-		distSquared >= (psStats->minRange * psStats->minRange))
+	if ((dist <= psStats->shortRange)  && (dist >= psStats->minRange))
 	{
 		// get weapon chance to hit in the short range
 		baseHitChance = weaponShortHit(psStats,psAttacker->player);
 	}
-	else if ((SDWORD)distSquared <= longRange * longRange &&
-			 ( (distSquared >= psStats->minRange * psStats->minRange) ||
-			   ((psAttacker->type == OBJ_DROID) &&
-			   !proj_Direct(psStats) &&
-			   actionInsideMinRange(psDroid, psTarget, psStats))))
+	else if ((dist <= longRange && dist >= psStats->minRange)
+	         || (psAttacker->type == OBJ_DROID
+	             && !proj_Direct(psStats)
+	             && actionInsideMinRange(psDroid, psTarget, psStats)))
 	{
 		// get weapon chance to hit in the long range
 		baseHitChance = weaponLongHit(psStats,psAttacker->player);
@@ -323,10 +326,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		resultHitChance = INVISIBLE_ACCURACY_PENALTY * resultHitChance / 100;
 	}
 
-	// cap resultHitChance to 0-100%, just in case
-	CLIP(resultHitChance, 0, 100);
-
-	HIT_ROLL(dice);
+	dice = gameRand(100);
 
 	// see if we were lucky to hit the target
 	if (dice <= resultHitChance)
@@ -401,7 +401,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 		objTrace(psAttacker->id, "combFire: [%s]->%u: resultHitChance=%d, visibility=%hhu : ",
 			psStats->pName, psTarget->id, resultHitChance, psTarget->visible[psAttacker->player]);
-		
+
 		if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player, predict, psTarget, false, weapon_slot))
 		{
 			/* Out of memory - we can safely ignore this */
@@ -435,15 +435,17 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	/*if a null target is passed in ignore - this will be the case when a 'miss'
 	projectile is sent - we may have to cater for these at some point*/
 	// also ignore cases where you attack your own player
+	// Also ignore cases where there are already 1000 missiles heading towards the attacker.
 	if ((psTarget == NULL) ||
-		((psAttacker != NULL) && (psAttacker->player == psTarget->player)))
+		((psAttacker != NULL) && (psAttacker->player == psTarget->player)) ||
+		aiObjectIsProbablyDoomed(psAttacker))
 	{
 		return;
 	}
 
 	CHECK_OBJECT(psTarget);
 
-	gridStartIterate((SDWORD)psTarget->pos.x, (SDWORD)psTarget->pos.y);
+	gridStartIterate(psTarget->pos.x, psTarget->pos.y, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS);
 	for (psViewer = gridIterate(); psViewer != NULL; psViewer = gridIterate())
 	{
 		STRUCTURE	*psStruct;
@@ -578,4 +580,72 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 	psObj->body -= actualDamage;
 
 	return (float) actualDamage / (float) originalhp;
+}
+
+/* Guesses how damage a shot might do.
+ * \param psObj object that might be hit
+ * \param damage amount of damage to deal
+ * \param weaponClass the class of the weapon that deals the damage
+ * \param weaponSubClass the subclass of the weapon that deals the damage
+ * \param angle angle of impact (from the damage dealing projectile in relation to this object)
+ * \return guess at amount of damage
+ */
+unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE i)
+{
+	unsigned int damage;
+	int impactSide;
+	int	actualDamage, armour = 0, level = 1;
+
+	if (psTarget == NULL)
+		return 0;  // Hard to destroy the ground. The armour on the mud is very strong and blocks all damage.
+
+	damage = calcDamage(weaponDamage(psStats, player), psStats->weaponEffect, psTarget);
+
+	// EMP cannons do no damage, if we are one return now
+	if (psStats->weaponSubClass == WSC_EMP)
+	{
+		return 0;
+	}
+
+
+	// apply game difficulty setting
+	if(!NetPlay.bComms)		// ignore multiplayer games
+	{
+		if (psTarget->player != selectedPlayer)
+		{
+			// Player inflicting damage on enemy.
+			damage = (UDWORD) modifyForDifficultyLevel(damage,true);
+		}
+		else
+		{
+			// Enemy inflicting damage on player.
+			damage = (UDWORD) modifyForDifficultyLevel(damage,false);
+		}
+	}
+
+	for (impactSide = 0; impactSide != NUM_HIT_SIDES; ++impactSide)
+		armour = MAX(armour, psTarget->armour[impactSide][psStats->weaponClass]);
+
+	//debug(LOG_ATTACK, "objGuessFutureDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
+
+	if (psTarget->type == OBJ_DROID)
+	{
+		DROID *psDroid = (DROID *)psTarget;
+
+		// Retrieve highest, applicable, experience level
+		level = getDroidEffectiveLevel(psDroid);
+	}
+
+	// Reduce damage taken by EXP_REDUCE_DAMAGE % for each experience level
+	actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
+
+	// You always do at least a third of the experience modified damage
+	actualDamage = MAX(actualDamage - armour, actualDamage / 3);
+
+	// And at least MIN_WEAPON_DAMAGE points
+	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);
+
+	//objTrace(psObj->id, "objGuessFutureDamage: Would penetrate %d", actualDamage);
+
+	return actualDamage;
 }

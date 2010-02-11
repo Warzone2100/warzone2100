@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_TEXT_H__
 #define __INCLUDED_SRC_TEXT_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // Forward declaration to allow pointers to this type
 struct STR_RES;
 
@@ -35,5 +40,9 @@ extern BOOL stringsInitialise(void);
 
 /* Shut down the string system */
 extern void stringsShutDown(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_TEXT_H__

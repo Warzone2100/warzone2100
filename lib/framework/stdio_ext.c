@@ -85,7 +85,7 @@ int vasprintf(char** strp, const char* format, va_list ap)
 	*strp = malloc(count + 1);
 	if (*strp == NULL)
 	{
-		debug(LOG_ERROR, "Out of memory!");
+		debug(LOG_FATAL, "Out of memory!");
 		abort();
 		return -1;
 	}

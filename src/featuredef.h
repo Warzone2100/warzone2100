@@ -27,6 +27,11 @@
 #include "basedef.h"
 #include "statsdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef enum _feature_type
 {
 	FEAT_BUILD_WRECK,
@@ -85,5 +90,9 @@ typedef struct _feature
 	UDWORD          startTime;              ///< Time the feature was created. Valid for wrecked droids and structures.
 	BOOL            bTargetted;
 } WZ_DECL_MAY_ALIAS FEATURE;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_FEATUREDEF_H__

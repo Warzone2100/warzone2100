@@ -203,9 +203,15 @@ void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 				break;
-			default:
+			case TRANS_DECAL:
 				rendStates.transMode = TRANS_DECAL;
 				glDisable(GL_BLEND);
+				break;
+			case TRANS_FILTER:
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_ONE, GL_ONE);
+				break;
+			default:
 				break;
 		}
 	}
@@ -258,3 +264,15 @@ void pie_ShowMouse(bool visible)
 	}
 }
 
+bool _glerrors(const char *function, const char *file, int line)
+{
+	bool ret = false;
+	GLenum err = glGetError();
+	while (err != GL_NO_ERROR)
+	{
+		ret = true;
+		debug(LOG_ERROR, "OpenGL error in function %s at %s:%u: %s\n", function, file, line, gluErrorString(err));
+		err = glGetError();
+	}
+	return ret;
+}

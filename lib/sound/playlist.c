@@ -73,7 +73,7 @@ bool PlayList_Read(const char* path)
 	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(listName), listName);
 	if (fileHandle == NULL)
 	{
-		debug(LOG_ERROR, "PHYSFS_openRead(\"%s\") failed with error: %s\n", listName, PHYSFS_getLastError());
+		debug(LOG_INFO, "PHYSFS_openRead(\"%s\") failed with error: %s\n", listName, PHYSFS_getLastError());
 		return false;
 	}
 
@@ -107,7 +107,7 @@ bool PlayList_Read(const char* path)
 		song = malloc(sizeof(*songList));
 		if (song == NULL)
 		{
-			debug(LOG_ERROR, "Out of memory!");
+			debug(LOG_FATAL, "Out of memory!");
 			PHYSFS_close(fileHandle);
 			abort();
 			return false;

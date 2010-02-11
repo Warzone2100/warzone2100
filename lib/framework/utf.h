@@ -30,6 +30,11 @@
 
 #include "types.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /** Used to store a UTF-32 character in
  */
 typedef uint32_t utf_32_char;
@@ -76,7 +81,7 @@ size_t UTF16CharacterCount(const uint16_t *utf16);
  */
 char *UTF16toUTF8(const utf_16_char *unicode_string, size_t *nbytes);
 
-/** Decodes a UTF-8 encode string to a UTF-16 encoded string (native endianess)
+/** Decodes a UTF-8 encoded string to a UTF-16 encoded string (native endianess)
  *  \param utf8_string a UTF-8 encoded nul terminated string
  *  \param[out] nbytes the number of bytes allocated, may be NULL
  *  \return a UTF-16 encoded unicode nul terminated string (use free() to deallocate it)
@@ -85,5 +90,26 @@ utf_16_char *UTF8toUTF16(const char *utf8_string, size_t *nbytes);
 
 char *UTF8CharacterAtOffset(const char *utf8_string, size_t index);
 utf_16_char *UTF16CharacterAtOffset(const utf_16_char *utf16_string, size_t index);
+
+/** Encodes a UTF-32 string to a UTF-8 encoded string
+ *  \param unicode_string the UTF-32 string to encode into UTF-8
+ *  \param[out] nbytes the number of bytes allocated, may be NULL
+ *  \return a UTF-8 encoded unicode nul terminated string (use free() to deallocate it)
+ */
+char *UTF32toUTF8(const utf_32_char *unicode_string, size_t *nbytes);
+
+/** Decodes a UTF-8 encoded string to a UTF-32 string
+ *  \param utf8_string a UTF-8 encoded nul terminated string
+ *  \param[out] nbytes the number of bytes allocated, may be NULL
+ *  \return a UTF-32 nul terminated string (use free() to deallocate it)
+ */
+utf_32_char *UTF8toUTF32(const char *utf8_string, size_t *nbytes);
+
+/** Returns number of characters, not including terminating nul. */
+size_t utf32len(const utf_32_char *unicode_string);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDE_LIB_FRAMEWORK_UTF8_H__

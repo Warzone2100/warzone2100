@@ -251,7 +251,7 @@ void	scoreUpdateVar( DATA_INDEX var )
 		missionData.babasMowedDown++;	// Ran over a barbarian
 		break;
 	default:
-		debug( LOG_ERROR, "Weirdy variable request from scoreUpdateVar" );
+		debug( LOG_FATAL, "Weirdy variable request from scoreUpdateVar" );
 		abort();
 		break;
 	}

@@ -58,7 +58,6 @@
 #include "console.h"
 #include "intdisplay.h"
 #include "multiplay.h"
-#include "target.h"
 
 // all the bollox needed for script callbacks
 #include "lib/script/parse.h"				// needed to define types in scripttabs.h (Arse!)
@@ -511,7 +510,7 @@ void driveUpdate(void)
 
 	if(DirectControl) {
 		if(psDrivenDroid != NULL) {
-			if(bMultiPlayer && (driveBumpTime < gameTime))	// send latest info about driven droid.
+			if(bMultiMessages && (driveBumpTime < gameTime))	// send latest info about driven droid.
 			{
 				SendDroidInfo(psDrivenDroid,DORDER_MOVE,psDrivenDroid->pos.x,psDrivenDroid->pos.y, NULL);
 			}
@@ -667,8 +666,8 @@ void driveProcessAquireButton(void)
 {
 	if(mouseReleased(MOUSE_RMB) || keyPressed(KEY_S))
 	{
-		BASE_OBJECT	*psObj;
-		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid);
+//		BASE_OBJECT	*psObj;
+//		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid);
 //		driveMarkTarget();
 //		pie_SetMouse(CURSOR_ATTACK, true);
 	}
@@ -738,7 +737,7 @@ void driveProcessRadarInput(int x,int y)
 	// when drive mode is active, clicking on the radar orders all selected droids
 	// to move to this position.
 	CalcRadarPosition(x, y, &PosX, &PosY);
-	orderSelectedLoc(selectedPlayer, PosX*TILE_UNITS,PosY*TILE_UNITS);
+	orderSelectedLoc(selectedPlayer, PosX*TILE_UNITS, PosY*TILE_UNITS, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
 }
 /*
 void driveMarkTarget(void)

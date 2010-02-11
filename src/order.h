@@ -27,6 +27,11 @@
 #include "orderdef.h"
 #include "action.h" //Watermelon:needs DROID_OACTION_INFO
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 //turn off the build queue availability until desired release date!
 //#define DISABLE_BUILD_QUEUE
 
@@ -186,8 +191,8 @@ extern void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order,
 extern void orderDroidStatsTwoLocAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
 
 /* Give selected droids an order with a location target */
-extern void orderSelectedLoc(UDWORD player, UDWORD x, UDWORD y);
-extern void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add);
+// Only called from UI.
+extern void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add);
 
 /* Give selected droids an order with an object target */
 extern void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj);
@@ -263,7 +268,11 @@ static inline void removeDroidOrderTarget(DROID *psDroid, SDWORD idx)
 	psDroid->asOrderList[idx].psOrderTarget = NULL;
 }
 
-extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y);
-extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj);
+extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, BOOL altOrder);
+extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ORDER_H__

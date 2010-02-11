@@ -16,16 +16,9 @@ data/base/messages/strings/scrstrings.txt
 data/base/multiplay/script/multilim.slo
 data/base/multiplay/script/multiplay.slo
 data/base/multiplay/script/scavfact.slo
-data/base/multiplay/skirmish/player0.slo
-data/base/multiplay/skirmish/player1.slo
-data/base/multiplay/skirmish/player2.slo
-data/base/multiplay/skirmish/player3.slo
-data/base/multiplay/skirmish/player4.slo
-data/base/multiplay/skirmish/player5.slo
-data/base/multiplay/skirmish/player6.slo
-data/base/multiplay/skirmish/player7.slo
 data/base/multiplay/skirmish/rules.slo
 data/base/multiplay/skirmish/sktech.slo
+data/base/multiplay/skirmish/ai.slo 
 data/base/script/demo/demo_global.slo
 data/base/script/demo/demo_p0.slo
 data/base/script/demo/demo_p1.slo
@@ -91,14 +84,6 @@ data/base/script/text/tech.slo
 data/base/script/text/tutorial3.slo
 data/base/script/text/vtols2.slo
 data/base/script/text/vtols.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player0.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player1.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player2.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player3.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player4.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player5.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player6.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player7.slo
 data/mods/multiplay/ntw/messages/strings/names.txt
 data/mods/multiplay/ntw/multiplay/script/autoenable.slo
 data/mods/multiplay/ntw/multiplay/script/camtech.slo
@@ -117,6 +102,7 @@ data/mods/multiplay/ntw/multiplay/skirmish/player6.slo
 data/mods/multiplay/ntw/multiplay/skirmish/player7.slo
 data/mods/multiplay/ntw/multiplay/skirmish/rules.slo
 data/mods/multiplay/ntw/multiplay/skirmish/sktech.slo
+data/mp/messages/resmessages12.rmsg
 data/mp/messages/resmessages1.rmsg
 data/mp/messages/resmessages23.rmsg
 data/mp/messages/resmessages2.rmsg
@@ -154,7 +140,6 @@ lib/framework/frameresource.c
 lib/framework/i18n.c
 lib/framework/input.c
 lib/framework/lexer_input.c
-lib/framework/physfs_vfs.c
 lib/framework/stdio_ext.c
 lib/framework/SDL_framerate.c
 lib/framework/strres.c
@@ -268,7 +253,7 @@ src/loop.c
 src/main.c
 src/map.c
 src/mapdisplay.c
-src/mapgrid.c
+src/mapgrid.cpp
 src/mechanics.c
 src/message.c
 src/miscimd.c
@@ -290,6 +275,7 @@ src/objmem.c
 src/oprint.c
 src/order.c
 src/parsetest.c
+src/pointtree.cpp
 src/power.c
 src/projectile.c
 src/radar.c
@@ -306,11 +292,7 @@ src/scriptvals.c
 src/selection.c
 src/seqdisp.c
 src/stats.c
-src/stats-db2.c
-src/stats-db2.tpl.sql.c
-src/stats-db.c
 src/structure.c
-src/target.c
 src/text.c
 src/texture.c
 src/transporter.c

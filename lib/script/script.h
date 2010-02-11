@@ -37,6 +37,11 @@
 #include <lauxlib.h>
 #include <lualib.h>
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 extern void registerScript(lua_State *L);
 extern void freeScript(lua_State *L);
 extern lua_State *scrNewState(const char *filename);
@@ -234,5 +239,8 @@ extern BOOL eventSetTrigger(void);
 //   3 - as 2 but show tested but not fired triggers as well
 extern BOOL eventSetTraceLevel(void);
 
-#endif
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
+#endif

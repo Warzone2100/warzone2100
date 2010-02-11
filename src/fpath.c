@@ -448,7 +448,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 				psMove->DestinationY = psNext->sMove.DestinationY;
 				psMove->numPoints = psNext->sMove.numPoints;
 				psMove->Position = 0;
-				psMove->Status = MOVEROUTE;
+				psMove->Status = MOVENAVIGATE;
 				if (psMove->asPath)
 				{
 					free(psMove->asPath);
@@ -523,18 +523,18 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 
 
 // Find a route for an DROID to a location in world coordinates
-FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
+FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
 {
 	PROPULSION_STATS	*psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	FPATH_MOVETYPE		moveType = isHumanPlayer(psDroid->player) ? FMT_MOVE : FMT_ATTACK;
+
+	// override for AI to blast our way through stuff
+	if (!isHumanPlayer(psDroid->player) && moveType == FMT_MOVE)
+	{
+		moveType = (psDroid->asWeaps[0].nStat == 0) ? FMT_MOVE : FMT_ATTACK;
+	}
 
 	ASSERT_OR_RETURN(FPR_FAILED, psPropStats != NULL, "invalid propulsion stats pointer");
 	ASSERT_OR_RETURN(FPR_FAILED, psDroid->type == OBJ_DROID, "We got passed an object that isn't a DROID!");
-
-	if (psDroid->asWeaps[0].nStat == 0)
-	{
-		moveType = FMT_MOVE;	// cannot blast its way through walls, so don't even try
-	}
 
 	// check whether the end point of the route
 	// is a blocking tile and find an alternative if it is

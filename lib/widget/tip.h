@@ -26,6 +26,11 @@
 
 #include "lib/ivis_common/textdraw.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Initialise the tool tip module */
 extern void tipInitialise(void);
 
@@ -50,5 +55,9 @@ extern void tipStop(WIDGET *psSource);
 
 /* Update and possibly display the tip */
 extern void tipDisplay(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_TIP_H__

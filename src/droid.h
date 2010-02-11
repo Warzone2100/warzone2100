@@ -31,18 +31,15 @@
 #include "stats.h"
 #include "visibility.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define OFF_SCREEN 9999		// world->screen check - alex
 
 #define REPAIRLEV_LOW	50	// percentage of body points remaining at which to repair droid automatically.
 #define REPAIRLEV_HIGH	75	// ditto, but this will repair much sooner..
-
-#define	DROID_EXPLOSION_SPREAD_X	(TILE_UNITS/2 - (rand()%TILE_UNITS))
-#define	DROID_EXPLOSION_SPREAD_Y	(rand()%TILE_UNITS)
-#define	DROID_EXPLOSION_SPREAD_Z	(TILE_UNITS/2 - (rand()%TILE_UNITS))
-
-/*defines the % to decrease the illumination of a tile when building - gets set
-back when building is destroyed*/
-//#define FOUNDATION_ILLUMIN		50
 
 #define DROID_RESISTANCE_FACTOR     30
 
@@ -50,10 +47,9 @@ back when building is destroyed*/
 
 //storage
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
-extern bool runningMultiplayer(void);
+extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
 
-/* The range for neighbouring objects */
-#define NAYBOR_RANGE		(TILE_UNITS*9)	//range of lancer, BB, TK etc
+extern bool runningMultiplayer(void);
 
 //used to stop structures being built too near the edge and droids being placed down - pickATile
 #define TOO_NEAR_EDGE	3
@@ -74,25 +70,12 @@ extern bool runningMultiplayer(void);
 /* Minumum number of droids a commander can control in its group */
 #define	MIN_CMD_GROUP_DROIDS	6
 
-/* Info stored for each droid neighbour */
-typedef struct _naybor_info
-{
-	BASE_OBJECT		*psObj;			// The neighbouring object
-	UDWORD			distSqr;		// The square of the distance to the object
-	//UDWORD			dist;			// The distance to the object
-} NAYBOR_INFO;
-
 typedef enum
 {
 	NO_FREE_TILE,
 	FREE_TILE,
 	HALF_FREE_TILE
 } PICKTILE;
-
-/* Store for the objects near the droid currently being updated */
-#define MAX_NAYBORS		120
-extern NAYBOR_INFO		asDroidNaybors[MAX_NAYBORS];
-extern UDWORD			numNaybors;
 
 // the structure that was last hit
 extern DROID	*psLastDroidHit;
@@ -103,11 +86,7 @@ extern UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
 // initialise droid module
 extern BOOL droidInit(void);
 
-extern void	removeDroidBase(DROID *psDel);
-
-// refresh the naybor list
-// this only does anything if the naybor list is out of date
-extern void droidGetNaybors(DROID *psDroid);
+extern void removeDroidBase(DROID *psDel);
 
 extern BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize);
 extern BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);
@@ -242,8 +221,6 @@ extern BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon
 extern DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player);
 /* gets a template from its name - relies on the name being unique */
 extern DROID_TEMPLATE* getTemplateFromTranslatedNameNoPlayer(char *pName);
-/*getTemplateFromSinglePlayerID gets template for unique ID  searching one players list */
-extern DROID_TEMPLATE* getTemplateFromSinglePlayerID(UDWORD multiPlayerID, UDWORD player);
 /*getTemplateFromMultiPlayerID gets template for unique ID  searching all lists */
 extern DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID);
 
@@ -334,8 +311,12 @@ extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
 
 //access function
 extern BOOL isVtolDroid(const DROID* psDroid);
-/*returns true if a VTOL Weapon Droid which has completed all runs*/
+/*returns true if the droid has lift propulsion and is above the ground level*/
+extern BOOL isFlying(const DROID* psDroid);
+/*returns true if a VTOL weapon droid which has completed all runs*/
 extern BOOL vtolEmpty(DROID *psDroid);
+/*returns true if a VTOL weapon droid which still has full ammo*/
+extern BOOL vtolFull(DROID *psDroid);
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
 extern BOOL  vtolHappy(const DROID* psDroid);
@@ -364,6 +345,8 @@ extern BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid);
 
 // return whether a droid has a CB sensor on it
 extern BOOL cbSensorDroid(DROID *psDroid);
+// return whether a droid has a standard sensor on it (standard, VTOL strike, or wide spectrum)
+extern BOOL standardSensorDroid(DROID *psDroid);
 
 // give a droid from one player to another - used in Electronic Warfare and multiplayer
 extern DROID * giftSingleDroid(DROID *psD, UDWORD to);
@@ -474,6 +457,17 @@ static inline WEAPON_STATS *getWeaponStats(DROID *psDroid, int weapon_slot)
 	return asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
 }
 
+static inline float getInterpolatedWeaponRotation(DROID *psDroid, int weaponSlot, uint32_t time)
+{
+	return interpolateDirection(psDroid->asWeaps[weaponSlot].prevRotation, psDroid->asWeaps[weaponSlot].rotation, psDroid->prevSpacetime.time, psDroid->time, time);
+}
+
+static inline float getInterpolatedWeaponPitch(DROID *psDroid, int weaponSlot, uint32_t time)
+{
+	// Aaargh, Direction[sic]. Angles can be 16-bit (65536 "degrees" in circle), or can be floats (360.0f degrees). Except here, where they are _unsigned_ integers from 0 to 360. All hail consistency!
+	return interpolateDirection(psDroid->asWeaps[weaponSlot].prevPitch, psDroid->asWeaps[weaponSlot].pitch, psDroid->prevSpacetime.time, psDroid->time, time);
+}
+
 /** helper functions for future refcount patch **/
 
 #define setDroidTarget(_psDroid, _psNewTarget) _setDroidTarget(_psDroid, _psNewTarget, __LINE__, __FUNCTION__)
@@ -563,5 +557,9 @@ int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj);
 #define	MIN_WEAPON_DAMAGE	1
 
 void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_DROID_H__

@@ -82,22 +82,19 @@ const char *objInfo(const BASE_OBJECT *psObj)
 	{
 		const DROID *psDroid = (const DROID *)psObj;
 
-		ssprintf(info, "%s", droidGetName(psDroid));
-		break;
+		return droidGetName(psDroid);
 	}
 	case OBJ_STRUCTURE:
 	{
 		const STRUCTURE *psStruct = (const STRUCTURE *)psObj;
 
-		ssprintf(info, "%s", getName(psStruct->pStructureType->pName));
-		break;
+		return getName(psStruct->pStructureType->pName);
 	}
 	case OBJ_FEATURE:
 	{
 		const FEATURE *psFeat = (const FEATURE *)psObj;
 
-		ssprintf(info, "%s", getName(psFeat->psStats->pName));
-		break;
+		return getName(psFeat->psStats->pName);
 	}
 	case OBJ_PROJECTILE:
 		sstrcpy(info, "Projectile");	// TODO

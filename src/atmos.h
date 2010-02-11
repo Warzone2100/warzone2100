@@ -21,6 +21,11 @@
 #ifndef __INCLUDED_SRC_ATMOS_H__
 #define __INCLUDED_SRC_ATMOS_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef struct _atmosParticle
 {
 UBYTE		status;
@@ -53,5 +58,9 @@ SBYTE	vec;
 } MISTAREA;
 
 extern MISTAREA *pMistValues;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ATMOS_H__

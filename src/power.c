@@ -42,12 +42,14 @@
 #include "intdisplay.h"
 #include "action.h"
 #include "difficulty.h"
+#include "random.h"
 
 
 #define EXTRACT_POINTS	    1
 #define EASY_POWER_MOD      110
 #define NORMAL_POWER_MOD    100
 #define HARD_POWER_MOD      90
+#define MAX_POWER           100000
 
 //flag used to check for power calculations to be done or not
 BOOL	powerCalculated;
@@ -134,7 +136,7 @@ void releasePlayerPower(void)
 /*check the current power - if enough return true, else return false */
 BOOL checkPower(int player, float quantity)
 {
-	ASSERT(player < MAX_PLAYERS, "checkPower: Bad player");
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Bad player (%d)", player);
 
 	//if not doing a check on the power - just return true
 	if (!powerCalculated)
@@ -151,15 +153,18 @@ BOOL checkPower(int player, float quantity)
 
 void usePower(int player, float quantity)
 {
-	ASSERT(asPower[player].currentPower >= quantity, "not enough power");
-	asPower[player].currentPower -= quantity;
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
+	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity);
 }
 
 void addPower(int player, float quantity)
 {
-	ASSERT(player < MAX_PLAYERS, "addPower: Bad player (%u)", player);
-	ASSERT(asPower[player].currentPower + quantity >= 0, "not enough power");
-	asPower[player].currentPower += quantity;
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
+	asPower[player].currentPower = MAX(0, asPower[player].currentPower + quantity);
+	if (asPower[player].currentPower > MAX_POWER)
+	{
+		asPower[player].currentPower = MAX_POWER;
+	}
 }
 
 /*resets the power calc flag for all players*/
@@ -276,6 +281,10 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 
 	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
+	if (asPower[player].currentPower > MAX_POWER)
+	{
+		asPower[player].currentPower = MAX_POWER;
+	}
 }
 
 // only used in multiplayer games.
@@ -303,12 +312,6 @@ void newGameInitPower(void)
 	{
 		addPower(inc, 400);
 	}
-}
-
-/*accrue the power in the facilities that require it - returns true if use some power*/
-BOOL accruePower(BASE_OBJECT *psObject)
-{
-	return false;
 }
 
 STRUCTURE *getRExtractor(STRUCTURE *psStruct)
@@ -408,7 +411,6 @@ float requestPower(int player, float amount)
 
 	// keep track on how much energy we could possibly spend
 	asPower[player].powerRequested += amount;
-	ASSERT(asPower[player].powerRequested < 1000, "you are asking too much");
 	
 	if (amountConsidered <= asPower[player].currentPower)
 	{
@@ -419,11 +421,12 @@ float requestPower(int player, float amount)
 	return 0; // no power this frame
 }
 
+// Why is there randomity in the power code?
 static int randomRound(float val)
 {
 	int intPart = val;
 	float floatPart = val - intPart;
-	if (rand()%100 < floatPart*100)
+	if (gameRand(100) < floatPart*100)
 	{
 		return intPart + 1;
 	}
@@ -445,7 +448,6 @@ int requestPowerFor(int player, float amount, int points)
 
 	// keep track on how much energy we could possibly spend
 	asPower[player].powerRequested += amount;
-	ASSERT(asPower[player].powerRequested < 1000, "you are asking too much");
 	
 	if (amountConsidered <= asPower[player].currentPower)
 	{

@@ -84,7 +84,7 @@ W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 	psWidget = (W_SLIDER *)malloc(sizeof(W_SLIDER));
 	if (psWidget == NULL)
 	{
-		debug(LOG_ERROR, "sliderCreate: Out of memory");
+		debug(LOG_FATAL, "sliderCreate: Out of memory");
 		abort();
 		return NULL;
 	}
@@ -233,7 +233,11 @@ void sliderRun(W_SLIDER *psWidget, W_CONTEXT *psContext)
 		psWidget->state &= ~SLD_DRAG;
 		widgSetReturn(psContext->psScreen, (WIDGET *)psWidget);
 	}
-	else if (psWidget->state & SLD_DRAG)
+	else if (!(psWidget->state & SLD_DRAG) && mouseDown(MOUSE_LMB))
+	{
+		sliderClicked(psWidget, psContext);
+	}
+	if (psWidget->state & SLD_DRAG)
 	{
 		/* Figure out where the drag box should be */
 		mx = psContext->mx - psWidget->x;

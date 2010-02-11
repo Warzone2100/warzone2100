@@ -14,4 +14,7 @@ trike		TEMPLATE	"BarbarianTrike"
 buggy		TEMPLATE	"BarbarianBuggy"
 bloke		TEMPLATE	"BaBaPeople"
 jeep		TEMPLATE	"BabaJeep"
+firetruck	TEMPLATE	"BabaFireTruck"
+cannonbus	TEMPLATE	"BabaBusCan"
+firebus		TEMPLATE	"BabaFireCan"
 }

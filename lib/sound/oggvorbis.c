@@ -165,7 +165,7 @@ struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_f
 	struct OggVorbisDecoderState* decoder = malloc(sizeof(struct OggVorbisDecoderState));
 	if (decoder == NULL)
 	{
-		debug(LOG_ERROR, "Out of memory");
+		debug(LOG_FATAL, "Out of memory");
 		abort();
 		return NULL;
 	}

@@ -40,6 +40,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
+#include "lib/netplay/netplay.h"
 
 #include "loop.h"
 #include "objects.h"
@@ -77,7 +78,6 @@
 #include "mapgrid.h"
 #include "edit3d.h"
 #include "drive.h"
-#include "target.h"
 #include "fpath.h"
 #include "scriptextern.h"
 #include "cluster.h"
@@ -147,6 +147,12 @@ GAMECODE gameLoop(void)
 	BOOL		quitting=false;
 	INT_RETVAL	intRetVal;
 	int	        clearMode = 0;
+	bool gameTicked = deltaGameTime != 0;
+
+	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
+	{
+		intAddInGamePopup();
+	}
 
 	if (!war_GetFog())
 	{
@@ -177,8 +183,7 @@ GAMECODE gameLoop(void)
 
 	if (!paused)
 	{
-		
-		if (!scriptPaused() && !editPaused())
+		if (!scriptPaused() && !editPaused() && gameTicked)
 		{
 			eventFireCallbackTrigger(CALL_EVERY_FRAME);
 			/* Update the event system */
@@ -188,15 +193,12 @@ GAMECODE gameLoop(void)
 			}
 			else
 			{
-				eventProcessTriggers(gameTime2/SCR_TICKRATE);
+				eventProcessTriggers(realTime/SCR_TICKRATE);
 			}
 		}
 
 		/* Run the in game interface and see if it grabbed any mouse clicks */
-	  	if (!rotActive
-		 && getWidgetsStatus()
-		 && dragBox3D.status != DRAG_DRAGGING
-		 && wallDrag.status != DRAG_DRAGGING)
+		if (!rotActive && getWidgetsStatus() && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING)
 		{
 			intRetVal = intRunWidgets();
 		}
@@ -206,7 +208,7 @@ GAMECODE gameLoop(void)
 		}
 
 		//don't process the object lists if paused or about to quit to the front end
-		if (!(gameUpdatePaused() || intRetVal == INT_QUIT))
+		if (!gameUpdatePaused() && intRetVal != INT_QUIT)
 		{
 			if( dragBox3D.status != DRAG_DRAGGING
 				&& wallDrag.status != DRAG_DRAGGING
@@ -225,7 +227,7 @@ GAMECODE gameLoop(void)
 			// check all flag positions for duplicate delivery points
 			checkFactoryFlags();
 #endif
-			if (!editPaused())
+			if (!editPaused() && gameTicked)
 			{
 				// Update abandoned structures
 				handleAbandonedStructures();
@@ -235,25 +237,26 @@ GAMECODE gameLoop(void)
 			process3DBuilding();
 
 			// Update the base movement stuff
+			// FIXME This function will be redundant with logical updates.
 			moveUpdateBaseSpeed();
 
 			// Update the visibility change stuff
 			visUpdateLevel();
 
-			// do the grid garbage collection
-			gridGarbageCollect();
-
-			if (!editPaused())
+			if (!editPaused() && gameTicked)
 			{
+				// Put all droids/structures/features into the grid.
+				gridReset();
+
+				// Check which objects are visible.
+				processVisibility();
+
 				//update the findpath system
 				fpathUpdate();
-			}
 
-			// update the cluster system
-			clusterUpdate();
+				// update the cluster system
+				clusterUpdate();
 
-			if (!editPaused())
-			{
 				// update the command droids
 				cmdDroidUpdate();
 				if(getDrivingStatus())
@@ -268,7 +271,7 @@ GAMECODE gameLoop(void)
 				multiPlayerLoop();
 			}
 
-			if (!editPaused())
+			if (!editPaused() && gameTicked)
 			{
 
 			fireWaitingCallbacks(); //Now is the good time to fire waiting callbacks (since interpreter is off now)
@@ -313,16 +316,16 @@ GAMECODE gameLoop(void)
 								DROID *psDroid = NULL;
 
 								numTransporterDroids[i] += psCurr->psGroup->refCount-1;
-								// and count the units inside it...for MP games only(?)
-								if (bMultiPlayer)
-								{
+								// and count the units inside it...
 									for (psDroid = psCurr->psGroup->psList; psDroid != NULL && psDroid != psCurr; psDroid = psDroid->psGrpNext)
 									{
-										// since in MP we can only have cyborgs in transport, don't need to count DROID_CONSTRUCT as well.
-										if (psDroid->droidType == DROID_CYBORG_CONSTRUCT)
+									if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
 										{
 											numConstructorDroids[i] += 1;
 										}
+									if (psDroid->droidType == DROID_COMMAND)
+									{
+										numCommandDroids[i] += 1;
 									}
 								}
 							}
@@ -443,7 +446,7 @@ GAMECODE gameLoop(void)
 			}
 
 			}
-			else // if editPaused()
+			else // if editPaused() or not gameTicked - make sure visual effects are updated
 			{
 				for (i = 0; i < MAX_PLAYERS; i++)
 				{
@@ -452,14 +455,14 @@ GAMECODE gameLoop(void)
 						/* Copy the next pointer - not 100% sure if the droid could get destroyed
 						but this covers us anyway */
 						psNext = psCurr->psNext;
-						processVisibility((BASE_OBJECT *)psCurr);
+						processVisibilityLevel((BASE_OBJECT *)psCurr);
 						calcDroidIllumination(psCurr);
 					}
 					for (psCBuilding = apsStructLists[i]; psCBuilding; psCBuilding = psNBuilding)
 					{
 						/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
 						psNBuilding = psCBuilding->psNext;
-						processVisibility((BASE_OBJECT *)psCBuilding);
+						processVisibilityLevel((BASE_OBJECT *)psCBuilding);
 					}
 				}
 			}
@@ -467,7 +470,10 @@ GAMECODE gameLoop(void)
 			/* update animations */
 			animObj_Update();
 
-			objmemUpdate();
+			if (gameTicked)
+			{
+				objmemUpdate();
+			}
 		}
 		if (!consolePaused())
 		{
@@ -491,11 +497,11 @@ GAMECODE gameLoop(void)
 			scroll();
 		}
 
-		if(InGameOpUp)		// ingame options menu up, run it!
+		if(InGameOpUp || isInGamePopupUp)		// ingame options menu up, run it!
 		{
 			widgval = widgRunScreen(psWScreen);
 			intProcessInGameOptions(widgval);
-			if(widgval == INTINGAMEOP_QUIT_CONFIRM)
+			if(widgval == INTINGAMEOP_QUIT_CONFIRM || widgval == INTINGAMEOP_POPUP_QUIT)
 			{
 				if(gamePaused())
 				{
@@ -511,6 +517,7 @@ GAMECODE gameLoop(void)
 			if(bRequestLoad)
 			{
 				loopMissionState = LMS_LOADGAME;
+				NET_InitPlayers();			// otherwise alliances were not cleared
 				sstrcpy(saveGameName, sRequestResult);
 			}
 			else
@@ -581,7 +588,7 @@ GAMECODE gameLoop(void)
 			processInput();
 
 			//no key clicks or in Intelligence Screen
-			if (intRetVal == INT_NONE && !InGameOpUp)
+			if (intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
 			{
 				processMouseClickInput();
 			}

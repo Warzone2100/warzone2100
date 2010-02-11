@@ -228,9 +228,8 @@ static void open_audio(void)
 	alGenBuffers(1, &audiodata.buffer1);
 	sound_GetError();
 	alGenBuffers(1, &audiodata.buffer2);
-	sound_GetError();
-	// Clear Error Codes
-	alGetError();
+	sound_GetError();	// Log and clear error codes
+
 	audiodata.totbufstarted = 0;
 
 	// set the volume of the FMV based on the user's preferences
@@ -297,6 +296,7 @@ static void video_write(bool update)
 	const int video_height = videodata.ti.frame_height;
 	yuv_buffer yuv;
 
+	glErrors();
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, video_texture);
 
@@ -330,6 +330,7 @@ static void video_write(bool update)
 
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video_width,
 				video_height, GL_RGBA, GL_UNSIGNED_BYTE, RGBAframe);
+		glErrors();
 	}
 
 	glDisable(GL_DEPTH_TEST);

@@ -456,7 +456,7 @@ BOOL runLoadSave(BOOL bResetMissionWidgets)
 			}
 			else
 			{
-				goto cleanup;				// clicked on an empty box
+				return false;				// clicked on an empty box
 			}
 
 			goto success;
@@ -525,7 +525,7 @@ BOOL runLoadSave(BOOL bResetMissionWidgets)
 
 
 		// scan to see if that game exists in another slot, if so then fail.
-		sstrcpy(sTemp, ((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText);
+		sstrcpy(sTemp, widgGetString(psRequestScreen, id));
 
 		for(i=LOADENTRY_START;i<LOADENTRY_END;i++)
 		{
@@ -547,9 +547,9 @@ BOOL runLoadSave(BOOL bResetMissionWidgets)
 
 
 		// return with this name, as we've edited it.
-		if (strlen(((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText))
+		if (strlen(widgGetString(psRequestScreen, id)))
 		{
-			sstrcpy(sTemp, ((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText);
+			sstrcpy(sTemp, widgGetString(psRequestScreen, id));
 			removeWildcards(sTemp);
 			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s.%s", sPath, sTemp, sExt);
 			if (strlen(sDelete) != 0)
@@ -597,37 +597,55 @@ BOOL displayLoadSave(void)
 void removeWildcards(char *pStr)
 {
 	UDWORD i;
-
-	for(i=0;i<strlen(pStr);i++)
+	
+	// Remember never to allow: < > : " / \ | ? *
+	
+	// Whitelist: Get rid of any characters except:
+	// a-z A-Z 0-9 - + ! , = ^ @ # $ % & ' ( ) [ ] (and space and unicode characters ≥ 0x80)
+	for (i=0; i<strlen(pStr); i++)
 	{
-/*	if(   pStr[i] == '?'
-		   || pStr[i] == '*'
-		   || pStr[i] == '"'
-		   || pStr[i] == '.'
-		   || pStr[i] == '/'
-		   || pStr[i] == '\\'
-		   || pStr[i] == '|' )
+		if (!isalnum(pStr[i])
+		    && (pStr[i] != ' ' || i==0 || pStr[i-1]==' ')
+			// We allow spaces as long as they aren't the first char, or two spaces in a row
+		    && pStr[i] != '-'
+		    && pStr[i] != '+'
+		    && pStr[i] != '!'
+		    && pStr[i] != ','
+		    && pStr[i] != '='
+		    && pStr[i] != '^'
+		    && pStr[i] != '@'
+		    && (pStr[i]<35 || pStr[i]>41) // # $ % & ' ( )
+		    && pStr[i] != '[' && pStr[i] != ']'
+		    && (pStr[i]&0x80) != 0x80  // á é í ó ú α β γ δ ε
+			)
 		{
 			pStr[i] = '_';
 		}
-*/
-		if( !isalnum(pStr[i])
- 		 && pStr[i] != ' '
-		 && pStr[i] != '-'
-		 && pStr[i] != '+'
-  		 && pStr[i] != '!'
-		 )
-		{
-			pStr[i] = '_';
-		}
-
 	}
-
+	
 	if (strlen(pStr) >= MAX_SAVE_NAME)
 	{
 		pStr[MAX_SAVE_NAME - 1] = 0;
 	}
-
+	
+	// Trim trailing spaces
+	for (i=strlen(pStr)-1; pStr[i]==' ' && i>=0; i--);
+	pStr[i+1] = 0;
+	
+	// Trims leading spaces (currently unused)
+	/* for (i=0; pStr[i]==' '; i++);
+	 if (i != 0)
+	 {
+	 memmove(pStr, pStr+i, strlen(pStr)+1-i);
+	 } */
+	
+	// If that leaves us with a blank string, replace with '!'
+	if (pStr[0] == 0)
+	{
+		pStr[0] = '!';
+		pStr[1] = 0;
+	}
+	
 	return;
 }
 

@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_POWER_H__
 #define __INCLUDED_SRC_POWER_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /** Free power on collection of oildrum. */
 #define OILDRUM_POWER		100
 
@@ -83,9 +88,6 @@ void powerCalc(BOOL on);
 /** Temp function to give all players some power when a new game has been loaded. */
 void newGameInitPower(void);
 
-/** Accrue the power in the facilities that require it. */
-extern BOOL accruePower(BASE_OBJECT *psObject);
-
 /**	Returns the next res. Ext. in the list from the one passed in. returns 1st one
 	in list if passed in is NULL and NULL if there's none?
 */
@@ -101,5 +103,9 @@ extern BOOL droidUsesPower(DROID *psDroid);
 extern	BOOL			powerCalculated;
 
 extern void throttleEconomy(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_POWER_H__

@@ -27,8 +27,13 @@
 #include "lib/ivis_common/imd.h"
 #include "lib/ivis_common/pieclip.h"
 
-#define	BOUNDARY_X			(16)
-#define BOUNDARY_Y			(16)
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
+#define	BOUNDARY_X			(22)
+#define BOUNDARY_Y			(22)
 //#define BOUNDARY_X		(DISP_WIDTH/20)	   // proportional to resolution - Alex M
 //#define	BOUNDARY_Y		(DISP_WIDTH/16)
 
@@ -39,5 +44,9 @@ typedef struct _screen_disp_data
 	UDWORD		screenX,screenY;
 	UDWORD		screenR;
 } SCREEN_DISP_DATA;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_DISPLAYDEF_H__

@@ -24,6 +24,11 @@
 #include "console.h"
 #include "lib/framework/fixedpoint.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // --------------- All those keyboard mappable functions */
 extern void	kf_HalveHeights( void );
 extern void	kf_DebugDroidInfo( void );
@@ -101,6 +106,7 @@ extern void	kf_SeekNorth( void );
 extern void	kf_MaxScrollLimits( void );
 extern void	kf_LevelSea( void );
 extern void	kf_TestWater( void );
+extern void	kf_toggleTrapCursor(void);
 extern void	kf_TogglePauseMode( void );
 extern void	kf_ToggleDemoMode( void );
 extern void	kf_ToggleRadarAllign( void );
@@ -120,7 +126,6 @@ extern void	kf_ChooseCancel( void );
 extern void	kf_ToggleWeather( void );
 extern void	kf_KillSelected(void);
 extern void	kf_ShowGridInfo(void);
-extern void	kf_GiveTemplateSet(void);
 extern void	kf_SendTextMessage(void);
 extern void	kf_SelectPlayer( void );
 extern void	kf_ToggleDrivingMode( void );
@@ -231,6 +236,8 @@ extern void kf_NormalSpeed( void );
 
 extern void kf_CloneSelected( void );
 
+extern void kf_ToggleLogical(void);
+
 #define SPIN_SCALING	(360*DEG_1)
 #define	SECS_PER_SPIN	2
 #define MAP_SPIN_RATE	(SPIN_SCALING/SECS_PER_SPIN)
@@ -245,5 +252,12 @@ void kf_NoAssert(void);
 extern void	kf_ToggleWatchWindow( void );
 
 bool runningMultiplayer(void);
+
+void	kf_ForceSync( void );
+void	kf_PowerInfo( void );
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_KEYBIND_H__

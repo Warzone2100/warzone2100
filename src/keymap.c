@@ -55,7 +55,7 @@ KEY_MAPPING	*psMapping,*psReturn;
 		psMapping && !psReturn;
 		psMapping = psMapping->psNext)
 		{
-			if(psMapping->function == function)
+			if ((void *)psMapping->function == function)
 			{
 				psReturn = psMapping;
 			}
@@ -232,7 +232,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_AddMissionOffWorld,
 	kf_KillSelected,
 	kf_ShowMappings,
-	kf_GiveTemplateSet,
+	kf_NOOP, // unused
 	kf_ToggleVisibility,
 	kf_FinishResearch,
 	kf_LowerTile,
@@ -253,6 +253,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_MapCheck,
 	kf_SetDroidGoToTransport,
 	kf_SetDroidMoveGuard,
+	kf_toggleTrapCursor,
 	NULL		// last function!
 };
 
@@ -346,9 +347,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	//                                **********************************
 	//                                **********************************
 	//	MULTIPLAYER
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KPENTER,KEYMAP_PRESSED,kf_addMultiMenu,		_("Multiplayer Options"));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_KP_FULLSTOP,KEYMAP_PRESSED,kf_multiAudioStart,	_("Start Multiplayer Audio"));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_KP_FULLSTOP,KEYMAP_RELEASED,kf_multiAudioStop,	_("Stop Multiplayer Audio"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KPENTER,KEYMAP_PRESSED,kf_addMultiMenu,		_("Multiplayer Options / Alliance dialog"));
 	//
 	//	GAME CONTROLS - Moving around, zooming in, rotating etc
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_BACKSPACE,KEYMAP_PRESSED,kf_SeekNorth,		_("Snap View to North"));
@@ -402,6 +401,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_SensorDisplayOn,		"Sensor display On");
 	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_RELEASED,kf_SensorDisplayOff,	"Sensor display Off");
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_S,KEYMAP_PRESSED,kf_ToggleShadows, "Toggles shadows");
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_T, KEYMAP_PRESSED, kf_toggleTrapCursor, "Trap cursor");
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarTerrain,         "Toggle radar terrain");
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LSHIFT,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarAllyEnemy,      "Toggle ally-enemy radar view");
 
@@ -507,7 +507,7 @@ KEY_MAPPING	*newMapping;
 	newMapping = (KEY_MAPPING*)malloc(sizeof(KEY_MAPPING));
 	if (newMapping == NULL)
 	{
-		debug(LOG_ERROR, "keyAddMapping: Out of memory!");
+		debug(LOG_FATAL, "keyAddMapping: Out of memory!");
 		abort();
 		return NULL;
 	}
@@ -516,7 +516,7 @@ KEY_MAPPING	*newMapping;
 	newMapping->pName = strdup(name);
 	if (newMapping->pName == NULL)
 	{
-		debug(LOG_ERROR, "keyAddMapping: Out of memory!");
+		debug(LOG_FATAL, "keyAddMapping: Out of memory!");
 		abort();
 		return NULL;
 	}
@@ -541,6 +541,7 @@ KEY_MAPPING	*newMapping;
 	if(metaCode == KEY_LCTRL) {newMapping->altMetaKeyCode = KEY_RCTRL;}
 	else if(metaCode == KEY_LALT) {newMapping->altMetaKeyCode = KEY_RALT;}
 	else if(metaCode == KEY_LSHIFT) {newMapping->altMetaKeyCode = KEY_RSHIFT;}
+	else if(metaCode == KEY_LMETA) {newMapping->altMetaKeyCode = KEY_RMETA;}
 
 	/* Set it to be active */
 	newMapping->active = true;
@@ -707,8 +708,9 @@ SDWORD		i;
   	(void) checkQwertyKeys();
 
 	/* Check for the meta keys */
-	if(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LALT)
-		|| keyDown(KEY_RALT) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
+	if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LALT)
+	 || keyDown(KEY_RALT) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)
+	 || keyDown(KEY_LMETA) || keyDown(KEY_RMETA))
 	{
 		bMetaKeyDown = true;
 	}
@@ -781,7 +783,7 @@ SDWORD		i;
 				break;
 
  			default:
-				debug(LOG_ERROR, "Unknown key action (action code %u) while processing keymap.", (unsigned int)keyToProcess->action);
+				debug(LOG_FATAL, "Unknown key action (action code %u) while processing keymap.", (unsigned int)keyToProcess->action);
 				abort();
  				break;
 			}
@@ -827,6 +829,10 @@ SDWORD		i;
 		cbPressedMetaKey = KEY_LSHIFT;
 	else if(keyDown(KEY_RSHIFT))
 		cbPressedMetaKey = KEY_RSHIFT;
+	else if(keyDown(KEY_LMETA))
+		cbPressedMetaKey = KEY_LMETA;
+	else if(keyDown(KEY_RMETA))
+		cbPressedMetaKey = KEY_RMETA;
 
 	/* Find out what keys were pressed */
 	for(i=0; i<KEY_MAXSCAN;i++)
@@ -840,6 +846,8 @@ SDWORD		i;
 			case KEY_RALT:
 			case KEY_LSHIFT:
 			case KEY_RSHIFT:
+			case KEY_LMETA:
+			case KEY_RMETA:
 				continue;
 			break;
 		}
@@ -878,6 +886,7 @@ BOOL	onlySub;
 	{
 		CONPRINTF(ConsoleString,(ConsoleString,"%s and %s - %s",asciiMeta,asciiSub,psMapping->pName));
 	}
+	debug(LOG_INPUT, "Received %s from Console", ConsoleString);
 }
 
 // ----------------------------------------------------------------------------------

@@ -33,23 +33,17 @@
 #define GTIME_MINFRAME	(GAME_TICKS_PER_SEC/80)
 
 /* See header file for documentation */
-UDWORD gameTime = 0, frameTime = 0, gameTime2 = 0, frameTime2 = 0;
-float frameTimeFraction = 0.0, frameTimeFraction2 = 0.0;
+UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0;
+float gameTimeFraction = 0.0, graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
 
 /** The current clock modifier. Set to speed up the game. */
 static float modifier;
 
-/** The amount of game time before the last time clock speed was set. */
+/// The graphics time, the last time clock speed was set.
 static UDWORD	timeOffset;
 
-/** The amount of game time before the last time clock speed was set. */
-static UDWORD	timeOffset2;
-
-/** The tick count the last time the clock speed was set. */
+/// The real time, the last time the clock speed was set.
 static UDWORD	baseTime;
-
-/** The tick count the last time the clock speed was set. */
-static UDWORD	baseTime2;
 
 /** When the game paused, so that gameTime can be adjusted when the game restarts. */
 static SDWORD	pauseStart;
@@ -61,100 +55,145 @@ static SDWORD	pauseStart;
 static UDWORD	stopCount;
 
 /* Initialise the game clock */
-BOOL gameTimeInit(void)
+void gameTimeInit(void)
 {
-    	/* Start the timer off at 2 so that when the scripts strip the map of objects
+	/* Start the timer off at 2 so that when the scripts strip the map of objects
 	 * for multiPlayer they will be processed as if they died. */
-	gameTime = 2;
-	timeOffset = 0;
-	baseTime = SDL_GetTicks();
+	// Setting game and graphics time.
+	setGameTime(2);
 
-	gameTime2 = 0;
-	timeOffset2 = 0;
-	baseTime2 = baseTime;
+	// Setting real time.
+	realTime = baseTime;
+	deltaRealTime = 0;
+	realTimeFraction = 0.f;
 
 	modifier = 1.0f;
 
 	stopCount = 0;
-
-	return true;
 }
 
-UDWORD	getTimeValueRange(UDWORD tickFrequency, UDWORD requiredRange)
+extern void setGameTime(uint32_t newGameTime)
 {
-	UDWORD	div1, div2;
+	// Setting game time.
+	gameTime = newGameTime;
+	deltaGameTime = 0;
+	gameTimeFraction = 0.f;
 
-	div1 = gameTime2%tickFrequency;
-	div2 = tickFrequency/requiredRange;
-	return(div1/div2);
+	// Setting graphics time to game time.
+	graphicsTime = gameTime;
+	deltaGraphicsTime = gameTime;
+	graphicsTimeFraction = 0.f;
+	timeOffset = graphicsTime;
+	baseTime = SDL_GetTicks();
+
+	// Not setting real time.
 }
 
-UDWORD	getStaticTimeValueRange(UDWORD tickFrequency, UDWORD requiredRange)
+UDWORD getModularScaledGameTime(UDWORD timePeriod, UDWORD requiredRange)
 {
-	UDWORD	div1, div2;
+	return gameTime%timePeriod * requiredRange/timePeriod;
+}
 
-	div1 = gameTime%tickFrequency;
-	div2 = tickFrequency/requiredRange;
-	return(div1/div2);
+UDWORD getModularScaledGraphicsTime(UDWORD timePeriod, UDWORD requiredRange)
+{
+	return graphicsTime%timePeriod * requiredRange/timePeriod;
+}
+
+UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange)
+{
+	return realTime%timePeriod * requiredRange/timePeriod;
 }
 
 /* Call this each loop to update the game timer */
-void gameTimeUpdate(void)
+bool logicalUpdates = true;
+void gameTimeUpdate()
 {
-	unsigned int currTime = SDL_GetTicks();
-	unsigned long long newTime;
+	uint32_t currTime = SDL_GetTicks();
+	bool sane = logicalUpdates;
+
+	if (currTime < realTime)
+	{
+		// Warzone 2100, the first relativistic computer game!
+		// Exhibit A: Time travel
+		// force a rebase
+		debug(LOG_WARNING, "Time travel is occurring! Clock went back in time a bit from %d to %d!\n", baseTime, currTime);
+		baseTime = currTime;
+		timeOffset = graphicsTime;
+	}
 
 	// Do not update the game time if gameTimeStop has been called
 	if (stopCount == 0)
 	{
 		// Calculate the new game time
-		newTime = ( currTime - baseTime ) * modifier + timeOffset;
-
-		// Calculate the time for this frame
-		frameTime = (newTime - gameTime);
-
-		// Limit the frame time
-		if (frameTime > GTIME_MAXFRAME)
+		uint32_t scaledCurrTime = (currTime - baseTime)*modifier + timeOffset;
+		if (scaledCurrTime < graphicsTime)  // Make sure the clock doesn't step back at all.
 		{
-			baseTime += ( frameTime - GTIME_MAXFRAME ) / modifier; // adjust the addition to base time
-			newTime = gameTime + GTIME_MAXFRAME;
-			frameTime = GTIME_MAXFRAME;
+			debug(LOG_WARNING, "Rescaled clock went back in time a bit from %d to %d!\n", graphicsTime, scaledCurrTime);
+			scaledCurrTime = graphicsTime;
+			baseTime = currTime;
+			timeOffset = graphicsTime;
 		}
 
-		// Store the game time
-		gameTime = newTime;
+		// Calculate the time for this frame
+		deltaGraphicsTime = scaledCurrTime - graphicsTime;
+
+		// Adjust deltas.
+		if (sane)
+		{
+			if (scaledCurrTime >= gameTime)
+			{
+				if (scaledCurrTime > gameTime + GAME_TICKS_PER_UPDATE)
+				{
+					// Game isn't updating fast enough...
+					uint32_t slideBack = deltaGraphicsTime - GAME_TICKS_PER_UPDATE;
+					baseTime += slideBack / modifier;  // adjust the addition to base time
+					deltaGraphicsTime -= slideBack;
+				}
+
+				deltaGameTime = GAME_TICKS_PER_UPDATE;
+			}
+			else
+			{
+				deltaGameTime = 0;
+			}
+		}
+		else
+		{
+			deltaGameTime     = scaledCurrTime - gameTime;
+
+			// Limit the frame time
+			if (deltaGraphicsTime > GTIME_MAXFRAME)
+			{
+				uint32_t slideBack = deltaGraphicsTime - GTIME_MAXFRAME;
+				baseTime += slideBack / modifier;  // adjust the addition to base time
+				deltaGraphicsTime -= slideBack;
+				deltaGameTime     -= slideBack;  // If !sane, then deltaGameTime == deltaGraphicsTime.
+			}
+		}
+
+		// Store the game and graphics times
+		gameTime     += deltaGameTime;
+		graphicsTime += deltaGraphicsTime;
 	}
 
-	// now update gameTime2 which does not pause
-	newTime = currTime - baseTime2 + timeOffset;
-
-	// Calculate the time for this frame
-	frameTime2 = newTime - gameTime2;
-
-	// Limit the frame time
-	if (frameTime2 > GTIME_MAXFRAME)
-	{
-		baseTime2 += frameTime2 - GTIME_MAXFRAME;
-		newTime = gameTime2 + GTIME_MAXFRAME;
-		frameTime2 = GTIME_MAXFRAME;
-	}
-
-	// Store the game time
-	gameTime2 = newTime;
+	// now update realTime which does not pause
+	// Store the real time
+	deltaRealTime = currTime - realTime;
+	realTime += deltaRealTime;
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
-	frameTimeFraction = (float)frameTime / (float)GAME_TICKS_PER_SEC;
-	frameTimeFraction2 = (float)frameTime / (float)GAME_TICKS_PER_SEC;
+	gameTimeFraction = (float)deltaGameTime / (float)GAME_TICKS_PER_SEC;
+	graphicsTimeFraction = (float)deltaGraphicsTime / (float)GAME_TICKS_PER_SEC;
+	realTimeFraction = (float)deltaRealTime / (float)GAME_TICKS_PER_SEC;
+
+	ASSERT(graphicsTime <= gameTime, "Trying to see the future.");
 }
 
 // reset the game time modifiers
 void gameTimeResetMod(void)
 {
-	timeOffset = gameTime;
-	timeOffset2 = gameTime2;
-
+	timeOffset = graphicsTime;
 	baseTime = SDL_GetTicks();
-	baseTime2 = baseTime;
 
 	modifier = 1.0f;
 }
@@ -208,16 +247,10 @@ void gameTimeStart(void)
 void gameTimeReset(UDWORD time)
 {
 	// reset the game timers
-	gameTime = time;
-	timeOffset = time;
-
-	gameTime2 = time;
-	timeOffset2 = time;
-
-	baseTime = SDL_GetTicks();
-	baseTime2 = baseTime;
-
-	modifier = 1.0f;
+	setGameTime(time);
+	gameTimeResetMod();
+	realTime = SDL_GetTicks();
+	deltaRealTime = 0;
 }
 
 void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWORD *seconds)

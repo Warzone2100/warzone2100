@@ -26,9 +26,15 @@
 
 #include "basedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef enum PROJ_STATE
 {
-	PROJ_INFLIGHT,
+	PROJ_INFLIGHTDIRECT,
+	PROJ_INFLIGHTINDIRECT,
 	PROJ_IMPACT,
 	PROJ_POSTIMPACT
 } PROJ_STATE;
@@ -39,26 +45,24 @@ typedef struct PROJECTILE
 	SIMPLE_ELEMENTS( struct PROJECTILE );
 
 	UBYTE           state;                  ///< current projectile state
-
-	UBYTE           player;                 ///< needed because damange and radDamage vary from base stat per player because of upgrades
-
 	UBYTE           bVisible;               ///< whether the selected player should see the projectile
-
 	WEAPON_STATS*   psWStats;               ///< firing weapon stats
-
 	BASE_OBJECT*    psSource;               ///< what fired the projectile
 	BASE_OBJECT*    psDest;                 ///< target of this projectile
 	BASE_OBJECT*    psDamaged;              ///< the target it already dealt damage to (don't damage the same target twice)
-
 	UDWORD          startX, startY;         ///< Where projectile started
 	UDWORD          tarX, tarY;             ///< The target coordinates
 	SDWORD          vXY, vZ;                ///< axis velocities
 	UDWORD          srcHeight;              ///< Height of origin
 	SDWORD          altChange;              ///< Change in altitude
+	SPACETIME       prevSpacetime;          ///< Location of projectile in previous tick.
 	UDWORD          born;
 	UDWORD          died;
-
-	void (*pInFlightFunc)(struct PROJECTILE* psObj);
+	UDWORD          expectedDamageCaused;   ///< Expected damage that this projectile will cause to the target.
 } PROJECTILE;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_PROJECTILEDEF_H__

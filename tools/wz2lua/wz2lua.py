@@ -75,10 +75,11 @@ rename = {
 
 unused_parameters = {
 	'chooseValidLoc': [0, 1],
+	'getPlayerStartPosition': [1, 2],
 	}
 
 # these functions do not get an extra return like UNUSED,... = function(...)
-no_extra_return = ['circlePerimPoint']
+no_extra_return = ['circlePerimPoint', 'getPlayerStartPosition']
 
 class Token:
 	def __init__(self, type, attr='', constant=True):

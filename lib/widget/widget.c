@@ -24,6 +24,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "lib/framework/frameint.h"
+#include "lib/framework/utf.h"
 #include "lib/ivis_common/textdraw.h"
 
 #include "widget.h"
@@ -54,6 +55,7 @@ static void widgClicked(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext);
 static void widgReleased(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext);
 static void widgRun(WIDGET *psWidget, W_CONTEXT *psContext);
 static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset);
+static void widgRelease(WIDGET *psWidget);
 
 /* Buffer to return strings in */
 static char aStringRetBuffer[WIDG_MAXSTR];
@@ -101,7 +103,7 @@ W_SCREEN* widgCreateScreen()
 	W_SCREEN* psScreen = (W_SCREEN *)malloc(sizeof(W_SCREEN));
 	if (psScreen == NULL)
 	{
-		debug(LOG_ERROR, "widgCreateScreen: Out of memory");
+		debug(LOG_FATAL, "widgCreateScreen: Out of memory");
 		abort();
 		return NULL;
 	}
@@ -143,31 +145,7 @@ void widgReleaseWidgetList(WIDGET *psWidgets)
 		{
 			psMouseOverWidget = NULL;
 		}
-		
-		switch(psCurr->type)
-		{
-		case WIDG_FORM:
-			formFree((W_FORM *)psCurr);
-			break;
-		case WIDG_LABEL:
-			labelFree((W_LABEL *)psCurr);
-			break;
-		case WIDG_BUTTON:
-			buttonFree((W_BUTTON *)psCurr);
-			break;
-		case WIDG_EDITBOX:
-			editBoxFree((W_EDITBOX *)psCurr);
-			break;
-		case WIDG_BARGRAPH:
-			barGraphFree((W_BARGRAPH *)psCurr);
-			break;
-		case WIDG_SLIDER:
-			sliderFree((W_SLIDER *)psCurr);
-			break;
-		default:
-			ASSERT(!"Unknown widget type", "Unknown widget type");
-			break;
-		}
+		widgRelease(psCurr);
 	}
 }
 
@@ -248,15 +226,6 @@ static BOOL widgCheckIDForm(W_FORM *psForm, UDWORD id)
 	return false;
 }
 
-#if 0
-/* Check whether an ID number has been used on a screen */
-static BOOL widgCheckID(W_SCREEN *psScreen, UDWORD id)
-{
-	return widgCheckIDForm((W_FORM *)psScreen->psForm, id);
-}
-#endif
-
-
 /* Set the tool tip font for a screen */
 void widgSetTipFont(W_SCREEN *psScreen, enum iV_fonts FontID)
 {
@@ -265,8 +234,6 @@ void widgSetTipFont(W_SCREEN *psScreen, enum iV_fonts FontID)
 
 	psScreen->TipFontID = FontID;
 }
-
-
 
 /* Add a form to the widget screen */
 BOOL widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit)
@@ -786,9 +753,7 @@ static WIDGET *widgFormGetFromID(W_FORM *psForm, UDWORD id)
 /* Find a widget in a screen from its ID number */
 WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id)
 {
-	ASSERT( psScreen != NULL,
-		"widgGetFromID: Invalid screen pointer" );
-
+	ASSERT_OR_RETURN(NULL, psScreen != NULL, "Invalid screen pointer");
 	return widgFormGetFromID((W_FORM *)psScreen->psForm, id);
 }
 
@@ -1090,11 +1055,9 @@ void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 
 	/* Get the button */
 	psWidget = widgGetFromID(psScreen, id);
-	if (psWidget == NULL)
-	{
-		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
-	}
-	else if (psWidget->type == WIDG_BUTTON)
+	ASSERT_OR_RETURN(, psWidget, "Couldn't find button or clickable widget by ID %u", state);
+
+	if (psWidget->type == WIDG_BUTTON)
 	{
 		buttonSetState((W_BUTTON *)psWidget, state);
 	}
@@ -1108,7 +1071,7 @@ void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 	}
 	else
 	{
-		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
+		ASSERT(false, "Couldn't find button or clickable widget by type %d", (int)psWidget->type);
 	}
 }
 
@@ -1145,8 +1108,12 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 				}
 				break;
 			case WIDG_EDITBOX:
-				sstrcpy(aStringRetBuffer, ((W_EDITBOX *)psWidget)->aText);
+			{
+				char *utf = UTF32toUTF8(((W_EDITBOX *)psWidget)->aText, NULL);
+				sstrcpy(aStringRetBuffer, utf);
+				free(utf);
 				break;
+			}
 			case WIDG_BARGRAPH:
 				ASSERT( false, "widgGetString: Bar Graphs do not have a string" );
 				aStringRetBuffer[0] = '\0';
@@ -1251,14 +1218,6 @@ static void widgProcessCallbacks(W_CONTEXT *psContext)
 	{
 		for(;psCurr; psCurr = psCurr->psNext)
 		{
-
-			/* Skip any hidden widgets */
-/*  Not sure if we want to skip hidden widgets or not ....
-			if (psCurr->style & WIDG_HIDDEN)
-			{
-				continue;
-			}*/
-
 			/* Call the callback */
 			if (psCurr->callback)
 			{

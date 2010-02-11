@@ -40,7 +40,11 @@ UDWORD traceID = -1;
 
 static debug_callback * callbackRegistry = NULL;
 bool enabled_debug[LOG_LAST]; // global
+#ifdef DEBUG
 bool assertEnabled = true;
+#else
+bool assertEnabled = false;
+#endif
 
 /*
  * This list _must_ match the enum in debug.h!
@@ -75,6 +79,10 @@ static const char *code_part_names[] = {
 	"info",
 	"terrain",
 	"feature",
+	"fatal",
+	"input",
+	"popup",
+	"console",
 	"last"
 };
 
@@ -229,6 +237,8 @@ void debug_init(void)
 	memset( enabled_debug, false, sizeof(enabled_debug) );
 	enabled_debug[LOG_ERROR] = true;
 	enabled_debug[LOG_INFO] = true;
+	enabled_debug[LOG_FATAL] = true;
+	enabled_debug[LOG_POPUP] = true;
 	inputBuffer[0][0] = '\0';
 	inputBuffer[1][0] = '\0';
 #ifdef DEBUG
@@ -387,6 +397,36 @@ void _debug( code_part part, const char *function, const char *str, ... )
 		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 
 		printToDebugCallbacks(outputBuffer);
+
+		// Throw up a dialog box for windows users since most don't have a clue to check the stderr.txt file for information
+		// Use for (duh) Fatal errors, that force us to terminate the game.
+		if (part == LOG_FATAL)
+		{
+#if defined(WZ_OS_WIN)
+			char wbuf[512];
+			ssprintf(wbuf, "%s\n\nPlease check your stderr.txt file in the same directory as the program file for more details. \
+				\nDo not forget to upload both the stderr.txt file and the warzone2100.rpt file in your bug reports!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			MessageBoxA( NULL,
+				wbuf,
+				"Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
+#endif
+		// TODO: Add Mac OS X dialog as well?
+		}
+
+		// Throw up a dialog box for windows users since most don't have a clue to check the stderr.txt file for information
+		// This is a popup dialog used for times when the error isn't fatal, but we still need to notify user what is going on.
+		if (part == LOG_POPUP)
+		{
+#if defined(WZ_OS_WIN)
+			char wbuf[512];
+			ssprintf(wbuf, "A non fatal error has occurred.\n\n%s\n\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			MessageBoxA( NULL,
+				wbuf,
+				"Warzone has detected a problem.", MB_OK|MB_ICONINFORMATION);
+#endif
+		// TODO: Add Mac OS X dialog as well?
+		}
+
 	}
 	useInputBuffer1 = !useInputBuffer1; // Swap buffers
 }

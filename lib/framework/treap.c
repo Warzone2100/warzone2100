@@ -62,7 +62,7 @@ TREAP_NODE** treapCreate()
 	TREAP_NODE** const psTreap = (TREAP_NODE**)malloc(sizeof(*psTreap));
 	if (!psTreap)
 	{
-		debug(LOG_ERROR, "Out of memory");
+		debug(LOG_FATAL, "Out of memory");
 		abort();
 		return NULL;
 	}
@@ -148,7 +148,8 @@ BOOL treapAdd(TREAP_NODE** psTreap, const char* key, const char* string)
 
 	if (psNew == NULL)
 	{
-		debug(LOG_ERROR, "treapAdd: Out of memory");
+		debug(LOG_FATAL, "treapAdd: Out of memory");
+		abort();
 		return false;
 	}
 

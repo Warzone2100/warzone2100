@@ -30,7 +30,6 @@
 
 #include "file.h"
 #include "resly.h"
-#include <sqlite3.h>
 
 // Local prototypes
 static RES_TYPE *psResTypes=NULL;
@@ -38,8 +37,6 @@ static RES_TYPE *psResTypes=NULL;
 /* The initial resource directory and the current resource directory */
 char aResDir[PATH_MAX];
 char aCurrResDir[PATH_MAX];
-static sqlite3* currDB = NULL;
-static char currDBFile[PATH_MAX];
 
 // the current resource block ID
 static SDWORD resBlockID;
@@ -116,6 +113,7 @@ BOOL resLoad(const char *pResFile, SDWORD blockID)
 	input.input.physfsfile = openLoadFile(pResFile, true);
 	if (!input.input.physfsfile)
 	{
+		debug(LOG_FATAL, "Could not open file %s", pResFile);
 		return false;
 	}
 
@@ -123,15 +121,8 @@ BOOL resLoad(const char *pResFile, SDWORD blockID)
 	res_set_extra(&input);
 	if (res_parse() != 0)
 	{
-		debug(LOG_ERROR, "resLoad: failed to parse %s", pResFile);
+		debug(LOG_FATAL, "Failed to parse %s", pResFile);
 		retval = false;
-	}
-
-	// If we have a database opened, make sure to close it
-	if (currDB)
-	{
-		sqlite3_close(currDB);
-		currDB = NULL;
 	}
 
 	res_lex_destroy();
@@ -159,7 +150,7 @@ static RES_TYPE* resAlloc(const char *pType)
 	psT = (RES_TYPE *)malloc(sizeof(RES_TYPE));
 	if (!psT)
 	{
-		debug( LOG_ERROR, "resAlloc: Out of memory" );
+		debug( LOG_FATAL, "resAlloc: Out of memory" );
 		abort();
 		return NULL;
 	}
@@ -189,7 +180,6 @@ BOOL resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 
 	psT->buffLoad = buffLoad;
 	psT->fileLoad = NULL;
-	psT->tableLoad = NULL;
 	psT->release = release;
 
 	psT->psNext = psResTypes;
@@ -212,27 +202,6 @@ BOOL resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
 
 	psT->buffLoad = NULL;
 	psT->fileLoad = fileLoad;
-	psT->tableLoad = NULL;
-	psT->release = release;
-
-	psT->psNext = psResTypes;
-	psResTypes = psT;
-
-	return true;
-}
-
-BOOL resAddTableLoad(const char* type, RES_TABLELOAD tableLoad, RES_FREE release)
-{
-	RES_TYPE* psT = resAlloc(type);
-
-	if (!psT)
-	{
-		return false;
-	}
-
-	psT->buffLoad = NULL;
-	psT->fileLoad = NULL;
-	psT->tableLoad = tableLoad;
 	psT->release = release;
 
 	psT->psNext = psResTypes;
@@ -399,9 +368,10 @@ static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, vo
  * check if given file exists in a locale dependend subdir
  * if so, modify given fileName to hold the locale dep. file,
  * else do not change given fileName
- * \param[out] fileName must be at least MAX_PATH bytes large
+ * \param[in,out] fileName must be at least PATH_MAX bytes large
+ * \param maxlen indicates the maximum buffer size of \c fileName
  */
-static void makeLocaleFile(char fileName[])  // given string must have MAX_PATH size
+static void makeLocaleFile(char* fileName, size_t maxlen)  // given string must have PATH_MAX size
 {
 #ifdef ENABLE_NLS
 	const char * language = getLanguage();
@@ -417,7 +387,7 @@ static void makeLocaleFile(char fileName[])  // given string must have MAX_PATH 
 
 	if ( PHYSFS_exists(localeFile) )
 	{
-		sstrcpy(fileName, localeFile);
+		strlcpy(fileName, localeFile, maxlen);
 		debug(LOG_WZ, "Found translated file: %s", fileName);
 	}
 #endif // ENABLE_NLS
@@ -457,7 +427,9 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 	HashedName = HashStringIgnoreCase(pFile);
 	for (psRes = psT->psRes; psRes; psRes = psRes->psNext)
 	{
-		if(psRes->HashedID == HashedName)
+		// FIXME: the check for SCRIPTVAL is because the Lua code depends on the script being loaded
+		// multiple times
+		if(psRes->HashedID == HashedName && strcmp(pType, "SCRIPTVAL"))
 		{
 			debug(LOG_WZ, "resLoadFile: Duplicate file name: %s (hash %x) for type %s",
 			      pFile, HashedName, psT->aType);
@@ -476,7 +448,7 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 	sstrcpy(aFileName, aCurrResDir);
 	sstrcat(aFileName, pFile);
 
-	makeLocaleFile(aFileName);  // check for translated file
+	makeLocaleFile(aFileName, sizeof(aFileName));  // check for translated file
 
 	SetLastResourceFilename(pFile); // Save the filename in case any routines need it
 
@@ -545,97 +517,6 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 		psRes->psNext = psT->psRes;
 		psT->psRes = psRes;
 	}
-	return true;
-}
-
-BOOL resLoadTable(const char* type, const char* tableName)
-{
-	RES_TYPE	*psT;
-	void		*pData;
-	RES_DATA	*psRes;
-	UDWORD HashedType = HashString(type);
-
-	// Find the resource-type
-	for (psT = psResTypes; psT != NULL; psT = psT->psNext)
-	{
-		if (psT->HashedType == HashedType)
-		{
-			break;
-		}
-	}
-
-	if (psT == NULL)
-	{
-		debug(LOG_WZ, "Unknown type: %s", type);
-		return false;
-	}
-
-	// load the resource
-	if (psT->tableLoad)
-	{
-		if (!psT->tableLoad(currDB, tableName, &pData))
-		{
-			debug(LOG_ERROR, "The load function for resource type \"%s\" failed while loading table \"%s\" from database \"%s\"", type, tableName, currDBFile);
-			if (psT->release != NULL)
-			{
-				psT->release(pData);
-			}
-
-			return false;
-		}
-	}
-	else
-	{
-		debug(LOG_ERROR, "No table load functions for this type (%s)", type);
-		return false;
-	}
-
-	resDoResLoadCallback();		// do callback.
-
-	// Set up the resource structure if there is something to store
-	if (pData != NULL)
-	{
-		char* table;
-		sasprintf(&table, "%s:%s", currDBFile, tableName);
-
-		// LastResourceFilename may have been changed (e.g. by TEXPAGE loading)
-		psRes = resDataInit(table, HashStringIgnoreCase(table), pData, resBlockID);
-		if (!psRes)
-		{
-			if (psT->release != NULL)
-			{
-				psT->release(pData);
-			}
-			return false;
-		}
-
-		// Add the resource to the list
-		psRes->psNext = psT->psRes;
-		psT->psRes = psRes;
-	}
-	return true;
-}
-
-BOOL resOpenDB(const char* filename)
-{
-	// If we already have a database opened, make sure to close it first.
-	if (currDB)
-	{
-		sqlite3_close(currDB);
-	}
-
-	sstrcpy(currDBFile, aCurrResDir);
-	sstrcat(currDBFile, filename);
-
-	makeLocaleFile(currDBFile);  // check for translated file
-
-	if (sqlite3_open_v2(currDBFile, &currDB, SQLITE_OPEN_READONLY, NULL) != SQLITE_OK)
-	{
-		debug(LOG_ERROR, "Can't open database (%s): %s", currDBFile, sqlite3_errmsg(currDB));
-		currDB = NULL;
-		return false;
-	}
-
 	return true;
 }
 

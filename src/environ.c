@@ -53,7 +53,7 @@ BOOL    environInit( void )
 	pEnvironData = (ENVIRON_DATA*)malloc(sizeof(struct environ_data) * MAP_MAXWIDTH * MAP_MAXHEIGHT);
 	if(!pEnvironData)
 	{
-		debug( LOG_ERROR, "Can't get memory for the environment data" );
+		debug( LOG_FATAL, "Can't get memory for the environment data" );
 		abort();
 		return false;
 	}

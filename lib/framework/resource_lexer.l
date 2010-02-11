@@ -85,10 +85,8 @@ extern void res_set_debug(int bdebug);
 
 %%
 	/* Match to key words */
-database					{ return DATABASE;  }
 directory					{ return DIRECTORY; }
 file						{ return FILETOKEN; }
-table						{ return TABLE;     }
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{

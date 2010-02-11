@@ -26,6 +26,11 @@
 
 #include "lib/framework/vector.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define NUM_RAYS 360
 
 // maximum length for a visiblity ray
@@ -70,5 +75,9 @@ extern void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWOR
 
 extern void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction,
 								   UDWORD thresholdDistance, SDWORD *pitch );
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_RAYCAST_H__

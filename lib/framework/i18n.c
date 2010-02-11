@@ -35,6 +35,11 @@
 
 
 #if defined(WZ_OS_WIN)
+/*
+ *  See msdn.microsoft.com for this stuff, esp.
+ *  http://msdn.microsoft.com/en-us/library/ms693062%28VS.85,printer%29.aspx
+ *  http://msdn.microsoft.com/en-us/library/dd318693%28VS.85,printer%29.aspx
+ */
 static const struct
 {
 	const char * language;
@@ -46,14 +51,14 @@ static const struct
 #  if defined(ENABLE_NLS)
 	{ "cs", N_("Czech"), LANG_CZECH, SUBLANG_DEFAULT },
 	{ "da", N_("Danish"), LANG_DANISH, SUBLANG_DEFAULT },
-	{ "de", N_("German"), LANG_GERMAN, SUBLANG_DEFAULT },
+	{ "de", N_("German"), LANG_GERMAN, SUBLANG_GERMAN },
 //	{ "en", N_("English"), LANG_ENGLISH, SUBLANG_DEFAULT },
-	{ "en_GB", N_("English (United Kingdom)"), LANG_ENGLISH, SUBLANG_DEFAULT },
-	{ "es", N_("Spanish"), LANG_SPANISH, SUBLANG_DEFAULT },
-	{ "et_EE", N_("Estonian"), LANG_ESTONIAN, SUBLANG_ESTONIAN },
+	{ "en_GB", N_("English (United Kingdom)"), LANG_ENGLISH, SUBLANG_ENGLISH_UK },
+	{ "es", N_("Spanish"), LANG_SPANISH, SUBLANG_SPANISH },
+	{ "et_EE", N_("Estonian"), LANG_ESTONIAN, SUBLANG_DEFAULT },
 //	{ "eu", N_("Basque"), LANG_BASQUE, SUBLANG_DEFAULT },
 	{ "fi", N_("Finnish"), LANG_FINNISH, SUBLANG_DEFAULT },
-	{ "fr", N_("French"), LANG_FRENCH, SUBLANG_DEFAULT },
+	{ "fr", N_("French"), LANG_FRENCH, SUBLANG_FRENCH },
 	/* Our Frisian translation is the "West Frisian" variation of it. This
 	 * variation is mostly spoken in the Dutch province Friesland (Fryslân
 	 * in Frisian) and has ISO 639-3 code "fry".
@@ -62,14 +67,16 @@ static const struct
 	 *        fy_XX.
 	 */
 	{ "fy", N_("Frisian"), LANG_FRISIAN, SUBLANG_FRISIAN_NETHERLANDS },
-	{ "ga", N_("Irish"), LANG_IRISH, SUBLANG_DEFAULT },
-	{ "it", N_("Italian"), LANG_ITALIAN, SUBLANG_DEFAULT },
+	{ "ga", N_("Irish"), LANG_IRISH, SUBLANG_IRISH_IRELAND },
+	{ "hr", N_("Croatian"), LANG_CROATIAN, SUBLANG_DEFAULT },
+	{ "it", N_("Italian"), LANG_ITALIAN, SUBLANG_ITALIAN },
 //	{ "la", N_("Latin"), LANG_LATIN, SUBLANG_DEFAULT },
 	{ "lt", N_("Lithuanian"), LANG_LITHUANIAN, SUBLANG_DEFAULT },
 //	{ "lv", N_("Latvian"), LANG_LATVIAN, SUBLANG_DEFAULT },
+	// MSDN uses "no"...
 	{ "nb", N_("Norwegian"), LANG_NORWEGIAN, SUBLANG_DEFAULT },
 //	{ "nn", N_("Norwegian (Nynorsk)"), LANG_NORWEGIAN, SUBLANG_NORWEGIAN_NYNORSK },
-	{ "nl", N_("Dutch"), LANG_DUTCH, SUBLANG_DEFAULT },
+	{ "nl", N_("Dutch"), LANG_DUTCH, SUBLANG_DUTCH },
 	{ "pl", N_("Polish"), LANG_POLISH, SUBLANG_DEFAULT },
 	{ "pt_BR", N_("Brazilian Portuguese"), LANG_PORTUGUESE, SUBLANG_PORTUGUESE_BRAZILIAN },
 	{ "pt", N_("Portuguese"), LANG_PORTUGUESE, SUBLANG_DEFAULT },
@@ -84,6 +91,7 @@ static const struct
 //	{ "sv", N_("Swedish"), LANG_SWEDISH, SUBLANG_DEFAULT },
 //	{ "tr", N_("Turkish"), LANG_TURKISH, SUBLANG_DEFAULT },
 //	{ "uz", N_("Uzbek (Cyrillic)"), LANG_UZBEK, SUBLANG_UZBEK_CYRILLIC },
+	{ "uk_UA", N_("Ukrainian"), LANG_UKRAINIAN, SUBLANG_DEFAULT },
 	{ "zh_CN", N_("Simplified Chinese"), LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED },
 	{ "zh_TW", N_("Traditional Chinese"), LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL },
 #  endif
@@ -103,7 +111,7 @@ static const struct
 	{ "de", N_("German"), "de_DE.UTF-8", "de_DE" },
 //	{ "en", N_("English"), "en_US.UTF-8", "en_US" },
 	{ "en_GB", N_("English (United Kingdom)"), "en_GB.UTF-8", "en_GB" },
-	{ "es", N_("Spanish"), "es.UTF-8", "es" },
+	{ "es", N_("Spanish"), "es_ES.UTF-8", "es_ES" },
 	{ "et_EE", N_("Estonian"), "et_EE.UTF-8", "et_EE" },
 //	{ "eu", N_("Basque"), "eu.UTF-8", "eu" },
 	{ "fi", N_("Finnish"), "fi.UTF-8", "fi" },
@@ -117,6 +125,7 @@ static const struct
 	 */
 	{ "fy", N_("Frisian"), "fy.UTF-8", "fy" },
 	{ "ga", N_("Irish"), "ga.UTF-8", "ga" },
+	{ "hr", N_("Croatian"), "hr_HR.UTF-8", "hr_HR" },
 	{ "it", N_("Italian"), "it_IT.UTF-8", "it_IT" },
 	{ "la", N_("Latin"), "la.UTF-8", "la" },
 	{ "lt", N_("Lithuanian"), "lt.UTF-8", "lt" },
@@ -134,6 +143,7 @@ static const struct
 //	{ "sv", N_("Swedish"), "sv.UTF-8", "sv" },
 //	{ "tr", N_("Turkish"), "tr.UTF-8", "tr" },
 //	{ "uz", N_("Uzbek (Cyrillic)"), "uz.UTF-8", "uz" },
+	{ "uk_UA", N_("Ukrainian"), "uk_UA.UTF-8", "uk_UA" },
 	{ "zh_CN", N_("Simplified Chinese"), "zh_CN.UTF-8", "zh_CN" },
 	{ "zh_TW", N_("Traditional Chinese"), "zh_TW.UTF-8", "zh_TW" },
 #  endif
@@ -260,7 +270,10 @@ static BOOL setLocaleUnix(const char* locale)
 	}
 	else
 	{
-		debug(LOG_WZ, "Requested locale \"%s\", got \"%s\" instead", locale, actualLocale);
+		if (strcmp(locale, actualLocale))
+		{
+			debug(LOG_WZ, "Requested locale \"%s\", got \"%s\" instead", locale, actualLocale);
+		}
 	}
 
 	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")

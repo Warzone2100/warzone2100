@@ -226,7 +226,8 @@ void	getBridgeInfo(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY, BRIDG
 	}
 	else
 	{
-		debug(LOG_ERROR, "Weirdy bridge requested - no axis of alignment");
+		debug( LOG_FATAL, "Weirdy Bridge requested - no axes allignment" );
+		abort();
 	}
 }
 

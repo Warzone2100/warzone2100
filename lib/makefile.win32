@@ -13,7 +13,6 @@ SUBDIRS=framework \
 	script \
 	sequence \
 	sound \
-	sqlite3 \
 	widget
 
 include $(top_srcdir)/makerules/submake.mk

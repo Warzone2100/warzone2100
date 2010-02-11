@@ -20,6 +20,11 @@
 #ifndef __INCLUDED_SRC_AIEXPERIENCE_H__
 #define __INCLUDED_SRC_AIEXPERIENCE_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define	SAVE_FORMAT_VERSION			2
 
 #define MAX_OIL_ENTRIES				600		//(Max number of derricks or oil resources) / 2
@@ -62,5 +67,9 @@ extern	void OilExperienceDebug(SDWORD nPlayer);
 #define EXPERIENCE_LOAD_OK			0			//no problemens encountered
 #define EXPERIENCE_LOAD_ERROR		1			//error while loading experience
 #define EXPERIENCE_LOAD_NOSAVE		(-1)		//no experience exists
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_AIEXPERIENCE_H__

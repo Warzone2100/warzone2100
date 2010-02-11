@@ -6,7 +6,6 @@
 	ProjectGUID="{C7698ECE-9255-4A60-8091-A9A76E8BE911}"
 	RootNamespace="netplay"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -42,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;STATICLIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -105,7 +104,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;STATICLIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -165,6 +164,106 @@
 				RelativePath=".\nettypes.c"
 				>
 			</File>
+			<Filter
+				Name="miniUPnP"
+				>
+				<Filter
+					Name="src files"
+					>
+					<File
+						RelativePath=".\miniupnpc\igd_desc_parse.c"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\minisoap.c"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\minissdpc.c"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\miniupnpc.c"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\miniwget.c"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\minixml.c"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\upnpcommands.c"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\upnperrors.c"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\upnpreplyparse.c"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="header files"
+					>
+					<File
+						RelativePath=".\miniupnpc\bsdqueue.h"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\codelength.h"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\declspec.h"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\igd_desc_parse.h"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\minisoap.h"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\minissdpc.h"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\miniupnpc.h"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\miniupnpcstrings.h"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\miniwget.h"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\minixml.h"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\upnpcommands.h"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\upnperrors.h"
+						>
+					</File>
+					<File
+						RelativePath=".\miniupnpc\upnpreplyparse.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"

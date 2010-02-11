@@ -8,6 +8,7 @@ SUBDIRS=mods
 BASELIST= \
 	anims \
 	audio \
+	challenges \
 	components \
 	effects \
 	features \
@@ -16,10 +17,10 @@ BASELIST= \
 	messages \
 	misc \
 	multiplay \
+	palette.txt \
 	script \
 	sequenceaudio \
 	stats \
-	stats-sql \
 	structs \
 	tagdefinitions \
 	texpages \
@@ -39,30 +40,31 @@ MPLIST= \
 BASEARCHIVE=base.wz
 MPARCHIVE=mp.wz
 
-CLEANFILES=$(BASEARCHIVE) $(MPARCHIVE)
+ZIPLIST=$(BASEARCHIVE) $(MPARCHIVE)
 
 include $(top_srcdir)/makerules/submake.mk
 
-.PHONY: all clean $(BASEARCHIVE) $(MPARCHIVE) $(SUBDIRS)
+.PHONY: all clean $(ZIPLIST) $(SUBDIRS)
 
 all:
 ifdef INSTALLER
-all: $(BASEARCHIVE) $(MPARCHIVE) $(SUBDIRS)
+all: $(ZIPLIST) $(SUBDIRS)
 endif
 
 stamp:
 	echo > stamp
 
+# zip returns 12 on "nothing to do"
+
 $(BASEARCHIVE): $(basename $(BASEARCHIVE)) stamp $(patsubst %,$(basename $(BASEARCHIVE))/%,$(BASELIST))
-	(cd $< && zip -ru0 $@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' -x '*Makefile*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
+	cd $< && zip -r1 ..\$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' -x '*Makefile*'
 	zip -T $@
 	$(RM_F) stamp
 
 $(MPARCHIVE): $(basename $(MPARCHIVE)) stamp $(patsubst %,$(basename $(MPARCHIVE))/%,$(MPLIST))
-	(cd $< && zip -ru0 $@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' -x '*Makefile*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
+	cd $< && zip -r1 ..\$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' -x '*Makefile*'
 	zip -T $@
 	$(RM_F) stamp
 
 clean: $(SUBDIRS)
-	$(RM_F) $(BASEARCHIVE)
-	$(RM_F) $(MPARCHIVE)
+	$(RM_F) $(ZIPLIST)

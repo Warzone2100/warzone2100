@@ -21,6 +21,11 @@
 #ifndef __INCLUDED_SRC_CHALLENGE_H__
 #define __INCLUDED_SRC_CHALLENGE_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define CHALLENGE_SCORES "scores.ini"
 
 bool addChallenges(void);
@@ -30,5 +35,9 @@ bool displayChallenges(void);
 
 extern bool challengesUp;
 extern bool challengeActive;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_CHALLENGE_H__

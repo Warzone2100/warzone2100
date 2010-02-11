@@ -275,7 +275,7 @@ static bool init(const char *definition, const char *datafile, bool write)
 	buffer = bufptr = malloc(fsize + 1);
 	if (!buffer || !bufptr)
 	{
-		debug(LOG_ERROR, "init(): Out of memory");
+		debug(LOG_FATAL, "init(): Out of memory");
 		abort();
 		return false;
 	}

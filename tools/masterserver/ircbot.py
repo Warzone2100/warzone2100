@@ -4,7 +4,7 @@
 #
 # This file is part of Warzone 2100.
 # Copyright (C) 2009  Gerard Krol
-# Copyright (C) 2009  Warzone Resurrection Project
+# Copyright (C) 2009  Warzone 2100 Project
 #
 # Warzone 2100 is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-__author__  = "The Warzone Resurrection Project"
-__version__ = "0.0.1"
+__author__  = "The Warzone 2100 Project"
+__version__ = "0.0.2"
 __license__ = "GPL"
 
 import re
@@ -39,7 +39,7 @@ irc_silent_channels = ['#warzone2100']
 irc_nick            = "wzlobbybot"
 irc_nickpass        = None
 lobby_host          = 'lobby.wz2100.net'
-lobby_version       = '2.1'
+lobby_version       = '2.2'
 
 def main():
     bot = Bot(irc_server, irc_port, irc_serve_channels, irc_silent_channels, irc_nick, irc_nickpass, lobby_host, lobby_version)
@@ -111,17 +111,15 @@ class BotCommands:
 
     def list(self, nick, write):
         try:
-            games = [game for game in self.bot.lobby.list(self.bot.lobby.host)]
-            if not games:
-                write("%s: No games in lobby" % (nick))
+            l = ["\x02%s\x02 [%i/%i] (version: %s)" % (g.description, g.currentPlayers, g.maxPlayers, g.multiplayerVersion)
+                    for g in self.bot.lobby.list(self.bot.lobby.host)]
+            if not l:
+                message = 'No games in lobby'
+            elif len(l) == 1:
+                message = "1 game hosted: %s" % (l[0])
             else:
-                if len(games) == 1:
-                    message = "1 game hosted: "
-                else:
-                    message = "%i games hosted: " % (len(games))
-                l = ["\x02%s\x02 [%i/%i]" % (g.description, g.currentPlayers, g.maxPlayers) for g in games]
-                message += ", ".join(l)
-                write("%s: %s" % (nick, message))
+                message = "%i games hosted: %s" % (len(l), ", ".join(l))
+            write("%s: %s" % (nick, message))
         except (socket.error, socket.herror, socket.gaierror, socket.timeout), e:
             write("%s: Failed to communicate with the lobby (%s:%d): %s" % (nick, self.bot.lobby.host, self.bot.lobby.gamePort, e))
 
@@ -158,7 +156,7 @@ class change_notifier(threading.Thread):
                 for g in new_games:
                     if g.host in self.games and g.announce:
                         g.announce = False
-                        message = "New game: \x02%s\x02 (%i players)" % (g.description, g.maxPlayers)
+                        message = "New game: \x02%s\x02 (%i players, version: %s)" % (g.description, g.maxPlayers, g.multiplayerVersion)
                         if not g.host in self.timestamps:
                             self.irc.write(message)
                         else:

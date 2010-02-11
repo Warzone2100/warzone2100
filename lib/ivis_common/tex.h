@@ -21,6 +21,11 @@
 #define _tex_
 
 #include "png_util.h"
+#if defined __APPLE__ && defined __MACH__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
 //*************************************************************************
 
@@ -37,7 +42,7 @@
 typedef struct
 {
 	char name[iV_TEXNAME_MAX];
-	unsigned int id;
+	GLuint id;
 } iTexPage;
 
 //*************************************************************************

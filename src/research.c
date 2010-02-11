@@ -59,17 +59,17 @@ STRUCTURE				*psCBLastResStructure;
 SDWORD					CBResFacilityOwner;
 
 //research is now loaded per campaign - this hopefully is the max there will be in any one campaign!
-#define MAX_RESEARCH        (500)
+#define MAX_RESEARCH        (450 + 50)
 
 //need to define max's for each of the lists associated with the research - these
 //values have been chosen based on the current research stats - 21/12/98
-#define MAX_RESEARCH_PR             (650)
-#define MAX_RESEARCH_STRUCT_PR      (44 + 5)
+#define MAX_RESEARCH_PR             (650 + 50)
+#define MAX_RESEARCH_STRUCT_PR      (44 + 50)
 #define MAX_RESEARCH_FUNC           (250 + 25)
-#define MAX_RESEARCH_STRUCT_RED     (30 + 2)
+#define MAX_RESEARCH_STRUCT_RED     (30 + 25)
 #define MAX_RESEARCH_ARTE_RED       (40 + 5)
-#define MAX_RESEARCH_STRUCT_RES     (84 + 5)
-#define MAX_RESEARCH_ARTE_RES       (125 + 5)
+#define MAX_RESEARCH_STRUCT_RES     (84 + 50)
+#define MAX_RESEARCH_ARTE_RES       (125 + 50)
 
 //need corresponding arrays for the above
 static UWORD*            pResearchPR;
@@ -132,7 +132,12 @@ BOOL researchInitVars(void)
 	asResearch = NULL;
 	// research is a pre-defined size now
 	asResearch = (RESEARCH *)malloc(sizeof(RESEARCH)* MAX_RESEARCH);
-	ASSERT_OR_RETURN(false, asResearch, "Research Stats - Out of memory");
+	if (asResearch == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(asResearch, 0, (MAX_RESEARCH * sizeof(RESEARCH)));
 
 	// create the PLAYER_RESEARCH arrays
@@ -142,7 +147,7 @@ BOOL researchInitVars(void)
 			sizeof(PLAYER_RESEARCH));
 		if (asPlayerResList[i] == NULL)
 		{
-			debug( LOG_ERROR, "Out of memory assigning Player_Research" );
+			debug( LOG_FATAL, "Out of memory assigning Player_Research" );
 			abort();
 			return false;
 		}
@@ -153,35 +158,75 @@ BOOL researchInitVars(void)
 
 	// and deal with all the other arrays for research
 	pResearchPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_PR);
-	ASSERT_OR_RETURN(false, pResearchPR, "Research Stats - Out of memory");
+	if (pResearchPR == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchPR, 0, (MAX_RESEARCH_PR * sizeof(UWORD)));
 
 	pResearchStructPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_PR);
-	ASSERT_OR_RETURN(false, pResearchStructPR, "Research Stats - Out of memory");
+	if (pResearchStructPR == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchStructPR, 0, (MAX_RESEARCH_STRUCT_PR * sizeof(UWORD)));
 
 	pResearchFunc = (FUNCTION **) malloc(sizeof(FUNCTION *) * MAX_RESEARCH_FUNC);
-	ASSERT_OR_RETURN(false, pResearchFunc, "Research Stats - Out of memory");
+	if (pResearchFunc == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchFunc, 0, (MAX_RESEARCH_FUNC * sizeof(FUNCTION *)));
 
 	pResearchStructRed = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RED);
-	ASSERT_OR_RETURN(false, pResearchStructRed, "Research Stats - Out of memory");
+	if (pResearchStructRed == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchStructRed, 0, (MAX_RESEARCH_STRUCT_RED * sizeof(UWORD)));
 
 	pResearchArteRed = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RED);
-	ASSERT_OR_RETURN(false, pResearchArteRed, "Research Stats - Out of memory");
+	if (pResearchArteRed == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchArteRed, 0, (MAX_RESEARCH_ARTE_RED * sizeof(COMPONENT_STATS *)));
 
 	pResearchStructRes = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RES);
-	ASSERT_OR_RETURN(false, pResearchStructRes, "Research Stats - Out of memory");
+	if (pResearchStructRes == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchStructRes, 0, (MAX_RESEARCH_STRUCT_RES * sizeof(UWORD)));
 
 	pResearchArteRes = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RES);
-	ASSERT_OR_RETURN(false, pResearchArteRes, "Research Stats - Out of memory");
+	if (pResearchArteRes == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMPONENT_STATS *)));
 
 	pResearchArteRep = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RES);
-	ASSERT_OR_RETURN(false, pResearchArteRep, "Research Stats - Out of memory");
+	if (pResearchArteRep == NULL)
+	{
+		debug( LOG_FATAL, "Research Stats - Out of memory" );
+		abort();
+		return false;
+	}
 	memset(pResearchArteRep, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMPONENT_STATS *)));
 
 	for(i=0; i<MAX_PLAYERS; i++)
@@ -196,7 +241,7 @@ BOOL researchInitVars(void)
 /*Load the research stats from the file exported from Access*/
 BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 {
-	const unsigned int researchCount = numCR(pResearchData, bufferSize);
+	unsigned int researchCount = numCR(pResearchData, bufferSize);
 	RESEARCH *pResearch;
 	COMPONENT_STATS *psComp;
 	SDWORD structID;
@@ -207,6 +252,13 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 	char structName[MAX_STR_LENGTH], compName[MAX_STR_LENGTH],
 		compType[MAX_STR_LENGTH];
 
+	// Skip descriptive header
+	if (strncmp(pResearchData,"Research ",9)==0)
+	{
+		pResearchData = strchr(pResearchData,'\n') + 1;
+		researchCount--;
+	}
+	
 	numResearch = researchCount;
 
 	ASSERT(numResearch <= MAX_RESEARCH, "Too many ResearchStats! - max allowed %d", MAX_RESEARCH);
@@ -510,15 +562,6 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 		PRName[0] = '\0';
 		sscanf(pPRData,"%[^','],%[^','],%*d", ResearchName, PRName);
 
-		if (!getResourceName(ResearchName))
-		{
-			return false;
-		}
-		if (!getResourceName(PRName))
-		{
-			return false;
-		}
-
 		//loop through each Research to compare the name
 		for (incR=0; incR < numResearch; incR++)
 		{
@@ -626,15 +669,6 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 		//increment the data pointer
 		pArteData += (strlen(ResearchName)+1+strlen(ArteName)+1+strlen(TypeName)+1);
 
-		if (!getResourceName(ResearchName))
-		{
-			return false;
-		}
-		if (!getResourceName(ArteName))
-		{
-			return false;
-		}
-
 		pArtefact = getComponentDetails(TypeName, ArteName);
 		if (pArtefact == NULL)
 		{
@@ -686,10 +720,6 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 				}
 				else
 				{
-					if (!getResourceName(ArteName))
-					{
-						return false;
-					}
 					pArtefact = getComponentDetails(TypeName, ArteName);
 					if (pArtefact == NULL)
 					{
@@ -784,15 +814,6 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 		StructureName[0] = '\0';
 		sscanf(pStructData,"%[^','],%[^','],%*d,%*d", ResearchName, StructureName);
 
-		if (!getResourceName(ResearchName))
-		{
-			return false;
-		}
-		if (!getResourceName(StructureName))
-		{
-			return false;
-		}
-
 		//loop through each Research to compare the name
 		for (incR = 0; incR < numResearch; incR++)
 		{
@@ -829,7 +850,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 								break;
 							default:
 								/* NO DEFAULT CASE? Alex.... Here ya go - just for you...*/
-								debug( LOG_ERROR, "Unknown research list" );
+								debug( LOG_FATAL, "Unknown research list" );
 								abort();
 								return false;
 						}
@@ -838,7 +859,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 						if (pResearch[incR].storeCount >
 										(SDWORD)numToFind)
 						{
-							debug( LOG_ERROR, "Trying to allocate more Structures than allowed for research %s", getResearchName(pResearch) );
+							debug( LOG_FATAL, "Trying to allocate more Structures than allowed for research %s", getResearchName(pResearch) );
 							abort();
 							return false;
 						}
@@ -912,11 +933,6 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 		FunctionName[0] = '\0';
 		sscanf(pFunctionData,"%[^','],%[^','],%*d", ResearchName, FunctionName);
 
-		if (!getResourceName(ResearchName))
-		{
-			return false;
-		}
-
 		//loop through each Research to compare the name
 		for (incR=0; incR < numResearch; incR++)
 		{
@@ -938,7 +954,7 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 						if (pResearch[incR].storeCount >
 										(SDWORD)pResearch[incR].numFunctions)
 						{
-							debug( LOG_ERROR, "Trying to allocate more Functions than allowed for research %s", ResearchName );
+							debug( LOG_FATAL, "Trying to allocate more Functions than allowed for research %s", ResearchName );
 							abort();
 							return false;
 						}
@@ -1095,8 +1111,7 @@ add_research: //if passed all the tests - add it to the list
 }
 
 /* process the results of a completed research topic */
-void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
-					STRUCTURE *psResearchFacility)
+void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE *psResearchFacility, BOOL bTrigger)
 {
 	RESEARCH					*pResearch = asResearch + researchIndex;
 	UDWORD						type, inc;//, upgrade;
@@ -1118,13 +1133,16 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 	//check for structures to be made available
 	for (inc = 0; inc < pResearch->numStructResults; inc++)
 	{
-		apStructTypeLists[player][pResearch->pStructureResults[inc]] = AVAILABLE;
+		if (apStructTypeLists[player][pResearch->pStructureResults[inc]] != REDUNDANT)
+		{
+			apStructTypeLists[player][pResearch->pStructureResults[inc]] = AVAILABLE;
+		}
 	}
 
 	//check for structures to be made redundant
 	for (inc = 0; inc < pResearch->numRedStructs; inc++)
 	{
-		apStructTypeLists[player][pResearch->pRedStructs[inc]] = UNAVAILABLE;
+		apStructTypeLists[player][pResearch->pRedStructs[inc]] = REDUNDANT;
 	}
 
 	//check for artefacts to be made available
@@ -1134,7 +1152,10 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 		type = statType(pResearch->pArtefactResults[inc]->ref);
 		//set the component state to AVAILABLE
 		compInc = pResearch->pArtefactResults[inc]->ref - statRefStart(type);
-		apCompLists[player][type][compInc] = AVAILABLE;
+		if (apCompLists[player][type][compInc] != REDUNDANT)
+		{
+			apCompLists[player][type][compInc] = AVAILABLE;
+		}
 		//check for default sensor
 		if (type == COMP_SENSOR)
 		{
@@ -1166,9 +1187,9 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 				pReplacedArtefacts[inc], player);
 			//set the 'old' component to unavailable
 			type = statType(pResearch->pReplacedArtefacts[inc]->ref);
-			//set the component state to AVAILABLE
+			//set the component state to REDUNDANT
 			compInc = pResearch->pReplacedArtefacts[inc]->ref - statRefStart(type);
-			apCompLists[player][type][compInc] = UNAVAILABLE;
+			apCompLists[player][type][compInc] = REDUNDANT;
 		}
 		//check if the component is a brain
 		if (type == COMP_BRAIN)
@@ -1190,9 +1211,9 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 	{
 		//determine the type of artefact
 		type = statType(pResearch->pRedArtefacts[inc]->ref);
-		//set the component state to UNAVAILABLE
+		//set the component state to REDUNDANT
 		apCompLists[player][type][pResearch->pRedArtefacts[inc]->ref -
-			statRefStart(type)] = UNAVAILABLE;
+			statRefStart(type)] = REDUNDANT;
 	}
 
 	//check for technology effects
@@ -1721,16 +1742,20 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 		}
 	}
 
-    if ((bMultiPlayer || player == selectedPlayer) && bDisplay)
-    {
-        psCBLastResearch = pResearch;
+	if (psResearchFacility)
+	{
+		psResearchFacility->pFunctionality->researchFacility.psSubject = NULL;		// Make sure topic is cleared
+	}
+	if ((bMultiPlayer || player == selectedPlayer) && bTrigger)
+	{
+		psCBLastResearch = pResearch;
 		CBResFacilityOwner = player;
 		psCBLastResStructure = psResearchFacility;
-	    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCHCOMPLETED);
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCHCOMPLETED);
 		psCBLastResStructure = NULL;
-        CBResFacilityOwner = -1;
+		CBResFacilityOwner = -1;
 		psCBLastResearch = NULL;
-    }
+	}
 
 #ifdef DEBUG
     /*this just checks that there are not more than 32 weapons now available for
@@ -1965,9 +1990,6 @@ void cancelResearch(STRUCTURE *psBuilding)
 
 		// Initialise the research facility's subject
 		psResFac->psSubject = NULL;
-
-		//set the researched flag - only set the flag to cancelled if it got past the accruePower stage
-		//pPlayerRes->researched = CANCELLED_RESEARCH;
 	}
 }
 
@@ -2331,13 +2353,6 @@ RESEARCH * getResearch(const char *pName, BOOL resName)
 {
 	unsigned int inc = 0;
 
-	//need to get the in game name if a resource name has been passed in
-	if (resName && !getResourceName(pName))
-	{
-		debug(LOG_ERROR, "getResearch: resource not found");
-		return NULL;
-	}
-
 	for (inc = 0; inc < numResearch; inc++)
 	{
 		if (!strcasecmp(asResearch[inc].pName, pName))
@@ -2520,7 +2535,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	//if a topic was found give the reward player the results of that research
 	if (rewardID)
 	{
-		researchResult(rewardID, rewardPlayer, true, NULL);
+		researchResult(rewardID, rewardPlayer, true, NULL, true);
 		if (rewardPlayer == selectedPlayer)
 		{
 			//name the actual reward

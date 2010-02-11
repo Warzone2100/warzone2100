@@ -29,6 +29,10 @@
 
 #include "wzglobal.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
 //! PSX-style float emulation: 12 digit semi-floats stored in an int
 // FIXME!
@@ -47,5 +51,9 @@ static inline WZ_DECL_CONST int DEG(const float degree)
 {
 	return (int)(degree * DEG_1);
 }
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // FIXEDPOINT_H

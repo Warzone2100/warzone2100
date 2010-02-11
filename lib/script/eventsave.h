@@ -27,12 +27,19 @@
 #ifndef _evntsave_h
 #define _evntsave_h
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // Save the state of the event system
 extern BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize);
 
 // Load the state of the event system
 extern BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed);
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus
+
 #endif
-
-

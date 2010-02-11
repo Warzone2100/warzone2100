@@ -69,8 +69,6 @@ void yyerror(const char* msg)
 	/* keywords */
 %token DIRECTORY
 %token FILETOKEN
-%token DATABASE
-%token TABLE
 
 %%
 
@@ -80,8 +78,6 @@ res_file:			res_line
 
 res_line:			dir_line
 				|	file_line
-				|	database_line
-				|	table_line
 				;
 
 dir_line:			DIRECTORY QTEXT_T
@@ -119,37 +115,6 @@ file_line:			FILETOKEN TEXT_T QTEXT_T
 					/* load a data file */
 					debug(LOG_NEVER, "file: %s %s", $2, $3);
 					succes = resLoadFile($2, $3);
-					free($2);
-					free($3);
-
-					if (!succes)
-					{
-						YYABORT;
-					}
-				}
-				;
-
-database_line:			DATABASE QTEXT_T
-				{
-					bool succes;
-					/* Open a database file */
-					debug(LOG_NEVER, "database: %s", $2);
-					succes = resOpenDB($2);
-					free($2);
-
-					if (!succes)
-					{
-						YYABORT;
-					}
-				}
-				;
-
-table_line:			TABLE TEXT_T QTEXT_T
-				{
-					bool succes;
-					/* load a database table */
-					debug(LOG_NEVER, "table: %s", $2);
-					succes = resLoadTable($2, $3);
 					free($2);
 					free($3);
 

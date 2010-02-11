@@ -179,7 +179,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 
 		if (iOption == POPT_ERROR_BADOPT)
 		{
-			debug(LOG_ERROR, "Unrecognized option: %s", poptBadOption(poptCon, 0));
+			debug(LOG_FATAL, "Unrecognized option: %s", poptBadOption(poptCon, 0));
 			exit(1);
 		}
 
@@ -352,6 +352,18 @@ bool ParseCommandLine(int argc, const char** argv)
 					return false;
 				}
 				NetPlay.bComms = false;
+				bMultiPlayer = false;
+				bMultiMessages = false;
+				NetPlay.players[0].allocated = true;
+				if (strcmp(token, "CAM_1A") && strcmp(token, "CAM_2A") && strcmp(token, "CAM_3A"))
+				{
+					game.type = CAMPAIGN;
+				}
+				else
+				{
+					game.type = SKIRMISH; // tutorial is skirmish for some reason
+				}
+				game.type = CAMPAIGN;
 				sstrcpy(aLevelName, token);
 				SetGameMode(GS_NORMAL);
 				break;

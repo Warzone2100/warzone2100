@@ -26,6 +26,11 @@
 
 #include "statsdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 enum FUNCTION_TYPES
 {
 	PRODUCTION_TYPE,
@@ -361,5 +366,9 @@ typedef struct _function_upgrade
 //	UDWORD			weaponCapacity;	/*The size of weapon in system points that may
 //									  be added. 0 = no weapons can be added*/
 //} DEFENSIVE_STRUCTURE_FUNCTION;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_FUNCTIONDEF_H__

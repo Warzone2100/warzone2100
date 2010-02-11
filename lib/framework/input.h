@@ -32,6 +32,12 @@
 
 #include <SDL.h>
 #include "types.h"
+#include "lib/framework/utf.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
 /** Defines for all the key codes used. */
 typedef enum _key_code
@@ -78,6 +84,8 @@ typedef enum _key_code
 	KEY_QUOTE		=SDLK_QUOTE,
 	KEY_BACKQUOTE		=SDLK_BACKQUOTE,
 	KEY_LSHIFT		=SDLK_LSHIFT,
+	KEY_LMETA		=SDLK_LMETA,
+	KEY_LSUPER		=SDLK_LSUPER,
 	KEY_BACKSLASH		=SDLK_BACKSLASH,
 	KEY_Z			=SDLK_z,
 	KEY_X			=SDLK_x,
@@ -90,6 +98,8 @@ typedef enum _key_code
 	KEY_FULLSTOP		=SDLK_PERIOD,
 	KEY_FORWARDSLASH	=SDLK_SLASH,
 	KEY_RSHIFT		=SDLK_RSHIFT,
+	KEY_RMETA		=SDLK_RMETA,
+	KEY_RSUPER		=SDLK_RSUPER,
 	KEY_KP_STAR		=SDLK_KP_MULTIPLY,
 	KEY_LALT		=SDLK_LALT,
 	KEY_SPACE		=SDLK_SPACE,
@@ -155,9 +165,6 @@ extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
 /** Initialise the input module. */
 extern void inputInitialise(void);
 
-/** Add a key press to the key buffer. */
-extern void inputAddBuffer(UDWORD code, char char_code, UDWORD count);
-
 /** This returns true if the key is currently depressed. */
 extern BOOL keyDown(KEY_CODE code);
 
@@ -219,15 +226,19 @@ extern void SetMousePos(Uint16 x, Uint16 y);
 #define INPBUF_ESC		0x00001b
 
 /** Return the next key press or 0 if no key in the buffer.
- * The key returned will have been remaped to the correct ascii code for the
- * windows key map.
- * All key presses are buffered up (including windows auto repeat).
+ * The key returned will have been remapped to the correct ascii code for the
+ * US layout (approximately) key map.
+ * All key presses are buffered up (including auto repeat).
+ * @param unicode is filled (unless NULL) with the unicode character corresponding
+ * to the key press (using the user's native layout).
  */
-extern UDWORD inputGetKey(void);
-
-extern char inputGetCharKey(void);
+extern UDWORD inputGetKey(utf_32_char *unicode);
 
 /** Clear the input buffer. */
 extern void inputClearBuffer(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

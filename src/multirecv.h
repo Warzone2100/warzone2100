@@ -27,6 +27,11 @@
 #ifndef __INCLUDED_SRC_MULTIRECV_H__
 #define __INCLUDED_SRC_MULTIRECV_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 extern BOOL recvDroid				(void);
 extern BOOL recvDroidInfo			(void);
 extern BOOL recvDestroyDroid		(void);
@@ -51,10 +56,9 @@ extern BOOL recvPowerCheck			(void);
 extern BOOL recvAlliance			(BOOL allowAudio);
 extern BOOL recvColourRequest		(void);
 extern BOOL recvPositionRequest		(void);
-//extern BOOL sendWholeStructure		(STRUCTURE *pS, DPID dest);
 extern void recvOptions				(void);
 extern void sendOptions				(void);
-extern BOOL recvScoreSubmission		(void);
+
 extern BOOL recvHappyVtol			(void);
 extern BOOL recvResearchStatus		(void);
 extern BOOL recvLasSat				(void);
@@ -65,5 +69,9 @@ extern BOOL	recvMapFileRequested		(void);
 extern BOOL recvTextMessageAI		(void);		//AI multiplayer message
 extern BOOL	recvTeamRequest		(void);
 extern BOOL	recvReadyRequest		(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIRECV_H__

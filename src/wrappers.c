@@ -62,8 +62,9 @@
 
 typedef struct _star
 {
-	UWORD	xPos;
-	SDWORD	speed;
+	int      xPos;
+	int      speed;
+	PIELIGHT colour;
 } STAR;
 
 #define MAX_STARS 20
@@ -83,6 +84,22 @@ static	UDWORD	lastChange = 0;
 extern char iptoconnect[PATH_MAX];		// holds our ip/hostname from the command line
 BOOL hostlaunch = false;				// used to detect if we are hosting a game via command line option.
 
+static PIELIGHT randColour(void)
+{
+	PIELIGHT colour;
+	colour.byte.r = 200;
+	colour.byte.g = 200;
+	colour.byte.b = 200;
+	colour.byte.a = 255;
+	if (rand()%15 == 0)
+	{
+		colour.byte.r = rand()%256;
+		colour.byte.g = rand()%256;
+		colour.byte.b = rand()%256;
+	}
+	return colour;
+}
+
 static void initStars(void)
 {
 	unsigned int i;
@@ -90,7 +107,8 @@ static void initStars(void)
 	for(i = 0; i < MAX_STARS; ++i)
 	{
 		stars[i].xPos = (UWORD)(rand()%598);		// scatter them
-		stars[i].speed = rand()%10+2;	// always move
+		stars[i].speed = rand() % 30 + 6;	// always move
+		stars[i].colour = randColour();
 	}
 }
 
@@ -126,6 +144,7 @@ TITLECODE titleLoop(void)
 		{
 			ingame.bHostSetup = true;
 			bMultiPlayer = true;
+			bMultiMessages = true;
 			game.type = SKIRMISH;		// needed?
 			changeTitleMode(MULTIOPTION);
 			hostlaunch = false;			// reset the bool to default state.
@@ -240,7 +259,7 @@ TITLECODE titleLoop(void)
 			break;
 
 		default:
-			debug( LOG_ERROR, "unknown title screen mode" );
+			debug( LOG_FATAL, "unknown title screen mode" );
 			abort();
 	}
 
@@ -274,17 +293,12 @@ void loadingScreenCallback(void)
 	UDWORD			currTick;
 	PIELIGHT		colour;
 
-	if(SDL_GetTicks()-lastTick < 16)
+	currTick = SDL_GetTicks();
+	if (currTick - lastTick < 50)
 	{
 		return;
 	}
-	currTick = SDL_GetTicks();
-	if ((currTick - lastTick) > 500)
-	{
-		currTick -= lastTick;
-		debug( LOG_NEVER, "loadingScreenCallback: pause %d\n", currTick );
-	}
-	lastTick = SDL_GetTicks();
+	lastTick = currTick;
 	colour.byte.r = 1;
 	colour.byte.g = 1;
 	colour.byte.b = 1;
@@ -304,17 +318,15 @@ void loadingScreenCallback(void)
 	   	if(stars[i].xPos + stars[i].speed >=598)
 		{
 			stars[i].xPos = 1;
+			stars[i].colour = randColour();
 		}
 		else
 		{
 			stars[i].xPos = (UWORD)(stars[i].xPos + stars[i].speed);
 		}
 
-		colour.byte.r = 200;
-		colour.byte.g = 200;
-		colour.byte.b = 200;
-		colour.byte.a = 255;
-		pie_UniTransBoxFill(10 + stars[i].xPos+D_W, 450 + i + D_H, 10 + stars[i].xPos + (2 * stars[i].speed) + D_W, 450 + i + 2 + D_H, colour);
+		colour = stars[i].colour;
+		pie_UniTransBoxFill(10 + stars[i].xPos + D_W, 450 + i + D_H, 10 + stars[i].xPos + stars[i].speed + D_W, 450 + i + 2 + D_H, colour);
    	}
 
 	pie_ScreenFlip(CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD);//loading callback		// dont clear.
@@ -393,14 +405,6 @@ void closeLoadingScreen(void)
 
 BOOL displayGameOver(BOOL bDidit)
 {
-// AlexL says take this out......
-//	setConsolePermanence(true,true);
-//	flushConsoleMessages( );
-
-//	addConsoleMessage(" ", CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-//	addConsoleMessage(_("Game Over"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-//	addConsoleMessage(" ", CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-
 	if(bDidit)
 	{
 		setPlayerHasWon(true);

@@ -114,7 +114,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot)
 	// FIXME: This function is used instead of glBindTexture, but we're juggling with difficult to trace global state here. Look into pie_SetTexturePage's definition for details.
 	//pie_SetTexturePage(i);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, (GLuint)_TEX_PAGE[i].id);
+	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[i].id);
 
 	bTextureGenerated = glIsTexture(_TEX_PAGE[i].id);
 
@@ -258,7 +258,7 @@ int pie_ReplaceTexPage(iV_Image *s, const char *texPage)
 		return -1;
 	}
 
-	glDeleteTextures(1, (GLuint *) &_TEX_PAGE[i].id);
+	glDeleteTextures(1, &_TEX_PAGE[i].id);
 	fprintf(stderr, "Reloading texture %s from index %d", texPage, i);
 	_TEX_PAGE[i].name[0] = '\0';
 	pie_AddTexPage(s, texPage, i);
@@ -277,7 +277,7 @@ void pie_TexShutDown(void)
 
 	while (i < _TEX_INDEX)
 	{
-		glDeleteTextures(1, (GLuint *) &_TEX_PAGE[i].id);
+		glDeleteTextures(1, &_TEX_PAGE[i].id);
 		i++;
 	}
 

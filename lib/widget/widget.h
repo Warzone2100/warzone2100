@@ -35,6 +35,11 @@
 #include "lib/ivis_common/textdraw.h"
 #include "widgbase.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /***********************************************************************************
  *
  * Widget style definitions - these control how the basic widget appears on screen
@@ -459,5 +464,9 @@ extern BOOL getWidgetsStatus( void );
 
 extern void CheckpsMouseOverWidget( void *psWidget );
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_WIDGET_H__

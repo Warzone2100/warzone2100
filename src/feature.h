@@ -26,6 +26,11 @@
 
 #include "objectdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* The statistics for the features */
 extern FEATURE_STATS	*asFeatureStats;
 extern UDWORD			numFeatureStats;
@@ -64,5 +69,9 @@ extern FEATURE	* checkForWreckage(DROID *psDroid);
 extern float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide);
 
 extern void     featureInitVars(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_FEATURE_H__

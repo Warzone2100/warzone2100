@@ -79,7 +79,7 @@
 #include "multigifts.h"
 #include "multilimit.h"
 #include "advvis.h"
-
+#include "mapgrid.h"
 #include "lib/ivis_common/piestate.h"
 #include "wrappers.h"
 #include "order.h"
@@ -102,7 +102,7 @@
 #include "keymap.h"
 #include "visibility.h"
 #include "design.h"
-
+#include "random.h"
 #include "scriptobj.h"
 #include "scriptvals.h"
 
@@ -123,8 +123,68 @@ static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 
 extern	UDWORD				objID;					// unique ID creation thing..
 
+/// Hold the previously assigned player
+static int nextPlayer = 0;
+static Vector2i positions[MAX_PLAYERS];
+
+void scriptSetStartPos(int position, int x, int y)
+{
+	positions[position].x = x;
+	positions[position].y = y;
+	debug(LOG_SCRIPT, "Setting start position %d to (%d, %d)", position, x, y);
+}
+
+BOOL scriptInit()
+{
+	nextPlayer = 0;
+	return true;
+}
+
+BOOL scrScavengersActive()
+{
+	scrFunctionResult.v.bval = game.scavengers;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
+static int scrGetPlayer(lua_State *L)
+{
+	if (nextPlayer >= MAX_PLAYERS)
+	{
+		return luaL_error(L, "maximum number of players reached");
+		// not reached
+		return 0;
+	}
+
+	debug(LOG_SCRIPT, "Initialized player %d, starts at position (%d, %d), max %d players", nextPlayer, 
+	      positions[nextPlayer].x, positions[nextPlayer].y, NetPlay.maxPlayers);
+	lua_pushinteger(L, nextPlayer);
+	nextPlayer++;
+	return 1;
+}
+
+static int scrGetPlayerStartPosition(lua_State *L)
+{
+	int player = luaWZ_checkplayer(L, 1);
+	int x = 0;
+	int y = 0;
+
+	if (player < NetPlay.maxPlayers)
+	{
+		x = positions[player].x;
+		y = positions[player].y;
+	}
+	lua_pushinteger(L, x);
+	lua_pushinteger(L, y);
+	return 2;
+}
+
 /******************************************************************************************/
 /*				 Check for objects in areas											 */
+
 
 // check for a base object being in range of a point
 BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range)
@@ -845,7 +905,8 @@ static int scrIsStructureAvailable(lua_State *L)
 	{
 		return luaL_error(L, "unknown structure type");
 	}
-	lua_pushboolean(L, apStructTypeLists[player][index] == AVAILABLE);
+	lua_pushboolean(L, apStructTypeLists[player][index] == AVAILABLE
+	                   && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit);
 	return 1;
 }
 
@@ -1090,7 +1151,6 @@ static int scrRemoveMessage(lua_State *L)
 
 	//find the message
 	psMessage = findMessage((MSG_VIEWDATA*)psViewData, msgType, player);
-	ASSERT(psMessage, "cannot find message - %s", psViewData->pName);
 	if (psMessage)
 	{
 		//delete it
@@ -1099,8 +1159,7 @@ static int scrRemoveMessage(lua_State *L)
 	}
 	else
 	{
-		return luaL_error(L, "cannot find message - %s",
-			psViewData->pName );
+		return luaL_error(L, "cannot find message - %s", psViewData->pName );
 	}
 
 	return 0;
@@ -1136,7 +1195,7 @@ static int scrBuildDroid(lua_State *L)
 	{
 
 		return luaL_error(L, "scrBuildUnit: invalid template - %s for factory - %s",
-			psTemplate->aName, psFactory->pStructureType->pName );
+	                 psTemplate->aName, psFactory->pStructureType->pName);
 	}
 
 	structSetManufacture(psFactory, psTemplate, (UBYTE)productionRun);
@@ -1172,13 +1231,7 @@ static int scrStructureIdle(lua_State *L)
 	STRUCTURE *psBuilding = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
 	BOOL		idle;
 
-	//test for idle
-	idle = false;
-	if (structureIdle(psBuilding))
-	{
-		idle = true;
-	}
-
+	idle = structureIdle(psBuilding);
 	lua_pushboolean(L, idle);
 	return 1;
 }
@@ -1534,6 +1587,35 @@ static int scrCentreViewPos(lua_State *L)
 	setViewPos(map_coord(x), map_coord(y), false);
 
 	return 0;
+}
+
+static STRUCTURE *unbuiltIter = NULL;
+static int unbuiltPlayer = -1;
+
+BOOL scrEnumUnbuilt(void)
+{
+	if (!stackPopParams(1, VAL_INT, &unbuiltPlayer))
+	{
+		return false;
+	}
+	ASSERT_OR_RETURN(false, unbuiltPlayer < MAX_PLAYERS && unbuiltPlayer >= 0, "Player number %d out of bounds", unbuiltPlayer);
+	unbuiltIter = apsStructLists[unbuiltPlayer];
+	return true;
+}
+
+BOOL scrIterateUnbuilt(void)
+{
+	for (; unbuiltIter && unbuiltIter->status != SS_BEING_BUILT; unbuiltIter = unbuiltIter->psNext) ;
+	scrFunctionResult.v.oval = unbuiltIter;
+	if (unbuiltIter)
+	{
+		unbuiltIter = unbuiltIter->psNext;	// proceed to next, so we do not report same twice (or infinitely loop)
+	}
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -2698,7 +2780,7 @@ static int scrStartMission(lua_State *L)
 	psNewLevel = levFindDataSet(pGame);
 	if (psNewLevel == NULL)
 	{
-		debug( LOG_ERROR, "scrStartMission: couldn't find level data" );
+		debug( LOG_FATAL, "scrStartMission: couldn't find level data" );
 		abort();
 		return luaL_error(L, "couldn't find level data" );
 	}
@@ -3152,7 +3234,10 @@ static int scrMyResponsibility(lua_State *L)
 }
 
 // -----------------------------------------------------------------------------------------
-// checks to see if a structure of the type specified exists within the specified range of an XY location
+/** 
+ * Checks to see if a structure of the type specified exists within the specified range of an XY location
+ * Use player -1 to find structures owned by any player. In this case, ignore if they are completed.
+ */
 static int scrStructureBuiltInRange(lua_State *L)
 {
 	int rangeSquared;
@@ -3222,13 +3307,9 @@ WZ_DECL_UNUSED static BOOL scrRandom(void)
 	{
 		iResult = 0;
 	}
-	else if (range > 0)
-	{
-		iResult = rand() % range;
-	}
 	else
 	{
-		iResult = rand() % (-range);
+		iResult = gameRand(abs(range));
 	}
 
 	scrFunctionResult.v.ival = iResult;
@@ -3244,7 +3325,9 @@ WZ_DECL_UNUSED static BOOL scrRandom(void)
 // randomise the random number seed
 static BOOL scrRandomiseSeed(lua_State *L)
 {
-	srand((UDWORD)clock());
+	// Why? What's the point? What on earth were they thinking, exactly? If the numbers don't have enough randominess, just set the random seed again and again until the numbers are double-plus super-duper full of randonomium?
+	debug(LOG_ERROR, "A script is trying to set the random seed with srand(). That just doesn't make sense.");
+	//srand((UDWORD)clock());
 
 	return 0;
 }
@@ -3290,11 +3373,11 @@ static int scrCompleteResearch(lua_State *L)
 		return luaL_error(L, "scrCompleteResearch: invalid research index" );
 	}
 
-	researchResult(researchIndex, (UBYTE)player, false, NULL);
+	researchResult(researchIndex, (UBYTE)player, false, NULL, false);
 
-	if(bMultiPlayer && (gameTime > 2 ))
+	if(bMultiMessages && (gameTime > 2 ))
 	{
-		SendResearch((UBYTE)player,researchIndex );
+		SendResearch((UBYTE)player, researchIndex, false);
 	}
 
 	return 0;
@@ -3926,14 +4009,8 @@ WZ_DECL_UNUSED static BOOL scrGetNearestGateway( void )
 		return(false);
 	}
 
-	if (gwGetGateways() == NULL)
-	{
-		ASSERT( false,"SCRIPT : No gateways found in getNearestGatway" );
-		return(false);
-	}
-
 	nearestSoFar = UDWORD_MAX;
-	retX = retY = 0;
+	retX = retY = -1;
 	success = false;
 	for (psGateway = gwGetGateways(); psGateway; psGateway = psGateway->psNext)
 	{
@@ -4282,17 +4359,32 @@ WZ_DECL_UNUSED static BOOL scrAddTemplate(void)
 // additional structure check
 static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles)
 {
-	UDWORD x,y,xTL,yTL,xBR,yBR;
-	UBYTE count =0;
-
-	STRUCTURE_STATS *psBuilding = (STRUCTURE_STATS *)psStat;
+	UDWORD		x, y, xTL, yTL, xBR, yBR;
+	UBYTE		count = 0;
+	STRUCTURE_STATS	*psBuilding = (STRUCTURE_STATS *)psStat;
+	GATEWAY		*psGate;
 
 	xTL = xx-1;
 	yTL = yy-1;
 	xBR = (xx + psBuilding->baseWidth );
 	yBR = (yy + psBuilding->baseBreadth );
-	// can you get past it?
 
+	// check against building in a gateway, as this can seriously block AI passages
+	for (psGate = gwGetGateways(); psGate; psGate = psGate->psNext)
+	{
+		for (x = xx; x <= xBR; x++)
+		{
+			for (y =yy; y <= yBR; y++)
+			{
+				if ((x >= psGate->x1 && x <= psGate->x2) && (y >= psGate->y1 && y <= psGate->y2))
+				{
+					return false;
+				}
+			}
+		}
+	}
+
+	// can you get past it?
 	y = yTL;	// top
 	for(x = xTL;x!=xBR+1;x++)
 	{
@@ -4339,7 +4431,6 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 		return true;
 	}
 	return false;
-
 }
 
 static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxBlockingTiles)
@@ -4350,99 +4441,79 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 	UDWORD			startX, startY, incX, incY;
 	SDWORD			x=0, y=0;
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "pickStructLocation:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
 
 	// check for wacky coords.
-	if(		*pX < 0
-		||	*pX > world_coord(mapWidth)
-		||	*pY < 0
-		||	*pY > world_coord(mapHeight)
-	  )
+	if (*pX < 0 || *pX > world_coord(mapWidth) || *pY < 0 || *pY > world_coord(mapHeight))
 	{
-		goto failedstructloc;
+		goto endstructloc;
 	}
 
 	psStat = &asStructureStats[index];			// get stat.
-	startX = map_coord(*pX);					// change to tile coords.
+	startX = map_coord(*pX);				// change to tile coords.
 	startY = map_coord(*pY);
-
 	x = startX;
 	y = startY;
 
 	// first try the original location
-	if ( validLocation((BASE_STATS*)psStat, startX, startY, player, false) )
+	if (validLocation((BASE_STATS*)psStat, startX, startY, player, false) && structDoubleCheck((BASE_STATS*)psStat, startX, startY, maxBlockingTiles))
 	{
-		if(structDoubleCheck((BASE_STATS*)psStat,startX,startY,maxBlockingTiles))
-		{
-			found = true;
-		}
+		found = true;
 	}
 
 	// try some locations nearby
-	if(!found)
+	for (incX = 1, incY = 1; incX < numIterations && !found; incX++, incY++)
 	{
-		for (incX = 1, incY = 1; incX < numIterations; incX++, incY++)
+		y = startY - incY;	// top
+		for (x = startX - incX; x < (SDWORD)(startX + incX); x++)
 		{
-			if (!found){			//top
-				y = startY - incY;
-				for(x = startX - incX; x < (SDWORD)(startX + incX); x++){
-					if ( validLocation((BASE_STATS*)psStat, x, y, player, false)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
-						){
-						found = true;
-						break;
-					}}}
-
-			if (!found)	{			//right
-				x = startX + incX;
-				for(y = startY - incY; y < (SDWORD)(startY + incY); y++){
-					if(validLocation((BASE_STATS*)psStat, x, y, player, false)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
-						){
-						found = true;
-						break;
-					}}}
-
-			if (!found){			//bot
-				y = startY + incY;
-				for(x = startX + incX; x > (SDWORD)(startX - incX); x--){
-					if(validLocation((BASE_STATS*)psStat, x, y, player, false)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
-						 ){
-						found = true;
-						break;
-					}}}
-
-			if (!found){			//left
-				x = startX - incX;
-				for(y = startY + incY; y > (SDWORD)(startY - incY); y--){
-					if(validLocation((BASE_STATS*)psStat, x, y, player, false)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
-						 ){
-						found = true;
-						break;
-					}}}
-
-			if (found)
+			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
+			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
 			{
-				break;
+				found = true;
+				goto endstructloc;
+			}
+		}
+		x = startX + incX;	// right
+		for (y = startY - incY; y < (SDWORD)(startY + incY); y++)
+		{
+			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
+			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			{
+				found = true;
+				goto endstructloc;
+			}
+		}
+		y = startY + incY;	// bottom
+		for (x = startX + incX; x > (SDWORD)(startX - incX); x--)
+		{
+			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
+			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			{
+				found = true;
+				goto endstructloc;
+			}
+		}
+		x = startX - incX;	// left
+		for (y = startY + incY; y > (SDWORD)(startY - incY); y--)
+		{
+			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
+			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			{
+				found = true;
+				goto endstructloc;
 			}
 		}
 	}
 
-	if(found)	// did It!
+endstructloc:
+	// back to world coords.
+	if (found)	// did it!
 	{
-		// back to world coords.
 		*pX = world_coord(x) + (psStat->baseWidth * (TILE_UNITS / 2));
 		*pY = world_coord(y) + (psStat->baseBreadth * (TILE_UNITS / 2));
-		return true;
 	}
-failedstructloc:
-	return false;
+	return found;
 }
 
 /// pick a structure location(only used in skirmish game at 27Aug) ajl.
@@ -5009,7 +5080,7 @@ WZ_DECL_UNUSED static BOOL scrFireWeaponAtObj(void)
 {
 	Vector3i target;
 	BASE_OBJECT *psTarget;
-	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0};
+	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 	if (!stackPopParams(2, ST_WEAPON, &sWeapon.nStat, ST_BASEOBJECT, &psTarget))
 	{
@@ -5035,7 +5106,7 @@ WZ_DECL_UNUSED static BOOL scrFireWeaponAtObj(void)
 WZ_DECL_UNUSED static BOOL scrFireWeaponAtLoc(void)
 {
 	Vector3i target;
-	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0};
+	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 	if (!stackPopParams(3, ST_WEAPON, &sWeapon.nStat, VAL_INT, &target.x, VAL_INT, &target.y))
 	{
@@ -5068,7 +5139,7 @@ WZ_DECL_UNUSED static BOOL scrSetDroidKills(void)
 		return false;
 	}
 
-	psDroid->experience = (UWORD)kills * 100;
+	psDroid->experience = (float)kills * 100.0;
 
 	return true;
 }
@@ -5203,12 +5274,6 @@ WZ_DECL_UNUSED static BOOL scrTutorialTemplates(void)
 
 	// find ViperLtMGWheels
 	sstrcpy(pName, "ViperLtMGWheels");
-	if (!getResourceName(pName))
-	{
-		debug( LOG_ERROR, "tutorial template setup failed" );
-		abort();
-		return false;
-	}
 
 	getDroidResourceName(pName);
 
@@ -5240,7 +5305,7 @@ WZ_DECL_UNUSED static BOOL scrTutorialTemplates(void)
 	}
 	else
 	{
-		debug( LOG_ERROR, "tutorial template setup failed" );
+		debug( LOG_FATAL, "tutorial template setup failed" );
 		abort();
 		return false;
 	}
@@ -8367,6 +8432,7 @@ static int scrPursueResearch(lua_State *L)
 
 	lua_pushboolean(L, found);
 	return 1;
+	intRefreshScreen();
 }
 
 WZ_DECL_UNUSED static BOOL scrGetStructureType(void)
@@ -8702,7 +8768,7 @@ WZ_DECL_UNUSED static BOOL scrGetChatCmdDescription(void)
 	pChatCommand = (char*)malloc(MAXSTRLEN);
 	if (pChatCommand == NULL)
 	{
-		debug(LOG_ERROR, "scrGetCmdDescription: Out of memory!");
+		debug(LOG_FATAL, "scrGetCmdDescription: Out of memory!");
 		abort();
 		return false;
 	}
@@ -8981,64 +9047,6 @@ static int scrDestroyed(lua_State *L)
 	return 1;
 }
 
-/*
- * Updates tile visibility for all map tiles for a given player,
- * to be used with scrCheckVisibleTile()
- */
-WZ_DECL_UNUSED static BOOL scrUpdateVisibleTiles(void)
-{
-	DROID		*psDroid;
-	STRUCTURE	*psStruct;
-	SDWORD		player;
-
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	scrResetPlayerTileVisibility(player);
-
-	for(psDroid = apsDroidLists[player];psDroid;psDroid=psDroid->psNext)
-	{
-		visTilesUpdate((BASE_OBJECT*)psDroid, scrRayTerrainCallback);
-	}
-
-	for(psStruct = apsStructLists[player];psStruct;psStruct=psStruct->psNext)
-	{
-		if (psStruct->pStructureType->type != REF_WALL
- 		    && psStruct->pStructureType->type != REF_WALLCORNER)
-		{
-			visTilesUpdate((BASE_OBJECT*)psStruct, scrRayTerrainCallback);
-		}
-	}
-
-	return true;
-}
-
-/*
- * Check is a given tile is visible for by a given player.
- * Should be used after a call to scrUpdateVisibleTiles().
- */
-WZ_DECL_UNUSED static BOOL scrCheckVisibleTile(void)
-{
-	int			x,y;
-	SDWORD		player;
-
-	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y))
-	{
-		return false;
-	}
-
-	scrFunctionResult.v.bval = scrTileIsVisible(player, x, y);
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrCheckVisibleTile(): failed to push result");
-		return false;
-	}
-
-	return true;
-}
-
 /// Assembles a template from components and returns it
 static int scrAssembleWeaponTemplate(lua_State *L)
 {
@@ -9111,7 +9119,7 @@ static int scrAssembleWeaponTemplate(lua_State *L)
 			pNewTemplate->psNext = apsDroidTemplates[player];
 			apsDroidTemplates[player] = pNewTemplate;		//apsTemplateList?
 
-			if (bMultiPlayer)
+			if (bMultiMessages)
 			{
 				sendTemplate(pNewTemplate);
 			}
@@ -9293,7 +9301,7 @@ WZ_DECL_UNUSED static BOOL scrPgettext(void)
 
 	if (asprintf(&msg_ctxt_id, "%s%s%s", strParam1, GETTEXT_CONTEXT_GLUE, strParam2) == -1)
 	{
-		debug(LOG_ERROR, "Out of memory");
+		debug(LOG_FATAL, "Out of memory");
 		abort();
 		return false;
 	}
@@ -9540,5 +9548,11 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "randomiseSeed", scrRandomiseSeed);
 	lua_register(L, "initAllNoGoAreas", scrInitAllNoGoAreas);
 	lua_register(L, "addDroidToMissionList", scrAddDroidToMissionList);
+	lua_register(L, "getPlayer", scrGetPlayer);
+	lua_register(L, "getPlayerStartPosition", scrGetPlayerStartPosition);
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
 	//lua_register(L, "", );
 }

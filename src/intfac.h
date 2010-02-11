@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_INTFAC_H__
 #define __INCLUDED_SRC_INTFAC_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 enum {
 	IMAGE_PBAR_EMPTY,
 	IMAGE_PBAR_AVAIL,
@@ -542,5 +547,9 @@ enum {
 	IMAGE_ORIGIN_SENSOR_AIRDEF,
 	IMAGE_ORIGIN_RADAR_DETECTOR
 };
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_INTFAC_H__

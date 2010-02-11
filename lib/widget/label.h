@@ -28,6 +28,11 @@
 #include "widgbase.h"
 #include "lib/ivis_common/textdraw.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // label states.
 #define WLABEL_HILITE	0x0004		// label is hilited
 
@@ -56,5 +61,9 @@ extern void labelHiLite(W_LABEL *psWidget, W_CONTEXT *psContext);
 
 /* Respond to the mouse moving off a label */
 extern void labelHiLiteLost(W_LABEL *psWidget);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_LABEL_H__

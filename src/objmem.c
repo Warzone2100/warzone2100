@@ -44,6 +44,7 @@
 #include "formation.h"
 #include "mapgrid.h"
 #include "combat.h"
+#include "visibility.h"
 #include "projectile.h"
 
 #ifdef DEBUG
@@ -125,6 +126,8 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 	// Make sure to get rid of some final references in the sound code to this object first
 	audio_RemoveObj(psObj);
 
+	visRemoveVisibility(psObj);
+	free(psObj->watchedTiles);
 	free(psObj);
 	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", psObj);
 }
@@ -223,6 +226,8 @@ static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
 	newObject->player = (UBYTE)player;
 	newObject->died = 0;
 	newObject->psNextFunc = NULL;
+	newObject->numWatchedTiles = 0;
+	newObject->watchedTiles = NULL;
 
 	return newObject;
 }
@@ -620,9 +625,6 @@ void killStruct(STRUCTURE *psBuilding)
 			}
 		}
 	}
-
-	// remove the object from the grid
-	gridRemoveObject((BASE_OBJECT *)psBuilding);
 
 	destroyObject((BASE_OBJECT**)apsStructLists, (BASE_OBJECT*)psBuilding);
 }

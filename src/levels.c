@@ -113,7 +113,7 @@ void levShutDown(void)
 
 		psLevels = psLevels->psNext;
 
-		for (i = 0; i < ARRAY_SIZE(toDelete->apDataFiles[i]); ++i)
+		for (i = 0; i < ARRAY_SIZE(toDelete->apDataFiles); ++i)
 		{
 			if (toDelete->apDataFiles[i] != NULL)
 			{
@@ -190,7 +190,7 @@ BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 				psDataSet = (LEVEL_DATASET*)malloc(sizeof(LEVEL_DATASET));
 				if (!psDataSet)
 				{
-					debug(LOG_ERROR, "Out of memory");
+					debug(LOG_FATAL, "Out of memory");
 					abort();
 					return false;
 				}
@@ -366,7 +366,7 @@ BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 				psDataSet->pName = strdup(pLevToken);
 				if (psDataSet->pName == NULL)
 				{
-					debug(LOG_ERROR, "Out of memory!");
+					debug(LOG_FATAL, "Out of memory!");
 					abort();
 					return false;
 				}
@@ -410,7 +410,7 @@ BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 				psDataSet->apDataFiles[currData] = strdup(pLevToken);
 				if (psDataSet->apDataFiles[currData] == NULL)
 				{
-					debug(LOG_ERROR, "Out of memory!");
+					debug(LOG_FATAL, "Out of memory!");
 					abort();
 					return false;
 				}
@@ -1023,6 +1023,6 @@ void levTest(void)
 	levTestLoad("CAM_3A");
 	levTestLoad("FASTPLAY");
 	levTestLoad("TUTORIAL3");
-	levTestLoad("BeggarsKanyon-T1");
+	levTestLoad("Sk-BeggarsKanyon-T1");
 	fprintf(stdout, "\tLevels self-test: PASSED\n");
 }

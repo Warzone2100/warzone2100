@@ -380,7 +380,7 @@ bool	CResMaster::freeTexPages(void) {
 
 	for (i = 0;i < m_textureToProcess;i++)
 	{
-		glDeleteTextures(1, (GLuint*)&_TEX_PAGE[i].id);
+		glDeleteTextures(1, &_TEX_PAGE[i].id);
 	}
 	return true;
 }

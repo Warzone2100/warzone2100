@@ -25,6 +25,11 @@
 #ifndef __INCLUDED_SRC_MULTISTATS_H__
 #define __INCLUDED_SRC_MULTISTATS_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef struct
 {
 	uint32_t played;						/// propogated stats.
@@ -52,5 +57,9 @@ extern void			updateMultiStatsLoses	(void);
 extern void			updateMultiStatsKills	(BASE_OBJECT *psKilled,UDWORD player);
 
 extern void recvMultiStats(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTISTATS_H__

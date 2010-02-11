@@ -7,7 +7,6 @@ SUBDIRS = framework	\
 	ivis_opengl	\
 	gamelib		\
 	sound		\
-	sqlite3		\
 	netplay		\
 	widget		\
 	lua

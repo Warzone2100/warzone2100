@@ -27,11 +27,10 @@
 #include "lib/framework/frame.h"
 #include "objects.h"
 
-/* The range out of which the random number for the to hit should be taken */
-#define HIT_DICE	100
-
-/* set a variable to the role of a die between 0 and HIT_DICE */
-#define HIT_ROLL(d)  (d) = rand() % HIT_DICE
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
 // maximum difference in direction for a fixed turret to fire
 #define FIXED_TURRET_DIR	1
@@ -65,5 +64,11 @@ extern void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget);
 
 extern float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD weaponClass,
                        UDWORD weaponSubClass, HIT_SIDE impactSide);
+
+extern unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE impactSide);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_COMBAT_H__

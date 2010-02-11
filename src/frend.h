@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_FREND_H__
 #define __INCLUDED_SRC_FREND_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 enum {
 	IMAGE_FE_LOGO,
 	IMAGE_COM1,
@@ -257,7 +262,15 @@ enum {
 	IMAGE_TRANS_LOCKED,		// clear background 'locked'
 	IMAGE_TRANS_UNLOCKED,	//  "       "       'unlocked'
 	IMAGE_UNLOCK_BLUE,		// Custom image for the host screen to fix the blend issue
-	IMAGE_LOCK_BLUE			//
+	IMAGE_LOCK_BLUE,		//
+	IMAGE_SCAVENGERS_ON,
+	IMAGE_SCAVENGERS_OFF,
+	IMAGE_SCAVENGERS_ON_HI,
+	IMAGE_SCAVENGERS_OFF_HI,
 };
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_FREND_H__

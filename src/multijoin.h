@@ -26,12 +26,16 @@
 
 #include "droiddef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 extern BOOL intDisplayMultiJoiningStatus(UBYTE joinCount);
 extern BOOL MultiPlayerLeave			(UDWORD playerIndex);						// A player has left the game.
 extern BOOL MultiPlayerJoin				(UDWORD playerIndex);						// A Player has joined the game.
 extern void setupNewPlayer				(UDWORD player);		// stuff to do when player joins.
-//extern BOOL UpdateClient				(DPID dest, UDWORD playerToSend);// send info about another player
-extern void clearPlayer					(UDWORD player, BOOL quietly, BOOL removeOil);// wipe a player off the face of the earth.
+extern void clearPlayer					(UDWORD player, BOOL quietly);// wipe a player off the face of the earth.
 //extern BOOL ProcessDroidOrders			(void);
 //extern UDWORD							arenaPlayersReceived;
 
@@ -42,5 +46,11 @@ typedef struct {
 
 extern DROIDSTORE *tempDroidList;
 extern void ShowMOTD(void);
+extern bool recvDataCheck(void);
+extern bool sendDataCheck(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIJOIN_H__

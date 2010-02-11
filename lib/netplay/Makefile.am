@@ -1,3 +1,5 @@
+SUBDIRS = miniupnpc
+
 AM_CPPFLAGS = $(SDL_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 
@@ -13,4 +15,4 @@ libnetplay_a_SOURCES = \
 	netplay.c \
 	nettypes.c
 
-libnetplay_a_LIBADD = $(top_builddir)/lib/framework/libframework.a
+libnetplay_a_LIBADD = $(top_builddir)/lib/framework/libframework.a $(top_builddir)/lib/netplay/miniupnpc/libminiupnpc.a

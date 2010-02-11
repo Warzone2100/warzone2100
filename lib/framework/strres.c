@@ -48,7 +48,7 @@ STR_RES* strresCreate()
 	STR_RES* const psRes = (STR_RES*)malloc(sizeof(*psRes));
 	if (!psRes)
 	{
-		debug(LOG_ERROR, "Out of memory");
+		debug(LOG_FATAL, "Out of memory");
 		abort();
 		return NULL;
 	}
@@ -56,7 +56,7 @@ STR_RES* strresCreate()
 	psRes->psIDTreap = treapCreate();
 	if (!psRes->psIDTreap)
 	{
-		debug(LOG_ERROR, "Out of memory");
+		debug(LOG_FATAL, "Out of memory");
 		abort();
 		free(psRes);
 		return NULL;
@@ -82,7 +82,7 @@ BOOL strresStoreString(STR_RES *psRes, const char* pID, const char* pString)
 	// Make sure that this ID string hasn't been used before
 	if (treapFind(psRes->psIDTreap, pID) != NULL)
 	{
-		debug(LOG_ERROR, "Duplicate string for id: \"%s\"", pID);
+		debug(LOG_FATAL, "Duplicate string for id: \"%s\"", pID);
 		abort();
 		return false;
 	}

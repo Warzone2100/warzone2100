@@ -28,6 +28,11 @@
 #include "netplay.h"
 #include "lib/framework/vector.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef enum packetDirectionEnum
 {
 	PACKET_ENCODE,
@@ -53,8 +58,10 @@ BOOL NETbin(char *str, uint16_t maxlen);
 PACKETDIR NETgetPacketDir(void);
 
 #if defined(__cplusplus)
+}
+
 template <typename EnumT>
-BOOL NETenum(EnumT* enumPtr)
+static BOOL NETenum(EnumT* enumPtr)
 {
 	int32_t val;
 	
@@ -68,6 +75,9 @@ BOOL NETenum(EnumT* enumPtr)
 
 	return retVal;
 }
+
+extern "C"
+{
 #else
 // FIXME: Causes tons of warnings: <enumPtr> is used unitialised in this function
 #define NETenum(enumPtr) \
@@ -90,5 +100,9 @@ BOOL NETVector3uw(Vector3uw* vp);
 int NETgetSource(void);
 
 void NETtest(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

@@ -129,10 +129,19 @@ void	setConsoleTextColor			( SDWORD player );
 /** Sets the system up */
 void	initConsoleMessages( void )
 {
+	int TextLineSize = iV_GetTextLineSize();
 	messageIndex = 0;
 
 	/* Console can extend to half screen height */
-	maxDrop = ((pie_GetVideoBufferHeight()/iV_GetTextLineSize())/2);
+	if (TextLineSize)
+	{
+		maxDrop = ((pie_GetVideoBufferHeight() / TextLineSize)/2);
+	}
+	else
+	{
+		debug(LOG_FATAL, "Something is wrong with the fonts? Aborting.");
+		abort();
+	}
 
 	if(maxDrop>32) maxDrop = 32;
 
@@ -227,6 +236,8 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 		jusType = defJustification;
 	}
 
+	debug(LOG_CONSOLE, "(to player %d): %s", (int)player, messageText);
+
 	consoleStorage[messageIndex].player = player;
 
 	/* Precalculate and store (quicker!) the indent for justified text */
@@ -248,7 +259,7 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 		break;
 		/* Gone tits up by the looks of it */
 	default:
-		debug( LOG_ERROR, "Weirdy type of text justification for console print" );
+		debug( LOG_FATAL, "Weirdy type of text justification for console print" );
 		abort();
 		break;
 	}
@@ -682,7 +693,7 @@ void	setDefaultConsoleJust(CONSOLE_TEXT_JUSTIFICATION defJ)
 		defJustification = defJ;
 		break;
 	default:
-		debug( LOG_ERROR, "Weird default text justification for console" );
+		debug( LOG_FATAL, "Weird default text justification for console" );
 		abort();
 		break;
 	}

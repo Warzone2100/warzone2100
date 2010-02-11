@@ -50,6 +50,7 @@
 #include "astar.h"
 #include "fpath.h"
 #include "levels.h"
+#include "scriptfuncs.h"
 
 struct ffnode
 {
@@ -106,7 +107,7 @@ typedef struct _zonemap_save_header {
 #define	ROOT_TABLE_SIZE		1024
 
 /* The size and contents of the map */
-UDWORD	mapWidth = 0, mapHeight = 0;
+SDWORD	mapWidth = 0, mapHeight = 0;
 MAPTILE	*psMapTiles = NULL;
 
 #define WATER_DEPTH	180
@@ -155,7 +156,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	psMapTiles = calloc(width * height, sizeof(MAPTILE));
 	if (psMapTiles == NULL)
 	{
-		debug(LOG_ERROR, "Out of memory");
+		debug(LOG_FATAL, "Out of memory");
 		abort();
 		return false;
 	}
@@ -166,8 +167,10 @@ BOOL mapNew(UDWORD width, UDWORD height)
 		psTile->height = MAX_HEIGHT / 4;
 		psTile->illumination = 255;
 		psTile->level = psTile->illumination;
-		psTile->bMaxed = true;
+		memset(psTile->watchers, 0, sizeof(psTile->watchers));
 		psTile->colour= WZCOL_WHITE;
+		psTile->tileExploredBits = 0;
+		psTile->sensorBits = 0;
 		psTile++;
 	}
 
@@ -304,7 +307,30 @@ static BOOL mapLoadGroundTypes(void)
 	else
 	{
 		debug(LOG_ERROR, "unsupported tileset: %s", tileset);
-		return false;
+		debug(LOG_POPUP, "This is a UNSUPPORTED map with a custom tileset.\nDefaulting to tertilesc1hw -- map may look strange!");
+		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
+		free(tileset);
+		tileset = strdup("texpages/tertilesc1hw");
+		numGroundTypes = 7;
+		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
+		
+		psGroundTypes[a_yellow].textureName = "page-45";
+		psGroundTypes[a_yellow].textureSize = 4.6;
+		psGroundTypes[a_red].textureName = "page-44";
+		psGroundTypes[a_red].textureSize = 6.2;
+		psGroundTypes[a_concrete].textureName = "page-47";
+		psGroundTypes[a_concrete].textureSize = 3.2;
+		psGroundTypes[a_cliff].textureName = "page-46";
+		psGroundTypes[a_cliff].textureSize = 5.8;
+		psGroundTypes[a_water].textureName = "page-42";
+		psGroundTypes[a_water].textureSize = 7.3;
+		
+		psGroundTypes[a_mud] = psGroundTypes[a_red];
+		psGroundTypes[a_green] = psGroundTypes[a_red];
+		
+		waterGroundType = a_water;
+		cliffGroundType = a_cliff;
+
 	}
 	return true;
 }
@@ -805,21 +831,24 @@ static BOOL hasRockiesDecal(UDWORD i, UDWORD j)
 static BOOL mapSetGroundTypes(void)
 {
 	int i,j;
+
 	for (i=0;i<mapWidth;i++)
 	{
 		for (j=0;j<mapHeight;j++)
 		{
-			mapTile(i,j)->ground = determineGroundType(i,j,tileset);
-			mapTile(i,j)->decal = false;
-			if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
+			MAPTILE *psTile = mapTile(i, j);
+
+			psTile->ground = determineGroundType(i,j,tileset);
+
+			if ((strcmp(tileset, "texpages/tertilesc1hw") == 0 && hasArizonaDecal(i, j))
+			    || (strcmp(tileset, "texpages/tertilesc2hw") == 0 && hasUrbanDecal(i, j))
+			    || (strcmp(tileset, "texpages/tertilesc3hw") == 0 && hasRockiesDecal(i, j)))
 			{
-				mapTile(i,j)->decal = hasArizonaDecal(i,j);
-			} else if (strcmp(tileset, "texpages/tertilesc2hw") == 0)
+				SET_TILE_DECAL(psTile);
+			}
+			else
 			{
-				mapTile(i,j)->decal = hasUrbanDecal(i,j);
-			} else if (strcmp(tileset, "texpages/tertilesc3hw") == 0)
-			{
-				mapTile(i,j)->decal = hasRockiesDecal(i,j);
+				CLEAR_TILE_DECAL(psTile);
 			}
 		}
 	}
@@ -906,6 +935,10 @@ BOOL mapLoad(char *filename)
 
 		psMapTiles[i].texture = texture;
 		psMapTiles[i].height = height;
+
+		// Visibility stuff
+		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
+		psMapTiles[i].sensorBits = 0;
 		for (j = 0; j < MAX_PLAYERS; j++)
 		{
 			psMapTiles[i].tileVisBits =(UBYTE)(psMapTiles[i].tileVisBits &~ (UBYTE)(1 << j));
@@ -941,24 +974,22 @@ BOOL mapLoad(char *filename)
 
 	// reset the random water bottom heights
 	environReset();
-	
+
 	// set the river bed
 	for (i=0;i<mapWidth;i++)
 	{
 		for (j=0;j<mapHeight;j++)
 		{
-			// copy over to height_new
-			setTileHeight(i,j, map_TileHeight(i, j));
 			// FIXME: magic number
-			mapTile(i,j)->waterLevel = mapTile(i,j)->height_new - world_coord(1)/3.0f/(float)ELEVATION_SCALE;
-			// lower riverbed (only for height_new)
-			if (mapTile(i,j)->ground == waterGroundType)
+			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3.0f / (float)ELEVATION_SCALE;
+			// lower riverbed
+			if (mapTile(i, j)->ground == waterGroundType)
 			{
-				mapTile(i,j)->height_new = mapTile(i,j)->height_new - (WATER_DEPTH - 2.0f*environGetData(i, j)) / (float)ELEVATION_SCALE;
+				mapTile(i, j)->height -= (WATER_DEPTH - 2.0f * environGetData(i, j)) / (float)ELEVATION_SCALE;
 			}
 		}
 	}
-	
+
 	/* set up the scroll mins and maxs - set values to valid ones for any new map */
 	scrollMinX = scrollMinY = 0;
 	scrollMaxX = mapWidth;
@@ -1305,7 +1336,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 			tagWriteEnter(0x12, 1);
 			tagWrite(0x01, psRearm->reArmPoints);
 			tagWrite(0x02, psRearm->timeStarted);
-			tagWrite(0x03, psRearm->currentPtsAdded);
+			tagWrite(0x03, psRearm->timeLastUpdated);
 			if (psRearm->psObj)
 			{
 				tagWrites(0x04, psRearm->psObj->id);
@@ -1740,7 +1771,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	*ppFileData = (char*)malloc(*pFileSize);
 	if (*ppFileData == NULL)
 	{
-		debug( LOG_ERROR, "Out of memory" );
+		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}
@@ -1826,7 +1857,7 @@ BOOL mapShutdown(void)
 	return true;
 }
 
-/// The height of the terrain at the specified world coordinates
+/// The max height of the terrain and water at the specified world coordinates
 extern SWORD map_Height(int x, int y)
 {
 	int tileX, tileY;
@@ -1837,15 +1868,16 @@ extern SWORD map_Height(int x, int y)
 	float onBottom, result;
 	float towardsCenter, towardsRight;
 
-	// make sure we have valid coordinates
-	if (x < 0 ||
-	    y < 0 ||
-	    x >= world_coord(mapWidth-1) ||
-	    y >= world_coord(mapHeight-1))
-	{
-		// we don't so give an arbitrary height
-		return 0;
-	}
+	// Clamp x and y values to actual ones
+	// Give one tile worth of leeway before asserting, for units/transporters coming in from off-map.
+	ASSERT(x >= -TILE_UNITS, "map_Height: x value is too small (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	ASSERT(y >= -TILE_UNITS, "map_Height: y value is too small (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	x = (x < 0 ? 0 : x);
+	y = (y < 0 ? 0 : y);
+	ASSERT(x < world_coord(mapWidth)+TILE_UNITS, "map_Height: x value is too big (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	ASSERT(y < world_coord(mapHeight)+TILE_UNITS, "map_Height: y value is too big (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	x = (x >= world_coord(mapWidth) ? world_coord(mapWidth) - 1 : x);
+	y = (y >= world_coord(mapHeight) ? world_coord(mapHeight) - 1 : y);
 
 	// on which tile are these coords?
 	tileX = map_coord(x);
@@ -1861,7 +1893,7 @@ extern SWORD map_Height(int x, int y)
 	{
 		for (j = 0; j < 2; j++)
 		{
-			height[i][j] = map_TileHeight(tileX+i, tileY+j);
+			height[i][j] = map_TileHeightSurface(tileX+i, tileY+j);
 			center += height[i][j];
 		}
 	}
@@ -1924,6 +1956,7 @@ extern SWORD map_Height(int x, int y)
 	onBottom = left * (1 - towardsRight) + right * towardsRight;
 	result = onBottom + (center - middle) * towardsCenter * 2;
 
+	result = MAX(result, 0);  // HACK Avoid unsigned underflow, when this is squashed into a Vector3uw later.
 	return (SDWORD)(result+0.5f);
 }
 
@@ -1931,15 +1964,16 @@ extern SWORD map_Height(int x, int y)
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 {
 	// min is used to make sure we don't go over array bounds!
+	// TODO Using the corner of the map instead doesn't make sense. Fix this...
 	SDWORD	iZ,
 			tileX = map_coord(psObj->pos.x),
 			tileY = map_coord(psObj->pos.y),
 			tileYOffset1 = (tileY * mapWidth),
 			tileYOffset2 = ((tileY+1) * mapWidth),
-			h1 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX)    ].height,
-			h2 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX + 1)].height,
-			h3 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX)    ].height,
-			h4 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX + 1)].height;
+			h1 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset1 + tileX)    ].height,
+			h2 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset1 + tileX + 1)].height,
+			h3 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset2 + tileX)    ].height,
+			h4 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset2 + tileX + 1)].height;
 
 	/* trivial test above */
 	if ( (psObj->pos.z > h1) && (psObj->pos.z > h2) &&
@@ -2132,6 +2166,7 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 	clock_t		start = clock();
 	bool		retval;
 
+	scriptInit();
 	retval = levLoadData(name, NULL, 0);
 	ASSERT(retval, "Could not load %s", name);
 	route.asPath = NULL;
@@ -2146,6 +2181,7 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 		job.destY = endy;
 		job.propulsion = PROPULSION_TYPE_WHEELED;
 		job.droidID = 1;
+		job.owner = 0;
 		asret = fpathAStarRoute(&route, &job);
 		free(route.asPath);
 		route.asPath = NULL;
@@ -2166,8 +2202,8 @@ void mapTest()
 {
 	fprintf(stdout, "\tMap self-test...\n");
 
-	astarTest("BeggarsKanyon-T1", 16, 5, 119, 182);
-	astarTest("MizaMaze-T3", 5, 5, 108, 112);
+	astarTest("Sk-BeggarsKanyon-T1", 16, 5, 119, 182);
+	astarTest("Sk-MizaMaze-T3", 5, 5, 108, 112);
 
 	fprintf(stdout, "\tMap self-test: PASSED\n");
 }

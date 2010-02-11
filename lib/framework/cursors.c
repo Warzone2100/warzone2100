@@ -33,6 +33,6 @@ SDL_Cursor* init_system_cursor(CURSOR cur, enum CURSOR_TYPE type)
 
 		default:
 			ASSERT(!"Bad cursor type", "Non-existent cursor type used: %u", (unsigned int)type);
-			return NULL;
+			return init_system_cursor32(cur);
 	}
 }

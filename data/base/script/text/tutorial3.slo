@@ -305,10 +305,10 @@ event	buildDerrick(inactive)
 	// Playsound "Oil resources are key to your success"
 	playSound(SND_TUT2,0);
 
+	pause(40);
+
 	// PlaySound "To build an oil derrick, select one of your trucks"
 	playSound(SND_TUT3,0);
-
-	pause(40);
 
 	tagConsoleText(_("To build an oil derrick, select one of your trucks"), 0);
 
@@ -498,6 +498,10 @@ event	powerGenBuilt(CALL_POWERGEN_BUILT)
 
 	clearConsole();
 
+	// if they didn't select the other unit, oh well.
+	setEventTrigger(otherUnitSelected,inactive);
+	setEventTrigger(correctUnit,inactive);
+
 	// Wait for a bit
 	pause(30);
 
@@ -512,9 +516,9 @@ event	powerGenBuilt(CALL_POWERGEN_BUILT)
 	playSound(SND_TUT15,0);
 
 	// Wait for a bit
-	pause(20);
 	tagConsoleText(_("Use a truck to search for the artifact indicated by the radar pulse"), 0);
 
+	pause(20);
 	pause(20);
 	tagConsoleText(_("Move the pointer over the artifact and left click to recover it"), 0);
 	
@@ -546,7 +550,7 @@ event	atArtefactSite(inactive)
 	enableResearch(artefact,0);
 
 	// Wait for a bit
-	pause(10);
+	//pause(10);
 
 	// fire off the build research centre malarky
 	setEventTrigger(buildResearchCentre,nextTo);
@@ -647,6 +651,9 @@ event	researchCentreBuilt(CALL_RESEARCH_BUILT)
 	// PlaySound "to resarch the artefact.."
 	playSound(SND_TUT22,0);
 
+	// Set the event that catches this
+	setEventTrigger(researchIconSelected,researchlistTrig);
+
 	addConsoleText(_("To research the artifact, left click on the flashing RESEARCH icon"), 0);
 
 	// Better add it then
@@ -654,9 +661,6 @@ event	researchCentreBuilt(CALL_RESEARCH_BUILT)
 
 	// Set it flashing
 	flashOn(RESEARCH);
-
-	// Set the event that catches this
-	setEventTrigger(researchIconSelected,researchlistTrig);
 
 	// Kill this event
 	setEventTrigger(researchCentreBuilt,inactive);
@@ -820,6 +824,8 @@ event	droidDesigned(CALL_DROIDDESIGNED)
 
 	removeReticuleButton(DESIGN,FALSE);
 
+	setEventTrigger(droidCreated,designScreenQuitted);
+
 	// wait..
 	pause(60);
 
@@ -830,8 +836,6 @@ event	droidDesigned(CALL_DROIDDESIGNED)
 
 	// flash the close button
 	flashOn(IDRET_CANCEL);
-
-	setEventTrigger(droidCreated,designScreenQuitted);
 
 	setEventTrigger(droidDesigned,inactive);
 }

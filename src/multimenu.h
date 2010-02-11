@@ -24,6 +24,11 @@
 #ifndef __INCLUDED_SRC_MULTIMENU__
 #define __INCLUDED_SRC_MULTIMENU__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // requester
 extern void		addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD id,UBYTE mapCam, UBYTE numPlayers);
 extern BOOL		multiRequestUp;
@@ -59,5 +64,9 @@ extern UDWORD		current_tech;
 #define	DEBUGMENU_BUTTON		(DEBUGMENU_CLOSE + DEBUGMENU_MAX_ENTRIES)
 
 extern char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH];
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIMENU__

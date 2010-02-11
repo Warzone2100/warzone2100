@@ -66,8 +66,6 @@ event initialisedEvent(CALL_GAMEINIT)
 	{
 		enableStructure(command		,playnum);		//make structures available to build
 		enableStructure(factory		,playnum);
-//		enableStructure(wall		,playnum);
-//		enableStructure(cornerWall	,playnum);
 		enableStructure(oilDerrick	,playnum);
 		enableStructure(powerGen	,playnum);
 		enableStructure(research	,playnum);
@@ -87,15 +85,14 @@ event initialisedEvent(CALL_GAMEINIT)
 
 event initialisedEventTwo(CALL_GAMEINIT)
 {
-	
 	playnum = 0;
 	while (playnum < 8)
 	{
-		count = 0;								
+		count = 0;
 		while (count < numBaseRes)
 		{
 			enableResearch(baseRes[count], playnum);
-			count = count +1;
+			count = count + 1;
 		}
 
 		// enable cyborgs components that can't be enabled with research
@@ -116,52 +113,46 @@ event initialisedEventTwo(CALL_GAMEINIT)
 		}
 		else if(multiPlayerBaseType == CAMP_BASE)
 		{
-			setPowerLevel(2500,playnum);	
-			count = 0;								
+			setPowerLevel(2500, playnum);
+			count = 0;
 			while (count < numBaseTech)
 			{
 				completeResearch(defTech[count], playnum);
-				count = count +1;
+				count = count + 1;
 			}
-		
 		}
 		else
-		{	
-
-			setPowerLevel(2500,playnum);		
-			count = 0;								
+		{
+			setPowerLevel(2500,playnum);
+			count = 0;
 			while (count < numDefTech)
 			{
 				completeResearch(defTech[count], playnum);
-				count = count +1;
+				count = count + 1;
 			}
 		}
-	
-		playnum = playnum+ 1;		
+
+		playnum = playnum + 1;
 	}
 }
 
 
-
 // /////////////////////////////////////////////////////////////////
 // END CONDITIONS
-event checkEndConditions (endConditions)
+event checkEndConditions(endConditions)
 {
 	// Losing Conditions
-	if(	   ( not anyDroidsLeft(selectedPlayer))
-  	  and  ( not anyFactoriesLeft(selectedPlayer))	
-	  )
+	if ((not anyDroidsLeft(selectedPlayer)) and (not anyFactoriesLeft(selectedPlayer)))
 	{		
 		gameLost = TRUE;
 
 		/* If teams enabled check if all team members have lost  */
-		if(multiPlayerGameType == SKIRMISH and multiPlayerAlliancesType == ALLIANCES_TEAMS)
+		if (multiPlayerGameType == SKIRMISH and multiPlayerAlliancesType == ALLIANCES_TEAMS)
 		{
 			playnum = 0;
 			while (playnum < multiPlayerMaxPlayers)
 			{
-				if((playnum != selectedPlayer)
-				 and allianceExistsBetween(selectedPlayer , playnum))
+				if ((playnum != selectedPlayer) and allianceExistsBetween(selectedPlayer, playnum))
 				{
 					if(anyDroidsLeft(playnum) or anyFactoriesLeft(playnum))
 					{

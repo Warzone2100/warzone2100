@@ -193,8 +193,7 @@ static int scrIdleGroup(lua_State *L)
 
 	for(psDroid = psGroup->psList;psDroid; psDroid = psDroid->psGrpNext)
 	{
-		if(  psDroid->order == DORDER_NONE
-		  || (psDroid->order == DORDER_GUARD && psDroid->psTarget == NULL))
+		if (psDroid->order == DORDER_NONE || (psDroid->order == DORDER_GUARD && psDroid->psTarget == NULL))
 		{
 			count++;
 		}
@@ -1418,6 +1417,7 @@ BOOL skTopicAvail(UWORD inc, UDWORD player)
 	}
 	return false;
 }
+
 // ********************************************************************************************
 static int scrSkDoResearch(lua_State *L)
 {
@@ -1443,7 +1443,7 @@ static int scrSkDoResearch(lua_State *L)
 	// choose a topic to complete.
 	for(i=0;i<numResearch;i++)
 	{
-		if( skTopicAvail(i,player) )
+		if (skTopicAvail(i, player) && (!bMultiPlayer || !beingResearchedByAlly(i, player)))
 		{
 			break;
 		}
@@ -1526,55 +1526,41 @@ static int scrSkGetFactoryCapacity(lua_State *L)
 // ********************************************************************************************
 static int scrSkDifficultyModifier(lua_State *L)
 {
-	SDWORD              amount;
 	RESEARCH_FACILITY	*psResFacility;
-	STRUCTURE           *psStr;
+	STRUCTURE		*psStr;
 	PLAYER_RESEARCH		*pPlayerRes;
 	
 	int player = luaL_checkint(L,1);
 
 	/* Skip cheats if difficulty modifier slider is set to minimum.
-	 * (0 - player disabled, 20 - max value)
+	 * (0 - player disabled, 20 - max value, UBYTE_MAX - autogame)
 	 */
-	if(game.skDiff[player] <= 1)
+	if (game.skDiff[player] <= 1 || game.skDiff[player] == UBYTE_MAX)
 	{
 		return 0;
 	}
 
-	// power modifier
-	// power range: 0-1000 (0 - DIFF_SLIDER_STOPS * 50)
-	amount = game.skDiff[player]*50;
+	// power modifier, range: 0-1000
+	addPower(player, game.skDiff[player] * 50);
 
-	if(amount > 0)
+	//research modifier
+	for (psStr=apsStructLists[player];psStr;psStr=psStr->psNext)
 	{
-		addPower(player,amount);
-	}
-	else
-	{
-		usePower(player,(0-amount));
-	}
-
-	//research modifier.??
-	for(psStr=apsStructLists[player];psStr;psStr=psStr->psNext)
-	{
-		if(psStr->pStructureType->type == REF_RESEARCH)
+		if (psStr->pStructureType->type == REF_RESEARCH)
 		{
 			psResFacility =	(RESEARCH_FACILITY*)psStr->pFunctionality;
 
 			// subtract 0 - 80% off the time to research.
-            if (psResFacility->psSubject)
-            {
-                pPlayerRes = asPlayerResList[player] +
-                    (((RESEARCH *)psResFacility->psSubject)->ref - REF_RESEARCH_START);
-                pPlayerRes->currentPoints += ((((RESEARCH *)psResFacility->psSubject)->
-                    researchPoints * 4 * game.skDiff[player])/100);
-            }
+			if (psResFacility->psSubject)
+			{
+				RESEARCH	*psResearch = (RESEARCH *)psResFacility->psSubject;
+
+				pPlayerRes = asPlayerResList[player] + (psResearch->ref - REF_RESEARCH_START);
+				pPlayerRes->currentPoints += (psResearch->researchPoints * 4 * game.skDiff[player]) / 100;
+			}
 		}
 
 	}
-
-	//free stuff??
-
 
 	return 0;
 }

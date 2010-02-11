@@ -118,39 +118,6 @@ static void sound_RemoveSample(SAMPLE_LIST* previous, SAMPLE_LIST* to_remove)
 	}
 }
 
-#ifndef WZ_NOSOUND
-static void PrintOpenALVersion(code_part part)
-{
-	const ALchar* pDeviceNames = NULL;
-	char buf[256];
-
-	debug(part, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
-	debug(part, "OpenAL Version: %s", alGetString(AL_VERSION));
-	debug(part, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
-	debug(part, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
-
-	// Print the available devices
-	pDeviceNames = alcGetString(NULL, ALC_DEVICE_SPECIFIER);
-	/* Devices are separated by NUL chars ('\0') and the list of devices is
-	 * terminated by two NUL chars (or an empty C string, depending on how
-	 * you look at it).
-	 */
-	while (pDeviceNames != NULL && *pDeviceNames != '\0')
-	{
-		debug(part, "available openAL device(s) are: %s", pDeviceNames);
-		pDeviceNames += strlen(pDeviceNames) + 1;
-	}
-
-	// Copy this info to be used by the crash handler for the dump file
-	ssprintf(buf, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
-	addDumpInfo(buf);
-	ssprintf(buf, "OpenAL Version: %s", alGetString(AL_VERSION));
-	addDumpInfo(buf);
-	ssprintf(buf, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
-	addDumpInfo(buf);
-}
-#endif
-
 //*
 // =======================================================================================================================
 // =======================================================================================================================
@@ -161,11 +128,23 @@ BOOL sound_InitLibrary( void )
 	int err;
 	const ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	const ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
-	ALCint attrSize;
-	ALCint *temp;
-	ALCint *attributes;
-	ALCint *data;
-	char buf[256];
+	char buf[512];
+	const ALCchar *deviceName;
+
+#if 0
+	// This code is disabled because enumerating devices apparently crashes PulseAudio on Fedora12
+
+	/* Get the available devices and print them.
+	 * Devices are separated by NUL chars ('\0') and the list of devices is
+	 * terminated by two NUL chars.
+	 */
+	deviceName = alcGetString(NULL, ALC_DEVICE_SPECIFIER);
+	while (deviceName != NULL && *deviceName != '\0')
+	{
+		debug(LOG_SOUND, "available OpenAL device(s) are: %s", deviceName);
+		deviceName += strlen(deviceName) + 1;
+	}
+#endif
 
 #ifdef WZ_OS_WIN
 	/* HACK: Select the "software" OpenAL device on Windows because it
@@ -174,79 +153,60 @@ BOOL sound_InitLibrary( void )
 	 *       to be significantly less noticeable.
 	 */
 	device = alcOpenDevice("Generic Software");
+	
+	// If the software device isn't available, fall back to default
 	if (!device)
+#endif
 	{
-		// If the software device isn't available, fall back to default
+		// Open default device
 		device = alcOpenDevice(NULL);
 	}
-#else
-	device = alcOpenDevice(0);
-#endif
-	if(!device)
+
+	if (!device)
 	{
-		PrintOpenALVersion(LOG_ERROR);
 		debug(LOG_ERROR, "Couldn't open audio device.");
 		return false;
 	}
 
+	// Print current device name and add it to dump info
+	deviceName = alcGetString(device, ALC_DEVICE_SPECIFIER);
+	debug(LOG_SOUND, "Current audio device: %s", deviceName);
+	ssprintf(buf, "OpenAL Device Name: %s", deviceName);
+	addDumpInfo(buf);
+
 	context = alcCreateContext(device, NULL);		//NULL was contextAttributes
 	if (!context)
 	{
-		PrintOpenALVersion(LOG_ERROR);
 		debug(LOG_ERROR, "Couldn't open audio context.");
 		return false;
 	}
+	
 	alcMakeContextCurrent(context);
 
-	err = sound_GetDeviceError(device);
+	err = sound_GetContextError(device);
 	if (err != ALC_NO_ERROR)
 	{
-		PrintOpenALVersion(LOG_ERROR);
 		debug(LOG_ERROR, "Couldn't initialize audio context: %s", alcGetString(device, err));
 		return false;
 	}
-	// getting more info about openAL
-	alcGetIntegerv(device, ALC_ATTRIBUTES_SIZE, sizeof(attrSize),&attrSize);
-	attributes = (ALCint *)malloc(attrSize * sizeof(ALCint));
-	alcGetIntegerv(device, ALC_ALL_ATTRIBUTES, attrSize, attributes);
-	data = attributes;
-	temp = attributes + attrSize ;
-	while (data < temp)
-	{
-		switch (*data)
-		{
-			case ALC_FREQUENCY:
-				data += 1;
-				ssprintf(buf, "ALC_FREQUENCY = %d", *data);
-				addDumpInfo(buf);
-				break;
-			case ALC_REFRESH:
-				data += 1;
-				ssprintf(buf, "ALC_REFRESH = %d", *data);
-				addDumpInfo(buf);
-				break;
-			case ALC_SYNC:
-				data += 1;
-				ssprintf(buf, "ALC_SYNC = %d", *data);
-				addDumpInfo(buf);
-				break;
-			case ALC_MONO_SOURCES:
-				data += 1;
-				ssprintf(buf, "ALC_MONO_SOURCES = %d", *data);
-				addDumpInfo(buf);
-				break;
-			case ALC_STEREO_SOURCES:
-				data += 1;
-				ssprintf(buf, "ALC_STEREO_SOURCES = %d", *data);
-				addDumpInfo(buf);
-				break;
-			default:
-				break;
-		}
-		data += 1;
-	}
-	free(attributes);
 
+	// Dump Open AL device info (depends on context)
+	// to the crash handler for the dump file and debug log
+	ssprintf(buf, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
+	addDumpInfo(buf);
+	debug(LOG_SOUND, buf);
+
+	ssprintf(buf, "OpenAL Version: %s", alGetString(AL_VERSION));
+	addDumpInfo(buf);
+	debug(LOG_SOUND, buf);
+
+	ssprintf(buf, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
+	addDumpInfo(buf);
+	debug(LOG_SOUND, buf);
+
+	ssprintf(buf, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
+	addDumpInfo(buf);
+	debug(LOG_SOUND, buf);
 #endif
 
 	openal_initialized = true;
@@ -256,14 +216,10 @@ BOOL sound_InitLibrary( void )
 	alGetError();
 	alcGetError(device);
 
-	// Check what version of Open AL we are using
-	PrintOpenALVersion(LOG_SOUND);
-
-	alGetError();	// clear error codes
 	alListener3f(AL_POSITION, 0.f, 0.f, 0.f);
-	alListenerfv( AL_VELOCITY, listenerVel );
-	alListenerfv( AL_ORIENTATION, listenerOri );
-	alDistanceModel( AL_NONE );
+	alListenerfv(AL_VELOCITY, listenerVel);
+	alListenerfv(AL_ORIENTATION, listenerOri);
+	alDistanceModel(AL_NONE);
 	sound_GetError();
 #endif
 	return true;
@@ -293,17 +249,23 @@ void sound_ShutdownLibrary( void )
 		sound_StopStream(stream);
 	}
 	sound_UpdateStreams();
+	
+	alcGetError(device);	// clear error codes
 
 	/* On Linux since this caused some versions of OpenAL to hang on exit. - Per */
 	debug(LOG_SOUND, "make default context NULL");
 	alcMakeContextCurrent(NULL);
+	sound_GetContextError(device);
 
 	debug(LOG_SOUND, "destroy previous context");
 	alcDestroyContext(context); // this gives a long delay on some impl.
+	sound_GetContextError(device);
 
 	debug(LOG_SOUND, "close device");
-	alcCloseDevice(device);
-	sound_GetError();
+	if (alcCloseDevice(device) == ALC_FALSE)
+	{
+		debug(LOG_SOUND, "OpenAl could not close the audio device." ); 
+	}
 #endif
 
 	while( aSample )
@@ -434,7 +396,7 @@ void sound_Update()
 
 	alcProcessContext(context);
 
-	err = sound_GetDeviceError(device);
+	err = sound_GetContextError(device);
 	if (err != ALC_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Error while processing audio context: %s", alGetString(err));
@@ -594,7 +556,7 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 	pTrack = (TRACK*)malloc(sizeof(TRACK) + filename_size);
 	if (pTrack == NULL)
 	{
-		debug( LOG_ERROR, "sound_ConstructTrack: couldn't allocate memory\n" );
+		debug( LOG_FATAL, "sound_ConstructTrack: couldn't allocate memory\n" );
 		abort();
 		return NULL;
 	}
@@ -867,7 +829,7 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 	stream = malloc(sizeof(AUDIO_STREAM));
 	if (stream == NULL)
 	{
-		debug(LOG_ERROR, "sound_PlayStream: Out of memory");
+		debug(LOG_FATAL, "sound_PlayStream: Out of memory");
 		abort();
 		return NULL;
 	}
@@ -998,7 +960,7 @@ void sound_StopStream(AUDIO_STREAM* stream)
 	assert(stream != NULL);
 
 #if !defined(WZ_NOSOUND)
-	sound_GetError();	// clear error codes
+	alGetError();	// clear error codes
 	// Tell OpenAL to stop playing on the given source
 	alSourceStop(stream->source);
 	sound_GetError();
@@ -1221,10 +1183,12 @@ static void sound_DestroyStream(AUDIO_STREAM* stream)
  */
 static void sound_UpdateStreams()
 {
-	AUDIO_STREAM *stream = active_streams, *previous = NULL;
+	AUDIO_STREAM *stream = active_streams, *previous = NULL, *next = NULL;
 
 	while (stream != NULL)
 	{
+		next = stream->next;
+
 		// Attempt to update the current stream, if we find that impossible,
 		// destroy it instead.
 		if (!sound_UpdateStream(stream))
@@ -1233,21 +1197,21 @@ static void sound_UpdateStreams()
 			if (previous)
 			{
 				// Make the previous item skip over the current to the next item
-				previous->next = stream->next;
+				previous->next = next;
 			}
 			else
 			{
 				// Apparently this is the first item in the list, so make the
 				// next item the list-head.
-				active_streams = stream->next;
+				active_streams = next;
 			}
 
 			// Now actually destroy the current stream
 			sound_DestroyStream(stream);
 
 			// Make sure the current stream pointer is intact again
-			stream = (previous != NULL) ? previous->next : active_streams;
-
+			stream = next;
+			
 			// Skip regular style iterator incrementing
 			continue;
 		}
@@ -1271,7 +1235,7 @@ void sound_StopSample(AUDIO_SAMPLE* psSample)
 		debug(LOG_SOUND, "sound_StopSample: sample number (%u) out of range, we probably have run out of available OpenAL sources", psSample->iSample);
 		return;
 	}
-	sound_GetError();	// clear error codes
+	alGetError();	// clear error codes
 	// Tell OpenAL to stop playing the given sample
 	alSourceStop(psSample->iSample);
 	sound_GetError();

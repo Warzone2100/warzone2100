@@ -21,8 +21,21 @@
 #ifndef __INCLUDED_SRC_MODDING_H__
 #define __INCLUDED_SRC_MODDING_H__
 
-void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToPath, char * checkList[] );
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
+void addSubdirs( const char * basedir, const char * subdir, const bool appendToPath, char * checkList[], bool addToModList );
 void removeSubdirs( const char * basedir, const char * subdir, char * checkList[] );
 void printSearchPath( void );
+
+void addLoadedMod(const char * modname);
+void clearLoadedMods(void);
+char * getModList(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MODDING_H__

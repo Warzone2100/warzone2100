@@ -3,6 +3,8 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
+SUBDIRS=miniupnpc
+
 SRC= \
 	netjoin_stub.c \
 	netlog.c \
@@ -12,3 +14,4 @@ SRC= \
 LIB=netplay
 
 include $(top_srcdir)/makerules/lib.mk
+include $(top_srcdir)/makerules/submake.mk

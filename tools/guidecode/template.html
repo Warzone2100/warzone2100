@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=8" />
+    <title>{TITLE} - Warzone 2100 Guide</title>
+    <link rel="icon" href="http://wzguide.co.cc/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="http://wzguide.co.cc/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="{ROOT}style.css" />
+
+    <!-- On the downside, I've wasted five hours before finding something that works in IE.
+         On the upside, I've discovered three IE bugs. -->
+    <!--[if lte IE 6]>
+    <style> .tree li { height: 1px; } </style>
+    <![endif]-->
+    <!--[if IE 7]>
+    <style> .tree li { zoom: 1; } </style>
+    <![endif]-->
+  </head>
+  <body onload="begin()">
+    <h1 id="logo"><a href="{ROOT}">Warzone 2100 Guide <span>(Home)</span></a></h1>
+    <div id="nav"><a href="{ROOT}"{NAV}>Guide</a> <a href="{ROOT}b/"{NAVb}>Base Structures</a> <a href="{ROOT}d/"{NAVd}>Defenses</a> <a href="{ROOT}w/"{NAVw}>Turrets</a> <a href="{ROOT}c/"{NAVc}>Cyborgs</a> <a href="{ROOT}bp/"{NAVbp}>Bodies and Propulsion</a> <a href="{ROOT}r/"{NAVr}>Research</a></div>
+
+    <script type="text/javascript">
+    <!--
+      var timer = null;
+      var wideWindow = false;
+      if (document.body.offsetWidth > 800)
+      {
+        wideWindow = true;
+        document.write('<div id="mainwrapper" class="widewindow">');
+      }
+      else
+      {
+        wideWindow = false;
+        document.write('<div id="mainwrapper" class="narrowwindow">');
+      }
+    -->
+    </script>
+    <div id="leftnavwrapper"><div id="leftnav" onclick="clearTimeout(timer); timer = setTimeout('chk()',10);"><ul>
+      {LEFTNAV}
+    </ul></div></div>
+<!--[if IE 6]>
+<script>
+document.getElementById('leftnavwrapper').style.display = 'none';
+</script>
+<![endif]-->
+    <script language="javascript" type="text/javascript">
+    <!--
+      var th = document.getElementById('logo').offsetHeight + document.getElementById('nav').offsetHeight;
+      var lnf = false;
+      var spos = new Array(), sname = new Array(), cloc = '', ci;
+      function chk()
+      {
+        if (!wideWindow) return;
+        var pos = (document.body.scrollTop || document.documentElement.scrollTop);
+        if ((pos >= th) != lnf)
+        {
+          if (lnf = !lnf) document.getElementById('leftnav').style.position = 'fixed';
+          else document.getElementById('leftnav').style.position = 'static';
+        }
+        var loc = '';
+        for (var i=0; i<=spos.length; i++)
+        {
+          if (i == spos.length || pos < spos[i] - 30)
+          {
+            if (i!=0) loc = sname[i-1];
+            break;
+          }
+        }
+        //alert(i+' '+loc);
+        if (loc != cloc)
+        {
+          var links=document.getElementById('leftnav').getElementsByTagName('a');
+          if (cloc != '') links[ci].className = 'nc';
+          ci = i-1;
+          if ((cloc=loc) != '') links[ci].className = 'c';
+        }
+      }
+      function resizechk()
+      {
+        if (document.body.offsetWidth > 800 && !wideWindow)
+        {
+          wideWindow = true;
+          document.getElementById('mainwrapper').className = 'widewindow';
+          chk();
+        }
+        else if (document.body.offsetWidth <= 800 && wideWindow)
+        {
+          wideWindow = false;
+          document.getElementById('mainwrapper').className = 'narrowwindow';
+          document.getElementById('leftnav').style.position = 'static';
+        }
+      }
+      window.onscroll = chk;
+      window.onresize = resizechk;
+      chk();
+      function begin()
+      {
+        var links=document.getElementById('leftnav').getElementsByTagName('a');
+        var name;
+        spos = new Array(); sname = new Array();
+        for (var i=0; i<links.length; i++)
+        {
+          name = links[i].href.substr(links[i].href.indexOf('#')+1);
+          //document.getElementsByName(name)[0].id = name;
+          spos[spos.length] = ypos(document.getElementById(name));
+          sname[sname.length] = name;
+          links[i].onclick = function() {clearTimeout(timer); timer = setTimeout('chk();scrollBy(0,-10)',10);};
+        }
+        if (document.getElementById('comments'))
+        {
+          spos[spos.length] = ypos(document.getElementById('comments'));
+          sname[sname.length] = '';
+        }
+        resizechk();
+        chk();
+      }
+      function ypos(obj)
+      {
+        var y = 0;
+        if (obj.offsetParent) do
+        {
+          y += obj.offsetTop;
+        } while (obj = obj.offsetParent);
+        return y;
+      }
+      function isadmin() // Do not use for verification - this function would be better named isadminorsomeonepretendingtobeadmin()
+      {
+        var cookies = document.cookie.split(';'), c;
+        for (var i=0; i < cookies.length; i++)
+        {
+          c = cookies[i];
+          while (c.charAt(0)==' ') c = c.substr(1);
+          if (c.substr(0,5) == 'name=') return (c.length > 5 && c.substr(c.length-3) != 'mg');
+        }
+        return false;
+      }
+
+    -->
+		</script>
+    <h2 id="header">{TITLEBAR}</h2>
+    <div id="content">
+      {CONTENT}
+    </div>
+    <script language="javascript" type="text/javascript">
+    <!--
+      document.write('</div>');
+      begin();
+      function toggle(id, that)
+      {
+        if (document.getElementById('prereq'+id).style.display=='none')
+        {
+          document.getElementById('prereq'+id).style.display = 'block';
+          that.className = 'expcol col';
+        }
+        else
+        {
+          document.getElementById('prereq'+id).style.display = 'none';
+          that.className = 'expcol exp';
+        }
+        that.blur();
+        //that.style.marginLeft = '-22px'; // Workaround for IE7 bug
+        return false;
+      }
+      function collapseall(that)
+      {
+        var links = that.getElementsByTagName('a');
+        for (var i=0; i<links.length; i++)
+        {
+          if (links[i].className == 'expcol col')
+						toggle(links[i].id.substr(3),links[i]);
+				}
+				return false;
+			}
+      function expandall(that)
+      {
+        var links = that.getElementsByTagName('a');
+        for (var i=0; i<links.length; i++)
+        {
+          if (links[i].className == 'expcol exp')
+          toggle(links[i].id.substr(3),links[i]);
+        }
+        return false;
+      }
+      function expandto(id)
+      {
+        var par = document.getElementById('li'+id).parentNode;
+        if (par.id.substr(0,6) == 'prereq') par = par.parentNode;
+        if (par.id.substr(0,2) == 'li')
+        {
+          id = par.id.substr(2);
+		  if (document.getElementById('btn'+id) && document.getElementById('btn'+id).className == 'expcol exp') toggle(id,document.getElementById('btn'+id));
+          return expandto(id);
+        }
+        return true;
+      }
+      var highlighted = '';
+      function highlight(id)
+      {
+        if (highlighted) document.getElementById('item'+highlighted).className = 'n';
+        highlighted = id;
+        document.getElementById('item'+id).className = 'highlighted';
+      }
+
+// Analytics
+//-->
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-8534680-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+  })();
+
+</script>
+  </body>
+</html>

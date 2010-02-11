@@ -1,4 +1,4 @@
-SUBDIRS = base mods music
+SUBDIRS = mods music
 
 stamp:
 	touch stamp
@@ -9,8 +9,10 @@ stamp:
 	rm -f stamp
 
 BASELIST = \
+	palette.txt \
 	anims \
 	audio \
+	challenges \
 	components \
 	effects \
 	features \
@@ -22,7 +24,6 @@ BASELIST = \
 	script \
 	sequenceaudio \
 	stats \
-	stats-sql \
 	structs \
 	tagdefinitions \
 	texpages \

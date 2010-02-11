@@ -27,6 +27,11 @@
 #include "movedef.h"
 #include "lib/gamelib/anim.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /**
  *	@file projectile.h
  *	Projectile types and function headers
@@ -65,26 +70,12 @@ bool proj_Direct(const WEAPON_STATS* psStats);
 /** Return the maximum range for a weapon. */
 SDWORD	proj_GetLongRange(const WEAPON_STATS* psStats);
 
-// Watermelon:neighbour info ripped from droiddef.h
-/** Info stored for each projectile neighbour */
-typedef struct _proj_naybor_info
-{
-	BASE_OBJECT		*psObj;			// The neighbouring object
-	UDWORD			distSqr;		// The square of the distance to the object
-	//UDWORD			dist;			// The distance to the object
-} PROJ_NAYBOR_INFO;
-
 extern UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget);
 extern BOOL gfxVisible(PROJECTILE *psObj);
 
 /***************************************************************************/
 
 extern void	objectShimmy	( BASE_OBJECT *psObj );
-
-static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
-{
-	psProj->psDest = psObj;
-}
 
 static inline void setProjectileSource(PROJECTILE *psProj, BASE_OBJECT *psObj)
 {
@@ -119,5 +110,9 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 
 /* assert if projectile is bad */
 #define CHECK_PROJECTILE(object) checkProjectile((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_PROJECTILE_H__

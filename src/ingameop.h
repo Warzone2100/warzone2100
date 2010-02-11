@@ -24,22 +24,29 @@
 #ifndef __INCLUDED_SRC_INGAMEOP_H__
 #define __INCLUDED_SRC_INGAMEOP_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 // functions
 extern BOOL intAddInGameOptions			(void);
 extern BOOL intCloseInGameOptions		(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets);
 extern void intCloseInGameOptionsNoAnim	(BOOL bResetMissionWidgets);
 extern BOOL intRunInGameOptions			(void);
 extern void intProcessInGameOptions		(UDWORD);
+extern void intAddInGamePopup(void);
 
 // status bools.
 extern BOOL	ClosingInGameOp;
 extern BOOL	InGameOpUp;
-
+extern bool isInGamePopupUp;
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
 // the screen itself.
 #define INTINGAMEOP				10500
+#define INTINGAMEPOPUP			77335
 
 // position info for window.
 
@@ -103,6 +110,10 @@ enum
 	INTINGAMEOP_SUBTITLES,
 	INTINGAMEOP_SUBTITLES_BT,
 	INTINGAMEOP_TUI_TARGET_ORIGIN_SW,		///< Switch
+	INTINGAMEOP_POPUP_QUIT,
+	INTINGAMEOP_POPUP_MSG1,
+	INTINGAMEOP_POPUP_MSG2,
+	INTINGAMEOP_POPUP_MSG3
 };
 
 
@@ -118,5 +129,9 @@ enum
 #define	INTINGAMEOP_6_Y		120
 
 #define OPALIGN		(WBUT_PLAIN | WBUT_TXTCENTRE)
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_INGAMEOP_H__

@@ -35,9 +35,6 @@
 #define FADE_IN_TIME	(GAME_TICKS_PER_SEC/10)
 #define	START_DIVIDE	(8)
 
-static UDWORD avConsidered;
-static UDWORD avCalculated;
-static UDWORD avIgnored;
 static BOOL bRevealActive = false;
 
 
@@ -48,114 +45,38 @@ void	avSetStatus(BOOL var)
 	bRevealActive = var;
 }
 
-void	avInformOfChange(SDWORD x, SDWORD y)
-{
-MAPTILE	*psTile;
-SDWORD	lowerX,upperX,lowerY,upperY;
-
-	psTile= mapTile(x,y);
-	if(psTile->level < 0)
-	{
-		lowerX = player.p.x/TILE_UNITS;
-		upperX = lowerX + visibleTiles.x;
-		lowerY = player.p.z/TILE_UNITS;
-		upperY = lowerY + visibleTiles.y;
-		if(lowerX<0) lowerX = 0;
-		if(lowerY<0) lowerY = 0;
-		if(x>lowerX && x<upperX && y>lowerY && y<upperY)
-		{
-			/* tile is on grid - so initiate fade up */
-			psTile->level = 0;
-		}
-		else
-		{
-			/* tile is off the grid, so force to maximum and finish */
-			psTile->level = psTile->illumination;
-			psTile->bMaxed = true;
-		}
-	}
-	else
-	{
-		/* Already know about this one - so exit */
-		return;
-	}
-}
-
-
-// ------------------------------------------------------------------------------------
-static void processAVTile(UDWORD x, UDWORD y)
-{
-	MAPTILE *psTile;
-	float newLevel;
-
-	psTile = mapTile(x, y);
-	if (psTile->level < 0 || psTile->bMaxed)
-	{
-		return;
-	}
-
-	newLevel = psTile->level + timeAdjustedIncrement(FADE_IN_TIME, true);
-	if (newLevel >= psTile->illumination)
-	{
-		psTile->level = psTile->illumination;
-		psTile->bMaxed = true;
-	}
-	else
-	{
-		psTile->level = newLevel;
-	}
-}
-
-
 // ------------------------------------------------------------------------------------
 void	avUpdateTiles( void )
 {
-SDWORD	startX,startY,endX,endY;
-UDWORD	i,j;
+	const int len = mapHeight * mapWidth;
+	const int playermask = 1 << selectedPlayer;
+	UDWORD i = 0;
+	float maxLevel, increment = timeAdjustedIncrement(FADE_IN_TIME, true);	// call once per frame
+	MAPTILE *psTile;
 
-	/* Clear stats */
-	avConsidered = 0;
-	avCalculated = 0;
-	avIgnored = 0;
+	/* Go through the tiles */
+	for (psTile = psMapTiles; i < len; i++)
+	{
+		maxLevel = psTile->illumination;
 
-  	/* Only process the ones on the grid. Find top left */
-	if(player.p.x>=0)
-	{
-		startX = player.p.x/TILE_UNITS;
-	}
-	else
-	{
-		startX = 0;
-	}
-	if(player.p.z >= 0)
-	{
-		startY = player.p.z/TILE_UNITS;
-	}
-	else
-	{
-		startY = 0;
-	}
-
-	/* Find bottom right */
-	endX = startX + visibleTiles.x;
-	endY = startY + visibleTiles.y;
-
-	/* Clip, as we may be off map */
-	if(startX<0) startX = 0;
-	if(startY<0) startY = 0;
-	if(endX>(SDWORD)(mapWidth-1))  endX = (SDWORD)(mapWidth-1);
-	if(endY>(SDWORD)(mapHeight-1)) endY =(SDWORD)(mapHeight-1);
-
-	/* Go through the grid */
-	for(i=startY; i<(UDWORD)endY; i++)
-	{
-		for(j=startX; j<(UDWORD)endX; j++)
+		if (psTile->level > 0 || psTile->tileExploredBits & playermask)	// seen
 		{
-			processAVTile(j,i);
+			// If we are not omniscient, and we are not seeing the tile, and none of our allies see the tile...
+			if (!godMode && !(alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)))
+			{
+				maxLevel /= 2;
+			}
+			if (psTile->level > maxLevel)
+			{
+				psTile->level = MAX(psTile->level - increment, 0);
+			}
+			else if (psTile->level < maxLevel)
+			{
+				psTile->level = MIN(psTile->level + increment, maxLevel);
+			}
 		}
+		psTile++;
 	}
-
-	avConsidered = (visibleTiles.x * visibleTiles.y);
 }
 
 
@@ -163,7 +84,6 @@ UDWORD	i,j;
 UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
 {
 	float div = (float)psObj->visible[selectedPlayer] / 255.f;
-
 	unsigned int lowest = origLevel / START_DIVIDE;
 	unsigned int newLevel = div * origLevel;
 
@@ -173,14 +93,6 @@ UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
 	}
 
 	return newLevel;
-}
-
-// ------------------------------------------------------------------------------------
-void	avGetStats(UDWORD *considered, UDWORD *ignored, UDWORD *calculated)
-{
-	*considered = avConsidered;
-	*ignored	= avIgnored;
-	*calculated = avCalculated;
 }
 
 // ------------------------------------------------------------------------------------
@@ -207,15 +119,16 @@ MAPTILE		*psTile;
 		for(j=0; j<mapHeight; j++)
 		{
 			psTile = mapTile(i,j);
-		   	if(TEST_TILE_VISIBLE(selectedPlayer,psTile))
+			psTile->level = 0;
+			psTile->tileExploredBits = 0;
+
+			if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
 		  	{
-				psTile->bMaxed = true;
-				psTile->level = psTile->illumination;
+				psTile->tileExploredBits = 1 << selectedPlayer;
 		  	}
-			else
+			if (!bRevealActive || TEST_TILE_VISIBLE(selectedPlayer, psTile))
 			{
-			 	psTile->level = -1;
-				psTile->bMaxed = false;
+				psTile->level = psTile->illumination;
 			}
 		}
 	}

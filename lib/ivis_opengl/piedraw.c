@@ -137,14 +137,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 	if (pieFlag & pie_ADDITIVE)
 	{ //Assume also translucent
 		pie_SetFogStatus(false);
-		pie_SetRendMode(REND_ADDITIVE_TEX);
+		pie_SetRendMode(REND_ADDITIVE);
 		colour.byte.a = (UBYTE)pieFlagData;
 		light = false;
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
 	{
 		pie_SetFogStatus(false);
-		pie_SetRendMode(REND_ALPHA_TEX);
+		pie_SetRendMode(REND_ALPHA);
 		colour.byte.a = (UBYTE)pieFlagData;
 		light = false;
 	}
@@ -159,7 +159,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 		{
 			pie_SetFogStatus(true);
 		}
-		pie_SetRendMode(REND_GOURAUD_TEX);
+		pie_SetRendMode(REND_OPAQUE);
 	}
 
 	if (light)
@@ -229,11 +229,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 			}
 		}
 
-		if (pPolys->flags & PIE_NO_CULL)
-		{
-			glDisable(GL_CULL_FACE);
-		}
-
 		glBegin(GL_TRIANGLE_FAN);
 
 		if (light)
@@ -248,11 +243,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 		}
 
 		glEnd();
-
-		if (pPolys->flags & PIE_NO_CULL)
-		{
-			glEnable(GL_CULL_FACE);
-		}
 	}
 
 	if (pieFlag & pie_BUTTON)
@@ -386,7 +376,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 						newstack = realloc(edgelist, sizeof(EDGE) * edgelistsize);
 						if (newstack == NULL)
 						{
-							debug(LOG_ERROR, "pie_DrawShadow: Out of memory!");
+							debug(LOG_FATAL, "pie_DrawShadow: Out of memory!");
 							abort();
 							return;
 						}
@@ -489,6 +479,7 @@ void pie_CleanUp( void )
 
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData)
 {
+	ASSERT_OR_RETURN(, shape, "Attempting to draw null sprite");
 	pieCount++;
 
 	if (frame == 0)

@@ -300,6 +300,12 @@ static void createHeader(int const argc, char* argv[])
 #else
 	       << "UNKNOWN" << endl
 #endif
+	   << "Compiled mode: "
+#ifdef DEBUG
+			<< "Debug build" << endl
+#else
+			<< "Release build" << endl
+#endif
 	   << "Executed on: " << getCurTime() << endl
 	   << getSysinfo() << endl
 	   << "Pointers: " << (sizeof(void*) * CHAR_BIT) << "bit" << endl
@@ -319,13 +325,13 @@ static void createHeader(int const argc, char* argv[])
 	dbgHeader = strdup(os.str().c_str());
 	if (dbgHeader == NULL)
 	{
-		debug(LOG_ERROR, "createHeader: Out of memory!");
+		debug(LOG_FATAL, "createHeader: Out of memory!");
 		abort();
 		return;
 	}
 }
 
-void addDumpInfo( char *inbuffer)
+void addDumpInfo(const char *inbuffer)
 {
 	time_t rawtime;
 	struct tm * timeinfo;

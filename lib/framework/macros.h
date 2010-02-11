@@ -23,13 +23,18 @@
 #ifndef MACROS_H
 #define MACROS_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define ABS(a) (((a) < 0) ? (-(a)) : (a))
 
 #define ABSDIF(a,b) ((a)>(b) ? (a)-(b) : (b)-(a))
 
-#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]) + WZ_ASSERT_ARRAY_EXPR(x))
 
 #define CLIP(val, min, max) do                                                \
 {                                                                             \
@@ -140,10 +145,7 @@ static inline float arrayMaxF(const float *array, const size_t n, size_t *index)
 #define ONEINTHREE				(rand()%3==0)
 #define ONEINFOUR				(rand()%4==0)
 #define ONEINFIVE				(rand()%5==0)
-#define ONEINSIX				(rand()%6==0)
-#define ONEINSEVEN				(rand()%7==0)
 #define ONEINEIGHT				(rand()%8==0)
-#define ONEINNINE				(rand()%9==0)
 #define ONEINTEN				(rand()%10==0)
 
 #define MACROS_H_STRINGIFY(x) #x
@@ -153,5 +155,9 @@ static inline float arrayMaxF(const float *array, const size_t n, size_t *index)
 
 #define MKID(a) MKID_(a, __LINE__)
 #define MKID_(a, b) a ## b
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // MACROS_H
