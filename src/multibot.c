@@ -461,7 +461,9 @@ BOOL SendDroidMove(const DROID* psDroid, uint32_t x, uint32_t y, BOOL formation)
 		NETuint32_t(&y);
 		NETbool(&formation);
 	}
-	return NETend();
+	NETend();
+
+	return false;  // false means not to do the move (until we receive the order we just sent).
 }
 
 // recv and updated droid position

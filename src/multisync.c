@@ -460,7 +460,7 @@ BOOL recvDroidCheck(NETQUEUE queue)
 			 * and the player who owns the droid has a low ping then do an
 			 * onscreen update, otherwise do an offscreen one.
 			 */
-			if (droidOnScreen(pD, 0)
+			/*if (droidOnScreen(pD, 0)
 			 && ingame.PingTimes[player] < PING_LIMIT)
 			{
 				onscreen = true;
@@ -468,7 +468,8 @@ BOOL recvDroidCheck(NETQUEUE queue)
 			else
 			{
 				onscreen = false;
-			}
+			}*/
+			onscreen = true;  // Pick anything. Just be consistent instead of depending on random non-synchronised things. Maybe delete this entire function.
 
 			// Update the droid
 			if (onscreen || isVtolDroid(pD))

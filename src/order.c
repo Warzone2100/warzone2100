@@ -2147,11 +2147,15 @@ void orderDroid(DROID *psDroid, DROID_ORDER order)
 
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
-	orderDroidBase(psDroid, &sOrder);
 
 	if(bMultiMessages)
 	{
 		SendDroidInfo(psDroid,  order,  0,  0, NULL);
+		// Wait to receive our order before changing the droid.
+	}
+	else
+	{
+		orderDroidBase(psDroid, &sOrder);
 	}
 }
 
@@ -2183,13 +2187,14 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid unit pointer");
 	ASSERT_OR_RETURN(, validOrderForLoc(order), "Invalid order for location");
 
-	orderClearDroidList(psDroid);
-
 	if(bMultiMessages) //ajl
 	{
 		SendDroidInfo(psDroid,  order,  x,  y, NULL);
-		turnOffMultiMsg(true);	// msgs off.
+		return;  // Wait to receive our order before changing the droid.
+		//turnOffMultiMsg(true);	// msgs off.
 	}
+
+	orderClearDroidList(psDroid);
 
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
@@ -2197,7 +2202,7 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 	sOrder.y = (UWORD)y;
 	orderDroidBase(psDroid, &sOrder);
 
-	turnOffMultiMsg(false);	//msgs back on..
+	//turnOffMultiMsg(false);	//msgs back on..
 }
 
 
@@ -2244,12 +2249,13 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj)
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
 	ASSERT(validOrderForObj(order), "Invalid order for object");
 
-	orderClearDroidList(psDroid);
-
 	if(bMultiMessages) //ajl
 	{
 		SendDroidInfo(psDroid, order, 0, 0, psObj);
+		return;  // Wait for the order to be received before changing the droid.
 	}
+
+	orderClearDroidList(psDroid);
 
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
@@ -2577,12 +2583,15 @@ BOOL orderDroidList(DROID *psDroid)
 		memmove(psDroid->asOrderList, psDroid->asOrderList + 1, psDroid->listSize * sizeof(ORDER_LIST));
 		memset(psDroid->asOrderList + psDroid->listSize, 0, sizeof(ORDER_LIST));
 
-		orderDroidBase(psDroid, &sOrder);
-
         //don't send BUILD orders in multiplayer
 		if(bMultiMessages && !(sOrder.order == DORDER_BUILD || sOrder.order == DORDER_LINEBUILD))
 		{
 			SendDroidInfo(psDroid,  sOrder.order , sOrder.x, sOrder.y,sOrder.psObj);
+			// Wait to receive the order before changing the droid.
+		}
+		else
+		{
+			orderDroidBase(psDroid, &sOrder);
 		}
 
 		return true;
@@ -2771,6 +2780,9 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 
 	if (!add && bMultiMessages && SendGroupOrderSelected((UBYTE)player,x,y,NULL,keyDown(KEY_LALT) || keyDown(KEY_RALT)) )
 	{	// turn off multiplay messages,since we've send a group one instead.
+		// note that an order list graphic needs to be displayed
+		bOrderEffectDisplayed = false;
+		return;  // Wait to receive our order before changing the droids.
 		turnOffMultiMsg(true);
 	}
 
@@ -3142,6 +3154,10 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 
 	if (!add && bMultiMessages && SendGroupOrderSelected((UBYTE)player,0,0,psObj,keyDown(KEY_LALT) || keyDown(KEY_RALT)) )
 	{	// turn off multiplay messages,since we've send a group one instead.
+		// note that an order list graphic needs to be displayed
+		bOrderEffectDisplayed = false;
+		orderPlayOrderObjAudio(player, psObj);
+		return;  // Wait to receive our order before changing anything.
 		turnOffMultiMsg(true);
 	}
 
@@ -3570,6 +3586,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	if(bMultiMessages)
 	{
 		sendDroidSecondary(psDroid,sec,State);
+		return true;  // Wait for our order before changing the droid.
 		turnOffMultiMsg(true);		// msgs off.
 	}
 

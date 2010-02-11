@@ -84,6 +84,7 @@
 #include "cmddroid.h"
 #include "keybind.h"
 #include "wrappers.h"
+#include "random.h"
 
 #include "warzoneconfig.h"
 
@@ -150,6 +151,7 @@ GAMECODE gameLoop(void)
 	if (deltaGameTime != 0)
 	{
 		sendPlayerGameTime();
+		gameSRand(gameTime);
 	}
 
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)

@@ -594,13 +594,13 @@ BOOL recvMessage(void)
 			{
 				// TODO Remove all these cases.
 				case NET_DROID:
-				case NET_DROIDINFO:
+				//case NET_DROIDINFO:    // 2 down, 41 to go.
 				case NET_DROIDDEST:
-				case NET_DROIDMOVE:
-				case NET_GROUPORDER:
-				case NET_CHECK_DROID:
-				case NET_CHECK_STRUCT:
-				case NET_CHECK_POWER:
+				//case NET_DROIDMOVE:    // 1 down, 42 to go.
+				//case NET_GROUPORDER:   // 3 down, 40 to go.
+				//case NET_CHECK_DROID:  // 4 down, 39 to go. (Didn't change anything, just marked it here.)
+				//case NET_CHECK_STRUCT: // 5 down, 38 to go. (Didn't change anything, just marked it here.)
+				//case NET_CHECK_POWER:  // 6 down, 37 to go. (Didn't change anything, just marked it here.)
 				case NET_TEXTMSG:
 				case NET_DATA_CHECK:
 				case NET_AITEXTMSG:
@@ -608,7 +608,7 @@ BOOL recvMessage(void)
 				case NET_BUILD:
 				case NET_BUILDFINISHED:
 				case NET_STRUCTDEST:
-				case NET_SECONDARY:
+				//case NET_SECONDARY:    // 7 down, 36 to go.
 				case NET_SECONDARY_ALL:
 				case NET_DROIDEMBARK:
 				case NET_DROIDDISEMBARK:
