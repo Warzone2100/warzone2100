@@ -174,42 +174,13 @@ static int scrGroupAddGroup(lua_State *L)
 
 
 // check if a droid is a member of a group
-WZ_DECL_UNUSED static BOOL scrGroupMember(void)
+static BOOL scrGroupMember(lua_State *L)
 {
-	DROID_GROUP		*psGroup;
-	DROID			*psDroid;
-	BOOL			retval;
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 2, OBJ_DROID);
 
-	if (!stackPopParams(2, ST_GROUP, &psGroup, ST_DROID, &psDroid))
-	{
-		return false;
-	}
-
-	ASSERT( psGroup != NULL,
-		"scrGroupMember: Invalid group pointer" );
-	ASSERT( psDroid != NULL,
-		"scrGroupMember: Invalid droid pointer" );
-	if (psDroid == NULL)
-	{
-		return false;
-	}
-
-	if (psDroid->psGroup == psGroup)
-	{
-		retval = true;
-	}
-	else
-	{
-		retval = false;
-	}
-
-	scrFunctionResult.v.bval=retval;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, (psDroid->psGroup == psGroup));
+	return 1;
 }
 
 
@@ -544,23 +515,17 @@ static int scrSetDroidSecondary(lua_State *L)
 }
 
 // set the secondary state for a droid
-WZ_DECL_UNUSED static BOOL scrSetGroupSecondary(void)
+static BOOL scrSetGroupSecondary(lua_State *L)
 {
-	DROID_GROUP		*psGroup;
-	SECONDARY_ORDER		sec;
-	SECONDARY_STATE		state;
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
+	SECONDARY_ORDER sec = luaL_checkint(L, 2);
+	SECONDARY_STATE state = luaL_checkint(L, 3);
 
-	if (!stackPopParams(3, ST_GROUP, &psGroup, VAL_INT, &sec, VAL_INT, &state))
+	if (psGroup)
 	{
-		return false;
+		grpSetSecondary(psGroup, sec, state);
 	}
-
-	ASSERT( psGroup != NULL,
-		"scrSetGroupSecondary: invalid group pointer" );
-
-	grpSetSecondary(psGroup, sec, state);
-
-	return true;
+	return 0;
 }
 
 
@@ -1981,8 +1946,8 @@ void registerScriptAIfuncs(lua_State *L)
 	lua_register(L, "droidCanReach", scrDroidCanReach);
 	lua_register(L, "skFireLassat", scrSkFireLassat);
 	lua_register(L, "orderGroupObj", scrOrderGroupObj);
-	//lua_register(L, "", );
-	//lua_register(L, "", );
+	lua_register(L, "groupMember", scrGroupMember);
+	lua_register(L, "setGroupSecondary", scrSetGroupSecondary);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
