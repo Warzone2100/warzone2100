@@ -586,8 +586,70 @@ BOOL recvMessage(void)
 	uint8_t type;
 
 	// TODO Figure out which messages belong in the game queues, and which are net related.
-	while(NETrecvNet(&queue, &type) || NETrecvGame(&queue, &type))          // for all incoming messages.
+	while (NETrecvNet(&queue, &type) || NETrecvGame(&queue, &type))          // for all incoming messages.
 	{
+		if (queue.queueType == QUEUE_GAME && myResponsibility(queue.index))
+		{
+			switch (type)
+			{
+				// TODO Remove all these cases.
+				case NET_DROID:
+				case NET_DROIDINFO:
+				case NET_DROIDDEST:
+				case NET_DROIDMOVE:
+				case NET_GROUPORDER:
+				case NET_CHECK_DROID:
+				case NET_CHECK_STRUCT:
+				case NET_CHECK_POWER:
+				case NET_TEXTMSG:
+				case NET_DATA_CHECK:
+				case NET_AITEXTMSG:
+				case NET_BEACONMSG:
+				case NET_BUILD:
+				case NET_BUILDFINISHED:
+				case NET_STRUCTDEST:
+				case NET_SECONDARY:
+				case NET_SECONDARY_ALL:
+				case NET_DROIDEMBARK:
+				case NET_DROIDDISEMBARK:
+				case NET_GIFT:
+				case NET_SCORESUBMIT:
+				case NET_VTOL:
+				case NET_LASSAT:
+
+				case NET_TEMPLATE:
+				case NET_TEMPLATEDEST:
+				case NET_FEATUREDEST:
+				case NET_PING:
+				case NET_DEMOLISH:
+				case NET_RESEARCH:
+				case NET_OPTIONS:
+				case NET_PLAYERRESPONDING:
+				case NET_COLOURREQUEST:
+				case NET_POSITIONREQUEST:
+				case NET_TEAMREQUEST:
+				case NET_READY_REQUEST:
+				case NET_ARTIFACTS:
+				case NET_FEATURES:
+				case NET_ALLIANCE:
+				case NET_KICK:
+				case NET_FIREUP:
+				case NET_RESEARCHSTATUS:
+				case NET_PLAYER_STATS:
+				{
+					static unsigned packets[256];
+					if (++packets[type] == 1)
+					{
+						debug(LOG_WARNING, "Ignoring our own game queue message, type %d, which hasn't been converted yet", type);
+					}
+					NETpop(queue);
+					continue;  // HACK-TODO Ignore our own queue.
+				}
+				default:
+					break;  // Yay, we are able to process our own messages of this time.
+			}
+		}
+
 		// messages only in game.
 		if(!ingame.localJoiningInProgress)
 		{

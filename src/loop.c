@@ -147,6 +147,11 @@ GAMECODE gameLoop(void)
 	int	        clearMode = 0;
 	bool gameTicked = deltaGameTime != 0;
 
+	if (deltaGameTime != 0)
+	{
+		sendPlayerGameTime();
+	}
+
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
 	{
 		intAddInGamePopup();
@@ -266,6 +271,10 @@ GAMECODE gameLoop(void)
 			if (bMultiPlayer)
 			{
 				multiPlayerLoop();
+			}
+			else
+			{
+				recvMessage();  // At least process our game queues...
 			}
 
 			if (!editPaused() && gameTicked)

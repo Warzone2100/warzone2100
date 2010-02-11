@@ -56,7 +56,8 @@ public:
 	// Network related, receiving
 	void writeRawData(const uint8_t *netData, size_t netLen);          ///< Inserts data from the network into the NetQueue.
 	// Network related, sending
-	void willNeverReadRawData();                                       ///< Marks that we will not be sending this data over the network.
+	void setWillNeverReadRawData();                                    ///< Marks that we will not be sending this data over the network.
+	bool checkCanReadRawData() const;                                  ///< Checks if we marked that we will not be sending this data over the network.
 	void readRawData(const uint8_t **netData, size_t *netLen);         ///< Extracts data from the NetQueue to send over the network.
 	void popRawData(size_t netLen);                                    ///< Pops the extracted data, so that future readRawData calls do not return that data.
 
@@ -64,7 +65,7 @@ public:
 	// Message related, storing.
 	void pushMessage(const NetMessage &message);                       ///< Adds a message to the queue.
 	// Message related, extracting.
-	void willNeverGetMessages();                                       ///< Marks that we will not be reading any of the messages (only sending over the network).
+	void setWillNeverGetMessages();                                    ///< Marks that we will not be reading any of the messages (only sending over the network).
 	bool haveMessage() const;                                          ///< Return true if we have a message ready to return.
 	const NetMessage &getMessage() const;                              ///< Returns a message.
 	void popMessage();                                                 ///< Pops the last returned message.
@@ -90,7 +91,7 @@ private:
 class NetQueuePair
 {
 public:
-	NetQueuePair() { send.willNeverGetMessages(); receive.willNeverReadRawData(); }
+	NetQueuePair() { send.setWillNeverGetMessages(); receive.setWillNeverReadRawData(); }
 
 	NetQueue send;
 	NetQueue receive;

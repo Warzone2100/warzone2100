@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_ORDERDEF_H__
 #define __INCLUDED_SRC_ORDERDEF_H__
 
+#include "droiddef.h"
+
 #ifdef __cplusplus
 extern "C"
 {

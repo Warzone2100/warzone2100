@@ -2198,6 +2198,27 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			}
 			break;
 		}
+		case NET_SHARE_GAME_QUEUE:
+		{
+			uint8_t player;
+			uint32_t size;
+			uint8_t buffer[65535];
+
+			// Encoded in NETprocessSystemMessage in nettypes.cpp.
+			NETbeginDecode(playerQueue, NET_SHARE_GAME_QUEUE);
+				NETuint8_t(&player);
+				NETuint32_t(&size);
+				NETbin(buffer, sizeof(buffer));
+			if (!NETend() || player > MAX_PLAYERS + 1)  // + 1 is for confused AIs.
+			{
+				debug(LOG_ERROR, "Bad NET_SHARE_GAME_QUEUE message.");
+				break;
+			}
+
+			// TODO Check that playerQueue is actually responsible for this game queue.
+			NETinsertRawData(NETgameQueue(player), buffer, size);
+			break;
+		}
 		case NET_PLAYER_STATS:
 		{
 			recvMultiStats();
@@ -2468,19 +2489,20 @@ checkMessages:
 BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type)
 {
 	uint32_t current;
-	for (current = 0; current < MAX_PLAYERS; ++current)
+	for (current = 0; current < MAX_PLAYERS + 1; ++current)  // + 1 is for confused AIs.
 	{
-		/* //TODO
-		if (gameQueueTime[current] > gameTime)
-		{
-			continue;  // Any remaining messages are not scheduled yet.
-		}
-		*/
-
 		*queue = NETgameQueue(current);
-		while (NETisMessageReady(*queue))
+		while (!checkPlayerGameTime(current) && NETisMessageReady(*queue))  // Check for any messages that are scheduled to be read now.
 		{
 			*type = NETmessageType(*queue);
+
+			if (*type == NET_GAME_TIME)
+			{
+				recvPlayerGameTime(*queue);
+				NETpop(*queue);
+				continue;
+			}
+
 			if (!NETprocessSystemMessage(*queue, *type))
 			{
 				return true;  // We couldn't process the message, let the caller deal with it..
@@ -2491,9 +2513,10 @@ BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type)
 			}
 		}
 
-		/* //TODO
-		break;  // Still waiting for messages from this player.
-		*/
+		if (!checkPlayerGameTime(current))
+		{
+			break;  // Still waiting for messages from this player, and all players should process messages in the same order.
+		}
 	}
 
 	return false;

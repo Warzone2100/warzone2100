@@ -122,8 +122,8 @@ typedef enum
 	NET_DATA_CHECK,			//66 Data integrity check
 	NET_HOST_DROPPED,		//67 Host has dropped
 	NET_SEND_TO_PLAYER,             //68 Was future use, now actually using! (Normally, things marked "for future use" never ever get used.)
-	NET_FUTURE2,			//69		"
-	NET_FUTURE3,			//70		"
+	NET_SHARE_GAME_QUEUE,           //69 Was future use, now actually using! (Normally, things marked "for future use" never ever get used.)
+	NET_GAME_TIME,                  //70 Was future use, now actually using! (Normally, things marked "for future use" never ever get used.)
 	NET_FILE_REQUESTED,		//71 Player has requested a file (map/mod/?)
 	NET_FILE_CANCELLED,		//72 Player cancelled a file request
 	NET_FILE_PAYLOAD,		//73 sending file to the player that needs it
@@ -290,9 +290,9 @@ extern int mapDownloadProgress;
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern int   NETinit(BOOL bFirstCall);				// init
-BOOL NETsend(uint8_t player, const uint8_t *rawData, ssize_t rawLen); ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
-extern BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type);               ///< recv a message from the net queues if possible.
-extern BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type);              ///< recv a message from the game queues if possible.
+BOOL NETsend(uint8_t player, const uint8_t *rawData, ssize_t rawLen);    ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+extern BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type);                  ///< recv a message from the net queues if possible.
+extern BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type);                 ///< recv a message from the game queues which is sceduled to execute by time, if possible.
 
 extern UBYTE   NETsendFile(char *fileName, UDWORD player);	// send file chunk.
 extern UBYTE   NETrecvFile(NETQUEUE queue);                     // recv file chunk

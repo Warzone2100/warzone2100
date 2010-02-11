@@ -29,6 +29,9 @@
 
 #include "lib/framework/frame.h"
 #include "gtime.h"
+#include "src/multiplay.h"
+#include "lib/netplay/netplay.h"
+
 
 #define GTIME_MINFRAME	(GAME_TICKS_PER_SEC/80)
 
@@ -54,6 +57,8 @@ static SDWORD	pauseStart;
   **/
 static UDWORD	stopCount;
 
+static uint32_t gameQueueTime[MAX_PLAYERS + 1];  // + 1 is for confused AIs.
+
 /* Initialise the game clock */
 void gameTimeInit(void)
 {
@@ -76,6 +81,7 @@ extern void setGameTime(uint32_t newGameTime)
 {
 	// Setting game time.
 	gameTime = newGameTime;
+	setPlayerGameTime(NET_ALL_PLAYERS, newGameTime);
 	deltaGameTime = 0;
 	gameTimeFraction = 0.f;
 
@@ -132,6 +138,17 @@ void gameTimeUpdate()
 			scaledCurrTime = graphicsTime;
 			baseTime = currTime;
 			timeOffset = graphicsTime;
+		}
+
+		if (scaledCurrTime >= gameTime && !checkPlayerGameTime(NET_ALL_PLAYERS))
+		{
+			// Pause time, since we are waiting for other players.
+			scaledCurrTime = graphicsTime;
+			baseTime = currTime;
+			timeOffset = graphicsTime;
+
+			debug(LOG_WARNING, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7], gameQueueTime[8]);
+			//debug(LOG_WARNING, "Waiting for other players.");
 		}
 
 		// Calculate the time for this frame
@@ -271,4 +288,68 @@ void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWORD *seco
 	*hours = h;
 	*minutes = m;
 	*seconds = s;
+}
+
+void sendPlayerGameTime()
+{
+	unsigned latency = 400;  // Hard-coded for now.
+
+	unsigned player;
+	uint32_t time = gameTime + latency;
+
+	for (player = 0; player < MAX_PLAYERS + 1; ++player)  // +1 is for confused AIs.
+	{
+		if (!myResponsibility(player))
+		{
+			continue;
+		}
+
+		NETbeginEncode(NETgameQueue(player), NET_GAME_TIME);
+			NETuint32_t(&time);
+		NETend();
+	}
+}
+
+void recvPlayerGameTime(NETQUEUE queue)
+{
+	uint32_t time;
+
+	NETbeginDecode(queue, NET_GAME_TIME);
+		NETuint32_t(&time);
+	NETend();
+
+	gameQueueTime[queue.index] = time;
+}
+
+bool checkPlayerGameTime(unsigned player)
+{
+	if (player == NET_ALL_PLAYERS)
+	{
+		for (player = 0; player < MAX_PLAYERS + 1; ++player)  // + 1 is for confused AIs.
+		{
+			if (!(gameTime <= gameQueueTime[player]))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	return gameTime <= gameQueueTime[player];
+}
+
+void setPlayerGameTime(unsigned player, uint32_t time)
+{
+	if (player == NET_ALL_PLAYERS)
+	{
+		for (player = 0; player < MAX_PLAYERS + 1; ++player)  // + 1 is for confused AIs.
+		{
+			gameQueueTime[player] = time;
+		}
+	}
+	else
+	{
+		gameQueueTime[player] = time;
+	}
 }

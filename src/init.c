@@ -932,6 +932,19 @@ BOOL stageTwoInitialise(void)
 
 	SetFormAudioIDs(ID_SOUND_WINDOWOPEN,ID_SOUND_WINDOWCLOSE);
 
+	// Setup game queues.
+	// Don't ask why this doesn't go in stage three. In fact, don't even ask me what stage one/two/three is supposed to mean, it seems about as descriptive as stage doStuff, stage doMoreStuff and stage doEvenMoreStuff...
+	debug(LOG_MAIN, "Init game queues, I am %d.", selectedPlayer);
+	for (i = 0; i < MAX_PLAYERS + 1; ++i)  // + 1 might be used by AIs that can't find their own queue.
+	{
+		NETinitQueue(NETgameQueue(i));
+
+		if (i == MAX_PLAYERS ? selectedPlayer != NET_HOST_ONLY : !myResponsibility(i))
+		{
+			NETsetNoSendOverNetwork(NETgameQueue(i));
+		}
+	}
+
 	debug(LOG_MAIN, "stageTwoInitialise: done");
 
 	return true;

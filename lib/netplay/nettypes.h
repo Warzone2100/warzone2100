@@ -67,6 +67,7 @@ uint8_t NETmessageType(NETQUEUE queue);
 uint32_t NETmessageSize(NETQUEUE queue);
 
 void NETinitQueue(NETQUEUE queue);
+void NETsetNoSendOverNetwork(NETQUEUE queue);
 void NETmoveQueue(NETQUEUE src, NETQUEUE dst);
 
 void NETbeginEncode(NETQUEUE queue, uint8_t type);

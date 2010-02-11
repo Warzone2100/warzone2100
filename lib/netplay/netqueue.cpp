@@ -35,9 +35,14 @@ void NetQueue::writeRawData(const uint8_t *netData, size_t netLen)
 	buffer.erase(buffer.begin(), buffer.begin() + used);
 }
 
-void NetQueue::willNeverReadRawData()
+void NetQueue::setWillNeverReadRawData()
 {
 	canReadRawData = false;
+}
+
+bool NetQueue::checkCanReadRawData() const
+{
+	return canReadRawData;
 }
 
 void NetQueue::readRawData(const uint8_t **netData, size_t *netLen)
@@ -80,7 +85,7 @@ void NetQueue::pushMessage(const NetMessage &message)
 	messages.push_front(message);
 }
 
-void NetQueue::willNeverGetMessages()
+void NetQueue::setWillNeverGetMessages()
 {
 	canGetMessages = false;
 }

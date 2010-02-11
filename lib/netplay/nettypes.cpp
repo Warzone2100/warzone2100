@@ -180,6 +180,19 @@ static void queue(const Q &q, Vector3uw &v)
 	queue(q, v.z);
 }
 
+template<class T>
+static void queueAuto(T &v)
+{
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		queue(writer, v);
+	}
+	else if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		queue(reader, v);
+	}
+}
+
 // Queue selection functions
 
 static NetQueue *sendQueue(NETQUEUE queue)
@@ -276,13 +289,13 @@ void NETinitQueue(NETQUEUE queue)
 	{
 		delete broadcastQueue;
 		broadcastQueue = new NetQueue;
-		broadcastQueue->willNeverGetMessages();
+		broadcastQueue->setWillNeverGetMessages();
 		return;
 	}
 	else if (queue.queueType == QUEUE_GAME)
 	{
 		delete gameQueues[queue.index];
-		gameQueues[queue.index] = new NetQueue;  // TODO Call .willNeverReadRawData() if not sending over net.
+		gameQueues[queue.index] = new NetQueue;
 		return;
 	}
 	else
@@ -290,6 +303,11 @@ void NETinitQueue(NETQUEUE queue)
 		delete pairQueue(queue);
 		pairQueue(queue) = new NetQueuePair;
 	}
+}
+
+void NETsetNoSendOverNetwork(NETQUEUE queue)
+{
+	sendQueue(queue)->setWillNeverReadRawData();  // Will not be sending over net.
 }
 
 void NETmoveQueue(NETQUEUE src, NETQUEUE dst)
@@ -339,6 +357,25 @@ BOOL NETend()
 			NETsend(queueInfo.index, data, dataLen);
 			queue->popRawData(dataLen);
 		}
+		else if (queueInfo.queueType == QUEUE_GAME && queue->checkCanReadRawData())
+		{
+			uint8_t player = queueInfo.index;  // queueInfo.index is changed by NETbeginEncode.
+
+			const uint8_t *data;
+			size_t dataLen;
+			queue->readRawData(&data, &dataLen);
+
+			// Not sure exactly where this belongs, but easy to put here in NETend()...
+			// Decoded in NETprocessSystemMessage in netplay.c.
+			NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
+				NETuint8_t(&player);
+				uint32_t size = dataLen;
+				NETuint32_t(&size);
+				NETbin(const_cast<uint8_t *>(data), dataLen);  // const_cast is safe since we are encoding, not decoding.
+			NETend();  // Recursive call, but queueInfo.queueType = QUEUE_BROADCAST now.
+
+			queue->popRawData(dataLen);
+		}
 
 		// We have ended the serialisation, so mark the direction invalid
 		NETsetPacketDir(PACKET_INVALID);
@@ -365,19 +402,6 @@ BOOL NETend()
 void NETpop(NETQUEUE queue)
 {
 	receiveQueue(queue)->popMessage();
-}
-
-template<class T>
-static void queueAuto(T &v)
-{
-	if (NETgetPacketDir() == PACKET_ENCODE)
-	{
-		queue(writer, v);
-	}
-	else if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		queue(reader, v);
-	}
 }
 
 void NETint8_t(int8_t *ip)
@@ -529,9 +553,9 @@ static void NETcoder(PACKETDIR dir)
 	sstrcpy(str, original);
 
 	if (dir == PACKET_ENCODE)
-		NETbeginEncodeNet(0, 0);
+		NETbeginEncode(0, 0);
 	else
-		NETbeginDecodeNet(0, 0);
+		NETbeginDecode(0, 0);
 	NETbool(&b);			assert(b == true);
 	NETuint32_t(&u32);  assert(u32 == 32);
 	NETuint16_t(&u16);  assert(u16 == 16);

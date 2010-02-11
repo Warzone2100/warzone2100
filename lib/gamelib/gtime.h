@@ -24,6 +24,13 @@
 #ifndef _gtime_h
 #define _gtime_h
 
+//#include "lib/netplay/nettypes.h"
+typedef struct _netqueue NETQUEUE_;
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
 /// The number of time units per second of the game clock.
 #define GAME_TICKS_PER_SEC 1000
@@ -164,5 +171,15 @@ static inline float timeAdjustedIncrement(float value, BOOL pauseTime)
 {
 	return (pauseTime ? gameTimeAdjustedIncrement : realTimeAdjustedIncrement)(value);
 }
+
+
+void sendPlayerGameTime(void);                            ///< Sends a NET_GAME_TIME message with gameTime plus latency to our game queues.
+void recvPlayerGameTime(NETQUEUE_ queue);                 ///< Processes a NET_GAME_TIME message.
+bool checkPlayerGameTime(unsigned player);                ///< Checks that we are not waiting for a NET_GAME_TIME message from this player. (player can be NET_ALL_PLAYERS.)
+void setPlayerGameTime(unsigned player, uint32_t time);   ///< Sets the player's time.
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

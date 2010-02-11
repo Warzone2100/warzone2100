@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_MULTIPLAY_H__
 
 #include "group.h"
+#include "featuredef.h"
 
 #ifdef __cplusplus
 extern "C"

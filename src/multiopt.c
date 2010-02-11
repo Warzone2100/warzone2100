@@ -520,12 +520,6 @@ static BOOL gameInit(void)
 {
 	UDWORD			player;
 
-	// Setup game queues.
-	for (player = 0; player < MAX_PLAYERS; ++player)
-	{
-		NETinitQueue(NETgameQueue(player));
-	}
-
 	scriptInit();
 
 	// If this is from a savegame, stop here!
