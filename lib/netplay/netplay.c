@@ -1364,6 +1364,7 @@ static void NETplayerDropped(UDWORD index)
 	debug(LOG_INFO, "NET_PLAYER_DROPPED received for player %d", id);
 	NET_DestroyPlayer(id);		// just clears array
 	MultiPlayerLeave(id);			// more cleanup
+
 	NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
 }
 
@@ -2455,13 +2456,7 @@ BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type)
 			if (NetPlay.isHost)
 			{
 				// Send message type specifically for dropped / disconnects
-				NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
-					NETuint32_t(&current);
-				NETend();
-				debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d (invalid socket)", (int)current);
-				NET_DestroyPlayer(current);                     // just clears array
-				MultiPlayerLeave(current);                      // more cleanup
-				NET_PlayerConnectionStatus = 2;                 // Display DROPPED_CONNECTION icon ingame.
+				NETplayerDropped(current);
 				NetPlay.players[current].kick = true;           // they are going to get kicked.
 			}
 		}

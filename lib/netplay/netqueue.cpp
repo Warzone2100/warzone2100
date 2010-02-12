@@ -74,7 +74,11 @@ void NetQueue::readRawData(const uint8_t **netData, size_t *netLen)
 void NetQueue::popRawData(size_t netLen)
 {
 	ASSERT(canReadRawData, "Wrong NetQueue type for popRawData.");
-	ASSERT(netLen <= unsentMessageData.size(), "Popped too much data!");
+	if (netLen > unsentMessageData.size())
+	{
+		debug(LOG_WARNING, "Popped too much data (popped %zu, had %zu). Someone probably just disconnected.", netLen, unsentMessageData.size());
+		netLen = unsentMessageData.size();
+	}
 
 	// Pop the data.
 	unsentMessageData.erase(unsentMessageData.begin(), unsentMessageData.begin() + netLen);
