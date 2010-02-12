@@ -50,6 +50,9 @@ extern void objmemShutdown(void);
 /* General housekeeping for the object system */
 extern void objmemUpdate(void);
 
+/// Generates a new, (hopefully) unique object id.
+uint32_t generateNewObjectId(void);
+
 /* Create a new droid */
 extern DROID* createDroid(UDWORD player);
 

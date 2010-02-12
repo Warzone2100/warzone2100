@@ -110,8 +110,6 @@ static BOOL	structHasModule(STRUCTURE *psStruct);
 
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl);
 
-extern	UDWORD				objID;					// unique ID creation thing..
-
 /// Hold the previously assigned player
 static int nextPlayer = 0;
 static Vector2i positions[MAX_PLAYERS];
@@ -11440,8 +11438,7 @@ BOOL scrAssembleWeaponTemplate(void)
 		if(tempTemplate == NULL)
 		{
 			// set template id
-			pNewTemplate->multiPlayerID = (objID<<3)|player;
-			objID++;
+			pNewTemplate->multiPlayerID = generateNewObjectId();
 
 			// add template to player template list
 			pNewTemplate->psNext = apsDroidTemplates[player];

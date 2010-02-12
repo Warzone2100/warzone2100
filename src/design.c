@@ -4668,8 +4668,7 @@ static BOOL saveTemplate(void)
 	if (stored)
 	{
 		ASSERT_OR_RETURN( false, psTempl != NULL, "Template is NULL in saveTemplate()!");
-		psTempl->multiPlayerID = (objID<<3)|selectedPlayer;
-		objID++;
+		psTempl->multiPlayerID = generateNewObjectId();
 		if (bMultiMessages)
 		{
 			sendTemplate(psTempl);

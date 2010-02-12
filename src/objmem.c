@@ -56,7 +56,7 @@ static SDWORD factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY
 /* The id number for the next object allocated
  * Each object will have a unique id number irrespective of type
  */
-UDWORD	objID;
+UDWORD                  objID;
 
 /* The lists of objects allocated */
 DROID			*apsDroidLists[MAX_PLAYERS];
@@ -197,6 +197,11 @@ void objmemUpdate(void)
 	}
 }
 
+uint32_t generateNewObjectId(void)
+{
+	return objID++<<3 | selectedPlayer;  // Was taken from createObject, where 'player' was used instead of 'selectedPlayer'. Hope there are no stupid hacks that try to recover 'player' from the last 3 bits.
+}
+
 /**************************************************************************************
  *
  * Inlines for the object memory functions
@@ -239,8 +244,7 @@ static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
 	}
 
 	newObject->type = objType;
-	newObject->id = (objID << 3) | player;
-	objID++;
+	newObject->id = generateNewObjectId();
 	newObject->player = (UBYTE)player;
 	newObject->died = 0;
 	newObject->psNextFunc = NULL;

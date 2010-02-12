@@ -629,7 +629,7 @@ BOOL recvMessage(void)
 				//case NET_POSITIONREQUEST:
 				//case NET_TEAMREQUEST:
 				//case NET_READY_REQUEST:
-				case GAME_ARTIFACTS:
+				//case GAME_ARTIFACTS:    // 23 down, 19 to go.
 				case GAME_FEATURES:
 				case GAME_ALLIANCE:
 				//case NET_KICK:

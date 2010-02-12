@@ -517,33 +517,21 @@ BOOL recvAlliance(NETQUEUE queue, BOOL allowAudio)
 // add an artifact on destruction if required.
 void  technologyGiveAway(const STRUCTURE *pS)
 {
-	int				i;
 	uint8_t			count = 1;
-	uint32_t		x, y;
-	FEATURE			*pF = NULL;
 	FEATURE_TYPE	type = FEAT_GEN_ARTE;
 
 	// If a fully built factory (or with modules under construction) which is our responsibility got destroyed
 	if (pS->pStructureType->type == REF_FACTORY && (pS->status == SS_BUILT || pS->currentBuildPts >= pS->body)
 	 && myResponsibility(pS->player))
 	{
-		x = map_coord(pS->pos.x);
-		y = map_coord(pS->pos.y);
+		uint32_t x = map_coord(pS->pos.x);
+		uint32_t y = map_coord(pS->pos.y);
+		uint32_t id = generateNewObjectId();
 
 		// Pick a tile to place the artifact
 		if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 		{
 			ASSERT(false, "technologyGiveAway: Unable to find a free location");
-		}
-
-		// Get the feature offset
-		for(i = 0; i < numFeatureStats && asFeatureStats[i].subType != FEAT_GEN_ARTE; i++);
-
-		// 'Build' the artifact
-		pF = buildFeature((asFeatureStats + i), world_coord(x), world_coord(y), false);
-		if (pF)
-		{
-			pF->player = pS->player;
 		}
 
 		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_ARTIFACTS);
@@ -557,7 +545,7 @@ void  technologyGiveAway(const STRUCTURE *pS)
 			NETenum(&type);
 			NETuint32_t(&x);
 			NETuint32_t(&y);
-			NETuint32_t(&pF->id);
+			NETuint32_t(&id);
 			NETuint8_t(&player);
 		}
 		NETend();
@@ -631,8 +619,7 @@ static const char *feature_names[] =
 // splatter artifact gifts randomly about.
 void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 {
-	FEATURE		*pF = NULL;
-	int			i, featureStat, count;
+	int             i, count;
 	uint32_t	x, y;
 	uint8_t		player = ANYPLAYER;
 
@@ -641,18 +628,18 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 		NETuint8_t(&quantity);
 		NETenum(&type);
 
-		for(featureStat = 0; featureStat < numFeatureStats && asFeatureStats[featureStat].subType != type; featureStat++);
-
 		ASSERT(mapWidth > 20, "map not big enough");
 		ASSERT(mapHeight > 20, "map not big enough");
 
 		for (count = 0; count < quantity; count++)
 		{
+			uint32_t id = generateNewObjectId();
+
 			for (i = 0; i < 3; i++) // try three times
 			{
 				// Between 10 and mapwidth - 10
-				x = (gameRand(mapWidth - 20)) + 10;
-				y = (gameRand(mapHeight - 20)) + 10;
+				x = (rand()%(mapWidth - 20)) + 10;
+				y = (rand()%(mapHeight - 20)) + 10;
 
 				if (pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 				{
@@ -664,29 +651,10 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 					x = INVALID_XY;
 				}
 			}
-			if (x != INVALID_XY) // at least one of the tries succeeded
-			{
-				pF = buildFeature(asFeatureStats + featureStat, world_coord(x), world_coord(y), false);
-				if (pF)
-				{
-					pF->player = player;
-				}
-				else
-				{
-					x = INVALID_XY;
-				}
-			}
 
 			NETuint32_t(&x);
 			NETuint32_t(&y);
-			if (pF)
-			{
-				NETuint32_t(&pF->id);
-			}
-			else
-			{
-				NETuint32_t(&x); // just give them a dummy value; it'll never be used
-			}
+			NETuint32_t(&id);
 			NETuint8_t(&player);
 		}
 
