@@ -593,54 +593,55 @@ BOOL recvMessage(void)
 			switch (type)
 			{
 				// TODO Remove all these cases.
-				case NET_DROID:
-				//case NET_DROIDINFO:    // 2 down, 41 to go.
-				case NET_DROIDDEST:
-				//case NET_DROIDMOVE:    // 1 down, 42 to go.
-				//case NET_GROUPORDER:   // 3 down, 40 to go.
-				//case NET_CHECK_DROID:  // 4 down, 39 to go. (Didn't change anything, just marked it here.)
-				//case NET_CHECK_STRUCT: // 5 down, 38 to go. (Didn't change anything, just marked it here.)
-				//case NET_CHECK_POWER:  // 6 down, 37 to go. (Didn't change anything, just marked it here.)
-				case NET_TEXTMSG:
-				case NET_DATA_CHECK:
-				case NET_AITEXTMSG:
-				case NET_BEACONMSG:
-				case NET_BUILD:
-				case NET_BUILDFINISHED:
-				case NET_STRUCTDEST:
-				//case NET_SECONDARY:    // 7 down, 36 to go.
-				case NET_SECONDARY_ALL:
-				case NET_DROIDEMBARK:
-				case NET_DROIDDISEMBARK:
-				case NET_GIFT:
-				case NET_SCORESUBMIT:
-				case NET_VTOL:
-				case NET_LASSAT:
+				case GAME_DROID:
+				//case GAME_DROIDINFO:    // 2 down, 41 to go.
+				case GAME_DROIDDEST:
+				//case GAME_DROIDMOVE:    // 1 down, 42 to go.
+				//case GAME_GROUPORDER:   // 3 down, 40 to go.
+				//case GAME_CHECK_DROID:  // 4 down, 39 to go. (Didn't change anything, just marked it here.)
+				//case GAME_CHECK_STRUCT: // 5 down, 38 to go. (Didn't change anything, just marked it here.)
+				//case GAME_CHECK_POWER:  // 6 down, 37 to go. (Didn't change anything, just marked it here.)
+				//case NET_TEXTMSG:
+				//case NET_DATA_CHECK:
+				//case NET_AITEXTMSG:
+				//case NET_BEACONMSG:
+				case GAME_BUILD:
+				case GAME_BUILDFINISHED:
+				case GAME_STRUCTDEST:
+				//case GAME_SECONDARY:    // 7 down, 36 to go.
+				case GAME_SECONDARY_ALL:
+				case GAME_DROIDEMBARK:
+				case GAME_DROIDDISEMBARK:
+				case GAME_GIFT:
+				//case NET_SCORESUBMIT:
+				case GAME_VTOL:
+				case GAME_LASSAT:
 
-				case NET_TEMPLATE:
-				case NET_TEMPLATEDEST:
-				case NET_FEATUREDEST:
-				case NET_PING:
-				case NET_DEMOLISH:
-				case NET_RESEARCH:
-				case NET_OPTIONS:
-				case NET_PLAYERRESPONDING:
-				case NET_COLOURREQUEST:
-				case NET_POSITIONREQUEST:
-				case NET_TEAMREQUEST:
-				case NET_READY_REQUEST:
-				case NET_ARTIFACTS:
-				case NET_FEATURES:
-				case NET_ALLIANCE:
-				case NET_KICK:
-				case NET_FIREUP:
-				case NET_RESEARCHSTATUS:
-				case NET_PLAYER_STATS:
+				case GAME_TEMPLATE:
+				case GAME_TEMPLATEDEST:
+				case GAME_FEATUREDEST:
+				//case NET_PING:
+				case GAME_DEMOLISH:
+				case GAME_RESEARCH:
+				//case NET_OPTIONS:
+				//case NET_PLAYERRESPONDING:
+				//case NET_COLOURREQUEST:
+				//case NET_POSITIONREQUEST:
+				//case NET_TEAMREQUEST:
+				//case NET_READY_REQUEST:
+				case GAME_ARTIFACTS:
+				case GAME_FEATURES:
+				case GAME_ALLIANCE:
+				//case NET_KICK:
+				//case NET_FIREUP:
+				case GAME_RESEARCHSTATUS:
+				//case NET_PLAYER_STATS:
+				//case NET_...:  // 22 down, 20 to go.
 				{
 					static unsigned packets[256];
 					if (++packets[type] == 1)
 					{
-						debug(LOG_WARNING, "Ignoring our own game queue message, type %d, which hasn't been converted yet", type);
+						debug(LOG_WARNING, "Ignoring our own game queue message %s, which hasn't been converted yet", messageTypeToString(type));
 					}
 					NETpop(queue);
 					continue;  // HACK-TODO Ignore our own queue.
@@ -655,28 +656,28 @@ BOOL recvMessage(void)
 		{
 			switch(type)
 			{
-			case NET_DROID:						// new droid of known type
+			case GAME_DROID:						// new droid of known type
 				recvDroid(queue);
 				break;
-			case NET_DROIDINFO:					//droid update info
+			case GAME_DROIDINFO:					//droid update info
 				recvDroidInfo(queue);
 				break;
-			case NET_DROIDDEST:					// droid destroy
+			case GAME_DROIDDEST:					// droid destroy
 				recvDestroyDroid(queue);
 				break;
-			case NET_DROIDMOVE:					// move a droid to x,y command.
+			case GAME_DROIDMOVE:					// move a droid to x,y command.
 				recvDroidMove(queue);
 				break;
-			case NET_GROUPORDER:				// an order for more than 1 droid.
+			case GAME_GROUPORDER:				// an order for more than 1 droid.
 				recvGroupOrder(queue);
 				break;
-			case NET_CHECK_DROID:				// droid damage and position checks
+			case GAME_CHECK_DROID:				// droid damage and position checks
 				recvDroidCheck(queue);
 				break;
-			case NET_CHECK_STRUCT:				// structure damage checks.
+			case GAME_CHECK_STRUCT:				// structure damage checks.
 				recvStructureCheck(queue);
 				break;
-			case NET_CHECK_POWER:				// Power level syncing.
+			case GAME_CHECK_POWER:				// Power level syncing.
 				recvPowerCheck(queue);
 				break;
 			case NET_TEXTMSG:					// simple text message
@@ -691,36 +692,36 @@ BOOL recvMessage(void)
 			case NET_BEACONMSG:					//beacon (blip) message
 				recvBeacon(queue);
 				break;
-			case NET_BUILD:						// a build order has been sent.
+			case GAME_BUILD:						// a build order has been sent.
 				recvBuildStarted(queue);
 				break;
-			case NET_BUILDFINISHED:				// a building is complete
+			case GAME_BUILDFINISHED:				// a building is complete
 				recvBuildFinished(queue);
 				break;
-			case NET_STRUCTDEST:				// structure destroy
+			case GAME_STRUCTDEST:				// structure destroy
 				recvDestroyStructure(queue);
 				break;
-			case NET_SECONDARY:					// set a droids secondary order level.
+			case GAME_SECONDARY:					// set a droids secondary order level.
 				recvDroidSecondary(queue);
 				break;
-			case NET_SECONDARY_ALL:					// set a droids secondary order level.
+			case GAME_SECONDARY_ALL:					// set a droids secondary order level.
 				recvDroidSecondaryAll(queue);
 				break;
-			case NET_DROIDEMBARK:
+			case GAME_DROIDEMBARK:
 				recvDroidEmbark(queue);              //droid has embarked on a Transporter
 				break;
-			case NET_DROIDDISEMBARK:
+			case GAME_DROIDDISEMBARK:
 				recvDroidDisEmbark(queue);           //droid has disembarked from a Transporter
 				break;
-			case NET_GIFT:						// an alliance gift from one player to another.
+			case GAME_GIFT:						// an alliance gift from one player to another.
 				recvGift(queue);
 				break;
 			case NET_SCORESUBMIT:				//  a score update from another player [UNUSED] see NET_PLAYER_STATS
 				break;
-			case NET_VTOL:
+			case GAME_VTOL:
 				recvHappyVtol(queue);
 				break;
-			case NET_LASSAT:
+			case GAME_LASSAT:
 				recvLasSat(queue);
 				break;
 			default:
@@ -731,22 +732,22 @@ BOOL recvMessage(void)
 		// messages usable all the time
 		switch(type)
 		{
-		case NET_TEMPLATE:					// new template
+		case GAME_TEMPLATE:					// new template
 			recvTemplate(queue);
 			break;
-		case NET_TEMPLATEDEST:				// template destroy
+		case GAME_TEMPLATEDEST:				// template destroy
 			recvDestroyTemplate(queue);
 			break;
-		case NET_FEATUREDEST:				// feature destroy
+		case GAME_FEATUREDEST:				// feature destroy
 			recvDestroyFeature(queue);
 			break;
 		case NET_PING:						// diagnostic ping msg.
 			recvPing(queue);
 			break;
-		case NET_DEMOLISH:					// structure demolished.
+		case GAME_DEMOLISH:					// structure demolished.
 			recvDemolishFinished(queue);
 			break;
-		case NET_RESEARCH:					// some research has been done.
+		case GAME_RESEARCH:					// some research has been done.
 			recvResearch(queue);
 			break;
 		case NET_OPTIONS:
@@ -790,13 +791,13 @@ BOOL recvMessage(void)
 				startMultiplayerGame();
 			}
 			break;
-		case NET_ARTIFACTS:
+		case GAME_ARTIFACTS:
 			recvMultiPlayerRandomArtifacts(queue);
 			break;
-		case NET_FEATURES:
+		case GAME_FEATURES:
 			recvMultiPlayerFeature(queue);
 			break;
-		case NET_ALLIANCE:
+		case GAME_ALLIANCE:
 			recvAlliance(queue, true);
 			break;
 		case NET_KICK:
@@ -824,7 +825,7 @@ BOOL recvMessage(void)
 		case NET_FIREUP:				// frontend only
 			debug(LOG_NET, "NET_FIREUP was received (frontend only?)"); 
 			break;
-		case NET_RESEARCHSTATUS:
+		case GAME_RESEARCHSTATUS:
 			recvResearchStatus(queue);
 			break;
 		case NET_PLAYER_STATS:
@@ -849,7 +850,7 @@ BOOL SendResearch(uint8_t player, uint32_t index, bool trigger)
 	PLAYER_RESEARCH *pPlayerRes;
 
 	// Send the player that is researching the topic and the topic itself
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_RESEARCH);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_RESEARCH);
 		NETuint8_t(&player);
 		NETuint32_t(&index);
 	NETend();
@@ -890,14 +891,14 @@ static BOOL recvResearch(NETQUEUE queue)
 	PLAYER_RESEARCH	*pPlayerRes;
 	RESEARCH		*pResearch;
 
-	NETbeginDecode(queue, NET_RESEARCH);
+	NETbeginDecode(queue, GAME_RESEARCH);
 		NETuint8_t(&player);
 		NETuint32_t(&index);
 	NETend();
 
 	if (player >= MAX_PLAYERS || index >= numResearch)
 	{
-		debug(LOG_ERROR, "Bad NET_RESEARCH received, player is %d, index is %u", (int)player, index);
+		debug(LOG_ERROR, "Bad GAME_RESEARCH received, player is %d, index is %u", (int)player, index);
 		return false;
 	}
 
@@ -946,7 +947,7 @@ BOOL sendReseachStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BO
 		return true;
 	}
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_RESEARCHSTATUS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_RESEARCHSTATUS);
 		NETuint8_t(&player);
 		NETbool(&bStart);
 
@@ -977,7 +978,7 @@ BOOL recvResearchStatus(NETQUEUE queue)
 	BOOL				bStart;
 	uint32_t			index, structRef;
 
-	NETbeginDecode(queue, NET_RESEARCHSTATUS);
+	NETbeginDecode(queue, GAME_RESEARCHSTATUS);
 		NETuint8_t(&player);
 		NETbool(&bStart);
 		NETuint32_t(&structRef);
@@ -986,7 +987,7 @@ BOOL recvResearchStatus(NETQUEUE queue)
 
 	if (player >= MAX_PLAYERS || index >= numResearch)
 	{
-		debug(LOG_ERROR, "Bad NET_RESEARCHSTATUS received, player is %d, index is %u", (int)player, index);
+		debug(LOG_ERROR, "Bad GAME_RESEARCHSTATUS received, player is %d, index is %u", (int)player, index);
 		return false;
 	}
 
@@ -1418,7 +1419,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 	ASSERT(pTempl != NULL, "sendTemplate: Old Pumpkin bug");
 	if (!pTempl) return true; /* hack */
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_TEMPLATE);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATE);
 		NETuint8_t(&player);
 		NETuint32_t(&pTempl->ref);
 		NETstring(pTempl->aName, sizeof(pTempl->aName));
@@ -1454,7 +1455,7 @@ BOOL recvTemplate(NETQUEUE queue)
 	DROID_TEMPLATE	t, *pT = &t;
 	int				i;
 
-	NETbeginDecode(queue, NET_TEMPLATE);
+	NETbeginDecode(queue, GAME_TEMPLATE);
 		NETuint8_t(&player);
 		ASSERT(player < MAX_PLAYERS, "recvtemplate: invalid player size: %d", player);
 
@@ -1513,7 +1514,7 @@ BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 {
 	uint8_t player = selectedPlayer;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_TEMPLATEDEST);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATEDEST);
 		NETuint8_t(&player);
 		NETuint32_t(&t->multiPlayerID);
 	NETend();
@@ -1528,7 +1529,7 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 	uint32_t		templateID;
 	DROID_TEMPLATE	*psTempl, *psTempPrev = NULL;
 
-	NETbeginDecode(queue, NET_TEMPLATEDEST);
+	NETbeginDecode(queue, GAME_TEMPLATEDEST);
 		NETuint8_t(&player);
 		NETuint32_t(&templateID);
 	NETend();
@@ -1572,7 +1573,7 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 // send a destruct feature message.
 BOOL SendDestroyFeature(FEATURE *pF)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_FEATUREDEST);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_FEATUREDEST);
 		NETuint32_t(&pF->id);
 	return NETend();
 }
@@ -1583,7 +1584,7 @@ BOOL recvDestroyFeature(NETQUEUE queue)
 	FEATURE *pF;
 	uint32_t	id;
 
-	NETbeginDecode(queue, NET_FEATUREDEST);
+	NETbeginDecode(queue, GAME_FEATUREDEST);
 		NETuint32_t(&id);
 	NETend();
 

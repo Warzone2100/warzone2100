@@ -181,12 +181,6 @@ typedef struct
 	bool ready;
 } Socket;
 
-/*typedef struct
-{
-	Socket *        socket;
-	uint8_t *       buffer;
-} NETBUFSOCKET;*/
-
 typedef struct
 {
 	size_t len;
@@ -250,9 +244,9 @@ extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk, netcode++ 3.36";
-static int NETCODE_VERSION_MAJOR = 3;
-static int NETCODE_VERSION_MINOR = 36;
+char VersionString[VersionStringSize] = "trunk, netcode 4.0";
+static int NETCODE_VERSION_MAJOR = 4;
+static int NETCODE_VERSION_MINOR = 0;
 static int NETCODE_HASH = 0;			// unused for now
 
 #if defined(WZ_OS_WIN)
@@ -2079,8 +2073,6 @@ BOOL NETsend(uint8_t player, const uint8_t *rawData, ssize_t rawLen)
 
 	if (player >= MAX_CONNECTED_PLAYERS && player != NET_ALL_PLAYERS) return false;
 
-	//NETlogPacket(msg, false);
-
 	if (NetPlay.isHost)
 	{
 		int firstPlayer = player == NET_ALL_PLAYERS ? 0                         : player;
@@ -2490,7 +2482,7 @@ BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type)
 		{
 			*type = NETmessageType(*queue);
 
-			if (*type == NET_GAME_TIME)
+			if (*type == GAME_GAME_TIME)
 			{
 				recvPlayerGameTime(*queue);
 				NETpop(*queue);
@@ -3509,7 +3501,7 @@ connect_succesfull:
 	for (;;)
 	{
 		NETQUEUE queue;
-		uint8_t type = NUM_GAME_PACKETS;
+		uint8_t type;
 
 		// FIXME: shouldn't there be some sort of rejection message?
 		if (SDL_GetTicks() > i + 5000)
@@ -3621,4 +3613,78 @@ void NETsetGameserverPort(unsigned int port)
 unsigned int NETgetGameserverPort()
 {
 	return gameserver_port;
+}
+
+const char *messageTypeToString(unsigned messageType_)
+{
+	MESSAGE_TYPES messageType = (MESSAGE_TYPES)messageType_;  // Cast to enum, so switch gives a warning if new message types are added without updating the switch.
+
+	switch (messageType)
+	{
+		// Search:  \s*([\w_]+).*
+		// Replace: case \1: return "\1";
+
+		case NET_MIN_TYPE: return "NET_MIN_TYPE";
+		case NET_PING: return "NET_PING";
+		case NET_PLAYER_STATS: return "NET_PLAYER_STATS";
+		case NET_TEXTMSG: return "NET_TEXTMSG";
+		case NET_PLAYERRESPONDING: return "NET_PLAYERRESPONDING";
+		case NET_OPTIONS: return "NET_OPTIONS";
+		case NET_KICK: return "NET_KICK";
+		case NET_FIREUP: return "NET_FIREUP";
+		case NET_COLOURREQUEST: return "NET_COLOURREQUEST";
+		case NET_SCORESUBMIT: return "NET_SCORESUBMIT";
+		case NET_AITEXTMSG: return "NET_AITEXTMSG";
+		case NET_BEACONMSG: return "NET_BEACONMSG";
+		case NET_TEAMREQUEST: return "NET_TEAMREQUEST";
+		case NET_JOIN: return "NET_JOIN";
+		case NET_ACCEPTED: return "NET_ACCEPTED";
+		case NET_PLAYER_INFO: return "NET_PLAYER_INFO";
+		case NET_PLAYER_JOINED: return "NET_PLAYER_JOINED";
+		case NET_PLAYER_LEAVING: return "NET_PLAYER_LEAVING";
+		case NET_PLAYER_DROPPED: return "NET_PLAYER_DROPPED";
+		case NET_GAME_FLAGS: return "NET_GAME_FLAGS";
+		case NET_READY_REQUEST: return "NET_READY_REQUEST";
+		case NET_REJECTED: return "NET_REJECTED";
+		case NET_POSITIONREQUEST: return "NET_POSITIONREQUEST";
+		case NET_DATA_CHECK: return "NET_DATA_CHECK";
+		case NET_HOST_DROPPED: return "NET_HOST_DROPPED";
+		case NET_SEND_TO_PLAYER: return "NET_SEND_TO_PLAYER";
+		case NET_SHARE_GAME_QUEUE: return "NET_SHARE_GAME_QUEUE";
+		case NET_FILE_REQUESTED: return "NET_FILE_REQUESTED";
+		case NET_FILE_CANCELLED: return "NET_FILE_CANCELLED";
+		case NET_FILE_PAYLOAD: return "NET_FILE_PAYLOAD";
+		case NET_MAX_TYPE: return "NET_MAX_TYPE";
+		case GAME_MIN_TYPE: return "GAME_MIN_TYPE";
+		case GAME_DROID: return "GAME_DROID";
+		case GAME_DROIDINFO: return "GAME_DROIDINFO";
+		case GAME_DROIDDEST: return "GAME_DROIDDEST";
+		case GAME_DROIDMOVE: return "GAME_DROIDMOVE";
+		case GAME_GROUPORDER: return "GAME_GROUPORDER";
+		case GAME_TEMPLATE: return "GAME_TEMPLATE";
+		case GAME_TEMPLATEDEST: return "GAME_TEMPLATEDEST";
+		case GAME_FEATUREDEST: return "GAME_FEATUREDEST";
+		case GAME_CHECK_DROID: return "GAME_CHECK_DROID";
+		case GAME_CHECK_STRUCT: return "GAME_CHECK_STRUCT";
+		case GAME_CHECK_POWER: return "GAME_CHECK_POWER";
+		case GAME_BUILD: return "GAME_BUILD";
+		case GAME_STRUCTDEST: return "GAME_STRUCTDEST";
+		case GAME_BUILDFINISHED: return "GAME_BUILDFINISHED";
+		case GAME_RESEARCH: return "GAME_RESEARCH";
+		case GAME_FEATURES: return "GAME_FEATURES";
+		case GAME_SECONDARY: return "GAME_SECONDARY";
+		case GAME_ALLIANCE: return "GAME_ALLIANCE";
+		case GAME_GIFT: return "GAME_GIFT";
+		case GAME_DEMOLISH: return "GAME_DEMOLISH";
+		case GAME_ARTIFACTS: return "GAME_ARTIFACTS";
+		case GAME_VTOL: return "GAME_VTOL";
+		case GAME_SECONDARY_ALL: return "GAME_SECONDARY_ALL";
+		case GAME_DROIDEMBARK: return "GAME_DROIDEMBARK";
+		case GAME_DROIDDISEMBARK: return "GAME_DROIDDISEMBARK";
+		case GAME_RESEARCHSTATUS: return "GAME_RESEARCHSTATUS";
+		case GAME_LASSAT: return "GAME_LASSAT";
+		case GAME_GAME_TIME: return "GAME_GAME_TIME";
+		case GAME_MAX_TYPE: return "GAME_MAX_TYPE";
+	}
+	return "(INVALID MESSAGE TYPE)";
 }

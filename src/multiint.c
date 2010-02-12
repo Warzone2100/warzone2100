@@ -2944,7 +2944,7 @@ void frontendMultiMessages(void)
 			}
 			break;
 
-		case NET_ALLIANCE:
+		case GAME_ALLIANCE:
 			recvAlliance(queue, false);
 			break;
 

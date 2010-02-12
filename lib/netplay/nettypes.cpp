@@ -33,6 +33,7 @@
 #include "netplay.h"
 #include "nettypes.h"
 #include "netqueue.h"
+#include "netlog.h"
 #include <cstring>
 
 /// There is a game queue representing each player. The game queues are synchronised among all players, so that all players process the same game queue
@@ -293,6 +294,11 @@ uint8_t NETmessageType(NETQUEUE queue)
 	return receiveQueue(queue)->getMessage().type;
 }
 
+uint32_t NETmessageSize(NETQUEUE queue)
+{
+	return receiveQueue(queue)->getMessage().data.size();
+}
+
 /*
  * Begin & End functions
  */
@@ -361,6 +367,16 @@ BOOL NETend()
 		// Push the message onto the list.
 		NetQueue *queue = sendQueue(queueInfo);
 		queue->pushMessage(message);
+		NETlogPacket(message.type, message.data.size(), false);
+
+		if (queueInfo.queueType == QUEUE_GAME)
+		{
+			ASSERT(message.type > GAME_MIN_TYPE && message.type < GAME_MAX_TYPE, "Inserting %s into game queue.", messageTypeToString(message.type));
+		}
+		else
+		{
+			ASSERT(message.type > NET_MIN_TYPE && message.type < NET_MAX_TYPE, "Inserting %s into net queue.", messageTypeToString(message.type));
+		}
 
 		if (queueInfo.queueType == QUEUE_NET || queueInfo.queueType == QUEUE_BROADCAST)
 		{

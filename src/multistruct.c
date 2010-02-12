@@ -54,7 +54,7 @@
 // INFORM others that a building has been started, and base plate should be put down.
 BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_BUILD);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_BUILD);
 
 		// Who is building it
 		NETuint8_t(&psDroid->player);
@@ -105,7 +105,7 @@ BOOL recvBuildStarted(NETQUEUE queue)
 	int32_t			order;
 	uint32_t		structRef, structId, targetId,droidID;
 
-	NETbeginDecode(queue, NET_BUILD);
+	NETbeginDecode(queue, GAME_BUILD);
 		NETuint8_t(&player);
 		NETuint32_t(&structRef);
 		NETuint16_t(&x);
@@ -177,7 +177,7 @@ BOOL SendBuildFinished(STRUCTURE *psStruct)
 	uint8_t player = psStruct->player;
 	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_BUILDFINISHED);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_BUILDFINISHED);
 		NETuint32_t(&power);			// send how much power we got.
 		NETuint32_t(&psStruct->id);		// ID of building
 
@@ -200,7 +200,7 @@ BOOL recvBuildFinished(NETQUEUE queue)
 	uint8_t		player;
 	uint32_t	power;
 
-	NETbeginDecode(queue, NET_BUILDFINISHED);
+	NETbeginDecode(queue, GAME_BUILDFINISHED);
 		NETuint32_t(&power);	// get the player's power level
 		NETuint32_t(&structId);	// get the struct id.
 		NETuint32_t(&type); 	// Kind of building.
@@ -278,7 +278,7 @@ BOOL recvBuildFinished(NETQUEUE queue)
 // demolish message.
 BOOL SendDemolishFinished(STRUCTURE *psStruct, DROID *psDroid)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_DEMOLISH);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEMOLISH);
 
 		// Send what is being demolish and who is doing it
 		NETuint32_t(&psStruct->id);
@@ -293,7 +293,7 @@ BOOL recvDemolishFinished(NETQUEUE queue)
 	DROID		*psDroid;
 	uint32_t	structID, droidID;
 
-	NETbeginDecode(queue, NET_DEMOLISH);
+	NETbeginDecode(queue, GAME_DEMOLISH);
 		NETuint32_t(&structID);
 		NETuint32_t(&droidID);
 	NETend();
@@ -325,7 +325,7 @@ BOOL recvDemolishFinished(NETQUEUE queue)
 BOOL SendDestroyStructure(STRUCTURE *s)
 {
 	technologyGiveAway(s);
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_STRUCTDEST);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_STRUCTDEST);
 
 	// Struct to destroy
 	NETuint32_t(&s->id);
@@ -340,7 +340,7 @@ BOOL recvDestroyStructure(NETQUEUE queue)
 	uint32_t structID;
 	STRUCTURE *psStruct;
 
-	NETbeginDecode(queue, NET_STRUCTDEST);
+	NETbeginDecode(queue, GAME_STRUCTDEST);
 		NETuint32_t(&structID);
 	NETend();
 
@@ -365,7 +365,7 @@ BOOL recvDestroyStructure(NETQUEUE queue)
 
 BOOL sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_LASSAT);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_LASSAT);
 
 		NETuint8_t(&player);
 		NETuint32_t(&psStruct->id);
@@ -384,7 +384,7 @@ BOOL recvLasSat(NETQUEUE queue)
 	uint32_t	id,targetid;
 
 	// TODO Add some kind of checking, so that things don't get lasatted by bunkers.
-	NETbeginDecode(queue, NET_LASSAT);
+	NETbeginDecode(queue, GAME_LASSAT);
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETuint32_t(&targetid);

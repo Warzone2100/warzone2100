@@ -28,91 +28,14 @@
 #include "netplay.h"
 
 // ////////////////////////////////////////////////////////////////////////
-// Logging for degug only
+// Logging for debug only
 // ////////////////////////////////////////////////////////////////////////
 
-static const char *packetname[NUM_GAME_PACKETS + 1] =
-{
-	"NET_DROID",
-	"NET_DROIDINFO",
-	"NET_DROIDDEST",
-	"NET_DROIDMOVE",
-	"NET_GROUPORDER",
-	"NET_TEMPLATE",
-	"NET_TEMPLATEDEST",
-	"NET_FEATUREDEST",
-	"NET_PING",
-	"NET_CHECK_DROID",
-	"NET_CHECK_STRUCT",
-	"NET_CHECK_POWER",
-	"NET_PLAYER_STATS",
-	"NET_BUILD",
-	"NET_STRUCTDEST",
-	"NET_BUILDFINISHED",
-	"NET_RESEARCH",
-	"NET_TEXTMSG",
-	"NET_UNUSED_18",
-	"NET_UNUSED_19",
-	"NET_PLAYERCOMPLETE",
-	"NET_UNUSED_21",
-	"NET_STRUCT",
-	"NET_UNUSED_23",
-	"NET_FEATURES",
-	"NET_PLAYERRESPONDING",
-	"NET_OPTIONS",
-	"NET_KICK",
-	"NET_SECONDARY",
-	"NET_FIREUP",
-	"NET_ALLIANCE",
-	"NET_GIFT",
-	"NET_DEMOLISH",
-	"NET_COLOURREQUEST",
-	"NET_ARTIFACTS",
-	"NET_DMATCHWIN",
-	"NET_SCORESUBMIT",
-	"NET_DESTROYXTRA",
-	"NET_VTOL",
-	"NET_UNUSED_39",
-	"NET_WHITEBOARD",
-	"NET_SECONDARY_ALL",
-	"NET_DROIDEMBARK",
-	"NET_DROIDDISEMBARK",
-	"NET_RESEARCHSTATUS",
-	"NET_LASSAT",
-	"NET_UNUSED_46",
-	"NET_AITEXTMSG",
-	"NET_TEAMS_ON",
-	"NET_BEACONMSG",
-	"NET_SET_TEAMS",
-	"NET_TEAMREQUEST",
-	"NET_JOIN",
-	"NET_ACCEPTED",
-	"NET_PLAYER_INFO",
-	"NET_PLAYER_JOINED",
-	"NET_PLAYER_LEAVING",
-	"NET_PLAYER_DROPPED",
-	"NET_GAME_FLAGS",
-	"NET_READY_REQUEST",
-	"NET_NEVERUSE",
-	"NET_REJECTED",
-	"NET_UNUSED_62",
-	"NET_UNUSED_63",
-	"NET_UNUSED_64",
-	"NET_POSITIONREQUEST",
-	"NET_DATA_CHECK",
-	"NET_HOST_DROPPED",
-	"NET_FUTURE1",
-	"NET_FUTURE2",
-	"NET_FUTURE3",
-	"NET_FILE_REQUESTED",
-	"NET_FILE_CANCELLED",
-	"NET_FILE_PAYLOAD",
-	"NET_???"
-};
+#define NUM_GAME_PACKETS 256
 
 static PHYSFS_file	*pFileHandle = NULL;
-static uint32_t		packetcount[2][NUM_GAME_PACKETS + 1];
-static uint32_t		packetsize[2][NUM_GAME_PACKETS + 1];
+static uint32_t		packetcount[2][NUM_GAME_PACKETS];
+static uint32_t		packetsize[2][NUM_GAME_PACKETS];
 
 BOOL NETstartLogging(void)
 {
@@ -122,7 +45,7 @@ BOOL NETstartLogging(void)
 	static char filename[256] = {'\0'};
 	int i;
 
-	for (i = 0; i < NUM_GAME_PACKETS + 1; i++)
+	for (i = 0; i < NUM_GAME_PACKETS; i++)
 	{
 		packetcount[0][i] = 0;
 		packetsize[0][i] = 0;
@@ -158,9 +81,9 @@ BOOL NETstopLogging(void)
 	}
 
 	/* Output stats */
-	for (i = 0; i < NUM_GAME_PACKETS + 1; i++)
+	for (i = 0; i < NUM_GAME_PACKETS; i++)
 	{
-		snprintf(buf, sizeof(buf), "%s: received %u times, %u bytes; sent %u times, %u bytes\n", packetname[i],
+		snprintf(buf, sizeof(buf), "%s: received %u times, %u bytes; sent %u times, %u bytes\n", messageTypeToString(i),
 			packetcount[0][i], packetsize[0][i], packetcount[1][i], packetsize[1][i]);
 		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	}
@@ -191,15 +114,12 @@ BOOL NETstopLogging(void)
 	return true;
 }
 
-/*void NETlogPacket(NETQUEUE queue, BOOL received)
+void NETlogPacket(uint8_t type, uint32_t size, BOOL received)
 {
-	if (NETmessageType(queue) >= NUM_GAME_PACKETS)
-	{
-		NETmessageType(queue) = NUM_GAME_PACKETS;
-	}
-	packetcount[received][NETmessageType(queue)]++;
-	packetsize[received][NETmessageType(queue)] += NETmessageSize(queue);
-}*/
+	STATIC_ASSERT((1<<(8*sizeof(type))) == NUM_GAME_PACKETS);  // NUM_GAME_PACKETS must be larger than maximum possible type.
+	packetcount[received][type]++;
+	packetsize[received][type] += size;
+}
 
 BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 {
@@ -243,7 +163,7 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 
 	if (a <= 51)
 		// replace common msgs with txt descriptions
-		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, packetname[a], b, asctime(newtime));
+		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, messageTypeToString(a), b, asctime(newtime));
 	else
 		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, asctime(newtime));
 

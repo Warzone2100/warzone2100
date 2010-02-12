@@ -73,7 +73,7 @@ BOOL sendHappyVtol(const DROID* psDroid)
 		return false;
 	}
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_VTOL);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_VTOL);
 	{
 		uint8_t player = psDroid->player;
 		uint32_t droid = psDroid->id;
@@ -89,7 +89,7 @@ BOOL recvHappyVtol(NETQUEUE queue)
 	DROID* pD;
 	unsigned int i;
 
-	NETbeginDecode(queue, NET_VTOL);
+	NETbeginDecode(queue, GAME_VTOL);
 	{
 		uint8_t player;
 		uint32_t droid;
@@ -127,7 +127,7 @@ BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STA
 	if (!bMultiMessages)
 		return true;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_SECONDARY);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_SECONDARY);
 	{
 		uint8_t player = psDroid->player;
 		uint32_t droid = psDroid->id;
@@ -153,7 +153,7 @@ BOOL recvDroidSecondary(NETQUEUE queue)
 	uint32_t body;
 	Vector3uw pos;
 
-	NETbeginDecode(queue, NET_SECONDARY);
+	NETbeginDecode(queue, GAME_SECONDARY);
 	{
 		uint8_t player;
 		uint32_t droid;
@@ -198,7 +198,7 @@ BOOL sendDroidSecondaryAll(const DROID* psDroid)
 	if (!bMultiMessages)
 		return true;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_SECONDARY_ALL);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_SECONDARY_ALL);
 	{
 		uint8_t player = psDroid->player;
 		uint32_t droid = psDroid->id;
@@ -215,7 +215,7 @@ BOOL recvDroidSecondaryAll(NETQUEUE queue)
 {
 	DROID* psDroid;
 
-	NETbeginDecode(queue, NET_SECONDARY_ALL);
+	NETbeginDecode(queue, GAME_SECONDARY_ALL);
 	{
 		uint8_t player;
 		uint32_t droid, secOrder;
@@ -249,7 +249,7 @@ BOOL sendDroidEmbark(const DROID* psDroid, const DROID* psTransporter)
 	if (!bMultiMessages)
 		return true;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_DROIDEMBARK);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDEMBARK);
 	{
 		uint8_t player = psDroid->player;
 		uint32_t droidID = psDroid->id;
@@ -272,7 +272,7 @@ BOOL recvDroidEmbark(NETQUEUE queue)
 	DROID* psTransporterDroid;
 	BOOL bDroidRemoved;
 
-	NETbeginDecode(queue, NET_DROIDEMBARK);
+	NETbeginDecode(queue, GAME_DROIDEMBARK);
 	{
 		uint8_t player;
 		uint32_t droidID;
@@ -336,7 +336,7 @@ BOOL sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
 	if (!bMultiMessages)
 		return true;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_DROIDDISEMBARK);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDDISEMBARK);
 	{
 		uint8_t player = psDroid->player;
 		uint32_t droidID = psDroid->id;
@@ -360,7 +360,7 @@ BOOL recvDroidDisEmbark(NETQUEUE queue)
 	DROID *psFoundDroid = NULL, *psTransporterDroid = NULL;
 	DROID *psCheckDroid = NULL;
 
-	NETbeginDecode(queue, NET_DROIDDISEMBARK);
+	NETbeginDecode(queue, GAME_DROIDDISEMBARK);
 	{
 		uint8_t player;
 		uint32_t droidID;
@@ -450,7 +450,7 @@ BOOL SendDroidMove(const DROID* psDroid, uint32_t x, uint32_t y, BOOL formation)
 		return true;
 	}
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_DROIDMOVE);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDMOVE);
 	{
 		uint8_t player = psDroid->player;
 		uint32_t droid = psDroid->id;
@@ -473,7 +473,7 @@ BOOL recvDroidMove(NETQUEUE queue)
 	uint32_t	x, y;
 	BOOL	formation;
 
-	NETbeginDecode(queue, NET_DROIDMOVE);
+	NETbeginDecode(queue, GAME_DROIDMOVE);
 	{
 		uint8_t		player;
 		uint32_t	droid;
@@ -539,7 +539,7 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 	}
 
 	debug(LOG_SYNC, "Droid sent with id of %u", id);
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_DROID);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROID);
 	{
 		Vector3uw pos = { x, y, 0 };
 		uint32_t templateID = pTemplate->multiPlayerID;
@@ -569,7 +569,7 @@ BOOL recvDroid(NETQUEUE queue)
 	uint32_t templateID;
 	uint32_t power;
 
-	NETbeginDecode(queue, NET_DROID);
+	NETbeginDecode(queue, GAME_DROID);
 	{
 		NETuint8_t(&player);
 		NETuint32_t(&id);
@@ -650,7 +650,7 @@ BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_O
 	if (!bMultiMessages)
 		return true;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_GROUPORDER);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GROUPORDER);
 	{
 		DROID_ORDER order = (altOrder?DORDER_UNKNOWN_ALT:DORDER_UNKNOWN);
 		BOOL subType = (psObj) ? true : false, cmdOrder = false;
@@ -724,7 +724,7 @@ BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t
 	if (!bMultiMessages)
 		return true;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_GROUPORDER);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GROUPORDER);
 	{
 		BOOL	subType = (psObj) ? true : false, cmdOrder = false;
 		DROID	*psDroid;
@@ -792,7 +792,7 @@ BOOL recvGroupOrder(NETQUEUE queue)
 	uint32_t	*droidBodies;
 	Vector3uw	*droidPositions;
 
-	NETbeginDecode(queue, NET_GROUPORDER);
+	NETbeginDecode(queue, GAME_GROUPORDER);
 	{
 		NETuint8_t(&player);		// FYI: anything over MAX_PLAYERS means this is a ai player
 		NETenum(&order);
@@ -920,7 +920,7 @@ BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t
 		return true;
 	}
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_DROIDINFO);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDINFO);
 	{
 		uint32_t droidId = psDroid->id;
 		BOOL subType = (psObj) ? true : false;
@@ -955,7 +955,7 @@ BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t
 // receive droid information form other players.
 BOOL recvDroidInfo(NETQUEUE queue)
 {
-	NETbeginDecode(queue, NET_DROIDINFO);
+	NETbeginDecode(queue, GAME_DROIDINFO);
 	{
 		uint32_t	droidId;
 		DROID*		psDroid;
@@ -1102,7 +1102,7 @@ BOOL SendDestroyDroid(const DROID* psDroid)
 		return true;
 	}
 	
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_DROIDDEST);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDDEST);
 	{
 		uint32_t id = psDroid->id;
 
@@ -1119,7 +1119,7 @@ BOOL recvDestroyDroid(NETQUEUE queue)
 {
 	DROID* psDroid;
 
-	NETbeginDecode(queue, NET_DROIDDEST);
+	NETbeginDecode(queue, GAME_DROIDDEST);
 	{
 		uint32_t id;
 

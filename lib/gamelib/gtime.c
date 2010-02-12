@@ -142,7 +142,7 @@ void gameTimeUpdate()
 
 		if (scaledCurrTime >= gameTime && !checkPlayerGameTime(NET_ALL_PLAYERS))
 		{
-			// Pause time, since we are waiting NET_GAME_TIME from other players.
+			// Pause time, since we are waiting GAME_GAME_TIME from other players.
 			scaledCurrTime = graphicsTime;
 			baseTime = currTime;
 			timeOffset = graphicsTime;
@@ -304,7 +304,7 @@ void sendPlayerGameTime()
 			continue;
 		}
 
-		NETbeginEncode(NETgameQueue(player), NET_GAME_TIME);
+		NETbeginEncode(NETgameQueue(player), GAME_GAME_TIME);
 			NETuint32_t(&time);
 		NETend();
 	}
@@ -314,7 +314,7 @@ void recvPlayerGameTime(NETQUEUE queue)
 {
 	uint32_t time;
 
-	NETbeginDecode(queue, NET_GAME_TIME);
+	NETbeginDecode(queue, GAME_GAME_TIME);
 		NETuint32_t(&time);
 	NETend();
 
@@ -338,7 +338,7 @@ bool checkPlayerGameTime(unsigned player)
 		}
 	}
 
-	return true;  // Have NET_GAME_TIME from all players.
+	return true;  // Have GAME_GAME_TIME from all players.
 }
 
 void setPlayerGameTime(unsigned player, uint32_t time)

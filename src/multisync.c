@@ -258,7 +258,7 @@ BOOL ForceDroidSync(const DROID* droidToSend)
 
 	debug(LOG_SYNC, "Force sync of droid %u from player %u", droidToSend->id, droidToSend->player);
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_CHECK_DROID);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_DROID);
 		NETuint8_t(&count);
 		packageCheck(droidToSend);
 	return NETend();
@@ -286,7 +286,7 @@ static BOOL sendDroidCheck(void)
 
 	lastSent = gameTime;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_CHECK_DROID);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_DROID);
 
 		// Allocate space for the list of droids to send
 		ppD = alloca(sizeof(DROID *) * toSend);
@@ -383,7 +383,7 @@ BOOL recvDroidCheck(NETQUEUE queue)
 	uint8_t		count;
 	int		i;
 
-	NETbeginDecode(queue, NET_CHECK_DROID);
+	NETbeginDecode(queue, GAME_CHECK_DROID);
 
 		// Get the number of droids to expect
 		NETuint8_t(&count);
@@ -710,7 +710,7 @@ static BOOL sendStructureCheck(void)
 	// Only send info about complete buildings
 	if (pS && (pS->status == SS_BUILT))
 	{
-		NETbeginEncode(NETgameQueue(selectedPlayer), NET_CHECK_STRUCT);
+		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_STRUCT);
 			NETuint8_t(&pS->player);
 			NETuint32_t(&pS->id);
 			NETuint32_t(&pS->body);
@@ -758,7 +758,7 @@ BOOL recvStructureCheck(NETQUEUE queue)
 	uint16_t		x, y, z;
 	uint32_t		ref, type;
 
-	NETbeginDecode(queue, NET_CHECK_STRUCT);
+	NETbeginDecode(queue, GAME_CHECK_STRUCT);
 		NETuint8_t(&player);
 		NETuint32_t(&ref);
 		NETuint32_t(&body);
@@ -770,7 +770,7 @@ BOOL recvStructureCheck(NETQUEUE queue)
 
 		if (player >= MAX_PLAYERS)
 		{
-			debug(LOG_ERROR, "Bad NET_CHECK_STRUCT received!");
+			debug(LOG_ERROR, "Bad GAME_CHECK_STRUCT received!");
 			NETend();
 			return false;
 		}
@@ -935,7 +935,7 @@ static BOOL sendPowerCheck()
 
 	lastsent = gameTime;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), NET_CHECK_POWER);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_POWER);
 		NETuint8_t(&player);
 		NETuint32_t(&power);
 	return NETend();
@@ -946,14 +946,14 @@ BOOL recvPowerCheck(NETQUEUE queue)
 	uint8_t		player;
 	uint32_t	power, power2;
 
-	NETbeginDecode(queue, NET_CHECK_POWER);
+	NETbeginDecode(queue, GAME_CHECK_POWER);
 		NETuint8_t(&player);
 		NETuint32_t(&power);
 	NETend();
 
 	if (player >= MAX_PLAYERS)
 	{
-		debug(LOG_ERROR, "Bad NET_CHECK_POWER packet: player is %d : %s", 
+		debug(LOG_ERROR, "Bad GAME_CHECK_POWER packet: player is %d : %s",
 		      (int)player, isHumanPlayer(player) ? "Human" : "AI");
 		return false;
 	}
@@ -961,7 +961,7 @@ BOOL recvPowerCheck(NETQUEUE queue)
 	power2 = getPower(player);
 	if (power != power2)
 	{
-//		debug(LOG_SYNC, "NET_CHECK_POWER: Adjusting power for player %d (%s) from %u to %u",
+//		debug(LOG_SYNC, "GAME_CHECK_POWER: Adjusting power for player %d (%s) from %u to %u",
 //		      (int)player, isHumanPlayer(player) ? "Human" : "AI", power2, power);
 		setPower( (uint32_t)player, power);
 	}

@@ -173,9 +173,9 @@ static inline float timeAdjustedIncrement(float value, BOOL pauseTime)
 }
 
 
-void sendPlayerGameTime(void);                            ///< Sends a NET_GAME_TIME message with gameTime plus latency to our game queues.
-void recvPlayerGameTime(NETQUEUE_ queue);                 ///< Processes a NET_GAME_TIME message.
-bool checkPlayerGameTime(unsigned player);                ///< Checks that we are not waiting for a NET_GAME_TIME message from this player. (player can be NET_ALL_PLAYERS.)
+void sendPlayerGameTime(void);                            ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.
+void recvPlayerGameTime(NETQUEUE_ queue);                 ///< Processes a GAME_GAME_TIME message.
+bool checkPlayerGameTime(unsigned player);                ///< Checks that we are not waiting for a GAME_GAME_TIME message from this player. (player can be NET_ALL_PLAYERS.)
 void setPlayerGameTime(unsigned player, uint32_t time);   ///< Sets the player's time.
 
 #ifdef __cplusplus
