@@ -1,6 +1,8 @@
 #include "netqueue.h"
 #include "lib/framework/frame.h"
 
+// See comments in netqueue.h.
+
 NetQueue::NetQueue()
 	: canReadRawData(true)
 	, canGetMessages(true)

@@ -151,7 +151,7 @@ GAMECODE gameLoop(void)
 	if (deltaGameTime != 0)
 	{
 		sendPlayerGameTime();
-		gameSRand(gameTime);
+		gameSRand(gameTime);   // Brute force way of synchronising the random number generator, which can't go out of synch.
 	}
 
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)

@@ -205,15 +205,6 @@ typedef struct {
 	uint64_t	unsentisMPDirtyBit;
 } SYNC_COUNTER;
 
-/*typedef struct {
-	uint16_t	size;				// used size of body
-	uint8_t		type;				// type of packet
-	uint8_t		destination;		// player to send to, or NET_ALL_PLAYERS
-	uint8_t		source;				// player it is sent from
-	char 		body[MaxMsgSize];	// msg buffer
-	BOOL		status;				// If the packet compiled or not (this is _not_ sent!)
-} NETMSG;*/
-
 typedef struct
 {
 	PHYSFS_file	*pFileHandle;		// handle
@@ -281,7 +272,6 @@ typedef struct {
 // variables
 
 extern NETPLAY				NetPlay;
-//extern NETMSG NetMsg;
 extern SYNC_COUNTER sync_counter;
 // update flags
 extern bool netPlayersUpdated;

@@ -17,6 +17,8 @@
 // At socket level:
 // There should be a NetQueuePair per socket.
 
+
+/// A NetMessage consists of a type (uint8_t) and some data, the meaning of which depends on the type.
 class NetMessage
 {
 public:
@@ -25,6 +27,7 @@ public:
 	std::vector<uint8_t> data;
 };
 
+/// MessageWriter is used for serialising, using the same interface as MessageReader.
 class MessageWriter
 {
 public:
@@ -35,6 +38,7 @@ public:
 	void byte(uint8_t v) const { message->data.push_back(v); }
 	NetMessage *message;
 };
+/// MessageReader is used for deserialising, using the same interface as MessageWriter.
 class MessageReader
 {
 public:
@@ -48,6 +52,7 @@ public:
 	mutable size_t index;
 };
 
+/// A NetQueue is a queue of NetMessages. A NetQueue can convert the messages into a stream of bytes, which can be sent over the network, and converted back into a queue of NetMessages by the NetQueue at the other end.
 class NetQueue
 {
 public:
@@ -74,8 +79,8 @@ private:
 	void popOldMessages();                                             ///< Pops any messages that are no longer needed.
 
 	// Disable copy constructor and assignment operator.
-	NetQueue(const NetQueue &);
-	void operator =(const NetQueue &);
+	NetQueue(const NetQueue &);         // TODO When switching to C++0x, use "= delete" notation.
+	void operator =(const NetQueue &);  // TODO When switching to C++0x, use "= delete" notation.
 
 	bool canReadRawData;                                               ///< True if we will send the messages over the network, false if we don't.
 	bool canGetMessages;                                               ///< True if we will get the messages, false if we don't use them ourselves.
@@ -88,6 +93,8 @@ private:
 	std::vector<uint8_t>          unsentMessageData;                   ///< Data for network which has been requested but not yet popped.
 };
 
+/// A NetQueuePair is used for talking to a socket. We insert NetMessages in the send NetQueue, which converts the messages into a stream of bytes for the
+/// socket. We take incoming bytes from the socket and insert them in the receive NetQueue, which converts the bytes back into NetMessages.
 class NetQueuePair
 {
 public:

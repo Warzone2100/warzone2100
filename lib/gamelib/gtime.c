@@ -142,13 +142,13 @@ void gameTimeUpdate()
 
 		if (scaledCurrTime >= gameTime && !checkPlayerGameTime(NET_ALL_PLAYERS))
 		{
-			// Pause time, since we are waiting for other players.
+			// Pause time, since we are waiting NET_GAME_TIME from other players.
 			scaledCurrTime = graphicsTime;
 			baseTime = currTime;
 			timeOffset = graphicsTime;
 
-			debug(LOG_WARNING, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7]);
-			//debug(LOG_WARNING, "Waiting for other players.");
+			debug(LOG_NET, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7]);
+			//debug(LOG_NET, "Waiting for other players.");
 		}
 
 		// Calculate the time for this frame
@@ -323,20 +323,22 @@ void recvPlayerGameTime(NETQUEUE queue)
 
 bool checkPlayerGameTime(unsigned player)
 {
+	unsigned begin = player, end = player + 1;
 	if (player == NET_ALL_PLAYERS)
 	{
-		for (player = 0; player < MAX_PLAYERS; ++player)
-		{
-			if (!(gameTime <= gameQueueTime[player]))
-			{
-				return false;
-			}
-		}
-
-		return true;
+		begin = 0;
+		end = MAX_PLAYERS;
 	}
 
-	return gameTime <= gameQueueTime[player];
+	for (player = begin; player < end; ++player)
+	{
+		if (gameTime > gameQueueTime[player] && !NetPlay.players[player].kick)  // .kick: Don't wait for dropped players.
+		{
+			return false;  // Still waiting for this player.
+		}
+	}
+
+	return true;  // Have NET_GAME_TIME from all players.
 }
 
 void setPlayerGameTime(unsigned player, uint32_t time)

@@ -56,19 +56,19 @@ typedef struct _netqueue
 	uint8_t queueType;
 } NETQUEUE;
 
-NETQUEUE NETnetTmpQueue(unsigned tmpPlayer);  ///< One of the temp queues from before a client has joined the game.
-NETQUEUE NETnetQueue(unsigned player);        ///< The queue pair used for sending and receiving data directly from another client.
-NETQUEUE NETgameQueue(unsigned player);       ///< The game action queue.
-NETQUEUE NETbroadcastQueue(void);             ///< The queue for sending data directly to all clients, not just a specific one.
+NETQUEUE NETnetTmpQueue(unsigned tmpPlayer);  ///< One of the temp queues from before a client has joined the game. (See comments on tmpQueues in nettypes.cpp.)
+NETQUEUE NETnetQueue(unsigned player);        ///< The queue pair used for sending and receiving data directly from another client. (See comments on netQueues in nettypes.cpp.)
+NETQUEUE NETgameQueue(unsigned player);       ///< The game action queue. (See comments on gameQueues in nettypes.cpp.)
+NETQUEUE NETbroadcastQueue(void);             ///< The queue for sending data directly to the netQueues of all clients, not just a specific one. (See comments on broadcastQueue in nettypes.cpp.)
 
 void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  /// Dump raw data from sockets and raw data sent via host here.
-BOOL NETisMessageReady(NETQUEUE queue);
-uint8_t NETmessageType(NETQUEUE queue);
-uint32_t NETmessageSize(NETQUEUE queue);
+BOOL NETisMessageReady(NETQUEUE queue);       ///< Returns true if there is a complete message ready to deserialise in this queue.
+uint8_t NETmessageType(NETQUEUE queue);       ///< Returns the type of the message in this queue which is ready to be deserialised.
+uint32_t NETmessageSize(NETQUEUE queue);      ///< Returns the size of the message data in this queue which is ready to be deserialised.
 
-void NETinitQueue(NETQUEUE queue);
-void NETsetNoSendOverNetwork(NETQUEUE queue);
-void NETmoveQueue(NETQUEUE src, NETQUEUE dst);
+void NETinitQueue(NETQUEUE queue);             ///< Allocates the queue. Deletes the old queue, if there was one. Avoids a crash on NULL pointer deference when trying to use the queue.
+void NETsetNoSendOverNetwork(NETQUEUE queue);  ///< Used to mark that a game queue should not be sent over the network (for example, if it is being sent to us, instead).
+void NETmoveQueue(NETQUEUE src, NETQUEUE dst); ///< Used for moving the tmpQueue to a netQueue, once a newly-connected client is assigned a player number.
 
 void NETbeginEncode(NETQUEUE queue, uint8_t type);
 void NETbeginDecode(NETQUEUE queue, uint8_t type);
@@ -124,12 +124,6 @@ do \
 #endif
 
 void NETVector3uw(Vector3uw* vp);
-
-/**
- *	Get player who is the source of the current packet.
- *	@see selectedPlayer
- */
-//int NETgetSource(void);
 
 void NETtest(void);
 
