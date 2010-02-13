@@ -45,11 +45,6 @@
 #include "ivispatch.h"
 #include "tex.h" // texture page loading
 
-
-// Static variables
-static VERTEXID vertexTable[iV_IMD_MAX_POINTS];
-
-
 static BOOL AtEndOfFile(const char *CurPos, const char *EndOfFile)
 {
 	while ( *CurPos == 0x00 || *CurPos == 0x09 || *CurPos == 0x0a || *CurPos == 0x0d || *CurPos == 0x20 )
@@ -127,7 +122,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 				return false;
 			}
 			pFileData += cnt;
-			poly->pindex[j] = vertexTable[newID];
+			poly->pindex[j] = newID;
 		}
 
 		assert(poly->npnts > 2);
@@ -222,54 +217,17 @@ static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
 {
 	const char *pFileData = *ppFileData;
 	unsigned int i;
-	int cnt, j, lastPoint = 0, match = -1;
-	Vector3f newVector = {0.0f, 0.0f, 0.0f};
+	int cnt;
 
 	for (i = 0; i < s->npoints; i++)
 	{
-		if (sscanf(pFileData, "%f %f %f%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
+		if (sscanf(pFileData, "%f %f %f%n", &s->points[i].x, &s->points[i].y, &s->points[i].z, &cnt) != 3)
 		{
 			debug(LOG_ERROR, "(_load_points) file corrupt -K");
 			return false;
 		}
 		pFileData += cnt;
-
-		//check for duplicate points
-		match = -1;
-
-		// scan through list upto the number of points added (lastPoint) ... not up to the number of points scanned in (i)  (which will include duplicates)
-		for (j = 0; j < lastPoint; j++)
-		{
-			if (Vector3f_Compare(newVector, s->points[j]))
-			{
-				match = j;
-				break;
-			}
-		}
-
-		//check for duplicate points
-		if (match == -1)
-		{
-			// new point
-			s->points[lastPoint].x = newVector.x;
-			s->points[lastPoint].y = newVector.y;
-			s->points[lastPoint].z = newVector.z;
-			vertexTable[i] = lastPoint;
-			lastPoint++;
-		}
-		else
-		{
-			vertexTable[i] = match;
-		}
 	}
-
-	//clear remaining table
-	for (i = s->npoints; i < iV_IMD_MAX_POINTS; i++)
-	{
-		vertexTable[i] = -1;
-	}
-
-	s->npoints = lastPoint;
 
 	*ppFileData = pFileData;
 
