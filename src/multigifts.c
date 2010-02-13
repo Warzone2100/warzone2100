@@ -516,8 +516,8 @@ void  technologyGiveAway(const STRUCTURE *pS)
 	FEATURE			*pF = NULL;
 	FEATURE_TYPE	type = FEAT_GEN_ARTE;
 
-	// If a factory which is our responsibility got destroyed
-	if (pS->pStructureType->type == REF_FACTORY
+	// If a fully built factory which is our responsibility got destroyed
+	if (pS->pStructureType->type == REF_FACTORY && pS->status == SS_BUILT
 	 && myResponsibility(pS->player))
 	{
 		x = map_coord(pS->pos.x);
