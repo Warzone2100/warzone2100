@@ -53,7 +53,8 @@ typedef struct {
 } WZ_FACE;
 
 typedef struct {
-	int x, y, z;
+	int x, y, z, reindex;
+	bool dupe;
 } WZ_POSITION;
 
 static void parse_args(int argc, char **argv)
@@ -138,8 +139,6 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 			fprintf(stderr, "Bad POINTS directive in %s, level %d.\n", input, level);
 			exit(1);
 		}
-		// TODO check for duplicate points and replace them below, but skip in list here
-		fprintf(ctl, "POINTS %d", points);
 
 		posList = malloc(sizeof(WZ_POSITION) * points);
 		for (j = 0; j < points; j++)
@@ -150,6 +149,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 				fprintf(stderr, "Bad POINTS entry level %d, number %d\n", level, j);
 				exit(1);
 			}
+			posList[j].dupe = false;
 		}
 
 		num = fscanf(fp, "POLYGONS %d", &faces);
@@ -242,9 +242,47 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 			}
 		}
 
+		/* Remove duplicate points */
+		x = 0;
 		for (j = 0; j < points; j++)
 		{
-			fprintf(ctl, " \n\t%d %d %d", posList[j].x, posList[j].y, posList[j].z);
+			int k;
+
+			for (k = j + 1; k < points; k++)
+			{
+				// if points in k are equal to points in j, replace all k with j in face list
+				if (posList[k].x == posList[j].x && posList[k].y == posList[j].y && posList[k].z == posList[j].z && !posList[k].dupe)
+				{
+					posList[k].dupe	= true;	// oh noes, a dupe! let's skip it when we write them out again.
+					posList[k].reindex = x;	// rewrite face list to point here
+				}
+			}
+			if (!posList[j].dupe)
+			{
+				posList[j].reindex = x;
+				x++;
+			}
+		}
+
+		fprintf(ctl, "POINTS %d", x);
+		for (j = 0; j < points; j++)
+		{
+			if (!posList[j].dupe)
+			{
+				fprintf(ctl, " \n\t%d %d %d", posList[j].x, posList[j].y, posList[j].z);
+			}
+		}
+		printf("%d\n", points - x);
+
+		// Rewrite face table
+		for (j = 0; j < faces; j++)
+		{
+			int m;
+
+			for (m = 0; m < faceList[j].vertices; m++)
+			{
+				faceList[j].index[m] = posList[faceList[j].index[m]].reindex;
+			}
 		}
 
 		fprintf(ctl, "\nPOLYGONS %d", facesPIE3);
