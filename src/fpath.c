@@ -420,10 +420,13 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	// Check if waiting for a result
 	if (psMove->Status == MOVEWAITROUTE)
 	{
-		PATHRESULT *psPrev = NULL, *psNext = firstResult;
+		PATHRESULT *psPrev = NULL, *psNext;
 
 		objTrace(id, "Checking if we have a path yet");
 		SDL_SemWait(fpathSemaphore);
+
+		// psNext should be _declared_ here, after the mutex lock! Used to be a race condition, thanks to -Wdeclaration-after-statement style pseudocompiler compatibility.
+		psNext = firstResult;
 
 		while (psNext)
 		{
