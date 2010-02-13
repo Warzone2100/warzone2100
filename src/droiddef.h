@@ -209,6 +209,9 @@ typedef struct DROID
 	/* anim data */
 	ANIM_OBJECT     *psCurAnim;
 	SDWORD          iAudioID;
+
+	// Synch checking
+	void *          gameCheckDroid;                 ///< Last PACKAGED_CHECK, for synchronisation use only (see multisync.c). TODO Make synch perfect, so that this isn't needed at all.
 } WZ_DECL_MAY_ALIAS DROID;
 
 #ifdef __cplusplus

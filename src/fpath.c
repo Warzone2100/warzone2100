@@ -522,8 +522,8 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 				goto ok;
 			}
 		}
-		// This should never happen, but apparently does. Is psMove->Status == MOVEWAITROUTE getting synched, or something ridiculous like that?
-		debug(LOG_ERROR, "Waiting for fpath result of droid %u, but the job doesn't exist. This may cause synch errors.", id);
+		// This should never happen, but apparently did. Probably fixed in svn -r9788, so shouldn't ever happen again.
+		ASSERT(false, "Waiting for fpath result of droid %u, but the job doesn't exist. This may cause synch errors.", id);
 		wzMutexUnlock(fpathMutex);
 		return FPR_FAILED;
 

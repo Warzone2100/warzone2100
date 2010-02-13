@@ -125,6 +125,24 @@ do \
 
 void NETVector3uw(Vector3uw* vp);
 
+typedef struct PackagedCheck
+{
+	uint32_t gameTime;  ///< Game time that this synch check was made. Not touched by NETPACKAGED_CHECK().
+	uint8_t player;
+	uint32_t droidID;
+	int32_t order;
+	uint32_t secondaryOrder;
+	uint32_t body;
+	float direction;
+	float experience;
+	float sMoveX;
+	float sMoveY;
+	uint32_t targetID;  ///< Defined iff order == DORDER_ATTACK.
+	uint16_t orderX;    ///< Defined iff order == DORDER_MOVE.
+	uint16_t orderY;    ///< Defined iff order == DORDER_MOVE.
+} PACKAGED_CHECK;
+void NETPACKAGED_CHECK(PACKAGED_CHECK *v);
+
 void NETtest(void);
 
 #ifdef __cplusplus

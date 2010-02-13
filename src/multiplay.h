@@ -228,7 +228,6 @@ extern	void startMultiplayerGame	(void);
 extern	void resetReadyStatus		(bool bSendOptions);
 
 extern	BOOL bPlayerReadyGUI[MAX_PLAYERS];
-extern bool isMPDirtyBit;
 
 #ifdef __cplusplus
 }

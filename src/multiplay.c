@@ -72,7 +72,6 @@
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // globals.
-bool						isMPDirtyBit = false;		// When we are forced to use turnOffMultiMsg() we set this
 BOOL						bMultiPlayer				= false;	// true when more than 1 player.
 BOOL						bMultiMessages				= false;	// == bMultiPlayer unless multimessages are disabled
 BOOL						openchannels[MAX_PLAYERS]={true};
@@ -124,16 +123,12 @@ void turnOffMultiMsg(BOOL bDoit)
 	}
 
 	bMultiMessages = !bDoit;
-	if (bDoit)
-	{
-		isMPDirtyBit = true;
-	}
 	return;
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
-// throw a pary when you win!
+// throw a party when you win!
 BOOL multiplayerWinSequence(BOOL firstCall)
 {
 	static Vector3i pos;

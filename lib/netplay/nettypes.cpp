@@ -34,6 +34,7 @@
 #include "nettypes.h"
 #include "netqueue.h"
 #include "netlog.h"
+#include "src/order.h"
 #include <cstring>
 
 /// There is a game queue representing each player. The game queues are synchronised among all players, so that all players process the same game queue
@@ -559,6 +560,28 @@ void NETbin(uint8_t *str, uint16_t maxlen)
 void NETVector3uw(Vector3uw *vp)
 {
 	queueAuto(*vp);
+}
+
+void NETPACKAGED_CHECK(PACKAGED_CHECK *v)
+{
+	queueAuto(v->player);
+	queueAuto(v->droidID);
+	queueAuto(v->order);
+	queueAuto(v->secondaryOrder);
+	queueAuto(v->body);
+	queueAuto(v->direction);
+	queueAuto(v->experience);
+	queueAuto(v->sMoveX);
+	queueAuto(v->sMoveY);
+	if (v->order == DORDER_ATTACK)
+	{
+		queueAuto(v->targetID);
+	}
+	else if (v->order == DORDER_MOVE)
+	{
+		queueAuto(v->orderX);
+		queueAuto(v->orderY);
+	}
 }
 
 typedef enum

@@ -188,8 +188,6 @@ typedef struct {
 	uint64_t	unsentScoreCheck;
 	uint64_t	sentPing;
 	uint64_t	unsentPing;
-	uint64_t	sentisMPDirtyBit;
-	uint64_t	unsentisMPDirtyBit;
 } SYNC_COUNTER;
 
 typedef struct

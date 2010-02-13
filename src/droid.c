@@ -2700,6 +2700,8 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->asBits[COMP_ECM].nStat = pTemplate->asParts[COMP_ECM];
 	psDroid->asBits[COMP_REPAIRUNIT].nStat = pTemplate->asParts[COMP_REPAIRUNIT];
 	psDroid->asBits[COMP_CONSTRUCT].nStat = pTemplate->asParts[COMP_CONSTRUCT];
+
+	psDroid->gameCheckDroid = NULL;
 }
 
 

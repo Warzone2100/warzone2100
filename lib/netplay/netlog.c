@@ -100,8 +100,6 @@ BOOL NETstopLogging(void)
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	snprintf(buf, sizeof(buf), "sent/unsent Ping %"PRIu64" / %"PRIu64"\n", sync_counter.sentPing, sync_counter.unsentPing);
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
-	snprintf(buf, sizeof(buf), "sent/unsent isMPDirtyBit %"PRIu64" / %"PRIu64"\n", sync_counter.sentisMPDirtyBit, sync_counter.unsentisMPDirtyBit);
-	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
 
 	if (!PHYSFS_close(pFileHandle))
