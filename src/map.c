@@ -976,9 +976,9 @@ BOOL mapLoad(char *filename)
 	environReset();
 
 	// set the river bed
-	for (i=0;i<mapWidth;i++)
+	for (i = 0; i < mapWidth; i++)
 	{
-		for (j=0;j<mapHeight;j++)
+		for (j = 0; j < mapHeight; j++)
 		{
 			// FIXME: magic number
 			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3.0f / (float)ELEVATION_SCALE;
@@ -1797,7 +1797,14 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{
 		psTileData->texture = psTile->texture;
-		psTileData->height = psTile->height;
+		if (psTile->ground == waterGroundType)
+		{
+			psTileData->height = MIN(255.0f, psTile->height + (WATER_DEPTH - 2.0f * environGetData(i % mapWidth, i / mapWidth)) / (float)ELEVATION_SCALE);
+		}
+		else
+		{
+			psTileData->height = psTile->height;
+		}
 
 		/* MAP_SAVETILE */
 		endian_uword(&psTileData->texture);
