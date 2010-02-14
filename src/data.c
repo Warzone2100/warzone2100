@@ -72,8 +72,8 @@
  * Local Variables
  *
  *********************************************************/
-void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index);
-UDWORD	hashBuffer(uint8_t *pData, uint32_t size);
+static void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index);
+static UDWORD	hashBuffer(uint8_t *pData, uint32_t size);
 
 // whether a save game is currently being loaded
 static BOOL saveFlag = false;
