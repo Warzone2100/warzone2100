@@ -80,9 +80,6 @@ extern void registerScriptfuncs(lua_State *L);
 extern BOOL addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg);
 extern VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 
-extern BOOL scrEnumUnbuilt(void);
-extern BOOL scrIterateUnbuilt(void);
-
 #ifdef __cplusplus
 }
 #endif //__cplusplus

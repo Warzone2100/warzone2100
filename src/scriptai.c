@@ -174,7 +174,7 @@ static int scrGroupAddGroup(lua_State *L)
 
 
 // check if a droid is a member of a group
-static BOOL scrGroupMember(lua_State *L)
+static int scrGroupMember(lua_State *L)
 {
 	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
 	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 2, OBJ_DROID);
@@ -354,7 +354,7 @@ static int scrOrderGroupLoc(lua_State *L)
 }
 
 // Give a group an order to an object
-static BOOL scrOrderGroupObj(lua_State *L)
+static int scrOrderGroupObj(lua_State *L)
 {
 	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
 	DROID_ORDER order = (DROID_ORDER)luaL_checkinteger(L, 2);
@@ -369,9 +369,7 @@ static BOOL scrOrderGroupObj(lua_State *L)
 		order != DORDER_FIRESUPPORT &&
 		order != DORDER_DROIDREPAIR)
 	{
-		ASSERT( false,
-			"scrOrderGroupObj: Invalid order" );
-		return false;
+		luaL_error(L, "Invalid order" );
 	}
 
 	debug(LOG_NEVER, "group %p (%u) order %d,  obj type %d player %d id %d",
@@ -514,7 +512,7 @@ static int scrSetDroidSecondary(lua_State *L)
 }
 
 // set the secondary state for a droid
-static BOOL scrSetGroupSecondary(lua_State *L)
+static int scrSetGroupSecondary(lua_State *L)
 {
 	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
 	SECONDARY_ORDER sec = luaL_checkint(L, 2);
@@ -1568,7 +1566,7 @@ static int scrSkDifficultyModifier(lua_State *L)
 // ********************************************************************************************
 
 // not a direct script function but a helper for scrSkDefenseLocation and scrSkDefenseLocationB
-static BOOL defenseLocation(lua_State *L, BOOL noNarrowGateways)
+static int defenseLocation(lua_State *L, BOOL noNarrowGateways)
 {
 	UDWORD		x,y,gX,gY,dist,nearestSoFar,count;
 	GATEWAY		*psGate,*psChosenGate;
@@ -1781,7 +1779,7 @@ static int scrSkDefenseLocationB(lua_State *L)
     return defenseLocation(L, true);
 }
 
-static BOOL scrSkFireLassat(lua_State *L)
+static int scrSkFireLassat(lua_State *L)
 {
 	int player = luaWZ_checkplayer(L, 1);
 	BASE_OBJECT *psObj = luaWZObj_checkbaseobject(L, 2);

@@ -739,7 +739,7 @@ static int scrMakeComponentAvailable(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // Add a droid
-static BOOL scrAddDroidToMissionList(lua_State *L)
+static int scrAddDroidToMissionList(lua_State *L)
 {
 	DROID_TEMPLATE	*psTemplate = luaWZObj_checktemplate(L, 1);
 	int player = luaWZ_checkplayer(L, 2);
@@ -803,13 +803,15 @@ static int scrAddDroid(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // Add droid to transporter
-static BOOL scrAddDroidToTransporter(lua_State *L)
+static int scrAddDroidToTransporter(lua_State *L)
 {
 	DROID *psTransporter = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
 	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 2, OBJ_DROID);
 
-	ASSERT_OR_RETURN(false, psTransporter && psDroid, "Null unit passed");
-	ASSERT_OR_RETURN(false, psTransporter->droidType == DROID_TRANSPORTER, "Invalid unit type");
+	if (!psTransporter || !psDroid)
+		luaL_error(L, "Null unit passed");
+	if (psTransporter->droidType == DROID_TRANSPORTER)
+		luaL_error(L, "First unit is no transporter");
 
 	/* check for space */
 	if (checkTransporterSpace(psTransporter, psDroid))
@@ -1592,7 +1594,7 @@ static int scrCentreViewPos(lua_State *L)
 static STRUCTURE *unbuiltIter = NULL;
 static int unbuiltPlayer = -1;
 
-BOOL scrEnumUnbuilt(void)
+WZ_DECL_UNUSED static BOOL scrEnumUnbuilt(void)
 {
 	if (!stackPopParams(1, VAL_INT, &unbuiltPlayer))
 	{
@@ -1603,7 +1605,7 @@ BOOL scrEnumUnbuilt(void)
 	return true;
 }
 
-BOOL scrIterateUnbuilt(void)
+WZ_DECL_UNUSED static BOOL scrIterateUnbuilt(void)
 {
 	for (; unbuiltIter && unbuiltIter->status != SS_BEING_BUILT; unbuiltIter = unbuiltIter->psNext) ;
 	scrFunctionResult.v.oval = unbuiltIter;
@@ -2235,7 +2237,7 @@ static int scrPlaySoundPos(lua_State *L)
 // -----------------------------------------------------------------------------------------
 
 /* add a text message to the top of the screen for the selected player*/
-static BOOL scrShowConsoleText(lua_State *L)
+static int scrShowConsoleText(lua_State *L)
 {
 	const char *pText = luaL_checkstring(L, 1);
 	int player = luaWZ_checkplayer(L, 2);
@@ -2598,7 +2600,7 @@ WZ_DECL_UNUSED static BOOL scrResumeCDAudio(void)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat point for a player
-static BOOL scrSetRetreatPoint(lua_State *L)
+static int scrSetRetreatPoint(lua_State *L)
 {
 	int player = luaWZ_checkplayer(L, 1);
 	Vector2i coord = luaWZ_checkWorldCoords(L, 2);
@@ -2611,14 +2613,17 @@ static BOOL scrSetRetreatPoint(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat force level
-static BOOL scrSetRetreatForce(lua_State *L)
+static int scrSetRetreatForce(lua_State *L)
 {
 	int player = luaWZ_checkplayer(L, 1);
 	int level = luaL_checkint(L, 2);
 	int numDroids;
 	DROID *psCurr;
 
-	ASSERT_OR_RETURN(false, level <= 100 && level >= 0, "Level out of range");
+	if (level > 100 || level < 0)
+	{
+		luaL_error(L, "Level out of range");
+	}
 
 	// count up the current number of droids
 	numDroids = 0;
@@ -2634,12 +2639,15 @@ static BOOL scrSetRetreatForce(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat leadership
-static BOOL scrSetRetreatLeadership(lua_State *L)
+static int scrSetRetreatLeadership(lua_State *L)
 {
 	int player = luaWZ_checkplayer(L, 1);
 	int level = luaL_checkint(L, 2);
 
-	ASSERT_OR_RETURN(false, level <= 100 && level >= 0, "Level out of range");
+	if (level > 100 || level < 0)
+	{
+		luaL_error(L, "Level out of range");
+	}
 
 	asRunData[player].leadership = (UBYTE)level;
 
@@ -3166,8 +3174,6 @@ static int scrAllianceExistsBetween(lua_State *L)
 
 	lua_pushboolean(L, alliances[i][j] == ALLIANCE_FORMED);
 	return 1;
-	ASSERT_OR_RETURN(false, i < MAX_PLAYERS && j < MAX_PLAYERS && i >= 0 && j >= 0, 
-	                 "Invalid player parameters %d and %d", i, j);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -3323,7 +3329,7 @@ WZ_DECL_UNUSED static BOOL scrRandom(void)
 
 // -----------------------------------------------------------------------------------------
 // randomise the random number seed
-static BOOL scrRandomiseSeed(lua_State *L)
+static int scrRandomiseSeed(lua_State *L)
 {
 	// Why? What's the point? What on earth were they thinking, exactly? If the numbers don't have enough randominess, just set the random seed again and again until the numbers are double-plus super-duper full of randonomium?
 	debug(LOG_ERROR, "A script is trying to set the random seed with srand(). That just doesn't make sense.");
@@ -3386,7 +3392,7 @@ static int scrCompleteResearch(lua_State *L)
 // -----------------------------------------------------------------------------------------
 // This routine used to start just a reticule button flashing
 //   .. now it starts any button flashing (awaiting implmentation from widget library)
-static BOOL scrFlashOn(lua_State *L)
+static int scrFlashOn(lua_State *L)
 {
 	int button = luaL_checkint(L, 1);
 
@@ -3394,7 +3400,7 @@ static BOOL scrFlashOn(lua_State *L)
 	if (button >= IDRET_OPTIONS && button <= IDRET_CANCEL)
 	{
 		flashReticuleButton((UDWORD)button);
-		return true;
+		return 0;
 	}
 
 	if(widgGetFromID(psWScreen,button) != NULL)
@@ -3407,14 +3413,14 @@ static BOOL scrFlashOn(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // stop a generic button flashing
-static BOOL scrFlashOff(lua_State *L)
+static int scrFlashOff(lua_State *L)
 {
 	int button = luaL_checkint(L, 1);
 
 	if (button >= IDRET_OPTIONS && button <= IDRET_CANCEL)
 	{
 		stopReticuleButtonFlash((UDWORD)button);
-		return true;
+		return 0;
 	}
 
 	if(widgGetFromID(psWScreen,button) != NULL)
@@ -3549,7 +3555,7 @@ WZ_DECL_UNUSED static BOOL scrSetLimboLanding(void)
 
 // -----------------------------------------------------------------------------------------
 //initialises all the no go areas
-static BOOL scrInitAllNoGoAreas(lua_State *L)
+static int scrInitAllNoGoAreas(lua_State *L)
 {
 	initNoGoAreas();
 
@@ -4247,7 +4253,7 @@ static int scrRemoveDroid(lua_State *L)
 	return 0;
 }
 // -----------------------------------------------------------------------------------------
-static BOOL	structHasModule(STRUCTURE *psStruct)
+static int	structHasModule(STRUCTURE *psStruct)
 {
 STRUCTURE_STATS	*psStats;
 BOOL			bFound;
@@ -4255,17 +4261,16 @@ BOOL			bFound;
 	/* Fail if the structure isn't built yet */
 	if(psStruct->status != SS_BUILT)
 	{
-		return(false);
+		lua_pushboolean(L, false);
+		return 1;
 	}
 
 	/* Not found yet */
 	bFound = false;
 
-
-	if(psStruct==NULL)
+	if(psStruct == NULL)
 	{
-		ASSERT( psStruct!=NULL,"structHasModule - Testing for a module from a NULL struct - huh!?" );
-		return(false);
+		luaL_error(L, "structHasModule - Testing for a module from a NULL struct - huh!?");
 	}
 
 	if(psStruct)
@@ -4309,7 +4314,8 @@ BOOL			bFound;
 		}
 
 	}
-	return(bFound);
+	lua_pushboolean(L, bFound);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -4552,7 +4558,7 @@ static int scrPickStructLocationB(lua_State *L) // FIXME, duplicated code
 
 // -----------------------------------------------------------------------------------------
 // Sets the transporter entry and exit points for the map
-static BOOL scrSetTransporterExit(lua_State *L)
+static int scrSetTransporterExit(lua_State *L)
 {
 	int player = luaWZ_checkplayer(L, 1);
 	int exitTileX = luaL_checkinteger(L, 2);
@@ -4565,7 +4571,7 @@ static BOOL scrSetTransporterExit(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // Fly transporters in at start of map
-static BOOL scrFlyTransporterIn(lua_State *L)
+static int scrFlyTransporterIn(lua_State *L)
 {
 	int player = luaWZ_checkplayer(L, 1);
 	int entryTileX = luaL_checkinteger(L, 2);
@@ -6498,7 +6504,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 }
 
 /* Similar to structureBuiltInRange(), but also returns true if structure is not finished */
-static BOOL scrNumStructsByStatInRange(lua_State *L)
+static int scrNumStructsByStatInRange(lua_State *L)
 {
 	int index = luaWZObj_checkstructurestat(L, 1);
 	Vector2i coord = luaWZ_checkWorldCoords(L, 2);
@@ -6532,8 +6538,7 @@ static BOOL scrNumStructsByStatInRange(lua_State *L)
 	}
 
 	lua_pushinteger(L, NumStruct);
-
-	return true;
+	return 1;
 }
 
 WZ_DECL_UNUSED static BOOL scrNumStructsByStatInArea(void)
@@ -8944,11 +8949,10 @@ WZ_DECL_UNUSED static BOOL scrPrintCallStack(void)
 /*
  * Returns true if game debug mode is on
  */
-static BOOL scrDebugModeEnabled(lua_State *L)
+static int scrDebugModeEnabled(lua_State *L)
 {
 	lua_pushboolean(L, getDebugMappingStatus());
-
-	return true;
+	return 1;
 }
 
 /*
