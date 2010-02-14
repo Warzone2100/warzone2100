@@ -206,7 +206,6 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleRadarJump,
 	kf_MovePause,
 	kf_ToggleReopenBuildMenu,
-	kf_InstaDeath,
 	kf_SensorDisplayOn,
 	kf_SensorDisplayOff,
 	kf_ToggleRadarTerrain,          //radar terrain on/off
@@ -460,7 +459,6 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_W,KEYMAP_PRESSED,kf_ToggleWatchWindow,			"Toggle watch window");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_L,KEYMAP_PRESSED,kf_TraceObject,				"Trace a game object");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_D,KEYMAP_PRESSED,kf_ToggleDrivingMode, 			"Toggle Driving Mode");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_DELETE,KEYMAP_PRESSED,kf_InstaDeath,				"Kaboom");
 	saveKeyMap();	// save out the default key mappings.
 
 //  ------------------------ OLD STUFF - Store here!

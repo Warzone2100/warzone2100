@@ -199,7 +199,6 @@ extern void	kf_MaxPower( void );
 extern void	kf_KillEnemy( void );
 extern void	kf_ToggleMissionTimer( void );
 extern void	kf_TraceObject( void );
-extern void kf_InstaDeath( void );
 
 extern void	kf_SetHardLevel( void );
 extern void	kf_SelectCommander_0( void );
