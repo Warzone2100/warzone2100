@@ -237,9 +237,9 @@ const char* getLanguageName(void)
 
 #if defined(ENABLE_NLS)
 #  if defined(WZ_OS_WIN)
-static BOOL setLocaleWindows(USHORT usPrimaryLanguage, USHORT usSubLanguage)
+static bool setLocaleWindows(USHORT usPrimaryLanguage, USHORT usSubLanguage)
 {
-	BOOL success = SUCCEEDED( SetThreadLocale( MAKELCID( MAKELANGID(usPrimaryLanguage, usSubLanguage), SORT_DEFAULT ) ) );
+	bool success = SUCCEEDED( SetThreadLocale( MAKELCID( MAKELANGID(usPrimaryLanguage, usSubLanguage), SORT_DEFAULT ) ) );
 
 	if (!success)
 	{
@@ -260,7 +260,7 @@ static BOOL setLocaleWindows(USHORT usPrimaryLanguage, USHORT usSubLanguage)
  * \param locale The locale, NOT just the language part
  * \note Use this instead of setlocale(), because we need the default radix character
  */
-static BOOL setLocaleUnix(const char* locale)
+static bool setLocaleUnix(const char* locale)
 {
 	const char *actualLocale = setlocale(LC_ALL, locale);
 
@@ -284,7 +284,7 @@ static BOOL setLocaleUnix(const char* locale)
 #endif
 
 
-BOOL setLanguage(const char *language)
+bool setLanguage(const char *language)
 {
 #if !defined(ENABLE_NLS)
 	return true;

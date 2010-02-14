@@ -172,7 +172,7 @@ static void registry_set_key( const char *k, const char *v )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static BOOL registry_load( const char *filename )
+static bool registry_load( const char *filename )
 {
 	char buffer[MAXLINESIZE];
 	char *bptr = NULL, *bufstart = NULL;
@@ -232,7 +232,7 @@ static BOOL registry_load( const char *filename )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static BOOL registry_save( const char *filename )
+static bool registry_save( const char *filename )
 {
 	char buffer[MAXLINESIZE * REGISTRY_HASH_SIZE];
 	unsigned int i;
@@ -268,10 +268,10 @@ void setRegistryFilePath(const char* fileName)
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL openWarzoneKey( void )
+bool openWarzoneKey( void )
 {
 	//~~~~~~~~~~~~~~~~~~~~~
-	static BOOL done = false;
+	static bool done = false;
 	//~~~~~~~~~~~~~~~~~~~~~
 
 	if ( done == false )
@@ -287,7 +287,7 @@ BOOL openWarzoneKey( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL closeWarzoneKey( void )
+bool closeWarzoneKey( void )
 {
 	registry_save( RegFilePath );
 	return true;
@@ -299,7 +299,7 @@ BOOL closeWarzoneKey( void )
  * \param	*val	Place where to store the setting
  * \return	Whether we succeed to find the setting
  */
-BOOL getWarzoneKeyNumeric( const char *pName, SDWORD *val )
+bool getWarzoneKeyNumeric( const char *pName, SDWORD *val )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	char	*value = registry_get_key( pName );
@@ -319,7 +319,7 @@ BOOL getWarzoneKeyNumeric( const char *pName, SDWORD *val )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL getWarzoneKeyString( const char *pName, char *pString )
+bool getWarzoneKeyString( const char *pName, char *pString )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	char	*value = registry_get_key( pName );
@@ -341,7 +341,7 @@ BOOL getWarzoneKeyString( const char *pName, char *pString )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL setWarzoneKeyNumeric( const char *pName, SDWORD val )
+bool setWarzoneKeyNumeric( const char *pName, SDWORD val )
 {
 	//~~~~~~~~~~~~
 	char	buf[32];
@@ -357,7 +357,7 @@ BOOL setWarzoneKeyNumeric( const char *pName, SDWORD val )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL setWarzoneKeyString( const char *pName, const char *pString )
+bool setWarzoneKeyString( const char *pName, const char *pString )
 {
 	registry_set_key( pName, pString );
 	return true;

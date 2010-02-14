@@ -61,7 +61,7 @@ extern void resetDataHash(void);
 extern UDWORD DataHash[DATA_MAXDATA];
 
 /* Pass all the data loading functions to the framework library */
-extern BOOL dataInitLoadFuncs(void);
+extern bool dataInitLoadFuncs(void);
 
 extern void dataSetSaveFlag(void);
 extern void dataClearSaveFlag(void);

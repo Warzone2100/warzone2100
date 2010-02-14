@@ -33,7 +33,7 @@
 #define TRIG_DEGREES	360
 
 /* Initialise the Trig tables */
-extern BOOL trigInitialise(void);
+extern bool trigInitialise(void);
 
 /* Shutdown the trig tables */
 extern void trigShutDown(void);

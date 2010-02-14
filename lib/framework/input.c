@@ -460,21 +460,21 @@ void inputLooseFocus(void)
 }
 
 /* This returns true if the key is currently depressed */
-BOOL keyDown(KEY_CODE code)
+bool keyDown(KEY_CODE code)
 {
 	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
 	return (aKeyState[code].state != KEY_UP);
 }
 
 /* This returns true if the key went from being up to being down this frame */
-BOOL keyPressed(KEY_CODE code)
+bool keyPressed(KEY_CODE code)
 {
 	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
 	return ((aKeyState[code].state == KEY_PRESSED) || (aKeyState[code].state == KEY_PRESSRELEASE));
 }
 
 /* This returns true if the key went from being down to being up this frame */
-BOOL keyReleased(KEY_CODE code)
+bool keyReleased(KEY_CODE code)
 {
 	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
 	return ((aKeyState[code].state == KEY_RELEASED) || (aKeyState[code].state == KEY_PRESSRELEASE));
@@ -493,19 +493,19 @@ Uint16 mouseY(void)
 }
 
 /* This returns true if the mouse key is currently depressed */
-BOOL mouseDown(MOUSE_KEY_CODE code)
+bool mouseDown(MOUSE_KEY_CODE code)
 {
 	return (aMouseState[code].state != KEY_UP);
 }
 
 /* This returns true if the mouse key was double clicked */
-BOOL mouseDClicked(MOUSE_KEY_CODE code)
+bool mouseDClicked(MOUSE_KEY_CODE code)
 {
 	return (aMouseState[code].state == KEY_DOUBLECLICK);
 }
 
 /* This returns true if the mouse key went from being up to being down this frame */
-BOOL mousePressed(MOUSE_KEY_CODE code)
+bool mousePressed(MOUSE_KEY_CODE code)
 {
 	return ((aMouseState[code].state == KEY_PRESSED) ||
 			(aMouseState[code].state == KEY_DOUBLECLICK) ||
@@ -513,7 +513,7 @@ BOOL mousePressed(MOUSE_KEY_CODE code)
 }
 
 /* This returns true if the mouse key went from being down to being up this frame */
-BOOL mouseReleased(MOUSE_KEY_CODE code)
+bool mouseReleased(MOUSE_KEY_CODE code)
 {
 	return ((aMouseState[code].state == KEY_RELEASED) ||
 			(aMouseState[code].state == KEY_DOUBLECLICK) ||
@@ -521,7 +521,7 @@ BOOL mouseReleased(MOUSE_KEY_CODE code)
 }
 
 /* Check for a mouse drag, return the drag start coords if dragging */
-BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
+bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 {
 	if (aMouseState[code].state == KEY_DRAG)
 	{

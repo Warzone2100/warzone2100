@@ -44,12 +44,12 @@
 
 
 /* Initialise the double buffered display */
-extern BOOL screenInitialise(UDWORD		width,			// Display width
+extern bool screenInitialise(UDWORD		width,			// Display width
 							 UDWORD		height,			// Display height
 							 UDWORD		bitDepth,		// Display bit depth
-							 BOOL		fullScreen,		// Whether to start windowed
+							 bool		fullScreen,		// Whether to start windowed
 														// or full screen
-							 BOOL		vsync);
+							 bool		vsync);
 
 
 /* Release the DD objects */

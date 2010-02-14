@@ -136,7 +136,7 @@ static void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew)
 
 /* Add an object to a treap
  */
-BOOL treapAdd(TREAP_NODE** psTreap, const char* key, const char* string)
+bool treapAdd(TREAP_NODE** psTreap, const char* key, const char* string)
 {
 	/* Over-allocate so that we can put the key and the string in the same
 	 * chunck of memory as the TREAP_NODE struct. Which means a single

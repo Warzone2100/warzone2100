@@ -43,7 +43,7 @@ extern void strresDestroy(struct STR_RES *psRes);
 extern const char* strresGetString(const struct STR_RES* psRes, const char* ID);
 
 /* Load a string resource file */
-extern BOOL strresLoad(struct STR_RES* psRes, const char* fileName);
+extern bool strresLoad(struct STR_RES* psRes, const char* fileName);
 
 /* Get the ID string for a string */
 extern const char* strresGetIDfromString(struct STR_RES *psRes, const char *pString);

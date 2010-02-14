@@ -161,13 +161,13 @@ extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
 extern void inputInitialise(void);
 
 /** This returns true if the key is currently depressed. */
-extern BOOL keyDown(KEY_CODE code);
+extern bool keyDown(KEY_CODE code);
 
 /** This returns true if the key went from being up to being down this frame. */
-extern BOOL keyPressed(KEY_CODE code);
+extern bool keyPressed(KEY_CODE code);
 
 /** This returns true if the key went from being down to being up this frame. */
-extern BOOL keyReleased(KEY_CODE code);
+extern bool keyReleased(KEY_CODE code);
 
 typedef enum _mouse_key_code
 {
@@ -185,19 +185,19 @@ extern Uint16 mouseX(void) WZ_DECL_PURE;
 extern Uint16 mouseY(void) WZ_DECL_PURE;
 
 /** This returns true if the mouse key is currently depressed. */
-extern BOOL mouseDown(MOUSE_KEY_CODE code);
+extern bool mouseDown(MOUSE_KEY_CODE code);
 
 /** This returns true if the mouse key was double clicked. */
-extern BOOL mouseDClicked(MOUSE_KEY_CODE code);
+extern bool mouseDClicked(MOUSE_KEY_CODE code);
 
 /** This returns true if the mouse key went from being up to being down this frame. */
-extern BOOL mousePressed(MOUSE_KEY_CODE code);
+extern bool mousePressed(MOUSE_KEY_CODE code);
 
 /** This returns true if the mouse key went from being down to being up this frame. */
-extern BOOL mouseReleased(MOUSE_KEY_CODE code);
+extern bool mouseReleased(MOUSE_KEY_CODE code);
 
 /** Check for a mouse drag, return the drag start coords if dragging. */
-extern BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
+extern bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
 
 /** Warps the mouse to the given position. */
 extern void SetMousePos(Uint16 x, Uint16 y);

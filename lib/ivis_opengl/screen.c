@@ -67,13 +67,13 @@ static BOOL FBOinit = false;
 BOOL bFboProblem = false;	// hack to work around people with bad drivers. (*cough*intel*cough*)
 
 /* Initialise the double buffered display */
-BOOL screenInitialise(
+bool screenInitialise(
 			UDWORD		width,		// Display width
 			UDWORD		height,		// Display height
 			UDWORD		bitDepth,	// Display bit depth
-			BOOL		fullScreen,	// Whether to start windowed
+			bool		fullScreen,	// Whether to start windowed
 							// or full screen
-			BOOL		vsync)		// If to sync to vblank or not
+			bool		vsync)		// If to sync to vblank or not
 {
 	static int video_flags = 0;
 	int bpp = 0, value;

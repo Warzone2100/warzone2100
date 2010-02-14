@@ -48,7 +48,7 @@ static float aInvSin[TRIG_ACCURACY];
 
 
 /* Initialise the Trig tables */
-BOOL trigInitialise(void)
+bool trigInitialise(void)
 {
 	float val = 0.0f, inc = 2.0f * M_PI / TRIG_DEGREES;
 	int i;
