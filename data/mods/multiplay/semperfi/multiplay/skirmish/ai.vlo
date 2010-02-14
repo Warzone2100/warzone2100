@@ -56,18 +56,19 @@ run
 	uplink			STRUCTURESTAT		"A0Sat-linkCentre"
 
 	//number of research topics for each research branch
-	techCount[0]	int					7
+	techCount[0]	int					8
 	
 	//how many res facilities to use when finished researching all specified research topics
 	maxIdleRes[0]	int					-1
 
-	tech[0][0]		RESEARCHSTAT		"R-Wpn-MG3Mk1"			//HMG
-	tech[0][1]		RESEARCHSTAT		"R-Struc-PowerModuleMk1"	//power module
-	tech[0][2]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
-	tech[0][3]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
-	tech[0][4]		RESEARCHSTAT		"R-Wpn-MG-Damage03"
-	tech[0][5]		RESEARCHSTAT		"R-Defense-Pillbox06"		//lancer bunker
-	tech[0][6]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
+	tech[0][0]		RESEARCHSTAT		"R-Defense-Tower01"		//mg guard tower
+	tech[0][1]		RESEARCHSTAT		"R-Wpn-MG3Mk1"			//HMG
+	tech[0][2]		RESEARCHSTAT		"R-Struc-PowerModuleMk1"	//power module
+	tech[0][3]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
+	tech[0][4]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
+	tech[0][5]		RESEARCHSTAT		"R-Wpn-MG-Damage03"
+	tech[0][6]		RESEARCHSTAT		"R-Defense-Pillbox06"		//lancer bunker
+	tech[0][7]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
 
 	//other tech: R-Vehicle-Prop-VTOL, R-Struc-VTOLPad, R-Struc-VTOLFactory
 	techCount[1]	int					27
@@ -142,12 +143,11 @@ run
 
  	// Essential and fundamental structs. Fundamental => what you build on level start
 	numStructs		int					13
-	numFundamental		int					5
+	numFundamental		int					4
 	structs[0]		STRUCTURESTAT		"A0LightFactory"
 	structs[1]		STRUCTURESTAT		"A0ResearchFacility"
-	structs[2]		STRUCTURESTAT		"A0PowerGenerator"
-	structs[3]		STRUCTURESTAT		"A0CommandCentre"
-	structs[4]		STRUCTURESTAT		"A0CyborgFactory"
+	structs[2]		STRUCTURESTAT		"A0CommandCentre"
+	structs[3]		STRUCTURESTAT		"A0CyborgFactory"
 
 	structs[5]		STRUCTURESTAT		"Sys-CB-Tower01"
 	structs[6]		STRUCTURESTAT		"Sys-SpyTower"
@@ -171,30 +171,31 @@ run
 	baseStruct[7]	STRUCTURESTAT		"A0VTolFactory1"
 
 	// defensive structs.
-	numDefStructs	int					21
-	defStructs[0]	STRUCTURESTAT		"PillBox1"
-	defStructs[1]	STRUCTURESTAT		"Pillbox-RotMG"
+	numDefStructs	int					22
+	defStructs[0]	STRUCTURESTAT		"GuardTower1"
+	defStructs[1]	STRUCTURESTAT		"PillBox1"
+	defStructs[2]	STRUCTURESTAT		"Pillbox-RotMG"
 	defStructs[3]	STRUCTURESTAT		"GuardTower6"
-	defStructs[2]	STRUCTURESTAT		"PillBox4"		//LC
-	defStructs[4]	STRUCTURESTAT		"GuardTower5"		//Lancer
-	defStructs[5]	STRUCTURESTAT		"WallTower03"		//MC
-	defStructs[6]	STRUCTURESTAT		"WallTower04"		//HC
-	defStructs[7]	STRUCTURESTAT		"GuardTower5"		//Lancer
+	defStructs[4]	STRUCTURESTAT		"PillBox4"		//LC
+	defStructs[5]	STRUCTURESTAT		"GuardTower5"		//Lancer
+	defStructs[6]	STRUCTURESTAT		"WallTower03"		//MC
+	defStructs[7]	STRUCTURESTAT		"WallTower04"		//HC
+	defStructs[8]	STRUCTURESTAT		"GuardTower5"		//Lancer
 
-	defStructs[8]	STRUCTURESTAT		"WallTower04"		//HC
-	defStructs[9]	STRUCTURESTAT		"WallTower-HPVcannon"
-	defStructs[10]	STRUCTURESTAT		"Emplacement-Howitzer105"
-	defStructs[11]	STRUCTURESTAT		"Emplacement-HvyATrocket"
-	defStructs[12]	STRUCTURESTAT		"Emplacement-MortarPit02"
-	defStructs[13]	STRUCTURESTAT		"WallTower06"
-	defStructs[14]	STRUCTURESTAT		"Emplacement-PulseLaser"	// Campaign 3 Defensive Structures
-	defStructs[15]	STRUCTURESTAT		"Emplacement-Rail2"
+	defStructs[9]	STRUCTURESTAT		"WallTower04"		//HC
+	defStructs[10]	STRUCTURESTAT		"WallTower-HPVcannon"
+	defStructs[11]	STRUCTURESTAT		"Emplacement-Howitzer105"
+	defStructs[12]	STRUCTURESTAT		"Emplacement-HvyATrocket"
+	defStructs[13]	STRUCTURESTAT		"Emplacement-MortarPit02"
+	defStructs[14]	STRUCTURESTAT		"WallTower06"
+	defStructs[15]	STRUCTURESTAT		"Emplacement-PulseLaser"	// Campaign 3 Defensive Structures
+	defStructs[16]	STRUCTURESTAT		"Emplacement-Rail2"
 
-	defStructs[16]	STRUCTURESTAT		"WallTower-HvATrocket"	//TK
-	defStructs[17]	STRUCTURESTAT		"WallTower-Atmiss"	//Scourge
-	defStructs[18]	STRUCTURESTAT		"WallTower-PulseLas"
-	defStructs[19]	STRUCTURESTAT		"WallTower-Rail2"
-	defStructs[20]	STRUCTURESTAT		"WallTower-Rail3"
+	defStructs[17]	STRUCTURESTAT		"WallTower-HvATrocket"	//TK
+	defStructs[18]	STRUCTURESTAT		"WallTower-Atmiss"	//Scourge
+	defStructs[19]	STRUCTURESTAT		"WallTower-PulseLas"
+	defStructs[20]	STRUCTURESTAT		"WallTower-Rail2"
+	defStructs[21]	STRUCTURESTAT		"WallTower-Rail3"
 
 	// wall structs (4)
 	numWallWeaps	int					10
