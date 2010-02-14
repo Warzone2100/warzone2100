@@ -594,7 +594,7 @@ BOOL recvMessage(void)
 				//case GAME_DROIDMOVE:    // 1 down, 42 to go.
 				//case GAME_GROUPORDER:   // 3 down, 40 to go.
 				//case GAME_CHECK_DROID:  // 4 down, 39 to go.
-				//case GAME_CHECK_STRUCT: // 5 down, 38 to go. (Didn't change anything, just marked it here.)
+				//case GAME_CHECK_STRUCT: // 5 down, 38 to go.
 				//case GAME_CHECK_POWER:  // 6 down, 37 to go.
 				//case NET_TEXTMSG:
 				//case NET_DATA_CHECK:

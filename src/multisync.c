@@ -69,7 +69,7 @@ static UDWORD averagePing(void);
 #define MP_FPS_LOCK			45			
 #define AV_PING_FREQUENCY	MP_FPS_LOCK * 1000		// how often to update average pingtimes. in approx millisecs.
 #define PING_FREQUENCY		MP_FPS_LOCK * 600		// how often to update pingtimes. in approx millisecs.
-#define STRUCT_FREQUENCY	MP_FPS_LOCK * 10		// how often (ms) to send a structure check.
+#define STRUCT_PERIOD           4000                            // how often (ms) to send a structure check.
 #define DROID_PERIOD            315                             // how often (ms) to send droid checks
 #define POWER_PERIOD            5000                            // how often to send power levels
 #define SCORE_FREQUENCY		MP_FPS_LOCK * 2400		// how often to update global score.
@@ -399,116 +399,98 @@ BOOL recvDroidCheck(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////
 // Structure Checking, to ensure smoke and stuff is consistent across machines.
 // this func is recursive!
-static  STRUCTURE *pickAStructure(void)
+static STRUCTURE *pickAStructure(unsigned player)
 {
-	static UDWORD	player=0;					// player currently checking.
-	static UDWORD	snum=0;						// structure index for this player.
-	STRUCTURE		*pS=NULL;
-	static UDWORD	maxtrys = 0;				// don't loop forever if failing/.
-	UDWORD			i;
+	STRUCTURE *pS, *ret = NULL;
+	unsigned i;
 
-	if ( !myResponsibility(player) )			// dont send stuff that's not our problem.
+	// O(n) where n is number of structures. Slow, but hard to beat on a linked list.
+	i = 0;
+	for (pS = apsStructLists[player]; pS != NULL; pS = pS->psNext)
 	{
-		player ++;								// next player next time.
-		player = player%MAX_PLAYERS;
-		snum =0;
-
-		if(maxtrys<MAX_PLAYERS)
+		if (gameRand(++i) == 0)
 		{
-			maxtrys ++;
-			return pickAStructure();
-		}
-		else
-		{
-			maxtrys = 0;
-			return NULL;
+			ret = pS;
 		}
 	}
 
-	pS = apsStructLists[player];				// find the strucutre
-	for(i=0; ((i<snum) && (pS != NULL)) ;i++)
-	{
-		pS= pS->psNext;
-	}
-
-
-	if (pS == NULL)								// last structure or no structures at all
-	{
-		player ++;								// go onto the next player
-		player = player%MAX_PLAYERS;
-		snum=0;
-
-		if(maxtrys<MAX_PLAYERS)
-		{
-			maxtrys ++;
-			return pickAStructure();
-		}
-		else
-		{
-			maxtrys = 0;
-			return NULL;
-		}
-	}
-	snum ++;										// next structure next time
-
-	maxtrys = 0;
-	return pS;
+	return ret;
 }
+
+static uint32_t structureCheckLastSent = 0;  // Last time a struct was sent
+static uint32_t structureCheckLastId[MAX_PLAYERS];
+static uint32_t structureCheckLastBody[MAX_PLAYERS];
+static float    structureCheckLastDirection[MAX_PLAYERS];
+static uint32_t structureCheckLastType[MAX_PLAYERS];
+static uint8_t  structureCheckLastCapacity[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////
 // Send structure information.
 static BOOL sendStructureCheck(void)
 {
-	static UDWORD	lastSent = 0;	// Last time a struct was sent
-	STRUCTURE		*pS;
-    uint8_t			capacity;
+	uint8_t         player;
 
-	if (lastSent > gameTime)
+	if (structureCheckLastSent > gameTime)
 	{
-		lastSent = 0;
+		structureCheckLastSent = 0;
 	}
 	// Only send a struct send if not done recently
-	if ((gameTime - lastSent) < STRUCT_FREQUENCY)
+	if (gameTime - structureCheckLastSent < STRUCT_PERIOD)
 	{
 		return true;
 	}
 
-	lastSent = gameTime;
+	structureCheckLastSent = gameTime;
 
-	pS = pickAStructure();
-	// Only send info about complete buildings
-	if (pS && (pS->status == SS_BUILT))
+	for (player = 0; player < MAX_PLAYERS; ++player)
 	{
-		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_STRUCT);
-			NETuint8_t(&pS->player);
-			NETuint32_t(&pS->id);
-			NETuint32_t(&pS->body);
-			NETuint32_t(&pS->pStructureType->ref);
-			NETuint16_t(&pS->pos.x);
-			NETuint16_t(&pS->pos.y);
-			NETuint16_t(&pS->pos.z);
-			NETfloat(&pS->direction);
+		STRUCTURE       *pS = pickAStructure(player);
+		bool            hasCapacity = true;
+		uint8_t         capacity;
 
-			switch (pS->pStructureType->type)
-			{
+		// Only send info about complete buildings
+		if (pS == NULL || pS->status != SS_BUILT)
+		{
+			structureCheckLastId[player] = 0;
+			continue;
+		}
 
-				case REF_RESEARCH:
-					capacity = ((RESEARCH_FACILITY *) pS->pFunctionality)->capacity;
-					NETuint8_t(&capacity);
-					break;
-				case REF_FACTORY:
-				case REF_VTOL_FACTORY:
-					capacity = ((FACTORY *) pS->pFunctionality)->capacity;
-					NETuint8_t(&capacity);
-					break;
-				case REF_POWER_GEN:
-					capacity = ((POWER_GEN *) pS->pFunctionality)->capacity;
-					NETuint8_t(&capacity);
-				default:
-					break;
-			}
+		switch (pS->pStructureType->type)
+		{
+			case REF_RESEARCH:
+				capacity = pS->pFunctionality->researchFacility.capacity;
+				break;
+			case REF_FACTORY:
+			case REF_VTOL_FACTORY:
+				capacity = pS->pFunctionality->factory.capacity;
+				break;
+			case REF_POWER_GEN:
+				capacity = pS->pFunctionality->powerGenerator.capacity;
+			default:
+				hasCapacity = false;
+				break;
+		}
+		structureCheckLastId[player] = pS->id;
+		structureCheckLastBody[player] = pS->body;
+		structureCheckLastDirection[player] = pS->direction;
+		structureCheckLastType[player] = pS->pStructureType->type;
+		structureCheckLastCapacity[player] = capacity;
 
-		NETend();
+		if (myResponsibility(player))
+		{
+			NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_STRUCT);
+				NETuint8_t(&player);
+				NETuint32_t(&gameTime);
+				NETuint32_t(&pS->id);
+				NETuint32_t(&pS->body);
+				NETuint32_t(&pS->pStructureType->type);
+				NETfloat(&pS->direction);
+				if (hasCapacity)
+				{
+					NETuint8_t(&capacity);
+				}
+			NETend();
+		}
 	}
 
 	return true;
@@ -517,24 +499,22 @@ static BOOL sendStructureCheck(void)
 // receive checking info about a structure and update local world state
 BOOL recvStructureCheck(NETQUEUE queue)
 {
+	uint32_t                synchTime;
 	STRUCTURE		*pS;
-	STRUCTURE_STATS	*psStats;
 	BOOL			hasCapacity = true;
-	int				i, j;
+	int                     j;
 	float			direction;
 	uint8_t			player, ourCapacity;
 	uint32_t		body;
-	uint16_t		x, y, z;
-	uint32_t		ref, type;
+	uint32_t                ref;
+	uint32_t                type;
 
 	NETbeginDecode(queue, GAME_CHECK_STRUCT);
 		NETuint8_t(&player);
+		NETuint32_t(&synchTime);
 		NETuint32_t(&ref);
 		NETuint32_t(&body);
 		NETuint32_t(&type);
-		NETuint16_t(&x);
-		NETuint16_t(&y);
-		NETuint16_t(&z);
 		NETfloat(&direction);
 
 		if (player >= MAX_PLAYERS)
@@ -544,86 +524,29 @@ BOOL recvStructureCheck(NETQUEUE queue)
 			return false;
 		}
 
+		if (structureCheckLastSent != synchTime)
+		{
+			debug(LOG_ERROR, "We got a structure synch at the wrong time.");
+		}
+
+		if (ref != structureCheckLastId[player])
+		{
+			debug(LOG_ERROR, "We got a structure %u synch, but had chosen %u instead.", ref, structureCheckLastId[player]);
+			NETend();
+			return false;
+		}
+
 		// If the structure exists our job is easy
 		pS = IdToStruct(ref, player);
 		if (pS)
 		{
-			pS->body = body;
-			pS->direction = direction;
-		}
-		// Structure was not found - build it
-		else
-		{
-			NETlogEntry("scheck:structure check failed, adding struct. val=type", 0, type - REF_STRUCTURE_START);
-
-			for (i = 0; i < numStructureStats && asStructureStats[i].ref != type; i++);
-			psStats = &asStructureStats[i];
-
-			// Check for similar buildings, to avoid overlaps
-			if (TileHasStructure(mapTile(map_coord(x), map_coord(y))))
+			if (pS->pStructureType->type != structureCheckLastType[player] || type != structureCheckLastType[player])
 			{
-				NETlogEntry("scheck:Tile has structure val=player", 0, player);
-
-				pS = getTileStructure(map_coord(x), map_coord(y));
-
-				// If correct type && player then complete & modify
-				if (pS
-				 && pS->pStructureType->type == type
-				 && pS->player == player)
-				{
-					pS->direction = direction;
-					pS->id = ref;
-
-					if (pS->status != SS_BUILT)
-					{
-						pS->status = SS_BUILT;
-						buildingComplete(pS);
-					}
-
-					NETlogEntry("scheck: fixed?", 0, player);
-				}
-				// Wall becoming a cornerwall
-				else if (pS->pStructureType->type == REF_WALL)
-				{
-					if (psStats->type == REF_WALLCORNER)
-					{
-						NETlogEntry("scheck: fixed wall->cornerwall", 0, 0);
-						removeStruct(pS, true);
-
-						powerCalc(false);
-						pS = buildStructure((STRUCTURE_STATS * )psStats, x, y, player, true);
-						powerCalc(true);
-
-						if (pS)
-						{
-							pS->id = ref;
-						}
-						else
-						{
-							NETlogEntry("scheck: failed to upgrade wall!", 0, player);
-							return false;
-						}
-					}
-				}
-				else
-				{
-					NETlogEntry("scheck:Tile did not have correct type or player val=player",0,player);
-					return false;
-			    }
+				debug(LOG_ERROR, "GAME_CHECK_STRUCT received, wrong structure type!");
+				NETend();
+				return false;
 			}
-			// Nothing exists there so lets get building!
-			else
-			{
-				NETlogEntry("scheck: didn't find structure at all, building it",0,0);
 
-				powerCalc(false);
-				pS = buildStructure((STRUCTURE_STATS *) psStats, x, y, player, true);
-				powerCalc(true);
-			}
-		}
-
-		if (pS)
-		{
 			// Check its finished
 			if (pS->status != SS_BUILT)
 			{
@@ -664,6 +587,7 @@ BOOL recvStructureCheck(NETQUEUE queue)
 				// If our capacity is different upgrade ourself
 				for (; ourCapacity < actualCapacity; ourCapacity++)
 				{
+					debug(LOG_SYNC, "Structure %u out of synch, adding module.", ref);
 					buildStructure(&asStructureStats[j], pS->pos.x, pS->pos.y, pS->player, false);
 
 					// Check it is finished
@@ -675,6 +599,15 @@ BOOL recvStructureCheck(NETQUEUE queue)
 					}
 				}
 			}
+
+#define MERGEDELTA(x, y, ya, z) if (y != ya[player]) { debug(LOG_SYNC, "Structure %u out of synch, changing "#x" from %"z" to %"z".", ref, x, x + y - ya[player]); x += y - ya[player]; }
+			MERGEDELTA(pS->body, body, structureCheckLastBody, "u");
+			MERGEDELTA(pS->direction, direction, structureCheckLastDirection, "f");
+#undef MERGEDELTA
+		}
+		else
+		{
+			debug(LOG_ERROR, "We got a structure %u synch, but can't find the structure.", ref);
 		}
 
 	NETend();
@@ -682,7 +615,7 @@ BOOL recvStructureCheck(NETQUEUE queue)
 }
 
 static uint32_t powerCheckLastSent = 0;
-static uint32_t powerChecklastPower[MAX_PLAYERS];
+static uint32_t powerCheckLastPower[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
@@ -705,13 +638,13 @@ static BOOL sendPowerCheck()
 	powerCheckLastSent = gameTime;
 	for (player = 0; player < MAX_PLAYERS; ++player)
 	{
-		powerChecklastPower[player] = getPower(player);
+		powerCheckLastPower[player] = getPower(player);
 		if (myResponsibility(player))
 		{
 			NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_POWER);
 				NETuint8_t(&player);
 				NETuint32_t(&gameTime);
-				NETuint32_t(&powerChecklastPower[player]);
+				NETuint32_t(&powerCheckLastPower[player]);
 			NETend();
 		}
 	}
@@ -743,10 +676,10 @@ BOOL recvPowerCheck(NETQUEUE queue)
 		return false;
 	}
 
-	if (power != powerChecklastPower[player])
+	if (power != powerCheckLastPower[player])
 	{
 		uint32_t powerFrom = getPower(player);
-		uint32_t powerTo = powerFrom + power - powerChecklastPower[player];
+		uint32_t powerTo = powerFrom + power - powerCheckLastPower[player];
 		debug(LOG_SYNC, "GAME_CHECK_POWER: Adjusting power for player %d (%s) from %u to %u",
 		      (int)player, isHumanPlayer(player) ? "Human" : "AI", powerFrom, powerTo);
 		setPower(player, powerTo);
