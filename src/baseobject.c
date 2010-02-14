@@ -53,11 +53,10 @@ float interpolateDirection(float v1, float v2, uint32_t t1, uint32_t t2, uint32_
 	return interpolateFloat(v1, v2, t1, t2, t);
 }
 
-int16_t interpolateCyclicInt16(int16_t v1, int16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
+int16_t interpolateIntAngle(int16_t v1, int16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	int i1 = (uint16_t)v1;                          // i1: [0; 0xFFFF] v2: [-0x8000; 0x7FFF]
-	int i2 = v2 + ((v2 + 0x8000 - i1) & 0x10000);  // i2: [i1 - 0x8000; i1 + 0x7FFF]
-	return interpolateInt(i1, i2, t1, t2, t);
+	int delta = (v2 - v1 + 360000 + 180)%360 - 180;  // delta: [-180; 179].
+	return (interpolateInt(v1, v1 + delta, t1, t2, t) + 360000)%360;  // [0; 359]
 }
 
 SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)
@@ -69,8 +68,8 @@ SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)
 	}
 	return constructSpacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t),
 	                          interpolateDirection(st1.direction, st2.direction, st1.time, st2.time, t),
-	                          interpolateCyclicInt16(st1.pitch, st2.pitch, st1.time, st2.time, t),
-	                          interpolateCyclicInt16(st1.roll, st2.roll, st1.time, st2.time, t),
+	                          interpolateIntAngle(st1.pitch, st2.pitch, st1.time, st2.time, t),
+	                          interpolateIntAngle(st1.roll, st2.roll, st1.time, st2.time, t),
 	                          t
 	                         );
 }

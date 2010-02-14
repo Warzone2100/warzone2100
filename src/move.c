@@ -2369,7 +2369,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	float   iDroidDir;
 	SDWORD  iMapZ, slideDir, iSpinSpeed, iTurnSpeed;
 	float   fDZ, fDroidZ, fMapZ, targetRoll, currentRoll;
-	int     newRoll;
+	float   newRoll;
 
 	CHECK_DROID(psDroid);
 
@@ -2419,7 +2419,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	{
 		currentRoll -= 360;
 	}
-	newRoll = currentRoll + timeAdjustedIncrement(3*(targetRoll - currentRoll), true) + 0.5f;
+	newRoll = currentRoll + timeAdjustedIncrement(3*(targetRoll - currentRoll), true);
 	if (newRoll < 0 )
 	{
 		newRoll += 360;
