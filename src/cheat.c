@@ -40,6 +40,7 @@ typedef struct _cheat_entry
 bool Cheated = false;
 static CHEAT_ENTRY cheatCodes[] =
 {
+	{"clone wars", kf_CloneSelected}, // clone selected units
 	{"noassert", kf_NoAssert}, // turn off asserts
 	{"count me", kf_ShowNumObjects}, // give a count of objects in the world
 	{"give all", kf_AllAvailable},	// give all

@@ -565,5 +565,6 @@ void checkDroid(const DROID *droid, const char * const location_description, con
 
 // Minimum damage a weapon will deal to its target
 #define	MIN_WEAPON_DAMAGE	1
+void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate);
 
 #endif // __INCLUDED_SRC_DROID_H__

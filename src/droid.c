@@ -2986,7 +2986,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 
 
 // Sets the parts array in a template given a droid.
-static void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate)
+void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate)
 {
 	UDWORD inc;
 	psTemplate->numWeaps = 0;
