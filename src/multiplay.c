@@ -166,7 +166,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 	// rotate world
 	if (MissionResUp && !getWarCamStatus())
 	{
-		rotAmount = timeAdjustedIncrement(MAP_SPIN_RATE / 12, true);
+		rotAmount = graphicsTimeAdjustedIncrement(MAP_SPIN_RATE / 12);
 		player.r.y += rotAmount;
 	}
 
