@@ -70,8 +70,8 @@ static UDWORD averagePing(void);
 #define AV_PING_FREQUENCY	MP_FPS_LOCK * 1000		// how often to update average pingtimes. in approx millisecs.
 #define PING_FREQUENCY		MP_FPS_LOCK * 600		// how often to update pingtimes. in approx millisecs.
 #define STRUCT_FREQUENCY	MP_FPS_LOCK * 10		// how often (ms) to send a structure check.
-#define DROID_FREQUENCY		MP_FPS_LOCK * 7			// how ofter (ms) to send droid checks
-#define POWER_FREQUENCY		MP_FPS_LOCK * 14		// how often to send power levels
+#define DROID_PERIOD            315                             // how often (ms) to send droid checks
+#define POWER_PERIOD            5000                            // how often to send power levels
 #define SCORE_FREQUENCY		MP_FPS_LOCK * 2400		// how often to update global score.
 
 static UDWORD				PingSend[MAX_PLAYERS];	//stores the time the ping was called.
@@ -114,25 +114,11 @@ BOOL sendCheck(void)
 	// Priority is droids -> structures -> power -> score -> ping
 
 	sendDroidCheck();
-	if(okToSend())
-	{
-		sendStructureCheck();
-		sync_counter.sentStructureCheck++;
-
-	}
-	else
-	{
-		sync_counter.unsentStructureCheck++;
-	}
-	if(okToSend())
-	{
-		sendPowerCheck();
-		sync_counter.sentPowerCheck++;
-	}
-	else
-	{
-		sync_counter.unsentPowerCheck++;
-	}
+	sync_counter.sentDroidCheck++;
+	sendStructureCheck();
+	sync_counter.sentStructureCheck++;
+	sendPowerCheck();
+	sync_counter.sentPowerCheck++;
 	if(okToSend())
 	{
 		sendScoreCheck();
@@ -227,7 +213,7 @@ static BOOL sendDroidCheck(void)
 	}
 
 	// Only send a struct send if not done recently
-	if (gameTime - lastSent < DROID_FREQUENCY)
+	if (gameTime - lastSent < DROID_PERIOD)
 	{
 		return true;
 	}
@@ -695,44 +681,60 @@ BOOL recvStructureCheck(NETQUEUE queue)
 	return true;
 }
 
+static uint32_t powerCheckLastSent = 0;
+static uint32_t powerChecklastPower[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Power Checking. Send a power level check every now and again.
 static BOOL sendPowerCheck()
 {
-	static UDWORD	lastsent = 0;
-	uint8_t			player = selectedPlayer;
-	uint32_t		power = getPower(player);
+	uint8_t         player;
 
-	if (lastsent > gameTime)
+	if (powerCheckLastSent > gameTime)
 	{
-		lastsent = 0;
+		powerCheckLastSent = 0;
 	}
 
 	// Only send if not done recently
-	if (gameTime - lastsent < POWER_FREQUENCY)
+	if (gameTime - powerCheckLastSent < POWER_PERIOD)
 	{
 		return true;
 	}
 
-	lastsent = gameTime;
-
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_POWER);
-		NETuint8_t(&player);
-		NETuint32_t(&power);
-	return NETend();
+	powerCheckLastSent = gameTime;
+	for (player = 0; player < MAX_PLAYERS; ++player)
+	{
+		powerChecklastPower[player] = getPower(player);
+		if (myResponsibility(player))
+		{
+			NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_POWER);
+				NETuint8_t(&player);
+				NETuint32_t(&gameTime);
+				NETuint32_t(&powerChecklastPower[player]);
+			NETend();
+		}
+	}
+	return true;
 }
 
 BOOL recvPowerCheck(NETQUEUE queue)
 {
 	uint8_t		player;
-	uint32_t	power, power2;
+	uint32_t        synchTime;
+	uint32_t        power;
 
 	NETbeginDecode(queue, GAME_CHECK_POWER);
 		NETuint8_t(&player);
+		NETuint32_t(&synchTime);
 		NETuint32_t(&power);
 	NETend();
+
+	if (powerCheckLastSent != synchTime)
+	{
+		debug(LOG_ERROR, "Power synch check out of synch!");
+		return false;
+	}
 
 	if (player >= MAX_PLAYERS)
 	{
@@ -741,12 +743,13 @@ BOOL recvPowerCheck(NETQUEUE queue)
 		return false;
 	}
 
-	power2 = getPower(player);
-	if (power != power2)
+	if (power != powerChecklastPower[player])
 	{
-//		debug(LOG_SYNC, "GAME_CHECK_POWER: Adjusting power for player %d (%s) from %u to %u",
-//		      (int)player, isHumanPlayer(player) ? "Human" : "AI", power2, power);
-		setPower( (uint32_t)player, power);
+		uint32_t powerFrom = getPower(player);
+		uint32_t powerTo = powerFrom + power - powerChecklastPower[player];
+		debug(LOG_SYNC, "GAME_CHECK_POWER: Adjusting power for player %d (%s) from %u to %u",
+		      (int)player, isHumanPlayer(player) ? "Human" : "AI", powerFrom, powerTo);
+		setPower(player, powerTo);
 	}
 	return true;
 }
