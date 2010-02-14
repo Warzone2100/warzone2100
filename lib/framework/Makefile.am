@@ -86,3 +86,10 @@ libframework_a_SOURCES = \
 	treap.c \
 	trig.c \
 	utf.c
+
+if MOTIF_AVAILABLE
+libframework_a_SOURCES += \
+	x-motif-messagebox.c
+noinst_HEADERS += \
+	x-motif-messagebox.h
+endif

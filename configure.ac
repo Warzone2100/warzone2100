@@ -187,6 +187,10 @@ AS_IF([test "x$enable_sound" != "xyes"],[
 	AC_DEFINE([WZ_NOSOUND], [], [Causes sound to be disabled])
 ])
 
+AC_ARG_ENABLE([motif],
+	AS_HELP_STRING([--disable-debug],[Use Motif widgets to provide message dialog boxes with.]),
+	[ enable_motif=${enableval} ], [ enable_motif=try ])
+
 # -O0 turns off all optimizations; this is necessary for accurate debugging
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
@@ -306,6 +310,19 @@ if test "x$host_os_mingw32" = "xyes" ; then
 
     WIN32_LIBS="${WIN32_LIBS} ${IBERTY_LIBS}"
 fi
+
+# Look for Motif
+AS_IF([test "$enable_motif" != "no"],[
+	AC_CHECK_HEADER(Xm/Xm.h, , AS_IF([test "$enable_motif" = "yes"],
+		[AC_MSG_ERROR([Motif headers not found])]))
+	AC_CHECK_LIB(Xm, XmCreateErrorDialog, [
+		AC_SUBST([MOTIF_LIBS], [-lXm])
+		AC_DEFINE([WZ_HAVE_MOTIF], 1, [Enable use of Motif when available])
+		AM_CONDITIONAL([MOTIF_AVAILABLE], true)
+		], AS_IF([test "$enable_motif" = "yes"],
+			[AC_MSG_ERROR([Motif library not found])]))
+])
+AM_CONDITIONAL([MOTIF_AVAILABLE], test -n "$MOTIF_LIBS")
 
 # Look for Popt
 AC_CHECK_HEADER(popt.h, , AC_MSG_ERROR([Popt header not found.]))

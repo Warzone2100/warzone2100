@@ -32,6 +32,10 @@
 #include "frameint.h"
 #include "string_ext.h"
 
+#if defined(WZ_HAVE_MOTIF)
+# include "x-motif-messagebox.h"
+#endif
+
 #include "lib/gamelib/gtime.h"
 
 #define MAX_LEN_LOG_LINE 512
@@ -404,12 +408,14 @@ void _debug( code_part part, const char *function, const char *str, ... )
 		if (part == LOG_FATAL)
 		{
 #if defined(WZ_OS_WIN)
-			char wbuf[512];
-			ssprintf(wbuf, "%s\n\nPlease check your stderr.txt file in the same directory as the program file for more details. \
+			char* popupBuf;
+			sasprintf(&popupBuf, "%s\n\nPlease check your stderr.txt file in the same directory as the program file for more details. \
 				\nDo not forget to upload both the stderr.txt file and the warzone2100.rpt file in your bug reports!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
-			MessageBoxA( NULL,
-				wbuf,
-				"Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
+
+			MessageBoxA(NULL, popupBuf, "Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
+#elif defined(WZ_HAVE_MOTIF)
+			const char* popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
+			XmMessageBox(part, code_part_names[part], popupBuf);
 #endif
 		// TODO: Add Mac OS X dialog as well?
 		}
@@ -418,12 +424,15 @@ void _debug( code_part part, const char *function, const char *str, ... )
 		// This is a popup dialog used for times when the error isn't fatal, but we still need to notify user what is going on.
 		if (part == LOG_POPUP)
 		{
-#if defined(WZ_OS_WIN)
-			char wbuf[512];
-			ssprintf(wbuf, "A non fatal error has occurred.\n\n%s\n\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
-			MessageBoxA( NULL,
-				wbuf,
-				"Warzone has detected a problem.", MB_OK|MB_ICONINFORMATION);
+#if defined(WZ_OS_WIN) || defined(WZ_HAVE_MOTIF)
+			char* popupBuf;
+			sasprintf(&popupBuf, "A non fatal error has occurred.\n\n%s", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+
+# if defined(WZ_OS_WIN)
+			MessageBoxA(NULL, popupBuf, "Warzone has detected a problem.", MB_OK|MB_ICONINFORMATION);
+# elif defined(WZ_HAVE_MOTIF)
+			XmMessageBox(part, code_part_names[part], popupBuf);
+# endif
 #endif
 		// TODO: Add Mac OS X dialog as well?
 		}

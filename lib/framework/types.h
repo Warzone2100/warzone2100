@@ -88,7 +88,7 @@ typedef int32_t  SDWORD;
 # endif
 #endif /* WZ_C99 */
 
-#if !defined(WZ_OS_WIN)
+#if !defined(WZ_OS_WIN) && !defined(WZ_NO_LCAPS_BOOL)
 typedef int BOOL;
 #endif // WZ_OS_WIN
 
