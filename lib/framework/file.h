@@ -33,18 +33,18 @@ extern PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail);
 extern PHYSFS_file* openSaveFile(const char* fileName);
 
 /** Load the file with name pointed to by pFileName into a memory buffer. */
-extern BOOL loadFile(const char *pFileName,		// The filename
+extern bool loadFile(const char *pFileName,		// The filename
               char **ppFileData,	// A buffer containing the file contents
               UDWORD *pFileSize);	// The size of this buffer
 
 /** Save the data in the buffer into the given file */
-extern BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize);
+extern bool saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize);
 
 /** Load a file from disk into a fixed memory buffer. */
-extern BOOL loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
+extern bool loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
 
 /** Load a file from disk, but returns quietly if no file found. */
-extern BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize,
+extern bool loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize,
                              UDWORD *pSize);
 
 #ifdef __cplusplus

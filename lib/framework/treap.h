@@ -50,7 +50,7 @@ extern struct TREAP_NODE** treapCreate(void);
 
 /* Add an object to a treap
  */
-extern BOOL treapAdd(struct TREAP_NODE** psTreap, const char *key, const char* string);
+extern bool treapAdd(struct TREAP_NODE** psTreap, const char *key, const char* string);
 
 /* Find an object in a treap */
 extern const char* treapFind(struct TREAP_NODE** psTreap, const char *key);
