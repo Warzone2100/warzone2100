@@ -189,7 +189,37 @@ void	kf_TraceObject( void )
 	objTraceDisable();
 	CONPRINTF(ConsoleString, (ConsoleString, "No longer tracing anything."));
 }
+//===================================================
+void kf_InstaDeath( void )
+{
+	DROID		*psCDroid, *psNDroid;
+	STRUCTURE	*psCStruct, *psNStruct;
 
+	for(psCDroid = apsDroidLists[selectedPlayer]; psCDroid; psCDroid = psNDroid)
+	{
+		psNDroid = psCDroid->psNext;
+		if (psCDroid->selected)
+		{
+			audio_PlayTrack(ID_SOUND_COLL_DIE);
+			CONPRINTF(ConsoleString, (ConsoleString, "die droid %s (id %d) die!", psCDroid->aName, (int)psCDroid->id));
+			destroyDroid(psCDroid);
+			return;
+		}
+	}
+	for(psCStruct = apsStructLists[selectedPlayer]; psCStruct; psCStruct = psNStruct)
+	{
+		psNStruct = psCStruct->psNext;
+		if (psCStruct->selected)
+		{
+			audio_PlayTrack(ID_SOUND_COLL_CLEANSE_AND_DESTROY);
+			CONPRINTF(ConsoleString, (ConsoleString, "die structure %s (id %d) die!", psCStruct->pStructureType->pName, (int)psCStruct->id));
+			destroyStruct(psCStruct);
+			return;
+		}
+	}
+
+	CONPRINTF(ConsoleString, (ConsoleString, "I can't kill what isn't selected."));
+}
 //===================================================
 void kf_ToggleSensorDisplay( void )
 {
