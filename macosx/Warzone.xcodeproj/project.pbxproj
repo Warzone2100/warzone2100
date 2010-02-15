@@ -492,7 +492,6 @@
 		2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 2244463B0E3EB7CB004D0F1F /* messagely.h */; };
 		22E244D70E65361800EC2B3E /* baseobject.c in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.c */; };
 		22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 22E244D50E65361800EC2B3E /* baseobject.h */; };
-		43025C78111FB072006C49B1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43025C2C111FB072006C49B1 /* InfoPlist.strings */; };
 		432BE39410D9C3E400A486AB /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 432BE34C10D9C21900A486AB /* SDL.framework */; };
 		432BE39710D9C45800A486AB /* SDLMain.h in Headers */ = {isa = PBXBuildFile; fileRef = 432BE34A10D9C21900A486AB /* SDLMain.h */; };
 		432BE39810D9C45900A486AB /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 432BE34B10D9C21900A486AB /* SDLMain.m */; };
@@ -540,6 +539,7 @@
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13210D6028C00A19EE4 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12E10D6028C00A19EE4 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
 		43BE73ED11121A47007DF934 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177E70F87A926000C8A96 /* config.h */; };
 		43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BE75E811124BB4007DF934 /* wavecast.cpp */; };
@@ -1470,20 +1470,6 @@
 		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = baseobject.c; path = ../src/baseobject.c; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
-		43025C33111FB072006C49B1 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C36111FB072006C49B1 /* en_GB */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = en_GB; path = en_GB.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C39111FB072006C49B1 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C3B111FB072006C49B1 /* es */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C43111FB072006C49B1 /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C4E111FB072006C49B1 /* it */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C5D111FB072006C49B1 /* pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C60111FB072006C49B1 /* pt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C63111FB072006C49B1 /* pt_BR */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = pt_BR; path = pt_BR.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C69111FB072006C49B1 /* ru */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C6C111FB072006C49B1 /* sl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = sl; path = sl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C6F111FB072006C49B1 /* uk_UA */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = uk_UA; path = uk_UA.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C75111FB072006C49B1 /* zh_TW */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = zh_TW; path = zh_TW.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025D0C111FC870006C49B1 /* et_EE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = et_EE; path = et_EE.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Project-All.xcconfig"; path = "configs/Project-All.xcconfig"; sourceTree = "<group>"; };
 		43025DFF1120A4CA006C49B1 /* Warzone-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-All.xcconfig"; path = "configs/Warzone-All.xcconfig"; sourceTree = "<group>"; };
 		43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-Debug.xcconfig"; path = "configs/Warzone-Debug.xcconfig"; sourceTree = "<group>"; };
@@ -1577,6 +1563,32 @@
 		4355E12D10D6028C00A19EE4 /* theora.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theora.h; path = external/libtheora/include/theora/theora.h; sourceTree = "<group>"; };
 		4355E12E10D6028C00A19EE4 /* theoradec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoradec.h; path = external/libtheora/include/theora/theoradec.h; sourceTree = "<group>"; };
 		4355E12F10D6028C00A19EE4 /* theoraenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoraenc.h; path = external/libtheora/include/theora/theoraenc.h; sourceTree = "<group>"; };
+		438BDDD81129DC9A00998660 /* cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDD91129DC9A00998660 /* da */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDDA1129DC9A00998660 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDDB1129DC9A00998660 /* en_GB */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en_GB; path = en_GB.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDDC1129DC9A00998660 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDDE1129DC9A00998660 /* es */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDDF1129DC9A00998660 /* et_EE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = et_EE; path = et_EE.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE01129DC9A00998660 /* fi */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE11129DC9A00998660 /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE21129DC9A00998660 /* fy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fy; path = fy.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE31129DC9A00998660 /* ga */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE41129DC9A00998660 /* hr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE51129DC9A00998660 /* it */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE61129DC9A00998660 /* la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = la; path = la.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE71129DC9A00998660 /* lt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE81129DC9A00998660 /* nb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE91129DC9A00998660 /* nl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDEA1129DC9A00998660 /* pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDEB1129DC9A00998660 /* pt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDEC1129DC9A00998660 /* pt_BR */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDED1129DC9A00998660 /* ro */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDEE1129DC9A00998660 /* ru */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDEF1129DC9A00998660 /* sl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDF01129DC9A00998660 /* uk_UA */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = uk_UA; path = uk_UA.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDF11129DC9A00998660 /* zh_CN */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh_CN; path = zh_CN.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDF21129DC9A00998660 /* zh_TW */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh_TW; path = zh_TW.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43A8417611028EDD00733CCB /* pointtree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pointtree.cpp; path = ../src/pointtree.cpp; sourceTree = SOURCE_ROOT; };
 		43A8417711028EDD00733CCB /* pointtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pointtree.h; path = ../src/pointtree.h; sourceTree = SOURCE_ROOT; };
 		43BE75E811124BB4007DF934 /* wavecast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wavecast.cpp; path = ../src/wavecast.cpp; sourceTree = SOURCE_ROOT; };
@@ -2706,7 +2718,7 @@
 		43025C2B111FB072006C49B1 /* wzlocal */ = {
 			isa = PBXGroup;
 			children = (
-				43025C2C111FB072006C49B1 /* InfoPlist.strings */,
+				438BDDD71129DC9A00998660 /* InfoPlist.strings */,
 			);
 			name = wzlocal;
 			path = Resources/wzlocal;
@@ -3614,7 +3626,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0246A05D0BD3C975004D1C70 /* Warzone.icns in Resources */,
-				43025C78111FB072006C49B1 /* InfoPlist.strings in Resources */,
+				438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3864,7 +3876,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Config\nexport PATH=$PATH:/opt/local/bin:/sw/bin:${SRCROOT}/external/gettext-bin\npodir=\"../po\"\naresdir=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/\"\nbresdir=\".lproj/locale\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\n\n# San check\necho \"Checking for msgfmt...\"\nif ! type -aP msgfmt; then\n    echo \"Fatal inability to properly translate messages.\"\n    exit 1\nfi\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${lang}${bresdir}\"\n        $msgfmtpth -v -o \"${aresdir}${lang}${bresdir}/${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
+			shellScript = "# Config\nexport PATH=$PATH:/opt/local/bin:/sw/bin:${SRCROOT}/external/gettext-bin\npodir=\"../po\"\ndisfile=\"configs/LangDis\"\naresdir=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/\"\nbresdir=\"locale/\"\nmessdir=\"LC_MESSAGES/\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\ndislist=`cat ${disfile} | sed -n 's:^<::p'`\n\n# San check\necho \"Checking for msgfmt...\"\nif ! type -aP msgfmt; then\n    echo \"Fatal inability to properly translate messages.\"\n    exit 1\nfi\n\n# Disable selected langs\nfor dislang in ${dislist}; do\n    echo \"Cleaning up for ${dislang} ...\"\n    rm -rfv \"${aresdir}${dislang}.lproj\"\ndone\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${bresdir}${lang}/${messdir}\"\n        $msgfmtpth -v -o \"${aresdir}${bresdir}${lang}/${messdir}${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
 		};
 		43095E9A10EEA8630067E86B /* Run autorevision */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4550,27 +4562,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		43025C2C111FB072006C49B1 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				43025C33111FB072006C49B1 /* de */,
-				43025C36111FB072006C49B1 /* en_GB */,
-				43025C39111FB072006C49B1 /* English */,
-				43025C3B111FB072006C49B1 /* es */,
-				43025D0C111FC870006C49B1 /* et_EE */,
-				43025C43111FB072006C49B1 /* fr */,
-				43025C4E111FB072006C49B1 /* it */,
-				43025C5D111FB072006C49B1 /* pl */,
-				43025C60111FB072006C49B1 /* pt */,
-				43025C63111FB072006C49B1 /* pt_BR */,
-				43025C69111FB072006C49B1 /* ru */,
-				43025C6C111FB072006C49B1 /* sl */,
-				43025C6F111FB072006C49B1 /* uk_UA */,
-				43025C75111FB072006C49B1 /* zh_TW */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		432BE3C110D9C79400A486AB /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -4591,6 +4582,39 @@
 			isa = PBXVariantGroup;
 			children = (
 				432BE3FF10D9CF1300A486AB /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		438BDDD71129DC9A00998660 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				438BDDD81129DC9A00998660 /* cs */,
+				438BDDD91129DC9A00998660 /* da */,
+				438BDDDA1129DC9A00998660 /* de */,
+				438BDDDB1129DC9A00998660 /* en_GB */,
+				438BDDDC1129DC9A00998660 /* English */,
+				438BDDDE1129DC9A00998660 /* es */,
+				438BDDDF1129DC9A00998660 /* et_EE */,
+				438BDDE01129DC9A00998660 /* fi */,
+				438BDDE11129DC9A00998660 /* fr */,
+				438BDDE21129DC9A00998660 /* fy */,
+				438BDDE31129DC9A00998660 /* ga */,
+				438BDDE41129DC9A00998660 /* hr */,
+				438BDDE51129DC9A00998660 /* it */,
+				438BDDE61129DC9A00998660 /* la */,
+				438BDDE71129DC9A00998660 /* lt */,
+				438BDDE81129DC9A00998660 /* nb */,
+				438BDDE91129DC9A00998660 /* nl */,
+				438BDDEA1129DC9A00998660 /* pl */,
+				438BDDEB1129DC9A00998660 /* pt */,
+				438BDDEC1129DC9A00998660 /* pt_BR */,
+				438BDDED1129DC9A00998660 /* ro */,
+				438BDDEE1129DC9A00998660 /* ru */,
+				438BDDEF1129DC9A00998660 /* sl */,
+				438BDDF01129DC9A00998660 /* uk_UA */,
+				438BDDF11129DC9A00998660 /* zh_CN */,
+				438BDDF21129DC9A00998660 /* zh_TW */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
