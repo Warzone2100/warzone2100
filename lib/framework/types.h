@@ -24,16 +24,30 @@
 #ifndef __INCLUDED_LIB_FRAMEWORK_TYPES_H__
 #define __INCLUDED_LIB_FRAMEWORK_TYPES_H__
 
+#ifndef __STDC_LIMIT_MACROS
+#define __STDC_LIMIT_MACROS
+#endif
+
 #include "wzglobal.h"
 #include <limits.h>
 #include <ctype.h>
 
-#ifdef WZ_C99
+#ifndef _MSC_VER
 /* Compilers that have support for C99 have all values below defined in stdint.h */
-# include <stdint.h>
-#else
+# include <inttypes.h>
+#else // !_MSC_VER
 // Defines C99 types for C99 incompatible compilers (e.g. MSVC)
-#include <SDL_stdinc.h>
+//BEGIN Hope this is right.
+typedef unsigned char      uint8_t;
+typedef unsigned short     uint16_t;
+typedef unsigned int       uint32_t;
+typedef unsigned long long uint64_t;
+typedef signed   char      int8_t;
+typedef signed   short     int16_t;
+typedef signed   int       int32_t;
+typedef signed   long long int64_t;
+//END   Hope this is right.
+
 # define INT8_MIN               (-128)
 # define INT16_MIN              (-32767-1)
 # define INT32_MIN              (-2147483647-1)
@@ -43,10 +57,8 @@
 # define UINT8_MAX              (255)
 # define UINT16_MAX             (65535)
 # define UINT32_MAX             (4294967295U)
-#ifdef WZ_CC_MSVC
 #define PRIu64  "I64u"
-#endif
-#endif // WZ_C99
+#endif // !_MSC_VER
 
 /* Basic numeric types */
 typedef uint8_t  UBYTE;

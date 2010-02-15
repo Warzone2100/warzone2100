@@ -4,11 +4,19 @@
 %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(WZ_CPPFLAGS) $(QT4_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
+
+MOCHEADER = wzapp.h
+MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
+
+%_moc.cpp: %.h
+	$(MOC4) -o $@ $<
+
 BUILT_SOURCES = \
+ 	$(MOCEDFILES) \
 	resource_lexer.lex.c \
 	resource_parser.tab.c \
 	resource_parser.tab.h \
@@ -17,6 +25,7 @@ BUILT_SOURCES = \
 	strres_parser.tab.h
 
 CLEANFILES = \
+ 	$(MOCEDFILES) \
 	resource_lexer.lex.c \
 	resource_parser.tab.c \
 	resource_parser.tab.h \
@@ -30,6 +39,8 @@ EXTRA_DIST = \
 
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = \
+	wzapp_c.h \
+	$(MOCHEADER) \
 	strres_parser.tab.h \
 	resource_parser.tab.h \
 	configfile.h \
@@ -65,6 +76,8 @@ noinst_HEADERS = \
 	wzglobal.h
 
 libframework_a_SOURCES = \
+	wzapp_moc.cpp \
+	wzapp.cpp \
 	resource_lexer.lex.c \
 	resource_parser.tab.c \
 	strres_lexer.lex.c \
@@ -77,7 +90,6 @@ libframework_a_SOURCES = \
 	frame.c \
 	frameresource.c \
 	i18n.c \
-	input.c \
 	lexer_input.c \
 	SDL_framerate.c \
 	stdio_ext.c \
@@ -86,3 +98,5 @@ libframework_a_SOURCES = \
 	treap.c \
 	trig.c \
 	utf.c
+
+libframework_a_DEPENDENCIES = $(MOCEDFILES)

@@ -32,10 +32,20 @@
 
 /***************************************************************************/
 
-#include <SDL/SDL_opengl.h>
+#if defined(__MACOSX__)
+#include <OpenGL/glu.h>	/* Header File For The GLU Library */
+#else
+#include <GL/glu.h>	/* Header File For The GLU Library */
+#endif
+
 
 #include "lib/framework/frame.h"
 #include "piedef.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
 /***************************************************************************/
 /*
@@ -133,7 +143,6 @@ extern void pie_SetRendMode(REND_MODE rendMode);
 
 extern void pie_InitColourMouse(IMAGEFILE* img, const uint16_t cursorIDs[CURSOR_MAX]);
 extern void pie_SetMouse(CURSOR cursor, bool coloured);
-extern void pie_DrawMouse(unsigned int X, unsigned int Y);
 extern void pie_ShowMouse(bool visible);
 
 extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
@@ -143,5 +152,8 @@ extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
 
 extern bool _glerrors(const char *, const char *, int);
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // _pieState_h

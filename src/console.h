@@ -126,4 +126,8 @@ extern void console(const char *pFormat, ...); /// Print always to the ingame co
 }
 #endif //__cplusplus
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus
+
 #endif // __INCLUDED_SRC_CONSOLE_H__

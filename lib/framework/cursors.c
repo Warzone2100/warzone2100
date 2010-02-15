@@ -21,18 +21,7 @@
 #include "frame.h"
 #include "cursors.h"
 
-SDL_Cursor* init_system_cursor(CURSOR cur, enum CURSOR_TYPE type)
+void init_system_cursor(CURSOR cur, enum CURSOR_TYPE type)
 {
-	switch (type)
-	{
-		case CURSOR_16:
-			return init_system_cursor16(cur);
-
-		case CURSOR_32:
-			return init_system_cursor32(cur);
-
-		default:
-			ASSERT(!"Bad cursor type", "Non-existent cursor type used: %u", (unsigned int)type);
-			return init_system_cursor32(cur);
-	}
+	init_system_cursor32(cur);
 }

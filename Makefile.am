@@ -15,7 +15,6 @@ EXTRA_DIST= \
 	config.rpath \
 	configure.ac \
 	macosx/external/bison.sh \
-	macosx/prebuilt/SDL.tar.gz \
 	macosx/README.BUILD.txt \
 	macosx/README.txt \
 	macosx/Resources/GenericFramework-Info.plist \

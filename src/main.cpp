@@ -24,8 +24,6 @@
 // Get platform defines before checking for them!
 #include "lib/framework/frame.h"
 
-#include <SDL.h>
-
 #if defined(WZ_OS_WIN)
 #  include <shlobj.h> /* For SHGetFolderPath */
 #elif defined(WZ_OS_UNIX)
@@ -36,6 +34,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/tagfile.h"
+#include "lib/framework/wzapp_c.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
@@ -294,7 +293,7 @@ char * getModList(void)
 		// mod list already constructed
 		return mod_list;
 	}
-	mod_list = malloc(modlist_string_size);
+	mod_list = (char *)malloc(modlist_string_size);
 	mod_list[0] = 0; //initialize
 	for (i=0; i<num_loaded_mods; i++)
 	{
@@ -653,7 +652,7 @@ static void startGameLoop(void)
 {
 	SetGameMode(GS_NORMAL);
 
-	if (!levLoadData(aLevelName, NULL, 0))
+	if (!levLoadData(aLevelName, NULL, GTYPE_SCENARIO_START))
 	{
 		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
@@ -678,7 +677,7 @@ static void startGameLoop(void)
 	// Trap the cursor if cursor snapping is enabled
 	if (war_GetTrapCursor())
 	{
-		SDL_WM_GrabInput(SDL_GRAB_ON);
+		wzGrabMouse();
 	}
 
 	// set a flag for the trigger/event system to indicate initialisation is complete
@@ -719,7 +718,7 @@ static void stopGameLoop(void)
 	// Disable cursor trapping
 	if (war_GetTrapCursor())
 	{
-		SDL_WM_GrabInput(SDL_GRAB_OFF);
+		wzReleaseMouse();
 	}
 
 	gameInitialised = false;
@@ -755,7 +754,7 @@ static bool initSaveGameLoad(void)
 	// Trap the cursor if cursor snapping is enabled
 	if (war_GetTrapCursor())
 	{
-		SDL_WM_GrabInput(SDL_GRAB_ON);
+		wzGrabMouse();
 	}
 	if (challengeActive)
 	{
@@ -792,7 +791,7 @@ static void runGameLoop(void)
 			stopGameLoop();
 			startGameLoop(); // Restart gameloop
 			break;
-		// Never trown:
+		// Never thrown:
 		case GAMECODE_FASTEXIT:
 		case GAMECODE_RESTARTGAME:
 			break;
@@ -815,12 +814,7 @@ static void runTitleLoop(void)
 		case TITLECODE_QUITGAME:
 			debug(LOG_MAIN, "TITLECODE_QUITGAME");
 			stopTitleLoop();
-			{
-				// Create a quit event to halt game loop.
-				SDL_Event quitEvent;
-				quitEvent.type = SDL_QUIT;
-				SDL_PushEvent(&quitEvent);
-			}
+			wzQuit();
 			break;
 		case TITLECODE_SAVEGAMELOAD:
 			{
@@ -855,7 +849,7 @@ static void runTitleLoop(void)
 	}
 }
 
-
+#if 0
 /*!
  * Activation (focus change) eventhandler
  */
@@ -909,20 +903,16 @@ static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 		}
 	}
 }
-
+#endif
 
 /*!
  * The mainloop.
  * Fetches events, executes appropriate code
  */
-static void mainLoop(void)
+void mainLoop(void)
 {
-	SDL_Event event;
-
-	while (true)
-	{
-		frameUpdate(); // General housekeeping
-
+	frameUpdate(); // General housekeeping
+#if 0
 		/* Deal with any windows messages */
 		while (SDL_PollEvent(&event))
 		{
@@ -948,34 +938,32 @@ static void mainLoop(void)
 					break;
 			}
 		}
-		// Screenshot key is now available globally
-		if(keyPressed(KEY_F10))
-		{
-			kf_ScreenDump();
-			inputLooseFocus();		// remove it from input stream
-		}
+#endif
+	// Screenshot key is now available globally
+	if (keyPressed(KEY_F10))
+	{
+		kf_ScreenDump();
+		inputLooseFocus();		// remove it from input stream
+	}
 
-		// only pause when not in multiplayer, no focus, and we actually want to pause
-		if (NetPlay.bComms || focusState == FOCUS_IN || !war_GetPauseOnFocusLoss())
+	if (NetPlay.bComms || focusState == FOCUS_IN || !war_GetPauseOnFocusLoss())
+	{
+		if (loop_GetVideoStatus())
 		{
-			if (loop_GetVideoStatus())
-			{
-				videoLoop(); // Display the video if neccessary
-			}
-			else switch (GetGameMode())
-			{
-				case GS_NORMAL: // Run the gameloop code
-					runGameLoop();
-					break;
-				case GS_TITLE_SCREEN: // Run the titleloop code
-					runTitleLoop();
-					break;
-				default:
-					break;
-			}
-
-			gameTimeUpdate(); // Update gametime. FIXME There is probably code duplicated with MaintainFrameStuff
+			videoLoop(); // Display the video if neccessary
 		}
+		else switch (GetGameMode())
+		{
+			case GS_NORMAL: // Run the gameloop code
+				runGameLoop();
+				break;
+			case GS_TITLE_SCREEN: // Run the titleloop code
+				runTitleLoop();
+				break;
+			default:
+				break;
+		}
+		gameTimeUpdate(); // Update gametime. FIXME There is probably code duplicated with MaintainFrameStuff
 	}
 }
 
@@ -1131,7 +1119,13 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFSAA(), war_getFullscreen(), war_GetVsync()))
+	return wzInit(argc, argv, war_getFSAA(), war_GetVsync(), pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), war_getFullscreen());
+}
+
+// Called from wzInit after graphics initialized
+int finalInitialization()
+{
+	if (!frameInitialise())
 	{
 		return -1;
 	}
@@ -1191,15 +1185,7 @@ int main(int argc, char *argv[])
 			debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
 			break;
 	}
-
-	debug(LOG_MAIN, "Entering main loop");
-
-	// Enter the mainloop
-	mainLoop();
-
-	debug(LOG_MAIN, "Shutting down Warzone 2100");
-
-	return EXIT_SUCCESS;
+	return 0;
 }
 
 

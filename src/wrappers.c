@@ -32,6 +32,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piefunc.h"
+#include "lib/framework/wzapp_c.h"
 
 #include "hci.h"		// access to widget screen.
 #include "wrappers.h"
@@ -247,8 +248,6 @@ TITLECODE titleLoop(void)
 
 	audio_Update();
 	
-	pie_DrawMouse(mouseX(), mouseY());
-
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
@@ -275,7 +274,7 @@ void loadingScreenCallback(void)
 	UDWORD			currTick;
 	PIELIGHT		colour;
 
-	currTick = SDL_GetTicks();
+	currTick = wzGetTicks();
 	if (currTick - lastTick < 50)
 	{
 		return;

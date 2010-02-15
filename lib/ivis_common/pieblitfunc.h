@@ -35,6 +35,11 @@
 #include "lib/framework/string_ext.h"
 #include "piedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -85,5 +90,9 @@ typedef enum _screenType
 } SCREENTYPE;
 
 extern void pie_LoadBackDrop(SCREENTYPE screenType);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif //

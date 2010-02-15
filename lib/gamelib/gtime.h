@@ -24,6 +24,11 @@
 #ifndef _gtime_h
 #define _gtime_h
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /** The number of ticks per second for the game clock. */
 #define GAME_TICKS_PER_SEC 1000
 
@@ -124,5 +129,9 @@ static inline float timeAdjustedIncrement(float value, BOOL pauseTime)
 		return (value * frameTimeFraction2);
 	}
 }
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

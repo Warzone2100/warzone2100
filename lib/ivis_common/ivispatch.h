@@ -32,6 +32,11 @@
 #include "lib/framework/frame.h"
 #include "pietypes.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -45,5 +50,9 @@
 #define iV_MatrixRotateY			pie_MatRotY
 #define iV_MatrixRotateZ			pie_MatRotZ
 #define iV_TRANSLATE				pie_TRANSLATE
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // _ivispatch_h

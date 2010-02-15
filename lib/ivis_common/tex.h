@@ -27,6 +27,11 @@
 #include <GL/gl.h>
 #endif
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 //*************************************************************************
 
 #define iV_TEX_MAX 128
@@ -67,5 +72,9 @@ extern void pie_MakeTexPageName(char * filename);
 //*************************************************************************
 
 extern void pie_TexShutDown(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

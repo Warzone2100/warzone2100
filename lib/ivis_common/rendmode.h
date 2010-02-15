@@ -26,6 +26,11 @@
 #include "bitimage.h"
 #include "textdraw.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 //*************************************************************************
 //patch
 
@@ -56,5 +61,9 @@ extern iSurface *psRendSurface;
 extern void iV_RenderAssign(iSurface *s);
 extern void iV_SurfaceDestroy(iSurface *s);
 extern iSurface *iV_SurfaceCreate(uint32_t flags, int width, int height, int xp, int yp, uint8_t *buffer);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

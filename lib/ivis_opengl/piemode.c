@@ -28,8 +28,7 @@
 
 #include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
-
-#include <SDL.h>
+#include "lib/framework/wzapp_c.h"
 
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
@@ -107,7 +106,7 @@ void pie_ScreenFlip(int clearMode)
 	GLbitfield clearFlags = 0;
 
 	screenDoDumpToDiskIfRequired();
-	SDL_GL_SwapBuffers();
+	wzScreenFlip();
 	if (!(clearMode & CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD))
 	{
 		glDepthMask(GL_TRUE);

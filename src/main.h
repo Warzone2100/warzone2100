@@ -40,6 +40,8 @@ extern GS_GAMEMODE GetGameMode(void) WZ_DECL_PURE;
 extern void SetGameMode(GS_GAMEMODE status);
 
 extern char SaveGamePath[];
+extern int finalInitialization(void);
+extern void mainLoop(void);
 
 #ifdef __cplusplus
 }

@@ -23,6 +23,11 @@
 
 #include "pietypes.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /*!
  * Load a PNG from file into image
  *
@@ -49,5 +54,9 @@ void iV_saveImage_PNG(const char *fileName, const iV_Image *image);
  * \return true on success, false otherwise
  */
 void iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // _LIBIVIS_COMMON_PNG_H_

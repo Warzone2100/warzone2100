@@ -23,6 +23,10 @@
 #ifndef _frame_h
 #define _frame_h
 
+#ifndef __STDC_LIMIT_MACROS
+#define __STDC_LIMIT_MACROS
+#endif
+
 #include "wzglobal.h"
 
 // Workaround X11 headers #defining Status
@@ -65,7 +69,7 @@ extern UDWORD selectedPlayer;
  *  @return true when the framework library is successfully initialised, false
  *          when a part of the initialisation failed.
  */
-extern BOOL frameInitialise(const char* pWindowName, UDWORD width, UDWORD height, UDWORD bitDepth, unsigned int fsaa, BOOL fullScreen, BOOL vsync);
+extern BOOL frameInitialise(void);
 
 extern bool selfTest;
 

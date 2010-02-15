@@ -70,4 +70,8 @@ extern BOOL formationMember(FORMATION *psFormation, const DROID* psDroid);
 }
 #endif //__cplusplus
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus
+
 #endif // __INCLUDED_SRC_FORMATION_H__

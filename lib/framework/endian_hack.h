@@ -26,7 +26,6 @@ extern "C"
 #endif //__cplusplus
 
 /* Endianness hacks */
-// TODO Use SDL_SwapXXXX instead
 
 static inline void endian_uword(UWORD* uword)
 {

@@ -34,6 +34,11 @@ extern "C"
 {
 #endif //__cplusplus
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* Edit Box states */
 #define WEDBS_FIXED		0x0001		// No editing is going on
 #define WEDBS_INSERT	0x0002		// Insertion editing

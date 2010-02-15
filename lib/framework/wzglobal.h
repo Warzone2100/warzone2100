@@ -593,4 +593,9 @@
 #endif // !WZ_C99 && !va_copy
 
 
+#ifndef __STDC_LIMIT_MACROS
+#define __STDC_LIMIT_MACROS
+#endif
+
+
 #endif /* WZGLOBAL_H */

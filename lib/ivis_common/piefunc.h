@@ -33,6 +33,11 @@
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/pieclip.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 extern UBYTE pie_ByteScale(UBYTE a, UBYTE b) WZ_DECL_CONST;
 extern void pie_TransColouredTriangle(CLIP_VERTEX *vrt, PIELIGHT c);
 extern void pie_DrawSkybox(float scale, int u, int v, int w, int h);
@@ -41,5 +46,9 @@ extern void pie_DrawViewingWindow( Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2,
 
 void pie_ClipBegin(int x1, int y1, int x2, int y2);
 void pie_ClipEnd(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // _piedef_h

@@ -30,6 +30,7 @@
 #include "lib/framework/strres.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/wzapp_c.h"
 
 #include "display.h"
 #include "map.h"
@@ -216,7 +217,7 @@ BOOL	rotActive = false;
 BOOL	gameStats = false;
 
 /* Mouse x and y - no point checking them more than once per frame */
-Uint16 mouseXPos = OFF_SCREEN, mouseYPos = OFF_SCREEN;
+uint16_t mouseXPos = OFF_SCREEN, mouseYPos = OFF_SCREEN;
 
 /* Hackety hack hack hack */
 SDWORD	screenShakeTable[100] =
@@ -1105,10 +1106,10 @@ void scroll(void)
 		}
 	}
 	/* Time to update scroll - change to should be time */
-	timeDiff = SDL_GetTicks() - scrollRefTime;
+	timeDiff = wzGetTicks() - scrollRefTime;
 
 	/* Store reference time */
-	scrollRefTime = SDL_GetTicks();
+	scrollRefTime = wzGetTicks();
 
 	if (timeDiff > GTIME_MAXFRAME)
 	{
@@ -1218,7 +1219,7 @@ void scroll(void)
  */
 void resetScroll(void)
 {
-	scrollRefTime = SDL_GetTicks();
+	scrollRefTime = wzGetTicks();
 	scrollSpeedUpDown = 0.0f;
 	scrollSpeedLeftRight = 0.0f;
 }

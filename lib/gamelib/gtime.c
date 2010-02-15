@@ -24,10 +24,10 @@
  *
  */
 
-#include <SDL_timer.h>
 #include <time.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp_c.h"
 #include "gtime.h"
 
 #define GTIME_MINFRAME	(GAME_TICKS_PER_SEC/80)
@@ -67,7 +67,7 @@ BOOL gameTimeInit(void)
 	 * for multiPlayer they will be processed as if they died. */
 	gameTime = 2;
 	timeOffset = 2;
-	baseTime = SDL_GetTicks();
+	baseTime = wzGetTicks();
 
 	gameTime2 = 0;
 	timeOffset2 = 0;
@@ -101,7 +101,7 @@ UDWORD	getStaticTimeValueRange(UDWORD tickFrequency, UDWORD requiredRange)
 /* Call this each loop to update the game timer */
 void gameTimeUpdate(void)
 {
-	unsigned int currTime = SDL_GetTicks();
+	unsigned int currTime = wzGetTicks();
 	long long newTime;
 
 	// Do not update the game time if gameTimeStop has been called
@@ -170,7 +170,7 @@ void gameTimeUpdate(void)
 		timeOffset = gameTime;
 		timeOffset2 = gameTime2;
 
-		baseTime = SDL_GetTicks();
+		baseTime = wzGetTicks();
 		baseTime2 = baseTime;
 	}
 }
@@ -181,7 +181,7 @@ void gameTimeResetMod(void)
 	timeOffset = gameTime;
 	timeOffset2 = gameTime2;
 
-	baseTime = SDL_GetTicks();
+	baseTime = wzGetTicks();
 	baseTime2 = baseTime;
 
 	modifier = 1.0f;
@@ -210,7 +210,7 @@ void gameTimeStop(void)
 {
 	if (stopCount == 0)
 	{
-		pauseStart = SDL_GetTicks();
+		pauseStart = wzGetTicks();
 		debug( LOG_NEVER, "Clock paused at %d\n", pauseStart);
 	}
 	stopCount += 1;
@@ -223,7 +223,7 @@ void gameTimeStart(void)
 	{
 		// shift the base time to now
 		timeOffset = gameTime;
-		baseTime = SDL_GetTicks();
+		baseTime = wzGetTicks();
 	}
 
 	if (stopCount > 0)
@@ -242,7 +242,7 @@ void gameTimeReset(UDWORD time)
 	gameTime2 = time;
 	timeOffset2 = time;
 
-	baseTime = SDL_GetTicks();
+	baseTime = wzGetTicks();
 	baseTime2 = baseTime;
 
 	modifier = 1.0f;

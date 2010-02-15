@@ -8,7 +8,6 @@ noinst_HEADERS = \
 	editbox.h \
 	form.h \
 	label.h \
-	scrap.h \
 	slider.h \
 	tip.h \
 	widgbase.h \
@@ -21,7 +20,6 @@ libwidget_a_SOURCES = \
 	editbox.c \
 	form.c \
 	label.c \
-	scrap.c \
 	slider.c \
 	tip.c \
 	widget.c

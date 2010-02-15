@@ -23,6 +23,7 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/framework/utf.h"
+#include "lib/framework/wzapp_c.h"
 #include "objects.h"
 #include "basedef.h"
 #include "map.h"
@@ -1332,7 +1333,6 @@ void kf_toggleTrapCursor(void)
 	const char *msg;
 	bool trap = !war_GetTrapCursor();
 	war_SetTrapCursor(trap);
-	SDL_WM_GrabInput(trap);
 	sasprintf((char**)&msg, _("Trap cursor %s"), trap ? "ON" : "OFF");
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
@@ -1359,7 +1359,7 @@ void	kf_TogglePauseMode( void )
 		// If cursor trapping is enabled allow the cursor to leave the window
 		if (war_GetTrapCursor())
 		{
-			SDL_WM_GrabInput(SDL_GRAB_OFF);
+			wzReleaseMouse();
 		}
 
 		/* And stop the clock */
@@ -1378,7 +1378,7 @@ void	kf_TogglePauseMode( void )
 		// Re-enable cursor trapping if it is enabled
 		if (war_GetTrapCursor())
 		{
-			SDL_WM_GrabInput(SDL_GRAB_ON);
+			wzGrabMouse();
 		}
 
 		/* And start the clock again */
@@ -1973,7 +1973,7 @@ void kf_SendTextMessage(void)
 		// FIXME: Why are we using duplicate defines? INPBUF_CR == KEY_RETURN == SDLK_RETURN
 
 		// Kill if they hit return or keypad enter or it maxes out console or it's more than one line long
-		if ((ch == INPBUF_CR) || (ch == SDLK_KP_ENTER) || (strlen(sTextToSend)>=MAX_CONSOLE_STRING_LENGTH-16) // Prefixes with ERROR: and terminates with '?'
+		if ((ch == INPBUF_CR) || (ch == KEY_KPENTER) || (strlen(sTextToSend)>=MAX_CONSOLE_STRING_LENGTH-16) // Prefixes with ERROR: and terminates with '?'
 		 || iV_GetTextWidth(sTextToSend) > (pie_GetVideoBufferWidth()-64))// sendit
 		{
 			bAllowOtherKeyPresses = true;

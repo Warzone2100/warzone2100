@@ -71,10 +71,10 @@ extern unsigned int audio_GetSampleQueueCount(void);
 extern unsigned int audio_GetSampleListCount(void);
 extern unsigned int sound_GetActiveSamplesCount(void);
 
+extern void             audioTest(void);
+
 #if defined(__cplusplus)
 }
 #endif
-
-extern void 		audioTest(void);
 
 #endif // __INCLUDED_LIB_SOUND_AUDIO_H__

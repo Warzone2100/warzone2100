@@ -978,10 +978,14 @@ BOOL startGameOptions4Menu(void)
 	return true;
 }
 
+typedef struct { int w, h; } HACK;  // HACK Make it compile. Previous behaviour was to crash, anyway.
+
 // Video Options
 BOOL runGameOptions4Menu(void)
 {
-	SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
+	//SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
+	HACK fakeMode = {42, 42};
+	HACK *modes[2] = {&fakeMode, NULL};
 	UDWORD id = widgRunScreen(psWScreen);
 
 	switch (id)

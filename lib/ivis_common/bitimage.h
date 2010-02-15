@@ -22,6 +22,11 @@
 
 #include "ivisdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 static inline WZ_DECL_PURE unsigned short iV_GetImageWidth(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->NumImages);
@@ -67,5 +72,8 @@ static inline WZ_DECL_PURE unsigned short iV_GetImageCenterY(const IMAGEFILE *Im
 extern IMAGEFILE *iV_LoadImageFile(const char *FileData);
 extern void iV_FreeImageFile(IMAGEFILE *ImageFile);
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif
