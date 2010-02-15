@@ -14,17 +14,20 @@ FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_1) $(FRAME
 HEADER_SEARCH_PATHS = .. $(inherited)
 LIBRARY_SEARCH_PATHS = $(inherited) $(LIBRARY_SEARCH_PATHS_QUOTED_1)
 GCC_MODEL_TUNING = G5
-OTHER_CFLAGS = -Wno-pointer-to-int-cast -Wmissing-declarations -Wstrict-prototypes -Wdeclaration-after-statement $(inherited)
+OTHER_CFLAGS = -Wno-pointer-to-int-cast -Wmissing-declarations -Wstrict-prototypes -Wdeclaration-after-statement $(inherited) // Warning flags that c++ does not like
 OTHER_CPLUSPLUSFLAGS = 
 GCC_PRECOMPILE_PREFIX_HEADER = YES
 GCC_PREFIX_HEADER = 
-GCC_WARN_ABOUT_RETURN_TYPE = YES
-GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES
-WARNING_CFLAGS = -Wall -Wno-unused-label -Wno-format-security -Wno-strict-aliasing -Wmissing-field-initializers -Wcast-align -Wwrite-strings -Wpointer-arith
-GCC_WARN_UNUSED_FUNCTION = YES
-GCC_WARN_UNUSED_LABEL = YES
-GCC_WARN_UNUSED_VALUE = YES
-GCC_WARN_UNUSED_VARIABLE = YES
+
+// Warnings
+GCC_WARN_ABOUT_RETURN_TYPE = YES // -Wreturn-type
+GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES // -Wmissing-field-initializers
+WARNING_CFLAGS = -Wall -Wno-unused-label -Wno-format-security -Wno-strict-aliasing -Wmissing-field-initializers -Wcast-align -Wwrite-strings -Wpointer-arith // Wno-missing-declarations is set on GLee.c; otherwise we would have +3000 warnings
+GCC_WARN_UNUSED_FUNCTION = YES // -Wunused-function
+GCC_WARN_UNUSED_LABEL = YES // -Wunused-label
+GCC_WARN_UNUSED_VALUE = YES // -Wunused-value
+GCC_WARN_UNUSED_VARIABLE = YES // -Wunused-variable
+
 FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks"
 FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "$(SRCROOT)/build/$(CONFIGURATION)"
 FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks"

@@ -49,8 +49,8 @@ EXTRA_DIST= \
 	macosx/configs/Vorbis-Debug.xcconfig \
 	macosx/configs/Vorbis-Release.xcconfig \
 	macosx/configs/Warzone-All.xcconfig \
-	macosx/configs/warzone-debug.xcconfig \
-	macosx/configs/warzone-release.xcconfig \
+	macosx/configs/Warzone-Debug.xcconfig \
+	macosx/configs/Warzone-Release.xcconfig \
 	macosx/configs/Warzone-StaticAnalyzer.xcconfig \
 	macosx/configs/Zlib-All.xcconfig \
 	macosx/configs/Zlib-Debug.xcconfig \
