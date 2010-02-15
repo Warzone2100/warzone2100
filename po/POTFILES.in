@@ -84,14 +84,6 @@ data/base/script/text/tech.slo
 data/base/script/text/tutorial3.slo
 data/base/script/text/vtols2.slo
 data/base/script/text/vtols.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player0.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player1.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player2.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player3.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player4.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player5.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player6.slo
-data/mods/multiplay/aivolution/multiplay/skirmish/player7.slo
 data/mods/multiplay/ntw/messages/strings/names.txt
 data/mods/multiplay/ntw/multiplay/script/autoenable.slo
 data/mods/multiplay/ntw/multiplay/script/camtech.slo
@@ -299,7 +291,6 @@ src/selection.c
 src/seqdisp.c
 src/stats.c
 src/structure.c
-src/target.c
 src/text.c
 src/texture.c
 src/transporter.c

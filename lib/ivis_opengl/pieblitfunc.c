@@ -69,11 +69,13 @@ void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetAlphaTest(false);
 
+	glPushAttrib(GL_CURRENT_BIT);     // HACK Why is this only needed after the Qt port branch merge?
 	glColor4ubv(colour.vector);
 	glBegin(GL_LINE_STRIP);
 	glVertex2f(x0, y0);
 	glVertex2f(x1, y1);
 	glEnd();
+	glPopAttrib();                    // HACK Why is this only needed after the Qt port branch merge?
 	pie_SetTexturePage(prevTexPage);  // HACK Why is this only needed in the Qt port branch?
 }
 
@@ -84,6 +86,7 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 {
 	pie_SetAlphaTest(false);
 
+	glPushAttrib(GL_CURRENT_BIT);     // HACK Why is this only needed after the Qt port branch merge?
 	glColor4ubv(colour.vector);
 	glBegin(GL_TRIANGLE_STRIP);
 		glVertex2i(x0, y0);
@@ -91,6 +94,7 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 		glVertex2i(x0, y1);
 		glVertex2i(x1, y1);
 	glEnd();
+	glPopAttrib();                    // HACK Why is this only needed after the Qt port branch merge?
 }
 
 
@@ -117,6 +121,7 @@ void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 	if (y1>psRendSurface->clip.bottom)
 		y1 = psRendSurface->clip.bottom;
 
+	glPushAttrib(GL_CURRENT_BIT);     // HACK Why is this only needed after the Qt port branch merge?
 	glColor4ubv(colour.vector);
 	glBegin(GL_LINE_STRIP);
 	glVertex2f(x0, y0);
@@ -125,6 +130,7 @@ void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 	glVertex2f(x0, y1);
 	glVertex2f(x0, y0);
 	glEnd();
+	glPopAttrib();                    // HACK Why is this only needed after the Qt port branch merge?
 	pie_SetTexturePage(prevTexPage);  // HACK Why is this only needed in the Qt port branch?
 }
 
@@ -133,7 +139,7 @@ void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
 	int prevTexPage = rendStates.texPage;
-	pie_SetRendMode(REND_FLAT);
+	pie_SetRendMode(REND_OPAQUE);
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_DrawRect(x0, y0, x1, y1, colour);
 	pie_SetTexturePage(prevTexPage);  // HACK Why is this only needed in the Qt port branch?
@@ -157,7 +163,7 @@ void pie_TransBoxFill(float x0, float y0, float x1, float y1)
 void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
-	pie_SetRendMode(REND_ALPHA_FLAT);
+	pie_SetRendMode(REND_ALPHA);
 	pie_DrawRect(x0, y0, x1, y1, light);
 }
 
@@ -173,7 +179,7 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	Image = &ImageFile->ImageDefs[ID];
 
 	ASSERT_OR_RETURN(, Image->TPageID < MAX_NUM_TPAGEIDS, "Out of range 2: %d", (int)Image->TPageID);
-	pie_SetRendMode(REND_ALPHA_TEX);
+	pie_SetRendMode(REND_ALPHA);
 	pie_SetAlphaTest(true);
 
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
@@ -199,7 +205,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	Image = &ImageFile->ImageDefs[ID];
 
 	ASSERT_OR_RETURN(, Image->TPageID < MAX_NUM_TPAGEIDS, "Out of range 2: %d", (int)Image->TPageID);
-	pie_SetRendMode(REND_GOURAUD_TEX);
+	pie_SetRendMode(REND_OPAQUE);
 	pie_SetAlphaTest(true);
 
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
@@ -314,7 +320,7 @@ void pie_DownLoadRadar(UDWORD *buffer, int width, int height)
 void pie_RenderRadar(int x, int y, int width, int height)
 {
 	pie_SetTexturePage(radarTexture);
-	pie_SetRendMode(REND_GOURAUD_TEX);
+	pie_SetRendMode(REND_OPAQUE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glColor4ubv(WZCOL_WHITE.vector);

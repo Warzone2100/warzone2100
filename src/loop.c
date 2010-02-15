@@ -78,7 +78,6 @@
 #include "mapgrid.h"
 #include "edit3d.h"
 #include "drive.h"
-#include "target.h"
 #include "fpath.h"
 #include "scriptextern.h"
 #include "cluster.h"
@@ -146,6 +145,7 @@ GAMECODE gameLoop(void)
 	BOOL		quitting=false;
 	INT_RETVAL	intRetVal;
 	int	        clearMode = 0;
+	bool gameTicked = deltaGameTime != 0;
 
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
 	{
@@ -181,7 +181,7 @@ GAMECODE gameLoop(void)
 
 	if (!paused)
 	{
-		if (!scriptPaused() && !editPaused())
+		if (!scriptPaused() && !editPaused() && gameTicked)
 		{
 			/* Update the event system */
 			if (!bInTutorial)
@@ -190,15 +190,12 @@ GAMECODE gameLoop(void)
 			}
 			else
 			{
-				eventProcessTriggers(gameTime2/SCR_TICKRATE);
+				eventProcessTriggers(realTime/SCR_TICKRATE);
 			}
 		}
 
 		/* Run the in game interface and see if it grabbed any mouse clicks */
-	  	if (!rotActive
-		 && getWidgetsStatus()
-		 && dragBox3D.status != DRAG_DRAGGING
-		 && wallDrag.status != DRAG_DRAGGING)
+		if (!rotActive && getWidgetsStatus() && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING)
 		{
 			intRetVal = intRunWidgets();
 		}
@@ -208,7 +205,7 @@ GAMECODE gameLoop(void)
 		}
 
 		//don't process the object lists if paused or about to quit to the front end
-		if (!(gameUpdatePaused() || intRetVal == INT_QUIT))
+		if (!gameUpdatePaused() && intRetVal != INT_QUIT)
 		{
 			if( dragBox3D.status != DRAG_DRAGGING
 				&& wallDrag.status != DRAG_DRAGGING
@@ -227,7 +224,7 @@ GAMECODE gameLoop(void)
 			// check all flag positions for duplicate delivery points
 			checkFactoryFlags();
 #endif
-			if (!editPaused())
+			if (!editPaused() && gameTicked)
 			{
 				// Update abandoned structures
 				handleAbandonedStructures();
@@ -237,28 +234,26 @@ GAMECODE gameLoop(void)
 			process3DBuilding();
 
 			// Update the base movement stuff
+			// FIXME This function will be redundant with logical updates.
 			moveUpdateBaseSpeed();
 
 			// Update the visibility change stuff
 			visUpdateLevel();
 
-			// Put all droids/structures/features into the grid.
-			gridReset();
-
-			// Check which objects are visible.
-			processVisibility();
-
-			if (!editPaused())
+			if (!editPaused() && gameTicked)
 			{
+				// Put all droids/structures/features into the grid.
+				gridReset();
+
+				// Check which objects are visible.
+				processVisibility();
+
 				//update the findpath system
 				fpathUpdate();
-			}
 
-			// update the cluster system
-			clusterUpdate();
+				// update the cluster system
+				clusterUpdate();
 
-			if (!editPaused())
-			{
 				// update the command droids
 				cmdDroidUpdate();
 				if(getDrivingStatus())
@@ -273,7 +268,7 @@ GAMECODE gameLoop(void)
 				multiPlayerLoop();
 			}
 
-			if (!editPaused())
+			if (!editPaused() && gameTicked)
 			{
 
 			fireWaitingCallbacks(); //Now is the good time to fire waiting callbacks (since interpreter is off now)
@@ -448,7 +443,7 @@ GAMECODE gameLoop(void)
 			}
 
 			}
-			else // if editPaused()
+			else // if editPaused() or not gameTicked - make sure visual effects are updated
 			{
 				for (i = 0; i < MAX_PLAYERS; i++)
 				{
@@ -472,7 +467,10 @@ GAMECODE gameLoop(void)
 			/* update animations */
 			animObj_Update();
 
-			objmemUpdate();
+			if (gameTicked)
+			{
+				objmemUpdate();
+			}
 		}
 		if (!consolePaused())
 		{

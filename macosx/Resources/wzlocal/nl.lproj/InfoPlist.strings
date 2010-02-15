@@ -1,0 +1,7 @@
+/* Localized versions of Info.plist keys */
+
+CFBundleName = "Warzone"; /* Name of the app bundle */
+
+NSHumanReadableCopyright = "Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2010 The Warzone 2100 Project";  /* Copyright string */
+
+"Warzone 2100 Map / Mod File" = "Warzone 2100 Map / Mod File"; /* Description of .wz files */

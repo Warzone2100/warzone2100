@@ -573,9 +573,9 @@ void	doBuildingLights( void )
 void	findSunVector( void )
 {
 	Vector3f val = {
-		4096 - getStaticTimeValueRange(16384,8192),
-		0 - getStaticTimeValueRange(16384,4096),
-		4096 - getStaticTimeValueRange(49152,8192)
+		4096 - getModularScaledGraphicsTime(16384,8192),
+		0 - getModularScaledGraphicsTime(16384,4096),
+		4096 - getModularScaledGraphicsTime(49152,8192)
 	};
 
 	setTheSun(val);

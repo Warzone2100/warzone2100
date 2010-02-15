@@ -362,7 +362,7 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	}
 	else
 	{
-		result->y = map_TileHeight_new(x, y);
+		result->y = map_TileHeight(x, y);
 		if (water)
 		{
 			result->y = map_WaterHeight(x, y);
@@ -485,7 +485,7 @@ static void setSectorDecals(int x, int y,
 			{
 				continue;
 			}
-			if (mapTile(i,j)->decal)
+			if (TILE_HAS_DECAL(mapTile(i, j)))
 			{
 				getTileTexCoords(*uv, mapTile(i,j)->texture);
 				averageUV(&center, *uv);

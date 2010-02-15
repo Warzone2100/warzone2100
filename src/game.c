@@ -1075,7 +1075,9 @@ static bool deserializeSaveGameV19Data(PHYSFS_file* fileHandle, SAVE_GAME_V19* s
 		for (j = 0; j < MAX_PLAYERS; ++j)
 		{
 			if (!PHYSFS_readUBE8(fileHandle, &serializeGame->alliances[i][j]))
+			{
 				return false;
+			}
 		}
 	}
 
@@ -2162,7 +2164,6 @@ static bool writeMapFile(const char* fileName);
 static BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity);
 
 static BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize);
-static DROID_TEMPLATE *FindDroidTemplate(const char * const name);
 
 static BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists);
 static BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
@@ -2501,9 +2502,15 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		{
 			for(i=0; i<MAX_PLAYERS; i++)
 			{
+		                alliancebits[i] |= 0;
 				for(j=0; j<MAX_PLAYERS; j++)
 				{
 					alliances[i][j] = saveGameData.alliances[i][j];
+					if (i == j) alliances[i][j] = ALLIANCE_FORMED;	// hack to fix old savegames
+					if (game.alliance == ALLIANCES_TEAMS && alliances[i][j] == ALLIANCE_FORMED)
+					{
+			                	alliancebits[i] |= 1 << j;
+					}
 				}
 			}
 			for(i=0; i<MAX_PLAYERS; i++)
@@ -3481,7 +3488,7 @@ error:
 // -----------------------------------------------------------------------------------------
 
 // Modified by AlexL , now takes a filename, with no popup....
-BOOL saveGame(char *aFileName, SDWORD saveType)
+BOOL saveGame(char *aFileName, GAME_TYPE saveType)
 {
 	UDWORD			fileExtension;
 	DROID			*psDroid, *psNext;
@@ -4701,22 +4708,6 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		{
 			return false;
 		}
-		// find the level dataset
-/*		psNewLevel = levFindDataSet(aLevelName);
-		if (psNewLevel == NULL)
-		{
-			DBERROR(("gameLoadV6: couldn't find level data"));
-			return false;
-		}
-		//check to see whether mission automatically starts
-		if (gameType == GTYPE_SAVE_START)
-		{
-//			launchMission();
-			if (!levLoadData(aLevelName, NULL, 0))
-			{
-				return false;
-			}
-		}*/
 
 		if (saveGameVersion >= VERSION_33)
 		{
@@ -5036,7 +5027,6 @@ BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-// Used for all droids
 BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 {
 	SAVE_DROIDINIT *pDroidInit;
@@ -5060,87 +5050,44 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 		endian_udword(&pDroidInit->burnStart);
 		endian_udword(&pDroidInit->burnDamage);
 
-		pDroidInit->player=RemapPlayerNumber(pDroidInit->player);
-
-		if (pDroidInit->player >= MAX_PLAYERS) {
+		pDroidInit->player = RemapPlayerNumber(pDroidInit->player);
+		if (pDroidInit->player >= MAX_PLAYERS)
+		{
 			pDroidInit->player = MAX_PLAYERS-1;	// now don't lose any droids ... force them to be the last player
 			NumberOfSkippedDroids++;
 		}
 
-
-		psTemplate = (DROID_TEMPLATE *)FindDroidTemplate(pDroidInit->name);
-
-		if(psTemplate==NULL)
+		psTemplate = getTemplateFromTranslatedNameNoPlayer(pDroidInit->name);
+		if (psTemplate == NULL)
 		{
-			debug( LOG_NEVER, "loadSaveUnitInitV2:\nUnable to find template for %s player %d", pDroidInit->name,pDroidInit->player );
+			debug(LOG_ERROR, "Unable to find template for %s for player %d", pDroidInit->name, pDroidInit->player);
 		}
 		else
 		{
-			ASSERT( psTemplate != NULL,
-				"loadSaveUnitInitV2: Invalid template pointer" );
+			ASSERT(psTemplate != NULL, "Invalid template pointer");
+			psDroid = buildDroid(psTemplate, (pDroidInit->x & (~TILE_MASK)) + TILE_UNITS/2, (pDroidInit->y  & (~TILE_MASK)) + TILE_UNITS/2,	pDroidInit->player, false);
 
-// Need to set apCompList[pDroidInit->player][componenttype][compid] = AVAILABLE for each droid.
-
+			if (psDroid)
 			{
-
-				psDroid = buildDroid(psTemplate, (pDroidInit->x & (~TILE_MASK)) + TILE_UNITS/2, (pDroidInit->y  & (~TILE_MASK)) + TILE_UNITS/2,
-					pDroidInit->player, false);
-
-				if (psDroid) {
-					psDroid->id = pDroidInit->id;
-					psDroid->direction = pDroidInit->direction;
-					addDroid(psDroid, apsDroidLists);
-				}
-				else
-				{
-
-					debug( LOG_ERROR, "This droid cannot be built - %s", pDroidInit->name );
-					return false;
-				}
+				psDroid->id = pDroidInit->id;
+				psDroid->direction = pDroidInit->direction;
+				addDroid(psDroid, apsDroidLists);
+			}
+			else
+			{
+				debug(LOG_ERROR, "This droid cannot be built - %s", pDroidInit->name);
+				return false;
 			}
 		}
 		pDroidInit++;
 	}
 	if(NumberOfSkippedDroids)
 	{
-		debug( LOG_ERROR, "unitLoad: Bad Player number in %d unit(s)... assigned to the last player!\n", NumberOfSkippedDroids );
+		debug(LOG_ERROR, "Bad Player number in %d unit(s)... assigned to the last player!", NumberOfSkippedDroids);
 		return false;
 	}
 	return true;
 }
-
-
-// -----------------------------------------------------------------------------------------
-DROID_TEMPLATE *FindDroidTemplate(const char * const name)
-{
-	UDWORD			TempPlayer;
-	DROID_TEMPLATE *Template;
-
-	// get the name from the resource associated with it
-	const char * const nameStr = strresGetString(psStringRes, name);
-	if (!nameStr)
-	{
-		debug( LOG_ERROR, "Cannot find resource for template - %s", name );
-		return NULL;
-	}
-
-	for(TempPlayer=0; TempPlayer<MAX_PLAYERS; TempPlayer++) {
-		Template = apsDroidTemplates[TempPlayer];
-
-		while(Template) {
-
-			//if(strcmp(nameStr,Template->pName)==0) {
-			if(strcmp(nameStr,Template->aName)==0) {
-				return Template;
-			}
-			Template = Template->psNext;
-		}
-	}
-
-	return NULL;
-}
-
-
 
 // -----------------------------------------------------------------------------------------
 // Remaps old player number based on position on map to new owner
@@ -5469,8 +5416,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	}
 	if ((version >= VERSION_14) && (version < VERSION_18))//version 14
 	{
-
-//warning V14 - v17 only
+		//warning V14 - v17 only
 		//current Save Droid V18+ uses larger tarStatName
 		//subsequent structure elements are not aligned between the two
 		psSaveDroidV14 = (SAVE_DROID_V14*)psSaveDroid;
@@ -5492,20 +5438,19 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
                 orderDroid(psDroid, DORDER_STOP);
 			}
 		}
-//warning V14 - v17 only
+		//warning V14 - v17 only
 		//rebuild the object pointer from the ID
 		FIXME_CAST_ASSIGN(UDWORD, psDroid->psBaseStruct, psSaveDroidV14->baseStructID);
 		psDroid->group = psSaveDroidV14->group;
 		psDroid->selected = psSaveDroidV14->selected;
-//20feb		psDroid->cluster = psSaveDroidV14->cluster;
 		psDroid->died = psSaveDroidV14->died;
 		psDroid->lastEmission =	psSaveDroidV14->lastEmission;
-//warning V14 - v17 only
+		//warning V14 - v17 only
 		for (i=0; i < MAX_PLAYERS; i++)
 		{
 			psDroid->visible[i]	= psSaveDroidV14->visible[i];
 		}
-//end warning V14 - v17 only
+		//end warning V14 - v17 only
 	}
 	else if (version >= VERSION_18)//version 18
 	{
@@ -5531,7 +5476,6 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		FIXME_CAST_ASSIGN(UDWORD, psDroid->psBaseStruct, psSaveDroid->baseStructID);
 		psDroid->group = psSaveDroid->group;
 		psDroid->selected = psSaveDroid->selected;
-//20feb		psDroid->cluster = psSaveDroid->cluster;
 		psDroid->died = psSaveDroid->died;
 		psDroid->lastEmission =	psSaveDroid->lastEmission;
 		for (i=0; i < MAX_PLAYERS; i++)
@@ -5675,9 +5619,6 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	if (psSaveDroid->sMove.isInFormation)
 	{
 		psDroid->sMove.psFormation = formationFind(psSaveDroid->formationX, psSaveDroid->formationY);
-//		psSaveDroid->formationDir;
-//		psSaveDroid->formationX;
-//		psSaveDroid->formationY;
 		// join a formation if it exists at the destination
 		if (psDroid->sMove.psFormation)
 		{
@@ -5698,7 +5639,7 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	if (psDroid->sMove.Status == MOVEWAITROUTE)
 	{
 		psDroid->sMove.Status = MOVEINACTIVE;
-		fpathDroidRoute(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
+		fpathDroidRoute(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY, FMT_MOVE);
 		psDroid->sMove.Status = MOVEWAITROUTE;
 	}
 }
@@ -5714,8 +5655,6 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	SDWORD					compInc;
 	UDWORD					burnTime;
 
-//	version;
-
 	psTemplate = &sTemplate;
 
 	psTemplate->pName = NULL;
@@ -5728,7 +5667,6 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	found = true;
 	for (i=1; i < DROID_MAXCOMP; i++)
 	{
-
 		compInc = getCompFromName(i, psSaveDroid->asBits[i].name);
 
         //HACK to get the game to load when ECMs, Sensors or RepairUnits have been deleted
@@ -5773,11 +5711,6 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	psTemplate->droidType = psSaveDroid->droidType;
 
 	/*create the Droid */
-
-	// ignore brains for now
-	// not any *$&!!! more - JOHN
-//	psTemplate->asParts[COMP_BRAIN] = 0;
-
 
 	turnOffMultiMsg(true);
 
@@ -5889,7 +5822,6 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	FIXME_CAST_ASSIGN(UDWORD, psDroid->psBaseStruct, psSaveDroid->baseStructID);
 	psDroid->group = psSaveDroid->group;
 	psDroid->selected = psSaveDroid->selected;
-//20feb	psDroid->cluster = psSaveDroid->cluster;
 	psDroid->died = psSaveDroid->died;
 	psDroid->lastEmission =	psSaveDroid->lastEmission;
 	for (i=0; i < MAX_PLAYERS; i++)
@@ -6468,15 +6400,6 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		else if (psDroid->droidType == DROID_TRANSPORTER)
 		{
 				//set current TransPorter group
-/*set in build droid
-				if (!grpCreate(&psGrp))
-				{
-					DBPRINTF(("droid build: unable to create group\n"));
-					return false;
-				}
-				psDroid->psGroup = NULL;
-				grpJoin(psGrp, psDroid);
-*/
 			psCurrentTransGroup = psDroid->psGroup;
 			addDroid(psDroid, ppsCurrentDroidLists);
 		}
@@ -6544,8 +6467,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 				}
 			}
 
-
-            //save out experience level
+			//save out experience level
 			psSaveDroid->numKills	= (UDWORD) psCurr->experience;
 			//version 11
 			//Watermelon:endian_udword for new save format
@@ -6607,7 +6529,6 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 
 			psSaveDroid->group = psCurr->group;
 			psSaveDroid->selected = psCurr->selected;
-//20feb			psSaveDroid->cluster = psCurr->cluster;
 			psSaveDroid->died = psCurr->died;
 			psSaveDroid->lastEmission = psCurr->lastEmission;
 			for (i=0; i < MAX_PLAYERS; i++)
@@ -6979,13 +6900,6 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 			}
 		}
 
-        //check not too near the edge
-        /*if (psSaveStructure->pos.x <= TILE_UNITS || psSaveStructure->pos.y <= TILE_UNITS)
-        {
-			DBERROR(("Structure being built too near the edge of the map"));
-            continue;
-        }*/
-
         //check not trying to build too near the edge
     	if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE
     	 || map_coord(psSaveStructure->x) > mapWidth - TOO_NEAR_EDGE)
@@ -7004,7 +6918,8 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 
         psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y,
 			psSaveStructure->player,true);
-	ASSERT_OR_RETURN(false, psStructure, "Unable to create structure");
+		ASSERT(psStructure, "Unable to create structure");
+		if (!psStructure) continue;
 
         /*The original code here didn't work and so the scriptwriters worked
         round it by using the module ID - so making it work now will screw up
@@ -7015,10 +6930,8 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 			//copy the values across
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
-//			psStructure->pos.z = (UWORD)psSaveStructure->pos.z;
 			psStructure->direction = psSaveStructure->direction;
 		}
-
 
 		psStructure->inFire = psSaveStructure->inFire;
 		psStructure->burnDamage = psSaveStructure->burnDamage;
@@ -7043,10 +6956,6 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 		}
 
 		psStructure->currentBuildPts = (SWORD)psSaveStructure->currentBuildPts;
-//		psStructure->body = psSaveStructure->body;
-//		psStructure->armour = psSaveStructure->armour;
-//		psStructure->resistance = psSaveStructure->resistance;
-//		psStructure->repair = psSaveStructure->repair;
 		switch (psStructure->pStructureType->type)
 		{
 			case REF_FACTORY:
@@ -7145,7 +7054,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 	RESEARCH_FACILITY		*psResearch;
 	REPAIR_FACILITY			*psRepair;
 	STRUCTURE_STATS			*psStats = NULL;
-    STRUCTURE_STATS			*psModule;
+	STRUCTURE_STATS			*psModule;
 	UDWORD					capacity;
 	UDWORD					count, statInc;
 	BOOL					found;
@@ -7268,12 +7177,6 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 				continue;
 			}
 		}
-        //check not too near the edge
-        /*if (psSaveStructure->pos.x <= TILE_UNITS || psSaveStructure->pos.y <= TILE_UNITS)
-        {
-			DBERROR(("Structure being built too near the edge of the map"));
-            continue;
-        }*/
         //check not trying to build too near the edge
     	if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE
     	 || map_coord(psSaveStructure->x) > mapWidth - TOO_NEAR_EDGE)
@@ -7291,7 +7194,8 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
         }
 
 	psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y, psSaveStructure->player,true);
-	ASSERT_OR_RETURN(false, psStructure, "Unable to create structure");
+		ASSERT(psStructure, "Unable to create structure");
+		if (!psStructure) continue;
 
         /*The original code here didn't work and so the scriptwriters worked
         round it by using the module ID - so making it work now will screw up
@@ -7565,7 +7469,6 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 
 					break;
 				case REF_RESEARCH:
-//21feb					intCheckResearchButton();
 					break;
 				default:
 					//do nothing for factories etc
@@ -7708,12 +7611,6 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 				continue;
 			}
 		}
-        //check not too near the edge
-        /*if (psSaveStructure->pos.x <= TILE_UNITS || psSaveStructure->pos.y <= TILE_UNITS)
-        {
-			DBERROR(("Structure being built too near the edge of the map"));
-            continue;
-        }*/
         //check not trying to build too near the edge
     	if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE
     	 || map_coord(psSaveStructure->x) > mapWidth - TOO_NEAR_EDGE)
@@ -7731,7 +7628,8 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
         }
 
 	psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y, psSaveStructure->player, true);
-	ASSERT_OR_RETURN(false, psStructure, "Unable to create structure");
+		ASSERT(psStructure, "Unable to create structure");
+		if (!psStructure) continue;
 
         /*The original code here didn't work and so the scriptwriters worked
         round it by using the module ID - so making it work now will screw up
@@ -7775,10 +7673,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 
 		psStructure->currentBuildPts = (SWORD)psSaveStructure->currentBuildPts;
 		psStructure->currentPowerAccrued = psSaveStructure->currentPowerAccrued;
-        psStructure->resistance = (SWORD)psSaveStructure->resistance;
-        //armour not ever adjusted...
-
-
+		psStructure->resistance = (SWORD)psSaveStructure->resistance;
 //		psStructure->repair = (UWORD)psSaveStructure->repair;
 		switch (psStructure->pStructureType->type)
 		{
@@ -7905,11 +7800,6 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
                 }
 				break;
 			case REF_REPAIR_FACILITY: //CODE THIS SOMETIME
-/*
-	// The group the droids to be repaired by this facility belong to
-	struct _droid_group		*psGroup;
-	struct DROID			*psGrpNext;
-*/
 				psRepair = ((REPAIR_FACILITY *)psStructure->pFunctionality);
 
 				psRepair->power = ((REPAIR_DROID_FUNCTION *) psStructure->pStructureType->asFuncList[0])->repairPoints;
@@ -7998,7 +7888,6 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 
 					break;
 				case REF_RESEARCH:
-//21feb					intCheckResearchButton();
 					break;
 				default:
 					//do nothing for factories etc
@@ -8134,8 +8023,6 @@ BOOL writeStructFile(char *pFileName)
 				case REF_VTOL_FACTORY:
 					psFactory = ((FACTORY *)psCurr->pFunctionality);
 					psSaveStruct->capacity	= psFactory->capacity;
-                    //don't need to save this - it gets set up
-					//psSaveStruct->output			= psFactory->productionOutput;
 					psSaveStruct->quantity			= psFactory->quantity;
 					psSaveStruct->droidTimeStarted	= psFactory->timeStarted;
 					psSaveStruct->powerAccrued		= psFactory->powerAccrued;
@@ -8170,21 +8057,18 @@ BOOL writeStructFile(char *pFileName)
 					{
 						psSaveStruct->commandId = NULL_ID;
 					}
-                    //secondary order added - AB 22/04/99
-                    psSaveStruct->dummy2 = psFactory->secondaryOrder;
+					//secondary order added - AB 22/04/99
+					psSaveStruct->dummy2 = psFactory->secondaryOrder;
 
 					break;
 				case REF_RESEARCH:
 					psSaveStruct->capacity = ((RESEARCH_FACILITY *)psCurr->
 						pFunctionality)->capacity;
-                    //don't need to save this - it gets set up
-					//psSaveStruct->output = ((RESEARCH_FACILITY *)psCurr->
-					//	pFunctionality)->researchPoints;
 					psSaveStruct->powerAccrued = ((RESEARCH_FACILITY *)psCurr->
 						pFunctionality)->powerAccrued;
 					psSaveStruct->timeStartHold	= ((RESEARCH_FACILITY *)psCurr->
 						pFunctionality)->timeStartHold;
-    				if (((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject)
+					if (((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject)
 					{
 						psSaveStruct->subjectInc = 0;
 						researchId = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->
@@ -8214,7 +8098,7 @@ BOOL writeStructFile(char *pFileName)
 					psRepair = ((REPAIR_FACILITY *)psCurr->pFunctionality);
 					psSaveStruct->droidTimeStarted = psRepair->timeStarted;
 					psSaveStruct->powerAccrued = psRepair->powerAccrued;
-                    psSaveStruct->dummy2 = psRepair->currentPtsAdded;
+					psSaveStruct->dummy2 = psRepair->currentPtsAdded;
 
 					if (psRepair->psObj != NULL)
 					{
@@ -8728,8 +8612,6 @@ BOOL writeFeatureFile(char *pFileName)
 		{
 			psSaveFeature->visible[i] = psCurr->visible[i];
 		}
-
-//		psSaveFeature->featureInc = psCurr->psStats - asFeatureStats;
 
 		/* SAVE_FEATURE is FEATURE_SAVE_V20 */
 		/* FEATURE_SAVE_V20 includes OBJECT_SAVE_V20 */
@@ -10131,16 +10013,6 @@ BOOL loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords)
 
 		for (playerInc = 0; playerInc < MAX_PLAYERS; playerInc++)
 		{
-/* what did this do then ?
-			if (psSaveResearch->researched[playerInc] != 0 &&
-				psSaveResearch->researched[playerInc] != STARTED_RESEARCH &&
-				psSaveResearch->researched[playerInc] != CANCELLED_RESEARCH &&
-				psSaveResearch->researched[playerInc] != RESEARCHED)
-			{
-				//ignore this record
-				continue; //to next player
-			}
-*/
 			PLAYER_RESEARCH *psPlRes;
 
 			psPlRes=&asPlayerResList[playerInc][statInc];
@@ -10150,7 +10022,6 @@ BOOL loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords)
 
 			if (psSaveResearch->possible[playerInc]!=0)
 				MakeResearchPossible(psPlRes);
-
 
 			psPlRes->currentPoints = psSaveResearch->currentPoints[playerInc];
 

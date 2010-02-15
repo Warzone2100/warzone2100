@@ -1091,7 +1091,7 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 	return false;
 }
 
-extern UDWORD gameTime2;
+extern UDWORD realTime;  // FIXME Include a header...
 
 /* Run a form widget */
 void formRun(W_FORM *psWidget, W_CONTEXT *psContext)
@@ -1104,7 +1104,7 @@ void formRun(W_FORM *psWidget, W_CONTEXT *psContext)
 	memset(&sTabPos, 0x0, sizeof(TAB_POS));
 	if(psWidget->style & WFORM_CLICKABLE) {
 		if(((W_CLICKFORM *)psWidget)->state & WCLICK_FLASH) {
-			if (((gameTime2/250) % 2) == 0) {
+			if (((realTime/250) % 2) == 0) {
 				((W_CLICKFORM *)psWidget)->state &= ~WCLICK_FLASHON;
 			} else {
 				((W_CLICKFORM *)psWidget)->state |= WCLICK_FLASHON;

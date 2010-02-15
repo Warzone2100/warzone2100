@@ -69,7 +69,6 @@
 #include "scripttabs.h"
 #include "scriptextern.h"
 #include "scriptcb.h"
-#include "target.h"
 #include "drive.h"
 #include "cmddroid.h"
 #include "selection.h"
@@ -1384,21 +1383,12 @@ void displayWorld(void)
 
 static BOOL mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 {
-	if(mouseXPos > x0 && mouseXPos < x1 && mouseYPos > y0 && mouseYPos < y1)
-	{
-		return true;
-	}
-
-	return false;
+	return mouseXPos > x0 && mouseXPos < x1 && mouseYPos > y0 && mouseYPos < y1;
 }
 
-BOOL DrawnInLastFrame(SDWORD Frame)
+BOOL DrawnInLastFrame(int32_t frame)
 {
-	if (Frame>=(SDWORD)StartOfLastFrame)
-	{
-		return true;
-	}
-	return false;
+	return frame >= (int32_t)StartOfLastFrame;
 }
 
 
@@ -1740,34 +1730,9 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 	else if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && ownDroid)
 	{
 		// try to attack your own unit
-		DROID* psCurr;
-
-		for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
-		{
-			if ((psCurr != psDroid) && // can't attack yourself
-			    (psCurr->selected))
-			{
-				if ((psCurr->droidType == DROID_WEAPON) ||
-				    (psCurr->droidType == DROID_CYBORG) ||
-				    (psCurr->droidType == DROID_CYBORG_SUPER) ||
-				    (psCurr->droidType == DROID_COMMAND))
-				{
-					orderDroidObj(psCurr, DORDER_ATTACK, (BASE_OBJECT*)psDroid);
-					FeedbackOrderGiven();
-				}
-				else if (psCurr->droidType == DROID_SENSOR)
-				{
-					orderDroidObj(psCurr, DORDER_OBSERVE, (BASE_OBJECT*)psDroid);
-					FeedbackOrderGiven();
-				}
-				else if (psCurr->droidType == DROID_REPAIR ||
-				          psCurr->droidType == DROID_CYBORG_REPAIR)
-				{
-					orderDroidObj(psCurr, DORDER_DROIDREPAIR, (BASE_OBJECT*)psDroid);
-					FeedbackOrderGiven();
-				}
-			}
-		}
+		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psDroid, ctrlShiftDown());
+		FeedbackOrderGiven();
+		driveDisableTactical();
 	}
 	else if (psDroid->droidType == DROID_TRANSPORTER)
 	{
@@ -1960,7 +1925,7 @@ static inline void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE s
 	if (!bRightClickOrders) printStructureInfo(psStructure);
 
 	/* Got to be built. Also, you can't 'select' derricks */
-	if ( (psStructure->status == SS_BUILT) &&
+	if (!keyDown(KEY_LALT) && !keyDown(KEY_RALT) && (psStructure->status == SS_BUILT) &&
 		(psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR) && ownStruct)
 	{
 		if (bRightClickOrders)
@@ -2027,39 +1992,13 @@ static inline void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE s
 		/* Establish new one */
 		psStructure->selected = true;
 	}
-	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && ownStruct)
+	bSensorAssigned = false;
+	orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psStructure, ctrlShiftDown());
+	FeedbackOrderGiven();
+	if (bSensorAssigned)
 	{
-		DROID* psCurr;
-
-		// try to attack your own structure
-		for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
-		{
-			if (psCurr->selected)
-			{
-				if ((psCurr->droidType == DROID_WEAPON) || cyborgDroid(psCurr) ||
-					(psCurr->droidType == DROID_COMMAND))
-				{
-					orderDroidObj(psCurr, DORDER_ATTACK, (BASE_OBJECT*)psStructure);
-					FeedbackOrderGiven();
-				}
-				else if (psCurr->droidType == DROID_SENSOR)
-				{
-					orderDroidObj(psCurr, DORDER_OBSERVE, (BASE_OBJECT*)psStructure);
-					FeedbackOrderGiven();
-				}
-			}
-		}
-	}
-	else
-	{
-		bSensorAssigned = false;
-		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psStructure, ctrlShiftDown());
-		FeedbackOrderGiven();
-		if (bSensorAssigned)
-		{
-			clearSelection();
-			assignSensorTarget((BASE_OBJECT *)psStructure);
-		}
+		clearSelection();
+		assignSensorTarget((BASE_OBJECT *)psStructure);
 	}
 
 	driveDisableTactical();
@@ -2215,7 +2154,7 @@ void	dealWithLMB( void )
 	/* What have we clicked on? */
 	if(driveModeActive() && !driveTacticalActive())
 	{
-		psClickedOn = targetGetCurrent();
+		psClickedOn = NULL;  //targetGetCurrent();
 		if (psClickedOn)
 		{
 			dealWithLMBObject(psClickedOn);
@@ -2594,7 +2533,7 @@ static void dealWithRMB( void )
 					for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
 					{
 						if (psDroid->selected &&
-						    chooseOrderObj(psDroid, psClickedOn) == DORDER_DEMOLISH)
+						    chooseOrderObj(psDroid, psClickedOn, false) == DORDER_DEMOLISH)
 						{
 							bDemolish = true;
 							break;
@@ -2842,7 +2781,7 @@ STRUCTURE	*psStructure;
 	/*	Not a droid, so maybe a structure or feature?
 		If still NULL after this then nothing */
 	if(driveModeActive() && !driveTacticalActive()) {
-		psNotDroid = targetGetCurrent();
+		psNotDroid = NULL;  //targetGetCurrent();
 	} else {
 		psNotDroid = getTileOccupier(mouseTileX, mouseTileY);
 	}

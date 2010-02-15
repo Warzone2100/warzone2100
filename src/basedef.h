@@ -60,6 +60,7 @@ typedef struct _tilePos
   For explanation of yaw/pitch/roll look for "flight dynamics" in your encyclopedia.
 */
 
+/// Along with NEXTOBJ, the elements of the base class SIMPLE_OBJECT. FIXME If converting to C++, this can be a normal base class and a lot less ugly.
 #define BASE_ELEMENTS1(pointerType) \
 	OBJECT_TYPE     type;                           /**< The type of object */ \
 	UDWORD          id;                             /**< ID number of the object */ \
@@ -67,7 +68,8 @@ typedef struct _tilePos
 	float           direction;                      /**< Object's yaw +ve rotation around up-axis */ \
 	SWORD           pitch;                          /**< Object's pitch +ve rotation around right-axis (nose up/down) */ \
 	UBYTE           player;                         /**< Which player the object belongs to */ \
-	SWORD           roll                            /**< Object's roll +ve rotation around forward-axis (left wing up/down) */
+	SWORD           roll;                           /**< Object's roll +ve rotation around forward-axis (left wing up/down) */ \
+	uint32_t        time                           /**< Game time of given space-time position. */
 
 #define BASE_ELEMENTS2(pointerType) \
 	SCREEN_DISP_DATA    sDisplay;                   /**< screen coordinate details */ \
@@ -91,10 +93,12 @@ typedef struct _tilePos
 	TILEPOS             *watchedTiles;		/**< Variable size array of watched tiles, NULL for features */ \
 	UDWORD              armour[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES]
 
+/// Along with BASE_ELEMENTS1, the elements of the base class BASE_OBJECT. FIXME If converting to C++, this can be a normal base class and a lot less ugly.
 #define NEXTOBJ(pointerType) \
 	pointerType     *psNext;			/**< Pointer to the next object in the object list */ \
 	pointerType     *psNextFunc			/**< Pointer to the next object in the function list */
 
+/// The elements of the base class SIMPLE_ELEMENTS.
 #define SIMPLE_ELEMENTS(pointerType) \
 	BASE_ELEMENTS1(pointerType); \
 	NEXTOBJ(pointerType)
@@ -105,13 +109,41 @@ typedef struct _tilePos
 
 typedef struct BASE_OBJECT
 {
-	BASE_ELEMENTS( struct BASE_OBJECT );
+	BASE_ELEMENTS( struct BASE_OBJECT );  ///< FIXME Should be converted to C++, and be written as ": public SIMPLE_OBJECT", avoiding a whole lot of casts.
 } WZ_DECL_MAY_ALIAS BASE_OBJECT;
 
 typedef struct SIMPLE_OBJECT
 {
 	SIMPLE_ELEMENTS( struct SIMPLE_OBJECT );
 } SIMPLE_OBJECT;
+
+/// Space-time coordinate.
+typedef struct SpaceTime
+{
+	uint32_t  time;        ///< Game time
+
+	Vector3uw pos;         ///< Position of the object
+	int16_t   pitch;       ///< Object's pitch +ve rotation around right-axis (nose up/down)
+	float     direction;   ///< Object's yaw +ve rotation around up-axis
+	int16_t   roll;        ///< Object's roll +ve rotation around forward-axis (left wing up/down)
+} SPACETIME;
+
+static inline SPACETIME constructSpacetime(Vector3uw pos, float direction, int16_t pitch, int16_t roll, uint32_t time)
+{	// we don't support C99 struct assignments
+	SPACETIME ret;
+	ret.time = time;
+	ret.pos.x = pos.x;
+	ret.pos.y = pos.y;
+	ret.pos.z = pos.z;
+	ret.pitch = pitch;
+	ret.direction = direction;
+	ret.roll = roll;
+
+	return ret;
+}
+
+#define GET_SPACETIME(psObj) constructSpacetime(psObj->pos, psObj->direction, psObj->pitch, psObj->roll, psObj->time)
+#define SET_SPACETIME(psObj, st) do { psObj->pos = st.pos; psObj->direction = st.direction; psObj->pitch = st.pitch; psObj->roll = st.roll; psObj->time = st.time; } while(0)
 
 static inline bool isDead(const BASE_OBJECT* psObj)
 {

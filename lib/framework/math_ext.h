@@ -114,16 +114,6 @@ static inline WZ_DECL_CONST float hypotf(float x, float y)
 
 
 /*!
- * Calculates a random floating point number in a certain range
- * \return Random number between 0.f and 1.f
- */
-static inline float frandom(void)
-{
-	return (float)rand() / (float)RAND_MAX;
-}
-
-
-/*!
  * Converts x from degrees to radian
  * \param x Degree value to convert
  * \return Radian value

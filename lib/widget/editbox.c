@@ -141,15 +141,15 @@ void editBoxInitialise(W_EDITBOX *psWidget)
 
 
 /* Insert a character into a text buffer */
-static void insertChar(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD *pPos, utf_32_char ch)
+static void insertChar(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD *pPos, utf_32_char ch, W_EDITBOX *psWidget)
 {
 	utf_32_char	*pSrc, *pDest;
 	UDWORD	len, count;
 
 	if (ch == '\0') return;
 
-	ASSERT( *pPos <= utf32len(*pBuffer),
-		"insertChar: Invalid insertion point" );
+	ASSERT( *pPos <= utf32len(*pBuffer), "Invalid insertion point" );
+	ASSERT_OR_RETURN ( , psWidget, "No widget to modify?");
 
 	len = utf32len(*pBuffer);
 
@@ -158,8 +158,12 @@ static void insertChar(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD *
 		/* Buffer is full */
 		utf_32_char *newBuffer = realloc(*pBuffer, *pBufferAllocated*2);
 		if (!newBuffer)
+		{
+			debug(LOG_ERROR, "Couldn't realloc() string?");
 			return;
-		*pBuffer = newBuffer;
+		}
+		// update old pointer from the widget
+		psWidget->aText = *pBuffer = newBuffer;
 		*pBufferAllocated *= 2;
 	}
 
@@ -178,7 +182,7 @@ static void insertChar(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD *
 
 
 /* Put a character into a text buffer overwriting any text under the cursor */
-static void overwriteChar(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD *pPos, utf_32_char ch)
+static void overwriteChar(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD *pPos, utf_32_char ch, W_EDITBOX *psWidget)
 {
 	UDWORD	len;
 
@@ -192,7 +196,7 @@ static void overwriteChar(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWOR
 	if (*pPos == len)
 	{
 		// At end of string.
-		insertChar(pBuffer, pBufferAllocated, pPos, ch);
+		insertChar(pBuffer, pBufferAllocated, pPos, ch, psWidget);
 		return;
 	}
 
@@ -510,11 +514,11 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			/* Dealt with everything else this must be a printable character */
 			if (editState == WEDBS_INSERT)
 			{
-				insertChar(&pBuffer, &pBufferAllocated, &pos, unicode);
+				insertChar(&pBuffer, &pBufferAllocated, &pos, unicode, psWidget);
 			}
 			else
 			{
-				overwriteChar(&pBuffer, &pBufferAllocated, &pos, unicode);
+				overwriteChar(&pBuffer, &pBufferAllocated, &pos, unicode, psWidget);
 			}
 
 			/* Update the printable chars */

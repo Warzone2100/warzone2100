@@ -119,7 +119,11 @@ void	droidUpdateRecoil( DROID *psDroid );
 
 static void cancelBuild(DROID *psDroid)
 {
+	objTrace(psDroid->id, "Droid build order cancelled");
 	psDroid->action = DACTION_NONE;
+	psDroid->order = DORDER_NONE;
+	setDroidTarget(psDroid, NULL);
+	setDroidActionTarget(psDroid, NULL, 0);
 
 	/* Notify scripts we just became idle */
 	psScrCBOrderDroid = psDroid;
@@ -678,10 +682,11 @@ void droidBurn(DROID *psDroid)
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid)
 {
-	Vector3i dv;
-	UDWORD	percentDamage, emissionInterval;
-	BASE_OBJECT	*psBeingTargetted = NULL;
-	SDWORD	damageToDo;
+	Vector3i        dv;
+	UDWORD          percentDamage, emissionInterval;
+	BASE_OBJECT     *psBeingTargetted = NULL;
+	SDWORD          damageToDo;
+	unsigned        i;
 
 	CHECK_DROID(psDroid);
 
@@ -700,8 +705,17 @@ void droidUpdate(DROID *psDroid)
 	}
 #endif
 
+	// Save old droid position, update time.
+	psDroid->prevSpacetime = GET_SPACETIME(psDroid);
+	psDroid->time = gameTime;
+	for (i = 0; i < MAX(1, psDroid->numWeaps); ++i)
+	{
+		psDroid->asWeaps[i].prevRotation = psDroid->asWeaps[i].rotation;
+		psDroid->asWeaps[i].prevPitch    = psDroid->asWeaps[i].pitch;
+	}
+
 	// update the cluster of the droid
-	if (psDroid->id % 20 == frameGetFrameNumber() % 20)
+	if ((psDroid->id + gameTime)/2000 != (psDroid->id + gameTime - deltaGameTime)/2000)
 	{
 		clustUpdateObject((BASE_OBJECT *)psDroid);
 	}
@@ -846,7 +860,7 @@ void droidUpdate(DROID *psDroid)
 	calcDroidIllumination(psDroid);
 
 	// Check the resistance level of the droid
-	if (psDroid->id % 50 == frameGetFrameNumber() % 50)
+	if ((psDroid->id + gameTime)/833 != (psDroid->id + gameTime - deltaGameTime)/833)
 	{
 		// Zero resistance means not currently been attacked - ignore these
 		if (psDroid->resistance && psDroid->resistance < droidResistance(psDroid))
@@ -1076,8 +1090,17 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	{
 		// Update the interface
 		intBuildFinished(psDroid);
-
-		cancelBuild(psDroid);
+		if ((map_coord(psDroid->orderX) == map_coord(psDroid->orderX2) && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))
+		    || psDroid->order != DORDER_LINEBUILD)
+		{
+			cancelBuild(psDroid);
+		}
+		else
+		{
+			psDroid->action = DACTION_NONE;	// make us continue line build
+			setDroidTarget(psDroid, NULL);
+			setDroidActionTarget(psDroid, NULL, 0);
+		}
 		return false;
 	}
 
@@ -2470,8 +2493,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	memset(psDroid->asOrderList, 0, sizeof(ORDER_LIST)*ORDER_LIST_MAX);
 
 	psDroid->iAudioID = NO_SOUND;
-	psDroid->lastSync = 0;
-
 	psDroid->psCurAnim = NULL;
 	psDroid->group = UBYTE_MAX;
 	psDroid->psBaseStruct = NULL;
@@ -2640,6 +2661,8 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
 	psDroid->originalBody = psDroid->body;
 	psDroid->expectedDamage = 0;  // Begin life optimistically.
+	psDroid->time = gameTime;
+	psDroid->prevSpacetime.time = gameTime - MAX(1, deltaGameTime);
 
 	//create the droids weapons
 	if (pTemplate->numWeaps > 0)
@@ -2650,10 +2673,11 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 			psDroid->asWeaps[inc].shotsFired=0;
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
 			psDroid->asWeaps[inc].recoilValue = 0;
-			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->
-				asWeaps[inc].nStat)->numRounds;
+			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->asWeaps[inc].nStat)->numRounds;
 			psDroid->asWeaps[inc].rotation = 0;
 			psDroid->asWeaps[inc].pitch = 0;
+			psDroid->asWeaps[inc].prevRotation = 0;
+			psDroid->asWeaps[inc].prevPitch = 0;
 		}
 	}
 	else
@@ -3739,7 +3763,7 @@ BOOL isVtolDroid(const DROID* psDroid)
 	    && psDroid->droidType != DROID_TRANSPORTER;
 }
 
-/*returns true if the droid has lift propulsion and is above the ground level*/
+// returns true if the droid has lift propulsion and is moving
 BOOL isFlying(const DROID* psDroid)
 {
 	return (asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->propulsionType == PROPULSION_TYPE_LIFT

@@ -156,16 +156,25 @@ iIMDShape	*getRandomDebrisImd( void )
 }
 // -------------------------------------------------------------------------------
 
-//iIMDShape	*pAssemblyPointIMDs[NUM_FACTORY_TYPES][MAX_FACTORY];
 iIMDShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY];
+
+static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned flagType)
+{
+	char pieName[100];
+	snprintf(pieName, sizeof(pieName), nameFormat, n);
+	pAssemblyPointIMDs[flagType][i] = (iIMDShape *)resGetData("IMD", pieName);
+	if (!pAssemblyPointIMDs[flagType][i])
+	{
+		debug(LOG_ERROR, "Can't find assembly point graphic %s for factory", pieName);
+
+		return false;
+	}
+	return true;
+}
 
 BOOL	initMiscImds( void )
 {
-	char		facName[] = "MINUM0.pie";
-	char		cybName[] = "MICNUM0.pie";
-	char		vtolName[] = "MIVNUM0.pie";
-	char		pieNum[2];
-	UDWORD		i;
+	unsigned        i;
 
 	/* Do the new loading system */
 	multiLoadMiscImds();
@@ -173,38 +182,19 @@ BOOL	initMiscImds( void )
 	/* Now load the multi array stuff */
 	for (i=0; i < MAX_FACTORY; i++)
 	{
-		snprintf(pieNum, sizeof(pieNum), "%u", i + 1);
-
-		facName[5] = *pieNum;
-		pAssemblyPointIMDs[FACTORY_FLAG][i] = (iIMDShape*)resGetData("IMD", facName);
-		if (!pAssemblyPointIMDs[FACTORY_FLAG][i])
+		unsigned n = i + 1;
+		if (n > 5)
 		{
-			debug( LOG_ERROR, "Can't find assembly point graphic for factory" );
-
-			return(false);
+			n = 5;
+			debug(LOG_ERROR, "Need to add more assembly point graphics, if increasing MAX_FACTORY.");
 		}
-		cybName[6] = *pieNum;
-		pAssemblyPointIMDs[CYBORG_FLAG][i] = (iIMDShape*)resGetData("IMD", cybName);
-		if (!pAssemblyPointIMDs[CYBORG_FLAG][i])
-		{
-			debug( LOG_ERROR, "Can't find assembly point graphic for cyborg factory" );
 
-			return(false);
-		}
-		vtolName[6] = *pieNum;
-		pAssemblyPointIMDs[VTOL_FLAG][i] = (iIMDShape*)resGetData("IMD", vtolName);
-		if (!pAssemblyPointIMDs[VTOL_FLAG][i])
+		if (!initMiscImd(i, n, "MINUM%u.pie",  FACTORY_FLAG) ||
+		    !initMiscImd(i, n, "MICNUM%u.pie", CYBORG_FLAG) ||
+		    !initMiscImd(i, n, "MIVNUM%u.pie", VTOL_FLAG) ||
+		    !initMiscImd(i, 1, "mirnum%u.pie", REPAIR_FLAG))
 		{
-			debug( LOG_ERROR, "Can't find assembly point graphic for vtol factory" );
-
-			return(false);
-		}
-		pAssemblyPointIMDs[REPAIR_FLAG][i] = (iIMDShape*)resGetData("IMD", "mirnum1.pie");
-		if (!pAssemblyPointIMDs[REPAIR_FLAG][i])
-		{
-			debug( LOG_ERROR, "Can't find assembly point graphic for repair facility" );
-
-			return(false);
+			return false;
 		}
 	}
 	return(true);

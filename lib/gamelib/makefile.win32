@@ -18,6 +18,6 @@ SRC= \
 
 LIB=gamelib
 
-CLEANFILES=audp_parser.tab.h
+CLEANFILES=audp_parser.tab.h $(PARSERS)
 
 include $(top_srcdir)/makerules/lib.mk

@@ -52,6 +52,7 @@
 
 #include "mapgrid.h"
 #include "display3d.h"
+#include "random.h"
 
 
 /* The statistics for the features */
@@ -303,11 +304,11 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	/* Dump down the building wrecks at random angles - still looks shit though */
 	if(psStats->subType == FEAT_BUILD_WRECK)
 	{
-		psFeature->direction = rand() % 360;
+		psFeature->direction = gameRand(360);
 	}
 	else if(psStats->subType == FEAT_TREE)
 	{
-		psFeature->direction = rand() % 360;
+		psFeature->direction = gameRand(360);
 	}
 	else
 	{

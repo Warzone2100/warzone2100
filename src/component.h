@@ -67,7 +67,7 @@ extern void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3
 extern void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
 extern void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
 extern void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
-extern void	displayComponentObject(BASE_OBJECT *psObj);
+extern void displayComponentObject(DROID *psDroid);
 
 extern void	compPersonToBits(DROID *psDroid);
 

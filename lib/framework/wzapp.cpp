@@ -134,6 +134,7 @@ void WzMainWindow::loadCursor(CURSOR cursor, int x, int y, QBuffer &buffer)
 WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget(format, parent)
 {
 	myself = this;
+	notReadyToPaint = true;
 	timer = new QTimer(this);
 	tickCount.start();
 	connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
@@ -191,15 +192,23 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 
 	// Fonts
 	regular.setFamily("DejaVu Sans");
-	regular.setPointSize(12);
+	regular.setPixelSize(12);
 	bold.setFamily("DejaVu Sans");
-	bold.setPointSize(21);
+	bold.setPixelSize(21);
 	bold.setBold(true);
+	small.setFamily("DejaVu Sans");
+	small.setPixelSize(9);
+
+	// Want focusOutEvent messages.
+	setFocusPolicy(Qt::ClickFocus);
+
+	// Want áéíóú inputMethodEvent messages.
+	setAttribute(Qt::WA_InputMethodEnabled);
 }
 
 WzMainWindow::~WzMainWindow()
 {
-	for (int i = 0; i < CURSOR_MAX; free(cursors[i++])) ;
+	for (int i = 0; i < CURSOR_MAX; delete cursors[i++]) ;
 }
 
 WzMainWindow *WzMainWindow::instance()
@@ -236,6 +245,11 @@ void WzMainWindow::resizeGL(int width, int height)
 
 void WzMainWindow::paintGL()
 {
+	if (notReadyToPaint)
+	{
+		return;
+	}
+
 	mainLoop();
 
 	// Tell the input system about the start of another frame
@@ -254,17 +268,18 @@ void WzMainWindow::setCursor(QCursor cursor)
 
 WzMainWindow *WzMainWindow::myself = NULL;
 
-void WzMainWindow::setFontType(enum iV_fonts FontID)
+void WzMainWindow::setFontType(enum iV_fonts fontID)
 {
-	fontID = FontID;
-
-	switch (FontID)
+	switch (fontID)
 	{
 	case font_regular:
 		setFont(regular);
 		break;
 	case font_large:
 		setFont(bold);
+		break;
+	case font_small:
+		setFont(small);
 		break;
 	default:
 		break;
@@ -273,9 +288,9 @@ void WzMainWindow::setFontType(enum iV_fonts FontID)
 
 void WzMainWindow::setFontSize(float size)
 {
-	regular.setPointSizeF(size);
-	bold.setPointSizeF(size);
-	setFontType(fontID);
+	QFont theFont = font();
+	theFont.setPixelSize(size);
+	setFont(theFont);
 }
 
 void WzMainWindow::mouseMoveEvent(QMouseEvent *event)
@@ -438,6 +453,21 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 
 	bool isKeypad = event->modifiers() & Qt::KeypadModifier;
 
+	switch (event->text().size())
+	{
+		case 0:
+			debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d", pressed ? "Down" : "Up  ", event->key(), isKeypad);
+		case 1:
+			debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d, 0x%04X", pressed ? "Down" : "Up  ", event->key(), isKeypad, event->text().unicode()[0].unicode());
+			break;
+		case 2:
+			debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d, 0x%04X, 0x%04X", pressed ? "Down" : "Up  ", event->key(), isKeypad, event->text().unicode()[0].unicode(), event->text().unicode()[1].unicode());
+			break;
+		case 3:
+			debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d, 0x%04X, 0x%04X, ...", pressed ? "Down" : "Up  ", event->key(), isKeypad, event->text().unicode()[0].unicode(), event->text().unicode()[1].unicode());
+			break;
+	}
+
 	if (!isKeypad)
 	{
 		switch (event->key())
@@ -576,6 +606,8 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 	{
 		inputAddBuffer(lastKey, event->text().unicode()->unicode());
 	}
+
+	event->accept();
 }
 
 void WzMainWindow::keyReleaseEvent(QKeyEvent *event)
@@ -586,6 +618,22 @@ void WzMainWindow::keyReleaseEvent(QKeyEvent *event)
 void WzMainWindow::keyPressEvent(QKeyEvent *event)
 {
 	realHandleKeyEvent(event, true);
+}
+
+void WzMainWindow::inputMethodEvent(QInputMethodEvent *event)
+{
+	// Foward all "committed" characters. Should be more advanced than that, but better than nothing.
+	for (int i = 0; i < event->commitString().size(); ++i)
+	{
+		inputAddBuffer(' ', event->commitString()[i].unicode());
+	}
+	QWidget::inputMethodEvent(event);
+}
+
+void WzMainWindow::focusOutEvent(QFocusEvent *event)
+{
+	debug(LOG_INPUT, "Main window lost focus.");
+	inputLoseFocus();
 }
 
 void WzMainWindow::close()
@@ -636,6 +684,7 @@ int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool full
 	screenWidth = w;
 	screenHeight = h;
 	mainwindow.show();
+	mainwindow.setReadyToPaint();
 
 	ssprintf(buf, "Video Mode %d x %d (%s)", w, h, fullscreen ? "fullscreen" : "window");
 	addDumpInfo(buf);
@@ -677,7 +726,7 @@ const char *wzGetClipboard()
 
 	text = clipboard->text(QClipboard::Selection);				// try X11 specific buffer first
 	if (text.isEmpty()) text = clipboard->text(QClipboard::Clipboard);	// if not, try generic clipboard
-	sstrcpy(clipText, text.toAscii().constData());
+	sstrcpy(clipText, text.toUtf8().constData());
 	return clipText;
 }
 
@@ -908,10 +957,10 @@ void inputNewFrame(void)
 }
 
 /*!
- * Release all keys (and buttons) when we loose focus
+ * Release all keys (and buttons) when we lose focus
  */
 // FIXME This seems to be totally ignored! (Try switching focus while the dragbox is open)
-void inputLooseFocus(void)
+void inputLoseFocus()
 {
 	unsigned int i;
 
@@ -1047,17 +1096,17 @@ void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBol
 
 unsigned int iV_GetTextWidth(const char* string)
 {
-	return WzMainWindow::instance()->fontMetrics().width(string, -1);
+	return WzMainWindow::instance()->fontMetrics().width(QString::fromUtf8(string), -1);
 }
 
 unsigned int iV_GetCountedTextWidth(const char* string, size_t string_length)
 {
-	return WzMainWindow::instance()->fontMetrics().width(string, string_length);
+	return WzMainWindow::instance()->fontMetrics().width(QString::fromUtf8(string), string_length);
 }
 
 unsigned int iV_GetTextHeight(const char* string)
 {
-	return WzMainWindow::instance()->fontMetrics().boundingRect(string).height();
+	return WzMainWindow::instance()->fontMetrics().boundingRect(QString::fromUtf8(string)).height();
 }
 
 unsigned int iV_GetCharWidth(uint32_t charCode)
@@ -1091,11 +1140,10 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	painter.translate(XPos, YPos);
 	painter.rotate(rotation);
 	painter.setPen(fontColor);
-	painter.drawText(0, 0, string);
+	painter.drawText(0, 0, QString::fromUtf8(string));
 }
 
 void iV_SetTextSize(float size)
 {
-	// Hmmm, implementing this was useless, since it's never called anyway.
 	WzMainWindow::instance()->setFontSize(size);
 }

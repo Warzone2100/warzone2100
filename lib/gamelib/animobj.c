@@ -161,7 +161,7 @@ animObj_Update( void )
 		/* remove any expired (non-looping) animations */
 		if ( (bRemove == false) && (psObj->uwCycles != 0) )
 		{
-			dwTime = gameTime - psObj->udwStartTime - psObj->udwStartDelay;
+			dwTime = graphicsTime - psObj->udwStartTime - psObj->udwStartDelay;
 
 			if ( dwTime > (psObj->psAnim->uwAnimTime*psObj->uwCycles) )
 			{
@@ -221,7 +221,7 @@ animObj_Add( void *pParentObj, int iAnimID,
 	/* init object */
 	psObj->uwID           = (UWORD) iAnimID;
 	psObj->psAnim         = (ANIM3D *) psAnim;
-	psObj->udwStartTime   = gameTime;
+	psObj->udwStartTime   = gameTime - deltaGameTime;  // Start animation at beginning of update period.
 	psObj->udwStartDelay  = udwStartDelay;
 	psObj->uwCycles       = uwCycles;
 	psObj->bVisible       = true;

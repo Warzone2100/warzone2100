@@ -297,6 +297,8 @@ typedef struct _structure
 	UDWORD          expectedDamage;                 ///< Expected damage to be caused by all currently incoming projectiles. This info is shared between all players,
 	                                                ///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 
+	uint32_t        prevTime;                       ///< Time of structure's previous tick.
+
 	/* anim data */
 	ANIM_OBJECT	*psCurAnim;
 

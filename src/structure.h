@@ -42,8 +42,6 @@ extern "C"
 #define ASSEMBLY_POINT_Z_PADDING 10
 
 #define	STRUCTURE_DAMAGE_SCALING	400
-// This should really be logarithmic
-#define	STRUCTURE_HEIGHT_SCATTER	(rand()%300)
 
 /* explosion data for when a structure is blown up - used by features as well*/
 #define	FLAME_MAX_ANIMS		4
@@ -437,6 +435,17 @@ static inline int structJammerPower(const STRUCTURE* psObj)
 static inline int structConcealment(const STRUCTURE* psObj)
 {
 	return objConcealment((const BASE_OBJECT*)psObj);
+}
+
+static inline float structureGetInterpolatedWeaponRotation(STRUCTURE *psStructure, int weaponSlot, uint32_t time)
+{
+	return interpolateDirection(psStructure->asWeaps[weaponSlot].prevRotation, psStructure->asWeaps[weaponSlot].rotation, psStructure->prevTime, psStructure->time, time);
+}
+
+static inline float structureGetInterpolatedWeaponPitch(STRUCTURE *psStructure, int weaponSlot, uint32_t time)
+{
+	// Aaargh, Direction[sic]. Angles can be 16-bit (65536 "degrees" in circle), or can be floats (360.0f degrees). Except here, where they are _unsigned_ integers from 0 to 360. All hail consistency!
+	return interpolateDirection(psStructure->asWeaps[weaponSlot].prevPitch, psStructure->asWeaps[weaponSlot].pitch, psStructure->prevTime, psStructure->time, time);
 }
 
 #define setStructureTarget(_psBuilding, _psNewTarget, _idx, _targetOrigin) _setStructureTarget(_psBuilding, _psNewTarget, _idx, _targetOrigin, __LINE__, __FUNCTION__)

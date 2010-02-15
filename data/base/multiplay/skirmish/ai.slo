@@ -176,7 +176,7 @@ private int			order;	// callback global
 trigger reachedTr				(CALL_DROID_REACH_LOCATION, me, ref droid, ref order);
 trigger buildExpandTr				(every, 600);
 trigger fortifyTr					(every,	1000);
-trigger upgradeStructuresTr			(every, 400 );
+trigger upgradeStructuresTr			(every, 360);
 trigger conDroidsTr					(every, 900);	// was 1400
 trigger repairDroidsTr				(every, 2600);
 trigger basedetailsTr				(every, 600	);
@@ -185,7 +185,7 @@ trigger buildOilDefenseOrRetreatTr	(every, 120	);
 trigger incendryTr					(every, 250 );
 trigger buildPowerGeneratorsTr		(every, 80	);
 trigger buildBaseTr					(every, 150	);
-trigger finishStructsTr				(every, 400 );
+trigger finishStructsTr				(every, 210);
 trigger droidBuiltTr				(CALL_NEWDROID,me, ref droid,ref structure);
 trigger	structBuiltTr				(CALL_STRUCTBUILT, me, ref droid, ref structure);
 trigger droidDestroyedTr			(CALL_DROID_DESTROYED,  me, ref droid);
@@ -1415,8 +1415,12 @@ event droidBuilt(droidBuiltTr)
 			}
 		}
 
+		if (droid.droidType == DROID_CONSTRUCT && structure.stattype == REF_FACTORY)
+		{
+			setEventTrigger(conDroids, chainloadTr);	// consider building more
+		}
 		// Continue building new droids right away
-		if(structure.stattype == REF_FACTORY)
+		else if(structure.stattype == REF_FACTORY)
 		{
 			factoryBuildDroid(structure);
 		}
@@ -1468,7 +1472,14 @@ event structBuilt(structBuiltTr)
 	}
 	else if (structure.stattype == REF_RESEARCH)
 	{
-		setEventTrigger(doResearch, chainloadTr);
+		if (isStructureAvailable(resModule, me))
+		{
+			orderDroidStatsLoc(droid, DORDER_BUILD, resModule, structure.x, structure.y);	// upgrade it.
+		}
+		else
+		{
+			setEventTrigger(doResearch, chainloadTr);
+		}
 	}
 
 	// Check if available trucks need to build more absolute necessities right away. We need a trigger here because
@@ -2465,7 +2476,7 @@ event vtolStructs(inactive)
 	_maxBuildTrucks = 3;
 	_maxTrucks = min(_maxBuildTrucks, max(_minBuildTrucks, idleGroup(buildGroup) / 2));
 
-	if(_numVtolFacs < maxVtolFacs[curTech])			// if not enough
+	if (isStructureAvailable(vtolFactory, me) and _numVtolFacs < maxVtolFacs[curTech])			// if not enough
 	{
 		// build factory
 		buildX = baseX;								// pick a location

@@ -1,0 +1,8 @@
+// Gettext settings for Release configuration
+
+#include "gettext-all.xcconfig"
+
+
+COPY_PHASE_STRIP = YES
+GCC_ENABLE_FIX_AND_CONTINUE = NO
+GCC_GENERATE_DEBUGGING_SYMBOLS = NO

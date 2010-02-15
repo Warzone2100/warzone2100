@@ -1142,8 +1142,7 @@ void aiUpdateDroid(DROID *psDroid)
 	{
 		if((psDroid->numWeaps > 0) && !hasCommander(psDroid))	//not assigned to commander
 		{
-			if((psDroid->id % TARGET_UPD_SKIP_FRAMES) ==
-				(frameGetFrameNumber() % TARGET_UPD_SKIP_FRAMES))
+			if((psDroid->id + gameTime)/TARGET_UPD_SKIP_FRAMES != (psDroid->id + gameTime - deltaGameTime)/TARGET_UPD_SKIP_FRAMES)
 			{
 				unsigned int i;
 

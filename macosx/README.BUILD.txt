@@ -1,7 +1,11 @@
-The minimum requirements to build Warzone are System 10.5 and Xcode 3.1.
+The minimum requirements to build Warzone are System 10.5, Xcode 3.1 and the Qt 4.6 moc.
+
 If you do not have Xcode 3.1 you can get it for free at Apple's website.
 http://developer.apple.com/technology/xcode.html
 You will need a free ADC Membership to download Xcode.
+
+If you do not the Qt 4.6 moc you can get it at the Qt website.
+http://qt.nokia.com/downloads/#lgpl
 
 This directory contains support files for the Mac OS X port of Warzone 2100.
 Since April, 2007, The Mac OS X port has been built using an Xcode project

@@ -74,7 +74,7 @@ extern void fpathUpdate(void);
 
 /** Find a route for a droid to a location.
  */
-extern FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
+extern FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType);
 
 /** Function pointer to the currently in-use blocking tile check function.
  *  

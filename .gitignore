@@ -136,3 +136,6 @@ cscope.out
 
 # Qt
 lib/framework/wzapp_moc.cpp
+
+# Ignore out-of-tree build.
+/build/

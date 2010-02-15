@@ -118,7 +118,7 @@ BOOL NETstartLogging(void)
 	time_t aclock;
 	struct tm *newtime;
 	char buf[256];
-	static const char filename[] = "netplay.log";
+	static char filename[256] = {'\0'};
 	int i;
 
 	for (i = 0; i < NUM_GAME_PACKETS; i++)
@@ -132,6 +132,7 @@ BOOL NETstartLogging(void)
 	time( &aclock );                 /* Get time in seconds */
 	newtime = localtime( &aclock );  /* Convert time to struct */
 
+	snprintf(filename, sizeof(filename), "logs/netplay-%02d%02d_%02d%02d%02d.log", newtime->tm_mon, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec );
 	pFileHandle = PHYSFS_openWrite( filename ); // open the file
 	if (!pFileHandle)
 	{

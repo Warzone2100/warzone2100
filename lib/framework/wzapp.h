@@ -5,7 +5,6 @@
 #include "lib/ivis_common/textdraw.h"
 #include "input.h"
 
-#if defined(__MACOSX__)
 #include <QtGui/QApplication>
 #include <QtCore/QTimer>
 #include <QtOpenGL/QGLWidget>
@@ -14,16 +13,6 @@
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
 #include <QtCore/QSemaphore>
-#else
-#include <QApplication>
-#include <QTimer>
-#include <QGLWidget>
-#include <QBuffer>
-#include <QTime>
-#include <QThread>
-#include <QMutex>
-#include <QSemaphore>
-#endif
 
 class WzMainWindow : public QGLWidget
 {
@@ -37,14 +26,16 @@ private:
 	void wheelEvent(QWheelEvent *event);
 	void keyPressEvent(QKeyEvent *event);
 	void keyReleaseEvent(QKeyEvent *event);
+	void inputMethodEvent(QInputMethodEvent *event);
 	void realHandleKeyEvent(QKeyEvent *event, bool pressed);
+	void focusOutEvent(QFocusEvent *event);
 	MOUSE_KEY_CODE buttonToIdx(Qt::MouseButton button);
 
 	QCursor *cursors[CURSOR_MAX];
 	QTimer *timer;
 	QTime tickCount;
-	QFont regular, bold;
-	enum iV_fonts fontID;
+	QFont regular, bold, small;
+	bool notReadyToPaint;  ///< HACK Don't draw during initial show(), since some global variables apparently aren't set up.
 	static WzMainWindow *myself;
 
 public:
@@ -59,6 +50,7 @@ public:
 	void setFontType(enum iV_fonts FontID);
 	void setFontSize(float size);
 	int ticks() { return tickCount.elapsed(); }
+	void setReadyToPaint() { notReadyToPaint = false; }
 
 public slots:
 	void tick();

@@ -1,8 +1,8 @@
 // technology auto enabler.
 
 public	int				initialPowerCl,initialPowerBa,initialPowerDe,numCamTech,numCamTechB,count,playnum;
-public	RESEARCHSTAT	camTech[254];
-public	RESEARCHSTAT	camTechB[15];
+public	RESEARCHSTAT	camTech[253];
+public	RESEARCHSTAT	camTechB[14];
 
 event setTechPower(CALL_GAMEINIT)
 {
