@@ -4402,7 +4402,7 @@ BOOL scrRandom(void)
 	}
 	else
 	{
-		iResult = gameRand(abs(range));
+		iResult = rand()%abs(range);
 	}
 
 	scrFunctionResult.v.ival = iResult;

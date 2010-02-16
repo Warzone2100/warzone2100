@@ -114,6 +114,7 @@ typedef enum
 	GAME_RESEARCHSTATUS,            ///< research state.
 	GAME_LASSAT,                    ///< lassat firing.
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
+	GAME_SYNC_DEBUG_STRING,         ///< For debugging purposes only. For checking if all clients do the same syncDebug() calls.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
 } MESSAGE_TYPES;
 
@@ -265,7 +266,7 @@ extern int mapDownloadProgress;
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern int   NETinit(BOOL bFirstCall);				// init
-BOOL NETsend(uint8_t player, const uint8_t *rawData, ssize_t rawLen);    ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+BOOL NETsend(uint8_t player, NETMESSAGE message);                        ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
 extern BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type);                  ///< recv a message from the net queues if possible.
 extern BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type);                 ///< recv a message from the game queues which is sceduled to execute by time, if possible.
 
@@ -317,6 +318,13 @@ extern bool NETgameIsCorrectVersion(GAMESTRUCT* check_game);
 extern void NET_InitPlayers(void);
 
 const char *messageTypeToString(unsigned messageType);
+
+/// Sync debugging. Only prints anything, if different players do different calls. Doesn't print anything, if all players that do the same calls get the same result, even if some players don't do any calls.
+#define syncDebug(...) do { _syncDebug(__FUNCTION__, __VA_ARGS__); } while(0)
+void _syncDebug(const char *function, const char *str, ...)
+	WZ_DECL_FORMAT(printf, 2, 3);
+void sendDebugSync(bool sendEvenIfEmpty);
+void recvDebugSync(NETQUEUE queue);
 
 #ifdef __cplusplus
 }

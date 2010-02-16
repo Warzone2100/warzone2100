@@ -2062,7 +2062,7 @@ UDWORD NETgetPacketsRecvd(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // Send a message to a player, option to guarantee message
-BOOL NETsend(uint8_t player, const uint8_t *rawData, ssize_t rawLen)
+BOOL NETsend(uint8_t player, NETMESSAGE message)
 {
 	ssize_t result = 0;
 
@@ -2082,7 +2082,11 @@ BOOL NETsend(uint8_t player, const uint8_t *rawData, ssize_t rawLen)
 			// We are the host, send directly to player.
 			if (connected_bsocket[player] != NULL)
 			{
+				uint8_t *rawData = NETmessageRawData(message);
+				size_t rawLen    = NETmessageRawSize(message);
 				result = writeAll(connected_bsocket[player], rawData, rawLen);
+				NETmessageDestroyRawData(rawData);  // Done with the data.
+
 				if (result == rawLen)
 				{
 					nStats.bytesSent   += rawLen;
@@ -2101,39 +2105,42 @@ BOOL NETsend(uint8_t player, const uint8_t *rawData, ssize_t rawLen)
 	else if (player == NetPlay.hostPlayer)
 	{
 		// We are a client, send directly to player, who happens to be the host.
-		if (tcp_socket && (result = writeAll(tcp_socket, rawData, rawLen) == rawLen))
+		if (tcp_socket)
 		{
-			return true;
-		}
-		else if (result == SOCKET_ERROR)
-		{
-			// Write error, most likely client disconnect.
-			debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-			debug(LOG_WARNING, "Host connection was broken?");
-			socketClose(tcp_socket);
-			tcp_socket = NULL;
-			NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
-			//Game is pretty much over --should just end everything when HOST dies.
-			NetPlay.isHostAlive = false;
+			uint8_t *rawData = NETmessageRawData(message);
+			size_t rawLen    = NETmessageRawSize(message);
+			result = writeAll(tcp_socket, rawData, rawLen);
+			NETmessageDestroyRawData(rawData);  // Done with the data.
+
+			if (result == rawLen)
+			{
+				nStats.bytesSent   += rawLen;
+				nStats.packetsSent += 1;
+			}
+			else if (result == SOCKET_ERROR)
+			{
+				// Write error, most likely client disconnect.
+				debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+				debug(LOG_WARNING, "Host connection was broken?");
+				socketClose(tcp_socket);
+				tcp_socket = NULL;
+				NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
+				//Game is pretty much over --should just end everything when HOST dies.
+				NetPlay.isHostAlive = false;
+			}
+
+			return result == rawLen;
 		}
 	}
 	else
 	{
 		// We are a client and can't send the data directly, ask the host to send the data to the player.
 		uint8_t sender = selectedPlayer;
-		uint16_t len;
-		while (rawLen > 0)
-		{
-			len = MIN(rawLen, 10000);
-			NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_SEND_TO_PLAYER);
-				NETuint8_t(&sender);
-				NETuint8_t(&player);
-				NETuint16_t(&len);                // Send length.
-				NETbin((uint8_t *)rawData, len);  // Sends length again. Cast away const.
-			NETend();
-			rawData += len;
-			rawLen  -= len;
-		}
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_SEND_TO_PLAYER);
+			NETuint8_t(&sender);
+			NETuint8_t(&player);
+			NETNETMESSAGE(&message);
+		NETend();
 	}
 
 	return false;
@@ -2150,16 +2157,15 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 		{
 			uint8_t sender;
 			uint8_t receiver;
-			uint8_t data[10000];
-			uint16_t len = sizeof(data);
+			NETMESSAGE message = NULL;
 			NETbeginDecode(playerQueue, NET_SEND_TO_PLAYER);
 				NETuint8_t(&sender);
 				NETuint8_t(&receiver);
-				NETuint16_t(&len);  // Get length.
-				NETbin(data, len);  // Gets and discards length.
+				NETNETMESSAGE(&message);  // Must destroy message later.
 			if (!NETend())
 			{
 				debug(LOG_ERROR, "Incomplete NET_SEND_TO_PLAYER.");
+				NETdestroyNETMESSAGE(message);
 				break;
 			}
 			if ((receiver == selectedPlayer || receiver == NET_ALL_PLAYERS) && playerQueue.index == NetPlay.hostPlayer)
@@ -2167,7 +2173,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				// Message was sent to us via the host.
 				if (sender != selectedPlayer)  // TODO Tell host not to send us our own broadcast messages.
 				{
-					NETinsertRawData(NETnetQueue(sender), data, len);
+					NETinsertMessageFromNet(NETnetQueue(sender), message);
 				}
 			}
 			else if (NetPlay.isHost && sender == playerQueue.index)
@@ -2176,31 +2182,31 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETbeginEncode(NETnetQueue(receiver), NET_SEND_TO_PLAYER);
 					NETuint8_t(&sender);
 					NETuint8_t(&receiver);
-					NETuint16_t(&len);  // Send length.
-					NETbin(data, len);  // Sends length again.
+					NETNETMESSAGE(&message);
 				NETend();
+
 				if (receiver == NET_ALL_PLAYERS)
 				{
-					NETinsertRawData(NETnetQueue(sender), data, len);  // Message is also for the host.
+					NETinsertMessageFromNet(NETnetQueue(sender), message);  // Message is also for the host.
 				}
 			}
 			else
 			{
 				debug(LOG_ERROR, "Player %d sent us a NET_SEND_TO_PLAYER addressed to %d from %d. We are %d.", playerQueue.index, receiver, sender, selectedPlayer);
 			}
+
+			NETdestroyNETMESSAGE(message);
 			break;
 		}
 		case NET_SHARE_GAME_QUEUE:
 		{
 			uint8_t player;
-			uint32_t size;
-			uint8_t buffer[65535];
+			NETMESSAGE message = NULL;
 
 			// Encoded in NETprocessSystemMessage in nettypes.cpp.
 			NETbeginDecode(playerQueue, NET_SHARE_GAME_QUEUE);
 				NETuint8_t(&player);
-				NETuint32_t(&size);
-				NETbin(buffer, sizeof(buffer));
+				NETNETMESSAGE(&message);
 			if (!NETend() || player > MAX_PLAYERS)
 			{
 				debug(LOG_ERROR, "Bad NET_SHARE_GAME_QUEUE message.");
@@ -2208,7 +2214,9 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			}
 
 			// TODO Check that playerQueue is actually responsible for this game queue.
-			NETinsertRawData(NETgameQueue(player), buffer, size);
+			NETinsertMessageFromNet(NETgameQueue(player), message);
+
+			NETdestroyNETMESSAGE(message);
 			break;
 		}
 		case NET_PLAYER_STATS:
@@ -2459,7 +2467,7 @@ checkMessages:
 		*queue = NETnetQueue(current);
 		while (NETisMessageReady(*queue))
 		{
-			*type = NETmessageType(*queue);
+			*type = NETmessageType(NETgetMessage(*queue));
 			if (!NETprocessSystemMessage(*queue, *type))
 			{
 				return true;  // We couldn't process the message, let the caller deal with it..
@@ -2480,7 +2488,7 @@ BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type)
 		*queue = NETgameQueue(current);
 		while (!checkPlayerGameTime(current) && NETisMessageReady(*queue))  // Check for any messages that are scheduled to be read now.
 		{
-			*type = NETmessageType(*queue);
+			*type = NETmessageType(NETgetMessage(*queue));
 
 			if (*type == GAME_GAME_TIME)
 			{
@@ -2994,7 +3002,7 @@ static void NETallowJoining(void)
 
 				NETinsertRawData(NETnetTmpQueue(i), buffer, size);
 
-				if (NETisMessageReady(NETnetTmpQueue(i)) && NETmessageType(NETnetTmpQueue(i)) == NET_JOIN)
+				if (NETisMessageReady(NETnetTmpQueue(i)) && NETmessageType(NETgetMessage(NETnetTmpQueue(i))) == NET_JOIN)
 				{
 					uint8_t j;
 					int8_t index;
@@ -3615,6 +3623,130 @@ unsigned int NETgetGameserverPort()
 	return gameserver_port;
 }
 
+#define MAX_LEN_LOG_LINE 512  // From debug.c - no use printing something longer.
+#define MAX_SYNC_MESSAGES 1000
+#define MAX_SYNC_HISTORY 100
+
+static unsigned syncDebugNext = 0;
+static uint32_t syncDebugNum[MAX_SYNC_HISTORY];
+static uint32_t syncDebugGameTime[MAX_SYNC_HISTORY];
+static char *syncDebugFunctions[MAX_SYNC_HISTORY][MAX_SYNC_MESSAGES];
+static char *syncDebugStrings[MAX_SYNC_HISTORY][MAX_SYNC_MESSAGES];
+
+void _syncDebug(const char *function, const char *str, ...)
+{
+	va_list ap;
+	char outputBuffer[MAX_LEN_LOG_LINE];
+
+	va_start(ap, str);
+	vssprintf(outputBuffer, str, ap);
+	va_end(ap);
+
+	if (syncDebugNum[syncDebugNext] < MAX_SYNC_MESSAGES)
+	{
+		syncDebugFunctions[syncDebugNext][syncDebugNum[syncDebugNext]] = strdup(function);
+		syncDebugStrings[syncDebugNext][syncDebugNum[syncDebugNext]] = strdup(outputBuffer);
+		++syncDebugNum[syncDebugNext];
+	}
+}
+
+void sendDebugSync(bool sendEvenIfEmpty)
+{
+	unsigned i;
+
+	if (syncDebugNum[syncDebugNext] == 0 && !sendEvenIfEmpty)
+	{
+		return;  // Nothing to send.
+	}
+
+	syncDebugGameTime[syncDebugNext] = gameTime;
+
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_SYNC_DEBUG_STRING);
+		NETuint32_t(&syncDebugNum[syncDebugNext]);
+		NETuint32_t(&syncDebugGameTime[syncDebugNext]);
+		for (i = 0; i < syncDebugNum[syncDebugNext]; ++i)
+		{
+			NETstring(syncDebugFunctions[syncDebugNext][i], MAX_LEN_LOG_LINE);
+			NETstring(syncDebugStrings[syncDebugNext][i], MAX_LEN_LOG_LINE);
+		}
+	NETend();
+
+	// Go to next position, and free it ready for use.
+	syncDebugNext = (syncDebugNext + 1)%MAX_SYNC_HISTORY;
+	for (unsigned i = 0; i != syncDebugNum[syncDebugNext]; ++i)
+	{
+		free(syncDebugFunctions[syncDebugNext][i]);
+		free(syncDebugStrings[syncDebugNext][i]);
+	}
+	syncDebugNum[syncDebugNext] = 0;
+	syncDebugGameTime[syncDebugNext] = 0;
+}
+
+void recvDebugSync(NETQUEUE queue)
+{
+	bool outOfSynch = false;
+	unsigned rsyncDebugNext;
+
+	uint32_t rsyncDebugNum;
+	uint32_t rsyncDebugGameTime;
+	char rsyncDebugFunction[MAX_LEN_LOG_LINE];
+	char rsyncDebugString[MAX_LEN_LOG_LINE];
+
+	NETbeginDecode(queue, GAME_SYNC_DEBUG_STRING);
+		NETuint32_t(&rsyncDebugNum);
+		NETuint32_t(&rsyncDebugGameTime);
+
+		if (rsyncDebugGameTime == syncDebugGameTime[syncDebugNext])
+		{
+			debug(LOG_ERROR, "Huh? We aren't done yet...");
+			NETend();
+			return;
+		}
+
+		for (rsyncDebugNext = 0; rsyncDebugNext != MAX_SYNC_HISTORY; ++rsyncDebugNext)
+		{
+			if (syncDebugGameTime[rsyncDebugNext] == rsyncDebugGameTime)
+			{
+				unsigned i;
+
+				if (syncDebugNum[rsyncDebugNext] != rsyncDebugNum)
+				{
+					outOfSynch = true;
+				}
+
+				for (i = 0; i < syncDebugNum[rsyncDebugNext] && !outOfSynch; ++i)
+				{
+					NETstring(rsyncDebugFunction, MAX_LEN_LOG_LINE);
+					NETstring(rsyncDebugString, MAX_LEN_LOG_LINE);
+
+					if (strcmp(syncDebugFunctions[rsyncDebugNext][i], rsyncDebugFunction) != 0 ||
+					    strcmp(syncDebugStrings[rsyncDebugNext][i],   rsyncDebugString)   != 0)
+					{
+						outOfSynch = true;
+					}
+				}
+
+				break;
+			}
+		}
+	NETend();
+
+	if (outOfSynch)
+	{
+		unsigned i;
+
+		debug(LOG_ERROR, "Inconsistent GAME_SYNC_DEBUG_STRING at gameTime %u. My version is: (%u lines)", syncDebugGameTime[rsyncDebugNext], syncDebugNum[rsyncDebugNext]);
+		for (i = 0; i < syncDebugNum[rsyncDebugNext]; ++i)
+		{
+			_debug(LOG_SYNC, syncDebugFunctions[rsyncDebugNext][i], "%s", syncDebugStrings[rsyncDebugNext][i]);
+			free(syncDebugFunctions[rsyncDebugNext][i]);
+			free(syncDebugStrings[rsyncDebugNext][i]);
+		}
+		syncDebugNum[rsyncDebugNext] = 0;
+		syncDebugGameTime[rsyncDebugNext] = 0;
+	}
+}
+
 const char *messageTypeToString(unsigned messageType_)
 {
 	MESSAGE_TYPES messageType = (MESSAGE_TYPES)messageType_;  // Cast to enum, so switch gives a warning if new message types are added without updating the switch.
@@ -3622,69 +3754,73 @@ const char *messageTypeToString(unsigned messageType_)
 	switch (messageType)
 	{
 		// Search:  \s*([\w_]+).*
-		// Replace: case \1: return "\1";
+		// Replace: case \1:                             return "\1";
+		// Search:  (case ...............................) *(return "[\w_]+";)
+		// Replace: \t\t\1\2
 
-		case NET_MIN_TYPE: return "NET_MIN_TYPE";
-		case NET_PING: return "NET_PING";
-		case NET_PLAYER_STATS: return "NET_PLAYER_STATS";
-		case NET_TEXTMSG: return "NET_TEXTMSG";
-		case NET_PLAYERRESPONDING: return "NET_PLAYERRESPONDING";
-		case NET_OPTIONS: return "NET_OPTIONS";
-		case NET_KICK: return "NET_KICK";
-		case NET_FIREUP: return "NET_FIREUP";
-		case NET_COLOURREQUEST: return "NET_COLOURREQUEST";
-		case NET_SCORESUBMIT: return "NET_SCORESUBMIT";
-		case NET_AITEXTMSG: return "NET_AITEXTMSG";
-		case NET_BEACONMSG: return "NET_BEACONMSG";
-		case NET_TEAMREQUEST: return "NET_TEAMREQUEST";
-		case NET_JOIN: return "NET_JOIN";
-		case NET_ACCEPTED: return "NET_ACCEPTED";
-		case NET_PLAYER_INFO: return "NET_PLAYER_INFO";
-		case NET_PLAYER_JOINED: return "NET_PLAYER_JOINED";
-		case NET_PLAYER_LEAVING: return "NET_PLAYER_LEAVING";
-		case NET_PLAYER_DROPPED: return "NET_PLAYER_DROPPED";
-		case NET_GAME_FLAGS: return "NET_GAME_FLAGS";
-		case NET_READY_REQUEST: return "NET_READY_REQUEST";
-		case NET_REJECTED: return "NET_REJECTED";
-		case NET_POSITIONREQUEST: return "NET_POSITIONREQUEST";
-		case NET_DATA_CHECK: return "NET_DATA_CHECK";
-		case NET_HOST_DROPPED: return "NET_HOST_DROPPED";
-		case NET_SEND_TO_PLAYER: return "NET_SEND_TO_PLAYER";
-		case NET_SHARE_GAME_QUEUE: return "NET_SHARE_GAME_QUEUE";
-		case NET_FILE_REQUESTED: return "NET_FILE_REQUESTED";
-		case NET_FILE_CANCELLED: return "NET_FILE_CANCELLED";
-		case NET_FILE_PAYLOAD: return "NET_FILE_PAYLOAD";
-		case NET_MAX_TYPE: return "NET_MAX_TYPE";
-		case GAME_MIN_TYPE: return "GAME_MIN_TYPE";
-		case GAME_DROID: return "GAME_DROID";
-		case GAME_DROIDINFO: return "GAME_DROIDINFO";
-		case GAME_DROIDDEST: return "GAME_DROIDDEST";
-		case GAME_DROIDMOVE: return "GAME_DROIDMOVE";
-		case GAME_GROUPORDER: return "GAME_GROUPORDER";
-		case GAME_TEMPLATE: return "GAME_TEMPLATE";
-		case GAME_TEMPLATEDEST: return "GAME_TEMPLATEDEST";
-		case GAME_FEATUREDEST: return "GAME_FEATUREDEST";
-		case GAME_CHECK_DROID: return "GAME_CHECK_DROID";
-		case GAME_CHECK_STRUCT: return "GAME_CHECK_STRUCT";
-		case GAME_CHECK_POWER: return "GAME_CHECK_POWER";
-		case GAME_BUILD: return "GAME_BUILD";
-		case GAME_STRUCTDEST: return "GAME_STRUCTDEST";
-		case GAME_BUILDFINISHED: return "GAME_BUILDFINISHED";
-		case GAME_RESEARCH: return "GAME_RESEARCH";
-		case GAME_FEATURES: return "GAME_FEATURES";
-		case GAME_SECONDARY: return "GAME_SECONDARY";
-		case GAME_ALLIANCE: return "GAME_ALLIANCE";
-		case GAME_GIFT: return "GAME_GIFT";
-		case GAME_DEMOLISH: return "GAME_DEMOLISH";
-		case GAME_ARTIFACTS: return "GAME_ARTIFACTS";
-		case GAME_VTOL: return "GAME_VTOL";
-		case GAME_SECONDARY_ALL: return "GAME_SECONDARY_ALL";
-		case GAME_DROIDEMBARK: return "GAME_DROIDEMBARK";
-		case GAME_DROIDDISEMBARK: return "GAME_DROIDDISEMBARK";
-		case GAME_RESEARCHSTATUS: return "GAME_RESEARCHSTATUS";
-		case GAME_LASSAT: return "GAME_LASSAT";
-		case GAME_GAME_TIME: return "GAME_GAME_TIME";
-		case GAME_MAX_TYPE: return "GAME_MAX_TYPE";
+		case NET_MIN_TYPE:                  return "NET_MIN_TYPE";
+		case NET_PING:                      return "NET_PING";
+		case NET_PLAYER_STATS:              return "NET_PLAYER_STATS";
+		case NET_TEXTMSG:                   return "NET_TEXTMSG";
+		case NET_PLAYERRESPONDING:          return "NET_PLAYERRESPONDING";
+		case NET_OPTIONS:                   return "NET_OPTIONS";
+		case NET_KICK:                      return "NET_KICK";
+		case NET_FIREUP:                    return "NET_FIREUP";
+		case NET_COLOURREQUEST:             return "NET_COLOURREQUEST";
+		case NET_SCORESUBMIT:               return "NET_SCORESUBMIT";
+		case NET_AITEXTMSG:                 return "NET_AITEXTMSG";
+		case NET_BEACONMSG:                 return "NET_BEACONMSG";
+		case NET_TEAMREQUEST:               return "NET_TEAMREQUEST";
+		case NET_JOIN:                      return "NET_JOIN";
+		case NET_ACCEPTED:                  return "NET_ACCEPTED";
+		case NET_PLAYER_INFO:               return "NET_PLAYER_INFO";
+		case NET_PLAYER_JOINED:             return "NET_PLAYER_JOINED";
+		case NET_PLAYER_LEAVING:            return "NET_PLAYER_LEAVING";
+		case NET_PLAYER_DROPPED:            return "NET_PLAYER_DROPPED";
+		case NET_GAME_FLAGS:                return "NET_GAME_FLAGS";
+		case NET_READY_REQUEST:             return "NET_READY_REQUEST";
+		case NET_REJECTED:                  return "NET_REJECTED";
+		case NET_POSITIONREQUEST:           return "NET_POSITIONREQUEST";
+		case NET_DATA_CHECK:                return "NET_DATA_CHECK";
+		case NET_HOST_DROPPED:              return "NET_HOST_DROPPED";
+		case NET_SEND_TO_PLAYER:            return "NET_SEND_TO_PLAYER";
+		case NET_SHARE_GAME_QUEUE:          return "NET_SHARE_GAME_QUEUE";
+		case NET_FILE_REQUESTED:            return "NET_FILE_REQUESTED";
+		case NET_FILE_CANCELLED:            return "NET_FILE_CANCELLED";
+		case NET_FILE_PAYLOAD:              return "NET_FILE_PAYLOAD";
+		case NET_MAX_TYPE:                  return "NET_MAX_TYPE";
+
+		case GAME_MIN_TYPE:                 return "GAME_MIN_TYPE";
+		case GAME_DROID:                    return "GAME_DROID";
+		case GAME_DROIDINFO:                return "GAME_DROIDINFO";
+		case GAME_DROIDDEST:                return "GAME_DROIDDEST";
+		case GAME_DROIDMOVE:                return "GAME_DROIDMOVE";
+		case GAME_GROUPORDER:               return "GAME_GROUPORDER";
+		case GAME_TEMPLATE:                 return "GAME_TEMPLATE";
+		case GAME_TEMPLATEDEST:             return "GAME_TEMPLATEDEST";
+		case GAME_FEATUREDEST:              return "GAME_FEATUREDEST";
+		case GAME_CHECK_DROID:              return "GAME_CHECK_DROID";
+		case GAME_CHECK_STRUCT:             return "GAME_CHECK_STRUCT";
+		case GAME_CHECK_POWER:              return "GAME_CHECK_POWER";
+		case GAME_BUILD:                    return "GAME_BUILD";
+		case GAME_STRUCTDEST:               return "GAME_STRUCTDEST";
+		case GAME_BUILDFINISHED:            return "GAME_BUILDFINISHED";
+		case GAME_RESEARCH:                 return "GAME_RESEARCH";
+		case GAME_FEATURES:                 return "GAME_FEATURES";
+		case GAME_SECONDARY:                return "GAME_SECONDARY";
+		case GAME_ALLIANCE:                 return "GAME_ALLIANCE";
+		case GAME_GIFT:                     return "GAME_GIFT";
+		case GAME_DEMOLISH:                 return "GAME_DEMOLISH";
+		case GAME_ARTIFACTS:                return "GAME_ARTIFACTS";
+		case GAME_VTOL:                     return "GAME_VTOL";
+		case GAME_SECONDARY_ALL:            return "GAME_SECONDARY_ALL";
+		case GAME_DROIDEMBARK:              return "GAME_DROIDEMBARK";
+		case GAME_DROIDDISEMBARK:           return "GAME_DROIDDISEMBARK";
+		case GAME_RESEARCHSTATUS:           return "GAME_RESEARCHSTATUS";
+		case GAME_LASSAT:                   return "GAME_LASSAT";
+		case GAME_GAME_TIME:                return "GAME_GAME_TIME";
+		case GAME_SYNC_DEBUG_STRING:        return "GAME_SYNC_DEBUG_STRING";
+		case GAME_MAX_TYPE:                 return "GAME_MAX_TYPE";
 	}
 	return "(INVALID MESSAGE TYPE)";
 }

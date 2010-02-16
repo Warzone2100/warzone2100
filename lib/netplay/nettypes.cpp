@@ -193,6 +193,38 @@ static void queue(const Q &q, Vector3uw &v)
 	queue(q, v.z);
 }
 
+template<class Q, class T>
+static void queue(const Q &q, std::vector<T> &v)
+{
+	uint32_t len = v.size();
+	queue(q, len);
+	switch (Q::Direction)
+	{
+		case Q::Write:
+			for (unsigned i = 0; i != len; ++i)
+			{
+				queue(q, v[i]);
+			}
+			break;
+		case Q::Read:
+			v.clear();
+			for (unsigned i = 0; i != len && q.valid(); ++i)
+			{
+				T tmp;
+				queue(q, tmp);
+				v.push_back(tmp);
+			}
+			break;
+	}
+}
+
+template<class Q>
+static void queue(const Q &q, NetMessage &v)
+{
+	queue(q, v.type);
+	queue(q, v.data);
+}
+
 template<class T>
 static void queueAuto(T &v)
 {
@@ -285,20 +317,46 @@ void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen)
 	receiveQueue(queue)->writeRawData(data, dataLen);
 }
 
+void NETinsertMessageFromNet(NETQUEUE queue, NETMESSAGE message)
+{
+	receiveQueue(queue)->pushMessage(*message);
+}
+
 BOOL NETisMessageReady(NETQUEUE queue)
 {
 	return receiveQueue(queue)->haveMessage();
 }
 
-uint8_t NETmessageType(NETQUEUE queue)
+NETMESSAGE NETgetMessage(NETQUEUE queue)
 {
-	return receiveQueue(queue)->getMessage().type;
+	return &receiveQueue(queue)->getMessage();
 }
 
-uint32_t NETmessageSize(NETQUEUE queue)
+uint8_t NETmessageType(NETMESSAGE message)
 {
-	return receiveQueue(queue)->getMessage().data.size();
+	return message->type;
 }
+
+uint32_t NETmessageSize(NETMESSAGE message)
+{
+	return message->data.size();
+}
+
+uint8_t *NETmessageRawData(NETMESSAGE message)
+{
+	return message->rawDataDup();
+}
+
+void NETmessageDestroyRawData(uint8_t *data)
+{
+	delete[] data;
+}
+
+size_t NETmessageRawSize(NETMESSAGE message)
+{
+	return message->rawLen();
+}
+
 
 /*
  * Begin & End functions
@@ -328,7 +386,7 @@ void NETinitQueue(NETQUEUE queue)
 
 void NETsetNoSendOverNetwork(NETQUEUE queue)
 {
-	sendQueue(queue)->setWillNeverReadRawData();  // Will not be sending over net.
+	sendQueue(queue)->setWillNeverGetMessagesForNet();  // Will not be sending over net.
 }
 
 void NETmoveQueue(NETQUEUE src, NETQUEUE dst)
@@ -381,31 +439,21 @@ BOOL NETend()
 
 		if (queueInfo.queueType == QUEUE_NET || queueInfo.queueType == QUEUE_BROADCAST)
 		{
-			const uint8_t *data;
-			size_t dataLen;
-
-			queue->readRawData(&data, &dataLen);
-			NETsend(queueInfo.index, data, dataLen);
-			queue->popRawData(dataLen);
+			NETsend(queueInfo.index, &queue->getMessageForNet());
+			queue->popMessageForNet();
 		}
-		else if (queueInfo.queueType == QUEUE_GAME && queue->checkCanReadRawData())
+		else if (queueInfo.queueType == QUEUE_GAME && queue->checkCanGetMessagesForNet())
 		{
 			uint8_t player = queueInfo.index;  // queueInfo.index is changed by NETbeginEncode.
-
-			const uint8_t *data;
-			size_t dataLen;
-			queue->readRawData(&data, &dataLen);
 
 			// Not sure exactly where this belongs, but easy to put here in NETend()...
 			// Decoded in NETprocessSystemMessage in netplay.c.
 			NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
 				NETuint8_t(&player);
-				uint32_t size = dataLen;
-				NETuint32_t(&size);
-				NETbin(const_cast<uint8_t *>(data), dataLen);  // const_cast is safe since we are encoding, not decoding.
+				queueAuto(const_cast<NetMessage &>(queue->getMessageForNet()));  // const_cast is safe since we are encoding, not decoding.
 			NETend();  // Recursive call, but queueInfo.queueType = QUEUE_BROADCAST now.
 
-			queue->popRawData(dataLen);
+			queue->popMessageForNet();
 		}
 
 		// We have ended the serialisation, so mark the direction invalid
@@ -417,8 +465,6 @@ BOOL NETend()
 	if (NETgetPacketDir() == PACKET_DECODE)
 	{
 		bool ret = reader.valid();
-
-		//receiveQueue(queueInfo)->popMessage();  // Moved to NETpop(), since some messages call NETbeginEncode but not NETend, and others call neither.
 
 		// We have ended the deserialisation, so mark the direction invalid
 		NETsetPacketDir(PACKET_INVALID);
@@ -530,15 +576,15 @@ void NETstring(char *str, uint16_t maxlen)
 	}
 }
 
-void NETbin(uint8_t *str, uint16_t maxlen)
+void NETbin(uint8_t *str, uint32_t maxlen)
 {
 	/*
 	 * Bins sent over the network are prefixed with their length, sent as an
-	 * unsigned 16-bit integer.
+	 * unsigned 32-bit integer.
 	 */
 
 	// Work out the length of the bin if we are encoding
-	uint16_t len = NETgetPacketDir() == PACKET_ENCODE ? maxlen : 0;
+	uint32_t len = NETgetPacketDir() == PACKET_ENCODE ? maxlen : 0;
 	queueAuto(len);
 
 	// Truncate length if necessary
@@ -584,6 +630,27 @@ void NETPACKAGED_CHECK(PACKAGED_CHECK *v)
 	}
 }
 
+void NETNETMESSAGE(NETMESSAGE *message)
+{
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		queueAuto(*const_cast<NetMessage *>(*message));  // Const cast safe when encoding.
+	}
+
+	if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		NetMessage *m = new NetMessage;
+		queueAuto(*m);
+		*message = m;
+		return;
+	}
+}
+
+void NETdestroyNETMESSAGE(NETMESSAGE message)
+{
+	delete message;
+}
+
 typedef enum
 {
 	test_a,
@@ -626,7 +693,9 @@ void NETtest()
 
 	memset(&cmp, 0, sizeof(cmp));
 	memset(&NetMsg, 0, sizeof(NetMsg));
+	*/
 	NETcoder(PACKET_ENCODE);
+	/*
 	memcpy(&cmp, &NetMsg, sizeof(cmp));
 	NETcoder(PACKET_DECODE);
 	ASSERT(memcmp(&cmp, &NetMsg, sizeof(cmp)) == 0, "nettypes unit test failed");

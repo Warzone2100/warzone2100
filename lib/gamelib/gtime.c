@@ -297,6 +297,8 @@ void sendPlayerGameTime()
 	unsigned player;
 	uint32_t time = gameTime + latency;
 
+	sendDebugSync(true);
+
 	for (player = 0; player < MAX_PLAYERS; ++player)
 	{
 		if (!myResponsibility(player))

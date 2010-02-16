@@ -23,6 +23,8 @@ class NetMessage
 {
 public:
 	NetMessage(uint8_t type_ = 0xFF) : type(type_) {}
+	uint8_t *rawDataDup() const;  ///< Returns data compatible with NetQueue::writeRawData(). Must be delete[]d.
+	size_t rawLen() const;        ///< Returns the length of the return value of rawDataDup().
 	uint8_t type;
 	std::vector<uint8_t> data;
 };
@@ -36,6 +38,7 @@ public:
 	MessageWriter(NetMessage *m = NULL) : message(m) {}
 	MessageWriter(NetMessage &m) : message(&m) {}
 	void byte(uint8_t v) const { message->data.push_back(v); }
+	bool valid() const { return true; }
 	NetMessage *message;
 };
 /// MessageReader is used for deserialising, using the same interface as MessageWriter.
@@ -61,10 +64,10 @@ public:
 	// Network related, receiving
 	void writeRawData(const uint8_t *netData, size_t netLen);          ///< Inserts data from the network into the NetQueue.
 	// Network related, sending
-	void setWillNeverReadRawData();                                    ///< Marks that we will not be sending this data over the network.
-	bool checkCanReadRawData() const;                                  ///< Checks if we marked that we will not be sending this data over the network.
-	void readRawData(const uint8_t **netData, size_t *netLen);         ///< Extracts data from the NetQueue to send over the network.
-	void popRawData(size_t netLen);                                    ///< Pops the extracted data, so that future readRawData calls do not return that data.
+	void setWillNeverGetMessagesForNet();                              ///< Marks that we will not be sending this data over the network.
+	bool checkCanGetMessagesForNet() const;                            ///< Checks that we didn't mark that we will not be sending this data over the network.
+	const NetMessage &getMessageForNet() const;                        ///< Extracts data from the NetQueue to send over the network.
+	void popMessageForNet();                                           ///< Pops the extracted data, so that future getMessageForNet calls do not return that data.
 
 	// All game clients should check game messages from all queues, including their own, and only the net messages sent to them.
 	// Message related, storing.
@@ -82,7 +85,7 @@ private:
 	NetQueue(const NetQueue &);         // TODO When switching to C++0x, use "= delete" notation.
 	void operator =(const NetQueue &);  // TODO When switching to C++0x, use "= delete" notation.
 
-	bool canReadRawData;                                               ///< True if we will send the messages over the network, false if we don't.
+	bool canGetMessagesForNet;                                         ///< True if we will send the messages over the network, false if we don't.
 	bool canGetMessages;                                               ///< True if we will get the messages, false if we don't use them ourselves.
 
 	typedef std::list<NetMessage> List;
@@ -90,7 +93,6 @@ private:
 	List::iterator                messagePos;                          ///< Last message which was popped.
 	List                          messages;                            ///< List of messages. Messages are added to the front and read from the back.
 	std::vector<uint8_t>          incompleteReceivedMessageData;       ///< Data from network which has not yet formed an entire message.
-	std::vector<uint8_t>          unsentMessageData;                   ///< Data for network which has been requested but not yet popped.
 };
 
 /// A NetQueuePair is used for talking to a socket. We insert NetMessages in the send NetQueue, which converts the messages into a stream of bytes for the
@@ -98,7 +100,7 @@ private:
 class NetQueuePair
 {
 public:
-	NetQueuePair() { send.setWillNeverGetMessages(); receive.setWillNeverReadRawData(); }
+	NetQueuePair() { send.setWillNeverGetMessages(); receive.setWillNeverGetMessagesForNet(); }
 
 	NetQueue send;
 	NetQueue receive;

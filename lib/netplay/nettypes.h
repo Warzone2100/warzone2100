@@ -56,15 +56,22 @@ typedef struct _netqueue
 	uint8_t queueType;
 } NETQUEUE;
 
+typedef const struct NetMessage *NETMESSAGE;
+
 NETQUEUE NETnetTmpQueue(unsigned tmpPlayer);  ///< One of the temp queues from before a client has joined the game. (See comments on tmpQueues in nettypes.cpp.)
 NETQUEUE NETnetQueue(unsigned player);        ///< The queue pair used for sending and receiving data directly from another client. (See comments on netQueues in nettypes.cpp.)
 NETQUEUE NETgameQueue(unsigned player);       ///< The game action queue. (See comments on gameQueues in nettypes.cpp.)
 NETQUEUE NETbroadcastQueue(void);             ///< The queue for sending data directly to the netQueues of all clients, not just a specific one. (See comments on broadcastQueue in nettypes.cpp.)
 
-void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  /// Dump raw data from sockets and raw data sent via host here.
+void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  ///< Dump raw data from sockets and raw data sent via host here.
+void NETinsertMessageFromNet(NETQUEUE queue, NETMESSAGE message);      ///< Dump whole NetMessages into the queue.
 BOOL NETisMessageReady(NETQUEUE queue);       ///< Returns true if there is a complete message ready to deserialise in this queue.
-uint8_t NETmessageType(NETQUEUE queue);       ///< Returns the type of the message in this queue which is ready to be deserialised.
-uint32_t NETmessageSize(NETQUEUE queue);      ///< Returns the size of the message data in this queue which is ready to be deserialised.
+NETMESSAGE NETgetMessage(NETQUEUE queue);     ///< Returns the current message in the queue which is ready to be deserialised. Do not delete the message.
+uint8_t NETmessageType(NETMESSAGE message);   ///< Returns the type of the message.
+uint32_t NETmessageSize(NETMESSAGE message);  ///< Returns the size of the message data.
+uint8_t *NETmessageRawData(NETMESSAGE message);///<Returns the raw data, must be deleted again with NETmessageDestroyRawData().
+void NETmessageDestroyRawData(uint8_t *data); ///< Destroys the data returned by NETmessageRawData().
+size_t NETmessageRawSize(NETMESSAGE message); ///< Returns the size of the message, including headers.
 
 void NETinitQueue(NETQUEUE queue);             ///< Allocates the queue. Deletes the old queue, if there was one. Avoids a crash on NULL pointer deference when trying to use the queue.
 void NETsetNoSendOverNetwork(NETQUEUE queue);  ///< Used to mark that a game queue should not be sent over the network (for example, if it is being sent to us, instead).
@@ -85,7 +92,7 @@ void NETfloat(float* fp);
 void NETbool(BOOL *bp);
 void NETnull(void);
 void NETstring(char *str, uint16_t maxlen);
-void NETbin(uint8_t *str, uint16_t maxlen);
+void NETbin(uint8_t *str, uint32_t maxlen);
 
 PACKETDIR NETgetPacketDir(void);
 
@@ -142,6 +149,8 @@ typedef struct PackagedCheck
 	uint16_t orderY;    ///< Defined iff order == DORDER_MOVE.
 } PACKAGED_CHECK;
 void NETPACKAGED_CHECK(PACKAGED_CHECK *v);
+void NETNETMESSAGE(NETMESSAGE *message);  ///< If decoding, must destroy the NETMESSAGE.
+void NETdestroyNETMESSAGE(NETMESSAGE message);
 
 void NETtest(void);
 

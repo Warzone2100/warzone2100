@@ -826,6 +826,9 @@ BOOL recvMessage(void)
 		case NET_PLAYER_STATS:
 			recvMultiStats(queue);
 			break;
+		case GAME_SYNC_DEBUG_STRING:
+			recvDebugSync(queue);
+			break;
 		default:
 			break;
 		}

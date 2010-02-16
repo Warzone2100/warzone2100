@@ -3,8 +3,25 @@
 
 // See comments in netqueue.h.
 
+uint8_t *NetMessage::rawDataDup() const
+{
+	uint8_t *ret = new uint8_t[5 + data.size()];
+	ret[0] = type;
+	ret[1] = data.size()>>24;
+	ret[2] = data.size()>>16;
+	ret[3] = data.size()>> 8;
+	ret[4] = data.size();
+	std::copy(data.begin(), data.end(), ret + 5);
+	return ret;
+}
+
+size_t NetMessage::rawLen() const
+{
+	return 5 + data.size();
+}
+
 NetQueue::NetQueue()
-	: canReadRawData(true)
+	: canGetMessagesForNet(true)
 	, canGetMessages(true)
 {
 	dataPos = messages.end();
@@ -22,8 +39,9 @@ void NetQueue::writeRawData(const uint8_t *netData, size_t netLen)
 	// Extract the messages.
 	while (buffer.size() - used >= 5)
 	{
-		uint32_t len = buffer[used]<<24 | buffer[used + 1]<<16 | buffer[used + 2]<<8 | buffer[used + 3];
-		uint8_t type = buffer[used + 4];
+		uint8_t type = buffer[used];
+		uint32_t len = buffer[used + 1]<<24 | buffer[used + 2]<<16 | buffer[used + 3]<<8 | buffer[used + 4];
+		ASSERT(len < 40000000, "Trying to writing a very large packet (%u bytes) to the queue.", len);
 		if (buffer.size() - used - 5 < len)
 		{
 			break;
@@ -37,53 +55,37 @@ void NetQueue::writeRawData(const uint8_t *netData, size_t netLen)
 	buffer.erase(buffer.begin(), buffer.begin() + used);
 }
 
-void NetQueue::setWillNeverReadRawData()
+void NetQueue::setWillNeverGetMessagesForNet()
 {
-	canReadRawData = false;
+	canGetMessagesForNet = false;
 }
 
-bool NetQueue::checkCanReadRawData() const
+bool NetQueue::checkCanGetMessagesForNet() const
 {
-	return canReadRawData;
+	return canGetMessagesForNet;
 }
 
-void NetQueue::readRawData(const uint8_t **netData, size_t *netLen)
+const NetMessage &NetQueue::getMessageForNet() const
 {
-	ASSERT(canReadRawData, "Wrong NetQueue type for readRawData.");
+	ASSERT(canGetMessagesForNet, "Wrong NetQueue type for getMessageForNet.");
+	ASSERT(dataPos != messages.begin(), "No message to get!");
 
-	std::vector<uint8_t> &buffer = unsentMessageData;  // Short alias.
+	// Return the message.
+	List::iterator i = dataPos;
+	--i;
+	return *i;
+}
 
-	// Turn the messages into raw data.
-	while (dataPos != messages.begin())
-	{
-		--dataPos;
-		buffer.push_back(dataPos->data.size()>>24);
-		buffer.push_back(dataPos->data.size()>>16);
-		buffer.push_back(dataPos->data.size()>> 8);
-		buffer.push_back(dataPos->data.size()    );
-		buffer.push_back(dataPos->type);
-		buffer.insert(buffer.end(), dataPos->data.begin(), dataPos->data.end());
-	}
+void NetQueue::popMessageForNet()
+{
+	ASSERT(canGetMessagesForNet, "Wrong NetQueue type for popMessageForNet.");
+	ASSERT(dataPos != messages.begin(), "No message to pop!");
+
+	// Pop the message.
+	--dataPos;
 
 	// Recycle old data.
 	popOldMessages();
-
-	// Return the data.
-	*netData = &buffer[0];
-	*netLen = buffer.size();
-}
-
-void NetQueue::popRawData(size_t netLen)
-{
-	ASSERT(canReadRawData, "Wrong NetQueue type for popRawData.");
-	if (netLen > unsentMessageData.size())
-	{
-		debug(LOG_WARNING, "Popped too much data (popped %zu, had %zu). Someone probably just disconnected.", netLen, unsentMessageData.size());
-		netLen = unsentMessageData.size();
-	}
-
-	// Pop the data.
-	unsentMessageData.erase(unsentMessageData.begin(), unsentMessageData.begin() + netLen);
 }
 
 void NetQueue::pushMessage(const NetMessage &message)
@@ -127,7 +129,7 @@ void NetQueue::popMessage()
 
 void NetQueue::popOldMessages()
 {
-	if (!canReadRawData)
+	if (!canGetMessagesForNet)
 	{
 		dataPos = messages.begin();
 	}
