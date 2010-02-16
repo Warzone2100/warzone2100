@@ -558,6 +558,8 @@ int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj);
 
 void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate);
 
+void cancelBuild(DROID *psDroid);
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus

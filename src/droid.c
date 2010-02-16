@@ -117,20 +117,27 @@ void	groupConsoleInformOfCreation( UDWORD groupNumber );
 void	groupConsoleInformOfCentering( UDWORD groupNumber );
 void	droidUpdateRecoil( DROID *psDroid );
 
-static void cancelBuild(DROID *psDroid)
+void cancelBuild(DROID *psDroid)
 {
-	objTrace(psDroid->id, "Droid build order cancelled");
-	psDroid->action = DACTION_NONE;
-	psDroid->order = DORDER_NONE;
-	setDroidTarget(psDroid, NULL);
-	setDroidActionTarget(psDroid, NULL, 0);
+	if (orderDroidList(psDroid))
+	{
+		objTrace(psDroid->id, "Droid build order cancelled - changing to next order");
+	}
+	else
+	{
+		objTrace(psDroid->id, "Droid build order cancelled");
+		psDroid->action = DACTION_NONE;
+		psDroid->order = DORDER_NONE;
+		setDroidTarget(psDroid, NULL);
+		setDroidActionTarget(psDroid, NULL, 0);
 
-	/* Notify scripts we just became idle */
-	psScrCBOrderDroid = psDroid;
-	psScrCBOrder = psDroid->order;
-	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
-	psScrCBOrderDroid = NULL;
-	psScrCBOrder = DORDER_NONE;
+		/* Notify scripts we just became idle */
+		psScrCBOrderDroid = psDroid;
+		psScrCBOrder = psDroid->order;
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
+		psScrCBOrderDroid = NULL;
+		psScrCBOrder = DORDER_NONE;
+	}
 }
 
 // initialise droid module
@@ -1090,6 +1097,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	{
 		// Update the interface
 		intBuildFinished(psDroid);
+		// Check if line order build is completed, or we are not carrying out a line order build
 		if ((map_coord(psDroid->orderX) == map_coord(psDroid->orderX2) && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))
 		    || psDroid->order != DORDER_LINEBUILD)
 		{
