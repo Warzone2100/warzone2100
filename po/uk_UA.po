@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-09 18:34+0100\n"
+"POT-Creation-Date: 2010-02-16 16:43+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -205,7 +205,7 @@ msgstr "Доступна Нова Захисна Споруда"
 #: data/base/messages/resmessages12.rmsg:5
 #: data/mp/messages/resmessages12.rmsg:5
 msgid "Armored Mortar battery pit"
-msgstr "Броньована Батарея Мортир"
+msgstr "Броньована Батарея Мортири"
 
 #: data/base/messages/resmessages12.rmsg:6
 #: data/base/messages/resmessages12.rmsg:19
@@ -1126,7 +1126,7 @@ msgstr "Підвищується Точність Ракет"
 #: data/base/messages/resmessages12.rmsg:252
 #: data/mp/messages/resmessages12.rmsg:252
 msgid "Heavy anti-tank rocket"
-msgstr "Важка протитанкова ракета"
+msgstr "Важка протитанкова пускова установка"
 
 #: data/base/messages/resmessages12.rmsg:253
 #: data/base/messages/resmessages1.rmsg:539
@@ -1694,7 +1694,7 @@ msgstr "Підвищується ефективність Енергогенер
 #: data/base/messages/resmessages1.rmsg:331
 #: data/mp/messages/resmessages1.rmsg:332
 msgid "Burns oil more efficiently"
-msgstr "Нафта спалюється ефективніше"
+msgstr "Ефективніше спалюється нафта"
 
 #: data/base/messages/resmessages1.rmsg:332
 #: data/mp/messages/resmessages1.rmsg:333
@@ -2020,7 +2020,7 @@ msgstr "Доступна нова Ходова"
 #: data/base/messages/resmessages1.rmsg:486
 #: data/mp/messages/resmessages1.rmsg:487
 msgid "Armored Half-tracks"
-msgstr "Броньовані Напів-гусениці"
+msgstr "Броньовані Напівгусениці"
 
 #: data/base/messages/resmessages1.rmsg:487
 #: data/mp/messages/resmessages1.rmsg:488
@@ -2178,7 +2178,7 @@ msgstr "Кулеметні кулі зі зміцненою гільзою"
 #: data/base/messages/strings/resstrings.txt:847
 #: data/mp/messages/strings/resstrings.txt:888
 msgid "Increases Machinegun damage"
-msgstr "Підвищується сила Кулемета"
+msgstr "Підвищується сила Кулемету"
 
 #: data/base/messages/resmessages1.rmsg:655
 #: data/mp/messages/resmessages1.rmsg:656
@@ -3235,7 +3235,7 @@ msgstr "Вдосконалюється Ходова Техніки"
 #: data/mp/messages/resmessages3.rmsg:735
 #: data/mp/messages/strings/resstrings.txt:627
 msgid "All half-tracks upgraded automatically"
-msgstr "Всі напів-гусениці покращуються автоматично"
+msgstr "Всі напівгусениці покращуються автоматично"
 
 #: data/base/messages/resmessages2.rmsg:553
 #: data/base/messages/resmessages3.rmsg:748
@@ -3652,7 +3652,7 @@ msgstr "Вдосконалені мікросхеми стійкі до віру
 #: data/base/messages/resmessages3.rmsg:32
 #: data/mp/messages/resmessages3.rmsg:32
 msgid "Computer systems can now be 'ring-fenced' from NEXUS"
-msgstr "Комп'ютерні системи тепер можуть бути 'огороджені' від НЕКСУСУ"
+msgstr "Комп'ютерні системи тепер можуть бути 'огороджені' від НЕКСУСу"
 
 #: data/base/messages/resmessages3.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:43
@@ -3828,7 +3828,7 @@ msgstr "Броньоване укріплення з Рейлганом"
 #: data/base/messages/resmessages3.rmsg:408
 #: data/mp/messages/resmessages3.rmsg:408
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr "Броньоване укріплення з Гарматою Гаусса"
+msgstr "Броньоване укріплення з Гарматою Гауса"
 
 #: data/base/messages/resmessages3.rmsg:421
 #: data/mp/messages/resmessages3.rmsg:421
@@ -5973,7 +5973,7 @@ msgstr "Кулеметник"
 #: data/mp/messages/strings/names.txt:545
 #: data/mp/messages/strings/names.txt:1071
 msgid "Flamer"
-msgstr "Вогнеметник"
+msgstr "Вогнемет"
 
 #: data/base/messages/strings/names.txt:214
 #: data/base/messages/strings/names.txt:221
@@ -9690,7 +9690,7 @@ msgstr "Швидкість Ремонту +100%"
 #: data/mp/messages/resmessages1.rmsg:306
 #, no-c-format
 msgid "Factory output speed +100% per module"
-msgstr "Продуктивність фабрики +100% на модуль"
+msgstr "Продуктивність фабрики +100% за модуль"
 
 #: data/mp/messages/resmessages1.rmsg:319
 #: data/mp/messages/resmessagesall.rmsg:786
@@ -11606,18 +11606,18 @@ msgstr "Гравець "
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Будівництво Неможливе. Через пожежу на Нафтовому Родовищі"
 
-#: src/display.c:1899
-#: src/display.c:2514
+#: src/display.c:1874
+#: src/display.c:2463
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Пошкоджень %d%% - Вбито %d, %s"
 
-#: src/display.c:1915
+#: src/display.c:1890
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Союзник - Пошкоджень %d%% - Вбито %d, %s"
 
-#: src/display.c:2121
+#: src/display.c:2070
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Інженеру наказано побудувати Бурову Вежу"
 
@@ -11768,8 +11768,8 @@ msgstr "РЕЖИМ ОДНОГО ГРАВЦЯ"
 
 #: src/frontend.c:470
 #: src/ingameop.c:519
-#: src/mission.c:2529
-#: src/mission.c:2634
+#: src/mission.c:2534
+#: src/mission.c:2639
 msgid "Load Saved Game"
 msgstr "Завантажити Збережену Гру"
 
@@ -12081,7 +12081,7 @@ msgstr "Командири (F6)"
 
 #: src/hci.c:3707
 msgid "Intelligence Display (F5)"
-msgstr "Intelligence Display (F5)"
+msgstr "Показати Розвіддані (F5)"
 
 #: src/hci.c:3723
 msgid "Manufacture (F1)"
@@ -12201,8 +12201,8 @@ msgstr "Тактична UI (Іконка Походження Цілі): При
 
 #: src/ingameop.c:295
 #: src/ingameop.c:523
-#: src/mission.c:2516
-#: src/mission.c:2637
+#: src/mission.c:2521
+#: src/mission.c:2642
 msgid "Save Game"
 msgstr "Зберегти Гру"
 
@@ -12653,7 +12653,7 @@ msgstr "Повернутися До Попереднього Екрану"
 
 #: src/keyedit.c:400
 msgid "Select Default"
-msgstr "Обрати Замовчання"
+msgstr "Обрати Замовчування"
 
 #: src/keymap.c:295
 msgid "Manufacture"
@@ -13020,42 +13020,42 @@ msgstr "Задіяти повторне відкривання будівель�
 msgid "Could not save game!"
 msgstr "Не вдалося зберегти гру!"
 
-#: src/mission.c:2069
+#: src/mission.c:2074
 msgid "Load Transport"
 msgstr "Завантажити Транспорт"
 
-#: src/mission.c:2463
+#: src/mission.c:2468
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "ЗАВДАННЯ ВИКОНАНО за допомогою шахрайства!"
 
-#: src/mission.c:2463
+#: src/mission.c:2468
 msgid "OBJECTIVE ACHIEVED"
 msgstr "ЗАВДАННЯ ВИКОНАНО"
 
-#: src/mission.c:2469
+#: src/mission.c:2474
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "ЗАВДАННЯ ПРОВАЛЕНЕ--шахрайство вам не допомогло!"
 
-#: src/mission.c:2469
+#: src/mission.c:2474
 msgid "OBJECTIVE FAILED"
 msgstr "ЗАВДАННЯ ПРОВАЛЕНЕ"
 
-#: src/mission.c:2495
-#: src/mission.c:2535
-#: src/mission.c:2653
+#: src/mission.c:2500
+#: src/mission.c:2540
+#: src/mission.c:2658
 msgid "Quit To Main Menu"
 msgstr "Вийти В Головне Меню"
 
-#: src/mission.c:2503
+#: src/mission.c:2508
 msgid "Continue Game"
 msgstr "Продовжити Гру"
 
-#: src/mission.c:2600
+#: src/mission.c:2605
 msgid "GAME SAVED :"
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
 
-#: src/move.c:2870
-#: src/move.c:2886
+#: src/move.c:2857
+#: src/move.c:2873
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Ви знайшли %u енергії в бочці нафти."
@@ -13375,22 +13375,22 @@ msgstr "ХОСТ"
 msgid "Players Still Joining"
 msgstr "Гравці Продовжують Приєднуватись"
 
-#: src/multijoin.c:230
+#: src/multijoin.c:213
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s покинув Гру"
 
-#: src/multijoin.c:342
+#: src/multijoin.c:325
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) має несумісний мод, отже був викинутий."
 
-#: src/multijoin.c:381
+#: src/multijoin.c:364
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s Приєднався до Гри"
 
-#: src/multijoin.c:391
+#: src/multijoin.c:374
 msgid "System message:"
 msgstr "Повідомлення системи:"
 
@@ -13659,12 +13659,12 @@ msgstr "ВИ ПЕРЕМОГЛИ!"
 msgid "YOU WERE DEFEATED!"
 msgstr "ВИ ЗАЗНАЛИ ПОРАЗКИ!"
 
-#: src/scriptfuncs.c:10166
+#: src/scriptfuncs.c:10150
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Отримано Сигнал від %s!"
 
-#: src/scriptfuncs.c:10212
+#: src/scriptfuncs.c:10196
 #, c-format
 msgid "Beacon %d"
 msgstr "Сигнал %d"
