@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-09 18:24+0100\n"
+"POT-Creation-Date: 2010-02-16 16:27+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -205,7 +205,7 @@ msgstr "Доступна Нова Захисна Споруда"
 #: data/base/messages/resmessages12.rmsg:5
 #: data/mp/messages/resmessages12.rmsg:5
 msgid "Armored Mortar battery pit"
-msgstr "Броньована Батарея Мортир"
+msgstr "Броньована Батарея Мортири"
 
 #: data/base/messages/resmessages12.rmsg:6
 #: data/base/messages/resmessages12.rmsg:19
@@ -1126,7 +1126,7 @@ msgstr "Підвищується Точність Ракет"
 #: data/base/messages/resmessages12.rmsg:252
 #: data/mp/messages/resmessages12.rmsg:252
 msgid "Heavy anti-tank rocket"
-msgstr "Важка протитанкова ракета"
+msgstr "Важка протитанкова пускова установка"
 
 #: data/base/messages/resmessages12.rmsg:253
 #: data/base/messages/resmessages1.rmsg:539
@@ -1694,7 +1694,7 @@ msgstr "Підвищується ефективність Енергогенер
 #: data/base/messages/resmessages1.rmsg:331
 #: data/mp/messages/resmessages1.rmsg:332
 msgid "Burns oil more efficiently"
-msgstr "Нафта спалюється ефективніше"
+msgstr "Ефективніше спалюється нафта"
 
 #: data/base/messages/resmessages1.rmsg:332
 #: data/mp/messages/resmessages1.rmsg:333
@@ -2020,7 +2020,7 @@ msgstr "Доступна нова Ходова"
 #: data/base/messages/resmessages1.rmsg:486
 #: data/mp/messages/resmessages1.rmsg:487
 msgid "Armored Half-tracks"
-msgstr "Броньовані Напів-гусениці"
+msgstr "Броньовані Напівгусениці"
 
 #: data/base/messages/resmessages1.rmsg:487
 #: data/mp/messages/resmessages1.rmsg:488
@@ -2178,7 +2178,7 @@ msgstr "Кулеметні кулі зі зміцненою гільзою"
 #: data/base/messages/strings/resstrings.txt:847
 #: data/mp/messages/strings/resstrings.txt:888
 msgid "Increases Machinegun damage"
-msgstr "Підвищується сила Кулемета"
+msgstr "Підвищується сила Кулемету"
 
 #: data/base/messages/resmessages1.rmsg:655
 #: data/mp/messages/resmessages1.rmsg:656
@@ -3235,7 +3235,7 @@ msgstr "Вдосконалюється Ходова Техніки"
 #: data/mp/messages/resmessages3.rmsg:735
 #: data/mp/messages/strings/resstrings.txt:627
 msgid "All half-tracks upgraded automatically"
-msgstr "Всі напів-гусениці покращуються автоматично"
+msgstr "Всі напівгусениці покращуються автоматично"
 
 #: data/base/messages/resmessages2.rmsg:553
 #: data/base/messages/resmessages3.rmsg:748
@@ -3652,7 +3652,7 @@ msgstr "Вдосконалені мікросхеми стійкі до віру
 #: data/base/messages/resmessages3.rmsg:32
 #: data/mp/messages/resmessages3.rmsg:32
 msgid "Computer systems can now be 'ring-fenced' from NEXUS"
-msgstr "Комп'ютерні системи тепер можуть бути 'огороджені' від НЕКСУСУ"
+msgstr "Комп'ютерні системи тепер можуть бути 'огороджені' від НЕКСУСу"
 
 #: data/base/messages/resmessages3.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:43
@@ -3828,7 +3828,7 @@ msgstr "Броньоване укріплення з Рейлганом"
 #: data/base/messages/resmessages3.rmsg:408
 #: data/mp/messages/resmessages3.rmsg:408
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr "Броньоване укріплення з Гарматою Гаусса"
+msgstr "Броньоване укріплення з Гарматою Гауса"
 
 #: data/base/messages/resmessages3.rmsg:421
 #: data/mp/messages/resmessages3.rmsg:421
@@ -5973,7 +5973,7 @@ msgstr "Кулеметник"
 #: data/mp/messages/strings/names.txt:545
 #: data/mp/messages/strings/names.txt:1071
 msgid "Flamer"
-msgstr "Вогнеметник"
+msgstr "Вогнемет"
 
 #: data/base/messages/strings/names.txt:214
 #: data/base/messages/strings/names.txt:221
@@ -9690,7 +9690,7 @@ msgstr "Швидкість Ремонту +100%"
 #: data/mp/messages/resmessages1.rmsg:306
 #, no-c-format
 msgid "Factory output speed +100% per module"
-msgstr "Продуктивність фабрики +100% на модуль"
+msgstr "Продуктивність фабрики +100% за модуль"
 
 #: data/mp/messages/resmessages1.rmsg:319
 #: data/mp/messages/resmessagesall.rmsg:786
@@ -11308,7 +11308,7 @@ msgstr "Неможливо зв'язатись з сервером лоббі! �
 msgid ", mods: "
 msgstr ", моди: "
 
-#: src/cheat.c:123
+#: src/cheat.c:124
 msgid ": Unknown cheat code."
 msgstr ": Невідомий щахрайський код."
 
@@ -12085,7 +12085,7 @@ msgstr "Командири (F6)"
 
 #: src/hci.c:3753
 msgid "Intelligence Display (F5)"
-msgstr "Intelligence Display (F5)"
+msgstr "Показати Розвіддані (F5)"
 
 #: src/hci.c:3769
 msgid "Manufacture (F1)"
@@ -12219,7 +12219,7 @@ msgid "Power Accrued"
 msgstr "Накопичена Енергія"
 
 #: src/intelmap.c:245
-#: src/keybind.c:1304
+#: src/keybind.c:1341
 msgid "PAUSED"
 msgstr "ПАУЗА"
 
@@ -12362,266 +12362,266 @@ msgstr "Давай глянем що ти бачиш!"
 msgid "Fine, weapon & sensor display is off!"
 msgstr "Добре, показ радіусу сенсору на зброї вимкнено!"
 
-#: src/keybind.c:301
-#: src/keybind.c:331
-#: src/keybind.c:348
-#: src/keybind.c:392
-#: src/keybind.c:497
-#: src/keybind.c:537
-#: src/keybind.c:643
-#: src/keybind.c:1194
-#: src/keybind.c:1251
-#: src/keybind.c:1353
-#: src/keybind.c:1450
-#: src/keybind.c:1761
-#: src/keybind.c:1801
+#: src/keybind.c:338
+#: src/keybind.c:368
+#: src/keybind.c:385
+#: src/keybind.c:429
+#: src/keybind.c:534
+#: src/keybind.c:574
+#: src/keybind.c:680
+#: src/keybind.c:1231
+#: src/keybind.c:1288
+#: src/keybind.c:1390
+#: src/keybind.c:1487
+#: src/keybind.c:1798
+#: src/keybind.c:1838
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Гравець %u) застосовує шахрайство :%s"
 
-#: src/keybind.c:302
+#: src/keybind.c:339
 msgid "Hard as nails!!!"
 msgstr "Твердий як цвях!!!"
 
-#: src/keybind.c:316
+#: src/keybind.c:353
 msgid "Takings thing easy!"
 msgstr "Живи простіше!"
 
-#: src/keybind.c:332
+#: src/keybind.c:369
 msgid "1000 big ones!!!"
 msgstr "1000 та ще й великих!!!"
 
-#: src/keybind.c:349
+#: src/keybind.c:386
 msgid "Power overwhelming"
 msgstr "Ось тобі твоя дорогоцінна енергія"
 
-#: src/keybind.c:364
+#: src/keybind.c:401
 msgid "Back to normality!"
 msgstr "Повернення до норми!"
 
-#: src/keybind.c:377
+#: src/keybind.c:414
 msgid "Getting tricky!"
 msgstr "Спробуємо взяти хитрістю!"
 
-#: src/keybind.c:393
+#: src/keybind.c:430
 msgid "Twice as nice!"
 msgstr "Два краще, ніж один!"
 
-#: src/keybind.c:404
+#: src/keybind.c:441
 msgid "FPS display is enabled."
 msgstr "Показ FPS задіяно."
 
-#: src/keybind.c:408
+#: src/keybind.c:445
 msgid "FPS display is disabled."
 msgstr "Показ FPS вимкнено."
 
-#: src/keybind.c:429
+#: src/keybind.c:466
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; FPS-ліміт: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 
-#: src/keybind.c:461
+#: src/keybind.c:498
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(Гравець %u) застосував шахрайство :Кількість Одиниць: %d  Кількість Будівель: %d  Кількість Властивостей: %d"
 
-#: src/keybind.c:498
+#: src/keybind.c:535
 msgid "Infinite power disabled"
 msgstr "Вимкнено необмежену енергію"
 
-#: src/keybind.c:498
+#: src/keybind.c:535
 msgid "Infinite power enabled"
 msgstr "Задіяно необмежену енергію"
 
-#: src/keybind.c:538
+#: src/keybind.c:575
 msgid "All items made available"
 msgstr "Стало доступне все"
 
-#: src/keybind.c:644
+#: src/keybind.c:681
 msgid "Fog on"
 msgstr "Туман ввімкнено"
 
-#: src/keybind.c:644
+#: src/keybind.c:681
 msgid "Fog off"
 msgstr "Туман вимкнено"
 
-#: src/keybind.c:1083
+#: src/keybind.c:1120
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "Обережно! Це шахрайство може викликати серйозні проблеми пізніше! [%s]"
 
-#: src/keybind.c:1083
+#: src/keybind.c:1120
 msgid "Ending Mission."
 msgstr "Місія Завершується."
 
-#: src/keybind.c:1195
+#: src/keybind.c:1232
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "ШАХРАЙСТВА ЗАРАЗ ЗАДІЯНІ!"
 
-#: src/keybind.c:1195
+#: src/keybind.c:1232
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "ШАХРАЙСТВА ЗАРАЗ ВИМКНЕНІ!"
 
-#: src/keybind.c:1252
+#: src/keybind.c:1289
 msgid "God Mode ON"
 msgstr "Режим Бога Задіяно"
 
-#: src/keybind.c:1252
+#: src/keybind.c:1289
 msgid "God Mode OFF"
 msgstr "Режим Бога Вимкнено"
 
-#: src/keybind.c:1264
+#: src/keybind.c:1301
 msgid "View Aligned to North"
 msgstr "Вид на Північ"
 
-#: src/keybind.c:1273
+#: src/keybind.c:1310
 #, c-format
 msgid "Trap cursor %s"
 msgstr "Зафіксувати курсор %s"
 
-#: src/keybind.c:1354
+#: src/keybind.c:1391
 msgid "Researched EVERYTHING for you!"
 msgstr "За вас ВСЕ вже винайшли!"
 
-#: src/keybind.c:1387
+#: src/keybind.c:1424
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Гарвець %u) використовує шахрайство :%s %s"
 
-#: src/keybind.c:1388
+#: src/keybind.c:1425
 msgid "Researched"
 msgstr "Досліджено"
 
-#: src/keybind.c:1408
+#: src/keybind.c:1445
 msgid "Only displaying energy bars when selected"
 msgstr "Стрічки енергії показуються тільки при виділенні"
 
-#: src/keybind.c:1411
+#: src/keybind.c:1448
 msgid "Always displaying energy bars for units"
 msgstr "Завжди показуються стрічки енергії підрозділів"
 
-#: src/keybind.c:1414
+#: src/keybind.c:1451
 msgid "Always displaying energy bars for units and structures"
 msgstr "Завжди показуються стрічки енергії підрозділів та будівель"
 
-#: src/keybind.c:1436
+#: src/keybind.c:1473
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Демо режим вимкнено - Повертаємось до нормального режиму гри"
 
-#: src/keybind.c:1451
+#: src/keybind.c:1488
 msgid "Debug menu is Open"
 msgstr "Меню налагодження Відкрито"
 
-#: src/keybind.c:1482
+#: src/keybind.c:1519
 msgid "Unable to locate any resource extractors!"
 msgstr "Не вдалося знайти жодних добувачів ресурсів!"
 
-#: src/keybind.c:1703
+#: src/keybind.c:1740
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Ох, погода на дворі жахлива... СНІГ"
 
-#: src/keybind.c:1709
+#: src/keybind.c:1746
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Дощику, дощику... зварю тобі борщику... ДОЩ"
 
-#: src/keybind.c:1715
+#: src/keybind.c:1752
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Прогноз погоди : Ясне небо у всіх районах... ЖОДНИХ ЗМІН ПОГОДИ"
 
-#: src/keybind.c:1760
+#: src/keybind.c:1797
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Обережно! Це може призвести до непередбачуваних наслідків при неправильному застосуванні на місіях."
 
-#: src/keybind.c:1762
+#: src/keybind.c:1799
 msgid "All enemies destroyed by cheating!"
 msgstr "Всіх ворогів знищено за допомогою шахрайства!"
 
-#: src/keybind.c:1802
+#: src/keybind.c:1839
 msgid "Destroying selected droids and structures!"
 msgstr "Обрані підрозділи та будівлі буде знищено!"
 
-#: src/keybind.c:2320
+#: src/keybind.c:2357
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Вид відцентровано на Штабі гравця у північному напрямку"
 
-#: src/keybind.c:2332
+#: src/keybind.c:2369
 msgid "Unable to locate HQ!"
 msgstr "Не вдалося знайти Штаб!"
 
-#: src/keybind.c:2339
+#: src/keybind.c:2376
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Обмеження швижкості формації було видалено з гри через баги."
 
-#: src/keybind.c:2388
+#: src/keybind.c:2425
 msgid "Vertical rotation direction: Normal"
 msgstr "Напрямок вертикального обертання: Нормальний"
 
-#: src/keybind.c:2393
+#: src/keybind.c:2430
 msgid "Vertical rotation direction: Flipped"
 msgstr "Напрямок вертикального обертання: Обернений"
 
-#: src/keybind.c:2402
+#: src/keybind.c:2439
 msgid "Screen shake when things die: Off"
 msgstr "Трясіння екрану при знищенні підрозділів: Вимкнене"
 
-#: src/keybind.c:2407
+#: src/keybind.c:2444
 msgid "Screen shake when things die: On"
 msgstr "Трясіння екрану при знищенні підрозділів: Задіяне"
 
-#: src/keybind.c:2452
-#: src/keybind.c:2495
+#: src/keybind.c:2489
+#: src/keybind.c:2532
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "На жаль, швидкість гри не можу бути змінена у мультиплеєрі."
 
-#: src/keybind.c:2473
-#: src/keybind.c:2516
-#: src/keybind.c:2538
+#: src/keybind.c:2510
+#: src/keybind.c:2553
+#: src/keybind.c:2575
 msgid "Game Speed Reset"
 msgstr "Швидкість Гри Нормалізовано"
 
-#: src/keybind.c:2477
+#: src/keybind.c:2514
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Швидкість Гри Підвищено до %3.1f"
 
-#: src/keybind.c:2520
+#: src/keybind.c:2557
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Швидкість Гри Знижено до %3.1f"
 
-#: src/keybind.c:2550
+#: src/keybind.c:2587
 msgid "Build menu will reopen"
 msgstr "Меню будівництва буде повторно відкриватись"
 
-#: src/keybind.c:2554
+#: src/keybind.c:2591
 msgid "Build menu will not reopen"
 msgstr "Меню будівництва не буде повторно відкриватись"
 
-#: src/keybind.c:2566
+#: src/keybind.c:2603
 msgid "Radar showing friend-foe colors"
 msgstr "Радар показує кольори свій-чужий"
 
-#: src/keybind.c:2570
+#: src/keybind.c:2607
 msgid "Radar showing player colors"
 msgstr "Радар показує кольори гравців"
 
-#: src/keybind.c:2591
+#: src/keybind.c:2628
 msgid "Radar showing only objects"
 msgstr "Радар показує лише об’єкти"
 
-#: src/keybind.c:2594
+#: src/keybind.c:2631
 msgid "Radar blending terrain and height"
 msgstr "Радар відображає місцевість та рельєф"
 
-#: src/keybind.c:2597
+#: src/keybind.c:2634
 msgid "Radar showing terrain"
 msgstr "Радар показує місцевість"
 
-#: src/keybind.c:2600
+#: src/keybind.c:2637
 msgid "Radar showing revealed terrain"
 msgstr "Радар показує розвідану місцевість"
 
-#: src/keybind.c:2603
+#: src/keybind.c:2640
 msgid "Radar showing height"
 msgstr "Радар показує рельєф"
 
@@ -12639,7 +12639,7 @@ msgstr "Повернутися До Попереднього Екрану"
 
 #: src/keyedit.c:400
 msgid "Select Default"
-msgstr "Обрати Замовчання"
+msgstr "Обрати Замовчування"
 
 #: src/keymap.c:295
 msgid "Manufacture"
@@ -13325,34 +13325,34 @@ msgstr "*** зараз потрібен пароль! ***"
 msgid "*** password is NOT required! ***"
 msgstr "*** пароль НЕ потрібен! ***"
 
-#: src/multiint.c:2644
+#: src/multiint.c:2645
 msgid "Sorry! Failed to host the game."
 msgstr "Вибачте! Не далося створити гру."
 
-#: src/multiint.c:2729
+#: src/multiint.c:2730
 msgid "'Locked Teams' mode enabled"
 msgstr "'Закріплені Команди' режим активовано"
 
-#: src/multiint.c:2768
-#: src/multiint.c:2818
+#: src/multiint.c:2769
+#: src/multiint.c:2819
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Хост викинув %s з гри!"
 
-#: src/multiint.c:2876
+#: src/multiint.c:2887
 msgid "Host is Starting Game"
 msgstr "Хост Починає Гру"
 
-#: src/multiint.c:3427
+#: src/multiint.c:3438
 msgid "Players"
 msgstr "Гравці"
 
-#: src/multiint.c:3543
+#: src/multiint.c:3554
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Мапа: %d%% завантажена"
 
-#: src/multiint.c:3569
+#: src/multiint.c:3580
 msgid "HOST"
 msgstr "ХОСТ"
 
@@ -13361,22 +13361,22 @@ msgstr "ХОСТ"
 msgid "Players Still Joining"
 msgstr "Гравці Продовжують Приєднуватись"
 
-#: src/multijoin.c:230
+#: src/multijoin.c:213
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s покинув Гру"
 
-#: src/multijoin.c:340
+#: src/multijoin.c:323
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) має несумісний мод, отже був викинутий."
 
-#: src/multijoin.c:384
+#: src/multijoin.c:367
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s Приєднався до Гри"
 
-#: src/multijoin.c:394
+#: src/multijoin.c:377
 msgid "System message:"
 msgstr "Повідомлення системи:"
 
@@ -13457,52 +13457,52 @@ msgstr "Передати Вибрані Одиниці"
 msgid "Give Power To Player"
 msgstr "Надати Енергію Гравцю"
 
-#: src/multiplay.c:287
+#: src/multiplay.c:288
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Викидуємо гравця %s, тому що він намагався обійти перевірку цілісності даних!"
 
-#: src/multiplay.c:1078
+#: src/multiplay.c:1079
 msgid "(allies"
 msgstr "(союзники"
 
-#: src/multiplay.c:1086
+#: src/multiplay.c:1087
 msgid "(private to "
 msgstr "(приватно до"
 
-#: src/multiplay.c:1099
+#: src/multiplay.c:1100
 msgid "[invalid]"
 msgstr "[невірний]"
 
-#: src/multiplay.c:1958
+#: src/multiplay.c:1959
 msgid "Green"
 msgstr "Зелений"
 
-#: src/multiplay.c:1959
+#: src/multiplay.c:1960
 msgid "Orange"
 msgstr "Помаранчовий"
 
-#: src/multiplay.c:1960
+#: src/multiplay.c:1961
 msgid "Grey"
 msgstr "Сірий"
 
-#: src/multiplay.c:1961
+#: src/multiplay.c:1962
 msgid "Black"
 msgstr "Чорний"
 
-#: src/multiplay.c:1962
+#: src/multiplay.c:1963
 msgid "Red"
 msgstr "Червоний"
 
-#: src/multiplay.c:1963
+#: src/multiplay.c:1964
 msgid "Blue"
 msgstr "Синій"
 
-#: src/multiplay.c:1964
+#: src/multiplay.c:1965
 msgid "Pink"
 msgstr "Рожевий"
 
-#: src/multiplay.c:1965
+#: src/multiplay.c:1966
 msgid "Cyan"
 msgstr "Блакитний"
 
