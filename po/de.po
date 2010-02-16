@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-02-09 18:24+0100\n"
-"PO-Revision-Date: 2010-02-03 17:33+0100\n"
+"PO-Revision-Date: 2010-02-16 17:07+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -13430,7 +13430,7 @@ msgstr "Standardwerte nehmen und zum vorherigen Bildschirm zurückkehren"
 
 #: src/multilimit.c:316
 msgid "Limits reset to default values"
-msgstr ""
+msgstr "Begrenzungen auf Standardwerte zurückgesetzt"
 
 #: src/multimenu.c:609
 msgid "Technology level 1"
