@@ -700,7 +700,7 @@ event buildFundamentals(inactive)
 	{
 		exit;	// not much more we can (or should) do
 	}
-	else if (playerPower(me) < HIGH_POWER)
+	else if (playerPower(me) < HIGH_POWER or numFactories() > 1)
 	{
 		// Ok, basics are done. Now go offensive! We first check for oil derricks to build on, to deny
 		// them to the enemy. Then that calls for building defenses there. Failing that, we expand our base.
@@ -708,11 +708,8 @@ event buildFundamentals(inactive)
 		setEventTrigger(buildDerrick, chainloadTr);
 		exit;
 	}
-	else	// if too much power
+	else	// if lots of power and too few factories to replace high-risk oil hunting trucks
 	{
-		// Fundamental base already built, so start expanding it if we have too much power. It will call all kinds
-		// of wasteful spending routines. Nothing is worse than losing with the coffers full! This event will
-		// allow us to spend more, and failing that will call the build defense event instead.
 		dbgPlr("Too much power - EXPAND!");
 		setEventTrigger(buildExpand, chainloadTr);
 		exit;
@@ -1032,7 +1029,10 @@ event buildOilDefenseOrRetreat(inactive)
 	}
 	if (idleGroup(buildGroup) > 0)
 	{
-			setEventTrigger(buildExpand, chainloadTr);	// not enough to do, start expanding in depth instead
+		// Fundamental base already built, so start expanding it if we have too much power. It will call all kinds
+		// of wasteful spending routines. Nothing is worse than losing with the coffers full! This event will
+		// allow us to spend more, and failing that will call the build defense event instead.
+		setEventTrigger(buildExpand, chainloadTr);	// not enough to do, start expanding in depth instead
 	}
 	setEventTrigger(buildOilDefenseOrRetreat, inactive);
 }
