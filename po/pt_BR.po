@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-09 18:34+0100\n"
-"PO-Revision-Date: 2009-11-14 17:51-0300\n"
-"Last-Translator: Artur Filipe <tucalipe@hotmail.com>\n"
+"POT-Creation-Date: 2010-02-16 16:43+0100\n"
+"PO-Revision-Date: 2010-02-13 14:39-0300\n"
+"Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9620,77 +9620,65 @@ msgid "Viper Flamer Half-Track"
 msgstr "Híbrido Incendiário Víbora"
 
 #: data/mp/messages/resmessages12.rmsg:58
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "Aumenta a velocidade de construção"
+msgstr "Velocidade de construção +10%"
 
 #: data/mp/messages/resmessages12.rmsg:97
 #: data/mp/messages/resmessagesall.rmsg:214
-#, fuzzy
 msgid "Cannon accuracy +10%"
-msgstr "Aumenta a exatidão do Canhão"
+msgstr "Precisão de canhões +10%"
 
 #: data/mp/messages/resmessages12.rmsg:110
-#, fuzzy
 msgid "Flamer reload time -15%"
-msgstr "Recarregamento Automático de Incendiário"
+msgstr "Interv. de recarga de incend. -15%"
 
 #: data/mp/messages/resmessages12.rmsg:136
 #: data/mp/messages/resmessages23.rmsg:175
 #: data/mp/messages/resmessages2.rmsg:890
-#, fuzzy
 msgid "Machinegun reload time -15%"
-msgstr "Melhora de Metralhadora"
+msgstr "Interv. de recarga de metralhadora -15%"
 
 #: data/mp/messages/resmessages12.rmsg:162
 #: data/mp/messages/resmessages23.rmsg:188
 #: data/mp/messages/resmessages3.rmsg:1176
-#, fuzzy
 msgid "Mortar accuracy +10%"
-msgstr "Aumenta a exatidão dos Morteiros"
+msgstr "Precisão de morteiros +10%"
 
 #: data/mp/messages/resmessages12.rmsg:175
 #: data/mp/messages/resmessages3.rmsg:1189
-#, fuzzy
 msgid "Mortar reload time -10%"
-msgstr "Carregador de Morteiro Automático"
+msgstr "Interv. de recarga de morteiros -10%"
 
 #: data/mp/messages/resmessages12.rmsg:201
-#, fuzzy
 msgid "Rocket reload time -15%"
-msgstr "Carregador Automático de Foguetes"
+msgstr "Interv. de recarga de foguetes -15%"
 
 #: data/mp/messages/resmessages12.rmsg:214
 #: data/mp/messages/resmessages3.rmsg:890
-#, fuzzy
 msgid "Cannon reload time -10%"
-msgstr "Carregamento Automático de Canhões"
+msgstr "Interv. de recarga de canhões -10%"
 
 #: data/mp/messages/resmessages12.rmsg:227
 #: data/mp/messages/resmessages1.rmsg:579
 #: data/mp/messages/resmessages3.rmsg:877
-#, fuzzy
 msgid "Cannon damage +25%"
-msgstr "Aumenta o dano dos canhões"
+msgstr "Dano de canhões +25%"
 
 #: data/mp/messages/resmessages12.rmsg:240
 #: data/mp/messages/resmessages1.rmsg:748
 #: data/mp/messages/resmessagesall.rmsg:175
-#, fuzzy
 msgid "Rocket accuracy +10%"
-msgstr "Aumenta a exatidão do foguete"
+msgstr "Precisão de foguetes +10%"
 
 #: data/mp/messages/resmessages1.rmsg:32
 #: data/mp/messages/resmessages3.rmsg:71
 #: data/mp/messages/resmessages3.rmsg:84
-#, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "Aumenta os pontos de vida e a armadura cinética"
+msgstr "Armadura cinética +35%, Pontos de vida +35%"
 
 #: data/mp/messages/resmessages1.rmsg:97
-#, fuzzy
 msgid "Armour +35%, Body Points +30%"
-msgstr "Aumenta Integridade e Pontos de Vida"
+msgstr "Armadura +35%, Ptos. de vida +35%"
 
 #: data/mp/messages/resmessages1.rmsg:148
 msgid "Armored guard tower with Lancer AT rocket"
@@ -9699,31 +9687,28 @@ msgstr "Torre Reforçada com Lançadeira de Foguetes AT"
 #: data/mp/messages/resmessages1.rmsg:253
 #: data/mp/messages/resmessages2.rmsg:331
 #: data/mp/messages/resmessages3.rmsg:422
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "Aumenta a velocidade de reparo"
+msgstr "Velocidade de reparo +100%"
 
 #: data/mp/messages/resmessages1.rmsg:306
 #, no-c-format
 msgid "Factory output speed +100% per module"
-msgstr ""
+msgstr "Velocidade de prod. da fábrica +100% por módulo"
 
 #: data/mp/messages/resmessages1.rmsg:319
 #: data/mp/messages/resmessagesall.rmsg:786
 msgid "Factory output speed +60%"
-msgstr ""
+msgstr "Velocidade de prod. da fábrica +60%"
 
 #: data/mp/messages/resmessages1.rmsg:345
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "Pesquisa concluída: %s"
+msgstr "Velocidade de pesquisa +85%"
 
 #: data/mp/messages/resmessages1.rmsg:358
 #: data/mp/messages/resmessages2.rmsg:370
 #: data/mp/messages/resmessages3.rmsg:448
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "Pesquisa concluída: %s"
+msgstr "Velocidade de pesquisa +30%"
 
 #: data/mp/messages/resmessages1.rmsg:371
 #: data/mp/messages/resmessages2.rmsg:58
@@ -9732,25 +9717,22 @@ msgstr "Pesquisa concluída: %s"
 #: data/mp/messages/resmessages3.rmsg:227
 #: data/mp/messages/resmessages3.rmsg:461
 #: data/mp/messages/resmessages3.rmsg:474
-#, fuzzy
 msgid "Armor +35%, Body Points +30%"
-msgstr "Aumenta Integridade e Pontos de Vida"
+msgstr "Armadura +35%, Ptos. de Vida +30%"
 
 #: data/mp/messages/resmessages1.rmsg:462
 #: data/mp/messages/resmessages2.rmsg:500
 #: data/mp/messages/resmessages3.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:682
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "Chassis"
+msgstr "Velocidade de unidades +5%"
 
 #: data/mp/messages/resmessages1.rmsg:475
 #: data/mp/messages/resmessages2.rmsg:513
 #: data/mp/messages/resmessages3.rmsg:695
 #: data/mp/messages/resmessages3.rmsg:708
-#, fuzzy
 msgid "Kinetic armor +30%, body points +30%"
-msgstr "Aumenta a armadura e os pontos de vida"
+msgstr "Armadura cinética +30%, ptos. de vida +30%"
 
 #: data/mp/messages/resmessages1.rmsg:553
 #: data/mp/messages/resmessages1.rmsg:566
@@ -9761,62 +9743,54 @@ msgstr "Alvo: Veículos e Defesas"
 #: data/mp/messages/resmessages1.rmsg:605
 #: data/mp/messages/resmessages2.rmsg:786
 #: data/mp/messages/resmessagesall.rmsg:773
-#, fuzzy
 msgid "Flamer damage +25%"
-msgstr "Aumenta o dano dos incendiários"
+msgstr "Dano de incendiários +25%"
 
 #: data/mp/messages/resmessages1.rmsg:644
 #: data/mp/messages/resmessages1.rmsg:657
 #: data/mp/messages/resmessages2.rmsg:877
 #: data/mp/messages/resmessages3.rmsg:1007
 #: data/mp/messages/resmessages3.rmsg:1020
-#, fuzzy
 msgid "Machinegun damage +25%"
-msgstr "Aumenta o dano da metralhadora"
+msgstr "Dano de metralhadoras +25%"
 
 #: data/mp/messages/resmessages1.rmsg:683
 #: data/mp/messages/resmessages2.rmsg:916
-#, fuzzy
 msgid "Mortar damage +25%"
-msgstr "Aumenta o dano dos Morteiros"
+msgstr "Dano de morteiros +25%"
 
 #: data/mp/messages/resmessages1.rmsg:709
-#, fuzzy
 msgid "Mini-Rocket accuracy +10%"
-msgstr "Aumenta a exatidão dos Mini-Foguetes"
+msgstr "Precisão de mini-foguetes +10%"
 
 #: data/mp/messages/resmessages1.rmsg:722
 #: data/mp/messages/resmessages2.rmsg:929
-#, fuzzy
 msgid "Mini-Rocket damage +25%"
-msgstr "Aumenta o dano do Mini-Foguete"
+msgstr "Dano de mini-foguetes +25%"
 
 #: data/mp/messages/resmessages1.rmsg:735
-#, fuzzy
 msgid "Mini-Rocket reload time -15%"
-msgstr "Melhora de Mini-Foguetes"
+msgstr "Interv. de recarga de mini-foguetes -15%"
 
 #: data/mp/messages/resmessages1.rmsg:761
 #: data/mp/messages/resmessages2.rmsg:942
-#, fuzzy
 msgid "Rocket damage +25%"
-msgstr "Aumenta o dano dos Foguetes"
+msgstr "Dano de foguetes +25%"
 
 #: data/mp/messages/resmessages23.rmsg:32
 msgid "Power output +25%"
-msgstr ""
+msgstr "Produção de energia +25%"
 
 #: data/mp/messages/resmessages23.rmsg:45
 #: data/mp/messages/resmessages3.rmsg:513
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "Aumenta a velocidade de construção"
+msgstr "Velocidade de Construção +20%"
 
 #: data/mp/messages/resmessages23.rmsg:136
 #: data/mp/messages/resmessages2.rmsg:643
 #: data/mp/messages/resmessages3.rmsg:812
 msgid "AA accuracy +10%"
-msgstr ""
+msgstr "Precisão de AA +10%"
 
 #: data/mp/messages/resmessages23.rmsg:160
 #: data/mp/messages/resmessages2.rmsg:732
@@ -9832,72 +9806,62 @@ msgstr "Formula de trinitroamina explosiva melhorada"
 #: data/mp/messages/resmessages2.rmsg:734
 #: data/mp/messages/resmessages3.rmsg:864
 msgid "Bomb damage +25%"
-msgstr ""
+msgstr "Dano de bombas +25%"
 
 #: data/mp/messages/resmessages2.rmsg:6
-#, fuzzy
 msgid "Thermal Armor +45%"
-msgstr "Armadura Térmica"
+msgstr "Armadura Térmica +45%"
 
 #: data/mp/messages/resmessages2.rmsg:19
-#, fuzzy
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "Aumenta os pontos de vida e a armadura cinética"
+msgstr "Armadura Cinética +35%, Ptos. de Vida +35%"
 
 #: data/mp/messages/resmessages2.rmsg:357
-#, fuzzy
 msgid "Factory production rate +60%"
-msgstr "Aumenta a produção das fábricas"
+msgstr "Velocidade de prod. de fábricas +60%"
 
 #: data/mp/messages/resmessages2.rmsg:358
 #: data/mp/messages/resmessagesall.rmsg:787
-#, fuzzy
 msgid "All factories upgraded automatically"
-msgstr "Todas as fábricas VTOL melhoradas automaticamente"
+msgstr "Todas as fábricas melhoradas automaticamente"
 
 #: data/mp/messages/resmessages2.rmsg:409
 #: data/mp/messages/resmessages3.rmsg:500
 msgid "Rearming speed +30%"
-msgstr ""
+msgstr "Velocidade de recarga +30%"
 
 #: data/mp/messages/resmessages2.rmsg:526
-#, fuzzy
 msgid "Thermal armor +40%"
-msgstr "Armadura Térmica"
+msgstr "Armadura Térmica +40%"
 
 #: data/mp/messages/resmessages2.rmsg:656
 #: data/mp/messages/resmessages3.rmsg:825
-#, fuzzy
 msgid "AA Flak damage +25%"
-msgstr "Aumenta o dano das armas AA"
+msgstr "Dano da AA explosiva +25"
 
 #: data/mp/messages/resmessages2.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:838
 msgid "AA reload time -15%"
-msgstr ""
+msgstr "Intervalo de recarga da AA -15%"
 
 #: data/mp/messages/resmessages2.rmsg:838
 #: data/mp/messages/resmessages3.rmsg:903
-#, fuzzy
 msgid "Howitzer accuracy +10%"
-msgstr "Aumenta a exatidão do Obus"
+msgstr "Precisão do Obus +10%"
 
 #: data/mp/messages/resmessages2.rmsg:851
 #: data/mp/messages/resmessages3.rmsg:916
-#, fuzzy
 msgid "Howitzer damage +25%"
-msgstr "Aumenta o dano do Obus"
+msgstr "Dano do Obus +10%"
 
 #: data/mp/messages/resmessages2.rmsg:864
 #: data/mp/messages/resmessages3.rmsg:929
-#, fuzzy
 msgid "Howitzer reload time -10%"
-msgstr "Carregador Automático de Obus"
+msgstr "Interv. de Recarga de Obus -10%"
 
 #: data/mp/messages/resmessages3.rmsg:6
-#, fuzzy
 msgid "Thermal Armor +35%"
-msgstr "Armadura Térmica Mk3"
+msgstr "Armadúra Térmica +35%"
 
 #: data/mp/messages/resmessages3.rmsg:304
 msgid "Armored guard tower with Pulse Laser"
@@ -9905,98 +9869,82 @@ msgstr "Torre Reforçada com Pulso Laser"
 
 #: data/mp/messages/resmessages3.rmsg:435
 msgid "Power output +30%"
-msgstr ""
+msgstr "Produção de energia +30%"
 
 #: data/mp/messages/resmessages3.rmsg:721
 #: data/mp/messages/resmessagesall.rmsg:838
-#, fuzzy
 msgid "Thermal Armor +40%"
-msgstr "Armadura Térmica"
+msgstr "Armadura Térmica +40%"
 
 #: data/mp/messages/resmessages3.rmsg:968
-#, fuzzy
 msgid "Laser accuracy +10%"
-msgstr "Aumenta a exatidão dos Lasers"
+msgstr "Precisão de laseres +10%"
 
 #: data/mp/messages/resmessages3.rmsg:981
-#, fuzzy
 msgid "Laser damage +25%"
-msgstr "Aumenta o dano dos Lasers"
+msgstr "Dano de Laseres +25%"
 
 #: data/mp/messages/resmessages3.rmsg:994
 msgid "Laser reload time -15%"
-msgstr ""
+msgstr "Intervalo de recarga de laseres -15%"
 
 #: data/mp/messages/resmessages3.rmsg:1059
 #: data/mp/messages/resmessages3.rmsg:1072
-#, fuzzy
 msgid "Missile accuracy +10%"
-msgstr "Aumenta a exatidão dos mísseis"
+msgstr "Precisão de mísseis +10%"
 
 #: data/mp/messages/resmessages3.rmsg:1085
-#, fuzzy
 msgid "Missile damage +25%"
-msgstr "Aumenta o dano do míssil"
+msgstr "Dano de mísseis +25"
 
 #: data/mp/messages/resmessages3.rmsg:1150
 #: data/mp/messages/resmessages3.rmsg:1163
-#, fuzzy
 msgid "Missile reload time -15%"
-msgstr "Duração da Missão - %s"
+msgstr "Interv. de recarga de mísseis -15%"
 
 #: data/mp/messages/resmessages3.rmsg:1241
-#, fuzzy
 msgid "Rail Gun accuracy +10%"
-msgstr "Aumenta a exatidão dos Aceleradores de Partículas"
+msgstr "Precisão de Acel. de Part. +10%"
 
 #: data/mp/messages/resmessages3.rmsg:1254
-#, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "Aumenta o dano dos aceleradores de partículas"
+msgstr "Dano de Acel. de Part. +25"
 
 #: data/mp/messages/resmessages3.rmsg:1267
-#, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "Melhora de Acelerador de Partículas"
+msgstr "Inter. de Recarga de Acel. de Part. -15%"
 
 #: data/mp/messages/resmessagesall.rmsg:84
-#, fuzzy
 msgid "Sensor Range +25%"
-msgstr "Alcance de Sensor"
+msgstr "Alcance de Sensor +25"
 
 #: data/mp/messages/resmessagesall.rmsg:96
-#, fuzzy
 msgid "Improved Thermal Emissions detection"
-msgstr "Detecção de Emissões de Calor"
+msgstr "Detecção Melhorada de Emissões de Calor"
 
 #: data/mp/messages/resmessagesall.rmsg:97
-#, fuzzy
 msgid "Sensor Range +15%"
-msgstr "Alcance de Sensor"
+msgstr "Alcance de Sensor +15%"
 
 #: data/mp/messages/resmessagesall.rmsg:109
-#, fuzzy
 msgid "Advanced Thermal Emissions detection"
-msgstr "Detecção de Emissões de Calor"
+msgstr "Detecção Avançada de Emissões de Calor"
 
 #: data/mp/messages/resmessagesall.rmsg:110
-#, fuzzy
 msgid "Sensor Range +10%"
-msgstr "Alcance de Sensor"
+msgstr "Alcance de Sensor +10%"
 
 #: data/mp/messages/resmessagesall.rmsg:135
 msgid "Radar detector tower detects enemy sensors"
-msgstr ""
+msgstr "Torre de radar detector detecta sensores inimigos"
 
 #: data/mp/messages/resmessagesall.rmsg:136
-#, fuzzy
 msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-msgstr "Comanda artilharias designadas a atirarem nas artilharias inimigas"
+msgstr "Comanda artilharias designadas a atirarem nos sensores inimigos"
 
 #: data/mp/messages/resmessagesall.rmsg:137
-#, fuzzy
 msgid "Counter-battery fire continues until enemy sensor is suppressed"
-msgstr "O fogo de artilharia continua até a artilharia inimiga ser destruída"
+msgstr "O fogo de artilharia continua até o sensor inimigo ser destruído"
 
 #: data/mp/messages/resmessagesall.rmsg:225
 msgid "Cyborg Transport Available"
@@ -10102,7 +10050,7 @@ msgstr "Visibilidade completa do campo de batalha"
 
 #: data/mp/messages/resmessagesall.rmsg:501
 msgid "Does not offer sensor targeting"
-msgstr ""
+msgstr "Não detecta alvos"
 
 #: data/mp/messages/resmessagesall.rmsg:512
 #: data/mp/messages/resmessagesall.rmsg:707
@@ -10122,7 +10070,6 @@ msgid "Immense damage infliction capability"
 msgstr "Alta capacidade de infração de danos"
 
 #: data/mp/messages/resmessagesall.rmsg:527
-#, fuzzy
 msgid "Narrow area of effect"
 msgstr "Área de efeito limitada"
 
@@ -10811,18 +10758,16 @@ msgid "Missile Fortress"
 msgstr "Fortaleza de Mísseis"
 
 #: data/mp/messages/strings/names.txt:1761
-#, fuzzy
 msgid "Heavy Body - Wyvern"
-msgstr "Chassis Super Pesado - Dragonete"
+msgstr "Chassis Pesado - Dragonete"
 
 #: data/mp/messages/strings/names.txt:1762
 msgid "Wyvern"
 msgstr "Dragonete"
 
 #: data/mp/messages/strings/names.txt:1764
-#, fuzzy
 msgid "Multi Turret Body - Dragon"
-msgstr "Chassis Extremo - Dragão"
+msgstr "Chassis de Múltiplos Torretes - Dragão"
 
 #: data/mp/messages/strings/names.txt:1765
 msgid "Dragon"
@@ -11276,9 +11221,8 @@ msgstr "Irlandês"
 
 #: lib/framework/i18n.c:71
 #: lib/framework/i18n.c:128
-#, fuzzy
 msgid "Croatian"
-msgstr "Romeno"
+msgstr "Croata"
 
 #: lib/framework/i18n.c:72
 #: lib/framework/i18n.c:129
@@ -11332,9 +11276,8 @@ msgstr "Slovênio"
 
 #: lib/framework/i18n.c:94
 #: lib/framework/i18n.c:146
-#, fuzzy
 msgid "Ukrainian"
-msgstr "Frisiano"
+msgstr "Ucraniano"
 
 #: lib/framework/i18n.c:95
 #: lib/framework/i18n.c:147
@@ -11352,9 +11295,8 @@ msgstr "Latim"
 
 #: lib/netplay/netplay.c:1164
 #: lib/netplay/netplay.c:1974
-#, fuzzy
 msgid "Enter password here"
-msgstr "Entre a Senha antes"
+msgstr "Entre a senha aqui"
 
 #: lib/netplay/netplay.c:2896
 #, c-format
@@ -11368,7 +11310,7 @@ msgstr "Não foi possível communicar com o servidor de lobby! A porta TCP %u es
 
 #: lib/netplay/netplay.c:3329
 msgid ", mods: "
-msgstr ""
+msgstr ", mods:"
 
 #: src/clparse.c:99
 msgid "Run in cheat mode"
@@ -11667,18 +11609,18 @@ msgstr "Jogador desconectou-se"
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Não pode construir. Recursos petrolíferos queimados."
 
-#: src/display.c:1899
-#: src/display.c:2514
+#: src/display.c:1874
+#: src/display.c:2463
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Danos %d%% - Experiência %d, %s"
 
-#: src/display.c:1915
-#, fuzzy, c-format
+#: src/display.c:1890
+#, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
-msgstr "%s - Danos %d%% - Experiência %d, %s"
+msgstr "%s - Aliado - Danos %d%% - Experiência %d, %s"
 
-#: src/display.c:2121
+#: src/display.c:2070
 msgid "Truck ordered to build Oil Derrick"
 msgstr "O Caminhão ordenou a construção Oil Derrick"
 
@@ -11829,8 +11771,8 @@ msgstr "UM JOGADOR"
 
 #: src/frontend.c:470
 #: src/ingameop.c:519
-#: src/mission.c:2529
-#: src/mission.c:2634
+#: src/mission.c:2534
+#: src/mission.c:2639
 msgid "Load Saved Game"
 msgstr "Carregar Jogo Salvo"
 
@@ -11968,9 +11910,8 @@ msgid "Shadows"
 msgstr "Sombras"
 
 #: src/frontend.c:726
-#, fuzzy
 msgid "GRAPHICS OPTIONS"
-msgstr "OPÇÕES DE JOGO"
+msgstr "OPÇÕES DE GRÁFICOS"
 
 #: src/frontend.c:857
 #: src/ingameop.c:177
@@ -11988,9 +11929,8 @@ msgid "Music Volume"
 msgstr "Volume da Música"
 
 #: src/frontend.c:872
-#, fuzzy
 msgid "AUDIO OPTIONS"
-msgstr "OPÇÕES DE JOGO"
+msgstr "OPÇÕES DE ÁUDIO"
 
 #: src/frontend.c:937
 msgid "Graphics Mode*"
@@ -12018,9 +11958,8 @@ msgid "* Takes effect on game restart"
 msgstr "* Precisa reiniciar o jogo"
 
 #: src/frontend.c:973
-#, fuzzy
 msgid "VIDEO OPTIONS"
-msgstr "OPÇÕES DE JOGO"
+msgstr "OPÇÕES DE VÍDEO"
 
 #: src/frontend.c:1131
 msgid "Reverse Rotation"
@@ -12031,7 +11970,6 @@ msgid "Trap Cursor"
 msgstr "Travar Cursor"
 
 #: src/frontend.c:1154
-#, fuzzy
 msgid "Colored Cursors*"
 msgstr "Cursores Coloridos *"
 
@@ -12044,9 +11982,8 @@ msgid "* May negatively affect performance"
 msgstr "* Pode afetar a performance"
 
 #: src/frontend.c:1180
-#, fuzzy
 msgid "MOUSE OPTIONS"
-msgstr "OPÇÕES DE JOGO"
+msgstr "OPÇÕES DE MOUSE"
 
 #: src/frontend.c:1281
 #: src/frontend.c:1347
@@ -12094,7 +12031,7 @@ msgstr "OPÇÕES DE JOGO"
 #: src/frontend.c:1699
 #: src/multiint.c:2233
 msgid "Active mods: "
-msgstr ""
+msgstr "Mods ativos:"
 
 #: src/hci.c:1013
 #: src/hci.c:3789
@@ -12251,7 +12188,7 @@ msgstr "Resumir Jogo"
 
 #: src/ingameop.c:142
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr ""
+msgstr "ATENÇÃO: Você é o hosp. Se você sair, o jogo acaba para todos!"
 
 #: src/ingameop.c:195
 #: src/ingameop.c:548
@@ -12265,23 +12202,22 @@ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Esconder"
 
 #: src/ingameop.c:295
 #: src/ingameop.c:523
-#: src/mission.c:2516
-#: src/mission.c:2637
+#: src/mission.c:2521
+#: src/mission.c:2642
 msgid "Save Game"
 msgstr "Salvar"
 
 #: src/ingameop.c:364
-#, fuzzy
 msgid "Host has quit the game!"
-msgstr "%s saiu do jogo"
+msgstr "O hospedeiro saiu do jogo!"
 
 #: src/ingameop.c:370
 msgid "The game can't continue without the host."
-msgstr ""
+msgstr "O jogo não pode continuar sem o hosp."
 
 #: src/ingameop.c:376
 msgid "-->  QUIT  <--"
-msgstr ""
+msgstr "--> SAIR <--"
 
 #: src/intdisplay.c:197
 msgid "Build Progress"
@@ -12552,9 +12488,9 @@ msgid "View Aligned to North"
 msgstr "Ver alinhado com o Norte"
 
 #: src/keybind.c:1336
-#, fuzzy, c-format
+#, c-format
 msgid "Trap cursor %s"
-msgstr "Travar Cursor"
+msgstr "Travar Cursor %s"
 
 #: src/keybind.c:1417
 msgid "Researched EVERYTHING for you!"
@@ -12627,29 +12563,28 @@ msgstr "Impossível localizar QG!"
 
 #: src/keybind.c:2442
 msgid "Formation speed limiting has been removed from the game due to bugs."
-msgstr ""
+msgstr "Limite de velocidade em formação removido devido a falhas."
 
 #: src/keybind.c:2491
 msgid "Vertical rotation direction: Normal"
-msgstr ""
+msgstr "Direção da rotação vertical: Normal"
 
 #: src/keybind.c:2496
 msgid "Vertical rotation direction: Flipped"
-msgstr ""
+msgstr "Direção da rotação vertical: Invertida"
 
 #: src/keybind.c:2505
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "Tremer a tela quando coisas morrem: Não"
 
 #: src/keybind.c:2510
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "Tremer a tela quando coisas morrem: Sim"
 
 #: src/keybind.c:2555
 #: src/keybind.c:2598
-#, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "Desculpe, as trapaças estão desativadas em jogos multiplayer."
+msgstr "Desculpe, não se pode mudar a velocidade  em jogos multiplayer."
 
 #: src/keybind.c:2576
 #: src/keybind.c:2619
@@ -12696,9 +12631,8 @@ msgid "Radar showing terrain"
 msgstr "Radar exibe terreno"
 
 #: src/keybind.c:2703
-#, fuzzy
 msgid "Radar showing revealed terrain"
-msgstr "Radar exibe terreno"
+msgstr "Radar exibe terreno revelado"
 
 #: src/keybind.c:2706
 msgid "Radar showing height"
@@ -12889,9 +12823,8 @@ msgid "Select Commander 9"
 msgstr "Selecionar Comandante 9"
 
 #: src/keymap.c:350
-#, fuzzy
 msgid "Multiplayer Options / Alliance dialog"
-msgstr "Opções de Multiplayer"
+msgstr "Opções de Multiplayer / Janela de Alianças"
 
 #: src/keymap.c:353
 msgid "Snap View to North"
@@ -13086,45 +13019,45 @@ msgstr "Liga/Desliga a reabertura do menu de construção"
 msgid "Could not save game!"
 msgstr "Impossível salvar o jogo!"
 
-#: src/mission.c:2069
+#: src/mission.c:2074
 msgid "Load Transport"
 msgstr "Carregar Transportes"
 
-#: src/mission.c:2463
+#: src/mission.c:2468
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBJETIVO ARQUIVADO por trapaça!"
 
-#: src/mission.c:2463
+#: src/mission.c:2468
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJETIVO ARQUIVADO"
 
-#: src/mission.c:2469
+#: src/mission.c:2474
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "FLAHA NO OBJETIVO--e você trapaçeou!"
 
-#: src/mission.c:2469
+#: src/mission.c:2474
 msgid "OBJECTIVE FAILED"
 msgstr "FLAHA NO OBJETIVO"
 
-#: src/mission.c:2495
-#: src/mission.c:2535
-#: src/mission.c:2653
+#: src/mission.c:2500
+#: src/mission.c:2540
+#: src/mission.c:2658
 msgid "Quit To Main Menu"
 msgstr "Sair para o Menu Principal"
 
-#: src/mission.c:2503
+#: src/mission.c:2508
 msgid "Continue Game"
 msgstr "Continuar o Jogo"
 
-#: src/mission.c:2600
+#: src/mission.c:2605
 msgid "GAME SAVED :"
 msgstr "JOGO SALVO :"
 
-#: src/move.c:2870
-#: src/move.c:2886
+#: src/move.c:2857
+#: src/move.c:2873
 #, c-format
 msgid "You found %u power in an oil drum."
-msgstr "Você obteve %u de energia de um tambor de petróleo."
+msgstr "Você encontrou %u de energia de um tambor de petróleo."
 
 #: src/multigifts.c:171
 #, c-format
@@ -13183,9 +13116,8 @@ msgstr "Aceitar Configurações"
 
 #: src/multiint.c:573
 #: src/multiint.c:1118
-#, fuzzy
 msgid "Cancel"
-msgstr "Lançadeiro"
+msgstr "Cancelar"
 
 #: src/multiint.c:584
 msgid "IP Address or Machine Name"
@@ -13221,11 +13153,11 @@ msgstr "Versão do Jogo Errada!"
 
 #: src/multiint.c:853
 msgid "You have an incompatible mod."
-msgstr ""
+msgstr "Você tem um mod incompatível"
 
 #: src/multiint.c:857
 msgid "Host couldn't send file?"
-msgstr ""
+msgstr "Hosp. não pôde enviar arquvo?"
 
 #: src/multiint.c:861
 msgid "Incorrect Password!"
@@ -13252,13 +13184,12 @@ msgid "Refresh Games List"
 msgstr "Atualizar Lista de Jogos"
 
 #: src/multiint.c:1095
-#, fuzzy
 msgid "Enter Password:"
-msgstr "Entre a Senha antes"
+msgstr "Entre a Senha:"
 
 #: src/multiint.c:1116
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/multiint.c:1257
 #: src/multiint.c:1264
@@ -13267,7 +13198,7 @@ msgstr "Selecionar Nome do Jogo"
 
 #: src/multiint.c:1257
 msgid "One-Player Skirmish"
-msgstr ""
+msgstr "Jogador vs. Computador"
 
 #: src/multiint.c:1267
 msgid "Select Map"
@@ -13360,19 +13291,16 @@ msgid "Set Structure Limits"
 msgstr "Definir Limites da Estrutura"
 
 #: src/multiint.c:1531
-#, fuzzy
 msgid "Player colour"
-msgstr "Jogador saiu"
+msgstr "Cor do jogador"
 
 #: src/multiint.c:1547
-#, fuzzy
 msgid "Kick player"
-msgstr "2 jogadores"
+msgstr "Expulsar jogador"
 
 #: src/multiint.c:1558
-#, fuzzy
 msgid "Player number"
-msgstr "Jogador saiu"
+msgstr "Número do jogador"
 
 #: src/multiint.c:1920
 msgid "Team"
@@ -13388,7 +13316,7 @@ msgstr "Clique quando estiver pronto"
 
 #: src/multiint.c:1963
 msgid "READY?"
-msgstr ""
+msgstr "PRONTO?"
 
 #: src/multiint.c:2000
 msgid "PLAYERS"
@@ -13400,7 +13328,7 @@ msgstr "BATE-PAPO"
 
 #: src/multiint.c:2238
 msgid "All players need to have the same mods to join your game."
-msgstr ""
+msgstr "Todos os jogadores devem ter os mesmos mods para entrar no seu jogo."
 
 #: src/multiint.c:2391
 msgid "*** password is now required! ***"
@@ -13435,44 +13363,43 @@ msgstr "Jogadores"
 #: src/multiint.c:3546
 #, c-format
 msgid "Map: %d%% downloaded"
-msgstr ""
+msgstr "Mapa: %d%% baixado"
 
 #: src/multiint.c:3572
 msgid "HOST"
-msgstr ""
+msgstr "HOSPEDEIRO"
 
 #: src/multijoin.c:98
 #: src/multijoin.c:99
 msgid "Players Still Joining"
 msgstr "Jogadores ainda conectando"
 
-#: src/multijoin.c:230
+#: src/multijoin.c:213
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s saiu do jogo"
 
-#: src/multijoin.c:342
+#: src/multijoin.c:325
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
-msgstr ""
+msgstr "%s (%u) possui um mod incompatível e foi expulso."
 
-#: src/multijoin.c:381
+#: src/multijoin.c:364
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s está se conectando"
 
-#: src/multijoin.c:391
+#: src/multijoin.c:374
 msgid "System message:"
 msgstr "Mensagem do sistema:"
 
 #: src/multilimit.c:185
-#, fuzzy
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "Aplica os valores parão e retorna à tela anterior"
+msgstr "Aplica Os Valores Padrão e Retorna À Tela Anterior"
 
 #: src/multilimit.c:316
 msgid "Limits reset to default values"
-msgstr ""
+msgstr "Limites retornaram aos valores padrão"
 
 #: src/multimenu.c:609
 msgid "Technology level 1"
@@ -13549,17 +13476,16 @@ msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Expulsando jogador %s porque tentou evitar a checagem de integridade de dados!"
 
 #: src/multiplay.c:1063
-#, fuzzy
 msgid "(allies"
-msgstr "Alianças"
+msgstr "(alliados"
 
 #: src/multiplay.c:1071
 msgid "(private to "
-msgstr ""
+msgstr "(pessoal para"
 
 #: src/multiplay.c:1084
 msgid "[invalid]"
-msgstr ""
+msgstr "[inválido]"
 
 #: src/multiplay.c:1943
 msgid "Green"
@@ -13732,12 +13658,12 @@ msgstr "VOCÊ FOI VITORIOSO"
 msgid "YOU WERE DEFEATED!"
 msgstr "VOCÊ FOI DERROTADO"
 
-#: src/scriptfuncs.c:10166
+#: src/scriptfuncs.c:10150
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sinal recebido de %s!"
 
-#: src/scriptfuncs.c:10212
+#: src/scriptfuncs.c:10196
 #, c-format
 msgid "Beacon %d"
 msgstr "Sinal %d"
@@ -13767,8 +13693,9 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossível localizar Comandantes!"
 
 #: src/structure.c:2851
+#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
-msgstr "Limite de Unidades Alcancado - Produção Interrompida"
+msgstr "Limite de Unidades de Controle Alcancado - Produção Interrompida"
 
 #: src/structure.c:6102
 #: src/structure.c:6127
@@ -13860,6 +13787,12 @@ msgstr " - Finalizado em %s"
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
 
+#~ msgid ": Unknown cheat code."
+#~ msgstr ": Código não reconhecido."
+
+#~ msgid "You found %u power in an oil drum"
+#~ msgstr "Você encontrou %u de energia de um tambor de petróleo"
+
 #, fuzzy
 #~ msgid "Player %u has the wrong game version. Auto kicking."
 #~ msgstr "Jogador %u possui uma versão errada do jogo e foi expulso da sessão."
@@ -13885,10 +13818,6 @@ msgstr "Versão %s%s%s%s"
 
 #~ msgid "Wrong data/mod detected by Host."
 #~ msgstr "O Hospedeiro identificou data/mod incompatível(eis)"
-
-#, fuzzy
-#~ msgid ": Unknown cheat code."
-#~ msgstr "Ativar modo de trapaças"
 
 #, fuzzy
 #~ msgid "Kicking player %s, game data doesn't match!"
