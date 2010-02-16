@@ -2631,6 +2631,7 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 
 	case MULTIOP_HOST:
+		debug(LOG_NET, "MULTIOP_HOST enabled");
 		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
 		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
 		sstrcpy(game.map, widgGetString(psWScreen, MULTIOP_MAP));		// add the name
@@ -2842,24 +2843,33 @@ void startMultiplayerGame(void)
 
 	if (NetPlay.isHost)
 	{
-		if (!bLimiterLoaded)	// if they set limits, then skip this
+		// This sets the limits to whatever the defaults are for the limiter screen
+		// If host sets limits, then we do not need to do the following routine.
+		if (!bLimiterLoaded)
 		{
+			debug(LOG_NET, "limiter was NOT activated, setting defaults");
 			if (!resLoad("wrf/piestats.wrf", 502))
 			{
-				debug(LOG_WARNING, "Unable to load limits.  Defaults not set.");
+				debug(LOG_INFO, "Unable to load limits.  Defaults not set.");
 			}
 			else if (!resLoad("wrf/limiter_data.wrf", 503))
 			{
-				debug(LOG_WARNING, "Unable to load limits?");
+				debug(LOG_INFO, "Unable to load limits?");
 			}
-			resetDataHash();	// need to reset it, since host's data has changed.
-			createLimitSet();
 		}
-		sendOptions();
+		else
+		{
+			debug(LOG_NET, "limiter was activated");
+		}
+
+		resetDataHash();	// need to reset it, since host's data has changed.
+		createLimitSet();
+		debug(LOG_NET,"sending our options to all clients");
+		sendOptions(); 
 		NEThaltJoining();							// stop new players entering.
 		ingame.TimeEveryoneIsInGame = 0;
 		ingame.isAllPlayersDataOK = false;
-		memset(&ingame.DataIntegrity, 0x0, sizeof(ingame.DataIntegrity));
+		memset(&ingame.DataIntegrity, 0x0, sizeof(ingame.DataIntegrity));	//clear all player's array
 		SendFireUp();								//bcast a fireup message
 	}
 
@@ -2867,6 +2877,7 @@ void startMultiplayerGame(void)
 	setRevealStatus(game.fog);
 	war_SetFog(!game.fog);
 
+	debug(LOG_NET, "title mode STARTGAME is set--Starting Game!"); 
 	changeTitleMode(STARTGAME);
 
 	bHosted = false;

@@ -340,6 +340,7 @@ void createLimitSet(void)
 	UDWORD			i, numchanges = 0, bufSize, idx = 0;
 	MULTISTRUCTLIMITS	*pEntry;
 
+	debug(LOG_NET, "LimitSet created");
 	// free old limiter structure
 	freeLimitSet();
 

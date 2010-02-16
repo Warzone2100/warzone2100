@@ -104,7 +104,7 @@ void sendOptions()
 
 	// Send the number of structure limits to expect
 	NETuint32_t(&ingame.numStructureLimits);
-
+	debug(LOG_NET, "(Host) Structure limits to process on client is %u", ingame.numStructureLimits);
 	// Send the structures changed
 	for (i = 0; i < ingame.numStructureLimits; i++)
 	{
@@ -140,6 +140,7 @@ void recvOptions()
 {
 	unsigned int i;
 
+	debug(LOG_NET, "Receiving options from host");
 	NETbeginDecode(NET_OPTIONS);
 
 	// Get general information about the game
@@ -186,7 +187,7 @@ void recvOptions()
 
 	// Get the number of structure limits to expect
 	NETuint32_t(&ingame.numStructureLimits);
-
+	debug(LOG_NET, "Host is sending us %u structure limits", ingame.numStructureLimits);
 	// If there were any changes allocate memory for them
 	if (ingame.numStructureLimits)
 	{

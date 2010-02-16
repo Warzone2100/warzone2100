@@ -72,7 +72,7 @@
  * Local Variables
  *
  *********************************************************/
-static void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index);
+static void	calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index);
 static UDWORD	hashBuffer(uint8_t *pData, uint32_t size);
 
 // whether a save game is currently being loaded
@@ -84,20 +84,20 @@ uint32_t	DataHash[DATA_MAXDATA]= {0};
 
 /**
 *	hashBuffer()
-*	\param pData pointer to our buffer
+*	\param pData pointer to our buffer (always a text file)
 *	\param size the size of the buffer
 *	\return hash calculated from the buffer.
 *
 *	Note, this is obviously not a very complex hash routine.  This most likely has many collisions possible.
-*	The conversion from CRLF | CR to LF is more complex. :P
 *	This is almost the same routine that Pumpkin had, minus the ugly bug :)
 */
-UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
+static UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 {
 	uint32_t hashval = 0,*val;
 	uint32_t pt = 0, newsize, i;
 	int fillbytes = 0, CRtoStrip = 0;
 	uint8_t *NewData = NULL;
+	bool isWindowsFormat = false;
 
 	// find out how many CRs are in the buffer
 	for (i=0; i < size; i++)
@@ -108,6 +108,7 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 		}
 	}
 
+	// Calculate the new size of the buffer we need to create, on a 4 byte boundry
 	fillbytes = (size - CRtoStrip) % 4;
 	if (fillbytes == 0)
 	{
@@ -117,38 +118,34 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 	{
 		newsize = (size - CRtoStrip) + (4- fillbytes);
 		fillbytes = newsize % 4;
-		debug(LOG_NET, "The size of the buffer (%u bytes - stripped %d) is not on a 4 byte boundry, compensating to a new buffer size of %u bytes.", size, CRtoStrip, newsize);
 	}
 
 	NewData = malloc(newsize * sizeof(uint8_t));
 	if (!NewData)
 	{
-		//fatal error...
 		debug(LOG_FATAL, "Out of memory!");
 		abort();
 	}
-	memset(NewData, 0xff, newsize);		// fill the new buffer with bit pattern 0xff
+	memset(NewData, 0xff, newsize);		// fill the new buffer with bit pattern 0xff for easier debug purposes
 
-	// convert CRLF (windows) | CR (mac OS9?) to LF
+	// convert CRLF (windows) to LF
 	for(i = 0; i < size- CRtoStrip; i++, pData++)
 	{
-		if (*(pData) == '\r' && *(pData+1) == '\n')
+		if (*pData == '\r' && *(pData + 1) == '\n')
 		{
-			NewData[i] = *(++pData);						// for windows change CRLF to LF
-		}
-		else if (*(pData) == '\r' && *(pData+1) != '\n')
-		{
-			NewData[i] = '\n';								// for mac change CR to LF
+			NewData[i] = *(++pData);			// for windows change CRLF to LF
+			isWindowsFormat = true;
 		}
 		else
 		{
-			NewData[i] = *(pData);							// straight copy
+			NewData[i] = *(pData);				// straight copy
 		}
 	}
 
 	debug(LOG_NEVER, "NewData is {%.10s}\n size is %u bytes \n", NewData, newsize );	// this is a bit spammy...
 
-	while (pt < newsize )
+	ASSERT_OR_RETURN(0, newsize != 0, "Empty file being checked!");
+	while (pt < newsize)
 	{
 		val = (uint32_t *)(NewData+pt);
 
@@ -159,11 +156,9 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 		pt += 4;
 	}
 
-	if (fillbytes)
-	{
-		free(NewData);
-	}
+	free(NewData);
 
+	debug(LOG_NET, "The size of the old buffer (%u bytes - %d stripped ), New buffer size of %u bytes. Format is: %s", size, CRtoStrip, newsize,  isWindowsFormat ? "windows" : "linux/mac");
 	return hashval;
 }
 
@@ -171,6 +166,8 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 // Data should be converted to Network byte order
 void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 {
+	const uint32_t oldHash = DataHash[index];
+
 	if (!bMultiPlayer)
 	{
 		return;
@@ -178,7 +175,13 @@ void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 
 	DataHash[index] ^= SDL_SwapBE32(hashBuffer(pBuffer, size));
 
+	if (!DataHash[index] && oldHash)
+	{
+		debug(LOG_NET, "The new hash is 0, the old hash was %u. We XOR'ed the same value!", oldHash);
+	}
+
 	debug(LOG_NET, "DataHash[%2u] = %08x", index, SDL_SwapBE32(DataHash[index])); 
+
 	return;
 }
 
