@@ -6107,10 +6107,10 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu power %hu - ECM %u",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu power %hu - ECM %u - born %u",
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
 				psStructure->id, psStructure->armour[0][WC_KINETIC], psStructure->armour[0][WC_HEAT],
-					structSensorRange(psStructure), structSensorPower(psStructure), structConcealment(psStructure)));
+					structSensorRange(psStructure), structSensorPower(psStructure), structConcealment(psStructure), psStructure->born));
 		} else
 #endif
 		if (psStructure->pStructureType->pSensor != NULL

@@ -69,7 +69,9 @@ typedef struct _tilePos
 	SWORD           pitch;                          /**< Object's pitch +ve rotation around right-axis (nose up/down) */ \
 	UBYTE           player;                         /**< Which player the object belongs to */ \
 	SWORD           roll;                           /**< Object's roll +ve rotation around forward-axis (left wing up/down) */ \
-	uint32_t        time                           /**< Game time of given space-time position. */
+	UDWORD          born;				/**< Time the game object was born */ \
+	UDWORD          died;                           /**< When an object was destroyed, if 0 still alive */ \
+	uint32_t        time                            /**< Game time of given space-time position. */
 
 #define BASE_ELEMENTS2(pointerType) \
 	SCREEN_DISP_DATA    sDisplay;                   /**< screen coordinate details */ \
@@ -78,7 +80,6 @@ typedef struct _tilePos
 	UBYTE               cluster;                    /**< Which cluster the object is a member of */ \
 	UBYTE               visible[MAX_PLAYERS];       /**< Whether object is visible to specific player */ \
 	UBYTE               seenThisTick[MAX_PLAYERS];  /**< Whether object has been seen this tick by the specific player. */ \
-	UDWORD              died;                       /**< When an object was destroyed, if 0 still alive */ \
 	UDWORD              lastEmission;               /**< When did it last puff out smoke? */ \
 	UDWORD              lastHitWeapon;		/**< The weapon that last hit it */ \
 	UDWORD              timeLastHit;		/**< The time the structure was last attacked */ \

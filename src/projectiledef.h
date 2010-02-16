@@ -56,8 +56,6 @@ typedef struct PROJECTILE
 	UDWORD          srcHeight;              ///< Height of origin
 	SDWORD          altChange;              ///< Change in altitude
 	SPACETIME       prevSpacetime;          ///< Location of projectile in previous tick.
-	UDWORD          born;
-	UDWORD          died;
 	UDWORD          expectedDamageCaused;   ///< Expected damage that this projectile will cause to the target.
 } PROJECTILE;
 
