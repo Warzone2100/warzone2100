@@ -3722,7 +3722,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	}
 	// Draw for both AI and human players
 
-	if (NetPlay.isHost && !NetPlay.players[j].wzFile.isSending)
+	if (!NetPlay.players[j].wzFile.isSending)
 	{
 		// player number
 		switch (NetPlay.players[j].position)
