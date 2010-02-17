@@ -248,6 +248,7 @@ BOOL multiPlayerLoop(void)
 			if (!ingame.TimeEveryoneIsInGame)
 			{
 				ingame.TimeEveryoneIsInGame = gameTime;
+				debug(LOG_NET, "I have entered the game @ %d", ingame.TimeEveryoneIsInGame );
 				if (!NetPlay.isHost)
 				{
 					debug(LOG_NET, "=== Sending hash to host ===");
