@@ -3547,10 +3547,20 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
-
-	if (mapDownloadProgress != 100 && j == selectedPlayer)
+	if (NetPlay.isHost && NetPlay.players[j].wzFile.isSending)
 	{
 		static char mapProgressString[MAX_STR_LENGTH] = {'\0'};
+		int progress = (NetPlay.players[j].wzFile.currPos * 100) / NetPlay.players[j].wzFile.fileSize_32;
+
+		snprintf(mapProgressString, MAX_STR_LENGTH, _("Sending Map: %d%% "), progress);
+		iV_SetFont(font_regular); // font
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_DrawText(mapProgressString, x + 15, y + 22);
+	}
+	else if (mapDownloadProgress != 100 && j == selectedPlayer)
+	{
+		static char mapProgressString[MAX_STR_LENGTH] = {'\0'};
+
 		snprintf(mapProgressString, MAX_STR_LENGTH, _("Map: %d%% downloaded"), mapDownloadProgress);
 		iV_SetFont(font_regular); // font
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
@@ -3712,67 +3722,70 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	}
 	// Draw for both AI and human players
 
-	// player number
-	switch (NetPlay.players[j].position)
+	if (NetPlay.isHost && !NetPlay.players[j].wzFile.isSending)
 	{
-	case 0:
-		iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
-		break;
-	case 1:
-		iV_DrawImage(IntImages,IMAGE_GN_1,x+5,y+29);
-		break;
-	case 2:
-		iV_DrawImage(IntImages,IMAGE_GN_2,x+4,y+29);
-		break;
-	case 3:
-		iV_DrawImage(IntImages,IMAGE_GN_3,x+4,y+29);
-		break;
-	case 4:
-		iV_DrawImage(IntImages,IMAGE_GN_4,x+4,y+29);
-		break;
-	case 5:
-		iV_DrawImage(IntImages,IMAGE_GN_5,x+4,y+29);
-		break;
-	case 6:
-		iV_DrawImage(IntImages,IMAGE_GN_6,x+4,y+29);
-		break;
-	case 7:
-		iV_DrawImage(IntImages,IMAGE_GN_7,x+4,y+29);
-		break;
-	default:
-		break;
-	}
-
-	if (game.skDiff[j]) // not disabled
-	{
-		switch (getPlayerColour(j))		// flag icon
+		// player number
+		switch (NetPlay.players[j].position)
 		{
 		case 0:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
+			iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
 			break;
 		case 1:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);
+			iV_DrawImage(IntImages,IMAGE_GN_1,x+5,y+29);
 			break;
 		case 2:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);
+			iV_DrawImage(IntImages,IMAGE_GN_2,x+4,y+29);
 			break;
 		case 3:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);
+			iV_DrawImage(IntImages,IMAGE_GN_3,x+4,y+29);
 			break;
 		case 4:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);
+			iV_DrawImage(IntImages,IMAGE_GN_4,x+4,y+29);
 			break;
 		case 5:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);
+			iV_DrawImage(IntImages,IMAGE_GN_5,x+4,y+29);
 			break;
 		case 6:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);
+			iV_DrawImage(IntImages,IMAGE_GN_6,x+4,y+29);
 			break;
 		case 7:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);
+			iV_DrawImage(IntImages,IMAGE_GN_7,x+4,y+29);
 			break;
 		default:
 			break;
+		}
+
+		if (game.skDiff[j]) // not disabled
+		{
+			switch (getPlayerColour(j))		// flag icon
+			{
+			case 0:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
+				break;
+			case 1:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);
+				break;
+			case 2:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);
+				break;
+			case 3:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);
+				break;
+			case 4:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);
+				break;
+			case 5:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);
+				break;
+			case 6:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);
+				break;
+			case 7:
+				iV_DrawImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 

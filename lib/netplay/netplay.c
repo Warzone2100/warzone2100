@@ -2704,6 +2704,7 @@ UBYTE NETsendFile(char *fileName, UDWORD player)
 	// We are not the host, so we don't care. (in fact, this would be a error)
 	if (!NetPlay.isHost)
 	{
+		debug(LOG_ERROR, "trying to send a file and we are not the host!");
 		return true;
 	}
 
