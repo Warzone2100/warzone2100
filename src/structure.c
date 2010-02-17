@@ -186,7 +186,6 @@ static void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player);
 static void removeStructFromMap(STRUCTURE *psStruct);
 static void	structUpdateRecoil( STRUCTURE *psStruct );
 static void resetResistanceLag(STRUCTURE *psBuilding);
-static void revealAll(UBYTE player);
 static void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 static int structureTotalReturn(STRUCTURE *psStruct);
 
@@ -8047,27 +8046,6 @@ void resetResistanceLag(STRUCTURE *psBuilding)
 				break;
 		}
 	}
-}
-
-
-/*reveals all the terrain in the map*/
-void revealAll(UBYTE player)
-{
-	UWORD   i, j;
-	MAPTILE	*psTile;
-
-	//reveal all tiles
-	for(i=0; i<mapWidth; i++)
-	{
-		for(j=0; j<mapHeight; j++)
-		{
-			psTile = mapTile(i,j);
-			psTile->tileVisBits |= alliancebits[player];
-			psTile->tileExploredBits |= alliancebits[player];
-		}
-	}
-
-	//the objects gets revealed in processVisibility()
 }
 
 

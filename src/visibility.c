@@ -355,6 +355,26 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 	}
 }
 
+/*reveals all the terrain in the map*/
+void revealAll(UBYTE player)
+{
+	UWORD   i, j;
+	MAPTILE	*psTile;
+	
+	//reveal all tiles
+	for(i=0; i<mapWidth; i++)
+	{
+		for(j=0; j<mapHeight; j++)
+		{
+			psTile = mapTile(i,j);
+			psTile->tileVisBits |= alliancebits[player];
+			psTile->tileExploredBits |= alliancebits[player];
+		}
+	}
+	
+	//the objects gets revealed in processVisibility()
+}
+
 /* Check whether psViewer can see psTarget.
  * psViewer should be an object that has some form of sensor,
  * currently droids and structures.
