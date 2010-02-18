@@ -1047,8 +1047,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 			psVal->v.oval = (void*)getBaseObjFromId(id);
 			if (!psVal->v.oval)
 			{
-				debug( LOG_FATAL, "scrValDefLoad: couldn't find object id %d", id );
-				abort();
+				// apparently, this is a non-fatal error.
+				debug( LOG_INFO, "Couldn't find object id %u type %d", id, psVal->type );
 			}
 		}
 		break;
