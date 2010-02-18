@@ -239,6 +239,7 @@ event	structureDestroyed;
 event	rebuildStructureEv;
 event	doResearch;
 event	buildDerrick;
+event	vtolStructs;
 
 /* Function prototypes */
 function bool haveBeacon(int _player);
