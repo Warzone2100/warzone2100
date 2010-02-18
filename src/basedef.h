@@ -84,7 +84,7 @@ typedef struct _tilePos
 	UDWORD              lastHitWeapon;		/**< The weapon that last hit it */ \
 	UDWORD              timeLastHit;		/**< The time the structure was last attacked */ \
 	UDWORD              body;			/**< Hit points with lame name */ \
-	BOOL                inFire;                     /**< true if the object is in a fire */ \
+	UBYTE               inFire;                     /**< true if the object is in a fire */ \
 	UDWORD              burnStart;                  /**< When the object entered the fire */ \
 	UDWORD              burnDamage;                 /**< How much damage has been done since the object entered the fire */ \
 	SDWORD              sensorPower;		/**< Active sensor power */ \

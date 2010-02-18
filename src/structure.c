@@ -1736,7 +1736,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		psBuilding->timeLastHit = 0;
 		psBuilding->lastHitWeapon = UDWORD_MAX;	// no such weapon
 
-		psBuilding->inFire = false;
+		psBuilding->inFire = 0;
 		psBuilding->burnStart = 0;
 		psBuilding->burnDamage = 0;
 

@@ -2588,7 +2588,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	memset(psDroid->visible, 0, sizeof(psDroid->seenThisTick));
 	psDroid->visible[psDroid->player] = UBYTE_MAX;
 	psDroid->died = 0;
-	psDroid->inFire = false;
+	psDroid->inFire = 0;
 	psDroid->burnStart = 0;
 	psDroid->burnDamage = 0;
 	psDroid->sDisplay.screenX = OFF_SCREEN;
