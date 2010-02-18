@@ -229,7 +229,6 @@ static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer
 		if (seen)
 		{
 			// Can see this tile.
-			psTile->tileVisBits |= alliancebits[rayPlayer];                                 // Share vision with allies
 			psTile->tileExploredBits |= alliancebits[rayPlayer];                            // Share exploration with allies too
 			visMarkTile(mapX, mapY, psTile, rayPlayer, recordTilePos, lastRecordTilePos);   // Mark this tile as seen by our sensor
 		}
@@ -367,7 +366,6 @@ void revealAll(UBYTE player)
 		for(j=0; j<mapHeight; j++)
 		{
 			psTile = mapTile(i,j);
-			psTile->tileVisBits |= alliancebits[player];
 			psTile->tileExploredBits |= alliancebits[player];
 		}
 	}
@@ -785,7 +783,6 @@ MAPTILE		*psTile;
 			psTile = mapTile(mapX+i,mapY+j);
 			if (psTile)
 			{
-				psTile->tileVisBits |= alliancebits[player];
 				psTile->tileExploredBits |= alliancebits[player];
 			}
 		}
