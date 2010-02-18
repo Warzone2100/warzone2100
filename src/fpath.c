@@ -273,9 +273,15 @@ BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int p
 
 	if (TileIsOccupied(psTile) && !TileIsNotBlocking(psTile))
 	{
+		// Implement gates by completely ignoring them
+		if (psTile->psObject->type == OBJ_STRUCTURE && psTile->psObject->player == player
+		    && ((STRUCTURE *)psTile->psObject)->pStructureType->type == REF_GATE)
+		{
+			return false;
+		}
 		// If the type of movement order is simple movement (FMT_MOVE) then we treat all genuine obstacles as
 		// impassable. However, if it is an attack type order, we assume we can blast our way through enemy buildings.
-		if (moveType == FMT_MOVE)
+		else if (moveType == FMT_MOVE)
 		{
 			return true;
 		}

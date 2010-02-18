@@ -336,7 +336,7 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 	{
 		STRUCTURE * psStruct = (STRUCTURE *)psObj;
 		if (psStruct->status != SS_BUILT ||
-		    psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER)
+		    psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER || psStruct->pStructureType->type == REF_GATE)
 		{
 			// unbuilt structures and walls do not confer visibility.
 			return;
@@ -431,6 +431,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 			}
 
 			if (psStruct->pStructureType->type == REF_WALL
+				|| psStruct->pStructureType->type == REF_GATE
 				|| psStruct->pStructureType->type == REF_WALLCORNER)
 			{
 				return 0;

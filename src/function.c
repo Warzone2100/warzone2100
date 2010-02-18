@@ -995,6 +995,7 @@ void structureBodyUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
 	case REF_WALLCORNER:
 	case REF_DEFENSE:
 	case REF_BLASTDOOR:
+	case REF_GATE:
 		increase = ((WALLDEFENCE_UPGRADE_FUNCTION *)pFunction)->body;
 		break;
 	default:
@@ -1025,6 +1026,7 @@ void structureArmourUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
 	case REF_WALLCORNER:
 	case REF_DEFENSE:
 	case REF_BLASTDOOR:
+	case REF_GATE:
 		increase = ((WALLDEFENCE_UPGRADE_FUNCTION *)pFunction)->armour;
 		break;
 	default:

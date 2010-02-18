@@ -426,6 +426,7 @@ static BOOL cleanMap(UDWORD player)
 			   ||(psStruct->pStructureType->type == REF_WALLCORNER)
 			   ||(psStruct->pStructureType->type == REF_DEFENSE)
 			   ||(psStruct->pStructureType->type == REF_BLASTDOOR)
+			   ||(psStruct->pStructureType->type == REF_GATE)
 			   ||(psStruct->pStructureType->type == REF_CYBORG_FACTORY)
 			   ||(psStruct->pStructureType->type == REF_COMMAND_CONTROL))
 			{

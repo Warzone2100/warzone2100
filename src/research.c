@@ -2734,10 +2734,8 @@ BOOL selfRepairEnabled(UBYTE player)
 /*checks the stat to see if its of type wall or defence*/
 BOOL wallDefenceStruct(STRUCTURE_STATS *psStats)
 {
-	if (psStats->type == REF_DEFENSE ||
-		psStats->type == REF_WALL ||
-		psStats->type == REF_WALLCORNER ||
-        psStats->type == REF_BLASTDOOR)
+	if (psStats->type == REF_DEFENSE || psStats->type == REF_WALL || psStats->type == REF_GATE
+	    || psStats->type == REF_WALLCORNER || psStats->type == REF_BLASTDOOR)
 	{
 		return true;
 	}

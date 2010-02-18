@@ -570,6 +570,7 @@ static void CheckFinishedDrag(void)
 				{
 					if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
 					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE
+					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_GATE
 					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD)
 					    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
 					{
@@ -614,6 +615,7 @@ static void CheckStartWallDrag(void)
 		{
 			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
 			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE
+			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_GATE
 			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD)
 			    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
 			{
@@ -642,6 +644,8 @@ static BOOL CheckFinishedFindPosition(void)
 		if (buildState == BUILD3D_VALID)
 		{
 			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
+			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_GATE
+			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD
 			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE)
 			    && sBuildDetails.psStats->ref >= REF_STRUCTURE_START
 			    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE)
@@ -692,6 +696,7 @@ static void HandleDrag(void)
 		if(buildState == BUILD3D_VALID)
 		{
 			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
+			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_GATE
 			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE
 			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD)
 			    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))

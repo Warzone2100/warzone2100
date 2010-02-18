@@ -357,6 +357,7 @@ static const struct
 	{ "REARM PAD",          REF_REARM_PAD           },
 	{ "MISSILE SILO",       REF_MISSILE_SILO        },
 	{ "SAT UPLINK",         REF_SAT_UPLINK          },
+	{ "GATE",               REF_GATE                },
 };
 
 static STRUCTURE_TYPE structureType(const char* typeName)
@@ -1402,6 +1403,7 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 		if (xdiff >= -2 && xdiff <= 2 &&
 			ydiff >= -2 && ydiff <= 2 &&
 			(psStruct->pStructureType->type == REF_WALL ||
+			psStruct->pStructureType->type == REF_GATE ||
 			psStruct->pStructureType->type == REF_WALLCORNER ||
 			psStruct->pStructureType->type == REF_DEFENSE))
 		{
@@ -1424,7 +1426,7 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 			{
 				// figure out what type the wall currently is
 				psStruct = apsStructs[x][y];
-				if (psStruct->pStructureType->type == REF_WALL)
+				if (psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_GATE)
 				{
 					if ( (int)psStruct->direction == 90 )
 					{
@@ -1452,13 +1454,13 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 						// change to a corner
 						if (psStruct->pStructureType->asFuncList[0]->type == WALL_TYPE)
 						{
+							const int oldBody = psStruct->body;
+
 							/* Still being built - so save and load build points */
 							if(psStruct->status == SS_BEING_BUILT)
 							{
 								oldBuildPoints = psStruct->currentBuildPts;
-								psStats = ((WALL_FUNCTION *)psStruct
-												->pStructureType->asFuncList[0])
-														->pCornerStat;
+								psStats = ((WALL_FUNCTION *)psStruct->pStructureType->asFuncList[0])->pCornerStat;
 								sx = psStruct->pos.x; sy = psStruct->pos.y;
 								removeStruct(psStruct, true);
 								powerCalc(false);
@@ -1467,14 +1469,13 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 								if(psStruct !=NULL)
 								{
 									psStruct->status = SS_BEING_BUILT;
+									psStruct->body = oldBody;
 									psStruct->currentBuildPts = (SWORD)oldBuildPoints;
 								}
 							}
 							else
 							{
-								psStats = ((WALL_FUNCTION *)psStruct
-												->pStructureType->asFuncList[0])
-														->pCornerStat;
+								psStats = ((WALL_FUNCTION *)psStruct->pStructureType->asFuncList[0])->pCornerStat;
 								sx = psStruct->pos.x; sy = psStruct->pos.y;
 								removeStruct(psStruct, true);
 								powerCalc(false);
@@ -1483,6 +1484,7 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 								if(psStruct !=NULL)
 								{
 									psStruct->status = SS_BUILT;
+									psStruct->body = oldBody;
 									buildingComplete(psStruct);
 								}
 							}
@@ -1517,8 +1519,9 @@ static void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UD
 	{
 		for (width=0; width <= (UBYTE)(pStructureType->baseWidth /*+ 1*/); width++)
 		{
-			if ( (pStructureType->type != REF_WALL) &&
-				 (pStructureType->type != REF_WALLCORNER) )
+			if (pStructureType->type != REF_WALL
+			    && pStructureType->type != REF_WALLCORNER
+			    && pStructureType->type != REF_GATE)
 			{
 				setTileHeight(x + width, y + breadth, h);//-1
 				// We need to raise features on raised tiles to the new height
@@ -1609,11 +1612,12 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			return NULL;
 		}
 
-		if (!FromSave && pStructureType->type == REF_WALL)
+		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE))
 		{
 			wallType = structChooseWallType(player, map_coord(x), map_coord(y));
 			if (wallType == WALL_CORNER)
 			{
+				ASSERT_OR_RETURN(NULL, pStructureType->type != REF_GATE, "Cannot build corner gates!");
 				if (pStructureType->asFuncList[0]->type == WALL_TYPE)
 				{
 					pStructureType = ((WALL_FUNCTION *)pStructureType->asFuncList[0])->pCornerStat;
@@ -1643,6 +1647,9 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 		//set up the imd to use for the display
 		psBuilding->sDisplay.imd = pStructureType->pIMD;
+
+		psBuilding->state = SAS_NORMAL;
+		psBuilding->lastStateTime = gameTime;
 
 		/* if resource extractor - need to remove oil feature first, but do not do any
 		 * consistency checking here - save games do not have any feature to remove
@@ -1743,7 +1750,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		psBuilding->cluster = 0;
 
 		// rotate a wall if necessary
-		if (!FromSave && pStructureType->type == REF_WALL && wallType == WALL_VERT)
+		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE ) && wallType == WALL_VERT)
 		{
 			psBuilding->direction = 90;
 		}
@@ -3836,9 +3843,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 /** Decides whether a structure should emit smoke when it's damaged */
 static BOOL canSmoke(STRUCTURE *psStruct)
 {
-	if(psStruct->pStructureType->type == REF_WALL ||
-		psStruct->pStructureType->type == REF_WALLCORNER ||
-		psStruct->status == SS_BEING_BUILT)
+	if (psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER
+	    || psStruct->status == SS_BEING_BUILT || psStruct->pStructureType->type == REF_GATE)
 	{
 		return(false);
 	}
@@ -3860,6 +3866,39 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	UDWORD emissionInterval, iPointsToAdd, iPointsRequired;
 	Vector3i dv;
 	int i;
+
+	if (psBuilding->pStructureType->type == REF_GATE)
+	{
+		if (psBuilding->state == SAS_OPEN && psBuilding->lastStateTime + SAS_STAY_OPEN_TIME < gameTime)
+		{
+			bool		found = false;
+			BASE_OBJECT	*psObj;
+
+			gridStartIterate(psBuilding->pos.x, psBuilding->pos.y, TILE_UNITS);
+			while (!found && (psObj = gridIterate()))
+			{
+				found = (psObj->type == OBJ_DROID);
+			}
+
+			if (!found)	// no droids on our tile, safe to close
+			{
+				psBuilding->state = SAS_CLOSING;
+				CLEAR_TILE_NOTBLOCKING(mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y)));
+				psBuilding->lastStateTime = gameTime;	// reset timer
+			}
+		}
+		else if (psBuilding->state == SAS_OPENING && psBuilding->lastStateTime + SAS_OPEN_SPEED < gameTime)
+		{
+			psBuilding->state = SAS_OPEN;
+			SET_TILE_NOTBLOCKING(mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y)));
+			psBuilding->lastStateTime = gameTime;	// reset timer
+		}
+		else if (psBuilding->state == SAS_CLOSING && psBuilding->lastStateTime + SAS_OPEN_SPEED < gameTime)
+		{
+			psBuilding->state = SAS_NORMAL;
+			psBuilding->lastStateTime = gameTime;	// reset timer
+		}
+	}
 
 	// Remove invalid targets. This must be done each frame.
 	for (i = 0; i < STRUCT_MAXWEAPS; i++)
@@ -4208,7 +4247,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 		}
 		//if we're dragging the wall/defense we need to check along the current dragged size
 		if (wallDrag.status != DRAG_INACTIVE
-			&& (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE || psBuilding->type == REF_REARM_PAD)
+			&& (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE || psBuilding->type == REF_REARM_PAD ||  psBuilding->type == REF_GATE)
 			&& !isLasSat(psBuilding))
 		{
 				UWORD    dx,dy;
@@ -4364,6 +4403,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 			case REF_POWER_GEN:
 			case REF_WALL:
 			case REF_WALLCORNER:
+			case REF_GATE:
 			case REF_DEFENSE:
 			case REF_REPAIR_FACILITY:
 			case REF_COMMAND_CONTROL:
@@ -4463,6 +4503,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 					if (!(psBuilding->type == REF_DEFENSE ||
 						psBuilding->type == REF_WALL ||
 						psBuilding->type == REF_WALLCORNER ||
+						psBuilding->type == REF_GATE ||
 						psBuilding->type == REF_REARM_PAD ||
 						psBuilding->type == REF_MISSILE_SILO))
 					{
@@ -6466,6 +6507,7 @@ UDWORD structureBody(const STRUCTURE *psStructure)
 		case REF_DEFENSE:
 		case REF_WALL:
 		case REF_WALLCORNER:
+		case REF_GATE:
 		case REF_BLASTDOOR:
 			return psStats->bodyPoints + (psStats->bodyPoints * asWallDefenceUpgrade[player].body)/100;
 		// all other structures:
@@ -6536,6 +6578,7 @@ UDWORD	structureArmour(STRUCTURE_STATS *psStats, UBYTE player)
 	case REF_DEFENSE:
 	case REF_WALL:
 	case REF_WALLCORNER:
+	case REF_GATE:
 	case REF_BLASTDOOR:
 		return (psStats->armourValue + (psStats->armourValue *
 			asWallDefenceUpgrade[player].armour)/100);
@@ -6553,6 +6596,7 @@ UDWORD	structureResistance(STRUCTURE_STATS *psStats, UBYTE player)
 	switch(psStats->type)
 	{
 	case REF_WALL:
+	case REF_GATE:
 	case REF_WALLCORNER:
 	case REF_BLASTDOOR:
 		//not upgradeable

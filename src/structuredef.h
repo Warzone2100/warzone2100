@@ -66,6 +66,7 @@ REF_LAB,
 REF_REARM_PAD,
 REF_MISSILE_SILO,
 REF_SAT_UPLINK,         //added for updates - AB 8/6/99
+REF_GATE,
 NUM_DIFF_BUILDINGS,		//need to keep a count of how many types for IMD loading
 } STRUCTURE_TYPE;
 
@@ -102,6 +103,17 @@ typedef enum _struct_strength
 #define INVALID_STRENGTH	(NUM_STRUCT_STRENGTH + 1)
 
 typedef UWORD STRUCTSTRENGTH_MODIFIER;
+
+#define SAS_OPEN_SPEED		(GAME_TICKS_PER_SEC * 2)
+#define SAS_STAY_OPEN_TIME	(GAME_TICKS_PER_SEC * 6)
+
+typedef enum _anim_states
+{
+	SAS_NORMAL,
+	SAS_OPEN,
+	SAS_OPENING,
+	SAS_CLOSING,
+} STRUCT_ANIM_STATES;
 
 //this structure is used to hold the permenant stats for each type of building
 typedef struct _structure_stats
@@ -302,6 +314,8 @@ typedef struct _structure
 	/* anim data */
 	ANIM_OBJECT	*psCurAnim;
 
+	STRUCT_ANIM_STATES	state;
+	UDWORD			lastStateTime;
 } WZ_DECL_MAY_ALIAS STRUCTURE;
 
 #define LOTS_OF	255						/*highest number the limit can be set to */

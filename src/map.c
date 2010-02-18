@@ -1350,6 +1350,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 		case REF_WALL:
 		case REF_WALLCORNER:
 		case REF_BLASTDOOR:
+		case REF_GATE:
 		case REF_RESEARCH_MODULE:
 		case REF_COMMAND_CONTROL:
 		case REF_BRIDGE:
