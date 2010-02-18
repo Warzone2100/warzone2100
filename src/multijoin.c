@@ -120,7 +120,7 @@ void clearPlayer(UDWORD player,BOOL quietly)
 	UDWORD			i;
 	STRUCTURE		*psStruct,*psNext;
 
-	debug(LOG_INFO, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true":"false");
+	debug(LOG_NET, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true":"false");
 
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
