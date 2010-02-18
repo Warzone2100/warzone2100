@@ -598,7 +598,7 @@ void draw3DScene( void )
 	}
 	else
 	{
-#ifdef DEBUG
+		// show level name and time
 		if (getWidgetsStatus() && !gamePaused())
 		{
 			char buildInfo[255];
@@ -606,7 +606,6 @@ void draw3DScene( void )
 			getAsciiTime(buildInfo,gameTime);
 			iV_DrawText( buildInfo, RET_X + 134, 434 + E_H );
 		}
-#endif
 	}
 
 	while(player.r.y>DEG(360))
