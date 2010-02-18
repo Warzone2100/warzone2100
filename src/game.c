@@ -8431,12 +8431,12 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 			continue;
 		}
 		//create the Feature
-		//buildFeature(asFeatureStats + psSaveFeature->featureInc,
-		//	psSaveFeature->pos.x, psSaveFeature->pos.y);
 		pFeature = buildFeature(psStats, psSaveFeature->x, psSaveFeature->y,true);
-		//will be added to the top of the linked list
-		//pFeature = apsFeatureLists[0];
-		ASSERT_OR_RETURN(false, pFeature, "Unable to create feature");
+		if (!pFeature)
+		{
+			debug(LOG_ERROR, "Unable to create feature %s", psSaveFeature->name);
+			continue;
+		}
 		//restore values
 		pFeature->id = psSaveFeature->id;
 		pFeature->direction = psSaveFeature->direction;
@@ -8530,12 +8530,12 @@ BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 			continue;
 		}
 		//create the Feature
-		//buildFeature(asFeatureStats + psSaveFeature->featureInc,
-		//	psSaveFeature->pos.x, psSaveFeature->pos.y);
 		pFeature = buildFeature(psStats, psSaveFeature->x, psSaveFeature->y,true);
-		//will be added to the top of the linked list
-		//pFeature = apsFeatureLists[0];
-		ASSERT_OR_RETURN(false, pFeature, "Unable to create feature");
+		if (!pFeature)
+		{
+			debug(LOG_ERROR, "Unable to create feature %s", psSaveFeature->name);
+			continue;
+		}
 		//restore values
 		pFeature->id = psSaveFeature->id;
 		pFeature->direction = psSaveFeature->direction;

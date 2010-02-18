@@ -379,7 +379,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		psFeature->sDisplay.imd = psStats->psImd;
   	}
 
-
 	ASSERT_OR_RETURN(NULL, psFeature->sDisplay.imd, "No IMD for feature");		// make sure we have an imd.
 
 	for (width = 0; width <= psStats->baseWidth; width++)
@@ -389,12 +388,8 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 			MAPTILE *psTile = mapTile(mapX + width, mapY + breadth);
 
 			//check not outside of map - for load save game
-			ASSERT( (mapX+width) < mapWidth,
-				"x coord bigger than map width - %s, id = %d",
-				getName(psFeature->psStats->pName), psFeature->id );
-			ASSERT( (mapY+breadth) < mapHeight,
-				"y coord bigger than map height - %s, id = %d",
-				getName(psFeature->psStats->pName), psFeature->id );
+			ASSERT_OR_RETURN(NULL, mapX + width < mapWidth, "x coord bigger than map width - %s, id = %d", getName(psFeature->psStats->pName), psFeature->id);
+			ASSERT_OR_RETURN(NULL, mapY + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getName(psFeature->psStats->pName), psFeature->id);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
