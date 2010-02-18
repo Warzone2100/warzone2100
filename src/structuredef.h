@@ -295,7 +295,6 @@ typedef struct _structure
 											   necessary for functionality */
 	/* The weapons on the structure */
 	UWORD		numWeaps;
-	UBYTE		targetted;
 	WEAPON		asWeaps[STRUCT_MAXWEAPS];
 	BASE_OBJECT	*psTarget[STRUCT_MAXWEAPS];
 	UWORD		targetOrigin[STRUCT_MAXWEAPS];

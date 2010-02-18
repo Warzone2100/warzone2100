@@ -80,17 +80,18 @@ typedef struct _tilePos
 	UBYTE               cluster;                    /**< Which cluster the object is a member of */ \
 	UBYTE               visible[MAX_PLAYERS];       /**< Whether object is visible to specific player */ \
 	UBYTE               seenThisTick[MAX_PLAYERS];  /**< Whether object has been seen this tick by the specific player. */ \
+	UBYTE               inFire;                     /**< true if the object is in a fire */ \
+	UWORD               numWatchedTiles;		/**< Number of watched tiles, zero for features */ \
 	UDWORD              lastEmission;               /**< When did it last puff out smoke? */ \
 	UDWORD              lastHitWeapon;		/**< The weapon that last hit it */ \
 	UDWORD              timeLastHit;		/**< The time the structure was last attacked */ \
 	UDWORD              body;			/**< Hit points with lame name */ \
-	UBYTE               inFire;                     /**< true if the object is in a fire */ \
 	UDWORD              burnStart;                  /**< When the object entered the fire */ \
 	UDWORD              burnDamage;                 /**< How much damage has been done since the object entered the fire */ \
 	SDWORD              sensorPower;		/**< Active sensor power */ \
 	SDWORD              sensorRange;		/**< Range of sensor */ \
 	SDWORD              ECMMod;			/**< Ability to conceal oneself from sensors */ \
-	UWORD               numWatchedTiles;		/**< Number of watched tiles, zero for features */ \
+	BOOL                bTargetted;			/**< Whether object is targetted by a selectedPlayer droid sensor (quite the hack) */ \
 	TILEPOS             *watchedTiles;		/**< Variable size array of watched tiles, NULL for features */ \
 	UDWORD              armour[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES]
 

@@ -1730,7 +1730,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			psBuilding->psTarget[i] = NULL;
 			psBuilding->targetOrigin[i] = ORIGIN_UNKNOWN;
 		}
-		psBuilding->targetted = 0;
+		psBuilding->bTargetted = false;
 
 		psBuilding->lastEmission = 0;
 		psBuilding->timeLastHit = 0;

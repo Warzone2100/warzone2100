@@ -426,9 +426,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	}
 	psFeature->pos.z = map_TileHeight(mapX,mapY);//jps 18july97
 
-	//store the time it was built for removing wrecked droids/structures
-	psFeature->startTime = gameTime;
-
 //	// set up the imd for the feature
 //	if(psFeature->psStats->subType==FEAT_BUILD_WRECK)
 //	{
@@ -463,7 +460,7 @@ void featureUpdate(FEATURE *psFeat)
 	case FEAT_DROID:
 	case FEAT_BUILD_WRECK:
 //		//kill off wrecked droids and structures after 'so' long
-//		if ((gameTime - psFeat->startTime) > WRECK_LIFETIME)
+//		if ((gameTime - psFeat->born) > WRECK_LIFETIME)
 //		{
 			destroyFeature(psFeat); // get rid of the now!!!
 //		}

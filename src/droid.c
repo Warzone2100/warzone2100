@@ -775,42 +775,14 @@ void droidUpdate(DROID *psDroid)
 	processVisibilityLevel((BASE_OBJECT*)psDroid);
 
 	// -----------------
-	/* Are we a sensor droid or a command droid? */
-	if( (psDroid->droidType == DROID_SENSOR) || (psDroid->droidType == DROID_COMMAND) )
+	/* Are we a sensor droid or a command droid? Show where we target for selectedPlayer. */
+	if (psDroid->player == selectedPlayer && (psDroid->droidType == DROID_SENSOR || psDroid->droidType == DROID_COMMAND))
 	{
 		/* If we're attacking or sensing (observing), then... */
 		if ((psBeingTargetted = orderStateObj(psDroid, DORDER_ATTACK))
-		 || (psBeingTargetted = orderStateObj(psDroid, DORDER_OBSERVE)))
+		    || (psBeingTargetted = orderStateObj(psDroid, DORDER_OBSERVE)))
 		{
-			/* If it's a structure */
-			if(psBeingTargetted->type == OBJ_STRUCTURE)
-			{
-				/* And it's your structure or your droid... */
-				if( (((STRUCTURE*)psBeingTargetted)->player == selectedPlayer)
-					|| (psDroid->player == selectedPlayer) )
-				{
-					/* Highlight the structure in question */
-					((STRUCTURE*)psBeingTargetted)->targetted = 1;
-				}
-			}
-			else if (psBeingTargetted->type == OBJ_DROID)
-			{
-				/* And it's your  your droid... */
-	 			if( (((DROID*)psBeingTargetted)->player == selectedPlayer)
- 					|| (psDroid->player == selectedPlayer) )
- 				{
- 				   	((DROID*)psBeingTargetted)->bTargetted = true;
-
- 				}
-			}
-			else if(psBeingTargetted->type == OBJ_FEATURE)
-			{
-				if(psDroid->player == selectedPlayer)
-				{
-					((FEATURE*)psBeingTargetted)->bTargetted = true;
-				}
-			}
-
+			psBeingTargetted->bTargetted = true;
 		}
 	}
 	// -----------------

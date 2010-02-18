@@ -2998,27 +2998,22 @@ static void	drawStructureSelections( void )
 		}
 	}
 
-	for(i=0; i<MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		/* Go thru' all the buildings */
-		for(psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+		if (i == selectedPlayer)
 		{
-			if(i!=selectedPlayer)		// only see enemy buildings being targetted, not yours!
+			continue;	// not interesting in our own buildings
+		}
+		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+		{
+			/* If it's targetted and on-screen */
+			if (clipXY(psStruct->pos.x,psStruct->pos.y)
+			    && psStruct->bTargetted
+			    && psStruct->sDisplay.frameNumber == currentGameFrame)
 			{
-				if(clipXY(psStruct->pos.x,psStruct->pos.y))
-				{
-					/* If it's targetted and on-screen */
-					if(psStruct->targetted)
-					{
-						if(psStruct->sDisplay.frameNumber == currentGameFrame)
-
-						{
-							scrX = psStruct->sDisplay.screenX;
-							scrY = psStruct->sDisplay.screenY - (psStruct->sDisplay.imd->max.y / 4);
-							iV_DrawImage(IntImages,getTargettingGfx(),scrX,scrY);
-						}
-					}
-				}
+				scrX = psStruct->sDisplay.screenX;
+				scrY = psStruct->sDisplay.screenY - (psStruct->sDisplay.imd->max.y / 4);
+				iV_DrawImage(IntImages, getTargettingGfx(), scrX, scrY);
 			}
 		}
 	}

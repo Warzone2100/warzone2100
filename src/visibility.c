@@ -594,14 +594,7 @@ void processVisibilitySelf(BASE_OBJECT *psObj)
 		}
 	}
 
-	// Remove any targetting locks from last update.
-	switch (psObj->type)
-	{
-		default: break;
-		case OBJ_DROID:     ((DROID     *)psObj)->bTargetted = false; break;
-		case OBJ_STRUCTURE: ((STRUCTURE *)psObj)->targetted  = 0;     break;  // Long live consistency.
-		case OBJ_FEATURE:   ((FEATURE   *)psObj)->bTargetted = false; break;
-	}
+	psObj->bTargetted = false;	// Remove any targetting locks from last update.
 }
 
 // Calculate which objects we can see. Better to call after processVisibilitySelf, since that check is cheaper.

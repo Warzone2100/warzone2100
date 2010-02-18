@@ -1230,7 +1230,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 	tagWrite(0x01, psStruct->pStructureType->type);
 	tagWrites(0x02, psStruct->currentPowerAccrued);
 	tagWrite(0x03, psStruct->lastResistance);
-	tagWrite(0x04, psStruct->targetted);
+	tagWrite(0x04, psStruct->bTargetted);
 	tagWrite(0x05, psStruct->timeLastHit);
 	tagWrite(0x06, psStruct->lastHitWeapon);
 	tagWrite(0x07, psStruct->status);
@@ -1372,7 +1372,7 @@ static void featureSaveTagged(FEATURE *psFeat)
 	/* FEATURE GROUP */
 
 	tagWriteEnter(0x0c, 1);
-	tagWrite(0x01, psFeat->startTime);
+	tagWrite(0x01, psFeat->born);
 	tagWriteLeave(0x0c);
 }
 
