@@ -5487,7 +5487,7 @@ static int scrInternalGetStructureVisibleBy(lua_State *L)
 
 static int scrInternalGetFeatureVisibleBy(lua_State *L)
 {
-	int seenBy           = luaWZ_checkplayer(L, 1);
+	int seenBy           = luaL_checkint(L, 1);	// cannot be checkplayer since can be -1 for see all
 	int featureType      = luaWZObj_checkfeaturestat(L, 2);
 	int enumFeatureCount = luaL_checkint(L, 3);
 	int count;
