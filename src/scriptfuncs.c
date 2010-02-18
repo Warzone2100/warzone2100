@@ -106,9 +106,6 @@
 #include "scriptobj.h"
 #include "scriptvals.h"
 
-// temp hack
-void *L=NULL;
-
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
 // If this is defined then check max number of units not reached before adding more.
@@ -117,7 +114,7 @@ static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to sta
 static SDWORD	bitMask[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
 static char		strParam1[MAXSTRLEN], strParam2[MAXSTRLEN];		//these should be used as string parameters for stackPopParams()
 
-static BOOL	structHasModule(STRUCTURE *psStruct);
+static bool	structHasModule(STRUCTURE *psStruct);
 
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl);
 
@@ -1662,7 +1659,7 @@ WZ_DECL_UNUSED static BOOL scrGetTemplate(void)
 
 	if (player < 0 || player >= MAX_PLAYERS)
 	{
-		return luaL_error(L, "invalid player number" );
+//		return luaL_error(L, "invalid player number" );
 	}
 
 	if (!stackPop(&sVal))
@@ -1766,7 +1763,7 @@ WZ_DECL_UNUSED static BOOL scrGetDroid(void)
 
 	if (player < 0 || player >= MAX_PLAYERS)
 	{
-		return luaL_error(L, "invalid player number" );
+//		return luaL_error(L, "invalid player number" );
 	}
 
 	if (!stackPop(&sVal))
@@ -4118,7 +4115,19 @@ static int scrTestStructureModule(lua_State *L)
 	if(!lua_isnil(L, 2))
 	{
 		psStructure = (STRUCTURE*)luaWZObj_checkobject(L, 2, OBJ_STRUCTURE);
-		if(structHasModule(psStructure))
+		if (psStruct == NULL)
+		{
+			luaL_error(L, "Testing for a module from a NULL struct - huh!?");
+		}
+
+		/* Fail if the structure isn't built yet */
+		if (psStruct->status != SS_BUILT)
+		{
+			lua_pushboolean(L, false);
+			return 1;
+		}
+
+		if (structHasModule(psStructure))
 		{
 			bFound = true;
 		}
@@ -4130,7 +4139,7 @@ static int scrTestStructureModule(lua_State *L)
 		for(psStruct = apsStructLists[player],bFound = false;
 			psStruct && !bFound; psStruct = psStruct->psNext)
 		{
-			if(structHasModule(psStruct))
+			if (psStruct->status == SS_BUILT && structHasModule(psStruct))
 			{
 				bFound = true;
 			}
@@ -4241,6 +4250,7 @@ UDWORD	count=0;
 
 	return(true);
 }
+
 // -----------------------------------------------------------------------------------------
 static int scrRemoveDroid(lua_State *L)
 {
@@ -4248,26 +4258,15 @@ static int scrRemoveDroid(lua_State *L)
 	destroyDroid(psDroid);
 	return 0;
 }
-// -----------------------------------------------------------------------------------------
-static int	structHasModule(STRUCTURE *psStruct)
-{
-STRUCTURE_STATS	*psStats;
-BOOL			bFound;
 
-	/* Fail if the structure isn't built yet */
-	if(psStruct->status != SS_BUILT)
-	{
-		lua_pushboolean(L, false);
-		return 1;
-	}
+// -----------------------------------------------------------------------------------------
+static bool structHasModule(STRUCTURE *psStruct)
+{
+	STRUCTURE_STATS	*psStats;
+	BOOL		bFound;
 
 	/* Not found yet */
 	bFound = false;
-
-	if(psStruct == NULL)
-	{
-		luaL_error(L, "structHasModule - Testing for a module from a NULL struct - huh!?");
-	}
 
 	if(psStruct)
 	{
@@ -4310,8 +4309,7 @@ BOOL			bFound;
 		}
 
 	}
-	lua_pushboolean(L, bFound);
-	return 1;
+	return true;
 }
 
 // -----------------------------------------------------------------------------------------
