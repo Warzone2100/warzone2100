@@ -1,3 +1,7 @@
+2010-00-00: Version 2.3 beta RC2
+ * Skirmish:
+   * Fix: Add back missing cyborg mechanic, thermite and grenadier (r9750, ticket:1607)
+
 2010-02-07: Version 2.3 beta 10
  * General:
    * Change: Add mod list to crash report file (r9651)
