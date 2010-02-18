@@ -1,6 +1,23 @@
-2010-00-00: Version 2.3 beta RC2
+2010-02-21: Version 2.3 RC2
+ * General:
+    * Fix: NSIS updates (r9764)
+    * Change: add 'logs' directory in config dir to store all netplay logs. (r9779, ticket:1564)
+    * Fix: Only drop artifacts on a fully built factory (r9795, r9787, ticket:1574)
+    * Add: Add MessageBox support on systems that have Motif (r9814, ticket:1569)
+    * Change: Display time and level name in release builds now
  * Skirmish:
    * Fix: Add back missing cyborg mechanic, thermite and grenadier (r9750, ticket:1607)
+ * Multiplayer:
+   * Fix: When player drops, don't remove the oil feature (r9768, ticket:1558)
+   * Fix: Fix kicking when host would change limits while hosting a game (r9824, ticket:1577)
+   * Fix: When a player drops, abort the map transfer. (r9838)
+   * Change: Display map transfer progress, for the host, for each player. (r9838)
+   * Fix: Fix bug regarding alt-orders not being sent over netcode correctly. (r9840, ticket:1474)
+ * Mod:
+   * Fix: Update NTW to work with new template system and other various fixes (r9773)
+   * Add: Dydo AI makes it's debut appearance (tbd)
+ * Translations:
+   * Update:  Various translation updates / fixes (r9759, r9828, r9829, r9830, r9831)
 
 2010-02-07: Version 2.3 beta 10
  * General:
