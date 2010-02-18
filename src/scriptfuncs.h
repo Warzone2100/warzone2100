@@ -42,7 +42,6 @@ struct DROID;
 
 extern BOOL scriptInit(void);
 extern void scriptSetStartPos(int position, int x, int	y);
-extern BOOL scrScavengersActive(void);
 
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);

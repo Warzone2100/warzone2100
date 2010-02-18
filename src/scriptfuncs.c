@@ -140,14 +140,10 @@ BOOL scriptInit()
 	return true;
 }
 
-BOOL scrScavengersActive()
+static int scrScavengersActive(lua_State *L)
 {
-	scrFunctionResult.v.bval = game.scavengers;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-	return true;
+	lua_pushboolean(L, game.scavengers);
+	return 1;
 }
 
 static int scrGetPlayer(lua_State *L)
@@ -9554,7 +9550,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "addDroidToMissionList", scrAddDroidToMissionList);
 	lua_register(L, "getPlayer", scrGetPlayer);
 	lua_register(L, "getPlayerStartPosition", scrGetPlayerStartPosition);
-	//lua_register(L, "", );
+	lua_register(L, "scavengersActive", scrScavengersActive);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
