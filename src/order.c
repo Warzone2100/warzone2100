@@ -1323,11 +1323,11 @@ void orderUpdateDroid(DROID *psDroid)
 		setDroidTarget(psDroid, psDroid->psActionTarget[0]);
 	}
 
-	if(psDroid->selected)
+	if (psDroid->selected)
 	{
 		// Tell us what the droid is doing.
-		sprintf(DROIDDOING,"%.12s,id(%d) order(%d):%s action(%d):%s secondary_order:%x", droidGetName(psDroid), psDroid->id,
-			psDroid->order, getDroidOrderName(psDroid->order), psDroid->action, getDroidActionName(psDroid->action), psDroid->secondaryOrder);
+		sprintf(DROIDDOING,"%.12s,id(%d) order(%d):%s action(%d):%s secondary order:%x", droidGetName(psDroid), psDroid->id,
+		        psDroid->order, getDroidOrderName(psDroid->order), psDroid->action, getDroidActionName(psDroid->action), (int)(psDroid->secondaryOrder));
 	}
 }
 
