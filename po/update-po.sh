@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # We need to be in the working copy's root directory
-cd ..
+cd "`dirname "$0"`/.."
 
 # Add the comment to the top of the file
 cat > po/POTFILES.in << EOF
