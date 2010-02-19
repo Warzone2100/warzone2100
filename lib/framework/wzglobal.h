@@ -533,7 +533,8 @@
 
 #  define WIN32_LEAN_AND_MEAN
 #  define WIN32_EXTRA_LEAN
-#  define NOMINMAX		// disable the min / max macros
+#  undef NOMINMAX
+#  define NOMINMAX 1		// disable the min / max macros
 #  include <windows.h>
 
 #  if defined(WZ_CC_MSVC)
