@@ -318,79 +318,79 @@ SectionGroup $(TEXT_SecNLS) SecNLS
 
 Section "-NLS files" SecNLS_files
   SetOutPath "$INSTDIR\locale\cs\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\cs.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\cs.gmo"
 
   SetOutPath "$INSTDIR\locale\da\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\da.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\da.gmo"
 
   SetOutPath "$INSTDIR\locale\de\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\de.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\de.gmo"
 
   SetOutPath "$INSTDIR\locale\en_GB\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\en_GB.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\en_GB.gmo"
 
   SetOutPath "$INSTDIR\locale\es\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\es.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\es.gmo"
 
   SetOutPath "$INSTDIR\locale\et\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\et_EE.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\et_EE.gmo"
 
   SetOutPath "$INSTDIR\locale\fi\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\fi.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fi.gmo"
 
   SetOutPath "$INSTDIR\locale\fr\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\fr.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fr.gmo"
 
   SetOutPath "$INSTDIR\locale\fy\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\fy.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fy.gmo"
 
   SetOutPath "$INSTDIR\locale\ga\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ga.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ga.gmo"
 
   SetOutPath "$INSTDIR\locale\hr\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\hr.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\hr.gmo"
 
   SetOutPath "$INSTDIR\locale\it\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\it.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\it.gmo"
 
   SetOutPath "$INSTDIR\locale\la\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\la.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\la.gmo"
 
   SetOutPath "$INSTDIR\locale\lt\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\lt.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\lt.gmo"
 
   SetOutPath "$INSTDIR\locale\nb\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\nb.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\nb.gmo"
 
   SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\nl.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\nl.gmo"
 
   SetOutPath "$INSTDIR\locale\pl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\pl.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\pl.gmo"
 
   SetOutPath "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\pt_BR.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\pt_BR.gmo"
 
   SetOutPath "$INSTDIR\locale\pt\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\pt.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\pt.gmo"
 
   SetOutPath "$INSTDIR\locale\ro\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ro.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ro.gmo"
 
   SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ru.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ru.gmo"
 
   SetOutPath "$INSTDIR\locale\sl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\sl.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\sl.gmo"
 
   SetOutPath "$INSTDIR\locale\uk\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\uk_UA.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\uk_UA.gmo"
 
   SetOutPath "$INSTDIR\locale\zh_TW\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\zh_TW.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\zh_TW.gmo"
 
   SetOutPath "$INSTDIR\locale\zh_CN\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\zh_CN.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\zh_CN.gmo"
 
 SectionEnd
 
