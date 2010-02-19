@@ -49,7 +49,9 @@ typedef struct PROJECTILE
 	WEAPON_STATS*   psWStats;               ///< firing weapon stats
 	BASE_OBJECT*    psSource;               ///< what fired the projectile
 	BASE_OBJECT*    psDest;                 ///< target of this projectile
-	BASE_OBJECT*    psDamaged;              ///< the target it already dealt damage to (don't damage the same target twice)
+	BASE_OBJECT **  psDamaged;              ///< the targets that have already been dealt damage to (don't damage the same target twice)
+	unsigned        psNumDamaged;
+
 	UDWORD          startX, startY;         ///< Where projectile started
 	UDWORD          tarX, tarY;             ///< The target coordinates
 	SDWORD          vXY, vZ;                ///< axis velocities
