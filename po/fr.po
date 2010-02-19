@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-09 18:24+0100\n"
+"POT-Creation-Date: 2010-02-19 19:10+0100\n"
 "PO-Revision-Date: 2009-05-15 21:52+0100\n"
 "Last-Translator: gesierfou <gesierfou@yahoo.fr>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -5656,67 +5656,84 @@ msgid "Incoming intelligence report... Team Gamma"
 msgstr "Réception d'un rapport de connaissances... Division Gamma"
 
 #: data/base/messages/strings/genstrings.txt:4
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
 msgstr "Début du Briefing"
 
 #: data/base/messages/strings/genstrings.txt:7
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
 msgstr "Poste Défensif de Pillards"
 
 #: data/base/messages/strings/genstrings.txt:8
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:8
 msgid "Power Resource"
 msgstr "Source d'énergie"
 
 #: data/base/messages/strings/genstrings.txt:9
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
 msgstr "Artefact Inconnu"
 
 #: data/base/messages/strings/genstrings.txt:10
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
 msgstr "Source de Surtension"
 
 #: data/base/messages/strings/genstrings.txt:13
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
 msgstr "Zone d'Atterrissage"
 
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:14
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:24
 msgid "Mission Target"
 msgstr "Cible de la Mission"
 
 #: data/base/messages/strings/genstrings.txt:15
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
 msgstr "Centre de recherche Pré-Apocalyptique"
 
 #: data/base/messages/strings/genstrings.txt:17
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
 msgstr "En-route vers le Site de la Mission"
 
 #: data/base/messages/strings/genstrings.txt:18
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
 msgstr "Échec"
 
 #: data/base/messages/strings/genstrings.txt:19
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
 msgstr "Réussite"
 
 #: data/base/messages/strings/genstrings.txt:22
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
 msgstr "Zone d'Atterrissage ennemie"
 
 #: data/base/messages/strings/genstrings.txt:23
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
 msgstr "Base ennemie"
 
 #: data/base/messages/strings/genstrings.txt:27
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
 msgstr "Réception d'une Transmission"
 
 #: data/base/messages/strings/genstrings.txt:30
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
 msgstr "Réception du Rapport de Conaissances"
 
 #: data/base/messages/strings/genstrings.txt:33
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
 msgstr "Réacteur Nucléaire"
 
@@ -5742,6 +5759,7 @@ msgstr "Véhicule de Construction"
 
 #: data/base/messages/strings/names.txt:17
 #: data/base/messages/strings/names.txt:173
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1832
 #: data/mp/messages/strings/names.txt:17
 #: data/mp/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:1829
@@ -5801,6 +5819,7 @@ msgid "Repair Turret Viper Half-tracks"
 msgstr "Tourelle de Réparation Mobile Viper Semi-chenillée"
 
 #: data/base/messages/strings/names.txt:174
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1833
 #: data/mp/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:1830
 msgid "Twin Machinegun Viper Wheels"
@@ -5817,6 +5836,7 @@ msgid "Heavy Machinegun Viper Half-tracks"
 msgstr "Mitrailleuse Lourde Viper Semi-chenillée"
 
 #: data/base/messages/strings/names.txt:177
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1840
 #: data/mp/messages/strings/names.txt:180
 #: data/mp/messages/strings/names.txt:1837
 msgid "Heavy Machinegun Viper Tracks"
@@ -5901,12 +5921,14 @@ msgstr "Canon léger Python chenillé"
 
 #: data/base/messages/strings/names.txt:194
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1331
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1920
 msgid "Medium Cannon Python Tracks"
 msgstr "Canon moyen Python chenillé"
 
 #: data/base/messages/strings/names.txt:195
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1848
 #: data/mp/messages/strings/names.txt:198
 #: data/mp/messages/strings/names.txt:1356
 #: data/mp/messages/strings/names.txt:1510
@@ -9112,6 +9134,7 @@ msgid "Archangel Missile Emplacement"
 msgstr "Emplacement pour Missiles Archangel"
 
 #: data/base/messages/strings/names.txt:1423
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1881
 #: data/mp/messages/strings/names.txt:1878
 #, fuzzy
 msgid "Repair Turret Cobra Tracks"
@@ -9147,6 +9170,7 @@ msgstr "Transporteur Abattu"
 
 #: data/base/messages/strings/names.txt:1458
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1330
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
 #: data/mp/messages/strings/names.txt:1471
 #: data/mp/messages/strings/names.txt:1919
 msgid "Tank Killer Python Tracks"
@@ -9478,6 +9502,7 @@ msgid "Viper HMG Wheels"
 msgstr "Vipère HMG Roues"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1289
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
 #: data/mp/messages/strings/names.txt:1821
 msgid "Scourge Mantis Hover"
 msgstr ""
@@ -9641,6 +9666,387 @@ msgstr "Mitrailleuse Viper Semi-chenillée"
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1329
 msgid "Viper Flamer Half-Track"
 msgstr "lance-flammes Viper Semi-chenillée"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
+#: data/mp/messages/strings/names.txt:1819
+msgid "Heavy Repair Turret Cobra Hover"
+msgstr "Dépanneuse Lourde Cobra Aéro-glisseur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1823
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1834
+#: data/mp/messages/strings/names.txt:1820
+#: data/mp/messages/strings/names.txt:1831
+msgid "Heavy Machinegun Viper Wheels"
+msgstr "Mitrailleuse lourde Viper sur Roues"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
+#: data/mp/messages/strings/names.txt:1822
+msgid "Tank Killer Mantis Hover"
+msgstr "Tueur de char Mantis aéro-glisseur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1826
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1841
+#: data/mp/messages/strings/names.txt:1823
+#: data/mp/messages/strings/names.txt:1838
+msgid "Heavy Machinegun Cobra Tracks"
+msgstr "Mitrailleuse Lourde Viper Chenillée"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1827
+#: data/mp/messages/strings/names.txt:1824
+msgid "Heavy Cannon Cobra Hover"
+msgstr "Canon Lourd Cobra aéro-glisseur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1835
+#: data/mp/messages/strings/names.txt:1832
+msgid "Heavy Machinegun Cobra Wheels"
+msgstr "Mitrailleuse lourde Viper sur Roues"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1836
+#: data/mp/messages/strings/names.txt:1833
+msgid "Heavy Machinegun Cobra Hover"
+msgstr "Mitrailleuse Lourde Cobra sur roues"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1838
+#: data/mp/messages/strings/names.txt:1835
+msgid "Machinegun Viper Tracks"
+msgstr "Mitrailleuse Viper sur Roues"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1839
+#: data/mp/messages/strings/names.txt:1836
+msgid "Twin Machinegun Viper Tracks"
+msgstr "Mitrailleuses jumelées Viper chenillée"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1843
+#: data/mp/messages/strings/names.txt:1840
+msgid "Medium Cannon Cobra Hover"
+msgstr "Canon Moyen Cobra aéro-glisseur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1844
+#: data/mp/messages/strings/names.txt:1841
+msgid "Medium Cannon Scorpion Hover"
+msgstr "Canon Moyen Scorpion aéro-glisseur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1845
+#: data/mp/messages/strings/names.txt:1842
+msgid "Medium Cannon Scorpion Tracks"
+msgstr "Canon Moyen Scorpion Chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1846
+#: data/mp/messages/strings/names.txt:1843
+msgid "Medium Cannon Python Hover"
+msgstr "Canon Moyen Python aéro-glisseur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1847
+#: data/mp/messages/strings/names.txt:1844
+msgid "Heavy Cannon Python Hover"
+msgstr "Canon lourd Python aéro-glisseur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1849
+#: data/mp/messages/strings/names.txt:1846
+msgid "Rail Gun Mantis Tracks"
+msgstr "Canon électrique Mantis chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1850
+#: data/mp/messages/strings/names.txt:1847
+msgid "Pulse Laser Mantis Tracks"
+msgstr "Laser à Impulsion Mantis Chenilles"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1851
+#: data/mp/messages/strings/names.txt:1848
+msgid "Lancer Python Tracks"
+msgstr "Lanceur Python chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1852
+#: data/mp/messages/strings/names.txt:1849
+msgid "Lancer Mantis Tracks"
+msgstr "Lanceur Mantis chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1853
+#: data/mp/messages/strings/names.txt:1850
+msgid "Tank Killer Vengeance Tracks"
+msgstr "Tueur de char Vengeance Chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1858
+#: data/mp/messages/strings/names.txt:1855
+msgid "Heavy Cannon Tiger Tracks"
+msgstr "Canon Lourd Tigre Chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1859
+#: data/mp/messages/strings/names.txt:1856
+msgid "Needle Gun Tiger Tracks"
+msgstr "Canon à aiguille Tigre chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1860
+#: data/mp/messages/strings/names.txt:1857
+msgid "Needle Gun Retribution Tracks"
+msgstr "Canon à aiguille Retribution chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1861
+#: data/mp/messages/strings/names.txt:1858
+msgid "Needle Gun Vengeance Tracks"
+msgstr "Canon à aiguille Vengeance chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1862
+#: data/mp/messages/strings/names.txt:1859
+msgid "Vengeance Tracks Rail Gun"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1863
+#: data/mp/messages/strings/names.txt:1860
+#, fuzzy
+msgid "Vengeance Tracks Gauss Cannon"
+msgstr "Anti-char Vengeance Chenilles"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1864
+#: data/mp/messages/strings/names.txt:1861
+#, fuzzy
+msgid "Vengeance Tracks Gauss Scourge"
+msgstr "Anti-char Vengeance Chenilles"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1867
+#: data/mp/messages/strings/names.txt:1864
+#, fuzzy
+msgid "VTOL Cluster Bomb Bay Bug VTOL"
+msgstr "Bombes à Fragmentation"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1868
+#: data/mp/messages/strings/names.txt:1865
+#, fuzzy
+msgid "VTOL Bunker Buster Bug VTOL"
+msgstr "Roquette Anti-Bunker VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1869
+#: data/mp/messages/strings/names.txt:1866
+#, fuzzy
+msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
+msgstr "Bombes à Fragmentation Scorpion VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1870
+#: data/mp/messages/strings/names.txt:1867
+#, fuzzy
+msgid "VTOL Bunker Buster Scorpion VTOL"
+msgstr "Roquette Anti-Bunker Scorpion VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1873
+#: data/mp/messages/strings/names.txt:1870
+msgid "VTOL Lancer Bug VTOL"
+msgstr "Lanceur VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1874
+msgid "VTOL HPV Cannon Bug VTOL"
+msgstr "Canon à HV VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1875
+#: data/mp/messages/strings/names.txt:1872
+msgid "VTOL Lancer Scorpion VTOL"
+msgstr "Lanceur Scorpion VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
+#, fuzzy
+msgid "VTOL HPV Cannon Scorpion VTOL"
+msgstr "Canon à HV Scorpion VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
+#: data/mp/messages/strings/names.txt:1874
+msgid "VTOL Lancer Mantis VTOL"
+msgstr "Lanceur Mantis VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
+msgid "VTOL HPV Cannon Mantis VTOL"
+msgstr "Canon à HV Mantis VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
+#: data/mp/messages/strings/names.txt:1879
+#, fuzzy
+msgid "Repair Turret Mantis Tracks"
+msgstr "Dépanneuse Mantis chenillée"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1884
+#: data/mp/messages/strings/names.txt:1881
+msgid "Lancer Scorpion Tracks"
+msgstr "Lanceur Scorpion chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1885
+#: data/mp/messages/strings/names.txt:1882
+msgid "Heavy Cannon Scorpion Tracks"
+msgstr "Canon Lourd Scorpion Chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1886
+#: data/mp/messages/strings/names.txt:1883
+msgid "Lancer Scorpion VTOL"
+msgstr "Lanceur Scorpion VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1887
+#: data/mp/messages/strings/names.txt:1884
+msgid "Bunker Buster Scorpion VTOL"
+msgstr "Roquette Anti-Bunker Scorpion VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1889
+#: data/mp/messages/strings/names.txt:1886
+msgid "Command Turret Viper Tracks"
+msgstr "Tourelle de Commandement Vipère Chenillée"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1890
+#: data/mp/messages/strings/names.txt:1887
+msgid "Command Turret Cobra Tracks"
+msgstr "Tourelle de Commandement Vipère Chenillée"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1891
+#: data/mp/messages/strings/names.txt:1888
+msgid "Command Turret Scorpion Tracks"
+msgstr "Tourelle de Commandement Scorpion Chenillée"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1892
+#: data/mp/messages/strings/names.txt:1889
+msgid "Command Turret Mantis Tracks"
+msgstr "Tourelle de Commandement Mantis Chenillée"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1894
+#: data/mp/messages/strings/names.txt:1891
+msgid "Lancer Cobra Tracks"
+msgstr "Lanceur Cobra chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1895
+#: data/mp/messages/strings/names.txt:1892
+msgid "Heavy Cannon Mantis Tracks"
+msgstr "Canon Lourd Mantis Chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1896
+#: data/mp/messages/strings/names.txt:1893
+msgid "Tank Killer Mantis Tracks"
+msgstr "Tueur de char Mantis Chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1897
+#: data/mp/messages/strings/names.txt:1894
+msgid "Scourge Mantis Tracks"
+msgstr "Lance missile Scourge Mantis chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1898
+#: data/mp/messages/strings/names.txt:1895
+#, fuzzy
+msgid "Heavy Machinegun Scorpion Tracks"
+msgstr "Mitrailleuse Lourde Scorpion Chenillée"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1900
+#: data/mp/messages/strings/names.txt:1897
+msgid "Repair Scorpion Tracks"
+msgstr "Dépanneuse Scorpion chenillée"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1901
+#: data/mp/messages/strings/names.txt:1898
+msgid "Heavy Repair Scorpion Hover"
+msgstr "Dépanneuse Lourde Scorpion aéro-glisseur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1904
+#: data/mp/messages/strings/names.txt:1901
+msgid "Truck Cobra Hover"
+msgstr "Camion Cobra aéro-glisseur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1905
+#: data/mp/messages/strings/names.txt:1902
+msgid "Truck Scorpion Hover"
+msgstr "Camion Scorpion aéro-glisseur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1906
+#: data/mp/messages/strings/names.txt:1903
+msgid "Truck Mantis Hover"
+msgstr "Camion Mantis aéro-glisseur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1909
+#: data/mp/messages/strings/names.txt:1906
+msgid "Bunker Buster Cobra Tracks"
+msgstr "Lance roquette Anti-Bunker Cobra chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1910
+#: data/mp/messages/strings/names.txt:1907
+msgid "Bunker Buster Scorpion Tracks"
+msgstr "Lance roquette Anti-Bunker Scorpion chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1911
+#: data/mp/messages/strings/names.txt:1908
+msgid "Bunker Buster Mantis Tracks"
+msgstr "Lance roquette Anti-Bunker Mantis chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1913
+#: data/mp/messages/strings/names.txt:1910
+msgid "Lancer Viper Tracks"
+msgstr "Lanceur Viper chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1915
+#: data/mp/messages/strings/names.txt:1912
+#, fuzzy
+msgid "Mini-Rocket Cobra Half-Tracks"
+msgstr "Mini lance-Roquettes Cobra Semi-chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1916
+#: data/mp/messages/strings/names.txt:1913
+#, fuzzy
+msgid "Mini-Rocket Cobra Tracks"
+msgstr "Mini lance-Roquettes Cobra sur roues"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
+#, fuzzy
+msgid "Mini-Rocket Artillery Cobra Tracks"
+msgstr "Lanceur de Mini-Roquettes Cobra chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1919
+#: data/mp/messages/strings/names.txt:1916
+msgid "Inferno Cobra Half-Tracks"
+msgstr "Inferno Cobra semi-chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1920
+msgid "HPV Cannon Python Hover"
+msgstr "Canon à HV Python aéro-glisseur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1924
+#: data/mp/messages/strings/names.txt:1921
+msgid "Scourge Python Tracks"
+msgstr "Lance missile Python chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1925
+#: data/mp/messages/strings/names.txt:1922
+msgid "Gauss Cannon Python Tracks"
+msgstr "Canon gauss Python chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1926
+#: data/mp/messages/strings/names.txt:1923
+msgid "Pulse Laser Python Tracks"
+msgstr "Laser à Impulsion Python Chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1927
+#: data/mp/messages/strings/names.txt:1924
+msgid "Pulse Laser Tiger Tracks"
+msgstr "Laser à Impulsion Tigre Chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1928
+#: data/mp/messages/strings/names.txt:1925
+msgid "Heavy Laser Tiger Tracks"
+msgstr "Laser Lourd Tigre Chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1929
+#: data/mp/messages/strings/names.txt:1926
+msgid "Gauss Cannon Wyvern Tracks"
+msgstr "Canon Gauss Wyvern Chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1930
+#: data/mp/messages/strings/names.txt:1927
+msgid "Pulse Laser Wyvern Tracks"
+msgstr "Laser à Impulsion Wyvern Chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1931
+#: data/mp/messages/strings/names.txt:1928
+msgid "Heavy Laser Wyvern Tracks"
+msgstr "Laser Lourd Wyvern Chenillé"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1933
+#: data/mp/messages/strings/names.txt:1930
+msgid "Machinegun Viper Half-Tracks"
+msgstr "Mitrailleuse Viper Semi-chenillée"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1934
+#: data/mp/messages/strings/names.txt:1931
+msgid "Flamer Viper Half-Tracks"
+msgstr "Lance-flammes Viper Semi-chenillé"
 
 #: data/mp/messages/resmessages12.rmsg:58
 #, fuzzy
@@ -10992,318 +11398,30 @@ msgstr "Tourelle de Commandemet Mk3"
 msgid "Command Turret IV"
 msgstr "Tourelle de Commandement"
 
-#: data/mp/messages/strings/names.txt:1819
-msgid "Heavy Repair Turret Cobra Hover"
-msgstr "Dépanneuse Lourde Cobra Aéro-glisseur"
-
-#: data/mp/messages/strings/names.txt:1820
-#: data/mp/messages/strings/names.txt:1831
-msgid "Heavy Machinegun Viper Wheels"
-msgstr "Mitrailleuse lourde Viper sur Roues"
-
-#: data/mp/messages/strings/names.txt:1822
-msgid "Tank Killer Mantis Hover"
-msgstr "Tueur de char Mantis aéro-glisseur"
-
-#: data/mp/messages/strings/names.txt:1823
-#: data/mp/messages/strings/names.txt:1838
-msgid "Heavy Machinegun Cobra Tracks"
-msgstr "Mitrailleuse Lourde Viper Chenillée"
-
-#: data/mp/messages/strings/names.txt:1824
-msgid "Heavy Cannon Cobra Hover"
-msgstr "Canon Lourd Cobra aéro-glisseur"
-
-#: data/mp/messages/strings/names.txt:1832
-msgid "Heavy Machinegun Cobra Wheels"
-msgstr "Mitrailleuse lourde Viper sur Roues"
-
-#: data/mp/messages/strings/names.txt:1833
-msgid "Heavy Machinegun Cobra Hover"
-msgstr "Mitrailleuse Lourde Cobra sur roues"
-
-#: data/mp/messages/strings/names.txt:1835
-msgid "Machinegun Viper Tracks"
-msgstr "Mitrailleuse Viper sur Roues"
-
-#: data/mp/messages/strings/names.txt:1836
-msgid "Twin Machinegun Viper Tracks"
-msgstr "Mitrailleuses jumelées Viper chenillée"
-
-#: data/mp/messages/strings/names.txt:1840
-msgid "Medium Cannon Cobra Hover"
-msgstr "Canon Moyen Cobra aéro-glisseur"
-
-#: data/mp/messages/strings/names.txt:1841
-msgid "Medium Cannon Scorpion Hover"
-msgstr "Canon Moyen Scorpion aéro-glisseur"
-
-#: data/mp/messages/strings/names.txt:1842
-msgid "Medium Cannon Scorpion Tracks"
-msgstr "Canon Moyen Scorpion Chenillé"
-
-#: data/mp/messages/strings/names.txt:1843
-msgid "Medium Cannon Python Hover"
-msgstr "Canon Moyen Python aéro-glisseur"
-
-#: data/mp/messages/strings/names.txt:1844
-msgid "Heavy Cannon Python Hover"
-msgstr "Canon lourd Python aéro-glisseur"
-
-#: data/mp/messages/strings/names.txt:1846
-msgid "Rail Gun Mantis Tracks"
-msgstr "Canon électrique Mantis chenillé"
-
-#: data/mp/messages/strings/names.txt:1847
-msgid "Pulse Laser Mantis Tracks"
-msgstr "Laser à Impulsion Mantis Chenilles"
-
-#: data/mp/messages/strings/names.txt:1848
-msgid "Lancer Python Tracks"
-msgstr "Lanceur Python chenillé"
-
-#: data/mp/messages/strings/names.txt:1849
-msgid "Lancer Mantis Tracks"
-msgstr "Lanceur Mantis chenillé"
-
-#: data/mp/messages/strings/names.txt:1850
-msgid "Tank Killer Vengeance Tracks"
-msgstr "Tueur de char Vengeance Chenillé"
-
-#: data/mp/messages/strings/names.txt:1855
-msgid "Heavy Cannon Tiger Tracks"
-msgstr "Canon Lourd Tigre Chenillé"
-
-#: data/mp/messages/strings/names.txt:1856
-msgid "Needle Gun Tiger Tracks"
-msgstr "Canon à aiguille Tigre chenillé"
-
-#: data/mp/messages/strings/names.txt:1857
-msgid "Needle Gun Retribution Tracks"
-msgstr "Canon à aiguille Retribution chenillé"
-
-#: data/mp/messages/strings/names.txt:1858
-msgid "Needle Gun Vengeance Tracks"
-msgstr "Canon à aiguille Vengeance chenillé"
-
-#: data/mp/messages/strings/names.txt:1859
-msgid "Vengeance Tracks Rail Gun"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1860
-#, fuzzy
-msgid "Vengeance Tracks Gauss Cannon"
-msgstr "Anti-char Vengeance Chenilles"
-
-#: data/mp/messages/strings/names.txt:1861
-#, fuzzy
-msgid "Vengeance Tracks Gauss Scourge"
-msgstr "Anti-char Vengeance Chenilles"
-
-#: data/mp/messages/strings/names.txt:1864
-#, fuzzy
-msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "Bombes à Fragmentation"
-
-#: data/mp/messages/strings/names.txt:1865
-#, fuzzy
-msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "Roquette Anti-Bunker VTOL"
-
-#: data/mp/messages/strings/names.txt:1866
-#, fuzzy
-msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "Bombes à Fragmentation Scorpion VTOL"
-
-#: data/mp/messages/strings/names.txt:1867
-#, fuzzy
-msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "Roquette Anti-Bunker Scorpion VTOL"
-
-#: data/mp/messages/strings/names.txt:1870
-msgid "VTOL Lancer Bug VTOL"
-msgstr "Lanceur VTOL"
-
 #: data/mp/messages/strings/names.txt:1871
 #, fuzzy
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
 msgstr "Canon à hyper vélocité VTOL"
-
-#: data/mp/messages/strings/names.txt:1872
-msgid "VTOL Lancer Scorpion VTOL"
-msgstr "Lanceur Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1873
 #, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "Canon à HV Scorpion VTOL"
 
-#: data/mp/messages/strings/names.txt:1874
-msgid "VTOL Lancer Mantis VTOL"
-msgstr "Lanceur Mantis VTOL"
-
 #: data/mp/messages/strings/names.txt:1875
 #, fuzzy
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
 msgstr "Canon à hyper vélocité VTOL"
-
-#: data/mp/messages/strings/names.txt:1879
-#, fuzzy
-msgid "Repair Turret Mantis Tracks"
-msgstr "Dépanneuse Mantis chenillée"
-
-#: data/mp/messages/strings/names.txt:1881
-msgid "Lancer Scorpion Tracks"
-msgstr "Lanceur Scorpion chenillé"
-
-#: data/mp/messages/strings/names.txt:1882
-msgid "Heavy Cannon Scorpion Tracks"
-msgstr "Canon Lourd Scorpion Chenillé"
-
-#: data/mp/messages/strings/names.txt:1883
-msgid "Lancer Scorpion VTOL"
-msgstr "Lanceur Scorpion VTOL"
-
-#: data/mp/messages/strings/names.txt:1884
-msgid "Bunker Buster Scorpion VTOL"
-msgstr "Roquette Anti-Bunker Scorpion VTOL"
-
-#: data/mp/messages/strings/names.txt:1886
-msgid "Command Turret Viper Tracks"
-msgstr "Tourelle de Commandement Vipère Chenillée"
-
-#: data/mp/messages/strings/names.txt:1887
-msgid "Command Turret Cobra Tracks"
-msgstr "Tourelle de Commandement Vipère Chenillée"
-
-#: data/mp/messages/strings/names.txt:1888
-msgid "Command Turret Scorpion Tracks"
-msgstr "Tourelle de Commandement Scorpion Chenillée"
-
-#: data/mp/messages/strings/names.txt:1889
-msgid "Command Turret Mantis Tracks"
-msgstr "Tourelle de Commandement Mantis Chenillée"
-
-#: data/mp/messages/strings/names.txt:1891
-msgid "Lancer Cobra Tracks"
-msgstr "Lanceur Cobra chenillé"
-
-#: data/mp/messages/strings/names.txt:1892
-msgid "Heavy Cannon Mantis Tracks"
-msgstr "Canon Lourd Mantis Chenillé"
-
-#: data/mp/messages/strings/names.txt:1893
-msgid "Tank Killer Mantis Tracks"
-msgstr "Tueur de char Mantis Chenillé"
-
-#: data/mp/messages/strings/names.txt:1894
-msgid "Scourge Mantis Tracks"
-msgstr "Lance missile Scourge Mantis chenillé"
-
-#: data/mp/messages/strings/names.txt:1895
-#, fuzzy
-msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Mitrailleuse Lourde Scorpion Chenillée"
-
-#: data/mp/messages/strings/names.txt:1897
-msgid "Repair Scorpion Tracks"
-msgstr "Dépanneuse Scorpion chenillée"
-
-#: data/mp/messages/strings/names.txt:1898
-msgid "Heavy Repair Scorpion Hover"
-msgstr "Dépanneuse Lourde Scorpion aéro-glisseur"
-
-#: data/mp/messages/strings/names.txt:1901
-msgid "Truck Cobra Hover"
-msgstr "Camion Cobra aéro-glisseur"
-
-#: data/mp/messages/strings/names.txt:1902
-msgid "Truck Scorpion Hover"
-msgstr "Camion Scorpion aéro-glisseur"
-
-#: data/mp/messages/strings/names.txt:1903
-msgid "Truck Mantis Hover"
-msgstr "Camion Mantis aéro-glisseur"
-
-#: data/mp/messages/strings/names.txt:1906
-msgid "Bunker Buster Cobra Tracks"
-msgstr "Lance roquette Anti-Bunker Cobra chenillé"
-
-#: data/mp/messages/strings/names.txt:1907
-msgid "Bunker Buster Scorpion Tracks"
-msgstr "Lance roquette Anti-Bunker Scorpion chenillé"
-
-#: data/mp/messages/strings/names.txt:1908
-msgid "Bunker Buster Mantis Tracks"
-msgstr "Lance roquette Anti-Bunker Mantis chenillé"
-
-#: data/mp/messages/strings/names.txt:1910
-msgid "Lancer Viper Tracks"
-msgstr "Lanceur Viper chenillé"
-
-#: data/mp/messages/strings/names.txt:1912
-#, fuzzy
-msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr "Mini lance-Roquettes Cobra Semi-chenillé"
-
-#: data/mp/messages/strings/names.txt:1913
-#, fuzzy
-msgid "Mini-Rocket Cobra Tracks"
-msgstr "Mini lance-Roquettes Cobra sur roues"
 
 #: data/mp/messages/strings/names.txt:1914
 #, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "Lanceur de Mini-Roquettes Cobra chenillé"
 
-#: data/mp/messages/strings/names.txt:1916
-msgid "Inferno Cobra Half-Tracks"
-msgstr "Inferno Cobra semi-chenillé"
-
 #: data/mp/messages/strings/names.txt:1917
 #, fuzzy
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Canon lourd Python aéro-glisseur"
-
-#: data/mp/messages/strings/names.txt:1921
-msgid "Scourge Python Tracks"
-msgstr "Lance missile Python chenillé"
-
-#: data/mp/messages/strings/names.txt:1922
-msgid "Gauss Cannon Python Tracks"
-msgstr "Canon gauss Python chenillé"
-
-#: data/mp/messages/strings/names.txt:1923
-msgid "Pulse Laser Python Tracks"
-msgstr "Laser à Impulsion Python Chenillé"
-
-#: data/mp/messages/strings/names.txt:1924
-msgid "Pulse Laser Tiger Tracks"
-msgstr "Laser à Impulsion Tigre Chenillé"
-
-#: data/mp/messages/strings/names.txt:1925
-msgid "Heavy Laser Tiger Tracks"
-msgstr "Laser Lourd Tigre Chenillé"
-
-#: data/mp/messages/strings/names.txt:1926
-msgid "Gauss Cannon Wyvern Tracks"
-msgstr "Canon Gauss Wyvern Chenillé"
-
-#: data/mp/messages/strings/names.txt:1927
-msgid "Pulse Laser Wyvern Tracks"
-msgstr "Laser à Impulsion Wyvern Chenillé"
-
-#: data/mp/messages/strings/names.txt:1928
-msgid "Heavy Laser Wyvern Tracks"
-msgstr "Laser Lourd Wyvern Chenillé"
-
-#: data/mp/messages/strings/names.txt:1930
-msgid "Machinegun Viper Half-Tracks"
-msgstr "Mitrailleuse Viper Semi-chenillée"
-
-#: data/mp/messages/strings/names.txt:1931
-msgid "Flamer Viper Half-Tracks"
-msgstr "Lance-flammes Viper Semi-chenillé"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:107
@@ -11443,21 +11561,38 @@ msgstr "Latin"
 msgid "Enter password here"
 msgstr "Entrez le mot de passe "
 
-#: lib/netplay/netplay.c:2901
+#: lib/netplay/netplay.c:2902
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Impossible de résourdre le DNS du serveur maître (%s) !"
 
-#: lib/netplay/netplay.c:2926
+#: lib/netplay/netplay.c:2927
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Impossible de communiquer avec le serveur maître ! Le port TCP %u est-il ouvert en sortie ?"
 
-#: lib/netplay/netplay.c:3334
+#: lib/netplay/netplay.c:3335
 msgid ", mods: "
 msgstr ""
 
-#: src/cheat.c:123
+#: src/challenge.c:172
+#: src/hci.c:1012
+#: src/hci.c:3835
+#: src/hci.c:3986
+#: src/hci.c:4439
+#: src/hci.c:5643
+#: src/intelmap.c:541
+#: src/intorder.c:661
+#: src/loadsave.c:267
+#: src/multimenu.c:479
+#: src/multimenu.c:1356
+#: src/transporter.c:286
+#: src/transporter.c:375
+#: src/transporter.c:840
+msgid "Close"
+msgstr "Fermer"
+
+#: src/cheat.c:124
 #, fuzzy
 msgid ": Unknown cheat code."
 msgstr "Exécution en mode DEBUG"
@@ -11762,18 +11897,18 @@ msgstr "Joueur"
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Construction Impossible. Le Gisement de Pétrole est en Feu."
 
-#: src/display.c:1911
-#: src/display.c:2551
+#: src/display.c:1886
+#: src/display.c:2500
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Endommagé à %d%% - Expérience %d, %s"
 
-#: src/display.c:1927
+#: src/display.c:1902
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Endommagé à %d%% - Expérience %d, %s"
 
-#: src/display.c:2134
+#: src/display.c:2083
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Construction d'un Puits de Pétrole"
 
@@ -12193,22 +12328,6 @@ msgstr "OPTIONS"
 msgid "Active mods: "
 msgstr ""
 
-#: src/hci.c:1012
-#: src/hci.c:3835
-#: src/hci.c:3986
-#: src/hci.c:4439
-#: src/hci.c:5643
-#: src/intelmap.c:541
-#: src/intorder.c:661
-#: src/loadsave.c:267
-#: src/multimenu.c:479
-#: src/multimenu.c:1356
-#: src/transporter.c:286
-#: src/transporter.c:375
-#: src/transporter.c:840
-msgid "Close"
-msgstr "Fermer"
-
 #: src/hci.c:1358
 #, fuzzy
 msgid "MAP SAVED!"
@@ -12382,7 +12501,7 @@ msgid "Power Accrued"
 msgstr "Puissance Accrue"
 
 #: src/intelmap.c:245
-#: src/keybind.c:1304
+#: src/keybind.c:1341
 msgid "PAUSED"
 msgstr "PAUSE"
 
@@ -12525,272 +12644,272 @@ msgstr "Voyons voir ce que tu vois !"
 msgid "Fine, weapon & sensor display is off!"
 msgstr "C'est bon, je désactive l'affichage des senseurs !"
 
-#: src/keybind.c:301
-#: src/keybind.c:331
-#: src/keybind.c:348
-#: src/keybind.c:392
-#: src/keybind.c:497
-#: src/keybind.c:537
-#: src/keybind.c:643
-#: src/keybind.c:1194
-#: src/keybind.c:1251
-#: src/keybind.c:1353
-#: src/keybind.c:1450
-#: src/keybind.c:1761
-#: src/keybind.c:1801
+#: src/keybind.c:338
+#: src/keybind.c:368
+#: src/keybind.c:385
+#: src/keybind.c:429
+#: src/keybind.c:534
+#: src/keybind.c:574
+#: src/keybind.c:680
+#: src/keybind.c:1231
+#: src/keybind.c:1288
+#: src/keybind.c:1390
+#: src/keybind.c:1487
+#: src/keybind.c:1798
+#: src/keybind.c:1838
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "Le joueur %u utilise un code de triche :%s"
 
-#: src/keybind.c:302
+#: src/keybind.c:339
 msgid "Hard as nails!!!"
 msgstr "Mange-toi ça dans les dents !!!"
 
-#: src/keybind.c:316
+#: src/keybind.c:353
 msgid "Takings thing easy!"
 msgstr "Prend ça cool !"
 
-#: src/keybind.c:332
+#: src/keybind.c:369
 msgid "1000 big ones!!!"
 msgstr "Chaos"
 
-#: src/keybind.c:349
+#: src/keybind.c:386
 msgid "Power overwhelming"
 msgstr "Surcharge de Puissance"
 
-#: src/keybind.c:364
+#: src/keybind.c:401
 msgid "Back to normality!"
 msgstr "De Retour à la Normalité !"
 
-#: src/keybind.c:377
+#: src/keybind.c:414
 msgid "Getting tricky!"
 msgstr "Sois plus Audacieux !"
 
-#: src/keybind.c:393
+#: src/keybind.c:430
 msgid "Twice as nice!"
 msgstr "À Deux, c'est Mieux !"
 
-#: src/keybind.c:404
+#: src/keybind.c:441
 msgid "FPS display is enabled."
 msgstr "L'affichage du nombre d'images par secondes est activé"
 
-#: src/keybind.c:408
+#: src/keybind.c:445
 msgid "FPS display is disabled."
 msgstr "L'affichage du nombre d'images par secondes est desactivé"
 
-#: src/keybind.c:429
+#: src/keybind.c:466
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; Limite-FPSt: %d; PIEs %d; polys %d; Terr. polys %d; Etats %d"
 
-#: src/keybind.c:461
+#: src/keybind.c:498
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr ""
 
-#: src/keybind.c:498
+#: src/keybind.c:535
 msgid "Infinite power disabled"
 msgstr "Énergie Infinie Désactivée (c'est bien !)"
 
-#: src/keybind.c:498
+#: src/keybind.c:535
 msgid "Infinite power enabled"
 msgstr "Énergie Infinie activée (Espèce de Tricheur !)"
 
-#: src/keybind.c:538
+#: src/keybind.c:575
 msgid "All items made available"
 msgstr "Tout les éléments sont disponibles"
 
-#: src/keybind.c:644
+#: src/keybind.c:681
 msgid "Fog on"
 msgstr "Brouillard activé"
 
-#: src/keybind.c:644
+#: src/keybind.c:681
 msgid "Fog off"
 msgstr "Brouillard désactivé"
 
-#: src/keybind.c:1083
+#: src/keybind.c:1120
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1083
+#: src/keybind.c:1120
 #, fuzzy
 msgid "Ending Mission."
 msgstr "Réception d'une transmission..."
 
-#: src/keybind.c:1195
+#: src/keybind.c:1232
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "LES CODES DE TRICHE SONT MAINTENANT ACTIVÉS !"
 
-#: src/keybind.c:1195
+#: src/keybind.c:1232
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "LES CODES DE TRICHE SONT DÉSACTIVÉS !"
 
-#: src/keybind.c:1252
+#: src/keybind.c:1289
 msgid "God Mode ON"
 msgstr "Mode dieu-tout-puissant activé"
 
-#: src/keybind.c:1252
+#: src/keybind.c:1289
 msgid "God Mode OFF"
 msgstr "Mode dieu-tout-puissant désactivé !"
 
-#: src/keybind.c:1264
+#: src/keybind.c:1301
 msgid "View Aligned to North"
 msgstr "Caméra Réorientée vers le Nord"
 
-#: src/keybind.c:1273
+#: src/keybind.c:1310
 #, fuzzy, c-format
 msgid "Trap cursor %s"
 msgstr "Piéger le Curseur"
 
-#: src/keybind.c:1354
+#: src/keybind.c:1391
 msgid "Researched EVERYTHING for you!"
 msgstr "Chercheur Exténué : On a fait du mieux qu'on a pu et on croit qu'on a réussi !"
 
-#: src/keybind.c:1387
+#: src/keybind.c:1424
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "Le joueur %u utilise un code de triche:%s %s"
 
-#: src/keybind.c:1388
+#: src/keybind.c:1425
 #, fuzzy
 msgid "Researched"
 msgstr "Menu Recherche"
 
-#: src/keybind.c:1408
+#: src/keybind.c:1445
 msgid "Only displaying energy bars when selected"
 msgstr "Afficher seulement l'énergie des unitées sélectionnées"
 
-#: src/keybind.c:1411
+#: src/keybind.c:1448
 msgid "Always displaying energy bars for units"
 msgstr "Toujours afficher l'énergie des unitées"
 
-#: src/keybind.c:1414
+#: src/keybind.c:1451
 msgid "Always displaying energy bars for units and structures"
 msgstr "Toujours afficher l'énergie des unitées et bâtiments"
 
-#: src/keybind.c:1436
+#: src/keybind.c:1473
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Mode Démonstration désactivé - Retour au Jeu Normal"
 
-#: src/keybind.c:1451
+#: src/keybind.c:1488
 #, fuzzy
 msgid "Debug menu is Open"
 msgstr "Le menu de débogage est Ouvert"
 
-#: src/keybind.c:1482
+#: src/keybind.c:1519
 msgid "Unable to locate any resource extractors!"
 msgstr "Impossible de localiser le moindre extracteur de ressources !"
 
-#: src/keybind.c:1703
+#: src/keybind.c:1740
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Brrr... Il fait si froid... IL NEIGE"
 
-#: src/keybind.c:1709
+#: src/keybind.c:1746
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Singing in the rain, I'm singing in the rain... IL PLEUT"
 
-#: src/keybind.c:1715
+#: src/keybind.c:1752
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Prévisions Locales : Ciel dégagé dans toute la Région... AUCUNE MÉTÉO"
 
-#: src/keybind.c:1760
+#: src/keybind.c:1797
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Attention ! Ceci peut avoir des conséquences désastreuses si il est mal utilisé dans les missions."
 
-#: src/keybind.c:1762
+#: src/keybind.c:1799
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "L'ennemi a été détruit par un TRICHEUR !!!"
 
-#: src/keybind.c:1802
+#: src/keybind.c:1839
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2320
+#: src/keybind.c:2357
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Vue Centrée sur le quartier général, direction NORD"
 
-#: src/keybind.c:2332
+#: src/keybind.c:2369
 msgid "Unable to locate HQ!"
 msgstr "Impossible de localiser le Quartier Général !"
 
-#: src/keybind.c:2339
+#: src/keybind.c:2376
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2388
+#: src/keybind.c:2425
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2393
+#: src/keybind.c:2430
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2402
+#: src/keybind.c:2439
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2407
+#: src/keybind.c:2444
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2452
-#: src/keybind.c:2495
+#: src/keybind.c:2489
+#: src/keybind.c:2532
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Désolé, ce code est désactivé durant les jeux multijoueurs."
 
-#: src/keybind.c:2473
-#: src/keybind.c:2516
-#: src/keybind.c:2538
+#: src/keybind.c:2510
+#: src/keybind.c:2553
+#: src/keybind.c:2575
 msgid "Game Speed Reset"
 msgstr "Réinitialisation de la Vitesse du Jeu"
 
-#: src/keybind.c:2477
+#: src/keybind.c:2514
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Vitesse de Jeu augmentée à %3.1f"
 
-#: src/keybind.c:2520
+#: src/keybind.c:2557
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Vitesse de Jeu réduite à %3.1f"
 
-#: src/keybind.c:2550
+#: src/keybind.c:2587
 msgid "Build menu will reopen"
 msgstr "Le menu des Constructions va se réouvrir"
 
-#: src/keybind.c:2554
+#: src/keybind.c:2591
 msgid "Build menu will not reopen"
 msgstr "Le menu des constructions ne se réouvrira pas"
 
-#: src/keybind.c:2566
+#: src/keybind.c:2603
 msgid "Radar showing friend-foe colors"
 msgstr "Radar Bicolore Ami-Ennemi"
 
-#: src/keybind.c:2570
+#: src/keybind.c:2607
 msgid "Radar showing player colors"
 msgstr "Radar montrant les couleurs des joueurs"
 
-#: src/keybind.c:2591
+#: src/keybind.c:2628
 msgid "Radar showing only objects"
 msgstr "Radar ne montrant que les objets"
 
-#: src/keybind.c:2594
+#: src/keybind.c:2631
 msgid "Radar blending terrain and height"
 msgstr "Radar mélangeant terrain et hauteur"
 
-#: src/keybind.c:2597
+#: src/keybind.c:2634
 msgid "Radar showing terrain"
 msgstr "Radar montrant le terrain"
 
-#: src/keybind.c:2600
+#: src/keybind.c:2637
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar montrant le terrain"
 
-#: src/keybind.c:2603
+#: src/keybind.c:2640
 msgid "Radar showing height"
 msgstr "Radar montrant la hauteur"
 
@@ -13510,34 +13629,39 @@ msgstr "*** un mot de passe est désormais requis ***"
 msgid "*** password is NOT required! ***"
 msgstr "*** mot de passe non requis ***"
 
-#: src/multiint.c:2644
+#: src/multiint.c:2645
 msgid "Sorry! Failed to host the game."
 msgstr "Désolé ! Impossible d'héberger la partie."
 
-#: src/multiint.c:2729
+#: src/multiint.c:2730
 msgid "'Locked Teams' mode enabled"
 msgstr "Verrouiller les équipes"
 
-#: src/multiint.c:2768
-#: src/multiint.c:2818
+#: src/multiint.c:2769
+#: src/multiint.c:2819
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'hôte a banni %s de la partie"
 
-#: src/multiint.c:2876
+#: src/multiint.c:2887
 msgid "Host is Starting Game"
 msgstr "L'hôte démarre la partie"
 
-#: src/multiint.c:3427
+#: src/multiint.c:3438
 msgid "Players"
 msgstr "Joueurs"
 
-#: src/multiint.c:3543
+#: src/multiint.c:3555
+#, c-format
+msgid "Sending Map: %d%% "
+msgstr ""
+
+#: src/multiint.c:3564
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3569
+#: src/multiint.c:3590
 msgid "HOST"
 msgstr ""
 
@@ -13546,22 +13670,27 @@ msgstr ""
 msgid "Players Still Joining"
 msgstr "Les joueurs sont en cours de connexion"
 
-#: src/multijoin.c:230
+#: src/multijoin.c:213
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s a Quitté la Partie"
 
-#: src/multijoin.c:340
+#: src/multijoin.c:227
+#, c-format
+msgid "File transfer has been aborted for %d."
+msgstr ""
+
+#: src/multijoin.c:334
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.c:384
+#: src/multijoin.c:378
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s vient de Rejoindre la Partie"
 
-#: src/multijoin.c:394
+#: src/multijoin.c:388
 #, fuzzy
 msgid "System message:"
 msgstr "Langage du système"
@@ -13644,53 +13773,53 @@ msgstr "Céder les Unités Sélectionnées"
 msgid "Give Power To Player"
 msgstr "Donner de l'énergie au Joueur"
 
-#: src/multiplay.c:287
+#: src/multiplay.c:288
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Le joueur %s à été kické car il a essayé de contourner le contrôle d'intégrité des données !"
 
-#: src/multiplay.c:1078
+#: src/multiplay.c:1079
 #, fuzzy
 msgid "(allies"
 msgstr "Alliances"
 
-#: src/multiplay.c:1086
+#: src/multiplay.c:1087
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1099
+#: src/multiplay.c:1100
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1958
+#: src/multiplay.c:1959
 msgid "Green"
 msgstr "Joueur Vert"
 
-#: src/multiplay.c:1959
+#: src/multiplay.c:1960
 msgid "Orange"
 msgstr "Joueur Orange"
 
-#: src/multiplay.c:1960
+#: src/multiplay.c:1961
 msgid "Grey"
 msgstr "Joueur Gris"
 
-#: src/multiplay.c:1961
+#: src/multiplay.c:1962
 msgid "Black"
 msgstr "Joueur Noir"
 
-#: src/multiplay.c:1962
+#: src/multiplay.c:1963
 msgid "Red"
 msgstr "Joueur Rouge"
 
-#: src/multiplay.c:1963
+#: src/multiplay.c:1964
 msgid "Blue"
 msgstr "Joueur Bleu"
 
-#: src/multiplay.c:1964
+#: src/multiplay.c:1965
 msgid "Pink"
 msgstr "Joueur Rose"
 
-#: src/multiplay.c:1965
+#: src/multiplay.c:1966
 msgid "Cyan"
 msgstr "Joueur Cyan"
 
@@ -14019,15 +14148,6 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Skirmish"
 #~ msgstr "Escarmouche"
-
-#~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "Canon à HV VTOL"
-
-#~ msgid "VTOL HPV Cannon Mantis VTOL"
-#~ msgstr "Canon à HV Mantis VTOL"
-
-#~ msgid "HPV Cannon Python Hover"
-#~ msgstr "Canon à HV Python aéro-glisseur"
 
 #~ msgid "English"
 #~ msgstr "Anglais"
