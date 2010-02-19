@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-19 19:09+0100\n"
+"POT-Creation-Date: 2010-02-19 23:39+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Antonio Kukas <tonykukas@gmail.com>\n"
 "Language-Team: \n"
@@ -4734,7 +4734,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:108
 #: data/base/messages/strings/cam3strings.txt:156
 msgid " "
-msgstr ""
+msgstr "."
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
@@ -9643,308 +9643,311 @@ msgstr ""
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
 #: data/mp/messages/strings/names.txt:1819
 msgid "Heavy Repair Turret Cobra Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1823
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1834
 #: data/mp/messages/strings/names.txt:1820
 #: data/mp/messages/strings/names.txt:1831
 msgid "Heavy Machinegun Viper Wheels"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
 #: data/mp/messages/strings/names.txt:1822
 msgid "Tank Killer Mantis Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1826
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1841
 #: data/mp/messages/strings/names.txt:1823
 #: data/mp/messages/strings/names.txt:1838
 msgid "Heavy Machinegun Cobra Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1827
 #: data/mp/messages/strings/names.txt:1824
 msgid "Heavy Cannon Cobra Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1835
 #: data/mp/messages/strings/names.txt:1832
 msgid "Heavy Machinegun Cobra Wheels"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1836
 #: data/mp/messages/strings/names.txt:1833
 msgid "Heavy Machinegun Cobra Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1838
 #: data/mp/messages/strings/names.txt:1835
 msgid "Machinegun Viper Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1839
 #: data/mp/messages/strings/names.txt:1836
 msgid "Twin Machinegun Viper Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1843
 #: data/mp/messages/strings/names.txt:1840
 msgid "Medium Cannon Cobra Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1844
 #: data/mp/messages/strings/names.txt:1841
 msgid "Medium Cannon Scorpion Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1845
 #: data/mp/messages/strings/names.txt:1842
 msgid "Medium Cannon Scorpion Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1846
 #: data/mp/messages/strings/names.txt:1843
 msgid "Medium Cannon Python Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1847
 #: data/mp/messages/strings/names.txt:1844
 msgid "Heavy Cannon Python Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1849
 #: data/mp/messages/strings/names.txt:1846
 msgid "Rail Gun Mantis Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1850
 #: data/mp/messages/strings/names.txt:1847
 msgid "Pulse Laser Mantis Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1851
 #: data/mp/messages/strings/names.txt:1848
 msgid "Lancer Python Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1852
 #: data/mp/messages/strings/names.txt:1849
 msgid "Lancer Mantis Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1853
 #: data/mp/messages/strings/names.txt:1850
 msgid "Tank Killer Vengeance Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1858
 #: data/mp/messages/strings/names.txt:1855
 msgid "Heavy Cannon Tiger Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1859
 #: data/mp/messages/strings/names.txt:1856
 msgid "Needle Gun Tiger Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1860
 #: data/mp/messages/strings/names.txt:1857
 msgid "Needle Gun Retribution Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1861
 #: data/mp/messages/strings/names.txt:1858
 msgid "Needle Gun Vengeance Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1862
 #: data/mp/messages/strings/names.txt:1859
 msgid "Vengeance Tracks Rail Gun"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1863
 #: data/mp/messages/strings/names.txt:1860
 msgid "Vengeance Tracks Gauss Cannon"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1864
 #: data/mp/messages/strings/names.txt:1861
 msgid "Vengeance Tracks Gauss Scourge"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1867
 #: data/mp/messages/strings/names.txt:1864
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1868
 #: data/mp/messages/strings/names.txt:1865
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1869
 #: data/mp/messages/strings/names.txt:1866
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1870
 #: data/mp/messages/strings/names.txt:1867
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1873
 #: data/mp/messages/strings/names.txt:1870
 msgid "VTOL Lancer Bug VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1874
+#, fuzzy
 msgid "VTOL HPV Cannon Bug VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1875
 #: data/mp/messages/strings/names.txt:1872
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
+#, fuzzy
 msgid "VTOL HPV Cannon Scorpion VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
 #: data/mp/messages/strings/names.txt:1874
 msgid "VTOL Lancer Mantis VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
+#, fuzzy
 msgid "VTOL HPV Cannon Mantis VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
 #: data/mp/messages/strings/names.txt:1879
 msgid "Repair Turret Mantis Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1884
 #: data/mp/messages/strings/names.txt:1881
 msgid "Lancer Scorpion Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1885
 #: data/mp/messages/strings/names.txt:1882
 msgid "Heavy Cannon Scorpion Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1886
 #: data/mp/messages/strings/names.txt:1883
 msgid "Lancer Scorpion VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1887
 #: data/mp/messages/strings/names.txt:1884
 msgid "Bunker Buster Scorpion VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1889
 #: data/mp/messages/strings/names.txt:1886
 msgid "Command Turret Viper Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1890
 #: data/mp/messages/strings/names.txt:1887
 msgid "Command Turret Cobra Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1891
 #: data/mp/messages/strings/names.txt:1888
 msgid "Command Turret Scorpion Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1892
 #: data/mp/messages/strings/names.txt:1889
 msgid "Command Turret Mantis Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1894
 #: data/mp/messages/strings/names.txt:1891
 msgid "Lancer Cobra Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1895
 #: data/mp/messages/strings/names.txt:1892
 msgid "Heavy Cannon Mantis Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1896
 #: data/mp/messages/strings/names.txt:1893
 msgid "Tank Killer Mantis Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1897
 #: data/mp/messages/strings/names.txt:1894
 msgid "Scourge Mantis Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1898
 #: data/mp/messages/strings/names.txt:1895
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1900
 #: data/mp/messages/strings/names.txt:1897
 msgid "Repair Scorpion Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1901
 #: data/mp/messages/strings/names.txt:1898
 msgid "Heavy Repair Scorpion Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1904
 #: data/mp/messages/strings/names.txt:1901
 msgid "Truck Cobra Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1905
 #: data/mp/messages/strings/names.txt:1902
 msgid "Truck Scorpion Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1906
 #: data/mp/messages/strings/names.txt:1903
 msgid "Truck Mantis Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1909
 #: data/mp/messages/strings/names.txt:1906
 msgid "Bunker Buster Cobra Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1910
 #: data/mp/messages/strings/names.txt:1907
 msgid "Bunker Buster Scorpion Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1911
 #: data/mp/messages/strings/names.txt:1908
 msgid "Bunker Buster Mantis Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1913
 #: data/mp/messages/strings/names.txt:1910
 msgid "Lancer Viper Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1915
 #: data/mp/messages/strings/names.txt:1912
 msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1916
 #: data/mp/messages/strings/names.txt:1913
 msgid "Mini-Rocket Cobra Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
 #, fuzzy
@@ -9954,7 +9957,7 @@ msgstr "AI unit"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1919
 #: data/mp/messages/strings/names.txt:1916
 msgid "Inferno Cobra Half-Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1920
 #, fuzzy
@@ -9964,52 +9967,52 @@ msgstr "AI unit"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1924
 #: data/mp/messages/strings/names.txt:1921
 msgid "Scourge Python Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1925
 #: data/mp/messages/strings/names.txt:1922
 msgid "Gauss Cannon Python Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1926
 #: data/mp/messages/strings/names.txt:1923
 msgid "Pulse Laser Python Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1927
 #: data/mp/messages/strings/names.txt:1924
 msgid "Pulse Laser Tiger Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1928
 #: data/mp/messages/strings/names.txt:1925
 msgid "Heavy Laser Tiger Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1929
 #: data/mp/messages/strings/names.txt:1926
 msgid "Gauss Cannon Wyvern Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1930
 #: data/mp/messages/strings/names.txt:1927
 msgid "Pulse Laser Wyvern Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1931
 #: data/mp/messages/strings/names.txt:1928
 msgid "Heavy Laser Wyvern Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1933
 #: data/mp/messages/strings/names.txt:1930
 msgid "Machinegun Viper Half-Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1934
 #: data/mp/messages/strings/names.txt:1931
 msgid "Flamer Viper Half-Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
@@ -11260,152 +11263,152 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1871
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/strings/names.txt:1873
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/strings/names.txt:1875
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/strings/names.txt:1914
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/strings/names.txt:1917
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
 msgid "System locale"
-msgstr ""
+msgstr "Lokalni"
 
 #: lib/framework/i18n.c:56
 #: lib/framework/i18n.c:113
 msgid "Czech"
-msgstr ""
+msgstr "Češki"
 
 #: lib/framework/i18n.c:57
 #: lib/framework/i18n.c:114
 msgid "Danish"
-msgstr ""
+msgstr "Danski"
 
 #: lib/framework/i18n.c:58
 #: lib/framework/i18n.c:115
 msgid "German"
-msgstr ""
+msgstr "Njemački"
 
 #: lib/framework/i18n.c:60
 #: lib/framework/i18n.c:117
 msgid "English (United Kingdom)"
-msgstr ""
+msgstr "Engleski"
 
 #: lib/framework/i18n.c:61
 #: lib/framework/i18n.c:118
 msgid "Spanish"
-msgstr ""
+msgstr "Španjolski"
 
 #: lib/framework/i18n.c:62
 #: lib/framework/i18n.c:119
 msgid "Estonian"
-msgstr ""
+msgstr "Estonijski"
 
 #: lib/framework/i18n.c:64
 #: lib/framework/i18n.c:121
 msgid "Finnish"
-msgstr ""
+msgstr "Finski"
 
 #: lib/framework/i18n.c:65
 #: lib/framework/i18n.c:122
 msgid "French"
-msgstr ""
+msgstr "Francuski"
 
 #: lib/framework/i18n.c:73
 #: lib/framework/i18n.c:130
 msgid "Frisian"
-msgstr ""
+msgstr "Frizijski"
 
 #: lib/framework/i18n.c:74
 #: lib/framework/i18n.c:131
 msgid "Irish"
-msgstr ""
+msgstr "Irski"
 
 #: lib/framework/i18n.c:75
 #: lib/framework/i18n.c:132
 msgid "Croatian"
-msgstr ""
+msgstr "Hrvatski"
 
 #: lib/framework/i18n.c:76
 #: lib/framework/i18n.c:133
 msgid "Italian"
-msgstr ""
+msgstr "Talijanski"
 
 #: lib/framework/i18n.c:78
 #: lib/framework/i18n.c:135
 msgid "Lithuanian"
-msgstr ""
+msgstr "Litvanski"
 
 #: lib/framework/i18n.c:81
 #: lib/framework/i18n.c:137
 msgid "Norwegian"
-msgstr ""
+msgstr "Norveški"
 
 #: lib/framework/i18n.c:83
 #: lib/framework/i18n.c:139
 msgid "Dutch"
-msgstr ""
+msgstr "Nizozemski"
 
 #: lib/framework/i18n.c:84
 #: lib/framework/i18n.c:140
 msgid "Polish"
-msgstr ""
+msgstr "Poljski"
 
 #: lib/framework/i18n.c:85
 #: lib/framework/i18n.c:141
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "Brazilsko Portugalski"
 
 #: lib/framework/i18n.c:86
 #: lib/framework/i18n.c:142
 msgid "Portuguese"
-msgstr ""
+msgstr "Portugalski"
 
 #: lib/framework/i18n.c:87
 #: lib/framework/i18n.c:143
 msgid "Romanian"
-msgstr ""
+msgstr "Rumunjski"
 
 #: lib/framework/i18n.c:88
 #: lib/framework/i18n.c:144
 msgid "Russian"
-msgstr ""
+msgstr "Ruski"
 
 #: lib/framework/i18n.c:89
 #: lib/framework/i18n.c:145
 msgid "Slovenian"
-msgstr ""
+msgstr "Slovenski"
 
 #: lib/framework/i18n.c:98
 #: lib/framework/i18n.c:150
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukarajinski"
 
 #: lib/framework/i18n.c:99
 #: lib/framework/i18n.c:151
 msgid "Simplified Chinese"
-msgstr ""
+msgstr "Pojednostavljeni Kineski"
 
 #: lib/framework/i18n.c:100
 #: lib/framework/i18n.c:152
 msgid "Traditional Chinese"
-msgstr ""
+msgstr "Tradicionalni Kineski"
 
 #: lib/framework/i18n.c:134
 msgid "Latin"
-msgstr ""
+msgstr "Latinski"
 
 #: lib/netplay/netplay.c:1164
 #: lib/netplay/netplay.c:1974
@@ -11609,7 +11612,7 @@ msgstr ""
 
 #: src/design.c:642
 msgid "Delete Design"
-msgstr ""
+msgstr "Izbriši dizajn"
 
 #: src/design.c:696
 #: src/design.c:744
@@ -11624,7 +11627,7 @@ msgstr ""
 #: src/design.c:721
 #: src/design.c:775
 msgid "Engine Output"
-msgstr ""
+msgstr "Snaga motora"
 
 #: src/design.c:729
 #: src/design.c:784
@@ -11641,7 +11644,7 @@ msgstr ""
 #: src/design.c:1961
 #: src/design.c:1997
 msgid "Weight"
-msgstr ""
+msgstr "Težina"
 
 #: src/design.c:815
 #: src/design.c:835
@@ -11660,11 +11663,11 @@ msgstr ""
 
 #: src/design.c:1349
 msgid "Transporter"
-msgstr ""
+msgstr "Transport"
 
 #: src/design.c:1371
 msgid "Hydra "
-msgstr ""
+msgstr "Hidra "
 
 #: src/design.c:1568
 msgid "Sensor Range"
@@ -12286,25 +12289,25 @@ msgstr ""
 
 #: src/hci.c:5531
 msgid "Loop Production"
-msgstr ""
+msgstr "Ponovi proizvodnju"
 
 #: src/hci.c:5622
 msgid "Tab Scroll left"
-msgstr ""
+msgstr "Tablica zakreni lijevo"
 
 #: src/hci.c:5639
 msgid "Tab Scroll right"
-msgstr ""
+msgstr "Tablica zakreni desno"
 
 #: src/ingameop.c:118
 #: src/ingameop.c:203
 #: src/ingameop.c:285
 msgid "Resume Game"
-msgstr ""
+msgstr "Nastavi igru"
 
 #: src/ingameop.c:142
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr ""
+msgstr "UPOZORENJE: Ti si host. Ako izađeš, igra završava za sve!"
 
 #: src/ingameop.c:195
 #: src/ingameop.c:548
@@ -12321,19 +12324,19 @@ msgstr ""
 #: src/mission.c:2521
 #: src/mission.c:2642
 msgid "Save Game"
-msgstr ""
+msgstr "Spermi igru"
 
 #: src/ingameop.c:364
 msgid "Host has quit the game!"
-msgstr ""
+msgstr "Host je prekinuo igru!"
 
 #: src/ingameop.c:370
 msgid "The game can't continue without the host."
-msgstr ""
+msgstr "Igra se ne može nastaviti ako nema hosta."
 
 #: src/ingameop.c:376
 msgid "-->  QUIT  <--"
-msgstr ""
+msgstr "---> IZLAZ <---"
 
 #: src/intdisplay.c:197
 #, fuzzy
@@ -12346,106 +12349,106 @@ msgstr "Proces gradnje"
 
 #: src/intdisplay.c:263
 msgid "Power Accrued"
-msgstr ""
+msgstr "Dobiveni resursi"
 
 #: src/intelmap.c:247
 #: src/keybind.c:1367
 msgid "PAUSED"
-msgstr ""
+msgstr "PAUZIRANO"
 
 #: src/intelmap.c:413
 msgid "Research Update"
-msgstr ""
+msgstr "Nadogradnja istraživanja"
 
 #: src/intelmap.c:417
 msgid "Project Goals"
-msgstr ""
+msgstr "Ciljevi PROJEKTA"
 
 #: src/intelmap.c:420
 msgid "Current Objective"
-msgstr ""
+msgstr "Trenutni zadatak"
 
 #: src/intelmap.c:1516
 msgid "New Intelligence Report"
-msgstr ""
+msgstr "Novo izvješče"
 
 #: src/intorder.c:179
 #: src/keymap.c:390
 msgid "Short Range"
-msgstr ""
+msgstr "Kratka udaljenost"
 
 #: src/intorder.c:180
 #: src/keymap.c:397
 msgid "Long Range"
-msgstr ""
+msgstr "Duga udaljenost"
 
 #: src/intorder.c:181
 #: src/keymap.c:389
 msgid "Optimum Range"
-msgstr ""
+msgstr "Srednja udaljenost"
 
 #: src/intorder.c:182
 #: src/keymap.c:409
 msgid "Retreat at Medium Damage"
-msgstr ""
+msgstr "Povlačenje kod srednje štete"
 
 #: src/intorder.c:183
 #: src/keymap.c:410
 msgid "Retreat at Heavy Damage"
-msgstr ""
+msgstr "Povlačenje kod visoke štete"
 
 #: src/intorder.c:184
 #: src/keymap.c:411
 msgid "Do or Die!"
-msgstr ""
+msgstr "Napravi ili crkni!!!"
 
 #: src/intorder.c:185
 msgid "Fire-At-Will"
-msgstr ""
+msgstr "Slobodno pucaj!"
 
 #: src/intorder.c:186
 #: src/keymap.c:385
 msgid "Return Fire"
-msgstr ""
+msgstr "Uzvračaj paljbu"
 
 #: src/intorder.c:187
 #: src/keymap.c:383
 msgid "Hold Fire"
-msgstr ""
+msgstr "Ne pucaj"
 
 #: src/intorder.c:188
 #: src/keymap.c:392
 msgid "Patrol"
-msgstr ""
+msgstr "Patroliraj"
 
 #: src/intorder.c:189
 #: src/keymap.c:391
 msgid "Pursue"
-msgstr ""
+msgstr "Sljedi neprijatelja"
 
 #: src/intorder.c:190
 #: src/keymap.c:387
 msgid "Guard Position"
-msgstr ""
+msgstr "Obrambeni položaj"
 
 #: src/intorder.c:191
 #: src/keymap.c:394
 msgid "Hold Position"
-msgstr ""
+msgstr "Ne miči se"
 
 #: src/intorder.c:192
 #: src/keymap.c:393
 msgid "Return For Repair"
-msgstr ""
+msgstr "Vrati se u Servis"
 
 #: src/intorder.c:193
 msgid "Return To HQ"
-msgstr ""
+msgstr "Vrati se do Sjedišta"
 
 #: src/intorder.c:194
 #: src/keymap.c:395
 msgid "Go to Transport"
-msgstr ""
+msgstr "Otiđi u Transporter"
 
 #: src/intorder.c:195
 #: src/keymap.c:420
@@ -12607,7 +12610,7 @@ msgstr "Pogled na sjever"
 #: src/keybind.c:1336
 #, c-format
 msgid "Trap cursor %s"
-msgstr ""
+msgstr "Zarobi pokazivač %s"
 
 #: src/keybind.c:1417
 msgid "Researched EVERYTHING for you!"
