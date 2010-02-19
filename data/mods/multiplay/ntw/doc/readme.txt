@@ -27,7 +27,7 @@ New Team War Map 2 (NTW_ver2):
 
 -------- Based on work by --------
 
-Walls / Gates(.pie[s]) / Desert Textures:
+Walls / Gates(.pie files):
    Elric - elrictheslayer@neo.rr.com
    GrimMoroe - grimandmandy@hotmail.com
 

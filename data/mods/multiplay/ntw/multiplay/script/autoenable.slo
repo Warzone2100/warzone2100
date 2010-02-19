@@ -1,9 +1,9 @@
 
 // Variables
 private 	INT 			count,numStrux,numTemplates,numCompo,numCompo2;
-private 	STRUCTURESTAT 	Strux[17];
-public	RESEARCHSTAT	tmpl[4];
-private	BODY			compo[6];
+private 	STRUCTURESTAT 	Strux[8];
+public	RESEARCHSTAT	tmpl[3];
+private	BODY			compo[3];
 
 //players
 private	INT				player;
