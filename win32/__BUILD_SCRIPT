@@ -86,8 +86,8 @@ if [ -f "/proc/cpuinfo" ] ; then
 fi
 
 # Make sure we've got a build directory
-if [ ! -d build ] ; then
-	mkdir build
+if [ ! -d build/libs ] ; then
+	mkdir -p build/libs
 fi
 
 set -x
