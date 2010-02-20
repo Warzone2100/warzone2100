@@ -1792,10 +1792,6 @@ BOOL scrSkDifficultyModifier(void)
 	{
 		addPower(player,amount);
 	}
-	else
-	{
-		usePower(player,(0-amount));
-	}
 
 	//research modifier.??
 	for(psStr=apsStructLists[player];psStr;psStr=psStr->psNext)
