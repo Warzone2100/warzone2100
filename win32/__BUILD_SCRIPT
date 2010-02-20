@@ -19,7 +19,6 @@ execute()
 
 # Some default configuration settings
 HOST_TRIPLET=i586-mingw32msvc
-DISTRIBUTOR="unknown"
 INSTALLER_VERSION="2.2.0.999"
 DEBUGFLAG="--disable-debug"
 CC_FOR_BUILD="gcc"
@@ -45,7 +44,7 @@ for arg in "$@"; do
 		unset DEBUGFLAG
 		;;
 	--enable-installer | --enable-installer=yes)
-		INSTALLERFLAG="--enable-data --enable-installer --with-installer-extdir=\"$PWD/build/libs\" --with-distributor=$DISTRIBUTOR
+		INSTALLERFLAG="--enable-data --enable-installer --with-installer-extdir=\"$PWD/build/libs\"
 			${INSTALLER_VERSION:+--with-installer-version=$INSTALLER_VERSION}"
 		;;
 	-with-* | --with-* | -enable-* | --enable-*)
