@@ -1261,7 +1261,6 @@ void	kf_ToggleDebugMappings( void )
 }
 // --------------------------------------------------------------------------
 
-
 void	kf_ToggleGodMode( void )
 {
 	const char* cmsg;
@@ -1309,6 +1308,7 @@ void	kf_ToggleGodMode( void )
 	else
 	{
 		godMode = true; // view all structures and droids
+		revealAll(selectedPlayer);
 		setRevealStatus(false); // view the entire map
 	}
 

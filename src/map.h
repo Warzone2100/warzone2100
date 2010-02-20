@@ -101,7 +101,6 @@ typedef struct _ground_type
 typedef struct _maptile
 {
 	uint8_t			tileInfoBits;
-	uint8_t			tileVisBits;	// COMPRESSED - bit per player
 	uint8_t			tileExploredBits;
 	uint8_t			sensorBits;		// bit per player, who can see tile with sensor
 	float			height;			// The height at the top left of the tile
@@ -207,11 +206,11 @@ static inline bool TileHasSmallStructure(const MAPTILE* tile)
 /* Flips the triangle partition on a tile pointer */
 #define TOGGLE_TRIFLIP(x)	((x)->texture ^= TILE_TRIFLIP)
 
-/* Can player number p see tile t? */
-#define TEST_TILE_VISIBLE(p,t)	((t)->tileVisBits & (1<<(p)))
+/* Can player number p has explored tile t? */
+#define TEST_TILE_VISIBLE(p,t)	((t)->tileExploredBits & (1<<(p)))
 
 /* Set a tile to be visible for a player */
-#define SET_TILE_VISIBLE(p,t) ((t)->tileVisBits |= alliancebits[p])
+#define SET_TILE_VISIBLE(p,t) ((t)->tileExploredBits |= alliancebits[p])
 
 /* Arbitrary maximum number of terrain textures - used in look up table for terrain type */
 #define MAX_TILE_TEXTURES	255

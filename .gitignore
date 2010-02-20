@@ -133,6 +133,7 @@ cscope.out
 # KDevelop4
 /.kdev4/
 /warzone.kdev4
+/.kdev_include_paths
 
 # Qt
 lib/framework/wzapp_moc.cpp

@@ -655,6 +655,11 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 			// Check that this transporter actually contains some droids
 			if (psTransporter->psGroup && psTransporter->psGroup->refCount > 1)
 			{
+				// Remove map information from previous map
+				free(psTransporter->watchedTiles);
+				psTransporter->watchedTiles = NULL;
+				psTransporter->numWatchedTiles = 0;
+
 				// Remove out of stored list and add to current Droid list
 				if (droidRemove(psTransporter, mission.apsDroidLists))
 				{

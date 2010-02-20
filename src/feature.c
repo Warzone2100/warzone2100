@@ -379,7 +379,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		psFeature->sDisplay.imd = psStats->psImd;
   	}
 
-
 	ASSERT_OR_RETURN(NULL, psFeature->sDisplay.imd, "No IMD for feature");		// make sure we have an imd.
 
 	for (width = 0; width <= psStats->baseWidth; width++)
@@ -389,12 +388,8 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 			MAPTILE *psTile = mapTile(mapX + width, mapY + breadth);
 
 			//check not outside of map - for load save game
-			ASSERT( (mapX+width) < mapWidth,
-				"x coord bigger than map width - %s, id = %d",
-				getName(psFeature->psStats->pName), psFeature->id );
-			ASSERT( (mapY+breadth) < mapHeight,
-				"y coord bigger than map height - %s, id = %d",
-				getName(psFeature->psStats->pName), psFeature->id );
+			ASSERT_OR_RETURN(NULL, mapX + width < mapWidth, "x coord bigger than map width - %s, id = %d", getName(psFeature->psStats->pName), psFeature->id);
+			ASSERT_OR_RETURN(NULL, mapY + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getName(psFeature->psStats->pName), psFeature->id);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
@@ -431,9 +426,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	}
 	psFeature->pos.z = map_TileHeight(mapX,mapY);//jps 18july97
 
-	//store the time it was built for removing wrecked droids/structures
-	psFeature->startTime = gameTime;
-
 //	// set up the imd for the feature
 //	if(psFeature->psStats->subType==FEAT_BUILD_WRECK)
 //	{
@@ -468,7 +460,7 @@ void featureUpdate(FEATURE *psFeat)
 	case FEAT_DROID:
 	case FEAT_BUILD_WRECK:
 //		//kill off wrecked droids and structures after 'so' long
-//		if ((gameTime - psFeat->startTime) > WRECK_LIFETIME)
+//		if ((gameTime - psFeat->born) > WRECK_LIFETIME)
 //		{
 			destroyFeature(psFeat); // get rid of the now!!!
 //		}

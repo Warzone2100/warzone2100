@@ -196,14 +196,16 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	if (png_ptr == NULL)
 	{
 		debug(LOG_ERROR, "pie_PNGSaveFile: Unable to create png struct\n");
-		return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+		PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+		return;
 	}
 
 	info_ptr = png_create_info_struct(png_ptr);
 	if (info_ptr == NULL)
 	{
 		debug(LOG_ERROR, "pie_PNGSaveFile: Unable to create png info struct\n");
-		return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+		PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+		return;
 	}
 
 	// If libpng encounters an error, it will jump into this if-branch
@@ -220,7 +222,8 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 		if (scanlines == NULL)
 		{
 			debug(LOG_ERROR, "pie_PNGSaveFile: Couldn't allocate memory\n");
-			return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+			PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+			return;
 		}
 
 		png_set_write_fn(png_ptr, fileHandle, wzpng_write_data, wzpng_flush_data);
@@ -268,7 +271,7 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	}
 
 	free(scanlines);
-	return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+	PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
 }
 
 void iV_saveImage_PNG(const char *fileName, const iV_Image *image)

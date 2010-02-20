@@ -55,7 +55,7 @@
 #define	LOW_POWER				250
 
 // Start spending spree when above this
-#define HIGH_POWER				1000
+#define HIGH_POWER				1250
 
 //Target type values
 #define	NO_TARGET_VALUE			0
@@ -134,7 +134,7 @@ public  RESEARCHSTAT		nexusDefence;
 private  RESEARCHSTAT		research;
 
 //build
-private GROUP			buildGroup;
+private GROUP			buildGroup, rushGroup;
 private int				buildX,buildY,buildX2,buildY2;
 public	FEATURESTAT		oilRes;
 
@@ -221,6 +221,7 @@ trigger slowloadTr				(wait, 13);
 trigger checkActivitiesTr			(every, 400);
 
 /* Events */
+event	manicWalls;
 event	buildFundamentals;
 event	newfortify;
 event	buildOilDefenseOrRetreat;
@@ -378,6 +379,22 @@ event initialisedEvent(CALL_GAMEINIT)
 	}
 }
 
+function void dbgPlr(string message)
+{
+	if (me == selectedPlayer)
+	{
+		console(message);
+	}
+}
+
+function void dbgObj(DROID obj, string message)
+{
+	if (obj.selected)
+	{
+		console(message);
+	}
+}
+
 function bool conCanHelp(DROID mydroid, int bx, int by)
 {
 	return (mydroid.order != DORDER_HELPBUILD and mydroid.order != DORDER_BUILD and mydroid.order != DORDER_LINEBUILD and droidCanReach(mydroid, bx, by));
@@ -391,41 +408,95 @@ event checkActivities(checkActivitiesTr)
 	setEventTrigger(buildFundamentals, slowloadTr);
 }
 
+// Count factories. TODO: Cache this value.
+function int numFactories()
+{
+	initEnumStruct(FALSE, factory, me, me);
+	structure = enumStruct();
+	count = 0;
+	while (structure != NULLOBJECT)
+	{
+		count = count + 1;
+		structure = enumStruct();
+	}
+	return count;
+}
+
+// Count VTOL factories. TODO: Cache this value.
+function int numVtolFactories()
+{
+	initEnumStruct(FALSE, vtolFactory, me, me);
+	structure = enumStruct();
+	count = 0;
+	while (structure != NULLOBJECT)
+	{
+		count = count + 1;
+		structure = enumStruct();
+	}
+	return count;
+}
+
+// Count cyborg factories. TODO: Cache this value.
+function int numCyborgFactories()
+{
+	initEnumStruct(FALSE, cybFactory, me, me);
+	structure = enumStruct();
+	count = 0;
+	while (structure != NULLOBJECT)
+	{
+		count = count + 1;
+		structure = enumStruct();
+	}
+	return count;
+}
+
+// Count research labs. TODO: Cache this value.
+function int numResearchLabs()
+{
+	initEnumStruct(FALSE, resLab, me, me);
+	structure = enumStruct();
+	count = 0;
+	while (structure != NULLOBJECT)
+	{
+		count = count + 1;
+		structure = enumStruct();
+	}
+	return count;
+}
+
 function bool grabTrucksAndBuild(int bx, int by, int range, STRUCTURESTAT bstats)
 {
 	local DROID	mydroid, closestDroid;
-	local int	closestDist, currDist, numHelpDroids;
+	local int	closestDist, currDist, numHelpDroids, tilerange;
 
 	initIterateGroup(buildGroup);				// find idle droids in build group.
 	mydroid = iterateGroup(buildGroup);
-	closestDist = -1;
+	closestDist = 99999;
 	closestDroid = NULLOBJECT;
 	numHelpDroids = 0;
+	tilerange = range * TILE;
 	while (mydroid != NULLOBJECT)
 	{
 		currDist = distBetweenTwoPoints(bx, by, mydroid.x, mydroid.y);
-		if (conCanHelp(mydroid, bx, by) and currDist < range)
+		if (conCanHelp(mydroid, bx, by))
 		{
-			orderDroidStatsLoc(mydroid, DORDER_BUILD, bstats, bx, by);	// close, so help build it
-			numHelpDroids = numHelpDroids + 1;
-			if (mydroid.selected)
+			if (currDist < tilerange)
 			{
-				console("Asked to do short distance construction at (" & bx & ", " & by & ")");
+				orderDroidStatsLoc(mydroid, DORDER_BUILD, bstats, bx, by);	// close, so help build it
+				numHelpDroids = numHelpDroids + 1;
+				dbgObj(mydroid, "Asked to do short distance construction at (" & bx & ", " & by & ")");
 			}
-		}
-		else if (currDist < closestDist)
-		{
-			closestDroid = mydroid;	// record this droid as being closest so far
-			closestDist = currDist;
+			else if (currDist < closestDist)
+			{
+				closestDroid = mydroid;	// record this droid as being closest so far
+				closestDist = currDist;
+			}
 		}
 		mydroid = iterateGroup(buildGroup);
 	}
 	if (numHelpDroids == 0 and closestDroid != NULLOBJECT)	// found none within help radius, so force someone to go long distance traveling
 	{
-		if (closestDroid.selected)
-		{
-			console("Asked to do long distance construction work at (" & bx & ", " & by & ")");
-		}
+		dbgObj(closestDroid, "Asked to do long distance construction work at (" & bx & ", " & by & ")");
 		orderDroidStatsLoc(closestDroid, DORDER_BUILD, bstats, bx, by);	// you, book a plane ticket and go!
 		return true;
 	}
@@ -437,8 +508,17 @@ event arrived(reachedTr)
 	local bool found;
 	local STRUCTURESTAT myChoice;
 
+	if (groupMember(rushGroup, droid))
+	{
+		dbgObj(droid, "Failed to build where we should - (re)start wall building");
+		setEventTrigger(manicWalls, chainloadTr);
+		exit;
+	}
+
 	if (droid.droidType == DROID_CONSTRUCT or droid.droidType == DROID_CYBORG_CONSTRUCT)
 	{
+		dbgObj(droid, "Failed to build where we should - attempt to screw up enemy oil derrick");
+
 		// Check if at oil well, and it was taken by enemy
 		structure = structureBuiltInRange(derrick, droid.x, droid.y, (5 * 128), -1);
 		if (structure != NULLOBJECT)
@@ -467,18 +547,26 @@ event arrived(reachedTr)
 					found = pickStructLocationB(defStructs[count], ref buildX, ref buildY, me, -1);
 					if (found and droidCanReach(droid, buildX, buildY))
 					{
+						dbgObj(droid, "Building defense at enemy oil derrick - just to be nasty");
 						orderDroidStatsLoc(droid, DORDER_BUILD, defStructs[count], buildX, buildY);
+					}
+					else
+					{
+						dbgObj(droid, "Wanted to be nasty, but found nowhere to build defense");
+						orderDroid(droid, DORDER_RTB);		// nothing more to do here.
 					}
 				}
 				else
 				{
+					dbgObj(droid, "Wanted to be nasty, but had nothing nasty to build - returning to base");
 					orderDroid(droid, DORDER_RTB);		// oh, well. nothing more to do here.
 				}
 				exit;
 			}
 			else if (droid.health < 100 and !insideBase(droid.x, droid.y))
 			{
-				orderDroid(droid, DORDER_RTB);		// bolt back to base now!
+				dbgObj(droid, "Under fire - bolting back to repair!");
+				orderDroid(droid, DORDER_RTR);		// bolt back to base now!
 				exit;
 			}
 		}
@@ -571,6 +659,7 @@ event buildFundamentals(inactive)
 	}
 
 	// Help build unfinished buildings
+	// TODO: Aid closest building
 	initEnumUnbuilt(me);
 	structure = enumUnbuilt();
 	while (structure != NULLOBJECT)
@@ -583,10 +672,7 @@ event buildFundamentals(inactive)
 			    and distBetweenTwoPoints(droid.x, droid.y, structure.x, structure.y) < 20 * TILE)
 			{
 				orderDroidObj(droid, DORDER_HELPBUILD, structure);
-				if (droid.selected)
-				{
-					console("Aid construction at (" & structure.x & ", " & structure.y & ")");
-				}
+				dbgObj(droid, "Aid construction at (" & structure.x & ", " & structure.y & ")");
 			}
 			droid = iterateGroup(buildGroup);
 		}
@@ -620,17 +706,11 @@ event buildFundamentals(inactive)
 		}
 	}
 
-	// Upgrade buildings
-	if (tryUpgrade() and idleGroup(buildGroup) == 0)
-	{
-		exit;	// all droids are now gainfully employed
-	}
-
 	if (playerPower(me) < LOW_POWER)
 	{
 		exit;	// not much more we can (or should) do
 	}
-	else if (playerPower(me) < HIGH_POWER)
+	else if (playerPower(me) < HIGH_POWER or numFactories() > 1)
 	{
 		// Ok, basics are done. Now go offensive! We first check for oil derricks to build on, to deny
 		// them to the enemy. Then that calls for building defenses there. Failing that, we expand our base.
@@ -638,21 +718,170 @@ event buildFundamentals(inactive)
 		setEventTrigger(buildDerrick, chainloadTr);
 		exit;
 	}
-	else	// if too much power
+	else	// if lots of power and too few factories to replace high-risk oil hunting trucks
 	{
-		// Fundamental base already built, so start expanding it if we have too much power. It will call all kinds
-		// of wasteful spending routines. Nothing is worse than losing with the coffers full! This event will
-		// allow us to spend more, and failing that will call the build defense event instead.
+		dbgPlr("Too much power - EXPAND!");
 		setEventTrigger(buildExpand, chainloadTr);
 		exit;
 	}
 }
 
+event truckRush(inactive)
+{
+	local int	plr, target, curdist, mindist, checkX, checkY, startX, startY;
+	local FEATURE	_oil, _closestOil;
+	local bool	found;
+
+	setEventTrigger(truckRush, inactive);
+
+	// Find closest enemy
+	plr = 0;
+	target = -1;
+	mindist = 999999;
+	while (plr < MAX_PLAYERS)
+	{
+		if (!friendlyPlayer(plr))
+		{
+			if (getPlayerStartPosition(plr, ref checkX, ref checkY))
+			{
+				curdist = distBetweenTwoPoints(baseX, baseY, checkX, checkY);
+				if (curdist < mindist)
+				{
+					startX = checkX;
+					startY = checkY;
+					mindist = curdist;
+					target = plr;
+				}
+			}
+		}
+		plr = plr + 1;
+	}
+	if (target == -1)
+	{
+		dbgPlr("Failed to find an enemy!");
+		exit;	// oops.
+	}
+	dbgPlr("Rushing player " & target);
+
+	// Reserve droids
+	groupAddGroup(rushGroup, buildGroup);
+
+	// Find oil well closest to to closest enemy
+	mindist = 999999;
+	_closestOil = NULLOBJECT;
+	initIterateGroup(rushGroup);
+	droid = iterateGroup(rushGroup);
+	initGetFeature(oilRes, -1, me);
+	_oil = getFeatureB(me);
+	while (droid != NULLOBJECT and _oil != NULLOBJECT)
+	{
+		curdist = distBetweenTwoPoints(startX, startY, _oil.x, _oil.y);
+		if (curdist < mindist and droidCanReach(droid, _oil.x, _oil.y) and !threatInRange(me, _oil.x, _oil.y, OIL_THREAT_RANGE, FALSE))
+		{
+			mindist = curdist;
+			_closestOil = _oil;
+		}
+		_oil = getFeatureB(me);
+	}
+	if (_closestOil == NULLOBJECT)
+	{
+		dbgPlr("No hostile oil found to rush (or no trucks available)");
+		groupAddGroup(buildGroup, rushGroup); // reverse
+		exit;
+	}
+
+	// Pick best defense
+	mindist = numDefStructs - 1;	// reusing this var to find best def
+	found = false;
+	while (mindist > 0 and not found)
+	{
+		if (isStructureAvailable(defStructs[mindist], me))
+		{
+			found = true;
+		}
+		else
+		{
+			mindist = mindist - 1;
+		}
+	}
+
+	// Pick location for defensive building near for our trucks
+	buildX = _closestOil.x;
+	buildY = _closestOil.y;
+	if (!found || !pickStructLocation(defStructs[mindist], ref buildX, ref buildY, me))
+	{
+		dbgPlr("Failed to find defense, or failed to find placement for it");
+		groupAddGroup(buildGroup, rushGroup); // reverse
+		exit;
+	}
+
+	// Build hostilities
+	while (droid != NULLOBJECT)
+	{
+		orderDroidStatsLoc(droid, DORDER_BUILD, defStructs[mindist], buildX, buildY);
+		droid = iterateGroup(rushGroup);
+	}
+}
+
+// Try to wall in the enemy with wall defenses at random gateways
+event manicWalls(inactive)
+{
+	local int weap;
+	local bool found;
+
+	setEventTrigger(manicWalls, inactive);
+
+	// choose best hardpoint type
+	weap = numWallWeaps - 1;
+	found = false;
+	while (weap > 0 and !found)
+	{
+		if (isStructureAvailable(wallWeaps[weap], me))
+		{
+			found = true;
+		}
+		else
+		{
+			weap = weap - 1;
+		}
+	}
+	if (!found)
+	{
+		dbgPlr("Had no wall weapons to build to wall in enemy");
+		groupAddGroup(buildGroup, rushGroup); // reverse
+		exit;
+	}
+
+	// Go build on gateways near enemy base
+	initIterateGroup(rushGroup);
+	droid = iterateGroup(rushGroup);
+	while (droid != NULLOBJECT)
+	{
+		tempx = droid.x;
+		tempy = droid.y;
+		if (!skDefenseLocationB(ref tempx, ref tempy, wall, wallWeaps[weap], droid, me))
+		{
+			dbgPlr("Manic wall building ran into an error - stopped");
+			groupAddGroup(buildGroup, rushGroup); // reverse
+			exit;
+		}
+		droid = iterateGroup(rushGroup);
+	}
+}
+
 event startLevel(startLevelTr)
 {
-	setEventTrigger(buildFundamentals, chainloadTr);
 	setEventTrigger(conDroids, chainloadTr);
 	setEventTrigger(doResearch, chainloadTr);
+	if ((numFactories() > 1) and (isStructureAvailable(defStructs[0], me)))
+	{
+		dbgPlr("TRUCK RUSH!");
+		setEventTrigger(truckRush, chainloadTr);
+	}
+	else
+	{
+		setEventTrigger(buildFundamentals, chainloadTr);
+	}
 	setEventTrigger(startLevel, inactive);
 }
 
@@ -685,12 +914,12 @@ function void setTechBranch(int _tech)
 		if(_rnd  < _y)
 		{
 			curTech = branchVTOL;
-			dbg("going air (" & _y & "/" & _rnd & ")", me);
+			dbgPlr("going air (" & _y & "/" & _rnd & ")");
 		}
 		else
 		{
 			curTech = branchDefault;
-			dbg("going land (" & _y & "/" & _rnd & ")", me);
+			dbgPlr("going land (" & _y & "/" & _rnd & ")");
 		}
 	}
 }
@@ -710,7 +939,6 @@ function bool aiResponsibleForPlayer(int _player)
 // keep details about the size and postion of the ai players base
 event basedetails(basedetailsTr)
 {
-
 	// clear old extremities.
 	maxy = 0;
 	maxx = 0;
@@ -815,12 +1043,11 @@ event buildDerrick(inactive)
 			droid = iterateGroup(buildGroup);
 		}
 	}
-	foundOne = false;
 	if (droid != NULLOBJECT)
 	{
 		initGetFeature(oilRes, -1, me);
 		_oil = getFeatureB(me);
-		while (_oil != NULLOBJECT && !foundOne)
+		while (_oil != NULLOBJECT)
 		{
 			_newDist = distBetweenTwoPoints(droid.x, droid.y, _oil.x, _oil.y);
 			_same = false;
@@ -831,9 +1058,10 @@ event buildDerrick(inactive)
 				{
 					initIterateGroup(buildGroup);				// find all units in build group.
 					_search = iterateGroup(buildGroup);
+					foundOne = false;
 					while (_search != NULLOBJECT && !foundOne)
 					{
-						if (_search.orderx == _oil.x and _search.ordery == _oil.y)
+						if (_search.orderx == _oil.x and _search.ordery == _oil.y and _search != droid)
 						{
 							_same = true;
 							foundOne = true;
@@ -852,6 +1080,7 @@ event buildDerrick(inactive)
 		if (_closestOil != NULLOBJECT)
 		{
 			orderDroidStatsLoc(droid, DORDER_BUILD, derrick, _closestOil.x, _closestOil.y); // build a derick
+			dbgObj(droid, "Off to build derrick at ("& _closestOil.x & ", " & _closestOil.y & ")");
 			if (idleGroup(buildGroup) > 0)
 			{
 				setEventTrigger(buildDerrick, slowloadTr);	// do it again for next droid
@@ -961,14 +1190,16 @@ event buildOilDefenseOrRetreat(inactive)
 	}
 	if (idleGroup(buildGroup) > 0)
 	{
-			setEventTrigger(buildExpand, chainloadTr);	// not enough to do, start expanding in depth instead
+		// Fundamental base already built, so start expanding it if we have too much power. It will call all kinds
+		// of wasteful spending routines. Nothing is worse than losing with the coffers full! This event will
+		// allow us to spend more, and failing that will call the build defense event instead.
+		setEventTrigger(buildExpand, chainloadTr);	// not enough to do, start expanding in depth instead
 	}
 	setEventTrigger(buildOilDefenseOrRetreat, inactive);
 }
 
 /////////////////////////////////////////////////////////////////////
 //mortar etc.. rules. build sensor towers and emplacements.
-// UNUSED FOR NOW
 event incendry(inactive)
 {
 	initEnumStruct(FALSE,sensorTower,me,me);
@@ -1122,6 +1353,7 @@ event incendry(inactive)
 			}
 		}
 	}
+	setEventTrigger(incendry, inactive);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -1139,6 +1371,7 @@ event buildPowerGenerators(inactive)
 		{
 			if (conCanHelp(droid, buildX, buildY))
 			{
+				dbgObj(droid, "Building power generator at (" & buildX & ", " & buildY & ")");
 				orderDroidStatsLoc(droid, DORDER_BUILD, powGen, buildX, buildY);
 			}
 			droid = iterateGroup(buildGroup);
@@ -1148,56 +1381,10 @@ event buildPowerGenerators(inactive)
 }
 
 /////////////////////////////////////////////////////////////////////
-// ensure we have everything in the vital structs list.
-// UNUSED FOR NOW
-event buildBase(inactive)
-{
-	local	int		_numBuilders,_maxBuilders;
-
-
-	if( idleGroup(buildGroup) >= (buildGroup.members/2) )
-	{
-		count = 0;
-		while(count < numStructs)
-		{
-			// check that struct.
-			structure = getStructure(structs[count],me);
-			if(structure == NULLOBJECT)				// if missing build it.
-			{
-				if(isStructureAvailable(structs[count],me))
-				{
-					buildX = baseX;						// pick a location
-					buildY = baseY;
-					boolResult = pickStructLocationB(structs[count], ref buildX, ref buildY,me,0);
-					if(boolResult == TRUE)
-					{
-						_maxBuilders = 2;
-						_numBuilders = numBuildSameBuilding(structs[count], buildX, buildY);
-
-						initIterateGroup(buildGroup);				// find idle droids in build group.
-						droid = iterateGroup(buildGroup);
-						while((droid != NULLOBJECT) and (_numBuilders < _maxBuilders))
-						{
-							if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
-							{
-								orderDroidStatsLoc(droid, DORDER_BUILD,structs[count], buildX,buildY);	// build it
-								_numBuilders++;
-							}
-							droid = iterateGroup(buildGroup);
-						}
-					}
-				}
-			}
-			count = count + 1;
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////
 //  build other stuff, grow the base slowly...
 event buildExpand(inactive)
 {
-	local	int		_numBuilders,_maxBuilders;
+	local int factories, reslabs, vtolfacs, cybfacs, total;
 
 	setEventTrigger(buildExpand, inactive);
 
@@ -1206,32 +1393,53 @@ event buildExpand(inactive)
 		exit;	// do not expand base with low power
 	}
 
-	if(extraStruct == numExtraStructs[curTech])	// loop round
+	// Try to keep some balance to the madness
+	factories = numFactories();
+	reslabs = numResearchLabs();
+	vtolfacs = numVtolFactories();
+	cybfacs = numCyborgFactories();
+	total = factories + reslabs + vtolfacs + cybfacs;
+
+	if (playerPower(me) > LOW_POWER * total)
 	{
-		extraStruct = 0;
-	}
-	if(isStructureAvailable(extraStructs[curTech][extraStruct],me))
-	{
-		buildX = baseX;						// pick a location
+		dbgPlr("EXPAND! factories=" & factories & " vtolfacs=" & vtolfacs & " cybfacs=" & cybfacs & " reslabs=" & reslabs);
+		buildX = baseX;
 		buildY = baseY;
-		boolResult = pickStructLocationB(extraStructs[curTech][extraStruct], ref buildX, ref buildY,me,0);
-
-		if(boolResult == TRUE)
+		if (isStructureAvailable(cybFactory, me) and (cybfacs < factories))
 		{
-			_numBuilders = numBuildSameBuilding(extraStructs[curTech][extraStruct], buildX, buildY);
-			_maxBuilders = 2;
-
-			initIterateGroup(buildGroup);				// find idle droids in build group.
-			droid = iterateGroup(buildGroup);
-			while((droid != NULLOBJECT) and (_numBuilders < _maxBuilders))
+			boolResult = pickStructLocationB(cybFactory, ref buildX, ref buildY, me, 0);
+			if (boolResult and grabTrucksAndBuild(buildX, buildY, 8, cybFactory))
 			{
-				if (conCanHelp(droid, buildX, buildY))
-				{
-					orderDroidStatsLoc(droid, DORDER_BUILD,extraStructs[curTech][extraStruct], buildX,buildY);// build it.
-					_numBuilders++;
-				}
-				droid = iterateGroup(buildGroup);
+				dbgPlr("Building more cyborg factories");
 			}
+			exit;
+		}
+		if (isStructureAvailable(resLab, me) and (reslabs < factories))
+		{
+			boolResult = pickStructLocationB(resLab, ref buildX, ref buildY, me, 0);
+			if (boolResult and grabTrucksAndBuild(buildX, buildY, 8, resLab))
+			{
+				dbgPlr("Building more research labs");
+			}
+			exit;
+		}
+		if (isStructureAvailable(vtolFactory, me) and (vtolfacs < factories))
+		{
+			boolResult = pickStructLocationB(vtolFactory, ref buildX, ref buildY, me, 0);
+			if (boolResult and grabTrucksAndBuild(buildX, buildY, 8, vtolFactory))
+			{
+				dbgPlr("Building more VTOL factories");
+			}
+			exit;
+		}
+		if (isStructureAvailable(factory, me) and (factories < vtolfacs + cybfacs + reslabs + 1))
+		{
+			boolResult = pickStructLocationB(factory, ref buildX, ref buildY, me, 0);
+			if (boolResult and grabTrucksAndBuild(buildX, buildY, 12, factory))
+			{
+				dbgPlr("Building more factories");
+			}
+			exit;
 		}
 	}
 
@@ -1251,8 +1459,9 @@ event newfortify(inactive)
 	local	int		_numBuilders,_maxBuilders;
 
 	_maxBuilders = 1;
+	setEventTrigger(newfortify, inactive);
 
-	if(numGroupSameOrder(buildGroup, DORDER_LINEBUILD) >= _maxBuilders)
+	if(numGroupSameOrder(buildGroup, DORDER_LINEBUILD) >= _maxBuilders)	// only gateway fortifications use line build
 	{
 		exit;
 	}
@@ -1291,6 +1500,10 @@ event newfortify(inactive)
 
 		}
 		droid = iterateGroup(buildGroup);
+	}
+	if (idleGroup(buildGroup) > 0 and !tryUpgrade())
+	{
+		setEventTrigger(incendry, slowloadTr);
 	}
 }
 
@@ -1422,6 +1635,24 @@ event structBuilt(structBuiltTr)
 	if (structure == NULLOBJECT || droid == NULLOBJECT)
 	{
 		exit;
+	}
+
+	// Try to do more nasty things with rush group
+	if (groupMember(rushGroup, droid))
+	{
+		if (isStructureAvailable(wallWeaps[0], me))
+		{
+			dbgPlr("Manic wall code triggered");
+			setEventTrigger(manicWalls, chainloadTr);	// try to wall in enemy
+			exit;
+		}
+		else
+		{
+			dbgPlr("Nothing more to do for rush group - disbanding it!");
+			groupAddGroup(buildGroup, rushGroup);
+			setEventTrigger(buildFundamentals, chainloadTr);
+			exit;
+		}
 	}
 
 	/* factory or factory module */
@@ -2989,7 +3220,6 @@ function void shutDownAI()
 	setEventTrigger(buildOilDefenseOrRetreat,	inactive);
 	setEventTrigger(incendry,	inactive);
 	setEventTrigger(buildPowerGenerators,	inactive);
-	setEventTrigger(buildBase,	inactive);
 	setEventTrigger(buildExpand,inactive);
 	setEventTrigger(newfortify,	inactive);
 	setEventTrigger(droidBuilt,	inactive);
@@ -3042,7 +3272,6 @@ function void reassignAI()
 	setEventTrigger(buildOilDefenseOrRetreat, inactive);
 	setEventTrigger(incendry, inactive);
 	setEventTrigger(buildPowerGenerators, inactive);
-	setEventTrigger(buildBase, inactive);
 	setEventTrigger(buildExpand, inactive);
 	setEventTrigger(newfortify, inactive);
 	setEventTrigger(droidBuilt,droidBuiltTr);
@@ -3866,8 +4095,7 @@ event keyPressed(CALL_KEY_PRESSED, ref count, ref count2)
 	{
 		if(_DEBUG)
 		{
-			addPower(1000, me);
-			console("add power");
+			console("The old cheat code has been removed.");
 		}
 	}
 }

@@ -66,6 +66,7 @@ REF_LAB,
 REF_REARM_PAD,
 REF_MISSILE_SILO,
 REF_SAT_UPLINK,         //added for updates - AB 8/6/99
+REF_GATE,
 NUM_DIFF_BUILDINGS,		//need to keep a count of how many types for IMD loading
 } STRUCTURE_TYPE;
 
@@ -102,6 +103,17 @@ typedef enum _struct_strength
 #define INVALID_STRENGTH	(NUM_STRUCT_STRENGTH + 1)
 
 typedef UWORD STRUCTSTRENGTH_MODIFIER;
+
+#define SAS_OPEN_SPEED		(GAME_TICKS_PER_SEC * 2)
+#define SAS_STAY_OPEN_TIME	(GAME_TICKS_PER_SEC * 6)
+
+typedef enum _anim_states
+{
+	SAS_NORMAL,
+	SAS_OPEN,
+	SAS_OPENING,
+	SAS_CLOSING,
+} STRUCT_ANIM_STATES;
 
 //this structure is used to hold the permenant stats for each type of building
 typedef struct _structure_stats
@@ -205,7 +217,6 @@ typedef struct _factory
 
 typedef struct _res_extractor
 {
-	UDWORD				power;				/*The max amount of power that can be extracted*/
 	UDWORD				timeLastUpdated;	/*time the Res Extr last got points*/
 	BOOL				active;				/*indicates when the extractor is on ie digging up oil*/
 	struct _structure	*psPowerGen;		/*owning power generator*/
@@ -213,13 +224,9 @@ typedef struct _res_extractor
 
 typedef struct _power_gen
 {
-	UDWORD				power;				/*The max power that can be used - NOT USED 21/04/98*/
-	UDWORD				multiplier;			/*Factor to multiply output by - percentage*/
-	UDWORD				capacity;			/* Number of upgrade modules added*/
-
-	//struct _structure	*apResExtractors[NUM_POWER_MODULES + 1];/*pointers to the res ext
-	struct _structure	*apResExtractors[NUM_POWER_MODULES];/*pointers to the res ext
-																associated with this gen*/
+	UDWORD			multiplier;				///< Factor to multiply output by - percentage
+	UDWORD			capacity;				///< Number of upgrade modules added
+	struct _structure	*apResExtractors[NUM_POWER_MODULES];	///< Pointers to associated oil derricks
 } POWER_GEN;
 
 typedef struct REPAIR_FACILITY
@@ -283,7 +290,6 @@ typedef struct _structure
 											   necessary for functionality */
 	/* The weapons on the structure */
 	UWORD		numWeaps;
-	UBYTE		targetted;
 	WEAPON		asWeaps[STRUCT_MAXWEAPS];
 	BASE_OBJECT	*psTarget[STRUCT_MAXWEAPS];
 	UWORD		targetOrigin[STRUCT_MAXWEAPS];
@@ -302,6 +308,8 @@ typedef struct _structure
 	/* anim data */
 	ANIM_OBJECT	*psCurAnim;
 
+	STRUCT_ANIM_STATES	state;
+	UDWORD			lastStateTime;
 } WZ_DECL_MAY_ALIAS STRUCTURE;
 
 #define LOTS_OF	255						/*highest number the limit can be set to */

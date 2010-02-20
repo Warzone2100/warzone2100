@@ -146,5 +146,6 @@ int message_lex_destroy(void)
 	/* For non-reentrant C scanner only. */
 	yy_delete_buffer(YY_CURRENT_BUFFER);
 	yy_init = 1;
+	return 0;
 }
 #endif

@@ -166,7 +166,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 	// rotate world
 	if (MissionResUp && !getWarCamStatus())
 	{
-		rotAmount = timeAdjustedIncrement(MAP_SPIN_RATE / 12, true);
+		rotAmount = graphicsTimeAdjustedIncrement(MAP_SPIN_RATE / 12);
 		player.r.y += rotAmount;
 	}
 
@@ -248,6 +248,7 @@ BOOL multiPlayerLoop(void)
 			if (!ingame.TimeEveryoneIsInGame)
 			{
 				ingame.TimeEveryoneIsInGame = gameTime;
+				debug(LOG_NET, "I have entered the game @ %d", ingame.TimeEveryoneIsInGame );
 				if (!NetPlay.isHost)
 				{
 					debug(LOG_NET, "=== Sending hash to host ===");
@@ -1595,7 +1596,7 @@ BOOL recvMapFileRequested()
 		if (pFileHandle == NULL)
 		{
 			debug(LOG_ERROR, "Failed to open %s for reading: %s", mapStr, PHYSFS_getLastError());
-			debug(LOG_FATAL, "You have a map (%s) that can't be located.\n\nMake sure it is in the correct directory and or format!", mapStr);
+			debug(LOG_FATAL, "You have a map (%s) that can't be located.\n\nMake sure it is in the correct directory and or format! (No map packs!)", mapStr);
 			// NOTE: if we get here, then the game is basically over, The host can't send the file for whatever reason...
 			// Which also means, that we can't continue.
 			debug(LOG_NET, "***Host has a file issue, and is being forced to quit!***");

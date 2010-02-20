@@ -1844,7 +1844,8 @@ void actionUpdateDroid(DROID *psDroid)
 					}
 					else
 					{
-						psDroid->action = DACTION_NONE;
+						objTrace(psDroid->id, "DACTION_MOVETOBUILD: tile has structure already");
+						cancelBuild(psDroid);
 					}
 				}
 				else if (!validLocation((BASE_STATS*)psDroid->psTarStats,
@@ -1854,7 +1855,7 @@ void actionUpdateDroid(DROID *psDroid)
 										false))
 				{
 					objTrace(psDroid->id, "DACTION_MOVETOBUILD: !validLocation");
-					psDroid->action = DACTION_NONE;
+					cancelBuild(psDroid);
 				}
 				else
 				{
@@ -1864,7 +1865,7 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 			}
 			else if ((psDroid->order == DORDER_LINEBUILD || psDroid->order==DORDER_BUILD)
-			         && (psStructStats->type == REF_WALL || psStructStats->type == REF_WALLCORNER ||
+			         && (psStructStats->type == REF_WALL || psStructStats->type == REF_WALLCORNER || psStructStats->type == REF_GATE ||
 			             psStructStats->type == REF_DEFENSE || psStructStats->type == REF_REARM_PAD))
 			{
 				// building a wall.

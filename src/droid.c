@@ -117,20 +117,27 @@ void	groupConsoleInformOfCreation( UDWORD groupNumber );
 void	groupConsoleInformOfCentering( UDWORD groupNumber );
 void	droidUpdateRecoil( DROID *psDroid );
 
-static void cancelBuild(DROID *psDroid)
+void cancelBuild(DROID *psDroid)
 {
-	objTrace(psDroid->id, "Droid build order cancelled");
-	psDroid->action = DACTION_NONE;
-	psDroid->order = DORDER_NONE;
-	setDroidTarget(psDroid, NULL);
-	setDroidActionTarget(psDroid, NULL, 0);
+	if (orderDroidList(psDroid))
+	{
+		objTrace(psDroid->id, "Droid build order cancelled - changing to next order");
+	}
+	else
+	{
+		objTrace(psDroid->id, "Droid build order cancelled");
+		psDroid->action = DACTION_NONE;
+		psDroid->order = DORDER_NONE;
+		setDroidTarget(psDroid, NULL);
+		setDroidActionTarget(psDroid, NULL, 0);
 
-	/* Notify scripts we just became idle */
-	psScrCBOrderDroid = psDroid;
-	psScrCBOrder = psDroid->order;
-	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
-	psScrCBOrderDroid = NULL;
-	psScrCBOrder = DORDER_NONE;
+		/* Notify scripts we just became idle */
+		psScrCBOrderDroid = psDroid;
+		psScrCBOrder = psDroid->order;
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
+		psScrCBOrderDroid = NULL;
+		psScrCBOrder = DORDER_NONE;
+	}
 }
 
 // initialise droid module
@@ -768,42 +775,14 @@ void droidUpdate(DROID *psDroid)
 	processVisibilityLevel((BASE_OBJECT*)psDroid);
 
 	// -----------------
-	/* Are we a sensor droid or a command droid? */
-	if( (psDroid->droidType == DROID_SENSOR) || (psDroid->droidType == DROID_COMMAND) )
+	/* Are we a sensor droid or a command droid? Show where we target for selectedPlayer. */
+	if (psDroid->player == selectedPlayer && (psDroid->droidType == DROID_SENSOR || psDroid->droidType == DROID_COMMAND))
 	{
 		/* If we're attacking or sensing (observing), then... */
 		if ((psBeingTargetted = orderStateObj(psDroid, DORDER_ATTACK))
-		 || (psBeingTargetted = orderStateObj(psDroid, DORDER_OBSERVE)))
+		    || (psBeingTargetted = orderStateObj(psDroid, DORDER_OBSERVE)))
 		{
-			/* If it's a structure */
-			if(psBeingTargetted->type == OBJ_STRUCTURE)
-			{
-				/* And it's your structure or your droid... */
-				if( (((STRUCTURE*)psBeingTargetted)->player == selectedPlayer)
-					|| (psDroid->player == selectedPlayer) )
-				{
-					/* Highlight the structure in question */
-					((STRUCTURE*)psBeingTargetted)->targetted = 1;
-				}
-			}
-			else if (psBeingTargetted->type == OBJ_DROID)
-			{
-				/* And it's your  your droid... */
-	 			if( (((DROID*)psBeingTargetted)->player == selectedPlayer)
- 					|| (psDroid->player == selectedPlayer) )
- 				{
- 				   	((DROID*)psBeingTargetted)->bTargetted = true;
-
- 				}
-			}
-			else if(psBeingTargetted->type == OBJ_FEATURE)
-			{
-				if(psDroid->player == selectedPlayer)
-				{
-					((FEATURE*)psBeingTargetted)->bTargetted = true;
-				}
-			}
-
+			psBeingTargetted->bTargetted = true;
 		}
 	}
 	// -----------------
@@ -1090,6 +1069,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	{
 		// Update the interface
 		intBuildFinished(psDroid);
+		// Check if line order build is completed, or we are not carrying out a line order build
 		if ((map_coord(psDroid->orderX) == map_coord(psDroid->orderX2) && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))
 		    || psDroid->order != DORDER_LINEBUILD)
 		{
@@ -2580,7 +2560,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	memset(psDroid->visible, 0, sizeof(psDroid->seenThisTick));
 	psDroid->visible[psDroid->player] = UBYTE_MAX;
 	psDroid->died = 0;
-	psDroid->inFire = false;
+	psDroid->inFire = 0;
 	psDroid->burnStart = 0;
 	psDroid->burnDamage = 0;
 	psDroid->sDisplay.screenX = OFF_SCREEN;
@@ -3198,14 +3178,14 @@ struct rankMap
 static const struct rankMap arrRank[] =
 {
 	{0,   0,    N_("Rookie")},
-	{4,   16,   NP_("rank", "Green")},
-	{8,   32,   N_("Trained")},
-	{16,  64,   N_("Regular")},
-	{32,  128,  N_("Professional")},
-	{64,  256,  N_("Veteran")},
-	{128, 512,  N_("Elite")},
-	{256, 1024, N_("Special")},
-	{512, 2048, N_("Hero")}
+	{4,   8,    NP_("rank", "Green")},
+	{8,   16,   N_("Trained")},
+	{16,  32,   N_("Regular")},
+	{32,  64,   N_("Professional")},
+	{64,  128,  N_("Veteran")},
+	{128, 256,  N_("Elite")},
+	{256, 512,  N_("Special")},
+	{512, 1024, N_("Hero")}
 };
 
 unsigned int getDroidLevel(const DROID* psDroid)
@@ -3214,12 +3194,6 @@ unsigned int getDroidLevel(const DROID* psDroid)
 						psDroid->droidType == DROID_SENSOR) ? true : false;
 	unsigned int numKills = psDroid->experience;
 	unsigned int i;
-
-	// Commanders don't need as much kills for ranks in multiplayer
-	if (isCommander && cmdGetDroidMultiExpBoost())
-	{
-		numKills *= 2;
-	}
 
 	// Search through the array of ranks until one is found
 	// which requires more kills than the droid has.
@@ -3244,15 +3218,12 @@ UDWORD getDroidEffectiveLevel(DROID *psDroid)
 	UDWORD cmdLevel = 0;
 
 	// get commander level
-	if(hasCommander(psDroid))
+	if (hasCommander(psDroid))
 	{
 		cmdLevel = cmdGetCommanderLevel(psDroid);
 
-		// Commanders boost unit's effectiveness just by being assigned to it
-		if(bMultiPlayer)
-		{
-			cmdLevel++;
-		}
+		// Commanders boost units' effectiveness just by being assigned to it
+		level++;
 	}
 
 	return MAX(level, cmdLevel);

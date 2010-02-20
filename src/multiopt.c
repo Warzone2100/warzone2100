@@ -105,7 +105,7 @@ void sendOptions()
 
 	// Send the number of structure limits to expect
 	NETuint32_t(&ingame.numStructureLimits);
-
+	debug(LOG_NET, "(Host) Structure limits to process on client is %u", ingame.numStructureLimits);
 	// Send the structures changed
 	for (i = 0; i < ingame.numStructureLimits; i++)
 	{
@@ -141,6 +141,7 @@ void recvOptions()
 {
 	unsigned int i;
 
+	debug(LOG_NET, "Receiving options from host");
 	NETbeginDecode(NET_OPTIONS);
 
 	// Get general information about the game
@@ -187,7 +188,7 @@ void recvOptions()
 
 	// Get the number of structure limits to expect
 	NETuint32_t(&ingame.numStructureLimits);
-
+	debug(LOG_NET, "Host is sending us %u structure limits", ingame.numStructureLimits);
 	// If there were any changes allocate memory for them
 	if (ingame.numStructureLimits)
 	{
@@ -425,6 +426,7 @@ static BOOL cleanMap(UDWORD player)
 			   ||(psStruct->pStructureType->type == REF_WALLCORNER)
 			   ||(psStruct->pStructureType->type == REF_DEFENSE)
 			   ||(psStruct->pStructureType->type == REF_BLASTDOOR)
+			   ||(psStruct->pStructureType->type == REF_GATE)
 			   ||(psStruct->pStructureType->type == REF_CYBORG_FACTORY)
 			   ||(psStruct->pStructureType->type == REF_COMMAND_CONTROL))
 			{
@@ -482,12 +484,11 @@ static BOOL cleanMap(UDWORD player)
 						if(((POWER_GEN*)psStruct->pFunctionality)->capacity != 0)
 						{	// downgrade powergen.
 							((POWER_GEN*)psStruct->pFunctionality)->capacity = 0;
-							((POWER_GEN*)psStruct->pFunctionality)->power = ((POWER_GEN_FUNCTION*)psStruct->pStructureType->asFuncList[0])->powerOutput;
-							((POWER_GEN*)psStruct->pFunctionality)->multiplier += ((POWER_GEN_FUNCTION*)psStruct->pStructureType->asFuncList[0])->powerMultiplier;
 
 							psStruct->sDisplay.imd	= psStruct->pStructureType->pIMD;
 							psStruct->body			= (UWORD)(structureBody(psStruct));
 						}
+						structurePowerUpgrade(psStruct);
 						psStruct=psStruct->psNext;
 				}
 			}

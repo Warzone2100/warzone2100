@@ -60,7 +60,7 @@ static BOOL FBOinit = false;
 BOOL bFboProblem = false;	// hack to work around people with bad drivers. (*cough*intel*cough*)
 
 /* Initialise the double buffered display */
-BOOL screenInitialise()
+bool screenInitialise()
 {
 		char buf[256];
 

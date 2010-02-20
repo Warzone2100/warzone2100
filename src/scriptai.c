@@ -995,6 +995,7 @@ static UDWORD scrStructTargetMask(STRUCTURE *psStruct)
 	case REF_BRIDGE:
 	case REF_DEMOLISH:
 	case REF_BLASTDOOR:
+	case REF_GATE:
 	default:
 		ASSERT( false,
 			"scrStructTargetMask: unknown or invalid target structure type" );

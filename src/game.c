@@ -7380,12 +7380,6 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 				}
 				break;
 			case REF_RESOURCE_EXTRACTOR:
-				((RES_EXTRACTOR *)psStructure->pFunctionality)->power = psSaveStructure->output;
-                //if run out of power, then the res_extractor should be inactive
-                if (psSaveStructure->output == 0)
-                {
-                    ((RES_EXTRACTOR *)psStructure->pFunctionality)->active = false;
-                }
 				break;
 			case REF_REPAIR_FACILITY: //CODE THIS SOMETIME
 				if (version >= VERSION_19)
@@ -7456,17 +7450,12 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 					}
 					break;
 				case REF_RESOURCE_EXTRACTOR:
-                    //only try and connect if power left in
-                    if (((RES_EXTRACTOR *)psStructure->pFunctionality)->power != 0)
-                    {
     					checkForPowerGen(psStructure);
 	    				/* GJ HACK! - add anim to deriks */
 		    			if (psStructure->psCurAnim == NULL)
 			    		{
 				    		psStructure->psCurAnim = animObj_Add(psStructure, ID_ANIM_DERIK, 0, 0);
 					    }
-                    }
-
 					break;
 				case REF_RESEARCH:
 					break;
@@ -7792,12 +7781,6 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 				}
 				break;
 			case REF_RESOURCE_EXTRACTOR:
-				((RES_EXTRACTOR *)psStructure->pFunctionality)->power = psSaveStructure->output;
-                //if run out of power, then the res_extractor should be inactive
-                if (psSaveStructure->output == 0)
-                {
-                    ((RES_EXTRACTOR *)psStructure->pFunctionality)->active = false;
-                }
 				break;
 			case REF_REPAIR_FACILITY: //CODE THIS SOMETIME
 				psRepair = ((REPAIR_FACILITY *)psStructure->pFunctionality);
@@ -7875,17 +7858,12 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 					}
 					break;
 				case REF_RESOURCE_EXTRACTOR:
-                    //only try and connect if power left in
-                    if (((RES_EXTRACTOR *)psStructure->pFunctionality)->power != 0)
-                    {
     					checkForPowerGen(psStructure);
 	    				/* GJ HACK! - add anim to deriks */
 		    			if (psStructure->psCurAnim == NULL)
 			    		{
 				    		psStructure->psCurAnim = animObj_Add(psStructure, ID_ANIM_DERIK, 0, 0);
 					    }
-                    }
-
 					break;
 				case REF_RESEARCH:
 					break;
@@ -8091,8 +8069,7 @@ BOOL writeStructFile(char *pFileName)
 						pFunctionality)->capacity;
 					break;
 				case REF_RESOURCE_EXTRACTOR:
-					psSaveStruct->output = ((RES_EXTRACTOR *)psCurr->
-						pFunctionality)->power;
+					psSaveStruct->output = 1;
 					break;
 				case REF_REPAIR_FACILITY: //CODE THIS SOMETIME
 					psRepair = ((REPAIR_FACILITY *)psCurr->pFunctionality);
@@ -8431,12 +8408,12 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 			continue;
 		}
 		//create the Feature
-		//buildFeature(asFeatureStats + psSaveFeature->featureInc,
-		//	psSaveFeature->pos.x, psSaveFeature->pos.y);
 		pFeature = buildFeature(psStats, psSaveFeature->x, psSaveFeature->y,true);
-		//will be added to the top of the linked list
-		//pFeature = apsFeatureLists[0];
-		ASSERT_OR_RETURN(false, pFeature, "Unable to create feature");
+		if (!pFeature)
+		{
+			debug(LOG_ERROR, "Unable to create feature %s", psSaveFeature->name);
+			continue;
+		}
 		//restore values
 		pFeature->id = psSaveFeature->id;
 		pFeature->direction = psSaveFeature->direction;
@@ -8530,12 +8507,12 @@ BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 			continue;
 		}
 		//create the Feature
-		//buildFeature(asFeatureStats + psSaveFeature->featureInc,
-		//	psSaveFeature->pos.x, psSaveFeature->pos.y);
 		pFeature = buildFeature(psStats, psSaveFeature->x, psSaveFeature->y,true);
-		//will be added to the top of the linked list
-		//pFeature = apsFeatureLists[0];
-		ASSERT_OR_RETURN(false, pFeature, "Unable to create feature");
+		if (!pFeature)
+		{
+			debug(LOG_ERROR, "Unable to create feature %s", psSaveFeature->name);
+			continue;
+		}
 		//restore values
 		pFeature->id = psSaveFeature->id;
 		pFeature->direction = psSaveFeature->direction;

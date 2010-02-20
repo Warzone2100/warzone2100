@@ -229,7 +229,6 @@ static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer
 		if (seen)
 		{
 			// Can see this tile.
-			psTile->tileVisBits |= alliancebits[rayPlayer];                                 // Share vision with allies
 			psTile->tileExploredBits |= alliancebits[rayPlayer];                            // Share exploration with allies too
 			visMarkTile(mapX, mapY, psTile, rayPlayer, recordTilePos, lastRecordTilePos);   // Mark this tile as seen by our sensor
 		}
@@ -336,7 +335,7 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 	{
 		STRUCTURE * psStruct = (STRUCTURE *)psObj;
 		if (psStruct->status != SS_BUILT ||
-		    psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER)
+		    psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER || psStruct->pStructureType->type == REF_GATE)
 		{
 			// unbuilt structures and walls do not confer visibility.
 			return;
@@ -353,6 +352,25 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 		psObj->numWatchedTiles = lastRecordTilePos;
 		memcpy(psObj->watchedTiles, recordTilePos, lastRecordTilePos * sizeof(*psObj->watchedTiles));
 	}
+}
+
+/*reveals all the terrain in the map*/
+void revealAll(UBYTE player)
+{
+	UWORD   i, j;
+	MAPTILE	*psTile;
+	
+	//reveal all tiles
+	for(i=0; i<mapWidth; i++)
+	{
+		for(j=0; j<mapHeight; j++)
+		{
+			psTile = mapTile(i,j);
+			psTile->tileExploredBits |= alliancebits[player];
+		}
+	}
+	
+	//the objects gets revealed in processVisibility()
 }
 
 /* Check whether psViewer can see psTarget.
@@ -411,6 +429,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 			}
 
 			if (psStruct->pStructureType->type == REF_WALL
+				|| psStruct->pStructureType->type == REF_GATE
 				|| psStruct->pStructureType->type == REF_WALLCORNER)
 			{
 				return 0;
@@ -575,14 +594,7 @@ void processVisibilitySelf(BASE_OBJECT *psObj)
 		}
 	}
 
-	// Remove any targetting locks from last update.
-	switch (psObj->type)
-	{
-		default: break;
-		case OBJ_DROID:     ((DROID     *)psObj)->bTargetted = false; break;
-		case OBJ_STRUCTURE: ((STRUCTURE *)psObj)->targetted  = 0;     break;  // Long live consistency.
-		case OBJ_FEATURE:   ((FEATURE   *)psObj)->bTargetted = false; break;
-	}
+	psObj->bTargetted = false;	// Remove any targetting locks from last update.
 }
 
 // Calculate which objects we can see. Better to call after processVisibilitySelf, since that check is cheaper.
@@ -764,7 +776,6 @@ MAPTILE		*psTile;
 			psTile = mapTile(mapX+i,mapY+j);
 			if (psTile)
 			{
-				psTile->tileVisBits |= alliancebits[player];
 				psTile->tileExploredBits |= alliancebits[player];
 			}
 		}

@@ -56,7 +56,7 @@ extern "C"
 
 extern WZ_DECL_CONST const char* getLanguage(void);
 extern WZ_DECL_CONST const char* getLanguageName(void);
-extern BOOL setLanguage(const char *name);
+extern bool setLanguage(const char *name);
 extern void setNextLanguage(void);
 extern void initI18n(void);
 

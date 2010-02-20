@@ -16,9 +16,9 @@ data/base/messages/strings/scrstrings.txt
 data/base/multiplay/script/multilim.slo
 data/base/multiplay/script/multiplay.slo
 data/base/multiplay/script/scavfact.slo
+data/base/multiplay/skirmish/ai.slo
 data/base/multiplay/skirmish/rules.slo
 data/base/multiplay/skirmish/sktech.slo
-data/base/multiplay/skirmish/ai.slo 
 data/base/script/demo/demo_global.slo
 data/base/script/demo/demo_p0.slo
 data/base/script/demo/demo_p1.slo
@@ -84,12 +84,11 @@ data/base/script/text/tech.slo
 data/base/script/text/tutorial3.slo
 data/base/script/text/vtols2.slo
 data/base/script/text/vtols.slo
+data/mods/multiplay/ntw/messages/strings/genstrings.txt
 data/mods/multiplay/ntw/messages/strings/names.txt
 data/mods/multiplay/ntw/multiplay/script/autoenable.slo
 data/mods/multiplay/ntw/multiplay/script/camtech.slo
-data/mods/multiplay/ntw/multiplay/script/fog-daynight.slo
 data/mods/multiplay/ntw/multiplay/script/gates.slo
-data/mods/multiplay/ntw/multiplay/script/landmine.slo
 data/mods/multiplay/ntw/multiplay/script/multiplay.slo
 data/mods/multiplay/ntw/multiplay/script/reactor.slo
 data/mods/multiplay/ntw/multiplay/skirmish/player0.slo
@@ -102,6 +101,8 @@ data/mods/multiplay/ntw/multiplay/skirmish/player6.slo
 data/mods/multiplay/ntw/multiplay/skirmish/player7.slo
 data/mods/multiplay/ntw/multiplay/skirmish/rules.slo
 data/mods/multiplay/ntw/multiplay/skirmish/sktech.slo
+data/mods/multiplay/old-1.10-balance/messages/strings/names.txt
+data/mods/multiplay/semperfi/multiplay/skirmish/ai.slo
 data/mp/messages/resmessages12.rmsg
 data/mp/messages/resmessages1.rmsg
 data/mp/messages/resmessages23.rmsg
@@ -112,9 +113,12 @@ data/mp/messages/strings/names.txt
 data/mp/messages/strings/resstrings.txt
 data/mp/multiplay/script/camtech.slo
 data/mp/multiplay/script/multiplay.slo
+lib/betawidget/src/button.c
 lib/betawidget/src/font.c
 lib/betawidget/src/geom.c
 lib/betawidget/src/hBox.c
+lib/betawidget/src/imageButton.c
+lib/betawidget/src/patternManager.c
 lib/betawidget/src/platform/sdl/clipboardWin32.c
 lib/betawidget/src/platform/sdl/clipboardX11.c
 lib/betawidget/src/platform/sdl/event.c
@@ -128,6 +132,7 @@ lib/betawidget/src/vector.c
 lib/betawidget/src/widget.c
 lib/betawidget/src/window.c
 lib/betawidget/tools/sdl-testapp.c
+lib/exceptionhandler/dumpinfo.cpp
 lib/exceptionhandler/exceptionhandler.c
 lib/exceptionhandler/exchndl.c
 lib/framework/configfile.c
@@ -139,8 +144,8 @@ lib/framework/frame.c
 lib/framework/frameresource.c
 lib/framework/i18n.c
 lib/framework/lexer_input.c
-lib/framework/stdio_ext.c
 lib/framework/SDL_framerate.c
+lib/framework/stdio_ext.c
 lib/framework/strres.c
 lib/framework/tagfile.c
 lib/framework/treap.c
@@ -150,6 +155,8 @@ lib/gamelib/anim.c
 lib/gamelib/animobj.c
 lib/gamelib/gtime.c
 lib/gamelib/hashtable.c
+lib/iniparser/dictionary.c
+lib/iniparser/iniparser.c
 lib/ivis_common/bitimage.c
 lib/ivis_common/imd.c
 lib/ivis_common/imdload.c
@@ -168,6 +175,21 @@ lib/ivis_opengl/rendmode.c
 lib/ivis_opengl/screen.c
 lib/ivis_opengl/tex.c
 lib/ivis_opengl/textdraw.c
+lib/netplay/miniupnpc/igd_desc_parse.c
+lib/netplay/miniupnpc/minisoap.c
+lib/netplay/miniupnpc/minissdpc.c
+lib/netplay/miniupnpc/miniupnpc.c
+lib/netplay/miniupnpc/miniupnpcmodule.c
+lib/netplay/miniupnpc/miniwget.c
+lib/netplay/miniupnpc/minixml.c
+lib/netplay/miniupnpc/minixmlvalid.c
+lib/netplay/miniupnpc/testigddescparse.c
+lib/netplay/miniupnpc/testminixml.c
+lib/netplay/miniupnpc/testupnpreplyparse.c
+lib/netplay/miniupnpc/upnpc.c
+lib/netplay/miniupnpc/upnpcommands.c
+lib/netplay/miniupnpc/upnperrors.c
+lib/netplay/miniupnpc/upnpreplyparse.c
 lib/netplay/netjoin_stub.c
 lib/netplay/netlog.c
 lib/netplay/netplay.c
@@ -206,6 +228,7 @@ src/aud.c
 src/baseobject.c
 src/bridge.c
 src/bucket3d.c
+src/challenge.c
 src/cheat.c
 src/clparse.c
 src/cluster.c
@@ -277,6 +300,7 @@ src/pointtree.cpp
 src/power.c
 src/projectile.c
 src/radar.c
+src/random.cpp
 src/raycast.c
 src/research.c
 src/scores.c
@@ -291,6 +315,7 @@ src/selection.c
 src/seqdisp.c
 src/stats.c
 src/structure.c
+src/terrain.c
 src/text.c
 src/texture.c
 src/transporter.c
@@ -298,4 +323,5 @@ src/version.c
 src/visibility.c
 src/warcam.c
 src/warzoneconfig.c
+src/wavecast.cpp
 src/wrappers.c

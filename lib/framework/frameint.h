@@ -36,7 +36,7 @@ extern "C"
 #endif
 
 /* Initialise the double buffered display */
-extern BOOL screenInitialise(void);
+extern bool screenInitialise(void);
 
 /* Release the DD objects */
 extern void screenShutDown(void);

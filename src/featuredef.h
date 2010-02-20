@@ -87,8 +87,6 @@ typedef struct _feature
 	BASE_ELEMENTS(struct _feature);
 
 	FEATURE_STATS*  psStats;
-	UDWORD          startTime;              ///< Time the feature was created. Valid for wrecked droids and structures.
-	BOOL            bTargetted;
 } WZ_DECL_MAY_ALIAS FEATURE;
 
 #ifdef __cplusplus

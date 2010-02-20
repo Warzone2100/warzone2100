@@ -78,11 +78,11 @@
  * Local Variables
  *
  *********************************************************/
-void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index);
-UDWORD	hashBuffer(uint8_t *pData, uint32_t size);
+static void	calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index);
+static UDWORD	hashBuffer(uint8_t *pData, uint32_t size);
 
 // whether a save game is currently being loaded
-static BOOL saveFlag = false;
+static bool saveFlag = false;
 
 extern int scr_lineno;
 
@@ -90,20 +90,20 @@ uint32_t	DataHash[DATA_MAXDATA]= {0};
 
 /**
 *	hashBuffer()
-*	\param pData pointer to our buffer
+*	\param pData pointer to our buffer (always a text file)
 *	\param size the size of the buffer
 *	\return hash calculated from the buffer.
 *
 *	Note, this is obviously not a very complex hash routine.  This most likely has many collisions possible.
-*	The conversion from CRLF | CR to LF is more complex. :P
 *	This is almost the same routine that Pumpkin had, minus the ugly bug :)
 */
-UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
+static UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 {
 	uint32_t hashval = 0,*val;
 	uint32_t pt = 0, newsize, i;
 	int fillbytes = 0, CRtoStrip = 0;
 	uint8_t *NewData = NULL;
+	bool isWindowsFormat = false;
 
 	// find out how many CRs are in the buffer
 	for (i=0; i < size; i++)
@@ -114,6 +114,7 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 		}
 	}
 
+	// Calculate the new size of the buffer we need to create, on a 4 byte boundry
 	fillbytes = (size - CRtoStrip) % 4;
 	if (fillbytes == 0)
 	{
@@ -123,38 +124,34 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 	{
 		newsize = (size - CRtoStrip) + (4- fillbytes);
 		fillbytes = newsize % 4;
-		debug(LOG_NET, "The size of the buffer (%u bytes - stripped %d) is not on a 4 byte boundry, compensating to a new buffer size of %u bytes.", size, CRtoStrip, newsize);
 	}
 
 	NewData = malloc(newsize * sizeof(uint8_t));
 	if (!NewData)
 	{
-		//fatal error...
 		debug(LOG_FATAL, "Out of memory!");
 		abort();
 	}
-	memset(NewData, 0xff, newsize);		// fill the new buffer with bit pattern 0xff
+	memset(NewData, 0xff, newsize);		// fill the new buffer with bit pattern 0xff for easier debug purposes
 
-	// convert CRLF (windows) | CR (mac OS9?) to LF
+	// convert CRLF (windows) to LF
 	for(i = 0; i < size- CRtoStrip; i++, pData++)
 	{
-		if (*(pData) == '\r' && *(pData+1) == '\n')
+		if (*pData == '\r' && *(pData + 1) == '\n')
 		{
-			NewData[i] = *(++pData);						// for windows change CRLF to LF
-		}
-		else if (*(pData) == '\r' && *(pData+1) != '\n')
-		{
-			NewData[i] = '\n';								// for mac change CR to LF
+			NewData[i] = *(++pData);			// for windows change CRLF to LF
+			isWindowsFormat = true;
 		}
 		else
 		{
-			NewData[i] = *(pData);							// straight copy
+			NewData[i] = *(pData);				// straight copy
 		}
 	}
 
 	debug(LOG_NEVER, "NewData is {%.10s}\n size is %u bytes \n", NewData, newsize );	// this is a bit spammy...
 
-	while (pt < newsize )
+	ASSERT_OR_RETURN(0, newsize != 0, "Empty file being checked!");
+	while (pt < newsize)
 	{
 		val = (uint32_t *)(NewData+pt);
 		hashval ^= *val;
@@ -164,11 +161,9 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 		pt += 4;
 	}
 
-	if (fillbytes)
-	{
-		free(NewData);
-	}
+	free(NewData);
 
+	debug(LOG_NET, "The size of the old buffer (%u bytes - %d stripped ), New buffer size of %u bytes. Format is: %s", size, CRtoStrip, newsize,  isWindowsFormat ? "windows" : "linux/mac");
 	return hashval;
 }
 
@@ -176,6 +171,8 @@ UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 // Data should be converted to Network byte order
 void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 {
+	const uint32_t oldHash = DataHash[index];
+
 	if (!bMultiPlayer)
 	{
 		return;
@@ -184,7 +181,13 @@ void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 	// create the hash for that data block.
 	DataHash[index] ^= htonl(hashBuffer(pBuffer, size));
 
-	debug(LOG_NET, "DataHash[%2u] = %08x\n", index, DataHash[index]);
+	if (!DataHash[index] && oldHash)
+	{
+		debug(LOG_NET, "The new hash is 0, the old hash was %u. We XOR'ed the same value!", oldHash);
+	}
+
+	debug(LOG_NET, "DataHash[%2u] = %08x", index, htonl(DataHash[index])); 
+
 	return;
 }
 
@@ -211,7 +214,7 @@ void dataClearSaveFlag(void)
 }
 
 /* Load the body stats */
-static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SBODY);
 
@@ -234,7 +237,7 @@ static void dataReleaseStats(WZ_DECL_UNUSED void *pData)
 
 
 /* Load the weapon stats */
-static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SWEAPON);
 
@@ -250,7 +253,7 @@ static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the constructor stats */
-static BOOL bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SCONSTR);
 
@@ -266,7 +269,7 @@ static BOOL bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the ECM stats */
-static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SECM);
 
@@ -282,7 +285,7 @@ static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Propulsion stats */
-static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SPROP);
 
@@ -298,7 +301,7 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Sensor stats */
-static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SSENSOR);
 
@@ -314,7 +317,7 @@ static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Repair stats */
-static BOOL bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SREPAIR);
 
@@ -330,7 +333,7 @@ static BOOL bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Brain stats */
-static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SBRAIN);
 
@@ -346,7 +349,7 @@ static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the PropulsionType stats */
-static BOOL bufferSPROPTYPESLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSPROPTYPESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SPROPTY);
 
@@ -362,7 +365,7 @@ static BOOL bufferSPROPTYPESLoad(const char *pBuffer, UDWORD size, void **ppData
 }
 
 /* Load the propulsion type sound stats */
-static BOOL bufferSPROPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSPROPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadPropulsionSounds(pBuffer, size))
 	{
@@ -375,7 +378,7 @@ static BOOL bufferSPROPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the SSPECABIL stats */
-static BOOL bufferSSPECABILLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSSPECABILLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadSpecialAbility(pBuffer, size))
 	{
@@ -388,7 +391,7 @@ static BOOL bufferSSPECABILLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the STERRTABLE stats */
-static BOOL bufferSTERRTABLELoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSTERRTABLELoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_STERRT);
 
@@ -403,7 +406,7 @@ static BOOL bufferSTERRTABLELoad(const char *pBuffer, UDWORD size, void **ppData
 }
 
 /* Load the body/propulsion IMDs stats */
-static BOOL bufferSBPIMDLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSBPIMDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadBodyPropulsionIMDs(pBuffer, size))
 	{
@@ -416,7 +419,7 @@ static BOOL bufferSBPIMDLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the weapon sound stats */
-static BOOL bufferSWEAPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSWEAPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadWeaponSounds(pBuffer, size))
 	{
@@ -429,7 +432,7 @@ static BOOL bufferSWEAPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Weapon Effect modifier stats */
-static BOOL bufferSWEAPMODLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSWEAPMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SWEAPMOD);
 
@@ -445,7 +448,7 @@ static BOOL bufferSWEAPMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 
 /* Load the Template stats */
-static BOOL bufferSTEMPLLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSTEMPLLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_STEMP);
 
@@ -467,7 +470,7 @@ static void dataSTEMPLRelease(WZ_DECL_UNUSED void *pData)
 }
 
 /* Load the Template weapons stats */
-static BOOL bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_STEMPWEAP);
 
@@ -482,7 +485,7 @@ static BOOL bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Structure stats */
-static BOOL bufferSSTRUCTLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSSTRUCTLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SSTRUCT);
 
@@ -505,7 +508,7 @@ static void dataSSTRUCTRelease(WZ_DECL_UNUSED void *pData)
 }
 
 /* Load the Structure Weapons stats */
-static BOOL bufferSSTRWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSSTRWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SSTRWEAP);
 
@@ -520,7 +523,7 @@ static BOOL bufferSSTRWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Structure Functions stats */
-static BOOL bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_STRFUNC);
 
@@ -535,7 +538,7 @@ static BOOL bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Structure strength modifier stats */
-static BOOL bufferSSTRMODLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSSTRMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SSTRMOD);
 
@@ -550,7 +553,7 @@ static BOOL bufferSSTRMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Feature stats */
-static BOOL bufferSFEATLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSFEATLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SFEAT);
 
@@ -571,7 +574,7 @@ static void dataSFEATRelease(WZ_DECL_UNUSED void *pData)
 }
 
 /* Load the Functions stats */
-static BOOL bufferSFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SFUNC);
 
@@ -602,7 +605,7 @@ static void dataRESCHRelease(WZ_DECL_UNUSED void *pData)
 }
 
 /* Load the Research stats */
-static BOOL bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_RESCH);
 
@@ -628,7 +631,7 @@ static BOOL bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research pre-requisites */
-static BOOL bufferRPREREQLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferRPREREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_RPREREQ);
 
@@ -643,7 +646,7 @@ static BOOL bufferRPREREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research components made redundant */
-static BOOL bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_RCOMPRED);
 
@@ -658,7 +661,7 @@ static BOOL bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research component results */
-static BOOL bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_RCOMPRES);
 
@@ -673,7 +676,7 @@ static BOOL bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research structures required */
-static BOOL bufferRSTRREQLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferRSTRREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_RSTRREQ);
 
@@ -688,7 +691,7 @@ static BOOL bufferRSTRREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research structures made redundant */
-static BOOL bufferRSTRREDLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferRSTRREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_RSTRRED);
 
@@ -703,7 +706,7 @@ static BOOL bufferRSTRREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research structure results */
-static BOOL bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_RSTRRES);
 
@@ -718,7 +721,7 @@ static BOOL bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research functions */
-static BOOL bufferRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_RFUNC);
 
@@ -733,7 +736,7 @@ static BOOL bufferRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the message viewdata */
-static BOOL bufferSMSGLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSMSGLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	VIEWDATA	*pViewData;
 
@@ -749,7 +752,7 @@ static BOOL bufferSMSGLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load research message viewdata */
-static BOOL dataResearchMsgLoad(const char* fileName, void** ppData)
+static bool dataResearchMsgLoad(const char* fileName, void** ppData)
 {
 	VIEWDATA* pViewData = loadResearchViewData(fileName);
 	if (!pViewData)
@@ -769,7 +772,7 @@ static void dataSMSGRelease(void *pData)
 }
 
 /* Load an imd */
-static BOOL dataIMDBufferLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool dataIMDBufferLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	iIMDShape	*psIMD;
 	const char *pBufferPosition = pBuffer;
@@ -788,7 +791,7 @@ static BOOL dataIMDBufferLoad(const char *pBuffer, UDWORD size, void **ppData)
 /*!
  * Load an image from file
  */
-static BOOL dataImageLoad(const char *fileName, void **ppData)
+static bool dataImageLoad(const char *fileName, void **ppData)
 {
 	iV_Image *psSprite = malloc(sizeof(iV_Image));
 	if (!psSprite)
@@ -809,7 +812,7 @@ static BOOL dataImageLoad(const char *fileName, void **ppData)
 
 
 // Tertiles (terrain tiles) loader.
-static BOOL dataTERTILESLoad(const char *fileName, void **ppData)
+static bool dataTERTILESLoad(const char *fileName, void **ppData)
 {
 	bool status;
 
@@ -827,7 +830,7 @@ static void dataTERTILESRelease(WZ_DECL_UNUSED void *pData)
 }
 
 
-static BOOL dataIMGLoad(const char *fileName, void **ppData)
+static bool dataIMGLoad(const char *fileName, void **ppData)
 {
 	*ppData = iV_LoadImageFile(fileName);
 	if(*ppData == NULL)
@@ -846,7 +849,7 @@ static void dataIMGRelease(void *pData)
 
 
 /* Load a texturepage into memory */
-static BOOL dataTexPageLoad(const char *fileName, void **ppData)
+static bool dataTexPageLoad(const char *fileName, void **ppData)
 {
 	char texpage[PATH_MAX] = {'\0'};
 
@@ -891,7 +894,7 @@ static void dataImageRelease(void *pData)
 
 
 /* Load an audio file */
-static BOOL dataAudioLoad(const char* fileName, void **ppData)
+static bool dataAudioLoad(const char* fileName, void **ppData)
 {
 	if ( audio_Disabled() == true )
 	{
@@ -907,9 +910,9 @@ static BOOL dataAudioLoad(const char* fileName, void **ppData)
 }
 
 /* Load an audio file */
-static BOOL dataAudioCfgLoad(const char* fileName, void **ppData)
+static bool dataAudioCfgLoad(const char* fileName, void **ppData)
 {
-	BOOL success;
+	bool success;
 	PHYSFS_file* fileHandle;
 
 	*ppData = NULL;
@@ -934,7 +937,7 @@ static BOOL dataAudioCfgLoad(const char* fileName, void **ppData)
 }
 
 /* Load an anim file */
-static BOOL dataAnimLoad(const char *fileName, void **ppData)
+static bool dataAnimLoad(const char *fileName, void **ppData)
 {
 	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
 	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
@@ -952,9 +955,9 @@ static BOOL dataAnimLoad(const char *fileName, void **ppData)
 }
 
 /* Load an audio config file */
-static BOOL dataAnimCfgLoad(const char *fileName, void **ppData)
+static bool dataAnimCfgLoad(const char *fileName, void **ppData)
 {
-	BOOL success;
+	bool success;
 	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
 	*ppData = NULL;
 
@@ -978,7 +981,7 @@ static void dataAnimRelease( void *pData )
 }
 
 /* Load a string resource file */
-static BOOL dataStrResLoad(const char* fileName, void** ppData)
+static bool dataStrResLoad(const char* fileName, void** ppData)
 {
 	// recreate the string resource if it was freed by a WRF release
 	if (psStringRes == NULL)
@@ -1010,7 +1013,7 @@ static void dataStrResRelease(WZ_DECL_UNUSED void *pData)
 
 /* Load a script file */
 // All scripts, binary or otherwise are now passed through this routine
-static BOOL dataScriptLoad(const char* fileName, void **ppData)
+static bool dataScriptLoad(const char* fileName, void **ppData)
 {
 	static const bool printHack = false;
 	SCRIPT_CODE** psProg = (SCRIPT_CODE**)ppData;
@@ -1073,9 +1076,9 @@ static void dataScriptRelease(void *pData)
 
 
 // Load a script variable values file
-static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
+static bool dataScriptLoadVals(const char* fileName, void **ppData)
 {
-	BOOL success;
+	bool success;
 	PHYSFS_file* fileHandle;
 	uint8_t *pBuffer;
 	PHYSFS_sint64 fileSize = 0;
@@ -1196,7 +1199,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 };
 
 /* Pass all the data loading functions to the framework library */
-BOOL dataInitLoadFuncs(void)
+bool dataInitLoadFuncs(void)
 {
 	// init the data integrity hash;
 	resetDataHash();

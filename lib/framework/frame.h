@@ -69,7 +69,7 @@ extern UDWORD selectedPlayer;
  *  @return true when the framework library is successfully initialised, false
  *          when a part of the initialisation failed.
  */
-extern BOOL frameInitialise(void);
+extern bool frameInitialise(void);
 
 extern bool selfTest;
 

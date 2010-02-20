@@ -1063,6 +1063,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	BOOL	blocked;
 	SDWORD	slideDir;
 	PROPULSION_TYPE	propulsion = getPropulsionStats(psDroid)->propulsionType;
+	MAPTILE	*psTile;
 
 	CHECK_DROID(psDroid);
 
@@ -1075,6 +1076,26 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	ny = psDroid->sMove.fy + my;
 	ntx = map_coord(nx);
 	nty = map_coord(ny);
+
+	// is the new tile a gate?
+	psTile = mapTile(ntx, nty);
+	if (psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE 
+	    && aiCheckAlliances(psTile->psObject->player, psDroid->player)
+	    && ((STRUCTURE *)psTile->psObject)->pStructureType->type == REF_GATE)
+	{
+		STRUCTURE *psStruct = (STRUCTURE *)psTile->psObject;
+
+		if (psStruct->state == SAS_NORMAL)
+		{
+			psStruct->lastStateTime = gameTime;
+			psStruct->state = SAS_OPENING;
+			psDroid->sMove.Status = MOVEPAUSE;
+			psDroid->sMove.pauseTime = SAS_OPEN_SPEED;
+			psDroid->sMove.bumpTime = gameTime;
+			psDroid->sMove.lastBump = 0;
+			return;	// wait for it to open
+		}
+	}
 
 	// is the new tile blocking?
 	if (fpathBlockingTile(ntx, nty, propulsion))
@@ -2369,7 +2390,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	float   iDroidDir;
 	SDWORD  iMapZ, slideDir, iSpinSpeed, iTurnSpeed;
 	float   fDZ, fDroidZ, fMapZ, targetRoll, currentRoll;
-	int     newRoll;
+	float   newRoll;
 
 	CHECK_DROID(psDroid);
 
@@ -2419,7 +2440,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	{
 		currentRoll -= 360;
 	}
-	newRoll = currentRoll + timeAdjustedIncrement(3*(targetRoll - currentRoll), true) + 0.5f;
+	newRoll = currentRoll + timeAdjustedIncrement(3*(targetRoll - currentRoll), true);
 	if (newRoll < 0 )
 	{
 		newRoll += 360;

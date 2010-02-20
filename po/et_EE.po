@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-09 18:34+0100\n"
+"POT-Creation-Date: 2010-02-19 19:09+0100\n"
 "PO-Revision-Date: 2010-02-03 15:33+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -5647,67 +5647,84 @@ msgid "Incoming intelligence report... Team Gamma"
 msgstr "Sissetulev luureraport... Rühm Gamma"
 
 #: data/base/messages/strings/genstrings.txt:4
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
 msgstr "Algab Briifing:"
 
 #: data/base/messages/strings/genstrings.txt:7
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
 msgstr "Mässajate Laager"
 
 #: data/base/messages/strings/genstrings.txt:8
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:8
 msgid "Power Resource"
 msgstr "Energia Resurss"
 
 #: data/base/messages/strings/genstrings.txt:9
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
 msgstr "Tundmatu Artefakt"
 
 #: data/base/messages/strings/genstrings.txt:10
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
 msgstr "Energiapurske Allikas"
 
 #: data/base/messages/strings/genstrings.txt:13
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
 msgstr "Maandumis Tsoon"
 
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:14
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:24
 msgid "Mission Target"
 msgstr "Missiooni Eesmärk"
 
 #: data/base/messages/strings/genstrings.txt:15
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
 msgstr "Kollapsieelne Uurimiskeskus"
 
 #: data/base/messages/strings/genstrings.txt:17
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
 msgstr "Suundu Missiooni Paika"
 
 #: data/base/messages/strings/genstrings.txt:18
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
 msgstr "Missioon Ebaõnnestus"
 
 #: data/base/messages/strings/genstrings.txt:19
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
 msgstr "Missioon Õnnestunud"
 
 #: data/base/messages/strings/genstrings.txt:22
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
 msgstr "Vaenlase Maandumis Tsoon"
 
 #: data/base/messages/strings/genstrings.txt:23
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
 msgstr "Vaenlase Baas"
 
 #: data/base/messages/strings/genstrings.txt:27
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
 msgstr "Sissetulev Ülekanne"
 
 #: data/base/messages/strings/genstrings.txt:30
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
 msgstr "Sissetulev luureraport."
 
 #: data/base/messages/strings/genstrings.txt:33
+#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
 msgstr "Tuumareaktor"
 
@@ -5733,6 +5750,7 @@ msgstr "Veoauto"
 
 #: data/base/messages/strings/names.txt:17
 #: data/base/messages/strings/names.txt:173
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1832
 #: data/mp/messages/strings/names.txt:17
 #: data/mp/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:1829
@@ -5791,6 +5809,7 @@ msgid "Repair Turret Viper Half-tracks"
 msgstr "Pool-Roomikutega Viper Remonditorn"
 
 #: data/base/messages/strings/names.txt:174
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1833
 #: data/mp/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:1830
 msgid "Twin Machinegun Viper Wheels"
@@ -5807,6 +5826,7 @@ msgid "Heavy Machinegun Viper Half-tracks"
 msgstr "Pool-Roomik Viper Raskekuulipilduja"
 
 #: data/base/messages/strings/names.txt:177
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1840
 #: data/mp/messages/strings/names.txt:180
 #: data/mp/messages/strings/names.txt:1837
 msgid "Heavy Machinegun Viper Tracks"
@@ -5886,12 +5906,14 @@ msgstr "Roomikutega Python Kergekahur"
 
 #: data/base/messages/strings/names.txt:194
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1331
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1920
 msgid "Medium Cannon Python Tracks"
 msgstr "Roomikutega Python Keskkahur"
 
 #: data/base/messages/strings/names.txt:195
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1848
 #: data/mp/messages/strings/names.txt:198
 #: data/mp/messages/strings/names.txt:1356
 #: data/mp/messages/strings/names.txt:1510
@@ -9093,6 +9115,7 @@ msgid "Archangel Missile Emplacement"
 msgstr "Archangel Rakettide Paigaldus"
 
 #: data/base/messages/strings/names.txt:1423
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1881
 #: data/mp/messages/strings/names.txt:1878
 msgid "Repair Turret Cobra Tracks"
 msgstr "Roomikutega Cobra Remonditorn"
@@ -9127,6 +9150,7 @@ msgstr "Maandunud Transport"
 
 #: data/base/messages/strings/names.txt:1458
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1330
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
 #: data/mp/messages/strings/names.txt:1471
 #: data/mp/messages/strings/names.txt:1919
 msgid "Tank Killer Python Tracks"
@@ -9458,6 +9482,7 @@ msgid "Viper HMG Wheels"
 msgstr "Ratastega Viper Raskekuulipilduja"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1289
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
 #: data/mp/messages/strings/names.txt:1821
 msgid "Scourge Mantis Hover"
 msgstr "Hõljukiga Mantis Scourge"
@@ -9621,6 +9646,377 @@ msgstr "Pool-Roomikutega Viper Kuulipilduja"
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1329
 msgid "Viper Flamer Half-Track"
 msgstr "Pool-Roomikutega Viper Leegiheitja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
+#: data/mp/messages/strings/names.txt:1819
+msgid "Heavy Repair Turret Cobra Hover"
+msgstr "Hõljuk Cobra Raskeremonditorn"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1823
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1834
+#: data/mp/messages/strings/names.txt:1820
+#: data/mp/messages/strings/names.txt:1831
+msgid "Heavy Machinegun Viper Wheels"
+msgstr "Ratastega Viper Raskekuulipilduja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
+#: data/mp/messages/strings/names.txt:1822
+msgid "Tank Killer Mantis Hover"
+msgstr "Hõljukiga Mantis Tankitapja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1826
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1841
+#: data/mp/messages/strings/names.txt:1823
+#: data/mp/messages/strings/names.txt:1838
+msgid "Heavy Machinegun Cobra Tracks"
+msgstr "Roomikutega Cobra Raskekuulipilduja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1827
+#: data/mp/messages/strings/names.txt:1824
+msgid "Heavy Cannon Cobra Hover"
+msgstr "Hõljukiga Cobra Raskekahur "
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1835
+#: data/mp/messages/strings/names.txt:1832
+msgid "Heavy Machinegun Cobra Wheels"
+msgstr "Ratastega Cobra Raskekuulipilduja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1836
+#: data/mp/messages/strings/names.txt:1833
+msgid "Heavy Machinegun Cobra Hover"
+msgstr "Hõljukiga Cobra Raskekuulipilduja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1838
+#: data/mp/messages/strings/names.txt:1835
+msgid "Machinegun Viper Tracks"
+msgstr "Roomikutega Viper Kuulipilduja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1839
+#: data/mp/messages/strings/names.txt:1836
+msgid "Twin Machinegun Viper Tracks"
+msgstr "Roomikutega Viper Kaksikkuulipilduja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1843
+#: data/mp/messages/strings/names.txt:1840
+msgid "Medium Cannon Cobra Hover"
+msgstr "Hõljukiga Cobra Keskkahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1844
+#: data/mp/messages/strings/names.txt:1841
+msgid "Medium Cannon Scorpion Hover"
+msgstr "Hõljukiga Scorpion Keskkahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1845
+#: data/mp/messages/strings/names.txt:1842
+msgid "Medium Cannon Scorpion Tracks"
+msgstr "Roomikutega Scorpion Keskkahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1846
+#: data/mp/messages/strings/names.txt:1843
+msgid "Medium Cannon Python Hover"
+msgstr "Hõljukiga Python Keskkahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1847
+#: data/mp/messages/strings/names.txt:1844
+msgid "Heavy Cannon Python Hover"
+msgstr "Hõljukiga Python Raskekahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1849
+#: data/mp/messages/strings/names.txt:1846
+msgid "Rail Gun Mantis Tracks"
+msgstr "Roomikutega Mantis Railkahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1850
+#: data/mp/messages/strings/names.txt:1847
+msgid "Pulse Laser Mantis Tracks"
+msgstr "Roomikutega Mantis Impulsslaser"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1851
+#: data/mp/messages/strings/names.txt:1848
+msgid "Lancer Python Tracks"
+msgstr "Roomikutega Python Lancer"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1852
+#: data/mp/messages/strings/names.txt:1849
+msgid "Lancer Mantis Tracks"
+msgstr "Roomikutega Mantis Lancer"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1853
+#: data/mp/messages/strings/names.txt:1850
+msgid "Tank Killer Vengeance Tracks"
+msgstr "Roomikutega Vengeance Tankitapja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1858
+#: data/mp/messages/strings/names.txt:1855
+msgid "Heavy Cannon Tiger Tracks"
+msgstr "Roomikutega Tiger Raskekahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1859
+#: data/mp/messages/strings/names.txt:1856
+msgid "Needle Gun Tiger Tracks"
+msgstr "Roomikutega Tiger Nõelakahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1860
+#: data/mp/messages/strings/names.txt:1857
+msgid "Needle Gun Retribution Tracks"
+msgstr "Roomikutega Retribution Nõelakahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1861
+#: data/mp/messages/strings/names.txt:1858
+msgid "Needle Gun Vengeance Tracks"
+msgstr "Roomikutega Vengeance Nõelakahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1862
+#: data/mp/messages/strings/names.txt:1859
+msgid "Vengeance Tracks Rail Gun"
+msgstr "Roomikutega Vengeance Railkahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1863
+#: data/mp/messages/strings/names.txt:1860
+msgid "Vengeance Tracks Gauss Cannon"
+msgstr "Roomikutega Vengeance Gausskahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1864
+#: data/mp/messages/strings/names.txt:1861
+msgid "Vengeance Tracks Gauss Scourge"
+msgstr "Roomikutega Vengeance Gauss Scourge"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1867
+#: data/mp/messages/strings/names.txt:1864
+msgid "VTOL Cluster Bomb Bay Bug VTOL"
+msgstr "VTOL Bug Parvpommitus"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1868
+#: data/mp/messages/strings/names.txt:1865
+msgid "VTOL Bunker Buster Bug VTOL"
+msgstr "VTOL Bug Punkripurustaja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1869
+#: data/mp/messages/strings/names.txt:1866
+msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
+msgstr "VTOL Scorpion Parvpommitus"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1870
+#: data/mp/messages/strings/names.txt:1867
+msgid "VTOL Bunker Buster Scorpion VTOL"
+msgstr "VTOL Scorpion Punkripurustaja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1873
+#: data/mp/messages/strings/names.txt:1870
+msgid "VTOL Lancer Bug VTOL"
+msgstr "VTOL Bug Lancer"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1874
+msgid "VTOL HPV Cannon Bug VTOL"
+msgstr "VTOL Bug HPV Kahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1875
+#: data/mp/messages/strings/names.txt:1872
+msgid "VTOL Lancer Scorpion VTOL"
+msgstr "VTOL Scorpion Lancer"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
+#, fuzzy
+msgid "VTOL HPV Cannon Scorpion VTOL"
+msgstr "VTOL Scorpion Hüperkiire Kahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
+#: data/mp/messages/strings/names.txt:1874
+msgid "VTOL Lancer Mantis VTOL"
+msgstr "VTOL Mantis Lancer"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
+msgid "VTOL HPV Cannon Mantis VTOL"
+msgstr "VTOL Mantis HPV Kahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
+#: data/mp/messages/strings/names.txt:1879
+msgid "Repair Turret Mantis Tracks"
+msgstr "Roomikutega Mantis Remonditorn"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1884
+#: data/mp/messages/strings/names.txt:1881
+msgid "Lancer Scorpion Tracks"
+msgstr "Roomikutega Scorpion Lancer"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1885
+#: data/mp/messages/strings/names.txt:1882
+msgid "Heavy Cannon Scorpion Tracks"
+msgstr "Roomikutega Scorpion Raskekahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1886
+#: data/mp/messages/strings/names.txt:1883
+msgid "Lancer Scorpion VTOL"
+msgstr "VTOL Scorpion Lancer"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1887
+#: data/mp/messages/strings/names.txt:1884
+msgid "Bunker Buster Scorpion VTOL"
+msgstr "VTOL Scorpion Punkripurustaja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1889
+#: data/mp/messages/strings/names.txt:1886
+msgid "Command Turret Viper Tracks"
+msgstr "Roomikutega Viper Komandör"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1890
+#: data/mp/messages/strings/names.txt:1887
+msgid "Command Turret Cobra Tracks"
+msgstr "Roomikutega Cobra Komandör"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1891
+#: data/mp/messages/strings/names.txt:1888
+msgid "Command Turret Scorpion Tracks"
+msgstr "Roomikutega Scorpion Komandör"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1892
+#: data/mp/messages/strings/names.txt:1889
+msgid "Command Turret Mantis Tracks"
+msgstr "Roomikutega Mantis Komandör"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1894
+#: data/mp/messages/strings/names.txt:1891
+msgid "Lancer Cobra Tracks"
+msgstr "Roomikutega Cobra Lancer"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1895
+#: data/mp/messages/strings/names.txt:1892
+msgid "Heavy Cannon Mantis Tracks"
+msgstr "Roomikutega Mantis Raskekahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1896
+#: data/mp/messages/strings/names.txt:1893
+msgid "Tank Killer Mantis Tracks"
+msgstr "Roomikutega Mantis Tankitapja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1897
+#: data/mp/messages/strings/names.txt:1894
+msgid "Scourge Mantis Tracks"
+msgstr "Roomikutega Mantis Scourge"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1898
+#: data/mp/messages/strings/names.txt:1895
+msgid "Heavy Machinegun Scorpion Tracks"
+msgstr "Roomikutega Scorpion Raskekuulipilduja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1900
+#: data/mp/messages/strings/names.txt:1897
+msgid "Repair Scorpion Tracks"
+msgstr "Roomikutega Scorpion Remont"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1901
+#: data/mp/messages/strings/names.txt:1898
+msgid "Heavy Repair Scorpion Hover"
+msgstr "Hõljukiga Scorpion Raskeremondiga"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1904
+#: data/mp/messages/strings/names.txt:1901
+msgid "Truck Cobra Hover"
+msgstr "Hõljukiga Cobre Veoauto"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1905
+#: data/mp/messages/strings/names.txt:1902
+msgid "Truck Scorpion Hover"
+msgstr "Hõljukiga Scorpion Veoauto"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1906
+#: data/mp/messages/strings/names.txt:1903
+msgid "Truck Mantis Hover"
+msgstr "Hõljukiga Mantis Veoauto"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1909
+#: data/mp/messages/strings/names.txt:1906
+msgid "Bunker Buster Cobra Tracks"
+msgstr "Roomikutega Cobra Punkripurustaja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1910
+#: data/mp/messages/strings/names.txt:1907
+msgid "Bunker Buster Scorpion Tracks"
+msgstr "Roomikutega Scorpion Punkripurustaja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1911
+#: data/mp/messages/strings/names.txt:1908
+msgid "Bunker Buster Mantis Tracks"
+msgstr "Roomikutega Mantis Punkripurustaja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1913
+#: data/mp/messages/strings/names.txt:1910
+msgid "Lancer Viper Tracks"
+msgstr "Roomikutega Viper Lancer"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1915
+#: data/mp/messages/strings/names.txt:1912
+msgid "Mini-Rocket Cobra Half-Tracks"
+msgstr "Pool-Roomikutega Cobra Mini-Raketid"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1916
+#: data/mp/messages/strings/names.txt:1913
+msgid "Mini-Rocket Cobra Tracks"
+msgstr "Roomikutega Cobra Mini-Raketid"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
+#, fuzzy
+msgid "Mini-Rocket Artillery Cobra Tracks"
+msgstr "Roomikutega Cobra MRA"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1919
+#: data/mp/messages/strings/names.txt:1916
+msgid "Inferno Cobra Half-Tracks"
+msgstr "Pool-Roomikutega Cobra Põrgupõletaja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1920
+msgid "HPV Cannon Python Hover"
+msgstr "Hõljukiga Python HPV Kahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1924
+#: data/mp/messages/strings/names.txt:1921
+msgid "Scourge Python Tracks"
+msgstr "Roomikutega Python Scourge"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1925
+#: data/mp/messages/strings/names.txt:1922
+msgid "Gauss Cannon Python Tracks"
+msgstr "Roomikutega Python Gausskahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1926
+#: data/mp/messages/strings/names.txt:1923
+msgid "Pulse Laser Python Tracks"
+msgstr "Roomikutega Python Impulsslaser"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1927
+#: data/mp/messages/strings/names.txt:1924
+msgid "Pulse Laser Tiger Tracks"
+msgstr "Roomiktega Tiger Impulsslaser"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1928
+#: data/mp/messages/strings/names.txt:1925
+msgid "Heavy Laser Tiger Tracks"
+msgstr "Roomikutega Tiger Raskelaser"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1929
+#: data/mp/messages/strings/names.txt:1926
+msgid "Gauss Cannon Wyvern Tracks"
+msgstr "Roomikutega Wyvern Gausskahur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1930
+#: data/mp/messages/strings/names.txt:1927
+msgid "Pulse Laser Wyvern Tracks"
+msgstr "Roomikutega Wyvern Impulsslaser"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1931
+#: data/mp/messages/strings/names.txt:1928
+msgid "Heavy Laser Wyvern Tracks"
+msgstr "Roomikutega Wyvern Raskelaser"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1933
+#: data/mp/messages/strings/names.txt:1930
+msgid "Machinegun Viper Half-Tracks"
+msgstr "Pool-Roomikutega Viper Kuulipilduja"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1934
+#: data/mp/messages/strings/names.txt:1931
+msgid "Flamer Viper Half-Tracks"
+msgstr "Pool-roomikutega Viper Leegiheitja"
 
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
@@ -10869,430 +11265,152 @@ msgstr "Komandör III"
 msgid "Command Turret IV"
 msgstr "Komandör IV"
 
-#: data/mp/messages/strings/names.txt:1819
-msgid "Heavy Repair Turret Cobra Hover"
-msgstr "Hõljuk Cobra Raskeremonditorn"
-
-#: data/mp/messages/strings/names.txt:1820
-#: data/mp/messages/strings/names.txt:1831
-msgid "Heavy Machinegun Viper Wheels"
-msgstr "Ratastega Viper Raskekuulipilduja"
-
-#: data/mp/messages/strings/names.txt:1822
-msgid "Tank Killer Mantis Hover"
-msgstr "Hõljukiga Mantis Tankitapja"
-
-#: data/mp/messages/strings/names.txt:1823
-#: data/mp/messages/strings/names.txt:1838
-msgid "Heavy Machinegun Cobra Tracks"
-msgstr "Roomikutega Cobra Raskekuulipilduja"
-
-#: data/mp/messages/strings/names.txt:1824
-msgid "Heavy Cannon Cobra Hover"
-msgstr "Hõljukiga Cobra Raskekahur "
-
-#: data/mp/messages/strings/names.txt:1832
-msgid "Heavy Machinegun Cobra Wheels"
-msgstr "Ratastega Cobra Raskekuulipilduja"
-
-#: data/mp/messages/strings/names.txt:1833
-msgid "Heavy Machinegun Cobra Hover"
-msgstr "Hõljukiga Cobra Raskekuulipilduja"
-
-#: data/mp/messages/strings/names.txt:1835
-msgid "Machinegun Viper Tracks"
-msgstr "Roomikutega Viper Kuulipilduja"
-
-#: data/mp/messages/strings/names.txt:1836
-msgid "Twin Machinegun Viper Tracks"
-msgstr "Roomikutega Viper Kaksikkuulipilduja"
-
-#: data/mp/messages/strings/names.txt:1840
-msgid "Medium Cannon Cobra Hover"
-msgstr "Hõljukiga Cobra Keskkahur"
-
-#: data/mp/messages/strings/names.txt:1841
-msgid "Medium Cannon Scorpion Hover"
-msgstr "Hõljukiga Scorpion Keskkahur"
-
-#: data/mp/messages/strings/names.txt:1842
-msgid "Medium Cannon Scorpion Tracks"
-msgstr "Roomikutega Scorpion Keskkahur"
-
-#: data/mp/messages/strings/names.txt:1843
-msgid "Medium Cannon Python Hover"
-msgstr "Hõljukiga Python Keskkahur"
-
-#: data/mp/messages/strings/names.txt:1844
-msgid "Heavy Cannon Python Hover"
-msgstr "Hõljukiga Python Raskekahur"
-
-#: data/mp/messages/strings/names.txt:1846
-msgid "Rail Gun Mantis Tracks"
-msgstr "Roomikutega Mantis Railkahur"
-
-#: data/mp/messages/strings/names.txt:1847
-msgid "Pulse Laser Mantis Tracks"
-msgstr "Roomikutega Mantis Impulsslaser"
-
-#: data/mp/messages/strings/names.txt:1848
-msgid "Lancer Python Tracks"
-msgstr "Roomikutega Python Lancer"
-
-#: data/mp/messages/strings/names.txt:1849
-msgid "Lancer Mantis Tracks"
-msgstr "Roomikutega Mantis Lancer"
-
-#: data/mp/messages/strings/names.txt:1850
-msgid "Tank Killer Vengeance Tracks"
-msgstr "Roomikutega Vengeance Tankitapja"
-
-#: data/mp/messages/strings/names.txt:1855
-msgid "Heavy Cannon Tiger Tracks"
-msgstr "Roomikutega Tiger Raskekahur"
-
-#: data/mp/messages/strings/names.txt:1856
-msgid "Needle Gun Tiger Tracks"
-msgstr "Roomikutega Tiger Nõelakahur"
-
-#: data/mp/messages/strings/names.txt:1857
-msgid "Needle Gun Retribution Tracks"
-msgstr "Roomikutega Retribution Nõelakahur"
-
-#: data/mp/messages/strings/names.txt:1858
-msgid "Needle Gun Vengeance Tracks"
-msgstr "Roomikutega Vengeance Nõelakahur"
-
-#: data/mp/messages/strings/names.txt:1859
-msgid "Vengeance Tracks Rail Gun"
-msgstr "Roomikutega Vengeance Railkahur"
-
-#: data/mp/messages/strings/names.txt:1860
-msgid "Vengeance Tracks Gauss Cannon"
-msgstr "Roomikutega Vengeance Gausskahur"
-
-#: data/mp/messages/strings/names.txt:1861
-msgid "Vengeance Tracks Gauss Scourge"
-msgstr "Roomikutega Vengeance Gauss Scourge"
-
-#: data/mp/messages/strings/names.txt:1864
-msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "VTOL Bug Parvpommitus"
-
-#: data/mp/messages/strings/names.txt:1865
-msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "VTOL Bug Punkripurustaja"
-
-#: data/mp/messages/strings/names.txt:1866
-msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "VTOL Scorpion Parvpommitus"
-
-#: data/mp/messages/strings/names.txt:1867
-msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "VTOL Scorpion Punkripurustaja"
-
-#: data/mp/messages/strings/names.txt:1870
-msgid "VTOL Lancer Bug VTOL"
-msgstr "VTOL Bug Lancer"
-
 #: data/mp/messages/strings/names.txt:1871
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
 msgstr "VTOL Bug Hüperkiire Kahur"
-
-#: data/mp/messages/strings/names.txt:1872
-msgid "VTOL Lancer Scorpion VTOL"
-msgstr "VTOL Scorpion Lancer"
 
 #: data/mp/messages/strings/names.txt:1873
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "VTOL Scorpion Hüperkiire Kahur"
 
-#: data/mp/messages/strings/names.txt:1874
-msgid "VTOL Lancer Mantis VTOL"
-msgstr "VTOL Mantis Lancer"
-
 #: data/mp/messages/strings/names.txt:1875
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
 msgstr "VTOL Mantis Hüperkiire Kahur"
-
-#: data/mp/messages/strings/names.txt:1879
-msgid "Repair Turret Mantis Tracks"
-msgstr "Roomikutega Mantis Remonditorn"
-
-#: data/mp/messages/strings/names.txt:1881
-msgid "Lancer Scorpion Tracks"
-msgstr "Roomikutega Scorpion Lancer"
-
-#: data/mp/messages/strings/names.txt:1882
-msgid "Heavy Cannon Scorpion Tracks"
-msgstr "Roomikutega Scorpion Raskekahur"
-
-#: data/mp/messages/strings/names.txt:1883
-msgid "Lancer Scorpion VTOL"
-msgstr "VTOL Scorpion Lancer"
-
-#: data/mp/messages/strings/names.txt:1884
-msgid "Bunker Buster Scorpion VTOL"
-msgstr "VTOL Scorpion Punkripurustaja"
-
-#: data/mp/messages/strings/names.txt:1886
-msgid "Command Turret Viper Tracks"
-msgstr "Roomikutega Viper Komandör"
-
-#: data/mp/messages/strings/names.txt:1887
-msgid "Command Turret Cobra Tracks"
-msgstr "Roomikutega Cobra Komandör"
-
-#: data/mp/messages/strings/names.txt:1888
-msgid "Command Turret Scorpion Tracks"
-msgstr "Roomikutega Scorpion Komandör"
-
-#: data/mp/messages/strings/names.txt:1889
-msgid "Command Turret Mantis Tracks"
-msgstr "Roomikutega Mantis Komandör"
-
-#: data/mp/messages/strings/names.txt:1891
-msgid "Lancer Cobra Tracks"
-msgstr "Roomikutega Cobra Lancer"
-
-#: data/mp/messages/strings/names.txt:1892
-msgid "Heavy Cannon Mantis Tracks"
-msgstr "Roomikutega Mantis Raskekahur"
-
-#: data/mp/messages/strings/names.txt:1893
-msgid "Tank Killer Mantis Tracks"
-msgstr "Roomikutega Mantis Tankitapja"
-
-#: data/mp/messages/strings/names.txt:1894
-msgid "Scourge Mantis Tracks"
-msgstr "Roomikutega Mantis Scourge"
-
-#: data/mp/messages/strings/names.txt:1895
-msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Roomikutega Scorpion Raskekuulipilduja"
-
-#: data/mp/messages/strings/names.txt:1897
-msgid "Repair Scorpion Tracks"
-msgstr "Roomikutega Scorpion Remont"
-
-#: data/mp/messages/strings/names.txt:1898
-msgid "Heavy Repair Scorpion Hover"
-msgstr "Hõljukiga Scorpion Raskeremondiga"
-
-#: data/mp/messages/strings/names.txt:1901
-msgid "Truck Cobra Hover"
-msgstr "Hõljukiga Cobre Veoauto"
-
-#: data/mp/messages/strings/names.txt:1902
-msgid "Truck Scorpion Hover"
-msgstr "Hõljukiga Scorpion Veoauto"
-
-#: data/mp/messages/strings/names.txt:1903
-msgid "Truck Mantis Hover"
-msgstr "Hõljukiga Mantis Veoauto"
-
-#: data/mp/messages/strings/names.txt:1906
-msgid "Bunker Buster Cobra Tracks"
-msgstr "Roomikutega Cobra Punkripurustaja"
-
-#: data/mp/messages/strings/names.txt:1907
-msgid "Bunker Buster Scorpion Tracks"
-msgstr "Roomikutega Scorpion Punkripurustaja"
-
-#: data/mp/messages/strings/names.txt:1908
-msgid "Bunker Buster Mantis Tracks"
-msgstr "Roomikutega Mantis Punkripurustaja"
-
-#: data/mp/messages/strings/names.txt:1910
-msgid "Lancer Viper Tracks"
-msgstr "Roomikutega Viper Lancer"
-
-#: data/mp/messages/strings/names.txt:1912
-msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr "Pool-Roomikutega Cobra Mini-Raketid"
-
-#: data/mp/messages/strings/names.txt:1913
-msgid "Mini-Rocket Cobra Tracks"
-msgstr "Roomikutega Cobra Mini-Raketid"
 
 #: data/mp/messages/strings/names.txt:1914
 msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "Roomikutega Cobra MRA"
 
-#: data/mp/messages/strings/names.txt:1916
-msgid "Inferno Cobra Half-Tracks"
-msgstr "Pool-Roomikutega Cobra Põrgupõletaja"
-
 #: data/mp/messages/strings/names.txt:1917
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hõljukiga Python Hüperkiire Kahur"
 
-#: data/mp/messages/strings/names.txt:1921
-msgid "Scourge Python Tracks"
-msgstr "Roomikutega Python Scourge"
-
-#: data/mp/messages/strings/names.txt:1922
-msgid "Gauss Cannon Python Tracks"
-msgstr "Roomikutega Python Gausskahur"
-
-#: data/mp/messages/strings/names.txt:1923
-msgid "Pulse Laser Python Tracks"
-msgstr "Roomikutega Python Impulsslaser"
-
-#: data/mp/messages/strings/names.txt:1924
-msgid "Pulse Laser Tiger Tracks"
-msgstr "Roomiktega Tiger Impulsslaser"
-
-#: data/mp/messages/strings/names.txt:1925
-msgid "Heavy Laser Tiger Tracks"
-msgstr "Roomikutega Tiger Raskelaser"
-
-#: data/mp/messages/strings/names.txt:1926
-msgid "Gauss Cannon Wyvern Tracks"
-msgstr "Roomikutega Wyvern Gausskahur"
-
-#: data/mp/messages/strings/names.txt:1927
-msgid "Pulse Laser Wyvern Tracks"
-msgstr "Roomikutega Wyvern Impulsslaser"
-
-#: data/mp/messages/strings/names.txt:1928
-msgid "Heavy Laser Wyvern Tracks"
-msgstr "Roomikutega Wyvern Raskelaser"
-
-#: data/mp/messages/strings/names.txt:1930
-msgid "Machinegun Viper Half-Tracks"
-msgstr "Pool-Roomikutega Viper Kuulipilduja"
-
-#: data/mp/messages/strings/names.txt:1931
-msgid "Flamer Viper Half-Tracks"
-msgstr "Pool-roomikutega Viper Leegiheitja"
-
-#: lib/framework/i18n.c:50
-#: lib/framework/i18n.c:107
+#: lib/framework/i18n.c:54
+#: lib/framework/i18n.c:111
 msgid "System locale"
 msgstr "Süsteemi Asukoht"
 
-#: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:109
+#: lib/framework/i18n.c:56
+#: lib/framework/i18n.c:113
 msgid "Czech"
 msgstr "Tðehhi Keel"
 
-#: lib/framework/i18n.c:53
-#: lib/framework/i18n.c:110
+#: lib/framework/i18n.c:57
+#: lib/framework/i18n.c:114
 msgid "Danish"
 msgstr "Taani Keel"
 
-#: lib/framework/i18n.c:54
-#: lib/framework/i18n.c:111
+#: lib/framework/i18n.c:58
+#: lib/framework/i18n.c:115
 msgid "German"
 msgstr "Saksa Keel"
 
-#: lib/framework/i18n.c:56
-#: lib/framework/i18n.c:113
+#: lib/framework/i18n.c:60
+#: lib/framework/i18n.c:117
 msgid "English (United Kingdom)"
 msgstr "Inglise Keel (Ühendatud Kuningriik)"
 
-#: lib/framework/i18n.c:57
-#: lib/framework/i18n.c:114
+#: lib/framework/i18n.c:61
+#: lib/framework/i18n.c:118
 msgid "Spanish"
 msgstr "Hispaania Keel"
 
-#: lib/framework/i18n.c:58
-#: lib/framework/i18n.c:115
+#: lib/framework/i18n.c:62
+#: lib/framework/i18n.c:119
 msgid "Estonian"
 msgstr "Eesti Keel"
 
-#: lib/framework/i18n.c:60
-#: lib/framework/i18n.c:117
+#: lib/framework/i18n.c:64
+#: lib/framework/i18n.c:121
 msgid "Finnish"
 msgstr "Soome Keel"
 
-#: lib/framework/i18n.c:61
-#: lib/framework/i18n.c:118
+#: lib/framework/i18n.c:65
+#: lib/framework/i18n.c:122
 msgid "French"
 msgstr "Prantsuse Keel"
 
-#: lib/framework/i18n.c:69
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:73
+#: lib/framework/i18n.c:130
 msgid "Frisian"
 msgstr "Friisi Keel"
 
-#: lib/framework/i18n.c:70
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:131
 msgid "Irish"
 msgstr "Iiri Keel"
 
-#: lib/framework/i18n.c:71
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:75
+#: lib/framework/i18n.c:132
 msgid "Croatian"
 msgstr "Horvaatia keel"
 
-#: lib/framework/i18n.c:72
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:76
+#: lib/framework/i18n.c:133
 msgid "Italian"
 msgstr "Itaalia Keel"
 
-#: lib/framework/i18n.c:74
-#: lib/framework/i18n.c:131
+#: lib/framework/i18n.c:78
+#: lib/framework/i18n.c:135
 msgid "Lithuanian"
 msgstr "Leedu Keel"
 
-#: lib/framework/i18n.c:77
-#: lib/framework/i18n.c:133
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:137
 msgid "Norwegian"
 msgstr "Norra Keel"
 
-#: lib/framework/i18n.c:79
-#: lib/framework/i18n.c:135
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:139
 msgid "Dutch"
 msgstr "Hollandi Keel"
 
-#: lib/framework/i18n.c:80
-#: lib/framework/i18n.c:136
+#: lib/framework/i18n.c:84
+#: lib/framework/i18n.c:140
 msgid "Polish"
 msgstr "Poola Keel"
 
-#: lib/framework/i18n.c:81
-#: lib/framework/i18n.c:137
+#: lib/framework/i18n.c:85
+#: lib/framework/i18n.c:141
 msgid "Brazilian Portuguese"
 msgstr "Brasiilia Portugaalia Keel"
 
-#: lib/framework/i18n.c:82
-#: lib/framework/i18n.c:138
+#: lib/framework/i18n.c:86
+#: lib/framework/i18n.c:142
 msgid "Portuguese"
 msgstr "Portugaalia Keel"
 
-#: lib/framework/i18n.c:83
-#: lib/framework/i18n.c:139
+#: lib/framework/i18n.c:87
+#: lib/framework/i18n.c:143
 msgid "Romanian"
 msgstr "Rumeenia Keel"
 
-#: lib/framework/i18n.c:84
-#: lib/framework/i18n.c:140
+#: lib/framework/i18n.c:88
+#: lib/framework/i18n.c:144
 msgid "Russian"
 msgstr "Vene Keel"
 
-#: lib/framework/i18n.c:85
-#: lib/framework/i18n.c:141
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:145
 msgid "Slovenian"
 msgstr "Sloveenia Keel"
 
-#: lib/framework/i18n.c:94
-#: lib/framework/i18n.c:146
+#: lib/framework/i18n.c:98
+#: lib/framework/i18n.c:150
 msgid "Ukrainian"
 msgstr "Ukraina Keel"
 
-#: lib/framework/i18n.c:95
-#: lib/framework/i18n.c:147
+#: lib/framework/i18n.c:99
+#: lib/framework/i18n.c:151
 msgid "Simplified Chinese"
 msgstr "Lihtsustatud Hiina Keel"
 
-#: lib/framework/i18n.c:96
-#: lib/framework/i18n.c:148
+#: lib/framework/i18n.c:100
+#: lib/framework/i18n.c:152
 msgid "Traditional Chinese"
 msgstr "Traditsiooniline Hiina Keel"
 
-#: lib/framework/i18n.c:130
+#: lib/framework/i18n.c:134
 msgid "Latin"
 msgstr "Ladina Keel"
 
@@ -11301,19 +11419,36 @@ msgstr "Ladina Keel"
 msgid "Enter password here"
 msgstr "Sisesta salasõna siia"
 
-#: lib/netplay/netplay.c:2896
+#: lib/netplay/netplay.c:2897
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Ei suuda peaserveri nime lahendada (%s)!"
 
-#: lib/netplay/netplay.c:2921
+#: lib/netplay/netplay.c:2922
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Ei suuda lobby serveriga suhelda! Kas port %u on väljaminevale liiklusele avatud?"
 
-#: lib/netplay/netplay.c:3329
+#: lib/netplay/netplay.c:3330
 msgid ", mods: "
 msgstr ", mods:"
+
+#: src/challenge.c:172
+#: src/hci.c:1013
+#: src/hci.c:3789
+#: src/hci.c:3940
+#: src/hci.c:4393
+#: src/hci.c:5597
+#: src/intelmap.c:543
+#: src/intorder.c:661
+#: src/loadsave.c:256
+#: src/multimenu.c:479
+#: src/multimenu.c:1356
+#: src/transporter.c:286
+#: src/transporter.c:375
+#: src/transporter.c:840
+msgid "Close"
+msgstr "Sulge"
 
 #: src/clparse.c:99
 msgid "Run in cheat mode"
@@ -11608,95 +11743,95 @@ msgstr "Mängija lahkus"
 msgid "Player dropped"
 msgstr "Mängija Väjavisatud"
 
-#: src/display.c:1694
+#: src/display.c:1699
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "EI Saa Ehitada. Naftaresurss Põleb."
 
-#: src/display.c:1899
-#: src/display.c:2514
+#: src/display.c:1879
+#: src/display.c:2468
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Kahju %d%% - Kogemus %d, %s"
 
-#: src/display.c:1915
+#: src/display.c:1895
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s -Liitlane - Kahju %d%% - Kogemus %d, %s"
 
-#: src/display.c:2121
+#: src/display.c:2075
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Veoautol kästi Naftapuurtorn ehitada"
 
-#: src/droid.c:203
+#: src/droid.c:210
 msgid "Unit Lost!"
 msgstr "Üksus Kaotatud!"
 
-#: src/droid.c:1354
+#: src/droid.c:1334
 msgid "Structure Restored"
 msgstr "Ehitis taastatud"
 
-#: src/droid.c:2960
+#: src/droid.c:2940
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupp %u valitud - %u Üksus"
 msgstr[1] "Grupp %u valitud - %u Üksust"
 
-#: src/droid.c:2973
+#: src/droid.c:2953
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u üksus määratud gruppi %u"
 msgstr[1] "%u Üksust määratud Gruppi %u"
 
-#: src/droid.c:2986
+#: src/droid.c:2966
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Grupi %u Vaade - %u Üksus"
 msgstr[1] "Grupi %u Vaade - %u Üksust"
 
-#: src/droid.c:2990
+#: src/droid.c:2970
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u Unit"
 msgstr[1] "Aligning with Group %u - %u Units"
 
-#: src/droid.c:3200
+#: src/droid.c:3180
 msgid "Rookie"
 msgstr "Uustulnuk"
 
-#: src/droid.c:3201
+#: src/droid.c:3181
 msgctxt "rank"
 msgid "Green"
 msgstr "Algaja"
 
-#: src/droid.c:3202
+#: src/droid.c:3182
 msgid "Trained"
 msgstr "Treenitud"
 
-#: src/droid.c:3203
+#: src/droid.c:3183
 msgid "Regular"
 msgstr "Regulaar"
 
-#: src/droid.c:3204
+#: src/droid.c:3184
 msgid "Professional"
 msgstr "Professionaal"
 
-#: src/droid.c:3205
+#: src/droid.c:3185
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3206
+#: src/droid.c:3186
 msgid "Elite"
 msgstr "Eliit"
 
-#: src/droid.c:3207
+#: src/droid.c:3187
 msgid "Special"
 msgstr "Eriline"
 
-#: src/droid.c:3208
+#: src/droid.c:3188
 msgid "Hero"
 msgstr "Kangelane"
 
@@ -11774,8 +11909,8 @@ msgstr "ÜKSIK MÄNG"
 
 #: src/frontend.c:470
 #: src/ingameop.c:519
-#: src/mission.c:2529
-#: src/mission.c:2634
+#: src/mission.c:2534
+#: src/mission.c:2639
 msgid "Load Saved Game"
 msgstr "Laadi Salvestatud Mäng"
 
@@ -12036,22 +12171,6 @@ msgstr "MÄNGU SEADED"
 msgid "Active mods: "
 msgstr "Aktiivsed mods:"
 
-#: src/hci.c:1013
-#: src/hci.c:3789
-#: src/hci.c:3940
-#: src/hci.c:4393
-#: src/hci.c:5597
-#: src/intelmap.c:543
-#: src/intorder.c:661
-#: src/loadsave.c:256
-#: src/multimenu.c:479
-#: src/multimenu.c:1356
-#: src/transporter.c:286
-#: src/transporter.c:375
-#: src/transporter.c:840
-msgid "Close"
-msgstr "Sulge"
-
 #: src/hci.c:1358
 msgid "MAP SAVED!"
 msgstr "KAART SALVESTATUD!"
@@ -12206,8 +12325,8 @@ msgstr ""
 
 #: src/ingameop.c:295
 #: src/ingameop.c:523
-#: src/mission.c:2516
-#: src/mission.c:2637
+#: src/mission.c:2521
+#: src/mission.c:2642
 msgid "Save Game"
 msgstr "Salvesta Mäng"
 
@@ -13025,42 +13144,42 @@ msgstr "Toggle reopening the build menu"
 msgid "Could not save game!"
 msgstr "Ei suutnud mängu salvestada"
 
-#: src/mission.c:2069
+#: src/mission.c:2074
 msgid "Load Transport"
 msgstr "Laadi Transport"
 
-#: src/mission.c:2463
+#: src/mission.c:2468
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "EESMÄRK SAAVUTATUD sohki tehes"
 
-#: src/mission.c:2463
+#: src/mission.c:2468
 msgid "OBJECTIVE ACHIEVED"
 msgstr "EESMÄRK SAAVUTATUD"
 
-#: src/mission.c:2469
+#: src/mission.c:2474
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "EESMÄRK EBAÕNNESTUNUD--ja sa tegid sohki"
 
-#: src/mission.c:2469
+#: src/mission.c:2474
 msgid "OBJECTIVE FAILED"
 msgstr "EESMÄRK EBAÕNNESTUNUD"
 
-#: src/mission.c:2495
-#: src/mission.c:2535
-#: src/mission.c:2653
+#: src/mission.c:2500
+#: src/mission.c:2540
+#: src/mission.c:2658
 msgid "Quit To Main Menu"
 msgstr "Välju Peamenüüsse"
 
-#: src/mission.c:2503
+#: src/mission.c:2508
 msgid "Continue Game"
 msgstr "Jätka Mängu"
 
-#: src/mission.c:2600
+#: src/mission.c:2605
 msgid "GAME SAVED :"
 msgstr "MÄNG SALVESTATUD!"
 
-#: src/move.c:2870
-#: src/move.c:2886
+#: src/move.c:2878
+#: src/move.c:2894
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Sa leidsid naftatünnist %u energiat"
@@ -13344,34 +13463,39 @@ msgstr "*** salasõna on vajalik! ***"
 msgid "*** password is NOT required! ***"
 msgstr "*** salasõna pole vaja! ***"
 
-#: src/multiint.c:2640
+#: src/multiint.c:2641
 msgid "Sorry! Failed to host the game."
 msgstr "Kahju! Ebaõnnestusid mängu võõrustamisel."
 
-#: src/multiint.c:2725
+#: src/multiint.c:2726
 msgid "'Locked Teams' mode enabled"
 msgstr "Lukustatud Tiimid, mode lubatud"
 
-#: src/multiint.c:2764
-#: src/multiint.c:2814
+#: src/multiint.c:2765
+#: src/multiint.c:2815
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Võõrustaja lõi %s mängust välja!"
 
-#: src/multiint.c:2877
+#: src/multiint.c:2890
 msgid "Host is Starting Game"
 msgstr "Võõrustaja Alustab Mängu"
 
-#: src/multiint.c:3430
+#: src/multiint.c:3443
 msgid "Players"
 msgstr "Mängijad"
 
-#: src/multiint.c:3546
+#: src/multiint.c:3560
+#, c-format
+msgid "Sending Map: %d%% "
+msgstr ""
+
+#: src/multiint.c:3568
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Kaart: %d%% allalaaditud"
 
-#: src/multiint.c:3572
+#: src/multiint.c:3594
 msgid "HOST"
 msgstr "VÕÕRUSTJA"
 
@@ -13380,22 +13504,27 @@ msgstr "VÕÕRUSTJA"
 msgid "Players Still Joining"
 msgstr "Mängijad Ikka Liituvad"
 
-#: src/multijoin.c:230
+#: src/multijoin.c:213
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s Lahkus mängust"
 
-#: src/multijoin.c:342
+#: src/multijoin.c:227
+#, c-format
+msgid "File transfer has been aborted for %d."
+msgstr ""
+
+#: src/multijoin.c:336
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "Mängijal %s (%u) on vale mod ja ta löödi mängust välja"
 
-#: src/multijoin.c:381
+#: src/multijoin.c:375
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s Liitus Mänguga"
 
-#: src/multijoin.c:391
+#: src/multijoin.c:385
 msgid "System message:"
 msgstr "Süsteemi sõnum:"
 
@@ -13476,52 +13605,52 @@ msgstr "Anna Valitud Üksused Üle"
 msgid "Give Power To Player"
 msgstr "Anna Mängijale Energiat"
 
-#: src/multiplay.c:270
+#: src/multiplay.c:271
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Mängija %s väljalöömine, sest ta proovis infokontrollist mõõda pääseda!"
 
-#: src/multiplay.c:1063
+#: src/multiplay.c:1064
 msgid "(allies"
 msgstr "(Liitlased"
 
-#: src/multiplay.c:1071
+#: src/multiplay.c:1072
 msgid "(private to "
 msgstr "(eraviisiline"
 
-#: src/multiplay.c:1084
+#: src/multiplay.c:1085
 msgid "[invalid]"
 msgstr "[kehtetu]"
 
-#: src/multiplay.c:1943
+#: src/multiplay.c:1944
 msgid "Green"
 msgstr "Roheline"
 
-#: src/multiplay.c:1944
+#: src/multiplay.c:1945
 msgid "Orange"
 msgstr "Oranð"
 
-#: src/multiplay.c:1945
+#: src/multiplay.c:1946
 msgid "Grey"
 msgstr "Hall"
 
-#: src/multiplay.c:1946
+#: src/multiplay.c:1947
 msgid "Black"
 msgstr "Must"
 
-#: src/multiplay.c:1947
+#: src/multiplay.c:1948
 msgid "Red"
 msgstr "Punane"
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1949
 msgid "Blue"
 msgstr "Sinine"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1950
 msgid "Pink"
 msgstr "Roosa"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1951
 msgid "Cyan"
 msgstr "Helesinine"
 
@@ -13664,12 +13793,12 @@ msgstr "SA OLED VÕIDUKAS"
 msgid "YOU WERE DEFEATED!"
 msgstr "SIND VÕIDETI!"
 
-#: src/scriptfuncs.c:10166
+#: src/scriptfuncs.c:10150
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Signaal saadud %s -lt!"
 
-#: src/scriptfuncs.c:10212
+#: src/scriptfuncs.c:10196
 #, c-format
 msgid "Beacon %d"
 msgstr "Signaal %d"
@@ -13698,61 +13827,61 @@ msgstr "Võimetu leidma Sensorüksusi!"
 msgid "Unable to locate any Commanders!"
 msgstr "Võimetu leidma Komandöre!"
 
-#: src/structure.c:2851
+#: src/structure.c:2857
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kontroll Limiit Saavutatud - Tootmine Peatatud"
 
-#: src/structure.c:6102
-#: src/structure.c:6127
+#: src/structure.c:6142
+#: src/structure.c:6167
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Üksus määratud"
 msgstr[1] "%s - %u Üksused määratud"
 
-#: src/structure.c:6132
-#: src/structure.c:6196
+#: src/structure.c:6172
+#: src/structure.c:6236
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Kahju %3.0f%%"
 
-#: src/structure.c:6182
+#: src/structure.c:6222
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u Ühendatud %u -st"
 
-#: src/structure.c:6312
-#: src/structure.c:6357
+#: src/structure.c:6352
+#: src/structure.c:6397
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektrooniliselt Kahjustatud"
 
-#: src/structure.c:6592
+#: src/structure.c:6635
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektrooniline Autasu - Nägemis Raport"
 
-#: src/structure.c:6632
+#: src/structure.c:6675
 msgid "Factory Reward - Propulsion"
 msgstr "Tehase Auhind - Liikumissüsteem"
 
-#: src/structure.c:6656
+#: src/structure.c:6699
 msgid "Factory Reward - Body"
 msgstr "Tehase Autasu - Kere"
 
-#: src/structure.c:6680
+#: src/structure.c:6723
 msgid "Factory Reward - Weapon"
 msgstr "Tehase Autasu - Relv"
 
-#: src/structure.c:6689
+#: src/structure.c:6732
 msgid "Factory Reward - Nothing"
 msgstr "Tehase Autasu - Midagi"
 
-#: src/structure.c:6717
+#: src/structure.c:6760
 msgid "Repair Facility Award - Repair"
 msgstr "Remontimiskeskuse Autasu - Remont"
 
-#: src/structure.c:6724
+#: src/structure.c:6767
 msgid "Repair Facility Award - Nothing"
 msgstr "Remontimiskeskuse Autasu - Midagi"
 
@@ -13862,15 +13991,6 @@ msgstr "Versioon %s%s%s%s"
 
 #~ msgid "The game is full!"
 #~ msgstr "Mäng on Täis"
-
-#~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "VTOL Bug HPV Kahur"
-
-#~ msgid "VTOL HPV Cannon Mantis VTOL"
-#~ msgstr "VTOL Mantis HPV Kahur"
-
-#~ msgid "HPV Cannon Python Hover"
-#~ msgstr "Hõljukiga Python HPV Kahur"
 
 #~ msgid "English"
 #~ msgstr "Inglise Keel"

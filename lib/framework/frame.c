@@ -74,7 +74,7 @@ static uint64_t lastFrames = 0;
 static uint32_t curTicks = 0; // Number of ticks since execution started
 static uint32_t lastTicks = 0;
 static FPSmanager wzFPSmanager;
-static BOOL initFPSmanager = false;
+static bool initFPSmanager = false;
 
 void setFramerateLimit(int fpsLimit)
 {
@@ -205,7 +205,7 @@ static void freeCursors(void)
  *
  * Initialise the framework library. - PC version
  */
-BOOL frameInitialise()
+bool frameInitialise()
 {
 	/* Initialise the trig stuff */
 	if (!trigInitialise())
@@ -296,8 +296,8 @@ PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail)
 
   If hard_fail is true, we will assert and report on failures.
 ***************************************************************************/
-static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSize,
-                      BOOL AllocateMem, BOOL hard_fail)
+static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSize,
+                      bool AllocateMem, bool hard_fail)
 {
 	PHYSFS_file *pfile;
 	PHYSFS_sint64 filesize;
@@ -396,7 +396,7 @@ PHYSFS_file* openSaveFile(const char* fileName)
 /***************************************************************************
 	Save the data in the buffer into the given file.
 ***************************************************************************/
-BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
+bool saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 {
 	PHYSFS_file *pfile;
 	PHYSFS_uint32 size = fileSize;
@@ -433,20 +433,20 @@ BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 	return true;
 }
 
-BOOL loadFile(const char *pFileName, char **ppFileData, UDWORD *pFileSize)
+bool loadFile(const char *pFileName, char **ppFileData, UDWORD *pFileSize)
 {
 	return loadFile2(pFileName, ppFileData, pFileSize, true, true);
 }
 
 // load a file from disk into a fixed memory buffer
-BOOL loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
+bool loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
 	*pSize = bufferSize;
 	return loadFile2(pFileName, &pFileBuffer, pSize, false, true);
 }
 
 // as above but returns quietly if no file found
-BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
+bool loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
 	*pSize = bufferSize;
 	return loadFile2(pFileName, &pFileBuffer, pSize, false, false);

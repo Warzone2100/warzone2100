@@ -65,7 +65,7 @@ static inline void resDoResLoadCallback(void)
 
 
 /* Initialise the resource module */
-BOOL resInitialise(void)
+bool resInitialise(void)
 {
 	ASSERT( psResTypes == NULL,
 		"resInitialise: resource module hasn't been shut down??" );
@@ -96,7 +96,7 @@ void resSetBaseDir(const char* pResDir)
 }
 
 /* Parse the res file */
-BOOL resLoad(const char *pResFile, SDWORD blockID)
+bool resLoad(const char *pResFile, SDWORD blockID)
 {
 	bool retval = true;
 	lexerinput_t input;
@@ -168,7 +168,7 @@ static RES_TYPE* resAlloc(const char *pType)
 
 
 /* Add a buffer load function for a file type */
-BOOL resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
+bool resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 					  RES_FREE release)
 {
 	RES_TYPE	*psT = resAlloc(pType);
@@ -190,7 +190,7 @@ BOOL resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 
 
 /* Add a file name load function for a file type */
-BOOL resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
+bool resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
 					RES_FREE release)
 {
 	RES_TYPE	*psT = resAlloc(pType);
@@ -289,7 +289,7 @@ static SDWORD FindEmptyResourceFile(void)
 
 
 // Get a resource data file ... either loads it or just returns a pointer
-static BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
+static bool RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 {
 	SDWORD ResID;
 	RESOURCEFILE *ResData;
@@ -400,7 +400,7 @@ static void makeLocaleFile(char* fileName, size_t maxlen)  // given string must 
  * Call the load function (registered in data.c)
  * for this filetype
  */
-BOOL resLoadFile(const char *pType, const char *pFile)
+bool resLoadFile(const char *pType, const char *pFile)
 {
 	RES_TYPE	*psT;
 	void		*pData;
@@ -571,7 +571,7 @@ void *resGetData(const char *pType, const char *pID)
 }
 
 
-BOOL resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
+bool resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;
@@ -662,7 +662,7 @@ const char* resGetNamefromData(const char* type, const void *data)
 }
 
 /* Simply returns true if a resource is present */
-BOOL resPresent(const char *pType, const char *pID)
+bool resPresent(const char *pType, const char *pID)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;
