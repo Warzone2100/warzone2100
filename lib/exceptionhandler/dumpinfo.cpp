@@ -28,6 +28,7 @@
 #include <physfs.h>
 #include "dumpinfo.h"
 #include "lib/framework/stdio_ext.h"
+#include "lib/framework/wzglobal.h" // required for config.h
 // FIXME: #include from src/
 #include "src/version.h"
 
@@ -333,16 +334,15 @@ static void createHeader(int const argc, char* argv[])
 
 void addDumpInfo(const char *inbuffer)
 {
-	time_t rawtime;
-	struct tm * timeinfo;
-	char ourtime[15];		//HH:MM:SS
+	char ourtime[sizeof("HH:MM:SS")];
 
-	time ( &rawtime );
-	timeinfo = localtime ( &rawtime );
-	strftime (ourtime,15,"%I:%M:%S",timeinfo);
+	const time_t curtime = time(NULL);
+	struct tm* const timeinfo = localtime(&curtime);
+
+	strftime(ourtime, sizeof(ourtime), "%H:%M:%S", timeinfo);
 
 	// add timestamp to all strings
-	miscData << "[" << ourtime << "]" << std::string(inbuffer) << endl;
+	miscData << "[" << ourtime << "]" << inbuffer << endl;
 }
 
 void dbgDumpInit(int argc, char* argv[])
