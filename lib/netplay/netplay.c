@@ -84,6 +84,11 @@ typedef SSIZE_T ssize_t;
 # endif
 #endif
 
+// Fallback for systems that don't #define this flag
+#ifndef MSG_NOSIGNAL
+# define MSG_NOSIGNAL 0
+#endif
+
 static int getSockErr(void)
 {
 #if   defined(WZ_OS_UNIX)
@@ -540,7 +545,7 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 			}
 		}
 
-		ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, 0);
+		ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, MSG_NOSIGNAL);
 		if (ret == SOCKET_ERROR)
 		{
 			switch (getSockErr())
@@ -843,6 +848,10 @@ static Socket* socketAccept(Socket* sock)
 	{
 		if (sock->fd[i] != INVALID_SOCKET)
 		{
+#if defined(SO_NOSIGPIPE)
+			static const int no_sigpipe = 1;
+#endif
+
 			char textAddress[40];
 			struct sockaddr_storage addr;
 			socklen_t addr_len = sizeof(addr);
@@ -861,6 +870,13 @@ static Socket* socketAccept(Socket* sock)
 
 				continue;
 			}
+
+#if defined(SO_NOSIGPIPE)
+			if (setsockopt(newConn, SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
+			{
+				debug(LOG_WARNING, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
+			}
+#endif
 
 			conn = malloc(sizeof(*conn) + addr_len);
 			if (conn == NULL)
@@ -893,6 +909,10 @@ static Socket* socketAccept(Socket* sock)
 
 static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 {
+#if defined(SO_NOSIGPIPE)
+	static const int no_sigpipe = 1;
+#endif
+
 	char textAddress[40];
 	unsigned int i;
 	int ret;
@@ -931,6 +951,13 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		socketClose(conn);
 		return NULL;
 	}
+
+#if defined(SO_NOSIGPIPE)
+	if (setsockopt(newConn, SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
+	{
+		debug(LOG_WARNING, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
+	}
+#endif
 
 	ret = connect(conn->fd[SOCK_CONNECTION], addr->ai_addr, addr->ai_addrlen);
 	if (ret == SOCKET_ERROR)
@@ -1019,7 +1046,9 @@ static Socket* socketListen(unsigned int port)
 	/* Enable the V4 to V6 mapping, but only when available, because it
 	 * isn't available on all platforms.
 	 */
+#if defined(IPV6_V6ONLY)
 	static const int ipv6_v6only = 0;
+#endif
 
 	struct sockaddr_in addr4;
 	struct sockaddr_in6 addr6;
@@ -1095,7 +1124,7 @@ static Socket* socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv4 socket. Error: %s", strSockError(getSockErr()));
 		}
@@ -1116,7 +1145,7 @@ static Socket* socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
 		}
