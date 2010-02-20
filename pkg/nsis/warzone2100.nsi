@@ -653,7 +653,7 @@ FunctionEnd
   LangString DESC_SecNLS_WinFonts ${LANG_RUSSIAN} "Задействовать папку шрифтов Windows при поиске. Помогает если есть проблемы с поставляемыми шрифтами. На Висте возможно замедление при загрузке!"
 
   LangString TEXT_SecDyDoAIMod ${LANG_RUSSIAN} "DyDo-AI"
-  LangString DESC_SecDyDoAIMod ${LANG_RUSSIAN} "DyDo-AI: New computer opponent"  
+  LangString DESC_SecDyDoAIMod ${LANG_RUSSIAN} "DyDo-AI: Новый компьютерный противник."  
 
   LangString TEXT_SecNTWMod ${LANG_RUSSIAN} "NTW"
   LangString DESC_SecNTWMod ${LANG_RUSSIAN} "Модификация New Team War. Изменяет большую часть оружия и исследований."
