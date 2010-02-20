@@ -2138,8 +2138,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STA
 	return blueprint;
 }
 
-
-BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
+static BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 {
 	CHECK_STRUCTURE(psBuilding);
 
@@ -6212,15 +6211,49 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s -  Connected %u of %u - Unique ID %u",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s -  Connected %u of %u - Unique ID %u - Multiplier: %u",
 					  getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES,
-					  psStructure->id));
+					  psStructure->id, psPowerGen->multiplier));
 		}
 		else
 #endif
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Connected %u of %u"),
 					  getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES));
+		}
+		break;
+	case REF_CYBORG_FACTORY:
+	case REF_VTOL_FACTORY:
+	case REF_FACTORY:
+#ifdef DEBUG
+		if (getDebugMappingStatus())
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u - Production Output: %u - TimeToBuild: %u",
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f, psStructure->id,
+					  psStructure->pFunctionality->factory.productionOutput,
+					  psStructure->pFunctionality->factory.timeToBuild));
+		}
+		else
+#endif
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
+		}
+		break;
+	case REF_RESEARCH:
+#ifdef DEBUG
+		if (getDebugMappingStatus())
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u - Research Points: %u - TimeToResearch: %u",
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f, psStructure->id,
+					  psStructure->pFunctionality->researchFacility.researchPoints,
+					  psStructure->pFunctionality->researchFacility.timeToResearch));
+		}
+		else
+#endif
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
 		}
 		break;
 	default:
