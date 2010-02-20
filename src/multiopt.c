@@ -490,6 +490,7 @@ static BOOL cleanMap(UDWORD player)
 							psStruct->sDisplay.imd	= psStruct->pStructureType->pIMD;
 							psStruct->body			= (UWORD)(structureBody(psStruct));
 						}
+						structurePowerUpgrade(psStruct);
 						psStruct=psStruct->psNext;
 				}
 			}
