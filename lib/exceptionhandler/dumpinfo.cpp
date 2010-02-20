@@ -27,14 +27,10 @@
 #include <sstream>
 #include <physfs.h>
 #include "dumpinfo.h"
-
-
-extern "C"
-{
 #include "lib/framework/stdio_ext.h"
+#include "lib/framework/wzglobal.h" // required for config.h
 // FIXME: #include from src/
 #include "src/version.h"
-}
 
 #if defined(WZ_OS_UNIX)
 # include <sys/utsname.h>
@@ -51,12 +47,15 @@ static const char endl[] =
     "\n";
 #endif
 
+using std::string;
+
 static const std::size_t max_debug_messages = 20;
 
 static char* dbgHeader = NULL;
 static std::deque<std::vector<char> > dbgMessages;
+
 // used to add custom info to the crash log
-static std::ostringstream miscData;
+static std::vector<char> miscData;
 
 static void dumpstr(const DumpFileHandle file, const char * const str, std::size_t const size)
 {
@@ -136,7 +135,7 @@ void dbgDumpHeader(DumpFileHandle file)
 		// Now get any other data that we need to include in bug report
 		dumpstr(file, "Misc Data:");
 		dumpEOL(file);
-		dumpstr(file, miscData.str().c_str());
+		dumpstr(file, &miscData[0], miscData.size());
 		dumpEOL(file);
 	}
 	else
@@ -335,18 +334,22 @@ static void createHeader(int const argc, char* argv[])
 	}
 }
 
-void addDumpInfo(char *inbuffer)
+void addDumpInfo(const char *inbuffer)
 {
-	time_t rawtime;
-	struct tm * timeinfo;
-	char ourtime[15];		//HH:MM:SS
+	char ourtime[sizeof("HH:MM:SS")];
 
-	time ( &rawtime );
-	timeinfo = localtime ( &rawtime );
-	strftime (ourtime,15,"%I:%M:%S",timeinfo);
+	const time_t curtime = time(NULL);
+	struct tm* const timeinfo = localtime(&curtime);
+
+	strftime(ourtime, sizeof(ourtime), "%H:%M:%S", timeinfo);
 
 	// add timestamp to all strings
-	miscData << "[" << ourtime << "]" << std::string(inbuffer) << endl;
+	std::ostringstream os;
+	os << "[" << ourtime << "]" << inbuffer << endl;
+
+	// Append message to miscData
+	string msg(os.str());
+	miscData.insert(miscData.end(), msg.begin(), msg.end());
 }
 
 void dbgDumpInit(int argc, char* argv[])

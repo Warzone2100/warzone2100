@@ -23,6 +23,10 @@
 
 #include "lib/framework/types.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 /** Retrieve the low revision number
  *  \return the lowest revision number of the working copy from which we built
  */
@@ -100,5 +104,9 @@ extern const char* version_getSvnTime(void);
  *  - "<BUILD TYPE>" the type of build produced (i.e. DEBUG or not)
  */
 extern const char* version_getFormattedVersionString(void);
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif // __INCLUDED_VERSION_H__
