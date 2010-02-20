@@ -945,9 +945,6 @@ BOOL init3DView(void)
 	/* Make sure and change these to comply with map.c */
 	imdRot.x = -35;
 
-	/* Initialize vertex arrays */
-	pie_TerrainInit(visibleTiles.y+1, visibleTiles.x+1);
-
 	/* Get all the init stuff out of here? */
 	initWarCam();
 

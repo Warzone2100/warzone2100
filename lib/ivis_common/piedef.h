@@ -96,12 +96,6 @@ typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE;	/**< An area of
 extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieData);
 extern void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest);
 
-void pie_TerrainInit(int sizex, int sizey);
-void pie_TerrainCleanup(void);
-void pie_DrawTerrain(int x1, int y1, int x2, int y2);
-void pie_DrawTerrainTriangle(int x, int y, int triangle, const TERRAIN_VERTEX *aVrts);
-void pie_DrawWaterTriangle(const TERRAIN_VERTEX *aVrts);
-
 extern void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount);
 
 /** Setup stencil shadows and OpenGL lighting. */
