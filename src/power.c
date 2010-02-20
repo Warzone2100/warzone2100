@@ -139,6 +139,11 @@ void addPower(UDWORD player, UDWORD quantity)
 {
 	ASSERT(player < MAX_PLAYERS, "addPower: Bad player (%u)", player);
 
+	if (quantity > MAX_POWER)
+	{
+		debug(LOG_WARNING, "Power over or under flow. Tried to add %u - ignored", quantity);
+		return;
+	}
 	asPower[player].currentPower += quantity;
 	if (asPower[player].currentPower > MAX_POWER)
 	{
