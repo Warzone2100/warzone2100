@@ -217,7 +217,6 @@ typedef struct _factory
 
 typedef struct _res_extractor
 {
-	UDWORD				power;				/*The max amount of power that can be extracted*/
 	UDWORD				timeLastUpdated;	/*time the Res Extr last got points*/
 	BOOL				active;				/*indicates when the extractor is on ie digging up oil*/
 	struct _structure	*psPowerGen;		/*owning power generator*/

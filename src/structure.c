@@ -2239,8 +2239,6 @@ static BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 		{
 			RES_EXTRACTOR* psResExtracter = &psBuilding->pFunctionality->resourceExtractor;
 
-			psResExtracter->power = ((RESOURCE_FUNCTION*)psBuilding->pStructureType->asFuncList[0])->maxPower;
-
 			// Make the structure inactive
 			psResExtracter->active = false;
 			psResExtracter->psPowerGen = NULL;
@@ -5015,11 +5013,8 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		HOW MUCH IS THERE && NOT RES EXTRACTORS */
 		if (psDel->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 		{
-			if (psDel->pFunctionality->resourceExtractor.power)
-			{
-				buildFeature(oilResFeature, psDel->pos.x, psDel->pos.y, false);
-				resourceFound = true;
-			}
+			buildFeature(oilResFeature, psDel->pos.x, psDel->pos.y, false);
+			resourceFound = true;
 		}
 	}
 
@@ -5789,10 +5784,7 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 			slot++;
 			//make sure the derrrick is active if any oil left
 			psResExtractor = &psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor;
-			if (psResExtractor->power)
-			{
-				psResExtractor->active = true;
-			}
+			psResExtractor->active = true;
 		}
 	}
 
@@ -5810,8 +5802,7 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 
 				//check not connected and power left and built!
 				if (!psResExtractor->active
-				 && psCurr->status == SS_BUILT
-				 && psResExtractor->power)
+				 && psCurr->status == SS_BUILT)
 				{
 					//assign the extractor to the power generator - use first vacant slot
 					for (i = 0; i < NUM_POWER_MODULES; i++)
@@ -5959,7 +5950,6 @@ void releaseResExtractor(STRUCTURE *psRelease)
 		if (psCurr->pStructureType->type == REF_RESOURCE_EXTRACTOR
 		 && psCurr != psRelease
 		 && !psCurr->pFunctionality->resourceExtractor.active
-		 && psCurr->pFunctionality->resourceExtractor.power
 		 && psCurr->status == SS_BUILT)
 		{
 			checkForPowerGen(psCurr);

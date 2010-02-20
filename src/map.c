@@ -1293,7 +1293,6 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 			RES_EXTRACTOR *psExtractor = (RES_EXTRACTOR *)psStruct->pFunctionality;
 
 			tagWriteEnter(0x0f, 1);
-			tagWrite(0x01, psExtractor->power);
 			if (psExtractor->psPowerGen)
 			{
 				tagWrites(0x02, psExtractor->psPowerGen->id);
