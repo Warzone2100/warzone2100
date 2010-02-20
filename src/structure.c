@@ -2026,12 +2026,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				//increment the power output, multiplier and capacity
 				//add all the research modules in one go AB 24/06/98
 				psBuilding->pFunctionality->powerGenerator.capacity = NUM_POWER_MODULES;
-				psBuilding->pFunctionality->powerGenerator.power += ((
-					POWER_GEN_FUNCTION*)pStructureType->asFuncList[0])->
-					powerOutput;
-				psBuilding->pFunctionality->powerGenerator.multiplier += ((
-					POWER_GEN_FUNCTION*)pStructureType->asFuncList[0])->
-					powerMultiplier;
 				bUpgraded = true;
 
 				//need to change which IMD is used for player 0
@@ -2041,19 +2035,11 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 					|| (bMultiPlayer && (game.type == SKIRMISH) && (psBuilding->player < game.maxPlayers))
 					|| !bMultiPlayer)
 				{
-					int capacity = psBuilding->pFunctionality->powerGenerator.capacity;
-
-					if (capacity < NUM_POWER_MODULES)
-					{
-						psBuilding->sDisplay.imd = powerModuleIMDs[capacity-1];
-					}
-					else
-					{
-						psBuilding->sDisplay.imd = powerModuleIMDs[NUM_POWER_MODULES-1];
-					}
+					psBuilding->sDisplay.imd = powerModuleIMDs[0];
 				}
 				//need to inform any res Extr associated that not digging until complete
 				releasePowerGen(psBuilding);
+				structurePowerUpgrade(psBuilding);
 			}
 		}
 		if (bUpgraded)
@@ -2227,8 +2213,6 @@ static BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 		{
 			POWER_GEN* psPowerGen = &psBuilding->pFunctionality->powerGenerator;
 
-			psPowerGen->power = ((POWER_GEN_FUNCTION *) psBuilding->pStructureType->asFuncList[0])->powerOutput;
-			psPowerGen->multiplier = ((POWER_GEN_FUNCTION *) psBuilding->pStructureType->asFuncList[0])->powerMultiplier;
 			psPowerGen->capacity = 0;
 
 			// Take advantage of upgrades

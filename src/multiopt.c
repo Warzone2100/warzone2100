@@ -484,8 +484,6 @@ static BOOL cleanMap(UDWORD player)
 						if(((POWER_GEN*)psStruct->pFunctionality)->capacity != 0)
 						{	// downgrade powergen.
 							((POWER_GEN*)psStruct->pFunctionality)->capacity = 0;
-							((POWER_GEN*)psStruct->pFunctionality)->power = ((POWER_GEN_FUNCTION*)psStruct->pStructureType->asFuncList[0])->powerOutput;
-							((POWER_GEN*)psStruct->pFunctionality)->multiplier += ((POWER_GEN_FUNCTION*)psStruct->pStructureType->asFuncList[0])->powerMultiplier;
 
 							psStruct->sDisplay.imd	= psStruct->pStructureType->pIMD;
 							psStruct->body			= (UWORD)(structureBody(psStruct));

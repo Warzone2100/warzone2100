@@ -224,13 +224,9 @@ typedef struct _res_extractor
 
 typedef struct _power_gen
 {
-	UDWORD				power;				/*The max power that can be used - NOT USED 21/04/98*/
-	UDWORD				multiplier;			/*Factor to multiply output by - percentage*/
-	UDWORD				capacity;			/* Number of upgrade modules added*/
-
-	//struct _structure	*apResExtractors[NUM_POWER_MODULES + 1];/*pointers to the res ext
-	struct _structure	*apResExtractors[NUM_POWER_MODULES];/*pointers to the res ext
-																associated with this gen*/
+	UDWORD			multiplier;				///< Factor to multiply output by - percentage
+	UDWORD			capacity;				///< Number of upgrade modules added
+	struct _structure	*apResExtractors[NUM_POWER_MODULES];	///< Pointers to associated oil derricks
 } POWER_GEN;
 
 typedef struct REPAIR_FACILITY
