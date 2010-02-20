@@ -983,6 +983,59 @@ static void mainLoop(void)
 	}
 }
 
+static void fptest1(void)
+{
+	float a = 5.19258240356725201562535524577016477814756008082239;
+	uint8_t aexpect[] = {5, 5, 5, 5, 5, 3, 3, 2, 1, 10, 1, 4, 6, 42, 6, 3, 2, 2, 5, 2, 1, 1, 1, 1, 2, 26, 1, 3, 1, 11, 2, 2, 1, 1, 3, 2, 2, 1, 2, 9, 1, 1, 9, 25, 1, 4, 4, 2, 8, 2, 14, 139, 1, 1, 1, 19, 1, 1, 10, 2, 1, 10, 1, 1, 1, 28, 11, 4, 4, 1, 2, 12, 59, 1, 4, 4, 8, 2, 2, 37, 1, 85, 1, 1, 15, 8, 1, 100, 1, 1, 2, 9, 1, 5, 1, 17, 6, 15, 3, 1};
+	float b = 5.03937732811384756748132236757401955859521845805786;
+	uint8_t bexpect[] = {5, 5, 5, 5, 3, 1, 2, 1, 2, 3, 2, 2, 1, 1, 1, 1, 1, 1, 2, 5, 1, 1, 1, 1, 1, 1, 2, 5, 1, 3, 3, 1, 4, 1, 1, 1, 1, 1, 2, 3, 1, 1, 1, 3, 2, 1, 2, 1, 1, 3, 1, 1, 2, 1, 3, 1, 9, 1, 1, 25, 2, 1, 1, 2, 4, 1, 1, 1, 1, 3, 2, 1, 3, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 7, 2, 1, 1, 1, 1, 2, 3, 2, 1, 11, 1, 1, 1, 1, 2, 1};
+	unsigned n;
+	for (n = 0; n != 100; ++n)
+	{
+		if ((unsigned)a != aexpect[n])
+		{
+			debug(LOG_WARNING, "My 32-bit floating point works differently.");
+			break;
+		}
+		a = 1/(a - (unsigned)a);
+	}
+	for (n = 0; n != 100; ++n)
+	{
+		if ((unsigned)b != bexpect[n])
+		{
+			debug(LOG_WARNING, "My 32-bit floating point square roots work differently.");
+			break;
+		}
+		b = 1/sqrtf(b - (unsigned)b);
+	}
+}
+
+static void fptest2(void)
+{
+	double a = 5.19258240356725201562535524577016477814756008082239;
+	uint16_t aexpect[] = {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 1, 55, 1, 3, 1, 2, 1, 1, 2, 2, 4, 2, 17, 1, 1, 5, 1, 28, 26, 1, 6, 4, 2, 1, 1, 2, 2, 4, 1, 11, 2, 1, 32, 5, 4, 2, 1, 1, 4, 1, 1, 1, 2, 8, 1, 4, 2, 2, 2, 2, 31, 1, 1, 90, 3, 1, 4, 1, 1, 273, 1, 4, 167, 5, 1, 1, 4, 1, 1, 1, 1, 6, 3, 1, 10, 1, 1, 4, 1, 1, 1, 1, 3, 3, 1, 2, 2, 1};
+	double b = 5.03937732811384756748132236757401955859521845805786;
+	uint8_t bexpect[] = {5, 5, 5, 5, 5, 5, 5, 5, 4, 1, 7, 1, 1, 1, 1, 7, 1, 1, 1, 2, 1, 1, 2, 2, 1, 4, 1, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 3, 2, 2, 3, 1, 1, 1, 1, 7, 1, 3, 1, 2, 1, 1, 2, 1, 1, 1, 12, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 12, 18, 1, 2, 3, 2};
+	unsigned n;
+	for (n = 0; n != 100; ++n)
+	{
+		if ((unsigned)a != aexpect[n])
+		{
+			debug(LOG_WARNING, "My 64-bit floating point works differently.");
+			break;
+		}
+		a = 1/(a - (unsigned)a);
+	}
+	for (n = 0; n != 100; ++n)
+	{
+		if ((unsigned)b != bexpect[n])
+		{
+			debug(LOG_WARNING, "My 64-bit floating point square roots work differently.");
+			break;
+		}
+		b = 1/sqrt(b - (unsigned)b);
+	}
+}
 
 int main(int argc, char *argv[])
 {
@@ -995,6 +1048,10 @@ int main(int argc, char *argv[])
 #if defined(WZ_OS_WIN) && defined(DEBUG_INSANE)
 	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
 #endif // WZ_OS_WIN && DEBUG_INSANE
+
+	// Sanity check that floating point math is the same on all machines. (x86 will probably need to be compiled with the "-msse -mfpmath=sse" compiler flags.)
+	fptest1();
+	fptest2();
 
 	/*** Initialize PhysicsFS ***/
 	initialize_PhysicsFS(argv[0]);
