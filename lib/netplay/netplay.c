@@ -117,7 +117,7 @@ static unsigned int masterserver_port = 0, gameserver_port = 0;
 *	Which means that we need to allocate a buffer big enough to handle worst case
 *	situations.
 *	reference: MaxMsgSize in netplay.h  (currently set to 16K)
-*	
+*
 */
 #define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 16K
 
@@ -623,6 +623,7 @@ static void delSocket(SocketSet* set, Socket* socket)
 	size_t i;
 
 	ASSERT_OR_RETURN(, set != NULL, "NULL SocketSet provided");
+	ASSERT(socket != NULL, "NULL Socket provided");
 
 	for (i = 0; i < set->len; ++i)
 	{
@@ -1206,7 +1207,7 @@ void NETsetGamePassword(const char *password)
 //	Resets the game password
 void NETresetGamePassword(void)
 {
-	sstrcpy(NetPlay.gamePassword, "Enter password here");
+	sstrcpy(NetPlay.gamePassword, _("Enter password here"));
 	debug(LOG_NET, "password reset to 'Enter password here'");
 	NETGameLocked(false);
 }
@@ -1460,7 +1461,8 @@ static void NETplayerClientDisconnect(uint32_t index)
 		connected_bsocket[index]->socket = NULL;
 		NetPlay.players[index].heartbeat = false;
 
-		// Announce to the world
+		// Announce to the world. This is really icky, because we may be calling the send
+		// function recursively. We really ought to have a send queue...
 		NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
 			NETuint32_t(&index);
 		NETend();
@@ -2238,8 +2240,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 	msg->size = htons(msg->size);
 
 	if (NetPlay.isHost)
-	{	// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
-		// SDLNet_TCP_Send *can* block!
+	{
 		if (   player < MAX_CONNECTED_PLAYERS
 		    && connected_bsocket[player] != NULL
 		    && connected_bsocket[player]->socket != NULL
@@ -2259,8 +2260,6 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 	}
 	else
 	{
-		// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
-		// SDLNet_TCP_Send *can* block!
 			if (tcp_socket && (result = writeAll(tcp_socket, msg, size) == size))
 			{
 				return true;
@@ -2310,8 +2309,6 @@ BOOL NETbcast(NETMSG *msg)
 			}
 			else
 			{	
-				// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
-				// SDLNet_TCP_Send *can* block!
 				if (writeAll(connected_bsocket[i]->socket, msg, size) == SOCKET_ERROR)
 				{
 					// Write error, most likely client disconnect.
@@ -2327,8 +2324,6 @@ BOOL NETbcast(NETMSG *msg)
 		{
 			return false;
 		}
-		// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
-		// SDLNet_TCP_Send *can* block!
 		if (writeAll(tcp_socket, msg, size) == SOCKET_ERROR)
 		{
 			// Write error, most likely client disconnect.
@@ -3201,16 +3196,16 @@ static void NETallowJoining(void)
 					int32_t Hash_Data = 0;				// Not currently used
 
 					NETbeginDecode(NET_JOIN);
-					NETstring(name, sizeof(name));
-					NETint32_t(&MajorVersion);	// NETCODE_VERSION_MAJOR
-					NETint32_t(&MinorVersion);	// NETCODE_VERSION_MINOR
-					NETstring(ModList, sizeof(ModList));
-					NETstring(GamePassword, sizeof(GamePassword));
-					NETint32_t(&Hash_Data);		// NETCODE_HASH, not currently used
+						NETstring(name, sizeof(name));
+						NETint32_t(&MajorVersion);	// NETCODE_VERSION_MAJOR
+						NETint32_t(&MinorVersion);	// NETCODE_VERSION_MINOR
+						NETstring(ModList, sizeof(ModList));
+						NETstring(GamePassword, sizeof(GamePassword));
+						NETint32_t(&Hash_Data);		// NETCODE_HASH, not currently used
 					NETend();
 
 					index = NET_CreatePlayer(name);
-					
+
 					if (index == -1)
 					{
 						// FIXME: No room. Dropping the player without warning since protocol doesn't seem to support rejection at this point
@@ -3249,7 +3244,7 @@ static void NETallowJoining(void)
 					if (rejected)
 					{
 						NETbeginEncode(NET_REJECTED, index);
-						NETuint8_t(&rejected);
+							NETuint8_t(&rejected);
 						NETend();
 
 						allow_joining = false; // no need to inform master server
@@ -3273,7 +3268,7 @@ static void NETallowJoining(void)
 					gamestruct.desc.dwCurrentPlayers++;
 
 					MultiPlayerJoin(index);
-					
+
 					// Send info about players to newcomer.
 					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 					{
@@ -3736,8 +3731,8 @@ connect_succesfull:
 			uint8_t rejection = 0;
 
 			NETbeginDecode(NET_REJECTED);
-			// WRY???
-			NETuint8_t(&rejection);
+				// WRY???
+				NETuint8_t(&rejection);
 			NETend();
 
 			debug(LOG_NET, "NET_REJECTED received. Better luck next time?");
