@@ -1164,23 +1164,23 @@ void structurePowerUpgrade(STRUCTURE *psBuilding)
 {
 	POWER_GEN		*pPowerGen = &psBuilding->pFunctionality->powerGenerator;
 	POWER_GEN_FUNCTION	*pPGFunc = (POWER_GEN_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	UDWORD			baseOutput;
+	UDWORD			multiplier;
 	STRUCTURE_STATS		*psStat;
 
 	ASSERT(pPowerGen != NULL, "Invalid Power Gen pointer");
 	ASSERT(pPGFunc != NULL, "Invalid function pointer");
 
 	// Current base value depends on whether there are modules attached to the structure
-	baseOutput = pPGFunc->powerMultiplier;
+	multiplier = pPGFunc->powerMultiplier;
 	psStat = getModuleStat(psBuilding);
 	if (psStat)
 	{
 		if (pPowerGen->capacity)
 		{
-			baseOutput += ((POWER_GEN_FUNCTION*)psStat->asFuncList[0])->powerOutput;
+			multiplier += ((POWER_GEN_FUNCTION*)psStat->asFuncList[0])->powerMultiplier;
 		}
 	}
-	pPowerGen->multiplier = baseOutput + (pPGFunc->powerMultiplier * asPowerUpgrade[psBuilding->player].modifier) / 100;
+	pPowerGen->multiplier = multiplier + (pPGFunc->powerMultiplier * asPowerUpgrade[psBuilding->player].modifier) / 100;
 }
 
 void structureRepairUpgrade(STRUCTURE *psBuilding)
