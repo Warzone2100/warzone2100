@@ -671,7 +671,7 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecDyDoAIMod} $(DESC_DyDo-AIMod)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecDyDoAIMod} $(DESC_SecDyDoAIMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNTWMod} $(DESC_SecNTWMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOriginalMod} $(DESC_SecOriginalMod)
 	
