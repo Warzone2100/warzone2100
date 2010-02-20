@@ -506,6 +506,9 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 			switch (getSockErr())
 			{
 				case EAGAIN:
+#if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
+				case EWOULDBLOCK:
+#endif
 				case EINTR:
 					continue;
 
@@ -736,8 +739,11 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 		{
 			switch (getSockErr())
 			{
-				case EINTR:
 				case EAGAIN:
+#if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
+				case EWOULDBLOCK:
+#endif
+				case EINTR:
 					continue;
 
 				default:
