@@ -48,6 +48,7 @@
 # include <fcntl.h>
 # include <netdb.h>
 # include <netinet/in.h>
+# include <sys/ioctl.h>
 # include <sys/socket.h>
 # include <sys/types.h>
 # include <sys/select.h>
@@ -260,6 +261,8 @@ char VersionString[VersionStringSize] = "2.3 svn"; // used for display in the lo
 static int NETCODE_VERSION_MAJOR = 2;                // major netcode version, used for compatibility check
 static int NETCODE_VERSION_MINOR = 51;               // minor netcode version, used for compatibility check
 static int NETCODE_HASH = 0;			// unused for now
+
+static int checkSockets(const SocketSet* set, unsigned int timeout);
 
 #if defined(WZ_OS_WIN)
 static HMODULE winsock2_dll = NULL;
@@ -500,12 +503,52 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 
 	while (written < size)
 	{
-		ssize_t ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, 0);
+		Socket* sockAr[] = { sock };
+		const SocketSet set = { ARRAY_SIZE(sockAr), sockAr };
+		ssize_t ret;
+
+		// Check whether the socket is still connected
+		ret = checkSockets(&set, 0);
+		if (ret == SOCKET_ERROR)
+		{
+			return SOCKET_ERROR;
+		}
+		else if (ret == set.len
+		      && sock->ready)
+		{
+			/* The next recv(2) call won't block, but we're writing. So
+			 * check the read queue to see if the connection is closed.
+			 * If there's no data in the queue that means the connection
+			 * is closed.
+			 */
+#if defined(WZ_OS_WIN)
+			unsigned long readQueue;
+			ret = ioctlsocket(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
+#else
+			int readQueue;
+			ret = ioctl(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
+#endif
+			if (ret == SOCKET_ERROR)
+			{
+				return SOCKET_ERROR;
+			}
+			else if (readQueue == 0)
+			{
+				// Disconnected
+				setSockErr(ECONNRESET);
+				return SOCKET_ERROR;
+			}
+		}
+
+		ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, 0);
 		if (ret == SOCKET_ERROR)
 		{
 			switch (getSockErr())
 			{
 				case EAGAIN:
+#if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
+				case EWOULDBLOCK:
+#endif
 				case EINTR:
 					continue;
 
@@ -735,8 +778,11 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 		{
 			switch (getSockErr())
 			{
-				case EINTR:
 				case EAGAIN:
+#if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
+				case EWOULDBLOCK:
+#endif
+				case EINTR:
 					continue;
 
 				default:
