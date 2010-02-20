@@ -47,13 +47,15 @@ static const char endl[] =
     "\n";
 #endif
 
+using std::string;
+
 static const std::size_t max_debug_messages = 20;
 
 static char* dbgHeader = NULL;
 static std::deque<std::vector<char> > dbgMessages;
 
 // used to add custom info to the crash log
-static std::ostringstream miscData;
+static std::vector<char> miscData;
 
 static void dumpstr(const DumpFileHandle file, const char * const str, std::size_t const size)
 {
@@ -133,7 +135,7 @@ void dbgDumpHeader(DumpFileHandle file)
 		// Now get any other data that we need to include in bug report
 		dumpstr(file, "Misc Data:");
 		dumpEOL(file);
-		dumpstr(file, miscData.str().c_str());
+		dumpstr(file, &miscData[0], miscData.size());
 		dumpEOL(file);
 	}
 	else
@@ -342,7 +344,12 @@ void addDumpInfo(const char *inbuffer)
 	strftime(ourtime, sizeof(ourtime), "%H:%M:%S", timeinfo);
 
 	// add timestamp to all strings
-	miscData << "[" << ourtime << "]" << inbuffer << endl;
+	std::ostringstream os;
+	os << "[" << ourtime << "]" << inbuffer << endl;
+
+	// Append message to miscData
+	string msg(os.str());
+	miscData.insert(miscData.end(), msg.begin(), msg.end());
 }
 
 void dbgDumpInit(int argc, char* argv[])
