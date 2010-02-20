@@ -117,7 +117,7 @@ void gameTimeUpdate()
 	uint32_t currTime = SDL_GetTicks();
 	bool sane = logicalUpdates;
 
-	if (currTime < realTime)
+	if (currTime < baseTime)
 	{
 		// Warzone 2100, the first relativistic computer game!
 		// Exhibit A: Time travel
@@ -193,17 +193,24 @@ void gameTimeUpdate()
 		graphicsTime += deltaGraphicsTime;
 	}
 
+	// Pre-calculate fraction used in timeAdjustedIncrement
+	gameTimeFraction = (float)deltaGameTime / (float)GAME_TICKS_PER_SEC;
+	graphicsTimeFraction = (float)deltaGraphicsTime / (float)GAME_TICKS_PER_SEC;
+
+	ASSERT(graphicsTime <= gameTime, "Trying to see the future.");
+}
+
+void realTimeUpdate(void)
+{
+	uint32_t currTime = SDL_GetTicks();
+
 	// now update realTime which does not pause
 	// Store the real time
 	deltaRealTime = currTime - realTime;
 	realTime += deltaRealTime;
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
-	gameTimeFraction = (float)deltaGameTime / (float)GAME_TICKS_PER_SEC;
-	graphicsTimeFraction = (float)deltaGraphicsTime / (float)GAME_TICKS_PER_SEC;
 	realTimeFraction = (float)deltaRealTime / (float)GAME_TICKS_PER_SEC;
-
-	ASSERT(graphicsTime <= gameTime, "Trying to see the future.");
 }
 
 // reset the game time modifiers

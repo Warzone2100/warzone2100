@@ -146,9 +146,17 @@ GAMECODE gameLoop(void)
 	BOOL		quitting=false;
 	INT_RETVAL	intRetVal;
 	int	        clearMode = 0;
-	bool gameTicked = deltaGameTime != 0;
+	bool            gameTicked;                     // true iff we are doing a logical update.
 
-	if (deltaGameTime != 0)
+	// Receive NET_BLAH messages.
+	// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
+	recvMessage();
+
+	// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
+	gameTimeUpdate();
+	gameTicked = deltaGameTime != 0;
+
+	if (gameTicked)
 	{
 		sendPlayerGameTime();
 		gameSRand(gameTime);   // Brute force way of synchronising the random number generator, which can't go out of synch.
@@ -270,13 +278,10 @@ GAMECODE gameLoop(void)
 			}
 
 			//ajl. get the incoming netgame messages and process them.
+			// FIXME Previous comment is deprecated. multiPlayerLoop does some other weird stuff, but not that anymore.
 			if (bMultiPlayer)
 			{
 				multiPlayerLoop();
-			}
-			else
-			{
-				recvMessage();  // At least process our game queues...
 			}
 
 			if (!editPaused() && gameTicked)

@@ -323,6 +323,7 @@ const char *messageTypeToString(unsigned messageType);
 #define syncDebug(...) do { _syncDebug(__FUNCTION__, __VA_ARGS__); } while(0)
 void _syncDebug(const char *function, const char *str, ...)
 	WZ_DECL_FORMAT(printf, 2, 3);
+void syncDebugBacktrace(void);  ///< Adds a backtrace to syncDebug. (Expect lots of false positives, if all clients aren't using the exact same binaries.)
 void sendDebugSync(bool sendEvenIfEmpty);
 void recvDebugSync(NETQUEUE queue);
 

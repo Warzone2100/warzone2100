@@ -67,17 +67,7 @@ uint32_t gameRandU32()
 	return gamePseudorandomNumberGenerator.u32();
 }
 
-#ifndef SYNC_DEBUG_RANDOM
 int32_t gameRand(uint32_t limit)
 {
 	return gamePseudorandomNumberGenerator.u32()%limit;
 }
-#else //SYNC_DEBUG_RANDOM
-#include "lib/netplay/netplay.h"
-int32_t _gameRand(uint32_t limit, const char *caller, unsigned line)
-{
-	int32_t ret = gamePseudorandomNumberGenerator.u32()%limit;
-	syncDebug("%s:%u got %u", caller, line, ret);
-	return ret;
-}
-#endif //SYNC_DEBUG_RANDOM

@@ -230,7 +230,7 @@ static BOOL sendDroidCheck(void)
 		{
 			pD = pickADroid();
 
-			if (pD == NULL || (pD->gameCheckDroid != NULL && ((PACKAGED_CHECK *)pD->gameCheckDroid)->gameTime + 5000 > gameTime))
+			if (pD == NULL || (pD->gameCheckDroid != NULL && ((PACKAGED_CHECK *)pD->gameCheckDroid)->gameTime > gameTime))
 			{
 				continue;  // Didn't find a droid, or droid was synched recently.
 			}
@@ -258,12 +258,13 @@ static BOOL sendDroidCheck(void)
 	return NETend();
 }
 
+#define MIN_DELAY_BETWEEN_DROID_SYNCHS 5000  // Must be longer than maximum possible latency.
 // ////////////////////////////////////////////////////////////////////////////
 // Send a Single Droid Check message
 static PACKAGED_CHECK packageCheck(const DROID *pD)
 {
 	PACKAGED_CHECK pc;
-	pc.gameTime = gameTime;
+	pc.gameTime = gameTime + MIN_DELAY_BETWEEN_DROID_SYNCHS;
 
 	pc.player = pD->player;
 	pc.droidID = pD->id;
@@ -316,13 +317,20 @@ BOOL recvDroidCheck(NETQUEUE queue)
 				continue;
 			}
 
-			if (pD->gameCheckDroid == NULL || ((PACKAGED_CHECK *)pD->gameCheckDroid)->gameTime != synchTime)
+			if (pD->gameCheckDroid == NULL)
 			{
-				debug(LOG_SYNC, "We got a droid %u synch, but we didn't choose the same droid to synch.", pc.droidID);
+				debug(LOG_SYNC, "We got a droid %u synch, but we couldn't find the droid!", pc.droidID);
 				continue;  // Can't synch, since we didn't save data to be able to calculate a delta.
 			}
 
-			pc2 = *(PACKAGED_CHECK *)pD->gameCheckDroid;
+			pc2 = *(PACKAGED_CHECK *)pD->gameCheckDroid;  // pc2 should be declared here, as const.
+
+			if (pc2.gameTime != synchTime + MIN_DELAY_BETWEEN_DROID_SYNCHS)
+			{
+				debug(LOG_SYNC, "We got a droid %u synch, but we didn't choose the same droid to synch.", pc.droidID);
+				((PACKAGED_CHECK *)pD->gameCheckDroid)->gameTime = synchTime + MIN_DELAY_BETWEEN_DROID_SYNCHS;  // Get droid synch time back in synch.
+				continue;  // Can't synch, since we didn't save data to be able to calculate a delta.
+			}
 
 #define MERGECOPY(x, y, z1, z2)  if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z1" to %"z2".", pc.droidID, x, pc.y);             x = pc.y; }
 #define MERGEDELTA(x, y, z1, z2) if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z1" to %"z2".", pc.droidID, x, x + pc.y - pc2.y); x += pc.y - pc2.y; }

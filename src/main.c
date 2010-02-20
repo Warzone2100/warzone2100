@@ -978,7 +978,7 @@ static void mainLoop(void)
 					break;
 			}
 
-			gameTimeUpdate(); // Update gametime. FIXME There is probably code duplicated with MaintainFrameStuff
+			realTimeUpdate(); // Update realTime.
 		}
 	}
 }

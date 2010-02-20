@@ -34,12 +34,7 @@ uint32_t gameRandU32(void);
 
 /// Generates a random number in the interval [0...limit - 1]. Not equidistributed for large non-powers of 2.
 /// Must not be called from graphics routines, only for making game decisions.
-#ifndef SYNC_DEBUG_RANDOM
 int32_t gameRand(uint32_t limit);
-#else //SYNC_DEBUG_RANDOM
-#define gameRand(x) _gameRand(x, __FUNCTION__, __LINE__)
-int32_t _gameRand(uint32_t limit, const char *caller, unsigned line);
-#endif //SYNC_DEBUG_RANDOM
 
 #ifdef __cplusplus
 }

@@ -74,12 +74,15 @@ extern void gameTimeInit(void);
 /// Changes the game (and graphics) time.
 extern void setGameTime(uint32_t newGameTime);
 
-/** Call this each loop to update the timers.
- * @param sane If true, then the game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK. If false, the game time is equal to the graphics time, and the game always ticks.
+/** Call this each loop to update the gameTime and graphicsTime timers, and corresponding deltaGameTime and deltaRealTime.
+ * If logicalUpdates is true, then the game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK. If false, the game time is equal to the graphics time, and the game always ticks.
  * @returns true iff the game time ticked.
  */
 extern void gameTimeUpdate(void);
 extern bool logicalUpdates;  ///< Separate logical from graphical updates. FIXME Should be constant true. But first it needs to work perfectly.
+
+/// Updates the realTime timer, and corresponding deltaRealTime.
+void realTimeUpdate(void);
 
 /* Returns true if gameTime is stopped. */
 extern BOOL gameTimeIsStopped(void);

@@ -42,6 +42,10 @@
 #include "miniupnpc/upnpcommands.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
+#ifdef WZ_OS_LINUX
+#include <execinfo.h>  // Nonfatal runtime backtraces.
+#endif //WZ_OS_LINUX
+
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
 # include <errno.h>
@@ -3648,6 +3652,23 @@ void _syncDebug(const char *function, const char *str, ...)
 		syncDebugStrings[syncDebugNext][syncDebugNum[syncDebugNext]] = strdup(outputBuffer);
 		++syncDebugNum[syncDebugNext];
 	}
+}
+
+void syncDebugBacktrace(void)
+{
+#ifdef WZ_OS_LINUX
+	void *btv[20];
+	unsigned num = backtrace(btv, sizeof(btv)/sizeof(*btv));
+	char **btc = backtrace_symbols(btv, num);
+	unsigned i;
+	for (i = 1; i + 2 < num; ++i)  // =1: Don't print "src/warzone2100(syncDebugBacktrace+0x16) [0x6312d1]". +2: Don't print last two lines of backtrace such as "/lib/libc.so.6(__libc_start_main+0xe6) [0x7f91e040ea26]", since the address varies (even with the same binary).
+	{
+		_syncDebug("BT", "%s", btc[i]);
+	}
+	free(btc);
+#else
+	_syncDebug("BT", "Sorry, syncDebugBacktrace() not implemented on your system.");
+#endif
 }
 
 void sendDebugSync(bool sendEvenIfEmpty)

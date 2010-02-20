@@ -277,9 +277,6 @@ BOOL multiPlayerLoop(void)
 			}
 		}
 
-	recvMessage();						// get queued messages
-
-
 	// if player has won then process the win effects...
 	if(testPlayerHasWon())
 	{
