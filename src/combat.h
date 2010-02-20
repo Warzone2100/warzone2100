@@ -32,12 +32,6 @@ extern "C"
 {
 #endif //__cplusplus
 
-/* The range out of which the random number for the to hit should be taken */
-#define HIT_DICE	100
-
-/* set a variable to the role of a die between 0 and HIT_DICE */
-#define HIT_ROLL(d)  (d) = rand() % HIT_DICE
-
 // maximum difference in direction for a fixed turret to fire
 #define FIXED_TURRET_DIR	1
 

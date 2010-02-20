@@ -132,6 +132,7 @@ noinst_HEADERS = \
 	projectiledef.h \
 	projectile.h \
 	radar.h \
+	random.h \
 	raycast.h \
 	researchdef.h \
 	research.h \
@@ -151,7 +152,6 @@ noinst_HEADERS = \
 	stringdef.h \
 	structuredef.h \
 	structure.h \
-	target.h \
 	terrain.h \
 	text.h \
 	texture.h \
@@ -251,6 +251,7 @@ warzone2100_SOURCES = \
 	power.c \
 	projectile.c \
 	radar.c \
+	random.cpp \
 	raycast.c \
 	research.c \
 	scores.c \
@@ -267,7 +268,6 @@ warzone2100_SOURCES = \
 	seqdisp.c \
 	stats.c \
 	structure.c \
-	target.c \
 	terrain.c \
 	text.c \
 	texture.c \

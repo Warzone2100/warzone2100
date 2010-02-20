@@ -1462,7 +1462,7 @@ static void NETplayerDropped(UDWORD index)
 	NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
 		NETuint32_t(&id);
 	NETend();
-	debug(LOG_NET, "NET_PLAYER_DROPPED received for player %d", id);
+	debug(LOG_INFO, "NET_PLAYER_DROPPED received for player %d", id);
 	NET_DestroyPlayer(id);		// just clears array
 	MultiPlayerLeave(id);			// more cleanup
 	NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
@@ -1476,7 +1476,7 @@ void NETplayerKicked(UDWORD index)
 {
 	// kicking a player counts as "leaving nicely", since "nicely" in this case
 	// simply means "there wasn't a connection error."
-
+	debug(LOG_INFO, "Player %u was kicked.", index);
 	NET_DestroyPlayer(index);		// sets index player's array to false
 	MultiPlayerLeave(index);		// more cleanup
 	NETplayerLeaving(index);		// need to close socket for the player that left.
@@ -2385,7 +2385,7 @@ static BOOL NETprocessSystemMessage(void)
 			{	// dropped from join screen most likely
 				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u ", (unsigned int)index);
 			}
-
+			debug(LOG_INFO, "Player %u has left the game.", index);
 			NET_DestroyPlayer(index);		// sets index player's array to false
 			MultiPlayerLeave(index);		// more cleanup
 			NETplayerLeaving(index);		// need to close socket for the player that left.
@@ -2539,7 +2539,7 @@ receive_message:
 						NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
 							NETuint32_t(&i);
 						NETend();
-						debug(LOG_NET, "sending NET_PLAYER_DROPPED for player %d", i);
+						debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d (invalid socket)", i);
 						NET_DestroyPlayer(i);			// just clears array
 						MultiPlayerLeave(i);			// more cleanup
 						NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION

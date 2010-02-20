@@ -47,6 +47,7 @@
 #include "ai.h"
 #include "action.h"
 #include "difficulty.h"
+#include "random.h"
 
 /* minimum miss distance */
 #define MIN_MISSDIST	(TILE_UNITS/6)
@@ -172,8 +173,10 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	// add a random delay to the fire
+	// With logical updates, a good graphics gard no longer gives a better ROF.
+	// TODO Should still replace this with something saner, such as a ±1% random deviation in reload time.
 	fireChance = gameTime - (psWeap->lastFired + firePause);
-	if (rand() % RANDOM_PAUSE > fireChance)
+	if (gameRand(RANDOM_PAUSE) > fireChance)
 	{
 		return;
 	}
@@ -323,10 +326,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		resultHitChance = INVISIBLE_ACCURACY_PENALTY * resultHitChance / 100;
 	}
 
-	// cap resultHitChance to 0-100%, just in case
-	CLIP(resultHitChance, 0, 100);
-
-	HIT_ROLL(dice);
+	dice = gameRand(100);
 
 	// see if we were lucky to hit the target
 	if (dice <= resultHitChance)

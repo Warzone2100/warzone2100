@@ -190,8 +190,6 @@ typedef struct DROID
 	// secondary order data
 	UDWORD          secondaryOrder;
 
-	UDWORD          lastSync;                       ///< multiplayer synchronization value.
-
 	/* Action data */
 	SDWORD          action;
 	UDWORD          actionX, actionY;
@@ -206,6 +204,7 @@ typedef struct DROID
 
 	/* Movement control data */
 	MOVE_CONTROL    sMove;
+	SPACETIME       prevSpacetime;                  ///< Location of droid in previous tick.
 
 	/* anim data */
 	ANIM_OBJECT     *psCurAnim;

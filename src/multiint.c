@@ -2923,9 +2923,9 @@ void frontendMultiMessages(void)
 			}
 			NETend();
 
-			debug(LOG_WARNING,"** player %u has dropped! Host is %s",player_id,host?"true":"false");
+			debug(LOG_INFO,"** player %u has dropped! Host is %s", player_id, host?"true":"false");
 
-			MultiPlayerLeave(player_id);
+			MultiPlayerLeave(player_id);		// get rid of their stuff
 			NET_PlayerConnectionStatus = 2;		//DROPPED_CONNECTION
 			if (host)					// host has quit, need to quit too.
 			{
@@ -3237,6 +3237,7 @@ BOOL startMultiOptions(BOOL bReenter)
 
 			sstrcpy(game.map, iniparser_getstring(dict, "challenge:Map", game.map));
 			game.maxPlayers = iniparser_getint(dict, "challenge:MaxPlayers", game.maxPlayers);	// TODO, read from map itself, not here!!
+			NetPlay.maxPlayers = game.maxPlayers;
 			game.scavengers = iniparser_getboolean(dict, "challenge:Scavengers", game.scavengers);
 			game.alliance = ALLIANCES_TEAMS;
 			netPlayersUpdated = true;

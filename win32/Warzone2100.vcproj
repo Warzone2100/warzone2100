@@ -575,6 +575,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\random.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\src\raycast.c"
 					>
 				</File>
@@ -636,10 +640,6 @@
 				</File>
 				<File
 					RelativePath="..\src\structure.c"
-					>
-				</File>
-				<File
-					RelativePath="..\src\target.c"
 					>
 				</File>
 				<File
@@ -1211,10 +1211,6 @@
 			</File>
 			<File
 				RelativePath="..\src\structuredef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\target.h"
 				>
 			</File>
 			<File

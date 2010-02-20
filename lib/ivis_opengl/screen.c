@@ -126,6 +126,25 @@ BOOL screenInitialise()
 	}
 #endif
 
+/*  // This code block left over from qt-trunk merge, should probably be deleted.
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0.0f, (double)width, (double)height, 0.0f, 1.0f, -1.0f);
+
+	glMatrixMode(GL_TEXTURE);
+	glScalef(1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f); // FIXME Scaling texture coords to 256x256!
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glCullFace(GL_FRONT);
+	glEnable(GL_CULL_FACE);
+*/
+
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 	glErrors();
 	return true;
 }
@@ -134,6 +153,8 @@ BOOL screenInitialise()
 /* Release the DD objects */
 void screenShutDown(void)
 {
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
 

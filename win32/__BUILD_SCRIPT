@@ -15,7 +15,7 @@ execute()
 }
 
 # Some default configuration settings
-HOST_TRIPLET=mingw32
+HOST_TRIPLET=i586-mingw32msvc
 INSTALLER_VERSION="2.2.0.999"
 DEBUGFLAG="--disable-debug"
 CC_FOR_BUILD="gcc"

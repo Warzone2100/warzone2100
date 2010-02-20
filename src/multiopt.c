@@ -537,20 +537,17 @@ static BOOL gameInit(void)
 		cleanMap(player);
 	}
 
-	// Remove baba player for skirmish
-	if (!game.scavengers)
+	for (player = 1; player < MAX_PLAYERS; player++)
 	{
-		for (player = 1; player < MAX_PLAYERS; player++)
+		// we want to remove disabled AI & all the other players that don't belong
+		if ((game.skDiff[player] == 0 || player >= game.maxPlayers) && (!game.scavengers || player != 7))
 		{
-			// we want to remove disabled AI & all the other players that don't belong
-			if (game.skDiff[player] == 0 || player >= game.maxPlayers)
-			{
-				clearPlayer(player, true, false);
-				debug(LOG_NET, "Removing disabled AI (%d) from map.", player);
-			}
+			clearPlayer(player, true);			// do this quietly
+			debug(LOG_NET, "removing disabled AI (%d) from map.", player);
 		}
 	}
-	else
+
+	if (game.scavengers)	// FIXME - not sure if we still need this hack - Per
 	{
 		// ugly hack for now
 		game.skDiff[7] = DIFF_SLIDER_STOPS / 2;

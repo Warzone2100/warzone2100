@@ -112,7 +112,7 @@ BOOL		anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i
 BASEANIM *	anim_GetAnim(UWORD uwAnimID);
 UWORD		anim_GetAnimID(char *szName);
 iIMDShape *	anim_GetShapeFromID(UWORD uwID);
-UWORD		anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGameTime, UDWORD udwStartTime,
+UWORD           anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGraphicsTime, UDWORD udwStartTime,
 		                UDWORD udwStartDelay, Vector3i *psVecPos, Vector3i *psVecRot,
 		                Vector3i *psVecScale);
 void		anim_SetVals(char szFileName[], UWORD uwAnimID);

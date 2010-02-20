@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-01-25 19:25+0100\n"
+"POT-Creation-Date: 2010-02-09 18:34+0100\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -11342,22 +11342,22 @@ msgstr ""
 msgid "Latin"
 msgstr "Latinsky"
 
-#: lib/netplay/netplay.c:1161
-#: lib/netplay/netplay.c:1942
+#: lib/netplay/netplay.c:1164
+#: lib/netplay/netplay.c:1974
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:2867
+#: lib/netplay/netplay.c:2896
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2892
+#: lib/netplay/netplay.c:2921
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: lib/netplay/netplay.c:3300
+#: lib/netplay/netplay.c:3329
 msgid ", mods: "
 msgstr ""
 
@@ -11503,7 +11503,7 @@ msgstr ""
 
 #: src/configuration.c:457
 #: src/configuration.c:458
-#: src/multistat.c:131
+#: src/multistat.c:135
 msgid "Player"
 msgstr "Hráč"
 
@@ -11649,46 +11649,46 @@ msgstr "Zbraně"
 msgid "Systems"
 msgstr ""
 
-#: src/display3d.c:523
+#: src/display3d.c:558
 #, fuzzy
 msgid "Player left"
 msgstr "Hráč"
 
-#: src/display3d.c:523
+#: src/display3d.c:558
 #, fuzzy
 msgid "Player dropped"
 msgstr "Hráč"
 
-#: src/display.c:1704
+#: src/display.c:1694
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nemohu stavět. Ropný vrt hoří."
 
-#: src/display.c:1909
-#: src/display.c:2524
+#: src/display.c:1899
+#: src/display.c:2514
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Poškození %d%% - Zkušenosti %d, %s"
 
-#: src/display.c:1925
+#: src/display.c:1915
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Poškození %d%% - Zkušenosti %d, %s"
 
-#: src/display.c:2131
+#: src/display.c:2121
 #, fuzzy
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Nákladní auto dostalo rozkaz postavit ropnou věž"
 
-#: src/droid.c:198
+#: src/droid.c:203
 msgid "Unit Lost!"
 msgstr "Jednotka ztracena!"
 
-#: src/droid.c:1330
+#: src/droid.c:1354
 #, fuzzy
 msgid "Structure Restored"
 msgstr "Budova obnovena"
 
-#: src/droid.c:2913
+#: src/droid.c:2960
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -11696,7 +11696,7 @@ msgstr[0] "Skupina %u vybrána - %u Jednotka"
 msgstr[1] "Skupina %u vybrána - %u Jednotky"
 msgstr[2] "Skupina %u vybrána - %u Jednotek"
 
-#: src/droid.c:2926
+#: src/droid.c:2973
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -11704,7 +11704,7 @@ msgstr[0] "%u jednotka začleněna do Skupiny %u"
 msgstr[1] "%u jednotky začleněny do Skupiny %u"
 msgstr[2] "%u jednotek začleněno do Skupiny %u"
 
-#: src/droid.c:2939
+#: src/droid.c:2986
 #, fuzzy, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -11712,7 +11712,7 @@ msgstr[0] "Zameřeno na skupinu %u - %u jednotka"
 msgstr[1] "Zameřeno na skupinu %u - %u jednotky"
 msgstr[2] "Zameřeno na skupinu %u - %u jednotek"
 
-#: src/droid.c:2943
+#: src/droid.c:2990
 #, fuzzy, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -11720,41 +11720,41 @@ msgstr[0] "Vyrovnání se skupinou %u - %u jednotka"
 msgstr[1] "Vyrovnání se skupinou %u - %u jednotky"
 msgstr[2] "Vyrovnání se skupinou %u - %u jednotek"
 
-#: src/droid.c:3168
+#: src/droid.c:3200
 msgid "Rookie"
 msgstr "Nováček"
 
-#: src/droid.c:3169
+#: src/droid.c:3201
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelenáč"
 
-#: src/droid.c:3170
+#: src/droid.c:3202
 #, fuzzy
 msgid "Trained"
 msgstr "Trénovaný"
 
-#: src/droid.c:3171
+#: src/droid.c:3203
 msgid "Regular"
 msgstr "Běžný"
 
-#: src/droid.c:3172
+#: src/droid.c:3204
 msgid "Professional"
 msgstr "Profesionální"
 
-#: src/droid.c:3173
+#: src/droid.c:3205
 msgid "Veteran"
 msgstr "Veterán"
 
-#: src/droid.c:3174
+#: src/droid.c:3206
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3175
+#: src/droid.c:3207
 msgid "Special"
 msgstr "Speciální"
 
-#: src/droid.c:3176
+#: src/droid.c:3208
 msgid "Hero"
 msgstr "Hrdina"
 
@@ -11801,13 +11801,13 @@ msgstr "TUTORIÁLY"
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.c:316
 #: src/frontend.c:374
-#: src/frontend.c:525
-#: src/frontend.c:587
-#: src/frontend.c:729
-#: src/frontend.c:868
-#: src/frontend.c:975
-#: src/frontend.c:1182
-#: src/frontend.c:1325
+#: src/frontend.c:526
+#: src/frontend.c:588
+#: src/frontend.c:730
+#: src/frontend.c:869
+#: src/frontend.c:976
+#: src/frontend.c:1183
+#: src/frontend.c:1326
 msgctxt "menu"
 msgid "Return"
 msgstr "Zpět"
@@ -11834,274 +11834,274 @@ msgstr "Nahraj Hru"
 msgid "SINGLE PLAYER"
 msgstr "HRA JEDNOHO HRÁČE"
 
-#: src/frontend.c:469
+#: src/frontend.c:470
 #: src/ingameop.c:519
 #: src/mission.c:2529
 #: src/mission.c:2634
 msgid "Load Saved Game"
 msgstr "Načti Uloženou Hru"
 
-#: src/frontend.c:520
+#: src/frontend.c:521
 msgid "MULTI PLAYER"
 msgstr "HRA VÍCE HRÁČŮ"
 
-#: src/frontend.c:522
+#: src/frontend.c:523
 msgid "Host Game"
 msgstr ""
 
-#: src/frontend.c:523
+#: src/frontend.c:524
 msgid "Join Game"
 msgstr "Připojit se ke hře"
 
-#: src/frontend.c:580
+#: src/frontend.c:581
 #: src/multiint.c:1252
 msgid "OPTIONS"
 msgstr "NASTAVENÍ"
 
-#: src/frontend.c:581
+#: src/frontend.c:582
 msgid "Game Options"
 msgstr "Herní nastavení"
 
-#: src/frontend.c:582
+#: src/frontend.c:583
 msgid "Graphics Options"
 msgstr "Grafická nastavení"
 
-#: src/frontend.c:583
+#: src/frontend.c:584
 #, fuzzy
 msgid "Video Options"
 msgstr "Zvuková nastavení"
 
-#: src/frontend.c:584
+#: src/frontend.c:585
 #: src/ingameop.c:288
 msgid "Audio Options"
 msgstr "Zvuková nastavení"
 
-#: src/frontend.c:585
+#: src/frontend.c:586
 #, fuzzy
 msgid "Mouse Options"
 msgstr "Herní nastavení"
 
-#: src/frontend.c:586
+#: src/frontend.c:587
 msgid "Key Mappings"
 msgstr "Mapování kláves"
 
-#: src/frontend.c:648
+#: src/frontend.c:649
 msgid "Video Playback"
 msgstr "Přehrávání videa"
 
-#: src/frontend.c:652
-#: src/frontend.c:822
+#: src/frontend.c:653
+#: src/frontend.c:823
 msgid "1X"
 msgstr ""
 
-#: src/frontend.c:656
-#: src/frontend.c:812
+#: src/frontend.c:657
+#: src/frontend.c:813
 msgid "2X"
 msgstr ""
 
-#: src/frontend.c:660
-#: src/frontend.c:817
-#: src/frontend.c:940
-#: src/frontend.c:998
+#: src/frontend.c:661
+#: src/frontend.c:818
+#: src/frontend.c:941
+#: src/frontend.c:999
 msgid "Fullscreen"
 msgstr "Celá obrazovka"
 
-#: src/frontend.c:670
+#: src/frontend.c:671
 msgid "Screen Shake"
 msgstr ""
 
-#: src/frontend.c:673
-#: src/frontend.c:703
-#: src/frontend.c:717
-#: src/frontend.c:753
-#: src/frontend.c:789
-#: src/frontend.c:798
-#: src/frontend.c:961
-#: src/frontend.c:1059
-#: src/frontend.c:1097
-#: src/frontend.c:1133
-#: src/frontend.c:1145
-#: src/frontend.c:1157
-#: src/frontend.c:1169
-#: src/frontend.c:1205
-#: src/frontend.c:1218
-#: src/frontend.c:1232
-#: src/frontend.c:1246
+#: src/frontend.c:674
+#: src/frontend.c:704
+#: src/frontend.c:718
+#: src/frontend.c:754
+#: src/frontend.c:790
+#: src/frontend.c:799
+#: src/frontend.c:962
+#: src/frontend.c:1060
+#: src/frontend.c:1098
+#: src/frontend.c:1134
+#: src/frontend.c:1146
+#: src/frontend.c:1158
+#: src/frontend.c:1170
+#: src/frontend.c:1206
+#: src/frontend.c:1219
+#: src/frontend.c:1233
+#: src/frontend.c:1247
 msgid "On"
 msgstr "Zapnuto"
 
-#: src/frontend.c:677
-#: src/frontend.c:699
-#: src/frontend.c:709
-#: src/frontend.c:721
-#: src/frontend.c:748
-#: src/frontend.c:784
-#: src/frontend.c:802
-#: src/frontend.c:965
-#: src/frontend.c:1054
-#: src/frontend.c:1092
-#: src/frontend.c:1137
-#: src/frontend.c:1149
-#: src/frontend.c:1161
-#: src/frontend.c:1173
-#: src/frontend.c:1200
-#: src/frontend.c:1213
-#: src/frontend.c:1227
-#: src/frontend.c:1241
+#: src/frontend.c:678
+#: src/frontend.c:700
+#: src/frontend.c:710
+#: src/frontend.c:722
+#: src/frontend.c:749
+#: src/frontend.c:785
+#: src/frontend.c:803
+#: src/frontend.c:966
+#: src/frontend.c:1055
+#: src/frontend.c:1093
+#: src/frontend.c:1138
+#: src/frontend.c:1150
+#: src/frontend.c:1162
+#: src/frontend.c:1174
+#: src/frontend.c:1201
+#: src/frontend.c:1214
+#: src/frontend.c:1228
+#: src/frontend.c:1242
 msgid "Off"
 msgstr "Vypnuto"
 
-#: src/frontend.c:682
+#: src/frontend.c:683
 #: src/multiint.c:1321
 msgid "Fog"
 msgstr "Mlha"
 
-#: src/frontend.c:685
-#: src/frontend.c:771
+#: src/frontend.c:686
+#: src/frontend.c:772
 msgid "Mist"
 msgstr "Mlha"
 
-#: src/frontend.c:689
-#: src/frontend.c:764
+#: src/frontend.c:690
+#: src/frontend.c:765
 #: src/multiint.c:1323
 msgid "Fog Of War"
 msgstr "Válečná mlha"
 
-#: src/frontend.c:696
-#: src/frontend.c:708
+#: src/frontend.c:697
+#: src/frontend.c:709
 msgid "Subtitles"
 msgstr "Titulky"
 
-#: src/frontend.c:714
+#: src/frontend.c:715
 msgid "Shadows"
 msgstr "Stíny"
 
-#: src/frontend.c:725
+#: src/frontend.c:726
 #, fuzzy
 msgid "GRAPHICS OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
-#: src/frontend.c:856
+#: src/frontend.c:857
 #: src/ingameop.c:177
 msgid "Voice Volume"
 msgstr "Hlasitost řeči"
 
-#: src/frontend.c:860
+#: src/frontend.c:861
 #: src/ingameop.c:182
 msgid "FX Volume"
 msgstr "Hlasitost efektů"
 
-#: src/frontend.c:864
+#: src/frontend.c:865
 #: src/ingameop.c:187
 msgid "Music Volume"
 msgstr "Hlasitost hudby"
 
-#: src/frontend.c:871
+#: src/frontend.c:872
 #, fuzzy
 msgid "AUDIO OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
-#: src/frontend.c:936
+#: src/frontend.c:937
 msgid "Graphics Mode*"
 msgstr "Grafický mód*"
 
-#: src/frontend.c:944
-#: src/frontend.c:993
+#: src/frontend.c:945
+#: src/frontend.c:994
 msgid "Windowed"
 msgstr ""
 
-#: src/frontend.c:948
+#: src/frontend.c:949
 msgid "Resolution*"
 msgstr "Rozlišení*"
 
-#: src/frontend.c:953
+#: src/frontend.c:954
 msgid "Texture size"
 msgstr "Velikost textury"
 
-#: src/frontend.c:957
+#: src/frontend.c:958
 msgid "Vertical sync*"
 msgstr ""
 
-#: src/frontend.c:969
+#: src/frontend.c:970
 msgid "* Takes effect on game restart"
 msgstr "* Projeví se až po restartu hry"
 
-#: src/frontend.c:972
+#: src/frontend.c:973
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
-#: src/frontend.c:1130
+#: src/frontend.c:1131
 #, fuzzy
 msgid "Reverse Rotation"
 msgstr "Obrať myš"
 
-#: src/frontend.c:1141
+#: src/frontend.c:1142
 msgid "Trap Cursor"
 msgstr ""
 
-#: src/frontend.c:1153
+#: src/frontend.c:1154
 msgid "Colored Cursors*"
 msgstr ""
 
-#: src/frontend.c:1166
+#: src/frontend.c:1167
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Herní nastavení"
 
-#: src/frontend.c:1176
+#: src/frontend.c:1177
 msgid "* May negatively affect performance"
 msgstr ""
 
-#: src/frontend.c:1179
+#: src/frontend.c:1180
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
-#: src/frontend.c:1280
-#: src/frontend.c:1346
+#: src/frontend.c:1281
+#: src/frontend.c:1347
 msgid "Difficulty"
 msgstr "Obtížnost"
 
-#: src/frontend.c:1284
-#: src/frontend.c:1354
-#: src/frontend.c:1385
+#: src/frontend.c:1285
+#: src/frontend.c:1355
+#: src/frontend.c:1386
 msgid "Easy"
 msgstr "Snadná"
 
-#: src/frontend.c:1287
-#: src/frontend.c:1357
-#: src/frontend.c:1377
+#: src/frontend.c:1288
+#: src/frontend.c:1358
+#: src/frontend.c:1378
 msgid "Normal"
 msgstr "Normální"
 
-#: src/frontend.c:1291
-#: src/frontend.c:1360
-#: src/frontend.c:1381
+#: src/frontend.c:1292
+#: src/frontend.c:1361
+#: src/frontend.c:1382
 msgid "Hard"
 msgstr "Těžká"
 
-#: src/frontend.c:1296
-#: src/frontend.c:1347
+#: src/frontend.c:1297
+#: src/frontend.c:1348
 msgid "Scroll Speed"
 msgstr "Rychlost rolování"
 
-#: src/frontend.c:1310
-#: src/frontend.c:1344
+#: src/frontend.c:1311
+#: src/frontend.c:1345
 msgid "Language"
 msgstr "Jazyk"
 
-#: src/frontend.c:1322
-#: src/frontend.c:1345
+#: src/frontend.c:1323
+#: src/frontend.c:1346
 msgid "Unit Colour"
 msgstr "Barva jednotky"
 
-#: src/frontend.c:1328
-#: src/frontend.c:1348
+#: src/frontend.c:1329
+#: src/frontend.c:1349
 msgid "GAME OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
-#: src/frontend.c:1698
+#: src/frontend.c:1699
 #: src/multiint.c:2233
 msgid "Active mods: "
 msgstr ""
@@ -12115,7 +12115,7 @@ msgstr ""
 #: src/intorder.c:661
 #: src/loadsave.c:256
 #: src/multimenu.c:479
-#: src/multimenu.c:1329
+#: src/multimenu.c:1356
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12128,8 +12128,8 @@ msgid "MAP SAVED!"
 msgstr "HRA ULOŽENA!"
 
 #: src/hci.c:1705
-#: src/loop.c:526
-#: src/loop.c:542
+#: src/loop.c:528
+#: src/loop.c:544
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "HRA ULOŽENA!"
@@ -12315,7 +12315,7 @@ msgid "Power Accrued"
 msgstr ""
 
 #: src/intelmap.c:247
-#: src/keybind.c:1342
+#: src/keybind.c:1367
 msgid "PAUSED"
 msgstr "PAUZA"
 
@@ -12452,284 +12452,284 @@ msgstr "Omlouváme se, ale tento podvod je vypnutý ve hře pro více hráčů."
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr ""
 
-#: src/keybind.c:199
+#: src/keybind.c:224
 msgid "Lets us see what you see!"
 msgstr "Ukaž nám co vidíš!"
 
-#: src/keybind.c:201
+#: src/keybind.c:226
 #, fuzzy
 msgid "Fine, weapon & sensor display is off!"
 msgstr "Fine, snímač displeje je vypnutý!"
 
-#: src/keybind.c:339
-#: src/keybind.c:369
-#: src/keybind.c:386
-#: src/keybind.c:430
-#: src/keybind.c:535
-#: src/keybind.c:575
-#: src/keybind.c:681
-#: src/keybind.c:1232
-#: src/keybind.c:1289
-#: src/keybind.c:1391
-#: src/keybind.c:1487
-#: src/keybind.c:1838
-#: src/keybind.c:1878
+#: src/keybind.c:364
+#: src/keybind.c:394
+#: src/keybind.c:411
+#: src/keybind.c:455
+#: src/keybind.c:560
+#: src/keybind.c:600
+#: src/keybind.c:706
+#: src/keybind.c:1257
+#: src/keybind.c:1314
+#: src/keybind.c:1416
+#: src/keybind.c:1512
+#: src/keybind.c:1863
+#: src/keybind.c:1903
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
 
-#: src/keybind.c:340
+#: src/keybind.c:365
 #, fuzzy
 msgid "Hard as nails!!!"
 msgstr "jako ocel"
 
-#: src/keybind.c:354
+#: src/keybind.c:379
 #, fuzzy
 msgid "Takings thing easy!"
 msgstr "Věci jdou lehce!"
 
-#: src/keybind.c:370
+#: src/keybind.c:395
 msgid "1000 big ones!!!"
 msgstr ""
 
-#: src/keybind.c:387
+#: src/keybind.c:412
 msgid "Power overwhelming"
 msgstr "Ohromující výkon"
 
-#: src/keybind.c:402
+#: src/keybind.c:427
 msgid "Back to normality!"
 msgstr "Zpátky do normálu!"
 
-#: src/keybind.c:415
+#: src/keybind.c:440
 msgid "Getting tricky!"
 msgstr ""
 
-#: src/keybind.c:431
+#: src/keybind.c:456
 msgid "Twice as nice!"
 msgstr ""
 
-#: src/keybind.c:442
+#: src/keybind.c:467
 msgid "FPS display is enabled."
 msgstr "Zobrazení FPS je zapnuté."
 
-#: src/keybind.c:446
+#: src/keybind.c:471
 msgid "FPS display is disabled."
 msgstr "Zobrazení FPS je vypnuté."
 
-#: src/keybind.c:467
+#: src/keybind.c:492
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr ""
 
-#: src/keybind.c:499
+#: src/keybind.c:524
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr ""
 
-#: src/keybind.c:536
+#: src/keybind.c:561
 msgid "Infinite power disabled"
 msgstr ""
 
-#: src/keybind.c:536
+#: src/keybind.c:561
 msgid "Infinite power enabled"
 msgstr ""
 
-#: src/keybind.c:576
+#: src/keybind.c:601
 msgid "All items made available"
 msgstr ""
 
-#: src/keybind.c:682
+#: src/keybind.c:707
 msgid "Fog on"
 msgstr "Zapnutá mlha"
 
-#: src/keybind.c:682
+#: src/keybind.c:707
 #, fuzzy
 msgid "Fog off"
 msgstr "Vypnutá mlha"
 
-#: src/keybind.c:1121
+#: src/keybind.c:1146
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1121
+#: src/keybind.c:1146
 msgid "Ending Mission."
 msgstr ""
 
-#: src/keybind.c:1233
+#: src/keybind.c:1258
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1233
+#: src/keybind.c:1258
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1290
+#: src/keybind.c:1315
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1290
+#: src/keybind.c:1315
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1302
+#: src/keybind.c:1327
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1311
+#: src/keybind.c:1336
 #, c-format
 msgid "Trap cursor %s"
 msgstr ""
 
-#: src/keybind.c:1392
+#: src/keybind.c:1417
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1423
+#: src/keybind.c:1448
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1424
+#: src/keybind.c:1449
 #, fuzzy
 msgid "Researched"
 msgstr "Výzkum"
 
-#: src/keybind.c:1445
+#: src/keybind.c:1470
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1448
+#: src/keybind.c:1473
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1451
+#: src/keybind.c:1476
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1473
+#: src/keybind.c:1498
 msgid "Demo mode off - Returning to normal game mode"
 msgstr ""
 
-#: src/keybind.c:1488
+#: src/keybind.c:1513
 msgid "Debug menu is Open"
 msgstr ""
 
-#: src/keybind.c:1519
+#: src/keybind.c:1544
 #, fuzzy
 msgid "Unable to locate any resource extractors!"
 msgstr "Nelze lokalizovat žádný sběrač surovin!"
 
-#: src/keybind.c:1740
+#: src/keybind.c:1765
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.c:1746
+#: src/keybind.c:1771
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.c:1752
+#: src/keybind.c:1777
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.c:1837
+#: src/keybind.c:1862
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1839
+#: src/keybind.c:1864
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "Nepřítel zničen podváděním!"
 
-#: src/keybind.c:1879
+#: src/keybind.c:1904
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2398
+#: src/keybind.c:2423
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2410
+#: src/keybind.c:2435
 msgid "Unable to locate HQ!"
 msgstr "Nelze nalézt HQ!"
 
-#: src/keybind.c:2417
+#: src/keybind.c:2442
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2466
+#: src/keybind.c:2491
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2471
+#: src/keybind.c:2496
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2480
+#: src/keybind.c:2505
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2485
+#: src/keybind.c:2510
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2530
-#: src/keybind.c:2573
+#: src/keybind.c:2555
+#: src/keybind.c:2598
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Omlouváme se, ale tento podvod je vypnutý ve hře pro více hráčů."
 
-#: src/keybind.c:2551
-#: src/keybind.c:2594
-#: src/keybind.c:2616
+#: src/keybind.c:2576
+#: src/keybind.c:2619
+#: src/keybind.c:2641
 #, fuzzy
 msgid "Game Speed Reset"
 msgstr "Restartování herní rychlosti"
 
-#: src/keybind.c:2555
+#: src/keybind.c:2580
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Rychlost Hry Zvýšena na %3.1f"
 
-#: src/keybind.c:2598
+#: src/keybind.c:2623
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Rychlost Hry Snížena na %3.1f"
 
-#: src/keybind.c:2628
+#: src/keybind.c:2653
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2632
+#: src/keybind.c:2657
 msgid "Build menu will not reopen"
 msgstr ""
 
-#: src/keybind.c:2644
+#: src/keybind.c:2669
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2648
+#: src/keybind.c:2673
 msgid "Radar showing player colors"
 msgstr "Radar ukazuje barvy hráčů"
 
-#: src/keybind.c:2669
+#: src/keybind.c:2694
 msgid "Radar showing only objects"
 msgstr "Radar ukazuje pouze objekty"
 
-#: src/keybind.c:2672
+#: src/keybind.c:2697
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2675
+#: src/keybind.c:2700
 msgid "Radar showing terrain"
 msgstr "Radar ukazuje terén"
 
-#: src/keybind.c:2678
+#: src/keybind.c:2703
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar ukazuje terén"
 
-#: src/keybind.c:2681
+#: src/keybind.c:2706
 msgid "Radar showing height"
 msgstr "Radar ukazuje výšku"
 
@@ -13120,8 +13120,8 @@ msgstr ""
 msgid "Toggle reopening the build menu"
 msgstr ""
 
-#: src/loop.c:533
-#: src/loop.c:549
+#: src/loop.c:535
+#: src/loop.c:551
 #, fuzzy
 msgid "Could not save game!"
 msgstr "Nahrát uloženou hru"
@@ -13169,52 +13169,52 @@ msgstr "HRA ULOŽENA!"
 msgid "You found %u power in an oil drum."
 msgstr ""
 
-#: src/multigifts.c:170
+#: src/multigifts.c:171
 #, fuzzy, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s dá ti viditelnou zprávu"
 
-#: src/multigifts.c:190
+#: src/multigifts.c:191
 #, fuzzy, c-format
 msgid "%s Gives you a %s"
 msgstr "%s ti dá %s"
 
-#: src/multigifts.c:241
+#: src/multigifts.c:242
 #, fuzzy, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
 msgstr "Zkouší dát pryč %s - ale to není umožněno"
 
-#: src/multigifts.c:300
+#: src/multigifts.c:301
 #, fuzzy, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s ti á technickou dokumentaci"
 
-#: src/multigifts.c:338
+#: src/multigifts.c:339
 #, fuzzy, c-format
 msgid "%s Gives You %u Power"
 msgstr "%s dá ti sílu"
 
-#: src/multigifts.c:358
+#: src/multigifts.c:359
 #, fuzzy, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s požaduje s tebou spolčení"
 
-#: src/multigifts.c:367
+#: src/multigifts.c:368
 #, fuzzy, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Jsi pozván %s ze spolku"
 
-#: src/multigifts.c:387
+#: src/multigifts.c:388
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s přerušil spolek s %s"
 
-#: src/multigifts.c:413
+#: src/multigifts.c:416
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s uzavřel spojenectví s %s"
 
-#: src/multigifts.c:773
+#: src/multigifts.c:780
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Nalezl jsi plány na %s"
@@ -13478,16 +13478,16 @@ msgstr "Hostitel vyhodil %s ze hry!"
 msgid "Host is Starting Game"
 msgstr "Host začíná hru"
 
-#: src/multiint.c:3426
+#: src/multiint.c:3430
 msgid "Players"
 msgstr "Hráči"
 
-#: src/multiint.c:3542
+#: src/multiint.c:3546
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3568
+#: src/multiint.c:3572
 msgid "HOST"
 msgstr ""
 
@@ -13496,22 +13496,22 @@ msgstr ""
 msgid "Players Still Joining"
 msgstr ""
 
-#: src/multijoin.c:222
+#: src/multijoin.c:230
 #, c-format
 msgid "%s has Left the Game"
 msgstr ""
 
-#: src/multijoin.c:335
+#: src/multijoin.c:342
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.c:374
+#: src/multijoin.c:381
 #, c-format
 msgid "%s is Joining the Game"
 msgstr ""
 
-#: src/multijoin.c:384
+#: src/multijoin.c:391
 #, fuzzy
 msgid "System message:"
 msgstr "Systémové místo"
@@ -13520,6 +13520,10 @@ msgstr "Systémové místo"
 #, fuzzy
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Zpět na Předchozí Obrazovku"
+
+#: src/multilimit.c:316
+msgid "Limits reset to default values"
+msgstr ""
 
 #: src/multimenu.c:609
 msgid "Technology level 1"
@@ -13572,73 +13576,73 @@ msgstr ""
 msgid "Structs"
 msgstr "Stavba"
 
-#: src/multimenu.c:1112
+#: src/multimenu.c:1139
 msgid "Toggle Alliance State"
 msgstr ""
 
-#: src/multimenu.c:1131
+#: src/multimenu.c:1158
 msgid "Give Visibility Report"
 msgstr ""
 
-#: src/multimenu.c:1137
+#: src/multimenu.c:1164
 msgid "Leak Technology Documents"
 msgstr ""
 
-#: src/multimenu.c:1144
+#: src/multimenu.c:1171
 msgid "Hand Over Selected Units"
 msgstr ""
 
-#: src/multimenu.c:1150
+#: src/multimenu.c:1177
 msgid "Give Power To Player"
 msgstr ""
 
-#: src/multiplay.c:265
+#: src/multiplay.c:270
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1067
+#: src/multiplay.c:1063
 #, fuzzy
 msgid "(allies"
 msgstr "Spojenectví"
 
-#: src/multiplay.c:1075
+#: src/multiplay.c:1071
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1088
+#: src/multiplay.c:1084
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1944
+#: src/multiplay.c:1943
 msgid "Green"
 msgstr "Zelená"
 
-#: src/multiplay.c:1945
+#: src/multiplay.c:1944
 msgid "Orange"
 msgstr "Oranžová"
 
-#: src/multiplay.c:1946
+#: src/multiplay.c:1945
 msgid "Grey"
 msgstr "Šedá"
 
-#: src/multiplay.c:1947
+#: src/multiplay.c:1946
 msgid "Black"
 msgstr "Černá"
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1947
 msgid "Red"
 msgstr "Červená"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1948
 msgid "Blue"
 msgstr "Modrá"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1949
 msgid "Pink"
 msgstr "Růžová"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1950
 msgid "Cyan"
 msgstr "Azurová"
 
@@ -13773,20 +13777,20 @@ msgstr "Celkový Čas Hry - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3213
+#: src/scriptfuncs.c:3247
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3217
+#: src/scriptfuncs.c:3251
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10133
+#: src/scriptfuncs.c:10166
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10179
+#: src/scriptfuncs.c:10212
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -13816,60 +13820,60 @@ msgstr "Nemohu nalézt žádnou senzorovou jednotku!"
 msgid "Unable to locate any Commanders!"
 msgstr "Nemohu nalézt žádného velitele!"
 
-#: src/structure.c:2816
+#: src/structure.c:2851
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:6059
-#: src/structure.c:6084
+#: src/structure.c:6102
+#: src/structure.c:6127
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "Jednotka přiřazena"
 msgstr[1] "Jednotky přiřazeny"
 
-#: src/structure.c:6089
-#: src/structure.c:6153
+#: src/structure.c:6132
+#: src/structure.c:6196
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Poškození %3.0f%%"
 
-#: src/structure.c:6139
+#: src/structure.c:6182
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Připojeno %u z %u"
 
-#: src/structure.c:6269
-#: src/structure.c:6314
+#: src/structure.c:6312
+#: src/structure.c:6357
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6549
+#: src/structure.c:6592
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6589
+#: src/structure.c:6632
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6613
+#: src/structure.c:6656
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6637
+#: src/structure.c:6680
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6646
+#: src/structure.c:6689
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6674
+#: src/structure.c:6717
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6681
+#: src/structure.c:6724
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 

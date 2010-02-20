@@ -46,7 +46,8 @@
 #include "multirecv.h"
 
 #define ANYPLAYER	99
-#define UNKNOWN		99
+#define DORDER_UNKNOWN		99
+#define DORDER_UNKNOWN_ALT 100
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
@@ -535,7 +536,7 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 		return false;
 	}
 
-	debug(LOG_SYNC, "Droid created with id of %u", id);
+	debug(LOG_SYNC, "Droid sent with id of %u", id);
 	NETbeginEncode(NET_DROID, NET_ALL_PLAYERS);
 	{
 		Vector3uw pos = { x, y, 0 };
@@ -642,14 +643,14 @@ typedef enum {
  * Droid Group/selection orders.
  * Minimises comms by sending orders for whole groups, rather than each droid
  */
-BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj)
+BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, BOOL altOrder)
 {
 	if (!bMultiMessages)
 		return true;
 
 	NETbeginEncode(NET_GROUPORDER, NET_ALL_PLAYERS);
 	{
-		DROID_ORDER order = UNKNOWN;
+		DROID_ORDER order = (altOrder?DORDER_UNKNOWN_ALT:DORDER_UNKNOWN);
 		BOOL subType = (psObj) ? true : false, cmdOrder = false;
 		DROID* psDroid;
 		uint8_t droidCount;
@@ -844,7 +845,7 @@ BOOL recvGroupOrder()
 	NETend();
 
 	/* Check if the order is valid */
-	if (order != UNKNOWN && ((subType && !validOrderForObj(order)) || (!subType && !validOrderForLoc(order))))
+	if (order != DORDER_UNKNOWN && order != DORDER_UNKNOWN_ALT && ((subType && !validOrderForObj(order)) || (!subType && !validOrderForLoc(order))))
 	{
 		debug(LOG_ERROR, "Invalid group order received from %d, [%s : p%d]", NETgetSource(),
 			isHumanPlayer(player) ? "Human" : "AI", player);
@@ -1026,9 +1027,13 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 		}
 
 		// If no specific order was passed work one out based on the location
-		if (order == UNKNOWN)
+		if (order == DORDER_UNKNOWN)
 		{
-			order = chooseOrderLoc(psDroid, x, y);
+			order = chooseOrderLoc(psDroid, x, y, false);
+		}
+		else if (order == DORDER_UNKNOWN_ALT)
+		{
+			order = chooseOrderLoc(psDroid, x, y, true);
 		}
 
 		turnOffMultiMsg(true);
@@ -1072,11 +1077,14 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 		}
 
 		// If we didn't sepcify an order, then pick one
-		if (order == UNKNOWN)
+		if (order == DORDER_UNKNOWN)
 		{
-			order = chooseOrderObj(psDroid, psObj);
+			order = chooseOrderObj(psDroid, psObj, false);
 		}
-
+		else if (order == DORDER_UNKNOWN_ALT)
+		{
+			order = chooseOrderObj(psDroid, psObj, true);
+		}
 		turnOffMultiMsg(true);
 		orderDroidObj(psDroid, order, psObj);
 		turnOffMultiMsg(false);

@@ -62,6 +62,8 @@
 #include "display3d.h"
 #include "combat.h"
 
+#include "random.h"
+
 // how long to run for
 #define RUN_TIME		8000
 #define RUN_BURN_TIME	10000
@@ -963,7 +965,7 @@ void orderUpdateDroid(DROID *psDroid)
 		else if (psDroid->order == DORDER_RTR &&
 				 (psDroid->action == DACTION_MOVE ||
 				  psDroid->action == DACTION_MOVEFIRE) &&
-				  ((psDroid->id % 50) == (frameGetFrameNumber() % 50)))
+				  ((psDroid->id + gameTime)/GAME_TICKS_PER_SEC != (psDroid->id + gameTime - deltaGameTime)/GAME_TICKS_PER_SEC))
 		{
 			// see if there is a repair facility nearer than the one currently selected
 			orderDroid(psDroid, DORDER_RTR);
@@ -1707,6 +1709,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->psTarStats = psOrder->psStats;
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
+		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats->pName);
 		break;
 	case DORDER_BUILDMODULE:
 		//build a module onto the structure
@@ -1722,6 +1725,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		ASSERT(psDroid->psTarStats != NULL, "orderUnitBase: should have found a module stats");
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->psObj->pos.x,psOrder->psObj->pos.y);
+		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats->pName);
 		break;
 	case DORDER_LINEBUILD:
 		// build a line of structures
@@ -1740,6 +1744,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->psTarStats = psOrder->psStats;
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
+		objTrace(psDroid->id, "Starting new line construction of %s", psOrder->psStats->pName);
 		break;
 	case DORDER_HELPBUILD:
 		// help to build a structure that is starting to be built
@@ -1754,6 +1759,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->psTarStats = (BASE_STATS *)((STRUCTURE *)psOrder->psObj)->pStructureType;
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psDroid->orderX, psDroid->orderY);
+		objTrace(psDroid->id, "Helping construction of %s", psOrder->psStats->pName);
 		break;
 	case DORDER_DEMOLISH:
 		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
@@ -2689,7 +2695,7 @@ static BOOL orderDroidObjAdd(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psO
 }
 
 /* Choose an order for a droid from a location */
-DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
+DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, BOOL altOrder)
 {
 	DROID_ORDER		order = DORDER_NONE;
 	PROPULSION_TYPE		propulsion = getPropulsionStats(psDroid)->propulsionType;
@@ -2712,7 +2718,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 	}
 
 	// scout if alt was pressed
-	if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
+	if (altOrder)
 	{
 		order = DORDER_SCOUT;
 		if (isVtolDroid(psDroid))
@@ -2763,7 +2769,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 		return;
 	}
 
-	if (!add && bMultiMessages && SendGroupOrderSelected((UBYTE)player,x,y,NULL) )
+	if (!add && bMultiMessages && SendGroupOrderSelected((UBYTE)player,x,y,NULL,keyDown(KEY_LALT) || keyDown(KEY_RALT)) )
 	{	// turn off multiplay messages,since we've send a group one instead.
 		turnOffMultiMsg(true);
 	}
@@ -2792,7 +2798,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 				continue;
 			}
 
-			order = chooseOrderLoc(psCurr, x, y);
+			order = chooseOrderLoc(psCurr, x, y, (keyDown(KEY_LALT) || keyDown(KEY_RALT)));
 			// see if the order can be added to the list
 			if (order != DORDER_NONE && !(add && orderDroidLocAdd(psCurr, order, x, y)))
 			{
@@ -2807,7 +2813,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 
 
 /* Choose an order for a droid from an object */
-DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
+DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder)
 {
 	DROID_ORDER		order;
 	STRUCTURE		*psStruct;
@@ -2834,6 +2840,23 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 		return DORDER_NONE;
 	}
 
+	if (altOrder && (psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE) && psDroid->player == psObj->player)
+	{
+		if ((psDroid->droidType == DROID_WEAPON) || cyborgDroid(psDroid) ||
+			(psDroid->droidType == DROID_COMMAND))
+		{
+			return DORDER_ATTACK;
+		}
+		else if (psDroid->droidType == DROID_SENSOR)
+		{
+			return DORDER_OBSERVE;
+		}
+		else if ((psDroid->droidType == DROID_REPAIR ||
+		         psDroid->droidType == DROID_CYBORG_REPAIR) && psObj->type == OBJ_DROID)
+		{
+			return DORDER_REPAIR;
+		}
+	}
 	//check for transporters first
 	if (psObj->type == OBJ_DROID && ((DROID *)psObj)->droidType == DROID_TRANSPORTER
 		&& psObj->player == psDroid->player)
@@ -3117,7 +3140,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 	DROID		*psCurr, *psDemolish;
 	DROID_ORDER	order;
 
-	if (!add && bMultiMessages && SendGroupOrderSelected((UBYTE)player,0,0,psObj) )
+	if (!add && bMultiMessages && SendGroupOrderSelected((UBYTE)player,0,0,psObj,keyDown(KEY_LALT) || keyDown(KEY_RALT)) )
 	{	// turn off multiplay messages,since we've send a group one instead.
 		turnOffMultiMsg(true);
 	}
@@ -3140,7 +3163,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 	{
 		if (psCurr->selected)
 		{
-			order = chooseOrderObj(psCurr, psObj);
+			order = chooseOrderObj(psCurr, psObj, (keyDown(KEY_LALT) || keyDown(KEY_RALT)));
             if (order == DORDER_DEMOLISH && player == selectedPlayer)
             {
                 psDemolish = psCurr;
@@ -4032,7 +4055,7 @@ void orderMoralCheck(UDWORD player)
 			continue;
 		}
 
-		check = rand() % 100;
+		check = gameRand(100);
 		if (psCurr->droidType == DROID_PERSON)
 		{
 			if (check > personLShip)
@@ -4053,6 +4076,7 @@ void orderMoralCheck(UDWORD player)
 }
 
 // do a moral check for a group
+// Near-duplicate of orderMoralCheck().
 void orderGroupMoralCheck(DROID_GROUP *psGroup)
 {
 	DROID		*psCurr;
@@ -4096,7 +4120,7 @@ void orderGroupMoralCheck(DROID_GROUP *psGroup)
 			continue;
 		}
 
-		check = rand() % 100;
+		check = gameRand(100);
 		if (psCurr->droidType == DROID_PERSON)
 		{
 			if (check > personLShip)

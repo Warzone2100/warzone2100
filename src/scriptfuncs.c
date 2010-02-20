@@ -96,6 +96,7 @@
 #include "keymap.h"
 #include "visibility.h"
 #include "design.h"
+#include "random.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
@@ -119,6 +120,7 @@ void scriptSetStartPos(int position, int x, int y)
 {
 	positions[position].x = x;
 	positions[position].y = y;
+	debug(LOG_SCRIPT, "Setting start position %d to (%d, %d)", position, x, y);
 }
 
 BOOL scriptInit()
@@ -141,9 +143,13 @@ BOOL scrGetPlayer()
 {
 	ASSERT_OR_RETURN(false, nextPlayer < MAX_PLAYERS, "Invalid player");
 
-	scrFunctionResult.v.ival = nextPlayer++;
+	scrFunctionResult.v.ival = nextPlayer;
+	debug(LOG_SCRIPT, "Initialized player %d, starts at position (%d, %d), max %d players", nextPlayer, 
+	      positions[nextPlayer].x, positions[nextPlayer].y, NetPlay.maxPlayers);
+	nextPlayer++;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
+		ASSERT(false, "Failed to initialize player");
 		return false;
 	}
 	return true;
@@ -157,7 +163,6 @@ BOOL scrGetPlayerStartPosition(void)
 	{
 		return false;
 	}
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player %d", player);
 	if (player < NetPlay.maxPlayers)
 	{
 		*x = positions[player].x;
@@ -2346,6 +2351,35 @@ BOOL scrCentreViewPos(void)
 	return true;
 }
 
+static STRUCTURE *unbuiltIter = NULL;
+static int unbuiltPlayer = -1;
+
+BOOL scrEnumUnbuilt(void)
+{
+	if (!stackPopParams(1, VAL_INT, &unbuiltPlayer))
+	{
+		return false;
+	}
+	ASSERT_OR_RETURN(false, unbuiltPlayer < MAX_PLAYERS && unbuiltPlayer >= 0, "Player number %d out of bounds", unbuiltPlayer);
+	unbuiltIter = apsStructLists[unbuiltPlayer];
+	return true;
+}
+
+BOOL scrIterateUnbuilt(void)
+{
+	for (; unbuiltIter && unbuiltIter->status != SS_BEING_BUILT; unbuiltIter = unbuiltIter->psNext) ;
+	scrFunctionResult.v.oval = unbuiltIter;
+	if (unbuiltIter)
+	{
+		unbuiltIter = unbuiltIter->psNext;	// proceed to next, so we do not report same twice (or infinitely loop)
+	}
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
 // -----------------------------------------------------------------------------------------
 // Get a pointer to a structure based on a stat - returns NULL if cannot find one
 BOOL scrGetStructure(void)
@@ -4368,13 +4402,9 @@ BOOL scrRandom(void)
 	{
 		iResult = 0;
 	}
-	else if (range > 0)
-	{
-		iResult = rand() % range;
-	}
 	else
 	{
-		iResult = rand() % (-range);
+		iResult = gameRand(abs(range));
 	}
 
 	scrFunctionResult.v.ival = iResult;
@@ -4390,8 +4420,11 @@ BOOL scrRandom(void)
 // randomise the random number seed
 BOOL scrRandomiseSeed(void)
 {
-	srand((UDWORD)clock());
+	// Why? What's the point? What on earth were they thinking, exactly? If the numbers don't have enough randominess, just set the random seed again and again until the numbers are double-plus super-duper full of randonomium?
+	debug(LOG_ERROR, "A script is trying to set the random seed with srand(). That just doesn't make sense.");
+	//srand((UDWORD)clock());
 
+	// Resisting the urge to return a random number here. Afraid of triggering some sort of fallback mechanism in the scripts for when setting the random seed somehow fails.
 	return true;
 }
 
@@ -5551,17 +5584,32 @@ BOOL scrAddTemplate(void)
 // additional structure check
 static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles)
 {
-	UDWORD x,y,xTL,yTL,xBR,yBR;
-	UBYTE count =0;
-
-	STRUCTURE_STATS *psBuilding = (STRUCTURE_STATS *)psStat;
+	UDWORD		x, y, xTL, yTL, xBR, yBR;
+	UBYTE		count = 0;
+	STRUCTURE_STATS	*psBuilding = (STRUCTURE_STATS *)psStat;
+	GATEWAY		*psGate;
 
 	xTL = xx-1;
 	yTL = yy-1;
 	xBR = (xx + psBuilding->baseWidth );
 	yBR = (yy + psBuilding->baseBreadth );
-	// can you get past it?
 
+	// check against building in a gateway, as this can seriously block AI passages
+	for (psGate = gwGetGateways(); psGate; psGate = psGate->psNext)
+	{
+		for (x = xx; x <= xBR; x++)
+		{
+			for (y =yy; y <= yBR; y++)
+			{
+				if ((x >= psGate->x1 && x <= psGate->x2) && (y >= psGate->y1 && y <= psGate->y2))
+				{
+					return false;
+				}
+			}
+		}
+	}
+
+	// can you get past it?
 	y = yTL;	// top
 	for(x = xTL;x!=xBR+1;x++)
 	{
@@ -5608,7 +5656,6 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 		return true;
 	}
 	return false;
-
 }
 
 static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxBlockingTiles)
@@ -5619,112 +5666,82 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 	UDWORD			startX, startY, incX, incY;
 	SDWORD			x=0, y=0;
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "pickStructLocation:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
 
-    // check for wacky coords.
-	if(		*pX < 0
-		||	*pX > world_coord(mapWidth)
-		||	*pY < 0
-		||	*pY > world_coord(mapHeight)
-	  )
+	// check for wacky coords.
+	if (*pX < 0 || *pX > world_coord(mapWidth) || *pY < 0 || *pY > world_coord(mapHeight))
 	{
-		goto failedstructloc;
+		goto endstructloc;
 	}
 
 	psStat = &asStructureStats[index];			// get stat.
-	startX = map_coord(*pX);					// change to tile coords.
+	startX = map_coord(*pX);				// change to tile coords.
 	startY = map_coord(*pY);
-
 	x = startX;
 	y = startY;
 
 	// first try the original location
-	if ( validLocation((BASE_STATS*)psStat, startX, startY, player, false) )
+	if (validLocation((BASE_STATS*)psStat, startX, startY, player, false) && structDoubleCheck((BASE_STATS*)psStat, startX, startY, maxBlockingTiles))
 	{
-		if(structDoubleCheck((BASE_STATS*)psStat,startX,startY,maxBlockingTiles))
-		{
-			found = true;
-		}
+		found = true;
 	}
 
 	// try some locations nearby
-	if(!found)
+	for (incX = 1, incY = 1; incX < numIterations && !found; incX++, incY++)
 	{
-		for (incX = 1, incY = 1; incX < numIterations; incX++, incY++)
+		y = startY - incY;	// top
+		for (x = startX - incX; x < (SDWORD)(startX + incX); x++)
 		{
-			if (!found){			//top
-				y = startY - incY;
-				for(x = startX - incX; x < (SDWORD)(startX + incX); x++){
-					if ( validLocation((BASE_STATS*)psStat, x, y, player, false)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
-						){
-						found = true;
-						break;
-					}}}
-
-			if (!found)	{			//right
-				x = startX + incX;
-				for(y = startY - incY; y < (SDWORD)(startY + incY); y++){
-					if(validLocation((BASE_STATS*)psStat, x, y, player, false)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
-						){
-						found = true;
-						break;
-					}}}
-
-			if (!found){			//bot
-				y = startY + incY;
-				for(x = startX + incX; x > (SDWORD)(startX - incX); x--){
-					if(validLocation((BASE_STATS*)psStat, x, y, player, false)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
-						 ){
-						found = true;
-						break;
-					}}}
-
-			if (!found){			//left
-				x = startX - incX;
-				for(y = startY + incY; y > (SDWORD)(startY - incY); y--){
-					if(validLocation((BASE_STATS*)psStat, x, y, player, false)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
-						 ){
-						found = true;
-						break;
-					}}}
-
-			if (found)
+			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
+			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
 			{
-				break;
+				found = true;
+				goto endstructloc;
+			}
+		}
+		x = startX + incX;	// right
+		for (y = startY - incY; y < (SDWORD)(startY + incY); y++)
+		{
+			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
+			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			{
+				found = true;
+				goto endstructloc;
+			}
+		}
+		y = startY + incY;	// bottom
+		for (x = startX + incX; x > (SDWORD)(startX - incX); x--)
+		{
+			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
+			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			{
+				found = true;
+				goto endstructloc;
+			}
+		}
+		x = startX - incX;	// left
+		for (y = startY + incY; y > (SDWORD)(startY - incY); y--)
+		{
+			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
+			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			{
+				found = true;
+				goto endstructloc;
 			}
 		}
 	}
 
-	if(found)	// did It!
+endstructloc:
+	// back to world coords.
+	if (found)	// did it!
 	{
-		// back to world coords.
 		*pX = world_coord(x) + (psStat->baseWidth * (TILE_UNITS / 2));
 		*pY = world_coord(y) + (psStat->baseBreadth * (TILE_UNITS / 2));
-
-		scrFunctionResult.v.bval = true;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
-		{
-			return false;
-		}
-
-		return true;
 	}
-	else
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
 	{
-failedstructloc:
-		scrFunctionResult.v.bval = false;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// failed!
-		{
-			return false;
-		}
+		return false;
 	}
 	return true;
 }
@@ -6348,7 +6365,7 @@ BOOL scrFireWeaponAtObj(void)
 {
 	Vector3i target;
 	BASE_OBJECT *psTarget;
-	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0};
+	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 	if (!stackPopParams(2, ST_WEAPON, &sWeapon.nStat, ST_BASEOBJECT, &psTarget))
 	{
@@ -6374,7 +6391,7 @@ BOOL scrFireWeaponAtObj(void)
 BOOL scrFireWeaponAtLoc(void)
 {
 	Vector3i target;
-	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0};
+	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 	if (!stackPopParams(3, ST_WEAPON, &sWeapon.nStat, VAL_INT, &target.x, VAL_INT, &target.y))
 	{

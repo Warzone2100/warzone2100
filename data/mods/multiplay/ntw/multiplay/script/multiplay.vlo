@@ -34,7 +34,7 @@ command2		STRUCTURESTAT		"A0CommandCentreDEL"
 // Technologies
 numCleanTech	int					4	// do x for clean	
 numBaseTech		int					18	// do x for base
-numDefTech		int					40	// do x for defensive
+numDefTech		int					38	// do x for defensive
 
 defTech[0]	RESEARCHSTAT	"R-Vehicle-Prop-Wheels"
 defTech[1]	RESEARCHSTAT	"R-Sys-Spade1Mk1"
@@ -70,14 +70,12 @@ defTech[28]		RESEARCHSTAT	"R-Vehicle-Engine02"
 defTech[29]		RESEARCHSTAT	"R-Wpn-Cannon1Mk1"
 defTech[30]		RESEARCHSTAT	"R-Wpn-Mortar01Lt"
 defTech[31]		RESEARCHSTAT	"R-Defense-Pillbox05"
-defTech[32]		RESEARCHSTAT	"R-Defense-TankTrap01"
-defTech[33]		RESEARCHSTAT	"R-Defense-WallTower02"
-defTech[34]		RESEARCHSTAT	"R-Defense-Pillbox04"
-defTech[35]		RESEARCHSTAT	"R-Wpn-MG-Damage01"
-defTech[36]		RESEARCHSTAT	"R-Wpn-Rocket05-MiniPod"
-defTech[37]		RESEARCHSTAT	"R-Wpn-MG-Damage02"
-defTech[38]		RESEARCHSTAT	"R-Wpn-Rocket-Damage01"
-defTech[39]		RESEARCHSTAT	"R-Defense-WallTower01"
+defTech[32]		RESEARCHSTAT	"R-Defense-WallTower02"
+defTech[33]		RESEARCHSTAT	"R-Defense-Pillbox04"
+defTech[34]		RESEARCHSTAT	"R-Wpn-MG-Damage01"
+defTech[35]		RESEARCHSTAT	"R-Wpn-Rocket05-MiniPod"
+defTech[36]		RESEARCHSTAT	"R-Wpn-MG-Damage02"
+defTech[37]		RESEARCHSTAT	"R-Wpn-Rocket-Damage01"
 
 
 /////////////////////////////////////////////////////////////////////////

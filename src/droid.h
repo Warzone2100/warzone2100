@@ -41,14 +41,6 @@ extern "C"
 #define REPAIRLEV_LOW	50	// percentage of body points remaining at which to repair droid automatically.
 #define REPAIRLEV_HIGH	75	// ditto, but this will repair much sooner..
 
-#define	DROID_EXPLOSION_SPREAD_X	(TILE_UNITS/2 - (rand()%TILE_UNITS))
-#define	DROID_EXPLOSION_SPREAD_Y	(rand()%TILE_UNITS)
-#define	DROID_EXPLOSION_SPREAD_Z	(TILE_UNITS/2 - (rand()%TILE_UNITS))
-
-/*defines the % to decrease the illumination of a tile when building - gets set
-back when building is destroyed*/
-//#define FOUNDATION_ILLUMIN		50
-
 #define DROID_RESISTANCE_FACTOR     30
 
 #define MAX_RECYCLED_DROIDS		32
@@ -463,6 +455,17 @@ static inline CONSTRUCT_STATS *getConstructStats(DROID *psDroid)
 static inline WEAPON_STATS *getWeaponStats(DROID *psDroid, int weapon_slot)
 {
 	return asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
+}
+
+static inline float getInterpolatedWeaponRotation(DROID *psDroid, int weaponSlot, uint32_t time)
+{
+	return interpolateDirection(psDroid->asWeaps[weaponSlot].prevRotation, psDroid->asWeaps[weaponSlot].rotation, psDroid->prevSpacetime.time, psDroid->time, time);
+}
+
+static inline float getInterpolatedWeaponPitch(DROID *psDroid, int weaponSlot, uint32_t time)
+{
+	// Aaargh, Direction[sic]. Angles can be 16-bit (65536 "degrees" in circle), or can be floats (360.0f degrees). Except here, where they are _unsigned_ integers from 0 to 360. All hail consistency!
+	return interpolateDirection(psDroid->asWeaps[weaponSlot].prevPitch, psDroid->asWeaps[weaponSlot].pitch, psDroid->prevSpacetime.time, psDroid->time, time);
 }
 
 /** helper functions for future refcount patch **/

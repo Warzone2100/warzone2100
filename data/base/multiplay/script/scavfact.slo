@@ -24,6 +24,9 @@ public		TEMPLATE	trike;
 public		TEMPLATE	buggy;
 public		TEMPLATE	bloke;
 public		TEMPLATE	jeep;
+public		TEMPLATE	firetruck;
+public		TEMPLATE	firebus;
+public		TEMPLATE	cannonbus;
 
 // groups
 private		GROUP		attackGroup;
@@ -66,7 +69,7 @@ event droidbuilt(CALL_NEWDROID, enemy1, ref newDroid, ref fac1)
 	{
 		if (structureIdle(fac1) and (numDroidsInArea(enemy1, 0, 0, (mapWidth * 128), (mapHeight * 128)) < maxDroids))
 		{
-			Fact1State = random(6);
+			Fact1State = random(10);
 
 			if (Fact1State == 0)
 			{
@@ -79,6 +82,14 @@ event droidbuilt(CALL_NEWDROID, enemy1, ref newDroid, ref fac1)
 			else if (Fact1State == 2)
 			{
 				buildDroid(jeep, fac1, enemy1, 1);
+			}
+			else if (Fact1State == 3)
+			{
+				buildDroid(cannonbus, fac1, enemy1, 1);
+			}
+			else if (Fact1State == 4)
+			{
+				buildDroid(firebus, fac1, enemy1, 1);
 			}
 			else
 			{

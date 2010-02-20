@@ -145,10 +145,7 @@ static inline float arrayMaxF(const float *array, const size_t n, size_t *index)
 #define ONEINTHREE				(rand()%3==0)
 #define ONEINFOUR				(rand()%4==0)
 #define ONEINFIVE				(rand()%5==0)
-#define ONEINSIX				(rand()%6==0)
-#define ONEINSEVEN				(rand()%7==0)
 #define ONEINEIGHT				(rand()%8==0)
-#define ONEINNINE				(rand()%9==0)
 #define ONEINTEN				(rand()%10==0)
 
 #define MACROS_H_STRINGIFY(x) #x

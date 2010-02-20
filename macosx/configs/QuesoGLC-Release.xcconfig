@@ -1,0 +1,10 @@
+// QuesoGLC settings for Release configuration
+
+#include "QuesoGLC-All.xcconfig"
+
+
+COPY_PHASE_STRIP = YES
+OTHER_LDFLAGS = -framework Carbon
+GCC_ENABLE_FIX_AND_CONTINUE = NO
+GCC_GENERATE_DEBUGGING_SYMBOLS = NO
+ZERO_LINK = NO

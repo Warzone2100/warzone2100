@@ -387,6 +387,10 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
 	DROID_TEMPLATE *psTempl = NULL;
 	UDWORD		i;
 
+	// First try static templates from scripts (could potentially also happen for currently human controlled players)
+	for (psTempl = apsStaticTemplates; psTempl && psTempl->multiPlayerID != tempId; psTempl = psTempl->psNext) ;
+	if (psTempl) return psTempl;
+
 	// Check if we know which player this is from, in that case, assume it is a player template
 	if (player != ANYPLAYER)
 	{
@@ -397,11 +401,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
 		return psTempl;
 	}
 
-	// If not, first try static templates from AI control (could potentially also happen for currently human controlled players)
-	for (psTempl = apsStaticTemplates; psTempl && psTempl->multiPlayerID != tempId; psTempl = psTempl->psNext) ;
-	if (psTempl) return psTempl;
-
-	// We really have no idea, but it is not a static template, so search through every player template
+	// We have no idea, so search through every player template
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		for (psTempl = apsDroidTemplates[i]; psTempl && psTempl->multiPlayerID != tempId; psTempl = psTempl->psNext) ;
@@ -1416,6 +1416,7 @@ BOOL recvTemplate()
 		NETuint32_t(&pT->multiPlayerID);
 	NETend();
 
+	t.prefab = false;
 	t.psNext = NULL;
 	t.pName = NULL;
 
@@ -1426,11 +1427,13 @@ BOOL recvTemplate()
 	{
 		t.psNext = psTempl->psNext;
 		memcpy(psTempl, &t, sizeof(DROID_TEMPLATE));
+		debug(LOG_SYNC, "Updating MP template %d", (int)t.multiPlayerID);
 	}
 	else
 	{
 		addTemplate(player,&t);
 		apsDroidTemplates[player]->ref = REF_TEMPLATE_START;
+		debug(LOG_SYNC, "Creating MP template %d", (int)t.multiPlayerID);
 	}
 
 	return true;

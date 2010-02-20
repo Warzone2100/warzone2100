@@ -380,7 +380,7 @@ iIMDShape *anim_GetShapeFromID(UWORD uwID)
 
 /***************************************************************************/
 
-UWORD anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGameTime, UDWORD udwStartTime, 
+UWORD anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGraphicsTime, UDWORD udwStartTime,
                       UDWORD udwStartDelay, Vector3i *psVecPos, Vector3i *psVecRot, Vector3i *psVecScale)
 {
 	SDWORD		dwTime;
@@ -388,7 +388,7 @@ UWORD anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGameTime, UDWORD ud
 	ANIM_STATE	*psState;
 
 	/* calculate current anim frame */
-	dwTime = udwGameTime - udwStartTime - udwStartDelay;
+	dwTime = udwGraphicsTime - udwStartTime - udwStartDelay;
 
 	/* return NULL if animation still delayed */
 	if ( dwTime < 0 )

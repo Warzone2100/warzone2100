@@ -268,8 +268,8 @@ static inline void removeDroidOrderTarget(DROID *psDroid, SDWORD idx)
 	psDroid->asOrderList[idx].psOrderTarget = NULL;
 }
 
-extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y);
-extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj);
+extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, BOOL altOrder);
+extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder);
 
 #ifdef __cplusplus
 }

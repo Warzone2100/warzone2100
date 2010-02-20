@@ -46,6 +46,7 @@
 #include "scripttabs.h"
 #include "transporter.h"
 #include "visibility.h"
+#include "random.h"
 
 /* attack run distance */
 #define	VTOL_ATTACK_LENGTH		1000
@@ -2584,6 +2585,8 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 
 	CHECK_DROID(psDroid);
 
+	psDroid->actionStarted = gameTime;
+
 	switch (psAction->action)
 	{
 	case DACTION_NONE:
@@ -2834,8 +2837,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 // 		debug( LOG_NEVER, "Go with sulk ... %p", psDroid );
 		psDroid->action = DACTION_SULK;
 		// hmmm, hope this doesn't cause any problems!
-		psDroid->actionStarted = gameTime+MIN_SULK_TIME+(rand()%(
-			MAX_SULK_TIME-MIN_SULK_TIME));
+		psDroid->actionStarted = gameTime + MIN_SULK_TIME + (gameRand(MAX_SULK_TIME - MIN_SULK_TIME));
 		break;
 	case DACTION_DESTRUCT:
 		psDroid->action = DACTION_DESTRUCT;

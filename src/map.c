@@ -307,7 +307,30 @@ static BOOL mapLoadGroundTypes(void)
 	else
 	{
 		debug(LOG_ERROR, "unsupported tileset: %s", tileset);
-		return false;
+		debug(LOG_POPUP, "This is a UNSUPPORTED map with a custom tileset.\nDefaulting to tertilesc1hw -- map may look strange!");
+		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
+		free(tileset);
+		tileset = strdup("texpages/tertilesc1hw");
+		numGroundTypes = 7;
+		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
+		
+		psGroundTypes[a_yellow].textureName = "page-45";
+		psGroundTypes[a_yellow].textureSize = 4.6;
+		psGroundTypes[a_red].textureName = "page-44";
+		psGroundTypes[a_red].textureSize = 6.2;
+		psGroundTypes[a_concrete].textureName = "page-47";
+		psGroundTypes[a_concrete].textureSize = 3.2;
+		psGroundTypes[a_cliff].textureName = "page-46";
+		psGroundTypes[a_cliff].textureSize = 5.8;
+		psGroundTypes[a_water].textureName = "page-42";
+		psGroundTypes[a_water].textureSize = 7.3;
+		
+		psGroundTypes[a_mud] = psGroundTypes[a_red];
+		psGroundTypes[a_green] = psGroundTypes[a_red];
+		
+		waterGroundType = a_water;
+		cliffGroundType = a_cliff;
+
 	}
 	return true;
 }
@@ -808,21 +831,24 @@ static BOOL hasRockiesDecal(UDWORD i, UDWORD j)
 static BOOL mapSetGroundTypes(void)
 {
 	int i,j;
+
 	for (i=0;i<mapWidth;i++)
 	{
 		for (j=0;j<mapHeight;j++)
 		{
-			mapTile(i,j)->ground = determineGroundType(i,j,tileset);
-			mapTile(i,j)->decal = false;
-			if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
+			MAPTILE *psTile = mapTile(i, j);
+
+			psTile->ground = determineGroundType(i,j,tileset);
+
+			if ((strcmp(tileset, "texpages/tertilesc1hw") == 0 && hasArizonaDecal(i, j))
+			    || (strcmp(tileset, "texpages/tertilesc2hw") == 0 && hasUrbanDecal(i, j))
+			    || (strcmp(tileset, "texpages/tertilesc3hw") == 0 && hasRockiesDecal(i, j)))
 			{
-				mapTile(i,j)->decal = hasArizonaDecal(i,j);
-			} else if (strcmp(tileset, "texpages/tertilesc2hw") == 0)
+				SET_TILE_DECAL(psTile);
+			}
+			else
 			{
-				mapTile(i,j)->decal = hasUrbanDecal(i,j);
-			} else if (strcmp(tileset, "texpages/tertilesc3hw") == 0)
-			{
-				mapTile(i,j)->decal = hasRockiesDecal(i,j);
+				CLEAR_TILE_DECAL(psTile);
 			}
 		}
 	}
@@ -948,24 +974,22 @@ BOOL mapLoad(char *filename)
 
 	// reset the random water bottom heights
 	environReset();
-	
+
 	// set the river bed
 	for (i=0;i<mapWidth;i++)
 	{
 		for (j=0;j<mapHeight;j++)
 		{
-			// copy over to height_new
-			setTileHeight(i,j, map_TileHeight(i, j));
 			// FIXME: magic number
-			mapTile(i,j)->waterLevel = mapTile(i,j)->height_new - world_coord(1)/3.0f/(float)ELEVATION_SCALE;
-			// lower riverbed (only for height_new)
-			if (mapTile(i,j)->ground == waterGroundType)
+			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3.0f / (float)ELEVATION_SCALE;
+			// lower riverbed
+			if (mapTile(i, j)->ground == waterGroundType)
 			{
-				mapTile(i,j)->height_new = mapTile(i,j)->height_new - (WATER_DEPTH - 2.0f*environGetData(i, j)) / (float)ELEVATION_SCALE;
+				mapTile(i, j)->height -= (WATER_DEPTH - 2.0f * environGetData(i, j)) / (float)ELEVATION_SCALE;
 			}
 		}
 	}
-	
+
 	/* set up the scroll mins and maxs - set values to valid ones for any new map */
 	scrollMinX = scrollMinY = 0;
 	scrollMaxX = mapWidth;
@@ -1833,7 +1857,7 @@ BOOL mapShutdown(void)
 	return true;
 }
 
-/// The height of the terrain at the specified world coordinates
+/// The max height of the terrain and water at the specified world coordinates
 extern SWORD map_Height(int x, int y)
 {
 	int tileX, tileY;
@@ -1869,7 +1893,7 @@ extern SWORD map_Height(int x, int y)
 	{
 		for (j = 0; j < 2; j++)
 		{
-			height[i][j] = map_TileHeight(tileX+i, tileY+j);
+			height[i][j] = map_TileHeightSurface(tileX+i, tileY+j);
 			center += height[i][j];
 		}
 	}
@@ -1932,6 +1956,7 @@ extern SWORD map_Height(int x, int y)
 	onBottom = left * (1 - towardsRight) + right * towardsRight;
 	result = onBottom + (center - middle) * towardsCenter * 2;
 
+	result = MAX(result, 0);  // HACK Avoid unsigned underflow, when this is squashed into a Vector3uw later.
 	return (SDWORD)(result+0.5f);
 }
 
@@ -1939,15 +1964,16 @@ extern SWORD map_Height(int x, int y)
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 {
 	// min is used to make sure we don't go over array bounds!
+	// TODO Using the corner of the map instead doesn't make sense. Fix this...
 	SDWORD	iZ,
 			tileX = map_coord(psObj->pos.x),
 			tileY = map_coord(psObj->pos.y),
 			tileYOffset1 = (tileY * mapWidth),
 			tileYOffset2 = ((tileY+1) * mapWidth),
-			h1 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX)    ].height,
-			h2 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX + 1)].height,
-			h3 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX)    ].height,
-			h4 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX + 1)].height;
+			h1 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset1 + tileX)    ].height,
+			h2 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset1 + tileX + 1)].height,
+			h3 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset2 + tileX)    ].height,
+			h4 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset2 + tileX + 1)].height;
 
 	/* trivial test above */
 	if ( (psObj->pos.z > h1) && (psObj->pos.z > h2) &&
