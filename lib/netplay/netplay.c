@@ -953,7 +953,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 	}
 
 #if defined(SO_NOSIGPIPE)
-	if (setsockopt(newConn, SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
+	if (setsockopt(conn->fd[SOCK_CONNECTION], SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
 	{
 		debug(LOG_WARNING, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
 	}
