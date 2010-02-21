@@ -1,4 +1,4 @@
-2010-02-21: Version 2.3_rc1a
+2010-02-21: Version 2.3 beta 11
  * General:
    * Add: Add MessageBox support on systems that have Motif (r9814, ticket:1569)
    * Change: Display time and level name in release builds now
@@ -54,6 +54,8 @@
    * Fix: Fix kicking issues when players tried to play a game when they came from a previous game (r9603)
    * Fix: Network synchronization updates was broken for most orders (r9681, ticket:1505, ticket:1516)
    * Fix: Remove disabled players from skirmish games with scavengers turned on (r9724)
+   * Fix: Re-initialize player data when a player is removed (r9963)
+   * Fix: Fix assert if socket set not allocated but socket needs to be deleted. (r9967)
  * Skirmish:
    * Fix: The Wide Spectrum Sensor no longer works as a Counterbattery sensor as this allowed cheating (r9560)
    * Fix: Workaround for bug that made AI stop research sometimes fixed (r9534)
