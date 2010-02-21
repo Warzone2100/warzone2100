@@ -736,7 +736,7 @@ Section "Uninstall"
   Delete "$INSTDIR\mods\music\music_1.0.AUTHORS.txt"
   Delete "$INSTDIR\mods\music\music_1.0.wz"
 
-  Delete "$INSTDIR\mods\multiplay\dido-ai.wz"
+  Delete "$INSTDIR\mods\multiplay\dydo-ai.wz"
   Delete "$INSTDIR\mods\multiplay\ntw.wz"
   Delete "$INSTDIR\mods\multiplay\old-1.10-balance.wz"
 
