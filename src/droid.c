@@ -3458,14 +3458,14 @@ struct rankMap
 static const struct rankMap arrRank[] =
 {
 	{0,   0,    N_("Rookie")},
-	{4,   16,   NP_("rank", "Green")},
-	{8,   32,   N_("Trained")},
-	{16,  64,   N_("Regular")},
-	{32,  128,  N_("Professional")},
-	{64,  256,  N_("Veteran")},
-	{128, 512,  N_("Elite")},
-	{256, 1024, N_("Special")},
-	{512, 2048, N_("Hero")}
+	{4,   8,    NP_("rank", "Green")},
+	{8,   16,   N_("Trained")},
+	{16,  32,   N_("Regular")},
+	{32,  64,   N_("Professional")},
+	{64,  128,  N_("Veteran")},
+	{128, 256,  N_("Elite")},
+	{256, 512,  N_("Special")},
+	{512, 1024, N_("Hero")}
 };
 
 unsigned int getDroidLevel(const DROID* psDroid)
@@ -3474,12 +3474,6 @@ unsigned int getDroidLevel(const DROID* psDroid)
 						psDroid->droidType == DROID_SENSOR) ? true : false;
 	unsigned int numKills = psDroid->experience;
 	unsigned int i;
-
-	// Commanders don't need as much kills for ranks in multiplayer
-	if (isCommander && cmdGetDroidMultiExpBoost())
-	{
-		numKills *= 2;
-	}
 
 	// Search through the array of ranks until one is found
 	// which requires more kills than the droid has.
@@ -3508,11 +3502,8 @@ UDWORD getDroidEffectiveLevel(DROID *psDroid)
 	{
 		cmdLevel = cmdGetCommanderLevel(psDroid);
 
-		// Commanders boost unit's effectiveness just by being assigned to it
-		if(bMultiPlayer)
-		{
-			cmdLevel++;
-		}
+		// Commanders boost units' effectiveness just by being assigned to it
+		level++;
 	}
 
 	return MAX(level, cmdLevel);
