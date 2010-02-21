@@ -172,7 +172,7 @@ lib/ivis_opengl/textdraw.c
 lib/netplay/netjoin_stub.c
 lib/netplay/netlog.c
 lib/netplay/netplay.c
-lib/netplay/nettypes.c
+lib/netplay/nettypes.cpp
 lib/script/codeprint.c
 lib/script/event.c
 lib/script/eventsave.c
