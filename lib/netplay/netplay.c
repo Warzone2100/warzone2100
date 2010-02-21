@@ -141,7 +141,7 @@ static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leavi
 static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETregisterServer(int state);
 static void NETallowJoining(void);
-
+static void NET_InitPlayer(int i);
 
 void NETGameLocked( bool flag);
 void NETresetGamePassword(void);
@@ -1419,24 +1419,29 @@ error:
 	return false;
 }
 
+static void NET_InitPlayer(int i)
+{
+	NetPlay.players[i].allocated = false;
+	NetPlay.players[i].heartattacktime = 0;
+	NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
+	NetPlay.players[i].kick = false;
+	NetPlay.players[i].name[0] = '\0';
+	NetPlay.players[i].colour = i;
+	NetPlay.players[i].position = i;
+	NetPlay.players[i].team = i;
+	NetPlay.players[i].ready = false;
+	NetPlay.players[i].needFile = false;
+	NetPlay.players[i].wzFile.isCancelled = false;
+	NetPlay.players[i].wzFile.isSending = false;
+}
+
 void NET_InitPlayers()
 {
 	unsigned int i;
 
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		NetPlay.players[i].allocated = false;
-		NetPlay.players[i].heartattacktime = 0;
-		NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
-		NetPlay.players[i].kick = false;
-		NetPlay.players[i].name[0] = '\0';
-		NetPlay.players[i].colour = i;
-		NetPlay.players[i].position = i;
-		NetPlay.players[i].team = i;
-		NetPlay.players[i].ready = false;
-		NetPlay.players[i].needFile = false;
-		NetPlay.players[i].wzFile.isCancelled = false;
-		NetPlay.players[i].wzFile.isSending = false;
+		NET_InitPlayer(i);
 	}
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
@@ -1498,6 +1503,7 @@ static void NET_DestroyPlayer(unsigned int index)
 			NETregisterServer(1);
 		}
 	}
+	NET_InitPlayer(index);	// reinitialize
 }
 
 /**
@@ -1510,12 +1516,7 @@ static void NETplayerClientDisconnect(uint32_t index)
 	{
 		debug(LOG_NET, "Player (%u) has left unexpectedly, closing socket %p",
 			index, connected_bsocket[index]->socket);
-
-		// Although we can get a error result from DelSocket, it don't really matter here.
-		SocketSet_DelSocket(socket_set, connected_bsocket[index]->socket);
-		socketClose(connected_bsocket[index]->socket);
-		connected_bsocket[index]->socket = NULL;
-		NetPlay.players[index].heartbeat = false;
+		NETplayerLeaving(index);
 
 		// Announce to the world. This is really icky, because we may be calling the send
 		// function recursively. We really ought to have a send queue...
@@ -1536,10 +1537,12 @@ static void NETplayerClientDisconnect(uint32_t index)
  */
 static void NETplayerLeaving(UDWORD index)
 {
+	NET_DestroyPlayer(index);		// sets index player's array to false
+	MultiPlayerLeave(index);		// more cleanup
+
 	if(connected_bsocket[index])
 	{
-		debug(LOG_NET, "Player (%u) has left nicely, closing socket %p",
-			index, connected_bsocket[index]->socket);
+		debug(LOG_NET, "Player (%u) has left, closing socket %p", index, connected_bsocket[index]->socket);
 
 		// Although we can get a error result from DelSocket, it don't really matter here.
 		SocketSet_DelSocket(socket_set, connected_bsocket[index]->socket);
@@ -1580,8 +1583,6 @@ void NETplayerKicked(UDWORD index)
 	// kicking a player counts as "leaving nicely", since "nicely" in this case
 	// simply means "there wasn't a connection error."
 	debug(LOG_INFO, "Player %u was kicked.", index);
-	NET_DestroyPlayer(index);		// sets index player's array to false
-	MultiPlayerLeave(index);		// more cleanup
 	NETplayerLeaving(index);		// need to close socket for the player that left.
 	NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
 }
@@ -2489,8 +2490,6 @@ static BOOL NETprocessSystemMessage(void)
 				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u ", (unsigned int)index);
 			}
 			debug(LOG_INFO, "Player %u has left the game.", index);
-			NET_DestroyPlayer(index);		// sets index player's array to false
-			MultiPlayerLeave(index);		// more cleanup
 			NETplayerLeaving(index);		// need to close socket for the player that left.
 			NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
 			break;
@@ -2559,12 +2558,14 @@ static void NETcheckPlayers(void)
 			{
 				if (NetPlay.players[i].heartattacktime + (15 * GAME_TICKS_PER_SEC) <  gameTime2) // wait 15 secs
 				{
+					debug(LOG_NET, "Kicking due to client heart attack");
 					NetPlay.players[i].kick = true;		// if still dead, then kick em.
 				}
 			}
 		}
 		if (NetPlay.players[i].kick)
 		{
+			debug(LOG_NET, "Kicking player %d", i);
 			NETplayerDropped(i);
 		}
 	}
