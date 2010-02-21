@@ -8,6 +8,7 @@
    * Fix: Power generator output should now always be correct (r9891, r9894, ticket:1469)
    * Fix: Multiple cross build system fixes (r9870-78, 9899)
    * Change: Unify commander levels (r9941, ticket:1612)
+   * Change: Use -fstack-protector if available (r9940)
  * Skirmish:
    * Fix: Add back missing cyborg mechanic, thermite and grenadier (r9750, ticket:1607)
    * Fix: Stop AI from building VTOL factory before it is researched (r9713)
