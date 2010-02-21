@@ -27,7 +27,8 @@
    * Fix: Update NTW to work with new template system and other various fixes (r9773, r9910)
    * Remove: Aivolution (r9752)
  * Translations:
-   * Update:  Various translation updates / fixes (r9759, r9828, r9829, r9830, r9831)
+   * Fix: Make more strings translatable (r9758)
+   * Updated: Spanish (r9759, r9828), Brazilian (r9829), Ukrainian (r9830), German (r9831, r9331), Croatian (r9883), Polish (r9933)
 
 2010-02-07: Version 2.3 beta 10
  * General:
