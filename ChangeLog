@@ -6,7 +6,7 @@
    * Fix: NSIS updates (r9764, r9907)
    * Fix: Only drop artifacts on a fully built factory (r9795, r9787, ticket:1574)
    * Fix: Power generator output should now always be correct (r9891, r9894, ticket:1469)
-   * Fix: Multiple cross build system fixes (r9870-78, 9899)
+   * Fix: Multiple cross build system fixes (r9870-r9878, r9899)
    * Change: Unify commander levels (r9941, ticket:1612)
    * Change: Use -fstack-protector if available (r9940)
  * Skirmish:
@@ -22,7 +22,7 @@
    * Fix: Remove disabled players from the map when scavengers are turned on (r9724)
    * Fix: When player aborts file transfers, close the old filehandle. (r9923)
    * Fix: When player is forced to drop, don't strand them in the lobby. (r9924)
-   * Fix: Try to fix all SIGPIPE issues (r9915-18)
+   * Fix: Try to fix all SIGPIPE and SIGBUS issues on linux (r9915-r9918, r9954, ticket:1136)
    * Fix:  Fix SIGBUS errors (r9954)
    * Change: Balance tweaks (r9946)
    * Fix: ignore `turnOffMultiMsg` for sending droid deaths from HP loss (r9944, ticket:1612)
