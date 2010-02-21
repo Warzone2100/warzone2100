@@ -611,7 +611,7 @@ static SocketSet* allocSocketSet(size_t count)
  *
  * @return true if @c socket is succesfully added to @set.
  */
-static bool addSocket(SocketSet* set, Socket* socket)
+static bool SocketSet_AddSocket(SocketSet* set, Socket* socket)
 {
 	size_t i;
 
@@ -644,7 +644,7 @@ static bool addSocket(SocketSet* set, Socket* socket)
 /**
  * Remove the given socket from the given socket set.
  */
-static void delSocket(SocketSet* set, Socket* socket)
+static void SocketSet_DelSocket(SocketSet* set, Socket* socket)
 {
 	size_t i;
 
@@ -1328,7 +1328,7 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 		// an error occured, or the remote host has closed the connection.
 		if (socket_set != NULL)
 		{
-			delSocket(socket_set, bs->socket);
+			SocketSet_DelSocket(socket_set, bs->socket);
 		}
 
 		ASSERT(bs->bytes < NET_BUFFER_SIZE, "Socket buffer is too small!");
@@ -1509,7 +1509,7 @@ static void NETplayerClientDisconnect(uint32_t index)
 			index, connected_bsocket[index]->socket);
 
 		// Although we can get a error result from DelSocket, it don't really matter here.
-		delSocket(socket_set, connected_bsocket[index]->socket);
+		SocketSet_DelSocket(socket_set, connected_bsocket[index]->socket);
 		socketClose(connected_bsocket[index]->socket);
 		connected_bsocket[index]->socket = NULL;
 		NetPlay.players[index].heartbeat = false;
@@ -1539,7 +1539,7 @@ static void NETplayerLeaving(UDWORD index)
 			index, connected_bsocket[index]->socket);
 
 		// Although we can get a error result from DelSocket, it don't really matter here.
-		delSocket(socket_set, connected_bsocket[index]->socket);
+		SocketSet_DelSocket(socket_set, connected_bsocket[index]->socket);
 		socketClose(connected_bsocket[index]->socket);
 		connected_bsocket[index]->socket = NULL;
 	}
@@ -2126,7 +2126,7 @@ int NETclose(void)
 	allow_joining = false;
 
 	if(bsocket)
-	{	// need delSocket() as well, socket_set or tmp_socket_set?
+	{	// need SocketSet_DelSocket() as well, socket_set or tmp_socket_set?
 		debug(LOG_NET, "Closing bsocket %p socket %p (tcp_socket=%p)", bsocket, bsocket->socket, tcp_socket);
 		//socketClose(bsocket->socket);
 		NET_destroyBufferedSocket(bsocket);
@@ -2159,7 +2159,7 @@ int NETclose(void)
 	{
 		if (tmp_socket[i])
 		{
-			// FIXME: need delSocket() as well, socket_set or tmp_socket_set?
+			// FIXME: need SocketSet_DelSocket() as well, socket_set or tmp_socket_set?
 			debug(LOG_NET, "Closing tmp_socket[%d] %p", i, tmp_socket[i]);
 			socketClose(tmp_socket[i]);
 			tmp_socket[i]=NULL;
@@ -2171,7 +2171,7 @@ int NETclose(void)
 		// checking to make sure tcp_socket is still valid
 		if (tcp_socket)
 		{
-			delSocket(socket_set, tcp_socket);
+			SocketSet_DelSocket(socket_set, tcp_socket);
 		}
 		debug(LOG_NET, "Freeing socket_set %p", socket_set);
 		free(socket_set);
@@ -3179,7 +3179,7 @@ static void NETallowJoining(void)
 	if (tmp_socket[i] == NULL // Make sure that we're not out of sockets
 	 && (tmp_socket[i] = socketAccept(tcp_socket)) != NULL)
 	{
-		addSocket(tmp_socket_set, tmp_socket[i]);
+		SocketSet_AddSocket(tmp_socket_set, tmp_socket[i]);
 		if (checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
 		    && tmp_socket[i]->ready
 		    && (recv_result = readNoInt(tmp_socket[i], buffer, 5))
@@ -3202,7 +3202,7 @@ static void NETallowJoining(void)
 					NETsendGAMESTRUCT(tmp_socket[i], &gamestruct);
 				}
 
-				delSocket(tmp_socket_set, tmp_socket[i]);
+				SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 				socketClose(tmp_socket[i]);
 				tmp_socket[i] = NULL;
 			}
@@ -3212,21 +3212,21 @@ static void NETallowJoining(void)
 				if (!NETsendGAMESTRUCT(tmp_socket[i], &gamestruct))
 				{
 					debug(LOG_ERROR, "Failed to respond (with GAMESTRUCT) to 'join' command: %s", strSockError(getSockErr()));
-					delSocket(tmp_socket_set, tmp_socket[i]);
+					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					socketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
 			}
 			else
 			{
-				delSocket(tmp_socket_set, tmp_socket[i]);
+				SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 				socketClose(tmp_socket[i]);
 				tmp_socket[i] = NULL;
 			}
 		}
 		else
 		{
-			delSocket(tmp_socket_set, tmp_socket[i]);
+			SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 			socketClose(tmp_socket[i]);
 			tmp_socket[i] = NULL;
 		}
@@ -3253,7 +3253,7 @@ static void NETallowJoining(void)
 						debug(LOG_NET, "Client socket ecountered error: %s", strSockError(getSockErr()));
 					}
 
-					delSocket(tmp_socket_set, tmp_socket[i]);
+					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					socketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
@@ -3284,15 +3284,15 @@ static void NETallowJoining(void)
 					if (index == -1)
 					{
 						// FIXME: No room. Dropping the player without warning since protocol doesn't seem to support rejection at this point
-						delSocket(tmp_socket_set, tmp_socket[i]);
+						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 						socketClose(tmp_socket[i]);
 						tmp_socket[i] = NULL;
 						return;
 					}
 
-					delSocket(tmp_socket_set, tmp_socket[i]);
+					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					NET_initBufferedSocket(connected_bsocket[index], tmp_socket[i]);
-					addSocket(socket_set, connected_bsocket[index]->socket);
+					SocketSet_AddSocket(socket_set, connected_bsocket[index]->socket);
 					tmp_socket[i] = NULL;
 
 					if (!NETisCorrectVersion(MajorVersion, MinorVersion))
@@ -3326,7 +3326,7 @@ static void NETallowJoining(void)
 						NET_DestroyPlayer(index);
 						allow_joining = true;
 
-						delSocket(socket_set, connected_bsocket[index]->socket);
+						SocketSet_DelSocket(socket_set, connected_bsocket[index]->socket);
 						socketClose(connected_bsocket[index]->socket);
 						connected_bsocket[index]->socket = NULL;
 						return;
@@ -3549,7 +3549,7 @@ BOOL NETfindGame(void)
 	if (tcp_socket != NULL)
 	{
 		debug(LOG_NET, "Deleting tcp_socket %p", tcp_socket);
-		delSocket(socket_set,tcp_socket);
+		SocketSet_DelSocket(socket_set,tcp_socket);
 		socketClose(tcp_socket);
 		tcp_socket = NULL;
 	}
@@ -3580,7 +3580,7 @@ BOOL NETfindGame(void)
 	}
 	debug(LOG_NET, "Created socket_set %p", socket_set);
 
-	addSocket(socket_set, tcp_socket);
+	SocketSet_AddSocket(socket_set, tcp_socket);
 
 	debug(LOG_NET, "Sending list cmd");
 
@@ -3712,13 +3712,13 @@ connect_succesfull:
 	debug(LOG_NET, "Created socket_set %p", socket_set);
 
 	// tcp_socket is used to talk to host machine
-	addSocket(socket_set, tcp_socket);
+	SocketSet_AddSocket(socket_set, tcp_socket);
 
 	if (writeAll(tcp_socket, "join", sizeof("join")) == SOCKET_ERROR)
 	{
 		debug(LOG_ERROR, "Failed to send 'join' command: %s", strSockError(getSockErr()));
 		freeaddrinfo(hosts);
-		delSocket(socket_set, tcp_socket);
+		SocketSet_DelSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
 		free(socket_set);
 		socket_set = NULL;
@@ -3734,7 +3734,7 @@ connect_succesfull:
 	if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
 	{
 		// Shouldn't join; game is full
-		delSocket(socket_set, tcp_socket);
+		SocketSet_DelSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
 		free(socket_set);
 		socket_set = NULL;
