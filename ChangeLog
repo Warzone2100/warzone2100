@@ -1,11 +1,12 @@
-2010-02-21: Version 2.3 RC2
+2010-02-21: Version 2.3_rc1b
  * General:
    * Add: Add MessageBox support on systems that have Motif (r9814, ticket:1569)
    * Change: Display time and level name in release builds now
    * Change: add 'logs' directory in config dir to store all netplay logs. (r9779, ticket:1564)
-   * Fix: NSIS updates (r9764)
+   * Fix: NSIS updates (r9764, r9907)
    * Fix: Only drop artifacts on a fully built factory (r9795, r9787, ticket:1574)
    * Fix: Power generator output should now always be correct (r9891, r9894)
+   * Fix: Multiple cross build system fixes (r9870-78, 9899)
  * Skirmish:
    * Change: 
    * Fix: Add back missing cyborg mechanic, thermite and grenadier (r9750, ticket:1607)
@@ -18,9 +19,12 @@
    * Fix: When a player drops, abort the map transfer (r9838)
    * Fix: Fix bug regarding alt-orders not being sent over netcode correctly (r9840, ticket:1474)
    * Fix: Remove disabled players from the map when scavengers are turned on (r9724)
+   * Fix: When player aborts file transfers, close the old filehandle. (r9923)
+   * Fix: When player is forced to drop, don't strand them in the lobby. (r9924)
+   * Fix: Try to fix all SIGPIPE issues (r9915-18)
  * Mods:
    * Add: Dydo AI added (r9901)
-   * Fix: Update NTW to work with new template system and other various fixes (r9773)
+   * Fix: Update NTW to work with new template system and other various fixes (r9773, r9910)
    * Remove: Aivolution (r9752)
  * Translations:
    * Update:  Various translation updates / fixes (r9759, r9828, r9829, r9830, r9831)
