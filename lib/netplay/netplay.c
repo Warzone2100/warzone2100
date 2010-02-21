@@ -507,6 +507,7 @@ static bool connectionIsOpen(Socket* sock)
 		{
 			// Disconnected
 			setSockErr(ECONNRESET);
+			debug(LOG_NET, "Read queue empty - failing");
 			return false;
 		}
 	}
@@ -561,11 +562,6 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 	{
 		ssize_t ret;
 
-		if (!connectionIsOpen(sock))
-		{
-			return SOCKET_ERROR;
-		}
-
 		ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, MSG_NOSIGNAL);
 		if (ret == SOCKET_ERROR)
 		{
@@ -575,9 +571,16 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 #if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
 				case EWOULDBLOCK:
 #endif
+					if (!connectionIsOpen(sock))
+					{
+						return SOCKET_ERROR;
+					}
 				case EINTR:
 					continue;
 
+				case EPIPE:
+					debug(LOG_NET, "EPIPE generated");
+					// fall through
 				default:
 					return SOCKET_ERROR;
 			}
@@ -741,7 +744,6 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 			if (set->fds[i])
 			{
 				const SOCKET fd = set->fds[i]->fd[SOCK_CONNECTION];
-
 				FD_SET(fd, &fds);
 			}
 		}
@@ -2709,14 +2711,13 @@ receive_message:
 						if (writeAll(connected_bsocket[j]->socket, pMsg, size) == SOCKET_ERROR)
 						{
 							// Write error, most likely client disconnect.
-							debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-							socketClose(connected_bsocket[j]->socket);
-							connected_bsocket[j]->socket = NULL;
+							debug(LOG_ERROR, "Failed to send message (host broadcast): %s", strSockError(getSockErr()));
+							NETplayerClientDisconnect(j);
 						}
 					}
 				}
 			}
-			else if (pMsg->destination != selectedPlayer)
+			else if (pMsg->destination != selectedPlayer && pMsg->destination < MAX_CONNECTED_PLAYERS)
 			{
 				// message was not meant for us; send it further
 				if (   pMsg->destination < MAX_CONNECTED_PLAYERS
@@ -2729,9 +2730,8 @@ receive_message:
 					if (writeAll(connected_bsocket[pMsg->destination]->socket, pMsg, size) == SOCKET_ERROR)
 					{
 						// Write error, most likely client disconnect.
-						debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-						socketClose(connected_bsocket[pMsg->destination]->socket);
-						connected_bsocket[pMsg->destination]->socket = NULL;
+						debug(LOG_ERROR, "Failed to send message (host specific): %s", strSockError(getSockErr()));
+						NETplayerClientDisconnect(pMsg->destination);
 					}
 				}
 				else
