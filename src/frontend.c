@@ -429,6 +429,7 @@ BOOL runSinglePlayerMenu(void)
 		// game.type is switched to SKIRMISH in startMultiOptions()
 		NetPlay.bComms = false;
 		bMultiPlayer = false;
+		bMultiMessages = false;
 		game.type = CAMPAIGN;
 		NetPlay.players[0].allocated = true;
 		// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
@@ -543,6 +544,7 @@ BOOL runMultiPlayerMenu(void)
 		NETdiscoverUPnPDevices();
 		ingame.bHostSetup = true;
 		bMultiPlayer = true;
+		bMultiMessages = true;
 		game.type = SKIRMISH;		// needed?
 		NetPlay.bComms = true;
 		changeTitleMode(MULTIOPTION);
@@ -550,6 +552,7 @@ BOOL runMultiPlayerMenu(void)
 	case FRONTEND_JOIN:
 		ingame.bHostSetup = false;
 		bMultiPlayer = true;
+		bMultiMessages = true;
 		if (getLobbyError() != ERROR_CHEAT && getLobbyError() != ERROR_KICKED)
 		{
 			setLobbyError(ERROR_NOERROR);

@@ -343,17 +343,17 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 	ASSERT_OR_RETURN(, psGroup != NULL,
 		"orderGroupLoc: invalid droid group" );
 
-	if(bMultiPlayer)
+	if(bMultiMessages)
 	{
 		SendGroupOrderGroup(psGroup,order,x,y,NULL);
-		bMultiPlayer = false;
+		bMultiMessages = false;
 
 		for(psCurr=psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			orderDroidLoc(psCurr, order, x,y);
 		}
 
-		bMultiPlayer = true;
+		bMultiMessages = true;
 	}
 	else
 	{
@@ -372,17 +372,17 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 	ASSERT_OR_RETURN(, psGroup != NULL,
 		"orderGroupObj: invalid droid group" );
 
-	if(bMultiPlayer)
+	if(bMultiMessages)
 	{
 		SendGroupOrderGroup(psGroup,order,0,0,psObj);
-		bMultiPlayer = false;
+		bMultiMessages = false;
 
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			orderDroidObj(psCurr, order, (BASE_OBJECT *)psObj);
 		}
 
-		bMultiPlayer = true;
+		bMultiMessages = true;
 	}
 	else
 	{

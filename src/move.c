@@ -313,7 +313,7 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 
 	CHECK_DROID(psDroid);
 
-	if(bMultiPlayer && (psDroid->sMove.Status != MOVEWAITROUTE))
+	if (bMultiMessages && (psDroid->sMove.Status != MOVEWAITROUTE))
 	{
 		if(SendDroidMove(psDroid,x,y,bFormation) == false)
 		{// dont make the move since we'll recv it anyway

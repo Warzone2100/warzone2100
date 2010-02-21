@@ -2187,7 +2187,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			orderDroid(psDroid, DORDER_STOP);
 			gridAddObject((BASE_OBJECT *)psDroid);
 			psDroid->selected = false;
-			if (!bMultiPlayer)
+			if (!bMultiMessages)
 			{
 				// So VTOLs don't try to rearm on another map
 				setDroidBase(psDroid, NULL);
@@ -2200,7 +2200,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			}
 
 			// Inform all other players
-			if (bMultiPlayer)
+			if (bMultiMessages)
 			{
 				sendDroidDisEmbark(psDroid, psTransporter);
 			}

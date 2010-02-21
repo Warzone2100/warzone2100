@@ -4093,7 +4093,7 @@ void intProcessDesign(UDWORD id)
 			if ( psTempl )
 			{
 
-				if (bMultiPlayer)		//ajl. inform others of template destruction.
+				if (bMultiMessages)		//ajl. inform others of template destruction.
 				{
 					SendDestroyTemplate(psTempl);
 				}
@@ -4669,7 +4669,7 @@ static BOOL saveTemplate(void)
 		ASSERT_OR_RETURN( false, psTempl != NULL, "Template is NULL in saveTemplate()!");
 		psTempl->multiPlayerID = (objID<<3)|selectedPlayer;
 		objID++;
-		if (bMultiPlayer)
+		if (bMultiMessages)
 		{
 			sendTemplate(psTempl);
 		}

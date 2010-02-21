@@ -4447,7 +4447,7 @@ BOOL scrCompleteResearch(void)
 	researchResult(researchIndex, (UBYTE)player, false, NULL);
 
 
-	if(bMultiPlayer && (gameTime > 2 ))
+	if (bMultiMessages && (gameTime > 2 ))
 	{
 		SendResearch((UBYTE)player,researchIndex );
 	}
@@ -11480,7 +11480,7 @@ BOOL scrAssembleWeaponTemplate(void)
 			pNewTemplate->psNext = apsDroidTemplates[player];
 			apsDroidTemplates[player] = pNewTemplate;		//apsTemplateList?
 
-			if (bMultiPlayer)
+			if (bMultiMessages)
 			{
 				sendTemplate(pNewTemplate);
 			}
