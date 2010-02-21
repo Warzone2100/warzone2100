@@ -58,6 +58,8 @@ win32/libs/png/libpng-1.2.36
 win32/libs/popt/extract-stamp
 win32/libs/popt/patch-stamp
 win32/libs/popt/popt-1.12
+win32/libs/qt4/extract-stamp
+win32/libs/qt4/qt-everywhere-opensource-src-4.6.2
 win32/libs/quesoglc/fetch-stamp
 win32/libs/quesoglc/quesoglc-0.7.3~svn913
 win32/libs/sdl/SDL-1.2.13

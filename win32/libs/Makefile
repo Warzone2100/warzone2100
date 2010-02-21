@@ -1,4 +1,4 @@
-SUBDIRS=dejavu devpkg expat freetype2 gettext iconv zlib fontconfig ogg popt png quesoglc sdl vorbis theora
+SUBDIRS=dejavu devpkg expat freetype2 gettext iconv zlib fontconfig ogg popt png quesoglc sdl vorbis theora qt4
 
 all: all-recursive
 build: build-recursive
