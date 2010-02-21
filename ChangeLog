@@ -1,4 +1,4 @@
-2010-02-21: Version 2.3_rc1b
+2010-02-21: Version 2.3_rc1a
  * General:
    * Add: Add MessageBox support on systems that have Motif (r9814, ticket:1569)
    * Change: Display time and level name in release builds now
@@ -7,6 +7,7 @@
    * Fix: Only drop artifacts on a fully built factory (r9795, r9787, ticket:1574)
    * Fix: Power generator output should now always be correct (r9891, r9894, ticket:1469)
    * Fix: Multiple cross build system fixes (r9870-78, 9899)
+   * Change: Unify commander levels (r9941, ticket:1612)
  * Skirmish:
    * Fix: Add back missing cyborg mechanic, thermite and grenadier (r9750, ticket:1607)
    * Fix: Stop AI from building VTOL factory before it is researched (r9713)
@@ -21,6 +22,10 @@
    * Fix: When player aborts file transfers, close the old filehandle. (r9923)
    * Fix: When player is forced to drop, don't strand them in the lobby. (r9924)
    * Fix: Try to fix all SIGPIPE issues (r9915-18)
+   * Fix:  Fix SIGBUS errors (r9954)
+   * Change: Balance tweaks (r9946)
+   * Fix: ignore `turnOffMultiMsg` for sending droid deaths from HP loss (r9944, ticket:1612)
+   * Fix: split bMultiPlayer and bMultiMessages (r9942, ticket:1268)
  * Mods:
    * Add: Dydo AI added (r9901)
    * Fix: Update NTW to work with new template system and other various fixes (r9773, r9910)
