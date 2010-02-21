@@ -262,9 +262,9 @@ extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "2.3 svn"; // used for display in the lobby, not the actual version check
+char VersionString[VersionStringSize] = "2.3 RC1a"; // used for display in the lobby, not the actual version check
 static int NETCODE_VERSION_MAJOR = 2;                // major netcode version, used for compatibility check
-static int NETCODE_VERSION_MINOR = 51;               // minor netcode version, used for compatibility check
+static int NETCODE_VERSION_MINOR = 52;               // minor netcode version, used for compatibility check
 static int NETCODE_HASH = 0;			// unused for now
 
 static int checkSockets(const SocketSet* set, unsigned int timeout);
