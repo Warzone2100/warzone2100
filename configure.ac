@@ -44,6 +44,10 @@ AC_GNU_SOURCE
 AX_CHECK_STRLCPY
 AX_CHECK_STRLCAT
 
+# Use -fstack-protector if possible
+AX_STACK_PROTECT_CC
+AX_STACK_PROTECT_CXX
+
 AC_CHECK_HEADERS(alloca.h)
 
 # Check for gettext
@@ -206,7 +210,7 @@ if test "x$enable_debug" = "xyes" ; then
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wall -Werror -Wno-unused-label -Wno-pointer-to-int-cast -Wmissing-field-initializers -Wcast-align -Wwrite-strings"
-		WZ_CFLAGS="${WZ_CFLAGS} -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith -Wno-format-security -Wdeclaration-after-statement -fstack-protector"
+		WZ_CFLAGS="${WZ_CFLAGS} -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith -Wno-format-security -Wdeclaration-after-statement"
 		WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi

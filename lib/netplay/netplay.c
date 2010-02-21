@@ -464,6 +464,57 @@ static const char* strSockError(int error)
 }
 
 /**
+ * Test whether the given socket still has an open connection.
+ *
+ * @return true when the connection is open, false when it's closed or in an
+ *         error state, check getSockErr() to find out which.
+ */
+static bool connectionIsOpen(Socket* sock)
+{
+	Socket* sockAr[] = { sock };
+	const SocketSet set = { ARRAY_SIZE(sockAr), sockAr };
+	int ret;
+
+	ASSERT_OR_RETURN((setSockErr(EBADF), false),
+		sock && sock->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid socket");
+
+	// Check whether the socket is still connected
+	ret = checkSockets(&set, 0);
+	if (ret == SOCKET_ERROR)
+	{
+		return false;
+	}
+	else if (ret == set.len
+	      && sock->ready)
+	{
+		/* The next recv(2) call won't block, but we're writing. So
+		 * check the read queue to see if the connection is closed.
+		 * If there's no data in the queue that means the connection
+		 * is closed.
+		 */
+#if defined(WZ_OS_WIN)
+		unsigned long readQueue;
+		ret = ioctlsocket(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
+#else
+		int readQueue;
+		ret = ioctl(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
+#endif
+		if (ret == SOCKET_ERROR)
+		{
+			return false;
+		}
+		else if (readQueue == 0)
+		{
+			// Disconnected
+			setSockErr(ECONNRESET);
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/**
  * Similar to read(2) with the exception that this function won't be
  * interrupted by signals (EINTR).
  */
@@ -508,41 +559,11 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 
 	while (written < size)
 	{
-		Socket* sockAr[] = { sock };
-		const SocketSet set = { ARRAY_SIZE(sockAr), sockAr };
 		ssize_t ret;
 
-		// Check whether the socket is still connected
-		ret = checkSockets(&set, 0);
-		if (ret == SOCKET_ERROR)
+		if (!connectionIsOpen(sock))
 		{
 			return SOCKET_ERROR;
-		}
-		else if (ret == set.len
-		      && sock->ready)
-		{
-			/* The next recv(2) call won't block, but we're writing. So
-			 * check the read queue to see if the connection is closed.
-			 * If there's no data in the queue that means the connection
-			 * is closed.
-			 */
-#if defined(WZ_OS_WIN)
-			unsigned long readQueue;
-			ret = ioctlsocket(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
-#else
-			int readQueue;
-			ret = ioctl(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
-#endif
-			if (ret == SOCKET_ERROR)
-			{
-				return SOCKET_ERROR;
-			}
-			else if (readQueue == 0)
-			{
-				// Disconnected
-				setSockErr(ECONNRESET);
-				return SOCKET_ERROR;
-			}
 		}
 
 		ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, MSG_NOSIGNAL);
@@ -667,6 +688,22 @@ static bool setSocketBlocking(const SOCKET fd, bool blocking)
 	}
 
 	return true;
+}
+
+static void socketBlockSIGPIPE(const SOCKET fd, bool block_sigpipe)
+{
+#if defined(SO_NOSIGPIPE)
+	const int no_sigpipe = block_sigpipe ? 1 : 0;
+
+	if (setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
+	{
+		debug(LOG_WARNING, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
+	}
+#else
+	// Prevent warnings
+	(void)fd;
+	(void)block_sigpipe;
+#endif
 }
 
 static int checkSockets(const SocketSet* set, unsigned int timeout)
@@ -848,10 +885,6 @@ static Socket* socketAccept(Socket* sock)
 	{
 		if (sock->fd[i] != INVALID_SOCKET)
 		{
-#if defined(SO_NOSIGPIPE)
-			static const int no_sigpipe = 1;
-#endif
-
 			char textAddress[40];
 			struct sockaddr_storage addr;
 			socklen_t addr_len = sizeof(addr);
@@ -871,12 +904,7 @@ static Socket* socketAccept(Socket* sock)
 				continue;
 			}
 
-#if defined(SO_NOSIGPIPE)
-			if (setsockopt(newConn, SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
-			{
-				debug(LOG_WARNING, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
-			}
-#endif
+			socketBlockSIGPIPE(newConn, true);
 
 			conn = malloc(sizeof(*conn) + addr_len);
 			if (conn == NULL)
@@ -909,10 +937,6 @@ static Socket* socketAccept(Socket* sock)
 
 static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 {
-#if defined(SO_NOSIGPIPE)
-	static const int no_sigpipe = 1;
-#endif
-
 	char textAddress[40];
 	unsigned int i;
 	int ret;
@@ -952,12 +976,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		return NULL;
 	}
 
-#if defined(SO_NOSIGPIPE)
-	if (setsockopt(conn->fd[SOCK_CONNECTION], SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
-	{
-		debug(LOG_WARNING, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
-	}
-#endif
+	socketBlockSIGPIPE(conn->fd[SOCK_CONNECTION], true);
 
 	ret = connect(conn->fd[SOCK_CONNECTION], addr->ai_addr, addr->ai_addrlen);
 	if (ret == SOCKET_ERROR)
@@ -1049,11 +1068,11 @@ static Socket* socketListen(unsigned int port)
 #if defined(IPV6_V6ONLY)
 	static const int ipv6_v6only = 0;
 #endif
+	static const int so_reuseaddr = 1;
 
 	struct sockaddr_in addr4;
 	struct sockaddr_in6 addr6;
 	unsigned int i;
-	int opt = 1;
 
 	Socket* const conn = malloc(sizeof(*conn));
 	if (conn == NULL)
@@ -1124,7 +1143,7 @@ static Socket* socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, &so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv4 socket. Error: %s", strSockError(getSockErr()));
 		}
@@ -1145,7 +1164,7 @@ static Socket* socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, &so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
 		}
