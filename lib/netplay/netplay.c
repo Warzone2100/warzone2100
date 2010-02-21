@@ -464,6 +464,57 @@ static const char* strSockError(int error)
 }
 
 /**
+ * Test whether the given socket still has an open connection.
+ *
+ * @return true when the connection is open, false when it's closed or in an
+ *         error state, check getSockErr() to find out which.
+ */
+static bool connectionIsOpen(Socket* sock)
+{
+	Socket* sockAr[] = { sock };
+	const SocketSet set = { ARRAY_SIZE(sockAr), sockAr };
+	int ret;
+
+	ASSERT_OR_RETURN((setSockErr(EBADF), false),
+		sock && sock->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid socket");
+
+	// Check whether the socket is still connected
+	ret = checkSockets(&set, 0);
+	if (ret == SOCKET_ERROR)
+	{
+		return false;
+	}
+	else if (ret == set.len
+	      && sock->ready)
+	{
+		/* The next recv(2) call won't block, but we're writing. So
+		 * check the read queue to see if the connection is closed.
+		 * If there's no data in the queue that means the connection
+		 * is closed.
+		 */
+#if defined(WZ_OS_WIN)
+		unsigned long readQueue;
+		ret = ioctlsocket(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
+#else
+		int readQueue;
+		ret = ioctl(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
+#endif
+		if (ret == SOCKET_ERROR)
+		{
+			return false;
+		}
+		else if (readQueue == 0)
+		{
+			// Disconnected
+			setSockErr(ECONNRESET);
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/**
  * Similar to read(2) with the exception that this function won't be
  * interrupted by signals (EINTR).
  */
@@ -508,41 +559,11 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 
 	while (written < size)
 	{
-		Socket* sockAr[] = { sock };
-		const SocketSet set = { ARRAY_SIZE(sockAr), sockAr };
 		ssize_t ret;
 
-		// Check whether the socket is still connected
-		ret = checkSockets(&set, 0);
-		if (ret == SOCKET_ERROR)
+		if (!connectionIsOpen(sock))
 		{
 			return SOCKET_ERROR;
-		}
-		else if (ret == set.len
-		      && sock->ready)
-		{
-			/* The next recv(2) call won't block, but we're writing. So
-			 * check the read queue to see if the connection is closed.
-			 * If there's no data in the queue that means the connection
-			 * is closed.
-			 */
-#if defined(WZ_OS_WIN)
-			unsigned long readQueue;
-			ret = ioctlsocket(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
-#else
-			int readQueue;
-			ret = ioctl(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
-#endif
-			if (ret == SOCKET_ERROR)
-			{
-				return SOCKET_ERROR;
-			}
-			else if (readQueue == 0)
-			{
-				// Disconnected
-				setSockErr(ECONNRESET);
-				return SOCKET_ERROR;
-			}
 		}
 
 		ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, MSG_NOSIGNAL);
