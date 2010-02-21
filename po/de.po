@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-02-19 19:10+0100\n"
-"PO-Revision-Date: 2010-02-16 17:07+0100\n"
+"PO-Revision-Date: 2010-02-21 08:41+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -9844,7 +9844,6 @@ msgid "VTOL Lancer Scorpion VTOL"
 msgstr "VTOL-Lancer Scorpion VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
-#, fuzzy
 msgid "VTOL HPV Cannon Scorpion VTOL"
 msgstr "VTOL-Hochgeschwindigkeitsgeschütz Scorpion VTOL"
 
@@ -9983,9 +9982,8 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr "Miniraketen Cobra Ketten"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Tracks"
-msgstr "Miniraketen-Anordnung Cobra Ketten"
+msgstr "Miniartillerieraketen Cobra Ketten"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1919
 #: data/mp/messages/strings/names.txt:1916
@@ -13513,7 +13511,7 @@ msgstr "Spieler"
 #: src/multiint.c:3555
 #, c-format
 msgid "Sending Map: %d%% "
-msgstr ""
+msgstr "Sende Karte: %d%%"
 
 #: src/multiint.c:3564
 #, c-format
@@ -13537,7 +13535,7 @@ msgstr "%s hat das Spiel verlassen"
 #: src/multijoin.c:227
 #, c-format
 msgid "File transfer has been aborted for %d."
-msgstr ""
+msgstr "Dateiübertragung für %d abgebrochen."
 
 #: src/multijoin.c:334
 #, c-format
