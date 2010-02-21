@@ -3031,8 +3031,10 @@ void frontendMultiMessages(void)
 				bMultiMessages = true;
 				changeTitleMode(STARTGAME);
 				bHosted = false;
-				break;
+				return;  // Start the game before processing more messages.
 			}
+			ASSERT(false, "NET_FIREUP was received, but !ingame.localOptionsReceived.");
+			break;
 
 		case NET_KICK:						// player is forcing someone to leave
 		{

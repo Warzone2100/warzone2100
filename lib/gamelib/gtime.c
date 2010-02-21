@@ -130,6 +130,8 @@ void gameTimeUpdate()
 	// Do not update the game time if gameTimeStop has been called
 	if (stopCount == 0)
 	{
+		bool mayUpdate = true;
+
 		// Calculate the new game time
 		uint32_t scaledCurrTime = (currTime - baseTime)*modifier + timeOffset;
 		if (scaledCurrTime < graphicsTime)  // Make sure the clock doesn't step back at all.
@@ -147,8 +149,9 @@ void gameTimeUpdate()
 			baseTime = currTime;
 			timeOffset = graphicsTime;
 
-			debug(LOG_NET, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7]);
-			//debug(LOG_NET, "Waiting for other players.");
+			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7]);
+			//debug(LOG_SYNC, "Waiting for other players.");
+			mayUpdate = false;
 		}
 
 		// Calculate the time for this frame
@@ -157,7 +160,7 @@ void gameTimeUpdate()
 		// Adjust deltas.
 		if (sane)
 		{
-			if (scaledCurrTime >= gameTime)
+			if (scaledCurrTime >= gameTime && mayUpdate)
 			{
 				if (scaledCurrTime > gameTime + GAME_TICKS_PER_UPDATE)
 				{

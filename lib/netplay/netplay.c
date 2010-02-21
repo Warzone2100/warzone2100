@@ -3759,7 +3759,7 @@ void recvDebugSync(NETQUEUE queue)
 		debug(LOG_ERROR, "Inconsistent GAME_SYNC_DEBUG_STRING at gameTime %u. My version is: (%u lines)", syncDebugGameTime[rsyncDebugNext], syncDebugNum[rsyncDebugNext]);
 		for (i = 0; i < syncDebugNum[rsyncDebugNext]; ++i)
 		{
-			_debug(LOG_SYNC, syncDebugFunctions[rsyncDebugNext][i], "%s", syncDebugStrings[rsyncDebugNext][i]);
+			_debug(LOG_SYNC, syncDebugFunctions[rsyncDebugNext][i], "[%03u] %s", i, syncDebugStrings[rsyncDebugNext][i]);
 			free(syncDebugFunctions[rsyncDebugNext][i]);
 			free(syncDebugStrings[rsyncDebugNext][i]);
 		}
