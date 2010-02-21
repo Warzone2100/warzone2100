@@ -577,9 +577,10 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 					}
 				case EINTR:
 					continue;
-
+#if defined (EPIPE)
 				case EPIPE:
 					debug(LOG_NET, "EPIPE generated");
+#endif
 					// fall through
 				default:
 					return SOCKET_ERROR;
