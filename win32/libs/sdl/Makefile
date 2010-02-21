@@ -17,7 +17,14 @@ $(PKG_SOURCEBASE) extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
 	tar xzf $^
 	touch extract-stamp
 
-$(PKG_SOURCEBASE)/config.status: extract-stamp
+patch-stamp: extract-stamp
+	@for patch in patches/*.diff; do \
+	    echo sed -e "s/\$$sourcebase\b/$(PKG_SOURCEBASE)/g" -e "s/\$$host_triplet\b/$(HOST_TRIPLET)/g" "$$patch" \| patch -p0 ; \
+	    sed -e "s/\$$sourcebase\b/$(PKG_SOURCEBASE)/g" -e "s/\$$host_triplet\b/$(HOST_TRIPLET)/g" "$$patch" | patch -p0 || exit ; \
+	done
+	touch patch-stamp
+
+$(PKG_SOURCEBASE)/config.status: patch-stamp
 	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs --disable-audio --disable-cdrom
 
 $(PKG_SOURCEBASE)/build/libSDL.la: $(PKG_SOURCEBASE)/config.status
@@ -38,6 +45,6 @@ all: build
 build: $(TARGETS)
 
 clean:
-	$(RM) -r $(PKG_SOURCEBASE) extract-stamp
+	$(RM) -r $(PKG_SOURCEBASE) extract-stamp patch-stamp
 
 .PHONY: all build clean
