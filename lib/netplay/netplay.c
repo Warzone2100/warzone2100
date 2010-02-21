@@ -690,6 +690,22 @@ static bool setSocketBlocking(const SOCKET fd, bool blocking)
 	return true;
 }
 
+static void socketBlockSIGPIPE(const SOCKET fd, bool block_sigpipe)
+{
+#if defined(SO_NOSIGPIPE)
+	const int no_sigpipe = block_sigpipe ? 1 : 0;
+
+	if (setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
+	{
+		debug(LOG_WARNING, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
+	}
+#else
+	// Prevent warnings
+	(void)fd;
+	(void)block_sigpipe;
+#endif
+}
+
 static int checkSockets(const SocketSet* set, unsigned int timeout)
 {
 	int ret;
@@ -869,10 +885,6 @@ static Socket* socketAccept(Socket* sock)
 	{
 		if (sock->fd[i] != INVALID_SOCKET)
 		{
-#if defined(SO_NOSIGPIPE)
-			static const int no_sigpipe = 1;
-#endif
-
 			char textAddress[40];
 			struct sockaddr_storage addr;
 			socklen_t addr_len = sizeof(addr);
@@ -892,12 +904,7 @@ static Socket* socketAccept(Socket* sock)
 				continue;
 			}
 
-#if defined(SO_NOSIGPIPE)
-			if (setsockopt(newConn, SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
-			{
-				debug(LOG_WARNING, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
-			}
-#endif
+			socketBlockSIGPIPE(newConn, true);
 
 			conn = malloc(sizeof(*conn) + addr_len);
 			if (conn == NULL)
@@ -930,10 +937,6 @@ static Socket* socketAccept(Socket* sock)
 
 static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 {
-#if defined(SO_NOSIGPIPE)
-	static const int no_sigpipe = 1;
-#endif
-
 	char textAddress[40];
 	unsigned int i;
 	int ret;
@@ -973,12 +976,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		return NULL;
 	}
 
-#if defined(SO_NOSIGPIPE)
-	if (setsockopt(conn->fd[SOCK_CONNECTION], SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
-	{
-		debug(LOG_WARNING, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
-	}
-#endif
+	socketBlockSIGPIPE(conn->fd[SOCK_CONNECTION], true);
 
 	ret = connect(conn->fd[SOCK_CONNECTION], addr->ai_addr, addr->ai_addrlen);
 	if (ret == SOCKET_ERROR)
