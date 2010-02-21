@@ -619,8 +619,8 @@ static bool SocketSet_AddSocket(SocketSet* set, Socket* socket)
 {
 	size_t i;
 
-	ASSERT(set != NULL, "NULL SocketSet provided");
-	ASSERT(socket != NULL, "NULL Socket provided");
+	ASSERT_OR_RETURN(false, set != NULL, "NULL SocketSet provided");
+	ASSERT_OR_RETURN(false, socket != NULL, "NULL Socket provided");
 
 	/* Check whether this socket is already present in this set (i.e. it
 	 * shouldn't be added again).
@@ -653,7 +653,7 @@ static void SocketSet_DelSocket(SocketSet* set, Socket* socket)
 	size_t i;
 
 	ASSERT_OR_RETURN(, set != NULL, "NULL SocketSet provided");
-	ASSERT(socket != NULL, "NULL Socket provided");
+	ASSERT_OR_RETURN(, socket != NULL, "NULL Socket provided");
 
 	for (i = 0; i < set->len; ++i)
 	{
@@ -3551,7 +3551,10 @@ BOOL NETfindGame(void)
 	if (tcp_socket != NULL)
 	{
 		debug(LOG_NET, "Deleting tcp_socket %p", tcp_socket);
-		SocketSet_DelSocket(socket_set,tcp_socket);
+		if (socket_set)
+		{
+			SocketSet_DelSocket(socket_set, tcp_socket);
+		}
 		socketClose(tcp_socket);
 		tcp_socket = NULL;
 	}
