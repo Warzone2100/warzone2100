@@ -3010,7 +3010,7 @@ void frontendMultiMessages(void)
 
 			MultiPlayerLeave(player_id);		// get rid of their stuff
 			NET_PlayerConnectionStatus = 2;		//DROPPED_CONNECTION
-			if (host)					// host has quit, need to quit too.
+			if (host || player_id == selectedPlayer)	// if host quits or we quit, abort out
 			{
 				stopJoining();
 			}
