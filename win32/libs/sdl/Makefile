@@ -1,10 +1,20 @@
 PKG_NAME:=SDL
-PKG_VERSION:=1.2.14
+SDL_PKG_VERSION?=1.2.14
+PKG_VERSION:=$(SDL_PKG_VERSION)
 
 PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:=http://www.libsdl.org/release/
+
+ifeq ($(PKG_VERSION),1.2.13)
+PKG_MD5SUM:=c6660feea2a6834de10bc71b2f8e4d88
+else
+ifeq ($(PKG_VERSION),1.2.14)
 PKG_MD5SUM:=e52086d1b508fa0b76c52ee30b55bec4
+else
+$(error Only SDL versions 1.2.13 and 1.2.14 are supported)
+endif
+endif
 
 TARGETS:= \
 	$(TOPDIR)/build/libs/include/SDL/SDL.h \
@@ -17,7 +27,19 @@ $(PKG_SOURCEBASE) extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
 	tar xzf $^
 	touch extract-stamp
 
-$(PKG_SOURCEBASE)/config.status: extract-stamp
+ifeq ($(PKG_VERSION),1.2.13)
+patch-stamp: extract-stamp
+	@for patch in patches/*.diff; do \
+	    echo sed -e "s/\$$sourcebase\b/$(PKG_SOURCEBASE)/g" -e "s/\$$host_triplet\b/$(HOST_TRIPLET)/g" "$$patch" \| patch -p0 ; \
+	    sed -e "s/\$$sourcebase\b/$(PKG_SOURCEBASE)/g" -e "s/\$$host_triplet\b/$(HOST_TRIPLET)/g" "$$patch" | patch -p0 || exit ; \
+	done
+	touch patch-stamp
+else
+patch-stamp: extract-stamp
+	touch patch-stamp
+endif
+
+$(PKG_SOURCEBASE)/config.status: patch-stamp
 	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs --disable-audio --disable-cdrom
 
 $(PKG_SOURCEBASE)/build/libSDL.la: $(PKG_SOURCEBASE)/config.status
@@ -38,6 +60,6 @@ all: build
 build: $(TARGETS)
 
 clean:
-	$(RM) -r $(PKG_SOURCEBASE) extract-stamp
+	$(RM) -r $(PKG_SOURCEBASE) extract-stamp patch-stamp
 
 .PHONY: all build clean
