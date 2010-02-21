@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-19 19:10+0100\n"
-"PO-Revision-Date: 2010-01-23 12:51+0100\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2010-02-21 15:32+0100\n"
+"PO-Revision-Date: 2010-02-20 23:48+0100\n"
+"Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2453,7 +2453,7 @@ msgstr "CB VTOL ulepszone"
 #: data/mp/messages/resmessages3.rmsg:539
 #: data/mp/messages/strings/resstrings.txt:515
 msgid "Extends VTOL CB Range"
-msgstr "Roszerza zasięg CB VTOL "
+msgstr "Poszerza zasięg CB VTOL "
 
 #: data/base/messages/resmessages23.rmsg:85
 #: data/base/messages/resmessages2.rmsg:449
@@ -5090,11 +5090,11 @@ msgstr "Potem zniszcz obóz."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "MISJA BAZY BETA: Zniszcz bazę powietrzną wroga i zdobądź VTOL"
+msgstr "MISJA BAZY BETA: Zniszcz bazę powietrzną wroga i zdobądź VTOL."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "Analiza lotu potwierdza że VTOL Collective startują z tamtąd."
+msgstr "Analiza lotu potwierdza że VTOL Collective startują stamtąd."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
@@ -5907,7 +5907,7 @@ msgid "Light Cannon Python Tracks"
 msgstr "Pyton z lekkim działem na gąsienicach"
 
 #: data/base/messages/strings/names.txt:194
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1345
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1920
@@ -6320,7 +6320,7 @@ msgstr "Wieżyczka CB"
 #: data/mp/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:919
 msgid "VTOL Strike Turret"
-msgstr "Wieżyczka VTOL Strike"
+msgstr "Wieża VTOL Strike"
 
 #: data/base/messages/strings/names.txt:377
 #: data/mp/messages/strings/names.txt:384
@@ -9160,7 +9160,7 @@ msgid "Downed Transport"
 msgstr "Transporter"
 
 #: data/base/messages/strings/names.txt:1458
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1344
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
 #: data/mp/messages/strings/names.txt:1471
 #: data/mp/messages/strings/names.txt:1919
@@ -9485,177 +9485,177 @@ msgstr "Poczekaj chwilę aż fabryka wyprodukuje nowe jednostki"
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Gratulacje dowódco - jesteś gotowy na swoją pierwszą misję"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1287
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1301
 msgid "Cobra Hover Heavy-Repair"
 msgstr "Kobra poduszkowiec ciężka naprawiająca"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1288
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1302
 msgid "Viper HMG Wheels"
 msgstr "Żmija z ciężkim karabinem na kołach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1289
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1303
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
 #: data/mp/messages/strings/names.txt:1821
 msgid "Scourge Mantis Hover"
 msgstr "Modliszka poduszkowiec Scourge"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1290
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1304
 msgid "TK Mantis Hover"
 msgstr "Modliszka ciężarówka poduszkowiec"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1291
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1305
 msgid "Cobra HMG Tracks"
 msgstr "Kobra z ciężkim karabinem na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1292
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1306
 msgid "Cobra Hover HC"
 msgstr "Kobra poduszkowiec z ciężkim działem"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1293
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1307
 msgid "Scorpion Lancer Tracks"
 msgstr "Skorpion Lancer na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1294
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1308
 msgid "Scorpion Heavy Cannon Tracks"
 msgstr "Skorpion z ciężkim działem na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1295
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1309
 msgid "Scorpion Lancer VTOL"
 msgstr "Skorpion Lancer VTOL"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1296
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1310
 msgid "Scorpion BB VTOL"
 msgstr "Skorpion Bunker Buster VTOL"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1297
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1311
 msgid "Viper Command Turret Tracks"
 msgstr "Żmija dowodząca na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1298
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1312
 msgid "Cobra Command Turret Tracks"
 msgstr "Kobra dowodząca na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1299
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
 msgid "Scorpion Command Turret Tracks"
 msgstr "Skorpion dowodzący na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1300
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
 msgid "mantis Command Turret Tracks"
 msgstr "Modliszka dowodząca na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1301
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
 msgid "Cobra Lancer Tracks"
 msgstr "Kobra Lancer na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1302
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
 msgid "Mantis Heavy Cannon Tracks"
 msgstr "Modliszka z ciężkim działem na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1303
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
 msgid "Mantis Tank Killer Tracks"
 msgstr "Modliszka Tank Killier na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1304
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
 msgid "Mantis Scourge Tracks"
 msgstr "Modliszka Scourge na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1305
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
 msgid "Scorpion Heavy Machinegun Tracks"
 msgstr "Skorpion z ciężkim karabinem na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1306
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
 msgid "Scorpion Repair Tracks"
 msgstr "Skorpion naprawczy na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1307
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
 msgid "Scorpion Heavy Repair Hover"
 msgstr "Skorpion ciężki naprawczy poduszkowiec"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1308
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
 msgid "Cobra Hover Truck"
 msgstr "Kobra ciężarówka-poduszkowiec"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1309
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
 msgid "Scorpion Hover Truck"
 msgstr "Skorpion ciężarówka-poduszkowiec"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1310
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
 msgid "Mantis Hover Truck"
 msgstr "Modliszka ciężarówka-poduszkowiec"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1311
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
 msgid "Cobra Bunker Buster Tracks"
 msgstr "Kobra Bunker Buster na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1312
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
 msgid "Scorpion Bunker Buster Tracks"
 msgstr "Skorpion Bunker Buster na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
 msgid "Mantis Bunker Buster Tracks"
 msgstr "Modliszka Bunker Buster na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
 msgid "Viper Tracks Lancer"
 msgstr "Żmija Lancer na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
 msgid "Cobra Half-Tracks Mini-Pod"
 msgstr "Kobra z minirakietami na pól-gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
 msgid "Cobra Tracks Mini-Pod"
 msgstr "Kobra z minirakietami na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
 msgid "Cobra Tracks Mini-Rocket Artillery"
 msgstr "Kobra artyleria minirakiet na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
 msgid "Cobra Inferno Half-track"
 msgstr "Kobra Inferno na pół-gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
 msgid "Python HVC Hover"
 msgstr "Pyton poduszkowiec z działem HPV"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
 msgid "Python Scourge Tracks"
 msgstr "Pyton Scourge na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
 msgid "Python Gauss Cannon Tracks"
 msgstr "Pyton z działem gaussa na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
 msgid "Python Pulse Laser Tracks"
 msgstr "Pyton ciężki laser na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
 msgid "Tiger Pulse Laser Tracks"
 msgstr "Tygrys z laserem pulsacyjnym na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
 msgid "Tiger Heavy Laser Tracks"
 msgstr "Tygrys ciężki laser na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr "Wywerna z działem gaussa na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
 msgid "Wyvern Pulse Laser Tracks"
 msgstr "Wywerna z laserem pulsacyjnym na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
 msgid "Wyvern Heavy Laser Tracks"
 msgstr "Wywerna ciężki laser na gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1342
 msgid "Viper Machinegun Half-Track"
 msgstr "Żmija karabin na pół-gąsienicach"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1343
 msgid "Viper Flamer Half-Track"
 msgstr "Żmija miotacz na pół-gąsienicach"
 
@@ -9819,9 +9819,8 @@ msgid "VTOL Lancer Bug VTOL"
 msgstr "Robal Lancer VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1874
-#, fuzzy
 msgid "VTOL HPV Cannon Bug VTOL"
-msgstr "Działo VTOL"
+msgstr "VTOL Robal działo HPV VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1875
 #: data/mp/messages/strings/names.txt:1872
@@ -9829,7 +9828,6 @@ msgid "VTOL Lancer Scorpion VTOL"
 msgstr "VTOL Skorpion Lancer VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
-#, fuzzy
 msgid "VTOL HPV Cannon Scorpion VTOL"
 msgstr "VTOL Skorpion działo HPV VOL"
 
@@ -9839,9 +9837,8 @@ msgid "VTOL Lancer Mantis VTOL"
 msgstr "VTOL Modliszka Lancer VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
-#, fuzzy
 msgid "VTOL HPV Cannon Mantis VTOL"
-msgstr "Działo VTOL"
+msgstr "VTOL Modliszka działo HPV VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
 #: data/mp/messages/strings/names.txt:1879
@@ -9969,7 +9966,6 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr "Kobra minirakiety na gąsienicach"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Tracks"
 msgstr "Kobra artyleria minirakiet na gąsienicach"
 
@@ -9979,9 +9975,8 @@ msgid "Inferno Cobra Half-Tracks"
 msgstr "Kobra miotacz Inferno na pół-gąsienicach"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1920
-#, fuzzy
 msgid "HPV Cannon Python Hover"
-msgstr "Pyton z działem HPV na gąsienicach"
+msgstr "Pyton poduszkowiec z działem HPV"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1924
 #: data/mp/messages/strings/names.txt:1921
@@ -10105,7 +10100,7 @@ msgid "Repair Speed +100%"
 msgstr "Szybkość napraw +100%"
 
 #: data/mp/messages/resmessages1.rmsg:306
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Factory output speed +100% per module"
 msgstr "Wydajność produkcji fabryki +100% dla każdego modułu"
 
@@ -11361,9 +11356,8 @@ msgstr "Irlański"
 
 #: lib/framework/i18n.c:71
 #: lib/framework/i18n.c:128
-#, fuzzy
 msgid "Croatian"
-msgstr "Łotewski"
+msgstr "Chorwacki"
 
 #: lib/framework/i18n.c:72
 #: lib/framework/i18n.c:129
@@ -11434,21 +11428,22 @@ msgstr "Chiński tradycyjny"
 msgid "Latin"
 msgstr "Łacina"
 
-#: lib/netplay/netplay.c:1972
+#: lib/netplay/netplay.c:1239
+#: lib/netplay/netplay.c:2050
 msgid "Enter password here"
 msgstr "Wpisz hasło tutaj"
 
-#: lib/netplay/netplay.c:2902
+#: lib/netplay/netplay.c:2995
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Nie można rozwinąć nazwy głównego serwera (%s)!"
 
-#: lib/netplay/netplay.c:2927
+#: lib/netplay/netplay.c:3020
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Nie można skomunikować się z serwerem lobby! Czy port %u TCP jest otwarty dla ruchu wychodzącego?"
 
-#: lib/netplay/netplay.c:3335
+#: lib/netplay/netplay.c:3428
 msgid ", mods: "
 msgstr ", mody: "
 
@@ -12626,9 +12621,9 @@ msgid "View Aligned to North"
 msgstr "Widok ustawiony na pólnoc"
 
 #: src/keybind.c:1310
-#, fuzzy, c-format
+#, c-format
 msgid "Trap cursor %s"
-msgstr "Złap kursor"
+msgstr "Złap kursor %s"
 
 #: src/keybind.c:1391
 msgid "Researched EVERYTHING for you!"
@@ -13469,47 +13464,47 @@ msgstr "CHAT"
 msgid "All players need to have the same mods to join your game."
 msgstr "Wszyscy gracze muszą mieć takie same mody aby przyłączyć się do twojej gry."
 
-#: src/multiint.c:2395
+#: src/multiint.c:2402
 msgid "*** password is now required! ***"
 msgstr "*** hasło jest teraz wymagane! ***"
 
-#: src/multiint.c:2402
+#: src/multiint.c:2409
 msgid "*** password is NOT required! ***"
 msgstr "*** hasło jest teraz niewymagane! ***"
 
-#: src/multiint.c:2645
+#: src/multiint.c:2652
 msgid "Sorry! Failed to host the game."
 msgstr "Przepraszamy! Nie udało się utworzyć serwera gry."
 
-#: src/multiint.c:2730
+#: src/multiint.c:2737
 msgid "'Locked Teams' mode enabled"
 msgstr "Włączono 'zablokowane drużyny'"
 
-#: src/multiint.c:2769
-#: src/multiint.c:2819
+#: src/multiint.c:2776
+#: src/multiint.c:2826
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Gospodarz wyrzucił %s z gry!"
 
-#: src/multiint.c:2887
+#: src/multiint.c:2894
 msgid "Host is Starting Game"
 msgstr "Gospodarz rozpoczyna grę"
 
-#: src/multiint.c:3438
+#: src/multiint.c:3445
 msgid "Players"
 msgstr "Gracze"
 
-#: src/multiint.c:3555
+#: src/multiint.c:3562
 #, c-format
 msgid "Sending Map: %d%% "
-msgstr ""
+msgstr "Przesyłanie mapy: %d%%"
 
-#: src/multiint.c:3564
+#: src/multiint.c:3571
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% pobrane"
 
-#: src/multiint.c:3590
+#: src/multiint.c:3597
 msgid "HOST"
 msgstr "GOSPODARZ"
 
@@ -13526,7 +13521,7 @@ msgstr "%s opuścił grę"
 #: src/multijoin.c:227
 #, c-format
 msgid "File transfer has been aborted for %d."
-msgstr ""
+msgstr "Transfer pliku został anulowany dla %d."
 
 #: src/multijoin.c:334
 #, c-format
@@ -13548,7 +13543,7 @@ msgstr "Zastosuj wartości domyślne i powróć do poprzedniego ekranu"
 
 #: src/multilimit.c:316
 msgid "Limits reset to default values"
-msgstr ""
+msgstr "Limity zresetowane do wartości domyślnych"
 
 #: src/multimenu.c:609
 msgid "Technology level 1"
