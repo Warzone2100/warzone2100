@@ -1414,6 +1414,7 @@ void NET_InitPlayers()
 	}
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
+	NetPlay.pMapFileHandle = NULL;
 	debug(LOG_NET, "Players initialized");
 }
 
@@ -1538,7 +1539,7 @@ static void NETplayerDropped(UDWORD index)
 	NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
 		NETuint32_t(&id);
 	NETend();
-	debug(LOG_INFO, "NET_PLAYER_DROPPED received for player %d", id);
+	debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d", id);
 	NET_DestroyPlayer(id);		// just clears array
 	MultiPlayerLeave(id);			// more cleanup
 	NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
@@ -2810,7 +2811,6 @@ UBYTE NETrecvFile(void)
 	int32_t		fileSize = 0, currPos = 0, bytesRead = 0;
 	char		fileName[256];
 	char		outBuff[MAX_FILE_TRANSFER_PACKET];
-	static PHYSFS_file	*pFileHandle;
 	static bool isLoop = false;
 
 	memset(fileName, 0x0, sizeof(fileName));
@@ -2831,7 +2831,28 @@ UBYTE NETrecvFile(void)
 			PHYSFS_file *fin;
 			PHYSFS_sint64 fsize;
 			fin = PHYSFS_openRead(fileName);
-			fsize = PHYSFS_fileLength(fin);
+			if (!fin)
+			{
+				// the file exists, but we can't open it, and I have no clue how to fix this...
+				debug(LOG_FATAL, "PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
+
+				debug(LOG_NET, "We are leaving 'nicely' after a fatal error");
+				NETbeginEncode(NET_PLAYER_LEAVING, NET_ALL_PLAYERS);
+				{
+					BOOL host = NetPlay.isHost;
+					uint32_t id = selectedPlayer;
+
+					NETuint32_t(&id);
+					NETbool(&host);
+				}
+				NETend();
+
+				abort();
+			}
+			else
+			{
+				fsize = PHYSFS_fileLength(fin);
+			}
 			if ((int32_t) fsize == fileSize)
 			{
 				uint32_t reason = ALREADY_HAVE_FILE;
@@ -2858,6 +2879,8 @@ UBYTE NETrecvFile(void)
 						NETuint32_t(&selectedPlayer);
 						NETuint32_t(&reason);
 					NETend();
+					PHYSFS_close(NetPlay.pMapFileHandle);
+					NetPlay.pMapFileHandle = NULL;
 					debug(LOG_FATAL, "Something is really wrong with the file's (%s) data, game can't detect it?", fileName);
 					return 100;
 				}
@@ -2867,10 +2890,10 @@ UBYTE NETrecvFile(void)
 			debug(LOG_NET, "We already have the file %s, but different size %d vs %d.  Redownloading", fileName, (int32_t) fsize, fileSize);
 
 		}
-		pFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
+		NetPlay.pMapFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
 	}
 
-	if (!pFileHandle) // file can't be opened
+	if (!NetPlay.pMapFileHandle) // file can't be opened
 	{
 		debug(LOG_FATAL, "Fatal error while creating file: %s", PHYSFS_getLastError());
 		debug(LOG_FATAL, "Either we do not have write permission, or the Host sent us a invalid file (%s)!", fileName);
@@ -2881,11 +2904,11 @@ UBYTE NETrecvFile(void)
 	NETend();
 
 	//write packet to the file.
-	PHYSFS_write(pFileHandle, outBuff, bytesRead, 1);
+	PHYSFS_write(NetPlay.pMapFileHandle, outBuff, bytesRead, 1);
 
 	if (currPos+bytesRead == fileSize)	// last packet
 	{
-		PHYSFS_close(pFileHandle);
+		PHYSFS_close(NetPlay.pMapFileHandle);
 	}
 
 	//return the percentage count
