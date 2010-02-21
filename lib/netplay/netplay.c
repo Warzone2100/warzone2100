@@ -739,7 +739,11 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 		for (i = 0; i < set->len; ++i)
 		{
 			if (set->fds[i])
-				FD_SET(set->fds[i]->fd[SOCK_CONNECTION], &fds);
+			{
+				const SOCKET fd = set->fds[i]->fd[SOCK_CONNECTION];
+
+				FD_SET(fd, &fds);
+			}
 		}
 
 		ret = select(maxfd + 1, &fds, NULL, NULL, &tv);
