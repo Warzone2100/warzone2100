@@ -300,13 +300,6 @@ void orderUpdateDroid(DROID *psDroid)
 			// started a new order, quit
 			break;
 		}
-		// HACK: we always want to update orders when NOT running a MP game,
-		// and we don't want to update when the droid belongs to another human player
-		else if (!myResponsibility(psDroid->player) && bMultiPlayer
-				  && isHumanPlayer(psDroid->player))
-		{
-			return;
-		}
 		// if you are in a command group, default to guarding the commander
 		else if (hasCommander(psDroid) &&
 				 (psDroid->psTarStats != (BASE_STATS *) structGetDemolishStat()))  // stop the constructor auto repairing when it is about to demolish
@@ -1158,13 +1151,6 @@ void orderUpdateDroid(DROID *psDroid)
 		{
 			// started a queued order - quit
 			break;
-		}
-		// HACK: we always want to update orders when NOT running a MP game,
-		// and we don't want to update when the droid belongs to another human player
-		else if (!myResponsibility(psDroid->player) && bMultiPlayer
-				  && isHumanPlayer(psDroid->player))
-		{
-			return;
 		}
 		else if ((psDroid->action == DACTION_NONE) ||
 				 (psDroid->action == DACTION_MOVE) ||

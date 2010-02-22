@@ -300,6 +300,7 @@ extern BOOL	NETjoinGame(UDWORD gameNumber, const char* playername);			// join ga
 extern BOOL	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
 extern BOOL	NETchangePlayerName(UDWORD player, char *newName);// change a players name.
+void            NETfixDuplicatePlayerNames(void);  // Change a player's name automatically, if there are duplicates.
 
 #include "netlog.h"
 

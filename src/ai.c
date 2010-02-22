@@ -1028,14 +1028,6 @@ void aiUpdateDroid(DROID *psDroid)
 		return;
 	}
 
-	// HACK: we always want to update orders when NOT running a MP game,
-	// and we don't want to update when the droid belongs to another human player
-	if (!myResponsibility(psDroid->player) && bMultiPlayer
-		  && isHumanPlayer(psDroid->player))
-	{
-		return;		// we should not order this droid around
-	}
-	
 	lookForTarget = false;
 	updateTarget = false;
 	
