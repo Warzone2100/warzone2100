@@ -3,7 +3,9 @@ PKG_VERSION:=1.2.14
 
 PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
-PKG_SOURCE_URL:=http://www.libsdl.org/release/
+PKG_SOURCE_URL:= \
+	http://www.libsdl.org/release/ \
+	http://www.il.fontys.nl/~giel/warzone/devpkg/
 PKG_MD5SUM:=e52086d1b508fa0b76c52ee30b55bec4
 
 TARGETS:= \
