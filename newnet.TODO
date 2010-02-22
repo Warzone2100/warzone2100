@@ -1,3 +1,9 @@
+*********
+* Notes *
+*********
+GAME_CHECK_DROID shouldn't do anything, unless the game is out of synch, now. And should print, if the droid isn't in _exactly_ the same place on all screens.
+GAME_BUILD should fix the structure ID of the structure being built. GAME_BUILD and GAME_BUILDFINISHED shouldn't do anything other than that, unless the game is out of synch, now.
+
 **************
 * Everywhere *
 **************
@@ -14,3 +20,9 @@ Clean up structPlaceDroid. After which, the GAME_SECONDARY_ALL message type will
 * src/keybind.c *
 *****************
 Fix kf_CloneSelected.
+
+*************
+* src/hci.c *
+*************
+Check that this file doesn't modify droids directly...
+

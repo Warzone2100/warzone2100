@@ -600,8 +600,8 @@ BOOL recvMessage(void)
 				//case NET_DATA_CHECK:
 				//case NET_AITEXTMSG:
 				//case NET_BEACONMSG:
-				case GAME_BUILD:
-				case GAME_BUILDFINISHED:
+				//case GAME_BUILD:        //26 down, 16 to go.
+				//case GAME_BUILDFINISHED://27 down, 15 to go.
 				case GAME_STRUCTDEST:
 				//case GAME_SECONDARY:    // 7 down, 36 to go.
 				case GAME_SECONDARY_ALL:

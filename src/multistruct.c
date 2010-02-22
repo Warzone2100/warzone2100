@@ -86,9 +86,6 @@ BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 			NETnull();
 		}
 
-		// Z coord
-		NETuint16_t(&psStruct->pos.z);
-
 	return NETend();
 }
 
@@ -101,7 +98,7 @@ BOOL recvBuildStarted(NETQUEUE queue)
 	UDWORD			actionX,actionY;
 	unsigned int typeIndex;
 	uint8_t			player;
-	uint16_t		x, y, z;
+	uint16_t		x, y;
 	int32_t			order;
 	uint32_t		structRef, structId, targetId,droidID;
 
@@ -114,8 +111,8 @@ BOOL recvBuildStarted(NETQUEUE queue)
 		NETuint32_t(&structId);
 		NETint32_t(&order);
 		NETuint32_t(&targetId);
-		NETuint16_t(&z);
 	NETend();
+
 	// Find structure target
 	for (typeIndex = 0;
 	     typeIndex < numStructureStats && asStructureStats[typeIndex].ref != structRef;
@@ -125,6 +122,15 @@ BOOL recvBuildStarted(NETQUEUE queue)
 
 	if (IdToDroid(droidID, player, &psDroid))
 	{
+		if (psDroid->psTarget)
+		{
+			// Sync IDs
+			debug(LOG_SYNC, "GAME_BUILD: Changing structureId %u to %u. (TODO: Remove this.)", ((STRUCTURE *)psDroid->psTarget)->id, structId);
+			((STRUCTURE *)psDroid->psTarget)->id = structId;
+			return true;
+		}
+		debug(LOG_SYNC, "Synch error, droid %u was not building structure %u.", droidID, structId);
+
 		// Tell the droid to go to where it needs to in order to build the struct
 		if (getDroidDestination((BASE_STATS *) psStats, x, y, &actionX, &actionY))
 		{
@@ -173,12 +179,10 @@ BOOL recvBuildStarted(NETQUEUE queue)
 // INFORM others that a building has been completed.
 BOOL SendBuildFinished(STRUCTURE *psStruct)
 {
-	uint32_t power = getPower( (uint32_t) psStruct->player);
 	uint8_t player = psStruct->player;
 	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
 
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_BUILDFINISHED);
-		NETuint32_t(&power);			// send how much power we got.
 		NETuint32_t(&psStruct->id);		// ID of building
 
 		// Along with enough info to build it (if needed)
@@ -198,10 +202,8 @@ BOOL recvBuildFinished(NETQUEUE queue)
 	uint16_t	x,y,z;
 	uint32_t	type,typeindex;
 	uint8_t		player;
-	uint32_t	power;
 
 	NETbeginDecode(queue, GAME_BUILDFINISHED);
-		NETuint32_t(&power);	// get the player's power level
 		NETuint32_t(&structId);	// get the struct id.
 		NETuint32_t(&type); 	// Kind of building.
 		NETuint16_t(&x);    	// x pos
@@ -213,7 +215,6 @@ BOOL recvBuildFinished(NETQUEUE queue)
 	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
 
 	psStruct = IdToStruct(structId,ANYPLAYER);
-	setPower( (uint32_t)player, power);		// we sync the power level as well
 
 	if (psStruct)
 	{												// make it complete.
@@ -221,6 +222,7 @@ BOOL recvBuildFinished(NETQUEUE queue)
 
 		if (psStruct->status != SS_BUILT)
 		{
+			debug(LOG_SYNC, "Synch error, structure %u was not complete, and should have been.", structId);
 			psStruct->status = SS_BUILT;
 			buildingComplete(psStruct);
 		}
@@ -261,12 +263,12 @@ BOOL recvBuildFinished(NETQUEUE queue)
 		psStruct->id		= structId;
 		psStruct->status	= SS_BUILT;
 		buildingComplete(psStruct);
-		debug(LOG_SYNC, "Forced to create building %u for player %u", psStruct->id, player);
+		debug(LOG_SYNC, "Huge synch error, forced to create building %u for player %u", psStruct->id, player);
 		NETlogEntry("had to plonk down a building" ,0,player);
 	}
 	else
 	{
-		debug(LOG_SYNC, "Unable to create building for player %u", player);
+		debug(LOG_SYNC, "Gigantic synch error, unable to create building for player %u", player);
 		NETlogEntry("had to plonk down a building, BUT FAILED OH S**T." ,0,player);
 	}
 

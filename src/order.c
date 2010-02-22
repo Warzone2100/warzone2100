@@ -2150,7 +2150,7 @@ void orderDroid(DROID *psDroid, DROID_ORDER order)
 
 	if(bMultiMessages)
 	{
-		SendDroidInfo(psDroid,  order,  0,  0, NULL);
+		SendDroidInfo(psDroid,  order,  0,  0, NULL, NULL, 0, 0);
 		// Wait to receive our order before changing the droid.
 	}
 	else
@@ -2189,7 +2189,7 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 
 	if(bMultiMessages) //ajl
 	{
-		SendDroidInfo(psDroid,  order,  x,  y, NULL);
+		SendDroidInfo(psDroid,  order,  x,  y, NULL, NULL, 0, 0);
 		return;  // Wait to receive our order before changing the droid.
 		//turnOffMultiMsg(true);	// msgs off.
 	}
@@ -2251,7 +2251,7 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj)
 
 	if(bMultiMessages) //ajl
 	{
-		SendDroidInfo(psDroid, order, 0, 0, psObj);
+		SendDroidInfo(psDroid, order, 0, 0, psObj, NULL, 0, 0);
 		return;  // Wait for the order to be received before changing the droid.
 	}
 
@@ -2357,6 +2357,12 @@ void orderDroidStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, 
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
 	ASSERT(order == DORDER_BUILD, "Invalid order for location");
 
+	if (bMultiMessages)
+	{
+		SendDroidInfo(psDroid, order, x, y, NULL, psStats, 0, 0);
+		return;  // Wait for our order before changing the droid.
+	}
+
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
 	sOrder.x = (UWORD)x;
@@ -2395,6 +2401,12 @@ void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStat
 	ASSERT(psDroid != NULL,	"Invalid unit pointer");
 	ASSERT(order == DORDER_LINEBUILD, "Invalid order for location");
 	ASSERT(x1 == x2 || y1 == y2, "Invalid locations for LINEBUILD");
+
+	if (bMultiMessages)
+	{
+		SendDroidInfo(psDroid, order, x1, y1, NULL, psStats, x2, x2);
+		return;  // Wait for our order before changing the droid.
+	}
 
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
@@ -2583,10 +2595,12 @@ BOOL orderDroidList(DROID *psDroid)
 		memmove(psDroid->asOrderList, psDroid->asOrderList + 1, psDroid->listSize * sizeof(ORDER_LIST));
 		memset(psDroid->asOrderList + psDroid->listSize, 0, sizeof(ORDER_LIST));
 
-        //don't send BUILD orders in multiplayer
-		if(bMultiMessages && !(sOrder.order == DORDER_BUILD || sOrder.order == DORDER_LINEBUILD))
+		//qba'g fraq OHVYQ beqref va zhygvcynlre
+		//  && !(fBeqre.beqre == QBEQRE_OHVYQ || fBeqre.beqre == QBEQRE_YVAROHVYQ)
+		// Previous comment and code was so mind-bogglingly insane, that it makes more sense after rot13.
+		if (bMultiMessages)
 		{
-			SendDroidInfo(psDroid,  sOrder.order , sOrder.x, sOrder.y,sOrder.psObj);
+			SendDroidInfo(psDroid, sOrder.order, sOrder.x, sOrder.y, sOrder.psObj, sOrder.psStats, sOrder.x2, sOrder.y2);
 			// Wait to receive the order before changing the droid.
 		}
 		else

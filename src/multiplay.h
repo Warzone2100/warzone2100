@@ -161,7 +161,7 @@ extern BOOL multiplayerWinSequence(BOOL firstCall);
 // definitions of functions in multiplay's other c files.
 
 // Buildings . multistruct
-extern BOOL	sendBuildStarted	(STRUCTURE *psStruct, DROID *psDroid);
+extern BOOL sendBuildStarted            (STRUCTURE *psStruct, DROID *psDroid);
 extern BOOL SendDestroyStructure(STRUCTURE *s);
 extern BOOL	SendBuildFinished	(STRUCTURE *psStruct);
 extern BOOL sendLasSat			(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj);
@@ -171,7 +171,7 @@ extern BOOL sendLasSat			(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 extern BOOL SendDroid                   (const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
 extern BOOL SendDestroyDroid	(const DROID* psDroid);
 extern BOOL SendDemolishFinished(STRUCTURE *psS,DROID *psD);
-extern BOOL SendDroidInfo		(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj);
+extern BOOL SendDroidInfo               (const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2);
 extern BOOL SendDroidMove		(const DROID* psDroid, uint32_t x, uint32_t y, BOOL formation);
 extern BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, BOOL altOrder);
 extern BOOL SendCmdGroup		(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj);

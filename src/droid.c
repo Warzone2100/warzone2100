@@ -993,6 +993,7 @@ BOOL droidStartBuild(DROID *psDroid)
 		{
 			if(myResponsibility(psDroid->player) )
 			{
+				// This message doesn't actually do anything, unless out of synch.
 				sendBuildStarted(psStruct, psDroid);
 			}
 		}
