@@ -3,7 +3,9 @@ PKG_VERSION=2.30
 
 PKG_SOURCEBASE:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.bz2
-PKG_SOURCE_URL:=@SF/dejavu
+PKG_SOURCE_URL:= \
+	@SF/dejavu \
+	http://www.il.fontys.nl/~giel/warzone/devpkg/
 PKG_MD5SUM:=545b3bfc69893075a90a7c6e6f4a7e67
 
 TARGETS:= \

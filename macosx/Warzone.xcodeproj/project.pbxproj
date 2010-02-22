@@ -34,7 +34,8 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 43FA570F10FF8EBB0074E914 /* Build configuration list for PBXAggregateTarget "Setup Prebuilt Components" */;
 			buildPhases = (
-				43FA570B10FF8E9B0074E914 /* ShellScript */,
+				43FA570B10FF8E9B0074E914 /* SDL */,
+				4345290E1130F84E002AD731 /* msgfmt */,
 			);
 			dependencies = (
 			);
@@ -492,7 +493,6 @@
 		2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 2244463B0E3EB7CB004D0F1F /* messagely.h */; };
 		22E244D70E65361800EC2B3E /* baseobject.c in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.c */; };
 		22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 22E244D50E65361800EC2B3E /* baseobject.h */; };
-		43025C78111FB072006C49B1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43025C2C111FB072006C49B1 /* InfoPlist.strings */; };
 		432BE39410D9C3E400A486AB /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 432BE34C10D9C21900A486AB /* SDL.framework */; };
 		432BE39710D9C45800A486AB /* SDLMain.h in Headers */ = {isa = PBXBuildFile; fileRef = 432BE34A10D9C21900A486AB /* SDLMain.h */; };
 		432BE39810D9C45900A486AB /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 432BE34B10D9C21900A486AB /* SDLMain.m */; };
@@ -540,6 +540,7 @@
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13210D6028C00A19EE4 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12E10D6028C00A19EE4 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
 		43BE73ED11121A47007DF934 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177E70F87A926000C8A96 /* config.h */; };
 		43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BE75E811124BB4007DF934 /* wavecast.cpp */; };
@@ -1470,20 +1471,6 @@
 		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = baseobject.c; path = ../src/baseobject.c; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
-		43025C33111FB072006C49B1 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C36111FB072006C49B1 /* en_GB */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = en_GB; path = en_GB.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C39111FB072006C49B1 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C3B111FB072006C49B1 /* es */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C43111FB072006C49B1 /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C4E111FB072006C49B1 /* it */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C5D111FB072006C49B1 /* pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C60111FB072006C49B1 /* pt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C63111FB072006C49B1 /* pt_BR */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = pt_BR; path = pt_BR.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C69111FB072006C49B1 /* ru */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C6C111FB072006C49B1 /* sl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = sl; path = sl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C6F111FB072006C49B1 /* uk_UA */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = uk_UA; path = uk_UA.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025C75111FB072006C49B1 /* zh_TW */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = zh_TW; path = zh_TW.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43025D0C111FC870006C49B1 /* et_EE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = et_EE; path = et_EE.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Project-All.xcconfig"; path = "configs/Project-All.xcconfig"; sourceTree = "<group>"; };
 		43025DFF1120A4CA006C49B1 /* Warzone-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-All.xcconfig"; path = "configs/Warzone-All.xcconfig"; sourceTree = "<group>"; };
 		43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-Debug.xcconfig"; path = "configs/Warzone-Debug.xcconfig"; sourceTree = "<group>"; };
@@ -1577,6 +1564,32 @@
 		4355E12D10D6028C00A19EE4 /* theora.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theora.h; path = external/libtheora/include/theora/theora.h; sourceTree = "<group>"; };
 		4355E12E10D6028C00A19EE4 /* theoradec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoradec.h; path = external/libtheora/include/theora/theoradec.h; sourceTree = "<group>"; };
 		4355E12F10D6028C00A19EE4 /* theoraenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoraenc.h; path = external/libtheora/include/theora/theoraenc.h; sourceTree = "<group>"; };
+		438BDDD81129DC9A00998660 /* cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDD91129DC9A00998660 /* da */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDDA1129DC9A00998660 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDDB1129DC9A00998660 /* en_GB */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en_GB; path = en_GB.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDDC1129DC9A00998660 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDDE1129DC9A00998660 /* es */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDDF1129DC9A00998660 /* et_EE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = et_EE; path = et_EE.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE01129DC9A00998660 /* fi */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE11129DC9A00998660 /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE21129DC9A00998660 /* fy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fy; path = fy.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE31129DC9A00998660 /* ga */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE41129DC9A00998660 /* hr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE51129DC9A00998660 /* it */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE61129DC9A00998660 /* la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = la; path = la.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE71129DC9A00998660 /* lt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE81129DC9A00998660 /* nb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDE91129DC9A00998660 /* nl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDEA1129DC9A00998660 /* pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDEB1129DC9A00998660 /* pt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDEC1129DC9A00998660 /* pt_BR */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDED1129DC9A00998660 /* ro */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDEE1129DC9A00998660 /* ru */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDEF1129DC9A00998660 /* sl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDF01129DC9A00998660 /* uk_UA */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = uk_UA; path = uk_UA.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDF11129DC9A00998660 /* zh_CN */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh_CN; path = zh_CN.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438BDDF21129DC9A00998660 /* zh_TW */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh_TW; path = zh_TW.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43A8417611028EDD00733CCB /* pointtree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pointtree.cpp; path = ../src/pointtree.cpp; sourceTree = SOURCE_ROOT; };
 		43A8417711028EDD00733CCB /* pointtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pointtree.h; path = ../src/pointtree.h; sourceTree = SOURCE_ROOT; };
 		43BE75E811124BB4007DF934 /* wavecast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wavecast.cpp; path = ../src/wavecast.cpp; sourceTree = SOURCE_ROOT; };
@@ -2706,7 +2719,7 @@
 		43025C2B111FB072006C49B1 /* wzlocal */ = {
 			isa = PBXGroup;
 			children = (
-				43025C2C111FB072006C49B1 /* InfoPlist.strings */,
+				438BDDD71129DC9A00998660 /* InfoPlist.strings */,
 			);
 			name = wzlocal;
 			path = Resources/wzlocal;
@@ -3614,7 +3627,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0246A05D0BD3C975004D1C70 /* Warzone.icns in Resources */,
-				43025C78111FB072006C49B1 /* InfoPlist.strings in Resources */,
+				438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3864,7 +3877,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Config\nexport PATH=$PATH:/opt/local/bin:/sw/bin:${SRCROOT}/external/gettext-bin\npodir=\"../po\"\naresdir=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/\"\nbresdir=\".lproj/locale\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\n\n# San check\necho \"Checking for msgfmt...\"\nif ! type -aP msgfmt; then\n    echo \"Fatal inability to properly translate messages.\"\n    exit 1\nfi\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${lang}${bresdir}\"\n        $msgfmtpth -v -o \"${aresdir}${lang}${bresdir}/${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
+			shellScript = "# Config\nexport PATH=$PATH:/opt/local/bin:/sw/bin\npodir=\"../po\"\ndisfile=\"configs/LangDis\"\naresdir=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/\"\nbresdir=\"locale/\"\nmessdir=\"LC_MESSAGES/\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\ndislist=`cat ${disfile} | sed -n 's:^<::p'`\n\n# 1st san check\necho \"Checking for msgfmt...\"\nif ! type -aP msgfmt; then\n    echo \"Fatal inability to properly translate messages.\"\n    exit 1\nfi\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# 2nd san check\necho \"Checking for sanity...\"\nif ! $msgfmtpth --version; then\n    echo \"Fatal failure of san check.\"\n    exit 1\nfi\n\n# Disable selected langs\nfor dislang in ${dislist}; do\n    echo \"Cleaning up for ${dislang} ...\"\n    rm -rfv \"${aresdir}${dislang}.lproj\"\ndone\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${bresdir}${lang}/${messdir}\"\n        $msgfmtpth -v -o \"${aresdir}${bresdir}${lang}/${messdir}${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
 		};
 		43095E9A10EEA8630067E86B /* Run autorevision */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3879,6 +3892,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd ..\n./macosx/build/${CONFIGURATION}/Autorevision +cstr . src/autorevision.h\nsed -n 's:#define:&:p' src/autorevision.h | sed 's:\"::g' | sed -e 's:tags/::' -e 's:branches/\\(.*\\)$:\\1 (SVN_REV):' -e 's:trunk:Trunk (SVN_REV):' | sed -e 's:_beta: Beta :' -e 's:_rc: RC :' >macosx/build/autorevision.h";
+		};
+		4345290E1130F84E002AD731 /* msgfmt */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = msgfmt;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# GTB\nGTB_DLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nGTB_MD5=\"ba7984918fe0b36e2e7c786693e005f2\"\nGTB_DIRECTORY=\"gettext-0.17.mpkg_\"\nGTB_OUTDIR=\"gettext-0.17.mpkg\"\nGTB_FILENAME=\"gettext-0.17.mpkg.tar.gz\"\n\n# Checks\nexport PATH=$PATH:/opt/local/bin:/sw/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"Please run the following command in the terminal: 'sudo port install gettext'.\"\n  open -b com.apple.Terminal\n  exit 1\nelif [ -d \"prebuilt/${GTB_DIRECTORY}\" ]; then\n  echo \"${GTB_DIRECTORY} exists, probably from an earlier failed run\"\n  exit 1\nfi\n\n# Download\ncd prebuilt\nif [ ! -f \"${GTB_FILENAME}\" ]; then\n    echo \"Fetching ${GTB_FILENAME}\"\n    if ! curl -L -O --connect-timeout \"30\" \"${GTB_DLP}\"; then\n        echo \"Unable to fetch ${GTB_DLP}\"\n        exit 1\n    fi\nelse\n    echo \"${GTB_FILENAME} already exists, skipping\"\nfi\n\n# MD5 check\nHAVEMD5=`md5 -q \"${GTB_FILENAME}\"`\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for ${GTB_FILENAME}\"\n  exit 1\nfi\nif [ \"$HAVEMD5\" != \"$GTB_MD5\" ]; then\n  echo \"MD5 does not match for ${GTB_FILENAME}\"\n  exit 1\nfi\n\n# Unpack\nif ! tar -zxf \"${GTB_FILENAME}\"; then\n    echo \"Unpacking $GTB_FILENAME failed\"\n    exit 1\nfi\n\n# Move\nif [ ! -d \"${GTB_DIRECTORY}\" ]; then\n    echo \"Can't find $GTB_DIRECTORY to rename\"\n    exit 1\nelse\n    cd ..\n    mv \"prebuilt/${GTB_DIRECTORY}\" \"external/${GTB_OUTDIR}\"\nfi\n\n# Install\necho \"Please install the gettext package before continuing.\"\nopen \"external/${GTB_OUTDIR}\"\n\nexit 1";
 		};
 		43F3011910D3572400707B6E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3906,18 +3933,19 @@
 			shellPath = /bin/bash;
 			shellScript = "# Config\nsimgfl=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/wztemplate.sparseimage\"\nsimgflnme=\"wztemplate.sparseimage\"\nsimgflmd5=\"da10e06f2b9b2b565e70dd8e98deaaad\"\nsequence=\"http://www.il.fontys.nl/~giel/warzone/videos/latest/en/hi/sequences.wz\"\nsequencenme=\"sequences.wz\"\nsequencelo=\"http://www.il.fontys.nl/~giel/warzone/videos/latest/en/lo/sequences.wz\"\nsequencelonme=\"sequences-lo.wz\"\nrelbuild=\"build/Release/Warzone.app\"\ndmgout=\"build/dmgout\"\n\n# Fail if not release\nif [ ! -d \"$relbuild\" ]; then\n    echo \"This should only be run as Release\"\n    exit 1\nfi\n\n# Make a dir and get the sparseimage\nmkdir -p \"$dmgout\"\ncd  \"$dmgout\"\nif [ ! -f \"$simgflnme\" ]; then\n    echo \"Fetching $simgfl\"\n    if ! curl -L -O --connect-timeout \"30\" \"$simgfl\"; then\n        echo \"Unable to fetch $simgfl\"\n        exit 1\n    fi\nelse\n    echo \"$simgflnme already exists, skipping\"\nfi\n\n# Get the sequences\n\n# Comment out the following to skip the high qual seq\n# if [ ! -f \"$sequencenme\" ]; then\n#     echo \"Fetching $sequencenme\"\n#     if ! curl -L -O --connect-timeout \"30\" \"$sequence\"; then\n#         echo \"Unable to fetch $sequence\"\n#         exit 1\n#     fi\n# else\n#     echo \"$sequencenme already exists, skipping\"\n# fi\n# \n\n# Comment out the following to skip the low qual seq\nif [ ! -f \"$sequencelonme\" ]; then\n    echo \"Fetching $sequencelonme\"\n    if [ -f \"${HOME}/Applications/Build/wz2100/dmgmaker/sequences-lo.wz\" ]; then\n        cp \"${HOME}/Applications/Build/wz2100/dmgmaker/sequences-lo.wz\" \"$sequencelonme\"\n    elif [ -f \"${HOME}/Library/Application Support/Warzone 2100 Trunk/sequences-lq.wz\" ]; then\n        cp \"${HOME}/Library/Application Support/Warzone 2100 Trunk/sequences-lq.wz\" \"$sequencelonme\"\n    else\n        if ! curl -L --connect-timeout \"30\" -o \"$sequencelonme\" \"$sequencelo\"; then\n            echo \"Unable to fetch $sequencelo\"\n            exit 1\n        fi\n    fi\nelse\n    echo \"$sequencelonme already exists, skipping\"\nfi\n# \n\n# Copy over the app\ncd ../../\necho \"Copying the app cleanly.\"\nrm -r -f $dmgout/Warzone.app\nif ! tar -c --exclude '.svn' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store' -C build/Release Warzone.app | tar -xC $dmgout; then\n    echo \"Unable to copy the app\"\n    exit 1\nfi\ncd \"$dmgout\"\n\n# mkredist.bash\n\ncd Warzone.app/Contents/Resources/data/\n\necho \"== Compressing base.zip ==\"\nif [ -d base/ ]\nthen\n  cd base/\n  zip -r ../base.wz *\n  cd ..\n  rm -rf base/\nfi\n\necho \"== Compressing mp.zip ==\"\nif [ -d mp/ ]\nthen\n  cd mp/\n  zip -r ../mp.wz *\n  cd ..\n  rm -rf mp/\nfi\n\ncd ../../../../\n\nrm -r -f ./out ./temp\nmkdir temp/\nmkdir out/\n\necho \"== Creating DMG ==\"\ncp wztemplate.sparseimage temp/wztemplatecopy.sparseimage\nhdiutil resize -size 150m temp/wztemplatecopy.sparseimage\nmountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\ncp -r Warzone.app/* /Volumes/Warzone\\ 2100/Warzone.app\n# hdiutil detach `expr match \"$mountpt\" '\\(^[^ ]*\\)'`\nhdiutil detach \"$mountpt\"\nhdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-novideo.dmg\n\nif [ -f \"$sequencelonme\" ]; then\n    echo \"== Creating LQ DMG ==\"\n    hdiutil resize -size 350m temp/wztemplatecopy.sparseimage\n    mountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\n    cp sequences-lo.wz /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n    # hdiutil detach `expr match \"$mountpt\" '\\(^[^ ]*\\)'`\n    hdiutil detach \"$mountpt\"\n    hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-lqvideo.dmg\nelse\n    echo \"$sequencelonme does not exist, skipping\"\nfi\n\n\nif [ -f \"$sequencenme\" ]; then\n    echo \"== Creating HQ DMG ==\"\n    hdiutil resize -size 700m temp/wztemplatecopy.sparseimage\n    mountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\n    rm /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n    cp sequences.wz /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n    hdiutil detach \"$mountpt\"\n    hdiutil converttemp/wztemplatecopy.sparseimage -format UDZO  -o out/warzone2100-hqvideo.dmg\nelse\n    echo \"$sequencenme does not exist, skipping\"\nfi\n\necho \"== Cleaning up ==\"\nrm -f temp/wztemplatecopy.sparseimage\nrmdir temp/\n\n# Open the dir\nopen \"out\"\n\nexit 0";
 		};
-		43FA570B10FF8E9B0074E914 /* ShellScript */ = {
+		43FA570B10FF8E9B0074E914 /* SDL */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = SDL;
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# SDL\nSDL_DLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/SDL.tar.gz\"\nSDL_MD5=\"200bf42ff5118a57b26114248cc6b9fe\"\nSDL_DIRECTORY=\"SDL_\"\nSDL_OUTDIR=\"SDL\"\nSDL_FILENAME=\"SDL.tar.gz\"\n\n# Checks\nif [ -d \"external/${SDL_OUTDIR}\" ]; then\n  echo \"${SDL_OUTDIR} exists, skipping\"\n  exit 0\nelif [ -d \"prebuilt/${SDL_DIRECTORY}\" ]; then\n  echo \"${SDL_DIRECTORY} exists, probably from an earlier failed run\"\n  exit 1\nfi\n\n# Download\ncd prebuilt\nif [ ! -f \"${SDL_FILENAME}\" ]; then\n    echo \"Fetching ${SDL_FILENAME}\"\n    if ! curl -L -O --connect-timeout \"30\" \"${SDL_DLP}\"; then\n        echo \"Unable to fetch ${SDL_DLP}\"\n        exit 1\n    fi\nelse\n    echo \"${SDL_FILENAME} already exists, skipping\"\nfi\n\n# MD5 check\nHAVEMD5=`md5 -q \"${SDL_FILENAME}\"`\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for ${SDL_FILENAME}\"\n  exit 1\nfi\nif [ \"$HAVEMD5\" != \"$SDL_MD5\" ]; then\n  echo \"MD5 does not match for ${SDL_FILENAME}\"\n  exit 1\nfi\n\n# Unpack\nif ! tar -zxf \"${SDL_FILENAME}\"; then\n    echo \"Unpacking $SDL_FILENAME failed\"\n    exit 1\nfi\n\n# Move\nif [ ! -d \"${SDL_DIRECTORY}\" ]; then\n    echo \"Can't find $SDL_DIRECTORY to rename\"\n    exit 1\nelse\n    cd ..\n    mv \"prebuilt/${SDL_DIRECTORY}\" \"external/${SDL_OUTDIR}\"\nfi\n\n# GTB\nGTB_DLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-bin.tar.gz\"\nGTB_MD5=\"8e81e3c6e4a2fb92773d48ea8fc6d74a\"\nGTB_DIRECTORY=\"gettext-bin_\"\nGTB_OUTDIR=\"gettext-bin\"\nGTB_FILENAME=\"gettext-bin.tar.gz\"\n\n# Checks\nexport PATH=$PATH:/opt/local/bin:/sw/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -d \"external/${GTB_OUTDIR}\" ]; then\n  echo \"${GTB_OUTDIR} exists, skipping\"\n  exit 0\nelif [ -d \"prebuilt/${GTB_DIRECTORY}\" ]; then\n  echo \"${GTB_DIRECTORY} exists, probably from an earlier failed run\"\n  exit 1\nfi\n\n# Download\ncd prebuilt\nif [ ! -f \"${GTB_FILENAME}\" ]; then\n    echo \"Fetching ${GTB_FILENAME}\"\n    if ! curl -L -O --connect-timeout \"30\" \"${GTB_DLP}\"; then\n        echo \"Unable to fetch ${GTB_DLP}\"\n        exit 1\n    fi\nelse\n    echo \"${GTB_FILENAME} already exists, skipping\"\nfi\n\n# MD5 check\nHAVEMD5=`md5 -q \"${GTB_FILENAME}\"`\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for ${GTB_FILENAME}\"\n  exit 1\nfi\nif [ \"$HAVEMD5\" != \"$GTB_MD5\" ]; then\n  echo \"MD5 does not match for ${GTB_FILENAME}\"\n  exit 1\nfi\n\n# Unpack\nif ! tar -zxf \"${GTB_FILENAME}\"; then\n    echo \"Unpacking $GTB_FILENAME failed\"\n    exit 1\nfi\n\n# Move\nif [ ! -d \"${GTB_DIRECTORY}\" ]; then\n    echo \"Can't find $GTB_DIRECTORY to rename\"\n    exit 1\nelse\n    cd ..\n    mv \"prebuilt/${GTB_DIRECTORY}\" \"external/${GTB_OUTDIR}\"\nfi\n\n# Install\nif ! cp -npv \"external/${GTB_OUTDIR}/*.dylib\" \"/usr/local/lib/\"; then\n    if ! sudo cp -npv \"external/${GTB_OUTDIR}/*.dylib\" \"/usr/local/lib/\"; then\n        echo \"Cannot install the libraries.\"\n        exit 1\n    fi\nfi\n\nexit 0";
+			shellScript = "# SDL\nSDL_DLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/SDL.tar.gz\"\nSDL_MD5=\"200bf42ff5118a57b26114248cc6b9fe\"\nSDL_DIRECTORY=\"SDL_\"\nSDL_OUTDIR=\"SDL\"\nSDL_FILENAME=\"SDL.tar.gz\"\n\n# Checks\nif [ -d \"external/${SDL_OUTDIR}\" ]; then\n  echo \"${SDL_OUTDIR} exists, skipping\"\n  exit 0\nelif [ -d \"prebuilt/${SDL_DIRECTORY}\" ]; then\n  echo \"${SDL_DIRECTORY} exists, probably from an earlier failed run\"\n  exit 1\nfi\n\n# Download\ncd prebuilt\nif [ ! -f \"${SDL_FILENAME}\" ]; then\n    echo \"Fetching ${SDL_FILENAME}\"\n    if ! curl -L -O --connect-timeout \"30\" \"${SDL_DLP}\"; then\n        echo \"Unable to fetch ${SDL_DLP}\"\n        exit 1\n    fi\nelse\n    echo \"${SDL_FILENAME} already exists, skipping\"\nfi\n\n# MD5 check\nHAVEMD5=`md5 -q \"${SDL_FILENAME}\"`\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for ${SDL_FILENAME}\"\n  exit 1\nfi\nif [ \"$HAVEMD5\" != \"$SDL_MD5\" ]; then\n  echo \"MD5 does not match for ${SDL_FILENAME}\"\n  exit 1\nfi\n\n# Unpack\nif ! tar -zxf \"${SDL_FILENAME}\"; then\n    echo \"Unpacking $SDL_FILENAME failed\"\n    exit 1\nfi\n\n# Move\nif [ ! -d \"${SDL_DIRECTORY}\" ]; then\n    echo \"Can't find $SDL_DIRECTORY to rename\"\n    exit 1\nelse\n    cd ..\n    mv \"prebuilt/${SDL_DIRECTORY}\" \"external/${SDL_OUTDIR}\"\nfi\n\nexit 0";
 		};
 		9711774C0F87A677000C8A96 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4550,27 +4578,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		43025C2C111FB072006C49B1 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				43025C33111FB072006C49B1 /* de */,
-				43025C36111FB072006C49B1 /* en_GB */,
-				43025C39111FB072006C49B1 /* English */,
-				43025C3B111FB072006C49B1 /* es */,
-				43025D0C111FC870006C49B1 /* et_EE */,
-				43025C43111FB072006C49B1 /* fr */,
-				43025C4E111FB072006C49B1 /* it */,
-				43025C5D111FB072006C49B1 /* pl */,
-				43025C60111FB072006C49B1 /* pt */,
-				43025C63111FB072006C49B1 /* pt_BR */,
-				43025C69111FB072006C49B1 /* ru */,
-				43025C6C111FB072006C49B1 /* sl */,
-				43025C6F111FB072006C49B1 /* uk_UA */,
-				43025C75111FB072006C49B1 /* zh_TW */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		432BE3C110D9C79400A486AB /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -4591,6 +4598,39 @@
 			isa = PBXVariantGroup;
 			children = (
 				432BE3FF10D9CF1300A486AB /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		438BDDD71129DC9A00998660 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				438BDDD81129DC9A00998660 /* cs */,
+				438BDDD91129DC9A00998660 /* da */,
+				438BDDDA1129DC9A00998660 /* de */,
+				438BDDDB1129DC9A00998660 /* en_GB */,
+				438BDDDC1129DC9A00998660 /* English */,
+				438BDDDE1129DC9A00998660 /* es */,
+				438BDDDF1129DC9A00998660 /* et_EE */,
+				438BDDE01129DC9A00998660 /* fi */,
+				438BDDE11129DC9A00998660 /* fr */,
+				438BDDE21129DC9A00998660 /* fy */,
+				438BDDE31129DC9A00998660 /* ga */,
+				438BDDE41129DC9A00998660 /* hr */,
+				438BDDE51129DC9A00998660 /* it */,
+				438BDDE61129DC9A00998660 /* la */,
+				438BDDE71129DC9A00998660 /* lt */,
+				438BDDE81129DC9A00998660 /* nb */,
+				438BDDE91129DC9A00998660 /* nl */,
+				438BDDEA1129DC9A00998660 /* pl */,
+				438BDDEB1129DC9A00998660 /* pt */,
+				438BDDEC1129DC9A00998660 /* pt_BR */,
+				438BDDED1129DC9A00998660 /* ro */,
+				438BDDEE1129DC9A00998660 /* ru */,
+				438BDDEF1129DC9A00998660 /* sl */,
+				438BDDF01129DC9A00998660 /* uk_UA */,
+				438BDDF11129DC9A00998660 /* zh_CN */,
+				438BDDF21129DC9A00998660 /* zh_TW */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

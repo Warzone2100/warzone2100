@@ -44,6 +44,10 @@ AC_GNU_SOURCE
 AX_CHECK_STRLCPY
 AX_CHECK_STRLCAT
 
+# Use -fstack-protector if possible
+AX_STACK_PROTECT_CC
+AX_STACK_PROTECT_CXX
+
 AC_CHECK_HEADERS(alloca.h)
 
 # Check for gettext

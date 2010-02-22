@@ -120,19 +120,12 @@ MAPTILE		*psTile;
 		{
 			psTile = mapTile(i,j);
 			psTile->level = 0;
-			psTile->tileExploredBits = 0;
 
-			if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
-		  	{
-				psTile->tileExploredBits = 1 << selectedPlayer;
-		  	}
 			if (!bRevealActive || TEST_TILE_VISIBLE(selectedPlayer, psTile))
 			{
 				psTile->level = psTile->illumination;
 			}
 		}
 	}
-
-
 }
 // ------------------------------------------------------------------------------------

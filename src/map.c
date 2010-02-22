@@ -939,10 +939,7 @@ BOOL mapLoad(char *filename)
 		// Visibility stuff
 		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
 		psMapTiles[i].sensorBits = 0;
-		for (j = 0; j < MAX_PLAYERS; j++)
-		{
-			psMapTiles[i].tileVisBits =(UBYTE)(psMapTiles[i].tileVisBits &~ (UBYTE)(1 << j));
-		}
+		psMapTiles[i].tileExploredBits = 0;
 	}
 
 	if (!PHYSFS_readULE32(fp, &version) || !PHYSFS_readULE32(fp, &numGw) || version != 1)
@@ -1233,7 +1230,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 	tagWrite(0x01, psStruct->pStructureType->type);
 	tagWrites(0x02, psStruct->currentPowerAccrued);
 	tagWrite(0x03, psStruct->lastResistance);
-	tagWrite(0x04, psStruct->targetted);
+	tagWrite(0x04, psStruct->bTargetted);
 	tagWrite(0x05, psStruct->timeLastHit);
 	tagWrite(0x06, psStruct->lastHitWeapon);
 	tagWrite(0x07, psStruct->status);
@@ -1296,7 +1293,6 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 			RES_EXTRACTOR *psExtractor = (RES_EXTRACTOR *)psStruct->pFunctionality;
 
 			tagWriteEnter(0x0f, 1);
-			tagWrite(0x01, psExtractor->power);
 			if (psExtractor->psPowerGen)
 			{
 				tagWrites(0x02, psExtractor->psPowerGen->id);
@@ -1350,6 +1346,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 		case REF_WALL:
 		case REF_WALLCORNER:
 		case REF_BLASTDOOR:
+		case REF_GATE:
 		case REF_RESEARCH_MODULE:
 		case REF_COMMAND_CONTROL:
 		case REF_BRIDGE:
@@ -1374,7 +1371,7 @@ static void featureSaveTagged(FEATURE *psFeat)
 	/* FEATURE GROUP */
 
 	tagWriteEnter(0x0c, 1);
-	tagWrite(0x01, psFeat->startTime);
+	tagWrite(0x01, psFeat->born);
 	tagWriteLeave(0x0c);
 }
 
@@ -1444,7 +1441,6 @@ BOOL mapSaveTagged(char *pFileName)
 		tagWrite(0x05, psTile->texture & TILE_YFLIP);
 		tagWrite(0x06, TileIsNotBlocking(psTile)); // Redundant, since already included in tileInfoBits
 		tagWrite(0x08, psTile->height);
-		tagWrite(0x09, psTile->tileVisBits);
 		tagWrite(0x0a, psTile->tileInfoBits);
 		tagWrite(0x0b, (psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT);
 
@@ -2078,7 +2074,7 @@ bool writeVisibilityData(const char* fileName)
 
 	for (i = 0; i < mapWidth * mapHeight; ++i)
 	{
-		if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileVisBits))
+		if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileExploredBits))
 		{
 			debug(LOG_ERROR, "writeVisibilityData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
 			PHYSFS_close(fileHandle);
@@ -2146,7 +2142,7 @@ bool readVisibilityData(const char* fileName)
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{
 		/* Get the visibility data */
-		if (!PHYSFS_readUBE8(fileHandle, &psMapTiles[i].tileVisBits))
+		if (!PHYSFS_readUBE8(fileHandle, &psMapTiles[i].tileExploredBits))
 		{
 			debug(LOG_ERROR, "readVisibilityData: could not read from %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
 			PHYSFS_close(fileHandle);

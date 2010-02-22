@@ -945,9 +945,6 @@ BOOL init3DView(void)
 	/* Make sure and change these to comply with map.c */
 	imdRot.x = -35;
 
-	/* Initialize vertex arrays */
-	pie_TerrainInit(visibleTiles.y+1, visibleTiles.x+1);
-
 	/* Get all the init stuff out of here? */
 	initWarCam();
 
@@ -1371,8 +1368,7 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 	                           state);
 	ASSERT_OR_RETURN(, blueprint != NULL, "No blueprint created");
 
-	if (psStats->type == REF_WALL &&
-		left == right && up != down)
+	if ((psStats->type == REF_WALL || psStats->type == REF_GATE) && left == right && up != down)
 	{
 		blueprint->direction = 90; // rotate so walls will look like walls
 	}
@@ -1998,7 +1994,8 @@ void	renderStructure(STRUCTURE *psStructure)
 	BOOL			defensive = false;
 	iIMDShape		*strImd = psStructure->sDisplay.imd;
 
-	if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_WALLCORNER)
+	if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_WALLCORNER
+	    || psStructure->pStructureType->type == REF_GATE)
 	{
 		renderWallSection(psStructure);
 		return;
@@ -2462,7 +2459,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, BOOL blueprint)
 /// Draw a piece of wall
 static BOOL	renderWallSection(STRUCTURE *psStructure)
 {
-	SDWORD			structX, structY, rx, rz;
+	SDWORD			structX, structY, rx, rz, height;
 	PIELIGHT		brightness, specular = WZCOL_BLACK;
 	iIMDShape		*imd;
 	SDWORD			rotation;
@@ -2473,6 +2470,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 
 	if(psStructure->visible[selectedPlayer] || demoGetStatus())
 	{
+		height = psStructure->sDisplay.imd->max.y;
 		psStructure->sDisplay.frameNumber = currentGameFrame;
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
 		structX = psStructure->pos.x;
@@ -2508,6 +2506,19 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		dv.x = (structX - player.p.x) - terrainMidX*TILE_UNITS;
 		dv.z = terrainMidY*TILE_UNITS - (structY - player.p.z);
 		dv.y = map_Height(structX, structY);
+
+		if (psStructure->pStructureType->type == REF_GATE && psStructure->state == SAS_OPEN)
+		{
+			dv.y -= height;
+		}
+		else if (psStructure->pStructureType->type == REF_GATE && psStructure->state == SAS_OPENING)
+		{
+			dv.y -= (height * (gameTime - psStructure->lastStateTime)) / SAS_OPEN_SPEED;
+		}
+		else if (psStructure->pStructureType->type == REF_GATE && psStructure->state == SAS_CLOSING)
+		{
+			dv.y -= height - (height * (gameTime - psStructure->lastStateTime)) / SAS_OPEN_SPEED;
+		}
 
 		/* Push the indentity matrix */
 		iV_MatrixBegin();
@@ -2558,7 +2569,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			}
 			else
 			{
-				if (psStructure->pStructureType->type == REF_WALL)
+				if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_GATE)
 				{
 					// walls can be rotated, so use a dynamic shadow for them
 					pieFlag = pie_SHADOW;
@@ -2984,27 +2995,22 @@ static void	drawStructureSelections( void )
 		}
 	}
 
-	for(i=0; i<MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		/* Go thru' all the buildings */
-		for(psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+		if (i == selectedPlayer)
 		{
-			if(i!=selectedPlayer)		// only see enemy buildings being targetted, not yours!
+			continue;	// not interesting in our own buildings
+		}
+		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+		{
+			/* If it's targetted and on-screen */
+			if (clipXY(psStruct->pos.x,psStruct->pos.y)
+			    && psStruct->bTargetted
+			    && psStruct->sDisplay.frameNumber == currentGameFrame)
 			{
-				if(clipXY(psStruct->pos.x,psStruct->pos.y))
-				{
-					/* If it's targetted and on-screen */
-					if(psStruct->targetted)
-					{
-						if(psStruct->sDisplay.frameNumber == currentGameFrame)
-
-						{
-							scrX = psStruct->sDisplay.screenX;
-							scrY = psStruct->sDisplay.screenY - (psStruct->sDisplay.imd->max.y / 4);
-							iV_DrawImage(IntImages,getTargettingGfx(),scrX,scrY);
-						}
-					}
-				}
+				scrX = psStruct->sDisplay.screenX;
+				scrY = psStruct->sDisplay.screenY - (psStruct->sDisplay.imd->max.y / 4);
+				iV_DrawImage(IntImages, getTargettingGfx(), scrX, scrY);
 			}
 		}
 	}

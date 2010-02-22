@@ -23,6 +23,7 @@ EXTRA_DIST= \
 	macosx/configs/Gettext-All.xcconfig \
 	macosx/configs/Gettext-Debug.xcconfig \
 	macosx/configs/Gettext-Release.xcconfig \
+	macosx/configs/LangDis \
 	macosx/configs/Ogg-All.xcconfig \
 	macosx/configs/Ogg-Debug.xcconfig \
 	macosx/configs/Ogg-Release.xcconfig \

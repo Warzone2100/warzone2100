@@ -214,7 +214,7 @@ proj_Shutdown( void )
 static void proj_Free(PROJECTILE *psObj)
 {
 	/* Decrement any reference counts the projectile may have increased */
-	setProjectileDamaged(psObj, NULL);
+	free(psObj->psDamaged);
 	setProjectileSource(psObj, NULL);
 
 	free(psObj);
@@ -392,14 +392,17 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		psProj->born = psOldProjectile->born;
 
 		setProjectileSource(psProj, psOldProjectile->psSource);
-		setProjectileDamaged(psProj, psOldProjectile->psDamaged);
+		psProj->psDamaged = (BASE_OBJECT **)malloc(psOldProjectile->psNumDamaged*sizeof(BASE_OBJECT *));
+		psProj->psNumDamaged = psOldProjectile->psNumDamaged;
+		memcpy(psProj->psDamaged, psOldProjectile->psDamaged, psOldProjectile->psNumDamaged*sizeof(BASE_OBJECT *));
 	}
 	else
 	{
 		psProj->born = gameTime;
 
 		setProjectileSource(psProj, psAttacker);
-		setProjectileDamaged(psProj, NULL);
+		psProj->psDamaged = NULL;
+		psProj->psNumDamaged = 0;
 	}
 
 	if (psTarget)
@@ -835,9 +838,20 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	gridStartIterate(psProj->pos.x, psProj->pos.y, PROJ_NEIGHBOUR_RANGE);
 	for (psTempObj = gridIterate(); psTempObj != NULL; psTempObj = gridIterate())
 	{
+		unsigned j;
+		bool alreadyDamaged = false;
+
 		CHECK_OBJECT(psTempObj);
 
-		if (psTempObj == psProj->psDamaged)
+		for (j = 0; j != psProj->psNumDamaged; ++j)
+		{
+			if (psTempObj == psProj->psDamaged[j])
+			{
+				alreadyDamaged = true;
+				break;
+			}
+		}
+		if (alreadyDamaged)
 		{
 			// Dont damage one target twice
 			continue;
@@ -1261,8 +1275,6 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 							//Watermelon:uses a slightly different check for angle,
 							// since fragment of a project is from the explosion spot not from the projectile start position
 							impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrD);
-							//  FIXME: This screws us!  A droid *can* die in the function below!
-							// which means we can't send that info to other players since turnOffMultiMsg() is off!
 							relativeDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, impactSide);
 
 							turnOffMultiMsg(false);	// multiplay msgs back on.
@@ -1412,6 +1424,7 @@ static void proj_PostImpactFunc( PROJECTILE *psObj )
 
 static void proj_Update(PROJECTILE *psObj)
 {
+	unsigned n, m;
 	CHECK_PROJECTILE(psObj);
 
 	psObj->prevSpacetime = GET_SPACETIME(psObj);
@@ -1427,10 +1440,14 @@ static void proj_Update(PROJECTILE *psObj)
 	{
 		setProjectileDestination(psObj, NULL);
 	}
-	if (psObj->psDamaged && psObj->psDamaged->died)
+	for (n = m = 0; n != psObj->psNumDamaged; ++n)
 	{
-		setProjectileDamaged(psObj, NULL);
+		if (!psObj->psDamaged[n]->died)
+		{
+			psObj->psDamaged[m++] = psObj->psDamaged[n];
+		}
 	}
+	psObj->psNumDamaged = m;
 
 	// This extra check fixes a crash in cam2, mission1
 	if (worldOnMap(psObj->pos.x, psObj->pos.y) == false)
@@ -1969,6 +1986,7 @@ static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 
 void checkProjectile(const PROJECTILE* psProjectile, const char * const location_description, const char * function, const int recurse)
 {
+	unsigned n;
 	if (recurse < 0)
 		return;
 
@@ -1988,6 +2006,6 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 	if (psProjectile->psSource)
 		checkObject(psProjectile->psSource, location_description, function, recurse - 1);
 
-	if (psProjectile->psDamaged)
-		checkObject(psProjectile->psDamaged, location_description, function, recurse - 1);
+	for (n = 0; n != psProjectile->psNumDamaged; ++n)
+		checkObject(psProjectile->psDamaged[n], location_description, function, recurse - 1);
 }

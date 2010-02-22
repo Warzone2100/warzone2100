@@ -250,6 +250,7 @@ static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
 	newObject->psNextFunc = NULL;
 	newObject->numWatchedTiles = 0;
 	newObject->watchedTiles = NULL;
+	newObject->born = gameTime;
 
 	return newObject;
 }

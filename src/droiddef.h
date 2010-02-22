@@ -173,8 +173,6 @@ typedef struct DROID
 	UWORD           orderX, orderY;
 	UWORD           orderX2, orderY2;
 
-	BOOL            bTargetted;
-
 	BASE_OBJECT*    psTarget;                       ///< Order target
 	BASE_STATS*     psTarStats;                     ///< What to build etc
 #ifdef DEBUG

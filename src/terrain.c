@@ -1295,13 +1295,18 @@ void drawTerrain(void)
 	}
 	// we don't need this one anymore
 	glDisableClientState( GL_COLOR_ARRAY );
-	//////////////////////////////////
-	// decals
-	
-	// no texture generation
+	// no more texture generation
 	glDisable(GL_TEXTURE_GEN_S); glError();
 	glDisable(GL_TEXTURE_GEN_T); glError();
+	// prevent the terrain from getting corrupted by the decal drawing code
+	// (something with VBO + changing the texture)
+	// this happens on radeon + mesa
+	// FIXME: remove this after the driver is fixed
+	glFlush();
 	
+	//////////////////////////////////
+	// decals
+
 	// select the terrain texture page
 	pie_SetTexturePage(terrainPage); glError();
 	// use the alpha to blend
@@ -1347,9 +1352,6 @@ void drawTerrain(void)
 
 	// leave everything in a sane state so it won't mess up somewhere else
 	glDisableClientState( GL_TEXTURE_COORD_ARRAY );
-	glDisable(GL_TEXTURE_GEN_S);
-	glDisable(GL_TEXTURE_GEN_T);
-	
 	glDisableClientState( GL_VERTEX_ARRAY );
 	
 	glDepthMask(GL_TRUE);

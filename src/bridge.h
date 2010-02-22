@@ -35,11 +35,11 @@ extern "C"
 
 typedef struct _bridge_info
 {
-	UDWORD	startX, startY, endX, endY;			// Copy of coordinates of bridge.
-	UDWORD	heightChange;					// How much to raise lowest end by.
-	UDWORD	bridgeHeight;					// How high are the sections?
-	UDWORD	bridgeLength;					// How many tiles long?
-	BOOL	bConstantX, startHighest;			// Which axis is it on and which end is highest?
+	int	startX, startY, endX, endY;			// Copy of coordinates of bridge.
+	int	heightChange;					// How much to raise lowest end by.
+	int	bridgeHeight;					// How high are the sections?
+	int	bridgeLength;					// How many tiles long?
+	bool	bConstantX, startHighest;			// Which axis is it on and which end is highest?
 } BRIDGE_INFO;
 
 /* Establishes whether a bridge could be built along the coordinates given */

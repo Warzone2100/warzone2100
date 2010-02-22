@@ -503,7 +503,6 @@ void systemShutdown(void)
 	iV_ShutDown();
 	levShutDown();
 	widgShutDown();
-	pie_TerrainCleanup();
 
 	fpathShutdown();
 

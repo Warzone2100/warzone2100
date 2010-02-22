@@ -6,6 +6,14 @@ stamp:
 	zip -T $@
 	rm -f stamp
 
+DYDOAILIST = \
+	multiplay \
+	images \
+	messages \
+	stats
+
+DYDOAIARCHIVE = dydo-ai.wz
+
 OLD110LIST = \
 	doc \
 	images \
@@ -33,14 +41,16 @@ NTWLIST = \
 
 NTWARCHIVE = ntw.wz
 
-CLEANFILES = $(OLD110ARCHIVE) $(NTWARCHIVE)
+CLEANFILES = $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE)
 
+$(DYDOAIARCHIVE): $(DYDOAILIST:%=$(basename $(DYDOAIARCHIVE))/%)
 $(OLD110ARCHIVE): $(OLD110LIST:%=$(basename $(OLD110ARCHIVE))/%)
 $(NTWARCHIVE): $(NTWLIST:%=$(basename $(NTWARCHIVE))/%)
 
 multiplaymodsdir = $(pkgdatadir)/mods/multiplay
-nodist_multiplaymods_DATA = $(OLD110ARCHIVE) $(NTWARCHIVE)
+nodist_multiplaymods_DATA =  $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE)
 
-dist-hook: $(OLD110ARCHIVE) $(NTWARCHIVE)
+dist-hook: $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE)
+	unzip -u $(DYDOAIARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(DYDOAIARCHIVE))
 	unzip -u $(OLD110ARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(OLD110ARCHIVE))
 	unzip -u $(NTWARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(NTWARCHIVE))

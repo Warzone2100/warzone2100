@@ -2311,6 +2311,13 @@ static void stopJoining(void)
 			sendLeavingMsg();								// say goodbye
 			NETclose();										// quit running game.
 
+			// if we were in a midle of transfering a file, then close the file handle
+			if (NetPlay.pMapFileHandle)
+			{
+				debug(LOG_NET, "closing aborted file");		// no need to delete it, we do size check on (map) file
+				PHYSFS_close(NetPlay.pMapFileHandle);
+				NetPlay.pMapFileHandle = NULL;
+			}
 			ingame.localJoiningInProgress = false;			// reset local flags
 			ingame.localOptionsReceived = false;
 			if(!ingame.bHostSetup && NetPlay.isHost)			// joining and host was transfered.
@@ -2628,6 +2635,7 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 
 	case MULTIOP_HOST:
+		debug(LOG_NET, "MULTIOP_HOST enabled");
 		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
 		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
 		sstrcpy(game.map, widgGetString(psWScreen, MULTIOP_MAP));		// add the name
@@ -2840,28 +2848,39 @@ void startMultiplayerGame(void)
 
 	if (NetPlay.isHost)
 	{
-		if (!bLimiterLoaded)	// if they set limits, then skip this
+		// This sets the limits to whatever the defaults are for the limiter screen
+		// If host sets limits, then we do not need to do the following routine.
+		if (!bLimiterLoaded)
 		{
+			debug(LOG_NET, "limiter was NOT activated, setting defaults");
+
+			// NOTE: TRUNK <->svn/2.3 difference, we don't load limiter_tex!
 			if (!resLoad("wrf/limiter_tex.wrf", 501))
 			{
-				debug(LOG_WARNING, "Unable to load limiter_tex.  Defaults not set.");
+				debug(LOG_INFO, "Unable to load limiter_tex.  Defaults not set.");
 			}
-			else if (!resLoad("wrf/piestats.wrf", 502))
+			if (!resLoad("wrf/piestats.wrf", 502))
 			{
-				debug(LOG_WARNING, "Unable to load limits.  Defaults not set.");
+				debug(LOG_INFO, "Unable to load piestats.  Defaults not set.");
 			}
 			else if (!resLoad("wrf/limiter_data.wrf", 503))
 			{
-				debug(LOG_WARNING, "Unable to load limits?");
+				debug(LOG_INFO, "Unable to load limiter_data.");
 			}
-			resetDataHash();	// need to reset it, since host's data has changed.
-			createLimitSet();
 		}
-		sendOptions();
+		else
+		{
+			debug(LOG_NET, "limiter was activated");
+		}
+
+		resetDataHash();	// need to reset it, since host's data has changed.
+		createLimitSet();
+		debug(LOG_NET,"sending our options to all clients");
+		sendOptions(); 
 		NEThaltJoining();							// stop new players entering.
 		ingame.TimeEveryoneIsInGame = 0;
 		ingame.isAllPlayersDataOK = false;
-		memset(&ingame.DataIntegrity, 0x0, sizeof(ingame.DataIntegrity));
+		memset(&ingame.DataIntegrity, 0x0, sizeof(ingame.DataIntegrity));	//clear all player's array
 		SendFireUp();								//bcast a fireup message
 	}
 
@@ -2869,6 +2888,7 @@ void startMultiplayerGame(void)
 	setRevealStatus(game.fog);
 	war_SetFog(!game.fog);
 
+	debug(LOG_NET, "title mode STARTGAME is set--Starting Game!"); 
 	changeTitleMode(STARTGAME);
 
 	bHosted = false;
@@ -2993,7 +3013,7 @@ void frontendMultiMessages(void)
 			MultiPlayerLeave(player_id);		// get rid of their stuff
 			NET_PlayerConnectionStatus = 2;		//DROPPED_CONNECTION
 
-			if (host)					// host has quit, need to quit too.
+			if (host || player_id == selectedPlayer)	// if host quits or we quit, abort out
 			{
 				stopJoining();
 			}
@@ -3546,8 +3566,17 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
+	if (NetPlay.isHost && NetPlay.players[j].wzFile.isSending)
+	{
+		static char mapProgressString[MAX_STR_LENGTH] = {'\0'};
+		int progress = (NetPlay.players[j].wzFile.currPos * 100) / NetPlay.players[j].wzFile.fileSize_32;
 
-	if (mapDownloadProgress != 100 && j == selectedPlayer)
+		snprintf(mapProgressString, MAX_STR_LENGTH, _("Sending Map: %d%% "), progress);
+		iV_SetFont(font_regular); // font
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_DrawText(mapProgressString, x + 15, y + 22);
+	}
+	else if (mapDownloadProgress != 100 && j == selectedPlayer)
 	{
 		static char mapProgressString[MAX_STR_LENGTH] = {'\0'};
 		snprintf(mapProgressString, MAX_STR_LENGTH, _("Map: %d%% downloaded"), mapDownloadProgress);
@@ -3598,37 +3627,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_DrawImage(FrontImages,IMAGE_LAMP_RED,x,y);
 		}
 
-
-		// player number
-		switch (NetPlay.players[j].position)
-		{
-		case 0:
-			iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
-			break;
-		case 1:
-			iV_DrawImage(IntImages,IMAGE_GN_1,x+5,y+29);
-			break;
-		case 2:
-			iV_DrawImage(IntImages,IMAGE_GN_2,x+4,y+29);
-			break;
-		case 3:
-			iV_DrawImage(IntImages,IMAGE_GN_3,x+4,y+29);
-			break;
-		case 4:
-			iV_DrawImage(IntImages,IMAGE_GN_4,x+4,y+29);
-			break;
-		case 5:
-			iV_DrawImage(IntImages,IMAGE_GN_5,x+4,y+29);
-			break;
-		case 6:
-			iV_DrawImage(IntImages,IMAGE_GN_6,x+4,y+29);
-			break;
-		case 7:
-			iV_DrawImage(IntImages,IMAGE_GN_7,x+4,y+29);
-			break;
-		default:
-			break;
-		}
 
 		// ranking against other players.
 		eval = bestPlayer(j);
@@ -3734,36 +3732,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 				}
 			}
 		}
-
-		switch(getPlayerColour(j))		//flag icon
-		{
-		case 0:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
-			break;
-		case 1:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);
-			break;
-		case 2:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);
-			break;
-		case 3:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);
-			break;
-		case 4:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);
-			break;
-		case 5:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);
-			break;
-		case 6:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);
-			break;
-		case 7:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);
-			break;
-		default:
-			break;
-		}
 		game.skDiff[j] = UBYTE_MAX;	// set AI difficulty to 0xFF (i.e. not an AI)
 	}
 	else
@@ -3773,9 +3741,11 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	}
 	// Draw for both AI and human players
 
-	// player number
-	switch (NetPlay.players[j].position)
+	if (!NetPlay.players[j].wzFile.isSending)
 	{
+		// player number
+		switch (NetPlay.players[j].position)
+		{
 		case 0:
 			iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
 			break;
@@ -3802,12 +3772,12 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			break;
 		default:
 			break;
-	}
+		}
 
-	if (game.skDiff[j]) // not isabled
-	{
-		switch (getPlayerColour(j))		// flag icon
+		if (game.skDiff[j]) // not disabled
 		{
+			switch (getPlayerColour(j))		// flag icon
+			{
 			case 0:
 				iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
 				break;
@@ -3834,6 +3804,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 				break;
 			default:
 				break;
+			}
 		}
 	}
 

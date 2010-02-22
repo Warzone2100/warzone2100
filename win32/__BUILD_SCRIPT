@@ -1,6 +1,9 @@
-#!/bin/sh -e
+#!/bin/sh
 
-cd "`dirname "$0"`"
+# Terminate when a command is unsuccesful
+set -e
+
+cd "$(dirname "$0")"
 
 ##
 # Function that provides make-like behaviour for executed commands. It prints
@@ -86,10 +89,11 @@ if [ -f "/proc/cpuinfo" ] ; then
 fi
 
 # Make sure we've got a build directory
-if [ ! -d build ] ; then
-	mkdir build
+if [ ! -d build/libs ] ; then
+	mkdir -p build/libs
 fi
 
+# Echo commands as we execute them
 set -x
 
 # Make sure that the dependencies have been built

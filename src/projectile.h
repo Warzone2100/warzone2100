@@ -101,7 +101,9 @@ static inline void setProjectileSource(PROJECTILE *psProj, BASE_OBJECT *psObj)
 
 static inline void setProjectileDamaged(PROJECTILE *psProj, BASE_OBJECT *psObj)
 {
-	psProj->psDamaged = psObj;
+	++psProj->psNumDamaged;
+	psProj->psDamaged = realloc(psProj->psDamaged, psProj->psNumDamaged*sizeof(BASE_OBJECT *));
+	psProj->psDamaged[psProj->psNumDamaged - 1] = psObj;
 }
 
 /* @} */

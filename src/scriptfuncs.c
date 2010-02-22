@@ -7248,7 +7248,7 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 		//check structures
 		for(psStruct = apsStructLists[i]; psStruct; psStruct=psStruct->psNext)
 		{
-			if(psStruct->visible[player])	//if can see it
+			if (psStruct->visible[player] || psStruct->born == 2)	// if can see it or started there
 			{
 				if(psStruct->status == SS_BUILT)
 				{

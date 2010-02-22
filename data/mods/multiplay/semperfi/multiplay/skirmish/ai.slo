@@ -134,7 +134,7 @@ public  RESEARCHSTAT		nexusDefence;
 private  RESEARCHSTAT		research;
 
 //build
-private GROUP			buildGroup;
+private GROUP			buildGroup, rushGroup;
 private int				buildX,buildY,buildX2,buildY2;
 public	FEATURESTAT		oilRes;
 
@@ -221,6 +221,7 @@ trigger slowloadTr				(wait, 13);
 trigger checkActivitiesTr			(every, 400);
 
 /* Events */
+event	manicWalls;
 event	buildFundamentals;
 event	newfortify;
 event	buildOilDefenseOrRetreat;
@@ -507,8 +508,17 @@ event arrived(reachedTr)
 	local bool found;
 	local STRUCTURESTAT myChoice;
 
+	if (groupMember(rushGroup, droid))
+	{
+		dbgObj(droid, "Failed to build where we should - (re)start wall building");
+		setEventTrigger(manicWalls, chainloadTr);
+		exit;
+	}
+
 	if (droid.droidType == DROID_CONSTRUCT or droid.droidType == DROID_CYBORG_CONSTRUCT)
 	{
+		dbgObj(droid, "Failed to build where we should - attempt to screw up enemy oil derrick");
+
 		// Check if at oil well, and it was taken by enemy
 		structure = structureBuiltInRange(derrick, droid.x, droid.y, (5 * 128), -1);
 		if (structure != NULLOBJECT)
@@ -700,7 +710,7 @@ event buildFundamentals(inactive)
 	{
 		exit;	// not much more we can (or should) do
 	}
-	else if (playerPower(me) < HIGH_POWER)
+	else if (playerPower(me) < HIGH_POWER or numFactories() > 1)
 	{
 		// Ok, basics are done. Now go offensive! We first check for oil derricks to build on, to deny
 		// them to the enemy. Then that calls for building defenses there. Failing that, we expand our base.
@@ -708,22 +718,170 @@ event buildFundamentals(inactive)
 		setEventTrigger(buildDerrick, chainloadTr);
 		exit;
 	}
-	else	// if too much power
+	else	// if lots of power and too few factories to replace high-risk oil hunting trucks
 	{
-		// Fundamental base already built, so start expanding it if we have too much power. It will call all kinds
-		// of wasteful spending routines. Nothing is worse than losing with the coffers full! This event will
-		// allow us to spend more, and failing that will call the build defense event instead.
 		dbgPlr("Too much power - EXPAND!");
 		setEventTrigger(buildExpand, chainloadTr);
 		exit;
 	}
 }
 
+event truckRush(inactive)
+{
+	local int	plr, target, curdist, mindist, checkX, checkY, startX, startY;
+	local FEATURE	_oil, _closestOil;
+	local bool	found;
+
+	setEventTrigger(truckRush, inactive);
+
+	// Find closest enemy
+	plr = 0;
+	target = -1;
+	mindist = 999999;
+	while (plr < MAX_PLAYERS)
+	{
+		if (!friendlyPlayer(plr))
+		{
+			if (getPlayerStartPosition(plr, ref checkX, ref checkY))
+			{
+				curdist = distBetweenTwoPoints(baseX, baseY, checkX, checkY);
+				if (curdist < mindist)
+				{
+					startX = checkX;
+					startY = checkY;
+					mindist = curdist;
+					target = plr;
+				}
+			}
+		}
+		plr = plr + 1;
+	}
+	if (target == -1)
+	{
+		dbgPlr("Failed to find an enemy!");
+		exit;	// oops.
+	}
+	dbgPlr("Rushing player " & target);
+
+	// Reserve droids
+	groupAddGroup(rushGroup, buildGroup);
+
+	// Find oil well closest to to closest enemy
+	mindist = 999999;
+	_closestOil = NULLOBJECT;
+	initIterateGroup(rushGroup);
+	droid = iterateGroup(rushGroup);
+	initGetFeature(oilRes, -1, me);
+	_oil = getFeatureB(me);
+	while (droid != NULLOBJECT and _oil != NULLOBJECT)
+	{
+		curdist = distBetweenTwoPoints(startX, startY, _oil.x, _oil.y);
+		if (curdist < mindist and droidCanReach(droid, _oil.x, _oil.y) and !threatInRange(me, _oil.x, _oil.y, OIL_THREAT_RANGE, FALSE))
+		{
+			mindist = curdist;
+			_closestOil = _oil;
+		}
+		_oil = getFeatureB(me);
+	}
+	if (_closestOil == NULLOBJECT)
+	{
+		dbgPlr("No hostile oil found to rush (or no trucks available)");
+		groupAddGroup(buildGroup, rushGroup); // reverse
+		exit;
+	}
+
+	// Pick best defense
+	mindist = numDefStructs - 1;	// reusing this var to find best def
+	found = false;
+	while (mindist > 0 and not found)
+	{
+		if (isStructureAvailable(defStructs[mindist], me))
+		{
+			found = true;
+		}
+		else
+		{
+			mindist = mindist - 1;
+		}
+	}
+
+	// Pick location for defensive building near for our trucks
+	buildX = _closestOil.x;
+	buildY = _closestOil.y;
+	if (!found || !pickStructLocation(defStructs[mindist], ref buildX, ref buildY, me))
+	{
+		dbgPlr("Failed to find defense, or failed to find placement for it");
+		groupAddGroup(buildGroup, rushGroup); // reverse
+		exit;
+	}
+
+	// Build hostilities
+	while (droid != NULLOBJECT)
+	{
+		orderDroidStatsLoc(droid, DORDER_BUILD, defStructs[mindist], buildX, buildY);
+		droid = iterateGroup(rushGroup);
+	}
+}
+
+// Try to wall in the enemy with wall defenses at random gateways
+event manicWalls(inactive)
+{
+	local int weap;
+	local bool found;
+
+	setEventTrigger(manicWalls, inactive);
+
+	// choose best hardpoint type
+	weap = numWallWeaps - 1;
+	found = false;
+	while (weap > 0 and !found)
+	{
+		if (isStructureAvailable(wallWeaps[weap], me))
+		{
+			found = true;
+		}
+		else
+		{
+			weap = weap - 1;
+		}
+	}
+	if (!found)
+	{
+		dbgPlr("Had no wall weapons to build to wall in enemy");
+		groupAddGroup(buildGroup, rushGroup); // reverse
+		exit;
+	}
+
+	// Go build on gateways near enemy base
+	initIterateGroup(rushGroup);
+	droid = iterateGroup(rushGroup);
+	while (droid != NULLOBJECT)
+	{
+		tempx = droid.x;
+		tempy = droid.y;
+		if (!skDefenseLocationB(ref tempx, ref tempy, wall, wallWeaps[weap], droid, me))
+		{
+			dbgPlr("Manic wall building ran into an error - stopped");
+			groupAddGroup(buildGroup, rushGroup); // reverse
+			exit;
+		}
+		droid = iterateGroup(rushGroup);
+	}
+}
+
 event startLevel(startLevelTr)
 {
-	setEventTrigger(buildFundamentals, chainloadTr);
 	setEventTrigger(conDroids, chainloadTr);
 	setEventTrigger(doResearch, chainloadTr);
+	if ((numFactories() > 1) and (isStructureAvailable(defStructs[0], me)))
+	{
+		dbgPlr("TRUCK RUSH!");
+		setEventTrigger(truckRush, chainloadTr);
+	}
+	else
+	{
+		setEventTrigger(buildFundamentals, chainloadTr);
+	}
 	setEventTrigger(startLevel, inactive);
 }
 
@@ -885,12 +1043,11 @@ event buildDerrick(inactive)
 			droid = iterateGroup(buildGroup);
 		}
 	}
-	foundOne = false;
 	if (droid != NULLOBJECT)
 	{
 		initGetFeature(oilRes, -1, me);
 		_oil = getFeatureB(me);
-		while (_oil != NULLOBJECT && !foundOne)
+		while (_oil != NULLOBJECT)
 		{
 			_newDist = distBetweenTwoPoints(droid.x, droid.y, _oil.x, _oil.y);
 			_same = false;
@@ -901,6 +1058,7 @@ event buildDerrick(inactive)
 				{
 					initIterateGroup(buildGroup);				// find all units in build group.
 					_search = iterateGroup(buildGroup);
+					foundOne = false;
 					while (_search != NULLOBJECT && !foundOne)
 					{
 						if (_search.orderx == _oil.x and _search.ordery == _oil.y and _search != droid)
@@ -1032,7 +1190,10 @@ event buildOilDefenseOrRetreat(inactive)
 	}
 	if (idleGroup(buildGroup) > 0)
 	{
-			setEventTrigger(buildExpand, chainloadTr);	// not enough to do, start expanding in depth instead
+		// Fundamental base already built, so start expanding it if we have too much power. It will call all kinds
+		// of wasteful spending routines. Nothing is worse than losing with the coffers full! This event will
+		// allow us to spend more, and failing that will call the build defense event instead.
+		setEventTrigger(buildExpand, chainloadTr);	// not enough to do, start expanding in depth instead
 	}
 	setEventTrigger(buildOilDefenseOrRetreat, inactive);
 }
@@ -1474,6 +1635,24 @@ event structBuilt(structBuiltTr)
 	if (structure == NULLOBJECT || droid == NULLOBJECT)
 	{
 		exit;
+	}
+
+	// Try to do more nasty things with rush group
+	if (groupMember(rushGroup, droid))
+	{
+		if (isStructureAvailable(wallWeaps[0], me))
+		{
+			dbgPlr("Manic wall code triggered");
+			setEventTrigger(manicWalls, chainloadTr);	// try to wall in enemy
+			exit;
+		}
+		else
+		{
+			dbgPlr("Nothing more to do for rush group - disbanding it!");
+			groupAddGroup(buildGroup, rushGroup);
+			setEventTrigger(buildFundamentals, chainloadTr);
+			exit;
+		}
 	}
 
 	/* factory or factory module */
@@ -3916,8 +4095,7 @@ event keyPressed(CALL_KEY_PRESSED, ref count, ref count2)
 	{
 		if(_DEBUG)
 		{
-			addPower(1000, me);
-			console("add power");
+			console("The old cheat code has been removed.");
 		}
 	}
 }

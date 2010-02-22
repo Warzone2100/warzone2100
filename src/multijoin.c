@@ -64,7 +64,7 @@
 #include "multistat.h"
 #include "multigifts.h"
 #include "scriptcb.h"
-
+#include <SDL.h>
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
@@ -208,7 +208,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 	}
 
 	NETlogEntry("Player leaving game", 0, playerIndex);
-	debug(LOG_WARNING,"** Warning, player %u [%s], has left the game.", playerIndex, getPlayerName(playerIndex));
+	debug(LOG_INFO,"** Player %u [%s], has left the game.", playerIndex, getPlayerName(playerIndex));
 
 	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
 
@@ -219,6 +219,17 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 	turnOffMultiMsg(false);
 
 	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+
+	if (NetPlay.players[playerIndex].wzFile.isSending)
+	{
+		char buf[256];
+
+		ssprintf(buf, _("File transfer has been aborted for %d.") , playerIndex);
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		debug(LOG_INFO, "=== File has been aborted for %d ===", playerIndex);
+		NetPlay.players[playerIndex].wzFile.isSending = false;
+		NetPlay.players[playerIndex].needFile = false;
+	}
 
 	if (widgGetFromID(psWScreen, IDRET_FORM))
 	{
@@ -327,8 +338,8 @@ bool recvDataCheck(NETQUEUE queue)
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 			kickPlayer(player, "your data doesn't match the host's!", ERROR_WRONGDATA);
-			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
-			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
+			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, SDL_SwapBE32(tempBuffer[i]), SDL_SwapBE32(DataHash[i]));
+			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, SDL_SwapBE32(tempBuffer[i]), SDL_SwapBE32(DataHash[i]));
 
 			return false;
 		}

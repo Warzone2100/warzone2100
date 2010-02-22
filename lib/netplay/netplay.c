@@ -52,6 +52,7 @@
 # include <fcntl.h>
 # include <netdb.h>
 # include <netinet/in.h>
+# include <sys/ioctl.h>
 # include <sys/socket.h>
 # include <sys/types.h>
 # include <sys/select.h>
@@ -85,6 +86,11 @@ typedef SSIZE_T ssize_t;
 # ifndef AI_ADDRCONFIG
 #  define AI_ADDRCONFIG	0x0020	/* Use configuration of this host to choose returned address type..  */
 # endif
+#endif
+
+// Fallback for systems that don't #define this flag
+#ifndef MSG_NOSIGNAL
+# define MSG_NOSIGNAL 0
 #endif
 
 static int getSockErr(void)
@@ -136,7 +142,7 @@ static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leavi
 static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETregisterServer(int state);
 static void NETallowJoining(void);
-
+static void NET_InitPlayer(int i);
 
 void NETGameLocked( bool flag);
 void NETresetGamePassword(void);
@@ -252,6 +258,8 @@ char VersionString[VersionStringSize] = "trunk, netcode 4.0";
 static int NETCODE_VERSION_MAJOR = 4;
 static int NETCODE_VERSION_MINOR = 0;
 static int NETCODE_HASH = 0;			// unused for now
+
+static int checkSockets(const SocketSet* set, unsigned int timeout);
 
 #if defined(WZ_OS_WIN)
 static HMODULE winsock2_dll = NULL;
@@ -448,6 +456,58 @@ static const char* strSockError(int error)
 }
 
 /**
+ * Test whether the given socket still has an open connection.
+ *
+ * @return true when the connection is open, false when it's closed or in an
+ *         error state, check getSockErr() to find out which.
+ */
+static bool connectionIsOpen(Socket* sock)
+{
+	Socket* sockAr[] = { sock };
+	const SocketSet set = { ARRAY_SIZE(sockAr), sockAr };
+	int ret;
+
+	ASSERT_OR_RETURN((setSockErr(EBADF), false),
+		sock && sock->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid socket");
+
+	// Check whether the socket is still connected
+	ret = checkSockets(&set, 0);
+	if (ret == SOCKET_ERROR)
+	{
+		return false;
+	}
+	else if (ret == set.len
+	      && sock->ready)
+	{
+		/* The next recv(2) call won't block, but we're writing. So
+		 * check the read queue to see if the connection is closed.
+		 * If there's no data in the queue that means the connection
+		 * is closed.
+		 */
+#if defined(WZ_OS_WIN)
+		unsigned long readQueue;
+		ret = ioctlsocket(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
+#else
+		int readQueue;
+		ret = ioctl(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
+#endif
+		if (ret == SOCKET_ERROR)
+		{
+			return false;
+		}
+		else if (readQueue == 0)
+		{
+			// Disconnected
+			setSockErr(ECONNRESET);
+			debug(LOG_NET, "Read queue empty - failing");
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/**
  * Similar to read(2) with the exception that this function won't be
  * interrupted by signals (EINTR).
  */
@@ -492,15 +552,28 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 
 	while (written < size)
 	{
-		ssize_t ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, 0);
+		ssize_t ret;
+
+		ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, MSG_NOSIGNAL);
 		if (ret == SOCKET_ERROR)
 		{
 			switch (getSockErr())
 			{
 				case EAGAIN:
+#if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
+				case EWOULDBLOCK:
+#endif
+					if (!connectionIsOpen(sock))
+					{
+						return SOCKET_ERROR;
+					}
 				case EINTR:
 					continue;
-
+#if defined(EPIPE)
+				case EPIPE:
+					debug(LOG_NET, "EPIPE generated");
+					// fall through
+#endif
 				default:
 					return SOCKET_ERROR;
 			}
@@ -534,12 +607,12 @@ static SocketSet* allocSocketSet(size_t count)
  *
  * @return true if @c socket is succesfully added to @set.
  */
-static bool addSocket(SocketSet* set, Socket* socket)
+static bool SocketSet_AddSocket(SocketSet* set, Socket* socket)
 {
 	size_t i;
 
-	ASSERT(set != NULL, "NULL SocketSet provided");
-	ASSERT(socket != NULL, "NULL Socket provided");
+	ASSERT_OR_RETURN(false, set != NULL, "NULL SocketSet provided");
+	ASSERT_OR_RETURN(false, socket != NULL, "NULL Socket provided");
 
 	/* Check whether this socket is already present in this set (i.e. it
 	 * shouldn't be added again).
@@ -567,12 +640,12 @@ static bool addSocket(SocketSet* set, Socket* socket)
 /**
  * Remove the given socket from the given socket set.
  */
-static void delSocket(SocketSet* set, Socket* socket)
+static void SocketSet_DelSocket(SocketSet* set, Socket* socket)
 {
 	size_t i;
 
 	ASSERT_OR_RETURN(, set != NULL, "NULL SocketSet provided");
-	ASSERT(socket != NULL, "NULL Socket provided");
+	ASSERT_OR_RETURN(, socket != NULL, "NULL Socket provided");
 
 	for (i = 0; i < set->len; ++i)
 	{
@@ -613,6 +686,22 @@ static bool setSocketBlocking(const SOCKET fd, bool blocking)
 	return true;
 }
 
+static void socketBlockSIGPIPE(const SOCKET fd, bool block_sigpipe)
+{
+#if defined(SO_NOSIGPIPE)
+	const int no_sigpipe = block_sigpipe ? 1 : 0;
+
+	if (setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
+	{
+		debug(LOG_WARNING, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
+	}
+#else
+	// Prevent warnings
+	(void)fd;
+	(void)block_sigpipe;
+#endif
+}
+
 static int checkSockets(const SocketSet* set, unsigned int timeout)
 {
 	int ret;
@@ -646,7 +735,11 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 		for (i = 0; i < set->len; ++i)
 		{
 			if (set->fds[i])
-				FD_SET(set->fds[i]->fd[SOCK_CONNECTION], &fds);
+			{
+				const SOCKET fd = set->fds[i]->fd[SOCK_CONNECTION];
+
+				FD_SET(fd, &fds);
+			}
 		}
 
 		ret = select(maxfd + 1, &fds, NULL, NULL, &tv);
@@ -728,8 +821,11 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 		{
 			switch (getSockErr())
 			{
-				case EINTR:
 				case EAGAIN:
+#if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
+				case EWOULDBLOCK:
+#endif
+				case EINTR:
 					continue;
 
 				default:
@@ -808,6 +904,8 @@ static Socket* socketAccept(Socket* sock)
 				continue;
 			}
 
+			socketBlockSIGPIPE(newConn, true);
+
 			conn = malloc(sizeof(*conn) + addr_len);
 			if (conn == NULL)
 			{
@@ -877,6 +975,8 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		socketClose(conn);
 		return NULL;
 	}
+
+	socketBlockSIGPIPE(conn->fd[SOCK_CONNECTION], true);
 
 	ret = connect(conn->fd[SOCK_CONNECTION], addr->ai_addr, addr->ai_addrlen);
 	if (ret == SOCKET_ERROR)
@@ -965,12 +1065,14 @@ static Socket* socketListen(unsigned int port)
 	/* Enable the V4 to V6 mapping, but only when available, because it
 	 * isn't available on all platforms.
 	 */
+#if defined(IPV6_V6ONLY)
 	static const int ipv6_v6only = 0;
+#endif
+	static const int so_reuseaddr = 1;
 
 	struct sockaddr_in addr4;
 	struct sockaddr_in6 addr6;
 	unsigned int i;
-	int opt = 1;
 
 	Socket* const conn = malloc(sizeof(*conn));
 	if (conn == NULL)
@@ -1041,7 +1143,7 @@ static Socket* socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, &so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv4 socket. Error: %s", strSockError(getSockErr()));
 		}
@@ -1062,7 +1164,7 @@ static Socket* socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, &so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
 		}
@@ -1190,7 +1292,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 		// an error occured, or the remote host has closed the connection.
 		if (socket_set != NULL)
 		{
-			delSocket(socket_set, socket);
+			SocketSet_DelSocket(socket_set, socket);
 		}
 
 		ASSERT(size <= bufsize, "Socket buffer is too small!");
@@ -1213,29 +1315,35 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 	return 0;
 }
 
+static void NET_InitPlayer(int i)
+{
+	NetPlay.players[i].allocated = false;
+	NetPlay.players[i].heartattacktime = 0;
+	NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
+	NetPlay.players[i].kick = false;
+	NetPlay.players[i].name[0] = '\0';
+	NetPlay.players[i].colour = i;
+	NetPlay.players[i].position = i;
+	NetPlay.players[i].team = i;
+	NetPlay.players[i].ready = false;
+	NetPlay.players[i].needFile = false;
+	NetPlay.players[i].wzFile.isCancelled = false;
+	NetPlay.players[i].wzFile.isSending = false;
+}
+
 void NET_InitPlayers()
 {
 	unsigned int i;
 
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		NetPlay.players[i].allocated = false;
-		NetPlay.players[i].heartattacktime = 0;
-		NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
-		NetPlay.players[i].kick = false;
-		NetPlay.players[i].name[0] = '\0';
-		NetPlay.players[i].colour = i;
-		NetPlay.players[i].position = i;
-		NetPlay.players[i].team = i;
-		NetPlay.players[i].ready = false;
-		NetPlay.players[i].needFile = false;
-		NetPlay.players[i].wzFile.isCancelled = false;
-		NetPlay.players[i].wzFile.isSending = false;
+		NET_InitPlayer(i);
 		NETinitQueue(NETnetQueue(i));
 	}
 	NETinitQueue(NETbroadcastQueue());
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
+	NetPlay.pMapFileHandle = NULL;
 	debug(LOG_NET, "Players initialized");
 }
 
@@ -1293,6 +1401,7 @@ static void NET_DestroyPlayer(unsigned int index)
 			NETregisterServer(1);
 		}
 	}
+	NET_InitPlayer(index);	// reinitialize
 }
 
 /**
@@ -1305,11 +1414,7 @@ static void NETplayerClientDisconnect(uint32_t index)
 	{
 		debug(LOG_NET, "Player (%u) has left unexpectedly, closing socket %p", index, connected_bsocket[index]);
 
-		// Although we can get a error result from DelSocket, it don't really matter here.
-		delSocket(socket_set, connected_bsocket[index]);
-		socketClose(connected_bsocket[index]);
-		connected_bsocket[index] = NULL;
-		NetPlay.players[index].heartbeat = false;
+		NETplayerLeaving(index);
 
 		// Announce to the world. This was really icky, because we may have been calling the send
 		// function recursively. We really ought to have had a send queue, and now we finally do...
@@ -1330,12 +1435,15 @@ static void NETplayerClientDisconnect(uint32_t index)
  */
 static void NETplayerLeaving(UDWORD index)
 {
+	NET_DestroyPlayer(index);		// sets index player's array to false
+	MultiPlayerLeave(index);		// more cleanup
+
 	if(connected_bsocket[index])
 	{
-		debug(LOG_NET, "Player (%u) has left nicely, closing socket %p", index, connected_bsocket[index]);
+		debug(LOG_NET, "Player (%u) has left, closing socket %p", index, connected_bsocket[index]);
 
 		// Although we can get a error result from DelSocket, it don't really matter here.
-		delSocket(socket_set, connected_bsocket[index]);
+		SocketSet_DelSocket(socket_set, connected_bsocket[index]);
 		socketClose(connected_bsocket[index]);
 		connected_bsocket[index] = NULL;
 	}
@@ -1358,7 +1466,7 @@ static void NETplayerDropped(UDWORD index)
 	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
 		NETuint32_t(&id);
 	NETend();
-	debug(LOG_INFO, "NET_PLAYER_DROPPED received for player %d", id);
+	debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d", id);
 	NET_DestroyPlayer(id);		// just clears array
 	MultiPlayerLeave(id);			// more cleanup
 
@@ -1374,8 +1482,6 @@ void NETplayerKicked(UDWORD index)
 	// kicking a player counts as "leaving nicely", since "nicely" in this case
 	// simply means "there wasn't a connection error."
 	debug(LOG_INFO, "Player %u was kicked.", index);
-	NET_DestroyPlayer(index);		// sets index player's array to false
-	MultiPlayerLeave(index);		// more cleanup
 	NETplayerLeaving(index);		// need to close socket for the player that left.
 	NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
 }
@@ -1923,10 +2029,10 @@ int NETclose(void)
 	allow_joining = false;
 
 	if(bsocket)
-	{	// need delSocket() as well, socket_set or tmp_socket_set?
+	{	// need SocketSet_DelSocket() as well, socket_set or tmp_socket_set?
 		debug(LOG_NET, "Closing bsocket %p socket %p (tcp_socket=%p)", bsocket, bsocket, tcp_socket);
-		// Why is there a commeted out socketClose there?
 		//socketClose(bsocket);
+		NET_destroyBufferedSocket(bsocket);
 		bsocket=NULL;
 	}
 
@@ -1952,7 +2058,7 @@ int NETclose(void)
 	{
 		if (tmp_socket[i])
 		{
-			// FIXME: need delSocket() as well, socket_set or tmp_socket_set?
+			// FIXME: need SocketSet_DelSocket() as well, socket_set or tmp_socket_set?
 			debug(LOG_NET, "Closing tmp_socket[%d] %p", i, tmp_socket[i]);
 			socketClose(tmp_socket[i]);
 			tmp_socket[i]=NULL;
@@ -1964,7 +2070,7 @@ int NETclose(void)
 		// checking to make sure tcp_socket is still valid
 		if (tcp_socket)
 		{
-			delSocket(socket_set, tcp_socket);
+			SocketSet_DelSocket(socket_set, tcp_socket);
 		}
 		debug(LOG_NET, "Freeing socket_set %p", socket_set);
 		free(socket_set);
@@ -2321,8 +2427,6 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u ", (unsigned int)index);
 			}
 			debug(LOG_INFO, "Player %u has left the game.", index);
-			NET_DestroyPlayer(index);		// sets index player's array to false
-			MultiPlayerLeave(index);		// more cleanup
 			NETplayerLeaving(index);		// need to close socket for the player that left.
 			NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
 			break;
@@ -2392,12 +2496,14 @@ static void NETcheckPlayers(void)
 			{
 				if (NetPlay.players[i].heartattacktime + (15 * GAME_TICKS_PER_SEC) <  gameTime2) // wait 15 secs
 				{
+					debug(LOG_NET, "Kicking due to client heart attack");
 					NetPlay.players[i].kick = true;		// if still dead, then kick em.
 				}
 			}
 		}
 		if (NetPlay.players[i].kick)
 		{
+			debug(LOG_NET, "Kicking player %d", i);
 			NETplayerDropped(i);
 		}
 	}
@@ -2564,6 +2670,7 @@ UBYTE NETsendFile(char *fileName, UDWORD player)
 	// We are not the host, so we don't care. (in fact, this would be a error)
 	if (!NetPlay.isHost)
 	{
+		debug(LOG_ERROR, "trying to send a file and we are not the host!");
 		return true;
 	}
 
@@ -2599,7 +2706,6 @@ UBYTE NETrecvFile(NETQUEUE queue)
 	int32_t		fileSize = 0, currPos = 0, bytesRead = 0;
 	char		fileName[256];
 	uint8_t         outBuff[MAX_FILE_TRANSFER_PACKET];
-	static PHYSFS_file	*pFileHandle;
 	static bool isLoop = false;
 
 	memset(fileName, 0x0, sizeof(fileName));
@@ -2620,7 +2726,28 @@ UBYTE NETrecvFile(NETQUEUE queue)
 			PHYSFS_file *fin;
 			PHYSFS_sint64 fsize;
 			fin = PHYSFS_openRead(fileName);
-			fsize = PHYSFS_fileLength(fin);
+			if (!fin)
+			{
+				// the file exists, but we can't open it, and I have no clue how to fix this...
+				debug(LOG_FATAL, "PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
+
+				debug(LOG_NET, "We are leaving 'nicely' after a fatal error");
+				NETbeginEncode(NET_PLAYER_LEAVING, NET_ALL_PLAYERS);
+				{
+					BOOL host = NetPlay.isHost;
+					uint32_t id = selectedPlayer;
+
+					NETuint32_t(&id);
+					NETbool(&host);
+				}
+				NETend();
+
+				abort();
+			}
+			else
+			{
+				fsize = PHYSFS_fileLength(fin);
+			}
 			if ((int32_t) fsize == fileSize)
 			{
 				uint32_t reason = ALREADY_HAVE_FILE;
@@ -2647,6 +2774,8 @@ UBYTE NETrecvFile(NETQUEUE queue)
 						NETuint32_t(&selectedPlayer);
 						NETuint32_t(&reason);
 					NETend();
+					PHYSFS_close(NetPlay.pMapFileHandle);
+					NetPlay.pMapFileHandle = NULL;
 					debug(LOG_FATAL, "Something is really wrong with the file's (%s) data, game can't detect it?", fileName);
 					return 100;
 				}
@@ -2656,10 +2785,10 @@ UBYTE NETrecvFile(NETQUEUE queue)
 			debug(LOG_NET, "We already have the file %s, but different size %d vs %d.  Redownloading", fileName, (int32_t) fsize, fileSize);
 
 		}
-		pFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
+		NetPlay.pMapFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
 	}
 
-	if (!pFileHandle) // file can't be opened
+	if (!NetPlay.pMapFileHandle) // file can't be opened
 	{
 		debug(LOG_FATAL, "Fatal error while creating file: %s", PHYSFS_getLastError());
 		debug(LOG_FATAL, "Either we do not have write permission, or the Host sent us a invalid file (%s)!", fileName);
@@ -2670,11 +2799,11 @@ UBYTE NETrecvFile(NETQUEUE queue)
 	NETend();
 
 	//write packet to the file.
-	PHYSFS_write(pFileHandle, outBuff, bytesRead, 1);
+	PHYSFS_write(NetPlay.pMapFileHandle, outBuff, bytesRead, 1);
 
 	if (currPos+bytesRead == fileSize)	// last packet
 	{
-		PHYSFS_close(pFileHandle);
+		PHYSFS_close(NetPlay.pMapFileHandle);
 	}
 
 	//return the percentage count
@@ -2923,7 +3052,7 @@ static void NETallowJoining(void)
 	 && (tmp_socket[i] = socketAccept(tcp_socket)) != NULL)
 	{
 		NETinitQueue(NETnetTmpQueue(i));
-		addSocket(tmp_socket_set, tmp_socket[i]);
+		SocketSet_AddSocket(tmp_socket_set, tmp_socket[i]);
 		if (checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
 		    && tmp_socket[i]->ready
 		    && (recv_result = readNoInt(tmp_socket[i], buffer, 5))
@@ -2946,7 +3075,7 @@ static void NETallowJoining(void)
 					NETsendGAMESTRUCT(tmp_socket[i], &gamestruct);
 				}
 
-				delSocket(tmp_socket_set, tmp_socket[i]);
+				SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 				socketClose(tmp_socket[i]);
 				tmp_socket[i] = NULL;
 			}
@@ -2956,21 +3085,21 @@ static void NETallowJoining(void)
 				if (!NETsendGAMESTRUCT(tmp_socket[i], &gamestruct))
 				{
 					debug(LOG_ERROR, "Failed to respond (with GAMESTRUCT) to 'join' command: %s", strSockError(getSockErr()));
-					delSocket(tmp_socket_set, tmp_socket[i]);
+					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					socketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
 			}
 			else
 			{
-				delSocket(tmp_socket_set, tmp_socket[i]);
+				SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 				socketClose(tmp_socket[i]);
 				tmp_socket[i] = NULL;
 			}
 		}
 		else
 		{
-			delSocket(tmp_socket_set, tmp_socket[i]);
+			SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 			socketClose(tmp_socket[i]);
 			tmp_socket[i] = NULL;
 		}
@@ -2998,7 +3127,7 @@ static void NETallowJoining(void)
 						debug(LOG_NET, "Client socket encountered error: %s", strSockError(getSockErr()));
 					}
 
-					delSocket(tmp_socket_set, tmp_socket[i]);
+					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					socketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 					continue;
@@ -3033,16 +3162,16 @@ static void NETallowJoining(void)
 					if (index == -1)
 					{
 						// FIXME: No room. Dropping the player without warning since protocol doesn't seem to support rejection at this point
-						delSocket(tmp_socket_set, tmp_socket[i]);
+						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 						socketClose(tmp_socket[i]);
 						tmp_socket[i] = NULL;
 						return;
 					}
 
-					delSocket(tmp_socket_set, tmp_socket[i]);
+					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					connected_bsocket[index] = tmp_socket[i];
 					tmp_socket[i] = NULL;
-					addSocket(socket_set, connected_bsocket[index]);
+					SocketSet_AddSocket(socket_set, connected_bsocket[index]);
 					NETmoveQueue(NETnetTmpQueue(i), NETnetQueue(index));
 
 					if (!NETisCorrectVersion(MajorVersion, MinorVersion))
@@ -3076,7 +3205,7 @@ static void NETallowJoining(void)
 						NET_DestroyPlayer(index);
 						allow_joining = true;
 
-						delSocket(socket_set, connected_bsocket[index]);
+						SocketSet_DelSocket(socket_set, connected_bsocket[index]);
 						socketClose(connected_bsocket[index]);
 						connected_bsocket[index] = NULL;
 						return;
@@ -3299,7 +3428,10 @@ BOOL NETfindGame(void)
 	if (tcp_socket != NULL)
 	{
 		debug(LOG_NET, "Deleting tcp_socket %p", tcp_socket);
-		delSocket(socket_set,tcp_socket);
+		if (socket_set)
+		{
+			SocketSet_DelSocket(socket_set, tcp_socket);
+		}
 		socketClose(tcp_socket);
 		tcp_socket = NULL;
 	}
@@ -3330,7 +3462,7 @@ BOOL NETfindGame(void)
 	}
 	debug(LOG_NET, "Created socket_set %p", socket_set);
 
-	addSocket(socket_set, tcp_socket);
+	SocketSet_AddSocket(socket_set, tcp_socket);
 
 	debug(LOG_NET, "Sending list cmd");
 
@@ -3462,13 +3594,13 @@ connect_succesfull:
 	debug(LOG_NET, "Created socket_set %p", socket_set);
 
 	// tcp_socket is used to talk to host machine
-	addSocket(socket_set, tcp_socket);
+	SocketSet_AddSocket(socket_set, tcp_socket);
 
 	if (writeAll(tcp_socket, "join", sizeof("join")) == SOCKET_ERROR)
 	{
 		debug(LOG_ERROR, "Failed to send 'join' command: %s", strSockError(getSockErr()));
 		freeaddrinfo(hosts);
-		delSocket(socket_set, tcp_socket);
+		SocketSet_DelSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
 		free(socket_set);
 		socket_set = NULL;
@@ -3484,7 +3616,7 @@ connect_succesfull:
 	if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
 	{
 		// Shouldn't join; game is full
-		delSocket(socket_set, tcp_socket);
+		SocketSet_DelSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
 		free(socket_set);
 		socket_set = NULL;
