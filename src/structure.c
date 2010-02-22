@@ -5107,6 +5107,7 @@ BOOL destroyStruct(STRUCTURE *psDel)
 	if (bMultiMessages)
 	{
 		SendDestroyStructure(psDel);
+		return true;  // Wait for our message before really destroying the structure.
 	}
 
 //---------------------------------------

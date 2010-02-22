@@ -9,6 +9,11 @@ GAME_BUILD should fix the structure ID of the structure being built. GAME_BUILD 
 **************
 Remove bMultiPlayer and turnOffMultiMsg() hacks, cleaning up any duplicate or dead code on the way.
 
+*************
+* Somewhere *
+*************
+Fix the extra droid explosion effects after a droid dies, but before the GAME_DROIDDEST message that gives the droid permission to really die. Actually, maybe the GAME_DROIDDEST, GAME_STRUCTDEST and GAME_FEATUREDEST should be turned into just synch messages, and stuff should be removed as soon as destroyed.
+
 ********************
 * src/structure.c: *
 ********************

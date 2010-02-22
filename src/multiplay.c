@@ -602,7 +602,7 @@ BOOL recvMessage(void)
 				//case NET_BEACONMSG:
 				//case GAME_BUILD:        //26 down, 16 to go.
 				//case GAME_BUILDFINISHED://27 down, 15 to go.
-				case GAME_STRUCTDEST:
+				//case GAME_STRUCTDEST:   //28 down, 14 to go.
 				//case GAME_SECONDARY:    // 7 down, 36 to go.
 				case GAME_SECONDARY_ALL:
 				case GAME_DROIDEMBARK:
@@ -614,7 +614,7 @@ BOOL recvMessage(void)
 
 				case GAME_TEMPLATE:
 				case GAME_TEMPLATEDEST:
-				case GAME_FEATUREDEST:
+				//case GAME_FEATUREDEST:  //29 down, 13 to go.
 				//case NET_PING:
 				case GAME_DEMOLISH:
 				case GAME_RESEARCH:
