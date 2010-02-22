@@ -1,35 +1,50 @@
 2010-02-21: Version 2.3 beta 11
  * General:
-   * Add: Add MessageBox support on systems that have Motif (r9814, ticket:1569)
    * Change: Display time and level name in release builds now
    * Change: add 'logs' directory in config dir to store all netplay logs. (r9779, ticket:1564)
-   * Change: Unify commander levels (r9941, ticket:1612)
    * Change: Use -fstack-protector if available (r9940)
    * Fix: NSIS updates (r9764, r9907)
    * Fix: Only drop artifacts on a fully built factory (r9795, r9787, ticket:1574)
-   * Fix: Power generator output should now always be correct (r9891, r9894, ticket:1469)
    * Fix: Multiple cross build system fixes (r9870-r9878, r9899)
+ * UI:
+   * New: Add MessageBox support on systems that have Motif (r9814, ticket:1569)
+ * Gameplay:
+   * Change: Commanders now work the same way in skirmish and campaign (r9941, ticket:1612)
+   * Fix: Power generator output should now always be correct (r9891, r9894, ticket:1469)
+   * Fix: Trucks could instantly repair structures (r9776)
+ * Campaign:
+   * Fix: Commanders could have more than the maximum number of units assigned (r9941)
  * Skirmish:
    * Fix: Add back missing cyborg mechanic, thermite and grenadier (r9750, ticket:1607)
    * Fix: Stop AI from building VTOL factory before it is researched (r9713)
-   * Fix: Stop massive power bonus to autogame AI players (r9720)
+   * Fix: Stop giving a massive power bonus to autogame AI players (r9720)
+ * Balance: (r9946)
+   * Oil derricks are no longer limited (r9698)
+   * Cannons and rails have their original 1.10 HP levels restored.
+   * Heavy Cannon was moved later-game
+   * Assault Cannon, Twin Assault Cannon, and Hyper Velocity Cannon were moved earlier-game (and rebalanced accordingly)
+   * Assault Cannon, Twin Assault Cannon, were made lighter
+   * Hyper Velocity Cannon can now hit air units, penetrate units, and is lighter, but reloads more slowly and has less HP. It no longer replaces Medium Cannon
+   * Plasma Cannon has been made into a cannon (prereqs: HPV + Inferno + DSLDA3), and has been rebalanced accordingly.
+   * Cannons, rails, mortars, and howitzers have their splash damage increased.
+   * Ripples and Archies have been nerfed.
+   * Lancer has had its damage slightly nerfed. A full lancer rebalance is planned for later.
+   * Analogous changes have been done to the corresponding cyborgs and VTOL weapons, as well.
  * Multiplayer:
-   * Change: Balance tweaks (r9946)
    * Change: Display map transfer progress, for the host, for each player (r9838)
-   * Fix: When player drops, do not remove the oil feature (r9768, ticket:1558)
+   * Fix: When player drops, do not remove their oil resources (r9768, ticket:1558)
    * Fix: Fix kicking when host would change limits while hosting a game (r9824, ticket:1577)
    * Fix: When a player drops, abort the map transfer (r9838)
-   * Fix: Fix bug regarding alt-orders not being sent over netcode correctly (r9840, ticket:1474)
+   * Fix: Fix game going out of sync when some Alt key combinations were used (r9840, ticket:1474)
    * Fix: Remove disabled players from the map when scavengers are turned on (r9724)
    * Fix: When player aborts file transfers, close the old filehandle. (r9923)
    * Fix: When player is forced to drop, don't strand them in the lobby. (r9924)
    * Fix: Try to fix all SIGPIPE and SIGBUS issues on linux (r9915-r9918, r9954, ticket:1136)
-   * Fix: ignore `turnOffMultiMsg` for sending droid deaths from HP loss (r9944, ticket:1612)
-   * Fix: split bMultiPlayer and bMultiMessages (r9942, ticket:1268)
+   * Fix: Some droids were not showing up as destroyed on all players' screens (r9944)
  * Mods:
-   * Add: Dydo AI added (r9901)
+   * New: DyDo-AI added to bundled mods (r9901)
    * Fix: Update NTW to work with new template system and other various fixes (r9773, r9910)
-   * Remove: Aivolution (r9752)
+   * Removed: Aivolution removed from bundled mods (r9752)
  * Translations:
    * Fix: Make more strings translatable (r9758)
    * Updated: Spanish (r9759, r9828), Brazilian (r9829), Ukrainian (r9830), German (r9831, r9331), Croatian (r9883), Polish (r9933)
