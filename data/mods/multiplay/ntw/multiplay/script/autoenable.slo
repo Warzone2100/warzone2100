@@ -1,7 +1,7 @@
 
 // Variables
 private 	INT 			count,numStrux,numTemplates,numCompo,numCompo2;
-private 	STRUCTURESTAT 	Strux[8];
+private 	STRUCTURESTAT 	Strux[1];
 public	RESEARCHSTAT	tmpl[3];
 private	BODY			compo[3];
 

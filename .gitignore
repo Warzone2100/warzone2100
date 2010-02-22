@@ -60,8 +60,10 @@ win32/libs/popt/patch-stamp
 win32/libs/popt/popt-1.12
 win32/libs/quesoglc/fetch-stamp
 win32/libs/quesoglc/quesoglc-0.7.3~svn913
+win32/libs/sdl/SDL-1.2.13
 win32/libs/sdl/SDL-1.2.14
 win32/libs/sdl/extract-stamp
+win32/libs/sdl/patch-stamp
 win32/libs/theora/extract-stamp
 win32/libs/theora/libtheora-1.1.1
 win32/libs/vorbis/extract-stamp

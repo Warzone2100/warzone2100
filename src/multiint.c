@@ -2247,6 +2247,13 @@ static void stopJoining(void)
 			sendLeavingMsg();								// say goodbye
 			NETclose();										// quit running game.
 
+			// if we were in a midle of transfering a file, then close the file handle
+			if (NetPlay.pMapFileHandle)
+			{
+				debug(LOG_NET, "closing aborted file");		// no need to delete it, we do size check on (map) file
+				PHYSFS_close(NetPlay.pMapFileHandle);
+				NetPlay.pMapFileHandle = NULL;
+			}
 			ingame.localJoiningInProgress = false;			// reset local flags
 			ingame.localOptionsReceived = false;
 			if(!ingame.bHostSetup && NetPlay.isHost)			// joining and host was transfered.
@@ -2940,7 +2947,7 @@ void frontendMultiMessages(void)
 
 			MultiPlayerLeave(player_id);		// get rid of their stuff
 			NET_PlayerConnectionStatus = 2;		//DROPPED_CONNECTION
-			if (host)					// host has quit, need to quit too.
+			if (host || player_id == selectedPlayer)	// if host quits or we quit, abort out
 			{
 				stopJoining();
 			}

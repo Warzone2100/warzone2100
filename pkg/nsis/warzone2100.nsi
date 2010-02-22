@@ -249,8 +249,21 @@ Section $(TEXT_SecOpenAL) SecOpenAL
 
 SectionEnd
 
-
 SectionGroup /e $(TEXT_SecMods) secMods
+
+Section $(TEXT_SecDyDoAIMod) SecDyDoAIMod
+
+  SetOutPath "$INSTDIR\mods\multiplay"
+
+  File "${TOP_BUILDDIR}\data\mods\multiplay\dydo-ai.wz"
+
+  SetOutPath "$INSTDIR"
+
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - dydo-ai.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp dydo-ai.wz"
+  !insertmacro MUI_STARTMENU_WRITE_END
+
+SectionEnd
 
 Section $(TEXT_SecNTWMod) SecNTWMod
 
@@ -519,6 +532,9 @@ FunctionEnd
   LangString TEXT_SecNLS_WinFonts ${LANG_ENGLISH} "WinFonts"
   LangString DESC_SecNLS_WinFonts ${LANG_ENGLISH} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
   
+  LangString TEXT_SecDyDoAIMod ${LANG_ENGLISH} "DyDo-AI"
+  LangString DESC_SecDyDoAIMod ${LANG_ENGLISH} "DyDo-AI: New computer opponent"
+
   LangString TEXT_SecNTWMod ${LANG_ENGLISH} "NTW"
   LangString DESC_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod. Modifies most of the weapons and research."
 
@@ -556,6 +572,9 @@ FunctionEnd
   LangString TEXT_SecNLS_WinFonts ${LANG_DUTCH} "WinFonts"
   LangString DESC_SecNLS_WinFonts ${LANG_DUTCH} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
   
+  LangString TEXT_SecDyDoAIMod ${LANG_DUTCH} "DyDo-AI"
+  LangString DESC_SecDyDoAIMod ${LANG_DUTCH} "DyDo-AI: Nieuwe computertegenstander"  
+
   LangString TEXT_SecNTWMod ${LANG_DUTCH} "NTW"
   LangString DESC_SecNTWMod ${LANG_DUTCH} "NTW: New Team War mod. Wijzigd de meeste wapens en onderzoeken."
 
@@ -593,6 +612,9 @@ FunctionEnd
   LangString TEXT_SecNLS_WinFonts ${LANG_GERMAN} "WinFonts"
   LangString DESC_SecNLS_WinFonts ${LANG_GERMAN} "Den Windows-Schriftarten-Ordner in den Suchpfad aufnehmen. Nutzen Sie dies, falls Sie spдter eigene Schriftarten in der Konfigurationsdatei eingeben wollen oder es zu Problemen mit der Standardschriftart kommt. Kann unter Vista und spдter langsam sein!"
   
+  LangString TEXT_SecDyDoAIMod ${LANG_GERMAN} "DyDo-AI"
+  LangString DESC_SecDyDoAIMod ${LANG_GERMAN} "DyDo-AI: Neuer Computergegner"  
+
   LangString TEXT_SecNTWMod ${LANG_GERMAN} "NTW"
   LangString DESC_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod. Verдndert die meisten Forschungen und Waffen."
 
@@ -630,6 +652,9 @@ FunctionEnd
   LangString TEXT_SecNLS_WinFonts ${LANG_RUSSIAN} "WinШрифты"
   LangString DESC_SecNLS_WinFonts ${LANG_RUSSIAN} "Задействовать папку шрифтов Windows при поиске. Помогает если есть проблемы с поставляемыми шрифтами. На Висте возможно замедление при загрузке!"
 
+  LangString TEXT_SecDyDoAIMod ${LANG_RUSSIAN} "DyDo-AI"
+  LangString DESC_SecDyDoAIMod ${LANG_RUSSIAN} "DyDo-AI: Новый компьютерный противник."  
+
   LangString TEXT_SecNTWMod ${LANG_RUSSIAN} "NTW"
   LangString DESC_SecNTWMod ${LANG_RUSSIAN} "Модификация New Team War. Изменяет большую часть оружия и исследований."
 
@@ -646,6 +671,7 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecDyDoAIMod} $(DESC_SecDyDoAIMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNTWMod} $(DESC_SecNTWMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOriginalMod} $(DESC_SecOriginalMod)
 	
@@ -710,6 +736,7 @@ Section "Uninstall"
   Delete "$INSTDIR\mods\music\music_1.0.AUTHORS.txt"
   Delete "$INSTDIR\mods\music\music_1.0.wz"
 
+  Delete "$INSTDIR\mods\multiplay\dido-ai.wz"
   Delete "$INSTDIR\mods\multiplay\ntw.wz"
   Delete "$INSTDIR\mods\multiplay\old-1.10-balance.wz"
 

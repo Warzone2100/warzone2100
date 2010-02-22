@@ -3,7 +3,9 @@ PKG_VERSION:=1.2.3
 
 PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
-PKG_SOURCE_URL:=http://downloads.xiph.org/releases/vorbis/
+PKG_SOURCE_URL:= \
+	http://downloads.xiph.org/releases/vorbis/ \
+	http://www.il.fontys.nl/~giel/warzone/devpkg/
 PKG_MD5SUM:=5aa77f55c0e0aab8eb8ed982335daac8
 
 TARGETS:= \
