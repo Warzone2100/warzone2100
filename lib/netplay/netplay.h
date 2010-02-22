@@ -62,7 +62,6 @@ typedef enum
 	NET_KICK,                       ///< kick a player .
 	NET_FIREUP,                     ///< campaign game has started, we can go too.. Shortcut message, not to be used in dmatch.
 	NET_COLOURREQUEST,              ///< player requests a colour change.
-	NET_SCORESUBMIT,                ///< submission of scores to host.
 	NET_AITEXTMSG,                  ///< chat between AIs
 	NET_BEACONMSG,                  ///< place beacon
 	NET_TEAMREQUEST,                ///< request team membership

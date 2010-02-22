@@ -578,9 +578,11 @@ BOOL recvMessage(void)
 	NETQUEUE queue;
 	uint8_t type;
 
-	// TODO Figure out which messages belong in the game queues, and which are net related.
 	while (NETrecvNet(&queue, &type) || NETrecvGame(&queue, &type))          // for all incoming messages.
 	{
+		bool processedMessage1 = false;
+		bool processedMessage2 = false;
+
 		if (queue.queueType == QUEUE_GAME && myResponsibility(queue.index))
 		{
 			switch (type)
@@ -647,6 +649,7 @@ BOOL recvMessage(void)
 		// messages only in game.
 		if(!ingame.localJoiningInProgress)
 		{
+			processedMessage1 = true;
 			switch(type)
 			{
 			case GAME_DROID:						// new droid of known type
@@ -709,8 +712,6 @@ BOOL recvMessage(void)
 			case GAME_GIFT:						// an alliance gift from one player to another.
 				recvGift(queue);
 				break;
-			case NET_SCORESUBMIT:				//  a score update from another player [UNUSED] see NET_PLAYER_STATS
-				break;
 			case GAME_VTOL:
 				recvHappyVtol(queue);
 				break;
@@ -718,11 +719,13 @@ BOOL recvMessage(void)
 				recvLasSat(queue);
 				break;
 			default:
+				processedMessage1 = false;
 				break;
 			}
 		}
 
 		// messages usable all the time
+		processedMessage2 = true;
 		switch(type)
 		{
 		case GAME_TEMPLATE:					// new template
@@ -815,9 +818,6 @@ BOOL recvMessage(void)
 			}
 			break;
 		}
-		case NET_FIREUP:				// frontend only
-			debug(LOG_NET, "NET_FIREUP was received (frontend only?)"); 
-			break;
 		case GAME_RESEARCHSTATUS:
 			recvResearchStatus(queue);
 			break;
@@ -828,7 +828,17 @@ BOOL recvMessage(void)
 			recvDebugSync(queue);
 			break;
 		default:
+			processedMessage2 = false;
 			break;
+		}
+
+		if (processedMessage1 && processedMessage2)
+		{
+			debug(LOG_ERROR, "Processed %s message twice!", messageTypeToString(type));
+		}
+		if (!processedMessage1 && !processedMessage2)
+		{
+			debug(LOG_ERROR, "Didn't handle %s message!", messageTypeToString(type));
 		}
 
 		NETpop(queue);

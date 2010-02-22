@@ -3051,7 +3051,10 @@ void frontendMultiMessages(void)
 				bMultiMessages = true;
 				changeTitleMode(STARTGAME);
 				bHosted = false;
-				return;  // Start the game before processing more messages.
+
+				// Start the game before processing more messages.
+				NETpop(queue);
+				return;
 			}
 			ASSERT(false, "NET_FIREUP was received, but !ingame.localOptionsReceived.");
 			break;
@@ -3097,6 +3100,10 @@ void frontendMultiMessages(void)
 			{
 				recvTextMessage(queue);
 			}
+			break;
+
+		default:
+			debug(LOG_ERROR, "Didn't handle %s message!", messageTypeToString(type));
 			break;
 		}
 

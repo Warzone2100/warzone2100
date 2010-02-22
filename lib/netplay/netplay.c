@@ -3919,7 +3919,6 @@ const char *messageTypeToString(unsigned messageType_)
 		case NET_KICK:                      return "NET_KICK";
 		case NET_FIREUP:                    return "NET_FIREUP";
 		case NET_COLOURREQUEST:             return "NET_COLOURREQUEST";
-		case NET_SCORESUBMIT:               return "NET_SCORESUBMIT";
 		case NET_AITEXTMSG:                 return "NET_AITEXTMSG";
 		case NET_BEACONMSG:                 return "NET_BEACONMSG";
 		case NET_TEAMREQUEST:               return "NET_TEAMREQUEST";
