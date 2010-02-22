@@ -3,7 +3,9 @@ PKG_VERSION:=1.1.1
 
 PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.bz2
-PKG_SOURCE_URL:=http://downloads.xiph.org/releases/theora/
+PKG_SOURCE_URL:= \
+	http://downloads.xiph.org/releases/theora/ \
+	http://www.il.fontys.nl/~giel/warzone/devpkg/
 PKG_MD5SUM:=292ab65cedd5021d6b7ddd117e07cd8e
 
 TARGETS:= \

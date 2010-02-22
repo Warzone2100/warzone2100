@@ -3,7 +3,9 @@ PKG_VERSION:=2.8.0
 
 PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
-PKG_SOURCE_URL:=http://fontconfig.org/release/
+PKG_SOURCE_URL:= \
+	http://fontconfig.org/release/ \
+	http://www.il.fontys.nl/~giel/warzone/devpkg/
 PKG_MD5SUM:=77e15a92006ddc2adbb06f840d591c0e
 
 TARGETS:= \
