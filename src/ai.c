@@ -1093,17 +1093,6 @@ void aiUpdateDroid(DROID *psDroid)
 		updateTarget = false;
 	}
 
-	// horrible check to stop droids looking for a target if
-	// they would switch to the guard order in the order update loop
-	if ((psDroid->order == DORDER_NONE) &&
-		(psDroid->player == selectedPlayer) &&
-		!isVtolDroid(psDroid) &&
-		secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_GUARD)
-	{
-		lookForTarget = false;
-		updateTarget = false;
-	}
-
 	// don't allow units to start attacking if they will switch to guarding the commander
 	if(hasCommander(psDroid))
 	{
