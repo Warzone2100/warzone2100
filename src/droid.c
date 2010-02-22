@@ -1496,22 +1496,15 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 
 	iPointsToAdd -= psRepairDroid->actionPoints;
 
-    if (iPointsToAdd)
-    {
         //just add the points if the power cost is negligable
         //if these points would make the droid healthy again then just add
         if (psDroidToRepair->body + iPointsToAdd >= psDroidToRepair->originalBody)
         {
             //anothe HACK but sorts out all the rounding errors when values get small
-            psDroidToRepair->body += iPointsToAdd;
-            psRepairDroid->actionPoints += iPointsToAdd;
+		iPointsToAdd = psDroidToRepair->originalBody - psDroidToRepair->body;
         }
-        else
-        {
-			psDroidToRepair->body += iPointsToAdd;
-			psRepairDroid->actionPoints += iPointsToAdd;
-        }
-    }
+	psDroidToRepair->body += iPointsToAdd;
+	psRepairDroid->actionPoints += iPointsToAdd;
 
 	/* add plasma repair effect whilst being repaired */
 	if ((ONEINFIVE) && (psDroidToRepair->visible[selectedPlayer]))
@@ -1527,16 +1520,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 	CHECK_DROID(psRepairDroid);
 
 	/* if not finished repair return true else complete repair and return false */
-	if (psDroidToRepair->body < psDroidToRepair->originalBody)
-	{
-		return true;
-	}
-	else
-	{
-        //reset the power accrued
-		psDroidToRepair->body = psDroidToRepair->originalBody;
-		return false;
-	}
+	return psDroidToRepair->body < psDroidToRepair->originalBody;
 }
 
 /* load the Droid stats for the components from the Access database */
@@ -4622,6 +4606,7 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 	ASSERT_HELPER(droid->listSize <= ORDER_LIST_MAX, location, function, "CHECK_DROID: Bad number of droid orders %d", (int)droid->listSize);
 	ASSERT_HELPER(droid->player < MAX_PLAYERS, location, function, "CHECK_DROID: Bad droid owner %d", (int)droid->player);
 	ASSERT_HELPER(droidOnMap(droid), location, function, "CHECK_DROID: Droid off map");
+	ASSERT_HELPER(droid->body <= droid->originalBody, location, function, "CHECK_DROID: More body points (%u) than original body points (%u).", (unsigned)droid->body, (unsigned)droid->originalBody);
 
 	for (i = 0; i < DROID_MAXWEAPS; ++i)
 	{
