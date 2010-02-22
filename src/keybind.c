@@ -299,7 +299,7 @@ void	kf_CloneSelected( void )
 	DROID		*psDroid, *psNewDroid;
 	DROID_TEMPLATE	sTemplate;
 	const int	limit = 10;	// make 10 clones
-	int		i, impact_side;
+	int		i;
 
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
 	{
@@ -312,7 +312,8 @@ void	kf_CloneSelected( void )
 			sstrcpy(sTemplate.aName, psDroid->aName);
 
 			// create a new droid
-			psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false);
+			psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false, NULL);
+			/* // TODO psNewDroid is null, since we just sent a message, but haven't actually created the droid locally yet.
 			ASSERT_OR_RETURN(, psNewDroid != NULL, "Unable to build a unit");
 			addDroid(psNewDroid, apsDroidLists);
 			psNewDroid->body = psDroid->body;
@@ -328,6 +329,7 @@ void	kf_CloneSelected( void )
 				updateDroidOrientation(psNewDroid);
 			}
 			psNewDroid->selected = true;
+			*/
 		}
 	}
 }

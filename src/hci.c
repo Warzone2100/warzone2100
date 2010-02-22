@@ -2158,20 +2158,26 @@ INT_RETVAL intRunWidgets(void)
 				else if (psPositionStats->ref >= REF_TEMPLATE_START &&
 						 psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
 				{
+					const char* msg;
 					psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats,
 								 world_coord(structX) + TILE_UNITS / 2, world_coord(structY) + TILE_UNITS / 2,
-								 selectedPlayer, false);
+								 selectedPlayer, false, NULL);
 					if (psDroid)
 					{
-						const char* msg;
 						addDroid(psDroid, apsDroidLists);
 
 						// Send a text message to all players, notifying them of
 						// the fact that we're cheating ourselves a new droid.
 						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new droid: %s."), selectedPlayer, psDroid->aName);
-						sendTextMessage(msg, true);
-						Cheated = true;
 					}
+					else
+					{
+						// Send a text message to all players, notifying them of
+						// the fact that we're cheating ourselves a new droid.
+						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new droid."), selectedPlayer);
+					}
+					sendTextMessage(msg, true);
+					Cheated = true;
 				}
 				editPosMode = IED_NOPOS;
 			}

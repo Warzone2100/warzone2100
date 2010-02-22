@@ -517,7 +517,7 @@ BOOL recvDroidMove(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Send a new Droid to the other players
-BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id)
+BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrdersP)
 {
 	if (!bMultiMessages)
 		return true;
@@ -543,14 +543,20 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 	{
 		Vector3uw pos = { x, y, 0 };
 		uint32_t templateID = pTemplate->multiPlayerID;
-		uint32_t power = getPower(player);
+		BOOL haveInitialOrders = initialOrdersP != NULL;
 
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETVector3uw(&pos);
 		NETuint32_t(&templateID);
-		NETuint32_t(&power);		// update player's power as well.
-		NETbool(&powerCalculated);
+		NETbool(&haveInitialOrders);
+		if (haveInitialOrders)
+		{
+			INITIAL_DROID_ORDERS initialOrders = *initialOrdersP;
+			NETuint32_t(&initialOrders.secondaryOrder);
+			NETint32_t(&initialOrders.moveToX);
+			NETint32_t(&initialOrders.moveToY);
+		}
 	}
 	debug(LOG_LIFE, "===> sending Droid from %u id of %u ",player,id);
 	return NETend();
@@ -565,9 +571,9 @@ BOOL recvDroid(NETQUEUE queue)
 	uint8_t player;
 	uint32_t id;
 	Vector3uw pos;
-	BOOL powerCalculated;
 	uint32_t templateID;
-	uint32_t power;
+	BOOL haveInitialOrders;
+	INITIAL_DROID_ORDERS initialOrders;
 
 	NETbeginDecode(queue, GAME_DROID);
 	{
@@ -575,8 +581,13 @@ BOOL recvDroid(NETQUEUE queue)
 		NETuint32_t(&id);
 		NETVector3uw(&pos);
 		NETuint32_t(&templateID);
-		NETuint32_t(&power);
-		NETbool(&powerCalculated);
+		NETbool(&haveInitialOrders);
+		if (haveInitialOrders)
+		{
+			NETuint32_t(&initialOrders.secondaryOrder);
+			NETint32_t(&initialOrders.moveToX);
+			NETint32_t(&initialOrders.moveToY);
+		}
 
 		pT = IdToTemplate(templateID, player);
 	}
@@ -600,21 +611,20 @@ BOOL recvDroid(NETQUEUE queue)
 		return false;
 	}
 
-	// forget about calculating the power, we *know* they built it, so we set
-	// their power accordingly on the local machine.
-	setPower((uint32_t) player, power);
-	debug(LOG_SYNC, "Syncing players %u power to %u", player, power);
-
 	// Create that droid on this machine.
-	turnOffMultiMsg(true);
-	psDroid = buildDroid(pT, pos.x, pos.y, player, false);
-	turnOffMultiMsg(false);
+	psDroid = reallyBuildDroid(pT, pos.x, pos.y, player, false);
 
 	// If we were able to build the droid set it up
 	if (psDroid)
 	{
 		psDroid->id = id;
 		addDroid(psDroid, apsDroidLists);
+
+		if (haveInitialOrders)
+		{
+			psDroid->secondaryOrder = initialOrders.secondaryOrder;
+			orderDroidLoc(psDroid, DORDER_MOVE, initialOrders.moveToX, initialOrders.moveToY);
+		}
 	}
 	else
 	{

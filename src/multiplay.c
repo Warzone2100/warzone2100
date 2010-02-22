@@ -586,7 +586,7 @@ BOOL recvMessage(void)
 			switch (type)
 			{
 				// TODO Remove all these cases.
-				case GAME_DROID:
+				//case GAME_DROID:        //24 down, 18 to go.
 				//case GAME_DROIDINFO:    // 2 down, 41 to go.
 				case GAME_DROIDDEST:
 				//case GAME_DROIDMOVE:    // 1 down, 42 to go.

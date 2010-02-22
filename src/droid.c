@@ -2381,8 +2381,7 @@ UDWORD calcDroidPoints(DROID *psDroid)
 }
 
 //Builds an instance of a Droid - the x/y passed in are in world coords.
-DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
-				  BOOL onMission)
+DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, BOOL onMission)
 {
 	DROID			*psDroid;
 	DROID_GROUP		*psGrp;
@@ -2577,15 +2576,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
  		clustNewDroid(psDroid);
 	}
 
-	// ajl. droid will be created, so inform others
-	if(bMultiMessages)
-	{
-		if (SendDroid(pTemplate,  x,  y,  (UBYTE)player, psDroid->id) == false)
-		{
-			return NULL;
-		}
-	}
-
 	/* transporter-specific stuff */
 	if (psDroid->droidType == DROID_TRANSPORTER)
 	{
@@ -2608,6 +2598,23 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	}
 
 	return psDroid;
+}
+
+DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, BOOL onMission, const INITIAL_DROID_ORDERS *initialOrders)
+{
+	// ajl. droid will be created, so inform others
+	if (bMultiMessages)
+	{
+		if (!SendDroid(pTemplate,  x,  y,  player, generateNewObjectId(), initialOrders))
+		{
+			debug(LOG_ERROR, "SendDroid failed?!");
+		}
+		return NULL;
+	}
+	else
+	{
+		return reallyBuildDroid(pTemplate, x, y, player, onMission);
+	}
 }
 
 //initialises the droid movement model
@@ -4298,7 +4305,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		// make the old droid vanish
 		vanishDroid(psD);
 		// create a new droid
-		psNewDroid = buildDroid(&sTemplate, x, y, to, false);
+		psNewDroid = buildDroid(&sTemplate, x, y, to, false, NULL);
 		ASSERT(psNewDroid != NULL, "unable to build a unit");
 		if (psNewDroid)
 		{

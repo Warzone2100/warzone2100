@@ -5065,7 +5065,7 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 		else
 		{
 			ASSERT(psTemplate != NULL, "Invalid template pointer");
-			psDroid = buildDroid(psTemplate, (pDroidInit->x & (~TILE_MASK)) + TILE_UNITS/2, (pDroidInit->y  & (~TILE_MASK)) + TILE_UNITS/2,	pDroidInit->player, false);
+			psDroid = reallyBuildDroid(psTemplate, (pDroidInit->x & ~TILE_MASK) + TILE_UNITS/2, (pDroidInit->y  & ~TILE_MASK) + TILE_UNITS/2, pDroidInit->player, false);
 
 			if (psDroid)
 			{
@@ -5228,8 +5228,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	// ignore brains for now
 	psTemplate->asParts[COMP_BRAIN] = 0;
 
-	psDroid = buildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y,
-		psSaveDroid->player, false);
+	psDroid = reallyBuildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y, psSaveDroid->player, false);
 
 	//copy the droid's weapon stats
 	for (i=0; i < psDroid->numWeaps; i++)
@@ -5336,18 +5335,15 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 
 	if(psSaveDroid->x == INVALID_XY)
 	{
-		psDroid = buildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y,
-			psSaveDroid->player, true);
+		psDroid = reallyBuildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y, psSaveDroid->player, true);
 	}
 	else if(psSaveDroid->saveType == DROID_ON_TRANSPORT)
 	{
-		psDroid = buildDroid(psTemplate, 0, 0,
-			psSaveDroid->player, true);
+		psDroid = reallyBuildDroid(psTemplate, 0, 0, psSaveDroid->player, true);
 	}
 	else
 	{
-		psDroid = buildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y,
-			psSaveDroid->player, false);
+		psDroid = reallyBuildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y, psSaveDroid->player, false);
 	}
 
 	ASSERT_OR_RETURN(NULL, psDroid, "Failed to build unit");
@@ -5716,18 +5712,15 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 
 	if(psSaveDroid->x == INVALID_XY)
 	{
-		psDroid = buildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y,
-			psSaveDroid->player, true);
+		psDroid = reallyBuildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y, psSaveDroid->player, true);
 	}
 	else if(psSaveDroid->saveType == DROID_ON_TRANSPORT)
 	{
-		psDroid = buildDroid(psTemplate, 0, 0,
-			psSaveDroid->player, true);
+		psDroid = reallyBuildDroid(psTemplate, 0, 0, psSaveDroid->player, true);
 	}
 	else
 	{
-		psDroid = buildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y,
-			psSaveDroid->player, false);
+		psDroid = reallyBuildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y, psSaveDroid->player, false);
 	}
 
 	ASSERT_OR_RETURN(NULL, psDroid, "Failed to build unit");

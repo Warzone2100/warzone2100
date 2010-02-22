@@ -2692,7 +2692,7 @@ DROID * buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
 {
 	DROID		*psNewDroid;
 
-	psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), player, true);
+	psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), player, true, NULL);
 	if (!psNewDroid)
 	{
 		return NULL;

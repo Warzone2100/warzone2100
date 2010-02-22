@@ -2032,7 +2032,6 @@ int NETclose(void)
 	{	// need SocketSet_DelSocket() as well, socket_set or tmp_socket_set?
 		debug(LOG_NET, "Closing bsocket %p socket %p (tcp_socket=%p)", bsocket, bsocket, tcp_socket);
 		//socketClose(bsocket);
-		NET_destroyBufferedSocket(bsocket);
 		bsocket=NULL;
 	}
 
@@ -2732,7 +2731,7 @@ UBYTE NETrecvFile(NETQUEUE queue)
 				debug(LOG_FATAL, "PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
 
 				debug(LOG_NET, "We are leaving 'nicely' after a fatal error");
-				NETbeginEncode(NET_PLAYER_LEAVING, NET_ALL_PLAYERS);
+				NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_LEAVING);
 				{
 					BOOL host = NetPlay.isHost;
 					uint32_t id = selectedPlayer;

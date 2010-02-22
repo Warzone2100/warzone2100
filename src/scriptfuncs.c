@@ -1012,7 +1012,7 @@ BOOL scrAddDroid(void)
 	} else
 #endif
 	{
-		psDroid = buildDroid(psTemplate, x, y, player, false);
+		psDroid = buildDroid(psTemplate, x, y, player, false, NULL);
 		if (psDroid)
 		{
 			addDroid(psDroid, apsDroidLists);
@@ -1025,7 +1025,7 @@ BOOL scrAddDroid(void)
 		}
 		else
 		{
-			debug( LOG_LIFE, "failed to create droid for AI player %d", player );
+			debug(LOG_LIFE, "send droid create message to game queue for AI player %d", player );
 		}
 	}
 

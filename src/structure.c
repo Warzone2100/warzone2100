@@ -2588,9 +2588,9 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 
 	if (placed)
 	{
+		INITIAL_DROID_ORDERS initialOrders = {psStructure->pFunctionality->factory.secondaryOrder, psStructure->pFunctionality->factory.psAssemblyPoint->coords.x, psStructure->pFunctionality->factory.psAssemblyPoint->coords.y};
 		//create a droid near to the structure
-		psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y),
-			psStructure->player, false);
+		psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), psStructure->player, false, &initialOrders);
 		if (!psNewDroid)
 		{
 			*ppsDroid = NULL;
