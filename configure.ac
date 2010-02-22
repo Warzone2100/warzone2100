@@ -315,6 +315,18 @@ if test "x$host_os_mingw32" = "xyes" ; then
     WIN32_LIBS="${WIN32_LIBS} ${IBERTY_LIBS}"
 fi
 
+# Look for X11 if required
+AC_TRY_COMPILE(, [
+#if   (defined(__OS2__) && !defined(__EMX__))
+# error Running OS2, not a Unix system.
+#elif (!defined(SAG_COM) && (defined(WIN32) || defined(WIN64) || defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) || defined(__WIN64__) || defined(__NT__))) || (defined(__MWERKS__) && defined(__INTEL__))
+# error Running on Windows, not a Unix system.
+#endif
+],[
+	AC_CHECK_LIB(X11, XSetSelectionOwner, AC_SUBST([X11_LIBS], [-lX11]),
+		AC_MSG_ERROR([X11 library not found]))
+])
+
 # Look for Motif
 AS_IF([test "$enable_motif" != "no"],[
 	AC_CHECK_HEADER(Xm/Xm.h, , AS_IF([test "$enable_motif" = "yes"],
