@@ -410,6 +410,7 @@ void	removeDroidBase(DROID *psDel)
 	{
 		ASSERT_OR_RETURN( , droidOnMap(psDel), "Asking other players to destroy droid driving off the map");
 		SendDestroyDroid(psDel);
+		return;
 	}
 
 

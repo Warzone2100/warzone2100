@@ -1111,7 +1111,7 @@ BOOL SendDestroyDroid(const DROID* psDroid)
 	{
 		return true;
 	}
-	
+
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDDEST);
 	{
 		uint32_t id = psDroid->id;

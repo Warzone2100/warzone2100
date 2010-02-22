@@ -142,6 +142,8 @@ typedef struct PackagedCheck
 	uint32_t body;
 	float direction;
 	float experience;
+	uint16_t posX;
+	uint16_t posY;
 	float sMoveX;
 	float sMoveY;
 	uint32_t targetID;  ///< Defined iff order == DORDER_ATTACK.

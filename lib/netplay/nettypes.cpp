@@ -617,6 +617,8 @@ void NETPACKAGED_CHECK(PACKAGED_CHECK *v)
 	queueAuto(v->body);
 	queueAuto(v->direction);
 	queueAuto(v->experience);
+	queueAuto(v->posX);
+	queueAuto(v->posY);
 	queueAuto(v->sMoveX);
 	queueAuto(v->sMoveY);
 	if (v->order == DORDER_ATTACK)

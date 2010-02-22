@@ -273,6 +273,8 @@ static PACKAGED_CHECK packageCheck(const DROID *pD)
 	pc.body = pD->body;
 	pc.direction = pD->direction;
 	pc.experience = pD->experience;
+	pc.posX = pD->pos.x;
+	pc.posY = pD->pos.y;
 	pc.sMoveX = pD->sMove.fx;
 	pc.sMoveY = pD->sMove.fy;
 	if (pD->order == DORDER_ATTACK)
@@ -332,19 +334,19 @@ BOOL recvDroidCheck(NETQUEUE queue)
 				continue;  // Can't synch, since we didn't save data to be able to calculate a delta.
 			}
 
-#define MERGECOPY(x, y, z1, z2)  if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z1" to %"z2".", pc.droidID, x, pc.y);             x = pc.y; }
-#define MERGEDELTA(x, y, z1, z2) if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z1" to %"z2".", pc.droidID, x, x + pc.y - pc2.y); x += pc.y - pc2.y; }
+#define MERGECOPY(x, y, z)  if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z" to %"z".", pc.droidID, x, pc.y);             x = pc.y; }
+#define MERGEDELTA(x, y, z) if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z" to %"z".", pc.droidID, x, x + pc.y - pc2.y); x += pc.y - pc2.y; }
 			// player not synched here...
-			MERGEDELTA(pD->pos.x, sMoveX, "d", "f");
-			MERGEDELTA(pD->pos.y, sMoveY, "d", "f");  // Apparently the old off-screen update set both pos.[xy] and sMove.f[xy] to the received sMove.f[xy], so doing the same.
-			MERGEDELTA(pD->sMove.fx, sMoveX, "f", "f");
-			MERGEDELTA(pD->sMove.fy, sMoveY, "f", "f");
-			MERGEDELTA(pD->direction, direction, "f", "f");
+			MERGEDELTA(pD->pos.x, posX, "d");
+			MERGEDELTA(pD->pos.y, posY, "d");
+			MERGEDELTA(pD->sMove.fx, sMoveX, "f");
+			MERGEDELTA(pD->sMove.fy, sMoveY, "f");
+			MERGEDELTA(pD->direction, direction, "f");
 			pD->direction += pD->direction < 0 ? 360 : pD->direction >= 360 ? -360 : 0; 
-			MERGEDELTA(pD->body, body, "u", "u");
-			MERGEDELTA(pD->experience, experience, "f", "f");
+			MERGEDELTA(pD->body, body, "u");
+			MERGEDELTA(pD->experience, experience, "f");
 
-			if (pc.sMoveX != pc2.sMoveX || pc.sMoveY != pc2.sMoveY)
+			if (pc.posX != pc2.posX || pc.posY != pc2.posY)
 			{
 				// snap droid(if on ground) to terrain level at x,y.
 				if ((asPropulsionStats + pD->asBits[COMP_PROPULSION].nStat)->propulsionType != PROPULSION_TYPE_LIFT)  // if not airborne.
@@ -380,9 +382,14 @@ BOOL recvDroidCheck(NETQUEUE queue)
 				case DORDER_GUARD:
 					if (pc.order != pc2.order)
 					{
+						DROID_ORDER_DATA sOrder;
+						memset(&sOrder, 0, sizeof(DROID_ORDER_DATA));
+						sOrder.order = pc.order;
+
 						debug(LOG_SYNC, "Droid %u out of synch, changing order from %s to %s.", pc.droidID, getDroidOrderName(pc2.order), getDroidOrderName(pc.order));
 						turnOffMultiMsg(true);
 						moveStopDroid(pD);
+						orderDroidBase(pD, &sOrder);
 						turnOffMultiMsg(false);
 					}
 					break;
@@ -390,7 +397,7 @@ BOOL recvDroidCheck(NETQUEUE queue)
 					break;  // Don't know what to do, but at least won't be actively breaking anything.
 			}
 
-			MERGECOPY(pD->secondaryOrder, secondaryOrder, "u", "u");  // The old code set this after changing orders, so doing that in case.
+			MERGECOPY(pD->secondaryOrder, secondaryOrder, "u");  // The old code set this after changing orders, so doing that in case.
 #undef MERGECOPY
 #undef MERGEDELTA
 
