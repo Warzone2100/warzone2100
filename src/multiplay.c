@@ -607,7 +607,7 @@ BOOL recvMessage(void)
 				case GAME_SECONDARY_ALL:
 				case GAME_DROIDEMBARK:
 				case GAME_DROIDDISEMBARK:
-				case GAME_GIFT:
+				//case GAME_GIFT:         //32 down, 10 to go
 				//case NET_SCORESUBMIT:
 				case GAME_VTOL:
 				case GAME_LASSAT:
@@ -624,14 +624,14 @@ BOOL recvMessage(void)
 				//case NET_POSITIONREQUEST:
 				//case NET_TEAMREQUEST:
 				//case NET_READY_REQUEST:
-				//case GAME_ARTIFACTS:    // 23 down, 19 to go.
+				//case GAME_ARTIFACTS:    //23 down, 19 to go.
 				case GAME_FEATURES:
-				case GAME_ALLIANCE:
+				//case GAME_ALLIANCE:     //33 down,  9 to go.
 				//case NET_KICK:
 				//case NET_FIREUP:
-				//case GAME_RESEARCHSTATUS://31 down, 11 to go.
+				//case GAME_RESEARCHSTATUS//31 down, 11 to go.
 				//case NET_PLAYER_STATS:
-				//case NET_...:  // 22 down, 20 to go.
+				//case NET_...:           // 22 down, 20 to go.
 				{
 					static unsigned packets[256];
 					if (++packets[type] == 1)
@@ -855,9 +855,6 @@ BOOL recvMessage(void)
 // Research Stuff. Nat games only send the result of research procedures.
 BOOL SendResearch(uint8_t player, uint32_t index, bool trigger)
 {
-	UBYTE i;
-	PLAYER_RESEARCH *pPlayerRes;
-
 	// Send the player that is researching the topic and the topic itself
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_RESEARCH);
 		NETuint8_t(&player);

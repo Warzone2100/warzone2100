@@ -152,8 +152,6 @@ void giftRadar(uint8_t from, uint8_t to, BOOL send)
 {
 	uint32_t dummy = 0;
 
-	hqReward(from, to);
-
 	if (send)
 	{
 		uint8_t subType = RADAR_GIFT;
@@ -168,6 +166,7 @@ void giftRadar(uint8_t from, uint8_t to, BOOL send)
 	// If we are recieving the gift
 	else if (to == selectedPlayer)
 	{
+		hqReward(from, to);
 		CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You A Visibility Report"),
 		          getPlayerName(from)));
 	}
@@ -204,7 +203,7 @@ static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 // \param to    :player that should be getting the droid
 static void sendGiftDroids(uint8_t from, uint8_t to)
 {
-	DROID        *next, *psD;
+	DROID        *psD;
 	uint8_t      giftType = DROID_GIFT;
 	uint8_t      totalToSend;
 
@@ -231,11 +230,8 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	 * does its own net calls.
 	 */
 
-	for (psD = apsDroidLists[from]; psD && totalToSend != 0; psD = next)
+	for (psD = apsDroidLists[from]; psD && totalToSend != 0; psD = psD->psNext)
 	{
-		// Store the next droid in the list as the list may change
-		next = psD->psNext;
-
 		if (psD->droidType == DROID_TRANSPORTER
 		 && !transporterIsEmpty(psD))
 		{
@@ -252,9 +248,6 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 			NETuint32_t(&psD->id);
 			NETend();
 
-			// Hand over the droid on our sidde
-			giftSingleDroid(psD, to);
-
 			// Decrement the number of droids left to send
 			--totalToSend;
 		}
@@ -270,21 +263,6 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 	int		i;
 	uint32_t	dummy = 0;
 
-	pR	 = asPlayerResList[from];
-	pRto = asPlayerResList[to];
-
-	// For each topic
-	for (i = 0; i < numResearch; i++)
-	{
-		// If they have it and we don't research it
-		if (IsResearchCompleted(&pR[i])
-		 && !IsResearchCompleted(&pRto[i]))
-		{
-			MakeResearchCompleted(&pRto[i]);
-			researchResult(i, to, false, NULL, true);
-		}
-	}
-
 	if (send)
 	{
 		uint8_t giftType = RESEARCH_GIFT;
@@ -299,6 +277,20 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 	else if (to == selectedPlayer)
 	{
 		CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You Technology Documents"),getPlayerName(from) ));
+		pR   = asPlayerResList[from];
+		pRto = asPlayerResList[to];
+
+		// For each topic
+		for (i = 0; i < numResearch; i++)
+		{
+			// If they have it and we don't research it
+			if (IsResearchCompleted(&pR[i])
+			&& !IsResearchCompleted(&pRto[i]))
+			{
+				MakeResearchCompleted(&pRto[i]);
+				researchResult(i, to, false, NULL, true);
+			}
+		}
 	}
 }
 
@@ -307,21 +299,7 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 // give Power
 void giftPower(uint8_t from, uint8_t to, BOOL send)
 {
-	UDWORD gifval;
 	uint32_t dummy = 0;
-
-	if (from == ANYPLAYER)
-	{
-		gifval = OILDRUM_POWER;
-	}
-	else
-	{
-		// Give 1/3 of our power away
-		gifval = getPower(from) / 3;
-		usePower(from, gifval);
-	}
-
-	addPower(to, gifval);
 
 	if (send)
 	{
@@ -336,7 +314,25 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 	}
 	else if (to == selectedPlayer)
 	{
-		CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You %u Power"),getPlayerName(from),gifval));
+		uint32_t gifval;
+
+		if (from == ANYPLAYER)
+		{
+			gifval = OILDRUM_POWER;
+		}
+		else
+		{
+			// Give 1/3 of our power away
+			gifval = getPower(from) / 3;
+			usePower(from, gifval);
+		}
+
+		addPower(to, gifval);
+
+		if (from != ANYPLAYER)
+		{
+			CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You %u Power"),getPlayerName(from),gifval));
+		}
 	}
 }
 
@@ -346,6 +342,12 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 
 void requestAlliance(uint8_t from, uint8_t to, BOOL prop, BOOL allowAudio)
 {
+	if (prop && bMultiMessages)
+	{
+		sendAlliance(from, to, ALLIANCE_REQUESTED, false);
+		return;  // Wait for our message.
+	}
+
 	alliances[from][to] = ALLIANCE_REQUESTED;	// We've asked
 	alliances[to][from] = ALLIANCE_INVITATION;	// They've been invited
 
@@ -371,16 +373,17 @@ void requestAlliance(uint8_t from, uint8_t to, BOOL prop, BOOL allowAudio)
 			audio_QueueTrack(ID_ALLIANCE_OFF);
 		}
 	}
-
-	if (prop)
-	{
-		sendAlliance(from, to, ALLIANCE_REQUESTED, false);
-	}
 }
 
 void breakAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio)
 {
 	char	tm1[128];
+
+	if (prop && bMultiMessages)
+	{
+		sendAlliance(p1, p2, ALLIANCE_BROKEN, false);
+		return;  // Wait for our message.
+	}
 
 	if (alliances[p1][p2] == ALLIANCE_FORMED)
 	{
@@ -397,17 +400,18 @@ void breakAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio)
 	alliances[p2][p1] = ALLIANCE_BROKEN;
 	alliancebits[p1] &= ~(1 << p2);
 	alliancebits[p2] &= ~(1 << p1);
-
-	if (prop)
-	{
-		sendAlliance(p1, p2, ALLIANCE_BROKEN, false);
-	}
 }
 
 void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allowNotification)
 {
 	DROID	*psDroid;
 	char	tm1[128];
+
+	if (bMultiMessages && prop)
+	{
+		sendAlliance(p1, p2, ALLIANCE_FORMED, false);
+		return;  // Wait for our message.
+	}
 
 	// Don't add message if already allied
 	if (bMultiPlayer && alliances[p1][p2] != ALLIANCE_FORMED && allowNotification)
@@ -427,11 +431,6 @@ void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allow
 	if (allowAudio && (p1 == selectedPlayer || p2== selectedPlayer))
 	{
 		audio_QueueTrack(ID_ALLIANCE_ACC);
-	}
-
-	if (bMultiMessages && prop)
-	{
-		sendAlliance(p1, p2, ALLIANCE_FORMED, false);
 	}
 
 	// Not campaign and alliances are transitive
@@ -495,13 +494,19 @@ BOOL recvAlliance(NETQUEUE queue, BOOL allowAudio)
 		case ALLIANCE_NULL:
 			break;
 		case ALLIANCE_REQUESTED:
+			turnOffMultiMsg(true);
 			requestAlliance(from, to, false, allowAudio);
+			turnOffMultiMsg(false);
 			break;
 		case ALLIANCE_FORMED:
+			turnOffMultiMsg(true);
 			formAlliance(from, to, false, allowAudio, true);
+			turnOffMultiMsg(false);
 			break;
 		case ALLIANCE_BROKEN:
+			turnOffMultiMsg(true);
 			breakAlliance(from, to, false, allowAudio);
+			turnOffMultiMsg(false);
 			break;
 		default:
 			debug(LOG_ERROR, "Unknown alliance state recvd.");

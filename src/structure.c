@@ -6409,7 +6409,8 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 					}
 				}
 
-				(void)giftSingleDroid(psDroid, attackPlayer);
+				// TODO: Should either do it directly (if everyone else knows to do the same), or tell the world, but not both.
+				//(void)giftSingleDroid(psDroid, attackPlayer);
 
 				// tell the world!
 				if (bMultiMessages)
