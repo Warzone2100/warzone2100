@@ -4009,6 +4009,7 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_DROIDEMBARK:              return "GAME_DROIDEMBARK";
 		case GAME_DROIDDISEMBARK:           return "GAME_DROIDDISEMBARK";
 		case GAME_RESEARCHSTATUS:           return "GAME_RESEARCHSTATUS";
+		case GAME_MANUFACTURESTATUS:        return "GAME_MANUFACTURESTATUS";
 		case GAME_LASSAT:                   return "GAME_LASSAT";
 		case GAME_GAME_TIME:                return "GAME_GAME_TIME";
 		case GAME_SYNC_DEBUG_STRING:        return "GAME_SYNC_DEBUG_STRING";

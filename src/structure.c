@@ -1326,6 +1326,12 @@ BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE qu
 	                 (int)psStruct->pStructureType->type);
 	/* psTempl might be NULL if the build is being cancelled in the middle */
 
+	if (bMultiMessages)
+	{
+		sendManufactureStatus(psStruct, psTempl, quantity);
+		return true;  // Wait for our message before doing anything.
+	}
+
 	//assign it to the Factory
 	psFact = &psStruct->pFunctionality->factory;
 	psFact->psSubject = (BASE_STATS *)psTempl;
@@ -3524,16 +3530,13 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				if (productionPlayer == psStructure->player)
 				{
 					psNextTemplate = factoryProdUpdate(psStructure,(DROID_TEMPLATE *)pSubject);
-					if (psNextTemplate)
-					{
-						structSetManufacture(psStructure, psNextTemplate,Quantity);
-						return;
-					}
-					else
+					psFactory->psSubject = NULL;
+					structSetManufacture(psStructure, psNextTemplate, Quantity);
+
+					if (!psNextTemplate)
 					{
 						//nothing more to manufacture - reset the Subject and Tab on HCI Form
 						intManufactureFinished(psStructure);
-						psFactory->psSubject = NULL;
 
 						//script callback, must be called after factory was flagged as idle
 						if(bDroidPlaced)
@@ -3553,16 +3556,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					}
 
 					// If quantity not 0 then kick of another manufacture.
-					if(Quantity)
-					{
-						// Manufacture another.
-						structSetManufacture(psStructure, (DROID_TEMPLATE*)pSubject,Quantity);
-						return;
-					}
-					else
+					psFactory->psSubject = NULL;
+					structSetManufacture(psStructure, (DROID_TEMPLATE*)pSubject,Quantity);
+					if (Quantity == 0)
 					{
 						//when quantity = 0, reset the Subject and Tab on HCI Form
-						psFactory->psSubject = NULL;
 						intManufactureFinished(psStructure);
 
 						//script callback, must be called after factory was flagged as idle

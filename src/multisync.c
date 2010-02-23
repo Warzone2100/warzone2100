@@ -344,6 +344,11 @@ BOOL recvDroidCheck(NETQUEUE queue)
 			MERGEDELTA(pD->direction, direction, "f");
 			pD->direction += pD->direction < 0 ? 360 : pD->direction >= 360 ? -360 : 0; 
 			MERGEDELTA(pD->body, body, "u");
+			if (pD->body > pD->originalBody)
+			{
+				pD->body = pD->originalBody;
+				debug(LOG_SYNC, "Droid %u body was too high after synch, reducing to %u.", pc.droidID, pD->body);
+			}
 			MERGEDELTA(pD->experience, experience, "f");
 
 			if (pc.posX != pc2.posX || pc.posY != pc2.posY)

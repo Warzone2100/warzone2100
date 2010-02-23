@@ -62,6 +62,7 @@ extern void sendOptions             (void);
 extern BOOL recvHappyVtol           (NETQUEUE queue);
 extern BOOL recvResearchStatus      (NETQUEUE queue);
 extern BOOL recvLasSat              (NETQUEUE queue);
+extern void recvManufactureStatus   (NETQUEUE queue);
 extern BOOL recvMapFileData         (NETQUEUE queue);
 extern BOOL recvMapFileRequested    (NETQUEUE queue);
 

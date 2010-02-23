@@ -821,6 +821,9 @@ BOOL recvMessage(void)
 		case GAME_RESEARCHSTATUS:
 			recvResearchStatus(queue);
 			break;
+		case GAME_MANUFACTURESTATUS:
+			recvManufactureStatus(queue);
+			break;
 		case NET_PLAYER_STATS:
 			recvMultiStats(queue);
 			break;

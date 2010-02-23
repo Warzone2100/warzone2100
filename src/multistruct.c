@@ -411,3 +411,61 @@ BOOL recvLasSat(NETQUEUE queue)
 
 	return true;
 }
+
+void sendManufactureStatus(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE quantity)
+{
+	uint8_t  player = psStruct->player;
+	uint32_t structId = psStruct->id;
+	uint32_t templateId = psTempl->multiPlayerID;
+
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_MANUFACTURESTATUS);
+		NETuint8_t(&player);
+		NETuint32_t(&structId);
+		NETuint8_t(&quantity);
+		if (quantity != 0)
+		{
+			NETuint32_t(&templateId);
+		}
+	NETend();
+}
+
+void recvManufactureStatus(NETQUEUE queue)
+{
+	uint8_t         player = 0;
+	uint32_t        structId = 0;
+	uint32_t        templateId = 0;
+	uint8_t         quantity = 0;
+	STRUCTURE *     psStruct;
+	DROID_TEMPLATE *psTempl = NULL;
+
+	NETbeginDecode(queue, GAME_MANUFACTURESTATUS);
+		NETuint8_t(&player);
+		NETuint32_t(&structId);
+		NETuint8_t(&quantity);
+		if (quantity != 0)
+		{
+			NETuint32_t(&templateId);
+		}
+	NETend();
+
+	psStruct = IdToStruct(structId, player);
+	if (psStruct == NULL)
+	{
+		debug(LOG_SYNC, "Couldn't find structure %u to change production.", structId);
+		return;
+	}
+
+	if (quantity != 0)
+	{
+		psTempl = IdToTemplate(templateId, player);
+		if (psTempl == NULL)
+		{
+			debug(LOG_SYNC, "Synch error, don't have tempate id %u, so can't change production of factory %u!", templateId, structId);
+			return;
+		}
+	}
+
+	turnOffMultiMsg(true);
+	structSetManufacture(psStruct, psTempl, quantity);
+	turnOffMultiMsg(false);
+}

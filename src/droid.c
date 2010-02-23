@@ -2607,10 +2607,8 @@ DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, 
 	// ajl. droid will be created, so inform others
 	if (bMultiMessages)
 	{
-		if (!SendDroid(pTemplate,  x,  y,  player, generateNewObjectId(), initialOrders))
-		{
-			debug(LOG_ERROR, "SendDroid failed?!");
-		}
+		// Only sends if it's ours, otherwise the owner should send the message.
+		SendDroid(pTemplate, x, y, player, generateNewObjectId(), initialOrders);
 		return NULL;
 	}
 	else

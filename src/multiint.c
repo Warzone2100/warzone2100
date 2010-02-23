@@ -695,6 +695,10 @@ void runConnectionScreen(void )
 			break;
 		case CON_OK:
 			sstrcpy(addr, widgGetString(psConScreen, CON_IP));
+			if (addr[0] == '\0')
+			{
+				sstrcpy(addr, "127.0.0.1");  // Default to localhost.
+			}
 
 			if(SettingsUp == true)
 			{

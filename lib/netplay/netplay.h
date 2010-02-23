@@ -111,6 +111,7 @@ typedef enum
 	GAME_DROIDEMBARK,               ///< droid embarked on a Transporter
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
 	GAME_RESEARCHSTATUS,            ///< research state.
+	GAME_MANUFACTURESTATUS,         ///< Manufacture state.
 	GAME_LASSAT,                    ///< lassat firing.
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
 	GAME_SYNC_DEBUG_STRING,         ///< For debugging purposes only. For checking if all clients do the same syncDebug() calls.
