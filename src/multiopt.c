@@ -53,6 +53,7 @@
 #include "aiexperience.h"	//for beacon messages
 #include "multiint.h"
 #include "multirecv.h"
+#include <SDL.h>
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
@@ -622,6 +623,8 @@ BOOL multiGameShutdown(void)
 
 	saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
 
+	// if we terminate the socket too quickly, then, it is possible not to get the leave message
+	SDL_Delay(1000);
 	// close game
 	NETclose();
 	NETremRedirects();
