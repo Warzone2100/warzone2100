@@ -631,7 +631,7 @@ static bool SocketSet_AddSocket(SocketSet* set, Socket* socket)
 	{
 		if (set->fds[i] == socket)
 		{
-			debug(LOG_NET, "Already found, socket: (set->fds[%d]) %p", i, socket);
+			debug(LOG_NET, "Already found, socket: (set->fds[%lu]) %p", (unsigned long) i, socket);
 			return true;
 		}
 	}
@@ -641,7 +641,7 @@ static bool SocketSet_AddSocket(SocketSet* set, Socket* socket)
 		if (set->fds[i] == NULL)
 		{
 			set->fds[i] = socket;
-			debug(LOG_NET, "Socket added: set->fds[%d] = %p", i, socket);
+			debug(LOG_NET, "Socket added: set->fds[%lu] = %p", (unsigned long) i, socket);
 			return true;
 		}
 	}
@@ -665,7 +665,7 @@ static void SocketSet_DelSocket(SocketSet* set, Socket* socket)
 	{
 		if (set->fds[i] == socket)
 		{
-			debug(LOG_NET, "Socket %p nullified (set->fds[%d])", socket, i);
+			debug(LOG_NET, "Socket %p nullified (set->fds[%lu])", socket, (unsigned long) i);
 			set->fds[i] = NULL;
 			break;
 		}
