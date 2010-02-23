@@ -2481,33 +2481,30 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		return;
 	}
 
-	// if not doing anything - do it immediately
-	if (psDroid->listSize == 0 &&
-		(psDroid->order == DORDER_NONE ||
-		 psDroid->order == DORDER_GUARD ||
-		 psDroid->order == DORDER_PATROL ||
-		 psDroid->order == DORDER_CIRCLE ||
-		 psDroid->order == DORDER_TEMP_HOLD))
+	psDroid->asOrderList[psDroid->listSize].order = psOrder->order;
+	if (psOrder->order == DORDER_BUILD || psOrder->order == DORDER_LINEBUILD)
 	{
-		orderDroidBase(psDroid, psOrder);
+		setDroidOrderTarget(psDroid, psOrder->psStats, psDroid->listSize);
 	}
 	else
 	{
-		psDroid->asOrderList[psDroid->listSize].order = psOrder->order;
-		//psDroid->asOrderList[psDroid->listSize].psObj = psOrder->psObj;
-        if (psOrder->order == DORDER_BUILD || psOrder->order == DORDER_LINEBUILD)
-        {
-		setDroidOrderTarget(psDroid, psOrder->psStats, psDroid->listSize);
-	}
-        else
-        {
 		setDroidOrderTarget(psDroid, psOrder->psObj, psDroid->listSize);
-        }
-		psDroid->asOrderList[psDroid->listSize].x = (UWORD)psOrder->x;
-		psDroid->asOrderList[psDroid->listSize].y = (UWORD)psOrder->y;
-		psDroid->asOrderList[psDroid->listSize].x2 = (UWORD)psOrder->x2;
-		psDroid->asOrderList[psDroid->listSize].y2 = (UWORD)psOrder->y2;
-		psDroid->listSize += 1;
+	}
+	psDroid->asOrderList[psDroid->listSize].x = (UWORD)psOrder->x;
+	psDroid->asOrderList[psDroid->listSize].y = (UWORD)psOrder->y;
+	psDroid->asOrderList[psDroid->listSize].x2 = (UWORD)psOrder->x2;
+	psDroid->asOrderList[psDroid->listSize].y2 = (UWORD)psOrder->y2;
+	psDroid->listSize += 1;
+
+	// if not doing anything - do it immediately
+	if (psDroid->listSize <= 1 &&
+	    (psDroid->order == DORDER_NONE ||
+	     psDroid->order == DORDER_GUARD ||
+	     psDroid->order == DORDER_PATROL ||
+	     psDroid->order == DORDER_CIRCLE ||
+	     psDroid->order == DORDER_TEMP_HOLD))
+	{
+		orderDroidList(psDroid);
 	}
 
     //don't display the arrow-effects with build orders since unnecessary
