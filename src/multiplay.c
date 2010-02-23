@@ -864,30 +864,6 @@ BOOL SendResearch(uint8_t player, uint32_t index, bool trigger)
 		NETuint32_t(&index);
 	NETend();
 
-	/*
-	 * Since we are called when the state of research changes (completed,
-	 * stopped &c) we also need to update our own local copy of what our allies
-	 * are doing/have done.
-	 */
-	if (game.type == SKIRMISH)
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			if (alliances[i][player] == ALLIANCE_FORMED)
-			{
-				pPlayerRes = asPlayerResList[i] + index;
-
-				// If we have it but they don't
-				if (!IsResearchCompleted(pPlayerRes))
-				{
-					// Do the research for that player
-					MakeResearchCompleted(pPlayerRes);
-					researchResult(index, i, false, NULL, trigger);
-				}
-			}
-		}
-	}
-
 	return true;
 }
 
