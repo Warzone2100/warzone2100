@@ -412,18 +412,20 @@ BOOL recvLasSat(NETQUEUE queue)
 	return true;
 }
 
-void sendManufactureStatus(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE quantity)
+void sendManufactureStatus(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl)
 {
 	uint8_t  player = psStruct->player;
 	uint32_t structId = psStruct->id;
-	uint32_t templateId = psTempl->multiPlayerID;
+	BOOL     isManufacturing = psTempl != NULL;
 
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_MANUFACTURESTATUS);
 		NETuint8_t(&player);
 		NETuint32_t(&structId);
-		NETuint8_t(&quantity);
-		if (quantity != 0)
+		NETbool(&isManufacturing);
+		if (isManufacturing)
 		{
+			uint32_t templateId = psTempl->multiPlayerID;
+
 			NETuint32_t(&templateId);
 		}
 	NETend();
@@ -434,15 +436,15 @@ void recvManufactureStatus(NETQUEUE queue)
 	uint8_t         player = 0;
 	uint32_t        structId = 0;
 	uint32_t        templateId = 0;
-	uint8_t         quantity = 0;
+	BOOL            isManufacturing = 0;
 	STRUCTURE *     psStruct;
 	DROID_TEMPLATE *psTempl = NULL;
 
 	NETbeginDecode(queue, GAME_MANUFACTURESTATUS);
 		NETuint8_t(&player);
 		NETuint32_t(&structId);
-		NETuint8_t(&quantity);
-		if (quantity != 0)
+		NETbool(&isManufacturing);
+		if (isManufacturing)
 		{
 			NETuint32_t(&templateId);
 		}
@@ -455,7 +457,7 @@ void recvManufactureStatus(NETQUEUE queue)
 		return;
 	}
 
-	if (quantity != 0)
+	if (isManufacturing)
 	{
 		psTempl = IdToTemplate(templateId, player);
 		if (psTempl == NULL)
@@ -466,6 +468,6 @@ void recvManufactureStatus(NETQUEUE queue)
 	}
 
 	turnOffMultiMsg(true);
-	structSetManufacture(psStruct, psTempl, quantity);
+	structSetManufacture(psStruct, psTempl);
 	turnOffMultiMsg(false);
 }

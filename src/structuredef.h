@@ -190,8 +190,7 @@ typedef struct _factory
 
 	UBYTE				capacity;			/* The max size of body the factory
 											   can produce*/
-	UBYTE				quantity;			/* The number of droids to produce OR for
-											   selectedPlayer, how many loops to perform*/
+	uint8_t                         productionLoops;        ///< Number of loops to perform. Not synchronised, and only meaningful for selectedPlayer.
 	UBYTE				loopsPerformed;		/* how many times the loop has been performed*/
 	//struct _propulsion_types*	propulsionType;
 	//UBYTE				propulsionType;		/* The type of propulsion the facility

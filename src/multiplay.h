@@ -165,7 +165,7 @@ extern BOOL sendBuildStarted            (STRUCTURE *psStruct, DROID *psDroid);
 extern BOOL SendDestroyStructure(STRUCTURE *s);
 extern BOOL	SendBuildFinished	(STRUCTURE *psStruct);
 extern BOOL sendLasSat			(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj);
-void sendManufactureStatus              (STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE quantity);
+void sendManufactureStatus              (STRUCTURE *psStruct, DROID_TEMPLATE *psTempl);
 
 // droids . multibot
 extern BOOL SendDroid                   (const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);

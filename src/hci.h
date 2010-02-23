@@ -278,8 +278,6 @@ typedef enum {
 //NOT ANYMORE! 10/08/98 AB
 //#define INCLUDE_PRODSLIDER	// Include quantity slider in manufacture window.
 
-#define INCLUDE_FACTORYLISTS
-
 extern INTMODE intMode;
 
 /* The widget screen */

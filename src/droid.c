@@ -4458,7 +4458,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
 								//power is returned by factoryProdAdjust()
 								if (psNextTemplate)
 								{
-									structSetManufacture(psStruct, psNextTemplate,psFactory->quantity);
+									structSetManufacture(psStruct, psNextTemplate);
 								}
 								else
 								{
@@ -4485,9 +4485,8 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
 					//not the production player, so check not being built in the factory for the template player
 					if (psFactory->psSubject == (BASE_STATS *)psTemplate)
 					{
-						//clear the factories subject and quantity
+						// Clear the factory's subject.
 						psFactory->psSubject = NULL;
-						psFactory->quantity = 0;
 						//return any accrued power
 						if (psFactory->powerAccrued)
 						{

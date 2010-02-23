@@ -2335,7 +2335,6 @@ static void intRunStats(void)
 		ProductionRun = Quantity;
 	}
 #endif
-#ifdef INCLUDE_FACTORYLISTS
 
 	BASE_OBJECT			*psOwner;
 	STRUCTURE			*psStruct;
@@ -2351,13 +2350,11 @@ static void intRunStats(void)
 
 		psFactory = (FACTORY *)psStruct->pFunctionality;
 		//adjust the loop button if necessary
-		if (psFactory->psSubject && psFactory->quantity)
+		if (psFactory->psSubject != NULL && psFactory->productionLoops != 0)
 		{
 			widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, WBUT_CLICKLOCK);
 		}
 	}
-
-#endif
 }
 
 
@@ -2769,9 +2766,7 @@ static void intProcessStats(UDWORD id)
 	STRUCTURE		*psStruct;
 	FLAG_POSITION	*psFlag;
 
-#ifdef INCLUDE_FACTORYLISTS
 	DROID_TEMPLATE	*psNext;
-#endif
 
 	ASSERT( widgGetFromID(psWScreen,IDOBJ_TABFORM) != NULL,"intProcessStats, missing form\n" );
 
@@ -2789,7 +2784,6 @@ static void intProcessStats(UDWORD id)
 		/* deal with LMB clicks */
 		else
 		{
-#ifdef INCLUDE_FACTORYLISTS
 			//manufacture works differently!
 			if(objMode == IOBJ_MANUFACTURE)
 			{
@@ -2854,7 +2848,6 @@ static void intProcessStats(UDWORD id)
                 }
 			}
 			else
-#endif
 			{
 				/* See if this was a click on an already selected stat */
 				psStats = objGetStatsFunc(psObjSelected);
@@ -3017,8 +3010,7 @@ static void intProcessStats(UDWORD id)
 			{
 				factoryLoopAdjust(psStruct, false);
 			}
-			if (((FACTORY *)psStruct->pFunctionality)->psSubject &&
-				((FACTORY *)psStruct->pFunctionality)->quantity)
+			if (((FACTORY *)psStruct->pFunctionality)->psSubject != NULL && ((FACTORY *)psStruct->pFunctionality)->productionLoops != 0)
 			{
 				//lock the button
 				widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, WBUT_CLICKLOCK);
@@ -5501,8 +5493,6 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	}
 #endif
 
-#ifdef INCLUDE_FACTORYLISTS
-
 	// Add the quantity slider ( if it's a factory ).
 	if(objMode == IOBJ_MANUFACTURE)
 	{
@@ -5547,7 +5537,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		if ( psOwner != NULL )
 		{
 			psFactory = (FACTORY *)((STRUCTURE *)psOwner)->pFunctionality;
-			if (psFactory->psSubject && psFactory->quantity)
+			if (psFactory->psSubject != NULL && psFactory->productionLoops != 0)
 			{
 				widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, WBUT_CLICKLOCK);
 			}
@@ -5586,10 +5576,6 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.pCallback = intAddProdQuantity;
 
 	}
-#endif
-
-
-
 
 	/* Add the close button */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
@@ -6269,7 +6255,6 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		"setManufactureStats: invalid Structure pointer" );
 	/* psStats might be NULL if the operation is canceled in the middle */
 
-#ifdef INCLUDE_FACTORYLISTS
 	Structure = (STRUCTURE*)psObj;
 	//check to see if the factory was already building something
 	if (!((FACTORY *)Structure->pFunctionality)->psSubject)
@@ -6278,13 +6263,12 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		if (psStats != NULL)
 		{
 			/* Set the factory to build droid(s) */
-			if (!structSetManufacture(Structure, (DROID_TEMPLATE *)psStats, 1))
+			if (!structSetManufacture(Structure, (DROID_TEMPLATE *)psStats))
 			{
 				return false;
 			}
 		}
 	}
-#endif
 
 #ifdef INCLUDE_PRODSLIDER
 	if (ProductionRun == 0)
@@ -6442,9 +6426,7 @@ static BOOL intAddCommand(DROID *psSelected)
 static void intStatsRMBPressed(UDWORD id)
 {
 	DROID_TEMPLATE		*psStats;
-#ifdef INCLUDE_FACTORYLISTS
 	DROID_TEMPLATE		*psNext;
-#endif
 
 	ASSERT( id - IDSTAT_START < numStatsListEntries,
 			"intStatsRMBPressed: Invalid structure stats id" );
@@ -6454,7 +6436,6 @@ static void intStatsRMBPressed(UDWORD id)
 		psStats = (DROID_TEMPLATE *)ppsStatsList[id - IDSTAT_START];
 
 		//this now causes the production run to be decreased by one
-#ifdef INCLUDE_FACTORYLISTS
 
 		ASSERT( psObjSelected != NULL,
 			"intStatsRMBPressed: Invalid structure pointer" );
@@ -6512,7 +6493,7 @@ static void intStatsRMBPressed(UDWORD id)
 			    }
 		    }
         }
-#else
+#if 0
 		// set the current Template
 		psCurrTemplate = apsDroidTemplates[selectedPlayer];
 		while (psStats != psCurrTemplate)

@@ -1249,7 +1249,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 
 			tagWriteEnter(0x0d, 1); // FACTORY GROUP
 			tagWrite(0x01, psFactory->capacity);
-			tagWrite(0x02, psFactory->quantity);
+			tagWrite(0x02, psFactory->productionLoops);
 			tagWrite(0x03, psFactory->loopsPerformed);
 			//tagWrite(0x04, psFactory->productionOutput); // not used in original code, recalculated instead
 			tagWrite(0x05, psFactory->powerAccrued);

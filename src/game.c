@@ -7259,7 +7259,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 					psFactory->capacity = 0;//capacity reset during module build (UBYTE)psSaveStructure->capacity;
                     //this is set up during module build - if the stats have changed it will also set up with the latest value
 					//psFactory->productionOutput = (UBYTE)psSaveStructure->output;
-					psFactory->quantity = (UBYTE)psSaveStructure->quantity;
+					psFactory->productionLoops = (UBYTE)psSaveStructure->quantity;
 					psFactory->timeStarted = psSaveStructure->droidTimeStarted;
 					psFactory->powerAccrued = psSaveStructure->powerAccrued;
 					psFactory->timeToBuild = psSaveStructure->timeToBuild;
@@ -7667,7 +7667,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 				psFactory->capacity = 0;//capacity reset during module build (UBYTE)psSaveStructure->capacity;
 				//this is set up during module build - if the stats have changed it will also set up with the latest value
 				//psFactory->productionOutput = (UBYTE)psSaveStructure->output;
-				psFactory->quantity = (UBYTE)psSaveStructure->quantity;
+				psFactory->productionLoops = (UBYTE)psSaveStructure->quantity;
 				psFactory->timeStarted = psSaveStructure->droidTimeStarted;
 				psFactory->powerAccrued = psSaveStructure->powerAccrued;
 				psFactory->timeToBuild = psSaveStructure->timeToBuild;
@@ -7994,7 +7994,7 @@ BOOL writeStructFile(char *pFileName)
 				case REF_VTOL_FACTORY:
 					psFactory = ((FACTORY *)psCurr->pFunctionality);
 					psSaveStruct->capacity	= psFactory->capacity;
-					psSaveStruct->quantity			= psFactory->quantity;
+					psSaveStruct->quantity                  = psFactory->productionLoops;
 					psSaveStruct->droidTimeStarted	= psFactory->timeStarted;
 					psSaveStruct->powerAccrued		= psFactory->powerAccrued;
 					psSaveStruct->timeToBuild		= psFactory->timeToBuild;

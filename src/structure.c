@@ -1314,7 +1314,7 @@ BOOL structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 }
 
 /* Set the type of droid for a factory to build */
-BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE quantity)
+BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl)
 {
 	FACTORY		*psFact;
 
@@ -1328,7 +1328,7 @@ BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE qu
 
 	if (bMultiMessages)
 	{
-		sendManufactureStatus(psStruct, psTempl, quantity);
+		sendManufactureStatus(psStruct, psTempl);
 		return true;  // Wait for our message before doing anything.
 	}
 
@@ -1343,7 +1343,7 @@ BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE qu
 		if (psStruct->player != selectedPlayer)
 		{
 			//set quantity to produce
-			psFact->quantity = quantity;
+			psFact->productionLoops = 1;
 		}
 
 		psFact->timeStarted = ACTION_START_TIME;//gameTime;
@@ -1923,7 +1923,9 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				++psBuilding->pFunctionality->factory.capacity;
 				bUpgraded = true;
 				//put any production on hold
+				turnOffMultiMsg(true);
 				holdProduction(psBuilding);
+				turnOffMultiMsg(false);
 
 				//quick check not trying to add too much
 				ASSERT_OR_RETURN(NULL, psBuilding->pFunctionality->factory.productionOutput +
@@ -1994,7 +1996,9 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				if (psBuilding->pFunctionality->researchFacility.psSubject)
 				{
 					//cancel the topic
+					turnOffMultiMsg(true);
 					holdResearch(psBuilding);
+					turnOffMultiMsg(false);
 				}
 
 				//need to change which IMD is used for player 0
@@ -2861,7 +2865,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 	DROID				*psDroid;
 	BASE_OBJECT			*psChosenObjs[STRUCT_MAXWEAPS] = {NULL};
 	BASE_OBJECT			*psChosenObj = NULL;
-	UBYTE				Quantity;
 	SDWORD				iDt;
 	FACTORY				*psFactory;
 	REPAIR_FACILITY		*psRepairFac = NULL;
@@ -2870,9 +2873,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 	BOOL				bFinishAction,bDroidPlaced;
 	WEAPON_STATS		*psWStats;
 	SDWORD				xdiff,ydiff, mindist, currdist;
-#ifdef INCLUDE_FACTORYLISTS
 	DROID_TEMPLATE		*psNextTemplate;
-#endif
 	UDWORD				i;
 	float secondsToBuild, powerNeeded;
 	int secondsElapsed;
@@ -3445,7 +3446,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 		else if (structureMode == REF_FACTORY)
 		{
 			psFactory = &psStructure->pFunctionality->factory;
-			Quantity = psFactory->quantity;
 
 			//if on hold don't do anything
 			if (psFactory->timeStartHold)
@@ -3524,50 +3524,36 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 
 				//reset the start time
 				psFactory->timeStarted = ACTION_START_TIME;
+				psFactory->psSubject = NULL;
 
-#ifdef INCLUDE_FACTORYLISTS
+				//decrement the quantity to manufacture if not set to infinity
+				/*if (Quantity && Quantity != NON_STOP_PRODUCTION)
+				{
+					psFactory->quantity--;
+					Quantity--;
+				}*/
+
+				// If quantity not 0 then kick of another manufacture.
+				turnOffMultiMsg(true);  // Do instantly, since quantity is synchronised.
+				structSetManufacture(psStructure, (DROID_TEMPLATE *)pSubject);
+				turnOffMultiMsg(false);
+
+				//script callback, must be called after factory was flagged as idle
+				if (bDroidPlaced)
+				{
+					cbNewDroid(psStructure, psDroid);
+				}
+
 				//next bit for productionPlayer only
 				if (productionPlayer == psStructure->player)
 				{
-					psNextTemplate = factoryProdUpdate(psStructure,(DROID_TEMPLATE *)pSubject);
-					psFactory->psSubject = NULL;
-					structSetManufacture(psStructure, psNextTemplate, Quantity);
+					psNextTemplate = factoryProdUpdate(psStructure, (DROID_TEMPLATE *)pSubject);
+					structSetManufacture(psStructure, psNextTemplate);
 
 					if (!psNextTemplate)
 					{
 						//nothing more to manufacture - reset the Subject and Tab on HCI Form
 						intManufactureFinished(psStructure);
-
-						//script callback, must be called after factory was flagged as idle
-						if(bDroidPlaced)
-						{
-							cbNewDroid(psStructure, psDroid);
-						}
-					}
-				}
-				else
-#endif
-				{
-					//decrement the quantity to manufacture if not set to infinity
-					if (Quantity && Quantity != NON_STOP_PRODUCTION)
-					{
-						psFactory->quantity--;
-						Quantity--;
-					}
-
-					// If quantity not 0 then kick of another manufacture.
-					psFactory->psSubject = NULL;
-					structSetManufacture(psStructure, (DROID_TEMPLATE*)pSubject,Quantity);
-					if (Quantity == 0)
-					{
-						//when quantity = 0, reset the Subject and Tab on HCI Form
-						intManufactureFinished(psStructure);
-
-						//script callback, must be called after factory was flagged as idle
-						if(bDroidPlaced)
-						{
-							cbNewDroid(psStructure, psDroid);
-						}
 					}
 				}
 			}
@@ -6012,13 +5998,17 @@ void buildingComplete(STRUCTURE *psBuilding)
 		case REF_RESEARCH:
 			intCheckResearchButton();
 			//this deals with researc facilities that are upgraded whilst mid-research
+			turnOffMultiMsg(true);
 			releaseResearch(psBuilding);
+			turnOffMultiMsg(false);
 			break;
 		case REF_FACTORY:
 		case REF_CYBORG_FACTORY:
 		case REF_VTOL_FACTORY:
 			//this deals with factories that are upgraded whilst mid-production
+			turnOffMultiMsg(true);
 			releaseProduction(psBuilding);
+			turnOffMultiMsg(false);
 			break;
 		case REF_SAT_UPLINK:
 			revealAll(psBuilding->player);
@@ -6922,6 +6912,12 @@ void cancelProduction(STRUCTURE *psBuilding)
 
 	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
 
+	if (bMultiMessages)
+	{
+		debug(LOG_WARNING, "TODO: cancelProduction disabled in multiplayer.");
+		return;
+	}
+
 	psFactory = &psBuilding->pFunctionality->factory;
 
 	//check its the correct factory
@@ -6947,7 +6943,7 @@ void cancelProduction(STRUCTURE *psBuilding)
 			MAX_PROD_RUN);
 		//clear the factories subject and quantity
 		psFactory->psSubject = NULL;
-		psFactory->quantity = 0;
+		psFactory->productionLoops = 0;
 		//tell the interface
 		intManufactureFinished(psBuilding);
 	}
@@ -6961,6 +6957,12 @@ void holdProduction(STRUCTURE *psBuilding)
 	FACTORY		*psFactory;
 
 	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
+
+	if (bMultiMessages)
+	{
+		debug(LOG_WARNING, "TODO: holdProduction disabled in multiplayer.");
+		return;
+	}
 
 	psFactory = &psBuilding->pFunctionality->factory;
 
@@ -6983,6 +6985,12 @@ void releaseProduction(STRUCTURE *psBuilding)
 	FACTORY		*psFactory;
 
 	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
+
+	if (bMultiMessages)
+	{
+		debug(LOG_WARNING, "TODO: releaseProduction disabled in multiplayer.");
+		return;
+	}
 
 	psFactory = &psBuilding->pFunctionality->factory;
 
@@ -7017,7 +7025,7 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 		//find the entry in the array for this template
 		for (inc=0; inc < MAX_PROD_RUN; inc++)
 		{
-			if (asProductionRun[factoryType][factoryInc][inc].psTemplate == psTemplate)
+			if (asProductionRun[factoryType][factoryInc][inc].psTemplate != NULL && asProductionRun[factoryType][factoryInc][inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID)
 			{
 				asProductionRun[factoryType][factoryInc][inc].built++;
 				if (asProductionRun[factoryType][factoryInc][inc].built <
@@ -7040,12 +7048,12 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 	}
 	/*If you've got here there's nothing left to build unless factory is
 	on loop production*/
-	if (psFactory->quantity)
+	if (psFactory->productionLoops != 0)
 	{
 		//reduce the loop count if not infinite
-		if (psFactory->quantity != INFINITE_PRODUCTION)
+		if (psFactory->productionLoops != INFINITE_PRODUCTION)
 		{
-			psFactory->quantity--;
+			psFactory->productionLoops--;
 		}
 
 		//need to reset the quantity built for each entry in the production list
@@ -7057,7 +7065,7 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 			}
 		}
 		//get the first to build again
-		return (factoryProdUpdate(psStructure, NULL));
+		return factoryProdUpdate(psStructure, NULL);
 	}
 	//if got to here then nothing left to produce so clear the array
 	memset(asProductionRun[factoryType][factoryInc], 0,
@@ -7168,7 +7176,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 		if (inc == MAX_PROD_RUN)
 		{
 			//must have cancelled eveything - so tell the struct
-			psFactory->quantity = 0;
+			psFactory->productionLoops = 0;
 		}
 	}
 }
@@ -7384,31 +7392,31 @@ void factoryLoopAdjust(STRUCTURE *psStruct, BOOL add)
 	if (add)
 	{
 		//check for wrapping to infinite production
-		if (psFactory->quantity == MAX_IN_RUN)
+		if (psFactory->productionLoops == MAX_IN_RUN)
 		{
-			psFactory->quantity = 0;
+			psFactory->productionLoops = 0;
 		}
 		else
 		{
 			//increment the count
-			psFactory->quantity++;
+			psFactory->productionLoops++;
 			//check for limit - this caters for when on infinite production and want to wrap around
-			if (psFactory->quantity > MAX_IN_RUN)
+			if (psFactory->productionLoops > MAX_IN_RUN)
 			{
-				psFactory->quantity = INFINITE_PRODUCTION;
+				psFactory->productionLoops = INFINITE_PRODUCTION;
 			}
 		}
 	}
 	else
 	{
 		//decrement the count
-		if (psFactory->quantity == 0)
+		if (psFactory->productionLoops == 0)
 		{
-			psFactory->quantity = INFINITE_PRODUCTION;
+			psFactory->productionLoops = INFINITE_PRODUCTION;
 		}
 		else
 		{
-			psFactory->quantity--;
+			psFactory->productionLoops--;
 		}
 	}
 }

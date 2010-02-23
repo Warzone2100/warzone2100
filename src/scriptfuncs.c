@@ -1551,7 +1551,11 @@ BOOL scrBuildDroid(void)
 	ASSERT_OR_RETURN(false, validTemplateForFactory(psTemplate, psFactory), "Invalid template - %s for factory - %s",
 	                 psTemplate->aName, psFactory->pStructureType->pName);
 
-	structSetManufacture(psFactory, psTemplate, (UBYTE)productionRun);
+	if (productionRun != 1)
+	{
+		debug(LOG_WARNING, "A script is trying to build a different number (%d) than 1 droid.", productionRun);
+	}
+	structSetManufacture(psFactory, psTemplate);
 
 	return true;
 }
@@ -10673,6 +10677,7 @@ BOOL scrPursueResearch(void)
 		pResearch = (asResearch + foundIndex);
 		pPlayerRes				= asPlayerResList[player]+ foundIndex;
 		psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
+		debug(LOG_ERROR, "FIXME! Not synchronised! And probably duplicate code!");
 
 		if (IsResearchCancelled(pPlayerRes))
 		{

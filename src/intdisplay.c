@@ -447,13 +447,13 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	{
 		FACTORY		*psFactory = (FACTORY *)psStruct->pFunctionality;
 
-		if (psFactory->quantity == INFINITE_PRODUCTION)
+		if (psFactory->productionLoops == INFINITE_PRODUCTION)
 		{
 			sstrcpy(Label->aText, "∞");
 		}
 		else
 		{
-			snprintf(Label->aText, sizeof(Label->aText), "%02u", psFactory->quantity + DEFAULT_LOOP);
+			snprintf(Label->aText, sizeof(Label->aText), "%02u", psFactory->productionLoops + DEFAULT_LOOP);
 		}
 		Label->style &= ~WIDG_HIDDEN;
 	}
@@ -1824,7 +1824,7 @@ void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 
 		if (psFactory && !psStruct->died)
 		{
-			Quantity = psFactory->quantity;
+			Quantity = psFactory->productionLoops;
 		}
 	}
 

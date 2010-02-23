@@ -122,8 +122,7 @@ extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoin
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern BOOL structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints);
 /* Set the type of droid for a factory to build */
-extern BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl,
-								 UBYTE quantity);
+extern BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl);
 
 //temp test function for creating structures at the start of the game
 extern void createTestStructures(void);

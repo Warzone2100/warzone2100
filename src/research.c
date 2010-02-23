@@ -1875,6 +1875,12 @@ void holdResearch(STRUCTURE *psBuilding)
 	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
 		"holdResearch: structure not a research facility" );
 
+	if (bMultiMessages)
+	{
+		debug(LOG_WARNING, "TODO: holdResearch disabled in multiplayer.");
+		return;
+	}
+
 	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
 
 	if (psResFac->psSubject)
@@ -1897,6 +1903,12 @@ void releaseResearch(STRUCTURE *psBuilding)
 
 	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
 		"releaseResearch: structure not a research facility" );
+
+	if (bMultiMessages)
+	{
+		debug(LOG_WARNING, "TODO: releaseResearch disabled in multiplayer.");
+		return;
+	}
 
 	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
 
