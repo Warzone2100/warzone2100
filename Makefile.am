@@ -9,22 +9,14 @@ dist_doc_DATA = \
 
 ACLOCAL_AMFLAGS = -I m4
 
+# workaround for e.g. git, which doesn't include empty directories
+macosx/prebuilt:
+	$(MKDIR_P) macosx/prebuilt
+
 EXTRA_DIST= \
 	autogen.sh \
 	autorevision.conf \
 	config.rpath \
 	configure.ac \
-	macosx/external/bison.sh \
-	macosx/prebuilt/ \
-	macosx/README.BUILD.txt \
-	macosx/README.txt \
-	macosx/Resources/GenericFramework-Info.plist \
-	macosx/Resources/ogg/English.lproj/InfoPlist.strings \
-	macosx/Resources/ogg/Info.plist \
-	macosx/Resources/theora/English.lproj/InfoPlist.strings \
-	macosx/Resources/theora/Info.plist \
-	macosx/Resources/vorbis/English.lproj/InfoPlist.strings \
-	macosx/Resources/vorbis/Info.plist \
-	macosx/Resources/Warzone.icns \
-	macosx/Resources/Warzone-Info.plist \
-	macosx/Warzone.xcodeproj/project.pbxproj
+	macosx/prebuilt \
+	macosx
