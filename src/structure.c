@@ -3376,11 +3376,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 			if (IsResearchCompleted(pPlayerRes)==0)
 			{
 				pResearch = (RESEARCH *)pSubject;
-				// don't update if not responsible (106)
-				if(bMultiPlayer && !myResponsibility(psStructure->player))
-				{
-					return;
-				}
 
 				if (psResFacility->timeStarted == ACTION_START_TIME)
 				{
@@ -3406,7 +3401,10 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				{
 					if(bMultiMessages)
 					{
-						SendResearch(psStructure->player, pSubject->ref - REF_RESEARCH_START, true);
+						if (myResponsibility(psStructure->player))
+						{
+							SendResearch(psStructure->player, pSubject->ref - REF_RESEARCH_START, true);
+						}
 						return;  // Wait for our message before adding the research.
 					}
 
@@ -3722,7 +3720,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				bFinishAction = false;
 
 				// dont rearm on remote pcs.
-				if(!bMultiPlayer || myResponsibility(psDroid->player))
+				// Huh?! Why not?! if(!bMultiPlayer || myResponsibility(psDroid->player))
 				{
 					/* do rearming */
 					if (psDroid->sMove.iAttackRuns != 0)
@@ -6870,7 +6868,7 @@ FLAG_POSITION *FindFactoryDelivery(STRUCTURE *Struct)
 	if(StructIsFactory(Struct))
 	{
 		// Find the factories delivery point.
-		for (psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag;
+		for (psCurrFlag = apsFlagPosLists[Struct->player]; psCurrFlag;
 			psCurrFlag = psCurrFlag->psNext)
 		{
 			if(FlagIsFactory(psCurrFlag)
@@ -7822,11 +7820,8 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 				buildingComplete(psStructure);
 			}
 			//since the structure isn't being rebuilt, the visibility code needs to be adjusted
-			if (attackPlayer == selectedPlayer)
-			{
-				//make sure this structure is visible to selectedPlayer
-				psStructure->visible[selectedPlayer] = UBYTE_MAX;
-			}
+			//make sure this structure is visible to selectedPlayer
+			psStructure->visible[attackPlayer] = UINT8_MAX;
 		}
 		return NULL;
 	}
