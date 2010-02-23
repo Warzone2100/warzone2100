@@ -2386,7 +2386,7 @@ void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStat
 
 	if (bMultiMessages)
 	{
-		SendDroidInfo(psDroid, order, x1, y1, NULL, psStats, x2, x2);
+		SendDroidInfo(psDroid, order, x1, y1, NULL, psStats, x2, y2);
 		return;  // Wait for our order before changing the droid.
 	}
 
