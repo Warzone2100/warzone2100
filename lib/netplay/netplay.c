@@ -3219,8 +3219,9 @@ static void NETallowJoining(void)
 	}
 	if (i == MAX_TMP_SOCKETS)
 	{
-		// prevent out-of-bounds access
-		i--;
+		// this should *never* happen, it would mean we are going to reuse a socket already in use.
+		debug(LOG_ERROR, "all temp sockets are used up!");
+		return;
 	}
 
 	// See if there's an incoming connection
