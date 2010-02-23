@@ -238,7 +238,7 @@ extern void orderGroupMoralCheck(struct _droid_group *psGroup);
 
 extern const char* getDroidOrderName(DROID_ORDER order);
 
-extern DROID *FindATransporter(void);
+extern DROID *FindATransporter(unsigned player);
 
 /*For a given constructor droid, check if there are any damaged buildings within
 a defined range*/

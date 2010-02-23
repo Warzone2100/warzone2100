@@ -149,8 +149,7 @@ void gameTimeUpdate()
 			baseTime = currTime;
 			timeOffset = graphicsTime;
 
-			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7]);
-			//debug(LOG_SYNC, "Waiting for other players.");
+			debug(LOG_NEVER, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7]);
 			mayUpdate = false;
 		}
 

@@ -9,6 +9,8 @@ GAME_BUILD should fix the structure ID of the structure being built. GAME_BUILD 
 **************
 Remove bMultiPlayer and turnOffMultiMsg() hacks, cleaning up any duplicate or dead code on the way.
 
+Sanity check all use of selectedPlayer. It should be used for deciding how the interface works, not for changing the game state in random places for no good reason...
+
 *************
 * Somewhere *
 *************
@@ -37,3 +39,8 @@ Check that this file doesn't modify droids directly...
 * src/research.c *
 ******************
 Check the researchResult function. Should a message be sent there, and if so, then should wait for it?
+
+***************
+* src/order.c *
+***************
+Just before transporterAddDroid, it changes the droid state directly. Should either not test for selectedPlayer, or should not change the droid state directly. See also: unloadTransporter.

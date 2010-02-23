@@ -1114,7 +1114,7 @@ BOOL OrderDroidToEmbark(DROID *psDroid)
 {
 	DROID *psTransporter;
 
-	psTransporter = FindATransporter();
+	psTransporter = FindATransporter(psDroid->player);
 
 	if(psTransporter != NULL)
 	{

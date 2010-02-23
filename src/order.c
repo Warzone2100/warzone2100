@@ -321,18 +321,6 @@ void orderUpdateDroid(DROID *psDroid)
 			}
 		}
 
-		// default to guarding if the correct secondary order is set
-		else if ((psDroid->player == selectedPlayer) &&
-		         (psDroid->psTarStats != (BASE_STATS *) structGetDemolishStat()) && // stop the constructor auto repairing when it is about to demolish
-		         secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_GUARD &&
-		         !isVtolDroid(psDroid))
-		{
-			UDWORD actionX = psDroid->pos.x;
-			UDWORD actionY = psDroid->pos.y;
-
-			orderDroidLoc(psDroid, DORDER_GUARD, actionX,actionY);
-		}
-
 		//repair droids default to repairing droids within a given range
 		else if ((psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR)
 		         && !orderState(psDroid, DORDER_GUARD))
@@ -370,6 +358,14 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 				actionDroidObj(psDroid, DACTION_REPAIR, psObj);
 			}
+		}
+
+		// default to guarding if the correct secondary order is set
+		else if (psDroid->psTarStats != (BASE_STATS *)structGetDemolishStat() && // stop the constructor auto repairing when it is about to demolish
+		         secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_GUARD &&
+		         !isVtolDroid(psDroid))
+		{
+			orderDroidLoc(psDroid, DORDER_GUARD, psDroid->pos.x, psDroid->pos.y);
 		}
 
 		break;
@@ -3281,11 +3277,12 @@ void orderSelectedStatsTwoLoc(UDWORD player, DROID_ORDER order,
 
 // See if the player has access to a transporter in this map.
 //
-DROID *FindATransporter(void)
+DROID *FindATransporter(unsigned player)
 {
 	DROID *psDroid;
 
-	for(psDroid = apsDroidLists[selectedPlayer]; (psDroid != NULL); psDroid = psDroid->psNext) {
+	for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+	{
 		if( psDroid->droidType == DROID_TRANSPORTER ) {
 			return psDroid;
 		}
@@ -3318,11 +3315,12 @@ static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 
 // See if the player has access to a repair facility in this map.
 //
-static STRUCTURE *FindARepairFacility(void)
+static STRUCTURE *FindARepairFacility(unsigned player)
 {
 	STRUCTURE *psStruct;
 
-	for(psStruct = apsStructLists[selectedPlayer]; (psStruct != NULL); psStruct = psStruct->psNext) {
+	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct = psStruct->psNext)
+	{
 		if(psStruct->pStructureType->type == REF_REPAIR_FACILITY) {
 			return psStruct;
 		}
@@ -3401,7 +3399,7 @@ BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 		if ((FindAFactory(psDroid->player, REF_FACTORY) == NULL) &&
 			(FindAFactory(psDroid->player, REF_CYBORG_FACTORY) == NULL) &&
 			(FindAFactory(psDroid->player, REF_VTOL_FACTORY) == NULL) &&
-			(FindARepairFacility() == NULL))
+			(FindARepairFacility(psDroid->player) == NULL))
 		{
 			supported = false;
 		}
@@ -3854,7 +3852,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 					CurrState |= DSS_RTL_BASE;
 					break;
 				case DSS_RTL_TRANSPORT:
-					psTransport = FindATransporter();
+					psTransport = FindATransporter(psDroid->player);
 					if (psTransport != NULL)
 					{
                         //in multiPlayer can only put cyborgs onto a Transporter
