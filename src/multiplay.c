@@ -617,7 +617,7 @@ BOOL recvMessage(void)
 				//case GAME_FEATUREDEST:  //29 down, 13 to go.
 				//case NET_PING:
 				case GAME_DEMOLISH:
-				case GAME_RESEARCH:
+				//case GAME_RESEARCH:     //30 down, 12 to go.
 				//case NET_OPTIONS:
 				//case NET_PLAYERRESPONDING:
 				//case NET_COLOURREQUEST:
@@ -629,7 +629,7 @@ BOOL recvMessage(void)
 				case GAME_ALLIANCE:
 				//case NET_KICK:
 				//case NET_FIREUP:
-				case GAME_RESEARCHSTATUS:
+				//case GAME_RESEARCHSTATUS://31 down, 11 to go.
 				//case NET_PLAYER_STATS:
 				//case NET_...:  // 22 down, 20 to go.
 				{

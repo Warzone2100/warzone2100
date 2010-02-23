@@ -14,6 +14,8 @@ Remove bMultiPlayer and turnOffMultiMsg() hacks, cleaning up any duplicate or de
 *************
 Fix the extra droid explosion effects after a droid dies, but before the GAME_DROIDDEST message that gives the droid permission to really die. Actually, maybe the GAME_DROIDDEST, GAME_STRUCTDEST and GAME_FEATUREDEST should be turned into just synch messages, and stuff should be removed as soon as destroyed.
 
+Fix production completed and research completed sounds.
+
 ********************
 * src/structure.c: *
 ********************
@@ -31,3 +33,7 @@ Fix kf_CloneSelected.
 *************
 Check that this file doesn't modify droids directly...
 
+******************
+* src/research.c *
+******************
+Check the researchResult function. Should a message be sent there, and if so, then should wait for it?

@@ -1127,6 +1127,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE
 	ASSERT( researchIndex < numResearch, "researchResult: invalid research index" );
 
 	sendReseachStatus(NULL, researchIndex, player, false);
+	// Confused whether we should wait for our message before doing anything, and confused what this function does...
 
 	MakeResearchCompleted(&pPlayerRes[researchIndex]);
 
@@ -1964,6 +1965,13 @@ void cancelResearch(STRUCTURE *psBuilding)
 
 	if (psBuilding->pStructureType->type == REF_RESEARCH)
 	{
+		if (bMultiMessages)
+		{
+			// Tell others that we want to stop reseaching [sic] something.
+			sendReseachStatus(NULL, topicInc, psBuilding->player, false);
+			return;  // Wait for our message before doing anything. (Whatever this function does...)
+		}
+
 		//check if waiting to accrue power
 		if (psResFac->timeStarted == ACTION_START_TIME)
 		{
@@ -1986,7 +1994,6 @@ void cancelResearch(STRUCTURE *psBuilding)
 			MakeResearchCancelled(pPlayerRes);
 		}
 
-		 sendReseachStatus(psBuilding, topicInc, psBuilding->player, false);
 
 		// Initialise the research facility's subject
 		psResFac->psSubject = NULL;

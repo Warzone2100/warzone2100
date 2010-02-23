@@ -6163,6 +6163,15 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 	//initialise the subject
 	psResFacilty->psSubject = NULL;
 
+	if (bMultiMessages)
+	{
+		// Say that we want to do reseach [sic].
+		sendReseachStatus(psBuilding, ((RESEARCH *)psStats)->ref - REF_RESEARCH_START, selectedPlayer, true);
+		//stop the button from flashing once a topic has been chosen
+		stopReticuleButtonFlash(IDRET_RESEARCH);
+		return true;
+	}
+
 	//set up the player_research
 	if (psStats != NULL)
 	{

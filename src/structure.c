@@ -3407,6 +3407,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					if(bMultiMessages)
 					{
 						SendResearch(psStructure->player, pSubject->ref - REF_RESEARCH_START, true);
+						return;  // Wait for our message before adding the research.
 					}
 
 					//store the last topic researched - if its the best

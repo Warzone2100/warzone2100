@@ -3194,6 +3194,7 @@ static void NETallowJoining(void)
 						NETstring(GamePassword, sizeof(GamePassword));
 						NETint32_t(&Hash_Data);		// NETCODE_HASH, not currently used
 					NETend();
+					NETpop(NETnetTmpQueue(i));
 
 					index = NET_CreatePlayer(name);
 
