@@ -55,6 +55,8 @@
 #include "multirecv.h"
 #include "scriptfuncs.h"
 
+#include "lib/framework/wzapp_c.h"
+
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
 
@@ -308,12 +310,12 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// Broadcast that we are leaving the game 'nicely', (we wanted to) and not
+// Tell the host we are leaving the game 'nicely', (we wanted to) and not
 // because we have some kind of error. (dropped or disconnected)
 BOOL sendLeavingMsg(void)
 {
 	debug(LOG_NET, "We are leaving 'nicely'");
-	NETbeginEncode(NET_PLAYER_LEAVING, NET_ALL_PLAYERS);
+	NETbeginEncode(NET_PLAYER_LEAVING, NET_HOST_ONLY);
 	{
 		BOOL host = NetPlay.isHost;
 		uint32_t id = selectedPlayer;
@@ -605,6 +607,7 @@ BOOL multiGameInit(void)
 BOOL multiGameShutdown(void)
 {
 	PLAYERSTATS	st;
+	uint32_t        time;
 
 	debug(LOG_NET,"%s is shutting down.",getPlayerName(selectedPlayer));
 
@@ -615,6 +618,12 @@ BOOL multiGameShutdown(void)
 
 	saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
 
+	// if we terminate the socket too quickly, then, it is possible not to get the leave message
+	time = wzGetTicks();
+	while (wzGetTicks() - time < 1000)
+	{
+		wzYieldCurrentThread();  // TODO Make a wzDelay() function?
+	}
 	// close game
 	NETclose();
 	NETremRedirects();
