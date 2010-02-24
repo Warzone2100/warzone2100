@@ -1810,6 +1810,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 		if (result == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Server socket ecountered error: %s", strSockError(getSockErr()));
+			SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
 			socketClose(tcp_socket);
 			tcp_socket = NULL;
 			return false;
@@ -1823,6 +1824,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 			{
 				debug(LOG_WARNING, "Server socket ecountered error: %s", strSockError(getSockErr()));
 				debug(LOG_WARNING, "GAMESTRUCT recv failed; received %u bytes out of %d", i, (int)sizeof(buf));
+				SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
 				socketClose(tcp_socket);
 				tcp_socket = NULL;
 				return false;
@@ -2326,6 +2328,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 			{
 				// Write error, most likely client disconnect.
 				debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+				SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
 				socketClose(tcp_socket);
 				tcp_socket = NULL;
 			}
@@ -2384,9 +2387,10 @@ BOOL NETbcast(NETMSG *msg)
 		}
 		if (writeAll(tcp_socket, msg, size) == SOCKET_ERROR)
 		{
-			// Write error, most likely client disconnect.
+			// Write error, most likely host disconnect.
 			debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
 			debug(LOG_WARNING, "Host connection was broken?");
+			SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
 			socketClose(tcp_socket);
 			tcp_socket = NULL;
 			NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
@@ -3607,6 +3611,7 @@ BOOL NETfindGame(void)
 		{
 			debug(LOG_NET, "Server didn't respond (timeout)");
 		}
+		SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
 		socketClose(tcp_socket);
 		tcp_socket = NULL;
 
