@@ -925,6 +925,7 @@ void runGameFind(void )
 
 	if(id == MULTIOP_REFRESH)
 	{
+		ingame.localOptionsReceived = true;
 		NETfindGame();								// find games synchronously
 		addGames();										//redraw list.
 	}
