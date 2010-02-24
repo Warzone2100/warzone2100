@@ -46,6 +46,7 @@
 #include "multirecv.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
+#include "research.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // structures
@@ -412,41 +413,49 @@ BOOL recvLasSat(NETQUEUE queue)
 	return true;
 }
 
-void sendManufactureStatus(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl)
+void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID_TEMPLATE *psTempl)
 {
 	uint8_t  player = psStruct->player;
 	uint32_t structId = psStruct->id;
-	BOOL     isManufacturing = psTempl != NULL;
+	uint8_t  structureInfo = structureInfo_;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_MANUFACTURESTATUS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_STRUCTUREINFO);
 		NETuint8_t(&player);
 		NETuint32_t(&structId);
-		NETbool(&isManufacturing);
-		if (isManufacturing)
+		NETuint8_t(&structureInfo);
+		if (structureInfo_ == STRUCTUREINFO_MANUFACTURE)
 		{
-			uint32_t templateId = psTempl->multiPlayerID;
+			uint32_t templateId = psTempl != NULL ? psTempl->multiPlayerID : 0;
 
 			NETuint32_t(&templateId);
 		}
 	NETend();
 }
 
-void recvManufactureStatus(NETQUEUE queue)
+void recvStructureInfo(NETQUEUE queue)
 {
 	uint8_t         player = 0;
 	uint32_t        structId = 0;
 	uint32_t        templateId = 0;
-	BOOL            isManufacturing = 0;
+	uint8_t         structureInfo;
 	STRUCTURE *     psStruct;
 	DROID_TEMPLATE *psTempl = NULL;
 
-	NETbeginDecode(queue, GAME_MANUFACTURESTATUS);
+	NETbeginDecode(queue, GAME_STRUCTUREINFO);
 		NETuint8_t(&player);
 		NETuint32_t(&structId);
-		NETbool(&isManufacturing);
-		if (isManufacturing)
+		NETuint8_t(&structureInfo);
+		if (structureInfo == STRUCTUREINFO_MANUFACTURE)
 		{
 			NETuint32_t(&templateId);
+			if (templateId != 0)
+			{
+				psTempl = IdToTemplate(templateId, player);
+				if (psTempl == NULL)
+				{
+					debug(LOG_SYNC, "Synch error, don't have tempate id %u, so can't change production of factory %u!", templateId, structId);
+				}
+			}
 		}
 	NETend();
 
@@ -457,17 +466,17 @@ void recvManufactureStatus(NETQUEUE queue)
 		return;
 	}
 
-	if (isManufacturing)
-	{
-		psTempl = IdToTemplate(templateId, player);
-		if (psTempl == NULL)
-		{
-			debug(LOG_SYNC, "Synch error, don't have tempate id %u, so can't change production of factory %u!", templateId, structId);
-			return;
-		}
-	}
-
 	turnOffMultiMsg(true);
-	structSetManufacture(psStruct, psTempl);
+	switch (structureInfo)
+	{
+		case STRUCTUREINFO_MANUFACTURE:       structSetManufacture(psStruct, psTempl); break;
+		case STRUCTUREINFO_CANCELPRODUCTION:  cancelProduction(psStruct);              break;
+		case STRUCTUREINFO_HOLDPRODUCTION:    holdProduction(psStruct);                break;
+		case STRUCTUREINFO_RELEASEPRODUCTION: releaseProduction(psStruct);             break;
+		case STRUCTUREINFO_HOLDRESEARCH:      holdResearch(psStruct);                  break;
+		case STRUCTUREINFO_RELEASERESEARCH:   releaseResearch(psStruct);               break;
+		default:
+			debug(LOG_ERROR, "Invalid structureInfo %d", structureInfo);
+	}
 	turnOffMultiMsg(false);
 }

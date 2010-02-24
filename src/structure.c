@@ -1328,7 +1328,7 @@ BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl)
 
 	if (bMultiMessages)
 	{
-		sendManufactureStatus(psStruct, psTempl);
+		sendStructureInfo(psStruct, STRUCTUREINFO_MANUFACTURE, psTempl);
 		return true;  // Wait for our message before doing anything.
 	}
 
@@ -6915,7 +6915,7 @@ void cancelProduction(STRUCTURE *psBuilding)
 
 	if (bMultiMessages)
 	{
-		debug(LOG_WARNING, "TODO: cancelProduction disabled in multiplayer.");
+		sendStructureInfo(psBuilding, STRUCTUREINFO_CANCELPRODUCTION, NULL);
 		return;
 	}
 
@@ -6954,14 +6954,13 @@ void cancelProduction(STRUCTURE *psBuilding)
 /*set a factory's production run to hold*/
 void holdProduction(STRUCTURE *psBuilding)
 {
-
 	FACTORY		*psFactory;
 
 	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
 
 	if (bMultiMessages)
 	{
-		debug(LOG_WARNING, "TODO: holdProduction disabled in multiplayer.");
+		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDPRODUCTION, NULL);
 		return;
 	}
 
@@ -6989,7 +6988,7 @@ void releaseProduction(STRUCTURE *psBuilding)
 
 	if (bMultiMessages)
 	{
-		debug(LOG_WARNING, "TODO: releaseProduction disabled in multiplayer.");
+		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASEPRODUCTION, NULL);
 		return;
 	}
 

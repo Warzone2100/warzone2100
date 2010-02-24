@@ -1869,7 +1869,6 @@ void ResearchRelease(void)
 /*puts research facility on hold*/
 void holdResearch(STRUCTURE *psBuilding)
 {
-
 	RESEARCH_FACILITY		*psResFac;
 
 	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
@@ -1877,7 +1876,7 @@ void holdResearch(STRUCTURE *psBuilding)
 
 	if (bMultiMessages)
 	{
-		debug(LOG_WARNING, "TODO: holdResearch disabled in multiplayer.");
+		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDRESEARCH, NULL);
 		return;
 	}
 
@@ -1906,7 +1905,7 @@ void releaseResearch(STRUCTURE *psBuilding)
 
 	if (bMultiMessages)
 	{
-		debug(LOG_WARNING, "TODO: releaseResearch disabled in multiplayer.");
+		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASERESEARCH, NULL);
 		return;
 	}
 
