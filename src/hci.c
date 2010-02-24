@@ -6145,18 +6145,25 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 	/* psStats might be NULL if the operation is canceled in the middle */
 	psBuilding = (STRUCTURE *)psObj;
 
-	psResFacilty = (RESEARCH_FACILITY*)psBuilding->pFunctionality;
-	//initialise the subject
-	psResFacilty->psSubject = NULL;
-
 	if (bMultiMessages)
 	{
-		// Say that we want to do reseach [sic].
-		sendReseachStatus(psBuilding, ((RESEARCH *)psStats)->ref - REF_RESEARCH_START, selectedPlayer, true);
+		if (psStats != NULL)
+		{
+			// Say that we want to do reseach [sic].
+			sendReseachStatus(psBuilding, ((RESEARCH *)psStats)->ref - REF_RESEARCH_START, selectedPlayer, true);
+		}
+		else
+		{
+			cancelResearch(psBuilding);
+		}
 		//stop the button from flashing once a topic has been chosen
 		stopReticuleButtonFlash(IDRET_RESEARCH);
 		return true;
 	}
+
+	psResFacilty = (RESEARCH_FACILITY*)psBuilding->pFunctionality;
+	//initialise the subject
+	psResFacilty->psSubject = NULL;
 
 	//set up the player_research
 	if (psStats != NULL)
