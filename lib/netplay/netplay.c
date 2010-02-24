@@ -1562,9 +1562,6 @@ static void NETplayerClientDisconnect(uint32_t index)
  */
 static void NETplayerLeaving(UDWORD index)
 {
-	NET_DestroyPlayer(index);		// sets index player's array to false
-	MultiPlayerLeave(index);		// more cleanup
-
 	if(connected_bsocket[index])
 	{
 		debug(LOG_NET, "Player (%u) has left, closing socket %p", index, connected_bsocket[index]->socket);
@@ -1578,6 +1575,9 @@ static void NETplayerLeaving(UDWORD index)
 	{
 		debug(LOG_NET, "Player (%u) has left nicely, socket already closed?", index);
 	}
+
+	MultiPlayerLeave(index);		// more cleanup
+	NET_DestroyPlayer(index);		// sets index player's array to false
 }
 
 /**
