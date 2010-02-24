@@ -493,13 +493,14 @@ static bool connectionIsOpen(Socket* sock)
 #endif
 		if (ret == SOCKET_ERROR)
 		{
+			debug(LOG_NET, "socket error");
 			return false;
 		}
 		else if (readQueue == 0)
 		{
 			// Disconnected
 			setSockErr(ECONNRESET);
-			debug(LOG_NET, "Read queue empty - failing");
+			debug(LOG_NET, "Read queue empty - failing (ECONNRESET)");
 			return false;
 		}
 	}
@@ -545,7 +546,7 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 	if (!sock
 	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Invalid socket");
+		debug(LOG_ERROR, "Invalid socket (EBADF)");
 		setSockErr(EBADF);
 		return SOCKET_ERROR;
 	}
@@ -565,6 +566,7 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 #endif
 					if (!connectionIsOpen(sock))
 					{
+						debug(LOG_NET, "Socket error");
 						return SOCKET_ERROR;
 					}
 				case EINTR:
@@ -620,7 +622,10 @@ static bool SocketSet_AddSocket(SocketSet* set, Socket* socket)
 	for (i = 0; i < set->len; ++i)
 	{
 		if (set->fds[i] == socket)
+		{
+			debug(LOG_NET, "Already found, socket: (set->fds[%lu]) %p", (unsigned long) i, socket);
 			return true;
+		}
 	}
 
 	for (i = 0; i < set->len; ++i)
@@ -628,6 +633,7 @@ static bool SocketSet_AddSocket(SocketSet* set, Socket* socket)
 		if (set->fds[i] == NULL)
 		{
 			set->fds[i] = socket;
+			debug(LOG_NET, "Socket added: set->fds[%lu] = %p", (unsigned long) i, socket);
 			return true;
 		}
 	}
@@ -651,6 +657,7 @@ static void SocketSet_DelSocket(SocketSet* set, Socket* socket)
 	{
 		if (set->fds[i] == socket)
 		{
+			debug(LOG_NET, "Socket %p nullified (set->fds[%lu])", socket, (unsigned long) i);
 			set->fds[i] = NULL;
 			break;
 		}
@@ -683,6 +690,7 @@ static bool setSocketBlocking(const SOCKET fd, bool blocking)
 		return false;
 	}
 
+	debug(LOG_NET, "Socket is set to %sblocking.", (blocking ? "" : "non-"));
 	return true;
 }
 
@@ -693,8 +701,10 @@ static void socketBlockSIGPIPE(const SOCKET fd, bool block_sigpipe)
 
 	if (setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
 	{
-		debug(LOG_WARNING, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
+		debug(LOG_INFO, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
 	}
+	// this is only for unix, windows don't have SIGPIPE
+	debug(LOG_NET, "Socket fd %x sets SIGPIPE to %sblocked.", fd, (block_sigpipe ? "" : "non-"));
 #else
 	// Prevent warnings
 	(void)fd;
@@ -786,7 +796,7 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 	if (!sock
 	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Invalid socket");
+		debug(LOG_ERROR, "Invalid socket (%p), sock->fd[SOCK_CONNECTION]=%x  (error: EBADF)", sock, sock->fd[SOCK_CONNECTION]);
 		setSockErr(EBADF);
 		return SOCKET_ERROR;
 	}
@@ -803,7 +813,11 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 			 || !sock->ready)
 			{
 				if (ret == 0)
+				{
+					debug(LOG_NET, "socket (%p) has timed out.", socket);
 					setSockErr(ETIMEDOUT);
+				}
+				debug(LOG_NET, "socket (%p) error.", socket);
 				return SOCKET_ERROR;
 			}
 		}
@@ -812,7 +826,7 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 		sock->ready = false;
 		if (ret == 0)
 		{
-			debug(LOG_NET, "Socket disconnected.");
+			debug(LOG_NET, "Socket %x disconnected.", sock->fd[SOCK_CONNECTION]);
 			setSockErr(ECONNRESET);
 			return received;
 		}
@@ -857,7 +871,7 @@ static void socketClose(Socket* sock)
 #endif
 				if (err)
 				{
-					debug(LOG_ERROR, "Failed to close socket: %s", strSockError(getSockErr()));
+					debug(LOG_ERROR, "Failed to close socket %p: %s", sock, strSockError(getSockErr()));
 				}
 
 				/* Make sure that dangling pointers to this
@@ -898,7 +912,7 @@ static Socket* socketAccept(Socket* sock)
 				if (getSockErr() != EAGAIN
 				 && getSockErr() != EWOULDBLOCK)
 				{
-					debug(LOG_ERROR, "accept failed: %s", strSockError(getSockErr()));
+					debug(LOG_ERROR, "accept failed for socket %p: %s", sock, strSockError(getSockErr()));
 				}
 
 				continue;
@@ -927,7 +941,7 @@ static Socket* socketAccept(Socket* sock)
 
 			addressToText((const struct sockaddr*)&addr, textAddress, sizeof(textAddress));
 			debug(LOG_NET, "Incoming connection from [%s]:%d", textAddress, (unsigned int)ntohs(((const struct sockaddr_in*)&addr)->sin_port));
-
+			debug(LOG_NET, "Using socket %p", conn);
 			return conn;
 		}
 	}
@@ -965,13 +979,15 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 
 	if (conn->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Failed to create a socket: %s", strSockError(getSockErr()));
+		debug(LOG_ERROR, "Failed to create a socket (%p): %s", conn, strSockError(getSockErr()));
 		socketClose(conn);
 		return NULL;
 	}
 
+	debug(LOG_NET, "setting socket (%p) blocking status (false).", conn);
 	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], false))
 	{
+		debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", conn);
 		socketClose(conn);
 		return NULL;
 	}
@@ -994,7 +1010,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 #endif
 		 || timeout == 0)
 		{
-			debug(LOG_NET, "Failed to start connecting: %s", strSockError(getSockErr()));
+			debug(LOG_NET, "Failed to start connecting: %s, using socket %p", strSockError(getSockErr()), conn);
 			socketClose(conn);
 			return NULL;
 		}
@@ -1019,7 +1035,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 
 		if (ret == SOCKET_ERROR)
 		{
-			debug(LOG_NET, "Failed to wait for connection: %s", strSockError(getSockErr()));
+			debug(LOG_NET, "Failed to wait for connection: %s, socket %p.  Closing.", strSockError(getSockErr()), conn);
 			socketClose(conn);
 			return NULL;
 		}
@@ -1027,7 +1043,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		if (ret == 0)
 		{
 			setSockErr(ETIMEDOUT);
-			debug(LOG_NET, "Timed out while waiting for connection to be established: %s", strSockError(getSockErr()));
+			debug(LOG_NET, "Timed out while waiting for connection to be established: %s, using socket %p.  Closing.", strSockError(getSockErr()), conn);
 			socketClose(conn);
 			return NULL;
 		}
@@ -1045,14 +1061,16 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		 && getSockErr() != EISCONN)
 #endif
 		{
-			debug(LOG_NET, "Failed to connect: %s", strSockError(getSockErr()));
+			debug(LOG_NET, "Failed to connect: %s, with socket %p.  Closing.", strSockError(getSockErr()), conn);
 			socketClose(conn);
 			return NULL;
 		}
 	}
 
+	debug(LOG_NET, "setting socket (%p) blocking status (true).", conn);
 	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], true))
 	{
+		debug(LOG_NET, "Failed to set socket %p blocking status (true).  Closing.", conn);
 		socketClose(conn);
 		return NULL;
 	}
@@ -1106,19 +1124,19 @@ static Socket* socketListen(unsigned int port)
 	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
 	 && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Failed to create an IPv4 and IPv6 (only supported address families) socket: %s", strSockError(getSockErr()));
+		debug(LOG_ERROR, "Failed to create an IPv4 and IPv6 (only supported address families) socket (%p): %s.  Closing.", conn, strSockError(getSockErr()));
 		socketClose(conn);
 		return NULL;
 	}
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
-		debug(LOG_NET, "Successfully created an IPv4 socket");
+		debug(LOG_NET, "Successfully created an IPv4 socket (%p)", conn);
 	}
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		debug(LOG_NET, "Successfully created an IPv6 socket");
+		debug(LOG_NET, "Successfully created an IPv6 socket (%p)", conn);
 	}
 
 #if defined(IPV6_V6ONLY)
@@ -1126,7 +1144,7 @@ static Socket* socketListen(unsigned int port)
 	{
 		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, &ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
 		{
-			debug(LOG_WARNING, "Failed to set IPv6 socket to perform IPv4 to IPv6 mapping. Falling back to using two sockets. Error: %s", strSockError(getSockErr()));
+			debug(LOG_INFO, "Failed to set IPv6 socket to perform IPv4 to IPv6 mapping. Falling back to using two sockets. Error: %s", strSockError(getSockErr()));
 		}
 		else
 		{
@@ -1148,6 +1166,7 @@ static Socket* socketListen(unsigned int port)
 			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv4 socket. Error: %s", strSockError(getSockErr()));
 		}
 
+		debug(LOG_NET, "setting socket (%p) blocking status (false, IPv4).", conn);
 		if (bind(conn->fd[SOCK_IPV4_LISTEN], (const struct sockaddr*)&addr4, sizeof(addr4)) == SOCKET_ERROR
 		 || listen(conn->fd[SOCK_IPV4_LISTEN], 5) == SOCKET_ERROR
 		 || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false))
@@ -1166,9 +1185,10 @@ static Socket* socketListen(unsigned int port)
 	{
 		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, &so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
-			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
+			debug(LOG_INFO, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
 		}
 
+		debug(LOG_NET, "setting socket (%p) blocking status (false, IPv6).", conn);
 		if (bind(conn->fd[SOCK_IPV6_LISTEN], (const struct sockaddr*)&addr6, sizeof(addr6)) == SOCKET_ERROR
 		 || listen(conn->fd[SOCK_IPV6_LISTEN], 5) == SOCKET_ERROR
 		 || !setSocketBlocking(conn->fd[SOCK_IPV6_LISTEN], false))
@@ -1187,6 +1207,7 @@ static Socket* socketListen(unsigned int port)
 	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
 	 && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
 	{
+		debug(LOG_NET, "No IPv4 or IPv6 sockets created.");
 		socketClose(conn);
 		return NULL;
 	}
@@ -1286,7 +1307,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 		}
 		else
 		{
-			debug(LOG_WARNING, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), socket);
+			debug(LOG_NET, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), socket);
 		}
 
 		// an error occured, or the remote host has closed the connection.
@@ -1307,6 +1328,8 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 			tcp_socket = NULL;
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
+			NETbeginEncode(NETbroadcastQueue(), NET_HOST_DROPPED);
+			NETend();
 		}
 		socketClose(socket);
 		*pSocket = NULL;
@@ -1349,6 +1372,7 @@ void NET_InitPlayers()
 
 void NETBroadcastPlayerInfo(uint32_t index)
 {
+	debug(LOG_NET, "sending player's (%u) info to all players", index);
 	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_INFO);
 		NETuint32_t(&index);
 		NETbool(&NetPlay.players[index].allocated);
@@ -1449,7 +1473,7 @@ static void NETplayerLeaving(UDWORD index)
 	}
 	else
 	{
-		debug(LOG_NET, "Player (%u) has left nicely", index);
+		debug(LOG_NET, "Player (%u) has left nicely, socket already closed?", index);
 	}
 }
 
@@ -1558,6 +1582,7 @@ SDWORD NETgetGameFlags(UDWORD flag)
 
 static void NETsendGameFlags(void)
 {
+	debug(LOG_NET, "sending game flags");
 	NETbeginEncode(NETbroadcastQueue(), NET_GAME_FLAGS);
 	{
 		// Send the amount of game flags we're about to send
@@ -1714,6 +1739,8 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 		return false;
 	}
 
+	debug(LOG_NET, "sending GAMESTRUCT");
+
 	return true;
 }
 
@@ -1745,7 +1772,8 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 		unsigned int time = SDL_GetTicks();
 		if (result == SOCKET_ERROR)
 		{
-			debug(LOG_WARNING, "Server socket ecountered error: %s", strSockError(getSockErr()));
+			debug(LOG_ERROR, "Server socket (%p) ecountered error: %s", tcp_socket, strSockError(getSockErr()));
+			SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
 			socketClose(tcp_socket);
 			tcp_socket = NULL;
 			return false;
@@ -1757,8 +1785,9 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 			if (result == SOCKET_ERROR
 			 || result == 0)
 			{
-				debug(LOG_WARNING, "Server socket ecountered error: %s", strSockError(getSockErr()));
-				debug(LOG_WARNING, "GAMESTRUCT recv failed; received %u bytes out of %d", i, (int)sizeof(buf));
+				debug(LOG_ERROR, "Server socket (%p) ecountered error: %s", tcp_socket, strSockError(getSockErr()));
+				debug(LOG_ERROR, "GAMESTRUCT recv failed; received %u bytes out of %d", i, (int)sizeof(buf));
+				SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
 				socketClose(tcp_socket);
 				tcp_socket = NULL;
 				return false;
@@ -1767,7 +1796,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 		}
 		if (i != sizeof(buf))
 		{
-			debug(LOG_WARNING, "GAMESTRUCT recv size mismatch; received %u bytes; expecting %d", i, (int)sizeof(buf));
+			debug(LOG_ERROR, "GAMESTRUCT recv size mismatch; received %u bytes; expecting %d", i, (int)sizeof(buf));
 			return false;
 		}
 	}
@@ -1840,6 +1869,8 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	ourgamestruct->future4 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
 	
+	debug(LOG_NET, "received GAMESTRUCT");
+
 	return true;
 }
 
@@ -2266,9 +2297,10 @@ BOOL NETsend(uint8_t player, NETMESSAGE message)
 			}
 			else if (result == SOCKET_ERROR)
 			{
-				// Write error, most likely client disconnect.
+				// Write error, most likely host disconnect.
 				debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-				debug(LOG_WARNING, "Host connection was broken?");
+				debug(LOG_ERROR, "Host connection was broken, socket %p.", tcp_socket);
+				SocketSet_DelSocket(socket_set, tcp_socket);            // mark it invalid
 				socketClose(tcp_socket);
 				tcp_socket = NULL;
 				NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
@@ -2383,13 +2415,13 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				// Bail out if the given ID number is out of range
 				if (index >= MAX_CONNECTED_PLAYERS)
 				{
-					debug(LOG_WARNING, "MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", index, (unsigned int)MAX_CONNECTED_PLAYERS);
+					debug(LOG_ERROR, "MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", index, (unsigned int)MAX_CONNECTED_PLAYERS);
 					NETend();
 					break;
 				}
 				if (index != playerQueue.index && playerQueue.index != NET_HOST_ONLY)
 				{
-					debug(LOG_WARNING, "MSG_PLAYER_INFO: Player %d trying to change info about player %d.", playerQueue.index, index);
+					debug(LOG_ERROR, "MSG_PLAYER_INFO: Player %d trying to change info about player %d.", playerQueue.index, index);
 					NETend();
 					break;
 				}
@@ -2409,7 +2441,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			if (NetPlay.hostPlayer != NET_HOST_ONLY)
 			{
 				// Exactly what was the point of letting anyone change the host? This codebase is confusing.
-				debug(LOG_WARNING, "MSG_PLAYER_INFO: Player %d thinks that player %d is the host...", playerQueue.index, NetPlay.hostPlayer);
+				debug(LOG_ERROR, "MSG_PLAYER_INFO: Player %d thinks that player %d is the host...", playerQueue.index, NetPlay.hostPlayer);
 				NetPlay.hostPlayer = NET_HOST_ONLY;
 			}
 			debug(LOG_NET, "Receiving MSG_PLAYER_INFO for player %u (%s)", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
@@ -2452,7 +2484,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 
 			if (playerQueue.index != NetPlay.hostPlayer && index != playerQueue.index)
 			{
-				debug(LOG_WARNING, "Player %d left, but accidentally set player %d as leaving.", playerQueue.index, index);
+				debug(LOG_ERROR, "Player %d left, but accidentally set player %d as leaving.", playerQueue.index, index);
 				index = playerQueue.index;
 			}
 
@@ -2462,8 +2494,23 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			}
 			else
 			{	// dropped from join screen most likely
-				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u ", (unsigned int)index);
+				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u (no socket?)", (unsigned int)index);
 			}
+
+			if (NetPlay.isHost)
+			{
+				debug(LOG_NET, "Broadcast leaving message to everyone else");
+				NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_LEAVING);
+				{
+					BOOL host = NetPlay.isHost;
+					uint32_t id = index;
+
+					NETuint32_t(&id);
+					NETbool(&host);
+				}
+				NETend();
+			}
+
 			debug(LOG_INFO, "Player %u has left the game.", index);
 			NETplayerLeaving(index);		// need to close socket for the player that left.
 			NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
@@ -2598,7 +2645,7 @@ BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type)
 		{
 			// If there is a error in NET_fillBuffer() then socket is already invalid.
 			// This means that the player dropped / disconnected for whatever reason. 
-			debug(LOG_WARNING, "Player, (player %u) seems to have dropped/disconnected.", (unsigned)current);
+			debug(LOG_INFO, "Player, (player %u) seems to have dropped/disconnected.", (unsigned)current);
 
 			if (NetPlay.isHost)
 			{
@@ -2651,7 +2698,7 @@ BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type)
 			}
 			else
 			{
-				debug(LOG_WARNING, "There was a system message in a game queue...");
+				debug(LOG_ERROR, "There was a system message in a game queue...");
 			}
 		}
 
@@ -2770,7 +2817,7 @@ UBYTE NETrecvFile(NETQUEUE queue)
 				debug(LOG_FATAL, "PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
 
 				debug(LOG_NET, "We are leaving 'nicely' after a fatal error");
-				NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_LEAVING);
+				NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_LEAVING);
 				{
 					BOOL host = NetPlay.isHost;
 					uint32_t id = selectedPlayer;
@@ -3081,8 +3128,9 @@ static void NETallowJoining(void)
 	}
 	if (i == MAX_TMP_SOCKETS)
 	{
-		// prevent out-of-bounds access
-		i--;
+		// this should *never* happen, it would mean we are going to reuse a socket already in use.
+		debug(LOG_ERROR, "all temp sockets are used up!");
+		return;
 	}
 
 	// See if there's an incoming connection
@@ -3103,7 +3151,7 @@ static void NETallowJoining(void)
 				{
 					// Write error, most likely client disconnect.
 					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-					debug(LOG_WARNING, "Couldn't get list from server. Make sure required ports are open. (TCP 9998-9999)");
+					debug(LOG_ERROR, "Couldn't get list from server. Make sure required ports are open. (TCP 9998-9999)");
 				}
 				else
 				{
@@ -3113,6 +3161,7 @@ static void NETallowJoining(void)
 					NETsendGAMESTRUCT(tmp_socket[i], &gamestruct);
 				}
 
+				debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
 				SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 				socketClose(tmp_socket[i]);
 				tmp_socket[i] = NULL;
@@ -3122,7 +3171,7 @@ static void NETallowJoining(void)
 				debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
 				if (!NETsendGAMESTRUCT(tmp_socket[i], &gamestruct))
 				{
-					debug(LOG_ERROR, "Failed to respond (with GAMESTRUCT) to 'join' command: %s", strSockError(getSockErr()));
+					debug(LOG_ERROR, "Failed to respond (with GAMESTRUCT) to 'join' command, socket (%p) error: %s", tmp_socket[i], strSockError(getSockErr()));
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					socketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
@@ -3130,6 +3179,7 @@ static void NETallowJoining(void)
 			}
 			else
 			{
+				debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
 				SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 				socketClose(tmp_socket[i]);
 				tmp_socket[i] = NULL;
@@ -3137,6 +3187,7 @@ static void NETallowJoining(void)
 		}
 		else
 		{
+			debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
 			SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 			socketClose(tmp_socket[i]);
 			tmp_socket[i] = NULL;
@@ -3165,6 +3216,7 @@ static void NETallowJoining(void)
 						debug(LOG_NET, "Client socket encountered error: %s", strSockError(getSockErr()));
 					}
 
+					debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					socketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
@@ -3201,12 +3253,14 @@ static void NETallowJoining(void)
 					if (index == -1)
 					{
 						// FIXME: No room. Dropping the player without warning since protocol doesn't seem to support rejection at this point
+						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", tmp_socket[i]);
 						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 						socketClose(tmp_socket[i]);
 						tmp_socket[i] = NULL;
 						return;
 					}
 
+					debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					connected_bsocket[index] = tmp_socket[i];
 					tmp_socket[i] = NULL;
@@ -3236,6 +3290,7 @@ static void NETallowJoining(void)
 
 					if (rejected)
 					{
+						debug(LOG_INFO, "We were rejected, reason (%u)", (unsigned int) rejected);
 						NETbeginEncode(NETnetQueue(index), NET_REJECTED);
 							NETuint8_t(&rejected);
 						NETend();
@@ -3523,6 +3578,7 @@ BOOL NETfindGame(void)
 		{
 			debug(LOG_NET, "Server didn't respond (timeout)");
 		}
+		SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
 		socketClose(tcp_socket);
 		tcp_socket = NULL;
 

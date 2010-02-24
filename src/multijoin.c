@@ -280,6 +280,18 @@ BOOL MultiPlayerJoin(UDWORD playerIndex)
 		{
 			kickPlayer(playerIndex, "the game is already full.", ERROR_FULL);
 		}
+		// send everyone's stats to the new guy
+		{
+			int i;
+
+			for (i = 0; i < MAX_PLAYERS; i++)
+			{
+				if (NetPlay.players[i].allocated)
+				{
+					setMultiStats(i, getMultiStats(i, false), false);
+				}
+			}
+		}
 	}
 	return true;
 }

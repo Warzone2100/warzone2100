@@ -55,6 +55,7 @@
 #include "multirecv.h"
 #include "scriptfuncs.h"
 
+#include <SDL.h>
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
 
@@ -310,12 +311,12 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// Broadcast that we are leaving the game 'nicely', (we wanted to) and not
+// Tell the host we are leaving the game 'nicely', (we wanted to) and not
 // because we have some kind of error. (dropped or disconnected)
 BOOL sendLeavingMsg(void)
 {
 	debug(LOG_NET, "We are leaving 'nicely'");
-	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_LEAVING);
+	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_LEAVING);
 	{
 		BOOL host = NetPlay.isHost;
 		uint32_t id = selectedPlayer;
@@ -617,6 +618,8 @@ BOOL multiGameShutdown(void)
 
 	saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
 
+	// if we terminate the socket too quickly, then, it is possible not to get the leave message
+	SDL_Delay(1000);
 	// close game
 	NETclose();
 	NETremRedirects();
