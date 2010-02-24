@@ -1368,6 +1368,8 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 			tcp_socket = NULL;
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
+			NETbeginEncode(NET_HOST_DROPPED, NET_ALL_PLAYERS);
+			NETend();
 		}
 		socketClose(bs->socket);
 		bs->socket = NULL;
