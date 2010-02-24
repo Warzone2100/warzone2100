@@ -271,6 +271,10 @@ static PACKAGED_CHECK packageCheck(const DROID *pD)
 	pc.order = pD->order;
 	pc.secondaryOrder = pD->secondaryOrder;
 	pc.body = pD->body;
+	if (pD->body > pD->originalBody)
+	{
+		ASSERT(false, "Droid %u body is too high before synch, is %u, which is more than %u.", pc.droidID, pD->body, pD->originalBody);
+	}
 	pc.direction = pD->direction;
 	pc.experience = pD->experience;
 	pc.posX = pD->pos.x;

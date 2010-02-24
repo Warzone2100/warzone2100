@@ -1038,6 +1038,8 @@ BOOL recvDroidInfo(NETQUEUE queue)
 			NETuint32_t(&y2);
 		}
 
+		psDroid->waitingForOwnReceiveDroidInfoMessage = false;
+
 		if (order == DORDER_BUILD)
 		{
 			turnOffMultiMsg(true);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.

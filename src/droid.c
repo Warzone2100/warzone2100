@@ -2466,6 +2466,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 
 	psDroid->listSize = 0;
 	memset(psDroid->asOrderList, 0, sizeof(ORDER_LIST)*ORDER_LIST_MAX);
+	psDroid->waitingForOwnReceiveDroidInfoMessage = false;
 
 	psDroid->iAudioID = NO_SOUND;
 	psDroid->psCurAnim = NULL;

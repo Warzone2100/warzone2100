@@ -167,6 +167,7 @@ typedef struct DROID
 	// queued orders
 	SDWORD          listSize;
 	ORDER_LIST      asOrderList[ORDER_LIST_MAX];
+	BOOL            waitingForOwnReceiveDroidInfoMessage;  ///< Set to true when processing a message from asOrderList, and reset to false when the message arrives.
 
 	/* Order data */
 	SDWORD          order;

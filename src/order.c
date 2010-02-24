@@ -2531,39 +2531,41 @@ BOOL orderDroidList(DROID *psDroid)
 {
 	DROID_ORDER_DATA	sOrder;
 
-	if (psDroid->listSize > 0)
+	if (psDroid->listSize > 0 && !psDroid->waitingForOwnReceiveDroidInfoMessage)
 	{
+		ASSERT(psDroid->player == selectedPlayer, "Droid order lists not currently synchronised, order queue should be local only.");
+
 		// there are some orders to give
 		memset(&sOrder, 0, sizeof(DROID_ORDER_DATA));
 		sOrder.order = psDroid->asOrderList[0].order;
-        //sOrder.psObj = psDroid->asOrderList[0].psObj;
-        switch (psDroid->asOrderList[0].order)
-        {
-        case DORDER_MOVE:
+		//sOrder.psObj = psDroid->asOrderList[0].psObj;
+		switch (psDroid->asOrderList[0].order)
+		{
+		case DORDER_MOVE:
 		case DORDER_SCOUT:
 		case DORDER_DISEMBARK:
 			sOrder.psObj = NULL;
 			break;
-        case DORDER_ATTACK:
-        case DORDER_REPAIR:
-        case DORDER_OBSERVE:
-        case DORDER_DROIDREPAIR:
-        case DORDER_FIRESUPPORT:
-        case DORDER_CLEARWRECK:
-        case DORDER_DEMOLISH:
-        case DORDER_HELPBUILD:
-        case DORDER_BUILDMODULE:
-            sOrder.psObj = (BASE_OBJECT *)psDroid->asOrderList[0].psOrderTarget;
-            break;
-        case DORDER_BUILD:
-        case DORDER_LINEBUILD:
-            sOrder.psObj = NULL;
-            sOrder.psStats = (BASE_STATS *)psDroid->asOrderList[0].psOrderTarget;
-            break;
-        default:
-            ASSERT( false, "orderDroidList: Invalid order" );
-            return false;
-        }
+		case DORDER_ATTACK:
+		case DORDER_REPAIR:
+		case DORDER_OBSERVE:
+		case DORDER_DROIDREPAIR:
+		case DORDER_FIRESUPPORT:
+		case DORDER_CLEARWRECK:
+		case DORDER_DEMOLISH:
+		case DORDER_HELPBUILD:
+		case DORDER_BUILDMODULE:
+			sOrder.psObj = (BASE_OBJECT *)psDroid->asOrderList[0].psOrderTarget;
+			break;
+		case DORDER_BUILD:
+		case DORDER_LINEBUILD:
+			sOrder.psObj = NULL;
+			sOrder.psStats = (BASE_STATS *)psDroid->asOrderList[0].psOrderTarget;
+			break;
+		default:
+			ASSERT( false, "orderDroidList: Invalid order" );
+			return false;
+		}
 		sOrder.x	 = psDroid->asOrderList[0].x;
 		sOrder.y	 = psDroid->asOrderList[0].y;
 		sOrder.x2	 = psDroid->asOrderList[0].x2;
@@ -2579,6 +2581,7 @@ BOOL orderDroidList(DROID *psDroid)
 		// Previous comment and code was so mind-bogglingly insane, that it makes more sense after rot13.
 		if (bMultiMessages)
 		{
+			psDroid->waitingForOwnReceiveDroidInfoMessage = true;
 			SendDroidInfo(psDroid, sOrder.order, sOrder.x, sOrder.y, sOrder.psObj, sOrder.psStats, sOrder.x2, sOrder.y2);
 			// Wait to receive the order before changing the droid.
 		}
@@ -2587,7 +2590,8 @@ BOOL orderDroidList(DROID *psDroid)
 			orderDroidBase(psDroid, &sOrder);
 		}
 
-		return true;
+		// Should only return true, if all other clients would return true. And order lists aren't synchronised.
+		return !psDroid->waitingForOwnReceiveDroidInfoMessage;
 	}
 
 	return false;
