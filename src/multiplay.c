@@ -591,7 +591,7 @@ BOOL recvMessage(void)
 				//case GAME_DROID:        //24 down, 18 to go.
 				//case GAME_DROIDINFO:    // 2 down, 41 to go.
 				//case GAME_DROIDDEST:    //25 down, 17 to go.
-				//case GAME_DROIDMOVE:    // 1 down, 42 to go.
+				//case GAME_DROIDMOVE:    // 1 down, 42 to go. <--- Doesn't even exist, now. Its only effect was breaking synch...
 				//case GAME_GROUPORDER:   // 3 down, 40 to go.
 				//case GAME_CHECK_DROID:  // 4 down, 39 to go.
 				//case GAME_CHECK_STRUCT: // 5 down, 38 to go.
@@ -660,9 +660,6 @@ BOOL recvMessage(void)
 				break;
 			case GAME_DROIDDEST:					// droid destroy
 				recvDestroyDroid(queue);
-				break;
-			case GAME_DROIDMOVE:					// move a droid to x,y command.
-				recvDroidMove(queue);
 				break;
 			case GAME_GROUPORDER:				// an order for more than 1 droid.
 				recvGroupOrder(queue);

@@ -254,9 +254,9 @@ extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk, netcode 4.0";
+char VersionString[VersionStringSize] = "trunk, netcode 4.1";
 static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 0;
+static int NETCODE_VERSION_MINOR = 1;
 static int NETCODE_HASH = 0;			// unused for now
 
 static int checkSockets(const SocketSet* set, unsigned int timeout);
@@ -4042,7 +4042,6 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_DROID:                    return "GAME_DROID";
 		case GAME_DROIDINFO:                return "GAME_DROIDINFO";
 		case GAME_DROIDDEST:                return "GAME_DROIDDEST";
-		case GAME_DROIDMOVE:                return "GAME_DROIDMOVE";
 		case GAME_GROUPORDER:               return "GAME_GROUPORDER";
 		case GAME_TEMPLATE:                 return "GAME_TEMPLATE";
 		case GAME_TEMPLATEDEST:             return "GAME_TEMPLATEDEST";

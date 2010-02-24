@@ -88,7 +88,6 @@ typedef enum
 	GAME_DROID,                     ///< a new droid
 	GAME_DROIDINFO,                 ///< update a droid order.
 	GAME_DROIDDEST,                 ///< issue a droid destruction
-	GAME_DROIDMOVE,                 ///< move a droid, don't change anything else though..
 	GAME_GROUPORDER,                ///< order a group of droids.
 	GAME_TEMPLATE,                  ///< a new template
 	GAME_TEMPLATEDEST,              ///< remove template

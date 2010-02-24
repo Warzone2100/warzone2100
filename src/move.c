@@ -319,14 +319,6 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 
 	CHECK_DROID(psDroid);
 
-	if(bMultiMessages && (psDroid->sMove.Status != MOVEWAITROUTE))
-	{
-		if(SendDroidMove(psDroid,x,y,bFormation) == false)
-		{// dont make the move since we'll recv it anyway
-			return false;
-		}
-	}
-
 	// in multiPlayer make Transporter move like the vtols
 	if ( psDroid->droidType == DROID_TRANSPORTER && game.maxPlayers == 0)
 	{
