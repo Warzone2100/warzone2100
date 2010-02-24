@@ -280,6 +280,8 @@ BOOL MultiPlayerJoin(UDWORD playerIndex)
 		{
 			kickPlayer(playerIndex, "the game is already full.", ERROR_FULL);
 		}
+		// send our stats
+		setMultiStats(selectedPlayer, getMultiStats(selectedPlayer, false), false);
 	}
 	return true;
 }
