@@ -2494,6 +2494,21 @@ static BOOL NETprocessSystemMessage(void)
 			{	// dropped from join screen most likely
 				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u ", (unsigned int)index);
 			}
+
+			if (NetPlay.isHost)
+			{
+				debug(LOG_NET, "Broadcast leaving message to everyone else");
+				NETbeginEncode(NET_PLAYER_LEAVING, NET_ALL_PLAYERS);
+				{
+					BOOL host = NetPlay.isHost;
+					uint32_t id = index;
+
+					NETuint32_t(&id);
+					NETbool(&host);
+				}
+				NETend();
+			}
+
 			debug(LOG_INFO, "Player %u has left the game.", index);
 			NETplayerLeaving(index);		// need to close socket for the player that left.
 			NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
@@ -2867,7 +2882,7 @@ UBYTE NETrecvFile(void)
 				debug(LOG_FATAL, "PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
 
 				debug(LOG_NET, "We are leaving 'nicely' after a fatal error");
-				NETbeginEncode(NET_PLAYER_LEAVING, NET_ALL_PLAYERS);
+				NETbeginEncode(NET_PLAYER_LEAVING, NET_HOST_ONLY);
 				{
 					BOOL host = NetPlay.isHost;
 					uint32_t id = selectedPlayer;
