@@ -164,11 +164,13 @@ void giftRadar(uint8_t from, uint8_t to, BOOL send)
 		NETend();
 	}
 	// If we are recieving the gift
-	else if (to == selectedPlayer)
+	else
 	{
 		hqReward(from, to);
-		CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You A Visibility Report"),
-		          getPlayerName(from)));
+		if (to == selectedPlayer)
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s Gives You A Visibility Report"), getPlayerName(from)));
+		}
 	}
 }
 
@@ -274,9 +276,12 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 			NETuint32_t(&dummy);
 		NETend();
 	}
-	else if (to == selectedPlayer)
+	else
 	{
-		CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You Technology Documents"),getPlayerName(from) ));
+		if (to == selectedPlayer)
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s Gives You Technology Documents"), getPlayerName(from)));
+		}
 		pR   = asPlayerResList[from];
 		pRto = asPlayerResList[to];
 
@@ -312,7 +317,7 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 			NETuint32_t(&dummy);
 		NETend();
 	}
-	else if (to == selectedPlayer)
+	else
 	{
 		uint32_t gifval;
 
@@ -329,7 +334,7 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 
 		addPower(to, gifval);
 
-		if (from != ANYPLAYER)
+		if (from != ANYPLAYER && to == selectedPlayer)
 		{
 			CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You %u Power"),getPlayerName(from),gifval));
 		}
