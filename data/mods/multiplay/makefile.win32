@@ -39,32 +39,30 @@ NTWARCHIVE=ntw.wz
 
 ZIPLIST=$(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE)
 
-CLEANFILES=$(OLD110ARCHIVE) $(NTWARCHIVE) $(DYDOAIARCHIVE) 
-
-.PHONY: all clean $(OLD110ARCHIVE) $(NTWARCHIVE) $(DYDOAIARCHIVE) 
+.PHONY: all clean $(ZIPLIST)
 
 all:
 ifdef INSTALLER
-all: $(OLD110ARCHIVE) $(NTWARCHIVE) $(DYDOAIARCHIVE) 
+all: $(ZIPLIST)
 endif
 
 stamp:
 	echo stamp > stamp
 
 $(DYDOAIARCHIVE): $(basename $(DYDOAIARCHIVE)) stamp $(patsubst %,$(basename $(DYDOAIARCHIVE))/%,$(DYDOAILIST))
-	(cd $< && zip -ru0 $@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
+	cd $< && zip -r1 ..\$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*'
 	zip -T $@
 	$(RM_F) stamp
 
 $(OLD110ARCHIVE): $(basename $(OLD110ARCHIVE)) stamp $(patsubst %,$(basename $(OLD110ARCHIVE))/%,$(OLD110LIST))
-	(cd $< && zip -ru0 $@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
+	cd $< && zip -r1 ..\$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*'
 	zip -T $@
 	$(RM_F) stamp
 
 $(NTWARCHIVE): $(basename $(NTWARCHIVE)) stamp $(patsubst %,$(basename $(NTWARCHIVE))/%,$(NTWLIST))
-	(cd $< && zip -ru0 $@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
+	cd $< && zip -r1 ..\$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*'
 	zip -T $@
 	$(RM_F) stamp
 
 clean:
-	$(RM_F) $(OLD110ARCHIVE) $(NTWARCHIVE) $(AIVOLUTIONARCHIVE) 
+	$(RM_F) $(ZIPLIST) 
