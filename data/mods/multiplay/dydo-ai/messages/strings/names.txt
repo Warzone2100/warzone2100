@@ -1171,6 +1171,9 @@ R-Wpn-Rocket-Damage03			_("HE Mini-Rockets Mk3")
 R-Wpn-Rocket-Damage04			_("HEAP Mini-Rockets")
 R-Wpn-Rocket-Damage05			_("HEAP Mini-Rockets Mk2")
 R-Wpn-Rocket-Damage06			_("HEAP Mini-Rockets Mk3")
+R-Wpn-Rocket-Damage07			_("HESH Mini-Rockets")
+R-Wpn-Rocket-Damage08			_("HESH Mini-Rockets Mk2")
+R-Wpn-Rocket-Damage09			_("HESH Mini-Rockets Mk3")
 R-Wpn-Rocket-ROF01			_("Fast Fire Mini-Rockets")
 R-Wpn-Rocket-ROF02			_("Fast Fire Mini-Rockets Mk2")
 R-Wpn-Rocket-ROF03			_("Fast Fire Mini-Rockets Mk3")
@@ -1758,10 +1761,10 @@ R-Defense-Super-Missile 		_("Missile Fortress")
 
 // added by Marc 1st September - Super Heavy bodies, Flamer Upgrades
 
-R-Vehicle-Body13				_("Super Heavy Body - Wyvern")
+R-Vehicle-Body13				_("Heavy Body - Wyvern")
 Body13SUP					_("Wyvern")
 
-R-Vehicle-Body14				_("Super Heavy Body - Dragon")
+R-Vehicle-Body14				_("Multi Turret Body - Dragon")
 Body14SUP					_("Dragon")
 
 R-Wpn-Flamer-Damage07			_("Superhot Plasmite gel")
@@ -1892,10 +1895,45 @@ CobraTrkLancer				_("Lancer Cobra Tracks")
 MantisTrkHC				_("Heavy Cannon Mantis Tracks")
 MantisTKTracks				_("Tank Killer Mantis Tracks")
 MantisScourgeTracks			_("Scourge Mantis Tracks")
+ScorpTrkHMG				_("Heavy Machinegun Scorpion Tracks")
 
-ScorpTrkHMG           _("Heavy Machine Gun Scorpion Tracks")
+ScorpRepairTrk				_("Repair Scorpion Tracks")
+ScorpHRepairHover			_("Heavy Repair Scorpion Hover")
 
-//Added by DylanDog for DyDo-AI
+// Hover Truck Templates
+CobraHoverTruck				_("Truck Cobra Hover")
+ScorpHoverTruck				_("Truck Scorpion Hover")
+MantisHoverTruck			_("Truck Mantis Hover")
+
+// Bunker Buster Templates
+CobraBBTracks				_("Bunker Buster Cobra Tracks")
+ScorpBBTracks				_("Bunker Buster Scorpion Tracks")
+MantisBBTracks				_("Bunker Buster Mantis Tracks")
+
+ViperTrkLancer				_("Lancer Viper Tracks")
+
+CobraPODHTracks				_("Mini-Rocket Cobra Half-Tracks")
+CobraPODTracks				_("Mini-Rocket Cobra Tracks")
+CobraMRLTracks				_("Mini-Rocket Array Cobra Tracks")
+
+CobraInfernoHTracks			_("Inferno Cobra Half-Tracks")
+PythonHoverHVC				_("Hyper Velocity Cannon Python Hover")
+
+PythonTKTracks				_("Tank Killer Python Tracks")
+PythonMedCanTracks			_("Medium Cannon Python Tracks")
+PythonScourgeTracks			_("Scourge Python Tracks")
+PythonGaussTracks			_("Gauss Cannon Python Tracks")
+PythonPulseTracks			_("Pulse Laser Python Tracks")
+TigerPulseTracks			_("Pulse Laser Tiger Tracks")
+TigerHvLaserTracks			_("Heavy Laser Tiger Tracks")
+WyvernGaussTracks			_("Gauss Cannon Wyvern Tracks")
+WyvernPulseTracks			_("Pulse Laser Wyvern Tracks")
+WyvernHvLaserTracks			_("Heavy Laser Wyvern Tracks")
+
+ViperLtMGHalfTracks			_("Machinegun Viper Half-Tracks")
+ViperFlameHalfTracks		_("Flamer Viper Half-Tracks")
+
+//Added for DyDo-AI
 CobraInfernoHover			_("Inferno Cobra Hover")
 CobraMedCnHTrks			  _("Medium Cannon Cobra Half Track")
 PythonHoverInferno		_("Inferno Python Hover")
@@ -1916,42 +1954,3 @@ SK-Mantis-VTOL-PBB    _("Phosphor Bomb Bay Manits VTOL")
 SK-Mantis-VTOL-HBB    _("Heap Bomb Bay Manits VTOL")
 SK-Retre-VTOL-HBB     _("Heap Bomb Bay Retribution VTOL")
 SK-Retal-VTOL-Scourge _("Scourge Retaliation VTOL")
-
-
-ScorpRepairTrk				_("Repair Scorpion Tracks")
-ScorpHRepairHover			_("Heavy Repair Scorpion Hover")
-
-
-// Hover Truck Templates
-CobraHoverTruck				_("Truck Cobra Hover")
-ScorpHoverTruck				_("Truck Scorpion Hover")
-MantisHoverTruck			_("Truck Mantis Hover")
-
-// Bunker Buster Templates
-CobraBBTracks				_("Bunker Buster Cobra Tracks")
-ScorpBBTracks				_("Bunker Buster Scorpion Tracks")
-MantisBBTracks				_("Bunker Buster Mantis Tracks")
-
-ViperTrkLancer				_("Lancer Viper Tracks")
-
-CobraPODHTracks				_("Mini-Rocket Cobra Half-Tracks")
-CobraPODTracks				_("Mini-Rocket Cobra Tracks")
-CobraMRLTracks				_("Mini-Rocket Array Cobra Tracks")
-
-CobraInfernoHTracks		_("Inferno Cobra Half-Tracks")
-
-PythonHoverHVC				_("Hyper Velocity Cannon Python Hover")
-
-PythonTKTracks				_("Tank Killer Python Tracks")
-PythonMedCanTracks			_("Medium Cannon Python Tracks")
-PythonScourgeTracks			_("Scourge Python Tracks")
-PythonGaussTracks			_("Gauss Cannon Python Tracks")
-PythonPulseTracks			_("Pulse Laser Python Tracks")
-TigerPulseTracks			_("Pulse Laser Tiger Tracks")
-TigerHvLaserTracks			_("Heavy Laser Tiger Tracks")
-WyvernGaussTracks			_("Gauss Cannon Wyvern Tracks")
-WyvernPulseTracks			_("Pulse Laser Wyvern Tracks")
-WyvernHvLaserTracks			_("Heavy Laser Wyvern Tracks")
-
-ViperLtMGHalfTracks			_("Machinegun Viper Half-Tracks")
-ViperFlameHalfTracks		_("Flamer Viper Half-Tracks")

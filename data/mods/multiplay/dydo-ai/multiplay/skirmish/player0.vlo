@@ -121,7 +121,10 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   RippleRockets   WEAPON "Rocket-IDF"
   ScourgeMissle   WEAPON "Missile-A-T"
   SeraphMissile   WEAPON "Missile-MdArt"
-  ArchangelMissile WEAPON "Missile-HvyArt"
+  ArchangelMissile WEAPON "Missile-HvyArt" 
+  FlashLight      WEAPON  "Laser3BEAMMk1"
+  PulseLaser      WEAPON  "Laser2PULSEMk1"
+  HeavyLaser      WEAPON  "HeavyLaser"
 
   
   HoverProp   PROPULSION "hover01"
@@ -363,24 +366,33 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	// cyborg templates
 	numSuperCyb	INT		17
 
-	superCyb[0]		TEMPLATE	"Cyb-Hvy-A-T"//Super Scourge Cyborg $235
-	superCyb[1]		TEMPLATE	"Cyb-Hvy-RailGunner"//Super Rail-Gunner $240
-	superCyb[2]		TEMPLATE	"Cyb-Hvy-PulseLsr"//Super Pulse Laser Cyborg $150
-	superCyb[3]		TEMPLATE	"Cyb-Hvy-TK"//Super Tank-Killer Cyborg $250
-	superCyb[4]		TEMPLATE	"Cyb-Hvy-HPV"//Super HPV Cyborg $150
-	superCyb[5]		TEMPLATE	"Cyb-Hvy-Acannon"//Super Auto-Cannon Cyborg $125
-	superCyb[6]		TEMPLATE	"Cyb-Hvy-Mcannon"//Super Heavy-Gunner $125
-	//normal cyborgs
-	superCyb[7]		TEMPLATE	"MP-Cyb-ATmiss-GRD"//Scourge $250
-	superCyb[8]		TEMPLATE	"MP-Cyb-Needle-GRD" //Needle Gunner $160
-	superCyb[9]		TEMPLATE	"CyborgRkt01Ground"//lancer $125
-	superCyb[10]		TEMPLATE	"MP-Cyb-Laser1-GRD"// Flashlight Gunner $100
-	superCyb[11]		TEMPLATE	"CyborgRotMgGround" //Assault Gunner $90
-	superCyb[12]		TEMPLATE	"Cyb-Thermite"//Thermite Flamer $80 (370 hitPoints)
-	superCyb[13]		TEMPLATE	"Cyb-Gren"//Grenadier $80 (370 hitPoints)
-	superCyb[14]		TEMPLATE	"CyborgCannon01Grd"//heavy Gunner $70 (380 hitPoints)
-	superCyb[15]		TEMPLATE	"CyborgFlamer01Grd"//flamer
-	superCyb[16]		TEMPLATE	"CyborgChain01Ground"//Machinegunner(235 hitPoints)
+	//Anti tank
+  superCyb[0]		TEMPLATE	"Cyb-Hvy-A-T"      //[1][36]Super Scourge Cyborg 
+	superCyb[3]		TEMPLATE	"Cyb-Hvy-TK"       //[1][0]Super Tank-Killer Cyborg 
+	superCyb[7]		TEMPLATE	"MP-Cyb-ATmiss-GRD"//[1][21]Scourge 
+	superCyb[9]		TEMPLATE	"CyborgRkt01Ground"//[0][24]Lancer
+	
+  //All Rounder
+  superCyb[1]		TEMPLATE	"Cyb-Hvy-RailGunner" //[1][2]  Super Rail-Gunner
+	superCyb[4]		TEMPLATE	"Cyb-Hvy-HPV"        //[0][51] Super HPV Cyborg 
+	superCyb[5]		TEMPLATE	"Cyb-Hvy-Acannon"    //[0][50] Super Auto-Cannon Cyborg 
+	superCyb[6]		TEMPLATE	"Cyb-Hvy-Mcannon"    //[0][49] Super Heavy-Gunner
+  
+  //Anti Personnel
+	   //Flamers-Lasers
+  superCyb[2]		TEMPLATE	"Cyb-Hvy-PulseLsr"  //[1][1]Super Pulse Laser Cyborg 
+	superCyb[10]	TEMPLATE	"MP-Cyb-Laser1-GRD" //[0][59] Flashlight Gunner 
+	superCyb[12]	TEMPLATE	"Cyb-Thermite"      //Thermite Flamer 
+	superCyb[15]	TEMPLATE	"CyborgFlamer01Grd" //flamer
+	   //Guns
+  superCyb[11]	TEMPLATE	"CyborgRotMgGround"   //[0][25] Assault Gunner 
+	superCyb[14]	TEMPLATE	"CyborgCannon01Grd"   //heavy Gunner 
+	superCyb[16]	TEMPLATE	"CyborgChain01Ground" //Machinegunner
+  
+  //Kinetic
+	superCyb[8]		TEMPLATE	"MP-Cyb-Needle-GRD" //[0][58]Needle Gunner 
+	superCyb[13]	TEMPLATE	"Cyb-Gren"          //Grenadier 
+  
 
 	/////////////////////////////////////////////////////////////////////
 	// VTOL TEMPLATES

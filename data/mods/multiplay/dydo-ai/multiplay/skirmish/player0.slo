@@ -1,5 +1,5 @@
 /*
-DyDo-AI Rel 2.0.5
+DyDo-AI Rel 2.0.7
 Mod Developer: "DylanDog" on http://forums.wz2100.net/
 AI webpage: http://www.obooma.net/dydo/       
                                                                 
@@ -14,12 +14,15 @@ http://www.obooma.net/dydo/
 
 ________________ CHANGELOG ___________________________________
 
-{fix} - 5 fixed an hack to build cyborg templates if none is found. 
+See Dydo website
 
+ToDo:
 Use of numTemplatesInProduction(TEMPLATE, PLAYER) 
- 
+Improve lassat targets, intoduce droid targets!
+Improve the way the units are gathered. dyDo should be abale to attack from various sides.
+  
 */
-#define DYDOBP_RELEASE "DyDo-AI ver 2.0.5"
+#define DYDOBP_RELEASE "DyDo-AI ver 2.0.7"
 
 #define	GAME_TIME_IN_SECS	(gameTime / 10)
 #define	GAME_TIME_IN_MIN	(gameTime / 10 / 60)
@@ -159,6 +162,7 @@ Use of numTemplatesInProduction(TEMPLATE, PLAYER)
 //attack only if this number of VTOLs has been reached
 #define MIN_VTOLS_ATTACK_DERRICK 2
 #define MIN_VTOLS_ATTACK_BASE 7
+#define MIN_VTOLS_DEFEND_BASE 1
 //Personality 2 aims for a quick buoild of these VTOLs
 #define MIN_VTOLS 3
 #define MIN_VTOLS_PERS2 5
@@ -290,6 +294,7 @@ private INT oilX,oilY;
 //+*+*+*+*+*+*+*+*+*+*+*+ DylanDog - VARIABLES DECLARATION *+*+*+*+*+*+*++*+*+*
 //+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*
 public WEAPON MGun, TwinMGun , HMGun, TwinAGun, AGun, Flamer ,PlasmFlamer ,Inferno;
+public WEAPON FlashLight,PulseLaser,HeavyLaser;
 public WEAPON NeedleGun , RailGun, GaussCannon ,PlasmaCannon ,EMPCannon ,LCannon;
 public WEAPON MCannon ,ACannon ,HCannon ,TACannon ,HVCannon ,RocketBB, RocketPod;
 public WEAPON RocketMRL , Lancer, RcketBB ,TankKiller ,RippleRockets ,ScourgeMissle;
@@ -330,7 +335,7 @@ private bool _bNoTrucks,bNeedDerrick,bDroidSelected,bAttackedByVTOL;
 
 private int oilResTargetId[11], oilResTargetX[11], oilResTargetY[11];
 private int aGatewayPosX[4],aGatewayPosY[4],nTotGateways,lastTimeRepairBuilt;
-private int _pos,numDefStrAtGateway,numGatewaysFound,defTruckSentTime,lastBuildDefX;
+private int numDefStrAtGateway,numGatewaysFound,defTruckSentTime,lastBuildDefX;
 private int lastBuildDefY,nRealGatewaysFound,nMidX,nMidY,nTotOilInAtStart;
 private int nLastTimeBuiltRepFac,lastTruckBuilt,lastCybEngBuilt,lastDisplayAI;
 private int lastDisplayAIcheck,nDefendRange,gatewaysRangeTiles,numBaseStructs;
@@ -340,13 +345,13 @@ private int nTime,nAttackTime,nFrWeapStructs,nFrWeapDroids,nFrWeapDrStr;
 private int nTanksDefGrp,nMapPower,nEnWeapStructs,nEnWeapDroids,nEnWeapDrStr;
 private int tFinishOilHack,alertX,alertY,alertTime,alertLevel,nX,nY;
 private int tLastPowerGen,tChangeTimeTankToAdd,nHelpX,nHelpY,tLastHelp,tTotalAttack,tLastTankAttack,tLastCyborgAttack;
-private int tTanksSentToGathering,nTankGatheringX,nTankGatheringY,tankAttackX,tankAttackY,targetPlayerTank,targetPlayerVTOL;
-
-private int tCybSentToGathering,tCybAttackAction,tHelpAction,tTankAttackAction,nCybGatheringX,nCybGatheringY,cybAlertX,cybAlertY,cybAttackX,cybAttackY,targetPlayerCyb;
+private int tTanksReSentToGathering,tTanksSentToGathering,nTankGatheringX,nTankGatheringY,tankAttackX,tankAttackY,targetPlayerTank,targetPlayerVTOL;
+private int tCybReSentToGathering,tCybSentToGathering,tCybAttackAction,tHelpAction,tTankAttackAction,nCybGatheringX,nCybGatheringY,cybAlertX,cybAlertY,cybAttackX,cybAttackY,targetPlayerCyb;
 private int tEveryMin, tEvery3Min;
 private int playerLeft,nVTOLFactories,nWorkingVTOLFac,nTotTanks,nTotCyborgs,nMyDerricks,nPower,nFactories,nResLabs,nCybFact,nWorkingFact,nWorkingCybFac;
 private int nKineticX,nKineticY,nWorkingLab,nTotDefences,nFreeOilRes,nTotBaseDefences;
-private int _targetPlayer,nLastDefSpotUpdate,_nOilRes, _t;
+private int _targetPlayer,nLastDefSpotUpdate,_nOilRes, _t, _pos;
+private int nTotCybAR, nTotCybAP, nTotCybAT, nTotCybKK, nTotCybErr; 
 
 private int nTotEnemyDroids,nCybMechanic,nStructToBeBuilt,nAllyBeingHelped,nPODMRLTank, nWeakTank,nTotCyborgBuilt,nTotTankBuilt;
 private int tLastCybMech,tLastFinalAttack,nFinalAttacks,nDamageLevelRepair, nProdSelect, tLastPowerSwitch,tLastbuildBaseDef,nEnemyPlayers,nLastEnemyPlayer,nTeam,nHumanPlayers,nPlayersInGame,nDerricksAtStart;
@@ -679,6 +684,7 @@ function bool createAIalliance(int _player1, int _player2);
 function STRUCTURESTAT getDefStruct();
 function DROID closestIdleDroid(GROUP _group, int _x, int _y);
 function STRUCTURE undefendedEnemyDerrick(bool _bVTOLTarget);
+function STRUCTURE getAAStruct(bool _bVTOLTarget);
 function void updateDefendRange();
 function void shutDownThisAI();
 function void activateAI();
@@ -781,6 +787,7 @@ event initialisedEvent(CALL_GAMEINIT)
     nCybGatheringY        = -1;
     targetPlayerCyb       = -1;
     tCybSentToGathering   = 0;
+    tCybReSentToGathering = 0;
     tCybAttackAction      = 0;
     tTankAttackAction     = 0;
     tHelpAction           = 0;
@@ -802,6 +809,7 @@ event initialisedEvent(CALL_GAMEINIT)
     targetPlayerTank         = -1;
     targetPlayerVTOL          = -1;
     tTanksSentToGathering     = 0;
+    tTanksReSentToGathering     = 0;
     pickWallDefQueueDepth = 0; 
     lastHelpPlayer = -1;
     nKineticX = -1;
@@ -812,8 +820,8 @@ event initialisedEvent(CALL_GAMEINIT)
     tEvery3Min = gameTime; 
     tBeaconSent = 0;
     nTanksDefGrp=0;
-		nAttackingUnitsToAdd  = _random(MAX_ATTACK_TANKS_ADD);
-		nCybAttUnitsToAdd     = _random(MAX_ATTACK_CYBORG_ADD);
+		nAttackingUnitsToAdd  = random(MAX_ATTACK_TANKS_ADD);
+		nCybAttUnitsToAdd     = random(MAX_ATTACK_CYBORG_ADD);
   	lStopBuildDef 	      = false;
   	lStopBuildDefDerricks = false;
   	lStopBuildDefGateway  = false;
@@ -1138,7 +1146,8 @@ event evPrintDebug (inactive)
       _count++;
     }
     
-    printDebug("nAIcheck("& nAIcheck &") gameType("& gameType() &") map("& mapWidth &"-"& mapHeight &") BaseRange("& nBaseRange/TILE &") gtwRange("& gatewaysRangeTiles &") DefRange("& nDefendRange/TILE &") HQ("& _HQx/TILE &"-"& _HQy/TILE &") Base("& baseX/TILE &"-"& baseY/TILE &") lMinBaseStructBuilt("& lMinBaseStructBuilt &") nTotTankBuilt("& nTotTankBuilt &") nTotCyborgBuilt("& nTotCyborgBuilt &")");
+    printDebug("nAIcheck("& nAIcheck &") gameType("& gameType() &") map("& mapWidth &"-"& mapHeight &") BaseRange("& nBaseRange/TILE &") gtwRange("& gatewaysRangeTiles &") DefRange("& nDefendRange/TILE &") HQ("& _HQx/TILE &"-"& _HQy/TILE &") Base("& baseX/TILE &"-"& baseY/TILE &") lMinBaseStructBuilt("& lMinBaseStructBuilt &") ");
+    printDebug("Cyborgs Built: (AR-AT-AP-KK)(Error) ("& nTotCybAR &" - "& nTotCybAT &" - "& nTotCybAP &" - "& nTotCybKK &")("& nTotCybErr &") nTotCyborgBuilt("& nTotCyborgBuilt &") nTotTankBuilt("& nTotTankBuilt &")");
     printDebug("Stats1:" & _strTeams &" Teams("& nTeam &" )");
     printDebug("Stats2: nEnemyPlayers ("& nEnemyPlayers &") nHumanPlayers("& nHumanPlayers &") nPlayersInGame("& nPlayersInGame &") Att Human Player("& nAttHumanPlayer &") Att AI("& nAttAIPlayer &") anyOilResLeft("&  bOilResLeft &") nTotEnemyDroids("& nTotEnemyDroids &")");
     printDebug("Stats3:" & _sPlInf1 );
@@ -1367,7 +1376,7 @@ event useLassat(inactive)
 {
 
 	local BASEOBJ _targetStruct;
-	local int _n,_loop,_pos,_xCoord,_yCoord,_targetPl,_rnd,_nTargets;
+	local int _loop,_pos,_xCoord,_yCoord,_targetPl,_rnd,_nTargets;
 	local bool _mustBeHuman;
 	local STRUCTURESTAT _aTargets[7];
   
@@ -1381,9 +1390,7 @@ event useLassat(inactive)
   _aTargets[4] = lassat;
   _aTargets[5] = playerHQ;
   _aTargets[6] = uplinkCenter;
-
-
-  
+ 
   _targetPl     = -1;
   _targetStruct = NULLOBJECT;
   
@@ -1414,7 +1421,11 @@ event useLassat(inactive)
   _loop     = 0;
   while( _loop < _nTargets and _targetStruct == NULLOBJECT)
   {
-    initEnumStruct(false, _aTargets[_pos], _targetPl, player);//get only visible enemy structs
+    if ( AIstrength < 4 ){
+      initEnumStruct(false, _aTargets[_pos], _targetPl, player);//get only visible enemy structs
+    } else {
+      initEnumStruct(false, _aTargets[_pos], _targetPl, _targetPl);//get also enemy structs not visible to player
+    }
     _targetStruct = enumStruct();
     _loop++;
     _pos++;
@@ -1425,6 +1436,7 @@ event useLassat(inactive)
   boolResult=false;
   if(_targetStruct != NULLOBJECT)
 	{
+    printDebug1("useLassat: target found !! _targetPl("& getPlayerName(_targetPl) &") _pos("& _pos &")"); 
     initEnumStruct(FALSE,lassat,player,player);
 		structure = enumStruct();
 		while(structure != NULLOBJECT)
@@ -1438,10 +1450,9 @@ event useLassat(inactive)
 			}
 			structure= enumStruct();
 		}
-	  _n = 1000;//exit the loop -> "while ( n < 10 ){"
 	} else { 
     //dbg("dbg->useLassat: No target found, _targetPl("& getPlayerName(_targetPl) &")",player); 
-    printDebug1("useLassat: No target found, _targetPl("& getPlayerName(_targetPl) &")"); 
+    printDebug1("useLassat: No target found, _targetPl("& getPlayerName(_targetPl) &") _loop("& _loop &")"); 
   }
 
 	if ( !boolResult ){
@@ -1681,7 +1692,10 @@ event AIbrain (inactive)
       }
     }
     
-    if ( cyborgConstructGroup.members + buildGroup.members + harvesterGroup.members + buildDefGroup.members >= 2 ) {
+    count = numTemplatesInProduction(cybcondroid, player);
+    count = count + numTemplatesInProduction(constructor, player);
+    count = count + numTemplatesInProduction(constructor2, player);
+    if ( count + cyborgConstructGroup.members + buildGroup.members + harvesterGroup.members + buildDefGroup.members >= 2 ) {
       //I am in trouble need tanks not trucks!!!
       lStopBuildTankProd = true;
       lStopCybEngProd    = true;
@@ -1737,7 +1751,6 @@ event AIbrain (inactive)
       }
     
     }
-
     
     //Trucks & cybEng
     if ( buildGroup.members + harvesterGroup.members + buildDefGroup.members < _nMaxTrucks){
@@ -1745,8 +1758,8 @@ event AIbrain (inactive)
     } else {
      lStopBuildTankProd = true;
     }  
-    if ( cyborgConstructGroup.members < _nMaxCybEngineers){
-  	 if ( nPower > 100 ){ lStopCybEngProd = false; }
+    if ( cyborgConstructGroup.members + numTemplatesInProduction(cybcondroid, player) < _nMaxCybEngineers){
+  	 if ( nPower > 100 and gameTime > TIME_HARVESTING_PHASE ){ lStopCybEngProd = false; }
     } else {
   	 lStopCybEngProd = true;
     }
@@ -1902,8 +1915,8 @@ event AIbrain (inactive)
   }
   
   if ( gameTime - lastDisplayAI >= 110 ){
-     displayMsg("Structs not idle: nProdSelect("& nProdSelect &") (Fac-Cyb-Res-VTOLfac) ("& nWorkingFact &"-"& nWorkingCybFac &"-"& nWorkingLab &"-"& nWorkingVTOLFac &") power["& playerPower(player) &"] Low Power("& aPower[VERY_LOW_POWER] &") tot Tank+Cyb("& nTotTanks+nTotCyborgs &") nTanksDefGrp("& nTanksDefGrp &") ");
-     displayMsg("Stops: (Fac-Cyb-VTOLfac-Res-CheapRes__DefBase-DefDerr-Gateways) ("& lStopTankProduction &"-"& lStopCybProduction &"-"& lStopVTOLProduction &"-"& lStopResearch &"-"& lStopCheapResearch &"__"& lStopBuildDef &"-"& lStopBuildDefDerricks &"-"& lStopBuildDefGateway &") nAttackTime("& gameTime-nTime &"/"& nAttackTime &")" );
+     //displayMsg("Structs not idle: nProdSelect("& nProdSelect &") (Fac-Cyb-Res-VTOLfac) ("& nWorkingFact &"-"& nWorkingCybFac &"-"& nWorkingLab &"-"& nWorkingVTOLFac &") power["& playerPower(player) &"] Low Power("& aPower[VERY_LOW_POWER] &") tot Tank+Cyb("& nTotTanks+nTotCyborgs &") nTanksDefGrp("& nTanksDefGrp &") ");
+     //displayMsg("Stops: (Fac-Cyb-VTOLfac-Res-CheapRes__DefBase-DefDerr-Gateways) ("& lStopTankProduction &"-"& lStopCybProduction &"-"& lStopVTOLProduction &"-"& lStopResearch &"-"& lStopCheapResearch &"__"& lStopBuildDef &"-"& lStopBuildDefDerricks &"-"& lStopBuildDefGateway &") nAttackTime("& gameTime-nTime &"/"& nAttackTime &")" );
      lastDisplayAI = gameTime;
   } 
 
@@ -2130,7 +2143,6 @@ event vtolDefend(vtolDefendTr)//(CALL_STRUCT_ATTACKED, player, ref structure, re
   			if( isVtol( objToDroid(enemyBaseObject) ) )
   			{
   
-displayMsg("vtolDefend: __________ 1 __________");
 
   			  bAttackedByVTOL = true;//force research of AA defences
           if ( structure != NULLOBJECT ){
@@ -2140,7 +2152,7 @@ displayMsg("vtolDefend: __________ 1 __________");
           }
   
           if ( _dist/TILE > (nDefendRange/TILE) * 3){
-					  dbg("dbg->vtolDefend: cannot build AA def as the palce is too far away _dist > 3*nDefendRange ("& _dist/TILE &" > "& (nDefendRange/TILE)*3 &") ",player);
+					  //dbg("dbg->vtolDefend: cannot build AA def as the palce is too far away _dist > 3*nDefendRange ("& _dist/TILE &" > "& (nDefendRange/TILE)*3 &") ",player);
             exit;
           }
   
@@ -2154,9 +2166,7 @@ displayMsg("vtolDefend: __________ 1 __________");
 
   				// build AA defenses.
   				if ( droid != NULLOBJECT ){
-displayMsg("vtolDefend: __________ 2 __________");
   					if( structure != NULLOBJECT ) {
-displayMsg("vtolDefend: __________ 3 __________");
     					//if no AA at all in AAdefRange or enough power
   				    _numAAdefInRange = numAAinRange(player, player, structure.x, structure.y, RANGE_BUILD_AADEF );
               if ( playerPower(player) > 100 or random(10) > 4 ){
@@ -2178,15 +2188,15 @@ displayMsg("vtolDefend: __________ 3 __________");
     							  boolResult = pickStructLocation(vtolGenStruct[count2], ref buildX, ref buildY, player);
     							  if( boolResult and droidCanReach(droid, buildX ,buildY) )	// build a vtol defense near the attacked struct...
     							  {
-    								  dbg("dbg->vtolDefend: build AA def ["& count2 &"] at ("& buildX/TILE &"-"& buildY/TILE &"), tot AA in struct range ("& _numAAdefInRange &") _dist("& _dist/TILE &")",player);
+    								  //dbg("dbg->vtolDefend: build AA def ["& count2 &"] at ("& buildX/TILE &"-"& buildY/TILE &"), tot AA in struct range ("& _numAAdefInRange &") _dist("& _dist/TILE &")",player);
                       orderDroidStatsLoc(droid, DORDER_BUILD,vtolGenStruct[count2],buildX,buildY);
                       tLastAAbuilt = gameTime;
     							  }
-    						  } else { dbg("dbg->vtolDefend: no AA defense found",player); } 
-                } else { dbg("dbg->vtolDefend: cannt build AA def _numAAdefInRange/max("& _numAAdefInRange &"/"& MAX_AADEF_INRANGE &") power("& playerPower(player) &")",player); }  
-  					  } else { dbg("dbg->vtolDefend: not enough power ("& playerPower(player) &") to build AA def _dist ("& _dist/TILE &")",player); } 
-            } else { dbg("dbg->vtolDefend: structure attacked is NULLOBJECT",player); } 
-  			  }  else { dbg("dbg->vtolDefend: idle droid not found",player); } 
+    						  } //else { dbg("dbg->vtolDefend: no AA defense found",player); } 
+                } //else { dbg("dbg->vtolDefend: cannt build AA def _numAAdefInRange/max("& _numAAdefInRange &"/"& MAX_AADEF_INRANGE &") power("& playerPower(player) &")",player); }  
+  					  } //else { dbg("dbg->vtolDefend: not enough power ("& playerPower(player) &") to build AA def _dist ("& _dist/TILE &")",player); } 
+            } //else { dbg("dbg->vtolDefend: structure attacked is NULLOBJECT",player); } 
+  			  }  //else { dbg("dbg->vtolDefend: idle droid not found",player); } 
   			}
   		}
   	}
@@ -2289,226 +2299,249 @@ event buildVtols(inactive)
 }
 
 //======================================================
-event manageDefVTOL(inactive)//event 19
+event manageDefVTOL(inactive)
 {
   local int _dist,_nVTOLSRequired;
   local string _dbgString;
       
-   ASSERT(player >= 0 and player < 8,      "player out of bounds: manageDefVTOL " & player, player);
-   //displayMsg("manageDefVTOL: ________ VTOLs ("& vtolDefendGr.members &") idle("& idleGroup(vtolDefendGr) &") alertIsOn("& alertIsOn &") alertTime("& alertTime &") ("& (gameTime-alertTime) &")__________");
-   
-   if (vtolDefendGr.members == 0){ exit; }
-
-   if ( targetPlayerVTOL >= 0 and targetPlayerVTOL < 8 ){
-     if ( friendlyPlayer(targetPlayerVTOL) ){
-      //displayMsg("dbg->manageDefVTOL: player ("& getPlayerName(player) &") a bug caused targetPlayerVTOL to be a friendly player ("& targetPlayerVTOL &"), now resetting all vtols targets");
-      targetPlayerVTOL    = -1;
-      attTargetVTOL = NULLOBJECT;
-      defTargetVTOL = NULLOBJECT; 
-     }
+  ASSERT(player >= 0 and player < 8,      "player out of bounds: manageDefVTOL " & player, player);
+  
+  if ( attTargetVTOL != NULLOBJECT ){          
+    _dist = distBetweenTwoPoints( attTargetVTOL.x, attTargetVTOL.y, baseX, baseY);
+    dbg("attTarget != NULLOBJECT; VTOLs ("& vtolDefendGr.members &") idle("& idleGroup(vtolDefendGr) &") alertIsOn("& alertIsOn &") alertTime("& alertTime &") tDefVtolAction("& tDefVtolAction &") isDerr("& bVTOLTargetIsDerrick &") dist("& _dist/TILE &"/"& nDefendRange/TILE &") AA("& numEnemyAAInRange(attTargetVTOL.x, attTargetVTOL.y, AA_THREAT_RANGE) &")",player);
+  }
+  if ( defTargetVTOL != NULLOBJECT ){          
+    _dist = distBetweenTwoPoints( defTargetVTOL.x, defTargetVTOL.y, baseX, baseY);
+    dbg("defTarget != NULLOBJECT; VTOLs ("& vtolDefendGr.members &") idle("& idleGroup(vtolDefendGr) &") alertIsOn("& alertIsOn &") alertTime("& alertTime &") tDefVtolAction("& tDefVtolAction &") isDerr("& bVTOLTargetIsDerrick &") dist("& _dist/TILE &"/"& nDefendRange/TILE &") AA("& numEnemyAAInRange(defTargetVTOL.x, defTargetVTOL.y, AA_THREAT_RANGE) &")",player);
+  }
+  if ( defTargetVTOL == NULLOBJECT and attTargetVTOL == NULLOBJECT){
+    dbg("Targets == NULLOBJECTS; VTOLs ("& vtolDefendGr.members &") idle("& idleGroup(vtolDefendGr) &") alertIsOn("& alertIsOn &") alertTime("& alertTime &") tDefVtolAction("& tDefVtolAction &") isDerr("& bVTOLTargetIsDerrick &") ",player);
+  }          
+  
+  if (vtolDefendGr.members == 0){ 
+    targetPlayerVTOL    = -1;
+    attTargetVTOL = NULLOBJECT;
+    defTargetVTOL = NULLOBJECT; 
+    exit; 
+  }
+  
+  if ( targetPlayerVTOL >= 0 and targetPlayerVTOL < 8 ){
+   if ( friendlyPlayer(targetPlayerVTOL) ){
+    targetPlayerVTOL    = -1;
+    attTargetVTOL = NULLOBJECT;
+    defTargetVTOL = NULLOBJECT; 
    }
+  }
+  
+  if (alertIsOn){ 
+    if ( idleGroup(vtolDefendGr) == 0 ){
+      exit;//allow VTOLS to stay on rearming pads
+    }
+  } else {
+    if ( (float)idleGroup(vtolDefendGr) < (float)(vtolDefendGr.members)*0.8 ){
+      exit;//allow VTOLS to stay on rearming pads
+    }
+  }  
+      
+  //VTOL are attacking something, check target is still valid and have enough VTOLs
+  if (bVTOLTargetIsDerrick){
+      _nVTOLSRequired = MIN_VTOLS_ATTACK_DERRICK;
+  } else {
+      _nVTOLSRequired = MIN_VTOLS_ATTACK_BASE;
+  }
+  
+  if ( attTargetVTOL != NULLOBJECT ){          
+    _dist = distBetweenTwoPoints( attTargetVTOL.x, attTargetVTOL.y, baseX, baseY);          
+    if (_dist > nDefendRange and ( vtolDefendGr.members < _nVTOLSRequired or attTargetVTOL.type == OBJ_DROID) )
+    {
+      attTargetVTOL = NULLOBJECT;
+      //orderGroup( vtolDefendGr, DORDER_RTR );
+    }
+  }
+  
+  //reset defTarget is neat to many AA defences
+  if ( defTargetVTOL != NULLOBJECT ){          
+    if ( vtolDefendGr.members <= numEnemyAAInRange(defTargetVTOL.x, defTargetVTOL.y, AA_THREAT_RANGE)*3 ){
+      defTargetVTOL = NULLOBJECT;
+      //orderGroup( vtolDefendGr, DORDER_RTR );
+    }
+  }         
+    
+  if (alertIsOn){  //------------------------------------ 
+  
+    //reset attack target
+    attTargetVTOL = NULLOBJECT;
+  
+    if (defTargetVTOL != NULLOBJECT ){
+      if ( !friendlyPlayer(defTargetVTOL.player) ){//due to NEXUS
+dbg("manageDefVTOL: attack defTargetVTOL",player);
+        orderGroupObj( vtolDefendGr, DORDER_ATTACK, defTargetVTOL );
+        tDefVtolAction = gameTime;
+      } 
+    } else { 
+
+      //alertX/Y can also be the coord of enemy indirect weapons which attacked in nDefendRange
+      if ( alertX > 0 and alertY > 0){
+        defTargetVTOL = objDroidTargetInRange(alertX,alertY,TILE*12,true);
+        if ( defTargetVTOL == NULLOBJECT ){
+          defTargetVTOL = objStrTargetInRange(alertX,alertY,TILE*12);
+        }        
+      } 
+      if ( defTargetVTOL != NULLOBJECT ){        
+dbg("manageDefVTOL: defTargetVTOL found and attacked ",player);
+        orderGroupObj( vtolDefendGr, DORDER_ATTACK, defTargetVTOL );
+        tDefVtolAction        = gameTime;
+        bVTOLTargetIsDerrick  = false;
+      } else { dbg("manageDefVTOL: target not found ",player); }
+    }
    
-      
-    //VTOL are attacking something, check target is still valid and have enough VTOLs
-    if (bVTOLTargetIsDerrick){
-        _nVTOLSRequired = MIN_VTOLS_ATTACK_DERRICK;
-    } else {
-        _nVTOLSRequired = MIN_VTOLS_ATTACK_BASE;
-    }
-    if ( attTargetVTOL != NULLOBJECT ){          
-      _dist = distBetweenTwoPoints( attTargetVTOL.x, attTargetVTOL.y, baseX, baseY);          
-      //STOP attack : VTOLs are attacking enemy droid out of def range or not have enough members to attack
-      if (_dist > nDefendRange and ( vtolDefendGr.members < _nVTOLSRequired or attTargetVTOL.type == OBJ_DROID) ){
-        attTargetVTOL = NULLOBJECT;
-        orderGroup( vtolDefendGr, DORDER_RTR );
-        //displayMsg("manageDefVTOL: stop attacking attTargetVTOL enemy Droid out of def range dist("& _dist/TILE &"/"& nDefendRange/TILE &") or not enough members ("& vtolDefendGr.members &"/"& vtolDefendGr.members &") ");
-      }
-    }
+  } else {// ============ alert not on ================== 
     
-    //VTOL are defending something, check target is still valid
-    if ( defTargetVTOL != NULLOBJECT ){          
-      _dist = distBetweenTwoPoints( defTargetVTOL.x, defTargetVTOL.y, baseX, baseY);          
-      count = distBetweenTwoPoints( alertX, alertY, baseX, baseY);          
-      //STOP attack : VTOLs are attacking enemy droid out of def range or not have enough members to attack
-      if ( (float)(_dist) > (float)(nDefendRange)*1.25 and defTargetVTOL.type == OBJ_DROID ){
-        defTargetVTOL = NULLOBJECT;
-        orderGroup( vtolDefendGr, DORDER_RTR );
-        //displayMsg("manageDefVTOL: stop to attack defTargetVTOL, droid target is too far away dist("& _dist/TILE &"/"& nDefendRange/TILE &") idle members ("& idleGroup(vtolDefendGr) &"/"& vtolDefendGr.members &") alert dist ("& count/TILE &")");
-      }
-    }         
-    
-    if (alertIsOn){  //------------------------------------ 
-
-      _nVTOLSRequired = 1;
-
-      //reset attack target
-      if ( attTargetVTOL != NULLOBJECT ){
-        attTargetVTOL = NULLOBJECT;
-        //displayMsg("manageDefVTOL: stop attacking enemy as alert is on! idle/members ("& idleGroup(vtolDefendGr) &"/"& vtolDefendGr.members &") ");
-      }          
-
-      if (defTargetVTOL != NULLOBJECT ){
-        if (!friendlyPlayer(defTargetVTOL.player) and (float)idleGroup(vtolDefendGr) > (float)vtolDefendGr.members*0.8  ){//due to NEXUS!!!
-          //displayMsg("manageDefVTOL: re-attacking defTargetVTOL, idle:("& idleGroup(vtolDefendGr) &") tot:("& vtolDefendGr.members &") to attack at alert coord ("& defTargetVTOL.x/TILE &"-"& defTargetVTOL.y/TILE &") ");
-          orderGroupObj( vtolDefendGr, DORDER_ATTACK, defTargetVTOL );
-          tDefVtolAction = gameTime;
-        } 
-      } else { 
-        //displayMsg("manageDefVTOL: defTargetVTOL == NULLOBJECT, searching new target in alert point range X("& alertX &") Y("& alertY &")");
-        if ( alertX > 0 and alertY > 0){
-          defTargetVTOL = objDroidTargetInRange(alertX,alertY,TILE*12,true);
-        } 
-        if ( defTargetVTOL != NULLOBJECT ){        
-          //displayMsg("manageDefVTOL: attacking defTargetVTOL, idle("& idleGroup(vtolDefendGr) &") tot("& vtolDefendGr.members &") to attack droid at coord ("& defTargetVTOL.x/TILE &"-"& defTargetVTOL.y/TILE &") droid hitPoints("& defTargetVTOL.hitPoints &")");
-          orderGroupObj( vtolDefendGr, DORDER_ATTACK, defTargetVTOL );
-          tDefVtolAction = gameTime;
-          bVTOLTargetIsDerrick = false;
-        } //else { displayMsg("manageDefVTOL: target not found "); }
-      }
-     
-    } else {// ============ alert not on ================== 
-      
-     
-      //================== DefendRange =========================
+   
+    //=========== Search a target in  DefendRange =================
+    if ( vtolDefendGr.members >= MIN_VTOLS_DEFEND_BASE ){
       if ( attTargetVTOL == NULLOBJECT  ){
         attTargetVTOL = objStrTargetInRange(baseX,baseY,nDefendRange);
-        bVTOLTargetIsDerrick = false;
+        if ( attTargetVTOL != NULLOBJECT ){ 
+          targetPlayerVTOL      = attTargetVTOL.player;
+          bVTOLTargetIsDerrick  = false; 
+//displayMsg("manageDefVTOL: found TGT STR def range");
+        }
       }
       if ( attTargetVTOL == NULLOBJECT ){
         attTargetVTOL = objDroidTargetInRange(baseX,baseY,nDefendRange,true);
-        bVTOLTargetIsDerrick = false;
+        if ( attTargetVTOL != NULLOBJECT ){ 
+          targetPlayerVTOL      = attTargetVTOL.player;
+          bVTOLTargetIsDerrick  = false; 
+//displayMsg("manageDefVTOL: found TGT DROID def range");
+        }
       }
-      
-      //================== Attack Derricks =========================
+    }
+    
+    //getAAStruct
+    //================== Search target = AA structs =========================
+    if ( vtolDefendGr.members >= MIN_VTOLS_ATTACK_DERRICK ){
       if ( attTargetVTOL == NULLOBJECT ){
-        //displayMsg("manageDefVTOL: try to get human derrick as target");
+        attTargetVTOL = getAAStruct(true);
+//displayMsg("manageDefVTOL: search TGT undefended AA def");
+        if ( attTargetVTOL != NULLOBJECT ){ 
+          targetPlayerVTOL      = attTargetVTOL.player;
+          bVTOLTargetIsDerrick  = true; 
+//displayMsg("manageDefVTOL: found TGT undefended AA def");
+        }
+      }
+    }
+    
+    //================== Search target = Enemy Derricks =========================
+    if ( vtolDefendGr.members >= MIN_VTOLS_ATTACK_DERRICK ){
+      if ( attTargetVTOL == NULLOBJECT ){
+//displayMsg("manageDefVTOL: search TGT Human Derrick ");
         attTargetVTOL = objHumanDerrick(true, 1, 0);
-        _nVTOLSRequired = MIN_VTOLS_ATTACK_DERRICK;
         if ( attTargetVTOL != NULLOBJECT ){ 
-          //displayMsg("manageDefVTOL: human derrick found");
-          bVTOLTargetIsDerrick = true; 
+          targetPlayerVTOL      = attTargetVTOL.player;
+          bVTOLTargetIsDerrick  = true; 
+//displayMsg("manageDefVTOL: found TGT Human Derrick ");
         }
       }
       if ( attTargetVTOL == NULLOBJECT ){
-        //displayMsg("manageDefVTOL: try to get undefendedEnemyDerrick as target");
         attTargetVTOL = undefendedEnemyDerrick(true);
-        _nVTOLSRequired = MIN_VTOLS_ATTACK_DERRICK;
+//displayMsg("manageDefVTOL: search TGT undefended Derrick ");
         if ( attTargetVTOL != NULLOBJECT ){ 
-          bVTOLTargetIsDerrick = true; 
-          //displayMsg("manageDefVTOL: undefendedEnemyDerrick found");
+          targetPlayerVTOL      = attTargetVTOL.player;
+          bVTOLTargetIsDerrick  = true; 
+//displayMsg("manageDefVTOL: found TGT undefended Derrick ");
         }
       }
-
-      if ( attTargetVTOL != NULLOBJECT ){
+    }
+  
+    //================== Search target = Enemy Bases =========================
+    if ( vtolDefendGr.members >= MIN_VTOLS_ATTACK_BASE ){
+      
+      if ( attTargetVTOL == NULLOBJECT ){  
         
-        _dist = distBetweenTwoPoints( attTargetVTOL.x, attTargetVTOL.y, baseX, baseY);
-        if (_dist > nDefendRange){
-
-          //if a droid, reset target
-          if ( attTargetVTOL.type == OBJ_DROID ){
-            //displayMsg("manageDefVTOL: reset enemy target, target is a droid and too far away dist("& _dist/TILE &"/"& nDefendRange/TILE &")");
-            attTargetVTOL = NULLOBJECT;
-            exit; //bug fixed with DyDo 1.2.3a, this exit was missing
-          }
-        
-          //check if enemy has build AA def around this object and reset target
-          count2 = numEnemyAAInRange(attTargetVTOL.x, attTargetVTOL.y, AA_THREAT_RANGE );
-          if ( vtolDefendGr.members < count2*3 ){
-            //displayMsg("manageDefVTOL: reset VTOL target ("& attTargetVTOL.id &") , too many AA ("& count2 &") VTOL("& vtolDefendGr.members &")");
-            attTargetVTOL = NULLOBJECT;
-            exit;//bug fixed with DyDo 1.2.3a, this exit was missing
-          } //else {   displayMsg("manageDefVTOL: VTOL target ("& attTargetVTOL.id &") still ok, AA ("& count2 &")/("& count3 &") VTOL("& idleGroup(vtolDefendGr) &"/"& vtolDefendGr.members &")");        }
-          
-          //re-attacking the enemy base, check that if target is droid it has not returned back to his base
-          if (  (float)idleGroup(vtolDefendGr) >= (float)(vtolDefendGr.members)*0.8 and vtolDefendGr.members >= _nVTOLSRequired ){        
-            //displayMsg("manageDefVTOL: ________________ VTOLS ATTACK TARGET OUTSIDE DEFEND RANGE ___________________");
-            //displayMsg("manageDefVTOL: attacking target with idle("& idleGroup(vtolDefendGr) &") members("& vtolDefendGr.members &")");
-            _dbgString = "struct";
-            if ( attTargetVTOL.type == OBJ_DROID ){
-              _dbgString = "droid";
+        count = 0;
+        while ( attTargetVTOL == NULLOBJECT and count < 5)
+        {
+          //get a target Enemy first
+          if ( targetPlayerVTOL < 0){
+            targetPlayerVTOL = getTargetEnemy(false);
+            if ( targetPlayerVTOL < 0){
+              targetPlayerVTOL = getRandomEnemyPlayer(false);
             }
-            //displayMsg("manageDefVTOL: re-attack enemy ("& _dbgString &") idle/tot:("& idleGroup(vtolDefendGr) &"/"& vtolDefendGr.members &") coord  ("& attTargetVTOL.x/128 &"-"& attTargetVTOL.y/128 &") dist("& distBetweenTwoPoints(attTargetVTOL.x,attTargetVTOL.y,baseX,baseY)/TILE &") ");
+          }
+          if ( targetPlayerVTOL > 0){
+            attTargetVTOL = getVTOLstructTarget();//uses  targetPlayerVTOL
+          }
+          if ( attTargetVTOL == NULLOBJECT ){ 
+            targetPlayerVTOL = -1; 
+          } else { 
+            bVTOLTargetIsDerrick = false; 
+          } 
+          count++;
+        }
+      
+      }
+//        if ( attTargetVTOL != NULLOBJECT ){
+//displayMsg("manageDefVTOL: found TGT enemy base targetPlayerVTOL("& targetPlayerVTOL &")");
+//        } else {
+//displayMsg("manageDefVTOL: NO TARGETS FOUND !!!");
+//        }
+
+    }
+    
+  if (bVTOLTargetIsDerrick){
+      _nVTOLSRequired = MIN_VTOLS_ATTACK_DERRICK;
+  } else {
+      _nVTOLSRequired = MIN_VTOLS_ATTACK_BASE;
+  }
+  
+  
+    //================== Target is not NULLOBJECT =====================
+    if ( attTargetVTOL != NULLOBJECT )
+    {
+      
+      _dist = distBetweenTwoPoints( attTargetVTOL.x, attTargetVTOL.y, baseX, baseY);
+      if (_dist > nDefendRange){
+  
+        //if a droid, reset target
+        //if ( attTargetVTOL.type == OBJ_DROID ){
+          //attTargetVTOL = NULLOBJECT;
+          //targetPlayerVTOL = -1;
+          //exit; 
+        //}
+      
+        //check if enemy has build AA def around this object and if have enough VTOLS
+        count2 = numEnemyAAInRange(attTargetVTOL.x, attTargetVTOL.y, AA_THREAT_RANGE );
+        if ( vtolDefendGr.members < count2*3 or vtolDefendGr.members < _nVTOLSRequired ){
+//displayMsg("manageDefVTOL: reset TARGET too many defences around it ("& vtolDefendGr.members &")<("& count2*3 &") or not enough VTOLS _nVTOLSRequired("& _nVTOLSRequired &" < "& vtolDefendGr.members &")!!!");
+          attTargetVTOL     = NULLOBJECT;
+          targetPlayerVTOL  = -1;
+          exit;
+        } 
+  
+        //re-attacking the enemy base
+        if (  (float)idleGroup(vtolDefendGr)  >= (float)(vtolDefendGr.members)*0.8  ){        
+//displayMsg("manageDefVTOL: attack TARGET ");
+          orderGroupObj( vtolDefendGr, DORDER_ATTACK, attTargetVTOL );
+          tDefVtolAction = gameTime;
+        }// else {
+//displayMsg("manageDefVTOL: cannot attack TARGET, not enough idle VTOLS ("& idleGroup(vtolDefendGr) &"/"& vtolDefendGr.members &")");
+        //} 
+      
+      } else { //if (_dist > nDefendRange){
+      
+        //defending the base in defend range, do not check the numbers of VTOLs
+        if (!friendlyPlayer(attTargetVTOL.player)){//due to NEXUS!!!
+          if ( (float)idleGroup(vtolDefendGr)  >= (float)(vtolDefendGr.members)*0.8  ){        
+//displayMsg("manageDefVTOL: VTOLs attacking enemy to defend base");
             orderGroupObj( vtolDefendGr, DORDER_ATTACK, attTargetVTOL );
             tDefVtolAction = gameTime;
-          } 
-        
-        } else { //_dist < nDefendRange
-        
-          //defending the base in defend range
-          if (!friendlyPlayer(attTargetVTOL.player)){//due to NEXUS!!!
-            if ( (float)idleGroup(vtolDefendGr)  >= (float)(vtolDefendGr.members)*0.8  ){        
-              //displayMsg("manageDefVTOL: ________________ ("& idleGroup(vtolDefendGr) &") VTOLS ATTACK TARGET IN DEFEND RANGE ___________________");
-              //displayMsg("manageDefVTOL: move all ("& vtolDefendGr.members &") attacking  ("& attTargetVTOL.x/128 &"-"& attTargetVTOL.y/128 &") dist("& distBetweenTwoPoints(attTargetVTOL.x,attTargetVTOL.y,baseX,baseY)/TILE &") ");
-              orderGroupObj( vtolDefendGr, DORDER_ATTACK, attTargetVTOL );
-              tDefVtolAction = gameTime;
-            }
           }
-        
         }
-        
       
-      } else { //alert not on and attTargetVTOL == NULLOBJECT
-        
-        //displayMsg("manageDefVTOL: alert not on ("& targetPlayerVTOL &") bVTOLTargetIsDerrick("& bVTOLTargetIsDerrick &")");
-        if ( targetPlayerVTOL <= 0){
-          targetPlayerVTOL = getTargetEnemy(false);
-          if ( targetPlayerVTOL <= 0){
-            targetPlayerVTOL = getRandomEnemyPlayer(false);
-          }
-        }
-        
-        //displayMsg("manageDefVTOL: targetPlayerVTOL=("& targetPlayerVTOL &") bVTOLTargetIsDerrick("& bVTOLTargetIsDerrick &")");
-        if ( targetPlayerVTOL >= 0){//let`s attack
-        
-          count = _random(10); 
-       
-          if ( attTargetVTOL != NULLOBJECT ){
-            //displayMsg("manageDefVTOL: attTargetVTOL has not changed attacking player ("& attTargetVTOL.player &") object ("& attTargetVTOL.x/TILE &"-"& attTargetVTOL.y/TILE &") ");
-            count2 = numEnemyAAInRange(attTargetVTOL.x, attTargetVTOL.y, AA_THREAT_RANGE );
-            if ( idleGroup(vtolDefendGr) > count2*3 ){
-              //displayMsg("manageDefVTOL: Re-attack target ("& attTargetVTOL.id &") with ("& idleGroup(vtolDefendGr)&"/"& vtolDefendGr.members &"), attacking player ("& attTargetVTOL.player &") object ("& attTargetVTOL.x/TILE &"-"& attTargetVTOL.y/TILE &") ");
-              orderGroupObj( vtolDefendGr, DORDER_ATTACK, attTargetVTOL );
-            }
-          }
-          
-          //priority #2
-          if ( attTargetVTOL == NULLOBJECT and (count < 5 or bNeedDerrick) and idleGroup(vtolDefendGr) >= MIN_VTOLS_ATTACK_DERRICK) {
-          //================== ATTACK enemy DERRICK =========================
-            //displayMsg("manageDefVTOL: ________________ VTOLS TRY ATTACK ENEMY DERRICK player ("& targetPlayerVTOL &")___________________");
-            attTargetVTOL = closestEnemyDerrick(false,targetPlayerVTOL);
-            if ( attTargetVTOL != NULLOBJECT ){
-              count2 = numEnemyAAInRange(attTargetVTOL.x, attTargetVTOL.y, AA_THREAT_RANGE );
-              if ( idleGroup(vtolDefendGr) > count2*3 ){
-                //displayMsg("manageDefVTOL: Attack derrick priority 2 ("& attTargetVTOL.id &") with ("& idleGroup(vtolDefendGr)&"/"& vtolDefendGr.members &") attacking  player ("& attTargetVTOL.player &") object ("& attTargetVTOL.x/TILE &"-"& attTargetVTOL.y/TILE &") ");
-                orderGroupObj( vtolDefendGr, DORDER_ATTACK, attTargetVTOL );
-                bVTOLTargetIsDerrick = true;
-              } else {
-                attTargetVTOL = NULLOBJECT; //reset to allow to attack base
-              }
-            }
-          }
-        
-          //================== ATTACK enemy BASE =========================
-          if (attTargetVTOL == NULLOBJECT ){
-            //displayMsg("manageDefVTOL: ________________ VTOLS TRY ATTACK ENEMY BASE player ("& targetPlayerVTOL &")___________________");
-            attTargetVTOL = getVTOLstructTarget();
-            //Attack!!!!
-            if ( attTargetVTOL != NULLOBJECT ){
-              if (!friendlyPlayer(attTargetVTOL.player)){//due to NEXUS!!!
-                if ( idleGroup(vtolDefendGr) > MIN_VTOLS_ATTACK_BASE ){        
-                  //displayMsg("manageDefVTOL: move all ("& vtolDefendGr.members &") attacking  player ("& attTargetVTOL.player &") object ("& attTargetVTOL.x/TILE &"-"& attTargetVTOL.y/TILE &") target ");
-                  orderGroupObj( vtolDefendGr, DORDER_ATTACK, attTargetVTOL );
-                  bVTOLTargetIsDerrick = false;
-                  targetPlayerVTOL = attTargetVTOL.player;
-                }
-              } 
-            } //else {displayMsg("manageDefVTOL: target VTOL NOT FOUND!!!!");  }    
-          
-          } // if ( attTargetVTOL == NULLOBJECT ){
-        }
-      } //else if ( attTargetVTOL != NULLOBJECT ){
-    }//end alert is on
-    
+      } //if (_dist > nDefendRange){
+    } //if ( attTargetVTOL != NULLOBJECT )
+  }//enderlse alertIsOn
 }
 
 //===========================  END VTOL STUFF ========================================
@@ -3207,7 +3240,8 @@ event TankAttack(inactive)
       }
               
       //check if tank group has arrived at gathring point, need to check the distance too!!!        
-      if ( !bTankAlreadyGathered ){             
+      if ( !bTankAlreadyGathered ){
+        //displayMsg(" tanks ("& idleGroup(tankGroup) &"/"& tankGroup.members &") dist("& distBetweenTwoPoints(tankGroup.x, tankGroup.y, nTankGatheringX, nTankGatheringY)/TILE &") ("& gameTime - tTanksSentToGathering &"/2400 ");             
         if ( (float)idleGroup(tankGroup) > (float)tankGroup.members*0.8 or distBetweenTwoPoints(tankGroup.x, tankGroup.y, nTankGatheringX, nTankGatheringY) < 4 * TILE or gameTime - tTanksSentToGathering > 2400 ) 
         {             
           bTankAlreadyGathered      = true;
@@ -3219,13 +3253,14 @@ event TankAttack(inactive)
         } else { 
               
           //just "rememeber" tanks where to go...
-          if ( gameTime - tTanksSentToGathering > 70 ){
+          if ( gameTime - tTanksReSentToGathering > 70 ){
             if (bAttackTeamAttacked){
               orderGroupScoutCMD(tankGroup,nTankGatheringX,nTankGatheringY);
             }else{
               orderGroupLoc(tankGroup,DORDER_MOVE,nTankGatheringX,nTankGatheringY);
             }
-            tTanksSentToGathering = gameTime;
+            tTanksReSentToGathering  = gameTime;
+            if ( tTanksSentToGathering < 0){tTanksSentToGathering = gameTime;}
           }      
         }        
       
@@ -3297,14 +3332,14 @@ event CyborgAttack(inactive)//Original event ID: xx (of 106)
       //displayMsg("#### CyborgAttack: First target not found");
       attackCybObj = getTargetObj();
       if ( attackCybObj != NULLOBJECT ){
-        dropBeaconToAllies("Player "& getPlayerName(player) & " attacking "& getPlayerName(attackCybObj.player) &" with "& cyborgAttGroup.members &" droids"  ,attackTankObj.x, attackTankObj.y, 0, true);
-        dropBeaconToAllies("go!"  ,attackTankObj.x, attackTankObj.y, 0, false);
+        dropBeaconToAllies("Player "& getPlayerName(player) & " attacking "& getPlayerName(attackCybObj.player) &" with "& cyborgAttGroup.members &" droids"  ,attackCybObj.x, attackCybObj.y, 0, true);
+        dropBeaconToAllies("go!"  ,attackCybObj.x, attackCybObj.y, 0, false);
         if ( isHumanPlayer(attackCybObj.player) ){
           nAttHumanPlayer++;
-          printDebug1("CyborgAttack: attacking Human player '"& getPlayerName(attackTankObj.player) &"'");
+          printDebug1("CyborgAttack: attacking Human player '"& getPlayerName(attackCybObj.player) &"'");
         } else {
           nAttAIPlayer++;
-          printDebug1("CyborgAttack: attacking AI player '"& getPlayerName(attackTankObj.player) &"'");
+          printDebug1("CyborgAttack: attacking AI player '"& getPlayerName(attackCybObj.player) &"'");
         } 
       }
       exit;
@@ -3374,7 +3409,7 @@ event CyborgAttack(inactive)//Original event ID: xx (of 106)
     //check if Cyborgs group has arrived at gathring point, need to check the distance too!!!
     if ( !bCybAlreadyGathered ) {             
     
-      if ( (float)idleGroup(cyborgAttGroup) > (float)cyborgAttGroup.members*0.8 or distBetweenTwoPoints(cyborgAttGroup.x, cyborgAttGroup.y, nCybGatheringX, nCybGatheringY) < 2 * TILE or gameTime - tTanksSentToGathering > 2400) {             
+      if ( (float)idleGroup(cyborgAttGroup) > (float)cyborgAttGroup.members*0.8 or distBetweenTwoPoints(cyborgAttGroup.x, cyborgAttGroup.y, nCybGatheringX, nCybGatheringY) < 4 * TILE or gameTime - tCybSentToGathering > 2400) {             
         //displayMsg("CyborgAttack: ________________ CYBORGS ARRIVED AT GATHERING POINT ___________________");
         //displayMsg("CyborgAttack: ("& cyborgAttGroup.members &") Cyborgs arrrived at coord ("& nCybGatheringX/TILE &"-"& nCybGatheringY/TILE &") enemy ("& targetPlayerCyb &")");
         bCybAlreadyGathered       = true;  
@@ -3384,15 +3419,17 @@ event CyborgAttack(inactive)//Original event ID: xx (of 106)
         orderGroupScoutCMD(cyborgAttGroup,cybAttackX,cybAttackY);
         //displayMsg("CyborgAttack: cyborgs Attack player ("& targetPlayerCyb &") with ("& cyborgAttGroup.members &") at coord ("& cybAttackX/TILE &"-"& cybAttackY/TILE &")");
       } else { 
+        
         //just "rememeber" cyborgs where to go...
-        if ( gameTime - tCybSentToGathering > 100 ){
+        if ( gameTime - tCybReSentToGathering > 100 ){
           if (bAttackTeamAttacked){
             orderGroupScoutCMD(cyborgAttGroup,nCybGatheringX,nCybGatheringY);
           }else{
             orderGroupLoc(cyborgAttGroup,DORDER_MOVE,nCybGatheringX,nCybGatheringY);
           }
           //displayMsg("CyborgAttack: remember ("& cyborgAttGroup.members &") cyborgs to gather at coord ("& nCybGatheringX/128 &"-"& nCybGatheringY/128 &") enemy ("& targetPlayerCyb &")");
-          tCybSentToGathering = gameTime;
+          tCybReSentToGathering = gameTime;
+          if ( tCybSentToGathering < 0 ){ tCybSentToGathering = gameTime; }
         }
       }
   
@@ -3485,7 +3522,7 @@ event AIattacked(AIattackedTr)    //event 20
             if ( _nAA*3 < vtolDefendGr.members ){
               defTargetVTOL         = enemyBaseObject;
               targetPlayerVTOL      = enemyBaseObject.player;
-              bVTOLTargetIsDerrick  = false;
+              //bVTOLTargetIsDerrick  = false;
               //dbg("dbg->AIattacked: order VTOL to defend structure and attack at ("& enemyBaseObject.x/TILE &"-"& enemyBaseObject.y/TILE &"), dist from base("& _nDistFromBase/TILE &")",player);
             }
           }
@@ -4022,8 +4059,8 @@ event updateBaseDetails(inactive)
 	//units to attack with tanks
   if ( tChangeTimeTankToAdd == 0 ){ tChangeTimeTankToAdd = tLastTankAttack; }
   if ( gameTime - tChangeTimeTankToAdd > TIME_CHANGE_TANKSTOADD ){
-    nAttackingUnitsToAdd  = _random(MAX_ATTACK_TANKS_ADD);
-    nCybAttUnitsToAdd     = _random(MAX_ATTACK_CYBORG_ADD);
+    nAttackingUnitsToAdd  = random(MAX_ATTACK_TANKS_ADD);
+    nCybAttUnitsToAdd     = random(MAX_ATTACK_CYBORG_ADD);
     tChangeTimeTankToAdd = gameTime;
   }
 
@@ -4111,6 +4148,7 @@ event buildRepFirst(inactive)
 
   eventCheckTime[9] = gameTime;
 	
+  //displayMsg("lStopBuildRepFacility ("& lStopBuildRepFacility &") nPower("& nPower &")");
   if( !lStopBuildRepFacility )
 	{
     //check on quantity and avoid multiple contruction at time, build max repFac - 1 to keep one
@@ -4549,7 +4587,7 @@ event upgradeStructures(inactive)
   		{
   			if( structureComplete(structure) and isStructureAvailable(powModule,player) and (not testStructureModule(player, structure, 0)) )
   			{
-  			  displayMsg("*** UpgradeStructures: upgrading Power Structure ("& structure.id &") ");
+  			  //displayMsg("*** UpgradeStructures: upgrading Power Structure ("& structure.id &") ");
   				orderDroidStatsLoc(droid,DORDER_BUILD,powModule, structure.x,structure.y);
   				boolResult = false;
   			}
@@ -4726,13 +4764,16 @@ event droidBuilt(droidBuiltTr) //  (CALL_NEWDROID,player, ref droid,ref structur
         if( droid.droidType == DROID_WEAPON){
           boolResult = true;
           //short range tanks         
-          if ( droid.weapon == Flamer or droid.weapon == PlasmFlamer or droid.weapon == Inferno or droid.weapon == NeedleGun or droid.weapon == RailGun or droid.weapon == GaussCannon or droid.weapon == PlasmaCannon or droid.weapon == EMPCannon or droid.weapon == AGun or droid.weapon == MGun or droid.weapon == TwinMGun or droid.weapon == HMGun or droid.weapon == TwinAGun){
+          if ( droid.weapon == Flamer or droid.weapon == PlasmFlamer or droid.weapon == Inferno or droid.weapon == PlasmaCannon or droid.weapon == EMPCannon or droid.weapon == AGun or droid.weapon == MGun or droid.weapon == TwinMGun or droid.weapon == HMGun or droid.weapon == TwinAGun){
       		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_SHORT);
       		  //displayMsg("droidbuilt: short attack range assigned to tank ");
           //long range  tanks-1
-          } else if ( droid.weapon == LCannon or droid.weapon == MCannon or droid.weapon == ACannon or droid.weapon == HCannon or droid.weapon == TACannon  ){
+          } else if ( droid.weapon == LCannon or droid.weapon == MCannon or droid.weapon == ACannon or droid.weapon == HCannon or droid.weapon == TACannon or droid.weapon == NeedleGun or droid.weapon == RailGun or droid.weapon == GaussCannon ){
+      		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_SHORT);
+      		  //displayMsg("droidbuilt: short attack range assigned to tank ");
+          } else if ( droid.weapon == FlashLight or droid.weapon == PulseLaser or droid.weapon == HeavyLaser ){
       		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_LONG);                  
-      		  //displayMsg("droidbuilt: long attack range assigned to tank ");
+      		  //displayMsg("droidbuilt: long attack range assigned to Laser-tank ");
           //long range  tanks-2
           } else if ( droid.weapon == RocketBB or droid.weapon == RocketPod or droid.weapon == HVCannon or droid.weapon == RocketMRL or droid.weapon == Lancer or droid.weapon == TankKiller or droid.weapon == RippleRockets or droid.weapon == ScourgeMissle or droid.weapon == ArchangelMissile){
       		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_LONG);                  
@@ -5501,13 +5542,21 @@ event SelectCyborgTemplate(inactive)
 {
 		
   local TEMPLATE cybTmpl[17];
-  local int cybPos[17],nRnd, nCybTemplates,_n,_pos;
+  local int _nRnd, _pos;
+  local bool _bBuildAR_cyborg, _bBuildAT_cyborg, _bBuildAP_cyborg, _bBuildKK_cyborg;
+  
   ASSERT(player >= 0 and player < 8,      "player out of bounds:.29 " & player, player);
   eventCheckTime[18] = gameTime;
   //displayMsg("*** SelectCyborgTemplate: ___________ CALLED lStopCybProduction("& lStopCybProduction &") droids tot("& getDroidCount(player) &"/"& MAX_DROIDS &")___________");
   
-  if( getDroidCount(player) >= MAX_DROIDS){ exit; }
+  _pos = -1;
+  _bBuildAR_cyborg = false;//AllRounder
+  _bBuildAT_cyborg = false; //AntiTank
+  _bBuildAP_cyborg = false; //AntiPersonnel
+  _bBuildKK_cyborg = false; //Kinetic (Grenadier-NeedleGunner)
   
+  if( getDroidCount(player) >= MAX_DROIDS){ exit; }
+    
   if(!lStopCybProduction)
 	{
 		initEnumStruct(false,cybFactory,player,player);
@@ -5519,14 +5568,9 @@ event SelectCyborgTemplate(inactive)
 			{
 					         
           boolResult  = true;
-          boolResult2 = true;
-          if ( gameTime > TIME_HARVESTING_PHASE and (gameTime - lastCybEngBuilt < 900) ){
-            boolResult2 = false;
-          }
 					
           // build cyborg constructor
-          if(boolResult2 and !lStopCybEngProd)
-					{
+          if( !lStopCybEngProd ){
 					    boolResult       = false;
 					    lastCybEngBuilt  = gameTime;
 							buildDroid(cybcondroid, structure, player, 1); 
@@ -5544,198 +5588,80 @@ event SelectCyborgTemplate(inactive)
           
           if( boolResult )
       		{
-            nCybTemplates = 0;
-            count3 = numSuperCyb - 1;
-						count2 = numSuperCyb - 1;
-						boolResult2 = false;
-						_pos = -1;
-						while(count2 >= 0 )
-						{
-							if( skCanBuildTemplate(player,structure, superCyb[count2]) )                                                                      {
-                count3 = count2;
-								cybTmpl[nCybTemplates] = superCyb[count2];
-								cybPos[nCybTemplates]  = count2;
-								//_pos++;
-								nCybTemplates++;
-							}
-							count2--;
-						}
-
-            //#### CANNOT BUILD CYBORG TEMPLATE nCybTemplates(2) _pos(-1) count(15) count3(14)
-            //#### CANNOT BUILD CYBORG TEMPLATE nCybTemplates(4) _pos(-1) count(13) count3(12)
-            //displayMsg("SelectCybTempl: count3("& count3 &") nCybTemplates("& nCybTemplates &")");
-					//and now pick up best cyborgs!!!
-            if ( count3 == 16 ){
-              count = 16;//Machinegunner $40
+            
+            
+            _nRnd = random(100);
+            if ( _nRnd < 30 ){
+                _bBuildAR_cyborg = true;//Allrounder
+                nTotCybAR++;                
+            } else if ( _nRnd >= 30 and _nRnd < 55 ){
+                _bBuildAT_cyborg = true; //AntiTank
+                nTotCybAT++;                
+            } else if ( _nRnd >= 55 and _nRnd < 80 ){
+                _bBuildAP_cyborg = true; //AntiPersonnel
+                nTotCybAP++;                
+            } else {
+                _bBuildKK_cyborg = true; //Kinetic
+                nTotCybKK++;                
             }
-
-            if ( count3 == 15 ){//flamer $50 
-              if( _random(10) <= 7 ){
-                count = 15;//70% flamer $50 
+            
+            //Build best Anti-Tank Template            
+            if ( _bBuildAT_cyborg ){
+              if( skCanBuildTemplate(player,structure, superCyb[9]) ){ _pos = 9; }//Lancer
+              if( skCanBuildTemplate(player,structure, superCyb[7]) ){ _pos = 7; }//Scourge
+              if ( random(10) < 5 ){
+                if( skCanBuildTemplate(player,structure, superCyb[3]) ){ _pos = 3; }//Super Tank-Killer Cyborg 
               } else {
-                count = 16;//30% Machinegunner $40
-              }
-            }
-
-            if ( count3 == 14 ){//heavy Gunner $70
-              if( _random(10) < 2 ){
-                count = 14;//30% heavy Gunner $70
-              } else {
-                count = 15;//70% flamer $50 
-              }
-            }
-
-            if ( count3 == 13 ){//Grenadier
-              if( _random(10) <= 6 ){
-                count = 15;//70% flamer $50  
-              } else {
-                if( _random(10) < 4 ){
-                  count = 13;//50% Grenadier
+                if( skCanBuildTemplate(player,structure, superCyb[0]) ){ 
+                  _pos = 0;//Super Scourge Cyborg 
                 } else {
-                  count = 14;//50% heavy Gunner
-                }
-              }
-            }
-						
-            if ( count3 == 12 ){//Thermite Flamer
-              if( _random(10) <= 6 ){
-                count = 12;//70% Thermite Flamer  
-              } else {
-                if( _random(10) < 4 ){
-                  count = 13;//50% Grenadier
-                } else {
-                  count = 14;//50% heavy Gunner
-                }
-              }
-            }
-
-						//best 3 templates for standard cyborgs!!
-            if ( count3 > 6 and count3 < 12 ){
-              if( _random(10) <= 4 ){
-                count = count3;//50% best template
-              } else {
-                
-                if  ( _random(2)==0 ){
-                  if  ( skCanBuildTemplate(player,structure, superCyb[12]) ){
-                    count = 12;//thermite flamer
-                  } else {
-                    count = 15;//flamer
-                  }
-                } else {
-                  count = count3+1+_random(2); //50% second and third templates
-                }
-                  if  ( skCanBuildTemplate(player,structure, superCyb[12]) ){
-                    count = 12;//thermite flamer
-                  } else {
-                    count = 15;//flamer
-                  }
-              
-              }
-            }
-
-						//Super cyborgs!!
-           if ( count3 == 6){
-              if( _random(10) <= 4 ){
-                count = 6;//40% Super Heavy-Gunner 
-              } else {
-                if ( random(10) < 7 ) {//42% flamers
-                  if  ( skCanBuildTemplate(player,structure, superCyb[12]) ){
-                    count = 12;//thermite flamer
-                  } else {
-                    count = 15;//flamer
-                  }
-                } else {//9% Gunners and 9% Lancers
-                  if ( random(10) < 5 ){//Gunners
-                    if  ( skCanBuildTemplate(player,structure, superCyb[8]) ){
-                      count = 8;//needle Gunner
-                    } else if ( skCanBuildTemplate(player,structure, superCyb[11]) ){
-                      count = 11;//Assault Gunner
-                    } else {
-                      count = 14;//heavy Gunner
-                    }
-                  } else { //Lancers
-                    if  ( skCanBuildTemplate(player,structure, superCyb[7]) ){
-                      count = 7;//Scourge
-                    } else {
-                      count = 9;//Lancer
-                    }
-                  }//end lancers
-                }
-              }
-            }
-
-						//Super cyborgs!!
-            if ( count3 <= 5 ){
-              
-              if( _random(10) <= 5 ){
-                //60% SUPER Cyborgs
-                if ( count3 == 5 ){
-                  count = count3 + random(2);//best 2 template
-                } else { 
-                  count = count3 + random(3);//best three templates
-                }
-              } else {//Flamers
-                if ( skCanBuildTemplate(player,structure, superCyb[2]) ){
-                  count = 2;//Pulse Laser
-                } else if ( skCanBuildTemplate(player,structure, superCyb[12]) ){
-                  count = 12;//thermite flamer
-                } else {
-                  count = 15;//flamer
+                  //backup
+                  if( skCanBuildTemplate(player,structure, superCyb[3]) ){ _pos = 3; }//Super Tank-Killer Cyborg 
                 }
               }
             }
             
-            _n=0;
-            while( _n < nCybTemplates ){
-              if ( count == cybPos[_n] ){ 
-                _pos  = _n; 
-                _n    = 1000;//exit the loop
-              }
-              _n++;
-						}
-
-						//debug check dydo 1.2.4
-            if ( nCybTemplates == 0 or _pos < 0) {
-							dbg("dbg->SelectCyborgTemplate: #### player ("& getPlayerName(player) &") CANNOT BUILD CYBORG TEMPLATE nCybTemplates("& nCybTemplates &") _pos("& _pos &") count("& count &") count3("& count3 &")",player);
-							printDebug1("#### CANNOT BUILD CYBORG TEMPLATE nCybTemplates("& nCybTemplates &") _pos("& _pos &") count("& count &") count3("& count3 &") struct_idle("& structureIdle(structure) &")");
-
-              _n=0;
-              while( _n < nCybTemplates ){
-                if ( count == cybPos[_n] ){ 
-							     printDebug1("#### CANNOT BUILD CYBORG TEMPLATE loop _n("& _n &") count == cybPos[_n]; ("& count &") == ("& cybPos[_n] &") ");
-                  _pos  = _n; 
-                  _n    = 1000;//exit the loop
-                } else {
-							     printDebug1("#### CANNOT BUILD CYBORG TEMPLATE loop _n("& _n &") count !== cybPos[_n]; ("& count &") !== ("& cybPos[_n] &") ");
-                }
-                _n++;
-    					}
-    					
-              //build best 2 random templates
-              if ( nCybTemplates < 5 and nCybTemplates > 2 ){
-                _pos = nCybTemplates - random(2) - 1;
-              } else {
-                if(nCybTemplates <= 2){
-                 _pos = nCybTemplates - 1;
-                } else {
-                 _pos = nCybTemplates - 1 - random(3);
-                }
-              }
-              /*
-              _pos = cybPos[_n];
-				      printDebug1("#### CANNOT BUILD CYBORG TEMPLATE - build random template cybPos["& _pos &"] ");
-              if( !skCanBuildTemplate(player,structure, cybTmpl[_pos]) ){
-				            printDebug1("#### CANNOT BUILD CYBORG TEMPLATE - ALSO NOT ABLE TO build random template _pos; ("& _pos &") ");
-              }
-              */
+            //Build best All-Rounder Template            
+            if ( _bBuildAR_cyborg ){
+              if( skCanBuildTemplate(player,structure, superCyb[6]) ){ _pos = 6; }
+              if( skCanBuildTemplate(player,structure, superCyb[5]) ){ _pos = 5; }
+              if( skCanBuildTemplate(player,structure, superCyb[4]) ){ _pos = 4; }
+              if( skCanBuildTemplate(player,structure, superCyb[1]) ){ _pos = 1; }
             }
             
-            if( skCanBuildTemplate(player,structure, cybTmpl[_pos]) )
+            //Build best Anti-Personnel Template            
+            if ( _bBuildAP_cyborg ){
+              if ( random(100) < 65 ){//65% Flamers-Lasers
+                if( skCanBuildTemplate(player,structure, superCyb[15]) ){ _pos = 15; }
+                if( skCanBuildTemplate(player,structure, superCyb[12]) ){ _pos = 12; }
+                if( skCanBuildTemplate(player,structure, superCyb[10]) ){ _pos = 10; }
+                if( skCanBuildTemplate(player,structure, superCyb[2] ) ){ _pos = 2; }
+              } else { //35% Gunners
+                if( skCanBuildTemplate(player,structure, superCyb[16]) ){ _pos = 16; }
+                if( skCanBuildTemplate(player,structure, superCyb[14]) ){ _pos = 14; }
+                if( skCanBuildTemplate(player,structure, superCyb[11]) ){ _pos = 11; }
+              }
+            }
+
+            //Build best Kinetic Template            
+            if ( _bBuildKK_cyborg ){
+              if( skCanBuildTemplate(player,structure, superCyb[13]) ){ _pos = 13; }
+              if( skCanBuildTemplate(player,structure, superCyb[8] ) ){ _pos = 8; }
+            }
+
+            if ( _pos == -1 ){
+              printDebug1("#### SelectCyborgTemplate: (A) cannot build template ["& _pos &"] ");
+              nTotCybErr++;
+              exit;          
+            }
+            if( skCanBuildTemplate(player,structure, superCyb[_pos]) )
 						{
-							//displayMsg("*** SelectCyborgTemplate: Building cyborg template ["& count &"]["& _pos &"] - best tmpl is ["& count3 &"] - tot templates found ("& nCybTemplates &") ");
-							buildDroid(cybTmpl[_pos],structure,player,1); //build droid
+							//displayMsg("*** SelectCyborgTemplate: Building cyborg template ["& count &"]["& _pos &"] - best tmpl is ["& _nBestTmpl &"] - tot templates found ("& nCybTemplates &") ");
+							buildDroid(superCyb[_pos],structure,player,1); //build droid
 			  		  boolResult = false;
-						} //else {   displayMsg("#### SelectCyborgTemplate: cannot build Template ["& count &"]["& _pos &"] ");          }
+						} else {   
+              printDebug1("#### SelectCyborgTemplate: (B) cannot build template ["& _pos &"] ");          
+            }
 						
 			    }		//end check on tankGroupMembers	
 				
@@ -6906,6 +6832,91 @@ function void displayErrMsg(STRING _message)
   }
 }
 //-----------------------------------------------------------------------------
+// Return an AA defence as target for 
+// VTOL: _nDefInRange*3 < vtolDefendGr.members
+// DROID: _nDefInRange < 1 
+function STRUCTURE getAAStruct(bool _bVTOLTarget)
+{
+  local	int				  _n, _bestDist, _tempDist, _targetPl, _dist, _numPl,_nDefInRange;
+	local	STRUCTURE		_bestAAdef, _tempAAdef, _BaseStruct,_struct;
+  
+	_bestDist   = 999*TILE;
+	_bestAAdef  = NULLOBJECT;
+	_numPl      = 0;//avoid to start always from player 0
+  _targetPl   = random(MAX_PLAYERS);//avoid to start always from player 0
+  
+  while(_numPl < MAX_PLAYERS)
+	{
+  	
+    if ( !friendlyPlayer(_targetPl) and isPlayerStillLive(_targetPl) ){
+      //displayMsg("undefendedEnemyAAdef:   AAdef x-y("& _targetPl &"-"& count &")");
+      //find enemy HQ and check distance to AAdef
+      _dist = 0;
+      _struct = getStructure(playerHQ,_targetPl);
+      if ( _struct == NULLOBJECT ){
+        _struct = getStructure(factory,_targetPl);
+      }
+      if ( _struct == NULLOBJECT ){
+        _struct = getStructure(resLab,_targetPl);
+      }
+      if ( _struct == NULLOBJECT ){
+        _struct = getStructure(cybFactory,_targetPl);
+      }
+
+      if ( _struct != NULLOBJECT ){
+        //only AAdefs visible to player (myself) are processed
+        
+        _n=0;
+        while (_n < numGenAA){
+          
+          if ( AIstrength < 4 ){
+            initEnumStruct(false,vtolGenStruct[_n],_targetPl,player); //only struct visible to player
+          } else {
+            initEnumStruct(false,vtolGenStruct[_n],_targetPl,_targetPl); //all structs, also those not visible to player
+          }
+        	_tempAAdef = enumStruct();
+        	while(_tempAAdef != NULLOBJECT and _struct != NULLOBJECT)
+        	{
+            _tempDist = distBetweenTwoPoints(_tempAAdef.x, _tempAAdef.y, baseX, baseY);
+            _dist     = distBetweenTwoPoints(_struct.x, _struct.y, _tempAAdef.x, _tempAAdef.y);
+     
+            if ( _bVTOLTarget ){
+              _nDefInRange = numEnemyAAInRange(_tempAAdef.x, _tempAAdef.y, AA_THREAT_RANGE );
+              if (_tempDist < _bestDist and _dist > 20*TILE and _nDefInRange*3 < vtolDefendGr.members ){
+                _bestAAdef   = _tempAAdef;
+                _bestDist    = _tempDist;
+             	}
+            } else {
+              _nDefInRange = numEnemyWeapStructsInRange(player, _tempAAdef.x, _tempAAdef.y, COMBAT_RANGE , false);
+              if (_tempDist < _bestDist and _dist > 20*TILE and _nDefInRange < 1 ){
+                _bestAAdef   = _tempAAdef;
+                _bestDist    = _tempDist;
+             	}
+            }
+            
+         		_tempAAdef = enumStruct();
+         	}//while
+         	
+          _n++;
+       	}//while
+     	
+       
+       
+       }//struct
+       	
+     	
+   	}
+ 	  _targetPl++;
+ 	  if ( _targetPl > 7 ){ _targetPl = 0; }
+ 	  _numPl++;
+  }//endwhile players
+  
+  return _bestAAdef;
+}
+//-----------------------------------------------------------------------------
+// Return a derrick as target for 
+// VTOL: _nDefInRange*3 < vtolDefendGr.members
+// DROID: _nDefInRange < 1 
 function STRUCTURE undefendedEnemyDerrick(bool _bVTOLTarget)
 {
   local	int				  _bestDist, _tempDist, _targetPl, _dist, _numPl,_nDefInRange;
@@ -6936,7 +6947,11 @@ function STRUCTURE undefendedEnemyDerrick(bool _bVTOLTarget)
 
       if ( _struct != NULLOBJECT ){
         //only derricks visible to player (myself) are processed
-        initEnumStruct(false,derrick,_targetPl,player);
+        if ( AIstrength < 4 ){
+          initEnumStruct(false,derrick,_targetPl,player); //only struct visible to player
+        } else {
+          initEnumStruct(false,derrick,_targetPl,_targetPl); //all structs, also those not visible to player
+        }
       	_tempDerrick = enumStruct();
       	while(_tempDerrick != NULLOBJECT and _struct != NULLOBJECT)
       	{
@@ -6944,15 +6959,19 @@ function STRUCTURE undefendedEnemyDerrick(bool _bVTOLTarget)
           _dist     = distBetweenTwoPoints(_struct.x, _struct.y, _tempDerrick.x, _tempDerrick.y);
    
           if ( _bVTOLTarget ){
-            _nDefInRange = numEnemyAAInRange(_struct.x, _struct.y, AA_THREAT_RANGE );
+            _nDefInRange = numEnemyAAInRange(_tempDerrick.x, _tempDerrick.y, AA_THREAT_RANGE );
+            if (_tempDist < _bestDist and _dist > 20*TILE and _nDefInRange*3 < vtolDefendGr.members ){
+              _derrick   = _tempDerrick;
+              _bestDist  = _tempDist;
+           	}
           } else {
-            _nDefInRange = numEnemyWeapStructsInRange(player, _struct.x, _struct.y, COMBAT_RANGE , false);
+            _nDefInRange = numEnemyWeapStructsInRange(player, _tempDerrick.x, _tempDerrick.y, COMBAT_RANGE , false);
+            if (_tempDist < _bestDist and _dist > 20*TILE and _nDefInRange < 1 ){
+              _derrick   = _tempDerrick;
+              _bestDist  = _tempDist;
+           	}
           }
           
-          if (_tempDist < _bestDist and _dist > 20*TILE and _nDefInRange < 2){
-            _derrick   = _tempDerrick;
-            _bestDist  = _tempDist;
-         	}
        		_tempDerrick = enumStruct();
        	}//while
      	}//struct
@@ -9433,7 +9452,7 @@ function BASEOBJ objStrTargetInRange(int _xCoord,int _yCoord, int _Range)
 	setStructTarPref(ST_CYBORG_FACTORY);
 	setStructTarPref(ST_VTOL_FACTORY);
 	setStructTarPref(ST_POWER_GEN);
-	setStructTarPref(ST_SENSOR);
+	//setStructTarPref(ST_SENSOR);
 	setStructTarPref(ST_RESOURCE_EXTRACTOR);
 	setStructTarPref(ST_DEF_AIR);
 	setStructTarPref(ST_RESEARCH);
@@ -9744,10 +9763,12 @@ function void SetDyDoPersonality(int nPersonality, int _player)
   //update array
   count2=0;
   while ( count2 < 4 ){
-    structsLimits[count2][STR_TANK_FACTORY]=_nAdd+structsLimits[count2][STR_TANK_FACTORY];
+    if ( (count2+1) != AI_CYBORG ){ 
+      structsLimits[count2][STR_TANK_FACTORY]=_nAdd+structsLimits[count2][STR_TANK_FACTORY];
+    }
     structsLimits[count2][STR_RESLAB]      =_nAdd+structsLimits[count2][STR_RESLAB];
     structsLimits[count2][STR_CYB_FACTORY] =_nAdd+structsLimits[count2][STR_CYB_FACTORY];
-    if ( count2 != AI_CYBORG){
+    if ( (count2+1) != AI_CYBORG){
       structsLimits[count2][STR_VTOL_FACTORY]=_nAdd+structsLimits[count2][STR_VTOL_FACTORY];
     }
     count2++;
@@ -10247,7 +10268,7 @@ function STRUCTURE getVTOLstructTarget()
       }
       _ii++;
     }
-    if ( _structTarget == NULLOBJECT or _bestAA*2 > vtolDefendGr.members*2){
+    if ( _structTarget == NULLOBJECT or _bestAA*3 > vtolDefendGr.members){
       _aa=0;
       _bestAA=999;
       _ii = 0;
@@ -10260,7 +10281,7 @@ function STRUCTURE getVTOLstructTarget()
         _ii++;
       }
     }
-    if ( _structTarget == NULLOBJECT or _bestAA*2 > vtolDefendGr.members*2){
+    if ( _structTarget == NULLOBJECT or _bestAA*2 > vtolDefendGr.members){
       _aa=0;
       _bestAA=999;
       _ii = 0;
@@ -11141,7 +11162,9 @@ function void displayStats(int _choice)
     dbg("dbg-> Plyers: " & _strTeams & " nTeam("& nTeam &") nLastEnemyPlayer ("& nLastEnemyPlayer &") nEnemyPlayers ("& nEnemyPlayers &") nHumanPlayers("& nHumanPlayers &") nPlayersInGame("& nPlayersInGame &") nTotEnemyDroids("& nTotEnemyDroids &")", _count);
     dbg("dbg-> bAnyOilResLeft("& bOilResLeft &") Harv("& _hg &") build("& _bg  &") bDef"& _bdg &") cybConst("& _ccG &") _HelpG ("& _HelpG &") Tank("& _tg &") TankDef(" & _tDG & ") cybDef("& _cG &")  cybAtt("& cyborgAttGroup.members &")  CybRep("& toBeRepairedCyborgGroup.members &") TankRep("& toBeRepairedTankGroup.members &") VTOLdef("& vtolDefendGr.members &") VTOLatt("& vtolAttGr.members &")",_count);  
     dbg("dbg-> CybAttReq("& minDefDroids[nAI_Pers][MINDEF_CYBORGS]+MIN_ATT_CYBORGS+nCybAttUnitsToAdd &") TotCyb("& nTotCyborgs &") TankAttReq("& _totTanks &") TotTank("& nTotTanks &") help("& helpGroup.members &") alertIsOn ("& alertIsOn &")  realGatew("& nRealGatewaysFound &") nAllyBeingHelped("& nAllyBeingHelped &") ",_count );
+    dbg("dbg-> Cyborgs Built: (AR-AT-AP-KK)(Error) ("& nTotCybAR &" - "& nTotCybAT &" - "& nTotCybAP &" - "& nTotCybKK &")("& nTotCybErr &")",player);
     dbg("dbg-> POWER ("& playerPower(0) &") ("& playerPower(1) &") ("& playerPower(2) &") ("& playerPower(3) &") ("& playerPower(4) &") ("& playerPower(5) &") ("& playerPower(6) &") ("& playerPower(7) &") DROID-LEFT ("& anyDroidsLeft(0) &")("& anyDroidsLeft(1) &")("& anyDroidsLeft(2) &")("& anyDroidsLeft(3) &")("& anyDroidsLeft(4) &")("& anyDroidsLeft(5) &")("& anyDroidsLeft(6) &")("& anyDroidsLeft(7) &") defSpotX/Y ("& defSpotX &"-"& defSpotY &") nTotOilInAtStart ("& nTotOilInAtStart &") ",_count);
+
   } 
   if ( _choice == 2 ){
     dbg("dbg-> Power:  bNeedDerrick ("& bNeedDerrick &") bForceResPowUp("& bForceResPowUp &") numRemainingOilRes()("& nFreeOilRes &") " & _sPlPow, _count);
