@@ -277,7 +277,7 @@ extern	UDWORD				objID;					// unique ID creation thing..
 DROID_TEMPLATE sDefaultDesignTemplate;
 
 extern void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void desSetupDesignTemplates( void );
+static void desSetupDesignTemplates(void);
 
 /* Set the current mode of the design screen, and display the appropriate component lists */
 static void intSetDesignMode(DES_COMPMODE newCompMode);
@@ -894,7 +894,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 }
 
 /* set up droid templates before going into design screen */
-void desSetupDesignTemplates( void )
+void desSetupDesignTemplates(void)
 {
 	DROID_TEMPLATE	*psTempl;
 	UDWORD			i;
@@ -4652,6 +4652,8 @@ static BOOL saveTemplate(void)
 			/*ANY change to the template affect the production - even if the
 			template is changed and then changed back again!*/
 			deleteTemplateFromProduction(psTempl, (UBYTE)selectedPlayer);
+			SendDestroyTemplate(psTempl);
+			sCurrDesign.multiPlayerID = generateNewObjectId();
 		}
 
 		/* Copy the template */

@@ -4430,7 +4430,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 }
 
 /*called when a Template is deleted in the Design screen*/
-void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
+static void maybeDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, bool really)
 {
 	STRUCTURE   *psStruct;
 	UDWORD      inc, i;
@@ -4454,57 +4454,36 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
 			if (StructIsFactory(psStruct))
 			{
 				FACTORY             *psFactory = &psStruct->pFunctionality->factory;
-				DROID_TEMPLATE      *psNextTemplate = NULL;
+
+				if (psFactory->psSubject == NULL)
+				{
+					continue;
+				}
 
 				//if template belongs to the production player - check thru the production list (if struct is busy)
-				if (player == productionPlayer && psFactory->psSubject)
+				if (player == productionPlayer)
 				{
 					for (inc = 0; inc < MAX_PROD_RUN; inc++)
 					{
-						if (asProductionRun[psFactory->psAssemblyPoint->factoryType][
-							psFactory->psAssemblyPoint->factoryInc][inc].psTemplate == psTemplate)
+						PRODUCTION_RUN *productionRun = &asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc][inc];
+						if (productionRun->psTemplate == psTemplate)
 						{
-							//if this is the template currently being worked on
-							if (psTemplate == (DROID_TEMPLATE *)psFactory->psSubject)
-							{
-								//set the quantity to 1 and then use factoryProdAdjust to subtract it
-								asProductionRun[psFactory->psAssemblyPoint->factoryType][
-	    							psFactory->psAssemblyPoint->factoryInc][inc].quantity = 1;
-								factoryProdAdjust(psStruct, psTemplate, false);
-								//init the factory production
-								psFactory->psSubject = NULL;
-								//check to see if anything left to produce
-								psNextTemplate = factoryProdUpdate(psStruct, NULL);
-								//power is returned by factoryProdAdjust()
-								if (psNextTemplate)
-								{
-									structSetManufacture(psStruct, psNextTemplate);
-								}
-								else
-								{
-									//nothing more to manufacture - reset the Subject and Tab on HCI Form
-									intManufactureFinished(psStruct);
-									//power is returned by factoryProdAdjust()
-								}
-							}
-							else
-							{
-								//just need to initialise this production run
-								asProductionRun[psFactory->psAssemblyPoint->factoryType][
-	    							psFactory->psAssemblyPoint->factoryInc][inc].psTemplate = NULL;
-								asProductionRun[psFactory->psAssemblyPoint->factoryType][
-	    							psFactory->psAssemblyPoint->factoryInc][inc].quantity = 0;
-								asProductionRun[psFactory->psAssemblyPoint->factoryType][
-	    							psFactory->psAssemblyPoint->factoryInc][inc].built = 0;
-							}
+							//just need to initialise this production run
+							productionRun->psTemplate = NULL;
+							productionRun->quantity = 0;
+							productionRun->built = 0;
 						}
 					}
 				}
-				else
+
+				// check not being built in the factory for the template player
+				if (psTemplate->multiPlayerID == ((DROID_TEMPLATE *)psFactory->psSubject)->multiPlayerID)
 				{
-					//not the production player, so check not being built in the factory for the template player
-					if (psFactory->psSubject == (BASE_STATS *)psTemplate)
+					if (really)
 					{
+						syncDebugStructure(psStruct, '<');
+						syncDebug("Clearing production");
+
 						// Clear the factory's subject.
 						psFactory->psSubject = NULL;
 						//return any accrued power
@@ -4512,13 +4491,54 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
 						{
 							addPower(psStruct->player, psFactory->powerAccrued);
 						}
+
+						if (player == productionPlayer)
+						{
+							//check to see if anything left to produce
+							DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStruct, NULL);
+							//power is returned by factoryProdAdjust()
+							if (psNextTemplate)
+							{
+								structSetManufacture(psStruct, psNextTemplate);
+							}
+							else
+							{
+								//nothing more to manufacture - reset the Subject and Tab on HCI Form
+								intManufactureFinished(psStruct);
+								//power is returned by factoryProdAdjust()
+							}
+						}
+
 						//tell the interface
 						intManufactureFinished(psStruct);
+
+						syncDebugStructure(psStruct, '>');
+					}
+					else
+					{
+						DROID_TEMPLATE *template = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
+						debug(LOG_ERROR, "TODO: Fix this memory leak when deleting templates.");
+
+						*template = *(DROID_TEMPLATE *)psFactory->psSubject;
+						template->pName = NULL;
+						template->psNext = NULL;
+
+						psFactory->psSubject = (BASE_STATS *)template;
 					}
 				}
 			}
 		}
 	}
+}
+
+void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
+{
+	maybeDeleteTemplateFromProduction(psTemplate, player, false);
+}
+
+void reallyDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
+{
+	maybeDeleteTemplateFromProduction(psTemplate, player, true);
 }
 
 

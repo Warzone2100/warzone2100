@@ -618,7 +618,7 @@ BOOL recvMessage(void)
 				case GAME_LASSAT:
 
 				case GAME_TEMPLATE:
-				case GAME_TEMPLATEDEST:
+				//case GAME_TEMPLATEDEST: //34 down,  8 to go. <--- Aaargh. This one down, but might come back as a zombie.
 				//case GAME_FEATUREDEST:  //29 down, 13 to go.
 				//case NET_PING:
 				case GAME_DEMOLISH:
@@ -1539,8 +1539,17 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 			apsDroidTemplates[player] = psTempl->psNext;
 		}
 
-		// Delete the template
+		// Delete the template.
+		//before deleting the template, need to make sure not being used in production
+		reallyDeleteTemplateFromProduction(psTempl, player);
 		free(psTempl);
+	}
+	else
+	{
+		DROID_TEMPLATE aaargh;
+		aaargh.multiPlayerID = templateID;
+		reallyDeleteTemplateFromProduction(&aaargh, player);
+		debug(LOG_ERROR, "TODO: Rewrite the whole interface, so it's possible to change the code without spaghetti dependencies causing problems everywhere, and without resorting to ugly hacks.");
 	}
 
 	return true;

@@ -18,6 +18,8 @@ Fix the extra droid explosion effects after a droid dies, but before the GAME_DR
 
 Fix production completed and research completed sounds.
 
+Fix destroying droid templates. Can probably go out of synch, if destroying a template just before the droid is produced, due to trying to produce an unknown type of droid (so the other players would see the new droid, but the droid owner wouldn't).
+
 ********************
 * src/structure.c: *
 ********************
@@ -26,8 +28,6 @@ Clean up structPlaceDroid. After which, the GAME_SECONDARY_ALL message type will
 Check what validLocation is used for, make sure that putting delivery points under locations where buildings are going to be placed can't cause synch errors.
 
 In destroyStruct, check that psTile->illumination can't affect the game state. Or make it consistent, so all players see the same scorch marks.
-
-Allow holding/releasing/cancelling production.
 
 *****************
 * src/keybind.c *
@@ -43,8 +43,6 @@ Check that this file doesn't modify droids directly...
 * src/research.c *
 ******************
 Check the researchResult function. Should a message be sent there, and if so, then should wait for it?
-
-Allow holding/releasing research.
 
 ***************
 * src/order.c *

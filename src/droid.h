@@ -370,6 +370,7 @@ extern const char *getDroidNameForRank(UDWORD rank);
 
 /*called when a Template is deleted in the Design screen*/
 extern void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player);
+extern void reallyDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player);
 
 // Select a droid and do any necessary housekeeping.
 extern void SelectDroid(DROID *psDroid);
