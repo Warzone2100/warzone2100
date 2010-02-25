@@ -39,8 +39,12 @@
    * Fix: Remove disabled players from the map when scavengers are turned on (r9724)
    * Fix: When player aborts file transfers, close the old filehandle. (r9923)
    * Fix: When player is forced to drop, don't strand them in the lobby. (r9924)
-   * Fix: Try to fix all SIGPIPE and SIGBUS issues on linux (r9915-r9918, r9954, ticket:1136)
+   * Fix: Try to fix all SIGPIPE and SIGBUS issues on linux (r9915-r9918, r9954, r9885, ticket:1136)
    * Fix: Some droids were not showing up as destroyed on all players' screens (r9944)
+   * Fix: Add a 1s delay between sending a quit message, and closing the socket (r9984)
+   * Fix: On player join, send stats from other players to them (r9993)
+   * Fix: On player quit, close things down and cleanup correctly (r10004)
+   * Fix: On host quit in buffer fill routine, then exit out into lobby with correct error message. (r10003)
  * Mods:
    * New: DyDo-AI added to bundled mods (r9901)
    * Fix: Update NTW to work with new template system and other various fixes (r9773, r9910)
