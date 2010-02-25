@@ -2773,7 +2773,7 @@ static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
 // put down in the editor or by the scripts.
 static UWORD MaxDroidsAllowedPerPlayer[MAX_PLAYERS] = {100, 999, 999, 999, 999, 999, 999, 999};
 // FIXME: We should have this variable user defined.
-static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS] = {150, 150, 150, 150, 150, 150, 150, 150};
+static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS] = {450, 450, 450, 450, 450, 450, 450, 450};
 
 BOOL IsPlayerStructureLimitReached(UDWORD PlayerNumber)
 {

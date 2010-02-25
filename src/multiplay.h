@@ -99,12 +99,11 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 //       do the sync code checks anymore(!), needless to say, this can and does cause issues.
 // FIXME: We should define this externally so people with dial-up modems can configure this
 // FIXME: Use possible compression on the packets.
-// NOTE: Remember, we (now) allow 150 units max * 7 (1 human, 6 AI possible for Host) to send to the other player.
+// NOTE: Remember, we (now) allow 450 units max * 7 (1 human, 6 AI possible for Host) to send to the other player.
 
 #define MAX_BYTESPERSEC			14336
 
 #define ANYPLAYER				99
-#define ONEPLAYER				98
 
 #define CAMPAIGN				12
 #define	SKIRMISH				14
