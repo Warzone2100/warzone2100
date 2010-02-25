@@ -244,7 +244,6 @@ void debug_init(void)
 	enabled_debug[LOG_INFO] = true;
 	enabled_debug[LOG_FATAL] = true;
 	enabled_debug[LOG_POPUP] = true;
-	enabled_debug[LOG_NET] = true;
 	inputBuffer[0][0] = '\0';
 	inputBuffer[1][0] = '\0';
 #ifdef DEBUG
