@@ -3831,6 +3831,17 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	Vector3i dv;
 	int i;
 
+	// TODO psBuilding->status == SS_BEING_BUILT test is because structure ids are not synchronised until after they start building...
+	syncDebug("< structure%d = p%d;pos(%d,%d,%d),stat%d,type%d,bld%d,pwr%d,bp%d, power = %f", psBuilding->status == SS_BEING_BUILT ? -1 : psBuilding->id,
+	          psBuilding->player,
+	          psBuilding->pos.x, psBuilding->pos.y, psBuilding->pos.z,
+	          psBuilding->status,
+	          psBuilding->pStructureType->type,
+	          psBuilding->currentBuildPts,
+	          psBuilding->currentPowerAccrued,
+	          psBuilding->body,
+	          getPower(psBuilding->player));
+
 	if (psBuilding->pStructureType->type == REF_GATE)
 	{
 		if (psBuilding->state == SAS_OPEN && psBuilding->lastStateTime + SAS_STAY_OPEN_TIME < gameTime)
@@ -4009,6 +4020,18 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 			}
 		}
 	}
+
+	// TODO psBuilding->status == SS_BEING_BUILT test is because structure ids are not synchronised until after they start building...
+	syncDebug("> structure%d = p%d;pos(%d,%d,%d),stat%d,type%d,bld%d,pwr%d,bp%d, power = %f", psBuilding->status == SS_BEING_BUILT ? -1 : psBuilding->id,
+	          psBuilding->player,
+	          psBuilding->pos.x, psBuilding->pos.y, psBuilding->pos.z,
+	          psBuilding->status,
+	          psBuilding->pStructureType->type,
+	          psBuilding->currentBuildPts,
+	          psBuilding->currentPowerAccrued,
+	          psBuilding->body,
+	          getPower(psBuilding->player));
+
 	CHECK_STRUCTURE(psBuilding);
 }
 

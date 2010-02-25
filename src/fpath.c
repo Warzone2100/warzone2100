@@ -44,6 +44,7 @@
 #include <SDL_thread.h>
 
 #include "lib/framework/frame.h"
+#include "lib/netplay/netplay.h"
 
 #include "objects.h"
 #include "map.h"
@@ -457,6 +458,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	{
 		// return failed to stop them moving anywhere
 		objTrace(id, "Tried to move nowhere");
+		syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = FPR_FAILED", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner);
 		return FPR_FAILED;
 	}
 
@@ -507,33 +509,13 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 				wzMutexUnlock(fpathMutex);
 				objTrace(id, "Got a path to (%d, %d)! Length=%d Retval=%d", (int)psMove->DestinationX,
 				         (int)psMove->DestinationY, (int)psMove->numPoints, (int)retval);
+				syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = %d (%d points)", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner, retval, psMove->numPoints);
 				return retval;
 			}
 			psPrev = psNext;
 			psNext = psNext->next;
 		}
 
-		// Sanity check that the job we are waiting for exists, at least.
-		for (psJob = firstJob; psJob != NULL; psJob = psJob->next)
-		{
-			if (psJob->droidID == id)
-			{
-				goto ok;
-			}
-		}
-		for (psNext = firstResult; psNext != NULL; psNext = psNext->next)
-		{
-			if (psNext->droidID == id)
-			{
-				goto ok;
-			}
-		}
-		// This should never happen, but apparently did. Probably fixed in svn -r9788, so shouldn't ever happen again.
-		ASSERT(false, "Waiting for fpath result of droid %u, but the job doesn't exist. This may cause synch errors.", id);
-		wzMutexUnlock(fpathMutex);
-		return FPR_FAILED;
-
-	ok:
 		objTrace(id, "No path yet. Waiting.");
 		waitingForResult = true;
 		waitingForResultId = id;
@@ -589,6 +571,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	wzMutexUnlock(fpathMutex);
 
 	objTrace(id, "Queued up a path-finding request to (%d, %d), %d items earlier in queue", tX, tY, count);
+	syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = FPR_WAIT", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner);
 	return FPR_WAIT;	// wait while polling result queue
 }
 

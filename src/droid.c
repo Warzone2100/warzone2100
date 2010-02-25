@@ -723,6 +723,15 @@ void droidUpdate(DROID *psDroid)
 	}
 #endif
 
+	syncDebug("< droid%d = p%d;pos(%d,%d,%d),ord%d(%d,%d),act%d,so%X,bp%d, power = %f", psDroid->id,
+	          psDroid->player,
+	          psDroid->pos.x, psDroid->pos.y, psDroid->pos.z,
+	          psDroid->order, psDroid->orderX, psDroid->orderY,
+	          psDroid->action,
+	          psDroid->secondaryOrder,
+	          psDroid->body,
+	          getPower(psDroid->player));
+
 	// Save old droid position, update time.
 	psDroid->prevSpacetime = GET_SPACETIME(psDroid);
 	psDroid->time = gameTime;
@@ -859,6 +868,15 @@ void droidUpdate(DROID *psDroid)
 			psDroid->resistance++;
 		}
 	}
+
+	syncDebug("> droid%d = p%d;pos(%d,%d,%d),ord%d(%d,%d),act%d,so%X,bp%d, power = %f", psDroid->id,
+	          psDroid->player,
+	          psDroid->pos.x, psDroid->pos.y, psDroid->pos.z,
+	          psDroid->order, psDroid->orderX, psDroid->orderY,
+	          psDroid->action,
+	          psDroid->secondaryOrder,
+	          psDroid->body,
+	          getPower(psDroid->player));
 
 	CHECK_DROID(psDroid);
 }
