@@ -583,6 +583,11 @@ BOOL recvMessage(void)
 		bool processedMessage1 = false;
 		bool processedMessage2 = false;
 
+		if (queue.queueType == QUEUE_GAME)
+		{
+			syncDebug("Processing player %d, message %s", queue.index, messageTypeToString(type));
+		}
+
 		if (queue.queueType == QUEUE_GAME && myResponsibility(queue.index))
 		{
 			switch (type)
@@ -823,9 +828,6 @@ BOOL recvMessage(void)
 			break;
 		case NET_PLAYER_STATS:
 			recvMultiStats(queue);
-			break;
-		case GAME_SYNC_DEBUG_STRING:
-			recvDebugSync(queue);
 			break;
 		default:
 			processedMessage2 = false;

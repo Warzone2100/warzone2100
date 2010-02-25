@@ -58,6 +58,9 @@ static SDWORD	pauseStart;
 static UDWORD	stopCount;
 
 static uint32_t gameQueueTime[MAX_PLAYERS];
+static uint32_t gameQueueCheckTime[MAX_PLAYERS];
+static uint32_t gameQueueCheckCrc[MAX_PLAYERS];
+static bool     crcError = false;
 
 /* Initialise the game clock */
 void gameTimeInit(void)
@@ -170,6 +173,13 @@ void gameTimeUpdate()
 				}
 
 				deltaGameTime = GAME_TICKS_PER_UPDATE;
+
+				if (crcError)
+				{
+					debug(LOG_ERROR, "Synch error, gameTimes were: {%10u, %10u, %10u, %10u, %10u, %10u, %10u, %10u}", gameQueueCheckTime[0], gameQueueCheckTime[1], gameQueueCheckTime[2], gameQueueCheckTime[3], gameQueueCheckTime[4], gameQueueCheckTime[5], gameQueueCheckTime[6], gameQueueCheckTime[7]);
+					debug(LOG_ERROR, "Synch error, CRCs were:      {0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X}", gameQueueCheckCrc[0], gameQueueCheckCrc[1], gameQueueCheckCrc[2], gameQueueCheckCrc[3], gameQueueCheckCrc[4], gameQueueCheckCrc[5], gameQueueCheckCrc[6], gameQueueCheckCrc[7]);
+					crcError = false;
+				}
 			}
 			else
 			{
@@ -305,8 +315,8 @@ void sendPlayerGameTime()
 
 	unsigned player;
 	uint32_t time = gameTime + latency;
-
-	sendDebugSync(true);
+	uint32_t checkTime = gameTime;
+	uint32_t checkCrc = nextDebugSync();
 
 	for (player = 0; player < MAX_PLAYERS; ++player)
 	{
@@ -317,19 +327,32 @@ void sendPlayerGameTime()
 
 		NETbeginEncode(NETgameQueue(player), GAME_GAME_TIME);
 			NETuint32_t(&time);
+			NETuint32_t(&checkTime);
+			NETuint32_t(&checkCrc);
 		NETend();
 	}
 }
 
 void recvPlayerGameTime(NETQUEUE queue)
 {
-	uint32_t time;
+	uint32_t time = 0;
+	uint32_t checkTime = 0;
+	uint32_t checkCrc = 0;
 
 	NETbeginDecode(queue, GAME_GAME_TIME);
 		NETuint32_t(&time);
+		NETuint32_t(&checkTime);
+		NETuint32_t(&checkCrc);
 	NETend();
 
 	gameQueueTime[queue.index] = time;
+
+	gameQueueCheckTime[queue.index] = checkTime;
+	gameQueueCheckCrc[queue.index] = checkCrc;
+	if (!checkDebugSync(checkTime, checkCrc))
+	{
+		crcError = true;
+	}
 }
 
 bool checkPlayerGameTime(unsigned player)
