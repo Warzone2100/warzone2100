@@ -3823,6 +3823,23 @@ static float CalcStructureSmokeInterval(float damage)
 	return (((1. - damage) + 0.1) * 10) * STRUCTURE_DAMAGE_SCALING;
 }
 
+void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch)
+{
+	// TODO psBuilding->status == SS_BEING_BUILT test is because structure ids are not synchronised until after they start building...
+	_syncDebug(function, "%c structure%d = p%d;pos(%d,%d,%d),stat%d,type%d,bld%d,pwr%d,bp%d, power = %f", ch,
+	          psStruct->status == SS_BEING_BUILT ? -1 : psStruct->id,
+
+	          psStruct->player,
+	          psStruct->pos.x, psStruct->pos.y, psStruct->pos.z,
+	          psStruct->status,
+	          psStruct->pStructureType->type,
+	          psStruct->currentBuildPts,
+	          psStruct->currentPowerAccrued,
+	          psStruct->body,
+
+	          getPower(psStruct->player));
+}
+
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool mission)
 {
@@ -3831,16 +3848,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	Vector3i dv;
 	int i;
 
-	// TODO psBuilding->status == SS_BEING_BUILT test is because structure ids are not synchronised until after they start building...
-	syncDebug("< structure%d = p%d;pos(%d,%d,%d),stat%d,type%d,bld%d,pwr%d,bp%d, power = %f", psBuilding->status == SS_BEING_BUILT ? -1 : psBuilding->id,
-	          psBuilding->player,
-	          psBuilding->pos.x, psBuilding->pos.y, psBuilding->pos.z,
-	          psBuilding->status,
-	          psBuilding->pStructureType->type,
-	          psBuilding->currentBuildPts,
-	          psBuilding->currentPowerAccrued,
-	          psBuilding->body,
-	          getPower(psBuilding->player));
+	syncDebugStructure(psBuilding, '<');
 
 	if (psBuilding->pStructureType->type == REF_GATE)
 	{
@@ -4021,16 +4029,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		}
 	}
 
-	// TODO psBuilding->status == SS_BEING_BUILT test is because structure ids are not synchronised until after they start building...
-	syncDebug("> structure%d = p%d;pos(%d,%d,%d),stat%d,type%d,bld%d,pwr%d,bp%d, power = %f", psBuilding->status == SS_BEING_BUILT ? -1 : psBuilding->id,
-	          psBuilding->player,
-	          psBuilding->pos.x, psBuilding->pos.y, psBuilding->pos.z,
-	          psBuilding->status,
-	          psBuilding->pStructureType->type,
-	          psBuilding->currentBuildPts,
-	          psBuilding->currentPowerAccrued,
-	          psBuilding->body,
-	          getPower(psBuilding->player));
+	syncDebugStructure(psBuilding, '>');
 
 	CHECK_STRUCTURE(psBuilding);
 }
@@ -6936,16 +6935,23 @@ void cancelProduction(STRUCTURE *psBuilding)
 
 	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
 
+	psFactory = &psBuilding->pFunctionality->factory;
+
 	if (bMultiMessages)
 	{
+		if (psBuilding->player == productionPlayer)
+		{
+			//clear the production run for this factory
+			memset(asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc], 0, sizeof(PRODUCTION_RUN) * MAX_PROD_RUN);
+			psFactory->productionLoops = 0;
+		}
+
 		sendStructureInfo(psBuilding, STRUCTUREINFO_CANCELPRODUCTION, NULL);
 		return;
 	}
 
-	psFactory = &psBuilding->pFunctionality->factory;
-
 	//check its the correct factory
-	if (psBuilding->player == productionPlayer && psFactory->psSubject)
+	if (psFactory->psSubject)
 	{
 		// give the power back that was used until now
 		int secondsToBuild = ((DROID_TEMPLATE*)psFactory->psSubject)->buildPoints/psFactory->productionOutput;
@@ -6961,15 +6967,13 @@ void cancelProduction(STRUCTURE *psBuilding)
 		}
 		addPower(psBuilding->player, powerUsed);
 
-		//clear the production run for this factory
-		memset(asProductionRun[psFactory->psAssemblyPoint->factoryType][
-			psFactory->psAssemblyPoint->factoryInc], 0, sizeof(PRODUCTION_RUN) *
-			MAX_PROD_RUN);
-		//clear the factories subject and quantity
+		//clear the factory's subject
 		psFactory->psSubject = NULL;
-		psFactory->productionLoops = 0;
-		//tell the interface
-		intManufactureFinished(psBuilding);
+		if (psBuilding->player == productionPlayer)
+		{
+			//tell the interface
+			intManufactureFinished(psBuilding);
+		}
 	}
 }
 

@@ -470,6 +470,9 @@ void checkStructure(const STRUCTURE* psStructure, const char * const location_de
 
 extern void     structureInitVars(void);
 
+#define syncDebugStructure(psStruct, ch) _syncDebugStructure(__FUNCTION__, psStruct, ch)
+void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch);
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus

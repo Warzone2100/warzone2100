@@ -697,6 +697,21 @@ void droidBurn(DROID *psDroid)
 	orderDroid( psDroid, DORDER_RUNBURN );
 }
 
+void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
+{
+	_syncDebug(function, "%c droid%d = p%d;pos(%d,%d,%d),ord%d(%d,%d),act%d,so%X,bp%d, power = %f", ch,
+	          psDroid->id,
+
+	          psDroid->player,
+	          psDroid->pos.x, psDroid->pos.y, psDroid->pos.z,
+	          psDroid->order, psDroid->orderX, psDroid->orderY,
+	          psDroid->action,
+	          psDroid->secondaryOrder,
+	          psDroid->body,
+
+	          getPower(psDroid->player));
+}
+
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid)
 {
@@ -723,14 +738,7 @@ void droidUpdate(DROID *psDroid)
 	}
 #endif
 
-	syncDebug("< droid%d = p%d;pos(%d,%d,%d),ord%d(%d,%d),act%d,so%X,bp%d, power = %f", psDroid->id,
-	          psDroid->player,
-	          psDroid->pos.x, psDroid->pos.y, psDroid->pos.z,
-	          psDroid->order, psDroid->orderX, psDroid->orderY,
-	          psDroid->action,
-	          psDroid->secondaryOrder,
-	          psDroid->body,
-	          getPower(psDroid->player));
+	syncDebugDroid(psDroid, '<');
 
 	// Save old droid position, update time.
 	psDroid->prevSpacetime = GET_SPACETIME(psDroid);
@@ -869,14 +877,7 @@ void droidUpdate(DROID *psDroid)
 		}
 	}
 
-	syncDebug("> droid%d = p%d;pos(%d,%d,%d),ord%d(%d,%d),act%d,so%X,bp%d, power = %f", psDroid->id,
-	          psDroid->player,
-	          psDroid->pos.x, psDroid->pos.y, psDroid->pos.z,
-	          psDroid->order, psDroid->orderX, psDroid->orderY,
-	          psDroid->action,
-	          psDroid->secondaryOrder,
-	          psDroid->body,
-	          getPower(psDroid->player));
+	syncDebugDroid(psDroid, '>');
 
 	CHECK_DROID(psDroid);
 }

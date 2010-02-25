@@ -639,7 +639,7 @@ BOOL recvStructureCheck(NETQUEUE queue)
 }
 
 static uint32_t powerCheckLastSent = 0;
-static uint32_t powerCheckLastPower[MAX_PLAYERS];
+static float powerCheckLastPower[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
@@ -668,7 +668,7 @@ static BOOL sendPowerCheck()
 			NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_POWER);
 				NETuint8_t(&player);
 				NETuint32_t(&gameTime);
-				NETuint32_t(&powerCheckLastPower[player]);
+				NETfloat(&powerCheckLastPower[player]);
 			NETend();
 		}
 	}
@@ -679,12 +679,12 @@ BOOL recvPowerCheck(NETQUEUE queue)
 {
 	uint8_t		player;
 	uint32_t        synchTime;
-	uint32_t        power;
+	float           power;
 
 	NETbeginDecode(queue, GAME_CHECK_POWER);
 		NETuint8_t(&player);
 		NETuint32_t(&synchTime);
-		NETuint32_t(&power);
+		NETfloat(&power);
 	NETend();
 
 	if (powerCheckLastSent != synchTime)
@@ -702,9 +702,9 @@ BOOL recvPowerCheck(NETQUEUE queue)
 
 	if (power != powerCheckLastPower[player])
 	{
-		uint32_t powerFrom = getPower(player);
-		uint32_t powerTo = powerFrom + power - powerCheckLastPower[player];
-		debug(LOG_SYNC, "GAME_CHECK_POWER: Adjusting power for player %d (%s) from %u to %u",
+		float powerFrom = getPower(player);
+		float powerTo = powerFrom + power - powerCheckLastPower[player];
+		debug(LOG_SYNC, "GAME_CHECK_POWER: Adjusting power for player %d (%s) from %f to %f",
 		      (int)player, isHumanPlayer(player) ? "Human" : "AI", powerFrom, powerTo);
 		setPower(player, powerTo);
 	}

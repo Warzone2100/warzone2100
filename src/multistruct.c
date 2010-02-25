@@ -466,6 +466,8 @@ void recvStructureInfo(NETQUEUE queue)
 		return;
 	}
 
+	syncDebugStructure(psStruct, '<');
+
 	turnOffMultiMsg(true);
 	switch (structureInfo)
 	{
@@ -479,4 +481,6 @@ void recvStructureInfo(NETQUEUE queue)
 			debug(LOG_ERROR, "Invalid structureInfo %d", structureInfo);
 	}
 	turnOffMultiMsg(false);
+
+	syncDebugStructure(psStruct, '>');
 }

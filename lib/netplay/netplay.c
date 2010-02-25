@@ -254,9 +254,9 @@ extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk, netcode 4.1";
+char VersionString[VersionStringSize] = "trunk, netcode 4.2";
 static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 1;
+static int NETCODE_VERSION_MINOR = 2;
 static int NETCODE_HASH = 0;			// unused for now
 
 static int checkSockets(const SocketSet* set, unsigned int timeout);

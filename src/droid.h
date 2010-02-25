@@ -568,6 +568,9 @@ void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate);
 
 void cancelBuild(DROID *psDroid);
 
+#define syncDebugDroid(psDroid, ch) _syncDebugDroid(__FUNCTION__, psDroid, ch)
+void _syncDebugDroid(const char *function, DROID *psDroid, char ch);
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus
