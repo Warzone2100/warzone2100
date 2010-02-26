@@ -501,8 +501,6 @@ BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_O
 			if (psDroid->selected)
 			{
 				NETuint32_t(&psDroid->id);
-				NETuint32_t(&psDroid->body);
-				NETVector3uw(&psDroid->pos);
 				--droidCount;
 			}
 		}
@@ -571,8 +569,6 @@ BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t
 		for (psDroid = psGroup->psList; psDroid; psDroid = psDroid->psGrpNext)
 		{
 			NETuint32_t(&psDroid->id);
-			NETuint32_t(&psDroid->body);
-			NETVector3uw(&psDroid->pos);
 		}
 	}
 	return NETend();
@@ -590,8 +586,6 @@ BOOL recvGroupOrder(NETQUEUE queue)
 
 	uint8_t		droidCount, i, player;
 	uint32_t	*droidIDs;
-	uint32_t	*droidBodies;
-	Vector3uw	*droidPositions;
 
 	NETbeginDecode(queue, GAME_GROUPORDER);
 	{
@@ -619,23 +613,11 @@ BOOL recvGroupOrder(NETQUEUE queue)
 		// Allocate some space on the stack to hold the droid IDs
 		droidIDs = alloca(droidCount * sizeof(uint32_t));
 
-		// Plus some more space for the body points of the droids
-		droidBodies = alloca(droidCount * sizeof(uint32_t));
-
-		// Finally some space for the positions of the droids
-		droidPositions = alloca(droidCount * sizeof(Vector3uw));
-
 		// Retrieve the droids from the message
 		for (i = 0; i < droidCount; ++i)
 		{
 			// Retrieve the id number for the current droid
 			NETuint32_t(&droidIDs[i]);
-
-			// Get the body points of the droid
-			NETuint32_t(&droidBodies[i]);
-
-			// Get the position of the droid
-			NETVector3uw(&droidPositions[i]);
 		}
 	}
 	if (!NETend())
@@ -658,8 +640,6 @@ BOOL recvGroupOrder(NETQUEUE queue)
 	for (i = 0; i < droidCount; ++i)
 	{
 		DROID* psDroid;
-		uint32_t body = droidBodies[i];
-		Vector3uw pos = droidPositions[i];
 
 		// Retrieve the droid associated with the current ID
 		if (!IdToDroid(droidIDs[i], ANYPLAYER, &psDroid))
@@ -692,17 +672,6 @@ BOOL recvGroupOrder(NETQUEUE queue)
 			 * specific position. Then we don't have any destination info
 			 */
 			ProcessDroidOrder(psDroid, order, x, y, 0, 0);
-		}
-
-		// Update the droids body points
-		psDroid->body = body;
-
-		// Set the droids position if it is more than two tiles out
-		if (abs(pos.x - psDroid->pos.x) > (TILE_UNITS * 2)
-		 || abs(pos.y - psDroid->pos.y) > (TILE_UNITS * 2))
-		{
-			// Jump it, even if it is on screen (may want to change this)
-			psDroid->pos = pos;
 		}
 	}
 
