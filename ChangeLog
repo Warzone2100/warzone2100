@@ -1,11 +1,12 @@
-2010-02-21: Version 2.3 beta 11
+2010-02-26: Version 2.3 beta 11a
  * General:
    * Change: Display time and level name in release builds now
    * Change: add 'logs' directory in config dir to store all netplay logs. (r9779, ticket:1564)
    * Change: Use -fstack-protector if available (r9940)
-   * Fix: NSIS updates (r9764, r9907)
+   * Fix: NSIS updates (r9764, r9907, r10017)
    * Fix: Only drop artifacts on a fully built factory (r9795, r9787, ticket:1574)
-   * Fix: Multiple cross build system fixes (r9870-r9878, r9899)
+   * Fix: Multiple cross build system fixes (r9870-r9878, r9899, r10020)
+   * Fix: Do not update the orientation of flying droids with respect to the ground. (r10022)
  * UI:
    * New: Add MessageBox support on systems that have Motif (r9814, ticket:1569)
  * Gameplay:
