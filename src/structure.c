@@ -2610,11 +2610,6 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 		//set the droids order to that of the factory - AB 22/04/99
 		psNewDroid->secondaryOrder = psStructure->pFunctionality->factory.secondaryOrder;
 
-		if(bMultiMessages)
-		{
-			sendDroidSecondaryAll(psNewDroid);
-		}
-
 		if(psStructure->visible[selectedPlayer])
 		{
 			/* add smoke effect to cover the droid's emergence from the factory */

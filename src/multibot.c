@@ -193,53 +193,6 @@ BOOL recvDroidSecondary(NETQUEUE queue)
 	return true;
 }
 
-BOOL sendDroidSecondaryAll(const DROID* psDroid)
-{
-	if (!bMultiMessages)
-		return true;
-
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_SECONDARY_ALL);
-	{
-		uint8_t player = psDroid->player;
-		uint32_t droid = psDroid->id;
-		uint32_t secOrder = psDroid->secondaryOrder;
-
-		NETuint8_t(&player);
-		NETuint32_t(&droid);
-		NETuint32_t(&secOrder);
-	}
-	return NETend();
-}
-
-BOOL recvDroidSecondaryAll(NETQUEUE queue)
-{
-	DROID* psDroid;
-
-	NETbeginDecode(queue, GAME_SECONDARY_ALL);
-	{
-		uint8_t player;
-		uint32_t droid, secOrder;
-
-		NETuint8_t(&player);
-		NETuint32_t(&droid);
-		NETuint32_t(&secOrder);
-
-		if (!IdToDroid(droid, player, &psDroid))
-		{
-			NETend();
-			return false;
-		}
-
-		if (psDroid != NULL)
-		{
-			psDroid->secondaryOrder = secOrder;
-		}
-	}
-	NETend();
-
-	return true;
-}
-
 /** Broadcast droid and transporter loading information
  *
  *  \sa recvDroidEmbark(),sendDroidDisEmbark(),recvDroidDisEmbark()

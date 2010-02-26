@@ -87,32 +87,34 @@ typedef enum
 	GAME_MIN_TYPE = 111,            ///< Minimum-1 valid GAME_ type, *MUST* be first.
 	GAME_DROID,                     ///< a new droid
 	GAME_DROIDINFO,                 ///< update a droid order.
-	GAME_DROIDDEST,                 ///< issue a droid destruction, will be sent by all players at the same time, and have no effect, if synchronised.
 	GAME_GROUPORDER,                ///< order a group of droids.
 	GAME_TEMPLATE,                  ///< a new template
 	GAME_TEMPLATEDEST,              ///< remove template
 	GAME_FEATUREDEST,               ///< destroy a game feature.
-	GAME_CHECK_DROID,               ///< check & update bot position and damage.
-	GAME_CHECK_STRUCT,              ///< check & update struct damage.
-	GAME_CHECK_POWER,               ///< power levels for a player.
 	GAME_BUILD,                     ///< build a new structure
-	GAME_STRUCTDEST,                ///< specify a strucutre to destroy, will be sent by all players at the same time, and have no effect, if synchronised.
-	GAME_BUILDFINISHED,             ///< a building is complete.
 	GAME_RESEARCH,                  ///< Research has been completed.
 	GAME_FEATURES,                  ///< information regarding features.
 	GAME_SECONDARY,                 ///< set a droids secondary order
 	GAME_ALLIANCE,                  ///< alliance data.
 	GAME_GIFT,                      ///< a luvly gift between players.
-	GAME_DEMOLISH,                  ///< a demolish is complete.
 	GAME_ARTIFACTS,                 ///< artifacts randomly placed.
 	GAME_VTOL,                      ///< vtol rearmed
-	GAME_SECONDARY_ALL,             ///< complete secondary order.
 	GAME_DROIDEMBARK,               ///< droid embarked on a Transporter
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
 	GAME_RESEARCHSTATUS,            ///< research state.
 	GAME_STRUCTUREINFO,             ///< Structure state.
 	GAME_LASSAT,                    ///< lassat firing.
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
+	// The following messages (not including GAME_MAX_TYPE) are currently redundant, and should probably at some point not be
+	// sent, except (some of them) when using cheats in debug mode.
+	GAME_DROIDDEST,                 ///< issue a droid destruction, will be sent by all players at the same time, and have no effect, if synchronised.
+	GAME_CHECK_DROID,               ///< check & update bot position and damage.
+	GAME_CHECK_STRUCT,              ///< check & update struct damage.
+	GAME_CHECK_POWER,               ///< power levels for a player.
+	GAME_STRUCTDEST,                ///< specify a strucutre to destroy, will be sent by all players at the same time, and have no effect, if synchronised.
+	GAME_BUILDFINISHED,             ///< a building is complete.
+	GAME_DEMOLISH,                  ///< a demolish is complete.
+	// End of redundant messages.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
 } MESSAGE_TYPES;
 

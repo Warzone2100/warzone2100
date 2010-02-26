@@ -609,7 +609,7 @@ BOOL recvMessage(void)
 				//case GAME_BUILDFINISHED://27 down, 15 to go.
 				//case GAME_STRUCTDEST:   //28 down, 14 to go.
 				//case GAME_SECONDARY:    // 7 down, 36 to go.
-				case GAME_SECONDARY_ALL:
+				//case GAME_SECONDARY_ALL://36 down,  6 to go. <--- Removed completely...
 				case GAME_DROIDEMBARK:
 				case GAME_DROIDDISEMBARK:
 				//case GAME_GIFT:         //32 down, 10 to go
@@ -621,7 +621,7 @@ BOOL recvMessage(void)
 				//case GAME_TEMPLATEDEST: //34 down,  8 to go. <--- Aaargh. This one down, but might come back as a zombie.
 				//case GAME_FEATUREDEST:  //29 down, 13 to go.
 				//case NET_PING:
-				case GAME_DEMOLISH:
+				//case GAME_DEMOLISH:     //35 down,  7 to go.
 				//case GAME_RESEARCH:     //30 down, 12 to go.
 				//case NET_OPTIONS:
 				//case NET_PLAYERRESPONDING:
@@ -701,9 +701,6 @@ BOOL recvMessage(void)
 				break;
 			case GAME_SECONDARY:					// set a droids secondary order level.
 				recvDroidSecondary(queue);
-				break;
-			case GAME_SECONDARY_ALL:					// set a droids secondary order level.
-				recvDroidSecondaryAll(queue);
 				break;
 			case GAME_DROIDEMBARK:
 				recvDroidEmbark(queue);              //droid has embarked on a Transporter

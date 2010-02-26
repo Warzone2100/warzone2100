@@ -47,7 +47,6 @@ extern BOOL recvPing                (NETQUEUE queue);
 extern BOOL recvRequestDroid        (NETQUEUE queue);
 extern BOOL recvTextMessage         (NETQUEUE queue);
 extern BOOL recvDroidSecondary      (NETQUEUE queue);
-extern BOOL recvDroidSecondaryAll   (NETQUEUE queue);
 extern BOOL recvDroidEmbark         (NETQUEUE queue);
 extern BOOL recvDroidDisEmbark      (NETQUEUE queue);
 extern BOOL recvDroidCheck          (NETQUEUE queue);

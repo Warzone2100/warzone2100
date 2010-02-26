@@ -311,6 +311,7 @@ BOOL recvDemolishFinished(NETQUEUE queue)
 	if (psStruct)
 	{
 		// Demolish it
+		// Should never get here, if in synch.
 		removeStruct(psStruct, true);
 		if (psDroid && psDroid->psTarStats)
 		{
