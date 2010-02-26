@@ -55,3 +55,4 @@ Check the researchResult function. Should a message be sent there, and if so, th
 * src/scriptfuncs.c *
 *********************
 Sanity check that this file doesn't do anything stupid, such as modifying the game state directly.
+Such as unloading transporters directly, not sure if that's used in multiplayer, though. And scrResetPlayerVisibility, scrSetDroidKills, scrFireWeaponAtLoc, scrFireWeaponAtObj, scrTakeOver..., some others, scrAddPower, scrCompleteResearch, scrDestroyStructure and many others.

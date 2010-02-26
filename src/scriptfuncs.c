@@ -936,12 +936,6 @@ BOOL scrAddDroidToMissionList(void)
 		return false;
 	}
 
-/*	if ((UBYTE)player == selectedPlayer )
-	{
-		ASSERT( false, "scrAddDroidToMissionList: can't add own player to list" );
-		return false;
-	}*/
-
 	if (player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrAddUnitToMissionList:player number is too high" );
@@ -976,7 +970,6 @@ BOOL scrAddDroidToMissionList(void)
 BOOL scrAddDroid(void)
 {
 	SDWORD			x, y, player;
-//	INTERP_VAL		sVal;
 	DROID_TEMPLATE	*psTemplate;
 	DROID			*psDroid;
 
@@ -984,17 +977,6 @@ BOOL scrAddDroid(void)
 	{
 		return false;
 	}
-/*	if (!stackPop(&sVal))
-	{
-		return false;
-	}
-	if (sVal.type != ST_TEMPLATE)
-	{
-		ASSERT( false, "scrAddDroid: type mismatch for object" );
-		return false;
-	}
-	psTemplate = (DROID_TEMPLATE *)sVal.v.ival;
-*/
 	if (player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrAddUnit:player number is too high" );
@@ -1078,7 +1060,6 @@ BOOL scrBuildingDestroyed(void)
 {
 	SDWORD		player;
 	UDWORD		structureID;
-//	INTERP_VAL	sVal;
 	BOOL		destroyed;
 	STRUCTURE	*psCurr;
 
@@ -1086,18 +1067,6 @@ BOOL scrBuildingDestroyed(void)
 	{
 		return false;
 	}
-/*	if (!stackPop(&sVal))
-	{
-		return false;
-	}
-
-	if (sVal.type != ST_STRUCTUREID)
-	{
-		ASSERT( false, "scrBuildingDestroyed: type mismatch for object" );
-		return false;
-	}
-	structureID = (UDWORD)sVal.v.ival;
-*/
 	if (player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrBuildingDestroyed:player number is too high" );
@@ -1128,22 +1097,11 @@ BOOL scrBuildingDestroyed(void)
 BOOL scrEnableStructure(void)
 {
 	SDWORD		player, index;
-//	INTERP_VAL	sVal;
 
 	if (!stackPopParams(2, ST_STRUCTURESTAT, &index, VAL_INT, &player))
 	{
 		return false;
 	}
-/*	if (!stackPop(&sVal))
-	{
-		return false;
-	}
-
-	if (sVal.type != ST_STRUCTURESTAT)
-	{
-		ASSERT( false, "scrEnableStructure: type mismatch for object" );
-		return false;
-	}*/
 	if (player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrEnableStructure:player number is too high" );
@@ -1200,24 +1158,12 @@ BOOL scrIsStructureAvailable(void)
 BOOL scrSelectDroidByID(void)
 {
 	SDWORD			player, droidID;
-//	INTERP_VAL		sVal;
 	BOOL			selected;
 
 	if (!stackPopParams(2, ST_DROIDID, &droidID, VAL_INT, &player))
 	{
 		return false;
 	}
-/*	if (!stackPop(&sVal))
-	{
-		return false;
-	}
-
-	if (sVal.type != ST_DROIDID)
-	{
-		ASSERT( false, "scrSelectDroidByID: type mismatch for object" );
-		return false;
-	}
-*/
 	if (player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrSelectUnitByID:player number is too high" );
@@ -1403,7 +1349,6 @@ BOOL scrAddMessage(void)
 	MESSAGE_TYPE		msgType;
 	SDWORD			player;
 	BOOL			playImmediate;
-//	INTERP_VAL		sVal;
 	VIEWDATA		*psViewData;
 	UDWORD			height;
 
@@ -1414,18 +1359,6 @@ BOOL scrAddMessage(void)
 		return false;
 	}
 
-/*
-	if (!stackPop(&sVal))
-	{
-		return false;
-	}
-
-	if (sVal.type != ST_INTMESSAGE)
-	{
-		ASSERT( false, "scrAddMessage: type mismatch for object" );
-		return false;
-	}
-*/
 	if (player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrAddMessage:player number is too high" );
@@ -1495,37 +1428,6 @@ BOOL scrRemoveMessage(void)
 
 	return true;
 }
-
-// -----------------------------------------------------------------------------------------
-// add a tutorial message to the Intelligence Display
-/*BOOL scrAddTutorialMessage(void)
-{
-	SDWORD			player;
-	VIEWDATA		*psViewData;
-
-
-	if (!stackPopParams(2, ST_INTMESSAGE, &psViewData , VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddTutorialMessage:player number is too high" );
-		return false;
-	}
-
-	//set the data
-	tutorialMessage.pViewData = psViewData;
-	tutorialMessage.player = player;
-
-	//play the tutorial message immediately
-	psCurrentMsg = &tutorialMessage;
-	initTextDisplay(psCurrentMsg, font_regular, 255);
-	addIntelScreen(true);
-
-	return true;
-}*/
 
 // -----------------------------------------------------------------------------------------
 /*builds a droid in the specified factory*/
@@ -10675,26 +10577,32 @@ BOOL scrPursueResearch(void)
 	 && foundIndex < numResearch)
 	{
 		pResearch = (asResearch + foundIndex);
-		pPlayerRes				= asPlayerResList[player]+ foundIndex;
-		psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
-		debug(LOG_ERROR, "FIXME! Not synchronised! And probably duplicate code!");
-
-		if (IsResearchCancelled(pPlayerRes))
+		if (bMultiMessages)
 		{
-			psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
+			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, player, true);
 		}
 		else
 		{
-			psResFacilty->powerAccrued = 0;
-		}
+			pPlayerRes = asPlayerResList[player]+ foundIndex;
+			psResFacilty->psSubject = (BASE_STATS*)pResearch;              //set the subject up
 
-		MakeResearchStarted(pPlayerRes);
-		psResFacilty->timeStarted = ACTION_START_TIME;
-		psResFacilty->timeStartHold = 0;
-		psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
-		if (psResFacilty->timeToResearch == 0)
-		{
-			psResFacilty->timeToResearch = 1;
+			if (IsResearchCancelled(pPlayerRes))
+			{
+				psResFacilty->powerAccrued = pResearch->researchPower; //set up as if all power available for cancelled topics
+			}
+			else
+			{
+				psResFacilty->powerAccrued = 0;
+			}
+
+			MakeResearchStarted(pPlayerRes);
+			psResFacilty->timeStarted = ACTION_START_TIME;
+			psResFacilty->timeStartHold = 0;
+			psResFacilty->timeToResearch = pResearch->researchPoints / psResFacilty->researchPoints;
+			if (psResFacilty->timeToResearch == 0)
+			{
+				psResFacilty->timeToResearch = 1;
+			}
 		}
 
 		sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[foundIndex].pName );

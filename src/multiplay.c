@@ -915,7 +915,7 @@ static BOOL recvResearch(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // New research stuff, so you can see what others are up to!
 // inform others that I'm researching this.
-BOOL sendReseachStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BOOL bStart)
+BOOL sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BOOL bStart)
 {
 	if (!myResponsibility(player) || gameTime < 5)
 	{

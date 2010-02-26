@@ -1667,32 +1667,37 @@ BOOL scrSkDoResearch(void)
 
 	if(i != numResearch)
 	{
-		pResearch = (asResearch+i);
-		pPlayerRes				= asPlayerResList[player]+ i;
-		psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
-
-		if (IsResearchCancelled(pPlayerRes))
+		pResearch = asResearch + i;
+		if (bMultiMessages)
 		{
-			psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
+			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, player, true);
 		}
 		else
 		{
-			psResFacilty->powerAccrued = 0;
-		}
+			pPlayerRes				= asPlayerResList[player]+ i;
+			psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
 
-		MakeResearchStarted(pPlayerRes);
-		psResFacilty->timeStarted = ACTION_START_TIME;
-        psResFacilty->timeStartHold = 0;
-		psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
-		if (psResFacilty->timeToResearch == 0)
-		{
-			psResFacilty->timeToResearch = 1;
+			if (IsResearchCancelled(pPlayerRes))
+			{
+				psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
+			}
+			else
+			{
+				psResFacilty->powerAccrued = 0;
+			}
+
+			MakeResearchStarted(pPlayerRes);
+			psResFacilty->timeStarted = ACTION_START_TIME;
+			psResFacilty->timeStartHold = 0;
+			psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
+			if (psResFacilty->timeToResearch == 0)
+			{
+				psResFacilty->timeToResearch = 1;
+			}
 		}
 
 		sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[i].pName );
 		NETlogEntry(sTemp,0,0);
-
-
 	}
 
 	return true;

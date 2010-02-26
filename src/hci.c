@@ -6159,7 +6159,7 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		if (psStats != NULL)
 		{
 			// Say that we want to do reseach [sic].
-			sendReseachStatus(psBuilding, ((RESEARCH *)psStats)->ref - REF_RESEARCH_START, selectedPlayer, true);
+			sendResearchStatus(psBuilding, ((RESEARCH *)psStats)->ref - REF_RESEARCH_START, selectedPlayer, true);
 		}
 		else
 		{
@@ -6206,7 +6206,7 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 			psResFacilty->powerAccrued = 0;
 		}
 
-		sendReseachStatus(psBuilding,count,selectedPlayer,true);	// inform others, I'm researching this.
+		sendResearchStatus(psBuilding,count,selectedPlayer,true);	// inform others, I'm researching this.
 
 		MakeResearchStarted(pPlayerRes);
 		//psResFacilty->timeStarted = gameTime;
