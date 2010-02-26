@@ -615,7 +615,7 @@ BOOL recvMessage(void)
 				//case GAME_GIFT:         //32 down, 10 to go
 				//case NET_SCORESUBMIT:
 				//case GAME_VTOL:         //37 down,  5 to go. <--- Removed completely, the VTOLs are happy without them.
-				case GAME_LASSAT:
+				//case GAME_LASSAT:       //38 down,  4 to go.
 
 				case GAME_TEMPLATE:
 				//case GAME_TEMPLATEDEST: //34 down,  8 to go. <--- Aaargh. This one down, but might come back as a zombie.

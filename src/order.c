@@ -4366,20 +4366,21 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 				break;
 			}
 
-			//ok to fire - so fire away
-			proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, pos, psObj, true, 0);
-			//set up last fires time
-			psStruct->asWeaps[0].lastFired =  gameTime;
-
-		//play 5 second countdown message
-			audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN,
-				psObj->pos.x, psObj->pos.y, psObj->pos.z );
-
-
 			// send the weapon fire
 			if(bMultiMessages)
 			{
 				sendLasSat(player,psStruct,psObj);
+			}
+			else
+			{
+				//ok to fire - so fire away
+				proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, pos, psObj, true, 0);
+				//set up last fires time
+				psStruct->asWeaps[0].lastFired =  gameTime;
+
+				//play 5 second countdown message
+				audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN,
+					psObj->pos.x, psObj->pos.y, psObj->pos.z );
 			}
 
 			break;

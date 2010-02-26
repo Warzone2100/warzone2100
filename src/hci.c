@@ -2085,6 +2085,7 @@ INT_RETVAL intRunWidgets(void)
 					psPositionStats->ref < REF_STRUCTURE_START + REF_RANGE)
 				{
 					STRUCTURE_STATS *psBuilding = (STRUCTURE_STATS *)psPositionStats;
+					STRUCTURE tmp;
 
 					intCalcStructCenter(psBuilding, structX, structY, &structX, &structY);
 					if (psBuilding->type == REF_DEMOLISH)
@@ -2095,7 +2096,8 @@ INT_RETVAL intRunWidgets(void)
 
 						if (psStructure && psTile->psObject->type == OBJ_STRUCTURE)
 						{
-							removeStruct(psStructure, true);
+							//removeStruct(psStructure, true);
+							SendDestroyStructure(psStructure);
 						}
 						else if (psFeature && psTile->psObject->type == OBJ_FEATURE)
 						{
@@ -2105,8 +2107,15 @@ INT_RETVAL intRunWidgets(void)
 					}
 					else
 					{
-						psStructure = buildStructure(psBuilding, structX, structY,
-						                             selectedPlayer, false);
+						//psStructure = buildStructure(psBuilding, structX, structY,
+						//                             selectedPlayer, false);
+						psStructure = &tmp;
+						tmp.player = selectedPlayer;
+						tmp.id = generateNewObjectId();
+						tmp.pStructureType = (STRUCTURE_STATS *)psPositionStats;
+						tmp.pos.x = structX;
+						tmp.pos.y = structY;
+						tmp.pos.z = map_Height(structX, structY) + world_coord(1)/10;
 						if (!psStructure)
 						{
 							addConsoleMessage(_("Failed to create building"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
@@ -2123,7 +2132,7 @@ INT_RETVAL intRunWidgets(void)
 						const char* msg;
 
 						psStructure->status = SS_BUILT;
-						buildingComplete(psStructure);
+						//buildingComplete(psStructure);
 
 						// In multiplayer games be sure to send a message to the
 						// other players, telling them a new structure has been
