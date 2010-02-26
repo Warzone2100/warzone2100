@@ -2,7 +2,7 @@ Dydo-AI is an Artificial Intelligence for the open source strategy game
 Warzone2100 -> http://wz2100.net/
 
 =============================================================
-For new release versions, changelogs, bugs reporting see Dydo-AI website
+For new release versions, patches and changelogs see Dydo-AI website
 
 Website: http://www.obooma.net/dydo/
 

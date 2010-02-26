@@ -1,5 +1,5 @@
 /*
-DyDo-AI Rel 2.0.6
+DyDo-AI Rel 2.0.7
 Mod Developer: "DylanDog" on http://forums.wz2100.net/
 AI webpage: http://www.obooma.net/dydo/       
                                                                 
@@ -16,13 +16,19 @@ ________________ CHANGELOG ___________________________________
 
 See Dydo website
 
+{fix} - improved VTOL production, in certain conditions not VTOLS were built.
+{fix} - fixed a minor bug which avoided to send more then one messages
+{fix} - wall defences was neither repaired nor completed if for any reason their building was interrupted
+{change} - uncomplete derricks are give priority when idle bild droids are assigned to an help build task. 
+{change} - improved a bit the tasks of the repair team.
+
 ToDo:
 Use of numTemplatesInProduction(TEMPLATE, PLAYER) 
 Improve lassat targets, intoduce droid targets!
 Improve the way the units are gathered. dyDo should be abale to attack from various sides.
   
 */
-#define DYDOBP_RELEASE "DyDo-AI ver 2.0.6"
+#define DYDOBP_RELEASE "DyDo-AI ver 2.0.7"
 
 #define	GAME_TIME_IN_SECS	(gameTime / 10)
 #define	GAME_TIME_IN_MIN	(gameTime / 10 / 60)
@@ -107,8 +113,8 @@ Improve the way the units are gathered. dyDo should be abale to attack from vari
 #define TIME_MOVE_TOGATEWAYS 70
 #define THREAT_RANGE_TILES 8
 //used for repairing and building derricks
-#define THREAT_RANGE_TILES_SHORT 8
-#define THREAT_RANGE_TILES_LONG 12
+#define THREAT_RANGE_TILES_SHORT 7
+#define THREAT_RANGE_TILES_LONG 10
 
 #define MIN_CYB_CONSTENG 2
 #define MIN_CYB_CONSTENG_CYB 4
@@ -343,7 +349,7 @@ private int nBaseRange,aaRange,gatherDefCybX,gatherDefCybY,gatherDefTankX,gather
 private int lastResIndex, nAttackingUnitsToAdd, nCybAttUnitsToAdd;
 private int nTime,nAttackTime,nFrWeapStructs,nFrWeapDroids,nFrWeapDrStr;
 private int nTanksDefGrp,nMapPower,nEnWeapStructs,nEnWeapDroids,nEnWeapDrStr;
-private int tFinishOilHack,alertX,alertY,alertTime,alertLevel,nX,nY;
+private int tTargetTime,tFinishOilHack,alertX,alertY,alertTime,alertLevel,nX,nY;
 private int tLastPowerGen,tChangeTimeTankToAdd,nHelpX,nHelpY,tLastHelp,tTotalAttack,tLastTankAttack,tLastCyborgAttack;
 private int tTanksReSentToGathering,tTanksSentToGathering,nTankGatheringX,nTankGatheringY,tankAttackX,tankAttackY,targetPlayerTank,targetPlayerVTOL;
 private int tCybReSentToGathering,tCybSentToGathering,tCybAttackAction,tHelpAction,tTankAttackAction,nCybGatheringX,nCybGatheringY,cybAlertX,cybAlertY,cybAttackX,cybAttackY,targetPlayerCyb;
@@ -847,6 +853,7 @@ event initialisedEvent(CALL_GAMEINIT)
 		nProd1 = 1;
     tLastCybMech = gameTime;
     nCybMechanic = 0;
+		tTargetTime       = gameTime;
 		
     num_aDroid = 50;
     count = 0;
@@ -2308,15 +2315,15 @@ event manageDefVTOL(inactive)
   
   if ( attTargetVTOL != NULLOBJECT ){          
     _dist = distBetweenTwoPoints( attTargetVTOL.x, attTargetVTOL.y, baseX, baseY);
-    //displayMsg("attTarget != NULLOBJECT; VTOLs ("& vtolDefendGr.members &") idle("& idleGroup(vtolDefendGr) &") alertIsOn("& alertIsOn &") alertTime("& alertTime &") tDefVtolAction("& tDefVtolAction &") isDerr("& bVTOLTargetIsDerrick &") dist("& _dist/TILE &"/"& nDefendRange/TILE &") AA("& numEnemyAAInRange(attTargetVTOL.x, attTargetVTOL.y, AA_THREAT_RANGE) &")");
+    //dbg("attTarget != NULLOBJECT; VTOLs ("& vtolDefendGr.members &") idle("& idleGroup(vtolDefendGr) &") alertIsOn("& alertIsOn &") alertTime("& alertTime &") tDefVtolAction("& tDefVtolAction &") isDerr("& bVTOLTargetIsDerrick &") dist("& _dist/TILE &"/"& nDefendRange/TILE &") AA("& numEnemyAAInRange(attTargetVTOL.x, attTargetVTOL.y, AA_THREAT_RANGE) &")",player);
   }
-  if ( defTargetVTOL != NULLOBJECT ){          
-    _dist = distBetweenTwoPoints( defTargetVTOL.x, defTargetVTOL.y, baseX, baseY);
-    //displayMsg("defTarget != NULLOBJECT; VTOLs ("& vtolDefendGr.members &") idle("& idleGroup(vtolDefendGr) &") alertIsOn("& alertIsOn &") alertTime("& alertTime &") tDefVtolAction("& tDefVtolAction &") isDerr("& bVTOLTargetIsDerrick &") dist("& _dist/TILE &"/"& nDefendRange/TILE &") AA("& numEnemyAAInRange(defTargetVTOL.x, defTargetVTOL.y, AA_THREAT_RANGE) &")");
-  }
-  //if ( defTargetVTOL == NULLOBJECT and attTargetVTOL == NULLOBJECT){
-    //displayMsg("Targets == NULLOBJECTS; VTOLs ("& vtolDefendGr.members &") idle("& idleGroup(vtolDefendGr) &") alertIsOn("& alertIsOn &") alertTime("& alertTime &") tDefVtolAction("& tDefVtolAction &") isDerr("& bVTOLTargetIsDerrick &") ");
-  //}          
+  //if ( defTargetVTOL != NULLOBJECT ){          
+    //_dist = distBetweenTwoPoints( defTargetVTOL.x, defTargetVTOL.y, baseX, baseY);
+    //dbg("defTarget != NULLOBJECT; VTOLs ("& vtolDefendGr.members &") idle("& idleGroup(vtolDefendGr) &") alertIsOn("& alertIsOn &") alertTime("& alertTime &") tDefVtolAction("& tDefVtolAction &") isDerr("& bVTOLTargetIsDerrick &") dist("& _dist/TILE &"/"& nDefendRange/TILE &") AA("& numEnemyAAInRange(defTargetVTOL.x, defTargetVTOL.y, AA_THREAT_RANGE) &")",player);
+  //}
+  if ( defTargetVTOL == NULLOBJECT and attTargetVTOL == NULLOBJECT){
+    dbg("Targets == NULLOBJECTS; VTOLs ("& vtolDefendGr.members &") idle("& idleGroup(vtolDefendGr) &") alertIsOn("& alertIsOn &") alertTime("& alertTime &") tDefVtolAction("& tDefVtolAction &") isDerr("& bVTOLTargetIsDerrick &") ",player);
+  }          
   
   if (vtolDefendGr.members == 0){ 
     targetPlayerVTOL    = -1;
@@ -2334,6 +2341,7 @@ event manageDefVTOL(inactive)
   }
   
   if (alertIsOn){ 
+    attTargetVTOL = NULLOBJECT;
     if ( idleGroup(vtolDefendGr) == 0 ){
       exit;//allow VTOLS to stay on rearming pads
     }
@@ -2372,9 +2380,16 @@ event manageDefVTOL(inactive)
     //reset attack target
     attTargetVTOL = NULLOBJECT;
   
+    //set defTarget, this is required in case a long range was set as Target
+    // and in the meanwhile it happen to got attacked by groud troops. In this
+    // case DyDo has to reset the target.
+    if ( gameTime - tTargetTime > 1*TIME_MINUTE ){
+       defTargetVTOL = NULLOBJECT;
+    }
+  
     if (defTargetVTOL != NULLOBJECT ){
       if ( !friendlyPlayer(defTargetVTOL.player) ){//due to NEXUS
-//displayMsg("manageDefVTOL: attack defTargetVTOL");
+//dbg("manageDefVTOL: attack defTargetVTOL",player);
         orderGroupObj( vtolDefendGr, DORDER_ATTACK, defTargetVTOL );
         tDefVtolAction = gameTime;
       } 
@@ -2388,11 +2403,11 @@ event manageDefVTOL(inactive)
         }        
       } 
       if ( defTargetVTOL != NULLOBJECT ){        
-//displayMsg("manageDefVTOL: defTargetVTOL found and attacked ");
+//dbg("manageDefVTOL: defTargetVTOL found and attacked ",player);
         orderGroupObj( vtolDefendGr, DORDER_ATTACK, defTargetVTOL );
         tDefVtolAction        = gameTime;
         bVTOLTargetIsDerrick  = false;
-      } //else { displayMsg("manageDefVTOL: target not found "); }
+      } //else { dbg("manageDefVTOL: target not found ",player); }
     }
    
   } else {// ============ alert not on ================== 
@@ -3522,6 +3537,7 @@ event AIattacked(AIattackedTr)    //event 20
             if ( _nAA*3 < vtolDefendGr.members ){
               defTargetVTOL         = enemyBaseObject;
               targetPlayerVTOL      = enemyBaseObject.player;
+              tTargetTime           = gameTime;
               //bVTOLTargetIsDerrick  = false;
               //dbg("dbg->AIattacked: order VTOL to defend structure and attack at ("& enemyBaseObject.x/TILE &"-"& enemyBaseObject.y/TILE &"), dist from base("& _nDistFromBase/TILE &")",player);
             }
@@ -3542,6 +3558,7 @@ event AIattacked(AIattackedTr)    //event 20
           defTargetVTOL     = enemyBaseObject;
           targetPlayerVTOL  = enemyBaseObject.player;
           bVTOLTargetIsDerrick = false;
+          tTargetTime       = gameTime;
         }
         bProceed = true;  //send also def troops to attack
         setEventTrigger(defFromLongRangeWeap,defFromLongRangeWeapTr); //build 
@@ -3555,6 +3572,7 @@ event AIattacked(AIattackedTr)    //event 20
           defTargetVTOL     = enemyBaseObject;
           targetPlayerVTOL  = enemyBaseObject.player;
           bVTOLTargetIsDerrick = false;
+          tTargetTime       = gameTime;
         }
         if ( _nDistFromEnemy >=19 and _nDistFromEnemy <= 22 ){
           bProceed = true;
@@ -3841,6 +3859,24 @@ event manageIdleTrucks(inactive)
   }
   boolResult = false;
 
+   //force helpbuild of derricks
+   if (_idleTruck != NULLOBJECT){  
+    initEnumStruct(FALSE,derrick,player,player);
+    structure = enumStruct();
+    while (structure != NULLOBJECT){
+      if(!structureComplete(structure)){
+        if ( !threatInRange(player,structure.x, structure.y, THREAT_RANGE_TILES_SHORT*128, false) )
+        {
+          if (droidCanReach(_idleTruck, structure.x, structure.y) ){
+            //displayMsg("**** manageIdleTrucks: found a derrick not complete for droid ("& _idleTruck.id &") ");
+   				 orderDroidObj(_idleTruck,DORDER_HELPBUILD,structure);
+   				}
+        } //else {displayMsg("manageIdleTrucks: there is some threat in range of derrick");}
+      }
+      structure = enumStruct();
+    }
+   }
+
    //force helpbuild of repair Facility first
    if (_idleTruck != NULLOBJECT){  
     initEnumStruct(FALSE,repairFacility,player,player);
@@ -3858,6 +3894,7 @@ event manageIdleTrucks(inactive)
       structure = enumStruct();
     }
    }
+
 
    if( buildDefGroup.members>0 ){
      if (!repairDefStructs(BUILDDEF_GRP)){
@@ -3889,7 +3926,7 @@ event manageIdleTrucks(inactive)
      if (!helpBuild(BUILD_GRP)){
       if ( !repairStructs(BUILD_GRP) ){
        boolResult2 = repairDefStructs(BUILD_GRP);
-      }// else {displayMsg("manageIdleTrucks: - nothing to do for BUILD_GRP");}      
+      } //else {displayMsg("manageIdleTrucks: - nothing to do for BUILD_GRP");}      
      }
    }
    
@@ -4039,7 +4076,39 @@ event manageRepairTeam(inactive)
         droid = iterateGroup(repairGroup);
       }
       
+      //As last chance let`s try to completely repair defend idle droids
+      if (boolResult and !alertIsOn){
+        droid2 = idleRepairDroid(baseX,baseY);
+        if ( droid2 != NULLOBJECT )
+        {
+          droid = nearestDroidToBeRepaired(tankDefGroup, droid2.x, droid2.y);
+          if ( droid != NULLOBJECT){
+            if  ( distBetweenTwoPoints( droid.x, droid.y, baseX, baseY) < nDefendRange ) {
+             orderDroidObj(droid2, DORDER_DROIDREPAIR, droid);
+             //displayMsg("*** manageRepairTeam: found unit in tankDefGroup ("& droid.id &") to be repaired, health ("& droid.health &")");
+             boolResult = false;
+            }
+          }
+        }
+      }
+      if (boolResult and !alertIsOn){
+        droid2 = idleRepairDroid(baseX,baseY);
+        if ( droid2 != NULLOBJECT )
+        {
+          droid = nearestDroidToBeRepaired(cyborgDefGroup, droid2.x, droid2.y);
+          if ( droid != NULLOBJECT){
+            if  ( distBetweenTwoPoints( droid.x, droid.y, baseX, baseY) < nDefendRange ) {
+             orderDroidObj(droid2, DORDER_DROIDREPAIR, droid);
+             //displayMsg("*** manageRepairTeam: found unit in cyborgDefGroup ("& droid.id &") to be repaired, health ("& droid.health &")");
+             boolResult = false;
+            }
+          }
+        }
+      }
+
     }//else{displayMsg("*** manageRepairTeam: No repair tanks found");}// end if members > 0
+    
+    
     
 }
 
@@ -4188,7 +4257,7 @@ event harvesterOperate(inactive)
   ASSERT(player >= 0 and player < 8,      "player out of bounds: harvesterOperate " & player, player);
   eventCheckTime[10] = gameTime;
   
-  //displayMsg("harvestOperate: called ("& bOilResLeft &")");
+  //displayMsg("harvestOperate: called ("& bOilResLeft &") ("& harvesterGroup.members &")");
   
   if ( !bOilResLeft ){ exit; }
 
@@ -4210,6 +4279,7 @@ event harvesterOperate(inactive)
   //get the number of Derricks built
   if ( _oilRes != NULLOBJECT )
   {
+    //displayMsg("harvesterOperate: oilRes found");
     if ( nMyDerricks < numMaxDerricks  ) 
     {
       //to avoid another droid target this oliRes
@@ -4241,7 +4311,7 @@ event harvesterOperate(inactive)
           } //else {  displayMsg("harvesterOperate: oilRes is too far away ("& count2/TILE &" / "& count/TILE &") ");  }
       }
     } 
-  } 
+  } //else {  displayMsg("harvesterOperate: oilRes not found");} 
 }
   
 
@@ -5526,7 +5596,9 @@ event SelectTankTemplate(inactive)
            //displayMsg("*** SelectTankTemplate : will build template selected");
             buildDroid(tmplChoice , structure, player, 1); //build droid
   		  		boolResult = false;
-		  		} else { displayMsg("#### SelectTankTemplate : CANNOT BUILD TEPLATE ["& nTmpl &"] "); }
+		  		} else { 
+            printDebug1("#### SelectTankTemplate : cannot build template ["& nTmpl &"] "); 
+          }
 				
       } //else { displayMsg("SelectTankTemplate: NOT OK structure.id("& structure.id &") boolResult("& boolResult &")________");  }			
 		 structure = enumStruct();
@@ -5650,7 +5722,7 @@ event SelectCyborgTemplate(inactive)
             }
 
             if ( _pos == -1 ){
-              printDebug1("#### SelectCyborgTemplate: (A) cannot build template ["& _pos &"] ");
+              printDebug1("#### SelectCyborgTemplate: (A) cannot build template ["& _pos &"] AT("& _bBuildAT_cyborg &") AP("& _bBuildAP_cyborg &") AR("& _bBuildAR_cyborg &") KK("& _bBuildKK_cyborg &") ");
               nTotCybErr++;
               exit;          
             }
@@ -6244,7 +6316,8 @@ function void vtolFactoryBuildVtol(STRUCTURE _factory)
 	_bResult = false;
 	_bBombVTOL = false;
 
-	_nLoop      = 0;
+	_t = -1;
+  _nLoop      = 0;
 	_nTemplAT   = 0;
 	_nTemplBomb = 0;
 	while( _nLoop < numVtolTemplates )
@@ -6253,11 +6326,11 @@ function void vtolFactoryBuildVtol(STRUCTURE _factory)
       if( skCanBuildTemplate(player,_factory, vtols[_nLoop]) ){
 				_nTemplAT++;
 				_bResult = true;
-				//dbg("vtolFactoryBuildVtol: can build vtols["& _nLoop &"]",player);
+				//dbg("vtolFactoryBuildVtol: can build AT vtols["& _nLoop &"]",player);
 			}
 		} else {  //Bomb - Heavy Body
       if( skCanBuildTemplate(player,_factory, vtols[_nLoop]) ){
-				//dbg("vtolFactoryBuildVtol: can build vtols["& _nLoop &"]",player);
+				//dbg("vtolFactoryBuildVtol: can build Bomb vtols["& _nLoop &"]",player);
 				_nTemplBomb++;
 				_bResult = true;
 			}
@@ -6273,41 +6346,68 @@ function void vtolFactoryBuildVtol(STRUCTURE _factory)
 
   _nRnd = random(100);
   if ( _nTemplBomb == 0){ //Only AT
+
+    if ( _nRnd < 70 ){ //Lancer - Scourge
+    	//Lancer-Scourge
+      if( skCanBuildTemplate( player ,_factory, vtols[0]) ){ _t = 0; } 
+    	if( skCanBuildTemplate( player ,_factory, vtols[2]) ){ _t = 2; } 
+    	if( skCanBuildTemplate( player ,_factory, vtols[4]) ){ _t = 4; }
+    	 if ( _t == -1 ){ //backup
+        if( skCanBuildTemplate( player ,_factory, vtols[1]) ){ _t = 1; } 
+      	if( skCanBuildTemplate( player ,_factory, vtols[3]) ){ _t = 3; }
+       }
+    } else {//HPV
+      if( skCanBuildTemplate( player ,_factory, vtols[1]) ){ _t = 1; } 
+    	if( skCanBuildTemplate( player ,_factory, vtols[3]) ){ _t = 3; }
+  	  if ( _t == -1 ){ //backup
+        if( skCanBuildTemplate( player ,_factory, vtols[0]) ){ _t = 0; } 
+      	if( skCanBuildTemplate( player ,_factory, vtols[2]) ){ _t = 2; } 
+      	if( skCanBuildTemplate( player ,_factory, vtols[4]) ){ _t = 4; }
+  	  }
+    } 
   
-    if ( researchFinished(retaliationBody,player) ){
-      _t = 3+random(2);//Scorpion HPV - Retaliation Scourge 
-    } else {
-      if ( researchFinished(scorpionBody,player) ){
-        _t = 2+random(2);//Scorpion
-      } else {
-        _t = random(2); //Bug
-      }
-    }
   
   } else {
    
     if ( _nRnd < 50 ){ //Bomb
-   
-      _t  = 5+random(_nTemplBomb);
-	    _bBombVTOL    = true;
+
+    	if( skCanBuildTemplate( player ,_factory, vtols[5]) ){ _t = 5; } 
+    	if( skCanBuildTemplate( player ,_factory, vtols[6]) ){ _t = 6; } 
+    	if( skCanBuildTemplate( player ,_factory, vtols[7]) ){ _t = 7; } 
+    	if( skCanBuildTemplate( player ,_factory, vtols[8]) ){ _t = 8; } 
    
     } else { //AT
     
-      if ( researchFinished(retaliationBody,player) ){
-        _t = 3+random(2);//Scorpion HPV - Retaliation Scourge      
-      } else {
-        if ( researchFinished(scorpionBody,player) ){
-          _t = 2+random(2);//Scorpion
-        } else {
-          _t = random(2); //Bug
-        }
-      }
+      _nRnd = random(100);
+      if ( _nRnd < 70 ){ //Lancer - Scourge
+      	//Lancer-Scourge
+        if( skCanBuildTemplate( player ,_factory, vtols[0]) ){ _t = 0; } 
+      	if( skCanBuildTemplate( player ,_factory, vtols[2]) ){ _t = 2; } 
+      	if( skCanBuildTemplate( player ,_factory, vtols[4]) ){ _t = 4; }
+      	 if ( _t == -1 ){ //backup
+          if( skCanBuildTemplate( player ,_factory, vtols[1]) ){ _t = 1; } 
+        	if( skCanBuildTemplate( player ,_factory, vtols[3]) ){ _t = 3; }
+         }
+      } else {//HPV 
+        if( skCanBuildTemplate( player ,_factory, vtols[1]) ){ _t = 1; } 
+      	if( skCanBuildTemplate( player ,_factory, vtols[3]) ){ _t = 3; }
+    	  if ( _t == -1 ){ //backup
+          if( skCanBuildTemplate( player ,_factory, vtols[0]) ){ _t = 0; } 
+        	if( skCanBuildTemplate( player ,_factory, vtols[2]) ){ _t = 2; } 
+        	if( skCanBuildTemplate( player ,_factory, vtols[4]) ){ _t = 4; }
+    	  }
+      } 
           
     }
   }
 	
+	if ( _t == -1 ){
+   //dbg("vtolFactoryBuildVtol: tmplate not found lancer("& researchFinished(lancerATweap,player) &") scorpion("& researchFinished(scorpionBody,player) &") _t("& _t &"), _bBombVTOL("& _bBombVTOL &") _nTemplBomb("& _nTemplBomb &") _nTemplAT("& _nTemplAT &")_nRnd("& _nRnd &") ",player);
+	 exit;
+  }
+  
 	if( skCanBuildTemplate( player ,_factory, vtols[_t]) ){
-    //displayMsg("vtolFactoryBuildVtol: build VTOL _t("& _t &"), _bBombVTOL("& _bBombVTOL &") _nTemplBomb("& _nTemplBomb &") _nTemplAT("& _nTemplAT &")_nRnd("& _nRnd &") ");
+    displayMsg("vtolFactoryBuildVtol: build VTOL _t("& _t &"), _bBombVTOL("& _bBombVTOL &") _nTemplBomb("& _nTemplBomb &") _nTemplAT("& _nTemplAT &")_nRnd("& _nRnd &") lancer("& researchFinished(lancerATweap,player) &") scorpion("& researchFinished(scorpionBody,player) &")");
     buildDroid(vtols[_t],_factory,player,1);
   } 
   //else {
@@ -6780,7 +6880,7 @@ function void  dropBeaconToAllies(STRING _message, int _x, int _y, int _z, bool 
   _toPlayer = 0;
   
   //avoid too many blips...
-  if ( (gameTime - tBeaconSent) > 2*TIME_MINUTE ){ return; }
+  if ( (gameTime - tBeaconSent) < 2*TIME_MINUTE ){ return; }
   
   while ( _toPlayer < MAX_PLAYERS ){
     if( friendlyPlayer(_toPlayer) ){ 
@@ -7156,13 +7256,15 @@ function STRUCTURE closestOilRes(DROID _droid, int _x, int _y)
       //displayMsg("OilRes ("& _tempOilRes.id &") @("& _tempOilRes.x/TILE &")("& _tempOilRes.y/TILE &") can be reached ("& _okToProceed &") by droid ("& _droid.id &")");
 
       //check that this OilRes is not already a "target" of a droid
-      _i = 0;
-      while (_i < 11)
-      {    
-        if ( _tempOilRes.id == oilResTargetId[_i] ){  
-          _okToProceed = false; 
-        }
-    		_i++;
+      if ( gameTime < TIME_HARVESTING_PHASE ){
+        _i = 0;
+        while (_i < 11)
+        {    
+          if ( _tempOilRes.id == oilResTargetId[_i] ){  
+            _okToProceed = false; 
+          }
+      		_i++;
+    		}
   		}
   		
       //check oilRes is not in range of an Ally base, leave this oilRes to the Ally 
@@ -7511,6 +7613,26 @@ function bool helpBuild(int _group)
   if (_idleTruck == NULLOBJECT){ return false; }
   
     //look for def structures first
+    while(_i < pickWallDefQueueDepth )
+    {
+      initEnumStruct(FALSE,pickWallDefQueue[_i],player,player);
+      _structurestat = enumStruct();
+      while (_structurestat != NULLOBJECT){
+        if ( !structureComplete(_structurestat) ){
+          if ( !threatInRange(player,_structurestat.x, _structurestat.y, THREAT_RANGE_TILES*128, false) )
+          {
+            if (droidCanReach(_idleTruck, _structurestat.x, _structurestat.y) ){
+       				orderDroidObj(_idleTruck,DORDER_HELPBUILD,_structurestat);
+              return true;
+            }
+          } //else {displayMsg("helpBuild: there is some threat in range");}
+        }
+        _structurestat = enumStruct();
+      }//while struct
+      _i++;
+    }//While _i
+
+    //look for def structures first
     while(_i < pickDefQueueDepth )
     {
       initEnumStruct(FALSE,pickDefQueue[_i],player,player);
@@ -7793,7 +7915,35 @@ function bool repairDefStructs(int _group)
   }//While _i
 	if(_mostDamagedDefense != NULLOBJECT)
 	{
-   // displayMsg("**** repairDefStructs: found a damaged def struct damage=("& _mostDamage &") ");
+    //displayMsg("**** repairDefStructs: found a damaged def struct damage=("& _mostDamage &") ");
+		orderDroidObj(_idleTruck, DORDER_REPAIR, _mostDamagedDefense);
+		return true;
+	}
+
+  _i=0;
+  //look for def structures 
+  while(_i < pickWallDefQueueDepth )
+  {
+    initEnumStruct(FALSE,pickWallDefQueue[_i],player,player);
+    _defense = enumStruct();
+    while (_defense != NULLOBJECT){
+			if(distBetweenTwoPoints(_defense.x, _defense.y, baseX, baseY) < nDefendRange ){
+				_tempDamage = 100 - _defense.health;
+				if(_tempDamage >= STRUCT_REPAIR_DAMAGE){
+          if ( !threatInRange(player,_defense.x, _defense.y, THREAT_RANGE_TILES*128, false) ) {
+          	if(_tempDamage > _mostDamage)	{
+  						_mostDamage = _tempDamage;
+  						_mostDamagedDefense = _defense;
+  					}
+					}
+				}
+      }
+      _defense = enumStruct();
+    }//while struct
+    _i++;
+  }//While _i
+  if(_mostDamagedDefense != NULLOBJECT)	{
+    //displayMsg("**** repairDefStructs: found a damaged WALL def struct damage=("& _mostDamage &") ");
 		orderDroidObj(_idleTruck, DORDER_REPAIR, _mostDamagedDefense);
 		return true;
 	}
@@ -7821,6 +7971,7 @@ function bool repairDefStructs(int _group)
     _i++;
   }//While _i
   if(_mostDamagedDefense != NULLOBJECT)	{
+    //displayMsg("**** repairDefStructs: found a damaged def struct damage=("& _mostDamage &") ");
 		orderDroidObj(_idleTruck, DORDER_REPAIR, _mostDamagedDefense);
 		return true;
 	}
