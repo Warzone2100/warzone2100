@@ -695,9 +695,10 @@ void updateDroidOrientation(DROID *psDroid)
 	double dx, dy;
 	double direction, pitch, roll;
 
-	if(psDroid->droidType == DROID_PERSON || cyborgDroid(psDroid) || psDroid->droidType == DROID_TRANSPORTER)
-	{
-		/* These guys always stand upright */
+	if(psDroid->droidType == DROID_PERSON || cyborgDroid(psDroid) || psDroid->droidType == DROID_TRANSPORTER 
+		|| isFlying(psDroid)) 
+	{ 
+		/* The ground doesn't affect the pitch/roll of these droids*/ 
 		return;
 	}
 
@@ -2731,27 +2732,24 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 	psDroid->roll  = 0;
 }
 
-static BOOL moveDescending( DROID *psDroid, UDWORD iMapHeight )
+static void moveDescending( DROID *psDroid, UDWORD iMapHeight )
 {
 	if ( psDroid->pos.z > iMapHeight )
 	{
 		/* descending */
 		psDroid->sMove.iVertSpeed = (SWORD)-VTOL_VERTICAL_SPEED;
 		psDroid->sMove.speed = 0;
-
-		/* return true to show still descending */
-		return true;
 	}
 	else
 	{
 		/* on floor - stop */
 		psDroid->sMove.iVertSpeed = 0;
 
+		/* reset move state */
+		psDroid->sMove.Status = MOVEINACTIVE;
+
 		/* conform to terrain */
 		updateDroidOrientation(psDroid);
-
-		/* return false to show stopped descending */
-		return false;
 	}
 }
 
@@ -3239,11 +3237,8 @@ void moveUpdateDroid(DROID *psDroid)
 			 (psDroid->action == DACTION_MOVE) || (psDroid->action == DACTION_WAITFORREARM) ||
 			 (psDroid->action == DACTION_WAITDURINGREARM)  || (psDroid->action == DACTION_FIRESUPPORT))*/
 		{
-			if ( moveDescending( psDroid, iZ ) == false )
-			{
-				/* reset move state */
-				psDroid->sMove.Status = MOVEINACTIVE;
-			}
+			moveDescending( psDroid, iZ );
+			
 /*			else
 			{
 				UDWORD	landX, landY;
