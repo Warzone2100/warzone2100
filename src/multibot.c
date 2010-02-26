@@ -61,64 +61,6 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWOR
 
 
 // ////////////////////////////////////////////////////////////////////////////
-// vtol bits.
-// happy vtol = vtol ready to go back to attack.
-BOOL sendHappyVtol(const DROID* psDroid)
-{
-	if (!bMultiMessages)
-		return true;
-
-	if (!myResponsibility(psDroid->player))
-	{
-		return false;
-	}
-
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_VTOL);
-	{
-		uint8_t player = psDroid->player;
-		uint32_t droid = psDroid->id;
-
-		NETuint8_t(&player);
-		NETuint32_t(&droid);
-	}
-	return NETend();
-}
-
-BOOL recvHappyVtol(NETQUEUE queue)
-{
-	DROID* pD;
-	unsigned int i;
-
-	NETbeginDecode(queue, GAME_VTOL);
-	{
-		uint8_t player;
-		uint32_t droid;
-
-		NETuint8_t(&player);
-		NETuint32_t(&droid);
-
-		if (!IdToDroid(droid, player, &pD))
-		{
-			NETend();
-			return false;
-		}
-	}
-	NETend();
-
-	// Rearming also repairs VTOLs
-	pD->body = pD->originalBody;
-
-	for (i = 0; i < pD->numWeaps; i++)
-	{
-		pD->sMove.iAttackRuns[i] = 0; // finish it for next time round.
-		pD->asWeaps[i].ammo = asWeaponStats[pD->asWeaps[i].nStat].numRounds;
-		pD->asWeaps[i].lastFired = 0;
-	}
-
-	return true;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 // Secondary Orders.
 
 // Send

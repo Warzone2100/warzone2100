@@ -3782,11 +3782,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				//check for fully armed and fully repaired
 				if (vtolHappy(psDroid))
 				{
-					if( bMultiMessages)
-					{
-						sendHappyVtol(psDroid);
-					}
-
 					//clear the rearm pad
 					psDroid->action = DACTION_NONE;
 					bFinishAction = true;

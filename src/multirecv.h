@@ -58,7 +58,6 @@ extern BOOL recvPositionRequest     (NETQUEUE queue);
 extern void recvOptions             (NETQUEUE queue);
 extern void sendOptions             (void);
 
-extern BOOL recvHappyVtol           (NETQUEUE queue);
 extern BOOL recvResearchStatus      (NETQUEUE queue);
 extern BOOL recvLasSat              (NETQUEUE queue);
 extern void recvStructureInfo       (NETQUEUE queue);

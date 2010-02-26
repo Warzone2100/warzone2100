@@ -614,7 +614,7 @@ BOOL recvMessage(void)
 				case GAME_DROIDDISEMBARK:
 				//case GAME_GIFT:         //32 down, 10 to go
 				//case NET_SCORESUBMIT:
-				case GAME_VTOL:
+				//case GAME_VTOL:         //37 down,  5 to go. <--- Removed completely, the VTOLs are happy without them.
 				case GAME_LASSAT:
 
 				case GAME_TEMPLATE:
@@ -710,9 +710,6 @@ BOOL recvMessage(void)
 				break;
 			case GAME_GIFT:						// an alliance gift from one player to another.
 				recvGift(queue);
-				break;
-			case GAME_VTOL:
-				recvHappyVtol(queue);
 				break;
 			case GAME_LASSAT:
 				recvLasSat(queue);

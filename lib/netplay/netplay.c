@@ -4040,7 +4040,6 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_ALLIANCE:                 return "GAME_ALLIANCE";
 		case GAME_GIFT:                     return "GAME_GIFT";
 		case GAME_ARTIFACTS:                return "GAME_ARTIFACTS";
-		case GAME_VTOL:                     return "GAME_VTOL";
 		case GAME_DROIDEMBARK:              return "GAME_DROIDEMBARK";
 		case GAME_DROIDDISEMBARK:           return "GAME_DROIDDISEMBARK";
 		case GAME_RESEARCHSTATUS:           return "GAME_RESEARCHSTATUS";

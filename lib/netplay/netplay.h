@@ -98,7 +98,6 @@ typedef enum
 	GAME_ALLIANCE,                  ///< alliance data.
 	GAME_GIFT,                      ///< a luvly gift between players.
 	GAME_ARTIFACTS,                 ///< artifacts randomly placed.
-	GAME_VTOL,                      ///< vtol rearmed
 	GAME_DROIDEMBARK,               ///< droid embarked on a Transporter
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
 	GAME_RESEARCHSTATUS,            ///< research state.

@@ -189,7 +189,6 @@ extern BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, u
 extern BOOL sendDroidSecondary	(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
 extern BOOL sendDroidEmbark     (const DROID* psDroid, const DROID* psTransporter);
 extern BOOL sendDroidDisEmbark  (const DROID* psDroid, const DROID* psTransporter);
-extern BOOL sendHappyVtol		(const DROID* psDroid);
 
 // Startup. mulitopt
 extern BOOL multiTemplateSetup	(void);
