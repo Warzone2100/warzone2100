@@ -21,6 +21,10 @@ Fix production completed and research completed sounds.
 
 Fix destroying droid templates. Can probably go out of synch, if destroying a template just before the droid is produced, due to trying to produce an unknown type of droid (so the other players would see the new droid, but the droid owner wouldn't).
 
+Fix unloading single units from transporters. Currently just unload everything, if trying to unload a unit.
+
+Check if commanders work.
+
 ********************
 * src/structure.c: *
 ********************
@@ -46,11 +50,6 @@ Make modified code for placing structures in debug mode less hackish.
 * src/research.c *
 ******************
 Check the researchResult function. Should a message be sent there, and if so, then should wait for it?
-
-***************
-* src/order.c *
-***************
-Just before transporterAddDroid, it changes the droid state directly. Should either not test for selectedPlayer, or should not change the droid state directly. See also: unloadTransporter.
 
 *********************
 * src/scriptfuncs.c *

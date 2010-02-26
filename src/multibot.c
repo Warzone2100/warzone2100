@@ -649,6 +649,8 @@ BOOL recvGroupOrder(NETQUEUE queue)
 			continue; // continue working on next droid; crossing fingers...
 		}
 
+		syncDebugDroid(psDroid, '<');
+
 		/*
 		 * If the current order not is a command order and we are not a
 		 * commander yet are in the commander group remove us from it.
@@ -673,6 +675,8 @@ BOOL recvGroupOrder(NETQUEUE queue)
 			 */
 			ProcessDroidOrder(psDroid, order, x, y, 0, 0);
 		}
+
+		syncDebugDroid(psDroid, '>');
 	}
 
 	return true;
@@ -840,7 +844,8 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 	{
 		// Don't bother if it is close
 		if (abs(psDroid->pos.x - x) < (TILE_UNITS/2)
-		 && abs(psDroid->pos.y - y) < (TILE_UNITS/2))
+		 && abs(psDroid->pos.y - y) < (TILE_UNITS/2)
+		 && order != DORDER_DISEMBARK)
 		{
 			return;
 		}

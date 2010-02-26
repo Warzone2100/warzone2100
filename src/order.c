@@ -850,26 +850,22 @@ void orderUpdateDroid(DROID *psDroid)
 			else if (abs((SDWORD)psDroid->pos.x - (SDWORD)psDroid->psTarget->pos.x) < TILE_UNITS
 			         && abs((SDWORD)psDroid->pos.y - (SDWORD)psDroid->psTarget->pos.y) < TILE_UNITS)
 			{
-				// if in multiPlayer, only want to process if this player's droid
-				if (!bMultiPlayer || psDroid->player == selectedPlayer)
-				{
-					// save the target of current droid (the transporter)
-					DROID * transporter = (DROID *)psDroid->psTarget;
+				// save the target of current droid (the transporter)
+				DROID * transporter = (DROID *)psDroid->psTarget;
 
-					// Make sure that it really is a valid droid
-					CHECK_DROID(transporter);
+				// Make sure that it really is a valid droid
+				CHECK_DROID(transporter);
 
-					// order the droid to stop so moveUpdateDroid does not process this unit
-					orderDroid(psDroid, DORDER_STOP);
-					setDroidTarget(psDroid, NULL);
-					psDroid->psTarStats = NULL;
-					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+				// order the droid to stop so moveUpdateDroid does not process this unit
+				orderDroid(psDroid, DORDER_STOP);
+				setDroidTarget(psDroid, NULL);
+				psDroid->psTarStats = NULL;
+				secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
 
-					/* We must add the droid to the transporter only *after*
-					 * processing changing its orders (see above).
-					 */
-					transporterAddDroid(transporter, psDroid);
-				}
+				/* We must add the droid to the transporter only *after*
+				 * processing changing its orders (see above).
+				 */
+				transporterAddDroid(transporter, psDroid);
 			}
 			else if (psDroid->action == DACTION_NONE)
 			{
@@ -891,11 +887,7 @@ void orderUpdateDroid(DROID *psDroid)
                 if (psDroid->action != DACTION_MOVE && psDroid->action != DACTION_MOVEFIRE &&
 				    psDroid->sMove.Status == MOVEINACTIVE && psDroid->sMove.iVertSpeed == 0)
                 {
-                    //only need to unload if this player's droid
-                    if (psDroid->player == selectedPlayer)
-                    {
-                        unloadTransporter(psDroid, psDroid->pos.x, psDroid->pos.y, false);
-                    }
+				unloadTransporter(psDroid, psDroid->pos.x, psDroid->pos.y, false);
                     //reset the transporter's order
                     psDroid->order = DORDER_NONE;
                 }
@@ -2739,7 +2731,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, BOOL altOrder)
 	{
 		/* in MultiPlayer - if ALT-key is pressed then need to get the Transporter
 		 * to fly to location and all units disembark */
-		if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
+		if (altOrder)
 		{
 			order = DORDER_DISEMBARK;
 		}

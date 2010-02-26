@@ -610,8 +610,8 @@ BOOL recvMessage(void)
 				//case GAME_STRUCTDEST:   //28 down, 14 to go.
 				//case GAME_SECONDARY:    // 7 down, 36 to go.
 				//case GAME_SECONDARY_ALL://36 down,  6 to go. <--- Removed completely...
-				case GAME_DROIDEMBARK:
-				case GAME_DROIDDISEMBARK:
+				//case GAME_DROIDEMBARK:  //39 down,  3 to go.
+				//case GAME_DROIDDISEMBARK://40down,  2 to go.
 				//case GAME_GIFT:         //32 down, 10 to go
 				//case NET_SCORESUBMIT:
 				//case GAME_VTOL:         //37 down,  5 to go. <--- Removed completely, the VTOLs are happy without them.

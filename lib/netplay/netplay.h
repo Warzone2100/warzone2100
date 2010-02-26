@@ -98,8 +98,6 @@ typedef enum
 	GAME_ALLIANCE,                  ///< alliance data.
 	GAME_GIFT,                      ///< a luvly gift between players.
 	GAME_ARTIFACTS,                 ///< artifacts randomly placed.
-	GAME_DROIDEMBARK,               ///< droid embarked on a Transporter
-	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
 	GAME_RESEARCHSTATUS,            ///< research state.
 	GAME_STRUCTUREINFO,             ///< Structure state.
 	GAME_LASSAT,                    ///< lassat firing.
@@ -113,6 +111,8 @@ typedef enum
 	GAME_STRUCTDEST,                ///< specify a strucutre to destroy, will be sent by all players at the same time, and have no effect, if synchronised.
 	GAME_BUILDFINISHED,             ///< a building is complete.
 	GAME_DEMOLISH,                  ///< a demolish is complete.
+	GAME_DROIDEMBARK,               ///< droid embarked on a Transporter
+	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
 	// End of redundant messages.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
 } MESSAGE_TYPES;

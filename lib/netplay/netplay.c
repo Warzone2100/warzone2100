@@ -254,9 +254,9 @@ extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk, netcode 4.2";
+char VersionString[VersionStringSize] = "trunk, netcode 4.3";
 static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 2;
+static int NETCODE_VERSION_MINOR = 3;
 static int NETCODE_HASH = 0;			// unused for now
 
 static int checkSockets(const SocketSet* set, unsigned int timeout);
@@ -4040,8 +4040,6 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_ALLIANCE:                 return "GAME_ALLIANCE";
 		case GAME_GIFT:                     return "GAME_GIFT";
 		case GAME_ARTIFACTS:                return "GAME_ARTIFACTS";
-		case GAME_DROIDEMBARK:              return "GAME_DROIDEMBARK";
-		case GAME_DROIDDISEMBARK:           return "GAME_DROIDDISEMBARK";
 		case GAME_RESEARCHSTATUS:           return "GAME_RESEARCHSTATUS";
 		case GAME_STRUCTUREINFO:            return "GAME_STRUCTUREINFO";
 		case GAME_LASSAT:                   return "GAME_LASSAT";
@@ -4053,6 +4051,8 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_STRUCTDEST:               return "GAME_STRUCTDEST";
 		case GAME_BUILDFINISHED:            return "GAME_BUILDFINISHED";
 		case GAME_DEMOLISH:                 return "GAME_DEMOLISH";
+		case GAME_DROIDEMBARK:              return "GAME_DROIDEMBARK";
+		case GAME_DROIDDISEMBARK:           return "GAME_DROIDDISEMBARK";
 		case GAME_MAX_TYPE:                 return "GAME_MAX_TYPE";
 	}
 	return "(INVALID MESSAGE TYPE)";
