@@ -55,10 +55,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <GLee.h>
 #include "sequence.h"
 #include "timer.h"
 #include "lib/framework/math_ext.h"
-#include "lib/ivis_opengl/GLee.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/openal_error.h"
