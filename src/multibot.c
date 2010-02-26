@@ -1111,13 +1111,13 @@ BOOL recvDestroyDroid(NETQUEUE queue)
 	if(!psDroid->died)
 	{
 		turnOffMultiMsg(true);
-		debug(LOG_DEATH, "Killing droid %d on request from player %d", psDroid->id, queue.index);
+		debug(LOG_DEATH, "Killing droid %d on request from player %d - huh?", psDroid->id, queue.index);
 		destroyDroid(psDroid);
 		turnOffMultiMsg(false);
 	}
 	else
 	{
-		debug(LOG_DEATH, "droid %d on request from player %d is dead already?", psDroid->id, queue.index);
+		debug(LOG_DEATH, "droid %d is confirmed dead by player %d.", psDroid->id, queue.index);
 	}
 
 	return true;

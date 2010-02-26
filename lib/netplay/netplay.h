@@ -87,7 +87,7 @@ typedef enum
 	GAME_MIN_TYPE = 111,            ///< Minimum-1 valid GAME_ type, *MUST* be first.
 	GAME_DROID,                     ///< a new droid
 	GAME_DROIDINFO,                 ///< update a droid order.
-	GAME_DROIDDEST,                 ///< issue a droid destruction
+	GAME_DROIDDEST,                 ///< issue a droid destruction, will be sent by all players at the same time, and have no effect, if synchronised.
 	GAME_GROUPORDER,                ///< order a group of droids.
 	GAME_TEMPLATE,                  ///< a new template
 	GAME_TEMPLATEDEST,              ///< remove template
@@ -96,7 +96,7 @@ typedef enum
 	GAME_CHECK_STRUCT,              ///< check & update struct damage.
 	GAME_CHECK_POWER,               ///< power levels for a player.
 	GAME_BUILD,                     ///< build a new structure
-	GAME_STRUCTDEST,                ///< specify a strucutre to destroy
+	GAME_STRUCTDEST,                ///< specify a strucutre to destroy, will be sent by all players at the same time, and have no effect, if synchronised.
 	GAME_BUILDFINISHED,             ///< a building is complete.
 	GAME_RESEARCH,                  ///< Research has been completed.
 	GAME_FEATURES,                  ///< information regarding features.

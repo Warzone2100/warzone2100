@@ -5065,7 +5065,7 @@ SDWORD		sX,sY;
 			{
 				if(bVisible)
 				{
-					destroyStruct(psStructure);
+					SendDestroyStructure(psStructure);
 				}
 				else
 				{
@@ -5443,7 +5443,7 @@ UDWORD	count=0;
 			(psDroid->pos.y > y1) && (psDroid->pos.y < y2) )
 		{
 			/* then it's inside the area */
-			destroyDroid(psDroid);
+			SendDestroyDroid(psDroid);
 			count++;
 		}
 	}

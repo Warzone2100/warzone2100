@@ -5111,8 +5111,8 @@ BOOL destroyStruct(STRUCTURE *psDel)
 
 	if (bMultiMessages)
 	{
+		// Every player should be sending this message at once, and ignoring it later.
 		SendDestroyStructure(psDel);
-		return true;  // Wait for our message before really destroying the structure.
 	}
 
 //---------------------------------------

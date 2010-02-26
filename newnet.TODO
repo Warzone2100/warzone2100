@@ -14,7 +14,7 @@ Sanity check all use of selectedPlayer. It should be used for deciding how the i
 *************
 * Somewhere *
 *************
-Fix the extra droid explosion effects after a droid dies, but before the GAME_DROIDDEST message that gives the droid permission to really die. Actually, maybe the GAME_DROIDDEST, GAME_STRUCTDEST and GAME_FEATUREDEST should be turned into just synch messages, and stuff should be removed as soon as destroyed.
+The GAME_FEATUREDEST should be turned into just synch messages, and features should be removed as soon as destroyed.
 
 Fix production completed and research completed sounds.
 

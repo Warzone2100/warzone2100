@@ -1874,13 +1874,13 @@ void	kf_KillEnemy( void )
 			for(psCDroid=apsDroidLists[player]; psCDroid; psCDroid=psNDroid)
 			{
 				psNDroid = psCDroid->psNext;
-				destroyDroid(psCDroid);
+				SendDestroyDroid(psCDroid);
 			}
 			// wipe out all their structures
 		  	for(psCStruct=apsStructLists[player]; psCStruct; psCStruct=psNStruct)
 		  	{
 		  		psNStruct = psCStruct->psNext;
-		  		destroyStruct(psCStruct);
+				SendDestroyStructure(psCStruct);
 		  	}
 		}
 	}
@@ -1913,7 +1913,7 @@ void kf_KillSelected(void)
 		if (psCDroid->selected)
 		{
 //			removeDroid(psCDroid);
-			destroyDroid(psCDroid);
+			SendDestroyDroid(psCDroid);
 		}
 	}
 	for(psCStruct=apsStructLists[selectedPlayer]; psCStruct; psCStruct=psNStruct)
@@ -1921,7 +1921,7 @@ void kf_KillSelected(void)
 		psNStruct = psCStruct->psNext;
 		if (psCStruct->selected)
 		{
-			destroyStruct(psCStruct);
+			SendDestroyStructure(psCStruct);
 		}
 	}
 }
