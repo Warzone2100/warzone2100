@@ -131,15 +131,11 @@ BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STA
 	{
 		uint8_t player = psDroid->player;
 		uint32_t droid = psDroid->id;
-		uint32_t body = psDroid->body;
-		Vector3uw pos = psDroid->pos;
 
 		NETuint8_t(&player);
 		NETuint32_t(&droid);
 		NETenum(&sec);
 		NETenum(&state);
-		NETuint32_t(&body);
-		NETVector3uw(&pos);
 	}
 	return NETend();
 }
@@ -150,8 +146,6 @@ BOOL recvDroidSecondary(NETQUEUE queue)
 	DROID*          psDroid;
 	SECONDARY_ORDER sec = DSO_ATTACK_RANGE;
 	SECONDARY_STATE state = DSS_NONE;
-	uint32_t body;
-	Vector3uw pos;
 
 	NETbeginDecode(queue, GAME_SECONDARY);
 	{
@@ -162,8 +156,6 @@ BOOL recvDroidSecondary(NETQUEUE queue)
 		NETuint32_t(&droid);
 		NETenum(&sec);
 		NETenum(&state);
-		NETuint32_t(&body);
-		NETVector3uw(&pos);
 
 		// If we can not find the droid should we not ask for it?
 		if (!IdToDroid(droid, player, &psDroid))
@@ -178,17 +170,6 @@ BOOL recvDroidSecondary(NETQUEUE queue)
 	turnOffMultiMsg(true);
 	secondarySetState(psDroid, sec, state);
 	turnOffMultiMsg(false);
-
-	// Set the droids body points (HP)
-	psDroid->body = body;
-
-	// Set the droids position if it is more than two tiles out
-	if (abs(pos.x - psDroid->pos.x) > (TILE_UNITS * 2)
-	 || abs(pos.y - psDroid->pos.y) > (TILE_UNITS * 2))
-	{
-		// Jump it, even if it is on screen (may want to change this)
-		psDroid->pos = pos;
-	}
 
 	return true;
 }
