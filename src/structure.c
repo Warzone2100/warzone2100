@@ -6230,7 +6230,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				// tell the world!
 				if (bMultiMessages)
 				{
-					uint8_t giftType = DROID_GIFT, droid_count = 1;
+					uint8_t giftType = DROID_GIFT;
 
 					NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
 					{
@@ -6242,9 +6242,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 						NETuint8_t(&psDroid->player);
 						NETuint8_t(&attackPlayer);
 
-						// the amount of droids (1 in this case)
 						// followed by the droid's ID
-						NETuint8_t(&droid_count);
 						NETuint32_t(&psDroid->id);
 					}
 					NETend();
