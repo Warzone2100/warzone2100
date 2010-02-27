@@ -98,7 +98,7 @@
 	Alex McLean, Pumpkin Studios, EIDOS Interactive.
 */
 
-#define	MAP_ZOOM_RATE	(1000)
+#define	MAP_ZOOM_RATE	(1250)
 #define MAP_PITCH_RATE	(SPIN_SCALING/SECS_PER_SPIN)
 
 extern char	ScreenDumpPath[];
