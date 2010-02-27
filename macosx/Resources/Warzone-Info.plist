@@ -14,10 +14,18 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>Warzone</string>
+	<key>CFBundleDisplayName</key>
+	<string>Warzone</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>LSMultipleInstancesProhibited</key>
+	<true/>
+	<key>LSHasLocalizedDisplayName</key>
+	<true/>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<true/>
 	<key>CFBundleVersion</key>
 	<string>SVN_REV</string>
 	<key>CFBundleShortVersionString</key>

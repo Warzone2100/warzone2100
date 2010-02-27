@@ -41,7 +41,6 @@ typedef struct _fp_node
 {
 	struct _fp_node *psOpen;
 	struct _fp_node	*psRoute;	// Previous point in the route
-	struct _fp_node *psNext;
 	uint16_t	iteration;
 	short		x, y;           // map coords
 	short		dist, est;	// distance so far and estimate to end

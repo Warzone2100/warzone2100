@@ -1367,8 +1367,9 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 			tcp_socket = NULL;
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
-			NETbeginEncode(NET_HOST_DROPPED, NET_ALL_PLAYERS);
-			NETend();
+			setLobbyError(ERROR_HOSTDROPPED);
+			NETclose();
+			return false;
 		}
 		socketClose(bs->socket);
 		bs->socket = NULL;
@@ -1561,9 +1562,6 @@ static void NETplayerClientDisconnect(uint32_t index)
  */
 static void NETplayerLeaving(UDWORD index)
 {
-	NET_DestroyPlayer(index);		// sets index player's array to false
-	MultiPlayerLeave(index);		// more cleanup
-
 	if(connected_bsocket[index])
 	{
 		debug(LOG_NET, "Player (%u) has left, closing socket %p", index, connected_bsocket[index]->socket);
@@ -1577,6 +1575,9 @@ static void NETplayerLeaving(UDWORD index)
 	{
 		debug(LOG_NET, "Player (%u) has left nicely, socket already closed?", index);
 	}
+
+	MultiPlayerLeave(index);		// more cleanup
+	NET_DestroyPlayer(index);		// sets index player's array to false
 }
 
 /**

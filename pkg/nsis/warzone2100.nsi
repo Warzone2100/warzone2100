@@ -53,7 +53,7 @@ VIAddVersionKey "CompanyName"		"Warzone 2100 Project"
 VIAddVersionKey "FileDescription"	"${PACKAGE_NAME} Installer"
 VIAddVersionKey "FileVersion"		"${PACKAGE_VERSION}"
 VIAddVersionKey "InternalName"		"${PACKAGE_NAME}"
-VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2009 Warzone 2100 Project"
+VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2010 Warzone 2100 Project"
 VIAddVersionKey "OriginalFilename"	"${PACKAGE}-${PACKAGE_VERSION}.exe"
 VIAddVersionKey "ProductName"		"${PACKAGE_NAME}"
 VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
@@ -260,7 +260,7 @@ Section $(TEXT_SecDyDoAIMod) SecDyDoAIMod
   SetOutPath "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - dydo-ai.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp dydo-ai.wz"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - DyDo-AI.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp dydo-ai.wz"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -736,7 +736,7 @@ Section "Uninstall"
   Delete "$INSTDIR\mods\music\music_1.0.AUTHORS.txt"
   Delete "$INSTDIR\mods\music\music_1.0.wz"
 
-  Delete "$INSTDIR\mods\multiplay\dido-ai.wz"
+  Delete "$INSTDIR\mods\multiplay\dydo-ai.wz"
   Delete "$INSTDIR\mods\multiplay\ntw.wz"
   Delete "$INSTDIR\mods\multiplay\old-1.10-balance.wz"
 
@@ -866,6 +866,7 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME}.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - NTW.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Old 1.10 Balance.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - DyDo-AI.lnk"
 
   ;Delete empty start menu parent diretories
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
