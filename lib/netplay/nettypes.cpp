@@ -86,7 +86,10 @@ static void queue(const Q &q, uint16_t &v)
 	uint8_t b[2] = {v>>8, v};
 	queue(q, b[0]);
 	queue(q, b[1]);
-	v = b[0]<<8 | b[1];
+	if (Q::Direction == Q::Read)
+	{
+		v = b[0]<<8 | b[1];
+	}
 }
 
 template<class Q>
@@ -95,7 +98,10 @@ static void queue(const Q &q, uint32_t &v)
 	uint16_t b[2] = {v>>16, v};
 	queue(q, b[0]);
 	queue(q, b[1]);
-	v = b[0]<<16 | b[1];
+	if (Q::Direction == Q::Read)
+	{
+		v = b[0]<<16 | b[1];
+	}
 }
 
 template<class Q>
@@ -104,7 +110,10 @@ static void queue(const Q &q, uint64_t &v)
 	uint32_t b[2] = {v>>32, v};
 	queue(q, b[0]);
 	queue(q, b[1]);
-	v = uint64_t(b[0])<<32 | b[1];
+	if (Q::Direction == Q::Read)
+	{
+		v = uint64_t(b[0])<<32 | b[1];
+	}
 }
 
 template<class Q>
@@ -112,7 +121,10 @@ static void queue(const Q &q, char &v)
 {
 	uint8_t b = v;
 	queue(q, b);
-	v = b;
+	if (Q::Direction == Q::Read)
+	{
+		v = b;
+	}
 
 	STATIC_ASSERT(sizeof(b) == sizeof(v));
 }
@@ -122,7 +134,10 @@ static void queue(const Q &q, int8_t &v)
 {
 	uint8_t b = v;
 	queue(q, b);
-	v = b;
+	if (Q::Direction == Q::Read)
+	{
+		v = b;
+	}
 
 	STATIC_ASSERT(sizeof(b) == sizeof(v));
 }
@@ -132,7 +147,10 @@ static void queue(const Q &q, int16_t &v)
 {
 	uint16_t b = v;
 	queue(q, b);
-	v = b;
+	if (Q::Direction == Q::Read)
+	{
+		v = b;
+	}
 
 	STATIC_ASSERT(sizeof(b) == sizeof(v));
 }
@@ -142,7 +160,10 @@ static void queue(const Q &q, int32_t &v)
 {
 	uint32_t b = v;
 	queue(q, b);
-	v = b;
+	if (Q::Direction == Q::Read)
+	{
+		v = b;
+	}
 
 	STATIC_ASSERT(sizeof(b) == sizeof(v));
 }
@@ -152,7 +173,10 @@ static void queue(const Q &q, int64_t &v)
 {
 	uint64_t b = v;
 	queue(q, b);
-	v = b;
+	if (Q::Direction == Q::Read)
+	{
+		v = b;
+	}
 
 	STATIC_ASSERT(sizeof(b) == sizeof(v));
 }
@@ -180,7 +204,10 @@ void queue(const Q &q, float &v)
 	uint32_t b;
 	std::memcpy(&b, &v, sizeof(b));
 	queue(q, b);
-	std::memcpy(&v, &b, sizeof(b));
+	if (Q::Direction == Q::Read)
+	{
+		std::memcpy(&v, &b, sizeof(b));
+	}
 
 	STATIC_ASSERT(sizeof(b) == sizeof(v));
 }
