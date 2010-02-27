@@ -1787,6 +1787,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 		if (!powerCost || (psDroidToRepair->body + iPointsToAdd >= psDroidToRepair->originalBody))
 		{
 			//anothe HACK but sorts out all the rounding errors when values get small
+			iPointsToAdd = MIN(iPointsToAdd, psDroidToRepair->originalBody - psDroidToRepair->body);  // Don't add more points than possible.
 			psDroidToRepair->body += iPointsToAdd;
 			psRepairDroid->actionPoints += iPointsToAdd;
 		}
