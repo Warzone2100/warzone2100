@@ -6421,13 +6421,13 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 					}
 				}
 
-				// TODO: Should either do it directly (if everyone else knows to do the same), or tell the world, but not both.
-				//(void)giftSingleDroid(psDroid, attackPlayer);
+				giftSingleDroid(psDroid, attackPlayer);
 
 				// tell the world!
+				// If the world is in synch, the world already knows, though.
 				if (bMultiMessages)
 				{
-					uint8_t giftType = DROID_GIFT, droid_count = 1;
+					uint8_t giftType = DROID_GIFT;
 
 					NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
 					{
@@ -6439,9 +6439,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 						NETuint8_t(&psDroid->player);
 						NETuint8_t(&attackPlayer);
 
-						// the amount of droids (1 in this case)
 						// followed by the droid's ID
-						NETuint8_t(&droid_count);
 						NETuint32_t(&psDroid->id);
 					}
 					NETend();
