@@ -42,6 +42,10 @@
 #include "miniupnpc/upnpcommands.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
+#include "src/multistat.h"
+#include "src/multijoin.h"
+#include "src/multiint.h"
+
 #ifdef WZ_OS_LINUX
 #include <execinfo.h>  // Nonfatal runtime backtraces.
 #endif //WZ_OS_LINUX
@@ -127,15 +131,6 @@ static unsigned int masterserver_port = 0, gameserver_port = 0;
 */
 #define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 16K
 
-// HACK(s) to allow us to call a src/multi*.c function
-extern void recvMultiStats(void);								// from src/multistat.c
-extern BOOL sendTextMessage(const char *pStr, BOOL all);		// from src/multiplay.c
-extern BOOL MultiPlayerJoin(UDWORD playerIndex);				// from src/multijoin.c
-extern BOOL MultiPlayerLeave(UDWORD playerIndex);				// from src/multijoin.c
-extern void ShowMOTD(void);																// from src/multijoin.c
-extern void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);	// from src/multiinit.c
-extern void setLobbyError (LOBBY_ERROR_TYPES error_type);							// from src/multiinit.c
-extern LOBBY_ERROR_TYPES getLobbyError(void);										// from src/multiinit.c
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
 static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
@@ -144,11 +139,6 @@ static void NETregisterServer(int state);
 static void NETallowJoining(void);
 static void NET_InitPlayer(int i);
 
-void NETGameLocked( bool flag);
-void NETresetGamePassword(void);
-
-void NETGameLocked( bool flag);
-void NETresetGamePassword(void);
 /*
  * Network globals, these are part of the new network API
  */
@@ -2400,7 +2390,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 		}
 		case NET_PLAYER_STATS:
 		{
-			recvMultiStats();
+			recvMultiStats(playerQueue);
 			netPlayersUpdated = true;
 			break;
 		}

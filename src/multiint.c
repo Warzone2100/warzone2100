@@ -142,17 +142,6 @@ extern GLuint FBOdepthbuffer;		// Our handle to the depth render buffer
 extern BOOL bFboProblem;			// hack to work around people with bad drivers. (*cough*intel*cough*)
 extern BOOL bSendingMap;			// used to indicate we are sending a map
 
-extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-extern void NETsetGamePassword(const char *password);	// in netplay.c
-extern void NETresetGamePassword(void);					// in netplay.c
-extern void NETGameLocked(bool flag);					// in netplay.c
-extern void NETsetGamePassword(const char *password);	// in netplay.c
-extern void NETresetGamePassword(void);					// in netplay.c
-extern void NETGameLocked(bool flag);					// in netplay.c
-extern void NETsetGamePassword(const char *password);	// in netplay.c
-extern void NETresetGamePassword(void);					// in netplay.c
-extern void NETGameLocked(bool flag);					// in netplay.c
-
 BOOL						bHosted			= false;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
 static int					colourChooserUp = -1;
@@ -181,20 +170,18 @@ static void drawReadyButton(UDWORD player);
 static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 
 // Drawing Functions
-void		displayChatEdit				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayMultiBut				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		intDisplayFeBox				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayRemoteGame			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayPlayer				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayTeamChooser			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayMultiEditBox			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		setLockedTeamsMode			(void);
+static void displayChatEdit     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayMultiBut     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void intDisplayFeBox     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayRemoteGame   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayPlayer       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayTeamChooser  (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayMultiEditBox (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void setLockedTeamsMode  (void);
 
 // find games
 static void addGames				(void);
 static void removeGames				(void);
-void		runGameFind				(void);
-void		startGameFind			(void);
 
 // password form functions
 static void hidePasswordForm(void);
@@ -202,20 +189,13 @@ static void showPasswordForm(void);
 
 // Connection option functions
 static void addConnections			(UDWORD);
-void		runConnectionScreen		(void);
-BOOL		startConnectionScreen	(void);
 
 // Game option functions
 static	void	addGameOptions		(BOOL bRedo);				// options (rhs) boxV
-UDWORD	addPlayerBox		(BOOL);				// players (mid) box
 static	void	addChatBox			(void);
 static	void	disableMultiButs	(void);
 static	void	processMultiopWidgets(UDWORD);
 static	void	SendFireUp			(void);
-
-void			runMultiOptions		(void);
-BOOL			startMultiOptions	(BOOL);
-void			frontendMultiMessages(void);
 
 static	UDWORD	bestPlayer			(UDWORD);
 static	void	decideWRF			(void);
@@ -226,8 +206,6 @@ static BOOL		SendColourRequest	(UBYTE player, UBYTE col);
 static BOOL		SendPositionRequest	(UBYTE player, UBYTE chosenPlayer);
 static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
 static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
-void			resetReadyStatus	(bool bSendOptions);
-void			initTeams( void );
 static	void stopJoining(void);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
