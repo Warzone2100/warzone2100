@@ -3234,7 +3234,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 			{
 				/* set chosen object */
 				psChosenObj = (BASE_OBJECT *)psDroid;
-				psRepairFac->psObj = (BASE_OBJECT *)psDroid;
 
 				/* move droid to repair point at rear of facility */
 				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
@@ -3247,9 +3246,14 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					actionDroidObjLoc(psDroid, DACTION_MOVETOREPAIRPOINT,
 									  (BASE_OBJECT *) psStructure, psStructure->pos.x, psStructure->pos.y);
 				}
-				/* reset repair started */
-				psRepairFac->timeStarted = ACTION_START_TIME;
-				psRepairFac->currentPtsAdded = 0;
+				/* reset repair started if we were previously repairing something else */
+				if (psRepairFac->psObj != (BASE_OBJECT *)psDroid)
+				{
+					psRepairFac->timeStarted = ACTION_START_TIME;
+					psRepairFac->currentPtsAdded = 0;
+
+					psRepairFac->psObj = (BASE_OBJECT *)psDroid;
+				}
 			}
 
 			// update repair arm position
@@ -3389,8 +3393,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				}
 
 				ASSERT_OR_RETURN(, gameTime >= psResFacility->timeStarted, "research seems to have started in the future");
-				pointsToAdd = (psResFacility->researchPoints * (gameTime -
-					psResFacility->timeStarted)) / GAME_TICKS_PER_SEC;
+				// formula written this way to prevent rounding error
+				pointsToAdd = (psResFacility->researchPoints * gameTime) / GAME_TICKS_PER_SEC -
+				              (psResFacility->researchPoints * psResFacility->timeStarted) / GAME_TICKS_PER_SEC;
 				pointsToAdd = MIN(pointsToAdd, pResearch->researchPoints - pPlayerRes->currentPoints);
 
 				if (pointsToAdd > 0 &&
