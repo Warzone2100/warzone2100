@@ -505,6 +505,7 @@ void loadMapPreview(bool hideInterface)
 			screen_Upload(imageData);
 		}
 		bFboProblem |= glErrors();
+		glEnable(GL_CULL_FACE);
 	}
 	else
 	{
