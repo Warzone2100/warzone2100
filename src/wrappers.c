@@ -284,15 +284,13 @@ void loadingScreenCallback(void)
 	colour.byte.r = 1;
 	colour.byte.g = 1;
 	colour.byte.b = 1;
-	colour.byte.a = 32;
-	pie_UniTransBoxFill(1, 1, 2, 2, colour);
+	colour.byte.a = 24;
 	/* Draw the black rectangle at the bottom */
 
 	topX = 10+D_W;
 	topY = 450+D_H-1;
 	botX = 630+D_W;
 	botY = 470+D_H+1;
-	colour.byte.a = 24;
 	pie_UniTransBoxFill(topX, topY, botX, botY, colour);
 
 	for(i = 1; i < MAX_STARS; ++i)
