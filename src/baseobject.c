@@ -31,12 +31,12 @@ static inline float interpolateFloat(float v1, float v2, uint32_t t1, uint32_t t
 	return v1 + (v2 - v1) * numer/denom;
 }
 
-Vector3uw interpolatePos(Vector3uw p1, Vector3uw p2, uint32_t t1, uint32_t t2, uint32_t t)
+Vector3i interpolatePos(Vector3i p1, Vector3i p2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	Vector3uw ret = { interpolateInt(p1.x, p2.x, t1, t2, t),
-	                  interpolateInt(p1.y, p2.y, t1, t2, t),
-	                  interpolateInt(p1.z, p2.z, t1, t2, t)
-	                };
+	Vector3i ret = { interpolateInt(p1.x, p2.x, t1, t2, t),
+	                 interpolateInt(p1.y, p2.y, t1, t2, t),
+	                 interpolateInt(p1.z, p2.z, t1, t2, t)
+	               };
 	return ret;
 }
 

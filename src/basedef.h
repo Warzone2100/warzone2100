@@ -64,7 +64,7 @@ typedef struct _tilePos
 #define BASE_ELEMENTS1(pointerType) \
 	OBJECT_TYPE     type;                           /**< The type of object */ \
 	UDWORD          id;                             /**< ID number of the object */ \
-	Vector3uw       pos;                            /**< Position of the object */ \
+	Position	pos;                            /**< Position of the object */ \
 	float           direction;                      /**< Object's yaw +ve rotation around up-axis */ \
 	SWORD           pitch;                          /**< Object's pitch +ve rotation around right-axis (nose up/down) */ \
 	UBYTE           player;                         /**< Which player the object belongs to */ \
@@ -124,13 +124,13 @@ typedef struct SpaceTime
 {
 	uint32_t  time;        ///< Game time
 
-	Vector3uw pos;         ///< Position of the object
+	Position  pos;         ///< Position of the object
 	int16_t   pitch;       ///< Object's pitch +ve rotation around right-axis (nose up/down)
 	float     direction;   ///< Object's yaw +ve rotation around up-axis
 	int16_t   roll;        ///< Object's roll +ve rotation around forward-axis (left wing up/down)
 } SPACETIME;
 
-static inline SPACETIME constructSpacetime(Vector3uw pos, float direction, int16_t pitch, int16_t roll, uint32_t time)
+static inline SPACETIME constructSpacetime(Position pos, float direction, int16_t pitch, int16_t roll, uint32_t time)
 {	// we don't support C99 struct assignments
 	SPACETIME ret;
 	ret.time = time;
@@ -153,7 +153,7 @@ static inline bool isDead(const BASE_OBJECT* psObj)
 	return (psObj->died > NOT_CURRENT_LIST);
 }
 
-static inline int objPosDiffSq(Vector3uw pos1, Vector3uw pos2)
+static inline int objPosDiffSq(Position pos1, Position pos2)
 {
 	const int xdiff = pos1.x - pos2.x;
 	const int ydiff = pos1.y - pos2.y;

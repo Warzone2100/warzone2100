@@ -40,7 +40,7 @@ static inline unsigned interpolateInt(int32_t v1, int32_t v2, uint32_t t1, uint3
 }
 
 /// Get interpolated position at time t.
-Vector3uw interpolatePos(Vector3uw p1, Vector3uw p2, uint32_t t1, uint32_t t2, uint32_t t);
+Vector3i interpolatePos(Vector3i p1, Vector3i p2, uint32_t t1, uint32_t t2, uint32_t t);
 /// Get interpolated direction at time t.
 float interpolateDirection(float v1, float v2, uint32_t t1, uint32_t t2, uint32_t t);
 /// Get interpolated pitch or roll at time t.

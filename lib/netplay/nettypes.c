@@ -420,6 +420,13 @@ BOOL NETVector3uw(Vector3uw* vp)
 	     && NETuint16_t(&vp->z));
 }
 
+BOOL NETVector3i(Vector3i* vp)
+{
+	return (NETint32_t(&vp->x)
+	     && NETint32_t(&vp->y)
+	     && NETint32_t(&vp->z));
+}
+
 typedef enum
 {
 	test_a,

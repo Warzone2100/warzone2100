@@ -330,7 +330,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	SDWORD			tarHeight, srcHeight, iMinSq;
 	SDWORD			altChange, dx, dy, dz, iVelSq, iVel;
 	double          fR, fA, fS, fT, fC;
-	Vector3f muzzle;
+	Vector3f		muzzle;
 	SDWORD			iRadSq, iPitchLow, iPitchHigh, iTemp;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
@@ -343,7 +343,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	{
 		// if there isn't an attacker just start at the target position
 		// NB this is for the script function to fire the las sats
-		muzzle = Vector3f_Init(target.x, target.y, target.z);
+		muzzle = Vector3i_To3f(target);
 	}
 	else if (psAttacker->type == OBJ_DROID && weapon_slot >= 0)
 	{
@@ -357,8 +357,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	}
 	else // incase anything wants a projectile
 	{
-		// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-		muzzle = Vector3uw_To3f(psAttacker->pos);
+		muzzle = Vector3i_To3f(psAttacker->pos);
 	}
 
 	/* Initialise the structure */
@@ -366,7 +365,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	psProj->type		    = OBJ_PROJECTILE;
 	psProj->psWStats		= psStats;
 
-	psProj->pos = Vector3f_To3uw(muzzle);
+	psProj->pos		= Vector3f_To3i(muzzle);
 	psProj->startX		= muzzle.x;
 	psProj->startY		= muzzle.y;
 	psProj->tarX			= target.x;
@@ -523,7 +522,6 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		}
 
 		/* if droid set muzzle pitch */
-		//Watermelon:fix turret pitch for more turrets
 		if (psAttacker != NULL && weapon_slot >= 0)
 		{
 			if (psAttacker->type == OBJ_DROID)
@@ -687,7 +685,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	// Projectile is missile:
 	bool bMissile = false;
 	WEAPON_STATS *psStats;
-	Vector3uw nextPos;
+	Vector3i nextPos;
 	unsigned int targetDistance, currentDistance;
 	BASE_OBJECT *psTempObj, *closestCollisionObject = NULL;
 	SPACETIME closestCollisionSpacetime;
@@ -896,20 +894,15 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 
 		// Actual collision test.
 		{
-			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-			Vector3i
-				posProj = {psProj->pos.x, psProj->pos.y, nextPosZ},  // HACK psProj->pos.z may have been set to 0, since psProj->pos.z can't be negative. So can't use Vector3uw_To3i.
-				prevPosProj = Vector3uw_To3i(psProj->prevSpacetime.pos),
-				posTemp = Vector3uw_To3i(psTempObj->pos);
-
-			Vector3i diff = Vector3i_Sub(posProj, posTemp);
-			Vector3i prevDiff = Vector3i_Sub(prevPosProj, posTemp);  // HACK Ignore that target might be moving. The projectile is probably moving faster, so it's better than nothing...
-
-			unsigned int targetHeight = establishTargetHeight(psTempObj);
-			unsigned int targetRadius = establishTargetRadius(psTempObj);
-
-			int32_t collision = collisionXYZ(prevDiff, diff, targetRadius, targetHeight);
-			uint32_t collisionTime = psProj->prevSpacetime.time + (psProj->time - psProj->prevSpacetime.time)*collision/1024;
+			const Vector3i posProj = {psProj->pos.x, psProj->pos.y, nextPosZ};  // HACK psProj->pos.z may have been set to 0, since psProj->pos.z can't be negative.
+			const Vector3i prevPosProj = psProj->prevSpacetime.pos;
+			const Vector3i posTemp = psTempObj->pos;
+			const Vector3i diff = Vector3i_Sub(posProj, posTemp);
+			const Vector3i prevDiff = Vector3i_Sub(prevPosProj, posTemp);  // HACK Ignore that target might be moving. The projectile is probably moving faster, so it's better than nothing...
+			const unsigned int targetHeight = establishTargetHeight(psTempObj);
+			const unsigned int targetRadius = establishTargetRadius(psTempObj);
+			const int32_t collision = collisionXYZ(prevDiff, diff, targetRadius, targetHeight);
+			const uint32_t collisionTime = psProj->prevSpacetime.time + (psProj->time - psProj->prevSpacetime.time)*collision/1024;
 
 			if (collision >= 0 && collisionTime < closestCollisionSpacetime.time)
 			{
@@ -1251,7 +1244,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 					// Check whether we can hit it and it is in hit radius
 					if (!((psStats->surfaceToAir == SHOOT_IN_AIR && !bTargetInAir) ||
 						 (psStats->surfaceToAir == SHOOT_ON_GROUND && bTargetInAir)) &&
-					    Vector3i_InSphere(Vector3uw_To3i(psCurrD->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
+					    Vector3i_InSphere(psCurrD->pos, psObj->pos, psStats->radius))
 					{
 						int dice = gameRand(100);
 						if (dice < weaponRadiusHit(psStats, psObj->player))
@@ -1299,7 +1292,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 					if ((BASE_OBJECT *)psCurrS != psObj->psDest)
 					{
 						// Check whether it is in hit radius
-						if (Vector3i_InCircle(Vector3uw_To3i(psCurrS->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
+						if (Vector3i_InCircle(psCurrS->pos, psObj->pos, psStats->radius))
 						{
 							int dice = gameRand(100);
 							if (dice < weaponRadiusHit(psStats, psObj->player))
@@ -1345,7 +1338,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			if ((BASE_OBJECT *)psCurrF != psObj->psDest)
 			{
 				// Check whether it is in hit radius
-				if (Vector3i_InCircle(Vector3uw_To3i(psCurrF->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
+				if (Vector3i_InCircle(psCurrF->pos, psObj->pos, psStats->radius))
 				{
 					int dice = gameRand(100);
 					if (dice < weaponRadiusHit(psStats, psObj->player))

@@ -92,6 +92,8 @@ do \
 #endif
 
 BOOL NETVector3uw(Vector3uw* vp);
+BOOL NETVector3i(Vector3i* vp);
+#define NETPosition(_pos) NETVector3i(_pos)
 
 /**
  *	Get player who is the source of the current packet.

@@ -4331,9 +4331,6 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 	{
 		if (lasSatStructSelected(psStruct))
 		{
-			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-			Vector3i pos = Vector3uw_To3i(psObj->pos);
-
 			// Lassats have just one weapon
 			unsigned int firePause = weaponFirePause(&asWeaponStats[psStruct->asWeaps[0].nStat], (UBYTE)player);
 			unsigned int damLevel = PERCENT(psStruct->body, structureBody(psStruct));
@@ -4351,7 +4348,7 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 			}
 
 			//ok to fire - so fire away
-			proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, pos, psObj, true, 0);
+			proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos, psObj, true, 0);
 			//set up last fires time
 			psStruct->asWeaps[0].lastFired =  gameTime;
 

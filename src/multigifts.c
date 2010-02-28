@@ -797,7 +797,7 @@ void processMultiPlayerArtifacts(void)
 	static UDWORD lastCall;
 	FEATURE	*pF,*pFN;
 	UDWORD	x,y,pl;
-	Vector3i position;
+	Position position;
 	BOOL	found=false;
 
 	// only do this every now and again.
@@ -817,9 +817,7 @@ void processMultiPlayerArtifacts(void)
 			found = objectInRange((BASE_OBJECT *)apsDroidLists[selectedPlayer], pF->pos.x, pF->pos.y, (TILE_UNITS+(TILE_UNITS/3))  );
 			if(found)
 			{
-				position.x = pF->pos.x;				// Add an effect
-				position.z = pF->pos.y;
-				position.y = pF->pos.z;
+				position = pF->pos;				// Add an effect
 				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,false,NULL,false);
 
 				x = pF->pos.x;

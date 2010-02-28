@@ -87,7 +87,7 @@ BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 		}
 
 		// Z coord
-		NETuint16_t(&psStruct->pos.z);
+		NETint32_t(&psStruct->pos.z);
 
 	return NETend();
 }
@@ -183,9 +183,7 @@ BOOL SendBuildFinished(STRUCTURE *psStruct)
 
 		// Along with enough info to build it (if needed)
 		NETuint32_t(&psStruct->pStructureType->ref);
-		NETuint16_t(&psStruct->pos.x);
-		NETuint16_t(&psStruct->pos.y);
-		NETuint16_t(&psStruct->pos.z);
+		NETPosition(&psStruct->pos);
 		NETuint8_t(&player);
 	return NETend();
 }
@@ -195,7 +193,7 @@ BOOL recvBuildFinished()
 {
 	uint32_t	structId;
 	STRUCTURE	*psStruct;
-	uint16_t	x,y,z;
+	int32_t		x,y,z;
 	uint32_t	type,typeindex;
 	uint8_t		player;
 	uint32_t	power;
@@ -204,9 +202,9 @@ BOOL recvBuildFinished()
 		NETuint32_t(&power);	// get the player's power level
 		NETuint32_t(&structId);	// get the struct id.
 		NETuint32_t(&type); 	// Kind of building.
-		NETuint16_t(&x);    	// x pos
-		NETuint16_t(&y);    	// y pos
-		NETuint16_t(&z);    	// z pos
+		NETint32_t(&x);    	// x pos
+		NETint32_t(&y);    	// y pos
+		NETint32_t(&z);    	// z pos
 		NETuint8_t(&player);
 	NETend();
 
@@ -393,17 +391,13 @@ BOOL recvLasSat()
 	psStruct = IdToStruct (id, player);
 	psObj	 = IdToPointer(targetid, targetplayer);
 
-	if( psStruct && psObj)
+	if (psStruct && psObj)
 	{
-		// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-		Vector3i pos = Vector3uw_To3i(psObj->pos);
-
 		// Give enemy no quarter, unleash the lasat
-		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, pos, psObj, true, 0);
+		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos, psObj, true, 0);
 
 		// Play 5 second countdown message
-		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y,
-			psObj->pos.z);
+		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y, psObj->pos.z);
 	}
 
 	return true;

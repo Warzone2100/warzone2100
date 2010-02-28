@@ -381,7 +381,7 @@ void revealAll(UBYTE player)
  */
 int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock)
 {
-	Vector3i pos, dest, diff;
+	Vector3i diff;
 	int range, distSq;
 	int	power;
 
@@ -393,10 +393,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 		return 0;
 	}
 
-	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-	pos = Vector3uw_To3i(psViewer->pos);
-	dest = Vector3uw_To3i(psTarget->pos);
-	diff = Vector3i_Sub(dest, pos);
+	diff = Vector3i_Sub(psViewer->pos, psTarget->pos);
 	range = objSensorRange(psViewer);
 
 	/* Get the sensor Range and power */
@@ -482,11 +479,11 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 	power = adjustPowerByRange(psViewer->pos.x, psViewer->pos.y, psTarget->pos.x, psTarget->pos.y, range, objSensorPower(psViewer));
 	{
 		// initialise the callback variables
-		VisibleObjectHelp_t help = { true, wallsBlock, distSq, pos.z + visObjHeight(psViewer), { map_coord(dest.x), map_coord(dest.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
+		VisibleObjectHelp_t help = { true, wallsBlock, distSq, psViewer->pos.z + visObjHeight(psViewer), { map_coord(psTarget->pos.x), map_coord(psTarget->pos.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
 		int targetGrad, top;
 
 		// Cast a ray from the viewer to the target
-		rayCast(pos, diff, range, rayLOSCallback, &help);
+		rayCast(psViewer->pos, diff, range, rayLOSCallback, &help);
 
 		if (gWall != NULL && gNumWalls != NULL) // Out globals are set
 		{
@@ -495,7 +492,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 		}
 
 		// See if the target can be seen
-		top = dest.z + visObjHeight(psTarget) - help.startHeight;
+		top = psTarget->pos.z + visObjHeight(psTarget) - help.startHeight;
 		targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
 
 		if (targetGrad >= help.currGrad)
@@ -787,7 +784,7 @@ MAPTILE		*psTile;
  */
 bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock)
 {
-	Vector3i pos, dest, diff;
+	Vector3i diff;
 	int range, distSq;
 
 	ASSERT(psViewer != NULL, "Invalid shooter pointer!");
@@ -797,10 +794,7 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 		return false;
 	}
 
-	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-	pos = Vector3uw_To3i(psViewer->pos);
-	dest = Vector3uw_To3i(psTarget->pos);
-	diff = Vector3i_Sub(dest, pos);
+	diff = Vector3i_Sub(psViewer->pos, psTarget->pos);
 	range = objSensorRange(psViewer);
 
 	distSq = Vector3i_ScalarP(diff, diff);
@@ -812,11 +806,11 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 
 	// initialise the callback variables
 	{
-		VisibleObjectHelp_t help = { true, wallsBlock, distSq, pos.z + visObjHeight(psViewer), { map_coord(dest.x), map_coord(dest.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
+		VisibleObjectHelp_t help = { true, wallsBlock, distSq, psViewer->pos.z + visObjHeight(psViewer), { map_coord(psTarget->pos.x), map_coord(psTarget->pos.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
 		int targetGrad, top;
 
 		// Cast a ray from the viewer to the target
-		rayCast(pos, diff, range, rayLOSCallback, &help);
+		rayCast(psViewer->pos, diff, range, rayLOSCallback, &help);
 
 		if (gWall != NULL && gNumWalls != NULL) // Out globals are set
 		{
@@ -825,7 +819,7 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 		}
 
 		// See if the target can be seen
-		top = dest.z + visObjHeight(psTarget) - help.startHeight;
+		top = psTarget->pos.z + visObjHeight(psTarget) - help.startHeight;
 		targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
 
 		return targetGrad >= help.currGrad;

@@ -714,9 +714,7 @@ static BOOL sendStructureCheck(void)
 			NETuint32_t(&pS->id);
 			NETuint32_t(&pS->body);
 			NETuint32_t(&pS->pStructureType->ref);
-			NETuint16_t(&pS->pos.x);
-			NETuint16_t(&pS->pos.y);
-			NETuint16_t(&pS->pos.z);
+			NETPosition(&pS->pos);
 			NETfloat(&pS->direction);
 
 			switch (pS->pStructureType->type)
