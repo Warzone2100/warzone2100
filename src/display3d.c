@@ -350,7 +350,7 @@ static void showDroidPaths(void)
 
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
 	{
-		if (psDroid->selected)
+		if (psDroid->selected && psDroid->sMove.Status != MOVEINACTIVE)
 		{
 			int	i;
 			int	len = psDroid->sMove.numPoints;
