@@ -172,7 +172,6 @@
 		02356DDC0BD3BC9900E9A019 /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356DCA0BD3BC9900E9A019 /* png.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02356DDD0BD3BC9900E9A019 /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356DCB0BD3BC9900E9A019 /* pngconf.h */; settings = {ATTRIBUTES = (); }; };
 		02356DDE0BD3BC9900E9A019 /* pngerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356DCC0BD3BC9900E9A019 /* pngerror.c */; };
-		02356DDF0BD3BC9900E9A019 /* pnggccrd.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356DCD0BD3BC9900E9A019 /* pnggccrd.c */; };
 		02356DE00BD3BC9900E9A019 /* pngget.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356DCE0BD3BC9900E9A019 /* pngget.c */; };
 		02356DE10BD3BC9900E9A019 /* pngmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356DCF0BD3BC9900E9A019 /* pngmem.c */; };
 		02356DE20BD3BC9900E9A019 /* pngpread.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356DD00BD3BC9900E9A019 /* pngpread.c */; };
@@ -656,7 +655,7 @@
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.c",
 			);
-			script = "cd \"${DERIVED_FILES_DIR}\" || exit 1\nflex -o\"${INPUT_FILE_BASE}\".lex.c \"${INPUT_FILE_PATH}\"";
+			script = "cd \"${DERIVED_FILES_DIR}\" || exit 1\nflex -o\"${INPUT_FILE_BASE}\".lex.c \"${INPUT_FILE_PATH}\" || exit 1";
 		};
 /* End PBXBuildRule section */
 
@@ -976,7 +975,6 @@
 		02356DCA0BD3BC9900E9A019 /* png.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = png.h; path = external/libpng/png.h; sourceTree = "<group>"; };
 		02356DCB0BD3BC9900E9A019 /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pngconf.h; path = external/libpng/pngconf.h; sourceTree = "<group>"; };
 		02356DCC0BD3BC9900E9A019 /* pngerror.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pngerror.c; path = external/libpng/pngerror.c; sourceTree = "<group>"; };
-		02356DCD0BD3BC9900E9A019 /* pnggccrd.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pnggccrd.c; path = external/libpng/pnggccrd.c; sourceTree = "<group>"; };
 		02356DCE0BD3BC9900E9A019 /* pngget.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pngget.c; path = external/libpng/pngget.c; sourceTree = "<group>"; };
 		02356DCF0BD3BC9900E9A019 /* pngmem.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pngmem.c; path = external/libpng/pngmem.c; sourceTree = "<group>"; };
 		02356DD00BD3BC9900E9A019 /* pngpread.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pngpread.c; path = external/libpng/pngpread.c; sourceTree = "<group>"; };
@@ -2566,7 +2564,6 @@
 				02356DCA0BD3BC9900E9A019 /* png.h */,
 				02356DCB0BD3BC9900E9A019 /* pngconf.h */,
 				02356DCC0BD3BC9900E9A019 /* pngerror.c */,
-				02356DCD0BD3BC9900E9A019 /* pnggccrd.c */,
 				02356DCE0BD3BC9900E9A019 /* pngget.c */,
 				02356DCF0BD3BC9900E9A019 /* pngmem.c */,
 				02356DD00BD3BC9900E9A019 /* pngpread.c */,
@@ -3807,7 +3804,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DIRECTORY=\"libpng-1.2.41\"\nOUTDIR=\"libpng\"\nFILENAME=\"libpng-1.2.41.tar.gz\"\nSOURCE=\"http://downloads.sourceforge.net/libpng/libpng-1.2.41.tar.gz\"\nMD5=\"82ab87818fb22961620aac7eca9fea14\"\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ -d \"$DIRECTORY\" ]; then\n  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n  exit 1\nfi\n\nif [ ! -r \"$FILENAME\" ]; then\n  echo \"Fetching $SOURCE\"\n  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n    echo \"Unable to fetch $SOURCE\" >&2\n    exit 1\n  fi\nfi\n\nHAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for $FILENAME\" >&2\n  exit 1\nfi\n\nif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n  echo \"Md5 does not match for $FILENAME\" >&2\n  exit 1\nfi\n\nEXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\nif [ \"$EXTENSION\" = \"gz\" ]; then\n  if ! tar -zxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelif [ \"$EXTENSION\" = \"bz2\" ]; then\n  if ! tar -jxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelse\n  echo \"Unable to unpack $FILENAME\" >&2\n  exit 1\nfi\n\nif [ ! -d \"$DIRECTORY\" ]; then\n  echo \"Can't find $DIRECTORY to rename\" >&2\n  exit 1\nfi\n\nmv \"$DIRECTORY\" \"$OUTDIR\"\n";
+			shellScript = "DIRECTORY=\"libpng-1.4.1\"\nOUTDIR=\"libpng\"\nFILENAME=\"libpng-1.4.1.tar.gz\"\nSOURCE=\"http://download.sourceforge.net/libpng/libpng-1.4.1.tar.gz\"\nMD5=\"fa0b2a84733463f90d3ac9f43ccafabc\"\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ -d \"$DIRECTORY\" ]; then\n  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n  exit 1\nfi\n\nif [ ! -r \"$FILENAME\" ]; then\n  echo \"Fetching $SOURCE\"\n  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n    echo \"Unable to fetch $SOURCE\" >&2\n    exit 1\n  fi\nfi\n\nHAVEMD5=`md5 -q \"$FILENAME\"`\n\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for $FILENAME\" >&2\n  exit 1\nfi\n\nif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n  echo \"Md5 does not match for $FILENAME\" >&2\n  exit 1\nfi\n\nEXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\nif [ \"$EXTENSION\" = \"gz\" ]; then\n  if ! tar -zxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelif [ \"$EXTENSION\" = \"bz2\" ]; then\n  if ! tar -jxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelse\n  echo \"Unable to unpack $FILENAME\" >&2\n  exit 1\nfi\n\nif [ ! -d \"$DIRECTORY\" ]; then\n  echo \"Can't find $DIRECTORY to rename\" >&2\n  exit 1\nfi\n\nmv \"$DIRECTORY\" \"$OUTDIR\"\n";
 		};
 		02FD38340BD4012A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4297,7 +4294,6 @@
 			files = (
 				02356DDB0BD3BC9900E9A019 /* png.c in Sources */,
 				02356DDE0BD3BC9900E9A019 /* pngerror.c in Sources */,
-				02356DDF0BD3BC9900E9A019 /* pnggccrd.c in Sources */,
 				02356DE00BD3BC9900E9A019 /* pngget.c in Sources */,
 				02356DE10BD3BC9900E9A019 /* pngmem.c in Sources */,
 				02356DE20BD3BC9900E9A019 /* pngpread.c in Sources */,
