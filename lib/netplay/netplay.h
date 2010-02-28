@@ -339,6 +339,9 @@ extern bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_versi
 extern bool NETgameIsCorrectVersion(GAMESTRUCT* check_game);
 extern void NET_InitPlayers(void);
 
+void NETGameLocked(bool flag);
+void NETresetGamePassword(void);
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus

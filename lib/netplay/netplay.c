@@ -42,6 +42,10 @@
 #include "miniupnpc/upnpcommands.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
+#include "src/multistat.h"
+#include "src/multijoin.h"
+#include "src/multiint.h"
+
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
 # include <errno.h>
@@ -126,28 +130,14 @@ static unsigned int masterserver_port = 0, gameserver_port = 0;
 */
 #define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 16K
 
-// HACK(s) to allow us to call a src/multi*.c function
-extern void recvMultiStats(void);								// from src/multistat.c
-extern BOOL sendTextMessage(const char *pStr, BOOL all);		// from src/multiplay.c
-extern BOOL MultiPlayerJoin(UDWORD playerIndex);				// from src/multijoin.c
-extern BOOL MultiPlayerLeave(UDWORD playerIndex);				// from src/multijoin.c
-extern void ShowMOTD(void);																// from src/multijoin.c
-extern void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);	// from src/multiinit.c
-extern void setLobbyError (LOBBY_ERROR_TYPES error_type);							// from src/multiinit.c
-extern LOBBY_ERROR_TYPES getLobbyError(void);										// from src/multiinit.c
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
 static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
 static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETregisterServer(int state);
 static void NETallowJoining(void);
-static void NET_InitPlayer(int i);
+static void NET_InitPlayer(int i, bool initPosition);
 
-void NETGameLocked( bool flag);
-void NETresetGamePassword(void);
-
-void NETGameLocked( bool flag);
-void NETresetGamePassword(void);
 /*
  * Network globals, these are part of the new network API
  */
@@ -1444,16 +1434,19 @@ error:
 	return false;
 }
 
-static void NET_InitPlayer(int i)
+static void NET_InitPlayer(int i, bool initPosition)
 {
 	NetPlay.players[i].allocated = false;
 	NetPlay.players[i].heartattacktime = 0;
 	NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
 	NetPlay.players[i].kick = false;
 	NetPlay.players[i].name[0] = '\0';
-	NetPlay.players[i].colour = i;
-	NetPlay.players[i].position = i;
-	NetPlay.players[i].team = i;
+	if (initPosition)
+	{
+		NetPlay.players[i].colour = i;
+		NetPlay.players[i].position = i;
+		NetPlay.players[i].team = i;
+	}
 	NetPlay.players[i].ready = false;
 	NetPlay.players[i].needFile = false;
 	NetPlay.players[i].wzFile.isCancelled = false;
@@ -1466,7 +1459,7 @@ void NET_InitPlayers()
 
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		NET_InitPlayer(i);
+		NET_InitPlayer(i, true);
 	}
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
@@ -1474,10 +1467,10 @@ void NET_InitPlayers()
 	debug(LOG_NET, "Players initialized");
 }
 
-void NETBroadcastPlayerInfo(uint32_t index)
+static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 {
 	debug(LOG_NET, "sending player's (%u) info to all players", index);
-	NETbeginEncode(NET_PLAYER_INFO, NET_ALL_PLAYERS);
+	NETbeginEncode(NET_PLAYER_INFO, to);
 		NETuint32_t(&index);
 		NETbool(&NetPlay.players[index].allocated);
 		NETbool(&NetPlay.players[index].heartbeat);
@@ -1490,6 +1483,11 @@ void NETBroadcastPlayerInfo(uint32_t index)
 		NETbool(&NetPlay.players[index].ready);
 		NETuint32_t(&NetPlay.hostPlayer);
 	NETend();
+}
+
+void NETBroadcastPlayerInfo(uint32_t index)
+{
+	NETSendPlayerInfoTo(index, NET_ALL_PLAYERS);
 }
 
 static signed int NET_CreatePlayer(const char* name)
@@ -1529,7 +1527,7 @@ static void NET_DestroyPlayer(unsigned int index)
 			NETregisterServer(1);
 		}
 	}
-	NET_InitPlayer(index);	// reinitialize
+	NET_InitPlayer(index, false);  // reinitialize
 }
 
 /**
@@ -3317,7 +3315,7 @@ static void NETallowJoining(void)
 				else if (NetMsg.type == NET_JOIN)
 				{
 					uint8_t j;
-					int8_t index;
+					uint8_t index;
 					uint8_t rejected = 0;
 
 					char name[64];
@@ -3393,7 +3391,7 @@ static void NETallowJoining(void)
 					}
 
 					NETbeginEncode(NET_ACCEPTED, index);
-					NETuint8_t((uint8_t *)&index);
+					NETuint8_t(&index);
 					NETend();
 
 					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name,
@@ -3412,18 +3410,15 @@ static void NETallowJoining(void)
 							NETbeginEncode(NET_PLAYER_JOINED, index);
 								NETuint8_t(&j);
 							NETend();
+							NETSendPlayerInfoTo(j, index);
 						}
 					}
 
 					// Send info about newcomer to all players.
 					NETbeginEncode(NET_PLAYER_JOINED, NET_ALL_PLAYERS);
-						NETuint8_t((uint8_t *)&index);
+						NETuint8_t(&index);
 					NETend();
-
-					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
-					{
-						NETBroadcastPlayerInfo(j);
-					}
+					NETBroadcastPlayerInfo(index);
 
 					// Make sure the master server gets updated by disconnecting from it
 					// NETallowJoining will reconnect
