@@ -2672,17 +2672,21 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 
 static void moveDescending( DROID *psDroid )
 {
-	if ( psDroid->pos.z > map_Height( psDroid->pos.x , psDroid->pos.y ) )
+	UDWORD iMapHeight = map_Height( psDroid->pos.x, psDroid->pos.y);
+
+	psDroid->sMove.speed = 0;
+
+	if ( psDroid->pos.z > iMapHeight)
 	{
 		/* descending */
 		psDroid->sMove.iVertSpeed = (SWORD)-VTOL_VERTICAL_SPEED;
-		psDroid->sMove.speed = 0;
 	}
 	else
 	{
 		/* on floor - stop */
+		psDroid->pos.z = iMapHeight;
 		psDroid->sMove.iVertSpeed = 0;
-		
+
 		/* reset move state */
 		psDroid->sMove.Status = MOVEINACTIVE;
 
