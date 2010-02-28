@@ -1676,14 +1676,29 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 // ////////////////////////////////////////////////////////////////////////////
 // drawing functions
 
-// show a background piccy
+// show a background piccy (currently used for version and mods labels)
 static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
+	char modListText[MAX_STR_LENGTH] = "";
+
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_GREY);
 	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 9, pie_GetVideoBufferHeight() - 14, 270.f);
+	
+	if (*getModList())
+	{
+		sstrcat(modListText, _("Active mods: "));
+		sstrcat(modListText, getModList());
+		iV_DrawText(modListText, 9, 14);
+	}
+	
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
+
+	if (*getModList())
+	{
+		iV_DrawText(modListText, 10, 15);
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1691,21 +1706,7 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	iV_DrawImage(FrontImages,IMAGE_FE_LOGO,xOffset+psWidget->x,yOffset+psWidget->y);
-
-	if (*getModList())
-	{
-		// show the mod list
-		char modListText[WIDG_MAXSTR] = "";
-		sstrcat(modListText, _("Active mods: "));
-		sstrcat(modListText, getModList());
-		iV_SetFont(font_regular);
-		iV_SetTextColour(WZCOL_GREY);
-		iV_DrawText(modListText, xOffset+psWidget->x-9, yOffset+psWidget->y-19);
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-		iV_DrawText(modListText, xOffset+psWidget->x-10, yOffset+psWidget->y-20);
-	}
 }
-
 
 
 // ////////////////////////////////////////////////////////////////////////////
