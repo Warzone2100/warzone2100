@@ -322,7 +322,7 @@ void	kf_CloneSelected( void )
 				psNewDroid->armour[impact_side][WC_HEAT] = psDroid->armour[impact_side][WC_HEAT];
 			}
 			psNewDroid->experience = psDroid->experience;
-			psNewDroid->direction = psDroid->direction;
+			psNewDroid->rot.direction = psDroid->rot.direction;
 			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER))
 			{
 				updateDroidOrientation(psNewDroid);

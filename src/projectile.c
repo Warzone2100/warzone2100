@@ -427,14 +427,14 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	dz = tarHeight - muzzle.z;
 
 	/* roll never set */
-	psProj->roll = 0;
+	psProj->rot.roll = 0;
 
 	fR = atan2(dx, dy);
 	if ( fR < 0.0 )
 	{
 		fR += 2.0 * M_PI;
 	}
-	psProj->direction = RAD_TO_DEG(fR);
+	psProj->rot.direction = DEG(RAD_TO_DEG(fR));
 
 
 	/* get target distance */
@@ -450,7 +450,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		{
 			fR += 2.0 * M_PI;
 		}
-		psProj->pitch = (SWORD)( RAD_TO_DEG(fR) );
+		psProj->rot.pitch = DEG(RAD_TO_DEG(fR));
 		psProj->state = PROJ_INFLIGHTDIRECT;
 	}
 	else
@@ -466,7 +466,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		if ( fS < 0.0 )
 		{
 			/* set optimal pitch */
-			psProj->pitch = PROJ_MAX_PITCH;
+			psProj->rot.pitch = DEG(PROJ_MAX_PITCH);
 
 			fS = trigSin(PROJ_MAX_PITCH);
 			fC = trigCos(PROJ_MAX_PITCH);
@@ -513,11 +513,11 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 			/* chooselow pitch unless -ve */
 			if ( iPitchLow > 0 )
 			{
-				psProj->pitch = (SWORD)iPitchLow;
+				psProj->rot.pitch = DEG(iPitchLow);
 			}
 			else
 			{
-				psProj->pitch = (SWORD)iPitchHigh;
+				psProj->rot.pitch = DEG(iPitchHigh);
 			}
 		}
 
@@ -526,16 +526,16 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		{
 			if (psAttacker->type == OBJ_DROID)
 			{
-				((DROID *) psAttacker)->asWeaps[weapon_slot].pitch = psProj->pitch;
+				((DROID *) psAttacker)->asWeaps[weapon_slot].rot.pitch = psProj->rot.pitch;
 			}
 			else if (psAttacker->type == OBJ_STRUCTURE)
 			{
-				((STRUCTURE *) psAttacker)->asWeaps[weapon_slot].pitch = psProj->pitch;
+				((STRUCTURE *) psAttacker)->asWeaps[weapon_slot].rot.pitch = psProj->rot.pitch;
 			}
 		}
 
-		psProj->vXY = iVel * trigCos(psProj->pitch);
-		psProj->vZ  = iVel * trigSin(psProj->pitch);
+		psProj->vXY = iVel * trigCos(UNDEG(psProj->rot.pitch));
+		psProj->vZ  = iVel * trigSin(UNDEG(psProj->rot.pitch));
 
 		psProj->state = PROJ_INFLIGHTINDIRECT;
 	}
@@ -827,7 +827,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	if (bIndirect)
 	{
 		/* Update pitch */
-		psProj->pitch = rad2degf(atan2f(psProj->vZ - (timeSoFar * ACC_GRAVITY / GAME_TICKS_PER_SEC), psProj->vXY));
+		psProj->rot.pitch = DEG(rad2degf(atan2f(psProj->vZ - (timeSoFar * ACC_GRAVITY / GAME_TICKS_PER_SEC), psProj->vXY)));
 	}
 
 	closestCollisionSpacetime.time = 0xFFFFFFFF;
@@ -930,7 +930,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		/* Buildings cannot be penetrated and we need a penetrating weapon */
 		if (closestCollisionObject->type == OBJ_DROID && psStats->penetrate)
 		{
-			WEAPON asWeap = {psStats - asWeaponStats, 0, 0, 0, 0, 0, 0, 0, 0};
+			WEAPON asWeap;
 			// Determine position to fire a missile at
 			// (must be at least 0 because we don't use signed integers
 			//  this shouldn't be larger than the height and width of the map either)
@@ -939,6 +939,8 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 				psProj->startY + move.y * distanceExtensionFactor,
 				psProj->srcHeight + move.z * distanceExtensionFactor
 			};
+			memset(&asWeap, 0, sizeof(asWeap));
+			asWeap.nStat = psStats - asWeaponStats;
 
 			ASSERT(distanceExtensionFactor != 0.f, "Unitialized variable used! distanceExtensionFactor is not initialized.");
 
@@ -1791,7 +1793,7 @@ static HIT_SIDE getHitSide(PROJECTILE *psObj, BASE_OBJECT *psTarget)
 		 * Work out the impact angle. It is easiest to understand if you
 		 * model the target droid as a circle, divided up into 360 pieces.
 		 */
-		impactAngle = abs(psTarget->direction - (180 * atan2f(deltaX, deltaY) / M_PI));
+		impactAngle = abs(UNDEG(psTarget->rot.direction) - (180 * atan2f(deltaX, deltaY) / M_PI));
 
 		impactAngle = wrap(impactAngle, 360);
 
@@ -1991,7 +1993,6 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 	    || psProjectile->state == PROJ_INFLIGHTINDIRECT
 	    || psProjectile->state == PROJ_IMPACT
 	    || psProjectile->state == PROJ_POSTIMPACT, location_description, function, "CHECK_PROJECTILE: invalid projectile state: %u", (unsigned int)psProjectile->state);
-	ASSERT_HELPER(psProjectile->direction <= 360.0f && psProjectile->direction >= 0.0f, location_description, function, "CHECK_PROJECTILE: out of range direction (%f)", psProjectile->direction);
 
 	if (psProjectile->psDest)
 		checkObject(psProjectile->psDest, location_description, function, recurse - 1);

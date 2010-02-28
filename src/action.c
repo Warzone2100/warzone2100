@@ -315,12 +315,12 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		tRot = ((DROID *)psObj)->asWeaps[weapon_slot].rotation;
-		tPitch = ((DROID *)psObj)->asWeaps[weapon_slot].pitch;
+		tRot = UNDEG(((DROID *)psObj)->asWeaps[weapon_slot].rot.direction);
+		tPitch = UNDEG(((DROID *)psObj)->asWeaps[weapon_slot].rot.pitch);
 		break;
 	case OBJ_STRUCTURE:
-		tRot = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].rotation;
-		tPitch = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].pitch;
+		tRot = UNDEG(((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.direction);
+		tPitch = UNDEG(((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.pitch);
 
 		// now find the nearest 90 degree angle
 		nearest = (UWORD)(((tRot + 45) / 90) * 90);
@@ -388,15 +388,15 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		((DROID *)psObj)->asWeaps[weapon_slot].rotation = tRot;
-		((DROID *)psObj)->asWeaps[weapon_slot].pitch = tPitch;
+		((DROID *)psObj)->asWeaps[weapon_slot].rot.direction = DEG(tRot);
+		((DROID *)psObj)->asWeaps[weapon_slot].rot.pitch = DEG(tPitch);
 		break;
 	case OBJ_STRUCTURE:
 		// now adjust back to the nearest 90 degree angle
 		tRot = (UWORD)((tRot + nearest) % 360);
 
-		((STRUCTURE *)psObj)->asWeaps[weapon_slot].rotation = tRot;
-		((STRUCTURE *)psObj)->asWeaps[weapon_slot].pitch = tPitch;
+		((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.direction = DEG(tRot);
+		((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.pitch = DEG(tPitch);
 		break;
 	default:
 		ASSERT(!"invalid object type", "invalid object type");
@@ -448,8 +448,8 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 		pitchRate = (SWORD) (rotRate / 2);
 	}
 
-	tRotation = psWeapon->rotation;
-	tPitch = psWeapon->pitch;
+	tRotation = UNDEG(psWeapon->rot.direction);
+	tPitch = UNDEG(psWeapon->rot.pitch);
 
 	//set the pitch limits based on the weapon stats of the attacker
 	pitchLowerLimit = pitchUpperLimit = 0;
@@ -505,9 +505,9 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	}*/
 
 	//and point the turret at target
-	targetRotation = calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y);
+	targetRotation = UNDEG(calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y));
 
-	rotationError = targetRotation - (tRotation + psAttacker->direction);
+	rotationError = targetRotation - (tRotation + UNDEG(psAttacker->rot.direction));
 
 	//restrict rotationerror to =/- 180 degrees
 	while (rotationError > 180)
@@ -540,13 +540,13 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	}
 	else //roughly there so lock on and fire
 	{
-		if ( (SDWORD)psAttacker->direction > targetRotation )
+		if (UNDEG(psAttacker->rot.direction) > targetRotation)
 		{
-			tRotation = (SWORD)(targetRotation + 360 - psAttacker->direction);
+			tRotation = (SWORD)(targetRotation + 360 - UNDEG(psAttacker->rot.direction));
 		}
 		else
 		{
-			tRotation = (SWORD)(targetRotation - psAttacker->direction);
+			tRotation = (SWORD)(targetRotation - UNDEG(psAttacker->rot.direction));
 		}
 		onTarget = true;
 	}
@@ -635,8 +635,8 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 		}
 	}
 
-	psWeapon->rotation = tRotation;
-	psWeapon->pitch = tPitch;
+	psWeapon->rot.direction = DEG(tRotation);
+	psWeapon->rot.pitch = DEG(tPitch);
 
 	return onTarget;
 }
@@ -1447,11 +1447,11 @@ void actionUpdateDroid(DROID *psDroid)
 					if (!psWeapStats->rotate)
 					{
 						// no rotating turret - need to check aligned with target
-						const int targetDir = calcDirection(psDroid->pos.x,
+						const int targetDir = UNDEG(calcDirection(psDroid->pos.x,
 						                                    psDroid->pos.y,
 						                                    psActionTarget->pos.x,
-						                                    psActionTarget->pos.y);
-						dirDiff = labs(targetDir - psDroid->direction);
+						                                    psActionTarget->pos.y));
+						dirDiff = labs(targetDir - UNDEG(psDroid->rot.direction));
 					}
 
 					if (dirDiff > FIXED_TURRET_DIR)
@@ -1708,8 +1708,8 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				for(i = 0;i < psDroid->numWeaps;i++)
 				{
-					if ((psDroid->asWeaps[i].rotation != 0) ||
-						(psDroid->asWeaps[i].pitch != 0))
+					if ((psDroid->asWeaps[i].rot.direction != 0) ||
+						(psDroid->asWeaps[i].rot.pitch != 0))
 					{
 						actionAlignTurret((BASE_OBJECT *)psDroid, i);
 					}
@@ -2553,8 +2553,7 @@ void actionUpdateDroid(DROID *psDroid)
 		//use 0 for all non-combat droid types
 		if (psDroid->numWeaps == 0)
 		{
-			if ((psDroid->asWeaps[0].rotation != 0) ||
-				(psDroid->asWeaps[0].pitch != 0))
+			if (psDroid->asWeaps[0].rot.direction != 0 || psDroid->asWeaps[0].rot.pitch != 0)
 			{
 				actionAlignTurret((BASE_OBJECT *)psDroid, 0);
 			}
@@ -2563,8 +2562,7 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			for (i = 0;i < psDroid->numWeaps;i++)
 			{
-				if ((psDroid->asWeaps[i].rotation != 0) ||
-					(psDroid->asWeaps[i].pitch != 0))
+				if (psDroid->asWeaps[i].rot.direction != 0 || psDroid->asWeaps[i].rot.pitch != 0)
 				{
 					actionAlignTurret((BASE_OBJECT *)psDroid, i);
 				}

@@ -228,8 +228,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// if the turret doesn't turn, check if the attacker is in alignment with the target
 	if (psAttacker->type == OBJ_DROID && !psStats->rotate)
 	{
-		targetDir = calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y);
-		dirDiff = labs(targetDir - (SDWORD)psAttacker->direction);
+		targetDir = UNDEG(calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y));
+		dirDiff = labs(targetDir - (SDWORD)UNDEG(psAttacker->rot.direction));
 		if (dirDiff > FIXED_TURRET_DIR)
 		{
 			return;
@@ -383,9 +383,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 				}
 			}
 
-			predict.x = trigSin( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * flightTime;
+			predict.x = trigSin(UNDEG(((DROID *)psTarget)->sMove.moveDir)) * ((DROID *)psTarget)->sMove.speed * flightTime;
 			predict.x += psTarget->pos.x;
-			predict.y = trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * flightTime;
+			predict.y = trigCos(UNDEG(((DROID *)psTarget)->sMove.moveDir)) * ((DROID *)psTarget)->sMove.speed * flightTime;
 			predict.y += psTarget->pos.y;
 
 			// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile

@@ -53,7 +53,7 @@ void initBulletTable( void )
 }
 
 /* Angle returned is reflected in line x=0 */
-SDWORD calcDirection(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
+uint16_t calcDirection(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
 {
 	/* Watch out here - should really be y1-y0, but coordinate system is reversed in Y */
 	SDWORD	xDif = (x1-x0), yDif = (y0-y1);
@@ -64,10 +64,9 @@ SDWORD calcDirection(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
 	if (angleInt<0)
 		angleInt+=360;
 
-	ASSERT( angleInt >= 0 && angleInt < 360,
-		"calcDirection: droid direction out of range" );
+	ASSERT(angleInt >= 0 && angleInt < 360, "Droid direction out of range");
 
-	return(angleInt);
+	return DEG(angleInt);
 }
 
 

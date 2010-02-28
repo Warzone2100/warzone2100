@@ -62,8 +62,8 @@ typedef struct _move_control
 	float	speed;						// Speed of motion
 	SWORD	boundX,boundY;				// Vector for the end of path boundary
 
-	float	moveDir;						// direction of motion (not the direction the droid is facing)
-	SWORD	bumpDir;					// direction at last bump
+	uint16_t moveDir;					// direction of motion (not the direction the droid is facing)
+	uint16_t bumpDir;					// direction at last bump
 	UDWORD	bumpTime;					// time of first bump with something
 	UWORD	lastBump;					// time of last bump with a droid - relative to bumpTime
 	UWORD	pauseTime;					// when MOVEPAUSE started - relative to bumpTime

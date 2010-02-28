@@ -226,7 +226,7 @@ void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Positio
 
 
 //changed it to loop thru and draw all weapons
-void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
 	iIMDShape *baseImd,*strImd;//*mountImd,*weaponImd;
 	iIMDShape *mountImd[STRUCT_MAXWEAPS];
@@ -243,7 +243,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i
 		Position->y -= 20;
 	}
 
-	setMatrix(Position, Rotation, RotXYZ);
+	setMatrix(Position, rotation, RotXYZ);
 	pie_MatScale(scale);
 
 	/* Draw the building's base first */
@@ -300,9 +300,11 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i
 		{
 			for (i = 0; i < MAX(1, psStructure->numWeaps); i++)
 			{
+				Rotation rot = structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime);
+
 				iV_MatrixBegin();
 				iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
-				pie_MatRotY(DEG(-structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
+				pie_MatRotY(-rot.direction);
 				if (mountImd[i] != NULL)
 				{
 					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
@@ -311,7 +313,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i
 						iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
 					}
 				}
-				iV_MatrixRotateX(DEG(structureGetInterpolatedWeaponPitch(psStructure, i, graphicsTime)));
+				iV_MatrixRotateX(rot.pitch);
 				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 				//we have a droid weapon so do we draw a muzzle flash
 				iV_MatrixEnd();
@@ -582,7 +584,7 @@ void displayComponentObject(DROID *psDroid)
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	worldAngle = (UDWORD)(player.r.y / DEG_1) % 360;
-	difference = worldAngle - st.direction;
+	difference = worldAngle - UNDEG(st.rot.direction);
 
 	leftFirst = !((difference> 0 && difference < 180) || difference < -180);
 
@@ -607,17 +609,17 @@ void displayComponentObject(DROID *psDroid)
 	}
 
 	/* Get all the pitch,roll,yaw info */
-	rotation.y = -st.direction;
-	rotation.x = st.pitch;
-	rotation.z = st.roll;
+	rotation.y = -st.rot.direction;
+	rotation.x = st.rot.pitch;
+	rotation.z = st.rot.roll;
 
 	/* Translate origin */
 	pie_TRANSLATE(position.x,position.y,position.z);
 
 	/* Rotate for droid */
-	pie_MatRotY(DEG(rotation.y));
-	pie_MatRotX(DEG(rotation.x));
-	pie_MatRotZ(DEG(rotation.z));
+	pie_MatRotY(rotation.y);
+	pie_MatRotX(rotation.x);
+	pie_MatRotZ(rotation.z);
 
 	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC) && psDroid->lastHitWeapon == WSC_ELECTRONIC)
 	{
@@ -668,9 +670,11 @@ void displayComponentObject(DROID *psDroid)
 static void pie_MatRotYMinusDroidRotation(DROID *psDroid, int weaponSlot, uint32_t time)
 {
 	// Is this check really useful? Left it in here, in case it somehow helps performance.
-	if(psDroid->asWeaps[0].rotation != 0 || psDroid->asWeaps[0].prevRotation != 0)
+	if(psDroid->asWeaps[0].rot.direction != 0 || psDroid->asWeaps[0].prevRot.direction != 0)
 	{
-		pie_MatRotY(DEG(-getInterpolatedWeaponRotation(psDroid, weaponSlot, time)));
+		Rotation rot = getInterpolatedWeaponRotation(psDroid, weaponSlot, time);
+
+		pie_MatRotY(-rot.direction);
 	}
 }
 
@@ -875,6 +879,8 @@ void displayCompObj(DROID *psDroid, BOOL bButton)
 					{
 						if ( psShapeTemp->connectors )
 						{
+							Rotation rot = getInterpolatedWeaponRotation(psDroid, i, graphicsTime);
+
 							pie_MatBegin();
 							//reset Z?
 							dummyZ = pie_RotateProject(&zero, &screenCoords);
@@ -924,12 +930,12 @@ void displayCompObj(DROID *psDroid, BOOL bButton)
 							if ( iConnector >= VTOL_CONNECTOR_START )
 							{
 								//pitch the barrel down
-								pie_MatRotX(DEG(-getInterpolatedWeaponPitch(psDroid, i, graphicsTime)));
+								pie_MatRotX(-rot.pitch);
 							}
 							else
 							{
 								//pitch the barrel up
-								pie_MatRotX(DEG(getInterpolatedWeaponPitch(psDroid, i, graphicsTime)));
+								pie_MatRotX(rot.pitch);
 							}
 
 							/* Get the weapon (gun?) graphic */
@@ -1150,6 +1156,7 @@ void displayCompObj(DROID *psDroid, BOOL bButton)
 					if(psShape->nconnectors && psDroid->action == DACTION_DROIDREPAIR)
 					{
 						SPACETIME st = interpolateSpacetime(psDroid->prevSpacetime, GET_SPACETIME(psDroid), graphicsTime);
+						Rotation rot = getInterpolatedWeaponRotation(psDroid, 0, graphicsTime);
 
 						pie_TRANSLATE( psShape->connectors[0].x,
 									   psShape->connectors[0].z,
@@ -1159,11 +1166,11 @@ void displayCompObj(DROID *psDroid, BOOL bButton)
 						psShape = getImdFromIndex(MI_FLAME);
 
 						/* Rotate for droid */
-						pie_MatRotY(DEG(st.direction));
-						pie_MatRotX(DEG(-st.pitch));
-						pie_MatRotZ(DEG(-st.roll));
+						pie_MatRotY(st.rot.direction);
+						pie_MatRotX(-st.rot.pitch);
+						pie_MatRotZ(-st.rot.roll);
 						//rotate Y
-						pie_MatRotY(DEG(getInterpolatedWeaponRotation(psDroid, 0, graphicsTime)));
+						pie_MatRotY(rot.direction);
 
 						iV_MatrixRotateY(-player.r.y);
 						iV_MatrixRotateX(-player.r.x);

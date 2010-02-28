@@ -413,14 +413,14 @@ BOOL NETbin(char *str, uint16_t maxlen)
 	return true;
 }
 
-BOOL NETVector3uw(Vector3uw* vp)
+BOOL NETRotation(Rotation *vp)
 {
-	return (NETuint16_t(&vp->x)
-	     && NETuint16_t(&vp->y)
-	     && NETuint16_t(&vp->z));
+	return (NETuint16_t(&vp->direction)
+	     && NETuint16_t(&vp->pitch)
+	     && NETuint16_t(&vp->roll));
 }
 
-BOOL NETVector3i(Vector3i* vp)
+BOOL NETPosition(Position *vp)
 {
 	return (NETint32_t(&vp->x)
 	     && NETint32_t(&vp->y)

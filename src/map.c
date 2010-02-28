@@ -1006,34 +1006,9 @@ failure:
 // Object macro group
 static void objectSaveTagged(BASE_OBJECT *psObj)
 {
-	uint16_t v[MAX_PLAYERS], i;
-
-	// not written: sDisplay
-
 	tagWriteEnter(0x01, 1);
 	tagWrite(0x01, psObj->type);
 	tagWrite(0x02, psObj->id);
-	v[0] = psObj->pos.x;
-	v[1] = psObj->pos.y;
-	v[2] = psObj->pos.z;
-	tagWrite16v(0x03, 3, v);
-	tagWritef(0x04, psObj->direction);
-	tagWrites(0x05, psObj->pitch);
-	tagWrites(0x06, psObj->roll);
-	tagWrite(0x07, psObj->player);
-	tagWrite(0x08, psObj->group);
-	tagWrite(0x09, psObj->selected);
-	tagWrite(0x0a, psObj->cluster);
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		v[i] = psObj->visible[i];
-	}
-	tagWrite16v(0x0b, MAX_PLAYERS, v);
-	tagWrite(0x0c, psObj->died);
-	tagWrite(0x0d, psObj->lastEmission);
-	tagWriteBool(0x0e, psObj->inFire);
-	tagWrite(0x0f, psObj->burnStart);
-	tagWrite(0x10, psObj->burnDamage);
 	tagWriteLeave(0x01);
 }
 
@@ -1068,23 +1043,7 @@ static void objectStatTagged(BASE_OBJECT *psObj, int body, int resistance)
 
 static void objectWeaponTagged(int num, WEAPON *asWeaps, BASE_OBJECT **psTargets)
 {
-	int i;
-
 	tagWriteEnter(0x04, num);
-	for (i = 0; i < num; i++)
-	{
-		tagWrite(0x01, asWeaps[i].nStat);
-		tagWrite(0x02, asWeaps[i].rotation);
-		tagWrite(0x03, asWeaps[i].pitch);
-		tagWrite(0x05, asWeaps[i].ammo);
-		tagWrite(0x06, asWeaps[i].lastFired);
-		tagWrite(0x07, asWeaps[i].recoilValue);
-		if (psTargets[i] != NULL)
-		{
-			tagWrites(0x08, psTargets[i]->id); // else default -1
-		}
-		tagWriteNext();
-	}
 	tagWriteLeave(0x04);
 }
 
@@ -1154,12 +1113,6 @@ static void droidSaveTagged(DROID *psDroid)
 		tagWriteNext();
 	}
 	tagWriteLeave(0x13);
-	if (psDroid->sMove.psFormation != NULL)
-	{
-		tagWrites(0x14, psDroid->sMove.psFormation->dir);
-		tagWrites(0x15, psDroid->sMove.psFormation->x);
-		tagWrites(0x16, psDroid->sMove.psFormation->y);
-	} // else these are zero as by default
 	// vtol ammo
 	for (i = 0; i < VTOL_MAXWEAPS; i++)
 	{
@@ -1187,23 +1140,6 @@ static void droidSaveTagged(DROID *psDroid)
 	v[0] = psDroid->sMove.bumpX;
 	v[1] = psDroid->sMove.bumpY;
 	tagWrite16v(0x1e, 2, v);
-	tagWrites(0x1f, psDroid->sMove.moveDir);
-	tagWrites(0x20, psDroid->sMove.bumpDir);
-	tagWrite(0x21, psDroid->sMove.bumpTime);
-	tagWrite(0x22, psDroid->sMove.lastBump);
-	tagWrite(0x23, psDroid->sMove.pauseTime);
-	tagWrite(0x24, psDroid->sMove.iVertSpeed);
-	tagWriteEnter(0x25, psDroid->sMove.numPoints);
-	for (i = 0; i < psDroid->sMove.numPoints; i++)
-	{
-		v[0] = psDroid->sMove.asPath[i].x;
-		v[1] = psDroid->sMove.asPath[i].y;
-		tagWrite16v(0x01, 2, v);
-		tagWriteNext();
-	}
-	tagWriteLeave(0x25);
-	tagWrite(0x26, psDroid->sMove.Status);
-	tagWrite(0x27, psDroid->sMove.Position);
 
 	tagWriteLeave(0x0a);
 }

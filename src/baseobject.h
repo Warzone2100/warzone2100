@@ -40,11 +40,9 @@ static inline unsigned interpolateInt(int32_t v1, int32_t v2, uint32_t t1, uint3
 }
 
 /// Get interpolated position at time t.
-Vector3i interpolatePos(Vector3i p1, Vector3i p2, uint32_t t1, uint32_t t2, uint32_t t);
+Position interpolatePos(Vector3i p1, Vector3i p2, uint32_t t1, uint32_t t2, uint32_t t);
 /// Get interpolated direction at time t.
-float interpolateDirection(float v1, float v2, uint32_t t1, uint32_t t2, uint32_t t);
-/// Get interpolated pitch or roll at time t.
-int16_t interpolateIntAngle(int16_t v1, int16_t v2, uint32_t t1, uint32_t t2, uint32_t t);
+Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint32_t t);
 /// Get interpolated spacetime at time t.
 SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t);
 /// Get interpolated object spacetime at time t.

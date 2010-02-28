@@ -1147,11 +1147,11 @@ void	renderProjectile(PROJECTILE *psCurr)
 		iV_TRANSLATE(rx,0,-rz);
 
 		/* Rotate it to the direction it's facing */
-		imdRot2.y = DEG(st.direction);
+		imdRot2.y = st.rot.direction;
 		iV_MatrixRotateY(-imdRot2.y);
 
 		/* pitch it */
-		imdRot2.x = DEG(st.pitch);
+		imdRot2.x = st.rot.pitch;
 		iV_MatrixRotateX(imdRot2.x);
 
 		if (psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE
@@ -1215,9 +1215,9 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		iV_TRANSLATE(rx, 0, -rz);
 
 		/* parent object rotations */
-		imdRot2.y = DEG(spacetime.direction);
+		imdRot2.y = spacetime.rot.direction;
 		iV_MatrixRotateY(-imdRot2.y);
-		imdRot2.x = DEG(spacetime.pitch);
+		imdRot2.x = spacetime.rot.pitch;
 		iV_MatrixRotateX(imdRot2.x);
 
 		/* Set frame numbers - look into this later?? FIXME!!!!!!!! */
@@ -1370,7 +1370,7 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 
 	if ((psStats->type == REF_WALL || psStats->type == REF_GATE) && left == right && up != down)
 	{
-		blueprint->direction = 90; // rotate so walls will look like walls
+		blueprint->rot.direction = DEG(90); // rotate so walls will look like walls
 	}
 
 	for(i = left; i < right + 1; i++)
@@ -1797,7 +1797,7 @@ void	renderFeature(FEATURE *psFeature)
 
 	/* Translate */
 	iV_TRANSLATE(rx,0,-rz);
-	rotation = DEG( (int)psFeature->direction );
+	rotation = psFeature->rot.direction;
 
 	iV_MatrixRotateY(-rotation);
 
@@ -2078,7 +2078,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	/* OK - here is where we establish which IMD to draw for the building - luckily static objects,
 	* buildings in other words are NOT made up of components - much quicker! */
 
-	rotation = DEG((int)psStructure->direction);
+	rotation = psStructure->rot.direction;
 	iV_MatrixRotateY(-rotation);
 	if (!defensive
 	    && gameTime2-psStructure->timeLastHit < ELEC_DAMAGE_DURATION
@@ -2212,11 +2212,13 @@ void	renderStructure(STRUCTURE *psStructure)
 			// draw Weapon / ECM / Sensor for structure
 			for (i = 0; i < psStructure->numWeaps || i == 0; i++)
 			{
+				Rotation rot = structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime);
+
 				if (weaponImd[i] != NULL)
 				{
 					iV_MatrixBegin();
 					iV_TRANSLATE(strImd->connectors[i].x, strImd->connectors[i].z, strImd->connectors[i].y);
-					pie_MatRotY(DEG(-structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
+					pie_MatRotY(-rot.direction);
 					if (mountImd[i] != NULL)
 					{
 						pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue / 3);
@@ -2227,7 +2229,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							iV_TRANSLATE(mountImd[i]->connectors->x, mountImd[i]->connectors->z, mountImd[i]->connectors->y);
 						}
 					}
-					iV_MatrixRotateX(DEG(structureGetInterpolatedWeaponPitch(psStructure, i, graphicsTime)));
+					iV_MatrixRotateX(rot.pitch);
 					pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue);
 
 					pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
@@ -2251,7 +2253,7 @@ void	renderStructure(STRUCTURE *psStructure)
 									iV_TRANSLATE(weaponImd[i]->connectors->x,weaponImd[i]->connectors->z-12,weaponImd[i]->connectors->y);
 									pRepImd = getImdFromIndex(MI_FLAME);
 
-									pie_MatRotY(DEG(structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
+									pie_MatRotY(rot.direction);
 
 									iV_MatrixRotateY(-player.r.y);
 									iV_MatrixRotateX(-player.r.x);
@@ -2259,7 +2261,7 @@ void	renderStructure(STRUCTURE *psStructure)
 
 									iV_MatrixRotateX(player.r.x);
 									iV_MatrixRotateY(player.r.y);
-									pie_MatRotY(DEG(structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
+									pie_MatRotY(rot.direction);
 								}
 							}
 						}
@@ -2321,16 +2323,16 @@ void	renderStructure(STRUCTURE *psStructure)
 							if (strImd->max.y > 80) // babatower
 							{
 								iV_TRANSLATE(0, 80, 0);
-								pie_MatRotY(DEG(-structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
+								pie_MatRotY(-rot.direction);
 								iV_TRANSLATE(0, 0, -20);
 							}
 							else//baba bunker
 							{
 								iV_TRANSLATE(0, 10, 0);
-								pie_MatRotY(DEG(-structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
+								pie_MatRotY(-rot.direction);
 								iV_TRANSLATE(0, 0, -40);
 							}
-							pie_MatRotX(DEG(structureGetInterpolatedWeaponPitch(psStructure, i, graphicsTime)));
+							pie_MatRotX(rot.pitch);
 							// draw the muzzle flash?
 							if (psStructure && psStructure->visible[selectedPlayer] > UBYTE_MAX / 2)
 							{
@@ -2533,7 +2535,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		/* Translate */
 		iV_TRANSLATE(rx, 0, -rz);
 
-		rotation = DEG( (int)psStructure->direction );
+		rotation = psStructure->rot.direction;
 		iV_MatrixRotateY(-rotation);
 
 		if(imd != NULL)
@@ -2549,7 +2551,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		imd = psStructure->sDisplay.imd;
 		temp = imd->points;
 
-		flattenImd(imd, structX, structY, psStructure->direction );
+		flattenImd(imd, structX, structY, UNDEG(psStructure->rot.direction));
 
 		/* Actually render it */
 		if ( (psStructure->status == SS_BEING_BUILT ) ||
@@ -2629,7 +2631,7 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 
 	if(psDroid->droidType == DROID_TRANSPORTER)
 	{
-		iV_MatrixRotateY( DEG( -psDroid->direction ) );
+		iV_MatrixRotateY(-psDroid->rot.direction);
 	}
 
 	pVecTemp = psShadowIMD->points;
@@ -2641,9 +2643,9 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	}
 	else
 	{
-		pie_MatRotY( DEG(-psDroid->direction ) );
-		pie_MatRotX( DEG( psDroid->pitch ) );
-		pie_MatRotZ( DEG( psDroid->roll ) );
+		pie_MatRotY(-psDroid->rot.direction);
+		pie_MatRotX(psDroid->rot.pitch);
+		pie_MatRotZ(psDroid->rot.roll);
 	}
 
 	pie_Draw3DShape(psShadowIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, 128);

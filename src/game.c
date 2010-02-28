@@ -5070,7 +5070,7 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 			if (psDroid)
 			{
 				psDroid->id = pDroidInit->id;
-				psDroid->direction = pDroidInit->direction;
+				psDroid->rot.direction = DEG(pDroidInit->direction);
 				addDroid(psDroid, apsDroidLists);
 			}
 			else
@@ -5246,7 +5246,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	//are these going to ever change from the values set up with?
 //			psDroid->pos.z = psSaveDroid->pos.z;		// use the correct map height value
 
-	psDroid->direction = psSaveDroid->direction;
+	psDroid->rot.direction = DEG(psSaveDroid->direction);
 	psDroid->body = psSaveDroid->body;
 	if (psDroid->body > psDroid->originalBody)
 	{
@@ -5262,8 +5262,8 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	//version 11
 	for (i=0; i < psDroid->numWeaps; i++)
 	{
-		psDroid->asWeaps[i].rotation = psSaveDroid->turretRotation;
-		psDroid->asWeaps[i].pitch = psSaveDroid->turretPitch;
+		psDroid->asWeaps[i].rot.direction = DEG(psSaveDroid->turretRotation);
+		psDroid->asWeaps[i].rot.pitch = DEG(psSaveDroid->turretPitch);
 	}
 
 
@@ -5366,7 +5366,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	//are these going to ever change from the values set up with?
 //			psDroid->pos.z = psSaveDroid->pos.z;		// use the correct map height value
 
-	psDroid->direction = psSaveDroid->direction;
+	psDroid->rot.direction = DEG(psSaveDroid->direction);
     psDroid->body = psSaveDroid->body;
 	if (psDroid->body > psDroid->originalBody)
 	{
@@ -5387,8 +5387,8 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		//Watermelon:make it back-compatible with older versions of save
 		for (i=0; i < psDroid->numWeaps; i++)
 		{
-			psDroid->asWeaps[i].rotation = psSaveDroid->turretRotation;
-			psDroid->asWeaps[i].pitch = psSaveDroid->turretPitch;
+			psDroid->asWeaps[i].rot.direction = DEG(psSaveDroid->turretRotation);
+			psDroid->asWeaps[i].rot.pitch = DEG(psSaveDroid->turretPitch);
 		}
 	}
 	if (version >= VERSION_12)//version 12
@@ -5541,7 +5541,7 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	if (psDroid->sMove.psFormation != NULL)
 	{
 		psSaveDroid->sMove.isInFormation = true;
-		psSaveDroid->formationDir = psDroid->sMove.psFormation->dir;
+		psSaveDroid->formationDir = UNDEG(psDroid->sMove.psFormation->direction);
 		psSaveDroid->formationX   = psDroid->sMove.psFormation->x;
 		psSaveDroid->formationY   = psDroid->sMove.psFormation->y;
 	}
@@ -5581,7 +5581,7 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.fx           = PHYSFS_swapSLE32(psSaveDroid->sMove.fx);
 	psDroid->sMove.fy           = PHYSFS_swapSLE32(psSaveDroid->sMove.fy);
 	psDroid->sMove.speed        = PHYSFS_swapSLE32(psSaveDroid->sMove.speed);
-	psDroid->sMove.moveDir      = PHYSFS_swapSLE32(psSaveDroid->sMove.moveDir);
+	psDroid->sMove.moveDir      = DEG(PHYSFS_swapSLE32(psSaveDroid->sMove.moveDir));
 	psDroid->sMove.fz           = PHYSFS_swapSLE32(psSaveDroid->sMove.fz);
 
 	// Hack to fix bad droids in savegames
@@ -5597,7 +5597,7 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	// Little endian SWORDs
 	psDroid->sMove.boundX       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundX);
 	psDroid->sMove.boundY       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundY);
-	psDroid->sMove.bumpDir      = PHYSFS_swapSLE16(psSaveDroid->sMove.bumpDir);
+	psDroid->sMove.bumpDir      = DEG(PHYSFS_swapSLE16(psSaveDroid->sMove.bumpDir));
 	psDroid->sMove.iVertSpeed   = PHYSFS_swapSLE16(psSaveDroid->sMove.iVertSpeed);
 
 	// Little endian UDWORDs
@@ -5749,7 +5749,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	//are these going to ever change from the values set up with?
 //			psDroid->pos.z = psSaveDroid->pos.z;		// use the correct map height value
 
-	psDroid->direction = psSaveDroid->direction;
+	psDroid->rot.direction = DEG(psSaveDroid->direction);
 	psDroid->body = psSaveDroid->body;
 	if (psDroid->body > psDroid->originalBody)
 	{
@@ -5771,13 +5771,13 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	{
 		if (version >= VERSION_24)
 		{
-			psDroid->asWeaps[i].rotation = psSaveDroid->turretRotation[i];
-			psDroid->asWeaps[i].pitch = psSaveDroid->turretPitch[i];
+			psDroid->asWeaps[i].rot.direction = DEG(psSaveDroid->turretRotation[i]);
+			psDroid->asWeaps[i].rot.pitch = DEG(psSaveDroid->turretPitch[i]);
 		}
 		else
 		{
-			psDroid->asWeaps[i].rotation = psSaveDroid->turretRotation[0];
-			psDroid->asWeaps[i].pitch = psSaveDroid->turretPitch[0];
+			psDroid->asWeaps[i].rot.direction = DEG(psSaveDroid->turretRotation[0]);
+			psDroid->asWeaps[i].rot.pitch = DEG(psSaveDroid->turretPitch[0]);
 		}
 	}
 	//version 12
@@ -6473,8 +6473,8 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			//Watermelon:endian_udword for new save format
 			for(i = 0;i < psCurr->numWeaps;i++)
 			{
-				psSaveDroid->turretRotation[i] = psCurr->asWeaps[i].rotation;
-				psSaveDroid->turretPitch[i]	= psCurr->asWeaps[i].pitch;
+				psSaveDroid->turretRotation[i] = UNDEG(psCurr->asWeaps[i].rot.direction);
+				psSaveDroid->turretPitch[i]	= UNDEG(psCurr->asWeaps[i].rot.pitch);
 			}
 			//version 12
 			psSaveDroid->order			= psCurr->order;
@@ -6558,7 +6558,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			psSaveDroid->x = psCurr->pos.x;
 			psSaveDroid->y = psCurr->pos.y;
 			psSaveDroid->z = psCurr->pos.z;
-			psSaveDroid->direction = psCurr->direction;
+			psSaveDroid->direction = UNDEG(psCurr->rot.direction);
 			psSaveDroid->player = psCurr->player;
 			psSaveDroid->inFire = psCurr->inFire;
 			psSaveDroid->burnStart = psCurr->burnStart;
@@ -6930,7 +6930,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 			//copy the values across
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
-			psStructure->direction = psSaveStructure->direction;
+			psStructure->rot.direction = DEG(psSaveStructure->direction);
 		}
 
 		psStructure->inFire = psSaveStructure->inFire;
@@ -7207,7 +7207,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
 //			psStructure->pos.z = (UWORD)psSaveStructure->pos.z;
-			psStructure->direction = psSaveStructure->direction;
+			psStructure->rot.direction = DEG(psSaveStructure->direction);
 		}
 
 		psStructure->inFire = psSaveStructure->inFire;
@@ -7630,7 +7630,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
 //			psStructure->pos.z = (UWORD)psSaveStructure->pos.z;
-			psStructure->direction = psSaveStructure->direction;
+			psStructure->rot.direction = DEG(psSaveStructure->direction);
 		}
 
 		psStructure->inFire = psSaveStructure->inFire;
@@ -7952,7 +7952,7 @@ BOOL writeStructFile(char *pFileName)
 			psSaveStruct->y = psCurr->pos.y;
 			psSaveStruct->z = psCurr->pos.z;
 
-			psSaveStruct->direction = psCurr->direction;
+			psSaveStruct->direction = UNDEG(psCurr->rot.direction);
 			psSaveStruct->player = psCurr->player;
 			psSaveStruct->inFire = psCurr->inFire;
 			psSaveStruct->burnStart = psCurr->burnStart;
@@ -8416,7 +8416,7 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 		}
 		//restore values
 		pFeature->id = psSaveFeature->id;
-		pFeature->direction = psSaveFeature->direction;
+		pFeature->rot.direction = DEG(psSaveFeature->direction);
 		pFeature->inFire = psSaveFeature->inFire;
 		pFeature->burnDamage = psSaveFeature->burnDamage;
 		if (version >= VERSION_14)
@@ -8515,7 +8515,7 @@ BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 		}
 		//restore values
 		pFeature->id = psSaveFeature->id;
-		pFeature->direction = psSaveFeature->direction;
+		pFeature->rot.direction = DEG(psSaveFeature->direction);
 		pFeature->inFire = psSaveFeature->inFire;
 		pFeature->burnDamage = psSaveFeature->burnDamage;
 		for (i=0; i < MAX_PLAYERS; i++)
@@ -8574,15 +8574,11 @@ BOOL writeFeatureFile(char *pFileName)
 
 		psSaveFeature->id = psCurr->id;
 
-//		psSaveFeature->pos.x = psCurr->pos.x - psCurr->psStats->baseWidth * TILE_UNITS / 2;
-//		psSaveFeature->pos.y = psCurr->pos.y - psCurr->psStats->baseBreadth * TILE_UNITS / 2;
-//		psSaveFeature->pos.z = psCurr->pos.z;
-
 		psSaveFeature->x = psCurr->pos.x;
 		psSaveFeature->y = psCurr->pos.y;
 		psSaveFeature->z = psCurr->pos.z;
 
-		psSaveFeature->direction = psCurr->direction;
+		psSaveFeature->direction = UNDEG(psCurr->rot.direction);
 		psSaveFeature->inFire = psCurr->inFire;
 		psSaveFeature->burnDamage = psCurr->burnDamage;
 		for (i=0; i < MAX_PLAYERS; i++)

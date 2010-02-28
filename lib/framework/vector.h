@@ -37,9 +37,8 @@ typedef struct { int x, y; } Vector2i;
 typedef struct { float x, y; } Vector2f;
 typedef struct { int x, y, z; } Vector3i;
 typedef struct { float x, y, z; } Vector3f;
-typedef struct { uint16_t x, y, z; } Vector3uw;
+typedef struct { uint16_t direction, pitch, roll; } Rotation;
 typedef Vector3i Position;
-typedef Vector3uw Rotation;
 
 /*!
  * Create a Vector from x and y
@@ -362,18 +361,6 @@ static inline WZ_DECL_CONST Vector3i Vector3f_To3i(const Vector3f v)
 
 
 /*!
- * Convert a float vector to short
- * \param v Vector to convert
- * \return Short vector
- */
-static inline WZ_DECL_CONST Vector3uw Vector3f_To3uw(const Vector3f v)
-{
-	Vector3uw dest = { (uint16_t)v.x, (uint16_t)v.y, (uint16_t)v.z };
-	return dest;
-}
-
-
-/*!
  * \return true if both vectors are equal
  */
 static inline WZ_DECL_CONST bool Vector3f_Compare(const Vector3f a, const Vector3f b)
@@ -609,18 +596,6 @@ static inline WZ_DECL_CONST Vector3f Vector3i_To3f(const Vector3i v)
 
 
 /*!
- * Convert an integer vector to short
- * \param v Vector to convert
- * \return Short vector
- */
-static inline WZ_DECL_CONST Vector3uw Vector3i_To3uw(const Vector3i v)
-{
-	Vector3uw dest = { (uint16_t)v.x, (uint16_t)v.y, (uint16_t)v.z };
-	return dest;
-}
-
-
-/*!
  * Convert a vector of degree angles into radians.
  * \param v Vector to convert
  * \return Radian vector
@@ -820,51 +795,6 @@ static inline WZ_DECL_CONST Vector3i Vector3i_LinearInterpolate(const Vector3i f
 	return Vector3i_Add(from, Vector3f_To3i(Vector3f_Mult(Vector3i_To3f(Vector3i_Sub(to, from)), s)));
 }
 
-
-/*!
- * Print a vector to stdout
- */
-static inline void Vector3uw_Print(const Vector3uw v)
-{
-	printf("V: x:%u, y:%u, z:%u\n", v.x, v.y, v.z);
-}
-
-
-/*!
- * Set the vector field by field, same as v = (Vector3uw){x, y, z};
- * Needed for MSVC which doesn't support C99 struct assignments.
- * \param x,y,z Coordinates
- * \return New Vector
- */
-static inline WZ_DECL_CONST Vector3uw Vector3uw_Init(const unsigned int x, const unsigned int y, const unsigned int z)
-{
-	Vector3uw dest = { x, y, z };
-	return dest;
-}
-
-
-/*!
- * Convert an short vector to int
- * \param v Vector to convert
- * \return Short vector
- */
-static inline WZ_DECL_CONST Vector3i Vector3uw_To3i(const Vector3uw v)
-{
-	Vector3i dest = { (int)v.x, (int)v.y, (int)v.z };
-	return dest;
-}
-
-
-/*!
- * Convert an short vector to int
- * \param v Vector to convert
- * \return Short vector
- */
-static inline WZ_DECL_CONST Vector3f Vector3uw_To3f(const Vector3uw v)
-{
-	Vector3f dest = { (float)v.x, (float)v.y, (float)v.z };
-	return dest;
-}
 
 #ifdef __cplusplus
 }
