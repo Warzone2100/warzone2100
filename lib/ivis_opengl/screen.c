@@ -239,11 +239,11 @@ bool screenInitialise(
 /* Release the DD objects */
 void screenShutDown(void)
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glFlush();
 	if (screen != NULL)
 	{
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glFlush();
 		SDL_FreeSurface(screen);
 		screen = NULL;
 	}
