@@ -654,10 +654,11 @@ void moveReallyStopDroid(DROID *psDroid)
 /* Get pitch and roll from direction and tile data */
 void updateDroidOrientation(DROID *psDroid)
 {
-	SDWORD hx0, hx1, hy0, hy1, w;
-	SDWORD newPitch, dPitch, pitchLimit;
-	double dx, dy;
-	double direction, pitch, roll;
+	int32_t hx0, hx1, hy0, hy1;
+	int newPitch, deltaPitch, pitchLimit;
+	int32_t dzdx, dzdy, dzdv, dzdw;
+	const int d = 20;
+	int32_t vX, vY;
 
 	if(psDroid->droidType == DROID_PERSON || cyborgDroid(psDroid) || psDroid->droidType == DROID_TRANSPORTER
 		|| isFlying(psDroid))
@@ -666,49 +667,42 @@ void updateDroidOrientation(DROID *psDroid)
 		return;
 	}
 
-	w = 20;
-	hx0 = map_Height(psDroid->pos.x + w, psDroid->pos.y);
-	hx1 = map_Height(MAX(0, psDroid->pos.x - w), psDroid->pos.y);
-	hy0 = map_Height(psDroid->pos.x, psDroid->pos.y + w);
-	hy1 = map_Height(psDroid->pos.x, MAX(0, psDroid->pos.y - w));
+	// Find the height of 4 points around the droid.
+	//    hy0
+	// hx0 * hx1      (* = droid)
+	//    hy1
+	hx1 = map_Height(psDroid->pos.x + d, psDroid->pos.y);
+	hx0 = map_Height(MAX(0, psDroid->pos.x - d), psDroid->pos.y);
+	hy1 = map_Height(psDroid->pos.x, psDroid->pos.y + d);
+	hy0 = map_Height(psDroid->pos.x, MAX(0, psDroid->pos.y - d));
 
 	//update height in case were in the bottom of a trough
-	if (((hx0 +hx1)/2) > (SDWORD)psDroid->pos.z)
-	{
-		psDroid->pos.z = (UWORD)((hx0 +hx1)/2);
-	}
-	if (((hy0 +hy1)/2) > (SDWORD)psDroid->pos.z)
-	{
-		psDroid->pos.z = (UWORD)((hy0 +hy1)/2);
-	}
+	psDroid->pos.z = MAX(psDroid->pos.z, (hx0 + hx1)/2);
+	psDroid->pos.z = MAX(psDroid->pos.z, (hy0 + hy1)/2);
 
-	dx = (double)(hx0 - hx1) / ((double)w * 2.0);
-	dy = (double)(hy0 - hy1) / ((double)w * 2.0);
-	//dx is atan of angle of elevation along x axis
-	//dy is atan of angle of elevation along y axis
-	//body
-	direction = (M_PI * psDroid->direction) / 180.0;
-	pitch = sin(direction) * dx + cos(direction) * dy;
-	pitch = atan(pitch);
-	newPitch = (SDWORD)((pitch * 180) / M_PI);
+	// Vector of length 65536 pointing in direction droid is facing.
+	vX = iSin(DEG(psDroid->direction));
+	vY = iCos(DEG(psDroid->direction));
+
+	// Calculate pitch of ground.
+	dzdx = hx1 - hx0;                                    // 2*d*∂z(x, y)/∂x       of ground
+	dzdy = hy1 - hy0;                                    // 2*d*∂z(x, y)/∂y       of ground
+	dzdv = dzdx*vX + dzdy*vY;                            // 2*d*∂z(x, y)/∂v << 16 of ground, where v is the direction the droid is facing.
+	newPitch = iAtan2(dzdv, (2*d) << 16);                // pitch = atan(∂z(x, y)/∂v)/2π << 16
+
+	deltaPitch = (int16_t)(newPitch - DEG(psDroid->pitch));   // (int16_t) cast: wrapping behaviour intended.
+
 	//limit the rate the front comes down to simulate momentum
-	pitchLimit = timeAdjustedIncrement(PITCH_LIMIT, true);
-	dPitch = newPitch - psDroid->pitch;
-	if (dPitch < 0)
-	{
-		dPitch +=360;
-	}
-	if ((dPitch > 180) && (dPitch < 360 - pitchLimit))
-	{
-		psDroid->pitch = (SWORD)(psDroid->pitch - pitchLimit);
-	}
-	else
-	{
-		psDroid->pitch = (SWORD)newPitch;
-	}
-	roll = cos(direction) * dx - sin(direction) * dy;
-	roll = atan(roll);
-	psDroid->roll = (UWORD)((roll * 180) / M_PI);
+	pitchLimit = gameTimeAdjustedIncrement(DEG(PITCH_LIMIT));
+	deltaPitch = MAX(deltaPitch, -pitchLimit);
+
+	// Update pitch.
+#define UNDEG(a) (a * 360/65536)  // ************** DELETE THIS LINE WHEN CHANGING UNITS **************
+	psDroid->pitch += UNDEG(deltaPitch);
+
+	// Calculate and update roll of ground (not taking pitch into account, but good enough).
+	dzdw = dzdx*vY - dzdy*vX;                            // 2*d*∂z(x, y)/∂w << 16 of ground, where w is at right angles to the direction the droid is facing.
+	psDroid->roll = UNDEG(iAtan2(dzdw, (2*d) << 16));           // pitch = atan(∂z(x, y)/∂w)/2π << 16
 }
 
 

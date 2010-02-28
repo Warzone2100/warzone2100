@@ -53,6 +53,12 @@ extern float trigInvCos(float val) WZ_DECL_CONST;
 /* Supposedly fast lookup sqrt - unfortunately it's probably slower than the FPU sqrt :-( */
 extern float trigIntSqrt(unsigned int val);
 
+// Deterministic trig functions.
+int32_t iSin(uint16_t a);               ///< Returns sin(a*2π >> 16) << 16, nearest integer. Used as the x component in this game.
+int32_t iCos(uint16_t a);               ///< Returns cos(a*2π >> 16) << 16, nearest integer. Used as the y component in this game.
+uint16_t iAtan2(int32_t s, int32_t c);  ///< Returns atan2(s, c)/2π << 16, nearest integer ± 1. Used as atan2(x, y) in this game.
+int iSqrt(uint32_t n);                  ///< Returns √(n), rounded down to next integer.
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus
