@@ -2670,24 +2670,24 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 	psDroid->roll  = 0;
 }
 
-static BOOL moveDescending( DROID *psDroid )
+static void moveDescending( DROID *psDroid )
 {
 	if ( psDroid->pos.z > map_Height( psDroid->pos.x , psDroid->pos.y ) )
 	{
 		/* descending */
 		psDroid->sMove.iVertSpeed = (SWORD)-VTOL_VERTICAL_SPEED;
 		psDroid->sMove.speed = 0;
-
-		/* return true to show still descending */
-		return true;
 	}
 	else
 	{
 		/* on floor - stop */
 		psDroid->sMove.iVertSpeed = 0;
+		
+		/* reset move state */
+		psDroid->sMove.Status = MOVEINACTIVE;
 
-		/* return false to show stopped descending */
-		return false;
+		/* conform to terrain */
+		updateDroidOrientation(psDroid);
 	}
 }
 
@@ -3133,14 +3133,7 @@ void moveUpdateDroid(DROID *psDroid)
 		ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
 		break;
 	case MOVEHOVER:
-		if (moveDescending(psDroid) == false)
-		{
-			/* reset move state */
-			psDroid->sMove.Status = MOVEINACTIVE;
-
-			/* conform to terrain */
-			updateDroidOrientation(psDroid);
-		}
+		moveDescending(psDroid);
 		break;
 	// Driven around by the player.
 	case MOVEDRIVE:
