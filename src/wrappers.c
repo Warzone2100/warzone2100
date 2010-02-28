@@ -87,16 +87,8 @@ BOOL hostlaunch = false;				// used to detect if we are hosting a game via comma
 static PIELIGHT randColour(void)
 {
 	PIELIGHT colour;
-	colour.byte.r = 200;
-	colour.byte.g = 200;
-	colour.byte.b = 200;
+	colour.byte.r = colour.byte.g = colour.byte.b = 150 + rand() % 100;
 	colour.byte.a = 255;
-	if (rand()%15 == 0)
-	{
-		colour.byte.r = rand()%256;
-		colour.byte.g = rand()%256;
-		colour.byte.b = rand()%256;
-	}
 	return colour;
 }
 
