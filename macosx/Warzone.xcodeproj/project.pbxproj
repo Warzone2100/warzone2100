@@ -396,7 +396,7 @@
 		02BBB20A0DA874F6002D438B /* exceptionhandler.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02BBB2080DA874F6002D438B /* exceptionhandler.h */; };
 		02C8AEF80BE68A5600E9D8A7 /* png_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEF60BE68A5600E9D8A7 /* png_util.c */; };
 		02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */; };
-		02CBED8C0C5B8BEB00316CE2 /* nettypes.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CBED8A0C5B8BEB00316CE2 /* nettypes.c */; };
+		02CBED8C0C5B8BEB00316CE2 /* nettypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02CBED8A0C5B8BEB00316CE2 /* nettypes.cpp */; };
 		02CBED8D0C5B8BEB00316CE2 /* nettypes.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02CBED8B0C5B8BEB00316CE2 /* nettypes.h */; };
 		02CDDCF90D159BE000722688 /* autorevision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02CDDCF80D159BE000722688 /* autorevision.cpp */; };
 		02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02CDDD080D159D5900722688 /* autorevision.h */; };
@@ -541,6 +541,7 @@
 		4355E13210D6028C00A19EE4 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12E10D6028C00A19EE4 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
+		43A64FE5113A0F890080968C /* netqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A64FE3113A0F890080968C /* netqueue.cpp */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
 		43BE73ED11121A47007DF934 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177E70F87A926000C8A96 /* config.h */; };
 		43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BE75E811124BB4007DF934 /* wavecast.cpp */; };
@@ -1369,7 +1370,7 @@
 		02C8AEF70BE68A5600E9D8A7 /* png_util.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = png_util.h; path = ../lib/ivis_common/png_util.h; sourceTree = SOURCE_ROOT; };
 		02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = oggvorbis.c; path = ../lib/sound/oggvorbis.c; sourceTree = SOURCE_ROOT; };
 		02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = oggvorbis.h; path = ../lib/sound/oggvorbis.h; sourceTree = SOURCE_ROOT; };
-		02CBED8A0C5B8BEB00316CE2 /* nettypes.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = nettypes.c; path = ../lib/netplay/nettypes.c; sourceTree = SOURCE_ROOT; };
+		02CBED8A0C5B8BEB00316CE2 /* nettypes.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = nettypes.cpp; path = ../lib/netplay/nettypes.cpp; sourceTree = SOURCE_ROOT; };
 		02CBED8B0C5B8BEB00316CE2 /* nettypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = nettypes.h; path = ../lib/netplay/nettypes.h; sourceTree = SOURCE_ROOT; };
 		02CDDCF40D159BC300722688 /* Autorevision */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Autorevision; sourceTree = BUILT_PRODUCTS_DIR; };
 		02CDDCF80D159BE000722688 /* autorevision.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = autorevision.cpp; path = ../build_tools/autorevision/autorevision.cpp; sourceTree = SOURCE_ROOT; };
@@ -1590,6 +1591,8 @@
 		438BDDF01129DC9A00998660 /* uk_UA */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = uk_UA; path = uk_UA.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438BDDF11129DC9A00998660 /* zh_CN */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh_CN; path = zh_CN.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438BDDF21129DC9A00998660 /* zh_TW */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh_TW; path = zh_TW.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43A64FE3113A0F890080968C /* netqueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netqueue.cpp; path = ../lib/netplay/netqueue.cpp; sourceTree = SOURCE_ROOT; };
+		43A64FE4113A0F890080968C /* netqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netqueue.h; path = ../lib/netplay/netqueue.h; sourceTree = SOURCE_ROOT; };
 		43A8417611028EDD00733CCB /* pointtree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pointtree.cpp; path = ../src/pointtree.cpp; sourceTree = SOURCE_ROOT; };
 		43A8417711028EDD00733CCB /* pointtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pointtree.h; path = ../src/pointtree.h; sourceTree = SOURCE_ROOT; };
 		43BE75E811124BB4007DF934 /* wavecast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wavecast.cpp; path = ../src/wavecast.cpp; sourceTree = SOURCE_ROOT; };
@@ -2143,6 +2146,8 @@
 		0246A12B0BD3CC47004D1C70 /* Netplay */ = {
 			isa = PBXGroup;
 			children = (
+				43A64FE3113A0F890080968C /* netqueue.cpp */,
+				43A64FE4113A0F890080968C /* netqueue.h */,
 				EFBC96A210B92A9C009C6753 /* bsdqueue.h */,
 				EFBC96A310B92A9C009C6753 /* codelength.h */,
 				EFBC96A410B92A9C009C6753 /* declspec.h */,
@@ -2165,7 +2170,7 @@
 				EFBC96B510B92A9C009C6753 /* upnperrors.h */,
 				EFBC96B610B92A9C009C6753 /* upnpreplyparse.c */,
 				EFBC96B710B92A9C009C6753 /* upnpreplyparse.h */,
-				02CBED8A0C5B8BEB00316CE2 /* nettypes.c */,
+				02CBED8A0C5B8BEB00316CE2 /* nettypes.cpp */,
 				02CBED8B0C5B8BEB00316CE2 /* nettypes.h */,
 				0246A12E0BD3CC58004D1C70 /* netjoin_stub.c */,
 				0246A12F0BD3CC58004D1C70 /* netlog.c */,
@@ -4230,7 +4235,7 @@
 				0246A2FD0BD3CCDC004D1C70 /* wrappers.c in Sources */,
 				02C8AEF80BE68A5600E9D8A7 /* png_util.c in Sources */,
 				02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.c in Sources */,
-				02CBED8C0C5B8BEB00316CE2 /* nettypes.c in Sources */,
+				02CBED8C0C5B8BEB00316CE2 /* nettypes.cpp in Sources */,
 				0223BBB00CFE3C380056EF85 /* version.c in Sources */,
 				0223BBC00CFE3CD60056EF85 /* tagfile.c in Sources */,
 				02CDDD1C0D159E2F00722688 /* openal_error.c in Sources */,
@@ -4269,6 +4274,7 @@
 				43A8417811028EDD00733CCB /* pointtree.cpp in Sources */,
 				43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */,
 				4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */,
+				43A64FE5113A0F890080968C /* netqueue.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
