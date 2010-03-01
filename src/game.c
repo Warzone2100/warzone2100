@@ -2608,7 +2608,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			for (i = 0; i < MAX_PLAYERS; i++)
 			{
 				strcpy((NetPlay.players[i]).name, ((saveGameData.sNetPlay).players[i]).name);
-				if ((saveGameData.sGame).skDiff[i] == UBYTE_MAX)
+				if ((saveGameData.sGame).skDiff[i] == UBYTE_MAX || (game.type == CAMPAIGN && i == 0))
 				{
 					(NetPlay.players[i]).allocated = true;
 				}
@@ -4723,7 +4723,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			for (i = 0; i < MAX_PLAYERS; i++)
 			{
 				strcpy((NetPlay.players[i]).name, ((saveGameData.sNetPlay).players[i]).name);
-				if ((saveGameData.sGame).skDiff[i] == UBYTE_MAX)
+				if ((saveGameData.sGame).skDiff[i] == UBYTE_MAX || (game.type == CAMPAIGN && i == 0))
 				{
 					(NetPlay.players[i]).allocated = true;
 				}

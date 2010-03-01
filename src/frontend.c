@@ -327,12 +327,14 @@ BOOL runTutorialMenu(void)
 	{
 		case FRONTEND_TUTORIAL:
 			NetPlay.players[0].allocated = true;
+			game.skDiff[0] = UBYTE_MAX;
 			sstrcpy(aLevelName, TUTORIAL_LEVEL);
 			changeTitleMode(STARTGAME);
 			break;
 
 		case FRONTEND_FASTPLAY:
 			NetPlay.players[0].allocated = true;
+			game.skDiff[0] = UBYTE_MAX;
 			sstrcpy(aLevelName, "FASTPLAY");
 			changeTitleMode(STARTGAME);
 			break;
@@ -432,6 +434,7 @@ BOOL runSinglePlayerMenu(void)
 		game.type = CAMPAIGN;
 		NET_InitPlayers();
 		NetPlay.players[0].allocated = true;
+		game.skDiff[0] = UBYTE_MAX;
 		// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
 		playercolor = getPlayerColour(0);
 		if (playercolor >= 1 && playercolor <= 3)
