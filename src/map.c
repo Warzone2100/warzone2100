@@ -1797,7 +1797,7 @@ BOOL mapShutdown(void)
 }
 
 /// The max height of the terrain and water at the specified world coordinates
-extern SWORD map_Height(int x, int y)
+extern int32_t map_Height(int x, int y)
 {
 	int tileX, tileY;
 	int i, j;
@@ -1895,7 +1895,6 @@ extern SWORD map_Height(int x, int y)
 	onBottom = left * (1 - towardsRight) + right * towardsRight;
 	result = onBottom + (center - middle) * towardsCenter * 2;
 
-	result = MAX(result, 0);  // HACK Avoid unsigned underflow, when this is squashed into a Vector3uw later.
 	return (SDWORD)(result+0.5f);
 }
 

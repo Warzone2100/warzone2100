@@ -411,7 +411,7 @@ typedef struct _tile_coord
 } TILE_COORD;
 
 /// The max height of the terrain and water at the specified world coordinates
-extern SWORD map_Height(int x, int y);
+extern int32_t map_Height(int x, int y);
 
 /* returns true if object is above ground */
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj );

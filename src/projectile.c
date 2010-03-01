@@ -667,7 +667,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
 	const unsigned int LAS_SAT_DELAY = 4;
-	int timeSoFar, nextPosZ;
+	int timeSoFar;
 	int distancePercent; /* How far we are 0..100 */
 	float distanceRatio; /* How far we are, 1.0==at target */
 	float distanceExtensionFactor; /* Extended lifespan */
@@ -792,13 +792,12 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	nextPos.y = psProj->startY + (distanceRatio * move.y);
 	if (!bIndirect)
 	{
-		nextPosZ = (SDWORD)(psProj->srcHeight + (distanceRatio * move.z));  // Save unclamped nextPos.z value.
+		nextPos.z = (SDWORD)(psProj->srcHeight + (distanceRatio * move.z));  // Save unclamped nextPos.z value.
 	}
 	else
 	{
-		nextPosZ = (SDWORD)(psProj->srcHeight + move.z);  // Save unclamped nextPos.z value.
+		nextPos.z = (SDWORD)(psProj->srcHeight + move.z);  // Save unclamped nextPos.z value.
 	}
-	nextPos.z = MAX(0, nextPosZ);  // nextPos.z is unsigned.
 
 	/* impact if about to go off map else update coordinates */
 	if (!worldOnMap(nextPos.x, nextPos.y))
@@ -884,7 +883,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 
 		// Actual collision test.
 		{
-			const Vector3i posProj = {psProj->pos.x, psProj->pos.y, nextPosZ};  // HACK psProj->pos.z may have been set to 0, since psProj->pos.z can't be negative.
+			const Vector3i posProj = psProj->pos;
 			const Vector3i prevPosProj = psProj->prevSpacetime.pos;
 			const Vector3i posTemp = psTempObj->pos;
 			const Vector3i diff = Vector3i_Sub(posProj, posTemp);
@@ -899,8 +898,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 				// We hit!
 				closestCollisionSpacetime = interpolateSpacetime(psProj->prevSpacetime, GET_SPACETIME(psProj), collisionTime);
 				closestCollisionObject = psTempObj;
-
-				closestCollisionSpacetime.pos.z = MAX(0, interpolateInt(psProj->prevSpacetime.pos.z, nextPosZ, psProj->prevSpacetime.time, psProj->time, collisionTime));
 
 				// Keep testing for more collisions, in case there was a closer target.
 			}
