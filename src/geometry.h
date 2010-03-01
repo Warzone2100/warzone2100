@@ -35,7 +35,7 @@ typedef struct _t_quad
 } QUAD;
 
 extern UDWORD adjustDirection( SDWORD present, SDWORD difference );
-extern uint16_t calcDirection( UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1 );
+extern uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1);
 extern void initBulletTable( void );
 extern int inQuad( const Vector2i *pt, const QUAD *quad );
 extern DROID *getNearestDroid( UDWORD x, UDWORD y, BOOL bSelected );

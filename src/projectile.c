@@ -429,12 +429,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	/* roll never set */
 	psProj->rot.roll = 0;
 
-	fR = atan2(dx, dy);
-	if ( fR < 0.0 )
-	{
-		fR += 2.0 * M_PI;
-	}
-	psProj->rot.direction = DEG(RAD_TO_DEG(fR));
+	psProj->rot.direction = iAtan2(dx, dy);
 
 
 	/* get target distance */
@@ -445,12 +440,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	if ( proj_Direct(psStats) ||
 		( !proj_Direct(psStats) && (iRadSq <= iMinSq) ) )
 	{
-		fR = atan2(dz, fR);
-		if ( fR < 0.0 )
-		{
-			fR += 2.0 * M_PI;
-		}
-		psProj->rot.pitch = DEG(RAD_TO_DEG(fR));
+		psProj->rot.pitch = iAtan2(dz, fR);
 		psProj->state = PROJ_INFLIGHTDIRECT;
 	}
 	else
@@ -474,7 +464,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 			fS = ACC_GRAVITY * (1. + fT * fT);
 			fS = fS / (2.0 * (fR * fT - dz));
 			{
-				iVel = trigIntSqrt(fS * (fR * fR));
+				iVel = iSqrt(fS * (fR * fR));
 			}
 		}
 		else
@@ -534,8 +524,8 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 			}
 		}
 
-		psProj->vXY = iVel * trigCos(UNDEG(psProj->rot.pitch));
-		psProj->vZ  = iVel * trigSin(UNDEG(psProj->rot.pitch));
+		psProj->vXY = (uint64_t)iVel * iCos(psProj->rot.pitch) / UINT16_MAX;
+		psProj->vZ  = (uint64_t)iVel * iSin(psProj->rot.pitch) / UINT16_MAX;
 
 		psProj->state = PROJ_INFLIGHTINDIRECT;
 	}
@@ -827,7 +817,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	if (bIndirect)
 	{
 		/* Update pitch */
-		psProj->rot.pitch = DEG(rad2degf(atan2f(psProj->vZ - (timeSoFar * ACC_GRAVITY / GAME_TICKS_PER_SEC), psProj->vXY)));
+		psProj->rot.pitch = iAtan2(psProj->vZ - (timeSoFar * ACC_GRAVITY / GAME_TICKS_PER_SEC), psProj->vXY);
 	}
 
 	closestCollisionSpacetime.time = 0xFFFFFFFF;
@@ -1793,22 +1783,20 @@ static HIT_SIDE getHitSide(PROJECTILE *psObj, BASE_OBJECT *psTarget)
 		 * Work out the impact angle. It is easiest to understand if you
 		 * model the target droid as a circle, divided up into 360 pieces.
 		 */
-		impactAngle = abs(UNDEG(psTarget->rot.direction) - (180 * atan2f(deltaX, deltaY) / M_PI));
-
-		impactAngle = wrap(impactAngle, 360);
+		impactAngle = (uint32_t)(psTarget->rot.direction - iAtan2(deltaX, deltaY));  // Cast wrapping intended.
 
 		// Use the impact angle to work out the side hit
 		// Right
-		if (impactAngle > 45 && impactAngle < 135)
+		if (impactAngle > DEG(45) && impactAngle < DEG(135))
 			return HIT_SIDE_RIGHT;
 		// Rear
-		else if (impactAngle >= 135 && impactAngle <= 225)
+		else if (impactAngle <= DEG(225))
 			return HIT_SIDE_REAR;
 		// Left
-		else if (impactAngle > 225 && impactAngle < 315)
+		else if (impactAngle < DEG(315))
 			return HIT_SIDE_LEFT;
 		// Front - default
-		else //if (impactAngle <= 45 || impactAngle >= 315)
+		else //if (impactAngle <= DEG(45) || impactAngle >= DEG(315))
 			return HIT_SIDE_FRONT;
 	}
 }

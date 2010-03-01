@@ -5513,13 +5513,13 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.fx           = PHYSFS_swapSLE32(psDroid->sMove.fx);
 	psSaveDroid->sMove.fy           = PHYSFS_swapSLE32(psDroid->sMove.fy);
 	psSaveDroid->sMove.speed        = PHYSFS_swapSLE32(psDroid->sMove.speed);
-	psSaveDroid->sMove.moveDir      = PHYSFS_swapSLE32(psDroid->sMove.moveDir);
+	psSaveDroid->sMove.moveDir      = PHYSFS_swapSLE32(UNDEG(psDroid->sMove.moveDir));
 	psSaveDroid->sMove.fz           = PHYSFS_swapSLE32(psDroid->sMove.fz);
 
 	// Little endian SWORDs
 	psSaveDroid->sMove.boundX       = PHYSFS_swapSLE16(psDroid->sMove.boundX);
 	psSaveDroid->sMove.boundY       = PHYSFS_swapSLE16(psDroid->sMove.boundY);
-	psSaveDroid->sMove.bumpDir      = PHYSFS_swapSLE16(psDroid->sMove.bumpDir);
+	psSaveDroid->sMove.bumpDir      = PHYSFS_swapSLE16(UNDEG(psDroid->sMove.bumpDir));
 	psSaveDroid->sMove.iVertSpeed   = PHYSFS_swapSLE16(psDroid->sMove.iVertSpeed);
 
 	// Little endian UDWORDs

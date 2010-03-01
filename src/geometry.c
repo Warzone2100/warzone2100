@@ -52,21 +52,9 @@ void initBulletTable( void )
 	}
 }
 
-/* Angle returned is reflected in line x=0 */
-uint16_t calcDirection(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
+uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1)
 {
-	/* Watch out here - should really be y1-y0, but coordinate system is reversed in Y */
-	SDWORD	xDif = (x1-x0), yDif = (y0-y1);
-	double	angle = atan2(yDif, xDif) * 180.0 / M_PI;
-	SDWORD	angleInt = (SDWORD) angle;
-
-	angleInt+=90;
-	if (angleInt<0)
-		angleInt+=360;
-
-	ASSERT(angleInt >= 0 && angleInt < 360, "Droid direction out of range");
-
-	return DEG(angleInt);
+	return iAtan2(x1 - x0, y1 - y0);
 }
 
 
