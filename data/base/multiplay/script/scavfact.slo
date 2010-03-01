@@ -36,22 +36,42 @@ private		INT		lastAttack;
 
 #region triggers
 
-trigger chainloadTr(wait, 15);	// scavs are not very bright
+trigger chainloadTr(wait, 10);
+trigger regularTr(every, 100);
 
 event structureAttacked;
 event startup;
 event droidbuilt;
 event startLevel;
+event scavManagement;
 
 #endregion triggers
 
-event startLevel(CALL_START_NEXT_LEVEL)
+// We need to reguarly check back on our scavs, since they are stupid and forget their orders.
+// (A nice way of saying we have bugs in our code.)
+event scavManagement(inactive)
 {
 	fac1 = getStructure(factory, enemy1);
 	if (fac1 != NULLOBJECT)
 	{
-		buildDroid(trike, fac1, enemy1, 1);
+		if (structureIdle(fac1))
+		{
+			buildDroid(trike, fac1, enemy1, 1);
+		}
+
+		if ((gameTime - lastAttack) > 600)
+		{
+			lastAttack = gameTime;
+			orderGroupLoc(attackGroup, DORDER_MOVE, fac1.x, fac1.y);
+		}
 	}
+
+	setEventTrigger(scavManagement, regularTr);
+}
+
+event startLevel(CALL_START_NEXT_LEVEL)
+{
+	setEventTrigger(scavManagement, chainloadTr);
 }
 
 // deal with a droid being built by us
@@ -94,7 +114,7 @@ event structureAttacked(CALL_STRUCT_ATTACKED, enemy1, ref structure, ref attacke
 	if ((gameTime - lastAttack) > 300)
 	{
 		lastAttack = gameTime;
-		orderGroupLoc(attackGroup, DORDER_MOVE, structure.x, structure.y);
+		orderGroupLoc(attackGroup, DORDER_MOVE, attacker.x, attacker.y);
 	}
 }
 

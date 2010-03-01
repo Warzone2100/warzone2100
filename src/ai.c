@@ -37,7 +37,7 @@
 #include "projectile.h"
 #include "visibility.h"
 
-#define FRUSTATED_TIME 1000 * 5
+#define FRUSTRATED_TIME (1000 * 5)
 
 /* Calculates attack priority for a certain target */
 static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot);
@@ -339,7 +339,9 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 				}
 			}
 			else if (targetInQuestion->type == OBJ_FEATURE
-			         && gameTime - psDroid->lastFrustratedTime < FRUSTATED_TIME  && ((FEATURE *)targetInQuestion)->psStats->damageable)
+			         && gameTime - psDroid->lastFrustratedTime < FRUSTRATED_TIME
+			         && ((FEATURE *)targetInQuestion)->psStats->damageable
+			         && !(game.scavengers && psDroid->player == 7))			// hack to avoid scavs blowing up their nice feature walls
 			{
 				psTarget = targetInQuestion;
 			}
