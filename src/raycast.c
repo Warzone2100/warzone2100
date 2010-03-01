@@ -36,12 +36,6 @@ typedef struct {
 	float pitch;
 } HeightCallbackHelp_t;
 
-typedef struct {
-	const int minDist, origHeight;
-	int highestHeight;
-	float pitch;
-} HighestCallbackHelp_t;
-
 
 void rayCast(Vector3i src, Vector3i direction, int length,
 	RAY_CALLBACK callback, void * data)
@@ -73,31 +67,6 @@ void rayCast(Vector3i src, Vector3i direction, int length,
 			return;
 		}
 	}
-}
-
-
-/*!
- * Gets the maximum terrain height along a certain direction to the edge of the grid
- * from wherever you specify, as well as the distance away
- */
-static bool getTileHighestCallback(Vector3i pos, int distSq, void* data)
-{
-	HighestCallbackHelp_t * help = data;
-
-	if (clipXY(pos.x, pos.y))
-	{
-		int height = map_Height(pos.x, pos.y), dist = sqrtf(distSq);
-		if (height > help->highestHeight && dist >= help->minDist)
-		{
-			int heightDif = height - help->origHeight;
-			help->pitch = rad2degf(atan2f(heightDif, world_coord(6)));// (float)(dist - world_coord(3))));
-			help->highestHeight = height;
-		}
-
-		return true;
-	}
-
-	return false;
 }
 
 //-----------------------------------------------------------------------------------
@@ -171,18 +140,6 @@ void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitc
 	HeightCallbackHelp_t help = { map_Height(x,y), 0.0f };
 
 	rayCast(pos, dir, 5430, getTileHeightCallback, &help); // FIXME Magic value
-
-	*pitch = help.pitch;
-}
-
-void getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction,
-							   UDWORD thresholdDistance, SDWORD *pitch)
-{
-	Vector3i pos = { x, y, 0 };
-	Vector3i dir = rayAngleToVector3i(direction);
-	HighestCallbackHelp_t help = { thresholdDistance, map_Height(x,y), map_Height(x,y), 0.0f };
-
-	rayCast(pos, dir, 3000, getTileHighestCallback, &help); // FIXME Magic value
 
 	*pitch = help.pitch;
 }

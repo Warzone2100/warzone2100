@@ -239,7 +239,7 @@ static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer
 static bool rayLOSCallback(Vector3i pos, int distSq, void *data)
 {
 	VisibleObjectHelp_t * help = data;
-	int dist = sqrtf(distSq);
+	int dist = iSqrt(distSq);
 
 	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
 		&& pos.y >= 0 && pos.y < world_coord(mapHeight),

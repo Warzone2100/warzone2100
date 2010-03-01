@@ -35,15 +35,9 @@
 #include "types.h"
 #include "trig.h"
 
-/* Number of steps between -1 and 1 for the inverse tables */
-#define TRIG_ACCURACY	4096
-#define TRIG_ACCMASK	0x0fff
-
 
 static float aSin[2*TRIG_DEGREES];
 static float aCos[2*TRIG_DEGREES];
-static float aInvCos[TRIG_ACCURACY];
-static float aInvSin[TRIG_ACCURACY];
 
 
 /* Initialise the Trig tables */
@@ -62,14 +56,6 @@ bool trigInitialise(void)
 		val += inc;
 	}
 
-	inc = 2.0f / (TRIG_ACCURACY-1);
-	val = -1;
-	for (i = 0; i < TRIG_ACCURACY; i++)
-	{
-		aInvSin[i] = asinf(val) * (float)TRIG_DEGREES / (2.0f * (float)M_PI);
-		aInvCos[i] = acosf(val) * (float)TRIG_DEGREES / (2.0f * (float)M_PI);
-		val += inc;
-	}
 	return true;
 }
 
@@ -89,22 +75,6 @@ float trigSin(int angle)
 float trigCos(int angle)
 {
 	return aCos[angle % TRIG_DEGREES + TRIG_DEGREES];
-}
-
-
-float trigInvSin(float val)
-{
-	SDWORD index = (val+1) * (TRIG_ACCURACY-1) / 2;
-
-	return aInvSin[index & TRIG_ACCMASK];
-}
-
-
-float trigInvCos(float val)
-{
-	SDWORD index = (val+1) * (TRIG_ACCURACY-1) / 2;
-
-	return aInvCos[index & TRIG_ACCMASK];
 }
 
 
@@ -579,16 +549,35 @@ uint16_t iAtan2(int32_t s, int32_t c)
 	             : d + 0x4000 - trigAtanTable[((int64_t)k*0x2000 + j/2)/j];
 }
 
-int iSqrt(uint32_t n)
+int32_t iSqrt(uint32_t n)
 {
-	// In case you are wondering why this function looks strange, it's paranoia that sqrt might not return identical results on all machines.
-	// Just returning sqrt(n) should give identical resuls on all machines, but should verify that first.
-	uint32_t x = sqrt(n) + 0.0001;  // Calculate square root, overestimate a bit.
-	while(x*x - 1 > n - 1)          // -1 to avoid overflow.
+	uint32_t r = sqrtf(n);       // Calculate square root, usually rounded down, but may be rounded up in some cases. Which specific cases depend on the floating point precision used.
+
+	if ((int32_t)(r*r - n) > 0)  // Overflow possible but then cancelled by underflow.
 	{
-		--x;                    // Estimate was too high, go down.
+		--r;                 // The square root was rounded up. Round down instead.
 	}
-	return x;
+
+	// Check that we got the right result.
+	ASSERT((int32_t)(r*r - n) <= 0 && (int32_t)((r + 1)*(r + 1) - n) > 0, "Too badly broken sqrtf(%u) = %u function.", (unsigned)n, (unsigned)r);
+
+	return r;
+}
+
+int32_t iHypot(int32_t x, int32_t y)
+{
+	uint32_t n = (uint32_t)x*x + (uint32_t)y*y;    // Possible overflow cancelled later.
+	uint32_t r = (uint64_t)(hypot(x, y) + 0.001);  // Possible overflow cancelled later. +0.001 to avoid risk of accumulated errors causing rounding down too far. uint64_t cast since the result may not fit into uint32_t, and casting from floating point to integer doesn't wrap while casting.
+
+	if ((int32_t)(r*r - n) > 0)                    // Any overflow cancelled here.
+	{
+		--r;                                   // The square root was rounded up. Round down instead.
+	}
+
+	// Check that we got the right result.
+	ASSERT((int32_t)(r*r - n) <= 0 && (int32_t)((uint32_t)(r + 1)*(uint32_t)(r + 1) - n) > 0, "Too badly broken hypot(%d, %d) = %u function.", (int)x, (int)y, (unsigned)r);
+
+	return r;
 }
 
 // For testing above functions.

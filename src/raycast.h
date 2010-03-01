@@ -58,11 +58,11 @@ typedef bool (*RAY_CALLBACK)(Vector3i pos, int distSq, void* data);
 extern void rayCast(Vector3i pos, Vector3i dir, int length, RAY_CALLBACK callback, void * data);
 
 
-static inline Vector3i rayAngleToVector3i(float angle)
+static inline Vector3i rayAngleToVector3i(uint16_t angle)
 {
 	Vector3i dest = {
-		cosf(deg2radf(angle)) * INT_MAX,
-		sinf(deg2radf(angle)) * INT_MAX,
+		iCos(angle),
+		iSin(angle),
 		0
 	};
 	return dest;
@@ -73,8 +73,6 @@ static inline Vector3i rayAngleToVector3i(float angle)
 // point to the edge of the grid
 extern void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitch);
 
-extern void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction,
-								   UDWORD thresholdDistance, SDWORD *pitch );
 
 #ifdef __cplusplus
 }
