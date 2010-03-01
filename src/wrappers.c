@@ -67,42 +67,60 @@ typedef struct _star
 	PIELIGHT colour;
 } STAR;
 
-#define MAX_STARS 20
-static STAR	stars[MAX_STARS];	// quick hack for loading stuff
-
 static BOOL		firstcall = false;
 static UDWORD	loadScreenCallNo=0;
 static BOOL		bPlayerHasLost = false;
 static BOOL		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
-void	startCreditsScreen	( void );
 void	runCreditsScreen	( void );
 
-static	UDWORD	lastTick = 0;
 static	UDWORD	lastChange = 0;
 extern char iptoconnect[PATH_MAX];		// holds our ip/hostname from the command line
 BOOL hostlaunch = false;				// used to detect if we are hosting a game via command line option.
 
-static PIELIGHT randColour(void)
+static uint32_t lastTick = 0;
+static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
+static STAR *stars;
+
+static STAR newStar(void)
 {
-	PIELIGHT colour;
-	colour.byte.r = colour.byte.g = colour.byte.b = 150 + rand() % 100;
-	colour.byte.a = 255;
-	return colour;
+	STAR s;
+	s.xPos = rand() % barRightX;
+	s.speed = (rand() % 30 + 6) * pie_GetVideoBufferWidth() / 640.0;
+	s.colour = pal_Grey(150 + rand() % 100);
+	return s;
 }
 
-static void initStars(void)
+static void setupLoadingScreen(void)
 {
 	unsigned int i;
+	int w = pie_GetVideoBufferWidth();
+	int h = pie_GetVideoBufferHeight();
+	int offset;
 
-	for(i = 0; i < MAX_STARS; ++i)
+	boxHeight = h / 40.0;
+	offset = boxHeight;
+	boxWidth = w - 2.0 * offset;
+
+	barRightX = w - offset;
+	barRightY = h - offset;
+
+	barLeftX = barRightX - boxWidth;
+	barLeftY = barRightY - boxHeight;
+
+	starsNum = boxWidth / boxHeight;
+	starHeight = 2.0 * h / 640.0;
+
+        stars = (STAR *)malloc(sizeof(STAR) * starsNum);
+
+	for (i = 0; i < starsNum; ++i)
 	{
-		stars[i].xPos = (UWORD)(rand()%598);		// scatter them
-		stars[i].speed = rand() % 30 + 6;	// always move
-		stars[i].colour = randColour();
+		stars[i] = newStar();
 	}
 }
+
+
 
 // //////////////////////////////////////////////////////////////////
 // Initialise frontend globals and statics.
@@ -110,7 +128,7 @@ static void initStars(void)
 BOOL frontendInitVars(void)
 {
 	firstcall = true;
-	initStars();
+	setupLoadingScreen();
 
 	return true;
 }
@@ -274,57 +292,43 @@ TITLECODE titleLoop(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Loading Screen.
 
-
-
-
 //loadbar update
 void loadingScreenCallback(void)
 {
+	const PIELIGHT loadingbar_background = pal_RGBA(0, 0, 0, 24);
+	const uint32_t currTick = SDL_GetTicks();
 	unsigned int i;
-	UDWORD			topX,topY,botX,botY;
-	UDWORD			currTick;
-	PIELIGHT		colour;
 
-	currTick = SDL_GetTicks();
 	if (currTick - lastTick < 50)
 	{
 		return;
 	}
 	lastTick = currTick;
-	colour.byte.r = 1;
-	colour.byte.g = 1;
-	colour.byte.b = 1;
-	colour.byte.a = 32;
-	pie_UniTransBoxFill(1, 1, 2, 2, colour);
-	/* Draw the black rectangle at the bottom */
 
-	topX = 10+D_W;
-	topY = 450+D_H-1;
-	botX = 630+D_W;
-	botY = 470+D_H+1;
-	colour.byte.a = 24;
-	pie_UniTransBoxFill(topX, topY, botX, botY, colour);
+	/* Draw the black rectangle at the bottom, with a two pixel border */
+	pie_UniTransBoxFill(barLeftX - 2, barLeftY - 2, barRightX + 2, barRightY + 2, loadingbar_background);
 
-	for(i = 1; i < MAX_STARS; ++i)
+	for (i = 1; i < starsNum; ++i)
 	{
-	   	if(stars[i].xPos + stars[i].speed >=598)
+		stars[i].xPos = stars[i].xPos + stars[i].speed;
+		if (stars[i].xPos >= barRightX)
 		{
+			stars[i] = newStar();
 			stars[i].xPos = 1;
-			stars[i].colour = randColour();
 		}
-		else
 		{
-			stars[i].xPos = (UWORD)(stars[i].xPos + stars[i].speed);
-		}
+		const int topX = barLeftX + stars[i].xPos;
+		const int topY = barLeftY + i * (boxHeight - starHeight) / starsNum;
+		const int botX = MIN(topX + stars[i].speed, barRightX);
+		const int botY = topY + starHeight;
 
-		colour = stars[i].colour;
-		pie_UniTransBoxFill(10 + stars[i].xPos + D_W, 450 + i + D_H, 10 + stars[i].xPos + stars[i].speed + D_W, 450 + i + 2 + D_H, colour);
-   	}
+		pie_UniTransBoxFill(topX, topY, botX, botY, stars[i].colour);
+		}
+	}
 
 	pie_ScreenFlip(CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD);//loading callback		// dont clear.
 	audio_Update();
 }
-
 
 // fill buffers with the static screen
 void initLoadingScreen( BOOL drawbdrop )
