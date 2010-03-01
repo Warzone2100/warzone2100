@@ -28,6 +28,7 @@
 static inline float interpolateFloat(float v1, float v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
 	int32_t numer = t - t1, denom = t2 - t1;
+	if (denom == 0) return v2;	// TEMPORARY HACK
 	return v1 + (v2 - v1) * numer/denom;
 }
 
@@ -35,6 +36,7 @@ static inline uint16_t interpolateDegree(uint16_t v1, uint16_t v2, uint32_t t1, 
 {
 	uint16_t numer = t - t1, denom = t2 - t1;
 	int16_t diff = v2 - v1;
+	if (denom == 0) return v2;	// TEMPORARY HACK
 	return v1 + diff * numer / denom;
 }
 
