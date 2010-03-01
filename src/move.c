@@ -1519,7 +1519,7 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 		*pX = *pX * ratio + avoidX * (1.f - ratio);
 		*pY = *pY * ratio + avoidY * (1.f - ratio);
 	}
-	ASSERT(isfinite(*pX) && isfinite(*pY), "moveGetObstacleVector: bad float");
+	ASSERT(isfinite(*pX) && isfinite(*pY), "float infinity detected");
 }
 
 
@@ -1528,7 +1528,7 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
  * \param psDroid Which droid to examine
  * \return The normalised direction vector
  */
-static Vector2f moveGetDirection(DROID *psDroid)
+static uint16_t moveGetDirection(DROID *psDroid)
 {
 	// Current position and destination direction
 	Vector2f
@@ -1557,8 +1557,7 @@ static Vector2f moveGetDirection(DROID *psDroid)
 		// We are already there
 		if (magnitude < FLT_EPSILON && nextMagnitude < FLT_EPSILON)
 		{
-			Vector2f zero = {0.0f, 0.0f};
-			return zero; // We are practically standing on our only waypoint
+			return 0; // We are practically standing on our only waypoint
 		}
 		// We are passing the current waypoint, so directly head over to the next
 		else if (magnitude < FLT_EPSILON)
@@ -1587,7 +1586,7 @@ static Vector2f moveGetDirection(DROID *psDroid)
 		}
 	}
 
-	ASSERT(isfinite(dest.x) && isfinite(dest.y), "moveGetDirection: bad float, early check");
+	ASSERT(isfinite(dest.x) && isfinite(dest.y), "float infinity detected");
 
 	// Transporters don't need to avoid obstacles, but everyone else should
 	if ( psDroid->droidType != DROID_TRANSPORTER )
@@ -1595,9 +1594,7 @@ static Vector2f moveGetDirection(DROID *psDroid)
 		moveGetObstacleVector(psDroid, &dest.x, &dest.y);
 	}
 
-	ASSERT(isfinite(dest.x) && isfinite(dest.y), "moveGetDirection: bad float");
-
-	return dest;
+	return vectorToAngle(dest.x, dest.y);
 }
 
 
@@ -2783,7 +2780,6 @@ void moveUpdateDroid(DROID *psDroid)
 	PROPULSION_STATS	*psPropStats;
 	Vector3i 			pos;
 	BOOL				bStarted = false, bStopped;
-	Vector2f			target;
 
 	CHECK_DROID(psDroid);
 
@@ -2835,10 +2831,7 @@ void moveUpdateDroid(DROID *psDroid)
 		else
 		{
 			// Calculate a target vector
-			Vector2f target = moveGetDirection(psDroid);
-
-			// Turn the droid if necessary
-			moveDir = vectorToAngle(target.x, target.y);
+			moveDir = moveGetDirection(psDroid);
 
 			moveSpeed = moveCalcDroidSpeed(psDroid);
 		}
@@ -2923,10 +2916,7 @@ void moveUpdateDroid(DROID *psDroid)
 		}
 
 		// Calculate a target vector
-		target = moveGetDirection(psDroid);
-
-		// Turn the droid if necessary
-		moveDir = vectorToAngle(target.x, target.y);
+		moveDir = moveGetDirection(psDroid);
 
 		moveSpeed = moveCalcDroidSpeed(psDroid);
 
