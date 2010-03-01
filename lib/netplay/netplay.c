@@ -3316,6 +3316,7 @@ static void NETallowJoining(void)
 					uint8_t j;
 					uint8_t index;
 					uint8_t rejected = 0;
+					int tmp;
 
 					char name[64];
 					int32_t MajorVersion = 0;
@@ -3333,9 +3334,9 @@ static void NETallowJoining(void)
 						NETint32_t(&Hash_Data);		// NETCODE_HASH, not currently used
 					NETend();
 
-					index = NET_CreatePlayer(name);
+					tmp = NET_CreatePlayer(name);
 
-					if (index == -1)
+					if (tmp == -1)
 					{
 						// FIXME: No room. Dropping the player without warning since protocol doesn't seem to support rejection at this point
 						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", tmp_socket[i]);
@@ -3344,6 +3345,8 @@ static void NETallowJoining(void)
 						tmp_socket[i] = NULL;
 						return;
 					}
+
+					index = tmp;
 
 					debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
