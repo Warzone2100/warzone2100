@@ -2447,7 +2447,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->actionY = 0;
 	psDroid->psTarStats = NULL;
 	psDroid->psTarget = NULL;
-	psDroid->lastFrustratedTime = 0;
+	psDroid->lastFrustratedTime = -UINT16_MAX;	// make sure we do not start the game frustrated
 
 	// Is setting asWeaps here needed? The first numWeaps entries are set in droidSetBits, too.)
 	for(i = 0;i < DROID_MAXWEAPS;i++)
