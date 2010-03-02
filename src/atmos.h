@@ -21,6 +21,11 @@
 #ifndef __INCLUDED_SRC_ATMOS_H__
 #define __INCLUDED_SRC_ATMOS_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 typedef struct _atmosParticle
 {
 UBYTE		status;
@@ -44,14 +49,9 @@ extern void		renderParticle		( ATPART *psPart );
 extern void		atmosDrawParticles	( void );
 extern void		atmosSetWeatherType	( WT_CLASS type );
 extern WT_CLASS		atmosGetWeatherType ( void );
-typedef struct _mistlocale
-{
-UBYTE	type;
-UBYTE	val;
-UBYTE	base;
-SBYTE	vec;
-} MISTAREA;
 
-extern MISTAREA *pMistValues;
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ATMOS_H__
