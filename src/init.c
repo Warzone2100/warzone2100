@@ -97,10 +97,6 @@ static void	initMiscVars(void);
 
 static const char UserMusicPath[] = "music";
 
-extern char * global_mods[];
-extern char * campaign_mods[];
-extern char * multiplay_mods[];
-
 // FIXME Totally inappropriate place for this.
 char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
 

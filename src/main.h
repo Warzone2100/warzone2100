@@ -34,6 +34,14 @@ extern BOOL bDisableLobby;
 extern GS_GAMEMODE GetGameMode(void) WZ_DECL_PURE;
 extern void SetGameMode(GS_GAMEMODE status);
 
-extern char SaveGamePath[];
+extern char SaveGamePath[PATH_MAX];
+extern char datadir[PATH_MAX];
+extern char configdir[PATH_MAX];
+
+#define MAX_MODS 100
+
+extern char * global_mods[MAX_MODS];
+extern char * campaign_mods[MAX_MODS];
+extern char * multiplay_mods[MAX_MODS];
 
 #endif // __INCLUDED_SRC_MAIN_H__
