@@ -39,6 +39,7 @@ typedef enum {
 #define PLAY_WIN    1
 #define PLAY_LOSE   2
 
+extern BOOL hostlaunch;
 
 extern BOOL			frontendInitVars	    ( void );
 extern TITLECODE	titleLoop			    ( void );

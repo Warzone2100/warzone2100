@@ -24,15 +24,10 @@
 #ifndef __INCLUDED_SRC_CLPARSE_H__
 #define __INCLUDED_SRC_CLPARSE_H__
 
-#include "lib/framework/frame.h"
-#include "lib/framework/types.h"
-
 #ifdef __cplusplus
 extern "C"
 {
 #endif //__cplusplus
-
-#define MAX_MODS 100
 
 // parse the commandline
 extern bool ParseCommandLine(int argc, const char** argv);

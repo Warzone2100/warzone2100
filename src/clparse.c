@@ -24,38 +24,21 @@
  *
  */
 
-#include <string.h>
-#include "lib/framework/frame.h"
 #include <popt.h>
 
-#include "main.h"
-#include "frontend.h"
-
-#include "lib/ivis_common/pieclip.h"
+#include "lib/framework/frame.h"
 #include "lib/netplay/netplay.h"
-#include "warzoneconfig.h"
 
 #include "clparse.h"
-#include "loadsave.h"
-#include "objects.h"
-#include "advvis.h"
-#include "multiplay.h"
-#include "wrappers.h"
-#include "cheat.h"
-#include "init.h"
+#include "display3d.h"
+#include "frontend.h"
 #include "keybind.h"
- // To set the shadow config:
-#include "display.h"
+#include "loadsave.h"
+#include "main.h"
+#include "multiplay.h"
 #include "version.h"
-
-// these are all global variables
-extern char	datadir[PATH_MAX];
-extern char	configdir[PATH_MAX];
-extern char * global_mods[MAX_MODS];
-extern char * campaign_mods[MAX_MODS];
-extern char * multiplay_mods[MAX_MODS];
-extern BOOL hostlaunch;
-extern bool CauseCrash;
+#include "warzoneconfig.h"
+#include "wrappers.h"
 
 //! Let the end user into debug mode....
 BOOL	bAllowDebugMode = false;
