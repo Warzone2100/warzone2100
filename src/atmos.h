@@ -49,15 +49,6 @@ extern void		renderParticle		( ATPART *psPart );
 extern void		atmosDrawParticles	( void );
 extern void		atmosSetWeatherType	( WT_CLASS type );
 extern WT_CLASS		atmosGetWeatherType ( void );
-typedef struct _mistlocale
-{
-UBYTE	type;
-UBYTE	val;
-UBYTE	base;
-SBYTE	vec;
-} MISTAREA;
-
-extern MISTAREA *pMistValues;
 
 #ifdef __cplusplus
 }

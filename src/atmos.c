@@ -22,22 +22,17 @@
  *
  * Handles atmospherics such as snow and rain.
 */
+
 #include "lib/framework/frame.h"
-#include "lib/ivis_common/piedef.h"
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/piestate.h"
-#include "display3d.h"
-#include "display3ddef.h"
-#include "lib/gamelib/gtime.h"
-#include "miscimd.h"
-#include "map.h"
+
 #include "atmos.h"
-#include "loop.h"
+#include "display3d.h"
 #include "effects.h"
-#include "lighting.h"
-#include "bucket3d.h"
 #include "hci.h"
+#include "loop.h"
+#include "map.h"
+#include "miscimd.h"
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -69,12 +64,6 @@ static ATPART	asAtmosParts[MAX_ATMOS_PARTICLES];
 static	UDWORD	freeParticle;
 static	UDWORD	weather;
 
-// -----------------------------------------------------------------------------
-static void processParticle(ATPART *psPart);
-static void atmosAddParticle(Vector3i *pos, AP_TYPE type);
-static void testParticleWrap(ATPART *psPart);
-// -----------------------------------------------------------------------------
-
 /* Setup all the particles */
 void	atmosInitSystem( void )
 {
@@ -93,65 +82,38 @@ UDWORD	i;
 }
 
 // -----------------------------------------------------------------------------
-/* Move the particles */
-void	atmosUpdateSystem( void )
+/*	Makes a particle wrap around - if it goes off the grid, then it returns
+	on the other side - provided it's still on world... Which it should be */
+static void testParticleWrap(ATPART *psPart)
 {
-	UDWORD	i;
-	UDWORD	numberToAdd;
-	Vector3i pos;
-
-	// we don't want to do any of this while paused.
-	if(!gamePaused() && weather!=WT_NONE)
+	/* Gone off left side */
+	if(psPart->position.x < player.p.x)
 	{
-		for(i = 0; i < MAX_ATMOS_PARTICLES; i++)
-		{
-			/* See if it's active */
-			if(asAtmosParts[i].status == APS_ACTIVE)
-			{
-				processParticle(&asAtmosParts[i]);
-			}
-		}
+		psPart->position.x += (visibleTiles.x*TILE_UNITS);
+	}
 
-		/* This bit below needs to go into a "precipitation function" */
-		numberToAdd = ((weather==WT_SNOWING) ? 2 : 4);
+	/* Gone off right side */
+	else if(psPart->position.x > (player.p.x + (visibleTiles.x*TILE_UNITS)))
+	{
+		psPart->position.x -= (visibleTiles.x*TILE_UNITS);
+	}
 
-		/* Temporary stuff - just adds a few particles! */
-		for(i=0; i<numberToAdd; i++)
-		{
+	/* Gone off top */
+	if(psPart->position.z < player.p.z)
+	{
+		psPart->position.z += (visibleTiles.y*TILE_UNITS);
+	}
 
-			pos.x = player.p.x + ((visibleTiles.x/2)*TILE_UNITS);
-			pos.z = player.p.z + ((visibleTiles.y/2)*TILE_UNITS);
-			pos.x += (((visibleTiles.x/2) - rand()%visibleTiles.x) * TILE_UNITS);
-			pos.z += (((visibleTiles.x/2) - rand()%visibleTiles.x) * TILE_UNITS);
-			pos.y = 1000;
-
-			/* If we've got one on the grid */
-			if(pos.x>0 && pos.z>0 &&
-			   pos.x<(SDWORD)((mapWidth-1)*TILE_UNITS) &&
-			   pos.z<(SDWORD)((mapHeight-1)*TILE_UNITS) )
-			{
-			   	/* On grid, so which particle shall we add? */
-				switch(weather)
-				{
-				case WT_SNOWING:
-					atmosAddParticle(&pos,AP_SNOW);
-					break;
-				case WT_RAINING:
-					atmosAddParticle(&pos,AP_RAIN);
-					break;
-				case WT_NONE:
-					break;
-				default:
-					break;
-				}
-			}
-		}
+	/* Gone off bottom */
+	else if(psPart->position.z > (player.p.z + (visibleTiles.y*TILE_UNITS)))
+	{
+		psPart->position.z -= (visibleTiles.y*TILE_UNITS);
 	}
 }
 
 // -----------------------------------------------------------------------------
 /* Moves one of the particles */
-void	processParticle( ATPART *psPart )
+static void processParticle(ATPART *psPart)
 {
 	SDWORD	groundHeight;
 	Vector3i pos;
@@ -224,7 +186,7 @@ void	processParticle( ATPART *psPart )
 
 // -----------------------------------------------------------------------------
 /* Adds a particle to the system if it can */
-void atmosAddParticle( Vector3i *pos, AP_TYPE type )
+static void atmosAddParticle(Vector3i *pos, AP_TYPE type)
 {
 	UDWORD	activeCount;
 	UDWORD	i;
@@ -293,6 +255,64 @@ void atmosAddParticle( Vector3i *pos, AP_TYPE type )
 		asAtmosParts[freeParticle].velocity.z = (float)SNOW_SPEED_DRIFT;
 	}
 }
+
+// -----------------------------------------------------------------------------
+/* Move the particles */
+void	atmosUpdateSystem( void )
+{
+	UDWORD	i;
+	UDWORD	numberToAdd;
+	Vector3i pos;
+
+	// we don't want to do any of this while paused.
+	if(!gamePaused() && weather!=WT_NONE)
+	{
+		for(i = 0; i < MAX_ATMOS_PARTICLES; i++)
+		{
+			/* See if it's active */
+			if(asAtmosParts[i].status == APS_ACTIVE)
+			{
+				processParticle(&asAtmosParts[i]);
+			}
+		}
+
+		/* This bit below needs to go into a "precipitation function" */
+		numberToAdd = ((weather==WT_SNOWING) ? 2 : 4);
+
+		/* Temporary stuff - just adds a few particles! */
+		for(i=0; i<numberToAdd; i++)
+		{
+
+			pos.x = player.p.x + ((visibleTiles.x/2)*TILE_UNITS);
+			pos.z = player.p.z + ((visibleTiles.y/2)*TILE_UNITS);
+			pos.x += (((visibleTiles.x/2) - rand()%visibleTiles.x) * TILE_UNITS);
+			pos.z += (((visibleTiles.x/2) - rand()%visibleTiles.x) * TILE_UNITS);
+			pos.y = 1000;
+
+			/* If we've got one on the grid */
+			if(pos.x>0 && pos.z>0 &&
+			   pos.x<(SDWORD)((mapWidth-1)*TILE_UNITS) &&
+			   pos.z<(SDWORD)((mapHeight-1)*TILE_UNITS) )
+			{
+			   	/* On grid, so which particle shall we add? */
+				switch(weather)
+				{
+				case WT_SNOWING:
+					atmosAddParticle(&pos,AP_SNOW);
+					break;
+				case WT_RAINING:
+					atmosAddParticle(&pos,AP_RAIN);
+					break;
+				case WT_NONE:
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+}
+
 // -----------------------------------------------------------------------------
 void	atmosDrawParticles( void )
 {
@@ -347,36 +367,6 @@ void	renderParticle( ATPART *psPart )
 	centreZ = player.p.z + world_coord(visibleTiles.y / 2);
    	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_NO_BILINEAR, 0);
 	iV_MatrixEnd();
-}
-
-// -----------------------------------------------------------------------------
-/*	Makes a particle wrap around - if it goes off the grid, then it returns
-	on the other side - provided it's still on world... Which it should be */
-void	testParticleWrap( ATPART *psPart )
-{
-	/* Gone off left side */
-	if(psPart->position.x < player.p.x)
-	{
-		psPart->position.x += (visibleTiles.x*TILE_UNITS);
-	}
-
-	/* Gone off right side */
-	else if(psPart->position.x > (player.p.x + (visibleTiles.x*TILE_UNITS)))
-	{
-		psPart->position.x -= (visibleTiles.x*TILE_UNITS);
-	}
-
-	/* Gone off top */
-	if(psPart->position.z < player.p.z)
-	{
-		psPart->position.z += (visibleTiles.y*TILE_UNITS);
-	}
-
-	/* Gone off bottom */
-	else if(psPart->position.z > (player.p.z + (visibleTiles.y*TILE_UNITS)))
-	{
-		psPart->position.z -= (visibleTiles.y*TILE_UNITS);
-	}
 }
 
 // -----------------------------------------------------------------------------
