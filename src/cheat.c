@@ -24,10 +24,9 @@
 /* Alex M 19th - Jan. 1999 */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/string_ext.h"
 #include "lib/exceptionhandler/dumpinfo.h"
+
 #include "cheat.h"
-#include "console.h"
 #include "keybind.h"
 #include "keymap.h"
 
