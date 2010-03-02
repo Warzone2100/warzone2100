@@ -43,9 +43,6 @@ typedef enum {
 extern BOOL			frontendInitVars	    ( void );
 extern TITLECODE	titleLoop			    ( void );
 
-extern void			clearTitle	 		    ( void );
-extern void			displayTitleScreen 	    ( void );
-
 extern void			initLoadingScreen		( BOOL drawbdrop );
 extern void			closeLoadingScreen	    ( void );
 extern void			loadingScreenCallback   ( void );

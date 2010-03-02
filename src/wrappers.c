@@ -22,43 +22,26 @@
  * Frontend loop & also loading screen & game over screen.
  * AlexL. Pumpkin Studios, EIDOS Interactive, 1997
  */
+
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
-#include "lib/framework/strres.h"
-
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/textdraw.h" //ivis text code
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_common/piemode.h"
-#include "lib/ivis_common/piefunc.h"
-
-#include "hci.h"		// access to widget screen.
-#include "wrappers.h"
-#include "main.h"
-#include "objects.h"
-#include "display.h"
-#include "display3d.h"
-#include "frontend.h"
-#include "frend.h"		// display logo.
-#include "console.h"
-#include "intimage.h"
-#include "intdisplay.h"	//for shutdown
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_opengl/screen.h"
+#include "lib/netplay/netplay.h"	// multiplayer
 #include "lib/sound/audio.h"
-#include "lib/gamelib/gtime.h"
-#include "ingameop.h"
+
+#include "frontend.h"
+#include "keyedit.h"
 #include "keymap.h"
 #include "mission.h"
-#include "keyedit.h"
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
-#include "lib/framework/cursors.h"
-#include "lib/netplay/netplay.h"	// multiplayer
-#include "multiplay.h"
 #include "multiint.h"
-#include "multistat.h"
 #include "multilimit.h"
+#include "multistat.h"
 #include "warzoneconfig.h"
+#include "wrappers.h"
 
 typedef struct _star
 {
@@ -68,7 +51,6 @@ typedef struct _star
 } STAR;
 
 static BOOL		firstcall = false;
-static UDWORD	loadScreenCallNo=0;
 static BOOL		bPlayerHasLost = false;
 static BOOL		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
@@ -76,7 +58,6 @@ static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 void	runCreditsScreen	( void );
 
 static	UDWORD	lastChange = 0;
-extern char iptoconnect[PATH_MAX];		// holds our ip/hostname from the command line
 BOOL hostlaunch = false;				// used to detect if we are hosting a game via command line option.
 
 static uint32_t lastTick = 0;
@@ -119,7 +100,6 @@ static void setupLoadingScreen(void)
 		stars[i] = newStar();
 	}
 }
-
 
 
 // //////////////////////////////////////////////////////////////////
@@ -341,7 +321,6 @@ void initLoadingScreen( BOOL drawbdrop )
 		pie_SetFogStatus(false);
 		pie_ScreenFlip(CLEAR_BLACK);
 		resSetLoadCallback(loadingScreenCallback);
-		loadScreenCallNo = 0;
 		return;
 	}
 
@@ -350,7 +329,6 @@ void initLoadingScreen( BOOL drawbdrop )
 
 	// setup the callback....
 	resSetLoadCallback(loadingScreenCallback);
-	loadScreenCallNo = 0;
 
 	// NOTE: When this is called, we stop the backdrop, but since the screen
 	// is double buffered, we only have the backdrop on 1 buffer, and not the other.
@@ -391,7 +369,6 @@ void runCreditsScreen( void )
 void closeLoadingScreen(void)
 {
 	resSetLoadCallback(NULL);
-	loadScreenCallNo = 0;
 }
 
 

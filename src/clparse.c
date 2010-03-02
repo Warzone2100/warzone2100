@@ -54,7 +54,6 @@ extern char	configdir[PATH_MAX];
 extern char * global_mods[MAX_MODS];
 extern char * campaign_mods[MAX_MODS];
 extern char * multiplay_mods[MAX_MODS];
-extern char iptoconnect[PATH_MAX];
 extern BOOL hostlaunch;
 extern bool CauseCrash;
 
