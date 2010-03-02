@@ -61,6 +61,9 @@ PROJECTILE *proj_GetNext(void);		///< Get next projectile in the list.
 
 void	proj_FreeAllProjectiles(void);	///< Free all projectiles in the list.
 
+/// Calculate the initial velocities of an indirect projectile. Returns the flight time.
+int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz);
+
 /** Send a single projectile against the given target. */
 BOOL	proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot);
 

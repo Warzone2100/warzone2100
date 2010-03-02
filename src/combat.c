@@ -103,7 +103,6 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	UDWORD			dice, damLevel;
 	SDWORD			resultHitChance=0,baseHitChance=0,fireChance;
 	UDWORD			firePause;
-	SDWORD			targetDir,dirDiff;
 	SDWORD			longRange;
 	DROID			*psDroid = NULL;
 	int				minOffset = 5;
@@ -228,8 +227,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// if the turret doesn't turn, check if the attacker is in alignment with the target
 	if (psAttacker->type == OBJ_DROID && !psStats->rotate)
 	{
-		targetDir = UNDEG(calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y));
-		dirDiff = labs(targetDir - (SDWORD)UNDEG(psAttacker->rot.direction));
+		uint16_t targetDir = calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y);
+		int dirDiff = abs((int16_t)(targetDir - psAttacker->rot.direction));  // Cast wrapping intended.
 		if (dirDiff > FIXED_TURRET_DIR)
 		{
 			return;
@@ -240,7 +239,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	xDiff = psAttacker->pos.x - psTarget->pos.x;
 	yDiff = psAttacker->pos.y - psTarget->pos.y;
 	distSquared = xDiff*xDiff + yDiff*yDiff;
-	dist = sqrtf(distSquared);
+	dist = iSqrt(distSquared);
 	longRange = proj_GetLongRange(psStats);
 
 	if ((dist <= psStats->shortRange)  && (dist >= psStats->minRange))
@@ -338,7 +337,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		//Watermelon:Target prediction
 		if (psTarget->type == OBJ_DROID)
 		{
-			double flightTime;
+			int32_t flightTime;
 			SDWORD empTime = 0;
 
 			if (proj_Direct(psStats) || dist <= psStats->minRange)
@@ -347,22 +346,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			}
 			else
 			{
-				/* Copied out of proj_SendProjectile.  Simplified slightly. */
-				SDWORD dz = psTarget->pos.z - psAttacker->pos.z;
-				SDWORD iRadSq = distSquared + dz*dz;
-				SDWORD iVelSq = psStats->flightSpeed * psStats->flightSpeed;
-				double fA = ACC_GRAVITY * (double)iRadSq / (2.0 * iVelSq);
-				double fC = 4.0 * fA * (dz + fA);
-				double fS = (double)iRadSq - fC;
-
-				if (fS < 0.0)
-				{
-					flightTime = sqrt((double)dist) / 30;  /* Purely a guess, but surprisingly effective */
-				}
-				else
-				{
-					flightTime = (double)dist / (double)psStats->flightSpeed;
-				}
+				int32_t vXY, vZ;  // Unused, we just want the flight time.
+				flightTime = projCalcIndirectVelocities(dist, psTarget->pos.z - psAttacker->pos.z, psStats->flightSpeed, &vXY, &vZ);
 			}
 
 			if (psTarget->lastHitWeapon == WSC_EMP)
@@ -375,17 +360,13 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 				}
 				else
 				{
-					flightTime -= (double)empTime / 1000;
-					if (flightTime < 0.0)
-					{
-						flightTime = 0.0;
-					}
+					flightTime = MAX(0, flightTime - empTime);
 				}
 			}
 
-			predict.x = trigSin(UNDEG(((DROID *)psTarget)->sMove.moveDir)) * ((DROID *)psTarget)->sMove.speed * flightTime;
+			predict.x = iSin(((DROID *)psTarget)->sMove.moveDir) * ((DROID *)psTarget)->sMove.speed * flightTime / (GAME_TICKS_PER_SEC*UINT16_MAX);
 			predict.x += psTarget->pos.x;
-			predict.y = trigCos(UNDEG(((DROID *)psTarget)->sMove.moveDir)) * ((DROID *)psTarget)->sMove.speed * flightTime;
+			predict.y = iCos(((DROID *)psTarget)->sMove.moveDir) * ((DROID *)psTarget)->sMove.speed * flightTime / (GAME_TICKS_PER_SEC*UINT16_MAX);
 			predict.y += psTarget->pos.y;
 
 			// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile

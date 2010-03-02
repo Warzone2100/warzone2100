@@ -53,6 +53,7 @@ int32_t iSin(uint16_t a);               ///< Returns sin(a*2π >> 16) << 16, rou
 int32_t iCos(uint16_t a);               ///< Returns cos(a*2π >> 16) << 16, rounded to nearest integer. Used as the y component in this game.
 uint16_t iAtan2(int32_t s, int32_t c);  ///< Returns atan2(s, c)/2π << 16, with a small ±1.5 platform-independent error. Used as atan2(x, y) in this game.
 int32_t iSqrt(uint32_t n);              ///< Returns √(n), rounded down.
+int32_t i64Sqrt(uint64_t n);            ///< Returns √(n), rounded down.
 int32_t iHypot(int32_t x, int32_t y);   ///< Returns √(x² + y²), rounded down. In case of overflow, returns correct result cast to (int32_t).
 
 #ifdef __cplusplus

@@ -33,7 +33,7 @@ extern "C"
 #endif //__cplusplus
 
 // maximum difference in direction for a fixed turret to fire
-#define FIXED_TURRET_DIR	1
+#define FIXED_TURRET_DIR DEG(1)
 
 // %age at which a unit is considered to be heavily damaged
 #define HEAVY_DAMAGE_LEVEL	25

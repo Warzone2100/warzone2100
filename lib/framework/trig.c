@@ -551,33 +551,27 @@ uint16_t iAtan2(int32_t s, int32_t c)
 
 int32_t iSqrt(uint32_t n)
 {
-	uint32_t r = sqrtf(n);       // Calculate square root, usually rounded down, but may be rounded up in some cases. Which specific cases depend on the floating point precision used.
-
-	if ((int32_t)(r*r - n) > 0)  // Overflow possible but then cancelled by underflow.
-	{
-		--r;                 // The square root was rounded up. Round down instead.
-	}
+	uint32_t r = sqrt(n);          // Calculate square root, rounded down. Excess precision does not change the result.
 
 	// Check that we got the right result.
-	ASSERT((int32_t)(r*r - n) <= 0 && (int32_t)((r + 1)*(r + 1) - n) > 0, "Too badly broken sqrtf(%u) = %u function.", (unsigned)n, (unsigned)r);
+	ASSERT((int32_t)(r*r - n) <= 0 && (int32_t)((r + 1)*(r + 1) - n) > 0, "Too badly broken sqrt function, iSqrt(%u) = %u.", (unsigned)n, (unsigned)r);
+
+	return r;
+}
+
+int32_t i64Sqrt(uint64_t n)
+{
+	uint32_t r = sqrt(n);          // Calculate square root, rounded down. Excess precision does not change the result.
+
+	// Check that we got the right result.
+	ASSERT((int32_t)(r*r - n) <= 0 && (int32_t)((r + 1)*(r + 1) - n) > 0, "Too badly broken sqrt function, i64Sqrt(%"PRIu64") = %u.", n, (unsigned)r);
 
 	return r;
 }
 
 int32_t iHypot(int32_t x, int32_t y)
 {
-	uint32_t n = (uint32_t)x*x + (uint32_t)y*y;    // Possible overflow cancelled later.
-	uint32_t r = (uint64_t)(hypot(x, y) + 0.001);  // Possible overflow cancelled later. +0.001 to avoid risk of accumulated errors causing rounding down too far. uint64_t cast since the result may not fit into uint32_t, and casting from floating point to integer doesn't wrap while casting.
-
-	if ((int32_t)(r*r - n) > 0)                    // Any overflow cancelled here.
-	{
-		--r;                                   // The square root was rounded up. Round down instead.
-	}
-
-	// Check that we got the right result.
-	ASSERT((int32_t)(r*r - n) <= 0 && (int32_t)((uint32_t)(r + 1)*(uint32_t)(r + 1) - n) > 0, "Too badly broken hypot(%d, %d) = %u function.", (int)x, (int)y, (unsigned)r);
-
-	return r;
+	return i64Sqrt((uint64_t)x*x + (uint64_t)y*y);  // Casting from int32_t to uint64_t does sign extend.
 }
 
 // For testing above functions.
@@ -613,5 +607,22 @@ int main()
 			std::printf("v = %u, sqrt = %d, %d\n", v, s1, s2);
 		}
 	}
+	do
+	{
+		uint32_t t1 = val*val;
+		++val;
+		uint32_t t2 = val*val - 1;
+		iSqrt(t1);
+		iSqrt(t2);
+	} while(val != 65536);
+	val = 0xFFFF0000;
+	do
+	{
+		uint32_t t1 = val*val;
+		++val;
+		uint32_t t2 = val*val - 1;
+		i64Sqrt(t1);
+		i64Sqrt(t2);
+	} while(val != 0xFFFF0000);
 }
 #endif

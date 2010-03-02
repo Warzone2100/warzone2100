@@ -1447,11 +1447,8 @@ void actionUpdateDroid(DROID *psDroid)
 					if (!psWeapStats->rotate)
 					{
 						// no rotating turret - need to check aligned with target
-						const int targetDir = UNDEG(calcDirection(psDroid->pos.x,
-						                                    psDroid->pos.y,
-						                                    psActionTarget->pos.x,
-						                                    psActionTarget->pos.y));
-						dirDiff = labs(targetDir - UNDEG(psDroid->rot.direction));
+						const uint16_t targetDir = calcDirection(psDroid->pos.x, psDroid->pos.y, psActionTarget->pos.x, psActionTarget->pos.y);
+						dirDiff = abs((int16_t)(targetDir - psDroid->rot.direction));  // Cast wrapping intended.
 					}
 
 					if (dirDiff > FIXED_TURRET_DIR)
