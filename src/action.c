@@ -1800,6 +1800,7 @@ void actionUpdateDroid(DROID *psDroid)
 			// Got to destination - start building
 			STRUCTURE_STATS* const psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
 			moveStopDroid(psDroid);
+			objTrace(psDroid->id, "Halted in our tracks - at construction site");
 			if (psDroid->order == DORDER_BUILD && psDroid->psTarget == NULL)
 			{
 				// Starting a new structure
@@ -1946,14 +1947,16 @@ void actionUpdateDroid(DROID *psDroid)
 				actionHomeBasePos(psDroid->player, &pbx, &pby);
 				if (pbx == 0 || pby == 0)
 				{
-					debug(LOG_NEVER, "DACTION_MOVETOBUILD: No HQ, cannot move in that direction.");
+					objTrace(psDroid->id, "DACTION_MOVETOBUILD: No HQ, cannot move in that direction");
 					psDroid->action = DACTION_NONE;
 					break;
 				}
+				objTrace(psDroid->id, "DACTION_MOVETOBUILD: Starting to drive inside construction site");
 				moveDroidToNoFormation(psDroid, (UDWORD)pbx,(UDWORD)pby);
 			}
 			else
 			{
+				objTrace(psDroid->id, "DACTION_MOVETOBUILD: Starting to drive toward construction site - move status was %d", (int)psDroid->sMove.Status);
 				moveDroidToNoFormation(psDroid, psDroid->actionX,psDroid->actionY);
 			}
 		}
@@ -1975,6 +1978,7 @@ void actionUpdateDroid(DROID *psDroid)
 			!actionReachedBuildPos(psDroid,
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 		{
+			objTrace(psDroid->id, "DACTION_BUILD: Starting to drive toward construction site");
 			moveDroidToNoFormation(psDroid, psDroid->orderX, psDroid->orderY);
 		}
 		else if (!DROID_STOPPED(psDroid) &&
@@ -1983,6 +1987,7 @@ void actionUpdateDroid(DROID *psDroid)
 				actionReachedBuildPos(psDroid,
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 		{
+			objTrace(psDroid->id, "DACTION_BUILD: Stopped - at construction site");
 			moveStopDroid(psDroid);
 		}
 		if (psDroid->action == DACTION_SULK)
@@ -2102,6 +2107,7 @@ void actionUpdateDroid(DROID *psDroid)
 			if (secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD ||
 			    (psDroid->order != DORDER_NONE && psDroid->order != DORDER_TEMP_HOLD))
 			{
+				objTrace(psDroid->id, "Secondary order: Go to construction site");
 				moveDroidToNoFormation(psDroid, psDroid->actionX,psDroid->actionY);
 			}
 			else
@@ -2115,6 +2121,7 @@ void actionUpdateDroid(DROID *psDroid)
 				actionReachedBuildPos(psDroid,
 						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats))
 		{
+			objTrace(psDroid->id, "Stopped - reached build position");
 			moveStopDroid(psDroid);
 		}
 		else if ( actionUpdateFunc(psDroid) )
@@ -2758,7 +2765,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			actionHomeBasePos(psDroid->player, &pbx,&pby);
 			if (pbx == 0 || pby == 0)
 			{
-				debug(LOG_NEVER, "DACTION_BUILD: No HQ, cannot move in that direction.");
+				objTrace(psDroid->id, "Setting DACTION_BUILD: No HQ, cannot move in that direction");
 				psDroid->action = DACTION_NONE;
 				break;
 			}

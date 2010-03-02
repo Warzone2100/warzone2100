@@ -1024,6 +1024,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, uint16
 	// if the droid is shuffling - just stop
 	if (psDroid->sMove.Status == MOVESHUFFLE)
 	{
+		objTrace(psDroid->id, "Was shuffling, now stopped");
 		psDroid->sMove.Status = MOVEINACTIVE;
 	}
 
@@ -2856,7 +2857,6 @@ void moveUpdateDroid(DROID *psDroid)
 			if (!moveNextTarget(psDroid))
 			{
 				// No more waypoints - finish
-//				psDroid->sMove.Status = MOVEINACTIVE;
 				if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 				{
 					psDroid->sMove.Status = MOVEHOVER;
@@ -2865,6 +2865,7 @@ void moveUpdateDroid(DROID *psDroid)
 				{
 					psDroid->sMove.Status = MOVETURN;
 				}
+				objTrace(psDroid->id, "Arrived at destination!");
 				break;
 			}
 			moveCalcBoundary(psDroid);
@@ -2882,9 +2883,7 @@ void moveUpdateDroid(DROID *psDroid)
 			}
 		}
 
-		// Calculate a target vector
 		moveDir = moveGetDirection(psDroid);
-
 		moveSpeed = moveCalcDroidSpeed(psDroid);
 
 		if ((psDroid->sMove.bumpTime != 0) &&
@@ -2929,6 +2928,7 @@ void moveUpdateDroid(DROID *psDroid)
 			{
 				psDroid->sMove.Status = MOVEINACTIVE;
 			}
+			objTrace(psDroid->id, "MOVETURN complete");
 		}
 		break;
 	case MOVETURNTOTARGET:
@@ -2944,6 +2944,7 @@ void moveUpdateDroid(DROID *psDroid)
 			{
 				psDroid->sMove.Status = MOVEINACTIVE;
 			}
+			objTrace(psDroid->id, "MOVETURNTOTARGET complete");
 		}
 		break;
 	case MOVEHOVER:
