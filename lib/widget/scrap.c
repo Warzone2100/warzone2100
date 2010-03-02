@@ -314,7 +314,7 @@ return(retval);
 
 int lost_scrap(void)
 {
-	int retval;
+	int retval = 0;
 
 #if defined(WZ_WS_X11)
 	Lock_Display();
