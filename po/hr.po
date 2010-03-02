@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-02-19 23:39+0100\n"
+"POT-Creation-Date: 2010-03-02 21:29+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Antonio Kukas <tonykukas@gmail.com>\n"
 "Language-Team: \n"
@@ -5736,7 +5736,7 @@ msgstr "Transport"
 #: data/mp/messages/strings/names.txt:16
 #: data/mp/messages/strings/names.txt:154
 #: data/mp/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:1470
+#: data/mp/messages/strings/names.txt:1473
 msgid "Truck"
 msgstr "Kamion"
 
@@ -5745,7 +5745,7 @@ msgstr "Kamion"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1832
 #: data/mp/messages/strings/names.txt:17
 #: data/mp/messages/strings/names.txt:176
-#: data/mp/messages/strings/names.txt:1829
+#: data/mp/messages/strings/names.txt:1832
 msgid "Machinegun Viper Wheels"
 msgstr "AI unit"
 
@@ -5772,7 +5772,7 @@ msgstr "AI unit"
 #: data/base/messages/strings/names.txt:148
 #: data/base/messages/strings/names.txt:1421
 #: data/mp/messages/strings/names.txt:149
-#: data/mp/messages/strings/names.txt:1434
+#: data/mp/messages/strings/names.txt:1437
 msgid "Heavy Machinegun Cobra Half-tracks"
 msgstr "AI unit"
 
@@ -5803,7 +5803,7 @@ msgstr "AI unit"
 #: data/base/messages/strings/names.txt:174
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1833
 #: data/mp/messages/strings/names.txt:177
-#: data/mp/messages/strings/names.txt:1830
+#: data/mp/messages/strings/names.txt:1833
 msgid "Twin Machinegun Viper Wheels"
 msgstr "AI unit"
 
@@ -5820,7 +5820,7 @@ msgstr "AI unit"
 #: data/base/messages/strings/names.txt:177
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1840
 #: data/mp/messages/strings/names.txt:180
-#: data/mp/messages/strings/names.txt:1837
+#: data/mp/messages/strings/names.txt:1840
 msgid "Heavy Machinegun Viper Tracks"
 msgstr "AI unit"
 
@@ -5844,7 +5844,7 @@ msgstr "AI unit"
 
 #: data/base/messages/strings/names.txt:183
 #: data/mp/messages/strings/names.txt:186
-#: data/mp/messages/strings/names.txt:1359
+#: data/mp/messages/strings/names.txt:1362
 msgid "Medium Cannon Cobra Tracks"
 msgstr "AI unit"
 
@@ -5856,7 +5856,7 @@ msgstr "AI unit"
 #: data/base/messages/strings/names.txt:185
 #: data/base/messages/strings/names.txt:1344
 #: data/mp/messages/strings/names.txt:188
-#: data/mp/messages/strings/names.txt:1357
+#: data/mp/messages/strings/names.txt:1360
 msgid "Cobra Truck"
 msgstr "AI unit"
 
@@ -5866,7 +5866,7 @@ msgstr "AI unit"
 
 #: data/base/messages/strings/names.txt:187
 #: data/mp/messages/strings/names.txt:190
-#: data/mp/messages/strings/names.txt:1358
+#: data/mp/messages/strings/names.txt:1361
 msgid "Flamer Cobra Tracks"
 msgstr "AI unit"
 
@@ -5883,7 +5883,7 @@ msgstr "AI unit"
 #: data/base/messages/strings/names.txt:190
 #: data/base/messages/strings/names.txt:1420
 #: data/mp/messages/strings/names.txt:193
-#: data/mp/messages/strings/names.txt:1433
+#: data/mp/messages/strings/names.txt:1436
 msgid "Lancer Cobra Half-tracks"
 msgstr "AI unit"
 
@@ -5897,26 +5897,26 @@ msgid "Light Cannon Python Tracks"
 msgstr "AI unit"
 
 #: data/base/messages/strings/names.txt:194
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1345
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
-#: data/mp/messages/strings/names.txt:1920
+#: data/mp/messages/strings/names.txt:1923
 msgid "Medium Cannon Python Tracks"
 msgstr "AI unit"
 
 #: data/base/messages/strings/names.txt:195
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1848
 #: data/mp/messages/strings/names.txt:198
-#: data/mp/messages/strings/names.txt:1356
-#: data/mp/messages/strings/names.txt:1510
-#: data/mp/messages/strings/names.txt:1845
+#: data/mp/messages/strings/names.txt:1359
+#: data/mp/messages/strings/names.txt:1513
+#: data/mp/messages/strings/names.txt:1848
 msgid "Heavy Cannon Python Tracks"
 msgstr "AI unit"
 
 #: data/base/messages/strings/names.txt:196
 #: data/base/messages/strings/names.txt:1422
 #: data/mp/messages/strings/names.txt:199
-#: data/mp/messages/strings/names.txt:1435
+#: data/mp/messages/strings/names.txt:1438
 msgid "Command Turret Python Tracks"
 msgstr "AI unit"
 
@@ -6381,7 +6381,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:393
 #: data/base/messages/strings/names.txt:1448
 #: data/mp/messages/strings/names.txt:400
-#: data/mp/messages/strings/names.txt:1461
+#: data/mp/messages/strings/names.txt:1464
 msgid "Repair Center"
 msgstr ""
 
@@ -6672,7 +6672,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1362
 #: data/mp/messages/strings/names.txt:471
 #: data/mp/messages/strings/names.txt:751
-#: data/mp/messages/strings/names.txt:1375
+#: data/mp/messages/strings/names.txt:1378
 msgid "Flashlight Emplacement"
 msgstr ""
 
@@ -6766,7 +6766,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1453
 #: data/mp/messages/strings/names.txt:493
 #: data/mp/messages/strings/names.txt:733
-#: data/mp/messages/strings/names.txt:1466
+#: data/mp/messages/strings/names.txt:1469
 msgid "Ground Shaker Emplacement"
 msgstr ""
 
@@ -6916,14 +6916,14 @@ msgstr ""
 #: data/base/messages/strings/names.txt:526
 #: data/base/messages/strings/names.txt:1183
 #: data/mp/messages/strings/names.txt:533
-#: data/mp/messages/strings/names.txt:1196
+#: data/mp/messages/strings/names.txt:1199
 msgid "Mini-Rocket Pod"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:527
 #: data/base/messages/strings/names.txt:1184
 #: data/mp/messages/strings/names.txt:534
-#: data/mp/messages/strings/names.txt:1197
+#: data/mp/messages/strings/names.txt:1200
 msgid "Ripple Rockets"
 msgstr ""
 
@@ -7397,14 +7397,14 @@ msgstr ""
 #: data/base/messages/strings/names.txt:720
 #: data/base/messages/strings/names.txt:1371
 #: data/mp/messages/strings/names.txt:731
-#: data/mp/messages/strings/names.txt:1384
+#: data/mp/messages/strings/names.txt:1387
 msgid "Tank Killer Emplacement"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:723
 #: data/base/messages/strings/names.txt:1452
 #: data/mp/messages/strings/names.txt:734
-#: data/mp/messages/strings/names.txt:1465
+#: data/mp/messages/strings/names.txt:1468
 msgid "Bombard Pit"
 msgstr ""
 
@@ -7420,19 +7420,19 @@ msgstr ""
 #: data/base/messages/strings/names.txt:730
 #: data/base/messages/strings/names.txt:1216
 #: data/mp/messages/strings/names.txt:741
-#: data/mp/messages/strings/names.txt:1229
+#: data/mp/messages/strings/names.txt:1232
 msgid "Mortar Pit"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:731
 #: data/mp/messages/strings/names.txt:742
-#: data/mp/messages/strings/names.txt:1381
+#: data/mp/messages/strings/names.txt:1384
 msgid "Mini-Rocket Battery"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:738
 #: data/base/messages/strings/names.txt:1374
-#: data/mp/messages/strings/names.txt:1387
+#: data/mp/messages/strings/names.txt:1390
 msgid "Pulse Laser Emplacement"
 msgstr ""
 
@@ -7454,14 +7454,14 @@ msgstr ""
 #: data/base/messages/strings/names.txt:749
 #: data/base/messages/strings/names.txt:1363
 #: data/mp/messages/strings/names.txt:760
-#: data/mp/messages/strings/names.txt:1376
+#: data/mp/messages/strings/names.txt:1379
 msgid "Avenger SAM Site"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:750
 #: data/base/messages/strings/names.txt:1364
 #: data/mp/messages/strings/names.txt:761
-#: data/mp/messages/strings/names.txt:1377
+#: data/mp/messages/strings/names.txt:1380
 msgid "Vindicator SAM Site"
 msgstr ""
 
@@ -7480,14 +7480,14 @@ msgstr ""
 #: data/base/messages/strings/names.txt:772
 #: data/base/messages/strings/names.txt:1382
 #: data/mp/messages/strings/names.txt:783
-#: data/mp/messages/strings/names.txt:1395
+#: data/mp/messages/strings/names.txt:1398
 msgid "Scourge Missile Hardpoint"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:774
 #: data/base/messages/strings/names.txt:1380
 #: data/mp/messages/strings/names.txt:785
-#: data/mp/messages/strings/names.txt:1393
+#: data/mp/messages/strings/names.txt:1396
 msgid "Tank Killer Hardpoint"
 msgstr ""
 
@@ -7499,7 +7499,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:778
 #: data/base/messages/strings/names.txt:1383
 #: data/mp/messages/strings/names.txt:789
-#: data/mp/messages/strings/names.txt:1396
+#: data/mp/messages/strings/names.txt:1399
 msgid "Gauss Cannon Hardpoint"
 msgstr ""
 
@@ -7620,7 +7620,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:820
 #: data/base/messages/strings/names.txt:1449
 #: data/mp/messages/strings/names.txt:831
-#: data/mp/messages/strings/names.txt:1462
+#: data/mp/messages/strings/names.txt:1465
 msgid "Repair Facility"
 msgstr ""
 
@@ -8783,297 +8783,297 @@ msgid "HEAP Mini-Rockets Mk3"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1161
-#: data/mp/messages/strings/names.txt:1174
+#: data/mp/messages/strings/names.txt:1177
 msgid "Fast Fire Mini-Rockets"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1162
-#: data/mp/messages/strings/names.txt:1175
+#: data/mp/messages/strings/names.txt:1178
 msgid "Fast Fire Mini-Rockets Mk2"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1163
-#: data/mp/messages/strings/names.txt:1176
+#: data/mp/messages/strings/names.txt:1179
 msgid "Fast Fire Mini-Rockets Mk3"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1164
-#: data/mp/messages/strings/names.txt:1177
+#: data/mp/messages/strings/names.txt:1180
 msgid "Rapid Fire Mini-Rockets"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1165
-#: data/mp/messages/strings/names.txt:1178
+#: data/mp/messages/strings/names.txt:1181
 msgid "Rapid Fire Mini-Rockets Mk2"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1166
-#: data/mp/messages/strings/names.txt:1179
+#: data/mp/messages/strings/names.txt:1182
 msgid "Rapid Fire Mini-Rockets Mk3"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1167
-#: data/mp/messages/strings/names.txt:1180
+#: data/mp/messages/strings/names.txt:1183
 msgid "Improved Rocket Wire Guidance"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1168
-#: data/mp/messages/strings/names.txt:1181
+#: data/mp/messages/strings/names.txt:1184
 msgid "Rocket Laser Designator"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1169
-#: data/mp/messages/strings/names.txt:1182
+#: data/mp/messages/strings/names.txt:1185
 msgid "Thermal Imaging Rockets"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1170
-#: data/mp/messages/strings/names.txt:1183
+#: data/mp/messages/strings/names.txt:1186
 msgid "HEAT Rocket Warhead"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1171
-#: data/mp/messages/strings/names.txt:1184
+#: data/mp/messages/strings/names.txt:1187
 msgid "HEAT Rocket Warhead Mk2"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1172
-#: data/mp/messages/strings/names.txt:1185
+#: data/mp/messages/strings/names.txt:1188
 msgid "HEAT Rocket Warhead Mk3"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1173
-#: data/mp/messages/strings/names.txt:1186
+#: data/mp/messages/strings/names.txt:1189
 msgid "HESH Rocket Warhead"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1174
-#: data/mp/messages/strings/names.txt:1187
+#: data/mp/messages/strings/names.txt:1190
 msgid "HESH Rocket Warhead Mk2"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1175
-#: data/mp/messages/strings/names.txt:1188
+#: data/mp/messages/strings/names.txt:1191
 msgid "HESH Rocket Warhead Mk3"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1176
-#: data/mp/messages/strings/names.txt:1189
+#: data/mp/messages/strings/names.txt:1192
 msgid "Rocket Autoloader"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1177
-#: data/mp/messages/strings/names.txt:1190
+#: data/mp/messages/strings/names.txt:1193
 msgid "Rocket Autoloader Mk2"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1178
-#: data/mp/messages/strings/names.txt:1191
+#: data/mp/messages/strings/names.txt:1194
 msgid "Rocket Autoloader Mk3"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1180
-#: data/mp/messages/strings/names.txt:1193
+#: data/mp/messages/strings/names.txt:1196
 msgid "Lancer AT Rocket"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1182
-#: data/mp/messages/strings/names.txt:1195
+#: data/mp/messages/strings/names.txt:1198
 msgid "Bunker Buster Rocket"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1185
-#: data/mp/messages/strings/names.txt:1198
+#: data/mp/messages/strings/names.txt:1201
 msgid "Tank Killer Rocket"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1187
-#: data/mp/messages/strings/names.txt:1200
+#: data/mp/messages/strings/names.txt:1203
 msgid "Machinegun Artifact"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1190
-#: data/mp/messages/strings/names.txt:1203
+#: data/mp/messages/strings/names.txt:1206
 msgid "New Paradigm Command Center"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1191
-#: data/mp/messages/strings/names.txt:1204
+#: data/mp/messages/strings/names.txt:1207
 msgid "Collective Command Center"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1201
-#: data/mp/messages/strings/names.txt:1214
+#: data/mp/messages/strings/names.txt:1217
 msgid "Scavenger Factory"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1202
-#: data/mp/messages/strings/names.txt:1215
+#: data/mp/messages/strings/names.txt:1218
 msgid "Scavenger Gun Tower"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1203
-#: data/mp/messages/strings/names.txt:1216
+#: data/mp/messages/strings/names.txt:1219
 msgid "Scavenger Horizontal Wall"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1204
-#: data/mp/messages/strings/names.txt:1217
+#: data/mp/messages/strings/names.txt:1220
 msgid "Scavenger Power Generator"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1205
-#: data/mp/messages/strings/names.txt:1218
+#: data/mp/messages/strings/names.txt:1221
 msgid "Scavenger Rocket Pit"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1206
-#: data/mp/messages/strings/names.txt:1219
+#: data/mp/messages/strings/names.txt:1222
 msgid "Scavenger AT-Rocket Pit"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1207
-#: data/mp/messages/strings/names.txt:1220
+#: data/mp/messages/strings/names.txt:1223
 msgid "Scavenger Bunker"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1208
-#: data/mp/messages/strings/names.txt:1221
+#: data/mp/messages/strings/names.txt:1224
 msgid "Scavenger CornerWall"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1209
-#: data/mp/messages/strings/names.txt:1222
+#: data/mp/messages/strings/names.txt:1225
 msgid "Scavenger Flame Tower"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1210
-#: data/mp/messages/strings/names.txt:1223
+#: data/mp/messages/strings/names.txt:1226
 msgid "Scavenger Flame Tower End"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1211
-#: data/mp/messages/strings/names.txt:1224
+#: data/mp/messages/strings/names.txt:1227
 msgid "Look-Out Tower"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1212
-#: data/mp/messages/strings/names.txt:1225
+#: data/mp/messages/strings/names.txt:1228
 msgid "Cannon Tower"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1235
-#: data/mp/messages/strings/names.txt:1248
+#: data/mp/messages/strings/names.txt:1251
 msgid "Artifact"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1236
-#: data/mp/messages/strings/names.txt:1249
+#: data/mp/messages/strings/names.txt:1252
 msgid "Oil Resource"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1262
-#: data/mp/messages/strings/names.txt:1275
+#: data/mp/messages/strings/names.txt:1278
 msgid "Bridge"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1265
-#: data/mp/messages/strings/names.txt:1278
+#: data/mp/messages/strings/names.txt:1281
 msgid "Ruined Factory"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1266
-#: data/mp/messages/strings/names.txt:1279
+#: data/mp/messages/strings/names.txt:1282
 msgid "Warehouse"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1267
-#: data/mp/messages/strings/names.txt:1280
+#: data/mp/messages/strings/names.txt:1283
 msgid "Hut"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1275
-#: data/mp/messages/strings/names.txt:1288
+#: data/mp/messages/strings/names.txt:1291
 msgid "Oil Drum"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1293
-#: data/mp/messages/strings/names.txt:1306
+#: data/mp/messages/strings/names.txt:1309
 msgid "Wreck"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1295
-#: data/mp/messages/strings/names.txt:1308
+#: data/mp/messages/strings/names.txt:1311
 msgid "Wrecked Tank"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1313
-#: data/mp/messages/strings/names.txt:1326
+#: data/mp/messages/strings/names.txt:1329
 msgid "Wrecked Bridge"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1314
-#: data/mp/messages/strings/names.txt:1327
+#: data/mp/messages/strings/names.txt:1330
 msgid "Wrecked Van"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1315
-#: data/mp/messages/strings/names.txt:1328
+#: data/mp/messages/strings/names.txt:1331
 msgid "Wrecked Vehicle"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1316
-#: data/mp/messages/strings/names.txt:1329
+#: data/mp/messages/strings/names.txt:1332
 msgid "Wrecked Tanker"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1320
 #: data/base/messages/strings/names.txt:1336
-#: data/mp/messages/strings/names.txt:1333
-#: data/mp/messages/strings/names.txt:1349
+#: data/mp/messages/strings/names.txt:1336
+#: data/mp/messages/strings/names.txt:1352
 msgid "Cyborg Laboratory"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1321
-#: data/mp/messages/strings/names.txt:1334
+#: data/mp/messages/strings/names.txt:1337
 msgid "Advanced Warfare Laboratory"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1322
 #: data/base/messages/strings/names.txt:1338
-#: data/mp/messages/strings/names.txt:1335
-#: data/mp/messages/strings/names.txt:1351
+#: data/mp/messages/strings/names.txt:1338
+#: data/mp/messages/strings/names.txt:1354
 msgid "Engineering Laboratory"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1323
 #: data/base/messages/strings/names.txt:1339
-#: data/mp/messages/strings/names.txt:1336
-#: data/mp/messages/strings/names.txt:1352
+#: data/mp/messages/strings/names.txt:1339
+#: data/mp/messages/strings/names.txt:1355
 msgid "Robotics Laboratory"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1324
-#: data/mp/messages/strings/names.txt:1337
+#: data/mp/messages/strings/names.txt:1340
 msgid "Laser Optics Laboratory"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1325
 #: data/base/messages/strings/names.txt:1337
-#: data/mp/messages/strings/names.txt:1338
-#: data/mp/messages/strings/names.txt:1350
+#: data/mp/messages/strings/names.txt:1341
+#: data/mp/messages/strings/names.txt:1353
 msgid "Electronics Laboratory"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1326
 #: data/base/messages/strings/names.txt:1335
-#: data/mp/messages/strings/names.txt:1339
-#: data/mp/messages/strings/names.txt:1348
+#: data/mp/messages/strings/names.txt:1342
+#: data/mp/messages/strings/names.txt:1351
 msgid "Chemical Laboratory"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1334
-#: data/mp/messages/strings/names.txt:1347
+#: data/mp/messages/strings/names.txt:1350
 msgid "Advanced Warfare"
 msgstr ""
 
@@ -9094,7 +9094,7 @@ msgid "MRL Emplacement"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1375
-#: data/mp/messages/strings/names.txt:1388
+#: data/mp/messages/strings/names.txt:1391
 msgid "Railgun Emplacement"
 msgstr ""
 
@@ -9103,49 +9103,49 @@ msgid "Angel Missile Emplacement"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1378
-#: data/mp/messages/strings/names.txt:1391
+#: data/mp/messages/strings/names.txt:1394
 msgid "Archangel Missile Emplacement"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1423
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1881
-#: data/mp/messages/strings/names.txt:1878
+#: data/mp/messages/strings/names.txt:1881
 msgid "Repair Turret Cobra Tracks"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1436
-#: data/mp/messages/strings/names.txt:1449
-#: data/mp/messages/strings/names.txt:1516
+#: data/mp/messages/strings/names.txt:1452
+#: data/mp/messages/strings/names.txt:1519
 msgid "Scourge"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1437
-#: data/mp/messages/strings/names.txt:1450
+#: data/mp/messages/strings/names.txt:1453
 msgid "Bunker Blaster"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1438
-#: data/mp/messages/strings/names.txt:1451
-#: data/mp/messages/strings/names.txt:1517
+#: data/mp/messages/strings/names.txt:1454
+#: data/mp/messages/strings/names.txt:1520
 msgid "Flashlight Gunner"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1439
-#: data/mp/messages/strings/names.txt:1452
-#: data/mp/messages/strings/names.txt:1605
+#: data/mp/messages/strings/names.txt:1455
+#: data/mp/messages/strings/names.txt:1608
 msgid "Needle Gunner"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1440
-#: data/mp/messages/strings/names.txt:1453
+#: data/mp/messages/strings/names.txt:1456
 msgid "Downed Transport"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1458
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1344
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
-#: data/mp/messages/strings/names.txt:1471
-#: data/mp/messages/strings/names.txt:1919
+#: data/mp/messages/strings/names.txt:1474
+#: data/mp/messages/strings/names.txt:1922
 msgid "Tank Killer Python Tracks"
 msgstr ""
 
@@ -9154,37 +9154,37 @@ msgid "HPV Cannon Python Tracks"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1460
-#: data/mp/messages/strings/names.txt:1473
+#: data/mp/messages/strings/names.txt:1476
 msgid "Cyclone AA Python Half-tracks"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1461
-#: data/mp/messages/strings/names.txt:1474
+#: data/mp/messages/strings/names.txt:1477
 msgid "Assault Gun Python Tracks"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1467
-#: data/mp/messages/strings/names.txt:1480
+#: data/mp/messages/strings/names.txt:1483
 msgid "Flashlight"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1468
-#: data/mp/messages/strings/names.txt:1481
+#: data/mp/messages/strings/names.txt:1484
 msgid "VTOL Flashlight"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1471
 #: data/base/messages/strings/names.txt:1472
 #: data/mp/messages/strings/names.txt:757
-#: data/mp/messages/strings/names.txt:1484
-#: data/mp/messages/strings/names.txt:1485
+#: data/mp/messages/strings/names.txt:1487
+#: data/mp/messages/strings/names.txt:1488
 msgid "Rotary MG Bunker"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1477
 #: data/base/messages/strings/names.txt:1478
-#: data/mp/messages/strings/names.txt:1490
-#: data/mp/messages/strings/names.txt:1491
+#: data/mp/messages/strings/names.txt:1493
+#: data/mp/messages/strings/names.txt:1494
 msgid "Missile Silo"
 msgstr ""
 
@@ -9466,336 +9466,336 @@ msgstr ""
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1287
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1301
 msgid "Cobra Hover Heavy-Repair"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1288
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1302
 msgid "Viper HMG Wheels"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1289
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1303
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
-#: data/mp/messages/strings/names.txt:1821
+#: data/mp/messages/strings/names.txt:1824
 msgid "Scourge Mantis Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1290
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1304
 msgid "TK Mantis Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1291
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1305
 msgid "Cobra HMG Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1292
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1306
 msgid "Cobra Hover HC"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1293
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1307
 msgid "Scorpion Lancer Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1294
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1308
 msgid "Scorpion Heavy Cannon Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1295
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1309
 msgid "Scorpion Lancer VTOL"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1296
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1310
 msgid "Scorpion BB VTOL"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1297
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1311
 msgid "Viper Command Turret Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1298
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1312
 msgid "Cobra Command Turret Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1299
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
 msgid "Scorpion Command Turret Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1300
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
 msgid "mantis Command Turret Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1301
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
 msgid "Cobra Lancer Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1302
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
 msgid "Mantis Heavy Cannon Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1303
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
 msgid "Mantis Tank Killer Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1304
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
 msgid "Mantis Scourge Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1305
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
 msgid "Scorpion Heavy Machinegun Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1306
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
 msgid "Scorpion Repair Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1307
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
 msgid "Scorpion Heavy Repair Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1308
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
 msgid "Cobra Hover Truck"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1309
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
 msgid "Scorpion Hover Truck"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1310
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
 msgid "Mantis Hover Truck"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1311
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
 msgid "Cobra Bunker Buster Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1312
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
 msgid "Scorpion Bunker Buster Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
 msgid "Mantis Bunker Buster Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
 msgid "Viper Tracks Lancer"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
 msgid "Cobra Half-Tracks Mini-Pod"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
 msgid "Cobra Tracks Mini-Pod"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
 msgid "Cobra Tracks Mini-Rocket Artillery"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
 msgid "Cobra Inferno Half-track"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
 msgid "Python HVC Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
 msgid "Python Scourge Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
 msgid "Python Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
 msgid "Python Pulse Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
 msgid "Tiger Pulse Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
 msgid "Tiger Heavy Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
 msgid "Wyvern Pulse Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
 msgid "Wyvern Heavy Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1342
 msgid "Viper Machinegun Half-Track"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1343
 msgid "Viper Flamer Half-Track"
 msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
-#: data/mp/messages/strings/names.txt:1819
+#: data/mp/messages/strings/names.txt:1822
 msgid "Heavy Repair Turret Cobra Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1823
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1834
-#: data/mp/messages/strings/names.txt:1820
-#: data/mp/messages/strings/names.txt:1831
+#: data/mp/messages/strings/names.txt:1823
+#: data/mp/messages/strings/names.txt:1834
 msgid "Heavy Machinegun Viper Wheels"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
-#: data/mp/messages/strings/names.txt:1822
+#: data/mp/messages/strings/names.txt:1825
 msgid "Tank Killer Mantis Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1826
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1841
-#: data/mp/messages/strings/names.txt:1823
-#: data/mp/messages/strings/names.txt:1838
+#: data/mp/messages/strings/names.txt:1826
+#: data/mp/messages/strings/names.txt:1841
 msgid "Heavy Machinegun Cobra Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1827
-#: data/mp/messages/strings/names.txt:1824
+#: data/mp/messages/strings/names.txt:1827
 msgid "Heavy Cannon Cobra Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1835
-#: data/mp/messages/strings/names.txt:1832
+#: data/mp/messages/strings/names.txt:1835
 msgid "Heavy Machinegun Cobra Wheels"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1836
-#: data/mp/messages/strings/names.txt:1833
+#: data/mp/messages/strings/names.txt:1836
 msgid "Heavy Machinegun Cobra Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1838
-#: data/mp/messages/strings/names.txt:1835
+#: data/mp/messages/strings/names.txt:1838
 msgid "Machinegun Viper Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1839
-#: data/mp/messages/strings/names.txt:1836
+#: data/mp/messages/strings/names.txt:1839
 msgid "Twin Machinegun Viper Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1843
-#: data/mp/messages/strings/names.txt:1840
+#: data/mp/messages/strings/names.txt:1843
 msgid "Medium Cannon Cobra Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1844
-#: data/mp/messages/strings/names.txt:1841
+#: data/mp/messages/strings/names.txt:1844
 msgid "Medium Cannon Scorpion Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1845
-#: data/mp/messages/strings/names.txt:1842
+#: data/mp/messages/strings/names.txt:1845
 msgid "Medium Cannon Scorpion Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1846
-#: data/mp/messages/strings/names.txt:1843
+#: data/mp/messages/strings/names.txt:1846
 msgid "Medium Cannon Python Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1847
-#: data/mp/messages/strings/names.txt:1844
+#: data/mp/messages/strings/names.txt:1847
 msgid "Heavy Cannon Python Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1849
-#: data/mp/messages/strings/names.txt:1846
+#: data/mp/messages/strings/names.txt:1849
 msgid "Rail Gun Mantis Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1850
-#: data/mp/messages/strings/names.txt:1847
+#: data/mp/messages/strings/names.txt:1850
 msgid "Pulse Laser Mantis Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1851
-#: data/mp/messages/strings/names.txt:1848
+#: data/mp/messages/strings/names.txt:1851
 msgid "Lancer Python Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1852
-#: data/mp/messages/strings/names.txt:1849
+#: data/mp/messages/strings/names.txt:1852
 msgid "Lancer Mantis Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1853
-#: data/mp/messages/strings/names.txt:1850
+#: data/mp/messages/strings/names.txt:1853
 msgid "Tank Killer Vengeance Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1858
-#: data/mp/messages/strings/names.txt:1855
+#: data/mp/messages/strings/names.txt:1858
 msgid "Heavy Cannon Tiger Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1859
-#: data/mp/messages/strings/names.txt:1856
+#: data/mp/messages/strings/names.txt:1859
 msgid "Needle Gun Tiger Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1860
-#: data/mp/messages/strings/names.txt:1857
+#: data/mp/messages/strings/names.txt:1860
 msgid "Needle Gun Retribution Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1861
-#: data/mp/messages/strings/names.txt:1858
+#: data/mp/messages/strings/names.txt:1861
 msgid "Needle Gun Vengeance Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1862
-#: data/mp/messages/strings/names.txt:1859
+#: data/mp/messages/strings/names.txt:1862
 msgid "Vengeance Tracks Rail Gun"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1863
-#: data/mp/messages/strings/names.txt:1860
+#: data/mp/messages/strings/names.txt:1863
 msgid "Vengeance Tracks Gauss Cannon"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1864
-#: data/mp/messages/strings/names.txt:1861
+#: data/mp/messages/strings/names.txt:1864
 msgid "Vengeance Tracks Gauss Scourge"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1867
-#: data/mp/messages/strings/names.txt:1864
+#: data/mp/messages/strings/names.txt:1867
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1868
-#: data/mp/messages/strings/names.txt:1865
+#: data/mp/messages/strings/names.txt:1868
 msgid "VTOL Bunker Buster Bug VTOL"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1869
-#: data/mp/messages/strings/names.txt:1866
+#: data/mp/messages/strings/names.txt:1869
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1870
-#: data/mp/messages/strings/names.txt:1867
+#: data/mp/messages/strings/names.txt:1870
 msgid "VTOL Bunker Buster Scorpion VTOL"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1873
-#: data/mp/messages/strings/names.txt:1870
+#: data/mp/messages/strings/names.txt:1873
 msgid "VTOL Lancer Bug VTOL"
 msgstr "AI unit"
 
@@ -9805,7 +9805,7 @@ msgid "VTOL HPV Cannon Bug VTOL"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1875
-#: data/mp/messages/strings/names.txt:1872
+#: data/mp/messages/strings/names.txt:1875
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "AI unit"
 
@@ -9815,7 +9815,7 @@ msgid "VTOL HPV Cannon Scorpion VTOL"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
-#: data/mp/messages/strings/names.txt:1874
+#: data/mp/messages/strings/names.txt:1877
 msgid "VTOL Lancer Mantis VTOL"
 msgstr "AI unit"
 
@@ -9825,127 +9825,127 @@ msgid "VTOL HPV Cannon Mantis VTOL"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
-#: data/mp/messages/strings/names.txt:1879
+#: data/mp/messages/strings/names.txt:1882
 msgid "Repair Turret Mantis Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1884
-#: data/mp/messages/strings/names.txt:1881
+#: data/mp/messages/strings/names.txt:1884
 msgid "Lancer Scorpion Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1885
-#: data/mp/messages/strings/names.txt:1882
+#: data/mp/messages/strings/names.txt:1885
 msgid "Heavy Cannon Scorpion Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1886
-#: data/mp/messages/strings/names.txt:1883
+#: data/mp/messages/strings/names.txt:1886
 msgid "Lancer Scorpion VTOL"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1887
-#: data/mp/messages/strings/names.txt:1884
+#: data/mp/messages/strings/names.txt:1887
 msgid "Bunker Buster Scorpion VTOL"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1889
-#: data/mp/messages/strings/names.txt:1886
+#: data/mp/messages/strings/names.txt:1889
 msgid "Command Turret Viper Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1890
-#: data/mp/messages/strings/names.txt:1887
+#: data/mp/messages/strings/names.txt:1890
 msgid "Command Turret Cobra Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1891
-#: data/mp/messages/strings/names.txt:1888
+#: data/mp/messages/strings/names.txt:1891
 msgid "Command Turret Scorpion Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1892
-#: data/mp/messages/strings/names.txt:1889
+#: data/mp/messages/strings/names.txt:1892
 msgid "Command Turret Mantis Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1894
-#: data/mp/messages/strings/names.txt:1891
+#: data/mp/messages/strings/names.txt:1894
 msgid "Lancer Cobra Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1895
-#: data/mp/messages/strings/names.txt:1892
+#: data/mp/messages/strings/names.txt:1895
 msgid "Heavy Cannon Mantis Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1896
-#: data/mp/messages/strings/names.txt:1893
+#: data/mp/messages/strings/names.txt:1896
 msgid "Tank Killer Mantis Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1897
-#: data/mp/messages/strings/names.txt:1894
+#: data/mp/messages/strings/names.txt:1897
 msgid "Scourge Mantis Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1898
-#: data/mp/messages/strings/names.txt:1895
+#: data/mp/messages/strings/names.txt:1898
 msgid "Heavy Machinegun Scorpion Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1900
-#: data/mp/messages/strings/names.txt:1897
+#: data/mp/messages/strings/names.txt:1900
 msgid "Repair Scorpion Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1901
-#: data/mp/messages/strings/names.txt:1898
+#: data/mp/messages/strings/names.txt:1901
 msgid "Heavy Repair Scorpion Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1904
-#: data/mp/messages/strings/names.txt:1901
+#: data/mp/messages/strings/names.txt:1904
 msgid "Truck Cobra Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1905
-#: data/mp/messages/strings/names.txt:1902
+#: data/mp/messages/strings/names.txt:1905
 msgid "Truck Scorpion Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1906
-#: data/mp/messages/strings/names.txt:1903
+#: data/mp/messages/strings/names.txt:1906
 msgid "Truck Mantis Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1909
-#: data/mp/messages/strings/names.txt:1906
+#: data/mp/messages/strings/names.txt:1909
 msgid "Bunker Buster Cobra Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1910
-#: data/mp/messages/strings/names.txt:1907
+#: data/mp/messages/strings/names.txt:1910
 msgid "Bunker Buster Scorpion Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1911
-#: data/mp/messages/strings/names.txt:1908
+#: data/mp/messages/strings/names.txt:1911
 msgid "Bunker Buster Mantis Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1913
-#: data/mp/messages/strings/names.txt:1910
+#: data/mp/messages/strings/names.txt:1913
 msgid "Lancer Viper Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1915
-#: data/mp/messages/strings/names.txt:1912
+#: data/mp/messages/strings/names.txt:1915
 msgid "Mini-Rocket Cobra Half-Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1916
-#: data/mp/messages/strings/names.txt:1913
+#: data/mp/messages/strings/names.txt:1916
 msgid "Mini-Rocket Cobra Tracks"
 msgstr "AI unit"
 
@@ -9955,7 +9955,7 @@ msgid "Mini-Rocket Artillery Cobra Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1919
-#: data/mp/messages/strings/names.txt:1916
+#: data/mp/messages/strings/names.txt:1919
 msgid "Inferno Cobra Half-Tracks"
 msgstr "AI unit"
 
@@ -9965,52 +9965,52 @@ msgid "HPV Cannon Python Hover"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1924
-#: data/mp/messages/strings/names.txt:1921
+#: data/mp/messages/strings/names.txt:1924
 msgid "Scourge Python Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1925
-#: data/mp/messages/strings/names.txt:1922
+#: data/mp/messages/strings/names.txt:1925
 msgid "Gauss Cannon Python Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1926
-#: data/mp/messages/strings/names.txt:1923
+#: data/mp/messages/strings/names.txt:1926
 msgid "Pulse Laser Python Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1927
-#: data/mp/messages/strings/names.txt:1924
+#: data/mp/messages/strings/names.txt:1927
 msgid "Pulse Laser Tiger Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1928
-#: data/mp/messages/strings/names.txt:1925
+#: data/mp/messages/strings/names.txt:1928
 msgid "Heavy Laser Tiger Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1929
-#: data/mp/messages/strings/names.txt:1926
+#: data/mp/messages/strings/names.txt:1929
 msgid "Gauss Cannon Wyvern Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1930
-#: data/mp/messages/strings/names.txt:1927
+#: data/mp/messages/strings/names.txt:1930
 msgid "Pulse Laser Wyvern Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1931
-#: data/mp/messages/strings/names.txt:1928
+#: data/mp/messages/strings/names.txt:1931
 msgid "Heavy Laser Wyvern Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1933
-#: data/mp/messages/strings/names.txt:1930
+#: data/mp/messages/strings/names.txt:1933
 msgid "Machinegun Viper Half-Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1934
-#: data/mp/messages/strings/names.txt:1931
+#: data/mp/messages/strings/names.txt:1934
 msgid "Flamer Viper Half-Tracks"
 msgstr "AI unit"
 
@@ -10656,7 +10656,7 @@ msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:372
-#: data/mp/messages/strings/names.txt:1702
+#: data/mp/messages/strings/names.txt:1705
 msgid "Radar Detector"
 msgstr ""
 
@@ -10703,13 +10703,13 @@ msgid "Seraph Missile Array"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:530
-#: data/mp/messages/strings/names.txt:1194
+#: data/mp/messages/strings/names.txt:1197
 msgid "Mini-Rocket Array"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:565
-#: data/mp/messages/strings/names.txt:1692
-#: data/mp/messages/strings/names.txt:1699
+#: data/mp/messages/strings/names.txt:1695
+#: data/mp/messages/strings/names.txt:1702
 msgid "Laser Satellite Command Post"
 msgstr ""
 
@@ -10746,12 +10746,12 @@ msgid "Plasteel Mk3"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:728
-#: data/mp/messages/strings/names.txt:1386
+#: data/mp/messages/strings/names.txt:1389
 msgid "Hyper Velocity Cannon Emplacement"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:739
-#: data/mp/messages/strings/names.txt:1389
+#: data/mp/messages/strings/names.txt:1392
 msgid "Seraph Missile Battery"
 msgstr ""
 
@@ -10760,7 +10760,7 @@ msgid "Flamer Tower"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:786
-#: data/mp/messages/strings/names.txt:1394
+#: data/mp/messages/strings/names.txt:1397
 msgid "Hyper Velocity Cannon Hardpoint"
 msgstr ""
 
@@ -10841,8 +10841,8 @@ msgid "Auto-Repair"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:896
-#: data/mp/messages/strings/names.txt:1644
-#: data/mp/messages/strings/names.txt:1645
+#: data/mp/messages/strings/names.txt:1647
+#: data/mp/messages/strings/names.txt:1648
 msgid "Heavy Repair Turret"
 msgstr ""
 
@@ -10851,7 +10851,7 @@ msgid "Nexus Intruder Program"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:927
-#: data/mp/messages/strings/names.txt:1685
+#: data/mp/messages/strings/names.txt:1688
 msgid "Nexus Resistance Circuits"
 msgstr ""
 
@@ -10891,393 +10891,405 @@ msgstr ""
 msgid "Rail Target Prediction Computer"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1382
+#: data/mp/messages/strings/names.txt:1174
+msgid "HESH Mini-Rockets"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1175
+msgid "HESH Mini-Rockets Mk2"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1176
+msgid "HESH Mini-Rockets Mk3"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1385
 msgid "Assault Gun Tower"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1436
+#: data/mp/messages/strings/names.txt:1439
 msgid "Repair Cobra Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1472
+#: data/mp/messages/strings/names.txt:1475
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1511
+#: data/mp/messages/strings/names.txt:1514
 msgid "Bunker Buster Cobra Hover"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1513
+#: data/mp/messages/strings/names.txt:1516
 msgid "Sensor Upgrade Mk2"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1514
+#: data/mp/messages/strings/names.txt:1517
 msgid "Sensor Upgrade Mk3"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1515
+#: data/mp/messages/strings/names.txt:1518
 msgid "Vapor Turbine Generator Mk2"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1519
+#: data/mp/messages/strings/names.txt:1522
 msgid "Gas Turbine Generator Mk2"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1520
+#: data/mp/messages/strings/names.txt:1523
 msgid "Gas Turbine Generator Mk3"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1523
+#: data/mp/messages/strings/names.txt:1526
 msgid "Vapor Turbine Generator Mk3"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1608
+#: data/mp/messages/strings/names.txt:1611
 msgid "Thermite Flamer Cyborg"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1611
+#: data/mp/messages/strings/names.txt:1614
 msgid "Thermite Flamer"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1613
+#: data/mp/messages/strings/names.txt:1616
 msgid "Grenadier Cyborg"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1616
+#: data/mp/messages/strings/names.txt:1619
 msgid "Grenadier"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1620
 #: data/mp/messages/strings/names.txt:1623
+#: data/mp/messages/strings/names.txt:1626
 msgid "Combat Engineer"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1625
 #: data/mp/messages/strings/names.txt:1628
+#: data/mp/messages/strings/names.txt:1631
 msgid "Cyborg Mechanic"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1632
-#: data/mp/messages/strings/names.txt:1633
+#: data/mp/messages/strings/names.txt:1635
+#: data/mp/messages/strings/names.txt:1636
 msgid "Incendiary Howitzer"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1634
-#: data/mp/messages/strings/names.txt:1635
+#: data/mp/messages/strings/names.txt:1637
+#: data/mp/messages/strings/names.txt:1638
 msgid "Incendiary Howitzer Emplacement"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1636
-#: data/mp/messages/strings/names.txt:1637
+#: data/mp/messages/strings/names.txt:1639
+#: data/mp/messages/strings/names.txt:1640
 msgid "Plasmite Flamer"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1638
-#: data/mp/messages/strings/names.txt:1639
+#: data/mp/messages/strings/names.txt:1641
+#: data/mp/messages/strings/names.txt:1642
 msgid "Plasmite Flamer Bunker"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1640
-#: data/mp/messages/strings/names.txt:1641
+#: data/mp/messages/strings/names.txt:1643
+#: data/mp/messages/strings/names.txt:1644
 msgid "Incendiary Mortar"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1642
-#: data/mp/messages/strings/names.txt:1643
+#: data/mp/messages/strings/names.txt:1645
+#: data/mp/messages/strings/names.txt:1646
 msgid "Incendiary Mortar Pit"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1647
+#: data/mp/messages/strings/names.txt:1650
 msgid "Cyborg Superdense Thermal Armor"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1648
+#: data/mp/messages/strings/names.txt:1651
 msgid "Cyborg Superdense Thermal Armor Mk2"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1649
+#: data/mp/messages/strings/names.txt:1652
 msgid "Cyborg Superdense Thermal Armor Mk3"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1651
+#: data/mp/messages/strings/names.txt:1654
 msgid "Vehicle Superdense Thermal Armor"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1652
+#: data/mp/messages/strings/names.txt:1655
 msgid "Vehicle Superdense Thermal Armor Mk2"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1653
+#: data/mp/messages/strings/names.txt:1656
 msgid "Vehicle Superdense Thermal Armor Mk3"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1657
-#: data/mp/messages/strings/names.txt:1658
-#: data/mp/messages/strings/names.txt:1659
 #: data/mp/messages/strings/names.txt:1660
+#: data/mp/messages/strings/names.txt:1661
+#: data/mp/messages/strings/names.txt:1662
+#: data/mp/messages/strings/names.txt:1663
 msgid "Super Heavy-Gunner"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1662
-#: data/mp/messages/strings/names.txt:1663
-#: data/mp/messages/strings/names.txt:1664
 #: data/mp/messages/strings/names.txt:1665
+#: data/mp/messages/strings/names.txt:1666
+#: data/mp/messages/strings/names.txt:1667
+#: data/mp/messages/strings/names.txt:1668
 msgid "Super Auto-Cannon Cyborg"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1667
-#: data/mp/messages/strings/names.txt:1668
-#: data/mp/messages/strings/names.txt:1669
 #: data/mp/messages/strings/names.txt:1670
+#: data/mp/messages/strings/names.txt:1671
+#: data/mp/messages/strings/names.txt:1672
+#: data/mp/messages/strings/names.txt:1673
 msgid "Super HPV Cyborg"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1672
-#: data/mp/messages/strings/names.txt:1673
-#: data/mp/messages/strings/names.txt:1674
 #: data/mp/messages/strings/names.txt:1675
-msgid "Super Tank-Killer Cyborg"
-msgstr ""
-
+#: data/mp/messages/strings/names.txt:1676
 #: data/mp/messages/strings/names.txt:1677
 #: data/mp/messages/strings/names.txt:1678
-msgid "Heavy Laser"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1679
-msgid "VTOL Heavy Laser"
+msgid "Super Tank-Killer Cyborg"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1680
 #: data/mp/messages/strings/names.txt:1681
+msgid "Heavy Laser"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1682
+msgid "VTOL Heavy Laser"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1683
+#: data/mp/messages/strings/names.txt:1684
 msgid "Heavy Laser Emplacement"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1687
-#: data/mp/messages/strings/names.txt:1688
+#: data/mp/messages/strings/names.txt:1690
+#: data/mp/messages/strings/names.txt:1691
 msgid "Twin Assault Cannon"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1689
-#: data/mp/messages/strings/names.txt:1690
+#: data/mp/messages/strings/names.txt:1692
+#: data/mp/messages/strings/names.txt:1693
 msgid "Twin Assault Cannon Bunker"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1693
-#: data/mp/messages/strings/names.txt:1698
-#: data/mp/messages/strings/names.txt:1700
+#: data/mp/messages/strings/names.txt:1696
+#: data/mp/messages/strings/names.txt:1701
+#: data/mp/messages/strings/names.txt:1703
 msgid "Satellite Uplink Center"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1694
-#: data/mp/messages/strings/names.txt:1696
+#: data/mp/messages/strings/names.txt:1697
+#: data/mp/messages/strings/names.txt:1699
 msgid "Wide Spectrum Sensor"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1695
-#: data/mp/messages/strings/names.txt:1697
+#: data/mp/messages/strings/names.txt:1698
+#: data/mp/messages/strings/names.txt:1700
 msgid "Wide Spectrum Sensor Tower"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1713
-#: data/mp/messages/strings/names.txt:1714
-msgid "Plasma Cannon"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1715
 #: data/mp/messages/strings/names.txt:1716
-msgid "Plasma Cannon Emplacement"
+#: data/mp/messages/strings/names.txt:1717
+msgid "Plasma Cannon"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1718
 #: data/mp/messages/strings/names.txt:1719
-#: data/mp/messages/strings/names.txt:1720
+msgid "Plasma Cannon Emplacement"
+msgstr ""
+
 #: data/mp/messages/strings/names.txt:1721
+#: data/mp/messages/strings/names.txt:1722
+#: data/mp/messages/strings/names.txt:1723
+#: data/mp/messages/strings/names.txt:1724
 msgid "Super Pulse Laser Cyborg"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1723
-#: data/mp/messages/strings/names.txt:1724
-#: data/mp/messages/strings/names.txt:1725
 #: data/mp/messages/strings/names.txt:1726
+#: data/mp/messages/strings/names.txt:1727
+#: data/mp/messages/strings/names.txt:1728
+#: data/mp/messages/strings/names.txt:1729
 msgid "Super Rail-Gunner"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1728
-#: data/mp/messages/strings/names.txt:1729
-#: data/mp/messages/strings/names.txt:1730
 #: data/mp/messages/strings/names.txt:1731
+#: data/mp/messages/strings/names.txt:1732
+#: data/mp/messages/strings/names.txt:1733
+#: data/mp/messages/strings/names.txt:1734
 msgid "Super Scourge Cyborg"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1733
-#: data/mp/messages/strings/names.txt:1734
+#: data/mp/messages/strings/names.txt:1736
+#: data/mp/messages/strings/names.txt:1737
 msgid "Nexus Link Tower"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1736
 #: data/mp/messages/strings/names.txt:1739
+#: data/mp/messages/strings/names.txt:1742
 msgid "EMP Cannon"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1737
-#: data/mp/messages/strings/names.txt:1738
+#: data/mp/messages/strings/names.txt:1740
+#: data/mp/messages/strings/names.txt:1741
 msgid "EMP Cannon Tower"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1743
-#: data/mp/messages/strings/names.txt:1745
+#: data/mp/messages/strings/names.txt:1746
+#: data/mp/messages/strings/names.txt:1748
 msgid "Mass Driver Fortress"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1744
+#: data/mp/messages/strings/names.txt:1747
 msgid "Mass Driver"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1747
-#: data/mp/messages/strings/names.txt:1748
-#: data/mp/messages/strings/names.txt:1749
+#: data/mp/messages/strings/names.txt:1750
+#: data/mp/messages/strings/names.txt:1751
+#: data/mp/messages/strings/names.txt:1752
 msgid "Cannon Fortress"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1751
-#: data/mp/messages/strings/names.txt:1752
-#: data/mp/messages/strings/names.txt:1753
+#: data/mp/messages/strings/names.txt:1754
+#: data/mp/messages/strings/names.txt:1755
+#: data/mp/messages/strings/names.txt:1756
 msgid "Heavy Rocket Bastion"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1755
-#: data/mp/messages/strings/names.txt:1756
-#: data/mp/messages/strings/names.txt:1757
+#: data/mp/messages/strings/names.txt:1758
+#: data/mp/messages/strings/names.txt:1759
+#: data/mp/messages/strings/names.txt:1760
 msgid "Missile Fortress"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1761
+#: data/mp/messages/strings/names.txt:1764
 msgid "Heavy Body - Wyvern"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1762
+#: data/mp/messages/strings/names.txt:1765
 msgid "Wyvern"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1764
+#: data/mp/messages/strings/names.txt:1767
 msgid "Multi Turret Body - Dragon"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1765
+#: data/mp/messages/strings/names.txt:1768
 msgid "Dragon"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1767
+#: data/mp/messages/strings/names.txt:1770
 msgid "Superhot Plasmite gel"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1768
+#: data/mp/messages/strings/names.txt:1771
 msgid "Superhot Plasmite gel Mk2"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1769
+#: data/mp/messages/strings/names.txt:1772
 msgid "Superhot Plasmite gel Mk3"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1773
-#: data/mp/messages/strings/names.txt:1775
-msgid "EMP Mortar"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1774
 #: data/mp/messages/strings/names.txt:1776
-msgid "EMP Mortar Pit"
+#: data/mp/messages/strings/names.txt:1778
+msgid "EMP Mortar"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1777
 #: data/mp/messages/strings/names.txt:1779
+msgid "EMP Mortar Pit"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1780
+#: data/mp/messages/strings/names.txt:1782
 msgid "Stormbringer AA Laser"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1778
-#: data/mp/messages/strings/names.txt:1780
+#: data/mp/messages/strings/names.txt:1781
+#: data/mp/messages/strings/names.txt:1783
 msgid "Stormbringer Emplacement"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1781
-#: data/mp/messages/strings/names.txt:1782
+#: data/mp/messages/strings/names.txt:1784
+#: data/mp/messages/strings/names.txt:1785
 msgid "Vindicator Hardpoint"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1783
-#: data/mp/messages/strings/names.txt:1784
+#: data/mp/messages/strings/names.txt:1786
+#: data/mp/messages/strings/names.txt:1787
 msgid "Whirlwind Hardpoint"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1785
-#: data/mp/messages/strings/names.txt:1786
+#: data/mp/messages/strings/names.txt:1788
+#: data/mp/messages/strings/names.txt:1789
 msgid "Cyclone Hardpoint"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1787
-#: data/mp/messages/strings/names.txt:1788
+#: data/mp/messages/strings/names.txt:1790
+#: data/mp/messages/strings/names.txt:1791
 msgid "Avenger Hardpoint"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1792
-#: data/mp/messages/strings/names.txt:1793
+#: data/mp/messages/strings/names.txt:1795
+#: data/mp/messages/strings/names.txt:1796
 msgid "Twin Assault Gun"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1794
-#: data/mp/messages/strings/names.txt:1795
+#: data/mp/messages/strings/names.txt:1797
+#: data/mp/messages/strings/names.txt:1798
 msgid "Twin Assault Gun Hardpoint"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1797
+#: data/mp/messages/strings/names.txt:1800
 msgid "VTOL Plasmite Bomb Bay"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1798
+#: data/mp/messages/strings/names.txt:1801
 msgid "Plasmite Bomb"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1799
+#: data/mp/messages/strings/names.txt:1802
 msgid "VTOL EMP Missile Launcher"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1800
+#: data/mp/messages/strings/names.txt:1803
 msgid "EMP Missile Launcher"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1804
-#: data/mp/messages/strings/names.txt:1805
+#: data/mp/messages/strings/names.txt:1807
+#: data/mp/messages/strings/names.txt:1808
 msgid "Command Turret II"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1806
-#: data/mp/messages/strings/names.txt:1807
+#: data/mp/messages/strings/names.txt:1809
+#: data/mp/messages/strings/names.txt:1810
 msgid "Command Turret III"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1808
-#: data/mp/messages/strings/names.txt:1809
+#: data/mp/messages/strings/names.txt:1811
+#: data/mp/messages/strings/names.txt:1812
 msgid "Command Turret IV"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1871
+#: data/mp/messages/strings/names.txt:1874
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
 msgstr "AI unit"
 
-#: data/mp/messages/strings/names.txt:1873
+#: data/mp/messages/strings/names.txt:1876
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "AI unit"
 
-#: data/mp/messages/strings/names.txt:1875
+#: data/mp/messages/strings/names.txt:1878
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
 msgstr "AI unit"
 
-#: data/mp/messages/strings/names.txt:1914
+#: data/mp/messages/strings/names.txt:1917
 msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "AI unit"
 
-#: data/mp/messages/strings/names.txt:1917
+#: data/mp/messages/strings/names.txt:1920
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "AI unit"
 
@@ -11410,26 +11422,26 @@ msgstr "Tradicionalni Kineski"
 msgid "Latin"
 msgstr "Latinski"
 
-#: lib/netplay/netplay.c:1164
-#: lib/netplay/netplay.c:1974
+#: lib/netplay/netplay.c:1277
+#: lib/netplay/netplay.c:2108
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:2897
+#: lib/netplay/netplay.c:3068
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2922
+#: lib/netplay/netplay.c:3093
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: lib/netplay/netplay.c:3330
+#: lib/netplay/netplay.c:3509
 msgid ", mods: "
 msgstr ""
 
-#: src/challenge.c:172
+#: src/challenge.c:188
 #: src/hci.c:1013
 #: src/hci.c:3789
 #: src/hci.c:3940
@@ -11439,148 +11451,148 @@ msgstr ""
 #: src/intorder.c:661
 #: src/loadsave.c:256
 #: src/multimenu.c:479
-#: src/multimenu.c:1356
+#: src/multimenu.c:1357
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
 msgid "Close"
 msgstr ""
 
-#: src/clparse.c:99
+#: src/clparse.c:81
 msgid "Run in cheat mode"
 msgstr ""
 
-#: src/clparse.c:100
+#: src/clparse.c:82
 msgid "Set default data directory"
 msgstr ""
 
-#: src/clparse.c:100
+#: src/clparse.c:82
 msgid "data directory"
 msgstr ""
 
-#: src/clparse.c:101
+#: src/clparse.c:83
 msgid "Set configuration directory"
 msgstr ""
 
-#: src/clparse.c:101
+#: src/clparse.c:83
 msgid "configuration directory"
 msgstr ""
 
-#: src/clparse.c:102
+#: src/clparse.c:84
 msgid "Show debug for given level"
 msgstr ""
 
-#: src/clparse.c:102
+#: src/clparse.c:84
 msgid "debug level"
 msgstr ""
 
-#: src/clparse.c:103
+#: src/clparse.c:85
 msgid "Log debug output to file"
 msgstr ""
 
-#: src/clparse.c:103
+#: src/clparse.c:85
 msgid "file"
 msgstr ""
 
-#: src/clparse.c:104
+#: src/clparse.c:86
 msgid "Flush all debug output written to stderr"
 msgstr ""
 
-#: src/clparse.c:105
+#: src/clparse.c:87
 msgid "Play in fullscreen mode"
 msgstr ""
 
-#: src/clparse.c:106
+#: src/clparse.c:88
 msgid "Load a specific game"
 msgstr ""
 
-#: src/clparse.c:106
+#: src/clparse.c:88
 msgid "game-name"
 msgstr ""
 
-#: src/clparse.c:107
+#: src/clparse.c:89
 msgid "Show this help message and exit"
 msgstr ""
 
-#: src/clparse.c:108
+#: src/clparse.c:90
 msgid "Enable a global mod"
 msgstr ""
 
-#: src/clparse.c:108
-#: src/clparse.c:109
-#: src/clparse.c:110
+#: src/clparse.c:90
+#: src/clparse.c:91
+#: src/clparse.c:92
 msgid "mod"
 msgstr ""
 
-#: src/clparse.c:109
+#: src/clparse.c:91
 msgid "Enable a campaign only mod"
 msgstr ""
 
-#: src/clparse.c:110
+#: src/clparse.c:92
 msgid "Enable a multiplay only mod"
 msgstr ""
 
-#: src/clparse.c:111
+#: src/clparse.c:93
 msgid "Disable asserts"
 msgstr ""
 
-#: src/clparse.c:112
+#: src/clparse.c:94
 msgid "Causes a crash to test the crash handler"
 msgstr ""
 
-#: src/clparse.c:113
+#: src/clparse.c:95
 msgid "Load a saved game"
 msgstr ""
 
-#: src/clparse.c:113
+#: src/clparse.c:95
 msgid "savegame"
 msgstr ""
 
-#: src/clparse.c:116
+#: src/clparse.c:98
 msgid "Play in windowed mode"
 msgstr ""
 
-#: src/clparse.c:117
+#: src/clparse.c:99
 msgid "Show version information and exit"
 msgstr ""
 
-#: src/clparse.c:118
+#: src/clparse.c:100
 msgid "Set the resolution to use"
 msgstr ""
 
-#: src/clparse.c:118
+#: src/clparse.c:100
 msgid "WIDTHxHEIGHT"
 msgstr ""
 
-#: src/clparse.c:119
+#: src/clparse.c:101
 msgid "Enable shadows"
 msgstr ""
 
-#: src/clparse.c:120
+#: src/clparse.c:102
 msgid "Disable shadows"
 msgstr ""
 
-#: src/clparse.c:121
+#: src/clparse.c:103
 msgid "Enable sound"
 msgstr ""
 
-#: src/clparse.c:122
+#: src/clparse.c:104
 msgid "Disable sound"
 msgstr ""
 
-#: src/clparse.c:123
+#: src/clparse.c:105
 msgid "Activate self-test"
 msgstr ""
 
-#: src/clparse.c:124
+#: src/clparse.c:106
 msgid "connect directly to IP/hostname"
 msgstr ""
 
-#: src/clparse.c:124
+#: src/clparse.c:106
 msgid "host"
 msgstr ""
 
-#: src/clparse.c:125
+#: src/clparse.c:107
 msgid "go directly to host screen"
 msgstr ""
 
@@ -11758,76 +11770,76 @@ msgstr ""
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
-#: src/droid.c:210
+#: src/droid.c:209
 msgid "Unit Lost!"
 msgstr ""
 
-#: src/droid.c:1334
+#: src/droid.c:1343
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:2940
+#: src/droid.c:2932
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:2953
+#: src/droid.c:2945
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:2966
+#: src/droid.c:2958
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:2970
+#: src/droid.c:2962
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3180
+#: src/droid.c:3172
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:3181
+#: src/droid.c:3173
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:3182
+#: src/droid.c:3174
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:3183
+#: src/droid.c:3175
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:3184
+#: src/droid.c:3176
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:3185
+#: src/droid.c:3177
 msgid "Veteran"
 msgstr ""
 
-#: src/droid.c:3186
+#: src/droid.c:3178
 msgid "Elite"
 msgstr ""
 
-#: src/droid.c:3187
+#: src/droid.c:3179
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:3188
+#: src/droid.c:3180
 msgid "Hero"
 msgstr ""
 
@@ -11870,300 +11882,300 @@ msgstr ""
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.c:316
-#: src/frontend.c:374
-#: src/frontend.c:526
-#: src/frontend.c:588
-#: src/frontend.c:730
-#: src/frontend.c:869
-#: src/frontend.c:976
-#: src/frontend.c:1183
-#: src/frontend.c:1326
+#: src/frontend.c:376
+#: src/frontend.c:529
+#: src/frontend.c:591
+#: src/frontend.c:733
+#: src/frontend.c:872
+#: src/frontend.c:979
+#: src/frontend.c:1186
+#: src/frontend.c:1329
 msgctxt "menu"
 msgid "Return"
 msgstr ""
 
-#: src/frontend.c:368
+#: src/frontend.c:370
 msgid "New Campaign"
 msgstr ""
 
-#: src/frontend.c:369
+#: src/frontend.c:371
 msgid "Start Skirmish Game"
 msgstr ""
 
-#: src/frontend.c:370
+#: src/frontend.c:372
 msgid "Challenges"
 msgstr ""
 
-#: src/frontend.c:371
+#: src/frontend.c:373
 #: src/ingameop.c:293
 msgid "Load Game"
 msgstr ""
 
-#: src/frontend.c:373
+#: src/frontend.c:375
 msgid "SINGLE PLAYER"
 msgstr ""
 
-#: src/frontend.c:470
+#: src/frontend.c:473
 #: src/ingameop.c:519
-#: src/mission.c:2534
-#: src/mission.c:2639
+#: src/mission.c:2533
+#: src/mission.c:2638
 msgid "Load Saved Game"
 msgstr ""
 
-#: src/frontend.c:521
+#: src/frontend.c:524
 msgid "MULTI PLAYER"
 msgstr ""
 
-#: src/frontend.c:523
+#: src/frontend.c:526
 msgid "Host Game"
 msgstr ""
 
-#: src/frontend.c:524
+#: src/frontend.c:527
 msgid "Join Game"
 msgstr ""
 
-#: src/frontend.c:581
-#: src/multiint.c:1252
+#: src/frontend.c:584
+#: src/multiint.c:1254
 msgid "OPTIONS"
 msgstr ""
 
-#: src/frontend.c:582
+#: src/frontend.c:585
 msgid "Game Options"
 msgstr ""
 
-#: src/frontend.c:583
+#: src/frontend.c:586
 msgid "Graphics Options"
 msgstr ""
 
-#: src/frontend.c:584
+#: src/frontend.c:587
 msgid "Video Options"
 msgstr ""
 
-#: src/frontend.c:585
+#: src/frontend.c:588
 #: src/ingameop.c:288
 msgid "Audio Options"
 msgstr ""
 
-#: src/frontend.c:586
+#: src/frontend.c:589
 msgid "Mouse Options"
 msgstr ""
 
-#: src/frontend.c:587
+#: src/frontend.c:590
 msgid "Key Mappings"
 msgstr ""
 
-#: src/frontend.c:649
+#: src/frontend.c:652
 msgid "Video Playback"
 msgstr ""
 
-#: src/frontend.c:653
-#: src/frontend.c:823
+#: src/frontend.c:656
+#: src/frontend.c:826
 msgid "1X"
 msgstr ""
 
-#: src/frontend.c:657
-#: src/frontend.c:813
+#: src/frontend.c:660
+#: src/frontend.c:816
 msgid "2X"
 msgstr ""
 
-#: src/frontend.c:661
-#: src/frontend.c:818
-#: src/frontend.c:941
-#: src/frontend.c:999
+#: src/frontend.c:664
+#: src/frontend.c:821
+#: src/frontend.c:944
+#: src/frontend.c:1002
 msgid "Fullscreen"
 msgstr ""
 
-#: src/frontend.c:671
+#: src/frontend.c:674
 msgid "Screen Shake"
 msgstr ""
 
-#: src/frontend.c:674
-#: src/frontend.c:704
-#: src/frontend.c:718
-#: src/frontend.c:754
-#: src/frontend.c:790
-#: src/frontend.c:799
-#: src/frontend.c:962
-#: src/frontend.c:1060
-#: src/frontend.c:1098
-#: src/frontend.c:1134
-#: src/frontend.c:1146
-#: src/frontend.c:1158
-#: src/frontend.c:1170
-#: src/frontend.c:1206
-#: src/frontend.c:1219
-#: src/frontend.c:1233
-#: src/frontend.c:1247
+#: src/frontend.c:677
+#: src/frontend.c:707
+#: src/frontend.c:721
+#: src/frontend.c:757
+#: src/frontend.c:793
+#: src/frontend.c:802
+#: src/frontend.c:965
+#: src/frontend.c:1063
+#: src/frontend.c:1101
+#: src/frontend.c:1137
+#: src/frontend.c:1149
+#: src/frontend.c:1161
+#: src/frontend.c:1173
+#: src/frontend.c:1209
+#: src/frontend.c:1222
+#: src/frontend.c:1236
+#: src/frontend.c:1250
 msgid "On"
 msgstr ""
 
-#: src/frontend.c:678
-#: src/frontend.c:700
-#: src/frontend.c:710
-#: src/frontend.c:722
-#: src/frontend.c:749
-#: src/frontend.c:785
-#: src/frontend.c:803
-#: src/frontend.c:966
-#: src/frontend.c:1055
-#: src/frontend.c:1093
-#: src/frontend.c:1138
-#: src/frontend.c:1150
-#: src/frontend.c:1162
-#: src/frontend.c:1174
-#: src/frontend.c:1201
-#: src/frontend.c:1214
-#: src/frontend.c:1228
-#: src/frontend.c:1242
+#: src/frontend.c:681
+#: src/frontend.c:703
+#: src/frontend.c:713
+#: src/frontend.c:725
+#: src/frontend.c:752
+#: src/frontend.c:788
+#: src/frontend.c:806
+#: src/frontend.c:969
+#: src/frontend.c:1058
+#: src/frontend.c:1096
+#: src/frontend.c:1141
+#: src/frontend.c:1153
+#: src/frontend.c:1165
+#: src/frontend.c:1177
+#: src/frontend.c:1204
+#: src/frontend.c:1217
+#: src/frontend.c:1231
+#: src/frontend.c:1245
 msgid "Off"
 msgstr ""
 
-#: src/frontend.c:683
-#: src/multiint.c:1321
+#: src/frontend.c:686
+#: src/multiint.c:1323
 msgid "Fog"
 msgstr ""
 
-#: src/frontend.c:686
-#: src/frontend.c:772
+#: src/frontend.c:689
+#: src/frontend.c:775
 msgid "Mist"
 msgstr ""
 
-#: src/frontend.c:690
-#: src/frontend.c:765
-#: src/multiint.c:1323
+#: src/frontend.c:693
+#: src/frontend.c:768
+#: src/multiint.c:1325
 msgid "Fog Of War"
 msgstr ""
 
-#: src/frontend.c:697
-#: src/frontend.c:709
+#: src/frontend.c:700
+#: src/frontend.c:712
 msgid "Subtitles"
 msgstr ""
 
-#: src/frontend.c:715
+#: src/frontend.c:718
 msgid "Shadows"
 msgstr ""
 
-#: src/frontend.c:726
+#: src/frontend.c:729
 msgid "GRAPHICS OPTIONS"
 msgstr ""
 
-#: src/frontend.c:857
+#: src/frontend.c:860
 #: src/ingameop.c:177
 msgid "Voice Volume"
 msgstr ""
 
-#: src/frontend.c:861
+#: src/frontend.c:864
 #: src/ingameop.c:182
 msgid "FX Volume"
 msgstr ""
 
-#: src/frontend.c:865
+#: src/frontend.c:868
 #: src/ingameop.c:187
 msgid "Music Volume"
 msgstr ""
 
-#: src/frontend.c:872
+#: src/frontend.c:875
 msgid "AUDIO OPTIONS"
 msgstr ""
 
-#: src/frontend.c:937
+#: src/frontend.c:940
 msgid "Graphics Mode*"
 msgstr ""
 
-#: src/frontend.c:945
-#: src/frontend.c:994
+#: src/frontend.c:948
+#: src/frontend.c:997
 msgid "Windowed"
 msgstr ""
 
-#: src/frontend.c:949
+#: src/frontend.c:952
 msgid "Resolution*"
 msgstr ""
 
-#: src/frontend.c:954
+#: src/frontend.c:957
 msgid "Texture size"
 msgstr ""
 
-#: src/frontend.c:958
+#: src/frontend.c:961
 msgid "Vertical sync*"
 msgstr ""
 
-#: src/frontend.c:970
+#: src/frontend.c:973
 msgid "* Takes effect on game restart"
 msgstr ""
 
-#: src/frontend.c:973
+#: src/frontend.c:976
 msgid "VIDEO OPTIONS"
 msgstr ""
 
-#: src/frontend.c:1131
+#: src/frontend.c:1134
 msgid "Reverse Rotation"
 msgstr ""
 
-#: src/frontend.c:1142
+#: src/frontend.c:1145
 msgid "Trap Cursor"
 msgstr ""
 
-#: src/frontend.c:1154
+#: src/frontend.c:1157
 msgid "Colored Cursors*"
 msgstr ""
 
-#: src/frontend.c:1167
+#: src/frontend.c:1170
 msgid "Switch Mouse Buttons"
 msgstr ""
 
-#: src/frontend.c:1177
+#: src/frontend.c:1180
 msgid "* May negatively affect performance"
 msgstr ""
 
-#: src/frontend.c:1180
+#: src/frontend.c:1183
 msgid "MOUSE OPTIONS"
 msgstr ""
 
-#: src/frontend.c:1281
-#: src/frontend.c:1347
+#: src/frontend.c:1284
+#: src/frontend.c:1350
 msgid "Difficulty"
-msgstr ""
-
-#: src/frontend.c:1285
-#: src/frontend.c:1355
-#: src/frontend.c:1386
-msgid "Easy"
 msgstr ""
 
 #: src/frontend.c:1288
 #: src/frontend.c:1358
-#: src/frontend.c:1378
+#: src/frontend.c:1389
+msgid "Easy"
+msgstr ""
+
+#: src/frontend.c:1291
+#: src/frontend.c:1361
+#: src/frontend.c:1381
 msgid "Normal"
 msgstr ""
 
-#: src/frontend.c:1292
-#: src/frontend.c:1361
-#: src/frontend.c:1382
+#: src/frontend.c:1295
+#: src/frontend.c:1364
+#: src/frontend.c:1385
 msgid "Hard"
 msgstr ""
 
-#: src/frontend.c:1297
-#: src/frontend.c:1348
+#: src/frontend.c:1300
+#: src/frontend.c:1351
 msgid "Scroll Speed"
 msgstr ""
 
-#: src/frontend.c:1311
-#: src/frontend.c:1345
+#: src/frontend.c:1314
+#: src/frontend.c:1348
 msgid "Language"
 msgstr ""
 
-#: src/frontend.c:1323
-#: src/frontend.c:1346
+#: src/frontend.c:1326
+#: src/frontend.c:1349
 msgid "Unit Colour"
 msgstr ""
 
-#: src/frontend.c:1329
-#: src/frontend.c:1349
+#: src/frontend.c:1332
+#: src/frontend.c:1352
 msgid "GAME OPTIONS"
 msgstr ""
 
-#: src/frontend.c:1699
-#: src/multiint.c:2233
+#: src/frontend.c:1693
+#: src/multiint.c:2235
 msgid "Active mods: "
 msgstr ""
 
@@ -12222,7 +12234,7 @@ msgid "Build (F3)"
 msgstr ""
 
 #: src/hci.c:3851
-#: src/multiint.c:1368
+#: src/multiint.c:1370
 #: src/multimenu.c:763
 msgid "Power"
 msgstr ""
@@ -12321,8 +12333,8 @@ msgstr ""
 
 #: src/ingameop.c:295
 #: src/ingameop.c:523
-#: src/mission.c:2521
-#: src/mission.c:2642
+#: src/mission.c:2520
+#: src/mission.c:2641
 msgid "Save Game"
 msgstr "Spermi igru"
 
@@ -12763,10 +12775,10 @@ msgid "KEY MAPPING"
 msgstr "Tipkovničke kratice"
 
 #: src/keyedit.c:395
-#: src/multiint.c:637
-#: src/multiint.c:680
-#: src/multiint.c:1070
-#: src/multiint.c:1454
+#: src/multiint.c:638
+#: src/multiint.c:681
+#: src/multiint.c:1072
+#: src/multiint.c:1456
 msgid "Return To Previous Screen"
 msgstr "Nazadx"
 
@@ -13139,42 +13151,42 @@ msgstr "Ponovno otvaranje menija za gradnju"
 msgid "Could not save game!"
 msgstr "Igra se ne može spremiti"
 
-#: src/mission.c:2074
+#: src/mission.c:2073
 msgid "Load Transport"
 msgstr "Ukrcaj na transport"
 
-#: src/mission.c:2468
+#: src/mission.c:2467
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "POBJEDIO SI!!! - jer si koristio sifre."
 
-#: src/mission.c:2468
+#: src/mission.c:2467
 msgid "OBJECTIVE ACHIEVED"
 msgstr "POBJEDIO SI!!!"
 
-#: src/mission.c:2474
+#: src/mission.c:2473
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "Koristio si šifre - ali si ipak IZGUBIO!!!"
 
-#: src/mission.c:2474
+#: src/mission.c:2473
 msgid "OBJECTIVE FAILED"
 msgstr "IZGUBIO SI!!!"
 
-#: src/mission.c:2500
-#: src/mission.c:2540
-#: src/mission.c:2658
+#: src/mission.c:2499
+#: src/mission.c:2539
+#: src/mission.c:2657
 msgid "Quit To Main Menu"
 msgstr "Izađi na glavni meni"
 
-#: src/mission.c:2508
+#: src/mission.c:2507
 msgid "Continue Game"
 msgstr "Nastavi igru"
 
-#: src/mission.c:2605
+#: src/mission.c:2604
 msgid "GAME SAVED :"
 msgstr "Igra spremljena:"
 
-#: src/move.c:2878
-#: src/move.c:2894
+#: src/move.c:2709
+#: src/move.c:2725
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Našao si %u resursa u bačvi."
@@ -13229,268 +13241,268 @@ msgstr "%s sklapa savez s %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Našao si nacrte za %s"
 
-#: src/multiint.c:571
+#: src/multiint.c:572
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Prihvati postavke"
 
-#: src/multiint.c:573
-#: src/multiint.c:1118
+#: src/multiint.c:574
+#: src/multiint.c:1120
 msgid "Cancel"
 msgstr "Poništi"
 
-#: src/multiint.c:584
+#: src/multiint.c:585
 msgid "IP Address or Machine Name"
 msgstr "IP"
 
-#: src/multiint.c:634
+#: src/multiint.c:635
 msgid "CONNECTION"
 msgstr "VEZA"
 
-#: src/multiint.c:647
+#: src/multiint.c:648
 msgid "Lobby"
 msgstr "Predvorje"
 
-#: src/multiint.c:648
+#: src/multiint.c:649
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:840
+#: src/multiint.c:841
 msgid "No games are available"
 msgstr "Nema dostupnih igara."
 
-#: src/multiint.c:843
+#: src/multiint.c:844
 msgid "Game is full"
 msgstr "Igra je popunjena!"
 
-#: src/multiint.c:847
+#: src/multiint.c:848
 msgid "You were kicked!"
 msgstr "Izbačen si!"
 
-#: src/multiint.c:850
+#: src/multiint.c:851
 msgid "Wrong Game Version!"
 msgstr "Kriva verzija igre!"
 
-#: src/multiint.c:853
+#: src/multiint.c:854
 msgid "You have an incompatible mod."
 msgstr "Imaš nedozvoljeni mod."
 
-#: src/multiint.c:857
+#: src/multiint.c:858
 msgid "Host couldn't send file?"
 msgstr "Host ne može poslati datoteku."
 
-#: src/multiint.c:861
+#: src/multiint.c:862
 msgid "Incorrect Password!"
 msgstr "Netočna lozinka."
 
-#: src/multiint.c:864
+#: src/multiint.c:865
 msgid "Host has dropped connection!"
 msgstr "Host je prekinuo igru."
 
-#: src/multiint.c:868
+#: src/multiint.c:869
 msgid "Connection Error"
 msgstr "Greška u povezivanju"
 
-#: src/multiint.c:1011
+#: src/multiint.c:1013
 msgid "Searching"
 msgstr "Traženje"
 
-#: src/multiint.c:1067
+#: src/multiint.c:1069
 msgid "GAMES"
 msgstr "Igre"
 
-#: src/multiint.c:1075
+#: src/multiint.c:1077
 msgid "Refresh Games List"
 msgstr "Osvježi popis igara"
 
-#: src/multiint.c:1095
+#: src/multiint.c:1097
 msgid "Enter Password:"
 msgstr "Unesi lozinku:"
 
-#: src/multiint.c:1116
+#: src/multiint.c:1118
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.c:1257
-#: src/multiint.c:1264
+#: src/multiint.c:1259
+#: src/multiint.c:1266
 msgid "Select Game Name"
 msgstr "Odaberi naziv igre"
 
-#: src/multiint.c:1257
+#: src/multiint.c:1259
 msgid "One-Player Skirmish"
 msgstr "Okršaj za 1 igrača"
 
-#: src/multiint.c:1267
+#: src/multiint.c:1269
 msgid "Select Map"
 msgstr "Odaberi kartu"
 
-#: src/multiint.c:1275
+#: src/multiint.c:1277
 msgid "Click to set Password"
 msgstr "Odaberi lozinku"
 
-#: src/multiint.c:1285
-#: src/multiint.c:1286
+#: src/multiint.c:1287
+#: src/multiint.c:1288
 msgid "Scavengers"
 msgstr "Sa stanovnicima"
 
-#: src/multiint.c:1288
+#: src/multiint.c:1290
 msgid "No Scavengers"
 msgstr "Bez stanovnika"
 
-#: src/multiint.c:1318
+#: src/multiint.c:1320
 msgid "Select Player Name"
 msgstr "Odaberi ime igrača"
 
-#: src/multiint.c:1324
+#: src/multiint.c:1326
 msgid "Distance Fog"
 msgstr "Magla udaljenosti"
 
-#: src/multiint.c:1335
+#: src/multiint.c:1337
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Savezi"
 
-#: src/multiint.c:1338
+#: src/multiint.c:1340
 msgid "No Alliances"
 msgstr "Opći rat"
 
-#: src/multiint.c:1340
+#: src/multiint.c:1342
 msgid "Allow Alliances"
 msgstr "Slobodno"
 
-#: src/multiint.c:1344
+#: src/multiint.c:1346
 msgid "Locked Teams"
 msgstr "Timovi"
 
-#: src/multiint.c:1370
+#: src/multiint.c:1372
 msgid "Low Power Levels"
 msgstr "Niska razina resursa"
 
-#: src/multiint.c:1372
+#: src/multiint.c:1374
 msgid "Medium Power Levels"
 msgstr "Srednja razina resursa"
 
-#: src/multiint.c:1374
+#: src/multiint.c:1376
 msgid "High Power Levels"
 msgstr "Visoka razina resursa"
 
-#: src/multiint.c:1406
+#: src/multiint.c:1408
 msgid "Base"
 msgstr "Baza"
 
-#: src/multiint.c:1408
+#: src/multiint.c:1410
 msgid "Start with No Bases"
 msgstr "Započni bez baza"
 
-#: src/multiint.c:1410
+#: src/multiint.c:1412
 msgid "Start with Bases"
 msgstr "Započni sa bazama"
 
-#: src/multiint.c:1412
+#: src/multiint.c:1414
 msgid "Start with Advanced Bases"
 msgstr "Započni sa naprednim bazama"
 
-#: src/multiint.c:1444
+#: src/multiint.c:1446
 msgid "Map Preview"
 msgstr "Predprikaz karte"
 
-#: src/multiint.c:1446
+#: src/multiint.c:1448
 msgid "Click to see Map"
 msgstr "Klikni za predprikaz karte"
 
-#: src/multiint.c:1460
+#: src/multiint.c:1462
 msgid "Start Hosting Game"
 msgstr "Započni hostanje igre"
 
-#: src/multiint.c:1468
+#: src/multiint.c:1470
 msgid "Show Structure Limits"
 msgstr "Pokaži limite"
 
-#: src/multiint.c:1468
+#: src/multiint.c:1470
 msgid "Set Structure Limits"
 msgstr "Postavi limite"
 
-#: src/multiint.c:1531
+#: src/multiint.c:1533
 msgid "Player colour"
 msgstr "Boja igrača"
 
-#: src/multiint.c:1547
+#: src/multiint.c:1549
 msgid "Kick player"
 msgstr "Izbaci igrača"
 
-#: src/multiint.c:1558
+#: src/multiint.c:1560
 msgid "Player number"
 msgstr "Broj igrača"
 
-#: src/multiint.c:1920
+#: src/multiint.c:1922
 msgid "Team"
 msgstr "Savez"
 
-#: src/multiint.c:1953
+#: src/multiint.c:1955
 msgid "Waiting for other players"
 msgstr "Čekanje na ostale igrače"
 
-#: src/multiint.c:1959
+#: src/multiint.c:1961
 msgid "Click when ready"
 msgstr "Označi kada si spreman"
 
-#: src/multiint.c:1963
+#: src/multiint.c:1965
 msgid "READY?"
 msgstr "SPREMAN?"
 
-#: src/multiint.c:2000
+#: src/multiint.c:2002
 msgid "PLAYERS"
 msgstr "Igrači"
 
-#: src/multiint.c:2204
+#: src/multiint.c:2206
 msgid "CHAT"
 msgstr "Čavrljanje"
 
-#: src/multiint.c:2238
+#: src/multiint.c:2240
 msgid "All players need to have the same mods to join your game."
 msgstr "Svi igrači moraju imati iste modove."
 
-#: src/multiint.c:2391
+#: src/multiint.c:2400
 msgid "*** password is now required! ***"
 msgstr "Lozinka je potrebna."
 
-#: src/multiint.c:2398
+#: src/multiint.c:2407
 msgid "*** password is NOT required! ***"
 msgstr "Lozinka nije potrebna."
 
-#: src/multiint.c:2641
+#: src/multiint.c:2650
 msgid "Sorry! Failed to host the game."
 msgstr "Ne možeš hostati igru."
 
-#: src/multiint.c:2726
+#: src/multiint.c:2735
 msgid "'Locked Teams' mode enabled"
 msgstr "Model saveza: Timovi"
 
-#: src/multiint.c:2765
-#: src/multiint.c:2815
+#: src/multiint.c:2774
+#: src/multiint.c:2824
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Host je izbacio %s iz igre."
 
-#: src/multiint.c:2890
+#: src/multiint.c:2899
 msgid "Host is Starting Game"
 msgstr "Host započinje igru"
 
-#: src/multiint.c:3443
+#: src/multiint.c:3452
 msgid "Players"
 msgstr "Igrači"
 
-#: src/multiint.c:3560
+#: src/multiint.c:3569
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3568
+#: src/multiint.c:3577
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Karta: %d%% downloadana"
 
-#: src/multiint.c:3594
+#: src/multiint.c:3603
 msgid "HOST"
 msgstr "HOST"
 
@@ -13509,17 +13521,17 @@ msgstr "%s je izašao iz igre"
 msgid "File transfer has been aborted for %d."
 msgstr ""
 
-#: src/multijoin.c:336
+#: src/multijoin.c:348
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) ima nedopušten mod  i izbačen je."
 
-#: src/multijoin.c:375
+#: src/multijoin.c:387
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s se pridužio igri."
 
-#: src/multijoin.c:385
+#: src/multijoin.c:397
 msgid "System message:"
 msgstr "Poruka servera:"
 
@@ -13580,23 +13592,23 @@ msgstr "Ping"
 msgid "Structs"
 msgstr "Strukture"
 
-#: src/multimenu.c:1139
+#: src/multimenu.c:1140
 msgid "Toggle Alliance State"
 msgstr "Promjeni stanje(prijatelj/neprijatelj)"
 
-#: src/multimenu.c:1158
+#: src/multimenu.c:1159
 msgid "Give Visibility Report"
 msgstr "Šalji radarski izvještaj"
 
-#: src/multimenu.c:1164
+#: src/multimenu.c:1165
 msgid "Leak Technology Documents"
 msgstr "Šalji tehnološke podatke"
 
-#: src/multimenu.c:1171
+#: src/multimenu.c:1172
 msgid "Hand Over Selected Units"
 msgstr "Predaj jedinice"
 
-#: src/multimenu.c:1177
+#: src/multimenu.c:1178
 msgid "Give Power To Player"
 msgstr "Pošalji resurse igraču"
 
@@ -13788,12 +13800,12 @@ msgstr "POBJEDIO SI!!!"
 msgid "YOU WERE DEFEATED!"
 msgstr "IZGUBIO SI!!!"
 
-#: src/scriptfuncs.c:10150
+#: src/scriptfuncs.c:10151
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "%s je postavio zastavicu."
 
-#: src/scriptfuncs.c:10196
+#: src/scriptfuncs.c:10197
 #, c-format
 msgid "Beacon %d"
 msgstr "Zastavica %d"
@@ -13822,61 +13834,63 @@ msgstr "Nemaš ni jedan mobilni radar."
 msgid "Unable to locate any Commanders!"
 msgstr "Nemaš ni jednog kapetana."
 
-#: src/structure.c:2857
+#: src/structure.c:2838
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limit prijeđen - Proizvodnja prekinuta"
 
-#: src/structure.c:6142
-#: src/structure.c:6167
+#: src/structure.c:6118
+#: src/structure.c:6143
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u jedinica dodjeljena"
 msgstr[1] "%s - %u jedinica dodjeljena"
 
-#: src/structure.c:6172
-#: src/structure.c:6236
+#: src/structure.c:6148
+#: src/structure.c:6216
+#: src/structure.c:6232
+#: src/structure.c:6246
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Oštečen %3.0f%%"
 
-#: src/structure.c:6222
+#: src/structure.c:6198
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Povezan s %u od %u"
 
-#: src/structure.c:6352
-#: src/structure.c:6397
+#: src/structure.c:6362
+#: src/structure.c:6407
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Hakirano"
 
-#: src/structure.c:6635
+#: src/structure.c:6643
 msgid "Electronic Reward - Visibility Report"
 msgstr "Nagrada hakirane građevine - Vizualno izvješče"
 
-#: src/structure.c:6675
+#: src/structure.c:6683
 msgid "Factory Reward - Propulsion"
 msgstr "Nagrada hakirane Tvornice - Vozni sustav"
 
-#: src/structure.c:6699
+#: src/structure.c:6707
 msgid "Factory Reward - Body"
 msgstr "Nagrada hakirane Tvornice - Trup"
 
-#: src/structure.c:6723
+#: src/structure.c:6731
 msgid "Factory Reward - Weapon"
 msgstr "Nagrada hakirane Tvornice - Oružje"
 
-#: src/structure.c:6732
+#: src/structure.c:6740
 msgid "Factory Reward - Nothing"
 msgstr "Nagrada hakirane Tvornice - Ništa"
 
-#: src/structure.c:6760
+#: src/structure.c:6768
 msgid "Repair Facility Award - Repair"
 msgstr "Nagrada hakiranog Servisa - Poravak"
 
-#: src/structure.c:6767
+#: src/structure.c:6775
 msgid "Repair Facility Award - Nothing"
 msgstr "Nagrada hakiranog Servisa - Ništa"
 
