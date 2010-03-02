@@ -110,4 +110,17 @@ static inline PIELIGHT pal_SetBrightness(UBYTE brightness)
 	return c;
 }
 
+#define pal_Grey pal_SetBrightness
+
+static inline PIELIGHT pal_RGBA(UBYTE r, UBYTE g, UBYTE b, UBYTE a)
+{
+	PIELIGHT c;
+
+	c.byte.r = r;
+	c.byte.g = g;
+	c.byte.b = b;
+	c.byte.a = a;
+
+	return c;
+}
 #endif
