@@ -21,7 +21,7 @@
  *  Render routines for 3D coloured and shaded transparency rendering.
  */
 
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 #include <string.h>
 #include <SDL_video.h>
 

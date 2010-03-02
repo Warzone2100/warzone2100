@@ -8,7 +8,6 @@ noinst_HEADERS = \
 	screen.h
 
 libivis_opengl_a_SOURCES = \
-	GLee.c \
 	ivi.c \
 	pieblitfunc.c \
 	piedraw.c \
@@ -21,6 +20,10 @@ libivis_opengl_a_SOURCES = \
 	screen.c \
 	tex.c \
 	textdraw.c
+
+if !SYSTEM_GLEE
+libivis_opengl_a_SOURCES += GLee.c
+endif
 
 libivis_opengl_a_LIBADD = $(top_builddir)/lib/ivis_common/libivis_common.a \
 	$(top_builddir)/lib/framework/libframework.a

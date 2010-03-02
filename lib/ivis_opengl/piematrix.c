@@ -21,7 +21,7 @@
  *  Matrix manipulation functions.
  */
 
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 #include "lib/framework/frame.h"
 
 #include "lib/framework/fixedpoint.h"

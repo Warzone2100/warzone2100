@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 #include "lib/framework/frame.h"
 #include <stdlib.h>
 #include <string.h>

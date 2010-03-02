@@ -23,7 +23,7 @@
  * This is where we do texture atlas generation.
  */
 
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 #include "lib/framework/frame.h"
 
 
