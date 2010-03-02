@@ -174,9 +174,9 @@ static void registry_set_key( const char *k, const char *v )
 //
 static bool registry_load( const char *filename )
 {
-	char buffer[MAXLINESIZE];
+	char buffer[MAXLINESIZE + 1];
 	char *bptr = NULL, *bufstart = NULL;
-	char key[32];
+	char key[MAXLINESIZE];
 	int l; // sscanf expects an int to receive %n, not an unsigned int
 	UDWORD filesize;
 
@@ -201,7 +201,8 @@ static bool registry_load( const char *filename )
 		int count = 0;
 
 		/* Put a line into buffer */
-		while (*bptr != '\0' && *bptr != '\n' && count < MAXLINESIZE) {
+		while (*bptr != '\0' && *bptr != '\n' && count < MAXLINESIZE)
+		{
 			buffer[count] = *bptr;
 			bptr++;
 			count++;
@@ -247,9 +248,9 @@ static bool registry_save( const char *filename )
 
 			snprintf(linebuf, sizeof(linebuf), "%s=%s\n", j->key, j->value);
 			assert(strlen(linebuf) > 0 && strlen(linebuf) < MAXLINESIZE);
+			assert(count + strlen(linebuf) < MAXLINESIZE * REGISTRY_HASH_SIZE);
 			memcpy(buffer + count, linebuf, strlen(linebuf));
 			count += strlen(linebuf);
-			assert(count < MAXLINESIZE * REGISTRY_HASH_SIZE);
 		}
 	}
 
