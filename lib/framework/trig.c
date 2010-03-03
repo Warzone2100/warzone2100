@@ -528,6 +528,26 @@ int32_t iCos(uint16_t a)
 	return sign[q]*(trigSinTable[rvr] + !!rvr);  // +!!rvr = add 1, unless rvr == 0.
 }
 
+int32_t iSinR(uint16_t a, int32_t r)
+{
+	return ((int64_t)r*iSin(a))/65536;
+}
+
+int32_t iCosR(uint16_t a, int32_t r)
+{
+	return ((int64_t)r*iCos(a))/65536;
+}
+
+int32_t iSinSR(int32_t a, int32_t s, int32_t r)
+{
+	return ((int64_t)r*iSin(((int64_t)a << 16)/s))/65536;
+}
+
+int32_t iCosSR(int32_t a, int32_t s, int32_t r)
+{
+	return ((int64_t)r*iCos(((int64_t)a << 16)/s))/65536;
+}
+
 uint16_t iAtan2(int32_t s, int32_t c)
 {
 	uint16_t d = 0;         // Dummy initialisation.

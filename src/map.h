@@ -438,7 +438,7 @@ extern bool fireOnLocation(unsigned int x, unsigned int y);
  * Transitive sensor check for tile. Has to be here rather than
  * visibility.h due to header include order issues. 
  */
-static inline bool hasSensorOnTile(MAPTILE *psTile, int player)
+static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
 {
 	return ((player == selectedPlayer && godMode) || (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)));
 }

@@ -364,9 +364,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 				}
 			}
 
-			predict.x = iSin(((DROID *)psTarget)->sMove.moveDir) * ((DROID *)psTarget)->sMove.speed * flightTime / (GAME_TICKS_PER_SEC*UINT16_MAX);
+			predict.x = iSinR(((DROID *)psTarget)->sMove.moveDir, ((DROID *)psTarget)->sMove.speed*flightTime / GAME_TICKS_PER_SEC);
 			predict.x += psTarget->pos.x;
-			predict.y = iCos(((DROID *)psTarget)->sMove.moveDir) * ((DROID *)psTarget)->sMove.speed * flightTime / (GAME_TICKS_PER_SEC*UINT16_MAX);
+			predict.y = iCosR(((DROID *)psTarget)->sMove.moveDir, ((DROID *)psTarget)->sMove.speed*flightTime / GAME_TICKS_PER_SEC);
 			predict.y += psTarget->pos.y;
 
 			// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile

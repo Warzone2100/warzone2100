@@ -319,11 +319,7 @@ static inline int fpathDistToTile(int tileX, int tileY, int pointX, int pointY)
 	int xdiff = world_coord(tileX) - pointX;
 	int ydiff = world_coord(tileY) - pointY;
 
-	if (xdiff == 0 && ydiff == 0)
-	{
-		return 0;
-	}
-	return trigIntSqrt(xdiff * xdiff + ydiff * ydiff);
+	return iHypot(xdiff, ydiff);
 }
 
 

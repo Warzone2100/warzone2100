@@ -958,9 +958,6 @@ BOOL init3DView(void)
 
 	initDemoCamera();
 
-	/* Set up the sine table for the bullets */
-	initBulletTable();
-
 	/* No initial rotations */
 	imdRot2.x = 0;
 	imdRot.y = 0;
@@ -3864,15 +3861,10 @@ UDWORD	getRubbleTileNum( void )
 	return(rubbleTile);
 }
 
-/// Variable used by structureEffectsPlayer
-static UDWORD	lastSpinVal;
-
 /// Draw the spinning particles for power stations and re-arm pads for the specified player
 static void structureEffectsPlayer( UDWORD player )
 {
-	SDWORD	val;
 	SDWORD	radius;
-	UDWORD	angle;
 	STRUCTURE	*psStructure;
 	SDWORD	xDif,yDif;
 	Vector3i	pos;
@@ -3910,28 +3902,20 @@ static void structureEffectsPlayer( UDWORD player )
 				case 1:
 				case 2:
 					gameDiv = 1440;
-					val = 4;
 					break;
 				case 3:
 				case 4:
 				default:
-					gameDiv = 1080;
-					val = 3;	  // really fast!!!
+					gameDiv = 1080;   // really fast!!!
 					break;
 				}
-
-				angle = gameTime2%gameDiv;
-				val = angle/val;
 
 				/* New addition - it shows how many are connected... */
 				for(i=0 ;i<numConnected; i++)
 				{
 					radius = 32 - (i*2);	// around the spire
-					xDif = radius * (SIN(DEG(val)));
-					yDif = radius * (COS(DEG(val)));
-
-					xDif = xDif/4096;	 // cos it's fixed point
-					yDif = yDif/4096;
+					xDif = iSinSR(graphicsTime, gameDiv, radius);
+					yDif = iCosSR(graphicsTime, gameDiv, radius);
 
 					pos.x = psStructure->pos.x + xDif;
 					pos.z = psStructure->pos.y + yDif;
@@ -3965,12 +3949,9 @@ static void structureEffectsPlayer( UDWORD player )
 
 						}
 						/* Then it's repairing...? */
-						val = lastSpinVal = getModularScaledGraphicsTime(720, 360);  // grab an angle - 4 seconds cyclic
 						radius = psStructure->sDisplay.imd->radius;
-						xDif = radius * (SIN(DEG(val)));
-						yDif = radius * (COS(DEG(val)));
-						xDif = xDif/4096;	 // cos it's fixed point
-						yDif = yDif/4096;
+						xDif = iSinSR(graphicsTime, 720, radius);
+						xDif = iCosSR(graphicsTime, 720, radius);
 						pos.x = psStructure->pos.x + xDif;
 						pos.z = psStructure->pos.y + yDif;
 						pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay.imd->max.y;
@@ -4038,125 +4019,72 @@ STRUCTURE	*psStruct;
 	}//end if we want to display...
 }
 
+static void showEffectCircle(Position centre, int32_t radius, uint32_t auxVar, EFFECT_GROUP group, EFFECT_TYPE type)
+{
+	int32_t circumference = radius * 2 * 355/113 / TILE_UNITS;  // 2πr in tiles.
+	int32_t i;
+	for (i = 0; i < circumference; ++i)
+	{
+		Vector3i pos;
+		pos.x = centre.x - iSinSR(i, circumference, radius);
+		pos.z = centre.y - iCosSR(i, circumference, radius);  // [sic] y -> z
+
+		// Check if it's actually on map
+		if (worldOnMap(pos.x, pos.z))
+		{
+			pos.y = map_Height(pos.x, pos.z) + 16;
+			effectGiveAuxVar(auxVar);
+			addEffect(&pos, group, type, false, NULL, 0);
+		}
+	}
+}
+
 // Shows the weapon (long) range of the object in question.
 // Note, it only does it for the first weapon slot!
 static void showWeaponRange(BASE_OBJECT *psObj)
 {
-	UDWORD	i;
-	DROID	*psDroid;
-	STRUCTURE	*psStruct;
-	WEAPON_STATS	*psStats;
-	SDWORD	radius;
-	SDWORD	xDif,yDif;
-	UDWORD	weaponRange;
-	Vector3i pos;
+	uint32_t weaponRange;
 
 	if (psObj->type == OBJ_DROID)
 	{
-		psDroid = (DROID*)psObj;
-		psStats = asWeaponStats + psDroid->asWeaps[0].nStat;//weapon_slot
+		DROID *psDroid = (DROID*)psObj;
+		WEAPON_STATS *psStats = asWeaponStats + psDroid->asWeaps[0].nStat;//weapon_slot
 		weaponRange = psStats->longRange;
 	}
 	else
 	{
-		psStruct = (STRUCTURE*)psObj;
+		STRUCTURE *psStruct = (STRUCTURE*)psObj;
 		if(psStruct->pStructureType->numWeaps == 0) return;
 		weaponRange = psStruct->pStructureType->psWeapStat[0]->longRange;
 	}
 
-	if (!weaponRange)
-	{
-		return;		//don't bother if no range.
-	}
-
-	for (i=0; i<360; i+=23)
-	{
-		radius = weaponRange;
-		xDif = radius * (SIN(DEG(i)));
-		yDif = radius * (COS(DEG(i)));
-
-		xDif = xDif/4096;	 // 'cause it's fixed point
-		yDif = yDif/4096;
-		pos.x = psObj->pos.x - xDif;
-		pos.z = psObj->pos.y - yDif;
-
-		// Check if it's actually on map 
-		if (worldOnMap(pos.x, pos.z))
-		{
-			pos.y = map_Height(pos.x, pos.z) + 16;
-			effectGiveAuxVar(40);
-			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
-		}
-	}
+	showEffectCircle(psObj->pos, weaponRange, 40, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
 }
-static void	showSensorRange2(BASE_OBJECT *psObj)
+
+static void showSensorRange2(BASE_OBJECT *psObj)
 {
-	SDWORD	radius;
-	SDWORD	xDif,yDif;
-	UDWORD	sensorRange;
-	Vector3i pos;
-	UDWORD	i;
-	DROID	*psDroid;
-	STRUCTURE	*psStruct;
+	uint32_t sensorRange;
 
-	for(i=0; i<360; i+=15)
+	if(psObj->type == OBJ_DROID)
 	{
-		if(psObj->type == OBJ_DROID)
-		{
-			psDroid = (DROID*)psObj;
-			sensorRange = asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].range;
-		}
-		else
-		{
-			psStruct = (STRUCTURE*)psObj;
-			sensorRange = structSensorRange(psStruct);
-		}
-		radius = sensorRange;
-		xDif = radius * (SIN(DEG(i)));
-		yDif = radius * (COS(DEG(i)));
-
-		xDif = xDif/4096;	 // cos it's fixed point
-		yDif = yDif/4096;
-		pos.x = psObj->pos.x - xDif;
-		pos.z = psObj->pos.y - yDif;
-
-		// Check if it's actually on map 
-		if (worldOnMap(pos.x, pos.z))
-		{
-			pos.y = map_Height(pos.x, pos.z) + 16;
-			effectGiveAuxVar(80);
-			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
-		}
+		DROID *psDroid = (DROID*)psObj;
+		sensorRange = asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].range;
+	}
+	else
+	{
+		STRUCTURE *psStruct = (STRUCTURE*)psObj;
+		sensorRange = structSensorRange(psStruct);
 	}
 
+	showEffectCircle(psObj->pos, sensorRange, 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER);
 	showWeaponRange(psObj);
 }
 
 /// Draw a circle on the map (to show the range of something)
-static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
+static void drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 {
-	SDWORD	xDif,yDif;
-	Vector3i	pos;
-	UDWORD	i;
-
-	for(i=0; i<360; i++)
-	{
-		xDif = radius * (SIN(DEG(i)));
-		yDif = radius * (COS(DEG(i)));
-
-		xDif = xDif/4096;	 // cos it's fixed point
-		yDif = yDif/4096;
-		pos.x = centerX - xDif;
-		pos.z = centerY - yDif;
-
-		// don't draw off map
-		if (worldOnMap(pos.x, pos.z))
-		{
-			pos.y = map_Height(pos.x, pos.z) + 16;
-			effectGiveAuxVar(80);
-			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
-		}
-	}
+	Position pos = {centerX, centerY, 0};  // .z ignored.
+	showEffectCircle(pos, radius, 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
 }
 
 /** Turn on drawing some effects at certain position to visualize the radius.

@@ -192,7 +192,7 @@ const float WAYPOINT_2NDNEXT_SUCKINESS = 0.5f;
 /*             VTOL model defines                                                 */
 
 // The magnitude of direction change required for a vtol to spin on the spot
-#define VTOL_SPIN_ANGLE                 DEG(360)
+#define VTOL_SPIN_ANGLE                 DEG(180)
 // The speed at which vtols spin (ignored now!)
 #define VTOL_SPIN_SPEED			100
 // The speed at which vtols turn while going forward (ignored now!)
@@ -464,7 +464,7 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 	CHECK_DROID(psDroid);
 
 	shuffleDir = iAtan2(sx, sy);
-	shuffleMag = iSqrt(sx*sx + sy*sy);
+	shuffleMag = iHypot(sx, sy);
 
 	if (shuffleMag == 0)
 	{
@@ -1882,14 +1882,13 @@ static void moveCombineNormalAndPerpSpeeds(DROID *psDroid, float fNormalSpeed, f
 
 
 // Calculate the current speed in the droids normal direction
-static float moveCalcNormalSpeed( DROID *psDroid, float fSpeed, float iDroidDir,
-		SDWORD iAccel, SDWORD iDecel )
+static float moveCalcNormalSpeed(DROID *psDroid, float fSpeed, uint16_t iDroidDir, SDWORD iAccel, SDWORD iDecel)
 {
-	float		adiff;
+	uint16_t        adiff;
 	float		normalSpeed;
 
-	adiff = fabsf(iDroidDir - UNDEG(psDroid->sMove.moveDir));
-	normalSpeed = psDroid->sMove.speed * trigCos(adiff);
+	adiff = (uint16_t)(iDroidDir - psDroid->sMove.moveDir);  // Cast wrapping intended.
+	normalSpeed = iCosR(adiff, psDroid->sMove.speed);
 
 	if (normalSpeed < fSpeed)
 	{
@@ -1918,10 +1917,10 @@ static void moveGetDroidPosDiffs( DROID *psDroid, float *pDX, float *pDY )
 {
 	float	move;
 
-	move = (float)psDroid->sMove.speed * (float)baseSpeed;
+	move = psDroid->sMove.speed * baseSpeed;
 
-	*pDX = move * trigSin(UNDEG(psDroid->sMove.moveDir));
-	*pDY = move * trigCos(UNDEG(psDroid->sMove.moveDir));
+	*pDX = iSinR(psDroid->sMove.moveDir, move);
+	*pDY = iCosR(psDroid->sMove.moveDir, move);
 }
 
 // see if the droid is close to the final way point
@@ -2052,7 +2051,7 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 
 	moveUpdateDroidDirection(psDroid, &speed, direction, TRACKED_SPIN_ANGLE, spinSpeed, turnSpeed, &iDroidDir, &fSpeed);
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, UNDEG(iDroidDir), TRACKED_ACCEL, TRACKED_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, iDroidDir, TRACKED_ACCEL, TRACKED_DECEL);
 	fPerpSpeed   = moveCalcPerpSpeed(psDroid, iDroidDir, skidDecel);
 
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
@@ -2127,7 +2126,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 
 	moveUpdateDroidDirection(psDroid, &speed, direction, PERSON_SPIN_ANGLE, PERSON_SPIN_SPEED, PERSON_TURN_SPEED, &iDroidDir, &fSpeed);
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, UNDEG(iDroidDir), PERSON_ACCEL, PERSON_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, iDroidDir, PERSON_ACCEL, PERSON_DECEL);
 
 	/* people don't skid at the moment so set zero perpendicular speed */
 	fPerpSpeed = 0;
@@ -2263,7 +2262,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 		moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, iSpinSpeed, iTurnSpeed, &iDroidDir, &fSpeed);
 	}
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, UNDEG(iDroidDir), VTOL_ACCEL, VTOL_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, iDroidDir, VTOL_ACCEL, VTOL_DECEL);
 	fPerpSpeed   = moveCalcPerpSpeed(psDroid, iDroidDir, VTOL_SKID_DECEL);
 
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
@@ -2348,7 +2347,7 @@ static void moveUpdateJumpCyborgModel(DROID *psDroid, SDWORD speed, uint16_t dir
 
 	moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, psDroid->baseSpeed, psDroid->baseSpeed/3, &iDroidDir, &fSpeed);
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, UNDEG(iDroidDir), VTOL_ACCEL, VTOL_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, iDroidDir, VTOL_ACCEL, VTOL_DECEL);
 	fPerpSpeed   = 0;
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 
@@ -2415,7 +2414,7 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 	iDx = psDroid->sMove.DestinationX - psDroid->pos.x;
 	iDy = psDroid->sMove.DestinationY - psDroid->pos.y;
 	iDz = psDroid->pos.z - iMapZ;
-	iDist = trigIntSqrt(iDx * iDx + iDy * iDy);
+	iDist = iHypot(iDx, iDy);
 
 	/* set jumping cyborg walking short distances */
 	if ( (psPropStats->propulsionType != PROPULSION_TYPE_JUMP) ||

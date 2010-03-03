@@ -33,25 +33,6 @@
 #include "hci.h"
 #include "display.h"
 
-#define AMPLITUDE_HEIGHT        100
-#define SIZE_SINE_TABLE         100
-#define deg (M_PI / SIZE_SINE_TABLE)
-
-/* The arc over which bullets fly */
-static UBYTE sineHeightTable[SIZE_SINE_TABLE];
-
-void initBulletTable( void )
-{
-	UDWORD i;
-	UBYTE height;
-
-	for (i = 0; i < SIZE_SINE_TABLE; i++)
-	{
-		height = AMPLITUDE_HEIGHT * sin(i*deg);
-		sineHeightTable[i] = height;
-	}
-}
-
 uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1)
 {
 	return iAtan2(x1 - x0, y1 - y0);
@@ -122,28 +103,6 @@ int inQuad(const Vector2i *pt, const QUAD *quad)
 	}
 
 	return c;
-}
-
-UDWORD	adjustDirection(SDWORD present, SDWORD difference)
-{
-SDWORD	sum;
-
-	sum = present+difference;
-	if(sum>=0 && sum<=360)
-	{
-		return(UDWORD)(sum);
-	}
-
-	if (sum<0)
-	{
-		return(UDWORD)(360+sum);
-	}
-
-	if (sum>360)
-	{
-		return(UDWORD)(sum-360);
-	}
-	return 0;
 }
 
 /**

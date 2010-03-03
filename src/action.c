@@ -54,9 +54,8 @@
 #define VTOL_ATTACK_TARDIST		400
 #define VTOL_ATTACK_RETURNDIST	700
 
-// turret rotation limits
-#define VTOL_TURRET_RLIMIT		315
-#define VTOL_TURRET_LLIMIT		45
+// turret rotation limit
+#define VTOL_TURRET_LIMIT               DEG(45)
 
 /** Time to pause before a droid blows up. */
 #define  ACTION_DESTRUCT_TIME	2000
@@ -297,111 +296,53 @@ BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psSt
 // Realign turret
 void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 {
-	UDWORD				rotation;
-	UWORD				nearest = 0;
-	UWORD				tRot;
-	UWORD				tPitch;
+	int32_t         rotation;
+	uint16_t        nearest = 0;
+	uint16_t        tRot;
+	uint16_t        tPitch;
 
 	//default turret rotation 0
 	tRot = 0;
 
 	//get the maximum rotation this frame
-	rotation = timeAdjustedIncrement(ACTION_TURRET_ROTATION_RATE, true);
-	if (rotation == 0)
-	{
-		rotation = 1;
-	}
+	rotation = gameTimeAdjustedIncrement(DEG(ACTION_TURRET_ROTATION_RATE));
 
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		tRot = UNDEG(((DROID *)psObj)->asWeaps[weapon_slot].rot.direction);
-		tPitch = UNDEG(((DROID *)psObj)->asWeaps[weapon_slot].rot.pitch);
+		tRot = ((DROID *)psObj)->asWeaps[weapon_slot].rot.direction;
+		tPitch = ((DROID *)psObj)->asWeaps[weapon_slot].rot.pitch;
 		break;
 	case OBJ_STRUCTURE:
-		tRot = UNDEG(((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.direction);
-		tPitch = UNDEG(((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.pitch);
+		tRot = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.direction;
+		tPitch = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.pitch;
 
 		// now find the nearest 90 degree angle
-		nearest = (UWORD)(((tRot + 45) / 90) * 90);
-		tRot = (UWORD)(((tRot + 360) - nearest) % 360);
+		nearest = (uint16_t)((tRot + DEG(45)) / DEG(90) * DEG(90));  // Cast wrapping indended.
 		break;
 	default:
 		ASSERT(!"invalid object type", "invalid object type");
 		return;
-		break;
 	}
 
-	if (rotation > 180)//crop to 180 degrees, no point in turning more than all the way round
-	{
-		rotation = 180;
-	}
-	if (tRot < 180)// +ve angle 0 - 179 degrees
-	{
-		if (tRot > rotation)
-		{
-			tRot = (UWORD)(tRot - rotation);
-		}
-		else
-		{
-			tRot = 0;
-		}
-	}
-	else //angle greater than 180 rotate in opposite direction
-	{
-		if (tRot < (360 - rotation))
-		{
-			tRot = (UWORD)(tRot + rotation);
-		}
-		else
-		{
-			tRot = 0;
-		}
-	}
-	tRot %= 360;
+	tRot += MIN(MAX((int16_t)(nearest - tRot), -rotation), rotation);  // Cast and addition wrapping intended.
 
 	// align the turret pitch
-	if (tPitch < 180)// +ve angle 0 - 179 degrees
-	{
-		if (tPitch > rotation/2)
-		{
-			tPitch = (UWORD)(tPitch - rotation/2);
-		}
-		else
-		{
-			tPitch = 0;
-		}
-	}
-	else // -ve angle rotate in opposite direction
-	{
-		if (tPitch < (360 -(SDWORD)rotation/2))
-		{
-			tPitch = (UWORD)(tPitch + rotation/2);
-		}
-		else
-		{
-			tPitch = 0;
-		}
-	}
-	tPitch %= 360;
+	tPitch += MIN(MAX((int16_t)(0 - tPitch), -rotation/2), rotation/2);  // Cast and addition wrapping intended.
 
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		((DROID *)psObj)->asWeaps[weapon_slot].rot.direction = DEG(tRot);
-		((DROID *)psObj)->asWeaps[weapon_slot].rot.pitch = DEG(tPitch);
+		((DROID *)psObj)->asWeaps[weapon_slot].rot.direction = tRot;
+		((DROID *)psObj)->asWeaps[weapon_slot].rot.pitch = tPitch;
 		break;
 	case OBJ_STRUCTURE:
-		// now adjust back to the nearest 90 degree angle
-		tRot = (UWORD)((tRot + nearest) % 360);
-
-		((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.direction = DEG(tRot);
-		((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.pitch = DEG(tPitch);
+		((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.direction = tRot;
+		((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.pitch = tPitch;
 		break;
 	default:
 		ASSERT(!"invalid object type", "invalid object type");
 		return;
-		break;
 	}
 }
 
@@ -409,15 +350,16 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon)
 {
 	WEAPON_STATS *psWeapStats = asWeaponStats + psWeapon->nStat;
-	SWORD  tRotation, tPitch, rotRate, pitchRate;
-	SDWORD  targetRotation,targetPitch;
-	SDWORD  pitchError;
-	SDWORD	rotationError, dx, dy, dz;
-	BOOL	onTarget = false;
-	float	fR;
-	SDWORD	pitchLowerLimit, pitchUpperLimit;
-	bool	bInvert = false;
-	bool	bRepair = false;
+	uint16_t tRotation, tPitch;
+	int32_t  rotRate, pitchRate;
+	uint16_t targetRotation, targetPitch;
+	int32_t  pitchError;
+	int32_t  rotationError, dx, dy, dz;
+	bool     onTarget;
+	int32_t  dxy;
+	int32_t  pitchLowerLimit, pitchUpperLimit;
+	bool     bInvert;
+	bool     bRepair;
 
 	if (!psTarget)
 	{
@@ -425,38 +367,32 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	}
 
 	/* check whether turret position inverted vertically on body */
-	if (psAttacker->type == OBJ_DROID && !cyborgDroid((DROID *)psAttacker) && isVtolDroid((DROID *)psAttacker))
-	{
-		bInvert = true;
-	}
+	bInvert = psAttacker->type == OBJ_DROID && !cyborgDroid((DROID *)psAttacker) && isVtolDroid((DROID *)psAttacker);
 
-	if (psAttacker->type == OBJ_DROID && ((DROID *)psAttacker)->droidType == DROID_REPAIR)
-	{
-		bRepair = true;
-	}
+	bRepair = psAttacker->type == OBJ_DROID && ((DROID *)psAttacker)->droidType == DROID_REPAIR;
 
 	// these are constants now and can be set up at the start of the function
-	rotRate = ACTION_TURRET_ROTATION_RATE * 4;
-	pitchRate = ACTION_TURRET_ROTATION_RATE * 2;
+	rotRate = DEG(ACTION_TURRET_ROTATION_RATE) * 4;
+	pitchRate = DEG(ACTION_TURRET_ROTATION_RATE) * 2;
 
 	// extra heavy weapons on some structures need to rotate and pitch more slowly
 	if (psWeapStats->weight > HEAVY_WEAPON_WEIGHT && !bRepair)
 	{
-		UDWORD excess = 100 * (psWeapStats->weight - HEAVY_WEAPON_WEIGHT) / psWeapStats->weight;
+		UDWORD excess = DEG(100) * (psWeapStats->weight - HEAVY_WEAPON_WEIGHT) / psWeapStats->weight;
 
-		rotRate = ACTION_TURRET_ROTATION_RATE * 2 - excess;
-		pitchRate = (SWORD) (rotRate / 2);
+		rotRate = DEG(ACTION_TURRET_ROTATION_RATE) * 2 - excess;
+		pitchRate = rotRate / 2;
 	}
 
-	tRotation = UNDEG(psWeapon->rot.direction);
-	tPitch = UNDEG(psWeapon->rot.pitch);
+	tRotation = psWeapon->rot.direction;
+	tPitch = psWeapon->rot.pitch;
 
 	//set the pitch limits based on the weapon stats of the attacker
 	pitchLowerLimit = pitchUpperLimit = 0;
 	if (psAttacker->type == OBJ_STRUCTURE)
 	{
-		pitchLowerLimit = psWeapStats->minElevation;
-		pitchUpperLimit = psWeapStats->maxElevation;
+		pitchLowerLimit = (int16_t)DEG(psWeapStats->minElevation);
+		pitchUpperLimit = (int16_t)DEG(psWeapStats->maxElevation);
 	}
 	else if (psAttacker->type == OBJ_DROID)
 	{
@@ -466,105 +402,43 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 			|| psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_CYBORG
 			|| psDroid->droidType == DROID_CYBORG_SUPER)
 		{
-			pitchLowerLimit = psWeapStats->minElevation;
-			pitchUpperLimit = psWeapStats->maxElevation;
+			pitchLowerLimit = (int16_t)DEG(psWeapStats->minElevation);
+			pitchUpperLimit = (int16_t)DEG(psWeapStats->maxElevation);
 		}
 		else if ( psDroid->droidType == DROID_REPAIR )
 		{
-			pitchLowerLimit = REPAIR_PITCH_LOWER;
-			pitchUpperLimit = REPAIR_PITCH_UPPER;
+			pitchLowerLimit = (int16_t)DEG(REPAIR_PITCH_LOWER);
+			pitchUpperLimit = (int16_t)DEG(REPAIR_PITCH_UPPER);
 		}
 	}
 
 	//get the maximum rotation this frame
-	rotRate = timeAdjustedIncrement(rotRate, true);
-	if (rotRate > 180)//crop to 180 degrees, no point in turning more than all the way round
-	{
-		rotRate = 180;
-	}
-	if (rotRate <= 0)
-	{
-		rotRate = 1;
-	}
-	pitchRate = timeAdjustedIncrement(pitchRate, true);
-	if (pitchRate > 180)//crop to 180 degrees, no point in turning more than all the way round
-	{
-		pitchRate = 180;
-	}
-	if (pitchRate <= 0)
-	{
-		pitchRate = 1;
-	}
+	rotRate = gameTimeAdjustedIncrement(rotRate);
+	rotRate = MAX(rotRate, DEG(1));
+	pitchRate = gameTimeAdjustedIncrement(pitchRate);
+	pitchRate = MAX(pitchRate, DEG(1));
 
 /*	if ( (psAttacker->type == OBJ_STRUCTURE) &&
 		 (((STRUCTURE *)psAttacker)->pStructureType->type == REF_DEFENSE) &&
 		 (asWeaponStats[((STRUCTURE *)psAttacker)->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR) )
 	{
-		rotRate = 180;
-		pitchRate = 180;
+		rotRate = DEG(180);
+		pitchRate = DEG(180);
 	}*/
 
 	//and point the turret at target
-	targetRotation = UNDEG(calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y));
-
-	rotationError = targetRotation - (tRotation + UNDEG(psAttacker->rot.direction));
+	targetRotation = calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y);
 
 	//restrict rotationerror to =/- 180 degrees
-	while (rotationError > 180)
-	{
-		rotationError -= 360;
-	}
+	rotationError = (int16_t)(targetRotation - (tRotation + psAttacker->rot.direction));  // Cast wrapping intentional.
 
-	while (rotationError < -180)
-	{
-		rotationError += 360;
-	}
-
-	if  (-rotationError > (SDWORD)rotRate)
-	{
-		// subtract rotation
-		if (tRotation < rotRate)
-		{
-			tRotation = (SWORD)(tRotation + 360 - rotRate);
-		}
-		else
-		{
-			tRotation = (SWORD)(tRotation - rotRate);
-		}
-	}
-	else if  (rotationError > (SDWORD)rotRate)
-	{
-		// add rotation
-		tRotation = (SWORD)(tRotation + rotRate);
-		tRotation %= 360;
-	}
-	else //roughly there so lock on and fire
-	{
-		if (UNDEG(psAttacker->rot.direction) > targetRotation)
-		{
-			tRotation = (SWORD)(targetRotation + 360 - UNDEG(psAttacker->rot.direction));
-		}
-		else
-		{
-			tRotation = (SWORD)(targetRotation - UNDEG(psAttacker->rot.direction));
-		}
-		onTarget = true;
-	}
-	tRotation %= 360;
-
-	if ((psAttacker->type == OBJ_DROID) &&
-		isVtolDroid((DROID *)psAttacker))
+	tRotation += MIN(MAX(rotationError, -rotRate), rotRate);  // Addition wrapping intentional.
+	if (psAttacker->type == OBJ_DROID && isVtolDroid((DROID *)psAttacker))
 	{
 		// limit the rotation for vtols
-		if ((tRotation <= 180) && (tRotation > VTOL_TURRET_LLIMIT))
-		{
-			tRotation = VTOL_TURRET_LLIMIT;
-		}
-		else if ((tRotation > 180) && (tRotation < VTOL_TURRET_RLIMIT))
-		{
-			tRotation = VTOL_TURRET_RLIMIT;
-		}
+		tRotation = (uint16_t)MIN(MAX((int16_t)tRotation, -VTOL_TURRET_LIMIT), VTOL_TURRET_LIMIT);  // Cast wrapping intentional.
 	}
+	onTarget = targetRotation == (uint16_t)(tRotation + psAttacker->rot.direction);  // Cast wrapping intentional.
 
 	/* set muzzle pitch if direct fire */
 	if (!bRepair && (proj_Direct(psWeapStats) || ((psAttacker->type == OBJ_DROID)
@@ -576,67 +450,26 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 		dz = psTarget->pos.z - psAttacker->pos.z;
 
 		/* get target distance */
-		fR = trigIntSqrt( dx*dx + dy*dy );
+		dxy = iHypot(dx, dy);
 
-		targetPitch = (SDWORD)( RAD_TO_DEG(atan2(dz, fR)));
-		if (tPitch > 180)
-		{
-			tPitch -=360;
-		}
+		targetPitch = iAtan2(dz, dxy);
 
 		/* invert calculations for bottom-mounted weapons (i.e. for vtols) */
-		if ( bInvert )
-		{
-			tPitch = (SWORD)(-tPitch);
-			targetPitch = -targetPitch;
-		}
+		//if (bInvert) { why do anything here? }
 
-		pitchError = targetPitch - tPitch;
+		pitchError = (int16_t)(targetPitch - tPitch);  // Cast wrapping intended.
 
-		if (pitchError < -pitchRate)
-		{
-			// move down
-			tPitch = (SWORD)(tPitch - pitchRate);
-			onTarget = false;
-		}
-		else if (pitchError > pitchRate)
-		{
-			// add rotation
-			tPitch = (SWORD)(tPitch + pitchRate);
-			onTarget = false;
-		}
-		else //roughly there so lock on and fire
-		{
-			tPitch = (SWORD)targetPitch;
-		}
+		tPitch += MIN(MAX(pitchError, -pitchRate), pitchRate);  // Addition wrapping intended.
+		tPitch = (uint16_t)MIN(MAX((int16_t)tPitch, pitchLowerLimit), pitchUpperLimit);  // Cast wrapping intended.
+		onTarget = onTarget && targetPitch == tPitch;
 
 		/* re-invert result for bottom-mounted weapons (i.e. for vtols) */
-		if ( bInvert )
-		{
-			tPitch = (SWORD)-tPitch;
-		}
+		//if (bInvert) { why do anything here? }
 
-		if (tPitch < pitchLowerLimit)
-		{
-			// move down
-			tPitch = (SWORD)pitchLowerLimit;
-			onTarget = false;
-		}
-		else if (tPitch > pitchUpperLimit)
-		{
-			// add rotation
-			tPitch = (SWORD)pitchUpperLimit;
-			onTarget = false;
-		}
-
-		if (tPitch < 0)
-		{
-			tPitch += 360;
-		}
 	}
 
-	psWeapon->rot.direction = DEG(tRotation);
-	psWeapon->rot.pitch = DEG(tPitch);
+	psWeapon->rot.direction = tRotation;
+	psWeapon->rot.pitch = tPitch;
 
 	return onTarget;
 }
@@ -700,7 +533,6 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 
 static void actionAddVtolAttackRun( DROID *psDroid )
 {
-	double      fA;
 	SDWORD		deltaX, deltaY, iA, iX, iY;
 	BASE_OBJECT	*psTarget;
 #if 0
@@ -727,8 +559,7 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 	deltaY = psTarget->pos.y - psDroid->pos.y;
 
 	/* get magnitude of normal vector (Pythagorean theorem) */
-	fA = trigIntSqrt( deltaX*deltaX + deltaY*deltaY );
-	iA = fA;
+	iA = iHypot(deltaX, deltaY);
 
 #if 0
 	/* get left perpendicular to normal vector:
@@ -850,7 +681,7 @@ static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, S
 	// get the vector from the target to the object
 	xdiff = (SDWORD)psObj->pos.x - (SDWORD)psTarget->pos.x;
 	ydiff = (SDWORD)psObj->pos.y - (SDWORD)psTarget->pos.y;
-	len = (SDWORD)sqrtf(xdiff*xdiff + ydiff*ydiff);
+	len = iHypot(xdiff, ydiff);
 
 	if (len == 0)
 	{

@@ -44,13 +44,17 @@ extern bool trigInitialise(void);
 extern void trigShutDown(void);
 
 // Deprecated trig functions.
-extern float trigSin(int angle) WZ_DECL_CONST;     ///< Use iSin(angle)/INT16_MAX instead.
-extern float trigCos(int angle) WZ_DECL_CONST;     ///< Use iCos(angle)/INT16_MAX instead.
+extern float trigSin(int angle) WZ_DECL_CONST;     ///< Use iSin(angle)/65536 instead.
+extern float trigCos(int angle) WZ_DECL_CONST;     ///< Use iCos(angle)/65536 instead.
 extern float trigIntSqrt(unsigned int val);        ///< Use iSqrt(val) instead.
 
 // Deterministic trig functions.
 int32_t iSin(uint16_t a);               ///< Returns sin(a*2π >> 16) << 16, rounded to nearest integer. Used as the x component in this game.
 int32_t iCos(uint16_t a);               ///< Returns cos(a*2π >> 16) << 16, rounded to nearest integer. Used as the y component in this game.
+int32_t iSinR(uint16_t a, int32_t r);   ///< Returns r*sin(a*2π >> 16), with up to 16 bits precision.
+int32_t iCosR(uint16_t a, int32_t r);   ///< Returns r*cos(a*2π >> 16), with up to 16 bits precision.
+int32_t iSinSR(int32_t a, int32_t s, int32_t r);  ///< Returns r*sin(a*2π/s), with up to 16 bits precision.
+int32_t iCosSR(int32_t a, int32_t s, int32_t r);  ///< Returns r*cos(a*2π/s), with up to 16 bits precision.
 uint16_t iAtan2(int32_t s, int32_t c);  ///< Returns atan2(s, c)/2π << 16, with a small ±1.5 platform-independent error. Used as atan2(x, y) in this game.
 int32_t iSqrt(uint32_t n);              ///< Returns √(n), rounded down.
 int32_t i64Sqrt(uint64_t n);            ///< Returns √(n), rounded down.

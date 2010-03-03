@@ -52,9 +52,9 @@ static std::vector<WavecastTile> generateWavecastTable(unsigned radius)
 
 	std::vector<RationalAngle> unsortedAngles;
 
-	for (int diamond = 1; diamond*TILE_UNITS < radius*2; ++diamond)  // Factor is a bit more than needed to surround the circle with diamonds.
+	for (unsigned diamond = 1; diamond*TILE_UNITS < radius*2; ++diamond)  // Factor is a bit more than needed to surround the circle with diamonds.
 	{
-		for (int quadrant = 0; quadrant < 4; ++quadrant)
+		for (unsigned quadrant = 0; quadrant < 4; ++quadrant)
 		{
 			for (int s = 0; s < diamond; ++s)
 			{

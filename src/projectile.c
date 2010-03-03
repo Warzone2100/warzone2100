@@ -368,11 +368,10 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
 {
 	PROJECTILE		*psProj = malloc(sizeof(PROJECTILE));
-	SDWORD			tarHeight, srcHeight, iMinSq;
+	SDWORD			tarHeight, srcHeight;
 	int32_t                 altChange, dx, dy, dz;
-	double                  fR;
+	uint32_t                dxy;
 	Vector3f		muzzle;
-	int32_t                 iRadSq;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
 	ASSERT( psStats != NULL, "proj_SendProjectile: invalid weapon stats" );
@@ -474,20 +473,17 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 
 
 	/* get target distance */
-	iRadSq = dx*dx + dy*dy + dz*dz;
-	fR = trigIntSqrt( iRadSq );
-	iMinSq = psStats->minRange * psStats->minRange;
+	dxy = iHypot(dx, dy);
 
-	if ( proj_Direct(psStats) ||
-		( !proj_Direct(psStats) && (iRadSq <= iMinSq) ) )
+	if (proj_Direct(psStats) || (!proj_Direct(psStats) && dxy <= psStats->minRange))
 	{
-		psProj->rot.pitch = iAtan2(dz, fR);
+		psProj->rot.pitch = iAtan2(dz, dxy);
 		psProj->state = PROJ_INFLIGHTDIRECT;
 	}
 	else
 	{
 		/* indirect */
-		projCalcIndirectVelocities(iHypot(dx, dy), dz, psStats->flightSpeed, &psProj->vXY, &psProj->vZ);
+		projCalcIndirectVelocities(dxy, dz, psStats->flightSpeed, &psProj->vXY, &psProj->vZ);
 		psProj->rot.pitch = iAtan2(psProj->vZ, psProj->vXY);
 		psProj->state = PROJ_INFLIGHTINDIRECT;
 	}
@@ -598,12 +594,12 @@ static INTERVAL collisionXY(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int3
 {
 	// Solve (1 - t)v1 + t v2 = r.
 	int32_t dx = x2 - x1, dy = y2 - y1;
-	int32_t a = dx*dx + dy*dy;                  // a = (v2 - v1)²
-	float   b = x1*dx + y1*dy;                  // b = v1(v2 - v1)
-	float   c = x1*x1 + y1*y1 - radius*radius;  // c = v1² - r²
+	int64_t a = (int64_t)dx*dx + (int64_t)dy*dy;                           // a = (v2 - v1)²
+	int64_t b = (int64_t)x1*dx + (int64_t)y1*dy;                           // b = v1(v2 - v1)
+	int64_t c = (int64_t)x1*x1 + (int64_t)y1*y1 - (int64_t)radius*radius;  // c = v1² - r²
 	// Equation to solve is now a t^2 + 2 b t + c = 0.
-	float   d = b*b - a*c;                      // d = b² - a c
-	float sd;
+	int64_t d = b*b - a*c;                                                 // d = b² - a c
+	int32_t sd;
 	// Solution is (-b ± √d)/a.
 	INTERVAL empty = {-1, -1};
 	INTERVAL full = {0, 1024};
@@ -617,7 +613,7 @@ static INTERVAL collisionXY(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int3
 		return c < 0 ? full : empty;  // Not moving. See if inside the target.
 	}
 
-	sd = sqrtf(d);
+	sd = i64Sqrt(d);
 	ret.begin = MAX(   0, 1024*(-b - sd)/a);
 	ret.end   = MIN(1024, 1024*(-b + sd)/a);
 	return ret;
@@ -653,7 +649,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	Vector3i nextPos;
 	unsigned int targetDistance, currentDistance;
 	BASE_OBJECT *psTempObj, *closestCollisionObject = NULL;
-	SPACETIME closestCollisionSpacetime;
+	SPACETIME closestCollisionSpacetime = closestCollisionSpacetime;  // Dummy initialisation.
 
 	CHECK_PROJECTILE(psProj);
 
@@ -743,7 +739,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		}
 	}
 
-	targetDistance = sqrtf(move.x*move.x + move.y*move.y);
+	targetDistance = iHypot(move.x, move.y);
 	if (!bIndirect)
 	{
 		currentDistance = timeSoFar * psStats->flightSpeed / GAME_TICKS_PER_SEC;

@@ -266,7 +266,6 @@ void orderUpdateDroid(DROID *psDroid)
 	SDWORD			xdiff,ydiff;
 	BOOL			bAttack;
 	UBYTE i;
-	float			radToAction;
 	SDWORD			xoffset,yoffset;
 
 	// clear the target if it has died
@@ -680,23 +679,19 @@ void orderUpdateDroid(DROID *psDroid)
 				if (psDroid->order == DORDER_CIRCLE)
 				{
 					//Watermelon:use orderX,orderY as local space origin and calculate droid direction in local space
-					radToAction = atan2f((float)xdiff, (float)ydiff);
-					xoffset = sinf(radToAction) * 1500;
-					yoffset = cosf(radToAction) * 1500;
-					xdiff = (SDWORD)psDroid->pos.x - (SDWORD)(psDroid->orderX + xoffset);
-					ydiff = (SDWORD)psDroid->pos.y - (SDWORD)(psDroid->orderY + yoffset);
+					uint16_t angle = iAtan2(xdiff, ydiff);
+					xoffset = iSinR(angle, 1500);
+					yoffset = iCosR(angle, 1500);
+					xdiff = psDroid->pos.x - (psDroid->orderX + xoffset);
+					ydiff = psDroid->pos.y - (psDroid->orderY + yoffset);
 					if (xdiff*xdiff + ydiff*ydiff < TILE_UNITS * TILE_UNITS)
 					{
 						//Watermelon:conter-clockwise 30 degree's per action
-						radToAction -= M_PI * 30 / 180;
-						xoffset = sinf(radToAction) * 1500;
-						yoffset = cosf(radToAction) * 1500;
-						actionDroidLoc(psDroid, DACTION_MOVE, (psDroid->orderX + xoffset),(psDroid->orderY + yoffset));
+						angle -= DEG(30);
+						xoffset = iSinR(angle, 1500);
+						yoffset = iCosR(angle, 1500);
 					}
-					else
-					{
-						actionDroidLoc(psDroid, DACTION_MOVE, (psDroid->orderX + xoffset),(psDroid->orderY + yoffset));
-					}
+					actionDroidLoc(psDroid, DACTION_MOVE, psDroid->orderX + xoffset, psDroid->orderY + yoffset);
 				}
 				else
 				{
