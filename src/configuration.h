@@ -24,25 +24,23 @@
 #ifndef __INCLUDED_SRC_CONFIGURATION_H__
 #define __INCLUDED_SRC_CONFIGURATION_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 extern BOOL loadConfig(void);
 extern BOOL loadRenderMode(void);
 extern BOOL saveConfig(void);
 extern BOOL reloadMPConfig(void);
 extern void closeConfig( void );
-extern void setSinglePlayerFrameLimit(SDWORD limit);
-extern SDWORD getSinglePlayerFrameLimit(void);
 extern void setDefaultFrameRateLimit(void);
 
-/* Frame limit for multiplayer games (excluding skirmish and campaign) */
-#define	MP_FRAME_LIMIT	45
-
-/* Default frame limit for single player: skirmish ans campaign */
-#define	SP_FRAME_LIMIT	60
-
-/// Default map for Mayhem
-#define DEFAULTCAMPAIGNMAP	"Rush"
 /// Default map for Skirmish
-#define DEFAULTSKIRMISHMAP	"Sk-Rush"
+static const char DEFAULTSKIRMISHMAP[] = "Sk-Rush";
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_CONFIGURATION_H__
