@@ -34,18 +34,8 @@ extern BOOL loadRenderMode(void);
 extern BOOL saveConfig(void);
 extern BOOL reloadMPConfig(void);
 extern void closeConfig( void );
-extern void setSinglePlayerFrameLimit(SDWORD limit);
-extern SDWORD getSinglePlayerFrameLimit(void);
 extern void setDefaultFrameRateLimit(void);
 
-/* Frame limit for multiplayer games (excluding skirmish and campaign) */
-#define	MP_FRAME_LIMIT	45
-
-/* Default frame limit for single player: skirmish ans campaign */
-#define	SP_FRAME_LIMIT	60
-
-/// Default map for Mayhem
-static const char DEFAULTCAMPAIGNMAP[] = "Rush";
 /// Default map for Skirmish
 static const char DEFAULTSKIRMISHMAP[] = "Sk-Rush";
 
