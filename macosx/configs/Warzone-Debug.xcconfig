@@ -8,4 +8,4 @@ GCC_GENERATE_DEBUGGING_SYMBOLS = YES
 GCC_DYNAMIC_NO_PIC = NO
 GCC_OPTIMIZATION_LEVEL = 0
 GCC_PREPROCESSOR_DEFINITIONS = VORBIS_NEEDS_HACK DEBUG $(inherited) // FIXME: VORBIS_NEEDS_HACK is a unnessary hack; there is a better way and it will be done eventually
-GCC_TREAT_WARNINGS_AS_ERRORS = NO // -Werror FIXME: off until Zarel finishes squelching all the remaining warnings
+GCC_TREAT_WARNINGS_AS_ERRORS = YES
