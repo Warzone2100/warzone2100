@@ -5498,8 +5498,11 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.Status    = psDroid->sMove.Status;
 	psSaveDroid->sMove.Position  = psDroid->sMove.Position;
 	psSaveDroid->sMove.numPoints = MIN(psDroid->sMove.numPoints, TRAVELSIZE);
-	memcpy(&psSaveDroid->sMove.asPath, psDroid->sMove.asPath,
-	       MIN(sizeof(psSaveDroid->sMove.asPath), sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints));
+	for (i = 0; i < MIN(psDroid->sMove.numPoints, TRAVELSIZE); i++)
+	{
+		psSaveDroid->sMove.asPath[i].x = map_coord(psDroid->sMove.asPath[i].x);
+		psSaveDroid->sMove.asPath[i].y = map_coord(psDroid->sMove.asPath[i].y);
+	}
 
 	// Little endian SDWORDs
 	psSaveDroid->sMove.DestinationX = PHYSFS_swapSLE32(psDroid->sMove.DestinationX);
@@ -5567,7 +5570,11 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.Position    = psSaveDroid->sMove.Position;
 	psDroid->sMove.numPoints   = psSaveDroid->sMove.numPoints;
 	psDroid->sMove.asPath      = malloc(sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints);
-	memcpy(psDroid->sMove.asPath, &psSaveDroid->sMove.asPath, sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints);
+	for (i = 0; i < psDroid->sMove.numPoints; i++)
+	{
+		psDroid->sMove.asPath[i].x = world_coord(psSaveDroid->sMove.asPath[i].x) + TILE_UNITS / 2;
+		psDroid->sMove.asPath[i].y = world_coord(psSaveDroid->sMove.asPath[i].y) + TILE_UNITS / 2;
+	}
 
 	// Little endian SDWORDs
 	psDroid->sMove.DestinationX = PHYSFS_swapSLE32(psSaveDroid->sMove.DestinationX);

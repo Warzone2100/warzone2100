@@ -329,8 +329,8 @@ static void fpathSetMove(MOVE_CONTROL *psMoveCntl, SDWORD targetX, SDWORD target
 	psMoveCntl->DestinationX = targetX;
 	psMoveCntl->DestinationY = targetY;
 	psMoveCntl->numPoints = 1;
-	psMoveCntl->asPath[0].x = map_coord(targetX);
-	psMoveCntl->asPath[0].y = map_coord(targetY);
+	psMoveCntl->asPath[0].x = targetX;
+	psMoveCntl->asPath[0].y = targetY;
 }
 
 
@@ -717,8 +717,8 @@ void fpathTest(int x, int y, int x2, int y2)
 	r = fpathSimpleRoute(&sMove, 1, x, y, x2, y2);
 	assert(r == FPR_OK);
 	assert(sMove.numPoints > 0 && sMove.asPath);
-	assert(sMove.asPath[sMove.numPoints - 1].x == map_coord(x2));
-	assert(sMove.asPath[sMove.numPoints - 1].y == map_coord(y2));
+	assert(sMove.asPath[sMove.numPoints - 1].x == x2);
+	assert(sMove.asPath[sMove.numPoints - 1].y == y2);
 	assert(fpathResultQueueLength() == 0);
 
 	/* Let one hundred paths flower! */
@@ -736,8 +736,8 @@ void fpathTest(int x, int y, int x2, int y2)
 		r = fpathSimpleRoute(&sMove, i, x, y, x2, y2);
 		assert(r == FPR_OK);
 		assert(sMove.numPoints > 0 && sMove.asPath);
-		assert(sMove.asPath[sMove.numPoints - 1].x == map_coord(x2));
-		assert(sMove.asPath[sMove.numPoints - 1].y == map_coord(y2));
+		assert(sMove.asPath[sMove.numPoints - 1].x == x2);
+		assert(sMove.asPath[sMove.numPoints - 1].y == y2);
 	}
 	assert(fpathResultQueueLength() == 0);
 

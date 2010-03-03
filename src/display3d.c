@@ -360,12 +360,11 @@ static void showDroidPaths(void)
 			{
 				Vector3i pos;
 
-				ASSERT(tileOnMap(psDroid->sMove.asPath[i].x, psDroid->sMove.asPath[i].y), "Path off map!");
-				pos.x = world_coord(psDroid->sMove.asPath[i].x) + TILE_UNITS / 2;
-				pos.z = world_coord(psDroid->sMove.asPath[i].y) + TILE_UNITS / 2;
+				ASSERT(worldOnMap(psDroid->sMove.asPath[i].x, psDroid->sMove.asPath[i].y), "Path off map!");
+				pos.x = psDroid->sMove.asPath[i].x;
+				pos.z = psDroid->sMove.asPath[i].y;
 				pos.y = map_Height(pos.x, pos.z) + 16;
 
-				ASSERT(worldOnMap(pos.x, pos.y), "Effect off map!");
 				effectGiveAuxVar(80);
 				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
 			}

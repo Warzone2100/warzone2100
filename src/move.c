@@ -353,8 +353,6 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 				// align the formation with the last path of the route
 				fmx2 = psDroid->sMove.asPath[psDroid->sMove.numPoints -1].x;
 				fmy2 = psDroid->sMove.asPath[psDroid->sMove.numPoints -1].y;
-				fmx2 = world_coord(fmx2) + TILE_UNITS / 2;
-				fmy2 = world_coord(fmy2) + TILE_UNITS / 2;
 				if (psDroid->sMove.numPoints == 1)
 				{
 					fmx1 = (SDWORD)psDroid->pos.x;
@@ -365,8 +363,6 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 					ASSERT_OR_RETURN(false, psDroid->sMove.numPoints > 1, "Invalid point count for path of %s", droidGetName(psDroid)); 
 					fmx1 = psDroid->sMove.asPath[psDroid->sMove.numPoints -2].x;
 					fmy1 = psDroid->sMove.asPath[psDroid->sMove.numPoints -2].y;
-					fmx1 = world_coord(fmx1) + TILE_UNITS / 2;
-					fmy1 = world_coord(fmy1) + TILE_UNITS / 2;
 				}
 
 				// no formation so create a new one
@@ -706,8 +702,8 @@ static BOOL moveNextTarget(DROID *psDroid)
 		return false;
 	}
 
-	tarX = world_coord(psDroid->sMove.asPath[psDroid->sMove.Position].x) + TILE_UNITS / 2;
-	tarY = world_coord(psDroid->sMove.asPath[psDroid->sMove.Position].y) + TILE_UNITS / 2;
+	tarX = psDroid->sMove.asPath[psDroid->sMove.Position].x;
+	tarY = psDroid->sMove.asPath[psDroid->sMove.Position].y;
 	if (psDroid->sMove.Position == 0)
 	{
 		psDroid->sMove.srcX = (SDWORD)psDroid->pos.x;
@@ -715,8 +711,8 @@ static BOOL moveNextTarget(DROID *psDroid)
 	}
 	else
 	{
-		srcX = world_coord(psDroid->sMove.asPath[psDroid->sMove.Position -1].x) + TILE_UNITS / 2;
-		srcY = world_coord(psDroid->sMove.asPath[psDroid->sMove.Position -1].y) + TILE_UNITS / 2;
+		srcX = psDroid->sMove.asPath[psDroid->sMove.Position -1].x;
+		srcY = psDroid->sMove.asPath[psDroid->sMove.Position -1].y;
 		psDroid->sMove.srcX = srcX;
 		psDroid->sMove.srcY = srcY ;
 	}
@@ -745,8 +741,8 @@ static Vector2i movePeekNextTarget(DROID *psDroid)
 	else
 	{
 		Vector2i p = {
-			world_coord(psDroid->sMove.asPath[psDroid->sMove.Position].x) + TILE_UNITS/2,
-			world_coord(psDroid->sMove.asPath[psDroid->sMove.Position].y) + TILE_UNITS/2
+			psDroid->sMove.asPath[psDroid->sMove.Position].x,
+			psDroid->sMove.asPath[psDroid->sMove.Position].y
 		};
 		return p;
 	}
