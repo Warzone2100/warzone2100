@@ -21,9 +21,6 @@
 #ifndef __INCLUDED_SRC_DIFFICULTY_H__
 #define __INCLUDED_SRC_DIFFICULTY_H__
 
-// required to ensure "types.h" is included the proper way (we need the "bool" type)
-#include "lib/framework/frame.h"
-
 #ifdef __cplusplus
 extern "C"
 {
@@ -41,7 +38,6 @@ typedef enum _difficulty_level
 extern void	setDifficultyLevel( DIFFICULTY_LEVEL lev);
 extern DIFFICULTY_LEVEL	getDifficultyLevel( void );
 extern int modifyForDifficultyLevel(int basicVal, bool IsPlayer);
-extern void setModifiers(float Player,float Enemy);
 
 #ifdef __cplusplus
 }

@@ -23,62 +23,27 @@
  * Data loading functions used by the framework resource module.
  *
  */
-#include <string.h>
-#include <ctype.h>
+
+#include <SDL.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
-//render library
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/bitimage.h"
-
-#include "texture.h"
-#include "warzoneconfig.h"
-#include "lib/ivis_common/tex.h"
-#include "lib/ivis_common/textdraw.h"
-
 #include "lib/framework/frameresource.h"
-#include "stats.h"
-#include "structure.h"
-#include "feature.h"
-#include "research.h"
-#include "data.h"
-#include "text.h"
-#include "droid.h"
-#include "function.h"
-#include "message.h"
-#include "lib/script/script.h"
-#include "scriptvals.h"
-#include "display3d.h"
-#include "game.h"
-#include "objects.h"
-#include "display.h"
-#include "lib/sound/audio.h"
-#include "lib/gamelib/anim.h"
+#include "lib/framework/strres.h"
 #include "lib/gamelib/parser.h"
-#include "levels.h"
-#include "mechanics.h"
-#include "display3d.h"
-#include "display3ddef.h"
-#include "init.h"
-#include "lib/ivis_common/png_util.h"
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/tex.h"
+#include "lib/script/script.h"
+#include "lib/sound/audio.h"
 
-#include "multiplay.h"
-#include "lib/netplay/netplay.h"
-#include <SDL.h>
-/**********************************************************
- *
- * Local Variables
- *
- *********************************************************/
-static void	calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index);
-static UDWORD	hashBuffer(uint8_t *pData, uint32_t size);
+#include "data.h"
+#include "mechanics.h"
+#include "message.h"
+#include "scriptvals.h"
+#include "text.h"
+#include "texture.h"
 
 // whether a save game is currently being loaded
 static bool saveFlag = false;
-
-extern int scr_lineno;
 
 uint32_t	DataHash[DATA_MAXDATA]= {0};
 
@@ -164,7 +129,7 @@ static UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 
 // create the hash for that data block.
 // Data should be converted to Network byte order
-void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
+static void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 {
 	const uint32_t oldHash = DataHash[index];
 
@@ -1016,7 +981,6 @@ static bool dataScriptLoad(const char* fileName, void **ppData)
 	PHYSFS_sint64 fileSize = 0;
 
 	debug(LOG_WZ, "COMPILING SCRIPT ...%s", GetLastResourceFilename());
-	scr_lineno = 1;
 
 	fileHandle = PHYSFS_openRead(fileName);
 	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
