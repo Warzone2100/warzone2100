@@ -79,11 +79,14 @@ static BOOL NETenum(EnumT* enumPtr)
 extern "C"
 {
 #else
-// FIXME: Causes tons of warnings: <enumPtr> is used unitialised in this function
+// FIXED: Used to cause tons of warnings: <enumPtr> is used unitialised in this function
+static inline void squelchUninitialisedUseWarning(void *ptr) { (void)ptr; }
 #define NETenum(enumPtr) \
 do \
 { \
-	int32_t _val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
+	int32_t _val; \
+	squelchUninitialisedUseWarning(enumPtr); \
+	_val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
 \
 	NETint32_t(&_val); \
 \
