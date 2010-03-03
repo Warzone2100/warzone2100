@@ -584,7 +584,7 @@ void sendMultiPlayerFeature(FEATURE_TYPE subType, uint32_t x, uint32_t y, uint32
 
 void recvMultiPlayerFeature()
 {
-	FEATURE_TYPE subType;
+	FEATURE_TYPE subType = FEAT_TREE;  // Dummy initialisation.
 	uint32_t     x, y, id;
 	unsigned int i;
 
@@ -708,7 +708,7 @@ void recvMultiPlayerRandomArtifacts()
 	uint8_t			quantity, player;
 	uint32_t		tx,ty;
 	uint32_t		ref;
-	FEATURE_TYPE	type;
+	FEATURE_TYPE            type = FEAT_TREE;  // Dummy initialisation.
 	FEATURE 		*pF;
 
 	NETbeginDecode(NET_ARTIFACTS);

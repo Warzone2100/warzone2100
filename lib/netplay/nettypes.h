@@ -79,7 +79,7 @@ static BOOL NETenum(EnumT* enumPtr)
 extern "C"
 {
 #else
-// FIXED: Used to cause tons of warnings: <enumPtr> is used unitialised in this function
+// FIXME: Somehow still causes tons of warnings: <enumPtr> is used unitialised in this function
 static inline void squelchUninitialisedUseWarning(void *ptr) { (void)ptr; }
 #define NETenum(enumPtr) \
 do \
