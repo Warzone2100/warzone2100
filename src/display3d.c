@@ -3950,7 +3950,7 @@ static void structureEffectsPlayer( UDWORD player )
 						/* Then it's repairing...? */
 						radius = psStructure->sDisplay.imd->radius;
 						xDif = iSinSR(graphicsTime, 720, radius);
-						xDif = iCosSR(graphicsTime, 720, radius);
+						yDif = iCosSR(graphicsTime, 720, radius);
 						pos.x = psStructure->pos.x + xDif;
 						pos.z = psStructure->pos.y + yDif;
 						pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay.imd->max.y;

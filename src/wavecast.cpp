@@ -56,7 +56,7 @@ static std::vector<WavecastTile> generateWavecastTable(unsigned radius)
 	{
 		for (unsigned quadrant = 0; quadrant < 4; ++quadrant)
 		{
-			for (int s = 0; s < diamond; ++s)
+			for (unsigned s = 0; s < diamond; ++s)
 			{
 				WavecastTile tile;
 				switch (quadrant)
