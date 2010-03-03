@@ -103,6 +103,11 @@ switch (type)
 /* * */
 		return RegisterClipboardFormatA(format);
 
+#elif defined(WZ_WS_MAC)
+/* * */
+		// Meaningless value to prevent "control reaches end of non-void function" warning
+		return 0;
+
 #endif /* scrap type */
 	}
 	}
