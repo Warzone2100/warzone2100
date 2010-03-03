@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-03-02 21:30+0100\n"
-"PO-Revision-Date: 2010-02-21 08:41+0100\n"
+"PO-Revision-Date: 2010-03-02 08:25+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -10922,19 +10922,16 @@ msgid "Rail Target Prediction Computer"
 msgstr "Computer für Zielvorhersage von Magnetgeschossen"
 
 #: data/mp/messages/strings/names.txt:1174
-#, fuzzy
 msgid "HESH Mini-Rockets"
-msgstr "Hochexplosive Miniraketen"
+msgstr "Hochexplosive Quetschkopf-Miniraketen"
 
 #: data/mp/messages/strings/names.txt:1175
-#, fuzzy
 msgid "HESH Mini-Rockets Mk2"
-msgstr "Hochexplosive Miniraketen Mk2"
+msgstr "Hochexplosive Quetschkopf-Miniraketen Mk2"
 
 #: data/mp/messages/strings/names.txt:1176
-#, fuzzy
 msgid "HESH Mini-Rockets Mk3"
-msgstr "Hochexplosive Miniraketen Mk3"
+msgstr "Hochexplosive Quetschkopf-Miniraketen Mk3"
 
 #: data/mp/messages/strings/names.txt:1385
 msgid "Assault Gun Tower"
