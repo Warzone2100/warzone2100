@@ -2861,7 +2861,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 	REPAIR_FACILITY		*psRepairFac = NULL;
 	RESEARCH_FACILITY	*psResFacility;
 	Vector3i iVecEffect;
-	BOOL				bFinishAction,bDroidPlaced;
+	BOOL				bFinishAction, bDroidPlaced = false;
 	WEAPON_STATS		*psWStats;
 	SDWORD				xdiff,ydiff, mindist, currdist;
 #ifdef INCLUDE_FACTORYLISTS
