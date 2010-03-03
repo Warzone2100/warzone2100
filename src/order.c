@@ -1516,13 +1516,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	UDWORD		iFactoryDistSq;
 	STRUCTURE	*psStruct, *psRepairFac, *psFactory;
 	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	const Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
-	const Vector2i rPos = { map_coord(psOrder->x), map_coord(psOrder->y) };
+	const Vector3i rPos = { psOrder->x, psOrder->y, 0 };
 
 	if (psOrder->order != DORDER_TRANSPORTIN	// transporters special
 	    && psOrder->psObj == NULL			// location-type order
 	    && (validOrderForLoc(psOrder->order) || psOrder->order == DORDER_BUILD) 
-	    && !fpathCheck(dPos, rPos, psPropStats->propulsionType))
+	    && !fpathCheck(psDroid->pos, rPos, psPropStats->propulsionType))
 	{
 		if (!isHumanPlayer(psDroid->player))
 		{

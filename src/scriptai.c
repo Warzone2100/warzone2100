@@ -2190,10 +2190,9 @@ BOOL scrDroidCanReach(void)
 	if (psDroid)
 	{
 		const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		const Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
-		const Vector2i rPos = { map_coord(x), map_coord(y) };
+		const Vector3i rPos = { x, y, 0 };
 
-		scrFunctionResult.v.bval = fpathCheck(dPos, rPos, psPropStats->propulsionType);
+		scrFunctionResult.v.bval = fpathCheck(psDroid->pos, rPos, psPropStats->propulsionType);
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
 			debug(LOG_ERROR, "stackPushResult failed");

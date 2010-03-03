@@ -758,7 +758,7 @@ void fpathTest(int x, int y, int x2, int y2)
 	assert(firstResult == NULL);
 }
 
-bool fpathCheck(Vector2i orig, Vector2i dest, PROPULSION_TYPE propulsion)
+bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 {
 	MAPTILE *origTile;
 	MAPTILE *destTile;
@@ -766,13 +766,13 @@ bool fpathCheck(Vector2i orig, Vector2i dest, PROPULSION_TYPE propulsion)
 	// We have to be careful with this check because it is called on
 	// load when playing campaign on droids that are on the other
 	// map during missions, and those maps are usually larger.
-	if (!tileOnMap(orig.x, orig.y) || !tileOnMap(dest.x, dest.y))
+	if (!worldOnMap(orig.x, orig.y) || !worldOnMap(dest.x, dest.y))
 	{
 		return false;
 	}
 
-	origTile = mapTile(orig.x, orig.y);
-	destTile = mapTile(dest.x, dest.y);
+	origTile = worldTile(orig.x, orig.y);
+	destTile = worldTile(dest.x, dest.y);
 
 	ASSERT(propulsion != PROPULSION_TYPE_NUM, "Bad propulsion type");
 	ASSERT(origTile != NULL && destTile != NULL, "Bad tile parameter");

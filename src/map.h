@@ -303,7 +303,7 @@ extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
 BOOL mapSaveTagged(char *pFileName);
 BOOL mapLoadTagged(char *pFileName);
 
-/* Return a pointer to the tile structure at x,y */
+/** Return a pointer to the tile structure at x,y in map coordinates */
 static inline WZ_DECL_PURE MAPTILE *mapTile(SDWORD x, SDWORD y)
 {
 	// Clamp x and y values to actual ones
@@ -319,6 +319,9 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(SDWORD x, SDWORD y)
 
 	return &psMapTiles[x + (y * mapWidth)];
 }
+
+/** Return a pointer to the tile structure at x,y in world coordinates */
+#define worldTile(_x, _y) mapTile(map_coord(_x), map_coord(_y))
 
 /// Return ground height of top-left corner of tile at x,y
 static inline WZ_DECL_PURE float map_TileHeight(SDWORD x, SDWORD y)

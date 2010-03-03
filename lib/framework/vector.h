@@ -37,8 +37,8 @@ typedef struct { int x, y; } Vector2i;
 typedef struct { float x, y; } Vector2f;
 typedef struct { int x, y, z; } Vector3i;
 typedef struct { float x, y, z; } Vector3f;
-typedef struct { uint16_t direction, pitch, roll; } Rotation;
-typedef Vector3i Position;
+typedef struct { uint16_t direction, pitch, roll; } Rotation;	///< Object rotation in 0..64k range
+typedef Vector3i Position;					///< Map position in world coordinates
 
 /*!
  * Create a Vector from x and y

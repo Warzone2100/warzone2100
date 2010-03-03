@@ -3394,7 +3394,7 @@ BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 	SDWORD		i, j;
 	SDWORD		startX, endX, startY, endY;
 	UDWORD		passes;
-	Vector2i	origin = { *x, *y };
+	Vector3i	origin = { *x, *y, 0 };
 
 	ASSERT_OR_RETURN(false, *x<mapWidth,"x coordinate is off-map for pickATileGen" );
 	ASSERT_OR_RETURN(false, *y<mapHeight,"y coordinate is off-map for pickATileGen" );
@@ -3418,7 +3418,7 @@ BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 				/* Test only perimeter as internal tested previous iteration */
 				if(i==startX || i==endX || j==startY || j==endY)
 				{
-					Vector2i newPos = { i, j };
+					Vector3i newPos = { world_coord(i), world_coord(j), 0 };
 
 					/* Good enough? */
 					if (function(i, j)
@@ -4614,10 +4614,8 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj)
 {
 	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
-	Vector2i rPos = { map_coord(psObj->pos.x), map_coord(psObj->pos.y) };
 
-	if (!fpathCheck(dPos, rPos, psPropStats->propulsionType))
+	if (!fpathCheck(psDroid->pos, psObj->pos, psPropStats->propulsionType))
 	{
 		return -1;
 	}
