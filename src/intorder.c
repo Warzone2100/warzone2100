@@ -17,34 +17,16 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
-#include "lib/widget/widget.h"
-#include "lib/ivis_common/textdraw.h"
-#include "objects.h"
-#include "loop.h"
-#include "map.h"
 #include "lib/ivis_common/bitimage.h"//bitmap routines
 
-#include "display3d.h"
 #include "hci.h"
-#include "lib/sound/audio.h"
-#include "lib/widget/widgint.h"
-#include "lib/widget/bar.h"
-#include "lib/widget/form.h"
-#include "lib/widget/label.h"
-#include "lib/widget/button.h"
-#include "lib/widget/editbox.h"
-#include "lib/widget/slider.h"
-#include "order.h"
-#include "intimage.h"
 #include "intdisplay.h"
 #include "intorder.h"
-
+#include "objects.h"
+#include "order.h"
 #include "scriptextern.h"
-
 
 
 #define ORDER_X			23
@@ -469,36 +451,18 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 	},
 };
 
-extern BOOL ClosingOrder;
-extern W_SCREEN *psWScreen;
-extern void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
-static BOOL BuildSelectedDroidList(void);
-//static BOOL factorySelected(void);
-static BOOL SetSecondaryState(SECONDARY_ORDER sec, SECONDARY_STATE State);
-static BOOL BuildDroidOrderList(void);
-static BOOL BuildStructureOrderList(STRUCTURE *psStructure);
-static SDWORD GetSecondaryStates(SECONDARY_ORDER sec);
-
-static UDWORD GetImageWidth(IMAGEFILE *ImageFile,UDWORD ImageID);
-static UDWORD GetImageHeight(IMAGEFILE *ImageFile,UDWORD ImageID);
 
 static UWORD NumSelectedDroids;
 static DROID *SelectedDroids[MAX_SELECTED_DROIDS];
 static STRUCTURE *psSelectedFactory;
 static UWORD NumAvailableOrders;
 static AVORDER AvailableOrders[MAX_AVAILABLE_ORDERS];
-//works on factories now as well - AB 21/04/99
-//static BOOL CheckDroidOrderList(void);
-static BOOL CheckObjectOrderList(void);
-static BOOL intRefreshOrderButtons(void);
-
-
 
 
 BOOL OrderUp = false;
 
 // update the order interface only if it is already open.
+// NOTE: Unused! BOOL intUpdateOrder(DROID *psDroid)
 BOOL intUpdateOrder(DROID *psDroid)
 {
 	if(widgGetFromID(psWScreen,IDORDER_FORM) != NULL && OrderUp)
@@ -511,6 +475,168 @@ BOOL intUpdateOrder(DROID *psDroid)
 
 	return true;
 }
+
+// Build a list of currently selected droids.
+// Returns true if droids were selected.
+//
+static BOOL BuildSelectedDroidList(void)
+{
+	DROID *psDroid;
+
+	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext) {
+		if(psDroid->selected) {
+			if(NumSelectedDroids < MAX_SELECTED_DROIDS) {
+				SelectedDroids[NumSelectedDroids] = psDroid;
+				NumSelectedDroids++;
+			}
+		}
+	}
+
+	if(NumSelectedDroids) {
+		return true;
+	}
+
+	return false;
+}
+
+// Build a list of orders available for the selected group of droids.
+//
+static BOOL BuildDroidOrderList(void)
+{
+	UWORD OrdIndex;
+	UWORD i,j;
+	BOOL Found;
+	BOOL Sorted;
+	AVORDER Tmp;
+
+	NumAvailableOrders = 0;
+
+	for(j=0; j<NumSelectedDroids; j++) {
+
+		for(OrdIndex = 0; OrdIndex < NUM_ORDERS; OrdIndex++) {
+
+			// Is the order available?
+			if(secondarySupported(SelectedDroids[j], OrderButtons[OrdIndex].Order)) {
+				if(NumAvailableOrders < MAX_AVAILABLE_ORDERS) {
+					// Have we already got this order?
+					Found = false;
+					for(i=0; i<NumAvailableOrders; i++) {
+						if(AvailableOrders[i].OrderIndex == OrdIndex) {
+							// Yes! Then increment it's reference count.
+							AvailableOrders[i].RefCount++;
+							Found = true;
+						}
+					}
+
+					if(!Found) {
+						// Not already got it so add it to the list of available orders.
+						AvailableOrders[NumAvailableOrders].OrderIndex = OrdIndex;
+						AvailableOrders[NumAvailableOrders].RefCount = 1;
+						NumAvailableOrders++;
+					}
+				}
+			}
+		}
+	}
+
+	if(NumAvailableOrders == 0) {
+		return false;
+	}
+
+	if(NumAvailableOrders > 1) {
+		// Sort by Order index, A bubble sort? I know but it's only
+		// a small list so what the hell.
+		do {
+			Sorted = true;
+			for(i=0; i<NumAvailableOrders-1; i++) {
+				if(AvailableOrders[i].OrderIndex > AvailableOrders[i+1].OrderIndex) {
+					Tmp = AvailableOrders[i];
+					AvailableOrders[i] = AvailableOrders[i+1];
+					AvailableOrders[i+1] = Tmp;
+					Sorted = false;
+				}
+			}
+		} while(!Sorted);
+	}
+
+	return true;
+}
+
+// Build a list of orders available for the selected structure.
+static BOOL BuildStructureOrderList(STRUCTURE *psStructure)
+{
+    //only valid for Factories (at the moment)
+    if (!StructIsFactory(psStructure))
+    {
+        ASSERT( false, "BuildStructureOrderList: structure is not a factory" );
+        return false;
+    }
+
+    //this can be hard-coded!
+    AvailableOrders[0].OrderIndex = 0;//DSO_ATTACK_RANGE;
+    AvailableOrders[0].RefCount = 1;
+    AvailableOrders[1].OrderIndex = 1;//DSO_REPAIR_LEVEL;
+    AvailableOrders[1].RefCount = 1;
+    AvailableOrders[2].OrderIndex = 2;//DSO_ATTACK_LEVEL;
+    AvailableOrders[2].RefCount = 1;
+    AvailableOrders[3].OrderIndex = 5;//DSO_HALTTYPE;
+    AvailableOrders[3].RefCount = 1;
+
+    NumAvailableOrders = 4;
+
+    return true;
+}
+
+
+// return the state for an order for all the units selected
+// if there are multiple states then don't return a state
+static SDWORD GetSecondaryStates(SECONDARY_ORDER sec)
+{
+	SDWORD	i;
+	SECONDARY_STATE state, currState;
+	BOOL	bFirst;
+
+	state = 0;
+	bFirst = true;
+    //handle a factory being selected - AB 22/04/99
+    if (psSelectedFactory)
+    {
+        if (getFactoryState(psSelectedFactory, sec, &currState))
+        {
+            state = currState;
+        }
+    }
+    else //droids
+    {
+	    for (i=0; i<NumSelectedDroids; i++)
+	    {
+		    currState = secondaryGetState(SelectedDroids[i], sec);
+			if (bFirst)
+			{
+				state = currState;
+				bFirst = false;
+			}
+			else if (state != currState)
+			{
+				state = 0;
+			}
+	    }
+    }
+
+	return state;
+}
+
+
+static UDWORD GetImageWidth(IMAGEFILE *ImageFile,UDWORD ImageID)
+{
+	return iV_GetImageWidth(ImageFile,(UWORD)ImageID);
+}
+
+static UDWORD GetImageHeight(IMAGEFILE *ImageFile,UDWORD ImageID)
+{
+	return iV_GetImageHeight(ImageFile,(UWORD)ImageID);
+}
+
 
 // Add the droid order screen.
 // Returns true if the form was displayed ok.
@@ -942,6 +1068,37 @@ void intRunOrder(void)
 }
 
 
+// Set the secondary order state for all currently selected droids. And Factory (if one selected)
+// Returns true if successful.
+//
+static BOOL SetSecondaryState(SECONDARY_ORDER sec, SECONDARY_STATE State)
+{
+	UWORD i;
+
+	for(i=0; i<NumSelectedDroids; i++) {
+		if (SelectedDroids[i])
+		{
+			//Only set the state if it's not a transporter.
+			if(SelectedDroids[i]->droidType != DROID_TRANSPORTER) {
+				if(!secondarySetState(SelectedDroids[i], sec, State)) {
+					return false;
+				}
+			}
+		}
+	}
+    //set the Factory settings
+    if (psSelectedFactory)
+    {
+        if (!setFactoryState(psSelectedFactory, sec, State))
+        {
+            return false;
+        }
+    }
+
+	return true;
+}
+
+
 // Process the droid order screen.
 //
 void intProcessOrder(UDWORD id)
@@ -1057,255 +1214,6 @@ void intProcessOrder(UDWORD id)
 				break;
    		}
    	}
-}
-
-
-static BOOL _intRefreshOrder(void)
-{
-	// Is the Order screen up?
-	if ((intMode == INT_ORDER) &&
-		(widgGetFromID(psWScreen,IDORDER_FORM) != NULL))
-	{
-		BOOL Ret;
-
-		NumSelectedDroids = 0;
-        //check for factory selected first
-        if (!psSelectedFactory)
-        {
-    		if (!BuildSelectedDroidList())
-	    	{
-		    	// no units selected - quit
-			    intRemoveOrder();
-			    return true;
-            }
-		}
-
-		// if the orders havn't changed, just reset the state
-		//if (CheckDroidOrderList())
-        if (CheckObjectOrderList())
-		{
-			Ret = intRefreshOrderButtons();
-		}
-		else
-		{
-			// Refresh it by re-adding it.
-			Ret = intAddOrder(NULL);
-			if(Ret == false) {
-				intMode = INT_NORMAL;
-			}
-		}
-		return Ret;
-	}
-
-	return true;
-}
-
-
-// Call to refresh the Order screen, ie when a droids boards it.
-//
-BOOL intRefreshOrder(void)
-{
-//	DBPRINTF(("intRefreshOrder\n"));
-
-	return _intRefreshOrder();
-}
-
-
-// Remove the droids order screen with animation.
-//
-void intRemoveOrder(void)
-{
-
-	W_TABFORM *Form;
-
-	widgDelete(psWScreen, IDORDER_CLOSE);
-
-	// Start the window close animation.
-	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDORDER_FORM);
-	if(Form) {
-		Form->display = intClosePlainForm;
-		Form->pUserData = NULL; // Used to signal when the close anim has finished.
-		Form->disableChildren = true;
-		ClosingOrder = true;
-		OrderUp = false;
-		NumSelectedDroids = 0;
-        psSelectedFactory = NULL;
-    }
-
-}
-
-
-// Remove the droids order screen without animation.
-//
-void intRemoveOrderNoAnim(void)
-{
-	widgDelete(psWScreen, IDORDER_CLOSE);
-	widgDelete(psWScreen, IDORDER_FORM);
-	OrderUp = false;
-	NumSelectedDroids = 0;
-    psSelectedFactory = NULL;
-}
-
-
-// Build a list of currently selected droids.
-// Returns true if droids were selected.
-//
-static BOOL BuildSelectedDroidList(void)
-{
-	DROID *psDroid;
-
-	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext) {
-		if(psDroid->selected) {
-			if(NumSelectedDroids < MAX_SELECTED_DROIDS) {
-				SelectedDroids[NumSelectedDroids] = psDroid;
-				NumSelectedDroids++;
-			}
-		}
-	}
-
-	if(NumSelectedDroids) {
-		return true;
-	}
-
-	return false;
-}
-
-//looks thru' the players' list of Structures to see if one is a factory and it is selected
-/*static BOOL factorySelected(void)
-{
-    STRUCTURE *psStruct;
-
-    for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
-    {
-        if (psStruct->selected && StructIsFactory(psStruct))
-        {
-            //found one - set as one to use for the interface
-            psSelectedFactory = psStruct;
-            return true;
-        }
-    }
-    //obviously never found a factory
-    return false;
-}*/
-
-
-// Set the secondary order state for all currently selected droids. And Factory (if one selected)
-// Returns true if succesfull.
-//
-static BOOL SetSecondaryState(SECONDARY_ORDER sec, SECONDARY_STATE State)
-{
-	UWORD i;
-
-	for(i=0; i<NumSelectedDroids; i++) {
-		if (SelectedDroids[i])
-		{
-			//Only set the state if it's not a transporter.
-			if(SelectedDroids[i]->droidType != DROID_TRANSPORTER) {
-				if(!secondarySetState(SelectedDroids[i], sec, State)) {
-					return false;
-				}
-			}
-		}
-	}
-    //set the Factory settings
-    if (psSelectedFactory)
-    {
-        if (!setFactoryState(psSelectedFactory, sec, State))
-        {
-            return false;
-        }
-    }
-
-	return true;
-}
-
-
-// Build a list of orders available for the selected group of droids.
-//
-static BOOL BuildDroidOrderList(void)
-{
-	UWORD OrdIndex;
-	UWORD i,j;
-	BOOL Found;
-	BOOL Sorted;
-	AVORDER Tmp;
-
-	NumAvailableOrders = 0;
-
-	for(j=0; j<NumSelectedDroids; j++) {
-
-		for(OrdIndex = 0; OrdIndex < NUM_ORDERS; OrdIndex++) {
-
-			// Is the order available?
-			if(secondarySupported(SelectedDroids[j], OrderButtons[OrdIndex].Order)) {
-				if(NumAvailableOrders < MAX_AVAILABLE_ORDERS) {
-					// Have we already got this order?
-					Found = false;
-					for(i=0; i<NumAvailableOrders; i++) {
-						if(AvailableOrders[i].OrderIndex == OrdIndex) {
-							// Yes! Then increment it's reference count.
-							AvailableOrders[i].RefCount++;
-							Found = true;
-						}
-					}
-
-					if(!Found) {
-						// Not already got it so add it to the list of available orders.
-						AvailableOrders[NumAvailableOrders].OrderIndex = OrdIndex;
-						AvailableOrders[NumAvailableOrders].RefCount = 1;
-						NumAvailableOrders++;
-					}
-				}
-			}
-		}
-	}
-
-	if(NumAvailableOrders == 0) {
-		return false;
-	}
-
-	if(NumAvailableOrders > 1) {
-		// Sort by Order index, A bubble sort? I know but it's only
-		// a small list so what the hell.
-		do {
-			Sorted = true;
-			for(i=0; i<NumAvailableOrders-1; i++) {
-				if(AvailableOrders[i].OrderIndex > AvailableOrders[i+1].OrderIndex) {
-					Tmp = AvailableOrders[i];
-					AvailableOrders[i] = AvailableOrders[i+1];
-					AvailableOrders[i+1] = Tmp;
-					Sorted = false;
-				}
-			}
-		} while(!Sorted);
-	}
-
-	return true;
-}
-
-// Build a list of orders available for the selected structure.
-static BOOL BuildStructureOrderList(STRUCTURE *psStructure)
-{
-    //only valid for Factories (at the moment)
-    if (!StructIsFactory(psStructure))
-    {
-        ASSERT( false, "BuildStructureOrderList: structure is not a factory" );
-        return false;
-    }
-
-    //this can be hard-coded!
-    AvailableOrders[0].OrderIndex = 0;//DSO_ATTACK_RANGE;
-    AvailableOrders[0].RefCount = 1;
-    AvailableOrders[1].OrderIndex = 1;//DSO_REPAIR_LEVEL;
-    AvailableOrders[1].RefCount = 1;
-    AvailableOrders[2].OrderIndex = 2;//DSO_ATTACK_LEVEL;
-    AvailableOrders[2].RefCount = 1;
-    AvailableOrders[3].OrderIndex = 5;//DSO_HALTTYPE;
-    AvailableOrders[3].RefCount = 1;
-
-    NumAvailableOrders = 4;
-
-    return true;
 }
 
 
@@ -1490,55 +1398,105 @@ static BOOL intRefreshOrderButtons(void)
 }
 
 
-// return the state for an order for all the units selected
-// if there are multiple states then don't return a state
-static SDWORD GetSecondaryStates(SECONDARY_ORDER sec)
+// Call to refresh the Order screen, ie when a droids boards it.
+//
+BOOL intRefreshOrder(void)
 {
-	SDWORD	i;
-	SECONDARY_STATE state, currState;
-	BOOL	bFirst;
+	// Is the Order screen up?
+	if ((intMode == INT_ORDER) &&
+		(widgGetFromID(psWScreen,IDORDER_FORM) != NULL))
+	{
+		BOOL Ret;
 
-	state = 0;
-	bFirst = true;
-    //handle a factory being selected - AB 22/04/99
-    if (psSelectedFactory)
-    {
-        if (getFactoryState(psSelectedFactory, sec, &currState))
+		NumSelectedDroids = 0;
+        //check for factory selected first
+        if (!psSelectedFactory)
         {
-            state = currState;
+    		if (!BuildSelectedDroidList())
+	    	{
+		    	// no units selected - quit
+			    intRemoveOrder();
+			    return true;
+            }
+		}
+
+		// if the orders havn't changed, just reset the state
+		//if (CheckDroidOrderList())
+        if (CheckObjectOrderList())
+		{
+			Ret = intRefreshOrderButtons();
+		}
+		else
+		{
+			// Refresh it by re-adding it.
+			Ret = intAddOrder(NULL);
+			if(Ret == false) {
+				intMode = INT_NORMAL;
+			}
+		}
+		return Ret;
+	}
+
+	return true;
+}
+
+
+// Remove the droids order screen with animation.
+//
+void intRemoveOrder(void)
+{
+
+	W_TABFORM *Form;
+
+	widgDelete(psWScreen, IDORDER_CLOSE);
+
+	// Start the window close animation.
+	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDORDER_FORM);
+	if(Form) {
+		Form->display = intClosePlainForm;
+		Form->pUserData = NULL; // Used to signal when the close anim has finished.
+		Form->disableChildren = true;
+		ClosingOrder = true;
+		OrderUp = false;
+		NumSelectedDroids = 0;
+        psSelectedFactory = NULL;
+    }
+
+}
+
+
+// Remove the droids order screen without animation.
+//
+void intRemoveOrderNoAnim(void)
+{
+	widgDelete(psWScreen, IDORDER_CLOSE);
+	widgDelete(psWScreen, IDORDER_FORM);
+	OrderUp = false;
+	NumSelectedDroids = 0;
+    psSelectedFactory = NULL;
+}
+
+
+//looks thru' the players' list of Structures to see if one is a factory and it is selected
+// NOTE: Unused! BOOL factorySelected(void)
+BOOL factorySelected(void);
+BOOL factorySelected(void)
+{
+    STRUCTURE *psStruct;
+
+    for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+    {
+        if (psStruct->selected && StructIsFactory(psStruct))
+        {
+            //found one - set as one to use for the interface
+            psSelectedFactory = psStruct;
+            return true;
         }
     }
-    else //droids
-    {
-	    for (i=0; i<NumSelectedDroids; i++)
-	    {
-		    currState = secondaryGetState(SelectedDroids[i], sec);
-			if (bFirst)
-			{
-				state = currState;
-				bFirst = false;
-			}
-			else if (state != currState)
-			{
-				state = 0;
-			}
-	    }
-    }
-
-	return state;
+    //obviously never found a factory
+    return false;
 }
 
-
-static UDWORD GetImageWidth(IMAGEFILE *ImageFile,UDWORD ImageID)
-{
-	return iV_GetImageWidth(ImageFile,(UWORD)ImageID);
-}
-
-
-static UDWORD GetImageHeight(IMAGEFILE *ImageFile,UDWORD ImageID)
-{
-	return iV_GetImageHeight(ImageFile,(UWORD)ImageID);
-}
 
 //new function added to bring up the RMB order form for Factories as well as droids
 void intAddFactoryOrder(STRUCTURE *psStructure)

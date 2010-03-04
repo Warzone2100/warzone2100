@@ -310,6 +310,7 @@ extern BOOL ClosingIntelMap;
 extern BOOL	ClosingTrans;
 extern BOOL	ClosingTransCont;
 extern BOOL	ClosingTransDroids;
+extern BOOL ClosingOrder;
 
 /* Initialise the in game interface */
 extern BOOL intInitialise(void);

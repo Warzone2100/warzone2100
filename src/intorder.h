@@ -24,14 +24,17 @@
 #ifndef __INCLUDED_SRC_INTORDER_H__
 #define __INCLUDED_SRC_INTORDER_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define IDORDER_FORM	8000
 #define IDORDER_CLOSE	8001
 
 extern BOOL OrderUp;
 
 BOOL intUpdateOrder(DROID *psDroid);	// update already open order form
-//changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
-//BOOL intAddOrder(DROID *Droid);			// create and open order form
 BOOL intAddOrder(BASE_OBJECT *psObj);			// create and open order form
 void intRunOrder(void);					
 void intProcessOrder(UDWORD id);
@@ -40,6 +43,10 @@ void intRemoveOrderNoAnim(void);
 BOOL intRefreshOrder(void);
 
 //new function added to bring up the RMB order form for Factories as well as droids
-extern void intAddFactoryOrder(STRUCTURE *psStructure);
+void intAddFactoryOrder(STRUCTURE *psStructure);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_INTORDER_H__
