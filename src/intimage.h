@@ -22,21 +22,15 @@
 
 #include "intfac.h" // Interface image id's.
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define FILLRED 16
 #define FILLGREEN 16
 #define FILLBLUE 128
 #define FILLTRANS 128
-
-// Sprite image structure.
-typedef struct {
-	UDWORD BMPNum;	//< Source bitmap index.
-	UDWORD Offset;	//< byte offset within source bitmap.
-	UDWORD Width;	//< Width of image.
-	UDWORD Height;	//< Height of image.
-	UDWORD Modulus;	//< Width of source bitmap.
-	SDWORD XOffset;	//< X offset for drawing.
-	SDWORD YOffset;	//< Y offset for drawing.
-} IMAGE;
 
 /** Frame type */
 typedef enum {
@@ -59,16 +53,15 @@ extern IMAGEFILE *IntImages;	//< All the 2d graphics for the user interface.
 
 // A few useful defined tabs.
 extern TABDEF StandardTab;
-extern TABDEF SystemTab;
 extern TABDEF SmallTab;
 
-extern BOOL imageInitBitmaps(void);
-extern void imageDeleteBitmaps(void);
+BOOL imageInitBitmaps(void);
 
 /** Draws a transparent window. */
-extern void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);
+void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);
 
-/** Called by RenderWindowFrame and RenderOpaqueWindow but you can call it yourself if you want. */
-extern void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, BOOL Opaque);
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif
