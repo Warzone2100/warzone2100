@@ -26,7 +26,7 @@ extern "C"
 {
 #endif //__cplusplus
 
-extern BOOL attemptCheatCode(const char* cheat_name);
+BOOL attemptCheatCode(const char* cheat_name);
 
 #ifdef __cplusplus
 }

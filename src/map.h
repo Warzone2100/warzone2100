@@ -303,7 +303,7 @@ extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
 BOOL mapSaveTagged(char *pFileName);
 BOOL mapLoadTagged(char *pFileName);
 
-/* Return a pointer to the tile structure at x,y */
+/** Return a pointer to the tile structure at x,y in map coordinates */
 static inline WZ_DECL_PURE MAPTILE *mapTile(SDWORD x, SDWORD y)
 {
 	// Clamp x and y values to actual ones
@@ -319,6 +319,9 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(SDWORD x, SDWORD y)
 
 	return &psMapTiles[x + (y * mapWidth)];
 }
+
+/** Return a pointer to the tile structure at x,y in world coordinates */
+#define worldTile(_x, _y) mapTile(map_coord(_x), map_coord(_y))
 
 /// Return ground height of top-left corner of tile at x,y
 static inline WZ_DECL_PURE float map_TileHeight(SDWORD x, SDWORD y)
@@ -411,7 +414,7 @@ typedef struct _tile_coord
 } TILE_COORD;
 
 /// The max height of the terrain and water at the specified world coordinates
-extern SWORD map_Height(int x, int y);
+extern int32_t map_Height(int x, int y);
 
 /* returns true if object is above ground */
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj );
@@ -438,7 +441,7 @@ extern bool fireOnLocation(unsigned int x, unsigned int y);
  * Transitive sensor check for tile. Has to be here rather than
  * visibility.h due to header include order issues. 
  */
-static inline bool hasSensorOnTile(MAPTILE *psTile, int player)
+static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
 {
 	return ((player == selectedPlayer && godMode) || (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)));
 }

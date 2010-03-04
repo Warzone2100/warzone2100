@@ -1814,9 +1814,6 @@ void processLaunchTransporter(void)
 
 SDWORD	bobTransporterHeight( void )
 {
-SDWORD	val;
-UDWORD	angle;
-
 	// Because 4320/12 = 360 degrees
 	// this gives us a bob frequency of 4.32 seconds.
 	// we scale amplitude to 10 (world coordinate metric).
@@ -1824,13 +1821,7 @@ UDWORD	angle;
 	// it will not 'bounce' off the top _and_ bottom of
 	// it's movemment arc.
 
-
-	angle = gameTime%4320;
-	val = angle/12;
-	val = 10 * (SIN(DEG(val)));
-
-
-	return(val/4096);
+	return iSinSR(gameTime, 4320, 10);
 }
 
 /*causes one of the mission buttons (Launch Button or Mission Timer) to start flashing*/

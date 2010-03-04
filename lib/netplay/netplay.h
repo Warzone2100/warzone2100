@@ -34,11 +34,6 @@ extern "C"
 {
 #endif //__cplusplus
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // Lobby Connection errors
 
 typedef enum
@@ -289,6 +284,7 @@ extern SYNC_COUNTER sync_counter;
 // update flags
 extern bool netPlayersUpdated;
 extern int mapDownloadProgress;
+extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
@@ -343,6 +339,9 @@ extern void NETBroadcastPlayerInfo(uint32_t index);
 extern bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
 extern bool NETgameIsCorrectVersion(GAMESTRUCT* check_game);
 extern void NET_InitPlayers(void);
+
+void NETGameLocked(bool flag);
+void NETresetGamePassword(void);
 
 #ifdef __cplusplus
 }

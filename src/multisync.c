@@ -56,7 +56,7 @@
 // function definitions
 
 static BOOL sendStructureCheck	(void);							//Structure
-static void packageCheck		(const DROID* pD);
+static void packageCheck(DROID* pD);
 static BOOL sendDroidCheck		(void);							//droids
 
 static void highLevelDroidUpdate(DROID *psDroid,
@@ -69,12 +69,12 @@ static void highLevelDroidUpdate(DROID *psDroid,
 
 
 static void onscreenUpdate		(DROID *pDroid,UDWORD dam,		// the droid and its damage
-								 UWORD dir,					// direction it should facing
+								 Rotation rot,					// direction it should facing
 								 DROID_ORDER order);			// what it should be doing
 
 static void offscreenUpdate		(DROID *pDroid,UDWORD dam,
 								 float fx,float fy,
-								 UWORD dir,
+								 Rotation rot,
 								 DROID_ORDER order);
 
 static BOOL sendPowerCheck(void);
@@ -250,7 +250,7 @@ static DROID* pickADroid(void)
  *
  *  Call this when you need to update the given droid right now.
  */
-BOOL ForceDroidSync(const DROID* droidToSend)
+BOOL ForceDroidSync(DROID* droidToSend)
 {
 	uint8_t count = 1;		// *always* one
 
@@ -322,7 +322,7 @@ static BOOL sendDroidCheck(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Send a Single Droid Check message
-static void packageCheck(const DROID* pD)
+static void packageCheck(DROID* pD)
 {
 	// Copy these variables so that we don't have to violate pD's constness
 	uint8_t player = pD->player;
@@ -330,7 +330,6 @@ static void packageCheck(const DROID* pD)
 	int32_t order = pD->order;
 	uint32_t secondaryOrder = pD->secondaryOrder;
 	uint32_t body = pD->body;
-	float direction = pD->direction;
 	float experience = pD->experience;
 	float sMoveX = pD->sMove.fx;
 	float sMoveY = pD->sMove.fy;
@@ -351,7 +350,7 @@ static void packageCheck(const DROID* pD)
 	NETuint32_t(&body);
 
 	// Direction it is going in
-	NETfloat(&direction);
+	NETRotation(&pD->rot);
 
 	NETfloat(&sMoveX);
 	NETfloat(&sMoveY);
@@ -396,9 +395,10 @@ BOOL recvDroidCheck()
 			DROID_ORDER	order = 0;
 			BOOL		onscreen;
 			uint8_t		player;
-			float		direction, experience;
+			float		experience;
 			uint16_t	tx, ty;
 			uint32_t	ref, body, target = 0, secondaryOrder;
+			Rotation	rot;
 
 			// Fetch the player
 			NETuint8_t(&player);
@@ -416,7 +416,7 @@ BOOL recvDroidCheck()
 			NETuint32_t(&body);
 
 			// Direction
-			NETfloat(&direction);
+			NETRotation(&rot);
 
 			// Fractional move
 			NETfloat(&fx);
@@ -473,11 +473,11 @@ BOOL recvDroidCheck()
 			// Update the droid
 			if (onscreen || isVtolDroid(pD))
 			{
-				onscreenUpdate(pD, body, direction, order);
+				onscreenUpdate(pD, body, rot, order);
 			}
 			else
 			{
-				offscreenUpdate(pD, body, fx, fy, direction, order);
+				offscreenUpdate(pD, body, fx, fy, rot, order);
 			}
 
 //			debug(LOG_SYNC, "difference in position for droid %d; was (%g, %g); did %s update", (int)pD->id, 
@@ -541,7 +541,7 @@ static void highLevelDroidUpdate(DROID *psDroid, float fx, float fy,
 // droid on screen needs modifying
 static void onscreenUpdate(DROID *psDroid,
 						   UDWORD dam,
-						   UWORD dir,
+						   Rotation rot,
 						   DROID_ORDER order)
 {
 	BASE_OBJECT *psClickedOn;
@@ -563,7 +563,7 @@ static void onscreenUpdate(DROID *psDroid,
 
 //	if(psDroid->order == DORDER_NONE || (psDroid->order == DORDER_GUARD && psDroid->action == DACTION_NONE) )
 //	{
-//		psDroid->direction	 = dir  %360;				//update rotation
+//		psDroid->rot.direction	 = rot.direction;				//update rotation
 //	}
 
 	return;
@@ -575,7 +575,7 @@ static void offscreenUpdate(DROID *psDroid,
 							UDWORD dam,
 							float fx,
 							float fy,
-							UWORD dir,
+							Rotation rot,
 							DROID_ORDER order)
 {
 	PROPULSION_STATS	*psPropStats;
@@ -590,7 +590,7 @@ static void offscreenUpdate(DROID *psDroid,
 	psDroid->pos.y		= fy;				// update y
 	psDroid->sMove.fx	= fx;
 	psDroid->sMove.fy	= fy;
-	psDroid->direction	= dir % 360;			// update rotation
+	psDroid->rot.direction	= rot.direction;		// update rotation
 	psDroid->body		= dam;								// update damage
 
 	// stage one, update the droid's position & info, LOW LEVEL STUFF.
@@ -714,10 +714,8 @@ static BOOL sendStructureCheck(void)
 			NETuint32_t(&pS->id);
 			NETuint32_t(&pS->body);
 			NETuint32_t(&pS->pStructureType->ref);
-			NETuint16_t(&pS->pos.x);
-			NETuint16_t(&pS->pos.y);
-			NETuint16_t(&pS->pos.z);
-			NETfloat(&pS->direction);
+			NETPosition(&pS->pos);
+			NETRotation(&pS->rot);
 
 			switch (pS->pStructureType->type)
 			{
@@ -751,7 +749,7 @@ BOOL recvStructureCheck()
 	STRUCTURE_STATS	*psStats;
 	BOOL			hasCapacity = true;
 	int				i, j;
-	float			direction;
+	Rotation		rot;
 	uint8_t			player, ourCapacity;
 	uint32_t		body;
 	uint16_t		x, y, z;
@@ -765,7 +763,7 @@ BOOL recvStructureCheck()
 		NETuint16_t(&x);
 		NETuint16_t(&y);
 		NETuint16_t(&z);
-		NETfloat(&direction);
+		NETRotation(&rot);
 
 		if (player >= MAX_PLAYERS)
 		{
@@ -779,7 +777,7 @@ BOOL recvStructureCheck()
 		if (pS)
 		{
 			pS->body = body;
-			pS->direction = direction;
+			pS->rot = rot;
 		}
 		// Structure was not found - build it
 		else
@@ -801,7 +799,7 @@ BOOL recvStructureCheck()
 				 && pS->pStructureType->type == type
 				 && pS->player == player)
 				{
-					pS->direction = direction;
+					pS->rot = rot;
 					pS->id = ref;
 
 					if (pS->status != SS_BUILT)
@@ -857,7 +855,7 @@ BOOL recvStructureCheck()
 			// Check its finished
 			if (pS->status != SS_BUILT)
 			{
-				pS->direction = direction;
+				pS->rot = rot;
 				pS->id = ref;
 				pS->status = SS_BUILT;
 				buildingComplete(pS);

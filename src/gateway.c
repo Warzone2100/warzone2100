@@ -130,31 +130,31 @@ BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 		y1 = temp;
 	}
 
-	// initialise the gateway
-	psNew->x1 = (UBYTE)x1;
-	psNew->y1 = (UBYTE)y1;
-	psNew->x2 = (UBYTE)x2;
-	psNew->y2 = (UBYTE)y2;
+	// Initialise the gateway, correct out-of-map gateways
+	psNew->x1 = MAX(3, x1);
+	psNew->y1 = MAX(3, y1);
+	psNew->x2 = MIN(x2, mapWidth - 4);
+	psNew->y2 = MIN(y2, mapHeight - 4);
 
 	// add the gateway to the list
 	psNew->psNext = psGateways;
 	psGateways = psNew;
 
 	// set the map flags
-	if (x1 == x2)
+	if (psNew->x1 == psNew->x2)
 	{
 		// vertical gateway
-		for(pos = y1; pos <= y2; pos++)
+		for(pos = psNew->y1; pos <= psNew->y2; pos++)
 		{
-			gwSetGatewayFlag(x1, pos);
+			gwSetGatewayFlag(psNew->x1, pos);
 		}
 	}
 	else
 	{
 		// horizontal gateway
-		for(pos = x1; pos <= x2; pos++)
+		for(pos = psNew->x1; pos <= psNew->x2; pos++)
 		{
-			gwSetGatewayFlag(pos, y1);
+			gwSetGatewayFlag(pos, psNew->y1);
 		}
 	}
 

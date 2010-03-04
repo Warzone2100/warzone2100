@@ -43,7 +43,7 @@ extern "C"
 typedef struct _f_line
 {
 	SWORD		xoffset,yoffset;	// position relative to center
-	SWORD		dir;				// orientation of line
+	uint16_t	direction;		// orientation of line
 	SBYTE		member;				// first member in the 'linked list' of members
 } F_LINE;
 
@@ -63,7 +63,7 @@ typedef struct _formation
 
 	SWORD		size;	// maximum length of the lines
 	SWORD		rankDist;	// seperation between the ranks
-	SWORD		dir;	// direction of the formation
+	uint16_t	direction;	// direction of the formation
 	SDWORD		x,y;	// position of the front of the formation
 
 	// the lines that make up a formation

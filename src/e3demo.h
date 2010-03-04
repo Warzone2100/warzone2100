@@ -26,11 +26,11 @@ extern "C"
 {
 #endif //__cplusplus
 
-extern	void	initDemoCamera		( void );
-extern	void	processDemoCam		( void );
-extern	void	toggleDemoStatus	( void );
-extern	BOOL	demoGetStatus		( void );
-extern	void	setFindNewTarget	( void );
+void initDemoCamera(void);
+void processDemoCam(void);
+void toggleDemoStatus(void);
+BOOL demoGetStatus(void);
+void setFindNewTarget(void);
 
 #ifdef __cplusplus
 }

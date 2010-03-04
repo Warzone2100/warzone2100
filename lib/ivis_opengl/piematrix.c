@@ -21,7 +21,7 @@
  *  Matrix manipulation functions.
  */
 
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 #include "lib/framework/frame.h"
 
 #include "lib/framework/fixedpoint.h"
@@ -322,9 +322,8 @@ void pie_TranslateTextureEnd(void)
 void pie_Begin3DScene(void)
 {
 	pie_SetTexturePage(TEXPAGE_FONT);
-	glColor3ub(0xFF,0xFF,0xFF);		// Reset Color to white
+	glColor3f( 1.0f, 1.0f, 1.0f);		// Reset Color to white
 	glDepthRange(0.1, 1);
-	glEnable(GL_CULL_FACE);
 	drawing_interface = false;
 }
 

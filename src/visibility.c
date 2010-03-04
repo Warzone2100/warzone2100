@@ -164,9 +164,9 @@ static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer
 #define MAX_WAVECAST_LIST_SIZE 1360  // Trivial upper bound to what a fully upgraded WSS can use (its number of angles). Should probably be some factor times the maximum possible radius. Is probably a lot more than needed. Tested to need at least 180.
 	int heights[2][MAX_WAVECAST_LIST_SIZE];
 	int angles[2][MAX_WAVECAST_LIST_SIZE + 1];
-	int readListSize, readListPos, writeListPos = 0;
+	int readListSize = 0, readListPos = 0, writeListPos = 0;  // readListSize, readListPos dummy initialisations.
 	int readList = 0;  // Reading from this list, writing to the other. Could also initialise to rand()%2.
-	int lastHeight;
+	int lastHeight = 0;  // lastHeight dummy initialisation.
 	int lastAngle = 0x7FFFFFFF;
 
 	// Start with full vision of all angles. (If someday wanting to make droids that can only look in one direction, change here, after getting the original angle values saved in the wavecast table.)
@@ -239,7 +239,7 @@ static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer
 static bool rayLOSCallback(Vector3i pos, int distSq, void *data)
 {
 	VisibleObjectHelp_t * help = data;
-	int dist = sqrtf(distSq);
+	int dist = iSqrt(distSq);
 
 	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
 		&& pos.y >= 0 && pos.y < world_coord(mapHeight),
@@ -381,7 +381,7 @@ void revealAll(UBYTE player)
  */
 int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock)
 {
-	Vector3i pos, dest, diff;
+	Vector3i diff;
 	int range, distSq;
 	int	power;
 
@@ -393,10 +393,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 		return 0;
 	}
 
-	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-	pos = Vector3uw_To3i(psViewer->pos);
-	dest = Vector3uw_To3i(psTarget->pos);
-	diff = Vector3i_Sub(dest, pos);
+	diff = Vector3i_Sub(psViewer->pos, psTarget->pos);
 	range = objSensorRange(psViewer);
 
 	/* Get the sensor Range and power */
@@ -482,11 +479,11 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 	power = adjustPowerByRange(psViewer->pos.x, psViewer->pos.y, psTarget->pos.x, psTarget->pos.y, range, objSensorPower(psViewer));
 	{
 		// initialise the callback variables
-		VisibleObjectHelp_t help = { true, wallsBlock, distSq, pos.z + visObjHeight(psViewer), { map_coord(dest.x), map_coord(dest.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
+		VisibleObjectHelp_t help = { true, wallsBlock, distSq, psViewer->pos.z + visObjHeight(psViewer), { map_coord(psTarget->pos.x), map_coord(psTarget->pos.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
 		int targetGrad, top;
 
 		// Cast a ray from the viewer to the target
-		rayCast(pos, diff, range, rayLOSCallback, &help);
+		rayCast(psViewer->pos, diff, range, rayLOSCallback, &help);
 
 		if (gWall != NULL && gNumWalls != NULL) // Out globals are set
 		{
@@ -495,7 +492,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 		}
 
 		// See if the target can be seen
-		top = dest.z + visObjHeight(psTarget) - help.startHeight;
+		top = psTarget->pos.z + visObjHeight(psTarget) - help.startHeight;
 		targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
 
 		if (targetGrad >= help.currGrad)
@@ -787,7 +784,7 @@ MAPTILE		*psTile;
  */
 bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock)
 {
-	Vector3i pos, dest, diff;
+	Vector3i diff;
 	int range, distSq;
 
 	ASSERT(psViewer != NULL, "Invalid shooter pointer!");
@@ -797,10 +794,7 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 		return false;
 	}
 
-	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-	pos = Vector3uw_To3i(psViewer->pos);
-	dest = Vector3uw_To3i(psTarget->pos);
-	diff = Vector3i_Sub(dest, pos);
+	diff = Vector3i_Sub(psViewer->pos, psTarget->pos);
 	range = objSensorRange(psViewer);
 
 	distSq = Vector3i_ScalarP(diff, diff);
@@ -812,11 +806,11 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 
 	// initialise the callback variables
 	{
-		VisibleObjectHelp_t help = { true, wallsBlock, distSq, pos.z + visObjHeight(psViewer), { map_coord(dest.x), map_coord(dest.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
+		VisibleObjectHelp_t help = { true, wallsBlock, distSq, psViewer->pos.z + visObjHeight(psViewer), { map_coord(psTarget->pos.x), map_coord(psTarget->pos.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
 		int targetGrad, top;
 
 		// Cast a ray from the viewer to the target
-		rayCast(pos, diff, range, rayLOSCallback, &help);
+		rayCast(psViewer->pos, diff, range, rayLOSCallback, &help);
 
 		if (gWall != NULL && gNumWalls != NULL) // Out globals are set
 		{
@@ -825,7 +819,7 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 		}
 
 		// See if the target can be seen
-		top = dest.z + visObjHeight(psTarget) - help.startHeight;
+		top = psTarget->pos.z + visObjHeight(psTarget) - help.startHeight;
 		targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
 
 		return targetGrad >= help.currGrad;

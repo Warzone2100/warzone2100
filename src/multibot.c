@@ -132,14 +132,14 @@ BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STA
 		uint8_t player = psDroid->player;
 		uint32_t droid = psDroid->id;
 		uint32_t body = psDroid->body;
-		Vector3uw pos = psDroid->pos;
+		Position pos = psDroid->pos;
 
 		NETuint8_t(&player);
 		NETuint32_t(&droid);
 		NETenum(&sec);
 		NETenum(&state);
 		NETuint32_t(&body);
-		NETVector3uw(&pos);
+		NETPosition(&pos);
 	}
 	return NETend();
 }
@@ -151,7 +151,7 @@ BOOL recvDroidSecondary()
 	SECONDARY_ORDER sec = DSO_ATTACK_RANGE;
 	SECONDARY_STATE state = DSS_NONE;
 	uint32_t body;
-	Vector3uw pos;
+	Position pos;
 
 	NETbeginDecode(NET_SECONDARY);
 	{
@@ -163,7 +163,7 @@ BOOL recvDroidSecondary()
 		NETenum(&sec);
 		NETenum(&state);
 		NETuint32_t(&body);
-		NETVector3uw(&pos);
+		NETPosition(&pos);
 
 		// If we can not find the droid should we not ask for it?
 		if (!IdToDroid(droid, player, &psDroid))
@@ -341,12 +341,12 @@ BOOL sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
 		uint8_t player = psDroid->player;
 		uint32_t droidID = psDroid->id;
 		uint32_t transporterID = psTransporter->id;
-		Vector3uw pos = psDroid->pos;
+		Position pos = psDroid->pos;
 
 		NETuint8_t(&player);
 		NETuint32_t(&droidID);
 		NETuint32_t(&transporterID);
-		NETVector3uw(&pos);
+		NETPosition(&pos);
 	}
 	return NETend();
 }
@@ -365,12 +365,12 @@ BOOL recvDroidDisEmbark()
 		uint8_t player;
 		uint32_t droidID;
 		uint32_t transporterID;
-		Vector3uw pos;
+		Position pos;
 
 		NETuint8_t(&player);
 		NETuint32_t(&droidID);
 		NETuint32_t(&transporterID);
-		NETVector3uw(&pos);
+		NETPosition(&pos);
 
 		NETend();
 
@@ -539,13 +539,13 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 	debug(LOG_SYNC, "Droid sent with id of %u", id);
 	NETbeginEncode(NET_DROID, NET_ALL_PLAYERS);
 	{
-		Vector3uw pos = { x, y, 0 };
+		Position pos = { x, y, 0 };
 		uint32_t templateID = pTemplate->multiPlayerID;
 		uint32_t power = getPower(player);
 
 		NETuint8_t(&player);
 		NETuint32_t(&id);
-		NETVector3uw(&pos);
+		NETPosition(&pos);
 		NETuint32_t(&templateID);
 		NETuint32_t(&power);		// update player's power as well.
 		NETbool(&powerCalculated);
@@ -562,7 +562,7 @@ BOOL recvDroid()
 	DROID* psDroid;
 	uint8_t player;
 	uint32_t id;
-	Vector3uw pos;
+	Position pos;
 	BOOL powerCalculated;
 	uint32_t templateID;
 	uint32_t power;
@@ -571,7 +571,7 @@ BOOL recvDroid()
 	{
 		NETuint8_t(&player);
 		NETuint32_t(&id);
-		NETVector3uw(&pos);
+		NETPosition(&pos);
 		NETuint32_t(&templateID);
 		NETuint32_t(&power);
 		NETbool(&powerCalculated);
@@ -699,7 +699,7 @@ BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_O
 			{
 				NETuint32_t(&psDroid->id);
 				NETuint32_t(&psDroid->body);
-				NETVector3uw(&psDroid->pos);
+				NETPosition(&psDroid->pos);
 				--droidCount;
 			}
 		}
@@ -769,7 +769,7 @@ BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t
 		{
 			NETuint32_t(&psDroid->id);
 			NETuint32_t(&psDroid->body);
-			NETVector3uw(&psDroid->pos);
+			NETPosition(&psDroid->pos);
 		}
 	}
 	return NETend();
@@ -788,7 +788,7 @@ BOOL recvGroupOrder()
 	uint8_t		droidCount, i, player;
 	uint32_t	*droidIDs;
 	uint32_t	*droidBodies;
-	Vector3uw	*droidPositions;
+	Position	*droidPositions;
 
 	NETbeginDecode(NET_GROUPORDER);
 	{
@@ -820,7 +820,7 @@ BOOL recvGroupOrder()
 		droidBodies = alloca(droidCount * sizeof(uint32_t));
 
 		// Finally some space for the positions of the droids
-		droidPositions = alloca(droidCount * sizeof(Vector3uw));
+		droidPositions = alloca(droidCount * sizeof(Position));
 
 		// Retrieve the droids from the message
 		for (i = 0; i < droidCount; ++i)
@@ -839,7 +839,7 @@ BOOL recvGroupOrder()
 			NETuint32_t(&droidBodies[i]);
 
 			// Get the position of the droid
-			NETVector3uw(&droidPositions[i]);
+			NETPosition(&droidPositions[i]);
 		}
 	}
 	NETend();
@@ -857,7 +857,7 @@ BOOL recvGroupOrder()
 	{
 		DROID* psDroid;
 		uint32_t body = droidBodies[i];
-		Vector3uw pos = droidPositions[i];
+		Position pos = droidPositions[i];
 
 		// Retrieve the droid associated with the current ID
 		if (!IdToDroid(droidIDs[i], ANYPLAYER, &psDroid))

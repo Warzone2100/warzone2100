@@ -304,9 +304,9 @@ static void setUpRadarTarget(SDWORD x, SDWORD y)
 	{
 		radarTarget.pos.z = map_Height(x,y) + CAMERA_PIVOT_HEIGHT;
 	}
-	radarTarget.direction = calcDirection(player.p.x, player.p.z, x, y);
-	radarTarget.pitch = 0;
-	radarTarget.roll = 0;
+	radarTarget.rot.direction = calcDirection(player.p.x, player.p.z, x, y);
+	radarTarget.rot.pitch = 0;
+	radarTarget.rot.roll = 0;
 	radarTarget.type = OBJ_TARGET;
 	radarTarget.died = 0;
 }
@@ -547,9 +547,9 @@ static SDWORD getAverageTrackAngle( BOOL bCheckOnScreen )
 			if (bCheckOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : true)
 			{
 					droidCount++;
-					averageAngle += psDroid->direction;
-					xShift = trigSin(psDroid->direction);
-					yShift = trigCos(psDroid->direction);
+					averageAngle += UNDEG(psDroid->rot.direction);
+					xShift = trigSin(UNDEG(psDroid->rot.direction));
+					yShift = trigCos(UNDEG(psDroid->rot.direction));
 					xTotal += xShift;
 					yTotal += yShift;
 			}
@@ -589,9 +589,9 @@ static SDWORD getGroupAverageTrackAngle(UDWORD groupNumber, BOOL bCheckOnScreen)
 			if (bCheckOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : true)
 			{
 					droidCount++;
-					averageAngle += psDroid->direction;
-					xShift = trigSin(psDroid->direction);
-					yShift = trigCos(psDroid->direction);
+					averageAngle += UNDEG(psDroid->rot.direction);
+					xShift = trigSin(UNDEG(psDroid->rot.direction));
+					yShift = trigCos(UNDEG(psDroid->rot.direction));
 					xTotal += xShift;
 					yTotal += yShift;
 			}
@@ -766,8 +766,8 @@ static void updateCameraAcceleration(UBYTE update)
 		}
 		else
 		{
-		 	behind.x = ( CAM_DEFAULT_Y_OFFSET * SIN( DEG( trackingCamera.target->direction ) ) ) >> FP12_SHIFT;
-			behind.y = ( CAM_DEFAULT_X_OFFSET * COS( DEG( trackingCamera.target->direction ) ) ) >> FP12_SHIFT;
+		 	behind.x = ( CAM_DEFAULT_Y_OFFSET * SIN(trackingCamera.target->rot.direction ) ) >> FP12_SHIFT;
+			behind.y = ( CAM_DEFAULT_X_OFFSET * COS(trackingCamera.target->rot.direction) ) >> FP12_SHIFT;
 		}
 
 		concern.y += angle*5;
@@ -931,7 +931,7 @@ static void updateCameraRotationAcceleration( UBYTE update )
 		}
 		else
 		{
-			yConcern = DEG( (int)trackingCamera.target->direction );
+			yConcern = trackingCamera.target->rot.direction;
 		}
 		yConcern += DEG(180);
 
@@ -973,7 +973,7 @@ static void updateCameraRotationAcceleration( UBYTE update )
 		}
 		else
 		{
-			xConcern = DEG(trackingCamera.target->pitch);
+			xConcern = trackingCamera.target->rot.pitch;
 			xConcern += DEG(-16);
 		}
 
@@ -1015,7 +1015,7 @@ static void updateCameraRotationAcceleration( UBYTE update )
 		}
 		else
 		{
-			zConcern = DEG(trackingCamera.target->roll);
+			zConcern = trackingCamera.target->rot.roll;
 		}
 		while(trackingCamera.rotation.z<0)
 			{

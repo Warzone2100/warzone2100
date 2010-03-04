@@ -26,39 +26,25 @@
 #include <ctype.h>
 #include <physfs.h>
 #include <time.h>
-
-#include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
-#include "lib/framework/input.h"
-#include "lib/framework/stdio_ext.h"
-#include "lib/widget/button.h"
-#include "lib/widget/editbox.h"
-#include "lib/widget/widget.h"
-#include "lib/iniparser/iniparser.h"
-#include "lib/ivis_common/piepalette.h"		// for predefined colours.
-#include "lib/ivis_common/rendmode.h"		// for boxfill
-#include "hci.h"
-#include "scores.h"
-#include "loadsave.h"
-#include "challenge.h"
-#include "multiplay.h"
-#include "game.h"
-#include "lib/sound/audio_id.h"
-#include "lib/sound/audio.h"
-#include "frontend.h"
-#include "main.h"
-#include "display3d.h"
-#include "display.h"
 #ifndef WIN32
 #include <dirent.h>
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #endif
-#include "lib/netplay/netplay.h"
-#include "loop.h"
+
+#include "lib/framework/frame.h"
+#include "lib/framework/input.h"
+#include "lib/iniparser/iniparser.h"
+#include "lib/ivis_common/rendmode.h"		// for boxfill
+#include "lib/widget/button.h"
+
+#include "challenge.h"
+#include "frontend.h"
+#include "hci.h"
 #include "intdisplay.h"
-#include "mission.h"
-#include "lib/gamelib/gtime.h"
+#include "loadsave.h"
+#include "multiplay.h"
+#include "scores.h"
 
 #define totalslots 36			// challenge slots
 #define slotsInColumn 12		// # of slots in a column
@@ -68,8 +54,6 @@
 #define CHALLENGE_Y				D_H + 5
 #define CHALLENGE_W				610
 #define CHALLENGE_H				220
-
-#define MAX_SAVE_NAME			60
 
 #define CHALLENGE_HGAP			9
 #define CHALLENGE_VGAP			9
@@ -87,15 +71,47 @@
 #define CHALLENGE_ENTRY_START			ID_LOADSAVE+10		// each of the buttons.
 #define CHALLENGE_ENTRY_END			ID_LOADSAVE+10 +totalslots  // must have unique ID hmm -Q
 
-#define SAVEENTRY_EDIT			ID_LOADSAVE + totalslots + totalslots		// save edit box. must be highest value possible I guess. -Q
-
-static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
 static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 
 bool		challengesUp = false;		///< True when interface is up and should be run.
 bool		challengeActive = false;	///< Whether we are running a challenge
+
+static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	PIELIGHT col = WZCOL_GREEN;
+	UDWORD	x = xOffset + psWidget->x;
+	UDWORD	y = yOffset + psWidget->y;
+
+	pie_BoxFill(x, y, x + psWidget->width, y + psWidget->height, col);
+	pie_BoxFill(x + 2, y + 2, x + psWidget->width - 2, y + psWidget->height - 2, WZCOL_MENU_BACKGROUND);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+
+	UDWORD	x = xOffset + psWidget->x;
+	UDWORD	y = yOffset + psWidget->y;
+	char  butString[64];
+
+	drawBlueBox(x, y, psWidget->width, psWidget->height);	//draw box
+
+	if (((W_BUTTON *)psWidget)->pText)
+	{
+		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText);
+
+		iV_SetFont(font_regular);									// font
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+
+		while (iV_GetTextWidth(butString) > psWidget->width)
+		{
+			butString[strlen(butString)-1] = '\0';
+		}
+
+		//draw text
+		iV_DrawText(butString, x + 4, y + 17);
+	}
+}
 
 //****************************************************************************************
 // Challenge menu
@@ -365,39 +381,3 @@ bool displayChallenges()
 	return true;
 }
 
-static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
-{
-	PIELIGHT col = WZCOL_GREEN;
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
-
-	pie_BoxFill(x, y, x + psWidget->width, y + psWidget->height, col);
-	pie_BoxFill(x + 2, y + 2, x + psWidget->width - 2, y + psWidget->height - 2, WZCOL_MENU_BACKGROUND);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
-{
-
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
-	char  butString[64];
-
-	drawBlueBox(x, y, psWidget->width, psWidget->height);	//draw box
-
-	if (((W_BUTTON *)psWidget)->pText)
-	{
-		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText);
-
-		iV_SetFont(font_regular);									// font
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-
-		while (iV_GetTextWidth(butString) > psWidget->width)
-		{
-			butString[strlen(butString)-1] = '\0';
-		}
-
-		//draw text
-		iV_DrawText(butString, x + 4, y + 17);
-	}
-}

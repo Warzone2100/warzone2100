@@ -22,55 +22,50 @@
  * Saves your favourite options to the Registry.
  *
  */
-#include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
-
-#include "configuration.h"
 #include "lib/framework/configfile.h"
-#include "objmem.h"
-#include "lib/sound/track.h"		// audio
-#include "lib/sound/cdaudio.h"	// audio
-#include "warzoneconfig.h"	// renderMode
-#include "component.h"
-#include "seqdisp.h"
-#include "difficulty.h"
 #include "lib/netplay/netplay.h"
-#include "display3d.h"
-#include "multiplay.h"
-#include "ai.h"
-#include "advvis.h"
 #include "lib/sound/mixer.h"
-#include "hci.h"
-#include "radar.h"
+
+#include "advvis.h"
+#include "ai.h"
 // HACK bAllowDebugMode shouldn't be in clparse
 #include "clparse.h"
+#include "component.h"
+#include "configuration.h"
+#include "difficulty.h"
+#include "display3d.h"
+#include "hci.h"
 #include "multiint.h"
+#include "multiplay.h"
+#include "radar.h"
+#include "seqdisp.h"
 #include "texture.h"
+#include "warzoneconfig.h"	// renderMode
 
 // ////////////////////////////////////////////////////////////////////////////
 
-#define DEFAULTFXVOL	80
-#define DEFAULTCDVOL	60
 #define DEFAULTSCROLL	1000
 
 #define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 
-void	setSinglePlayerFrameLimit		(SDWORD limit);
-SDWORD	getSinglePlayerFrameLimit		(void);
-void	setDefaultFrameRateLimit		(void);
+/* Frame limit for multiplayer games (excluding skirmish and campaign) */
+#define MP_FRAME_LIMIT 45
+
+/* Default frame limit for single player: skirmish ans campaign */
+#define SP_FRAME_LIMIT 60
 
 // current frame limit for single player modes
 static SDWORD	spFrameLimit = SP_FRAME_LIMIT;
 
-void setSinglePlayerFrameLimit(SDWORD limit)
+static void setSinglePlayerFrameLimit(SDWORD limit)
 {
 	spFrameLimit = limit;
 }
 
-SDWORD getSinglePlayerFrameLimit(void)
+static SDWORD getSinglePlayerFrameLimit(void)
 {
 	return spFrameLimit;
 }

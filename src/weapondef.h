@@ -36,10 +36,8 @@ typedef struct _weapon
 	uint32_t        lastFired;	///< The gametime when this weapon last fired
 	uint32_t        shotsFired;
 	uint32_t        recoilValue;
-	uint16_t        pitch;
-	uint16_t        rotation;
-	uint16_t        prevPitch;
-	uint16_t        prevRotation;
+	Rotation	rot;
+	Rotation	prevRot;
 } WEAPON;
 
 #ifdef __cplusplus

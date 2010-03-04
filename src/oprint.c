@@ -50,7 +50,7 @@ static void printBaseObjInfo(const BASE_OBJECT* psObj)
 		break;
 	}
 
-	CONPRINTF( ConsoleString, (ConsoleString, "%s id %d at (%d,%d,%d) dpr (%f,%d,%d)\n", pType, psObj->id, psObj->pos.x, psObj->pos.y, psObj->pos.z, psObj->direction, psObj->pitch, psObj->roll) );
+	CONPRINTF( ConsoleString, (ConsoleString, "%s id %d at (%d,%d,%d) dpr (%hu,%hu,%hu)\n", pType, psObj->id, psObj->pos.x, psObj->pos.y, psObj->pos.z, psObj->rot.direction, psObj->rot.pitch, psObj->rot.roll));
 }
 
 /** print out information about a general component

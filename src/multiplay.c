@@ -136,8 +136,8 @@ void turnOffMultiMsg(BOOL bDoit)
 // throw a pary when you win!
 BOOL multiplayerWinSequence(BOOL firstCall)
 {
-	static Vector3i pos;
-	Vector3i pos2;
+	static Position pos;
+	Position pos2;
 	static UDWORD last=0;
 	float		rotAmount;
 	STRUCTURE	*psStruct;

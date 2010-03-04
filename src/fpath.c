@@ -323,11 +323,7 @@ static inline int fpathDistToTile(int tileX, int tileY, int pointX, int pointY)
 	int xdiff = world_coord(tileX) - pointX;
 	int ydiff = world_coord(tileY) - pointY;
 
-	if (xdiff == 0 && ydiff == 0)
-	{
-		return 0;
-	}
-	return trigIntSqrt(xdiff * xdiff + ydiff * ydiff);
+	return iHypot(xdiff, ydiff);
 }
 
 
@@ -337,8 +333,8 @@ static void fpathSetMove(MOVE_CONTROL *psMoveCntl, SDWORD targetX, SDWORD target
 	psMoveCntl->DestinationX = targetX;
 	psMoveCntl->DestinationY = targetY;
 	psMoveCntl->numPoints = 1;
-	psMoveCntl->asPath[0].x = map_coord(targetX);
-	psMoveCntl->asPath[0].y = map_coord(targetY);
+	psMoveCntl->asPath[0].x = targetX;
+	psMoveCntl->asPath[0].y = targetY;
 }
 
 
@@ -727,8 +723,8 @@ void fpathTest(int x, int y, int x2, int y2)
 	r = fpathSimpleRoute(&sMove, 1, x, y, x2, y2);
 	assert(r == FPR_OK);
 	assert(sMove.numPoints > 0 && sMove.asPath);
-	assert(sMove.asPath[sMove.numPoints - 1].x == map_coord(x2));
-	assert(sMove.asPath[sMove.numPoints - 1].y == map_coord(y2));
+	assert(sMove.asPath[sMove.numPoints - 1].x == x2);
+	assert(sMove.asPath[sMove.numPoints - 1].y == y2);
 	assert(fpathResultQueueLength() == 0);
 
 	/* Let one hundred paths flower! */
@@ -746,8 +742,8 @@ void fpathTest(int x, int y, int x2, int y2)
 		r = fpathSimpleRoute(&sMove, i, x, y, x2, y2);
 		assert(r == FPR_OK);
 		assert(sMove.numPoints > 0 && sMove.asPath);
-		assert(sMove.asPath[sMove.numPoints - 1].x == map_coord(x2));
-		assert(sMove.asPath[sMove.numPoints - 1].y == map_coord(y2));
+		assert(sMove.asPath[sMove.numPoints - 1].x == x2);
+		assert(sMove.asPath[sMove.numPoints - 1].y == y2);
 	}
 	assert(fpathResultQueueLength() == 0);
 
@@ -768,7 +764,7 @@ void fpathTest(int x, int y, int x2, int y2)
 	assert(firstResult == NULL);
 }
 
-bool fpathCheck(Vector2i orig, Vector2i dest, PROPULSION_TYPE propulsion)
+bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 {
 	MAPTILE *origTile;
 	MAPTILE *destTile;
@@ -776,13 +772,13 @@ bool fpathCheck(Vector2i orig, Vector2i dest, PROPULSION_TYPE propulsion)
 	// We have to be careful with this check because it is called on
 	// load when playing campaign on droids that are on the other
 	// map during missions, and those maps are usually larger.
-	if (!tileOnMap(orig.x, orig.y) || !tileOnMap(dest.x, dest.y))
+	if (!worldOnMap(orig.x, orig.y) || !worldOnMap(dest.x, dest.y))
 	{
 		return false;
 	}
 
-	origTile = mapTile(orig.x, orig.y);
-	destTile = mapTile(dest.x, dest.y);
+	origTile = worldTile(orig.x, orig.y);
+	destTile = worldTile(dest.x, dest.y);
 
 	ASSERT(propulsion != PROPULSION_TYPE_NUM, "Bad propulsion type");
 	ASSERT(origTile != NULL && destTile != NULL, "Bad tile parameter");

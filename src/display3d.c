@@ -350,7 +350,7 @@ static void showDroidPaths(void)
 
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
 	{
-		if (psDroid->selected)
+		if (psDroid->selected && psDroid->sMove.Status != MOVEINACTIVE)
 		{
 			int	i;
 			int	len = psDroid->sMove.numPoints;
@@ -360,12 +360,11 @@ static void showDroidPaths(void)
 			{
 				Vector3i pos;
 
-				ASSERT(tileOnMap(psDroid->sMove.asPath[i].x, psDroid->sMove.asPath[i].y), "Path off map!");
-				pos.x = world_coord(psDroid->sMove.asPath[i].x) + TILE_UNITS / 2;
-				pos.z = world_coord(psDroid->sMove.asPath[i].y) + TILE_UNITS / 2;
+				ASSERT(worldOnMap(psDroid->sMove.asPath[i].x, psDroid->sMove.asPath[i].y), "Path off map!");
+				pos.x = psDroid->sMove.asPath[i].x;
+				pos.z = psDroid->sMove.asPath[i].y;
 				pos.y = map_Height(pos.x, pos.z) + 16;
 
-				ASSERT(worldOnMap(pos.x, pos.y), "Effect off map!");
 				effectGiveAuxVar(80);
 				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
 			}
@@ -958,9 +957,6 @@ BOOL init3DView(void)
 
 	initDemoCamera();
 
-	/* Set up the sine table for the bullets */
-	initBulletTable();
-
 	/* No initial rotations */
 	imdRot2.x = 0;
 	imdRot.y = 0;
@@ -1147,11 +1143,11 @@ void	renderProjectile(PROJECTILE *psCurr)
 		iV_TRANSLATE(rx,0,-rz);
 
 		/* Rotate it to the direction it's facing */
-		imdRot2.y = DEG(st.direction);
+		imdRot2.y = st.rot.direction;
 		iV_MatrixRotateY(-imdRot2.y);
 
 		/* pitch it */
-		imdRot2.x = DEG(st.pitch);
+		imdRot2.x = st.rot.pitch;
 		iV_MatrixRotateX(imdRot2.x);
 
 		if (psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE
@@ -1215,9 +1211,9 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		iV_TRANSLATE(rx, 0, -rz);
 
 		/* parent object rotations */
-		imdRot2.y = DEG(spacetime.direction);
+		imdRot2.y = spacetime.rot.direction;
 		iV_MatrixRotateY(-imdRot2.y);
-		imdRot2.x = DEG(spacetime.pitch);
+		imdRot2.x = spacetime.rot.pitch;
 		iV_MatrixRotateX(imdRot2.x);
 
 		/* Set frame numbers - look into this later?? FIXME!!!!!!!! */
@@ -1370,7 +1366,7 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 
 	if ((psStats->type == REF_WALL || psStats->type == REF_GATE) && left == right && up != down)
 	{
-		blueprint->direction = 90; // rotate so walls will look like walls
+		blueprint->rot.direction = DEG(90); // rotate so walls will look like walls
 	}
 
 	for(i = left; i < right + 1; i++)
@@ -1797,7 +1793,7 @@ void	renderFeature(FEATURE *psFeature)
 
 	/* Translate */
 	iV_TRANSLATE(rx,0,-rz);
-	rotation = DEG( (int)psFeature->direction );
+	rotation = psFeature->rot.direction;
 
 	iV_MatrixRotateY(-rotation);
 
@@ -2078,7 +2074,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	/* OK - here is where we establish which IMD to draw for the building - luckily static objects,
 	* buildings in other words are NOT made up of components - much quicker! */
 
-	rotation = DEG((int)psStructure->direction);
+	rotation = psStructure->rot.direction;
 	iV_MatrixRotateY(-rotation);
 	if (!defensive
 	    && gameTime2-psStructure->timeLastHit < ELEC_DAMAGE_DURATION
@@ -2212,11 +2208,13 @@ void	renderStructure(STRUCTURE *psStructure)
 			// draw Weapon / ECM / Sensor for structure
 			for (i = 0; i < psStructure->numWeaps || i == 0; i++)
 			{
+				Rotation rot = structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime);
+
 				if (weaponImd[i] != NULL)
 				{
 					iV_MatrixBegin();
 					iV_TRANSLATE(strImd->connectors[i].x, strImd->connectors[i].z, strImd->connectors[i].y);
-					pie_MatRotY(DEG(-structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
+					pie_MatRotY(-rot.direction);
 					if (mountImd[i] != NULL)
 					{
 						pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue / 3);
@@ -2227,7 +2225,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							iV_TRANSLATE(mountImd[i]->connectors->x, mountImd[i]->connectors->z, mountImd[i]->connectors->y);
 						}
 					}
-					iV_MatrixRotateX(DEG(structureGetInterpolatedWeaponPitch(psStructure, i, graphicsTime)));
+					iV_MatrixRotateX(rot.pitch);
 					pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue);
 
 					pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
@@ -2251,7 +2249,7 @@ void	renderStructure(STRUCTURE *psStructure)
 									iV_TRANSLATE(weaponImd[i]->connectors->x,weaponImd[i]->connectors->z-12,weaponImd[i]->connectors->y);
 									pRepImd = getImdFromIndex(MI_FLAME);
 
-									pie_MatRotY(DEG(structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
+									pie_MatRotY(rot.direction);
 
 									iV_MatrixRotateY(-player.r.y);
 									iV_MatrixRotateX(-player.r.x);
@@ -2259,7 +2257,7 @@ void	renderStructure(STRUCTURE *psStructure)
 
 									iV_MatrixRotateX(player.r.x);
 									iV_MatrixRotateY(player.r.y);
-									pie_MatRotY(DEG(structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
+									pie_MatRotY(rot.direction);
 								}
 							}
 						}
@@ -2321,16 +2319,16 @@ void	renderStructure(STRUCTURE *psStructure)
 							if (strImd->max.y > 80) // babatower
 							{
 								iV_TRANSLATE(0, 80, 0);
-								pie_MatRotY(DEG(-structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
+								pie_MatRotY(-rot.direction);
 								iV_TRANSLATE(0, 0, -20);
 							}
 							else//baba bunker
 							{
 								iV_TRANSLATE(0, 10, 0);
-								pie_MatRotY(DEG(-structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime)));
+								pie_MatRotY(-rot.direction);
 								iV_TRANSLATE(0, 0, -40);
 							}
-							pie_MatRotX(DEG(structureGetInterpolatedWeaponPitch(psStructure, i, graphicsTime)));
+							pie_MatRotX(rot.pitch);
 							// draw the muzzle flash?
 							if (psStructure && psStructure->visible[selectedPlayer] > UBYTE_MAX / 2)
 							{
@@ -2533,7 +2531,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		/* Translate */
 		iV_TRANSLATE(rx, 0, -rz);
 
-		rotation = DEG( (int)psStructure->direction );
+		rotation = psStructure->rot.direction;
 		iV_MatrixRotateY(-rotation);
 
 		if(imd != NULL)
@@ -2549,7 +2547,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		imd = psStructure->sDisplay.imd;
 		temp = imd->points;
 
-		flattenImd(imd, structX, structY, psStructure->direction );
+		flattenImd(imd, structX, structY, UNDEG(psStructure->rot.direction));
 
 		/* Actually render it */
 		if ( (psStructure->status == SS_BEING_BUILT ) ||
@@ -2629,7 +2627,7 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 
 	if(psDroid->droidType == DROID_TRANSPORTER)
 	{
-		iV_MatrixRotateY( DEG( -psDroid->direction ) );
+		iV_MatrixRotateY(-psDroid->rot.direction);
 	}
 
 	pVecTemp = psShadowIMD->points;
@@ -2641,9 +2639,9 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	}
 	else
 	{
-		pie_MatRotY( DEG(-psDroid->direction ) );
-		pie_MatRotX( DEG( psDroid->pitch ) );
-		pie_MatRotZ( DEG( psDroid->roll ) );
+		pie_MatRotY(-psDroid->rot.direction);
+		pie_MatRotX(psDroid->rot.pitch);
+		pie_MatRotZ(psDroid->rot.roll);
 	}
 
 	pie_Draw3DShape(psShadowIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, 128);
@@ -3315,7 +3313,7 @@ static void	drawDroidSelections( void )
 	}
 
 	// Reset color to white so that features textures are rendered as expected
-	glColor3ub(0xFF,0xFF,0xFF);
+	glColor3f( 1.0f, 1.0f, 1.0f);
 	
 	for(psFeature = apsFeatureLists[0]; psFeature; psFeature = psFeature->psNext)
 	{
@@ -3862,15 +3860,10 @@ UDWORD	getRubbleTileNum( void )
 	return(rubbleTile);
 }
 
-/// Variable used by structureEffectsPlayer
-static UDWORD	lastSpinVal;
-
 /// Draw the spinning particles for power stations and re-arm pads for the specified player
 static void structureEffectsPlayer( UDWORD player )
 {
-	SDWORD	val;
 	SDWORD	radius;
-	UDWORD	angle;
 	STRUCTURE	*psStructure;
 	SDWORD	xDif,yDif;
 	Vector3i	pos;
@@ -3908,28 +3901,20 @@ static void structureEffectsPlayer( UDWORD player )
 				case 1:
 				case 2:
 					gameDiv = 1440;
-					val = 4;
 					break;
 				case 3:
 				case 4:
 				default:
-					gameDiv = 1080;
-					val = 3;	  // really fast!!!
+					gameDiv = 1080;   // really fast!!!
 					break;
 				}
-
-				angle = gameTime2%gameDiv;
-				val = angle/val;
 
 				/* New addition - it shows how many are connected... */
 				for(i=0 ;i<numConnected; i++)
 				{
 					radius = 32 - (i*2);	// around the spire
-					xDif = radius * (SIN(DEG(val)));
-					yDif = radius * (COS(DEG(val)));
-
-					xDif = xDif/4096;	 // cos it's fixed point
-					yDif = yDif/4096;
+					xDif = iSinSR(graphicsTime, gameDiv, radius);
+					yDif = iCosSR(graphicsTime, gameDiv, radius);
 
 					pos.x = psStructure->pos.x + xDif;
 					pos.z = psStructure->pos.y + yDif;
@@ -3963,12 +3948,9 @@ static void structureEffectsPlayer( UDWORD player )
 
 						}
 						/* Then it's repairing...? */
-						val = lastSpinVal = getModularScaledGraphicsTime(720, 360);  // grab an angle - 4 seconds cyclic
 						radius = psStructure->sDisplay.imd->radius;
-						xDif = radius * (SIN(DEG(val)));
-						yDif = radius * (COS(DEG(val)));
-						xDif = xDif/4096;	 // cos it's fixed point
-						yDif = yDif/4096;
+						xDif = iSinSR(graphicsTime, 720, radius);
+						yDif = iCosSR(graphicsTime, 720, radius);
 						pos.x = psStructure->pos.x + xDif;
 						pos.z = psStructure->pos.y + yDif;
 						pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay.imd->max.y;
@@ -4036,125 +4018,72 @@ STRUCTURE	*psStruct;
 	}//end if we want to display...
 }
 
+static void showEffectCircle(Position centre, int32_t radius, uint32_t auxVar, EFFECT_GROUP group, EFFECT_TYPE type)
+{
+	int32_t circumference = radius * 2 * 355/113 / TILE_UNITS;  // 2πr in tiles.
+	int32_t i;
+	for (i = 0; i < circumference; ++i)
+	{
+		Vector3i pos;
+		pos.x = centre.x - iSinSR(i, circumference, radius);
+		pos.z = centre.y - iCosSR(i, circumference, radius);  // [sic] y -> z
+
+		// Check if it's actually on map
+		if (worldOnMap(pos.x, pos.z))
+		{
+			pos.y = map_Height(pos.x, pos.z) + 16;
+			effectGiveAuxVar(auxVar);
+			addEffect(&pos, group, type, false, NULL, 0);
+		}
+	}
+}
+
 // Shows the weapon (long) range of the object in question.
 // Note, it only does it for the first weapon slot!
 static void showWeaponRange(BASE_OBJECT *psObj)
 {
-	UDWORD	i;
-	DROID	*psDroid;
-	STRUCTURE	*psStruct;
-	WEAPON_STATS	*psStats;
-	SDWORD	radius;
-	SDWORD	xDif,yDif;
-	UDWORD	weaponRange;
-	Vector3i pos;
+	uint32_t weaponRange;
 
 	if (psObj->type == OBJ_DROID)
 	{
-		psDroid = (DROID*)psObj;
-		psStats = asWeaponStats + psDroid->asWeaps[0].nStat;//weapon_slot
+		DROID *psDroid = (DROID*)psObj;
+		WEAPON_STATS *psStats = asWeaponStats + psDroid->asWeaps[0].nStat;//weapon_slot
 		weaponRange = psStats->longRange;
 	}
 	else
 	{
-		psStruct = (STRUCTURE*)psObj;
+		STRUCTURE *psStruct = (STRUCTURE*)psObj;
 		if(psStruct->pStructureType->numWeaps == 0) return;
 		weaponRange = psStruct->pStructureType->psWeapStat[0]->longRange;
 	}
 
-	if (!weaponRange)
-	{
-		return;		//don't bother if no range.
-	}
-
-	for (i=0; i<360; i+=23)
-	{
-		radius = weaponRange;
-		xDif = radius * (SIN(DEG(i)));
-		yDif = radius * (COS(DEG(i)));
-
-		xDif = xDif/4096;	 // 'cause it's fixed point
-		yDif = yDif/4096;
-		pos.x = psObj->pos.x - xDif;
-		pos.z = psObj->pos.y - yDif;
-
-		// Check if it's actually on map 
-		if (worldOnMap(pos.x, pos.z))
-		{
-			pos.y = map_Height(pos.x, pos.z) + 16;
-			effectGiveAuxVar(40);
-			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
-		}
-	}
+	showEffectCircle(psObj->pos, weaponRange, 40, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
 }
-static void	showSensorRange2(BASE_OBJECT *psObj)
+
+static void showSensorRange2(BASE_OBJECT *psObj)
 {
-	SDWORD	radius;
-	SDWORD	xDif,yDif;
-	UDWORD	sensorRange;
-	Vector3i pos;
-	UDWORD	i;
-	DROID	*psDroid;
-	STRUCTURE	*psStruct;
+	uint32_t sensorRange;
 
-	for(i=0; i<360; i+=15)
+	if(psObj->type == OBJ_DROID)
 	{
-		if(psObj->type == OBJ_DROID)
-		{
-			psDroid = (DROID*)psObj;
-			sensorRange = asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].range;
-		}
-		else
-		{
-			psStruct = (STRUCTURE*)psObj;
-			sensorRange = structSensorRange(psStruct);
-		}
-		radius = sensorRange;
-		xDif = radius * (SIN(DEG(i)));
-		yDif = radius * (COS(DEG(i)));
-
-		xDif = xDif/4096;	 // cos it's fixed point
-		yDif = yDif/4096;
-		pos.x = psObj->pos.x - xDif;
-		pos.z = psObj->pos.y - yDif;
-
-		// Check if it's actually on map 
-		if (worldOnMap(pos.x, pos.z))
-		{
-			pos.y = map_Height(pos.x, pos.z) + 16;
-			effectGiveAuxVar(80);
-			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
-		}
+		DROID *psDroid = (DROID*)psObj;
+		sensorRange = asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].range;
+	}
+	else
+	{
+		STRUCTURE *psStruct = (STRUCTURE*)psObj;
+		sensorRange = structSensorRange(psStruct);
 	}
 
+	showEffectCircle(psObj->pos, sensorRange, 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER);
 	showWeaponRange(psObj);
 }
 
 /// Draw a circle on the map (to show the range of something)
-static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
+static void drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 {
-	SDWORD	xDif,yDif;
-	Vector3i	pos;
-	UDWORD	i;
-
-	for(i=0; i<360; i++)
-	{
-		xDif = radius * (SIN(DEG(i)));
-		yDif = radius * (COS(DEG(i)));
-
-		xDif = xDif/4096;	 // cos it's fixed point
-		yDif = yDif/4096;
-		pos.x = centerX - xDif;
-		pos.z = centerY - yDif;
-
-		// don't draw off map
-		if (worldOnMap(pos.x, pos.z))
-		{
-			pos.y = map_Height(pos.x, pos.z) + 16;
-			effectGiveAuxVar(80);
-			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
-		}
-	}
+	Position pos = {centerX, centerY, 0};  // .z ignored.
+	showEffectCircle(pos, radius, 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
 }
 
 /** Turn on drawing some effects at certain position to visualize the radius.

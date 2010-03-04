@@ -141,7 +141,7 @@ extern float gameTimeFraction;  ///< Private performance calculation. Do not use
 extern float graphicsTimeFraction;  ///< Private performance calculation. Do not use.
 extern float realTimeFraction;  ///< Private performance calculation. Do not use.
 
-/// Returns the value times deltaGraphicsTime, converted to seconds.
+/// Returns the value times deltaGameTime, converted to seconds.
 static inline float gameTimeAdjustedIncrement(float value)
 {
 	return value * gameTimeFraction;

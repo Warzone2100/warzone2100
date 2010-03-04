@@ -94,7 +94,7 @@ void formationShutDown(void)
 /** Create a new formation
  */
 BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
-					SDWORD x, SDWORD y, SDWORD dir)
+					SDWORD x, SDWORD y, uint16_t dir)
 {
 	SDWORD		i;
 	FORMATION	*psNew = malloc(sizeof(FORMATION));
@@ -106,13 +106,11 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 		return false;
 	}
 
-	// debug(LOG_NEVER, "type %d, at (%d,%d), dir %d", type, x, y, dir);
-
 	// initialise it
 	psNew->refCount = 0;
 	psNew->size = (SWORD)F_DEFLENGTH;
 	psNew->rankDist = (SWORD)RANK_DIST;
-	psNew->dir = (SWORD)dir;
+	psNew->direction = dir;
 	psNew->x = x;
 	psNew->y = y;
 	psNew->free = 0;
@@ -132,12 +130,12 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 		// line to the left
 		psNew->asLines[0].xoffset = 0;
 		psNew->asLines[0].yoffset = 0;
-		psNew->asLines[0].dir = (SWORD)adjustDirection(dir, -110);
+		psNew->asLines[0].direction = dir - DEG(110);
 		psNew->asLines[0].member = -1;
 		// line to the right
 		psNew->asLines[1].xoffset = 0;
 		psNew->asLines[1].yoffset = 0;
-		psNew->asLines[1].dir = (SWORD)adjustDirection(dir, 110);
+		psNew->asLines[1].direction = dir - DEG(110);
 		psNew->asLines[1].member = -1;
 		break;
 	case FT_COLUMN:
@@ -145,7 +143,7 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 		// line to the left
 		psNew->asLines[0].xoffset = 0;
 		psNew->asLines[0].yoffset = 0;
-		psNew->asLines[0].dir = (SWORD)adjustDirection(dir, 180);
+		psNew->asLines[0].direction = dir - DEG(180);
 		psNew->asLines[0].member = -1;
 		break;
 	default:
@@ -343,14 +341,15 @@ static void formationCalcPos(FORMATION *psFormation, SDWORD line, SDWORD dist,
 	const int rank = dist / psFormation->size;
 
 	// calculate the offset of the line based on the rank
-	int dir = adjustDirection(psFormation->dir, 180);
+	uint16_t dir16 = psFormation->direction - DEG(180);
+	float dir = UNDEG(dir16);
 	const int xoffset = (int)(trigSin(dir) * (float)(psFormation->rankDist * rank))
 			+ psFormation->asLines[line].xoffset;
 	const int yoffset = (int)(trigCos(dir) * (float)(psFormation->rankDist * rank))
 			+ psFormation->asLines[line].yoffset;
 
 	// calculate the position of the gap
-	dir = psFormation->asLines[line].dir;
+	dir = UNDEG(psFormation->asLines[line].direction);
 	dist -= psFormation->size * rank;
 	*pX = (int)(trigSin(dir) * (float)dist)
 			+ xoffset + psFormation->x;

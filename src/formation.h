@@ -45,7 +45,7 @@ extern void formationShutDown(void);
 
 // Create a new formation
 extern BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
-					SDWORD x, SDWORD y, SDWORD dir);
+					SDWORD x, SDWORD y, uint16_t dir);
 
 // Try and find a formation near to a location
 extern FORMATION* formationFind(int x, int y);

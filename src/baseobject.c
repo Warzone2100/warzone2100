@@ -28,35 +28,34 @@
 static inline float interpolateFloat(float v1, float v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
 	int32_t numer = t - t1, denom = t2 - t1;
+	if (denom == 0) return v2;	// TEMPORARY HACK
 	return v1 + (v2 - v1) * numer/denom;
 }
 
-Vector3uw interpolatePos(Vector3uw p1, Vector3uw p2, uint32_t t1, uint32_t t2, uint32_t t)
+static inline uint16_t interpolateDegree(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	Vector3uw ret = { interpolateInt(p1.x, p2.x, t1, t2, t),
-	                  interpolateInt(p1.y, p2.y, t1, t2, t),
-	                  interpolateInt(p1.z, p2.z, t1, t2, t)
-	                };
+	uint16_t numer = t - t1, denom = t2 - t1;
+	int16_t diff = v2 - v1;
+	if (denom == 0) return v2;	// TEMPORARY HACK
+	return v1 + diff * numer / denom;
+}
+
+Vector3i interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t2, uint32_t t)
+{
+	Position ret = { interpolateInt(p1.x, p2.x, t1, t2, t),
+	                 interpolateInt(p1.y, p2.y, t1, t2, t),
+	                 interpolateInt(p1.z, p2.z, t1, t2, t)
+	               };
 	return ret;
 }
 
-float interpolateDirection(float v1, float v2, uint32_t t1, uint32_t t2, uint32_t t)
+Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	if (v1 > v2 + 180)
-	{
-		v2 += 360;
-	}
-	else if(v2 > v1 + 180)
-	{
-		v1 += 360;
-	}
-	return interpolateFloat(v1, v2, t1, t2, t);
-}
-
-int16_t interpolateIntAngle(int16_t v1, int16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
-{
-	int delta = (v2 - v1 + 360000 + 180)%360 - 180;  // delta: [-180; 179].
-	return (interpolateInt(v1, v1 + delta, t1, t2, t) + 360000)%360;  // [0; 359]
+	Rotation rot = { interpolateDegree(v1.direction, v2.direction, t1, t2, t),
+	                 interpolateDegree(v1.pitch, v2.pitch, t1, t2, t),
+	                 interpolateDegree(v1.roll, v2.roll, t1, t2, t),
+	               };
+	return rot;
 }
 
 SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)
@@ -66,12 +65,7 @@ SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)
 		debug(LOG_WARNING, "st1.time = %u, st2.time = %u, t = %u\n", (unsigned)st1.time, (unsigned)st2.time, (unsigned)t);
 		return st2;
 	}
-	return constructSpacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t),
-	                          interpolateDirection(st1.direction, st2.direction, st1.time, st2.time, t),
-	                          interpolateIntAngle(st1.pitch, st2.pitch, st1.time, st2.time, t),
-	                          interpolateIntAngle(st1.roll, st2.roll, st1.time, st2.time, t),
-	                          t
-	                         );
+	return constructSpacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t), interpolateRot(st1.rot, st2.rot, st1.time, st2.time, t), t);
 }
 
 SPACETIME interpolateObjectSpacetime(SIMPLE_OBJECT *obj, uint32_t t)
@@ -119,8 +113,4 @@ void checkObject(const BASE_OBJECT* psObject, const char * const location_descri
 	    || psObject->type == OBJ_TARGET
 	    || psObject->player < MAX_PLAYERS,
 	       location_description, function, "CHECK_OBJECT: Out of bound owning player number (%u)", (unsigned int)psObject->player);
-
-	ASSERT_HELPER(psObject->direction <= 360.0f
-	    && psObject->direction >= 0.0f,
-	       location_description, function, "CHECK_OBJECT: Out of range direction (%f)", (float)psObject->direction);
 }

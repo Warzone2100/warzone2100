@@ -420,13 +420,26 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		// reachable. As I see it, this is the reason why psNearest got introduced.
 		// -- Dennis L.
 		psCurr = psRoute;
-		psMove->DestinationX = world_coord(psCurr->x);
-		psMove->DestinationY = world_coord(psCurr->y);
+		if (psCurr && retval == ASR_OK)
+		{
+			// Found exact path, so use exact coordinates for last point, no reason to lose precision
+			count--;
+			psMove->asPath[count].x = psJob->destX;
+			psMove->asPath[count].y = psJob->destY;
+			psMove->DestinationX = psJob->destX;
+			psMove->DestinationY = psJob->destY;
+			psCurr = psCurr->psRoute;
+		}
+		else
+		{
+			psMove->DestinationX = world_coord(psCurr->x) + TILE_UNITS / 2;
+			psMove->DestinationY = world_coord(psCurr->y) + TILE_UNITS / 2;
+		}
 		while (psCurr)
 		{
 			count--;
-			psMove->asPath[count].x = psCurr->x;
-			psMove->asPath[count].y = psCurr->y;
+			psMove->asPath[count].x = world_coord(psCurr->x) + TILE_UNITS / 2;
+			psMove->asPath[count].y = world_coord(psCurr->y) + TILE_UNITS / 2;
 			psCurr = psCurr->psRoute;
 		}
 	}

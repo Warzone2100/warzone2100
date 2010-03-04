@@ -64,11 +64,9 @@ typedef struct _tilePos
 #define BASE_ELEMENTS1(pointerType) \
 	OBJECT_TYPE     type;                           /**< The type of object */ \
 	UDWORD          id;                             /**< ID number of the object */ \
-	Vector3uw       pos;                            /**< Position of the object */ \
-	float           direction;                      /**< Object's yaw +ve rotation around up-axis */ \
-	SWORD           pitch;                          /**< Object's pitch +ve rotation around right-axis (nose up/down) */ \
+	Position	pos;                            /**< Position of the object */ \
+	Rotation	rot;				/**< Object's yaw +ve rotation around up-axis */ \
 	UBYTE           player;                         /**< Which player the object belongs to */ \
-	SWORD           roll;                           /**< Object's roll +ve rotation around forward-axis (left wing up/down) */ \
 	UDWORD          born;				/**< Time the game object was born */ \
 	UDWORD          died;                           /**< When an object was destroyed, if 0 still alive */ \
 	uint32_t        time                            /**< Game time of given space-time position. */
@@ -124,28 +122,23 @@ typedef struct SpaceTime
 {
 	uint32_t  time;        ///< Game time
 
-	Vector3uw pos;         ///< Position of the object
-	int16_t   pitch;       ///< Object's pitch +ve rotation around right-axis (nose up/down)
-	float     direction;   ///< Object's yaw +ve rotation around up-axis
-	int16_t   roll;        ///< Object's roll +ve rotation around forward-axis (left wing up/down)
+	Position  pos;         ///< Position of the object
+	Rotation  rot;         ///< Rotation of the object
 } SPACETIME;
 
-static inline SPACETIME constructSpacetime(Vector3uw pos, float direction, int16_t pitch, int16_t roll, uint32_t time)
+static inline SPACETIME constructSpacetime(Position pos, Rotation rot, uint32_t time)
 {	// we don't support C99 struct assignments
 	SPACETIME ret;
+
 	ret.time = time;
-	ret.pos.x = pos.x;
-	ret.pos.y = pos.y;
-	ret.pos.z = pos.z;
-	ret.pitch = pitch;
-	ret.direction = direction;
-	ret.roll = roll;
+	ret.pos = pos;
+	ret.rot = rot;
 
 	return ret;
 }
 
-#define GET_SPACETIME(psObj) constructSpacetime(psObj->pos, psObj->direction, psObj->pitch, psObj->roll, psObj->time)
-#define SET_SPACETIME(psObj, st) do { psObj->pos = st.pos; psObj->direction = st.direction; psObj->pitch = st.pitch; psObj->roll = st.roll; psObj->time = st.time; } while(0)
+#define GET_SPACETIME(psObj) constructSpacetime(psObj->pos, psObj->rot, psObj->time)
+#define SET_SPACETIME(psObj, st) do { psObj->pos = st.pos; psObj->rot = st.rot; psObj->time = st.time; } while(0)
 
 static inline bool isDead(const BASE_OBJECT* psObj)
 {
@@ -153,7 +146,7 @@ static inline bool isDead(const BASE_OBJECT* psObj)
 	return (psObj->died > NOT_CURRENT_LIST);
 }
 
-static inline int objPosDiffSq(Vector3uw pos1, Vector3uw pos2)
+static inline int objPosDiffSq(Position pos1, Position pos2)
 {
 	const int xdiff = pos1.x - pos2.x;
 	const int ydiff = pos1.y - pos2.y;

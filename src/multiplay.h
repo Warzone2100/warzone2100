@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_SRC_MULTIPLAY_H__
 #define __INCLUDED_SRC_MULTIPLAY_H__
 
+#include "featuredef.h"
 #include "group.h"
 
 #ifdef __cplusplus
@@ -201,7 +202,7 @@ extern BOOL sendCheck			(void);							//send/recv  check info
 extern BOOL sendScoreCheck		(void);							//score check only(frontend)
 extern BOOL sendPing			(void);							// allow game to request pings.
 
-extern BOOL ForceDroidSync(const DROID* droidToSend);
+extern BOOL ForceDroidSync(DROID* droidToSend);
 // multijoin
 extern BOOL sendReseachStatus	(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL bStart);
 

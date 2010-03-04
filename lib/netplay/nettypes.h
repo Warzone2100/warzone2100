@@ -57,18 +57,45 @@ BOOL NETbin(char *str, uint16_t maxlen);
 
 PACKETDIR NETgetPacketDir(void);
 
-// FIXME: Causes tons of warnings: <enumPtr> is used unitialised in this function
+#if defined(__cplusplus)
+}
+
+template <typename EnumT>
+static BOOL NETenum(EnumT* enumPtr)
+{
+	int32_t val;
+	
+	if (NETgetPacketDir() == PACKET_ENCODE)
+		val = *enumPtr;
+
+	const BOOL retVal = NETint32_t(&val);
+
+	if (NETgetPacketDir() == PACKET_DECODE)
+		*enumPtr = static_cast<EnumT>(val);
+
+	return retVal;
+}
+
+extern "C"
+{
+#else
+// FIXME: Somehow still causes tons of warnings: <enumPtr> is used unitialised in this function
+static inline void squelchUninitialisedUseWarning(void *ptr) { (void)ptr; }
 #define NETenum(enumPtr) \
 do \
 { \
-	int32_t _val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
+	int32_t _val; \
+	squelchUninitialisedUseWarning(enumPtr); \
+	_val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
 \
 	NETint32_t(&_val); \
 \
 	*(enumPtr) = _val; \
 } while(0)
+#endif
 
-BOOL NETVector3uw(Vector3uw* vp);
+BOOL NETPosition(Position *vp);
+BOOL NETRotation(Rotation *vp);
 
 /**
  *	Get player who is the source of the current packet.

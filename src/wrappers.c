@@ -22,44 +22,27 @@
  * Frontend loop & also loading screen & game over screen.
  * AlexL. Pumpkin Studios, EIDOS Interactive, 1997
  */
+
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
-#include "lib/framework/strres.h"
-
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/textdraw.h" //ivis text code
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_common/piemode.h"
-#include "lib/ivis_common/piefunc.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_opengl/screen.h"
+#include "lib/netplay/netplay.h"	// multiplayer
+#include "lib/sound/audio.h"
 #include "lib/framework/wzapp_c.h"
 
-#include "hci.h"		// access to widget screen.
-#include "wrappers.h"
-#include "main.h"
-#include "objects.h"
-#include "display.h"
-#include "display3d.h"
 #include "frontend.h"
-#include "frend.h"		// display logo.
-#include "console.h"
-#include "intimage.h"
-#include "intdisplay.h"	//for shutdown
-#include "lib/sound/audio.h"
-#include "lib/gamelib/gtime.h"
-#include "ingameop.h"
+#include "keyedit.h"
 #include "keymap.h"
 #include "mission.h"
-#include "keyedit.h"
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
-#include "lib/framework/cursors.h"
-#include "lib/netplay/netplay.h"	// multiplayer
-#include "multiplay.h"
 #include "multiint.h"
-#include "multistat.h"
 #include "multilimit.h"
+#include "multistat.h"
 #include "warzoneconfig.h"
+#include "wrappers.h"
 
 typedef struct _star
 {
@@ -68,50 +51,57 @@ typedef struct _star
 	PIELIGHT colour;
 } STAR;
 
-#define MAX_STARS 20
-static STAR	stars[MAX_STARS];	// quick hack for loading stuff
-
 static BOOL		firstcall = false;
-static UDWORD	loadScreenCallNo=0;
 static BOOL		bPlayerHasLost = false;
 static BOOL		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
-void	startCreditsScreen	( void );
 void	runCreditsScreen	( void );
 
-static	UDWORD	lastTick = 0;
 static	UDWORD	lastChange = 0;
-extern char iptoconnect[PATH_MAX];		// holds our ip/hostname from the command line
 BOOL hostlaunch = false;				// used to detect if we are hosting a game via command line option.
 
-static PIELIGHT randColour(void)
+static uint32_t lastTick = 0;
+static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
+static STAR *stars;
+
+static STAR newStar(void)
 {
-	PIELIGHT colour;
-	colour.byte.r = 200;
-	colour.byte.g = 200;
-	colour.byte.b = 200;
-	colour.byte.a = 255;
-	if (rand()%15 == 0)
-	{
-		colour.byte.r = rand()%256;
-		colour.byte.g = rand()%256;
-		colour.byte.b = rand()%256;
-	}
-	return colour;
+	STAR s;
+	s.xPos = rand() % barRightX;
+	s.speed = (rand() % 30 + 6) * pie_GetVideoBufferWidth() / 640.0;
+	s.colour = pal_Grey(150 + rand() % 100);
+	return s;
 }
 
-static void initStars(void)
+static void setupLoadingScreen(void)
 {
 	unsigned int i;
+	int w = pie_GetVideoBufferWidth();
+	int h = pie_GetVideoBufferHeight();
+	int offset;
 
-	for(i = 0; i < MAX_STARS; ++i)
+	boxHeight = h / 40.0;
+	offset = boxHeight;
+	boxWidth = w - 2.0 * offset;
+
+	barRightX = w - offset;
+	barRightY = h - offset;
+
+	barLeftX = barRightX - boxWidth;
+	barLeftY = barRightY - boxHeight;
+
+	starsNum = boxWidth / boxHeight;
+	starHeight = 2.0 * h / 640.0;
+
+        stars = (STAR *)malloc(sizeof(STAR) * starsNum);
+
+	for (i = 0; i < starsNum; ++i)
 	{
-		stars[i].xPos = (UWORD)(rand()%598);		// scatter them
-		stars[i].speed = rand() % 30 + 6;	// always move
-		stars[i].colour = randColour();
+		stars[i] = newStar();
 	}
 }
+
 
 // //////////////////////////////////////////////////////////////////
 // Initialise frontend globals and statics.
@@ -119,7 +109,7 @@ static void initStars(void)
 BOOL frontendInitVars(void)
 {
 	firstcall = true;
-	initStars();
+	setupLoadingScreen();
 
 	return true;
 }
@@ -281,57 +271,43 @@ TITLECODE titleLoop(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Loading Screen.
 
-
-
-
 //loadbar update
 void loadingScreenCallback(void)
 {
+	const PIELIGHT loadingbar_background = pal_RGBA(0, 0, 0, 24);
+	const uint32_t currTick = wzGetTicks();
 	unsigned int i;
-	UDWORD			topX,topY,botX,botY;
-	UDWORD			currTick;
-	PIELIGHT		colour;
 
-	currTick = wzGetTicks();
 	if (currTick - lastTick < 50)
 	{
 		return;
 	}
 	lastTick = currTick;
-	colour.byte.r = 1;
-	colour.byte.g = 1;
-	colour.byte.b = 1;
-	colour.byte.a = 32;
-	pie_UniTransBoxFill(1, 1, 2, 2, colour);
-	/* Draw the black rectangle at the bottom */
 
-	topX = 10+D_W;
-	topY = 450+D_H-1;
-	botX = 630+D_W;
-	botY = 470+D_H+1;
-	colour.byte.a = 24;
-	pie_UniTransBoxFill(topX, topY, botX, botY, colour);
+	/* Draw the black rectangle at the bottom, with a two pixel border */
+	pie_UniTransBoxFill(barLeftX - 2, barLeftY - 2, barRightX + 2, barRightY + 2, loadingbar_background);
 
-	for(i = 1; i < MAX_STARS; ++i)
+	for (i = 1; i < starsNum; ++i)
 	{
-	   	if(stars[i].xPos + stars[i].speed >=598)
+		stars[i].xPos = stars[i].xPos + stars[i].speed;
+		if (stars[i].xPos >= barRightX)
 		{
+			stars[i] = newStar();
 			stars[i].xPos = 1;
-			stars[i].colour = randColour();
 		}
-		else
 		{
-			stars[i].xPos = (UWORD)(stars[i].xPos + stars[i].speed);
-		}
+		const int topX = barLeftX + stars[i].xPos;
+		const int topY = barLeftY + i * (boxHeight - starHeight) / starsNum;
+		const int botX = MIN(topX + stars[i].speed, barRightX);
+		const int botY = topY + starHeight;
 
-		colour = stars[i].colour;
-		pie_UniTransBoxFill(10 + stars[i].xPos + D_W, 450 + i + D_H, 10 + stars[i].xPos + stars[i].speed + D_W, 450 + i + 2 + D_H, colour);
-   	}
+		pie_UniTransBoxFill(topX, topY, botX, botY, stars[i].colour);
+		}
+	}
 
 	pie_ScreenFlip(CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD);//loading callback		// dont clear.
 	audio_Update();
 }
-
 
 // fill buffers with the static screen
 void initLoadingScreen( BOOL drawbdrop )
@@ -344,7 +320,6 @@ void initLoadingScreen( BOOL drawbdrop )
 		pie_SetFogStatus(false);
 		pie_ScreenFlip(CLEAR_BLACK);
 		resSetLoadCallback(loadingScreenCallback);
-		loadScreenCallNo = 0;
 		return;
 	}
 
@@ -353,7 +328,6 @@ void initLoadingScreen( BOOL drawbdrop )
 
 	// setup the callback....
 	resSetLoadCallback(loadingScreenCallback);
-	loadScreenCallNo = 0;
 
 	// NOTE: When this is called, we stop the backdrop, but since the screen
 	// is double buffered, we only have the backdrop on 1 buffer, and not the other.
@@ -394,7 +368,6 @@ void runCreditsScreen( void )
 void closeLoadingScreen(void)
 {
 	resSetLoadCallback(NULL);
-	loadScreenCallNo = 0;
 }
 
 

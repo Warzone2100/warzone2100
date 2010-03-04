@@ -6365,8 +6365,9 @@ BOOL scrFireWeaponAtObj(void)
 {
 	Vector3i target;
 	BASE_OBJECT *psTarget;
-	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+	WEAPON sWeapon;
 
+	memset(&sWeapon, 0, sizeof(sWeapon));
 	if (!stackPopParams(2, ST_WEAPON, &sWeapon.nStat, ST_BASEOBJECT, &psTarget))
 	{
 		return false;
@@ -6378,8 +6379,7 @@ BOOL scrFireWeaponAtObj(void)
 		return false;
 	}
 
-	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-	target = Vector3uw_To3i(psTarget->pos);
+	target = psTarget->pos;
 
 	// send the projectile using the selectedPlayer so that it can always be seen
 	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, psTarget, true, 0);
@@ -6391,8 +6391,9 @@ BOOL scrFireWeaponAtObj(void)
 BOOL scrFireWeaponAtLoc(void)
 {
 	Vector3i target;
-	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+	WEAPON sWeapon;
 
+	memset(&sWeapon, 0, sizeof(sWeapon));
 	if (!stackPopParams(3, ST_WEAPON, &sWeapon.nStat, VAL_INT, &target.x, VAL_INT, &target.y))
 	{
 		return false;
