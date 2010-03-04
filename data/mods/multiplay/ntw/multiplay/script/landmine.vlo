@@ -1,0 +1,54 @@
+
+script "LandMine.slo"
+run
+{
+  /* Set debug value (below) to 1 only if this script has problems needing to be fixed
+   *
+   * When active, player's power level will hover around a value reflecting
+   * the status of the script:
+   *
+   * 1000 -- no active mines on field
+   * 1200 -- active mines nearby
+   * 1300 -- player's VTOL flew over an active mine
+   * 7770 -- Minesweeper removed a mine just now
+   * 6660 -- KA-BOOM! Heh heh heh...
+   *
+   * 2000...2700 -- A certain type of mine didn't go off when stepped on
+   * 2800...3000 -- Unable to determine type of mine player stepped on,
+   *                (usually an error encoding the health stat of mine)
+   *
+   */
+
+  // Distance at which a mine will explode.
+  actRange     INT   50
+
+  // Distance at which a mine will activate (disappear)
+  setRange  INT   600
+
+  // Special cyborg references used in the script.
+  Miner[0]  BODY  "Cyb-Bod-ComEng2"
+  Miner[1]  BODY  "Cyb-Bod-MineSweep"
+
+  // Types of mines that can be built.
+  Mine  FEATURESTAT  "ContaMine"
+  BuildMine[0]  STRUCTURESTAT  "ContaMine1"
+  BuildMine[1]  STRUCTURESTAT  "ContaMine2"
+  BuildMine[2]  STRUCTURESTAT  "ContaMine3"
+  BuildMine[3]  STRUCTURESTAT  "ContaMine4"
+  BuildMine[4]  STRUCTURESTAT  "ContaMine5"
+  BuildMine[5]  STRUCTURESTAT  "ContaMine6"
+  BuildMine[6]  STRUCTURESTAT  "ContaMine7"
+  BuildMine[7]  STRUCTURESTAT  "ContaMine8"
+
+  // Types of explosions produced by the mines.
+  Fizzle  WEAPON  "ZNULLWEAPON"
+  Blip  WEAPON  "ZNULLMINE"
+  Explosion[0]  WEAPON  "WepMine1"
+  Explosion[1]  WEAPON  "WepMine2"
+  Explosion[2]  WEAPON  "WepMine3"
+  Explosion[3]  WEAPON  "WepMine4"
+  Explosion[4]  WEAPON  "WepMine5"
+  Explosion[5]  WEAPON  "WepMine6"
+  Explosion[6]  WEAPON  "WepMine7"
+  Explosion[7]  WEAPON  "WepMine8"
+}
