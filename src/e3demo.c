@@ -24,189 +24,43 @@
 	Alex McLean, Pumpkin Studios, EIDOS Interactive.
 	Will be called from a DEBUG key-mapping.
 */
-// -------------------------------------------------------------------------
 
 #include "lib/framework/frame.h"
 
-// -------------------------------------------------------------------------
-
-#include "lib/gamelib/gtime.h"
-#include "lib/framework/fixedpoint.h"
-#include "objects.h"
+#include "e3demo.h"
 #include "map.h"
-#include "hci.h"
 #include "warcam.h"
-#include "order.h"
-#include "display3d.h"
-#include "map.h"
-#include "geometry.h"
-#include "action.h"
-#include "console.h"
+
 // -------------------------------------------------------------------------
 #define DC_ISACTIVE	99
 #define DC_INACTIVE	101
 #define	DEFAULT_DEMO_INTERVAL  (8 * GAME_TICKS_PER_SEC)
-#define DROID_MOVE_INTERVAL	(GAME_TICKS_PER_SEC/4)
-
-// -------------------------------------------------------------------------
-BOOL	demoGetStatus		( void );
-void	initDemoCamera		( void );
-void	processDemoCam		( void );
-void	toggleDemoStatus	( void );
-static void findSomethingInteresting(void);
-void	setFindNewTarget	( void );
 
 // -------------------------------------------------------------------------
 /* When did the camera last change it's point of interest? */
 static	UDWORD	lastCameraMove;
-static	UDWORD	lastDroidMove;
 static	UDWORD	lastDroidSending;
 static	UDWORD	presentStatus;
 static	UDWORD	demoCamInterval;
-static	UDWORD	droidMoveInterval;
 static	DROID	*psLastDroid = NULL;
-static	UDWORD	lastHeight;
 static	UDWORD	lastSelectedPlayer;
 static	DROID	*getDroidForDemo( UDWORD player );
+
 // -------------------------------------------------------------------------
 /* Sets up the system */
 void	initDemoCamera( void )
 {
 	presentStatus = DC_INACTIVE; // or DC_ISACTIVE
 	lastCameraMove = 0;
-	lastDroidMove = 0;
-	droidMoveInterval = DROID_MOVE_INTERVAL;
 	demoCamInterval = DEFAULT_DEMO_INTERVAL;
 	psLastDroid = NULL;
-	lastHeight = 0;
-}
-
-// -------------------------------------------------------------------------
-/* Updates the camera's point of interest if it's time to */
-void	processDemoCam( void )
-{
-UDWORD	firstPlayer,otherPlayer;
-DROID	*psDroid;
-BOOL	bSkipOrder = false;
-UDWORD	i,numWith;
-
-	/* Is the demo camera actually active? */
-	if(presentStatus == DC_INACTIVE)
-	{
-		/* Nope, so get out */
-		return;
-	}
-
-	/* Is it time for a new target? */
-	if( gameTime > (lastCameraMove + demoCamInterval) )
-	{
-		lastCameraMove = gameTime;
-		/* The bones */
-		findSomethingInteresting();
-	  //	player.r.x = DEG(-90);
-
-	}
-	/* Otherwise, just send a droid off to war */
-	else if(gameTime > (lastDroidSending + GAME_TICKS_PER_SEC) )
-	{
-			/* Check all the droid lists, looking for empty ones */
-			for(i = 0,numWith = 0; i<MAX_PLAYERS; i++)
-			{
-				/* Keep a count of how many are empty */
-				if(apsDroidLists[i])
-				{
-					/* We got one */
-					numWith++;
-				}
-			}
-			/* If they were all empty, then record this fact and only seek locations */
-			/* We need two sides for this to work! */
-			if(numWith<2)
-			{
-				bSkipOrder = true;
-			}
-
-			if(!bSkipOrder)
-			{
-				lastDroidSending = gameTime;
-				/* Choose a player at random */
-				firstPlayer = rand()%MAX_PLAYERS;
-
-				/* Have they got any droids? */
-				while(apsDroidLists[firstPlayer]==NULL)
-				{
-					/* Nope, so choose another one until we get one with droids */
-					firstPlayer = rand()%MAX_PLAYERS;
-				}
-
-				/* Choose a player at random */
-				otherPlayer = rand()%MAX_PLAYERS;
-
-				/* Have they got any structures? Make sure it's not their own we're checking! */
-				while(apsStructLists[otherPlayer]==NULL || otherPlayer==firstPlayer)
-				{
-					/* Nope, so choose another one until we get one with droids */
-					otherPlayer = rand()%MAX_PLAYERS;
-				}
-				psDroid = getDroidForDemo(firstPlayer);
-
-
-				/* Only do this if we've got a droid and an enemy building to attack! */
-				if(psDroid && apsStructLists[otherPlayer])
-				{
-					if( (orderState(psDroid,DORDER_NONE) == true) ||
-						((orderState(psDroid,DORDER_GUARD) == true) && (psDroid->action == DACTION_NONE)))
-					{
-						/* Make the droid attack the building - it'll indirectly route there too */
-						orderDroidLoc(psDroid,DORDER_SCOUT,
-						apsStructLists[otherPlayer]->pos.x, apsStructLists[otherPlayer]->pos.y);
-					}
-				}
-			}
-	}
-}
-
-// -------------------------------------------------------------------------
-void	setFindNewTarget( void )
-{
-	lastCameraMove = 0;
-}
-// -------------------------------------------------------------------------
-/* Flips on/off */
-void	toggleDemoStatus( void )
-{
-	if(presentStatus == DC_ISACTIVE)
-	{
-		presentStatus = DC_INACTIVE;
-		selectedPlayer = lastSelectedPlayer;
-	}
-	else if(presentStatus == DC_INACTIVE)
-	{
-		presentStatus = DC_ISACTIVE;
-		lastSelectedPlayer = selectedPlayer;
-	}
-}
-
-// -------------------------------------------------------------------------
-/* Returns status */
-BOOL	demoGetStatus( void )
-{
-	if(presentStatus == DC_ISACTIVE)
-	{
-		return(true);
-	}
-	else
-	{
-		return(false);
-	}
 }
 
 // -------------------------------------------------------------------------
 /*	Attempts to find a new location for the tracking camera to go to, or
 	a new object (target) for it to track.
 */
-
-void findSomethingInteresting()
+static void findSomethingInteresting(void)
 {
 	enum
 	{
@@ -350,6 +204,126 @@ PROPULSION_STATS	*psPropStats;
 			break;
 		}
 //	}
+}
+
+// -------------------------------------------------------------------------
+/* Updates the camera's point of interest if it's time to */
+void	processDemoCam( void )
+{
+UDWORD	firstPlayer,otherPlayer;
+DROID	*psDroid;
+BOOL	bSkipOrder = false;
+UDWORD	i,numWith;
+
+	/* Is the demo camera actually active? */
+	if(presentStatus == DC_INACTIVE)
+	{
+		/* Nope, so get out */
+		return;
+	}
+
+	/* Is it time for a new target? */
+	if( gameTime > (lastCameraMove + demoCamInterval) )
+	{
+		lastCameraMove = gameTime;
+		/* The bones */
+		findSomethingInteresting();
+	  //	player.r.x = DEG(-90);
+
+	}
+	/* Otherwise, just send a droid off to war */
+	else if(gameTime > (lastDroidSending + GAME_TICKS_PER_SEC) )
+	{
+			/* Check all the droid lists, looking for empty ones */
+			for(i = 0,numWith = 0; i<MAX_PLAYERS; i++)
+			{
+				/* Keep a count of how many are empty */
+				if(apsDroidLists[i])
+				{
+					/* We got one */
+					numWith++;
+				}
+			}
+			/* If they were all empty, then record this fact and only seek locations */
+			/* We need two sides for this to work! */
+			if(numWith<2)
+			{
+				bSkipOrder = true;
+			}
+
+			if(!bSkipOrder)
+			{
+				lastDroidSending = gameTime;
+				/* Choose a player at random */
+				firstPlayer = rand()%MAX_PLAYERS;
+
+				/* Have they got any droids? */
+				while(apsDroidLists[firstPlayer]==NULL)
+				{
+					/* Nope, so choose another one until we get one with droids */
+					firstPlayer = rand()%MAX_PLAYERS;
+				}
+
+				/* Choose a player at random */
+				otherPlayer = rand()%MAX_PLAYERS;
+
+				/* Have they got any structures? Make sure it's not their own we're checking! */
+				while(apsStructLists[otherPlayer]==NULL || otherPlayer==firstPlayer)
+				{
+					/* Nope, so choose another one until we get one with droids */
+					otherPlayer = rand()%MAX_PLAYERS;
+				}
+				psDroid = getDroidForDemo(firstPlayer);
+
+
+				/* Only do this if we've got a droid and an enemy building to attack! */
+				if(psDroid && apsStructLists[otherPlayer])
+				{
+					if( (orderState(psDroid,DORDER_NONE) == true) ||
+						((orderState(psDroid,DORDER_GUARD) == true) && (psDroid->action == DACTION_NONE)))
+					{
+						/* Make the droid attack the building - it'll indirectly route there too */
+						orderDroidLoc(psDroid,DORDER_SCOUT,
+						apsStructLists[otherPlayer]->pos.x, apsStructLists[otherPlayer]->pos.y);
+					}
+				}
+			}
+	}
+}
+
+// -------------------------------------------------------------------------
+void	setFindNewTarget( void )
+{
+	lastCameraMove = 0;
+}
+// -------------------------------------------------------------------------
+/* Flips on/off */
+void	toggleDemoStatus( void )
+{
+	if(presentStatus == DC_ISACTIVE)
+	{
+		presentStatus = DC_INACTIVE;
+		selectedPlayer = lastSelectedPlayer;
+	}
+	else if(presentStatus == DC_INACTIVE)
+	{
+		presentStatus = DC_ISACTIVE;
+		lastSelectedPlayer = selectedPlayer;
+	}
+}
+
+// -------------------------------------------------------------------------
+/* Returns status */
+BOOL	demoGetStatus( void )
+{
+	if(presentStatus == DC_ISACTIVE)
+	{
+		return(true);
+	}
+	else
+	{
+		return(false);
+	}
 }
 
 // -------------------------------------------------------------------------
