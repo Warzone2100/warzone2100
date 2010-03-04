@@ -462,7 +462,7 @@ BASE_OBJECT *clustIterate(void)
 }
 
 // find the center of a cluster
-// NOTE: Currently not used anywhere
+// NOTE: Unused! void clustGetCenter(BASE_OBJECT *psObj, SDWORD *px, SDWORD *py)
 void clustGetCenter(BASE_OBJECT *psObj, SDWORD *px, SDWORD *py)
 {
 	BASE_OBJECT		*psList;

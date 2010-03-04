@@ -25,7 +25,6 @@
 #define __INCLUDED_SRC_GROUP_H__
 
 #include "order.h"
-#include "orderdef.h"
 
 typedef enum _group_type
 {
@@ -73,15 +72,15 @@ struct _droid_order_data;
 //extern void orderGroupBase(DROID_GROUP *psGroup, struct _droid_order_data *psData);
 
 /* Give a group an order */
-extern void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order);
+void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order);
 
 /* Give a group of droids an order */
-extern void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y);
+void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y);
 
 /* Give a group of droids an order */
-extern void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj);
+void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj);
 
 /* set the secondary state for a group of droids */
-extern void grpSetSecondary(DROID_GROUP *psGroup, SECONDARY_ORDER sec, SECONDARY_STATE state);
+void grpSetSecondary(DROID_GROUP *psGroup, SECONDARY_ORDER sec, SECONDARY_STATE state);
 
 #endif // __INCLUDED_SRC_GROUP_H__

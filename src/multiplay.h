@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_SRC_MULTIPLAY_H__
 #define __INCLUDED_SRC_MULTIPLAY_H__
 
+#include "featuredef.h"
 #include "group.h"
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

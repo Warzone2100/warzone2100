@@ -26,44 +26,45 @@
 
 // used for multiplayer data integrity check.
 enum {
-DATA_SWEAPON,
-DATA_SBODY,
-DATA_SCONSTR,
-DATA_SECM,
-DATA_SPROP,
-DATA_SSENSOR,
-DATA_SREPAIR,
-DATA_SBRAIN,
-DATA_SPROPTY,
-DATA_STERRT,
-DATA_SWEAPMOD,
-DATA_STEMP,
-DATA_STEMPWEAP,
-DATA_SSTRUCT,
-DATA_SSTRWEAP,
-DATA_STRFUNC,
-DATA_SSTRMOD,
-DATA_SFEAT,
-DATA_SFUNC,
-DATA_RESCH,
-DATA_RPREREQ,
-DATA_RCOMPRED,
-DATA_RSTRREQ,
-DATA_RCOMPRES,
-DATA_RSTRRED,
-DATA_RSTRRES,
-DATA_RFUNC,
-DATA_SCRIPT,
-DATA_SCRIPTVAL,
-DATA_MAXDATA		// must be last
+	DATA_SWEAPON,
+	DATA_SBODY,
+	DATA_SCONSTR,
+	DATA_SECM,
+	DATA_SPROP,
+	DATA_SSENSOR,
+	DATA_SREPAIR,
+	DATA_SBRAIN,
+	DATA_SPROPTY,
+	DATA_STERRT,
+	DATA_SWEAPMOD,
+	DATA_STEMP,
+	DATA_STEMPWEAP,
+	DATA_SSTRUCT,
+	DATA_SSTRWEAP,
+	DATA_STRFUNC,
+	DATA_SSTRMOD,
+	DATA_SFEAT,
+	DATA_SFUNC,
+	DATA_RESCH,
+	DATA_RPREREQ,
+	DATA_RCOMPRED,
+	DATA_RSTRREQ,
+	DATA_RCOMPRES,
+	DATA_RSTRRED,
+	DATA_RSTRRES,
+	DATA_RFUNC,
+	DATA_SCRIPT,
+	DATA_SCRIPTVAL,
+	DATA_MAXDATA		// must be last
 };
-extern void resetDataHash(void);
-extern UDWORD DataHash[DATA_MAXDATA];
+
+void resetDataHash(void);
+UDWORD DataHash[DATA_MAXDATA];
 
 /* Pass all the data loading functions to the framework library */
-extern bool dataInitLoadFuncs(void);
+bool dataInitLoadFuncs(void);
 
-extern void dataSetSaveFlag(void);
-extern void dataClearSaveFlag(void);
+void dataSetSaveFlag(void);
+void dataClearSaveFlag(void);
 
 #endif // __INCLUDED_SRC_DATA_H__
