@@ -29,12 +29,12 @@ extern "C"
 {
 #endif //__cplusplus
 
-extern BOOL loadConfig(void);
-extern BOOL loadRenderMode(void);
-extern BOOL saveConfig(void);
-extern BOOL reloadMPConfig(void);
-extern void closeConfig( void );
-extern void setDefaultFrameRateLimit(void);
+BOOL loadConfig(void);
+BOOL loadRenderMode(void);
+BOOL saveConfig(void);
+BOOL reloadMPConfig(void);
+void closeConfig( void );
+void setDefaultFrameRateLimit(void);
 
 /// Default map for Skirmish
 static const char DEFAULTSKIRMISHMAP[] = "Sk-Rush";

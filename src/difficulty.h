@@ -35,9 +35,9 @@ typedef enum _difficulty_level
 	DL_KILLER
 } DIFFICULTY_LEVEL;
 
-extern void	setDifficultyLevel( DIFFICULTY_LEVEL lev);
-extern DIFFICULTY_LEVEL	getDifficultyLevel( void );
-extern int modifyForDifficultyLevel(int basicVal, bool IsPlayer);
+void setDifficultyLevel(DIFFICULTY_LEVEL lev);
+DIFFICULTY_LEVEL getDifficultyLevel(void);
+int modifyForDifficultyLevel(int basicVal, bool IsPlayer);
 
 #ifdef __cplusplus
 }

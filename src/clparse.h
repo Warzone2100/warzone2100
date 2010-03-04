@@ -30,8 +30,8 @@ extern "C"
 #endif //__cplusplus
 
 // parse the commandline
-extern bool ParseCommandLine(int argc, const char** argv);
-extern bool ParseCommandLineEarly(int argc, const char** argv);
+bool ParseCommandLine(int argc, const char** argv);
+bool ParseCommandLineEarly(int argc, const char** argv);
 
 extern BOOL bAllowDebugMode;
 
