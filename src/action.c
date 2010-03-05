@@ -325,10 +325,10 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 		return;
 	}
 
-	tRot += MIN(MAX(angleDelta(nearest - tRot), -rotation), rotation);  // Addition wrapping intended.
+	tRot += clip(angleDelta(nearest - tRot), -rotation, rotation);  // Addition wrapping intended.
 
 	// align the turret pitch
-	tPitch += MIN(MAX(angleDelta(0 - tPitch), -rotation/2), rotation/2);  // Addition wrapping intended.
+	tPitch += clip(angleDelta(0 - tPitch), -rotation/2, rotation/2);  // Addition wrapping intended.
 
 	switch (psObj->type)
 	{
@@ -432,11 +432,11 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	//restrict rotationerror to =/- 180 degrees
 	rotationError = angleDelta(targetRotation - (tRotation + psAttacker->rot.direction));
 
-	tRotation += MIN(MAX(rotationError, -rotRate), rotRate);  // Addition wrapping intentional.
+	tRotation += clip(rotationError, -rotRate, rotRate);  // Addition wrapping intentional.
 	if (psAttacker->type == OBJ_DROID && isVtolDroid((DROID *)psAttacker))
 	{
 		// limit the rotation for vtols
-		tRotation = (uint16_t)MIN(MAX(angleDelta(tRotation), -VTOL_TURRET_LIMIT), VTOL_TURRET_LIMIT);  // Cast wrapping intentional.
+		tRotation = (uint16_t)clip(angleDelta(tRotation), -VTOL_TURRET_LIMIT, VTOL_TURRET_LIMIT);  // Cast wrapping intentional.
 	}
 	onTarget = targetRotation == (uint16_t)(tRotation + psAttacker->rot.direction);  // Cast wrapping intentional.
 
@@ -459,8 +459,8 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 
 		pitchError = angleDelta(targetPitch - tPitch);
 
-		tPitch += MIN(MAX(pitchError, -pitchRate), pitchRate);  // Addition wrapping intended.
-		tPitch = (uint16_t)MIN(MAX(angleDelta(tPitch), pitchLowerLimit), pitchUpperLimit);  // Cast wrapping intended.
+		tPitch += clip(pitchError, -pitchRate, pitchRate);  // Addition wrapping intended.
+		tPitch = (uint16_t)clip(angleDelta(tPitch), pitchLowerLimit, pitchUpperLimit);  // Cast wrapping intended.
 		onTarget = onTarget && targetPitch == tPitch;
 
 		/* re-invert result for bottom-mounted weapons (i.e. for vtols) */

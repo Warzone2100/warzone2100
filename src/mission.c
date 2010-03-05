@@ -633,7 +633,6 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 	DROID	*psTransporter, *psNext;
 	UWORD	iX, iY, iZ;
 	SDWORD	iLandX, iLandY, iDx, iDy;
-	double  fR;
 
 	ASSERT_OR_RETURN(, iPlayer < 8, "Flying nonexistent player %d's transporters in", iPlayer);
 
@@ -676,13 +675,7 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 			    iDx = iLandX - iX;
 			    iDy = iLandY - iY;
 
-
-			    fR = (double) atan2(iDx, iDy);
-			    if ( fR < 0.0 )
-			    {
-			    	fR += (double) (2 * M_PI);
-			    }
-			    psTransporter->rot.direction = DEG(RAD_TO_DEG(fR));
+				psTransporter->rot.direction = iAtan2(iDx, iDy);
 
 				// Camera track requested and it's the selected player.
 			    if ( ( bTrackTransporter == true ) && (iPlayer == (SDWORD)selectedPlayer) )

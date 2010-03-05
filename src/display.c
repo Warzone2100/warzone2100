@@ -190,12 +190,10 @@ static UDWORD	currentFrame;
 static UDWORD StartOfLastFrame;
 static SDWORD	rotX;
 static SDWORD	rotY;
-static UDWORD	worldAngle;
 static UDWORD	rotInitial;
 static UDWORD	rotInitialUp;
 static UDWORD	xMoved, yMoved;
 static STRUCTURE	*psBuilding;
-static SDWORD	direction = 0;
 static BOOL	edgeOfMap = false;
 static UDWORD	scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
@@ -1041,8 +1039,6 @@ void processMouseClickInput(void)
 
 void scroll(void)
 {
-	float	radians;
-	float	cosine, sine;
 	SDWORD	xDif,yDif;
 	UDWORD	timeDiff;
 	BOOL mouseAtLeft = false, mouseAtRight = false,
@@ -1196,19 +1192,10 @@ void scroll(void)
 	scrollStepUpDown = scrollSpeedUpDown * (float)(timeDiff) /
 		(float)GAME_TICKS_PER_SEC;
 
-	/* Get angle vector to scroll along */
-	worldAngle = (UDWORD) ((UDWORD)player.r.y/DEG_1)%360;
-	direction = (360) - worldAngle;
-
-	/* Convert to radians */
-	radians = ((M_PI / 180) * (direction));
-	cosine = cosf(radians);
-	sine = sinf(radians);
-
 	/* Get x component of movement */
-	xDif = roundf(cosine * scrollStepLeftRight + sine * scrollStepUpDown);
+	xDif = iCosR(player.r.y, scrollStepLeftRight) + iSinR(player.r.y, scrollStepUpDown);
 	/* Get y component of movement */
-	yDif = roundf(sine * scrollStepLeftRight - cosine * scrollStepUpDown);
+	yDif = iSinR(player.r.y, scrollStepLeftRight) - iCosR(player.r.y, scrollStepUpDown);
 
 	/* Adjust player's position by these components */
 	player.p.x += xDif;

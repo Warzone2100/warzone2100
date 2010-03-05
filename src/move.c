@@ -217,8 +217,6 @@ static float	baseTurn;
 static void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t direction);
 // Calculate the boundary vector
 static void	moveCalcBoundary(DROID *psDroid);
-/* Turn a vector into an angle */
-static uint16_t vectorToAngle(float vx, float vy);
 
 /** Initialise the movement system
  */
@@ -665,15 +663,6 @@ void updateDroidOrientation(DROID *psDroid)
 	psDroid->rot.roll = iAtan2(dzdw, (2*d) << 16);		// pitch = atan(∂z(x, y)/∂w)/2π << 16
 }
 
-/** Turn a vector into an angle
- *  @return the vector expressed as an angle
- */
-static uint16_t vectorToAngle(float vx, float vy)
-{
-	return (int)(UINT16_MAX/(2*M_PI) * atan2(vx, vy));
-//	return iAtan2(vx, vy);
-}
-
 
 /* Calculate the change in direction given a target angle and turn rate */
 static void moveCalcTurn(uint16_t *pCurr, uint16_t target, int rate)
@@ -685,7 +674,7 @@ static void moveCalcTurn(uint16_t *pCurr, uint16_t target, int rate)
 	int change = baseTurn * rate * UINT16_MAX/360;  // constant rate so we can use a normal multiplication
 
 	// Move *pCurr towards target, by at most ±change.
-	*pCurr += MIN(MAX(diff, -change), change);
+	*pCurr += clip(diff, -change, change);
 }
 
 
@@ -911,13 +900,12 @@ static BOOL moveBlocked(DROID *psDroid)
 
 
 // Calculate the actual movement to slide around
-static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, float *pMx, float *pMy)
+static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, int32_t *pMx, int32_t *pMy)
 {
 	SDWORD		obstX, obstY;
-	SDWORD		absX, absY;
-	SDWORD		dirX, dirY, dirMag;
-	float		mx, my, unitX,unitY;
-	float		dotRes;
+	SDWORD		dirX, dirY, dirMagSq;
+	int32_t         mx, my;
+	int32_t         dotRes;
 
 	mx = *pMx;
 	my = *pMy;
@@ -933,7 +921,7 @@ static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, float *
 	}
 
 	// Choose the tangent vector to this on the same side as the target
-	dotRes = (float)obstY * mx - (float)obstX * my;
+	dotRes = obstY * mx - obstX * my;
 	if (dotRes >= 0)
 	{
 		dirX = obstY;
@@ -943,24 +931,23 @@ static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, float *
 	{
 		dirX = -obstY;
 		dirY = obstX;
-		dotRes = (float)dirX * *pMx + (float)dirY * *pMy;
+		dotRes = -dotRes;
 	}
-	absX = labs(dirX); absY = labs(dirY);
-	dirMag = absX > absY ? absX + absY/2 : absY + absX/2;
+	dirMagSq = MAX(1, dirX*dirX + dirY*dirY);
 
 	// Calculate the component of the movement in the direction of the tangent vector
-	unitX = (float)dirX / (float)dirMag;
-	unitY = (float)dirY / (float)dirMag;
-	dotRes = dotRes / (float)dirMag;
-	*pMx = unitX * dotRes;
-	*pMy = unitY * dotRes;
+	*pMx = (int64_t)dirX * dotRes / dirMagSq;
+	*pMy = (int64_t)dirY * dotRes / dirMagSq;
 }
 
 
 // see if a droid has run into a blocking tile
-static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, uint16_t tarDir, uint16_t *pSlideDir)
+// TODO See if this function can be simplified.
+static void moveCalcBlockingSlide(DROID *psDroid, float *pmx_, float *pmy_, uint16_t tarDir, uint16_t *pSlideDir)
 {
-	float	mx = *pmx,my = *pmy, nx,ny;
+	int32_t pmxv = *pmx_, pmyv = *pmy_;
+	int32_t *pmx = &pmxv, *pmy = &pmyv;
+	int32_t mx = *pmx, my = *pmy, nx, ny;
 	SDWORD	tx,ty, ntx,nty;		// current tile x,y and new tile x,y
 	SDWORD	blkCX,blkCY;
 	SDWORD	horizX,horizY, vertX,vertY;
@@ -1217,7 +1204,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, uint16
 		}
 	}
 
-	slideDir = vectorToAngle(*pmx, *pmy);
+	slideDir = iAtan2(*pmx, *pmy);
 	if (ntx != tx)
 	{
 		// hit a horizontal block
@@ -1247,6 +1234,9 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, uint16
 		}
 	}
 	*pSlideDir = slideDir;
+
+	*pmx_ = *pmx;
+	*pmy_ = *pmy;
 
 	CHECK_DROID(psDroid);
 }
@@ -1373,7 +1363,10 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 	if (psObst != NULL)
 	{
 		// Try to slide round it
-		moveCalcSlideVector(psDroid, (SDWORD)psObst->pos.x,(SDWORD)psObst->pos.y, pmx,pmy);
+		int32_t x = *pmx, y = *pmy;
+		moveCalcSlideVector(psDroid, (SDWORD)psObst->pos.x,(SDWORD)psObst->pos.y, &x, &y);
+		*pmx = x;
+		*pmy = y;
 	}
 	CHECK_DROID(psDroid);
 }
@@ -1591,7 +1584,7 @@ static uint16_t moveGetDirection(DROID *psDroid)
 		moveGetObstacleVector(psDroid, &dest.x, &dest.y);
 	}
 
-	return vectorToAngle(dest.x, dest.y);
+	return iAtan2(dest.x*10000, dest.y*10000);
 }
 
 
@@ -2274,7 +2267,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 	moveUpdateDroidPos( psDroid, dx, dy );
 
 	/* update vtol orientation */
-	targetRoll = MIN(MAX(4 * angleDelta(psDroid->sMove.moveDir - psDroid->rot.direction), -DEG(60)), DEG(60));
+	targetRoll = clip(4 * angleDelta(psDroid->sMove.moveDir - psDroid->rot.direction), -DEG(60), DEG(60));
 	psDroid->rot.roll = psDroid->rot.roll + (uint16_t)gameTimeAdjustedIncrement(3 * angleDelta(targetRoll - psDroid->rot.roll));
 
 	iMapZ = map_Height(psDroid->pos.x, psDroid->pos.y);

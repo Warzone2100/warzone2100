@@ -7350,10 +7350,10 @@ BOOL scrFogTileInRange(void)
 		  	{
 				//within base range
 				if (wRange <= 0
-				 || world_coord(dirtyHypot(tRangeX - i, tRangeY - j)) < wRange)		//dist in world units between baseX/baseY and the tile
+				 || world_coord(iHypot(tRangeX - i, tRangeY - j)) < wRange)		//dist in world units between baseX/baseY and the tile
 				{
 					//calc dist between this tile and looker
-					wDist = world_coord(dirtyHypot(tx - i, ty - j));
+					wDist = world_coord(iHypot(tx - i, ty - j));
 
 					//closer than last one?
 					if(wDist < wBestDist)
@@ -7441,7 +7441,7 @@ BOOL scrMapRevealedInRange(void)
 			if(abs(tRangeX-i) < tRange && abs(tRangeY-j) < tRange)
 			{
 				//within range
-				if (world_coord(dirtyHypot(tRangeX - i, tRangeY - j)) < wRange 		//dist in world units between x/y and the tile
+				if (world_coord(iHypot(tRangeX - i, tRangeY - j)) < wRange  //dist in world units between x/y and the tile
 				 && TEST_TILE_VISIBLE(player, mapTile(i, j)))		//not visible
 				{
 					scrFunctionResult.v.bval = true;
@@ -7917,7 +7917,7 @@ static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 			}
 
 			if (range < 0
-			 || dirtyHypot(rangeX - psDroid->pos.x, rangeY - psDroid->pos.y) < range)	//enemy in range
+			 || iHypot(rangeX - psDroid->pos.x, rangeY - psDroid->pos.y) < range)  //enemy in range
 			{
 				if (justCount)
 				{
@@ -10351,7 +10351,7 @@ BOOL scrClosestDamagedGroupDroid(void)
 	{
 		if((psDroid->body * 100 / psDroid->originalBody) <= healthLeft)	//in%
 		{
-			wDist = map_coord(dirtyHypot(psDroid->pos.x - x, psDroid->pos.y - y));	//in tiles
+			wDist = map_coord(iHypot(psDroid->pos.x - x, psDroid->pos.y - y));  //in tiles
 			if(wDist < wBestDist)
 			{
 				if((maxRepairedBy < 0) || (getNumRepairedBy(psDroid, player) <= maxRepairedBy))

@@ -582,6 +582,11 @@ int32_t iHypot(int32_t x, int32_t y)
 	return i64Sqrt((uint64_t)x*x + (uint64_t)y*y);  // Casting from int32_t to uint64_t does sign extend.
 }
 
+int32_t iHypot3(int32_t x, int32_t y, int32_t z)
+{
+	return i64Sqrt((uint64_t)x*x + (uint64_t)y*y + (uint64_t)z*z);  // Casting from int32_t to uint64_t does sign extend.
+}
+
 // For testing above functions.
 #if 0
 int main()

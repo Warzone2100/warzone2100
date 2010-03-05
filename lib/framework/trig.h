@@ -54,6 +54,7 @@ uint16_t iAtan2(int32_t s, int32_t c);  ///< Returns atan2(s, c)/2π << 16, with
 int32_t iSqrt(uint32_t n);              ///< Returns √(n), rounded down.
 int32_t i64Sqrt(uint64_t n);            ///< Returns √(n), rounded down.
 int32_t iHypot(int32_t x, int32_t y);   ///< Returns √(x² + y²), rounded down. In case of overflow, returns correct result cast to (int32_t).
+int32_t iHypot3(int32_t x, int32_t y, int32_t z);  ///< Returns √(x² + y² + z²), rounded down. In case of overflow, returns correct result cast to (int32_t).
 
 /// Returns the given angle, wrapped to the range [-180°; 180°) = [-32768; 32767].
 static inline int32_t angleDelta(int32_t a)
