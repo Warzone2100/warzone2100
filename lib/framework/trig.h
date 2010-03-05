@@ -60,6 +60,12 @@ int32_t iSqrt(uint32_t n);              ///< Returns √(n), rounded down.
 int32_t i64Sqrt(uint64_t n);            ///< Returns √(n), rounded down.
 int32_t iHypot(int32_t x, int32_t y);   ///< Returns √(x² + y²), rounded down. In case of overflow, returns correct result cast to (int32_t).
 
+/// Returns the given angle, wrapped to the range [-180°; 180°) = [-32768; 32767].
+static inline int angleDelta(int a)
+{
+	return (int16_t)a;  // Cast wrapping intended.
+}
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus

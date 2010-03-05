@@ -507,7 +507,7 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 			if (abs(xdiff) < SHUFFLE_DIST && abs(ydiff) < SHUFFLE_DIST && xdiff*xdiff + ydiff*ydiff < SHUFFLE_DIST*SHUFFLE_DIST)
 			{
 				uint16_t droidDir = iAtan2(xdiff, ydiff);
-				int diff = (int16_t)(shuffleDir - droidDir);  // Cast wrapping intended.
+				int diff = angleDelta(shuffleDir - droidDir);
 				if (diff > -DEG(135) && diff < -DEG(45))
 				{
 					leftClear = false;
@@ -651,7 +651,7 @@ void updateDroidOrientation(DROID *psDroid)
 	dzdv = dzdx*vX + dzdy*vY;                            // 2*d*∂z(x, y)/∂v << 16 of ground, where v is the direction the droid is facing.
 	newPitch = iAtan2(dzdv, (2*d) << 16);                // pitch = atan(∂z(x, y)/∂v)/2π << 16
 
-	deltaPitch = (int16_t)(newPitch - psDroid->rot.pitch);	// (int16_t) cast: wrapping behaviour intended.
+	deltaPitch = angleDelta(newPitch - psDroid->rot.pitch);
 
 	// Limit the rate the front comes down to simulate momentum
 	pitchLimit = gameTimeAdjustedIncrement(DEG(PITCH_LIMIT));
@@ -679,7 +679,7 @@ static uint16_t vectorToAngle(float vx, float vy)
 static void moveCalcTurn(uint16_t *pCurr, uint16_t target, int rate)
 {
 	// calculate the difference in the angles
-	int diff = (int16_t)(target - *pCurr);  // Cast wrapping intended.
+	int diff = angleDelta(target - *pCurr);
 
 	// calculate the change in direction
 	int change = baseTurn * rate * UINT16_MAX/360;  // constant rate so we can use a normal multiplication
@@ -858,7 +858,7 @@ static BOOL moveBlocked(DROID *psDroid)
 	}
 
 	// See if the block can be cancelled
-	if (abs((int16_t)(psDroid->rot.direction - psDroid->sMove.bumpDir)) > DEG(BLOCK_DIR))  // Cast wrapping intended.
+	if (abs(angleDelta(psDroid->rot.direction - psDroid->sMove.bumpDir)) > DEG(BLOCK_DIR))
 	{
 		// Move on, clear the bump
 		psDroid->sMove.bumpTime = 0;
@@ -1731,7 +1731,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 							  getDroidEffectiveLevel(psDroid));
 
 	// now offset the speed for the slope of the droid
-	pitch = (int16_t)psDroid->rot.pitch;	// Wrapping when casting intended
+	pitch = angleDelta(psDroid->rot.pitch);
 	speed = (maxPitch - pitch) * speed / maxPitch;
 	if (speed <= 10)
 	{
@@ -1816,7 +1816,7 @@ static void moveUpdateDroidDirection(DROID *psDroid, SDWORD *pSpeed, uint16_t di
 		return;
 	}
 
-	adiff = abs((int16_t)(direction - *pDroidDir));  // Cast wrapping intended.
+	adiff = abs(angleDelta(direction - *pDroidDir));
 	if (adiff > iSpinAngle)
 	{
 		// large change in direction, spin on the spot
@@ -1837,7 +1837,7 @@ static float moveCalcPerpSpeed(DROID *psDroid, uint16_t iDroidDir, SDWORD iSkidD
 	uint16_t        adiff;
 	float		perpSpeed;
 
-	adiff = (int16_t)(iDroidDir - psDroid->sMove.moveDir);  // Cast wrapping intended.
+	adiff = angleDelta(iDroidDir - psDroid->sMove.moveDir);
 	perpSpeed = psDroid->sMove.speed * iSin(adiff) / UINT16_MAX;
 
 	// decelerate the perpendicular speed
@@ -1870,7 +1870,7 @@ static void moveCombineNormalAndPerpSpeeds(DROID *psDroid, float fNormalSpeed, f
 	relDir = iAtan2(fPerpSpeed, fNormalSpeed);
 
 	// choose the finalDir on the same side as the old movement direction
-	adiff = (int16_t)(iDroidDir - psDroid->sMove.moveDir);  // Cast wrapping intended.
+	adiff = angleDelta(iDroidDir - psDroid->sMove.moveDir);
 
 	psDroid->sMove.moveDir = adiff < 0 ? iDroidDir + relDir : iDroidDir - relDir;  // Cast wrapping intended.
 	psDroid->sMove.speed = finalSpeed;
@@ -2274,8 +2274,8 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 	moveUpdateDroidPos( psDroid, dx, dy );
 
 	/* update vtol orientation */
-	targetRoll = MIN(MAX(4 * (int16_t)(psDroid->sMove.moveDir - psDroid->rot.direction), -DEG(60)), DEG(60));  // Cast wrapping intended.
-	psDroid->rot.roll = psDroid->rot.roll + (uint16_t)gameTimeAdjustedIncrement(3 * (int16_t)(targetRoll - psDroid->rot.roll));  // Cast wrapping intended.
+	targetRoll = MIN(MAX(4 * angleDelta(psDroid->sMove.moveDir - psDroid->rot.direction), -DEG(60)), DEG(60));
+	psDroid->rot.roll = psDroid->rot.roll + (uint16_t)gameTimeAdjustedIncrement(3 * angleDelta(targetRoll - psDroid->rot.roll));
 
 	iMapZ = map_Height(psDroid->pos.x, psDroid->pos.y);
 
