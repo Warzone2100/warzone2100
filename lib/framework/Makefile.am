@@ -35,6 +35,7 @@ noinst_HEADERS = \
 	strres_parser.tab.h \
 	resource_parser.tab.h \
 	configfile.h \
+	crc.h \
 	cursors.h \
 	debug.h \
 	file.h \
@@ -72,6 +73,7 @@ libframework_a_SOURCES = \
 	strres_lexer.lex.c \
 	strres_parser.tab.c \
 	configfile.c \
+	crc.cpp \
 	cursors16.c \
 	cursors32.c \
 	cursors.c \
