@@ -137,7 +137,7 @@ static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leavi
 static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETregisterServer(int state);
 static void NETallowJoining(void);
-static void NET_InitPlayer(int i);
+static void NET_InitPlayer(int i, bool initPosition);
 
 /*
  * Network globals, these are part of the new network API
@@ -1329,16 +1329,19 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 	return 0;
 }
 
-static void NET_InitPlayer(int i)
+static void NET_InitPlayer(int i, bool initPosition)
 {
 	NetPlay.players[i].allocated = false;
 	NetPlay.players[i].heartattacktime = 0;
 	NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
 	NetPlay.players[i].kick = false;
 	NetPlay.players[i].name[0] = '\0';
-	NetPlay.players[i].colour = i;
-	NetPlay.players[i].position = i;
-	NetPlay.players[i].team = i;
+	if (initPosition)
+	{
+		NetPlay.players[i].colour = i;
+		NetPlay.players[i].position = i;
+		NetPlay.players[i].team = i;
+	}
 	NetPlay.players[i].ready = false;
 	NetPlay.players[i].needFile = false;
 	NetPlay.players[i].wzFile.isCancelled = false;
@@ -1351,7 +1354,7 @@ void NET_InitPlayers()
 
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		NET_InitPlayer(i);
+		NET_InitPlayer(i, true);
 		NETinitQueue(NETnetQueue(i));
 	}
 	NETinitQueue(NETbroadcastQueue());
@@ -1361,10 +1364,10 @@ void NET_InitPlayers()
 	debug(LOG_NET, "Players initialized");
 }
 
-void NETBroadcastPlayerInfo(uint32_t index)
+static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 {
 	debug(LOG_NET, "sending player's (%u) info to all players", index);
-	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_INFO);
+	NETbeginEncode(NETnetQueue(to), NET_PLAYER_INFO);
 		NETuint32_t(&index);
 		NETbool(&NetPlay.players[index].allocated);
 		NETbool(&NetPlay.players[index].heartbeat);
@@ -1377,6 +1380,11 @@ void NETBroadcastPlayerInfo(uint32_t index)
 		NETbool(&NetPlay.players[index].ready);
 		NETuint32_t(&NetPlay.hostPlayer);
 	NETend();
+}
+
+void NETBroadcastPlayerInfo(uint32_t index)
+{
+	NETSendPlayerInfoTo(index, NET_ALL_PLAYERS);
 }
 
 static signed int NET_CreatePlayer(const char* name)
@@ -1416,7 +1424,7 @@ static void NET_DestroyPlayer(unsigned int index)
 			NETregisterServer(1);
 		}
 	}
-	NET_InitPlayer(index);	// reinitialize
+	NET_InitPlayer(index, false);  // reinitialize
 }
 
 /**
@@ -3219,8 +3227,9 @@ static void NETallowJoining(void)
 				if (NETisMessageReady(NETnetTmpQueue(i)) && NETmessageType(NETgetMessage(NETnetTmpQueue(i))) == NET_JOIN)
 				{
 					uint8_t j;
-					int8_t index;
+					uint8_t index;
 					uint8_t rejected = 0;
+					int tmp;
 
 					char name[64];
 					int32_t MajorVersion = 0;
@@ -3239,9 +3248,9 @@ static void NETallowJoining(void)
 					NETend();
 					NETpop(NETnetTmpQueue(i));
 
-					index = NET_CreatePlayer(name);
+					tmp = NET_CreatePlayer(name);
 
-					if (index == -1)
+					if (tmp == -1)
 					{
 						// FIXME: No room. Dropping the player without warning since protocol doesn't seem to support rejection at this point
 						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", tmp_socket[i]);
@@ -3250,6 +3259,8 @@ static void NETallowJoining(void)
 						tmp_socket[i] = NULL;
 						return;
 					}
+
+					index = tmp;
 
 					debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
@@ -3297,7 +3308,7 @@ static void NETallowJoining(void)
 					}
 
 					NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
-					NETuint8_t((uint8_t *)&index);
+					NETuint8_t(&index);
 					NETend();
 
 					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name, (unsigned int)index, connected_bsocket[index]);
@@ -3315,13 +3326,15 @@ static void NETallowJoining(void)
 							NETbeginEncode(NETnetQueue(index), NET_PLAYER_JOINED);
 								NETuint8_t(&j);
 							NETend();
+							NETSendPlayerInfoTo(j, index);
 						}
 					}
 
 					// Send info about newcomer to all players.
 					NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_JOINED);
-						NETuint8_t((uint8_t *)&index);
+						NETuint8_t(&index);
 					NETend();
+					NETBroadcastPlayerInfo(index);
 
 					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 					{

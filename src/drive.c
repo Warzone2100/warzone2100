@@ -207,7 +207,7 @@ BOOL StartDriverMode(DROID *psOldDroid)
 
 	if(psDrivenDroid) {
 
-		driveDir = (int)psDrivenDroid->direction % 360;
+		driveDir = UNDEG(psDrivenDroid->rot.direction);
 		driveSpeed = 0;
 		driveBumpTime = gameTime;
 
@@ -533,7 +533,7 @@ void driveUpdate(void)
 				if(psDrivenDroid->sMove.Status != MOVEDRIVE) {
 					psDrivenDroid->sMove.Status = MOVEDRIVE;
 					ASSERT( (psDrivenDroid->droidType != DROID_TRANSPORTER),"Tried to control a transporter" );
-					driveDir = (int)psDrivenDroid->direction % 360;
+					driveDir = UNDEG(psDrivenDroid->rot.direction);
 				}
 
 				DoFollowRangeCheck = true;
@@ -595,8 +595,7 @@ SDWORD driveGetMoveDir(void)
 void driveSetDroidMove(DROID *psDroid)
 {
 //	psDroid->sMove.speed = (float)driveSpeed;
-//	psDroid->sMove.dir = driveDir;
-	psDroid->direction = driveDir;
+	psDroid->rot.direction = DEG(driveDir);
 }
 
 

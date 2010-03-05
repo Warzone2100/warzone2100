@@ -23,21 +23,13 @@
  * Link droids together into a group for AI etc.
  *
  */
-#include <string.h>
 
 #include "lib/framework/frame.h"
-#include "objects.h"
-#include "group.h"
-#include "orderdef.h"
 
 #include "multiplay.h"
 
 static DROID_GROUP *firstGroup = NULL;
 static BOOL grpInitialized = false;
-
-// sizes for the group heap
-#define GRP_HEAP_INIT	45
-#define GRP_HEAP_EXT	15
 
 // initialise the group system
 BOOL grpInitialise(void)
@@ -149,6 +141,7 @@ void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
 }
 
 // add a droid to a group at the end of the list
+// NOTE: Unused! void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid)
 void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid)
 {
 	DROID		*psPrev, *psCurr;

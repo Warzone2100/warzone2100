@@ -266,7 +266,6 @@ void orderUpdateDroid(DROID *psDroid)
 	SDWORD			xdiff,ydiff;
 	BOOL			bAttack;
 	UBYTE i;
-	float			radToAction;
 	SDWORD			xoffset,yoffset;
 
 	// clear the target if it has died
@@ -669,23 +668,19 @@ void orderUpdateDroid(DROID *psDroid)
 				if (psDroid->order == DORDER_CIRCLE)
 				{
 					//Watermelon:use orderX,orderY as local space origin and calculate droid direction in local space
-					radToAction = atan2f((float)xdiff, (float)ydiff);
-					xoffset = sinf(radToAction) * 1500;
-					yoffset = cosf(radToAction) * 1500;
-					xdiff = (SDWORD)psDroid->pos.x - (SDWORD)(psDroid->orderX + xoffset);
-					ydiff = (SDWORD)psDroid->pos.y - (SDWORD)(psDroid->orderY + yoffset);
+					uint16_t angle = iAtan2(xdiff, ydiff);
+					xoffset = iSinR(angle, 1500);
+					yoffset = iCosR(angle, 1500);
+					xdiff = psDroid->pos.x - (psDroid->orderX + xoffset);
+					ydiff = psDroid->pos.y - (psDroid->orderY + yoffset);
 					if (xdiff*xdiff + ydiff*ydiff < TILE_UNITS * TILE_UNITS)
 					{
 						//Watermelon:conter-clockwise 30 degree's per action
-						radToAction -= M_PI * 30 / 180;
-						xoffset = sinf(radToAction) * 1500;
-						yoffset = cosf(radToAction) * 1500;
-						actionDroidLoc(psDroid, DACTION_MOVE, (psDroid->orderX + xoffset),(psDroid->orderY + yoffset));
+						angle -= DEG(30);
+						xoffset = iSinR(angle, 1500);
+						yoffset = iCosR(angle, 1500);
 					}
-					else
-					{
-						actionDroidLoc(psDroid, DACTION_MOVE, (psDroid->orderX + xoffset),(psDroid->orderY + yoffset));
-					}
+					actionDroidLoc(psDroid, DACTION_MOVE, psDroid->orderX + xoffset, psDroid->orderY + yoffset);
 				}
 				else
 				{
@@ -1341,7 +1336,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 WZ_DECL_UNUSED static void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER_DATA *psOrder)
 {
 	SDWORD		fsx,fsy, fsnum, sensorVX,sensorVY, fsVX,fsVY;
-	float		sensorAngle, fsAngle, adiff;
+	uint16_t        sensorAngle, fsAngle, adiff;
 	SDWORD		xdiff,ydiff;
 	DROID		*psCurr;
 	BASE_OBJECT	*psTarget;
@@ -1390,21 +1385,13 @@ WZ_DECL_UNUSED static void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER
 		}
 
 		// now get the angle between the firesupport units and the sensor move
-		sensorAngle = (float)atan2f(sensorVY, sensorVX);
-		fsAngle = (float)atan2f(fsVY, fsVX);
-		adiff = fsAngle - sensorAngle;
-		if (adiff < 0)
-		{
-			adiff += (float)(M_PI * 2);
-		}
-		if (adiff > M_PI)
-		{
-			adiff -= (float)(M_PI);
-		}
+		sensorAngle = iAtan2(sensorVY, sensorVX);
+		fsAngle = iAtan2(fsVY, fsVX);
+		adiff = angleDelta(fsAngle - sensorAngle);
 
 		// if the angle between the firesupport units and the sensor move is bigger
 		// than 45 degrees don't retreat
-		if (adiff > M_PI / 4)
+		if (adiff > DEG(45))
 		{
 			goto done;
 		}
@@ -1495,13 +1482,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	UDWORD		iFactoryDistSq;
 	STRUCTURE	*psStruct, *psRepairFac, *psFactory;
 	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	const Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
-	const Vector2i rPos = { map_coord(psOrder->x), map_coord(psOrder->y) };
+	const Vector3i rPos = { psOrder->x, psOrder->y, 0 };
 
 	if (psOrder->order != DORDER_TRANSPORTIN	// transporters special
 	    && psOrder->psObj == NULL			// location-type order
 	    && (validOrderForLoc(psOrder->order) || psOrder->order == DORDER_BUILD) 
-	    && !fpathCheck(dPos, rPos, psPropStats->propulsionType))
+	    && !fpathCheck(psDroid->pos, rPos, psPropStats->propulsionType))
 	{
 		if (!isHumanPlayer(psDroid->player))
 		{
@@ -1683,7 +1669,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->psTarStats = psOrder->psStats;
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
-		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats->pName);
+		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
 		break;
 	case DORDER_BUILDMODULE:
 		//build a module onto the structure
@@ -1699,7 +1685,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		ASSERT(psDroid->psTarStats != NULL, "orderUnitBase: should have found a module stats");
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->psObj->pos.x,psOrder->psObj->pos.y);
-		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats->pName);
+		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
 		break;
 	case DORDER_LINEBUILD:
 		// build a line of structures
@@ -1718,7 +1704,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->psTarStats = psOrder->psStats;
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
-		objTrace(psDroid->id, "Starting new line construction of %s", psOrder->psStats->pName);
+		objTrace(psDroid->id, "Starting new line construction of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
 		break;
 	case DORDER_HELPBUILD:
 		// help to build a structure that is starting to be built
@@ -1733,7 +1719,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->psTarStats = (BASE_STATS *)((STRUCTURE *)psOrder->psObj)->pStructureType;
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psDroid->orderX, psDroid->orderY);
-		objTrace(psDroid->id, "Helping construction of %s", psOrder->psStats->pName);
+		objTrace(psDroid->id, "Helping construction of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
 		break;
 	case DORDER_DEMOLISH:
 		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
@@ -4339,9 +4325,6 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 	{
 		if (lasSatStructSelected(psStruct))
 		{
-			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-			Vector3i pos = Vector3uw_To3i(psObj->pos);
-
 			// Lassats have just one weapon
 			unsigned int firePause = weaponFirePause(&asWeaponStats[psStruct->asWeaps[0].nStat], (UBYTE)player);
 			unsigned int damLevel = PERCENT(psStruct->body, structureBody(psStruct));
@@ -4366,7 +4349,7 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 			else
 			{
 				//ok to fire - so fire away
-				proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, pos, psObj, true, 0);
+				proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos, psObj, true, 0);
 				//set up last fires time
 				psStruct->asWeaps[0].lastFired =  gameTime;
 

@@ -190,12 +190,10 @@ static UDWORD	currentFrame;
 static UDWORD StartOfLastFrame;
 static SDWORD	rotX;
 static SDWORD	rotY;
-static UDWORD	worldAngle;
 static UDWORD	rotInitial;
 static UDWORD	rotInitialUp;
 static UDWORD	xMoved, yMoved;
 static STRUCTURE	*psBuilding;
-static SDWORD	direction = 0;
 static BOOL	edgeOfMap = false;
 static UDWORD	scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
@@ -1041,8 +1039,6 @@ void processMouseClickInput(void)
 
 void scroll(void)
 {
-	float	radians;
-	float	cosine, sine;
 	SDWORD	xDif,yDif;
 	UDWORD	timeDiff;
 	BOOL mouseAtLeft = false, mouseAtRight = false,
@@ -1196,19 +1192,10 @@ void scroll(void)
 	scrollStepUpDown = scrollSpeedUpDown * (float)(timeDiff) /
 		(float)GAME_TICKS_PER_SEC;
 
-	/* Get angle vector to scroll along */
-	worldAngle = (UDWORD) ((UDWORD)player.r.y/DEG_1)%360;
-	direction = (360) - worldAngle;
-
-	/* Convert to radians */
-	radians = ((M_PI / 180) * (direction));
-	cosine = cosf(radians);
-	sine = sinf(radians);
-
 	/* Get x component of movement */
-	xDif = roundf(cosine * scrollStepLeftRight + sine * scrollStepUpDown);
+	xDif = iCosR(player.r.y, scrollStepLeftRight) + iSinR(player.r.y, scrollStepUpDown);
 	/* Get y component of movement */
-	yDif = roundf(sine * scrollStepLeftRight - cosine * scrollStepUpDown);
+	yDif = iSinR(player.r.y, scrollStepLeftRight) - iCosR(player.r.y, scrollStepUpDown);
 
 	/* Adjust player's position by these components */
 	player.p.x += xDif;
@@ -1851,11 +1838,11 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		if (getDebugMappingStatus()) // cheating on, so output debug info
 		{
 			CONPRINTF(ConsoleString, (ConsoleString,
-						"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu power %hu - ECM %u",
+						"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu power %hu - ECM %u - pitch %.0f",
 						droidGetName(psDroid),
 						100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
 						psDroid->experience, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action),
-						droidSensorRange(psDroid), droidSensorPower(psDroid), droidConcealment(psDroid)));
+						droidSensorRange(psDroid), droidSensorPower(psDroid), droidConcealment(psDroid), UNDEG(psDroid->rot.pitch)));
 			FeedbackOrderGiven();
 		}
 		else

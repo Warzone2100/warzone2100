@@ -37,7 +37,7 @@
 #include "projectile.h"
 #include "visibility.h"
 
-#define FRUSTATED_TIME 1000 * 5
+#define FRUSTRATED_TIME (1000 * 5)
 
 /* Calculates attack priority for a certain target */
 static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot);
@@ -380,7 +380,9 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 				}
 			}
 			else if (targetInQuestion->type == OBJ_FEATURE
-			         && gameTime - psDroid->lastFrustratedTime < FRUSTATED_TIME  && ((FEATURE *)targetInQuestion)->psStats->damageable)
+			         && gameTime - psDroid->lastFrustratedTime < FRUSTRATED_TIME
+			         && ((FEATURE *)targetInQuestion)->psStats->damageable
+			         && !(game.scavengers && psDroid->player == 7))			// hack to avoid scavs blowing up their nice feature walls
 			{
 				psTarget = targetInQuestion;
 			}
@@ -619,7 +621,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		/* Now calculate the overall weight */
 		attackWeight = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION].nStat)->propulsionType] // Our weapon's effect against target
 				+ WEIGHT_DIST_TILE_DROID * psAttacker->sensorRange/TILE_UNITS
-				- WEIGHT_DIST_TILE_DROID * map_coord(dirtyHypot(psAttacker->pos.x - targetDroid->pos.x, psAttacker->pos.y - targetDroid->pos.y)) // farer droids are less attractive
+				- WEIGHT_DIST_TILE_DROID * map_coord(iHypot(psAttacker->pos.x - targetDroid->pos.x, psAttacker->pos.y - targetDroid->pos.y)) // farer droids are less attractive
 				+ WEIGHT_HEALTH_DROID * damageRatio // we prefer damaged droids
 				+ targetTypeBonus; // some droid types have higher priority
 
@@ -661,7 +663,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		/* Now calculate the overall weight */
 		attackWeight = asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength] // Our weapon's effect against target
 				+ WEIGHT_DIST_TILE_STRUCT * psAttacker->sensorRange/TILE_UNITS
-				- WEIGHT_DIST_TILE_STRUCT * map_coord(dirtyHypot(psAttacker->pos.x - targetStructure->pos.x, psAttacker->pos.y - targetStructure->pos.y)) // farer structs are less attractive
+				- WEIGHT_DIST_TILE_STRUCT * map_coord(iHypot(psAttacker->pos.x - targetStructure->pos.x, psAttacker->pos.y - targetStructure->pos.y)) // farer structs are less attractive
 				+ WEIGHT_HEALTH_STRUCT * damageRatio // we prefer damaged structures
 				+ targetTypeBonus; // some structure types have higher priority
 

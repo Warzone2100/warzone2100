@@ -275,10 +275,9 @@ static PACKAGED_CHECK packageCheck(const DROID *pD)
 	{
 		ASSERT(false, "Droid %u body is too high before synch, is %u, which is more than %u.", pc.droidID, pD->body, pD->originalBody);
 	}
-	pc.direction = pD->direction;
 	pc.experience = pD->experience;
-	pc.posX = pD->pos.x;
-	pc.posY = pD->pos.y;
+	pc.pos = pD->pos;
+	pc.rot = pD->rot;
 	pc.sMoveX = pD->sMove.fx;
 	pc.sMoveY = pD->sMove.fy;
 	if (pD->order == DORDER_ATTACK)
@@ -341,12 +340,14 @@ BOOL recvDroidCheck(NETQUEUE queue)
 #define MERGECOPY(x, y, z)  if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z" to %"z".", pc.droidID, x, pc.y);             x = pc.y; }
 #define MERGEDELTA(x, y, z) if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z" to %"z".", pc.droidID, x, x + pc.y - pc2.y); x += pc.y - pc2.y; }
 			// player not synched here...
-			MERGEDELTA(pD->pos.x, posX, "d");
-			MERGEDELTA(pD->pos.y, posY, "d");
+			MERGEDELTA(pD->pos.x, pos.x, "d");
+			MERGEDELTA(pD->pos.y, pos.y, "d");
+			MERGEDELTA(pD->pos.z, pos.z, "d");
+			MERGEDELTA(pD->rot.direction, rot.direction, "d");
+			MERGEDELTA(pD->rot.pitch, rot.pitch, "d");
+			MERGEDELTA(pD->rot.roll, rot.roll, "d");
 			MERGEDELTA(pD->sMove.fx, sMoveX, "f");
 			MERGEDELTA(pD->sMove.fy, sMoveY, "f");
-			MERGEDELTA(pD->direction, direction, "f");
-			pD->direction += pD->direction < 0 ? 360 : pD->direction >= 360 ? -360 : 0; 
 			MERGEDELTA(pD->body, body, "u");
 			if (pD->body > pD->originalBody)
 			{
@@ -355,7 +356,7 @@ BOOL recvDroidCheck(NETQUEUE queue)
 			}
 			MERGEDELTA(pD->experience, experience, "f");
 
-			if (pc.posX != pc2.posX || pc.posY != pc2.posY)
+			if (pc.pos.x != pc2.pos.x || pc.pos.y != pc2.pos.y)
 			{
 				// snap droid(if on ground) to terrain level at x,y.
 				if ((asPropulsionStats + pD->asBits[COMP_PROPULSION].nStat)->propulsionType != PROPULSION_TYPE_LIFT)  // if not airborne.
@@ -444,7 +445,7 @@ static STRUCTURE *pickAStructure(unsigned player)
 static uint32_t structureCheckLastSent = 0;  // Last time a struct was sent
 static uint32_t structureCheckLastId[MAX_PLAYERS];
 static uint32_t structureCheckLastBody[MAX_PLAYERS];
-static float    structureCheckLastDirection[MAX_PLAYERS];
+static Rotation structureCheckLastDirection[MAX_PLAYERS];
 static uint32_t structureCheckLastType[MAX_PLAYERS];
 static uint8_t  structureCheckLastCapacity[MAX_PLAYERS];
 
@@ -496,7 +497,7 @@ static BOOL sendStructureCheck(void)
 		}
 		structureCheckLastId[player] = pS->id;
 		structureCheckLastBody[player] = pS->body;
-		structureCheckLastDirection[player] = pS->direction;
+		structureCheckLastDirection[player] = pS->rot;
 		structureCheckLastType[player] = pS->pStructureType->type;
 		structureCheckLastCapacity[player] = capacity;
 
@@ -508,7 +509,7 @@ static BOOL sendStructureCheck(void)
 				NETuint32_t(&pS->id);
 				NETuint32_t(&pS->body);
 				NETuint32_t(&pS->pStructureType->type);
-				NETfloat(&pS->direction);
+				NETRotation(&pS->rot);
 				if (hasCapacity)
 				{
 					NETuint8_t(&capacity);
@@ -527,7 +528,7 @@ BOOL recvStructureCheck(NETQUEUE queue)
 	STRUCTURE		*pS;
 	BOOL			hasCapacity = true;
 	int                     j;
-	float			direction;
+	Rotation                rot;
 	uint8_t			player, ourCapacity;
 	uint32_t		body;
 	uint32_t                ref;
@@ -539,7 +540,7 @@ BOOL recvStructureCheck(NETQUEUE queue)
 		NETuint32_t(&ref);
 		NETuint32_t(&body);
 		NETuint32_t(&type);
-		NETfloat(&direction);
+		NETRotation(&rot);
 
 		if (player >= MAX_PLAYERS)
 		{
@@ -574,7 +575,7 @@ BOOL recvStructureCheck(NETQUEUE queue)
 			// Check its finished
 			if (pS->status != SS_BUILT)
 			{
-				pS->direction = direction;
+				pS->rot = rot;
 				pS->id = ref;
 				pS->status = SS_BUILT;
 				buildingComplete(pS);
@@ -624,9 +625,11 @@ BOOL recvStructureCheck(NETQUEUE queue)
 				}
 			}
 
-#define MERGEDELTA(x, y, ya, z) if (y != ya[player]) { debug(LOG_SYNC, "Structure %u out of synch, changing "#x" from %"z" to %"z".", ref, x, x + y - ya[player]); x += y - ya[player]; }
-			MERGEDELTA(pS->body, body, structureCheckLastBody, "u");
-			MERGEDELTA(pS->direction, direction, structureCheckLastDirection, "f");
+#define MERGEDELTA(x, y, ya, z) if (y != ya) { debug(LOG_SYNC, "Structure %u out of synch, changing "#x" from %"z" to %"z".", ref, x, x + y - ya); x += y - ya; }
+			MERGEDELTA(pS->body, body, structureCheckLastBody[player], "u");
+			MERGEDELTA(pS->rot.direction, rot.direction, structureCheckLastDirection[player].direction, "d");
+			MERGEDELTA(pS->rot.pitch, rot.pitch, structureCheckLastDirection[player].pitch, "d");
+			MERGEDELTA(pS->rot.roll, rot.roll, structureCheckLastDirection[player].roll, "d");
 #undef MERGEDELTA
 		}
 		else

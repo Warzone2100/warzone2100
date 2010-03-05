@@ -23,43 +23,33 @@
  * Form droids and structures into clusters
  *
  */
-#include <string.h>
 
-// cluster empty printf's
 #include "lib/framework/frame.h"
-#include "objects.h"
-#include "map.h"
-#include "cluster.h"
-#include "console.h"
-#include "hci.h"
-#include "lib/gamelib/gtime.h"
 #include "lib/script/script.h"
-#include "scripttabs.h"
+
+#include "cluster.h"
+#include "map.h"
 #include "scriptcb.h"
+#include "scripttabs.h"
 
 // distance between units for them to be in the same cluster
 #define CLUSTER_DIST	(TILE_UNITS*8)
 
 
-// cluster information flags
-#define CLUSTER_PLAYER_MASK		0x07
-#define CLUSTER_DROID			0x08
-#define CLUSTER_STRUCTURE		0x10
-
 // Indirect the cluster ID to an actual cluster number
 UBYTE	aClusterMap[CLUSTER_MAX];
 
 // flag to note when a cluster needs the cluster empty callback
-UBYTE	aClusterEmpty[CLUSTER_MAX];
+static UBYTE aClusterEmpty[CLUSTER_MAX];
 
 // number of droids in a cluster
-UWORD	aClusterUsage[CLUSTER_MAX];
+static UWORD aClusterUsage[CLUSTER_MAX];
 
 // whether a cluster can be seen by a player
-UBYTE	aClusterVisibility[CLUSTER_MAX];
+static UBYTE aClusterVisibility[CLUSTER_MAX];
 
 // when a cluster was last attacked
-UDWORD	aClusterAttacked[CLUSTER_MAX];
+static UDWORD aClusterAttacked[CLUSTER_MAX];
 
 // information about the cluster
 UBYTE	aClusterInfo[CLUSTER_MAX];
@@ -184,7 +174,7 @@ void clustRemoveObject(BASE_OBJECT *psObj)
 
 
 // tell a droid to join a cluster
-static void _clustAddDroid(DROID *psDroid, SDWORD cluster)
+static void clustAddDroid(DROID *psDroid, SDWORD cluster)
 {
 	DROID	*psCurr;
 	SDWORD	xdiff, ydiff;
@@ -213,17 +203,10 @@ static void _clustAddDroid(DROID *psDroid, SDWORD cluster)
 		ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psCurr->pos.y;
 		if (xdiff*xdiff + ydiff*ydiff < CLUSTER_DIST*CLUSTER_DIST)
 		{
-			_clustAddDroid(psCurr, cluster);
+			clustAddDroid(psCurr, cluster);
 		}
 	}
 }
-
-
-static void clustAddDroid(DROID *psDroid, SDWORD cluster)
-{
-	_clustAddDroid(psDroid,cluster);
-}
-
 
 
 // tell the cluster system about a new droid
@@ -250,7 +233,7 @@ void clustNewDroid(DROID *psDroid)
 
 
 // tell a structure to join a cluster
-static void _clustAddStruct(STRUCTURE *psStruct, SDWORD cluster)
+static void clustAddStruct(STRUCTURE *psStruct, SDWORD cluster)
 {
 	STRUCTURE	*psCurr;
 	SDWORD		xdiff, ydiff;
@@ -279,15 +262,11 @@ static void _clustAddStruct(STRUCTURE *psStruct, SDWORD cluster)
 		ydiff = (SDWORD)psStruct->pos.y - (SDWORD)psCurr->pos.y;
 		if (xdiff*xdiff + ydiff*ydiff < CLUSTER_DIST*CLUSTER_DIST)
 		{
-			_clustAddStruct(psCurr, cluster);
+			clustAddStruct(psCurr, cluster);
 		}
 	}
 }
 
-static void clustAddStruct(STRUCTURE *psStruct, SDWORD cluster)
-{
-	_clustAddStruct(psStruct,cluster);
-}
 
 // tell the cluster system about a new structure
 void clustNewStruct(STRUCTURE *psStruct)
@@ -330,90 +309,6 @@ static SDWORD clustFindUnused(void)
 
 	// no unused cluster return the default
 	return 0;
-}
-
-// display the current clusters
-void clustDisplay(void)
-{
-	SDWORD	cluster, map, player;
-	DROID		*psDroid;
-	STRUCTURE	*psStruct;
-	char	aBuff[255];
-	BOOL	found;
-	SDWORD	numUsed;
-
-	numUsed = 0;
-	for(map=0; map < CLUSTER_MAX; map++)
-	{
-		if (aClusterMap[map] != 0)
-		{
-			numUsed += 1;
-		}
-	}
-
-	CONPRINTF(ConsoleString, (ConsoleString, "Current clusters (%d):\n", numUsed));
-	for(map=0; map < CLUSTER_MAX; map++)
-	{
-		cluster = aClusterMap[map];
-		if (cluster != 0)
-		{
-			found = false;
-			for(player = 0; player < MAX_PLAYERS; player++)
-			{
-//				if (player == (SDWORD)selectedPlayer)
-//				{
-//					continue;
-//				}
-
-				for(psDroid=apsDroidLists[player]; psDroid; psDroid=psDroid->psNext)
-				{
-					if ((psDroid->cluster == cluster) &&
-//						(psDroid->visible[selectedPlayer]))
-						(psDroid->player == selectedPlayer))
-					{
-						if (!found)
-						{
-							// found a cluster print it out
-							sprintf(aBuff, "Unit cluster %d (%d), ", map, cluster);
-							sprintf(aBuff + strlen(aBuff), "player %d:", psDroid->player);
-							found = true;
-						}
-
-						if (strlen(aBuff) < 250)
-						{
-							sprintf(aBuff + strlen(aBuff), " %d", psDroid->id);
-						}
-					}
-				}
-				for(psStruct=apsStructLists[player]; psStruct; psStruct=psStruct->psNext)
-				{
-					if ((psStruct->cluster == cluster) &&
-//						(psStruct->visible[selectedPlayer]))
-						(psStruct->player == selectedPlayer))
-
-					{
-						if (!found)
-						{
-							// found a cluster print it out
-							sprintf(aBuff, "struct cluster %d (%d), ", map, cluster);
-							sprintf(aBuff + strlen(aBuff), "player %d:", psStruct->player);
-							found = true;
-						}
-
-						if (strlen(aBuff) < 250)
-						{
-							sprintf(aBuff + strlen(aBuff), " %d", psStruct->id);
-						}
-					}
-				}
-			}
-
-			if (found)
-			{
-				CONPRINTF(ConsoleString, (ConsoleString, "%s", aBuff));
-			}
-		}
-	}
 }
 
 // update the cluster information for an object
@@ -510,14 +405,6 @@ SDWORD clustGetClusterID(BASE_OBJECT *psObj)
 	return 0;
 }
 
-// get the actual cluster number from a cluster ID
-SDWORD clustGetClusterFromID(SDWORD clusterID)
-{
-	ASSERT( (clusterID >= 0) && (clusterID < CLUSTER_MAX),
-		"clustGetClusterFromID: invalid cluster ID" );
-
-	return aClusterMap[clusterID];
-}
 
 // variables for the cluster iteration
 static SDWORD		iterateClusterID;
@@ -575,6 +462,7 @@ BASE_OBJECT *clustIterate(void)
 }
 
 // find the center of a cluster
+// NOTE: Unused! void clustGetCenter(BASE_OBJECT *psObj, SDWORD *px, SDWORD *py)
 void clustGetCenter(BASE_OBJECT *psObj, SDWORD *px, SDWORD *py)
 {
 	BASE_OBJECT		*psList;

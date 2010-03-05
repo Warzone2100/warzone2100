@@ -114,28 +114,6 @@ static inline WZ_DECL_CONST float hypotf(float x, float y)
 
 
 /*!
- * Converts x from degrees to radian
- * \param x Degree value to convert
- * \return Radian value
- */
-static inline WZ_DECL_CONST float deg2radf(float x)
-{
-	return x * (float)M_PI / 180.0f;
-}
-
-
-/*!
- * Converts x from radian to degrees
- * \param x Radian value to convert
- * \return Degree value
- */
-static inline WZ_DECL_CONST float rad2degf(float x)
-{
-	return x / (float)M_PI * 180.0f;
-}
-
-
-/*!
  * Moves x into the range 0 - max
  * \param x Value to clip
  * \param max Upper range

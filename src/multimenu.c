@@ -799,7 +799,8 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	UDWORD			x					= xOffset+psWidget->x;
 	UDWORD			y					= yOffset+psWidget->y;
 	UDWORD			player = psWidget->UserData; //get the in game player number.
-	Vector3i Rotation, Position;
+	Position		position;
+	Vector3i 		rotation;
 
 	if( responsibleFor(player,0) )
 	{
@@ -971,14 +972,14 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	if(apsDroidLists[player])
 	{
 		pie_SetGeometricOffset( MULTIMENU_FORM_X+MULTIMENU_C1 ,y+MULTIMENU_PLAYER_H);
-		Rotation.x = -15;
-		Rotation.y = 45;
-		Rotation.z = 0;
-		Position.x = 0;
-		Position.y = 0;
-		Position.z = 2000;		//scale them!
+		rotation.x = -15;
+		rotation.y = 45;
+		rotation.z = 0;
+		position.x = 0;
+		position.y = 0;
+		position.z = 2000;		//scale them!
 
-		displayComponentButtonObject(apsDroidLists[player],&Rotation,&Position,false, 100);
+		displayComponentButtonObject(apsDroidLists[player],&rotation,&position,false, 100);
 	}
 
 	// clean up widgets if player leaves while menu is up.

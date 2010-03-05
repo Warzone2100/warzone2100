@@ -18,5 +18,4 @@ EXTRA_DIST= \
 	autorevision.conf \
 	config.rpath \
 	configure.ac \
-	macosx/prebuilt \
 	macosx

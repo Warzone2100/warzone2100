@@ -34,14 +34,10 @@ typedef struct _t_quad
 	Vector2i coords[4];
 } QUAD;
 
-extern UDWORD adjustDirection( SDWORD present, SDWORD difference );
-extern SDWORD calcDirection( UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1 );
-extern void initBulletTable( void );
+extern uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1);
 extern int inQuad( const Vector2i *pt, const QUAD *quad );
 extern DROID *getNearestDroid( UDWORD x, UDWORD y, BOOL bSelected );
 extern BOOL droidOnScreen( DROID *psDroid, SDWORD tolerance );
-
-extern unsigned int WZ_DECL_CONST dirtyHypot(int deltaX, int deltaY);
 
 static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 {

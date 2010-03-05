@@ -27,7 +27,6 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/trig.h"
-#include "lib/framework/math_ext.h"
 
 #include "lib/gamelib/gtime.h"
 #include "objects.h"
@@ -61,8 +60,6 @@
 #include "mapgrid.h"
 #include "random.h"
 
-#define	PROJ_MAX_PITCH			30
-#define	DIRECT_PROJ_SPEED		500
 #define VTOL_HITBOX_MODIFICATOR 100
 
 typedef struct _interval
@@ -324,14 +321,57 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 
 /***************************************************************************/
 
+static int32_t randomVariation(int32_t val)
+{
+	// Up to ±5% random variation.
+	return (int64_t)val*(95000 + rand()%10001)/100000;
+}
+
+int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz)
+{
+	// Find values of vx and vz, which solve the equations:
+	// dz = -1/2 g t² + vz t
+	// dx = vx t
+	// v² = vx² + vz²
+	// Increases v, if needed for there to be a solution. Decreases v, if needed for vz > 0.
+	// Randomly changes v by up to 2.5%, so the shots don't all follow the same path.
+
+	const int32_t g = ACC_GRAVITY;                         // In units/s².
+	int32_t a = randomVariation(v*v) - dz*g;               // In units²/s².
+	uint64_t b = g*g*((uint64_t)dx*dx + (uint64_t)dz*dz);  // In units⁴/s⁴. Casting to uint64_t does sign extend the int32_t.
+	int64_t c = (uint64_t)a*a - b;                         // In units⁴/s⁴.
+	if (c < 0)
+	{
+		// Must increase velocity, target too high. Find the smallest possible a (which corresponds to the smallest possible velocity).
+
+		a = i64Sqrt(b) + 1;                            // Still in units²/s². Adding +1, since i64Sqrt rounds down.
+		c = (uint64_t)a*a - b;                         // Still in units⁴/s⁴. Should be 0, plus possible rounding errors.
+	} { // Remove the useless extra bracket once -Wdeclaration-after-statement is gone.
+
+	int32_t t = MAX(1, iSqrt(2*(a - i64Sqrt(c)))*(GAME_TICKS_PER_SEC/g));   // In ticks. Note that a - √c ≥ 0, since c ≤ a². Try changing the - to +, and watch the mini-rockets.
+	*vx = dx*GAME_TICKS_PER_SEC/t;                                          // In units/sec.
+	*vz = dz*GAME_TICKS_PER_SEC/t + g*t/(2*GAME_TICKS_PER_SEC);             // In units/sec.
+
+	STATIC_ASSERT(GAME_TICKS_PER_SEC/ACC_GRAVITY*ACC_GRAVITY == GAME_TICKS_PER_SEC);  // On line that calculates t, must cast iSqrt to uint64_t, and remove brackets around TICKS_PER_SEC/g, if changing ACC_GRAVITY.
+
+	if (*vz < 0)
+	{
+		// Don't want to shoot downwards, reduce velocity and let gravity take over.
+		t = MAX(1, i64Sqrt(-2*dz*(uint64_t)GAME_TICKS_PER_SEC*GAME_TICKS_PER_SEC/g));  // Still in ticks.
+		*vx = dx*GAME_TICKS_PER_SEC/t;             // Still in units/sec.
+		*vz = 0;                                   // Still in units/sec. (Wouldn't really matter if it was pigeons/inch, since it's 0 anyway.)
+	}
+
+	return t;
+} } // Remove the useless extra bracket once -Wdeclaration-after-statement is gone.
+
 BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
 {
 	PROJECTILE		*psProj = malloc(sizeof(PROJECTILE));
-	SDWORD			tarHeight, srcHeight, iMinSq;
-	SDWORD			altChange, dx, dy, dz, iVelSq, iVel;
-	double          fR, fA, fS, fT, fC;
-	Vector3f muzzle;
-	SDWORD			iRadSq, iPitchLow, iPitchHigh, iTemp;
+	SDWORD			tarHeight, srcHeight;
+	int32_t                 altChange, dx, dy, dz;
+	uint32_t                dxy;
+	Vector3f		muzzle;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
 	ASSERT( psStats != NULL, "proj_SendProjectile: invalid weapon stats" );
@@ -343,7 +383,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	{
 		// if there isn't an attacker just start at the target position
 		// NB this is for the script function to fire the las sats
-		muzzle = Vector3f_Init(target.x, target.y, target.z);
+		muzzle = Vector3i_To3f(target);
 	}
 	else if (psAttacker->type == OBJ_DROID && weapon_slot >= 0)
 	{
@@ -357,8 +397,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	}
 	else // incase anything wants a projectile
 	{
-		// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-		muzzle = Vector3uw_To3f(psAttacker->pos);
+		muzzle = Vector3i_To3f(psAttacker->pos);
 	}
 
 	/* Initialise the structure */
@@ -366,7 +405,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	psProj->type		    = OBJ_PROJECTILE;
 	psProj->psWStats		= psStats;
 
-	psProj->pos = Vector3f_To3uw(muzzle);
+	psProj->pos		= Vector3f_To3i(muzzle);
 	psProj->startX		= muzzle.x;
 	psProj->startY		= muzzle.y;
 	psProj->tarX			= target.x;
@@ -428,118 +467,38 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	dz = tarHeight - muzzle.z;
 
 	/* roll never set */
-	psProj->roll = 0;
+	psProj->rot.roll = 0;
 
-	fR = atan2(dx, dy);
-	if ( fR < 0.0 )
-	{
-		fR += 2.0 * M_PI;
-	}
-	psProj->direction = RAD_TO_DEG(fR);
+	psProj->rot.direction = iAtan2(dx, dy);
 
 
 	/* get target distance */
-	iRadSq = dx*dx + dy*dy + dz*dz;
-	fR = trigIntSqrt( iRadSq );
-	iMinSq = psStats->minRange * psStats->minRange;
+	dxy = iHypot(dx, dy);
 
-	if ( proj_Direct(psStats) ||
-		( !proj_Direct(psStats) && (iRadSq <= iMinSq) ) )
+	if (proj_Direct(psStats) || (!proj_Direct(psStats) && dxy <= psStats->minRange))
 	{
-		fR = atan2(dz, fR);
-		if ( fR < 0.0 )
-		{
-			fR += 2.0 * M_PI;
-		}
-		psProj->pitch = (SWORD)( RAD_TO_DEG(fR) );
+		psProj->rot.pitch = iAtan2(dz, dxy);
 		psProj->state = PROJ_INFLIGHTDIRECT;
 	}
 	else
 	{
 		/* indirect */
-		iVelSq = psStats->flightSpeed * psStats->flightSpeed;
-
-		fA = ACC_GRAVITY * (double)iRadSq / (2.0 * iVelSq);
-		fC = 4.0 * fA * (dz + fA);
-		fS = (double)iRadSq - fC;
-
-		/* target out of range - increase velocity to hit target */
-		if ( fS < 0.0 )
-		{
-			/* set optimal pitch */
-			psProj->pitch = PROJ_MAX_PITCH;
-
-			fS = trigSin(PROJ_MAX_PITCH);
-			fC = trigCos(PROJ_MAX_PITCH);
-			fT = fS / fC;
-			fS = ACC_GRAVITY * (1. + fT * fT);
-			fS = fS / (2.0 * (fR * fT - dz));
-			{
-				iVel = trigIntSqrt(fS * (fR * fR));
-			}
-		}
-		else
-		{
-			/* set velocity to stats value */
-			iVel = psStats->flightSpeed;
-
-			/* get floating point square root */
-			fS = trigIntSqrt(fS);
-
-			fT = atan2(fR + fS, 2.0 * fA);
-
-			/* make sure angle positive */
-			if ( fT < 0.0 )
-			{
-				fT += 2.0 * M_PI;
-			}
-			iPitchLow = RAD_TO_DEG(fT);
-
-			fT = atan2(fR-fS, 2.0*fA);
-			/* make sure angle positive */
-			if ( fT < 0.0 )
-			{
-				fT += 2.0 * M_PI;
-			}
-			iPitchHigh = RAD_TO_DEG(fT);
-
-			/* swap pitches if wrong way round */
-			if ( iPitchLow > iPitchHigh )
-			{
-				iTemp = iPitchHigh;
-				iPitchLow = iPitchHigh;
-				iPitchHigh = iTemp;
-			}
-
-			/* chooselow pitch unless -ve */
-			if ( iPitchLow > 0 )
-			{
-				psProj->pitch = (SWORD)iPitchLow;
-			}
-			else
-			{
-				psProj->pitch = (SWORD)iPitchHigh;
-			}
-		}
-
-		/* if droid set muzzle pitch */
-		//Watermelon:fix turret pitch for more turrets
-		if (psAttacker != NULL && weapon_slot >= 0)
-		{
-			if (psAttacker->type == OBJ_DROID)
-			{
-				((DROID *) psAttacker)->asWeaps[weapon_slot].pitch = psProj->pitch;
-			}
-			else if (psAttacker->type == OBJ_STRUCTURE)
-			{
-				((STRUCTURE *) psAttacker)->asWeaps[weapon_slot].pitch = psProj->pitch;
-			}
-		}
-
-		psProj->vXY = iVel * trigCos(psProj->pitch);
-		psProj->vZ  = iVel * trigSin(psProj->pitch);
-
+		projCalcIndirectVelocities(dxy, dz, psStats->flightSpeed, &psProj->vXY, &psProj->vZ);
+		psProj->rot.pitch = iAtan2(psProj->vZ, psProj->vXY);
 		psProj->state = PROJ_INFLIGHTINDIRECT;
+	}
+
+	// If droid or structure, set muzzle pitch.
+	if (psAttacker != NULL && weapon_slot >= 0)
+	{
+		if (psAttacker->type == OBJ_DROID)
+		{
+			((DROID *)psAttacker)->asWeaps[weapon_slot].rot.pitch = psProj->rot.pitch;
+		}
+		else if (psAttacker->type == OBJ_STRUCTURE)
+		{
+			((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].rot.pitch = psProj->rot.pitch;
+		}
 	}
 
 	/* put the projectile object first in the global list */
@@ -635,12 +594,12 @@ static INTERVAL collisionXY(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int3
 {
 	// Solve (1 - t)v1 + t v2 = r.
 	int32_t dx = x2 - x1, dy = y2 - y1;
-	int32_t a = dx*dx + dy*dy;                  // a = (v2 - v1)²
-	float   b = x1*dx + y1*dy;                  // b = v1(v2 - v1)
-	float   c = x1*x1 + y1*y1 - radius*radius;  // c = v1² - r²
+	int64_t a = (int64_t)dx*dx + (int64_t)dy*dy;                           // a = (v2 - v1)²
+	int64_t b = (int64_t)x1*dx + (int64_t)y1*dy;                           // b = v1(v2 - v1)
+	int64_t c = (int64_t)x1*x1 + (int64_t)y1*y1 - (int64_t)radius*radius;  // c = v1² - r²
 	// Equation to solve is now a t^2 + 2 b t + c = 0.
-	float   d = b*b - a*c;                      // d = b² - a c
-	float sd;
+	int64_t d = b*b - a*c;                                                 // d = b² - a c
+	int32_t sd;
 	// Solution is (-b ± √d)/a.
 	INTERVAL empty = {-1, -1};
 	INTERVAL full = {0, 1024};
@@ -654,7 +613,7 @@ static INTERVAL collisionXY(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int3
 		return c < 0 ? full : empty;  // Not moving. See if inside the target.
 	}
 
-	sd = sqrtf(d);
+	sd = i64Sqrt(d);
 	ret.begin = MAX(   0, 1024*(-b - sd)/a);
 	ret.end   = MIN(1024, 1024*(-b + sd)/a);
 	return ret;
@@ -679,7 +638,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
 	const unsigned int LAS_SAT_DELAY = 4;
-	int timeSoFar, nextPosZ;
+	int timeSoFar;
 	int distancePercent; /* How far we are 0..100 */
 	float distanceRatio; /* How far we are, 1.0==at target */
 	float distanceExtensionFactor; /* Extended lifespan */
@@ -687,10 +646,10 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	// Projectile is missile:
 	bool bMissile = false;
 	WEAPON_STATS *psStats;
-	Vector3uw nextPos;
+	Vector3i nextPos;
 	unsigned int targetDistance, currentDistance;
 	BASE_OBJECT *psTempObj, *closestCollisionObject = NULL;
-	SPACETIME closestCollisionSpacetime;
+	SPACETIME closestCollisionSpacetime = closestCollisionSpacetime;  // Dummy initialisation.
 
 	CHECK_PROJECTILE(psProj);
 
@@ -780,7 +739,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		}
 	}
 
-	targetDistance = sqrtf(move.x*move.x + move.y*move.y);
+	targetDistance = iHypot(move.x, move.y);
 	if (!bIndirect)
 	{
 		currentDistance = timeSoFar * psStats->flightSpeed / GAME_TICKS_PER_SEC;
@@ -804,13 +763,12 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	nextPos.y = psProj->startY + (distanceRatio * move.y);
 	if (!bIndirect)
 	{
-		nextPosZ = (SDWORD)(psProj->srcHeight + (distanceRatio * move.z));  // Save unclamped nextPos.z value.
+		nextPos.z = (SDWORD)(psProj->srcHeight + (distanceRatio * move.z));  // Save unclamped nextPos.z value.
 	}
 	else
 	{
-		nextPosZ = (SDWORD)(psProj->srcHeight + move.z);  // Save unclamped nextPos.z value.
+		nextPos.z = (SDWORD)(psProj->srcHeight + move.z);  // Save unclamped nextPos.z value.
 	}
-	nextPos.z = MAX(0, nextPosZ);  // nextPos.z is unsigned.
 
 	/* impact if about to go off map else update coordinates */
 	if (!worldOnMap(nextPos.x, nextPos.y))
@@ -829,7 +787,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	if (bIndirect)
 	{
 		/* Update pitch */
-		psProj->pitch = rad2degf(atan2f(psProj->vZ - (timeSoFar * ACC_GRAVITY / GAME_TICKS_PER_SEC), psProj->vXY));
+		psProj->rot.pitch = iAtan2(psProj->vZ - (timeSoFar * ACC_GRAVITY / GAME_TICKS_PER_SEC), psProj->vXY);
 	}
 
 	closestCollisionSpacetime.time = 0xFFFFFFFF;
@@ -896,28 +854,21 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 
 		// Actual collision test.
 		{
-			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-			Vector3i
-				posProj = {psProj->pos.x, psProj->pos.y, nextPosZ},  // HACK psProj->pos.z may have been set to 0, since psProj->pos.z can't be negative. So can't use Vector3uw_To3i.
-				prevPosProj = Vector3uw_To3i(psProj->prevSpacetime.pos),
-				posTemp = Vector3uw_To3i(psTempObj->pos);
-
-			Vector3i diff = Vector3i_Sub(posProj, posTemp);
-			Vector3i prevDiff = Vector3i_Sub(prevPosProj, posTemp);  // HACK Ignore that target might be moving. The projectile is probably moving faster, so it's better than nothing...
-
-			unsigned int targetHeight = establishTargetHeight(psTempObj);
-			unsigned int targetRadius = establishTargetRadius(psTempObj);
-
-			int32_t collision = collisionXYZ(prevDiff, diff, targetRadius, targetHeight);
-			uint32_t collisionTime = psProj->prevSpacetime.time + (psProj->time - psProj->prevSpacetime.time)*collision/1024;
+			const Vector3i posProj = psProj->pos;
+			const Vector3i prevPosProj = psProj->prevSpacetime.pos;
+			const Vector3i posTemp = psTempObj->pos;
+			const Vector3i diff = Vector3i_Sub(posProj, posTemp);
+			const Vector3i prevDiff = Vector3i_Sub(prevPosProj, posTemp);  // HACK Ignore that target might be moving. The projectile is probably moving faster, so it's better than nothing...
+			const unsigned int targetHeight = establishTargetHeight(psTempObj);
+			const unsigned int targetRadius = establishTargetRadius(psTempObj);
+			const int32_t collision = collisionXYZ(prevDiff, diff, targetRadius, targetHeight);
+			const uint32_t collisionTime = psProj->prevSpacetime.time + (psProj->time - psProj->prevSpacetime.time)*collision/1024;
 
 			if (collision >= 0 && collisionTime < closestCollisionSpacetime.time)
 			{
 				// We hit!
 				closestCollisionSpacetime = interpolateSpacetime(psProj->prevSpacetime, GET_SPACETIME(psProj), collisionTime);
 				closestCollisionObject = psTempObj;
-
-				closestCollisionSpacetime.pos.z = MAX(0, interpolateInt(psProj->prevSpacetime.pos.z, nextPosZ, psProj->prevSpacetime.time, psProj->time, collisionTime));
 
 				// Keep testing for more collisions, in case there was a closer target.
 			}
@@ -937,7 +888,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		/* Buildings cannot be penetrated and we need a penetrating weapon */
 		if (closestCollisionObject->type == OBJ_DROID && psStats->penetrate)
 		{
-			WEAPON asWeap = {psStats - asWeaponStats, 0, 0, 0, 0, 0, 0, 0, 0};
+			WEAPON asWeap;
 			// Determine position to fire a missile at
 			// (must be at least 0 because we don't use signed integers
 			//  this shouldn't be larger than the height and width of the map either)
@@ -946,6 +897,8 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 				psProj->startY + move.y * distanceExtensionFactor,
 				psProj->srcHeight + move.z * distanceExtensionFactor
 			};
+			memset(&asWeap, 0, sizeof(asWeap));
+			asWeap.nStat = psStats - asWeaponStats;
 
 			ASSERT(distanceExtensionFactor != 0.f, "Unitialized variable used! distanceExtensionFactor is not initialized.");
 
@@ -1251,7 +1204,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 					// Check whether we can hit it and it is in hit radius
 					if (!((psStats->surfaceToAir == SHOOT_IN_AIR && !bTargetInAir) ||
 						 (psStats->surfaceToAir == SHOOT_ON_GROUND && bTargetInAir)) &&
-					    Vector3i_InSphere(Vector3uw_To3i(psCurrD->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
+					    Vector3i_InSphere(psCurrD->pos, psObj->pos, psStats->radius))
 					{
 						int dice = gameRand(100);
 						if (dice < weaponRadiusHit(psStats, psObj->player))
@@ -1299,7 +1252,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 					if ((BASE_OBJECT *)psCurrS != psObj->psDest)
 					{
 						// Check whether it is in hit radius
-						if (Vector3i_InCircle(Vector3uw_To3i(psCurrS->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
+						if (Vector3i_InCircle(psCurrS->pos, psObj->pos, psStats->radius))
 						{
 							int dice = gameRand(100);
 							if (dice < weaponRadiusHit(psStats, psObj->player))
@@ -1345,7 +1298,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			if ((BASE_OBJECT *)psCurrF != psObj->psDest)
 			{
 				// Check whether it is in hit radius
-				if (Vector3i_InCircle(Vector3uw_To3i(psCurrF->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
+				if (Vector3i_InCircle(psCurrF->pos, psObj->pos, psStats->radius))
 				{
 					int dice = gameRand(100);
 					if (dice < weaponRadiusHit(psStats, psObj->player))
@@ -1798,22 +1751,20 @@ static HIT_SIDE getHitSide(PROJECTILE *psObj, BASE_OBJECT *psTarget)
 		 * Work out the impact angle. It is easiest to understand if you
 		 * model the target droid as a circle, divided up into 360 pieces.
 		 */
-		impactAngle = abs(psTarget->direction - (180 * atan2f(deltaX, deltaY) / M_PI));
-
-		impactAngle = wrap(impactAngle, 360);
+		impactAngle = (uint32_t)(psTarget->rot.direction - iAtan2(deltaX, deltaY));  // Cast wrapping intended.
 
 		// Use the impact angle to work out the side hit
 		// Right
-		if (impactAngle > 45 && impactAngle < 135)
+		if (impactAngle > DEG(45) && impactAngle < DEG(135))
 			return HIT_SIDE_RIGHT;
 		// Rear
-		else if (impactAngle >= 135 && impactAngle <= 225)
+		else if (impactAngle <= DEG(225))
 			return HIT_SIDE_REAR;
 		// Left
-		else if (impactAngle > 225 && impactAngle < 315)
+		else if (impactAngle < DEG(315))
 			return HIT_SIDE_LEFT;
 		// Front - default
-		else //if (impactAngle <= 45 || impactAngle >= 315)
+		else //if (impactAngle <= DEG(45) || impactAngle >= DEG(315))
 			return HIT_SIDE_FRONT;
 	}
 }
@@ -1998,7 +1949,6 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 	    || psProjectile->state == PROJ_INFLIGHTINDIRECT
 	    || psProjectile->state == PROJ_IMPACT
 	    || psProjectile->state == PROJ_POSTIMPACT, location_description, function, "CHECK_PROJECTILE: invalid projectile state: %u", (unsigned int)psProjectile->state);
-	ASSERT_HELPER(psProjectile->direction <= 360.0f && psProjectile->direction >= 0.0f, location_description, function, "CHECK_PROJECTILE: out of range direction (%f)", psProjectile->direction);
 
 	if (psProjectile->psDest)
 		checkObject(psProjectile->psDest, location_description, function, recurse - 1);

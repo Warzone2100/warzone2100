@@ -140,6 +140,8 @@ extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 extern UWORD barMode;
 extern UDWORD geoOffset;
 
+extern bool CauseCrash;
+
 extern bool tuiTargetOrigin;
 
 #ifdef __cplusplus

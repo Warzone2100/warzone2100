@@ -103,6 +103,11 @@ switch (type)
 /* * */
 		return RegisterClipboardFormatA(format);
 
+#elif defined(WZ_WS_MAC)
+/* * */
+		// Meaningless value to prevent "control reaches end of non-void function" warning
+		return 0;
+
 #endif /* scrap type */
 	}
 	}
@@ -314,7 +319,7 @@ return(retval);
 
 int lost_scrap(void)
 {
-	int retval;
+	int retval = 0;
 
 #if defined(WZ_WS_X11)
 	Lock_Display();

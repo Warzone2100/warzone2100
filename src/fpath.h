@@ -103,8 +103,8 @@ extern void fpathRemoveDroidData(int id);
 extern BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2);
 
 /** Quick O(1) test of whether it is theoretically possible to go from origin to destination
- *  using the given propulsion type. */
-bool fpathCheck(Vector2i orig, Vector2i dest, PROPULSION_TYPE propulsion);
+ *  using the given propulsion type. orig and dest are in world coordinates. */
+bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion);
 
 /** Unit testing. */
 void fpathTest(int x, int y, int x2, int y2);

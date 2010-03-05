@@ -118,11 +118,14 @@ static BOOL NETenum(EnumT* enumPtr)
 extern "C"
 {
 #else
-// FIXME: Causes tons of warnings: <enumPtr> is used unitialised in this function
+// FIXME: Somehow still causes tons of warnings: <enumPtr> is used unitialised in this function
+static inline void squelchUninitialisedUseWarning(void *ptr) { (void)ptr; }
 #define NETenum(enumPtr) \
 do \
 { \
-	int32_t _val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
+	int32_t _val; \
+	squelchUninitialisedUseWarning(enumPtr); \
+	_val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
 \
 	NETint32_t(&_val); \
 \
@@ -130,7 +133,8 @@ do \
 } while(0)
 #endif
 
-void NETVector3uw(Vector3uw* vp);
+void NETPosition(Position *vp);
+void NETRotation(Rotation *vp);
 
 typedef struct PackagedCheck
 {
@@ -140,10 +144,9 @@ typedef struct PackagedCheck
 	int32_t order;
 	uint32_t secondaryOrder;
 	uint32_t body;
-	float direction;
 	float experience;
-	uint16_t posX;
-	uint16_t posY;
+	Position pos;
+	Rotation rot;
 	float sMoveX;
 	float sMoveY;
 	uint32_t targetID;  ///< Defined iff order == DORDER_ATTACK.

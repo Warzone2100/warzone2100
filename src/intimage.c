@@ -23,47 +23,13 @@
  * Image definitions and related functions.
  *
  */
+
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
-
-/* Includes direct access to render library */
-#include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/piemode.h"
-
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
-#include "lib/ivis_common/bitimage.h"
-
-#include "lib/gamelib/gtime.h"
-#include "lib/sound/audio.h"
-#include "lib/widget/widget.h"
-#include "lib/widget/widgint.h"
-#include "lib/widget/bar.h"
-#include "lib/widget/form.h"
-#include "lib/widget/label.h"
-#include "lib/widget/button.h"
-#include "lib/widget/editbox.h"
-#include "lib/widget/slider.h"
 
 #include "intimage.h"
-
-#include "objects.h"
-#include "loop.h"
-#include "map.h"
-
-#include "display3d.h"
-#include "edit3d.h"
-#include "structure.h"
-#include "research.h"
-#include "function.h"
-#include "hci.h"
-#include "stats.h"
-#include "game.h"
-#include "power.h"
-#include "order.h"
-#include "main.h"
-
 
 #define INCEND	(0)
 
@@ -184,22 +150,6 @@ TABDEF	StandardTab = {
 	IMAGE_TABSELECTED,	// Minor tab currently selected.
 };
 
-TABDEF SystemTab = {
-	IMAGE_DES_WEAPONS,
-	IMAGE_DES_WEAPONSDOWN,
-	IMAGE_DES_EXTRAHI,
-	IMAGE_DES_WEAPONSDOWN,
-
-	/*IMAGE_TAB1,
-	IMAGE_TAB1DOWN,
-	IMAGE_TABHILIGHT,
-	IMAGE_TABSELECTED,*/
-	IMAGE_SIDETAB,
-	IMAGE_SIDETABDOWN,
-	IMAGE_SIDETABHI,
-	IMAGE_SIDETABSEL,
-};
-
 TABDEF	SmallTab = {
 	IMAGE_TAB1_SM,			// Major tab normal.
 	IMAGE_TAB1DOWN_SM,		// Major tab clicked.
@@ -212,7 +162,6 @@ TABDEF	SmallTab = {
 	IMAGE_TAB1SELECTED_SM,	// Minor tab currently selected.
 };
 
-
 // Read bitmaps used by the interface.
 //
 BOOL imageInitBitmaps(void)
@@ -223,14 +172,9 @@ BOOL imageInitBitmaps(void)
 	return true;
 }
 
-void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
-{
-	RenderWindow(frame, x, y, Width, Height, false);
-}
-
 // Render a window frame.
 //
-void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, BOOL Opaque)
+static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, BOOL Opaque)
 {
 	SWORD WTopRight = 0;
 	SWORD WTopLeft = 0;
@@ -405,3 +349,9 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 							iV_GetImageWidth(IntImages, Frame->RightEdge), Height - HTopRight - HBottomRight );
 	}
 }
+
+void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
+{
+	RenderWindow(frame, x, y, Width, Height, false);
+}
+

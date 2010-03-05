@@ -1,0 +1,788 @@
+
+// Static variables defined in the VLO
+private FEATURESTAT Mine;
+private STRUCTURESTAT BuildMine[8];
+private WEAPON Explosion[8];
+private WEAPON Fizzle, Blip;
+private BODY Miner[2];
+
+// Used for tweaking and debugging
+private  INT  setRange, actRange;
+
+// Temporary script variables
+private  INT  player;
+private  INT  count;
+private  INT  temp, tempp;
+private  BOOL  NotReady;
+private  STRUCTURE strucMine;
+private  FEATURE testMine;
+private  DROID target;
+
+event CheckMines(every, 10)
+{
+// Scan all active landmines.  Detonate if necessary.
+
+
+// Must do this to all players, for MP compatibility
+player = 0;
+while (player < 8)
+{
+  initGetFeature(Mine, player, selectedPlayer);
+  testMine = getFeature(selectedPlayer);
+  while (testMine != NULLOBJECT)
+  {
+    // Retrieve type & player info from the mine
+    temp = testMine.health / 10;
+    tempp = testMine.health - 10 * temp;
+
+    // The player can see their own mines only.
+    if (tempp > 4)
+      {fireWeaponAtLoc(Blip, testMine.x, testMine.y);}
+
+    target = droidTargetInArea(player, player, (testMine.x - actRange), (testMine.y - actRange), (testMine.x + actRange), (testMine.y + actRange));
+    if (target != NULLOBJECT)
+    {
+
+      // Rule 1: Only ground units may detonate land mines.
+      // (Also note that the mine layer borg does not "trip" them ;) )
+      if ((target.z < testMine.z + 96) and (target.body != Miner[0]))
+      {
+
+        // Make sure only a mine can go boom.
+        if (temp < 8)
+        {
+          if (target.body == Miner[1])
+          {
+            // Mine Sweeper 'borg gets lucky!
+            fireWeaponAtObj(Fizzle, testMine);
+          }
+          else
+          {
+            // Anyone else, well... >B}
+            fireWeaponAtObj(Explosion[temp], target);
+          }
+          destroyFeature(testMine);
+        }
+      }
+    }
+    testMine = getFeature(selectedPlayer);
+  }
+  player = player + 1;
+}
+
+player = 1;
+while (player < 8)
+{
+  initGetFeature(Mine, player, selectedPlayer);
+  testMine = getFeature(selectedPlayer);
+  while (testMine != NULLOBJECT)
+  {
+    // Retrieve type & player info from the mine
+    temp = testMine.health / 10;
+    tempp = testMine.health - 10 * temp;
+
+    // The player can see their own mines only.
+    if (tempp > 4)
+      {fireWeaponAtLoc(Blip, testMine.x, testMine.y);}
+
+    target = droidTargetInArea(player, player, (testMine.x - actRange), (testMine.y - actRange), (testMine.x + actRange), (testMine.y + actRange));
+    if (target != NULLOBJECT)
+    {
+
+      // Rule 1: Only ground units may detonate land mines.
+      // (Also note that the mine layer borg does not "trip" them ;) )
+      if ((target.z < testMine.z + 96) and (target.body != Miner[0]))
+      {
+
+        // Make sure only a mine can go boom.
+        if (temp < 8)
+        {
+          if (target.body == Miner[1])
+          {
+            // Mine Sweeper 'borg gets lucky!
+            fireWeaponAtObj(Fizzle, testMine);
+          }
+          else
+          {
+            // Anyone else, well... >B}
+            fireWeaponAtObj(Explosion[temp], target);
+          }
+          destroyFeature(testMine);
+        }
+      }
+    }
+    testMine = getFeature(selectedPlayer);
+  }
+  player = player + 1;
+}
+
+player = 2;
+while (player < 8)
+{
+  initGetFeature(Mine, player, selectedPlayer);
+  testMine = getFeature(selectedPlayer);
+  while (testMine != NULLOBJECT)
+  {
+    // Retrieve type & player info from the mine
+    temp = testMine.health / 10;
+    tempp = testMine.health - 10 * temp;
+
+    // The player can see their own mines only.
+    if (tempp > 4)
+      {fireWeaponAtLoc(Blip, testMine.x, testMine.y);}
+
+
+    target = droidTargetInArea(player, player, (testMine.x - actRange), (testMine.y - actRange), (testMine.x + actRange), (testMine.y + actRange));
+    if (target != NULLOBJECT)
+    {
+
+      // Rule 1: Only ground units may detonate land mines.
+      // (Also note that the mine layer borg does not "trip" them ;) )
+      if ((target.z < testMine.z + 96) and (target.body != Miner[0]))
+      {
+
+        // Make sure only a mine can go boom.
+        if (temp < 8)
+        {
+          if (target.body == Miner[1])
+          {
+            // Mine Sweeper 'borg gets lucky!
+            fireWeaponAtObj(Fizzle, testMine);
+          }
+          else
+          {
+            // Anyone else, well... >B}
+            fireWeaponAtObj(Explosion[temp], target);
+          }
+          destroyFeature(testMine);
+        }
+      }
+    }
+    testMine = getFeature(selectedPlayer);
+  }
+  player = player + 1;
+}
+
+player = 3;
+while (player < 8)
+{
+  initGetFeature(Mine, player, selectedPlayer);
+  testMine = getFeature(selectedPlayer);
+  while (testMine != NULLOBJECT)
+  {
+    // Retrieve type & player info from the mine
+    temp = testMine.health / 10;
+    tempp = testMine.health - 10 * temp;
+
+    // The player can see their own mines only.
+    if (tempp > 4)
+      {fireWeaponAtLoc(Blip, testMine.x, testMine.y);}
+
+
+    target = droidTargetInArea(player, player, (testMine.x - actRange), (testMine.y - actRange), (testMine.x + actRange), (testMine.y + actRange));
+    if (target != NULLOBJECT)
+    {
+
+      // Rule 1: Only ground units may detonate land mines.
+      // (Also note that the mine layer borg does not "trip" them ;) )
+      if ((target.z < testMine.z + 96) and (target.body != Miner[0]))
+      {
+
+        // Make sure only a mine can go boom.
+        if (temp < 8)
+        {
+          if (target.body == Miner[1])
+          {
+            // Mine Sweeper 'borg gets lucky!
+            fireWeaponAtObj(Fizzle, testMine);
+          }
+          else
+          {
+            // Anyone else, well... >B}
+            fireWeaponAtObj(Explosion[temp], target);
+          }
+          destroyFeature(testMine);
+        }
+      }
+    }
+    testMine = getFeature(selectedPlayer);
+  }
+  player = player + 1;
+}
+
+player = 4;
+while (player < 8)
+{
+  initGetFeature(Mine, player, selectedPlayer);
+  testMine = getFeature(selectedPlayer);
+  while (testMine != NULLOBJECT)
+  {
+    // Retrieve type & player info from the mine
+    temp = testMine.health / 10;
+    tempp = testMine.health - 10 * temp;
+
+    // The player can see their own mines only.
+    if (tempp > 4)
+      {fireWeaponAtLoc(Blip, testMine.x, testMine.y);}
+
+
+    target = droidTargetInArea(player, player, (testMine.x - actRange), (testMine.y - actRange), (testMine.x + actRange), (testMine.y + actRange));
+    if (target != NULLOBJECT)
+    {
+
+      // Rule 1: Only ground units may detonate land mines.
+      // (Also note that the mine layer borg does not "trip" them ;) )
+      if ((target.z < testMine.z + 96) and (target.body != Miner[0]))
+      {
+
+        // Make sure only a mine can go boom.
+        if (temp < 8)
+        {
+          if (target.body == Miner[1])
+          {
+            // Mine Sweeper 'borg gets lucky!
+            fireWeaponAtObj(Fizzle, testMine);
+          }
+          else
+          {
+            // Anyone else, well... >B}
+            fireWeaponAtObj(Explosion[temp], target);
+          }
+          destroyFeature(testMine);
+        }
+      }
+    }
+    testMine = getFeature(selectedPlayer);
+  }
+  player = player + 1;
+}
+
+player = 5;
+while (player < 8)
+{
+  initGetFeature(Mine, player, selectedPlayer);
+  testMine = getFeature(selectedPlayer);
+  while (testMine != NULLOBJECT)
+  {
+    // Retrieve type & player info from the mine
+    temp = testMine.health / 10;
+    tempp = testMine.health - 10 * temp;
+
+    // The player can see their own mines only.
+    if (tempp > 4)
+      {fireWeaponAtLoc(Blip, testMine.x, testMine.y);}
+
+
+    target = droidTargetInArea(player, player, (testMine.x - actRange), (testMine.y - actRange), (testMine.x + actRange), (testMine.y + actRange));
+    if (target != NULLOBJECT)
+    {
+
+      // Rule 1: Only ground units may detonate land mines.
+      // (Also note that the mine layer borg does not "trip" them ;) )
+      if ((target.z < testMine.z + 96) and (target.body != Miner[0]))
+      {
+
+        // Make sure only a mine can go boom.
+        if (temp < 8)
+        {
+          if (target.body == Miner[1])
+          {
+            // Mine Sweeper 'borg gets lucky!
+            fireWeaponAtObj(Fizzle, testMine);
+          }
+          else
+          {
+            // Anyone else, well... >B}
+            fireWeaponAtObj(Explosion[temp], target);
+          }
+          destroyFeature(testMine);
+        }
+      }
+    }
+    testMine = getFeature(selectedPlayer);
+  }
+  player = player + 1;
+}
+
+player = 6;
+while (player < 8)
+{
+  initGetFeature(Mine, player, selectedPlayer);
+  testMine = getFeature(selectedPlayer);
+  while (testMine != NULLOBJECT)
+  {
+    // Retrieve type & player info from the mine
+    temp = testMine.health / 10;
+    tempp = testMine.health - 10 * temp;
+
+    // The player can see their own mines only.
+    if (tempp > 4)
+      {fireWeaponAtLoc(Blip, testMine.x, testMine.y);}
+
+
+    target = droidTargetInArea(player, player, (testMine.x - actRange), (testMine.y - actRange), (testMine.x + actRange), (testMine.y + actRange));
+    if (target != NULLOBJECT)
+    {
+
+      // Rule 1: Only ground units may detonate land mines.
+      // (Also note that the mine layer borg does not "trip" them ;) )
+      if ((target.z < testMine.z + 96) and (target.body != Miner[0]))
+      {
+
+        // Make sure only a mine can go boom.
+        if (temp < 8)
+        {
+          if (target.body == Miner[1])
+          {
+            // Mine Sweeper 'borg gets lucky!
+            fireWeaponAtObj(Fizzle, testMine);
+          }
+          else
+          {
+            // Anyone else, well... >B}
+            fireWeaponAtObj(Explosion[temp], target);
+          }
+          destroyFeature(testMine);
+        }
+      }
+    }
+    testMine = getFeature(selectedPlayer);
+  }
+  player = player + 1;
+}
+
+player = 7;
+while (player < 8)
+{
+  initGetFeature(Mine, player, selectedPlayer);
+  testMine = getFeature(selectedPlayer);
+  while (testMine != NULLOBJECT)
+  {
+    // Retrieve type & player info from the mine
+    temp = testMine.health / 10;
+    tempp = testMine.health - 10 * temp;
+
+    // The player can see their own mines only.
+    if (tempp > 4)
+      {fireWeaponAtLoc(Blip, testMine.x, testMine.y);}
+
+
+    target = droidTargetInArea(player, player, (testMine.x - actRange), (testMine.y - actRange), (testMine.x + actRange), (testMine.y + actRange));
+    if (target != NULLOBJECT)
+    {
+
+      // Rule 1: Only ground units may detonate land mines.
+      // (Also note that the mine layer borg does not "trip" them ;) )
+      if ((target.z < testMine.z + 96) and (target.body != Miner[0]))
+      {
+
+        // Make sure only a mine can go boom.
+        if (temp < 8)
+        {
+          if (target.body == Miner[1])
+          {
+            // Mine Sweeper 'borg gets lucky!
+            fireWeaponAtObj(Fizzle, testMine);
+          }
+          else
+          {
+            // Anyone else, well... >B}
+            fireWeaponAtObj(Explosion[temp], target);
+          }
+          destroyFeature(testMine);
+        }
+      }
+    }
+    testMine = getFeature(selectedPlayer);
+  }
+  player = player + 1;
+}
+
+// Activate newly set mines when the owner is at a "safe" distance
+//
+// Again, this must be done for all players to be MP compatible
+player = 0;
+while (player < 8)
+{
+  count = 0;
+  while (count < 8)
+  {
+    initEnumStruct(FALSE, BuildMine[count], player, player);
+    strucMine= enumStruct();
+    while (strucMine!= NULLOBJECT)
+    {
+      if (structureComplete(strucMine))
+      {
+        NotReady = droidInRange(player, strucMine.x, strucMine.y, setRange);
+
+        if (NotReady)
+        {
+          target = droidTargetInArea(player, player, (strucMine.x - actRange), (strucMine.y - actRange), (strucMine.x + actRange), (strucMine.y + actRange));
+          if (target != NULLOBJECT)
+          {
+		// Mine layer droids can activate their own mines
+            if (target.body == Miner[0]) { NotReady= FALSE; }
+          }
+        }
+
+        if (NotReady== FALSE)
+        {
+          testMine = addFeature(Mine, strucMine.x, strucMine.y);
+
+          // Encode the mine's type into the feature's health stat
+
+          // *** NOTE! *** Mine must not be declared indestructible via WZCK //
+
+          if (player == selectedPlayer)
+            {temp = 10 * count + 8;}
+          else
+            {temp = 10 * count + 3;}
+
+          forceDamageObject(testMine, temp);
+          destroyStructure(strucMine);
+        }
+      }
+      strucMine = enumStruct();
+    }
+    count = count + 1;
+  }
+  player = player + 1;
+}
+
+player = 1;
+while (player < 8)
+{
+  count = 0;
+  while (count < 8)
+  {
+    initEnumStruct(FALSE, BuildMine[count], player, player);
+    strucMine= enumStruct();
+    while (strucMine!= NULLOBJECT)
+    {
+      if (structureComplete(strucMine))
+      {
+        NotReady = droidInRange(player, strucMine.x, strucMine.y, setRange);
+
+        if (NotReady)
+        {
+          target = droidTargetInArea(player, player, (strucMine.x - actRange), (strucMine.y - actRange), (strucMine.x + actRange), (strucMine.y + actRange));
+          if (target != NULLOBJECT)
+          {
+		// Mine layer droids can activate their own mines
+            if (target.body == Miner[0]) { NotReady= FALSE; }
+          }
+        }
+
+        if (NotReady== FALSE)
+        {
+          testMine = addFeature(Mine, strucMine.x, strucMine.y);
+
+          // Encode the mine's type into the feature's health stat
+
+          // *** NOTE! *** Mine must not be declared indestructible via WZCK //
+
+          if (player == selectedPlayer)
+            {temp = 10 * count + 8;}
+          else
+            {temp = 10 * count + 3;}
+
+          forceDamageObject(testMine, temp);
+          destroyStructure(strucMine);
+        }
+      }
+      strucMine = enumStruct();
+    }
+    count = count + 1;
+  }
+  player = player + 1;
+}
+
+player = 2;
+while (player < 8)
+{
+  count = 0;
+  while (count < 8)
+  {
+    initEnumStruct(FALSE, BuildMine[count], player, player);
+    strucMine= enumStruct();
+    while (strucMine!= NULLOBJECT)
+    {
+      if (structureComplete(strucMine))
+      {
+        NotReady = droidInRange(player, strucMine.x, strucMine.y, setRange);
+
+        if (NotReady)
+        {
+          target = droidTargetInArea(player, player, (strucMine.x - actRange), (strucMine.y - actRange), (strucMine.x + actRange), (strucMine.y + actRange));
+          if (target != NULLOBJECT)
+          {
+		// Mine layer droids can activate their own mines
+            if (target.body == Miner[0]) { NotReady= FALSE; }
+          }
+        }
+
+        if (NotReady== FALSE)
+        {
+          testMine = addFeature(Mine, strucMine.x, strucMine.y);
+
+          // Encode the mine's type into the feature's health stat
+
+          // *** NOTE! *** Mine must not be declared indestructible via WZCK //
+
+          if (player == selectedPlayer)
+            {temp = 10 * count + 8;}
+          else
+            {temp = 10 * count + 3;}
+
+          forceDamageObject(testMine, temp);
+          destroyStructure(strucMine);
+        }
+      }
+      strucMine = enumStruct();
+    }
+    count = count + 1;
+  }
+  player = player + 1;
+}
+
+player = 3;
+while (player < 8)
+{
+  count = 0;
+  while (count < 8)
+  {
+    initEnumStruct(FALSE, BuildMine[count], player, player);
+    strucMine= enumStruct();
+    while (strucMine!= NULLOBJECT)
+    {
+      if (structureComplete(strucMine))
+      {
+        NotReady = droidInRange(player, strucMine.x, strucMine.y, setRange);
+
+        if (NotReady)
+        {
+          target = droidTargetInArea(player, player, (strucMine.x - actRange), (strucMine.y - actRange), (strucMine.x + actRange), (strucMine.y + actRange));
+          if (target != NULLOBJECT)
+          {
+		// Mine layer droids can activate their own mines
+            if (target.body == Miner[0]) { NotReady= FALSE; }
+          }
+        }
+
+        if (NotReady== FALSE)
+        {
+          testMine = addFeature(Mine, strucMine.x, strucMine.y);
+
+          // Encode the mine's type into the feature's health stat
+
+          // *** NOTE! *** Mine must not be declared indestructible via WZCK //
+
+          if (player == selectedPlayer)
+            {temp = 10 * count + 8;}
+          else
+            {temp = 10 * count + 3;}
+
+          forceDamageObject(testMine, temp);
+          destroyStructure(strucMine);
+        }
+      }
+      strucMine = enumStruct();
+    }
+    count = count + 1;
+  }
+  player = player + 1;
+}
+
+player = 4;
+while (player < 8)
+{
+  count = 0;
+  while (count < 8)
+  {
+    initEnumStruct(FALSE, BuildMine[count], player, player);
+    strucMine= enumStruct();
+    while (strucMine!= NULLOBJECT)
+    {
+      if (structureComplete(strucMine))
+      {
+        NotReady = droidInRange(player, strucMine.x, strucMine.y, setRange);
+
+        if (NotReady)
+        {
+          target = droidTargetInArea(player, player, (strucMine.x - actRange), (strucMine.y - actRange), (strucMine.x + actRange), (strucMine.y + actRange));
+          if (target != NULLOBJECT)
+          {
+		// Mine layer droids can activate their own mines
+            if (target.body == Miner[0]) { NotReady= FALSE; }
+          }
+        }
+
+        if (NotReady== FALSE)
+        {
+          testMine = addFeature(Mine, strucMine.x, strucMine.y);
+
+          // Encode the mine's type into the feature's health stat
+
+          // *** NOTE! *** Mine must not be declared indestructible via WZCK //
+
+          if (player == selectedPlayer)
+            {temp = 10 * count + 8;}
+          else
+            {temp = 10 * count + 3;}
+
+          forceDamageObject(testMine, temp);
+          destroyStructure(strucMine);
+        }
+      }
+      strucMine = enumStruct();
+    }
+    count = count + 1;
+  }
+  player = player + 1;
+}
+
+player = 5;
+while (player < 8)
+{
+  count = 0;
+  while (count < 8)
+  {
+    initEnumStruct(FALSE, BuildMine[count], player, player);
+    strucMine= enumStruct();
+    while (strucMine!= NULLOBJECT)
+    {
+      if (structureComplete(strucMine))
+      {
+        NotReady = droidInRange(player, strucMine.x, strucMine.y, setRange);
+
+        if (NotReady)
+        {
+          target = droidTargetInArea(player, player, (strucMine.x - actRange), (strucMine.y - actRange), (strucMine.x + actRange), (strucMine.y + actRange));
+          if (target != NULLOBJECT)
+          {
+		// Mine layer droids can activate their own mines
+            if (target.body == Miner[0]) { NotReady= FALSE; }
+          }
+        }
+
+        if (NotReady== FALSE)
+        {
+          testMine = addFeature(Mine, strucMine.x, strucMine.y);
+
+          // Encode the mine's type into the feature's health stat
+
+          // *** NOTE! *** Mine must not be declared indestructible via WZCK //
+
+          if (player == selectedPlayer)
+            {temp = 10 * count + 8;}
+          else
+            {temp = 10 * count + 3;}
+
+          forceDamageObject(testMine, temp);
+          destroyStructure(strucMine);
+        }
+      }
+      strucMine = enumStruct();
+    }
+    count = count + 1;
+  }
+  player = player + 1;
+}
+
+player = 6;
+while (player < 8)
+{
+  count = 0;
+  while (count < 8)
+  {
+    initEnumStruct(FALSE, BuildMine[count], player, player);
+    strucMine= enumStruct();
+    while (strucMine!= NULLOBJECT)
+    {
+      if (structureComplete(strucMine))
+      {
+        NotReady = droidInRange(player, strucMine.x, strucMine.y, setRange);
+
+        if (NotReady)
+        {
+          target = droidTargetInArea(player, player, (strucMine.x - actRange), (strucMine.y - actRange), (strucMine.x + actRange), (strucMine.y + actRange));
+          if (target != NULLOBJECT)
+          {
+		// Mine layer droids can activate their own mines
+            if (target.body == Miner[0]) { NotReady= FALSE; }
+          }
+        }
+
+        if (NotReady== FALSE)
+        {
+          testMine = addFeature(Mine, strucMine.x, strucMine.y);
+
+          // Encode the mine's type into the feature's health stat
+
+          // *** NOTE! *** Mine must not be declared indestructible via WZCK //
+
+          if (player == selectedPlayer)
+            {temp = 10 * count + 8;}
+          else
+            {temp = 10 * count + 3;}
+
+          forceDamageObject(testMine, temp);
+          destroyStructure(strucMine);
+        }
+      }
+      strucMine = enumStruct();
+    }
+    count = count + 1;
+  }
+  player = player + 1;
+}
+
+player = 7;
+while (player < 8)
+{
+  count = 0;
+  while (count < 8)
+  {
+    initEnumStruct(FALSE, BuildMine[count], player, player);
+    strucMine= enumStruct();
+    while (strucMine!= NULLOBJECT)
+    {
+      if (structureComplete(strucMine))
+      {
+        NotReady = droidInRange(player, strucMine.x, strucMine.y, setRange);
+
+        if (NotReady)
+        {
+          target = droidTargetInArea(player, player, (strucMine.x - actRange), (strucMine.y - actRange), (strucMine.x + actRange), (strucMine.y + actRange));
+          if (target != NULLOBJECT)
+          {
+		// Mine layer droids can activate their own mines
+            if (target.body == Miner[0]) { NotReady= FALSE; }
+          }
+        }
+
+        if (NotReady== FALSE)
+        {
+          testMine = addFeature(Mine, strucMine.x, strucMine.y);
+
+          // Encode the mine's type into the feature's health stat
+
+          // *** NOTE! *** Mine must not be declared indestructible via WZCK //
+
+          if (player == selectedPlayer)
+            {temp = 10 * count + 8;}
+          else
+            {temp = 10 * count + 3;}
+
+          forceDamageObject(testMine, temp);
+          destroyStructure(strucMine);
+        }
+      }
+      strucMine = enumStruct();
+    }
+    count = count + 1;
+  }
+  player = player + 1;
+}
+
+}

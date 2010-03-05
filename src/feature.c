@@ -302,17 +302,13 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	}
 
 	/* Dump down the building wrecks at random angles - still looks shit though */
-	if(psStats->subType == FEAT_BUILD_WRECK)
+	if(psStats->subType == FEAT_BUILD_WRECK || psStats->subType == FEAT_TREE)
 	{
-		psFeature->direction = gameRand(360);
-	}
-	else if(psStats->subType == FEAT_TREE)
-	{
-		psFeature->direction = gameRand(360);
+		psFeature->rot.direction = gameRand(DEG_360);
 	}
 	else
 	{
-		psFeature->direction = 0;
+		psFeature->rot.direction = 0;
 	}
 	//psFeature->damage = featureDamage;
 	psFeature->selected = false;

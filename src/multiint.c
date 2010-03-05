@@ -25,7 +25,7 @@
  * along with connection and game options.
  */
 
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 #include "lib/framework/frame.h"
 
 #include <time.h>
@@ -484,6 +484,7 @@ void loadMapPreview(bool hideInterface)
 			screen_Upload(imageData);
 		}
 		bFboProblem |= glErrors();
+		glEnable(GL_CULL_FACE);
 	}
 	else
 	{

@@ -30,13 +30,6 @@
 
 #include "lib/ivis_common/piedef.h"
 
-// FIXME DUPLICATE CODE! Already present in trig.c!
-#define SC_TABLESIZE 4096
-#define SIN(X) aSinTable[(uint16_t)(X) >> 4]
-#define COS(X) aSinTable[((uint16_t)(X) >> 4) + (SC_TABLESIZE/4)]
-
-extern SDWORD aSinTable[];
-
 //*************************************************************************
 
 /*!

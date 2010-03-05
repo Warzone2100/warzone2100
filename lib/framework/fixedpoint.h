@@ -46,11 +46,8 @@ extern "C"
 static const int DEG_360 = 65536;
 static const float DEG_1 = (float)65536 / 360.f;
 
-
-static inline WZ_DECL_CONST int DEG(const float degree)
-{
-	return (int)(degree * DEG_1);
-}
+static inline WZ_DECL_CONST float UNDEG(uint16_t angle) { return angle * 360 / 65536.0f; }
+static inline WZ_DECL_CONST int DEG(const float degree) { return (int)(degree * DEG_1); }
 
 #ifdef __cplusplus
 }

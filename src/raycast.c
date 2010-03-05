@@ -33,14 +33,8 @@
 
 typedef struct {
 	const int height;
-	float pitch;
+	uint16_t pitch;
 } HeightCallbackHelp_t;
-
-typedef struct {
-	const int minDist, origHeight;
-	int highestHeight;
-	float pitch;
-} HighestCallbackHelp_t;
 
 
 void rayCast(Vector3i src, Vector3i direction, int length,
@@ -75,31 +69,6 @@ void rayCast(Vector3i src, Vector3i direction, int length,
 	}
 }
 
-
-/*!
- * Gets the maximum terrain height along a certain direction to the edge of the grid
- * from wherever you specify, as well as the distance away
- */
-static bool getTileHighestCallback(Vector3i pos, int distSq, void* data)
-{
-	HighestCallbackHelp_t * help = data;
-
-	if (clipXY(pos.x, pos.y))
-	{
-		int height = map_Height(pos.x, pos.y), dist = sqrtf(distSq);
-		if (height > help->highestHeight && dist >= help->minDist)
-		{
-			int heightDif = height - help->origHeight;
-			help->pitch = rad2degf(atan2f(heightDif, world_coord(6)));// (float)(dist - world_coord(3))));
-			help->highestHeight = height;
-		}
-
-		return true;
-	}
-
-	return false;
-}
-
 //-----------------------------------------------------------------------------------
 /* Will return false when we've hit the edge of the grid */
 static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
@@ -112,7 +81,7 @@ static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
 	/* Are we still on the grid? */
 	if (clipXY(pos.x, pos.y))
 	{
-		int dist = sqrtf(distSq);
+		int dist = iSqrt(distSq);
 		bool HasTallStructure = TileHasTallStructure(mapTile(map_coord(pos.x), map_coord(pos.y)));
 
 		if (dist > TILE_UNITS || HasTallStructure)
@@ -121,7 +90,7 @@ static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
 			// there is a tall structure  on the current tile and the current tile is not the starting tile.
 			/* Get height at this intersection point */
 			int height = map_Height(pos.x, pos.y), heightDiff;
-			float newPitch;
+			uint16_t newPitch;
 
 			if (HasTallStructure)
 			{
@@ -138,10 +107,10 @@ static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
 			}
 
 			/* Work out the angle to this point from start point */
-			newPitch = rad2degf(atan2f(heightDiff, dist));
+			newPitch = iAtan2(heightDiff, dist);
 
 			/* Is this the steepest we've found? */
-			if (newPitch > help->pitch)
+			if (angleDelta(newPitch - help->pitch) > 0)
 			{
 				/* Yes, then keep a record of it */
 				help->pitch = newPitch;
@@ -164,25 +133,13 @@ static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
 	return false;
 }
 
-void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitch)
+void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch)
 {
 	Vector3i pos = { x, y, 0 };
 	Vector3i dir = rayAngleToVector3i(direction);
 	HeightCallbackHelp_t help = { map_Height(x,y), 0.0f };
 
 	rayCast(pos, dir, 5430, getTileHeightCallback, &help); // FIXME Magic value
-
-	*pitch = help.pitch;
-}
-
-void getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction,
-							   UDWORD thresholdDistance, SDWORD *pitch)
-{
-	Vector3i pos = { x, y, 0 };
-	Vector3i dir = rayAngleToVector3i(direction);
-	HighestCallbackHelp_t help = { thresholdDistance, map_Height(x,y), map_Height(x,y), 0.0f };
-
-	rayCast(pos, dir, 3000, getTileHighestCallback, &help); // FIXME Magic value
 
 	*pitch = help.pitch;
 }

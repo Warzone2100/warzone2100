@@ -487,8 +487,8 @@ static void DrawRadarObjects(void)
 /** Rotate an array of 2d vectors about a given angle, also translates them after rotating. */
 static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, int Angle, int Count)
 {
-	int Cos = COS(Angle);
-	int Sin = SIN(Angle);
+	int64_t Cos = iCos(Angle);
+	int64_t Sin = iSin(Angle);
 	int ox = 0;
 	int oy = 0;
 	int i;
@@ -503,8 +503,8 @@ static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, i
 
 	for (i = 0; i < Count; i++)
 	{
-		TVec->x = ( (Vec->x*Cos + Vec->y*Sin) >> FP12_SHIFT ) + ox;
-		TVec->y = ( (Vec->y*Cos - Vec->x*Sin) >> FP12_SHIFT ) + oy;
+		TVec->x = ((Vec->x*Cos + Vec->y*Sin) >> 16) + ox;
+		TVec->y = ((Vec->y*Cos - Vec->x*Sin) >> 16) + oy;
 		Vec++;
 		TVec++;
 	}

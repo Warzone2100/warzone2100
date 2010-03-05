@@ -767,10 +767,8 @@ static void updateFirework(EFFECT *psEffect)
 				//val = getStaticTimeValueRange(720,360);	// grab an angle - 4 seconds cyclic
   				for(val = 0; val<=180; val+=20)
 				{
-   					xDif = radius * (SIN(DEG(val)));
-   					yDif = radius * (COS(DEG(val)));
-   					xDif = xDif/4096;	 // cos it's fixed point
-   					yDif = yDif/4096;
+					xDif = iSinR(DEG(val), radius);
+					yDif = iCosR(DEG(val), radius);
    					dv.x = psEffect->position.x + xDif;
    					dv.z = psEffect->position.z + yDif;
    					dv.y = psEffect->position.y + dif;
@@ -893,10 +891,8 @@ static void updateSatLaser(EFFECT *psEffect)
 			/* Add 36 around in a circle..! */
 			for(val = 0; val<=180; val+=30)
 			{
-   				xDif = radius * (SIN(DEG(val)));
-   				yDif = radius * (COS(DEG(val)));
-   				xDif = xDif/4096;	 // cos it's fixed point
-   				yDif = yDif/4096;
+				xDif = iSinR(DEG(val), radius);
+				yDif = iCosR(DEG(val), radius);
    				dv.x = xPos+xDif+i/64;
    				dv.z = yPos+yDif;
    				dv.y = startHeight+i;
@@ -2090,13 +2086,13 @@ void	effectSetupGraviton(EFFECT *psEffect)
 
 	}
 
-	psEffect->rotation.x = DEG((rand()%360));
-	psEffect->rotation.z = DEG((rand()%360));
-	psEffect->rotation.y = DEG((rand()%360));
+	psEffect->rotation.x = rand()%DEG(360);
+	psEffect->rotation.z = rand()%DEG(360);
+	psEffect->rotation.y = rand()%DEG(360);
 
-	psEffect->spin.x = DEG((rand()%100)+20);
-	psEffect->spin.z = DEG((rand()%100)+20);
-	psEffect->spin.y = DEG((rand()%100)+20);
+	psEffect->spin.x = rand()%DEG(100) + DEG(20);
+	psEffect->spin.z = rand()%DEG(100) + DEG(20);
+	psEffect->spin.y = rand()%DEG(100) + DEG(20);
 
 	/* Gravitons are essential */
 	SET_ESSENTIAL(psEffect);
@@ -2458,8 +2454,8 @@ static void effectDroidUpdates(void)
 					{
 						/* Present direction is important */
 						Vector2i behind = {
-							50.0f * sinf(psDroid->direction),
-							50.0f * cosf(psDroid->direction)
+							iSinR(psDroid->rot.direction, 50),
+							iCosR(psDroid->rot.direction, 50)
 						};
 						Vector3i pos = {
 							clip(psDroid->pos.x - behind.x, 0, mapWidth),

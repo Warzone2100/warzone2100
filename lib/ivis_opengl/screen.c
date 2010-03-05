@@ -24,7 +24,7 @@
  *
  */
 
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 #include "lib/framework/frame.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include <SDL.h>
@@ -255,10 +255,11 @@ bool screenInitialise(
 /* Release the DD objects */
 void screenShutDown(void)
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	if (screen != NULL)
 	{
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glFlush();
 		SDL_FreeSurface(screen);
 		screen = NULL;
 	}

@@ -744,8 +744,7 @@ void droidUpdate(DROID *psDroid)
 	psDroid->time = gameTime;
 	for (i = 0; i < MAX(1, psDroid->numWeaps); ++i)
 	{
-		psDroid->asWeaps[i].prevRotation = psDroid->asWeaps[i].rotation;
-		psDroid->asWeaps[i].prevPitch    = psDroid->asWeaps[i].pitch;
+		psDroid->asWeaps[i].prevRot = psDroid->asWeaps[i].rot;
 	}
 
 	// update the cluster of the droid
@@ -2467,7 +2466,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 	psDroid->actionY = 0;
 	psDroid->psTarStats = NULL;
 	psDroid->psTarget = NULL;
-	psDroid->lastFrustratedTime = 0;
+	psDroid->lastFrustratedTime = -UINT16_MAX;	// make sure we do not start the game frustrated
 
 	// Is setting asWeaps here needed? The first numWeaps entries are set in droidSetBits, too.)
 	for(i = 0;i < DROID_MAXWEAPS;i++)
@@ -2478,8 +2477,10 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 		psDroid->asWeaps[i].nStat = 0;
 		psDroid->asWeaps[i].ammo = 0;
 		psDroid->asWeaps[i].recoilValue = 0;
-		psDroid->asWeaps[i].rotation = 0;
-		psDroid->asWeaps[i].pitch = 0;
+		psDroid->asWeaps[i].rot.direction = 0;
+		psDroid->asWeaps[i].rot.roll = 0;
+		psDroid->asWeaps[i].rot.pitch = 0;
+		psDroid->asWeaps[i].prevRot = psDroid->asWeaps[i].rot;
 	}
 
 	psDroid->listSize = 0;
@@ -2526,9 +2527,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 
 	initDroidMovement(psDroid);
 
-	psDroid->direction = 0;  // Redundant? (Is set in droidSetBits, too.)
-	psDroid->pitch =  0;  // Redundant? (Is set in droidSetBits, too.)
-	psDroid->roll = 0;  // Redundant? (Is set in droidSetBits, too.)
 	psDroid->selected = false;
 	psDroid->lastEmission = 0;
 	psDroid->bTargetted = false;
@@ -2645,7 +2643,7 @@ void initDroidMovement(DROID *psDroid)
 	psDroid->sMove.fy = psDroid->pos.y;
 	psDroid->sMove.fz = psDroid->pos.z;
 	psDroid->sMove.speed = 0.0f;
-	psDroid->sMove.moveDir = 0.0f;
+	psDroid->sMove.moveDir = 0;
 }
 
 // Set the asBits in a DROID structure given it's template.
@@ -2654,9 +2652,9 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	UDWORD						inc;
 
 	psDroid->droidType = droidTemplateType(pTemplate);
-	psDroid->direction = 0;
-	psDroid->pitch =  0;
-	psDroid->roll = 0;
+	psDroid->rot.direction = 0;
+	psDroid->rot.pitch =  0;
+	psDroid->rot.roll = 0;
 	psDroid->numWeaps = pTemplate->numWeaps;
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
 	psDroid->originalBody = psDroid->body;
@@ -2674,10 +2672,10 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
 			psDroid->asWeaps[inc].recoilValue = 0;
 			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->asWeaps[inc].nStat)->numRounds;
-			psDroid->asWeaps[inc].rotation = 0;
-			psDroid->asWeaps[inc].pitch = 0;
-			psDroid->asWeaps[inc].prevRotation = 0;
-			psDroid->asWeaps[inc].prevPitch = 0;
+			psDroid->asWeaps[inc].rot.direction = 0;
+			psDroid->asWeaps[inc].rot.pitch = 0;
+			psDroid->asWeaps[inc].rot.roll = 0;
+			psDroid->asWeaps[inc].prevRot = psDroid->asWeaps[inc].rot;
 		}
 	}
 	else
@@ -3044,14 +3042,14 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 		pie_TRANSLATE(psDroid->pos.x, -psDroid->pos.z, psDroid->pos.y);
 
 		//matrix = the center of droid
-		pie_MatRotY( DEG( psDroid->direction ) );
-		pie_MatRotX( DEG( psDroid->pitch ) );
-		pie_MatRotZ( DEG( -psDroid->roll ) );
+		pie_MatRotY(psDroid->rot.direction);
+		pie_MatRotX(psDroid->rot.pitch);
+		pie_MatRotZ(-psDroid->rot.roll);
 		pie_TRANSLATE(psBodyImd->connectors[weapon_slot].x, -psBodyImd->connectors[weapon_slot].z,
 					 -psBodyImd->connectors[weapon_slot].y);//note y and z flipped
 
 		//matrix = the weapon[slot] mount on the body
-		pie_MatRotY(DEG(psDroid->asWeaps[weapon_slot].rotation));	// +ve anticlockwise
+		pie_MatRotY(psDroid->asWeaps[weapon_slot].rot.direction);	// +ve anticlockwise
 
 		// process turret mount
 		if (psMountImd && psMountImd->nconnectors)
@@ -3060,7 +3058,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 		}		
 
 		//matrix = the turret connector for the gun
-		pie_MatRotX(DEG(psDroid->asWeaps[weapon_slot].pitch));		// +ve up
+		pie_MatRotX(psDroid->asWeaps[weapon_slot].rot.pitch);		// +ve up
 
 		//process the gun
 		if (psWeaponImd && psWeaponImd->nconnectors)
@@ -3424,12 +3422,15 @@ BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 	SDWORD		i, j;
 	SDWORD		startX, endX, startY, endY;
 	UDWORD		passes;
-	Vector2i	origin = { *x, *y };
+	Vector3i	origin = { world_coord(*x), world_coord(*y), 0 };
+	Vector3i	firstPos = { world_coord(*x), world_coord(*y), 0 };
 
 	ASSERT_OR_RETURN(false, *x<mapWidth,"x coordinate is off-map for pickATileGen" );
 	ASSERT_OR_RETURN(false, *y<mapHeight,"y coordinate is off-map for pickATileGen" );
 
-	if(function(*x,*y) && ((threatRange <=0) || (!ThreatInRange(player, threatRange, *x, *y, false))))	//TODO: vtol check really not needed?
+	if (function(*x,*y) 
+	    && fpathCheck(origin, firstPos, PROPULSION_TYPE_WHEELED)
+	    && ((threatRange <=0) || (!ThreatInRange(player, threatRange, *x, *y, false))))	//TODO: vtol check really not needed?
 	{
 		return(true);
 	}
@@ -3448,7 +3449,7 @@ BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 				/* Test only perimeter as internal tested previous iteration */
 				if(i==startX || i==endX || j==startY || j==endY)
 				{
-					Vector2i newPos = { i, j };
+					Vector3i newPos = { world_coord(i), world_coord(j), 0 };
 
 					/* Good enough? */
 					if (function(i, j)
@@ -3756,11 +3757,11 @@ BOOL isVtolDroid(const DROID* psDroid)
 	    && psDroid->droidType != DROID_TRANSPORTER;
 }
 
-// returns true if the droid has lift propulsion and is moving
+/* returns true if the droid has lift propulsion and is moving */ 
 BOOL isFlying(const DROID* psDroid)
 {
-	return (asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->propulsionType == PROPULSION_TYPE_LIFT
-			&& psDroid->sMove.Status != MOVEINACTIVE;
+	return (asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->propulsionType == PROPULSION_TYPE_LIFT  
+			&& ( psDroid->sMove.Status != MOVEINACTIVE || psDroid->droidType == DROID_TRANSPORTER ); 
 }
 
 /* returns true if it's a VTOL weapon droid which has completed all runs */
@@ -4314,7 +4315,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 			armourH[impact_side] = psD->armour[impact_side][WC_HEAT];
 		}
 		numKills = psD->experience;
-		direction = psD->direction;
+		direction = psD->rot.direction;
 		// only play the sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
 		if (psD->player == selectedPlayer && to != selectedPlayer)
 		{
@@ -4336,7 +4337,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 				psNewDroid->armour[impact_side][WC_HEAT] = armourH[impact_side];
 			}
 			psNewDroid->experience = (float) numKills;
-			psNewDroid->direction = direction;
+			psNewDroid->rot.direction = direction;
 			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER))
 			{
 				updateDroidOrientation(psNewDroid);
@@ -4648,7 +4649,6 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 
 	ASSERT_HELPER(droid != NULL, location, function, "CHECK_DROID: NULL pointer");
 	ASSERT_HELPER(droid->type == OBJ_DROID, location, function, "CHECK_DROID: Not droid (type %d)", (int)droid->type);
-	ASSERT_HELPER(droid->direction <= 360.0f && droid->direction >= 0.0f, location, function, "CHECK_DROID: Bad droid direction %f", droid->direction);
 	ASSERT_HELPER(droid->numWeaps <= DROID_MAXWEAPS, location, function, "CHECK_DROID: Bad number of droid weapons %d", (int)droid->numWeaps);
 	ASSERT_HELPER(droid->listSize <= ORDER_LIST_MAX, location, function, "CHECK_DROID: Bad number of droid orders %d", (int)droid->listSize);
 	ASSERT_HELPER(droid->player < MAX_PLAYERS, location, function, "CHECK_DROID: Bad droid owner %d", (int)droid->player);
@@ -4657,22 +4657,15 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 
 	for (i = 0; i < DROID_MAXWEAPS; ++i)
 	{
-		ASSERT_HELPER(droid->asWeaps[i].rotation <= 360, location, function, "CHECK_DROID: Bad turret rotation of turret %u", i);
 		ASSERT_HELPER(droid->asWeaps[i].lastFired <= gameTime, location, function, "CHECK_DROID: Bad last fired time for turret %u", i);
-		if (droid->psActionTarget[i])
-		{
-			ASSERT_HELPER(droid->psActionTarget[i]->direction >= 0.0f, location, function, "CHECK_DROID: Bad direction of turret %u's target", i);
-		}
 	}
 }
 
 int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj)
 {
 	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
-	Vector2i rPos = { map_coord(psObj->pos.x), map_coord(psObj->pos.y) };
 
-	if (!fpathCheck(dPos, rPos, psPropStats->propulsionType))
+	if (!fpathCheck(psDroid->pos, psObj->pos, psPropStats->propulsionType))
 	{
 		return -1;
 	}

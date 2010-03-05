@@ -188,9 +188,7 @@ BOOL SendBuildFinished(STRUCTURE *psStruct)
 
 		// Along with enough info to build it (if needed)
 		NETuint32_t(&psStruct->pStructureType->ref);
-		NETuint16_t(&psStruct->pos.x);
-		NETuint16_t(&psStruct->pos.y);
-		NETuint16_t(&psStruct->pos.z);
+		NETPosition(&psStruct->pos);
 		NETuint8_t(&player);
 	return NETend();
 }
@@ -200,16 +198,14 @@ BOOL recvBuildFinished(NETQUEUE queue)
 {
 	uint32_t	structId;
 	STRUCTURE	*psStruct;
-	uint16_t	x,y,z;
+	Position        pos;
 	uint32_t	type,typeindex;
 	uint8_t		player;
 
 	NETbeginDecode(queue, GAME_BUILDFINISHED);
 		NETuint32_t(&structId);	// get the struct id.
 		NETuint32_t(&type); 	// Kind of building.
-		NETuint16_t(&x);    	// x pos
-		NETuint16_t(&y);    	// y pos
-		NETuint16_t(&z);    	// z pos
+		NETPosition(&pos);      // pos
 		NETuint8_t(&player);
 	NETend();
 
@@ -240,10 +236,10 @@ BOOL recvBuildFinished(NETQUEUE queue)
 		typeindex++);
 
 	// Check for similar buildings, to avoid overlaps
-	if (TileHasStructure(mapTile(map_coord(x), map_coord(y))))
+	if (TileHasStructure(mapTile(map_coord(pos.x), map_coord(pos.y))))
 	{
 		// Get the current structure
-		psStruct = getTileStructure(map_coord(x), map_coord(y));
+		psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
 		if (asStructureStats[typeindex].type == psStruct->pStructureType->type)
 		{
 			// Correct type, correct location, just rename the id's to sync it.. (urgh)
@@ -257,7 +253,7 @@ BOOL recvBuildFinished(NETQUEUE queue)
 		}
 	}
 	// Build the structure
-	psStruct = buildStructure(&(asStructureStats[typeindex]), x, y, player, true);
+	psStruct = buildStructure(&(asStructureStats[typeindex]), pos.x, pos.y, player, true);
 
 	if (psStruct)
 	{
@@ -398,17 +394,13 @@ BOOL recvLasSat(NETQUEUE queue)
 	psStruct = IdToStruct (id, player);
 	psObj	 = IdToPointer(targetid, targetplayer);
 
-	if( psStruct && psObj)
+	if (psStruct && psObj)
 	{
-		// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-		Vector3i pos = Vector3uw_To3i(psObj->pos);
-
 		// Give enemy no quarter, unleash the lasat
-		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, pos, psObj, true, 0);
+		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos, psObj, true, 0);
 
 		// Play 5 second countdown message
-		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y,
-			psObj->pos.z);
+		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y, psObj->pos.z);
 	}
 
 	return true;

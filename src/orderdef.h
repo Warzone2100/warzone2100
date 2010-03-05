@@ -24,6 +24,9 @@
 #ifndef __INCLUDED_SRC_ORDERDEF_H__
 #define __INCLUDED_SRC_ORDERDEF_H__
 
+#include "lib/framework/vector.h"
+
+#include "basedef.h"
 #include "droiddef.h"
 
 #ifdef __cplusplus

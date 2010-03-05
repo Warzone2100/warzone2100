@@ -213,11 +213,19 @@ void queue(const Q &q, float &v)
 }
 
 template<class Q>
-static void queue(const Q &q, Vector3uw &v)
+static void queue(const Q &q, Position &v)
 {
 	queue(q, v.x);
 	queue(q, v.y);
 	queue(q, v.z);
+}
+
+template<class Q>
+static void queue(const Q &q, Rotation &v)
+{
+	queue(q, v.direction);
+	queue(q, v.pitch);
+	queue(q, v.roll);
 }
 
 template<class Q, class T>
@@ -630,7 +638,12 @@ void NETbin(uint8_t *str, uint32_t maxlen)
 	//maxlen = len;
 }
 
-void NETVector3uw(Vector3uw *vp)
+void NETPosition(Position *vp)
+{
+	queueAuto(*vp);
+}
+
+void NETRotation(Rotation *vp)
 {
 	queueAuto(*vp);
 }
@@ -642,10 +655,9 @@ void NETPACKAGED_CHECK(PACKAGED_CHECK *v)
 	queueAuto(v->order);
 	queueAuto(v->secondaryOrder);
 	queueAuto(v->body);
-	queueAuto(v->direction);
 	queueAuto(v->experience);
-	queueAuto(v->posX);
-	queueAuto(v->posY);
+	queueAuto(v->pos);
+	queueAuto(v->rot);
 	queueAuto(v->sMoveX);
 	queueAuto(v->sMoveY);
 	if (v->order == DORDER_ATTACK)

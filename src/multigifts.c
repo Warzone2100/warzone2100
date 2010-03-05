@@ -582,7 +582,7 @@ void sendMultiPlayerFeature(FEATURE_TYPE subType, uint32_t x, uint32_t y, uint32
 
 void recvMultiPlayerFeature(NETQUEUE queue)
 {
-	FEATURE_TYPE subType;
+	FEATURE_TYPE subType = FEAT_TREE;  // Dummy initialisation.
 	uint32_t     x, y, id;
 	unsigned int i;
 
@@ -686,7 +686,7 @@ void recvMultiPlayerRandomArtifacts(NETQUEUE queue)
 	uint8_t			quantity, player;
 	uint32_t		tx,ty;
 	uint32_t		ref;
-	FEATURE_TYPE	type;
+	FEATURE_TYPE            type = FEAT_TREE;  // Dummy initialisation.
 	FEATURE 		*pF;
 
 	NETbeginDecode(queue, GAME_ARTIFACTS);
@@ -775,7 +775,7 @@ void processMultiPlayerArtifacts(void)
 	static UDWORD lastCall;
 	FEATURE	*pF,*pFN;
 	UDWORD	x,y,pl;
-	Vector3i position;
+	Position position;
 	BOOL	found=false;
 
 	// only do this every now and again.
@@ -795,9 +795,7 @@ void processMultiPlayerArtifacts(void)
 			found = objectInRange((BASE_OBJECT *)apsDroidLists[selectedPlayer], pF->pos.x, pF->pos.y, (TILE_UNITS+(TILE_UNITS/3))  );
 			if(found)
 			{
-				position.x = pF->pos.x;				// Add an effect
-				position.z = pF->pos.y;
-				position.y = pF->pos.z;
+				position = pF->pos;				// Add an effect
 				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,false,NULL,false);
 
 				x = pF->pos.x;

@@ -217,12 +217,12 @@ BOOL sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
 		uint8_t player = psDroid->player;
 		uint32_t droidID = psDroid->id;
 		uint32_t transporterID = psTransporter->id;
-		Vector3uw pos = psDroid->pos;
+		Position pos = psDroid->pos;
 
 		NETuint8_t(&player);
 		NETuint32_t(&droidID);
 		NETuint32_t(&transporterID);
-		NETVector3uw(&pos);
+		NETPosition(&pos);
 	}
 	return NETend();
 }
@@ -241,12 +241,12 @@ BOOL recvDroidDisEmbark(NETQUEUE queue)
 		uint8_t player;
 		uint32_t droidID;
 		uint32_t transporterID;
-		Vector3uw pos;
+		Position pos;
 
 		NETuint8_t(&player);
 		NETuint32_t(&droidID);
 		NETuint32_t(&transporterID);
-		NETVector3uw(&pos);
+		NETPosition(&pos);
 
 		NETend();
 
@@ -332,13 +332,13 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 	debug(LOG_SYNC, "Droid sent with id of %u", id);
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROID);
 	{
-		Vector3uw pos = { x, y, 0 };
+		Position pos = { x, y, 0 };
 		uint32_t templateID = pTemplate->multiPlayerID;
 		BOOL haveInitialOrders = initialOrdersP != NULL;
 
 		NETuint8_t(&player);
 		NETuint32_t(&id);
-		NETVector3uw(&pos);
+		NETPosition(&pos);
 		NETuint32_t(&templateID);
 		NETbool(&haveInitialOrders);
 		if (haveInitialOrders)
@@ -361,7 +361,7 @@ BOOL recvDroid(NETQUEUE queue)
 	DROID* psDroid;
 	uint8_t player;
 	uint32_t id;
-	Vector3uw pos;
+	Position pos;
 	uint32_t templateID;
 	BOOL haveInitialOrders;
 	INITIAL_DROID_ORDERS initialOrders;
@@ -370,7 +370,7 @@ BOOL recvDroid(NETQUEUE queue)
 	{
 		NETuint8_t(&player);
 		NETuint32_t(&id);
-		NETVector3uw(&pos);
+		NETPosition(&pos);
 		NETuint32_t(&templateID);
 		NETbool(&haveInitialOrders);
 		if (haveInitialOrders)

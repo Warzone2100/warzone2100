@@ -28,12 +28,7 @@
 	Changed to allow seperate modifiers for enemy and player damage.
 */
 
-
-// ------------------------------------------------------------------------------------
 #include "lib/framework/frame.h"
-
-#include <math.h>
-#include "lib/framework/math_ext.h"
 
 #include "difficulty.h"
 // ------------------------------------------------------------------------------------
@@ -41,13 +36,6 @@
 static DIFFICULTY_LEVEL	presDifLevel = DL_NORMAL;
 static float		fDifPlayerModifier;
 static float		fDifEnemyModifier;
-
-
-void setModifiers(float Player,float Enemy)
-{
-	fDifPlayerModifier = Player;
-	fDifEnemyModifier = Enemy;
-}
 
 
 // ------------------------------------------------------------------------------------

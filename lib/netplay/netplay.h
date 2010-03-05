@@ -262,6 +262,7 @@ extern SYNC_COUNTER sync_counter;
 // update flags
 extern bool netPlayersUpdated;
 extern int mapDownloadProgress;
+extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
