@@ -3,6 +3,7 @@
 
 INSTALL_PATH = $(HOME)/Applications
 COPY_PHASE_STRIP = NO
+OTHER_LDFLAGS[arch=ppc] = -w
 PREBINDING = NO
 INFOPLIST_FILE = Resources/Warzone-Info.plist
 INFOPLIST_OTHER_PREPROCESSOR_FLAGS = -traditional
