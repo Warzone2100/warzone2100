@@ -43,11 +43,6 @@ extern bool trigInitialise(void);
 /* Shutdown the trig tables */
 extern void trigShutDown(void);
 
-// Deprecated trig functions.
-extern float trigSin(int angle) WZ_DECL_CONST;     ///< Use iSin(angle)/65536 instead.
-extern float trigCos(int angle) WZ_DECL_CONST;     ///< Use iCos(angle)/65536 instead.
-extern float trigIntSqrt(unsigned int val);        ///< Use iSqrt(val) instead.
-
 // Deterministic trig functions.
 int32_t iSin(uint16_t a);               ///< Returns sin(a*2π >> 16) << 16, rounded to nearest integer. Used as the x component in this game.
 int32_t iCos(uint16_t a);               ///< Returns cos(a*2π >> 16) << 16, rounded to nearest integer. Used as the y component in this game.
@@ -61,7 +56,7 @@ int32_t i64Sqrt(uint64_t n);            ///< Returns √(n), rounded down.
 int32_t iHypot(int32_t x, int32_t y);   ///< Returns √(x² + y²), rounded down. In case of overflow, returns correct result cast to (int32_t).
 
 /// Returns the given angle, wrapped to the range [-180°; 180°) = [-32768; 32767].
-static inline int angleDelta(int a)
+static inline int32_t angleDelta(int32_t a)
 {
 	return (int16_t)a;  // Cast wrapping intended.
 }

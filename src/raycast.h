@@ -71,7 +71,7 @@ static inline Vector3i rayAngleToVector3i(uint16_t angle)
 
 // Calculates the maximum height and distance found along a line from any
 // point to the edge of the grid
-extern void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitch);
+extern void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch);
 
 
 #ifdef __cplusplus

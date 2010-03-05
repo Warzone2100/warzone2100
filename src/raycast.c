@@ -33,7 +33,7 @@
 
 typedef struct {
 	const int height;
-	float pitch;
+	uint16_t pitch;
 } HeightCallbackHelp_t;
 
 
@@ -81,7 +81,7 @@ static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
 	/* Are we still on the grid? */
 	if (clipXY(pos.x, pos.y))
 	{
-		int dist = sqrtf(distSq);
+		int dist = iSqrt(distSq);
 		bool HasTallStructure = TileHasTallStructure(mapTile(map_coord(pos.x), map_coord(pos.y)));
 
 		if (dist > TILE_UNITS || HasTallStructure)
@@ -90,7 +90,7 @@ static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
 			// there is a tall structure  on the current tile and the current tile is not the starting tile.
 			/* Get height at this intersection point */
 			int height = map_Height(pos.x, pos.y), heightDiff;
-			float newPitch;
+			uint16_t newPitch;
 
 			if (HasTallStructure)
 			{
@@ -107,10 +107,10 @@ static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
 			}
 
 			/* Work out the angle to this point from start point */
-			newPitch = rad2degf(atan2f(heightDiff, dist));
+			newPitch = iAtan2(heightDiff, dist);
 
 			/* Is this the steepest we've found? */
-			if (newPitch > help->pitch)
+			if (angleDelta(newPitch - help->pitch) > 0)
 			{
 				/* Yes, then keep a record of it */
 				help->pitch = newPitch;
@@ -133,7 +133,7 @@ static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
 	return false;
 }
 
-void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitch)
+void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch)
 {
 	Vector3i pos = { x, y, 0 };
 	Vector3i dir = rayAngleToVector3i(direction);
