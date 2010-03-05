@@ -700,6 +700,7 @@ typedef enum
 
 static void NETcoder(PACKETDIR dir)
 {
+	(void)dir;
 /*	static const char original[] = "THIS IS A TEST STRING";
 	char str[sizeof(original)];
 	BOOL b = true;

@@ -263,7 +263,7 @@ static BOOL sendDroidCheck(void)
 // Send a Single Droid Check message
 static PACKAGED_CHECK packageCheck(const DROID *pD)
 {
-	PACKAGED_CHECK pc;
+	PACKAGED_CHECK pc = pc;  // Dummy initialisation.
 	pc.gameTime = gameTime + MIN_DELAY_BETWEEN_DROID_SYNCHS;
 
 	pc.player = pD->player;

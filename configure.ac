@@ -205,10 +205,11 @@ if test "x$enable_debug" = "xyes" ; then
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wcheck -Werror"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wall -Werror -Wno-unused-label -Wno-pointer-to-int-cast -Wmissing-field-initializers -Wcast-align -Wwrite-strings"
-		WZ_CFLAGS="${WZ_CFLAGS} -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith -Wno-format-security -Wdeclaration-after-statement"
+		WZ_WARNINGS="-Wall -Werror -Wno-unused-label -Wmissing-field-initializers -Wcast-align -Wwrite-strings -Wmissing-declarations -Wpointer-arith -Wno-format-security"
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wno-pointer-to-int-cast -Wstrict-prototypes -Wdeclaration-after-statement ${WZ_WARNINGS}"
+		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Wextra ${WZ_WARNINGS}"
 		WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
-		WZ_CPPFLAGS="${WZ_CPPFLAGS} -Wall -Werror -DDEBUG"
+		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
 elif test "x$enable_debug" = "xrelaxed" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -Wall -Wextra -Wwrite-strings"
@@ -388,6 +389,7 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 
 AC_SUBST([WZ_CPPFLAGS], [${WZ_CPPFLAGS}])
 AC_SUBST([WZ_CFLAGS], [${WZ_CFLAGS}])
+AC_SUBST([WZ_CXXFLAGS], [${WZ_CXXFLAGS}])
 AC_SUBST([WZ_C99FLAGS], [${WZ_C99FLAGS}])
 
 

@@ -1,5 +1,6 @@
 AM_CPPFLAGS = $(SDL_CFLAGS) $(PNG_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS)
 
 noinst_LIBRARIES = libivis_common.a
 noinst_HEADERS = \
