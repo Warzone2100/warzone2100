@@ -393,7 +393,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 		return 0;
 	}
 
-	diff = Vector3i_Sub(psViewer->pos, psTarget->pos);
+	diff = Vector3i_Sub(psTarget->pos, psViewer->pos);
 	range = objSensorRange(psViewer);
 
 	/* Get the sensor Range and power */
@@ -794,7 +794,7 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 		return false;
 	}
 
-	diff = Vector3i_Sub(psViewer->pos, psTarget->pos);
+	diff = Vector3i_Sub(psTarget->pos, psViewer->pos);
 	range = objSensorRange(psViewer);
 
 	distSq = Vector3i_ScalarP(diff, diff);
