@@ -322,6 +322,8 @@ BOOL recvDroidCheck(NETQUEUE queue)
 				continue;
 			}
 
+			syncDebugDroid(pD, '<');
+
 			if (pD->gameCheckDroid == NULL)
 			{
 				debug(LOG_SYNC, "We got a droid %u synch, but we couldn't find the droid!", pc.droidID);
@@ -410,6 +412,8 @@ BOOL recvDroidCheck(NETQUEUE queue)
 			MERGECOPY(pD->secondaryOrder, secondaryOrder, "u");  // The old code set this after changing orders, so doing that in case.
 #undef MERGECOPY
 #undef MERGEDELTA
+
+			syncDebugDroid(pD, '>');
 
 			// ...and repeat!
 		}
@@ -563,6 +567,7 @@ BOOL recvStructureCheck(NETQUEUE queue)
 
 		// If the structure exists our job is easy
 		pS = IdToStruct(ref, player);
+		syncDebugStructure(pS, '<');
 		if (pS)
 		{
 			if (pS->pStructureType->type != structureCheckLastType[player] || type != structureCheckLastType[player])
@@ -631,6 +636,8 @@ BOOL recvStructureCheck(NETQUEUE queue)
 			MERGEDELTA(pS->rot.pitch, rot.pitch, structureCheckLastDirection[player].pitch, "d");
 			MERGEDELTA(pS->rot.roll, rot.roll, structureCheckLastDirection[player].roll, "d");
 #undef MERGEDELTA
+
+			syncDebugStructure(pS, '>');
 		}
 		else
 		{
@@ -709,6 +716,7 @@ BOOL recvPowerCheck(NETQUEUE queue)
 		float powerTo = powerFrom + power - powerCheckLastPower[player];
 		debug(LOG_SYNC, "GAME_CHECK_POWER: Adjusting power for player %d (%s) from %f to %f",
 		      (int)player, isHumanPlayer(player) ? "Human" : "AI", powerFrom, powerTo);
+		syncDebug("Adjusting power for player %d (%s) from %f to %f", (int)player, isHumanPlayer(player) ? "Human" : "AI", powerFrom, powerTo);
 		setPower(player, powerTo);
 	}
 	return true;

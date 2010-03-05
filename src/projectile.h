@@ -116,6 +116,9 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 /* assert if projectile is bad */
 #define CHECK_PROJECTILE(object) checkProjectile((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
 
+#define syncDebugProjectile(psProj, ch) _syncDebugProjectile(__FUNCTION__, psProj, ch)
+void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch);
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus

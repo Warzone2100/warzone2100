@@ -321,10 +321,21 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 
 /***************************************************************************/
 
+void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch)
+{
+	_syncDebug(function, "%c projectile = p%d;pos(%d,%d,%d),rot(%d,%d,%d),state%d,edc%d,nd%d", ch,
+	          psProj->player,
+	          psProj->pos.x, psProj->pos.y, psProj->pos.z,
+	          psProj->rot.direction, psProj->rot.pitch, psProj->rot.roll,
+	          psProj->state,
+	          psProj->expectedDamageCaused,
+	          psProj->psNumDamaged);
+}
+
 static int32_t randomVariation(int32_t val)
 {
 	// Up to ±5% random variation.
-	return (int64_t)val*(95000 + rand()%10001)/100000;
+	return (int64_t)val*(95000 + gameRand(10001))/100000;
 }
 
 int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz)
@@ -544,6 +555,8 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 
 	psProj->time = gameTime;
 	psProj->prevSpacetime.time = gameTime;
+
+	syncDebugProjectile(psProj, '*');
 
 	CHECK_PROJECTILE(psProj);
 
@@ -1380,6 +1393,8 @@ static void proj_Update(PROJECTILE *psObj)
 	unsigned n, m;
 	CHECK_PROJECTILE(psObj);
 
+	syncDebugProjectile(psObj, '<');
+
 	psObj->prevSpacetime = GET_SPACETIME(psObj);
 
 	/* See if any of the stored objects have died
@@ -1427,6 +1442,8 @@ static void proj_Update(PROJECTILE *psObj)
 			proj_PostImpactFunc( psObj );
 			break;
 	}
+
+	syncDebugProjectile(psObj, '>');
 }
 
 /***************************************************************************/
