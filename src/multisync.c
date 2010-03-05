@@ -145,7 +145,7 @@ BOOL sendCheck(void)
 // pick a droid to send, NULL otherwise.
 static DROID* pickADroid(void)
 {
-	DROID *pD, *ret;
+	DROID *pD, *ret = NULL;  // ret: dummy initialisation.
 	unsigned player = MAX_PLAYERS;
 	unsigned i;
 
