@@ -21,9 +21,9 @@
 #ifndef __INCLUDED_SRC_KEYEDIT_H__
 #define __INCLUDED_SRC_KEYEDIT_H__
 
-extern BOOL runKeyMapEditor		(void);
-extern BOOL startKeyMapEditor	(BOOL first);
-extern BOOL saveKeyMap			(void);
-extern BOOL loadKeyMap			(void);
+BOOL runKeyMapEditor(void);
+BOOL startKeyMapEditor(BOOL first);
+BOOL saveKeyMap(void);
+BOOL loadKeyMap(void);
 
 #endif // __INCLUDED_SRC_KEYEDIT_H__
