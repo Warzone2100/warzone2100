@@ -44,7 +44,8 @@
 # define UINT16_MAX             (65535)
 # define UINT32_MAX             (4294967295U)
 #ifdef WZ_CC_MSVC
-#define PRIu64  "I64u"
+# define PRIu32					"u"
+# define PRIu64					"I64u"
 #endif
 #endif // WZ_C99
 
