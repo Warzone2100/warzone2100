@@ -2069,8 +2069,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 	/* why is this necessary - it makes tiles under the structure visible */
 	setUnderTilesVis((BASE_OBJECT*)psBuilding,player);
 
-	psBuilding->time = gameTime;
-	psBuilding->prevTime = gameTime - MAX(1, deltaGameTime);
+	psBuilding->prevTime = gameTime - deltaGameTime;  // Structure hasn't been updated this tick, yet.
+	psBuilding->time = psBuilding->prevTime - 1;      // -1, so the times are different, even before updating.
 
 	return psBuilding;
 }

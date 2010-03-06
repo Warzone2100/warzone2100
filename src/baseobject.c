@@ -25,22 +25,19 @@
 #include "projectile.h"
 #include "structure.h"
 
-static inline float interpolateFloat(float v1, float v2, uint32_t t1, uint32_t t2, uint32_t t)
+static inline int32_t interpolateInt(int32_t v1, int32_t v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
 	int32_t numer = t - t1, denom = t2 - t1;
-	if (denom == 0) return v2;	// TEMPORARY HACK
 	return v1 + (v2 - v1) * numer/denom;
 }
 
-static inline uint16_t interpolateDegree(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
+static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	uint16_t numer = t - t1, denom = t2 - t1;
-	int16_t diff = v2 - v1;
-	if (denom == 0) return v2;	// TEMPORARY HACK
-	return v1 + diff * numer / denom;
+	int32_t numer = t - t1, denom = t2 - t1;
+	return v1 + angleDelta(v2 - v1) * numer/denom;
 }
 
-Vector3i interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t2, uint32_t t)
+Position interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t2, uint32_t t)
 {
 	Position ret = { interpolateInt(p1.x, p2.x, t1, t2, t),
 	                 interpolateInt(p1.y, p2.y, t1, t2, t),
@@ -51,24 +48,19 @@ Vector3i interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t2, uint
 
 Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	Rotation rot = { interpolateDegree(v1.direction, v2.direction, t1, t2, t),
-	                 interpolateDegree(v1.pitch, v2.pitch, t1, t2, t),
-	                 interpolateDegree(v1.roll, v2.roll, t1, t2, t),
+	Rotation rot = { interpolateAngle(v1.direction, v2.direction, t1, t2, t),
+	                 interpolateAngle(v1.pitch,     v2.pitch,     t1, t2, t),
+	                 interpolateAngle(v1.roll,      v2.roll,      t1, t2, t)
 	               };
 	return rot;
 }
 
 SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)
 {
-	if (st1.time == st2.time)
-	{
-		debug(LOG_WARNING, "st1.time = %u, st2.time = %u, t = %u\n", (unsigned)st1.time, (unsigned)st2.time, (unsigned)t);
-		return st2;
-	}
 	return constructSpacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t), interpolateRot(st1.rot, st2.rot, st1.time, st2.time, t), t);
 }
 
-SPACETIME interpolateObjectSpacetime(SIMPLE_OBJECT *obj, uint32_t t)
+SPACETIME interpolateObjectSpacetime(const SIMPLE_OBJECT *obj, uint32_t t)
 {
 	switch (obj->type)
 	{
@@ -76,6 +68,8 @@ SPACETIME interpolateObjectSpacetime(SIMPLE_OBJECT *obj, uint32_t t)
 			return GET_SPACETIME(obj);
 		case OBJ_DROID:
 			return interpolateSpacetime(((DROID *)obj)->prevSpacetime, GET_SPACETIME(obj), t);
+		case OBJ_PROJECTILE:
+			return interpolateSpacetime(((PROJECTILE *)obj)->prevSpacetime, GET_SPACETIME(obj), t);
 	}
 }
 

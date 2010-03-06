@@ -430,14 +430,23 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		PROJECTILE * psOldProjectile = (PROJECTILE*)psAttacker;
 		psProj->born = psOldProjectile->born;
 
+		psProj->prevSpacetime.time = psOldProjectile->time;  // Have partially ticked already.
+		psProj->time = gameTime;
+		psProj->prevSpacetime.time -=  psProj->prevSpacetime.time == psProj->time;  // Times should not be equal, for interpolation.
+
 		setProjectileSource(psProj, psOldProjectile->psSource);
 		psProj->psDamaged = (BASE_OBJECT **)malloc(psOldProjectile->psNumDamaged*sizeof(BASE_OBJECT *));
 		psProj->psNumDamaged = psOldProjectile->psNumDamaged;
 		memcpy(psProj->psDamaged, psOldProjectile->psDamaged, psOldProjectile->psNumDamaged*sizeof(BASE_OBJECT *));
+
+		// TODO Should finish the tick, when penetrating.
 	}
 	else
 	{
 		psProj->born = gameTime;
+
+		psProj->prevSpacetime.time = gameTime - deltaGameTime;  // Haven't ticked yet.
+		psProj->time = psProj->prevSpacetime.time;
 
 		setProjectileSource(psProj, psAttacker);
 		psProj->psDamaged = NULL;
@@ -541,9 +550,6 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		//check for Counter Battery Sensor in range of target
 		counterBatteryFire(psAttacker, psTarget);
 	}
-
-	psProj->time = gameTime;
-	psProj->prevSpacetime.time = gameTime;
 
 	CHECK_PROJECTILE(psProj);
 
@@ -652,11 +658,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	SPACETIME closestCollisionSpacetime = closestCollisionSpacetime;  // Dummy initialisation.
 
 	CHECK_PROJECTILE(psProj);
-
-	if (psProj->prevSpacetime.time == gameTime)
-	{
-		return;  // Not in flight yet.
-	}
 
 	timeSoFar = gameTime - psProj->born;
 
@@ -867,7 +868,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			if (collision >= 0 && collisionTime < closestCollisionSpacetime.time)
 			{
 				// We hit!
-				closestCollisionSpacetime = interpolateSpacetime(psProj->prevSpacetime, GET_SPACETIME(psProj), collisionTime);
+				closestCollisionSpacetime = interpolateObjectSpacetime((SIMPLE_OBJECT *)psProj, collisionTime);
 				closestCollisionObject = psTempObj;
 
 				// Keep testing for more collisions, in case there was a closer target.
