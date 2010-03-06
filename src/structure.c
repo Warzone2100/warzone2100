@@ -1575,7 +1575,12 @@ void alignStructure(STRUCTURE *psBuilding)
 }
 
 /*Builds an instance of a Structure - the x/y passed in are in world coords. */
-STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, UDWORD player, BOOL FromSave)
+STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, BOOL FromSave)
+{
+	return buildStructureDir(pStructureType, x, y, 0, player, FromSave);
+}
+
+STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, BOOL FromSave)
 {
 	STRUCTURE	*psBuilding = NULL;
 
@@ -1746,7 +1751,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		psBuilding->burnStart = 0;
 		psBuilding->burnDamage = 0;
 
-		psBuilding->rot.direction = 0;
+		psBuilding->rot.direction = pStructureType->baseWidth == pStructureType->baseBreadth ? (direction + 0x2000)&0xC000 : (direction + 0x4000)&0x8000;
 		psBuilding->rot.pitch = 0;
 		psBuilding->rot.roll = 0;
 		psBuilding->selected = false;
@@ -2085,7 +2090,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 	return psBuilding;
 }
 
-STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STATES state)
+STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, uint16_t direction, STRUCT_STATES state)
 {
 	STRUCTURE *blueprint;
 
@@ -2102,7 +2107,9 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STA
 	blueprint->pos.x = x;
 	blueprint->pos.y = y;
 	blueprint->pos.z = map_Height(blueprint->pos.x, blueprint->pos.y) + world_coord(1)/10;
-	blueprint->rot.direction = 0;
+	blueprint->rot.direction = psStats->baseWidth == psStats->baseBreadth ? (direction + 0x2000)&0xC000 : (direction + 0x4000)&0x8000;
+	blueprint->rot.pitch = 0;
+	blueprint->rot.roll = 0;
 	blueprint->selected = false;
 
 	blueprint->timeLastHit = 0;

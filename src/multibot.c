@@ -684,7 +684,7 @@ BOOL recvGroupOrder(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Droid update information
-BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2)
+BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction)
 {
 	if (!bMultiMessages)
 		return true;
@@ -728,6 +728,7 @@ BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t
 
 			NETuint32_t(&structRef);
 			NETuint32_t(&structId);
+			NETuint16_t(&direction);
 		}
 		if (order == DORDER_LINEBUILD)
 		{
@@ -754,6 +755,7 @@ BOOL recvDroidInfo(NETQUEUE queue)
 		STRUCTURE_STATS *psStats = NULL;
 		uint32_t        structId = 0;
 		uint32_t        x2 = 0, y2 = 0;
+		uint16_t        direction = 0;
 
 		NETuint8_t(&player);		// actual player this belongs to
 		NETuint32_t(&droidId);		// Get the droid
@@ -795,6 +797,7 @@ BOOL recvDroidInfo(NETQUEUE queue)
 					psStats = asStructureStats + typeIndex;
 				}
 			}
+			NETuint16_t(&direction);
 		}
 		if (order == DORDER_LINEBUILD)
 		{
@@ -807,13 +810,13 @@ BOOL recvDroidInfo(NETQUEUE queue)
 		if (order == DORDER_BUILD)
 		{
 			turnOffMultiMsg(true);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.
-			orderDroidStatsLoc(psDroid, order, (BASE_STATS *)psStats, x, y);
+			orderDroidStatsLocDir(psDroid, order, (BASE_STATS *)psStats, x, y, direction);
 			turnOffMultiMsg(false);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.
 		}
 		else if (order == DORDER_LINEBUILD)
 		{
 			turnOffMultiMsg(true);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.
-			orderDroidStatsTwoLoc(psDroid, order, (BASE_STATS *)psStats, x, y, x2, y2);
+			orderDroidStatsTwoLocDir(psDroid, order, (BASE_STATS *)psStats, x, y, x2, y2, direction);
 			turnOffMultiMsg(false);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.
 		}
 		else if (!subType && x == 0 && y == 0)

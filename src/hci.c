@@ -1314,7 +1314,7 @@ void intResetScreen(BOOL NoAnim)
 
 // calulate the center world coords for a structure stat given
 // top left tile coords
-static void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD tiley, UDWORD *pcx, UDWORD *pcy)
+static void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD tiley, uint16_t direction, UDWORD *pcx, UDWORD *pcy)
 {
 	SDWORD	width, height;
 
@@ -1982,14 +1982,11 @@ INT_RETVAL intRunWidgets(void)
 						    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
 						    && psObjSelected != NULL)
 						{
-							orderDroidStatsTwoLoc((DROID *)psObjSelected, DORDER_LINEBUILD,
-											   psPositionStats, structX, structY, structX2,structY2);
+							orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, psPositionStats, structX, structY, structX2, structY2, player.r.y);
 						}
 						else
 						{
-							orderSelectedStatsTwoLoc(selectedPlayer, DORDER_LINEBUILD,
-							                         psPositionStats, structX, structY, structX2,
-							                         structY2, ctrlShiftDown());
+							orderSelectedStatsTwoLocDir(selectedPlayer, DORDER_LINEBUILD, psPositionStats, structX, structY, structX2, structY2, player.r.y, ctrlShiftDown());
 						}
 					}
 				}
@@ -2021,8 +2018,7 @@ INT_RETVAL intRunWidgets(void)
 
 					// Send the droid off to build the structure assuming the droid
 					// can get to the location chosen
-					intCalcStructCenter((STRUCTURE_STATS *)psPositionStats, structX,structY,
-												&structX,&structY);
+					intCalcStructCenter((STRUCTURE_STATS *)psPositionStats, structX, structY, player.r.y, &structX, &structY);
 
 					// Don't allow derrick to be built on burning ground.
 					if( ((STRUCTURE_STATS*)psPositionStats)->type == REF_RESOURCE_EXTRACTOR) {
@@ -2041,13 +2037,11 @@ INT_RETVAL intRunWidgets(void)
 							    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
 							    && psObjSelected != NULL)
 							{
-								orderDroidStatsLoc((DROID *)psObjSelected, DORDER_BUILD,
-									   psPositionStats, structX, structY);
+								orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, psPositionStats, structX, structY, player.r.y);
 							}
 							else
 							{
-								orderSelectedStatsLoc(selectedPlayer, DORDER_BUILD,
-									   psPositionStats, structX, structY, ctrlShiftDown());
+								orderSelectedStatsLocDir(selectedPlayer, DORDER_BUILD, psPositionStats, structX, structY, player.r.y, ctrlShiftDown());
 							}
 						}
 					}
@@ -2087,7 +2081,7 @@ INT_RETVAL intRunWidgets(void)
 					STRUCTURE_STATS *psBuilding = (STRUCTURE_STATS *)psPositionStats;
 					STRUCTURE tmp;
 
-					intCalcStructCenter(psBuilding, structX, structY, &structX, &structY);
+					intCalcStructCenter(psBuilding, structX, structY, player.r.y, &structX, &structY);
 					if (psBuilding->type == REF_DEMOLISH)
 					{
 						MAPTILE *psTile = mapTile(map_coord(structX), map_coord(structY));

@@ -97,9 +97,6 @@ void orderCheckList(DROID *psDroid);
 // clear all the orders from the list
 void orderClearDroidList(DROID *psDroid);
 
-void orderDroidStatsTwoLocAdd(DROID *psDroid, DROID_ORDER order,
-						BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
-
 //Watermelon:add a timestamp to order circle
 static UDWORD orderStarted;
 
@@ -1665,6 +1662,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->order = DORDER_BUILD;
 		psDroid->orderX = psOrder->x;
 		psDroid->orderY = psOrder->y;
+		psDroid->orderDirection = psOrder->direction;
 		setDroidTarget(psDroid, NULL);
 		psDroid->psTarStats = psOrder->psStats;
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
@@ -1680,6 +1678,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->order = DORDER_BUILD;
 		psDroid->orderX = psOrder->psObj->pos.x;
 		psDroid->orderY = psOrder->psObj->pos.y;
+		psDroid->orderDirection = 0;
 		setDroidTarget(psDroid, NULL);
 		psDroid->psTarStats = (BASE_STATS *)getModuleStat((STRUCTURE *)psOrder->psObj);
 		ASSERT(psDroid->psTarStats != NULL, "orderUnitBase: should have found a module stats");
@@ -1700,6 +1699,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->orderY = psOrder->y;
 		psDroid->orderX2 = psOrder->x2;
 		psDroid->orderY2 = psOrder->y2;
+		psDroid->orderDirection = psOrder->direction;
 		setDroidTarget(psDroid, NULL);
 		psDroid->psTarStats = psOrder->psStats;
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
@@ -2110,7 +2110,7 @@ void orderDroid(DROID *psDroid, DROID_ORDER order)
 
 	if(bMultiMessages)
 	{
-		SendDroidInfo(psDroid,  order,  0,  0, NULL, NULL, 0, 0);
+		SendDroidInfo(psDroid,  order,  0,  0, NULL, NULL, 0, 0, 0);
 		// Wait to receive our order before changing the droid.
 	}
 	else
@@ -2149,7 +2149,7 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 
 	if(bMultiMessages) //ajl
 	{
-		SendDroidInfo(psDroid,  order,  x,  y, NULL, NULL, 0, 0);
+		SendDroidInfo(psDroid,  order,  x,  y, NULL, NULL, 0, 0, 0);
 		return;  // Wait to receive our order before changing the droid.
 		//turnOffMultiMsg(true);	// msgs off.
 	}
@@ -2211,7 +2211,7 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj)
 
 	if(bMultiMessages) //ajl
 	{
-		SendDroidInfo(psDroid, order, 0, 0, psObj, NULL, 0, 0);
+		SendDroidInfo(psDroid, order, 0, 0, psObj, NULL, 0, 0, 0);
 		return;  // Wait for the order to be received before changing the droid.
 	}
 
@@ -2310,7 +2310,7 @@ BASE_OBJECT* orderStateObj(DROID *psDroid, DROID_ORDER order)
 
 
 /* Give a droid an order with a location and a stat */
-void orderDroidStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y)
+void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction)
 {
 	DROID_ORDER_DATA	sOrder;
 
@@ -2319,7 +2319,7 @@ void orderDroidStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, 
 
 	if (bMultiMessages)
 	{
-		SendDroidInfo(psDroid, order, x, y, NULL, psStats, 0, 0);
+		SendDroidInfo(psDroid, order, x, y, NULL, psStats, 0, 0, direction);
 		return;  // Wait for our order before changing the droid.
 	}
 
@@ -2327,12 +2327,13 @@ void orderDroidStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, 
 	sOrder.order = order;
 	sOrder.x = (UWORD)x;
 	sOrder.y = (UWORD)y;
+	sOrder.direction = direction;
 	sOrder.psStats = psStats;
 	orderDroidBase(psDroid, &sOrder);
 }
 
 /* add an order with a location and a stat to the droids order list*/
-void orderDroidStatsLocAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y)
+void orderDroidStatsLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction)
 {
 	DROID_ORDER_DATA	sOrder;
 
@@ -2348,13 +2349,14 @@ void orderDroidStatsLocAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStat
 	sOrder.order = order;
 	sOrder.x = (UWORD)x;
 	sOrder.y = (UWORD)y;
+	sOrder.direction = direction;
 	sOrder.psStats = psStats;
 	orderDroidAdd(psDroid, &sOrder);
 }
 
 
 /* Give a droid an order with a location and a stat */
-void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
+void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction)
 {
 	DROID_ORDER_DATA	sOrder;
 
@@ -2364,7 +2366,7 @@ void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStat
 
 	if (bMultiMessages)
 	{
-		SendDroidInfo(psDroid, order, x1, y1, NULL, psStats, x2, y2);
+		SendDroidInfo(psDroid, order, x1, y1, NULL, psStats, x2, y2, direction);
 		return;  // Wait for our order before changing the droid.
 	}
 
@@ -2374,13 +2376,13 @@ void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStat
 	sOrder.y = (UWORD)y1;
 	sOrder.x2 = (UWORD)x2;
 	sOrder.y2 = (UWORD)y2;
+	sOrder.direction = direction;
 	sOrder.psStats = psStats;
 	orderDroidBase(psDroid, &sOrder);
 }
 
 /* Add an order with a location and a stat */
-void orderDroidStatsTwoLocAdd(DROID *psDroid, DROID_ORDER order,
-						BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
+void orderDroidStatsTwoLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction)
 {
 	DROID_ORDER_DATA	sOrder;
 
@@ -2394,6 +2396,7 @@ void orderDroidStatsTwoLocAdd(DROID *psDroid, DROID_ORDER order,
 	sOrder.y = (UWORD)y1;
 	sOrder.x2 = (UWORD)x2;
 	sOrder.y2 = (UWORD)y2;
+	sOrder.direction = direction;
 	sOrder.psStats = psStats;
 	orderDroidAdd(psDroid, &sOrder);
 }
@@ -2468,10 +2471,11 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	{
 		setDroidOrderTarget(psDroid, psOrder->psObj, psDroid->listSize);
 	}
-	psDroid->asOrderList[psDroid->listSize].x = (UWORD)psOrder->x;
-	psDroid->asOrderList[psDroid->listSize].y = (UWORD)psOrder->y;
-	psDroid->asOrderList[psDroid->listSize].x2 = (UWORD)psOrder->x2;
-	psDroid->asOrderList[psDroid->listSize].y2 = (UWORD)psOrder->y2;
+	psDroid->asOrderList[psDroid->listSize].x = psOrder->x;
+	psDroid->asOrderList[psDroid->listSize].y = psOrder->y;
+	psDroid->asOrderList[psDroid->listSize].x2 = psOrder->x2;
+	psDroid->asOrderList[psDroid->listSize].y2 = psOrder->y2;
+	psDroid->asOrderList[psDroid->listSize].direction = psOrder->direction;
 	psDroid->listSize += 1;
 
 	// if not doing anything - do it immediately
@@ -2548,6 +2552,7 @@ BOOL orderDroidList(DROID *psDroid)
 		sOrder.y	 = psDroid->asOrderList[0].y;
 		sOrder.x2	 = psDroid->asOrderList[0].x2;
 		sOrder.y2	 = psDroid->asOrderList[0].y2;
+		sOrder.direction = psDroid->asOrderList[0].direction;
 		psDroid->listSize -= 1;
 
 		// move the rest of the list down
@@ -2560,7 +2565,7 @@ BOOL orderDroidList(DROID *psDroid)
 		if (bMultiMessages)
 		{
 			psDroid->waitingForOwnReceiveDroidInfoMessage = true;
-			SendDroidInfo(psDroid, sOrder.order, sOrder.x, sOrder.y, sOrder.psObj, sOrder.psStats, sOrder.x2, sOrder.y2);
+			SendDroidInfo(psDroid, sOrder.order, sOrder.x, sOrder.y, sOrder.psObj, sOrder.psStats, sOrder.x2, sOrder.y2, sOrder.direction);
 			// Wait to receive the order before changing the droid.
 		}
 		else
@@ -3199,8 +3204,7 @@ void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj)
 
 
 /* order all selected droids with a location and a stat */
-void orderSelectedStatsLoc(UDWORD player, DROID_ORDER order,
-						   BASE_STATS *psStats, UDWORD x, UDWORD y, BOOL add)
+void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, BOOL add)
 {
 	DROID		*psCurr;
 
@@ -3215,11 +3219,11 @@ void orderSelectedStatsLoc(UDWORD player, DROID_ORDER order,
 		{
             if (add)
             {
-                orderDroidStatsLocAdd(psCurr, order, psStats, x,y);
+                orderDroidStatsLocDirAdd(psCurr, order, psStats, x, y, direction);
             }
             else
             {
-			    orderDroidStatsLoc(psCurr, order, psStats, x,y);
+			    orderDroidStatsLocDir(psCurr, order, psStats, x, y, direction);
             }
 		}
 	}
@@ -3227,8 +3231,7 @@ void orderSelectedStatsLoc(UDWORD player, DROID_ORDER order,
 
 
 /* order all selected droids with two a locations and a stat */
-void orderSelectedStatsTwoLoc(UDWORD player, DROID_ORDER order,
-        BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, BOOL add)
+void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, BOOL add)
 {
 	DROID		*psCurr;
 
@@ -3243,11 +3246,11 @@ void orderSelectedStatsTwoLoc(UDWORD player, DROID_ORDER order,
 		{
             if (add)
             {
-    			orderDroidStatsTwoLocAdd(psCurr, order, psStats, x1,y1, x2,y2);
+				orderDroidStatsTwoLocDirAdd(psCurr, order, psStats, x1, y1, x2, y2, direction);
             }
             else
             {
-                orderDroidStatsTwoLoc(psCurr, order, psStats, x1,y1, x2,y2);
+				orderDroidStatsTwoLocDir(psCurr, order, psStats, x1, y1, x2, y2, direction);
             }
 		}
 	}

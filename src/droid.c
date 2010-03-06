@@ -997,7 +997,7 @@ BOOL droidStartBuild(DROID *psDroid)
 			return false;
 		}
 		//ok to build
-		psStruct = buildStructure(psStructStat, psDroid->orderX,psDroid->orderY, psDroid->player,false);
+		psStruct = buildStructureDir(psStructStat, psDroid->orderX,psDroid->orderY, psDroid->orderDirection, psDroid->player,false);
 		if (!psStruct)
 		{
 			intBuildFinished(psDroid);

@@ -660,7 +660,7 @@ BOOL scrOrderDroidStatsLoc(void)
 			return true;
 		}
 
-		orderDroidStatsLoc(psDroid, order, psStats, (UDWORD)x,(UDWORD)y);
+		orderDroidStatsLocDir(psDroid, order, psStats, (UDWORD)x, (UDWORD)y, 0);
 	}
 
 	return true;
@@ -2014,21 +2014,21 @@ static BOOL defenseLocation(BOOL variantB)
 	// first section.
 	if(x1 == x2 && y1 == y2)	//first sec is 1 tile only: ((2 tile gate) or (3 tile gate and first sec))
 	{
-		orderDroidStatsLoc(psDroid, DORDER_BUILD, psWStats, x1, y1);
+		orderDroidStatsLocDir(psDroid, DORDER_BUILD, psWStats, x1, y1, 0);
 	}
 	else
 	{
-		orderDroidStatsTwoLoc(psDroid, DORDER_LINEBUILD, psWStats,  x1, y1,x2,y2);
+		orderDroidStatsTwoLocDir(psDroid, DORDER_LINEBUILD, psWStats,  x1, y1, x2, y2, 0);
 	}
 
 	// second section
 	if(x3 == x4 && y3 == y4)
 	{
-		orderDroidStatsLocAdd(psDroid, DORDER_BUILD, psWStats, x3, y3);
+		orderDroidStatsLocDirAdd(psDroid, DORDER_BUILD, psWStats, x3, y3, 0);
 	}
 	else
 	{
-		orderDroidStatsTwoLocAdd(psDroid, DORDER_LINEBUILD, psWStats,  x3, y3,x4,y4);
+		orderDroidStatsTwoLocDirAdd(psDroid, DORDER_LINEBUILD, psWStats,  x3, y3, x4, y4, 0);
 	}
 
 	return true;

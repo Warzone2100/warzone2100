@@ -90,6 +90,7 @@ typedef struct _order_list
 	SDWORD          order;
 	void*           psOrderTarget;  ///< this needs to cope with objects and stats
 	UWORD           x, y, x2, y2;   ///< line build requires two sets of coords
+	uint16_t        direction;      ///< Needed to align structures with viewport.
 } ORDER_LIST;
 
 typedef struct _droid_template
@@ -173,6 +174,7 @@ typedef struct DROID
 	SDWORD          order;
 	UWORD           orderX, orderY;
 	UWORD           orderX2, orderY2;
+	uint16_t        orderDirection;
 
 	BASE_OBJECT*    psTarget;                       ///< Order target
 	BASE_STATS*     psTarStats;                     ///< What to build etc

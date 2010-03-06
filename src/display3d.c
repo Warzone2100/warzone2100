@@ -1347,7 +1347,7 @@ void displayStaticObjects( void )
 	pie_SetDepthOffset(0.0f);
 }
 
-static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, int down, STRUCT_STATES state)
+static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, int down, uint16_t direction, STRUCT_STATES state)
 {
 	int i, j;
 	STRUCTURE *blueprint;
@@ -1361,6 +1361,7 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 	blueprint = buildBlueprint(psStats,
 	                           world_coord(left)+world_coord(sBuildDetails.width)/2,
 	                           world_coord(up)+world_coord(sBuildDetails.height)/2,
+	                           direction,
 	                           state);
 	ASSERT_OR_RETURN(, blueprint != NULL, "No blueprint created");
 
@@ -1421,7 +1422,7 @@ void displayBlueprints(void)
 				up = MIN(wallDrag.y1, wallDrag.y2);
 				down = MAX(wallDrag.y1, wallDrag.y2);
 
-				drawWallDrag((STRUCTURE_STATS *)sBuildDetails.psStats, left, right, up, down, state);
+				drawWallDrag((STRUCTURE_STATS *)sBuildDetails.psStats, left, right, up, down, player.r.y, state);
 			}
 			else
 			{
@@ -1429,6 +1430,7 @@ void displayBlueprints(void)
 				blueprint = buildBlueprint((STRUCTURE_STATS *)sBuildDetails.psStats,
 										   world_coord(sBuildDetails.x)+world_coord(sBuildDetails.width)/2,
 										   world_coord(sBuildDetails.y)+world_coord(sBuildDetails.height)/2,
+										   player.r.y,
 										   state);
 				renderStructure(blueprint);
 				free(blueprint);
@@ -1470,7 +1472,7 @@ void displayBlueprints(void)
 				up = MIN(map_coord(psDroid->orderY), map_coord(psDroid->orderY2));
 				down = MAX(map_coord(psDroid->orderY), map_coord(psDroid->orderY2));
 
-				drawWallDrag((STRUCTURE_STATS *)psDroid->psTarStats, left, right, up, down, SS_BLUEPRINT_PLANNED);
+				drawWallDrag((STRUCTURE_STATS *)psDroid->psTarStats, left, right, up, down, psDroid->orderDirection, SS_BLUEPRINT_PLANNED);
 			}
 			if (psDroid->order == DORDER_BUILD && psDroid->psTarStats)
 			{
@@ -1479,6 +1481,7 @@ void displayBlueprints(void)
 					blueprint = buildBlueprint((STRUCTURE_STATS *)psDroid->psTarStats,
 											   psDroid->orderX,
 											   psDroid->orderY,
+											   psDroid->orderDirection,
 											   SS_BLUEPRINT_PLANNED);
 					renderStructure(blueprint);
 					free(blueprint);
@@ -1495,6 +1498,7 @@ void displayBlueprints(void)
 						blueprint = buildBlueprint((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget,
 						                           psDroid->asOrderList[order].x,
 						                           psDroid->asOrderList[order].y,
+									   psDroid->asOrderList[order].direction,
 						                           SS_BLUEPRINT_PLANNED);
 						renderStructure(blueprint);
 						free(blueprint);
@@ -1510,7 +1514,7 @@ void displayBlueprints(void)
 					up = MIN(map_coord(psDroid->asOrderList[order].y), map_coord(psDroid->asOrderList[order].y2));
 					down = MAX(map_coord(psDroid->asOrderList[order].y), map_coord(psDroid->asOrderList[order].y2));
 
-					drawWallDrag((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget, left, right, up, down, SS_BLUEPRINT_PLANNED);
+					drawWallDrag((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget, left, right, up, down, psDroid->asOrderList[order].direction, SS_BLUEPRINT_PLANNED);
 				}
 			}
 		}

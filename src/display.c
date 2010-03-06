@@ -2049,15 +2049,11 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 
 					if (ctrlShiftDown())
 					{
-						orderDroidStatsLocAdd(psCurr, DORDER_BUILD,
-							(BASE_STATS*) &asStructureStats[i],
-							psFeature->pos.x, psFeature->pos.y);
+						orderDroidStatsLocDirAdd(psCurr, DORDER_BUILD, (BASE_STATS*) &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y);
 					}
 					else
 					{
-						orderDroidStatsLoc(psCurr, DORDER_BUILD,
-							(BASE_STATS*) &asStructureStats[i],
-							psFeature->pos.x, psFeature->pos.y);
+						orderDroidStatsLocDir(psCurr, DORDER_BUILD, (BASE_STATS*) &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y);
 					}
 					addConsoleMessage(_("Truck ordered to build Oil Derrick"),DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 					FeedbackOrderGiven();

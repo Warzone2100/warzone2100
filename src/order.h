@@ -177,18 +177,16 @@ extern void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj)
 extern BASE_OBJECT* orderStateObj(DROID *psDroid, DROID_ORDER order);
 
 /* Give a droid an order with a location and a stat */
-extern void orderDroidStatsLoc(DROID *psDroid, DROID_ORDER order,
-						BASE_STATS *psStats, UDWORD x, UDWORD y);
+extern void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction);
 
 /* Get the state of a droid order with a location and a stat */
 extern BOOL orderStateStatsLoc(DROID *psDroid, DROID_ORDER order,
 						BASE_STATS **ppsStats, UDWORD *pX, UDWORD *pY);
 
 /* Give a droid an order with a location and a stat */
-extern void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order,
-						BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
+void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction);
 
-extern void orderDroidStatsTwoLocAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
+void orderDroidStatsTwoLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction);
 
 /* Give selected droids an order with a location target */
 // Only called from UI.
@@ -204,16 +202,13 @@ extern void orderDroidAdd(DROID *psDroid, struct _droid_order_data *psOrder);
 extern BOOL orderDroidList(DROID *psDroid);
 
 /* order all selected droids with a location and a stat */
-void orderSelectedStatsLoc(UDWORD player, DROID_ORDER order,
-						   BASE_STATS *psStats, UDWORD x, UDWORD y, BOOL add);
+void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, BOOL add);
 
 /* add an order with a location and a stat to the droids order list*/
-extern void orderDroidStatsLocAdd(DROID *psDroid, DROID_ORDER order,
-						BASE_STATS *psStats, UDWORD x, UDWORD y);
+void orderDroidStatsLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction);
 
 /* order all selected droids with two a locations and a stat */
-void orderSelectedStatsTwoLoc(UDWORD player, DROID_ORDER order,
-        BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, BOOL add);
+void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, BOOL add);
 
 // see if a droid supports a secondary order
 extern BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec);
