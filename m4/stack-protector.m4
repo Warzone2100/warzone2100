@@ -29,35 +29,6 @@ m4_define([stack_protector_c_test_program],
 ])
 
 AC_DEFUN([AX_STACK_PROTECT_CC],[
-	dnl Function to compile as C, but link as C++. This should catch errors
-	dnl where the C compiler and C++ compiler that are used are from
-	dnl different versions or vendors.
-	AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_try_link_as_cxx],
-		[AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_try_link_as_cxx], [LINENO],
-			[Try to link conftest.$ac_ext as C++, and return whether this succeeded.])],
-		[
-			AS_LINENO_PUSH([$[]1])
-			rm -f conftest.$ac_objext conftest$ac_exeext
-			AS_IF([_AC_DO_STDERR($ac_compile) &&
-			       _AC_DO_STDERR($CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_objext $LIBS >&AS_MESSAGE_LOG_FD) && {
-			       test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
-			       test ! -s conftest.err
-			     } && test -s conftest$ac_exeext && {
-			       test "$cross_compiling" = yes ||
-			       AS_TEST_X([conftest$ac_exeext])
-			     }],
-			    [ac_retval=0],
-			    [_AC_MSG_LOG_CONFTEST
-			      ac_retval=1])
-			# Delete the IPA/IPO (Inter Procedural Analysis/Optimization) information
-			# created by the PGI compiler (conftest_ipa8_conftest.oo), as it would
-			# interfere with the next link command; also delete a directory that is
-			# left behind by Apple's compiler.  We do this before executing the actions.
-			rm -rf conftest.dSYM conftest_ipa8_conftest.oo
-			AS_LINENO_POP
-			AS_SET_STATUS([$ac_retval])
-	])
-
 	AC_MSG_CHECKING([whether ${CC} accepts -fstack-protector])
 
 	AC_LANG_PUSH([C])
@@ -74,7 +45,26 @@ AC_DEFUN([AX_STACK_PROTECT_CC],[
 	AC_LINK_IFELSE([stack_protector_c_test_program], [
 		dnl Try to compile as C and link as C++
 		AC_LANG_CONFTEST([stack_protector_c_test_program])
-		AS_IF([ac_fn_[]_AC_LANG_ABBREV[]_try_link_as_cxx "$LINENO"], AC_MSG_RESULT(yes), [
+		AS_IF([{
+			rm -f conftest.$ac_objext conftest$ac_exeext
+			AS_IF([_AC_DO_STDERR($ac_compile) &&
+			       _AC_DO_STDERR($CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_objext $LIBS >&AS_MESSAGE_LOG_FD) && {
+			       test -z "$ac_c_werror_flag" ||
+			       test ! -s conftest.err
+			     } && test -s conftest$ac_exeext && {
+			       test "$cross_compiling" = yes ||
+			       AS_TEST_X([conftest$ac_exeext])
+			     }],
+			    [ac_retval=0],
+			    [_AC_MSG_LOG_CONFTEST
+			      ac_retval=1])
+			# Delete the IPA/IPO (Inter Procedural Analysis/Optimization) information
+			# created by the PGI compiler (conftest_ipa8_conftest.oo), as it would
+			# interfere with the next link command; also delete a directory that is
+			# left behind by Apple's compiler.  We do this before executing the actions.
+			rm -rf conftest.dSYM conftest_ipa8_conftest.oo
+			test "$ac_retval" = 0
+		}], AC_MSG_RESULT(yes), [
 			CFLAGS="$OLD_CFLAGS"
 			AC_MSG_RESULT(no)
 		])
