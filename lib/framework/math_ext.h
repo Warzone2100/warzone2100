@@ -33,10 +33,6 @@
 #define PERCENT(a,b) (((a)*100)/(b))
 #define PERNUM(range,a,b) (((a)*range)/(b))
 
-/* conversion macros */
-#define RAD_TO_DEG(x)	(x * 180.0 / M_PI)
-
-
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
 #endif
