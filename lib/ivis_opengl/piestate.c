@@ -78,7 +78,7 @@ static char *readShaderBuf(const char *name)
 // Retrieve shader compilation errors
 static void printShaderInfoLog(GLuint shader)
 {
-	int infologLen = 0;
+	GLint infologLen = 0;
 
 	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infologLen);
 	if (infologLen > 0)
@@ -95,7 +95,7 @@ static void printShaderInfoLog(GLuint shader)
 // Retrieve shader linkage errors
 static void printProgramInfoLog(GLuint program)
 {
-	int infologLen = 0;
+	GLint infologLen = 0;
 
 	glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infologLen);
 	if (infologLen > 0)

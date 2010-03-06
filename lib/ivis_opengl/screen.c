@@ -199,7 +199,7 @@ bool screenInitialise(
 	debug(LOG_3D, "  * Vertex Buffer Object (VBO) %s supported.", GL_ARB_vertex_buffer_object ? "is" : "is NOT");
 	
 	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &glMaxTUs);
-	debug(LOG_3D, "  * Total number of Texture Units (TUs) supported is %d.", glMaxTUs);
+	debug(LOG_3D, "  * Total number of Texture Units (TUs) supported is %d.", (int) glMaxTUs);
 
 	if (!GLEE_VERSION_1_4)
 	{
@@ -240,7 +240,7 @@ bool screenInitialise(
 		addDumpInfo(buf);
 
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &glMaxTIUs);
-		debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", glMaxTIUs);
+		debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
 
 		if (!pie_LoadShaders())
 			debug(LOG_WARNING, "Can't use shaders! Switching back to fixed pipeline...");;
