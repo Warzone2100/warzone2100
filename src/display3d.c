@@ -1113,7 +1113,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 		return;
 	}
 
-	st = interpolateSpacetime(psCurr->prevSpacetime, GET_SPACETIME(psCurr), graphicsTime);
+	st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psCurr, graphicsTime);
 
 	//the weapon stats holds the reference to which graphic to use
 	/*Need to draw the graphic depending on what the projectile is doing - hitting target,

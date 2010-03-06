@@ -441,14 +441,23 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		PROJECTILE * psOldProjectile = (PROJECTILE*)psAttacker;
 		psProj->born = psOldProjectile->born;
 
+		psProj->prevSpacetime.time = psOldProjectile->time;  // Have partially ticked already.
+		psProj->time = gameTime;
+		psProj->prevSpacetime.time -=  psProj->prevSpacetime.time == psProj->time;  // Times should not be equal, for interpolation.
+
 		setProjectileSource(psProj, psOldProjectile->psSource);
 		psProj->psDamaged = (BASE_OBJECT **)malloc(psOldProjectile->psNumDamaged*sizeof(BASE_OBJECT *));
 		psProj->psNumDamaged = psOldProjectile->psNumDamaged;
 		memcpy(psProj->psDamaged, psOldProjectile->psDamaged, psOldProjectile->psNumDamaged*sizeof(BASE_OBJECT *));
+
+		// TODO Should finish the tick, when penetrating.
 	}
 	else
 	{
 		psProj->born = gameTime;
+
+		psProj->prevSpacetime.time = gameTime - deltaGameTime;  // Haven't ticked yet.
+		psProj->time = psProj->prevSpacetime.time;
 
 		setProjectileSource(psProj, psAttacker);
 		psProj->psDamaged = NULL;
@@ -552,9 +561,6 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		//check for Counter Battery Sensor in range of target
 		counterBatteryFire(psAttacker, psTarget);
 	}
-
-	psProj->time = gameTime;
-	psProj->prevSpacetime.time = gameTime;
 
 	syncDebugProjectile(psProj, '*');
 
@@ -665,11 +671,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	SPACETIME closestCollisionSpacetime = closestCollisionSpacetime;  // Dummy initialisation.
 
 	CHECK_PROJECTILE(psProj);
-
-	if (psProj->prevSpacetime.time == gameTime)
-	{
-		return;  // Not in flight yet.
-	}
 
 	timeSoFar = gameTime - psProj->born;
 
@@ -880,7 +881,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			if (collision >= 0 && collisionTime < closestCollisionSpacetime.time)
 			{
 				// We hit!
-				closestCollisionSpacetime = interpolateSpacetime(psProj->prevSpacetime, GET_SPACETIME(psProj), collisionTime);
+				closestCollisionSpacetime = interpolateObjectSpacetime((SIMPLE_OBJECT *)psProj, collisionTime);
 				closestCollisionObject = psTempObj;
 
 				// Keep testing for more collisions, in case there was a closer target.
@@ -943,39 +944,43 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	/* Paint effects if visible */
 	if (gfxVisible(psProj))
 	{
-		switch (psStats->weaponSubClass)
+		uint32_t effectTime;
+		// TODO Should probably give effectTime as an extra parameter to addEffect, or make an effectGiveAuxTime parameter, with yet another 'this is naughty' comment.
+		for (effectTime = ((psProj->prevSpacetime.time + 15) & ~15); effectTime < psProj->time; effectTime += 16)
 		{
-			case WSC_FLAME:
+			SPACETIME st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psProj, effectTime);
+			Vector3i posFlip = {st.pos.x, st.pos.z, st.pos.y};  // [sic] y <--> z
+			switch (psStats->weaponSubClass)
 			{
-				Vector3i pos = {psProj->pos.x, psProj->pos.z-8, psProj->pos.y};
-				effectGiveAuxVar(distancePercent);
-				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0);
-			} break;
-			case WSC_COMMAND:
-			case WSC_ELECTRONIC:
-			case WSC_EMP:
-			{
-				Vector3i pos = {psProj->pos.x, psProj->pos.z-8, psProj->pos.y};
-				effectGiveAuxVar(distancePercent/2);
-				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
-			} break;
-			case WSC_ROCKET:
-			case WSC_MISSILE:
-			case WSC_SLOWROCKET:
-			case WSC_SLOWMISSILE:
-			{
-				Vector3i pos = {psProj->pos.x, psProj->pos.z+8, psProj->pos.y};
-				addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
-			} break;
-			default:
-				// Add smoke trail to indirect weapons, even if firing directly.
-				if (!proj_Direct(psStats))
-				{
-					Vector3i pos = {psProj->pos.x, psProj->pos.z+4, psProj->pos.y};
-					addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
-				}
-				// Otherwise no effect.
+				case WSC_FLAME:
+					posFlip.z -= 8;  // Why?
+					effectGiveAuxVar(distancePercent);
+					addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0);
 				break;
+				case WSC_COMMAND:
+				case WSC_ELECTRONIC:
+				case WSC_EMP:
+					posFlip.z -= 8;  // Why?
+					effectGiveAuxVar(distancePercent/2);
+					addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
+				break;
+				case WSC_ROCKET:
+				case WSC_MISSILE:
+				case WSC_SLOWROCKET:
+				case WSC_SLOWMISSILE:
+					posFlip.z += 8;  // Why?
+					addEffect(&posFlip, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
+				break;
+				default:
+					// Add smoke trail to indirect weapons, even if firing directly.
+					if (!proj_Direct(psStats))
+					{
+						posFlip.z += 4;  // Why?
+						addEffect(&posFlip, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
+					}
+					// Otherwise no effect.
+					break;
+			}
 		}
 	}
 }
