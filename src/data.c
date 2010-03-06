@@ -842,7 +842,7 @@ static bool dataTexPageLoad(const char *fileName, void **ppData)
 }
 
 /* Load a team colour mask texturepage into memory */
-static BOOL dataTexPageTCMaskLoad(const char *fileName, void **ppData)
+static bool dataTexPageTCMaskLoad(const char *fileName, void **ppData)
 {
 	char texpage[PATH_MAX] = {'\0'};
 
