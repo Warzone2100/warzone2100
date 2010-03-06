@@ -931,39 +931,43 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	/* Paint effects if visible */
 	if (gfxVisible(psProj))
 	{
-		switch (psStats->weaponSubClass)
+		uint32_t effectTime;
+		// TODO Should probably give effectTime as an extra parameter to addEffect, or make an effectGiveAuxTime parameter, with yet another 'this is naughty' comment.
+		for (effectTime = ((psProj->prevSpacetime.time + 15) & ~15); effectTime < psProj->time; effectTime += 16)
 		{
-			case WSC_FLAME:
+			SPACETIME st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psProj, effectTime);
+			Vector3i posFlip = {st.pos.x, st.pos.z, st.pos.y};  // [sic] y <--> z
+			switch (psStats->weaponSubClass)
 			{
-				Vector3i pos = {psProj->pos.x, psProj->pos.z-8, psProj->pos.y};
-				effectGiveAuxVar(distancePercent);
-				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0);
-			} break;
-			case WSC_COMMAND:
-			case WSC_ELECTRONIC:
-			case WSC_EMP:
-			{
-				Vector3i pos = {psProj->pos.x, psProj->pos.z-8, psProj->pos.y};
-				effectGiveAuxVar(distancePercent/2);
-				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
-			} break;
-			case WSC_ROCKET:
-			case WSC_MISSILE:
-			case WSC_SLOWROCKET:
-			case WSC_SLOWMISSILE:
-			{
-				Vector3i pos = {psProj->pos.x, psProj->pos.z+8, psProj->pos.y};
-				addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
-			} break;
-			default:
-				// Add smoke trail to indirect weapons, even if firing directly.
-				if (!proj_Direct(psStats))
-				{
-					Vector3i pos = {psProj->pos.x, psProj->pos.z+4, psProj->pos.y};
-					addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
-				}
-				// Otherwise no effect.
+				case WSC_FLAME:
+					posFlip.z -= 8;  // Why?
+					effectGiveAuxVar(distancePercent);
+					addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0);
 				break;
+				case WSC_COMMAND:
+				case WSC_ELECTRONIC:
+				case WSC_EMP:
+					posFlip.z -= 8;  // Why?
+					effectGiveAuxVar(distancePercent/2);
+					addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
+				break;
+				case WSC_ROCKET:
+				case WSC_MISSILE:
+				case WSC_SLOWROCKET:
+				case WSC_SLOWMISSILE:
+					posFlip.z += 8;  // Why?
+					addEffect(&posFlip, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
+				break;
+				default:
+					// Add smoke trail to indirect weapons, even if firing directly.
+					if (!proj_Direct(psStats))
+					{
+						posFlip.z += 4;  // Why?
+						addEffect(&posFlip, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
+					}
+					// Otherwise no effect.
+					break;
+			}
 		}
 	}
 }
