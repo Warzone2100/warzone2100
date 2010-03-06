@@ -567,9 +567,9 @@ BOOL recvStructureCheck(NETQUEUE queue)
 
 		// If the structure exists our job is easy
 		pS = IdToStruct(ref, player);
-		syncDebugStructure(pS, '<');
 		if (pS)
 		{
+			syncDebugStructure(pS, '<');
 			if (pS->pStructureType->type != structureCheckLastType[player] || type != structureCheckLastType[player])
 			{
 				debug(LOG_ERROR, "GAME_CHECK_STRUCT received, wrong structure type!");

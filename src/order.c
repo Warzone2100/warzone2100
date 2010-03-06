@@ -2511,7 +2511,7 @@ BOOL orderDroidList(DROID *psDroid)
 
 	if (psDroid->listSize > 0 && !psDroid->waitingForOwnReceiveDroidInfoMessage)
 	{
-		ASSERT(psDroid->player == selectedPlayer, "Droid order lists not currently synchronised, order queue should be local only.");
+		ASSERT(myResponsibility(psDroid->player), "Droid order lists not currently synchronised, order queue should be local only.");
 
 		// there are some orders to give
 		memset(&sOrder, 0, sizeof(DROID_ORDER_DATA));
