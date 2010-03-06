@@ -1193,9 +1193,9 @@ void scroll(void)
 		(float)GAME_TICKS_PER_SEC;
 
 	/* Get x component of movement */
-	xDif = iCosR(player.r.y, scrollStepLeftRight) + iSinR(player.r.y, scrollStepUpDown);
+	xDif = iCosR(-player.r.y, scrollStepLeftRight) + iSinR(-player.r.y, scrollStepUpDown);
 	/* Get y component of movement */
-	yDif = iSinR(player.r.y, scrollStepLeftRight) - iCosR(player.r.y, scrollStepUpDown);
+	yDif = iSinR(-player.r.y, scrollStepLeftRight) - iCosR(-player.r.y, scrollStepUpDown);
 
 	/* Adjust player's position by these components */
 	player.p.x += xDif;
