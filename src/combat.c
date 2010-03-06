@@ -342,7 +342,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 			if (proj_Direct(psStats) || dist <= psStats->minRange)
 			{
-				flightTime = (double)dist / (double)psStats->flightSpeed;
+				flightTime = dist / psStats->flightSpeed;
 			}
 			else
 			{
