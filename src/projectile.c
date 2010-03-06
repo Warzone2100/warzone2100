@@ -655,7 +655,11 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	Vector3i nextPos;
 	unsigned int targetDistance, currentDistance;
 	BASE_OBJECT *psTempObj, *closestCollisionObject = NULL;
+#ifdef WZ_CC_MSVC // Such hacks are assert-hell for MSVC, so avoid them..
+	SPACETIME closestCollisionSpacetime; 
+#else
 	SPACETIME closestCollisionSpacetime = closestCollisionSpacetime;  // Dummy initialisation.
+#endif
 
 	CHECK_PROJECTILE(psProj);
 
