@@ -63,7 +63,7 @@
 #define WZCOL_CONS_TEXT_DEBUG		psPalette[38]
 #define WZCOL_GREY					psPalette[39]
 #define WZCOL_MAP_PREVIEW_AIPLAYER  psPalette[40]
-#define WZCOL_MENU_SHADOW	psPalette[41]
+#define WZCOL_MENU_SHADOW			psPalette[41]
 #define WZCOL_DBLUE					psPalette[42]
 #define WZCOL_LBLUE					psPalette[43]
 #define WZCOL_BLUEPRINT_VALID		psPalette[44]
@@ -73,8 +73,16 @@
 #define WZCOL_HEALTH_MEDIUM_SHADOW	psPalette[48]
 #define WZCOL_HEALTH_LOW_SHADOW		psPalette[49]
 #define WZCOL_HEALTH_RESISTANCE		psPalette[50]
+#define WZCOL_TEAM1					psPalette[51]
+#define WZCOL_TEAM2					psPalette[52]
+#define WZCOL_TEAM3					psPalette[53]
+#define WZCOL_TEAM4					psPalette[54]
+#define WZCOL_TEAM5					psPalette[55]
+#define WZCOL_TEAM6					psPalette[56]
+#define WZCOL_TEAM7					psPalette[57]
+#define WZCOL_TEAM8					psPalette[58]
 
-#define WZCOL_MAX			51
+#define WZCOL_MAX			59
 
 //*************************************************************************
 
@@ -84,6 +92,7 @@ extern PIELIGHT		psPalette[];
 
 extern void		pal_Init(void);
 extern void		pal_ShutDown(void);
+extern PIELIGHT pal_GetTeamColour(int team);
 
 static inline PIELIGHT pal_Colour(UBYTE r, UBYTE g, UBYTE b)
 {
@@ -122,4 +131,13 @@ static inline PIELIGHT pal_RGBA(UBYTE r, UBYTE g, UBYTE b, UBYTE a)
 
 	return c;
 }
+
+static inline void pal_PIELIGHTtoRGBA4f(float *rgba4f, PIELIGHT rgba)
+{
+	rgba4f[0] = rgba.byte.r / 255.0;
+	rgba4f[1] = rgba.byte.g / 255.0;
+	rgba4f[2] = rgba.byte.b / 255.0;
+	rgba4f[3] = rgba.byte.a / 255.0;
+}
+
 #endif

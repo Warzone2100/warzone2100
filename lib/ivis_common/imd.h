@@ -35,6 +35,9 @@
 
 //*************************************************************************
 
+// PIE model flags
+#define iV_IMD_TCMASK 0x00010000
+
 // polygon flags	b0..b7: col, b24..b31: anim index
 
 

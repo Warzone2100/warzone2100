@@ -515,6 +515,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		return NULL;
 	}
 
+	s->flags = 0;
 	s->nconnectors = 0; // Default number of connectors must be 0
 	s->npoints = 0;
 	s->npolys = 0;
@@ -527,6 +528,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	s->shadowEdgeList = NULL;
 	s->nShadowEdges = 0;
 	s->texpage = iV_TEX_INVALID;
+	s->tcmaskpage = iV_TEX_INVALID;
 
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &s->npoints, &cnt) != 2)
@@ -620,7 +622,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	iIMDShape *shape, *psShape;
 	UDWORD level;
 	int32_t imd_version;
-	uint32_t imd_flags; // FIXME UNUSED
+	uint32_t imd_flags;
 	BOOL bTextured = false;
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &imd_version, &cnt) != 2)
@@ -752,6 +754,27 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		for (psShape = shape; psShape != NULL; psShape = psShape->next)
 		{
 			psShape->texpage = texpage;
+		}
+
+		// check if model should use team colour mask
+		if (imd_flags & iV_IMD_TCMASK)
+		{
+			pie_MakeTexPageTCMaskName(texfile);
+			texpage = iV_GetTexture(texfile);
+
+			if (texpage < 0)
+			{
+				ASSERT(false, "iV_ProcessIMD %s could not load tcmask %s", pFileName, texfile);
+				debug(LOG_ERROR, "iV_ProcessIMD %s could not load tcmask %s", pFileName, texfile);
+			}
+			else
+			{
+				shape->flags |= iV_IMD_TCMASK;
+				for (psShape = shape; psShape != NULL; psShape = psShape->next)
+				{
+					psShape->tcmaskpage = texpage;
+				}
+			}			
 		}
 	}
 

@@ -42,6 +42,9 @@
 #include "text.h"
 #include "texture.h"
 
+#define DT_TEXPAGE "TEXPAGE"
+#define DT_TCMASK "TCMASK"
+
 // whether a save game is currently being loaded
 static bool saveFlag = false;
 
@@ -822,17 +825,53 @@ static bool dataTexPageLoad(const char *fileName, void **ppData)
 	}
 
 	// see if this texture page has already been loaded
-	if (resPresent("TEXPAGE", texpage))
+	if (resPresent(DT_TEXPAGE, texpage))
 	{
 		// replace the old texture page with the new one
 		debug(LOG_TEXTURE, "replacing %s with new texture %s", texpage, fileName);
-		(void) pie_ReplaceTexPage(*ppData, texpage, getTextureSize());
+		(void) pie_ReplaceTexPage(*ppData, texpage, getTextureSize(), true);
 	}
 	else
 	{
 		debug(LOG_TEXTURE, "adding page %s with texture %s", texpage, fileName);
 		SetLastResourceFilename(texpage);
-		(void) pie_AddTexPage(*ppData, texpage, 0, getTextureSize());
+		(void) pie_AddTexPage(*ppData, texpage, 0, getTextureSize(), true);
+	}
+
+	return true;
+}
+
+/* Load a team colour mask texturepage into memory */
+static BOOL dataTexPageTCMaskLoad(const char *fileName, void **ppData)
+{
+	char texpage[PATH_MAX] = {'\0'};
+
+	// This hackery is needed, because fileName will include the directory name, whilst the LastResourceFilename will not, and we need a short name to identify the texpage
+	sstrcpy(texpage, GetLastResourceFilename());
+
+	// Check if a corresponding texpage exists, exit if no
+	pie_MakeTexPageName(texpage);
+	ASSERT_OR_RETURN(false, resPresent(DT_TEXPAGE, texpage), "Corresponding texpage %s doesn't exists!", texpage);
+
+	pie_MakeTexPageTCMaskName(texpage);
+		
+	if (!dataImageLoad(fileName, ppData))
+	{
+		return false;
+	}
+
+	// see if this texture page has already been loaded
+	if (resPresent(DT_TCMASK, texpage))
+	{
+		// replace the old texture page with the new one
+		debug(LOG_TEXTURE, "replacing %s with new tcmask %s", texpage, fileName);
+		(void) pie_ReplaceTexPage(*ppData, texpage, getTextureSize(), false);
+	}
+	else
+	{
+		debug(LOG_TEXTURE, "adding page %s with tcmask %s", texpage, fileName);
+		SetLastResourceFilename(texpage);
+		(void) pie_AddTexPage(*ppData, texpage, 0, getTextureSize(), false);
 	}
 
 	return true;
@@ -1149,11 +1188,12 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"IMGPAGE", dataImageLoad, dataImageRelease},
 	{"TERTILES", dataTERTILESLoad, dataTERTILESRelease},
 	{"IMG", dataIMGLoad, dataIMGRelease},
-	{"TEXPAGE", dataTexPageLoad, dataImageRelease},
+	{DT_TEXPAGE, dataTexPageLoad, dataImageRelease},
+	{DT_TCMASK, dataTexPageTCMaskLoad, dataImageRelease},
 	{"SCRIPT", dataScriptLoad, dataScriptRelease},
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
-	{ "RESEARCHMSG", dataResearchMsgLoad, dataSMSGRelease },
+	{"RESEARCHMSG", dataResearchMsgLoad, dataSMSGRelease },
 };
 
 /* Pass all the data loading functions to the framework library */
