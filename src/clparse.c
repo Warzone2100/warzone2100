@@ -24,8 +24,6 @@
  *
  */
 
-#include <popt.h>
-
 #include "lib/framework/frame.h"
 #include "lib/netplay/netplay.h"
 
@@ -43,6 +41,160 @@
 //! Let the end user into debug mode....
 BOOL	bAllowDebugMode = false;
 
+//////
+// Our fine replacement for the popt abomination follows
+
+#define POPT_ARG_STRING true
+#define POPT_ARG_NONE false
+#define POPT_ERROR_BADOPT -1
+
+struct poptOption
+{
+	const char *string;
+	char short_form;
+	bool argument;
+	void *nullptr;		// unused
+	int enumeration;
+	const char *descrip;
+	const char *argDescrip;
+};
+
+typedef struct _poptContext
+{
+	int argc, current, size;
+	const char **argv;
+	const char *parameter;
+	const char *bad;
+	const struct poptOption *table;
+} *poptContext;
+
+static void poptPrintHelp(poptContext ctx, FILE *output, WZ_DECL_UNUSED int unused)
+{
+	int i;
+
+	fprintf(output, "Usage: %s [OPTION...]\n", ctx->argv[0]);
+	for (i = 0; i < ctx->size; i++)
+	{
+		char txt[128];
+
+		if (ctx->table[i].short_form != '\0')
+		{
+			ssprintf(txt, "  -%c, --%s", ctx->table[i].short_form, ctx->table[i].string);
+		}
+		else
+		{
+			ssprintf(txt, "  --%s", ctx->table[i].string);
+		}
+
+		if (ctx->table[i].argument)
+		{
+			sstrcat(txt, "=");
+			sstrcat(txt, ctx->table[i].argDescrip);
+		}
+
+		fprintf(output, "%-40s", txt);
+		if (ctx->table[i].descrip)
+		{
+			fprintf(output, "%s", ctx->table[i].descrip);
+		}
+		fprintf(output, "\n");
+	}
+}
+
+static const char *poptBadOption(poptContext ctx, WZ_DECL_UNUSED int unused)
+{
+	return ctx->bad;
+}
+
+static const char *poptGetOptArg(poptContext ctx)
+{
+	return ctx->parameter;
+}
+
+static int poptGetNextOpt(poptContext ctx)
+{
+	static char match[PATH_MAX];		// static for bad function
+	static char parameter[PATH_MAX];	// static for arg function
+	char *pparam;
+	int i;
+
+	ctx->bad = NULL;
+	ctx->parameter = NULL;
+	parameter[0] = '\0';
+	match[0] = '\0';
+
+	if (ctx->current >= ctx->argc)	// counts from 1
+	{
+		return 0;
+	}
+
+	sstrcpy(match, ctx->argv[ctx->current]);
+	ctx->current++;
+	pparam = strrchr(match, '=');
+	if (pparam)									// option's got a parameter
+	{
+		*pparam++ = '\0';							// split option from parameter and increment past '='
+		if (pparam[0] == '"')							// found scary quotes
+		{
+			pparam++;							// skip start quote
+			sstrcpy(parameter, pparam);					// copy first parameter
+			if (!strrchr(pparam, '"'))					// if no end quote, then find it
+			{
+				while (!strrchr(parameter, '"') && ctx->current < ctx->argc)
+				{
+					sstrcat(parameter, " ");			// insert space
+					sstrcat(parameter, ctx->argv[ctx->current]);
+					ctx->current++;					// next part, please!
+				}
+			}
+			if (strrchr(parameter, '"'))					// its not an else for above!
+			{
+				*strrchr(parameter, '"') = '\0';			// remove end qoute
+			}
+		}
+		else
+		{
+			sstrcpy(parameter, pparam);					// copy parameter
+		}
+	}
+
+	for (i = 0; i < ctx->size; i++)
+	{
+		char sshort[3];
+		char slong[64];
+
+		ssprintf(sshort, "-%c", ctx->table[i].short_form);
+		ssprintf(slong, "--%s", ctx->table[i].string);
+		if ((strcmp(sshort, match) == 0 && ctx->table[i].short_form != '\0') || strcmp(slong, match) == 0)
+		{
+			if (ctx->table[i].argument && pparam)
+			{
+				ctx->parameter = parameter;
+			}
+			return ctx->table[i].enumeration;
+		}
+	}
+	ctx->bad = match;
+	ctx->current++;
+	return POPT_ERROR_BADOPT;
+}
+
+static poptContext poptGetContext(WZ_DECL_UNUSED void *unused, int argc, const char **argv, const struct poptOption *table, WZ_DECL_UNUSED int none)
+{
+	static struct _poptContext ctx;
+
+	ctx.argc = argc;
+	ctx.argv = argv;
+	ctx.table = table;
+	ctx.current = 1;
+	ctx.parameter = NULL;
+
+	for (ctx.size = 0; table[ctx.size].string; ctx.size++) ;	// count table size
+
+	return &ctx;
+}
+
+
 typedef enum
 {
 	// We don't want to use zero, so start at one (1)
@@ -59,7 +211,6 @@ typedef enum
 	CLI_MOD_CA,
 	CLI_MOD_MP,
 	CLI_SAVEGAME,
-	CLI_USAGE,
 	CLI_WINDOW,
 	CLI_VERSION,
 	CLI_RESOLUTION,
@@ -79,8 +230,8 @@ static const struct poptOption* getOptionsTable(void)
 	static const struct poptOption optionsTable[] =
 	{
 		{ "cheat",      '\0', POPT_ARG_NONE,   NULL, CLI_CHEAT,      N_("Run in cheat mode"),                 NULL },
-		{ "datadir",    '\0', POPT_ARG_STRING, NULL, CLI_DATADIR,    N_("Set default data directory"),        N_("data directory") },
 		{ "configdir",  '\0', POPT_ARG_STRING, NULL, CLI_CONFIGDIR,  N_("Set configuration directory"),       N_("configuration directory") },
+		{ "datadir",    '\0', POPT_ARG_STRING, NULL, CLI_DATADIR,    N_("Set default data directory"),        N_("data directory") },
 		{ "debug",      '\0', POPT_ARG_STRING, NULL, CLI_DEBUG,      N_("Show debug for given level"),        N_("debug level") },
 		{ "debugfile",  '\0', POPT_ARG_STRING, NULL, CLI_DEBUGFILE,  N_("Log debug output to file"),          N_("file") },
 		{ "flush-debug-stderr", '\0', POPT_ARG_NONE, NULL, CLI_FLUSHDEBUGSTDERR, N_("Flush all debug output written to stderr"), NULL },
@@ -93,8 +244,6 @@ static const struct poptOption* getOptionsTable(void)
 		{ "noassert",	'\0', POPT_ARG_NONE,   NULL, CLI_NOASSERT,   N_("Disable asserts"),                   NULL },
 		{ "crash",		'\0', POPT_ARG_NONE,   NULL, CLI_CRASH,      N_("Causes a crash to test the crash handler"), NULL },
 		{ "savegame",   '\0', POPT_ARG_STRING, NULL, CLI_SAVEGAME,   N_("Load a saved game"),                 N_("savegame") },
-		{ "usage",      '\0', POPT_ARG_NONE
-		          | POPT_ARGFLAG_DOC_HIDDEN,   NULL, CLI_USAGE,      NULL,                                    NULL, },
 		{ "window",     '\0', POPT_ARG_NONE,   NULL, CLI_WINDOW,     N_("Play in windowed mode"),             NULL },
 		{ "version",    '\0', POPT_ARG_NONE,   NULL, CLI_VERSION,    N_("Show version information and exit"), NULL },
 		{ "resolution", '\0', POPT_ARG_STRING, NULL, CLI_RESOLUTION, N_("Set the resolution to use"),         N_("WIDTHxHEIGHT") },
@@ -173,7 +322,6 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				if (token == NULL)
 				{
 					debug(LOG_ERROR, "Usage: --debug <flag>");
-					poptFreeContext(poptCon);
 					return false;
 				}
 
@@ -181,7 +329,6 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				if (!debug_enable_switch(token))
 				{
 					debug(LOG_ERROR, "Debug flag \"%s\" not found!", token);
-					poptFreeContext(poptCon);
 					return false;
 				}
 				break;
@@ -192,7 +339,6 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				if (token == NULL)
 				{
 					debug(LOG_ERROR, "Missing debugfile filename?");
-					poptFreeContext(poptCon);
 					return false;
 				}
 				debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
@@ -209,7 +355,6 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				if (token == NULL)
 				{
 					debug(LOG_ERROR, "Unrecognised configuration directory");
-					poptFreeContext(poptCon);
 					return false;
 				}
 				sstrcpy(configdir, token);
@@ -217,25 +362,16 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 
 			case CLI_HELP:
 				poptPrintHelp(poptCon, stdout, 0);
-				poptFreeContext(poptCon);
-				return false;
-
-			case CLI_USAGE:
-				poptPrintUsage(poptCon, stdout, 0);
-				poptFreeContext(poptCon);
 				return false;
 
 			case CLI_VERSION:
 				printf("Warzone 2100 - %s\n", version_getFormattedVersionString());
-				poptFreeContext(poptCon);
 				return false;
 
 			default:
 				break;
 		};
 	}
-
-	poptFreeContext(poptCon);
 
 	return true;
 }
@@ -265,7 +401,6 @@ bool ParseCommandLine(int argc, const char** argv)
 			case CLI_FLUSHDEBUGSTDERR:
 			case CLI_CONFIGDIR:
 			case CLI_HELP:
-			case CLI_USAGE:
 			case CLI_VERSION:
 				// These options are parsed in ParseCommandLineEarly() already, so ignore them
 				break;
@@ -293,7 +428,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				if (token == NULL)
 				{
 					debug(LOG_ERROR, "Unrecognised datadir");
-					poptFreeContext(poptCon);
 					return false;
 				}
 				sstrcpy(datadir, token);
@@ -308,7 +442,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				if (token == NULL)
 				{
 					debug(LOG_ERROR, "No IP/hostname given");
-					poptFreeContext(poptCon);
 					return false;
 				}
 				sstrcpy(iptoconnect, token);
@@ -323,7 +456,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				if (token == NULL)
 				{
 					debug(LOG_ERROR, "No game name");
-					poptFreeContext(poptCon);
 					return false;
 				}
 				if (strcmp(token, "CAM_1A") && strcmp(token, "CAM_2A") && strcmp(token, "CAM_3A")
@@ -358,7 +490,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				if (token == NULL)
 				{
 					debug(LOG_ERROR, "Missing mod name?");
-					poptFreeContext(poptCon);
 					return false;
 				}
 
@@ -367,7 +498,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				if (i >= 100 || global_mods[i] != NULL)
 				{
 					debug(LOG_ERROR, "Too many mods registered! Aborting!");
-					poptFreeContext(poptCon);
 					return false;
 				}
 				global_mods[i] = strdup(token);
@@ -382,7 +512,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				if (token == NULL)
 				{
 					debug(LOG_ERROR, "Missing mod name?");
-					poptFreeContext(poptCon);
 					return false;
 				}
 
@@ -391,7 +520,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				if (i >= 100 || campaign_mods[i] != NULL)
 				{
 					debug(LOG_ERROR, "Too many mods registered! Aborting!");
-					poptFreeContext(poptCon);
 					return false;
 				}
 				campaign_mods[i] = strdup(token);
@@ -406,7 +534,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				if (token == NULL)
 				{
 					debug(LOG_ERROR, "Missing mod name?");
-					poptFreeContext(poptCon);
 					return false;
 				}
 
@@ -414,7 +541,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				if (i >= 100 || multiplay_mods[i] != NULL)
 				{
 					debug(LOG_ERROR, "Too many mods registered! Aborting!");
-					poptFreeContext(poptCon);
 					return false;
 				}
 				multiplay_mods[i] = strdup(token);
@@ -452,7 +578,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				if (token == NULL)
 				{
 					debug(LOG_ERROR, "Unrecognised savegame name");
-					poptFreeContext(poptCon);
 					return false;
 				}
 				snprintf(saveGameName, sizeof(saveGameName), "%s/%s", SaveGamePath, token);
@@ -484,8 +609,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				break;
 		};
 	}
-
-	poptFreeContext(poptCon);
 
 	return true;
 }

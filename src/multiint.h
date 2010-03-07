@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_SRC_MULTIINT_H__
 #define __INCLUDED_SRC_MULTIINT_H__
 
+#include "lib/netplay/netplay.h"
 #include "lib/widget/widgbase.h"
 
 #ifdef __cplusplus

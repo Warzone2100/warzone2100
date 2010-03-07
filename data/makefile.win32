@@ -20,6 +20,7 @@ BASELIST= \
 	palette.txt \
 	script \
 	sequenceaudio \
+	shaders\
 	stats \
 	structs \
 	tagdefinitions \

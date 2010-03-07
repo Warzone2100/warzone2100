@@ -140,7 +140,7 @@
 		022B2FA80BD55B50002E64E3 /* vasnwprintf.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F950BD55B50002E64E3 /* vasnwprintf.h */; };
 		022B2FA90BD55B50002E64E3 /* wprintf-parse.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F960BD55B50002E64E3 /* wprintf-parse.h */; };
 		022B2FAA0BD55B50002E64E3 /* xsize.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F970BD55B50002E64E3 /* xsize.h */; };
-		022B2FE20BD55E45002E64E3 /* libgnuintl.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2FE00BD55E45002E64E3 /* libgnuintl.h */; };
+		022B2FE20BD55E45002E64E3 /* libgnuintl.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2FE00BD55E45002E64E3 /* libgnuintl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		022B2FE30BD55E45002E64E3 /* libintl.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2FE10BD55E45002E64E3 /* libintl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		022B30AB0BD564FC002E64E3 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B30AA0BD564FC002E64E3 /* config.h */; };
 		022B30E00BD56618002E64E3 /* plural.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B30DF0BD56618002E64E3 /* plural.c */; };
@@ -170,7 +170,7 @@
 		02356DB50BD3BB6F00E9A019 /* zutil.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356D9F0BD3BB6F00E9A019 /* zutil.h */; settings = {ATTRIBUTES = (); }; };
 		02356DDB0BD3BC9900E9A019 /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356DC90BD3BC9900E9A019 /* png.c */; };
 		02356DDC0BD3BC9900E9A019 /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356DCA0BD3BC9900E9A019 /* png.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		02356DDD0BD3BC9900E9A019 /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356DCB0BD3BC9900E9A019 /* pngconf.h */; settings = {ATTRIBUTES = (); }; };
+		02356DDD0BD3BC9900E9A019 /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356DCB0BD3BC9900E9A019 /* pngconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02356DDE0BD3BC9900E9A019 /* pngerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356DCC0BD3BC9900E9A019 /* pngerror.c */; };
 		02356DE00BD3BC9900E9A019 /* pngget.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356DCE0BD3BC9900E9A019 /* pngget.c */; };
 		02356DE10BD3BC9900E9A019 /* pngmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356DCF0BD3BC9900E9A019 /* pngmem.c */; };
