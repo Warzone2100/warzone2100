@@ -171,13 +171,14 @@ BOOL recvBuildStarted(NETQUEUE queue)
 				psDroid->action = DACTION_BUILD;
 			}
 		}
+#endif
 
 		// Sync IDs
+		// TODO Synch IDs, without resorting to an ugly hack like this.
 		if (psDroid->psTarget)
 		{
 			((STRUCTURE *) psDroid->psTarget)->id = structId;
 		}
-#endif
 	}
 
 	return true;
