@@ -26,6 +26,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "lib/framework/crc.h"
+#include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"
 #include "src/component.h"		// FIXME: we need to handle this better
 #include "src/modding.h"		// FIXME: we need to handle this better
@@ -139,6 +140,7 @@ static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & 
 static void NETregisterServer(int state);
 static void NETallowJoining(void);
 static void NET_InitPlayer(int i, bool initPosition);
+static void recvDebugSync(NETQUEUE queue);
 
 /*
  * Network globals, these are part of the new network API
@@ -245,9 +247,9 @@ extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk, netcode 4.4";
+char VersionString[VersionStringSize] = "trunk, netcode 4.5";
 static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 4;
+static int NETCODE_VERSION_MINOR = 5;
 static int NETCODE_HASH = 0;			// unused for now
 
 static int checkSockets(const SocketSet* set, unsigned int timeout);
@@ -2549,6 +2551,11 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			}
 			break;
 		}
+		case NET_DEBUG_SYNC:
+		{
+			recvDebugSync(playerQueue);
+			break;
+		}
 
 		default:
 			return false;
@@ -3929,10 +3936,53 @@ uint32_t nextDebugSync(void)
 	return ret;
 }
 
+static void dumpDebugSync(uint8_t *buf, size_t bufLen, uint32_t time, unsigned player)
+{
+	char fname[100];
+	PHYSFS_file *fp;
+
+	ssprintf(fname, "desync%u_p%u.txt", time, player);
+	fp = openSaveFile(fname);
+	PHYSFS_write(fp, buf, bufLen, 1);
+	PHYSFS_close(fp);
+
+	debug(LOG_ERROR, "Dumped player %u's sync error at gameTime %u to file: %s%s", player, time, PHYSFS_getRealDir(fname), fname);
+}
+
+static void sendDebugSync(uint8_t *buf, uint32_t bufLen, uint32_t time)
+{
+	// Save our own, before sending, so that if we have 2 clients running on the same computer, to guarantee that it is done saving before the other client saves on top.
+	dumpDebugSync(buf, bufLen, time, selectedPlayer);
+
+	NETbeginEncode(NETbroadcastQueue(), NET_DEBUG_SYNC);
+		NETuint32_t(&time);
+		NETuint32_t(&bufLen);
+		NETbin(buf, bufLen);
+	NETend();
+}
+
+static uint8_t debugSyncTmpBuf[1000000];
+static void recvDebugSync(NETQUEUE queue)
+{
+	uint32_t time = 0;
+	uint32_t bufLen = 0;
+
+	NETbeginDecode(queue, NET_DEBUG_SYNC);
+		NETuint32_t(&time);
+		NETuint32_t(&bufLen);
+		bufLen = MIN(bufLen, ARRAY_SIZE(debugSyncTmpBuf));
+		NETbin(debugSyncTmpBuf, bufLen);
+	NETend();
+
+	dumpDebugSync(debugSyncTmpBuf, bufLen, time, queue.index);
+}
+
 bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 {
 	unsigned index;
 	unsigned i;
+	static uint32_t numDumps = 0;
+	size_t bufSize = 0;
 
 	if (checkGameTime == syncDebugGameTime[syncDebugNext])  // Can't happen - and syncDebugGameTime[] == 0, until just before sending the CRC, anyway.
 	{
@@ -3959,12 +4009,19 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 	}
 
 	// Dump our version, and also erase it, so we only dump it at most once.
-	debug(LOG_ERROR, "Inconsistent sync debug at gameTime %u. My version is: (%u lines, CRC = 0x%08X)", syncDebugGameTime[index], syncDebugNum[index], ~syncDebugCrcs[index] & 0xFFFFFFFF);
+	debug(LOG_ERROR, "Inconsistent sync debug at gameTime %u. My version has %u lines, CRC = 0x%08X.", syncDebugGameTime[index], syncDebugNum[index], ~syncDebugCrcs[index] & 0xFFFFFFFF);
+	bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "===== BEGIN gameTime=%u, %u lines, CRC 0x%08X =====\n", syncDebugGameTime[index], syncDebugNum[index], ~syncDebugCrcs[index] & 0xFFFFFFFF);
 	for (i = 0; i < syncDebugNum[index]; ++i)
 	{
-		_debug(LOG_SYNC, syncDebugFunctions[index][i], "[%03u] %s", i, syncDebugStrings[index][i]);
+		bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "[%s] %s\n", syncDebugFunctions[index][i], syncDebugStrings[index][i]);
 		free(syncDebugFunctions[index][i]);
 		free(syncDebugStrings[index][i]);
+	}
+	bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "===== END gameTime=%u, %u lines, CRC 0x%08X =====\n", syncDebugGameTime[index], syncDebugNum[index], ~syncDebugCrcs[index] & 0xFFFFFFFF);
+	if (numDumps < 5)
+	{
+		++numDumps;
+		sendDebugSync(debugSyncTmpBuf, bufSize, syncDebugGameTime[index]);
 	}
 	syncDebugNum[index] = 0;
 	syncDebugGameTime[index] = 0;
@@ -4013,6 +4070,7 @@ const char *messageTypeToString(unsigned messageType_)
 		case NET_FILE_REQUESTED:            return "NET_FILE_REQUESTED";
 		case NET_FILE_CANCELLED:            return "NET_FILE_CANCELLED";
 		case NET_FILE_PAYLOAD:              return "NET_FILE_PAYLOAD";
+		case NET_DEBUG_SYNC:                return "NET_DEBUG_SYNC";
 		case NET_MAX_TYPE:                  return "NET_MAX_TYPE";
 
 		case GAME_MIN_TYPE:                 return "GAME_MIN_TYPE";

@@ -82,6 +82,7 @@ typedef enum
 	NET_FILE_REQUESTED,             ///< Player has requested a file (map/mod/?)
 	NET_FILE_CANCELLED,             ///< Player cancelled a file request
 	NET_FILE_PAYLOAD,               ///< sending file to the player that needs it
+	NET_DEBUG_SYNC,                 ///< Synch error messages, so people don't have to use pastebin.
 	NET_MAX_TYPE,                   ///< Maximum+1 valid NET_ type, *MUST* be last.
 
 	GAME_MIN_TYPE = 111,            ///< Minimum-1 valid GAME_ type, *MUST* be first.
