@@ -510,7 +510,7 @@ bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, boo
 STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 {
 	int numWalls = 0;
-	Vector2i wall;
+	Vector2i wall = { 0, 0 };
 
 	// HACK Using globals to not clutter visibleObject() interface too much
 	gNumWalls = &numWalls;
