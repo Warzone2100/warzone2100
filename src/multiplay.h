@@ -103,9 +103,6 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define CAMP_BASE				1
 #define CAMP_WALLS				2
 
-#define DEATHMATCHTEMPLATES		4			// game templates are stored in player x.
-#define CAMPAIGNTEMPLATES		5
-
 #define PING_LO					0			// this ping is kickin'.
 #define PING_MED				200			// this ping is crawlin'
 #define PING_HI					400			// this ping just plain sucks :P
