@@ -2765,6 +2765,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->psTarStats = NULL;
 	psDroid->psTarget = NULL;
 	psDroid->lastFrustratedTime = -UINT16_MAX;	// make sure we do not start the game frustrated
+	psDroid->powerAccrued = 0;
 
 	for(i = 0;i < DROID_MAXWEAPS;i++)
 	{
