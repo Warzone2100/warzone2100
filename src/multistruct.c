@@ -96,7 +96,6 @@ BOOL recvBuildStarted(NETQUEUE queue)
 {
 	STRUCTURE_STATS *psStats;
 	DROID			*psDroid;
-	UDWORD			actionX,actionY;
 	unsigned int typeIndex;
 	uint8_t			player;
 	uint16_t		x, y;
@@ -130,8 +129,15 @@ BOOL recvBuildStarted(NETQUEUE queue)
 			((STRUCTURE *)psDroid->psTarget)->id = structId;
 			return true;
 		}
-		debug(LOG_SYNC, "Synch error, droid %u was not building structure %u.", droidID, structId);
+		debug(LOG_SYNC, "Droid %u was not building structure %u. But that's ok, it was probably destroyed before this message arrived.", droidID, structId);
 
+		// TODO The following may be causing crashes, figure out whether to fix or remove it. (Shouldn't be needed with the new code.)
+		// sync    |11:57:00: [recvBuildStarted] Synch error, droid 162496 was not building structure 165480.
+		// error   |11:57:00: [buildStructureDir] Player 0 (Human): is building Emplacement-MortarPit01 at (42, 43) but found Emplacement-MortarPit01 already at (42, 43)
+		// error   |11:57:00: [droidUpdateBuild] Trying to update a construction, but no target!
+		// error   |11:57:00: [droidUpdateBuild] Assert in Warzone: ../../src/droid.c:1098 (psDroid->psTarget), last script event: '0 (CALL_DROID_REACH_LOCATION)'
+#if 0
+		UDWORD actionX, actionY;
 		// Tell the droid to go to where it needs to in order to build the struct
 		if (getDroidDestination((BASE_STATS *) psStats, x, y, &actionX, &actionY))
 		{
@@ -171,6 +177,7 @@ BOOL recvBuildStarted(NETQUEUE queue)
 		{
 			((STRUCTURE *) psDroid->psTarget)->id = structId;
 		}
+#endif
 	}
 
 	return true;
