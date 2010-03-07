@@ -83,7 +83,7 @@ static void printShaderInfoLog(GLuint shader)
 	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infologLen);
 	if (infologLen > 0)
 	{
-		int charsWritten = 0;
+		GLint charsWritten = 0;
 		GLchar *infoLog = (GLchar *)malloc(infologLen);
 
 		glGetShaderInfoLog(shader, infologLen, &charsWritten, infoLog);
@@ -100,7 +100,7 @@ static void printProgramInfoLog(GLuint program)
 	glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infologLen);
 	if (infologLen > 0)
 	{
-		int charsWritten = 0;
+		GLint charsWritten = 0;
 		GLchar *infoLog = (GLchar *)malloc(infologLen);
 
 		glGetProgramInfoLog(program, infologLen, &charsWritten, infoLog);
