@@ -56,6 +56,7 @@
 
 // turret rotation limit
 #define VTOL_TURRET_LIMIT               DEG(45)
+#define VTOL_TURRET_LIMIT_BOMB          DEG(60)
 
 /** Time to pause before a droid blows up. */
 #define  ACTION_DESTRUCT_TIME	2000
@@ -355,6 +356,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	uint16_t targetRotation, targetPitch;
 	int32_t  pitchError;
 	int32_t  rotationError, dx, dy, dz;
+	int32_t  rotationTolerance = 0;
 	bool     onTarget;
 	int32_t  dxy;
 	int32_t  pitchLowerLimit, pitchUpperLimit;
@@ -436,9 +438,15 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	if (psAttacker->type == OBJ_DROID && isVtolDroid((DROID *)psAttacker))
 	{
 		// limit the rotation for vtols
-		tRotation = (uint16_t)clip(angleDelta(tRotation), -VTOL_TURRET_LIMIT, VTOL_TURRET_LIMIT);  // Cast wrapping intentional.
+		int32_t limit = VTOL_TURRET_LIMIT;
+		if (psWeapStats->weaponSubClass == WSC_BOMB || psWeapStats->weaponSubClass == WSC_EMP)
+		{
+			limit = 0;  // Don't turn bombs.
+			rotationTolerance = VTOL_TURRET_LIMIT_BOMB;
+		}
+		tRotation = (uint16_t)clip(angleDelta(tRotation), -limit, limit);  // Cast wrapping intentional.
 	}
-	onTarget = targetRotation == (uint16_t)(tRotation + psAttacker->rot.direction);  // Cast wrapping intentional.
+	onTarget = abs(angleDelta(targetRotation - (tRotation + psAttacker->rot.direction))) <= rotationTolerance;
 
 	/* set muzzle pitch if direct fire */
 	if (!bRepair && (proj_Direct(psWeapStats) || ((psAttacker->type == OBJ_DROID)
