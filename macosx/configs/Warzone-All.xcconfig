@@ -2,7 +2,6 @@
 
 
 INSTALL_PATH = $(HOME)/Applications
-COPY_PHASE_STRIP = NO
 OTHER_LDFLAGS[arch=ppc] = -w // This turns off 2 warnings that are actually in apple's sdk.
 PREBINDING = NO
 INFOPLIST_FILE = Resources/Warzone-Info.plist
