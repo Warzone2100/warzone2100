@@ -2032,6 +2032,7 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 			(apStructTypeLists[selectedPlayer][i] == AVAILABLE) )	// dont go any further if no derrick stat found.
 		{
 			DROID* psCurr;
+			int numTrucks = 0;
 
 			// for each droid
 			for(psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
@@ -2059,9 +2060,21 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 							(BASE_STATS*) &asStructureStats[i],
 							psFeature->pos.x, psFeature->pos.y);
 					}
-					addConsoleMessage(_("Truck ordered to build Oil Derrick"),DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
-					FeedbackOrderGiven();
+					++numTrucks;
 				}
+			}
+
+			if (numTrucks != 0)
+			{
+				char msg[100];
+				switch (numTrucks)
+				{
+					case 1:  ssprintf(msg, _("Truck ordered to build Oil Derrick")); break;
+					case 2:  ssprintf(msg, _("2 trucks ordered to build Oil Derrick")); break;
+					default: ssprintf(msg, _("%d trucks ordered to build Oil Derrick"), numTrucks); break;
+				}
+				addConsoleMessage(msg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				FeedbackOrderGiven();
 			}
 		}
 
