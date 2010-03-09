@@ -76,7 +76,7 @@ static char *readShaderBuf(const char *name)
 }
 
 // Retrieve shader compilation errors
-static void printShaderInfoLog(GLuint shader)
+static void printShaderInfoLog(code_part part, GLuint shader)
 {
 	GLint infologLen = 0;
 
@@ -87,13 +87,13 @@ static void printShaderInfoLog(GLuint shader)
 		GLchar *infoLog = (GLchar *)malloc(infologLen);
 
 		glGetShaderInfoLog(shader, infologLen, &charsWritten, infoLog);
-		debug(LOG_ERROR, "Shader info log: %s", infoLog);
+		debug(part, "Shader info log: %s", infoLog);
 		free(infoLog);
 	}
 }
 
 // Retrieve shader linkage errors
-static void printProgramInfoLog(GLuint program)
+static void printProgramInfoLog(code_part part, GLuint program)
 {
 	GLint infologLen = 0;
 
@@ -104,30 +104,34 @@ static void printProgramInfoLog(GLuint program)
 		GLchar *infoLog = (GLchar *)malloc(infologLen);
 
 		glGetProgramInfoLog(program, infologLen, &charsWritten, infoLog);
-		debug(LOG_ERROR, "Program info log: %s", infoLog);
+		debug(part, "Program info log: %s", infoLog);
 		free(infoLog);
 	}
 }
 
 // Read/compile/link shaders
-static bool loadShaders(GLuint *program, const char *vertexPath, const char *fragmentPath)
+static bool loadShaders(GLuint *program, char *definitions,
+						const char *vertexPath, const char *fragmentPath)
 {
 	GLint status;
 	bool success = true; // Assume overall success
-	char *buffer;
-	*program = glCreateProgram();
+	char *buffer[2];
 
-	ASSERT_OR_RETURN(false, *program != 0, "Could not create shader program");
+	*program = glCreateProgram();
+	ASSERT_OR_RETURN(false, definitions, "Null in preprocessor definitions!");
+	ASSERT_OR_RETURN(false, *program, "Could not create shader program!");
+
+	*buffer = definitions;
 
 	if (vertexPath)
 	{
 		success = false; // Assume failure before reading shader file
 
-		if ((buffer = readShaderBuf(vertexPath)))
+		if ((*(buffer + 1) = readShaderBuf(vertexPath)))
 		{
 			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
 
-			glShaderSource(shader, 1, (const char **)&buffer, NULL);
+			glShaderSource(shader, 2, (const char **)buffer, NULL);
 			glCompileShader(shader);
 
 			// Check for compilation errors
@@ -135,15 +139,16 @@ static bool loadShaders(GLuint *program, const char *vertexPath, const char *fra
 			if (!status)
 			{
 				debug(LOG_ERROR, "Vertex shader compilation has failed [%s]", vertexPath);
-				printShaderInfoLog(shader);
+				printShaderInfoLog(LOG_ERROR, shader);
 			}
 			else
 			{
+				printShaderInfoLog(LOG_3D, shader);
 				glAttachShader(*program, shader);
 				success = true;
 			}
 
-			free(buffer);
+			free(*(buffer + 1));
 		}
 	}
 
@@ -151,11 +156,11 @@ static bool loadShaders(GLuint *program, const char *vertexPath, const char *fra
 	{
 		success = false; // Assume failure before reading shader file
 
-		if ((buffer = readShaderBuf(fragmentPath)))
+		if ((*(buffer + 1) = readShaderBuf(fragmentPath)))
 		{
 			GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-			glShaderSource(shader, 1, (const char **)&buffer, NULL);
+			glShaderSource(shader, 2, (const char **)buffer, NULL);
 			glCompileShader(shader);
 			
 			// Check for compilation errors
@@ -163,15 +168,16 @@ static bool loadShaders(GLuint *program, const char *vertexPath, const char *fra
 			if (!status)
 			{
 				debug(LOG_ERROR, "Fragment shader compilation has failed [%s]", fragmentPath);
-				printShaderInfoLog(shader);
+				printShaderInfoLog(LOG_ERROR, shader);
 			}
 			else
 			{
+				printShaderInfoLog(LOG_3D, shader);
 				glAttachShader(*program, shader);
 				success = true;
 			}
 
-			free(buffer);
+			free(*(buffer + 1));
 		}
 	}
 
@@ -184,8 +190,12 @@ static bool loadShaders(GLuint *program, const char *vertexPath, const char *fra
 		if (!status)
 		{
 			debug(LOG_ERROR, "Shader program linkage has failed [%s, %s]", vertexPath, fragmentPath);
-			printProgramInfoLog(*program);
+			printProgramInfoLog(LOG_ERROR, *program);
 			success = false;
+		}
+		else
+		{
+			printProgramInfoLog(LOG_3D, *program);
 		}
 	}
 
@@ -204,10 +214,17 @@ bool pie_LoadShaders()
 	shaderProgram[SHADER_NONE]		= 0;
 
 	// TCMask shader
-	debug(LOG_3D, "Loading shaders: SHADER_TCMASK");
-	if (!loadShaders(&program, "shaders/tcmask.vert", "shaders/tcmask.frag"))
+	debug(LOG_3D, "Loading shader: SHADER_TCMASK");
+	if (!loadShaders(&program, "",
+					"shaders/tcmask.vert", "shaders/tcmask.frag"))
 		return false;
 	shaderProgram[SHADER_TCMASK] = program;
+
+	debug(LOG_3D, "Loading shader: SHADER_TCMASK_FOGGED");
+	if (!loadShaders(&program, "#define FOG_ENABLED\n",
+					"shaders/tcmask.vert", "shaders/tcmask.frag"))
+		return false;
+	shaderProgram[SHADER_TCMASK_FOGGED] = program;
 
 	// Good to go
 	shadersAvailable = true;
@@ -247,7 +264,15 @@ void pie_ActivateShader_TCMask(PIELIGHT teamcolour, SDWORD maskpage)
 	if (!shadersAvailable)
 		return;
 
-	shaderProgram = pie_SetShader(SHADER_TCMASK);
+	// Check if fog is enabled
+	if (rendStates.fog)
+	{
+		shaderProgram = pie_SetShader(SHADER_TCMASK_FOGGED);
+	}
+	else
+	{
+		shaderProgram = pie_SetShader(SHADER_TCMASK);
+	}
 
 	loc = glGetUniformLocation(shaderProgram, "Texture0"); 
 	glUniform1i(loc, 0);
