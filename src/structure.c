@@ -2857,7 +2857,7 @@ BOOL CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 }
 
 
-static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
+static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 {
 	BASE_STATS			*pSubject = NULL;
 	UDWORD				pointsToAdd;//, iPower;
@@ -2883,6 +2883,16 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 
 	CHECK_STRUCTURE(psStructure);
 
+	if (psStructure->time == gameTime)
+	{
+		// This isn't supposed to happen, and really shouldn't be possible - if this happens, maybe a structure is being updated twice?
+		int count1 = 0, count2 = 0;
+		STRUCTURE *s;
+		for (s =         apsStructLists[psStructure->player]; s != NULL; s = s->psNext) count1 += s == psStructure;
+		for (s = mission.apsStructLists[psStructure->player]; s != NULL; s = s->psNext) count2 += s == psStructure;
+		debug(LOG_ERROR, "psStructure->prevTime = %u, psStructure->time = %u, gameTime = %u, count1 = %d, count2 = %d", psStructure->prevTime, psStructure->time, gameTime, count1, count2);
+		--psStructure->time;
+	}
 	psStructure->prevTime = psStructure->time;
 	psStructure->time = gameTime;
 	for (i = 0; i < MAX(1, psStructure->numWeaps); ++i)
@@ -2890,7 +2900,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 		psStructure->asWeaps[i].prevRot = psStructure->asWeaps[i].rot;
 	}
 
-	if (mission)
+	if (isMission)
 	{
 		switch (psStructure->pStructureType->type)
 		{
@@ -3509,7 +3519,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				!IsFactoryCommanderGroupFull(psFactory) &&
 				!CheckHaltOnMaxUnitsReached(psStructure))
 			{
-				if (mission)
+				if (isMission)
 				{
 					// put it in the mission list
 					psDroid = buildMissionDroid((DROID_TEMPLATE *)pSubject,
@@ -3530,13 +3540,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				//reset the start time
 				psFactory->timeStarted = ACTION_START_TIME;
 				psFactory->psSubject = NULL;
-
-				//decrement the quantity to manufacture if not set to infinity
-				/*if (Quantity && Quantity != NON_STOP_PRODUCTION)
-				{
-					psFactory->quantity--;
-					Quantity--;
-				}*/
 
 				// If quantity not 0 then kick of another manufacture.
 				turnOffMultiMsg(true);  // Do instantly, since quantity is synchronised.

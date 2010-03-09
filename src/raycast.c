@@ -37,23 +37,12 @@ typedef struct {
 } HeightCallbackHelp_t;
 
 
-void rayCast(Vector3i src, Vector3i direction, int length,
-	RAY_CALLBACK callback, void * data)
+void rayCast(Vector3i src, uint16_t direction, uint32_t length, RAY_CALLBACK callback, void *data)
 {
-	unsigned int lengthSq = (length == RAY_MAXLEN ? RAY_MAXLEN : length*length), currLengthSq;
-	Vector3i curr = src, diff;
-	Vector3i step = Vector3f_To3i(
-						Vector3f_Mult(
-							Vector3f_Normalise(Vector3i_To3f(direction)),
-							sqrtf(TILE_SIZE)
-						)
-					);
-
-	while (curr = Vector3i_Add(curr, step),
-		   diff = Vector3i_Sub(curr, src),
-		   currLengthSq = Vector3i_ScalarP(diff, diff),
-		   currLengthSq < lengthSq)
+	uint32_t currLen;
+	for (currLen = 0; currLen < length; currLen += TILE_UNITS)
 	{
+		Vector3i curr = {src.x + iSinR(direction, currLen), src.y + iCosR(direction, currLen), src.z};
 		// stop at the edge of the map
 		if (curr.x < 0 || curr.x >= world_coord(mapWidth) ||
 			curr.y < 0 || curr.y >= world_coord(mapHeight))
@@ -61,7 +50,7 @@ void rayCast(Vector3i src, Vector3i direction, int length,
 			return;
 		}
 
-		if (!callback(curr, currLengthSq, data))
+		if (!callback(curr, currLen, data))
 		{
 			// callback doesn't want any more points so return
 			return;
@@ -71,7 +60,7 @@ void rayCast(Vector3i src, Vector3i direction, int length,
 
 //-----------------------------------------------------------------------------------
 /* Will return false when we've hit the edge of the grid */
-static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
+static bool getTileHeightCallback(Vector3i pos, int32_t dist, void *data)
 {
 	HeightCallbackHelp_t * help = data;
 #ifdef TEST_RAY
@@ -81,7 +70,6 @@ static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
 	/* Are we still on the grid? */
 	if (clipXY(pos.x, pos.y))
 	{
-		int dist = iSqrt(distSq);
 		bool HasTallStructure = TileHasTallStructure(mapTile(map_coord(pos.x), map_coord(pos.y)));
 
 		if (dist > TILE_UNITS || HasTallStructure)
@@ -136,10 +124,9 @@ static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
 void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch)
 {
 	Vector3i pos = { x, y, 0 };
-	Vector3i dir = rayAngleToVector3i(direction);
 	HeightCallbackHelp_t help = { map_Height(x,y), 0.0f };
 
-	rayCast(pos, dir, 5430, getTileHeightCallback, &help); // FIXME Magic value
+	rayCast(pos, direction, 5430, getTileHeightCallback, &help); // FIXME Magic value
 
 	*pitch = help.pitch;
 }

@@ -1298,7 +1298,7 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 
 		if (radSq > distSq)
 		{
-			if (psObst != NULL || !aiCheckAlliances(psObj->player, psDroid->player))
+			if (psObst != NULL)
 			{
 				// hit more than one droid - stop
 				*pmx = (float)0;

@@ -95,57 +95,10 @@
 		0223BC3D0CFE40680056EF85 /* glew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC390CFE40680056EF85 /* glew.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0223BC3E0CFE40680056EF85 /* glxew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC3A0CFE40680056EF85 /* glxew.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0223BC3F0CFE40680056EF85 /* wglew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC3B0CFE40680056EF85 /* wglew.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		022B2F680BD55AE3002E64E3 /* bindtextdom.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F4B0BD55AE2002E64E3 /* bindtextdom.c */; };
-		022B2F690BD55AE3002E64E3 /* dcgettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F4C0BD55AE2002E64E3 /* dcgettext.c */; };
-		022B2F6A0BD55AE3002E64E3 /* dcigettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F4D0BD55AE2002E64E3 /* dcigettext.c */; };
-		022B2F6B0BD55AE3002E64E3 /* dcngettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F4E0BD55AE2002E64E3 /* dcngettext.c */; };
-		022B2F6C0BD55AE3002E64E3 /* dgettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F4F0BD55AE2002E64E3 /* dgettext.c */; };
-		022B2F6D0BD55AE3002E64E3 /* dngettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F500BD55AE2002E64E3 /* dngettext.c */; };
-		022B2F6E0BD55AE3002E64E3 /* explodename.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F510BD55AE2002E64E3 /* explodename.c */; };
-		022B2F6F0BD55AE3002E64E3 /* finddomain.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F520BD55AE2002E64E3 /* finddomain.c */; };
-		022B2F700BD55AE3002E64E3 /* gettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F530BD55AE2002E64E3 /* gettext.c */; };
-		022B2F710BD55AE3002E64E3 /* hash-string.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F540BD55AE3002E64E3 /* hash-string.c */; };
-		022B2F720BD55AE3002E64E3 /* intl-compat.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F550BD55AE3002E64E3 /* intl-compat.c */; };
-		022B2F740BD55AE3002E64E3 /* l10nflist.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F570BD55AE3002E64E3 /* l10nflist.c */; };
-		022B2F750BD55AE3002E64E3 /* langprefs.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F580BD55AE3002E64E3 /* langprefs.c */; };
-		022B2F760BD55AE3002E64E3 /* loadmsgcat.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F590BD55AE3002E64E3 /* loadmsgcat.c */; };
-		022B2F770BD55AE3002E64E3 /* localcharset.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F5A0BD55AE3002E64E3 /* localcharset.c */; };
-		022B2F780BD55AE3002E64E3 /* localealias.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F5B0BD55AE3002E64E3 /* localealias.c */; };
-		022B2F790BD55AE3002E64E3 /* localename.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F5C0BD55AE3002E64E3 /* localename.c */; };
-		022B2F7A0BD55AE3002E64E3 /* lock.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F5D0BD55AE3002E64E3 /* lock.c */; };
-		022B2F7B0BD55AE3002E64E3 /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F5E0BD55AE3002E64E3 /* log.c */; };
-		022B2F7C0BD55AE3002E64E3 /* ngettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F5F0BD55AE3002E64E3 /* ngettext.c */; };
-		022B2F7E0BD55AE3002E64E3 /* osdep.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F610BD55AE3002E64E3 /* osdep.c */; };
-		022B2F7F0BD55AE3002E64E3 /* plural-exp.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F620BD55AE3002E64E3 /* plural-exp.c */; };
-		022B2F810BD55AE3002E64E3 /* printf.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F640BD55AE3002E64E3 /* printf.c */; };
-		022B2F820BD55AE3002E64E3 /* relocatable.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F650BD55AE3002E64E3 /* relocatable.c */; };
-		022B2F830BD55AE3002E64E3 /* textdomain.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F660BD55AE3002E64E3 /* textdomain.c */; };
-		022B2F840BD55AE3002E64E3 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F670BD55AE3002E64E3 /* version.c */; };
-		022B2F980BD55B50002E64E3 /* eval-plural.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F850BD55B4F002E64E3 /* eval-plural.h */; };
-		022B2F990BD55B50002E64E3 /* gettextP.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F860BD55B4F002E64E3 /* gettextP.h */; };
-		022B2F9A0BD55B50002E64E3 /* gmo.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F870BD55B50002E64E3 /* gmo.h */; };
-		022B2F9B0BD55B50002E64E3 /* hash-string.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F880BD55B50002E64E3 /* hash-string.h */; };
-		022B2F9C0BD55B50002E64E3 /* loadinfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F890BD55B50002E64E3 /* loadinfo.h */; };
-		022B2F9D0BD55B50002E64E3 /* localcharset.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F8A0BD55B50002E64E3 /* localcharset.h */; };
-		022B2F9E0BD55B50002E64E3 /* lock.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F8B0BD55B50002E64E3 /* lock.h */; };
-		022B2F9F0BD55B50002E64E3 /* os2compat.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F8C0BD55B50002E64E3 /* os2compat.h */; };
-		022B2FA00BD55B50002E64E3 /* plural-exp.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F8D0BD55B50002E64E3 /* plural-exp.h */; };
-		022B2FA10BD55B50002E64E3 /* printf-args.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F8E0BD55B50002E64E3 /* printf-args.c */; };
-		022B2FA20BD55B50002E64E3 /* printf-args.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F8F0BD55B50002E64E3 /* printf-args.h */; };
-		022B2FA30BD55B50002E64E3 /* printf-parse.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F900BD55B50002E64E3 /* printf-parse.c */; };
-		022B2FA40BD55B50002E64E3 /* printf-parse.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F910BD55B50002E64E3 /* printf-parse.h */; };
-		022B2FA50BD55B50002E64E3 /* relocatable.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F920BD55B50002E64E3 /* relocatable.h */; };
-		022B2FA60BD55B50002E64E3 /* vasnprintf.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F930BD55B50002E64E3 /* vasnprintf.c */; };
-		022B2FA70BD55B50002E64E3 /* vasnprintf.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F940BD55B50002E64E3 /* vasnprintf.h */; };
-		022B2FA80BD55B50002E64E3 /* vasnwprintf.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F950BD55B50002E64E3 /* vasnwprintf.h */; };
-		022B2FA90BD55B50002E64E3 /* wprintf-parse.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F960BD55B50002E64E3 /* wprintf-parse.h */; };
-		022B2FAA0BD55B50002E64E3 /* xsize.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F970BD55B50002E64E3 /* xsize.h */; };
 		022B2FE20BD55E45002E64E3 /* libgnuintl.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2FE00BD55E45002E64E3 /* libgnuintl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		022B2FE30BD55E45002E64E3 /* libintl.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2FE10BD55E45002E64E3 /* libintl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		022B30AB0BD564FC002E64E3 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B30AA0BD564FC002E64E3 /* config.h */; };
-		022B30E00BD56618002E64E3 /* plural.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B30DF0BD56618002E64E3 /* plural.c */; };
 		022B31370BD568BA002E64E3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
-		022B31400BD5691D002E64E3 /* Gettext.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B2F220BD55814002E64E3 /* Gettext.framework */; };
 		02356DA00BD3BB6F00E9A019 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356D8A0BD3BB6F00E9A019 /* adler32.c */; };
 		02356DA10BD3BB6F00E9A019 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356D8B0BD3BB6F00E9A019 /* compress.c */; };
 		02356DA20BD3BB6F00E9A019 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356D8C0BD3BB6F00E9A019 /* crc32.c */; };
@@ -370,7 +323,6 @@
 		0246A8060BD3D79D004D1C70 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A5F60BD3D5E5004D1C70 /* CoreAudio.framework */; };
 		0246A8070BD3D79D004D1C70 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A5F70BD3D5E5004D1C70 /* QuickTime.framework */; };
 		0246AA1B0BD3DFFC004D1C70 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
-		02548E070D159F4000B4B3B9 /* Popt.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
 		02548E0A0D159F4400B4B3B9 /* QuesoGLC.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */; };
 		02581B6F0BD5A30900957CBC /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
 		02581C640BD5A98900957CBC /* libSDLmain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02581C5D0BD5A94A00957CBC /* libSDLmain.a */; };
@@ -485,7 +437,6 @@
 		02F5CC8F0D1496580000A2D0 /* poptint.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC860D1496580000A2D0 /* poptint.h */; };
 		02F5CC900D1496580000A2D0 /* poptparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC870D1496580000A2D0 /* poptparse.c */; };
 		02F5CC910D1496580000A2D0 /* system.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC880D1496580000A2D0 /* system.h */; };
-		02F5CCC00D1498A30000A2D0 /* Popt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
 		2234C2A00E2BE18200E7704C /* positiondef.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 2234C29F0E2BE18200E7704C /* positiondef.h */; };
 		2244463C0E3EB7CB004D0F1F /* message_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 224446390E3EB7CB004D0F1F /* message_lexer.l */; };
 		2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 2244463A0E3EB7CB004D0F1F /* message_parser.y */; };
@@ -545,6 +496,55 @@
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
 		43BE73ED11121A47007DF934 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177E70F87A926000C8A96 /* config.h */; };
 		43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BE75E811124BB4007DF934 /* wavecast.cpp */; };
+		43E1890411440D8C000870EB /* eval-plural.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F850BD55B4F002E64E3 /* eval-plural.h */; };
+		43E1890511440D8D000870EB /* gettextP.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F860BD55B4F002E64E3 /* gettextP.h */; };
+		43E1890611440D8F000870EB /* gmo.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F870BD55B50002E64E3 /* gmo.h */; };
+		43E1890711440D90000870EB /* hash-string.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F880BD55B50002E64E3 /* hash-string.h */; };
+		43E1890811440D91000870EB /* loadinfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F890BD55B50002E64E3 /* loadinfo.h */; };
+		43E1890911440D92000870EB /* localcharset.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F8A0BD55B50002E64E3 /* localcharset.h */; };
+		43E1890A11440D93000870EB /* lock.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F8B0BD55B50002E64E3 /* lock.h */; };
+		43E1890B11440D93000870EB /* os2compat.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F8C0BD55B50002E64E3 /* os2compat.h */; };
+		43E1890C11440D94000870EB /* plural-exp.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F8D0BD55B50002E64E3 /* plural-exp.h */; };
+		43E1890D11440D95000870EB /* printf-args.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F8F0BD55B50002E64E3 /* printf-args.h */; };
+		43E1890E11440D96000870EB /* printf-parse.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F910BD55B50002E64E3 /* printf-parse.h */; };
+		43E1890F11440D97000870EB /* relocatable.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F920BD55B50002E64E3 /* relocatable.h */; };
+		43E1891011440D98000870EB /* tsearch.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E188F411440CC9000870EB /* tsearch.h */; };
+		43E1891111440D99000870EB /* vasnprintf.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F940BD55B50002E64E3 /* vasnprintf.h */; };
+		43E1891211440D9A000870EB /* vasnwprintf.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F950BD55B50002E64E3 /* vasnwprintf.h */; };
+		43E1891311440D9B000870EB /* wprintf-parse.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F960BD55B50002E64E3 /* wprintf-parse.h */; };
+		43E1891411440D9C000870EB /* xsize.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F970BD55B50002E64E3 /* xsize.h */; };
+		43E1898911441107000870EB /* bindtextdom.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F4B0BD55AE2002E64E3 /* bindtextdom.c */; };
+		43E1898A11441108000870EB /* dcgettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F4C0BD55AE2002E64E3 /* dcgettext.c */; };
+		43E1898B11441109000870EB /* dcigettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F4D0BD55AE2002E64E3 /* dcigettext.c */; };
+		43E1898C1144110A000870EB /* dcngettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F4E0BD55AE2002E64E3 /* dcngettext.c */; };
+		43E1898D1144110B000870EB /* dgettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F4F0BD55AE2002E64E3 /* dgettext.c */; };
+		43E1898E1144110C000870EB /* dngettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F500BD55AE2002E64E3 /* dngettext.c */; };
+		43E1898F1144110D000870EB /* explodename.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F510BD55AE2002E64E3 /* explodename.c */; };
+		43E189901144110E000870EB /* finddomain.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F520BD55AE2002E64E3 /* finddomain.c */; };
+		43E1899111441110000870EB /* gettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F530BD55AE2002E64E3 /* gettext.c */; };
+		43E1899211441111000870EB /* hash-string.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F540BD55AE3002E64E3 /* hash-string.c */; };
+		43E1899311441113000870EB /* intl-compat.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F550BD55AE3002E64E3 /* intl-compat.c */; };
+		43E1899511441115000870EB /* l10nflist.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F570BD55AE3002E64E3 /* l10nflist.c */; };
+		43E1899611441117000870EB /* langprefs.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F580BD55AE3002E64E3 /* langprefs.c */; };
+		43E1899711441118000870EB /* loadmsgcat.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F590BD55AE3002E64E3 /* loadmsgcat.c */; };
+		43E1899811441119000870EB /* localcharset.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F5A0BD55AE3002E64E3 /* localcharset.c */; };
+		43E189991144111E000870EB /* localealias.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F5B0BD55AE3002E64E3 /* localealias.c */; };
+		43E1899A1144111F000870EB /* localename.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F5C0BD55AE3002E64E3 /* localename.c */; };
+		43E1899B11441120000870EB /* lock.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F5D0BD55AE3002E64E3 /* lock.c */; };
+		43E1899C11441123000870EB /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F5E0BD55AE3002E64E3 /* log.c */; };
+		43E1899D11441124000870EB /* ngettext.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F5F0BD55AE3002E64E3 /* ngettext.c */; };
+		43E1899F11441126000870EB /* osdep.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F610BD55AE3002E64E3 /* osdep.c */; };
+		43E189A01144112B000870EB /* plural-exp.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F620BD55AE3002E64E3 /* plural-exp.c */; };
+		43E189A11144112C000870EB /* plural.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B30DF0BD56618002E64E3 /* plural.c */; };
+		43E189A21144112D000870EB /* printf-args.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F8E0BD55B50002E64E3 /* printf-args.c */; };
+		43E189A31144112E000870EB /* printf-parse.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F900BD55B50002E64E3 /* printf-parse.c */; };
+		43E189A411441131000870EB /* printf.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F640BD55AE3002E64E3 /* printf.c */; };
+		43E189A511441132000870EB /* relocatable.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F650BD55AE3002E64E3 /* relocatable.c */; };
+		43E189A611441133000870EB /* textdomain.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F660BD55AE3002E64E3 /* textdomain.c */; };
+		43E189A711441134000870EB /* tsearch.c in Sources */ = {isa = PBXBuildFile; fileRef = 43E188F311440CC9000870EB /* tsearch.c */; };
+		43E189A811441135000870EB /* vasnprintf.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F930BD55B50002E64E3 /* vasnprintf.c */; };
+		43E189A911441136000870EB /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F670BD55AE3002E64E3 /* version.c */; };
+		43EA393D11442A8900AEF27C /* Gettext.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B2F220BD55814002E64E3 /* Gettext.framework */; };
 		43F3001410D3410C00707B6E /* macosx.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3FFFE10D33F4D00707B6E /* macosx.c */; };
 		43F3002C10D3417500707B6E /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A93A0BD3DD3E004D1C70 /* Carbon.framework */; };
 		43F3003310D341F000707B6E /* hog.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C20BD3C3450049AB60 /* hog.c */; };
@@ -739,13 +739,6 @@
 			remoteGlobalIDString = 02356D820BD3BB4100E9A019;
 			remoteInfo = Zlib;
 		};
-		02F5CCC30D1498BB0000A2D0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 02F5CC6C0D1494AA0000A2D0;
-			remoteInfo = Popt;
-		};
 		221052AB0E3D369C0057CD9C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -814,7 +807,6 @@
 				432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks */,
 				023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks */,
 				02548E0A0D159F4400B4B3B9 /* QuesoGLC.framework in Copy frameworks */,
-				02548E070D159F4000B4B3B9 /* Popt.framework in Copy frameworks */,
 				02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks */,
 				02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks */,
 				02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks */,
@@ -1598,6 +1590,10 @@
 		43A8417711028EDD00733CCB /* pointtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pointtree.h; path = ../src/pointtree.h; sourceTree = SOURCE_ROOT; };
 		43BE75E811124BB4007DF934 /* wavecast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wavecast.cpp; path = ../src/wavecast.cpp; sourceTree = SOURCE_ROOT; };
 		43BE75E911124BB4007DF934 /* wavecast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wavecast.h; path = ../src/wavecast.h; sourceTree = SOURCE_ROOT; };
+		43E188F311440CC9000870EB /* tsearch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tsearch.c; path = "external/gettext/gettext-runtime/intl/tsearch.c"; sourceTree = "<group>"; };
+		43E188F411440CC9000870EB /* tsearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tsearch.h; path = "external/gettext/gettext-runtime/intl/tsearch.h"; sourceTree = "<group>"; };
+		43E1897311441009000870EB /* os2compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = os2compat.c; path = "external/gettext/gettext-runtime/intl/os2compat.c"; sourceTree = "<group>"; };
+		43E189781144104B000870EB /* intl-exports.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "intl-exports.c"; path = "external/gettext/gettext-runtime/intl/intl-exports.c"; sourceTree = "<group>"; };
 		43F3005510D344AF00707B6E /* analyze.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = analyze.c; path = external/libtheora/lib/analyze.c; sourceTree = "<group>"; };
 		43F3005610D344AF00707B6E /* apiwrapper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = apiwrapper.c; path = external/libtheora/lib/apiwrapper.c; sourceTree = "<group>"; };
 		43F3005710D344AF00707B6E /* apiwrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apiwrapper.h; path = external/libtheora/lib/apiwrapper.h; sourceTree = "<group>"; };
@@ -1740,13 +1736,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43EA393D11442A8900AEF27C /* Gettext.framework in Frameworks */,
 				97AEAC560E8C261B00A10721 /* Theora.framework in Frameworks */,
 				02CDDD130D159DF600722688 /* QuesoGLC.framework in Frameworks */,
-				02F5CCC00D1498A30000A2D0 /* Popt.framework in Frameworks */,
 				02581C740BD5ABF700957CBC /* Carbon.framework in Frameworks */,
 				02581C640BD5A98900957CBC /* libSDLmain.a in Frameworks */,
 				02581B6F0BD5A30900957CBC /* CoreFoundation.framework in Frameworks */,
-				022B31400BD5691D002E64E3 /* Gettext.framework in Frameworks */,
 				0246A8020BD3D79D004D1C70 /* AudioToolbox.framework in Frameworks */,
 				0246A8030BD3D79D004D1C70 /* AudioUnit.framework in Frameworks */,
 				0246A8060BD3D79D004D1C70 /* CoreAudio.framework in Frameworks */,
@@ -1903,6 +1898,10 @@
 		022B2F460BD55940002E64E3 /* Gettext sources */ = {
 			isa = PBXGroup;
 			children = (
+				43E189781144104B000870EB /* intl-exports.c */,
+				43E1897311441009000870EB /* os2compat.c */,
+				43E188F311440CC9000870EB /* tsearch.c */,
+				43E188F411440CC9000870EB /* tsearch.h */,
 				022B30DF0BD56618002E64E3 /* plural.c */,
 				022B30AA0BD564FC002E64E3 /* config.h */,
 				022B2FE00BD55E45002E64E3 /* libgnuintl.h */,
@@ -3083,25 +3082,26 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				022B2F980BD55B50002E64E3 /* eval-plural.h in Headers */,
-				022B2F990BD55B50002E64E3 /* gettextP.h in Headers */,
-				022B2F9A0BD55B50002E64E3 /* gmo.h in Headers */,
-				022B2F9B0BD55B50002E64E3 /* hash-string.h in Headers */,
-				022B2F9C0BD55B50002E64E3 /* loadinfo.h in Headers */,
-				022B2F9D0BD55B50002E64E3 /* localcharset.h in Headers */,
-				022B2F9E0BD55B50002E64E3 /* lock.h in Headers */,
-				022B2F9F0BD55B50002E64E3 /* os2compat.h in Headers */,
-				022B2FA00BD55B50002E64E3 /* plural-exp.h in Headers */,
-				022B2FA20BD55B50002E64E3 /* printf-args.h in Headers */,
-				022B2FA40BD55B50002E64E3 /* printf-parse.h in Headers */,
-				022B2FA50BD55B50002E64E3 /* relocatable.h in Headers */,
-				022B2FA70BD55B50002E64E3 /* vasnprintf.h in Headers */,
-				022B2FA80BD55B50002E64E3 /* vasnwprintf.h in Headers */,
-				022B2FA90BD55B50002E64E3 /* wprintf-parse.h in Headers */,
-				022B2FAA0BD55B50002E64E3 /* xsize.h in Headers */,
 				022B2FE20BD55E45002E64E3 /* libgnuintl.h in Headers */,
 				022B2FE30BD55E45002E64E3 /* libintl.h in Headers */,
 				022B30AB0BD564FC002E64E3 /* config.h in Headers */,
+				43E1890411440D8C000870EB /* eval-plural.h in Headers */,
+				43E1890511440D8D000870EB /* gettextP.h in Headers */,
+				43E1890611440D8F000870EB /* gmo.h in Headers */,
+				43E1890711440D90000870EB /* hash-string.h in Headers */,
+				43E1890811440D91000870EB /* loadinfo.h in Headers */,
+				43E1890911440D92000870EB /* localcharset.h in Headers */,
+				43E1890A11440D93000870EB /* lock.h in Headers */,
+				43E1890B11440D93000870EB /* os2compat.h in Headers */,
+				43E1890C11440D94000870EB /* plural-exp.h in Headers */,
+				43E1890D11440D95000870EB /* printf-args.h in Headers */,
+				43E1890E11440D96000870EB /* printf-parse.h in Headers */,
+				43E1890F11440D97000870EB /* relocatable.h in Headers */,
+				43E1891011440D98000870EB /* tsearch.h in Headers */,
+				43E1891111440D99000870EB /* vasnprintf.h in Headers */,
+				43E1891211440D9A000870EB /* vasnwprintf.h in Headers */,
+				43E1891311440D9B000870EB /* wprintf-parse.h in Headers */,
+				43E1891411440D9C000870EB /* xsize.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3329,7 +3329,6 @@
 				0246A3030BD3CCF3004D1C70 /* PBXTargetDependency */,
 				0246A3050BD3CCF6004D1C70 /* PBXTargetDependency */,
 				0246A3070BD3CCF9004D1C70 /* PBXTargetDependency */,
-				02F5CCC40D1498BB0000A2D0 /* PBXTargetDependency */,
 				97B1D6680D1541C000737638 /* PBXTargetDependency */,
 				97AEAC550E8C261600A10721 /* PBXTargetDependency */,
 				43FA571310FF8EE90074E914 /* PBXTargetDependency */,
@@ -3884,7 +3883,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Config\nexport PATH=$PATH:/opt/local/bin:/sw/bin\npodir=\"../po\"\ndisfile=\"configs/LangDis\"\naresdir=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/\"\nbresdir=\"locale/\"\nmessdir=\"LC_MESSAGES/\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\ndislist=`cat ${disfile} | sed -n 's:^<::p'`\n\n# 1st san check\necho \"Checking for msgfmt...\"\nif [ -f build/notrans.dis ]; then\n    rm build/notrans.dis\n    echo \"Gettext support has been disabled for this build because we could not find a binary.\" >&2\n    exit 0\nelif ! type -aP msgfmt; then\n    echo \"Fatal inability to properly translate messages.\" >&2\n    exit 1\nfi\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# 2nd san check\necho \"Checking for sanity...\"\nif ! $msgfmtpth --version; then\n    echo \"Fatal failure of san check.\" >&2\n    exit 1\nfi\n\n# Disable selected langs\nfor dislang in ${dislist}; do\n    echo \"Cleaning up for ${dislang} ...\"\n    rm -rfv \"${aresdir}${dislang}.lproj\"\ndone\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${bresdir}${lang}/${messdir}\"\n        $msgfmtpth -v -o \"${aresdir}${bresdir}${lang}/${messdir}${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
+			shellScript = "# Config\nexport PATH=$PATH:/sw/bin:/opt/local/bin\npodir=\"../po\"\ndisfile=\"configs/LangDis\"\naresdir=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/\"\nbresdir=\"locale/\"\nmessdir=\"LC_MESSAGES/\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\ndislist=`cat ${disfile} | sed -n 's:^<::p'`\n\n# 1st san check\necho \"Checking for msgfmt...\"\nif [ -f build/notrans.dis ]; then\n    rm build/notrans.dis\n    echo \"Gettext support has been disabled for this build because we could not find a binary.\" >&2\n    exit 0\nelif ! type -aP msgfmt; then\n    echo \"Fatal inability to properly translate messages.\" >&2\n    exit 1\nfi\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# 2nd san check\necho \"Checking for sanity...\"\nif ! $msgfmtpth --version; then\n    echo \"Fatal failure of san check.\" >&2\n    exit 1\nfi\n\n# Disable selected langs\nfor dislang in ${dislist}; do\n    echo \"Cleaning up for ${dislang} ...\"\n    rm -rfv \"${aresdir}${dislang}.lproj\"\ndone\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${bresdir}${lang}/${messdir}\"\n        $msgfmtpth -v -o \"${aresdir}${bresdir}${lang}/${messdir}${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
 		};
 		43095E9A10EEA8630067E86B /* Run autorevision */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3912,7 +3911,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/opt/local/bin:/sw/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\n\n# Install\nif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \"Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
+			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\n\n# Install\nif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \"Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
 		};
 		43F3011910D3572400707B6E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4035,36 +4034,37 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				022B2F680BD55AE3002E64E3 /* bindtextdom.c in Sources */,
-				022B2F690BD55AE3002E64E3 /* dcgettext.c in Sources */,
-				022B2F6A0BD55AE3002E64E3 /* dcigettext.c in Sources */,
-				022B2F6B0BD55AE3002E64E3 /* dcngettext.c in Sources */,
-				022B2F6C0BD55AE3002E64E3 /* dgettext.c in Sources */,
-				022B2F6D0BD55AE3002E64E3 /* dngettext.c in Sources */,
-				022B2F6E0BD55AE3002E64E3 /* explodename.c in Sources */,
-				022B2F6F0BD55AE3002E64E3 /* finddomain.c in Sources */,
-				022B2F700BD55AE3002E64E3 /* gettext.c in Sources */,
-				022B2F710BD55AE3002E64E3 /* hash-string.c in Sources */,
-				022B2F720BD55AE3002E64E3 /* intl-compat.c in Sources */,
-				022B2F740BD55AE3002E64E3 /* l10nflist.c in Sources */,
-				022B2F750BD55AE3002E64E3 /* langprefs.c in Sources */,
-				022B2F760BD55AE3002E64E3 /* loadmsgcat.c in Sources */,
-				022B2F770BD55AE3002E64E3 /* localcharset.c in Sources */,
-				022B2F780BD55AE3002E64E3 /* localealias.c in Sources */,
-				022B2F790BD55AE3002E64E3 /* localename.c in Sources */,
-				022B2F7A0BD55AE3002E64E3 /* lock.c in Sources */,
-				022B2F7B0BD55AE3002E64E3 /* log.c in Sources */,
-				022B2F7C0BD55AE3002E64E3 /* ngettext.c in Sources */,
-				022B2F7E0BD55AE3002E64E3 /* osdep.c in Sources */,
-				022B2F7F0BD55AE3002E64E3 /* plural-exp.c in Sources */,
-				022B2F810BD55AE3002E64E3 /* printf.c in Sources */,
-				022B2F820BD55AE3002E64E3 /* relocatable.c in Sources */,
-				022B2F830BD55AE3002E64E3 /* textdomain.c in Sources */,
-				022B2F840BD55AE3002E64E3 /* version.c in Sources */,
-				022B2FA10BD55B50002E64E3 /* printf-args.c in Sources */,
-				022B2FA30BD55B50002E64E3 /* printf-parse.c in Sources */,
-				022B2FA60BD55B50002E64E3 /* vasnprintf.c in Sources */,
-				022B30E00BD56618002E64E3 /* plural.c in Sources */,
+				43E1898911441107000870EB /* bindtextdom.c in Sources */,
+				43E1898A11441108000870EB /* dcgettext.c in Sources */,
+				43E1898B11441109000870EB /* dcigettext.c in Sources */,
+				43E1898C1144110A000870EB /* dcngettext.c in Sources */,
+				43E1898D1144110B000870EB /* dgettext.c in Sources */,
+				43E1898E1144110C000870EB /* dngettext.c in Sources */,
+				43E1898F1144110D000870EB /* explodename.c in Sources */,
+				43E189901144110E000870EB /* finddomain.c in Sources */,
+				43E1899111441110000870EB /* gettext.c in Sources */,
+				43E1899211441111000870EB /* hash-string.c in Sources */,
+				43E1899311441113000870EB /* intl-compat.c in Sources */,
+				43E1899511441115000870EB /* l10nflist.c in Sources */,
+				43E1899611441117000870EB /* langprefs.c in Sources */,
+				43E1899711441118000870EB /* loadmsgcat.c in Sources */,
+				43E1899811441119000870EB /* localcharset.c in Sources */,
+				43E189991144111E000870EB /* localealias.c in Sources */,
+				43E1899A1144111F000870EB /* localename.c in Sources */,
+				43E1899B11441120000870EB /* lock.c in Sources */,
+				43E1899C11441123000870EB /* log.c in Sources */,
+				43E1899D11441124000870EB /* ngettext.c in Sources */,
+				43E1899F11441126000870EB /* osdep.c in Sources */,
+				43E189A01144112B000870EB /* plural-exp.c in Sources */,
+				43E189A11144112C000870EB /* plural.c in Sources */,
+				43E189A21144112D000870EB /* printf-args.c in Sources */,
+				43E189A31144112E000870EB /* printf-parse.c in Sources */,
+				43E189A411441131000870EB /* printf.c in Sources */,
+				43E189A511441132000870EB /* relocatable.c in Sources */,
+				43E189A611441133000870EB /* textdomain.c in Sources */,
+				43E189A711441134000870EB /* tsearch.c in Sources */,
+				43E189A811441135000870EB /* vasnprintf.c in Sources */,
+				43E189A911441136000870EB /* version.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4538,11 +4538,6 @@
 			target = 02356D820BD3BB4100E9A019 /* Zlib */;
 			targetProxy = 02DDA8D20BD3C3780049AB60 /* PBXContainerItemProxy */;
 		};
-		02F5CCC40D1498BB0000A2D0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 02F5CC6C0D1494AA0000A2D0 /* Popt */;
-			targetProxy = 02F5CCC30D1498BB0000A2D0 /* PBXContainerItemProxy */;
-		};
 		221052AC0E3D369C0057CD9C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 221052010E3D21E80057CD9C /* Bison */;
@@ -4951,7 +4946,6 @@
 		4389DBE4111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4962,8 +4956,6 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
 				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -5056,7 +5048,6 @@
 		971177620F87A677000C8A96 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5069,7 +5060,6 @@
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -5089,7 +5079,6 @@
 		971177630F87A677000C8A96 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5100,8 +5089,6 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
 				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";

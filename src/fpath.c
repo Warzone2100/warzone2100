@@ -670,25 +670,16 @@ static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 }
 
 // Variables for the callback
-static SDWORD	finalX,finalY, vectorX,vectorY;
 static BOOL		obstruction;
 
 /** The visibility ray callback
  */
-static bool fpathVisCallback(Vector3i pos, int dist, void* data)
+static bool fpathVisCallback(Vector3i pos, int32_t dist, void *data)
 {
 	/* Has to be -1 to make sure that it doesn't match any enumerated
 	 * constant from PROPULSION_TYPE.
 	 */
 	static const PROPULSION_TYPE prop = (PROPULSION_TYPE)-1;
-
-	// See if this point is past the final point (dot product)
-	int vx = pos.x - finalX, vy = pos.y - finalY;
-
-	if (vx*vectorX + vy*vectorY <= 0)
-	{
-		return false;
-	}
 
 	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), prop))
 	{
@@ -708,13 +699,9 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	Vector3i dir = Vector3i_Sub(p2, p1);
 
 	// Initialise the callback variables
-	finalX = p2.x;
-	finalY = p2.y;
-	vectorX = -dir.x;
-	vectorY = -dir.y;
 	obstruction = false;
 
-	rayCast(p1, dir, RAY_MAXLEN, fpathVisCallback, NULL);
+	rayCast(p1, iAtan2(dir.x, dir.y), iHypot(dir.x, dir.y), fpathVisCallback, NULL);
 
 	return !obstruction;
 }
