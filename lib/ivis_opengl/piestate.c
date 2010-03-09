@@ -110,7 +110,7 @@ static void printProgramInfoLog(code_part part, GLuint program)
 }
 
 // Read/compile/link shaders
-static bool loadShaders(GLuint *program, char *definitions,
+static bool loadShaders(GLuint *program, const char *definitions,
 						const char *vertexPath, const char *fragmentPath)
 {
 	GLint status;
@@ -118,10 +118,10 @@ static bool loadShaders(GLuint *program, char *definitions,
 	char *buffer[2];
 
 	*program = glCreateProgram();
-	ASSERT_OR_RETURN(false, definitions, "Null in preprocessor definitions!");
+	ASSERT_OR_RETURN(false, definitions != NULL, "Null in preprocessor definitions!");
 	ASSERT_OR_RETURN(false, *program, "Could not create shader program!");
 
-	*buffer = definitions;
+	*buffer = (char *)definitions;
 
 	if (vertexPath)
 	{
