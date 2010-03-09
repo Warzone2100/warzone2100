@@ -1,6 +1,8 @@
 #pragma debug(on)
 
+#ifdef FOG_ENABLED
 varying float vertexDistance;
+#endif
 
 void main(void)
 {
@@ -15,6 +17,8 @@ void main(void)
 	// Use "magic" fixed routine while using GLSL < 1.30
 	gl_Position = ftransform();
 	
+#ifdef FOG_ENABLED
 	// Remember vertex distance
 	vertexDistance = gl_Position.z;
+#endif
 }
