@@ -2879,8 +2879,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 		// This isn't supposed to happen, and really shouldn't be possible - if this happens, maybe a structure is being updated twice?
 		int count1 = 0, count2 = 0;
 		STRUCTURE *s;
-		for (s =         apsStructLists[i]; s != NULL; s = s->psNext) count1 += s == psStructure;
-		for (s = mission.apsStructLists[i]; s != NULL; s = s->psNext) count2 += s == psStructure;
+		for (s =         apsStructLists[psStructure->player]; s != NULL; s = s->psNext) count1 += s == psStructure;
+		for (s = mission.apsStructLists[psStructure->player]; s != NULL; s = s->psNext) count2 += s == psStructure;
 		debug(LOG_ERROR, "psStructure->prevTime = %u, psStructure->time = %u, gameTime = %u, count1 = %d, count2 = %d", psStructure->prevTime, psStructure->time, gameTime, count1, count2);
 		--psStructure->time;
 	}
