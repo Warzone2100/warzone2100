@@ -39,8 +39,6 @@ extern int inQuad( const Vector2i *pt, const QUAD *quad );
 extern DROID *getNearestDroid( UDWORD x, UDWORD y, BOOL bSelected );
 extern BOOL droidOnScreen( DROID *psDroid, SDWORD tolerance );
 
-extern unsigned int WZ_DECL_CONST dirtyHypot(int deltaX, int deltaY);
-
 static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 {
 	BASE_OBJECT * psObj = mapTile(x,y)->psObject;

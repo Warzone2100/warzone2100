@@ -23,6 +23,11 @@
  * Originally by Alex McLean & Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE
  */
 #include "lib/ivis_opengl/GLee.h"
+// Workaround X11 headers #defining Status
+#ifdef Status
+# undef Status
+#endif
+
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/stdio_ext.h"
@@ -740,6 +745,7 @@ static void drawTiles(iView *player)
 {
 	UDWORD i, j;
 	SDWORD rx, rz;
+	Vector3f theSun;
 
 	/* ---------------------------------------------------------------- */
 	/* Do boundary and extent checking                                  */
@@ -778,12 +784,9 @@ static void drawTiles(iView *player)
 	/* Translate */
 	pie_TRANSLATE(-rx, -player->p.y, rz);
 
-	if (getDrawShadows())
-	{
-		Vector3f theSun = getTheSun();
-		// this also detemines the length of the shadows
-		pie_BeginLighting(&theSun);
-	}
+	// this also detemines the length of the shadows
+	theSun = getTheSun();
+	pie_BeginLighting(&theSun, getDrawShadows());
 
 	// update the fog of war
 	for (i = 0; i < visibleTiles.y+1; i++)
@@ -842,7 +845,12 @@ static void drawTiles(iView *player)
 	drawTerrain();
 	
 	// go back to the warzone [0,255] range
+	glActiveTexture(GL_TEXTURE1);
 	pie_TranslateTextureEnd();
+	// go back to the warzone [0,255] range
+	glActiveTexture(GL_TEXTURE0);
+	pie_TranslateTextureEnd();
+
 	// and to the warzone modelview transform
 	glPopMatrix();
 
@@ -895,7 +903,12 @@ static void drawTiles(iView *player)
 	drawWater();
 	
 	// go back to the warzone [0,255] range
+	glActiveTexture(GL_TEXTURE1);
 	pie_TranslateTextureEnd();
+	// go back to the warzone [0,255] range
+	glActiveTexture(GL_TEXTURE0);
+	pie_TranslateTextureEnd();
+
 	// and to the warzone modelview transform
 	glPopMatrix();
 
@@ -1113,7 +1126,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 		return;
 	}
 
-	st = interpolateSpacetime(psCurr->prevSpacetime, GET_SPACETIME(psCurr), graphicsTime);
+	st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psCurr, graphicsTime);
 
 	//the weapon stats holds the reference to which graphic to use
 	/*Need to draw the graphic depending on what the projectile is doing - hitting target,
@@ -1157,7 +1170,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 		}
 		else
 		{
-			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_NO_BILINEAR, 0);
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
 		}
 
 		iV_MatrixEnd();
@@ -1268,7 +1281,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		iV_MatrixRotateZ(-psObj->orientation.y);
 		iV_MatrixRotateX(-psObj->orientation.x);
 
-		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, WZCOL_BLACK, pie_NO_BILINEAR|pie_STATIC_SHADOW, 0);
+		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, WZCOL_BLACK, pie_STATIC_SHADOW, 0);
 
 		/* clear stack */
 		iV_MatrixEnd();
@@ -2097,7 +2110,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			}
 			else
 			{
-				pieFlag = pie_TRANSLUCENT;
+				pieFlag = pie_TRANSLUCENT | pie_FORCE_FOG;
 				pieFlagData = 255;
 			}
 			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
@@ -2675,10 +2688,10 @@ static void	drawDragBox( void )
 		}
 
 		// SHURCOOL: Determine the 4 corners of the selection box, and use them for consistent selection box rendering
-		minX = MIN(dragBox3D.x1, mouseXPos);
-		maxX = MAX(dragBox3D.x1, mouseXPos);
-		minY = MIN(dragBox3D.y1, mouseYPos);
-		maxY = MAX(dragBox3D.y1, mouseYPos);
+		minX = MIN(dragBox3D.x1, mouseX());
+		maxX = MAX(dragBox3D.x1, mouseX());
+		minY = MIN(dragBox3D.y1, mouseY());
+		maxY = MAX(dragBox3D.y1, mouseY());
 
 		// SHURCOOL: Reduce the box in size to produce a (consistent) pulsing inward effect
 		minX += dragBox3D.pulse / 2;
@@ -3534,7 +3547,7 @@ void calcScreenCoords(DROID *psDroid)
  */
 static void locateMouse(void)
 {
-	const Vector2i pt = {mouseXPos, mouseYPos};
+	const Vector2i pt = {mouseX(), mouseY()};
 	unsigned int i;
 	int nearestZ = INT_MAX;
 

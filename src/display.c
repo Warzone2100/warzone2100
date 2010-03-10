@@ -191,12 +191,10 @@ static UDWORD	currentFrame;
 static UDWORD StartOfLastFrame;
 static SDWORD	rotX;
 static SDWORD	rotY;
-static UDWORD	worldAngle;
 static UDWORD	rotInitial;
 static UDWORD	rotInitialUp;
 static UDWORD	xMoved, yMoved;
 static STRUCTURE	*psBuilding;
-static SDWORD	direction = 0;
 static BOOL	edgeOfMap = false;
 static UDWORD	scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
@@ -214,9 +212,6 @@ static bool mouseScroll = true;
 
 BOOL	rotActive = false;
 BOOL	gameStats = false;
-
-/* Mouse x and y - no point checking them more than once per frame */
-uint16_t mouseXPos = OFF_SCREEN, mouseYPos = OFF_SCREEN;
 
 /* Hackety hack hack hack */
 SDWORD	screenShakeTable[100] =
@@ -454,10 +449,7 @@ void processInput(void)
 	BOOL mOverRadar = false;
 	int WheelZoomIterator;
 
-	mouseXPos = mouseX();
-	mouseYPos = mouseY();
-
-	if(radarOnScreen && getHQExists(selectedPlayer) && CoordInRadar(mouseXPos, mouseYPos))
+	if(radarOnScreen && getHQExists(selectedPlayer) && CoordInRadar(mouseX(), mouseY()))
 	{
 		mOverRadar = true;
 	}
@@ -588,8 +580,8 @@ static void CheckFinishedDrag(void)
 				clearSelection();
 			}
 			dragBox3D.status = DRAG_RELEASED;
-			dragBox3D.x2 = mouseXPos;
-			dragBox3D.y2 = mouseYPos;
+			dragBox3D.x2 = mouseX();
+			dragBox3D.y2 = mouseY();
 		}
 		else
 		{
@@ -687,9 +679,9 @@ static void HandleDrag(void)
 	{
 		if(!driveModeActive()) {
 			dragBox3D.x1 = dragX;
-			dragBox3D.x2 = mouseXPos;
+			dragBox3D.x2 = mouseX();
 			dragBox3D.y1 = dragY;
-			dragBox3D.y2 = mouseYPos;
+			dragBox3D.y2 = mouseY();
 
 			dragBox3D.status = DRAG_DRAGGING;
 		}
@@ -1042,8 +1034,6 @@ void processMouseClickInput(void)
 
 void scroll(void)
 {
-	float	radians;
-	float	cosine, sine;
 	SDWORD	xDif,yDif;
 	UDWORD	timeDiff;
 	BOOL mouseAtLeft = false, mouseAtRight = false,
@@ -1060,25 +1050,25 @@ void scroll(void)
 	if (mouseScroll)
 	{
 		/* Scroll left */
-		if (mouseXPos < BOUNDARY_X)
+		if (mouseX() < BOUNDARY_X)
 		{
 			mouseAtLeft = true;
 		}
 
 		/* Scroll right */
-		if (mouseXPos > (pie_GetVideoBufferWidth() - BOUNDARY_X))
+		if (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X))
 		{
 			mouseAtRight = true;
 		}
 
 		/* Scroll up */
-		if (mouseYPos < BOUNDARY_Y)
+		if (mouseY() < BOUNDARY_Y)
 		{
 			mouseAtBottom = true;
 		}
 
 		/* Scroll down */
-		if (mouseYPos > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
+		if (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
 		{
 			mouseAtTop = true;
 		}
@@ -1197,19 +1187,10 @@ void scroll(void)
 	scrollStepUpDown = scrollSpeedUpDown * (float)(timeDiff) /
 		(float)GAME_TICKS_PER_SEC;
 
-	/* Get angle vector to scroll along */
-	worldAngle = (UDWORD) ((UDWORD)player.r.y/DEG_1)%360;
-	direction = (360) - worldAngle;
-
-	/* Convert to radians */
-	radians = ((M_PI / 180) * (direction));
-	cosine = cosf(radians);
-	sine = sinf(radians);
-
 	/* Get x component of movement */
-	xDif = roundf(cosine * scrollStepLeftRight + sine * scrollStepUpDown);
+	xDif = iCosR(-player.r.y, scrollStepLeftRight) + iSinR(-player.r.y, scrollStepUpDown);
 	/* Get y component of movement */
-	yDif = roundf(sine * scrollStepLeftRight - cosine * scrollStepUpDown);
+	yDif = iSinR(-player.r.y, scrollStepLeftRight) - iCosR(-player.r.y, scrollStepUpDown);
 
 	/* Adjust player's position by these components */
 	player.p.x += xDif;
@@ -1321,41 +1302,41 @@ void displayWorld(void)
 
 	if (mouseDown(MOUSE_RMB) && rotActive)
 	{
-		if (abs(mouseXPos - rotX) > 8 || xMoved > 8)
+		if (abs(mouseX() - rotX) > 8 || xMoved > 8)
 		{
-			xMoved += abs(mouseXPos - rotX);
-			if (mouseXPos < rotX)
+			xMoved += abs(mouseX() - rotX);
+			if (mouseX() < rotX)
 			{
-				player.r.y = rotInitial + (rotX - mouseXPos)/2 * DEG(1);
+				player.r.y = rotInitial + (rotX - mouseX())/2 * DEG(1);
 			}
 			else
 			{
-				player.r.y = rotInitial - (mouseXPos - rotX)/2 * DEG(1);
+				player.r.y = rotInitial - (mouseX() - rotX)/2 * DEG(1);
 			}
 		}
-		if (abs(mouseYPos - rotY) > 8 || yMoved > 8)
+		if (abs(mouseY() - rotY) > 8 || yMoved > 8)
 		{
-				yMoved += abs(mouseYPos - rotY);
+				yMoved += abs(mouseY() - rotY);
 				if (bInvertMouse)
 				{
-					if (mouseYPos < rotY)
+					if (mouseY() < rotY)
 					{
-						player.r.x = rotInitialUp + (rotY - mouseYPos)/3 * DEG(1);
+						player.r.x = rotInitialUp + (rotY - mouseY())/3 * DEG(1);
 					}
 					else
 					{
-						player.r.x = rotInitialUp - (mouseYPos - rotY)/3 * DEG(1);
+						player.r.x = rotInitialUp - (mouseY() - rotY)/3 * DEG(1);
 					}
 				}
 				else
 				{
-					if(mouseYPos < rotY)
+					if(mouseY() < rotY)
 					{
-						player.r.x = rotInitialUp - (rotY - mouseYPos)/3 * DEG(1);
+						player.r.x = rotInitialUp - (rotY - mouseY())/3 * DEG(1);
 					}
 					else
 					{
-						player.r.x = rotInitialUp + (mouseYPos - rotY)/3 * DEG(1);
+						player.r.x = rotInitialUp + (mouseY() - rotY)/3 * DEG(1);
 					}
 				}
 				if(player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
@@ -1388,7 +1369,7 @@ void displayWorld(void)
 
 static BOOL mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 {
-	return mouseXPos > x0 && mouseXPos < x1 && mouseYPos > y0 && mouseYPos < y1;
+	return mouseX() > x0 && mouseX() < x1 && mouseY() > y0 && mouseY() < y1;
 }
 
 BOOL DrawnInLastFrame(int32_t frame)
@@ -2046,6 +2027,7 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 			(apStructTypeLists[selectedPlayer][i] == AVAILABLE) )	// dont go any further if no derrick stat found.
 		{
 			DROID* psCurr;
+			int numTrucks = 0;
 
 			// for each droid
 			for(psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
@@ -2073,9 +2055,21 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 							(BASE_STATS*) &asStructureStats[i],
 							psFeature->pos.x, psFeature->pos.y);
 					}
-					addConsoleMessage(_("Truck ordered to build Oil Derrick"),DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
-					FeedbackOrderGiven();
+					++numTrucks;
 				}
+			}
+
+			if (numTrucks != 0)
+			{
+				char msg[100];
+				switch (numTrucks)
+				{
+					case 1:  ssprintf(msg, _("Truck ordered to build Oil Derrick")); break;
+					case 2:  ssprintf(msg, _("2 trucks ordered to build Oil Derrick")); break;
+					default: ssprintf(msg, _("%d trucks ordered to build Oil Derrick"), numTrucks); break;
+				}
+				addConsoleMessage(msg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				FeedbackOrderGiven();
 			}
 		}
 

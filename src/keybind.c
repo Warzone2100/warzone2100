@@ -2678,11 +2678,11 @@ void kf_ToggleRadarAllyEnemy(void)
 
 void kf_ToggleRadarTerrain(void)
 {
-	radarDrawMode++;
+	radarDrawMode = (RADAR_DRAW_MODE)(radarDrawMode + 1);
 
 	if (radarDrawMode == RADAR_MODE_TERRAIN_SEEN && getRevealStatus())
 	{
-		radarDrawMode++;	// skip this radar mode for fog of war mode
+		radarDrawMode = (RADAR_DRAW_MODE)(radarDrawMode + 1);  // skip this radar mode for fog of war mode
 	}
 	if (radarDrawMode >= NUM_RADAR_MODES)
 	{

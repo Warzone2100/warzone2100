@@ -26,6 +26,8 @@
 #ifndef _codeprint_h
 #define _codeprint_h
 
+#include "lib/script/interpreter.h"
+
 #ifdef __cplusplus
 extern "C"
 {

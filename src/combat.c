@@ -228,7 +228,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	if (psAttacker->type == OBJ_DROID && !psStats->rotate)
 	{
 		uint16_t targetDir = calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y);
-		int dirDiff = abs((int16_t)(targetDir - psAttacker->rot.direction));  // Cast wrapping intended.
+		int dirDiff = abs(angleDelta(targetDir - psAttacker->rot.direction));
 		if (dirDiff > FIXED_TURRET_DIR)
 		{
 			return;
@@ -342,7 +342,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 			if (proj_Direct(psStats) || dist <= psStats->minRange)
 			{
-				flightTime = (double)dist / (double)psStats->flightSpeed;
+				flightTime = dist / psStats->flightSpeed;
 			}
 			else
 			{

@@ -2633,8 +2633,8 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
 	psDroid->originalBody = psDroid->body;
 	psDroid->expectedDamage = 0;  // Begin life optimistically.
-	psDroid->time = gameTime;
-	psDroid->prevSpacetime.time = gameTime - MAX(1, deltaGameTime);
+	psDroid->time = gameTime - deltaGameTime;         // Start at beginning of tick.
+	psDroid->prevSpacetime.time = psDroid->time - 1;  // -1 for interpolation.
 
 	//create the droids weapons
 	if (pTemplate->numWeaps > 0)

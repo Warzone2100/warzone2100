@@ -527,141 +527,52 @@ void	camAllignWithTarget(BASE_OBJECT *psTarget)
 	OldViewValid = true;
 }
 
+#define GROUP_SELECTED 0xFFFFFFFF
 
 //-----------------------------------------------------------------------------------
-static SDWORD getAverageTrackAngle( BOOL bCheckOnScreen )
+static uint16_t getAverageTrackAngle(unsigned groupNumber, bool bCheckOnScreen)
 {
 	DROID *psDroid;
-	float xShift, yShift;
-	float xTotal = 0.0, yTotal = 0.0;
-	float averageAngleFloat = 0;
-	SDWORD droidCount = 0, averageAngle = 0;
-	SDWORD retVal;
+	int32_t xTotal = 0, yTotal = 0;
 
 	/* Got thru' all droids */
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		/* Is he worth selecting? */
-		if (psDroid->selected)
+		if (groupNumber == GROUP_SELECTED ? psDroid->selected : psDroid->group == groupNumber)
 		{
 			if (bCheckOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : true)
 			{
-					droidCount++;
-					averageAngle += UNDEG(psDroid->rot.direction);
-					xShift = trigSin(UNDEG(psDroid->rot.direction));
-					yShift = trigCos(UNDEG(psDroid->rot.direction));
-					xTotal += xShift;
-					yTotal += yShift;
+				xTotal += iSin(psDroid->rot.direction);
+				yTotal += iCos(psDroid->rot.direction);
 			}
 		}
 	}
-	if (droidCount)
-	{
-		retVal = (averageAngle / droidCount);
-		averageAngleFloat = (float)RAD_TO_DEG(atan2(xTotal, yTotal));
-	}
-	else
-	{
-		retVal = 0;
-	}
-	// FIXME: Should we return 0 when retVal is 0?
-	presAvAngle = averageAngleFloat;//retVal;
+	presAvAngle = iAtan2(xTotal, yTotal);
 	return presAvAngle;
 }
 
 
 //-----------------------------------------------------------------------------------
-static SDWORD getGroupAverageTrackAngle(UDWORD groupNumber, BOOL bCheckOnScreen)
-{
-	DROID *psDroid;
-	float xShift, yShift;
-	float xTotal = 0.0, yTotal = 0.0;
-	float averageAngleFloat = 0;
-	SDWORD droidCount = 0, averageAngle = 0;
-	SDWORD retVal;
-
-	/* Got thru' all droids */
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
-	{
-		/* Is he worth considering? */
-		if (psDroid->group == groupNumber)
-		{
-			if (bCheckOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : true)
-			{
-					droidCount++;
-					averageAngle += UNDEG(psDroid->rot.direction);
-					xShift = trigSin(UNDEG(psDroid->rot.direction));
-					yShift = trigCos(UNDEG(psDroid->rot.direction));
-					xTotal += xShift;
-					yTotal += yShift;
-			}
-		}
-	}
-	if (droidCount)
-	{
-		retVal = (averageAngle / droidCount);
-		averageAngleFloat = RAD_TO_DEG(atan2(xTotal, yTotal));
-	}
-	else
-	{
-		retVal = 0;
-	}
-	// FIXME: Return 0 when retVal is 0?
-	presAvAngle = averageAngleFloat;//retVal;
-	return presAvAngle;
-}
-
-
-//-----------------------------------------------------------------------------------
-static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z)
+static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNumber, BOOL bOnScreen)
 {
 	SDWORD xTotals = 0, yTotals = 0, zTotals = 0;
 	DROID *psDroid;
 	UDWORD count;
 
 	for (count = 0, psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
-		{
-			if (psDroid->selected)
-			{
-				if (droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 4))
-				{
-					count++;
-					xTotals += psDroid->pos.x;
-					yTotals += psDroid->pos.z;	// note the flip
-					zTotals += psDroid->pos.y;
-				}
-			}
-		}
-
-	if (count)	// necessary!!!!!!!
 	{
-		*x = xTotals / count;
-		*y = yTotals / count;
-		*z = zTotals / count;
-	}
-}
-
-
-//-----------------------------------------------------------------------------------
-static void getGroupTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNumber, BOOL bOnScreen)
-{
-	SDWORD xTotals = 0, yTotals = 0, zTotals = 0;
-	DROID *psDroid;
-	UDWORD count;
-
-	for (count = 0, psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		if (groupNumber == GROUP_SELECTED ? psDroid->selected : psDroid->group == groupNumber)
 		{
-			if (psDroid->group == groupNumber)
+			if (!bOnScreen || droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 4))
 			{
-				if (bOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 4) : true)
-				{
-				 		count++;
-						xTotals += psDroid->pos.x;
-						yTotals += psDroid->pos.z;	// note the flip
-						zTotals += psDroid->pos.y;
-				}
+				count++;
+				xTotals += psDroid->pos.x;
+				yTotals += psDroid->pos.z;	// note the flip
+				zTotals += psDroid->pos.y;
 			}
 		}
+	}
 
 	if (count)	// necessary!!!!!!!
 	{
@@ -748,26 +659,18 @@ static void updateCameraAcceleration(UBYTE update)
 		/* Present direction is important */
 		if (getNumDroidsSelected() > 2)
 		{
-			unsigned int multiAngle;
+			unsigned group = trackingCamera.target->selected ? GROUP_SELECTED : trackingCamera.target->group;
 
-			if (trackingCamera.target->selected)
-			{
-				multiAngle = getAverageTrackAngle(true);
-				getTrackingConcerns(&concern.x, &concern.y, &concern.z);
-			}
-			else
-			{
-				multiAngle = getGroupAverageTrackAngle( trackingCamera.target->group, true );
-				getGroupTrackingConcerns(&concern.x, &concern.y, &concern.z, trackingCamera.target->group, true);
-			}
+			uint16_t multiAngle = getAverageTrackAngle(group, true);
+			getTrackingConcerns(&concern.x, &concern.y, &concern.z, group, true);
 
-			behind.x = ( CAM_DEFAULT_Y_OFFSET * SIN( DEG(multiAngle) ) ) >> FP12_SHIFT;
-			behind.y = ( CAM_DEFAULT_X_OFFSET * COS( DEG(multiAngle) ) ) >> FP12_SHIFT;
+			behind.x = iSinR(multiAngle, CAM_DEFAULT_Y_OFFSET);
+			behind.y = iCosR(multiAngle, CAM_DEFAULT_X_OFFSET);
 		}
 		else
 		{
-		 	behind.x = ( CAM_DEFAULT_Y_OFFSET * SIN(trackingCamera.target->rot.direction ) ) >> FP12_SHIFT;
-			behind.y = ( CAM_DEFAULT_X_OFFSET * COS(trackingCamera.target->rot.direction) ) >> FP12_SHIFT;
+		 	behind.x = iSinR(trackingCamera.target->rot.direction, CAM_DEFAULT_Y_OFFSET);
+			behind.y = iCosR(trackingCamera.target->rot.direction, CAM_DEFAULT_X_OFFSET);
 		}
 
 		concern.y += angle*5;
@@ -890,7 +793,6 @@ static void updateCameraRotationAcceleration( UBYTE update )
 	SDWORD	xConcern, yConcern, zConcern;
 	BOOL	bTooLow;
 	PROPULSION_STATS *psPropStats;
-	SDWORD	pitch;
 	BOOL	bGotFlying = false;
 	SDWORD	xPos = 0, yPos = 0, zPos = 0;
 
@@ -920,14 +822,8 @@ static void updateCameraRotationAcceleration( UBYTE update )
 		/* Check what we're tracking */
 		if(getNumDroidsSelected()>2 && trackingCamera.target->type == OBJ_DROID)
 		{
-			if(trackingCamera.target->selected)
-			{
-				yConcern = DEG( getAverageTrackAngle(false) ); //DEG(trackingCamera.target->direction);
-			}
-			else
-			{
-				yConcern = DEG( getGroupAverageTrackAngle(trackingCamera.target->group, false) ); //DEG(trackingCamera.target->direction);
-			}
+			unsigned group = trackingCamera.target->selected ? GROUP_SELECTED : trackingCamera.target->group;
+			yConcern = getAverageTrackAngle(group, false);
 		}
 		else
 		{
@@ -941,15 +837,8 @@ static void updateCameraRotationAcceleration( UBYTE update )
 		}
 
 		/* Which way are we facing? */
-		worldAngle =  trackingCamera.rotation.y;
-		separation = fmodf(yConcern - worldAngle, DEG(360));
-
-		// Make sure that rotations larger than 180 degrees are noted
-		// in the range of -180 - 0 degrees.
-		if (separation > DEG(180))
-		{
-			separation -= DEG(360);
-		}
+		worldAngle = trackingCamera.rotation.y;
+		separation = angleDelta(yConcern - worldAngle);
 
 		/* Make new acceleration */
 		trackingCamera.rotAccel.y = ROT_ACCEL_CONSTANT * separation - ROT_VELOCITY_CONSTANT * trackingCamera.rotVel.y;
@@ -959,17 +848,12 @@ static void updateCameraRotationAcceleration( UBYTE update )
 	{
 		if(trackingCamera.target->type == OBJ_DROID && !bGotFlying)
 		{
-			getTrackingConcerns(&xPos,&yPos,&zPos);
-			if(trackingCamera.target->selected)
-			{
-				getBestPitchToEdgeOfGrid(xPos,zPos,360-((getAverageTrackAngle(true)+180)%360),&pitch);
-			}
-			else
-			{
-				getBestPitchToEdgeOfGrid(xPos,zPos,360-((getGroupAverageTrackAngle(trackingCamera.target->group,true)+180)%360),&pitch);
-			}
-			if(pitch<14) pitch = 14;
-			xConcern = DEG(-pitch);
+			uint16_t pitch;
+			unsigned group = trackingCamera.target->selected ? GROUP_SELECTED : trackingCamera.target->group;
+			getTrackingConcerns(&xPos, &yPos, &zPos, GROUP_SELECTED, true);  // FIXME Should this be group instead of GROUP_SELECTED?
+			getBestPitchToEdgeOfGrid(xPos, zPos, DEG(180) - getAverageTrackAngle(group, true), &pitch);
+			pitch = MAX(angleDelta(pitch), DEG(14));
+			xConcern = -pitch;
 		}
 		else
 		{
@@ -987,18 +871,7 @@ static void updateCameraRotationAcceleration( UBYTE update )
 				trackingCamera.rotation.x+=DEG(360);
 			}
 		worldAngle =  trackingCamera.rotation.x;
-		separation = xConcern - worldAngle;
-
-		// Make sure that rotations are noted
-		// in the range of -180 - 180 degrees.
-		while (separation > DEG(180))
-		{
-			separation -= DEG(360);
-		}
-		while (separation < -DEG(180))
-		{
-			separation += DEG(360);
-		}
+		separation = angleDelta(xConcern - worldAngle);
 
 		/* Make new acceleration */
 		trackingCamera.rotAccel.x =

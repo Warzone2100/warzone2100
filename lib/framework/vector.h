@@ -135,7 +135,7 @@ static inline WZ_DECL_CONST int Vector2i_ScalarP(const Vector2i op1, const Vecto
  */
 static inline WZ_DECL_CONST int Vector2i_Length(const Vector2i v)
 {
-	return sqrtf( (float)Vector2i_ScalarP(v, v) );
+	return iHypot(v.x, v.y);
 }
 
 
@@ -281,9 +281,9 @@ static inline WZ_DECL_CONST Vector2f Vector2f_Normalise(const Vector2f v)
 static inline WZ_DECL_CONST Vector2f Vector2f_Rotate2f(Vector2f v, float degrees)
 {
 	Vector2f result;
-	float radians = (degrees / 360) * 2 * 3.14;
-	result.x = v.x*cos(radians) - v.y*sin(radians);
-	result.y = v.x*sin(radians) + v.y*cos(radians);
+	int angle = (int)((degrees*65536 + 180)/360);
+	result.x = (v.x*iCos(angle) - v.y*iSin(angle)) / 65536;
+	result.y = (v.x*iSin(angle) + v.y*iCos(angle)) / 65536;
 
 	return result;
 }
@@ -516,43 +516,6 @@ static inline WZ_DECL_CONST bool Vector3f_InSphere (const Vector3f v, const Vect
 
 
 /*!
- * Compute the forward vector, a body's local Z axis, for a set of Euler angles
- * (pitch, yaw and roll).
- * \param v Vector containing the pitch, yaw and roll in its x, y and z members
- *          respectively. These rotations need to be expressed in radians.
- * \return Forward vector.
- */
-static inline WZ_DECL_CONST Vector3f Vector3f_EulerToForwardVector(const Vector3f v)
-{
-	Vector3f dest = {
-		cosf(v.x) * sinf(v.y),
-		-sinf(v.x),
-		cosf(v.x) * cosf(v.y)
-	};
-
-	return dest;
-}
-
-/*!
- * Compute the up vector, a body's local Y axis, for a set of Euler angles
- * (pitch, yaw and roll).
- * \param v Vector containing the pitch, yaw and roll in its x, y and z members
- *          respectively. These rotations need to be expressed in radians.
- * \return Up vector.
- */
-static inline WZ_DECL_CONST Vector3f Vector3f_EulerToUpVector(const Vector3f v)
-{
-	Vector3f dest = {
-		sinf(v.x) * sinf(v.y) * cosf(v.z) - sinf(v.z) * cosf(v.z),
-		cosf(v.x) * cosf(v.z),
-		sinf(v.x) * cosf(v.y) * cosf(v.z) + sinf(v.y) * sinf(v.z)
-	};
-
-	return dest;
-}
-
-
-/*!
  * Finds a point that lies in between two other points, a starting and ending
  * point.
  *
@@ -591,22 +554,6 @@ static inline WZ_DECL_CONST Vector3i Vector3i_Init(const int x, const int y, con
 static inline WZ_DECL_CONST Vector3f Vector3i_To3f(const Vector3i v)
 {
 	Vector3f dest = { (float)v.x, (float)v.y, (float)v.z };
-	return dest;
-}
-
-
-/*!
- * Convert a vector of degree angles into radians.
- * \param v Vector to convert
- * \return Radian vector
- */
-static inline WZ_DECL_CONST Vector3f Vector3f_ToRadians(const Vector3f v)
-{
-	Vector3f dest = {
-		deg2radf(v.x),
-		deg2radf(v.y),
-		deg2radf(v.z)
-	};
 	return dest;
 }
 
@@ -710,7 +657,7 @@ static inline WZ_DECL_CONST unsigned int Vector3i_ScalarP(const Vector3i op1, co
  */
 static inline WZ_DECL_CONST float Vector3i_Length(const Vector3i v)
 {
-	return sqrtf( Vector3i_ScalarP(v, v) );
+	return iHypot3(v.x, v.y, v.z);
 }
 
 

@@ -1362,7 +1362,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 WZ_DECL_UNUSED static void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER_DATA *psOrder)
 {
 	SDWORD		fsx,fsy, fsnum, sensorVX,sensorVY, fsVX,fsVY;
-	float		sensorAngle, fsAngle, adiff;
+	uint16_t        sensorAngle, fsAngle, adiff;
 	SDWORD		xdiff,ydiff;
 	DROID		*psCurr;
 	BASE_OBJECT	*psTarget;
@@ -1411,21 +1411,13 @@ WZ_DECL_UNUSED static void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER
 		}
 
 		// now get the angle between the firesupport units and the sensor move
-		sensorAngle = (float)atan2f(sensorVY, sensorVX);
-		fsAngle = (float)atan2f(fsVY, fsVX);
-		adiff = fsAngle - sensorAngle;
-		if (adiff < 0)
-		{
-			adiff += (float)(M_PI * 2);
-		}
-		if (adiff > M_PI)
-		{
-			adiff -= (float)(M_PI);
-		}
+		sensorAngle = iAtan2(sensorVY, sensorVX);
+		fsAngle = iAtan2(fsVY, fsVX);
+		adiff = angleDelta(fsAngle - sensorAngle);
 
 		// if the angle between the firesupport units and the sensor move is bigger
 		// than 45 degrees don't retreat
-		if (adiff > M_PI / 4)
+		if (adiff > DEG(45))
 		{
 			goto done;
 		}

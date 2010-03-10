@@ -33,12 +33,6 @@ extern "C"
 
 static const unsigned int max_check_object_recursion = 4;
 
-static inline unsigned interpolateInt(int32_t v1, int32_t v2, uint32_t t1, uint32_t t2, uint32_t t)
-{
-	int32_t numer = t - t1, denom = t2 - t1;
-	return v1 + (v2 - v1) * numer/denom;
-}
-
 /// Get interpolated position at time t.
 Position interpolatePos(Vector3i p1, Vector3i p2, uint32_t t1, uint32_t t2, uint32_t t);
 /// Get interpolated direction at time t.
@@ -46,7 +40,7 @@ Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint
 /// Get interpolated spacetime at time t.
 SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t);
 /// Get interpolated object spacetime at time t.
-SPACETIME interpolateObjectSpacetime(SIMPLE_OBJECT *obj, uint32_t t);
+SPACETIME interpolateObjectSpacetime(const SIMPLE_OBJECT *obj, uint32_t t);
 
 void checkObject(const BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse);
 

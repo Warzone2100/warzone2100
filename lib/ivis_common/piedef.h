@@ -32,6 +32,7 @@
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
+#include "lib/framework/vector.h"
 #include "ivisdef.h"
 #include "ivispatch.h"
 
@@ -57,7 +58,7 @@ extern "C"
 //Render style flags for all pie draw functions
 #define pie_TRANSLUCENT         0x2
 #define pie_ADDITIVE            0x4
-#define pie_NO_BILINEAR         0x8
+#define pie_FORCE_FOG			0x8
 #define pie_HEIGHT_SCALED       0x10
 #define pie_RAISE               0x20
 #define pie_BUTTON              0x40
@@ -98,20 +99,21 @@ typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE;	/**< An area of
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieData);
+extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData);
 extern void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest);
 
 extern void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount);
 
 /** Setup stencil shadows and OpenGL lighting. */
-void pie_BeginLighting(const Vector3f * light);
+void pie_BeginLighting(const Vector3f * light, bool drawshadows);
 
 /* Stop using stencil shadows and OpenGL lighting (if enabled). */
 void pie_EndLighting(void);
 
 void pie_RemainingPasses(void);
 
-void pie_CleanUp( void );
+void pie_SetUp(void);
+void pie_CleanUp(void);
 
 #ifdef __cplusplus
 }

@@ -318,17 +318,12 @@ fi
 # check for nearbyint()
 AC_CHECK_LIB(m, nearbyint, [MATH_LIB=""], AC_MSG_ERROR([nearbyint not found.]))
 
-# When (cross-)compiling for Windows (MinGW) we need to link in iberty for Popt
-# and the Dr. MinGW derived exception handler.
+# When (cross-)compiling for Windows (MinGW) we need to link in iberty for the Dr. MinGW derived exception handler.
 if test "x$host_os_mingw32" = "xyes" ; then
     AC_CHECK_LIB(iberty, main, AC_SUBST([IBERTY_LIBS], [-liberty]), AC_MSG_ERROR([libiberty not found.]))
 
     WIN32_LIBS="${WIN32_LIBS} ${IBERTY_LIBS}"
 fi
-
-# Look for Popt
-AC_CHECK_HEADER(popt.h, , AC_MSG_ERROR([Popt header not found.]))
-AC_CHECK_LIB(popt, poptGetContext, AC_SUBST([POPT_LIBS], [-lpopt]), AC_MSG_ERROR([Popt not found.]), [${WIN32_LIBS}])
 
 # Look for PhysicsFS
 AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found.]))

@@ -32,10 +32,10 @@
 #include <limits.h>
 #include <ctype.h>
 
-#ifndef _MSC_VER
+#if defined WZ_C99 || defined __cplusplus
 /* Compilers that have support for C99 have all values below defined in stdint.h */
 # include <inttypes.h>
-#else // !_MSC_VER
+#else
 // Defines C99 types for C99 incompatible compilers (e.g. MSVC)
 //BEGIN Hope this is right.
 typedef unsigned char      uint8_t;
@@ -57,8 +57,11 @@ typedef signed   long long int64_t;
 # define UINT8_MAX              (255)
 # define UINT16_MAX             (65535)
 # define UINT32_MAX             (4294967295U)
-#define PRIu64  "I64u"
-#endif // !_MSC_VER
+#ifdef WZ_CC_MSVC
+# define PRIu32					"u"
+# define PRIu64					"I64u"
+#endif
+#endif // WZ_C99
 
 /* Basic numeric types */
 typedef uint8_t  UBYTE;

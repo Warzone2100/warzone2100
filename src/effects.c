@@ -2454,8 +2454,8 @@ static void effectDroidUpdates(void)
 					{
 						/* Present direction is important */
 						Vector2i behind = {
-							50.0f * sinf(UNDEG(psDroid->rot.direction)),
-							50.0f * cosf(UNDEG(psDroid->rot.direction))
+							iSinR(psDroid->rot.direction, 50),
+							iCosR(psDroid->rot.direction, 50)
 						};
 						Vector3i pos = {
 							clip(psDroid->pos.x - behind.x, 0, mapWidth),

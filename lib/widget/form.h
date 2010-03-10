@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_LIB_WIDGET_FORM_H__
 #define __INCLUDED_LIB_WIDGET_FORM_H__
 
+#include "lib/widget/widget.h"
+
 #ifdef __cplusplus
 extern "C"
 {

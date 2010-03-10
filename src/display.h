@@ -35,8 +35,6 @@ extern "C"
 /* Initialise the display system */
 extern BOOL dispInitialise(void);
 
-extern uint16_t mouseXPos, mouseYPos;
-
 extern void shakeStart(void);
 extern void shakeStop(void);
 

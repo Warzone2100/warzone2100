@@ -89,7 +89,9 @@ typedef struct {
 } iIMDPoly;
 
 typedef struct _iIMDShape {
+	unsigned int flags;	
 	int texpage;
+	int tcmaskpage;
 	int sradius, radius;
 	Vector3f min, max;
 

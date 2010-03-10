@@ -78,6 +78,7 @@ static unsigned int scr_num_macros;       /* Number of macros defined so far */
 static int scr_macro_stack_ptr;  /* Pointer to the current flex macro input buffer */
 static char *pScrMacroBuffer[MAX_SCR_MACRO_DEPTH];
 
+#undef YY_INPUT
 #define YY_INPUT(buf,result,max_size) \
 	{ \
 		if (PHYSFS_eof(pScrInputFiles[scr_include_stack_ptr])) \
@@ -478,7 +479,7 @@ init					return INITIALISE;
 link					return LINK;
 ref						return REF;
 return					return	RET;
-function				return	FUNCTION;
+function				return	lexFUNCTION;
 "("int")"|"("INT")"			{ RULE(yytext); return TO_INT_CAST; }
 "("float")"|"("FLOAT")"			{ RULE(yytext); return TO_FLOAT_CAST; }
 public					{ scr_lval.stype = ST_PUBLIC; return STORAGE; }

@@ -580,7 +580,7 @@ void displayComponentObject(DROID *psDroid)
 	PROPULSION_STATS	*psPropStats;
 	UDWORD	tileX,tileY;
 	MAPTILE	*psTile;
-	SPACETIME st = interpolateSpacetime(psDroid->prevSpacetime, GET_SPACETIME(psDroid), graphicsTime);
+	SPACETIME st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psDroid, graphicsTime);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	worldAngle = (UDWORD)(player.r.y / DEG_1) % 360;
@@ -667,24 +667,12 @@ void displayComponentObject(DROID *psDroid)
 }
 
 
-static void pie_MatRotYMinusDroidRotation(DROID *psDroid, int weaponSlot, uint32_t time)
-{
-	// Is this check really useful? Left it in here, in case it somehow helps performance.
-	if(psDroid->asWeaps[0].rot.direction != 0 || psDroid->asWeaps[0].prevRot.direction != 0)
-	{
-		Rotation rot = getInterpolatedWeaponRotation(psDroid, weaponSlot, time);
-
-		pie_MatRotY(-rot.direction);
-	}
-}
-
-
 /* Assumes matrix context is already set */
 // this is able to handle multiple weapon graphics now
 // removed mountRotation,they get such stuff from psObj directly now
 void displayCompObj(DROID *psDroid, BOOL bButton)
 {
-	iIMDShape			*psShape, *psJet, *psShapeTemp = NULL;
+	iIMDShape               *psShape, *psJet, *psShapeTemp = NULL, *psMountShape;
 	Vector3i				zero = {0, 0, 0};
 	Vector2i				screenCoords;
 	SDWORD				dummyZ, iConnector;
@@ -899,7 +887,7 @@ void displayCompObj(DROID *psDroid, BOOL bButton)
 											   psShapeTemp->connectors[iConnector + i].y  );
 							}
 
-							pie_MatRotYMinusDroidRotation(psDroid, i, graphicsTime);
+							pie_MatRotY(-rot.direction);
 
 							/* vtol weapons inverted */
 							if ( iConnector >= VTOL_CONNECTOR_START )
@@ -996,128 +984,44 @@ void displayCompObj(DROID *psDroid, BOOL bButton)
 				break;
 
 			case DROID_SENSOR:
-				/*	Get the mounting graphic - we've already moved to the right position
-				Allegedly - all droids will have a mount graphic so this shouldn't
-				fall on it's arse......*/
-				//sensor uses connectors[0]
-				pie_MatBegin();
-				//reset Z?
-				dummyZ = pie_RotateProject(&zero, &screenCoords);
-				/* vtol weapons inverted */
-				if ( iConnector >= VTOL_CONNECTOR_START )
-				{
-					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
-				}
-
-				pie_TRANSLATE( psShapeTemp->connectors[0].x,
-							   psShapeTemp->connectors[0].z,
-							   psShapeTemp->connectors[0].y  );
-
-				pie_MatRotYMinusDroidRotation(psDroid, 0, graphicsTime);
-				psShape = SENSOR_MOUNT_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape)
-				{
-					pie_Draw3DShape(psShape, 0,colour, brightness, specular, pieFlag, iPieData);
-				}
-
-				/* Get the sensor graphic, assuming it's there */
-				psShape = SENSOR_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape)
-				{
-					pie_Draw3DShape(psShape, 0,colour, brightness, specular, pieFlag, iPieData);
-				}
-				/* Pop Matrix */
-				pie_MatEnd();
-				break;
-
 			case DROID_CONSTRUCT:
 			case DROID_CYBORG_CONSTRUCT:
-				/*	Get the mounting graphic - we've already moved to the right position
-				Allegedly - all droids will have a mount graphic so this shouldn't
-				fall on it's arse......*/
-				//cyborg uses connectors[0]
-				pie_MatBegin();
-				//reset Z?
-				dummyZ = pie_RotateProject(&zero, &screenCoords);
-				/* vtol weapons inverted */
-				if ( iConnector >= VTOL_CONNECTOR_START )
-				{
-					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
-				}
-				pie_TRANSLATE( psShapeTemp->connectors[0].x,
-							   psShapeTemp->connectors[0].z,
-							   psShapeTemp->connectors[0].y  );
-
-				pie_MatRotYMinusDroidRotation(psDroid, 0, graphicsTime);
-				psShape = CONSTRUCT_MOUNT_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape)
-				{
-					pie_Draw3DShape(psShape, 0,colour, brightness, specular, pieFlag, iPieData);
-				}
-
-				/* translate for construct mount point if cyborg */
-				if (cyborgDroid(psDroid) && psShape && psShape->nconnectors)
-				{
-					pie_TRANSLATE( psShape->connectors[0].x,
-								   psShape->connectors[0].z,
-								   psShape->connectors[0].y  );
-				}
-
-				/* Get the construct graphic assuming it's there */
-				psShape = CONSTRUCT_IMD(psDroid,psDroid->player);
-
-				/* Draw it */
-				if(psShape)
-				{
-					pie_Draw3DShape(psShape, 0,colour, brightness, specular, pieFlag, iPieData);
-				}
-				/* Pop Matrix */
-				pie_MatEnd();
-				break;
 			case DROID_ECM:
-				/*	Get the mounting graphic - we've already moved to the right position
-				Allegedly - all droids will have a mount graphic so this shouldn't
-				fall on it's arse......*/
-				//ecm uses connectors[0]
-				pie_MatBegin();
-				//reset Z?
-				dummyZ = pie_RotateProject(&zero, &screenCoords);
-				/* vtol weapons inverted */
-				if ( iConnector >= VTOL_CONNECTOR_START )
-				{
-					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
-				}
-				pie_TRANSLATE( psShapeTemp->connectors[0].x,
-							   psShapeTemp->connectors[0].z,
-							   psShapeTemp->connectors[0].y  );
-
-				pie_MatRotYMinusDroidRotation(psDroid, 0, graphicsTime);
-				psShape = ECM_MOUNT_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape)
-				{
-					pie_Draw3DShape(psShape, 0, colour, brightness, specular, pieFlag, iPieData);
-				}
-
-				/* Get the ECM graphic assuming it's there.... */
-				psShape = ECM_IMD(psDroid,psDroid->player);
-				/* Draw it */
-				if(psShape)
-				{
-					pie_Draw3DShape(psShape, 0, colour, brightness, specular, pieFlag, iPieData);
-				}
-				/* Pop Matrix */
-				pie_MatEnd();
-				break;
 			case DROID_REPAIR:
 			case DROID_CYBORG_REPAIR:
+			{
+				Rotation rot = getInterpolatedWeaponRotation(psDroid, 0, graphicsTime);
+
+				switch (psDroid->droidType)
+				{
+				default: ASSERT(false, "...");
+				case DROID_SENSOR:
+					psMountShape = SENSOR_MOUNT_IMD(psDroid, psDroid->player);
+					/* Get the sensor graphic, assuming it's there */
+					psShape = SENSOR_IMD(psDroid, psDroid->player);
+					break;
+				case DROID_CONSTRUCT:
+				case DROID_CYBORG_CONSTRUCT:
+					psMountShape = CONSTRUCT_MOUNT_IMD(psDroid, psDroid->player);
+					/* Get the construct graphic assuming it's there */
+					psShape = CONSTRUCT_IMD(psDroid, psDroid->player);
+					break;
+				case DROID_ECM:
+					psMountShape = ECM_MOUNT_IMD(psDroid, psDroid->player);
+					/* Get the ECM graphic assuming it's there.... */
+					psShape = ECM_IMD(psDroid, psDroid->player);
+					break;
+				case DROID_REPAIR:
+				case DROID_CYBORG_REPAIR:
+					psMountShape = REPAIR_MOUNT_IMD(psDroid, psDroid->player);
+					/* Get the Repair graphic assuming it's there.... */
+					psShape = REPAIR_IMD(psDroid, psDroid->player);
+					break;
+				}
 				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
-				//cyborg uses connectors[0]
+				//sensor and cyborg and ecm uses connectors[0]
 				pie_MatBegin();
 				//reset Z?
 				dummyZ = pie_RotateProject(&zero, &screenCoords);
@@ -1126,36 +1030,36 @@ void displayCompObj(DROID *psDroid, BOOL bButton)
 				{
 					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
 				}
+
 				pie_TRANSLATE( psShapeTemp->connectors[0].x,
 							   psShapeTemp->connectors[0].z,
 							   psShapeTemp->connectors[0].y  );
 
-				pie_MatRotYMinusDroidRotation(psDroid, 0, graphicsTime);
-				psShape = REPAIR_MOUNT_IMD(psDroid,psDroid->player);
+				pie_MatRotY(-rot.direction);
 				/* Draw it */
-				if(psShape)
+				if (psMountShape)
 				{
-					pie_Draw3DShape(psShape, 0, colour, brightness, specular, pieFlag, iPieData);
+					pie_Draw3DShape(psMountShape, 0, colour, brightness, specular, pieFlag, iPieData);
 				}
 
 				/* translate for construct mount point if cyborg */
-				if (cyborgDroid(psDroid) && psShape && psShape->nconnectors)
+				if (cyborgDroid(psDroid) && psMountShape && psMountShape->nconnectors)
 				{
-					pie_TRANSLATE( psShape->connectors[0].x,
-								   psShape->connectors[0].z,
-								   psShape->connectors[0].y  );
+					pie_TRANSLATE(psMountShape->connectors[0].x,
+					              psMountShape->connectors[0].z,
+					              psMountShape->connectors[0].y);
 				}
-
-				/* Get the Repair graphic assuming it's there.... */
-				psShape = REPAIR_IMD(psDroid,psDroid->player);
 
 				/* Draw it */
 				if(psShape)
 				{
 					pie_Draw3DShape(psShape, 0, colour, brightness, specular, pieFlag, iPieData);
-					if(psShape->nconnectors && psDroid->action == DACTION_DROIDREPAIR)
+
+					// In repair droid case only:
+					if ((psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR) &&
+					    psShape->nconnectors && psDroid->action == DACTION_DROIDREPAIR)
 					{
-						SPACETIME st = interpolateSpacetime(psDroid->prevSpacetime, GET_SPACETIME(psDroid), graphicsTime);
+						SPACETIME st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psDroid, graphicsTime);
 						Rotation rot = getInterpolatedWeaponRotation(psDroid, 0, graphicsTime);
 
 						pie_TRANSLATE( psShape->connectors[0].x,
@@ -1185,7 +1089,8 @@ void displayCompObj(DROID *psDroid, BOOL bButton)
 				}
 				/* Pop Matrix */
 				pie_MatEnd();
-					break;
+				break;
+			}
 			case DROID_PERSON:
 				// no extra mounts for people
 				break;

@@ -2069,8 +2069,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 	/* why is this necessary - it makes tiles under the structure visible */
 	setUnderTilesVis((BASE_OBJECT*)psBuilding,player);
 
-	psBuilding->time = gameTime;
-	psBuilding->prevTime = gameTime - MAX(1, deltaGameTime);
+	psBuilding->prevTime = gameTime - deltaGameTime;  // Structure hasn't been updated this tick, yet.
+	psBuilding->time = psBuilding->prevTime - 1;      // -1, so the times are different, even before updating.
 
 	return psBuilding;
 }
@@ -2845,7 +2845,7 @@ BOOL CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 }
 
 
-static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
+static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 {
 	BASE_STATS			*pSubject = NULL;
 	UDWORD				pointsToAdd;//, iPower;
@@ -2874,6 +2874,16 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 
 	CHECK_STRUCTURE(psStructure);
 
+	if (psStructure->time == gameTime)
+	{
+		// This isn't supposed to happen, and really shouldn't be possible - if this happens, maybe a structure is being updated twice?
+		int count1 = 0, count2 = 0;
+		STRUCTURE *s;
+		for (s =         apsStructLists[psStructure->player]; s != NULL; s = s->psNext) count1 += s == psStructure;
+		for (s = mission.apsStructLists[psStructure->player]; s != NULL; s = s->psNext) count2 += s == psStructure;
+		debug(LOG_ERROR, "psStructure->prevTime = %u, psStructure->time = %u, gameTime = %u, count1 = %d, count2 = %d", psStructure->prevTime, psStructure->time, gameTime, count1, count2);
+		--psStructure->time;
+	}
 	psStructure->prevTime = psStructure->time;
 	psStructure->time = gameTime;
 	for (i = 0; i < MAX(1, psStructure->numWeaps); ++i)
@@ -2881,7 +2891,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 		psStructure->asWeaps[i].prevRot = psStructure->asWeaps[i].rot;
 	}
 
-	if (mission)
+	if (isMission)
 	{
 		switch (psStructure->pStructureType->type)
 		{
@@ -3502,7 +3512,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				!IsFactoryCommanderGroupFull(psFactory) &&
 				!CheckHaltOnMaxUnitsReached(psStructure))
 			{
-				if (mission)
+				if (isMission)
 				{
 					// put it in the mission list
 					psDroid = buildMissionDroid((DROID_TEMPLATE *)pSubject,
@@ -3523,7 +3533,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				//reset the start time
 				psFactory->timeStarted = ACTION_START_TIME;
 
-#ifdef INCLUDE_FACTORYLISTS
 				//next bit for productionPlayer only
 				if (productionPlayer == psStructure->player)
 				{
@@ -3547,7 +3556,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					}
 				}
 				else
-#endif
 				{
 					//decrement the quantity to manufacture if not set to infinity
 					if (Quantity && Quantity != NON_STOP_PRODUCTION)

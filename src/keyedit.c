@@ -29,25 +29,20 @@
 #include <physfs.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
-#include "lib/framework/input.h"
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
 
-#include "lib/widget/widget.h"
-#include "frontend.h"
 #include "frend.h"
-#include "lib/ivis_common/textdraw.h"
-#include "lib/ivis_common/piepalette.h"
+#include "frontend.h"
 #include "hci.h"
 #include "init.h"
-#include "loadsave.h"
-#include "keymap.h"
-#include "intimage.h"
-#include "lib/ivis_common/bitimage.h"
 #include "intdisplay.h"
-#include "lib/sound/audio_id.h"
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/netplay/netplay.h"
+#include "keyedit.h"
+#include "keymap.h"
+#include "loadsave.h"
+#include "main.h"
 #include "multiint.h"
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -66,9 +61,6 @@
 #define KM_X				30
 #define KM_Y				20
 
-#define KM_RETURNX			(KM_W-90)
-#define KM_RETURNY			(KM_H-42)
-
 #define BUTTONSPERKEYMAPPAGE 20
 
 #define KM_ENTRYW			480
@@ -79,19 +71,7 @@
 // variables
 
 static KEY_MAPPING	*selectedKeyMap;
-// ////////////////////////////////////////////////////////////////////////////
-// protos
-
-BOOL		runKeyMapEditor		(void);
-static BOOL keyMapToString		(char *pStr, KEY_MAPPING *psMapping);
-static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-BOOL		startKeyMapEditor	(BOOL first);
-BOOL		saveKeyMap		(void);
-BOOL		loadKeyMap		(void);
-static BOOL	pushedKeyMap		(UDWORD key);
-
-char	keymapVersion[8] = "KM_0002";
-extern char    KeyMapPath[];
+static char keymapVersion[8] = "KM_0002";
 
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
@@ -317,7 +297,7 @@ static BOOL keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 
 // ////////////////////////////////////////////////////////////////////////////
 // display a keymap on the interface.
-void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
@@ -352,7 +332,7 @@ void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNU
 	if (psMapping->subKeyCode >= KEY_KP_0 && psMapping->subKeyCode <= KEY_KPENTER)
 	{
 		iV_SetTextColour(WZCOL_YELLOW);
-		//ssprintf(sKey, "(numpad)%s", SDL_GetKeyName(psMapping->subKeyCode));
+		//ssprintf(sKey, "(numpad)%s", SDL_GetKeyName((SDLKey)psMapping->subKeyCode));
 	}
 	iV_DrawText(sKey, x + 364, y + (psWidget->height / 2) + 3);
 }

@@ -37,7 +37,6 @@
 /***************************************************************************/
 
 #define MATRIX_MAX 8
-#define ONE_PERCENT 4096/100
 
 typedef struct { SDWORD a, b, c,  d, e, f,  g, h, i,  j, k, l; } SDMATRIX;
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
@@ -47,13 +46,9 @@ BOOL drawing_interface = true;
 
 //*************************************************************************
 
-// We use FP12_MULTIPLIER => This matrix should be float instead
+// We use FP12_MULTIPLIER.
 static SDMATRIX _MATRIX_ID = {FP12_MULTIPLIER, 0, 0, 0, FP12_MULTIPLIER, 0, 0, 0, FP12_MULTIPLIER, 0L, 0L, 0L};
 static SDWORD _MATRIX_INDEX;
-
-//*************************************************************************
-
-SDWORD aSinTable[SC_TABLESIZE + (SC_TABLESIZE/4)];
 
 //*************************************************************************
 //*** reset transformation matrix stack and make current identity
@@ -134,24 +129,22 @@ void pie_TRANSLATE(int x, int y, int z)
 //******
 void pie_MatScale( unsigned int percent )
 {
-	SDWORD scaleFactor = percent * ONE_PERCENT;
-
 	if (percent == 100)
 	{
 		return;
 	}
 
-	psMatrix->a = (psMatrix->a * scaleFactor) / 4096;
-	psMatrix->b = (psMatrix->b * scaleFactor) / 4096;
-	psMatrix->c = (psMatrix->c * scaleFactor) / 4096;
+	psMatrix->a = (psMatrix->a * percent) / 100;
+	psMatrix->b = (psMatrix->b * percent) / 100;
+	psMatrix->c = (psMatrix->c * percent) / 100;
 
-	psMatrix->d = (psMatrix->d * scaleFactor) / 4096;
-	psMatrix->e = (psMatrix->e * scaleFactor) / 4096;
-	psMatrix->f = (psMatrix->f * scaleFactor) / 4096;
+	psMatrix->d = (psMatrix->d * percent) / 100;
+	psMatrix->e = (psMatrix->e * percent) / 100;
+	psMatrix->f = (psMatrix->f * percent) / 100;
 
-	psMatrix->g = (psMatrix->g * scaleFactor) / 4096;
-	psMatrix->h = (psMatrix->h * scaleFactor) / 4096;
-	psMatrix->i = (psMatrix->i * scaleFactor) / 4096;
+	psMatrix->g = (psMatrix->g * percent) / 100;
+	psMatrix->h = (psMatrix->h * percent) / 100;
+	psMatrix->i = (psMatrix->i * percent) / 100;
 
 	glScalef(0.01f*percent, 0.01f*percent, 0.01f*percent);
 }
@@ -167,21 +160,21 @@ void pie_MatRotY(int y)
 	if (y != 0)
 	{
 		int t;
-		int cra = COS(y), sra = SIN(y);
+		int64_t cra = iCos(y), sra = iSin(y);
 
-		t = ((cra * psMatrix->a) - (sra * psMatrix->g))>>FP12_SHIFT;
-		psMatrix->g = ((sra * psMatrix->a) + (cra * psMatrix->g))>>FP12_SHIFT;
+		t = (cra*psMatrix->a - sra*psMatrix->g)>>16;
+		psMatrix->g = (sra*psMatrix->a + cra*psMatrix->g)>>16;
 		psMatrix->a = t;
 
-		t = ((cra * psMatrix->b) - (sra * psMatrix->h))>>FP12_SHIFT;
-		psMatrix->h = ((sra * psMatrix->b) + (cra * psMatrix->h))>>FP12_SHIFT;
+		t = (cra*psMatrix->b - sra*psMatrix->h)>>16;
+		psMatrix->h = (sra*psMatrix->b + cra*psMatrix->h)>>16;
 		psMatrix->b = t;
 
-		t = ((cra * psMatrix->c) - (sra * psMatrix->i))>>FP12_SHIFT;
-		psMatrix->i = ((sra * psMatrix->c) + (cra * psMatrix->i))>>FP12_SHIFT;
+		t = (cra*psMatrix->c - sra*psMatrix->i)>>16;
+		psMatrix->i = (sra*psMatrix->c + cra*psMatrix->i)>>16;
 		psMatrix->c = t;
 
-		glRotatef(y * 22.5f/4096.0f, 0.0f, 1.0f, 0.0f);
+		glRotatef(y*(360.f / 65536), 0.0f, 1.0f, 0.0f);
 	}
 }
 
@@ -196,21 +189,21 @@ void pie_MatRotZ(int z)
 	if (z != 0)
 	{
 		int t;
-		int cra = COS(z), sra = SIN(z);
+		int64_t cra = iCos(z), sra = iSin(z);
 
-		t = ((cra * psMatrix->a) + (sra * psMatrix->d))>>FP12_SHIFT;
-		psMatrix->d = ((cra * psMatrix->d) - (sra * psMatrix->a))>>FP12_SHIFT;
+		t = (cra*psMatrix->a + sra*psMatrix->d)>>16;
+		psMatrix->d = (cra*psMatrix->d - sra*psMatrix->a)>>16;
 		psMatrix->a = t;
 
-		t = ((cra * psMatrix->b) + (sra * psMatrix->e))>>FP12_SHIFT;
-		psMatrix->e = ((cra * psMatrix->e) - (sra * psMatrix->b))>>FP12_SHIFT;
+		t = (cra*psMatrix->b + sra*psMatrix->e)>>16;
+		psMatrix->e = (cra*psMatrix->e - sra*psMatrix->b)>>16;
 		psMatrix->b = t;
 
-		t = ((cra * psMatrix->c) + (sra * psMatrix->f))>>FP12_SHIFT;
-		psMatrix->f = ((cra * psMatrix->f) - (sra * psMatrix->c))>>FP12_SHIFT;
+		t = (cra*psMatrix->c + sra*psMatrix->f)>>16;
+		psMatrix->f = (cra*psMatrix->f - sra*psMatrix->c)>>16;
 		psMatrix->c = t;
 
-		glRotatef(z * 22.5f/4096.0f, 0.0f, 0.0f, 1.0f);
+		glRotatef(z*(360.f / 65536), 0.0f, 0.0f, 1.0f);
 	}
 }
 
@@ -225,21 +218,21 @@ void pie_MatRotX(int x)
 	if (x != 0)
 	{
 		int t;
-		int cra = COS(x), sra = SIN(x);
+		int64_t cra = iCos(x), sra = iSin(x);
 
-		t = ((cra * psMatrix->d) + (sra * psMatrix->g))>>FP12_SHIFT;
-		psMatrix->g = ((cra * psMatrix->g) - (sra * psMatrix->d))>>FP12_SHIFT;
+		t = (cra*psMatrix->d + sra*psMatrix->g)>>16;
+		psMatrix->g = (cra*psMatrix->g - sra*psMatrix->d)>>16;
 		psMatrix->d = t;
 
-		t = ((cra * psMatrix->e) + (sra * psMatrix->h))>>FP12_SHIFT;
-		psMatrix->h = ((cra * psMatrix->h) - (sra * psMatrix->e))>>FP12_SHIFT;
+		t = (cra*psMatrix->e + sra*psMatrix->h)>>16;
+		psMatrix->h = (cra*psMatrix->h - sra*psMatrix->e)>>16;
 		psMatrix->e = t;
 
-		t = ((cra * psMatrix->f) + (sra * psMatrix->i))>>FP12_SHIFT;
-		psMatrix->i = ((cra * psMatrix->i) - (sra * psMatrix->f))>>FP12_SHIFT;
+		t = (cra*psMatrix->f + sra*psMatrix->i)>>16;
+		psMatrix->i = (cra*psMatrix->i - sra*psMatrix->f)>>16;
 		psMatrix->f = t;
 
-		glRotatef(x * 22.5f/4096.0f, 1.0f, 0.0f, 0.0f);
+		glRotatef(x*(360.f / 65536), 1.0f, 0.0f, 0.0f);
 	}
 }
 
@@ -357,19 +350,6 @@ void pie_VectorInverseRotate0(const Vector3i *v1, Vector3i *v2)
  */
 void pie_MatInit(void)
 {
-	const double conv = M_PI / (0.5 * SC_TABLESIZE);
-	unsigned int i, scsize = SC_TABLESIZE + (SC_TABLESIZE / 4);
-
-	for (i = 0; i < scsize; i++)
-	{
-		double v = sin(i * conv) * FP12_MULTIPLIER;
-
-		if (v >= 0.0)
-			aSinTable[i] = (int32_t)(v + 0.5);
-		else
-			aSinTable[i] = (int32_t)(v - 0.5);
-	}
-
 	// init matrix/quat stack
 	pie_MatReset();
 }

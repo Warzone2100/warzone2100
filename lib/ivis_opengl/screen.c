@@ -62,47 +62,62 @@ BOOL bFboProblem = false;	// hack to work around people with bad drivers. (*coug
 /* Initialise the double buffered display */
 bool screenInitialise()
 {
-		char buf[256];
+	char buf[256];
+	GLint glMaxTUs;
 
-		// Copy this info to be used by the crash handler for the dump file
-		ssprintf(buf, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
+	// Copy this info to be used by the crash handler for the dump file
+	ssprintf(buf, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
+	addDumpInfo(buf);
+	ssprintf(buf, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
+	addDumpInfo(buf);
+	ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
+	addDumpInfo(buf);
+	if (GLEE_VERSION_2_0)
+	{
+		ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		addDumpInfo(buf);
-		ssprintf(buf, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
-		addDumpInfo(buf);
-		ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
-		addDumpInfo(buf);
-		if (GLEE_VERSION_2_0)
-		{
-			ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-			addDumpInfo(buf);
-		}
-		/* Dump information about OpenGL implementation to the console */
-		debug(LOG_3D, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
-		debug(LOG_3D, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
-		debug(LOG_3D, "OpenGL Version : %s", glGetString(GL_VERSION));
-		debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE
-		debug(LOG_3D, "Supported OpenGL extensions:");
-		debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLEE_VERSION_1_2 ? "is" : "is NOT");
-		debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLEE_VERSION_1_3 ? "is" : "is NOT");
-		debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLEE_VERSION_1_4 ? "is" : "is NOT");
-		debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLEE_VERSION_1_5 ? "is" : "is NOT");
-		debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLEE_VERSION_2_0 ? "is" : "is NOT");
-		debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLEE_VERSION_2_1 ? "is" : "is NOT");
-		debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLEE_VERSION_3_0 ? "is" : "is NOT");
-		debug(LOG_3D, "  * Texture compression %s supported.", GLEE_ARB_texture_compression ? "is" : "is NOT");
-		debug(LOG_3D, "  * Two side stencil %s supported.", GLEE_EXT_stencil_two_side ? "is" : "is NOT");
-		debug(LOG_3D, "  * ATI separate stencil is%s supported.", GLEE_ATI_separate_stencil ? "" : " NOT");
-		debug(LOG_3D, "  * Stencil wrap %s supported.", GLEE_EXT_stencil_wrap ? "is" : "is NOT");
-		debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
-		debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
-		debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object ? "is" : "is NOT");
-		debug(LOG_3D, "  * Shader Objects %s supported.", GL_ARB_shader_objects ? "is" : "is NOT");
-		debug(LOG_3D, "  * Vertex Buffer Object (VBO) %s supported.", GL_ARB_vertex_buffer_object ? "is" : "is NOT");
-		if (GLEE_VERSION_2_0)
-		{
-			debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-		}
-	
+	}
+
+	/* Dump general information about OpenGL implementation to the console and the dump file */
+	ssprintf(buf, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
+	addDumpInfo(buf);
+	debug(LOG_3D, buf);
+	ssprintf(buf, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
+	addDumpInfo(buf);
+	debug(LOG_3D, buf);
+	ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
+	addDumpInfo(buf);
+	debug(LOG_3D, buf);
+
+	/* Dump extended information about OpenGL implementation to the console */
+	debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE
+	debug(LOG_3D, "Supported OpenGL extensions:");
+	debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLEE_VERSION_1_2 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLEE_VERSION_1_3 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLEE_VERSION_1_4 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLEE_VERSION_1_5 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLEE_VERSION_2_0 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLEE_VERSION_2_1 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLEE_VERSION_3_0 ? "is" : "is NOT");
+	debug(LOG_3D, "  * Texture compression %s supported.", GLEE_ARB_texture_compression ? "is" : "is NOT");
+	debug(LOG_3D, "  * Two side stencil %s supported.", GLEE_EXT_stencil_two_side ? "is" : "is NOT");
+	debug(LOG_3D, "  * ATI separate stencil is%s supported.", GLEE_ATI_separate_stencil ? "" : " NOT");
+	debug(LOG_3D, "  * Stencil wrap %s supported.", GLEE_EXT_stencil_wrap ? "is" : "is NOT");
+	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
+	debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
+	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object ? "is" : "is NOT");
+	debug(LOG_3D, "  * Shader Objects %s supported.", GL_ARB_shader_objects ? "is" : "is NOT");
+	debug(LOG_3D, "  * Vertex Buffer Object (VBO) %s supported.", GL_ARB_vertex_buffer_object ? "is" : "is NOT");
+
+	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &glMaxTUs);
+	debug(LOG_3D, "  * Total number of Texture Units (TUs) supported is %d.", (int) glMaxTUs);
+
+	if (!GLEE_VERSION_1_4)
+	{
+		debug(LOG_FATAL, "OpenGL 1.4+ is required for this game!");
+		exit(1);
+	}
+
 #ifndef WZ_OS_MAC
 	// Make OpenGL's VBO functions available under the core names for
 	// implementations that have them only as extensions, namely Mesa.
@@ -125,6 +140,26 @@ bool screenInitialise()
 		GLeeFuncPtr_glGetBufferPointerv = GLeeFuncPtr_glGetBufferPointervARB;
 	}
 #endif
+
+	/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
+	if (GLEE_VERSION_2_0)
+	{
+		GLint glMaxTIUs;
+
+		debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		addDumpInfo(buf);
+
+		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &glMaxTIUs);
+		debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
+
+		if (!pie_LoadShaders())
+			debug(LOG_WARNING, "Can't use shaders! Switching back to fixed pipeline...");;
+	}
+	else
+	{
+		debug(LOG_WARNING, "OpenGL 2.0 is not supported by your system! Using fixed pipeline...");
+	}
 
 /*  // This code block left over from qt-trunk merge, should probably be deleted.
 	glViewport(0, 0, width, height);

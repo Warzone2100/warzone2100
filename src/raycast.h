@@ -40,11 +40,11 @@ extern "C"
 /*!
  * The raycast intersection callback.
  * \param pos Current position
- * \param distSq Current distance from start, squared
+ * \param dist Current distance from start
  * \param data Payload (store intermediate results here)
  * \return true if ore points are required, false otherwise
  */
-typedef bool (*RAY_CALLBACK)(Vector3i pos, int distSq, void* data);
+typedef bool (*RAY_CALLBACK)(Vector3i pos, int32_t dist, void* data);
 
 
 /*!
@@ -55,23 +55,12 @@ typedef bool (*RAY_CALLBACK)(Vector3i pos, int distSq, void* data);
  * \param callback Callback to call for each passed tile
  * \param data Data to pass through to the callback
  */
-extern void rayCast(Vector3i pos, Vector3i dir, int length, RAY_CALLBACK callback, void * data);
-
-
-static inline Vector3i rayAngleToVector3i(uint16_t angle)
-{
-	Vector3i dest = {
-		iCos(angle),
-		iSin(angle),
-		0
-	};
-	return dest;
-}
+extern void rayCast(Vector3i pos, uint16_t dir, uint32_t length, RAY_CALLBACK callback, void *data);
 
 
 // Calculates the maximum height and distance found along a line from any
 // point to the edge of the grid
-extern void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitch);
+extern void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch);
 
 
 #ifdef __cplusplus

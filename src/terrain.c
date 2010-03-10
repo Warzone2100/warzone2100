@@ -1247,8 +1247,8 @@ void drawTerrain(void)
 	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
 
 	// additive blending
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	pie_SetRendMode(REND_ADDITIVE);
+
 	// only draw colors
 	glDepthMask(GL_FALSE);
 	
@@ -1314,7 +1314,7 @@ void drawTerrain(void)
 	// select the terrain texture page
 	pie_SetTexturePage(terrainPage); glError();
 	// use the alpha to blend
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	pie_SetRendMode(REND_ALPHA);
 	// and the texture coordinates buffer
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY ); glError();
 	glEnableClientState( GL_VERTEX_ARRAY ); glError();
@@ -1359,10 +1359,11 @@ void drawTerrain(void)
 	glDisableClientState( GL_VERTEX_ARRAY );
 	
 	glDepthMask(GL_TRUE);
-	glDisable(GL_BLEND);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (don't know if it has to be unbound everywhere), otherwise text rendering may mysteriously crash.
 
+	pie_SetRendMode(REND_OPAQUE);
+	
 	glPopAttrib();
 }
 

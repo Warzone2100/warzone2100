@@ -217,8 +217,6 @@ static float	baseTurn;
 static void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t direction);
 // Calculate the boundary vector
 static void	moveCalcBoundary(DROID *psDroid);
-/* Turn a vector into an angle */
-static uint16_t vectorToAngle(float vx, float vy);
 
 /** Initialise the movement system
  */
@@ -507,7 +505,7 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 			if (abs(xdiff) < SHUFFLE_DIST && abs(ydiff) < SHUFFLE_DIST && xdiff*xdiff + ydiff*ydiff < SHUFFLE_DIST*SHUFFLE_DIST)
 			{
 				uint16_t droidDir = iAtan2(xdiff, ydiff);
-				int diff = (int16_t)(shuffleDir - droidDir);  // Cast wrapping intended.
+				int diff = angleDelta(shuffleDir - droidDir);
 				if (diff > -DEG(135) && diff < -DEG(45))
 				{
 					leftClear = false;
@@ -651,7 +649,7 @@ void updateDroidOrientation(DROID *psDroid)
 	dzdv = dzdx*vX + dzdy*vY;                            // 2*d*∂z(x, y)/∂v << 16 of ground, where v is the direction the droid is facing.
 	newPitch = iAtan2(dzdv, (2*d) << 16);                // pitch = atan(∂z(x, y)/∂v)/2π << 16
 
-	deltaPitch = (int16_t)(newPitch - psDroid->rot.pitch);	// (int16_t) cast: wrapping behaviour intended.
+	deltaPitch = angleDelta(newPitch - psDroid->rot.pitch);
 
 	// Limit the rate the front comes down to simulate momentum
 	pitchLimit = gameTimeAdjustedIncrement(DEG(PITCH_LIMIT));
@@ -665,27 +663,18 @@ void updateDroidOrientation(DROID *psDroid)
 	psDroid->rot.roll = iAtan2(dzdw, (2*d) << 16);		// pitch = atan(∂z(x, y)/∂w)/2π << 16
 }
 
-/** Turn a vector into an angle
- *  @return the vector expressed as an angle
- */
-static uint16_t vectorToAngle(float vx, float vy)
-{
-	return (int)(UINT16_MAX/(2*M_PI) * atan2(vx, vy));
-//	return iAtan2(vx, vy);
-}
-
 
 /* Calculate the change in direction given a target angle and turn rate */
 static void moveCalcTurn(uint16_t *pCurr, uint16_t target, int rate)
 {
 	// calculate the difference in the angles
-	int diff = (int16_t)(target - *pCurr);  // Cast wrapping intended.
+	int diff = angleDelta(target - *pCurr);
 
 	// calculate the change in direction
 	int change = baseTurn * rate * UINT16_MAX/360;  // constant rate so we can use a normal multiplication
 
 	// Move *pCurr towards target, by at most ±change.
-	*pCurr += MIN(MAX(diff, -change), change);
+	*pCurr += clip(diff, -change, change);
 }
 
 
@@ -858,7 +847,7 @@ static BOOL moveBlocked(DROID *psDroid)
 	}
 
 	// See if the block can be cancelled
-	if (abs((int16_t)(psDroid->rot.direction - psDroid->sMove.bumpDir)) > DEG(BLOCK_DIR))  // Cast wrapping intended.
+	if (abs(angleDelta(psDroid->rot.direction - psDroid->sMove.bumpDir)) > DEG(BLOCK_DIR))
 	{
 		// Move on, clear the bump
 		psDroid->sMove.bumpTime = 0;
@@ -911,13 +900,12 @@ static BOOL moveBlocked(DROID *psDroid)
 
 
 // Calculate the actual movement to slide around
-static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, float *pMx, float *pMy)
+static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, int32_t *pMx, int32_t *pMy)
 {
 	SDWORD		obstX, obstY;
-	SDWORD		absX, absY;
-	SDWORD		dirX, dirY, dirMag;
-	float		mx, my, unitX,unitY;
-	float		dotRes;
+	SDWORD		dirX, dirY, dirMagSq;
+	int32_t         mx, my;
+	int32_t         dotRes;
 
 	mx = *pMx;
 	my = *pMy;
@@ -933,7 +921,7 @@ static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, float *
 	}
 
 	// Choose the tangent vector to this on the same side as the target
-	dotRes = (float)obstY * mx - (float)obstX * my;
+	dotRes = obstY * mx - obstX * my;
 	if (dotRes >= 0)
 	{
 		dirX = obstY;
@@ -943,24 +931,23 @@ static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, float *
 	{
 		dirX = -obstY;
 		dirY = obstX;
-		dotRes = (float)dirX * *pMx + (float)dirY * *pMy;
+		dotRes = -dotRes;
 	}
-	absX = labs(dirX); absY = labs(dirY);
-	dirMag = absX > absY ? absX + absY/2 : absY + absX/2;
+	dirMagSq = MAX(1, dirX*dirX + dirY*dirY);
 
 	// Calculate the component of the movement in the direction of the tangent vector
-	unitX = (float)dirX / (float)dirMag;
-	unitY = (float)dirY / (float)dirMag;
-	dotRes = dotRes / (float)dirMag;
-	*pMx = unitX * dotRes;
-	*pMy = unitY * dotRes;
+	*pMx = (int64_t)dirX * dotRes / dirMagSq;
+	*pMy = (int64_t)dirY * dotRes / dirMagSq;
 }
 
 
 // see if a droid has run into a blocking tile
-static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, uint16_t tarDir, uint16_t *pSlideDir)
+// TODO See if this function can be simplified.
+static void moveCalcBlockingSlide(DROID *psDroid, float *pmx_, float *pmy_, uint16_t tarDir, uint16_t *pSlideDir)
 {
-	float	mx = *pmx,my = *pmy, nx,ny;
+	int32_t pmxv = *pmx_, pmyv = *pmy_;
+	int32_t *pmx = &pmxv, *pmy = &pmyv;
+	int32_t mx = *pmx, my = *pmy, nx, ny;
 	SDWORD	tx,ty, ntx,nty;		// current tile x,y and new tile x,y
 	SDWORD	blkCX,blkCY;
 	SDWORD	horizX,horizY, vertX,vertY;
@@ -1217,7 +1204,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, uint16
 		}
 	}
 
-	slideDir = vectorToAngle(*pmx, *pmy);
+	slideDir = iAtan2(*pmx, *pmy);
 	if (ntx != tx)
 	{
 		// hit a horizontal block
@@ -1247,6 +1234,9 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, uint16
 		}
 	}
 	*pSlideDir = slideDir;
+
+	*pmx_ = *pmx;
+	*pmy_ = *pmy;
 
 	CHECK_DROID(psDroid);
 }
@@ -1316,7 +1306,7 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 
 		if (radSq > distSq)
 		{
-			if (psObst != NULL || !aiCheckAlliances(psObj->player, psDroid->player))
+			if (psObst != NULL)
 			{
 				// hit more than one droid - stop
 				*pmx = (float)0;
@@ -1373,7 +1363,10 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 	if (psObst != NULL)
 	{
 		// Try to slide round it
-		moveCalcSlideVector(psDroid, (SDWORD)psObst->pos.x,(SDWORD)psObst->pos.y, pmx,pmy);
+		int32_t x = *pmx, y = *pmy;
+		moveCalcSlideVector(psDroid, (SDWORD)psObst->pos.x,(SDWORD)psObst->pos.y, &x, &y);
+		*pmx = x;
+		*pmy = y;
 	}
 	CHECK_DROID(psDroid);
 }
@@ -1591,7 +1584,7 @@ static uint16_t moveGetDirection(DROID *psDroid)
 		moveGetObstacleVector(psDroid, &dest.x, &dest.y);
 	}
 
-	return vectorToAngle(dest.x, dest.y);
+	return iAtan2(dest.x*10000, dest.y*10000);
 }
 
 
@@ -1731,7 +1724,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 							  getDroidEffectiveLevel(psDroid));
 
 	// now offset the speed for the slope of the droid
-	pitch = (int16_t)psDroid->rot.pitch;	// Wrapping when casting intended
+	pitch = angleDelta(psDroid->rot.pitch);
 	speed = (maxPitch - pitch) * speed / maxPitch;
 	if (speed <= 10)
 	{
@@ -1816,7 +1809,7 @@ static void moveUpdateDroidDirection(DROID *psDroid, SDWORD *pSpeed, uint16_t di
 		return;
 	}
 
-	adiff = abs((int16_t)(direction - *pDroidDir));  // Cast wrapping intended.
+	adiff = abs(angleDelta(direction - *pDroidDir));
 	if (adiff > iSpinAngle)
 	{
 		// large change in direction, spin on the spot
@@ -1837,7 +1830,7 @@ static float moveCalcPerpSpeed(DROID *psDroid, uint16_t iDroidDir, SDWORD iSkidD
 	uint16_t        adiff;
 	float		perpSpeed;
 
-	adiff = (int16_t)(iDroidDir - psDroid->sMove.moveDir);  // Cast wrapping intended.
+	adiff = angleDelta(iDroidDir - psDroid->sMove.moveDir);
 	perpSpeed = psDroid->sMove.speed * iSin(adiff) / UINT16_MAX;
 
 	// decelerate the perpendicular speed
@@ -1870,7 +1863,7 @@ static void moveCombineNormalAndPerpSpeeds(DROID *psDroid, float fNormalSpeed, f
 	relDir = iAtan2(fPerpSpeed, fNormalSpeed);
 
 	// choose the finalDir on the same side as the old movement direction
-	adiff = (int16_t)(iDroidDir - psDroid->sMove.moveDir);  // Cast wrapping intended.
+	adiff = angleDelta(iDroidDir - psDroid->sMove.moveDir);
 
 	psDroid->sMove.moveDir = adiff < 0 ? iDroidDir + relDir : iDroidDir - relDir;  // Cast wrapping intended.
 	psDroid->sMove.speed = finalSpeed;
@@ -2274,8 +2267,8 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 	moveUpdateDroidPos( psDroid, dx, dy );
 
 	/* update vtol orientation */
-	targetRoll = MIN(MAX(4 * (int16_t)(psDroid->sMove.moveDir - psDroid->rot.direction), -DEG(60)), DEG(60));  // Cast wrapping intended.
-	psDroid->rot.roll = psDroid->rot.roll + (uint16_t)gameTimeAdjustedIncrement(3 * (int16_t)(targetRoll - psDroid->rot.roll));  // Cast wrapping intended.
+	targetRoll = clip(4 * angleDelta(psDroid->sMove.moveDir - psDroid->rot.direction), -DEG(60), DEG(60));
+	psDroid->rot.roll = psDroid->rot.roll + (uint16_t)gameTimeAdjustedIncrement(3 * angleDelta(targetRoll - psDroid->rot.roll));
 
 	iMapZ = map_Height(psDroid->pos.x, psDroid->pos.y);
 

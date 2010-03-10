@@ -27,33 +27,33 @@
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
+#include "types.h"
+#include "trig.h"
+
 #include <assert.h>
 #include <stdlib.h>
 
 #include <math.h>
 
-#include "types.h"
-#include "trig.h"
-
-
-static float aSin[2*TRIG_DEGREES];
-static float aCos[2*TRIG_DEGREES];
-
-
 /* Initialise the Trig tables */
 bool trigInitialise(void)
 {
-	float val = 0.0f, inc = 2.0f * M_PI / TRIG_DEGREES;
-	int i;
+	uint64_t test;
 
-	// Initialise the tables
-	for (i = 0; i < TRIG_DEGREES; i++)
+	// Test large and small square roots.
+	for (test = 0x0000; test != 0x10000; ++test)
 	{
-		aSin[i] = sinf(val);
-		aCos[i] = cosf(val);
-		aSin[TRIG_DEGREES+i] = aSin[i];
-		aCos[TRIG_DEGREES+i] = aCos[i];
-		val += inc;
+		uint64_t lower = test*test;
+		uint64_t upper = (test + 1)*(test + 1) - 1;
+		ASSERT((uint32_t)iSqrt(lower) == test, "Sanity check failed, sqrt(%"PRIu64") gave %"PRIu32" instead of %"PRIu64"!", lower, i64Sqrt(lower), test);
+		ASSERT((uint32_t)iSqrt(upper) == test, "Sanity check failed, sqrt(%"PRIu64") gave %"PRIu32" instead of %"PRIu64"!", upper, i64Sqrt(upper), test);
+	}
+	for (test = 0xFFFE0000; test != 0x00020000; test = (test + 1)&0xFFFFFFFF)
+	{
+		uint64_t lower = test*test;
+		uint64_t upper = (test + 1)*(test + 1) - 1;
+		ASSERT((uint32_t)i64Sqrt(lower) == test, "Sanity check failed, sqrt(%"PRIu64") gave %"PRIu32" instead of %"PRIu64"!", lower, i64Sqrt(lower), test);
+		ASSERT((uint32_t)i64Sqrt(upper) == test, "Sanity check failed, sqrt(%"PRIu64") gave %"PRIu32" instead of %"PRIu64"!", upper, i64Sqrt(upper), test);
 	}
 
 	return true;
@@ -65,24 +65,6 @@ void trigShutDown(void)
 {}
 
 
-/* Access the trig tables */
-float trigSin(int angle)
-{
-	return aSin[angle % TRIG_DEGREES + TRIG_DEGREES];
-}
-
-
-float trigCos(int angle)
-{
-	return aCos[angle % TRIG_DEGREES + TRIG_DEGREES];
-}
-
-
-/* Fast lookup sqrt */
-float trigIntSqrt(unsigned int val)
-{
-	return sqrtf(val);
-}
 
 // This is how the following tables were generated. An alternative would be to generate them run-time, and verify the CRC is correct.
 #if 0
@@ -117,6 +99,7 @@ int main()
 }
 #endif
 
+// TODO Set these in trigInitialise, and check CRC.
 static const uint16_t trigSinTable[0x4001] =
 {
 0, 5, 12, 18, 24, 30, 37, 43, 49, 56, 62, 68, 74, 81, 87, 93, 100, 106, 112, 118, 125, 131, 137, 144, 150, 156, 162, 169, 175, 181, 187, 194, 200, 206, 213, 219, 225, 231, 238, 244, 250, 257, 263, 269, 275, 282, 288, 294, 301, 307, 313, 319, 326, 332, 338, 345, 351, 357, 363, 370, 376, 382, 389, 395, 401
@@ -581,10 +564,12 @@ int32_t iSqrt(uint32_t n)
 
 int32_t i64Sqrt(uint64_t n)
 {
-	uint32_t r = sqrt(n);          // Calculate square root, rounded down. Excess precision does not change the result.
+	uint64_t r = sqrt(n);          // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
+
+	r -= (int64_t)(r*r - n) > 0;   // If we rounded up, subtract 1.
 
 	// Check that we got the right result.
-	ASSERT((int32_t)(r*r - n) <= 0 && (int32_t)((r + 1)*(r + 1) - n) > 0, "Too badly broken sqrt function, i64Sqrt(%"PRIu64") = %u.", n, (unsigned)r);
+	ASSERT((int64_t)(r*r - n) <= 0 && (int64_t)((r + 1)*(r + 1) - n) > 0, "Too badly broken sqrt function, i64Sqrt(%"PRIu64") = %"PRIu64".", n, r);
 
 	return r;
 }
@@ -592,6 +577,11 @@ int32_t i64Sqrt(uint64_t n)
 int32_t iHypot(int32_t x, int32_t y)
 {
 	return i64Sqrt((uint64_t)x*x + (uint64_t)y*y);  // Casting from int32_t to uint64_t does sign extend.
+}
+
+int32_t iHypot3(int32_t x, int32_t y, int32_t z)
+{
+	return i64Sqrt((uint64_t)x*x + (uint64_t)y*y + (uint64_t)z*z);  // Casting from int32_t to uint64_t does sign extend.
 }
 
 // For testing above functions.
@@ -618,31 +608,5 @@ int main()
 			std::printf("a = %d, sin = %d, %d, cos = %d, %d\n", a, s1, s2, c1, c2);
 		}
 	}
-	for (unsigned i = 0; i != 1000000; ++i)
-	{
-		uint32_t v = i < 10000 ? i : i < 20000 ? 10001-i : rand() + rand();
-		int s1 = sqrt(v), s2 = iSqrt(v);
-		if (s1 != s2)
-		{
-			std::printf("v = %u, sqrt = %d, %d\n", v, s1, s2);
-		}
-	}
-	do
-	{
-		uint32_t t1 = val*val;
-		++val;
-		uint32_t t2 = val*val - 1;
-		iSqrt(t1);
-		iSqrt(t2);
-	} while(val != 65536);
-	val = 0xFFFF0000;
-	do
-	{
-		uint32_t t1 = val*val;
-		++val;
-		uint32_t t2 = val*val - 1;
-		i64Sqrt(t1);
-		i64Sqrt(t2);
-	} while(val != 0xFFFF0000);
 }
 #endif

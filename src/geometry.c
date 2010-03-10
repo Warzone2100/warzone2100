@@ -50,7 +50,6 @@ uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1)
 DROID	*getNearestDroid(UDWORD x, UDWORD y, BOOL bSelected)
 {
 DROID	*psDroid,*psBestUnit;
-UDWORD	xDif,yDif,dist;
 UDWORD	bestSoFar;
 
 	/* Go thru' all the droids  - how often have we seen this - a MACRO maybe? */
@@ -60,13 +59,9 @@ UDWORD	bestSoFar;
         if (!isVtolDroid(psDroid))
         {
 		    /* Clever (?) bit that reads whether we're interested in droids being selected or not */
-		    if( (bSelected ? psDroid->selected : true ) )
+			if (!bSelected || psDroid->selected)
 		    {
-			    /* Get the differences */
-			    xDif = abs(psDroid->pos.x - x);
-			    yDif = abs(psDroid->pos.y - y);
-			    /* Approximates the distance away - using a sqrt approximation */
-			    dist = MAX(xDif,yDif) + MIN(xDif,yDif)/2;	// approximates, but never more than 11% out...
+				uint32_t dist = iHypot(psDroid->pos.x - x, psDroid->pos.y - y);
 			    /* Is this the nearest one we got so far? */
 			    if(dist<bestSoFar)
 			    {
@@ -103,24 +98,6 @@ int inQuad(const Vector2i *pt, const QUAD *quad)
 	}
 
 	return c;
-}
-
-/**
- * Approximates the euclidian distance function, never moret than 11% out.
- * 
- * Mathematically equivalent to sqrt(deltaX * deltaX + deltaY * deltaY).
- *
- * @Deprecated All uses of this function should be replaced by calls to hypot()
- *             or hypotf(), the C99 functions. This because this integer
- *             optimisation is no longer required (due to hardware improvements
- *             since 1997).
- */
-unsigned int WZ_DECL_CONST dirtyHypot(int deltaX, int deltaY)
-{
-	deltaX = abs(deltaX);
-	deltaY = abs(deltaY);
-	
-	return MAX(deltaX, deltaY) + MIN(deltaX, deltaY) / 2;
 }
 
 //-----------------------------------------------------------------------------------

@@ -21,11 +21,6 @@
 #define _tex_
 
 #include "png_util.h"
-#if defined __APPLE__ && defined __MACH__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
 
 #ifdef __cplusplus
 extern "C"
@@ -38,6 +33,8 @@ extern "C"
 #define iV_TEX_INVALID -1
 #define iV_TEXNAME_MAX 64
 
+#define iV_TEXNAME_TCSUFFIX "_tcmask"
+
 //*************************************************************************
 
 #define iV_TEXNAME(i)	((char *) (&_TEX_PAGE[(i)].name))
@@ -47,7 +44,7 @@ extern "C"
 typedef struct
 {
 	char name[iV_TEXNAME_MAX];
-	GLuint id;
+	uint32_t id;
 } iTexPage;
 
 //*************************************************************************
@@ -61,13 +58,14 @@ extern int iV_GetTexture(const char *filename);
 extern void iV_unloadImage(iV_Image *image);
 extern unsigned int iV_getPixelFormat(const iV_Image *image);
 
-extern int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSize);
-extern int pie_AddTexPage(iV_Image *s, const char *filename, int slot, int maxTextureSize);
+extern int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSize, bool useMipmaping);
+extern int pie_AddTexPage(iV_Image *s, const char *filename, int slot, int maxTextureSize, bool useMipmaping);
 extern void pie_TexInit(void);
 
 extern void pie_InitSkybox(SDWORD pageNum);
 
 extern void pie_MakeTexPageName(char * filename);
+extern void pie_MakeTexPageTCMaskName(char * filename);
 
 //*************************************************************************
 

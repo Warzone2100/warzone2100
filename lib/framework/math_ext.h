@@ -33,10 +33,6 @@
 #define PERCENT(a,b) (((a)*100)/(b))
 #define PERNUM(range,a,b) (((a)*range)/(b))
 
-/* conversion macros */
-#define RAD_TO_DEG(x)	(x * 180.0 / M_PI)
-
-
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
 #endif
@@ -111,28 +107,6 @@ static inline WZ_DECL_CONST float hypotf(float x, float y)
 }
 #endif
 
-
-
-/*!
- * Converts x from degrees to radian
- * \param x Degree value to convert
- * \return Radian value
- */
-static inline WZ_DECL_CONST float deg2radf(float x)
-{
-	return x * (float)M_PI / 180.0f;
-}
-
-
-/*!
- * Converts x from radian to degrees
- * \param x Radian value to convert
- * \return Degree value
- */
-static inline WZ_DECL_CONST float rad2degf(float x)
-{
-	return x / (float)M_PI * 180.0f;
-}
 
 
 /*!

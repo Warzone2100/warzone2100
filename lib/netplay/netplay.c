@@ -2450,6 +2450,10 @@ static BOOL NETprocessSystemMessage(void)
 		case NET_PLAYER_INFO:
 		{
 			uint32_t index;
+			int32_t colour = 0;
+			int32_t position = 0;
+			int32_t team = 0;
+			uint32_t hostPlayer = 0;
 
 			NETbeginDecode(NET_PLAYER_INFO);
 				// Retrieve the player's ID
@@ -2469,12 +2473,22 @@ static BOOL NETprocessSystemMessage(void)
 				NETbool(&NetPlay.players[index].kick);
 				NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 				NETuint32_t(&NetPlay.players[index].heartattacktime);
-				NETint32_t(&NetPlay.players[index].colour);
-				NETint32_t(&NetPlay.players[index].position);
-				NETint32_t(&NetPlay.players[index].team);
+				NETint32_t(&colour);
+				NETint32_t(&position);
+				NETint32_t(&team);
 				NETbool(&NetPlay.players[index].ready);
-				NETuint32_t(&NetPlay.hostPlayer);
+				NETuint32_t(&hostPlayer);
 			NETend();
+
+			// Don't let anyone except the host change these, otherwise it will end up inconsistent at some point, and the game gets really messed up.
+			if (pMsg->source == NetPlay.hostPlayer)
+			{
+				NetPlay.players[index].colour = colour;
+				NetPlay.players[index].position = position;
+				NetPlay.players[index].team = team;
+				//NetPlay.hostPlayer = hostPlayer;  // Huh?
+			}
+
 			debug(LOG_NET, "Receiving MSG_PLAYER_INFO for player %u (%s)", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
 			// update the color to the local array
 			setPlayerColour(index, NetPlay.players[index].colour);
@@ -3407,11 +3421,14 @@ static void NETallowJoining(void)
 					// Send info about players to newcomer.
 					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 					{
-						if (NetPlay.players[j].allocated && index != j)
+						if (index != j)  // We will broadcast the index == j case.
 						{
-							NETbeginEncode(NET_PLAYER_JOINED, index);
-								NETuint8_t(&j);
-							NETend();
+							if (NetPlay.players[j].allocated)
+							{
+								NETbeginEncode(NET_PLAYER_JOINED, index);
+									NETuint8_t(&j);
+								NETend();
+							}
 							NETSendPlayerInfoTo(j, index);
 						}
 					}
