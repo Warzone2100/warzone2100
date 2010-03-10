@@ -8,7 +8,7 @@ run
 {
    player          INT                2
 
-// Version 2.0.01
+// Version 2.1
 // the version of the .vlo files is not related to the one of the .slo files
 //
 //
@@ -182,7 +182,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	CyborgLegs 		   RESEARCHSTAT 	"R-Cyborg-Legs01"
 	VTOLPadRes       RESEARCHSTAT   "R-Struc-VTOLPad"
 	AASite	         RESEARCHSTAT		"R-Defense-AASite-QuadBof"//Cyclone AA Site
-	HurricaneAASite	 RESEARCHSTAT	  "R-Defense-AASite-QuadMg1"
+	HurricaneAASite	 RESEARCHSTAT	  "R-Defense-AASite-QuadMg1" //Hurricane AA Site
 	CycloneAASite    RESEARCHSTAT   "R-Defense-AASite-QuadBof"
 	WhirlwindAASite  RESEARCHSTAT   "R-Defense-AASite-QuadRotMg"
 
@@ -273,16 +273,16 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	structs[3]			STRUCTURESTAT		"A0VTolFactory1"
 
 	// General 1
-  structsLimits[0][0]			INT		3
-	structsLimits[0][1]			INT		4
-	structsLimits[0][2]			INT		3 
-	structsLimits[0][3]			INT		3 
+  structsLimits[0][0]			INT		3 //FACT
+	structsLimits[0][1]			INT		4 //RES
+	structsLimits[0][2]			INT		3 //CYB
+	structsLimits[0][3]			INT		2 //VTOL
 
 	// General 2  VTOL
 	structsLimits[1][0]			INT		3
-	structsLimits[1][1]			INT		3
+	structsLimits[1][1]			INT		2
 	structsLimits[1][2]			INT		3 
-	structsLimits[1][3]			INT		3 
+	structsLimits[1][3]			INT		4 
 
 	// General 3  Turtle
 	structsLimits[2][0]			INT		2
@@ -296,7 +296,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	structsLimits[3][2]			INT		5 
 	structsLimits[3][3]			INT		1   
 
-  numDefStructs	INT					13
+  numDefStructs	INT					11
   defStructs[0]  STRUCTURESTAT    "GuardTower1"//*MG3Mk1 $Machinegun Guard Tower
   defStructs[1]  STRUCTURESTAT    "PillBox1"//Machinegun Bunker
   defStructs[2]  STRUCTURESTAT    "PillBox5"//Flamer Bunker
@@ -304,12 +304,10 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   defStructs[4]  STRUCTURESTAT    "GuardTower5"//Lancer Tower
   defStructs[5]  STRUCTURESTAT    "PillBox6"//Lancer Bunker 
   defStructs[6]  STRUCTURESTAT    "PillBox4"//Light Cannon Bunker
-	defStructs[7]	 STRUCTURESTAT		"Emplacement-MortarPit02"
-  defStructs[8]  STRUCTURESTAT    "Emplacement-HeavyLaser" //Heavy Laser Emplacement
-	defStructs[9]	 STRUCTURESTAT		"Emplacement-Howitzer105"
-	defStructs[10]	STRUCTURESTAT		"Emplacement-HvyATrocket"
-	defStructs[11]	STRUCTURESTAT		"Emplacement-PulseLaser"	
-	defStructs[12]	STRUCTURESTAT		"Emplacement-Rail2"
+	defStructs[7]	 STRUCTURESTAT		"Emplacement-RotMor" //*Pepperpot Pit [range 9-18]
+	defStructs[8]  STRUCTURESTAT		"Emplacement-HvyATrocket"
+	defStructs[9]  STRUCTURESTAT		"Emplacement-PulseLaser"	
+	defStructs[10] STRUCTURESTAT		"Emplacement-Rail2"
   
 
 	// wall structs - NOT BUILT YET
@@ -357,7 +355,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 
 	repairTank	 TEMPLATE	"ViperRepairWheels"
 	constructor	 TEMPLATE	"ConstructorDroid"
-	constructor2 TEMPLATE "ScorpHoverTruck"
+	constructor2 TEMPLATE "CobraHoverTruck"
 	cybcondroid	 TEMPLATE	"Cyb-ComEng"
 	cybMech      TEMPLATE "Cyb-Mechanic"
 
@@ -366,24 +364,33 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	// cyborg templates
 	numSuperCyb	INT		17
 
-	superCyb[0]		TEMPLATE	"Cyb-Hvy-A-T"//[1][36]Super Scourge Cyborg $235
-	superCyb[1]		TEMPLATE	"Cyb-Hvy-RailGunner"//[1][2]Super Rail-Gunner
-	superCyb[2]		TEMPLATE	"Cyb-Hvy-PulseLsr"//[1][1]Super Pulse Laser Cyborg $150
-	superCyb[3]		TEMPLATE	"Cyb-Hvy-TK"//[1][0]Super Tank-Killer Cyborg $250
-	superCyb[4]		TEMPLATE	"Cyb-Hvy-HPV"//[0][51] Super HPV Cyborg 
-	superCyb[5]		TEMPLATE	"Cyb-Hvy-Acannon"//[0][50] Super Auto-Cannon Cyborg 
-	superCyb[6]		TEMPLATE	"Cyb-Hvy-Mcannon"//[0][49] Super Heavy-Gunner
-	//normal cyborgs
-	superCyb[7]		TEMPLATE	"MP-Cyb-ATmiss-GRD"//[1][21]Scourge $250
-	superCyb[8]		TEMPLATE	"MP-Cyb-Needle-GRD" //[0][58]Needle Gunner $160
-	superCyb[9]		TEMPLATE	"CyborgRkt01Ground"//[0][24]Lancer $125
-	superCyb[10]		TEMPLATE	"MP-Cyb-Laser1-GRD"// [0][59] Flashlight Gunner $100
-	superCyb[11]		TEMPLATE	"CyborgRotMgGround" //[0][25] Assault Gunner $90
-	superCyb[12]		TEMPLATE	"Cyb-Thermite"//Thermite Flamer $80 (370 hitPoints)
-	superCyb[13]		TEMPLATE	"Cyb-Gren"//Grenadier $80 (370 hitPoints)
-	superCyb[14]		TEMPLATE	"CyborgCannon01Grd"//heavy Gunner $70 (380 hitPoints)
-	superCyb[15]		TEMPLATE	"CyborgFlamer01Grd"//flamer
-	superCyb[16]		TEMPLATE	"CyborgChain01Ground"//Machinegunner(235 hitPoints)
+	//Anti tank
+  superCyb[0]		TEMPLATE	"Cyb-Hvy-A-T"      //[1][36]Super Scourge Cyborg 
+	superCyb[3]		TEMPLATE	"Cyb-Hvy-TK"       //[1][0]Super Tank-Killer Cyborg 
+	superCyb[7]		TEMPLATE	"MP-Cyb-ATmiss-GRD"//[1][21]Scourge 
+	superCyb[9]		TEMPLATE	"CyborgRkt01Ground"//[0][24]Lancer
+	
+  //All Rounder
+  superCyb[1]		TEMPLATE	"Cyb-Hvy-RailGunner" //[1][2]  Super Rail-Gunner
+	superCyb[4]		TEMPLATE	"Cyb-Hvy-HPV"        //[0][51] Super HPV Cyborg 
+	superCyb[5]		TEMPLATE	"Cyb-Hvy-Acannon"    //[0][50] Super Auto-Cannon Cyborg 
+	superCyb[6]		TEMPLATE	"Cyb-Hvy-Mcannon"    //[0][49] Super Heavy-Gunner
+  
+  //Anti Personnel
+	   //Flamers-Lasers
+  superCyb[2]		TEMPLATE	"Cyb-Hvy-PulseLsr"  //[1][1]Super Pulse Laser Cyborg 
+	superCyb[10]	TEMPLATE	"MP-Cyb-Laser1-GRD" //[0][59] Flashlight Gunner 
+	superCyb[12]	TEMPLATE	"Cyb-Thermite"      //Thermite Flamer 
+	superCyb[15]	TEMPLATE	"CyborgFlamer01Grd" //flamer
+	   //Guns
+  superCyb[11]	TEMPLATE	"CyborgRotMgGround"   //[0][25] Assault Gunner 
+	superCyb[14]	TEMPLATE	"CyborgCannon01Grd"   //heavy Gunner 
+	superCyb[16]	TEMPLATE	"CyborgChain01Ground" //Machinegunner
+  
+  //Kinetic
+	superCyb[8]		TEMPLATE	"MP-Cyb-Needle-GRD" //[0][58]Needle Gunner 
+	superCyb[13]	TEMPLATE	"Cyb-Gren"          //Grenadier 
+  
 
 	/////////////////////////////////////////////////////////////////////
 	// VTOL TEMPLATES
@@ -555,22 +562,22 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   researchCheap[0][0]	  RESEARCHSTAT		"R-Sys-MobileRepairTurret01"	//$18 repair turret, pre-researched
  	researchCheap[0][1]	  RESEARCHSTAT		"R-Struc-Research-Module"   //$37 
 	researchCheap[0][2]	  RESEARCHSTAT		"R-Struc-Research-Upgrade02"	//160% 
-  researchCheap[0][3]	  RESEARCHSTAT		"R-Struc-RepairFacility" //$75 - repair facility {powMod - factModule-RepTurret}
-	researchCheap[0][4]	  RESEARCHSTAT		"R-Defense-Tower06"		   //$75 - Mini-Rocket Tower  
-	researchCheap[0][5]	  RESEARCHSTAT		"R-Wpn-MG-Damage01"	     //$18 - 125% - Hardened MG Bullets 
-	researchCheap[0][6]	  RESEARCHSTAT		"R-Struc-Materials01"		 //$37 - 135% - Reinforced Base Structure Materials  
-	researchCheap[0][7]	  RESEARCHSTAT		"R-Cyborg-Metals01"		   //$37 - 135% - Cyborg Composite Alloys  
-  researchCheap[0][8]	  RESEARCHSTAT		"R-Struc-Factory-Upgrade01" //$75 - 160% - Automated Manufacturing {factMod-powMod} 
-	researchCheap[0][9]	  RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //$37 - 125% -  HEAT Cannon Shells
-	researchCheap[0][10]  RESEARCHSTAT		"R-Vehicle-Engine01"	   //$37 - 105% -  Fuel Injection Engine
-	researchCheap[0][11]	RESEARCHSTAT		"R-Defense-WallUpgrade01"//$37 - 135% -  Improved Hardcrete
-	researchCheap[0][12]	RESEARCHSTAT		"R-Vehicle-Body11"	     //$37 - Phyton , Cobra {facMod, powMod}
-	researchCheap[0][13]	RESEARCHSTAT		"R-Defense-WallTower01"	 //$37 - Heavy Machinegun Hardpoint  
-	researchCheap[0][14]	RESEARCHSTAT		"R-Defense-WallTower02"	 //$46 - "Light Cannon HardPoint"	{Light Cannon, HardCrete}
-  researchCheap[0][15]	RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	   //$75 - {POD, HE Mini-Rockets Mk2}
-	researchCheap[0][16]	RESEARCHSTAT	  "R-Defense-Pillbox06"	   //$46 - Lancer Tower {MRL, Lancer AT Rocket, Stabilized Mini-Rockets}
-	researchCheap[0][17]	RESEARCHSTAT		"R-Vehicle-Prop-Tracks"	 //$75 - Tracked Propulsion - {Composite Alloys Mk2, FactMod, ResearchMod}
-	researchCheap[0][18]	RESEARCHSTAT		"R-Defense-AASite-QuadMg1"//Hurricane AA site
+  researchCheap[0][3]	  RESEARCHSTAT		"R-Struc-RepairFacility" //repair facility {powMod - factModule-RepTurret}
+	researchCheap[0][4]	  RESEARCHSTAT		"R-Defense-Tower06"		   //Mini-Rocket Tower  
+	researchCheap[0][5]	  RESEARCHSTAT		"R-Wpn-MG-Damage01"	     //Hardened MG Bullets 
+	researchCheap[0][6]	  RESEARCHSTAT		"R-Struc-Materials01"		 //Reinforced Base Structure Materials  
+	researchCheap[0][7]	  RESEARCHSTAT		"R-Cyborg-Metals01"		   //Cyborg Composite Alloys  
+  researchCheap[0][8]	  RESEARCHSTAT		"R-Struc-Factory-Upgrade01" //Automated Manufacturing {factMod-powMod} 
+	researchCheap[0][9]	  RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //HEAT Cannon Shells
+	researchCheap[0][10]  RESEARCHSTAT		"R-Vehicle-Engine01"	   //Fuel Injection Engine
+	researchCheap[0][11]	RESEARCHSTAT		"R-Defense-WallUpgrade01"//Improved Hardcrete
+	researchCheap[0][12]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"//Cyclone AA site
+	researchCheap[0][13]	RESEARCHSTAT		"R-Vehicle-Body11"	     //$37 - Phyton , Cobra {facMod, powMod}
+	researchCheap[0][14]	RESEARCHSTAT		"R-Defense-WallTower01"	 //$37 - Heavy Machinegun Hardpoint  
+	researchCheap[0][15]	RESEARCHSTAT		"R-Defense-WallTower02"	 //$46 - "Light Cannon HardPoint"	{Light Cannon, HardCrete}
+  researchCheap[0][16]	RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	   //$75 - {POD, HE Mini-Rockets Mk2}
+	researchCheap[0][17]	RESEARCHSTAT	  "R-Defense-Pillbox06"	   //$46 - Lancer Tower {MRL, Lancer AT Rocket, Stabilized Mini-Rockets}
+	researchCheap[0][18]	RESEARCHSTAT		"R-Vehicle-Prop-Tracks"	 //$75 - Tracked Propulsion - {Composite Alloys Mk2, FactMod, ResearchMod}
 	researchCheap[0][19]	RESEARCHSTAT		"R-Defense-MortarPit"		 //$37 - Mortar Pit  {hardcrete,facMod}
 	researchCheap[0][20]	RESEARCHSTAT		"R-Sys-CBSensor-Tower01"	//CB Tower 
   
