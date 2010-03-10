@@ -27,7 +27,6 @@
 #ifndef WZGLOBAL_H
 #define WZGLOBAL_H
 
-
 #if defined(HAVE_CONFIG_H)
 #  undef _XOPEN_SOURCE
 #  include "config.h"

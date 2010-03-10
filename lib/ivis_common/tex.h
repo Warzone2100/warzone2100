@@ -20,6 +20,8 @@
 #ifndef _tex_
 #define _tex_
 
+//#include <GLee.h>
+#include <GL/gl.h>
 #include "png_util.h"
 
 //*************************************************************************
@@ -39,7 +41,7 @@
 typedef struct
 {
 	char name[iV_TEXNAME_MAX];
-	uint32_t id;
+	GLuint id;
 } iTexPage;
 
 //*************************************************************************
