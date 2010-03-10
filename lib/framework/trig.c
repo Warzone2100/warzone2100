@@ -27,14 +27,14 @@
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
+#include "types.h"
+#include "trig.h"
+#include "crc.h"
+
 #include <assert.h>
 #include <stdlib.h>
 
 #include <math.h>
-
-#include "types.h"
-#include "trig.h"
-#include "crc.h"
 
 static uint16_t trigSinTable[0x4001];
 static uint16_t trigAtanTable[0x2001];

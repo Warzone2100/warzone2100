@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_SCRIPTTABS_H__
 
 #include "lib/script/event.h" // needed for _scr_user_types
+#include "lib/script/parse.h"
 
 #ifdef __cplusplus
 extern "C"

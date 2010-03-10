@@ -32,8 +32,6 @@
 
 /***************************************************************************/
 
-#include <SDL/SDL_opengl.h>
-
 #include "lib/framework/frame.h"
 #include "piedef.h"
 
@@ -91,6 +89,7 @@ typedef enum
 {
 	SHADER_NONE,
 	SHADER_TCMASK,
+	SHADER_TCMASK_FOGGED,
 	SHADER_MAX
 } SHADER_MODE;
 

@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_INTELMAP_H__
 #define __INCLUDED_SRC_INTELMAP_H__
 
+#include "messagedef.h"
+
 #ifdef __cplusplus
 extern "C"
 {

@@ -1334,7 +1334,7 @@ void kf_toggleTrapCursor(void)
 	const char *msg;
 	bool trap = !war_GetTrapCursor();
 	war_SetTrapCursor(trap);
-	SDL_WM_GrabInput(trap);
+	SDL_WM_GrabInput(trap ? SDL_GRAB_ON : SDL_GRAB_OFF);
 	sasprintf((char**)&msg, _("Trap cursor %s"), trap ? "ON" : "OFF");
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
@@ -2680,11 +2680,11 @@ void kf_ToggleRadarAllyEnemy(void)
 
 void kf_ToggleRadarTerrain(void)
 {
-	radarDrawMode++;
+	radarDrawMode = (RADAR_DRAW_MODE)(radarDrawMode + 1);
 
 	if (radarDrawMode == RADAR_MODE_TERRAIN_SEEN && getRevealStatus())
 	{
-		radarDrawMode++;	// skip this radar mode for fog of war mode
+		radarDrawMode = (RADAR_DRAW_MODE)(radarDrawMode + 1);  // skip this radar mode for fog of war mode
 	}
 	if (radarDrawMode >= NUM_RADAR_MODES)
 	{

@@ -327,7 +327,7 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_D
 	if (psMapping->subKeyCode >= KEY_KP_0 && psMapping->subKeyCode <= KEY_KPENTER)
 	{
 		iV_SetTextColour(WZCOL_YELLOW);
-		ssprintf(sKey, "(numpad)%s", SDL_GetKeyName(psMapping->subKeyCode));
+		ssprintf(sKey, "(numpad)%s", SDL_GetKeyName((SDLKey)psMapping->subKeyCode));
 }
 	iV_DrawText(sKey, x + 364, y + (psWidget->height / 2) + 3);
 }

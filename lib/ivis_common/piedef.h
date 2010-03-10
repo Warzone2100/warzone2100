@@ -32,6 +32,7 @@
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
+#include "lib/framework/vector.h"
 #include "ivisdef.h"
 #include "ivispatch.h"
 
@@ -52,7 +53,7 @@
 //Render style flags for all pie draw functions
 #define pie_TRANSLUCENT         0x2
 #define pie_ADDITIVE            0x4
-#define pie_NO_BILINEAR         0x8
+#define pie_FORCE_FOG			0x8
 #define pie_HEIGHT_SCALED       0x10
 #define pie_RAISE               0x20
 #define pie_BUTTON              0x40
