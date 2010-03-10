@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_DATA_H__
 #define __INCLUDED_SRC_DATA_H__
 
+#include "lib/framework/types.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -64,7 +66,7 @@ enum {
 };
 
 void resetDataHash(void);
-UDWORD DataHash[DATA_MAXDATA];
+extern uint32_t DataHash[DATA_MAXDATA];
 
 /* Pass all the data loading functions to the framework library */
 bool dataInitLoadFuncs(void);

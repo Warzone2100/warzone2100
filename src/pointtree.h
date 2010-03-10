@@ -65,7 +65,7 @@ POINT_TREE *pointTreeCreate(void);
 void pointTreeDestroy(POINT_TREE *pointTree);
 
 void pointTreeInsert(POINT_TREE *pointTree, void *point, int32_t x, int32_t y);
-void pointTreeClear();
+void pointTreeClear(void);
 
 // Must sort after inserting, and before querying.
 void pointTreeSort(POINT_TREE *pointTree);

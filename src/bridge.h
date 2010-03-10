@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_BRIDGE_H__
 #define __INCLUDED_SRC_BRIDGE_H__
 
+#include "structuredef.h"
+
 #ifdef __cplusplus
 extern "C"
 {

@@ -22,6 +22,7 @@
 #define __INCLUDED_SRC_DESIGN_H__
 
 #include "lib/widget/widgbase.h"
+#include "src/droiddef.h"
 
 #ifdef __cplusplus
 extern "C"

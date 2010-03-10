@@ -59,6 +59,7 @@ static const char *pEndBuffer = NULL;
 
 static SDWORD playerIndex;
 
+#undef YY_INPUT
 #define YY_INPUT(buf,result,max_size) \
       if (pInputBuffer != pEndBuffer) { \
         buf[0] = *(pInputBuffer++); result = 1; \

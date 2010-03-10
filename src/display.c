@@ -212,9 +212,6 @@ static bool mouseScroll = true;
 BOOL	rotActive = false;
 BOOL	gameStats = false;
 
-/* Mouse x and y - no point checking them more than once per frame */
-Uint16 mouseXPos = OFF_SCREEN, mouseYPos = OFF_SCREEN;
-
 /* Hackety hack hack hack */
 SDWORD	screenShakeTable[100] =
 {
@@ -451,10 +448,7 @@ void processInput(void)
 	BOOL mOverRadar = false;
 	int WheelZoomIterator;
 
-	mouseXPos = mouseX();
-	mouseYPos = mouseY();
-
-	if(radarOnScreen && getHQExists(selectedPlayer) && CoordInRadar(mouseXPos, mouseYPos))
+	if(radarOnScreen && getHQExists(selectedPlayer) && CoordInRadar(mouseX(), mouseY()))
 	{
 		mOverRadar = true;
 	}
@@ -585,8 +579,8 @@ static void CheckFinishedDrag(void)
 				clearSelection();
 			}
 			dragBox3D.status = DRAG_RELEASED;
-			dragBox3D.x2 = mouseXPos;
-			dragBox3D.y2 = mouseYPos;
+			dragBox3D.x2 = mouseX();
+			dragBox3D.y2 = mouseY();
 		}
 		else
 		{
@@ -684,9 +678,9 @@ static void HandleDrag(void)
 	{
 		if(!driveModeActive()) {
 			dragBox3D.x1 = dragX;
-			dragBox3D.x2 = mouseXPos;
+			dragBox3D.x2 = mouseX();
 			dragBox3D.y1 = dragY;
-			dragBox3D.y2 = mouseYPos;
+			dragBox3D.y2 = mouseY();
 
 			dragBox3D.status = DRAG_DRAGGING;
 		}
@@ -1055,25 +1049,25 @@ void scroll(void)
 	if (mouseScroll)
 	{
 		/* Scroll left */
-		if (mouseXPos < BOUNDARY_X)
+		if (mouseX() < BOUNDARY_X)
 		{
 			mouseAtLeft = true;
 		}
 
 		/* Scroll right */
-		if (mouseXPos > (pie_GetVideoBufferWidth() - BOUNDARY_X))
+		if (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X))
 		{
 			mouseAtRight = true;
 		}
 
 		/* Scroll up */
-		if (mouseYPos < BOUNDARY_Y)
+		if (mouseY() < BOUNDARY_Y)
 		{
 			mouseAtBottom = true;
 		}
 
 		/* Scroll down */
-		if (mouseYPos > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
+		if (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
 		{
 			mouseAtTop = true;
 		}
@@ -1307,41 +1301,41 @@ void displayWorld(void)
 
 	if (mouseDown(MOUSE_RMB) && rotActive)
 	{
-		if (abs(mouseXPos - rotX) > 8 || xMoved > 8)
+		if (abs(mouseX() - rotX) > 8 || xMoved > 8)
 		{
-			xMoved += abs(mouseXPos - rotX);
-			if (mouseXPos < rotX)
+			xMoved += abs(mouseX() - rotX);
+			if (mouseX() < rotX)
 			{
-				player.r.y = rotInitial + (rotX - mouseXPos)/2 * DEG(1);
+				player.r.y = rotInitial + (rotX - mouseX())/2 * DEG(1);
 			}
 			else
 			{
-				player.r.y = rotInitial - (mouseXPos - rotX)/2 * DEG(1);
+				player.r.y = rotInitial - (mouseX() - rotX)/2 * DEG(1);
 			}
 		}
-		if (abs(mouseYPos - rotY) > 8 || yMoved > 8)
+		if (abs(mouseY() - rotY) > 8 || yMoved > 8)
 		{
-				yMoved += abs(mouseYPos - rotY);
+				yMoved += abs(mouseY() - rotY);
 				if (bInvertMouse)
 				{
-					if (mouseYPos < rotY)
+					if (mouseY() < rotY)
 					{
-						player.r.x = rotInitialUp + (rotY - mouseYPos)/3 * DEG(1);
+						player.r.x = rotInitialUp + (rotY - mouseY())/3 * DEG(1);
 					}
 					else
 					{
-						player.r.x = rotInitialUp - (mouseYPos - rotY)/3 * DEG(1);
+						player.r.x = rotInitialUp - (mouseY() - rotY)/3 * DEG(1);
 					}
 				}
 				else
 				{
-					if(mouseYPos < rotY)
+					if(mouseY() < rotY)
 					{
-						player.r.x = rotInitialUp - (rotY - mouseYPos)/3 * DEG(1);
+						player.r.x = rotInitialUp - (rotY - mouseY())/3 * DEG(1);
 					}
 					else
 					{
-						player.r.x = rotInitialUp + (mouseYPos - rotY)/3 * DEG(1);
+						player.r.x = rotInitialUp + (mouseY() - rotY)/3 * DEG(1);
 					}
 				}
 				if(player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
@@ -1374,7 +1368,7 @@ void displayWorld(void)
 
 static BOOL mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 {
-	return mouseXPos > x0 && mouseXPos < x1 && mouseYPos > y0 && mouseYPos < y1;
+	return mouseX() > x0 && mouseX() < x1 && mouseY() > y0 && mouseY() < y1;
 }
 
 BOOL DrawnInLastFrame(int32_t frame)
