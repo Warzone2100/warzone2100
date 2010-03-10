@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_LIB_WIDGET_FORM_H__
 #define __INCLUDED_LIB_WIDGET_FORM_H__
 
+#include "lib/widget/widget.h"
+
 /* The basic form data */
 #define FORM_BASE \
 	WIDGET_BASE;				/* The common widget data */ \

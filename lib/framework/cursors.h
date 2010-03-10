@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_LIB_FRAMEWORK_CURSORS_H__
 #define __INCLUDED_LIB_FRAMEWORK_CURSORS_H__
 
-#include <SDL_mouse.h>
+#include <SDL/SDL_mouse.h>
 
 typedef enum
 {

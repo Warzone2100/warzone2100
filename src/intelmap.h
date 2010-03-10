@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_INTELMAP_H__
 #define __INCLUDED_SRC_INTELMAP_H__
 
+#include "messagedef.h"
+
 /* Intelligence Map screen IDs */
 #define IDINTMAP_FORM			6000	//The intelligence map base form
 #define IDINTMAP_MSGVIEW		6002	//The message 3D view for the intelligence screen

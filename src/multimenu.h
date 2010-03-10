@@ -24,6 +24,9 @@
 #ifndef __INCLUDED_SRC_MULTIMENU__
 #define __INCLUDED_SRC_MULTIMENU__
 
+#include "lib/widget/widgbase.h"
+#include "stringdef.h"
+
 // requester
 extern void		addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD id,UBYTE mapCam, UBYTE numPlayers);
 extern BOOL		multiRequestUp;

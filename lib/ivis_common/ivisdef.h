@@ -32,8 +32,6 @@
 #include "lib/framework/frame.h"
 #include "pietypes.h"
 
-#include <SDL_opengl.h>
-
 //*************************************************************************
 //
 // screen surface structure
@@ -131,7 +129,7 @@ typedef struct {
 #define MAX_NUM_TPAGEIDS 16
 typedef struct {
 	int NumImages;          /**< Number of images contained here */
-	GLuint TPageIDs[MAX_NUM_TPAGEIDS];	/**< OpenGL Texture IDs */
+	uint32_t TPageIDs[MAX_NUM_TPAGEIDS];  /**< OpenGL Texture IDs */
 	IMAGEDEF *ImageDefs;    /**< Stored images */
 } IMAGEFILE;
 

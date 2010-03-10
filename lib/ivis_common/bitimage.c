@@ -26,7 +26,7 @@
 #include "tex.h"
 
 
-static GLuint LoadTextureFile(const char *FileName)
+static unsigned LoadTextureFile(const char *FileName)
 {
 	iV_Image *pSprite;
 	unsigned int i;

@@ -1764,7 +1764,7 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 	VAR_IDENT_DECL	*videcl;
 }
 	/* key words */
-%token FUNCTION
+%token lexFUNCTION
 %token TRIGGER
 %token EVENT
 %token WAIT
@@ -2444,10 +2444,10 @@ event_subdecl:		EVENT IDENT
 				;
 
 
-function_def:		FUNCTION TYPE function_type
+function_def:		lexFUNCTION TYPE function_type
 				{
 
-					RULE("function_def: FUNCTION TYPE function_type");
+					RULE("function_def: lexFUNCTION TYPE function_type");
 
 					psCurEvent = $3;
 
@@ -2473,11 +2473,11 @@ function_type:			VOID_FUNC_CUST
 					;
 
 /* function declaration rules */
-func_subdecl:		FUNCTION TYPE IDENT
+func_subdecl:		lexFUNCTION TYPE IDENT
 					{
 						EVENT_SYMBOL	*psEvent;
 
-						RULE("func_subdecl: FUNCTION TYPE IDENT");
+						RULE("func_subdecl: lexFUNCTION TYPE IDENT");
 
 						/* allow local vars to have the same names as global vars (don't check global vars) */
 						localVariableDef = true;
@@ -2494,17 +2494,17 @@ func_subdecl:		FUNCTION TYPE IDENT
 
 						$$ = psEvent;
 
-						//debug(LOG_SCRIPT, "END func_subdecl:FUNCTION TYPE IDENT. ");
+						//debug(LOG_SCRIPT, "END func_subdecl:lexFUNCTION TYPE IDENT. ");
 					}
 				;
 
 
 /* void function declaration rules */
-void_func_subdecl:		FUNCTION _VOID IDENT	/* declaration of a function */
+void_func_subdecl:		lexFUNCTION _VOID IDENT	/* declaration of a function */
 						{
 							EVENT_SYMBOL	*psEvent;
 
-							RULE("void_func_subdecl: FUNCTION _VOID IDENT");
+							RULE("void_func_subdecl: lexFUNCTION _VOID IDENT");
 
 							/* allow local vars to have the same names as global vars (don't check global vars) */
 							localVariableDef = true;
@@ -2521,13 +2521,13 @@ void_func_subdecl:		FUNCTION _VOID IDENT	/* declaration of a function */
 
 							$$ = psEvent;
 
-							//debug(LOG_SCRIPT, "END func_subdecl:FUNCTION TYPE IDENT. ");
+							//debug(LOG_SCRIPT, "END func_subdecl:lexFUNCTION TYPE IDENT. ");
 						}
 					;
 
-void_function_def:		FUNCTION _VOID function_type	/* definition of a function that was declated before */
+void_function_def:		lexFUNCTION _VOID function_type	/* definition of a function that was declated before */
 						{
-							//debug(LOG_SCRIPT, "func_subdecl:FUNCTION EVENT_SYM ");
+							//debug(LOG_SCRIPT, "func_subdecl:lexFUNCTION EVENT_SYM ");
 							psCurEvent = $3;
 
 
@@ -2542,7 +2542,7 @@ void_function_def:		FUNCTION _VOID function_type	/* definition of a function tha
 							/* psCurEvent->bFunction = true; */
 							/* psEvent->retType = $2; */
 							$$ = $3;
-							//debug(LOG_SCRIPT, "func_subdecl:FUNCTION EVENT_SYM. ");
+							//debug(LOG_SCRIPT, "func_subdecl:lexFUNCTION EVENT_SYM. ");
 						}
 					;
 

@@ -21,8 +21,11 @@
 #ifndef __INCLUDED_SRC_BRIDGE_H__
 #define __INCLUDED_SRC_BRIDGE_H__
 
+#include "structuredef.h"
+
 /* Shift these out into a header file */
 #define MINIMUM_BRIDGE_SPAN 2
+
 #define MAXIMUM_BRIDGE_SPAN	12
 #define BRIDGE_END_HORIZ 1
 #define BRIDGE_END_VERT  2

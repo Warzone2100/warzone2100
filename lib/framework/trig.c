@@ -27,6 +27,9 @@
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
+#include "types.h"
+#include "trig.h"
+
 #include <assert.h>
 #include <stdlib.h>
 

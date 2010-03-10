@@ -28,9 +28,9 @@
 #include <limits.h>
 #include <ctype.h>
 
-#ifdef WZ_C99
+#if defined WZ_C99 || defined __cplusplus
 /* Compilers that have support for C99 have all values below defined in stdint.h */
-# include <stdint.h>
+# include <inttypes.h>
 #else
 // Defines C99 types for C99 incompatible compilers (e.g. MSVC)
 #include <SDL_stdinc.h>

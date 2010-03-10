@@ -2965,10 +2965,10 @@ static void	drawDragBox( void )
 		}
 
 		// SHURCOOL: Determine the 4 corners of the selection box, and use them for consistent selection box rendering
-		minX = MIN(dragBox3D.x1, mouseXPos);
-		maxX = MAX(dragBox3D.x1, mouseXPos);
-		minY = MIN(dragBox3D.y1, mouseYPos);
-		maxY = MAX(dragBox3D.y1, mouseYPos);
+		minX = MIN(dragBox3D.x1, mouseX());
+		maxX = MAX(dragBox3D.x1, mouseX());
+		minY = MIN(dragBox3D.y1, mouseY());
+		maxY = MAX(dragBox3D.y1, mouseY());
 
 		// SHURCOOL: Reduce the box in size to produce a (consistent) pulsing inward effect
 		minX += dragBox3D.pulse / 2;
@@ -3784,7 +3784,7 @@ void calcScreenCoords(DROID *psDroid)
  */
 static void locateMouse(void)
 {
-	const Vector2i pt = {mouseXPos, mouseYPos};
+	const Vector2i pt = {mouseX(), mouseY()};
 	unsigned int i;
 	int nearestZ = INT_MAX;
 

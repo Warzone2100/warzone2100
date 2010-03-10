@@ -21,7 +21,6 @@
 #define _tex_
 
 #include "png_util.h"
-#include <SDL_opengl.h>
 
 //*************************************************************************
 
@@ -38,7 +37,7 @@
 typedef struct
 {
 	char name[iV_TEXNAME_MAX];
-	GLuint id;
+	uint32_t id;
 } iTexPage;
 
 //*************************************************************************

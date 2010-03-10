@@ -26,6 +26,8 @@
 #ifndef _codeprint_h
 #define _codeprint_h
 
+#include "lib/script/interpreter.h"
+
 /* Display the contents of a program in readable form */
 extern void cpPrintProgram(SCRIPT_CODE *psProg);
 

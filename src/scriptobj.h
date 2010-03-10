@@ -24,6 +24,9 @@
 #ifndef __INCLUDED_SRC_SCRIPTOBJ_H__
 #define __INCLUDED_SRC_SCRIPTOBJ_H__
 
+#include "lib/framework/types.h"
+#include "lib/script/interpreter.h"
+
 // id's for object variables
 enum _objids
 {
