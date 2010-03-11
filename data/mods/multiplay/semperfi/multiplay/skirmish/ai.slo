@@ -43,8 +43,6 @@
 
 #define	MAX_DROIDS				150
 
-//range for trucks to look for more oil
-#define MORE_OIL_RANGE			(10 * TILE)
 //don't try to build on oil if there's threat within this range
 #define	OIL_THREAT_RANGE		(9 * TILE)
 
@@ -219,6 +217,7 @@ trigger startLevelTr				(CALL_START_NEXT_LEVEL);
 trigger chainloadTr				(wait, 1);
 trigger slowloadTr				(wait, 13);
 trigger checkActivitiesTr			(every, 400);
+trigger selectedDroidTr				(CALL_DROID_SELECTED, ref droid);
 
 /* Events */
 event	manicWalls;
@@ -392,6 +391,50 @@ function void dbgObj(DROID obj, string message)
 	if (obj.selected)
 	{
 		console(message);
+	}
+}
+
+// for debugging
+event selectedDroid(selectedDroidTr)
+{
+	local int groupcount;
+
+	if (!hasGroup(droid))
+	{
+		console("Not in any group");
+	}
+	if (groupMember(buildGroup, droid))
+	{
+		console("In build group");
+	}
+	if (groupMember(rushGroup, droid))
+	{
+		console("In rush (forward defense construction) group");
+	}
+	if (groupMember(defendGroup, droid))
+	{
+		console("In defend group");
+	}
+	if (groupMember(attackGroup, droid))
+	{
+		console("In attack group");
+	}
+	if (groupMember(scoutGroup, droid))
+	{
+		console("In scout group");
+	}
+	if (groupMember(vtolDefendGr, droid))
+	{
+		console("In VTOL defend group");
+	}
+	groupcount = 0;
+	while (groupcount < 10)
+	{
+		if (groupMember(vtolAttackGr[groupcount], droid))
+		{
+			console("In VTOL attack group " & groupcount);
+		}
+		groupcount = groupcount + 1;
 	}
 }
 
@@ -641,6 +684,7 @@ event buildFundamentals(inactive)
 	// Do we need power generators?
 	if (numUnusedDerricks() > 0)
 	{
+		dbgPlr("More power generators needed");
 		setEventTrigger(buildPowerGenerators, chainloadTr);
 		exit;
 	}
@@ -653,6 +697,7 @@ event buildFundamentals(inactive)
 		_oil = getFeatureB(me);
 		if (_oil != NULLOBJECT)
 		{
+			dbgPlr("More oil needed - candidate found");
 			setEventTrigger(buildDerrick, chainloadTr);
 			exit;
 		}
@@ -708,7 +753,7 @@ event buildFundamentals(inactive)
 
 	if (playerPower(me) < LOW_POWER)
 	{
-		exit;	// not much more we can (or should) do
+		exit;	// not much more we can (or should) do - except maybe upgrade?
 	}
 	else if (playerPower(me) < HIGH_POWER or numFactories() > 1)
 	{
@@ -1503,6 +1548,7 @@ event newfortify(inactive)
 	}
 	if (idleGroup(buildGroup) > 0 and !tryUpgrade())
 	{
+		dbgPlr("No more base defenses to build - trying to build incedry");
 		setEventTrigger(incendry, slowloadTr);
 	}
 }
@@ -1678,6 +1724,7 @@ event structBuilt(structBuiltTr)
 	else if(structure.stattype == REF_RESOURCE_EXTRACTOR)
 	{
 		setEventTrigger(buildDerrick, chainloadTr);
+		exit;
 	}
 	else if (structure.stattype == REF_RESEARCH)
 	{
@@ -2315,17 +2362,16 @@ event attackStuff(attackStuffTr)
 /////////////////////////////////////////////////////////////////////
 event doAllOutAttack(allOutAttackTr)
 {
-	if( idleGroup(attackGroup) >= (attackGroup.members / 3))	// make sure at least 30% are idle
+	if (idleGroup(attackGroup) >= (attackGroup.members / 3))	// make sure at least 30% are idle
 	{
-		if( (allOutAttack != NULLOBJECT) and (not helpingAlly()) )
+		if ((allOutAttack != NULLOBJECT) and (not helpingAlly()))
 		{
-			if( !friendlyPlayer(allOutAttack.player) )
+			if (!friendlyPlayer(allOutAttack.player))
 			{
-				if( getDroidCount(me) > 40)	// plenty of units.
+				if (getDroidCount(me) > 40)	// plenty of units.
 				{
-					orderGroupObj(attackGroup, DORDER_ATTACK,allOutAttack);
-					//orderGroupLoc(defendGroup, DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
-					orderGroupLoc(scoutGroup,  DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
+					orderGroupObj(attackGroup, DORDER_ATTACK, allOutAttack);
+					orderGroupLoc(scoutGroup, DORDER_SCOUT, allOutAttack.x, allOutAttack.y);
 				}
 			}
 			else
@@ -2357,7 +2403,6 @@ event defendWatch(defendWatchTr)
 					if( idleGroup(defendGroup) >= (defendGroup.members / 2) )
 					{
 						orderGroupLoc(defendGroup, DORDER_MOVE,defendObj.x,defendObj.y);	//cyborg mechanics can't attack (won't move)
-						//orderGroupObj(defendGroup, DORDER_ATTACK, defendObj);
 					}
 
 					if( idleGroup(scoutGroup) >= (scoutGroup.members / 2) )
@@ -2619,30 +2664,6 @@ event consolidateEvent(consolidateEventTr)
 			orderGroupLoc(scoutGroup, DORDER_MOVE,buildX,buildY);
 			orderGroupLoc(defendGroup, DORDER_MOVE,buildX,buildY);
 		}
-
-/*
-		if(attackObj != NULLOBJECT)	// consolidate any ongoing attack.
-		{
-			if(!friendlyPlayer(attackObj.player))
-			{
-				orderGroupLoc(attackGroup, DORDER_SCOUT, attackObj.x, attackObj.y);
-			}
-			else
-			{
-				attackObj = NULLOBJECT;
-			}
-		}
-		else if(allOutAttack == NULLOBJECT) //make sure not allOutAttacking
-		{
-
-			// find a place with no structures nearby
-			buildX = baseX;
-			buildY = baseY;
-			pickStructLocationB(powGen, ref buildX, ref buildY, me, 0);
-
-			orderGroupLoc(attackGroup, DORDER_MOVE,buildX,buildY);
-		}
-*/
 	}
 }
 
@@ -3594,27 +3615,6 @@ event manageAllyHelp(manageAllyHelpTr)
 		{
 			stopHelpingAlly();
 		}
-		//else
-		//{
-		//	/* See if all units we sent were killed */
-		//	if(not haveHelpers())
-		//	{
-		//		if(random(4) == 0)
-		//		{
-		//			messagePlayer(lastHelpPlayer, M_HELPERS_KILLED);
-		//		}
-
-		//		if(not attemptToHelp(lastHelpPlayer, helpX, helpY))
-		//		{
-		//			dbg("NO UNITS, STOPPED HELPING", me);
-		//			stopHelpingAlly();		//don't make sense to try again
-		//		}
-		//		else
-		//		{
-		//			dbg("SENDING REINFORCEMENTS", me);
-		//		}
-		//	}
-		//}
 	}
 }
 
@@ -3856,10 +3856,7 @@ event watchBaseThreat(watchBaseThreatTr)
 	{
 		if(!defendingOwnBase())	//make sure not already defending the base
 		{
-			if(_DEBUG)
-				debug(me & ") watchBaseThreat: base in trouble");
-
-			dbg("watchBaseThreat: base in trouble", me);
+			dbgPlr("Our base is in trouble!");
 
 			/* Bring our forces back if needed */
 			if(helpingAlly())
@@ -4097,59 +4094,6 @@ event keyPressed(CALL_KEY_PRESSED, ref count, ref count2)
 		{
 			console("The old cheat code has been removed.");
 		}
-	}
-}
-
-event watchMenu(everySec)
-{
-	if(_DEBUG)
-	{
-		if(vtolGrAttackObj[0] == NULLOBJECT){
-			setDebugMenuEntry("0 - " & vtolAttackGr[0].members, 0);
-		}else{
-			setDebugMenuEntry("0 " & vtolAttackGr[0].members & " - " & (vtolGrAttackObj[0].x / TILE) & "-" & (vtolGrAttackObj[0].y / TILE), 0);
-		}
-
-		if(vtolGrAttackObj[1] == NULLOBJECT){
-			setDebugMenuEntry("1 - " & vtolAttackGr[1].members, 1);
-		}else{
-			setDebugMenuEntry("1 " & vtolAttackGr[1].members & " - " & (vtolGrAttackObj[1].x / TILE) & "-" & (vtolGrAttackObj[1].y / TILE), 1);
-		}
-
-		if(vtolGrAttackObj[2] == NULLOBJECT){
-			setDebugMenuEntry("2 - " & vtolAttackGr[2].members, 2);
-		}else{
-			setDebugMenuEntry("2 " & vtolAttackGr[2].members & " - " & (vtolGrAttackObj[2].x / TILE) & "-" & (vtolGrAttackObj[2].y / TILE), 2);
-		}
-
-		if(vtolGrAttackObj[3] == NULLOBJECT){
-			setDebugMenuEntry("3 - " & vtolAttackGr[3].members, 3);
-		}else{
-			setDebugMenuEntry("3 " & vtolAttackGr[3].members & " - " & (vtolGrAttackObj[3].x / TILE) & "-" & (vtolGrAttackObj[3].y / TILE), 3);
-		}
-
-		if(vtolGrAttackObj[4] == NULLOBJECT){
-			setDebugMenuEntry("4 - " & vtolAttackGr[4].members, 4);
-		}else{
-			setDebugMenuEntry("4 " & vtolAttackGr[4].members & " - " & (vtolGrAttackObj[4].x / TILE) & "-" & (vtolGrAttackObj[4].y / TILE), 4);
-		}
-
-		if(vtolGrAttackObj[5] == NULLOBJECT){
-			setDebugMenuEntry("5 - " & vtolAttackGr[5].members, 5);
-		}else{
-			setDebugMenuEntry("5 " & vtolAttackGr[5].members & " - " & (vtolGrAttackObj[5].x / TILE) & "-" & (vtolGrAttackObj[5].y / TILE), 5);
-		}
-
-	/*
-		setDebugMenuEntry("total " & countRebuildStruct, 0);
-		setDebugMenuEntry("x1=" & rebuildStructX[0], 1);
-		setDebugMenuEntry("y1=" & rebuildStructY[0], 2);
-		setDebugMenuEntry("x2=" & rebuildStructX[1], 3);
-		setDebugMenuEntry("y2=" & rebuildStructY[1], 4);
-		setDebugMenuEntry("x3=" & rebuildStructX[2], 5);
-		setDebugMenuEntry("y3=" & rebuildStructY[2], 6);
-		setDebugMenuEntry("x4=" & rebuildStructX[3], 7);
-		setDebugMenuEntry("y4=" & rebuildStructY[3], 8);*/
 	}
 }
 

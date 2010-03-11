@@ -56,7 +56,7 @@ run
 	uplink			STRUCTURESTAT		"A0Sat-linkCentre"
 
 	//number of research topics for each research branch
-	techCount[0]	int					8
+	techCount[0]	int					18
 	
 	//how many res facilities to use when finished researching all specified research topics
 	maxIdleRes[0]	int					-1
@@ -64,11 +64,21 @@ run
 	tech[0][0]		RESEARCHSTAT		"R-Defense-Tower01"		//mg guard tower
 	tech[0][1]		RESEARCHSTAT		"R-Wpn-MG3Mk1"			//HMG
 	tech[0][2]		RESEARCHSTAT		"R-Struc-PowerModuleMk1"	//power module
-	tech[0][3]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
-	tech[0][4]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
-	tech[0][5]		RESEARCHSTAT		"R-Wpn-MG-Damage03"
-	tech[0][6]		RESEARCHSTAT		"R-Defense-Pillbox06"		//lancer bunker
-	tech[0][7]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
+	tech[0][3]		RESEARCHSTAT		"R-Struc-Research-Module"	//research module
+	tech[0][4]		RESEARCHSTAT		"R-Struc-Factory-Module"	//factory module
+	tech[0][5]		RESEARCHSTAT		"R-Defense-WallTower01"		//heavy mg hardpoint
+	tech[0][6]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"		//mini rocket artillery
+	tech[0][7]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"		//Fast Fire Mini-Rockets Mk3
+	tech[0][8]		RESEARCHSTAT		"R-Wpn-MG-Damage03"		//APDSB MG Bullets Mk2
+	tech[0][9]		RESEARCHSTAT		"R-Vehicle-Metals02"		//composite alloys Mk2
+	tech[0][10]		RESEARCHSTAT		"R-Defense-Pillbox06"		//lancer tower
+	tech[0][11]		RESEARCHSTAT		"R-Defense-WallUpgrade01"	//impr hardcrete - in case missed
+	tech[0][12]		RESEARCHSTAT		"R-Struc-Materials01"		//reinf struc mat - in case missed
+	tech[0][13]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
+	tech[0][14]		RESEARCHSTAT		"R-Sys-Sensor-Upgrade01"	//sensor upgrade
+	tech[0][15]		RESEARCHSTAT		"R-Vehicle-Prop-Hover"		//hover propulsion - for more options
+	tech[0][16]		RESEARCHSTAT		"R-Vehicle-Body08"		//scorpion body - for more options (eg new hover truck)
+	tech[0][17]		RESEARCHSTAT		"R-Struc-Research-Upgrade06"	//to dedicate one reslab to cerebral stuff
 
 	//other tech: R-Vehicle-Prop-VTOL, R-Struc-VTOLPad, R-Struc-VTOLFactory
 	techCount[1]	int					27
