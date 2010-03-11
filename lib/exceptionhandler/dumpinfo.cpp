@@ -18,6 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include "dumpinfo.h"
 #include <cerrno>
 #include <climits>
 #include <ctime>
@@ -26,7 +27,6 @@
 #include <deque>
 #include <sstream>
 #include <physfs.h>
-#include "dumpinfo.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/framework/wzglobal.h" // required for config.h
 // FIXME: #include from src/
