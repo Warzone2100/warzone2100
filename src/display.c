@@ -1604,23 +1604,13 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 
 	/*	Toggle selection on and off - allows you drag around a big
 		area of droids and then exclude certain individuals */
-	if(!bDragBox &&
-		psDroid->selected==true)
+	if (!bDragBox && psDroid->selected == true)
 	{
-//		psDroid->selected = false;
 		DeSelectDroid(psDroid);
-
-//		if(OrderUp)
-		{
-			/* Fix this ALEX M!!! */
-		}
 	}
-	else if (ctrlShiftDown()
-			|| !droidHasLeader(psDroid))
+	else if (ctrlShiftDown() || !droidHasLeader(psDroid))
 	{
-
-	for(psD = apsDroidLists[selectedPlayer],bGotGroup = false;
-		psD && !bGotGroup; psD = psD->psNext)
+		for(psD = apsDroidLists[selectedPlayer],bGotGroup = false; psD && !bGotGroup; psD = psD->psNext)
 		{
 			if(psD->selected && (psD->group!=UBYTE_MAX))
 			{
@@ -1628,11 +1618,10 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 				groupNumber = psD->group;
 			}
 		}
-//		psDroid->selected = true;
-		if(keyDown(KEY_LALT) || keyDown(KEY_RALT) )
+		if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
 		{
 			/* We only want to select weapon units if ALT is down on a drag */
-			if(psDroid->asWeaps[0].nStat > 0)
+			if (psDroid->asWeaps[0].nStat > 0)
 			{
 				SelectDroid(psDroid);
 			}
@@ -1641,17 +1630,9 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 		{
 			SelectDroid(psDroid);
 		}
-/*						if(psDroid->droidType == DROID_COMMAND)
-		{
-			cmdSelectSubDroids(psDroid);
-		}*/
-//					intObjectSelected((BASE_OBJECT *)psDroid);
-		if (bInTutorial)
-		{
-			psCBSelectedDroid = psDroid;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SELECTED);
-			psCBSelectedDroid = NULL;
-		}
+		psCBSelectedDroid = psDroid;
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SELECTED);
+		psCBSelectedDroid = NULL;
 	}
 }
 
