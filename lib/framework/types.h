@@ -25,10 +25,8 @@
 #define __INCLUDED_LIB_FRAMEWORK_TYPES_H__
 
 #include "wzglobal.h"
-#include <limits.h>
-#include <ctype.h>
 
-#if defined WZ_C99 || defined __cplusplus
+#ifdef HAVE_INTTYPES_H // defined WZ_C99
 /* Compilers that have support for C99 have all values below defined in stdint.h */
 # include <inttypes.h>
 #else
@@ -48,6 +46,9 @@
 # define PRIu64					"I64u"
 #endif
 #endif // WZ_C99
+
+#include <limits.h>
+#include <ctype.h>
 
 /* Basic numeric types */
 typedef uint8_t  UBYTE;

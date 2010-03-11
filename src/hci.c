@@ -7344,14 +7344,11 @@ DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,BOOL AllowGroup)
 		}
 	}
 
-	if(Found == true) {
-
-		if (bInTutorial)
-		{
-			psCBSelectedDroid = CurrentDroid;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SELECTED);
-			psCBSelectedDroid = NULL;
-		}
+	if (Found == true)
+	{
+		psCBSelectedDroid = CurrentDroid;
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SELECTED);
+		psCBSelectedDroid = NULL;
 
 		// Center it on screen.
 		if(CurrentDroid) {

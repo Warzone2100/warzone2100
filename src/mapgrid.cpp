@@ -24,7 +24,7 @@
  * The objects are stored in the quad-tree.
  *
  */
-#include "lib/framework/frame.h"
+#include "lib/framework/types.h"
 #include "objects.h"
 #include "map.h"
 
@@ -168,7 +168,7 @@ struct ConditionUnseen
 	ConditionUnseen(int32_t player_) : player(player_) {}
 	bool test(BASE_OBJECT *obj) const
 	{
-		return obj->seenThisTick[player] < UBYTE_MAX;
+		return obj->seenThisTick[player] < UINT8_MAX;
 	}
 	int player;
 };
