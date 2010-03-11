@@ -99,6 +99,7 @@ typedef struct InitialDroidOrders
 	uint32_t secondaryOrder;
 	int32_t moveToX;
 	int32_t moveToY;
+	uint32_t factoryId;
 } INITIAL_DROID_ORDERS;
 /*Builds an instance of a Structure - the x/y passed in are in world coords.*/
 /// Sends a GAME_DROID message if bMultiMessages is true, or actually creates it if false. Only uses initialOrders if sending a GAME_DROID message.

@@ -412,6 +412,8 @@ extern BOOL lasSatStructSelected(STRUCTURE *psStruct);
 
 BOOL structureCheckReferences(STRUCTURE *psVictimStruct);
 
+void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
+
 static inline int structSensorRange(const STRUCTURE* psObj)
 {
 	return objSensorRange((const BASE_OBJECT*)psObj);

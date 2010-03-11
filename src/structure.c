@@ -186,7 +186,6 @@ static void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player);
 static void removeStructFromMap(STRUCTURE *psStruct);
 static void	structUpdateRecoil( STRUCTURE *psStruct );
 static void resetResistanceLag(STRUCTURE *psBuilding);
-static void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 static int structureTotalReturn(STRUCTURE *psStruct);
 
 // last time the maximum units message was displayed
@@ -2605,7 +2604,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 
 	if (placed)
 	{
-		INITIAL_DROID_ORDERS initialOrders = {psStructure->pFunctionality->factory.secondaryOrder, psStructure->pFunctionality->factory.psAssemblyPoint->coords.x, psStructure->pFunctionality->factory.psAssemblyPoint->coords.y};
+		INITIAL_DROID_ORDERS initialOrders = {psStructure->pFunctionality->factory.secondaryOrder, psStructure->pFunctionality->factory.psAssemblyPoint->coords.x, psStructure->pFunctionality->factory.psAssemblyPoint->coords.y, psStructure->id};
 		//create a droid near to the structure
 		psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), psStructure->player, false, &initialOrders);
 		if (!psNewDroid)
@@ -8147,7 +8146,7 @@ BOOL lasSatStructSelected(STRUCTURE *psStruct)
 
 
 /* Call CALL_NEWDROID script callback */
-static void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
+void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
 {
 	ASSERT_OR_RETURN( , psDroid != NULL, "no droid assigned for CALL_NEWDROID callback");
 

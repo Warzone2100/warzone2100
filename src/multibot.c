@@ -347,6 +347,7 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 			NETuint32_t(&initialOrders.secondaryOrder);
 			NETint32_t(&initialOrders.moveToX);
 			NETint32_t(&initialOrders.moveToY);
+			NETuint32_t(&initialOrders.factoryId);  // For making scripts happy.
 		}
 	}
 	debug(LOG_LIFE, "===> sending Droid from %u id of %u ",player,id);
@@ -378,6 +379,7 @@ BOOL recvDroid(NETQUEUE queue)
 			NETuint32_t(&initialOrders.secondaryOrder);
 			NETint32_t(&initialOrders.moveToX);
 			NETint32_t(&initialOrders.moveToY);
+			NETuint32_t(&initialOrders.factoryId);  // For making scripts happy.
 		}
 
 		pT = IdToTemplate(templateID, player);
@@ -415,6 +417,7 @@ BOOL recvDroid(NETQUEUE queue)
 		{
 			psDroid->secondaryOrder = initialOrders.secondaryOrder;
 			orderDroidLoc(psDroid, DORDER_MOVE, initialOrders.moveToX, initialOrders.moveToY);
+			cbNewDroid(IdToStruct(initialOrders.factoryId, ANYPLAYER), psDroid);
 		}
 	}
 	else
