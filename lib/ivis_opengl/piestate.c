@@ -22,7 +22,11 @@
  */
 
 #include <GLee.h>
+#if defined(__MACOSX__)
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif
 #include "lib/framework/frame.h"
 
 #include <physfs.h>

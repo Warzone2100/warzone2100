@@ -99,17 +99,6 @@ unsigned int screenHeight = 0;
 
 static void inputAddBuffer(UDWORD key, utf_32_char unicode);
 
-#define gl_errors() really_report_gl_errors(__FILE__, __LINE__)
-static void really_report_gl_errors (const char *file, int line)
-{
-	GLenum error = glGetError();
-
-	if (error != GL_NO_ERROR)
-	{
-		qFatal("Oops, GL error caught: %s %s:%i", gluErrorString(error), file, line);
-	}
-}
-
 /*!
  * The mainloop.
  * Fetches events, executes appropriate code
@@ -149,7 +138,7 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	char *bytes;
 	loadFile("images/intfac5.png", &bytes, &size);
 	QByteArray array(bytes, size);
-	if (array.size() != size)
+	if ((unsigned)array.size() != size)
 	{
 		debug(LOG_ERROR, "Bad array"); abort();
 	}
@@ -703,7 +692,7 @@ int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool full
 	return EXIT_SUCCESS;
 }
 
-int wzQuit()
+void wzQuit()
 {
 	WzMainWindow::instance()->close();
 }
