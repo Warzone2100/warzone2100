@@ -383,11 +383,19 @@ BOOL recvDroidCheck(NETQUEUE queue)
 				case DORDER_ATTACK:
 					if (pc.order != pc2.order || pc.targetID != pc2.targetID)
 					{
-						debug(LOG_SYNC, "Droid %u out of synch, changing order from %s to %s(%u).", pc.droidID, getDroidOrderName(pc2.order), getDroidOrderName(pc.order), pc.targetID);
-						// remote droid is attacking, not here tho!
-						turnOffMultiMsg(true);
-						orderDroidObj(pD, pc.order, IdToPointer(pc.targetID, ANYPLAYER));
-						turnOffMultiMsg(false);
+						BASE_OBJECT *obj = IdToPointer(pc.targetID, ANYPLAYER);
+						if (obj != NULL)
+						{
+							debug(LOG_SYNC, "Droid %u out of synch, changing order from %s to %s(%u).", pc.droidID, getDroidOrderName(pc2.order), getDroidOrderName(pc.order), pc.targetID);
+							// remote droid is attacking, not here tho!
+							turnOffMultiMsg(true);
+							orderDroidObj(pD, pc.order, IdToPointer(pc.targetID, ANYPLAYER));
+							turnOffMultiMsg(false);
+						}
+						else
+						{
+							debug(LOG_SYNC, "Droid %u out of synch, would change order from %s to %s(%u), but can't find target.", pc.droidID, getDroidOrderName(pc2.order), getDroidOrderName(pc.order), pc.targetID);
+						}
 					}
 					break;
 				case DORDER_NONE:

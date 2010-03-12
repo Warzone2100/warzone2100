@@ -3952,7 +3952,7 @@ static void dumpDebugSync(uint8_t *buf, size_t bufLen, uint32_t time, unsigned p
 	char fname[100];
 	PHYSFS_file *fp;
 
-	ssprintf(fname, "desync%u_p%u.txt", time, player);
+	ssprintf(fname, "logs/desync%u_p%u.txt", time, player);
 	fp = openSaveFile(fname);
 	PHYSFS_write(fp, buf, bufLen, 1);
 	PHYSFS_close(fp);
