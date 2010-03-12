@@ -88,6 +88,11 @@ void clearPlayerPower(void)
 	nextPowerSystemUpdate = 0;
 }
 
+static void syncDebugEconomy(unsigned player, char ch)
+{
+	syncDebug("%c economy%u = %f,%f,%f,%f", ch, player, asPower[player].currentPower, asPower[player].economyThrottle, asPower[player].powerProduced, asPower[player].powerRequested);
+}
+
 void throttleEconomy(void)
 {
 	int player;
@@ -101,6 +106,8 @@ void throttleEconomy(void)
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
+		syncDebugEconomy(player, '<');
+
 		if (asPower[player].currentPower > asPower[player].powerRequested ||
 		    asPower[player].powerRequested <= asPower[player].powerProduced)
 		{
@@ -124,6 +131,8 @@ void throttleEconomy(void)
 		CLIP(asPower[player].economyThrottle, 0, 1);
 		asPower[player].powerProduced = 0;
 		asPower[player].powerRequested = 0;
+
+		syncDebugEconomy(player, '>');
 	}
 }
 
@@ -141,25 +150,31 @@ BOOL checkPower(int player, float quantity)
 	//if not doing a check on the power - just return true
 	if (!powerCalculated)
 	{
+		syncDebug("checkPower%d %f vs %f uncalculated", player, asPower[player].currentPower, quantity);
 		return true;
 	}
 
 	if (asPower[player].currentPower >= quantity)
 	{
+		syncDebug("checkPower%d %f vs %f pass", player, asPower[player].currentPower, quantity);
 		return true;
 	}
+	syncDebug("checkPower%d %f vs %f fail", player, asPower[player].currentPower, quantity);
 	return false;
 }
 
 void usePower(int player, float quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
+	syncDebug("usePower%d %f-=%f", player, asPower[player].currentPower, quantity);
+	syncDebugBacktrace();
 	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity);
 }
 
 void addPower(int player, float quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
+	syncDebug("addPower%d %f+=%f", player, asPower[player].currentPower, quantity);
 	asPower[player].currentPower = MAX(0, asPower[player].currentPower + quantity);
 	if (asPower[player].currentPower > MAX_POWER)
 	{
@@ -214,6 +229,8 @@ float updateExtractedPower(STRUCTURE	*psBuilding)
 
 		pResExtractor->timeLastUpdated = gameTime;
 		extractedPoints += pointsToAdd;
+
+		syncDebug("updateExtractedPower%d = %f", psBuilding->player, extractedPoints);
 	}
 	ASSERT(extractedPoints >= 0, "extracted negative amount of power");
 	return extractedPoints;
@@ -251,6 +268,7 @@ void updatePlayerPower(UDWORD player)
 		}
 	}
 	asPower[player].powerProduced += asPower[player].currentPower - powerBefore;
+	syncDebug("updatePlayerPower%u %f->%f", player, powerBefore, asPower[player].currentPower);
 }
 
 /* Updates the current power based on the extracted power and a Power Generator*/
@@ -292,6 +310,7 @@ void setPower(int player, float power)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
+	syncDebug("setPower%d %f->%f", player, asPower[player].currentPower, power);
 	asPower[player].currentPower = power;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 }
@@ -416,8 +435,10 @@ float requestPower(int player, float amount)
 	{
 		// you can have it
 		asPower[player].currentPower -= amountConsidered;
+		syncDebug("requestPower%d give%f,want%f", player, amountConsidered, amount);
 		return amountConsidered;
 	}
+	syncDebug("requestPower%d giveNone,want%f", player, amount);
 	return 0; // no power this frame
 }
 
@@ -453,8 +474,10 @@ int requestPowerFor(int player, float amount, int points)
 	{
 		// you can have it
 		asPower[player].currentPower -= amountConsidered;
+		syncDebug("requestPower%d give%d,want%d", player, pointsConsidered, points);
 		return pointsConsidered;
 	}
+	syncDebug("requestPower%d giveNone,want%d", player, points);
 	return 0; // no power this frame
 }
 

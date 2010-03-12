@@ -871,6 +871,8 @@ static BOOL recvResearch(NETQUEUE queue)
 		NETuint32_t(&index);
 	NETend();
 
+	syncDebug("player%d, index%u", player, index);
+
 	if (player >= MAX_PLAYERS || index >= numResearch)
 	{
 		debug(LOG_ERROR, "Bad GAME_RESEARCH received, player is %d, index is %u", (int)player, index);
@@ -878,6 +880,7 @@ static BOOL recvResearch(NETQUEUE queue)
 	}
 
 	pPlayerRes = asPlayerResList[player] + index;
+	syncDebug("research status = %d", pPlayerRes->ResearchStatus);
 
 	if (!IsResearchCompleted(pPlayerRes))
 	{
@@ -959,6 +962,8 @@ BOOL recvResearchStatus(NETQUEUE queue)
 		NETuint32_t(&structRef);
 		NETuint32_t(&index);
 	NETend();
+
+	syncDebug("player%d, bStart%d, structRef%u, index%u", player, bStart, structRef, index);
 
 	if (player >= MAX_PLAYERS || index >= numResearch)
 	{

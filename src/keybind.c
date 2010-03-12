@@ -1411,8 +1411,16 @@ void	kf_FinishAllResearch(void)
 		pPlayerRes += j; // select right tech
 		if (IsResearchCompleted(pPlayerRes) == false)
 		{
-			MakeResearchCompleted(pPlayerRes);
-			researchResult(j, selectedPlayer, false, NULL, false);
+			if (bMultiMessages)
+			{
+				SendResearch(selectedPlayer, j, false);
+				// Wait for our message before doing anything.
+			}
+			else
+			{
+				MakeResearchCompleted(pPlayerRes);
+				researchResult(j, selectedPlayer, false, NULL, false);
+			}
 		}
 	}
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"),
@@ -1446,7 +1454,15 @@ void	kf_FinishResearch( void )
 			pSubject = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject;
 			if (pSubject)
 			{
-				researchResult((RESEARCH*)pSubject - asResearch, selectedPlayer, true, psCurr, true);
+				if (bMultiMessages)
+				{
+					SendResearch(selectedPlayer, (RESEARCH*)pSubject - asResearch, true);
+					// Wait for our message before doing anything.
+				}
+				else
+				{
+					researchResult((RESEARCH*)pSubject - asResearch, selectedPlayer, true, psCurr, true);
+				}
 				sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s %s"),
 					selectedPlayer, _("Researched"), getName(pSubject->pName) );
 				sendTextMessage(cmsg, true);

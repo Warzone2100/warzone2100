@@ -186,7 +186,9 @@ static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 
 	if (IdToDroid(droidID, from, &psDroid))
 	{
+		syncDebugDroid(psDroid, '<');
 		giftSingleDroid(psDroid, to);
+		syncDebugDroid(psDroid, '>');
 		if (to == selectedPlayer)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s Gives you a %s"), getPlayerName(from), psDroid->aName));

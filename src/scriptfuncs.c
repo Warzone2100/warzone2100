@@ -4390,12 +4390,14 @@ BOOL scrCompleteResearch(void)
 		return false;
 	}
 
-	researchResult(researchIndex, (UBYTE)player, false, NULL, false);
-
-
 	if(bMultiMessages && (gameTime > 2 ))
 	{
-		SendResearch((UBYTE)player, researchIndex, false);
+		SendResearch(player, researchIndex, false);
+		// Wait for our message before doing anything.
+	}
+	else
+	{
+		researchResult(researchIndex, player, false, NULL, false);
 	}
 
 
