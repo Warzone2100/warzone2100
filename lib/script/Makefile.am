@@ -3,7 +3,7 @@
 
 %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
-	sed -i 's/\(fwrite(.*)\)/abs(\1)/' $@
+#	sed -i 's/\(fwrite(.*)\)/abs(\1)/' $@
 
 AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)

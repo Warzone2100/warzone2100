@@ -3,7 +3,7 @@
 
 %.lex.h %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
-	sed -i 's/\(fwrite(.*)\)/abs(\1)/' $@
+#	sed -i 's/\(fwrite(.*)\)/abs(\1)/' $@
 
 # Required to force using a C++ linker
 force-linker.cpp:
