@@ -167,7 +167,6 @@ void usePower(int player, float quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
 	syncDebug("usePower%d %f-=%f", player, asPower[player].currentPower, quantity);
-	syncDebugBacktrace();
 	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity);
 }
 
