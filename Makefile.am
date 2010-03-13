@@ -20,3 +20,7 @@ EXTRA_DIST= \
 	configure.ac \
 	macosx/prebuilt \
 	macosx
+
+# get rid of SVN stuff in the tarball
+dist-hook:
+	rm -rf `find $(distdir) -type d -name .svn`
