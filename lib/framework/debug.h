@@ -265,6 +265,13 @@ void _realObjTrace(int id, const char *function, const char *str, ...) WZ_DECL_F
 static inline void objTraceEnable(UDWORD id) { traceID = id; }
 static inline void objTraceDisable(void) { traceID = (UDWORD)-1; }
 
+// MSVC specific rotuines to set/clear allocation tracking
+#if defined(WZ_CC_MSVC) && defined(DEBUG)
+void debug_MEMCHKOFF(void);
+void debug_MEMCHKON(void);
+void debug_MEMSTATS(void);
+#endif
+
 #if defined(__cplusplus)
 }
 #endif

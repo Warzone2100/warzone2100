@@ -31,6 +31,37 @@
 extern "C" {
 #endif
 
+
+/*!
+ * On MSVC, in order to squelch tons of 'memory leaks' we set the allocator
+ * to not count the memory received by strdup() calls.
+ *
+ */
+#if defined(WZ_CC_MSVC)
+#	ifdef strdup
+#		undef strdup
+#	endif
+#	if defined(DEBUG)
+#		define strdup(s) \
+			strdup2(s,__FILE__,__LINE__)
+static inline char *strdup2(const char *s, char *fileName, int line)
+{
+	char *result;
+
+	(void)debug_MEMCHKOFF();
+	result = (char*)malloc(strlen(s) + 1);
+	(void)debug_MEMCHKON();
+	debug(LOG_NEVER, "allocator toggled in %s %d",fileName,line);
+	if (result == (char*)0)
+		return (char*)0;
+	strcpy(result, s); 
+	return result; 
+}
+#	else	// for release builds
+#		define strdup _strdup
+#	endif	//debug block
+#endif
+
 /*!
  * Safe variant of strlen.
  * Finds the length of the required buffer to store string.
