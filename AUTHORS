@@ -5,6 +5,7 @@ The Warzone 2100 Project team and former contributors to the GPL version, in alp
 Scott Balneaves <sbalneav> : Programming
 -- <Buginator> : Programming
 Roman C. <troman> : Programming and Scripting + Scripting-engine rewrite and AI
+-- <dak180> : MacOSX Packaging
 Denis Dupeyron <charun> : Programming
 Bruce V. Edwards <cathuria> : 2D/3D Graphics
 Don Edwards : 2D Graphics support
