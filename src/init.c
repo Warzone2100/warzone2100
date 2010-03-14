@@ -170,6 +170,7 @@ void cleanSearchPath( void )
 		free( curSearchPath );
 		curSearchPath = tmpSearchPath;
 	}
+	searchPathRegistry = NULL;
 }
 
 
@@ -471,10 +472,16 @@ BOOL systemInitialise(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Called once at program shutdown.
 //
+extern char *mod_list;
+
 void systemShutdown(void)
 {
-//	unsigned int i;
+	if (mod_list)
+	{
+		free(mod_list);
+	}
 
+	closeLoadingScreen();
 	keyClearMappings();
 
 	// free up all the load functions (all the data should already have been freed)
@@ -482,7 +489,8 @@ void systemShutdown(void)
 
 	if (!multiShutdown()) // ajl. init net stuff
 	{
-		return;
+		debug(LOG_FATAL, "Unable to multiShutdown() cleanly!");
+		abort();
 	}
 
 	debug(LOG_MAIN, "shutting down audio subsystems");
@@ -492,7 +500,8 @@ void systemShutdown(void)
 
 	if ( audio_Disabled() == false && !audio_Shutdown() )
 	{
-		return;
+		debug(LOG_FATAL, "Unable to audio_Shutdown() cleanly!");
+		abort();
 	}
 
 	debug(LOG_MAIN, "shutting down graphics subsystem");
@@ -500,10 +509,16 @@ void systemShutdown(void)
 	levShutDown();
 	widgShutDown();
 	pie_TerrainCleanup();
-
+	scrShutDown();
 	fpathShutdown();
-
-	return;
+	debug(LOG_MAIN, "shutting down everything else");
+	pal_ShutDown();		// currently unused stub
+	frameShutDown();	// close screen / SDL / resources / cursors / trig
+	closeConfig();		// "registry" close
+	cleanSearchPath();	// clean PHYSFS search paths
+	debug_exit();		// cleanup debug routines
+	PHYSFS_deinit();	// cleanup PHYSFS (If failure, state of PhysFS is undefined, and probably badly screwed up.)
+	// NOTE: Exception handler is cleaned via atexit(ExchndlShutdown);
 }
 
 /***************************************************************************/
@@ -673,6 +688,8 @@ BOOL frontendShutdown(void)
 	debug(LOG_TEXTURE, "=== frontendShutdown ===");
 	pie_TexShutDown();
 	pie_TexInit(); // ready for restart
+	freeComponentLists();
+	statsShutDown();
 
 	return true;
 }
