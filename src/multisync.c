@@ -264,7 +264,7 @@ static BOOL sendDroidCheck(void)
 static PACKAGED_CHECK packageCheck(const DROID *pD)
 {
 	PACKAGED_CHECK pc;
-	memset(pc, 0xFF, sizeof(pc));  // Dummy initialisation.
+	memset(&pc, 0xFF, sizeof(pc));  // Dummy initialisation.
 	pc.gameTime = gameTime + MIN_DELAY_BETWEEN_DROID_SYNCHS;
 
 	pc.player = pD->player;
