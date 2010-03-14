@@ -55,6 +55,7 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				EnableEnhancedInstructionSet="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -170,6 +171,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\crc.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cursors.c"
 				>
 			</File>
@@ -275,6 +280,10 @@
 			>
 			<File
 				RelativePath=".\configfile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\crc.h"
 				>
 			</File>
 			<File
