@@ -1847,6 +1847,9 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 		//increment the pointer to the start of the next record
 		pDroidData = strchr(pDroidData,'\n') + 1;
+
+		debug(LOG_NEVER, "(default) Droid template found, aName: %s, MP ID: %d, ref: %u, pname: %s, prefab: %s, type:%d (loading)",
+			pDroidDesign->aName, pDroidDesign->multiPlayerID, pDroidDesign->ref, pDroidDesign->pName, pDroidDesign->prefab ? "yes":"no",pDroidDesign->droidType);
 	}
 
 	ASSERT_OR_RETURN(false, bDefaultTemplateFound, "Default template not found");
@@ -3063,7 +3066,81 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 
 	return true;
 }
+/*!
+ * Get a static template from its aName.
+ * This checks the all the Human's apsDroidTemplates list.
+ * This function is similar to getTemplateFromUniqueName() but we use aName,
+ * and not pName, since we don't have that information, and we are checking all player's list.
+ * \param aName Template aName
+ * 
+ */
+DROID_TEMPLATE	*GetHumanDroidTemplate(char *aName)
+{
+	DROID_TEMPLATE	*templatelist, *found = NULL, *foundOtherPlayer = NULL;
+	int i, playerFound = 0;
 
+	for (i=0; i < MAX_PLAYERS; i++)
+	{
+		templatelist = apsDroidTemplates[i];
+		while (templatelist)
+		{
+			if (!strcmp(templatelist->aName, aName))
+			{
+				debug(LOG_NEVER, "Droid template found, aName: %s, MP ID: %d, ref: %u, pname: %s (for player %d)",
+					templatelist->aName, templatelist->multiPlayerID, templatelist->ref, templatelist->pName, i);
+				if (i == selectedPlayer)
+				{
+					found = templatelist;
+				}
+				else
+				{
+					foundOtherPlayer = templatelist;
+					playerFound = i;
+				}
+			}
+
+			templatelist = templatelist->psNext;
+		}
+	}
+
+	if (foundOtherPlayer && !found)
+	{
+		debug(LOG_ERROR, "The template was not in our list, but was in another players list.");
+		debug(LOG_ERROR, "Droid template's aName: %s, MP ID: %d, ref: %u, pname: %s (for player %d)",
+			foundOtherPlayer->aName, foundOtherPlayer->multiPlayerID, foundOtherPlayer->ref, foundOtherPlayer->pName, playerFound);
+		return foundOtherPlayer;
+	}
+
+	return found;
+}
+
+/*!
+ * Get a static template from its aName.
+ * This checks the AI apsStaticTemplates.
+ * This function is similar to getTemplateFromTranslatedNameNoPlayer() but we use aName,
+ * and not pName, since we don't have that information.
+ * \param aName Template aName
+ * 
+ */
+DROID_TEMPLATE *GetAIDroidTemplate(char *aName)
+{
+	DROID_TEMPLATE	*templatelist, *found = NULL;
+
+	templatelist = apsStaticTemplates;
+	while (templatelist)
+	{
+		if (!strcmp(templatelist->aName, aName))
+		{
+			debug(LOG_INFO, "Droid template found, name: %s, MP ID: %d, ref: %u, pname: %s ",
+				templatelist->aName, templatelist->multiPlayerID, templatelist->ref, templatelist->pName);
+
+			found = templatelist;
+		}
+		templatelist = templatelist->psNext;
+	}
+
+	return found;
+}
 
 /*!
  * Gets a template from its name
