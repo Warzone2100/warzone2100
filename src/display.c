@@ -1297,45 +1297,43 @@ BOOL CheckScrollLimits(void)
 void displayWorld(void)
 {
 	Vector3i pos;
+	
 	shakeUpdate();
 
 	if (mouseDown(MOUSE_RMB) && rotActive)
 	{
-		if (abs(mouseX() - rotX) > 8 || xMoved > 8)
+		if (abs(mouseX() - rotX) > 2 || xMoved > 2 || abs(mouseY() - rotY) > 2 || yMoved > 2)
 		{
 			xMoved += abs(mouseX() - rotX);
 			if (mouseX() < rotX)
 			{
-				player.r.y = rotInitial + (rotX - mouseX())/2 * DEG(1);
+				player.r.y = rotInitial + (rotX - mouseX()) * DEG(1) / 2;
 			}
 			else
 			{
-				player.r.y = rotInitial - (mouseX() - rotX)/2 * DEG(1);
+				player.r.y = rotInitial - (mouseX() - rotX) * DEG(1) / 2;
 			}
-		}
-		if (abs(mouseY() - rotY) > 8 || yMoved > 8)
-		{
 				yMoved += abs(mouseY() - rotY);
 				if (bInvertMouse)
 				{
 					if (mouseY() < rotY)
 					{
-						player.r.x = rotInitialUp + (rotY - mouseY())/3 * DEG(1);
+						player.r.x = rotInitialUp + (rotY - mouseY()) * DEG(1) / 3;
 					}
 					else
 					{
-						player.r.x = rotInitialUp - (mouseY() - rotY)/3 * DEG(1);
+						player.r.x = rotInitialUp - (mouseY() - rotY) * DEG(1) / 3;
 					}
 				}
 				else
 				{
 					if(mouseY() < rotY)
 					{
-						player.r.x = rotInitialUp - (rotY - mouseY())/3 * DEG(1);
+						player.r.x = rotInitialUp - (rotY - mouseY()) * DEG(1) / 3;
 					}
 					else
 					{
-						player.r.x = rotInitialUp + (mouseY() - rotY)/3 * DEG(1);
+						player.r.x = rotInitialUp + (mouseY() - rotY) * DEG(1) / 3;
 					}
 				}
 				if(player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
