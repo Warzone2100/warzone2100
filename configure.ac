@@ -202,8 +202,8 @@ AC_MSG_RESULT([${enable_debug}])
 
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wcheck -Werror"
-		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Wcheck -Werror"
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -fp-model precise -fp-model source -ftz -no-fma -Wcheck -Werror"
+		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -fp-model precise -fp-model source -ftz -no-fma -Wcheck -Werror"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
 		# -mno-fused-madd = Do not generate fused multiply-add instructions, which round differently than separate multiply and add instructions.
