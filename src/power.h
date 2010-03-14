@@ -61,14 +61,12 @@ extern BOOL resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
 /** Free the space used for playerPower. */
 extern void releasePlayerPower(void);
 
-/** Check the available power. */
-extern BOOL checkPower(int player, float quantity);
-
 extern float requestPower(int player, float amount);
 extern int requestPowerFor(int player, float amount, int points);
 
 extern void addPower(int player, float quantity);
 
+/** Check the available power. */
 BOOL checkPower(int player, float quantity);
 void usePower(int player, float quantity);
 

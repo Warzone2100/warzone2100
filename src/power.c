@@ -150,16 +150,13 @@ BOOL checkPower(int player, float quantity)
 	//if not doing a check on the power - just return true
 	if (!powerCalculated)
 	{
-		syncDebug("checkPower%d %f vs %f uncalculated", player, asPower[player].currentPower, quantity);
 		return true;
 	}
 
 	if (asPower[player].currentPower >= quantity)
 	{
-		syncDebug("checkPower%d %f vs %f pass", player, asPower[player].currentPower, quantity);
 		return true;
 	}
-	syncDebug("checkPower%d %f vs %f fail", player, asPower[player].currentPower, quantity);
 	return false;
 }
 

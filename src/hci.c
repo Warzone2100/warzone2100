@@ -1526,7 +1526,8 @@ static void intProcessEditStats(UDWORD id)
 		{
 			if (!checkPower(selectedPlayer, ((STRUCTURE_STATS*)psPositionStats)->powerToBuild))
 			{
-				return;
+				debug(LOG_INFO, "Ignoring power check, this is only used from the edit menu, isn't it?");
+				//return;
 			}
 		}
 		/*if it is a template - need to check there is enough power available
@@ -1536,6 +1537,7 @@ static void intProcessEditStats(UDWORD id)
 		{
 			if (!checkPower(selectedPlayer, ((DROID_TEMPLATE*)psPositionStats)->powerPoints))
 			{
+				debug(LOG_INFO, "Ignoring power check, this is only used from the edit menu, isn't it?");
 				return;
 			}
 		}
