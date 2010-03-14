@@ -237,8 +237,7 @@ static NETSTATS		nStats = { 0, 0, 0, 0 };
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
 char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
 
-extern int NET_PlayerConnectionStatus;		// from src/display3d.c
-extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
+int NET_PlayerConnectionStatus = CONNECTIONSTATUS_NORMAL;
 
 // ////////////////////////////////////////////////////////////////////////////
 #define VersionStringSize 80

@@ -176,6 +176,8 @@ void gameTimeUpdate()
 
 			debug(LOG_NEVER, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7]);
 			mayUpdate = false;
+
+			NET_PlayerConnectionStatus |= CONNECTIONSTATUS_WAITING_FOR_PLAYER;
 		}
 
 		// Calculate the time for this frame
@@ -408,6 +410,7 @@ void recvPlayerGameTime(NETQUEUE queue)
 	if (!checkDebugSync(checkTime, checkCrc))
 	{
 		crcError = true;
+		NET_PlayerConnectionStatus |= CONNECTIONSTATUS_DESYNC;
 	}
 
 	if (updateReadyTime == 0 && checkPlayerGameTime(NET_ALL_PLAYERS))

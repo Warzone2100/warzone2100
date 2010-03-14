@@ -50,6 +50,15 @@ typedef enum
 	ERROR_UNKNOWNFILEISSUE
 } LOBBY_ERROR_TYPES;
 
+typedef enum
+{
+	CONNECTIONSTATUS_NORMAL              = 0,
+
+	CONNECTIONSTATUS_PLAYER_LEAVING      = 1,
+	CONNECTIONSTATUS_PLAYER_DROPPED      = 2,
+	CONNECTIONSTATUS_WAITING_FOR_PLAYER  = 4,
+	CONNECTIONSTATUS_DESYNC              = 8
+} CONNECTION_STATUS;
 
 typedef enum
 {
@@ -264,6 +273,7 @@ extern SYNC_COUNTER sync_counter;
 extern bool netPlayersUpdated;
 extern int mapDownloadProgress;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
+extern int NET_PlayerConnectionStatus;
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.

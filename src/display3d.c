@@ -49,6 +49,8 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 
+#include "lib/netplay/netplay.h"
+
 #include "e3demo.h"
 #include "loop.h"
 #include "atmos.h"
@@ -223,7 +225,7 @@ bool showORDERS = false;
 /** When we have a connection issue, we will flash a message on screen
 * 0 = no issue, 1= player leaving nicely, 2= player got disconnected
 */
-int NET_PlayerConnectionStatus = 0;
+
 #define NETWORK_FORM_ID 0xFAAA
 #define NETWORK_BUT_ID 0xFAAB
 /** When enabled, this causes a segfault in the game, to test out the crash handler */
@@ -412,10 +414,102 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	iV_DrawImage(IntImages,ImageID,x,y);
 }
 
+static void setupConnectionStatusForm(CONNECTION_STATUS status)
+{
+	static W_FORMINIT        sFormInit;
+	static W_BUTINIT         sButInit;
+	static bool              formUP = false;
+	static CONNECTION_STATUS prevStatus = CONNECTIONSTATUS_NORMAL;
+
+	if (formUP || status != prevStatus)
+	{
+		// Remove the icon.
+		widgDelete(psWScreen, NETWORK_BUT_ID);   // kill button
+		widgDelete(psWScreen, NETWORK_FORM_ID);  // kill form
+
+		formUP = false;
+		prevStatus = CONNECTIONSTATUS_NORMAL;
+	}
+
+	if (!formUP && status != CONNECTIONSTATUS_NORMAL)
+	{
+		// Create the basic form
+		memset(&sFormInit, 0, sizeof(W_FORMINIT));
+		sFormInit.formID = 0;
+		sFormInit.id = NETWORK_FORM_ID;
+		sFormInit.style = WFORM_PLAIN;
+		sFormInit.x = (int)(pie_GetVideoBufferWidth() - 52);
+		sFormInit.y = 80;
+		sFormInit.width = 36;
+		sFormInit.height = 24;
+		sFormInit.pDisplay = NetworkDisplayPlainForm;
+		if (!widgAddForm(psWScreen, &sFormInit))
+		{
+			//return false;
+		}
+
+		/* Now add the buttons */
+
+		//set up default button data
+		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit.formID = NETWORK_FORM_ID;
+		sButInit.id = NETWORK_BUT_ID;
+		sButInit.width = 36;
+		sButInit.height = 24;
+		sButInit.FontID = font_regular;
+
+		//add button
+		sButInit.style = WBUT_PLAIN;
+		sButInit.x = 0;
+		sButInit.y = 0;
+		sButInit.pDisplay = NetworkDisplayImage;
+		// Note we would set the image to be different based on which issue it is.
+		switch (status)
+		{
+		default:
+			ASSERT(false, "Bad connection status value.");
+			sButInit.pTip = "Bug";
+			sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DESYNC_HI, IMAGE_PLAYER_LEFT_LO);
+			break;
+		case CONNECTIONSTATUS_PLAYER_LEAVING:
+			sButInit.pTip = _("Player left");
+			sButInit.UserData = PACKDWORD_TRI(1, IMAGE_PLAYER_LEFT_HI, IMAGE_PLAYER_LEFT_LO);
+			break;
+		case CONNECTIONSTATUS_PLAYER_DROPPED:
+			sButInit.pTip = _("Player dropped");
+			sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DISCONNECT_LO, IMAGE_DISCONNECT_HI);
+			break;
+		case CONNECTIONSTATUS_WAITING_FOR_PLAYER:
+			sButInit.pTip = _("Waiting for other players");
+			sButInit.UserData = PACKDWORD_TRI(1, IMAGE_WAITING_HI, IMAGE_WAITING_LO);
+			break;
+		case CONNECTIONSTATUS_DESYNC:
+			sButInit.pTip = _("Out of sync");
+			sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DESYNC_HI, IMAGE_DESYNC_LO);
+			break;
+		}
+
+		if (!widgAddButton(psWScreen, &sButInit))
+		{
+			//return false;
+		}
+
+		formUP = true;
+		prevStatus = status;
+	}
+}
+
 /// Render the 3D world
 void draw3DScene( void )
 {
 	BOOL bPlayerHasHQ = false;
+
+	// Misplaced here, due to -Wdeclaration-after-statement.
+	static uint32_t flashtimer = 0;
+	static CONNECTION_STATUS flashstatus = CONNECTIONSTATUS_NORMAL;
+	const CONNECTION_STATUS orderOfPreference[] = {CONNECTIONSTATUS_PLAYER_DROPPED, CONNECTIONSTATUS_PLAYER_LEAVING, CONNECTIONSTATUS_WAITING_FOR_PLAYER, CONNECTIONSTATUS_DESYNC, CONNECTIONSTATUS_NORMAL};
+	const int timeouts[]                        = {GAME_TICKS_PER_SEC*10,           GAME_TICKS_PER_SEC*10,           GAME_TICKS_PER_SEC/10,               GAME_TICKS_PER_SEC,      -1};
+	unsigned i;
 
 	// the world centre - used for decaying lighting etc
 	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
@@ -521,73 +615,24 @@ void draw3DScene( void )
 		iV_DrawText(DROIDDOING, 0, pie_GetVideoBufferHeight()- height);
 	}
 
-	if (NET_PlayerConnectionStatus)
+	for (i = 0; i < sizeof(orderOfPreference)/sizeof(*orderOfPreference); ++i)
 	{
-		static W_FORMINIT		sFormInit;
-		static W_BUTINIT		sButInit;
-		static bool formUP = 0;
-		static int flashtimer = 0;
-
-		if(!formUP)
+		if ((NET_PlayerConnectionStatus & orderOfPreference[i]) == orderOfPreference[i])
 		{
-			// Create the basic form 
-			memset(&sFormInit, 0, sizeof(W_FORMINIT));
-			sFormInit.formID = 0;
-			sFormInit.id = NETWORK_FORM_ID;
-			sFormInit.style = WFORM_PLAIN;
-			sFormInit.x = (SDWORD) (pie_GetVideoBufferWidth() - 52) ;
-			sFormInit.y = 80;
-			sFormInit.width = 36;
-			sFormInit.height = 	24;
-			sFormInit.pDisplay = NetworkDisplayPlainForm;
-			if (!widgAddForm(psWScreen, &sFormInit))
+			if (flashstatus != orderOfPreference[i])
 			{
-				//return false;
-			}
+				flashstatus = orderOfPreference[i];
+				flashtimer = realTime;
 
-			/* Now add the buttons */
+				setupConnectionStatusForm(flashstatus);
+			}
+			if ((int)(flashtimer + timeouts[i] - realTime) < 0)
+			{
+				flashtimer = realTime;
 
-			//set up default button data
-			memset(&sButInit, 0, sizeof(W_BUTINIT));
-			sButInit.formID = NETWORK_FORM_ID;
-			sButInit.id = NETWORK_BUT_ID;
-			sButInit.width = 36;
-			sButInit.height = 24;
-			sButInit.FontID = font_regular;
-
-			//add button
-			sButInit.style = WBUT_PLAIN;
-			sButInit.x = 0;
-			sButInit.y = 0;
-			sButInit.pTip = NET_PlayerConnectionStatus == 1 ? _("Player left"):_("Player dropped");
-			sButInit.pDisplay = NetworkDisplayImage;
-			// Note we would set the image to be different based on which issue it is.
-			if (NET_PlayerConnectionStatus == 1)
-			{
-				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_PLAYER_LEFT_HI, IMAGE_PLAYER_LEFT_LO);
+				NET_PlayerConnectionStatus &= ~orderOfPreference[i];
 			}
-			else
-			{
-				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DISCONNECT_LO, IMAGE_DISCONNECT_HI);
-			}
-
-			if (!widgAddButton(psWScreen, &sButInit))
-			{
-				//return false;
-			}
-			formUP = true;					//
-			flashtimer = gameTime2;			// save time widget went up
-		}
-		else
-		{
-			// flash the button for ~10 secs.
-			if(flashtimer + (GAME_TICKS_PER_SEC * 10) < gameTime2)
-			{
-				widgDelete(psWScreen,NETWORK_BUT_ID);	// kill button
-				widgDelete(psWScreen,NETWORK_FORM_ID);	// kill form
-				formUP = false;
-				NET_PlayerConnectionStatus = 0;
-			}
+			break;
 		}
 	}
 	if (getWidgetsStatus() && getDebugMappingStatus() && !demoGetStatus() && !gamePaused())
