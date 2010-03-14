@@ -263,7 +263,8 @@ static BOOL sendDroidCheck(void)
 // Send a Single Droid Check message
 static PACKAGED_CHECK packageCheck(const DROID *pD)
 {
-	PACKAGED_CHECK pc = pc;  // Dummy initialisation.
+	PACKAGED_CHECK pc;
+	memset(pc, 0xFF, sizeof(pc));  // Dummy initialisation.
 	pc.gameTime = gameTime + MIN_DELAY_BETWEEN_DROID_SYNCHS;
 
 	pc.player = pD->player;
@@ -459,7 +460,6 @@ static uint32_t structureCheckLastId[MAX_PLAYERS];
 static uint32_t structureCheckLastBody[MAX_PLAYERS];
 static Rotation structureCheckLastDirection[MAX_PLAYERS];
 static uint32_t structureCheckLastType[MAX_PLAYERS];
-static uint8_t  structureCheckLastCapacity[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////
 // Send structure information.
@@ -511,7 +511,6 @@ static BOOL sendStructureCheck(void)
 		structureCheckLastBody[player] = pS->body;
 		structureCheckLastDirection[player] = pS->rot;
 		structureCheckLastType[player] = pS->pStructureType->type;
-		structureCheckLastCapacity[player] = capacity;
 
 		if (myResponsibility(player))
 		{
