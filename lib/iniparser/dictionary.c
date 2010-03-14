@@ -19,6 +19,8 @@
 /*---------------------------------------------------------------------------
    								Includes
  ---------------------------------------------------------------------------*/
+#include "lib/framework/wzglobal.h"
+#include "lib/framework/frame.h"
 #include "dictionary.h"
 
 #include <stdlib.h>

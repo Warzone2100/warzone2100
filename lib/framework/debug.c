@@ -215,6 +215,29 @@ void debugFlushStderr()
 {
 	debug_flush_stderr = true;
 }
+// MSVC specific rotuines to set/clear allocation tracking
+#if defined(WZ_CC_MSVC) && defined(DEBUG)
+void debug_MEMCHKOFF(void)
+{
+	// Disable allocation tracking
+	int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
+	flags &= ~_CRTDBG_ALLOC_MEM_DF;
+	_CrtSetDbgFlag(flags);
+}
+void debug_MEMCHKON(void)
+{
+	// Enable allocation tracking
+	int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
+	flags |= _CRTDBG_ALLOC_MEM_DF;
+	_CrtSetDbgFlag(flags);
+}
+void debug_MEMSTATS(void)
+{
+	_CrtMemState state;
+	_CrtMemCheckpoint(&state);
+	_CrtMemDumpStatistics(&state);
+}
+#endif
 
 void debug_init(void)
 {

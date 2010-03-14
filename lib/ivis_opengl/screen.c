@@ -417,7 +417,7 @@ static const unsigned int channelsPerPixel = 3;
 void screenDoDumpToDiskIfRequired(void)
 {
 	const char* fileName = screendump_filename;
-	static iV_Image image = { 0, 0, 8, NULL };
+	iV_Image image = { 0, 0, 8, NULL };
 
 	if (!screendump_required) return;
 	debug( LOG_3D, "Saving screenshot %s\n", fileName );
@@ -453,7 +453,10 @@ void screenDoDumpToDiskIfRequired(void)
 	// display message to user about screenshot
 	snprintf(ConsoleString,sizeof(ConsoleString),"Screenshot %s saved!",fileName);
 	addConsoleMessage(ConsoleString, LEFT_JUSTIFY,SYSTEM_MESSAGE);
-
+	if (image.bmp)
+	{
+		free(image.bmp);
+	}
 	screendump_required = false;
 }
 

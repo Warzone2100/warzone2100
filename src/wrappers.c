@@ -62,7 +62,7 @@ BOOL hostlaunch = false;				// used to detect if we are hosting a game via comma
 
 static uint32_t lastTick = 0;
 static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
-static STAR *stars;
+static STAR *stars = NULL;
 
 static STAR newStar(void)
 {
@@ -93,7 +93,10 @@ static void setupLoadingScreen(void)
 	starsNum = boxWidth / boxHeight;
 	starHeight = 2.0 * h / 640.0;
 
-        stars = (STAR *)malloc(sizeof(STAR) * starsNum);
+	if (!stars)
+	{
+		stars = (STAR *)malloc(sizeof(STAR) * starsNum);
+	}
 
 	for (i = 0; i < starsNum; ++i)
 	{
@@ -368,6 +371,11 @@ void runCreditsScreen( void )
 // shut down the loading screen
 void closeLoadingScreen(void)
 {
+	if (stars)
+	{
+		free(stars);
+		stars = NULL;
+	}
 	resSetLoadCallback(NULL);
 }
 

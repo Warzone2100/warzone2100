@@ -76,6 +76,11 @@ BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 	//allocate the space for the Players' component lists
 	for (inc=0; inc < MAX_PLAYERS; inc++)
 	{
+		if (apCompLists[inc][type])
+		{
+			free(apCompLists[inc][type]);
+		}
+
 		apCompLists[inc][type] = (UBYTE *) malloc(sizeof(UBYTE) * number);
 		if (apCompLists[inc][type] == NULL)
 		{
@@ -85,7 +90,7 @@ BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 		}
 
 		//initialise the players' lists
-		for (comp=0; comp <number; comp++)
+		for (comp=0; comp < number; comp++)
 		{
 			apCompLists[inc][type][comp] = UNAVAILABLE;
 		}
@@ -102,14 +107,46 @@ void freeComponentLists(void)
 	for (inc=0; inc < MAX_PLAYERS; inc++)
 	{
 		//free the component lists
-		free(apCompLists[inc][COMP_BODY]);
-		free(apCompLists[inc][COMP_BRAIN]);
-		free(apCompLists[inc][COMP_PROPULSION]);
-		free(apCompLists[inc][COMP_SENSOR]);
-		free(apCompLists[inc][COMP_ECM]);
-		free(apCompLists[inc][COMP_REPAIRUNIT]);
-		free(apCompLists[inc][COMP_CONSTRUCT]);
-		free(apCompLists[inc][COMP_WEAPON]);
+		if (apCompLists[inc][COMP_BODY])
+		{
+			free(apCompLists[inc][COMP_BODY]);
+			apCompLists[inc][COMP_BODY] = NULL;
+		}
+		if (apCompLists[inc][COMP_BRAIN])
+		{
+			free(apCompLists[inc][COMP_BRAIN]);
+			apCompLists[inc][COMP_BRAIN] = NULL;
+		}
+		if (apCompLists[inc][COMP_PROPULSION])
+		{
+			free(apCompLists[inc][COMP_PROPULSION]);
+			apCompLists[inc][COMP_PROPULSION] = NULL;
+		}
+		if (apCompLists[inc][COMP_SENSOR])
+		{
+			free(apCompLists[inc][COMP_SENSOR]);
+			apCompLists[inc][COMP_SENSOR] = NULL;
+		}
+		if (apCompLists[inc][COMP_ECM])
+		{
+			free(apCompLists[inc][COMP_ECM]);
+			apCompLists[inc][COMP_ECM] = NULL;
+		}
+		if (apCompLists[inc][COMP_REPAIRUNIT])
+		{
+			free(apCompLists[inc][COMP_REPAIRUNIT]);
+			apCompLists[inc][COMP_REPAIRUNIT] = NULL;
+		}
+		if (apCompLists[inc][COMP_CONSTRUCT])
+		{
+			free(apCompLists[inc][COMP_CONSTRUCT]);
+			apCompLists[inc][COMP_CONSTRUCT] = NULL;
+		}
+		if (apCompLists[inc][COMP_WEAPON])
+		{
+			free(apCompLists[inc][COMP_WEAPON]);
+			apCompLists[inc][COMP_WEAPON] = NULL;
+		}
 	}
 }
 
