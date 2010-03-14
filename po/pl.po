@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-02 21:30+0100\n"
-"PO-Revision-Date: 2010-02-20 23:48+0100\n"
+"POT-Creation-Date: 2010-03-14 15:46+0100\n"
+"PO-Revision-Date: 2010-03-14 09:16+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -1510,7 +1510,7 @@ msgstr "Nowa Stacja Naprawcza naprawia uszkodzone jednostki"
 #: data/base/messages/resmessages1.rmsg:240
 #: data/mp/messages/resmessages1.rmsg:240
 msgid "Use the Command Console to send units back for repair"
-msgstr "Użyj Konsoli Dowodzenia aby wysłać jedostki do naprawy"
+msgstr "Użyj Konsoli Dowodzenia aby wysłać jednostki do naprawy"
 
 #: data/base/messages/resmessages1.rmsg:241
 #: data/mp/messages/resmessages1.rmsg:241
@@ -4848,7 +4848,7 @@ msgstr "TRANSMISJA PRZYCHODZĄCA"
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
-msgstr "Dekodowanie w trakcie............."
+msgstr "Dekodowanie w toku....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
@@ -5291,7 +5291,7 @@ msgstr "Zabezpiecz SL, potem przygotuj wysuniętą bazę."
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr "MISJA TRANSPORTOWA: Koordynaty wyrzutni rakiet"
+msgstr "MISJA TRANSPORTOWA: Współrzędne wyrzutni rakiet"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
@@ -5303,12 +5303,12 @@ msgstr "Była jedna lub więcej rakiet na tym stanowisku NASDA."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr "Przesyłamy ci koordynaty SL blisko silosów."
+msgstr "Przesyłamy ci współrzędne SL blisko silosów."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
 msgid "Coordinate Download Completed."
-msgstr "Pobieranie koordynatów zakończone."
+msgstr "Pobieranie współrzędnych zakończone."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
@@ -5381,7 +5381,7 @@ msgstr "MISJA TRANSPORTOWA: Wykryto Drużynę Alfa"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr "Wyślij zwiad na te koordynaty i zbadaj systuację."
+msgstr "Wyślij zwiad na te współrzędne i zbadaj sytuację."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
@@ -5397,7 +5397,7 @@ msgstr "MISJA SEKTORA PÓŁNOCNEGO: Przesłuchanie Drużyny Alfa"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
-msgstr "Transfer energii z Drużyny Alfa w trakcie."
+msgstr "Transfer energii z Drużyny Alfa w toku."
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
@@ -5409,7 +5409,7 @@ msgstr "Korzyści ze zbadania go mogą byc ogromne."
 
 #: data/base/messages/strings/cam3strings.txt:79
 msgid "Enemy forces are ....... from these coordinates."
-msgstr "Siły wroga są ..........od tych koordynatów."
+msgstr "Siły wroga są ........ od tych współrzędnych."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
@@ -5433,7 +5433,7 @@ msgstr "Kiedy NEXUS się wycofywał, przechwyciliśmy tą wiadomość - Dekodowa
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
-msgstr "Drużyna zadaniowa NEXUS kieruje się na te koordynaty."
+msgstr "Drużyna zadaniowa NEXUS kieruje się na te współrzędne."
 
 #: data/base/messages/strings/cam3strings.txt:90
 msgid "You have an opportunity to destroy NEXUS before they get there."
@@ -5493,7 +5493,7 @@ msgstr "Zapewniają, że są wolni od NEXUS i oferują ich bazę jako stanowisko
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
-msgstr "Pobieranie koordynatów bazy w trakcie."
+msgstr "Pobieranie współrzędnych bazy w toku."
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
@@ -10907,19 +10907,16 @@ msgid "Rail Target Prediction Computer"
 msgstr "Komputer Rail przewidujący cel"
 
 #: data/mp/messages/strings/names.txt:1174
-#, fuzzy
 msgid "HESH Mini-Rockets"
-msgstr "Minirakiety HE"
+msgstr "Minirakiety HESH"
 
 #: data/mp/messages/strings/names.txt:1175
-#, fuzzy
 msgid "HESH Mini-Rockets Mk2"
-msgstr "Minirakiety HE Mk2"
+msgstr "Minirakiety HESH Mk2"
 
 #: data/mp/messages/strings/names.txt:1176
-#, fuzzy
 msgid "HESH Mini-Rockets Mk3"
-msgstr "Minirakiety HE Mk3"
+msgstr "Minirakiety HESH Mk3"
 
 #: data/mp/messages/strings/names.txt:1385
 msgid "Assault Gun Tower"
@@ -11448,17 +11445,17 @@ msgstr "Łacina"
 msgid "Enter password here"
 msgstr "Wpisz hasło tutaj"
 
-#: lib/netplay/netplay.c:3067
+#: lib/netplay/netplay.c:3081
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Nie można rozwinąć nazwy głównego serwera (%s)!"
 
-#: lib/netplay/netplay.c:3092
+#: lib/netplay/netplay.c:3106
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Nie można skomunikować się z serwerem lobby! Czy port %u TCP jest otwarty dla ruchu wychodzącego?"
 
-#: lib/netplay/netplay.c:3508
+#: lib/netplay/netplay.c:3525
 msgid ", mods: "
 msgstr ", mody: "
 
@@ -11469,7 +11466,7 @@ msgstr ", mody: "
 #: src/hci.c:4439
 #: src/hci.c:5643
 #: src/intelmap.c:541
-#: src/intorder.c:661
+#: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:479
 #: src/multimenu.c:1356
@@ -11621,8 +11618,8 @@ msgstr "gospodarz"
 msgid "go directly to host screen"
 msgstr "Idź od razu na ekran gospodarza"
 
-#: src/configuration.c:457
-#: src/configuration.c:458
+#: src/configuration.c:452
+#: src/configuration.c:453
 #: src/multistat.c:135
 msgid "Player"
 msgstr "Gracz"
@@ -11776,22 +11773,22 @@ msgstr "Gracz opuścił grę"
 msgid "Player dropped"
 msgstr "Gracz odrzucony"
 
-#: src/display.c:1706
+#: src/display.c:1695
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nie można budować. Płonie ropa."
 
-#: src/display.c:1886
-#: src/display.c:2500
+#: src/display.c:1875
+#: src/display.c:2489
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Obrażenia %d%% - Doświadczenie %d, %s"
 
-#: src/display.c:1902
+#: src/display.c:1891
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Sojusznik - Obrażenia %d%% - Doświadczenie %d, %s"
 
-#: src/display.c:2083
+#: src/display.c:2072
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Rozkazano budowniczemu zbudować Rafinerię"
 
@@ -11803,7 +11800,7 @@ msgstr "Jednostka utracona!"
 msgid "Structure Restored"
 msgstr "Struktura odbudowana"
 
-#: src/droid.c:3253
+#: src/droid.c:3254
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -11811,7 +11808,7 @@ msgstr[0] "Wybrana grupa %u -  %u jednostka"
 msgstr[1] "Wybrana grupa %u -  %u jednostki"
 msgstr[2] "Wybrana grupa %u -  %u jednostek"
 
-#: src/droid.c:3266
+#: src/droid.c:3267
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -11819,7 +11816,7 @@ msgstr[0] "%u jednostka przypisana do Grupy %u"
 msgstr[1] "%u jednostki przypisane do Grupy %u"
 msgstr[2] "%u jednostek przypisano do Grupy %u"
 
-#: src/droid.c:3279
+#: src/droid.c:3280
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -11827,7 +11824,7 @@ msgstr[0] "Wyśrodkowano na grupie %u - %u jednostka"
 msgstr[1] "Wyśrodkowano na grupie %u - %u jednostki"
 msgstr[2] "Wyśrodkowano na grupie %u - %u jednostek"
 
-#: src/droid.c:3283
+#: src/droid.c:3284
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -11836,40 +11833,40 @@ msgstr[1] "Wyrównanie z grupą %u - %u jednostki"
 msgstr[2] "Wyrównanie z grupą %u - %u jednostek"
 
 # I had really trouble with this one. This word has no meaning in Polish so I decided to translate it as 'Newbe'
-#: src/droid.c:3471
+#: src/droid.c:3472
 msgid "Rookie"
 msgstr "Nowicjusz"
 
-#: src/droid.c:3472
+#: src/droid.c:3473
 msgctxt "rank"
 msgid "Green"
 msgstr "Zielony"
 
-#: src/droid.c:3473
+#: src/droid.c:3474
 msgid "Trained"
 msgstr "Wyszkolony"
 
-#: src/droid.c:3474
+#: src/droid.c:3475
 msgid "Regular"
 msgstr "Zawodowy"
 
-#: src/droid.c:3475
+#: src/droid.c:3476
 msgid "Professional"
 msgstr "Profesjonalny"
 
-#: src/droid.c:3476
+#: src/droid.c:3477
 msgid "Veteran"
 msgstr "Weteran"
 
-#: src/droid.c:3477
+#: src/droid.c:3478
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3478
+#: src/droid.c:3479
 msgid "Special"
 msgstr "Specjalny"
 
-#: src/droid.c:3479
+#: src/droid.c:3480
 msgid "Hero"
 msgstr "Bohater"
 
@@ -12400,110 +12397,110 @@ msgstr "Obecny cel"
 msgid "New Intelligence Report"
 msgstr "Przyszły dane wywiadu"
 
-#: src/intorder.c:179
+#: src/intorder.c:161
 #: src/keymap.c:390
 msgid "Short Range"
 msgstr "Krótki zasięg"
 
-#: src/intorder.c:180
+#: src/intorder.c:162
 #: src/keymap.c:397
 msgid "Long Range"
 msgstr "Długi zasięg"
 
-#: src/intorder.c:181
+#: src/intorder.c:163
 #: src/keymap.c:389
 msgid "Optimum Range"
 msgstr "Optymalny zasięg"
 
-#: src/intorder.c:182
+#: src/intorder.c:164
 #: src/keymap.c:409
 msgid "Retreat at Medium Damage"
 msgstr "Wycofaj się przy średnich obrażeniach"
 
-#: src/intorder.c:183
+#: src/intorder.c:165
 #: src/keymap.c:410
 msgid "Retreat at Heavy Damage"
 msgstr "Wycofaj się przy cieżkich obrażeniach"
 
-#: src/intorder.c:184
+#: src/intorder.c:166
 #: src/keymap.c:411
 msgid "Do or Die!"
 msgstr "Wykonaj lub giń!"
 
-#: src/intorder.c:185
+#: src/intorder.c:167
 msgid "Fire-At-Will"
 msgstr "Strzelać bez rozkazu"
 
-#: src/intorder.c:186
+#: src/intorder.c:168
 #: src/keymap.c:385
 msgid "Return Fire"
 msgstr "Odpowiadaj ogniem"
 
-#: src/intorder.c:187
+#: src/intorder.c:169
 #: src/keymap.c:383
 msgid "Hold Fire"
 msgstr "Wstrzymać ogień"
 
-#: src/intorder.c:188
+#: src/intorder.c:170
 #: src/keymap.c:392
 msgid "Patrol"
 msgstr "Patrol"
 
-#: src/intorder.c:189
+#: src/intorder.c:171
 #: src/keymap.c:391
 msgid "Pursue"
 msgstr "Ścigaj"
 
-#: src/intorder.c:190
+#: src/intorder.c:172
 #: src/keymap.c:387
 msgid "Guard Position"
 msgstr "Chronić pozycję"
 
-#: src/intorder.c:191
+#: src/intorder.c:173
 #: src/keymap.c:394
 msgid "Hold Position"
 msgstr "Trzymać pozycję"
 
-#: src/intorder.c:192
+#: src/intorder.c:174
 #: src/keymap.c:393
 msgid "Return For Repair"
 msgstr "Wróć do naprawy"
 
-#: src/intorder.c:193
+#: src/intorder.c:175
 msgid "Return To HQ"
 msgstr "Wróć do bazy"
 
-#: src/intorder.c:194
+#: src/intorder.c:176
 #: src/keymap.c:395
 msgid "Go to Transport"
 msgstr "Idź do transportu."
 
-#: src/intorder.c:195
+#: src/intorder.c:177
 #: src/keymap.c:420
 msgid "Return for Recycling"
 msgstr "Powrót na przetworzenie"
 
-#: src/intorder.c:196
+#: src/intorder.c:178
 msgid "Recycle"
 msgstr "Przetworzyć"
 
-#: src/intorder.c:197
+#: src/intorder.c:179
 msgid "Assign Factory Production"
 msgstr "Przypisz produkcję Fabryki"
 
-#: src/intorder.c:198
+#: src/intorder.c:180
 msgid "Assign Cyborg Factory Production"
 msgstr "Przypisz produkcję Fabryki Cyborgów"
 
-#: src/intorder.c:199
+#: src/intorder.c:181
 msgid "Assign Fire Support"
 msgstr "Przypisz wsparcie ogniowe"
 
-#: src/intorder.c:200
+#: src/intorder.c:182
 msgid "Assign VTOL Factory Production"
 msgstr "Przypisz produkcję Fabryki VTOL"
 
-#: src/intorder.c:201
+#: src/intorder.c:183
 msgid "Circle"
 msgstr "Krąż"
 
@@ -12786,11 +12783,11 @@ msgstr "Radar pokazuje ujawniony teren"
 msgid "Radar showing height"
 msgstr "Mapa pokazuje wysokość"
 
-#: src/keyedit.c:373
+#: src/keyedit.c:347
 msgid "KEY MAPPING"
 msgstr "Ustawienia klawiszy"
 
-#: src/keyedit.c:395
+#: src/keyedit.c:369
 #: src/multiint.c:643
 #: src/multiint.c:686
 #: src/multiint.c:1075
@@ -12798,7 +12795,7 @@ msgstr "Ustawienia klawiszy"
 msgid "Return To Previous Screen"
 msgstr "Wstecz"
 
-#: src/keyedit.c:400
+#: src/keyedit.c:374
 msgid "Select Default"
 msgstr "Zaznacz domyślne"
 
