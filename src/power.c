@@ -90,7 +90,7 @@ void clearPlayerPower(void)
 
 static void syncDebugEconomy(unsigned player, char ch)
 {
-	syncDebug("%c economy%u = %f,%f,%f,%f", ch, player, asPower[player].currentPower, asPower[player].economyThrottle, asPower[player].powerProduced, asPower[player].powerRequested);
+	syncDebug("%c economy%u = %s,%s,%s,%s", ch, player, syncDebugFloat(asPower[player].currentPower), syncDebugFloat(asPower[player].economyThrottle), syncDebugFloat(asPower[player].powerProduced), syncDebugFloat(asPower[player].powerRequested));
 }
 
 void throttleEconomy(void)
@@ -163,14 +163,14 @@ BOOL checkPower(int player, float quantity)
 void usePower(int player, float quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
-	syncDebug("usePower%d %f-=%f", player, asPower[player].currentPower, quantity);
+	syncDebug("usePower%d %s-=%s", player, syncDebugFloat(asPower[player].currentPower), syncDebugFloat(quantity));
 	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity);
 }
 
 void addPower(int player, float quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
-	syncDebug("addPower%d %f+=%f", player, asPower[player].currentPower, quantity);
+	syncDebug("addPower%d %s+=%s", player, syncDebugFloat(asPower[player].currentPower), syncDebugFloat(quantity));
 	asPower[player].currentPower = MAX(0, asPower[player].currentPower + quantity);
 	if (asPower[player].currentPower > MAX_POWER)
 	{
@@ -181,14 +181,7 @@ void addPower(int player, float quantity)
 /*resets the power calc flag for all players*/
 void powerCalc(BOOL on)
 {
-	if (on)
-	{
-		powerCalculated = true;
-	}
-	else
-	{
-		powerCalculated = false;
-	}
+	powerCalculated = on;
 }
 
 /** Each Resource Extractor yields EXTRACT_POINTS per second FOREVER */
@@ -226,7 +219,7 @@ float updateExtractedPower(STRUCTURE	*psBuilding)
 		pResExtractor->timeLastUpdated = gameTime;
 		extractedPoints += pointsToAdd;
 
-		syncDebug("updateExtractedPower%d = %f", psBuilding->player, extractedPoints);
+		syncDebug("updateExtractedPower%d = %s", psBuilding->player, syncDebugFloat(extractedPoints));
 	}
 	ASSERT(extractedPoints >= 0, "extracted negative amount of power");
 	return extractedPoints;
@@ -264,7 +257,7 @@ void updatePlayerPower(UDWORD player)
 		}
 	}
 	asPower[player].powerProduced += asPower[player].currentPower - powerBefore;
-	syncDebug("updatePlayerPower%u %f->%f", player, powerBefore, asPower[player].currentPower);
+	syncDebug("updatePlayerPower%u %s->%s", player, syncDebugFloat(powerBefore), syncDebugFloat(asPower[player].currentPower));
 }
 
 /* Updates the current power based on the extracted power and a Power Generator*/
@@ -306,7 +299,7 @@ void setPower(int player, float power)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
-	syncDebug("setPower%d %f->%f", player, asPower[player].currentPower, power);
+	syncDebug("setPower%d %s->%s", player, syncDebugFloat(asPower[player].currentPower), syncDebugFloat(power));
 	asPower[player].currentPower = power;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 }
@@ -431,10 +424,10 @@ float requestPower(int player, float amount)
 	{
 		// you can have it
 		asPower[player].currentPower -= amountConsidered;
-		syncDebug("requestPower%d give%f,want%f", player, amountConsidered, amount);
+		syncDebug("requestPower%d give%s,want%s", player, syncDebugFloat(amountConsidered), syncDebugFloat(amount));
 		return amountConsidered;
 	}
-	syncDebug("requestPower%d giveNone,want%f", player, amount);
+	syncDebug("requestPower%d giveNone,want%s", player, syncDebugFloat(amount));
 	return 0; // no power this frame
 }
 

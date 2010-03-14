@@ -3828,7 +3828,7 @@ static float CalcStructureSmokeInterval(float damage)
 void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch)
 {
 	// TODO psBuilding->status == SS_BEING_BUILT test is because structure ids are not synchronised until after they start building...
-	_syncDebug(function, "%c structure%d = p%d;pos(%d,%d,%d),stat%d,type%d,bld%d,pwr%d,bp%d, power = %f", ch,
+	_syncDebug(function, "%c structure%d = p%d;pos(%d,%d,%d),stat%d,type%d,bld%d,pwr%d,bp%d, power = %s", ch,
 	          psStruct->status == SS_BEING_BUILT ? -1 : psStruct->id,
 
 	          psStruct->player,
@@ -3839,7 +3839,7 @@ void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch)
 	          psStruct->currentPowerAccrued,
 	          psStruct->body,
 
-	          getPower(psStruct->player));
+	          syncDebugFloat(getPower(psStruct->player)));
 }
 
 /* The main update routine for all Structures */

@@ -698,7 +698,7 @@ void droidBurn(DROID *psDroid)
 
 void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
 {
-	_syncDebug(function, "%c droid%d = p%d;pos(%d,%d,%d),ord%d(%d,%d),act%d,so%X,bp%d, power = %f", ch,
+	_syncDebug(function, "%c droid%d = p%d;pos(%d,%d,%d),ord%d(%d,%d),act%d,so%X,bp%d, power = %s", ch,
 	          psDroid->id,
 
 	          psDroid->player,
@@ -708,7 +708,7 @@ void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
 	          psDroid->secondaryOrder,
 	          psDroid->body,
 
-	          getPower(psDroid->player));
+	          syncDebugFloat(getPower(psDroid->player)));
 }
 
 /* The main update routine for all droids */

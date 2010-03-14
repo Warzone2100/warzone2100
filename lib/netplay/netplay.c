@@ -3924,6 +3924,18 @@ void syncDebugBacktrace(void)
 #endif
 }
 
+const char *syncDebugFloat(float f)
+{
+	static char ret[16][20];
+	static int counter = 0;
+	uint32_t i;
+	memcpy(&i, &f, sizeof(i));
+	STATIC_ASSERT(sizeof(i) == sizeof(f));
+	counter = (counter + 1)&15;
+	sprintf(ret[counter], "%c%02X_%06X", (i & 0x80000000) == 0 ? '+' : '-', (i & 0x7F000000)>>24, i & 0x00FFFFFF);
+	return ret[counter];
+}
+
 uint32_t nextDebugSync(void)
 {
 	uint32_t ret = ~syncDebugCrcs[syncDebugNext];  // Invert bits, since everyone else seems to do that with CRCs...

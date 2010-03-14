@@ -340,6 +340,7 @@ const char *messageTypeToString(unsigned messageType);
 void _syncDebug(const char *function, const char *str, ...)
 	WZ_DECL_FORMAT(printf, 2, 3);
 void syncDebugBacktrace(void);  ///< Adds a backtrace to syncDebug. (Expect lots of false positives, if all clients aren't using the exact same binaries.)
+const char *syncDebugFloat(float f);  ///< Prints the float in hex.
 
 uint32_t nextDebugSync(void);                                    ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() call.
 bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.

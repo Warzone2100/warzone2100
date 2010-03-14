@@ -723,7 +723,7 @@ BOOL recvPowerCheck(NETQUEUE queue)
 		float powerTo = powerFrom + power - powerCheckLastPower[player];
 		debug(LOG_SYNC, "GAME_CHECK_POWER: Adjusting power for player %d (%s) from %f to %f",
 		      (int)player, isHumanPlayer(player) ? "Human" : "AI", powerFrom, powerTo);
-		syncDebug("Adjusting power for player %d (%s) from %f to %f", (int)player, isHumanPlayer(player) ? "Human" : "AI", powerFrom, powerTo);
+		syncDebug("Adjusting power for player %d (%s) from %s to %s", (int)player, isHumanPlayer(player) ? "Human" : "AI", syncDebugFloat(powerFrom), syncDebugFloat(powerTo));
 		setPower(player, powerTo);
 	}
 	return true;
