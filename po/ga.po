@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-02 21:30+0100\n"
+"POT-Creation-Date: 2010-03-14 16:05+0100\n"
 "PO-Revision-Date: 2008-05-08 17:14+0000\n"
 "Last-Translator: Seanan <Unknown>\n"
 "Language-Team: Irish <ga@li.org>\n"
@@ -11440,17 +11440,17 @@ msgstr "Laidin"
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3067
+#: lib/netplay/netplay.c:3081
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3092
+#: lib/netplay/netplay.c:3106
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: lib/netplay/netplay.c:3508
+#: lib/netplay/netplay.c:3525
 msgid ", mods: "
 msgstr ""
 
@@ -11461,7 +11461,7 @@ msgstr ""
 #: src/hci.c:4439
 #: src/hci.c:5643
 #: src/intelmap.c:541
-#: src/intorder.c:661
+#: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:479
 #: src/multimenu.c:1356
@@ -11613,8 +11613,8 @@ msgstr ""
 msgid "go directly to host screen"
 msgstr ""
 
-#: src/configuration.c:457
-#: src/configuration.c:458
+#: src/configuration.c:452
+#: src/configuration.c:453
 #: src/multistat.c:135
 msgid "Player"
 msgstr "Imreoir"
@@ -11770,22 +11770,22 @@ msgstr "Imreoir"
 msgid "Player dropped"
 msgstr "Imreoir"
 
-#: src/display.c:1706
+#: src/display.c:1695
 msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
-#: src/display.c:1886
-#: src/display.c:2500
+#: src/display.c:1875
+#: src/display.c:2489
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dochar %d%% - Taithí %d, %s"
 
-#: src/display.c:1902
+#: src/display.c:1891
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dochar %d%% - Taithí %d, %s"
 
-#: src/display.c:2083
+#: src/display.c:2072
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
@@ -11797,68 +11797,68 @@ msgstr "Chaill an t-Aonad!"
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3253
+#: src/droid.c:3257
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3266
+#: src/droid.c:3270
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3279
+#: src/droid.c:3283
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3283
+#: src/droid.c:3287
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3471
+#: src/droid.c:3550
 msgid "Rookie"
 msgstr "Glasearcach"
 
-#: src/droid.c:3472
+#: src/droid.c:3551
 msgctxt "rank"
 msgid "Green"
 msgstr "Glasearcach"
 
-#: src/droid.c:3473
+#: src/droid.c:3552
 msgid "Trained"
 msgstr "Oilte"
 
-#: src/droid.c:3474
+#: src/droid.c:3553
 msgid "Regular"
 msgstr "Gnáth"
 
-#: src/droid.c:3475
+#: src/droid.c:3554
 msgid "Professional"
 msgstr "Gairmiúil"
 
-#: src/droid.c:3476
+#: src/droid.c:3555
 msgid "Veteran"
 msgstr "Seansaighdiúir"
 
-#: src/droid.c:3477
+#: src/droid.c:3556
 msgid "Elite"
 msgstr "Tofa"
 
-#: src/droid.c:3478
+#: src/droid.c:3557
 msgid "Special"
 msgstr "Sain"
 
-#: src/droid.c:3479
+#: src/droid.c:3558
 msgid "Hero"
 msgstr "Laoch"
 
@@ -12377,7 +12377,7 @@ msgid "Power Accrued"
 msgstr ""
 
 #: src/intelmap.c:245
-#: src/keybind.c:1341
+#: src/keybind.c:1374
 msgid "PAUSED"
 msgstr "MOILLITHE"
 
@@ -12397,110 +12397,110 @@ msgstr ""
 msgid "New Intelligence Report"
 msgstr ""
 
-#: src/intorder.c:179
+#: src/intorder.c:161
 #: src/keymap.c:390
 msgid "Short Range"
 msgstr ""
 
-#: src/intorder.c:180
+#: src/intorder.c:162
 #: src/keymap.c:397
 msgid "Long Range"
 msgstr ""
 
-#: src/intorder.c:181
+#: src/intorder.c:163
 #: src/keymap.c:389
 msgid "Optimum Range"
 msgstr ""
 
-#: src/intorder.c:182
+#: src/intorder.c:164
 #: src/keymap.c:409
 msgid "Retreat at Medium Damage"
 msgstr ""
 
-#: src/intorder.c:183
+#: src/intorder.c:165
 #: src/keymap.c:410
 msgid "Retreat at Heavy Damage"
 msgstr ""
 
-#: src/intorder.c:184
+#: src/intorder.c:166
 #: src/keymap.c:411
 msgid "Do or Die!"
 msgstr ""
 
-#: src/intorder.c:185
+#: src/intorder.c:167
 msgid "Fire-At-Will"
 msgstr ""
 
-#: src/intorder.c:186
+#: src/intorder.c:168
 #: src/keymap.c:385
 msgid "Return Fire"
 msgstr ""
 
-#: src/intorder.c:187
+#: src/intorder.c:169
 #: src/keymap.c:383
 msgid "Hold Fire"
 msgstr ""
 
-#: src/intorder.c:188
+#: src/intorder.c:170
 #: src/keymap.c:392
 msgid "Patrol"
 msgstr ""
 
-#: src/intorder.c:189
+#: src/intorder.c:171
 #: src/keymap.c:391
 msgid "Pursue"
 msgstr ""
 
-#: src/intorder.c:190
+#: src/intorder.c:172
 #: src/keymap.c:387
 msgid "Guard Position"
 msgstr ""
 
-#: src/intorder.c:191
+#: src/intorder.c:173
 #: src/keymap.c:394
 msgid "Hold Position"
 msgstr ""
 
-#: src/intorder.c:192
+#: src/intorder.c:174
 #: src/keymap.c:393
 msgid "Return For Repair"
 msgstr ""
 
-#: src/intorder.c:193
+#: src/intorder.c:175
 msgid "Return To HQ"
 msgstr ""
 
-#: src/intorder.c:194
+#: src/intorder.c:176
 #: src/keymap.c:395
 msgid "Go to Transport"
 msgstr ""
 
-#: src/intorder.c:195
+#: src/intorder.c:177
 #: src/keymap.c:420
 msgid "Return for Recycling"
 msgstr ""
 
-#: src/intorder.c:196
+#: src/intorder.c:178
 msgid "Recycle"
 msgstr ""
 
-#: src/intorder.c:197
+#: src/intorder.c:179
 msgid "Assign Factory Production"
 msgstr ""
 
-#: src/intorder.c:198
+#: src/intorder.c:180
 msgid "Assign Cyborg Factory Production"
 msgstr ""
 
-#: src/intorder.c:199
+#: src/intorder.c:181
 msgid "Assign Fire Support"
 msgstr ""
 
-#: src/intorder.c:200
+#: src/intorder.c:182
 msgid "Assign VTOL Factory Production"
 msgstr ""
 
-#: src/intorder.c:201
+#: src/intorder.c:183
 msgid "Circle"
 msgstr ""
 
@@ -12520,275 +12520,280 @@ msgstr ""
 msgid "Fine, weapon & sensor display is off!"
 msgstr ""
 
-#: src/keybind.c:338
-#: src/keybind.c:368
-#: src/keybind.c:385
-#: src/keybind.c:429
-#: src/keybind.c:534
-#: src/keybind.c:574
-#: src/keybind.c:680
-#: src/keybind.c:1231
-#: src/keybind.c:1288
-#: src/keybind.c:1390
-#: src/keybind.c:1487
-#: src/keybind.c:1798
-#: src/keybind.c:1838
+#: src/keybind.c:332
+#, c-format
+msgid "Player %u is cheating him/herself a new droid army of %s(s)."
+msgstr ""
+
+#: src/keybind.c:371
+#: src/keybind.c:401
+#: src/keybind.c:418
+#: src/keybind.c:462
+#: src/keybind.c:567
+#: src/keybind.c:607
+#: src/keybind.c:713
+#: src/keybind.c:1264
+#: src/keybind.c:1321
+#: src/keybind.c:1423
+#: src/keybind.c:1520
+#: src/keybind.c:1831
+#: src/keybind.c:1872
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
 
-#: src/keybind.c:339
+#: src/keybind.c:372
 msgid "Hard as nails!!!"
 msgstr ""
 
-#: src/keybind.c:353
+#: src/keybind.c:386
 msgid "Takings thing easy!"
 msgstr ""
 
-#: src/keybind.c:369
+#: src/keybind.c:402
 msgid "1000 big ones!!!"
 msgstr "1000 cinn móra!!"
 
-#: src/keybind.c:386
+#: src/keybind.c:419
 msgid "Power overwhelming"
 msgstr ""
 
-#: src/keybind.c:401
+#: src/keybind.c:434
 msgid "Back to normality!"
 msgstr ""
 
-#: src/keybind.c:414
+#: src/keybind.c:447
 msgid "Getting tricky!"
 msgstr "Tá sé ag éirí deacair!!"
 
-#: src/keybind.c:430
+#: src/keybind.c:463
 msgid "Twice as nice!"
 msgstr ""
 
-#: src/keybind.c:441
+#: src/keybind.c:474
 msgid "FPS display is enabled."
 msgstr ""
 
-#: src/keybind.c:445
+#: src/keybind.c:478
 msgid "FPS display is disabled."
 msgstr ""
 
-#: src/keybind.c:466
+#: src/keybind.c:499
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr ""
 
-#: src/keybind.c:498
+#: src/keybind.c:531
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr ""
 
-#: src/keybind.c:535
+#: src/keybind.c:568
 msgid "Infinite power disabled"
 msgstr ""
 
-#: src/keybind.c:535
+#: src/keybind.c:568
 msgid "Infinite power enabled"
 msgstr ""
 
-#: src/keybind.c:575
+#: src/keybind.c:608
 msgid "All items made available"
 msgstr ""
 
-#: src/keybind.c:681
+#: src/keybind.c:714
 msgid "Fog on"
 msgstr "Gan ceo"
 
-#: src/keybind.c:681
+#: src/keybind.c:714
 msgid "Fog off"
 msgstr "Ceo ann"
 
-#: src/keybind.c:1120
+#: src/keybind.c:1153
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1120
+#: src/keybind.c:1153
 msgid "Ending Mission."
 msgstr ""
 
-#: src/keybind.c:1232
+#: src/keybind.c:1265
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1232
+#: src/keybind.c:1265
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1289
+#: src/keybind.c:1322
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1289
+#: src/keybind.c:1322
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1301
+#: src/keybind.c:1334
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1310
+#: src/keybind.c:1343
 #, c-format
 msgid "Trap cursor %s"
 msgstr ""
 
-#: src/keybind.c:1391
+#: src/keybind.c:1424
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1424
+#: src/keybind.c:1457
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1425
+#: src/keybind.c:1458
 #, fuzzy
 msgid "Researched"
 msgstr "Taighde (F2)"
 
-#: src/keybind.c:1445
+#: src/keybind.c:1478
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1448
+#: src/keybind.c:1481
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1451
+#: src/keybind.c:1484
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1473
+#: src/keybind.c:1506
 msgid "Demo mode off - Returning to normal game mode"
 msgstr ""
 
-#: src/keybind.c:1488
+#: src/keybind.c:1521
 msgid "Debug menu is Open"
 msgstr ""
 
-#: src/keybind.c:1519
+#: src/keybind.c:1552
 msgid "Unable to locate any resource extractors!"
 msgstr ""
 
-#: src/keybind.c:1740
+#: src/keybind.c:1773
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.c:1746
+#: src/keybind.c:1779
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.c:1752
+#: src/keybind.c:1785
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.c:1797
+#: src/keybind.c:1830
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1799
+#: src/keybind.c:1832
 msgid "All enemies destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.c:1839
+#: src/keybind.c:1873
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2357
+#: src/keybind.c:2394
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2369
+#: src/keybind.c:2406
 msgid "Unable to locate HQ!"
 msgstr "Ní féidir an suíochán a aimsiú!"
 
-#: src/keybind.c:2376
+#: src/keybind.c:2413
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2425
+#: src/keybind.c:2462
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2430
+#: src/keybind.c:2467
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2439
+#: src/keybind.c:2476
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2444
+#: src/keybind.c:2481
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2489
-#: src/keybind.c:2532
+#: src/keybind.c:2526
+#: src/keybind.c:2569
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr ""
 
-#: src/keybind.c:2510
-#: src/keybind.c:2553
-#: src/keybind.c:2575
+#: src/keybind.c:2547
+#: src/keybind.c:2590
+#: src/keybind.c:2612
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.c:2514
+#: src/keybind.c:2551
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2557
+#: src/keybind.c:2594
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2587
+#: src/keybind.c:2624
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2591
+#: src/keybind.c:2628
 msgid "Build menu will not reopen"
 msgstr ""
 
-#: src/keybind.c:2603
+#: src/keybind.c:2640
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2607
+#: src/keybind.c:2644
 msgid "Radar showing player colors"
 msgstr ""
 
-#: src/keybind.c:2628
+#: src/keybind.c:2665
 msgid "Radar showing only objects"
 msgstr ""
 
-#: src/keybind.c:2631
+#: src/keybind.c:2668
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2634
+#: src/keybind.c:2671
 msgid "Radar showing terrain"
 msgstr ""
 
-#: src/keybind.c:2637
+#: src/keybind.c:2674
 msgid "Radar showing revealed terrain"
 msgstr ""
 
-#: src/keybind.c:2640
+#: src/keybind.c:2677
 msgid "Radar showing height"
 msgstr ""
 
-#: src/keyedit.c:373
+#: src/keyedit.c:347
 msgid "KEY MAPPING"
 msgstr ""
 
-#: src/keyedit.c:395
+#: src/keyedit.c:369
 #: src/multiint.c:643
 #: src/multiint.c:686
 #: src/multiint.c:1075
@@ -12796,7 +12801,7 @@ msgstr ""
 msgid "Return To Previous Screen"
 msgstr "Fill Chuig An Scáileán Roimhe"
 
-#: src/keyedit.c:400
+#: src/keyedit.c:374
 msgid "Select Default"
 msgstr ""
 
