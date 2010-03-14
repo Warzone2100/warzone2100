@@ -50,16 +50,6 @@ data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/cam1res.wrf"
 
-//Kevlar Scavengers
-campaign	CAM_1KEVLAR
-data		"wrf/vidmemc.wrf"
-data		"wrf/basic.wrf"
-data		"wrf/cam1.wrf"
-data		"wrf/audio.wrf"
-data		"wrf/piestats.wrf"
-data		"wrf/stats.wrf"
-data		"wrf/cam1res.wrf"
-
 /* Campaign 1 now starts with 1A */
 camstart	CAM_1A
 dataset		CAM_1
