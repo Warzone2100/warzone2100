@@ -8,3 +8,5 @@ GCC_DYNAMIC_NO_PIC = NO
 GCC_OPTIMIZATION_LEVEL = 0
 GCC_PREPROCESSOR_DEFINITIONS = VORBIS_NEEDS_HACK DEBUG $(inherited) // FIXME: VORBIS_NEEDS_HACK is a unnessary hack; there is a better way and it will be done eventually
 GCC_TREAT_WARNINGS_AS_ERRORS = YES
+
+// BuildDependentFlagsForCandCpp = -fstack-protector-all // Needs 10.5 min before being used
