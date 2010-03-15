@@ -3472,14 +3472,11 @@ BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 	SDWORD		startX, endX, startY, endY;
 	UDWORD		passes;
 	Vector3i	origin = { world_coord(*x), world_coord(*y), 0 };
-	Vector3i	firstPos = { world_coord(*x), world_coord(*y), 0 };
 
 	ASSERT_OR_RETURN(false, *x<mapWidth,"x coordinate is off-map for pickATileGen" );
 	ASSERT_OR_RETURN(false, *y<mapHeight,"y coordinate is off-map for pickATileGen" );
 
-	if (function(*x,*y) 
-	    && fpathCheck(origin, firstPos, PROPULSION_TYPE_WHEELED)
-	    && ((threatRange <=0) || (!ThreatInRange(player, threatRange, *x, *y, false))))	//TODO: vtol check really not needed?
+	if (function(*x,*y) && ((threatRange <=0) || (!ThreatInRange(player, threatRange, *x, *y, false))))	//TODO: vtol check really not needed?
 	{
 		return(true);
 	}
