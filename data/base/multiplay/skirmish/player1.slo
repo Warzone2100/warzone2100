@@ -493,7 +493,6 @@ function bool aiResponsibleForPlayer(int _player)
 // keep details about the size and postion of the ai players base
 event basedetails(basedetailsTr)
 {
-
 	// clear old extremities.
 	maxy = 0;
 	maxx = 0;
@@ -605,7 +604,7 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 	droid = iterateGroup(buildGroup);
 	while(droid != NULLOBJECT)
 	{
-		if(droid.order == DORDER_NONE)
+		if (droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD and droid.order != DORDER_HELPBUILD)
 		{
 			// if in range of a derrick
 			structure = structureBuiltInRange(derrick, droid.x, droid.y, (5*128), me);
@@ -999,7 +998,6 @@ event buildExpand( buildExpandTr )
 //	Structure (fac/res/pow) upgrades
 event upgradeStructures(upgradeStructuresTr )
 {
-
 	initIterateGroup(buildGroup);				// find idle droids in build group.
 	droid = iterateGroup(buildGroup);
 	while(droid != NULLOBJECT)
@@ -1164,7 +1162,9 @@ event finishStructs(finishStructsTr)
 			droid = iterateGroup(buildGroup);
 			while(droid != NULLOBJECT)
 			{
-				if ((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD) and droidCanReach(droid, structure.x, structure.y))
+				if (droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD
+				    and droidCanReach(droid, structure.x, structure.y)
+				    and distBetweenTwoPoints(droid.x, droid.y, structure.x, structure.y) < 20 * TILE)
 				{
 					orderDroidObj(droid,DORDER_HELPBUILD,structure);
 				}
@@ -1196,7 +1196,7 @@ event newfortify(fortifyTr)
 	droid = iterateGroup(buildGroup);
 	while((boolResult == FALSE) and (droid != NULLOBJECT))
 	{
-		if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
+		if (droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD and droid.order != DORDER_HELPBUILD)
 		{
 			boolResult = TRUE;					// dont do this again!
 
@@ -1603,7 +1603,6 @@ event repairDroids(repairDroidsTr)
 /////////////////////////////////////////////////////////////////////
 event factoryEvent(factoryEventTr)
 {
-
 	// for each factory....
 	initEnumStruct(FALSE,factory,me,me);
 	structure = enumStruct();								// find factory.
@@ -1935,7 +1934,6 @@ event takeoverDefend(takeoverTr)
 
 event useLassat(useLassatTr)
 {
-
 	// find my lassat
 	// fire it at my attack objective.
 	if(allOutAttack != NULLOBJECT)
@@ -2014,17 +2012,16 @@ event attackStuff(attackStuffTr)
 /////////////////////////////////////////////////////////////////////
 event doAllOutAttack(allOutAttackTr)
 {
-	if( idleGroup(attackGroup) >= (attackGroup.members / 3))	// make sure at least 30% are idle
+	if (idleGroup(attackGroup) >= (attackGroup.members / 3))	// make sure at least 30% are idle
 	{
-		if( (allOutAttack != NULLOBJECT) and (not helpingAlly()) )
+		if ((allOutAttack != NULLOBJECT) and (not helpingAlly()))
 		{
-			if( !friendlyPlayer(allOutAttack.player) )
+			if (!friendlyPlayer(allOutAttack.player))
 			{
-				if( getDroidCount(me) > 40)	// plenty of units.
+				if (getDroidCount(me) > 40)	// plenty of units.
 				{
-					orderGroupObj(attackGroup, DORDER_ATTACK,allOutAttack);
-					//orderGroupLoc(defendGroup, DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
-					orderGroupLoc(scoutGroup,  DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
+					orderGroupObj(attackGroup, DORDER_ATTACK, allOutAttack);
+					orderGroupLoc(scoutGroup, DORDER_SCOUT, allOutAttack.x, allOutAttack.y);
 				}
 			}
 			else
@@ -2056,7 +2053,6 @@ event defendWatch(defendWatchTr)
 					if( idleGroup(defendGroup) >= (defendGroup.members / 2) )
 					{
 						orderGroupLoc(defendGroup, DORDER_MOVE,defendObj.x,defendObj.y);	//cyborg mechanics can't attack (won't move)
-						//orderGroupObj(defendGroup, DORDER_ATTACK, defendObj);
 					}
 
 					if( idleGroup(scoutGroup) >= (scoutGroup.members / 2) )
@@ -2197,7 +2193,6 @@ function int findResearch(int _searchStart, int _techTree)
 // form alliances
 event formAllianceEvent(formAllianceEventTr)
 {
-
 	count = 0;
 	while(count < MAX_PLAYERS)
 	{
@@ -2401,7 +2396,8 @@ event vtolStructs(inactive)
 	local	int		_numVtolFacs,_numRearmPads;
 
 	// got any idle trucks?
-	if(idleGroup(buildGroup) < 1){
+	if (idleGroup(buildGroup) < 1)
+	{
 		exit;
 	}
 
@@ -2414,6 +2410,11 @@ event vtolStructs(inactive)
 	{
 		dbg("NEED REARM PADS", me);
 		buildRearmPads();
+	}
+
+	if (_numVtolFacs > 0 and playerPower(me) < LOW_POWER)
+	{
+		exit;	// Throttle expansion to avoid waste
 	}
 
 	// calculate how many trucks we want to use for construction
@@ -2501,7 +2502,6 @@ function void buildRearmPads()
 
 event buildVtols(inactive)
 {
-
 	// got enough vtols?
 	if((vtolDefendGr.members >= maxVTOLs[curTech]) or (getDroidCount(me) >= MAX_DROIDS)){
 		dbg("CAN'T BUILD VTOLS - TOO MANY UNITS", me);
@@ -2932,7 +2932,6 @@ event vtolDefend(vtolDefendTr)
 							{
 								orderDroidStatsLoc(droid, DORDER_BUILD,vtolDefStruct[count2],buildX,buildY);
 								_numBuilders++;
-//									boolResult2 = TRUE;
 							}
 						}
 
@@ -3354,27 +3353,6 @@ event manageAllyHelp(manageAllyHelpTr)
 		{
 			stopHelpingAlly();
 		}
-		//else
-		//{
-		//	/* See if all units we sent were killed */
-		//	if(not haveHelpers())
-		//	{
-		//		if(random(4) == 0)
-		//		{
-		//			messagePlayer(lastHelpPlayer, M_HELPERS_KILLED);
-		//		}
-
-		//		if(not attemptToHelp(lastHelpPlayer, helpX, helpY))
-		//		{
-		//			dbg("NO UNITS, STOPPED HELPING", me);
-		//			stopHelpingAlly();		//don't make sense to try again
-		//		}
-		//		else
-		//		{
-		//			dbg("SENDING REINFORCEMENTS", me);
-		//		}
-		//	}
-		//}
 	}
 }
 
@@ -4000,7 +3978,6 @@ function int numGroupSameOrder(GROUP _group, int _orderIndex)
 event structureDestroyed(structureDestroyedTr)
 {
 	local	int	_count;
-
 
 	// add certain structures to the rebuild list
 	_count = 0;
