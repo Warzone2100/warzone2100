@@ -540,7 +540,6 @@ function bool aiResponsibleForPlayer(int _player)
 // keep details about the size and postion of the ai players base
 event basedetails(basedetailsTr)
 {
-
 	// clear old extremities.
 	maxy = 0;
 	maxx = 0;
@@ -613,7 +612,7 @@ event buildDerrick(buildDerrickTr)
 	droid = iterateGroup(buildGroup);
 	while (droid != NULLOBJECT && !foundOne)
 	{
-		if (droid.order == DORDER_NONE or droid.order == DORDER_RTB)
+		if (droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD and droid.order != DORDER_HELPBUILD)
 		{
 			foundOne = true;
 		}
@@ -622,12 +621,11 @@ event buildDerrick(buildDerrickTr)
 			droid = iterateGroup(buildGroup);
 		}
 	}
-	foundOne = false;
 	if (droid != NULLOBJECT)
 	{
 		initGetFeature(oilRes, -1, me);
 		_oil = getFeatureB(me);
-		while (_oil != NULLOBJECT && !foundOne)
+		while (_oil != NULLOBJECT)
 		{
 			_newDist = distBetweenTwoPoints(droid.x, droid.y, _oil.x, _oil.y);
 			_same = false;
@@ -638,9 +636,10 @@ event buildDerrick(buildDerrickTr)
 				{
 					initIterateGroup(buildGroup);				// find all units in build group.
 					_search = iterateGroup(buildGroup);
+					foundOne = false;
 					while (_search != NULLOBJECT && !foundOne)
 					{
-						if (_search.orderx == _oil.x and _search.ordery == _oil.y)
+						if (_search.orderx == _oil.x and _search.ordery == _oil.y and _search != droid)
 						{
 							_same = true;
 							foundOne = true;
@@ -683,7 +682,7 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 	droid = iterateGroup(buildGroup);
 	while(droid != NULLOBJECT)
 	{
-		if(droid.order == DORDER_NONE)
+		if (droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD and droid.order != DORDER_HELPBUILD)
 		{
 			// if in range of a derrick
 			structure = structureBuiltInRange(derrick, droid.x, droid.y, (5*128), me);
@@ -1275,7 +1274,7 @@ event newfortify(fortifyTr)
 	droid = iterateGroup(buildGroup);
 	while((boolResult == FALSE) and (droid != NULLOBJECT))
 	{
-		if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
+		if (droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD and droid.order != DORDER_HELPBUILD)
 		{
 			boolResult = TRUE;					// dont do this again!
 
@@ -1469,6 +1468,7 @@ event structBuilt(structBuiltTr)
 	else if(structure.stattype == REF_RESOURCE_EXTRACTOR)
 	{
 		setEventTrigger(buildDerrick, chainloadTr);
+		exit;
 	}
 	else if (structure.stattype == REF_RESEARCH)
 	{
@@ -1479,6 +1479,13 @@ event structBuilt(structBuiltTr)
 		else
 		{
 			setEventTrigger(doResearch, chainloadTr);
+		}
+	}
+	else if (structure.stattype == REF_POWER_GEN)
+	{
+		if (isStructureAvailable(powModule, me))
+		{
+			orderDroidStatsLoc(droid, DORDER_BUILD, powModule, structure.x, structure.y);	// upgrade it.
 		}
 	}
 
@@ -2099,17 +2106,16 @@ event attackStuff(attackStuffTr)
 /////////////////////////////////////////////////////////////////////
 event doAllOutAttack(allOutAttackTr)
 {
-	if( idleGroup(attackGroup) >= (attackGroup.members / 3))	// make sure at least 30% are idle
+	if (idleGroup(attackGroup) >= (attackGroup.members / 3))	// make sure at least 30% are idle
 	{
-		if( (allOutAttack != NULLOBJECT) and (not helpingAlly()) )
+		if ((allOutAttack != NULLOBJECT) and (not helpingAlly()))
 		{
-			if( !friendlyPlayer(allOutAttack.player) )
+			if (!friendlyPlayer(allOutAttack.player))
 			{
-				if( getDroidCount(me) > 40)	// plenty of units.
+				if (getDroidCount(me) > 40)	// plenty of units.
 				{
-					orderGroupObj(attackGroup, DORDER_ATTACK,allOutAttack);
-					//orderGroupLoc(defendGroup, DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
-					orderGroupLoc(scoutGroup,  DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
+					orderGroupObj(attackGroup, DORDER_ATTACK, allOutAttack);
+					orderGroupLoc(scoutGroup, DORDER_SCOUT, allOutAttack.x, allOutAttack.y);
 				}
 			}
 			else
@@ -2141,7 +2147,6 @@ event defendWatch(defendWatchTr)
 					if( idleGroup(defendGroup) >= (defendGroup.members / 2) )
 					{
 						orderGroupLoc(defendGroup, DORDER_MOVE,defendObj.x,defendObj.y);	//cyborg mechanics can't attack (won't move)
-						//orderGroupObj(defendGroup, DORDER_ATTACK, defendObj);
 					}
 
 					if( idleGroup(scoutGroup) >= (scoutGroup.members / 2) )
@@ -3394,27 +3399,6 @@ event manageAllyHelp(manageAllyHelpTr)
 		{
 			stopHelpingAlly();
 		}
-		//else
-		//{
-		//	/* See if all units we sent were killed */
-		//	if(not haveHelpers())
-		//	{
-		//		if(random(4) == 0)
-		//		{
-		//			messagePlayer(lastHelpPlayer, M_HELPERS_KILLED);
-		//		}
-
-		//		if(not attemptToHelp(lastHelpPlayer, helpX, helpY))
-		//		{
-		//			dbg("NO UNITS, STOPPED HELPING", me);
-		//			stopHelpingAlly();		//don't make sense to try again
-		//		}
-		//		else
-		//		{
-		//			dbg("SENDING REINFORCEMENTS", me);
-		//		}
-		//	}
-		//}
 	}
 }
 
