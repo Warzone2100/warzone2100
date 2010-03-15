@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-03-14 16:05+0100\n"
-"PO-Revision-Date: 2010-03-03 20:20+0100\n"
+"PO-Revision-Date: 2010-03-15 14:41+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -12530,9 +12530,8 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "Gut, Waffen- und Sensoranzeige sind aus!"
 
 #: src/keybind.c:332
-#, fuzzy, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
-msgstr "Spieler %u erschummelt (Debugmenü) sich eine neue Einheit: %s."
+msgstr "Spieler %u erschummelt sich eine neue Armee aus %s."
 
 #: src/keybind.c:371
 #: src/keybind.c:401
