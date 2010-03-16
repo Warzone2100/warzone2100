@@ -23,6 +23,10 @@
 
 #include "string_ext.h"
 
+#ifdef WZ_OS_MAC
+# include <CoreFoundation/CoreFoundation.h>
+# include <CoreFoundation/CFURL.h>
+#endif
 
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)
@@ -348,7 +352,25 @@ void initI18n(void)
 		textdomainDirectory = bindtextdomain(PACKAGE, localeDir);
 	}
 #else
+	#ifdef WZ_OS_MAC
+	{
+		char resourcePath[PATH_MAX];
+		CFURLRef resourceURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
+		if( CFURLGetFileSystemRepresentation( resourceURL, true, (UInt8 *) resourcePath, PATH_MAX) )
+		{
+			sstrcat(resourcePath, "/locale");
+			textdomainDirectory = bindtextdomain(PACKAGE, resourcePath);
+		}
+		else
+		{
+			debug( LOG_ERROR, "Could not change to resources directory." );
+		}
+
+		debug(LOG_INFO, "resourcePath is %s", resourcePath);
+	}
+	#else
 	textdomainDirectory = bindtextdomain(PACKAGE, LOCALEDIR);
+	#endif
 #endif
 	if (!textdomainDirectory)
 	{
