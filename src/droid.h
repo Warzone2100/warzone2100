@@ -312,9 +312,9 @@ extern BOOL droidUpdateClearing( DROID *psDroid );
 a defined range*/
 extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
 
-//access function
+/// Returns true iff the droid has VTOL propulsion, and is not a transport.
 extern BOOL isVtolDroid(const DROID* psDroid);
-/* returns true if the droid has lift propulsion and is moving */  
+/// Returns true iff the droid has VTOL propulsion and is moving.
 extern BOOL isFlying(const DROID* psDroid);
 /*returns true if a VTOL weapon droid which has completed all runs*/
 extern BOOL vtolEmpty(DROID *psDroid);

@@ -850,7 +850,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		if (psStats->surfaceToAir == SHOOT_IN_AIR &&
 			(psTempObj->type == OBJ_STRUCTURE ||
 				psTempObj->type == OBJ_FEATURE ||
-				(psTempObj->type == OBJ_DROID && !isVtolDroid((DROID *)psTempObj))
+				(psTempObj->type == OBJ_DROID && !isFlying((DROID *)psTempObj))
 			))
 		{
 			// AA weapons should not hit buildings and non-vtol droids
