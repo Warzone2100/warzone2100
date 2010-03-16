@@ -21,26 +21,15 @@
 #ifndef __INCLUDED_SRC_MAPDISPLAY_H__
 #define __INCLUDED_SRC_MAPDISPLAY_H__
 
-#include "lib/ivis_common/pietypes.h"
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
-#define BUFFER_GRIDX	22
-#define BUFFER_GRIDY	22
+void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY);
 
-
-/*Flag to switch code for bucket sorting in renderFeatures etc
-  for the renderMapToBuffer code */
-  /*This is no longer used but may be useful for testing so I've left it in - maybe
-  get rid of it eventually? - AB 1/4/98*/
-extern BOOL	doBucket;
-
-// The surface to render Message information into for the Intelligence Screen
-extern iSurface	*mapSurface;
-
-/* renders up to two IMDs into the surface - used by message display in Intelligence Map */
-extern void renderIMDToBuffer(iSurface *pSurface, iIMDShape *pIMD,
-							  iIMDShape *pIMD2, UDWORD WindowX,UDWORD WindowY,
-							  UDWORD OriginX,UDWORD OriginY);
-extern void renderResearchToBuffer(RESEARCH *psResearch,
-                            UDWORD OriginX, UDWORD OriginY);
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MAPDISPLAY_H__
