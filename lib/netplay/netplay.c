@@ -1332,7 +1332,7 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 	{
 		if (size == 0)
 		{
-			debug(LOG_NET, "Connection closed from the other side");
+			debug(LOG_NET, "Connection closed from the other side.  Socket:%p", bs->socket);
 		}
 		else
 		{
@@ -1498,6 +1498,7 @@ static signed int NET_CreatePlayer(const char* name)
 		if (NetPlay.players[index].allocated == false)
 		{
 			debug(LOG_NET, "A new player has been created. Player, %s, is set to slot %u", name, index);
+			NET_InitPlayer(index, false);	// re-init everything
 			NetPlay.players[index].allocated = true;
 			sstrcpy(NetPlay.players[index].name, name);
 			NETBroadcastPlayerInfo(index);
@@ -2705,10 +2706,9 @@ receive_message:
 							NETuint32_t(&i);
 						NETend();
 						debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d (invalid socket)", i);
-						NET_DestroyPlayer(i);			// just clears array
-						MultiPlayerLeave(i);			// more cleanup
+						NET_DestroyPlayer(i);			// just clears array & inits struct for a new player
+						MultiPlayerLeave(i);			// more cleanup (scripts)
 						NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
-						NetPlay.players[i].kick = true;			//they are going to get kicked.
 					}
 
 					if (++i == MAX_CONNECTED_PLAYERS)
