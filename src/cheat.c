@@ -80,7 +80,7 @@ BOOL attemptCheatCode(const char* cheat_name)
 
 // =============
 	// NOTE: this will be removed once the "legs" bug has been found.
-	if (!stricmp("legs", cheat_name))
+	if (!strcasecmp("legs", cheat_name))
 	{
 		kf_DebugTemplates();
 		return true;
