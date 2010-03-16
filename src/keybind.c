@@ -90,6 +90,7 @@
 #include "aiexperience.h"	/* for console commands */
 #include "scriptfuncs.h"
 #include "clparse.h"
+#include "research.h"
 
 /*
 	KeyBind.c
