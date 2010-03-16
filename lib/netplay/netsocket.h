@@ -61,7 +61,7 @@ char const *getSocketTextAddress(Socket const *sock);                   ///< Get
 bool socketReadReady(Socket const *sock);                               ///< Returns if checkSockets found data to read from this Socket.
 ssize_t readNoInt(Socket *sock, void *buf, size_t max_size);            ///< Reads up to max_size bytes from the Socket.
 ssize_t readAll(Socket* sock, void *buf, size_t size, unsigned timeout);///< Reads exactly size bytes from the Socket, or blocks until the timeout expires.
-ssize_t writeAll(Socket *sock, const void* buf, size_t size);           ///< Blocking write of size bytes to the Socket. Causes deadlocks, where all the clients are calling this at the same time.
+ssize_t writeAll(Socket *sock, const void* buf, size_t size);           ///< Nonblocking write of size bytes to the Socket. All bytes will be written asynchronously, by a separate thread.
 
 // Socket sets.
 SocketSet *allocSocketSet(void);                                        ///< Constructs a SocketSet.

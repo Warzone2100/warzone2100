@@ -26,8 +26,29 @@
 #include "lib/framework/frame.h"
 #include "netsocket.h"
 
+//#include "lib/framework/wzapp_c.h"
+// TODO Delete these defines during Qt merge.
+#define WZ_THREAD SDL_Thread
+#define WZ_MUTEX SDL_mutex
+#define WZ_SEMAPHORE SDL_sem
+#define wzMutexLock SDL_LockMutex
+#define wzMutexUnlock SDL_UnlockMutex
+#define wzSemaphoreCreate SDL_CreateSemaphore
+#define wzSemaphoreDestroy SDL_DestroySemaphore
+#define wzSemaphoreWait SDL_SemWait
+#define wzSemaphorePost SDL_SemPost
+#define wzThreadJoin(x) SDL_WaitThread(x, NULL)
+#define wzMutexDestroy SDL_DestroyMutex
+#define wzMutexCreate SDL_CreateMutex
+#define wzYieldCurrentThread() SDL_Delay(10)
+#define wzThreadCreate SDL_CreateThread
+#define wzThreadStart(x)
+#include <SDL/SDL.h>
+#include <SDL/SDL_thread.h>
+
 #include <vector>
 #include <algorithm>
+#include <map>
 
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
@@ -91,8 +112,11 @@ struct Socket
 	 *
 	 * All non-listening sockets will only use the first socket handle.
 	 */
+	Socket() : ready(false), writeError(false) {}
+
 	SOCKET fd[SOCK_COUNT];
 	bool ready;
+	bool writeError;
 	char textAddress[40];
 };
 
@@ -100,6 +124,14 @@ struct SocketSet
 {
 	std::vector<Socket *> fds;
 };
+
+
+static WZ_MUTEX *socketThreadMutex;
+static WZ_SEMAPHORE *socketThreadSemaphore;
+static WZ_THREAD *socketThread = NULL;
+static bool socketThreadQuit;
+typedef std::map<Socket *, std::vector<uint8_t> > SocketThreadWriteMap;
+static SocketThreadWriteMap socketThreadWrites;
 
 
 bool socketReadReady(Socket const *sock)
@@ -369,6 +401,103 @@ static bool connectionIsOpen(Socket* sock)
 	return true;
 }
 
+static int socketThreadFunction(void *)
+{
+	wzMutexLock(socketThreadMutex);
+	while (!socketThreadQuit)
+	{
+#if   defined(WZ_OS_UNIX)
+		SOCKET maxfd = INT_MIN;
+#elif defined(WZ_OS_WIN)
+		SOCKET maxfd = 0;
+#endif
+		fd_set fds;
+		FD_ZERO(&fds);
+		for (SocketThreadWriteMap::iterator i = socketThreadWrites.begin(); i != socketThreadWrites.end(); ++i)
+		{
+			if (!i->second.empty())
+			{
+				SOCKET fd = i->first->fd[SOCK_CONNECTION];
+				maxfd = std::max(maxfd, fd);
+				FD_SET(fd, &fds);
+			}
+		}
+		struct timeval tv = {0, 50 * 1000};
+
+		// Check if we can write to any sockets.
+		wzMutexUnlock(socketThreadMutex);
+		int ret = select(maxfd + 1, NULL, &fds, NULL, &tv);
+		wzMutexLock(socketThreadMutex);
+
+		// We can write to some sockets. (Ignore errors from select, we may have deleted the socket after unlocking the mutex, and before calling select.)
+		if (ret > 0)
+		{
+			for (SocketThreadWriteMap::iterator i = socketThreadWrites.begin(); i != socketThreadWrites.end(); )
+			{
+				SocketThreadWriteMap::iterator w = i;
+				++i;
+
+				Socket *sock = w->first;
+				std::vector<uint8_t> &writeQueue = socketThreadWrites[sock];
+
+				if (writeQueue.empty() || !FD_ISSET(sock->fd[SOCK_CONNECTION], &fds))
+				{
+					continue;  // This socket is not ready for writing, or we don't have anything to write.
+				}
+
+				// Write data.
+				ssize_t ret = send(sock->fd[SOCK_CONNECTION], reinterpret_cast<char *>(&writeQueue[0]), writeQueue.size(), MSG_NOSIGNAL);
+				if (ret != SOCKET_ERROR)
+				{
+					// Erase as much data as written.
+					writeQueue.erase(writeQueue.begin(), writeQueue.begin() + ret);
+					if (writeQueue.empty())
+					{
+						socketThreadWrites.erase(w);  // Nothing left to write, delete from pending list.
+					}
+				}
+				else
+				{
+					switch (getSockErr())
+					{
+						case EAGAIN:
+#if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
+						case EWOULDBLOCK:
+#endif
+							if (!connectionIsOpen(sock))
+							{
+								debug(LOG_NET, "Socket error");
+								sock->writeError = true;
+								socketThreadWrites.erase(w);  // Socket broken, don't try writing to it again.
+								break;
+							}
+						case EINTR:
+							break;
+#if defined(EPIPE)
+						case EPIPE:
+							debug(LOG_NET, "EPIPE generated");
+							// fall through
+#endif
+						default:
+							sock->writeError = true;
+							socketThreadWrites.erase(w);  // Socket broken, don't try writing to it again.
+							break;
+					}
+				}
+			}
+		}
+
+		if (socketThreadWrites.empty())
+		{
+			// Nothing to do, expect to wait.
+			wzMutexUnlock(socketThreadMutex);
+			wzSemaphoreWait(socketThreadSemaphore);
+			wzMutexLock(socketThreadMutex);
+		}
+	}
+	wzMutexUnlock(socketThreadMutex);
+}
+
 /**
  * Similar to read(2) with the exception that this function won't be
  * interrupted by signals (EINTR).
@@ -402,8 +531,6 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
  */
 ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 {
-	size_t written = 0;
-
 	if (!sock
 	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
@@ -412,40 +539,24 @@ ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 		return SOCKET_ERROR;
 	}
 
-	while (written < size)
+	if (sock->writeError)
 	{
-		ssize_t ret;
-
-		ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, MSG_NOSIGNAL);
-		if (ret == SOCKET_ERROR)
-		{
-			switch (getSockErr())
-			{
-				case EAGAIN:
-#if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
-				case EWOULDBLOCK:
-#endif
-					if (!connectionIsOpen(sock))
-					{
-						debug(LOG_NET, "Socket error");
-						return SOCKET_ERROR;
-					}
-				case EINTR:
-					continue;
-#if defined(EPIPE)
-				case EPIPE:
-					debug(LOG_NET, "EPIPE generated");
-					// fall through
-#endif
-				default:
-					return SOCKET_ERROR;
-			}
-		}
-
-		written += ret;
+		return SOCKET_ERROR;
 	}
 
-	return written;
+	if (size > 0)
+	{
+		wzMutexLock(socketThreadMutex);
+		if (socketThreadWrites.empty())
+		{
+			wzSemaphorePost(socketThreadSemaphore);
+		}
+		std::vector<uint8_t> &writeQueue = socketThreadWrites[sock];
+		writeQueue.insert(writeQueue.end(), static_cast<char const *>(buf), static_cast<char const *>(buf) + size);
+		wzMutexUnlock(socketThreadMutex);
+	}
+
+	return size;
 }
 
 SocketSet *allocSocketSet()
@@ -684,6 +795,10 @@ void socketClose(Socket* sock)
 
 	if (sock)
 	{
+		wzMutexLock(socketThreadMutex);
+		socketThreadWrites.erase(sock);
+		wzMutexUnlock(socketThreadMutex);
+
 		for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
 		{
 			if (sock->fd[i] != INVALID_SOCKET)
@@ -705,7 +820,7 @@ void socketClose(Socket* sock)
 				sock->fd[i] = INVALID_SOCKET;
 			}
 		}
-		free(sock);
+		delete sock;
 		sock = NULL;
 	}
 }
@@ -743,7 +858,7 @@ Socket *socketAccept(Socket *sock)
 
 			socketBlockSIGPIPE(newConn, true);
 
-			conn = (Socket *)malloc(sizeof(*conn));
+			conn = new Socket;
 			if (conn == NULL)
 			{
 				debug(LOG_ERROR, "Out of memory!");
@@ -757,7 +872,6 @@ Socket *socketAccept(Socket *sock)
 				conn->fd[j] = INVALID_SOCKET;
 			}
 
-			conn->ready = false;
 			conn->fd[SOCK_CONNECTION] = newConn;
 
 			sock->ready = false;
@@ -777,7 +891,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 	unsigned int i;
 	int ret;
 
-	Socket *const conn = (Socket *)malloc(sizeof(*conn));
+	Socket *const conn = new Socket;
 	if (conn == NULL)
 	{
 		debug(LOG_ERROR, "Out of memory!");
@@ -796,7 +910,6 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 		conn->fd[i] = INVALID_SOCKET;
 	}
 
-	conn->ready = false;
 	conn->fd[SOCK_CONNECTION] = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
 
 	if (conn->fd[SOCK_CONNECTION] == INVALID_SOCKET)
@@ -914,7 +1027,7 @@ Socket *socketListen(unsigned int port)
 	struct sockaddr_in6 addr6;
 	unsigned int i;
 
-	Socket *const conn = (Socket *)malloc(sizeof(*conn));
+	Socket *const conn = new Socket;
 	if (conn == NULL)
 	{
 		debug(LOG_ERROR, "Out of memory!");
@@ -941,7 +1054,6 @@ Socket *socketListen(unsigned int port)
 	addr6.sin6_flowinfo = 0;
 	addr6.sin6_scope_id = 0;
 
-	conn->ready = false;
 	conn->fd[SOCK_IPV4_LISTEN] = socket(addr4.sin_family, SOCK_STREAM, 0);
 	conn->fd[SOCK_IPV6_LISTEN] = socket(addr6.sin6_family, SOCK_STREAM, 0);
 
@@ -1148,10 +1260,32 @@ void SOCKETinit()
 		major_windows_version = LOBYTE(LOWORD(GetVersion()));
 	}
 #endif
+
+	if (socketThread == NULL)
+	{
+		socketThreadQuit = false;
+		socketThreadMutex = wzMutexCreate();
+		socketThreadSemaphore = wzSemaphoreCreate(0);
+		socketThread = wzThreadCreate(socketThreadFunction, NULL);
+		wzThreadStart(socketThread);
+	}
 }
 
 void SOCKETshutdown()
 {
+	if (socketThread != NULL)
+	{
+		wzMutexLock(socketThreadMutex);
+		socketThreadQuit = true;
+		socketThreadWrites.clear();
+		wzMutexUnlock(socketThreadMutex);
+		wzSemaphorePost(socketThreadSemaphore);  // Wake up the thread, so it can quit.
+		wzThreadJoin(socketThread);
+		wzMutexDestroy(socketThreadMutex);
+		wzSemaphoreDestroy(socketThreadSemaphore);
+		socketThread = NULL;
+	}
+
 #if defined(WZ_OS_WIN)
 	WSACleanup();
 
