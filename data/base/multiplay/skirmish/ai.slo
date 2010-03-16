@@ -423,8 +423,7 @@ event arrived(reachedTr)
 				{
 					buildX = droid.x;
 					buildY = droid.y;
-					found = pickStructLocationB(defStructs[count], ref buildX, ref buildY, me, -1);
-					if (found and droidCanReach(droid, buildX, buildY))
+					if (pickDroidStructLocation(droid, defStructs[count], ref buildX, ref buildY, me, -1))
 					{
 						orderDroidStatsLoc(droid, DORDER_BUILD, defStructs[count], buildX, buildY);
 					}
@@ -733,7 +732,7 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 						count = random(count2);						 //count = choice!
 
 						// pick a location
-						boolResult = pickStructLocation(structChoice[count], ref buildX, ref buildY,me);
+						boolResult = pickDroidStructLocation(droid, structChoice[count], ref buildX, ref buildY, me, -1);
 
 						_numBuilders = numBuildSameBuilding(NULLSTRUCTURESTAT, buildX, buildY);
 
@@ -961,22 +960,20 @@ event buildPowerGenerators(buildPowerGeneratorsTr)
 
 	if( (count2 * 4) < count )								// if we need powergen
 	{
-		buildX = baseX;										// try build powergen.
-		buildY = baseY;
-		boolResult = pickStructLocation(powGen, ref buildX, ref buildY,me);
-		if(boolResult == TRUE)
+		initIterateGroup(buildGroup);
+		droid = iterateGroup(buildGroup);
+		while(droid != NULLOBJECT)
 		{
-			initIterateGroup(buildGroup);
-			droid = iterateGroup(buildGroup);
-			while(droid != NULLOBJECT)
+			if (droid.order != DORDER_HELPBUILD and droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD)
 			{
-				if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
+				buildX = baseX;							// try build powergen.
+				buildY = baseY;
+				if (pickDroidStructLocation(droid, powGen, ref buildX, ref buildY, me, 1))
 				{
-					orderDroidStatsLoc(droid, DORDER_BUILD,powGen, buildX,buildY);
+					orderDroidStatsLoc(droid, DORDER_BUILD, powGen, buildX,buildY);
 				}
-				droid = iterateGroup(buildGroup);
 			}
-
+			droid = iterateGroup(buildGroup);
 		}
 	}
 }
@@ -4071,11 +4068,11 @@ function void buildOnExactLocation(DROID _truck, int _x, int _y, STRUCTURESTAT _
 	_newX = _x;
 	_newY = _y;
 
-	if(pickStructLocationB(_stat, ref _newX, ref _newY, me, -1))
+	if (pickDroidStructLocation(_truck, _stat, ref _newX, ref _newY, me, -1))
 	{
 		dbg("trying to rebuild on (" & _newX & "/" & _newY & ")", me);
 
-		if((_x != _newX) or (_y != _newY) or !droidCanReach(_truck, _x, _y))
+		if ((_x != _newX) or (_y != _newY))
 		{
 			return;
 		}
