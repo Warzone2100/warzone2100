@@ -496,6 +496,8 @@ static int socketThreadFunction(void *)
 		}
 	}
 	wzMutexUnlock(socketThreadMutex);
+
+	return 42;  // Return value arbitrary and unused.
 }
 
 /**
