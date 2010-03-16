@@ -27,6 +27,11 @@
 #include "structure.h"
 #include "messagedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define NO_AUDIO_MSG		-1
 
 /** The lists of messages allocated. */
@@ -39,51 +44,56 @@ extern iIMDShape	*pProximityMsgIMD;
 extern PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];
 
 /** Allocates the viewdata heap. */
-extern BOOL initViewData(void);
+BOOL initViewData(void);
 
 /** Initialise the message heaps. */
-extern BOOL initMessage(void);
+BOOL initMessage(void);
 
 /** Release the message heaps. */
-extern BOOL messageShutdown(void);
+BOOL messageShutdown(void);
 
 /** Add a message to the list. */
-extern MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player);
+MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player);
 
 /** Add a beacon message to the list. */
-extern MESSAGE * addBeaconMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player);
+MESSAGE * addBeaconMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player);
 
 /** Remove a message. */
-extern void removeMessage(MESSAGE *psDel, UDWORD player);
+void removeMessage(MESSAGE *psDel, UDWORD player);
 
 /** Remove all Messages. */
-extern void freeMessages(void);
+void freeMessages(void);
 
 /** Removes all the proximity displays. */
-extern void releaseAllProxDisp(void);
+void releaseAllProxDisp(void);
 
-extern bool addToViewDataList(VIEWDATA* psViewData, unsigned int numData);
+bool addToViewDataList(VIEWDATA* psViewData, unsigned int numData);
 
 /** Load the view data for the messages from the file exported from the world editor. */
-extern VIEWDATA* loadViewData(const char *pViewMsgData, UDWORD bufferSize);
+VIEWDATA* loadViewData(const char *pViewMsgData, UDWORD bufferSize);
 
-extern VIEWDATA* loadResearchViewData(const char* fileName);
+VIEWDATA* loadResearchViewData(const char* fileName);
 
 /** Get the view data that contains the text message pointer passed in. */
-extern VIEWDATA* getViewData(const char *pTextMsg);
+VIEWDATA* getViewData(const char *pTextMsg);
 
 /** Release the viewdata memory. */
-extern void viewDataShutDown(VIEWDATA *psViewData);
+void viewDataShutDown(VIEWDATA *psViewData);
 
-extern PROXIMITY_DISPLAY * getProximityDisplay(MESSAGE *psMessage);
+// Unused
+PROXIMITY_DISPLAY * getProximityDisplay(MESSAGE *psMessage);
 
 /** Looks through the players list of messages to find one with the same viewData
   * pointer and which is the same type of message - used in scriptFuncs. */
-extern MESSAGE* findMessage(MSG_VIEWDATA *pViewdata, MESSAGE_TYPE type, UDWORD player);
+MESSAGE* findMessage(MSG_VIEWDATA *pViewdata, MESSAGE_TYPE type, UDWORD player);
 
 /** 'Displays' a proximity display. */
-extern void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp);
+void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp);
 
-extern BOOL messageInitVars(void);
+BOOL messageInitVars(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MESSAGE_H__
