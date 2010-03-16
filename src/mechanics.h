@@ -24,33 +24,24 @@
 #ifndef __INCLUDED_SRC_MECHANICS_H__
 #define __INCLUDED_SRC_MECHANICS_H__
 
-#include "lib/framework/frame.h"
-#include "combat.h"
-#include "lib/gamelib/gtime.h"
-#include "map.h"
-#include "mechanics.h"
-#include "move.h"
-#include "stats.h"
-#include "function.h"
-#include "research.h"
-#include "visibility.h"
+#include "statsdef.h"
 
 /* Shutdown the mechanics system */
-extern bool mechanicsShutdown(void);
+bool mechanicsShutdown(void);
 
 // Allocate the list for a component
-extern BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number);
+BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number);
 
 // release all the component lists
-extern void freeComponentLists(void);
+void freeComponentLists(void);
 
 //allocate the space for the Players' structure lists
-extern BOOL allocStructLists(void);
+BOOL allocStructLists(void);
 
 // release the structure lists
-extern void freeStructureLists(void);
+void freeStructureLists(void);
 
 //TEST FUNCTION - MAKE EVERYTHING AVAILABLE
-extern void makeAllAvailable(void);
+void makeAllAvailable(void);
 
 #endif // __INCLUDED_SRC_MECHANICS_H__

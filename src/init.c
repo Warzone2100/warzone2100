@@ -81,6 +81,7 @@
 #include "multiplay.h"
 #include "projectile.h"
 #include "radar.h"
+#include "research.h"
 #include "lib/framework/cursors.h"
 #include "scriptextern.h"
 #include "scripttabs.h"
