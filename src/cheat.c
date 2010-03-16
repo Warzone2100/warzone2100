@@ -70,6 +70,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"showfps", kf_ToggleFPS},	//displays your average FPS
 	{"showsamples", kf_ToggleSamples}, //displays the # of Sound samples in Queue & List
 	{"showorders", kf_ToggleOrders}, //displays unit order/action state.
+	{"legs", kf_DebugTemplates},	// for template debugging
 };
 
 BOOL attemptCheatCode(const char* cheat_name)
@@ -77,6 +78,14 @@ BOOL attemptCheatCode(const char* cheat_name)
 	const CHEAT_ENTRY * curCheat;
 	static const CHEAT_ENTRY * const EndCheat = &cheatCodes[ARRAY_SIZE(cheatCodes)];
 
+// =============
+	// NOTE: this will be removed once the "legs" bug has been found.
+	if (!stricmp("legs", cheat_name))
+	{
+		kf_DebugTemplates();
+		return true;
+	}
+// =============
 	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)
 	{
 		if (!getDebugMappingStatus())

@@ -243,6 +243,7 @@ void kf_TileInfo(void);
 void kf_NoAssert(void);
 
 extern void	kf_ToggleWatchWindow( void );
+extern void kf_DebugTemplates( void );
 
 bool runningMultiplayer(void);
 

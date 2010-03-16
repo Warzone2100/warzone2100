@@ -2173,7 +2173,47 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 	return true;
 }
+// RemakeTemplate
+char *RemakeTemplate(DROID_TEMPLATE	*templatelist, COMPONENT_STATS *cStat, COMPONENT_TYPE COMP_PART)
+{
+	static const char *Zlist[]=
+	{
+		"COMP_UNKNOWN",
+		"ZNULLBODY",
+		"ZNULLBRAIN",
+		"ZNULLPROP",
+		"ZNULLREPAIR",
+		"ZNULLECM",
+		"ZNULLSENSOR",
+		"ZNULLCONSTRUCT",
+		"COMP_WEAPON",
+	};
+	static const size_t SizeList[] =
+	{
+		0,							//COMP_UNKNOWN
+		sizeof(BODY_STATS),			//COMP_BODY
+		sizeof(BRAIN_STATS),		//COMP_BRAIN 
+		sizeof(PROPULSION_STATS),	//COMP_PROPULSION 
+		sizeof(REPAIR_STATS),		//COMP_REPAIRUNIT
+		sizeof(ECM_STATS),			//COMP_ECM 
+		sizeof(SENSOR_STATS),		//COMP_SENSOR
+		sizeof(CONSTRUCT_STATS),	//COMP_CONSTRUCT
+		0,							//COMP_WEAPON
+	};
 
+
+	if (templatelist->asParts[COMP_PART] == 0)
+	{
+		return (char *)Zlist[COMP_PART];
+	}
+	else
+	{
+		COMPONENT_STATS *pStats = (COMPONENT_STATS *)cStat;
+		pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + templatelist->asParts[COMP_PART]*SizeList[COMP_PART]));
+		return pStats->pName;
+	}
+
+}
 /*initialise the template build and power points */
 void initTemplatePoints(void)
 {

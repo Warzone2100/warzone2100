@@ -91,6 +91,7 @@
 #include "scriptfuncs.h"
 #include "clparse.h"
 #include "research.h"
+#include <time.h>
 
 /*
 	KeyBind.c
@@ -255,7 +256,142 @@ void	kf_FaceWest(void)
 	}
 }
 // --------------------------------------------------------------------------
+// Dump out all templates for each player, and the AI templates as well to the
+// standard csv format file.
+void	kf_DebugTemplates(void)
+{
+	DROID_TEMPLATE	*templatelist = NULL;
+	PHYSFS_file	*pFileHandle = NULL;
+	int i, numPlayers;
+	char filename[256] = {'\0'};
+	char outbuf[1024] = {'\0'};
+	char templateName[MAX_STR_LENGTH] = {'\0'};
+	char templateMID[MAX_STR_LENGTH] = {'\0'};
+	char *compBody;
+	char *compBrain;
+	char *compConstruct;
+	char *compECM;
+	char *compPropulsion;
+	char *compRepair;
+	char *compSensor;
+	char templateType[MAX_STR_LENGTH] = {'\0'};
+	char playerID[MAX_STR_LENGTH] = {'\0'};
+	char numWeapons[MAX_STR_LENGTH] = {'\0'};
 
+	time_t aclock;
+	struct tm *newtime;
+
+	static const char *Tlist[]=
+	{
+		"DROID",
+		"DROID_SENSOR",
+		"DROID_ECM",
+		"DROID_CONSTRUCT",
+		"PERSON",
+		"CYBORG",
+		"TRANSPORTER",
+		"DROID_COMMAND",
+		"DROID_REPAIR",
+		"ZNULLDROID",
+		"CYBORG_CONSTRUCT",
+		"CYBORG_REPAIR",
+		"CYBORG_SUPER",
+		"DROID_ANY",
+	};
+
+
+	time( &aclock );					// Get time in seconds
+	newtime = localtime( &aclock );		// Convert time to struct
+
+	// we use 1 for SP games, and maxPlayers for MP games, and trap it so we don't exceed MAX_PLAYERS --not that this should be possible
+	numPlayers = MIN((game.maxPlayers == 0) ? 1 : game.maxPlayers, MAX_PLAYERS) ;
+	for (i=0; i < numPlayers; i++)
+	{
+		if (!isHumanPlayer(i)) continue;	// skip AI players--this file would be empty.
+		snprintf(filename, sizeof(filename), "logs/template_%02d-%s_%02d%02d%02d.txt",i, game.map, newtime->tm_hour, newtime->tm_min, newtime->tm_sec );
+		pFileHandle = PHYSFS_openWrite(filename); // open the file
+		if (!pFileHandle)
+		{
+			debug(LOG_POPUP, "Could not create template file %s: %s", filename, PHYSFS_getLastError());
+			return;
+		}
+
+		templatelist = apsDroidTemplates[i];
+		while (templatelist)
+		{
+			sprintf(templateName, "%s", templatelist->pName);
+			sprintf(templateMID, "%d", templatelist->multiPlayerID);
+			compBody = RemakeTemplate(templatelist, (COMPONENT_STATS *)asBodyStats, COMP_BODY);
+			compBrain = RemakeTemplate(templatelist, (COMPONENT_STATS *)asBrainStats, COMP_BRAIN);
+			compConstruct = RemakeTemplate(templatelist, (COMPONENT_STATS *)asConstructStats, COMP_CONSTRUCT);
+			compECM = RemakeTemplate(templatelist, (COMPONENT_STATS *)asECMStats, COMP_ECM);
+			compPropulsion = RemakeTemplate(templatelist, (COMPONENT_STATS *)asPropulsionStats, COMP_PROPULSION);
+			compRepair = RemakeTemplate(templatelist, (COMPONENT_STATS *)asRepairStats, COMP_REPAIRUNIT);
+			compSensor = RemakeTemplate(templatelist, (COMPONENT_STATS *)asSensorStats, COMP_SENSOR);
+			sprintf(playerID, "0");		// 0 for humans.
+			sprintf(templateType, "%s", Tlist[templatelist->droidType]);
+			sprintf(numWeapons, "%d", templatelist->numWeaps);
+
+			sprintf(outbuf, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n", templateName, templateMID, compBody, compBrain, compConstruct,
+				compECM, playerID, compPropulsion, compRepair, templateType, compSensor, numWeapons );
+			PHYSFS_write(pFileHandle, outbuf, strlen(outbuf), 1);
+
+			templatelist = templatelist->psNext;
+		}
+	}
+
+	if (pFileHandle && !PHYSFS_close(pFileHandle))
+	{
+		debug(LOG_POPUP, "Could not close template file: %s", PHYSFS_getLastError());
+		return;
+	}
+	pFileHandle = NULL;
+
+	snprintf(filename, sizeof(filename), "logs/templateAI-%s_%02d%02d%02d.txt", game.map, newtime->tm_hour, newtime->tm_min, newtime->tm_sec );
+	pFileHandle = PHYSFS_openWrite(filename); // open the file
+	if (!pFileHandle)
+	{
+		debug(LOG_POPUP, "Could not create templateAI file %s: %s", filename, PHYSFS_getLastError());
+		return;
+	}
+
+	templatelist = apsStaticTemplates;		//AI templates
+	while (templatelist)
+	{
+		sprintf(templateName, "%s", templatelist->pName);
+		sprintf(templateMID, "%d", templatelist->multiPlayerID);
+		compBody = RemakeTemplate(templatelist, (COMPONENT_STATS *)asBodyStats, COMP_BODY);
+		compBrain = RemakeTemplate(templatelist, (COMPONENT_STATS *)asBrainStats, COMP_BRAIN);
+		compConstruct = RemakeTemplate(templatelist, (COMPONENT_STATS *)asConstructStats, COMP_CONSTRUCT);
+		compECM = RemakeTemplate(templatelist, (COMPONENT_STATS *)asECMStats, COMP_ECM);
+		compPropulsion = RemakeTemplate(templatelist, (COMPONENT_STATS *)asPropulsionStats, COMP_PROPULSION);
+		compRepair = RemakeTemplate(templatelist, (COMPONENT_STATS *)asRepairStats, COMP_REPAIRUNIT);
+		compSensor = RemakeTemplate(templatelist, (COMPONENT_STATS *)asSensorStats, COMP_SENSOR);
+
+		sprintf(playerID, "3");		// AI's always have "3" now
+		sprintf(templateType, "%s", Tlist[templatelist->droidType]);
+		sprintf(numWeapons, "%d", templatelist->numWeaps);
+
+		sprintf(outbuf, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n", templateName, templateMID, compBody, compBrain, compConstruct,
+			compECM, playerID, compPropulsion, compRepair, templateType, compSensor, numWeapons );
+		PHYSFS_write(pFileHandle, outbuf, strlen(outbuf), 1);
+
+		templatelist = templatelist->psNext;
+	}
+
+	if (!PHYSFS_close(pFileHandle))
+	{
+		debug(LOG_POPUP, "Could not close templateAI file: %s", PHYSFS_getLastError());
+		return;
+	}
+	{
+		char *cmsg;
+		sasprintf((char**)&cmsg, _("(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"), selectedPlayer);
+		sendTextMessage(cmsg, true);
+		sprintf(outbuf, "The logs are located here: %s", filename);
+		addConsoleMessage(outbuf, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+	}
+}
 /* Writes out debug info about all the selected droids */
 void	kf_DebugDroidInfo( void )
 {
