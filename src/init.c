@@ -511,7 +511,6 @@ void systemShutdown(void)
 	iV_ShutDown();
 	levShutDown();
 	widgShutDown();
-	scrShutDown();
 	fpathShutdown();
 	debug(LOG_MAIN, "shutting down everything else");
 	pal_ShutDown();		// currently unused stub
