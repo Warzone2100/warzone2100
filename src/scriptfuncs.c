@@ -5599,10 +5599,9 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 		return true;
 	}
 	return false;
-
 }
 
-static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxBlockingTiles)
+static BOOL pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int player, int maxBlockingTiles)
 {
 	STRUCTURE_STATS	*psStat;
 	UDWORD			numIterations = 30;
@@ -5610,112 +5609,82 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 	UDWORD			startX, startY, incX, incY;
 	SDWORD			x=0, y=0;
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "pickStructLocation:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
 
-    // check for wacky coords.
-	if(		*pX < 0
-		||	*pX > world_coord(mapWidth)
-		||	*pY < 0
-		||	*pY > world_coord(mapHeight)
-	  )
+	// check for wacky coords.
+	if (*pX < 0 || *pX > world_coord(mapWidth) || *pY < 0 || *pY > world_coord(mapHeight))
 	{
-		goto failedstructloc;
+		goto endstructloc;
 	}
 
 	psStat = &asStructureStats[index];			// get stat.
-	startX = map_coord(*pX);					// change to tile coords.
+	startX = map_coord(*pX);				// change to tile coords.
 	startY = map_coord(*pY);
-
 	x = startX;
 	y = startY;
 
+	// save a lot of typing... checks whether a position is valid
+	#define LOC_OK(_x, _y) ((!psDroid || fpathCheck(Vector2i_Init(map_coord(psDroid->pos.x), map_coord(psDroid->pos.y)), Vector2i_Init(_x, _y), PROPULSION_TYPE_WHEELED)) \
+	                        && validLocation((BASE_STATS*)psStat, _x, _y, player, false) && structDoubleCheck((BASE_STATS*)psStat, _x, _y, maxBlockingTiles))
+
 	// first try the original location
-	if ( validLocation((BASE_STATS*)psStat, startX, startY, player, false) )
+	if (LOC_OK(startX, startY))
 	{
-		if(structDoubleCheck((BASE_STATS*)psStat,startX,startY,maxBlockingTiles))
-		{
-			found = true;
-		}
+		found = true;
 	}
 
 	// try some locations nearby
-	if(!found)
+	for (incX = 1, incY = 1; incX < numIterations && !found; incX++, incY++)
 	{
-		for (incX = 1, incY = 1; incX < numIterations; incX++, incY++)
+		y = startY - incY;	// top
+		for (x = startX - incX; x < (SDWORD)(startX + incX); x++)
 		{
-			if (!found){			//top
-				y = startY - incY;
-				for(x = startX - incX; x < (SDWORD)(startX + incX); x++){
-					if ( validLocation((BASE_STATS*)psStat, x, y, player, false)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
-						){
-						found = true;
-						break;
-					}}}
-
-			if (!found)	{			//right
-				x = startX + incX;
-				for(y = startY - incY; y < (SDWORD)(startY + incY); y++){
-					if(validLocation((BASE_STATS*)psStat, x, y, player, false)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
-						){
-						found = true;
-						break;
-					}}}
-
-			if (!found){			//bot
-				y = startY + incY;
-				for(x = startX + incX; x > (SDWORD)(startX - incX); x--){
-					if(validLocation((BASE_STATS*)psStat, x, y, player, false)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
-						 ){
-						found = true;
-						break;
-					}}}
-
-			if (!found){			//left
-				x = startX - incX;
-				for(y = startY + incY; y > (SDWORD)(startY - incY); y--){
-					if(validLocation((BASE_STATS*)psStat, x, y, player, false)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
-						 ){
-						found = true;
-						break;
-					}}}
-
-			if (found)
+			if (LOC_OK(x, y))
 			{
-				break;
+				found = true;
+				goto endstructloc;
+			}
+		}
+		x = startX + incX;	// right
+		for (y = startY - incY; y < (SDWORD)(startY + incY); y++)
+		{
+			if (LOC_OK(x, y))
+			{
+				found = true;
+				goto endstructloc;
+			}
+		}
+		y = startY + incY;	// bottom
+		for (x = startX + incX; x > (SDWORD)(startX - incX); x--)
+		{
+			if (LOC_OK(x, y))
+			{
+				found = true;
+				goto endstructloc;
+			}
+		}
+		x = startX - incX;	// left
+		for (y = startY + incY; y > (SDWORD)(startY - incY); y--)
+		{
+			if (LOC_OK(x, y))
+			{
+				found = true;
+				goto endstructloc;
 			}
 		}
 	}
 
-	if(found)	// did It!
+endstructloc:
+	// back to world coords.
+	if (found)	// did it!
 	{
-		// back to world coords.
 		*pX = world_coord(x) + (psStat->baseWidth * (TILE_UNITS / 2));
 		*pY = world_coord(y) + (psStat->baseBreadth * (TILE_UNITS / 2));
-
-		scrFunctionResult.v.bval = true;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
-		{
-			return false;
-		}
-
-		return true;
 	}
-	else
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
 	{
-failedstructloc:
-		scrFunctionResult.v.bval = false;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// failed!
-		{
-			return false;
-		}
+		return false;
 	}
 	return true;
 }
@@ -5732,7 +5701,20 @@ BOOL scrPickStructLocation(void)
 	{
 		return false;
 	}
-	return pickStructLocation(index, pX, pY, player, MAX_BLOCKING_TILES);
+	return pickStructLocation(NULL, index, pX, pY, player, MAX_BLOCKING_TILES);
+}
+
+// pick a structure location and check that we can build there (duh!)
+BOOL scrPickStructLocationC(void)
+{
+	int			*pX, *pY, index, player, maxBlockingTiles;
+	DROID			*psDroid;
+
+	if (!stackPopParams(6, ST_DROID, &psDroid, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX , VAL_REF|VAL_INT, &pY, VAL_INT, &player, VAL_INT, &maxBlockingTiles))
+	{
+		return false;
+	}
+	return pickStructLocation(psDroid, index, pX, pY, player, maxBlockingTiles);
 }
 
 // pick a structure location(only used in skirmish game at 27Aug) ajl.
@@ -5749,7 +5731,7 @@ BOOL scrPickStructLocationB(void)
 	{
 		return false;
 	}
-	return pickStructLocation(index, pX, pY, player, maxBlockingTiles);
+	return pickStructLocation(NULL, index, pX, pY, player, maxBlockingTiles);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -11498,7 +11480,7 @@ BOOL scrAssembleWeaponTemplate(void)
 	}
 
 	// return template to scripts
-	if (!stackPushResult(ST_TEMPLATE, &scrFunctionResult))
+	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, &scrFunctionResult))
 	{
 		return false;
 	}
@@ -11728,7 +11710,7 @@ BOOL scrGettext()
 
 	scrFunctionResult.v.sval = (char*)gettext(strParam1);
 
-	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
+	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
 
 BOOL scrGettext_noop()
@@ -11780,7 +11762,7 @@ BOOL scrPgettext()
 		scrFunctionResult.v.sval = translation;
 	}
 
-	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
+	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
 
 BOOL scrPgettext_expr()
@@ -11792,7 +11774,7 @@ BOOL scrPgettext_expr()
 
 	scrFunctionResult.v.sval = (char*)pgettext_expr(strParam1, strParam2);
 
-	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
+	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
 
 BOOL scrPgettext_noop()

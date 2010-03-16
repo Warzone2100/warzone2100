@@ -862,7 +862,6 @@ event incendry(incendryTr)
 // build a power gen for every 4 derricks. VITAL!
 event buildPowerGenerators(buildPowerGeneratorsTr)
 {
-
 	initEnumStruct(FALSE,derrick,me,me);					// count = numderricks
 	structure= enumStruct();
 	count	 = 0;
@@ -883,22 +882,20 @@ event buildPowerGenerators(buildPowerGeneratorsTr)
 
 	if( (count2 * 4) < count )								// if we need powergen
 	{
-		buildX = baseX;										// try build powergen.
-		buildY = baseY;
-		boolResult = pickStructLocation(powGen, ref buildX, ref buildY,me);
-		if(boolResult == TRUE)
+		initIterateGroup(buildGroup);
+		droid = iterateGroup(buildGroup);
+		while(droid != NULLOBJECT)
 		{
-			initIterateGroup(buildGroup);
-			droid = iterateGroup(buildGroup);
-			while(droid != NULLOBJECT)
+			buildX = baseX;								// try build powergen.
+			buildY = baseY;
+			if (droid.order != DORDER_HELPBUILD and droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD and droidCanReach(droid, buildX, buildY))
 			{
-				if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
+				if (pickDroidStructLocation(droid, powGen, ref buildX, ref buildY, me, 1))
 				{
-					orderDroidStatsLoc(droid, DORDER_BUILD,powGen, buildX,buildY);
+					orderDroidStatsLoc(droid, DORDER_BUILD, powGen, buildX, buildY);
 				}
-				droid = iterateGroup(buildGroup);
 			}
-
+			droid = iterateGroup(buildGroup);
 		}
 	}
 }
