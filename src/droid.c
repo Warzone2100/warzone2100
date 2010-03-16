@@ -1067,7 +1067,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	CHECK_DROID(psDroid);
 	ASSERT_OR_RETURN(false, psDroid->action == DACTION_BUILD, "%s (order %s) has wrong action for construction: %s",
 	                 droidGetName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action));
-	ASSERT_OR_RETURN(false, psDroid->psTarget, "Trying to update a construction, but no target!");
+	ASSERT_OR_RETURN(false, psDroid->psTarget != NULL, "Trying to update a construction, but no target!");
 
 	psStruct = (STRUCTURE *)psDroid->psTarget;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure" );
@@ -3585,7 +3585,7 @@ BOOL buildModule(STRUCTURE *psStruct)
 	{
 		case REF_POWER_GEN:
 			//check room for one more!
-			ASSERT_OR_RETURN(false, psStruct->pFunctionality, "Functionality missing for power!");
+			ASSERT_OR_RETURN(false, psStruct->pFunctionality != NULL, "Functionality missing for power!");
 			if (psStruct->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
 			{
 				i = powerModuleStat;
@@ -3595,7 +3595,7 @@ BOOL buildModule(STRUCTURE *psStruct)
 		case REF_FACTORY:
 		case REF_VTOL_FACTORY:
 			//check room for one more!
-			ASSERT_OR_RETURN(false, psStruct->pFunctionality, "Functionality missing for factory!");
+			ASSERT_OR_RETURN(false, psStruct->pFunctionality != NULL, "Functionality missing for factory!");
 			if (psStruct->pFunctionality->factory.capacity < NUM_FACTORY_MODULES)
 			{
 				i = factoryModuleStat;
@@ -3604,7 +3604,7 @@ BOOL buildModule(STRUCTURE *psStruct)
 			break;
 		case REF_RESEARCH:
 			//check room for one more!
-			ASSERT_OR_RETURN(false, psStruct->pFunctionality, "Functionality missing for research!");
+			ASSERT_OR_RETURN(false, psStruct->pFunctionality != NULL, "Functionality missing for research!");
 			if (psStruct->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES)
 			{
 				i = researchModuleStat;

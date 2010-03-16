@@ -2080,7 +2080,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STA
 	STRUCTURE *blueprint;
 
 	ASSERT_OR_RETURN(NULL, psStats != NULL, "No blueprint stats");
-	ASSERT_OR_RETURN(NULL, psStats->pIMD, "No blueprint model for %s", getStatName(psStats));
+	ASSERT_OR_RETURN(NULL, psStats->pIMD != NULL, "No blueprint model for %s", getStatName(psStats));
 
 	blueprint = malloc(sizeof(STRUCTURE));
 	// construct the fake structure
@@ -7601,7 +7601,7 @@ STRUCTURE *	findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, BOOL bClear
 	SDWORD			xdiff,ydiff, mindist, currdist, totallyDist;
 	SDWORD			cx,cy;
 
-	ASSERT_OR_RETURN(NULL, psDroid, "findNearestReArmPad: No droid was passed.");
+	ASSERT_OR_RETURN(NULL, psDroid != NULL, "findNearestReArmPad: No droid was passed.");
 
 	if (psTarget != NULL)
 	{
