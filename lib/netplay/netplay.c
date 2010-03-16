@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 
 #include "netplay.h"
 #include "netlog.h"
+#include "netsocket.h"
 
 #include "miniupnpc/miniwget.h"
 #include "miniupnpc/miniupnpc.h"
@@ -45,71 +46,6 @@
 #include "src/multistat.h"
 #include "src/multijoin.h"
 #include "src/multiint.h"
-
-#if   defined(WZ_OS_UNIX)
-# include <arpa/inet.h>
-# include <errno.h>
-# include <fcntl.h>
-# include <netdb.h>
-# include <netinet/in.h>
-# include <sys/ioctl.h>
-# include <sys/socket.h>
-# include <sys/types.h>
-# include <sys/select.h>
-# include <unistd.h>
-typedef int SOCKET;
-static const SOCKET INVALID_SOCKET = -1;
-static const int SOCKET_ERROR = -1;
-#elif defined(WZ_OS_WIN)
-# include <winsock2.h>
-# include <ws2tcpip.h>
-# undef EAGAIN
-# undef EBADF
-# undef ECONNRESET
-# undef EINPROGRESS
-# undef EINTR
-# undef EISCONN
-# undef ETIMEDOUT
-# undef EWOULDBLOCK
-# define EAGAIN      WSAEWOULDBLOCK
-# define EBADF       WSAEBADF
-# define ECONNRESET  WSAECONNRESET
-# define EINPROGRESS WSAEINPROGRESS
-# define EINTR       WSAEINTR
-# define EISCONN     WSAEISCONN
-# define ETIMEDOUT   WSAETIMEDOUT
-# define EWOULDBLOCK WSAEWOULDBLOCK
-typedef SSIZE_T ssize_t;
-# ifndef AI_V4MAPPED
-#  define AI_V4MAPPED	0x0008	/* IPv4 mapped addresses are acceptable.  */
-# endif
-# ifndef AI_ADDRCONFIG
-#  define AI_ADDRCONFIG	0x0020	/* Use configuration of this host to choose returned address type..  */
-# endif
-#endif
-
-// Fallback for systems that don't #define this flag
-#ifndef MSG_NOSIGNAL
-# define MSG_NOSIGNAL 0
-#endif
-
-static int getSockErr(void)
-{
-#if   defined(WZ_OS_UNIX)
-	return errno;
-#elif defined(WZ_OS_WIN)
-	return WSAGetLastError();
-#endif
-}
-
-static void setSockErr(int error)
-{
-#if   defined(WZ_OS_UNIX)
-	errno = error;
-#elif defined(WZ_OS_WIN)
-	WSASetLastError(error);
-#endif
-}
 
 // WARNING !!! This is initialised via configuration.c !!!
 char masterserver_name[255] = {'\0'};
@@ -161,39 +97,13 @@ typedef struct
 	size_t          buffer_size;
 } NET_PLAYER_DATA;
 
-enum
-{
-	SOCK_CONNECTION,
-	SOCK_IPV4_LISTEN = SOCK_CONNECTION,
-	SOCK_IPV6_LISTEN,
-	SOCK_COUNT,
-};
-
-typedef struct
-{
-	/* Multiple socket handles only for listening sockets. This allows us
-	 * to listen on multiple protocols and address families (e.g. IPv4 and
-	 * IPv6).
-	 *
-	 * All non-listening sockets will only use the first socket handle.
-	 */
-	SOCKET fd[SOCK_COUNT];
-	bool ready;
-} Socket;
-
 typedef struct
 {
 	Socket* socket;
-	char*		buffer;
-	unsigned int	buffer_start;
-	unsigned int	bytes;
+	char*           buffer;
+	unsigned int    buffer_start;
+	unsigned int    bytes;
 } NETBUFSOCKET;
-
-typedef struct
-{
-	size_t len;
-	Socket** fds;
-} SocketSet;
 
 // ////////////////////////////////////////////////////////////////////////
 // Variables
@@ -256,996 +166,6 @@ char VersionString[VersionStringSize] = "trunk, netcode 3.32";
 static int NETCODE_VERSION_MAJOR = 2;
 static int NETCODE_VERSION_MINOR = 35;
 static int NETCODE_HASH = 0;			// unused for now
-
-static int checkSockets(const SocketSet* set, unsigned int timeout);
-
-#if defined(WZ_OS_WIN)
-static HMODULE winsock2_dll = NULL;
-static unsigned int major_windows_version = 0;
-static int (WINAPI * getaddrinfo_dll_func)(const char *node, const char *service,
-                                           const struct addrinfo *hints,
-                                           struct addrinfo **res) = NULL;
-
-static int (WINAPI * freeaddrinfo_dll_func)(struct addrinfo *res) = NULL;
-
-# define getaddrinfo  getaddrinfo_dll_dispatcher
-# define freeaddrinfo freeaddrinfo_dll_dispatcher
-
-static int getaddrinfo(const char *node, const char *service,
-                       const struct addrinfo *hints,
-                       struct addrinfo **res)
-{
-	struct addrinfo hint;
-	if (hints)
-	{
-		memcpy(&hint, hints, sizeof(hint));
-	}
-
-	switch (major_windows_version)
-	{
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		// Windows 95, 98 and ME
-		case 4:
-			debug(LOG_ERROR, "Name resolution isn't supported on this version (%u) of Windows", major_windows_version);
-			return EAI_FAIL;
-
-		// Windows 2000, XP and Server 2003
-		case 5:
-			if (hints)
-			{
-				// These flags are only supported from version 6 and onward
-				hint.ai_flags &= ~(AI_V4MAPPED | AI_ADDRCONFIG);
-			}
-		// Windows Vista and Server 2008
-		case 6:
-		// Onward (aka: in the future)
-		default:
-			if (!winsock2_dll)
-			{
-				debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
-				return EAI_FAIL;
-			}
-
-			if (!getaddrinfo_dll_func)
-			{
-				debug(LOG_ERROR, "Failed to retrieve \"getaddrinfo\" function from winsock2 DLL. Required for name resolution.");
-				return EAI_FAIL;
-			}
-
-			return getaddrinfo_dll_func(node, service, hints ? &hint: NULL, res);
-	}
-}
-
-static void freeaddrinfo(struct addrinfo *res)
-{
-	switch (major_windows_version)
-	{
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		// Windows 95, 98 and ME
-		case 4:
-			debug(LOG_ERROR, "Name resolution isn't supported on this version (%u) of Windows", major_windows_version);
-			return;
-
-		// Windows 2000, XP and Server 2003
-		case 5:
-		// Windows Vista and Server 2008
-		case 6:
-		// Onward (aka: in the future)
-		default:
-			if (!winsock2_dll)
-			{
-				debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
-				return;
-			}
-
-			if (!freeaddrinfo_dll_func)
-			{
-				debug(LOG_ERROR, "Failed to retrieve \"freeaddrinfo\" function from winsock2 DLL. Required for name resolution.");
-				return;
-			}
-
-			freeaddrinfo_dll_func(res);
-	}
-}
-#endif
-
-static int addressToText(const struct sockaddr* addr, char* buf, size_t size)
-{
-	switch (addr->sa_family)
-	{
-		case AF_INET:
-		{
-			unsigned char* address = (unsigned char*)&((const struct sockaddr_in*)addr)->sin_addr.s_addr;
-
-			return snprintf(buf, size,
-			"%hhu.%hhu.%hhu.%hhu",
-				address[0],
-				address[1],
-				address[2],
-				address[3]);
-		}
-		case AF_INET6:
-		{
-			uint16_t* address = (uint16_t*)&((const struct sockaddr_in6*)addr)->sin6_addr.s6_addr;
-
-			return snprintf(buf, size,
-			"%hx:%hx:%hx:%hx:%hx:%hx:%hx:%hx",
-				ntohs(address[0]),
-				ntohs(address[1]),
-				ntohs(address[2]),
-				ntohs(address[3]),
-				ntohs(address[4]),
-				ntohs(address[5]),
-				ntohs(address[6]),
-				ntohs(address[7]));
-		}
-		default:
-			ASSERT(!"Unknown address family", "Got non IPv4 or IPv6 address!");
-			return -1;
-	}
-}
-
-static const char* strSockError(int error)
-{
-#if   defined(WZ_OS_WIN)
-	switch (error)
-	{
-                case 0:                     return "No error";
-                case WSAEINTR:              return "Interrupted system call";
-                case WSAEBADF:              return "Bad file number";
-                case WSAEACCES:             return "Permission denied";
-                case WSAEFAULT:             return "Bad address";
-                case WSAEINVAL:             return "Invalid argument";
-                case WSAEMFILE:             return "Too many open sockets";
-                case WSAEWOULDBLOCK:        return "Operation would block";
-                case WSAEINPROGRESS:        return "Operation now in progress";
-                case WSAEALREADY:           return "Operation already in progress";
-                case WSAENOTSOCK:           return "Socket operation on non-socket";
-                case WSAEDESTADDRREQ:       return "Destination address required";
-                case WSAEMSGSIZE:           return "Message too long";
-                case WSAEPROTOTYPE:         return "Protocol wrong type for socket";
-                case WSAENOPROTOOPT:        return "Bad protocol option";
-                case WSAEPROTONOSUPPORT:    return "Protocol not supported";
-                case WSAESOCKTNOSUPPORT:    return "Socket type not supported";
-                case WSAEOPNOTSUPP:         return "Operation not supported on socket";
-                case WSAEPFNOSUPPORT:       return "Protocol family not supported";
-                case WSAEAFNOSUPPORT:       return "Address family not supported";
-                case WSAEADDRINUSE:         return "Address already in use";
-                case WSAEADDRNOTAVAIL:      return "Can't assign requested address";
-                case WSAENETDOWN:           return "Network is down";
-                case WSAENETUNREACH:        return "Network is unreachable";
-                case WSAENETRESET:          return "Net connection reset";
-                case WSAECONNABORTED:       return "Software caused connection abort";
-                case WSAECONNRESET:         return "Connection reset by peer";
-                case WSAENOBUFS:            return "No buffer space available";
-                case WSAEISCONN:            return "Socket is already connected";
-                case WSAENOTCONN:           return "Socket is not connected";
-                case WSAESHUTDOWN:          return "Can't send after socket shutdown";
-                case WSAETOOMANYREFS:       return "Too many references, can't splice";
-                case WSAETIMEDOUT:          return "Connection timed out";
-                case WSAECONNREFUSED:       return "Connection refused";
-                case WSAELOOP:              return "Too many levels of symbolic links";
-                case WSAENAMETOOLONG:       return "File name too long";
-                case WSAEHOSTDOWN:          return "Host is down";
-                case WSAEHOSTUNREACH:       return "No route to host";
-                case WSAENOTEMPTY:          return "Directory not empty";
-                case WSAEPROCLIM:           return "Too many processes";
-                case WSAEUSERS:             return "Too many users";
-                case WSAEDQUOT:             return "Disc quota exceeded";
-                case WSAESTALE:             return "Stale NFS file handle";
-                case WSAEREMOTE:            return "Too many levels of remote in path";
-                case WSASYSNOTREADY:        return "Network system is unavailable";
-                case WSAVERNOTSUPPORTED:    return "Winsock version out of range";
-                case WSANOTINITIALISED:     return "WSAStartup not yet called";
-                case WSAEDISCON:            return "Graceful shutdown in progress";
-                case WSAHOST_NOT_FOUND:     return "Host not found";
-                case WSANO_DATA:            return "No host data of that type was found";
-		default:                    return "Unknown error";
-	}
-#elif defined(WZ_OS_UNIX)
-	return strerror(error);
-#endif
-}
-
-/**
- * Test whether the given socket still has an open connection.
- *
- * @return true when the connection is open, false when it's closed or in an
- *         error state, check getSockErr() to find out which.
- */
-static bool connectionIsOpen(Socket* sock)
-{
-	Socket* sockAr[] = { sock };
-	const SocketSet set = { ARRAY_SIZE(sockAr), sockAr };
-	int ret;
-
-	ASSERT_OR_RETURN((setSockErr(EBADF), false),
-		sock && sock->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid socket");
-
-	// Check whether the socket is still connected
-	ret = checkSockets(&set, 0);
-	if (ret == SOCKET_ERROR)
-	{
-		return false;
-	}
-	else if (ret == set.len
-	      && sock->ready)
-	{
-		/* The next recv(2) call won't block, but we're writing. So
-		 * check the read queue to see if the connection is closed.
-		 * If there's no data in the queue that means the connection
-		 * is closed.
-		 */
-#if defined(WZ_OS_WIN)
-		unsigned long readQueue;
-		ret = ioctlsocket(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
-#else
-		int readQueue;
-		ret = ioctl(sock->fd[SOCK_CONNECTION], FIONREAD, &readQueue);
-#endif
-		if (ret == SOCKET_ERROR)
-		{
-			debug(LOG_NET, "socket error");
-			return false;
-		}
-		else if (readQueue == 0)
-		{
-			// Disconnected
-			setSockErr(ECONNRESET);
-			debug(LOG_NET, "Read queue empty - failing (ECONNRESET)");
-			return false;
-		}
-	}
-
-	return true;
-}
-
-/**
- * Similar to read(2) with the exception that this function won't be
- * interrupted by signals (EINTR).
- */
-static ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
-{
-	ssize_t received;
-
-	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
-	{
-		debug(LOG_ERROR, "Invalid socket");
-		setSockErr(EBADF);
-		return SOCKET_ERROR;
-	}
-
-	do
-	{
-		received = recv(sock->fd[SOCK_CONNECTION], buf, max_size, 0);
-	} while (received == SOCKET_ERROR && getSockErr() == EINTR);
-
-	sock->ready = false;
-
-	return received;
-}
-
-/**
- * Similar to write(2) with the exception that this function will block until
- * <em>all</em> data has been written or an error occurs.
- *
- * @return @c size when succesful or @c SOCKET_ERROR if an error occurred.
- */
-static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
-{
-	size_t written = 0;
-
-	if (!sock
-	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
-	{
-		debug(LOG_ERROR, "Invalid socket (EBADF)");
-		setSockErr(EBADF);
-		return SOCKET_ERROR;
-	}
-
-	while (written < size)
-	{
-		ssize_t ret;
-
-		ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, MSG_NOSIGNAL);
-		if (ret == SOCKET_ERROR)
-		{
-			switch (getSockErr())
-			{
-				case EAGAIN:
-#if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
-				case EWOULDBLOCK:
-#endif
-					if (!connectionIsOpen(sock))
-					{
-						debug(LOG_NET, "Socket error");
-						return SOCKET_ERROR;
-					}
-				case EINTR:
-					continue;
-#if defined(EPIPE)
-				case EPIPE:
-					debug(LOG_NET, "EPIPE generated");
-					// fall through
-#endif
-				default:
-					return SOCKET_ERROR;
-			}
-		}
-
-		written += ret;
-	}
-
-	return written;
-}
-
-static SocketSet* allocSocketSet(size_t count)
-{
-	SocketSet* const set = malloc(sizeof(*set) + sizeof(set->fds[0]) * count);
-	if (set == NULL)
-	{
-		debug(LOG_ERROR, "Out of memory!");
-		abort();
-		return NULL;
-	}
-
-	set->len = count;
-	set->fds = (Socket**)(set + 1);
-	memset(set->fds, 0, sizeof(set->fds[0]) * count);
-
-	return set;
-}
-
-/**
- * Add the given socket to the given socket set.
- *
- * @return true if @c socket is succesfully added to @set.
- */
-static bool SocketSet_AddSocket(SocketSet* set, Socket* socket)
-{
-	size_t i;
-
-	ASSERT_OR_RETURN(false, set != NULL, "NULL SocketSet provided");
-	ASSERT_OR_RETURN(false, socket != NULL, "NULL Socket provided");
-
-	/* Check whether this socket is already present in this set (i.e. it
-	 * shouldn't be added again).
-	 */
-	for (i = 0; i < set->len; ++i)
-	{
-		if (set->fds[i] == socket)
-		{
-			debug(LOG_NET, "Already found, socket: (set->fds[%lu]) %p", (unsigned long) i, socket);
-			return true;
-		}
-	}
-
-	for (i = 0; i < set->len; ++i)
-	{
-		if (set->fds[i] == NULL)
-		{
-			set->fds[i] = socket;
-			debug(LOG_NET, "Socket added: set->fds[%lu] = %p", (unsigned long) i, socket);
-			return true;
-		}
-	}
-
-	debug(LOG_ERROR, "Socket set full, no room left (max %zu)", set->len);
-
-	return false;
-}
-
-/**
- * Remove the given socket from the given socket set.
- */
-static void SocketSet_DelSocket(SocketSet* set, Socket* socket)
-{
-	size_t i;
-
-	ASSERT_OR_RETURN(, set != NULL, "NULL SocketSet provided");
-	ASSERT_OR_RETURN(, socket != NULL, "NULL Socket provided");
-
-	for (i = 0; i < set->len; ++i)
-	{
-		if (set->fds[i] == socket)
-		{
-			debug(LOG_NET, "Socket %p nullified (set->fds[%lu])", socket, (unsigned long) i);
-			set->fds[i] = NULL;
-			break;
-		}
-	}
-}
-
-static bool setSocketBlocking(const SOCKET fd, bool blocking)
-{
-#if   defined(WZ_OS_UNIX)
-	int sockopts = fcntl(fd, F_GETFL);
-	if (sockopts == SOCKET_ERROR)
-	{
-		debug(LOG_NET, "Failed to retrieve current socket options: %s", strSockError(getSockErr()));
-		return false;
-	}
-
-	// Set or clear O_NONBLOCK flag
-	if (blocking)
-		sockopts &= ~O_NONBLOCK;
-	else
-		sockopts |= O_NONBLOCK;
-
-	if (fcntl(fd, F_SETFL, sockopts) == SOCKET_ERROR)
-#elif defined(WZ_OS_WIN)
-	unsigned long nonblocking = !blocking;
-	if (ioctlsocket(fd, FIONBIO, &nonblocking) == SOCKET_ERROR)
-#endif
-	{
-		debug(LOG_NET, "Failed to set socket %sblocking: %s", (blocking ? "" : "non-"), strSockError(getSockErr()));
-		return false;
-	}
-
-	debug(LOG_NET, "Socket is set to %sblocking.", (blocking ? "" : "non-"));
-	return true;
-}
-
-static void socketBlockSIGPIPE(const SOCKET fd, bool block_sigpipe)
-{
-#if defined(SO_NOSIGPIPE)
-	const int no_sigpipe = block_sigpipe ? 1 : 0;
-
-	if (setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) == SOCKET_ERROR)
-	{
-		debug(LOG_INFO, "Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connections gets broken. Error: %s", strSockError(getSockErr()));
-	}
-	// this is only for unix, windows don't have SIGPIPE
-	debug(LOG_NET, "Socket fd %x sets SIGPIPE to %sblocked.", fd, (block_sigpipe ? "" : "non-"));
-#else
-	// Prevent warnings
-	(void)fd;
-	(void)block_sigpipe;
-#endif
-}
-
-static int checkSockets(const SocketSet* set, unsigned int timeout)
-{
-	int ret;
-	fd_set fds;
-	size_t count = 0, i;
-#if   defined(WZ_OS_UNIX)
-	SOCKET maxfd = INT_MIN;
-#elif defined(WZ_OS_WIN)
-	SOCKET maxfd = 0;
-#endif
-
-	for (i = 0; i < set->len; ++i)
-	{
-		if (set->fds[i])
-		{
-			ASSERT(set->fds[i]->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid file descriptor!");
-
-			++count;
-			maxfd = MAX(maxfd, set->fds[i]->fd[SOCK_CONNECTION]);
-		}
-	}
-
-	if (!count)
-		return 0;
-
-	do
-	{
-		struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
-
-		FD_ZERO(&fds);
-		for (i = 0; i < set->len; ++i)
-		{
-			if (set->fds[i])
-			{
-				const SOCKET fd = set->fds[i]->fd[SOCK_CONNECTION];
-
-				FD_SET(fd, &fds);
-			}
-		}
-
-		ret = select(maxfd + 1, &fds, NULL, NULL, &tv);
-	} while (ret == SOCKET_ERROR && getSockErr() == EINTR);
-
-	if (ret == SOCKET_ERROR)
-	{
-		debug(LOG_ERROR, "select failed: %s", strSockError(getSockErr()));
-		return SOCKET_ERROR;
-	}
-
-	for (i = 0; i < set->len; ++i)
-	{
-		if (set->fds[i])
-		{
-			set->fds[i]->ready = FD_ISSET(set->fds[i]->fd[SOCK_CONNECTION], &fds);
-		}
-	}
-
-	return ret;
-}
-
-/**
- * Similar to read(2) with the exception that this function won't be
- * interrupted by signals (EINTR) and will only return when <em>exactly</em>
- * @c size bytes have been received. I.e. this function blocks until all data
- * has been received or a timeout occurred.
- *
- * @param timeout When non-zero this function times out after @c timeout
- *                milliseconds. When zero this function blocks until success or
- *                an error occurs.
- *
- * @c return @c size when succesful, less than @c size but at least zero (0)
- * when the other end disconnected or a timeout occurred. Or @c SOCKET_ERROR if
- * an error occurred.
- */
-static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
-{
-	Socket* sockAr[] = { sock };
-	const SocketSet set = { ARRAY_SIZE(sockAr), sockAr };
-
-	size_t received = 0;
-
-	if (!sock
-	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
-	{
-		debug(LOG_ERROR, "Invalid socket (%p), sock->fd[SOCK_CONNECTION]=%x  (error: EBADF)", sock, sock->fd[SOCK_CONNECTION]);
-		setSockErr(EBADF);
-		return SOCKET_ERROR;
-	}
-
-	while (received < size)
-	{
-		ssize_t ret;
-
-		// If a timeout is set, wait for that amount of time for data to arrive (or abort)
-		if (timeout)
-		{
-			ret = checkSockets(&set, timeout);
-			if (ret < set.len
-			 || !sock->ready)
-			{
-				if (ret == 0)
-				{
-					debug(LOG_NET, "socket (%p) has timed out.", socket);
-					setSockErr(ETIMEDOUT);
-				}
-				debug(LOG_NET, "socket (%p) error.", socket);
-				return SOCKET_ERROR;
-			}
-		}
-
-		ret = recv(sock->fd[SOCK_CONNECTION], &((char*)buf)[received], size - received, 0);
-		sock->ready = false;
-		if (ret == 0)
-		{
-			debug(LOG_NET, "Socket %x disconnected.", sock->fd[SOCK_CONNECTION]);
-			setSockErr(ECONNRESET);
-			return received;
-		}
-
-		if (ret == SOCKET_ERROR)
-		{
-			switch (getSockErr())
-			{
-				case EAGAIN:
-#if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
-				case EWOULDBLOCK:
-#endif
-				case EINTR:
-					continue;
-
-				default:
-					return SOCKET_ERROR;
-			}
-		}
-
-		received += ret;
-	}
-
-	return received;
-}
-
-static void socketClose(Socket* sock)
-{
-	unsigned int i;
-	int err = 0;
-
-	if (sock)
-	{
-		for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
-		{
-			if (sock->fd[i] != INVALID_SOCKET)
-			{
-#if   defined(WZ_OS_WIN)
-				err = closesocket(sock->fd[i]);
-#else
-				err = close(sock->fd[i]);
-#endif
-				if (err)
-				{
-					debug(LOG_ERROR, "Failed to close socket %p: %s", sock, strSockError(getSockErr()));
-				}
-
-				/* Make sure that dangling pointers to this
-				 * structure don't think they've got their
-				 * hands on a valid socket.
-				 */
-				sock->fd[i] = INVALID_SOCKET;
-			}
-		}
-		free(sock);
-		sock = NULL;
-	}
-}
-
-static Socket* socketAccept(Socket* sock)
-{
-	unsigned int i;
-
-	ASSERT(sock != NULL, "NULL Socket provided");
-
-	/* Search for a socket that has a pending connection on it and accept
-	 * the first one.
-	 */
-	for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
-	{
-		if (sock->fd[i] != INVALID_SOCKET)
-		{
-			char textAddress[40];
-			struct sockaddr_storage addr;
-			socklen_t addr_len = sizeof(addr);
-			Socket* conn;
-			unsigned int j;
-
-			const SOCKET newConn = accept(sock->fd[i], (struct sockaddr*)&addr, &addr_len);
-			if (newConn == INVALID_SOCKET)
-			{
-				// Ignore the case where no connection is pending
-				if (getSockErr() != EAGAIN
-				 && getSockErr() != EWOULDBLOCK)
-				{
-					debug(LOG_ERROR, "accept failed for socket %p: %s", sock, strSockError(getSockErr()));
-				}
-
-				continue;
-			}
-
-			socketBlockSIGPIPE(newConn, true);
-
-			conn = malloc(sizeof(*conn) + addr_len);
-			if (conn == NULL)
-			{
-				debug(LOG_ERROR, "Out of memory!");
-				abort();
-				return NULL;
-			}
-
-			// Mark all unused socket handles as invalid
-			for (j = 0; j < ARRAY_SIZE(conn->fd); ++j)
-			{
-				conn->fd[j] = INVALID_SOCKET;
-			}
-
-			conn->ready = false;
-			conn->fd[SOCK_CONNECTION] = newConn;
-
-			sock->ready = false;
-
-			addressToText((const struct sockaddr*)&addr, textAddress, sizeof(textAddress));
-			debug(LOG_NET, "Incoming connection from [%s]:%d", textAddress, (unsigned int)ntohs(((const struct sockaddr_in*)&addr)->sin_port));
-			debug(LOG_NET, "Using socket %p", conn);
-			return conn;
-		}
-	}
-
-	return NULL;
-}
-
-static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
-{
-	char textAddress[40];
-	unsigned int i;
-	int ret;
-
-	Socket* const conn = malloc(sizeof(*conn));
-	if (conn == NULL)
-	{
-		debug(LOG_ERROR, "Out of memory!");
-		abort();
-		return NULL;
-	}
-
-	ASSERT(addr != NULL, "NULL Socket provided");
-
-	addressToText(addr->ai_addr, textAddress, sizeof(textAddress));
-	debug(LOG_NET, "Connecting to [%s]:%d", textAddress, (int)ntohs(((const struct sockaddr_in*)addr->ai_addr)->sin_port));
-
-	// Mark all unused socket handles as invalid
-	for (i = 0; i < ARRAY_SIZE(conn->fd); ++i)
-	{
-		conn->fd[i] = INVALID_SOCKET;
-	}
-
-	conn->ready = false;
-	conn->fd[SOCK_CONNECTION] = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
-
-	if (conn->fd[SOCK_CONNECTION] == INVALID_SOCKET)
-	{
-		debug(LOG_ERROR, "Failed to create a socket (%p): %s", conn, strSockError(getSockErr()));
-		socketClose(conn);
-		return NULL;
-	}
-
-	debug(LOG_NET, "setting socket (%p) blocking status (false).", conn);
-	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], false))
-	{
-		debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", conn);
-		socketClose(conn);
-		return NULL;
-	}
-
-	socketBlockSIGPIPE(conn->fd[SOCK_CONNECTION], true);
-
-	ret = connect(conn->fd[SOCK_CONNECTION], addr->ai_addr, addr->ai_addrlen);
-	if (ret == SOCKET_ERROR)
-	{
-		fd_set conReady;
-#if   defined(WZ_OS_WIN)
-		fd_set conFailed;
-#endif
-
-		if ((getSockErr() != EINPROGRESS
-		  && getSockErr() != EAGAIN
-		  && getSockErr() != EWOULDBLOCK)
-#if   defined(WZ_OS_UNIX)
-		 || conn->fd[SOCK_CONNECTION] >= FD_SETSIZE
-#endif
-		 || timeout == 0)
-		{
-			debug(LOG_NET, "Failed to start connecting: %s, using socket %p", strSockError(getSockErr()), conn);
-			socketClose(conn);
-			return NULL;
-		}
-
-		do
-		{
-			struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
-
-			FD_ZERO(&conReady);
-			FD_SET(conn->fd[SOCK_CONNECTION], &conReady);
-#if   defined(WZ_OS_WIN)
-			FD_ZERO(&conFailed);
-			FD_SET(conn->fd[SOCK_CONNECTION], &conFailed);
-#endif
-
-#if   defined(WZ_OS_WIN)
-			ret = select(conn->fd[SOCK_CONNECTION] + 1, NULL, &conReady, &conFailed, &tv);
-#else
-			ret = select(conn->fd[SOCK_CONNECTION] + 1, NULL, &conReady, NULL, &tv);
-#endif
-		} while (ret == SOCKET_ERROR && getSockErr() == EINTR);
-
-		if (ret == SOCKET_ERROR)
-		{
-			debug(LOG_NET, "Failed to wait for connection: %s, socket %p.  Closing.", strSockError(getSockErr()), conn);
-			socketClose(conn);
-			return NULL;
-		}
-
-		if (ret == 0)
-		{
-			setSockErr(ETIMEDOUT);
-			debug(LOG_NET, "Timed out while waiting for connection to be established: %s, using socket %p.  Closing.", strSockError(getSockErr()), conn);
-			socketClose(conn);
-			return NULL;
-		}
-
-#if   defined(WZ_OS_WIN)
-		ASSERT(FD_ISSET(conn->fd[SOCK_CONNECTION], &conReady) || FD_ISSET(conn->fd[SOCK_CONNECTION], &conFailed), "\"sock\" is the only file descriptor in set, it should be the one that is set.");
-#else
-		ASSERT(FD_ISSET(conn->fd[SOCK_CONNECTION], &conReady), "\"sock\" is the only file descriptor in set, it should be the one that is set.");
-#endif
-
-#if   defined(WZ_OS_WIN)
-		if (FD_ISSET(conn->fd[SOCK_CONNECTION], &conFailed))
-#elif defined(WZ_OS_UNIX)
-		if (connect(conn->fd[SOCK_CONNECTION], addr->ai_addr, addr->ai_addrlen) == SOCKET_ERROR
-		 && getSockErr() != EISCONN)
-#endif
-		{
-			debug(LOG_NET, "Failed to connect: %s, with socket %p.  Closing.", strSockError(getSockErr()), conn);
-			socketClose(conn);
-			return NULL;
-		}
-	}
-
-	debug(LOG_NET, "setting socket (%p) blocking status (true).", conn);
-	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], true))
-	{
-		debug(LOG_NET, "Failed to set socket %p blocking status (true).  Closing.", conn);
-		socketClose(conn);
-		return NULL;
-	}
-
-	return conn;
-}
-
-static Socket* socketListen(unsigned int port)
-{
-	/* Enable the V4 to V6 mapping, but only when available, because it
-	 * isn't available on all platforms.
-	 */
-#if defined(IPV6_V6ONLY)
-	static const int ipv6_v6only = 0;
-#endif
-	static const int so_reuseaddr = 1;
-
-	struct sockaddr_in addr4;
-	struct sockaddr_in6 addr6;
-	unsigned int i;
-
-	Socket* const conn = malloc(sizeof(*conn));
-	if (conn == NULL)
-	{
-		debug(LOG_ERROR, "Out of memory!");
-		abort();
-		return NULL;
-	}
-
-	// Mark all unused socket handles as invalid
-	for (i = 0; i < ARRAY_SIZE(conn->fd); ++i)
-	{
-		conn->fd[i] = INVALID_SOCKET;
-	}
-
-	// Listen on all local IPv4 and IPv6 addresses for the given port
-	addr4.sin_family      = AF_INET;
-	addr4.sin_port        = htons(port);
-	addr4.sin_addr.s_addr = INADDR_ANY;
-
-	addr6.sin6_family   = AF_INET6;
-	addr6.sin6_port     = htons(port);
-	addr6.sin6_addr     = in6addr_any;
-	addr6.sin6_flowinfo = 0;
-	addr6.sin6_scope_id = 0;
-
-	conn->ready = false;
-	conn->fd[SOCK_IPV4_LISTEN] = socket(addr4.sin_family, SOCK_STREAM, 0);
-	conn->fd[SOCK_IPV6_LISTEN] = socket(addr6.sin6_family, SOCK_STREAM, 0);
-
-	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
-	 && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
-	{
-		debug(LOG_ERROR, "Failed to create an IPv4 and IPv6 (only supported address families) socket (%p): %s.  Closing.", conn, strSockError(getSockErr()));
-		socketClose(conn);
-		return NULL;
-	}
-
-	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
-	{
-		debug(LOG_NET, "Successfully created an IPv4 socket (%p)", conn);
-	}
-
-	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
-	{
-		debug(LOG_NET, "Successfully created an IPv6 socket (%p)", conn);
-	}
-
-#if defined(IPV6_V6ONLY)
-	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
-	{
-		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, &ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
-		{
-			debug(LOG_INFO, "Failed to set IPv6 socket to perform IPv4 to IPv6 mapping. Falling back to using two sockets. Error: %s", strSockError(getSockErr()));
-		}
-		else
-		{
-			debug(LOG_NET, "Successfully enabled IPv4 to IPv6 mapping. Cleaning up IPv4 socket.");
-#if   defined(WZ_OS_WIN)
-			closesocket(conn->fd[SOCK_IPV4_LISTEN]);
-#else
-			close(conn->fd[SOCK_IPV4_LISTEN]);
-#endif
-			conn->fd[SOCK_IPV4_LISTEN] = INVALID_SOCKET;
-		}
-	}
-#endif
-
-	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
-	{
-		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, &so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
-		{
-			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv4 socket. Error: %s", strSockError(getSockErr()));
-		}
-
-		debug(LOG_NET, "setting socket (%p) blocking status (false, IPv4).", conn);
-		if (bind(conn->fd[SOCK_IPV4_LISTEN], (const struct sockaddr*)&addr4, sizeof(addr4)) == SOCKET_ERROR
-		 || listen(conn->fd[SOCK_IPV4_LISTEN], 5) == SOCKET_ERROR
-		 || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false))
-		{
-			debug(LOG_ERROR, "Failed to set up IPv4 socket for listening on port %u: %s", port, strSockError(getSockErr()));
-#if   defined(WZ_OS_WIN)
-			closesocket(conn->fd[SOCK_IPV4_LISTEN]);
-#else
-			close(conn->fd[SOCK_IPV4_LISTEN]);
-#endif
-			conn->fd[SOCK_IPV4_LISTEN] = INVALID_SOCKET;
-		}
-	}
-
-	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
-	{
-		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, &so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
-		{
-			debug(LOG_INFO, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
-		}
-
-		debug(LOG_NET, "setting socket (%p) blocking status (false, IPv6).", conn);
-		if (bind(conn->fd[SOCK_IPV6_LISTEN], (const struct sockaddr*)&addr6, sizeof(addr6)) == SOCKET_ERROR
-		 || listen(conn->fd[SOCK_IPV6_LISTEN], 5) == SOCKET_ERROR
-		 || !setSocketBlocking(conn->fd[SOCK_IPV6_LISTEN], false))
-		{
-			debug(LOG_ERROR, "Failed to set up IPv6 socket for listening on port %u: %s", port, strSockError(getSockErr()));
-#if   defined(WZ_OS_WIN)
-			closesocket(conn->fd[SOCK_IPV6_LISTEN]);
-#else
-			close(conn->fd[SOCK_IPV6_LISTEN]);
-#endif
-			conn->fd[SOCK_IPV6_LISTEN] = INVALID_SOCKET;
-		}
-	}
-
-	// Check whether we still have at least a single (operating) socket.
-	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
-	 && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
-	{
-		debug(LOG_NET, "No IPv4 or IPv6 sockets created.");
-		socketClose(conn);
-		return NULL;
-	}
-
-	return conn;
-}
-
-static struct addrinfo* resolveHost(const char* host, unsigned int port)
-{
-	struct addrinfo* results;
-	char* service;
-	struct addrinfo hint;
-	int error, flags = 0;
-
-	hint.ai_family    = AF_UNSPEC;
-	hint.ai_socktype  = SOCK_STREAM;
-	hint.ai_protocol  = 0;
-#ifdef AI_V4MAPPED
-	flags             |= AI_V4MAPPED;
-#endif
-#ifdef AI_ADDRCONFIG
-	flags             |= AI_ADDRCONFIG;
-#endif
-	hint.ai_flags     = flags;
-	hint.ai_addrlen   = 0;
-	hint.ai_addr      = NULL;
-	hint.ai_canonname = NULL;
-	hint.ai_next      = NULL;
-
-	sasprintf(&service, "%u", port);
-
-	error = getaddrinfo(host, service, &hint, &results);
-	if (error != 0)
-	{
-		debug(LOG_NET, "getaddrinfo failed for %s:%s: %s", host, service, gai_strerror(error));
-		return NULL;
-	}
-
-	return results;
-}
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -1315,9 +235,7 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 	char* bufstart = bs->buffer + bs->buffer_start + bs->bytes;
 	const int bufsize = NET_BUFFER_SIZE - bs->buffer_start - bs->bytes;
 
-
-	if (bs->buffer_start != 0
-	 || !bs->socket->ready)
+	if (bs->buffer_start != 0 || !socketReadReady(bs->socket))
 	{
 		return false;
 	}
@@ -1367,6 +285,21 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 	}
 
 	return false;
+}
+
+static uint16_t htons(uint16_t h)
+{
+	uint8_t n[2] = {h>>8, h};
+	uint16_t n_;
+	memcpy(&n_, n, 2);
+	return n_;
+}
+
+static uint16_t ntohs(uint16_t n_)
+{
+	uint8_t n[2];
+	memcpy(&n, &n_, 2);
+	return n[0]<<8 | n[1];
 }
 
 // Check if we have a full message waiting for us. If not, return false and wait for more data.
@@ -1680,6 +613,21 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
 	return true;
 }
 
+static uint32_t htonl(uint32_t h)
+{
+	uint8_t n[4] = {h>>24, h>>16, h>>8, h};
+	uint32_t n_;
+	memcpy(&n_, n, 4);
+	return n_;
+}
+
+static uint32_t ntohl(uint32_t n_)
+{
+	uint8_t n[4];
+	memcpy(&n, &n_, 4);
+	return n[0]<<24 | n[1]<<16 | n[2]<<8 | n[3];
+}
+
 /**
  * @note \c game is being sent to the master server (if hosting)
  *       The implementation of NETsendGAMESTRUCT <em>must</em> guarantee to
@@ -1829,7 +777,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	if (tcp_socket == NULL
 	 || socket_set == NULL
 	 || checkSockets(socket_set, NET_TIMEOUT_DELAY) <= 0
-	 || !tcp_socket->ready
+	 || !socketReadReady(tcp_socket)
 	 || (result = readNoInt(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
 		unsigned int time = SDL_GetTicks();
@@ -2068,31 +1016,12 @@ int NETinit(BOOL bFirstCall)
 
 	debug(LOG_NET, "NETinit");
 	NET_InitPlayers();
+
+	SOCKETinit();
+
 	if(bFirstCall)
 	{
 		debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
-
-#if defined(WZ_OS_WIN)
-		{
-			static WSADATA stuff;
-			WORD ver_required = (2 << 8) + 2;
-			if (WSAStartup(ver_required, &stuff) != 0)
-			{
-				debug(LOG_ERROR, "Failed to initialize Winsock: %s", strSockError(getSockErr()));
-				return -1;
-			}
-		}
-
-		winsock2_dll = LoadLibraryA("ws2_32.dll");
-		if (winsock2_dll)
-		{
-			getaddrinfo_dll_func = GetProcAddress(winsock2_dll, "getaddrinfo");
-			freeaddrinfo_dll_func = GetProcAddress(winsock2_dll, "freeaddrinfo");
-		}
-
-		// Determine major Windows version
-		major_windows_version = LOBYTE(LOWORD(GetVersion()));
-#endif
 
 		for(i = 0; i < MAX_PLAYERS; i++)
 		{
@@ -2125,17 +1054,7 @@ int NETshutdown(void)
 
 	NETstopLogging();
 
-#if defined(WZ_OS_WIN)
-	WSACleanup();
-
-	if (winsock2_dll)
-	{
-		FreeLibrary(winsock2_dll);
-		winsock2_dll = NULL;
-		getaddrinfo_dll_func = NULL;
-		freeaddrinfo_dll_func = NULL;
-	}
-#endif
+	SOCKETshutdown();
 
 	if (NetPlay.bComms && NetPlay.isUPNP)
 	{
@@ -2186,7 +1105,7 @@ int NETclose(void)
 	if (tmp_socket_set)
 	{
 		debug(LOG_NET, "Freeing tmp_socket_set %p", tmp_socket_set);
-		free(tmp_socket_set);
+		deleteSocketSet(tmp_socket_set);
 		tmp_socket_set=NULL;
 	}
 
@@ -2209,7 +1128,7 @@ int NETclose(void)
 			SocketSet_DelSocket(socket_set, tcp_socket);
 		}
 		debug(LOG_NET, "Freeing socket_set %p", socket_set);
-		free(socket_set);
+		deleteSocketSet(socket_set);
 		socket_set=NULL;
 	}
 	if (tcp_socket)
@@ -3055,7 +1974,7 @@ error:
 
 static void NETregisterServer(int state)
 {
-	static Socket* rs_socket[2] = { NULL };
+	static Socket* rs_socket[2] = {NULL, NULL};
 	static int registered = 0;
 	unsigned int i;
 
@@ -3072,8 +1991,7 @@ static void NETregisterServer(int state)
 			{
 				bool succesful = false;
 				uint32_t gameId = 0;
-				struct addrinfo* cur;
-				struct addrinfo* const hosts = resolveHost(masterserver_name, masterserver_port);
+				SocketAddress *const hosts = resolveHost(masterserver_name, masterserver_port);
 
 				if (hosts == NULL)
 				{
@@ -3084,21 +2002,9 @@ static void NETregisterServer(int state)
 					return;
 				}
 
-				for (cur = hosts; cur; cur = cur->ai_next)
-				{
-					for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
-					{
-						if (rs_socket[i] == NULL)
-							break;
-					}
-					if (i >= ARRAY_SIZE(rs_socket))
-						break;
-
-					if (cur->ai_family == AF_INET
-					 || cur->ai_family == AF_INET6)
-						rs_socket[i] = SocketOpen(cur, 15000);
-				}
-				freeaddrinfo(hosts);
+				socketArrayClose(rs_socket, ARRAY_SIZE(rs_socket));  // Make sure there aren't any leftover sockets.
+				socketArrayOpen(rs_socket, ARRAY_SIZE(rs_socket), hosts, 15000);
+				deleteSocketAddress(hosts);
 
 				if (rs_socket[0] == NULL)
 				{
@@ -3118,14 +2024,7 @@ static void NETregisterServer(int state)
 					debug(LOG_ERROR, "%s", NetPlay.MOTD);
 
 					// The sockets have been invalidated, so get rid of it. (using them now may cause SIGPIPE).
-					for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
-					{
-						if (rs_socket[i] == NULL)
-							continue;
-
-						socketClose(rs_socket[i]);
-						rs_socket[i] = NULL;
-					}
+					socketArrayClose(rs_socket, ARRAY_SIZE(rs_socket));
 					server_not_there = true;
 					return;
 				}
@@ -3175,14 +2074,7 @@ static void NETregisterServer(int state)
 
 			case 0:
 				// we don't need this anymore, so clean up
-				for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
-				{
-					if (rs_socket[i] == NULL)
-						continue;
-
-					socketClose(rs_socket[i]);
-					rs_socket[i] = NULL;
-				}
+				socketArrayClose(rs_socket, ARRAY_SIZE(rs_socket));
 			break;
 		}
 		registered=state;
@@ -3217,7 +2109,7 @@ static void NETallowJoining(void)
 	{
 		// initialize server socket set
 		// FIXME: why is this not done in NETinit()?? - Per
-		tmp_socket_set = allocSocketSet(MAX_TMP_SOCKETS+1);
+		tmp_socket_set = allocSocketSet();
 		if (tmp_socket_set == NULL)
 		{
 			debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
@@ -3246,7 +2138,7 @@ static void NETallowJoining(void)
 	{
 		SocketSet_AddSocket(tmp_socket_set, tmp_socket[i]);
 		if (checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
-		    && tmp_socket[i]->ready
+		    && socketReadReady(tmp_socket[i])
 		    && (recv_result = readNoInt(tmp_socket[i], buffer, 5))
 		    && recv_result != SOCKET_ERROR)
 		{
@@ -3305,7 +2197,7 @@ static void NETallowJoining(void)
 		for(i = 0; i < MAX_TMP_SOCKETS; ++i)
 		{
 			if (   tmp_socket[i] != NULL
-			    && tmp_socket[i]->ready)
+			    && socketReadReady(tmp_socket[i]))
 			{
 				ssize_t size = readNoInt(tmp_socket[i], &NetMsg, sizeof(NetMsg));
 
@@ -3492,7 +2384,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	}
 	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
 	// Host needs to create a socket set for MAX_PLAYERS
-	if(!socket_set) socket_set = allocSocketSet(MAX_CONNECTED_PLAYERS);
+	if(!socket_set) socket_set = allocSocketSet();
 	if (socket_set == NULL)
 	{
 		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
@@ -3571,8 +2463,7 @@ BOOL NEThaltJoining(void)
 // find games on open connection
 BOOL NETfindGame(void)
 {
-	struct addrinfo* cur;
-	struct addrinfo* hosts;
+	SocketAddress* hosts;
 	unsigned int gamecount = 0;
 	uint32_t gamesavailable;
 	unsigned int port = (hostname == masterserver_name) ? masterserver_port : gameserver_port;
@@ -3632,28 +2523,24 @@ BOOL NETfindGame(void)
 		tcp_socket = NULL;
 	}
 
-	for (cur = hosts; cur; cur = cur->ai_next)
-	{
-		tcp_socket = SocketOpen(cur, 15000);
-		if (tcp_socket)
-			break;
-	}
+	tcp_socket = socketOpenAny(hosts, 15000);
+	
+	deleteSocketAddress(hosts);
+	hosts = NULL;
 
 	if (tcp_socket == NULL)
 	{
 		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, port, strSockError(getSockErr()));
 		setLobbyError(ERROR_CONNECTION);
-		freeaddrinfo(hosts);
 		return false;
 	}
 	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
 	// client machines only need 1 socket set
-	socket_set = allocSocketSet(1);
+	socket_set = allocSocketSet();
 	if (socket_set == NULL)
 	{
 		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
 		setLobbyError(ERROR_CONNECTION);
-		freeaddrinfo(hosts);
 		return false;
 	}
 	debug(LOG_NET, "Created socket_set %p", socket_set);
@@ -3664,7 +2551,7 @@ BOOL NETfindGame(void)
 
 	if (writeAll(tcp_socket, "list", sizeof("list")) != SOCKET_ERROR
 	 && checkSockets(socket_set, NET_TIMEOUT_DELAY) > 0
-	 && tcp_socket->ready
+	 && socketReadReady(tcp_socket)
 	 && (result = readNoInt(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
 	{
 		gamesavailable = ntohl(gamesavailable);
@@ -3685,7 +2572,6 @@ BOOL NETfindGame(void)
 
 		// when we fail to receive a game count, bail out
 		setLobbyError(ERROR_CONNECTION);
-		freeaddrinfo(hosts);
 		return false;
 	}
 
@@ -3698,19 +2584,17 @@ BOOL NETfindGame(void)
 		{
 			debug(LOG_NET, "only %u game(s) received", (unsigned int)gamecount);
 			// If we fail, success depends on the amount of games that we've read already
-			freeaddrinfo(hosts);
 			return gamecount;
 		}
 
 		if (NetPlay.games[gamecount].desc.host[0] == '\0')
 		{
-			addressToText(cur->ai_addr, NetPlay.games[gamecount].desc.host, sizeof(NetPlay.games[gamecount].desc.host));
+			strncpy(NetPlay.games[gamecount].desc.host, getSocketTextAddress(tcp_socket), sizeof(NetPlay.games[gamecount].desc.host));
 		}
 
 		++gamecount;
 	} while (gamecount < gamesavailable);
 
-	freeaddrinfo(hosts);
 	return true;
 }
 
@@ -3719,8 +2603,7 @@ BOOL NETfindGame(void)
 // Functions used to setup and join games.
 BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 {
-	struct addrinfo *cur = NULL;
-	struct addrinfo *hosts = NULL;
+	SocketAddress *hosts = NULL;
 	unsigned int i;
 
 	debug(LOG_NET, "resetting sockets.");
@@ -3761,16 +2644,12 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 			socketClose(tcp_socket);
 		}
 
-		for (cur = hosts; cur; cur = cur->ai_next)
+		tcp_socket = socketOpenAny(hosts, 15000);
+		deleteSocketAddress(hosts);
+		if (tcp_socket != NULL)
 		{
-			tcp_socket = SocketOpen(cur, 15000);
-			if (tcp_socket)
-			{
-				goto connect_succesfull;
-			}
+			break;
 		}
-
-		freeaddrinfo(hosts);
 	}
 
 	if (tcp_socket == NULL)
@@ -3778,14 +2657,11 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		return false;
 	}
 
-connect_succesfull:
-
 	// client machines only need 1 socket set
-	socket_set = allocSocketSet(1);
+	socket_set = allocSocketSet();
 	if (socket_set == NULL)
 	{
 		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
-		freeaddrinfo(hosts);
  		return false;
  	}
 	debug(LOG_NET, "Created socket_set %p", socket_set);
@@ -3796,10 +2672,9 @@ connect_succesfull:
 	if (writeAll(tcp_socket, "join", sizeof("join")) == SOCKET_ERROR)
 	{
 		debug(LOG_ERROR, "Failed to send 'join' command: %s", strSockError(getSockErr()));
-		freeaddrinfo(hosts);
 		SocketSet_DelSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
-		free(socket_set);
+		deleteSocketSet(socket_set);
 		socket_set = NULL;
 		return false;
 	}
@@ -3807,15 +2682,14 @@ connect_succesfull:
 	if (NETrecvGAMESTRUCT(&NetPlay.games[gameNumber])
 	 && NetPlay.games[gameNumber].desc.host[0] == '\0')
 	{
-		addressToText(cur->ai_addr, NetPlay.games[gameNumber].desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
+		strncpy(NetPlay.games[gameNumber].desc.host, getSocketTextAddress(tcp_socket), sizeof(NetPlay.games[gameNumber].desc.host));
 	}
-	freeaddrinfo(hosts);
 	if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
 	{
 		// Shouldn't join; game is full
 		SocketSet_DelSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
-		free(socket_set);
+		deleteSocketSet(socket_set);
 		socket_set = NULL;
 		setLobbyError(ERROR_FULL);
 		return false;
