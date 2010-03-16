@@ -26,23 +26,12 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
 #include "lib/framework/file.h"
-#include "lib/netplay/netplay.h"
-#include "lib/widget/widget.h"
+#include "lib/netplay/nettypes.h"
 
-#include "objmem.h"
-#include "power.h"
-#include "map.h"
-#include "effects.h"	// for discovery flash
-#include "cmddroid.h"
-#include "multiplay.h"
-#include "multirecv.h"
-#include "multistat.h"
-#include "multiint.h"
+#include "main.h"
 #include "mission.h" // for cheats
-
-extern char	MultiPlayersPath[PATH_MAX];
+#include "multistat.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // STATS STUFF
