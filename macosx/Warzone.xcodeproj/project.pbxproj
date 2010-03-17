@@ -646,7 +646,7 @@
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h",
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c",
 			);
-			script = "configs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}\".tab.h \"${INPUT_FILE_PATH}\" || exit 1\nconfigs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}\".tab.c \"${INPUT_FILE_PATH}\" || exit 1";
+			script = "configs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h\" \"${INPUT_FILE_PATH}\" || exit 1\nconfigs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_PATH}\" || exit 1";
 		};
 		0246AA730BD3E47F004D1C70 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -656,7 +656,7 @@
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.c",
 			);
-			script = "cd \"${DERIVED_FILES_DIR}\" || exit 1\nflex -o\"${INPUT_FILE_BASE}\".lex.c \"${INPUT_FILE_PATH}\" || exit 1";
+			script = "flex --outfile=\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.c\" \"${INPUT_FILE_PATH}\" || exit 1";
 		};
 /* End PBXBuildRule section */
 
