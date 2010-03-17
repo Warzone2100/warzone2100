@@ -485,6 +485,7 @@
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13210D6028C00A19EE4 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12E10D6028C00A19EE4 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4371DC96115137D400869BAB /* nettypes.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43C18FAF114FF38B0028741B /* nettypes.h */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
 		43BE73ED11121A47007DF934 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177E70F87A926000C8A96 /* config.h */; };
@@ -811,6 +812,7 @@
 				02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks */,
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
+				4371DC96115137D400869BAB /* nettypes.h in Copy frameworks */,
 				0223BBAF0CFE3C380056EF85 /* main.h in Copy frameworks */,
 				0223BBB10CFE3C380056EF85 /* version.h in Copy frameworks */,
 				0223BBC10CFE3CD60056EF85 /* tagfile.h in Copy frameworks */,
@@ -2930,7 +2932,6 @@
 				43C18F7D114FF38B0028741B /* declspec.h */,
 				43C18F7E114FF38B0028741B /* igd_desc_parse.c */,
 				43C18F7F114FF38B0028741B /* igd_desc_parse.h */,
-				43C18F85114FF38B0028741B /* man3 */,
 				43C18F88114FF38B0028741B /* minisoap.c */,
 				43C18F89114FF38B0028741B /* minisoap.h */,
 				43C18F8A114FF38B0028741B /* minissdpc.c */,
@@ -2952,13 +2953,6 @@
 			name = miniupnpc;
 			path = ../lib/netplay/miniupnpc;
 			sourceTree = SOURCE_ROOT;
-		};
-		43C18F85114FF38B0028741B /* man3 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = man3;
-			sourceTree = "<group>";
 		};
 		43F3008010D344B000707B6E /* x86 */ = {
 			isa = PBXGroup;
