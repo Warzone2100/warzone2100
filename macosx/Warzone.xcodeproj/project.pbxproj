@@ -345,7 +345,6 @@
 		02C8AEF80BE68A5600E9D8A7 /* png_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEF60BE68A5600E9D8A7 /* png_util.c */; };
 		02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */; };
 		02CBED8C0C5B8BEB00316CE2 /* nettypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02CBED8A0C5B8BEB00316CE2 /* nettypes.cpp */; };
-		02CBED8D0C5B8BEB00316CE2 /* nettypes.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02CBED8B0C5B8BEB00316CE2 /* nettypes.h */; };
 		02CDDCF90D159BE000722688 /* autorevision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02CDDCF80D159BE000722688 /* autorevision.cpp */; };
 		02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02CDDD080D159D5900722688 /* autorevision.h */; };
 		02CDDD130D159DF600722688 /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */; };
@@ -487,6 +486,7 @@
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13210D6028C00A19EE4 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12E10D6028C00A19EE4 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4371DCFE1151394A00869BAB /* nettypes.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43C18FAF114FF38B0028741B /* nettypes.h */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
 		438F99561141A296003CB5F2 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438F99541141A296003CB5F2 /* crc.cpp */; };
 		43A64FE5113A0F890080968C /* netqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A64FE3113A0F890080968C /* netqueue.cpp */; };
@@ -506,7 +506,6 @@
 		43C18FD0114FF38B0028741B /* netlog.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA8114FF38B0028741B /* netlog.c */; };
 		43C18FD1114FF38B0028741B /* netplay.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAA114FF38B0028741B /* netplay.c */; };
 		43C18FD2114FF38B0028741B /* netsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAC114FF38B0028741B /* netsocket.cpp */; };
-		43C18FD3114FF38B0028741B /* nettypes.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAE114FF38B0028741B /* nettypes.c */; };
 		43E1890411440D8C000870EB /* eval-plural.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F850BD55B4F002E64E3 /* eval-plural.h */; };
 		43E1890511440D8D000870EB /* gettextP.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F860BD55B4F002E64E3 /* gettextP.h */; };
 		43E1890611440D8F000870EB /* gmo.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F870BD55B50002E64E3 /* gmo.h */; };
@@ -815,6 +814,7 @@
 				02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks */,
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
+				4371DCFE1151394A00869BAB /* nettypes.h in Copy frameworks */,
 				0223BBAF0CFE3C380056EF85 /* main.h in Copy frameworks */,
 				0223BBB10CFE3C380056EF85 /* version.h in Copy frameworks */,
 				0223BBC10CFE3CD60056EF85 /* tagfile.h in Copy frameworks */,
@@ -1358,7 +1358,6 @@
 		02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = oggvorbis.c; path = ../lib/sound/oggvorbis.c; sourceTree = SOURCE_ROOT; };
 		02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = oggvorbis.h; path = ../lib/sound/oggvorbis.h; sourceTree = SOURCE_ROOT; };
 		02CBED8A0C5B8BEB00316CE2 /* nettypes.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = nettypes.cpp; path = ../lib/netplay/nettypes.cpp; sourceTree = SOURCE_ROOT; };
-		02CBED8B0C5B8BEB00316CE2 /* nettypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = nettypes.h; path = ../lib/netplay/nettypes.h; sourceTree = SOURCE_ROOT; };
 		02CDDCF40D159BC300722688 /* Autorevision */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Autorevision; sourceTree = BUILT_PRODUCTS_DIR; };
 		02CDDCF80D159BE000722688 /* autorevision.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = autorevision.cpp; path = ../build_tools/autorevision/autorevision.cpp; sourceTree = SOURCE_ROOT; };
 		02CDDD080D159D5900722688 /* autorevision.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = autorevision.h; path = ../src/autorevision.h; sourceTree = SOURCE_ROOT; };
@@ -1615,7 +1614,6 @@
 		43C18FAB114FF38B0028741B /* netplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netplay.h; path = ../lib/netplay/netplay.h; sourceTree = SOURCE_ROOT; };
 		43C18FAC114FF38B0028741B /* netsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netsocket.cpp; path = ../lib/netplay/netsocket.cpp; sourceTree = SOURCE_ROOT; };
 		43C18FAD114FF38B0028741B /* netsocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netsocket.h; path = ../lib/netplay/netsocket.h; sourceTree = SOURCE_ROOT; };
-		43C18FAE114FF38B0028741B /* nettypes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nettypes.c; path = ../lib/netplay/nettypes.c; sourceTree = SOURCE_ROOT; };
 		43C18FAF114FF38B0028741B /* nettypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nettypes.h; path = ../lib/netplay/nettypes.h; sourceTree = SOURCE_ROOT; };
 		43E188F311440CC9000870EB /* tsearch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tsearch.c; path = "external/gettext/gettext-runtime/intl/tsearch.c"; sourceTree = "<group>"; };
 		43E188F411440CC9000870EB /* tsearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tsearch.h; path = "external/gettext/gettext-runtime/intl/tsearch.h"; sourceTree = "<group>"; };
@@ -2153,10 +2151,10 @@
 		0246A12B0BD3CC47004D1C70 /* Netplay */ = {
 			isa = PBXGroup;
 			children = (
+				43C18F79114FF38B0028741B /* miniupnpc */,
 				43A64FE3113A0F890080968C /* netqueue.cpp */,
 				43A64FE4113A0F890080968C /* netqueue.h */,
 				02CBED8A0C5B8BEB00316CE2 /* nettypes.cpp */,
-				43C18F79114FF38B0028741B /* miniupnpc */,
 				43C18FA7114FF38B0028741B /* netjoin_stub.c */,
 				43C18FA8114FF38B0028741B /* netlog.c */,
 				43C18FA9114FF38B0028741B /* netlog.h */,
@@ -2944,7 +2942,6 @@
 				43C18F7D114FF38B0028741B /* declspec.h */,
 				43C18F7E114FF38B0028741B /* igd_desc_parse.c */,
 				43C18F7F114FF38B0028741B /* igd_desc_parse.h */,
-				43C18F85114FF38B0028741B /* man3 */,
 				43C18F88114FF38B0028741B /* minisoap.c */,
 				43C18F89114FF38B0028741B /* minisoap.h */,
 				43C18F8A114FF38B0028741B /* minissdpc.c */,
@@ -2966,13 +2963,6 @@
 			name = miniupnpc;
 			path = ../lib/netplay/miniupnpc;
 			sourceTree = SOURCE_ROOT;
-		};
-		43C18F85114FF38B0028741B /* man3 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = man3;
-			sourceTree = "<group>";
 		};
 		43F3008010D344B000707B6E /* x86 */ = {
 			isa = PBXGroup;
