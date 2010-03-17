@@ -615,7 +615,7 @@
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp",
 			);
-			script = "moc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}\"";
+			script = "moc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}\" || exit 1";
 		};
 /* End PBXBuildRule section */
 
