@@ -182,9 +182,6 @@
 		0246A1280BD3CC43004D1C70 /* screen.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1180BD3CC43004D1C70 /* screen.c */; };
 		0246A1290BD3CC43004D1C70 /* tex.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A11A0BD3CC43004D1C70 /* tex.c */; };
 		0246A12A0BD3CC43004D1C70 /* textdraw.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A11B0BD3CC43004D1C70 /* textdraw.c */; };
-		0246A1360BD3CC58004D1C70 /* netjoin_stub.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A12E0BD3CC58004D1C70 /* netjoin_stub.c */; };
-		0246A1370BD3CC58004D1C70 /* netlog.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A12F0BD3CC58004D1C70 /* netlog.c */; };
-		0246A1380BD3CC58004D1C70 /* netplay.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1310BD3CC58004D1C70 /* netplay.c */; };
 		0246A14D0BD3CC71004D1C70 /* chat_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 0246A13B0BD3CC71004D1C70 /* chat_lexer.l */; };
 		0246A14E0BD3CC71004D1C70 /* chat_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 0246A13C0BD3CC71004D1C70 /* chat_parser.y */; };
 		0246A14F0BD3CC71004D1C70 /* codeprint.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A13E0BD3CC71004D1C70 /* codeprint.c */; };
@@ -496,6 +493,20 @@
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
 		43BE73ED11121A47007DF934 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177E70F87A926000C8A96 /* config.h */; };
 		43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BE75E811124BB4007DF934 /* wavecast.cpp */; };
+		43C18FB1114FF38B0028741B /* igd_desc_parse.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F7E114FF38B0028741B /* igd_desc_parse.c */; };
+		43C18FB9114FF38B0028741B /* minisoap.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F88114FF38B0028741B /* minisoap.c */; };
+		43C18FBA114FF38B0028741B /* minissdpc.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F8A114FF38B0028741B /* minissdpc.c */; };
+		43C18FBB114FF38B0028741B /* miniupnpc.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F8C114FF38B0028741B /* miniupnpc.c */; };
+		43C18FBF114FF38B0028741B /* miniwget.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F92114FF38B0028741B /* miniwget.c */; };
+		43C18FC0114FF38B0028741B /* minixml.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F94114FF38B0028741B /* minixml.c */; };
+		43C18FCC114FF38B0028741B /* upnpcommands.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA1114FF38B0028741B /* upnpcommands.c */; };
+		43C18FCD114FF38B0028741B /* upnperrors.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA3114FF38B0028741B /* upnperrors.c */; };
+		43C18FCE114FF38B0028741B /* upnpreplyparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA5114FF38B0028741B /* upnpreplyparse.c */; };
+		43C18FCF114FF38B0028741B /* netjoin_stub.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA7114FF38B0028741B /* netjoin_stub.c */; };
+		43C18FD0114FF38B0028741B /* netlog.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA8114FF38B0028741B /* netlog.c */; };
+		43C18FD1114FF38B0028741B /* netplay.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAA114FF38B0028741B /* netplay.c */; };
+		43C18FD2114FF38B0028741B /* netsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAC114FF38B0028741B /* netsocket.cpp */; };
+		43C18FD3114FF38B0028741B /* nettypes.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAE114FF38B0028741B /* nettypes.c */; };
 		43E1890411440D8C000870EB /* eval-plural.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F850BD55B4F002E64E3 /* eval-plural.h */; };
 		43E1890511440D8D000870EB /* gettextP.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F860BD55B4F002E64E3 /* gettextP.h */; };
 		43E1890611440D8F000870EB /* gmo.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F870BD55B50002E64E3 /* gmo.h */; };
@@ -626,15 +637,6 @@
 		97AEAB790E8C1C5100A10721 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
 		97AEAC560E8C261B00A10721 /* Theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; };
 		97F013D80EDEAE98004947E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
-		EFBC96B810B92A9C009C6753 /* igd_desc_parse.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96A510B92A9C009C6753 /* igd_desc_parse.c */; };
-		EFBC96B910B92A9C009C6753 /* minisoap.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96A710B92A9C009C6753 /* minisoap.c */; };
-		EFBC96BA10B92A9C009C6753 /* minissdpc.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96A910B92A9C009C6753 /* minissdpc.c */; };
-		EFBC96BB10B92A9C009C6753 /* miniupnpc.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96AB10B92A9C009C6753 /* miniupnpc.c */; };
-		EFBC96BC10B92A9C009C6753 /* miniwget.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96AE10B92A9C009C6753 /* miniwget.c */; };
-		EFBC96BD10B92A9C009C6753 /* minixml.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96B010B92A9C009C6753 /* minixml.c */; };
-		EFBC96BE10B92A9C009C6753 /* upnpcommands.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96B210B92A9C009C6753 /* upnpcommands.c */; };
-		EFBC96BF10B92A9C009C6753 /* upnperrors.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96B410B92A9C009C6753 /* upnperrors.c */; };
-		EFBC96C010B92A9C009C6753 /* upnpreplyparse.c in Sources */ = {isa = PBXBuildFile; fileRef = EFBC96B610B92A9C009C6753 /* upnpreplyparse.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -813,7 +815,6 @@
 				02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks */,
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
-				02CBED8D0C5B8BEB00316CE2 /* nettypes.h in Copy frameworks */,
 				0223BBAF0CFE3C380056EF85 /* main.h in Copy frameworks */,
 				0223BBB10CFE3C380056EF85 /* version.h in Copy frameworks */,
 				0223BBC10CFE3CD60056EF85 /* tagfile.h in Copy frameworks */,
@@ -1065,11 +1066,6 @@
 		0246A1190BD3CC43004D1C70 /* screen.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = screen.h; path = ../lib/ivis_opengl/screen.h; sourceTree = SOURCE_ROOT; };
 		0246A11A0BD3CC43004D1C70 /* tex.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = tex.c; path = ../lib/ivis_opengl/tex.c; sourceTree = SOURCE_ROOT; };
 		0246A11B0BD3CC43004D1C70 /* textdraw.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = textdraw.c; path = ../lib/ivis_opengl/textdraw.c; sourceTree = SOURCE_ROOT; };
-		0246A12E0BD3CC58004D1C70 /* netjoin_stub.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = netjoin_stub.c; path = ../lib/netplay/netjoin_stub.c; sourceTree = SOURCE_ROOT; };
-		0246A12F0BD3CC58004D1C70 /* netlog.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = netlog.c; path = ../lib/netplay/netlog.c; sourceTree = SOURCE_ROOT; };
-		0246A1300BD3CC58004D1C70 /* netlog.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = netlog.h; path = ../lib/netplay/netlog.h; sourceTree = SOURCE_ROOT; };
-		0246A1310BD3CC58004D1C70 /* netplay.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = netplay.c; path = ../lib/netplay/netplay.c; sourceTree = SOURCE_ROOT; };
-		0246A1320BD3CC58004D1C70 /* netplay.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = netplay.h; path = ../lib/netplay/netplay.h; sourceTree = SOURCE_ROOT; };
 		0246A13B0BD3CC71004D1C70 /* chat_lexer.l */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.lex; name = chat_lexer.l; path = ../lib/script/chat_lexer.l; sourceTree = SOURCE_ROOT; };
 		0246A13C0BD3CC71004D1C70 /* chat_parser.y */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.yacc; name = chat_parser.y; path = ../lib/script/chat_parser.y; sourceTree = SOURCE_ROOT; };
 		0246A13D0BD3CC71004D1C70 /* chat_processing.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = chat_processing.h; path = ../lib/script/chat_processing.h; sourceTree = SOURCE_ROOT; };
@@ -1590,6 +1586,37 @@
 		43A8417711028EDD00733CCB /* pointtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pointtree.h; path = ../src/pointtree.h; sourceTree = SOURCE_ROOT; };
 		43BE75E811124BB4007DF934 /* wavecast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wavecast.cpp; path = ../src/wavecast.cpp; sourceTree = SOURCE_ROOT; };
 		43BE75E911124BB4007DF934 /* wavecast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wavecast.h; path = ../src/wavecast.h; sourceTree = SOURCE_ROOT; };
+		43C18F7A114FF38B0028741B /* bsdqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bsdqueue.h; sourceTree = "<group>"; };
+		43C18F7C114FF38B0028741B /* codelength.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = codelength.h; sourceTree = "<group>"; };
+		43C18F7D114FF38B0028741B /* declspec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = declspec.h; sourceTree = "<group>"; };
+		43C18F7E114FF38B0028741B /* igd_desc_parse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = igd_desc_parse.c; sourceTree = "<group>"; };
+		43C18F7F114FF38B0028741B /* igd_desc_parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = igd_desc_parse.h; sourceTree = "<group>"; };
+		43C18F88114FF38B0028741B /* minisoap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = minisoap.c; sourceTree = "<group>"; };
+		43C18F89114FF38B0028741B /* minisoap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minisoap.h; sourceTree = "<group>"; };
+		43C18F8A114FF38B0028741B /* minissdpc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = minissdpc.c; sourceTree = "<group>"; };
+		43C18F8B114FF38B0028741B /* minissdpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minissdpc.h; sourceTree = "<group>"; };
+		43C18F8C114FF38B0028741B /* miniupnpc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = miniupnpc.c; sourceTree = "<group>"; };
+		43C18F8E114FF38B0028741B /* miniupnpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = miniupnpc.h; sourceTree = "<group>"; };
+		43C18F90114FF38B0028741B /* miniupnpcstrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = miniupnpcstrings.h; sourceTree = "<group>"; };
+		43C18F92114FF38B0028741B /* miniwget.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = miniwget.c; sourceTree = "<group>"; };
+		43C18F93114FF38B0028741B /* miniwget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = miniwget.h; sourceTree = "<group>"; };
+		43C18F94114FF38B0028741B /* minixml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = minixml.c; sourceTree = "<group>"; };
+		43C18F95114FF38B0028741B /* minixml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minixml.h; sourceTree = "<group>"; };
+		43C18FA1114FF38B0028741B /* upnpcommands.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = upnpcommands.c; sourceTree = "<group>"; };
+		43C18FA2114FF38B0028741B /* upnpcommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = upnpcommands.h; sourceTree = "<group>"; };
+		43C18FA3114FF38B0028741B /* upnperrors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = upnperrors.c; sourceTree = "<group>"; };
+		43C18FA4114FF38B0028741B /* upnperrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = upnperrors.h; sourceTree = "<group>"; };
+		43C18FA5114FF38B0028741B /* upnpreplyparse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = upnpreplyparse.c; sourceTree = "<group>"; };
+		43C18FA6114FF38B0028741B /* upnpreplyparse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = upnpreplyparse.h; sourceTree = "<group>"; };
+		43C18FA7114FF38B0028741B /* netjoin_stub.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = netjoin_stub.c; path = ../lib/netplay/netjoin_stub.c; sourceTree = SOURCE_ROOT; };
+		43C18FA8114FF38B0028741B /* netlog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = netlog.c; path = ../lib/netplay/netlog.c; sourceTree = SOURCE_ROOT; };
+		43C18FA9114FF38B0028741B /* netlog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netlog.h; path = ../lib/netplay/netlog.h; sourceTree = SOURCE_ROOT; };
+		43C18FAA114FF38B0028741B /* netplay.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = netplay.c; path = ../lib/netplay/netplay.c; sourceTree = SOURCE_ROOT; };
+		43C18FAB114FF38B0028741B /* netplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netplay.h; path = ../lib/netplay/netplay.h; sourceTree = SOURCE_ROOT; };
+		43C18FAC114FF38B0028741B /* netsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netsocket.cpp; path = ../lib/netplay/netsocket.cpp; sourceTree = SOURCE_ROOT; };
+		43C18FAD114FF38B0028741B /* netsocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netsocket.h; path = ../lib/netplay/netsocket.h; sourceTree = SOURCE_ROOT; };
+		43C18FAE114FF38B0028741B /* nettypes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nettypes.c; path = ../lib/netplay/nettypes.c; sourceTree = SOURCE_ROOT; };
+		43C18FAF114FF38B0028741B /* nettypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nettypes.h; path = ../lib/netplay/nettypes.h; sourceTree = SOURCE_ROOT; };
 		43E188F311440CC9000870EB /* tsearch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tsearch.c; path = "external/gettext/gettext-runtime/intl/tsearch.c"; sourceTree = "<group>"; };
 		43E188F411440CC9000870EB /* tsearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tsearch.h; path = "external/gettext/gettext-runtime/intl/tsearch.h"; sourceTree = "<group>"; };
 		43E1897311441009000870EB /* os2compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = os2compat.c; path = "external/gettext/gettext-runtime/intl/os2compat.c"; sourceTree = "<group>"; };
@@ -1689,28 +1716,6 @@
 		97AEA9600E8C184C00A10721 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		97AEAB330E8C1B5200A10721 /* Theora.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Theora.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		97F013D10EDEAE5C004947E5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		EFBC96A210B92A9C009C6753 /* bsdqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bsdqueue.h; path = ../lib/netplay/miniupnpc/bsdqueue.h; sourceTree = SOURCE_ROOT; };
-		EFBC96A310B92A9C009C6753 /* codelength.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codelength.h; path = ../lib/netplay/miniupnpc/codelength.h; sourceTree = SOURCE_ROOT; };
-		EFBC96A410B92A9C009C6753 /* declspec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = declspec.h; path = ../lib/netplay/miniupnpc/declspec.h; sourceTree = SOURCE_ROOT; };
-		EFBC96A510B92A9C009C6753 /* igd_desc_parse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = igd_desc_parse.c; path = ../lib/netplay/miniupnpc/igd_desc_parse.c; sourceTree = SOURCE_ROOT; };
-		EFBC96A610B92A9C009C6753 /* igd_desc_parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = igd_desc_parse.h; path = ../lib/netplay/miniupnpc/igd_desc_parse.h; sourceTree = SOURCE_ROOT; };
-		EFBC96A710B92A9C009C6753 /* minisoap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = minisoap.c; path = ../lib/netplay/miniupnpc/minisoap.c; sourceTree = SOURCE_ROOT; };
-		EFBC96A810B92A9C009C6753 /* minisoap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = minisoap.h; path = ../lib/netplay/miniupnpc/minisoap.h; sourceTree = SOURCE_ROOT; };
-		EFBC96A910B92A9C009C6753 /* minissdpc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = minissdpc.c; path = ../lib/netplay/miniupnpc/minissdpc.c; sourceTree = SOURCE_ROOT; };
-		EFBC96AA10B92A9C009C6753 /* minissdpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = minissdpc.h; path = ../lib/netplay/miniupnpc/minissdpc.h; sourceTree = SOURCE_ROOT; };
-		EFBC96AB10B92A9C009C6753 /* miniupnpc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = miniupnpc.c; path = ../lib/netplay/miniupnpc/miniupnpc.c; sourceTree = SOURCE_ROOT; };
-		EFBC96AC10B92A9C009C6753 /* miniupnpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = miniupnpc.h; path = ../lib/netplay/miniupnpc/miniupnpc.h; sourceTree = SOURCE_ROOT; };
-		EFBC96AD10B92A9C009C6753 /* miniupnpcstrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = miniupnpcstrings.h; path = ../lib/netplay/miniupnpc/miniupnpcstrings.h; sourceTree = SOURCE_ROOT; };
-		EFBC96AE10B92A9C009C6753 /* miniwget.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = miniwget.c; path = ../lib/netplay/miniupnpc/miniwget.c; sourceTree = SOURCE_ROOT; };
-		EFBC96AF10B92A9C009C6753 /* miniwget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = miniwget.h; path = ../lib/netplay/miniupnpc/miniwget.h; sourceTree = SOURCE_ROOT; };
-		EFBC96B010B92A9C009C6753 /* minixml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = minixml.c; path = ../lib/netplay/miniupnpc/minixml.c; sourceTree = SOURCE_ROOT; };
-		EFBC96B110B92A9C009C6753 /* minixml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = minixml.h; path = ../lib/netplay/miniupnpc/minixml.h; sourceTree = SOURCE_ROOT; };
-		EFBC96B210B92A9C009C6753 /* upnpcommands.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upnpcommands.c; path = ../lib/netplay/miniupnpc/upnpcommands.c; sourceTree = SOURCE_ROOT; };
-		EFBC96B310B92A9C009C6753 /* upnpcommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = upnpcommands.h; path = ../lib/netplay/miniupnpc/upnpcommands.h; sourceTree = SOURCE_ROOT; };
-		EFBC96B410B92A9C009C6753 /* upnperrors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upnperrors.c; path = ../lib/netplay/miniupnpc/upnperrors.c; sourceTree = SOURCE_ROOT; };
-		EFBC96B510B92A9C009C6753 /* upnperrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = upnperrors.h; path = ../lib/netplay/miniupnpc/upnperrors.h; sourceTree = SOURCE_ROOT; };
-		EFBC96B610B92A9C009C6753 /* upnpreplyparse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upnpreplyparse.c; path = ../lib/netplay/miniupnpc/upnpreplyparse.c; sourceTree = SOURCE_ROOT; };
-		EFBC96B710B92A9C009C6753 /* upnpreplyparse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = upnpreplyparse.h; path = ../lib/netplay/miniupnpc/upnpreplyparse.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2150,35 +2155,16 @@
 			children = (
 				43A64FE3113A0F890080968C /* netqueue.cpp */,
 				43A64FE4113A0F890080968C /* netqueue.h */,
-				EFBC96A210B92A9C009C6753 /* bsdqueue.h */,
-				EFBC96A310B92A9C009C6753 /* codelength.h */,
-				EFBC96A410B92A9C009C6753 /* declspec.h */,
-				EFBC96A510B92A9C009C6753 /* igd_desc_parse.c */,
-				EFBC96A610B92A9C009C6753 /* igd_desc_parse.h */,
-				EFBC96A710B92A9C009C6753 /* minisoap.c */,
-				EFBC96A810B92A9C009C6753 /* minisoap.h */,
-				EFBC96A910B92A9C009C6753 /* minissdpc.c */,
-				EFBC96AA10B92A9C009C6753 /* minissdpc.h */,
-				EFBC96AB10B92A9C009C6753 /* miniupnpc.c */,
-				EFBC96AC10B92A9C009C6753 /* miniupnpc.h */,
-				EFBC96AD10B92A9C009C6753 /* miniupnpcstrings.h */,
-				EFBC96AE10B92A9C009C6753 /* miniwget.c */,
-				EFBC96AF10B92A9C009C6753 /* miniwget.h */,
-				EFBC96B010B92A9C009C6753 /* minixml.c */,
-				EFBC96B110B92A9C009C6753 /* minixml.h */,
-				EFBC96B210B92A9C009C6753 /* upnpcommands.c */,
-				EFBC96B310B92A9C009C6753 /* upnpcommands.h */,
-				EFBC96B410B92A9C009C6753 /* upnperrors.c */,
-				EFBC96B510B92A9C009C6753 /* upnperrors.h */,
-				EFBC96B610B92A9C009C6753 /* upnpreplyparse.c */,
-				EFBC96B710B92A9C009C6753 /* upnpreplyparse.h */,
 				02CBED8A0C5B8BEB00316CE2 /* nettypes.cpp */,
-				02CBED8B0C5B8BEB00316CE2 /* nettypes.h */,
-				0246A12E0BD3CC58004D1C70 /* netjoin_stub.c */,
-				0246A12F0BD3CC58004D1C70 /* netlog.c */,
-				0246A1300BD3CC58004D1C70 /* netlog.h */,
-				0246A1310BD3CC58004D1C70 /* netplay.c */,
-				0246A1320BD3CC58004D1C70 /* netplay.h */,
+				43C18F79114FF38B0028741B /* miniupnpc */,
+				43C18FA7114FF38B0028741B /* netjoin_stub.c */,
+				43C18FA8114FF38B0028741B /* netlog.c */,
+				43C18FA9114FF38B0028741B /* netlog.h */,
+				43C18FAA114FF38B0028741B /* netplay.c */,
+				43C18FAB114FF38B0028741B /* netplay.h */,
+				43C18FAC114FF38B0028741B /* netsocket.cpp */,
+				43C18FAD114FF38B0028741B /* netsocket.h */,
+				43C18FAF114FF38B0028741B /* nettypes.h */,
 			);
 			name = Netplay;
 			sourceTree = "<group>";
@@ -2950,6 +2936,44 @@
 			name = betawidget;
 			sourceTree = "<group>";
 		};
+		43C18F79114FF38B0028741B /* miniupnpc */ = {
+			isa = PBXGroup;
+			children = (
+				43C18F7A114FF38B0028741B /* bsdqueue.h */,
+				43C18F7C114FF38B0028741B /* codelength.h */,
+				43C18F7D114FF38B0028741B /* declspec.h */,
+				43C18F7E114FF38B0028741B /* igd_desc_parse.c */,
+				43C18F7F114FF38B0028741B /* igd_desc_parse.h */,
+				43C18F85114FF38B0028741B /* man3 */,
+				43C18F88114FF38B0028741B /* minisoap.c */,
+				43C18F89114FF38B0028741B /* minisoap.h */,
+				43C18F8A114FF38B0028741B /* minissdpc.c */,
+				43C18F8B114FF38B0028741B /* minissdpc.h */,
+				43C18F8C114FF38B0028741B /* miniupnpc.c */,
+				43C18F8E114FF38B0028741B /* miniupnpc.h */,
+				43C18F90114FF38B0028741B /* miniupnpcstrings.h */,
+				43C18F92114FF38B0028741B /* miniwget.c */,
+				43C18F93114FF38B0028741B /* miniwget.h */,
+				43C18F94114FF38B0028741B /* minixml.c */,
+				43C18F95114FF38B0028741B /* minixml.h */,
+				43C18FA1114FF38B0028741B /* upnpcommands.c */,
+				43C18FA2114FF38B0028741B /* upnpcommands.h */,
+				43C18FA3114FF38B0028741B /* upnperrors.c */,
+				43C18FA4114FF38B0028741B /* upnperrors.h */,
+				43C18FA5114FF38B0028741B /* upnpreplyparse.c */,
+				43C18FA6114FF38B0028741B /* upnpreplyparse.h */,
+			);
+			name = miniupnpc;
+			path = ../lib/netplay/miniupnpc;
+			sourceTree = SOURCE_ROOT;
+		};
+		43C18F85114FF38B0028741B /* man3 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = man3;
+			sourceTree = "<group>";
+		};
 		43F3008010D344B000707B6E /* x86 */ = {
 			isa = PBXGroup;
 			children = (
@@ -3711,7 +3735,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "SYS_SVN=\"svn\" # System Svn executable\nOUTDIR=quesoglc\nSVNURL=https://quesoglc.svn.sourceforge.net/svnroot/quesoglc/branches/release-0.7/quesoglc/\nSVNREV=914\n\n\n#\n# Determines if a version of Svn is compatible with Warzone. The argument\n# 'executable' specifies the location of the Svn executable to test. Returns\n# 1 if the version of Svn is valid, else 0\nfunction isValidSvn\n{\n\tlocal SVN=$1            # Svn command to check version of\n\tlocal MIN_SVN_MAJOR=1   # Minimum major version of Svn to allow\n\tlocal MIN_SVN_MINOR=4  # Minimum minor version of Svn to allow\n\tlocal SVN_BLACKLIST=()  # Svn versions to blacklist (e.g. \"2.1\")\n\t\n\t# Expects the Svn version to be the only token of the form #.#.# on the first\n\t# line of the output from ./svn --version --quiet, where the first # is the major\n\t# version and the second # is the minor version\n\tlocal SVN_VER=`$SVN --version --quiet`\n\tlocal SVN_MAJOR=`echo $SVN_VER | sed -E  's:([0-9]+)\\.[0-9]+\\.[0-9]+:\\1:'`\n\tlocal SVN_MINOR=`echo $SVN_VER | sed -E  's:[0-9]+\\.([0-9]+)\\.[0-9]+:\\1:'`\n\t\n\tlocal VALID_SVN=$(( (SVN_MAJOR > MIN_SVN_MAJOR)\n\t                   || (  SVN_MAJOR == MIN_SVN_MAJOR\n\t                      && SVN_MINOR >= MIN_SVN_MINOR) ))\n\t\n\t# If version is valid so far, check the blacklist\n\tif [ $VALID_SVN -eq 1 ]; then\n\t\tfor (( i = 0; i < ${#SVN_BLACKLIST[@]}; ++i )); do\n\t\t\tif [ $SVN_VER == ${SVN_BLACKLIST[${i}]} ]; then\n\t\t\t\tVALID_SVN=0\n\t\t\tfi\n\t\tdone\n\tfi\n\t\n\treturn $VALID_SVN\n}\n\n\n\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\n\n\nisValidSvn $SYS_SVN\nif [ $? -ne 1 ]; then\n\techo \"The version of Svn on your system is not compatible with QuesoGLC.\"\n\techo \"Please install svn version 1.4.0 or later.\"\n\texit 1\n\t\nfi\n\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ ! -z \"$SVNREV\" ]; then\n  SVNARGS=\"$SVNARGS -r $SVNREV\"\nfi\n\nsvn co $SVNARGS $SVNURL $OUTDIR\n";
+			shellScript = "# tar -czf quesoglc-0.7-r921.tar.gz --exclude '.svn' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store'  quesoglc-0.7-r921\n\nDirectorY=\"quesoglc-0.7-r921\"\nOutDir=\"quesoglc\"\nFileName=\"quesoglc-0.7-r921.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/quesoglc-0.7-r921.tar.gz\"\nMD5Sum=\"ee73eebd23292dfb17365ff19eb15a0e\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"";
 		};
 		022B2F290BD55840002E64E3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3911,7 +3935,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\n\n# Install\nif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \"Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
+			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    touch build/notrans.dis\n    echo \"Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\n\n# Install\nif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \"Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
 		};
 		43F3011910D3572400707B6E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4107,9 +4131,6 @@
 				0246A1280BD3CC43004D1C70 /* screen.c in Sources */,
 				0246A1290BD3CC43004D1C70 /* tex.c in Sources */,
 				0246A12A0BD3CC43004D1C70 /* textdraw.c in Sources */,
-				0246A1360BD3CC58004D1C70 /* netjoin_stub.c in Sources */,
-				0246A1370BD3CC58004D1C70 /* netlog.c in Sources */,
-				0246A1380BD3CC58004D1C70 /* netplay.c in Sources */,
 				0246A14E0BD3CC71004D1C70 /* chat_parser.y in Sources */,
 				0246A14D0BD3CC71004D1C70 /* chat_lexer.l in Sources */,
 				0246A14F0BD3CC71004D1C70 /* codeprint.c in Sources */,
@@ -4264,20 +4285,24 @@
 				647D9C531039288D006D37CF /* dictionary.c in Sources */,
 				647D9C541039288D006D37CF /* iniparser.c in Sources */,
 				647D9C571039289A006D37CF /* challenge.c in Sources */,
-				EFBC96B810B92A9C009C6753 /* igd_desc_parse.c in Sources */,
-				EFBC96B910B92A9C009C6753 /* minisoap.c in Sources */,
-				EFBC96BA10B92A9C009C6753 /* minissdpc.c in Sources */,
-				EFBC96BB10B92A9C009C6753 /* miniupnpc.c in Sources */,
-				EFBC96BC10B92A9C009C6753 /* miniwget.c in Sources */,
-				EFBC96BD10B92A9C009C6753 /* minixml.c in Sources */,
-				EFBC96BE10B92A9C009C6753 /* upnpcommands.c in Sources */,
-				EFBC96BF10B92A9C009C6753 /* upnperrors.c in Sources */,
-				EFBC96C010B92A9C009C6753 /* upnpreplyparse.c in Sources */,
 				43A8417811028EDD00733CCB /* pointtree.cpp in Sources */,
 				43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */,
 				4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */,
 				43A64FE5113A0F890080968C /* netqueue.cpp in Sources */,
 				438F99561141A296003CB5F2 /* crc.cpp in Sources */,
+				43C18FB1114FF38B0028741B /* igd_desc_parse.c in Sources */,
+				43C18FB9114FF38B0028741B /* minisoap.c in Sources */,
+				43C18FBA114FF38B0028741B /* minissdpc.c in Sources */,
+				43C18FBB114FF38B0028741B /* miniupnpc.c in Sources */,
+				43C18FBF114FF38B0028741B /* miniwget.c in Sources */,
+				43C18FC0114FF38B0028741B /* minixml.c in Sources */,
+				43C18FCC114FF38B0028741B /* upnpcommands.c in Sources */,
+				43C18FCD114FF38B0028741B /* upnperrors.c in Sources */,
+				43C18FCE114FF38B0028741B /* upnpreplyparse.c in Sources */,
+				43C18FCF114FF38B0028741B /* netjoin_stub.c in Sources */,
+				43C18FD0114FF38B0028741B /* netlog.c in Sources */,
+				43C18FD1114FF38B0028741B /* netplay.c in Sources */,
+				43C18FD2114FF38B0028741B /* netsocket.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

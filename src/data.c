@@ -37,9 +37,15 @@
 #include "lib/sound/audio.h"
 
 #include "data.h"
+#include "droid.h"
+#include "feature.h"
+#include "function.h"
 #include "mechanics.h"
 #include "message.h"
+#include "multiplay.h"
+#include "research.h"
 #include "scriptvals.h"
+#include "stats.h"
 #include "text.h"
 #include "texture.h"
 

@@ -39,7 +39,7 @@ typedef int bool;
 #define iV_IMD_TEX	0x00000200
 #define iV_IMD_XNOCUL	0x00002000
 #define iV_IMD_TEXANIM	0x00004000
-#define MAX_POLYGON_SIZE 16
+#define MAX_POLYGON_SIZE 6 // the game can't handle more
 
 static char *input = "";
 static bool verbose = false;
@@ -88,7 +88,13 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 		fprintf(stderr, "Bad PIE file %s\n", input);
 		exit(1);
 	}
-	fprintf(ctl, "PIE 3\n");
+	
+ 	if (x != 2)
+	{
+		fprintf(stderr, "Unknown PIE version %d in %s\n", x, input);
+		exit(1);
+	}	
+	fprintf(ctl, "PIE 2\n");
 
 	num = fscanf(fp, "TYPE %d\n", &x); // ignore
 	if (num != 1)
@@ -96,7 +102,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 		fprintf(stderr, "Bad TYPE directive in %s\n", input);
 		exit(1);
 	}
-	fprintf(ctl, "TYPE 0\n");
+	fprintf(ctl, "TYPE 200\n");
 
 	num = fscanf(fp, "TEXTURE %d %s %d %d\n", &z, s, &x, &y);
 	if (num != 4)
@@ -104,7 +110,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 		fprintf(stderr, "Bad TEXTURE directive in %s\n", input);
 		exit(1);
 	}
-	fprintf(ctl, "TEXTURE 0 %s 0 0\n", s);
+	fprintf(ctl, "TEXTURE %d %s 256 256\n", z, s);
 
 	num = fscanf(fp, "LEVELS %d\n", &levels);
 	if (num != 1)
@@ -146,7 +152,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 			num = fscanf(fp, "%d %d %d\n", &posList[j].x, &posList[j].y, &posList[j].z);
 			if (num != 3)
 			{
-				fprintf(stderr, "Bad POINTS entry level %d, number %d\n", level, j);
+				fprintf(stderr, "File %s. Bad POINTS entry level %d, number %d.\n", input, level, j);
 				exit(1);
 			}
 			posList[j].dupe = false;
@@ -169,12 +175,12 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 			num = fscanf(fp, "\n%x", &flags);
 			if (num != 1)
 			{
-				fprintf(stderr, "Bad POLYGONS texture flag entry level %d, number %d\n", level, j);
+				fprintf(stderr, "File %s. Bad POLYGONS texture flag entry level %d, number %d\n", input, level, j);
 				exit(1);
 			}
 			if (!(flags & iV_IMD_TEX))
 			{
-				fprintf(stderr, "Bad texture flag entry level %d, number %d - no texture flag!\n", level, j);
+				fprintf(stderr, "File %s. Bad texture flag entry level %d, number %d - no texture flag!\n", input, level, j);
 				exit(1);
 			}
 
@@ -191,7 +197,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 			num = fscanf(fp, "%d", &faceList[j].vertices);
 			if (num != 1)
 			{
-				fprintf(stderr, "Bad POLYGONS vertices entry level %d, number %d\n", level, j);
+				fprintf(stderr, "File %s. Bad POLYGONS vertices entry level %d, number %d\n", input, level, j);
 				exit(1);
 			}
 			assert(faceList[j].vertices <= MAX_POLYGON_SIZE); // larger polygons not supported
@@ -203,7 +209,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 				num = fscanf(fp, "%d", &faceList[j].index[k]);
 				if (num != 1)
 				{
-					fprintf(stderr, "Bad vertex position entry level %d, number %d\n", level, j);
+					fprintf(stderr, "File %s. Bad vertex position entry level %d, number %d\n", input, level, j);
 					exit(1);
 				}
 			}
@@ -212,12 +218,13 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 				num = fscanf(fp, "%d %d %d %d", &faceList[j].frames, &faceList[j].rate, &faceList[j].width, &faceList[j].height);
 				if (num != 4)
 				{
-					fprintf(stderr, "Bad texture animation entry level %d, number %d.\n", level, j);
+					fprintf(stderr, "File %s. Bad texture animation entry level %d, number %d.\n", input, level, j);
 					exit(1);
 				}
 				if (faceList[j].frames <= 1)
 				{
-					fprintf(stderr, "File %slevel %d, polygon %d has a single animation frame. That makes no sense.\n", input, level, j);
+					fprintf(stderr, "File %s. Level %d, polygon %d has a single animation frame. Disabled.\n", input, level, j);
+					faceList[j].frames = 0;
 				}
 				if (textureArrays < faceList[j].frames)
 				{
@@ -236,7 +243,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 				num = fscanf(fp, "%d %d", &faceList[j].texCoord[k][0], &faceList[j].texCoord[k][1]);
 				if (num != 2)
 				{
-					fprintf(stderr, "Bad texture coordinate entry level %d, number %d\n", level, j);
+					fprintf(stderr, "File %s. Bad texture coordinate entry level %d, number %d\n", input, level, j);
 					exit(1);
 				}
 			}
@@ -272,8 +279,12 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 				fprintf(ctl, " \n\t%d %d %d", posList[j].x, posList[j].y, posList[j].z);
 			}
 		}
-		printf("%d\n", points - x);
-
+		
+		if (verbose && (points - x))
+		{
+			printf("Duplicated vertexes: %d ", points - x);
+		}
+		
 		// Rewrite face table
 		for (j = 0; j < faces; j++)
 		{
@@ -285,6 +296,11 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 			}
 		}
 
+		if (verbose && (facesPIE3 - faces))
+		{
+			printf("Corrected 2faces: %d ", facesPIE3 - faces);
+		}
+		
 		fprintf(ctl, "\nPOLYGONS %d", facesPIE3);
 		for (j = 0; j < faces; j++)
 		{
@@ -331,7 +347,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 				num = fscanf(fp, "\n%d %d %d", &a, &b, &c);
 				if (num != 3)
 				{
-					fprintf(stderr, "Bad CONNECTORS directive entry level %d, number %d\n", level, j);
+					fprintf(stderr, "File %s. Bad CONNECTORS directive entry level %d, number %d\n", input, level, j);
 					exit(1);
 				}
 				fprintf(ctl, "\n\t%d %d %d", a, b, c);
@@ -364,9 +380,33 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Cannot open temporary file for writing: %s\n", strerror(errno));
 		exit(1);
 	}
+
+#ifdef _WIN32
+	if (verbose)
+	{
+		// Should it be / on Linux?
+		//char *fname = strrchr(input, '/');
+		char *fname = strrchr(input, '\\');
+		if (fname && *(fname + 1))
+		{
+			fname++;
+		}
+		else
+		{
+			fname = input;
+		}
+		printf("PIE: %s ", fname);
+	}
+#endif
+	
 	dump_to_pie(f, p);
 	fclose(p);
 
+	if (verbose)
+	{
+		printf("\n");
+	}
+		
 	// Now copy temporary file to original
 	rewind(f);
 	p = fopen(input, "w");

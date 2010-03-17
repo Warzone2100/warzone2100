@@ -9,6 +9,7 @@ noinst_HEADERS = \
 	netlog.h \
 	netplay.h \
 	netqueue.h \
+	netsocket.h \
 	nettypes.h
 
 libnetplay_a_SOURCES = \
@@ -16,6 +17,7 @@ libnetplay_a_SOURCES = \
 	netlog.c \
 	netplay.c \
 	netqueue.cpp \
+	netsocket.cpp \
 	nettypes.cpp
 
 libnetplay_a_LIBADD = $(top_builddir)/lib/framework/libframework.a $(top_builddir)/lib/netplay/miniupnpc/libminiupnpc.a

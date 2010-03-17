@@ -47,18 +47,16 @@ typedef struct
 	uint32_t scoreToAdd;
 } PLAYERSTATS;
 
-// stat defs
-extern BOOL			saveMultiStats			(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
-extern BOOL			loadMultiStats			(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
-extern PLAYERSTATS	getMultiStats			(UDWORD player,BOOL bLocal);									// get from net
-extern BOOL			setMultiStats			(SDWORD player, PLAYERSTATS plStats,BOOL bLocal);			// send to net.
-extern void			updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted);
-extern void			updateMultiStatsGames	(void);
-extern void			updateMultiStatsWins	(void);
-extern void			updateMultiStatsLoses	(void);
-extern void			updateMultiStatsKills	(BASE_OBJECT *psKilled,UDWORD player);
-
-extern void recvMultiStats(NETQUEUE queue);
+BOOL saveMultiStats(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
+BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
+PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal);									// get from net
+BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats,BOOL bLocal);			// send to net.
+void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted);
+void updateMultiStatsGames(void);
+void updateMultiStatsWins(void);
+void updateMultiStatsLoses(void);
+void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player);
+void recvMultiStats(NETQUEUE queue);
 
 #ifdef __cplusplus
 }

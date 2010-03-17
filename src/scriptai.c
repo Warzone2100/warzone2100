@@ -240,7 +240,7 @@ BOOL scrIdleGroup(void)
 	{
 		return false;
 	}
-	ASSERT_OR_RETURN(false, psGroup, "Invalid group pointer");
+	ASSERT_OR_RETURN(false, psGroup != NULL, "Invalid group pointer");
 
 	for(psDroid = psGroup->psList;psDroid; psDroid = psDroid->psGrpNext)
 	{

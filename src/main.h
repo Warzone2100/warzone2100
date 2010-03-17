@@ -43,6 +43,7 @@ extern char SaveGamePath[PATH_MAX];
 extern char datadir[PATH_MAX];
 extern char configdir[PATH_MAX];
 extern char KeyMapPath[PATH_MAX];
+extern char MultiPlayersPath[PATH_MAX];
 
 #define MAX_MODS 100
 

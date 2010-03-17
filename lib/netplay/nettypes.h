@@ -25,7 +25,6 @@
 #define __INCLUDE_LIB_NETPLAY_NETTYPES_H__
 
 #include "lib/framework/frame.h"
-#include "netplay.h"
 #include "lib/framework/vector.h"
 
 #ifdef __cplusplus

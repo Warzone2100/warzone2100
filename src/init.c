@@ -81,6 +81,7 @@
 #include "multiplay.h"
 #include "projectile.h"
 #include "radar.h"
+#include "research.h"
 #include "lib/framework/cursors.h"
 #include "scriptextern.h"
 #include "scripttabs.h"
@@ -510,7 +511,6 @@ void systemShutdown(void)
 	iV_ShutDown();
 	levShutDown();
 	widgShutDown();
-	scrShutDown();
 	fpathShutdown();
 	debug(LOG_MAIN, "shutting down everything else");
 	pal_ShutDown();		// currently unused stub

@@ -26,28 +26,13 @@
 	it's neater as a separate file, as the intelligence map has special requirements
 	and overlays and needs to render to a specified buffer for later use.
 */
+
 #include "lib/framework/frame.h"
-
-/* Includes direct access to render library */
-#include "lib/ivis_common/ivisdef.h"
-#include "lib/framework/fixedpoint.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/rendmode.h"
-#include "lib/ivis_common/piemode.h"
-
-#include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/piematrix.h"
 
-#include "map.h"
-#include "mapdisplay.h"
 #include "component.h"
-#include "display3d.h"
-#include "hci.h"
-#include "intelmap.h"
-#include "intimage.h"
-
-#include "texture.h"
 #include "intdisplay.h"
+#include "mapdisplay.h"
 
 #define ROTATE_TIME	(2*GAME_TICKS_PER_SEC)
 

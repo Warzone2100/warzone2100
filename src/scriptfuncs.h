@@ -416,6 +416,7 @@ extern BOOL scrFlushConsoleMessages(void);
 // find and manipulate a position to build a structure.
 extern BOOL scrPickStructLocation(void);
 extern BOOL scrPickStructLocationB(void);
+extern BOOL scrPickStructLocationC(void);
 
 // establish the distance between two points in world coordinates - approximate bounded to 11% out
 extern BOOL scrDistanceTwoPts( void );

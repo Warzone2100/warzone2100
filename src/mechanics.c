@@ -25,15 +25,14 @@
  */
 
 #include "lib/framework/frame.h"
+
+#include "basedef.h"
+#include "droid.h"
+#include "feature.h"
 #include "mechanics.h"
-#include "stats.h"
+#include "objmem.h"
+#include "research.h"
 #include "structure.h"
-#include "game.h"
-#include "power.h"
-#include "projectile.h"
-#include "move.h"
-#include "message.h"
-#include "visibility.h"
 
 /* Shutdown the mechanics system */
 bool mechanicsShutdown(void)

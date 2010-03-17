@@ -1087,7 +1087,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	CHECK_DROID(psDroid);
 	ASSERT_OR_RETURN(false, psDroid->action == DACTION_BUILD, "%s (order %s) has wrong action for construction: %s",
 	                 droidGetName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action));
-	ASSERT_OR_RETURN(false, psDroid->psTarget, "Trying to update a construction, but no target!");
+	ASSERT_OR_RETURN(false, psDroid->psTarget != NULL, "Trying to update a construction, but no target!");
 
 	psStruct = (STRUCTURE *)psDroid->psTarget;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure" );
@@ -3500,14 +3500,11 @@ BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 	SDWORD		startX, endX, startY, endY;
 	UDWORD		passes;
 	Vector3i	origin = { world_coord(*x), world_coord(*y), 0 };
-	Vector3i	firstPos = { world_coord(*x), world_coord(*y), 0 };
 
 	ASSERT_OR_RETURN(false, *x<mapWidth,"x coordinate is off-map for pickATileGen" );
 	ASSERT_OR_RETURN(false, *y<mapHeight,"y coordinate is off-map for pickATileGen" );
 
-	if (function(*x,*y) 
-	    && fpathCheck(origin, firstPos, PROPULSION_TYPE_WHEELED)
-	    && ((threatRange <=0) || (!ThreatInRange(player, threatRange, *x, *y, false))))	//TODO: vtol check really not needed?
+	if (function(*x,*y) && ((threatRange <=0) || (!ThreatInRange(player, threatRange, *x, *y, false))))	//TODO: vtol check really not needed?
 	{
 		return(true);
 	}
@@ -3616,7 +3613,7 @@ BOOL buildModule(STRUCTURE *psStruct)
 	{
 		case REF_POWER_GEN:
 			//check room for one more!
-			ASSERT_OR_RETURN(false, psStruct->pFunctionality, "Functionality missing for power!");
+			ASSERT_OR_RETURN(false, psStruct->pFunctionality != NULL, "Functionality missing for power!");
 			if (psStruct->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
 			{
 				i = powerModuleStat;
@@ -3626,7 +3623,7 @@ BOOL buildModule(STRUCTURE *psStruct)
 		case REF_FACTORY:
 		case REF_VTOL_FACTORY:
 			//check room for one more!
-			ASSERT_OR_RETURN(false, psStruct->pFunctionality, "Functionality missing for factory!");
+			ASSERT_OR_RETURN(false, psStruct->pFunctionality != NULL, "Functionality missing for factory!");
 			if (psStruct->pFunctionality->factory.capacity < NUM_FACTORY_MODULES)
 			{
 				i = factoryModuleStat;
@@ -3635,7 +3632,7 @@ BOOL buildModule(STRUCTURE *psStruct)
 			break;
 		case REF_RESEARCH:
 			//check room for one more!
-			ASSERT_OR_RETURN(false, psStruct->pFunctionality, "Functionality missing for research!");
+			ASSERT_OR_RETURN(false, psStruct->pFunctionality != NULL, "Functionality missing for research!");
 			if (psStruct->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES)
 			{
 				i = researchModuleStat;

@@ -70,8 +70,8 @@ void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 
 	glColor4ubv(colour.vector);
 	glBegin(GL_LINE_STRIP);
-	glVertex2f(x0, y0);
-	glVertex2f(x1, y1);
+	glVertex2i(x0, y0);
+	glVertex2i(x1, y1);
 	glEnd();
 }
 
@@ -84,10 +84,10 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 
 	glColor4ubv(colour.vector);
 	glBegin(GL_TRIANGLE_STRIP);
-		glVertex2i(x0, y0);
-		glVertex2i(x1, y0);
-		glVertex2i(x0, y1);
-		glVertex2i(x1, y1);
+		glVertex2f(x0, y0);
+		glVertex2f(x1, y0);
+		glVertex2f(x0, y1);
+		glVertex2f(x1, y1);
 	glEnd();
 }
 
@@ -300,8 +300,8 @@ void pie_DownLoadRadar(UDWORD *buffer, int width, int height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	radarSizeX = width;
 	radarSizeY = height;
-	radarTexX = ((GLfloat)width / (GLfloat)w) * 256.0;
-	radarTexY = ((GLfloat)height / (GLfloat)h) * 256.0;
+	radarTexX = ((GLfloat)width / (GLfloat)w);
+	radarTexY = ((GLfloat)height / (GLfloat)h);
 }
 
 /** Display radar texture using the given height and width, depending on zoom level. */

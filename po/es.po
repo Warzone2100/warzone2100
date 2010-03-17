@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-14 16:07+0100\n"
-"PO-Revision-Date: 2010-02-10 19:11+0100\n"
-"Last-Translator: Saber Nyoki <saberuneko@gmail.com>\n"
+"POT-Creation-Date: 2010-03-16 01:14+0100\n"
+"PO-Revision-Date: 2010-03-15 23:00+0100\n"
+"Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9820,9 +9820,8 @@ msgid "VTOL Lancer Scorpion VTOL"
 msgstr "Escorpión Lanzadera ADV"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
-#, fuzzy
 msgid "VTOL HPV Cannon Scorpion VTOL"
-msgstr "Cañón HPV Escorpión ADV"
+msgstr "ADV HPV Escorpión"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
 #: data/mp/messages/strings/names.txt:1877
@@ -9830,9 +9829,8 @@ msgid "VTOL Lancer Mantis VTOL"
 msgstr "Lanzadera Mantis ADV"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
-#, fuzzy
 msgid "VTOL HPV Cannon Mantis VTOL"
-msgstr "Cañón Pesado Bicho ADV"
+msgstr "ADV HPV Mantis"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
 #: data/mp/messages/strings/names.txt:1882
@@ -9960,7 +9958,6 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr "Mini-Cohetes Cobra Oruga"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Tracks"
 msgstr "Artillería Mini-Cohetes Cobra Oruga"
 
@@ -10901,19 +10898,16 @@ msgid "Rail Target Prediction Computer"
 msgstr "Computador de Predicción de Objetivos"
 
 #: data/mp/messages/strings/names.txt:1174
-#, fuzzy
 msgid "HESH Mini-Rockets"
-msgstr "HE Mini-Cohetes"
+msgstr "HESH Mini-Cohetes"
 
 #: data/mp/messages/strings/names.txt:1175
-#, fuzzy
 msgid "HESH Mini-Rockets Mk2"
-msgstr "HE Mini-Cohetes Mk2"
+msgstr "HESH Mini-Cohetes Mk2"
 
 #: data/mp/messages/strings/names.txt:1176
-#, fuzzy
 msgid "HESH Mini-Rockets Mk3"
-msgstr "HE Mini-Cohetes Mk3"
+msgstr "HESH Mini-Cohetes Mk3"
 
 #: data/mp/messages/strings/names.txt:1385
 msgid "Assault Gun Tower"
@@ -11763,31 +11757,31 @@ msgstr "Jugador Salió"
 msgid "Player dropped"
 msgstr "Jugador Desconectado"
 
-#: src/display.c:1661
+#: src/display.c:1659
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "No se puede construir. Yacimiento de petróleo ardiendo."
 
-#: src/display.c:1841
-#: src/display.c:2443
+#: src/display.c:1839
+#: src/display.c:2441
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Daño %d%% - Experiencia %d, %s"
 
-#: src/display.c:1857
+#: src/display.c:1855
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s Aliado - Daño %d%% - Experiencia %d, %s"
 
-#: src/display.c:2047
+#: src/display.c:2045
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Camión enviado a construir Torre Petrolífera"
 
-#: src/display.c:2048
+#: src/display.c:2046
 #, fuzzy
 msgid "2 trucks ordered to build Oil Derrick"
 msgstr "Camión enviado a construir Torre Petrolífera"
 
-#: src/display.c:2049
+#: src/display.c:2047
 #, fuzzy, c-format
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr "Camión enviado a construir Torre Petrolífera"
@@ -12531,9 +12525,9 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "¡Excelente, la pantalla del sensor está apagada!"
 
 #: src/keybind.c:357
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
-msgstr "El jugador %u está haciendo trampas (menú depuración) con un nuevo androide: %s."
+msgstr "El jugador %u está haciendo trampas con una nueva armada de droides de: %s(s)."
 
 #: src/keybind.c:397
 #: src/keybind.c:427
@@ -13523,7 +13517,7 @@ msgstr "Jugadores"
 #: src/multiint.c:3569
 #, c-format
 msgid "Sending Map: %d%% "
-msgstr ""
+msgstr "Enviando Mapa: %d%%"
 
 #: src/multiint.c:3577
 #, c-format
@@ -13547,7 +13541,7 @@ msgstr "%s abandonó la partida"
 #: src/multijoin.c:227
 #, c-format
 msgid "File transfer has been aborted for %d."
-msgstr ""
+msgstr "La transferencia de archivos ha sido abortada por %d"
 
 #: src/multijoin.c:348
 #, c-format
