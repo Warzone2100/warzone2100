@@ -3320,8 +3320,8 @@
 				02581CC40BD5AD5300957CBC /* Copy game data */,
 			);
 			buildRules = (
-				0246AA730BD3E47F004D1C70 /* PBXBuildRule */,
 				0246AA4D0BD3E067004D1C70 /* PBXBuildRule */,
+				0246AA730BD3E47F004D1C70 /* PBXBuildRule */,
 			);
 			dependencies = (
 				221052AC0E3D369C0057CD9C /* PBXTargetDependency */,
