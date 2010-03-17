@@ -319,7 +319,18 @@ void	kf_DebugTemplates(void)
 		templatelist = apsDroidTemplates[i];
 		while (templatelist)
 		{
-			sprintf(templateName, "%s", templatelist->pName);
+			if (templatelist->pName)
+			{
+				sprintf(templateName, "%s", templatelist->pName);
+			}
+			else if (templatelist->aName)
+			{
+				sprintf(templateName, "%s", templatelist->aName);
+			}
+			else
+			{
+				sprintf(templateName, "(null)");
+			}
 			sprintf(templateMID, "%d", templatelist->multiPlayerID);
 			compBody = RemakeTemplate(templatelist, (COMPONENT_STATS *)asBodyStats, COMP_BODY);
 			compBrain = RemakeTemplate(templatelist, (COMPONENT_STATS *)asBrainStats, COMP_BRAIN);
@@ -358,7 +369,18 @@ void	kf_DebugTemplates(void)
 	templatelist = apsStaticTemplates;		//AI templates
 	while (templatelist)
 	{
-		sprintf(templateName, "%s", templatelist->pName);
+		if (templatelist->pName)
+		{
+			sprintf(templateName, "%s", templatelist->pName);
+		}
+		else if (templatelist->aName)
+		{
+			sprintf(templateName, "%s", templatelist->aName);
+		}
+		else
+		{
+			sprintf(templateName, "(null)");
+		}
 		sprintf(templateMID, "%d", templatelist->multiPlayerID);
 		compBody = RemakeTemplate(templatelist, (COMPONENT_STATS *)asBodyStats, COMP_BODY);
 		compBrain = RemakeTemplate(templatelist, (COMPONENT_STATS *)asBrainStats, COMP_BRAIN);
