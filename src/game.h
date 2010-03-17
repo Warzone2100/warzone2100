@@ -29,6 +29,8 @@
 #ifndef __INCLUDED_SRC_GAME_H__
 #define __INCLUDED_SRC_GAME_H__
 
+#include "lib/framework/vector.h"
+
 #ifdef __cplusplus
 extern "C"
 {

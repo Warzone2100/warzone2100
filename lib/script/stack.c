@@ -1013,6 +1013,7 @@ void stackShutDown(void)
 		free(psCurr->aVals);
 		free(psCurr);
 	}
+	psStackBase = NULL;
 }
 
 /* Get rid of the top value without returning it */

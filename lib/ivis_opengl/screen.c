@@ -168,9 +168,6 @@ bool screenInitialise()
 	glLoadIdentity();
 	glOrtho(0.0f, (double)width, (double)height, 0.0f, 1.0f, -1.0f);
 
-	glMatrixMode(GL_TEXTURE);
-	glScalef(1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f); // FIXME Scaling texture coords to 256x256!
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glCullFace(GL_FRONT);
@@ -293,11 +290,11 @@ void screen_Upload(const char *newBackDropBmp)
 	glBegin(GL_TRIANGLE_STRIP);
 		glTexCoord2f(0, 0);
 		glVertex2f(0, 0);
-		glTexCoord2f(255, 0);
+		glTexCoord2f(1, 0);
 		glVertex2f(screenWidth, 0);
-		glTexCoord2f(0, 255);
+		glTexCoord2f(0, 1);
 		glVertex2f(0, screenHeight);
-		glTexCoord2f(255, 255);
+		glTexCoord2f(1, 1);
 		glVertex2f(screenWidth, screenHeight);
 	glEnd();
 }
@@ -324,7 +321,7 @@ static const unsigned int channelsPerPixel = 3;
 void screenDoDumpToDiskIfRequired(void)
 {
 	const char* fileName = screendump_filename;
-	static iV_Image image = { 0, 0, 8, NULL };
+	iV_Image image = { 0, 0, 8, NULL };
 
 	if (!screendump_required) return;
 	debug( LOG_3D, "Saving screenshot %s\n", fileName );
@@ -354,7 +351,10 @@ void screenDoDumpToDiskIfRequired(void)
 	// display message to user about screenshot
 	snprintf(ConsoleString,sizeof(ConsoleString),"Screenshot %s saved!",fileName);
 	addConsoleMessage(ConsoleString, LEFT_JUSTIFY,SYSTEM_MESSAGE);
-
+	if (image.bmp)
+	{
+		free(image.bmp);
+	}
 	screendump_required = false;
 }
 

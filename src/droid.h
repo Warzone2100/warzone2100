@@ -217,6 +217,9 @@ extern BOOL activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 /* calculate muzzle tip location in 3d world added int weapon_slot to fix the always slot 0 hack*/
 extern BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot);
 
+/* gets a template from its aName (when pName is unknown) */ 
+extern DROID_TEMPLATE	*GetHumanDroidTemplate(char *aName);
+extern DROID_TEMPLATE	*GetAIDroidTemplate(char *aName);
 /* gets a template from its name - relies on the name being unique */
 extern DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player);
 /* gets a template from its name - relies on the name being unique */
@@ -309,9 +312,9 @@ extern BOOL droidUpdateClearing( DROID *psDroid );
 a defined range*/
 extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
 
-//access function
+/// Returns true iff the droid has VTOL propulsion, and is not a transport.
 extern BOOL isVtolDroid(const DROID* psDroid);
-/* returns true if the droid has lift propulsion and is moving */  
+/// Returns true iff the droid has VTOL propulsion and is moving.
 extern BOOL isFlying(const DROID* psDroid);
 /*returns true if a VTOL weapon droid which has completed all runs*/
 extern BOOL vtolEmpty(DROID *psDroid);

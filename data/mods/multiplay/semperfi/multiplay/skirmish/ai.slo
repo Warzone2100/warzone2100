@@ -507,7 +507,8 @@ function int numResearchLabs()
 	return count;
 }
 
-function bool grabTrucksAndBuild(int bx, int by, int range, STRUCTURESTAT bstats)
+// Build something on specific position, grab trucks to do it within tiles range
+function bool grabTrucksAndBuildAt(int bx, int by, int range, STRUCTURESTAT bstats)
 {
 	local DROID	mydroid, closestDroid;
 	local int	closestDist, currDist, numHelpDroids, tilerange;
@@ -533,6 +534,51 @@ function bool grabTrucksAndBuild(int bx, int by, int range, STRUCTURESTAT bstats
 			{
 				closestDroid = mydroid;	// record this droid as being closest so far
 				closestDist = currDist;
+			}
+		}
+		mydroid = iterateGroup(buildGroup);
+	}
+	if (numHelpDroids == 0 and closestDroid != NULLOBJECT)	// found none within help radius, so force someone to go long distance traveling
+	{
+		dbgObj(closestDroid, "Asked to do long distance construction work at (" & bx & ", " & by & ")");
+		orderDroidStatsLoc(closestDroid, DORDER_BUILD, bstats, bx, by);	// you, book a plane ticket and go!
+		return true;
+	}
+	return (numHelpDroids > 0);
+}
+
+// Build something in main base, grab trucks to do it within tiles range
+function bool grabTrucksAndBuild(int range, STRUCTURESTAT bstats, int maxBlockingTiles)
+{
+	local DROID	mydroid, closestDroid;
+	local int	closestDist, currDist, numHelpDroids, tilerange, bx, by;
+
+	initIterateGroup(buildGroup);				// find idle droids in build group.
+	mydroid = iterateGroup(buildGroup);
+	closestDist = 99999;
+	closestDroid = NULLOBJECT;
+	numHelpDroids = 0;
+	tilerange = range * TILE;
+	while (mydroid != NULLOBJECT)
+	{
+		if (conCanHelp(mydroid, baseX, baseY))
+		{
+			bx = baseX;
+			by = baseY;
+			if (pickDroidStructLocation(mydroid, bstats, ref bx, ref by, me, maxBlockingTiles))
+			{
+				currDist = distBetweenTwoPoints(bx, by, mydroid.x, mydroid.y);
+				if (currDist < tilerange)
+				{
+					orderDroidStatsLoc(mydroid, DORDER_BUILD, bstats, bx, by);	// close, so help build it
+					numHelpDroids = numHelpDroids + 1;
+					dbgObj(mydroid, "Asked to do short distance construction at (" & bx & ", " & by & ")");
+				}
+				else if (currDist < closestDist)
+				{
+					closestDroid = mydroid;	// record this droid as being closest so far
+					closestDist = currDist;
+				}
 			}
 		}
 		mydroid = iterateGroup(buildGroup);
@@ -587,8 +633,7 @@ event arrived(reachedTr)
 				{
 					buildX = droid.x;
 					buildY = droid.y;
-					found = pickStructLocationB(defStructs[count], ref buildX, ref buildY, me, -1);
-					if (found and droidCanReach(droid, buildX, buildY))
+					if (pickDroidStructLocation(droid, defStructs[count], ref buildX, ref buildY, me, -1))
 					{
 						dbgObj(droid, "Building defense at enemy oil derrick - just to be nasty");
 						orderDroidStatsLoc(droid, DORDER_BUILD, defStructs[count], buildX, buildY);
@@ -628,7 +673,7 @@ function bool tryUpgrade()
 		{
 			if (not testStructureModule(me, struct, 0))
 			{
-				return grabTrucksAndBuild(struct.x, struct.y, TILE * 8, powModule);
+				return grabTrucksAndBuildAt(struct.x, struct.y, 8, powModule);
 			}
 			struct = enumStruct();
 		}
@@ -641,7 +686,7 @@ function bool tryUpgrade()
 		{
 			if (not testStructureModule(me, struct, 0))
 			{
-				return grabTrucksAndBuild(struct.x, struct.y, TILE * 10, facModule);
+				return grabTrucksAndBuildAt(struct.x, struct.y, 10, facModule);
 			}
 			struct = enumStruct();
 		}
@@ -652,7 +697,7 @@ function bool tryUpgrade()
 		{
 			if (not testStructureModule(me, struct, 0))
 			{
-				return grabTrucksAndBuild(struct.x, struct.y, TILE * 10, facModule);
+				return grabTrucksAndBuildAt(struct.x, struct.y, 10, facModule);
 			}
 			struct = enumStruct();
 		}
@@ -665,7 +710,7 @@ function bool tryUpgrade()
 		{
 			if (not testStructureModule(me, struct, 0))
 			{
-				return grabTrucksAndBuild(struct.x, struct.y, TILE * 6, resModule);
+				return grabTrucksAndBuildAt(struct.x, struct.y, 6, resModule);
 			}
 			struct = enumStruct();
 		}
@@ -735,15 +780,9 @@ event buildFundamentals(inactive)
 			{
 				if (isStructureAvailable(structs[count], me))
 				{
-					buildX = baseX;						// pick a location
-					buildY = baseY;
-					boolResult = pickStructLocationB(structs[count], ref buildX, ref buildY, me, 0);
-					if (boolResult == TRUE)
+					if (grabTrucksAndBuild(15, structs[count], 0))
 					{
-						if (grabTrucksAndBuild(buildX, buildY, TILE * 15, structs[count]))
-						{
-							exit;
-						}
+						exit;
 					}
 				}
 			}
@@ -853,7 +892,7 @@ event truckRush(inactive)
 	// Pick location for defensive building near for our trucks
 	buildX = _closestOil.x;
 	buildY = _closestOil.y;
-	if (!found || !pickStructLocation(defStructs[mindist], ref buildX, ref buildY, me))
+	if (!found || !pickDroidStructLocation(droid, defStructs[mindist], ref buildX, ref buildY, me, -1))
 	{
 		dbgPlr("Failed to find defense, or failed to find placement for it");
 		groupAddGroup(buildGroup, rushGroup); // reverse
@@ -1195,15 +1234,16 @@ event buildOilDefenseOrRetreat(inactive)
 						count = random(count2);						 //count = choice!
 
 						// pick a location
-						boolResult = pickStructLocation(structChoice[count], ref buildX, ref buildY,me);
-
-						_numBuilders = numBuildSameBuilding(NULLSTRUCTURESTAT, buildX, buildY);
-
-						if((boolResult == TRUE) and (_numBuilders < _maxBuilders) and droidCanReach(droid, buildX, buildY))
+						if (pickDroidStructLocation(droid, structChoice[count], ref buildX, ref buildY, me, 1))
 						{
-							// build it.
-							orderDroidStatsLoc(droid, DORDER_BUILD,structChoice[count], buildX,buildY);
-							_numBuilders++;
+							_numBuilders = numBuildSameBuilding(NULLSTRUCTURESTAT, buildX, buildY);
+
+							if (_numBuilders < _maxBuilders)
+							{
+								// build it.
+								orderDroidStatsLoc(droid, DORDER_BUILD,structChoice[count], buildX,buildY);
+								_numBuilders++;
+							}
 						}
 					}
 				}
@@ -1405,21 +1445,11 @@ event incendry(inactive)
 // build a power gen for every 4 derricks. VITAL!
 event buildPowerGenerators(inactive)
 {
-	buildX = baseX;								// try build powergen.
-	buildY = baseY;
-	boolResult = pickStructLocation(powGen, ref buildX, ref buildY, me);
-	if (isStructureAvailable(powGen, me) and boolResult == TRUE)
+	if (isStructureAvailable(powGen, me))
 	{
-		initIterateGroup(buildGroup);
-		droid = iterateGroup(buildGroup);
-		while (droid != NULLOBJECT)
+		if (not grabTrucksAndBuild(8, powGen, 1))
 		{
-			if (conCanHelp(droid, buildX, buildY))
-			{
-				dbgObj(droid, "Building power generator at (" & buildX & ", " & buildY & ")");
-				orderDroidStatsLoc(droid, DORDER_BUILD, powGen, buildX, buildY);
-			}
-			droid = iterateGroup(buildGroup);
+			dbgPlr("Needed power generator but could not build one");
 		}
 	}
 	setEventTrigger(buildPowerGenerators, inactive);
@@ -1452,8 +1482,7 @@ event buildExpand(inactive)
 		buildY = baseY;
 		if (isStructureAvailable(cybFactory, me) and (cybfacs < factories))
 		{
-			boolResult = pickStructLocationB(cybFactory, ref buildX, ref buildY, me, 0);
-			if (boolResult and grabTrucksAndBuild(buildX, buildY, 8, cybFactory))
+			if (grabTrucksAndBuild(8, cybFactory, 0))
 			{
 				dbgPlr("Building more cyborg factories");
 			}
@@ -1461,8 +1490,7 @@ event buildExpand(inactive)
 		}
 		if (isStructureAvailable(resLab, me) and (reslabs < factories))
 		{
-			boolResult = pickStructLocationB(resLab, ref buildX, ref buildY, me, 0);
-			if (boolResult and grabTrucksAndBuild(buildX, buildY, 8, resLab))
+			if (grabTrucksAndBuild(8, resLab, 0))
 			{
 				dbgPlr("Building more research labs");
 			}
@@ -1470,8 +1498,7 @@ event buildExpand(inactive)
 		}
 		if (isStructureAvailable(vtolFactory, me) and (vtolfacs < factories))
 		{
-			boolResult = pickStructLocationB(vtolFactory, ref buildX, ref buildY, me, 0);
-			if (boolResult and grabTrucksAndBuild(buildX, buildY, 8, vtolFactory))
+			if (grabTrucksAndBuild(8, vtolFactory, 0))
 			{
 				dbgPlr("Building more VTOL factories");
 			}
@@ -1479,8 +1506,7 @@ event buildExpand(inactive)
 		}
 		if (isStructureAvailable(factory, me) and (factories < vtolfacs + cybfacs + reslabs + 1))
 		{
-			boolResult = pickStructLocationB(factory, ref buildX, ref buildY, me, 0);
-			if (boolResult and grabTrucksAndBuild(buildX, buildY, 12, factory))
+			if (grabTrucksAndBuild(12, factory, 0))
 			{
 				dbgPlr("Building more factories");
 			}
@@ -2673,7 +2699,6 @@ event consolidateEvent(consolidateEventTr)
 // build vtol strucutures.
 event vtolStructs(inactive)
 {
-	local	int		_maxTrucks,_numTrucks,_maxBuildTrucks,_minBuildTrucks;
 	local	int		_numVtolFacs,_numRearmPads;
 
 	// got any idle trucks?
@@ -2698,31 +2723,11 @@ event vtolStructs(inactive)
 		exit;	// Throttle expansion to avoid waste
 	}
 
-	// calculate how many trucks we want to use for construction
-	_minBuildTrucks = 1;
-	_maxBuildTrucks = 3;
-	_maxTrucks = min(_maxBuildTrucks, max(_minBuildTrucks, idleGroup(buildGroup) / 2));
-
 	if (isStructureAvailable(vtolFactory, me) and _numVtolFacs < maxVtolFacs[curTech])			// if not enough
 	{
-		// build factory
-		buildX = baseX;								// pick a location
-		buildY = baseY;
-		boolResult = pickStructLocation(vtolFactory, ref buildX, ref buildY,me);
-		if(boolResult == TRUE)
+		if (not grabTrucksAndBuild(8, vtolFactory, 1))
 		{
-			initIterateGroup(buildGroup);			// find idle droids in build group.
-			droid = iterateGroup(buildGroup);
-			_numTrucks = 0;							// only send _maxTrucks to do the job
-			while( (_numTrucks < _maxTrucks) and (droid != NULLOBJECT))
-			{
-				if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
-				{
-					orderDroidStatsLoc(droid, DORDER_BUILD,vtolFactory, buildX,buildY);
-					_numTrucks++;
-				}
-				droid = iterateGroup(buildGroup);
-			}
+			dbgPlr("Wanted to build VTOL Factory but could not");
 		}
 	}
 }
@@ -2747,32 +2752,11 @@ function int totalVtols()
 
 function void buildRearmPads()
 {
-	local	int		_buildX,_buildY;
-	local	DROID	_truck;
-	local	bool	_buildOK;
-
-	if(!isStructureAvailable(vtolPad,me)){
-		return;
-	}
-
-	// build vtol rearm pads.
-	_buildX = baseX;								// pick a location
-	_buildY = baseY;
-
-	_buildOK = pickStructLocation(vtolPad, ref _buildX, ref _buildY,me);
-	if(_buildOK)
+	if (isStructureAvailable(vtolPad, me))
 	{
-		initIterateGroup(buildGroup);			// find idle droids in build group.
-		_truck = iterateGroup(buildGroup);
-		_buildOK = FALSE;
-		while(_truck != NULLOBJECT and _buildOK == FALSE)
+		if (not grabTrucksAndBuild(4, vtolPad, -1))
 		{
-			if (conCanHelp(_truck, _buildX, _buildY))
-			{
-				orderDroidStatsLoc(_truck, DORDER_BUILD,vtolPad, _buildX,_buildY);
-				_buildOK = TRUE;
-			}
-			_truck = iterateGroup(buildGroup);
+			dbgPlr("Wanted to build VTOL rearm pad, but could not");
 		}
 	}
 }
@@ -3200,8 +3184,8 @@ event vtolDefend(vtolDefendTr)
 						}
 						if(count2 != (-1) )
 						{
-							boolResult = pickStructLocation(vtolDefStruct[count2], ref buildX, ref buildY,me);
-							if((boolResult == TRUE) and (_numBuilders < _maxBuilders) and droidCanReach(droid, buildX, buildY))	// build a vtol defense near the attacked struct...
+							boolResult = pickDroidStructLocation(droid, vtolDefStruct[count2], ref buildX, ref buildY, me, 1);
+							if (boolResult == TRUE and (_numBuilders < _maxBuilders))	// build a vtol defense near the attacked struct...
 							{
 								orderDroidStatsLoc(droid, DORDER_BUILD,vtolDefStruct[count2],buildX,buildY);
 								_numBuilders++;
@@ -4230,17 +4214,16 @@ function void buildOnExactLocation(DROID _truck, int _x, int _y, STRUCTURESTAT _
 	_newX = _x;
 	_newY = _y;
 
-	if(pickStructLocationB(_stat, ref _newX, ref _newY, me, -1))
+	if (pickDroidStructLocation(_truck, _stat, ref _newX, ref _newY, me, -1))
 	{
 		dbg("trying to rebuild on (" & _newX & "/" & _newY & ")", me);
 
-		if((_x != _newX) or (_y != _newY) or !droidCanReach(_truck, _x, _y))
+		if ((_x != _newX) or (_y != _newY))
 		{
 			return;
 		}
 
 		orderDroidStatsLoc(_truck, DORDER_BUILD, _stat, _x, _y);
-		//dbg("rebuilding structure after!! (" & _x & "/" & _y & ")", me);
 	}
 }
 

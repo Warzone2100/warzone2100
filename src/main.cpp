@@ -511,8 +511,6 @@ static void scanDataDirs( void )
 		}
 	}
 
-	atexit( cleanSearchPath );
-
 	// Commandline supplied datadir
 	if( strlen( datadir ) != 0 )
 		registerSearchPath( datadir, 1 );
@@ -973,8 +971,6 @@ int main(int argc, char *argv[])
 	setupExceptionHandler(argc, argv);
 
 	debug_init();
-	atexit( debug_exit );
-
 	debug_register_callback( debug_callback_stderr, NULL, NULL, NULL );
 #if defined(WZ_OS_WIN) && defined(DEBUG_INSANE)
 	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
@@ -1021,7 +1017,7 @@ int main(int argc, char *argv[])
 	debug(LOG_MAIN, "initializing");
 
 	loadConfig();
-	atexit( closeConfig );
+
 	loadRenderMode(); //get the registry entry for clRendMode
 
 	NETinit(true);
@@ -1129,13 +1125,11 @@ int finalInitialization()
 	{
 		return -1;
 	}
-	atexit(frameShutDown);
 
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);
 
 	pal_Init();
-	atexit(pal_ShutDown);
 
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	pie_SetFogStatus(false);
@@ -1145,7 +1139,6 @@ int finalInitialization()
 	{
 		return -1;
 	}
-	atexit(systemShutdown);
 
 	//set all the pause states to false
 	setAllPauseStates(false);

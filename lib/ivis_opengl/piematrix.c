@@ -296,22 +296,6 @@ void pie_PerspectiveEnd(void)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-
-void pie_TranslateTextureBegin(const Vector2f offset)
-{
-	glMatrixMode(GL_TEXTURE);
-	glTranslatef(offset.x, offset.y, 0.0f);
-	glMatrixMode(GL_MODELVIEW);
-}
-
-void pie_TranslateTextureEnd(void)
-{
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-	glScalef(1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f); // FIXME Scaling texture coords to 256x256!
-	glMatrixMode(GL_MODELVIEW);
-}
-
 void pie_Begin3DScene(void)
 {
 	pie_SetTexturePage(TEXPAGE_FONT);

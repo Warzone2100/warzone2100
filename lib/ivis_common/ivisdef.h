@@ -65,11 +65,6 @@ typedef struct _iSurface {
 //
 //*************************************************************************
 
-typedef struct {
-	int textureWidth;
-	int textureHeight;
-} iTexAnim;
-
 /// Stores the from and to verticles from an edge
 typedef struct edge_
 {
@@ -85,7 +80,7 @@ typedef struct {
 	Vector3f normal;
 	VERTEXID *pindex;
 	Vector2f *texCoord;
-	iTexAnim texAnim;
+	Vector2f texAnim;
 } iIMDPoly;
 
 typedef struct _iIMDShape {

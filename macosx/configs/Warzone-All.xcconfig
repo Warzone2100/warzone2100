@@ -10,14 +10,13 @@ INFOPLIST_PREFIX_HEADER = $(SRCROOT)/build/autorevision.h
 INFOPLIST_PREPROCESS = YES
 PRODUCT_NAME = Warzone
 WRAPPER_EXTENSION = app
-FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_1) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2) $(FRAMEWORK_SEARCH_PATHS_QUOTED_3) $(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)
+FRAMEWORK_SEARCH_PATHS = $(FRAMEWORK_SEARCH_PATHS_QUOTED_1) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2) $(inherited)
 HEADER_SEARCH_PATHS = .. $(inherited)
 LIBRARY_SEARCH_PATHS = $(inherited) $(LIBRARY_SEARCH_PATHS_QUOTED_1)
 GCC_MODEL_TUNING = G5
-OTHER_CFLAGS = -Wno-pointer-to-int-cast -Wmissing-declarations -Wstrict-prototypes -Wdeclaration-after-statement $(inherited) // Warning flags that c++ does not like
-OTHER_CPLUSPLUSFLAGS = 
-GCC_PRECOMPILE_PREFIX_HEADER = YES
-GCC_PREFIX_HEADER = 
+OTHER_CFLAGS = $(FlagsForCandCpp) -Wno-pointer-to-int-cast -Wmissing-declarations -Wstrict-prototypes -Wdeclaration-after-statement $(inherited) // Warning flags that c++ does not like
+OTHER_CPLUSPLUSFLAGS = $(FlagsForCandCpp)
+
 
 // Warnings
 GCC_WARN_ABOUT_RETURN_TYPE = YES // -Wreturn-type
@@ -27,9 +26,3 @@ GCC_WARN_UNUSED_FUNCTION = YES // -Wunused-function
 GCC_WARN_UNUSED_LABEL = YES // -Wunused-label
 GCC_WARN_UNUSED_VALUE = YES // -Wunused-value
 GCC_WARN_UNUSED_VARIABLE = YES // -Wunused-variable
-
-FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks"
-FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "$(SRCROOT)/build/$(CONFIGURATION)"
-FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks"
-FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "$(SRCROOT)/external/QT"
-LIBRARY_SEARCH_PATHS_QUOTED_1 = "$(SRCROOT)/build/$(CONFIGURATION)"

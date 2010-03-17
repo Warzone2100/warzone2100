@@ -34,18 +34,23 @@
 #include "lib/sound/audio.h"
 
 #include "data.h"
+#include "droid.h"
+#include "feature.h"
+#include "function.h"
 #include "mechanics.h"
 #include "message.h"
+#include "multiplay.h"
+#include "research.h"
 #include "scriptvals.h"
+#include "stats.h"
+#include "text.h"
+#include "texture.h"
 
 #ifndef WZ_OS_WIN
 #include <arpa/inet.h>
 #else
 #include <Winsock2.h>
 #endif
-
-#include "text.h"
-#include "texture.h"
 
 #define DT_TEXPAGE "TEXPAGE"
 #define DT_TCMASK "TCMASK"

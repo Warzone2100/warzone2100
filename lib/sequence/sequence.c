@@ -337,17 +337,15 @@ static void video_write(bool update)
 
 	glPushMatrix();
 
-	// NOTE: 255 * width | height, because texture matrix is set up with a
-	// call to glScalef(1/256.0, 1/256.0, 1) ... so don't blame me. :P
 	glTranslatef(ScrnvidXpos, ScrnvidYpos, 0.0f);
 	glBegin(GL_TRIANGLE_STRIP);
 	glTexCoord2f(0, 0);
 	glVertex2f(0, 0);
-	glTexCoord2f(256 * video_width / texture_width, 0);
+	glTexCoord2f((float) video_width / texture_width, 0);
 	glVertex2f(ScrnvidXsize, 0);				//screenWidth
-	glTexCoord2f(0, 256 * video_height / texture_height);
+	glTexCoord2f(0, (float) video_height / texture_height);
 	glVertex2f(0, ScrnvidYsize);				//screenHeight
-	glTexCoord2f(256 * video_width / texture_width, 256 * video_height / texture_height);
+	glTexCoord2f((float) video_width / texture_width, (float) video_height / texture_height);
 	glVertex2f(ScrnvidXsize, ScrnvidYsize);		//screenWidth,screenHeight
 	glEnd();
 

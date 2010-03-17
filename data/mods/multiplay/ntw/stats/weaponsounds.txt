@@ -82,7 +82,7 @@ Cyb-Hvywpn-TK,rocket.ogg,lrgexpl.ogg, 181
 Cyb-Hvywpn-RailGunner,gaussgun.ogg,lrgexpl.ogg, 182 
 Cyb-Hvywpn-PulseLsr,plslsr.ogg,lsrexpl.ogg, 183 
 Cyb-Hvywpn-Mcannon,medcan.ogg,smlexpl.ogg, 184 
-Cyb-Hvywpn-HPV,cybgrnd.ogg,smlexpl.ogg, 175
+Cyb-Hvywpn-HPV,cybgrnd.ogg,smlexpl.ogg, 185
 Cyb-Hvywpn-Acannon,col013a.ogg,smlexpl.ogg, 186 
 Cyb-Hvywpn-A-T,col016a.ogg,smlexpl.ogg, 187 
 CommandTurret1,rotlsr.ogg,-1, 191 
@@ -130,3 +130,4 @@ ReactorBurn,plslsr.ogg,lsrexpl.ogg, 232
 RailGun4Mk1,col020a.ogg,lrgexpl.ogg, 233 
 EMP-Trap,emp.ogg,-1, 234
 AAS-weapon,emp.ogg,-1, 235
+scv-Hvywpn-HPV,cybgrnd.ogg,smlexpl.ogg, 236

@@ -5350,7 +5350,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 			psSaveDroid->player, false);
 	}
 
-	ASSERT_OR_RETURN(NULL, psDroid, "Failed to build unit");
+	ASSERT_OR_RETURN(NULL, psDroid != NULL, "Failed to build unit");
 
 	//copy the droid's weapon stats
 	for (i=0; i < psDroid->numWeaps; i++)
@@ -5737,7 +5737,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 			psSaveDroid->player, false);
 	}
 
-	ASSERT_OR_RETURN(NULL, psDroid, "Failed to build unit");
+	ASSERT_OR_RETURN(NULL, psDroid != NULL, "Failed to build unit");
 
 	turnOffMultiMsg(false);
 

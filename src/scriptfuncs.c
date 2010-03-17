@@ -5658,7 +5658,7 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 	return false;
 }
 
-static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxBlockingTiles)
+static BOOL pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int player, int maxBlockingTiles)
 {
 	STRUCTURE_STATS	*psStat;
 	UDWORD			numIterations = 30;
@@ -5680,8 +5680,12 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 	x = startX;
 	y = startY;
 
+	// save a lot of typing... checks whether a position is valid
+	#define LOC_OK(_x, _y) ((!psDroid || fpathCheck(psDroid->pos, Vector3i_Init(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
+	                        && validLocation((BASE_STATS*)psStat, _x, _y, player, false) && structDoubleCheck((BASE_STATS*)psStat, _x, _y, maxBlockingTiles))
+
 	// first try the original location
-	if (validLocation((BASE_STATS*)psStat, startX, startY, player, false) && structDoubleCheck((BASE_STATS*)psStat, startX, startY, maxBlockingTiles))
+	if (LOC_OK(startX, startY))
 	{
 		found = true;
 	}
@@ -5692,8 +5696,7 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 		y = startY - incY;	// top
 		for (x = startX - incX; x < (SDWORD)(startX + incX); x++)
 		{
-			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
-			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			if (LOC_OK(x, y))
 			{
 				found = true;
 				goto endstructloc;
@@ -5702,8 +5705,7 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 		x = startX + incX;	// right
 		for (y = startY - incY; y < (SDWORD)(startY + incY); y++)
 		{
-			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
-			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			if (LOC_OK(x, y))
 			{
 				found = true;
 				goto endstructloc;
@@ -5712,8 +5714,7 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 		y = startY + incY;	// bottom
 		for (x = startX + incX; x > (SDWORD)(startX - incX); x--)
 		{
-			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
-			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			if (LOC_OK(x, y))
 			{
 				found = true;
 				goto endstructloc;
@@ -5722,8 +5723,7 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 		x = startX - incX;	// left
 		for (y = startY + incY; y > (SDWORD)(startY - incY); y--)
 		{
-			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
-			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			if (LOC_OK(x, y))
 			{
 				found = true;
 				goto endstructloc;
@@ -5758,7 +5758,20 @@ BOOL scrPickStructLocation(void)
 	{
 		return false;
 	}
-	return pickStructLocation(index, pX, pY, player, MAX_BLOCKING_TILES);
+	return pickStructLocation(NULL, index, pX, pY, player, MAX_BLOCKING_TILES);
+}
+
+// pick a structure location and check that we can build there (duh!)
+BOOL scrPickStructLocationC(void)
+{
+	int			*pX, *pY, index, player, maxBlockingTiles;
+	DROID			*psDroid;
+
+	if (!stackPopParams(6, ST_DROID, &psDroid, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX , VAL_REF|VAL_INT, &pY, VAL_INT, &player, VAL_INT, &maxBlockingTiles))
+	{
+		return false;
+	}
+	return pickStructLocation(psDroid, index, pX, pY, player, maxBlockingTiles);
 }
 
 // pick a structure location(only used in skirmish game at 27Aug) ajl.
@@ -5775,7 +5788,7 @@ BOOL scrPickStructLocationB(void)
 	{
 		return false;
 	}
-	return pickStructLocation(index, pX, pY, player, maxBlockingTiles);
+	return pickStructLocation(NULL, index, pX, pY, player, maxBlockingTiles);
 }
 
 // -----------------------------------------------------------------------------------------

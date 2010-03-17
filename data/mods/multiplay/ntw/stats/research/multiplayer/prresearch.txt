@@ -449,9 +449,6 @@ R-Wpn-Missile-Accuracy02,R-Wpn-Missile-Accuracy01,109
 R-Wpn-Missile-Damage01,R-Wpn-Missile-LtSAM,109
 R-Wpn-Missile-Damage02,R-Wpn-Missile-Damage01,109
 R-Wpn-Missile-Damage03,R-Wpn-Missile-Damage02,109
-R-Wpn-Missile-ROF01,R-Wpn-MdArtMissile,109
-R-Wpn-Missile-ROF02,R-Wpn-Missile-ROF01,109
-R-Wpn-Missile-ROF03,R-Wpn-Missile-ROF02,109
 R-Wpn-Mortar-Damage04,R-Wpn-Mortar02Hvy,109
 R-Wpn-Mortar-Damage04,R-Wpn-Mortar-Damage03,109
 R-Wpn-Mortar-Damage05,R-Wpn-Mortar-Damage04,109
@@ -566,7 +563,6 @@ R-Defense-Super-Rocket,R-Defense-WallUpgrade05,109
 R-Defense-Super-Rocket,R-Wpn-RocketSlow-Damage06,109
 R-Defense-Super-Missile,R-Defense-WallUpgrade10,109
 R-Defense-Super-Missile,R-Wpn-Missile2A-T,109
-R-Defense-Super-Missile,R-Wpn-Missile-ROF03,109
 R-Defense-WallUpgrade10,R-Defense-WallUpgrade09,109
 R-Defense-WallUpgrade11,R-Defense-WallUpgrade10,109
 R-Defense-WallUpgrade12,R-Defense-WallUpgrade11,109

@@ -91,6 +91,7 @@
 #include "aiexperience.h"	/* for console commands */
 #include "scriptfuncs.h"
 #include "clparse.h"
+#include "research.h"
 
 /*
 	KeyBind.c
@@ -297,20 +298,42 @@ DROID	*psDroid;
 
 void	kf_CloneSelected( void )
 {
-	DROID		*psDroid, *psNewDroid;
+	DROID		*psDroid, *psNewDroid = NULL;
 	DROID_TEMPLATE	sTemplate;
+	DROID_TEMPLATE	*sTemplate2 = NULL;
 	const int	limit = 10;	// make 10 clones
 	int		i, impact_side;
+	const char* msg;
+
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
 
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
 	{
 		for (i = 0; psDroid->selected && i < limit; i++)
 		{
 			// create a template based on the droid
+			if (!sTemplate2)
+			{
+				sTemplate2 = GetHumanDroidTemplate(psDroid->aName);
+				if (!sTemplate2)
+				{	// we now search the AI template list (apsStaticTemplates)
+					sTemplate2 = GetAIDroidTemplate(psDroid->aName);
+				}
+			}
+			if (!sTemplate2)
+			{
+				debug(LOG_ERROR, "We can't find the template for this droid: %s, id:%u, type:%d!", psDroid->aName, psDroid->id, psDroid->droidType);
+				return;
+			}
+			memcpy(&sTemplate, sTemplate2, sizeof(DROID_TEMPLATE));
 			templateSetParts(psDroid, &sTemplate);
-
-			// copy the name across
-			sstrcpy(sTemplate.aName, psDroid->aName);
 
 			// create a new droid
 			psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false);
@@ -328,6 +351,17 @@ void	kf_CloneSelected( void )
 			{
 				updateDroidOrientation(psNewDroid);
 			}
+		}
+		if (psNewDroid)
+		{
+			// Send a text message to all players, notifying them of
+			// the fact that we're cheating ourselves a new droid army
+			sasprintf((char**)&msg, _("Player %u is cheating him/herself a new droid army of %s(s)."), selectedPlayer, psNewDroid->aName);
+			sendTextMessage(msg, true);
+			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
+			sTemplate2 = NULL;
+			psNewDroid = NULL;
+			Cheated = true;
 			psNewDroid->selected = true;
 		}
 	}
@@ -1863,6 +1897,7 @@ void	kf_KillEnemy( void )
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"),
 				selectedPlayer, _("All enemies destroyed by cheating!"));
 	sendTextMessage(cmsg, true);
+	Cheated = true;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
@@ -1905,6 +1940,9 @@ void kf_KillSelected(void)
 	sendTextMessage(cmsg, true);
 
 	debug(LOG_DEATH, "Destroying selected droids and structures");
+	audio_PlayTrack(ID_SOUND_COLL_DIE);
+	Cheated = true;
+
 	for(psCDroid=apsDroidLists[selectedPlayer]; psCDroid; psCDroid=psNDroid)
 	{
 		psNDroid = psCDroid->psNext;

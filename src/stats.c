@@ -131,6 +131,7 @@ static void updateMaxConstStats(UWORD maxValue);
 #define ALLOC_STATS(numEntries, list, listSize, type) \
 	ASSERT( (numEntries) < REF_RANGE, \
 	"allocStats: number of stats entries too large for " #type );\
+	if ((list))	free((list));	\
 	(list) = (type *)malloc(sizeof(type) * (numEntries)); \
 	if ((list) == NULL) \
 	{ \
@@ -144,25 +145,12 @@ static void updateMaxConstStats(UWORD maxValue);
 
 /*Macro to Deallocate stats*/
 #define STATS_DEALLOC(list, listSize, type) \
-	statsDealloc((COMPONENT_STATS*)(list), (listSize), sizeof(type))
+	statsDealloc((COMPONENT_STATS*)(list), (listSize), sizeof(type)); \
+	(list) = NULL 
 
 
 void statsInitVars(void)
 {
-	int i,j;
-
-	asBodyStats = NULL;
-	asBrainStats = NULL;
-	asPropulsionStats = NULL;
-	asSensorStats = NULL;
-	asECMStats = NULL;
-	asRepairStats = NULL;
-	asWeaponStats = NULL;
-	asConstructStats = NULL;
-	asPropulsionTypes = NULL;
-	asTerrainTable = NULL;
-	asSpecialAbility = NULL;
-
 	/* The number of different stats stored */
 	numBodyStats = 0;
 	numBrainStats = 0;
@@ -174,18 +162,6 @@ void statsInitVars(void)
 	numConstructStats = 0;
 	numSpecialAbility = 0;
 
-	//stores for each players component states - can be either UNAVAILABLE, REDUNDANT, FOUND or AVAILABLE
-	for(i=0; i<MAX_PLAYERS; i++) {
-		for(j=0; j<COMP_NUMCOMPONENTS; j++) {
-			apCompLists[i][j] = NULL;
-		}
-	}
-
-	//store for each players Structure states
-	for(i=0; i<MAX_PLAYERS; i++) {
-		apStructTypeLists[i] = NULL;
-	}
-
 	//initialise the upgrade structures
 	memset(asWeaponUpgrade, 0, sizeof(asWeaponUpgrade));
 	memset(asSensorUpgrade, 0, sizeof(asSensorUpgrade));
@@ -195,16 +171,19 @@ void statsInitVars(void)
 
 	// init the max values
 	maxComponentWeight = maxBodyArmour = maxBodyPower =
-        maxBodyPoints = maxSensorRange = maxSensorPower = maxECMPower = maxECMRange =
-        maxConstPoints = maxRepairPoints = maxWeaponRange = maxWeaponDamage =
-        maxPropulsionSpeed = 0;
+		maxBodyPoints = maxSensorRange = maxSensorPower = maxECMPower = maxECMRange =
+		maxConstPoints = maxRepairPoints = maxWeaponRange = maxWeaponDamage =
+		maxPropulsionSpeed = 0;
 }
 
 
 /*Deallocate all the stats assigned from input data*/
 void statsDealloc(COMPONENT_STATS* pStats, UDWORD listSize, UDWORD structureSize)
 {
-	free(pStats);
+	if (pStats)
+	{
+		free(pStats);
+	}
 }
 
 

@@ -752,7 +752,7 @@ BOOL recvStructureCheck()
 	Rotation		rot;
 	uint8_t			player, ourCapacity;
 	uint32_t		body;
-	uint16_t		x, y, z;
+	Position                pos;
 	uint32_t		ref, type;
 
 	NETbeginDecode(NET_CHECK_STRUCT);
@@ -760,9 +760,7 @@ BOOL recvStructureCheck()
 		NETuint32_t(&ref);
 		NETuint32_t(&body);
 		NETuint32_t(&type);
-		NETuint16_t(&x);
-		NETuint16_t(&y);
-		NETuint16_t(&z);
+		NETPosition(&pos);
 		NETRotation(&rot);
 
 		if (player >= MAX_PLAYERS)
@@ -788,11 +786,11 @@ BOOL recvStructureCheck()
 			psStats = &asStructureStats[i];
 
 			// Check for similar buildings, to avoid overlaps
-			if (TileHasStructure(mapTile(map_coord(x), map_coord(y))))
+			if (TileHasStructure(mapTile(map_coord(pos.x), map_coord(pos.y))))
 			{
 				NETlogEntry("scheck:Tile has structure val=player", 0, player);
 
-				pS = getTileStructure(map_coord(x), map_coord(y));
+				pS = getTileStructure(map_coord(pos.x), map_coord(pos.y));
 
 				// If correct type && player then complete & modify
 				if (pS
@@ -819,7 +817,7 @@ BOOL recvStructureCheck()
 						removeStruct(pS, true);
 
 						powerCalc(false);
-						pS = buildStructure((STRUCTURE_STATS * )psStats, x, y, player, true);
+						pS = buildStructure((STRUCTURE_STATS * )psStats, pos.x, pos.y, player, true);
 						powerCalc(true);
 
 						if (pS)
@@ -845,7 +843,7 @@ BOOL recvStructureCheck()
 				NETlogEntry("scheck: didn't find structure at all, building it",0,0);
 
 				powerCalc(false);
-				pS = buildStructure((STRUCTURE_STATS *) psStats, x, y, player, true);
+				pS = buildStructure((STRUCTURE_STATS *) psStats, pos.x, pos.y, player, true);
 				powerCalc(true);
 			}
 		}

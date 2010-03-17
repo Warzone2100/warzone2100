@@ -32,6 +32,7 @@ extern "C"
 #define PIE_NAME				"PIE"  // Pumpkin image export data file
 #define IMD_VER				1
 #define PIE_VER				2
+#define PIE_FLOAT_VER		3
 
 //*************************************************************************
 

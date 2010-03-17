@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-02 21:29+0100\n"
-"PO-Revision-Date: 2010-02-10 19:11+0100\n"
-"Last-Translator: Saber Nyoki <saberuneko@gmail.com>\n"
+"POT-Creation-Date: 2010-03-16 01:14+0100\n"
+"PO-Revision-Date: 2010-03-15 23:00+0100\n"
+"Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9820,9 +9820,8 @@ msgid "VTOL Lancer Scorpion VTOL"
 msgstr "Escorpión Lanzadera ADV"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
-#, fuzzy
 msgid "VTOL HPV Cannon Scorpion VTOL"
-msgstr "Cañón HPV Escorpión ADV"
+msgstr "ADV HPV Escorpión"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
 #: data/mp/messages/strings/names.txt:1877
@@ -9830,9 +9829,8 @@ msgid "VTOL Lancer Mantis VTOL"
 msgstr "Lanzadera Mantis ADV"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
-#, fuzzy
 msgid "VTOL HPV Cannon Mantis VTOL"
-msgstr "Cañón Pesado Bicho ADV"
+msgstr "ADV HPV Mantis"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
 #: data/mp/messages/strings/names.txt:1882
@@ -9960,7 +9958,6 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr "Mini-Cohetes Cobra Oruga"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Tracks"
 msgstr "Artillería Mini-Cohetes Cobra Oruga"
 
@@ -10901,19 +10898,16 @@ msgid "Rail Target Prediction Computer"
 msgstr "Computador de Predicción de Objetivos"
 
 #: data/mp/messages/strings/names.txt:1174
-#, fuzzy
 msgid "HESH Mini-Rockets"
-msgstr "HE Mini-Cohetes"
+msgstr "HESH Mini-Cohetes"
 
 #: data/mp/messages/strings/names.txt:1175
-#, fuzzy
 msgid "HESH Mini-Rockets Mk2"
-msgstr "HE Mini-Cohetes Mk2"
+msgstr "HESH Mini-Cohetes Mk2"
 
 #: data/mp/messages/strings/names.txt:1176
-#, fuzzy
 msgid "HESH Mini-Rockets Mk3"
-msgstr "HE Mini-Cohetes Mk3"
+msgstr "HESH Mini-Cohetes Mk3"
 
 #: data/mp/messages/strings/names.txt:1385
 msgid "Assault Gun Tower"
@@ -11439,28 +11433,28 @@ msgstr "Latino"
 msgid "Enter password here"
 msgstr "Introducir contraseña aquí"
 
-#: lib/netplay/netplay.c:3068
+#: lib/netplay/netplay.c:3082
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "¡No se pudo resolver el nombre del servidor maestro (%s)!"
 
-#: lib/netplay/netplay.c:3093
+#: lib/netplay/netplay.c:3107
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "¡No se pudo comunicar con el servidor! ¿Está el puerto TCP %u abierto para tráfico saliente?"
 
-#: lib/netplay/netplay.c:3509
+#: lib/netplay/netplay.c:3526
 msgid ", mods: "
 msgstr ", mods: "
 
 #: src/challenge.c:188
-#: src/hci.c:1013
-#: src/hci.c:3789
-#: src/hci.c:3940
-#: src/hci.c:4393
-#: src/hci.c:5597
+#: src/hci.c:1018
+#: src/hci.c:3829
+#: src/hci.c:3980
+#: src/hci.c:4497
+#: src/hci.c:5701
 #: src/intelmap.c:543
-#: src/intorder.c:661
+#: src/intorder.c:787
 #: src/loadsave.c:256
 #: src/multimenu.c:479
 #: src/multimenu.c:1357
@@ -11470,146 +11464,146 @@ msgstr ", mods: "
 msgid "Close"
 msgstr "Cerrar"
 
-#: src/clparse.c:81
+#: src/clparse.c:232
 msgid "Run in cheat mode"
 msgstr "Ejecutar en modo de trampas"
 
-#: src/clparse.c:82
-msgid "Set default data directory"
-msgstr "Establecer directorio de datos por defecto"
-
-#: src/clparse.c:82
-msgid "data directory"
-msgstr "directorio de datos"
-
-#: src/clparse.c:83
+#: src/clparse.c:233
 msgid "Set configuration directory"
 msgstr "Establecer directorio de configuración"
 
-#: src/clparse.c:83
+#: src/clparse.c:233
 msgid "configuration directory"
 msgstr "directorio de configuración"
 
-#: src/clparse.c:84
+#: src/clparse.c:234
+msgid "Set default data directory"
+msgstr "Establecer directorio de datos por defecto"
+
+#: src/clparse.c:234
+msgid "data directory"
+msgstr "directorio de datos"
+
+#: src/clparse.c:235
 msgid "Show debug for given level"
 msgstr "Mostrar depuración para el nivel dado"
 
-#: src/clparse.c:84
+#: src/clparse.c:235
 msgid "debug level"
 msgstr "nivel de depuración"
 
-#: src/clparse.c:85
+#: src/clparse.c:236
 msgid "Log debug output to file"
 msgstr "Registrar salida de depuración a fichero"
 
-#: src/clparse.c:85
+#: src/clparse.c:236
 msgid "file"
 msgstr "fichero"
 
-#: src/clparse.c:86
+#: src/clparse.c:237
 msgid "Flush all debug output written to stderr"
 msgstr "Desechar todo el debug escrito en stderr"
 
-#: src/clparse.c:87
+#: src/clparse.c:238
 msgid "Play in fullscreen mode"
 msgstr "Jugar en modo a pantalla completa"
 
-#: src/clparse.c:88
+#: src/clparse.c:239
 msgid "Load a specific game"
 msgstr "Cargar una partida específica"
 
-#: src/clparse.c:88
+#: src/clparse.c:239
 msgid "game-name"
 msgstr "nombre de la partida"
 
-#: src/clparse.c:89
+#: src/clparse.c:240
 msgid "Show this help message and exit"
 msgstr "Mostrar este mensaje de ayuda y salir"
 
-#: src/clparse.c:90
+#: src/clparse.c:241
 msgid "Enable a global mod"
 msgstr "Habilitar mod global"
 
-#: src/clparse.c:90
-#: src/clparse.c:91
-#: src/clparse.c:92
+#: src/clparse.c:241
+#: src/clparse.c:242
+#: src/clparse.c:243
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.c:91
+#: src/clparse.c:242
 msgid "Enable a campaign only mod"
 msgstr "Habilitar mod de campaña"
 
-#: src/clparse.c:92
+#: src/clparse.c:243
 msgid "Enable a multiplay only mod"
 msgstr "Habilitar mod multijugador"
 
-#: src/clparse.c:93
+#: src/clparse.c:244
 msgid "Disable asserts"
 msgstr "Desactivar sombras"
 
-#: src/clparse.c:94
+#: src/clparse.c:245
 msgid "Causes a crash to test the crash handler"
 msgstr "Provoca una colisión para probar el cliente de colisiones"
 
-#: src/clparse.c:95
+#: src/clparse.c:246
 msgid "Load a saved game"
 msgstr "Cargar una partida guardada"
 
-#: src/clparse.c:95
+#: src/clparse.c:246
 msgid "savegame"
 msgstr "savegame"
 
-#: src/clparse.c:98
+#: src/clparse.c:247
 msgid "Play in windowed mode"
 msgstr "Jugar en modo ventana"
 
-#: src/clparse.c:99
+#: src/clparse.c:248
 msgid "Show version information and exit"
 msgstr "Mostrar información de versión y salir"
 
-#: src/clparse.c:100
+#: src/clparse.c:249
 msgid "Set the resolution to use"
 msgstr "Establecer la resolución a utilizar"
 
-#: src/clparse.c:100
+#: src/clparse.c:249
 msgid "WIDTHxHEIGHT"
 msgstr "ANCHOxALTO"
 
-#: src/clparse.c:101
+#: src/clparse.c:250
 msgid "Enable shadows"
 msgstr "Activar sombras"
 
-#: src/clparse.c:102
+#: src/clparse.c:251
 msgid "Disable shadows"
 msgstr "Desactivar sombras"
 
-#: src/clparse.c:103
+#: src/clparse.c:252
 msgid "Enable sound"
 msgstr "Activar sonido"
 
-#: src/clparse.c:104
+#: src/clparse.c:253
 msgid "Disable sound"
 msgstr "Desactivar sonido"
 
-#: src/clparse.c:105
+#: src/clparse.c:254
 msgid "Activate self-test"
 msgstr "Activar auto-test"
 
-#: src/clparse.c:106
+#: src/clparse.c:255
 msgid "connect directly to IP/hostname"
 msgstr "Conectar directamente con IP/Dominio"
 
-#: src/clparse.c:106
+#: src/clparse.c:255
 msgid "host"
 msgstr "Dominio"
 
-#: src/clparse.c:107
+#: src/clparse.c:256
 msgid "go directly to host screen"
 msgstr "Ir directamente a pantalla de dominio"
 
-#: src/configuration.c:457
-#: src/configuration.c:458
+#: src/configuration.c:452
+#: src/configuration.c:453
 #: src/multistat.c:135
 msgid "Player"
 msgstr "Jugador"
@@ -11755,31 +11749,41 @@ msgstr "Armas"
 msgid "Systems"
 msgstr "Sistemas"
 
-#: src/display3d.c:558
+#: src/display3d.c:562
 msgid "Player left"
 msgstr "Jugador Salió"
 
-#: src/display3d.c:558
+#: src/display3d.c:562
 msgid "Player dropped"
 msgstr "Jugador Desconectado"
 
-#: src/display.c:1699
+#: src/display.c:1659
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "No se puede construir. Yacimiento de petróleo ardiendo."
 
-#: src/display.c:1879
-#: src/display.c:2468
+#: src/display.c:1839
+#: src/display.c:2441
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Daño %d%% - Experiencia %d, %s"
 
-#: src/display.c:1895
+#: src/display.c:1855
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s Aliado - Daño %d%% - Experiencia %d, %s"
 
-#: src/display.c:2075
+#: src/display.c:2045
 msgid "Truck ordered to build Oil Derrick"
+msgstr "Camión enviado a construir Torre Petrolífera"
+
+#: src/display.c:2046
+#, fuzzy
+msgid "2 trucks ordered to build Oil Derrick"
+msgstr "Camión enviado a construir Torre Petrolífera"
+
+#: src/display.c:2047
+#, fuzzy, c-format
+msgid "%d trucks ordered to build Oil Derrick"
 msgstr "Camión enviado a construir Torre Petrolífera"
 
 #: src/droid.c:209
@@ -11790,68 +11794,68 @@ msgstr "¡Unidad destruída!"
 msgid "Structure Restored"
 msgstr "Estructura Restaurada"
 
-#: src/droid.c:2932
+#: src/droid.c:2935
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u seleccionado - %u Unidad"
 msgstr[1] "Grupo %u seleccionado - %u Unidades"
 
-#: src/droid.c:2945
+#: src/droid.c:2948
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidad asignada al Grupo %u"
 msgstr[1] "%u unidades asignadas al Grupo %u"
 
-#: src/droid.c:2958
+#: src/droid.c:2961
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado en el Grupo %u - %u Unidad"
 msgstr[1] "Centrado en el Grupo %u - %u Unidades"
 
-#: src/droid.c:2962
+#: src/droid.c:2965
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alineando con el Grupo %u - %u Unidad"
 msgstr[1] "Alineando con el Grupo %u - %u Unidades"
 
-#: src/droid.c:3172
+#: src/droid.c:3249
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.c:3173
+#: src/droid.c:3250
 msgctxt "rank"
 msgid "Green"
 msgstr "Principiante"
 
-#: src/droid.c:3174
+#: src/droid.c:3251
 msgid "Trained"
 msgstr "Entrenado"
 
-#: src/droid.c:3175
+#: src/droid.c:3252
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3176
+#: src/droid.c:3253
 msgid "Professional"
 msgstr "Profesional"
 
-#: src/droid.c:3177
+#: src/droid.c:3254
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3178
+#: src/droid.c:3255
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.c:3179
+#: src/droid.c:3256
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.c:3180
+#: src/droid.c:3257
 msgid "Hero"
 msgstr "Héroe"
 
@@ -11929,8 +11933,8 @@ msgstr "UN JUGADOR"
 
 #: src/frontend.c:473
 #: src/ingameop.c:519
-#: src/mission.c:2533
-#: src/mission.c:2638
+#: src/mission.c:2526
+#: src/mission.c:2631
 msgid "Load Saved Game"
 msgstr "Cargar Partida Guardada"
 
@@ -12191,135 +12195,135 @@ msgstr "OPCIONES DE JUEGO"
 msgid "Active mods: "
 msgstr "Mods activos: "
 
-#: src/hci.c:1358
+#: src/hci.c:1363
 msgid "MAP SAVED!"
 msgstr "¡MAPA GUARDADO!"
 
-#: src/hci.c:1705
+#: src/hci.c:1745
 #: src/loop.c:528
 #: src/loop.c:544
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "¡PARTIDA GUARDADA!"
 
-#: src/hci.c:2112
+#: src/hci.c:2152
 msgid "Failed to create building"
 msgstr "Error al crear estructura"
 
-#: src/hci.c:2135
+#: src/hci.c:2175
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "El jugador %u está haciendo trampas (menú depuración) con una nueva estructura: %s."
 
-#: src/hci.c:2150
+#: src/hci.c:2190
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "El jugador %u está haciendo trampas (menú depuración) con una nueva característica: %s."
 
-#: src/hci.c:2171
+#: src/hci.c:2211
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "El jugador %u está haciendo trampas (menú depuración) con un nuevo androide: %s."
 
-#: src/hci.c:3691
+#: src/hci.c:3731
 msgid "Commanders (F6)"
 msgstr "Comandantes (F6)"
 
-#: src/hci.c:3707
+#: src/hci.c:3747
 msgid "Intelligence Display (F5)"
 msgstr "Inteligencia (F5)"
 
-#: src/hci.c:3723
+#: src/hci.c:3763
 msgid "Manufacture (F1)"
 msgstr "Fabricación (F1)"
 
-#: src/hci.c:3739
+#: src/hci.c:3779
 msgid "Design (F4)"
 msgstr "Diseño (F4)"
 
-#: src/hci.c:3755
+#: src/hci.c:3795
 msgid "Research (F2)"
 msgstr "Investigación (F2)"
 
-#: src/hci.c:3771
+#: src/hci.c:3811
 msgid "Build (F3)"
 msgstr "Construcción (F3)"
 
-#: src/hci.c:3851
+#: src/hci.c:3891
 #: src/multiint.c:1370
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Energía"
 
-#: src/hci.c:4035
+#: src/hci.c:4075
 msgid "Tile"
 msgstr "casilla"
 
-#: src/hci.c:4036
+#: src/hci.c:4076
 msgid "Place tiles on map"
 msgstr "Colocar casillas en el mapa"
 
-#: src/hci.c:4045
+#: src/hci.c:4085
 msgid "Unit"
 msgstr "Unidad"
 
-#: src/hci.c:4046
+#: src/hci.c:4086
 msgid "Place Unit on map"
 msgstr "Colocar Unidad en el mapa"
 
-#: src/hci.c:4054
+#: src/hci.c:4094
 msgid "Struct"
 msgstr "Estructura"
 
-#: src/hci.c:4055
+#: src/hci.c:4095
 msgid "Place Structures on map"
 msgstr "Colocar Estructuras en el mapa"
 
-#: src/hci.c:4063
+#: src/hci.c:4103
 msgid "Feat"
 msgstr "Hazaña"
 
-#: src/hci.c:4064
+#: src/hci.c:4104
 msgid "Place Features on map"
 msgstr "Colocar Características en el mapa"
 
-#: src/hci.c:4075
+#: src/hci.c:4115
 msgid "Pause or unpause the game"
 msgstr "Pausa o despausa la partida"
 
-#: src/hci.c:4089
+#: src/hci.c:4129
 msgid "Align height of all map objects"
 msgstr "Anchura de alineacion de todos los objetos del mapa"
 
-#: src/hci.c:4114
+#: src/hci.c:4154
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "Salir"
 
-#: src/hci.c:4115
+#: src/hci.c:4155
 msgid "Exit Game"
 msgstr "Salir del Juego"
 
-#: src/hci.c:4478
+#: src/hci.c:4582
 #: src/intdisplay.c:270
 msgid "Progress Bar"
 msgstr "Barra de progreso"
 
-#: src/hci.c:5512
+#: src/hci.c:5616
 msgid "Factory Delivery Point"
 msgstr "Punto de Reparto de la Fábrica"
 
-#: src/hci.c:5531
+#: src/hci.c:5635
 msgid "Loop Production"
 msgstr "Ciclos de Producción"
 
-#: src/hci.c:5622
+#: src/hci.c:5726
 msgid "Tab Scroll left"
 msgstr "Tab Desplazamiento Izquierda"
 
-#: src/hci.c:5639
+#: src/hci.c:5743
 msgid "Tab Scroll right"
 msgstr "Tab Desplazamiento Derecha"
 
@@ -12345,8 +12349,8 @@ msgstr ""
 
 #: src/ingameop.c:295
 #: src/ingameop.c:523
-#: src/mission.c:2520
-#: src/mission.c:2641
+#: src/mission.c:2513
+#: src/mission.c:2634
 msgid "Save Game"
 msgstr "Guardar Partida"
 
@@ -12377,7 +12381,7 @@ msgid "Power Accrued"
 msgstr "Energía acumulada"
 
 #: src/intelmap.c:247
-#: src/keybind.c:1367
+#: src/keybind.c:1400
 msgid "PAUSED"
 msgstr "PAUSADO"
 
@@ -12397,110 +12401,110 @@ msgstr "Objetivo Actual"
 msgid "New Intelligence Report"
 msgstr "Nuevo Informe de Inteligencia"
 
-#: src/intorder.c:179
+#: src/intorder.c:161
 #: src/keymap.c:390
 msgid "Short Range"
 msgstr "Rango Corto"
 
-#: src/intorder.c:180
+#: src/intorder.c:162
 #: src/keymap.c:397
 msgid "Long Range"
 msgstr "Rango Largo"
 
-#: src/intorder.c:181
+#: src/intorder.c:163
 #: src/keymap.c:389
 msgid "Optimum Range"
 msgstr "Rango Óptimo"
 
-#: src/intorder.c:182
+#: src/intorder.c:164
 #: src/keymap.c:409
 msgid "Retreat at Medium Damage"
 msgstr "Retirarse con Daños Medios"
 
-#: src/intorder.c:183
+#: src/intorder.c:165
 #: src/keymap.c:410
 msgid "Retreat at Heavy Damage"
 msgstr "Retirarse con Daños Graves"
 
-#: src/intorder.c:184
+#: src/intorder.c:166
 #: src/keymap.c:411
 msgid "Do or Die!"
 msgstr "¡Hazlo o Muere!"
 
-#: src/intorder.c:185
+#: src/intorder.c:167
 msgid "Fire-At-Will"
 msgstr "Fuego a discreción"
 
-#: src/intorder.c:186
+#: src/intorder.c:168
 #: src/keymap.c:385
 msgid "Return Fire"
 msgstr "Devolver el fuego"
 
-#: src/intorder.c:187
+#: src/intorder.c:169
 #: src/keymap.c:383
 msgid "Hold Fire"
 msgstr "Alto el fuego"
 
-#: src/intorder.c:188
+#: src/intorder.c:170
 #: src/keymap.c:392
 msgid "Patrol"
 msgstr "Patrullar"
 
-#: src/intorder.c:189
+#: src/intorder.c:171
 #: src/keymap.c:391
 msgid "Pursue"
 msgstr "Perseguir"
 
-#: src/intorder.c:190
+#: src/intorder.c:172
 #: src/keymap.c:387
 msgid "Guard Position"
 msgstr "Guardar Posición"
 
-#: src/intorder.c:191
+#: src/intorder.c:173
 #: src/keymap.c:394
 msgid "Hold Position"
 msgstr "Mantener Posición"
 
-#: src/intorder.c:192
+#: src/intorder.c:174
 #: src/keymap.c:393
 msgid "Return For Repair"
 msgstr "Regresar para Reparar"
 
-#: src/intorder.c:193
+#: src/intorder.c:175
 msgid "Return To HQ"
 msgstr "Regresar al CG"
 
-#: src/intorder.c:194
+#: src/intorder.c:176
 #: src/keymap.c:395
 msgid "Go to Transport"
 msgstr "Ir al Transporte"
 
-#: src/intorder.c:195
+#: src/intorder.c:177
 #: src/keymap.c:420
 msgid "Return for Recycling"
 msgstr "Regresar para Reciclaje"
 
-#: src/intorder.c:196
+#: src/intorder.c:178
 msgid "Recycle"
 msgstr "Reciclar"
 
-#: src/intorder.c:197
+#: src/intorder.c:179
 msgid "Assign Factory Production"
 msgstr "Asignar Producción de Fábrica"
 
-#: src/intorder.c:198
+#: src/intorder.c:180
 msgid "Assign Cyborg Factory Production"
 msgstr "Asignar Producción de Fábrica de Cyborgs"
 
-#: src/intorder.c:199
+#: src/intorder.c:181
 msgid "Assign Fire Support"
 msgstr "Asignar Fuego de Apoyo"
 
-#: src/intorder.c:200
+#: src/intorder.c:182
 msgid "Assign VTOL Factory Production"
 msgstr "Asignar Producción de fábrica de ADV"
 
-#: src/intorder.c:201
+#: src/intorder.c:183
 msgid "Circle"
 msgstr "círculo"
 
@@ -12520,274 +12524,279 @@ msgstr "¡Déjanos ver lo que ves!"
 msgid "Fine, weapon & sensor display is off!"
 msgstr "¡Excelente, la pantalla del sensor está apagada!"
 
-#: src/keybind.c:364
-#: src/keybind.c:394
-#: src/keybind.c:411
-#: src/keybind.c:455
-#: src/keybind.c:560
-#: src/keybind.c:600
-#: src/keybind.c:706
-#: src/keybind.c:1257
-#: src/keybind.c:1314
-#: src/keybind.c:1416
-#: src/keybind.c:1512
-#: src/keybind.c:1863
-#: src/keybind.c:1903
+#: src/keybind.c:357
+#, c-format
+msgid "Player %u is cheating him/herself a new droid army of %s(s)."
+msgstr "El jugador %u está haciendo trampas con una nueva armada de droides de: %s(s)."
+
+#: src/keybind.c:397
+#: src/keybind.c:427
+#: src/keybind.c:444
+#: src/keybind.c:488
+#: src/keybind.c:593
+#: src/keybind.c:633
+#: src/keybind.c:739
+#: src/keybind.c:1290
+#: src/keybind.c:1347
+#: src/keybind.c:1449
+#: src/keybind.c:1545
+#: src/keybind.c:1896
+#: src/keybind.c:1937
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Jugador %u) está usando la trampa: %s"
 
-#: src/keybind.c:365
+#: src/keybind.c:398
 msgid "Hard as nails!!!"
 msgstr "¡¡¡Más duro que el acero!!!"
 
-#: src/keybind.c:379
+#: src/keybind.c:412
 msgid "Takings thing easy!"
 msgstr "¡Haciéndolo fácil!"
 
-#: src/keybind.c:395
+#: src/keybind.c:428
 msgid "1000 big ones!!!"
 msgstr "¡¡¡1000 grandes!!!"
 
-#: src/keybind.c:412
+#: src/keybind.c:445
 msgid "Power overwhelming"
 msgstr "Poder aplastante"
 
-#: src/keybind.c:427
+#: src/keybind.c:460
 msgid "Back to normality!"
 msgstr "¡Vuelta a la rutina!"
 
-#: src/keybind.c:440
+#: src/keybind.c:473
 msgid "Getting tricky!"
 msgstr "¡Haciéndolo difícil!"
 
-#: src/keybind.c:456
+#: src/keybind.c:489
 msgid "Twice as nice!"
 msgstr "¡Dos veces bueno!"
 
-#: src/keybind.c:467
+#: src/keybind.c:500
 msgid "FPS display is enabled."
 msgstr "Visor de FPS activado."
 
-#: src/keybind.c:471
+#: src/keybind.c:504
 msgid "FPS display is disabled."
 msgstr "Visor de FPS desactivado."
 
-#: src/keybind.c:492
+#: src/keybind.c:525
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; Límite-FPS: %d; PIEs %d; polígs. %d; Polígs. Terr. %d; Estados %d"
 
-#: src/keybind.c:524
+#: src/keybind.c:557
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(Jugador %u) está usando una trampa :Num Droids: %d Num Structures: %d Num Features: %d"
 
-#: src/keybind.c:561
+#: src/keybind.c:594
 msgid "Infinite power disabled"
 msgstr "Energía ilimitada desactivada"
 
-#: src/keybind.c:561
+#: src/keybind.c:594
 msgid "Infinite power enabled"
 msgstr "Energía ilimitada activada"
 
-#: src/keybind.c:601
+#: src/keybind.c:634
 msgid "All items made available"
 msgstr "Todos los artículos disponibles"
 
-#: src/keybind.c:707
+#: src/keybind.c:740
 msgid "Fog on"
 msgstr "Niebla activada"
 
-#: src/keybind.c:707
+#: src/keybind.c:740
 msgid "Fog off"
 msgstr "Niebla desactivada"
 
-#: src/keybind.c:1146
+#: src/keybind.c:1179
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "¡Atención! ¡Esta trampa puede causar problemas futuros! [%s]"
 
-#: src/keybind.c:1146
+#: src/keybind.c:1179
 msgid "Ending Mission."
 msgstr "Finalizando Misión..."
 
-#: src/keybind.c:1258
+#: src/keybind.c:1291
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "¡TRAMPAS HABILITADAS!"
 
-#: src/keybind.c:1258
+#: src/keybind.c:1291
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "¡TRAMPAS DESHABILITADAS!"
 
-#: src/keybind.c:1315
+#: src/keybind.c:1348
 msgid "God Mode ON"
 msgstr "Modo Dios Activado"
 
-#: src/keybind.c:1315
+#: src/keybind.c:1348
 msgid "God Mode OFF"
 msgstr "Modo Dios Desactivado"
 
-#: src/keybind.c:1327
+#: src/keybind.c:1360
 msgid "View Aligned to North"
 msgstr "Vista Alineada al Norte"
 
-#: src/keybind.c:1336
+#: src/keybind.c:1369
 #, c-format
 msgid "Trap cursor %s"
 msgstr "Capturar Cursor %s"
 
-#: src/keybind.c:1417
+#: src/keybind.c:1450
 msgid "Researched EVERYTHING for you!"
 msgstr "¡Investigado TODO para ti!"
 
-#: src/keybind.c:1448
+#: src/keybind.c:1481
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Jugador %u) usa trampa : %s %s"
 
-#: src/keybind.c:1449
+#: src/keybind.c:1482
 msgid "Researched"
 msgstr "Investigado"
 
-#: src/keybind.c:1470
+#: src/keybind.c:1503
 msgid "Only displaying energy bars when selected"
 msgstr "Solo mostrar barras de energía cuando se selecciona"
 
-#: src/keybind.c:1473
+#: src/keybind.c:1506
 msgid "Always displaying energy bars for units"
 msgstr "Siempre mostrar las barras de energía para las unidades"
 
-#: src/keybind.c:1476
+#: src/keybind.c:1509
 msgid "Always displaying energy bars for units and structures"
 msgstr "Siempre mostrar las barras de energía para unidades y estructuras"
 
-#: src/keybind.c:1498
+#: src/keybind.c:1531
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Modo demostración desactivado - Volviendo al modo de juego normal"
 
-#: src/keybind.c:1513
+#: src/keybind.c:1546
 msgid "Debug menu is Open"
 msgstr "El Menú de construcción está Abierto"
 
-#: src/keybind.c:1544
+#: src/keybind.c:1577
 msgid "Unable to locate any resource extractors!"
 msgstr "¡Incapaz de encontrar ningún extractor de recursos!"
 
-#: src/keybind.c:1765
+#: src/keybind.c:1798
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, el tiempo fuera es terrible... NIEVE"
 
-#: src/keybind.c:1771
+#: src/keybind.c:1804
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Singing in the rain, I'm singing in the rain... LLUVIA"
 
-#: src/keybind.c:1777
+#: src/keybind.c:1810
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Pronóstico: Cielos despejados en todas las áreas... CLIMA DESACTIVADO"
 
-#: src/keybind.c:1862
+#: src/keybind.c:1895
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "¡Atención! Esto puede tener consecuencias drásticas si se usa incorrectamente en misiones."
 
-#: src/keybind.c:1864
+#: src/keybind.c:1897
 msgid "All enemies destroyed by cheating!"
 msgstr "¡Todos los enemigos destruicos con trampas!"
 
-#: src/keybind.c:1904
+#: src/keybind.c:1938
 msgid "Destroying selected droids and structures!"
 msgstr "¡Destruyendo los droides y estructuras seleccionados!"
 
-#: src/keybind.c:2423
+#: src/keybind.c:2460
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Centrado en el CG del jugador, dirección Norte"
 
-#: src/keybind.c:2435
+#: src/keybind.c:2472
 msgid "Unable to locate HQ!"
 msgstr "¡Incapaz de encontrar el CG!"
 
-#: src/keybind.c:2442
+#: src/keybind.c:2479
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "La limitación de velocidad de formación ha sido deshabilitado debido a errores"
 
-#: src/keybind.c:2491
+#: src/keybind.c:2528
 msgid "Vertical rotation direction: Normal"
 msgstr "Dirección de Rotación Vertical: Normal"
 
-#: src/keybind.c:2496
+#: src/keybind.c:2533
 msgid "Vertical rotation direction: Flipped"
 msgstr "Dirección de Rotación Vertical: Invertida"
 
-#: src/keybind.c:2505
+#: src/keybind.c:2542
 msgid "Screen shake when things die: Off"
 msgstr "Agitar pantalla cuando mueren cosas: Desactivado"
 
-#: src/keybind.c:2510
+#: src/keybind.c:2547
 msgid "Screen shake when things die: On"
 msgstr "Agitar pantalla cuando mueren cosas: Habilitado"
 
-#: src/keybind.c:2555
-#: src/keybind.c:2598
+#: src/keybind.c:2592
+#: src/keybind.c:2635
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Lo sentimos, pero la velocidad de juego no se puede cambiar en partidas multijugador."
 
-#: src/keybind.c:2576
-#: src/keybind.c:2619
-#: src/keybind.c:2641
+#: src/keybind.c:2613
+#: src/keybind.c:2656
+#: src/keybind.c:2678
 msgid "Game Speed Reset"
 msgstr "Reestablecer Velocidad de Juego"
 
-#: src/keybind.c:2580
+#: src/keybind.c:2617
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Velocidad de Juego Aumentada a  %3.1f"
 
-#: src/keybind.c:2623
+#: src/keybind.c:2660
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Velocidad de Juego Reducida a  %3.1f"
 
-#: src/keybind.c:2653
+#: src/keybind.c:2690
 msgid "Build menu will reopen"
 msgstr "Menú de construcción se reabrirá"
 
-#: src/keybind.c:2657
+#: src/keybind.c:2694
 msgid "Build menu will not reopen"
 msgstr "Menú de construcción no se reabrirá"
 
-#: src/keybind.c:2669
+#: src/keybind.c:2706
 msgid "Radar showing friend-foe colors"
 msgstr "Radar mostrando colores de amigo-enemigo"
 
-#: src/keybind.c:2673
+#: src/keybind.c:2710
 msgid "Radar showing player colors"
 msgstr "Radar mostrando colores de jugador"
 
-#: src/keybind.c:2694
+#: src/keybind.c:2731
 msgid "Radar showing only objects"
 msgstr "Radar mostrando sólo objetos"
 
-#: src/keybind.c:2697
+#: src/keybind.c:2734
 msgid "Radar blending terrain and height"
 msgstr "Radar mezclando terreno y alturas"
 
-#: src/keybind.c:2700
+#: src/keybind.c:2737
 msgid "Radar showing terrain"
 msgstr "Radar mostrando terreno"
 
-#: src/keybind.c:2703
+#: src/keybind.c:2740
 msgid "Radar showing revealed terrain"
 msgstr "Radar mostrando terreno"
 
-#: src/keybind.c:2706
+#: src/keybind.c:2743
 msgid "Radar showing height"
 msgstr "Radar mostrando alturas"
 
-#: src/keyedit.c:373
+#: src/keyedit.c:347
 msgid "KEY MAPPING"
 msgstr "MAPEO DE TECLAS"
 
-#: src/keyedit.c:395
+#: src/keyedit.c:369
 #: src/multiint.c:638
 #: src/multiint.c:681
 #: src/multiint.c:1072
@@ -12795,7 +12804,7 @@ msgstr "MAPEO DE TECLAS"
 msgid "Return To Previous Screen"
 msgstr "Volver a la Pantalla Anterior"
 
-#: src/keyedit.c:400
+#: src/keyedit.c:374
 msgid "Select Default"
 msgstr "Seleccionar valores por defecto"
 
@@ -13164,42 +13173,42 @@ msgstr "Alternar Reabrir el menú de construción"
 msgid "Could not save game!"
 msgstr "¡No se pudo guardar la partida!"
 
-#: src/mission.c:2073
+#: src/mission.c:2066
 msgid "Load Transport"
 msgstr "Cargar Transporte"
 
-#: src/mission.c:2467
+#: src/mission.c:2460
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "¡OBJETIVO CUMPLIDO con trampas!"
 
-#: src/mission.c:2467
+#: src/mission.c:2460
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJETIVO CUMPLIDO"
 
-#: src/mission.c:2473
+#: src/mission.c:2466
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "OBJETIVO FALLADO-- ¡e hiciste trampas!"
 
-#: src/mission.c:2473
+#: src/mission.c:2466
 msgid "OBJECTIVE FAILED"
 msgstr "OBJETIVO FALLADO"
 
-#: src/mission.c:2499
-#: src/mission.c:2539
-#: src/mission.c:2657
+#: src/mission.c:2492
+#: src/mission.c:2532
+#: src/mission.c:2650
 msgid "Quit To Main Menu"
 msgstr "Salir al Menú Principal"
 
-#: src/mission.c:2507
+#: src/mission.c:2500
 msgid "Continue Game"
 msgstr "Continuar Partida"
 
-#: src/mission.c:2604
+#: src/mission.c:2597
 msgid "GAME SAVED :"
 msgstr "¡PARTIDA GUARDADA!"
 
-#: src/move.c:2709
-#: src/move.c:2725
+#: src/move.c:2697
+#: src/move.c:2713
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Encontraste %u energía en un barril de petróleo"
@@ -13508,7 +13517,7 @@ msgstr "Jugadores"
 #: src/multiint.c:3569
 #, c-format
 msgid "Sending Map: %d%% "
-msgstr ""
+msgstr "Enviando Mapa: %d%%"
 
 #: src/multiint.c:3577
 #, c-format
@@ -13532,7 +13541,7 @@ msgstr "%s abandonó la partida"
 #: src/multijoin.c:227
 #, c-format
 msgid "File transfer has been aborted for %d."
-msgstr ""
+msgstr "La transferencia de archivos ha sido abortada por %d"
 
 #: src/multijoin.c:348
 #, c-format
@@ -13852,58 +13861,58 @@ msgstr "¡Imposible localizar ningún Comandante!"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Alcanzado Límite de Control de Comandantes - Producción Detenida"
 
-#: src/structure.c:6118
-#: src/structure.c:6143
+#: src/structure.c:6126
+#: src/structure.c:6151
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unidad asignada"
 msgstr[1] "%s - %u Unidades asignadas"
 
-#: src/structure.c:6148
-#: src/structure.c:6216
-#: src/structure.c:6232
-#: src/structure.c:6246
+#: src/structure.c:6156
+#: src/structure.c:6224
+#: src/structure.c:6240
+#: src/structure.c:6254
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Daño %3.0f%%"
 
-#: src/structure.c:6198
+#: src/structure.c:6206
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Conectado %u de %u"
 
-#: src/structure.c:6362
-#: src/structure.c:6407
+#: src/structure.c:6370
+#: src/structure.c:6415
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Dañado Electrónicamente"
 
-#: src/structure.c:6643
+#: src/structure.c:6651
 msgid "Electronic Reward - Visibility Report"
 msgstr "Recompensa de Electrónica - Informe de Visibilidad"
 
-#: src/structure.c:6683
+#: src/structure.c:6691
 msgid "Factory Reward - Propulsion"
 msgstr "Recompensa de Fábrica - Propulsión"
 
-#: src/structure.c:6707
+#: src/structure.c:6715
 msgid "Factory Reward - Body"
 msgstr "Recompensa de Fábrica - Carrocería"
 
-#: src/structure.c:6731
+#: src/structure.c:6739
 msgid "Factory Reward - Weapon"
 msgstr "Recompensa de Fábrica - Arma"
 
-#: src/structure.c:6740
+#: src/structure.c:6748
 msgid "Factory Reward - Nothing"
 msgstr "Recompensa de Fábrica - Nada"
 
-#: src/structure.c:6768
+#: src/structure.c:6776
 msgid "Repair Facility Award - Repair"
 msgstr "Premio de Instalación de Reparación - Reparación"
 
-#: src/structure.c:6775
+#: src/structure.c:6783
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio de Instalación de Reparación - Nada"
 
