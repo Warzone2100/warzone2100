@@ -442,6 +442,7 @@
 		4336D8BF111DFD520012E8E4 /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8BB111DFD520012E8E4 /* pointtree.cpp */; };
 		4336D8C0111DFD520012E8E4 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8BD111DFD520012E8E4 /* wavecast.cpp */; };
 		438FD79D1151645100D8A480 /* netsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438FD79B1151645100D8A480 /* netsocket.cpp */; };
+		438FDA661151844500D8A480 /* wzapp.h.moc in Sources */ = {isa = PBXBuildFile; fileRef = 438FDA651151844500D8A480 /* wzapp.h.moc */; };
 		439A199C1113347200B9186B /* SDL_framerate.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B30BD3CBD5004D1C70 /* SDL_framerate.c */; };
 		43BE71A911120A69007DF934 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43BE719E11120A4F007DF934 /* InfoPlist.strings */; };
 		43BE71C011120C11007DF934 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43BE71A611120A4F007DF934 /* InfoPlist.strings */; };
@@ -552,7 +553,6 @@
 		43BE7B33111267AF007DF934 /* QtOpenGL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43BE7B18111267A6007DF934 /* QtOpenGL.framework */; };
 		43C827B61140774000E4EE72 /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C827B41140774000E4EE72 /* random.cpp */; };
 		43C8287511407B7A00E4EE72 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43C8285A11407B7A00E4EE72 /* InfoPlist.strings */; };
-		43EC04051117A029005D5E3E /* wzapp_moc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43EC04041117A029005D5E3E /* wzapp_moc.cpp */; };
 		647D9C531039288D006D37CF /* dictionary.c in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C4F1039288D006D37CF /* dictionary.c */; };
 		647D9C541039288D006D37CF /* iniparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C511039288D006D37CF /* iniparser.c */; };
 		9711775E0F87A677000C8A96 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
@@ -594,7 +594,7 @@
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h",
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c",
 			);
-			script = "configs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}\".tab.h \"${INPUT_FILE_PATH}\" || exit 1\nconfigs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}\".tab.c \"${INPUT_FILE_PATH}\" || exit 1";
+			script = "configs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h\" \"${INPUT_FILE_PATH}\" || exit 1\nconfigs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_PATH}\" || exit 1";
 		};
 		0246AA730BD3E47F004D1C70 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -604,7 +604,18 @@
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.c",
 			);
-			script = "flex --outfile=\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}\".lex.c \"${INPUT_FILE_PATH}\" || exit 1";
+			script = "flex --outfile=\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.c\" \"${INPUT_FILE_PATH}\" || exit 1";
+		};
+		438FD9EA1151833800D8A480 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.moc";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp",
+			);
+			script = "moc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}\"";
 		};
 /* End PBXBuildRule section */
 
@@ -1355,6 +1366,7 @@
 		4336D8BE111DFD520012E8E4 /* wavecast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wavecast.h; path = ../src/wavecast.h; sourceTree = SOURCE_ROOT; };
 		438FD79B1151645100D8A480 /* netsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netsocket.cpp; path = ../lib/netplay/netsocket.cpp; sourceTree = SOURCE_ROOT; };
 		438FD79C1151645100D8A480 /* netsocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netsocket.h; path = ../lib/netplay/netsocket.h; sourceTree = SOURCE_ROOT; };
+		438FDA651151844500D8A480 /* wzapp.h.moc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = wzapp.h.moc; path = ../lib/framework/wzapp.h.moc; sourceTree = SOURCE_ROOT; };
 		43BE719C11120A4F007DF934 /* GenericFramework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GenericFramework-Info.plist"; path = "Resources/GenericFramework-Info.plist"; sourceTree = "<group>"; };
 		43BE719F11120A4F007DF934 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43BE71A011120A4F007DF934 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1528,7 +1540,6 @@
 		43C8289611407C1F00E4EE72 /* Zlib-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Zlib-All.xcconfig"; path = "configs/Zlib-All.xcconfig"; sourceTree = "<group>"; };
 		43C8289711407C1F00E4EE72 /* Zlib-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Zlib-Debug.xcconfig"; path = "configs/Zlib-Debug.xcconfig"; sourceTree = "<group>"; };
 		43C8289811407C1F00E4EE72 /* Zlib-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Zlib-Release.xcconfig"; path = "configs/Zlib-Release.xcconfig"; sourceTree = "<group>"; };
-		43EC04041117A029005D5E3E /* wzapp_moc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wzapp_moc.cpp; sourceTree = "<group>"; };
 		43EC09521117BFA9005D5E3E /* QtNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtNetwork.framework; sourceTree = "<group>"; };
 		647D9C4F1039288D006D37CF /* dictionary.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dictionary.c; path = ../lib/iniparser/dictionary.c; sourceTree = SOURCE_ROOT; };
 		647D9C501039288D006D37CF /* dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dictionary.h; path = ../lib/iniparser/dictionary.h; sourceTree = SOURCE_ROOT; };
@@ -1808,7 +1819,6 @@
 			children = (
 				43BE759511123EC9007DF934 /* lib */,
 				0246A1970BD3CCC3004D1C70 /* Warzone */,
-				43EC040011179FF7005D5E3E /* moc files */,
 			);
 			name = "Warzone sources";
 			sourceTree = "<group>";
@@ -1816,6 +1826,7 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				438FDA651151844500D8A480 /* wzapp.h.moc */,
 				43BE75AC11124048007DF934 /* wzapp_c.h */,
 				43BE75AD11124048007DF934 /* wzapp.cpp */,
 				43BE75AE11124048007DF934 /* wzapp.h */,
@@ -2798,31 +2809,6 @@
 			name = wzlocal;
 			sourceTree = "<group>";
 		};
-		43EC040011179FF7005D5E3E /* moc files */ = {
-			isa = PBXGroup;
-			children = (
-				43EC04021117A029005D5E3E /* lib */,
-			);
-			name = "moc files";
-			sourceTree = "<group>";
-		};
-		43EC04021117A029005D5E3E /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				43EC04031117A029005D5E3E /* framework */,
-			);
-			name = lib;
-			path = build/moc/lib;
-			sourceTree = "<group>";
-		};
-		43EC04031117A029005D5E3E /* framework */ = {
-			isa = PBXGroup;
-			children = (
-				43EC04041117A029005D5E3E /* wzapp_moc.cpp */,
-			);
-			path = framework;
-			sourceTree = "<group>";
-		};
 		971177840F87A6D9000C8A96 /* Pixman sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -3077,8 +3063,9 @@
 				02581CC40BD5AD5300957CBC /* Copy game data */,
 			);
 			buildRules = (
-				0246AA730BD3E47F004D1C70 /* PBXBuildRule */,
 				0246AA4D0BD3E067004D1C70 /* PBXBuildRule */,
+				0246AA730BD3E47F004D1C70 /* PBXBuildRule */,
+				438FD9EA1151833800D8A480 /* PBXBuildRule */,
 			);
 			dependencies = (
 				221052AC0E3D369C0057CD9C /* PBXTargetDependency */,
@@ -3657,7 +3644,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Checking for moc...\"\nif ! type -aP moc; then\n    echo \"Fatal inability to properly moc the code.\"\n    exit 1\nfi\n\nmkdir -p build/moc/lib/framework/\nmake -f- <<'EOF'\nall: build/moc/lib/framework/wzapp_moc.cpp\n\nbuild/moc/%_moc.cpp: ../%.h\n\tmoc -o $@ $<\nEOF\n\nexit 0";
+			shellScript = "echo \"Checking for moc...\"\nif ! type -aP moc; then\n    echo \"Fatal inability to properly moc the code.\" >&2\n    exit 1\nfi\n\nexit 0";
 		};
 		9711774C0F87A677000C8A96 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3745,6 +3732,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				438FDA661151844500D8A480 /* wzapp.h.moc in Sources */,
 				0246A0C10BD3CBD5004D1C70 /* configfile.c in Sources */,
 				0246A0C20BD3CBD5004D1C70 /* debug.c in Sources */,
 				0246A0C40BD3CBD5004D1C70 /* frame.c in Sources */,
@@ -3945,7 +3933,6 @@
 				43BE759811123F77007DF934 /* challenge.c in Sources */,
 				43BE75AF11124048007DF934 /* wzapp.cpp in Sources */,
 				439A199C1113347200B9186B /* SDL_framerate.c in Sources */,
-				43EC04051117A029005D5E3E /* wzapp_moc.cpp in Sources */,
 				4336D8BF111DFD520012E8E4 /* pointtree.cpp in Sources */,
 				4336D8C0111DFD520012E8E4 /* wavecast.cpp in Sources */,
 				43C827B61140774000E4EE72 /* random.cpp in Sources */,

@@ -1,0 +1,3 @@
+This is a moc file; it does nothing but tell xcode to use moc on the file named without the '.moc'.
+
+Use for any other purpose will result in being roundly moced.
