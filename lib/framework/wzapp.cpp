@@ -1125,11 +1125,13 @@ void iV_SetTextColour(PIELIGHT colour)
 
 void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotation)
 {
+	glDisable(GL_CULL_FACE);	// hack needed on MacOSX
 	QPainter painter(WzMainWindow::instance()->context()->device());
 	painter.translate(XPos, YPos);
 	painter.rotate(rotation);
 	painter.setPen(fontColor);
 	painter.drawText(0, 0, QString::fromUtf8(string));
+	glEnable(GL_CULL_FACE);
 }
 
 void iV_SetTextSize(float size)
