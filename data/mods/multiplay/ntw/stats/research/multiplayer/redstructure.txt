@@ -20,6 +20,5 @@ R-Defense-HvyArtMissile,Emplacement-Howitzer105,152
 R-Defense-WallTower-HPVcannon,WallTower02,241
 R-Defense-WallTower-A-Tmiss,WallTower06,245
 R-Defense-Pillbox-RotMG,PillBox1,201
-R-Defense-WallTower-SamHvy,WallTower-SamSite,238
 R-Defense-WallTower-TwinAGun,CO-Tower-RotMG,144
 R-Struc-com,A0CommandCentre,246

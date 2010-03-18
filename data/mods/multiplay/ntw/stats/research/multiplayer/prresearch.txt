@@ -254,6 +254,7 @@ R-Defense-MortarPit,R-Wpn-Mortar01Lt,109
 R-Defense-Wall-RotMg,R-Wpn-MG4,109
 R-Defense-Wall-RotMg,R-Wpn-MG3Mk1,109
 R-Defense-Wall-VulcanCan,R-Wpn-Cannon5,109
+R-Defense-Wall-VulcanCan,R-Defense-WallTower02,109
 R-Defense-WallTower-PulseLas,R-Wpn-Laser01,109
 R-Defense-WallTower-Rail2,R-Wpn-RailGun02,109
 R-Cyborg-Metals04,R-Cyborg-Metals03,109
@@ -292,8 +293,6 @@ R-Wpn-Rocket07-Tank-Killer,R-Wpn-RocketSlow-Accuracy02,109
 R-Wpn-Rocket07-Tank-Killer,R-Wpn-RocketSlow-Damage04,109
 R-Defense-HvyFlamer,R-Wpn-Flame2,109
 R-Defense-HvyFlamer,R-Defense-Pillbox05,109
-R-Defense-SamSite1,R-Wpn-Missile-LtSAM,109
-R-Defense-SamSite2,R-Wpn-Missile-HvSAM,109
 R-Defense-HvyHowitzer,R-Defense-Howitzer,109
 R-Defense-HvyHowitzer,R-Wpn-HvyHowitzer,109
 R-Defense-MRL,R-Wpn-Rocket02-MRL,109
@@ -446,7 +445,7 @@ R-Wpn-Energy-ROF02,R-Wpn-Energy-ROF01,109
 R-Wpn-Energy-ROF03,R-Wpn-Energy-ROF02,109
 R-Wpn-Missile-Accuracy01,R-Wpn-Missile-Damage01,109
 R-Wpn-Missile-Accuracy02,R-Wpn-Missile-Accuracy01,109
-R-Wpn-Missile-Damage01,R-Wpn-Missile-LtSAM,109
+R-Wpn-Missile-Damage01,R-Wpn-Missile2A-T,109
 R-Wpn-Missile-Damage02,R-Wpn-Missile-Damage01,109
 R-Wpn-Missile-Damage03,R-Wpn-Missile-Damage02,109
 R-Wpn-Mortar-Damage04,R-Wpn-Mortar02Hvy,109
@@ -519,10 +518,6 @@ R-Wpn-Howitzer-ROF01,R-Wpn-HvyHowitzer,109
 R-Wpn-Howitzer-ROF02,R-Wpn-Howitzer-ROF01,109
 R-Wpn-Howitzer-ROF03,R-Wpn-Howitzer-ROF02,109
 R-Wpn-Howitzer-ROF04,R-Wpn-Howitzer-ROF03,109
-R-Wpn-Missile-LtSAM,R-Sys-VTOLStrike-Tower01,109
-R-Wpn-Missile-LtSAM,R-Wpn-Missile2A-T,109
-R-Wpn-Missile-HvSAM,R-Wpn-Missile-Damage03,109
-R-Wpn-Missile-HvSAM,R-Wpn-Missile-LtSAM,109
 R-Wpn-MdArtMissile,R-Wpn-Missile-Damage03,109
 R-Wpn-MdArtMissile,R-Wpn-Rocket06-IDF,109
 R-Wpn-HvArtMissile,R-Wpn-MdArtMissile,109
@@ -539,6 +534,7 @@ R-Sys-Resistance-Circuits,R-Struc-Research-Upgrade08,109
 R-Sys-Resistance-Circuits,R-Sys-Sensor-WSTower,109
 R-Wpn-Cannon6TwinAslt,R-Wpn-Cannon5,109
 R-Defense-Cannon6,R-Wpn-Cannon6TwinAslt,109
+R-Defense-Cannon6,R-Defense-Pillbox04,109
 R-Wpn-HvyLaser,R-Wpn-Laser02,109
 R-Wpn-HvyLaser,R-Wpn-Energy-Damage03,109
 R-Defense-HeavyLas,R-Wpn-HvyLaser,109
@@ -588,15 +584,11 @@ R-Struc-Factory-Cyborg-Upgrade09,R-Struc-Factory-Cyborg-Upgrade08,109
 R-Wpn-AALaser,R-Wpn-Energy-ROF03,109
 R-Defense-AA-Laser,R-Wpn-AALaser,109
 R-Defense-EMPMortar,R-Defense-EMPCannon,109
-R-Defense-WallTower-SamHvy,R-Wpn-Missile-HvSAM,109
-R-Defense-WallTower-SamHvy,R-Defense-WallUpgrade07,109
 R-Defense-WallTower-QuadRotAA,R-Defense-HardcreteWall,109
 R-Defense-WallTower-QuadRotAA,R-Defense-AASite-QuadRotMg,109
 R-Sys-Sensor-WS,CAM1RESEARCH,109
 R-Wpn-EMPCannon,R-Struc-Research-Upgrade07,109
 R-Defense-WallTower-DoubleAAgun,R-Wpn-AAGun02,109
-R-Defense-WallTower-SamSite,R-Defense-WallUpgrade07,109
-R-Defense-WallTower-SamSite,R-Defense-SamSite1,109
 R-Wpn-MG5,R-Wpn-MG4,109
 R-Wpn-MG5,R-Wpn-MG-ROF03,109
 R-Defense-WallTower-TwinAGun,R-Wpn-MG5,109
@@ -650,3 +642,7 @@ R-Defense-A0BaBaMortarPit,R-Defense-A0BaBaGunTower,109
 R-Defense-A0BaBaRocketPit,R-Defense-A0BaBaGunTower,109
 R-Defense-A0CannonTower,R-Defense-A0BaBaGunTower,109
 R-Defense-A0BaBaFlameTower,R-Defense-A0BaBaGunTower,109
+R-Wpn-GShield,R-Struc-Research-Upgrade07,109
+R-Wpn-GShield,R-Vehicle-Prop-VTOL,109
+R-Defense-Plas-Art,R-Wpn-Plas-Art,109
+R-Wpn-Plas-Art,R-Wpn-HvyLaser,109

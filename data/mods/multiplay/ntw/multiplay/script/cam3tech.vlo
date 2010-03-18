@@ -4,14 +4,14 @@ run
 //ALWAYS MAKE THIS THE SAME AS THE INDEX OF THE LAST ENTRY IN THE cam Tech[] array
 numCamTech		int 	252
 //ALWAYS MAKE THIS THE ONE MORE THAN THE INDEX OF THE LAST ENTRY IN THE cam Tech[] array
-numCamTechB		int 	13
+numCamTechB		int 	12
 
 initialPowerCl	int     2000
 initialPowerBa	int     3000
 initialPowerDe	int     4000
 
 //tech level three
-camTech	[0]	RESEARCHSTAT	"R-Struc-Research-Upgrade09"
+camTech	[0]	RESEARCHSTAT	"R-Struc-Research-Upgrade08"
 
 //tech level all
 camTech	[1]	RESEARCHSTAT	"R-Defense-HardcreteWall"
@@ -284,5 +284,4 @@ camTechB	[8]	RESEARCHSTAT	"R-Wpn-MG5"
 camTechB	[9]	RESEARCHSTAT	"R-Wpn-Cannon-Damage07"
 camTechB	[10]	RESEARCHSTAT	"R-Wpn-Cannon-Damage08"
 camTechB	[11]	RESEARCHSTAT	"R-Wpn-Cannon-Damage09"
-camTechB	[12]	RESEARCHSTAT	"R-Struc-Research-Upgrade08"
 }
