@@ -2211,6 +2211,10 @@ INT_RETVAL intRunWidgets(void)
 						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new droid: %s."), selectedPlayer, psDroid->aName);
 						sendTextMessage(msg, true);
 						Cheated = true;
+						psScrCBNewDroid = psDroid;
+						psScrCBNewDroidFact = NULL;
+						eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);	// notify scripts so it will get assigned jobs
+						psScrCBNewDroid = NULL;
 					}
 				}
 				editPosMode = IED_NOPOS;
