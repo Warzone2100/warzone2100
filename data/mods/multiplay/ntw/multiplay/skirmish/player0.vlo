@@ -72,8 +72,8 @@ run
 
 	//AA
 	numVtolDefStr	INT			2 	
-	vtolDefStruct[0] STRUCTURESTAT		"P0-AASite-SAM1"
-	vtolDefStruct[1] STRUCTURESTAT		"P0-AASite-SAM2" 	
+	vtolDefStruct[0] STRUCTURESTAT		"WallTower-QuadRotAAGun"
+	vtolDefStruct[1] STRUCTURESTAT		"WallTower-QuadRotAAGun" 	
 
 	//Combat Templates
 	numTemplates	INT		12
@@ -233,10 +233,3 @@ run
 	DebugMsg[13]	TEXTSTRING	"Debug_msg_14"		//BASE: Base attacked. Defending.
 	DebugMsg[14]	TEXTSTRING	"Debug_msg_15"		//BASE: Agressive defence.
 }
-
-
-
-
-
-
-

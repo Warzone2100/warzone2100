@@ -66,6 +66,7 @@ Emplacement-MRL-pit,DEFENSE,Level All,MEDIUM,0,1,1,Concrete,400,1,10,200,10,125,
 Emplacement-Rocket06-IDF,DEFENSE,Level All,MEDIUM,0,1,1,Concrete,500,1,10,150,10,325,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blaamnt1.pie,0,0,1
 Emplacement-RotHow,DEFENSE,Level Two-Three,MEDIUM,0,1,1,Concrete,650,1,10,200,10,525,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blaamnt2.PIE,0,0,1
 Emplacement-RotMor,DEFENSE,Level Two-Three,MEDIUM,0,1,1,Concrete,500,1,10,200,10,325,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLMRTPIT.PIE,0,0,1
+NX-Emp-Plasma-Pit,DEFENSE,Level Three,HARD,0,1,1,Concrete,650,1,15,200,10,525,10,150,255,1,ZNULLECM,NavGunSensor,1,Blaamnt2.Pie,0,0,1
 GuardTower-ATMiss,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,400,2,10,300,10,300,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.PIE,0,0,1
 GuardTower-BeamLas,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,400,2,10,300,10,100,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.PIE,0,0,1
 GuardTower-Rail1,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,400,2,10,300,10,250,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.PIE,0,0,1
@@ -85,7 +86,6 @@ NX-ANTI-SATSite,MISSILE SILO,Level Three,BUNKER,0,1,1,Concrete,500,1,999,999,10,
 NX-CruiseSite,DEFENSE,Level Three,BUNKER,0,1,1,Concrete,500,1,20,300,10,100,30,0,1,1,ZNULLECM,DefaultSensor1Mk1,0,blbunkms.Pie,0,1,0
 NX-Emp-MedArtMiss-Pit,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,1,15,200,10,100,10,150,255,1,ZNULLECM,NavGunSensor,1,BLHARDPT.PIE,0,0,1
 NX-Emp-MultiArtMiss-Pit,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,1,15,200,10,100,10,150,255,1,ZNULLECM,NavGunSensor,1,BLHARDPT.PIE,0,0,1
-NX-Emp-Plasma-Pit,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,1,15,200,10,100,10,150,255,1,ZNULLECM,NavGunSensor,1,Blaamnt2.Pie,0,0,1
 NX-Tower-ATMiss,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,400,2,15,300,10,40,10,150,255,1,ZNULLECM,NavGunSensor,1,Blgrdnex.Pie,0,0,1
 NX-Tower-PulseLas,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,400,2,15,300,10,40,10,150,255,1,ZNULLECM,NavGunSensor,1,Blgrdnex.Pie,0,0,1
 NX-Tower-Rail1,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,400,2,15,300,10,40,10,150,255,1,ZNULLECM,NavGunSensor,1,Blgrdnex.Pie,0,0,1
@@ -166,5 +166,6 @@ ContaMine4,DEFENSE,Level One-Two,MEDIUM,0,1,1,Concrete,50,1,12,200,1,200,1,150,2
 ContaMine5,DEFENSE,Level Two-Three,MEDIUM,0,1,1,Concrete,70,1,14,300,1,250,1,150,255,0,ZNULLECM,ZNULLSENSOR,1,Mine_Vis.pie,0,0,1
 ContaMine6,DEFENSE,Level Two-Three,MEDIUM,0,1,1,Concrete,70,1,14,300,1,250,1,150,255,0,ZNULLECM,ZNULLSENSOR,1,Mine_vis.pie,0,0,1
 ContaMine8,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,100,1,20,200,1,500,1,150,255,0,ZNULLECM,ZNULLSENSOR,1,Mine_Vis.pie,0,0,1
-AAShield,DEFENSE,Level Three,MEDIUM,1,2,2,Concrete,1000,3,20,300,10,1000,10,150,255,0,ZNULLECM,ZNULLSENSOR2,1,shield.pie,0,0,1
+AAShield,DEFENSE,Level Three,HARD,1,2,2,Concrete,1000,3,20,1000,20,1000,20,150,255,0,ZNULLECM,ZNULLSENSOR2,1,shield.pie,0,0,1
 A0CommandCentreCO,HQ,Level Two,HARD,0,2,2,Concrete,500,3,10,500,10,100,30,300,1,1,ZNULLECM,CCSensor,0,blhq3.pie,0,1,0
+GShield,DEFENSE,Level Three,HARD,1,2,2,Concrete,1000,3,20,1000,20,1000,20,150,255,0,ZNULLECM,ZNULLSENSOR2,1,shield2.pie,0,0,1

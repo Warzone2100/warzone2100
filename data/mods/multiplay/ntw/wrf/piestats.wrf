@@ -5,6 +5,7 @@
 //warzone.wz and new pies
 directory	"structs"
 file		IMD	"shield.pie"
+file		IMD	"shield2.pie"
 file		IMD	"tank-traps.pie"
 file		IMD	"adv-bunker.pie"
 file		IMD	"scav-res.pie"

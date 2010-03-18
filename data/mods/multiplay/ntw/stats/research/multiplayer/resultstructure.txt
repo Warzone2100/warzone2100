@@ -40,8 +40,6 @@ R-Defense-WallTower-PulseLas,WallTower-PulseLas,0,233
 R-Defense-WallTower-Rail2,WallTower-Rail2,0,235
 R-Sys-Sensor-Tower02,Sys-SensoTower02,0,215
 R-Defense-HvyFlamer,Tower-Projector,0,221
-R-Defense-SamSite1,P0-AASite-SAM1,0,197
-R-Defense-SamSite2,P0-AASite-SAM2,0,198
 R-Defense-HvyHowitzer,Emplacement-Howitzer150,0,153
 R-Defense-MRL,Emplacement-MRL-pit,0,162
 R-Defense-RotMG,Pillbox-RotMG,0,200
@@ -77,10 +75,8 @@ R-Defense-Super-Rocket,X-Super-Rocket,0,250
 R-Defense-Super-Missile,X-Super-Missile,0,249
 R-Defense-AA-Laser,P0-AASite-Laser,0,196
 R-Defense-EMPMortar,Emplacement-MortarEMP,0,158
-R-Defense-WallTower-SamHvy,WallTower-SamHvy,0,237
 R-Defense-WallTower-QuadRotAA,WallTower-QuadRotAAGun,0,234
 R-Defense-WallTower-DoubleAAgun,WallTower-DoubleAAGun,0,228
-R-Defense-WallTower-SamSite,WallTower-SamSite,0,238
 R-Defense-WallTower-TwinAGun,WallTower-TwinAssaultGun,0,239
 R-Wpn-LasSat_3,NuclearReactor,0,251
 R-Wpn-LasSat_3,CoolingTower,0,252
@@ -103,3 +99,5 @@ R-Defense-A0BaBaMortarPit,A0BaBaMortarPit,0,271
 R-Defense-A0BaBaRocketPit,A0BaBaRocketPit,0,272
 R-Defense-A0CannonTower,A0CannonTower,0,273
 R-Defense-Mine1,mineinfo,0,275
+R-Wpn-GShield,GShield,0,276
+R-Defense-Plas-Art,NX-Emp-Plasma-Pit,0,277

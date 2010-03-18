@@ -98,8 +98,6 @@ R-Wpn-Bomb01,Bomb1-VTOL-LtHE,WEAPON,0,0,10
 R-Wpn-Bomb02,Bomb2-VTOL-HvHE,WEAPON,0,0,10
 R-Wpn-Bomb03,Bomb3-VTOL-LtINC,WEAPON,0,0,10
 R-Wpn-Bomb04,Bomb4-VTOL-HvyINC,WEAPON,0,0,10
-R-Wpn-Missile-LtSAM,Missile-LtSAM,WEAPON,0,0,10
-R-Wpn-Missile-HvSAM,Missile-HvySAM,WEAPON,0,0,10
 R-Wpn-MdArtMissile,Missile-MdArt,WEAPON,0,0,10
 R-Wpn-HvArtMissile,Missile-HvyArt,WEAPON,0,10
 R-Sys-Autorepair-General,AutoRepair,REPAIR,ZNULLREPAIR,REPAIR,6
@@ -126,3 +124,4 @@ R-Vehicle-SABody1,SABody1,BODY,0,0,2
 R-Vehicle-SABody2,SABody2,BODY,0,0,2
 R-Vehicle-SABody3,SABody3,BODY,0,0,2
 R-Vehicle-Truck,TruckBody,BODY,0,0,2
+R-Wpn-Plas-Art,PlasmaHeavy,WEAPON,0,0,10
