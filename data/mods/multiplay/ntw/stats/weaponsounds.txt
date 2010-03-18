@@ -132,3 +132,5 @@ EMP-Trap,emp.ogg,-1, 234
 AAS-weapon,emp.ogg,-1, 235
 scv-Hvywpn-HPV,cybgrnd.ogg,smlexpl.ogg, 236
 GS-weapon,emp.ogg,-1, 237
+Incenediary-Mo,mortar.ogg,lrgexpl.ogg, 238
+LasSat2,bemlsr.ogg,lsrexpl.ogg,239

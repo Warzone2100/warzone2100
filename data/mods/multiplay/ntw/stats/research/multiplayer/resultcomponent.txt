@@ -125,3 +125,4 @@ R-Vehicle-SABody2,SABody2,BODY,0,0,2
 R-Vehicle-SABody3,SABody3,BODY,0,0,2
 R-Vehicle-Truck,TruckBody,BODY,0,0,2
 R-Wpn-Plas-Art,PlasmaHeavy,WEAPON,0,0,10
+R-Wpn-Incenediary-Mortar,Incenediary-Mo,WEAPON,0,0,10

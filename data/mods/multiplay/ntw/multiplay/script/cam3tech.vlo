@@ -11,7 +11,7 @@ initialPowerBa	int     3000
 initialPowerDe	int     4000
 
 //tech level three
-camTech	[0]	RESEARCHSTAT	"R-Struc-Research-Upgrade08"
+camTech	[0]	RESEARCHSTAT	"R-Wpn-Incenediary-Mortar"
 
 //tech level all
 camTech	[1]	RESEARCHSTAT	"R-Defense-HardcreteWall"
@@ -134,7 +134,7 @@ camTech	[115]	RESEARCHSTAT	"R-Wpn-Mortar-ROF01"
 camTech	[116]	RESEARCHSTAT	"R-Wpn-Rocket02-MRL"
 camTech	[117]	RESEARCHSTAT	"R-Wpn-Rocket-Damage03"
 camTech	[118]	RESEARCHSTAT	"R-Wpn-Rocket-ROF02"
-camTech	[119]	RESEARCHSTAT	"R-Struc-Research-Upgrade07"
+camTech	[119]	RESEARCHSTAT	"R-Defense-Incenediary-Mortar-Pit"
 camTech	[120]	RESEARCHSTAT	"R-Wpn-RocketSlow-Accuracy02"
 
 //tech level two
