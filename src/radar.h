@@ -30,9 +30,10 @@
 
 void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b);	///< Set radar colour for given terrain type.
 
-#define MAX_RADARZOOM	2.50f
-#define MIN_RADARZOOM	0.75f
-#define RADARZOOM_STEP	0.25f
+#define MAX_RADARZOOM		(16 * 10/4) // 2.50x
+#define MIN_RADARZOOM		(16 * 3/4)  // 0.75x
+#define DEFAULT_RADARZOOM	(16)        // 1.00x
+#define RADARZOOM_STEP		(16 * 1/4)  // 0.25x
 
 extern void resetRadarRedraw(void);
 extern BOOL InitRadar(void);				///< Initialize minimap subsystem.
@@ -40,8 +41,8 @@ extern BOOL ShutdownRadar(void);			///< Shutdown minimap subsystem.
 extern BOOL resizeRadar(void);				///< Recalculate minimap size. For initialization code only.
 extern void drawRadar(void);				///< Draw the minimap on the screen.
 extern void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY);	///< Given a position within the radar, returns a world coordinate.
-extern void SetRadarZoom(float ZoomLevel);		///< Set current zoom level. 1.0 is 1:1 resolution.
-extern float GetRadarZoom(void);			///< Get current zoom level.
+extern void SetRadarZoom(uint8_t ZoomLevel);		///< Set current zoom level. 1.0 is 1:1 resolution.
+extern uint8_t GetRadarZoom(void);			///< Get current zoom level.
 extern BOOL CoordInRadar(int x, int y);			///< Is screen coordinate inside minimap?
 
 /** Different mini-map draw modes. */
