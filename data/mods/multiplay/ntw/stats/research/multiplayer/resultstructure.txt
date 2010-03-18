@@ -101,3 +101,4 @@ R-Defense-A0CannonTower,A0CannonTower,0,273
 R-Defense-Mine1,mineinfo,0,275
 R-Wpn-GShield,GShield,0,276
 R-Defense-Plas-Art,NX-Emp-Plasma-Pit,0,277
+R-Wpn-Laser-Sat,Laser-Sat,0,278

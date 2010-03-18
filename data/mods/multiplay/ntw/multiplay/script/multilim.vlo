@@ -20,4 +20,5 @@ repair			STRUCTURESTAT		"A0RepairCentre3"
 vtolfact			STRUCTURESTAT		"A0VTolFactory1"
 vtolpad			STRUCTURESTAT		"A0VtolPad"	
 lassat		STRUCTURESTAT		"A0LasSatCommand"
+lassat2		STRUCTURESTAT		"Laser-Sat"
 }

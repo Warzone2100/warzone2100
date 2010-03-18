@@ -547,8 +547,9 @@ R-Sys-Sensor-WSTower,R-Struc-Research-Upgrade07,109
 R-Sys-Sensor-UpLink,R-Struc-Research-Upgrade08,109
 R-Sys-Sensor-UpLink,R-Sys-Sensor-WSTower,109
 R-Sys-Sensor-UpLink,R-Sys-Engineering03,109
-R-Wpn-LasSat,R-Struc-Research-Upgrade09,109
-R-Wpn-LasSat,R-Sys-Sensor-UpLink,109
+R-Wpn-LasSat,R-Wpn-Laser-Sat,109
+R-Wpn-Laser-Sat,R-Struc-Research-Upgrade09,109
+R-Wpn-Laser-Sat,R-Sys-Sensor-UpLink,109
 R-Wpn-PlasmaCannon,R-Wpn-HvyLaser,109
 R-Sys-SpyTower,R-Sys-SpyTurret,109
 R-Defense-PlasmaCannon,R-Wpn-PlasmaCannon,109
@@ -646,3 +647,7 @@ R-Wpn-GShield,R-Struc-Research-Upgrade07,109
 R-Wpn-GShield,R-Vehicle-Prop-VTOL,109
 R-Defense-Plas-Art,R-Wpn-Plas-Art,109
 R-Wpn-Plas-Art,R-Wpn-HvyLaser,109
+R-Wpn-Incenediary-Mortar,R-Wpn-Mortar02Hvy,109
+R-Wpn-Incenediary-Mortar,R-Wpn-Flame2,109
+R-Defense-Incenediary-Mortar-Pit,R-Wpn-Incenediary-Mortar,109
+R-Defense-Incenediary-Mortar-Pit,R-Defense-HvyMor,109
