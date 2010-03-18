@@ -2362,6 +2362,7 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 
 	for (line = 0; line < NumWeapons; line++)
 	{
+		bool addedToStaticList = false;
 		int player, i;
 		char WeaponName[DROID_MAXWEAPS][MAX_STR_LENGTH] = {{'\0'}},
 			TemplateName[MAX_STR_LENGTH] = {'\0'};
@@ -2388,6 +2389,10 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 					continue;	// ok, this player did not have this template. that's fine.
 				}
 			}
+			if (!isHumanPlayer(i) && addedToStaticList)
+			{
+				continue;	// do not add weapons multiple times to templates in AI list
+			}
 
 			ASSERT_OR_RETURN(false, pTemplate->numWeaps <= DROID_MAXWEAPS, "stack corruption unavoidable");
 
@@ -2409,7 +2414,7 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 			}
 			if (!isHumanPlayer(i))
 			{
-				break;	// only one list to add to
+				addedToStaticList = true;	// only one list to add to
 			}
 		}
 
