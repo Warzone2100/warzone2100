@@ -51,7 +51,7 @@ AI - Aivolution:
 Fish, Dolphin, Whale Bodys (not the Textures):
    Mertens - http://forums.wz2100.net
 
-Factory Textures
+Factory, Power & Button Textures
    Mysteryem - http://www.mysterymayhem.co.uk
 
 Camo Textures
