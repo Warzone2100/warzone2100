@@ -58,7 +58,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;;&quot;$(SolutionDir)\..\lib\ivis_opengl&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\lib\ivis_opengl&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;YY_STATIC;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -80,10 +80,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				ExecutionBucket="11"
-				AdditionalDependencies="OpenGL32.lib GLU32.lib shfolder.lib winmm.lib ws2_32.lib dbghelp.lib glc32.lib libintl.lib libogg_static.lib libpngd_static.lib libpopt.lib libtheora_static.lib libvorbis_static.lib libvorbisfile_static.lib OpenAL32.lib physfs_static.lib SDL.lib SDLmain.lib zlibd_static.lib"
+				AdditionalDependencies="OpenGL32.lib GLU32.lib shfolder.lib winmm.lib ws2_32.lib dbghelp.lib OpenAL32.lib physfs_static.lib libogg_static.lib libvorbis_static.lib libvorbisfile_static.lib libtheora_static.lib libpngd_static.lib zlibd_static.lib QtGuid4.lib QtOpenGLd4.lib QtCored4.lib QtNetworkd4.lib QtMaind.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\devpkg\libd&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\devpkg\libd&quot;;&quot;$(QTDIR)\lib\&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -156,7 +156,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;;&quot;$(SolutionDir)\..\lib\ivis_opengl&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\lib\ivis_opengl&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;YY_STATIC"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -175,8 +175,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				ExecutionBucket="11"
-				AdditionalDependencies="OpenGL32.lib GLU32.lib shfolder.lib winmm.lib ws2_32.lib dbghelp.lib glc32.lib libintl.lib libogg_static.lib libpng_static.lib libpopt.lib libtheora_static.lib libvorbis_static.lib libvorbisfile_static.lib OpenAL32.lib physfs_static.lib SDL.lib SDLmain.lib zlib_static.lib"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\devpkg\lib&quot;"
+				AdditionalDependencies="OpenGL32.lib GLU32.lib shfolder.lib winmm.lib ws2_32.lib dbghelp.lib OpenAL32.lib physfs_static.lib libogg_static.lib libvorbis_static.lib libvorbisfile_static.lib libtheora_static.lib libpng_static.lib zlib_static.lib QtGui4.lib QtOpenGL4.lib QtCore4.lib QtNetwork4.lib QtMain.lib"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\devpkg\lib&quot;;&quot;$(QTDIR)\lib\&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -439,7 +439,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\main.c"
+				RelativePath="..\src\main.cpp"
 				>
 			</File>
 			<File

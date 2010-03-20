@@ -100,6 +100,10 @@ typedef enum _focus_state
 # define WZ_WRITEDIR ".warzone2100-trunk"
 #endif
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 char datadir[PATH_MAX] = ""; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be empty on startup for ParseCommandLine to work!
 char configdir[PATH_MAX] = ""; // specifies custom USER directory. Same rules apply as datadir above.
 
@@ -122,7 +126,9 @@ char	MultiForcesPath[PATH_MAX];
 char	MultiCustomMapsPath[PATH_MAX];
 char	MultiPlayersPath[PATH_MAX];
 char	KeyMapPath[PATH_MAX];
-
+#ifdef __cplusplus
+}
+#endif
 // Start game in title mode:
 static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop

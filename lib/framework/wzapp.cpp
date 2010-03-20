@@ -20,8 +20,21 @@
  *  Qt-related functions.
  */
 
+#include <QtGui/QImageReader>
+#include <QtGui/QBitmap>
+#include <QtGui/QPainter>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QClipboard>
+#include <QtGui/QDesktopWidget>
+
 // Get platform defines before checking for them!
 #include "frame.h"
+
+#include "wzapp.h"
+#if defined(WZ_CC_MSVC)
+#include "wzapp.moc.h"		// this is generated on the pre-build event.
+#endif
+
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "file.h"
 #include "configfile.h"
@@ -33,13 +46,6 @@
 #include "lib/gamelib/gtime.h"
 #include <deque>
 
-#include <QtGui/QImageReader>
-#include <QtGui/QBitmap>
-#include <QtGui/QPainter>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QClipboard>
-#include "wzapp.h"
-#include <QtGui/QDesktopWidget>
 
 /* The possible states for keys */
 typedef enum _key_state
@@ -94,9 +100,15 @@ static QColor fontColor;
 static uint16_t mouseXPos = 0, mouseYPos = 0;
 static CURSOR lastCursor = CURSOR_ARROW;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 unsigned int screenWidth = 0;
 unsigned int screenHeight = 0;
-
+#ifdef __cplusplus
+}
+#endif
 static void inputAddBuffer(UDWORD key, utf_32_char unicode);
 
 /*!
