@@ -20,15 +20,15 @@
  *  Qt-related functions.
  */
 
-// Get platform defines before checking for them!
-#include "frame.h"
-
 #include <QtGui/QImageReader>
 #include <QtGui/QBitmap>
 #include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QClipboard>
 #include <QtGui/QDesktopWidget>
+
+// Get platform defines before checking for them!
+#include "frame.h"
 
 #include "wzapp.h"
 #if defined(WZ_CC_MSVC)
