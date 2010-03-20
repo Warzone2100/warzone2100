@@ -220,6 +220,10 @@ bool showSAMPLES = false;
  *  default OFF, turn ON via console command 'showorders'
  */
 bool showORDERS = false;	
+/** Show the current level name on the screen, toggle via the 'showlevelname'
+ *  console command
+*/
+bool showLevelName = true;
 /** When we have a connection issue, we will flash a message on screen
 * 0 = no issue, 1= player leaving nicely, 2= player got disconnected
 */
@@ -600,7 +604,10 @@ void draw3DScene( void )
 		if (getWidgetsStatus() && !gamePaused())
 		{
 			char buildInfo[255];
-			iV_DrawText( getLevelName(), RET_X + 134, 420 + E_H );
+			if (showLevelName)
+			{
+				iV_DrawText( getLevelName(), RET_X + 134, 420 + E_H );
+			}
 			getAsciiTime(buildInfo,gameTime);
 			iV_DrawText( buildInfo, RET_X + 134, 434 + E_H );
 		}
@@ -4168,10 +4175,9 @@ static void	drawDroidSensorLock(DROID *psDroid)
 /// Draw the construction lines for all construction droids
 static	void	doConstructionLines( void )
 {
-DROID	*psDroid;
-UDWORD	i;
+	DROID	*psDroid;
+	UDWORD	i;
 
-	pie_SetTranslucencyMode(TRANS_ALPHA);
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
 		for(psDroid= apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
@@ -4217,9 +4223,8 @@ UDWORD	i;
 /// Draw the construction or demolish lines for one droid
 static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 {
-	CLIP_VERTEX pts[3];
 	Vector3i each;
-	Vector3f *point;
+	Vector3f *point, pts[3];
 	UDWORD	pointIndex;
 	SDWORD	realY;
 	Vector3i null, vec;
@@ -4237,9 +4242,9 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pts[0].pos.x = vec.x + rx;
-	pts[0].pos.y = vec.y;
-	pts[0].pos.z = vec.z - rz;
+	pts[0].x = vec.x + rx;
+	pts[0].y = vec.y;
+	pts[0].z = vec.z - rz;
 
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
@@ -4261,9 +4266,9 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pts[1].pos.x = vec.x + rx;
-	pts[1].pos.y = vec.y;
-	pts[1].pos.z = vec.z - rz;
+	pts[1].x = vec.x + rx;
+	pts[1].y = vec.y;
+	pts[1].z = vec.z - rz;
 
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
@@ -4279,9 +4284,9 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pts[2].pos.x = vec.x + rx;
-	pts[2].pos.y = vec.y;
-	pts[2].pos.z = vec.z - rz;
+	pts[2].x = vec.x + rx;
+	pts[2].y = vec.y;
+	pts[2].z = vec.z - rz;
 
 	// set the colour
 	colour = pal_SetBrightness(UBYTE_MAX);
@@ -4294,18 +4299,6 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 		colour.byte.r = 0;
 		colour.byte.g = 0;
 	}
-	pts[0].light.rgba = 0xff000000;
-	pts[1].light.rgba = 0xff000000;
-	pts[2].light.rgba = 0xff000000;
-
-	pts[0].u = 0;
-	pts[0].v = 0;
-
-	pts[1].u = 0;
-	pts[1].v = 0;
-
-	pts[2].u = 0;
-	pts[2].v = 0;
 
 	pie_TransColouredTriangle(pts, colour);
 }

@@ -161,6 +161,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\netsocket.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\nettypes.c"
 				>
 			</File>
@@ -276,6 +280,10 @@
 			</File>
 			<File
 				RelativePath=".\netplay.h"
+				>
+			</File>
+			<File
+				RelativePath=".\netsocket.h"
 				>
 			</File>
 			<File

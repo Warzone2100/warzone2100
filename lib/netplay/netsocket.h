@@ -32,7 +32,9 @@ typedef struct Socket Socket;
 typedef struct SocketSet SocketSet;
 typedef struct addrinfo SocketAddress;
 
+#ifndef WZ_OS_WIN
 static const int SOCKET_ERROR = -1;
+#endif
 
 
 // Init/shutdown.

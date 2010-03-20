@@ -1,8 +1,9 @@
 FORMS += 3ds2pie_gui.ui
 SOURCES += 3ds2pie_gui.cpp \
-           3ds2pie.c \
+           3ds2pie.cpp \
            main.cpp
-HEADERS += 3ds2pie_gui.h
+HEADERS += 3ds2pie_gui.h \
+           3ds2pie.h
 TEMPLATE = app
 CONFIG += warn_on \
           qt \

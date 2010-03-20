@@ -24,10 +24,6 @@
 #ifndef __INCLUDED_LIB_FRAMEWORK_TYPES_H__
 #define __INCLUDED_LIB_FRAMEWORK_TYPES_H__
 
-#ifndef __STDC_LIMIT_MACROS
-#define __STDC_LIMIT_MACROS
-#endif
-
 #include "wzglobal.h"
 
 #ifdef HAVE_INTTYPES_H // defined WZ_C99
@@ -46,6 +42,7 @@ typedef signed   int       int32_t;
 typedef signed   long long int64_t;
 //END   Hope this is right.
 
+#ifndef WZ_CC_MINGW
 # define INT8_MIN               (-128)
 # define INT16_MIN              (-32767-1)
 # define INT32_MIN              (-2147483647-1)
@@ -55,9 +52,11 @@ typedef signed   long long int64_t;
 # define UINT8_MAX              (255)
 # define UINT16_MAX             (65535)
 # define UINT32_MAX             (4294967295U)
+#endif
 #ifdef WZ_CC_MSVC
 # define PRIu32					"u"
 # define PRIu64					"I64u"
+typedef SSIZE_T ssize_t;
 #endif
 #endif // WZ_C99
 

@@ -360,9 +360,9 @@ void	kf_CloneSelected( void )
 			sendTextMessage(msg, true);
 			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
 			sTemplate2 = NULL;
+			psNewDroid->selected = true;
 			psNewDroid = NULL;
 			Cheated = true;
-			psNewDroid->selected = true;
 		}
 	}
 }
@@ -520,7 +520,10 @@ void kf_ToggleOrders(void)	// Displays orders & action of currently selected uni
 		showORDERS = !showORDERS;
 		CONPRINTF(ConsoleString, (ConsoleString, "Unit Order/Action displayed is %s", showORDERS ? "Enabled" : "Disabled"));
 }
-
+void kf_ToggleLevelName(void) // toggles level name 
+{
+	showLevelName = !showLevelName;
+}
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
@@ -841,7 +844,7 @@ void	kf_ZoomOut( void )
 // --------------------------------------------------------------------------
 void	kf_RadarZoomIn( void )
 {
-	float RadarZoomLevel = GetRadarZoom();
+	uint8_t RadarZoomLevel = GetRadarZoom();
 
 	if(RadarZoomLevel < MAX_RADARZOOM)
 	{
@@ -849,25 +852,17 @@ void	kf_RadarZoomIn( void )
 		SetRadarZoom(RadarZoomLevel);
 		audio_PlayTrack( ID_SOUND_BUTTON_CLICK_5 );
 	}
-	else	// at maximum already
-	{
-		audio_PlayTrack( ID_SOUND_BUILD_FAIL );
-	}
 }
 // --------------------------------------------------------------------------
 void	kf_RadarZoomOut( void )
 {
-	float RadarZoomLevel = GetRadarZoom();
+	uint8_t RadarZoomLevel = GetRadarZoom();
 
 	if (RadarZoomLevel > MIN_RADARZOOM)
 	{
 		RadarZoomLevel -= RADARZOOM_STEP;
 		SetRadarZoom(RadarZoomLevel);
 		audio_PlayTrack( ID_SOUND_BUTTON_CLICK_5 );
-	}
-	else	// at minimum already
-	{
-		audio_PlayTrack( ID_SOUND_BUILD_FAIL );
 	}
 }
 // --------------------------------------------------------------------------

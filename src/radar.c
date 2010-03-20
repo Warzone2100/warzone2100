@@ -83,7 +83,8 @@ static PIELIGHT flashColours[MAX_PLAYERS]=
 };
 
 static SDWORD radarWidth, radarHeight, radarCenterX, radarCenterY, radarTexWidth, radarTexHeight;
-static float RadarZoom;
+static uint8_t RadarZoom;
+static float RadarZoomMultiplier = 1.0f;
 static UDWORD radarBufferSize = 0;
 
 static void DrawRadarTiles(void);
@@ -91,8 +92,9 @@ static void DrawRadarObjects(void);
 static void DrawRadarExtras(float radarX, float radarY, float pixSizeH, float pixSizeV);
 static void DrawNorth(void);
 
-static void radarSize(float zoom)
+static void radarSize(int ZoomLevel)
 {
+	float zoom = (float)ZoomLevel * RadarZoomMultiplier / 16.0;
 	radarWidth = radarTexWidth * zoom;
 	radarHeight = radarTexHeight * zoom;
 	radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - MAX(radarHeight, radarWidth)/2;
@@ -104,8 +106,8 @@ void radarInitVars(void)
 {
 	radarTexWidth = 0;
 	radarTexHeight = 0;
-	RadarZoom = 1.0f;
-	debug(LOG_WZ, "Resetting radar zoom to %f", RadarZoom);
+	RadarZoom = DEFAULT_RADARZOOM;
+	debug(LOG_WZ, "Resetting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
 }
 
@@ -145,8 +147,8 @@ BOOL resizeRadar(void)
 		return false;
 	}
 	memset(radarBuffer, 0, radarBufferSize);
-	RadarZoom = (float)MAX(RADWIDTH, RADHEIGHT) / (float)MAX(radarTexWidth, radarTexHeight);
-	debug(LOG_WZ, "Setting radar zoom to %f", RadarZoom);
+	RadarZoomMultiplier = (float)MAX(RADWIDTH, RADHEIGHT) / (float)MAX(radarTexWidth, radarTexHeight);
+	debug(LOG_WZ, "Setting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
 
 	return true;
@@ -162,17 +164,26 @@ BOOL ShutdownRadar(void)
 	return true;
 }
 
-void SetRadarZoom(float ZoomLevel)
+void SetRadarZoom(uint8_t ZoomLevel)
 {
-	if (ZoomLevel <= MAX_RADARZOOM && ZoomLevel >= MIN_RADARZOOM)
+	if (ZoomLevel < 4) // old savegame format didn't save zoom levels very well
 	{
-		debug(LOG_WZ, "Setting radar zoom to %f from %f", ZoomLevel, RadarZoom);
-		RadarZoom = ZoomLevel;
-		radarSize(ZoomLevel);
+		ZoomLevel = DEFAULT_RADARZOOM;
 	}
+	if (ZoomLevel > MAX_RADARZOOM)
+	{
+		ZoomLevel = MAX_RADARZOOM;
+	}
+	if (ZoomLevel < MIN_RADARZOOM)
+	{
+		ZoomLevel = MIN_RADARZOOM;
+	}
+	debug(LOG_WZ, "Setting radar zoom to %u from %u", ZoomLevel, RadarZoom);
+	RadarZoom = ZoomLevel;
+	radarSize(RadarZoom);
 }
 
-float GetRadarZoom(void)
+uint8_t GetRadarZoom(void)
 {
 	return RadarZoom;
 }

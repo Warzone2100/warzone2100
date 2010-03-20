@@ -23,10 +23,6 @@
 #ifndef _frame_h
 #define _frame_h
 
-#ifndef __STDC_LIMIT_MACROS
-#define __STDC_LIMIT_MACROS
-#endif
-
 #include "wzglobal.h"
 
 // Workaround X11 headers #defining Status

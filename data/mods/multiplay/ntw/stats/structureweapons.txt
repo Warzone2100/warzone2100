@@ -112,3 +112,6 @@ ContaMine8,WepMine8,NULL,NULL,NULL,111
 WallTower-Rail4,RailGun4Mk1,NULL,NULL,NULL,112
 A0TankTrap2,EMP-Trap,NULL,NULL,NULL,113
 AAShield,AAS-weapon,NULL,NULL,NULL,114
+GShield,GS-weapon,NULL,NULL,NULL,115
+Incenediary-Mortar-Pit,Incenediary-Mo,NULL,NULL,NULL,116
+Laser-Sat,LasSat2,NULL,NULL,NULL,117

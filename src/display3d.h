@@ -56,6 +56,7 @@ typedef enum
 extern bool showFPS;
 extern bool showSAMPLES;
 extern bool showORDERS;
+extern bool showLevelName;
 
 extern void	setViewAngle(SDWORD angle);
 extern UDWORD getViewDistance(void);
