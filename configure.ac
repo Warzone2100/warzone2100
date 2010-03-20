@@ -213,6 +213,9 @@ AC_ARG_ENABLE([debug],
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([${enable_debug}])
 
+# Only needed for CXX, actually.
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
+
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wcheck -Werror"

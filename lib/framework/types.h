@@ -60,6 +60,10 @@ typedef SSIZE_T ssize_t;
 #endif
 #endif // WZ_C99
 
+#ifndef INT8_MAX
+#warning inttypes.h and stdint.h defines missing! Make sure that __STDC_FORMAT_MACROS and __STDC_LIMIT_MACROS are defined when compiling C++ files.
+#endif
+
 #include <limits.h>
 #include <ctype.h>
 
