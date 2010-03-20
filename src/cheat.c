@@ -78,14 +78,6 @@ BOOL attemptCheatCode(const char* cheat_name)
 	const CHEAT_ENTRY * curCheat;
 	static const CHEAT_ENTRY * const EndCheat = &cheatCodes[ARRAY_SIZE(cheatCodes)];
 
-// =============
-	// NOTE: this will be removed once the "legs" bug has been found.
-	if (!strcasecmp("legs", cheat_name))
-	{
-		kf_DebugTemplates();
-		return true;
-	}
-// =============
 	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)
 	{
 		if (!getDebugMappingStatus())
