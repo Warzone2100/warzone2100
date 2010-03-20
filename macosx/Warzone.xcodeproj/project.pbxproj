@@ -646,7 +646,7 @@
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h",
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c",
 			);
-			script = "configs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h\" \"${INPUT_FILE_PATH}\" || exit 1\nconfigs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_PATH}\" || exit 1";
+			script = "configs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_PATH}\" || exit 1";
 		};
 		0246AA730BD3E47F004D1C70 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -4081,8 +4081,8 @@
 				0246A0C40BD3CBD5004D1C70 /* frame.c in Sources */,
 				0246A0C50BD3CBD5004D1C70 /* frameresource.c in Sources */,
 				0246A0C70BD3CBD5004D1C70 /* input.c in Sources */,
-				0246A0C90BD3CBD5004D1C70 /* resource_parser.y in Sources */,
 				0246A0C80BD3CBD5004D1C70 /* resource_lexer.l in Sources */,
+				0246A0C90BD3CBD5004D1C70 /* resource_parser.y in Sources */,
 				0246A0CA0BD3CBD5004D1C70 /* SDL_framerate.c in Sources */,
 				0246A0CC0BD3CBD5004D1C70 /* strres_parser.y in Sources */,
 				0246A0CB0BD3CBD5004D1C70 /* strres_lexer.l in Sources */,
