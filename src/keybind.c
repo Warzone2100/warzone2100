@@ -651,7 +651,10 @@ void kf_ToggleOrders(void)	// Displays orders & action of currently selected uni
 		showORDERS = !showORDERS;
 		CONPRINTF(ConsoleString, (ConsoleString, "Unit Order/Action displayed is %s", showORDERS ? "Enabled" : "Disabled"));
 }
-
+void kf_ToggleLevelName(void) // toggles level name 
+{
+	showLevelName = !showLevelName;
+}
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
