@@ -16,6 +16,7 @@
 	<http://www.gnu.org/licenses/>.
 */
 #include "3ds2pie_gui.h"
+#include "3ds2pie.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -24,9 +25,6 @@
 
 // For dump_pie_file
 #include <lib3ds/file.h>
-
-
-extern "C" void dump_pie_file(Lib3dsFile *f, FILE *o, const char *page, bool swapYZ, bool inverseUV, bool reverseWinding, int baseTexFlags, float scaleFactor);
 
 
 Gui3ds2pie::Gui3ds2pie( QWidget *parent )
@@ -62,14 +60,14 @@ void Gui3ds2pie::spinboxChanged(double value)
 
 void Gui3ds2pie::browseInputFile()
 {
-	QString path = QFileDialog::getOpenFileName(this, tr("Choose input file"), QString::null, QString::null);
+	QString path = QFileDialog::getOpenFileName(this, tr("Choose input file"), QString::null, "*.3ds");
 	inputFile_edit->setText(path);
 }
 
 
 void Gui3ds2pie::browseOutputFile()
 {
-	QString path = QFileDialog::getSaveFileName(this, tr("Choose output file"), QString::null, QString::null);
+	QString path = QFileDialog::getSaveFileName(this, tr("Choose output file"), QString::null, "*.pie");
 	outputFile_edit->setText(path);
 }
 
@@ -104,7 +102,6 @@ void Gui3ds2pie::accept()
 	QString inputFile = inputFile_edit->text();
 	QString outputFile = outputFile_edit->text();
 	QString texturePage = texturePage_edit->text();
-	unsigned int baseTexFlags = (twoSidedPolys->isChecked() ? 2200 : 200 );
 
 	if (inputFile.isEmpty())
 	{
@@ -135,10 +132,26 @@ void Gui3ds2pie::accept()
 		return;
 	}
 
-	dump_pie_file(f, o, texturePage.toAscii().data(), swapYZ->isChecked(), invertUV->isChecked(), reverseWinding->isChecked(), baseTexFlags, scale_spinbox->value());
+	PIE_OPTIONS options;
+	options.twoSidedPolys = twoSidedPolys->isChecked();
+	options.exportPIE3 = exportPIE3->isChecked();
+	options.invertUV = invertUV->isChecked();
+	options.page = strdup(texturePage.toAscii().data());
+	options.reverseWinding = reverseWinding->isChecked();
+	options.scaleFactor = scale_spinbox->value();
+	options.swapYZ = swapYZ->isChecked();
+	options.useTCMask = useTCMask->isChecked();
+
+	WZ_PIE_LEVEL pie;
+
+	dump_3ds_to_pie(f, &pie, options);
+	dump_pie_file(&pie, o, options);
 
 	fclose(o);
 	lib3ds_file_free(f);
+
+	if (options.page)
+		free(options.page);
 
 	QDialog::accept();
 }
