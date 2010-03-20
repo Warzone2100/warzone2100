@@ -63,7 +63,9 @@
 # include <unistd.h>
 typedef int SOCKET;
 static const SOCKET INVALID_SOCKET = -1;
-#elif defined(WZ_OS_WIN)
+#endif
+
+#ifdef WZ_OS_WIN
 # include <winsock2.h>
 # include <ws2tcpip.h>
 # undef EAGAIN
@@ -82,7 +84,6 @@ static const SOCKET INVALID_SOCKET = -1;
 # define EISCONN     WSAEISCONN
 # define ETIMEDOUT   WSAETIMEDOUT
 # define EWOULDBLOCK WSAEWOULDBLOCK
-typedef SSIZE_T ssize_t;
 # ifndef AI_V4MAPPED
 #  define AI_V4MAPPED	0x0008	/* IPv4 mapped addresses are acceptable.  */
 # endif
@@ -158,13 +159,16 @@ void setSockErr(int error)
 }
 
 #if defined(WZ_OS_WIN)
+typedef int (WINAPI * GETADDRINFO_DLL_FUNC)(const char *node, const char *service,
+                                           const struct addrinfo *hints,
+                                           struct addrinfo **res);
+typedef int (WINAPI * FREEADDRINFO_DLL_FUNC)(struct addrinfo *res);
+
 static HMODULE winsock2_dll = NULL;
 static unsigned int major_windows_version = 0;
-static int (WINAPI * getaddrinfo_dll_func)(const char *node, const char *service,
-                                           const struct addrinfo *hints,
-                                           struct addrinfo **res) = NULL;
 
-static int (WINAPI * freeaddrinfo_dll_func)(struct addrinfo *res) = NULL;
+static GETADDRINFO_DLL_FUNC getaddrinfo_dll_func = NULL;
+static FREEADDRINFO_DLL_FUNC freeaddrinfo_dll_func = NULL;
 
 # define getaddrinfo  getaddrinfo_dll_dispatcher
 # define freeaddrinfo freeaddrinfo_dll_dispatcher
@@ -517,7 +521,7 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 
 	do
 	{
-		received = recv(sock->fd[SOCK_CONNECTION], buf, max_size, 0);
+		received = recv(sock->fd[SOCK_CONNECTION], (char*)buf, max_size, 0);
 	} while (received == SOCKET_ERROR && getSockErr() == EINTR);
 
 	sock->ready = false;
@@ -1080,7 +1084,7 @@ Socket *socketListen(unsigned int port)
 #if defined(IPV6_V6ONLY)
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, &ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, (char*)&ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
 		{
 			debug(LOG_INFO, "Failed to set IPv6 socket to perform IPv4 to IPv6 mapping. Falling back to using two sockets. Error: %s", strSockError(getSockErr()));
 		}
@@ -1099,7 +1103,7 @@ Socket *socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, &so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, (char*)&so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv4 socket. Error: %s", strSockError(getSockErr()));
 		}
@@ -1121,7 +1125,7 @@ Socket *socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, &so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, (char*)&so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
 			debug(LOG_INFO, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
 		}
@@ -1248,14 +1252,14 @@ void SOCKETinit()
 		if (WSAStartup(ver_required, &stuff) != 0)
 		{
 			debug(LOG_ERROR, "Failed to initialize Winsock: %s", strSockError(getSockErr()));
-			return -1;
+			return;
 		}
 
 		winsock2_dll = LoadLibraryA("ws2_32.dll");
 		if (winsock2_dll)
 		{
-			getaddrinfo_dll_func = GetProcAddress(winsock2_dll, "getaddrinfo");
-			freeaddrinfo_dll_func = GetProcAddress(winsock2_dll, "freeaddrinfo");
+			getaddrinfo_dll_func = (GETADDRINFO_DLL_FUNC) GetProcAddress(winsock2_dll, "getaddrinfo");
+			freeaddrinfo_dll_func = (FREEADDRINFO_DLL_FUNC) GetProcAddress(winsock2_dll, "freeaddrinfo");
 		}
 
 		// Determine major Windows version

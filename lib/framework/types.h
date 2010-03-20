@@ -32,6 +32,7 @@
 #else
 // Defines C99 types for C99 incompatible compilers (e.g. MSVC)
 #include <SDL_stdinc.h>
+#ifndef WZ_CC_MINGW
 # define INT8_MIN               (-128)
 # define INT16_MIN              (-32767-1)
 # define INT32_MIN              (-2147483647-1)
@@ -41,9 +42,11 @@
 # define UINT8_MAX              (255)
 # define UINT16_MAX             (65535)
 # define UINT32_MAX             (4294967295U)
+#endif
 #ifdef WZ_CC_MSVC
 # define PRIu32					"u"
 # define PRIu64					"I64u"
+typedef SSIZE_T ssize_t;
 #endif
 #endif // WZ_C99
 

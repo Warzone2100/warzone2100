@@ -9,7 +9,8 @@ SRC= \
 	netjoin_stub.c \
 	netlog.c \
 	netplay.c \
-	nettypes.c
+	nettypes.c \
+	netsocket.cpp
 
 LIB=netplay
 
