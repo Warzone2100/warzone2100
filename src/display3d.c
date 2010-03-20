@@ -220,6 +220,10 @@ bool showSAMPLES = false;
  *  default OFF, turn ON via console command 'showorders'
  */
 bool showORDERS = false;	
+/** Show the current level name on the screen, toggle via the 'showlevelname'
+ *  console command
+*/
+bool showLevelName = true;
 /** When we have a connection issue, we will flash a message on screen
 * 0 = no issue, 1= player leaving nicely, 2= player got disconnected
 */
@@ -600,7 +604,10 @@ void draw3DScene( void )
 		if (getWidgetsStatus() && !gamePaused())
 		{
 			char buildInfo[255];
-			iV_DrawText( getLevelName(), RET_X + 134, 420 + E_H );
+			if (showLevelName)
+			{
+				iV_DrawText( getLevelName(), RET_X + 134, 420 + E_H );
+			}
 			getAsciiTime(buildInfo,gameTime);
 			iV_DrawText( buildInfo, RET_X + 134, 434 + E_H );
 		}
