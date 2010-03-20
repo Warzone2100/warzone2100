@@ -57,7 +57,7 @@ extern int lev_lex_destroy(void);
 // block ID number start for the current level data (as opposed to a dataset)
 #define CURRENT_DATAID		LEVEL_MAXFILES
 
-static	char	currentLevelName[32];
+static	char	currentLevelName[32] = { "main" };
 
 // the current level descriptions
 LEVEL_DATASET	*psLevels = NULL;

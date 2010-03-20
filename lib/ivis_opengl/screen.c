@@ -44,6 +44,7 @@
 #endif
 #include "screen.h"
 #include "src/console.h"
+#include "src/levels.h"
 
 /* The Current screen size and bit depth */
 UDWORD		screenWidth = 0;
@@ -470,7 +471,7 @@ void screenDumpToDisk(const char* path)
 
 	while (++screendump_num != 0) {
 		// We can safely use '/' as path separator here since PHYSFS uses that as its default separator
-		ssprintf(screendump_filename, "%s/wz2100_shot_%03i.png", path, screendump_num);
+		ssprintf(screendump_filename, "%s/wz2100_%s_shot_%03i.png", path, getLevelName(), screendump_num);
 		if (!PHYSFS_exists(screendump_filename)) {
 			// Found a usable filename, so we'll stop searching.
 			break;
