@@ -359,9 +359,9 @@ void	kf_CloneSelected( void )
 			sendTextMessage(msg, true);
 			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
 			sTemplate2 = NULL;
+			psNewDroid->selected = true;
 			psNewDroid = NULL;
 			Cheated = true;
-			psNewDroid->selected = true;
 		}
 	}
 }
