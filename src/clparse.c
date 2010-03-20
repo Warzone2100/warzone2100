@@ -172,7 +172,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_ERROR, "Usage: --debug <flag>");
+					debug(LOG_FATAL, "Usage: --debug <flag>");
 					poptFreeContext(poptCon);
 					return false;
 				}
@@ -180,7 +180,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				// Attempt to enable the given debug section
 				if (!debug_enable_switch(token))
 				{
-					debug(LOG_ERROR, "Debug flag \"%s\" not found!", token);
+					debug(LOG_FATAL, "Debug flag \"%s\" not found!", token);
 					poptFreeContext(poptCon);
 					return false;
 				}
@@ -191,7 +191,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_ERROR, "Missing debugfile filename?");
+					debug(LOG_FATAL, "Missing debugfile filename?");
 					poptFreeContext(poptCon);
 					return false;
 				}
@@ -208,7 +208,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_ERROR, "Unrecognised configuration directory");
+					debug(LOG_FATAL, "Unrecognised configuration directory");
 					poptFreeContext(poptCon);
 					return false;
 				}
@@ -292,7 +292,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_ERROR, "Unrecognised datadir");
+					debug(LOG_FATAL, "Unrecognised datadir");
 					poptFreeContext(poptCon);
 					return false;
 				}
@@ -307,7 +307,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_ERROR, "No IP/hostname given");
+					debug(LOG_FATAL, "No IP/hostname given");
 					poptFreeContext(poptCon);
 					return false;
 				}
@@ -322,15 +322,15 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_ERROR, "No game name");
+					debug(LOG_POPUP, "No game name");
 					poptFreeContext(poptCon);
 					return false;
 				}
 				if (strcmp(token, "CAM_1A") && strcmp(token, "CAM_2A") && strcmp(token, "CAM_3A")
 				    && strcmp(token, "TUTORIAL3") && strcmp(token, "FASTPLAY"))
 				{
-					debug(LOG_ERROR, "The game parameter requires one of the following keywords:");
-					debug(LOG_ERROR, "CAM_1A, CAM_2A, CAM_3A, TUTORIAL3, or FASTPLAY");
+					debug(LOG_FATAL, "The game parameter requires one of the following keywords:");
+					debug(LOG_FATAL, "CAM_1A, CAM_2A, CAM_3A, TUTORIAL3, or FASTPLAY");
 					return false;
 				}
 				NetPlay.bComms = false;
@@ -357,7 +357,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_ERROR, "Missing mod name?");
+					debug(LOG_FATAL, "Missing mod name?");
 					poptFreeContext(poptCon);
 					return false;
 				}
@@ -366,7 +366,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				for (i = 0; i < 100 && global_mods[i] != NULL; ++i);
 				if (i >= 100 || global_mods[i] != NULL)
 				{
-					debug(LOG_ERROR, "Too many mods registered! Aborting!");
+					debug(LOG_FATAL, "Too many mods registered! Aborting!");
 					poptFreeContext(poptCon);
 					return false;
 				}
@@ -381,7 +381,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_ERROR, "Missing mod name?");
+					debug(LOG_FATAL, "Missing mod name?");
 					poptFreeContext(poptCon);
 					return false;
 				}
@@ -390,7 +390,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				for (i = 0; i < 100 && campaign_mods[i] != NULL; ++i);
 				if (i >= 100 || campaign_mods[i] != NULL)
 				{
-					debug(LOG_ERROR, "Too many mods registered! Aborting!");
+					debug(LOG_FATAL, "Too many mods registered! Aborting!");
 					poptFreeContext(poptCon);
 					return false;
 				}
@@ -405,7 +405,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_ERROR, "Missing mod name?");
+					debug(LOG_FATAL, "Missing mod name?");
 					poptFreeContext(poptCon);
 					return false;
 				}
@@ -413,7 +413,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				for (i = 0; i < 100 && multiplay_mods[i] != NULL; ++i);
 				if (i >= 100 || multiplay_mods[i] != NULL)
 				{
-					debug(LOG_ERROR, "Too many mods registered! Aborting!");
+					debug(LOG_FATAL, "Too many mods registered! Aborting!");
 					poptFreeContext(poptCon);
 					return false;
 				}
@@ -427,15 +427,15 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (sscanf(token, "%ix%i", &width, &height ) != 2 )
 				{
-					debug(LOG_ERROR, "Invalid parameter specified (format is WIDTHxHEIGHT, e.g. 800x600)");
+					debug(LOG_FATAL, "Invalid parameter specified (format is WIDTHxHEIGHT, e.g. 800x600)");
 					return false;
 				}
 				if (width < 640) {
-					debug(LOG_ERROR, "Screen width < 640 unsupported, using 640");
+					debug(LOG_POPUP, "Screen width < 640 unsupported, using 640");
 					width = 640;
 				}
 				if (height < 480) {
-					debug(LOG_ERROR, "Screen height < 480 unsupported, using 480");
+					debug(LOG_POPUP, "Screen height < 480 unsupported, using 480");
 					height = 480;
 				}
 				// tell the display system of the desired resolution
@@ -451,7 +451,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_ERROR, "Unrecognised savegame name");
+					debug(LOG_POPUP, "Unrecognised savegame name");
 					poptFreeContext(poptCon);
 					return false;
 				}
