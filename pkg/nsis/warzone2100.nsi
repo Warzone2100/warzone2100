@@ -1,5 +1,5 @@
 ;  This file is part of Warzone 2100.
-;  Copyright (C) 2006-2009  Warzone 2100 Project
+;  Copyright (C) 2006-2010  Warzone 2100 Project
 ;  Copyright (C) 2006       Dennis Schridde
 ;
 ;  Warzone 2100 is free software; you can redistribute it and/or modify
@@ -86,12 +86,7 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 
   ; These indented statements modify settings for MUI_PAGE_FINISH
   !define MUI_FINISHPAGE_NOAUTOCLOSE
-  !define MUI_FINISHPAGE_RUN
-  !define MUI_FINISHPAGE_RUN_NOTCHECKED
-  !define MUI_FINISHPAGE_RUN_TEXT $(TEXT_RunWarzone)
-  !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
-  !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
-  !define MUI_FINISHPAGE_SHOWREADME $(TEXT_Readme)
+  !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 
 ;--------------------------------
 ;Pages
@@ -459,10 +454,6 @@ ${OrIf} ${SectionIsSelected} ${SecFMVs_EngLo}
 ${EndIf}
 FunctionEnd
 
-Function LaunchLink
-  Exec '$INSTDIR\${PACKAGE}.exe'
-FunctionEnd
-
 Function unix2dos
     ; strips all CRs and then converts all LFs into CRLFs
     ; (this is roughly equivalent to "cat file | dos2unix | unix2dos")
@@ -541,9 +532,6 @@ FunctionEnd
   LangString TEXT_SecOriginalMod ${LANG_ENGLISH} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_ENGLISH} "Play the game as it was back in the 1.10 days."
 
-  LangString TEXT_RunWarzone ${LANG_ENGLISH} "Run ${PACKAGE_NAME}"
-  LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.html"
-  
   ;Dutch
   LangString TEXT_SecBase ${LANG_DUTCH} "Core files"
   LangString DESC_SecBase ${LANG_DUTCH} "The core files required to run Warzone 2100."
@@ -581,9 +569,6 @@ FunctionEnd
   LangString TEXT_SecOriginalMod ${LANG_DUTCH} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_DUTCH} "Speel het spel met de originele 1.10 versie balans stats."
 
-  LangString TEXT_RunWarzone ${LANG_DUTCH} "Start ${PACKAGE_NAME}"
-  LangString TEXT_Readme ${LANG_DUTCH}   "$INSTDIR\Readme.en.html"
-  
   ;German
   LangString TEXT_SecBase ${LANG_GERMAN} "Core files"
   LangString DESC_SecBase ${LANG_GERMAN} "Die Kerndateien, die fьr Warzone 2100 benцtigt werden."
@@ -620,9 +605,6 @@ FunctionEnd
 
   LangString TEXT_SecOriginalMod ${LANG_GERMAN} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_GERMAN} "Spielen Sie das Spiel mit dem Balancing aus der Originalversion 1.10."
-
-  LangString TEXT_RunWarzone ${LANG_GERMAN} "Starte ${PACKAGE_NAME}"
-  LangString TEXT_Readme ${LANG_GERMAN}  "$INSTDIR\Readme.de.html"
 
   ;Russian
   LangString TEXT_SecBase ${LANG_RUSSIAN} "Базовые файлы"
@@ -661,9 +643,6 @@ FunctionEnd
   LangString TEXT_SecOriginalMod ${LANG_RUSSIAN} "Баланс 1.10"
   LangString DESC_SecOriginalMod ${LANG_RUSSIAN} "Играть в игру с балансом от оригинальной версии 1.10."
 
-  LangString TEXT_RunWarzone ${LANG_RUSSIAN} "Запуск ${PACKAGE_NAME}"
-  LangString TEXT_Readme ${LANG_RUSSIAN} "$INSTDIR\Readme.en.html"
-  
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecBase} $(DESC_SecBase)
