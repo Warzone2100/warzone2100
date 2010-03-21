@@ -196,38 +196,45 @@ bool screenInitialise(
 	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
 	debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
 	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object ? "is" : "is NOT");
-	debug(LOG_3D, "  * Shader Objects %s supported.", GL_ARB_shader_objects ? "is" : "is NOT");
-	debug(LOG_3D, "  * Vertex Buffer Object (VBO) %s supported.", GL_ARB_vertex_buffer_object ? "is" : "is NOT");
+	debug(LOG_3D, "  * Vertex Buffer Object (VBO) %s supported.", GLEE_ARB_vertex_buffer_object ? "is" : "is NOT");
 	
 	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &glMaxTUs);
 	debug(LOG_3D, "  * Total number of Texture Units (TUs) supported is %d.", (int) glMaxTUs);
 
 	if (!GLEE_VERSION_1_4)
 	{
-		debug(LOG_FATAL, "OpenGL 1.4+ is required for this game!");
+		debug(LOG_FATAL, "OpenGL 1.4 + VBO extension is required for this game!");
 		exit(1);
 	}
 
 #ifndef WZ_OS_MAC
 	// Make OpenGL's VBO functions available under the core names for
 	// implementations that have them only as extensions, namely Mesa.
-	if (!GLEE_VERSION_1_5 && !strncmp((const char *)glGetString(GL_RENDERER), "Mesa", 4))
+	if (!GLEE_VERSION_1_5)
 	{
-		info("Using VBO extension functions under the core names.");
-		// GLee is usually initialized automatically when needed, but
-		// here it has to be done explicitly.
-		GLeeInit();
-		GLeeFuncPtr_glBindBuffer = GLeeFuncPtr_glBindBufferARB;
-		GLeeFuncPtr_glDeleteBuffers = GLeeFuncPtr_glDeleteBuffersARB;
-		GLeeFuncPtr_glGenBuffers = GLeeFuncPtr_glGenBuffersARB;
-		GLeeFuncPtr_glIsBuffer = GLeeFuncPtr_glIsBufferARB;
-		GLeeFuncPtr_glBufferData = GLeeFuncPtr_glBufferDataARB;
-		GLeeFuncPtr_glBufferSubData = GLeeFuncPtr_glBufferSubDataARB;
-		GLeeFuncPtr_glGetBufferSubData = GLeeFuncPtr_glGetBufferSubDataARB;
-		GLeeFuncPtr_glMapBuffer = GLeeFuncPtr_glMapBufferARB;
-		GLeeFuncPtr_glUnmapBuffer = GLeeFuncPtr_glUnmapBufferARB;
-		GLeeFuncPtr_glGetBufferParameteriv = GLeeFuncPtr_glGetBufferParameterivARB;
-		GLeeFuncPtr_glGetBufferPointerv = GLeeFuncPtr_glGetBufferPointervARB;
+		if (GLEE_ARB_vertex_buffer_object)
+		{
+			info("Using VBO extension functions under the core names.");
+
+			GLeeFuncPtr_glBindBuffer = GLeeFuncPtr_glBindBufferARB;
+			GLeeFuncPtr_glDeleteBuffers = GLeeFuncPtr_glDeleteBuffersARB;
+			GLeeFuncPtr_glGenBuffers = GLeeFuncPtr_glGenBuffersARB;
+			GLeeFuncPtr_glIsBuffer = GLeeFuncPtr_glIsBufferARB;
+			GLeeFuncPtr_glBufferData = GLeeFuncPtr_glBufferDataARB;
+			GLeeFuncPtr_glBufferSubData = GLeeFuncPtr_glBufferSubDataARB;
+			GLeeFuncPtr_glGetBufferSubData = GLeeFuncPtr_glGetBufferSubDataARB;
+			GLeeFuncPtr_glMapBuffer = GLeeFuncPtr_glMapBufferARB;
+			GLeeFuncPtr_glUnmapBuffer = GLeeFuncPtr_glUnmapBufferARB;
+			GLeeFuncPtr_glGetBufferParameteriv = GLeeFuncPtr_glGetBufferParameterivARB;
+			GLeeFuncPtr_glGetBufferPointerv = GLeeFuncPtr_glGetBufferPointervARB;
+		}
+		else
+		{
+			debug(LOG_FATAL, "OpenGL 1.4 + VBO extension is required for this game!");
+			exit(1);
+		}
+
+		debug(LOG_WARNING, "OpenGL 1.5 is not supported by your system! Expect some glitches...");
 	}
 #endif
 
@@ -248,7 +255,7 @@ bool screenInitialise(
 	}
 	else
 	{
-		debug(LOG_WARNING, "OpenGL 2.0 is not supported by your system! Using fixed pipeline...");
+		debug(LOG_WARNING, "OpenGL 2.0 is not supported by your system! Can't use shaders!...");
 	}
 
 	glViewport(0, 0, width, height);
