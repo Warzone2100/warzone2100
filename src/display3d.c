@@ -3310,9 +3310,6 @@ static void	drawDroidSelections( void )
 		}
 	}
 
-	// Reset color to white so that features textures are rendered as expected
-	glColor3f( 1.0f, 1.0f, 1.0f);
-	
 	for(psFeature = apsFeatureLists[0]; psFeature; psFeature = psFeature->psNext)
 	{
 		if(!psFeature->died && psFeature->sDisplay.frameNumber == currentGameFrame)

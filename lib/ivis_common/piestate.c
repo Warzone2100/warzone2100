@@ -128,6 +128,10 @@ void pie_SetRendMode(REND_MODE rendMode)
 				pie_SetTranslucencyMode(TRANS_ADDITIVE);
 				break;
 
+			case REND_MULTIPLICATIVE:
+				pie_SetTranslucencyMode(TRANS_MULTIPLICATIVE);
+				break;
+
 			default:
 				break;
 		}
