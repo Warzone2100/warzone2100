@@ -2423,16 +2423,16 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, BOOL blueprint)
 
 	pie_MatScale(50); // they are all big now so make this one smaller too
 
+	pieFlag = pie_TRANSLUCENT;
+	pieFlagData = BLUEPRINT_OPACITY;
+
 	if (blueprint)
 	{
-		pieFlag = pie_TRANSLUCENT;
-		pieFlagData = BLUEPRINT_OPACITY;
 		colour = (buildState == BUILD3D_VALID) ? WZCOL_BLUEPRINT_VALID : WZCOL_BLUEPRINT_INVALID;
 	}
 	else
 	{
-		pieFlag = 0;
-		pieFlagData = 0;
+		pieFlag |= pie_FORCE_FOG;
 		colour = WZCOL_WHITE;
 	}
 	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc], 0, 0, colour, WZCOL_BLACK, pieFlag, pieFlagData);
