@@ -833,6 +833,8 @@ VIEWDATA * getViewData(const char *pName)
 	VIEWDATA_LIST *psList = NULL;
 	unsigned int i = 0;
 
+	ASSERT_OR_RETURN(NULL, pName[0] != '\0', "Trying to find empty message name");
+
 	for (psList = apsViewData; psList != NULL; psList = psList->psNext)
 	{
 		for (i = 0; i < psList->numViewData; i++)
@@ -842,6 +844,16 @@ VIEWDATA * getViewData(const char *pName)
 			{
 				return &psList->psViewData[i];
 			}
+		}
+	}
+
+	// Dump mismatched candidates
+	debug(LOG_ERROR, "No match for view data, dumping whole list:");
+	for (psList = apsViewData; psList != NULL; psList = psList->psNext)
+	{
+		for (i = 0; i < psList->numViewData; i++)
+		{
+			debug(LOG_ERROR, "%s != %s", psList->psViewData[i].pName, pName);
 		}
 	}
 
