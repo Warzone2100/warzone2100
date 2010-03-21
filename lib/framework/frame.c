@@ -64,7 +64,11 @@ UDWORD		selectedPlayer = 0; 	/**< Current player */
  */
 
 /* Over how many seconds is the average required? */
-#define	TIMESPAN	5
+#ifdef _DEBUG
+# define	TIMESPAN	1
+#else
+# define	TIMESPAN	5
+#endif
 
 /* Initial filler value for the averages - arbitrary */
 #define  IN_A_FRAME 70
