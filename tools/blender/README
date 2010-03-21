@@ -4,5 +4,5 @@ Files:
  - pie.py : Generic PIE parser
  - pie_common.py : Blender plugin library
  - pie_import.py : Blender import plugin
- - pie_export.py : Blender export plugin (currently defunct)
+ - pie_export.py : Blender export plugin 
  - pie_levels_to_layers.py : Assign PIE levels to Blender layers
