@@ -2267,25 +2267,15 @@ static void dealWithLMBDClick(void)
 			if(psDroid->player == selectedPlayer)
 			{
 				/* If we've double clicked on a constructor droid, activate build menu */
-				//if (psDroid->droidType == DROID_CONSTRUCT)
-				if (psDroid->droidType == DROID_CONSTRUCT ||
-					psDroid->droidType == DROID_CYBORG_CONSTRUCT)
-				{
-					intResetScreen(true);
-					intConstructorSelected(psDroid);
-				}
-				else if (psDroid->droidType == DROID_COMMAND)
+				if (psDroid->droidType == DROID_COMMAND)
 				{
 					intResetScreen(true);
 					intCommanderSelected(psDroid);
 				}
 				else
 				{
-					/* Otherwise, activate the droid's group (if any) */
-//					activateGroup(selectedPlayer,psDroid->group);
-					// Now selects all of smae type on screen
+					// Now selects all of same type on screen
 					selDroidSelection(selectedPlayer,DS_BY_TYPE,DST_ALL_SAME,true);
-
 				}
 			}
 		}
