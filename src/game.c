@@ -10202,7 +10202,6 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 {
 	SAVE_MESSAGE_36	*psSaveMessage;
 	MESSAGE			*psMessage;
-	VIEWDATA		*psViewData = NULL;
 	UDWORD			i, height;
 
 	// Only clear the messages if its a mid save game
@@ -10217,7 +10216,6 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 		{
 			return true;
 		}
-
 	}
 
 	//check file
@@ -10251,10 +10249,17 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 					{
 						psMessage->pViewData = (MSG_VIEWDATA *)getBaseObjFromId(psSaveMessage->objId);
 					}
+					else
+					{
+						debug(LOG_ERROR, "Proximity object could not be created (type=%d, player=%d)",
+					              (int)psSaveMessage->type, (int)psSaveMessage->player);
+					}
 				}
 				else
 				{
-					//proximity position so get viewdata pointer from the name
+					VIEWDATA	*psViewData = NULL;
+
+					// Proximity position so get viewdata pointer from the name
 					psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
 
 					if (psMessage)
@@ -10272,24 +10277,41 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 							sender = psSaveMessage->sender;
 
 							psViewData = CreateBeaconViewData(sender, locX, locY);
+							if (psViewData == NULL)
+							{
+								// Skip this message
+								debug(LOG_ERROR, "Failed to create view data for beacon - skipping");
+								continue;
+							}
+						}
+						else if (psSaveMessage->name[0] != '\0')
+						{
+							psViewData = (VIEWDATA *)getViewData(psSaveMessage->name);
+							if (psViewData == NULL)
+							{
+								// Skip this message
+								debug(LOG_ERROR, "Failed to find view data for proximity position - skipping");
+								continue;
+							}
 						}
 						else
 						{
-							psViewData = (VIEWDATA *)getViewData(psSaveMessage->name);
-						}
-
-						if (psViewData == NULL)
-						{
-							// Skip this message
+							debug(LOG_ERROR, "Proximity position with empty name skipped");
 							continue;
 						}
+
 						psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
+						// Check the z value is at least the height of the terrain
+						height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x, ((VIEW_PROXIMITY *)psViewData->pData)->y);
+						if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
+						{
+							((VIEW_PROXIMITY *)psViewData->pData)->z = height;
+						}
 					}
-					// Check the z value is at least the height of the terrain
-					height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x, ((VIEW_PROXIMITY *)psViewData->pData)->y);
-					if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
+					else
 					{
-						((VIEW_PROXIMITY *)psViewData->pData)->z = height;
+						debug(LOG_ERROR, "Proximity position could not be created (type=%d, player=%d)",
+					              (int)psSaveMessage->type, (int)psSaveMessage->player);
 					}
 				}
 			}
