@@ -653,7 +653,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 	}
 
 	
-	if (x <= 0 || y <= 0 || x >= mapWidth || y >= mapHeight)
+	if (x < 0 || y < 0 || x >= mapWidth || y >= mapHeight)
 	{
 		return 0; // just return the first ground type
 	}
@@ -663,7 +663,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 	{
 		for(j=0;j<2;j++)
 		{
-			if (x+i-1 <= 0 || y+j-1 <= 0 || x+i-1 >= mapWidth || y+j-1 >= mapHeight)
+			if (x+i-1 < 0 || y+j-1 < 0 || x+i-1 >= mapWidth || y+j-1 >= mapHeight)
 			{
 				tile = 0;
 			}
