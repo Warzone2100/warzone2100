@@ -2205,7 +2205,6 @@ static BOOL loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecord
 static BOOL writeResearchFile(char *pFileName);
 
 static BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType);
-static BOOL loadSaveMessageV(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType);
 static BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType);
 static BOOL writeMessageFile(char *pFileName);
 
@@ -10281,10 +10280,8 @@ BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType)
 	/* Check the file version */
 	if(psHeader->version <= VERSION_35)
 	{
-		if (!loadSaveMessageV(pFileData, filesize, psHeader->quantity, psHeader->version, levelType))
-		{
-			return false;
-		}
+		debug(LOG_ERROR, "Unsupported message save format %d", (int)psHeader->version);
+		return false;
 	}
 	else
 	{
@@ -10296,119 +10293,6 @@ BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType)
 	return true;
 }
 
-// -----------------------------------------------------------------------------------------
-BOOL loadSaveMessageV(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType)
-{
-	SAVE_MESSAGE	*psSaveMessage;
-	MESSAGE			*psMessage;
-	VIEWDATA		*psViewData = NULL;
-	UDWORD			i, height;
-
-	//clear any messages put in during level loads
-	//freeMessages();
-
-    //only clear the messages if its a mid save game
-	if (gameType == GTYPE_SAVE_MIDMISSION)
-    {
-        freeMessages();
-    }
-    else if (gameType == GTYPE_SAVE_START)
-    {
-        //if we're loading in a CamStart or a CamChange then we're not interested in any saved messages
-        if (levelType == LDS_CAMSTART || levelType == LDS_CAMCHANGE)
-        {
-            return true;
-        }
-
-    }
-
-	//check file
-	if ((sizeof(SAVE_MESSAGE) * numMessages + MESSAGE_HEADER_SIZE) >
-		filesize)
-	{
-		debug( LOG_ERROR, "loadSaveMessage: unexpected end of file" );
-
-		return false;
-	}
-
-	// Load the data
-	for (i = 0; i < numMessages; i++, pFileData += sizeof(SAVE_MESSAGE))
-	{
-		psSaveMessage = (SAVE_MESSAGE *) pFileData;
-
-		/* SAVE_MESSAGE */
-		endian_sdword((SDWORD*)&psSaveMessage->type);	/* FIXME: enum may not be this type! */
-		endian_udword(&psSaveMessage->objId);
-		endian_udword(&psSaveMessage->player);
-
-		if (psSaveMessage->type == MSG_PROXIMITY)
-		{
-            //only load proximity if a mid-mission save game
-            if (gameType == GTYPE_SAVE_MIDMISSION)
-            {
-			    if (psSaveMessage->bObj)
-			    {
-				    //proximity object so create get the obj from saved idy
-				    psMessage = addMessage(psSaveMessage->type, true, psSaveMessage->player);
-				    if (psMessage)
-				    {
-					    psMessage->pViewData = (MSG_VIEWDATA *)getBaseObjFromId(psSaveMessage->objId);
-				    }
-			    }
-			    else
-			    {
-				    //proximity position so get viewdata pointer from the name
-				    psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
-				    if (psMessage)
-				    {
-					    psViewData = (VIEWDATA *)getViewData(psSaveMessage->name);
-                        if (psViewData == NULL)
-                        {
-                            //skip this message
-                            continue;
-                        }
-					    psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
-				    }
-				    //check the z value is at least the height of the terrain
-				    height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x,
-					    ((VIEW_PROXIMITY *)psViewData->pData)->y);
-				    if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
-				    {
-					    ((VIEW_PROXIMITY *)psViewData->pData)->z = height;
-				    }
-			    }
-            }
-		}
-		else
-		{
-            //only load Campaign/Mission if a mid-mission save game
-            if (psSaveMessage->type == MSG_CAMPAIGN || psSaveMessage->type == MSG_MISSION)
-            {
-                if (gameType == GTYPE_SAVE_MIDMISSION)
-                {
-    			    // Research message // Campaign message // Mission Report messages
-    	    		psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
-	    	    	if (psMessage)
-		    	    {
-			    	    psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
-			        }
-                }
-            }
-            else
-            {
-    			// Research message
-    	    	psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
-	    	    if (psMessage)
-		    	{
-			    	psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
-			    }
-            }
-		}
-	}
-
-	return true;
-}
-
 BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType)
 {
 	SAVE_MESSAGE_36	*psSaveMessage;
@@ -10416,30 +10300,25 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 	VIEWDATA		*psViewData = NULL;
 	UDWORD			i, height;
 
-	//clear any messages put in during level loads
-	//freeMessages();
-
-    //only clear the messages if its a mid save game
+	// Only clear the messages if its a mid save game
 	if (gameType == GTYPE_SAVE_MIDMISSION)
-    {
-        freeMessages();
-    }
-    else if (gameType == GTYPE_SAVE_START)
-    {
-        //if we're loading in a CamStart or a CamChange then we're not interested in any saved messages
-        if (levelType == LDS_CAMSTART || levelType == LDS_CAMCHANGE)
-        {
-            return true;
-        }
+	{
+		freeMessages();
+	}
+	else if (gameType == GTYPE_SAVE_START)
+	{
+		// If we are loading in a CamStart or a CamChange then we are not interested in any saved messages
+		if (levelType == LDS_CAMSTART || levelType == LDS_CAMCHANGE)
+		{
+			return true;
+		}
 
-    }
+	}
 
 	//check file
-	if ((sizeof(SAVE_MESSAGE_36) * numMessages + MESSAGE_HEADER_SIZE) >
-		filesize)
+	if ((sizeof(SAVE_MESSAGE_36) * numMessages + MESSAGE_HEADER_SIZE) > filesize)
 	{
-		debug( LOG_ERROR, "loadSaveMessage: unexpected end of file" );
-
+		debug(LOG_ERROR, "loadSaveMessage: unexpected end of file");
 		return false;
 	}
 
@@ -10456,28 +10335,28 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 
 		if (psSaveMessage->type == MSG_PROXIMITY)
 		{
-            //only load proximity if a mid-mission save game
-            if (gameType == GTYPE_SAVE_MIDMISSION)
-            {
-			    if (psSaveMessage->bObj)
-			    {
-				    //proximity object so create get the obj from saved idy
-				    psMessage = addMessage(psSaveMessage->type, true, psSaveMessage->player);
-				    if (psMessage)
-				    {
-					    psMessage->pViewData = (MSG_VIEWDATA *)getBaseObjFromId(psSaveMessage->objId);
-				    }
-			    }
-			    else
-			    {
-				    //proximity position so get viewdata pointer from the name
+			//only load proximity if a mid-mission save game
+			if (gameType == GTYPE_SAVE_MIDMISSION)
+			{
+				if (psSaveMessage->bObj)
+				{
+					// Proximity object so create get the obj from saved idy
+					psMessage = addMessage(psSaveMessage->type, true, psSaveMessage->player);
+					if (psMessage)
+					{
+						psMessage->pViewData = (MSG_VIEWDATA *)getBaseObjFromId(psSaveMessage->objId);
+					}
+				}
+				else
+				{
+					//proximity position so get viewdata pointer from the name
 					psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
 
 					if (psMessage)
-				    {
-						if(psSaveMessage->dataType == MSG_DATA_BEACON)
+					{
+						if (psSaveMessage->dataType == MSG_DATA_BEACON)
 						{
-							UDWORD locX,locY;
+							UDWORD locX, locY;
 							SDWORD sender;
 
 							endian_udword(&psSaveMessage->locX);
@@ -10495,46 +10374,45 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 						}
 
 						if (psViewData == NULL)
-                        {
-                            //skip this message
-                            continue;
-                        }
-					    psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
-				    }
-				    //check the z value is at least the height of the terrain
-				    height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x,
-					    ((VIEW_PROXIMITY *)psViewData->pData)->y);
-				    if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
-				    {
-					    ((VIEW_PROXIMITY *)psViewData->pData)->z = height;
-				    }
-			    }
-            }
+						{
+							// Skip this message
+							continue;
+						}
+						psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
+					}
+					// Check the z value is at least the height of the terrain
+					height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x, ((VIEW_PROXIMITY *)psViewData->pData)->y);
+					if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
+					{
+						((VIEW_PROXIMITY *)psViewData->pData)->z = height;
+					}
+				}
+			}
 		}
 		else
 		{
-            //only load Campaign/Mission if a mid-mission save game
-            if (psSaveMessage->type == MSG_CAMPAIGN || psSaveMessage->type == MSG_MISSION)
-            {
-                if (gameType == GTYPE_SAVE_MIDMISSION)
-                {
-    			    // Research message // Campaign message // Mission Report messages
-    	    		psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
-	    	    	if (psMessage)
-		    	    {
-			    	    psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
-			        }
-                }
-            }
-            else
-            {
-    			// Research message
-    	    	psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
-	    	    if (psMessage)
-		    	{
-			    	psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
-			    }
-            }
+			// Only load Campaign/Mission if a mid-mission save game
+			if (psSaveMessage->type == MSG_CAMPAIGN || psSaveMessage->type == MSG_MISSION)
+			{
+				if (gameType == GTYPE_SAVE_MIDMISSION)
+				{
+					// Research message // Campaign message // Mission Report messages
+					psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
+					if (psMessage)
+					{
+						psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
+					}
+				}
+			}
+			else
+			{
+				// Research message
+				psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
+				if (psMessage)
+				{
+					psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
+				}
+			}
 		}
 	}
 
