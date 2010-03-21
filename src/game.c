@@ -10376,6 +10376,7 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 							{
 								// Skip this message
 								debug(LOG_ERROR, "Failed to create view data for beacon - skipping");
+								removeMessage(psMessage, psSaveMessage->player);
 								continue;
 							}
 						}
@@ -10386,12 +10387,14 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 							{
 								// Skip this message
 								debug(LOG_ERROR, "Failed to find view data for proximity position - skipping");
+								removeMessage(psMessage, psSaveMessage->player);
 								continue;
 							}
 						}
 						else
 						{
 							debug(LOG_ERROR, "Proximity position with empty name skipped");
+							removeMessage(psMessage, psSaveMessage->player);
 							continue;
 						}
 
