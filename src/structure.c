@@ -1615,9 +1615,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE))
 		{
 			wallType = structChooseWallType(player, map_coord(x), map_coord(y));
-			if (wallType == WALL_CORNER)
+			if (wallType == WALL_CORNER && pStructureType->type != REF_GATE)
 			{
-				ASSERT_OR_RETURN(NULL, pStructureType->type != REF_GATE, "Cannot build corner gates!");
 				if (pStructureType->asFuncList[0]->type == WALL_TYPE)
 				{
 					pStructureType = ((WALL_FUNCTION *)pStructureType->asFuncList[0])->pCornerStat;
