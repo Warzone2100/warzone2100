@@ -972,6 +972,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx_, float *pmy_, uint
 	psTile = mapTile(ntx, nty);
 	if (psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE 
 	    && aiCheckAlliances(psTile->psObject->player, psDroid->player)
+	    && ((STRUCTURE *)psTile->psObject)->status == SS_BUILT
 	    && ((STRUCTURE *)psTile->psObject)->pStructureType->type == REF_GATE)
 	{
 		STRUCTURE *psStruct = (STRUCTURE *)psTile->psObject;

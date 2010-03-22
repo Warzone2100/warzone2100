@@ -275,6 +275,7 @@ BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int p
 	{
 		// Implement gates by completely ignoring them
 		if (psTile->psObject->type == OBJ_STRUCTURE && psTile->psObject->player == player
+		    && ((STRUCTURE *)psTile->psObject)->status == SS_BUILT
 		    && ((STRUCTURE *)psTile->psObject)->pStructureType->type == REF_GATE)
 		{
 			return false;
