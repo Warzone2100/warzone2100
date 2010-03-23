@@ -17,13 +17,23 @@ if [ ! -d "prebuilt" ]; then
 fi
 
 # Checks
-if [ -d "external/${OutDir}" ]; then
-  echo "${OutDir} exists, skipping"
-  exit 0
+if [ "${ACTION}" = "clean" ]; then
+    # Force cleaning when directed
+    rm -fRv "prebuilt/${DirectorY}" "external/${OutDir}"
+    MD5SumLoc=`md5 -q "prebuilt/${FileName}"`
+    if [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
+        rm -fRv "prebuilt/${FileName}"
+    fi
+    exit 0
+elif [ -d "external/${OutDir}" ]; then
+    # Do not do more work then we have to
+    echo "${OutDir} exists, skipping"
+    exit 0
 elif [ -d "prebuilt/${DirectorY}" ]; then
-  echo "${DirectorY} exists, probably from an earlier failed run" >&2
-  #rm -frv "prebuilt/${DirectorY}"
-  exit 1
+    # Clean if dirty
+    echo "error: ${DirectorY} exists, probably from an earlier failed run" >&2
+    #rm -frv "prebuilt/${DirectorY}"
+    exit 1
 fi
 
 # Download
@@ -31,7 +41,7 @@ cd prebuilt
 if [ ! -f "${FileName}" ]; then
     echo "Fetching ${FileName}"
     if ! curl -L -O --connect-timeout "30" "${BuiltDLP}"; then
-        echo "Unable to fetch ${BuiltDLP}" >&2
+        echo "error: Unable to fetch ${BuiltDLP}" >&2
         exit 1
     fi
 else
@@ -41,22 +51,22 @@ fi
 # MD5 check
 MD5SumLoc=`md5 -q "${FileName}"`
 if [ -z "${MD5SumLoc}" ]; then
-  echo "Unable to compute md5 for ${FileName}" >&2
-  exit 1
+    echo "error: Unable to compute md5 for ${FileName}" >&2
+    exit 1
 elif [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
-  echo "MD5 does not match for ${FileName}" >&2
-  exit 1
+    echo "error: MD5 does not match for ${FileName}" >&2
+    exit 1
 fi
 
 # Unpack
 if ! tar -zxf "${FileName}"; then
-    echo "Unpacking $FileName failed" >&2
+    echo "error: Unpacking $FileName failed" >&2
     exit 1
 fi
 
 # Move
 if [ ! -d "${DirectorY}" ]; then
-    echo "Can't find $DirectorY to rename" >&2
+    echo "error: Can't find $DirectorY to rename" >&2
     exit 1
 else
     cd ..
