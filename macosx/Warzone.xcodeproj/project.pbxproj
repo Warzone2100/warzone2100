@@ -646,7 +646,7 @@
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h",
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c",
 			);
-			script = "configs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_PATH}\" || exit 1";
+			script = "configs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_PATH}\"\nexit ${?}";
 		};
 		0246AA730BD3E47F004D1C70 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -655,8 +655,9 @@
 			isEditable = 1;
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.c",
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.h",
 			);
-			script = "flex --outfile=\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.c\" \"${INPUT_FILE_PATH}\" || exit 1";
+			script = "flex --outfile=\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.c\" --header-file=\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.h\" \"${INPUT_FILE_PATH}\"\nexit ${?}";
 		};
 /* End PBXBuildRule section */
 
