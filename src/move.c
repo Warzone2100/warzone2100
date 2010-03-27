@@ -970,7 +970,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx_, float *pmy_, uint
 
 	// is the new tile a gate?
 	psTile = mapTile(ntx, nty);
-	if (psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE 
+	if (!isFlying(psDroid) && psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE
 	    && aiCheckAlliances(psTile->psObject->player, psDroid->player)
 	    && ((STRUCTURE *)psTile->psObject)->status == SS_BUILT
 	    && ((STRUCTURE *)psTile->psObject)->pStructureType->type == REF_GATE)
