@@ -587,8 +587,7 @@ BOOL loadKeyMap(void)
 
 	if (!PHYSFS_exists(KeyMapPath))
 	{
-		// NOTE: Changed to LOG_FATAL, since we want to inform user via pop-up (windows only)
-		debug(LOG_FATAL, "%s not found", KeyMapPath);
+		debug(LOG_WZ, "%s not found", KeyMapPath);
 		return false;
 	}
 	pfile = PHYSFS_openRead(KeyMapPath);
