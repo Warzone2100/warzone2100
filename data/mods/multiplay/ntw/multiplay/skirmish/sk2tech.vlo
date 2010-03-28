@@ -6,8 +6,8 @@ run
 numCamTech		int 	114
 
 initialPowerCl	int     1000
-initialPowerBa	int     2000
-initialPowerDe	int     3000
+initialPowerBa	int     1500
+initialPowerDe	int     2000
 
 camTech	[0]	RESEARCHSTAT	"R-Comp-CommandTurret01"
 camTech	[1]	RESEARCHSTAT	"R-Comp-SynapticLink"
