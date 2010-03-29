@@ -1,4 +1,4 @@
-2010-03-20: Version 2.3 beta 12
+2010-03-29: Version 2.3 beta 12
  * General:
    * Change: Double-clicking trucks will now select them for consistency (r10391, ticket:1472)
    * Change: let users toggle level name  via 'showlevelname' console command (r10336)
@@ -8,6 +8,8 @@
    * Fix: Fix adding more body points than possible when repairing (r10040)
    * Fix: Memory leaks and crash fixes (r10246, r10247, r10248, r10249, r10251)
    * Fix: When failing to load a message, remove it from the message queue to avoid a crash later (r10392, ticket:1660)
+ * UI:
+   * Change: Improved loading bars (r10102)
  * Campaign:
    * Fix: Fix Tank Killer angle bug in campaign (r10212)
    * Fix: Make sure that for campaign, we always set the is human flag correctly on savegame load (r10081, ticket:1628)
@@ -26,7 +28,7 @@
  * Scripts:
    * Added: AI script function that gives position to build a structure while checking that a given droid can build it (r10323)
  * Translations:
-   * Updated: Polish (r10268), Italian (r10242)
+   * Updated: German (r10123, r10126, r10291), Italian (r10242), Polish (r10268, r10373), Spanish (r10305, r10422), Estonian (r10423)
 
 2010-02-26: Version 2.3 beta 11a
  * General:
