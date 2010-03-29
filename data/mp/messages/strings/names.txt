@@ -401,6 +401,7 @@ A0RepairCentre				_("Repair Center")
 A0ComDroidControl			_("Command Relay Center")
 A0HardcreteMk1CWall			_("Hardcrete Corner Wall")
 A0HardcreteMk1Wall			_("Hardcrete Wall")
+A0HardcreteMk1Gate			_("Hardcrete Gate")
 
 A0VTolFactory1				_("VTOL Factory")
 A0CyborgFactory				_("Cyborg Factory")
@@ -719,6 +720,8 @@ R-Defense-WallUpgrade09			_("Plascrete Mk3")
 R-Defense-WallUpgrade10			_("Plasteel")
 R-Defense-WallUpgrade11			_("Plasteel Mk2")
 R-Defense-WallUpgrade12			_("Plasteel Mk3")
+
+R-Defense-HardcreteGate			_("Gate")
 
 R-Defense-AASite-QuadBof		_("Cyclone AA Site")
 R-Defense-AASite-QuadMg1		_("Hurricane AA Site")
