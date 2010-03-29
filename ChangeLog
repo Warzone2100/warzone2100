@@ -28,6 +28,7 @@
  * Scripts:
    * Added: AI script function that gives position to build a structure while checking that a given droid can build it (r10323)
  * Translations:
+   * Translations now work on the mac (ticket:927, r10316)
    * Updated: German (r10123, r10126, r10291), Italian (r10242), Polish (r10268, r10373), Spanish (r10305, r10422), Estonian (r10423)
 
 2010-02-26: Version 2.3 beta 11a
