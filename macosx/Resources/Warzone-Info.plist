@@ -47,7 +47,7 @@
 			<string>Warzone 2100 Map / Mod File</string>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.zip</string>
+				<string>public.zip-archive</string>
 			</array>
 			<key>UTTypeTagSpecification</key>
 			<dict>
