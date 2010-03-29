@@ -1852,7 +1852,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 	{
 		char templName[MAX_STR_LENGTH];
 		char componentName[MAX_STR_LENGTH];
-		unsigned int player;
+		char playerType[MAX_STR_LENGTH];
 		int cnt;
 		DROID_TEMPLATE design;
 		DROID_TEMPLATE *pDroidDesign = &design;
@@ -1994,11 +1994,11 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			ASSERT_OR_RETURN(false, found, "ECM component not found for droid %s", getTemplateName(pDroidDesign));
 		}
 
-		//read in player id - Access decides the order -crap hey?
-		sscanf(pDroidData, "%d,%n", &player,&cnt);
+		//read in player type - decides whether or not humans can access it
+		sscanf(pDroidData, "%[^','],%n", playerType,&cnt);
 		pDroidData += cnt;
 
-		if (getTemplateFromUniqueName(pDroidDesign->pName, player))
+		if (getTemplateFromUniqueName(pDroidDesign->pName, 0))
 		{
 			debug( LOG_ERROR, "Duplicate template %s", pDroidDesign->pName );
 			continue;
@@ -2148,13 +2148,20 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		{
 			int i;
 
-			// Give those meant for humans (player 0) to all human players.
-			for (i = 0; i < MAX_PLAYERS; i++)
+			// Give those meant for humans to all human players.
+			// Also support the old template format, in which those meant
+			// for humans were player 0 (in campaign) or 5 (in multiplayer).
+			if ((!strcmp(playerType, "0") && !bMultiPlayer) ||
+			    (!strcmp(playerType, "5") && bMultiPlayer) ||
+			    !strcmp(playerType, "YES"))
 			{
-				if (player == 0 && NetPlay.players[i].allocated)	// human prototype template
+				for (i = 0; i < MAX_PLAYERS; i++)
 				{
-					pDroidDesign->prefab = false;
-					addTemplateToList(pDroidDesign, &apsDroidTemplates[i]);
+					if (NetPlay.players[i].allocated)	// human prototype template
+					{
+						pDroidDesign->prefab = false;
+						addTemplateToList(pDroidDesign, &apsDroidTemplates[i]);
+					}
 				}
 			}
 			// Add all templates to static template list
