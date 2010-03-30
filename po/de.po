@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-03-30 14:12+0200\n"
-"PO-Revision-Date: 2010-03-15 14:41+0100\n"
+"PO-Revision-Date: 2010-03-30 15:11+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -11324,105 +11324,85 @@ msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hochgeschwindigkeitsgeschütz Python Hover"
 
 #: data/mp/messages/strings/names.txt:1937
-#, fuzzy
 msgid "Inferno Cobra Hover"
-msgstr "Inferno Cobra Halbketten"
+msgstr "Inferno Cobra Hover"
 
 #: data/mp/messages/strings/names.txt:1938
-#, fuzzy
 msgid "Medium Cannon Cobra Half Track"
-msgstr "Mittleres Geschütz Cobra Ketten"
+msgstr "Mittleres Geschütz Cobra Halbketten"
 
 #: data/mp/messages/strings/names.txt:1939
-#, fuzzy
 msgid "Inferno Python Hover"
-msgstr "Hochgeschwindigkeitsgeschütz Python Hover"
+msgstr "Inferno Python Hover"
 
 #: data/mp/messages/strings/names.txt:1940
-#, fuzzy
 msgid "Assault Gun Python Hover"
-msgstr "Sturmgewehr Python Ketten"
+msgstr "Sturmgewehr Python Hover"
 
 #: data/mp/messages/strings/names.txt:1941
-#, fuzzy
 msgid "Assault Gun Python Half Track"
-msgstr "Sturmgewehr Python Ketten"
+msgstr "Sturmgewehr Python Halbketten"
 
 #: data/mp/messages/strings/names.txt:1942
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Schweres Maschinengewehr Scorpion Ketten"
+msgstr "Schweres Maschinengewehr Scorpion Halbketten"
 
 #: data/mp/messages/strings/names.txt:1943
-#, fuzzy
 msgid "Assault Cannon Mantis Hover"
-msgstr "Wachturm mit Sturmgeschütz"
+msgstr "Sturmgeschütz Mantis Hover"
 
 #: data/mp/messages/strings/names.txt:1944
-#, fuzzy
 msgid "Pulse Laser Leopard Hover"
-msgstr "Turm mit Pulslaser"
+msgstr "Pulslaser Leopard Hover"
 
 #: data/mp/messages/strings/names.txt:1945
-#, fuzzy
 msgid "Pulse Laser Panther Hover"
-msgstr "Turm mit Pulslaser"
+msgstr "Pulslaser Panther Hover"
 
 #: data/mp/messages/strings/names.txt:1946
-#, fuzzy
 msgid "Rail Gun Tiger Hover"
-msgstr "Magnetwaffenverbesserung"
+msgstr "Magnetgeschütz Tiger Hover"
 
 #: data/mp/messages/strings/names.txt:1947
-#, fuzzy
 msgid "Pulse Laser Tiger Hover"
-msgstr "Pulslaser Tiger Ketten"
+msgstr "Pulslaser Tiger Hover"
 
 #: data/mp/messages/strings/names.txt:1948
-#, fuzzy
 msgid "Plasma Cannon Wyvern Tracks"
-msgstr "Gaußkanone Wyvern Ketten"
+msgstr "Plasmakanone Wyvern Ketten"
 
 #: data/mp/messages/strings/names.txt:1949
-#, fuzzy
 msgid "Scourge Missile Wyvern Tracks"
-msgstr "Turm mit Scourge-Lenkraketen"
+msgstr "Scourge-Lenkrakete Wyvern Ketten"
 
 #: data/mp/messages/strings/names.txt:1950
-#, fuzzy
 msgid "Flashlight Retribution Hover"
-msgstr "Flashlight-Schütze"
+msgstr "Flashlight Retribution Hover"
 
 #: data/mp/messages/strings/names.txt:1951
-#, fuzzy
 msgid "Mini-Rocket Viper Half Track"
-msgstr "Miniraketen Cobra Halbketten"
+msgstr "Miniraketen Viper Halbketten"
 
 #: data/mp/messages/strings/names.txt:1952
-#, fuzzy
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Miniraketen-Anordnung Cobra Ketten"
+msgstr "Miniraketen-Anordnung Viper Halbketten"
 
 #: data/mp/messages/strings/names.txt:1953
-#, fuzzy
 msgid "Phosphor Bomb Bay Manits VTOL"
-msgstr "Phosphorbomben-Abwurfschacht"
+msgstr "Phosphorbomben-Abwurfschacht Mantis VTOL"
 
 # HEAP = high explosive, armor piercing -Kreuvf
 #: data/mp/messages/strings/names.txt:1954
-#, fuzzy
 msgid "Heap Bomb Bay Manits VTOL"
-msgstr "VTOL-Bombenabwurfschacht für hochexplosive, panzerbrechende Bomben"
+msgstr "VTOL-Bombenabwurfschacht für hochexplosive, panzerbrechende Bomben Mantis VTOL"
 
 #: data/mp/messages/strings/names.txt:1955
-#, fuzzy
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Mittlerer Rumpf - Retribution"
+msgstr "VTOL-Bombenabwurfschacht für hochexplosive, panzerbrechende Bomben Retribution VTOL"
 
 #: data/mp/messages/strings/names.txt:1956
-#, fuzzy
 msgid "Scourge Retaliation VTOL"
-msgstr "Retaliation"
+msgstr "Scourge-Lenkrakete Retaliation VTOL"
 
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
@@ -12633,7 +12613,7 @@ msgstr "Gut, Waffen- und Sensoranzeige sind aus!"
 #: src/keybind.c:411
 #, c-format
 msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
-msgstr ""
+msgstr "(Spieler %u) hat den Cyborg-\"Beine\"-Fehler! Bitte \"legs\" in die Chatzeile schreiben und uns die Dateien schicken!"
 
 #: src/keybind.c:491
 #, c-format
