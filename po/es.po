@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-29 15:50+0200\n"
-"PO-Revision-Date: 2010-03-26 09:53+0100\n"
+"POT-Creation-Date: 2010-03-29 22:16+0200\n"
+"PO-Revision-Date: 2010-03-29 20:48+0100\n"
 "Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -11299,6 +11299,106 @@ msgstr "Artillería Mini-Cohetes Cobra Oruga"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Cañón HPV Pitón Oruga"
 
+#: data/mp/messages/strings/names.txt:1937
+#, fuzzy
+msgid "Inferno Cobra Hover"
+msgstr "Incendiario Infierno Cobra Semi-oruga"
+
+#: data/mp/messages/strings/names.txt:1938
+#, fuzzy
+msgid "Medium Cannon Cobra Half Track"
+msgstr "Víbora Cañón Medio Oruga"
+
+#: data/mp/messages/strings/names.txt:1939
+#, fuzzy
+msgid "Inferno Python Hover"
+msgstr "Cañón Pesado Pitón Deslizador"
+
+#: data/mp/messages/strings/names.txt:1940
+#, fuzzy
+msgid "Assault Gun Python Hover"
+msgstr "Rifle de Asalto Pitón Oruga"
+
+#: data/mp/messages/strings/names.txt:1941
+#, fuzzy
+msgid "Assault Gun Python Half Track"
+msgstr "Rifle de Asalto Pitón Oruga"
+
+#: data/mp/messages/strings/names.txt:1942
+#, fuzzy
+msgid "Heavy Machinegun Scorpion Half Tracks"
+msgstr "Escorpión Ametralladora Pesada Oruga"
+
+#: data/mp/messages/strings/names.txt:1943
+#, fuzzy
+msgid "Assault Cannon Mantis Hover"
+msgstr "Torre de Guardia Cañón de Asalto"
+
+#: data/mp/messages/strings/names.txt:1944
+#, fuzzy
+msgid "Pulse Laser Leopard Hover"
+msgstr "Torre de Láser de Pulsos"
+
+#: data/mp/messages/strings/names.txt:1945
+#, fuzzy
+msgid "Pulse Laser Panther Hover"
+msgstr "Torre de Láser de Pulsos"
+
+#: data/mp/messages/strings/names.txt:1946
+#, fuzzy
+msgid "Rail Gun Tiger Hover"
+msgstr "Mejora de Pistola de Raíles"
+
+#: data/mp/messages/strings/names.txt:1947
+#, fuzzy
+msgid "Pulse Laser Tiger Hover"
+msgstr "Tigre Láser de Pulsos Oruga"
+
+#: data/mp/messages/strings/names.txt:1948
+#, fuzzy
+msgid "Plasma Cannon Wyvern Tracks"
+msgstr "Cañón Gauss Dragón Heráldico Oruga"
+
+#: data/mp/messages/strings/names.txt:1949
+#, fuzzy
+msgid "Scourge Missile Wyvern Tracks"
+msgstr "Torre Misiles Azote"
+
+#: data/mp/messages/strings/names.txt:1950
+#, fuzzy
+msgid "Flashlight Retribution Hover"
+msgstr "Pistolero de Láser Ligero"
+
+#: data/mp/messages/strings/names.txt:1951
+#, fuzzy
+msgid "Mini-Rocket Viper Half Track"
+msgstr "Mini-Cohetes Cobra Semi-oruga"
+
+#: data/mp/messages/strings/names.txt:1952
+#, fuzzy
+msgid "Mini-Rocket Array Viper Half Track"
+msgstr "Artillería Mini-Cohetes Cobra Oruga"
+
+#: data/mp/messages/strings/names.txt:1953
+#, fuzzy
+msgid "Phosphor Bomb Bay Manits VTOL"
+msgstr "Bahía de Bombas de Fósforo"
+
+#: data/mp/messages/strings/names.txt:1954
+#, fuzzy
+msgid "Heap Bomb Bay Manits VTOL"
+msgstr "ADV Bahía de Bombas Múltiples"
+
+#: data/mp/messages/strings/names.txt:1955
+#, fuzzy
+msgid "Heap Bomb Bay Retribution VTOL"
+msgstr "Carrocería Media - Merecido"
+
+#: data/mp/messages/strings/names.txt:1956
+#, fuzzy
+msgid "Scourge Retaliation VTOL"
+msgstr "Represalia"
+
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
 msgid "System locale"
@@ -11788,68 +11888,68 @@ msgstr "¡Unidad destruída!"
 msgid "Structure Restored"
 msgstr "Estructura Restaurada"
 
-#: src/droid.c:3302
+#: src/droid.c:3309
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u seleccionado - %u Unidad"
 msgstr[1] "Grupo %u seleccionado - %u Unidades"
 
-#: src/droid.c:3315
+#: src/droid.c:3322
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidad asignada al Grupo %u"
 msgstr[1] "%u unidades asignadas al Grupo %u"
 
-#: src/droid.c:3328
+#: src/droid.c:3335
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado en el Grupo %u - %u Unidad"
 msgstr[1] "Centrado en el Grupo %u - %u Unidades"
 
-#: src/droid.c:3332
+#: src/droid.c:3339
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alineando con el Grupo %u - %u Unidad"
 msgstr[1] "Alineando con el Grupo %u - %u Unidades"
 
-#: src/droid.c:3595
+#: src/droid.c:3602
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.c:3596
+#: src/droid.c:3603
 msgctxt "rank"
 msgid "Green"
 msgstr "Principiante"
 
-#: src/droid.c:3597
+#: src/droid.c:3604
 msgid "Trained"
 msgstr "Entrenado"
 
-#: src/droid.c:3598
+#: src/droid.c:3605
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3599
+#: src/droid.c:3606
 msgid "Professional"
 msgstr "Profesional"
 
-#: src/droid.c:3600
+#: src/droid.c:3607
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3601
+#: src/droid.c:3608
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.c:3602
+#: src/droid.c:3609
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.c:3603
+#: src/droid.c:3610
 msgid "Hero"
 msgstr "Héroe"
 
@@ -12505,7 +12605,7 @@ msgstr "¡Excelente, la pantalla del sensor está apagada!"
 #: src/keybind.c:411
 #, c-format
 msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
-msgstr ""
+msgstr "(Jugador %u) ha detectado el bug de 'borg sin piernas' ¡Por favor introduce legs en la console y súbenos los archivos!"
 
 #: src/keybind.c:491
 #, c-format
