@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-29 16:12+0200\n"
-"PO-Revision-Date: 2010-03-26 09:53+0100\n"
+"POT-Creation-Date: 2010-03-30 13:49+0200\n"
+"PO-Revision-Date: 2010-03-29 20:48+0100\n"
 "Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -11309,6 +11309,106 @@ msgstr "Artillería Mini-Cohetes Cobra Oruga"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Cañón HPV Pitón Oruga"
 
+#: data/mp/messages/strings/names.txt:1940
+#, fuzzy
+msgid "Inferno Cobra Hover"
+msgstr "Incendiario Infierno Cobra Semi-oruga"
+
+#: data/mp/messages/strings/names.txt:1941
+#, fuzzy
+msgid "Medium Cannon Cobra Half Track"
+msgstr "Víbora Cañón Medio Oruga"
+
+#: data/mp/messages/strings/names.txt:1942
+#, fuzzy
+msgid "Inferno Python Hover"
+msgstr "Cañón Pesado Pitón Deslizador"
+
+#: data/mp/messages/strings/names.txt:1943
+#, fuzzy
+msgid "Assault Gun Python Hover"
+msgstr "Rifle de Asalto Pitón Oruga"
+
+#: data/mp/messages/strings/names.txt:1944
+#, fuzzy
+msgid "Assault Gun Python Half Track"
+msgstr "Rifle de Asalto Pitón Oruga"
+
+#: data/mp/messages/strings/names.txt:1945
+#, fuzzy
+msgid "Heavy Machinegun Scorpion Half Tracks"
+msgstr "Escorpión Ametralladora Pesada Oruga"
+
+#: data/mp/messages/strings/names.txt:1946
+#, fuzzy
+msgid "Assault Cannon Mantis Hover"
+msgstr "Torre de Guardia Cañón de Asalto"
+
+#: data/mp/messages/strings/names.txt:1947
+#, fuzzy
+msgid "Pulse Laser Leopard Hover"
+msgstr "Torre de Láser de Pulsos"
+
+#: data/mp/messages/strings/names.txt:1948
+#, fuzzy
+msgid "Pulse Laser Panther Hover"
+msgstr "Torre de Láser de Pulsos"
+
+#: data/mp/messages/strings/names.txt:1949
+#, fuzzy
+msgid "Rail Gun Tiger Hover"
+msgstr "Mejora de Pistola de Raíles"
+
+#: data/mp/messages/strings/names.txt:1950
+#, fuzzy
+msgid "Pulse Laser Tiger Hover"
+msgstr "Tigre Láser de Pulsos Oruga"
+
+#: data/mp/messages/strings/names.txt:1951
+#, fuzzy
+msgid "Plasma Cannon Wyvern Tracks"
+msgstr "Cañón Gauss Dragón Heráldico Oruga"
+
+#: data/mp/messages/strings/names.txt:1952
+#, fuzzy
+msgid "Scourge Missile Wyvern Tracks"
+msgstr "Torre Misiles Azote"
+
+#: data/mp/messages/strings/names.txt:1953
+#, fuzzy
+msgid "Flashlight Retribution Hover"
+msgstr "Pistolero de Láser Ligero"
+
+#: data/mp/messages/strings/names.txt:1954
+#, fuzzy
+msgid "Mini-Rocket Viper Half Track"
+msgstr "Mini-Cohetes Cobra Semi-oruga"
+
+#: data/mp/messages/strings/names.txt:1955
+#, fuzzy
+msgid "Mini-Rocket Array Viper Half Track"
+msgstr "Artillería Mini-Cohetes Cobra Oruga"
+
+#: data/mp/messages/strings/names.txt:1956
+#, fuzzy
+msgid "Phosphor Bomb Bay Manits VTOL"
+msgstr "Bahía de Bombas de Fósforo"
+
+#: data/mp/messages/strings/names.txt:1957
+#, fuzzy
+msgid "Heap Bomb Bay Manits VTOL"
+msgstr "ADV Bahía de Bombas Múltiples"
+
+#: data/mp/messages/strings/names.txt:1958
+#, fuzzy
+msgid "Heap Bomb Bay Retribution VTOL"
+msgstr "Carrocería Media - Merecido"
+
+#: data/mp/messages/strings/names.txt:1959
+#, fuzzy
+msgid "Scourge Retaliation VTOL"
+msgstr "Represalia"
+
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
 msgid "System locale"
@@ -13965,6 +14065,9 @@ msgstr "Versión: %s%s%s%s"
 
 #~ msgid ": Unknown cheat code."
 #~ msgstr "Código de trampa desconocido"
+
+#~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
+#~ msgstr "(Jugador %u) ha detectado el bug de 'borg sin piernas' ¡Por favor introduce legs en la console y súbenos los archivos!"
 
 #~ msgid "You found %u power in an oil drum"
 #~ msgstr "Encontraste %u energía en un barril de petróleo"
