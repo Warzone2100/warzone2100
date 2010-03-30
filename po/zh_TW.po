@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-14 16:07+0100\n"
+"POT-Creation-Date: 2010-03-30 14:14+0200\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -1583,7 +1583,7 @@ msgstr "改善生化人生產速度"
 #: data/base/messages/resmessages1.rmsg:278
 #: data/base/messages/strings/names.txt:783
 #: data/mp/messages/resmessages1.rmsg:278
-#: data/mp/messages/strings/names.txt:794
+#: data/mp/messages/strings/names.txt:797
 msgid "Automated Cyborg Production"
 msgstr "初階自動化生化人生產"
 
@@ -1615,8 +1615,8 @@ msgstr "所有生化人工廠自動升級"
 #: data/base/messages/strings/names.txt:399
 #: data/base/messages/strings/names.txt:782
 #: data/mp/messages/resmessages1.rmsg:291
-#: data/mp/messages/strings/names.txt:406
-#: data/mp/messages/strings/names.txt:793
+#: data/mp/messages/strings/names.txt:407
+#: data/mp/messages/strings/names.txt:796
 msgid "Cyborg Factory"
 msgstr "生化人步兵工廠"
 
@@ -1777,7 +1777,7 @@ msgstr "增加攻擊抵抗能力"
 #: data/base/messages/resmessages1.rmsg:369
 #: data/base/messages/strings/names.txt:805
 #: data/mp/messages/resmessages1.rmsg:370
-#: data/mp/messages/strings/names.txt:816
+#: data/mp/messages/strings/names.txt:819
 msgid "Reinforced Base Structure Materials"
 msgstr "初階強化建材一型"
 
@@ -1950,7 +1950,7 @@ msgstr "車輛引擎升級"
 #: data/base/messages/resmessages1.rmsg:460
 #: data/base/messages/strings/names.txt:942
 #: data/mp/messages/resmessages1.rmsg:461
-#: data/mp/messages/strings/names.txt:955
+#: data/mp/messages/strings/names.txt:958
 msgid "Fuel Injection Engine"
 msgstr "燃油噴射引擎一型"
 
@@ -2107,7 +2107,7 @@ msgstr "移動速度：慢"
 #: data/base/messages/resmessages1.rmsg:525
 #: data/base/messages/strings/names.txt:976
 #: data/mp/messages/resmessages1.rmsg:526
-#: data/mp/messages/strings/names.txt:989
+#: data/mp/messages/strings/names.txt:992
 msgid "Wheeled Propulsion"
 msgstr "推進動力：輪"
 
@@ -2967,7 +2967,7 @@ msgstr "新的機器人修理科技"
 #: data/base/messages/strings/names.txt:786
 #: data/base/messages/strings/resstrings.txt:348
 #: data/mp/messages/resmessages2.rmsg:343
-#: data/mp/messages/strings/names.txt:797
+#: data/mp/messages/strings/names.txt:800
 #: data/mp/messages/strings/resstrings.txt:374
 msgid "Robotic Cyborg Production"
 msgstr "中階自動化生化人生產"
@@ -2989,7 +2989,7 @@ msgstr "工廠生產速率增加"
 #: data/base/messages/strings/names.txt:835
 #: data/base/messages/strings/resstrings.txt:390
 #: data/mp/messages/resmessages2.rmsg:369
-#: data/mp/messages/strings/names.txt:846
+#: data/mp/messages/strings/names.txt:849
 #: data/mp/messages/strings/resstrings.txt:416
 msgid "Dedicated Synaptic Link Data Analysis"
 msgstr "專注突觸連結資料分析一型"
@@ -2998,7 +2998,7 @@ msgstr "專注突觸連結資料分析一型"
 #: data/base/messages/strings/names.txt:808
 #: data/base/messages/strings/resstrings.txt:400
 #: data/mp/messages/resmessages2.rmsg:382
-#: data/mp/messages/strings/names.txt:819
+#: data/mp/messages/strings/names.txt:822
 #: data/mp/messages/strings/resstrings.txt:426
 msgid "Hardened Base Structure Materials"
 msgstr "中階強化建材一型"
@@ -3007,7 +3007,7 @@ msgstr "中階強化建材一型"
 #: data/base/messages/strings/names.txt:851
 #: data/base/messages/strings/resstrings.txt:412
 #: data/mp/messages/resmessages2.rmsg:395
-#: data/mp/messages/strings/names.txt:862
+#: data/mp/messages/strings/names.txt:865
 #: data/mp/messages/strings/resstrings.txt:438
 msgid "Robotic VTOL Production"
 msgstr "中階自動化VTOL生產"
@@ -3043,7 +3043,7 @@ msgstr "VTOL補給時間縮短"
 #: data/base/messages/strings/names.txt:843
 #: data/base/messages/strings/resstrings.txt:422
 #: data/mp/messages/resmessages2.rmsg:408
-#: data/mp/messages/strings/names.txt:854
+#: data/mp/messages/strings/names.txt:857
 #: data/mp/messages/strings/resstrings.txt:448
 msgid "Automated VTOL Rearming"
 msgstr "初階自動化VTOL補給一型"
@@ -3174,7 +3174,7 @@ msgstr "需要的資源及生產時間比眼鏡蛇多"
 #: data/base/messages/strings/names.txt:945
 #: data/base/messages/strings/resstrings.txt:560
 #: data/mp/messages/resmessages2.rmsg:499
-#: data/mp/messages/strings/names.txt:958
+#: data/mp/messages/strings/names.txt:961
 #: data/mp/messages/strings/resstrings.txt:593
 msgid "Turbo-Charged Engine"
 msgstr "渦輪增壓引擎一型"
@@ -3852,14 +3852,14 @@ msgstr "蒸氣渦輪增加能源輸出效率"
 #: data/base/messages/resmessages3.rmsg:447
 #: data/base/messages/strings/names.txt:838
 #: data/mp/messages/resmessages3.rmsg:447
-#: data/mp/messages/strings/names.txt:849
+#: data/mp/messages/strings/names.txt:852
 msgid "Neural Synapse Research Brain"
 msgstr "神經突觸智慧研究一型"
 
 #: data/base/messages/resmessages3.rmsg:460
 #: data/base/messages/strings/names.txt:811
 #: data/mp/messages/resmessages3.rmsg:460
-#: data/mp/messages/strings/names.txt:822
+#: data/mp/messages/strings/names.txt:825
 msgid "Advanced Base Structure Materials"
 msgstr "高階強化建材一型"
 
@@ -3871,14 +3871,14 @@ msgstr "高密度基礎建築材料"
 #: data/base/messages/resmessages3.rmsg:486
 #: data/base/messages/strings/names.txt:854
 #: data/mp/messages/resmessages3.rmsg:486
-#: data/mp/messages/strings/names.txt:865
+#: data/mp/messages/strings/names.txt:868
 msgid "Advanced VTOL Production"
 msgstr "高階自動化VTOL 生產"
 
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/strings/names.txt:846
 #: data/mp/messages/resmessages3.rmsg:499
-#: data/mp/messages/strings/names.txt:857
+#: data/mp/messages/strings/names.txt:860
 msgid "Robotic VTOL Rearming"
 msgstr "中階自動化VTOL補給一型"
 
@@ -4016,7 +4016,7 @@ msgstr "非常貴..."
 #: data/base/messages/resmessages3.rmsg:668
 #: data/base/messages/strings/names.txt:948
 #: data/mp/messages/resmessages3.rmsg:668
-#: data/mp/messages/strings/names.txt:961
+#: data/mp/messages/strings/names.txt:964
 msgid "Gas Turbine Engine"
 msgstr "燃氣渦輪增壓引擎一型"
 
@@ -5747,7 +5747,7 @@ msgstr "運輸艦"
 #: data/mp/messages/strings/names.txt:16
 #: data/mp/messages/strings/names.txt:154
 #: data/mp/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:1473
+#: data/mp/messages/strings/names.txt:1476
 msgid "Truck"
 msgstr "工程車"
 
@@ -5756,7 +5756,7 @@ msgstr "工程車"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1832
 #: data/mp/messages/strings/names.txt:17
 #: data/mp/messages/strings/names.txt:176
-#: data/mp/messages/strings/names.txt:1832
+#: data/mp/messages/strings/names.txt:1835
 msgid "Machinegun Viper Wheels"
 msgstr "輪式響尾蛇坦克（機槍）"
 
@@ -5783,7 +5783,7 @@ msgstr "履帶式響尾蛇坦克（輕型加農砲）"
 #: data/base/messages/strings/names.txt:148
 #: data/base/messages/strings/names.txt:1421
 #: data/mp/messages/strings/names.txt:149
-#: data/mp/messages/strings/names.txt:1437
+#: data/mp/messages/strings/names.txt:1440
 msgid "Heavy Machinegun Cobra Half-tracks"
 msgstr "半履帶式眼鏡蛇坦克（重機槍）"
 
@@ -5815,7 +5815,7 @@ msgstr "半履帶式響尾蛇修理車"
 #: data/base/messages/strings/names.txt:174
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1833
 #: data/mp/messages/strings/names.txt:177
-#: data/mp/messages/strings/names.txt:1833
+#: data/mp/messages/strings/names.txt:1836
 msgid "Twin Machinegun Viper Wheels"
 msgstr "輪式響尾蛇坦克（雙管機槍）"
 
@@ -5832,7 +5832,7 @@ msgstr "半履帶式響尾蛇坦克（重機槍）"
 #: data/base/messages/strings/names.txt:177
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1840
 #: data/mp/messages/strings/names.txt:180
-#: data/mp/messages/strings/names.txt:1840
+#: data/mp/messages/strings/names.txt:1843
 msgid "Heavy Machinegun Viper Tracks"
 msgstr "履帶式響尾蛇坦克（重機槍）"
 
@@ -5859,7 +5859,7 @@ msgstr "輪式響尾蛇坦克（碉堡終結者）"
 
 #: data/base/messages/strings/names.txt:183
 #: data/mp/messages/strings/names.txt:186
-#: data/mp/messages/strings/names.txt:1362
+#: data/mp/messages/strings/names.txt:1365
 msgid "Medium Cannon Cobra Tracks"
 msgstr "履帶式眼鏡蛇坦克（中型加農砲）"
 
@@ -5871,7 +5871,7 @@ msgstr "履帶式眼鏡蛇坦克（重型加農砲）"
 #: data/base/messages/strings/names.txt:185
 #: data/base/messages/strings/names.txt:1344
 #: data/mp/messages/strings/names.txt:188
-#: data/mp/messages/strings/names.txt:1360
+#: data/mp/messages/strings/names.txt:1363
 msgid "Cobra Truck"
 msgstr "眼鏡蛇工程車"
 
@@ -5882,7 +5882,7 @@ msgstr "半履帶式眼鏡蛇雷達車"
 
 #: data/base/messages/strings/names.txt:187
 #: data/mp/messages/strings/names.txt:190
-#: data/mp/messages/strings/names.txt:1361
+#: data/mp/messages/strings/names.txt:1364
 msgid "Flamer Cobra Tracks"
 msgstr "履帶式眼鏡蛇坦克（火焰噴射）"
 
@@ -5899,7 +5899,7 @@ msgstr "半履帶式眼鏡蛇坦克（指揮官）"
 #: data/base/messages/strings/names.txt:190
 #: data/base/messages/strings/names.txt:1420
 #: data/mp/messages/strings/names.txt:193
-#: data/mp/messages/strings/names.txt:1436
+#: data/mp/messages/strings/names.txt:1439
 msgid "Lancer Cobra Half-tracks"
 msgstr "半履帶式眼鏡蛇坦克（槍騎兵火箭）"
 
@@ -5914,26 +5914,26 @@ msgid "Light Cannon Python Tracks"
 msgstr "履帶式蟒蛇坦克（輕型加農砲）"
 
 #: data/base/messages/strings/names.txt:194
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1345
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1357
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
-#: data/mp/messages/strings/names.txt:1923
+#: data/mp/messages/strings/names.txt:1926
 msgid "Medium Cannon Python Tracks"
 msgstr "履帶式蟒蛇坦克（中型加農砲）"
 
 #: data/base/messages/strings/names.txt:195
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1848
 #: data/mp/messages/strings/names.txt:198
-#: data/mp/messages/strings/names.txt:1359
-#: data/mp/messages/strings/names.txt:1513
-#: data/mp/messages/strings/names.txt:1848
+#: data/mp/messages/strings/names.txt:1362
+#: data/mp/messages/strings/names.txt:1516
+#: data/mp/messages/strings/names.txt:1851
 msgid "Heavy Cannon Python Tracks"
 msgstr "履帶式蟒蛇坦克（高速加農砲）"
 
 #: data/base/messages/strings/names.txt:196
 #: data/base/messages/strings/names.txt:1422
 #: data/mp/messages/strings/names.txt:199
-#: data/mp/messages/strings/names.txt:1438
+#: data/mp/messages/strings/names.txt:1441
 msgid "Command Turret Python Tracks"
 msgstr "履帶式蟒蛇坦克（指揮官）"
 
@@ -5997,7 +5997,7 @@ msgstr "平民"
 #: data/base/messages/strings/names.txt:537
 #: data/mp/messages/strings/names.txt:215
 #: data/mp/messages/strings/names.txt:221
-#: data/mp/messages/strings/names.txt:544
+#: data/mp/messages/strings/names.txt:545
 msgid "Machinegunner"
 msgstr "生化人步兵（機槍）"
 
@@ -6006,9 +6006,9 @@ msgstr "生化人步兵（機槍）"
 #: data/base/messages/strings/names.txt:538
 #: data/base/messages/strings/names.txt:1058
 #: data/mp/messages/strings/names.txt:216
-#: data/mp/messages/strings/names.txt:487
-#: data/mp/messages/strings/names.txt:545
-#: data/mp/messages/strings/names.txt:1071
+#: data/mp/messages/strings/names.txt:488
+#: data/mp/messages/strings/names.txt:546
+#: data/mp/messages/strings/names.txt:1074
 msgid "Flamer"
 msgstr "火焰噴射"
 
@@ -6018,8 +6018,8 @@ msgstr "火焰噴射"
 #: data/base/messages/strings/names.txt:536
 #: data/mp/messages/strings/names.txt:217
 #: data/mp/messages/strings/names.txt:224
-#: data/mp/messages/strings/names.txt:529
-#: data/mp/messages/strings/names.txt:543
+#: data/mp/messages/strings/names.txt:530
+#: data/mp/messages/strings/names.txt:544
 msgid "Lancer"
 msgstr "槍騎兵火箭"
 
@@ -6028,7 +6028,7 @@ msgstr "槍騎兵火箭"
 #: data/base/messages/strings/names.txt:534
 #: data/mp/messages/strings/names.txt:218
 #: data/mp/messages/strings/names.txt:223
-#: data/mp/messages/strings/names.txt:541
+#: data/mp/messages/strings/names.txt:542
 msgid "Heavy Gunner"
 msgstr "生化人步兵（重機槍）"
 
@@ -6122,8 +6122,8 @@ msgstr ""
 #: data/base/messages/strings/names.txt:542
 #: data/base/messages/strings/names.txt:648
 #: data/mp/messages/strings/names.txt:303
-#: data/mp/messages/strings/names.txt:549
-#: data/mp/messages/strings/names.txt:655
+#: data/mp/messages/strings/names.txt:550
+#: data/mp/messages/strings/names.txt:656
 msgid "Command Turret"
 msgstr "指揮官"
 
@@ -6227,14 +6227,14 @@ msgstr "半履帶式三型"
 #: data/base/messages/strings/names.txt:330
 #: data/base/messages/strings/names.txt:693
 #: data/mp/messages/strings/names.txt:333
-#: data/mp/messages/strings/names.txt:702
+#: data/mp/messages/strings/names.txt:703
 msgid "Cyborg Propulsion II"
 msgstr "生化人步兵二型"
 
 #: data/base/messages/strings/names.txt:331
 #: data/base/messages/strings/names.txt:694
 #: data/mp/messages/strings/names.txt:334
-#: data/mp/messages/strings/names.txt:703
+#: data/mp/messages/strings/names.txt:704
 msgid "Cyborg Propulsion III"
 msgstr "生化人步兵三型"
 
@@ -6256,7 +6256,7 @@ msgstr "野蠻人步兵"
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
-#: data/mp/messages/strings/names.txt:701
+#: data/mp/messages/strings/names.txt:702
 msgid "Cyborg Propulsion"
 msgstr "生化人步兵"
 
@@ -6284,8 +6284,8 @@ msgstr ""
 #: data/base/messages/strings/names.txt:423
 #: data/base/messages/strings/names.txt:888
 #: data/mp/messages/strings/names.txt:373
-#: data/mp/messages/strings/names.txt:430
-#: data/mp/messages/strings/names.txt:901
+#: data/mp/messages/strings/names.txt:431
+#: data/mp/messages/strings/names.txt:904
 msgid "Sensor Tower"
 msgstr "雷達塔"
 
@@ -6293,15 +6293,15 @@ msgstr "雷達塔"
 #: data/base/messages/strings/names.txt:424
 #: data/base/messages/strings/names.txt:889
 #: data/mp/messages/strings/names.txt:374
-#: data/mp/messages/strings/names.txt:431
-#: data/mp/messages/strings/names.txt:902
+#: data/mp/messages/strings/names.txt:432
+#: data/mp/messages/strings/names.txt:905
 msgid "Hardened Sensor Tower"
 msgstr "強化雷達塔"
 
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/names.txt:887
 #: data/mp/messages/strings/names.txt:375
-#: data/mp/messages/strings/names.txt:900
+#: data/mp/messages/strings/names.txt:903
 msgid "Sensor Turret"
 msgstr "雷達"
 
@@ -6325,7 +6325,7 @@ msgstr "反砲兵雷達"
 #: data/base/messages/strings/names.txt:376
 #: data/base/messages/strings/names.txt:906
 #: data/mp/messages/strings/names.txt:383
-#: data/mp/messages/strings/names.txt:919
+#: data/mp/messages/strings/names.txt:922
 msgid "VTOL Strike Turret"
 msgstr "VTOL攻擊雷達"
 
@@ -6361,7 +6361,7 @@ msgstr "工廠"
 #: data/base/messages/strings/names.txt:386
 #: data/base/messages/strings/names.txt:793
 #: data/mp/messages/strings/names.txt:393
-#: data/mp/messages/strings/names.txt:804
+#: data/mp/messages/strings/names.txt:807
 msgid "Factory Module"
 msgstr "工廠模組"
 
@@ -6373,7 +6373,7 @@ msgstr "發電廠"
 #: data/base/messages/strings/names.txt:388
 #: data/base/messages/strings/names.txt:816
 #: data/mp/messages/strings/names.txt:395
-#: data/mp/messages/strings/names.txt:827
+#: data/mp/messages/strings/names.txt:830
 msgid "Power Module"
 msgstr "發電模組"
 
@@ -6385,7 +6385,7 @@ msgstr "研發中心"
 #: data/base/messages/strings/names.txt:390
 #: data/base/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:397
-#: data/mp/messages/strings/names.txt:842
+#: data/mp/messages/strings/names.txt:845
 msgid "Research Module"
 msgstr "研發模組"
 
@@ -6397,7 +6397,7 @@ msgstr "破壞建築物"
 #: data/base/messages/strings/names.txt:393
 #: data/base/messages/strings/names.txt:1448
 #: data/mp/messages/strings/names.txt:400
-#: data/mp/messages/strings/names.txt:1464
+#: data/mp/messages/strings/names.txt:1467
 msgid "Repair Center"
 msgstr "修理廠"
 
@@ -6418,8 +6418,8 @@ msgstr "鈦鋼筋牆"
 
 #: data/base/messages/strings/names.txt:398
 #: data/base/messages/strings/names.txt:850
-#: data/mp/messages/strings/names.txt:405
-#: data/mp/messages/strings/names.txt:861
+#: data/mp/messages/strings/names.txt:406
+#: data/mp/messages/strings/names.txt:864
 msgid "VTOL Factory"
 msgstr "VTOL工廠"
 
@@ -6430,30 +6430,30 @@ msgstr "地獄火砲台"
 
 #: data/base/messages/strings/names.txt:403
 #: data/base/messages/strings/names.txt:773
-#: data/mp/messages/strings/names.txt:410
-#: data/mp/messages/strings/names.txt:784
+#: data/mp/messages/strings/names.txt:411
+#: data/mp/messages/strings/names.txt:787
 msgid "Inferno Hardpoint"
 msgstr "地獄火要塞"
 
 #: data/base/messages/strings/names.txt:404
 #: data/base/messages/strings/names.txt:747
-#: data/mp/messages/strings/names.txt:411
-#: data/mp/messages/strings/names.txt:758
+#: data/mp/messages/strings/names.txt:412
+#: data/mp/messages/strings/names.txt:761
 msgid "Pepperpot Pit"
 msgstr "旋轉迫擊砲砲坑"
 
 #: data/base/messages/strings/names.txt:405
 #: data/base/messages/strings/names.txt:488
 #: data/base/messages/strings/names.txt:745
-#: data/mp/messages/strings/names.txt:412
-#: data/mp/messages/strings/names.txt:495
-#: data/mp/messages/strings/names.txt:756
+#: data/mp/messages/strings/names.txt:413
+#: data/mp/messages/strings/names.txt:496
+#: data/mp/messages/strings/names.txt:759
 msgid "Hellstorm Emplacement"
 msgstr "地獄風暴砲台"
 
 #: data/base/messages/strings/names.txt:409
 #: data/base/messages/strings/names.txt:715
-#: data/mp/messages/strings/names.txt:726
+#: data/mp/messages/strings/names.txt:729
 msgid "Tornado AA Flak Site"
 msgstr "龍捲風級高射砲"
 
@@ -6464,27 +6464,27 @@ msgstr "暴風級高射砲"
 
 #: data/base/messages/strings/names.txt:411
 #: data/base/messages/strings/names.txt:713
-#: data/mp/messages/strings/names.txt:418
-#: data/mp/messages/strings/names.txt:724
+#: data/mp/messages/strings/names.txt:419
+#: data/mp/messages/strings/names.txt:727
 msgid "Hurricane AA Site"
 msgstr "颶風級高射砲"
 
 #: data/base/messages/strings/names.txt:412
 #: data/base/messages/strings/names.txt:714
-#: data/mp/messages/strings/names.txt:419
-#: data/mp/messages/strings/names.txt:725
+#: data/mp/messages/strings/names.txt:420
+#: data/mp/messages/strings/names.txt:728
 msgid "Whirlwind AA Site"
 msgstr "旋風級高射砲"
 
 #: data/base/messages/strings/names.txt:414
 #: data/base/messages/strings/names.txt:726
-#: data/mp/messages/strings/names.txt:421
-#: data/mp/messages/strings/names.txt:737
+#: data/mp/messages/strings/names.txt:422
+#: data/mp/messages/strings/names.txt:740
 msgid "Ripple Rocket Battery"
 msgstr "多管火箭砲台"
 
 #: data/base/messages/strings/names.txt:417
-#: data/mp/messages/strings/names.txt:424
+#: data/mp/messages/strings/names.txt:425
 msgid "Assault Cannon Guard Tower"
 msgstr "突擊加農砲防衛塔"
 
@@ -6495,29 +6495,29 @@ msgstr "突擊槍防衛塔"
 
 #: data/base/messages/strings/names.txt:419
 #: data/base/messages/strings/names.txt:770
-#: data/mp/messages/strings/names.txt:426
-#: data/mp/messages/strings/names.txt:781
+#: data/mp/messages/strings/names.txt:427
+#: data/mp/messages/strings/names.txt:784
 msgid "Assault Gun Hardpoint"
 msgstr "突擊槍要塞"
 
 #: data/base/messages/strings/names.txt:420
 #: data/base/messages/strings/names.txt:771
-#: data/mp/messages/strings/names.txt:427
-#: data/mp/messages/strings/names.txt:782
+#: data/mp/messages/strings/names.txt:428
+#: data/mp/messages/strings/names.txt:785
 msgid "Assault Cannon Hardpoint"
 msgstr "突擊加農砲要塞"
 
 #: data/base/messages/strings/names.txt:426
 #: data/base/messages/strings/names.txt:892
-#: data/mp/messages/strings/names.txt:433
-#: data/mp/messages/strings/names.txt:905
+#: data/mp/messages/strings/names.txt:434
+#: data/mp/messages/strings/names.txt:908
 msgid "CB Tower"
 msgstr "反砲兵雷達"
 
 #: data/base/messages/strings/names.txt:427
 #: data/base/messages/strings/names.txt:899
-#: data/mp/messages/strings/names.txt:434
-#: data/mp/messages/strings/names.txt:912
+#: data/mp/messages/strings/names.txt:435
+#: data/mp/messages/strings/names.txt:915
 msgid "VTOL CB Tower"
 msgstr "VTOL反砲兵雷達"
 
@@ -6527,80 +6527,80 @@ msgstr "VTOL雷達"
 
 #: data/base/messages/strings/names.txt:431
 #: data/base/messages/strings/names.txt:764
-#: data/mp/messages/strings/names.txt:438
-#: data/mp/messages/strings/names.txt:775
+#: data/mp/messages/strings/names.txt:439
+#: data/mp/messages/strings/names.txt:778
 msgid "Heavy Machinegun Hardpoint"
 msgstr "重機槍要塞"
 
 #: data/base/messages/strings/names.txt:432
 #: data/base/messages/strings/names.txt:765
-#: data/mp/messages/strings/names.txt:439
-#: data/mp/messages/strings/names.txt:776
+#: data/mp/messages/strings/names.txt:440
+#: data/mp/messages/strings/names.txt:779
 msgid "Light Cannon Hardpoint"
 msgstr "輕型加農砲要塞"
 
 #: data/base/messages/strings/names.txt:433
 #: data/base/messages/strings/names.txt:766
-#: data/mp/messages/strings/names.txt:440
-#: data/mp/messages/strings/names.txt:777
+#: data/mp/messages/strings/names.txt:441
+#: data/mp/messages/strings/names.txt:780
 msgid "Medium Cannon Hardpoint"
 msgstr "中型加農砲要塞"
 
 #: data/base/messages/strings/names.txt:434
 #: data/base/messages/strings/names.txt:767
-#: data/mp/messages/strings/names.txt:441
-#: data/mp/messages/strings/names.txt:778
+#: data/mp/messages/strings/names.txt:442
+#: data/mp/messages/strings/names.txt:781
 msgid "Heavy Cannon Hardpoint"
 msgstr "重型加農砲要塞"
 
 #: data/base/messages/strings/names.txt:435
 #: data/base/messages/strings/names.txt:768
-#: data/mp/messages/strings/names.txt:442
-#: data/mp/messages/strings/names.txt:779
+#: data/mp/messages/strings/names.txt:443
+#: data/mp/messages/strings/names.txt:782
 msgid "Flamer Hardpoint"
 msgstr "火焰噴射要塞"
 
 #: data/base/messages/strings/names.txt:436
 #: data/base/messages/strings/names.txt:769
-#: data/mp/messages/strings/names.txt:443
-#: data/mp/messages/strings/names.txt:780
+#: data/mp/messages/strings/names.txt:444
+#: data/mp/messages/strings/names.txt:783
 msgid "Lancer Hardpoint"
 msgstr "槍騎兵火箭要塞"
 
 #: data/base/messages/strings/names.txt:438
 #: data/base/messages/strings/names.txt:755
-#: data/mp/messages/strings/names.txt:445
-#: data/mp/messages/strings/names.txt:766
+#: data/mp/messages/strings/names.txt:446
+#: data/mp/messages/strings/names.txt:769
 msgid "Machinegun Guard Tower"
 msgstr "機槍防衛塔"
 
 #: data/base/messages/strings/names.txt:439
-#: data/mp/messages/strings/names.txt:446
+#: data/mp/messages/strings/names.txt:447
 msgid "Twin Machinegun Guard Tower"
 msgstr "雙管機槍防衛塔"
 
 #: data/base/messages/strings/names.txt:440
-#: data/mp/messages/strings/names.txt:447
-#: data/mp/messages/strings/names.txt:767
+#: data/mp/messages/strings/names.txt:448
+#: data/mp/messages/strings/names.txt:770
 msgid "Heavy Machinegun Tower"
 msgstr "重機槍防衛塔"
 
 #: data/base/messages/strings/names.txt:441
 #: data/base/messages/strings/names.txt:757
-#: data/mp/messages/strings/names.txt:448
+#: data/mp/messages/strings/names.txt:449
 msgid "Flamer Guard Tower"
 msgstr "火焰噴射防衛塔"
 
 #: data/base/messages/strings/names.txt:442
-#: data/mp/messages/strings/names.txt:449
-#: data/mp/messages/strings/names.txt:748
-#: data/mp/messages/strings/names.txt:769
+#: data/mp/messages/strings/names.txt:450
+#: data/mp/messages/strings/names.txt:751
+#: data/mp/messages/strings/names.txt:772
 msgid "Lancer Tower"
 msgstr "槍騎兵火箭防衛塔"
 
 #: data/base/messages/strings/names.txt:443
-#: data/mp/messages/strings/names.txt:450
-#: data/mp/messages/strings/names.txt:770
+#: data/mp/messages/strings/names.txt:451
+#: data/mp/messages/strings/names.txt:773
 #, fuzzy
 msgid "Mini-Rocket Tower"
 msgstr "迷你火箭炮防衛塔"
@@ -6608,88 +6608,88 @@ msgstr "迷你火箭炮防衛塔"
 #: data/base/messages/strings/names.txt:446
 #: data/base/messages/strings/names.txt:496
 #: data/base/messages/strings/names.txt:733
-#: data/mp/messages/strings/names.txt:453
-#: data/mp/messages/strings/names.txt:503
-#: data/mp/messages/strings/names.txt:744
+#: data/mp/messages/strings/names.txt:454
+#: data/mp/messages/strings/names.txt:504
+#: data/mp/messages/strings/names.txt:747
 msgid "Machinegun Bunker"
 msgstr "機槍碉堡"
 
 #: data/base/messages/strings/names.txt:447
 #: data/base/messages/strings/names.txt:498
-#: data/mp/messages/strings/names.txt:454
-#: data/mp/messages/strings/names.txt:505
+#: data/mp/messages/strings/names.txt:455
+#: data/mp/messages/strings/names.txt:506
 msgid "Twin Machinegun Bunker"
 msgstr "雙管機槍碉堡"
 
 #: data/base/messages/strings/names.txt:448
 #: data/base/messages/strings/names.txt:500
 #: data/base/messages/strings/names.txt:734
-#: data/mp/messages/strings/names.txt:455
-#: data/mp/messages/strings/names.txt:507
-#: data/mp/messages/strings/names.txt:745
+#: data/mp/messages/strings/names.txt:456
+#: data/mp/messages/strings/names.txt:508
+#: data/mp/messages/strings/names.txt:748
 msgid "Heavy Machinegun Bunker"
 msgstr "重機槍碉堡"
 
 #: data/base/messages/strings/names.txt:449
 #: data/base/messages/strings/names.txt:735
-#: data/mp/messages/strings/names.txt:456
-#: data/mp/messages/strings/names.txt:746
+#: data/mp/messages/strings/names.txt:457
+#: data/mp/messages/strings/names.txt:749
 msgid "Light Cannon Bunker"
 msgstr "輕型加農砲碉堡"
 
 #: data/base/messages/strings/names.txt:450
 #: data/base/messages/strings/names.txt:736
-#: data/mp/messages/strings/names.txt:457
-#: data/mp/messages/strings/names.txt:747
+#: data/mp/messages/strings/names.txt:458
+#: data/mp/messages/strings/names.txt:750
 msgid "Flamer Bunker"
 msgstr "火焰噴射碉堡"
 
 #: data/base/messages/strings/names.txt:451
 #: data/base/messages/strings/names.txt:737
-#: data/mp/messages/strings/names.txt:458
+#: data/mp/messages/strings/names.txt:459
 msgid "Lancer Bunker"
 msgstr "槍騎兵火箭碉堡"
 
 #: data/base/messages/strings/names.txt:454
 #: data/base/messages/strings/names.txt:456
 #: data/base/messages/strings/names.txt:752
-#: data/mp/messages/strings/names.txt:461
-#: data/mp/messages/strings/names.txt:463
-#: data/mp/messages/strings/names.txt:763
+#: data/mp/messages/strings/names.txt:462
+#: data/mp/messages/strings/names.txt:464
+#: data/mp/messages/strings/names.txt:766
 msgid "Tank Traps"
 msgstr "坦克陷阱"
 
 #: data/base/messages/strings/names.txt:455
 #: data/base/messages/strings/names.txt:457
 #: data/base/messages/strings/names.txt:753
-#: data/mp/messages/strings/names.txt:462
-#: data/mp/messages/strings/names.txt:464
-#: data/mp/messages/strings/names.txt:764
+#: data/mp/messages/strings/names.txt:463
+#: data/mp/messages/strings/names.txt:465
+#: data/mp/messages/strings/names.txt:767
 msgid "Dragon's Teeth"
 msgstr "龍之牙"
 
 #: data/base/messages/strings/names.txt:460
 #: data/base/messages/strings/names.txt:842
-#: data/mp/messages/strings/names.txt:467
-#: data/mp/messages/strings/names.txt:853
+#: data/mp/messages/strings/names.txt:468
+#: data/mp/messages/strings/names.txt:856
 msgid "VTOL Rearming Pad"
 msgstr "VTOL補給點"
 
 #: data/base/messages/strings/names.txt:463
 #: data/base/messages/strings/names.txt:484
 #: data/base/messages/strings/names.txt:719
-#: data/mp/messages/strings/names.txt:470
-#: data/mp/messages/strings/names.txt:491
-#: data/mp/messages/strings/names.txt:730
+#: data/mp/messages/strings/names.txt:471
+#: data/mp/messages/strings/names.txt:492
+#: data/mp/messages/strings/names.txt:733
 msgid "Howitzer Emplacement"
 msgstr "榴彈砲砲台"
 
 #: data/base/messages/strings/names.txt:464
 #: data/base/messages/strings/names.txt:740
 #: data/base/messages/strings/names.txt:1362
-#: data/mp/messages/strings/names.txt:471
-#: data/mp/messages/strings/names.txt:751
-#: data/mp/messages/strings/names.txt:1378
+#: data/mp/messages/strings/names.txt:472
+#: data/mp/messages/strings/names.txt:754
+#: data/mp/messages/strings/names.txt:1381
 msgid "Flashlight Emplacement"
 msgstr "激光雷射砲台"
 
@@ -6700,139 +6700,139 @@ msgstr "激光雷射要塞"
 
 #: data/base/messages/strings/names.txt:467
 #: data/base/messages/strings/names.txt:777
-#: data/mp/messages/strings/names.txt:474
-#: data/mp/messages/strings/names.txt:788
+#: data/mp/messages/strings/names.txt:475
+#: data/mp/messages/strings/names.txt:791
 msgid "Rail Gun Hardpoint"
 msgstr "軌道砲要塞"
 
 #: data/base/messages/strings/names.txt:469
 #: data/base/messages/strings/names.txt:761
-#: data/mp/messages/strings/names.txt:476
-#: data/mp/messages/strings/names.txt:772
+#: data/mp/messages/strings/names.txt:477
+#: data/mp/messages/strings/names.txt:775
 msgid "Scourge Missile Tower"
 msgstr "天譴飛彈防衛塔"
 
 #: data/base/messages/strings/names.txt:470
 #: data/base/messages/strings/names.txt:762
-#: data/mp/messages/strings/names.txt:477
-#: data/mp/messages/strings/names.txt:773
+#: data/mp/messages/strings/names.txt:478
+#: data/mp/messages/strings/names.txt:776
 msgid "Needle Gun Tower"
 msgstr "針刺砲防衛塔"
 
 #: data/base/messages/strings/names.txt:471
 #: data/base/messages/strings/names.txt:743
-#: data/mp/messages/strings/names.txt:478
-#: data/mp/messages/strings/names.txt:754
+#: data/mp/messages/strings/names.txt:479
+#: data/mp/messages/strings/names.txt:757
 msgid "Gauss Cannon Emplacement"
 msgstr "高斯加農砲砲台"
 
 #: data/base/messages/strings/names.txt:474
 #: data/base/messages/strings/names.txt:1033
-#: data/mp/messages/strings/names.txt:481
-#: data/mp/messages/strings/names.txt:1046
+#: data/mp/messages/strings/names.txt:482
+#: data/mp/messages/strings/names.txt:1049
 msgid "Light Cannon"
 msgstr "輕型加農砲"
 
 #: data/base/messages/strings/names.txt:475
 #: data/base/messages/strings/names.txt:1034
-#: data/mp/messages/strings/names.txt:482
-#: data/mp/messages/strings/names.txt:1047
+#: data/mp/messages/strings/names.txt:483
+#: data/mp/messages/strings/names.txt:1050
 msgid "Medium Cannon"
 msgstr "中型加農砲"
 
 #: data/base/messages/strings/names.txt:476
 #: data/base/messages/strings/names.txt:1035
-#: data/mp/messages/strings/names.txt:483
-#: data/mp/messages/strings/names.txt:1048
+#: data/mp/messages/strings/names.txt:484
+#: data/mp/messages/strings/names.txt:1051
 msgid "Heavy Cannon"
 msgstr "重型加農砲"
 
 #: data/base/messages/strings/names.txt:477
 #: data/base/messages/strings/names.txt:1036
-#: data/mp/messages/strings/names.txt:484
-#: data/mp/messages/strings/names.txt:1049
+#: data/mp/messages/strings/names.txt:485
+#: data/mp/messages/strings/names.txt:1052
 msgid "Hyper Velocity Cannon"
 msgstr "高速加農砲"
 
 #: data/base/messages/strings/names.txt:478
 #: data/base/messages/strings/names.txt:1037
-#: data/mp/messages/strings/names.txt:485
-#: data/mp/messages/strings/names.txt:1050
+#: data/mp/messages/strings/names.txt:486
+#: data/mp/messages/strings/names.txt:1053
 msgid "Assault Cannon"
 msgstr "突擊加農砲"
 
 #: data/base/messages/strings/names.txt:481
-#: data/mp/messages/strings/names.txt:488
+#: data/mp/messages/strings/names.txt:489
 msgid "Inferno"
 msgstr "地獄火"
 
 #: data/base/messages/strings/names.txt:483
 #: data/base/messages/strings/names.txt:1061
-#: data/mp/messages/strings/names.txt:490
-#: data/mp/messages/strings/names.txt:1074
+#: data/mp/messages/strings/names.txt:491
+#: data/mp/messages/strings/names.txt:1077
 msgid "Howitzer"
 msgstr "榴彈砲"
 
 #: data/base/messages/strings/names.txt:485
-#: data/mp/messages/strings/names.txt:492
+#: data/mp/messages/strings/names.txt:493
 msgid "Ground Shaker"
 msgstr "撼地者級榴彈砲"
 
 #: data/base/messages/strings/names.txt:486
 #: data/base/messages/strings/names.txt:722
 #: data/base/messages/strings/names.txt:1453
-#: data/mp/messages/strings/names.txt:493
-#: data/mp/messages/strings/names.txt:733
-#: data/mp/messages/strings/names.txt:1469
+#: data/mp/messages/strings/names.txt:494
+#: data/mp/messages/strings/names.txt:736
+#: data/mp/messages/strings/names.txt:1472
 msgid "Ground Shaker Emplacement"
 msgstr "撼地者級榴彈砲砲塔"
 
 #: data/base/messages/strings/names.txt:487
-#: data/mp/messages/strings/names.txt:494
+#: data/mp/messages/strings/names.txt:495
 msgid "Hellstorm"
 msgstr "地獄風暴"
 
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:1083
-#: data/mp/messages/strings/names.txt:499
-#: data/mp/messages/strings/names.txt:1096
+#: data/mp/messages/strings/names.txt:500
+#: data/mp/messages/strings/names.txt:1099
 msgid "Pulse Laser"
 msgstr "脈衝雷射"
 
 #: data/base/messages/strings/names.txt:495
 #: data/base/messages/strings/names.txt:540
 #: data/base/messages/strings/names.txt:1098
-#: data/mp/messages/strings/names.txt:502
-#: data/mp/messages/strings/names.txt:547
-#: data/mp/messages/strings/names.txt:1111
+#: data/mp/messages/strings/names.txt:503
+#: data/mp/messages/strings/names.txt:548
+#: data/mp/messages/strings/names.txt:1114
 msgid "Machinegun"
 msgstr "機槍"
 
 #: data/base/messages/strings/names.txt:497
 #: data/base/messages/strings/names.txt:1099
-#: data/mp/messages/strings/names.txt:504
-#: data/mp/messages/strings/names.txt:1112
+#: data/mp/messages/strings/names.txt:505
+#: data/mp/messages/strings/names.txt:1115
 msgid "Twin Machinegun"
 msgstr "雙管機槍"
 
 #: data/base/messages/strings/names.txt:499
 #: data/base/messages/strings/names.txt:1100
-#: data/mp/messages/strings/names.txt:506
-#: data/mp/messages/strings/names.txt:1113
+#: data/mp/messages/strings/names.txt:507
+#: data/mp/messages/strings/names.txt:1116
 msgid "Heavy Machinegun"
 msgstr "重機槍"
 
 #: data/base/messages/strings/names.txt:501
 #: data/base/messages/strings/names.txt:1101
-#: data/mp/messages/strings/names.txt:508
-#: data/mp/messages/strings/names.txt:1114
+#: data/mp/messages/strings/names.txt:509
+#: data/mp/messages/strings/names.txt:1117
 msgid "Assault Gun"
 msgstr "突擊槍"
 
 #: data/base/messages/strings/names.txt:504
 #: data/base/messages/strings/names.txt:1120
-#: data/mp/messages/strings/names.txt:511
-#: data/mp/messages/strings/names.txt:1133
+#: data/mp/messages/strings/names.txt:512
+#: data/mp/messages/strings/names.txt:1136
 msgid "Scourge Missile"
 msgstr "天譴飛彈"
 
@@ -6843,80 +6843,80 @@ msgstr "天使飛彈"
 
 #: data/base/messages/strings/names.txt:506
 #: data/base/messages/strings/names.txt:1119
-#: data/mp/messages/strings/names.txt:513
-#: data/mp/messages/strings/names.txt:1132
+#: data/mp/messages/strings/names.txt:514
+#: data/mp/messages/strings/names.txt:1135
 msgid "Vindicator SAM"
 msgstr "擁護者級地對空飛彈"
 
 #: data/base/messages/strings/names.txt:507
 #: data/base/messages/strings/names.txt:1122
-#: data/mp/messages/strings/names.txt:514
-#: data/mp/messages/strings/names.txt:1135
+#: data/mp/messages/strings/names.txt:515
+#: data/mp/messages/strings/names.txt:1138
 msgid "Archangel Missile"
 msgstr "大天使飛彈"
 
 #: data/base/messages/strings/names.txt:509
 #: data/base/messages/strings/names.txt:1118
-#: data/mp/messages/strings/names.txt:516
-#: data/mp/messages/strings/names.txt:1131
+#: data/mp/messages/strings/names.txt:517
+#: data/mp/messages/strings/names.txt:1134
 msgid "Avenger SAM"
 msgstr "復仇者級地對空飛彈"
 
 #: data/base/messages/strings/names.txt:511
-#: data/mp/messages/strings/names.txt:518
+#: data/mp/messages/strings/names.txt:519
 msgid "VTOL Scourge Missile"
 msgstr "VTOL（天譴飛彈）"
 
 #: data/base/messages/strings/names.txt:513
 #: data/base/messages/strings/names.txt:1138
-#: data/mp/messages/strings/names.txt:520
-#: data/mp/messages/strings/names.txt:1151
+#: data/mp/messages/strings/names.txt:521
+#: data/mp/messages/strings/names.txt:1154
 msgid "Mortar"
 msgstr "迫擊砲"
 
 #: data/base/messages/strings/names.txt:514
-#: data/mp/messages/strings/names.txt:521
+#: data/mp/messages/strings/names.txt:522
 msgid "Mortar Emplacement"
 msgstr "迫擊砲砲台"
 
 #: data/base/messages/strings/names.txt:515
-#: data/mp/messages/strings/names.txt:522
+#: data/mp/messages/strings/names.txt:523
 msgid "Bombard"
 msgstr "重裝迫擊砲"
 
 #: data/base/messages/strings/names.txt:516
-#: data/mp/messages/strings/names.txt:523
+#: data/mp/messages/strings/names.txt:524
 msgid "Bombard Emplacement"
 msgstr "重裝迫擊砲砲台"
 
 #: data/base/messages/strings/names.txt:517
-#: data/mp/messages/strings/names.txt:524
+#: data/mp/messages/strings/names.txt:525
 msgid "Pepperpot"
 msgstr "旋轉迫擊砲"
 
 #: data/base/messages/strings/names.txt:518
-#: data/mp/messages/strings/names.txt:525
+#: data/mp/messages/strings/names.txt:526
 msgid "Pepperpot Emplacement"
 msgstr "旋轉迫擊砲砲台"
 
 #: data/base/messages/strings/names.txt:519
 #: data/base/messages/strings/names.txt:1142
-#: data/mp/messages/strings/names.txt:526
-#: data/mp/messages/strings/names.txt:1155
+#: data/mp/messages/strings/names.txt:527
+#: data/mp/messages/strings/names.txt:1158
 msgid "Needle Gun"
 msgstr "針刺砲"
 
 #: data/base/messages/strings/names.txt:520
 #: data/base/messages/strings/names.txt:1143
-#: data/mp/messages/strings/names.txt:527
-#: data/mp/messages/strings/names.txt:1156
+#: data/mp/messages/strings/names.txt:528
+#: data/mp/messages/strings/names.txt:1159
 msgid "Rail Gun"
 msgstr "軌道砲"
 
 #: data/base/messages/strings/names.txt:521
 #: data/base/messages/strings/names.txt:1144
-#: data/mp/messages/strings/names.txt:528
-#: data/mp/messages/strings/names.txt:1157
+#: data/mp/messages/strings/names.txt:529
+#: data/mp/messages/strings/names.txt:1160
 msgid "Gauss Cannon"
 msgstr "高斯加農砲"
 
@@ -6926,76 +6926,76 @@ msgid "Mini-Rocket Artillery"
 msgstr "迷你火箭炮"
 
 #: data/base/messages/strings/names.txt:524
-#: data/mp/messages/strings/names.txt:531
+#: data/mp/messages/strings/names.txt:532
 msgid "Bunker Buster"
 msgstr "碉堡終結者"
 
 #: data/base/messages/strings/names.txt:526
 #: data/base/messages/strings/names.txt:1183
-#: data/mp/messages/strings/names.txt:533
-#: data/mp/messages/strings/names.txt:1199
+#: data/mp/messages/strings/names.txt:534
+#: data/mp/messages/strings/names.txt:1202
 #, fuzzy
 msgid "Mini-Rocket Pod"
 msgstr "迷你火箭升級"
 
 #: data/base/messages/strings/names.txt:527
 #: data/base/messages/strings/names.txt:1184
-#: data/mp/messages/strings/names.txt:534
-#: data/mp/messages/strings/names.txt:1200
+#: data/mp/messages/strings/names.txt:535
+#: data/mp/messages/strings/names.txt:1203
 msgid "Ripple Rockets"
 msgstr "多管火箭"
 
 #: data/base/messages/strings/names.txt:528
-#: data/mp/messages/strings/names.txt:535
+#: data/mp/messages/strings/names.txt:536
 msgid "Tank Killer"
 msgstr "坦克殺手"
 
 #: data/base/messages/strings/names.txt:529
-#: data/mp/messages/strings/names.txt:536
+#: data/mp/messages/strings/names.txt:537
 msgid "VTOL Bunker Buster"
 msgstr "VTOL（碉堡終結者）"
 
 #: data/base/messages/strings/names.txt:530
-#: data/mp/messages/strings/names.txt:537
+#: data/mp/messages/strings/names.txt:538
 #, fuzzy
 msgid "VTOL Mini-Rocket"
 msgstr "HE迷你火箭一型（"
 
 #: data/base/messages/strings/names.txt:531
-#: data/mp/messages/strings/names.txt:538
+#: data/mp/messages/strings/names.txt:539
 msgid "VTOL Lancer"
 msgstr "VTOL（槍騎兵）"
 
 #: data/base/messages/strings/names.txt:532
-#: data/mp/messages/strings/names.txt:539
+#: data/mp/messages/strings/names.txt:540
 msgid "VTOL Tank Killer"
 msgstr "VTOL（坦克殺手）"
 
 #: data/base/messages/strings/names.txt:544
 #: data/base/messages/strings/names.txt:980
-#: data/mp/messages/strings/names.txt:551
-#: data/mp/messages/strings/names.txt:993
+#: data/mp/messages/strings/names.txt:552
+#: data/mp/messages/strings/names.txt:996
 msgid "Tornado Flak Turret"
 msgstr "龍捲風級高射砲"
 
 #: data/base/messages/strings/names.txt:545
 #: data/base/messages/strings/names.txt:981
-#: data/mp/messages/strings/names.txt:552
-#: data/mp/messages/strings/names.txt:994
+#: data/mp/messages/strings/names.txt:553
+#: data/mp/messages/strings/names.txt:997
 msgid "Cyclone Flak Turret"
 msgstr "暴風級高射砲"
 
 #: data/base/messages/strings/names.txt:550
 #: data/base/messages/strings/names.txt:983
-#: data/mp/messages/strings/names.txt:557
-#: data/mp/messages/strings/names.txt:996
+#: data/mp/messages/strings/names.txt:558
+#: data/mp/messages/strings/names.txt:999
 msgid "Whirlwind AA Turret"
 msgstr "旋風級高射砲"
 
 #: data/base/messages/strings/names.txt:551
 #: data/base/messages/strings/names.txt:982
-#: data/mp/messages/strings/names.txt:558
-#: data/mp/messages/strings/names.txt:995
+#: data/mp/messages/strings/names.txt:559
+#: data/mp/messages/strings/names.txt:998
 msgid "Hurricane AA Turret"
 msgstr "颶風級高射砲"
 
@@ -7004,62 +7004,62 @@ msgid "LasSat"
 msgstr "雷射衛星"
 
 #: data/base/messages/strings/names.txt:560
-#: data/mp/messages/strings/names.txt:567
+#: data/mp/messages/strings/names.txt:568
 msgid "VTOL Cannon"
 msgstr "VTOL（輕型加農砲）"
 
 #: data/base/messages/strings/names.txt:561
-#: data/mp/messages/strings/names.txt:568
+#: data/mp/messages/strings/names.txt:569
 msgid "VTOL Hyper Velocity Cannon"
 msgstr "VTOL（高速加農砲）"
 
 #: data/base/messages/strings/names.txt:562
-#: data/mp/messages/strings/names.txt:569
+#: data/mp/messages/strings/names.txt:570
 msgid "VTOL Assault Cannon"
 msgstr "VTOL（突擊加農砲）"
 
 #: data/base/messages/strings/names.txt:563
-#: data/mp/messages/strings/names.txt:570
+#: data/mp/messages/strings/names.txt:571
 msgid "VTOL Pulse Laser"
 msgstr "VTOL（脈衝雷射）"
 
 #: data/base/messages/strings/names.txt:565
-#: data/mp/messages/strings/names.txt:572
+#: data/mp/messages/strings/names.txt:573
 msgid "VTOL Machinegun"
 msgstr "VTOL（機槍）"
 
 #: data/base/messages/strings/names.txt:566
-#: data/mp/messages/strings/names.txt:573
+#: data/mp/messages/strings/names.txt:574
 msgid "VTOL Twin Machinegun"
 msgstr "VTOL（雙管機槍）"
 
 #: data/base/messages/strings/names.txt:567
-#: data/mp/messages/strings/names.txt:574
+#: data/mp/messages/strings/names.txt:575
 msgid "VTOL Heavy Machinegun"
 msgstr "VTOL（重機槍）"
 
 #: data/base/messages/strings/names.txt:568
-#: data/mp/messages/strings/names.txt:575
+#: data/mp/messages/strings/names.txt:576
 msgid "VTOL Assault Gun"
 msgstr "VTOL（突擊槍）"
 
 #: data/base/messages/strings/names.txt:569
-#: data/mp/messages/strings/names.txt:576
+#: data/mp/messages/strings/names.txt:577
 msgid "VTOL Needle Gun"
 msgstr "VTOL（針刺砲）"
 
 #: data/base/messages/strings/names.txt:570
-#: data/mp/messages/strings/names.txt:577
+#: data/mp/messages/strings/names.txt:578
 msgid "VTOL Rail Gun"
 msgstr "VTOL（軌道砲）"
 
 #: data/base/messages/strings/names.txt:572
-#: data/mp/messages/strings/names.txt:579
+#: data/mp/messages/strings/names.txt:580
 msgid "Proximity Bomb Turret"
 msgstr "距離炸彈"
 
 #: data/base/messages/strings/names.txt:573
-#: data/mp/messages/strings/names.txt:580
+#: data/mp/messages/strings/names.txt:581
 msgid "Proximity Superbomb Turret"
 msgstr "超級距離炸彈"
 
@@ -7068,22 +7068,22 @@ msgid "VTOL Cluster Bombs Bay"
 msgstr "VTOL（集束炸彈艙）"
 
 #: data/base/messages/strings/names.txt:576
-#: data/mp/messages/strings/names.txt:583
+#: data/mp/messages/strings/names.txt:584
 msgid "VTOL Heap Bomb Bay"
 msgstr "VTOL（高爆性穿甲炸彈艙）"
 
 #: data/base/messages/strings/names.txt:577
-#: data/mp/messages/strings/names.txt:584
+#: data/mp/messages/strings/names.txt:585
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "VTOL（燐光炸彈艙）"
 
 #: data/base/messages/strings/names.txt:578
-#: data/mp/messages/strings/names.txt:585
+#: data/mp/messages/strings/names.txt:586
 msgid "VTOL Thermite Bomb Bay"
 msgstr "VTOL（鋁熱反應炸彈艙）"
 
 #: data/base/messages/strings/names.txt:581
-#: data/mp/messages/strings/names.txt:588
+#: data/mp/messages/strings/names.txt:589
 msgid "Collective Wall"
 msgstr "Collective鈦鋼筋牆"
 
@@ -7100,307 +7100,307 @@ msgid "NEXUS CWall"
 msgstr "NEXUS鈦鋼筋角牆"
 
 #: data/base/messages/strings/names.txt:623
-#: data/mp/messages/strings/names.txt:630
+#: data/mp/messages/strings/names.txt:631
 msgid "CAM1 RESEARCH"
 msgstr "戰役一：研發"
 
 #: data/base/messages/strings/names.txt:624
-#: data/mp/messages/strings/names.txt:631
+#: data/mp/messages/strings/names.txt:632
 msgid "ADVANCED RESEARCH"
 msgstr "高階研發"
 
 #: data/base/messages/strings/names.txt:625
-#: data/mp/messages/strings/names.txt:632
+#: data/mp/messages/strings/names.txt:633
 msgid "CAM1 VEHICLES"
 msgstr "戰役一：車輛"
 
 #: data/base/messages/strings/names.txt:626
-#: data/mp/messages/strings/names.txt:633
+#: data/mp/messages/strings/names.txt:634
 msgid "CAM1 WEAPONS"
 msgstr "戰役一：武器"
 
 #: data/base/messages/strings/names.txt:627
-#: data/mp/messages/strings/names.txt:634
+#: data/mp/messages/strings/names.txt:635
 msgid "CAM1 SYSTEMS"
 msgstr "戰役一：系統"
 
 #: data/base/messages/strings/names.txt:628
-#: data/mp/messages/strings/names.txt:635
+#: data/mp/messages/strings/names.txt:636
 msgid "CAM1 DEFENSES"
 msgstr "戰役一：防禦"
 
 #: data/base/messages/strings/names.txt:629
-#: data/mp/messages/strings/names.txt:636
+#: data/mp/messages/strings/names.txt:637
 msgid "CAM1 STRUCTURES"
 msgstr "戰役一：建築"
 
 #: data/base/messages/strings/names.txt:630
-#: data/mp/messages/strings/names.txt:637
+#: data/mp/messages/strings/names.txt:638
 msgid "CAM2 RESEARCH"
 msgstr "戰役二：研發"
 
 #: data/base/messages/strings/names.txt:631
-#: data/mp/messages/strings/names.txt:638
+#: data/mp/messages/strings/names.txt:639
 msgid "CAM2 VEHICLES"
 msgstr "戰役二：車輛"
 
 #: data/base/messages/strings/names.txt:632
-#: data/mp/messages/strings/names.txt:639
+#: data/mp/messages/strings/names.txt:640
 msgid "CAM2 CYBORGS"
 msgstr "戰役二：生化人"
 
 #: data/base/messages/strings/names.txt:633
-#: data/mp/messages/strings/names.txt:640
+#: data/mp/messages/strings/names.txt:641
 msgid "CAM2 WEAPONS"
 msgstr "戰役二：武器"
 
 #: data/base/messages/strings/names.txt:634
-#: data/mp/messages/strings/names.txt:641
+#: data/mp/messages/strings/names.txt:642
 msgid "CAM2 SYSTEMS"
 msgstr "戰役二：系統"
 
 #: data/base/messages/strings/names.txt:635
-#: data/mp/messages/strings/names.txt:642
+#: data/mp/messages/strings/names.txt:643
 msgid "CAM2 DEFENSES"
 msgstr "戰役二：防禦"
 
 #: data/base/messages/strings/names.txt:636
-#: data/mp/messages/strings/names.txt:643
+#: data/mp/messages/strings/names.txt:644
 msgid "CAM2 STRUCTURES"
 msgstr "戰役二：建築"
 
 #: data/base/messages/strings/names.txt:638
-#: data/mp/messages/strings/names.txt:645
+#: data/mp/messages/strings/names.txt:646
 msgid "CAM3 RESEARCH"
 msgstr "戰役三：研發"
 
 #: data/base/messages/strings/names.txt:649
-#: data/mp/messages/strings/names.txt:656
+#: data/mp/messages/strings/names.txt:657
 msgid "Synaptic Link"
 msgstr "突觸連結"
 
 #: data/base/messages/strings/names.txt:651
-#: data/mp/messages/strings/names.txt:658
+#: data/mp/messages/strings/names.txt:659
 msgid "Missile Targeting Codes"
 msgstr "第一階導彈密碼"
 
 #: data/base/messages/strings/names.txt:652
-#: data/mp/messages/strings/names.txt:659
+#: data/mp/messages/strings/names.txt:660
 msgid "Second Level Missile Targeting Codes"
 msgstr "第二階導彈密碼"
 
 #: data/base/messages/strings/names.txt:653
-#: data/mp/messages/strings/names.txt:660
+#: data/mp/messages/strings/names.txt:661
 msgid "Third Level Missile Firing Codes"
 msgstr "第三階導彈密碼"
 
 #: data/base/messages/strings/names.txt:655
-#: data/mp/messages/strings/names.txt:662
+#: data/mp/messages/strings/names.txt:663
 msgid "Cyborg Thermal Armor"
 msgstr "生化人熱能裝甲一型"
 
 #: data/base/messages/strings/names.txt:656
-#: data/mp/messages/strings/names.txt:663
+#: data/mp/messages/strings/names.txt:664
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "生化人熱能裝甲二型"
 
 #: data/base/messages/strings/names.txt:657
-#: data/mp/messages/strings/names.txt:664
+#: data/mp/messages/strings/names.txt:665
 msgid "Cyborg Thermal Armor Mk3"
 msgstr "生化人熱能裝甲三型"
 
 #: data/base/messages/strings/names.txt:658
-#: data/mp/messages/strings/names.txt:665
+#: data/mp/messages/strings/names.txt:666
 msgid "Cyborg High Intensity Thermal Armor"
 msgstr "生化人高強度熱能裝甲一型"
 
 #: data/base/messages/strings/names.txt:659
-#: data/mp/messages/strings/names.txt:666
+#: data/mp/messages/strings/names.txt:667
 msgid "Cyborg High Intensity Thermal Armor Mk2"
 msgstr "生化人高強度熱能裝甲二型"
 
 #: data/base/messages/strings/names.txt:660
-#: data/mp/messages/strings/names.txt:667
+#: data/mp/messages/strings/names.txt:668
 msgid "Cyborg High Intensity Thermal Armor Mk3"
 msgstr "生化人高強度熱能裝甲三型"
 
 #: data/base/messages/strings/names.txt:662
-#: data/mp/messages/strings/names.txt:669
+#: data/mp/messages/strings/names.txt:670
 msgid "Cyborg Composite Alloys"
 msgstr "生化人複合合金一型"
 
 #: data/base/messages/strings/names.txt:663
-#: data/mp/messages/strings/names.txt:670
+#: data/mp/messages/strings/names.txt:671
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "生化人複合合金二型"
 
 #: data/base/messages/strings/names.txt:664
-#: data/mp/messages/strings/names.txt:671
+#: data/mp/messages/strings/names.txt:672
 msgid "Cyborg Composite Alloys Mk3"
 msgstr "生化人複合合金三型"
 
 #: data/base/messages/strings/names.txt:665
-#: data/mp/messages/strings/names.txt:672
+#: data/mp/messages/strings/names.txt:673
 msgid "Cyborg Dense Composite Alloys"
 msgstr "生化人緊密合金一型"
 
 #: data/base/messages/strings/names.txt:666
-#: data/mp/messages/strings/names.txt:673
+#: data/mp/messages/strings/names.txt:674
 msgid "Cyborg Dense Composite Alloys Mk2"
 msgstr "生化人緊密合金二型"
 
 #: data/base/messages/strings/names.txt:667
-#: data/mp/messages/strings/names.txt:674
+#: data/mp/messages/strings/names.txt:675
 msgid "Cyborg Dense Composite Alloys Mk3"
 msgstr "生化人緊密合金三型"
 
 #: data/base/messages/strings/names.txt:668
-#: data/mp/messages/strings/names.txt:675
+#: data/mp/messages/strings/names.txt:676
 msgid "Cyborg Superdense Composite Alloys"
 msgstr "生化人高密合金一型"
 
 #: data/base/messages/strings/names.txt:669
-#: data/mp/messages/strings/names.txt:676
+#: data/mp/messages/strings/names.txt:677
 msgid "Cyborg Superdense Composite Alloys Mk2"
 msgstr "生化人高密合金二型"
 
 #: data/base/messages/strings/names.txt:670
-#: data/mp/messages/strings/names.txt:677
+#: data/mp/messages/strings/names.txt:678
 msgid "Cyborg Superdense Composite Alloys Mk3"
 msgstr "生化人高密合金三型"
 
 #: data/base/messages/strings/names.txt:673
-#: data/mp/messages/strings/names.txt:682
+#: data/mp/messages/strings/names.txt:683
 msgid "Bunker Blaster Cyborg"
 msgstr "生化人步兵（碉堡終結者）"
 
 #: data/base/messages/strings/names.txt:674
-#: data/mp/messages/strings/names.txt:683
+#: data/mp/messages/strings/names.txt:684
 msgid "Heavy Gunner Cyborg"
 msgstr "生化人步兵（重機槍）"
 
 #: data/base/messages/strings/names.txt:675
-#: data/mp/messages/strings/names.txt:684
+#: data/mp/messages/strings/names.txt:685
 msgid "Flamer Cyborg"
 msgstr "生化人步兵（火焰噴射）"
 
 #: data/base/messages/strings/names.txt:676
-#: data/mp/messages/strings/names.txt:685
+#: data/mp/messages/strings/names.txt:686
 msgid "Machinegunner Cyborg"
 msgstr "生化人步兵（機槍）"
 
 #: data/base/messages/strings/names.txt:677
-#: data/mp/messages/strings/names.txt:686
+#: data/mp/messages/strings/names.txt:687
 msgid "Lancer Cyborg"
 msgstr "生化人步兵（槍騎兵火箭）"
 
 #: data/base/messages/strings/names.txt:678
-#: data/mp/messages/strings/names.txt:687
+#: data/mp/messages/strings/names.txt:688
 msgid "Assault Gunner Cyborg"
 msgstr "生化人步兵（突擊槍）"
 
 #: data/base/messages/strings/names.txt:679
-#: data/mp/messages/strings/names.txt:688
+#: data/mp/messages/strings/names.txt:689
 msgid "Needle Gunner Cyborg"
 msgstr "生化人步兵（針刺砲）"
 
 #: data/base/messages/strings/names.txt:680
-#: data/mp/messages/strings/names.txt:689
+#: data/mp/messages/strings/names.txt:690
 msgid "Scourge Cyborg"
 msgstr "生化人步兵（天譴飛彈）"
 
 #: data/base/messages/strings/names.txt:681
-#: data/mp/messages/strings/names.txt:690
+#: data/mp/messages/strings/names.txt:691
 msgid "Flashlight Gunner Cyborg"
 msgstr "生化人步兵（激光雷射）"
 
 #: data/base/messages/strings/names.txt:683
-#: data/mp/messages/strings/names.txt:692
+#: data/mp/messages/strings/names.txt:693
 msgid "Jump Bunker Blaster"
 msgstr "跳躍生化人步兵（碉堡終結者）"
 
 #: data/base/messages/strings/names.txt:684
-#: data/mp/messages/strings/names.txt:693
+#: data/mp/messages/strings/names.txt:694
 msgid "Jump Heavy Gunner"
 msgstr "跳躍生化人步兵（重機槍）"
 
 #: data/base/messages/strings/names.txt:685
-#: data/mp/messages/strings/names.txt:694
+#: data/mp/messages/strings/names.txt:695
 msgid "Jump Lancer"
 msgstr "跳躍生化人步兵（槍騎兵火箭）"
 
 #: data/base/messages/strings/names.txt:686
-#: data/mp/messages/strings/names.txt:695
+#: data/mp/messages/strings/names.txt:696
 msgid "Jump Assault Gunner"
 msgstr "跳躍生化人步兵（突擊槍）"
 
 #: data/base/messages/strings/names.txt:687
-#: data/mp/messages/strings/names.txt:696
+#: data/mp/messages/strings/names.txt:697
 msgid "Jump Needle Gunner"
 msgstr "跳躍生化人步兵（針刺砲）"
 
 #: data/base/messages/strings/names.txt:688
-#: data/mp/messages/strings/names.txt:697
+#: data/mp/messages/strings/names.txt:698
 msgid "Jump Scourge"
 msgstr "跳躍生化人步兵（天譴飛彈）"
 
 #: data/base/messages/strings/names.txt:689
-#: data/mp/messages/strings/names.txt:698
+#: data/mp/messages/strings/names.txt:699
 msgid "Jump Flashlight Gunner"
 msgstr "跳躍生化人步兵（激光雷射砲）"
 
 #: data/base/messages/strings/names.txt:691
-#: data/mp/messages/strings/names.txt:700
+#: data/mp/messages/strings/names.txt:701
 msgid "Cyborg Jump Pack"
 msgstr "生化人步兵跳躍背包"
 
 #: data/base/messages/strings/names.txt:697
-#: data/mp/messages/strings/names.txt:706
+#: data/mp/messages/strings/names.txt:707
 msgid "Hardcrete"
 msgstr "鈦鋼筋牆"
 
 #: data/base/messages/strings/names.txt:699
-#: data/mp/messages/strings/names.txt:708
+#: data/mp/messages/strings/names.txt:709
 msgid "NP-Hardcrete"
 msgstr "NP-鈦鋼筋牆"
 
 #: data/base/messages/strings/names.txt:701
-#: data/mp/messages/strings/names.txt:710
+#: data/mp/messages/strings/names.txt:711
 msgid "Improved Hardcrete"
 msgstr "改良鈦鋼筋牆一型"
 
 #: data/base/messages/strings/names.txt:702
-#: data/mp/messages/strings/names.txt:711
+#: data/mp/messages/strings/names.txt:712
 msgid "Improved Hardcrete Mk2"
 msgstr "改良鈦鋼筋牆二型"
 
 #: data/base/messages/strings/names.txt:703
-#: data/mp/messages/strings/names.txt:712
+#: data/mp/messages/strings/names.txt:713
 msgid "Improved Hardcrete Mk3"
 msgstr "改良鈦鋼筋牆三型"
 
 #: data/base/messages/strings/names.txt:704
-#: data/mp/messages/strings/names.txt:713
+#: data/mp/messages/strings/names.txt:714
 msgid "Supercrete"
 msgstr "硼合金鋼筋牆一型"
 
 #: data/base/messages/strings/names.txt:705
-#: data/mp/messages/strings/names.txt:714
+#: data/mp/messages/strings/names.txt:715
 msgid "Supercrete Mk2"
 msgstr "硼合金鋼筋牆二型"
 
 #: data/base/messages/strings/names.txt:706
-#: data/mp/messages/strings/names.txt:715
+#: data/mp/messages/strings/names.txt:716
 msgid "Supercrete Mk3"
 msgstr "硼合金鋼筋牆三型"
 
 #: data/base/messages/strings/names.txt:707
-#: data/mp/messages/strings/names.txt:716
+#: data/mp/messages/strings/names.txt:717
 msgid "Plascrete"
 msgstr "超合金鋼筋牆一型"
 
 #: data/base/messages/strings/names.txt:708
-#: data/mp/messages/strings/names.txt:717
+#: data/mp/messages/strings/names.txt:718
 msgid "Plascrete Mk2"
 msgstr "超合金鋼筋牆二型"
 
@@ -7415,15 +7415,15 @@ msgstr "高速加農砲砲台"
 
 #: data/base/messages/strings/names.txt:720
 #: data/base/messages/strings/names.txt:1371
-#: data/mp/messages/strings/names.txt:731
-#: data/mp/messages/strings/names.txt:1387
+#: data/mp/messages/strings/names.txt:734
+#: data/mp/messages/strings/names.txt:1390
 msgid "Tank Killer Emplacement"
 msgstr "坦克殺手砲台"
 
 #: data/base/messages/strings/names.txt:723
 #: data/base/messages/strings/names.txt:1452
-#: data/mp/messages/strings/names.txt:734
-#: data/mp/messages/strings/names.txt:1468
+#: data/mp/messages/strings/names.txt:737
+#: data/mp/messages/strings/names.txt:1471
 msgid "Bombard Pit"
 msgstr "重裝迫擊砲坑"
 
@@ -7432,55 +7432,55 @@ msgid "Angel Missile Battery"
 msgstr "天使飛彈砲台"
 
 #: data/base/messages/strings/names.txt:729
-#: data/mp/messages/strings/names.txt:740
+#: data/mp/messages/strings/names.txt:743
 msgid "Archangel Missile Battery"
 msgstr "大天使飛彈砲台"
 
 #: data/base/messages/strings/names.txt:730
 #: data/base/messages/strings/names.txt:1216
-#: data/mp/messages/strings/names.txt:741
-#: data/mp/messages/strings/names.txt:1232
+#: data/mp/messages/strings/names.txt:744
+#: data/mp/messages/strings/names.txt:1235
 msgid "Mortar Pit"
 msgstr "迫擊砲砲坑"
 
 #: data/base/messages/strings/names.txt:731
-#: data/mp/messages/strings/names.txt:742
-#: data/mp/messages/strings/names.txt:1384
+#: data/mp/messages/strings/names.txt:745
+#: data/mp/messages/strings/names.txt:1387
 msgid "Mini-Rocket Battery"
 msgstr "迷你火箭炮"
 
 #: data/base/messages/strings/names.txt:738
 #: data/base/messages/strings/names.txt:1374
-#: data/mp/messages/strings/names.txt:1390
+#: data/mp/messages/strings/names.txt:1393
 msgid "Pulse Laser Emplacement"
 msgstr "脈衝雷射砲台"
 
 #: data/base/messages/strings/names.txt:742
-#: data/mp/messages/strings/names.txt:753
+#: data/mp/messages/strings/names.txt:756
 msgid "Rail Gun Emplacement"
 msgstr "軌道砲砲台"
 
 #: data/base/messages/strings/names.txt:744
-#: data/mp/messages/strings/names.txt:755
+#: data/mp/messages/strings/names.txt:758
 msgid "Assault Cannon Emplacement"
 msgstr "突擊加農砲砲台"
 
 #: data/base/messages/strings/names.txt:746
-#: data/mp/messages/strings/names.txt:425
+#: data/mp/messages/strings/names.txt:426
 msgid "Assault Gun Emplacement"
 msgstr "突擊槍砲台"
 
 #: data/base/messages/strings/names.txt:749
 #: data/base/messages/strings/names.txt:1363
-#: data/mp/messages/strings/names.txt:760
-#: data/mp/messages/strings/names.txt:1379
+#: data/mp/messages/strings/names.txt:763
+#: data/mp/messages/strings/names.txt:1382
 msgid "Avenger SAM Site"
 msgstr "復仇者級地對空飛彈砲台"
 
 #: data/base/messages/strings/names.txt:750
 #: data/base/messages/strings/names.txt:1364
-#: data/mp/messages/strings/names.txt:761
-#: data/mp/messages/strings/names.txt:1380
+#: data/mp/messages/strings/names.txt:764
+#: data/mp/messages/strings/names.txt:1383
 msgid "Vindicator SAM Site"
 msgstr "擁護者級地對空飛彈砲台"
 
@@ -7499,15 +7499,15 @@ msgstr "迷你火箭防衛塔"
 
 #: data/base/messages/strings/names.txt:772
 #: data/base/messages/strings/names.txt:1382
-#: data/mp/messages/strings/names.txt:783
-#: data/mp/messages/strings/names.txt:1398
+#: data/mp/messages/strings/names.txt:786
+#: data/mp/messages/strings/names.txt:1401
 msgid "Scourge Missile Hardpoint"
 msgstr "天譴飛彈要塞"
 
 #: data/base/messages/strings/names.txt:774
 #: data/base/messages/strings/names.txt:1380
-#: data/mp/messages/strings/names.txt:785
-#: data/mp/messages/strings/names.txt:1396
+#: data/mp/messages/strings/names.txt:788
+#: data/mp/messages/strings/names.txt:1399
 msgid "Tank Killer Hardpoint"
 msgstr "坦克殺手要塞"
 
@@ -7518,49 +7518,49 @@ msgstr "高速加農砲要塞"
 
 #: data/base/messages/strings/names.txt:778
 #: data/base/messages/strings/names.txt:1383
-#: data/mp/messages/strings/names.txt:789
-#: data/mp/messages/strings/names.txt:1399
+#: data/mp/messages/strings/names.txt:792
+#: data/mp/messages/strings/names.txt:1402
 msgid "Gauss Cannon Hardpoint"
 msgstr "高斯加農砲要塞"
 
 #: data/base/messages/strings/names.txt:780
-#: data/mp/messages/strings/names.txt:791
+#: data/mp/messages/strings/names.txt:794
 msgid "Command Relay Post"
 msgstr "命令傳遞基地"
 
 #: data/base/messages/strings/names.txt:784
-#: data/mp/messages/strings/names.txt:795
+#: data/mp/messages/strings/names.txt:798
 msgid "Automated Cyborg Production Mk2"
 msgstr "初階自動化生化人生產二型"
 
 #: data/base/messages/strings/names.txt:785
-#: data/mp/messages/strings/names.txt:796
+#: data/mp/messages/strings/names.txt:799
 msgid "Automated Cyborg Production Mk3"
 msgstr "初階自動化生化人生產三型"
 
 #: data/base/messages/strings/names.txt:787
-#: data/mp/messages/strings/names.txt:798
+#: data/mp/messages/strings/names.txt:801
 msgid "Robotic Cyborg Production Mk2"
 msgstr "中階自動化生化人生產二型"
 
 #: data/base/messages/strings/names.txt:788
-#: data/mp/messages/strings/names.txt:799
+#: data/mp/messages/strings/names.txt:802
 msgid "Robotic Cyborg Production Mk3"
 msgstr "中階自動化生化人生產三型"
 
 #: data/base/messages/strings/names.txt:789
 #: data/mp/messages/resmessagesall.rmsg:798
-#: data/mp/messages/strings/names.txt:800
+#: data/mp/messages/strings/names.txt:803
 msgid "Advanced Cyborg Production"
 msgstr "高階自動化生化人生產一型"
 
 #: data/base/messages/strings/names.txt:790
-#: data/mp/messages/strings/names.txt:801
+#: data/mp/messages/strings/names.txt:804
 msgid "Advanced Cyborg Production Mk2"
 msgstr "高階自動化生化人生產二型"
 
 #: data/base/messages/strings/names.txt:791
-#: data/mp/messages/strings/names.txt:802
+#: data/mp/messages/strings/names.txt:805
 msgid "Advanced Cyborg Production Mk3"
 msgstr "高階自動化生化人生產三型"
 
@@ -7598,54 +7598,54 @@ msgid "Advanced Factory Production Mk3"
 msgstr "高階自動化生產工廠三型"
 
 #: data/base/messages/strings/names.txt:806
-#: data/mp/messages/strings/names.txt:817
+#: data/mp/messages/strings/names.txt:820
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "初階強化建材二型"
 
 #: data/base/messages/strings/names.txt:807
-#: data/mp/messages/strings/names.txt:818
+#: data/mp/messages/strings/names.txt:821
 msgid "Reinforced Base Structure Materials Mk3"
 msgstr "初階強化建材三型"
 
 #: data/base/messages/strings/names.txt:809
-#: data/mp/messages/strings/names.txt:820
+#: data/mp/messages/strings/names.txt:823
 msgid "Hardened Base Structure Materials Mk2"
 msgstr "中階強化建材二型"
 
 #: data/base/messages/strings/names.txt:810
-#: data/mp/messages/strings/names.txt:821
+#: data/mp/messages/strings/names.txt:824
 msgid "Hardened Base Structure Materials Mk3"
 msgstr "中階強化建材三型"
 
 #: data/base/messages/strings/names.txt:812
-#: data/mp/messages/strings/names.txt:823
+#: data/mp/messages/strings/names.txt:826
 msgid "Advanced Base Structure Materials Mk2"
 msgstr "高階強化建材二型"
 
 #: data/base/messages/strings/names.txt:813
-#: data/mp/messages/strings/names.txt:824
+#: data/mp/messages/strings/names.txt:827
 msgid "Advanced Base Structure Materials Mk3"
 msgstr "高階強化建材二型"
 
 #: data/base/messages/strings/names.txt:817
-#: data/mp/messages/strings/names.txt:828
+#: data/mp/messages/strings/names.txt:831
 msgid "Gas Turbine Generator"
 msgstr "燃氣渦輪發電機一型"
 
 #: data/base/messages/strings/names.txt:818
-#: data/mp/messages/strings/names.txt:829
+#: data/mp/messages/strings/names.txt:832
 msgid "Vapor Turbine Generator"
 msgstr "蒸氣渦輪發電機一型"
 
 #: data/base/messages/strings/names.txt:820
 #: data/base/messages/strings/names.txt:1449
-#: data/mp/messages/strings/names.txt:831
-#: data/mp/messages/strings/names.txt:1465
+#: data/mp/messages/strings/names.txt:834
+#: data/mp/messages/strings/names.txt:1468
 msgid "Repair Facility"
 msgstr "修理工廠"
 
 #: data/base/messages/strings/names.txt:821
-#: data/mp/messages/strings/names.txt:832
+#: data/mp/messages/strings/names.txt:835
 msgid "Automated Repair Facility"
 msgstr "初階自動修理工廠"
 
@@ -7682,172 +7682,172 @@ msgid "Advanced Repair Facility Upgrade Mk3"
 msgstr "高階自動修理工廠三型"
 
 #: data/base/messages/strings/names.txt:832
-#: data/mp/messages/strings/names.txt:843
+#: data/mp/messages/strings/names.txt:846
 msgid "Synaptic Link Data Analysis"
 msgstr "突觸連結資料分析一型"
 
 #: data/base/messages/strings/names.txt:833
-#: data/mp/messages/strings/names.txt:844
+#: data/mp/messages/strings/names.txt:847
 msgid "Synaptic Link Data Analysis Mk2"
 msgstr "突觸連結資料分析二型"
 
 #: data/base/messages/strings/names.txt:834
-#: data/mp/messages/strings/names.txt:845
+#: data/mp/messages/strings/names.txt:848
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "突觸連結資料分析三型"
 
 #: data/base/messages/strings/names.txt:836
-#: data/mp/messages/strings/names.txt:847
+#: data/mp/messages/strings/names.txt:850
 msgid "Dedicated Synaptic Link Data Analysis Mk2"
 msgstr "專注突觸連結資料分析二型"
 
 #: data/base/messages/strings/names.txt:837
-#: data/mp/messages/strings/names.txt:848
+#: data/mp/messages/strings/names.txt:851
 msgid "Dedicated Synaptic Link Data Analysis Mk3"
 msgstr "專注突觸連結資料分析三型"
 
 #: data/base/messages/strings/names.txt:839
-#: data/mp/messages/strings/names.txt:850
+#: data/mp/messages/strings/names.txt:853
 msgid "Neural Synapse Research Brain Mk2"
 msgstr "神經突觸智慧研究二型"
 
 #: data/base/messages/strings/names.txt:840
-#: data/mp/messages/strings/names.txt:851
+#: data/mp/messages/strings/names.txt:854
 msgid "Neural Synapse Research Brain Mk3"
 msgstr "神經突觸智慧研究三型"
 
 #: data/base/messages/strings/names.txt:844
-#: data/mp/messages/strings/names.txt:855
+#: data/mp/messages/strings/names.txt:858
 msgid "Automated VTOL Rearming Mk2"
 msgstr "初階自動化VTOL補給二型"
 
 #: data/base/messages/strings/names.txt:845
-#: data/mp/messages/strings/names.txt:856
+#: data/mp/messages/strings/names.txt:859
 msgid "Automated VTOL Rearming Mk3"
 msgstr "初階自動化VTOL補給三型"
 
 #: data/base/messages/strings/names.txt:847
-#: data/mp/messages/strings/names.txt:858
+#: data/mp/messages/strings/names.txt:861
 msgid "Robotic VTOL Rearming Mk2"
 msgstr "中階自動化VTOL補給二型"
 
 #: data/base/messages/strings/names.txt:848
-#: data/mp/messages/strings/names.txt:859
+#: data/mp/messages/strings/names.txt:862
 msgid "Robotic VTOL Rearming Mk3"
 msgstr "中階自動化VTOL補給三型"
 
 #: data/base/messages/strings/names.txt:849
-#: data/mp/messages/strings/names.txt:860
+#: data/mp/messages/strings/names.txt:863
 msgid "Robotic VTOL Rearming Mk4"
 msgstr "中階自動化VTOL補給四型"
 
 #: data/base/messages/strings/names.txt:852
-#: data/mp/messages/strings/names.txt:863
+#: data/mp/messages/strings/names.txt:866
 msgid "Robotic VTOL Production Mk2"
 msgstr "中階自動化VTOL生產二型"
 
 #: data/base/messages/strings/names.txt:853
-#: data/mp/messages/strings/names.txt:864
+#: data/mp/messages/strings/names.txt:867
 msgid "Robotic VTOL Production Mk3"
 msgstr "中階自動化VTOL生產三型"
 
 #: data/base/messages/strings/names.txt:855
-#: data/mp/messages/strings/names.txt:866
+#: data/mp/messages/strings/names.txt:869
 msgid "Advanced VTOL Production Mk2"
 msgstr "高階自動化VTOL生產二型"
 
 #: data/base/messages/strings/names.txt:856
-#: data/mp/messages/strings/names.txt:867
+#: data/mp/messages/strings/names.txt:870
 msgid "Advanced VTOL Production Mk3"
 msgstr "高階自動化VTOL生產三型"
 
 #: data/base/messages/strings/names.txt:858
-#: data/mp/messages/strings/names.txt:869
+#: data/mp/messages/strings/names.txt:872
 msgid "Cyborg Self-Repair"
 msgstr "生化人步兵自我修復"
 
 #: data/base/messages/strings/names.txt:859
-#: data/mp/messages/strings/names.txt:870
+#: data/mp/messages/strings/names.txt:873
 msgid "Automated Cyborg Repair Mk2"
 msgstr "自動化生化人修護二型"
 
 #: data/base/messages/strings/names.txt:860
-#: data/mp/messages/strings/names.txt:871
+#: data/mp/messages/strings/names.txt:874
 msgid "Automated Cyborg Repair Mk3"
 msgstr "自動化生化人修護三型"
 
 #: data/base/messages/strings/names.txt:862
-#: data/mp/messages/strings/names.txt:873
+#: data/mp/messages/strings/names.txt:876
 msgid "Defenses Self-Repair"
 msgstr "防禦工事自我修復"
 
 #: data/base/messages/strings/names.txt:863
-#: data/mp/messages/strings/names.txt:874
+#: data/mp/messages/strings/names.txt:877
 msgid "Automated Defenses Repair Mk2"
 msgstr "自動化防禦工事修護二型"
 
 #: data/base/messages/strings/names.txt:864
-#: data/mp/messages/strings/names.txt:875
+#: data/mp/messages/strings/names.txt:878
 msgid "Automated Defenses Repair Mk3"
 msgstr "自動化防禦工事修護三型"
 
 #: data/base/messages/strings/names.txt:866
-#: data/mp/messages/strings/names.txt:877
+#: data/mp/messages/strings/names.txt:880
 msgid "Base Structure Self-Repair"
 msgstr "基礎建築自動修護"
 
 #: data/base/messages/strings/names.txt:867
-#: data/mp/messages/strings/names.txt:878
+#: data/mp/messages/strings/names.txt:881
 msgid "Automated Base Structure Repair Mk2"
 msgstr "自動化基礎建築修護二型"
 
 #: data/base/messages/strings/names.txt:868
-#: data/mp/messages/strings/names.txt:879
+#: data/mp/messages/strings/names.txt:882
 msgid "Automated Base Structure Repair Mk3"
 msgstr "自動化基礎建築修護三型"
 
 #: data/base/messages/strings/names.txt:870
-#: data/mp/messages/strings/names.txt:881
+#: data/mp/messages/strings/names.txt:884
 msgid "Vehicle Self-Repair"
 msgstr "車輛自我修復"
 
 #: data/base/messages/strings/names.txt:871
-#: data/mp/messages/strings/names.txt:882
+#: data/mp/messages/strings/names.txt:885
 msgid "Automated Vehicle Repair Mk2"
 msgstr "自動化車輛修護二型"
 
 #: data/base/messages/strings/names.txt:872
-#: data/mp/messages/strings/names.txt:883
+#: data/mp/messages/strings/names.txt:886
 msgid "Automated Vehicle Repair Mk3"
 msgstr "自動化車輛修護三型"
 
 #: data/base/messages/strings/names.txt:874
-#: data/mp/messages/strings/names.txt:887
+#: data/mp/messages/strings/names.txt:890
 msgid "Sensor Upgrade"
 msgstr "雷達升級一型"
 
 #: data/base/messages/strings/names.txt:876
-#: data/mp/messages/strings/names.txt:889
+#: data/mp/messages/strings/names.txt:892
 msgid "Construction Unit"
 msgstr "建築單位"
 
 #: data/base/messages/strings/names.txt:878
-#: data/mp/messages/strings/names.txt:891
+#: data/mp/messages/strings/names.txt:894
 msgid "Engineering"
 msgstr "初階工程科技"
 
 #: data/base/messages/strings/names.txt:879
-#: data/mp/messages/strings/names.txt:892
+#: data/mp/messages/strings/names.txt:895
 msgid "Improved Engineering"
 msgstr "中階工程科技"
 
 #: data/base/messages/strings/names.txt:880
-#: data/mp/messages/strings/names.txt:893
+#: data/mp/messages/strings/names.txt:896
 msgid "Advanced Engineering"
 msgstr "高階工程科技"
 
 #: data/base/messages/strings/names.txt:882
-#: data/mp/messages/strings/names.txt:895
+#: data/mp/messages/strings/names.txt:898
 msgid "Mobile Repair Turret"
 msgstr "移動修理車"
 
@@ -7857,84 +7857,84 @@ msgstr "重型移動修理車"
 
 #: data/base/messages/strings/names.txt:884
 #: data/base/messages/strings/resstrings.txt:450
-#: data/mp/messages/strings/names.txt:897
+#: data/mp/messages/strings/names.txt:900
 #: data/mp/messages/strings/resstrings.txt:478
 msgid "Mobile Repair Upgrade"
 msgstr "移動修理車升級"
 
 #: data/base/messages/strings/names.txt:885
-#: data/mp/messages/strings/names.txt:898
+#: data/mp/messages/strings/names.txt:901
 msgid "Mobile Repair Upgrade Mk2"
 msgstr "移動修理車升級二型"
 
 #: data/base/messages/strings/names.txt:891
-#: data/mp/messages/strings/names.txt:904
+#: data/mp/messages/strings/names.txt:907
 msgid "CB Turret"
 msgstr "反砲兵雷達"
 
 #: data/base/messages/strings/names.txt:893
-#: data/mp/messages/strings/names.txt:906
+#: data/mp/messages/strings/names.txt:909
 msgid "CB Sensor Upgrade"
 msgstr "反砲兵雷達升級"
 
 #: data/base/messages/strings/names.txt:894
-#: data/mp/messages/strings/names.txt:907
+#: data/mp/messages/strings/names.txt:910
 msgid "CB Sensor Upgrade 2"
 msgstr "反砲兵雷達升級二型"
 
 #: data/base/messages/strings/names.txt:895
-#: data/mp/messages/strings/names.txt:908
+#: data/mp/messages/strings/names.txt:911
 msgid "CB Sensor Upgrade 3"
 msgstr "反砲兵雷達升級三型"
 
 #: data/base/messages/strings/names.txt:897
-#: data/mp/messages/strings/names.txt:910
+#: data/mp/messages/strings/names.txt:913
 msgid "VTOL CB Turret"
 msgstr "VTOL反砲兵雷達"
 
 #: data/base/messages/strings/names.txt:900
-#: data/mp/messages/strings/names.txt:913
+#: data/mp/messages/strings/names.txt:916
 msgid "VTOL CB Upgrade"
 msgstr "VTOL反砲兵雷達"
 
 #: data/base/messages/strings/names.txt:901
-#: data/mp/messages/strings/names.txt:914
+#: data/mp/messages/strings/names.txt:917
 msgid "VTOL CB Upgrade 2"
 msgstr "VTOL反砲兵雷達二型"
 
 #: data/base/messages/strings/names.txt:902
-#: data/mp/messages/strings/names.txt:915
+#: data/mp/messages/strings/names.txt:918
 msgid "VTOL CB Upgrade 3"
 msgstr "VTOL反砲兵雷達三型"
 
 #: data/base/messages/strings/names.txt:903
-#: data/mp/messages/strings/names.txt:916
+#: data/mp/messages/strings/names.txt:919
 msgid "VTOL Strike Upgrade"
 msgstr "VTOL攻擊升級"
 
 #: data/base/messages/strings/names.txt:904
-#: data/mp/messages/strings/names.txt:917
+#: data/mp/messages/strings/names.txt:920
 msgid "VTOL Strike Upgrade Mk2"
 msgstr "VTOL攻擊升級二型"
 
 #: data/base/messages/strings/names.txt:905
-#: data/mp/messages/strings/names.txt:918
+#: data/mp/messages/strings/names.txt:921
 msgid "VTOL Strike Upgrade Mk3"
 msgstr "VTOL攻擊升級三型"
 
 #: data/base/messages/strings/names.txt:907
-#: data/mp/messages/strings/names.txt:435
-#: data/mp/messages/strings/names.txt:920
+#: data/mp/messages/strings/names.txt:436
+#: data/mp/messages/strings/names.txt:923
 msgid "VTOL Strike Tower"
 msgstr "VTOL攻擊雷達"
 
 #: data/base/messages/strings/names.txt:910
-#: data/mp/messages/strings/names.txt:923
+#: data/mp/messages/strings/names.txt:926
 msgid "Improved Scrambler"
 msgstr "改善的擾頻器"
 
 #: data/base/messages/strings/names.txt:911
-#: data/mp/messages/strings/names.txt:924
+#: data/mp/messages/strings/names.txt:927
 msgid "Scrambler Turret Mk2"
 msgstr "擾頻器二型"
 
@@ -7955,292 +7955,292 @@ msgid "NEXUS Resistance Circuits Mk3"
 msgstr "NEXUS阻抗迴路三型"
 
 #: data/base/messages/strings/names.txt:918
-#: data/mp/messages/strings/names.txt:931
+#: data/mp/messages/strings/names.txt:934
 msgid "Sensor Lock"
 msgstr "雷達鎖定"
 
 #: data/base/messages/strings/names.txt:922
-#: data/mp/messages/strings/names.txt:935
+#: data/mp/messages/strings/names.txt:938
 msgid "Thermal Armor"
 msgstr "熱能裝甲一型"
 
 #: data/base/messages/strings/names.txt:923
-#: data/mp/messages/strings/names.txt:936
+#: data/mp/messages/strings/names.txt:939
 msgid "Thermal Armor Mk2"
 msgstr "熱能裝甲二型"
 
 #: data/base/messages/strings/names.txt:924
-#: data/mp/messages/strings/names.txt:937
+#: data/mp/messages/strings/names.txt:940
 msgid "Thermal Armor Mk3"
 msgstr "熱能裝甲三型"
 
 #: data/base/messages/strings/names.txt:925
-#: data/mp/messages/strings/names.txt:938
+#: data/mp/messages/strings/names.txt:941
 msgid "High Intensity Thermal Armor"
 msgstr "高強度熱能裝甲一型"
 
 #: data/base/messages/strings/names.txt:926
-#: data/mp/messages/strings/names.txt:939
+#: data/mp/messages/strings/names.txt:942
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "高強度熱能裝甲二型"
 
 #: data/base/messages/strings/names.txt:927
-#: data/mp/messages/strings/names.txt:940
+#: data/mp/messages/strings/names.txt:943
 msgid "High Intensity Thermal Armor Mk3"
 msgstr "高強度熱能裝甲三型"
 
 #: data/base/messages/strings/names.txt:929
-#: data/mp/messages/strings/names.txt:942
+#: data/mp/messages/strings/names.txt:945
 msgid "Light Body - Viper"
 msgstr "輕量級車身：響尾蛇"
 
 #: data/base/messages/strings/names.txt:930
-#: data/mp/messages/strings/names.txt:943
+#: data/mp/messages/strings/names.txt:946
 msgid "Light Body - Leopard"
 msgstr "輕量級車身：美洲豹"
 
 #: data/base/messages/strings/names.txt:931
-#: data/mp/messages/strings/names.txt:944
+#: data/mp/messages/strings/names.txt:947
 msgid "Light Body - Retaliation"
 msgstr "輕量級車身：報復者"
 
 #: data/base/messages/strings/names.txt:932
-#: data/mp/messages/strings/names.txt:945
+#: data/mp/messages/strings/names.txt:948
 msgid "Light Body - Bug"
 msgstr "輕量級車身：毒蟲"
 
 #: data/base/messages/strings/names.txt:933
-#: data/mp/messages/strings/names.txt:946
+#: data/mp/messages/strings/names.txt:949
 msgid "Medium Body - Cobra"
 msgstr "中量級車身：眼鏡蛇"
 
 #: data/base/messages/strings/names.txt:934
-#: data/mp/messages/strings/names.txt:947
+#: data/mp/messages/strings/names.txt:950
 msgid "Medium Body - Panther"
 msgstr "中量級車身：黑豹"
 
 #: data/base/messages/strings/names.txt:935
-#: data/mp/messages/strings/names.txt:948
+#: data/mp/messages/strings/names.txt:951
 msgid "Medium Body - Retribution"
 msgstr "中量級車身：懲罰者"
 
 #: data/base/messages/strings/names.txt:936
-#: data/mp/messages/strings/names.txt:949
+#: data/mp/messages/strings/names.txt:952
 msgid "Medium Body - Scorpion"
 msgstr "中量級車身：毒蠍"
 
 #: data/base/messages/strings/names.txt:937
-#: data/mp/messages/strings/names.txt:950
+#: data/mp/messages/strings/names.txt:953
 msgid "Heavy Body - Tiger"
 msgstr "重量級車身：虎式"
 
 #: data/base/messages/strings/names.txt:938
-#: data/mp/messages/strings/names.txt:951
+#: data/mp/messages/strings/names.txt:954
 msgid "Heavy Body - Vengeance"
 msgstr "重量級車身：復仇者"
 
 #: data/base/messages/strings/names.txt:939
-#: data/mp/messages/strings/names.txt:952
+#: data/mp/messages/strings/names.txt:955
 msgid "Heavy Body - Python"
 msgstr "重量級車身：蟒蛇"
 
 #: data/base/messages/strings/names.txt:940
-#: data/mp/messages/strings/names.txt:953
+#: data/mp/messages/strings/names.txt:956
 msgid "Heavy Body - Mantis"
 msgstr "重量級車身：螳螂"
 
 #: data/base/messages/strings/names.txt:943
-#: data/mp/messages/strings/names.txt:956
+#: data/mp/messages/strings/names.txt:959
 msgid "Fuel Injection Engine Mk2"
 msgstr "燃油噴射引擎二型"
 
 #: data/base/messages/strings/names.txt:944
-#: data/mp/messages/strings/names.txt:957
+#: data/mp/messages/strings/names.txt:960
 msgid "Fuel Injection Engine Mk3"
 msgstr "燃油噴射引擎三型"
 
 #: data/base/messages/strings/names.txt:946
-#: data/mp/messages/strings/names.txt:959
+#: data/mp/messages/strings/names.txt:962
 msgid "Turbo-Charged Engine Mk2"
 msgstr "渦輪增壓引擎二型"
 
 #: data/base/messages/strings/names.txt:947
-#: data/mp/messages/strings/names.txt:960
+#: data/mp/messages/strings/names.txt:963
 msgid "Turbo-Charged Engine Mk3"
 msgstr "渦輪增壓引擎三型"
 
 #: data/base/messages/strings/names.txt:949
-#: data/mp/messages/strings/names.txt:962
+#: data/mp/messages/strings/names.txt:965
 msgid "Gas Turbine Engine Mk2"
 msgstr "燃氣渦輪增壓引擎二型"
 
 #: data/base/messages/strings/names.txt:950
-#: data/mp/messages/strings/names.txt:963
+#: data/mp/messages/strings/names.txt:966
 msgid "Gas Turbine Engine Mk3"
 msgstr "燃氣渦輪增壓引擎三型"
 
 #: data/base/messages/strings/names.txt:953
-#: data/mp/messages/strings/names.txt:966
+#: data/mp/messages/strings/names.txt:969
 msgid "Composite Alloys"
 msgstr "複合合金一型"
 
 #: data/base/messages/strings/names.txt:954
-#: data/mp/messages/strings/names.txt:967
+#: data/mp/messages/strings/names.txt:970
 msgid "Composite Alloys Mk2"
 msgstr "複合合金二型"
 
 #: data/base/messages/strings/names.txt:955
-#: data/mp/messages/strings/names.txt:968
+#: data/mp/messages/strings/names.txt:971
 msgid "Composite Alloys Mk3"
 msgstr "複合合金三型"
 
 #: data/base/messages/strings/names.txt:956
-#: data/mp/messages/strings/names.txt:969
+#: data/mp/messages/strings/names.txt:972
 msgid "Dense Composite Alloys"
 msgstr "緊密合金一型"
 
 #: data/base/messages/strings/names.txt:957
-#: data/mp/messages/strings/names.txt:970
+#: data/mp/messages/strings/names.txt:973
 msgid "Dense Composite Alloys Mk2"
 msgstr "緊密合金二型"
 
 #: data/base/messages/strings/names.txt:958
-#: data/mp/messages/strings/names.txt:971
+#: data/mp/messages/strings/names.txt:974
 msgid "Dense Composite Alloys Mk3"
 msgstr "緊密合金三型"
 
 #: data/base/messages/strings/names.txt:959
-#: data/mp/messages/strings/names.txt:972
+#: data/mp/messages/strings/names.txt:975
 msgid "Superdense Composite Alloys"
 msgstr "高密合金一型"
 
 #: data/base/messages/strings/names.txt:960
-#: data/mp/messages/strings/names.txt:973
+#: data/mp/messages/strings/names.txt:976
 msgid "Superdense Composite Alloys Mk2"
 msgstr "高密合金二型"
 
 #: data/base/messages/strings/names.txt:961
-#: data/mp/messages/strings/names.txt:974
+#: data/mp/messages/strings/names.txt:977
 msgid "Superdense Composite Alloys Mk3"
 msgstr "高密合金三型"
 
 #: data/base/messages/strings/names.txt:964
-#: data/mp/messages/strings/names.txt:977
+#: data/mp/messages/strings/names.txt:980
 msgid "Hover Propulsion"
 msgstr "推進動力：氣墊船"
 
 #: data/base/messages/strings/names.txt:965
-#: data/mp/messages/strings/names.txt:978
+#: data/mp/messages/strings/names.txt:981
 msgid "Hover Propulsion II"
 msgstr "推進動力：氣墊船二型"
 
 #: data/base/messages/strings/names.txt:967
-#: data/mp/messages/strings/names.txt:980
+#: data/mp/messages/strings/names.txt:983
 msgid "Half-tracked Propulsion"
 msgstr "推進動力：半履帶"
 
 #: data/base/messages/strings/names.txt:968
-#: data/mp/messages/strings/names.txt:981
+#: data/mp/messages/strings/names.txt:984
 msgid "Half-tracked Propulsion II"
 msgstr "推進動力：半履帶二型"
 
 #: data/base/messages/strings/names.txt:970
-#: data/mp/messages/strings/names.txt:983
+#: data/mp/messages/strings/names.txt:986
 msgid "Tracked Propulsion"
 msgstr "推進動力：履帶"
 
 #: data/base/messages/strings/names.txt:971
-#: data/mp/messages/strings/names.txt:984
+#: data/mp/messages/strings/names.txt:987
 msgid "Tracked Propulsion II"
 msgstr "推進動力：履帶二型"
 
 #: data/base/messages/strings/names.txt:973
-#: data/mp/messages/strings/names.txt:986
+#: data/mp/messages/strings/names.txt:989
 msgid "VTOL Propulsion"
 msgstr "推進動力：垂直起降飛行器（VTOL）"
 
 #: data/base/messages/strings/names.txt:974
-#: data/mp/messages/strings/names.txt:987
+#: data/mp/messages/strings/names.txt:990
 msgid "VTOL Propulsion II"
 msgstr "推進動力：VTOL二型"
 
 #: data/base/messages/strings/names.txt:977
-#: data/mp/messages/strings/names.txt:990
+#: data/mp/messages/strings/names.txt:993
 msgid "Wheeled Propulsion II"
 msgstr "推進動力：輪二型"
 
 #: data/base/messages/strings/names.txt:984
-#: data/mp/messages/strings/names.txt:997
+#: data/mp/messages/strings/names.txt:1000
 msgid "AA Thermal Imaging Sensor"
 msgstr "防空武器熱相感應雷達"
 
 #: data/base/messages/strings/names.txt:985
-#: data/mp/messages/strings/names.txt:998
+#: data/mp/messages/strings/names.txt:1001
 msgid "AA Target Acquisition Shells"
 msgstr "防空武器目標追蹤彈殼"
 
 #: data/base/messages/strings/names.txt:986
-#: data/mp/messages/strings/names.txt:999
+#: data/mp/messages/strings/names.txt:1002
 msgid "AA Target Prediction Computer"
 msgstr "防空武器目標預測雷達"
 
 #: data/base/messages/strings/names.txt:987
-#: data/mp/messages/strings/names.txt:1000
+#: data/mp/messages/strings/names.txt:1003
 msgid "AA HE Flak"
 msgstr "HE防空砲彈一型"
 
 #: data/base/messages/strings/names.txt:988
-#: data/mp/messages/strings/names.txt:1001
+#: data/mp/messages/strings/names.txt:1004
 msgid "AA HE Flak Mk2"
 msgstr "HE防空砲彈二型"
 
 #: data/base/messages/strings/names.txt:989
-#: data/mp/messages/strings/names.txt:1002
+#: data/mp/messages/strings/names.txt:1005
 msgid "AA HE Flak Mk3"
 msgstr "HE防空砲彈三型"
 
 #: data/base/messages/strings/names.txt:990
-#: data/mp/messages/strings/names.txt:1003
+#: data/mp/messages/strings/names.txt:1006
 msgid "AA HEAP Flak"
 msgstr "HEAP防空砲彈一型"
 
 #: data/base/messages/strings/names.txt:991
-#: data/mp/messages/strings/names.txt:1004
+#: data/mp/messages/strings/names.txt:1007
 msgid "AA HEAP Flak Mk2"
 msgstr "HEAP防空砲彈二型"
 
 #: data/base/messages/strings/names.txt:992
-#: data/mp/messages/strings/names.txt:1005
+#: data/mp/messages/strings/names.txt:1008
 msgid "AA HEAP Flak Mk3"
 msgstr "HEAP防空砲彈三型"
 
 #: data/base/messages/strings/names.txt:993
-#: data/mp/messages/strings/names.txt:1006
+#: data/mp/messages/strings/names.txt:1009
 msgid "AA Ammunition Hopper"
 msgstr "防空火砲彈藥送料斗一型"
 
 #: data/base/messages/strings/names.txt:994
-#: data/mp/messages/strings/names.txt:1007
+#: data/mp/messages/strings/names.txt:1010
 msgid "AA Ammunition Hopper Mk2"
 msgstr "防空火砲彈藥送料斗二型"
 
 #: data/base/messages/strings/names.txt:995
-#: data/mp/messages/strings/names.txt:1008
+#: data/mp/messages/strings/names.txt:1011
 msgid "AA Ammunition Hopper Mk3"
 msgstr "防空火砲彈藥送料斗三型"
 
 #: data/base/messages/strings/names.txt:996
-#: data/mp/messages/strings/names.txt:1009
+#: data/mp/messages/strings/names.txt:1012
 msgid "AA Chainfeed Loader"
 msgstr "防空火砲連鎖裝彈系統一型"
 
 #: data/base/messages/strings/names.txt:997
-#: data/mp/messages/strings/names.txt:1010
+#: data/mp/messages/strings/names.txt:1013
 msgid "AA Chainfeed Loader Mk2"
 msgstr "防空火砲連鎖裝彈系統二型"
 
 #: data/base/messages/strings/names.txt:998
-#: data/mp/messages/strings/names.txt:1011
+#: data/mp/messages/strings/names.txt:1014
 msgid "AA Chainfeed Loader Mk3"
 msgstr "防空火砲連鎖裝彈系統三型"
 
@@ -8249,17 +8249,17 @@ msgid "Cluster Bombs Bay"
 msgstr "集束炸彈艙"
 
 #: data/base/messages/strings/names.txt:1004
-#: data/mp/messages/strings/names.txt:1017
+#: data/mp/messages/strings/names.txt:1020
 msgid "HEAP Bomb Bay"
 msgstr "高爆性穿甲炸彈艙"
 
 #: data/base/messages/strings/names.txt:1005
-#: data/mp/messages/strings/names.txt:1018
+#: data/mp/messages/strings/names.txt:1021
 msgid "Phosphor Bomb Bay"
 msgstr "燐光炸彈艙"
 
 #: data/base/messages/strings/names.txt:1006
-#: data/mp/messages/strings/names.txt:1019
+#: data/mp/messages/strings/names.txt:1022
 msgid "Thermite Bomb Bay"
 msgstr "鋁熱反應炸彈艙"
 
@@ -8276,252 +8276,252 @@ msgid "Target Acquisition Bombsight"
 msgstr "目標追蹤投彈瞄準器"
 
 #: data/base/messages/strings/names.txt:1012
-#: data/mp/messages/strings/names.txt:1025
+#: data/mp/messages/strings/names.txt:1028
 msgid "Cannon Laser Rangefinder"
 msgstr "加農砲雷射測距儀"
 
 #: data/base/messages/strings/names.txt:1013
-#: data/mp/messages/strings/names.txt:1026
+#: data/mp/messages/strings/names.txt:1029
 msgid "Cannon Laser Designator"
 msgstr "加農砲雷射指向器"
 
 #: data/base/messages/strings/names.txt:1014
-#: data/mp/messages/strings/names.txt:1027
+#: data/mp/messages/strings/names.txt:1030
 msgid "HEAT Cannon Shells"
 msgstr "HEAT加農砲彈一型"
 
 #: data/base/messages/strings/names.txt:1015
-#: data/mp/messages/strings/names.txt:1028
+#: data/mp/messages/strings/names.txt:1031
 msgid "HEAT Cannon Shells Mk2"
 msgstr "HEAT加農砲彈二型"
 
 #: data/base/messages/strings/names.txt:1016
-#: data/mp/messages/strings/names.txt:1029
+#: data/mp/messages/strings/names.txt:1032
 msgid "HEAT Cannon Shells Mk3"
 msgstr "HEAT加農砲彈三型"
 
 #: data/base/messages/strings/names.txt:1017
-#: data/mp/messages/strings/names.txt:1030
+#: data/mp/messages/strings/names.txt:1033
 msgid "APFSDS Cannon Rounds"
 msgstr "APFSDS加農砲彈一型"
 
 #: data/base/messages/strings/names.txt:1018
-#: data/mp/messages/strings/names.txt:1031
+#: data/mp/messages/strings/names.txt:1034
 msgid "APFSDS Cannon Rounds Mk2"
 msgstr "APFSDS加農砲彈二型"
 
 #: data/base/messages/strings/names.txt:1019
-#: data/mp/messages/strings/names.txt:1032
+#: data/mp/messages/strings/names.txt:1035
 msgid "APFSDS Cannon Rounds Mk3"
 msgstr "APFSDS加農砲彈三型"
 
 #: data/base/messages/strings/names.txt:1020
-#: data/mp/messages/strings/names.txt:1033
+#: data/mp/messages/strings/names.txt:1036
 msgid "HVAPFSDS Cannon Rounds"
 msgstr "HVAPFSDS加農砲一型"
 
 #: data/base/messages/strings/names.txt:1021
-#: data/mp/messages/strings/names.txt:1034
+#: data/mp/messages/strings/names.txt:1037
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr "HVAPFSDS加農砲二型"
 
 #: data/base/messages/strings/names.txt:1022
-#: data/mp/messages/strings/names.txt:1035
+#: data/mp/messages/strings/names.txt:1038
 msgid "HVAPFSDS Cannon Rounds Mk3"
 msgstr "HVAPFSDS加農砲三型"
 
 #: data/base/messages/strings/names.txt:1026
-#: data/mp/messages/strings/names.txt:1039
+#: data/mp/messages/strings/names.txt:1042
 msgid "Cannon Autoloader"
 msgstr "加農砲自動裝填系統一型"
 
 #: data/base/messages/strings/names.txt:1027
-#: data/mp/messages/strings/names.txt:1040
+#: data/mp/messages/strings/names.txt:1043
 msgid "Cannon Autoloader Mk2"
 msgstr "加農砲自動裝填系統二型"
 
 #: data/base/messages/strings/names.txt:1028
-#: data/mp/messages/strings/names.txt:1041
+#: data/mp/messages/strings/names.txt:1044
 msgid "Cannon Autoloader Mk3"
 msgstr "加農砲自動裝填系統三型"
 
 #: data/base/messages/strings/names.txt:1029
-#: data/mp/messages/strings/names.txt:1042
+#: data/mp/messages/strings/names.txt:1045
 msgid "Cannon Rapid Loader"
 msgstr "加農砲高速裝填系統一型"
 
 #: data/base/messages/strings/names.txt:1030
-#: data/mp/messages/strings/names.txt:1043
+#: data/mp/messages/strings/names.txt:1046
 msgid "Cannon Rapid Loader Mk2"
 msgstr "加農砲高速裝填系統二型"
 
 #: data/base/messages/strings/names.txt:1031
-#: data/mp/messages/strings/names.txt:1044
+#: data/mp/messages/strings/names.txt:1047
 msgid "Cannon Rapid Loader Mk3"
 msgstr "加農砲高速裝填系統三型"
 
 #: data/base/messages/strings/names.txt:1039
-#: data/mp/messages/strings/names.txt:1052
+#: data/mp/messages/strings/names.txt:1055
 msgid "Improved Laser Focusing"
 msgstr "改進雷射對焦系統一型"
 
 #: data/base/messages/strings/names.txt:1040
-#: data/mp/messages/strings/names.txt:1053
+#: data/mp/messages/strings/names.txt:1056
 msgid "Improved Laser Focusing Mk2"
 msgstr "改進雷射對焦系統二型"
 
 #: data/base/messages/strings/names.txt:1041
-#: data/mp/messages/strings/names.txt:1054
+#: data/mp/messages/strings/names.txt:1057
 msgid "Improved Laser Focusing Mk3"
 msgstr "改進雷射對焦系統三型"
 
 #: data/base/messages/strings/names.txt:1042
-#: data/mp/messages/strings/names.txt:1055
+#: data/mp/messages/strings/names.txt:1058
 msgid "Hi-Energy Laser Emitter"
 msgstr "高能雷射發射極一型"
 
 #: data/base/messages/strings/names.txt:1043
-#: data/mp/messages/strings/names.txt:1056
+#: data/mp/messages/strings/names.txt:1059
 msgid "Hi-Energy Laser Emitter Mk2"
 msgstr "高能雷射發射極二型"
 
 #: data/base/messages/strings/names.txt:1044
-#: data/mp/messages/strings/names.txt:1057
+#: data/mp/messages/strings/names.txt:1060
 msgid "Hi-Energy Laser Emitter Mk3"
 msgstr "高能雷射發射極三型"
 
 #: data/base/messages/strings/names.txt:1045
-#: data/mp/messages/strings/names.txt:1058
+#: data/mp/messages/strings/names.txt:1061
 msgid "Thermopole Energizer"
 msgstr "熱極加速器一型"
 
 #: data/base/messages/strings/names.txt:1046
-#: data/mp/messages/strings/names.txt:1059
+#: data/mp/messages/strings/names.txt:1062
 msgid "Thermopole Energizer Mk2"
 msgstr "熱極加速器二型"
 
 #: data/base/messages/strings/names.txt:1047
-#: data/mp/messages/strings/names.txt:1060
+#: data/mp/messages/strings/names.txt:1063
 msgid "Thermopole Energizer Mk3"
 msgstr "熱極加速器三型"
 
 #: data/base/messages/strings/names.txt:1049
-#: data/mp/messages/strings/names.txt:1062
+#: data/mp/messages/strings/names.txt:1065
 msgid "High Temperature Flamer Gel"
 msgstr "高溫火焰凝膠一型"
 
 #: data/base/messages/strings/names.txt:1050
-#: data/mp/messages/strings/names.txt:1063
+#: data/mp/messages/strings/names.txt:1066
 msgid "High Temperature Flamer Gel Mk2"
 msgstr "高溫火焰凝膠二型"
 
 #: data/base/messages/strings/names.txt:1051
-#: data/mp/messages/strings/names.txt:1064
+#: data/mp/messages/strings/names.txt:1067
 msgid "High Temperature Flamer Gel Mk3"
 msgstr "高溫火焰凝膠三型"
 
 #: data/base/messages/strings/names.txt:1052
-#: data/mp/messages/strings/names.txt:1065
+#: data/mp/messages/strings/names.txt:1068
 msgid "Superhot Flamer Gel"
 msgstr "超熱火焰凝膠一型"
 
 #: data/base/messages/strings/names.txt:1053
-#: data/mp/messages/strings/names.txt:1066
+#: data/mp/messages/strings/names.txt:1069
 msgid "Superhot Flamer Gel Mk2"
 msgstr "超熱火焰凝膠二型"
 
 #: data/base/messages/strings/names.txt:1054
-#: data/mp/messages/strings/names.txt:1067
+#: data/mp/messages/strings/names.txt:1070
 msgid "Superhot Flamer Gel Mk3"
 msgstr "超熱火焰凝膠三型"
 
 #: data/base/messages/strings/names.txt:1055
-#: data/mp/messages/strings/names.txt:1068
+#: data/mp/messages/strings/names.txt:1071
 msgid "Flamer Autoloader"
 msgstr "自動裝填噴射一型"
 
 #: data/base/messages/strings/names.txt:1056
-#: data/mp/messages/strings/names.txt:1069
+#: data/mp/messages/strings/names.txt:1072
 msgid "Flamer Autoloader Mk2"
 msgstr "自動裝填噴射二型"
 
 #: data/base/messages/strings/names.txt:1057
-#: data/mp/messages/strings/names.txt:1070
+#: data/mp/messages/strings/names.txt:1073
 msgid "Flamer Autoloader Mk3"
 msgstr "自動裝填噴射三型"
 
 #: data/base/messages/strings/names.txt:1059
-#: data/mp/messages/strings/names.txt:1072
+#: data/mp/messages/strings/names.txt:1075
 msgid "Heavy Flamer - Inferno"
 msgstr "重型火焰噴射 - 地獄火"
 
 #: data/base/messages/strings/names.txt:1062
-#: data/mp/messages/strings/names.txt:1075
+#: data/mp/messages/strings/names.txt:1078
 msgid "Heavy Howitzer - Ground Shaker"
 msgstr "重型榴彈砲-憾地者"
 
 #: data/base/messages/strings/names.txt:1063
-#: data/mp/messages/strings/names.txt:1076
+#: data/mp/messages/strings/names.txt:1079
 msgid "Rotary Howitzer - Hellstorm"
 msgstr "旋轉榴彈砲-地獄風暴"
 
 #: data/base/messages/strings/names.txt:1066
-#: data/mp/messages/strings/names.txt:1079
+#: data/mp/messages/strings/names.txt:1082
 msgid "Target Acquisition Artillery Shells"
 msgstr "目標追蹤砲彈一型"
 
 #: data/base/messages/strings/names.txt:1067
-#: data/mp/messages/strings/names.txt:1080
+#: data/mp/messages/strings/names.txt:1083
 msgid "Target Acquisition Artillery Shells Mk2"
 msgstr "目標追蹤砲彈二型"
 
 #: data/base/messages/strings/names.txt:1068
-#: data/mp/messages/strings/names.txt:1081
+#: data/mp/messages/strings/names.txt:1084
 msgid "Target Prediction Artillery Shells"
 msgstr "目標預測砲彈 "
 
 #: data/base/messages/strings/names.txt:1070
-#: data/mp/messages/strings/names.txt:1083
+#: data/mp/messages/strings/names.txt:1086
 msgid "HE Howitzer Shells"
 msgstr "HE榴彈砲一型"
 
 #: data/base/messages/strings/names.txt:1071
-#: data/mp/messages/strings/names.txt:1084
+#: data/mp/messages/strings/names.txt:1087
 msgid "HE Howitzer Shells Mk2"
 msgstr "HE榴彈砲二型"
 
 #: data/base/messages/strings/names.txt:1072
-#: data/mp/messages/strings/names.txt:1085
+#: data/mp/messages/strings/names.txt:1088
 msgid "HE Howitzer Shells Mk3"
 msgstr "HE榴彈砲三型"
 
 #: data/base/messages/strings/names.txt:1073
-#: data/mp/messages/strings/names.txt:1086
+#: data/mp/messages/strings/names.txt:1089
 msgid "HEAP Howitzer Shells"
 msgstr "HEAP榴彈砲一型"
 
 #: data/base/messages/strings/names.txt:1074
-#: data/mp/messages/strings/names.txt:1087
+#: data/mp/messages/strings/names.txt:1090
 msgid "HEAP Howitzer Shells Mk2"
 msgstr "HEAP榴彈砲二型"
 
 #: data/base/messages/strings/names.txt:1075
-#: data/mp/messages/strings/names.txt:1088
+#: data/mp/messages/strings/names.txt:1091
 msgid "HEAP Howitzer Shells Mk3"
 msgstr "HEAP榴彈砲三型"
 
 #: data/base/messages/strings/names.txt:1077
-#: data/mp/messages/strings/names.txt:1090
+#: data/mp/messages/strings/names.txt:1093
 msgid "Howitzer Autoloader"
 msgstr "榴彈砲自動裝填器一型"
 
 #: data/base/messages/strings/names.txt:1078
-#: data/mp/messages/strings/names.txt:1091
+#: data/mp/messages/strings/names.txt:1094
 msgid "Howitzer Autoloader Mk2"
 msgstr "榴彈砲自動裝填器二型"
 
 #: data/base/messages/strings/names.txt:1079
-#: data/mp/messages/strings/names.txt:1092
+#: data/mp/messages/strings/names.txt:1095
 msgid "Howitzer Autoloader Mk3"
 msgstr "榴彈砲自動裝填器三型"
 
@@ -8530,57 +8530,57 @@ msgid "Fast Loader"
 msgstr "榴彈砲快速裝填"
 
 #: data/base/messages/strings/names.txt:1082
-#: data/mp/messages/strings/names.txt:1095
+#: data/mp/messages/strings/names.txt:1098
 msgid "Laser - Flashlight"
 msgstr "雷射-激光雷射"
 
 #: data/base/messages/strings/names.txt:1085
-#: data/mp/messages/strings/names.txt:1098
+#: data/mp/messages/strings/names.txt:1101
 msgid "Hardened MG Bullets"
 msgstr "強化子彈"
 
 #: data/base/messages/strings/names.txt:1086
-#: data/mp/messages/strings/names.txt:1099
+#: data/mp/messages/strings/names.txt:1102
 msgid "APDSB MG Bullets"
 msgstr "穿甲脫殼彈一型"
 
 #: data/base/messages/strings/names.txt:1087
-#: data/mp/messages/strings/names.txt:1100
+#: data/mp/messages/strings/names.txt:1103
 msgid "APDSB MG Bullets Mk2"
 msgstr "穿甲脫殼彈二型"
 
 #: data/base/messages/strings/names.txt:1088
-#: data/mp/messages/strings/names.txt:1101
+#: data/mp/messages/strings/names.txt:1104
 msgid "APDSB MG Bullets Mk3"
 msgstr "穿甲脫殼彈三型"
 
 #: data/base/messages/strings/names.txt:1089
-#: data/mp/messages/strings/names.txt:1102
+#: data/mp/messages/strings/names.txt:1105
 msgid "Tungsten-Tipped MG Bullets"
 msgstr "尖端鎢化彈一型"
 
 #: data/base/messages/strings/names.txt:1090
-#: data/mp/messages/strings/names.txt:1103
+#: data/mp/messages/strings/names.txt:1106
 msgid "Tungsten-Tipped MG Bullets Mk2"
 msgstr "尖端鎢化彈二型"
 
 #: data/base/messages/strings/names.txt:1091
-#: data/mp/messages/strings/names.txt:1104
+#: data/mp/messages/strings/names.txt:1107
 msgid "Tungsten-Tipped MG Bullets Mk3"
 msgstr "尖端鎢化彈三型"
 
 #: data/base/messages/strings/names.txt:1092
-#: data/mp/messages/strings/names.txt:1105
+#: data/mp/messages/strings/names.txt:1108
 msgid "Depleted Uranium MG Bullets"
 msgstr "貧化鈾彈一型"
 
 #: data/base/messages/strings/names.txt:1093
-#: data/mp/messages/strings/names.txt:1106
+#: data/mp/messages/strings/names.txt:1109
 msgid "Depleted Uranium MG Bullets Mk2"
 msgstr "貧化鈾彈二型"
 
 #: data/base/messages/strings/names.txt:1095
-#: data/mp/messages/strings/names.txt:1108
+#: data/mp/messages/strings/names.txt:1111
 msgid "Chaingun Upgrade"
 msgstr "初階高速型鍊槍升級"
 
@@ -8589,142 +8589,142 @@ msgid "Rapid Fire Chaingun Upgrade"
 msgstr "中階高速型鍊槍升級"
 
 #: data/base/messages/strings/names.txt:1097
-#: data/mp/messages/strings/names.txt:1110
+#: data/mp/messages/strings/names.txt:1113
 msgid "Hyper Fire Chaingun Upgrade"
 msgstr "高階高速型鍊槍升級"
 
 #: data/base/messages/strings/names.txt:1103
-#: data/mp/messages/strings/names.txt:1116
+#: data/mp/messages/strings/names.txt:1119
 msgid "Target Prediction Missiles"
 msgstr "目標預測飛彈"
 
 #: data/base/messages/strings/names.txt:1104
-#: data/mp/messages/strings/names.txt:1117
+#: data/mp/messages/strings/names.txt:1120
 msgid "Search & Destroy Missiles"
 msgstr "巡弋飛彈"
 
 #: data/base/messages/strings/names.txt:1105
-#: data/mp/messages/strings/names.txt:1118
+#: data/mp/messages/strings/names.txt:1121
 msgid "Advanced Missile Warhead"
 msgstr "高階飛彈彈頭一型"
 
 #: data/base/messages/strings/names.txt:1106
-#: data/mp/messages/strings/names.txt:1119
+#: data/mp/messages/strings/names.txt:1122
 msgid "Advanced Missile Warhead Mk2"
 msgstr "高階飛彈彈頭二型"
 
 #: data/base/messages/strings/names.txt:1107
-#: data/mp/messages/strings/names.txt:1120
+#: data/mp/messages/strings/names.txt:1123
 msgid "Advanced Missile Warhead Mk3"
 msgstr "高階飛彈彈頭三型"
 
 #: data/base/messages/strings/names.txt:1108
-#: data/mp/messages/strings/names.txt:1121
+#: data/mp/messages/strings/names.txt:1124
 msgid "Advanced Missile Allocation System"
 msgstr "高階飛彈分配系統一型"
 
 #: data/base/messages/strings/names.txt:1109
-#: data/mp/messages/strings/names.txt:1122
+#: data/mp/messages/strings/names.txt:1125
 msgid "Advanced Missile Allocation System Mk2"
 msgstr "高階飛彈分配系統二型"
 
 #: data/base/messages/strings/names.txt:1110
-#: data/mp/messages/strings/names.txt:1123
+#: data/mp/messages/strings/names.txt:1126
 msgid "Advanced Missile Allocation System Mk3"
 msgstr "高階飛彈分配系統三型"
 
 #: data/base/messages/strings/names.txt:1111
-#: data/mp/messages/strings/names.txt:1124
+#: data/mp/messages/strings/names.txt:1127
 msgid "HEAP Missile Warhead"
 msgstr "HEAP飛彈彈頭一型"
 
 #: data/base/messages/strings/names.txt:1112
-#: data/mp/messages/strings/names.txt:1125
+#: data/mp/messages/strings/names.txt:1128
 msgid "HEAP Missile Warhead Mk2"
 msgstr "HEAP飛彈彈頭二型"
 
 #: data/base/messages/strings/names.txt:1113
-#: data/mp/messages/strings/names.txt:1126
+#: data/mp/messages/strings/names.txt:1129
 msgid "HEAP Missile Warhead Mk3"
 msgstr "HEAP飛彈彈頭三型"
 
 #: data/base/messages/strings/names.txt:1114
-#: data/mp/messages/strings/names.txt:1127
+#: data/mp/messages/strings/names.txt:1130
 msgid "Improved Missile Loading System"
 msgstr "改善飛彈裝填系統"
 
 #: data/base/messages/strings/names.txt:1125
-#: data/mp/messages/strings/names.txt:1138
+#: data/mp/messages/strings/names.txt:1141
 msgid "Mortar Targeting Computer"
 msgstr "迫擊砲目標鎖定電腦"
 
 #: data/base/messages/strings/names.txt:1126
-#: data/mp/messages/strings/names.txt:1139
+#: data/mp/messages/strings/names.txt:1142
 msgid "Thermal Imaging Mortar Shells"
 msgstr "熱影像感應迫擊砲彈"
 
 #: data/base/messages/strings/names.txt:1127
-#: data/mp/messages/strings/names.txt:1140
+#: data/mp/messages/strings/names.txt:1143
 msgid "Target Acquisition Mortar Shells"
 msgstr "目標追蹤迫擊砲彈"
 
 #: data/base/messages/strings/names.txt:1128
-#: data/mp/messages/strings/names.txt:1141
+#: data/mp/messages/strings/names.txt:1144
 msgid "HE Mortar Shells"
 msgstr "HE迫擊砲彈一型"
 
 #: data/base/messages/strings/names.txt:1129
-#: data/mp/messages/strings/names.txt:1142
+#: data/mp/messages/strings/names.txt:1145
 msgid "HE Mortar Shells Mk2"
 msgstr "HE迫擊砲彈二型"
 
 #: data/base/messages/strings/names.txt:1130
-#: data/mp/messages/strings/names.txt:1143
+#: data/mp/messages/strings/names.txt:1146
 msgid "HE Mortar Shells Mk3"
 msgstr "HE迫擊砲彈三型"
 
 #: data/base/messages/strings/names.txt:1131
-#: data/mp/messages/strings/names.txt:1144
+#: data/mp/messages/strings/names.txt:1147
 msgid "HEAP Mortar Shells"
 msgstr "HEAP迫擊砲彈一型"
 
 #: data/base/messages/strings/names.txt:1132
-#: data/mp/messages/strings/names.txt:1145
+#: data/mp/messages/strings/names.txt:1148
 msgid "HEAP Mortar Shells Mk2"
 msgstr "HEAP迫擊砲彈二型"
 
 #: data/base/messages/strings/names.txt:1133
-#: data/mp/messages/strings/names.txt:1146
+#: data/mp/messages/strings/names.txt:1149
 msgid "HEAP Mortar Shells Mk3"
 msgstr "HEAP迫擊砲彈三型"
 
 #: data/base/messages/strings/names.txt:1134
-#: data/mp/messages/strings/names.txt:1147
+#: data/mp/messages/strings/names.txt:1150
 msgid "Mortar Autoloader"
 msgstr "迫擊砲自動裝載系統一型"
 
 #: data/base/messages/strings/names.txt:1135
-#: data/mp/messages/strings/names.txt:1148
+#: data/mp/messages/strings/names.txt:1151
 msgid "Mortar Autoloader Mk2"
 msgstr "迫擊砲自動裝載系統二型"
 
 #: data/base/messages/strings/names.txt:1136
-#: data/mp/messages/strings/names.txt:1149
+#: data/mp/messages/strings/names.txt:1152
 msgid "Mortar Autoloader Mk3"
 msgstr "迫擊砲自動裝載系統三型"
 
 #: data/base/messages/strings/names.txt:1137
-#: data/mp/messages/strings/names.txt:1150
+#: data/mp/messages/strings/names.txt:1153
 msgid "Mortar Fast Loader"
 msgstr "迫擊砲快速裝載系統"
 
 #: data/base/messages/strings/names.txt:1139
-#: data/mp/messages/strings/names.txt:1152
+#: data/mp/messages/strings/names.txt:1155
 msgid "Heavy Mortar - Bombard"
 msgstr "重裝迫擊砲"
 
 #: data/base/messages/strings/names.txt:1140
-#: data/mp/messages/strings/names.txt:1153
+#: data/mp/messages/strings/names.txt:1156
 msgid "Rotary Mortar - Pepperpot"
 msgstr "旋轉迫擊砲-Pepperpot（胡椒瓶）"
 
@@ -8733,367 +8733,367 @@ msgid "Target Prediction Computer"
 msgstr "目標預測電腦"
 
 #: data/base/messages/strings/names.txt:1146
-#: data/mp/messages/strings/names.txt:1159
+#: data/mp/messages/strings/names.txt:1162
 msgid "Hardened Rail Dart"
 msgstr "強化軌道砲"
 
 #: data/base/messages/strings/names.txt:1147
-#: data/mp/messages/strings/names.txt:1160
+#: data/mp/messages/strings/names.txt:1163
 msgid "Hardened Rail Dart Mk2"
 msgstr "強化軌道砲 二型"
 
 #: data/base/messages/strings/names.txt:1148
-#: data/mp/messages/strings/names.txt:1161
+#: data/mp/messages/strings/names.txt:1164
 msgid "Hardened Rail Dart Mk3"
 msgstr "強化軌道砲 三型"
 
 #: data/base/messages/strings/names.txt:1149
-#: data/mp/messages/strings/names.txt:1162
+#: data/mp/messages/strings/names.txt:1165
 msgid "Rail Gun ROF"
 msgstr "軌道砲射速一型"
 
 #: data/base/messages/strings/names.txt:1150
-#: data/mp/messages/strings/names.txt:1163
+#: data/mp/messages/strings/names.txt:1166
 msgid "Rail Gun ROF Mk2"
 msgstr "軌道砲射速二型"
 
 #: data/base/messages/strings/names.txt:1151
-#: data/mp/messages/strings/names.txt:1164
+#: data/mp/messages/strings/names.txt:1167
 msgid "Rail Gun ROF Mk3"
 msgstr "軌道砲射速三型"
 
 #: data/base/messages/strings/names.txt:1153
-#: data/mp/messages/strings/names.txt:1166
+#: data/mp/messages/strings/names.txt:1169
 msgid "Stabilized Mini-Rockets"
 msgstr "安定迷你火箭一型"
 
 #: data/base/messages/strings/names.txt:1154
-#: data/mp/messages/strings/names.txt:1167
+#: data/mp/messages/strings/names.txt:1170
 msgid "Stabilized Mini-Rockets Mk2"
 msgstr "安定迷你火箭二型"
 
 #: data/base/messages/strings/names.txt:1155
-#: data/mp/messages/strings/names.txt:1168
+#: data/mp/messages/strings/names.txt:1171
 msgid "HE Mini-Rockets"
 msgstr "HE迷你火箭一型（"
 
 #: data/base/messages/strings/names.txt:1156
-#: data/mp/messages/strings/names.txt:1169
+#: data/mp/messages/strings/names.txt:1172
 msgid "HE Mini-Rockets Mk2"
 msgstr "HE迷你火箭二型"
 
 #: data/base/messages/strings/names.txt:1157
-#: data/mp/messages/strings/names.txt:1170
+#: data/mp/messages/strings/names.txt:1173
 msgid "HE Mini-Rockets Mk3"
 msgstr "HE迷你火箭三型"
 
 #: data/base/messages/strings/names.txt:1158
-#: data/mp/messages/strings/names.txt:1171
+#: data/mp/messages/strings/names.txt:1174
 msgid "HEAP Mini-Rockets"
 msgstr "HEAP迷你火箭一型"
 
 #: data/base/messages/strings/names.txt:1159
-#: data/mp/messages/strings/names.txt:1172
+#: data/mp/messages/strings/names.txt:1175
 msgid "HEAP Mini-Rockets Mk2"
 msgstr "HEAP迷你火箭二型"
 
 #: data/base/messages/strings/names.txt:1160
-#: data/mp/messages/strings/names.txt:1173
+#: data/mp/messages/strings/names.txt:1176
 msgid "HEAP Mini-Rockets Mk3"
 msgstr "HEAP迷你火箭三型"
 
 #: data/base/messages/strings/names.txt:1161
-#: data/mp/messages/strings/names.txt:1177
+#: data/mp/messages/strings/names.txt:1180
 msgid "Fast Fire Mini-Rockets"
 msgstr "快速射擊迷你火箭一型"
 
 #: data/base/messages/strings/names.txt:1162
-#: data/mp/messages/strings/names.txt:1178
+#: data/mp/messages/strings/names.txt:1181
 msgid "Fast Fire Mini-Rockets Mk2"
 msgstr "快速射擊迷你火箭二型"
 
 #: data/base/messages/strings/names.txt:1163
-#: data/mp/messages/strings/names.txt:1179
+#: data/mp/messages/strings/names.txt:1182
 msgid "Fast Fire Mini-Rockets Mk3"
 msgstr "快速射擊迷你火箭三型"
 
 #: data/base/messages/strings/names.txt:1164
-#: data/mp/messages/strings/names.txt:1180
+#: data/mp/messages/strings/names.txt:1183
 msgid "Rapid Fire Mini-Rockets"
 msgstr "快速射擊迷你火箭一型"
 
 #: data/base/messages/strings/names.txt:1165
-#: data/mp/messages/strings/names.txt:1181
+#: data/mp/messages/strings/names.txt:1184
 msgid "Rapid Fire Mini-Rockets Mk2"
 msgstr "快速射擊迷你火箭二型"
 
 #: data/base/messages/strings/names.txt:1166
-#: data/mp/messages/strings/names.txt:1182
+#: data/mp/messages/strings/names.txt:1185
 msgid "Rapid Fire Mini-Rockets Mk3"
 msgstr "快速射擊迷你火箭三型"
 
 #: data/base/messages/strings/names.txt:1167
-#: data/mp/messages/strings/names.txt:1183
+#: data/mp/messages/strings/names.txt:1186
 msgid "Improved Rocket Wire Guidance"
 msgstr "纜線火箭導引系統"
 
 #: data/base/messages/strings/names.txt:1168
-#: data/mp/messages/strings/names.txt:1184
+#: data/mp/messages/strings/names.txt:1187
 msgid "Rocket Laser Designator"
 msgstr "雷射火箭導引系統"
 
 #: data/base/messages/strings/names.txt:1169
-#: data/mp/messages/strings/names.txt:1185
+#: data/mp/messages/strings/names.txt:1188
 msgid "Thermal Imaging Rockets"
 msgstr "熱感火箭導引系統"
 
 #: data/base/messages/strings/names.txt:1170
-#: data/mp/messages/strings/names.txt:1186
+#: data/mp/messages/strings/names.txt:1189
 msgid "HEAT Rocket Warhead"
 msgstr "HEAT火箭彈頭一型"
 
 #: data/base/messages/strings/names.txt:1171
-#: data/mp/messages/strings/names.txt:1187
+#: data/mp/messages/strings/names.txt:1190
 msgid "HEAT Rocket Warhead Mk2"
 msgstr "HEAT火箭彈頭二型"
 
 #: data/base/messages/strings/names.txt:1172
-#: data/mp/messages/strings/names.txt:1188
+#: data/mp/messages/strings/names.txt:1191
 msgid "HEAT Rocket Warhead Mk3"
 msgstr "HEAT火箭彈頭三型"
 
 #: data/base/messages/strings/names.txt:1173
-#: data/mp/messages/strings/names.txt:1189
+#: data/mp/messages/strings/names.txt:1192
 msgid "HESH Rocket Warhead"
 msgstr "HESH火箭彈頭一型"
 
 #: data/base/messages/strings/names.txt:1174
-#: data/mp/messages/strings/names.txt:1190
+#: data/mp/messages/strings/names.txt:1193
 msgid "HESH Rocket Warhead Mk2"
 msgstr "HESH火箭彈頭二型"
 
 #: data/base/messages/strings/names.txt:1175
-#: data/mp/messages/strings/names.txt:1191
+#: data/mp/messages/strings/names.txt:1194
 msgid "HESH Rocket Warhead Mk3"
 msgstr "HESH火箭彈頭三型"
 
 #: data/base/messages/strings/names.txt:1176
-#: data/mp/messages/strings/names.txt:1192
+#: data/mp/messages/strings/names.txt:1195
 msgid "Rocket Autoloader"
 msgstr "火箭自動裝載系統一型"
 
 #: data/base/messages/strings/names.txt:1177
-#: data/mp/messages/strings/names.txt:1193
+#: data/mp/messages/strings/names.txt:1196
 msgid "Rocket Autoloader Mk2"
 msgstr "火箭自動裝載系統二型"
 
 #: data/base/messages/strings/names.txt:1178
-#: data/mp/messages/strings/names.txt:1194
+#: data/mp/messages/strings/names.txt:1197
 msgid "Rocket Autoloader Mk3"
 msgstr "火箭自動裝載系統三型"
 
 #: data/base/messages/strings/names.txt:1180
-#: data/mp/messages/strings/names.txt:1196
+#: data/mp/messages/strings/names.txt:1199
 msgid "Lancer AT Rocket"
 msgstr "火箭（槍騎兵）"
 
 #: data/base/messages/strings/names.txt:1182
-#: data/mp/messages/strings/names.txt:1198
+#: data/mp/messages/strings/names.txt:1201
 msgid "Bunker Buster Rocket"
 msgstr "火箭（碉堡終結者）"
 
 #: data/base/messages/strings/names.txt:1185
-#: data/mp/messages/strings/names.txt:1201
+#: data/mp/messages/strings/names.txt:1204
 msgid "Tank Killer Rocket"
 msgstr "火箭（坦克殺手）"
 
 #: data/base/messages/strings/names.txt:1187
-#: data/mp/messages/strings/names.txt:1203
+#: data/mp/messages/strings/names.txt:1206
 msgid "Machinegun Artifact"
 msgstr "機槍科技"
 
 #: data/base/messages/strings/names.txt:1190
-#: data/mp/messages/strings/names.txt:1206
+#: data/mp/messages/strings/names.txt:1209
 msgid "New Paradigm Command Center"
 msgstr "New Paradigm指揮中心"
 
 #: data/base/messages/strings/names.txt:1191
-#: data/mp/messages/strings/names.txt:1207
+#: data/mp/messages/strings/names.txt:1210
 msgid "Collective Command Center"
 msgstr "Collective指揮中心"
 
 #: data/base/messages/strings/names.txt:1201
-#: data/mp/messages/strings/names.txt:1217
+#: data/mp/messages/strings/names.txt:1220
 msgid "Scavenger Factory"
 msgstr "拾荒者工廠"
 
 #: data/base/messages/strings/names.txt:1202
-#: data/mp/messages/strings/names.txt:1218
+#: data/mp/messages/strings/names.txt:1221
 msgid "Scavenger Gun Tower"
 msgstr "拾荒者槍塔"
 
 #: data/base/messages/strings/names.txt:1203
-#: data/mp/messages/strings/names.txt:1219
+#: data/mp/messages/strings/names.txt:1222
 msgid "Scavenger Horizontal Wall"
 msgstr "拾荒者矮牆"
 
 #: data/base/messages/strings/names.txt:1204
-#: data/mp/messages/strings/names.txt:1220
+#: data/mp/messages/strings/names.txt:1223
 msgid "Scavenger Power Generator"
 msgstr "拾荒者發電廠"
 
 #: data/base/messages/strings/names.txt:1205
-#: data/mp/messages/strings/names.txt:1221
+#: data/mp/messages/strings/names.txt:1224
 msgid "Scavenger Rocket Pit"
 msgstr "拾荒者火箭坑"
 
 #: data/base/messages/strings/names.txt:1206
-#: data/mp/messages/strings/names.txt:1222
+#: data/mp/messages/strings/names.txt:1225
 msgid "Scavenger AT-Rocket Pit"
 msgstr "拾荒者反坦克火箭砲坑"
 
 #: data/base/messages/strings/names.txt:1207
-#: data/mp/messages/strings/names.txt:1223
+#: data/mp/messages/strings/names.txt:1226
 msgid "Scavenger Bunker"
 msgstr "拾荒者碉堡"
 
 #: data/base/messages/strings/names.txt:1208
-#: data/mp/messages/strings/names.txt:1224
+#: data/mp/messages/strings/names.txt:1227
 msgid "Scavenger CornerWall"
 msgstr "拾荒者角牆"
 
 #: data/base/messages/strings/names.txt:1209
-#: data/mp/messages/strings/names.txt:1225
+#: data/mp/messages/strings/names.txt:1228
 msgid "Scavenger Flame Tower"
 msgstr "拾荒者火焰塔"
 
 #: data/base/messages/strings/names.txt:1210
-#: data/mp/messages/strings/names.txt:1226
+#: data/mp/messages/strings/names.txt:1229
 msgid "Scavenger Flame Tower End"
 msgstr "拾荒者火焰防衛塔"
 
 #: data/base/messages/strings/names.txt:1211
-#: data/mp/messages/strings/names.txt:1227
+#: data/mp/messages/strings/names.txt:1230
 msgid "Look-Out Tower"
 msgstr "瞭望臺"
 
 #: data/base/messages/strings/names.txt:1212
-#: data/mp/messages/strings/names.txt:1228
+#: data/mp/messages/strings/names.txt:1231
 msgid "Cannon Tower"
 msgstr "加農砲防衛塔"
 
 #: data/base/messages/strings/names.txt:1235
-#: data/mp/messages/strings/names.txt:1251
+#: data/mp/messages/strings/names.txt:1254
 msgid "Artifact"
 msgstr "遺留科技"
 
 #: data/base/messages/strings/names.txt:1236
-#: data/mp/messages/strings/names.txt:1252
+#: data/mp/messages/strings/names.txt:1255
 msgid "Oil Resource"
 msgstr "油田"
 
 #: data/base/messages/strings/names.txt:1262
-#: data/mp/messages/strings/names.txt:1278
+#: data/mp/messages/strings/names.txt:1281
 msgid "Bridge"
 msgstr "橋"
 
 #: data/base/messages/strings/names.txt:1265
-#: data/mp/messages/strings/names.txt:1281
+#: data/mp/messages/strings/names.txt:1284
 msgid "Ruined Factory"
 msgstr "荒廢的工廠"
 
 #: data/base/messages/strings/names.txt:1266
-#: data/mp/messages/strings/names.txt:1282
+#: data/mp/messages/strings/names.txt:1285
 msgid "Warehouse"
 msgstr "倉庫"
 
 #: data/base/messages/strings/names.txt:1267
-#: data/mp/messages/strings/names.txt:1283
+#: data/mp/messages/strings/names.txt:1286
 msgid "Hut"
 msgstr "茅屋"
 
 #: data/base/messages/strings/names.txt:1275
-#: data/mp/messages/strings/names.txt:1291
+#: data/mp/messages/strings/names.txt:1294
 msgid "Oil Drum"
 msgstr "鑽油井"
 
 #: data/base/messages/strings/names.txt:1293
-#: data/mp/messages/strings/names.txt:1309
+#: data/mp/messages/strings/names.txt:1312
 msgid "Wreck"
 msgstr "殘骸"
 
 #: data/base/messages/strings/names.txt:1295
-#: data/mp/messages/strings/names.txt:1311
+#: data/mp/messages/strings/names.txt:1314
 msgid "Wrecked Tank"
 msgstr "殘破的坦克"
 
 #: data/base/messages/strings/names.txt:1313
-#: data/mp/messages/strings/names.txt:1329
+#: data/mp/messages/strings/names.txt:1332
 msgid "Wrecked Bridge"
 msgstr "殘破的橋"
 
 #: data/base/messages/strings/names.txt:1314
-#: data/mp/messages/strings/names.txt:1330
+#: data/mp/messages/strings/names.txt:1333
 msgid "Wrecked Van"
 msgstr "殘破的卡車"
 
 #: data/base/messages/strings/names.txt:1315
-#: data/mp/messages/strings/names.txt:1331
+#: data/mp/messages/strings/names.txt:1334
 msgid "Wrecked Vehicle"
 msgstr "殘破的車身"
 
 #: data/base/messages/strings/names.txt:1316
-#: data/mp/messages/strings/names.txt:1332
+#: data/mp/messages/strings/names.txt:1335
 msgid "Wrecked Tanker"
 msgstr "殘破的油罐車"
 
 #: data/base/messages/strings/names.txt:1320
 #: data/base/messages/strings/names.txt:1336
-#: data/mp/messages/strings/names.txt:1336
-#: data/mp/messages/strings/names.txt:1352
+#: data/mp/messages/strings/names.txt:1339
+#: data/mp/messages/strings/names.txt:1355
 msgid "Cyborg Laboratory"
 msgstr "生化人實驗室"
 
 #: data/base/messages/strings/names.txt:1321
-#: data/mp/messages/strings/names.txt:1337
+#: data/mp/messages/strings/names.txt:1340
 msgid "Advanced Warfare Laboratory"
 msgstr "高階戰爭實驗室"
 
 #: data/base/messages/strings/names.txt:1322
 #: data/base/messages/strings/names.txt:1338
-#: data/mp/messages/strings/names.txt:1338
-#: data/mp/messages/strings/names.txt:1354
+#: data/mp/messages/strings/names.txt:1341
+#: data/mp/messages/strings/names.txt:1357
 msgid "Engineering Laboratory"
 msgstr "工程科技實驗室"
 
 #: data/base/messages/strings/names.txt:1323
 #: data/base/messages/strings/names.txt:1339
-#: data/mp/messages/strings/names.txt:1339
-#: data/mp/messages/strings/names.txt:1355
+#: data/mp/messages/strings/names.txt:1342
+#: data/mp/messages/strings/names.txt:1358
 msgid "Robotics Laboratory"
 msgstr "機器人實驗室"
 
 #: data/base/messages/strings/names.txt:1324
-#: data/mp/messages/strings/names.txt:1340
+#: data/mp/messages/strings/names.txt:1343
 msgid "Laser Optics Laboratory"
 msgstr "雷射光學實驗室"
 
 #: data/base/messages/strings/names.txt:1325
 #: data/base/messages/strings/names.txt:1337
-#: data/mp/messages/strings/names.txt:1341
-#: data/mp/messages/strings/names.txt:1353
+#: data/mp/messages/strings/names.txt:1344
+#: data/mp/messages/strings/names.txt:1356
 msgid "Electronics Laboratory"
 msgstr "電子科技實驗室"
 
 #: data/base/messages/strings/names.txt:1326
 #: data/base/messages/strings/names.txt:1335
-#: data/mp/messages/strings/names.txt:1342
-#: data/mp/messages/strings/names.txt:1351
+#: data/mp/messages/strings/names.txt:1345
+#: data/mp/messages/strings/names.txt:1354
 msgid "Chemical Laboratory"
 msgstr "化學科技實驗室"
 
 #: data/base/messages/strings/names.txt:1334
-#: data/mp/messages/strings/names.txt:1350
+#: data/mp/messages/strings/names.txt:1353
 msgid "Advanced Warfare"
 msgstr "高階戰爭"
 
@@ -9114,7 +9114,7 @@ msgid "MRL Emplacement"
 msgstr "迷你火箭砲台"
 
 #: data/base/messages/strings/names.txt:1375
-#: data/mp/messages/strings/names.txt:1391
+#: data/mp/messages/strings/names.txt:1394
 msgid "Railgun Emplacement"
 msgstr "軌道砲砲台"
 
@@ -9123,50 +9123,50 @@ msgid "Angel Missile Emplacement"
 msgstr "天使飛彈砲台"
 
 #: data/base/messages/strings/names.txt:1378
-#: data/mp/messages/strings/names.txt:1394
+#: data/mp/messages/strings/names.txt:1397
 msgid "Archangel Missile Emplacement"
 msgstr "大天使飛彈砲台"
 
 #: data/base/messages/strings/names.txt:1423
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1881
-#: data/mp/messages/strings/names.txt:1881
+#: data/mp/messages/strings/names.txt:1884
 #, fuzzy
 msgid "Repair Turret Cobra Tracks"
 msgstr "履帶式眼鏡蛇修理車"
 
 #: data/base/messages/strings/names.txt:1436
-#: data/mp/messages/strings/names.txt:1452
-#: data/mp/messages/strings/names.txt:1519
+#: data/mp/messages/strings/names.txt:1455
+#: data/mp/messages/strings/names.txt:1522
 msgid "Scourge"
 msgstr "天譴飛彈"
 
 #: data/base/messages/strings/names.txt:1437
-#: data/mp/messages/strings/names.txt:1453
+#: data/mp/messages/strings/names.txt:1456
 msgid "Bunker Blaster"
 msgstr "碉堡終結者"
 
 #: data/base/messages/strings/names.txt:1438
-#: data/mp/messages/strings/names.txt:1454
-#: data/mp/messages/strings/names.txt:1520
+#: data/mp/messages/strings/names.txt:1457
+#: data/mp/messages/strings/names.txt:1523
 msgid "Flashlight Gunner"
 msgstr "激光雷射"
 
 #: data/base/messages/strings/names.txt:1439
-#: data/mp/messages/strings/names.txt:1455
-#: data/mp/messages/strings/names.txt:1608
+#: data/mp/messages/strings/names.txt:1458
+#: data/mp/messages/strings/names.txt:1611
 msgid "Needle Gunner"
 msgstr "針刺飛彈"
 
 #: data/base/messages/strings/names.txt:1440
-#: data/mp/messages/strings/names.txt:1456
+#: data/mp/messages/strings/names.txt:1459
 msgid "Downed Transport"
 msgstr "卸載運輸艦"
 
 #: data/base/messages/strings/names.txt:1458
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1344
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1356
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
-#: data/mp/messages/strings/names.txt:1474
-#: data/mp/messages/strings/names.txt:1922
+#: data/mp/messages/strings/names.txt:1477
+#: data/mp/messages/strings/names.txt:1925
 msgid "Tank Killer Python Tracks"
 msgstr "履帶式蟒蛇坦克（坦克殺手）"
 
@@ -9175,37 +9175,37 @@ msgid "HPV Cannon Python Tracks"
 msgstr "履帶式蟒蛇坦克（高速加農砲）"
 
 #: data/base/messages/strings/names.txt:1460
-#: data/mp/messages/strings/names.txt:1476
+#: data/mp/messages/strings/names.txt:1479
 msgid "Cyclone AA Python Half-tracks"
 msgstr "半履帶式蟒蛇坦克（暴風式空對空飛彈）"
 
 #: data/base/messages/strings/names.txt:1461
-#: data/mp/messages/strings/names.txt:1477
+#: data/mp/messages/strings/names.txt:1480
 msgid "Assault Gun Python Tracks"
 msgstr "履帶式蟒蛇坦克（突擊槍）"
 
 #: data/base/messages/strings/names.txt:1467
-#: data/mp/messages/strings/names.txt:1483
+#: data/mp/messages/strings/names.txt:1486
 msgid "Flashlight"
 msgstr "激光雷射"
 
 #: data/base/messages/strings/names.txt:1468
-#: data/mp/messages/strings/names.txt:1484
+#: data/mp/messages/strings/names.txt:1487
 msgid "VTOL Flashlight"
 msgstr "VTOL激光雷射"
 
 #: data/base/messages/strings/names.txt:1471
 #: data/base/messages/strings/names.txt:1472
-#: data/mp/messages/strings/names.txt:757
-#: data/mp/messages/strings/names.txt:1487
-#: data/mp/messages/strings/names.txt:1488
+#: data/mp/messages/strings/names.txt:760
+#: data/mp/messages/strings/names.txt:1490
+#: data/mp/messages/strings/names.txt:1491
 msgid "Rotary MG Bunker"
 msgstr "旋轉機槍碉堡"
 
 #: data/base/messages/strings/names.txt:1477
 #: data/base/messages/strings/names.txt:1478
-#: data/mp/messages/strings/names.txt:1493
-#: data/mp/messages/strings/names.txt:1494
+#: data/mp/messages/strings/names.txt:1496
+#: data/mp/messages/strings/names.txt:1497
 msgid "Missile Silo"
 msgstr "飛彈發射井"
 
@@ -9487,342 +9487,342 @@ msgstr "請稍待片刻"
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "恭喜你指揮官！！你已經完成了你的第一個任務！"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1301
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
 msgid "Cobra Hover Heavy-Repair"
 msgstr "眼鏡蛇重型修理氣墊船"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1302
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
 msgid "Viper HMG Wheels"
 msgstr "輪式響尾蛇坦克（重機槍）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1303
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
-#: data/mp/messages/strings/names.txt:1824
+#: data/mp/messages/strings/names.txt:1827
 msgid "Scourge Mantis Hover"
 msgstr "螳螂氣墊船（天譴飛彈）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1304
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
 msgid "TK Mantis Hover"
 msgstr "螳螂氣墊船（坦克殺手）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1305
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
 msgid "Cobra HMG Tracks"
 msgstr "履帶式眼鏡蛇坦克（重機槍）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1306
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
 msgid "Cobra Hover HC"
 msgstr "眼鏡蛇氣墊船（重型加農砲）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1307
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
 msgid "Scorpion Lancer Tracks"
 msgstr "履帶式毒蠍坦克（槍騎兵火箭）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1308
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
 msgid "Scorpion Heavy Cannon Tracks"
 msgstr "履帶式毒蠍坦克（重型加農砲）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1309
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
 msgid "Scorpion Lancer VTOL"
 msgstr "毒蠍VTOL（槍騎兵火箭）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1310
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
 msgid "Scorpion BB VTOL"
 msgstr "毒蠍 BB VTOL"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1311
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
 msgid "Viper Command Turret Tracks"
 msgstr "響尾蛇指揮車"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1312
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
 msgid "Cobra Command Turret Tracks"
 msgstr "眼鏡蛇指揮車"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
 msgid "Scorpion Command Turret Tracks"
 msgstr "毒蠍指揮車"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
 msgid "mantis Command Turret Tracks"
 msgstr "螳螂指揮車"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
 msgid "Cobra Lancer Tracks"
 msgstr "履帶式眼鏡蛇坦克（槍騎兵火箭）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
 msgid "Mantis Heavy Cannon Tracks"
 msgstr "履帶式螳螂坦克（重型加農砲）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
 msgid "Mantis Tank Killer Tracks"
 msgstr "履帶式螳螂坦克（坦克殺手）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
 msgid "Mantis Scourge Tracks"
 msgstr "履帶式螳螂坦克（天譴飛彈）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
 msgid "Scorpion Heavy Machinegun Tracks"
 msgstr "履帶式毒蠍坦克（重機槍）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
 msgid "Scorpion Repair Tracks"
 msgstr "毒蠍修理車"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
 msgid "Scorpion Heavy Repair Hover"
 msgstr "毒蠍重型修理車"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
 msgid "Cobra Hover Truck"
 msgstr "眼鏡蛇工程氣墊船"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
 msgid "Scorpion Hover Truck"
 msgstr "毒蠍工程氣墊船"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
 msgid "Mantis Hover Truck"
 msgstr "螳螂工程氣墊船"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
 msgid "Cobra Bunker Buster Tracks"
 msgstr "履帶式眼鏡蛇坦克（碉堡終結者）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
 msgid "Scorpion Bunker Buster Tracks"
 msgstr "履帶式毒蠍坦克（碉堡終結者）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
 msgid "Mantis Bunker Buster Tracks"
 msgstr "履帶式螳螂坦克（碉堡終結者）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
 msgid "Viper Tracks Lancer"
 msgstr "履帶式響尾蛇坦克（槍騎兵火箭）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
 msgid "Cobra Half-Tracks Mini-Pod"
 msgstr "半履帶式眼鏡蛇坦克（迷你火箭）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1342
 msgid "Cobra Tracks Mini-Pod"
 msgstr "履帶式眼鏡蛇坦克（迷你火箭）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1343
 msgid "Cobra Tracks Mini-Rocket Artillery"
 msgstr "履帶式眼鏡蛇坦克（迷你火箭砲）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1344
 msgid "Cobra Inferno Half-track"
 msgstr "半履帶式眼鏡蛇坦克（火焰噴射）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1345
 msgid "Python HVC Hover"
 msgstr "蟒蛇氣墊船（高速加農砲）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1346
 msgid "Python Scourge Tracks"
 msgstr "履帶式蟒蛇坦克（天譴飛彈）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1347
 msgid "Python Gauss Cannon Tracks"
 msgstr "履帶式蟒蛇坦克（高斯加農砲）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1348
 msgid "Python Pulse Laser Tracks"
 msgstr "履帶式蟒蛇坦克（脈衝雷射）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1349
 msgid "Tiger Pulse Laser Tracks"
 msgstr "履帶式虎式坦克（脈衝雷射）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1350
 msgid "Tiger Heavy Laser Tracks"
 msgstr "履帶式虎式坦克（高能雷射）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1351
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr "履帶式雙足飛龍坦克（高斯加農砲）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1352
 msgid "Wyvern Pulse Laser Tracks"
 msgstr "履帶式雙足飛龍坦克（脈衝雷射）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1353
 msgid "Wyvern Heavy Laser Tracks"
 msgstr "履帶式雙足飛龍坦克（重機槍）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1342
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1354
 msgid "Viper Machinegun Half-Track"
 msgstr "半履帶式響尾蛇坦克（雙管機槍）"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1343
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1355
 msgid "Viper Flamer Half-Track"
 msgstr "半履帶式響尾蛇坦克（火焰噴射）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
-#: data/mp/messages/strings/names.txt:1822
+#: data/mp/messages/strings/names.txt:1825
 msgid "Heavy Repair Turret Cobra Hover"
 msgstr "眼鏡蛇重型修理氣墊船"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1823
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1834
-#: data/mp/messages/strings/names.txt:1823
-#: data/mp/messages/strings/names.txt:1834
+#: data/mp/messages/strings/names.txt:1826
+#: data/mp/messages/strings/names.txt:1837
 msgid "Heavy Machinegun Viper Wheels"
 msgstr "輪式響尾蛇坦克（重機槍）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
-#: data/mp/messages/strings/names.txt:1825
+#: data/mp/messages/strings/names.txt:1828
 msgid "Tank Killer Mantis Hover"
 msgstr "螳螂氣墊船（坦克殺手）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1826
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1841
-#: data/mp/messages/strings/names.txt:1826
-#: data/mp/messages/strings/names.txt:1841
+#: data/mp/messages/strings/names.txt:1829
+#: data/mp/messages/strings/names.txt:1844
 msgid "Heavy Machinegun Cobra Tracks"
 msgstr "履帶式響尾蛇坦克（重機槍）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1827
-#: data/mp/messages/strings/names.txt:1827
+#: data/mp/messages/strings/names.txt:1830
 msgid "Heavy Cannon Cobra Hover"
 msgstr "眼鏡蛇氣墊船（重型加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1835
-#: data/mp/messages/strings/names.txt:1835
+#: data/mp/messages/strings/names.txt:1838
 msgid "Heavy Machinegun Cobra Wheels"
 msgstr "輪式眼鏡蛇坦克（重機槍）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1836
-#: data/mp/messages/strings/names.txt:1836
+#: data/mp/messages/strings/names.txt:1839
 msgid "Heavy Machinegun Cobra Hover"
 msgstr "眼鏡蛇氣墊船（重機槍）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1838
-#: data/mp/messages/strings/names.txt:1838
+#: data/mp/messages/strings/names.txt:1841
 msgid "Machinegun Viper Tracks"
 msgstr "輪式響尾蛇坦克（機槍）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1839
-#: data/mp/messages/strings/names.txt:1839
+#: data/mp/messages/strings/names.txt:1842
 msgid "Twin Machinegun Viper Tracks"
 msgstr "輪式響尾蛇坦克（雙管機槍）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1843
-#: data/mp/messages/strings/names.txt:1843
+#: data/mp/messages/strings/names.txt:1846
 msgid "Medium Cannon Cobra Hover"
 msgstr "眼鏡蛇氣墊船（中型加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1844
-#: data/mp/messages/strings/names.txt:1844
+#: data/mp/messages/strings/names.txt:1847
 msgid "Medium Cannon Scorpion Hover"
 msgstr "毒蠍氣墊船（中型加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1845
-#: data/mp/messages/strings/names.txt:1845
+#: data/mp/messages/strings/names.txt:1848
 msgid "Medium Cannon Scorpion Tracks"
 msgstr "履帶式毒蠍坦克（中型加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1846
-#: data/mp/messages/strings/names.txt:1846
+#: data/mp/messages/strings/names.txt:1849
 msgid "Medium Cannon Python Hover"
 msgstr "蟒蛇氣墊船（中型加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1847
-#: data/mp/messages/strings/names.txt:1847
+#: data/mp/messages/strings/names.txt:1850
 msgid "Heavy Cannon Python Hover"
 msgstr "蟒蛇氣墊船（重型加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1849
-#: data/mp/messages/strings/names.txt:1849
+#: data/mp/messages/strings/names.txt:1852
 msgid "Rail Gun Mantis Tracks"
 msgstr "履帶式螳螂坦克（軌道砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1850
-#: data/mp/messages/strings/names.txt:1850
+#: data/mp/messages/strings/names.txt:1853
 msgid "Pulse Laser Mantis Tracks"
 msgstr "履帶式螳螂坦克（脈衝雷射）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1851
-#: data/mp/messages/strings/names.txt:1851
+#: data/mp/messages/strings/names.txt:1854
 msgid "Lancer Python Tracks"
 msgstr "履帶式蟒蛇坦克（槍騎兵火箭）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1852
-#: data/mp/messages/strings/names.txt:1852
+#: data/mp/messages/strings/names.txt:1855
 msgid "Lancer Mantis Tracks"
 msgstr "履帶式螳螂坦克（槍騎兵火箭）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1853
-#: data/mp/messages/strings/names.txt:1853
+#: data/mp/messages/strings/names.txt:1856
 msgid "Tank Killer Vengeance Tracks"
 msgstr "履帶式復仇者坦克（坦克殺手）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1858
-#: data/mp/messages/strings/names.txt:1858
+#: data/mp/messages/strings/names.txt:1861
 msgid "Heavy Cannon Tiger Tracks"
 msgstr "履帶式虎式坦克（重型加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1859
-#: data/mp/messages/strings/names.txt:1859
+#: data/mp/messages/strings/names.txt:1862
 msgid "Needle Gun Tiger Tracks"
 msgstr "履帶式虎式坦克（針刺砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1860
-#: data/mp/messages/strings/names.txt:1860
+#: data/mp/messages/strings/names.txt:1863
 msgid "Needle Gun Retribution Tracks"
 msgstr "履帶式懲罰者坦克（針刺砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1861
-#: data/mp/messages/strings/names.txt:1861
+#: data/mp/messages/strings/names.txt:1864
 msgid "Needle Gun Vengeance Tracks"
 msgstr "履帶式復仇者坦克（針刺砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1862
-#: data/mp/messages/strings/names.txt:1862
+#: data/mp/messages/strings/names.txt:1865
 msgid "Vengeance Tracks Rail Gun"
 msgstr "履帶式復仇者坦克（軌道砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1863
-#: data/mp/messages/strings/names.txt:1863
+#: data/mp/messages/strings/names.txt:1866
 #, fuzzy
 msgid "Vengeance Tracks Gauss Cannon"
 msgstr "履帶式復仇者坦克（高斯加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1864
-#: data/mp/messages/strings/names.txt:1864
+#: data/mp/messages/strings/names.txt:1867
 #, fuzzy
 msgid "Vengeance Tracks Gauss Scourge"
 msgstr "履帶式復仇者坦克（ 天譴飛彈）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1867
-#: data/mp/messages/strings/names.txt:1867
+#: data/mp/messages/strings/names.txt:1870
 #, fuzzy
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
 msgstr "VTOL（集束炸彈艙）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1868
-#: data/mp/messages/strings/names.txt:1868
+#: data/mp/messages/strings/names.txt:1871
 #, fuzzy
 msgid "VTOL Bunker Buster Bug VTOL"
 msgstr "毒蟲VTOL（碉堡終結者）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1869
-#: data/mp/messages/strings/names.txt:1869
+#: data/mp/messages/strings/names.txt:1872
 #, fuzzy
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
 msgstr "毒蠍VTOL（集束炸彈艙）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1870
-#: data/mp/messages/strings/names.txt:1870
+#: data/mp/messages/strings/names.txt:1873
 #, fuzzy
 msgid "VTOL Bunker Buster Scorpion VTOL"
 msgstr "毒蠍VTOL（碉堡終結者）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1873
-#: data/mp/messages/strings/names.txt:1873
+#: data/mp/messages/strings/names.txt:1876
 msgid "VTOL Lancer Bug VTOL"
 msgstr "毒蟲VTOL（槍騎兵火箭）"
 
@@ -9831,7 +9831,7 @@ msgid "VTOL HPV Cannon Bug VTOL"
 msgstr "毒蟲VTOL（高速加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1875
-#: data/mp/messages/strings/names.txt:1875
+#: data/mp/messages/strings/names.txt:1878
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "毒蠍VTOL（槍騎兵火箭）"
 
@@ -9841,7 +9841,7 @@ msgid "VTOL HPV Cannon Scorpion VTOL"
 msgstr "毒蠍VTOL（高速加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
-#: data/mp/messages/strings/names.txt:1877
+#: data/mp/messages/strings/names.txt:1880
 msgid "VTOL Lancer Mantis VTOL"
 msgstr "螳螂VTOL（槍騎兵火箭）"
 
@@ -9850,130 +9850,130 @@ msgid "VTOL HPV Cannon Mantis VTOL"
 msgstr "螳螂VTOL（高速加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
-#: data/mp/messages/strings/names.txt:1882
+#: data/mp/messages/strings/names.txt:1885
 #, fuzzy
 msgid "Repair Turret Mantis Tracks"
 msgstr "螳螂修理車"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1884
-#: data/mp/messages/strings/names.txt:1884
+#: data/mp/messages/strings/names.txt:1887
 msgid "Lancer Scorpion Tracks"
 msgstr "履帶式毒蠍坦克（槍騎兵火箭）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1885
-#: data/mp/messages/strings/names.txt:1885
+#: data/mp/messages/strings/names.txt:1888
 msgid "Heavy Cannon Scorpion Tracks"
 msgstr "履帶式毒蠍坦克（重型加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1886
-#: data/mp/messages/strings/names.txt:1886
+#: data/mp/messages/strings/names.txt:1889
 msgid "Lancer Scorpion VTOL"
 msgstr "毒蠍VTOL（槍騎兵火箭）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1887
-#: data/mp/messages/strings/names.txt:1887
+#: data/mp/messages/strings/names.txt:1890
 msgid "Bunker Buster Scorpion VTOL"
 msgstr "毒蠍VTOL（碉堡終結者）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1889
-#: data/mp/messages/strings/names.txt:1889
+#: data/mp/messages/strings/names.txt:1892
 msgid "Command Turret Viper Tracks"
 msgstr "響尾蛇指揮車"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1890
-#: data/mp/messages/strings/names.txt:1890
+#: data/mp/messages/strings/names.txt:1893
 msgid "Command Turret Cobra Tracks"
 msgstr "眼鏡蛇指揮車"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1891
-#: data/mp/messages/strings/names.txt:1891
+#: data/mp/messages/strings/names.txt:1894
 msgid "Command Turret Scorpion Tracks"
 msgstr "毒蠍指揮車"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1892
-#: data/mp/messages/strings/names.txt:1892
+#: data/mp/messages/strings/names.txt:1895
 msgid "Command Turret Mantis Tracks"
 msgstr "螳螂指揮車"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1894
-#: data/mp/messages/strings/names.txt:1894
+#: data/mp/messages/strings/names.txt:1897
 msgid "Lancer Cobra Tracks"
 msgstr "履帶式眼鏡蛇坦克（槍騎兵火箭）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1895
-#: data/mp/messages/strings/names.txt:1895
+#: data/mp/messages/strings/names.txt:1898
 msgid "Heavy Cannon Mantis Tracks"
 msgstr "履帶式螳螂坦克（重型加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1896
-#: data/mp/messages/strings/names.txt:1896
+#: data/mp/messages/strings/names.txt:1899
 msgid "Tank Killer Mantis Tracks"
 msgstr "履帶式螳螂坦克（坦克殺手）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1897
-#: data/mp/messages/strings/names.txt:1897
+#: data/mp/messages/strings/names.txt:1900
 msgid "Scourge Mantis Tracks"
 msgstr "履帶式螳螂坦克（天譴飛彈）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1898
-#: data/mp/messages/strings/names.txt:1898
+#: data/mp/messages/strings/names.txt:1901
 #, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
 msgstr "履帶式毒蠍坦克（重機槍）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1900
-#: data/mp/messages/strings/names.txt:1900
+#: data/mp/messages/strings/names.txt:1903
 msgid "Repair Scorpion Tracks"
 msgstr "毒蠍修理車"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1901
-#: data/mp/messages/strings/names.txt:1901
+#: data/mp/messages/strings/names.txt:1904
 msgid "Heavy Repair Scorpion Hover"
 msgstr "毒蠍重型修理氣墊船"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1904
-#: data/mp/messages/strings/names.txt:1904
+#: data/mp/messages/strings/names.txt:1907
 msgid "Truck Cobra Hover"
 msgstr "眼鏡蛇工程氣墊船"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1905
-#: data/mp/messages/strings/names.txt:1905
+#: data/mp/messages/strings/names.txt:1908
 msgid "Truck Scorpion Hover"
 msgstr "毒蠍工程氣墊船"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1906
-#: data/mp/messages/strings/names.txt:1906
+#: data/mp/messages/strings/names.txt:1909
 msgid "Truck Mantis Hover"
 msgstr "螳螂工程氣墊船"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1909
-#: data/mp/messages/strings/names.txt:1909
+#: data/mp/messages/strings/names.txt:1912
 msgid "Bunker Buster Cobra Tracks"
 msgstr "履帶式眼鏡蛇坦克（碉堡終結者）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1910
-#: data/mp/messages/strings/names.txt:1910
+#: data/mp/messages/strings/names.txt:1913
 msgid "Bunker Buster Scorpion Tracks"
 msgstr "履帶式毒蠍坦克（碉堡終結者）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1911
-#: data/mp/messages/strings/names.txt:1911
+#: data/mp/messages/strings/names.txt:1914
 msgid "Bunker Buster Mantis Tracks"
 msgstr "履帶式螳螂坦克（碉堡終結者）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1913
-#: data/mp/messages/strings/names.txt:1913
+#: data/mp/messages/strings/names.txt:1916
 msgid "Lancer Viper Tracks"
 msgstr "履帶式響尾蛇坦克（槍騎兵火箭）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1915
-#: data/mp/messages/strings/names.txt:1915
+#: data/mp/messages/strings/names.txt:1918
 #, fuzzy
 msgid "Mini-Rocket Cobra Half-Tracks"
 msgstr "半履帶式眼鏡蛇坦克（迷你火箭）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1916
-#: data/mp/messages/strings/names.txt:1916
+#: data/mp/messages/strings/names.txt:1919
 #, fuzzy
 msgid "Mini-Rocket Cobra Tracks"
 msgstr "履帶式眼鏡蛇坦克（迷你火箭）"
@@ -9984,7 +9984,7 @@ msgid "Mini-Rocket Artillery Cobra Tracks"
 msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1919
-#: data/mp/messages/strings/names.txt:1919
+#: data/mp/messages/strings/names.txt:1922
 msgid "Inferno Cobra Half-Tracks"
 msgstr "半履帶式眼鏡蛇坦克（地獄火）"
 
@@ -9993,52 +9993,52 @@ msgid "HPV Cannon Python Hover"
 msgstr "履帶式蟒蛇坦克（高速加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1924
-#: data/mp/messages/strings/names.txt:1924
+#: data/mp/messages/strings/names.txt:1927
 msgid "Scourge Python Tracks"
 msgstr "履帶式蟒蛇坦克（天譴飛彈）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1925
-#: data/mp/messages/strings/names.txt:1925
+#: data/mp/messages/strings/names.txt:1928
 msgid "Gauss Cannon Python Tracks"
 msgstr "履帶式蟒蛇坦克（高速加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1926
-#: data/mp/messages/strings/names.txt:1926
+#: data/mp/messages/strings/names.txt:1929
 msgid "Pulse Laser Python Tracks"
 msgstr "履帶式蟒蛇坦克（脈衝雷射）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1927
-#: data/mp/messages/strings/names.txt:1927
+#: data/mp/messages/strings/names.txt:1930
 msgid "Pulse Laser Tiger Tracks"
 msgstr "履帶式虎式坦克（脈衝雷射）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1928
-#: data/mp/messages/strings/names.txt:1928
+#: data/mp/messages/strings/names.txt:1931
 msgid "Heavy Laser Tiger Tracks"
 msgstr "履帶式虎式坦克（高能雷射）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1929
-#: data/mp/messages/strings/names.txt:1929
+#: data/mp/messages/strings/names.txt:1932
 msgid "Gauss Cannon Wyvern Tracks"
 msgstr "履帶式雙足飛龍坦克（高斯加農砲）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1930
-#: data/mp/messages/strings/names.txt:1930
+#: data/mp/messages/strings/names.txt:1933
 msgid "Pulse Laser Wyvern Tracks"
 msgstr "履帶式雙足飛龍坦克（脈衝雷射）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1931
-#: data/mp/messages/strings/names.txt:1931
+#: data/mp/messages/strings/names.txt:1934
 msgid "Heavy Laser Wyvern Tracks"
 msgstr "履帶式雙足飛龍坦克（高能雷射）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1933
-#: data/mp/messages/strings/names.txt:1933
+#: data/mp/messages/strings/names.txt:1936
 msgid "Machinegun Viper Half-Tracks"
 msgstr "半履帶式響尾蛇坦克（機槍）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1934
-#: data/mp/messages/strings/names.txt:1934
+#: data/mp/messages/strings/names.txt:1937
 msgid "Flamer Viper Half-Tracks"
 msgstr "半履帶式響尾蛇坦克（火焰噴射）"
 
@@ -10714,7 +10714,7 @@ msgid "Upgraded battlefield computer system"
 msgstr "戰場電腦系統升級"
 
 #: data/mp/messages/strings/names.txt:15
-#: data/mp/messages/strings/names.txt:680
+#: data/mp/messages/strings/names.txt:681
 msgid "Cyborg Transport"
 msgstr "生化人運輸艦"
 
@@ -10745,7 +10745,7 @@ msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
 
 #: data/mp/messages/strings/names.txt:372
-#: data/mp/messages/strings/names.txt:1705
+#: data/mp/messages/strings/names.txt:1708
 msgid "Radar Detector"
 msgstr ""
 
@@ -10759,678 +10759,788 @@ msgid "Nexus Link"
 msgstr "Nexus Link（可搭載新的武器）"
 
 #: data/mp/messages/strings/names.txt:387
-#: data/mp/messages/strings/names.txt:922
+#: data/mp/messages/strings/names.txt:925
 msgid "Nexus Link Turret"
 msgstr "Nexus Link（可搭載新的武器）"
 
-#: data/mp/messages/strings/names.txt:409
-#: data/mp/messages/strings/names.txt:732
+#: data/mp/messages/strings/names.txt:404
+#, fuzzy
+msgid "Hardcrete Gate"
+msgstr "鈦鋼筋牆"
+
+#: data/mp/messages/strings/names.txt:410
+#: data/mp/messages/strings/names.txt:735
 #, fuzzy
 msgid "Inferno Bunker"
 msgstr "槍騎兵火箭碉堡"
 
-#: data/mp/messages/strings/names.txt:416
+#: data/mp/messages/strings/names.txt:417
 msgid "Tornado AA Site"
 msgstr "龍捲風級高射砲"
 
-#: data/mp/messages/strings/names.txt:417
-#: data/mp/messages/strings/names.txt:723
+#: data/mp/messages/strings/names.txt:418
+#: data/mp/messages/strings/names.txt:726
 msgid "Cyclone AA Site"
 msgstr "暴風級高射砲"
 
-#: data/mp/messages/strings/names.txt:473
-#: data/mp/messages/strings/names.txt:787
+#: data/mp/messages/strings/names.txt:474
+#: data/mp/messages/strings/names.txt:790
 #, fuzzy
 msgid "Pulse Laser Hardpoint"
 msgstr "火焰噴射要塞"
 
-#: data/mp/messages/strings/names.txt:475
-#: data/mp/messages/strings/names.txt:749
+#: data/mp/messages/strings/names.txt:476
+#: data/mp/messages/strings/names.txt:752
 #, fuzzy
 msgid "Pulse Laser Tower"
 msgstr "脈衝雷射"
 
-#: data/mp/messages/strings/names.txt:512
-#: data/mp/messages/strings/names.txt:1134
+#: data/mp/messages/strings/names.txt:513
+#: data/mp/messages/strings/names.txt:1137
 #, fuzzy
 msgid "Seraph Missile Array"
 msgstr "增加飛彈準確率"
 
-#: data/mp/messages/strings/names.txt:530
-#: data/mp/messages/strings/names.txt:1197
+#: data/mp/messages/strings/names.txt:531
+#: data/mp/messages/strings/names.txt:1200
 #, fuzzy
 msgid "Mini-Rocket Array"
 msgstr "迷你火箭炮"
 
-#: data/mp/messages/strings/names.txt:565
-#: data/mp/messages/strings/names.txt:1695
-#: data/mp/messages/strings/names.txt:1702
+#: data/mp/messages/strings/names.txt:566
+#: data/mp/messages/strings/names.txt:1698
+#: data/mp/messages/strings/names.txt:1705
 msgid "Laser Satellite Command Post"
 msgstr "激光衛星指揮中心"
 
-#: data/mp/messages/strings/names.txt:582
+#: data/mp/messages/strings/names.txt:583
 #, fuzzy
 msgid "VTOL Cluster Bomb Bay"
 msgstr "VTOL（集束炸彈艙）"
 
-#: data/mp/messages/strings/names.txt:589
+#: data/mp/messages/strings/names.txt:590
 msgid "Collective Corner Wall"
 msgstr "Collective鈦鋼筋角牆"
 
-#: data/mp/messages/strings/names.txt:611
+#: data/mp/messages/strings/names.txt:612
 msgid "Nexus Wall"
 msgstr "NEXUS鈦鋼筋牆"
 
-#: data/mp/messages/strings/names.txt:612
+#: data/mp/messages/strings/names.txt:613
 msgid "Nexus Corner Wall"
 msgstr "NEXUS鈦鋼筋角牆"
 
-#: data/mp/messages/strings/names.txt:718
+#: data/mp/messages/strings/names.txt:719
 msgid "Plascrete Mk3"
 msgstr "超合金鋼筋牆三型"
 
-#: data/mp/messages/strings/names.txt:719
+#: data/mp/messages/strings/names.txt:720
 msgid "Plasteel"
 msgstr "超塑鋼筋牆一型"
 
-#: data/mp/messages/strings/names.txt:720
+#: data/mp/messages/strings/names.txt:721
 msgid "Plasteel Mk2"
 msgstr "超塑鋼筋牆二型"
 
-#: data/mp/messages/strings/names.txt:721
+#: data/mp/messages/strings/names.txt:722
 msgid "Plasteel Mk3"
 msgstr "超塑鋼筋牆一型"
 
-#: data/mp/messages/strings/names.txt:728
-#: data/mp/messages/strings/names.txt:1389
+#: data/mp/messages/strings/names.txt:724
+#, fuzzy
+msgid "Gate"
+msgstr "遊戲"
+
+#: data/mp/messages/strings/names.txt:731
+#: data/mp/messages/strings/names.txt:1392
 #, fuzzy
 msgid "Hyper Velocity Cannon Emplacement"
 msgstr "高速加農砲"
 
-#: data/mp/messages/strings/names.txt:739
-#: data/mp/messages/strings/names.txt:1392
+#: data/mp/messages/strings/names.txt:742
+#: data/mp/messages/strings/names.txt:1395
 #, fuzzy
 msgid "Seraph Missile Battery"
 msgstr "天使飛彈砲台"
 
-#: data/mp/messages/strings/names.txt:768
+#: data/mp/messages/strings/names.txt:771
 msgid "Flamer Tower"
 msgstr "火焰噴射防衛塔"
 
-#: data/mp/messages/strings/names.txt:786
-#: data/mp/messages/strings/names.txt:1397
+#: data/mp/messages/strings/names.txt:789
+#: data/mp/messages/strings/names.txt:1400
 #, fuzzy
 msgid "Hyper Velocity Cannon Hardpoint"
 msgstr "高速加農砲"
 
-#: data/mp/messages/strings/names.txt:805
+#: data/mp/messages/strings/names.txt:808
 #, fuzzy
 msgid "Automated Manufacturing"
 msgstr "初階自動化VTOL補給一型"
 
-#: data/mp/messages/strings/names.txt:806
+#: data/mp/messages/strings/names.txt:809
 #, fuzzy
 msgid "Automated Manufacturing Mk2"
 msgstr "初階自動化VTOL補給二型"
 
-#: data/mp/messages/strings/names.txt:807
+#: data/mp/messages/strings/names.txt:810
 #, fuzzy
 msgid "Automated Manufacturing Mk3"
 msgstr "初階自動化VTOL補給三型"
 
-#: data/mp/messages/strings/names.txt:808
+#: data/mp/messages/strings/names.txt:811
 #, fuzzy
 msgid "Robotic Manufacturing"
 msgstr "生產新單位"
 
-#: data/mp/messages/strings/names.txt:809
+#: data/mp/messages/strings/names.txt:812
 #, fuzzy
 msgid "Robotic Manufacturing Mk2"
 msgstr "中階自動化VTOL補給二型"
 
-#: data/mp/messages/strings/names.txt:810
+#: data/mp/messages/strings/names.txt:813
 #, fuzzy
 msgid "Robotic Manufacturing Mk3"
 msgstr "中階自動化VTOL補給三型"
 
-#: data/mp/messages/strings/names.txt:811
+#: data/mp/messages/strings/names.txt:814
 #, fuzzy
 msgid "Advanced Manufacturing"
 msgstr "高階戰爭"
 
-#: data/mp/messages/strings/names.txt:812
+#: data/mp/messages/strings/names.txt:815
 #, fuzzy
 msgid "Advanced Manufacturing Mk2"
 msgstr "高階自動化生產工廠二型"
 
-#: data/mp/messages/strings/names.txt:813
+#: data/mp/messages/strings/names.txt:816
 #, fuzzy
 msgid "Self-Replicating Manufacturing"
 msgstr "自我複製工廠製造"
 
-#: data/mp/messages/strings/names.txt:814
+#: data/mp/messages/strings/names.txt:817
 #, fuzzy
 msgid "Advanced Manufacturing Mk3"
 msgstr "高階自動化生產工廠三型"
 
-#: data/mp/messages/strings/names.txt:833
+#: data/mp/messages/strings/names.txt:836
 #, fuzzy
 msgid "Automated Repair Facility Mk2"
 msgstr "初階自動修理工廠"
 
-#: data/mp/messages/strings/names.txt:834
+#: data/mp/messages/strings/names.txt:837
 #, fuzzy
 msgid "Automated Repair Facility Mk3"
 msgstr "初階自動修理工廠"
 
-#: data/mp/messages/strings/names.txt:835
+#: data/mp/messages/strings/names.txt:838
 #, fuzzy
 msgid "Robotic Repair Facility"
 msgstr "中階自動修理工廠"
 
-#: data/mp/messages/strings/names.txt:836
+#: data/mp/messages/strings/names.txt:839
 #, fuzzy
 msgid "Robotic Repair Facility Mk2"
 msgstr "中階自動修理工廠二型"
 
-#: data/mp/messages/strings/names.txt:837
+#: data/mp/messages/strings/names.txt:840
 #, fuzzy
 msgid "Advanced Repair Facility"
 msgstr "高階自動修理工廠 "
 
-#: data/mp/messages/strings/names.txt:838
+#: data/mp/messages/strings/names.txt:841
 #, fuzzy
 msgid "Robotic Repair Facility Mk3"
 msgstr "中階自動修理工廠三型"
 
-#: data/mp/messages/strings/names.txt:839
+#: data/mp/messages/strings/names.txt:842
 #, fuzzy
 msgid "Advanced Repair Facility Mk2"
 msgstr "高階自動修理工廠二型"
 
-#: data/mp/messages/strings/names.txt:840
+#: data/mp/messages/strings/names.txt:843
 #, fuzzy
 msgid "Advanced Repair Facility Mk3"
 msgstr "高階自動修理工廠三型"
 
-#: data/mp/messages/strings/names.txt:885
+#: data/mp/messages/strings/names.txt:888
 msgid "Auto-Repair"
 msgstr "自動修理技術"
 
-#: data/mp/messages/strings/names.txt:896
-#: data/mp/messages/strings/names.txt:1647
-#: data/mp/messages/strings/names.txt:1648
+#: data/mp/messages/strings/names.txt:899
+#: data/mp/messages/strings/names.txt:1650
+#: data/mp/messages/strings/names.txt:1651
 msgid "Heavy Repair Turret"
 msgstr "重型修理車"
 
-#: data/mp/messages/strings/names.txt:926
+#: data/mp/messages/strings/names.txt:929
 msgid "Nexus Intruder Program"
 msgstr "NEXUS入侵程式"
 
-#: data/mp/messages/strings/names.txt:927
-#: data/mp/messages/strings/names.txt:1688
+#: data/mp/messages/strings/names.txt:930
+#: data/mp/messages/strings/names.txt:1691
 msgid "Nexus Resistance Circuits"
 msgstr "NEXUS 電腦入侵防禦系統一型"
 
-#: data/mp/messages/strings/names.txt:928
+#: data/mp/messages/strings/names.txt:931
 msgid "Nexus Resistance Circuits Mk2"
 msgstr "NEXUS 電腦入侵防禦系統二型"
 
-#: data/mp/messages/strings/names.txt:929
+#: data/mp/messages/strings/names.txt:932
 msgid "Nexus Resistance Circuits Mk3"
 msgstr "NEXUS 電腦入侵防禦系統三型"
 
-#: data/mp/messages/strings/names.txt:1016
+#: data/mp/messages/strings/names.txt:1019
 #, fuzzy
 msgid "Cluster Bomb Bay"
 msgstr "集束炸彈艙"
 
-#: data/mp/messages/strings/names.txt:1021
+#: data/mp/messages/strings/names.txt:1024
 #, fuzzy
 msgid "HE Bomb Shells"
 msgstr "HE迫擊砲彈一型"
 
-#: data/mp/messages/strings/names.txt:1022
+#: data/mp/messages/strings/names.txt:1025
 #, fuzzy
 msgid "Improved Bomb Warhead"
 msgstr "改善彈頭外型及裝填效能"
 
-#: data/mp/messages/strings/names.txt:1023
+#: data/mp/messages/strings/names.txt:1026
 #, fuzzy
 msgid "Advanced Bomb Warhead"
 msgstr "高階飛彈彈頭一型"
 
-#: data/mp/messages/strings/names.txt:1093
+#: data/mp/messages/strings/names.txt:1096
 msgid "Howitzer Fast Loader"
 msgstr "迫擊砲快速裝載系統"
 
-#: data/mp/messages/strings/names.txt:1109
+#: data/mp/messages/strings/names.txt:1112
 msgid "Rapid Fire Chaingun"
 msgstr "中階高速型鍊槍升級"
 
-#: data/mp/messages/strings/names.txt:1158
+#: data/mp/messages/strings/names.txt:1161
 msgid "Rail Target Prediction Computer"
 msgstr "軌道目標預測電腦"
 
-#: data/mp/messages/strings/names.txt:1174
+#: data/mp/messages/strings/names.txt:1177
 #, fuzzy
 msgid "HESH Mini-Rockets"
 msgstr "HE迷你火箭一型（"
 
-#: data/mp/messages/strings/names.txt:1175
+#: data/mp/messages/strings/names.txt:1178
 #, fuzzy
 msgid "HESH Mini-Rockets Mk2"
 msgstr "HE迷你火箭二型"
 
-#: data/mp/messages/strings/names.txt:1176
+#: data/mp/messages/strings/names.txt:1179
 #, fuzzy
 msgid "HESH Mini-Rockets Mk3"
 msgstr "HE迷你火箭三型"
 
-#: data/mp/messages/strings/names.txt:1385
+#: data/mp/messages/strings/names.txt:1388
 msgid "Assault Gun Tower"
 msgstr "突擊槍防衛塔"
 
-#: data/mp/messages/strings/names.txt:1439
+#: data/mp/messages/strings/names.txt:1442
 msgid "Repair Cobra Tracks"
 msgstr "履帶式眼鏡蛇修理車"
 
-#: data/mp/messages/strings/names.txt:1475
+#: data/mp/messages/strings/names.txt:1478
 #, fuzzy
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "履帶式蟒蛇坦克（高速加農砲）"
 
-#: data/mp/messages/strings/names.txt:1514
+#: data/mp/messages/strings/names.txt:1517
 msgid "Bunker Buster Cobra Hover"
 msgstr "眼鏡蛇氣墊船（碉堡終結者）"
 
-#: data/mp/messages/strings/names.txt:1516
+#: data/mp/messages/strings/names.txt:1519
 msgid "Sensor Upgrade Mk2"
 msgstr "雷達升級二型"
 
-#: data/mp/messages/strings/names.txt:1517
+#: data/mp/messages/strings/names.txt:1520
 msgid "Sensor Upgrade Mk3"
 msgstr "雷達升級三型"
 
-#: data/mp/messages/strings/names.txt:1518
+#: data/mp/messages/strings/names.txt:1521
 msgid "Vapor Turbine Generator Mk2"
 msgstr "蒸氣渦輪發電機二型"
 
-#: data/mp/messages/strings/names.txt:1522
+#: data/mp/messages/strings/names.txt:1525
 msgid "Gas Turbine Generator Mk2"
 msgstr "燃氣渦輪發電機二型"
 
-#: data/mp/messages/strings/names.txt:1523
+#: data/mp/messages/strings/names.txt:1526
 msgid "Gas Turbine Generator Mk3"
 msgstr "燃氣渦輪發電機三型"
 
-#: data/mp/messages/strings/names.txt:1526
+#: data/mp/messages/strings/names.txt:1529
 msgid "Vapor Turbine Generator Mk3"
 msgstr "蒸氣渦輪發電機三型"
 
-#: data/mp/messages/strings/names.txt:1611
+#: data/mp/messages/strings/names.txt:1614
 msgid "Thermite Flamer Cyborg"
 msgstr "生化人步兵（鋁熱反應火焰）"
 
-#: data/mp/messages/strings/names.txt:1614
+#: data/mp/messages/strings/names.txt:1617
 msgid "Thermite Flamer"
 msgstr "鋁熱反應火焰噴射步兵"
 
-#: data/mp/messages/strings/names.txt:1616
+#: data/mp/messages/strings/names.txt:1619
 msgid "Grenadier Cyborg"
 msgstr "生化人步兵（手榴彈）"
 
-#: data/mp/messages/strings/names.txt:1619
+#: data/mp/messages/strings/names.txt:1622
 msgid "Grenadier"
 msgstr "生化人步兵（手榴彈）"
 
-#: data/mp/messages/strings/names.txt:1623
 #: data/mp/messages/strings/names.txt:1626
+#: data/mp/messages/strings/names.txt:1629
 msgid "Combat Engineer"
 msgstr "工程生化人步兵"
 
-#: data/mp/messages/strings/names.txt:1628
 #: data/mp/messages/strings/names.txt:1631
+#: data/mp/messages/strings/names.txt:1634
 msgid "Cyborg Mechanic"
 msgstr "維修生化人步兵"
 
-#: data/mp/messages/strings/names.txt:1635
-#: data/mp/messages/strings/names.txt:1636
+#: data/mp/messages/strings/names.txt:1638
+#: data/mp/messages/strings/names.txt:1639
 #, fuzzy
 msgid "Incendiary Howitzer"
 msgstr "燃燒榴彈砲"
 
-#: data/mp/messages/strings/names.txt:1637
-#: data/mp/messages/strings/names.txt:1638
+#: data/mp/messages/strings/names.txt:1640
+#: data/mp/messages/strings/names.txt:1641
 #, fuzzy
 msgid "Incendiary Howitzer Emplacement"
 msgstr "燃燒榴彈砲砲台"
 
-#: data/mp/messages/strings/names.txt:1639
-#: data/mp/messages/strings/names.txt:1640
+#: data/mp/messages/strings/names.txt:1642
+#: data/mp/messages/strings/names.txt:1643
 msgid "Plasmite Flamer"
 msgstr "等離子火焰噴射"
 
-#: data/mp/messages/strings/names.txt:1641
-#: data/mp/messages/strings/names.txt:1642
+#: data/mp/messages/strings/names.txt:1644
+#: data/mp/messages/strings/names.txt:1645
 msgid "Plasmite Flamer Bunker"
 msgstr "等離子火焰噴射碉堡"
 
-#: data/mp/messages/strings/names.txt:1643
-#: data/mp/messages/strings/names.txt:1644
+#: data/mp/messages/strings/names.txt:1646
+#: data/mp/messages/strings/names.txt:1647
 #, fuzzy
 msgid "Incendiary Mortar"
 msgstr "燃燒迫擊砲"
 
-#: data/mp/messages/strings/names.txt:1645
-#: data/mp/messages/strings/names.txt:1646
+#: data/mp/messages/strings/names.txt:1648
+#: data/mp/messages/strings/names.txt:1649
 #, fuzzy
 msgid "Incendiary Mortar Pit"
 msgstr "燃燒迫擊砲"
 
-#: data/mp/messages/strings/names.txt:1650
+#: data/mp/messages/strings/names.txt:1653
 msgid "Cyborg Superdense Thermal Armor"
 msgstr "超緊密生化人熱能裝甲一型"
 
-#: data/mp/messages/strings/names.txt:1651
+#: data/mp/messages/strings/names.txt:1654
 msgid "Cyborg Superdense Thermal Armor Mk2"
 msgstr "超緊密生化人熱能裝甲二型"
 
-#: data/mp/messages/strings/names.txt:1652
+#: data/mp/messages/strings/names.txt:1655
 msgid "Cyborg Superdense Thermal Armor Mk3"
 msgstr "超緊密生化人熱能裝甲三型"
 
-#: data/mp/messages/strings/names.txt:1654
+#: data/mp/messages/strings/names.txt:1657
 msgid "Vehicle Superdense Thermal Armor"
 msgstr "超緊密熱能裝甲一型"
 
-#: data/mp/messages/strings/names.txt:1655
+#: data/mp/messages/strings/names.txt:1658
 msgid "Vehicle Superdense Thermal Armor Mk2"
 msgstr "超緊密熱能裝甲二型"
 
-#: data/mp/messages/strings/names.txt:1656
+#: data/mp/messages/strings/names.txt:1659
 msgid "Vehicle Superdense Thermal Armor Mk3"
 msgstr "超緊密熱能裝甲三型"
 
-#: data/mp/messages/strings/names.txt:1660
-#: data/mp/messages/strings/names.txt:1661
-#: data/mp/messages/strings/names.txt:1662
 #: data/mp/messages/strings/names.txt:1663
+#: data/mp/messages/strings/names.txt:1664
+#: data/mp/messages/strings/names.txt:1665
+#: data/mp/messages/strings/names.txt:1666
 msgid "Super Heavy-Gunner"
 msgstr "超級生化人步兵（中型加農砲）"
 
-#: data/mp/messages/strings/names.txt:1665
-#: data/mp/messages/strings/names.txt:1666
-#: data/mp/messages/strings/names.txt:1667
 #: data/mp/messages/strings/names.txt:1668
+#: data/mp/messages/strings/names.txt:1669
+#: data/mp/messages/strings/names.txt:1670
+#: data/mp/messages/strings/names.txt:1671
 msgid "Super Auto-Cannon Cyborg"
 msgstr "超級生化人步兵（高速加農砲Auto-Cannon）"
 
-#: data/mp/messages/strings/names.txt:1670
-#: data/mp/messages/strings/names.txt:1671
-#: data/mp/messages/strings/names.txt:1672
 #: data/mp/messages/strings/names.txt:1673
+#: data/mp/messages/strings/names.txt:1674
+#: data/mp/messages/strings/names.txt:1675
+#: data/mp/messages/strings/names.txt:1676
 msgid "Super HPV Cyborg"
 msgstr "超級生化人步兵（高速加農砲HPV）"
 
-#: data/mp/messages/strings/names.txt:1675
-#: data/mp/messages/strings/names.txt:1676
-#: data/mp/messages/strings/names.txt:1677
 #: data/mp/messages/strings/names.txt:1678
+#: data/mp/messages/strings/names.txt:1679
+#: data/mp/messages/strings/names.txt:1680
+#: data/mp/messages/strings/names.txt:1681
 msgid "Super Tank-Killer Cyborg"
 msgstr "超級生化人步兵（坦克殺手火箭）"
 
-#: data/mp/messages/strings/names.txt:1680
-#: data/mp/messages/strings/names.txt:1681
+#: data/mp/messages/strings/names.txt:1683
+#: data/mp/messages/strings/names.txt:1684
 msgid "Heavy Laser"
 msgstr "高能雷射"
 
-#: data/mp/messages/strings/names.txt:1682
+#: data/mp/messages/strings/names.txt:1685
 msgid "VTOL Heavy Laser"
 msgstr "VTOL（高能雷射）"
 
-#: data/mp/messages/strings/names.txt:1683
-#: data/mp/messages/strings/names.txt:1684
+#: data/mp/messages/strings/names.txt:1686
+#: data/mp/messages/strings/names.txt:1687
 msgid "Heavy Laser Emplacement"
 msgstr "高能雷射砲台"
 
-#: data/mp/messages/strings/names.txt:1690
-#: data/mp/messages/strings/names.txt:1691
+#: data/mp/messages/strings/names.txt:1693
+#: data/mp/messages/strings/names.txt:1694
 msgid "Twin Assault Cannon"
 msgstr "雙管突擊加農砲"
 
-#: data/mp/messages/strings/names.txt:1692
-#: data/mp/messages/strings/names.txt:1693
+#: data/mp/messages/strings/names.txt:1695
+#: data/mp/messages/strings/names.txt:1696
 msgid "Twin Assault Cannon Bunker"
 msgstr "雙管突擊加農砲碉堡"
 
-#: data/mp/messages/strings/names.txt:1696
-#: data/mp/messages/strings/names.txt:1701
-#: data/mp/messages/strings/names.txt:1703
+#: data/mp/messages/strings/names.txt:1699
+#: data/mp/messages/strings/names.txt:1704
+#: data/mp/messages/strings/names.txt:1706
 msgid "Satellite Uplink Center"
 msgstr "衛星資料上傳中心"
 
-#: data/mp/messages/strings/names.txt:1697
-#: data/mp/messages/strings/names.txt:1699
+#: data/mp/messages/strings/names.txt:1700
+#: data/mp/messages/strings/names.txt:1702
 msgid "Wide Spectrum Sensor"
 msgstr "廣域雷達"
 
-#: data/mp/messages/strings/names.txt:1698
-#: data/mp/messages/strings/names.txt:1700
+#: data/mp/messages/strings/names.txt:1701
+#: data/mp/messages/strings/names.txt:1703
 msgid "Wide Spectrum Sensor Tower"
 msgstr "廣域雷達"
 
-#: data/mp/messages/strings/names.txt:1716
-#: data/mp/messages/strings/names.txt:1717
+#: data/mp/messages/strings/names.txt:1719
+#: data/mp/messages/strings/names.txt:1720
 msgid "Plasma Cannon"
 msgstr "離子加農砲"
 
-#: data/mp/messages/strings/names.txt:1718
-#: data/mp/messages/strings/names.txt:1719
+#: data/mp/messages/strings/names.txt:1721
+#: data/mp/messages/strings/names.txt:1722
 msgid "Plasma Cannon Emplacement"
 msgstr "離子加農砲砲台"
 
-#: data/mp/messages/strings/names.txt:1721
-#: data/mp/messages/strings/names.txt:1722
-#: data/mp/messages/strings/names.txt:1723
 #: data/mp/messages/strings/names.txt:1724
+#: data/mp/messages/strings/names.txt:1725
+#: data/mp/messages/strings/names.txt:1726
+#: data/mp/messages/strings/names.txt:1727
 msgid "Super Pulse Laser Cyborg"
 msgstr "超級生化人步兵（脈衝雷射）"
 
-#: data/mp/messages/strings/names.txt:1726
-#: data/mp/messages/strings/names.txt:1727
-#: data/mp/messages/strings/names.txt:1728
 #: data/mp/messages/strings/names.txt:1729
+#: data/mp/messages/strings/names.txt:1730
+#: data/mp/messages/strings/names.txt:1731
+#: data/mp/messages/strings/names.txt:1732
 msgid "Super Rail-Gunner"
 msgstr "超級生化人步兵（軌道砲）"
 
-#: data/mp/messages/strings/names.txt:1731
-#: data/mp/messages/strings/names.txt:1732
-#: data/mp/messages/strings/names.txt:1733
 #: data/mp/messages/strings/names.txt:1734
+#: data/mp/messages/strings/names.txt:1735
+#: data/mp/messages/strings/names.txt:1736
+#: data/mp/messages/strings/names.txt:1737
 msgid "Super Scourge Cyborg"
 msgstr "超級生化人步兵（天譴飛彈）"
 
-#: data/mp/messages/strings/names.txt:1736
-#: data/mp/messages/strings/names.txt:1737
+#: data/mp/messages/strings/names.txt:1739
+#: data/mp/messages/strings/names.txt:1740
 msgid "Nexus Link Tower"
 msgstr "Nexus Link防衛塔"
 
-#: data/mp/messages/strings/names.txt:1739
 #: data/mp/messages/strings/names.txt:1742
+#: data/mp/messages/strings/names.txt:1745
 msgid "EMP Cannon"
 msgstr "電磁脈衝加農砲"
 
-#: data/mp/messages/strings/names.txt:1740
-#: data/mp/messages/strings/names.txt:1741
+#: data/mp/messages/strings/names.txt:1743
+#: data/mp/messages/strings/names.txt:1744
 msgid "EMP Cannon Tower"
 msgstr "電磁脈衝加農砲防衛塔"
 
-#: data/mp/messages/strings/names.txt:1746
-#: data/mp/messages/strings/names.txt:1748
+#: data/mp/messages/strings/names.txt:1749
+#: data/mp/messages/strings/names.txt:1751
 msgid "Mass Driver Fortress"
 msgstr "質量投射器堡壘"
 
-#: data/mp/messages/strings/names.txt:1747
+#: data/mp/messages/strings/names.txt:1750
 msgid "Mass Driver"
 msgstr "質量投射器"
 
-#: data/mp/messages/strings/names.txt:1750
-#: data/mp/messages/strings/names.txt:1751
-#: data/mp/messages/strings/names.txt:1752
+#: data/mp/messages/strings/names.txt:1753
+#: data/mp/messages/strings/names.txt:1754
+#: data/mp/messages/strings/names.txt:1755
 msgid "Cannon Fortress"
 msgstr "加農砲堡壘"
 
-#: data/mp/messages/strings/names.txt:1754
-#: data/mp/messages/strings/names.txt:1755
-#: data/mp/messages/strings/names.txt:1756
+#: data/mp/messages/strings/names.txt:1757
+#: data/mp/messages/strings/names.txt:1758
+#: data/mp/messages/strings/names.txt:1759
 msgid "Heavy Rocket Bastion"
 msgstr "重型火箭堡壘"
 
-#: data/mp/messages/strings/names.txt:1758
-#: data/mp/messages/strings/names.txt:1759
-#: data/mp/messages/strings/names.txt:1760
+#: data/mp/messages/strings/names.txt:1761
+#: data/mp/messages/strings/names.txt:1762
+#: data/mp/messages/strings/names.txt:1763
 msgid "Missile Fortress"
 msgstr "飛彈堡壘"
 
-#: data/mp/messages/strings/names.txt:1764
+#: data/mp/messages/strings/names.txt:1767
 #, fuzzy
 msgid "Heavy Body - Wyvern"
 msgstr "超重量級車身：雙足飛龍"
 
-#: data/mp/messages/strings/names.txt:1765
+#: data/mp/messages/strings/names.txt:1768
 msgid "Wyvern"
 msgstr "雙足飛龍"
 
-#: data/mp/messages/strings/names.txt:1767
+#: data/mp/messages/strings/names.txt:1770
 #, fuzzy
 msgid "Multi Turret Body - Dragon"
 msgstr "超重量級車身：龍"
 
-#: data/mp/messages/strings/names.txt:1768
+#: data/mp/messages/strings/names.txt:1771
 msgid "Dragon"
 msgstr "龍"
 
-#: data/mp/messages/strings/names.txt:1770
+#: data/mp/messages/strings/names.txt:1773
 msgid "Superhot Plasmite gel"
 msgstr "超熱等離子凝膠一型"
 
-#: data/mp/messages/strings/names.txt:1771
+#: data/mp/messages/strings/names.txt:1774
 msgid "Superhot Plasmite gel Mk2"
 msgstr "超熱等離子凝膠二型"
 
-#: data/mp/messages/strings/names.txt:1772
+#: data/mp/messages/strings/names.txt:1775
 msgid "Superhot Plasmite gel Mk3"
 msgstr "超熱等離子凝膠三型"
 
-#: data/mp/messages/strings/names.txt:1776
-#: data/mp/messages/strings/names.txt:1778
+#: data/mp/messages/strings/names.txt:1779
+#: data/mp/messages/strings/names.txt:1781
 msgid "EMP Mortar"
 msgstr "電磁脈衝迫擊砲砲台"
 
-#: data/mp/messages/strings/names.txt:1777
-#: data/mp/messages/strings/names.txt:1779
+#: data/mp/messages/strings/names.txt:1780
+#: data/mp/messages/strings/names.txt:1782
 msgid "EMP Mortar Pit"
 msgstr "電磁脈衝迫擊砲砲坑"
 
-#: data/mp/messages/strings/names.txt:1780
-#: data/mp/messages/strings/names.txt:1782
+#: data/mp/messages/strings/names.txt:1783
+#: data/mp/messages/strings/names.txt:1785
 msgid "Stormbringer AA Laser"
 msgstr "興風者級防空雷射"
 
-#: data/mp/messages/strings/names.txt:1781
-#: data/mp/messages/strings/names.txt:1783
+#: data/mp/messages/strings/names.txt:1784
+#: data/mp/messages/strings/names.txt:1786
 msgid "Stormbringer Emplacement"
 msgstr "興風者級高射砲台"
 
-#: data/mp/messages/strings/names.txt:1784
-#: data/mp/messages/strings/names.txt:1785
+#: data/mp/messages/strings/names.txt:1787
+#: data/mp/messages/strings/names.txt:1788
 msgid "Vindicator Hardpoint"
 msgstr "擁護者級地對空飛彈要塞"
 
-#: data/mp/messages/strings/names.txt:1786
-#: data/mp/messages/strings/names.txt:1787
+#: data/mp/messages/strings/names.txt:1789
+#: data/mp/messages/strings/names.txt:1790
 msgid "Whirlwind Hardpoint"
 msgstr "旋風級高射砲要塞"
 
-#: data/mp/messages/strings/names.txt:1788
-#: data/mp/messages/strings/names.txt:1789
+#: data/mp/messages/strings/names.txt:1791
+#: data/mp/messages/strings/names.txt:1792
 msgid "Cyclone Hardpoint"
 msgstr "暴風級高射砲要塞"
 
-#: data/mp/messages/strings/names.txt:1790
-#: data/mp/messages/strings/names.txt:1791
+#: data/mp/messages/strings/names.txt:1793
+#: data/mp/messages/strings/names.txt:1794
 msgid "Avenger Hardpoint"
 msgstr "復仇者者級地對空飛彈要塞"
 
-#: data/mp/messages/strings/names.txt:1795
-#: data/mp/messages/strings/names.txt:1796
+#: data/mp/messages/strings/names.txt:1798
+#: data/mp/messages/strings/names.txt:1799
 msgid "Twin Assault Gun"
 msgstr "雙管突擊槍"
 
-#: data/mp/messages/strings/names.txt:1797
-#: data/mp/messages/strings/names.txt:1798
+#: data/mp/messages/strings/names.txt:1800
+#: data/mp/messages/strings/names.txt:1801
 msgid "Twin Assault Gun Hardpoint"
 msgstr "雙管突擊槍要塞"
 
-#: data/mp/messages/strings/names.txt:1800
+#: data/mp/messages/strings/names.txt:1803
 msgid "VTOL Plasmite Bomb Bay"
 msgstr "VTOL等離子炸彈艙"
 
-#: data/mp/messages/strings/names.txt:1801
+#: data/mp/messages/strings/names.txt:1804
 msgid "Plasmite Bomb"
 msgstr "等離子炸彈艙"
 
-#: data/mp/messages/strings/names.txt:1802
+#: data/mp/messages/strings/names.txt:1805
 msgid "VTOL EMP Missile Launcher"
 msgstr "VTOL電磁脈衝飛彈發射器"
 
-#: data/mp/messages/strings/names.txt:1803
+#: data/mp/messages/strings/names.txt:1806
 msgid "EMP Missile Launcher"
 msgstr "電磁脈衝飛彈"
 
-#: data/mp/messages/strings/names.txt:1807
-#: data/mp/messages/strings/names.txt:1808
+#: data/mp/messages/strings/names.txt:1810
+#: data/mp/messages/strings/names.txt:1811
 #, fuzzy
 msgid "Command Turret II"
 msgstr "指揮官"
 
-#: data/mp/messages/strings/names.txt:1809
-#: data/mp/messages/strings/names.txt:1810
+#: data/mp/messages/strings/names.txt:1812
+#: data/mp/messages/strings/names.txt:1813
 #, fuzzy
 msgid "Command Turret III"
 msgstr "指揮官車三型"
 
-#: data/mp/messages/strings/names.txt:1811
-#: data/mp/messages/strings/names.txt:1812
+#: data/mp/messages/strings/names.txt:1814
+#: data/mp/messages/strings/names.txt:1815
 #, fuzzy
 msgid "Command Turret IV"
 msgstr "指揮官"
 
-#: data/mp/messages/strings/names.txt:1874
+#: data/mp/messages/strings/names.txt:1877
 #, fuzzy
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
 msgstr "VTOL（高速加農砲）"
 
-#: data/mp/messages/strings/names.txt:1876
+#: data/mp/messages/strings/names.txt:1879
 #, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "毒蠍VTOL（高速加農砲）"
 
-#: data/mp/messages/strings/names.txt:1878
+#: data/mp/messages/strings/names.txt:1881
 #, fuzzy
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
 msgstr "VTOL（高速加農砲）"
 
-#: data/mp/messages/strings/names.txt:1917
+#: data/mp/messages/strings/names.txt:1920
 #, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
 
-#: data/mp/messages/strings/names.txt:1920
+#: data/mp/messages/strings/names.txt:1923
 #, fuzzy
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "蟒蛇氣墊船（重型加農砲）"
+
+#: data/mp/messages/strings/names.txt:1940
+#, fuzzy
+msgid "Inferno Cobra Hover"
+msgstr "半履帶式眼鏡蛇坦克（地獄火）"
+
+#: data/mp/messages/strings/names.txt:1941
+#, fuzzy
+msgid "Medium Cannon Cobra Half Track"
+msgstr "履帶式眼鏡蛇坦克（中型加農砲）"
+
+#: data/mp/messages/strings/names.txt:1942
+#, fuzzy
+msgid "Inferno Python Hover"
+msgstr "履帶式蟒蛇坦克（高速加農砲）"
+
+#: data/mp/messages/strings/names.txt:1943
+#, fuzzy
+msgid "Assault Gun Python Hover"
+msgstr "履帶式蟒蛇坦克（突擊槍）"
+
+#: data/mp/messages/strings/names.txt:1944
+#, fuzzy
+msgid "Assault Gun Python Half Track"
+msgstr "履帶式蟒蛇坦克（突擊槍）"
+
+#: data/mp/messages/strings/names.txt:1945
+#, fuzzy
+msgid "Heavy Machinegun Scorpion Half Tracks"
+msgstr "履帶式毒蠍坦克（重機槍）"
+
+#: data/mp/messages/strings/names.txt:1946
+#, fuzzy
+msgid "Assault Cannon Mantis Hover"
+msgstr "突擊加農砲防衛塔"
+
+#: data/mp/messages/strings/names.txt:1947
+#, fuzzy
+msgid "Pulse Laser Leopard Hover"
+msgstr "脈衝雷射"
+
+#: data/mp/messages/strings/names.txt:1948
+#, fuzzy
+msgid "Pulse Laser Panther Hover"
+msgstr "脈衝雷射"
+
+#: data/mp/messages/strings/names.txt:1949
+#, fuzzy
+msgid "Rail Gun Tiger Hover"
+msgstr "軌道砲系武器升級"
+
+#: data/mp/messages/strings/names.txt:1950
+#, fuzzy
+msgid "Pulse Laser Tiger Hover"
+msgstr "履帶式虎式坦克（脈衝雷射）"
+
+#: data/mp/messages/strings/names.txt:1951
+#, fuzzy
+msgid "Plasma Cannon Wyvern Tracks"
+msgstr "履帶式雙足飛龍坦克（高斯加農砲）"
+
+#: data/mp/messages/strings/names.txt:1952
+#, fuzzy
+msgid "Scourge Missile Wyvern Tracks"
+msgstr "天譴飛彈防衛塔"
+
+#: data/mp/messages/strings/names.txt:1953
+#, fuzzy
+msgid "Flashlight Retribution Hover"
+msgstr "激光雷射"
+
+#: data/mp/messages/strings/names.txt:1954
+#, fuzzy
+msgid "Mini-Rocket Viper Half Track"
+msgstr "半履帶式眼鏡蛇坦克（迷你火箭）"
+
+#: data/mp/messages/strings/names.txt:1955
+#, fuzzy
+msgid "Mini-Rocket Array Viper Half Track"
+msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
+
+#: data/mp/messages/strings/names.txt:1956
+#, fuzzy
+msgid "Phosphor Bomb Bay Manits VTOL"
+msgstr "燐光炸彈艙"
+
+#: data/mp/messages/strings/names.txt:1957
+#, fuzzy
+msgid "Heap Bomb Bay Manits VTOL"
+msgstr "VTOL（高爆性穿甲炸彈艙）"
+
+#: data/mp/messages/strings/names.txt:1958
+#, fuzzy
+msgid "Heap Bomb Bay Retribution VTOL"
+msgstr "中量級車身：懲罰者"
+
+#: data/mp/messages/strings/names.txt:1959
+#, fuzzy
+msgid "Scourge Retaliation VTOL"
+msgstr "報復者"
 
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
@@ -11565,31 +11675,31 @@ msgstr ""
 msgid "Latin"
 msgstr "拉丁語"
 
-#: lib/netplay/netplay.c:1277
-#: lib/netplay/netplay.c:2108
+#: lib/netplay/netplay.c:197
+#: lib/netplay/netplay.c:1037
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3082
+#: lib/netplay/netplay.c:2000
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3107
+#: lib/netplay/netplay.c:2013
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: lib/netplay/netplay.c:3526
+#: lib/netplay/netplay.c:2418
 msgid ", mods: "
 msgstr ""
 
 #: src/challenge.c:188
 #: src/hci.c:1018
-#: src/hci.c:3829
-#: src/hci.c:3980
-#: src/hci.c:4497
-#: src/hci.c:5701
+#: src/hci.c:3833
+#: src/hci.c:3984
+#: src/hci.c:4501
+#: src/hci.c:5705
 #: src/intelmap.c:543
 #: src/intorder.c:787
 #: src/loadsave.c:256
@@ -11741,7 +11851,7 @@ msgstr "go directly to host screen"
 
 #: src/configuration.c:452
 #: src/configuration.c:453
-#: src/multistat.c:135
+#: src/multistat.c:124
 msgid "Player"
 msgstr "玩家"
 
@@ -11886,41 +11996,41 @@ msgstr "武器裝備"
 msgid "Systems"
 msgstr "系統裝備"
 
-#: src/display3d.c:562
+#: src/display3d.c:566
 #, fuzzy
 msgid "Player left"
 msgstr "玩家"
 
-#: src/display3d.c:562
+#: src/display3d.c:566
 #, fuzzy
 msgid "Player dropped"
 msgstr "玩家"
 
-#: src/display.c:1661
+#: src/display.c:1659
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃燒中，無法建築鑽油井"
 
-#: src/display.c:1841
-#: src/display.c:2443
+#: src/display.c:1839
+#: src/display.c:2431
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
 
-#: src/display.c:1857
+#: src/display.c:1855
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
 
-#: src/display.c:2047
+#: src/display.c:2045
 msgid "Truck ordered to build Oil Derrick"
 msgstr "命令工程車建造鑽油井"
 
-#: src/display.c:2048
+#: src/display.c:2046
 #, fuzzy
 msgid "2 trucks ordered to build Oil Derrick"
 msgstr "命令工程車建造鑽油井"
 
-#: src/display.c:2049
+#: src/display.c:2047
 #, fuzzy, c-format
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr "命令工程車建造鑽油井"
@@ -11933,64 +12043,64 @@ msgstr "損失單位！"
 msgid "Structure Restored"
 msgstr "建築物重建"
 
-#: src/droid.c:2935
+#: src/droid.c:2947
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "第 %u 隊聽令 - 共 %u  單位"
 
-#: src/droid.c:2948
+#: src/droid.c:2960
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "共 %u 單位 被指派為 第 %u 隊"
 
-#: src/droid.c:2961
+#: src/droid.c:2973
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "視角移動至第 %u  隊 - 共 %u 單位"
 
-#: src/droid.c:2965
+#: src/droid.c:2977
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u 單位"
 
-#: src/droid.c:3249
+#: src/droid.c:3261
 msgid "Rookie"
 msgstr "菜鳥"
 
-#: src/droid.c:3250
+#: src/droid.c:3262
 msgctxt "rank"
 msgid "Green"
 msgstr "青澀"
 
-#: src/droid.c:3251
+#: src/droid.c:3263
 msgid "Trained"
 msgstr "訓練有素的"
 
-#: src/droid.c:3252
+#: src/droid.c:3264
 msgid "Regular"
 msgstr "好樣的"
 
-#: src/droid.c:3253
+#: src/droid.c:3265
 msgid "Professional"
 msgstr "專家"
 
-#: src/droid.c:3254
+#: src/droid.c:3266
 msgid "Veteran"
 msgstr "老手"
 
-#: src/droid.c:3255
+#: src/droid.c:3267
 msgid "Elite"
 msgstr "菁英"
 
-#: src/droid.c:3256
+#: src/droid.c:3268
 msgid "Special"
 msgstr "特務"
 
-#: src/droid.c:3257
+#: src/droid.c:3269
 msgid "Hero"
 msgstr "英雄"
 
@@ -12368,105 +12478,105 @@ msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新功能: %s."
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新droid: %s."
 
-#: src/hci.c:3731
+#: src/hci.c:3735
 msgid "Commanders (F6)"
 msgstr "指揮命令 （F6）"
 
-#: src/hci.c:3747
+#: src/hci.c:3751
 msgid "Intelligence Display (F5)"
 msgstr "顯示任務及情報（F5）"
 
-#: src/hci.c:3763
+#: src/hci.c:3767
 msgid "Manufacture (F1)"
 msgstr "生產新的單位 （F1）"
 
-#: src/hci.c:3779
+#: src/hci.c:3783
 msgid "Design (F4)"
 msgstr "設計新的單位（F4）"
 
-#: src/hci.c:3795
+#: src/hci.c:3799
 msgid "Research (F2)"
 msgstr "研發新科技（F2）"
 
-#: src/hci.c:3811
+#: src/hci.c:3815
 msgid "Build (F3)"
 msgstr "建造新的建築物 （F3）"
 
-#: src/hci.c:3891
+#: src/hci.c:3895
 #: src/multiint.c:1370
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "能源"
 
-#: src/hci.c:4075
+#: src/hci.c:4079
 msgid "Tile"
 msgstr "貼圖"
 
-#: src/hci.c:4076
+#: src/hci.c:4080
 msgid "Place tiles on map"
 msgstr "在地圖上加入貼圖"
 
-#: src/hci.c:4085
+#: src/hci.c:4089
 msgid "Unit"
 msgstr "單位"
 
-#: src/hci.c:4086
+#: src/hci.c:4090
 msgid "Place Unit on map"
 msgstr "在地圖上加入單位"
 
-#: src/hci.c:4094
+#: src/hci.c:4098
 msgid "Struct"
 msgstr "建築"
 
-#: src/hci.c:4095
+#: src/hci.c:4099
 msgid "Place Structures on map"
 msgstr "在地圖上加入建築物"
 
-#: src/hci.c:4103
+#: src/hci.c:4107
 msgid "Feat"
 msgstr "特徵"
 
-#: src/hci.c:4104
+#: src/hci.c:4108
 msgid "Place Features on map"
 msgstr "在地圖上加入特徵"
 
-#: src/hci.c:4115
+#: src/hci.c:4119
 msgid "Pause or unpause the game"
 msgstr "暫停（或繼續）遊戲"
 
-#: src/hci.c:4129
+#: src/hci.c:4133
 msgid "Align height of all map objects"
 msgstr "使地圖上所有物件等高"
 
-#: src/hci.c:4154
+#: src/hci.c:4158
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "退出"
 
-#: src/hci.c:4155
+#: src/hci.c:4159
 msgid "Exit Game"
 msgstr "離開遊戲"
 
-#: src/hci.c:4582
+#: src/hci.c:4586
 #: src/intdisplay.c:270
 msgid "Progress Bar"
 msgstr "進度條"
 
-#: src/hci.c:5616
+#: src/hci.c:5620
 msgid "Factory Delivery Point"
 msgstr "工廠單位產出點"
 
-#: src/hci.c:5635
+#: src/hci.c:5639
 msgid "Loop Production"
 msgstr "循環生產"
 
-#: src/hci.c:5726
+#: src/hci.c:5730
 msgid "Tab Scroll left"
 msgstr "頁簽向左捲動"
 
-#: src/hci.c:5743
+#: src/hci.c:5747
 msgid "Tab Scroll right"
 msgstr "頁簽向右捲動"
 
@@ -12525,7 +12635,7 @@ msgid "Power Accrued"
 msgstr "能量增加"
 
 #: src/intelmap.c:247
-#: src/keybind.c:1400
+#: src/keybind.c:1396
 msgid "PAUSED"
 msgstr "暫停"
 
@@ -12652,293 +12762,293 @@ msgstr "指定VTOL工廠生產"
 msgid "Circle"
 msgstr "圓（循環）"
 
-#: src/keybind.c:134
+#: src/keybind.c:135
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "抱歉，多人遊戲中無法使用此作弊碼"
 
-#: src/keybind.c:140
+#: src/keybind.c:141
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr ""
 
-#: src/keybind.c:224
+#: src/keybind.c:225
 msgid "Lets us see what you see!"
 msgstr "讓我看看你看到了什麼！"
 
-#: src/keybind.c:226
+#: src/keybind.c:227
 msgid "Fine, weapon & sensor display is off!"
 msgstr "關閉細節、武器及雷達顯示"
 
-#: src/keybind.c:357
+#: src/keybind.c:358
 #, fuzzy, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新droid: %s."
 
-#: src/keybind.c:397
-#: src/keybind.c:427
-#: src/keybind.c:444
-#: src/keybind.c:488
-#: src/keybind.c:593
-#: src/keybind.c:633
-#: src/keybind.c:739
-#: src/keybind.c:1290
-#: src/keybind.c:1347
-#: src/keybind.c:1449
-#: src/keybind.c:1545
-#: src/keybind.c:1896
-#: src/keybind.c:1937
+#: src/keybind.c:398
+#: src/keybind.c:428
+#: src/keybind.c:445
+#: src/keybind.c:489
+#: src/keybind.c:597
+#: src/keybind.c:637
+#: src/keybind.c:743
+#: src/keybind.c:1286
+#: src/keybind.c:1343
+#: src/keybind.c:1445
+#: src/keybind.c:1541
+#: src/keybind.c:1892
+#: src/keybind.c:1933
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
 
-#: src/keybind.c:398
+#: src/keybind.c:399
 msgid "Hard as nails!!!"
 msgstr "像爪子一樣硬！！"
 
-#: src/keybind.c:412
+#: src/keybind.c:413
 msgid "Takings thing easy!"
 msgstr "讓事情變簡單！"
 
-#: src/keybind.c:428
+#: src/keybind.c:429
 msgid "1000 big ones!!!"
 msgstr "1000 big ones!!!"
 
-#: src/keybind.c:445
+#: src/keybind.c:446
 msgid "Power overwhelming"
 msgstr "巨大的能量"
 
-#: src/keybind.c:460
+#: src/keybind.c:461
 msgid "Back to normality!"
 msgstr "回到正常狀態"
 
-#: src/keybind.c:473
+#: src/keybind.c:474
 msgid "Getting tricky!"
 msgstr "得到技巧！"
 
-#: src/keybind.c:489
+#: src/keybind.c:490
 msgid "Twice as nice!"
 msgstr "給我兩倍的力量！！"
 
-#: src/keybind.c:500
+#: src/keybind.c:501
 msgid "FPS display is enabled."
 msgstr "FPS顯示開啟"
 
-#: src/keybind.c:504
+#: src/keybind.c:505
 msgid "FPS display is disabled."
 msgstr "FPS顯示關閉"
 
-#: src/keybind.c:525
+#: src/keybind.c:529
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; FPS限制: %d; PIEs %d; polys %d; Terr. polys %d; 狀態 %d"
 
-#: src/keybind.c:557
+#: src/keybind.c:561
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr ""
 
-#: src/keybind.c:594
+#: src/keybind.c:598
 msgid "Infinite power disabled"
 msgstr "無限制能源：關"
 
-#: src/keybind.c:594
+#: src/keybind.c:598
 msgid "Infinite power enabled"
 msgstr "無限制能源：開"
 
-#: src/keybind.c:634
+#: src/keybind.c:638
 msgid "All items made available"
 msgstr "可使用所有的項目"
 
-#: src/keybind.c:740
+#: src/keybind.c:744
 msgid "Fog on"
 msgstr "戰爭迷霧開啟"
 
-#: src/keybind.c:740
+#: src/keybind.c:744
 msgid "Fog off"
 msgstr "戰爭迷霧關閉"
 
-#: src/keybind.c:1179
+#: src/keybind.c:1175
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1179
+#: src/keybind.c:1175
 #, fuzzy
 msgid "Ending Mission."
 msgstr "傳來訊息..."
 
-#: src/keybind.c:1291
+#: src/keybind.c:1287
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1291
+#: src/keybind.c:1287
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1348
+#: src/keybind.c:1344
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1348
+#: src/keybind.c:1344
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1360
+#: src/keybind.c:1356
 msgid "View Aligned to North"
 msgstr "View Aligned to North"
 
-#: src/keybind.c:1369
+#: src/keybind.c:1365
 #, fuzzy, c-format
 msgid "Trap cursor %s"
 msgstr "捕捉滑鼠"
 
-#: src/keybind.c:1450
+#: src/keybind.c:1446
 msgid "Researched EVERYTHING for you!"
 msgstr "替你研發所有科技！"
 
-#: src/keybind.c:1481
+#: src/keybind.c:1477
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1482
+#: src/keybind.c:1478
 #, fuzzy
 msgid "Researched"
 msgstr "研發新科技"
 
-#: src/keybind.c:1503
+#: src/keybind.c:1499
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1506
+#: src/keybind.c:1502
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1509
+#: src/keybind.c:1505
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1531
+#: src/keybind.c:1527
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "關閉展示模式—回到正常遊戲模式"
 
-#: src/keybind.c:1546
+#: src/keybind.c:1542
 #, fuzzy
 msgid "Debug menu is Open"
 msgstr "建築選單將重新開啟"
 
-#: src/keybind.c:1577
+#: src/keybind.c:1573
 msgid "Unable to locate any resource extractors!"
 msgstr "無法找到任何資源（resource extractors）"
 
-#: src/keybind.c:1798
+#: src/keybind.c:1794
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "喔，外面的天氣真糟...下雪"
 
-#: src/keybind.c:1804
+#: src/keybind.c:1800
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "下雨啦～下雨啦～"
 
-#: src/keybind.c:1810
+#: src/keybind.c:1806
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "天氣預報：一整片晴朗的天空。"
 
-#: src/keybind.c:1895
+#: src/keybind.c:1891
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1897
+#: src/keybind.c:1893
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "敵軍已經死了...由於你作弊的關係.."
 
-#: src/keybind.c:1938
+#: src/keybind.c:1934
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2460
+#: src/keybind.c:2456
 msgid "Centered on player HQ, direction NORTH"
 msgstr "視角移至主基地，面向北方"
 
-#: src/keybind.c:2472
+#: src/keybind.c:2468
 msgid "Unable to locate HQ!"
 msgstr "無法定位至主基地"
 
-#: src/keybind.c:2479
+#: src/keybind.c:2475
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2528
+#: src/keybind.c:2524
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2533
+#: src/keybind.c:2529
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2542
+#: src/keybind.c:2538
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2547
+#: src/keybind.c:2543
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2592
-#: src/keybind.c:2635
+#: src/keybind.c:2588
+#: src/keybind.c:2631
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "抱歉，多人遊戲中無法使用此作弊碼"
 
-#: src/keybind.c:2613
-#: src/keybind.c:2656
-#: src/keybind.c:2678
+#: src/keybind.c:2609
+#: src/keybind.c:2652
+#: src/keybind.c:2674
 msgid "Game Speed Reset"
 msgstr "重設遊戲速度"
 
-#: src/keybind.c:2617
+#: src/keybind.c:2613
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "遊戲速度增加至 %3.1f"
 
-#: src/keybind.c:2660
+#: src/keybind.c:2656
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "遊戲速度減少至 %3.1f"
 
-#: src/keybind.c:2690
+#: src/keybind.c:2686
 msgid "Build menu will reopen"
 msgstr "建築選單將重新開啟"
 
-#: src/keybind.c:2694
+#: src/keybind.c:2690
 msgid "Build menu will not reopen"
 msgstr "建造選單將不會開啟"
 
-#: src/keybind.c:2706
+#: src/keybind.c:2702
 msgid "Radar showing friend-foe colors"
 msgstr "雷達顯示友軍顏色"
 
-#: src/keybind.c:2710
+#: src/keybind.c:2706
 msgid "Radar showing player colors"
 msgstr "雷達顯示玩家顏色"
 
-#: src/keybind.c:2731
+#: src/keybind.c:2727
 msgid "Radar showing only objects"
 msgstr "雷達僅顯示物件"
 
-#: src/keybind.c:2734
+#: src/keybind.c:2730
 msgid "Radar blending terrain and height"
 msgstr "雷達描繪地形及高度"
 
-#: src/keybind.c:2737
+#: src/keybind.c:2733
 msgid "Radar showing terrain"
 msgstr "雷達顯示地形"
 
-#: src/keybind.c:2740
+#: src/keybind.c:2736
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "雷達顯示地形"
 
-#: src/keybind.c:2743
+#: src/keybind.c:2739
 msgid "Radar showing height"
 msgstr "雷達顯示高度"
 
@@ -13363,8 +13473,8 @@ msgstr "繼續遊戲"
 msgid "GAME SAVED :"
 msgstr "遊戲已儲存"
 
-#: src/move.c:2697
-#: src/move.c:2713
+#: src/move.c:2698
+#: src/move.c:2714
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -13992,12 +14102,12 @@ msgstr "你獲勝了！"
 msgid "YOU WERE DEFEATED!"
 msgstr "你被打敗了！"
 
-#: src/scriptfuncs.c:10151
+#: src/scriptfuncs.c:10164
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "由 %s 獲得引導指標"
 
-#: src/scriptfuncs.c:10197
+#: src/scriptfuncs.c:10210
 #, c-format
 msgid "Beacon %d"
 msgstr "引導指標 %d"
@@ -14025,61 +14135,61 @@ msgstr "找不到任何雷達單位！"
 msgid "Unable to locate any Commanders!"
 msgstr "找不到任何指揮官車！"
 
-#: src/structure.c:2838
+#: src/structure.c:2837
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "已達到可控制單位總數上限，停止生產新單位"
 
-#: src/structure.c:6126
-#: src/structure.c:6151
+#: src/structure.c:6125
+#: src/structure.c:6150
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - 已指派 %u  單位"
 
-#: src/structure.c:6156
-#: src/structure.c:6224
-#: src/structure.c:6240
-#: src/structure.c:6254
+#: src/structure.c:6155
+#: src/structure.c:6223
+#: src/structure.c:6239
+#: src/structure.c:6253
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 損傷 %3.0f%%"
 
-#: src/structure.c:6206
+#: src/structure.c:6205
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - 連接鑽油井數量 %u of %u"
 
-#: src/structure.c:6370
-#: src/structure.c:6415
+#: src/structure.c:6369
+#: src/structure.c:6414
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s -電子傷害"
 
-#: src/structure.c:6651
+#: src/structure.c:6650
 msgid "Electronic Reward - Visibility Report"
 msgstr "電子回饋—可檢視報告"
 
-#: src/structure.c:6691
+#: src/structure.c:6690
 msgid "Factory Reward - Propulsion"
 msgstr "工廠獎勵—推進動力"
 
-#: src/structure.c:6715
+#: src/structure.c:6714
 msgid "Factory Reward - Body"
 msgstr "工廠獎勵—車身"
 
-#: src/structure.c:6739
+#: src/structure.c:6738
 msgid "Factory Reward - Weapon"
 msgstr "工廠獎勵—武器"
 
-#: src/structure.c:6748
+#: src/structure.c:6747
 msgid "Factory Reward - Nothing"
 msgstr "工廠獎勵—無"
 
-#: src/structure.c:6776
+#: src/structure.c:6775
 msgid "Repair Facility Award - Repair"
 msgstr "修理中心獎勵—修理"
 
-#: src/structure.c:6783
+#: src/structure.c:6782
 msgid "Repair Facility Award - Nothing"
 msgstr "修理工廠回饋—無"
 
@@ -14188,9 +14298,6 @@ msgstr "版本 %s%s%s%s"
 
 #~ msgid "Software (colored)"
 #~ msgstr "軟體 (colored)"
-
-#~ msgid "Game"
-#~ msgstr "遊戲"
 
 #~ msgid "Mayhem"
 #~ msgstr "混亂模式"
