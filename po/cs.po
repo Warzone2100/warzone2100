@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-14 16:05+0100\n"
+"POT-Creation-Date: 2010-03-30 14:12+0200\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -5911,7 +5911,7 @@ msgid "Light Cannon Python Tracks"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:194
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1345
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1357
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1923
@@ -9157,7 +9157,7 @@ msgid "Downed Transport"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1458
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1344
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1356
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
 #: data/mp/messages/strings/names.txt:1474
 #: data/mp/messages/strings/names.txt:1922
@@ -9481,177 +9481,177 @@ msgstr "Počkej prosím, zatímco továrna vyrobí nové jednotky"
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Blahopřeji veliteli - jsi připraven na svou první misi"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1301
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
 msgid "Cobra Hover Heavy-Repair"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1302
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
 msgid "Viper HMG Wheels"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1303
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
 #: data/mp/messages/strings/names.txt:1824
 msgid "Scourge Mantis Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1304
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
 msgid "TK Mantis Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1305
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
 msgid "Cobra HMG Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1306
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
 msgid "Cobra Hover HC"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1307
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
 msgid "Scorpion Lancer Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1308
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
 msgid "Scorpion Heavy Cannon Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1309
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
 msgid "Scorpion Lancer VTOL"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1310
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
 msgid "Scorpion BB VTOL"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1311
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
 msgid "Viper Command Turret Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1312
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
 msgid "Cobra Command Turret Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
 msgid "Scorpion Command Turret Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
 msgid "mantis Command Turret Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
 msgid "Cobra Lancer Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
 msgid "Mantis Heavy Cannon Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
 msgid "Mantis Tank Killer Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
 msgid "Mantis Scourge Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
 msgid "Scorpion Heavy Machinegun Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
 msgid "Scorpion Repair Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
 msgid "Scorpion Heavy Repair Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
 msgid "Cobra Hover Truck"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
 msgid "Scorpion Hover Truck"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
 msgid "Mantis Hover Truck"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
 msgid "Cobra Bunker Buster Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
 msgid "Scorpion Bunker Buster Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
 msgid "Mantis Bunker Buster Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
 msgid "Viper Tracks Lancer"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
 msgid "Cobra Half-Tracks Mini-Pod"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1342
 msgid "Cobra Tracks Mini-Pod"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1343
 msgid "Cobra Tracks Mini-Rocket Artillery"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1344
 msgid "Cobra Inferno Half-track"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1345
 msgid "Python HVC Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1346
 msgid "Python Scourge Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1347
 msgid "Python Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1348
 msgid "Python Pulse Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1349
 msgid "Tiger Pulse Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1350
 msgid "Tiger Heavy Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1351
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1352
 msgid "Wyvern Pulse Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1353
 msgid "Wyvern Heavy Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1342
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1354
 msgid "Viper Machinegun Half-Track"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1343
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1355
 msgid "Viper Flamer Half-Track"
 msgstr ""
 
@@ -11337,144 +11337,229 @@ msgstr "Vybrat všechny Pásové Jednotky"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr ""
 
-#: lib/framework/i18n.c:50
-#: lib/framework/i18n.c:107
-msgid "System locale"
-msgstr "Systémové místo"
-
-#: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:109
-msgid "Czech"
+#: data/mp/messages/strings/names.txt:1937
+msgid "Inferno Cobra Hover"
 msgstr ""
 
-#: lib/framework/i18n.c:53
-#: lib/framework/i18n.c:110
-msgid "Danish"
-msgstr "Dánsky"
+#: data/mp/messages/strings/names.txt:1938
+#, fuzzy
+msgid "Medium Cannon Cobra Half Track"
+msgstr "Vybrat všechny Kolopásové Jednotky"
+
+#: data/mp/messages/strings/names.txt:1939
+msgid "Inferno Python Hover"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1940
+msgid "Assault Gun Python Hover"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1941
+msgid "Assault Gun Python Half Track"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1942
+#, fuzzy
+msgid "Heavy Machinegun Scorpion Half Tracks"
+msgstr "Vybrat všechny Kolopásové Jednotky"
+
+#: data/mp/messages/strings/names.txt:1943
+msgid "Assault Cannon Mantis Hover"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1944
+msgid "Pulse Laser Leopard Hover"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1945
+msgid "Pulse Laser Panther Hover"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1946
+msgid "Rail Gun Tiger Hover"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1947
+msgid "Pulse Laser Tiger Hover"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1948
+#, fuzzy
+msgid "Plasma Cannon Wyvern Tracks"
+msgstr "Plazmový kanón střílející plazmu"
+
+#: data/mp/messages/strings/names.txt:1949
+msgid "Scourge Missile Wyvern Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1950
+msgid "Flashlight Retribution Hover"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1951
+#, fuzzy
+msgid "Mini-Rocket Viper Half Track"
+msgstr "Vybrat všechny Kolopásové Jednotky"
+
+#: data/mp/messages/strings/names.txt:1952
+#, fuzzy
+msgid "Mini-Rocket Array Viper Half Track"
+msgstr "Vybrat všechny Pásové Jednotky"
+
+#: data/mp/messages/strings/names.txt:1953
+msgid "Phosphor Bomb Bay Manits VTOL"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1954
+msgid "Heap Bomb Bay Manits VTOL"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1955
+msgid "Heap Bomb Bay Retribution VTOL"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1956
+msgid "Scourge Retaliation VTOL"
+msgstr ""
 
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
-msgid "German"
-msgstr "Německy"
+msgid "System locale"
+msgstr "Systémové místo"
 
 #: lib/framework/i18n.c:56
 #: lib/framework/i18n.c:113
-msgid "English (United Kingdom)"
+msgid "Czech"
 msgstr ""
 
 #: lib/framework/i18n.c:57
 #: lib/framework/i18n.c:114
-#, fuzzy
-msgid "Spanish"
+msgid "Danish"
 msgstr "Dánsky"
 
 #: lib/framework/i18n.c:58
 #: lib/framework/i18n.c:115
-msgid "Estonian"
-msgstr ""
+msgid "German"
+msgstr "Německy"
 
 #: lib/framework/i18n.c:60
 #: lib/framework/i18n.c:117
+msgid "English (United Kingdom)"
+msgstr ""
+
+#: lib/framework/i18n.c:61
+#: lib/framework/i18n.c:118
+#, fuzzy
+msgid "Spanish"
+msgstr "Dánsky"
+
+#: lib/framework/i18n.c:62
+#: lib/framework/i18n.c:119
+msgid "Estonian"
+msgstr ""
+
+#: lib/framework/i18n.c:64
+#: lib/framework/i18n.c:121
 #, fuzzy
 msgid "Finnish"
 msgstr "Dánsky"
 
-#: lib/framework/i18n.c:61
-#: lib/framework/i18n.c:118
+#: lib/framework/i18n.c:65
+#: lib/framework/i18n.c:122
 msgid "French"
 msgstr "Francouzsky"
 
-#: lib/framework/i18n.c:69
-#: lib/framework/i18n.c:126
+#: lib/framework/i18n.c:73
+#: lib/framework/i18n.c:130
 msgid "Frisian"
 msgstr ""
 
-#: lib/framework/i18n.c:70
-#: lib/framework/i18n.c:127
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:131
 #, fuzzy
 msgid "Irish"
 msgstr "Šarvátka"
 
-#: lib/framework/i18n.c:71
-#: lib/framework/i18n.c:128
+#: lib/framework/i18n.c:75
+#: lib/framework/i18n.c:132
 #, fuzzy
 msgid "Croatian"
 msgstr "Latinsky"
 
-#: lib/framework/i18n.c:72
-#: lib/framework/i18n.c:129
+#: lib/framework/i18n.c:76
+#: lib/framework/i18n.c:133
 msgid "Italian"
 msgstr "Italsky"
 
-#: lib/framework/i18n.c:74
-#: lib/framework/i18n.c:131
+#: lib/framework/i18n.c:78
+#: lib/framework/i18n.c:135
 msgid "Lithuanian"
 msgstr ""
 
-#: lib/framework/i18n.c:77
-#: lib/framework/i18n.c:133
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:137
 msgid "Norwegian"
 msgstr "Norsky"
 
-#: lib/framework/i18n.c:79
-#: lib/framework/i18n.c:135
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:139
 msgid "Dutch"
 msgstr "Holandsky"
 
-#: lib/framework/i18n.c:80
-#: lib/framework/i18n.c:136
+#: lib/framework/i18n.c:84
+#: lib/framework/i18n.c:140
 #, fuzzy
 msgid "Polish"
 msgstr "Anglicky"
 
-#: lib/framework/i18n.c:81
-#: lib/framework/i18n.c:137
+#: lib/framework/i18n.c:85
+#: lib/framework/i18n.c:141
 #, fuzzy
 msgid "Brazilian Portuguese"
 msgstr "Portugalsky"
 
-#: lib/framework/i18n.c:82
-#: lib/framework/i18n.c:138
+#: lib/framework/i18n.c:86
+#: lib/framework/i18n.c:142
 #, fuzzy
 msgid "Portuguese"
 msgstr "Portugalsky"
 
-#: lib/framework/i18n.c:83
-#: lib/framework/i18n.c:139
+#: lib/framework/i18n.c:87
+#: lib/framework/i18n.c:143
 msgid "Romanian"
 msgstr ""
 
-#: lib/framework/i18n.c:84
-#: lib/framework/i18n.c:140
+#: lib/framework/i18n.c:88
+#: lib/framework/i18n.c:144
 msgid "Russian"
 msgstr "Rusky"
 
-#: lib/framework/i18n.c:85
-#: lib/framework/i18n.c:141
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:145
 msgid "Slovenian"
 msgstr ""
 
-#: lib/framework/i18n.c:94
-#: lib/framework/i18n.c:146
+#: lib/framework/i18n.c:98
+#: lib/framework/i18n.c:150
 msgid "Ukrainian"
 msgstr ""
 
-#: lib/framework/i18n.c:95
-#: lib/framework/i18n.c:147
+#: lib/framework/i18n.c:99
+#: lib/framework/i18n.c:151
 msgid "Simplified Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:96
-#: lib/framework/i18n.c:148
+#: lib/framework/i18n.c:100
+#: lib/framework/i18n.c:152
 msgid "Traditional Chinese"
 msgstr ""
 
-#: lib/framework/i18n.c:130
+#: lib/framework/i18n.c:134
 msgid "Latin"
 msgstr "Latinsky"
 
 #: lib/netplay/netplay.c:1276
-#: lib/netplay/netplay.c:2107
+#: lib/netplay/netplay.c:2108
 msgid "Enter password here"
 msgstr ""
 
@@ -11509,7 +11594,7 @@ msgstr ""
 msgid "Close"
 msgstr "Zavřít"
 
-#: src/cheat.c:123
+#: src/cheat.c:137
 msgid ": Unknown cheat code."
 msgstr ""
 
@@ -11655,7 +11740,7 @@ msgstr ""
 
 #: src/configuration.c:452
 #: src/configuration.c:453
-#: src/multistat.c:135
+#: src/multistat.c:124
 msgid "Player"
 msgstr "Hráč"
 
@@ -11801,12 +11886,12 @@ msgstr "Zbraně"
 msgid "Systems"
 msgstr ""
 
-#: src/display3d.c:564
+#: src/display3d.c:568
 #, fuzzy
 msgid "Player left"
 msgstr "Hráč"
 
-#: src/display3d.c:564
+#: src/display3d.c:568
 #, fuzzy
 msgid "Player dropped"
 msgstr "Hráč"
@@ -11816,7 +11901,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nemohu stavět. Ropný vrt hoří."
 
 #: src/display.c:1875
-#: src/display.c:2489
+#: src/display.c:2479
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Poškození %d%% - Zkušenosti %d, %s"
@@ -11840,7 +11925,7 @@ msgstr "Jednotka ztracena!"
 msgid "Structure Restored"
 msgstr "Budova obnovena"
 
-#: src/droid.c:3257
+#: src/droid.c:3309
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -11848,7 +11933,7 @@ msgstr[0] "Skupina %u vybrána - %u Jednotka"
 msgstr[1] "Skupina %u vybrána - %u Jednotky"
 msgstr[2] "Skupina %u vybrána - %u Jednotek"
 
-#: src/droid.c:3270
+#: src/droid.c:3322
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -11856,7 +11941,7 @@ msgstr[0] "%u jednotka začleněna do Skupiny %u"
 msgstr[1] "%u jednotky začleněny do Skupiny %u"
 msgstr[2] "%u jednotek začleněno do Skupiny %u"
 
-#: src/droid.c:3283
+#: src/droid.c:3335
 #, fuzzy, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -11864,7 +11949,7 @@ msgstr[0] "Zameřeno na skupinu %u - %u jednotka"
 msgstr[1] "Zameřeno na skupinu %u - %u jednotky"
 msgstr[2] "Zameřeno na skupinu %u - %u jednotek"
 
-#: src/droid.c:3287
+#: src/droid.c:3339
 #, fuzzy, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -11872,41 +11957,41 @@ msgstr[0] "Vyrovnání se skupinou %u - %u jednotka"
 msgstr[1] "Vyrovnání se skupinou %u - %u jednotky"
 msgstr[2] "Vyrovnání se skupinou %u - %u jednotek"
 
-#: src/droid.c:3550
+#: src/droid.c:3602
 msgid "Rookie"
 msgstr "Nováček"
 
-#: src/droid.c:3551
+#: src/droid.c:3603
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelenáč"
 
-#: src/droid.c:3552
+#: src/droid.c:3604
 #, fuzzy
 msgid "Trained"
 msgstr "Trénovaný"
 
-#: src/droid.c:3553
+#: src/droid.c:3605
 msgid "Regular"
 msgstr "Běžný"
 
-#: src/droid.c:3554
+#: src/droid.c:3606
 msgid "Professional"
 msgstr "Profesionální"
 
-#: src/droid.c:3555
+#: src/droid.c:3607
 msgid "Veteran"
 msgstr "Veterán"
 
-#: src/droid.c:3556
+#: src/droid.c:3608
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3557
+#: src/droid.c:3609
 msgid "Special"
 msgstr "Speciální"
 
-#: src/droid.c:3558
+#: src/droid.c:3610
 msgid "Hero"
 msgstr "Hrdina"
 
@@ -12437,7 +12522,7 @@ msgid "Power Accrued"
 msgstr ""
 
 #: src/intelmap.c:245
-#: src/keybind.c:1374
+#: src/keybind.c:1528
 msgid "PAUSED"
 msgstr "PAUZA"
 
@@ -12566,297 +12651,302 @@ msgstr ""
 msgid "Circle"
 msgstr "soubor"
 
-#: src/keybind.c:134
+#: src/keybind.c:136
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Omlouváme se, ale tento podvod je vypnutý ve hře pro více hráčů."
 
-#: src/keybind.c:140
+#: src/keybind.c:142
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr ""
 
-#: src/keybind.c:199
+#: src/keybind.c:201
 msgid "Lets us see what you see!"
 msgstr "Ukaž nám co vidíš!"
 
-#: src/keybind.c:201
+#: src/keybind.c:203
 #, fuzzy
 msgid "Fine, weapon & sensor display is off!"
 msgstr "Fine, snímač displeje je vypnutý!"
 
-#: src/keybind.c:332
+#: src/keybind.c:411
+#, c-format
+msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
+msgstr ""
+
+#: src/keybind.c:491
 #, fuzzy, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 msgstr "Hráč %u podvádí ( ladící menu ) sebe sama novou budovou: %s"
 
-#: src/keybind.c:371
-#: src/keybind.c:401
-#: src/keybind.c:418
-#: src/keybind.c:462
-#: src/keybind.c:567
-#: src/keybind.c:607
-#: src/keybind.c:713
-#: src/keybind.c:1264
-#: src/keybind.c:1321
-#: src/keybind.c:1423
-#: src/keybind.c:1520
-#: src/keybind.c:1831
-#: src/keybind.c:1872
+#: src/keybind.c:530
+#: src/keybind.c:560
+#: src/keybind.c:577
+#: src/keybind.c:621
+#: src/keybind.c:729
+#: src/keybind.c:769
+#: src/keybind.c:875
+#: src/keybind.c:1418
+#: src/keybind.c:1475
+#: src/keybind.c:1577
+#: src/keybind.c:1674
+#: src/keybind.c:1985
+#: src/keybind.c:2026
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
 
-#: src/keybind.c:372
+#: src/keybind.c:531
 #, fuzzy
 msgid "Hard as nails!!!"
 msgstr "jako ocel"
 
-#: src/keybind.c:386
+#: src/keybind.c:545
 #, fuzzy
 msgid "Takings thing easy!"
 msgstr "Věci jdou lehce!"
 
-#: src/keybind.c:402
+#: src/keybind.c:561
 msgid "1000 big ones!!!"
 msgstr ""
 
-#: src/keybind.c:419
+#: src/keybind.c:578
 msgid "Power overwhelming"
 msgstr "Ohromující výkon"
 
-#: src/keybind.c:434
+#: src/keybind.c:593
 msgid "Back to normality!"
 msgstr "Zpátky do normálu!"
 
-#: src/keybind.c:447
+#: src/keybind.c:606
 msgid "Getting tricky!"
 msgstr ""
 
-#: src/keybind.c:463
+#: src/keybind.c:622
 msgid "Twice as nice!"
 msgstr ""
 
-#: src/keybind.c:474
+#: src/keybind.c:633
 msgid "FPS display is enabled."
 msgstr "Zobrazení FPS je zapnuté."
 
-#: src/keybind.c:478
+#: src/keybind.c:637
 msgid "FPS display is disabled."
 msgstr "Zobrazení FPS je vypnuté."
 
-#: src/keybind.c:499
+#: src/keybind.c:661
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr ""
 
-#: src/keybind.c:531
+#: src/keybind.c:693
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr ""
 
-#: src/keybind.c:568
+#: src/keybind.c:730
 msgid "Infinite power disabled"
 msgstr ""
 
-#: src/keybind.c:568
+#: src/keybind.c:730
 msgid "Infinite power enabled"
 msgstr ""
 
-#: src/keybind.c:608
+#: src/keybind.c:770
 msgid "All items made available"
 msgstr ""
 
-#: src/keybind.c:714
+#: src/keybind.c:876
 msgid "Fog on"
 msgstr "Zapnutá mlha"
 
-#: src/keybind.c:714
+#: src/keybind.c:876
 #, fuzzy
 msgid "Fog off"
 msgstr "Vypnutá mlha"
 
-#: src/keybind.c:1153
+#: src/keybind.c:1307
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1153
+#: src/keybind.c:1307
 msgid "Ending Mission."
 msgstr ""
 
-#: src/keybind.c:1265
+#: src/keybind.c:1419
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1265
+#: src/keybind.c:1419
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1322
+#: src/keybind.c:1476
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1322
+#: src/keybind.c:1476
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1334
+#: src/keybind.c:1488
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1343
+#: src/keybind.c:1497
 #, c-format
 msgid "Trap cursor %s"
 msgstr ""
 
-#: src/keybind.c:1424
+#: src/keybind.c:1578
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1457
+#: src/keybind.c:1611
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1458
+#: src/keybind.c:1612
 #, fuzzy
 msgid "Researched"
 msgstr "Výzkum"
 
-#: src/keybind.c:1478
+#: src/keybind.c:1632
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1481
+#: src/keybind.c:1635
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1484
+#: src/keybind.c:1638
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1506
+#: src/keybind.c:1660
 msgid "Demo mode off - Returning to normal game mode"
 msgstr ""
 
-#: src/keybind.c:1521
+#: src/keybind.c:1675
 msgid "Debug menu is Open"
 msgstr ""
 
-#: src/keybind.c:1552
+#: src/keybind.c:1706
 #, fuzzy
 msgid "Unable to locate any resource extractors!"
 msgstr "Nelze lokalizovat žádný sběrač surovin!"
 
-#: src/keybind.c:1773
+#: src/keybind.c:1927
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.c:1779
+#: src/keybind.c:1933
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.c:1785
+#: src/keybind.c:1939
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.c:1830
+#: src/keybind.c:1984
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1832
+#: src/keybind.c:1986
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "Nepřítel zničen podváděním!"
 
-#: src/keybind.c:1873
+#: src/keybind.c:2027
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2394
+#: src/keybind.c:2548
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2406
+#: src/keybind.c:2560
 msgid "Unable to locate HQ!"
 msgstr "Nelze nalézt HQ!"
 
-#: src/keybind.c:2413
+#: src/keybind.c:2567
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2462
+#: src/keybind.c:2616
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2467
+#: src/keybind.c:2621
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2476
+#: src/keybind.c:2630
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2481
+#: src/keybind.c:2635
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2526
-#: src/keybind.c:2569
+#: src/keybind.c:2680
+#: src/keybind.c:2723
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Omlouváme se, ale tento podvod je vypnutý ve hře pro více hráčů."
 
-#: src/keybind.c:2547
-#: src/keybind.c:2590
-#: src/keybind.c:2612
+#: src/keybind.c:2701
+#: src/keybind.c:2744
+#: src/keybind.c:2766
 #, fuzzy
 msgid "Game Speed Reset"
 msgstr "Restartování herní rychlosti"
 
-#: src/keybind.c:2551
+#: src/keybind.c:2705
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Rychlost Hry Zvýšena na %3.1f"
 
-#: src/keybind.c:2594
+#: src/keybind.c:2748
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Rychlost Hry Snížena na %3.1f"
 
-#: src/keybind.c:2624
+#: src/keybind.c:2778
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2628
+#: src/keybind.c:2782
 msgid "Build menu will not reopen"
 msgstr ""
 
-#: src/keybind.c:2640
+#: src/keybind.c:2794
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2644
+#: src/keybind.c:2798
 msgid "Radar showing player colors"
 msgstr "Radar ukazuje barvy hráčů"
 
-#: src/keybind.c:2665
+#: src/keybind.c:2819
 msgid "Radar showing only objects"
 msgstr "Radar ukazuje pouze objekty"
 
-#: src/keybind.c:2668
+#: src/keybind.c:2822
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2671
+#: src/keybind.c:2825
 msgid "Radar showing terrain"
 msgstr "Radar ukazuje terén"
 
-#: src/keybind.c:2674
+#: src/keybind.c:2828
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar ukazuje terén"
 
-#: src/keybind.c:2677
+#: src/keybind.c:2831
 msgid "Radar showing height"
 msgstr "Radar ukazuje výšku"
 
@@ -13921,12 +14011,12 @@ msgstr ""
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10126
+#: src/scriptfuncs.c:10108
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10172
+#: src/scriptfuncs.c:10154
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -14077,10 +14167,6 @@ msgstr ""
 
 #~ msgid "Swedish"
 #~ msgstr "Švédsky"
-
-#, fuzzy
-#~ msgid "Heavy Machinegun Cobra Half-trackS"
-#~ msgstr "Vybrat všechny Kolopásové Jednotky"
 
 #, fuzzy
 #~ msgid "Hardware"

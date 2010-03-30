@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-29 15:50+0200\n"
+"POT-Creation-Date: 2010-03-30 14:12+0200\n"
 "PO-Revision-Date: 2010-03-26 18:42+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -11295,6 +11295,106 @@ msgstr "Roomikutega Cobra MRA"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hõljukiga Python Hüperkiire Kahur"
 
+#: data/mp/messages/strings/names.txt:1937
+#, fuzzy
+msgid "Inferno Cobra Hover"
+msgstr "Pool-Roomikutega Cobra Põrgupõletaja"
+
+#: data/mp/messages/strings/names.txt:1938
+#, fuzzy
+msgid "Medium Cannon Cobra Half Track"
+msgstr "Roomikutega Cobra Keskkahur"
+
+#: data/mp/messages/strings/names.txt:1939
+#, fuzzy
+msgid "Inferno Python Hover"
+msgstr "Hõljukiga Python HPV Kahur"
+
+#: data/mp/messages/strings/names.txt:1940
+#, fuzzy
+msgid "Assault Gun Python Hover"
+msgstr "Roomikutega Python Ründekuulipildujaga"
+
+#: data/mp/messages/strings/names.txt:1941
+#, fuzzy
+msgid "Assault Gun Python Half Track"
+msgstr "Roomikutega Python Ründekuulipildujaga"
+
+#: data/mp/messages/strings/names.txt:1942
+#, fuzzy
+msgid "Heavy Machinegun Scorpion Half Tracks"
+msgstr "Roomikutega Scorpion Raskekuulipilduja"
+
+#: data/mp/messages/strings/names.txt:1943
+#, fuzzy
+msgid "Assault Cannon Mantis Hover"
+msgstr "Rünndekahuri Valvetorn"
+
+#: data/mp/messages/strings/names.txt:1944
+#, fuzzy
+msgid "Pulse Laser Leopard Hover"
+msgstr "Impulsslaseri Torn"
+
+#: data/mp/messages/strings/names.txt:1945
+#, fuzzy
+msgid "Pulse Laser Panther Hover"
+msgstr "Impulsslaseri Torn"
+
+#: data/mp/messages/strings/names.txt:1946
+#, fuzzy
+msgid "Rail Gun Tiger Hover"
+msgstr "Railkahuri Uuendus"
+
+#: data/mp/messages/strings/names.txt:1947
+#, fuzzy
+msgid "Pulse Laser Tiger Hover"
+msgstr "Roomiktega Tiger Impulsslaser"
+
+#: data/mp/messages/strings/names.txt:1948
+#, fuzzy
+msgid "Plasma Cannon Wyvern Tracks"
+msgstr "Roomikutega Wyvern Gausskahur"
+
+#: data/mp/messages/strings/names.txt:1949
+#, fuzzy
+msgid "Scourge Missile Wyvern Tracks"
+msgstr "Scourge Rakettide Torn"
+
+#: data/mp/messages/strings/names.txt:1950
+#, fuzzy
+msgid "Flashlight Retribution Hover"
+msgstr "Välkvalgusväelane"
+
+#: data/mp/messages/strings/names.txt:1951
+#, fuzzy
+msgid "Mini-Rocket Viper Half Track"
+msgstr "Pool-Roomikutega Cobra Mini-Raketid"
+
+#: data/mp/messages/strings/names.txt:1952
+#, fuzzy
+msgid "Mini-Rocket Array Viper Half Track"
+msgstr "Roomikutega Cobra MRA"
+
+#: data/mp/messages/strings/names.txt:1953
+#, fuzzy
+msgid "Phosphor Bomb Bay Manits VTOL"
+msgstr "Fosfori Pommitus"
+
+#: data/mp/messages/strings/names.txt:1954
+#, fuzzy
+msgid "Heap Bomb Bay Manits VTOL"
+msgstr "VTOL Kuhjadeviisi Pommitus"
+
+#: data/mp/messages/strings/names.txt:1955
+#, fuzzy
+msgid "Heap Bomb Bay Retribution VTOL"
+msgstr "Keskmine Kere - Retribution"
+
+#: data/mp/messages/strings/names.txt:1956
+#, fuzzy
+msgid "Scourge Retaliation VTOL"
+msgstr "Retaliation"
+
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
 msgid "System locale"
@@ -11784,68 +11884,68 @@ msgstr "Üksus Kaotatud!"
 msgid "Structure Restored"
 msgstr "Ehitis taastatud"
 
-#: src/droid.c:3302
+#: src/droid.c:3309
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupp %u valitud - %u Üksus"
 msgstr[1] "Grupp %u valitud - %u Üksust"
 
-#: src/droid.c:3315
+#: src/droid.c:3322
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u üksus määratud gruppi %u"
 msgstr[1] "%u Üksust määratud Gruppi %u"
 
-#: src/droid.c:3328
+#: src/droid.c:3335
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Grupi %u Vaade - %u Üksus"
 msgstr[1] "Grupi %u Vaade - %u Üksust"
 
-#: src/droid.c:3332
+#: src/droid.c:3339
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u Unit"
 msgstr[1] "Aligning with Group %u - %u Units"
 
-#: src/droid.c:3595
+#: src/droid.c:3602
 msgid "Rookie"
 msgstr "Uustulnuk"
 
-#: src/droid.c:3596
+#: src/droid.c:3603
 msgctxt "rank"
 msgid "Green"
 msgstr "Algaja"
 
-#: src/droid.c:3597
+#: src/droid.c:3604
 msgid "Trained"
 msgstr "Treenitud"
 
-#: src/droid.c:3598
+#: src/droid.c:3605
 msgid "Regular"
 msgstr "Regulaar"
 
-#: src/droid.c:3599
+#: src/droid.c:3606
 msgid "Professional"
 msgstr "Professionaal"
 
-#: src/droid.c:3600
+#: src/droid.c:3607
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3601
+#: src/droid.c:3608
 msgid "Elite"
 msgstr "Eliit"
 
-#: src/droid.c:3602
+#: src/droid.c:3609
 msgid "Special"
 msgstr "Eriline"
 
-#: src/droid.c:3603
+#: src/droid.c:3610
 msgid "Hero"
 msgstr "Kangelane"
 
