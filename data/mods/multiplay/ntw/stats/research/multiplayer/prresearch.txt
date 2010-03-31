@@ -647,6 +647,7 @@ R-Wpn-GShield,R-Struc-Research-Upgrade07,109
 R-Wpn-GShield,R-Vehicle-Prop-VTOL,109
 R-Defense-Plas-Art,R-Wpn-Plas-Art,109
 R-Wpn-Plas-Art,R-Wpn-HvyLaser,109
+R-Wpn-Plas-Art,R-Sys-CBSensor-Tower01,109
 R-Wpn-Incenediary-Mortar,R-Wpn-Mortar02Hvy,109
 R-Wpn-Incenediary-Mortar,R-Wpn-Flame2,109
 R-Defense-Incenediary-Mortar-Pit,R-Wpn-Incenediary-Mortar,109
