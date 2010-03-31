@@ -441,7 +441,7 @@ R-Defense-A0BaBaMortarPit,Level All,0,0,IMAGE_RES_DEFENCE,0,0,0,A0BaBaMortarPit,
 R-Defense-A0BaBaRocketPit,Level All,0,0,IMAGE_RES_DEFENCE,0,0,0,A0BaBaRocketPit,0,0,500,0,1,0,0,0,1,0,0
 R-Defense-A0CannonTower,Level All,0,0,IMAGE_RES_DEFENCE,0,0,0,A0CannonTower,0,0,500,0,1,0,0,0,1,0,0
 R-Defense-A0BaBaFlameTower,Level All,0,0,IMAGE_RES_DEFENCE,0,0,0,A0BaBaFlameTower,0,0,500,0,1,0,0,0,1,0,0
-R-Wpn-Plas-Art,Level Three,0,0,IMAGE_RES_WEAPONTECH,0,0,RES_W_MS_MART,0,PlasmaHeavy,WEAPON,20000,1,1,0,0,0,0,0,1
+R-Wpn-Plas-Art,Level Three,0,0,IMAGE_RES_WEAPONTECH,0,0,RES_W_MS_MART,0,PlasmaHeavy,WEAPON,20000,1,2,0,0,0,0,0,1
 R-Defense-Plas-Art,Level Three,0,0,IMAGE_RES_DEFENCE,0,0,RES_EMP_MdAM,NX-Emp-Plasma-Pit,0,0,14400,0,1,0,0,0,1,0,0
 R-Wpn-GShield,Level One,0,0,IMAGE_RES_STRUCTURETECH,0,0,0,GShield,0,0,25000,1,2,0,0,0,1,0,0
 R-Wpn-Laser-Sat,Level Three,0,0,IMAGE_RES_WEAPONTECH,0,0,RES_W_LASSAT,Laser-Sat,0,0,30000,1,2,0,0,0,1,0,0
