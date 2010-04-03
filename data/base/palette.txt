@@ -57,3 +57,11 @@ A0,70,00,ff	// team2 - orange
 20,30,60,ff	// team6 - blue
 90,00,70,ff	// team7 - purple
 00,80,80,ff	// team8 - teal
+7f,7f,7f,ff	// default form background
+ff,ff,ff,ff	// default form text
+ff,ff,ff,ff	// default form light
+00,00,00,ff	// default form dark
+40,40,40,ff	// default form hilite
+ff,0,0,ff	// default form cursor
+30,30,30,ff	// default form tip background
+bf,bf,bf,ff	// default form disabled

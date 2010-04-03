@@ -81,8 +81,16 @@
 #define WZCOL_TEAM6					psPalette[56]
 #define WZCOL_TEAM7					psPalette[57]
 #define WZCOL_TEAM8					psPalette[58]
+#define WZCOL_FORM_BACKGROUND				psPalette[59]
+#define WZCOL_FORM_TEXT					psPalette[60]
+#define WZCOL_FORM_LIGHT				psPalette[61]
+#define WZCOL_FORM_DARK					psPalette[62]
+#define WZCOL_FORM_HILITE				psPalette[63]
+#define WZCOL_FORM_CURSOR				psPalette[64]
+#define WZCOL_FORM_TIP_BACKGROUND			psPalette[65]
+#define WZCOL_FORM_DISABLE				psPalette[66]
 
-#define WZCOL_MAX			59
+#define WZCOL_MAX			67
 
 //*************************************************************************
 

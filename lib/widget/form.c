@@ -49,49 +49,14 @@ typedef struct _tab_pos
 /* Set default colours for a form */
 static void formSetDefaultColours(W_FORM *psForm)
 {
-	static BOOL bDefaultsSet = false;
-	static PIELIGHT wcol_bkgrnd;
-	static PIELIGHT wcol_text;
-	static PIELIGHT wcol_light;
-	static PIELIGHT wcol_dark;
-	static PIELIGHT wcol_hilite;
-	static PIELIGHT wcol_cursor;
-	static PIELIGHT wcol_tipbkgrnd;
-	static PIELIGHT wcol_disable;
-
-	if (bDefaultsSet)
-	{
-		psForm->aColours[WCOL_BKGRND]    = wcol_bkgrnd;
-		psForm->aColours[WCOL_TEXT]      = wcol_text;
-		psForm->aColours[WCOL_LIGHT]     = wcol_light;
-		psForm->aColours[WCOL_DARK]      = wcol_dark;
-		psForm->aColours[WCOL_HILITE]    = wcol_hilite;
-		psForm->aColours[WCOL_CURSOR]    = wcol_cursor;
-		psForm->aColours[WCOL_TIPBKGRND] = wcol_tipbkgrnd;
-		psForm->aColours[WCOL_DISABLE]   = wcol_disable;
-	}
-	else
-	{
-		wcol_bkgrnd    = pal_Colour(0x7f, 0x7f, 0x7f);
-		wcol_text      = WZCOL_WHITE;
-		wcol_light     = WZCOL_WHITE;
-		wcol_dark      = WZCOL_BLACK;
-		wcol_hilite    = pal_Colour(0x40, 0x40, 0x40);
-		wcol_cursor    = pal_Colour(0xff, 0x00, 0x00);
-		wcol_tipbkgrnd = pal_Colour(0x30, 0x30, 0x60);
-		wcol_disable   = pal_Colour(0xbf, 0xbf, 0xbf);
-
-		bDefaultsSet   = true;
-
-		psForm->aColours[WCOL_BKGRND]    = wcol_bkgrnd;
-		psForm->aColours[WCOL_TEXT]      = wcol_text;
-		psForm->aColours[WCOL_LIGHT]     = wcol_light;
-		psForm->aColours[WCOL_DARK]      = wcol_dark;
-		psForm->aColours[WCOL_HILITE]    = wcol_hilite;
-		psForm->aColours[WCOL_CURSOR]    = wcol_cursor;
-		psForm->aColours[WCOL_TIPBKGRND] = wcol_tipbkgrnd;
-		psForm->aColours[WCOL_DISABLE]   = wcol_disable;
-	}
+	psForm->aColours[WCOL_BKGRND]    = WZCOL_FORM_BACKGROUND;
+	psForm->aColours[WCOL_TEXT]      = WZCOL_FORM_TEXT;
+	psForm->aColours[WCOL_LIGHT]     = WZCOL_FORM_LIGHT;
+	psForm->aColours[WCOL_DARK]      = WZCOL_FORM_DARK;
+	psForm->aColours[WCOL_HILITE]    = WZCOL_FORM_HILITE;
+	psForm->aColours[WCOL_CURSOR]    = WZCOL_FORM_CURSOR;
+	psForm->aColours[WCOL_TIPBKGRND] = WZCOL_FORM_TIP_BACKGROUND;
+	psForm->aColours[WCOL_DISABLE]   = WZCOL_FORM_DISABLE;
 }
 
 /* Create a plain form widget */
