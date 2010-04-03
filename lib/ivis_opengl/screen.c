@@ -197,7 +197,8 @@ bool screenInitialise(
 	debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
 	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object ? "is" : "is NOT");
 	debug(LOG_3D, "  * Vertex Buffer Object (VBO) %s supported.", GLEE_ARB_vertex_buffer_object ? "is" : "is NOT");
-	
+	debug(LOG_3D, "  * NPOT %s supported.", GLEE_ARB_texture_non_power_of_two ? "is" : "is NOT");
+	debug(LOG_3D, "  * texture cube_map %s supported.", GLEE_ARB_texture_cube_map ? "is" : "is NOT");
 	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &glMaxTUs);
 	debug(LOG_3D, "  * Total number of Texture Units (TUs) supported is %d.", (int) glMaxTUs);
 
