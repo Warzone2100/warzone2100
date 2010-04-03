@@ -445,9 +445,9 @@ void _debug( code_part part, const char *function, const char *str, ... )
 			param.movable = true;
 			
 			ssprintf(aBuffer, "%s\n\nPlease check your logs for more details.\n\n Run Console.app and search for wz2100 and copy that to a file. \
-							\n\nFor Crash report on 10.4/10.5 check ~/Library/Logs/CrashReporter, and on 10.6 check ~/Library/Logs/DiagnosticReports, and attach those to a bug report at http://developer.wz2100.net/newticket", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
+							\n\nFor Crash report on 10.4/10.5 check ~/Library/Logs/CrashReporter, and on 10.6 check ~/Library/Logs/DiagnosticReports", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
 			
-			err = CreateStandardAlert( kAlertStopAlert, CFStringCreateWithCString( nil, aBuffer, kCFStringEncodingMacRoman), CFSTR( "Do not forget to upload both the stderr.txt file and the warzone2100.rpt file in your bug reports!" ), &param, &dialog );
+			err = CreateStandardAlert( kAlertStopAlert, CFStringCreateWithCString( nil, aBuffer, kCFStringEncodingMacRoman), CFSTR( "Do not forget to upload and attach those to a bug report at http://developer.wz2100.net/newticket  Thanks!" ), &param, &dialog );
 			SetWindowTitleWithCFString( GetDialogWindow( dialog ), CFSTR( "Warzone has terminated unexpectedly" ) );
 			
 			RunStandardAlert( dialog, NULL, &itemHit );
