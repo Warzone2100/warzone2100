@@ -4,6 +4,7 @@
 INSTALL_PATH = $(HOME)/Applications
 OTHER_LDFLAGS[arch=ppc] = -w // This turns off 2 warnings that are actually in apple's sdk.
 PREBINDING = NO
+APPLY_RULES_IN_COPY_FILES = YES
 INFOPLIST_FILE = Resources/Warzone-Info.plist
 INFOPLIST_OTHER_PREPROCESSOR_FLAGS = -traditional
 INFOPLIST_PREFIX_HEADER = $(SRCROOT)/build/autorevision.h
