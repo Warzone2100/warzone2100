@@ -1011,6 +1011,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		 || timeout == 0)
 		{
 			debug(LOG_NET, "Failed to start connecting: %s, using socket %p", strSockError(getSockErr()), conn);
+			NETlogEntry("Failed to start connecting ?", SYNC_FLAG, selectedPlayer);
 			socketClose(conn);
 			return NULL;
 		}
@@ -1036,6 +1037,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		if (ret == SOCKET_ERROR)
 		{
 			debug(LOG_NET, "Failed to wait for connection: %s, socket %p.  Closing.", strSockError(getSockErr()), conn);
+			NETlogEntry("Failed to wait for connection ?", SYNC_FLAG, selectedPlayer);
 			socketClose(conn);
 			return NULL;
 		}
@@ -1044,6 +1046,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		{
 			setSockErr(ETIMEDOUT);
 			debug(LOG_NET, "Timed out while waiting for connection to be established: %s, using socket %p.  Closing.", strSockError(getSockErr()), conn);
+			NETlogEntry("Timed out while waiting for connection to be established.", SYNC_FLAG, selectedPlayer);
 			socketClose(conn);
 			return NULL;
 		}
@@ -1062,6 +1065,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 #endif
 		{
 			debug(LOG_NET, "Failed to connect: %s, with socket %p.  Closing.", strSockError(getSockErr()), conn);
+			NETlogEntry("Failed to to connect with socket.", SYNC_FLAG, selectedPlayer);
 			socketClose(conn);
 			return NULL;
 		}
@@ -1071,6 +1075,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], true))
 	{
 		debug(LOG_NET, "Failed to set socket %p blocking status (true).  Closing.", conn);
+		NETlogEntry("Failed to set blocking status of socket.", SYNC_FLAG, selectedPlayer);
 		socketClose(conn);
 		return NULL;
 	}
@@ -1125,6 +1130,7 @@ static Socket* socketListen(unsigned int port)
 	 && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Failed to create an IPv4 and IPv6 (only supported address families) socket (%p): %s.  Closing.", conn, strSockError(getSockErr()));
+		NETlogEntry("Failed to create an IPv4 and IPv6 (only supported address families) socket ?", SYNC_FLAG, selectedPlayer);
 		socketClose(conn);
 		return NULL;
 	}
@@ -1172,6 +1178,7 @@ static Socket* socketListen(unsigned int port)
 		 || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false))
 		{
 			debug(LOG_ERROR, "Failed to set up IPv4 socket for listening on port %u: %s", port, strSockError(getSockErr()));
+			NETlogEntry("Failed to set up IPv4 socket for listening on port.", SYNC_FLAG, selectedPlayer);
 #if   defined(WZ_OS_WIN)
 			closesocket(conn->fd[SOCK_IPV4_LISTEN]);
 #else
@@ -1336,6 +1343,7 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 		if (size == 0)
 		{
 			debug(LOG_NET, "Connection closed from the other side.  Socket:%p", bs->socket);
+			NETlogEntry("Connection closed from the other side..", SYNC_FLAG, selectedPlayer);
 		}
 		else
 		{
@@ -1353,10 +1361,12 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 		if (bs->bytes > NET_BUFFER_SIZE)
 		{
 			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %d", NET_BUFFER_SIZE, bs->bytes);
+			NETlogEntry("Fatal connection error: buffer size was too small!", SYNC_FLAG, selectedPlayer);
 		}
 		if (tcp_socket == bs->socket)
 		{
 			debug(LOG_NET, "Host connection was lost!");
+			NETlogEntry("Host connection was lost!", SYNC_FLAG, selectedPlayer);
 			tcp_socket = NULL;
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
@@ -1501,6 +1511,7 @@ static signed int NET_CreatePlayer(const char* name)
 		if (NetPlay.players[index].allocated == false)
 		{
 			debug(LOG_NET, "A new player has been created. Player, %s, is set to slot %u", name, index);
+			NETlogEntry("A new player has been created.", SYNC_FLAG, index);
 			NET_InitPlayer(index, false);	// re-init everything
 			NetPlay.players[index].allocated = true;
 			sstrcpy(NetPlay.players[index].name, name);
@@ -1512,12 +1523,14 @@ static signed int NET_CreatePlayer(const char* name)
 	}
 
 	debug(LOG_ERROR, "Could not find place for player %s", name);
+	NETlogEntry("Could not find a place for player!", SYNC_FLAG, index);
 	return -1;
 }
 
 static void NET_DestroyPlayer(unsigned int index)
 {
 	debug(LOG_NET, "Freeing slot %u for a new player", index);
+	NETlogEntry("Freeing slot for a new player.", SYNC_FLAG, index);
 	if (NetPlay.players[index].allocated)
 	{
 		NetPlay.players[index].allocated = false;
@@ -1545,7 +1558,7 @@ static void NETplayerClientDisconnect(uint32_t index)
 		debug(LOG_NET, "Player (%u) has left unexpectedly, closing socket %p",
 			index, connected_bsocket[index]->socket);
 		NETplayerLeaving(index);
-
+		NETlogEntry("Player has left unexpectedly.", SYNC_FLAG, index);
 		// Announce to the world. This is really icky, because we may be calling the send
 		// function recursively. We really ought to have a send queue...
 		NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
@@ -1568,7 +1581,7 @@ static void NETplayerLeaving(UDWORD index)
 	if(connected_bsocket[index])
 	{
 		debug(LOG_NET, "Player (%u) has left, closing socket %p", index, connected_bsocket[index]->socket);
-
+		NETlogEntry("Player has left nicely.", SYNC_FLAG, index);
 		// Although we can get a error result from DelSocket, it don't really matter here.
 		SocketSet_DelSocket(socket_set, connected_bsocket[index]->socket);
 		socketClose(connected_bsocket[index]->socket);
@@ -1613,6 +1626,7 @@ void NETplayerKicked(UDWORD index)
 	// simply means "there wasn't a connection error."
 	debug(LOG_INFO, "Player %u was kicked.", index);
 	sync_counter.kicks++;
+	NETlogEntry("Player was kicked.", SYNC_FLAG, index);
 	addToBanList(NetPlay.players[index].IPtextAddress, NetPlay.players[index].name);
 	NETplayerLeaving(index);		// need to close socket for the player that left.
 	NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
@@ -1628,7 +1642,7 @@ BOOL NETchangePlayerName(UDWORD index, char *newName)
 		return true;
 	}
 	debug(LOG_NET, "Requesting a change of player name for pid=%u to %s", index, newName);
-
+	NETlogEntry("Player wants a name change.", SYNC_FLAG, index);
 	sstrcpy(NetPlay.players[index].name, newName);
 
 	NETBroadcastPlayerInfo(index);
@@ -2074,6 +2088,7 @@ int NETinit(BOOL bFirstCall)
 	UDWORD i;
 
 	debug(LOG_NET, "NETinit");
+	NETlogEntry("NETinit!", SYNC_FLAG, selectedPlayer);
 	NET_InitPlayers();
 	if(bFirstCall)
 	{
@@ -2129,7 +2144,7 @@ int NETinit(BOOL bFirstCall)
 int NETshutdown(void)
 {
 	debug( LOG_NET, "NETshutdown" );
-
+	NETlogEntry("NETshutdown", SYNC_FLAG, selectedPlayer);
 	NETstopLogging();
 	if (IPlist)
 		free(IPlist);
@@ -2353,6 +2368,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 		{
 			// Write error, most likely client disconnect.
 			debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+			NETlogEntry("client disconnect?", SYNC_FLAG, player);
 			NETplayerClientDisconnect(player);
 		}
 	}
@@ -2366,6 +2382,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 			{
 				// Write error, most likely client disconnect.
 				debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+				NETlogEntry("write error--client disconnect.", SYNC_FLAG, player);
 				SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
 				socketClose(tcp_socket);
 				tcp_socket = NULL;
@@ -2412,6 +2429,7 @@ BOOL NETbcast(NETMSG *msg)
 				{
 					// Write error, most likely client disconnect.
 					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+					NETlogEntry("Failed to send message. Client disconnect?", SYNC_FLAG, i);
 					NETplayerClientDisconnect(i);
 				}
 			}
@@ -2428,6 +2446,7 @@ BOOL NETbcast(NETMSG *msg)
 			// Write error, most likely host disconnect.
 			debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
 			debug(LOG_ERROR, "Host connection was broken, socket %p.", tcp_socket);
+			NETlogEntry("Host connection was broken!", SYNC_FLAG, 0);
 			SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
 			socketClose(tcp_socket);
 			tcp_socket = NULL;
@@ -3328,9 +3347,9 @@ static void NETallowJoining(void)
 					}
 					else
 					{
-						debug(LOG_NET, "Client socket ecountered error: %s", strSockError(getSockErr()));
+						debug(LOG_NET, "Client socket encountered error: %s", strSockError(getSockErr()));
 					}
-
+					NETlogEntry("Client socket disconnected (allowJoining)", SYNC_FLAG, i);
 					debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					socketClose(tmp_socket[i]);
@@ -3528,7 +3547,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	}
 
 	NetPlay.isHost = true;
-
+	NETlogEntry("Hosting game", SYNC_FLAG, 0);
 	sstrcpy(gamestruct.name, SessionName);
 	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
 	gamestruct.desc.dwSize = sizeof(gamestruct.desc);
