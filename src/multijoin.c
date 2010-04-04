@@ -207,7 +207,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 		return false;
 	}
 
-	NETlogEntry("Player leaving game", 0, playerIndex);
+	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
 	debug(LOG_INFO,"** Player %u [%s], has left the game.", playerIndex, getPlayerName(playerIndex));
 
 	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));

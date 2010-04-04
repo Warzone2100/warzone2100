@@ -1692,7 +1692,7 @@ BOOL scrSkDoResearch(void)
 		}
 
 		sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[i].pName );
-		NETlogEntry(sTemp,0,0);
+		NETlogEntry(sTemp, SYNC_FLAG, 0);
 
 
 	}

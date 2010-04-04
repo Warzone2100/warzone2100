@@ -444,7 +444,7 @@ BOOL recvDroidCheck()
 			// Find the droid in question
 			if (!IdToDroid(ref, player, &pD))
 			{
-				NETlogEntry("Recvd Unknown droid info. val=player",0,player);
+				NETlogEntry("Recvd Unknown droid info. val=player", SYNC_FLAG, player);
 				debug(LOG_SYNC, "Received checking info for an unknown (as yet) droid. player:%d ref:%d", player, ref);
 				continue;
 			}
@@ -791,7 +791,7 @@ BOOL recvStructureCheck()
 		// Structure was not found - build it
 		else
 		{
-			NETlogEntry("scheck:structure check failed, adding struct. val=type", 0, type - REF_STRUCTURE_START);
+			NETlogEntry("scheck:structure check failed, adding struct. val=type", SYNC_FLAG, type - REF_STRUCTURE_START);
 
 			for (i = 0; i < numStructureStats && asStructureStats[i].ref != type; i++);
 			psStats = &asStructureStats[i];
@@ -799,7 +799,7 @@ BOOL recvStructureCheck()
 			// Check for similar buildings, to avoid overlaps
 			if (TileHasStructure(mapTile(map_coord(x), map_coord(y))))
 			{
-				NETlogEntry("scheck:Tile has structure val=player", 0, player);
+				NETlogEntry("scheck:Tile has structure val=player", SYNC_FLAG, player);
 
 				pS = getTileStructure(map_coord(x), map_coord(y));
 
@@ -817,14 +817,14 @@ BOOL recvStructureCheck()
 						buildingComplete(pS);
 					}
 
-					NETlogEntry("scheck: fixed?", 0, player);
+					NETlogEntry("scheck: fixed?", SYNC_FLAG, player);
 				}
 				// Wall becoming a cornerwall
 				else if (pS->pStructureType->type == REF_WALL)
 				{
 					if (psStats->type == REF_WALLCORNER)
 					{
-						NETlogEntry("scheck: fixed wall->cornerwall", 0, 0);
+						NETlogEntry("scheck: fixed wall->cornerwall", SYNC_FLAG, 0);
 						removeStruct(pS, true);
 
 						powerCalc(false);
@@ -837,21 +837,21 @@ BOOL recvStructureCheck()
 						}
 						else
 						{
-							NETlogEntry("scheck: failed to upgrade wall!", 0, player);
+							NETlogEntry("scheck: failed to upgrade wall!", SYNC_FLAG, player);
 							return false;
 						}
 					}
 				}
 				else
 				{
-					NETlogEntry("scheck:Tile did not have correct type or player val=player",0,player);
+					NETlogEntry("scheck:Tile did not have correct type or player val=player", SYNC_FLAG, player);
 					return false;
 			    }
 			}
 			// Nothing exists there so lets get building!
 			else
 			{
-				NETlogEntry("scheck: didn't find structure at all, building it",0,0);
+				NETlogEntry("scheck: didn't find structure at all, building it", SYNC_FLAG, 0);
 
 				powerCalc(false);
 				pS = buildStructure((STRUCTURE_STATS *) psStats, x, y, player, true);

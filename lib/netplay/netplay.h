@@ -124,6 +124,7 @@ typedef enum
 	NET_FILE_PAYLOAD,		//73 sending file to the player that needs it
 	NUM_GAME_PACKETS		//   *MUST* be last.
 } MESSAGE_TYPES;
+#define SYNC_FLAG (NUM_GAME_PACKETS * NUM_GAME_PACKETS)	//special flag used for logging.
 
 // Constants
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
