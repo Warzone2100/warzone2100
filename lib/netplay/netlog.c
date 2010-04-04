@@ -264,7 +264,7 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 		// replace common msgs with txt descriptions
 		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, packetname[a], b, asctime(newtime));
 	else if (a == SYNC_FLAG)
-		snprintf(buf, sizeof(buf), "%s \t: %d \t(Sync error) \t%s", str, b, asctime(newtime));
+		snprintf(buf, sizeof(buf), "%s \t: %d \t(Sync) \t%s", str, b, asctime(newtime));
 	else
 		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, asctime(newtime));
 
