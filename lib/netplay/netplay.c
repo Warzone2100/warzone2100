@@ -3005,6 +3005,7 @@ UBYTE NETrecvFile(void)
 	if (currPos+bytesRead == fileSize)	// last packet
 	{
 		PHYSFS_close(NetPlay.pMapFileHandle);
+		NetPlay.pMapFileHandle = NULL;
 	}
 
 	//return the percentage count
