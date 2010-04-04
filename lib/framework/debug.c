@@ -50,7 +50,9 @@ bool assertEnabled = true;
 #else
 bool assertEnabled = false;
 #endif
-
+#if defined(WZ_OS_MAC)
+#include <Carbon/Carbon.h>
+#endif
 /*
  * This list _must_ match the enum in debug.h!
  * Names must be 8 chars long at max!
@@ -439,8 +441,29 @@ void _debug( code_part part, const char *function, const char *str, ... )
 #elif defined(WZ_HAVE_MOTIF)
 			const char* popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
 			XmMessageBox(part, code_part_names[part], popupBuf);
+#elif defined(WZ_OS_MAC)
+			AlertStdCFStringAlertParamRec	param;
+			DialogRef						dialog;
+			OSStatus						err;
+			DialogItemIndex					itemHit;
+			char aBuffer[512];
+
+			GetStandardAlertDefaultParams( &param, kStdCFStringAlertVersionOne );
+			param.movable = true;
+			
+			ssprintf(aBuffer, "%s\n\nPlease check your logs for more details.\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
+			
+			err = CreateStandardAlert( kAlertStopAlert, CFStringCreateWithCString( nil, aBuffer, kCFStringEncodingMacRoman),
+				CFSTR( "Run Console.app and search for wz2100 and copy that to a file.\
+					  \n\nFor the Crash report on 10.4/10.5 check\
+					  \n~/Library/Logs/CrashReporter,\
+					  \non 10.6 check ~/Library/Logs/DiagnosticReports\
+					  \nDo not forget to upload and attach those to a bug report at http://developer.wz2100.net/newticket\
+					  \nThanks!" ), &param, &dialog );
+			SetWindowTitleWithCFString( GetDialogWindow( dialog ), CFSTR( "Warzone has terminated unexpectedly" ) );
+			
+			RunStandardAlert( dialog, NULL, &itemHit );
 #endif
-		// TODO: Add Mac OS X dialog as well?
 		}
 
 		// Throw up a dialog box for windows users since most don't have a clue to check the stderr.txt file for information
@@ -456,8 +479,23 @@ void _debug( code_part part, const char *function, const char *str, ... )
 # elif defined(WZ_HAVE_MOTIF)
 			XmMessageBox(part, code_part_names[part], popupBuf);
 # endif
+#elif defined (WZ_OS_MAC)
+			AlertStdCFStringAlertParamRec	param;
+			DialogRef						dialog;
+			OSStatus						err;
+			DialogItemIndex					itemHit;
+			char aBuffer[512];
+			
+			GetStandardAlertDefaultParams( &param, kStdCFStringAlertVersionOne );
+			param.movable = true;
+			
+			ssprintf(aBuffer, "A non fatal error has occurred.\n\n%s\n\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
+			
+			err = CreateStandardAlert( kAlertNoteAlert, CFStringCreateWithCString( nil, aBuffer, kCFStringEncodingMacRoman), NULL, &param, &dialog );
+			SetWindowTitleWithCFString( GetDialogWindow( dialog ), CFSTR( "Warzone has detected a problem" ) );
+			
+			RunStandardAlert( dialog, NULL, &itemHit );
 #endif
-		// TODO: Add Mac OS X dialog as well?
 		}
 
 	}
