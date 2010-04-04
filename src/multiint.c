@@ -2880,6 +2880,15 @@ void startMultiplayerGame(void)
 		ingame.TimeEveryoneIsInGame = 0;
 		ingame.isAllPlayersDataOK = false;
 		memset(&ingame.DataIntegrity, 0x0, sizeof(ingame.DataIntegrity));	//clear all player's array
+		{
+			char buf[255];
+			NETlogEntry("FireUp called.", SYNC_FLAG, 0);
+			snprintf(buf, sizeof(buf), "type:%u, scavs:%u, fog:%u, alliance:%u, MaxPlayers:%u", (unsigned int)game.type, (unsigned int)game.scavengers,
+				(unsigned int)game.fog, (unsigned int)game.alliance, (unsigned int)game.maxPlayers);
+			NETlogEntry(buf, SYNC_FLAG, 0);
+			snprintf(buf, sizeof(buf), "base:%u, power:%u, map:%s, name:%s", (unsigned int)game.base, game.power, game.map, game.name );
+			NETlogEntry(buf, SYNC_FLAG, 0);
+		}
 		SendFireUp();								//bcast a fireup message
 	}
 

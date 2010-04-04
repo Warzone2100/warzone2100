@@ -249,12 +249,14 @@ BOOL multiPlayerLoop(void)
 			{
 				ingame.TimeEveryoneIsInGame = gameTime;
 				debug(LOG_NET, "I have entered the game @ %d", ingame.TimeEveryoneIsInGame );
+				NETlogEntry("player entered game @ ", SYNC_FLAG, ingame.TimeEveryoneIsInGame);
 				if (!NetPlay.isHost)
 				{
 #ifdef DEBUG
 					addConsoleMessage("Sending data check...", LEFT_JUSTIFY, NOTIFY_MESSAGE);
 #endif
 					debug(LOG_NET, "=== Sending hash to host ===");
+					NETlogEntry("player sent hash to host ", SYNC_FLAG, selectedPlayer);
 					sendDataCheck();
 				}
 			}
@@ -277,7 +279,7 @@ BOOL multiPlayerLoop(void)
 							addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 							kickPlayer(index, "it is not nice to cheat!", ERROR_CHEAT);
-							debug(LOG_WARNING, "Kicking Player %s (%u), they tried to bypass data integrity check!", getPlayerName(index), index);
+							debug(LOG_INFO, "Kicking Player %s (%u), they tried to bypass data integrity check!", getPlayerName(index), index);
 						}
 					}
 					ingame.isAllPlayersDataOK = true;

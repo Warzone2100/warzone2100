@@ -2364,6 +2364,8 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 	int NumWeapons = numCR(pWeaponData, bufferSize);
 	int SkippedWeaponCount = 0;
 	int line = 0;
+	bool playerProcessed[MAX_PLAYERS] = {false};
+	bool skippedProcessing[MAX_PLAYERS] = {false};
 
 	ASSERT_OR_RETURN(false, NumWeapons > 0, "template without weapons");
 
@@ -2393,6 +2395,14 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 				}
 				else
 				{
+					if (skippedProcessing[i] == false)
+					{
+						char buf[250];
+						snprintf(buf, sizeof(buf), "not loading droid's weapons for this player (%d). (did not have template or duplicate) line: %d, AI:%s",
+							i, line, isHumanPlayer(i) ? "no" : "yes");
+						NETlogEntry(buf, SYNC_FLAG, 0);
+						skippedProcessing[i] = true;
+					}
 					continue;	// ok, this player did not have this template. that's fine.
 				}
 			}
@@ -2402,7 +2412,14 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 			}
 
 			ASSERT_OR_RETURN(false, pTemplate->numWeaps <= DROID_MAXWEAPS, "stack corruption unavoidable");
-
+			if (playerProcessed[i] != true)
+			{
+				char buf[250];
+				snprintf(buf, sizeof(buf), "Added droid's weapons for this player. (%d). line: %d, AI:%s",
+						i, line, isHumanPlayer(i) ? "no" : "yes");
+				NETlogEntry(buf, SYNC_FLAG, 0);
+				playerProcessed[i] = true;
+			}
 			for (j = 0; j < pTemplate->numWeaps; j++)
 			{
 				int incWpn = getCompFromName(COMP_WEAPON, WeaponName[j]);
