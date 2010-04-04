@@ -278,12 +278,19 @@ typedef struct {
 	char* MOTD;
 } NETPLAY;
 
+typedef struct
+{
+	char	pname[40];
+	char	IPAddress[40];
+} PLAYER_IP;
+#define MAX_BANS 255
 // ////////////////////////////////////////////////////////////////////////
 // variables
 
 extern NETPLAY				NetPlay;
 extern NETMSG NetMsg;
 extern SYNC_COUNTER sync_counter;
+extern PLAYER_IP	*IPlist;
 // update flags
 extern bool netPlayersUpdated;
 extern int mapDownloadProgress;
