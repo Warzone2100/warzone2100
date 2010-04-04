@@ -90,6 +90,11 @@ BOOL attemptCheatCode(const char* cheat_name)
 		kf_ToggleLevelName();
 		return true;
 	}
+	else if (!strcasecmp("legs", cheat_name))
+	{
+		kf_DebugTemplates();
+		return true;
+	}
 
 	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)
 	{
