@@ -230,7 +230,7 @@ static struct IGDdatas data;
 
 // local ip address
 static char lanaddr[16];
-
+static char clientAddress[40] = { '\0' };
 /**
  * Used for connections with clients.
  */
@@ -937,6 +937,7 @@ static Socket* socketAccept(Socket* sock)
 			sock->ready = false;
 
 			addressToText((const struct sockaddr*)&addr, textAddress, sizeof(textAddress));
+			sstrcpy(clientAddress, textAddress);
 			debug(LOG_NET, "Incoming connection from [%s]:%d", textAddress, (unsigned int)ntohs(((const struct sockaddr_in*)&addr)->sin_port));
 			debug(LOG_NET, "Using socket %p", conn);
 			return conn;
@@ -1503,6 +1504,7 @@ static signed int NET_CreatePlayer(const char* name)
 			sstrcpy(NetPlay.players[index].name, name);
 			NETBroadcastPlayerInfo(index);
 			NetPlay.playercount++;
+			sync_counter.joins++;
 			return index;
 		}
 	}
@@ -1574,7 +1576,7 @@ static void NETplayerLeaving(UDWORD index)
 	{
 		debug(LOG_NET, "Player (%u) has left nicely, socket already closed?", index);
 	}
-
+	sync_counter.left++;
 	MultiPlayerLeave(index);		// more cleanup
 	NET_DestroyPlayer(index);		// sets index player's array to false
 }
@@ -1593,6 +1595,7 @@ static void NETplayerDropped(UDWORD index)
 		NETuint32_t(&id);
 	NETend();
 	debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d", id);
+	sync_counter.drops++;
 	NET_DestroyPlayer(id);		// just clears array
 	MultiPlayerLeave(id);			// more cleanup
 	NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
@@ -1607,6 +1610,7 @@ void NETplayerKicked(UDWORD index)
 	// kicking a player counts as "leaving nicely", since "nicely" in this case
 	// simply means "there wasn't a connection error."
 	debug(LOG_INFO, "Player %u was kicked.", index);
+	sync_counter.kicks++;
 	NETplayerLeaving(index);		// need to close socket for the player that left.
 	NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
 }
@@ -3357,6 +3361,7 @@ static void NETallowJoining(void)
 						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 						socketClose(tmp_socket[i]);
 						tmp_socket[i] = NULL;
+						sync_counter.cantjoin++;
 						return;
 					}
 
@@ -3405,6 +3410,8 @@ static void NETallowJoining(void)
 						connected_bsocket[index]->socket = NULL;
 						return;
 					}
+
+					sstrcpy(NetPlay.players[index].IPtextAddress, clientAddress);
 
 					NETbeginEncode(NET_ACCEPTED, index);
 					NETuint8_t(&index);

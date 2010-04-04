@@ -150,6 +150,7 @@ BOOL NETstopLogging(void)
 	static const char dash_line[] = "-----------------------------------------------------------\n";
 	char buf[256];
 	int i;
+	UDWORD totalBytessent = 0, totalBytesrecv = 0, totalPacketsent = 0, totalPacketrecv = 0;
 
 	if (!pFileHandle)
 	{
@@ -159,11 +160,24 @@ BOOL NETstopLogging(void)
 	/* Output stats */
 	for (i = 0; i < NUM_GAME_PACKETS; i++)
 	{
-		snprintf(buf, sizeof(buf), "%s: received %u times, %u bytes; sent %u times, %u bytes\n", packetname[i],
+		snprintf(buf, sizeof(buf), "%-24s:\t received %u times, %u bytes; sent %u times, %u bytes\n", packetname[i],
 			packetcount[0][i], packetsize[0][i], packetcount[1][i], packetsize[1][i]);
 		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+		totalBytessent += packetsize[1][i];
+		totalBytesrecv += packetsize[0][i];
+		totalPacketsent += packetcount[0][i];
+		totalPacketrecv += packetcount[1][i];
 	}
+	snprintf(buf, sizeof(buf), "== Total bytes sent %u, Total bytes received %u ==\n", totalBytessent, totalBytesrecv);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	snprintf(buf, sizeof(buf), "== Total packets sent %u, recv %u ==\n", totalPacketsent, totalPacketrecv);
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	snprintf(buf, sizeof(buf), "\n-Sync statistics -\n");
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
+	snprintf(buf, sizeof(buf), "joins: %hhu, kicks: %hhu, drops: %hhu, left %hhu\n", sync_counter.joins, sync_counter.kicks, sync_counter.drops, sync_counter.left );
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	snprintf(buf, sizeof(buf), "banned: %hhu, cantjoin: %hhu, rejected: %hhu\n", sync_counter.banned, sync_counter.cantjoin, sync_counter.rejected );
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
 	snprintf(buf, sizeof(buf), "sent/unsent DroidCheck %"PRIu64" / %"PRIu64"\n", sync_counter.sentDroidCheck, sync_counter.unsentDroidCheck);
@@ -214,17 +228,10 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 		return false;
 	}
 
-#ifndef MASSIVELOGS
-	if(a ==9 || a==10)
-	{
-		return true;
-	}
-#endif
+	time( &aclock );					/* Get time in seconds */
+	newtime = localtime( &aclock );		/* Convert time to struct */
 
-	time( &aclock );                 /* Get time in seconds */
-	newtime = localtime( &aclock );  /* Convert time to struct */
-
-	if (!newtime || a >= NET_GAME_FLAGS || !str || !pFileHandle)
+	if (!newtime || !str || !pFileHandle)
 	{
 		debug(LOG_ERROR, "Fatal error averted in NETlog");
 		return false;
@@ -236,25 +243,26 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 		static const char dash_line[] = "-----------------------------------------------------------\n";
 
 		lastframe = frame;
-
 		PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
 	}
 
-	if (a <= 51)
+	if (a < NUM_GAME_PACKETS)
 		// replace common msgs with txt descriptions
 		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, packetname[a], b, asctime(newtime));
 	else
 		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, asctime(newtime));
 
-	if (a == 56 || a==57 ) // NET_PLAYER_LEAVING || NET_PLAYER_DROPPED
+	if (a == NET_PLAYER_LEAVING || a == NET_PLAYER_DROPPED )
+	{
 		// Write a starry line above NET_LEAVING messages
 		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
-
-	PHYSFS_write(pFileHandle, buf, strlen( buf ), 1);
-
-	if (a == 56 || a== 57 ) // NET_PLAYER_LEAVING ||NET_PLAYER_DROPPED
-		// Write a starry line below NET_LEAVING messages
+		PHYSFS_write(pFileHandle, buf, strlen( buf ), 1);
 		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
+	}
+	else
+	{
+		PHYSFS_write(pFileHandle, buf, strlen( buf ), 1);
+	}
 
 	PHYSFS_flush(pFileHandle);
 	return true;
