@@ -89,8 +89,15 @@
 #define WZCOL_FORM_CURSOR				psPalette[64]
 #define WZCOL_FORM_TIP_BACKGROUND			psPalette[65]
 #define WZCOL_FORM_DISABLE				psPalette[66]
+#define WZCOL_DESIGN_POWER_FORM_BACKGROUND		psPalette[67]
+#define WZCOL_POWER_BAR					psPalette[68]
+#define WZCOL_ACTION_PROGRESS_BAR_MAJOR			psPalette[69]
+#define WZCOL_ACTION_PROGRESS_BAR_MINOR			psPalette[70]
+#define WZCOL_ACTION_PRODUCTION_RUN_TEXT		psPalette[71]
+#define WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND		psPalette[72]
+#define WZCOL_LOADING_BAR_BACKGROUND			psPalette[73]
 
-#define WZCOL_MAX			67
+#define WZCOL_MAX			74
 
 //*************************************************************************
 
@@ -100,7 +107,7 @@ extern PIELIGHT		psPalette[];
 
 extern void		pal_Init(void);
 extern void		pal_ShutDown(void);
-extern PIELIGHT pal_GetTeamColour(int team);
+extern PIELIGHT		pal_GetTeamColour(int team);
 
 static inline PIELIGHT pal_Colour(UBYTE r, UBYTE g, UBYTE b)
 {
@@ -125,8 +132,6 @@ static inline PIELIGHT pal_SetBrightness(UBYTE brightness)
 
 	return c;
 }
-
-#define pal_Grey pal_SetBrightness
 
 static inline PIELIGHT pal_RGBA(UBYTE r, UBYTE g, UBYTE b, UBYTE a)
 {

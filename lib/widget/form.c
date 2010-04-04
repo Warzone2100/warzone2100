@@ -660,26 +660,13 @@ void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor, UWORD *pMinor)
 
 
 /* Set a colour on a form */
-void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD colour,
-				   UBYTE red, UBYTE green, UBYTE blue)
+void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD index, PIELIGHT colour)
 {
-	W_TABFORM	*psForm;
+	W_TABFORM	*psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
 
-	psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
-	if (psForm == NULL || psForm->type != WIDG_FORM)
-	{
-		ASSERT( false,"widgSetColour: couldn't find form from id" );
-		return;
-	}
-	ASSERT( psForm != NULL,
-		"widgSetColour: Invalid tab form pointer" );
-
-	if (colour >= WCOL_MAX)
-	{
-		ASSERT( false, "widgSetColour: Colour id out of range" );
-		return;
-	}
-	psForm->aColours[colour] = pal_Colour(red,green,blue);
+	ASSERT_OR_RETURN(, psForm && psForm->type == WIDG_FORM, "Could not find form from id %u", id);
+	ASSERT_OR_RETURN(, index < WCOL_MAX, "Colour id %u out of range", index);
+	psForm->aColours[index] = colour;
 }
 
 
