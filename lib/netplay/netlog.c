@@ -179,7 +179,7 @@ BOOL NETstopLogging(void)
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	snprintf(buf, sizeof(buf), "banned: %hhu, cantjoin: %hhu, rejected: %hhu\n", sync_counter.banned, sync_counter.cantjoin, sync_counter.rejected );
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
-	if (sync_counter.banned)
+	if (sync_counter.banned && IPlist)
 	{
 		snprintf(buf, sizeof(buf), "Banned list:\n");
 		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
