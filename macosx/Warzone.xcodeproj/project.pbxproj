@@ -3762,7 +3762,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p build/${CONFIGURATION}/Warzone.app/Contents/Resources\n# rm -rf build/${CONFIGURATION}/Warzone.app/Contents/Resources/data\ncd ..\ntar -c --exclude '.svn' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store' data | tar -xC macosx/build/${CONFIGURATION}/Warzone.app/Contents/Resources\n# cp -R -p -f data macosx/build/${CONFIGURATION}/Warzone.app/Contents/Resources";
+			shellScript = "#Config\ndestdata=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/data\"\ndatadir=\"../data\"\nsvnrevtag=`svnversion -c \"${datadir}\"`\nmtag=`echo \"${svnrevtag}\" | sed -ne 's:\\(.*\\)M$:true:p'`\n\nif [ -d \"${destdata}\" ]; then\n    testsvnrevtag=`svnversion -c \"${destdata}\"`\n    if [[ \"${testsvnrevtag}\" = \"${svnrevtag}\" ]] && [[ ! \"${mtag}\" = \"true\" ]]; then\n        echo \"Data directory is up to date\"\n        exit 0\n    else\n        echo \"Data directory is out of date or has local modifications; recopying\"\n        cp -af \"${datadir}/\" \"${destdata}/\"\n        exit 0\n    fi\nelse\n    mkdir -p \"${destdata}\"\n    cp -af \"${datadir}/\" \"${destdata}/\"\nfi\n\nexit 0";
 		};
 		02F5CC4F0D148FC30000A2D0 /* Create database.c */ = {
 			isa = PBXShellScriptBuildPhase;
