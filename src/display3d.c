@@ -902,12 +902,6 @@ static void drawTiles(iView *player)
 
 	pie_EndLighting();
 
-	if(driveModeActive()) {
-		// If were in driving mode then mark the current target.
-		/*if(targetGetCurrent() != NULL) {
-			targetMarkCurrent();
-		}*/
-	}
 	if(!gamePaused())
 	{
 		doConstructionLines();

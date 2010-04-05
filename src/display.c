@@ -2131,7 +2131,7 @@ void	dealWithLMB( void )
 	/* What have we clicked on? */
 	if(driveModeActive() && !driveTacticalActive())
 	{
-		psClickedOn = NULL;  //targetGetCurrent();
+		psClickedOn = NULL;
 		if (psClickedOn)
 		{
 			dealWithLMBObject(psClickedOn);
@@ -2748,7 +2748,7 @@ STRUCTURE	*psStructure;
 	/*	Not a droid, so maybe a structure or feature?
 		If still NULL after this then nothing */
 	if(driveModeActive() && !driveTacticalActive()) {
-		psNotDroid = NULL;  //targetGetCurrent();
+		psNotDroid = NULL;
 	} else {
 		psNotDroid = getTileOccupier(mouseTileX, mouseTileY);
 	}
