@@ -1696,7 +1696,7 @@ void AddDerrickBurningMessage(void)
 	audio_PlayTrack( ID_SOUND_BUILD_FAIL );
 }
 
-static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
+static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 {
 	bool ownDroid; // Not an allied droid
 	
@@ -1899,7 +1899,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 	
 }
 
-static inline void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selection)
+static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selection)
 {
 	//	clearSelection();	// Clear droid selection.
 	bool ownStruct = (psStructure->player == selectedPlayer);
@@ -2004,7 +2004,7 @@ static inline void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE s
 	driveDisableTactical();
 }
 
-static inline void dealWithLMBFeature(FEATURE* psFeature)
+static void dealWithLMBFeature(FEATURE* psFeature)
 {
 	//some features are targetable
 	//check for constructor droid trying to remove wrecked building first
@@ -2134,7 +2134,7 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 	driveDisableTactical();
 }
 
-static inline void dealWithLMBObject(BASE_OBJECT* psClickedOn)
+static void dealWithLMBObject(BASE_OBJECT* psClickedOn)
 {
 	SELECTION_TYPE selection = establishSelection(selectedPlayer);
 	OBJECT_TYPE type = psClickedOn->type;
