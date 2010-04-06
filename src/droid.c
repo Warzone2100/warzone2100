@@ -83,6 +83,7 @@
 #include "research.h"
 #include "combat.h"
 #include "scriptfuncs.h"			//for ThreatInRange()
+#include "design.h"					//for GetDefaultTemplateName
 
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
 #define	DROID_DAMAGE_SPREAD	(16 - rand()%32)
@@ -1550,11 +1551,6 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		pDroidDesign->pName = templName;
 		sstrcpy(templName, componentName);
 
-		// Store translated name in aName
-		if (!getDroidResourceName(componentName))
-		{
-			return false;
-		}
 		sstrcpy(pDroidDesign->aName, componentName);
 
 		//read in Body Name
@@ -1815,6 +1811,18 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		sscanf(pDroidData,"%d", &pDroidDesign->numWeaps);
 		//check that not allocating more weapons than allowed
 		ASSERT_OR_RETURN(false, pDroidDesign->numWeaps <= DROID_MAXWEAPS, "Too many weapons have been allocated for droid Template: %s", pDroidDesign->aName);
+
+		// Store translated name in aName
+		sstrcpy(componentName, pDroidDesign->aName);		
+		if (getDroidResourceName(componentName))
+		{
+			sstrcpy(pDroidDesign->aName, componentName);		
+		}
+		else
+		{
+			sstrcpy(pDroidDesign->aName, GetDefaultTemplateName(pDroidDesign));		
+		}
+
 
 		pDroidDesign->ref = REF_TEMPLATE_START + line;
 		// Store global default design if found else store in the appropriate array
