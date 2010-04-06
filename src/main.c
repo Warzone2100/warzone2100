@@ -108,6 +108,10 @@ char * global_mods[MAX_MODS] = { NULL };
 char * campaign_mods[MAX_MODS] = { NULL };
 char * multiplay_mods[MAX_MODS] = { NULL };
 
+char * override_mods[MAX_MODS] = { NULL };
+char * override_mod_list = NULL;
+bool use_override_mods = false;
+
 char * loaded_mods[MAX_MODS] = { NULL };
 char * mod_list = NULL;
 int num_loaded_mods = 0;
@@ -223,6 +227,36 @@ void printSearchPath( void )
 		debug(LOG_WZ, "    [%s]", *i);
 	}
 	PHYSFS_freeList( searchPath );
+}
+
+void setOverrideMods(char * modlist)
+{
+	char * curmod = modlist;
+	char * nextmod;
+	int i=0;
+	while ((nextmod = strstr(curmod, ", ")) && i<MAX_MODS-2)
+	{
+		override_mods[i] = malloc(nextmod-curmod+1);
+		strlcpy(override_mods[i], curmod, nextmod-curmod);
+		override_mods[i][nextmod-curmod] = '\0';
+		curmod = nextmod + 2;
+		i++;
+	}
+	override_mods[i] = strdup(curmod);
+	override_mods[i+1] = NULL;
+	override_mod_list = modlist;
+	use_override_mods = true;
+}
+void clearOverrideMods(void)
+{
+	int i;
+	use_override_mods = false;
+	for (i=0; i<MAX_MODS && override_mods[i]; i++)
+	{
+		free(override_mods[i]);
+	}
+	override_mods[0] = NULL;
+	override_mod_list = NULL;
 }
 
 void addLoadedMod(const char * modname)
