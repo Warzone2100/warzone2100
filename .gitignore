@@ -130,9 +130,6 @@ cscope.out
 /waf
 /.waf-*
 
-# Lua:
-*.lua
-
 # KDevelop4
 /.kdev4/
 /warzone.kdev4
