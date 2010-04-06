@@ -3248,7 +3248,7 @@ static int scrStructureBuiltInRange(lua_State *L)
 	int x = luaL_checkint(L, 2);
 	int y = luaL_checkint(L, 3);
 	int range = luaL_checkint(L, 4);
-	int player = luaWZ_checkplayer(L, 5);
+	int player = luaL_checkint(L, 5);	// player, but may be -1
 
 	if (x < 0
 	 || map_coord(x) > (SDWORD)mapWidth)
