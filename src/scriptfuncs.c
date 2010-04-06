@@ -4104,9 +4104,7 @@ static int scrTestStructureModule(lua_State *L)
 {
 	STRUCTURE *psStruct;
 	BOOL bFound;
-
 	int player = luaWZ_checkplayer(L, 1);
-	STRUCTURE *psStructure;
 
 	/* Nothing yet */
 	bFound = false;
@@ -4114,7 +4112,7 @@ static int scrTestStructureModule(lua_State *L)
 	/* Check the specified case first */
 	if(!lua_isnil(L, 2))
 	{
-		psStructure = (STRUCTURE*)luaWZObj_checkobject(L, 2, OBJ_STRUCTURE);
+		psStruct = (STRUCTURE*)luaWZObj_checkobject(L, 2, OBJ_STRUCTURE);
 		if (psStruct == NULL)
 		{
 			luaL_error(L, "Testing for a module from a NULL struct - huh!?");
@@ -4127,7 +4125,7 @@ static int scrTestStructureModule(lua_State *L)
 			return 1;
 		}
 
-		if (structHasModule(psStructure))
+		if (structHasModule(psStruct))
 		{
 			bFound = true;
 		}

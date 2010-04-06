@@ -180,7 +180,23 @@ function version(v)
 		end
 
 		function _event.call_with_backtrace(f, ...)
-			return f(...) -- no bactrace here!
+			local arg = {...}
+			local run_function = function () return f(unpack(arg)) end
+			local result, returns = _event.pack(xpcall(run_function, debug.traceback))
+			if not result then
+				--[[ HACK: try to remove the last useless lines
+				local index = string.find(returns[1], "[C]: in function 'xpcall'", 1, true)
+				if index then
+					print(string.sub(returns[1], 1, index-19))
+				else
+					print(returns[1])
+				end
+				return nil
+				]]
+				print(returns[1])
+			else
+				return returns
+			end
 		end
 
 		-- run the handler as a coroutine to intercept the yields produced by pause
@@ -223,6 +239,9 @@ function version(v)
 				end
 			elseif coroutine.status(co) == 'dead' and type(handler) == 'thread' then
 				_event.event_list[handler].enabled = false
+			elseif coroutine.status(co) == 'dead' and results[1] == false and results [2] ~= nil then
+				--print('error in script: '..results[2])
+				error(results[2])
 			end
 
 		end

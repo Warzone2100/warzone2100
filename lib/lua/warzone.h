@@ -26,6 +26,7 @@ extern int luaWZ_dofile(lua_State *L, const char *filename);
 extern int luaWZ_dofile_threaded(lua_State *L, const char *filename);
 extern void luaWZ_openlibs(lua_State *L);
 extern int luaWZ_pcall_backtrace(lua_State *L, int args, int ret);
+extern void luaWZ_pcall_backtrace_threaded(lua_State *L);
 extern int luaWZ_loadfile(lua_State *L, const char *filename);
 
 extern bool luaL_checkboolean(lua_State* L, int param);
