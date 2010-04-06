@@ -2415,7 +2415,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	sstrcpy(gamestruct.versionstring, VersionString);		// version (string)
 	if (*getModList())
 	{
-		sstrcat(gamestruct.versionstring, _(", mods: "));	// version (string)
+		sstrcat(gamestruct.versionstring, _(", mod: "));	// version (string)
 		sstrcat(gamestruct.versionstring, getModList());	// version (string)
 	}
 	sstrcpy(gamestruct.modlist, getModList());				// List of mods
