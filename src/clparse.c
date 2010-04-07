@@ -477,7 +477,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				{
 					game.type = SKIRMISH; // tutorial is skirmish for some reason
 				}
-				game.type = CAMPAIGN;
 				sstrcpy(aLevelName, token);
 				SetGameMode(GS_NORMAL);
 				break;
