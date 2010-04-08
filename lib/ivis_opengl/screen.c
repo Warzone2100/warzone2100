@@ -252,11 +252,11 @@ bool screenInitialise(
 		debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
 
 		if (!pie_LoadShaders())
-			debug(LOG_WARNING, "Can't use shaders! Switching back to fixed pipeline...");;
+			debug(LOG_INFO, "Can't use shaders, switching back to fixed pipeline.");;
 	}
 	else
 	{
-		debug(LOG_WARNING, "OpenGL 2.0 is not supported by your system! Can't use shaders!...");
+		debug(LOG_INFO, "OpenGL 2.0 is not supported by your system, using fixed pipeline.");
 	}
 
 	glViewport(0, 0, width, height);
