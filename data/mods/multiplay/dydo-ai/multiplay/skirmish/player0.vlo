@@ -8,7 +8,7 @@ run
 {
    player          INT                0
 
-// Version 2.1
+// Version 2.2
 // the version of the .vlo files is not related to the one of the .slo files
 //
 //
@@ -236,14 +236,16 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	sense[2]		STRUCTURESTAT		"Sys-SensoTower01"  //Sensor Tower  [range 12-18]
 
 	//anti air
-	numAA	INT					6
+	/*
+  numAA	INT					6
 	vtolDefStruct[0]	STRUCTURESTAT		"AASite-QuadMg1"			//hurricane
 	vtolDefStruct[1]	STRUCTURESTAT		"AASite-QuadBof" 			//cyclone
 	vtolDefStruct[2]	STRUCTURESTAT		"AASite-QuadRotMg"		//plasma site
 	vtolDefStruct[3]	STRUCTURESTAT		"P0-AASite-SAM1" 			//avenger
 	vtolDefStruct[4]	STRUCTURESTAT		"P0-AASite-SAM2" 			//vindicator
 	vtolDefStruct[5]	STRUCTURESTAT		"P0-AASite-Laser" 			//laser
-
+  */
+  
   //min droids to keep in defend team for each AIpersonality
   //[x][0] tanks
   //[x][1] cyborgs
@@ -257,8 +259,8 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   minDefDroids[1][1]    INT       5
   minDefDroids[1][2]    INT       5
   //turtle
-  minDefDroids[2][0]    INT       8
-  minDefDroids[2][1]    INT       8
+  minDefDroids[2][0]    INT       10
+  minDefDroids[2][1]    INT       10
   minDefDroids[2][2]    INT       5
   //Cyborg
   minDefDroids[3][0]    INT       0
@@ -439,7 +441,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	numTmpls	INT		63
   //=================================================================
   //1-Viper
-	tmpl0[62]	TEMPLATE	"ViperMG01Wheels"//
+	tmpl0[62]	TEMPLATE	"ViperMG01Wheels"//Anti personnel
   tmpl0[61]	TEMPLATE	"ViperFlameHalfTracks"  //Anti personnel
 	tmpl0[60]	TEMPLATE	"ViperMG02Halftrack"    //Anti personnel
 	tmpl0[59]	TEMPLATE	"ViperLtCannonHTracks"	//all-rounder 
@@ -457,7 +459,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   tmpl0[49]	TEMPLATE	"CobraInfernoHover" //Anti personnel
 	
 
-  //1-Phyton
+  //1-Phyton  Lancer,TK,Inferno,AssGun,MC,HC
   tmpl0[48]	TEMPLATE	"SK-Python-Hover-Lancer"  //anti-tank 
 	tmpl0[47]	TEMPLATE	"PythonTKTracks"			    //anti-tank 
   tmpl0[46]	TEMPLATE	"PythonHoverInferno"      //Anti personnel
@@ -476,7 +478,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   tmpl0[38]	TEMPLATE	"ScorpHTrackHMG"	        //Anti personnel     
   tmpl0[37]	TEMPLATE	"SK-Scorp-Hover-Mcannon"	//all-rounder
 
-	//2-Mantis {R-Vehicle-Body12}
+	//2-Mantis {R-Vehicle-Body12} AC,HC,HVC
 	tmpl0[36]	TEMPLATE	"MantisHoverAC"           //all-rounder
 	tmpl0[35]	TEMPLATE	"SK-Mantis-Hover-Hcannon" //all-rounder
 	tmpl0[34]	TEMPLATE	"SK-Mantis-Hover-HVC"     //all-rounder
@@ -517,7 +519,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	tmpl0[13]	TEMPLATE	"SK-Retre-Hover-RailGun"  //all-rounder
 	tmpl0[12]	TEMPLATE	"SK-Retre-Track-RailGun"  //all-rounder
 	
-  //4-R-Wpn-Cannon-Damage07 
+  //4-Vengeance {Body10MBT}
   tmpl0[11]	TEMPLATE	"SK-Veng-Hover-Scourge"   //anti-tank
 	tmpl0[10]	TEMPLATE	"SK-Veng-Track-Scourge"  //anti-tank
 	tmpl0[9]	TEMPLATE	"SK-Veng-Hover-PulseLsr"  //Anti personnel
@@ -559,8 +561,8 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 
   //cheap Researches
 	numCheapRes[0]		INT					21
-  researchCheap[0][0]	  RESEARCHSTAT		"R-Sys-MobileRepairTurret01"	//$18 repair turret, pre-researched
- 	researchCheap[0][1]	  RESEARCHSTAT		"R-Struc-Research-Module"   //$37 
+  researchCheap[0][0]	  RESEARCHSTAT		"R-Sys-MobileRepairTurret01"	//
+ 	researchCheap[0][1]	  RESEARCHSTAT		"R-Struc-Research-Module"   // 
 	researchCheap[0][2]	  RESEARCHSTAT		"R-Struc-Research-Upgrade02"	//160% 
   researchCheap[0][3]	  RESEARCHSTAT		"R-Struc-RepairFacility" //repair facility {powMod - factModule-RepTurret}
 	researchCheap[0][4]	  RESEARCHSTAT		"R-Defense-Tower06"		   //Mini-Rocket Tower  
@@ -594,7 +596,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   research[0][4]	RESEARCHSTAT	"R-Struc-Power-Upgrade01b"	  // 150-01*/(175-01b)/200-01c/230-02**/260-03/290-03a
 
   //Cobra & Hover ---------------------
-  research[0][5]  RESEARCHSTAT  "R-Vehicle-Body05"
+  research[0][5]  RESEARCHSTAT  "R-Vehicle-Body05"//cobra
   research[0][6]	RESEARCHSTAT	"R-Vehicle-Prop-Hover"	//Hover
   research[0][7]  RESEARCHSTAT  "R-Defense-WallTower01" //HMG
   research[0][8]  RESEARCHSTAT  "R-Defense-Tower06" //POD
@@ -714,7 +716,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   research[1][14]	RESEARCHSTAT		"R-Defense-WallUpgrade06" // 135/170/205/240/275/(305)/340* /375/405/440/475/510
 
 	//Weapon Upgrades
-  research[1][15]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //(125)/150/175 %
+  research[1][15]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //(125)/150/175/200/225/250/275/300/325 %
   research[1][16]	RESEARCHSTAT		"R-Wpn-Energy-Damage01"	 //(125)/150/175 %
   research[1][17]	RESEARCHSTAT		"R-Wpn-Energy-ROF01"	   //(118)/143/182 %
 
@@ -876,7 +878,6 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   //Cyborg Upgrades
   general2[0][12]	RESEARCHSTAT		"R-Cyborg-Metals04"	// 135/170/205/(240*)/275/310/345**/380/415
   general2[0][13]	RESEARCHSTAT		"R-Cyborg-Armor-Heat01"	// (145)*/190/235/270**/315/360/405/450/495
-
 
   //Weapon Upgrades
   general2[0][14] RESEARCHSTAT    "R-Wpn-MG-Damage02" //125/(150)/175/200/225/250/275/300/325 %
@@ -1522,7 +1523,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   general4[1][12]	RESEARCHSTAT		"R-Defense-WallUpgrade06" // 135/170/205/240/275/(305)/340* /375/405/440/475/510
 
 	//Weapon Upgrades
-  general4[1][13]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //(125)/150/175 %
+  general4[1][13]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //(125)/150/175/200/225/250/275/300/325 %
   general4[1][14]	RESEARCHSTAT		"R-Wpn-Energy-Damage01"	 //(125)/150/175 %
   general4[1][15]	RESEARCHSTAT		"R-Wpn-Energy-ROF01"	   //(118)/143/182 %
 
