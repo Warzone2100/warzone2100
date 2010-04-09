@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-30 14:12+0200\n"
+"POT-Creation-Date: 2010-04-09 03:12+0200\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -10042,6 +10042,126 @@ msgstr "半履帶式響尾蛇坦克（機槍）"
 msgid "Flamer Viper Half-Tracks"
 msgstr "半履帶式響尾蛇坦克（火焰噴射）"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1937
+#: data/mp/messages/strings/names.txt:1937
+#, fuzzy
+msgid "Inferno Cobra Hover"
+msgstr "半履帶式眼鏡蛇坦克（地獄火）"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1938
+#: data/mp/messages/strings/names.txt:1938
+#, fuzzy
+msgid "Medium Cannon Cobra Half Track"
+msgstr "履帶式眼鏡蛇坦克（中型加農砲）"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1939
+#: data/mp/messages/strings/names.txt:1939
+#, fuzzy
+msgid "Inferno Python Hover"
+msgstr "履帶式蟒蛇坦克（高速加農砲）"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1940
+#: data/mp/messages/strings/names.txt:1940
+#, fuzzy
+msgid "Assault Gun Python Hover"
+msgstr "履帶式蟒蛇坦克（突擊槍）"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1941
+#: data/mp/messages/strings/names.txt:1941
+#, fuzzy
+msgid "Assault Gun Python Half Track"
+msgstr "履帶式蟒蛇坦克（突擊槍）"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
+#: data/mp/messages/strings/names.txt:1942
+#, fuzzy
+msgid "Heavy Machinegun Scorpion Half Tracks"
+msgstr "履帶式毒蠍坦克（重機槍）"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
+#: data/mp/messages/strings/names.txt:1943
+#, fuzzy
+msgid "Assault Cannon Mantis Hover"
+msgstr "突擊加農砲防衛塔"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1944
+#: data/mp/messages/strings/names.txt:1944
+#, fuzzy
+msgid "Pulse Laser Leopard Hover"
+msgstr "脈衝雷射"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
+#: data/mp/messages/strings/names.txt:1945
+#, fuzzy
+msgid "Pulse Laser Panther Hover"
+msgstr "脈衝雷射"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
+#: data/mp/messages/strings/names.txt:1946
+#, fuzzy
+msgid "Rail Gun Tiger Hover"
+msgstr "軌道砲系武器升級"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1947
+#: data/mp/messages/strings/names.txt:1947
+#, fuzzy
+msgid "Pulse Laser Tiger Hover"
+msgstr "履帶式虎式坦克（脈衝雷射）"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
+#: data/mp/messages/strings/names.txt:1948
+#, fuzzy
+msgid "Plasma Cannon Wyvern Tracks"
+msgstr "履帶式雙足飛龍坦克（高斯加農砲）"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1949
+#: data/mp/messages/strings/names.txt:1949
+#, fuzzy
+msgid "Scourge Missile Wyvern Tracks"
+msgstr "天譴飛彈防衛塔"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1950
+#: data/mp/messages/strings/names.txt:1950
+#, fuzzy
+msgid "Flashlight Retribution Hover"
+msgstr "激光雷射"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
+#: data/mp/messages/strings/names.txt:1951
+#, fuzzy
+msgid "Mini-Rocket Viper Half Track"
+msgstr "半履帶式眼鏡蛇坦克（迷你火箭）"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1952
+#: data/mp/messages/strings/names.txt:1952
+#, fuzzy
+msgid "Mini-Rocket Array Viper Half Track"
+msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
+#: data/mp/messages/strings/names.txt:1953
+#, fuzzy
+msgid "Phosphor Bomb Bay Mantis VTOL"
+msgstr "燐光炸彈艙"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
+#: data/mp/messages/strings/names.txt:1954
+#, fuzzy
+msgid "Heap Bomb Bay Mantis VTOL"
+msgstr "VTOL（高爆性穿甲炸彈艙）"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
+#: data/mp/messages/strings/names.txt:1955
+#, fuzzy
+msgid "Heap Bomb Bay Retribution VTOL"
+msgstr "中量級車身：懲罰者"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
+#: data/mp/messages/strings/names.txt:1956
+#, fuzzy
+msgid "Scourge Retaliation VTOL"
+msgstr "報復者"
+
 #: data/mp/messages/resmessages12.rmsg:58
 #, fuzzy
 msgid "Construction speed +10%"
@@ -11432,106 +11552,6 @@ msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "蟒蛇氣墊船（重型加農砲）"
 
-#: data/mp/messages/strings/names.txt:1937
-#, fuzzy
-msgid "Inferno Cobra Hover"
-msgstr "半履帶式眼鏡蛇坦克（地獄火）"
-
-#: data/mp/messages/strings/names.txt:1938
-#, fuzzy
-msgid "Medium Cannon Cobra Half Track"
-msgstr "履帶式眼鏡蛇坦克（中型加農砲）"
-
-#: data/mp/messages/strings/names.txt:1939
-#, fuzzy
-msgid "Inferno Python Hover"
-msgstr "履帶式蟒蛇坦克（高速加農砲）"
-
-#: data/mp/messages/strings/names.txt:1940
-#, fuzzy
-msgid "Assault Gun Python Hover"
-msgstr "履帶式蟒蛇坦克（突擊槍）"
-
-#: data/mp/messages/strings/names.txt:1941
-#, fuzzy
-msgid "Assault Gun Python Half Track"
-msgstr "履帶式蟒蛇坦克（突擊槍）"
-
-#: data/mp/messages/strings/names.txt:1942
-#, fuzzy
-msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "履帶式毒蠍坦克（重機槍）"
-
-#: data/mp/messages/strings/names.txt:1943
-#, fuzzy
-msgid "Assault Cannon Mantis Hover"
-msgstr "突擊加農砲防衛塔"
-
-#: data/mp/messages/strings/names.txt:1944
-#, fuzzy
-msgid "Pulse Laser Leopard Hover"
-msgstr "脈衝雷射"
-
-#: data/mp/messages/strings/names.txt:1945
-#, fuzzy
-msgid "Pulse Laser Panther Hover"
-msgstr "脈衝雷射"
-
-#: data/mp/messages/strings/names.txt:1946
-#, fuzzy
-msgid "Rail Gun Tiger Hover"
-msgstr "軌道砲系武器升級"
-
-#: data/mp/messages/strings/names.txt:1947
-#, fuzzy
-msgid "Pulse Laser Tiger Hover"
-msgstr "履帶式虎式坦克（脈衝雷射）"
-
-#: data/mp/messages/strings/names.txt:1948
-#, fuzzy
-msgid "Plasma Cannon Wyvern Tracks"
-msgstr "履帶式雙足飛龍坦克（高斯加農砲）"
-
-#: data/mp/messages/strings/names.txt:1949
-#, fuzzy
-msgid "Scourge Missile Wyvern Tracks"
-msgstr "天譴飛彈防衛塔"
-
-#: data/mp/messages/strings/names.txt:1950
-#, fuzzy
-msgid "Flashlight Retribution Hover"
-msgstr "激光雷射"
-
-#: data/mp/messages/strings/names.txt:1951
-#, fuzzy
-msgid "Mini-Rocket Viper Half Track"
-msgstr "半履帶式眼鏡蛇坦克（迷你火箭）"
-
-#: data/mp/messages/strings/names.txt:1952
-#, fuzzy
-msgid "Mini-Rocket Array Viper Half Track"
-msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
-
-#: data/mp/messages/strings/names.txt:1953
-#, fuzzy
-msgid "Phosphor Bomb Bay Manits VTOL"
-msgstr "燐光炸彈艙"
-
-#: data/mp/messages/strings/names.txt:1954
-#, fuzzy
-msgid "Heap Bomb Bay Manits VTOL"
-msgstr "VTOL（高爆性穿甲炸彈艙）"
-
-#: data/mp/messages/strings/names.txt:1955
-#, fuzzy
-msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "中量級車身：懲罰者"
-
-#: data/mp/messages/strings/names.txt:1956
-#, fuzzy
-msgid "Scourge Retaliation VTOL"
-msgstr "報復者"
-
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
 msgid "System locale"
@@ -11665,22 +11685,22 @@ msgstr ""
 msgid "Latin"
 msgstr "拉丁語"
 
-#: lib/netplay/netplay.c:1276
-#: lib/netplay/netplay.c:2108
+#: lib/netplay/netplay.c:1286
+#: lib/netplay/netplay.c:2130
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3081
+#: lib/netplay/netplay.c:3111
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3106
+#: lib/netplay/netplay.c:3136
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: lib/netplay/netplay.c:3525
+#: lib/netplay/netplay.c:3568
 msgid ", mods: "
 msgstr ""
 
@@ -11701,7 +11721,7 @@ msgstr ""
 msgid "Close"
 msgstr "關閉"
 
-#: src/cheat.c:137
+#: src/cheat.c:142
 #, fuzzy
 msgid ": Unknown cheat code."
 msgstr "以作弊模式運行"
@@ -12028,64 +12048,64 @@ msgstr "損失單位！"
 msgid "Structure Restored"
 msgstr "建築物重建"
 
-#: src/droid.c:3309
+#: src/droid.c:3326
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "第 %u 隊聽令 - 共 %u  單位"
 
-#: src/droid.c:3322
+#: src/droid.c:3339
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "共 %u 單位 被指派為 第 %u 隊"
 
-#: src/droid.c:3335
+#: src/droid.c:3352
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "視角移動至第 %u  隊 - 共 %u 單位"
 
-#: src/droid.c:3339
+#: src/droid.c:3356
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u 單位"
 
-#: src/droid.c:3602
+#: src/droid.c:3619
 msgid "Rookie"
 msgstr "菜鳥"
 
-#: src/droid.c:3603
+#: src/droid.c:3620
 msgctxt "rank"
 msgid "Green"
 msgstr "青澀"
 
-#: src/droid.c:3604
+#: src/droid.c:3621
 msgid "Trained"
 msgstr "訓練有素的"
 
-#: src/droid.c:3605
+#: src/droid.c:3622
 msgid "Regular"
 msgstr "好樣的"
 
-#: src/droid.c:3606
+#: src/droid.c:3623
 msgid "Professional"
 msgstr "專家"
 
-#: src/droid.c:3607
+#: src/droid.c:3624
 msgid "Veteran"
 msgstr "老手"
 
-#: src/droid.c:3608
+#: src/droid.c:3625
 msgid "Elite"
 msgstr "菁英"
 
-#: src/droid.c:3609
+#: src/droid.c:3626
 msgid "Special"
 msgstr "特務"
 
-#: src/droid.c:3610
+#: src/droid.c:3627
 msgid "Hero"
 msgstr "英雄"
 
@@ -13757,25 +13777,25 @@ msgstr "鎖定同盟模式"
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家將 %s 踢出遊戲！"
 
-#: src/multiint.c:2897
+#: src/multiint.c:2906
 msgid "Host is Starting Game"
 msgstr "主玩家已開始遊戲"
 
-#: src/multiint.c:3449
+#: src/multiint.c:3458
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.c:3566
+#: src/multiint.c:3575
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3575
+#: src/multiint.c:3584
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3601
+#: src/multiint.c:3610
 msgid "HOST"
 msgstr ""
 
@@ -13784,27 +13804,27 @@ msgstr ""
 msgid "Players Still Joining"
 msgstr "玩家加入中"
 
-#: src/multijoin.c:213
+#: src/multijoin.c:214
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s 已離開遊戲"
 
-#: src/multijoin.c:227
+#: src/multijoin.c:228
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr ""
 
-#: src/multijoin.c:346
+#: src/multijoin.c:347
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.c:390
+#: src/multijoin.c:391
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s 加入遊戲"
 
-#: src/multijoin.c:400
+#: src/multijoin.c:401
 #, fuzzy
 msgid "System message:"
 msgstr "系統語系"
@@ -13887,53 +13907,53 @@ msgstr "交出選擇的單位"
 msgid "Give Power To Player"
 msgstr "提供玩家能源"
 
-#: src/multiplay.c:275
+#: src/multiplay.c:277
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1066
+#: src/multiplay.c:1068
 #, fuzzy
 msgid "(allies"
 msgstr "同盟"
 
-#: src/multiplay.c:1074
+#: src/multiplay.c:1076
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1087
+#: src/multiplay.c:1089
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1946
+#: src/multiplay.c:1948
 msgid "Green"
 msgstr "綠色"
 
-#: src/multiplay.c:1947
+#: src/multiplay.c:1949
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1950
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1951
 msgid "Black"
 msgstr "黑色"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1952
 msgid "Red"
 msgstr "紅色"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1953
 msgid "Blue"
 msgstr "藍色"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1954
 msgid "Pink"
 msgstr "粉紅色"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1955
 msgid "Cyan"
 msgstr "青綠色"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-30 14:12+0200\n"
+"POT-Creation-Date: 2010-04-09 03:12+0200\n"
 "PO-Revision-Date: 2008-05-09 16:39+0000\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Latin\n"
@@ -10028,6 +10028,111 @@ msgstr ""
 msgid "Flamer Viper Half-Tracks"
 msgstr ""
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1937
+#: data/mp/messages/strings/names.txt:1937
+msgid "Inferno Cobra Hover"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1938
+#: data/mp/messages/strings/names.txt:1938
+msgid "Medium Cannon Cobra Half Track"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1939
+#: data/mp/messages/strings/names.txt:1939
+msgid "Inferno Python Hover"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1940
+#: data/mp/messages/strings/names.txt:1940
+msgid "Assault Gun Python Hover"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1941
+#: data/mp/messages/strings/names.txt:1941
+msgid "Assault Gun Python Half Track"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
+#: data/mp/messages/strings/names.txt:1942
+msgid "Heavy Machinegun Scorpion Half Tracks"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
+#: data/mp/messages/strings/names.txt:1943
+msgid "Assault Cannon Mantis Hover"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1944
+#: data/mp/messages/strings/names.txt:1944
+#, fuzzy
+msgid "Pulse Laser Leopard Hover"
+msgstr "Vigor"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
+#: data/mp/messages/strings/names.txt:1945
+#, fuzzy
+msgid "Pulse Laser Panther Hover"
+msgstr "Vigor"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
+#: data/mp/messages/strings/names.txt:1946
+msgid "Rail Gun Tiger Hover"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1947
+#: data/mp/messages/strings/names.txt:1947
+#, fuzzy
+msgid "Pulse Laser Tiger Hover"
+msgstr "Vigor"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
+#: data/mp/messages/strings/names.txt:1948
+msgid "Plasma Cannon Wyvern Tracks"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1949
+#: data/mp/messages/strings/names.txt:1949
+msgid "Scourge Missile Wyvern Tracks"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1950
+#: data/mp/messages/strings/names.txt:1950
+msgid "Flashlight Retribution Hover"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
+#: data/mp/messages/strings/names.txt:1951
+#, fuzzy
+msgid "Mini-Rocket Viper Half Track"
+msgstr "Vigor"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1952
+#: data/mp/messages/strings/names.txt:1952
+#, fuzzy
+msgid "Mini-Rocket Array Viper Half Track"
+msgstr "Vigor"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
+#: data/mp/messages/strings/names.txt:1953
+msgid "Phosphor Bomb Bay Mantis VTOL"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
+#: data/mp/messages/strings/names.txt:1954
+msgid "Heap Bomb Bay Mantis VTOL"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
+#: data/mp/messages/strings/names.txt:1955
+msgid "Heap Bomb Bay Retribution VTOL"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
+#: data/mp/messages/strings/names.txt:1956
+msgid "Scourge Retaliation VTOL"
+msgstr ""
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr ""
@@ -11324,91 +11429,6 @@ msgstr ""
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1937
-msgid "Inferno Cobra Hover"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1938
-msgid "Medium Cannon Cobra Half Track"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1939
-msgid "Inferno Python Hover"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1940
-msgid "Assault Gun Python Hover"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1941
-msgid "Assault Gun Python Half Track"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1942
-msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1943
-msgid "Assault Cannon Mantis Hover"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1944
-#, fuzzy
-msgid "Pulse Laser Leopard Hover"
-msgstr "Vigor"
-
-#: data/mp/messages/strings/names.txt:1945
-#, fuzzy
-msgid "Pulse Laser Panther Hover"
-msgstr "Vigor"
-
-#: data/mp/messages/strings/names.txt:1946
-msgid "Rail Gun Tiger Hover"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1947
-#, fuzzy
-msgid "Pulse Laser Tiger Hover"
-msgstr "Vigor"
-
-#: data/mp/messages/strings/names.txt:1948
-msgid "Plasma Cannon Wyvern Tracks"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1949
-msgid "Scourge Missile Wyvern Tracks"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1950
-msgid "Flashlight Retribution Hover"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1951
-#, fuzzy
-msgid "Mini-Rocket Viper Half Track"
-msgstr "Vigor"
-
-#: data/mp/messages/strings/names.txt:1952
-#, fuzzy
-msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Vigor"
-
-#: data/mp/messages/strings/names.txt:1953
-msgid "Phosphor Bomb Bay Manits VTOL"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1954
-msgid "Heap Bomb Bay Manits VTOL"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1955
-msgid "Heap Bomb Bay Retribution VTOL"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1956
-msgid "Scourge Retaliation VTOL"
-msgstr ""
-
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
 msgid "System locale"
@@ -11539,22 +11559,22 @@ msgstr ""
 msgid "Latin"
 msgstr ""
 
-#: lib/netplay/netplay.c:1276
-#: lib/netplay/netplay.c:2108
+#: lib/netplay/netplay.c:1286
+#: lib/netplay/netplay.c:2130
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3081
+#: lib/netplay/netplay.c:3111
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3106
+#: lib/netplay/netplay.c:3136
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: lib/netplay/netplay.c:3525
+#: lib/netplay/netplay.c:3568
 msgid ", mods: "
 msgstr ""
 
@@ -11575,7 +11595,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: src/cheat.c:137
+#: src/cheat.c:142
 msgid ": Unknown cheat code."
 msgstr ""
 
@@ -11899,70 +11919,70 @@ msgstr ""
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3309
+#: src/droid.c:3326
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3322
+#: src/droid.c:3339
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3335
+#: src/droid.c:3352
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3339
+#: src/droid.c:3356
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3602
+#: src/droid.c:3619
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:3603
+#: src/droid.c:3620
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:3604
+#: src/droid.c:3621
 #, fuzzy
 msgid "Trained"
 msgstr "Exercitum"
 
-#: src/droid.c:3605
+#: src/droid.c:3622
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:3606
+#: src/droid.c:3623
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:3607
+#: src/droid.c:3624
 #, fuzzy
 msgid "Veteran"
 msgstr "Veteranum"
 
-#: src/droid.c:3608
+#: src/droid.c:3625
 msgid "Elite"
 msgstr ""
 
-#: src/droid.c:3609
+#: src/droid.c:3626
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:3610
+#: src/droid.c:3627
 #, fuzzy
 msgid "Hero"
 msgstr "Heros"
@@ -13612,25 +13632,25 @@ msgstr ""
 msgid "The host has kicked %s from the game!"
 msgstr ""
 
-#: src/multiint.c:2897
+#: src/multiint.c:2906
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:3449
+#: src/multiint.c:3458
 msgid "Players"
-msgstr ""
-
-#: src/multiint.c:3566
-#, c-format
-msgid "Sending Map: %d%% "
 msgstr ""
 
 #: src/multiint.c:3575
 #, c-format
+msgid "Sending Map: %d%% "
+msgstr ""
+
+#: src/multiint.c:3584
+#, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3601
+#: src/multiint.c:3610
 msgid "HOST"
 msgstr ""
 
@@ -13639,27 +13659,27 @@ msgstr ""
 msgid "Players Still Joining"
 msgstr ""
 
-#: src/multijoin.c:213
+#: src/multijoin.c:214
 #, c-format
 msgid "%s has Left the Game"
 msgstr ""
 
-#: src/multijoin.c:227
+#: src/multijoin.c:228
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr ""
 
-#: src/multijoin.c:346
+#: src/multijoin.c:347
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.c:390
+#: src/multijoin.c:391
 #, c-format
 msgid "%s is Joining the Game"
 msgstr ""
 
-#: src/multijoin.c:400
+#: src/multijoin.c:401
 msgid "System message:"
 msgstr ""
 
@@ -13740,54 +13760,54 @@ msgstr ""
 msgid "Give Power To Player"
 msgstr ""
 
-#: src/multiplay.c:275
+#: src/multiplay.c:277
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1066
+#: src/multiplay.c:1068
 msgid "(allies"
 msgstr ""
 
-#: src/multiplay.c:1074
+#: src/multiplay.c:1076
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1087
+#: src/multiplay.c:1089
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1946
+#: src/multiplay.c:1948
 #, fuzzy
 msgid "Green"
 msgstr "Viridum"
 
-#: src/multiplay.c:1947
+#: src/multiplay.c:1949
 msgid "Orange"
 msgstr ""
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1950
 msgid "Grey"
 msgstr "Canum"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1951
 msgid "Black"
 msgstr "Nĭgrum"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1952
 #, fuzzy
 msgid "Red"
 msgstr "Rubrum"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1953
 msgid "Blue"
 msgstr ""
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1954
 msgid "Pink"
 msgstr ""
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1955
 msgid "Cyan"
 msgstr ""
 
