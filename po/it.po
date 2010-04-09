@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-30 14:12+0200\n"
-"PO-Revision-Date: 2010-03-13 20:32+0100\n"
+"POT-Creation-Date: 2010-04-09 03:12+0200\n"
+"PO-Revision-Date: 2010-03-31 14:39+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -1028,7 +1028,7 @@ msgstr "Aumenta la precisione del Mortaio"
 #: data/mp/messages/resmessages3.rmsg:1190
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "All mortars upgraded automatically"
-msgstr "Tutti i morati saranno aggiornati automaticamente"
+msgstr "Tutti i mortai saranno aggiornati automaticamente"
 
 #: data/base/messages/resmessages12.rmsg:174
 #: data/mp/messages/resmessages12.rmsg:174
@@ -4367,7 +4367,7 @@ msgstr "Il computer prevede e compensa i movimenti del bersaglio"
 
 #: data/base/messages/resmessages3.rmsg:1241
 msgid "Increases Rail Gun accuracy"
-msgstr "Aumenta la precisione della Rail Gun"
+msgstr "Aumenta la precisione del Cannone a Massa"
 
 #: data/base/messages/resmessages3.rmsg:1242
 #: data/base/messages/resmessages3.rmsg:1255
@@ -4376,7 +4376,7 @@ msgstr "Aumenta la precisione della Rail Gun"
 #: data/mp/messages/resmessages3.rmsg:1255
 #: data/mp/messages/resmessages3.rmsg:1268
 msgid "All rail guns upgraded automatically"
-msgstr "Tutte le Rail Gun sono aggiornate automaticamente"
+msgstr "Tutti i Cannoni a Massa sono aggiornati automaticamenti"
 
 #: data/base/messages/resmessages3.rmsg:1253
 #: data/mp/messages/resmessages3.rmsg:1253
@@ -4385,16 +4385,16 @@ msgstr "Dardi perforanti migliorati"
 
 #: data/base/messages/resmessages3.rmsg:1254
 msgid "Increases Rail Gun damage"
-msgstr "Aumenta il danno causato dalla Rail Gun"
+msgstr "Aumenta il danno causato dal Cannone a Massa"
 
 #: data/base/messages/resmessages3.rmsg:1266
 #: data/mp/messages/resmessages3.rmsg:1266
 msgid "Increased gauss output speeds up reload time"
-msgstr "Aumenta la potenza d'uscita del cannone gauss e velocizza il tempo di ricarica"
+msgstr "L'incremento della potenza di Gauss velocizza la ricarica."
 
 #: data/base/messages/resmessages3.rmsg:1267
 msgid "Increases Rail Gun ROF"
-msgstr "Aumenta il Rateo di Fuoco della Rail Gun"
+msgstr "Aumenta il Rateo di Fuoco del Cannone a Massa"
 
 #: data/base/messages/resmessagesall.rmsg:4
 #: data/mp/messages/resmessagesall.rmsg:4
@@ -6907,7 +6907,7 @@ msgstr "Cannone ad ago"
 #: data/mp/messages/strings/names.txt:527
 #: data/mp/messages/strings/names.txt:1156
 msgid "Rail Gun"
-msgstr "Cannone a massa"
+msgstr "Cannone a Massa"
 
 #: data/base/messages/strings/names.txt:521
 #: data/base/messages/strings/names.txt:1144
@@ -9730,7 +9730,7 @@ msgstr "Cannone Pesante Python Hover"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1849
 #: data/mp/messages/strings/names.txt:1849
 msgid "Rail Gun Mantis Tracks"
-msgstr "Cannone a massa Mantis Cingoli"
+msgstr "Cannone a Massa Mantis Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1850
 #: data/mp/messages/strings/names.txt:1850
@@ -9775,7 +9775,7 @@ msgstr "Cannone ad Ago Vengeance Cingoli"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1862
 #: data/mp/messages/strings/names.txt:1862
 msgid "Vengeance Tracks Rail Gun"
-msgstr "Vengeance Cingoli Cannone a massa"
+msgstr "Vengeance Cingoli Cannone a Massa"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1863
 #: data/mp/messages/strings/names.txt:1863
@@ -10021,6 +10021,108 @@ msgstr "Mitragliatrice Viper Semicingoli"
 #: data/mp/messages/strings/names.txt:1934
 msgid "Flamer Viper Half-Tracks"
 msgstr "Inceneritore Viper Semicingoli"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1937
+#: data/mp/messages/strings/names.txt:1937
+msgid "Inferno Cobra Hover"
+msgstr "Inferno Cobra Hover"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1938
+#: data/mp/messages/strings/names.txt:1938
+msgid "Medium Cannon Cobra Half Track"
+msgstr "Cannone Medio Cobra Semi-cingoli"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1939
+#: data/mp/messages/strings/names.txt:1939
+msgid "Inferno Python Hover"
+msgstr "Inferno Python Hover"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1940
+#: data/mp/messages/strings/names.txt:1940
+msgid "Assault Gun Python Hover"
+msgstr "Mitragliatrice d'assalto Python Hover"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1941
+#: data/mp/messages/strings/names.txt:1941
+msgid "Assault Gun Python Half Track"
+msgstr "Mitragliatrice d'assalto Python Semi-cingoli"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
+#: data/mp/messages/strings/names.txt:1942
+msgid "Heavy Machinegun Scorpion Half Tracks"
+msgstr "Mitragliatrice Pesante Scorpion Semi-cingoli"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
+#: data/mp/messages/strings/names.txt:1943
+msgid "Assault Cannon Mantis Hover"
+msgstr "Cannone d'Assalto Mantis Hover"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1944
+#: data/mp/messages/strings/names.txt:1944
+msgid "Pulse Laser Leopard Hover"
+msgstr "Laser a Impulso Leopard Hover"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
+#: data/mp/messages/strings/names.txt:1945
+msgid "Pulse Laser Panther Hover"
+msgstr "Laser a Impulso Panther Hover"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
+#: data/mp/messages/strings/names.txt:1946
+msgid "Rail Gun Tiger Hover"
+msgstr "Cannone a Massa Tiger Hover"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1947
+#: data/mp/messages/strings/names.txt:1947
+msgid "Pulse Laser Tiger Hover"
+msgstr "Laser a Impulso Tiger Hover"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
+#: data/mp/messages/strings/names.txt:1948
+msgid "Plasma Cannon Wyvern Tracks"
+msgstr "Cannone al Plasma Wyvern Cingoli"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1949
+#: data/mp/messages/strings/names.txt:1949
+msgid "Scourge Missile Wyvern Tracks"
+msgstr "Missile Scourge Wyvern Cingoli"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1950
+#: data/mp/messages/strings/names.txt:1950
+msgid "Flashlight Retribution Hover"
+msgstr "Flashlight Retribution Hover"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
+#: data/mp/messages/strings/names.txt:1951
+msgid "Mini-Rocket Viper Half Track"
+msgstr "Minirazzi Viper Semi-cingoli"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1952
+#: data/mp/messages/strings/names.txt:1952
+msgid "Mini-Rocket Array Viper Half Track"
+msgstr "Batteria di Minirazzi Viper Semi-cingoli"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
+#: data/mp/messages/strings/names.txt:1953
+#, fuzzy
+msgid "Phosphor Bomb Bay Mantis VTOL"
+msgstr "Bombe al Fosforo Mantis VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
+#: data/mp/messages/strings/names.txt:1954
+#, fuzzy
+msgid "Heap Bomb Bay Mantis VTOL"
+msgstr "Bombe HEAP Mantis VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
+#: data/mp/messages/strings/names.txt:1955
+msgid "Heap Bomb Bay Retribution VTOL"
+msgstr "Bombe HEAP Retribution VTOL"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
+#: data/mp/messages/strings/names.txt:1956
+msgid "Scourge Retaliation VTOL"
+msgstr "Scourge Retaliation VTOL"
 
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
@@ -10508,7 +10610,7 @@ msgstr "Armato con Laser a Impulso per Cyborg"
 
 #: data/mp/messages/resmessagesall.rmsg:616
 msgid "Armed with Cyborg Rail Gun"
-msgstr "Armato con Rail Gun per Cyborg"
+msgstr "Armato con Cannone a Massa Cyborg"
 
 #: data/mp/messages/resmessagesall.rmsg:629
 msgid "Armed with Cyborg Scourge Missile Launcher"
@@ -11301,106 +11403,6 @@ msgstr "Batteria di minirazzi Cobra Cingoli"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Cannone ad ipervelocità Python Hover"
 
-#: data/mp/messages/strings/names.txt:1937
-#, fuzzy
-msgid "Inferno Cobra Hover"
-msgstr "Inferno Cobra Semi-Cingoli"
-
-#: data/mp/messages/strings/names.txt:1938
-#, fuzzy
-msgid "Medium Cannon Cobra Half Track"
-msgstr "Cannone Medio Cobra Cingoli"
-
-#: data/mp/messages/strings/names.txt:1939
-#, fuzzy
-msgid "Inferno Python Hover"
-msgstr "Cannone ad ipervelocità Python Cingoli"
-
-#: data/mp/messages/strings/names.txt:1940
-#, fuzzy
-msgid "Assault Gun Python Hover"
-msgstr "Mitragliatrice d'assalto Python Cingoli"
-
-#: data/mp/messages/strings/names.txt:1941
-#, fuzzy
-msgid "Assault Gun Python Half Track"
-msgstr "Mitragliatrice d'assalto Python Cingoli"
-
-#: data/mp/messages/strings/names.txt:1942
-#, fuzzy
-msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Mitragliatrice Pesante Scorpion Cingoli"
-
-#: data/mp/messages/strings/names.txt:1943
-#, fuzzy
-msgid "Assault Cannon Mantis Hover"
-msgstr "Torretta di Guardia con Cannone d'Assalto"
-
-#: data/mp/messages/strings/names.txt:1944
-#, fuzzy
-msgid "Pulse Laser Leopard Hover"
-msgstr "Torre con Laser a Impulso"
-
-#: data/mp/messages/strings/names.txt:1945
-#, fuzzy
-msgid "Pulse Laser Panther Hover"
-msgstr "Torre con Laser a Impulso"
-
-#: data/mp/messages/strings/names.txt:1946
-#, fuzzy
-msgid "Rail Gun Tiger Hover"
-msgstr "Miglioramento del Cannone a Massa"
-
-#: data/mp/messages/strings/names.txt:1947
-#, fuzzy
-msgid "Pulse Laser Tiger Hover"
-msgstr "Tiger Laser a Impulso Cingoli"
-
-#: data/mp/messages/strings/names.txt:1948
-#, fuzzy
-msgid "Plasma Cannon Wyvern Tracks"
-msgstr "Cannone Gauss Wyvern Cingoli"
-
-#: data/mp/messages/strings/names.txt:1949
-#, fuzzy
-msgid "Scourge Missile Wyvern Tracks"
-msgstr "Torre con Missile Scourge"
-
-#: data/mp/messages/strings/names.txt:1950
-#, fuzzy
-msgid "Flashlight Retribution Hover"
-msgstr "Cyborg con Flashlight"
-
-#: data/mp/messages/strings/names.txt:1951
-#, fuzzy
-msgid "Mini-Rocket Viper Half Track"
-msgstr "Minirazzi Cobra Semi-cingoli"
-
-#: data/mp/messages/strings/names.txt:1952
-#, fuzzy
-msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Batteria di minirazzi Cobra Cingoli"
-
-#: data/mp/messages/strings/names.txt:1953
-#, fuzzy
-msgid "Phosphor Bomb Bay Manits VTOL"
-msgstr "Bombe al Fosforo"
-
-#: data/mp/messages/strings/names.txt:1954
-#, fuzzy
-msgid "Heap Bomb Bay Manits VTOL"
-msgstr "Bombe HEAP"
-
-#: data/mp/messages/strings/names.txt:1955
-#, fuzzy
-msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Corpo Medio - Retribution"
-
-#: data/mp/messages/strings/names.txt:1956
-#, fuzzy
-msgid "Scourge Retaliation VTOL"
-msgstr "Retaliation"
-
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
 msgid "System locale"
@@ -11530,22 +11532,22 @@ msgstr "Cinese Tradizionale"
 msgid "Latin"
 msgstr "Latino"
 
-#: lib/netplay/netplay.c:1276
-#: lib/netplay/netplay.c:2108
+#: lib/netplay/netplay.c:1286
+#: lib/netplay/netplay.c:2130
 msgid "Enter password here"
 msgstr "Inserisci qua la password"
 
-#: lib/netplay/netplay.c:3081
+#: lib/netplay/netplay.c:3111
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Non posso decidere il nome del server master (%s)!"
 
-#: lib/netplay/netplay.c:3106
+#: lib/netplay/netplay.c:3136
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Non posso comunicare con il server della Lobby! La porta TCP %u è aperta?"
 
-#: lib/netplay/netplay.c:3525
+#: lib/netplay/netplay.c:3568
 msgid ", mods: "
 msgstr ", mods:"
 
@@ -11566,7 +11568,7 @@ msgstr ", mods:"
 msgid "Close"
 msgstr "Chiudi"
 
-#: src/cheat.c:137
+#: src/cheat.c:142
 msgid ": Unknown cheat code."
 msgstr ": Codice del trucco sconosciuto."
 
@@ -11890,68 +11892,68 @@ msgstr "Unità Persa!"
 msgid "Structure Restored"
 msgstr "Struttura Riparata"
 
-#: src/droid.c:3309
+#: src/droid.c:3326
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppo %u selezionato - %u Unità"
 msgstr[1] "Gruppo %u selezionato - %u Unità"
 
-#: src/droid.c:3322
+#: src/droid.c:3339
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unità assegnata al Gruppo %u"
 msgstr[1] "%u unità assegnata al Gruppo %u"
 
-#: src/droid.c:3335
+#: src/droid.c:3352
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Visuale Centrata sul Gruppo %u - %u Unit"
 msgstr[1] "Visuale Centrata sul gruppo %u - %u Unità"
 
-#: src/droid.c:3339
+#: src/droid.c:3356
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Visuale affiancata al Gruppo %u - %u Unità"
 msgstr[1] "Visuale affiancata al Gruppo %u - %u Unità"
 
-#: src/droid.c:3602
+#: src/droid.c:3619
 msgid "Rookie"
 msgstr "Coscritta"
 
-#: src/droid.c:3603
+#: src/droid.c:3620
 msgctxt "rank"
 msgid "Green"
 msgstr "Inesperta"
 
-#: src/droid.c:3604
+#: src/droid.c:3621
 msgid "Trained"
 msgstr "Addestrata"
 
-#: src/droid.c:3605
+#: src/droid.c:3622
 msgid "Regular"
 msgstr "Normale"
 
-#: src/droid.c:3606
+#: src/droid.c:3623
 msgid "Professional"
 msgstr "Professionale"
 
-#: src/droid.c:3607
+#: src/droid.c:3624
 msgid "Veteran"
 msgstr "Veterana"
 
-#: src/droid.c:3608
+#: src/droid.c:3625
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3609
+#: src/droid.c:3626
 msgid "Special"
 msgstr "Speciale"
 
-#: src/droid.c:3610
+#: src/droid.c:3627
 msgid "Hero"
 msgstr "Eroe"
 
@@ -12607,12 +12609,12 @@ msgstr "Va bene,il display delle armi e dei sensor è spento!"
 #: src/keybind.c:411
 #, c-format
 msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
-msgstr ""
+msgstr "(Giocatore %u) ha rilevato il bug delle\"gambe\" dei cyborg! Per favore, inserisci legs nella tua console e spediscici i file!"
 
 #: src/keybind.c:491
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
-msgstr "Il giocatore %u sta ottenendo una nuova unità per mezzo di trucchi (debug menu) : %s."
+msgstr "Il giocatore %u sta ottenendo per mezzo di trucchi un nuovo esercito di %s(s)"
 
 #: src/keybind.c:530
 #: src/keybind.c:560
@@ -13591,25 +13593,25 @@ msgstr "Squadre Bloccate"
 msgid "The host has kicked %s from the game!"
 msgstr "L'host ha espulso %s dalla partita!"
 
-#: src/multiint.c:2897
+#: src/multiint.c:2906
 msgid "Host is Starting Game"
 msgstr "L'host sta avviando la partita"
 
-#: src/multiint.c:3449
+#: src/multiint.c:3458
 msgid "Players"
 msgstr "Giocatori"
 
-#: src/multiint.c:3566
+#: src/multiint.c:3575
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Invio mappa: %d%%"
 
-#: src/multiint.c:3575
+#: src/multiint.c:3584
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mappa: %d%% scaricata"
 
-#: src/multiint.c:3601
+#: src/multiint.c:3610
 msgid "HOST"
 msgstr "HOST"
 
@@ -13618,27 +13620,27 @@ msgstr "HOST"
 msgid "Players Still Joining"
 msgstr "Alcuni giocatori si stanno ancora unendo alla partita"
 
-#: src/multijoin.c:213
+#: src/multijoin.c:214
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s ha abbandonato la partita"
 
-#: src/multijoin.c:227
+#: src/multijoin.c:228
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Il trasferimento del file è stato annullato per %d"
 
-#: src/multijoin.c:346
+#: src/multijoin.c:347
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) ha un mod incompatibile, ed è stato espulso."
 
-#: src/multijoin.c:390
+#: src/multijoin.c:391
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s si sta unendo alla partita"
 
-#: src/multijoin.c:400
+#: src/multijoin.c:401
 msgid "System message:"
 msgstr "Messaggio di Sistema"
 
@@ -13719,52 +13721,52 @@ msgstr "Consegna le Unità Selezionate"
 msgid "Give Power To Player"
 msgstr "Invia Energia al Giocatore"
 
-#: src/multiplay.c:275
+#: src/multiplay.c:277
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Il giocatore %s sarà kickato perchè hanno cercato di bypassare il controllo dell'integrità dei dati!"
 
-#: src/multiplay.c:1066
+#: src/multiplay.c:1068
 msgid "(allies"
 msgstr "(alleati"
 
-#: src/multiplay.c:1074
+#: src/multiplay.c:1076
 msgid "(private to "
 msgstr "(privato a"
 
-#: src/multiplay.c:1087
+#: src/multiplay.c:1089
 msgid "[invalid]"
 msgstr "[invalido]"
 
-#: src/multiplay.c:1946
+#: src/multiplay.c:1948
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.c:1947
+#: src/multiplay.c:1949
 msgid "Orange"
 msgstr "Arancione"
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1950
 msgid "Grey"
 msgstr "Grigio"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1951
 msgid "Black"
 msgstr "Nero"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1952
 msgid "Red"
 msgstr "Rosso"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1953
 msgid "Blue"
 msgstr "Blu"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1954
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1955
 msgid "Cyan"
 msgstr "Azzurro"
 
@@ -13921,7 +13923,7 @@ msgstr "Segnale %d"
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] "%u unitù selezionata"
+msgstr[0] "%u unità selezionata"
 msgstr[1] "%u unità selezionate"
 
 #: src/selection.c:434
