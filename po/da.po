@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-03-30 14:14+0200\n"
+"POT-Creation-Date: 2010-04-09 03:20+0200\n"
 "PO-Revision-Date: 2008-05-09 16:08+0000\n"
 "Last-Translator: carson <Unknown>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -10261,6 +10261,124 @@ msgstr "Vælg alle halv-bælter"
 msgid "Flamer Viper Half-Tracks"
 msgstr "Vælg alle halv-bælter"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1937
+#: data/mp/messages/strings/names.txt:1940
+#, fuzzy
+msgid "Inferno Cobra Hover"
+msgstr "Vælg alle halv-bælter"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1938
+#: data/mp/messages/strings/names.txt:1941
+#, fuzzy
+msgid "Medium Cannon Cobra Half Track"
+msgstr "Vælg alle halv-bælter"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1939
+#: data/mp/messages/strings/names.txt:1942
+#, fuzzy
+msgid "Inferno Python Hover"
+msgstr "Kommandører"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1940
+#: data/mp/messages/strings/names.txt:1943
+#, fuzzy
+msgid "Assault Gun Python Hover"
+msgstr "Kommandører"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1941
+#: data/mp/messages/strings/names.txt:1944
+#, fuzzy
+msgid "Assault Gun Python Half Track"
+msgstr "Kommandører"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
+#: data/mp/messages/strings/names.txt:1945
+#, fuzzy
+msgid "Heavy Machinegun Scorpion Half Tracks"
+msgstr "Vælg alle halv-bælter"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
+#: data/mp/messages/strings/names.txt:1946
+#, fuzzy
+msgid "Assault Cannon Mantis Hover"
+msgstr "Kommandører"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1944
+#: data/mp/messages/strings/names.txt:1947
+#, fuzzy
+msgid "Pulse Laser Leopard Hover"
+msgstr "Kommandører"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
+#: data/mp/messages/strings/names.txt:1948
+#, fuzzy
+msgid "Pulse Laser Panther Hover"
+msgstr "Kommandører"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
+#: data/mp/messages/strings/names.txt:1949
+msgid "Rail Gun Tiger Hover"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1947
+#: data/mp/messages/strings/names.txt:1950
+#, fuzzy
+msgid "Pulse Laser Tiger Hover"
+msgstr "Kommandører"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
+#: data/mp/messages/strings/names.txt:1951
+#, fuzzy
+msgid "Plasma Cannon Wyvern Tracks"
+msgstr "Kommandører"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1949
+#: data/mp/messages/strings/names.txt:1952
+#, fuzzy
+msgid "Scourge Missile Wyvern Tracks"
+msgstr "Vælg alle halv-bælter"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1950
+#: data/mp/messages/strings/names.txt:1953
+msgid "Flashlight Retribution Hover"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
+#: data/mp/messages/strings/names.txt:1954
+#, fuzzy
+msgid "Mini-Rocket Viper Half Track"
+msgstr "Vælg alle halv-bælter"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1952
+#: data/mp/messages/strings/names.txt:1955
+#, fuzzy
+msgid "Mini-Rocket Array Viper Half Track"
+msgstr "Vælg alle halv-bælter"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
+#: data/mp/messages/strings/names.txt:1956
+#, fuzzy
+msgid "Phosphor Bomb Bay Mantis VTOL"
+msgstr "Score"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
+#: data/mp/messages/strings/names.txt:1957
+#, fuzzy
+msgid "Heap Bomb Bay Mantis VTOL"
+msgstr "Score"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
+#: data/mp/messages/strings/names.txt:1958
+#, fuzzy
+msgid "Heap Bomb Bay Retribution VTOL"
+msgstr "Score"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
+#: data/mp/messages/strings/names.txt:1959
+#, fuzzy
+msgid "Scourge Retaliation VTOL"
+msgstr "Score"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr ""
@@ -11619,102 +11737,6 @@ msgstr "Vælg alle halv-bælter"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Kommandører"
 
-#: data/mp/messages/strings/names.txt:1940
-#, fuzzy
-msgid "Inferno Cobra Hover"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mp/messages/strings/names.txt:1941
-#, fuzzy
-msgid "Medium Cannon Cobra Half Track"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mp/messages/strings/names.txt:1942
-#, fuzzy
-msgid "Inferno Python Hover"
-msgstr "Kommandører"
-
-#: data/mp/messages/strings/names.txt:1943
-#, fuzzy
-msgid "Assault Gun Python Hover"
-msgstr "Kommandører"
-
-#: data/mp/messages/strings/names.txt:1944
-#, fuzzy
-msgid "Assault Gun Python Half Track"
-msgstr "Kommandører"
-
-#: data/mp/messages/strings/names.txt:1945
-#, fuzzy
-msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mp/messages/strings/names.txt:1946
-#, fuzzy
-msgid "Assault Cannon Mantis Hover"
-msgstr "Kommandører"
-
-#: data/mp/messages/strings/names.txt:1947
-#, fuzzy
-msgid "Pulse Laser Leopard Hover"
-msgstr "Kommandører"
-
-#: data/mp/messages/strings/names.txt:1948
-#, fuzzy
-msgid "Pulse Laser Panther Hover"
-msgstr "Kommandører"
-
-#: data/mp/messages/strings/names.txt:1949
-msgid "Rail Gun Tiger Hover"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1950
-#, fuzzy
-msgid "Pulse Laser Tiger Hover"
-msgstr "Kommandører"
-
-#: data/mp/messages/strings/names.txt:1951
-#, fuzzy
-msgid "Plasma Cannon Wyvern Tracks"
-msgstr "Kommandører"
-
-#: data/mp/messages/strings/names.txt:1952
-#, fuzzy
-msgid "Scourge Missile Wyvern Tracks"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mp/messages/strings/names.txt:1953
-msgid "Flashlight Retribution Hover"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1954
-#, fuzzy
-msgid "Mini-Rocket Viper Half Track"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mp/messages/strings/names.txt:1955
-#, fuzzy
-msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mp/messages/strings/names.txt:1956
-msgid "Phosphor Bomb Bay Manits VTOL"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1957
-msgid "Heap Bomb Bay Manits VTOL"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1958
-#, fuzzy
-msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Score"
-
-#: data/mp/messages/strings/names.txt:1959
-#, fuzzy
-msgid "Scourge Retaliation VTOL"
-msgstr "Score"
-
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
 #, fuzzy
@@ -11864,15 +11886,15 @@ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing
 msgstr ""
 
 #: lib/netplay/netplay.c:2418
-msgid ", mods: "
+msgid ", mod: "
 msgstr ""
 
 #: src/challenge.c:188
 #: src/hci.c:1018
 #: src/hci.c:3833
-#: src/hci.c:3984
-#: src/hci.c:4501
-#: src/hci.c:5705
+#: src/hci.c:3982
+#: src/hci.c:4499
+#: src/hci.c:5685
 #: src/intelmap.c:543
 #: src/intorder.c:787
 #: src/loadsave.c:256
@@ -12030,7 +12052,7 @@ msgstr "Spiller"
 
 #: src/design.c:457
 #: src/design.c:478
-#: src/design.c:3559
+#: src/design.c:3555
 msgid "New Vehicle"
 msgstr "Nyt design"
 
@@ -12069,18 +12091,18 @@ msgstr "Hestekrafter"
 
 #: src/design.c:729
 #: src/design.c:784
-#: src/design.c:1586
-#: src/design.c:1623
-#: src/design.c:1644
-#: src/design.c:1662
-#: src/design.c:1683
-#: src/design.c:1701
-#: src/design.c:1739
-#: src/design.c:1774
-#: src/design.c:1909
-#: src/design.c:1926
-#: src/design.c:1961
-#: src/design.c:1997
+#: src/design.c:1582
+#: src/design.c:1619
+#: src/design.c:1640
+#: src/design.c:1658
+#: src/design.c:1679
+#: src/design.c:1697
+#: src/design.c:1735
+#: src/design.c:1770
+#: src/design.c:1905
+#: src/design.c:1922
+#: src/design.c:1957
+#: src/design.c:1993
 msgid "Weight"
 msgstr "Vægt"
 
@@ -12095,79 +12117,79 @@ msgstr "Produktionsomkostninger"
 msgid "Total Body Points"
 msgstr "Total pansring"
 
-#: src/design.c:1065
-#: src/design.c:1097
+#: src/design.c:1061
+#: src/design.c:1093
 msgid "Power Usage"
 msgstr "Energi forbrug"
 
-#: src/design.c:1349
+#: src/design.c:1345
 msgid "Transporter"
 msgstr "Transportskib"
 
-#: src/design.c:1371
+#: src/design.c:1367
 msgid "Hydra "
 msgstr ""
 
-#: src/design.c:1568
+#: src/design.c:1564
 msgid "Sensor Range"
 msgstr "Rækkevide"
 
 # This is always 1000 ingame... any reason to have this at all? is it ever used?
-#: src/design.c:1577
+#: src/design.c:1573
 msgid "Sensor Power"
 msgstr "Watt"
 
-#: src/design.c:1614
+#: src/design.c:1610
 msgid "ECM Power"
 msgstr "ECM Effekt"
 
-#: src/design.c:1636
-#: src/design.c:1653
-#: src/design.c:1675
-#: src/design.c:1692
+#: src/design.c:1632
+#: src/design.c:1649
+#: src/design.c:1671
+#: src/design.c:1688
 msgid "Build Points"
 msgstr "Effektivitet"
 
-#: src/design.c:1715
-#: src/design.c:1747
+#: src/design.c:1711
+#: src/design.c:1743
 msgid "Range"
 msgstr "Rækkevide"
 
-#: src/design.c:1723
-#: src/design.c:1756
+#: src/design.c:1719
+#: src/design.c:1752
 msgid "Damage"
 msgstr "Skade"
 
-#: src/design.c:1731
-#: src/design.c:1765
+#: src/design.c:1727
+#: src/design.c:1761
 msgid "Rate-of-Fire"
 msgstr "Kadance"
 
-#: src/design.c:1901
-#: src/design.c:1917
+#: src/design.c:1897
+#: src/design.c:1913
 msgid "Air Speed"
 msgstr "Lufthastighed"
 
-#: src/design.c:1937
-#: src/design.c:1970
+#: src/design.c:1933
+#: src/design.c:1966
 msgid "Road Speed"
 msgstr "Vejhastighed"
 
-#: src/design.c:1945
-#: src/design.c:1979
+#: src/design.c:1941
+#: src/design.c:1975
 msgid "Off-Road Speed"
 msgstr "Hastighed i terræn"
 
-#: src/design.c:1953
-#: src/design.c:1988
+#: src/design.c:1949
+#: src/design.c:1984
 msgid "Water Speed"
 msgstr "Vandhastighed"
 
-#: src/design.c:2122
+#: src/design.c:2118
 msgid "Weapons"
 msgstr "Våben"
 
-#: src/design.c:2144
+#: src/design.c:2140
 msgid "Systems"
 msgstr "Systemer"
 
@@ -12210,76 +12232,76 @@ msgstr "Truck beordret til at bygge oliebrøn."
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr "Truck beordret til at bygge oliebrøn."
 
-#: src/droid.c:209
+#: src/droid.c:210
 msgid "Unit Lost!"
 msgstr "Enhed tabt!"
 
-#: src/droid.c:1343
+#: src/droid.c:1344
 msgid "Structure Restored"
 msgstr "Bygning restoreret"
 
-#: src/droid.c:2947
+#: src/droid.c:2955
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppe %u valgt - %u Enheder"
 msgstr[1] "Gruppe %u valgt - %u Enheder"
 
-#: src/droid.c:2960
+#: src/droid.c:2968
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u Enheder tildelt gruppe %u"
 msgstr[1] "%u Enheder tildelt gruppe %u"
 
-#: src/droid.c:2973
+#: src/droid.c:2981
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Fokuseret på gruppe %u - %u Enheder"
 msgstr[1] "Fokuseret på gruppe %u - %u Enheder"
 
-#: src/droid.c:2977
+#: src/droid.c:2985
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Korigerede med gruppe %u - %u Enheder"
 msgstr[1] "Korigerede med gruppe %u - %u Enheder"
 
-#: src/droid.c:3261
+#: src/droid.c:3269
 msgid "Rookie"
 msgstr "Utrænet"
 
-#: src/droid.c:3262
+#: src/droid.c:3270
 msgctxt "rank"
 msgid "Green"
 msgstr "Grøn"
 
-#: src/droid.c:3263
+#: src/droid.c:3271
 msgid "Trained"
 msgstr "Trænet"
 
-#: src/droid.c:3264
+#: src/droid.c:3272
 msgid "Regular"
 msgstr "Regulær"
 
-#: src/droid.c:3265
+#: src/droid.c:3273
 msgid "Professional"
 msgstr "Professionel"
 
-#: src/droid.c:3266
+#: src/droid.c:3274
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3267
+#: src/droid.c:3275
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3268
+#: src/droid.c:3276
 msgid "Special"
 msgstr "Speciel"
 
-#: src/droid.c:3269
+#: src/droid.c:3277
 msgid "Hero"
 msgstr "Helt"
 
@@ -12631,7 +12653,7 @@ msgstr "SPIL INDSTILLINGER"
 
 #: src/frontend.c:1693
 #: src/multiint.c:2235
-msgid "Active mods: "
+msgid "Mod: "
 msgstr ""
 
 #: src/hci.c:1363
@@ -12691,87 +12713,87 @@ msgstr "Forskning (F2)"
 msgid "Build (F3)"
 msgstr "Konstruktion (F3)"
 
-#: src/hci.c:3895
+#: src/hci.c:3893
 #: src/multiint.c:1370
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Kraft"
 
-#: src/hci.c:4079
+#: src/hci.c:4077
 #, fuzzy
 msgid "Tile"
 msgstr "fil"
 
-#: src/hci.c:4080
+#: src/hci.c:4078
 #, fuzzy
 msgid "Place tiles on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4089
+#: src/hci.c:4087
 msgid "Unit"
 msgstr "Enhed"
 
-#: src/hci.c:4090
+#: src/hci.c:4088
 #, fuzzy
 msgid "Place Unit on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4098
+#: src/hci.c:4096
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4099
+#: src/hci.c:4097
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4107
+#: src/hci.c:4105
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4108
+#: src/hci.c:4106
 #, fuzzy
 msgid "Place Features on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4119
+#: src/hci.c:4117
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "Værten har forladt spillet"
 
-#: src/hci.c:4133
+#: src/hci.c:4131
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4158
+#: src/hci.c:4156
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "Afslut"
 
-#: src/hci.c:4159
+#: src/hci.c:4157
 msgid "Exit Game"
 msgstr "Forlad spil"
 
-#: src/hci.c:4586
+#: src/hci.c:4580
 #: src/intdisplay.c:270
 msgid "Progress Bar"
 msgstr "Statuslinje"
 
-#: src/hci.c:5620
+#: src/hci.c:5600
 msgid "Factory Delivery Point"
 msgstr "Leveringspunkt"
 
-#: src/hci.c:5639
+#: src/hci.c:5619
 msgid "Loop Production"
 msgstr "Gentag produktion"
 
-#: src/hci.c:5730
+#: src/hci.c:5710
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5747
+#: src/hci.c:5727
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -12813,6 +12835,14 @@ msgstr ""
 
 #: src/ingameop.c:376
 msgid "-->  QUIT  <--"
+msgstr ""
+
+#: src/init.c:391
+#, c-format
+msgid ""
+"The required mod could not be loaded: %s\n"
+"\n"
+"Warzone will try to load the game without it."
 msgstr ""
 
 #: src/intdisplay.c:197
@@ -14403,7 +14433,7 @@ msgstr "Reperationsgevinst - Ingen"
 msgid "Launch Transport"
 msgstr "Afsend transportskib"
 
-#: src/transporter.c:1757
+#: src/transporter.c:1752
 msgid "Reinforcements landing"
 msgstr "Forstærkninger er ankommet"
 
