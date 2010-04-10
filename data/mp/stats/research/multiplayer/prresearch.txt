@@ -416,7 +416,6 @@ R-Wpn-Energy-Damage03,R-Wpn-Energy-Damage02,854
 R-Wpn-Energy-ROF01,R-Wpn-Energy-Damage01,855
 R-Wpn-Energy-ROF02,R-Wpn-Energy-ROF01,856
 R-Wpn-Energy-ROF03,R-Wpn-Energy-ROF02,857
-R-Wpn-Flame2,R-Vehicle-Body05,524
 R-Wpn-Flame2,R-Wpn-Flamer-Damage04,524
 R-Wpn-Flame2,R-Wpn-Flamer01Mk1,524
 R-Wpn-Flamer-Damage01,R-Wpn-Flamer01Mk1,385
