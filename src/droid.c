@@ -2364,15 +2364,15 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 	int NumWeapons = numCR(pWeaponData, bufferSize);
 	int SkippedWeaponCount = 0;
 	int line = 0;
-	bool playerProcessed[MAX_PLAYERS] = {false};
-	bool skippedProcessing[MAX_PLAYERS] = {false};
+	bool playerProcessed[MAX_PLAYERS+1] = {false};
+	bool skippedProcessing[MAX_PLAYERS+1] = {false};
 
 	ASSERT_OR_RETURN(false, NumWeapons > 0, "template without weapons");
 
 	for (line = 0; line < NumWeapons; line++)
 	{
-		bool addedToStaticList = false;
-		int player, i;
+		DROID_TEMPLATE *pTemplate; 
+		int player, i, j;
 		char WeaponName[DROID_MAXWEAPS][MAX_STR_LENGTH] = {{'\0'}},
 			TemplateName[MAX_STR_LENGTH] = {'\0'};
 
@@ -2380,11 +2380,21 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 		sscanf(pWeaponData, "%[^','],%[^','],%[^','],%[^','],%d",
 			TemplateName, WeaponName[0], WeaponName[1], WeaponName[2], &player);
 
-		for (i = 0; i < MAX_PLAYERS; i++)
+		for (i = 0; i < MAX_PLAYERS + 1; i++)
 		{
-			unsigned int j;
-
-			DROID_TEMPLATE *pTemplate = getTemplateFromUniqueName(TemplateName, i);
+			if (i < MAX_PLAYERS)    // a player 
+			{ 
+				if (!isHumanPlayer(i)) 
+				{ 
+					continue;       // no need to add to AIs, they use the static list 
+				} 
+				pTemplate = getTemplateFromUniqueName(TemplateName, i); 
+			} 
+			else                    // special exception - the static list 
+			{ 
+				// Add weapons to static list 
+				pTemplate = getTemplateFromTranslatedNameNoPlayer(TemplateName); 
+			} 
 
 			/* if Template not found - try default design */
 			if (!pTemplate)
@@ -2398,25 +2408,35 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 					if (skippedProcessing[i] == false)
 					{
 						char buf[250];
-						snprintf(buf, sizeof(buf), "not loading droid's weapons for this player (%d). (did not have template or duplicate) line: %d, AI:%s",
-							i, line, isHumanPlayer(i) ? "no" : "yes");
+						if(isHumanPlayer(i))
+						{
+							snprintf(buf, sizeof(buf), "Not loading droid's weapons for human player %d (did not have template or duplicate,) from line %d.",
+								i, line);
+						}
+						else // i == MAX_PLAYERS
+						{
+							snprintf(buf, sizeof(buf), "Not loading droid's weapons for AI (did not have template or duplicate,) from line %d.",
+								line);
+						}
 						NETlogEntry(buf, SYNC_FLAG, 0);
 						skippedProcessing[i] = true;
 					}
 					continue;	// ok, this player did not have this template. that's fine.
 				}
 			}
-			if (!isHumanPlayer(i) && addedToStaticList)
-			{
-				continue;	// do not add weapons multiple times to templates in AI list
-			}
 
 			ASSERT_OR_RETURN(false, pTemplate->numWeaps <= DROID_MAXWEAPS, "stack corruption unavoidable");
 			if (playerProcessed[i] != true)
 			{
 				char buf[250];
-				snprintf(buf, sizeof(buf), "Added droid's weapons for this player. (%d). line: %d, AI:%s",
-						i, line, isHumanPlayer(i) ? "no" : "yes");
+				if(isHumanPlayer(i))
+				{
+					snprintf(buf, sizeof(buf), "Added droid's weapons for human player %d from line: %d.",i, line);
+				}
+				else // i == MAX_PLAYERS
+				{
+					snprintf(buf, sizeof(buf), "Added droid's weapons for AI from line %d.", line);
+				}
 				NETlogEntry(buf, SYNC_FLAG, 0);
 				playerProcessed[i] = true;
 			}
@@ -2435,10 +2455,6 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 				ASSERT_OR_RETURN(false, checkValidWeaponForProp(pTemplate), "Weapon is invalid for air propulsion for template %s", 
 				                 pTemplate->aName);
 				pTemplate->storeCount++;
-			}
-			if (!isHumanPlayer(i))
-			{
-				addedToStaticList = true;	// only one list to add to
 			}
 		}
 
