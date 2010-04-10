@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-04-09 03:12+0200\n"
-"PO-Revision-Date: 2010-03-30 15:11+0200\n"
+"PO-Revision-Date: 2010-04-10 12:08+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -10126,14 +10126,12 @@ msgstr "Miniraketen-Anordnung Viper Halbketten"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
 #: data/mp/messages/strings/names.txt:1953
-#, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
 msgstr "Phosphorbomben-Abwurfschacht Mantis VTOL"
 
 # HEAP = high explosive, armor piercing -Kreuvf
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
 #: data/mp/messages/strings/names.txt:1954
-#, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
 msgstr "VTOL-Bombenabwurfschacht für hochexplosive, panzerbrechende Bomben Mantis VTOL"
 
