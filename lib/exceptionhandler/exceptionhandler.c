@@ -800,7 +800,6 @@ bool OverrideRPTDirectory(char *newPath)
 	PathRemoveFileSpec(buf);
 	_tcscat(buf, _T("\\logs\\")); // stuff it in the logs directory
 	_tcscat(buf, _T("Warzone2100.RPT"));
-	debug(LOG_INFO, "New RPT directory is %s, was %s", buf, szLogFileName);
 	ResetRPTDirectory(buf);
 #endif
 	return true;
