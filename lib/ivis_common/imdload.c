@@ -774,7 +774,8 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 			debug(LOG_ERROR, "iV_ProcessIMD %s could not load tex page %s", pFileName, texfile);
 			return NULL;
 		}
-		/* assign tex page to levels */
+
+		// assign tex page to levels
 		for (psShape = shape; psShape != NULL; psShape = psShape->next)
 		{
 			psShape->texpage = texpage;
@@ -793,9 +794,10 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 			}
 			else
 			{
-				shape->flags |= iV_IMD_TCMASK;
+				// Propagate settings through levels
 				for (psShape = shape; psShape != NULL; psShape = psShape->next)
 				{
+					psShape->flags |= iV_IMD_TCMASK;
 					psShape->tcmaskpage = texpage;
 				}
 			}			
