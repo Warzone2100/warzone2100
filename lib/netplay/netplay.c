@@ -3554,7 +3554,12 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	}
 
 	NetPlay.isHost = true;
-	NETlogEntry("Hosting game", SYNC_FLAG, 0);
+	NETlogEntry("Hosting game, resetting ban list.", SYNC_FLAG, 0);
+	if (IPlist)
+	{ 
+		free(IPlist);
+		IPlist = NULL;
+	}
 	sstrcpy(gamestruct.name, SessionName);
 	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
 	gamestruct.desc.dwSize = sizeof(gamestruct.desc);
@@ -4007,7 +4012,7 @@ static bool onBanList(const char *ip)
 	if (!IPlist) return false;		//if no bans are added, then don't check.
 	for(i = 0; i < MAX_BANS ; i++)
 	{
-		if (strcmp(ip, IPlist[i].IPAddress)==0)
+		if (strcmp(ip, IPlist[i].IPAddress) == 0)
 		{
 			return true;
 		}
@@ -4032,6 +4037,7 @@ static void addToBanList(const char *ip, const char *name)
 			debug(LOG_FATAL, "Out of memory!");
 			abort();
 		}
+		numBans = 0;
 	}
 	memset(IPlist, 0x0, sizeof(PLAYER_IP) * MAX_BANS);
 	sstrcpy(IPlist[numBans].IPAddress, ip);
