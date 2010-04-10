@@ -30,7 +30,7 @@ typedef enum {
 //flag to indicate when initialisation is complete
 extern BOOL gameInitialised;
 extern BOOL bDisableLobby;
-
+extern bool customDebugfile;
 extern GS_GAMEMODE GetGameMode(void) WZ_DECL_PURE;
 extern void SetGameMode(GS_GAMEMODE status);
 
