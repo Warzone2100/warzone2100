@@ -126,6 +126,7 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 	audio_RemoveObj(psObj);
 
 	visRemoveVisibility(psObj);
+	free(psObj->watchedTiles);
 	free(psObj);
 	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", psObj);
 }
@@ -417,7 +418,9 @@ static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJECT_DESTRUCTO
 			// Call a specialized destruction function
 			// (will do all cleanup except for releasing memory of object)
 			objectDestructor(psCurr);
-			visRemoveVisibility(psCurr);
+			// FIXME: the next call is disabled for now, yes, it will leak memory again.
+			// issue is with campaign games, and the swapping pointers 'trick' Pumpkin uses.
+			//	visRemoveVisibility(psCurr);
 			// Release object's memory
 			free(psCurr);
 		}
