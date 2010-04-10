@@ -46,4 +46,8 @@ extern char * global_mods[MAX_MODS];
 extern char * campaign_mods[MAX_MODS];
 extern char * multiplay_mods[MAX_MODS];
 
+extern char * override_mods[MAX_MODS];
+extern char * override_mod_list;
+extern bool use_override_mods;
+
 #endif // __INCLUDED_SRC_MAIN_H__

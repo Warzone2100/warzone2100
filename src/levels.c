@@ -677,7 +677,10 @@ BOOL levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 		}
 	}
 
-	rebuildSearchPath(psNewLevel->dataDir, false);
+	if (!rebuildSearchPath(psNewLevel->dataDir, false))
+	{
+		return false;
+	}
 
 	// reset the old mission data if necessary
 	if (psCurrLevel != NULL)

@@ -40,6 +40,7 @@
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
+#include "modding.h"
 
 #include "game.h"
 
@@ -1464,20 +1465,52 @@ static bool deserializeSaveGameV35Data(PHYSFS_file* fileHandle, SAVE_GAME_V35* s
 	return deserializeSaveGameV34Data(fileHandle, (SAVE_GAME_V34*) serializeGame);
 }
 
+// Store loaded mods in savegame
+#define GAME_SAVE_V38			\
+	GAME_SAVE_V35;					\
+	char		modList[modlist_string_size]
+
+typedef struct save_game_v38
+{
+	GAME_SAVE_V38;
+} SAVE_GAME_V38;
+
+static bool serializeSaveGameV38Data(PHYSFS_file* fileHandle, const SAVE_GAME_V38* serializeGame)
+{
+	if (!serializeSaveGameV35Data(fileHandle, (const SAVE_GAME_V35*) serializeGame))
+		return false;
+
+	if (PHYSFS_write(fileHandle, serializeGame->modList, modlist_string_size, 1) != 1)
+		return false;
+
+	return true;
+}
+
+static bool deserializeSaveGameV38Data(PHYSFS_file* fileHandle, SAVE_GAME_V38* serializeGame)
+{
+	if (!deserializeSaveGameV35Data(fileHandle, (SAVE_GAME_V35*) serializeGame))
+		return false;
+
+	if (PHYSFS_read(fileHandle, serializeGame->modList, modlist_string_size, 1) != 1)
+		return false;
+
+	return true;
+}
+
 // Current save game version
 typedef struct save_game
 {
-	GAME_SAVE_V35;
+	GAME_SAVE_V38;
 } SAVE_GAME;
 
 static bool serializeSaveGameData(PHYSFS_file* fileHandle, const SAVE_GAME* serializeGame)
 {
-	return serializeSaveGameV35Data(fileHandle, (const SAVE_GAME_V35*) serializeGame);
+	return serializeSaveGameV38Data(fileHandle, (const SAVE_GAME_V38*) serializeGame);
 }
 
 static bool deserializeSaveGameData(PHYSFS_file* fileHandle, SAVE_GAME* serializeGame)
 {
-	return deserializeSaveGameV35Data(fileHandle, (SAVE_GAME_V35*) serializeGame);
+	return deserializeSaveGameV38Data(fileHandle, (SAVE_GAME_V38*) serializeGame);
 }
 
 #define TEMP_DROID_MAXPROGS	3
@@ -4419,6 +4452,16 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			return false;
 		}
 	}
+	else if (version <= VERSION_37) // versions 35-37 use the same save game format
+	{
+		//if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V35), 1) != 1)
+		if (!deserializeSaveGameV35Data(fileHandle, (SAVE_GAME_V35*) &saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
+
+			return false;
+		}
+	}
 	else if (version <= CURRENT_VERSION_NUM)
 	{
 		if (!deserializeSaveGameData(fileHandle, &saveGameData))
@@ -4442,6 +4485,11 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 	{
 		debug(LOG_ERROR, "Skirmish savegames of version %u are not supported in this release.", version);
 		return false;
+	}
+	/* Test mod list */
+	if (version >= VERSION_38)
+	{
+		setOverrideMods(saveGameData.modList);
 	}
 
 	// All savegames from version 34 or before are little endian so swap them. All
@@ -4976,6 +5024,9 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	{
 		strcpy(saveGame.sPlayerName[i], getPlayerName(i));
 	}
+
+	//version 38
+	sstrcpy(saveGame.modList, getModList());
 
 	status = serializeSaveGameData(fileHandle, &saveGame);
 

@@ -25,6 +25,9 @@ void addSubdirs( const char * basedir, const char * subdir, const bool appendToP
 void removeSubdirs( const char * basedir, const char * subdir, char * checkList[] );
 void printSearchPath( void );
 
+void setOverrideMods(char * modlist);
+void clearOverrideMods(void);
+
 void addLoadedMod(const char * modname);
 void clearLoadedMods(void);
 char * getModList(void);

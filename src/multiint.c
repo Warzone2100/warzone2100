@@ -2236,7 +2236,7 @@ static void addChatBox(void)
 	if (*getModList())
 	{
 		char modListMessage[WIDG_MAXSTR] = "";
-		sstrcat(modListMessage, _("Active mods: "));
+		sstrcat(modListMessage, _("Mod: "));
 		sstrcat(modListMessage, getModList());
 		addConsoleMessage(modListMessage,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		if (NetPlay.bComms)

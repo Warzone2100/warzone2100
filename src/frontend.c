@@ -1704,7 +1704,7 @@ void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSE
 	{
 		// show the mod list
 		char modListText[WIDG_MAXSTR] = "";
-		sstrcat(modListText, _("Active mods: "));
+		sstrcat(modListText, _("Mod: "));
 		sstrcat(modListText, getModList());
 		iV_SetFont(font_regular);
 		iV_SetTextColour(WZCOL_GREY);

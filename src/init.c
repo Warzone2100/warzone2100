@@ -233,11 +233,15 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 	wzSearchPath * curSearchPath = searchPathRegistry;
 	char tmpstr[PATH_MAX] = "\0";
 
-	if ( mode != current_mode || force )
+	if (mode != current_mode || force ||
+	    (use_override_mods && strcmp(override_mod_list, getModList())))
 	{
-		current_mode = mode;
+		if (mode != mod_clean)
+		{
+			rebuildSearchPath( mod_clean, false );
+		}
 
-		rebuildSearchPath( mod_clean, false );
+		current_mode = mode;
 
 		// Start at the lowest priority
 		while( curSearchPath->lowerPriority )
@@ -257,9 +261,10 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					// Remove maps and mods
 					removeSubdirs( curSearchPath->path, "maps", NULL );
 					removeSubdirs( curSearchPath->path, "mods/music", NULL );
-					removeSubdirs( curSearchPath->path, "mods/global", global_mods );
-					removeSubdirs( curSearchPath->path, "mods/campaign", campaign_mods );
-					removeSubdirs( curSearchPath->path, "mods/multiplay", multiplay_mods );
+					removeSubdirs( curSearchPath->path, "mods/global", NULL );
+					removeSubdirs( curSearchPath->path, "mods/campaign", NULL );
+					removeSubdirs( curSearchPath->path, "mods/multiplay", NULL );
+					removeSubdirs( curSearchPath->path, "mods/autoload", NULL );
 
 					// Remove multiplay patches
 					sstrcpy(tmpstr, curSearchPath->path);
@@ -300,10 +305,10 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 
 					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL, false );
-					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods, true );
-					addSubdirs( curSearchPath->path, "mods", PHYSFS_APPEND, global_mods, true );
-					addSubdirs( curSearchPath->path, "mods/autoload", PHYSFS_APPEND, NULL, true );
-					addSubdirs( curSearchPath->path, "mods/campaign", PHYSFS_APPEND, campaign_mods, true );
+					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
+					addSubdirs( curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
+					addSubdirs( curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods?override_mods:NULL, true );
+					addSubdirs( curSearchPath->path, "mods/campaign", PHYSFS_APPEND, use_override_mods?override_mods:campaign_mods, true );
 					if (!PHYSFS_removeFromSearchPath( curSearchPath->path ))
 					{
 						info("* Failed to remove path %s again", curSearchPath->path);
@@ -341,10 +346,10 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 					addSubdirs( curSearchPath->path, "maps", PHYSFS_APPEND, NULL, false );
 					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL, false );
-					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods, true );
-					addSubdirs( curSearchPath->path, "mods", PHYSFS_APPEND, global_mods, true );
-					addSubdirs( curSearchPath->path, "mods/autoload", PHYSFS_APPEND, NULL, true );
-					addSubdirs( curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, multiplay_mods, true );
+					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
+					addSubdirs( curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
+					addSubdirs( curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods?override_mods:NULL, true );
+					addSubdirs( curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, use_override_mods?override_mods:multiplay_mods, true );
 					PHYSFS_removeFromSearchPath( curSearchPath->path );
 
 					// Add multiplay patches
@@ -378,6 +383,15 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 				debug(LOG_ERROR, "Can't switch to unknown mods %i", mode);
 				return false;
 		}
+		if (use_override_mods && mode != mod_clean)
+		{
+			if (strcmp(getModList(),override_mod_list))
+			{
+				debug(LOG_POPUP, _("The required mod could not be loaded: %s\n\nWarzone will try to load the game without it."), override_mod_list);
+			}
+			clearOverrideMods();
+			current_mode = mod_override;
+		}
 
 		// User's home dir must be first so we allways see what we write
 		PHYSFS_removeFromSearchPath(PHYSFS_getWriteDir());
@@ -386,6 +400,11 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 #ifdef DEBUG
 		printSearchPath();
 #endif // DEBUG
+	}
+	else if (use_override_mods)
+	{
+		// override mods are already the same as current mods, so no need to do anything
+		clearOverrideMods();
 	}
 	return true;
 }

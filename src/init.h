@@ -54,7 +54,7 @@ typedef struct _wzSearchPath
 	struct _wzSearchPath * higherPriority, * lowerPriority;
 } wzSearchPath;
 
-typedef enum { mod_clean=0, mod_campaign=1, mod_multiplay=2 } searchPathMode;
+typedef enum { mod_clean=0, mod_campaign=1, mod_multiplay=2, mod_override=3 } searchPathMode;
 
 void cleanSearchPath( void );
 void registerSearchPath( const char path[], unsigned int priority );
