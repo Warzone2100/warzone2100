@@ -1270,6 +1270,7 @@ void NETGameLocked( bool flag)
 {
 	NetPlay.GamePassworded = flag;
 	gamestruct.privateGame = flag;
+	NETlogEntry("Password is", SYNC_FLAG, NetPlay.GamePassworded);
 	debug(LOG_NET, "Passworded game is %s", NetPlay.GamePassworded ? "TRUE" : "FALSE" );
 }
 
@@ -1482,6 +1483,7 @@ void NET_InitPlayers()
 static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 {
 	debug(LOG_NET, "sending player's (%u) info to all players", index);
+	NETlogEntry(" sending player's info to all players", SYNC_FLAG, index);
 	NETbeginEncode(NET_PLAYER_INFO, to);
 		NETuint32_t(&index);
 		NETbool(&NetPlay.players[index].allocated);
@@ -3448,6 +3450,11 @@ static void NETallowJoining(void)
 					}
 
 					sstrcpy(NetPlay.players[index].IPtextAddress, clientAddress);
+					{
+						char buf[250] = {'\0'};
+						snprintf(buf, sizeof(buf), "Player %d has joined, IP is:%s", index, clientAddress);
+						NETlogEntry(buf, SYNC_FLAG, index);
+					}
 
 					NETbeginEncode(NET_ACCEPTED, index);
 					NETuint8_t(&index);
