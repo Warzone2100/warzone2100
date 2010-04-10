@@ -21,5 +21,5 @@
 #define __INCLUDED_LIB_EXCEPTIONHANDLER_EXCEPTIONHANDLER_H__
 
 extern void setupExceptionHandler(int argc, char * argv[]);
-
+extern bool OverrideRPTDirectory(char *newPath);
 #endif // __INCLUDED_LIB_EXCEPTIONHANDLER_EXCEPTIONHANDLER_H__

@@ -212,7 +212,7 @@ static std::string getProgramPath(const char* programCommand)
 	}
 	else
 	{
-		debug(LOG_WARNING, "Could not retrieve full path to %s, will not create extended backtrace", programCommand);
+		debug(LOG_INFO, "Could not retrieve full path to %s, will not create extended backtrace", programCommand);
 	}
 
 	return programPath;

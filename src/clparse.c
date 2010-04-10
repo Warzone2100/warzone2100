@@ -342,6 +342,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 					return false;
 				}
 				debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
+				customDebugfile = true;
 				break;
 
 			case CLI_FLUSHDEBUGSTDERR:
@@ -418,7 +419,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				break;
 
 			case CLI_CHEAT:
-				printf("  ** DEBUG MODE UNLOCKED! **\n");
+				//printf("  ** DEBUG MODE UNLOCKED! **\n");
 				bAllowDebugMode = true;
 				break;
 

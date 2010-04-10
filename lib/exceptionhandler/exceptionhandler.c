@@ -23,6 +23,9 @@
 #include "dumpinfo.h"
 
 #if defined(WZ_OS_WIN)
+#include <tchar.h>
+#include <shlobj.h>
+#include <shlwapi.h>
 
 # include "dbghelp.h"
 # include "exchndl.h"
@@ -33,6 +36,7 @@ static LPTOP_LEVEL_EXCEPTION_FILTER prevExceptionHandler = NULL;
 /**
  * Exception handling on Windows.
  * Ask the user whether he wants to safe a Minidump and then dump it into the temp directory.
+ * NOTE: This is only for MSVC compiled programs.
  *
  * \param pExceptionInfo Information on the exception, passed from Windows
  * \return whether further exception handlers (i.e. the Windows internal one) should be invoked
@@ -702,4 +706,44 @@ void setupExceptionHandler(int argc, char * argv[])
 
 	setFatalSignalHandler(posixExceptionHandler);
 #endif // WZ_OS_*
+}
+bool OverrideRPTDirectory(char *newPath)
+{
+# if defined(WZ_CC_MINGW)
+	TCHAR buf[MAX_PATH];
+
+	if (!MultiByteToWideChar(CP_UTF8, 0, newPath, strlen(newPath), buf, 0))
+	{
+		//conversion failed-- we won't use the user's directory.
+
+		LPVOID lpMsgBuf;
+		LPVOID lpDisplayBuf;
+		DWORD dw = GetLastError();
+		TCHAR szBuffer[4196];
+
+		FormatMessage(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+			FORMAT_MESSAGE_FROM_SYSTEM |
+			FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL,
+			dw,
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			(LPTSTR) &lpMsgBuf,
+			0, NULL );
+
+		wsprintf(szBuffer, _T("Exception handler failed setting new directory with error %d: %s\n"), dw, lpMsgBuf);
+		MessageBox(MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
+
+		LocalFree(lpMsgBuf);
+		LocalFree(lpDisplayBuf);
+
+		return false;
+	}
+	_tcscpy(buf, newPath);
+	PathRemoveFileSpec(buf);
+	_tcscat(buf, _T("\\logs\\")); // stuff it in the logs directory
+	_tcscat(buf, _T("Warzone2100.RPT"));
+	ResetRPTDirectory(buf);
+#endif
+	return true;
 }
