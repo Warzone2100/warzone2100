@@ -1,3 +1,16 @@
+2010-04-00: Version 2.3 beta 13
+ * General:
+   * Change: Use system dialogs for reporting errors on Mac (r10474)
+   * Fix: Oil features were not being added back to the game when oil derricks were destroyed (r10489, ticket:1726)
+ * Multiplayer:
+   * Change: Ban IP addresses when kicking people from games (r10465)
+   * Fix: Crash during game hosting (ticket:1745, r10480)
+   * Fix: Missing cyborg legs in games with 8 human players (r10527, ticket:1740)
+ * Campaign:
+   * Fix: Crash when cleaning up memory usage between missions (r10476)
+ * Mods:
+   * Change: DyDo AI updated to version 2.1, and includes its own challenges
+
 2010-03-29: Version 2.3 beta 12
  * General:
    * Change: Double-clicking trucks will now select them for consistency (r10391, ticket:1472)
