@@ -2020,20 +2020,30 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 
 	for (line = 0; line < NumWeapons; line++)
 	{
-		bool addedToStaticList = false;
-		int player, i;
-		char WeaponName[DROID_MAXWEAPS][MAX_STR_LENGTH] = {{'\0'}},
-			TemplateName[MAX_STR_LENGTH] = {'\0'};
+		DROID_TEMPLATE *pTemplate;
+		int player, i, j;
+		char WeaponName[DROID_MAXWEAPS][MAX_STR_LENGTH] = {{'\0'}};
+		char TemplateName[MAX_STR_LENGTH] = {'\0'};
 
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pWeaponData, "%[^','],%[^','],%[^','],%[^','],%d",
 			TemplateName, WeaponName[0], WeaponName[1], WeaponName[2], &player);
 
-		for (i = 0; i < MAX_PLAYERS; i++)
+		for (i = 0; i < MAX_PLAYERS + 1; i++)
 		{
-			unsigned int j;
-
-			DROID_TEMPLATE *pTemplate = getTemplateFromUniqueName(TemplateName, i);
+			if (i < MAX_PLAYERS)	// a player
+			{
+				if (!isHumanPlayer(i))
+				{
+					continue;	// no need to add to AIs, they use the static list
+				}
+				pTemplate = getTemplateFromUniqueName(TemplateName, i);
+			}
+			else			// special exception - the static list
+			{
+				// Add weapons to static list
+				pTemplate = getTemplateFromTranslatedNameNoPlayer(TemplateName);
+			}
 
 			/* if Template not found - try default design */
 			if (!pTemplate)
@@ -2046,10 +2056,6 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 				{
 					continue;	// ok, this player did not have this template. that's fine.
 				}
-			}
-			if (!isHumanPlayer(i) && addedToStaticList)
-			{
-				continue;	// do not add weapons multiple times to templates in AI list
 			}
 
 			ASSERT_OR_RETURN(false, pTemplate->numWeaps <= DROID_MAXWEAPS, "stack corruption unavoidable");
@@ -2069,10 +2075,6 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 				ASSERT_OR_RETURN(false, checkValidWeaponForProp(pTemplate), "Weapon is invalid for air propulsion for template %s", 
 				                 pTemplate->aName);
 				pTemplate->storeCount++;
-			}
-			if (!isHumanPlayer(i))
-			{
-				addedToStaticList = true;	// only one list to add to
 			}
 		}
 
