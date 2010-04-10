@@ -9,8 +9,7 @@ stamp:
 DYDOAILIST = \
 	multiplay \
 	images \
-	messages \
-	stats
+	messages
 
 DYDOAIARCHIVE = dydo-ai.wz
 
