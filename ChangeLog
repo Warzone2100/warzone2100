@@ -3,6 +3,7 @@
    * Change: Crash report and log files now will reside in a UAC friendly directory for windows (r10532, ticket:1759)
    * Change: All platforms will have stderr routed to <configdir>/logs/WZlog*.txt (r10532, ticket:1759)
    * Change: Use system dialogs for reporting errors on Mac (r10474)
+   * Change: Change most references to plural "mods" to singular "mod", to discourage using multiple mods (r10498)
    * Fix: Oil features were not being added back to the game when oil derricks were destroyed (r10489, ticket:1726)
  * Multiplayer:
    * Change: Ban IP addresses when kicking people from games (r10465)
