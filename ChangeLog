@@ -12,6 +12,17 @@
    * Fix: Crash when cleaning up memory usage between missions (r10476)
  * Mods:
    * Change: DyDo AI updated to version 2.1, and includes its own challenges
+ * Balance: (r10537)
+   * Remove Cobra prereq from Inferno
+   * Increase Plasma Cannon range to 10 and damage to 500
+   * Plasma Cannon and Archie can no longer fire while moving
+   * Increase HPV weight
+   * Decrease Assault Cannon/Twin Assault Cannon weight
+   * Increase Lancer/TK damage by 10
+   * Increase Bombard damage by 10
+   * Heavy Laser damage and reload time increased (overall slight buff)
+   * Heavy Cannon and Medium Cannon range increased 0.5
+   * Cyborgs sped up a bit
 
 2010-03-29: Version 2.3 beta 12
  * General:
