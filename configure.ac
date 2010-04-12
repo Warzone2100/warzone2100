@@ -301,13 +301,12 @@ if test "x$enable_static" = "xyes" ; then
 	PKG_CHECK_MODULES([FREETYPE], [freetype2])
 fi
 
-if test "x$host_os_mingw32" = "xno" ; then
-	PKG_CHECK_MODULES([GLee], [glee >= 5.4.0], [system_glee=true], [system_glee=false])
-else
-	system_glee=false
+system_glee=false
+if test "x$host_os_mingw32" != "xyes" ; then
+	PKG_CHECK_MODULES([GLee], [glee >= 5.4.0], [system_glee=true])
 fi
-AM_CONDITIONAL([SYSTEM_GLEE], [test x$system_glee = xtrue])
-if test x$system_glee = xfalse ; then
+AM_CONDITIONAL([SYSTEM_GLEE], [test "x$system_glee" = "xtrue"])
+if test "x$system_glee" = "xfalse" ; then
 	AC_MSG_NOTICE([Using integrated GLee])
 	AC_SUBST([GLee_CFLAGS], ['-I$(top_srcdir)/lib/ivis_opengl'])
 fi
