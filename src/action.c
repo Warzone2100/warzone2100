@@ -23,40 +23,35 @@
  * Functions for setting the action of a droid.
  *
  */
-#include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/gamelib/gtime.h"
 #include "lib/script/script.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
 
 #include "action.h"
-#include "lib/framework/vector.h"
-#include "lib/sound/audio_id.h"
-#include "lib/sound/audio.h"
 #include "combat.h"
 #include "formation.h"
 #include "geometry.h"
-#include "hci.h"
 #include "intdisplay.h"
 #include "mission.h"
-#include "multiplay.h"
 #include "projectile.h"
+#include "random.h"
 #include "research.h"
 #include "scriptcb.h"
 #include "scripttabs.h"
 #include "transporter.h"
-#include "visibility.h"
-#include "random.h"
 
 /* attack run distance */
 #define	VTOL_ATTACK_LENGTH		1000
 #define	VTOL_ATTACK_WIDTH		200
 #define VTOL_ATTACK_TARDIST		400
-#define VTOL_ATTACK_RETURNDIST	700
 
 // turret rotation limit
 #define VTOL_TURRET_LIMIT               DEG(45)
 #define VTOL_TURRET_LIMIT_BOMB          DEG(60)
+
+#define	VTOL_ATTACK_AUDIO_DELAY		(3*GAME_TICKS_PER_SEC)
 
 /** Time to pause before a droid blows up. */
 #define  ACTION_DESTRUCT_TIME	2000
@@ -67,9 +62,6 @@
 #define ACTION_TURRET_ROTATION_RATE	45
 #define REPAIR_PITCH_LOWER		30
 #define	REPAIR_PITCH_UPPER		-15
-
-/** How long to follow a damaged droid around before giving up if don't get near. */
-#define KEEP_TRYING_REPAIR	10000
 
 /* How many tiles to pull back. */
 #define PULL_BACK_DIST		10
@@ -91,6 +83,22 @@ typedef struct _droid_action_data
 
 /** Radius for search when looking for VTOL landing position */
 static const int vtolLandingRadius = 23;
+
+/**
+ * @typedef tileMatchFunction
+ *
+ * @brief pointer to a 'tile search function', used by spiralSearch()
+ *
+ * @param x,y  are the coordinates that should be inspected.
+ *
+ * @param data a pointer to state data, allows the search function to retain
+ *             state in between calls and can be used as a means of returning
+ *             its result to the caller of spiralSearch().
+ *
+ * @return true when the search has finished, false when the search should
+ *         continue.
+ */
+typedef bool (*tileMatchFunction)(int x, int y, void* matchState);
 
 const char* getDroidActionName(DROID_ACTION action)
 {
@@ -146,7 +154,7 @@ const char* getDroidActionName(DROID_ACTION action)
 }
 
 /* Check if a target is at correct range to attack */
-BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
+static BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
 	SDWORD			dx, dy, dz, radSq, rangeSq, longRange;
 	WEAPON_STATS	*psStats;
@@ -765,7 +773,7 @@ BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 
 
 // check if a droid is on the foundations of a new building
-BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats)
+static BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats)
 {
 	SDWORD	width, breadth, tx,ty, dx,dy;
 
@@ -821,8 +829,6 @@ static void actionHomeBasePos(SDWORD player, SDWORD *px, SDWORD *py)
 	*px = getLandingX(player);
 	*py = getLandingY(player);
 }
-
-#define	VTOL_ATTACK_AUDIO_DELAY		(3*GAME_TICKS_PER_SEC)
 
 // Update the action state for a droid
 void actionUpdateDroid(DROID *psDroid)
@@ -2909,7 +2915,7 @@ static BOOL vtolLandingTile(SDWORD x, SDWORD y)
  * \return true if finished because the searchFunction requested termination,
  *         false if the radius limit was reached
  */
-bool spiralSearch(int startX, int startY, int max_radius, tileMatchFunction match, void* matchState)
+static bool spiralSearch(int startX, int startY, int max_radius, tileMatchFunction match, void* matchState)
 {
 	int radius;          // radius counter
 

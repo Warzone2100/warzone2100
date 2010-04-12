@@ -25,7 +25,7 @@
 #define __INCLUDED_SRC_ORDER_H__
 
 #include "orderdef.h"
-#include "action.h" //Watermelon:needs DROID_OACTION_INFO
+#include "structuredef.h"
 
 #ifdef __cplusplus
 extern "C"
