@@ -31,6 +31,7 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/framework/fixedpoint.h"
 
+#include "action.h"
 #include "display.h"
 #include "map.h"
 #include "loop.h"
