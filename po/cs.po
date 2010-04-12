@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-09 03:12+0200\n"
+"POT-Creation-Date: 2010-04-12 21:03+0200\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -11578,23 +11578,23 @@ msgstr ""
 msgid "Latin"
 msgstr "Latinsky"
 
-#: lib/netplay/netplay.c:1286
-#: lib/netplay/netplay.c:2130
+#: lib/netplay/netplay.c:1287
+#: lib/netplay/netplay.c:2132
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3111
+#: lib/netplay/netplay.c:3113
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3136
+#: lib/netplay/netplay.c:3138
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: lib/netplay/netplay.c:3568
-msgid ", mods: "
+#: lib/netplay/netplay.c:3580
+msgid ", mod: "
 msgstr ""
 
 #: src/challenge.c:188
@@ -11945,7 +11945,7 @@ msgstr "Jednotka ztracena!"
 msgid "Structure Restored"
 msgstr "Budova obnovena"
 
-#: src/droid.c:3326
+#: src/droid.c:3342
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -11953,7 +11953,7 @@ msgstr[0] "Skupina %u vybrána - %u Jednotka"
 msgstr[1] "Skupina %u vybrána - %u Jednotky"
 msgstr[2] "Skupina %u vybrána - %u Jednotek"
 
-#: src/droid.c:3339
+#: src/droid.c:3355
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -11961,7 +11961,7 @@ msgstr[0] "%u jednotka začleněna do Skupiny %u"
 msgstr[1] "%u jednotky začleněny do Skupiny %u"
 msgstr[2] "%u jednotek začleněno do Skupiny %u"
 
-#: src/droid.c:3352
+#: src/droid.c:3368
 #, fuzzy, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -11969,7 +11969,7 @@ msgstr[0] "Zameřeno na skupinu %u - %u jednotka"
 msgstr[1] "Zameřeno na skupinu %u - %u jednotky"
 msgstr[2] "Zameřeno na skupinu %u - %u jednotek"
 
-#: src/droid.c:3356
+#: src/droid.c:3372
 #, fuzzy, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -11977,41 +11977,41 @@ msgstr[0] "Vyrovnání se skupinou %u - %u jednotka"
 msgstr[1] "Vyrovnání se skupinou %u - %u jednotky"
 msgstr[2] "Vyrovnání se skupinou %u - %u jednotek"
 
-#: src/droid.c:3619
+#: src/droid.c:3635
 msgid "Rookie"
 msgstr "Nováček"
 
-#: src/droid.c:3620
+#: src/droid.c:3636
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelenáč"
 
-#: src/droid.c:3621
+#: src/droid.c:3637
 #, fuzzy
 msgid "Trained"
 msgstr "Trénovaný"
 
-#: src/droid.c:3622
+#: src/droid.c:3638
 msgid "Regular"
 msgstr "Běžný"
 
-#: src/droid.c:3623
+#: src/droid.c:3639
 msgid "Professional"
 msgstr "Profesionální"
 
-#: src/droid.c:3624
+#: src/droid.c:3640
 msgid "Veteran"
 msgstr "Veterán"
 
-#: src/droid.c:3625
+#: src/droid.c:3641
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3626
+#: src/droid.c:3642
 msgid "Special"
 msgstr "Speciální"
 
-#: src/droid.c:3627
+#: src/droid.c:3643
 msgid "Hero"
 msgstr "Hrdina"
 
@@ -12360,7 +12360,7 @@ msgstr "HERNÍ NASTAVENÍ"
 
 #: src/frontend.c:1707
 #: src/multiint.c:2239
-msgid "Active mods: "
+msgid "Mod: "
 msgstr ""
 
 #: src/hci.c:1358
@@ -12533,6 +12533,14 @@ msgstr ""
 
 #: src/ingameop.c:364
 msgid "-->  QUIT  <--"
+msgstr ""
+
+#: src/init.c:390
+#, c-format
+msgid ""
+"The required mod could not be loaded: %s\n"
+"\n"
+"Warzone will try to load the game without it."
 msgstr ""
 
 #: src/intdisplay.c:202
@@ -13847,48 +13855,48 @@ msgstr ""
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1068
+#: src/multiplay.c:1069
 #, fuzzy
 msgid "(allies"
 msgstr "Spojenectví"
 
-#: src/multiplay.c:1076
+#: src/multiplay.c:1077
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1089
+#: src/multiplay.c:1090
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1949
 msgid "Green"
 msgstr "Zelená"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1950
 msgid "Orange"
 msgstr "Oranžová"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1951
 msgid "Grey"
 msgstr "Šedá"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1952
 msgid "Black"
 msgstr "Černá"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1953
 msgid "Red"
 msgstr "Červená"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1954
 msgid "Blue"
 msgstr "Modrá"
 
-#: src/multiplay.c:1954
+#: src/multiplay.c:1955
 msgid "Pink"
 msgstr "Růžová"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1956
 msgid "Cyan"
 msgstr "Azurová"
 

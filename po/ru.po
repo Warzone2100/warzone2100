@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-09 03:12+0200\n"
+"POT-Creation-Date: 2010-04-12 21:03+0200\n"
 "PO-Revision-Date: 2010-01-28 19:50+0600\n"
 "Last-Translator: Maxim <raptor9000@yandex.ru>\n"
 "Language-Team: Russian <>\n"
@@ -11554,23 +11554,24 @@ msgstr "китайский"
 msgid "Latin"
 msgstr "Латинский"
 
-#: lib/netplay/netplay.c:1286
-#: lib/netplay/netplay.c:2130
+#: lib/netplay/netplay.c:1287
+#: lib/netplay/netplay.c:2132
 msgid "Enter password here"
 msgstr "Введите пароль"
 
-#: lib/netplay/netplay.c:3111
+#: lib/netplay/netplay.c:3113
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "не могу получить имя основного сервера (%s)!"
 
-#: lib/netplay/netplay.c:3136
+#: lib/netplay/netplay.c:3138
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Не удалось соединиться с лобби-сервером. проверьте, открыт-ли TCP-порт %u для исходящего траффика."
 
-#: lib/netplay/netplay.c:3568
-msgid ", mods: "
+#: lib/netplay/netplay.c:3580
+#, fuzzy
+msgid ", mod: "
 msgstr ", моды:"
 
 #: src/challenge.c:188
@@ -11914,7 +11915,7 @@ msgstr "Юнит потерян!"
 msgid "Structure Restored"
 msgstr "постройка восстановлена"
 
-#: src/droid.c:3326
+#: src/droid.c:3342
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -11922,7 +11923,7 @@ msgstr[0] "Выбрана группа %u - %u юнит"
 msgstr[1] "Выбрана группа %u - %u юнита"
 msgstr[2] "Выбрана группа %u - %u юнитов"
 
-#: src/droid.c:3339
+#: src/droid.c:3355
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -11930,7 +11931,7 @@ msgstr[0] "%u юнит назначен группе %u"
 msgstr[1] "%u юнита назначено группе %u"
 msgstr[2] "%u юнитов назначено группе %u"
 
-#: src/droid.c:3352
+#: src/droid.c:3368
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -11938,7 +11939,7 @@ msgstr[0] "Фокус на группе %u - %u юнит"
 msgstr[1] "Фокус на группе %u - %u юнита"
 msgstr[2] "Фокус на группе %u - %u юнитов"
 
-#: src/droid.c:3356
+#: src/droid.c:3372
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -11946,40 +11947,40 @@ msgstr[0] "Соединить с группой %u - %u Юнит"
 msgstr[1] "Соединить с группой %u - %u Юниты"
 msgstr[2] "Соединить с группой %u - %u Юниты"
 
-#: src/droid.c:3619
+#: src/droid.c:3635
 msgid "Rookie"
 msgstr "Новобранец"
 
-#: src/droid.c:3620
+#: src/droid.c:3636
 msgctxt "rank"
 msgid "Green"
 msgstr "Молодой"
 
-#: src/droid.c:3621
+#: src/droid.c:3637
 msgid "Trained"
 msgstr "Тренированный"
 
-#: src/droid.c:3622
+#: src/droid.c:3638
 msgid "Regular"
 msgstr "Опытный"
 
-#: src/droid.c:3623
+#: src/droid.c:3639
 msgid "Professional"
 msgstr "Профессионал"
 
-#: src/droid.c:3624
+#: src/droid.c:3640
 msgid "Veteran"
 msgstr "Ветеран"
 
-#: src/droid.c:3625
+#: src/droid.c:3641
 msgid "Elite"
 msgstr "Элита"
 
-#: src/droid.c:3626
+#: src/droid.c:3642
 msgid "Special"
 msgstr "Специалист"
 
-#: src/droid.c:3627
+#: src/droid.c:3643
 msgid "Hero"
 msgstr "Герой"
 
@@ -12316,8 +12317,9 @@ msgstr "НАСТРОЙКИ ИГРЫ"
 
 #: src/frontend.c:1707
 #: src/multiint.c:2239
-msgid "Active mods: "
-msgstr "Активные моды:"
+#, fuzzy
+msgid "Mod: "
+msgstr ", моды:"
 
 #: src/hci.c:1358
 msgid "MAP SAVED!"
@@ -12481,6 +12483,14 @@ msgstr "Игра не может продолжаться без владель�
 #: src/ingameop.c:364
 msgid "-->  QUIT  <--"
 msgstr "--> ВЫХОД <--"
+
+#: src/init.c:390
+#, c-format
+msgid ""
+"The required mod could not be loaded: %s\n"
+"\n"
+"Warzone will try to load the game without it."
+msgstr ""
 
 #: src/intdisplay.c:202
 #: src/intdisplay.c:247
@@ -13752,47 +13762,47 @@ msgstr "Передать энергию  игроку"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Кик игрока %s за попытку обойти проверку внутренних данных"
 
-#: src/multiplay.c:1068
+#: src/multiplay.c:1069
 msgid "(allies"
 msgstr "( Союзники"
 
-#: src/multiplay.c:1076
+#: src/multiplay.c:1077
 msgid "(private to "
 msgstr "(приват"
 
-#: src/multiplay.c:1089
+#: src/multiplay.c:1090
 msgid "[invalid]"
 msgstr "[неверно]"
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1949
 msgid "Green"
 msgstr "Зелёный"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1950
 msgid "Orange"
 msgstr "Оранжевый"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1951
 msgid "Grey"
 msgstr "Серый"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1952
 msgid "Black"
 msgstr "Чёрный"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1953
 msgid "Red"
 msgstr "Красный"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1954
 msgid "Blue"
 msgstr "Синий"
 
-#: src/multiplay.c:1954
+#: src/multiplay.c:1955
 msgid "Pink"
 msgstr "Розовый"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1956
 msgid "Cyan"
 msgstr "Голубой"
 
@@ -14064,6 +14074,9 @@ msgstr " - сборка %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версия %s%s%s%s"
+
+#~ msgid "Active mods: "
+#~ msgstr "Активные моды:"
 
 #, fuzzy
 #~ msgid "Player %u has the wrong game version. Auto kicking."

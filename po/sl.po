@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-09 03:12+0200\n"
+"POT-Creation-Date: 2010-04-12 21:03+0200\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -11631,25 +11631,26 @@ msgstr ""
 msgid "Latin"
 msgstr "Latinski"
 
-#: lib/netplay/netplay.c:1286
-#: lib/netplay/netplay.c:2130
+#: lib/netplay/netplay.c:1287
+#: lib/netplay/netplay.c:2132
 #, fuzzy
 msgid "Enter password here"
 msgstr "Najprej vnesite geslo"
 
-#: lib/netplay/netplay.c:3111
+#: lib/netplay/netplay.c:3113
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Ni bilo mogoče razrešiti imena glavnega strežnika (%s)!"
 
-#: lib/netplay/netplay.c:3136
+#: lib/netplay/netplay.c:3138
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Ni bilo mogoče komunicirati z vežnim strežnikom! Je TCP prehod %u odprt za izhodni promet?"
 
-#: lib/netplay/netplay.c:3568
-msgid ", mods: "
-msgstr ""
+#: lib/netplay/netplay.c:3580
+#, fuzzy
+msgid ", mod: "
+msgstr "mod"
 
 #: src/challenge.c:188
 #: src/hci.c:1012
@@ -11993,7 +11994,7 @@ msgstr "Enota izgubljena!"
 msgid "Structure Restored"
 msgstr "Zgradba obnovljena"
 
-#: src/droid.c:3326
+#: src/droid.c:3342
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -12002,7 +12003,7 @@ msgstr[1] "Skupina %u izbrana - %u enota"
 msgstr[2] "Skupina %u izbrana - %u enoti"
 msgstr[3] "Skupina %u izbrana - %u enote"
 
-#: src/droid.c:3339
+#: src/droid.c:3355
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -12011,7 +12012,7 @@ msgstr[1] "%u enota dodeljena skupini %u"
 msgstr[2] "%u enoti dodeljeni skupini %u"
 msgstr[3] "%u enote dodeljene skupini %u"
 
-#: src/droid.c:3352
+#: src/droid.c:3368
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -12020,7 +12021,7 @@ msgstr[1] "Centriran na skupino %u - %u enota"
 msgstr[2] "Centriran na skupino %u - %u enoti"
 msgstr[3] "Centriran na skupino %u - %u enote"
 
-#: src/droid.c:3356
+#: src/droid.c:3372
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -12029,40 +12030,40 @@ msgstr[1] "Poravnava s skupino %u - %u enota"
 msgstr[2] "Poravnava s skupino %u - %u enoti"
 msgstr[3] "Poravnava s skupino %u - %u enote"
 
-#: src/droid.c:3619
+#: src/droid.c:3635
 msgid "Rookie"
 msgstr "Novinec"
 
-#: src/droid.c:3620
+#: src/droid.c:3636
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelen"
 
-#: src/droid.c:3621
+#: src/droid.c:3637
 msgid "Trained"
 msgstr "Izurjen"
 
-#: src/droid.c:3622
+#: src/droid.c:3638
 msgid "Regular"
 msgstr "Navaden"
 
-#: src/droid.c:3623
+#: src/droid.c:3639
 msgid "Professional"
 msgstr "Poklicni"
 
-#: src/droid.c:3624
+#: src/droid.c:3640
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3625
+#: src/droid.c:3641
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3626
+#: src/droid.c:3642
 msgid "Special"
 msgstr "Poseben"
 
-#: src/droid.c:3627
+#: src/droid.c:3643
 msgid "Hero"
 msgstr "Junak"
 
@@ -12406,7 +12407,7 @@ msgstr "MOŽNOSTI IGRE"
 
 #: src/frontend.c:1707
 #: src/multiint.c:2239
-msgid "Active mods: "
+msgid "Mod: "
 msgstr ""
 
 #: src/hci.c:1358
@@ -12571,6 +12572,14 @@ msgstr ""
 
 #: src/ingameop.c:364
 msgid "-->  QUIT  <--"
+msgstr ""
+
+#: src/init.c:390
+#, c-format
+msgid ""
+"The required mod could not be loaded: %s\n"
+"\n"
+"Warzone will try to load the game without it."
 msgstr ""
 
 #: src/intdisplay.c:202
@@ -13857,48 +13866,48 @@ msgstr "Daj igralcu moč"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1068
+#: src/multiplay.c:1069
 #, fuzzy
 msgid "(allies"
 msgstr "Zavezništva"
 
-#: src/multiplay.c:1076
+#: src/multiplay.c:1077
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1089
+#: src/multiplay.c:1090
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1949
 msgid "Green"
 msgstr "Zelena"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1950
 msgid "Orange"
 msgstr "Oranžna"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1951
 msgid "Grey"
 msgstr "Siva"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1952
 msgid "Black"
 msgstr "Črna"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1953
 msgid "Red"
 msgstr "Rdeča"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1954
 msgid "Blue"
 msgstr "Modra"
 
-#: src/multiplay.c:1954
+#: src/multiplay.c:1955
 msgid "Pink"
 msgstr "Roza"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1956
 msgid "Cyan"
 msgstr "Cijan"
 

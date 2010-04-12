@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-09 03:12+0200\n"
+"POT-Creation-Date: 2010-04-12 21:03+0200\n"
 "PO-Revision-Date: 2008-05-05 12:29+0000\n"
 "Last-Translator: Jen Ockwell <jenfraggleubuntu@googlemail.com>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -11822,24 +11822,25 @@ msgstr ""
 msgid "Latin"
 msgstr "Latin"
 
-#: lib/netplay/netplay.c:1286
-#: lib/netplay/netplay.c:2130
+#: lib/netplay/netplay.c:1287
+#: lib/netplay/netplay.c:2132
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3111
+#: lib/netplay/netplay.c:3113
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3136
+#: lib/netplay/netplay.c:3138
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: lib/netplay/netplay.c:3568
-msgid ", mods: "
-msgstr ""
+#: lib/netplay/netplay.c:3580
+#, fuzzy
+msgid ", mod: "
+msgstr "mod"
 
 #: src/challenge.c:188
 #: src/hci.c:1012
@@ -12186,68 +12187,68 @@ msgstr "Unit Lost!"
 msgid "Structure Restored"
 msgstr "Structure Restored"
 
-#: src/droid.c:3326
+#: src/droid.c:3342
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Group %u selected - %u Unit"
 msgstr[1] "Group %u selected - %u Units"
 
-#: src/droid.c:3339
+#: src/droid.c:3355
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unit assigned to Group %u"
 msgstr[1] "%u units assigned to Group %u"
 
-#: src/droid.c:3352
+#: src/droid.c:3368
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centred on Group %u - %u Unit"
 msgstr[1] "Centred on Group %u - %u Units"
 
-#: src/droid.c:3356
+#: src/droid.c:3372
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u Unit"
 msgstr[1] "Aligning with Group %u - %u Units"
 
-#: src/droid.c:3619
+#: src/droid.c:3635
 msgid "Rookie"
 msgstr "Rookie"
 
-#: src/droid.c:3620
+#: src/droid.c:3636
 msgctxt "rank"
 msgid "Green"
 msgstr "Green"
 
-#: src/droid.c:3621
+#: src/droid.c:3637
 msgid "Trained"
 msgstr "Trained"
 
-#: src/droid.c:3622
+#: src/droid.c:3638
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3623
+#: src/droid.c:3639
 msgid "Professional"
 msgstr "Professional"
 
-#: src/droid.c:3624
+#: src/droid.c:3640
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3625
+#: src/droid.c:3641
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3626
+#: src/droid.c:3642
 msgid "Special"
 msgstr "Special"
 
-#: src/droid.c:3627
+#: src/droid.c:3643
 msgid "Hero"
 msgstr "Hero"
 
@@ -12597,7 +12598,7 @@ msgstr "GAME OPTIONS"
 
 #: src/frontend.c:1707
 #: src/multiint.c:2239
-msgid "Active mods: "
+msgid "Mod: "
 msgstr ""
 
 #: src/hci.c:1358
@@ -12767,6 +12768,14 @@ msgstr ""
 
 #: src/ingameop.c:364
 msgid "-->  QUIT  <--"
+msgstr ""
+
+#: src/init.c:390
+#, c-format
+msgid ""
+"The required mod could not be loaded: %s\n"
+"\n"
+"Warzone will try to load the game without it."
 msgstr ""
 
 #: src/intdisplay.c:202
@@ -14067,48 +14076,48 @@ msgstr "Give Power To Player"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1068
+#: src/multiplay.c:1069
 #, fuzzy
 msgid "(allies"
 msgstr "Alliances"
 
-#: src/multiplay.c:1076
+#: src/multiplay.c:1077
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1089
+#: src/multiplay.c:1090
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1949
 msgid "Green"
 msgstr "Green"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1950
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1951
 msgid "Grey"
 msgstr "Grey"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1952
 msgid "Black"
 msgstr "Black"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1953
 msgid "Red"
 msgstr "Red"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1954
 msgid "Blue"
 msgstr "Blue"
 
-#: src/multiplay.c:1954
+#: src/multiplay.c:1955
 msgid "Pink"
 msgstr "Pink"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1956
 msgid "Cyan"
 msgstr "Cyan"
 

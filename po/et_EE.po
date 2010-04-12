@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-09 03:12+0200\n"
+"POT-Creation-Date: 2010-04-12 21:03+0200\n"
 "PO-Revision-Date: 2010-03-26 18:42+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -11544,23 +11544,24 @@ msgstr "Traditsiooniline Hiina Keel"
 msgid "Latin"
 msgstr "Ladina Keel"
 
-#: lib/netplay/netplay.c:1286
-#: lib/netplay/netplay.c:2130
+#: lib/netplay/netplay.c:1287
+#: lib/netplay/netplay.c:2132
 msgid "Enter password here"
 msgstr "Sisesta salasõna siia"
 
-#: lib/netplay/netplay.c:3111
+#: lib/netplay/netplay.c:3113
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Ei suuda peaserveri nime lahendada (%s)!"
 
-#: lib/netplay/netplay.c:3136
+#: lib/netplay/netplay.c:3138
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Ei suuda lobby serveriga suhelda! Kas port %u on väljaminevale liiklusele avatud?"
 
-#: lib/netplay/netplay.c:3568
-msgid ", mods: "
+#: lib/netplay/netplay.c:3580
+#, fuzzy
+msgid ", mod: "
 msgstr ", mods:"
 
 #: src/challenge.c:188
@@ -11904,68 +11905,68 @@ msgstr "Üksus Kaotatud!"
 msgid "Structure Restored"
 msgstr "Ehitis taastatud"
 
-#: src/droid.c:3326
+#: src/droid.c:3342
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupp %u valitud - %u Üksus"
 msgstr[1] "Grupp %u valitud - %u Üksust"
 
-#: src/droid.c:3339
+#: src/droid.c:3355
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u üksus määratud gruppi %u"
 msgstr[1] "%u Üksust määratud Gruppi %u"
 
-#: src/droid.c:3352
+#: src/droid.c:3368
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Grupi %u Vaade - %u Üksus"
 msgstr[1] "Grupi %u Vaade - %u Üksust"
 
-#: src/droid.c:3356
+#: src/droid.c:3372
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u Unit"
 msgstr[1] "Aligning with Group %u - %u Units"
 
-#: src/droid.c:3619
+#: src/droid.c:3635
 msgid "Rookie"
 msgstr "Uustulnuk"
 
-#: src/droid.c:3620
+#: src/droid.c:3636
 msgctxt "rank"
 msgid "Green"
 msgstr "Algaja"
 
-#: src/droid.c:3621
+#: src/droid.c:3637
 msgid "Trained"
 msgstr "Treenitud"
 
-#: src/droid.c:3622
+#: src/droid.c:3638
 msgid "Regular"
 msgstr "Regulaar"
 
-#: src/droid.c:3623
+#: src/droid.c:3639
 msgid "Professional"
 msgstr "Professionaal"
 
-#: src/droid.c:3624
+#: src/droid.c:3640
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3625
+#: src/droid.c:3641
 msgid "Elite"
 msgstr "Eliit"
 
-#: src/droid.c:3626
+#: src/droid.c:3642
 msgid "Special"
 msgstr "Eriline"
 
-#: src/droid.c:3627
+#: src/droid.c:3643
 msgid "Hero"
 msgstr "Kangelane"
 
@@ -12302,8 +12303,9 @@ msgstr "MÄNGU SEADED"
 
 #: src/frontend.c:1707
 #: src/multiint.c:2239
-msgid "Active mods: "
-msgstr "Aktiivsed mods:"
+#, fuzzy
+msgid "Mod: "
+msgstr ", mods:"
 
 #: src/hci.c:1358
 msgid "MAP SAVED!"
@@ -12467,6 +12469,14 @@ msgstr "Mäng ei saa ilma võõrustajata jätkuda."
 #: src/ingameop.c:364
 msgid "-->  QUIT  <--"
 msgstr "--> LOOBU <--"
+
+#: src/init.c:390
+#, c-format
+msgid ""
+"The required mod could not be loaded: %s\n"
+"\n"
+"Warzone will try to load the game without it."
+msgstr ""
 
 #: src/intdisplay.c:202
 #: src/intdisplay.c:247
@@ -13738,47 +13748,47 @@ msgstr "Anna Mängijale Energiat"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Mängija %s väljalöömine, sest ta proovis infokontrollist mõõda pääseda!"
 
-#: src/multiplay.c:1068
+#: src/multiplay.c:1069
 msgid "(allies"
 msgstr "(Liitlased"
 
-#: src/multiplay.c:1076
+#: src/multiplay.c:1077
 msgid "(private to "
 msgstr "(eraviisiline"
 
-#: src/multiplay.c:1089
+#: src/multiplay.c:1090
 msgid "[invalid]"
 msgstr "[kehtetu]"
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1949
 msgid "Green"
 msgstr "Roheline"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1950
 msgid "Orange"
 msgstr "Oranð"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1951
 msgid "Grey"
 msgstr "Hall"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1952
 msgid "Black"
 msgstr "Must"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1953
 msgid "Red"
 msgstr "Punane"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1954
 msgid "Blue"
 msgstr "Sinine"
 
-#: src/multiplay.c:1954
+#: src/multiplay.c:1955
 msgid "Pink"
 msgstr "Roosa"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1956
 msgid "Cyan"
 msgstr "Helesinine"
 
@@ -14048,6 +14058,9 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versioon %s%s%s%s"
+
+#~ msgid "Active mods: "
+#~ msgstr "Aktiivsed mods:"
 
 #~ msgid "Warning: Player %s did not send a data check, and may be cheating."
 #~ msgstr "Hoiatus: Mängija  %s ei saatnud info kontrolli, ja võib sohki teha."
