@@ -24,11 +24,8 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/gamelib/gtime.h"
 
 #include "advvis.h"
-#include "display3d.h"
-#include "hci.h"
 #include "map.h"
 
 // ------------------------------------------------------------------------------------
