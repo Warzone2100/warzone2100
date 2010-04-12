@@ -303,7 +303,7 @@ fi
 
 system_glee=false
 if test "x$host_os_mingw32" != "xyes" ; then
-	PKG_CHECK_MODULES([GLee], [glee >= 5.4.0], [system_glee=true])
+	PKG_CHECK_MODULES([GLee], [glee >= 5.4.0], [system_glee=true], [system_glee=false])
 fi
 AM_CONDITIONAL([SYSTEM_GLEE], [test "x$system_glee" = "xtrue"])
 if test "x$system_glee" = "xfalse" ; then
