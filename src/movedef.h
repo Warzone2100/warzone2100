@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_MOVEDEF_H__
 #define __INCLUDED_MOVEDEF_H__
 
+#include "lib/framework/vector.h"
+
 #ifdef __cplusplus
 extern "C"
 {

@@ -23,8 +23,9 @@
 
 #ifndef WZ_TESTING
 #include "lib/framework/frame.h"
-#include "map.h"
+
 #include "astar.h"
+#include "map.h"
 #endif
 
 /** Counter to implement lazy deletion from nodeArray.
