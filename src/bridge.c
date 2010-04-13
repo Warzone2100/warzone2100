@@ -17,18 +17,15 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
 #include "lib/framework/frame.h"
-#include "map.h"
-#include "hci.h"
-#include "mapdisplay.h"
-#include "display3d.h"
-#include "lib/ivis_common/ivisdef.h" //ivis matrix code
-#include "lib/ivis_common/piedef.h" //pie render
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_common/piepalette.h"
-#include "miscimd.h"
-#include "effects.h"
+
 #include "bridge.h"
+#include "display3d.h"
+#include "effects.h"
+#include "map.h"
 
 /**
  * @file bridge.c
@@ -42,6 +39,9 @@
  * He was right. It did not make the final game. The code below
  * is unused. Can it be reused? - Per, 2007
  */
+
+#define MINIMUM_BRIDGE_SPAN	2
+#define MAXIMUM_BRIDGE_SPAN	12
 
 /*
 Returns true or false as to whether a bridge is valid.
