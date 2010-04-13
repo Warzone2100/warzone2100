@@ -33,12 +33,8 @@ extern "C"
 
 static const unsigned int max_check_object_recursion = 4;
 
-/// Get interpolated position at time t.
-Position interpolatePos(Vector3i p1, Vector3i p2, uint32_t t1, uint32_t t2, uint32_t t);
 /// Get interpolated direction at time t.
 Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint32_t t);
-/// Get interpolated spacetime at time t.
-SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t);
 /// Get interpolated object spacetime at time t.
 SPACETIME interpolateObjectSpacetime(const SIMPLE_OBJECT *obj, uint32_t t);
 

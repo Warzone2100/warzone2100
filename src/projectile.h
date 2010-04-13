@@ -21,11 +21,8 @@
 #ifndef __INCLUDED_SRC_PROJECTILE_H__
 #define __INCLUDED_SRC_PROJECTILE_H__
 
-#include "lib/framework/types.h"
-#include "basedef.h"
-#include "statsdef.h"
-#include "movedef.h"
-#include "lib/gamelib/anim.h"
+#include "projectiledef.h"
+#include "weapondef.h"
 
 #ifdef __cplusplus
 extern "C"
