@@ -23,24 +23,16 @@
  * Stores object render calls in a linked list renders after bucket sorting objects.
  */
 
-/* Includes direct access to matrix code */
-#include "lib/ivis_common/piedef.h"
-#include "lib/framework/fixedpoint.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/rendmode.h"
-#include "lib/ivis_opengl/piematrix.h"
-/* Includes from PUMPKIN stuff */
 #include "lib/framework/frame.h"
-#include "objectdef.h"
-#include "map.h"
-#include "display3d.h"
-#include "miscimd.h"
-#include "effects.h"
-#include "component.h"
-#include "bucket3d.h"
-#include "message.h"
-#include "console.h"
+#include "lib/ivis_opengl/piematrix.h"
+
 #include "atmos.h"
+#include "bucket3d.h"
+#include "component.h"
+#include "display3d.h"
+#include "effects.h"
+#include "map.h"
+#include "miscimd.h"
 
 #define CLIP_LEFT	((SDWORD)0)
 #define CLIP_RIGHT	((SDWORD)pie_GetVideoBufferWidth())
@@ -63,130 +55,12 @@ static BUCKET_TAG *bucketArrayS = NULL;
 static BUCKET_TAG *bucketArrayF = NULL;
 static BUCKET_TAG *bucketArrayEOS = NULL;
 
-/* function prototypes */
-static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject);
-static SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject);
-
 // C version of BUCKET_TAG::operator <().
 static int bucketArray_less_than(const void *av, const void *bv)
 {
 	BUCKET_TAG *a = (BUCKET_TAG *)av;
 	BUCKET_TAG *b = (BUCKET_TAG *)bv;
 	return (a->actualZ < b->actualZ) - (a->actualZ > b->actualZ);  // Sort in reverse z order.
-}
-
-/* add an object to the current render list */
-extern void bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
-{
-	BUCKET_TAG newTag;
-	int32_t    z;
-	bool       useCalculateZ = false;
-
-	switch (objectType)
-	{
-		case RENDER_EFFECT:
-			switch (((EFFECT*)pObject)->group)
-			{
-				case EFFECT_EXPLOSION:
-				case EFFECT_CONSTRUCTION:
-				case EFFECT_SMOKE:
-				case EFFECT_FIREWORK:
-					useCalculateZ = true;
-					break;
-				default: break;
-			}
-			break;
-		case RENDER_SHADOW:
-		case RENDER_PROJECTILE:
-		case RENDER_PROXMSG:
-			useCalculateZ = true;
-			break;
-		default: break;
-	}
-	// NOTE bucketCalculateState calls bucketCalculateZ, don't know why not just use bucketCalculateZ.
-	z = useCalculateZ ? bucketCalculateZ(objectType, pObject) : bucketCalculateState(objectType, pObject);
-
-	if (z < 0)
-	{
-		/* Object will not be render - has been clipped! */
-		if(objectType == RENDER_DROID || objectType == RENDER_STRUCTURE)
-		{
-			/* Won't draw selection boxes */
-			((BASE_OBJECT *)pObject)->sDisplay.frameNumber = 0;
-		}
-
-		return;
-	}
-
-	//put the object data into the tag
-	newTag.objectType = objectType;
-	newTag.pObject = pObject;
-	newTag.actualZ = z;
-
-	//add tag to bucketArray
-	// C version of std::vector<BUCKET_TAG>::push_back().
-	if (bucketArrayF == bucketArrayEOS)
-	{
-		BUCKET_TAG *old = bucketArrayS;
-		size_t reserve = (bucketArrayEOS - old)*2 + 1;
-		bucketArrayS = realloc(old, reserve*sizeof(*old));
-		bucketArrayF = bucketArrayS + (bucketArrayF - old);
-		bucketArrayEOS = bucketArrayS + reserve;
-	}
-	*bucketArrayF++ = newTag;
-}
-
-
-/* render Objects in list */
-extern void bucketRenderCurrentList(void)
-{
-	BUCKET_TAG* thisTag;
-
-	// C version of std::sort().
-	qsort(bucketArrayS, bucketArrayF - bucketArrayS, sizeof(*bucketArrayS), &bucketArray_less_than);
-
-	// C version of for (std::vector<BUCKET_TAG>::iterator thisTag = bucketArray.begin(); thisTag != bucketArray.end(); ++thisTag). C wins!
-	for (thisTag = bucketArrayS; thisTag != bucketArrayF; ++thisTag) // render from back to front
-	{
-		switch(thisTag->objectType)
-		{
-			case RENDER_PARTICLE:
-				renderParticle((ATPART*)thisTag->pObject);
-				break;
-			case RENDER_EFFECT:
-				renderEffect((EFFECT*)thisTag->pObject);
-				break;
-			case RENDER_DROID:
-				renderDroid((DROID*)thisTag->pObject);
-				break;
-			case RENDER_SHADOW:
-				renderShadow((DROID*)thisTag->pObject, getImdFromIndex(MI_SHADOW));
-				break;
-			case RENDER_STRUCTURE:
-				renderStructure((STRUCTURE*)thisTag->pObject);
-				break;
-			case RENDER_FEATURE:
-				renderFeature((FEATURE*)thisTag->pObject);
-				break;
-			case RENDER_PROXMSG:
-				renderProximityMsg((PROXIMITY_DISPLAY*)thisTag->pObject);
-				break;
-			case RENDER_PROJECTILE:
-				renderProjectile((PROJECTILE*)thisTag->pObject);
-				break;
-			case RENDER_ANIMATION:
-				renderAnimComponent((COMPONENT_OBJECT*)thisTag->pObject);
-				break;
-			case RENDER_DELIVPOINT:
-				renderDeliveryPoint((FLAG_POSITION*)thisTag->pObject, false);
-				break;
-		}
-	}
-
-	//reset the bucket array as we go
-	//reset the tag array
-	// C version of bucketArray.clear().
-	bucketArrayF = bucketArrayS;
 }
 
 static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
@@ -594,4 +468,118 @@ static SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject)
 	}
 
 	return z;
+}
+
+/* add an object to the current render list */
+void bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
+{
+	BUCKET_TAG newTag;
+	int32_t    z;
+	bool       useCalculateZ = false;
+
+	switch (objectType)
+	{
+		case RENDER_EFFECT:
+			switch (((EFFECT*)pObject)->group)
+			{
+				case EFFECT_EXPLOSION:
+				case EFFECT_CONSTRUCTION:
+				case EFFECT_SMOKE:
+				case EFFECT_FIREWORK:
+					useCalculateZ = true;
+					break;
+				default: break;
+			}
+			break;
+		case RENDER_SHADOW:
+		case RENDER_PROJECTILE:
+		case RENDER_PROXMSG:
+			useCalculateZ = true;
+			break;
+		default: break;
+	}
+	// NOTE bucketCalculateState calls bucketCalculateZ, don't know why not just use bucketCalculateZ.
+	z = useCalculateZ ? bucketCalculateZ(objectType, pObject) : bucketCalculateState(objectType, pObject);
+
+	if (z < 0)
+	{
+		/* Object will not be render - has been clipped! */
+		if(objectType == RENDER_DROID || objectType == RENDER_STRUCTURE)
+		{
+			/* Won't draw selection boxes */
+			((BASE_OBJECT *)pObject)->sDisplay.frameNumber = 0;
+		}
+
+		return;
+	}
+
+	//put the object data into the tag
+	newTag.objectType = objectType;
+	newTag.pObject = pObject;
+	newTag.actualZ = z;
+
+	//add tag to bucketArray
+	// C version of std::vector<BUCKET_TAG>::push_back().
+	if (bucketArrayF == bucketArrayEOS)
+	{
+		BUCKET_TAG *old = bucketArrayS;
+		size_t reserve = (bucketArrayEOS - old)*2 + 1;
+		bucketArrayS = realloc(old, reserve*sizeof(*old));
+		bucketArrayF = bucketArrayS + (bucketArrayF - old);
+		bucketArrayEOS = bucketArrayS + reserve;
+	}
+	*bucketArrayF++ = newTag;
+}
+
+
+/* render Objects in list */
+void bucketRenderCurrentList(void)
+{
+	BUCKET_TAG* thisTag;
+
+	// C version of std::sort().
+	qsort(bucketArrayS, bucketArrayF - bucketArrayS, sizeof(*bucketArrayS), &bucketArray_less_than);
+
+	// C version of for (std::vector<BUCKET_TAG>::iterator thisTag = bucketArray.begin(); thisTag != bucketArray.end(); ++thisTag). C wins!
+	for (thisTag = bucketArrayS; thisTag != bucketArrayF; ++thisTag) // render from back to front
+	{
+		switch(thisTag->objectType)
+		{
+			case RENDER_PARTICLE:
+				renderParticle((ATPART*)thisTag->pObject);
+				break;
+			case RENDER_EFFECT:
+				renderEffect((EFFECT*)thisTag->pObject);
+				break;
+			case RENDER_DROID:
+				renderDroid((DROID*)thisTag->pObject);
+				break;
+			case RENDER_SHADOW:
+				renderShadow((DROID*)thisTag->pObject, getImdFromIndex(MI_SHADOW));
+				break;
+			case RENDER_STRUCTURE:
+				renderStructure((STRUCTURE*)thisTag->pObject);
+				break;
+			case RENDER_FEATURE:
+				renderFeature((FEATURE*)thisTag->pObject);
+				break;
+			case RENDER_PROXMSG:
+				renderProximityMsg((PROXIMITY_DISPLAY*)thisTag->pObject);
+				break;
+			case RENDER_PROJECTILE:
+				renderProjectile((PROJECTILE*)thisTag->pObject);
+				break;
+			case RENDER_ANIMATION:
+				renderAnimComponent((COMPONENT_OBJECT*)thisTag->pObject);
+				break;
+			case RENDER_DELIVPOINT:
+				renderDeliveryPoint((FLAG_POSITION*)thisTag->pObject, false);
+				break;
+		}
+	}
+
+	//reset the bucket array as we go
+	//reset the tag array
+	// C version of bucketArray.clear().
+	bucketArrayF = bucketArrayS;
 }

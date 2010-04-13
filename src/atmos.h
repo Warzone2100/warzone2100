@@ -21,6 +21,9 @@
 #ifndef __INCLUDED_SRC_ATMOS_H__
 #define __INCLUDED_SRC_ATMOS_H__
 
+#include "lib/framework/vector.h"
+#include "lib/ivis_common/ivisdef.h"
+
 #ifdef __cplusplus
 extern "C"
 {

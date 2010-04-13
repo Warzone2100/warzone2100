@@ -43,10 +43,10 @@ typedef enum _render_type
 //function prototypes
 
 /* add an object to the current render list */
-extern void bucketAddTypeToList(RENDER_TYPE objectType, void *object);
+void bucketAddTypeToList(RENDER_TYPE objectType, void *object);
 
 /* render Objects in list */
-extern void bucketRenderCurrentList(void);
+void bucketRenderCurrentList(void);
 
 #ifdef __cplusplus
 }
