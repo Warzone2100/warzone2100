@@ -1517,7 +1517,6 @@ static signed int NET_CreatePlayer(const char* name)
 			NET_InitPlayer(index, false);	// re-init everything
 			NetPlay.players[index].allocated = true;
 			sstrcpy(NetPlay.players[index].name, name);
-			NETBroadcastPlayerInfo(index);
 			NetPlay.playercount++;
 			sync_counter.joins++;
 			return index;
@@ -3373,7 +3372,11 @@ static void NETallowJoining(void)
 
 					if (onBanList(clientAddress))
 					{
-						debug(LOG_INFO, "A player that you have kicked tried to rejoin the game, and was rejected. IP:%s", clientAddress);
+						char buf[256] = {'\0'};
+
+						ssprintf(buf, "** A player that you have kicked tried to rejoin the game, and was rejected. IP:%s", clientAddress );
+						debug(LOG_INFO, buf);
+						NETlogEntry(buf, SYNC_FLAG, i);
 						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 						socketClose(tmp_socket[i]);
 						tmp_socket[i] = NULL;
@@ -3405,7 +3408,7 @@ static void NETallowJoining(void)
 
 					index = tmp;
 
-					debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
+					debug(LOG_NET, "freeing temp socket %p (%d), creating permanent socket.", tmp_socket[i], __LINE__);
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					NET_initBufferedSocket(connected_bsocket[index], tmp_socket[i]);
 					SocketSet_AddSocket(socket_set, connected_bsocket[index]->socket);
@@ -3434,7 +3437,11 @@ static void NETallowJoining(void)
 
 					if (rejected)
 					{
-						debug(LOG_INFO, "We were rejected, reason (%u)", (unsigned int) rejected);
+						char buf[256] = {'\0'};
+
+						ssprintf(buf, "** This player %u, was rejected, error code: %u",(unsigned int) index, (unsigned int) rejected);
+						debug(LOG_INFO, buf);
+						NETlogEntry(buf, SYNC_FLAG, index);
 						NETbeginEncode(NET_REJECTED, index);
 							NETuint8_t(&rejected);
 						NETend();
@@ -3455,6 +3462,9 @@ static void NETallowJoining(void)
 						snprintf(buf, sizeof(buf), "Player %d has joined, IP is:%s", index, clientAddress);
 						NETlogEntry(buf, SYNC_FLAG, index);
 					}
+
+					// Broadcast to everyone that a new player has joined
+					NETBroadcastPlayerInfo(index);
 
 					NETbeginEncode(NET_ACCEPTED, index);
 					NETuint8_t(&index);
@@ -3935,17 +3945,16 @@ connect_succesfull:
 		}
 		else if (type == NET_REJECTED)
 		{
-			// :(
 			uint8_t rejection = 0;
 
 			NETbeginDecode(NET_REJECTED);
-				// WRY???
 				NETuint8_t(&rejection);
 			NETend();
 
-			debug(LOG_NET, "NET_REJECTED received. Better luck next time?");
+			debug(LOG_NET, "NET_REJECTED received. Error code: %u", (unsigned int) rejection);
 
 			setLobbyError((LOBBY_ERROR_TYPES)rejection);
+			NETclose();
 		}
 	}
 }
