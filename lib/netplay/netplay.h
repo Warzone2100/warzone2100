@@ -200,6 +200,13 @@ typedef struct {
 	uint64_t	unsentPing;
 	uint64_t	sentisMPDirtyBit;
 	uint64_t	unsentisMPDirtyBit;
+	uint16_t	kicks;
+	uint16_t	joins;
+	uint16_t	left;
+	uint16_t	drops;
+	uint16_t	cantjoin;
+	uint16_t	banned;
+	uint16_t	rejected;
 } SYNC_COUNTER;
 
 typedef struct {
@@ -253,6 +260,7 @@ typedef struct
 	BOOL		unused_2;	///< for future usage
 	BOOL		needFile;			///< if We need a file sent to us
 	WZFile		wzFile;				///< for each player, we keep track of map progress
+	char		IPtextAddress[40];	///< IP of this player
 } PLAYER;
 
 // ////////////////////////////////////////////////////////////////////////
