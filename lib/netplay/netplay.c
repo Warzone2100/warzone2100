@@ -73,6 +73,8 @@ static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & 
 static void NETregisterServer(int state);
 static void NETallowJoining(void);
 static void NET_InitPlayer(int i, bool initPosition);
+static bool onBanList(const char *ip);
+static void addToBanList(const char *ip, const char *name);
 
 /*
  * Network globals, these are part of the new network API
@@ -109,7 +111,7 @@ typedef struct
 // Variables
 
 NETPLAY	NetPlay;
-
+PLAYER_IP	*IPlist = NULL;
 static BOOL		allow_joining = false;
 static	bool server_not_there = false;
 static GAMESTRUCT	gamestruct;
@@ -543,6 +545,7 @@ void NETplayerKicked(UDWORD index)
 	// simply means "there wasn't a connection error."
 	debug(LOG_INFO, "Player %u was kicked.", index);
 	sync_counter.kicks++;
+	addToBanList(NetPlay.players[index].IPtextAddress, NetPlay.players[index].name);
 	NETplayerLeaving(index);		// need to close socket for the player that left.
 	NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
 }
@@ -1056,6 +1059,9 @@ int NETshutdown(void)
 	debug( LOG_NET, "NETshutdown" );
 
 	NETstopLogging();
+	if (IPlist)
+		free(IPlist);
+	IPlist = NULL;
 
 	SOCKETshutdown();
 
@@ -2235,6 +2241,16 @@ static void NETallowJoining(void)
 					char GamePassword[password_string_size] = { '\0' };
 					int32_t Hash_Data = 0;				// Not currently used
 
+					if (onBanList(clientAddress))
+					{
+						debug(LOG_INFO, "A player that you have kicked tried to rejoin the game, and was rejected. IP:%s", clientAddress);
+						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
+						socketClose(tmp_socket[i]);
+						tmp_socket[i] = NULL;
+						sync_counter.rejected++;
+						return;
+					}
+
 					NETbeginDecode(NET_JOIN);
 						NETstring(name, sizeof(name));
 						NETint32_t(&MajorVersion);	// NETCODE_VERSION_MAJOR
@@ -2825,4 +2841,53 @@ void NETsetGameserverPort(unsigned int port)
 unsigned int NETgetGameserverPort()
 {
 	return gameserver_port;
+}
+
+/**
+ * Check if ip is on the banned list.
+ * \param ip IP address converted to text
+ */
+static bool onBanList(const char *ip)
+{
+	int i;
+
+	if (!IPlist) return true;		//if no bans are added, then don't check.
+	for(i = 0; i < MAX_BANS ; i++)
+	{
+		if (strcmp(ip, IPlist[i].IPAddress)==0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * Create the banned list.
+ * \param ip IP address in text format
+ * \param name Name of the player we are banning
+ */
+static void addToBanList(const char *ip, const char *name)
+{
+	static int numBans = 0;
+
+	if (!IPlist)
+	{
+		IPlist = malloc(sizeof(PLAYER_IP) * MAX_BANS + 1);
+		if (!IPlist)
+		{
+			debug(LOG_FATAL, "Out of memory!");
+			abort();
+		}
+	}
+	memset(IPlist, 0x0, sizeof(PLAYER_IP) * MAX_BANS);
+	sstrcpy(IPlist[numBans].IPAddress, ip);
+	sstrcpy(IPlist[numBans].pname, name);
+	numBans++;
+	sync_counter.banned++;
+	if (numBans > MAX_BANS)
+	{
+		debug(LOG_INFO, "We have exceeded %d bans, resetting to 0", MAX_BANS);
+		numBans = 0;
+	}
 }

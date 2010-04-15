@@ -129,6 +129,7 @@ typedef enum
 	NET_FILE_PAYLOAD,		//73 sending file to the player that needs it
 	NUM_GAME_PACKETS		//   *MUST* be last.
 } MESSAGE_TYPES;
+#define SYNC_FLAG (NUM_GAME_PACKETS * NUM_GAME_PACKETS)	//special flag used for logging.
 
 // Constants
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
@@ -283,12 +284,19 @@ typedef struct {
 	char* MOTD;
 } NETPLAY;
 
+typedef struct
+{
+	char	pname[40];
+	char	IPAddress[40];
+} PLAYER_IP;
+#define MAX_BANS 255
 // ////////////////////////////////////////////////////////////////////////
 // variables
 
 extern NETPLAY				NetPlay;
 extern NETMSG NetMsg;
 extern SYNC_COUNTER sync_counter;
+extern PLAYER_IP	*IPlist;
 // update flags
 extern bool netPlayersUpdated;
 extern int mapDownloadProgress;

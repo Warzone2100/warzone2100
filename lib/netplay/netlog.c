@@ -179,6 +179,20 @@ BOOL NETstopLogging(void)
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	snprintf(buf, sizeof(buf), "banned: %hhu, cantjoin: %hhu, rejected: %hhu\n", sync_counter.banned, sync_counter.cantjoin, sync_counter.rejected );
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	if (sync_counter.banned && IPlist)
+	{
+		snprintf(buf, sizeof(buf), "Banned list:\n");
+		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+		for (i = 0; i < MAX_BANS; i++)
+		{
+			if (IPlist[i].IPAddress[0] != '\0')
+			{
+				snprintf(buf, sizeof(buf), "player %s, IP: %s\n", IPlist[i].pname, IPlist[i].IPAddress);
+				PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+			}
+		}
+
+	}
 	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
 	snprintf(buf, sizeof(buf), "sent/unsent DroidCheck %"PRIu64" / %"PRIu64"\n", sync_counter.sentDroidCheck, sync_counter.unsentDroidCheck);
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
@@ -249,6 +263,8 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 	if (a < NUM_GAME_PACKETS)
 		// replace common msgs with txt descriptions
 		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, packetname[a], b, asctime(newtime));
+	else if (a == SYNC_FLAG)
+		snprintf(buf, sizeof(buf), "%s \t: %d \t(Sync) \t%s", str, b, asctime(newtime));
 	else
 		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, asctime(newtime));
 
