@@ -223,7 +223,6 @@ BOOL recvBuildFinished()
 			buildingComplete(psStruct);
 		}
 		debug(LOG_SYNC, "Created normal building %u for player %u", psStruct->id, player);
-		NETlogEntry("building finished ok." ,0,0);
 		return true;
 	}
 
@@ -246,7 +245,7 @@ BOOL recvBuildFinished()
 			psStruct->status = SS_BUILT;
 			buildingComplete(psStruct);
 			debug(LOG_SYNC, "Created modified building %u for player %u", psStruct->id, player);
-			NETlogEntry("structure id modified", 0, player);
+			NETlogEntry("structure id modified", SYNC_FLAG, player);
 
 			return true;
 		}
@@ -260,12 +259,12 @@ BOOL recvBuildFinished()
 		psStruct->status	= SS_BUILT;
 		buildingComplete(psStruct);
 		debug(LOG_SYNC, "Forced to create building %u for player %u", psStruct->id, player);
-		NETlogEntry("had to plonk down a building" ,0,player);
+		NETlogEntry("had to plonk down a building" ,SYNC_FLAG, player);
 	}
 	else
 	{
 		debug(LOG_SYNC, "Unable to create building for player %u", player);
-		NETlogEntry("had to plonk down a building, BUT FAILED OH S**T." ,0,player);
+		NETlogEntry("had to plonk down a building, BUT FAILED!" , SYNC_FLAG, player);
 	}
 
 	return false;
