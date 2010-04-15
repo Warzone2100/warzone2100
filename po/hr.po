@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-12 21:03+0200\n"
+"POT-Creation-Date: 2010-04-15 17:08+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Antonio Kukas <tonykukas@gmail.com>\n"
 "Language-Team: \n"
@@ -4734,7 +4734,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:108
 #: data/base/messages/strings/cam3strings.txt:156
 msgid " "
-msgstr "."
+msgstr " "
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
@@ -4822,7 +4822,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
-msgstr ""
+msgstr "Dodatak"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
@@ -6323,9 +6323,8 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:380
 #: data/base/messages/strings/names.txt:909
-#, fuzzy
 msgid "Scrambler Turret"
-msgstr "Prčkaš"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:390
@@ -9468,177 +9467,177 @@ msgstr ""
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1313
 msgid "Cobra Hover Heavy-Repair"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1314
 msgid "Viper HMG Wheels"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1315
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
 #: data/mp/messages/strings/names.txt:1824
 msgid "Scourge Mantis Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1316
 msgid "TK Mantis Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1317
 msgid "Cobra HMG Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1318
 msgid "Cobra Hover HC"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1319
 msgid "Scorpion Lancer Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1320
 msgid "Scorpion Heavy Cannon Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1321
 msgid "Scorpion Lancer VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1322
 msgid "Scorpion BB VTOL"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1323
 msgid "Viper Command Turret Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1324
 msgid "Cobra Command Turret Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1325
 msgid "Scorpion Command Turret Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1326
 msgid "mantis Command Turret Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1327
 msgid "Cobra Lancer Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1328
 msgid "Mantis Heavy Cannon Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1329
 msgid "Mantis Tank Killer Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1330
 msgid "Mantis Scourge Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1331
 msgid "Scorpion Heavy Machinegun Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1332
 msgid "Scorpion Repair Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1333
 msgid "Scorpion Heavy Repair Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1334
 msgid "Cobra Hover Truck"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1335
 msgid "Scorpion Hover Truck"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1336
 msgid "Mantis Hover Truck"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1337
 msgid "Cobra Bunker Buster Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1338
 msgid "Scorpion Bunker Buster Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1339
 msgid "Mantis Bunker Buster Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1340
 msgid "Viper Tracks Lancer"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1341
 msgid "Cobra Half-Tracks Mini-Pod"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1342
 msgid "Cobra Tracks Mini-Pod"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1343
 msgid "Cobra Tracks Mini-Rocket Artillery"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1344
 msgid "Cobra Inferno Half-track"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1345
 msgid "Python HVC Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1346
 msgid "Python Scourge Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1347
 msgid "Python Gauss Cannon Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1348
 msgid "Python Pulse Laser Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1349
 msgid "Tiger Pulse Laser Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1350
 msgid "Tiger Heavy Laser Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1351
 msgid "Wyvern Gauss Cannon Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1352
 msgid "Wyvern Pulse Laser Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1353
 msgid "Wyvern Heavy Laser Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1354
 msgid "Viper Machinegun Half-Track"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1355
 msgid "Viper Flamer Half-Track"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
 #: data/mp/messages/strings/names.txt:1822
@@ -9800,7 +9799,6 @@ msgid "VTOL Lancer Bug VTOL"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1874
-#, fuzzy
 msgid "VTOL HPV Cannon Bug VTOL"
 msgstr "AI unit"
 
@@ -9810,7 +9808,6 @@ msgid "VTOL Lancer Scorpion VTOL"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
-#, fuzzy
 msgid "VTOL HPV Cannon Scorpion VTOL"
 msgstr "AI unit"
 
@@ -9820,7 +9817,6 @@ msgid "VTOL Lancer Mantis VTOL"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
-#, fuzzy
 msgid "VTOL HPV Cannon Mantis VTOL"
 msgstr "AI unit"
 
@@ -9950,7 +9946,6 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Tracks"
 msgstr "AI unit"
 
@@ -9960,7 +9955,6 @@ msgid "Inferno Cobra Half-Tracks"
 msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1920
-#, fuzzy
 msgid "HPV Cannon Python Hover"
 msgstr "AI unit"
 
@@ -10111,15 +10105,13 @@ msgstr "AI unit"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
 #: data/mp/messages/strings/names.txt:1953
-#, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "AI unit"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
 #: data/mp/messages/strings/names.txt:1954
-#, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "AI unit"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
 #: data/mp/messages/strings/names.txt:1955
@@ -10756,23 +10748,23 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:175
 msgid "Repair Turret Viper Half-track"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/strings/names.txt:183
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/strings/names.txt:184
 msgid "Bunker Buster Rockets Viper Wheels"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/strings/names.txt:189
 msgid "Sensor Turret Cobra Half-tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/strings/names.txt:194
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/strings/names.txt:372
 #: data/mp/messages/strings/names.txt:1705
@@ -11028,15 +11020,15 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1439
 msgid "Repair Cobra Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/strings/names.txt:1475
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/strings/names.txt:1514
 msgid "Bunker Buster Cobra Hover"
-msgstr ""
+msgstr "AI unit"
 
 #: data/mp/messages/strings/names.txt:1516
 msgid "Sensor Upgrade Mk2"
@@ -11542,23 +11534,24 @@ msgid "Latin"
 msgstr "Latinski"
 
 #: lib/netplay/netplay.c:1287
-#: lib/netplay/netplay.c:2132
+#: lib/netplay/netplay.c:2131
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3113
+#: lib/netplay/netplay.c:3112
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3138
+#: lib/netplay/netplay.c:3137
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: lib/netplay/netplay.c:3580
+#: lib/netplay/netplay.c:3590
+#, fuzzy
 msgid ", mod: "
-msgstr ""
+msgstr "mod"
 
 #: src/challenge.c:188
 #: src/hci.c:1012
@@ -11575,7 +11568,7 @@ msgstr ""
 #: src/transporter.c:375
 #: src/transporter.c:840
 msgid "Close"
-msgstr ""
+msgstr "Zatvori"
 
 #: src/cheat.c:142
 msgid ": Unknown cheat code."
@@ -11645,7 +11638,7 @@ msgstr ""
 #: src/clparse.c:91
 #: src/clparse.c:92
 msgid "mod"
-msgstr ""
+msgstr "mod"
 
 #: src/clparse.c:91
 msgid "Enable a campaign only mod"
@@ -11713,7 +11706,7 @@ msgstr ""
 
 #: src/clparse.c:106
 msgid "host"
-msgstr ""
+msgstr "host"
 
 #: src/clparse.c:107
 msgid "go directly to host screen"
@@ -12180,7 +12173,7 @@ msgstr ""
 
 #: src/frontend.c:734
 msgid "GRAPHICS OPTIONS"
-msgstr ""
+msgstr "OPCIJE SLIKE"
 
 #: src/frontend.c:865
 #: src/ingameop.c:179
@@ -12199,103 +12192,103 @@ msgstr ""
 
 #: src/frontend.c:880
 msgid "AUDIO OPTIONS"
-msgstr ""
+msgstr "OPCIJE ZVUKA"
 
 #: src/frontend.c:945
 msgid "Graphics Mode*"
-msgstr ""
+msgstr "Grafički način"
 
 #: src/frontend.c:953
 #: src/frontend.c:1002
 msgid "Windowed"
-msgstr ""
+msgstr "U prozoru"
 
 #: src/frontend.c:957
 msgid "Resolution*"
-msgstr ""
+msgstr "Rezolucija*"
 
 #: src/frontend.c:962
 msgid "Texture size"
-msgstr ""
+msgstr "Veličina tekstura*"
 
 #: src/frontend.c:966
 msgid "Vertical sync*"
-msgstr ""
+msgstr "Verikarno osvježivanje*"
 
 #: src/frontend.c:978
 msgid "* Takes effect on game restart"
-msgstr ""
+msgstr "* Radi tek nakon ponovnog pokretanja igre"
 
 #: src/frontend.c:981
 msgid "VIDEO OPTIONS"
-msgstr ""
+msgstr "OPCIJE VIDEA"
 
 #: src/frontend.c:1139
 msgid "Reverse Rotation"
-msgstr ""
+msgstr "Obrni rotaciju"
 
 #: src/frontend.c:1150
 msgid "Trap Cursor"
-msgstr ""
+msgstr "Zarobi Kursor"
 
 #: src/frontend.c:1162
 msgid "Colored Cursors*"
-msgstr ""
+msgstr "Obojeni Kursori*"
 
 #: src/frontend.c:1175
 msgid "Switch Mouse Buttons"
-msgstr ""
+msgstr "Zamjeni Tipke Miša"
 
 #: src/frontend.c:1185
 msgid "* May negatively affect performance"
-msgstr ""
+msgstr "* Može negativno utjecati na performanse"
 
 #: src/frontend.c:1188
 msgid "MOUSE OPTIONS"
-msgstr ""
+msgstr "OPCIJE MIŠA"
 
 #: src/frontend.c:1289
 #: src/frontend.c:1355
 msgid "Difficulty"
-msgstr ""
+msgstr "Težina"
 
 #: src/frontend.c:1293
 #: src/frontend.c:1363
 #: src/frontend.c:1394
 msgid "Easy"
-msgstr ""
+msgstr "Lagano"
 
 #: src/frontend.c:1296
 #: src/frontend.c:1366
 #: src/frontend.c:1386
 msgid "Normal"
-msgstr ""
+msgstr "Srednje"
 
 #: src/frontend.c:1300
 #: src/frontend.c:1369
 #: src/frontend.c:1390
 msgid "Hard"
-msgstr ""
+msgstr "Teško"
 
 #: src/frontend.c:1305
 #: src/frontend.c:1356
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Brzina "
 
 #: src/frontend.c:1319
 #: src/frontend.c:1353
 msgid "Language"
-msgstr ""
+msgstr "Jezik"
 
 #: src/frontend.c:1331
 #: src/frontend.c:1354
 msgid "Unit Colour"
-msgstr ""
+msgstr "Boja"
 
 #: src/frontend.c:1337
 #: src/frontend.c:1357
 msgid "GAME OPTIONS"
-msgstr ""
+msgstr "OPCIJE IGRE"
 
 #: src/frontend.c:1707
 #: src/multiint.c:2239
@@ -12304,7 +12297,7 @@ msgstr ""
 
 #: src/hci.c:1358
 msgid "MAP SAVED!"
-msgstr ""
+msgstr "KARTA SPREMLJENA!"
 
 #: src/hci.c:1705
 #: src/loop.c:536
@@ -12315,114 +12308,114 @@ msgstr "Igra spremljena:"
 
 #: src/hci.c:2112
 msgid "Failed to create building"
-msgstr ""
+msgstr "Nije moguće napraviti građevinu"
 
 #: src/hci.c:2135
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr ""
+msgstr "Igrač %u vara, postavio si je : %s"
 
 #: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr ""
+msgstr "Igrač %u vara, postavio si je : %s"
 
 #: src/hci.c:2171
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr ""
+msgstr "Igrač %u vara, postavio si je : %s"
 
 #: src/hci.c:3737
 msgid "Commanders (F6)"
-msgstr ""
+msgstr "Kapetani (F6)"
 
 #: src/hci.c:3753
 msgid "Intelligence Display (F5)"
-msgstr ""
+msgstr "Viječanje (F5)"
 
 #: src/hci.c:3769
 msgid "Manufacture (F1)"
-msgstr ""
+msgstr "Proizvedi (F1)"
 
 #: src/hci.c:3785
 msgid "Design (F4)"
-msgstr ""
+msgstr "Dizajniraj (F4)"
 
 #: src/hci.c:3801
 msgid "Research (F2)"
-msgstr ""
+msgstr "Istražuj (F2)"
 
 #: src/hci.c:3817
 msgid "Build (F3)"
-msgstr ""
+msgstr "Gradi (F3)"
 
 #: src/hci.c:3897
 #: src/multiint.c:1374
 #: src/multimenu.c:763
 msgid "Power"
-msgstr ""
+msgstr "Resursi"
 
 #: src/hci.c:4081
 msgid "Tile"
-msgstr ""
+msgstr "Kvadratić"
 
 #: src/hci.c:4082
 msgid "Place tiles on map"
-msgstr ""
+msgstr "Postavi teksture na kartu"
 
 #: src/hci.c:4091
 msgid "Unit"
-msgstr ""
+msgstr "Jedinica"
 
 #: src/hci.c:4092
 msgid "Place Unit on map"
-msgstr ""
+msgstr "Postavi jedinice na kartu"
 
 #: src/hci.c:4100
 msgid "Struct"
-msgstr ""
+msgstr "Građevina"
 
 #: src/hci.c:4101
 msgid "Place Structures on map"
-msgstr ""
+msgstr "Postavi građevine na kartu"
 
 #: src/hci.c:4109
 msgid "Feat"
-msgstr ""
+msgstr "Pogodnosti"
 
 #: src/hci.c:4110
 msgid "Place Features on map"
-msgstr ""
+msgstr "Postavi pogodnost na kartu"
 
 #: src/hci.c:4121
 msgid "Pause or unpause the game"
-msgstr ""
+msgstr "Pauziraj igru"
 
 #: src/hci.c:4135
 msgid "Align height of all map objects"
-msgstr ""
+msgstr "Podesi visinu svih objekata na karti"
 
 #: src/hci.c:4160
 #: src/ingameop.c:119
 #: src/ingameop.c:264
 #: src/ingameop.c:269
 msgid "Quit"
-msgstr ""
+msgstr "Izađi"
 
 #: src/hci.c:4161
 msgid "Exit Game"
-msgstr ""
+msgstr "Izađi iz igre"
 
 #: src/hci.c:4524
 #: src/intdisplay.c:212
 #: src/intdisplay.c:255
 #: src/intdisplay.c:306
 msgid "Progress Bar"
-msgstr ""
+msgstr "Procesna trakica"
 
 #: src/hci.c:5558
 msgid "Factory Delivery Point"
-msgstr ""
+msgstr "Dostavna točka Tvornice"
 
 #: src/hci.c:5577
 msgid "Loop Production"
@@ -12629,9 +12622,9 @@ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your c
 msgstr ""
 
 #: src/keybind.c:491
-#, c-format
+#, fuzzy, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
-msgstr ""
+msgstr "Igrač %u vara, postavio si je : %s"
 
 #: src/keybind.c:530
 #: src/keybind.c:560
@@ -12906,7 +12899,7 @@ msgstr "Tipkovničke kratice"
 #: src/multiint.c:1075
 #: src/multiint.c:1460
 msgid "Return To Previous Screen"
-msgstr "Nazadx"
+msgstr "Nazad"
 
 #: src/keyedit.c:374
 msgid "Select Default"
@@ -13621,7 +13614,7 @@ msgstr "Igrači"
 #: src/multiint.c:3575
 #, c-format
 msgid "Sending Map: %d%% "
-msgstr ""
+msgstr "Slanje karte: %d%%"
 
 #: src/multiint.c:3584
 #, c-format
@@ -13645,7 +13638,7 @@ msgstr "%s je izašao iz igre"
 #: src/multijoin.c:228
 #, c-format
 msgid "File transfer has been aborted for %d."
-msgstr ""
+msgstr "Slanje podaaka je zaustavljeno za %d."
 
 #: src/multijoin.c:347
 #, c-format
@@ -13667,7 +13660,7 @@ msgstr "Postavi zadane postavke"
 
 #: src/multilimit.c:316
 msgid "Limits reset to default values"
-msgstr ""
+msgstr "Limiti resetirani na zadane postavke"
 
 #: src/multimenu.c:609
 msgid "Technology level 1"
@@ -14053,6 +14046,9 @@ msgstr " - Kompajlirano %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#~ msgid "Active mods: "
+#~ msgstr "Aktivni modovi:"
 
 #~ msgid "Construction Progress"
 #~ msgstr "Proces gradnje"
