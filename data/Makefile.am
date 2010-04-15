@@ -4,8 +4,8 @@ stamp:
 	touch stamp
 
 %.wz: $(abs_srcdir)/% stamp
-	(cd $(srcdir)/$(notdir $<) && zip -ru0 $(abs_builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' -x '*Makefile*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
-	zip -T $@
+	(cd $(srcdir)/$(notdir $<) && $(ZIP) -ru0 $(abs_builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' -x '*Makefile*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
+	$(ZIP) -T $@
 	rm -f stamp
 
 BASELIST = \
@@ -52,5 +52,5 @@ $(PATCHARCHIVE): $(PATCHLIST:%=$(abs_srcdir)/$(basename $(PATCHARCHIVE))/%)
 nodist_pkgdata_DATA =  $(BASEARCHIVE) $(PATCHARCHIVE)
 
 dist-hook: $(BASEARCHIVE) $(PATCHARCHIVE)
-	unzip -u $(BASEARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(BASEARCHIVE))
-	unzip -u $(PATCHARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(PATCHARCHIVE))
+	$(UNZIP) -u $(BASEARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(BASEARCHIVE))
+	$(UNZIP) -u $(PATCHARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(PATCHARCHIVE))
