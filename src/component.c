@@ -21,43 +21,26 @@
  * @file component.c
  * Draws component objects - oh yes indeed.
 */
-#include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/netplay/netplay.h"
-#include "basedef.h"
-#include "droid.h"
-#include "action.h"
-#include "order.h"
-#include "component.h"
-#include "lib/ivis_common/ivisdef.h" //ivis matrix code
+#include "lib/ivis_common/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/ivis_common/piedef.h" //ivis matrix code
-#include "lib/framework/fixedpoint.h"
-#include "lib/ivis_common/piestate.h" //ivis render code
-#include "lib/ivis_common/piepalette.h"
-#include "lighting.h"
+#include "lib/netplay/netplay.h"
+
+#include "action.h"
+#include "component.h"
+#include "display3d.h"
+#include "e3demo.h"
+#include "effects.h"
+#include "intdisplay.h"
 #include "loop.h"
+#include "map.h"
+#include "miscimd.h"
+#include "order.h"
+#include "projectile.h"
+#include "transporter.h"
 
 #define GetRadius(x) ((x)->sradius)
-
-#include "stats.h"
-#include "lib/ivis_common/piemode.h"
-#include "objects.h"
-#include "display.h"
-#include "geometry.h"
-#include "display3d.h"
-#include "map.h"
-#include "lib/gamelib/gtime.h"
-#include "intdisplay.h"
-#include "miscimd.h"
-#include "effects.h"
-#include "e3demo.h"
-#include "transporter.h"
-#include "projectile.h"
-
-static void unsetMatrix(void);
-static void setMatrix(Vector3i *Position, Vector3i *Rotation, BOOL RotXYZ);
 
 #define BLIP_ANIM_DURATION			200
 #define	DEFAULT_COMPONENT_TRANSLUCENCY	128
@@ -66,15 +49,7 @@ static void setMatrix(Vector3i *Position, Vector3i *Rotation, BOOL RotXYZ);
 //VTOL weapon connector start
 #define VTOL_CONNECTOR_START 5
 
-static void displayCompObj(DROID* psDroid, BOOL bButton);
-static iIMDShape *getLeftPropulsionIMD(DROID *psDroid);
-static iIMDShape *getRightPropulsionIMD(DROID *psDroid);
-static UDWORD getStructureHeight(STRUCTURE *psStructure);
-
 static BOOL		leftFirst;
-extern UDWORD selectedPlayer;
-
-UBYTE		PlayerColour[MAX_PLAYERS] = {0,1,2,3,4,5,6,7};
 
 // Colour Lookups
 // use col = MAX_PLAYERS for anycolour (see multiint.c)
@@ -198,7 +173,7 @@ UDWORD getStructureStatSize(STRUCTURE_STATS *Stats)
 	return (size);
 }
 
-UDWORD getStructureHeight(STRUCTURE *psStructure)
+static UDWORD getStructureHeight(STRUCTURE *psStructure)
 {
 	return (getStructureStatHeight(psStructure->pStructureType));
 }
@@ -506,171 +481,40 @@ void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posit
 
 
 
-// Render a composite droid given a DROID_TEMPLATE structure.
-//
-void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+static iIMDShape *getLeftPropulsionIMD(DROID *psDroid)
 {
-	static DROID Droid;	// Made static to reduce stack usage.
-	SDWORD difference;
+	UDWORD			bodyStat, propStat;
+	iIMDShape		**imd;
 
-	/* init to NULL */
-	memset( &Droid, 0, sizeof(DROID) );
+	bodyStat = psDroid->asBits[COMP_BODY].nStat;
+	propStat = psDroid->asBits[COMP_PROPULSION].nStat;
 
-	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale);
+	imd = asBodyStats[bodyStat].ppIMDList;
+	imd += (propStat * NUM_PROP_SIDES + LEFT_PROP);
 
-// Decide how to sort it.
-
-	difference = Rotation->y%360;
-
-	if((difference>0 && difference <180) || difference<-180)
-	{
-		leftFirst = false;
-	}
-	else
-	{
-		leftFirst = true;
-	}
-
-	droidSetBits(psTemplate,&Droid);
-	Droid.player = (UBYTE)selectedPlayer;
-
-	Droid.pos.x = Droid.pos.y = Droid.pos.z = 0;
-
-	//draw multi component object as a button object
-	displayCompObj(&Droid, true);
-
-
-	unsetMatrix();
+	return *imd;
 }
 
 
-// Render a composite droid given a DROID structure.
-//
-void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+static iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 {
-	SDWORD		difference;
+	UDWORD			bodyStat, propStat;
+	iIMDShape		**imd;
 
-	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale);
+	bodyStat = psDroid->asBits[COMP_BODY].nStat;
+	propStat = psDroid->asBits[COMP_PROPULSION].nStat;
 
-// Decide how to sort it.
-	difference = Rotation->y%360;
+	imd = asBodyStats[bodyStat].ppIMDList;
+	imd += (propStat * NUM_PROP_SIDES + RIGHT_PROP);
 
-	leftFirst = !((difference > 0 && difference < 180) || difference < -180);
-
-// And render the composite object.
-	//draw multi component object as a button object
-	displayCompObj(psDroid, true);
-
-	unsetMatrix();
-}
-
-
-
-/* Assumes matrix context is already set */
-// multiple turrets display removed the pointless mountRotation
-void displayComponentObject(DROID *psDroid)
-{
-	Vector3i	position, rotation;
-	int32_t		xShift,zShift;
-	UDWORD		worldAngle;
-	SDWORD		difference;
-	SDWORD		frame;
-	PROPULSION_STATS	*psPropStats;
-	UDWORD	tileX,tileY;
-	MAPTILE	*psTile;
-	SPACETIME st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psDroid, graphicsTime);
-
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	worldAngle = (UDWORD)(player.r.y / DEG_1) % 360;
-	difference = worldAngle - UNDEG(st.rot.direction);
-
-	leftFirst = !((difference> 0 && difference < 180) || difference < -180);
-
-	/* Push the matrix */
-	pie_MatBegin();
-
-	/* Get internal tile units coordinates */
-	xShift = map_round(player.p.x);
-	zShift = map_round(player.p.z);
-
-	/* Mask out to tile_units resolution */
-	pie_TRANSLATE(xShift,0,-zShift);
-
-	/* Get the real position */
-	position.x = (st.pos.x - player.p.x) - terrainMidX*TILE_UNITS;
-	position.z = terrainMidY*TILE_UNITS - (st.pos.y - player.p.z);
-	position.y = st.pos.z;
-
-	if(psDroid->droidType == DROID_TRANSPORTER)
-	{
-		position.y += bobTransporterHeight();
-	}
-
-	/* Get all the pitch,roll,yaw info */
-	rotation.y = -st.rot.direction;
-	rotation.x = st.rot.pitch;
-	rotation.z = st.rot.roll;
-
-	/* Translate origin */
-	pie_TRANSLATE(position.x,position.y,position.z);
-
-	/* Rotate for droid */
-	pie_MatRotY(rotation.y);
-	pie_MatRotX(rotation.x);
-	pie_MatRotZ(rotation.z);
-
-	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC) && psDroid->lastHitWeapon == WSC_ELECTRONIC)
-	{
-		objectShimmy( (BASE_OBJECT*) psDroid );
-	}
-
-	if (psDroid->lastHitWeapon == WSC_EMP &&
-	    (gameTime - psDroid->timeLastHit < EMP_DISABLE_TIME))
-	{
-		Vector3i position;
-
-		//add an effect on the droid
-		position.x = st.pos.x + DROID_EMP_SPREAD;
-		position.y = st.pos.z + rand()%8;
-		position.z = st.pos.y + DROID_EMP_SPREAD;
-		effectGiveAuxVar(90+rand()%20);
-		addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_PLASMA,false,NULL,0);
-	}
-
-	if ((psDroid->visible[selectedPlayer] == UBYTE_MAX) || demoGetStatus())
-	{
-		//ingame not button object
-		//should render 3 mounted weapons now
-		displayCompObj(psDroid, false);
-	}
-	else
-	{
-
-		// make sure it's not over water.
-		tileX = st.pos.x/TILE_UNITS;
-		tileY = st.pos.y/TILE_UNITS;
-		// double check it's on map
-		if ( tileX < mapWidth && tileY < mapHeight )
-		{
-			psTile = mapTile(tileX,tileY);
-			if (terrainType(psTile) != TER_WATER)
-			{
-				frame = gameTime/BLIP_ANIM_DURATION + psDroid->id; //visible[selectedPlayer];
-				pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2);
-				/* set up all the screen coords stuff - need to REMOVE FROM THIS LOOP */
-			}
-		}
-	}
-	pie_MatEnd();
+	return *imd;
 }
 
 
 /* Assumes matrix context is already set */
 // this is able to handle multiple weapon graphics now
 // removed mountRotation,they get such stuff from psObj directly now
-void displayCompObj(DROID *psDroid, BOOL bButton)
+static void displayCompObj(DROID *psDroid, BOOL bButton)
 {
 	iIMDShape               *psShape, *psJet, *psShapeTemp = NULL, *psMountShape;
 	Vector3i				zero = {0, 0, 0};
@@ -1123,6 +967,167 @@ void displayCompObj(DROID *psDroid, BOOL bButton)
 }
 
 
+// Render a composite droid given a DROID_TEMPLATE structure.
+//
+void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+{
+	static DROID Droid;	// Made static to reduce stack usage.
+	SDWORD difference;
+
+	/* init to NULL */
+	memset( &Droid, 0, sizeof(DROID) );
+
+	setMatrix(Position, Rotation, RotXYZ);
+	pie_MatScale(scale);
+
+// Decide how to sort it.
+
+	difference = Rotation->y%360;
+
+	if((difference>0 && difference <180) || difference<-180)
+	{
+		leftFirst = false;
+	}
+	else
+	{
+		leftFirst = true;
+	}
+
+	droidSetBits(psTemplate,&Droid);
+	Droid.player = (UBYTE)selectedPlayer;
+
+	Droid.pos.x = Droid.pos.y = Droid.pos.z = 0;
+
+	//draw multi component object as a button object
+	displayCompObj(&Droid, true);
+
+
+	unsetMatrix();
+}
+
+
+// Render a composite droid given a DROID structure.
+//
+void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+{
+	SDWORD		difference;
+
+	setMatrix(Position, Rotation, RotXYZ);
+	pie_MatScale(scale);
+
+// Decide how to sort it.
+	difference = Rotation->y%360;
+
+	leftFirst = !((difference > 0 && difference < 180) || difference < -180);
+
+// And render the composite object.
+	//draw multi component object as a button object
+	displayCompObj(psDroid, true);
+
+	unsetMatrix();
+}
+
+
+
+/* Assumes matrix context is already set */
+// multiple turrets display removed the pointless mountRotation
+void displayComponentObject(DROID *psDroid)
+{
+	Vector3i	position, rotation;
+	int32_t		xShift,zShift;
+	UDWORD		worldAngle;
+	SDWORD		difference;
+	SDWORD		frame;
+	PROPULSION_STATS	*psPropStats;
+	UDWORD	tileX,tileY;
+	MAPTILE	*psTile;
+	SPACETIME st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psDroid, graphicsTime);
+
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	worldAngle = (UDWORD)(player.r.y / DEG_1) % 360;
+	difference = worldAngle - UNDEG(st.rot.direction);
+
+	leftFirst = !((difference> 0 && difference < 180) || difference < -180);
+
+	/* Push the matrix */
+	pie_MatBegin();
+
+	/* Get internal tile units coordinates */
+	xShift = map_round(player.p.x);
+	zShift = map_round(player.p.z);
+
+	/* Mask out to tile_units resolution */
+	pie_TRANSLATE(xShift,0,-zShift);
+
+	/* Get the real position */
+	position.x = (st.pos.x - player.p.x) - terrainMidX*TILE_UNITS;
+	position.z = terrainMidY*TILE_UNITS - (st.pos.y - player.p.z);
+	position.y = st.pos.z;
+
+	if(psDroid->droidType == DROID_TRANSPORTER)
+	{
+		position.y += bobTransporterHeight();
+	}
+
+	/* Get all the pitch,roll,yaw info */
+	rotation.y = -st.rot.direction;
+	rotation.x = st.rot.pitch;
+	rotation.z = st.rot.roll;
+
+	/* Translate origin */
+	pie_TRANSLATE(position.x,position.y,position.z);
+
+	/* Rotate for droid */
+	pie_MatRotY(rotation.y);
+	pie_MatRotX(rotation.x);
+	pie_MatRotZ(rotation.z);
+
+	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC) && psDroid->lastHitWeapon == WSC_ELECTRONIC)
+	{
+		objectShimmy( (BASE_OBJECT*) psDroid );
+	}
+
+	if (psDroid->lastHitWeapon == WSC_EMP &&
+	    (gameTime - psDroid->timeLastHit < EMP_DISABLE_TIME))
+	{
+		Vector3i position;
+
+		//add an effect on the droid
+		position.x = st.pos.x + DROID_EMP_SPREAD;
+		position.y = st.pos.z + rand()%8;
+		position.z = st.pos.y + DROID_EMP_SPREAD;
+		effectGiveAuxVar(90+rand()%20);
+		addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_PLASMA,false,NULL,0);
+	}
+
+	if ((psDroid->visible[selectedPlayer] == UBYTE_MAX) || demoGetStatus())
+	{
+		//ingame not button object
+		//should render 3 mounted weapons now
+		displayCompObj(psDroid, false);
+	}
+	else
+	{
+
+		// make sure it's not over water.
+		tileX = st.pos.x/TILE_UNITS;
+		tileY = st.pos.y/TILE_UNITS;
+		// double check it's on map
+		if ( tileX < mapWidth && tileY < mapHeight )
+		{
+			psTile = mapTile(tileX,tileY);
+			if (terrainType(psTile) != TER_WATER)
+			{
+				frame = gameTime/BLIP_ANIM_DURATION + psDroid->id; //visible[selectedPlayer];
+				pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2);
+				/* set up all the screen coords stuff - need to REMOVE FROM THIS LOOP */
+			}
+		}
+	}
+	pie_MatEnd();
+}
+
+
 void destroyFXDroid(DROID	*psDroid)
 {
 	UDWORD	i;
@@ -1253,36 +1258,6 @@ void	compPersonToBits(DROID *psDroid)
 	addEffect(&position,EFFECT_GRAVITON,GRAVITON_TYPE_GIBLET,true,legsImd,col);
 	addEffect(&position,EFFECT_GRAVITON,GRAVITON_TYPE_GIBLET,true,armImd,col);
 	addEffect(&position,EFFECT_GRAVITON,GRAVITON_TYPE_GIBLET,true,bodyImd,col);
-}
-
-
-iIMDShape *getLeftPropulsionIMD(DROID *psDroid)
-{
-	UDWORD			bodyStat, propStat;
-	iIMDShape		**imd;
-
-	bodyStat = psDroid->asBits[COMP_BODY].nStat;
-	propStat = psDroid->asBits[COMP_PROPULSION].nStat;
-
-	imd = asBodyStats[bodyStat].ppIMDList;
-	imd += (propStat * NUM_PROP_SIDES + LEFT_PROP);
-
-	return *imd;
-}
-
-
-iIMDShape *getRightPropulsionIMD(DROID *psDroid)
-{
-	UDWORD			bodyStat, propStat;
-	iIMDShape		**imd;
-
-	bodyStat = psDroid->asBits[COMP_BODY].nStat;
-	propStat = psDroid->asBits[COMP_PROPULSION].nStat;
-
-	imd = asBodyStats[bodyStat].ppIMDList;
-	imd += (propStat * NUM_PROP_SIDES + RIGHT_PROP);
-
-	return *imd;
 }
 
 
