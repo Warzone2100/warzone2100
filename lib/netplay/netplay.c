@@ -2852,7 +2852,7 @@ static bool onBanList(const char *ip)
 {
 	int i;
 
-	if (!IPlist) return true;		//if no bans are added, then don't check.
+	if (!IPlist) return false;		//if no bans are added, then don't check.
 	for(i = 0; i < MAX_BANS ; i++)
 	{
 		if (strcmp(ip, IPlist[i].IPAddress)==0)
