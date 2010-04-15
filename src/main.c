@@ -201,6 +201,7 @@ void removeSubdirs( const char * basedir, const char * subdir, char * checkList[
 	char tmpstr[PATH_MAX];
 	char ** subdirlist = PHYSFS_enumerateFiles( subdir );
 	char ** i = subdirlist;
+
 	while( *i != NULL )
 	{
 #ifdef DEBUG
@@ -212,7 +213,12 @@ void removeSubdirs( const char * basedir, const char * subdir, char * checkList[
 #ifdef DEBUG
 			debug( LOG_NEVER, "removeSubdirs: Removing [%s] from search path", tmpstr );
 #endif // DEBUG
-			PHYSFS_removeFromSearchPath( tmpstr );
+			if (!PHYSFS_removeFromSearchPath( tmpstr ))
+			{
+#ifdef DEBUG	// spams a ton!
+				debug(LOG_NEVER, "Couldn't remove %s from search path because %s", tmpstr, PHYSFS_getLastError());
+#endif // DEBUG
+			}
 		}
 		i++;
 	}
