@@ -37,6 +37,11 @@ AX_PROG_PERL_VERSION([5.10], [], [ PERL="" ])
 AC_SUBST([PERL])
 AM_CONDITIONAL([PERL_AVAILABLE], test -n "$PERL")
 
+AC_CHECK_PROG(ZIP, zip, zip)
+test -z "${ZIP}" && AC_MSG_ERROR(Zip not found!)
+AC_CHECK_PROG(UNZIP, unzip, unzip)
+test -z "${UNZIP}" && AC_MSG_ERROR(Unzip not found!)
+
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
 
