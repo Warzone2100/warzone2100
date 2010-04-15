@@ -152,7 +152,8 @@ void clearPlayer(UDWORD player,BOOL quietly)
 	{
 		psNext = psStruct->psNext;
 
-		if(quietly)		// don't show effects
+		// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
+		if(quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 		{
 			removeStruct(psStruct, true);
 		}
