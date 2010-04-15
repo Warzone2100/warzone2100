@@ -271,6 +271,7 @@ BOOL multiPlayerLoop(void)
 							sprintf(msg, _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
 							sendTextMessage(msg, true);
 							addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+							NETlogEntry(msg, SYNC_FLAG, index);
 
 #ifndef DEBUG
 							kickPlayer(index, "it is not nice to cheat!", ERROR_CHEAT);
