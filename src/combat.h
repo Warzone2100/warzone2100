@@ -24,9 +24,6 @@
 #ifndef __INCLUDED_SRC_COMBAT_H__
 #define __INCLUDED_SRC_COMBAT_H__
 
-#include "lib/framework/frame.h"
-#include "objects.h"
-
 #ifdef __cplusplus
 extern "C"
 {
@@ -49,23 +46,16 @@ extern "C"
 #define ORIGIN_AIRDEF_SENSOR		7	///< Came from Air Defense sensor
 #define ORIGIN_RADAR_DETECTOR		8	///< Came from Radar Detector sensor
 
-/* Initialise the combat system */
-extern BOOL combInitialise(void);
-
-/* Shutdown the combat system */
-extern BOOL combShutdown(void);
-
 /* Fire a weapon at something added int weapon_slot*/
-extern void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot);
+void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot);
 
 /*checks through the target players list of structures and droids to see
 if any support a counter battery sensor*/
-extern void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget);
+void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget);
 
-extern float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD weaponClass,
-                       UDWORD weaponSubClass, HIT_SIDE impactSide);
+float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide);
 
-extern unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE impactSide);
+unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE impactSide);
 
 #ifdef __cplusplus
 }
