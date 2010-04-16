@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-04-12 21:03+0200\n"
-"PO-Revision-Date: 2010-04-10 12:08+0200\n"
+"PO-Revision-Date: 2010-04-16 17:45+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -12313,9 +12313,8 @@ msgstr "SPIELOPTIONEN"
 
 #: src/frontend.c:1707
 #: src/multiint.c:2239
-#, fuzzy
 msgid "Mod: "
-msgstr ", Mods: "
+msgstr "Mod: "
 
 #: src/hci.c:1358
 msgid "MAP SAVED!"
@@ -12489,6 +12488,9 @@ msgid ""
 "\n"
 "Warzone will try to load the game without it."
 msgstr ""
+"Die benötigte Mod konnte nicht geladen werden: %s\n"
+"\n"
+"Warzone wird versuchen das Spiel ohne sie zu laden."
 
 #: src/intdisplay.c:202
 #: src/intdisplay.c:247
