@@ -8,7 +8,7 @@ run
 {
    player          INT                0
 
-// Version 2.2
+// Version 2.3
 // the version of the .vlo files is not related to the one of the .slo files
 //
 //
@@ -132,7 +132,8 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   Half_Track  PROPULSION "HalfTrack"
   Viper       BODY "Body1REC"
   
-	// structures
+	// scavenger structures
+  scavFactory			STRUCTURESTAT		"A0BaBaFactory"
  
  	// generic names, often used.
 	oilRes			    FEATURESTAT		  "OilResource"

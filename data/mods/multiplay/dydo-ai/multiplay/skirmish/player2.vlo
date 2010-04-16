@@ -8,7 +8,7 @@ run
 {
    player          INT                2
 
-// Version 2.2
+// Version 2.3
 // the version of the .vlo files is not related to the one of the .slo files
 //
 //
@@ -132,7 +132,8 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   Half_Track  PROPULSION "HalfTrack"
   Viper       BODY "Body1REC"
   
-	// structures
+	// scavenger structures
+  scavFactory			STRUCTURESTAT		"A0BaBaFactory"
  
  	// generic names, often used.
 	oilRes			    FEATURESTAT		  "OilResource"
@@ -441,7 +442,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	numTmpls	INT		63
   //=================================================================
   //1-Viper
-	tmpl0[62]	TEMPLATE	"ViperMG01Wheels"//
+	tmpl0[62]	TEMPLATE	"ViperMG01Wheels"//Anti personnel
   tmpl0[61]	TEMPLATE	"ViperFlameHalfTracks"  //Anti personnel
 	tmpl0[60]	TEMPLATE	"ViperMG02Halftrack"    //Anti personnel
 	tmpl0[59]	TEMPLATE	"ViperLtCannonHTracks"	//all-rounder 
@@ -459,7 +460,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   tmpl0[49]	TEMPLATE	"CobraInfernoHover" //Anti personnel
 	
 
-  //1-Phyton
+  //1-Phyton  Lancer,TK,Inferno,AssGun,MC,HC
   tmpl0[48]	TEMPLATE	"SK-Python-Hover-Lancer"  //anti-tank 
 	tmpl0[47]	TEMPLATE	"PythonTKTracks"			    //anti-tank 
   tmpl0[46]	TEMPLATE	"PythonHoverInferno"      //Anti personnel
@@ -478,7 +479,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   tmpl0[38]	TEMPLATE	"ScorpHTrackHMG"	        //Anti personnel     
   tmpl0[37]	TEMPLATE	"SK-Scorp-Hover-Mcannon"	//all-rounder
 
-	//2-Mantis {R-Vehicle-Body12}
+	//2-Mantis {R-Vehicle-Body12} AC,HC,HVC
 	tmpl0[36]	TEMPLATE	"MantisHoverAC"           //all-rounder
 	tmpl0[35]	TEMPLATE	"SK-Mantis-Hover-Hcannon" //all-rounder
 	tmpl0[34]	TEMPLATE	"SK-Mantis-Hover-HVC"     //all-rounder
@@ -519,7 +520,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	tmpl0[13]	TEMPLATE	"SK-Retre-Hover-RailGun"  //all-rounder
 	tmpl0[12]	TEMPLATE	"SK-Retre-Track-RailGun"  //all-rounder
 	
-  //4-R-Wpn-Cannon-Damage07 
+  //4-Vengeance {Body10MBT}
   tmpl0[11]	TEMPLATE	"SK-Veng-Hover-Scourge"   //anti-tank
 	tmpl0[10]	TEMPLATE	"SK-Veng-Track-Scourge"  //anti-tank
 	tmpl0[9]	TEMPLATE	"SK-Veng-Hover-PulseLsr"  //Anti personnel
@@ -716,7 +717,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   research[1][14]	RESEARCHSTAT		"R-Defense-WallUpgrade06" // 135/170/205/240/275/(305)/340* /375/405/440/475/510
 
 	//Weapon Upgrades
-  research[1][15]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //(125)/150/175 %
+  research[1][15]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //(125)/150/175/200/225/250/275/300/325 %
   research[1][16]	RESEARCHSTAT		"R-Wpn-Energy-Damage01"	 //(125)/150/175 %
   research[1][17]	RESEARCHSTAT		"R-Wpn-Energy-ROF01"	   //(118)/143/182 %
 
@@ -1523,7 +1524,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   general4[1][12]	RESEARCHSTAT		"R-Defense-WallUpgrade06" // 135/170/205/240/275/(305)/340* /375/405/440/475/510
 
 	//Weapon Upgrades
-  general4[1][13]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //(125)/150/175 %
+  general4[1][13]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //(125)/150/175/200/225/250/275/300/325 %
   general4[1][14]	RESEARCHSTAT		"R-Wpn-Energy-Damage01"	 //(125)/150/175 %
   general4[1][15]	RESEARCHSTAT		"R-Wpn-Energy-ROF01"	   //(118)/143/182 %
 

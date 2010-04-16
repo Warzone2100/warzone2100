@@ -1,5 +1,5 @@
 /*
-DyDo-AI Rel 2.1
+DyDo-AI Rel 2.1.1
 Mod Developer: "DylanDog" on http://forums.wz2100.net/
 AI webpage: http://www.obooma.net/dydo/       
                                                                 
@@ -10,32 +10,28 @@ For changelog, bug reporting and downloads see DyDo-AI homepage:
 http://www.obooma.net/dydo/
 #################################################################
 
-
+{bug fix}     - Fixed a crashing bug (#1765), sometimes -1 was passed to pickDefQueue[_nDef]
+{feature fix} - Fixed a bug on micro droid management, when selecting best target for 
+            a droid, only tanks were taken into account.
+{change} - On droid micro management, now flamers attacks hover first, 
+            then cyborgs then other type of tanks.
+{change} - DyDo should now never build light tanks if heavy tanks are available. 
+{change} - DyDo do not build VTOL factories if heavy bodies are available and 
+           factories are not upgraded with 2 modules or if factories are 
+           not upgraded with at least one module.  
+{change} - DyDo starts upgrading factories earlier on T2 and T3 games .
+{change} - DyDo is now able to get coord for scavenger base (to be improved).
+{change} - When attacking with more then 6 VTOLs DyDo splits them in groups of three
+            droids each and select other structure targets near the main one (if any!).
+{change} - Improvement on droid micro management: droids should not attack walls
+            anymore for more then few secs but should attack enemy droids and 
+            enemy defend structures in their range or "move" to the target coord
 ________________ CHANGELOG ___________________________________
 
-See Dydo website
 
-{fix} - The pointers to the array for building the wanted numbers of structures were inverted between research labs and cyborg factories
-{fix} - Sometimes light bodies tanks were built even if heavy bodies were available, this should not be the case.
-{new} - You can set the AI strenght to 5 (max) via the console with "/set level 5"
-{new} - DyDo comes with few "challenges" concerning maps where DyDo plays well. 
-{change} - Improved a lot research pursuing, random research have been reduced to minimum. 
-{change} - DyDo to attack groups of AA structs which are not in the enemy base
-{change} - When defending the base VTOL attacks in groups by 3
-{change} - DyDo builds more defences around derricks after 30 minutes of game, Turtle AI builds even more. 
-{change} - VTOL should not attack enemy targets (AA & derricks) anymore if to reach them they have to fly over the enemy base;
-{change} - Optimized building of AA def, in particular for Turtle AI;
-{change} - Optimized building of Tanks, more type of tanks are built;
-{change} - Changed % probability values used to choose the type on tank template to be built:
-          before was AR=40% AT=30% AP=30% now is AR=30% AT=35% AP=35%
-{change} - If last enemy left is human player (NO enemies AI), DyDo checks the type of droids built by human player and consequently
-          adopt the building of its droids by choosing the best weapon to face enemy droids.
-          Example: If the human player builds mainly cyborgs then DyDo builds mainly (not only!) droids with AP weapons  
-{change} - If last enemy left is human player (NO enemies AI), DyDo checks the numbers of enemies VTOL and stops the building of AA defences
-          if the human player has few VTOLs and enough AA are already built
 
 */
-#define DYDOBP_RELEASE "DyDo-AI ver 2.1"
+#define DYDOBP_RELEASE "DyDo-AI ver 2.1.1"
 
 #define	GAME_TIME_IN_SECS	(gameTime / 10)
 #define	GAME_TIME_IN_MIN	(gameTime / 10 / 60)
@@ -84,7 +80,8 @@ See Dydo website
 #define WUI_HP 2
 
 #define DROIDTYPE_CYBORG 0
-#define DROIDTYPE_TANK 0
+#define DROIDTYPE_TANK 1
+#define DROIDTYPE_HOVER 2
 
 //used with aPl[][]
 #define X_COORD 0
@@ -250,7 +247,7 @@ public INT numMaxDerricks;   // rate of exploration
 public INT baseX,baseY,minx,miny,maxx,maxy,defSpotX,defSpotY;
 public INT numStructs,numAA,numIncendrys, numFortressDef,numWallWeaps,numTmpls, numSuperCyb, numSense, numGenAA;
 public STRUCTURESTAT wall,incendrys[8],structs[51],defStructs[20],structChoice[30],fortressDef[4],wallWeaps[20],vtolDefStruct[10],sense[3],vtolGenStruct[10];
-public STRUCTURESTAT sensorTower,resLab,powGen,playerHQ,demAnomallyFix,lassat,factory,derrick,cybFactory,vtolPad,vtolFactory,repairFacility, uplinkCenter,CBSense;
+public STRUCTURESTAT sensorTower,resLab,powGen,playerHQ,demAnomallyFix,lassat,scavFactory,factory,derrick,cybFactory,vtolPad,vtolFactory,repairFacility, uplinkCenter,CBSense;
 public STRUCTURESTAT HMGhardPoint,MGbunker,miniRocketTower,LancerTower, powModule,facModule,resModule;
 public STRUCTURESTAT defMortar,defBombard, defPepperpot,defRippleRockets;
 public RESEARCHSTAT WhirlwindAASite,CycloneAASite,HurricaneAASite;
@@ -340,15 +337,15 @@ private STRUCTURE _derrick,_struct;
 
 private bool bPowerNormalized,bAttackedHumanDerrick,debugCenterView, bAttackedByMortars;
 private bool bAttackedByLongRangeWeap,sentToGateway,isBackinBase;
-private bool alertIsOn;
-private bool bCybAttIsOn,lCybSentToGatheringPoint,bCybAlreadyGathered;
-private bool bOilResLeft,lStopVTOLProduction,lStopVTOLFactBuilding,lStopResLabUpgrade;
+private bool bFactUpgraded1Module,bFactUpgraded2Modules,alertIsOn;
+private bool bDyDoHasHeavyBody,bCybAttIsOn,lCybSentToGatheringPoint,bCybAlreadyGathered;
+private bool bScoutOrder,bOilResLeft,lStopVTOLProduction,lStopVTOLFactBuilding,lStopResLabUpgrade;
 private bool lMinBaseStructBuilt,lStopBuildingStructures,lStopBuildRepFacility,lStopCybEngProd;
 private bool lStopBuildTankProd,lStopTankProduction, lStopCybProduction, lStopResearch;
 private bool lStopCheapResearch, lStopFactUpgrade, lStopBuildDefDerricks,lStopBuildDefGateway;
 private bool lStopBuildDef,lStopFactUpgrade2,bVTOLTargetIsDerrick,_bVTOLTarget;
-private bool _mustBeHuman,lTankSentToGatheringPoint, bTankAttIsOn, bTankAlreadyGathered;
 private bool bIsEnemyHumanOnly,bForceResPowUp,bFinalAttack_1vs1,bAttackTeamAttacked,bAAgroupsAttacked;
+private bool _mustBeHuman,lTankSentToGatheringPoint, bTankAttIsOn, bTankAlreadyGathered;
 private bool _bNoTrucks,bNeedDerrick,bDroidSelected,bAttackedByVTOL;
 
 
@@ -429,18 +426,18 @@ trigger defFromLongRangeWeapTr(wait,1);
 trigger difficultyModifierTr  (wait,3);
 trigger shutDownAITr          (every,4);
 
+trigger AIbrainTr             (every,10);
 trigger AIcheckTr             (every,10);
 trigger buildPowerGeneratorsTr(every,10);
 trigger buildRepFirstTr       (every,10);
 trigger harvesterOperateTr    (every,10);
-trigger AIbrainTr             (every,10);
+trigger upgradeStructuresTr   (every,10);
 
 trigger manageIdleTrucksTr    (every,15);
 
 trigger manageDefCyborgsTr    (every,20);
 trigger manageDefTankTr       (every,20);
 trigger unitRepairSwitchTr    (every,20);
-trigger upgradeStructuresTr   (every,20);
 trigger defendGatewaysPointTr (every,20);
 trigger buildRippleRocketsTr  (every,20);
 
@@ -577,6 +574,7 @@ event VTOLhunter;
 event buildArtillery;
 event buildRippleRockets;
 
+#endregion triggers
 
 //+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*
 //+*+*+*+*+*+*+*+*+*+*+*+ DylanDog - FUNCTION DECLARATION *+*+*+*+*+*+*++*+*+*
@@ -729,8 +727,10 @@ function bool isAntiTank(DROID _droid);
 function BASEOBJ getAAgroups(bool _mustBeHuman);
 function int mapSize();
 function void setTankGatheringPoint(int _fromX,int _fromY,int _targetX,int _targetY);
-
-
+function bool isScavenger( int _player );
+function bool isFlamer(DROID _droid);
+function void vtolAttack(BASEOBJ oTarget);
+function STRUCTURE getEnemyDefStruct(GROUP _group,int _range);
 //+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*
 //+*+*+*+*+*+*+*+*+*+*+*+ MAIN SCRIPT *+*+*+*+*+*+*++*+*+*+*+*+*+*+*+*+*+*+*
 //+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*
@@ -767,6 +767,10 @@ event initialisedEvent(CALL_GAMEINIT)
       aGatewayPosY[count]       = -1;
       count++;
     }
+    bScoutOrder = true;
+    bFactUpgraded2Modules = false;
+    bFactUpgraded1Module = false;
+    bDyDoHasHeavyBody = false;
     bIsEnemyHumanOnly = false;
     nAI_Pers = 0;
     nTotCyborgBuilt = 0;
@@ -904,7 +908,7 @@ event initialisedEvent(CALL_GAMEINIT)
 		nArtilleryPos = 0;
 		nAPTankBuilt = 0;
 		nAPCyborgBuilt = 0;
-		    
+        
     num_aDroid = 50;
     count = 0;
     while ( count < num_aDroid ){
@@ -1045,6 +1049,8 @@ event initialisedEvent(CALL_GAMEINIT)
    }
    eventCheckTrigger[0] = 3050;//lassat
 
+   printDebug1( DYDOBP_RELEASE & ", starting power: (" & playerPower(player) & ") map("& mapWidth &"-"& mapHeight &") mapSize:"& mapSize() &" scavengers("& scavengersActive() &") " );
+
  	 if( aiResponsibleForPlayer(player) )
    {
   		bRunning = true;
@@ -1053,8 +1059,6 @@ event initialisedEvent(CALL_GAMEINIT)
       shutDownThisAI();
    }
   
-   printDebug1( DYDOBP_RELEASE & ", starting power: (" & playerPower(player) & ") map("& mapWidth &"-"& mapHeight &") mapSize:"& mapSize() );
-   displayMsg( DYDOBP_RELEASE & ", www.obooma.net/dydo/");
 
 }
 //=============================================
@@ -1684,8 +1688,14 @@ event AIbrain (inactive)
   if ( defSpotX <= 0 )
   {lStopBuildDef = true;} 
 
+  //stop VTOL building if fact upgrade is not completed
+  if ( !bFactUpgraded2Modules and bDyDoHasHeavyBody or !bFactUpgraded1Module){
+   lStopVTOLFactBuilding = true;
+   lStopBuildDef = true;
+  }
+
   //have been attacked and have no troups remaining
-  if ( gameTime > 12*TIME_MINUTE and (nTotCyborgs+nTotTanks) < MIN_TOT_UNITS )//==============================
+  if (  gameTime > 12*TIME_MINUTE and (nTotCyborgs+nTotTanks) < MIN_TOT_UNITS )//==============================
   {	
 
     //force droids production
@@ -1721,7 +1731,7 @@ event AIbrain (inactive)
   	  lStopVTOLFactBuilding    = true;
 	  }
 
-  } else { // ======================= ACTIVATE EVENTS =========================
+  } else { // ================================================
     
     //activate more tanks and cyb engineers if AA def are required
     if ( !lMinBaseStructBuilt ){
@@ -1753,7 +1763,7 @@ event AIbrain (inactive)
     if ( lMinBaseStructBuilt ) {
       if ( researchFinished(cobraBody, player) or researchFinished(hoverPropulsion, player) or researchFinished(scorpionBody, player) )
       { lStopFactUpgrade    = false; }
-      if ( researchFinished(trackPropulsion, player) or researchFinished(phytonBody, player) or researchFinished(mantisBody, player) )
+      if ( bDyDoHasHeavyBody )
       { lStopFactUpgrade2    = false; }
       if ( nPower > aPower[VERY_LOW_POWER] ){
         lStopFactUpgrade  = false; 
@@ -1838,6 +1848,40 @@ event AIbrain (inactive)
       if ( nTotTanks+nTotCyborgs > 16 ){
         if ( nWorkingLab < 2 ){lStopResearch = false; }
       }
+    }  //end if (nPower > 100 )
+
+    //power superiority check in 1vs1 games
+    bForceResPowUp = false;
+    if ( nEnemyPlayers == 1 and gameTime > 15*TIME_MINUTE ){
+      if ( getPowerIndex( nLastEnemyPlayer ) >= getPowerIndex( player )  ){ //human player has more or higher power index
+        if ( nMyDerricks >= getNumDerricks(nLastEnemyPlayer) ){ //derricks are fine
+          bForceResPowUp = true;//force research of power
+          lStopResearch  = false;
+        }
+      }
+    }
+    
+    //checking power in all type of games
+    _player=0;
+    while( _player < MAX_PLAYERS and gameTime > 15*TIME_MINUTE ){
+      if (isPlayerStillLive(_player)){
+        if ( getPowerIndex( _player ) > getPowerIndex( player ) ){ //human player has higher power index
+          if ( nMyDerricks >= getNumDerricks(_player) ){ //derricks are fine
+            bForceResPowUp  = true;//force research of power
+            lStopResearch   = false;
+          }
+        }
+      }
+      _player++;
+    }
+  
+  
+    //AA def 
+    numAAinBase = numAAinRange(player, player, baseX, baseY, nBaseRange );
+    if ( numAAinBase < 5  and bAttackedByVTOL ) { 
+      lStopBuildDef 	       = true; 
+      lStopBuildDefDerricks  = true;
+      lStopBuildDefGateway   = true;
     }
 
  }//- - - - - - - -  - -  activate evends END
@@ -1863,48 +1907,9 @@ event AIbrain (inactive)
   } else {
     nDamageLevelRepair = DAMAGE_REPAIR_LEVEL;
   }
-
-
-  //power superiority check in 1vs1 games
-  bForceResPowUp = false;
-  if ( nEnemyPlayers == 1 and gameTime > 15*TIME_MINUTE ){
-    if ( getPowerIndex( nLastEnemyPlayer ) >= getPowerIndex( player )  ){ //human player has more or higher power index
-      if ( nMyDerricks >= getNumDerricks(nLastEnemyPlayer) ){ //derricks are fine
-        bForceResPowUp = true;//force research of power
-        lStopResearch  = false;
-      }
-    }
-  }
-  
-  //checking power in all type of games
-  _player=0;
-  while( _player < MAX_PLAYERS and gameTime > 15*TIME_MINUTE ){
-    if (isPlayerStillLive(_player)){
-      if ( getPowerIndex( _player ) > getPowerIndex( player ) ){ //human player has higher power index
-        if ( nMyDerricks >= getNumDerricks(_player) ){ //derricks are fine
-          bForceResPowUp  = true;//force research of power
-          lStopResearch   = false;
-        }
-      }
-    }
-    _player++;
-  }
-
-
-  //AA def 
-  numAAinBase = numAAinRange(player, player, baseX, baseY, nBaseRange );
-  if ( numAAinBase < 5  and bAttackedByVTOL ) { 
-    lStopBuildDef 	       = true; 
-    lStopBuildDefDerricks  = true;
-    lStopBuildDefGateway   = true;
-  }
-
   
   if ( gameTime - lastDisplayAI >= 30 ){
-     //displayMsg("AIbrain: lMinBaseStructBuilt("& lMinBaseStructBuilt &") lStopBuildingStructures("& lStopBuildingStructures &") lStopFactUpgrade2("& lStopFactUpgrade2 &") ");
-     //displayMsg("AIbrain: "& researchFinished(trackPropulsion, player) &" "& researchFinished(phytonBody, player) &" "& researchFinished(mantisBody, player) );
-     //displayMsg("AIbrain: CYB("& structsBuildLimits[nAI_Pers][STR_CYB_FACTORY] &") RES("& structsBuildLimits[nAI_Pers][STR_RESLAB] &") TK("& structsBuildLimits[nAI_Pers][STR_TANK_FACTORY] &") VTOL("& structsBuildLimits[nAI_Pers][STR_VTOL_FACTORY] &")" );
-    lastDisplayAI = gameTime;
+     lastDisplayAI = gameTime;
   } 
 
   tAIbrain = gameTime;
@@ -2051,6 +2056,9 @@ event buildAAdef(inactive)
   eventCheckTime[27] = gameTime;
 
   if (!researchFinished(HurricaneAASite,player)){ exit; }
+  if ( !bFactUpgraded2Modules and bDyDoHasHeavyBody or !bFactUpgraded1Module){
+    exit;
+  }
   
   //dbg("buildAAdef: __________ ("& lMinBaseStructBuilt &")("& numAAinBase &") attbyVTOL("& bAttackedByVTOL &") time ("& gameTime - tLastAAbuilt&") < 300",player);
 
@@ -2122,7 +2130,7 @@ event buildAAdef(inactive)
     boolResult = pickStructLocation(vtolGenStruct[count2], ref buildX, ref buildY,player);
     if(boolResult and droidCanReach(droid, buildX ,buildY) )	// build a vtol defense near the attacked struct...
     {
-      dbg("buildAAdef: droid ("& droid.id &")build AA def ["& count2 &"] at ("& buildX/TILE &"-"& buildY/TILE &") numAAinBase("& numAAinBase &")",player);
+      //dbg("buildAAdef: droid ("& droid.id &")build AA def ["& count2 &"] at ("& buildX/TILE &"-"& buildY/TILE &") numAAinBase("& numAAinBase &")",player);
       printDebug1("buildAAdef; droid ("& droid.id &")build AA def ["& count2 &"] at ("& buildX/TILE &"-"& buildY/TILE &") numAAinBase("& numAAinBase &")");
       orderDroidStatsLoc(droid, DORDER_BUILD,vtolGenStruct[count2],buildX,buildY);
       tLastAAbuilt = gameTime;
@@ -2224,7 +2232,8 @@ event vtolStructs(inactive)
 		buildRearmPads();
 	}
 
-	if( lStopVTOLFactBuilding  ){
+	/*
+  if( lStopVTOLFactBuilding  ){
 	 exit;
   }
 
@@ -2250,6 +2259,8 @@ event vtolStructs(inactive)
 			} //else { displayMsg("vtolStructs: cannot find an idle buildTruck"); }
 		} //else { displayMsg("#### vtolStructs: CANNOT PICK UP VTOL FACTORY LOCATION "); }
 	} //else { displayMsg("vtolStructs: MAX VTOL FACT REACHED "); }	
+  */
+
 }
 
 // ------------- build VTOL droids --------------------
@@ -2300,12 +2311,15 @@ event manageDefVTOL(inactive)
   local string _dbgString;
       
   ASSERT(player >= 0 and player < 8,      "player out of bounds: manageDefVTOL " & player, player);
-  
+
   if ( attTargetVTOL != NULLOBJECT ){          
     _dist = distBetweenTwoPoints( attTargetVTOL.x, attTargetVTOL.y, baseX, baseY);
   }
   if ( defTargetVTOL != NULLOBJECT ){          
     _dist = distBetweenTwoPoints( defTargetVTOL.x, defTargetVTOL.y, baseX, baseY);
+    if ( _dist > nDefendRange ){
+      defTargetVTOL = NULLOBJECT;
+    }
   }
   
   if (vtolDefendGr.members == 0){ 
@@ -2325,7 +2339,7 @@ event manageDefVTOL(inactive)
   
   if (alertIsOn){ 
     attTargetVTOL = NULLOBJECT;
-    if ( idleGroup(vtolDefendGr) == 0 ){
+    if ( idleGroup(vtolDefendGr)*2 < vtolDefendGr.members ){
       exit;//allow VTOLS to stay on rearming pads
     }
   } else {
@@ -2484,9 +2498,9 @@ event manageDefVTOL(inactive)
           exit;
         } 
   
-        //re-attacking the enemy base
+        //(re-)attacking the enemy target
         if (  (float)idleGroup(vtolDefendGr)  >= (float)(vtolDefendGr.members)*0.8  ){        
-          orderGroupObj( vtolDefendGr, DORDER_ATTACK, attTargetVTOL );
+          vtolAttack( attTargetVTOL );
           tDefVtolAction = gameTime;
         }
               
@@ -2495,7 +2509,7 @@ event manageDefVTOL(inactive)
         //defending the base in defend range, do not check the numbers of VTOLs
         if (!friendlyPlayer(attTargetVTOL.player)){//due to NEXUS!!!
           if ( (float)idleGroup(vtolDefendGr)  >= (float)(vtolDefendGr.members)*0.8  ){        
-            orderGroupObj( vtolDefendGr, DORDER_ATTACK, attTargetVTOL );
+            vtolAttack( attTargetVTOL );
             tDefVtolAction = gameTime;
           }
         }
@@ -2505,7 +2519,7 @@ event manageDefVTOL(inactive)
   }//enderlse alertIsOn
 }
 
-//===========================  END VTOL STUFF ========================================
+//===================================================================
 event buildBase(inactive) //event 8
 {
   local int _f,_r,_c,_v,_h,_l;
@@ -2652,6 +2666,10 @@ event buildBase(inactive) //event 8
 
     //all base structs have been built!
     if ( nStructToBeBuilt == 4 or (nStructToBeBuilt == STR_VTOL_FACTORY and !isStructureAvailable(vtolFactory,player)) ){ 
+      nStructToBeBuilt = STR_TANK_FACTORY; 
+      exit; 
+    }
+    if ( nStructToBeBuilt == STR_VTOL_FACTORY and lStopVTOLFactBuilding ){ 
       nStructToBeBuilt = STR_TANK_FACTORY; 
       exit; 
     }
@@ -3149,6 +3167,7 @@ event TankAttack(inactive)
   local int _distFromObj;
   
   ASSERT(player >= 0 and player < 8,      "player out of bounds: TankAttack " & player, player);
+  
        
   //do a preliminary check
   if ( (tankGroup.members < MIN_SURVIVOR_TANKS and !bAttackedHumanDerrick) or tankGroup.members==0 ){
@@ -3158,9 +3177,15 @@ event TankAttack(inactive)
      deactivateTankAttack();
      exit;//this is necessary otherwise the event proceeeds!        
   }
-  
-   //dbg("dbg->TankAttack : tank ("& tankGroup.members &") bTankAlreadyGathered("& bTankAlreadyGathered &") targ("& targetPlayerTank &") x-Y("& tankAttackX/TILE &")("& tankAttackY/TILE &") ",player);
-  
+ 
+   
+  if ( gameTime - tProd1 > 150 and bTankAlreadyGathered ){
+   dbg("dbg->TankAttack : gathering tanks",player);
+   tProd1 = gameTime;
+   orderGroupLoc(tankGroup, DORDER_MOVE, tankGroup.x, tankGroup.y);
+   exit;
+  }
+
   //get target for the first attack, further targets are chosen below   
   if ( attackTankObj == NULLOBJECT and !bTankAlreadyGathered ){     
     attackTankObj = getTargetObj();
@@ -3192,7 +3217,8 @@ event TankAttack(inactive)
         targetPlayerVTOL  = targetPlayerTank;
         tankAttackX       = attackTankObj.x;
         tankAttackY       = attackTankObj.y;          
-        orderGroupScoutCMD(tankGroup, tankAttackX, tankAttackY);
+        droidMicroManager(tankGroup, 12*TILE, tankAttackX, tankAttackY );
+        //orderGroupScoutCMD(tankGroup, tankAttackX, tankAttackY);
       } else {
         //dbg("dbg->TankAttack: deactivate attack",player);
         groupAddGroup(tankDefGroup , tankGroup);
@@ -3254,20 +3280,10 @@ event TankAttack(inactive)
     
     } else {//bTankAlreadyGathered == TRUE
     
-      //check if target has been destroyed
-      if ( structInRange(targetPlayerTank, tankAttackX, tankAttackY, 2*TILE ) or droidInRange(targetPlayerTank, tankAttackX, tankAttackY, 2*TILE )  ){
-        if ( gameTime - tTankAttackAction > 100 ){
-          //dbg("dbg->TankAttack: attacking again tankAttackX("& tankAttackX/TILE &")-("& tankAttackY/TILE &")",player);
-          count = distBetweenTwoPoints(tankGroup.x,tankGroup.y,tankAttackX,tankAttackY);
-          //if ( count > 8*TILE  ){
-            //dbg("TankAttack: orderGroupScoutCMD dist from alert: ("& count/TILE &") ",player);
-            //orderGroupScoutCMD(tankGroup, tankAttackX, tankAttackY);
-          //} else {
-            //dbg("TankAttack: droidMicroManager called dist from target: ("& count/TILE &") grp coord ("& tankGroup.x/TILE &"-"& tankGroup.y/TILE &") att coord("& tankAttackX/TILE &"-"& tankAttackY/TILE &") ",player);
-            droidMicroManager(tankGroup, 12*TILE, tankAttackX, tankAttackY );
-          //}
-          tTankAttackAction = gameTime;
-        }
+      if ( gameTime - tTankAttackAction > 50 ){
+        count = distBetweenTwoPoints(tankGroup.x,tankGroup.y,tankAttackX,tankAttackY);
+        droidMicroManager(tankGroup, 12*TILE, tankAttackX, tankAttackY );
+        tTankAttackAction = gameTime;
       }
     
     }
@@ -3279,7 +3295,7 @@ event CyborgAttack(inactive)//Original event ID: xx (of 106)
   local int _distFromObj;
   
   ASSERT(player >= 0 and player < 8,      "player out of bounds: CyborgAttack " & player, player);
-  //dbg("dbg->CyborgAttack: '"& getPlayerName(player) &"' cyborgs ("& cyborgAttGroup.members &") CALLED bCybAlreadyGathered("& bCybAlreadyGathered &") targ("& targetPlayerCyb &") x-Y("& cybAttackX &")("& cybAttackY &")",player);
+  dbg("dbg->CyborgAttack: '"& getPlayerName(player) &"' cyborgs ("& cyborgAttGroup.members &") bCybAlreadyGathered("& bCybAlreadyGathered &") targ("& targetPlayerCyb &") ",player);
 
   //do a preliminary check
   if ( (cyborgAttGroup.members < MIN_SURVIVOR_CYBORGS and !bAttackedHumanDerrick) or cyborgAttGroup.members==0){
@@ -3309,17 +3325,9 @@ event CyborgAttack(inactive)//Original event ID: xx (of 106)
         targetPlayerVTOL  = targetPlayerCyb;
         cybAttackX   = attackCybObj.x;
         cybAttackY   = attackCybObj.y;
-
-        //dbg("CyborgAttack: ________________ CYBORG ATTACK NEW TARGET IN AREA ___________________",player);
-        //dbg("CyborgAttack: move all ("& cyborgAttGroup.members &") attacking struct/droid ("& cybAttackX/128 &"-"& cybAttackY/128 &") ",player);
         tCybAttackAction = gameTime;
-        //if ( distBetweenTwoPoints(cyborgAttGroup.x ,cyborgAttGroup.y ,cybAttackX, cybAttackX ) > 12*TILE  ){
-          //displayMsg("CyborgAttack: orderGroupScoutCMD called dist: ("& distBetweenTwoPoints(cyborgAttGroup.x ,cyborgAttGroup.y ,cybAttackX, cybAttackX )/TILE &") > 12 TILES");
-          orderGroupScoutCMD(cyborgAttGroup, cybAttackX, cybAttackX);
-        //} else {
-          //displayMsg("CyborgAttack: droidMicroManager called dist: ("& distBetweenTwoPoints(cyborgAttGroup.x ,cyborgAttGroup.y ,cybAttackX, cybAttackX )/TILE &") <= 12 TILES");
-          //droidMicroManager(cyborgAttGroup, 12*TILE, cybAttackX, cybAttackX );
-        //}
+        droidMicroManager(cyborgAttGroup, 12*TILE, cybAttackX, cybAttackY );
+        
       } else {
         //displayMsg("CyborgAttack: ________________ CYBORG ATTACK DEACTIVATED - ALL TARGETS IN RANGE HAVE BEEN DESTROYED___________________");
         if (cyborgAttGroup.members>0){
@@ -3435,14 +3443,10 @@ event CyborgAttack(inactive)//Original event ID: xx (of 106)
   
     } else {//if ( bCybAlreadyGathered )
       
-      //check if target has been destroyed
-      if ( structInRange(targetPlayerCyb, cybAttackX, cybAttackY, 2*TILE ) or droidInRange(targetPlayerCyb, cybAttackX, cybAttackY, 2*TILE ) ){
-        if ( gameTime - tCybAttackAction > 100 ){
+        if ( gameTime - tCybAttackAction > 50 ){
           tCybAttackAction = gameTime;
           droidMicroManager(cyborgAttGroup, 12*TILE, cybAttackX, cybAttackY );
-          //dbg("CyborgAttack: cyborgs re-attack with ("& cyborgAttGroup.members &") cyborgs at coord ("& cybAttackX/128 &"-"& cybAttackY/128 &")",player);
         }
-      }
     
     }
   } ////attackCybObj != NULLOBJECT
@@ -3464,7 +3468,7 @@ event AIattacked(AIattackedTr)    //event 20
   bProceed = true;
   
   if ( gameTime - alertTime < 60 ){ exit; }
-
+  
   if(enemyBaseObject != NULLOBJECT and myBaseObject != NULLOBJECT){
     _nDistFromEnemy = distBetweenTwoPoints(myBaseObject.x, myBaseObject.y, enemyBaseObject.x, enemyBaseObject.y);
     _nDistFromBase  = distBetweenTwoPoints(baseX, baseY, myBaseObject.x, myBaseObject.y);
@@ -3834,7 +3838,7 @@ event manageIdleTrucks(inactive)
    boolResult2 = true;
    boolResult3 = true;
 
- //force helpbuild of derricks
+  //force helpbuild of derricks
   initEnumStruct(FALSE,derrick,player,player);
   structure = enumStruct();
   while (structure != NULLOBJECT){
@@ -3893,19 +3897,64 @@ event manageIdleTrucks(inactive)
    }
    
    //if ( gameTime - lastDisplayAI >= 20 ){  displayMsg("manageIdleTrucks: ________________ START 2__________________");  }
-   if( cyborgConstructGroup.members>0 ){
-     harvestNearOilRes();
-     if ( !repairStructs(CYBENG_GRP) ){
-       if (!repairDefStructs(BUILDDEF_GRP)){
-         if ( !helpBuild(CYBENG_GRP) ){
-           boolResult3 = repairDefStructs(CYBENG_GRP);
-           //if( !boolResult3 and gameTime > TIME_HARVESTING_PHASE ){
-             //harvestNearOilRes();
-           //}
+  if( cyborgConstructGroup.members>0 ){
+     
+    if( harvesterGroup.members > 1 or !bOilResLeft){ //do not upgrade too early
+      //Let`s upgrade factories first!!
+      if ( !bFactUpgraded1Module and (researchFinished(cobraBody, player) or researchFinished(hoverPropulsion, player) or researchFinished(scorpionBody, player)) )
+      {
+       droid = pickCybEng(true);
+       if ( droid != NULLOBJECT ){
+         initEnumStruct(false,factory,player,player);
+         structure = enumStruct();
+         boolResult = true;
+         while(structure != NULLOBJECT and boolResult)
+         {
+        	 if( structureComplete(structure) and isStructureAvailable(facModule,player) and (skGetFactoryCapacity(structure) < 1 ) )
+        	 {
+             //displayMsg("manage idle droid: cybEng ("& droid.id &") to upgrade with first module struct ("& structure.id &")");
+             orderDroidStatsLoc(droid, DORDER_BUILD,facModule, structure.x,structure.y);
+        	   boolResult = false;
+        	 }
+        	 structure= enumStruct();
          }
        }
+      }
+      
+      if ( !bFactUpgraded2Modules and bDyDoHasHeavyBody ){
+       droid = pickCybEng(true);
+       if ( droid != NULLOBJECT ){
+         initEnumStruct(false,factory,player,player);
+         structure = enumStruct();
+         boolResult = true;
+         while(structure != NULLOBJECT and boolResult)
+         {
+        	 if( structureComplete(structure) and isStructureAvailable(facModule,player) and (skGetFactoryCapacity(structure) < 2 ) )
+        	 {
+             //displayMsg("manage idle droid: cybEng ("& droid.id &") to upgrade with sec module struct ("& structure.id &")");
+             orderDroidStatsLoc(droid, DORDER_BUILD,facModule, structure.x,structure.y);
+        	   boolResult = false;
+        	 }
+        	 structure= enumStruct();
+         }
+       }
+      }
+    }
+    
+    harvestNearOilRes();
+    if ( !repairStructs(CYBENG_GRP) ){
+     if (!repairDefStructs(BUILDDEF_GRP)){
+       if ( !helpBuild(CYBENG_GRP) ){
+         boolResult3 = repairDefStructs(CYBENG_GRP);
+         //if( !boolResult3 and gameTime > TIME_HARVESTING_PHASE ){
+           //harvestNearOilRes();
+         //}
+       }
      }
-   }
+    }   
+  
+  }
+
   //if ( gameTime - lastDisplayAI >= 20 ){  displayMsg("manageIdleTrucks: ________________ START 4__________________");  }
   if( buildGroup.members>0 and lMinBaseStructBuilt ){
      if (!helpBuild(BUILD_GRP)){
@@ -4096,6 +4145,7 @@ event manageRepairTeam(inactive)
 // =====================================================================
 event updateBaseDetails(inactive) 
 {
+  local int _nTotFact,_nFact1Module,_nFact2Module;
   ASSERT(player >= 0 and player < 8,      "player out of bounds: updateBaseDetails " & player, player);
   eventCheckTime[8] = gameTime;
 
@@ -4108,6 +4158,32 @@ event updateBaseDetails(inactive)
   
   //get all players stats
   updatePlayersStats();
+
+  //check factories upgrade
+  initEnumStruct(false,factory,player,player);
+  structure= enumStruct();
+  while(structure != NULLOBJECT)
+  {
+    _nTotFact++;
+  	if( structureComplete(structure) ){
+  		if( skGetFactoryCapacity(structure) > 0 ){
+  		  _nFact1Module++;
+  		}
+  		if( skGetFactoryCapacity(structure) > 1 ){
+  		  _nFact2Module++;
+  		}
+  	}
+  	structure= enumStruct();
+  }
+  if ( _nFact1Module == _nTotFact ){ bFactUpgraded1Module = true;  }
+  if ( _nFact2Module == _nTotFact ){ bFactUpgraded2Modules = true;  }
+  //displayMsg("result tot("& _nTotFact &") 1mod("& _nFact1Module &") 2mod("& _nFact2Module &")");
+
+  //check heavy body and track prop
+  if ( researchFinished(trackPropulsion, player) or researchFinished(phytonBody, player) or researchFinished(mantisBody, player) or researchFinished(vengeanceBody, player) or researchFinished(wyvernBody, player))
+  {
+    bDyDoHasHeavyBody = true;
+  }
 
 	//units to attack with tanks
   if ( tChangeTimeTankToAdd == 0 ){ tChangeTimeTankToAdd = tLastTankAttack; }
@@ -4672,6 +4748,8 @@ event upgradeStructures(inactive)
   ASSERT(player >= 0 and player < 8,      "player out of bounds:.17 " & player, player);
   eventCheckTime[16] = gameTime;
 
+  //displayMsg("upgradeStructures: ("& GAME_TIME_IN_MIN &") lStopVTOLFactBuilding("& lStopVTOLFactBuilding &") FactModules ("& bFactUpgraded1Module &")("& bFactUpgraded2Modules &") bDyDoHasHeavyBody("& bDyDoHasHeavyBody &") lMinBaseStructBuilt("& lMinBaseStructBuilt &") stop upgrade("& lStopFactUpgrade &") ("& lStopFactUpgrade2 &")");
+  
   droid = closestIdleDroid(buildGroup,baseX,baseY);
 	if(droid == NULLOBJECT){
 	 droid = pickDefTruck(true);
@@ -4766,145 +4844,129 @@ event upgradeStructures(inactive)
 event droidBuilt(droidBuiltTr) //  (CALL_NEWDROID,player, ref droid,ref structure);
 {
 	
-  /*
-  if( !aiResponsibleForPlayer(player) )
-	{
-    dbg("dbg->droidBuilt : ai not responsible for player ("& player &") ",player);
-		setEventTrigger(droidBuilt,inactive);
-	}
-	else
-	{
-	*/
-
-     ASSERT(player >= 0 and player < 8,      "player out of bounds: droidBuilt " & player, player);
-     
-     boolResult = true;
-     //dbg("dbg->droidBuilt : droid ("& droid.id &") hitPoints ("& droid.hitPoints &") ",player);
-     if(droid != NULLOBJECT)
-  	 {                
-        if ( droid.player != player ){ exit; }
+   ASSERT(player >= 0 and player < 8,      "player out of bounds: droidBuilt " & player, player);
+   
+   boolResult = true;
+   //dbg("dbg->droidBuilt : droid ("& droid.id &") hitPoints ("& droid.hitPoints &") ",player);
+   if(droid != NULLOBJECT)
+   {                
+      if ( droid.player != player ){ exit; }
   // TANK
-  			if(droid.droidType == DROID_WEAPON and droid.propulsion != cyborgPropulsion)
-  			{
-  			  nTotTankBuilt++;
-  			  //displayMsg("droidBuilt: tank ("& droid.id &") hitPoints ("& droid.hitPoints &") power ("& calcDroidPower(droid) &") ");
-  				groupAddDroid(tankDefGroup, droid);
-  			}
+  		if(droid.droidType == DROID_WEAPON and droid.propulsion != cyborgPropulsion)
+  		{
+  		  nTotTankBuilt++;
+  		  //displayMsg("droidBuilt: tank ("& droid.id &") hitPoints ("& droid.hitPoints &") power ("& calcDroidPower(droid) &") ");
+  			groupAddDroid(tankDefGroup, droid);
+  		}
   
   // TANK REPAIR
-  			if(droid.droidType == DROID_REPAIR )
-  			{
-  			  //displayMsg("droidBuilt: tank ("& droid.id &") hitPoints ("& droid.hitPoints &") assigned to repairGroup ");
-  				groupAddDroid(repairGroup, droid);
-  			}
+  		if(droid.droidType == DROID_REPAIR )
+  		{
+  		  //displayMsg("droidBuilt: tank ("& droid.id &") hitPoints ("& droid.hitPoints &") assigned to repairGroup ");
+  			groupAddDroid(repairGroup, droid);
+  		}
   
- //TANK CONTRUCTOR
-  			if( droid.droidType == DROID_CONSTRUCT  )
-  			{
-          //store coord for stuck check
-          //storeDroidCoord(droid);
-  			  //displayMsg("droidBuilt: tank ("& droid.id &") hitPoints ("& droid.hitPoints &") assigned to buildGroup ");
-          groupAddDroid(buildGroup, droid);
-        }
-
-
- // CYBORG
-        if(droid.propulsion == cyborgPropulsion)
-        {
-        	if(droid.droidType == DROID_CYBORG_CONSTRUCT)
-        	{
-    			  //displayMsg("droidBuilt: cyborg ("& droid.id &") hitPoints ("& droid.hitPoints &") power ("& calcDroidPower(droid) &") assigned to cyborgConstructGroup");
-            groupAddDroid(cyborgConstructGroup, droid);
-        	} else {
-            nTotCyborgBuilt++;
-    			  if ( AIPersonality == AI_CYBORG ){
-    			    //displayMsg("droidBuilt: cyborg ("& droid.id &") hitPoints ("& droid.hitPoints &") power ("& calcDroidPower(droid) &") assigned to cyborgDefGroup");
-    				  groupAddDroid(cyborgDefGroup, droid);
+  //TANK CONTRUCTOR
+  		if( droid.droidType == DROID_CONSTRUCT  )
+  		{
+        //store coord for stuck check
+        //storeDroidCoord(droid);
+  		  //displayMsg("droidBuilt: tank ("& droid.id &") hitPoints ("& droid.hitPoints &") assigned to buildGroup ");
+        groupAddDroid(buildGroup, droid);
+      }
+  
+  
+  // CYBORG
+      if(droid.propulsion == cyborgPropulsion)
+      {
+      	if(droid.droidType == DROID_CYBORG_CONSTRUCT)
+      	{
+  			  //displayMsg("droidBuilt: cyborg ("& droid.id &") hitPoints ("& droid.hitPoints &") power ("& calcDroidPower(droid) &") assigned to cyborgConstructGroup");
+          groupAddDroid(cyborgConstructGroup, droid);
+      	} else {
+          nTotCyborgBuilt++;
+  			  if ( AIPersonality == AI_CYBORG ){
+  			    //displayMsg("droidBuilt: cyborg ("& droid.id &") hitPoints ("& droid.hitPoints &") power ("& calcDroidPower(droid) &") assigned to cyborgDefGroup");
+  				  groupAddDroid(cyborgDefGroup, droid);
+          } else {
+            if (nTotCyborgBuilt > 2){
+              //displayMsg("droidBuilt: ["& nTotCyborgBuilt &"] CYBORG ("& droid.id &") hitPoints ("& droid.hitPoints &") power ("& calcDroidPower(droid) &") assigned to tankDefGroup ");
+      				groupAddDroid(tankDefGroup, droid);
+      				nTotCyborgBuilt = 0;
             } else {
-              if (nTotCyborgBuilt > 2){
-                //displayMsg("droidBuilt: ["& nTotCyborgBuilt &"] CYBORG ("& droid.id &") hitPoints ("& droid.hitPoints &") power ("& calcDroidPower(droid) &") assigned to tankDefGroup ");
-        				groupAddDroid(tankDefGroup, droid);
-        				nTotCyborgBuilt = 0;
-              } else {
-    			      //displayMsg("droidBuilt: ["& nTotCyborgBuilt &"] cyborg ("& droid.id &") hitPoints ("& droid.hitPoints &") power ("& calcDroidPower(droid) &") assigned to cyborgDefGroup ");
-    				    groupAddDroid(cyborgDefGroup, droid);
-              }
+  			      //displayMsg("droidBuilt: ["& nTotCyborgBuilt &"] cyborg ("& droid.id &") hitPoints ("& droid.hitPoints &") power ("& calcDroidPower(droid) &") assigned to cyborgDefGroup ");
+  				    groupAddDroid(cyborgDefGroup, droid);
             }
-        	}
-        }
-  			
+          }
+      	}
+      }
+  		
   
   // VTOL
-			  if( isVtol(droid) )
-  			{
-  			  //displayMsg("droidBuilt: VTOL ("& droid.id &") hitPoints ("& droid.hitPoints &") power ("& calcDroidPower(droid) &") assigned to vtolDefendGr ");
- 					groupAddDroid(vtolDefendGr, droid);
- 					//need to check if I have to give new droid an order to attack
-          if (attTargetVTOL != NULLOBJECT){
-            if ( !friendlyPlayer(attTargetVTOL.player) ){
-              //displayMsg("droidbuilt: ordered VTOL to attack attTargetVTOL("& attTargetVTOL.id &") ");
-              orderDroidObj(droid,DORDER_ATTACK,attTargetVTOL);
-            }
-          } //else { displayMsg("droidbuilt: attTargetVTOL is NULL ");  }
-          if ( defTargetVTOL != NULLOBJECT ){
-            if ( !friendlyPlayer(defTargetVTOL.player) ){
-              //displayMsg("droidbuilt: ordered VTOL to attack defTargetVTOL("& defTargetVTOL.id &") ");
-              orderDroidObj(droid,DORDER_ATTACK,defTargetVTOL);  //bug fixed in DyDo 1.2.3a, the target object was attTargetVTOL and not defTargetVTOL 
-            }
-          } //else {  displayMsg("droidbuilt: defTargetVTOL is NULL "); }
-          //setDroidSecondary(droid, DSO_PATROL, DSS_PATROL_SET);
-  				exit;
-  			}
-        
-    		//to be improved: add secondary for weapons cyborgs
-    		setDroidSecondary(droid,DSO_REPAIR_LEVEL, DSS_REPLEV_NEVER);
-    		setDroidSecondary(droid, DSO_HALTTYPE, DSS_HALT_PERSUE);
-    		setDroidSecondary(droid, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
-
-        boolResult = false;
-        if( droid.droidType == DROID_WEAPON){
-          boolResult = true;
-          //short range tanks         
-          if ( droid.weapon == Flamer or droid.weapon == PlasmFlamer or droid.weapon == Inferno or droid.weapon == PlasmaCannon or droid.weapon == EMPCannon or droid.weapon == AGun or droid.weapon == MGun or droid.weapon == TwinMGun or droid.weapon == HMGun or droid.weapon == TwinAGun){
-      		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_SHORT);
-      		  //displayMsg("droidbuilt: short attack range assigned to tank ");
-          //long range  tanks-1
-          } else if ( droid.weapon == LCannon or droid.weapon == MCannon or droid.weapon == ACannon or droid.weapon == HCannon or droid.weapon == TACannon or droid.weapon == NeedleGun or droid.weapon == RailGun or droid.weapon == GaussCannon ){
-      		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_SHORT);
-      		  //displayMsg("droidbuilt: short attack range assigned to tank ");
-          } else if ( droid.weapon == FlashLight or droid.weapon == PulseLaser or droid.weapon == HeavyLaser ){
-      		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_LONG);                  
-      		  //displayMsg("droidbuilt: long attack range assigned to Laser-tank ");
-          //long range  tanks-2
-          } else if ( droid.weapon == RocketBB or droid.weapon == RocketPod or droid.weapon == HVCannon or droid.weapon == RocketMRL or droid.weapon == Lancer or droid.weapon == TankKiller or droid.weapon == RippleRockets or droid.weapon == ScourgeMissle or droid.weapon == ArchangelMissile){
-      		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_LONG);                  
-      		  //displayMsg("droidbuilt: long attack range assigned to tank ");
-          } else {         
-      		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_DEFAULT);
-     		    //displayMsg("droidbuilt: default attack range assigned to droid ");
-    		  }
-    		}
-  	
-
-        if( droid.propulsion == cyborgPropulsion and droid.droidType != DROID_CYBORG_CONSTRUCT ){
-          boolResult = true;
-          //short range cyborgs
-          if ( droid.weapon == cybGren or droid.weapon == cybLancer or droid.weapon == cybScourge or droid.weapon == cybSuperHPV or droid.weapon == cybSuperScourge or droid.weapon == cybTankKiller){
-      		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_LONG);
-      		  //displayMsg("droidbuilt: long attack range assigned to cyborg");
-          } else {         
-      		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_SHORT);
-      		  //displayMsg("droidbuilt: short attack range assigned to cyborg");
-    		  }
-    		}
-
-        //for debug purposes only
-        //if( !boolResult ){
-          //dbg("dbg->droidbuilt: no attack range assigned to droid",player);
-        //}
-
-    }//droid != NULLOBJECT
-  //}
+  	  if( isVtol(droid) ){
+  		  //displayMsg("droidBuilt: VTOL ("& droid.id &") hitPoints ("& droid.hitPoints &") power ("& calcDroidPower(droid) &") assigned to vtolDefendGr ");
+  			groupAddDroid(vtolDefendGr, droid);
+  			//need to check if I have to give new droid an order to attack
+        if ( defTargetVTOL != NULLOBJECT ){
+          if ( !friendlyPlayer(defTargetVTOL.player) ){
+            displayMsg("droidbuilt: ordered VTOL to attack defTargetVTOL("& defTargetVTOL.id &") ");
+            orderDroidObj(droid,DORDER_ATTACK,defTargetVTOL);  //bug fixed in DyDo 1.2.3a, the target object was attTargetVTOL and not defTargetVTOL 
+          }
+        } else {  
+          orderDroid(droid,DORDER_RTR); 
+        }
+        //setDroidSecondary(droid, DSO_PATROL, DSS_PATROL_SET);
+  			exit;
+  		}
+      
+  		//to be improved: add secondary for weapons cyborgs
+  		setDroidSecondary(droid,DSO_REPAIR_LEVEL, DSS_REPLEV_NEVER);
+  		setDroidSecondary(droid, DSO_HALTTYPE, DSS_HALT_PERSUE);
+  		setDroidSecondary(droid, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
+  
+      boolResult = false;
+      if( droid.droidType == DROID_WEAPON){
+        boolResult = true;
+        //short range tanks         
+        if ( droid.weapon == Flamer or droid.weapon == PlasmFlamer or droid.weapon == Inferno or droid.weapon == PlasmaCannon or droid.weapon == EMPCannon or droid.weapon == AGun or droid.weapon == MGun or droid.weapon == TwinMGun or droid.weapon == HMGun or droid.weapon == TwinAGun){
+    		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_SHORT);
+    		  //displayMsg("droidbuilt: short attack range assigned to tank ");
+        //long range  tanks-1
+        } else if ( droid.weapon == LCannon or droid.weapon == MCannon or droid.weapon == ACannon or droid.weapon == HCannon or droid.weapon == TACannon or droid.weapon == NeedleGun or droid.weapon == RailGun or droid.weapon == GaussCannon ){
+    		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_SHORT);
+    		  //displayMsg("droidbuilt: short attack range assigned to tank ");
+        } else if ( droid.weapon == FlashLight or droid.weapon == PulseLaser or droid.weapon == HeavyLaser ){
+    		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_LONG);                  
+    		  //displayMsg("droidbuilt: long attack range assigned to Laser-tank ");
+        //long range  tanks-2
+        } else if ( droid.weapon == RocketBB or droid.weapon == RocketPod or droid.weapon == HVCannon or droid.weapon == RocketMRL or droid.weapon == Lancer or droid.weapon == TankKiller or droid.weapon == RippleRockets or droid.weapon == ScourgeMissle or droid.weapon == ArchangelMissile){
+    		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_LONG);                  
+    		  //displayMsg("droidbuilt: long attack range assigned to tank ");
+        } else {         
+    		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_DEFAULT);
+   		    //displayMsg("droidbuilt: default attack range assigned to droid ");
+  		  }
+  		}
+  
+  
+      if( droid.propulsion == cyborgPropulsion and droid.droidType != DROID_CYBORG_CONSTRUCT ){
+        boolResult = true;
+        //short range cyborgs
+        if ( droid.weapon == cybGren or droid.weapon == cybLancer or droid.weapon == cybScourge or droid.weapon == cybSuperHPV or droid.weapon == cybSuperScourge or droid.weapon == cybTankKiller){
+    		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_LONG);
+    		  //displayMsg("droidbuilt: long attack range assigned to cyborg");
+        } else {         
+    		  setDroidSecondary(droid,DSO_ATTACK_RANGE, DSS_ARANGE_SHORT);
+    		  //displayMsg("droidbuilt: short attack range assigned to cyborg");
+  		  }
+  		}
+  
+      //for debug purposes only
+      //if( !boolResult ){
+        //dbg("dbg->droidbuilt: no attack range assigned to droid",player);
+      //}
+  
+  }//droid != NULLOBJECT
 }
 
 // ================== UNITS RESORTING SCRIPT ==========================
@@ -5055,47 +5117,58 @@ event SelectTankTemplate(inactive)
             if( skCanBuildTemplate(player,structure, tmpl0[62]) ){//Viper MG 
               buildDroid( tmpl0[62] , structure, player, 1); 
             } else {
-              printDebug1("####SelectTankTemplate; REALLY not able to build any tank template !!");              
+              printDebug1("####SelectTankTemplate; REALLY not able to build any tank template!");              
             }
           }
         }
         exit;
       }
 
-      //Heavy and Medium are availabe
-      if ( _nBestHvyBody > 0 ){
-        if ( _nBestMedBody > 0 ){
-          if ( _nRnd2 < 65 ){
-            boolResult = buildHeavyTank(_nRnd,structure);
-          } else {
-            boolResult = buildMediumTank(_nRnd,structure);
-          }
-        } else {
-            boolResult = buildHeavyTank(_nRnd,structure);
-        }
-      }
-
-      //Medium and Light are availabe
-      if ( !boolResult ){
-        if ( _nBestHvyBody == 0 ){
-          if (_nBestMedBody > 0 ){
-            if (_nBestLghBody > 0 ){
-              if ( _nRnd2 < 65 ){
-                boolResult = buildMediumTank(_nRnd,structure);
-              } else {
-                boolResult = buildLightTank(_nRnd,structure);
-              }
+      if ( bDyDoHasHeavyBody ){  //this avoides that DyDo builds light tanks even if heavy bodies are available
+        
+        if ( _nBestHvyBody > 0 ){
+          //If Heavy and Medium are availabe
+          if ( _nBestMedBody > 0 ){
+            if ( _nRnd2 < 65 ){
+              boolResult = buildHeavyTank(_nRnd,structure);
             } else {
               boolResult = buildMediumTank(_nRnd,structure);
             }
+          } else {
+              boolResult = buildHeavyTank(_nRnd,structure);
+          }
+        } else {
+          if ( _nBestMedBody > 0 ){
+            boolResult = buildMediumTank(_nRnd,structure);
+          } else {
+            printDebug1("####SelectTankTemplate; not able to build any HEAVY or MEDIUM tank template with this weapon type!");              
           }
         }
-      }
-      
-      //Only Light is availabe
-      if ( !boolResult ){
-        if ( _nBestHvyBody == 0 and _nBestMedBody == 0 and _nBestLghBody > 0){
-          boolResult = buildLightTank(_nRnd,structure);
+
+      } else { //medium and light body only
+
+        //Medium and Light are availabe
+        if ( !boolResult ){
+          if ( _nBestHvyBody == 0 ){
+            if (_nBestMedBody > 0 ){
+              if (_nBestLghBody > 0 ){
+                if ( _nRnd2 < 65 ){
+                  boolResult = buildMediumTank(_nRnd,structure);
+                } else {
+                  boolResult = buildLightTank(_nRnd,structure);
+                }
+              } else {
+                boolResult = buildMediumTank(_nRnd,structure);
+              }
+            }
+          }
+        }
+        
+        //Only Light is availabe
+        if ( !boolResult ){
+          if ( _nBestHvyBody == 0 and _nBestMedBody == 0 and _nBestLghBody > 0){
+            boolResult = buildLightTank(_nRnd,structure);
+          }
         }
       }
       
@@ -5620,7 +5693,7 @@ event VTOLmicroManager(inactive)
   }
   
   if ( _nNumEnDroids == 0 ){
-    dbg("#### VTOLmicroManager: _nNumEnDroids == 0, no targets found",player);
+    printDebug1("#### VTOLmicroManager: _nNumEnDroids == 0, no targets found");
     exit;
   }
   
@@ -5661,7 +5734,7 @@ event VTOLmicroManager(inactive)
   }
 
   if ( _loop == 0 ){
-    dbg("#### VTOLmicroManager: _loop == 0, no best target found",player);
+    printDebug1("#### VTOLmicroManager: _loop == 0, no best target found");
     exit;
   }
 
@@ -5683,11 +5756,11 @@ event VTOLmicroManager(inactive)
     droid = iterateGroup(vtolDefendGr);
   }
 
-  if ( _nCheck == 0 ){
-    dbg("#### VTOLmicroManager: _nCheck == 0, not able to attack targets",player);
-  } else {
-    dbg("VTOLmicroManager: nuber of attacks = _nCheck ("& _nCheck &") _n("& _n &") _i("& _i &") ",player);
-  }
+  //if ( _nCheck == 0 ){
+    //dbg("#### VTOLmicroManager: _nCheck == 0, not able to attack targets",player);
+  //} else {
+    //dbg("VTOLmicroManager: nuber of attacks = _nCheck ("& _nCheck &") _n("& _n &") _i("& _i &") ",player);
+  //}
   
 }
 //----------------------------------------------------------------
@@ -5816,6 +5889,10 @@ event buildArtillery(inactive)
 	local	int		_nBestDef, _numWeapInRange, _numWeapInBase, _rnd;
   
   eventCheckTime[26] = gameTime;
+
+  if ( !bFactUpgraded2Modules and bDyDoHasHeavyBody or !bFactUpgraded1Module){
+    exit;
+  }
 
   //find best defense we can build.
   count     = 0;
@@ -6058,9 +6135,45 @@ function int mapSize()
   return MAP_BIG;  
 }
 //----------------------------------------------------------------
+//  loop through all units belonging to _group and assign them best target
+//  - 1 attack droid in unit range checking for best target based on its weapon
+//  - 2 attack def struct in group range
+//  - 3 attack droid in _x & _y range checking for best target based on its weapon
+//  - 4 if not targets found scout (50%) and move (50%) to _x & _y coordinates
 function void droidMicroManager(GROUP _group, int _range, int _x, int _y)
 {
   local DROID _droid,_enDroid;
+  local STRUCTURE _structTarget;
+
+  //search for struct in group (! not his) range
+  _structTarget = getEnemyDefStruct(_group,_range);
+  
+  //check if any droid target in group short range 
+  //loop through the tanks
+
+  /*
+  _droid = getADroid(_group);
+  if ( _droid != NULLOBJECT ){
+    _enDroid = getEnemyDroid( _droid.x, _droid.y, 5*TILE, DROIDTYPE_HOVER);
+    if ( _enDroid == NULLOBJECT ) {
+      _enDroid = getEnemyDroid( _droid.x, _droid.y, 5*TILE, DROIDTYPE_CYBORG);
+    }
+    if ( _enDroid == NULLOBJECT ) {
+      _enDroid = getEnemyDroid( _droid.x, _droid.y, 5*TILE, DROIDTYPE_TANK);
+    }
+  }
+
+  if ( _enDroid == NULLOBJECT and _structTarget != NULLOBJECT ) {
+    if ( bScoutOrder ){
+      dbg("droidMicroManager: _droid ("& _droid.id &") Attacking def Struct ("& _structTarget.id &")",player);
+      orderDroidObj(_droid, DORDER_ATTACK, _structTarget);
+    } else {
+      dbg("droidMicroManager: _droid ("& _droid.id &") moving to def Struct ("& _structTarget.id &")",player);
+      orderDroidLoc(_droid, DORDER_MOVE, _structTarget.x, _structTarget.y);
+    }
+  }
+  */
+
 
   //loop through the tanks
 	initIterateGroup(_group);
@@ -6069,46 +6182,96 @@ function void droidMicroManager(GROUP _group, int _range, int _x, int _y)
   while(_droid != NULLOBJECT and count < MAX_WHILE_LOOPS)
   {
     
-    //search for droid target in his range
-    if ( isAntiPersonnel(_droid) ){
-      _enDroid = getEnemyDroid( _droid.x, _droid.y, _range, DROIDTYPE_CYBORG);
+    //search for droid target in group range
+    //Flamer - Laser    
+    if ( isFlamer(_droid) ){
+      _enDroid = getEnemyDroid( _group.x, _group.y, _range, DROIDTYPE_HOVER);
       if ( _enDroid == NULLOBJECT ) {
-        _enDroid = getEnemyDroid( _droid.x, _droid.y, _range, DROIDTYPE_TANK);
+        _enDroid = getEnemyDroid( _group.x, _group.y, _range, DROIDTYPE_CYBORG);
       }
-    } else {    
-      if ( isAntiTank(_droid) ){
-        _enDroid = getEnemyDroid( _droid.x, _droid.y, _range, DROIDTYPE_TANK);
-      } else {//All rounder
-        _enDroid = getEnemyDroid( _droid.x, _droid.y, _range, DROIDTYPE_CYBORG);      
+      if ( _enDroid == NULLOBJECT ) {
+        _enDroid = getEnemyDroid( _group.x, _group.y, _range, DROIDTYPE_TANK);
       }
-    } 
-    
-   //search for droid target in alert/target range
-    if ( _enDroid == NULLOBJECT ) {
+    } else {
+      //AP
       if ( isAntiPersonnel(_droid) ){
-        _enDroid = getEnemyDroid( _x, _y, _range, DROIDTYPE_CYBORG);
+        _enDroid = getEnemyDroid( _group.x, _group.y, _range, DROIDTYPE_CYBORG);
         if ( _enDroid == NULLOBJECT ) {
-          _enDroid = getEnemyDroid( _x, _y, _range, DROIDTYPE_TANK);
+          _enDroid = getEnemyDroid( _group.x, _group.y, _range, DROIDTYPE_TANK);
         }
       } else {    
+        //AT
         if ( isAntiTank(_droid) ){
-          _enDroid = getEnemyDroid( _x, _y, _range, DROIDTYPE_TANK);
-        } else {//All rounder
-          _enDroid = getEnemyDroid( _x, _y, _range, DROIDTYPE_CYBORG);      
+          _enDroid = getEnemyDroid( _group.x, _group.y, _range, DROIDTYPE_TANK);
+        } else {
+          //All rounder: search a droid taget if structure target is NULLOBJECT
+          if (_structTarget == NULLOBJECT ) {
+            _enDroid = getEnemyDroid( _group.x, _group.y, _range, DROIDTYPE_TANK);
+          }      
+        }
+      } 
+    } 
+    
+    //search for enemy def struct     
+    if ( _enDroid == NULLOBJECT ) {
+      if (_structTarget != NULLOBJECT ) {
+        if ( bScoutOrder ){
+          dbg("droidMicroManager: _droid ("& _droid.id &") Attacking def Struct ("& _structTarget.id &")",player);
+          orderDroidObj(_droid, DORDER_ATTACK, _structTarget);
+        } else {
+          dbg("droidMicroManager: _droid ("& _droid.id &") moving to def Struct ("& _structTarget.id &")",player);
+          orderDroidLoc(_droid, DORDER_MOVE, _structTarget.x, _structTarget.y);
+        }
+      }
+    }
+  
+    //search for droid target in alert/target range if it has been reached
+    if ( _structTarget == NULLOBJECT and _enDroid == NULLOBJECT ) {    
+      if ( distBetweenTwoPoints( _group.x, _group.y, _x, _y) < 4 * TILE ){   
+        dbg("droidMicroManager: group is in target range ",player);
+        if ( isAntiPersonnel(_droid) ){
+          _enDroid = getEnemyDroid( _x, _y, _range, DROIDTYPE_CYBORG);
+          if ( _enDroid == NULLOBJECT ) {
+            _enDroid = getEnemyDroid( _x, _y, _range, DROIDTYPE_TANK);
+          }
+        } else {    
+          if ( isAntiTank(_droid) ){
+            _enDroid = getEnemyDroid( _x, _y, _range, DROIDTYPE_TANK);
+          } else {//All rounder
+            _enDroid = getEnemyDroid( _x, _y, _range, DROIDTYPE_CYBORG);      
+          }
         }
       }
     } 
-
+        
     //attack or scout!!   
     if ( _enDroid != NULLOBJECT ) {
-      //dbg("**** droidMicroManager: target for droid ("& _droid.id &") found = ("& _enDroid.id &") ",player);
-      orderDroidObj(_droid, DORDER_ATTACK,_enDroid);
+      if ( bScoutOrder ){
+        dbg("droidMicroManager: _droid ("& _droid.id &") order to attack enemy droid ("& _enDroid.id &")",player);
+        orderDroidObj(_droid, DORDER_ATTACK,_enDroid);
+      } else {
+        dbg("droidMicroManager: _droid ("& _droid.id &") order to move to enemy droid ("& _enDroid.id &")",player);
+        orderDroidLoc(_droid, DORDER_MOVE, _enDroid.x, _enDroid.y);
+      }
     } else {
-      //dbg("droidMicroManager: target NOT found for droid ("& _droid.id &") ",player);
-      orderDroidLoc(_droid, DORDER_SCOUT, _x, _y);
+      if ( bScoutOrder ){
+        dbg("droidMicroManager: _droid ("& _droid.id &") order to scout",player);
+        orderDroidLoc(_droid, DORDER_SCOUT, _x, _y);
+      } else {
+        dbg("droidMicroManager: _droid ("& _droid.id &") order to move",player);
+        orderDroidLoc(_droid, DORDER_MOVE, _x, _y);
+      }
     }
+    
     _droid = iterateGroup(_group);
     count++;
+  }
+  
+  //change the action
+  if ( bScoutOrder ){
+    bScoutOrder = false;
+  } else {
+    bScoutOrder = true;
   }
   
  
@@ -6130,6 +6293,11 @@ function DROID getEnemyDroid(int _x,int _y,int _dist,int _droidType)
       while(_droid != NULLOBJECT){
    			if ( distBetweenTwoPoints(_droid.x ,_droid.y ,_x ,_y) < _dist){
           
+          if ( _droidType == DROIDTYPE_HOVER ){
+            if( _droid.propulsion == HoverProp ){
+              return _droid;
+            }
+          }
           if ( _droidType == DROIDTYPE_TANK ){
             if(_droid.droidType == DROID_WEAPON and _droid.propulsion != cyborgPropulsion){
               return _droid;
@@ -6152,18 +6320,30 @@ function DROID getEnemyDroid(int _x,int _y,int _dist,int _droidType)
   return _droid;//NULLOBJECT
 }
 //-----------------------------------------------------------------------------
-function bool isAntiPersonnel(DROID _droid)
+function bool isFlamer(DROID _droid)
 {
 
   //tanks
-  if ( _droid.weapon == Flamer or _droid.weapon == PlasmFlamer or _droid.weapon == Inferno or _droid.weapon == PlasmaCannon or _droid.weapon == EMPCannon or _droid.weapon == AGun or _droid.weapon == MGun or _droid.weapon == TwinMGun or _droid.weapon == HMGun or _droid.weapon == TwinAGun){
+  if ( _droid.weapon == Flamer or _droid.weapon == PlasmFlamer or _droid.weapon == Inferno  ){
+    return true;
+  }
+   
+  return false;
+}
+//-----------------------------------------------------------------------------
+function bool isAntiPersonnel(DROID _droid)
+{
+
+  //tanks & cyborgs
+  if ( _droid.weapon == EMPCannon or _droid.weapon == AGun or _droid.weapon == MGun or _droid.weapon == TwinMGun or _droid.weapon == HMGun or _droid.weapon == TwinAGun){
     return true;
   }
   
-  if ( _droid.weapon == FlashLight or _droid.weapon == PulseLaser or _droid.weapon == HeavyLaser ){
+  //Lasers   
+  if ( _droid.weapon == FlashLight or _droid.weapon == PulseLaser or _droid.weapon == HeavyLaser or _droid.weapon == PlasmaCannon ){
      return true;                  
   }
-   
+  
   //cyborgs
   if ( _droid.weapon == cybGren ){
     return true;
@@ -6320,7 +6500,7 @@ function void vtolFactoryBuildVtol(STRUCTURE _factory)
   }
   
 	if( skCanBuildTemplate( player ,_factory, vtols[_t]) ){
-    displayMsg("vtolFactoryBuildVtol: build VTOL _t("& _t &"), _bBombVTOL("& _bBombVTOL &") _nTemplBomb("& _nTemplBomb &") _nTemplAT("& _nTemplAT &")_nRnd("& _nRnd &") lancer("& researchFinished(lancerATweap,player) &") scorpion("& researchFinished(scorpionBody,player) &")");
+    //displayMsg("vtolFactoryBuildVtol: build VTOL _t("& _t &"), _bBombVTOL("& _bBombVTOL &") _nTemplBomb("& _nTemplBomb &") _nTemplAT("& _nTemplAT &")_nRnd("& _nRnd &") lancer("& researchFinished(lancerATweap,player) &") scorpion("& researchFinished(scorpionBody,player) &")");
     buildDroid(vtols[_t],_factory,player,1);
   } 
   //else {
@@ -7021,7 +7201,7 @@ function STRUCTURE closestDerrickToDefend()
     if ( pickWallDefQueueDepth <= 0 ){_nMaxDef = MAX_DEFSTR_DERRICKS;}
     if ( pickWallDefQueueDepth == 1 ){_nMaxDef = MAX_DEFSTR_DERRICKS+1;}
     if ( pickWallDefQueueDepth == 2 ){_nMaxDef = MAX_DEFSTR_DERRICKS+2;}
-    if ( pickWallDefQueueDepth > 2 ){_nMaxDef = MAX_DEFSTR_DERRICKS+3;}
+    if ( pickWallDefQueueDepth > 2 ) {_nMaxDef = MAX_DEFSTR_DERRICKS+3;}
   } else {
     if ( pickWallDefQueueDepth >= 2 ){_nMaxDef = MAX_DEFSTR_DERRICKS+1;}
   }
@@ -9465,31 +9645,46 @@ function void updatePlCoord()
 function int getEnemy_baseCoord( int _player, STRING sCoord )
 {
 	local	STRUCTURE	_structure;
-	local	int	_index,_baseX,_baseY,_numBaseStructs;
-	//Go through all structures
+	local	int	_i,_index,_baseX,_baseY,_numBaseStructs,_numBaseStructsFound;
+  local STRUCTURESTAT _baseStructs[10];
+	
+	_i = 0;
+	if ( isScavenger(_player) ){
+    _baseStructs[0] = scavFactory;
+    _numBaseStructs = 1;
+  } else {
+    _numBaseStructs = numBaseStructs;
+    _numBaseStructs--; //do not include derricks
+    while ( _i < _numBaseStructs ){ 
+      _baseStructs[_i] = baseStructs[_i];
+      _i++;
+    }
+  }
+  
+  //Go through all structures
 	_index = 0;
-	_numBaseStructs = 0;
+	_numBaseStructsFound = 0;
 	_baseX = 0;
 	_baseY = 0;
-	while(_index+1 < numBaseStructs)//+1 to exclude derricks!!
+	while(_index < _numBaseStructs)//+1 to exclude derricks!!
 	{
-		initEnumStruct( false, baseStructs[_index], _player, _player);
+		initEnumStruct( false, _baseStructs[_index], _player, _player);
 		_structure = enumStruct();
 
 		while(_structure != NULLOBJECT)
 		{
 			_baseX = _baseX + _structure.x / TILE;
 			_baseY = _baseY + _structure.y / TILE;
-			_numBaseStructs++;
+			_numBaseStructsFound++;
 			_structure = enumStruct();
 		}
 		_index++;
 	}
 
-	if(_numBaseStructs > 0)
+	if(_numBaseStructsFound > 0)
 	{
-		_baseX = (_baseX / _numBaseStructs) * TILE;
-		_baseY = (_baseY / _numBaseStructs) * TILE;
+		_baseX = (_baseX / _numBaseStructsFound) * TILE;
+		_baseY = (_baseY / _numBaseStructsFound) * TILE;
     //displayMsg("getEnemy_baseCoord: Base Structs tmethod #1 ok  _baseX("& _baseX/TILE &")_baseY("& _baseY/TILE &") ");
 	
   } else {
@@ -9497,20 +9692,20 @@ function int getEnemy_baseCoord( int _player, STRING sCoord )
     //method #2
 	  _index = 0;
 	  _numBaseStructs = 0;
-  	while(_index+1 < numBaseStructs)//+1 to exclude derricks!!
+  	while(_index+1 < _numBaseStructs)//+1 to exclude derricks!!
   	{
-  		_structure = getStructure(baseStructs[_index],_player);
+  		_structure = getStructure(_baseStructs[_index],_player);
 			if ( _structure != NULLOBJECT ){
         _baseX = _baseX + _structure.x / TILE;
   			_baseY = _baseY + _structure.y / TILE;
-  			_numBaseStructs++;
+  			_numBaseStructsFound++;
 			}
   		_index++;
   	}   
-  	if(_numBaseStructs > 0)
+  	if(_numBaseStructsFound > 0)
   	{
-  		_baseX = (_baseX / _numBaseStructs) * TILE;
-  		_baseY = (_baseY / _numBaseStructs) * TILE;
+  		_baseX = (_baseX / _numBaseStructsFound) * TILE;
+  		_baseY = (_baseY / _numBaseStructsFound) * TILE;
       //displayMsg("getEnemy_baseCoord: Base Structs tmethod #2 ok  _baseX("& _baseX/TILE &")_baseY("& _baseY/TILE &") ");
   	} else {  
       if ( isPlayerStillLive(_player) ){
@@ -9519,6 +9714,8 @@ function int getEnemy_baseCoord( int _player, STRING sCoord )
       return 0;
     }
   }
+  
+  //let`s check...
   if ( (_baseX == 0 or _baseY == 0) and isPlayerStillLive(_player) ){
     printDebug1("#### getEnemy_baseCoord; 2-not able to find base coord for player ("& _player &")");
   }
@@ -9528,6 +9725,7 @@ function int getEnemy_baseCoord( int _player, STRING sCoord )
   } else { 
     return _baseY; 
   }
+  
   return 0;
 }
  
@@ -9728,9 +9926,9 @@ function BASEOBJ objDroidTargetInRange(int _xCoord ,int _yCoord, int _Range, boo
       }
       count++;
     }
-  } else {
-    if (bIsVTOL){displayMsg("objDroidTargetInRange: ***** best target for VTOL found: Id("& _objTarget.id &") hitPoints("& _objTarget.hitPoints &")");}
-  }
+  } //else {
+    //if (bIsVTOL){displayMsg("objDroidTargetInRange: ***** best target for VTOL found: Id("& _objTarget.id &") hitPoints("& _objTarget.hitPoints &")");}
+  //}
   return _objTarget;
 }
 //-----------------------------------------------------------------------------
@@ -11346,8 +11544,8 @@ function void displayStats(int _choice)
     _count2++;
   }
 
-  /*
   _count = player;
+  /*
   if ( _choice == 1 ){
     dbg("dbg-> GameTime("& gameTime &") General("& AIPersonality &") AIstrength("& AIstrength &") gameType("& gameType() &") gameTime("& gameTime &") MAP("& mapWidth &"-"& mapHeight &") nBasRg("& nBaseRange/TILE &") gatRange("& gatewaysRangeTiles &") DefRange("& nDefendRange/TILE &") HQ("& _HQx/TILE &"-"& _HQy/TILE &") Base("& baseX/TILE &"-"& baseY/TILE &") arHarv("& _totHarv &") ",_count);
     dbg("dbg-> Plyers: " & _strTeams & " nTeam("& nTeam &") nLastEnemyPlayer ("& nLastEnemyPlayer &") nEnemyPlayers ("& nEnemyPlayers &") nHumanPlayers("& nHumanPlayers &") nPlayersInGame("& nPlayersInGame &") nTotEnemyDroids("& nTotEnemyDroids &")", _count);
@@ -11689,6 +11887,10 @@ function STRUCTURESTAT getDefStruct()
   
   _n         = min(pickDefQueueDepth,3);
   _nDef      = pickDefQueueDepth - 1 - random(_n);//best 3 defences
+  if ( _nDef == -1 ){
+    printDebug1("#### getDefStruct: _nDef for standard was -1, now forced to 0 pickDefQueueDepth("& pickDefQueueDepth &")"); 
+    _nDef = 0; 
+  }
   _defstruct = pickDefQueue[_nDef];
 
   //=========== STANDARD DEFENCES ==================================
@@ -11727,7 +11929,11 @@ function STRUCTURESTAT getDefStruct()
     if(pickWallDefQueueDepth > 0)//best 4 def
   	{
   	  _n          = min(pickWallDefQueueDepth,4);
-      _nDef       = pickWallDefQueueDepth - 1 - _random(_n);
+      _nDef       = pickWallDefQueueDepth - 1 - random(_n);
+      if ( _nDef == -1 ){
+        printDebug1("#### getDefStruct: _nDef for WALL def was -1, now forced to 0 pickWallDefQueueDepth("& pickWallDefQueueDepth &")"); 
+        _nDef = 0; 
+      }
       _defstruct  = pickWallDefQueue[_nDef];
     }
   
@@ -12265,13 +12471,204 @@ function  int checkBestBody(int _nBody, int _nWeapon, STRUCTURE _struct )
       if( skCanBuildTemplate(player,_struct, tmpl0[57]) ){ _i++; }
     }
   }
-  if ( _nBody == 0 ){ _sBody = "Light"; }
-  if ( _nBody == 1 ){ _sBody = "Medium"; }
-  if ( _nBody == 2 ){ _sBody = "Heavy"; }
+  if ( _nBody == BODY_LIGHT ) { _sBody = "Light"; }
+  if ( _nBody == BODY_MEDIUM ){ _sBody = "Medium"; }
+  if ( _nBody == BODY_HEAVY ) { _sBody = "Heavy"; }
   if ( _nWeapon == WEAPON_AP ){ _sWeapon = "AP"; }
   if ( _nWeapon == WEAPON_AT ){ _sWeapon = "AT"; }
   if ( _nWeapon == WEAPON_AR ){ _sWeapon = "AR"; }
-  printDebug1("checkBestBody; num tmpl found='"& _i &"' Body='"& _sBody &"' Weapon='"& _sWeapon &"'");
+  //printDebug1("checkBestBody; num tmpl found='"& _i &"' Body='"& _sBody &"' Weapon='"& _sWeapon &"'");
   return _i;
 }
+//---------------------------------------------------------------------------
+function bool isScavenger( int _player ){
+  if ( scavengersActive() ){
+    if ( _player == 7){
+      return true;
+    }
+  }
+  return false;
+}
+//---------------------------------------------------------------------------
+function void vtolAttack(BASEOBJ oTarget)
+{
+  local int _i,_n,_nCheck,_nFound,_dist,_tot;
+  local DROID _droid;
+	local	STRUCTURE	_tempDef,_targetVTOL[3];
+  
+  //excetute this for the whole group anyway to be use all VTOLs are used
+  //  in case no other targets are in range
 
+  if ( vtolDefendGr.members > 3 ){
+    //check for any strucutre of interest in range of the target
+    _i = 0;
+    _n = numGenAA;
+    _n--;
+    while (_n >= 0 and _i < 3){
+      initEnumStruct(false,vtolGenStruct[_n],oTarget.player,oTarget.player); //all structs, also those not visible to this AI
+    	_tempDef = enumStruct();
+    	while(_tempDef != NULLOBJECT and _i < 3)
+    	{
+        _dist = distBetweenTwoPoints(_tempDef.x, _tempDef.y, oTarget.x, oTarget.y);
+        if ( _dist < 10 * TILE ){
+          _targetVTOL[_i] = _tempDef;
+          _i++;
+          _nFound++;
+          //dbg("vtolAttack: AA def struct found ("& _tempDef.id &")",player);
+        } 
+     		_tempDef = enumStruct();
+     	}//while
+     	_n--;
+    }//end while  _n < numGenAA
+    
+    //search for wall def
+    if ( _nFound < 3){
+      _n = numWallWeaps;
+      _n--;
+      while (_n >= 0 and _i < 3){
+        initEnumStruct(false,wallWeaps[_n],oTarget.player,oTarget.player); //all structs, also those not visible to this AI
+      	_tempDef = enumStruct();
+      	while(_tempDef != NULLOBJECT and _i < 3)
+      	{
+          _dist = distBetweenTwoPoints(_tempDef.x, _tempDef.y, oTarget.x, oTarget.y);
+          if ( _dist < 10 * TILE ){
+            _targetVTOL[_i]   = _tempDef;
+            _i++;
+            _nFound++;
+            //dbg("vtolAttack: WALL def struct found ("& _tempDef.id &")",player);
+          } 
+       		_tempDef = enumStruct();
+       	}//while
+       	_n--;
+      }//end while  _n < numGenAA
+    }
+    
+    //search for standard def
+    if ( _nFound < 3){
+      _n = numDefStructs;
+      _n--;
+      while (_n >= 0 and _i < 3){
+        initEnumStruct(false,defStructs[_n],oTarget.player,oTarget.player); //all structs, also those not visible to this AI
+      	_tempDef = enumStruct();
+      	while(_tempDef != NULLOBJECT and _i < 3)
+      	{
+          _dist = distBetweenTwoPoints(_tempDef.x, _tempDef.y, oTarget.x, oTarget.y);
+          if ( _dist < 10 * TILE ){
+            _targetVTOL[_i]   = _tempDef;
+            _i++;
+            _nFound++;
+            //dbg("vtolAttack: STD def struct found ("& _tempDef.id &")",player);
+          } 
+       		_tempDef = enumStruct();
+       	}//while
+       	_n--;
+      }//end while  _n < numGenAA
+    }
+
+    //Attack the targets, assign at least 3 droids to each target
+    _i=0;
+  	_n=0;
+  	_tot = 0;
+  	_nCheck = 0;
+    initIterateGroup(vtolDefendGr);
+  	droid = iterateGroup(vtolDefendGr);
+  	while(droid != NULLOBJECT)
+  	{
+      if ( _n == 3 ){ _i++; _n=0;}//change the target
+  	  if ( _i == 3 ){ _i=0;}
+      if ( _nCheck < 3 ){
+        if ( oTarget != NULLOBJECT ){
+          //dbg("vtolAttack: oTarget _n("& _n &") _i("& _i &")",player);
+          orderDroidObj( droid, DORDER_ATTACK, oTarget );
+          _nCheck++;
+        } 
+      } else {
+        if ( _targetVTOL[_i] != NULLOBJECT ){
+          //dbg("vtolAttack: struct _n("& _n &") _i("& _i &")",player);
+          orderDroidObj( droid, DORDER_ATTACK, _targetVTOL[_i] );
+          _n++;
+          _nCheck++; 
+        }
+      }
+      droid = iterateGroup(vtolDefendGr);
+      _tot++;
+    }
+    printDebug1("vtolAttack: VTOLs ("& vtolDefendGr.members &") struct found ("& _nFound &") AA attacked ("& _nCheck &")");
+    //dbg("vtolAttack: VTOLs ("& vtolDefendGr.members &") struct found ("& _nFound &") attacked ("& _nCheck &")",player);
+  } //else {
+    //dbg("vtolAttack: not enough VTOLs ("& vtolDefendGr.members &")",player);
+  //}
+  
+  return;
+}
+//---------------------------------------------------------------------------
+function STRUCTURE getEnemyDefStruct(GROUP _group,int _range)
+{
+  local int _n,_dist,_bestDist,_player;
+  local STRUCTURE _target,_tempDef;
+  
+  _target = NULLOBJECT;
+  
+  //search for wall def
+  _n = numWallWeaps;
+  _n--;
+  _bestDist = 9999999;
+  _player = 0;
+  while ( _player < MAX_PLAYERS ){ 
+    if ( isPlayerStillLive(_player) and !friendlyPlayer(_player) ){
+
+      while (_n >= 0){
+        initEnumStruct(false,wallWeaps[_n],_player,_player); //all structs, also those not visible to this AI
+      	_tempDef = enumStruct();
+      	while(_tempDef != NULLOBJECT)
+      	{
+          _dist = distBetweenTwoPoints(_tempDef.x, _tempDef.y, _group.x, _group.y);
+          if ( _dist <= _range and _dist < _bestDist ){
+            _target   = _tempDef;
+            _bestDist = _dist;
+            dbg("getEnemyDefStruct: WALL def struct found ("& _tempDef.id &") _n("& _n &") dist("& _dist/TILE &")",player);
+          } 
+       		_tempDef = enumStruct();
+       	}//while
+       	_n--;
+      }//end while
+    
+    }
+    _player++;
+  } //end loop players 
+  
+  if ( _target != NULLOBJECT ){
+    return _target;
+  }
+  
+  //search for standard def
+  _n = numDefStructs;
+  _n--;
+  _bestDist = 9999999;
+  _player = 0;
+  while ( _player < MAX_PLAYERS ){ 
+    if ( isPlayerStillLive(_player) and !friendlyPlayer(_player) ){
+
+      while (_n >= 0){
+        initEnumStruct(false,defStructs[_n],_player,_player); //all structs, also those not visible to this AI
+      	_tempDef = enumStruct();
+      	while(_tempDef != NULLOBJECT)
+      	{
+          _dist = distBetweenTwoPoints(_tempDef.x, _tempDef.y, _group.x, _group.y);
+          if ( _dist <= _range and _dist < _bestDist ){
+            _target   = _tempDef;
+            _bestDist = _dist;
+            dbg("getEnemyDefStruct: STD def struct found ("& _tempDef.id &") _n("& _n &") dist("& _dist/TILE &")",player);
+          } 
+       		_tempDef = enumStruct();
+       	}//while
+       	_n--;
+      }//end while
+    
+    }
+    _player++;
+  } //end loop players
+  
+  return _target; 
+
+}
