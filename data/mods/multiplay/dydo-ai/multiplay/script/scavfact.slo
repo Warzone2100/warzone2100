@@ -1,0 +1,640 @@
+// Scavenger MultiPlayer Factory (one) Script
+
+// Modified Version for DyDo package
+// dydo-scav v1.0
+
+/* aims
+
+x build up to x droids of 9 types
+x add each new droid to the defenGroup
+x if defenGroup has x droids, send off to attack enemy stuff (mainly human targets)
+x first attack starts after x seconds
+x two teams wandering likes oil resources
+x defend team to defend owned structures when attacked
+
++ groups attack things that come into range
+
+*/
+
+// scavenger values
+#define MAX_PLAYERS 8
+#define	TILE				128
+#define MAX_WHILE_LOOPS 99
+#define WANDER_DROIDS 4
+#define MIN_DEFEND_DROIDS 7
+#define MIN_ATT_DROIDS 5
+#define TIME_FIRST_ATTACK 1200
+#define	GAME_TIME_IN_MIN	(gameTime / 10 / 60)
+
+
+public		int		enemy1;
+public		int		maxDroids;
+
+public		STRUCTURESTAT	factory,derrick;
+private		STRUCTURE	fac1;
+
+// Build Templates 
+public		TEMPLATE	trike;
+public		TEMPLATE	buggy;
+public		TEMPLATE	bloke;
+public		TEMPLATE	jeep;
+public		TEMPLATE	busCan,RKJeep,FireCan,FireTruck,RKBuggy;
+public    PROPULSION LegsProp;
+
+// groups
+private		GROUP		attackGroup,defendGroup,wanderGroup,wanderGroup2;
+private		DROID		newDroid, droid;
+
+// attacking 
+private		STRUCTURE  structure;
+private		BASEOBJ    attacker,oTargetObj;
+private   int  nTargetPlayer,nAttackDroids,nDefendDroids;
+private   int  tAttacked,tWanderCoord,tWanderCoord2,tStartAttack;
+
+private int nTemplScav,baseX,baseY,defSpotX,defSpotY,wanderX,wanderY,wanderX2,wanderY2;
+
+private bool boolResult;
+
+public FEATURESTAT oilRes;
+private FEATURE feature;
+
+//funct parameters
+private   int _player,_targetPlayer;
+private   STRUCTURESTAT _structure;
+private   STRING _message;
+
+
+private bool _DEBUG;
+
+#region triggers
+
+trigger chainloadTr(wait, 10);
+trigger prepareAttackTr(every, 100);
+trigger regularTr(every, 100);
+trigger scavAttackTr(every, 100);
+trigger wanderTeam2Tr(every, 300);
+trigger wanderTeamTr(every, 350);
+trigger buildScavDroidTr (every, 50);
+
+event structureAttacked;
+event startup;
+event droidbuilt;
+event startLevel;
+event scavManagement;
+event scavAttack;
+event prepareAttack;
+event wanderTeam;
+event wanderTeam2;
+event buildScavDroid;
+
+#endregion triggers
+
+function bool isPlayerStillLive(int _player);
+function STRUCTURE closestEnemyDerrick(int _targetPlayer);
+function bool bAnyOilResLeft();
+function bool setWanderCoord();
+function bool setWanderCoord2();
+function int numRemainingOilRes();
+function void printDebug( STRING _message );
+
+//==========================================================================
+//                   EVENTS
+//==========================================================================
+
+//----------------------------------------------------------
+// Startup
+event startup(CALL_GAMEINIT)
+{
+	if (!scavengersActive() or !myResponsibility(enemy1))
+	{
+		setEventTrigger(startLevel, inactive);
+		setEventTrigger(wanderTeam, inactive);
+		setEventTrigger(wanderTeam2, inactive);
+		setEventTrigger(prepareAttack, inactive);
+		setEventTrigger(droidbuilt, inactive);
+		setEventTrigger(buildScavDroid, inactive);
+		setEventTrigger(structureAttacked, inactive);
+ 	} else {
+    _DEBUG = true;//print off debug messages
+ 	  tAttacked = 0;
+ 	  nTemplScav = 0;
+	  wanderX = -1;
+	  wanderY = -1;
+	  wanderX2 = -1;
+	  wanderY2 = -1;
+    nAttackDroids = 7;
+    nDefendDroids = 5;
+    defSpotX = -1;
+    defSpotY = -1;
+    tStartAttack = random(1800);
+    tWanderCoord = 0;
+    tWanderCoord2 = 0;
+  	groupAddArea(defendGroup, enemy1, 0, 0, (mapWidth * 128), (mapHeight * 128));
+  	console("Scavenger AI: first attack set after '"& (tStartAttack+TIME_FIRST_ATTACK)/10 &"' seconds");
+	}
+}
+//----------------------------------------------------------
+event startLevel(CALL_START_NEXT_LEVEL)
+{
+	setEventTrigger(scavManagement, chainloadTr);
+}
+//----------------------------------------------------------
+// We need to reguarly check back on our scavs, since they are stupid and forget their orders.
+// (A nice way of saying we have bugs in our code.)
+event scavManagement(inactive)
+{
+	if ((gameTime - tAttacked) > 300)
+	{
+		if ( defSpotX>0 and defSpotY>0){
+			orderGroupLoc(defendGroup, DORDER_SCOUT, defSpotX, defSpotY);
+    } 
+  }
+	setEventTrigger(scavManagement, regularTr);
+}
+
+//----------------------------------------------------------
+// sends wander group to a random oil resources
+event wanderTeam(wanderTeamTr)
+{
+  local int _nMoved,_nTot;
+
+  //close event after 8 min
+  if ( !bAnyOilResLeft()) {
+    if ( wanderGroup.members > 0 ){
+      initIterateGroup(wanderGroup);
+    	droid = iterateGroup(defendGroup);
+      while ( droid != NULLOBJECT){
+        groupAddDroid(defendGroup, droid);
+  		  droid = iterateGroup(wanderGroup);
+      }
+    }
+    setEventTrigger(wanderTeam, inactive); 
+    exit; 
+  }
+
+  _nTot = MIN_DEFEND_DROIDS+WANDER_DROIDS;
+
+  if ( wanderGroup.members < 3 ){
+    //if not enough units exit
+    if ( defendGroup.members < _nTot ){ exit; }
+    
+    console("Scavenger AI: preparing create a wanderGroup with ("& WANDER_DROIDS &") droids from defendGroup ("& defendGroup.members &")");
+    initIterateGroup(defendGroup);
+  	droid = iterateGroup(defendGroup);
+    while ( wanderGroup.members < WANDER_DROIDS and droid != NULLOBJECT){
+      if ( droid.propulsion != LegsProp ){
+        groupAddDroid(wanderGroup, droid);
+      }
+  		droid = iterateGroup(defendGroup);
+    }
+    if ( wanderGroup.members == 0 ){ 
+      console("#### Scavenger AI: no droids moved to wanderGroup ");
+      exit; 
+    } else {
+      console("Scavenger AI: built a wander group  with ("& wanderGroup.members &") droids");
+    }
+  }
+
+  //set wander coord (free oilRes)
+  if ( !setWanderCoord() ){
+    if ( !setWanderCoord() ){
+      console("#### Scavenger AI: not able to set wander coord - 2");
+      exit;
+    }
+  }
+  
+  //moving to oilRes
+  console("Scavenger AI: ("& wanderGroup.members  &") scavenger droids wandering to oilRes at ("& wanderX/TILE &"-"& wanderY/TILE &")");
+  orderGroupLoc(wanderGroup, DORDER_SCOUT, wanderX, wanderY);
+
+    
+  
+}
+//----------------------------------------------------------
+event wanderTeam2(wanderTeam2Tr)
+{
+  local int _nMoved,_nTot;
+
+  //close event after 8 min
+  if ( !bAnyOilResLeft()) {
+    if ( wanderGroup2.members > 0 ){
+      initIterateGroup(wanderGroup2);
+    	droid = iterateGroup(defendGroup);
+      while ( droid != NULLOBJECT){
+        groupAddDroid(defendGroup, droid);
+  		  droid = iterateGroup(wanderGroup2);
+      }
+    }
+    setEventTrigger(wanderTeam, inactive); 
+    exit; 
+  }
+
+  _nTot = MIN_DEFEND_DROIDS+WANDER_DROIDS;
+
+  if ( wanderGroup2.members < 3 ){
+    //if not enough units exit
+    if ( defendGroup.members < _nTot ){ exit; }
+    
+    console("Scavenger AI: preparing create a wanderGroup #2 with ("& WANDER_DROIDS &") droids from defendGroup ("& defendGroup.members &")");
+    initIterateGroup(defendGroup);
+  	droid = iterateGroup(defendGroup);
+    while ( wanderGroup2.members < WANDER_DROIDS and droid != NULLOBJECT){
+      if ( droid.propulsion != LegsProp ){
+        groupAddDroid(wanderGroup2, droid);
+      }
+  		droid = iterateGroup(defendGroup);
+    }
+    if ( wanderGroup2.members == 0 ){ 
+      console("#### Scavenger AI: no droids moved to wanderGroup #2 ");
+      exit; 
+    } else {
+      console("Scavenger AI: built a wander group #2 with ("& wanderGroup2.members &") droids");
+    }
+  }
+
+  //set wander coord (free oilRes)
+  if ( !setWanderCoord2() ){
+    if ( !setWanderCoord2() ){
+      console("#### Scavenger AI: not able to set wander coord - 2");
+      exit;
+    }
+  }
+  
+  //moving to oilRes
+  console("Scavenger AI: ("& wanderGroup2.members  &") scavenger wander group 2 wandering to oilRes at ("& wanderX2/TILE &"-"& wanderY2/TILE &")");
+  orderGroupLoc(wanderGroup2, DORDER_SCOUT, wanderX2, wanderY2);
+
+    
+  
+}
+//----------------------------------------------------------
+// activate attack if conditions are ok
+event prepareAttack(prepareAttackTr)
+{
+  local int _nMoved, _nTot;
+  local int _player,_nCounter,_nHumanPlayer,_nAIPlayer;
+  
+  _nTot = MIN_ATT_DROIDS+MIN_DEFEND_DROIDS;
+  //console("Scavenger AI: defendGroup ("& defendGroup.members &") ("& nDefendDroids &")("& nAttackDroids &")");
+  
+  if ( gameTime < TIME_FIRST_ATTACK+tStartAttack ){ exit; }
+  if ( attackGroup.members > 0 ){ exit; }
+  if ( defendGroup.members < _nTot ){ exit; }
+  
+  _nMoved = 0;
+  //console("Scavenger AI: preparing to move ("& nAttackDroids &") droids to attackGroup from defendGroup ("& defendGroup.members &")");
+  initIterateGroup(defendGroup);
+	droid = iterateGroup(defendGroup);
+  while ( _nMoved <= nAttackDroids and droid != NULLOBJECT){
+    _nMoved++;
+    groupAddDroid(attackGroup, droid);
+		droid = iterateGroup(defendGroup);
+  }
+    
+  
+  if ( attackGroup.members == 0 ){ 
+    console("#### Scavenger AI: no droids moved to attackGroup ");
+    exit; 
+  } //else {
+    //console("Scavenger AI: built an attacking group  with ("& attackGroup.members &") droids");
+  //}
+
+ //find human player
+  _player       = random(8);
+  _nCounter     = 0;
+  _nHumanPlayer = -1;
+  _nAIPlayer    = -1;
+  nTargetPlayer = -1;
+  while ( _nCounter < MAX_PLAYERS and _nHumanPlayer == -1 ){    
+    if ( isPlayerStillLive(_player) ){
+      if ( isHumanPlayer( _player ) ){
+         _nHumanPlayer = _player;
+      } else {
+        if ( _nAIPlayer == -1 and _player != enemy1 ){ _nAIPlayer = _player; }
+      }
+    }
+    _player++;
+    if ( _player >= 8 ) {  _player = 0;  }
+    _nCounter++;
+  }
+
+  if ( _nHumanPlayer == -1 ){
+    console("#### Scavenger AI - prepareAttack: Human player not found ??");
+    exit;
+  }
+    
+  if ( random(10) < 8 or _nAIPlayer == -1 ){
+    nTargetPlayer = _nHumanPlayer;
+    console("Scavenger AI: Target is Human player '"& getPlayerName(nTargetPlayer)  &"' with "& attackGroup.members &" droids");
+    printDebug("Scavenger attacking human player '"& getPlayerName(nTargetPlayer)  &"' with "& attackGroup.members &" droids");
+  } else {
+    nTargetPlayer = _nAIPlayer;
+    console("Scavenger AI: Target is AI player ("& getPlayerName(nTargetPlayer)  &")");
+    printDebug("Scavenger attacking AI player '"& getPlayerName(nTargetPlayer)  &"' with "& attackGroup.members &" droids");
+  }
+
+  setEventTrigger(scavAttack,	scavAttackTr);
+  
+}
+//----------------------------------------------------------
+// Sometimes one single scav attacking droid moves too slowly and never reaches 
+// the target
+event scavAttack(inactive)
+{
+  if ( attackGroup.members < 2 or !isPlayerStillLive(nTargetPlayer) ){
+    if ( attackGroup.members > 0 ){
+      initIterateGroup(attackGroup);
+    	droid = iterateGroup(attackGroup);
+      while ( droid != NULLOBJECT){
+        groupAddDroid(defendGroup, droid);
+    		droid = iterateGroup(attackGroup);
+      }
+    }
+    oTargetObj    = NULLOBJECT;
+    nTargetPlayer = -1;
+    console("#### Scavenger AI - scavAttack: attack deactivated");
+    setEventTrigger(scavAttack,	inactive);
+    exit;
+  }
+  
+  if ( oTargetObj == NULLOBJECT ){
+    oTargetObj = closestEnemyDerrick(nTargetPlayer);
+    if ( oTargetObj == NULLOBJECT ){
+      oTargetObj = skLocateEnemy(nTargetPlayer);
+      if ( oTargetObj == NULLOBJECT ){
+        console("#### Scavenger AI - scavAttack: target not found ??");
+        exit;
+      } //else {
+        //console("Scavenger AI: new target object found");
+      //}
+    } //else {
+      //console("Scavenger AI - scavAttack: target is derrick ?");
+    //}
+  }   
+  console("Scavenger AI: attacking with ("& attackGroup.members &") droids player ("& getPlayerName(nTargetPlayer) &") at coord ("& oTargetObj.x/TILE &"-"& oTargetObj.y/TILE &") ");
+  orderGroupLoc( attackGroup, DORDER_SCOUT, oTargetObj.x, oTargetObj.y );
+}
+
+//----------------------------------------------------------
+// build scavenger droids
+event buildScavDroid(buildScavDroidTr)
+{
+  local     int       _nRnd;
+  private		TEMPLATE  _tmpl;
+  
+  //_nRnd = random(9);
+  
+  initEnumStruct(false,factory,enemy1,enemy1);
+  structure = enumStruct();
+  while(structure != NULLOBJECT)
+  {     
+  	if(structureIdle(structure)){
+      _nRnd = nTemplScav;
+      //console("Scavenger AI : builds template # ("& _nRnd &") on struct ("& structure.id &") power("& playerPower(enemy1) &")"); 
+      if ( _nRnd == 0 ){ buildDroid(trike, structure, enemy1, 1); }
+      if ( _nRnd == 1 ){ buildDroid(buggy, structure, enemy1, 1); }
+      if ( _nRnd == 2 ){ buildDroid(bloke, structure, enemy1, 1); }
+      if ( _nRnd == 3 ){ buildDroid(jeep, structure, enemy1, 1); }
+      if ( _nRnd == 4 ){ buildDroid(busCan, structure, enemy1, 1); }
+      if ( _nRnd == 5 ){ buildDroid(RKJeep, structure, enemy1, 1); }
+      if ( _nRnd == 6 ){ buildDroid(RKBuggy, structure, enemy1, 1); }
+      if ( _nRnd == 7 ){ buildDroid(FireCan, structure, enemy1, 1); }
+      if ( _nRnd == 8 ){ buildDroid(FireTruck, structure, enemy1, 1); }
+      nTemplScav++;
+      if ( nTemplScav >= 9 ){ nTemplScav = 0; }
+    }
+    structure = enumStruct();
+  }    
+}
+
+
+//----------------------------------------------------------
+// deal with a droid being built
+event droidbuilt(CALL_NEWDROID, enemy1, ref newDroid, ref fac1)
+{
+	groupAddDroid(defendGroup, newDroid);
+}
+
+
+//----------------------------------------------------------
+// watch for structures being attacked. Send the cavalry as required.
+event structureAttacked(CALL_STRUCT_ATTACKED, enemy1, ref structure, ref attacker)
+{
+	local DROID _droid;
+	local int _dist;
+	
+  if ((gameTime - tAttacked) > 300)
+	{		
+    
+    if (attacker.type == OBJ_DROID){
+      _droid = objToDroid(attacker);
+  		if ( !isVtol(_droid) ){
+        orderGroupLoc(defendGroup, DORDER_SCOUT, attacker.x, attacker.y);
+        defSpotX = structure.x;
+  		  defSpotY = structure.y;
+  		  tAttacked = gameTime;
+  		}
+		} else {
+      _dist = distBetweenTwoPoints(structure.x, structure.y, attacker.x, attacker.y);
+      if ( _dist < 22*TILE ){
+        orderGroupLoc(defendGroup, DORDER_SCOUT, attacker.x, attacker.y);
+        defSpotX = structure.x;
+  		  defSpotY = structure.y;
+  		  tAttacked = gameTime;
+      }
+    }
+	
+  }
+}
+
+// ======================================================
+//
+//    FUNCTIONS
+//
+// ======================================================
+
+//-----------------------------------------------------------------------------
+function bool isPlayerStillLive(int _player)
+{
+  if ( anyDroidsLeft(_player) or anyFactoriesLeft(_player) ){
+    return true;
+  } 
+  return false;
+}
+//-----------------------------------------------------------------------------
+function STRUCTURE closestEnemyDerrick(int _targetPlayer)
+{
+	
+  local	int				  _bestDist, _tempDist;
+	local	STRUCTURE		_derrick, _tempDerrick;
+  
+	_bestDist   = 999*TILE;
+	_derrick    = NULLOBJECT;
+  _tempDist   = 0;
+  
+  //a target player is required?
+  if ( _targetPlayer > -1 ){
+
+    initEnumStruct(false,derrick,_targetPlayer,_targetPlayer);
+  	_tempDerrick = enumStruct();
+  	while(_tempDerrick != NULLOBJECT)
+  	{
+      _tempDist = distBetweenTwoPoints(_tempDerrick.x, _tempDerrick.y, attackGroup.x, attackGroup.y);
+      if (_tempDist < _bestDist ){
+        _derrick   = _tempDerrick;
+        _bestDist  = _tempDist;
+     	}
+   		_tempDerrick = enumStruct();
+   	}//while
+   	   	
+ 	}  
+  return _derrick;  
+}
+//-----------------------------------------------------------------------------
+function bool bAnyOilResLeft()
+{
+  local DROID _droid;
+  boolResult = true;
+
+  InitEnumDroids(enemy1,enemy1);
+  _droid = EnumDroid();
+  while ( _droid != NULLOBJECT and boolResult ){
+    if (_droid != NULLOBJECT){ boolResult = false;}
+    _droid = EnumDroid();
+  }
+
+  if ( _droid == NULLOBJECT ){
+    return false;
+  }
+	
+  initGetFeature(oilRes,-1,enemy1);
+	feature = getFeature(enemy1);
+  while(feature != NULLOBJECT)
+	{
+     if ( droidCanReach(_droid, feature.x, feature.y) ){
+	     return true;
+     }
+     feature = getFeature(enemy1);
+	}
+
+  return false;
+}
+//-----------------------------------------------------------------------------
+function bool setWanderCoord()
+{
+  local DROID _droid;
+  local FEATURE _oilRes;
+  local int _bestDist,_dist;
+	local int _nOil,_count;
+  
+	boolResult = true;
+
+  InitEnumDroids(enemy1,enemy1);
+  _droid = EnumDroid();
+  while ( _droid != NULLOBJECT and boolResult ){
+    if (_droid != NULLOBJECT){ boolResult = false;}
+    _droid = EnumDroid();
+  }
+
+  if ( _droid == NULLOBJECT ){
+    return false;
+  }
+	
+  //_bestDist = 999999;
+  _nOil     = random(numRemainingOilRes());
+  _count    = 0;
+  initGetFeature(oilRes,-1,enemy1);
+	feature = getFeature(enemy1);
+  while(feature != NULLOBJECT)
+	{
+     if ( droidCanReach(_droid, feature.x, feature.y) and _nOil == _count ){
+       _dist = distBetweenTwoPoints(feature.x, feature.y, wanderGroup.x, wanderGroup.y);
+       if ( _dist > 8 * TILE or tWanderCoord - gameTime > 1200){
+         _oilRes = feature;
+       }
+	   }
+     feature = getFeature(enemy1);
+	   _count++;
+  }
+	if ( _oilRes != NULLOBJECT ){
+	 tWanderCoord = gameTime;
+   console("Scavenger AI - setWanderCoord, coord set to ("& wanderX/TILE &"-"& wanderY/TILE &")");
+   wanderX = _oilRes.x;
+	 wanderY = _oilRes.y;
+	 return true;
+  }
+
+  return false;
+}
+//-----------------------------------------------------------------------------
+function bool setWanderCoord2()
+{
+  local DROID _droid;
+  local FEATURE _oilRes;
+  local int _bestDist,_dist;
+	local int _nOil,_count;
+  
+	boolResult = true;
+
+  InitEnumDroids(enemy1,enemy1);
+  _droid = EnumDroid();
+  while ( _droid != NULLOBJECT and boolResult ){
+    if (_droid != NULLOBJECT){ boolResult = false;}
+    _droid = EnumDroid();
+  }
+
+  if ( _droid == NULLOBJECT ){
+    return false;
+  }
+	
+  //_bestDist = 999999;
+  _nOil     = random(numRemainingOilRes());
+  _count    = 0;
+  initGetFeature(oilRes,-1,enemy1);
+	feature = getFeature(enemy1);
+  while(feature != NULLOBJECT)
+	{
+     if ( droidCanReach(_droid, feature.x, feature.y) and _nOil == _count ){
+       _dist = distBetweenTwoPoints(feature.x, feature.y, wanderGroup2.x, wanderGroup2.y);
+       if ( _dist > 8 * TILE or tWanderCoord2 - gameTime > 1200){
+         _oilRes = feature;
+       }
+	   }
+     feature = getFeature(enemy1);
+	   _count++;
+  }
+	if ( _oilRes != NULLOBJECT ){
+	 tWanderCoord2 = gameTime;
+   console("Scavenger AI - setWanderCoord, coord set to ("& wanderX2/TILE &"-"& wanderY2/TILE &")");
+   wanderX2 = _oilRes.x;
+	 wanderY2 = _oilRes.y;
+	 return true;
+  }
+
+  return false;
+}
+//-----------------------------------------------------------------------------
+function int numRemainingOilRes()
+{
+  local FEATURE _tempOilRes;
+  local int _nTot;
+  _nTot=0;
+  
+  initGetFeature(oilRes,-1,enemy1);
+	_tempOilRes = getFeature(enemy1);
+	while(_tempOilRes != NULLOBJECT and _nTot < MAX_WHILE_LOOPS)
+	{
+		_nTot++;
+    _tempOilRes = getFeature(enemy1);
+	}
+	
+  return _nTot;
+}
+//-----------------------------------------------------------------------------
+function void printDebug( STRING _message )
+{
+ if ( _DEBUG ){
+  debug( GAME_TIME_IN_MIN &"min; "& getPlayerName(enemy1) &" #"& enemy1 &" [ x - x ] ;0 ;" & _message);
+ }
+}
+ 
