@@ -2875,7 +2875,10 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->psBaseStruct = NULL;
 
 	// find the highest stored experience
-	if ((psDroid->droidType != DROID_CONSTRUCT) &&
+	// Unless game time is stopped, then we're hopefully loading a game and
+	// don't want to use up recycled experience for the droids we just loaded.
+	if (!gameTimeIsStopped() &&
+		(psDroid->droidType != DROID_CONSTRUCT) &&
 		(psDroid->droidType != DROID_CYBORG_CONSTRUCT) &&
 		(psDroid->droidType != DROID_REPAIR) &&
 		(psDroid->droidType != DROID_CYBORG_REPAIR) &&
