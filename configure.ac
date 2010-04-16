@@ -205,6 +205,13 @@ AC_ARG_ENABLE([debug],
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([${enable_debug}])
 
+# gcc 4.5 added some warnings to -Wall that weren't even valid in previous
+# versions. The -Werror is necessary since otherwise gcc prints a warning that
+# the option is only valid for c++/objc++, but the test succeeds. The order is
+# also important, it doesn't work if -Werror comes last.
+AX_C_CHECK_FLAG([-Werror -Wno-switch], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-switch")
+AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-enum-compare")
+
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wcheck -Werror"
@@ -212,6 +219,7 @@ if test "x$enable_debug" = "xyes" ; then
 	else
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wall -Werror -Wno-unused-label -Wno-pointer-to-int-cast -Wmissing-field-initializers -Wcast-align -Wwrite-strings"
 		WZ_CFLAGS="${WZ_CFLAGS} -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith -Wno-format-security -Wdeclaration-after-statement"
+		WZ_CFLAGS="${WZ_CFLAGS} ${CFLAGS_IGNORE_WARNINGS}"
 		WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
