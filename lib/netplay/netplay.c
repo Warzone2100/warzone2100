@@ -895,6 +895,11 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	ourgamestruct->future4 = ntoh32(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
 	
+	// cat the modstring (if there is one) to the version string to display it for the end-user
+	if (ourgamestruct->modlist[0] != '\0')
+	{
+		ssprintf(ourgamestruct->versionstring, "%s, Mods:%s", ourgamestruct->versionstring, ourgamestruct->modlist);
+	}
 	debug(LOG_NET, "received GAMESTRUCT");
 
 	return true;
@@ -2471,11 +2476,6 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	memset(gamestruct.secondaryHosts, 0, sizeof(gamestruct.secondaryHosts));
 	sstrcpy(gamestruct.extra, "Extra");						// extra string (future use)
 	sstrcpy(gamestruct.versionstring, VersionString);		// version (string)
-	if (*getModList())
-	{
-		sstrcat(gamestruct.versionstring, _(", mod: "));	// version (string)
-		sstrcat(gamestruct.versionstring, getModList());	// version (string)
-	}
 	sstrcpy(gamestruct.modlist, getModList());				// List of mods
 	gamestruct.GAMESTRUCT_VERSION = 3;						// version of this structure
 	gamestruct.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
