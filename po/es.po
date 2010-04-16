@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-09 03:20+0200\n"
-"PO-Revision-Date: 2010-04-01 21:25+0100\n"
+"POT-Creation-Date: 2010-04-15 17:12+0200\n"
+"PO-Revision-Date: 2010-04-15 23:00+0100\n"
 "Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -10102,13 +10102,11 @@ msgstr "Artillería Mini-Cohetes Víbora Semi-Oruga"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
 #: data/mp/messages/strings/names.txt:1956
-#, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
 msgstr "Bahía de Bombas de Fósforo Mantis ADV"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
 #: data/mp/messages/strings/names.txt:1957
-#, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
 msgstr "Bahía de Bombas Múltiples Mantis ADV"
 
@@ -11540,25 +11538,24 @@ msgstr "Chino Tradicional"
 msgid "Latin"
 msgstr "Latino"
 
-#: lib/netplay/netplay.c:197
-#: lib/netplay/netplay.c:1037
+#: lib/netplay/netplay.c:200
+#: lib/netplay/netplay.c:1053
 msgid "Enter password here"
 msgstr "Introducir contraseña aquí"
 
-#: lib/netplay/netplay.c:2000
+#: lib/netplay/netplay.c:2024
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "¡No se pudo resolver el nombre del servidor maestro (%s)!"
 
-#: lib/netplay/netplay.c:2013
+#: lib/netplay/netplay.c:2037
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "¡No se pudo comunicar con el servidor! ¿Está el puerto TCP %u abierto para tráfico saliente?"
 
-#: lib/netplay/netplay.c:2418
-#, fuzzy
+#: lib/netplay/netplay.c:2476
 msgid ", mod: "
-msgstr ", mods: "
+msgstr ""
 
 #: src/challenge.c:188
 #: src/hci.c:1018
@@ -11870,31 +11867,31 @@ msgstr "Jugador Salió"
 msgid "Player dropped"
 msgstr "Jugador Desconectado"
 
-#: src/display.c:1659
+#: src/display.c:1660
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "No se puede construir. Yacimiento de petróleo ardiendo."
 
-#: src/display.c:1839
-#: src/display.c:2431
+#: src/display.c:1840
+#: src/display.c:2432
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Daño %d%% - Experiencia %d, %s"
 
-#: src/display.c:1855
+#: src/display.c:1856
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s Aliado - Daño %d%% - Experiencia %d, %s"
 
-#: src/display.c:2045
+#: src/display.c:2046
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Camión enviado a construir Torre Petrolífera"
 
-#: src/display.c:2046
+#: src/display.c:2047
 #, fuzzy
 msgid "2 trucks ordered to build Oil Derrick"
 msgstr "Camión enviado a construir Torre Petrolífera"
 
-#: src/display.c:2047
+#: src/display.c:2048
 #, fuzzy, c-format
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr "Camión enviado a construir Torre Petrolífera"
@@ -11907,68 +11904,68 @@ msgstr "¡Unidad destruída!"
 msgid "Structure Restored"
 msgstr "Estructura Restaurada"
 
-#: src/droid.c:2955
+#: src/droid.c:2960
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u seleccionado - %u Unidad"
 msgstr[1] "Grupo %u seleccionado - %u Unidades"
 
-#: src/droid.c:2968
+#: src/droid.c:2973
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidad asignada al Grupo %u"
 msgstr[1] "%u unidades asignadas al Grupo %u"
 
-#: src/droid.c:2981
+#: src/droid.c:2986
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado en el Grupo %u - %u Unidad"
 msgstr[1] "Centrado en el Grupo %u - %u Unidades"
 
-#: src/droid.c:2985
+#: src/droid.c:2990
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alineando con el Grupo %u - %u Unidad"
 msgstr[1] "Alineando con el Grupo %u - %u Unidades"
 
-#: src/droid.c:3269
+#: src/droid.c:3274
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.c:3270
+#: src/droid.c:3275
 msgctxt "rank"
 msgid "Green"
 msgstr "Principiante"
 
-#: src/droid.c:3271
+#: src/droid.c:3276
 msgid "Trained"
 msgstr "Entrenado"
 
-#: src/droid.c:3272
+#: src/droid.c:3277
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3273
+#: src/droid.c:3278
 msgid "Professional"
 msgstr "Profesional"
 
-#: src/droid.c:3274
+#: src/droid.c:3279
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3275
+#: src/droid.c:3280
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.c:3276
+#: src/droid.c:3281
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.c:3277
+#: src/droid.c:3282
 msgid "Hero"
 msgstr "Héroe"
 
@@ -12305,9 +12302,8 @@ msgstr "OPCIONES DE JUEGO"
 
 #: src/frontend.c:1693
 #: src/multiint.c:2235
-#, fuzzy
 msgid "Mod: "
-msgstr ", mods: "
+msgstr ""
 
 #: src/hci.c:1363
 msgid "MAP SAVED!"
@@ -12487,6 +12483,9 @@ msgid ""
 "\n"
 "Warzone will try to load the game without it."
 msgstr ""
+"El mod requerido no pudo ser cargado: %s\n"
+"\n"
+"Warzone intentará cargar el la partida sin él."
 
 #: src/intdisplay.c:197
 #, fuzzy
@@ -13655,27 +13654,27 @@ msgstr "ANFITRIÓN"
 msgid "Players Still Joining"
 msgstr "Todavia hay jugadores uniéndose"
 
-#: src/multijoin.c:213
+#: src/multijoin.c:214
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s abandonó la partida"
 
-#: src/multijoin.c:227
+#: src/multijoin.c:228
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "La transferencia de archivos ha sido abortada por %d"
 
-#: src/multijoin.c:348
+#: src/multijoin.c:349
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) tiene un mod incompatible, y ha sido kickeado"
 
-#: src/multijoin.c:387
+#: src/multijoin.c:388
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s se está uniendo a la partida"
 
-#: src/multijoin.c:397
+#: src/multijoin.c:398
 msgid "System message:"
 msgstr "Mensaje del sistema:"
 
@@ -13761,47 +13760,47 @@ msgstr "Dar Energía al Jugador"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "¡Kickeado el jugador %s, porque intentó saltar la seguridad de integridad de datos!"
 
-#: src/multiplay.c:1064
+#: src/multiplay.c:1065
 msgid "(allies"
 msgstr "( a aliados"
 
-#: src/multiplay.c:1072
+#: src/multiplay.c:1073
 msgid "(private to "
 msgstr "(privado a "
 
-#: src/multiplay.c:1085
+#: src/multiplay.c:1086
 msgid "[invalid]"
 msgstr "[inválido]"
 
-#: src/multiplay.c:1944
+#: src/multiplay.c:1945
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.c:1945
+#: src/multiplay.c:1946
 msgid "Orange"
 msgstr "Naranja"
 
-#: src/multiplay.c:1946
+#: src/multiplay.c:1947
 msgid "Grey"
 msgstr "Gris"
 
-#: src/multiplay.c:1947
+#: src/multiplay.c:1948
 msgid "Black"
 msgstr "Negro"
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1949
 msgid "Red"
 msgstr "Rojo"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1950
 msgid "Blue"
 msgstr "Azul"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1951
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1952
 msgid "Cyan"
 msgstr "Cian"
 
@@ -14078,14 +14077,14 @@ msgstr "Versión: %s%s%s%s"
 #~ msgid ": Unknown cheat code."
 #~ msgstr "Código de trampa desconocido"
 
-#~ msgid "Active mods: "
-#~ msgstr "Mods activos: "
-
 #~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
 #~ msgstr "(Jugador %u) ha detectado el bug de 'borg sin piernas' ¡Por favor introduce legs en la console y súbenos los archivos!"
 
 #~ msgid "You found %u power in an oil drum"
 #~ msgstr "Encontraste %u energía en un barril de petróleo"
+
+#~ msgid "Active mods: "
+#~ msgstr "Mods activos: "
 
 #~ msgid "Warning: Player %s did not send a data check, and may be cheating."
 #~ msgstr "Atención: El Jugador %s no envió un chequeo de datos y puede que haga trampas."
