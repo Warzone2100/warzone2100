@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-12 21:03+0200\n"
-"PO-Revision-Date: 2010-04-01 21:25+0100\n"
+"POT-Creation-Date: 2010-04-16 18:03+0200\n"
+"PO-Revision-Date: 2010-04-15 23:00+0100\n"
 "Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -10102,13 +10102,11 @@ msgstr "Artillería Mini-Cohetes Víbora Semi-Oruga"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
 #: data/mp/messages/strings/names.txt:1953
-#, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
 msgstr "Bahía de Bombas de Fósforo Mantis ADV"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
 #: data/mp/messages/strings/names.txt:1954
-#, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
 msgstr "Bahía de Bombas Múltiples Mantis ADV"
 
@@ -11531,24 +11529,23 @@ msgid "Latin"
 msgstr "Latino"
 
 #: lib/netplay/netplay.c:1287
-#: lib/netplay/netplay.c:2132
+#: lib/netplay/netplay.c:2131
 msgid "Enter password here"
 msgstr "Introducir contraseña aquí"
 
-#: lib/netplay/netplay.c:3113
+#: lib/netplay/netplay.c:3112
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "¡No se pudo resolver el nombre del servidor maestro (%s)!"
 
-#: lib/netplay/netplay.c:3138
+#: lib/netplay/netplay.c:3137
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "¡No se pudo comunicar con el servidor! ¿Está el puerto TCP %u abierto para tráfico saliente?"
 
-#: lib/netplay/netplay.c:3580
-#, fuzzy
+#: lib/netplay/netplay.c:3590
 msgid ", mod: "
-msgstr ", mods: "
+msgstr ""
 
 #: src/challenge.c:188
 #: src/hci.c:1012
@@ -12289,9 +12286,8 @@ msgstr "OPCIONES DE JUEGO"
 
 #: src/frontend.c:1707
 #: src/multiint.c:2239
-#, fuzzy
 msgid "Mod: "
-msgstr ", mods: "
+msgstr ""
 
 #: src/hci.c:1358
 msgid "MAP SAVED!"
@@ -12463,6 +12459,9 @@ msgid ""
 "\n"
 "Warzone will try to load the game without it."
 msgstr ""
+"El mod requerido no pudo ser cargado: %s\n"
+"\n"
+"Warzone intentará cargar el la partida sin él."
 
 #: src/intdisplay.c:202
 #: src/intdisplay.c:247
