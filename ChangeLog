@@ -1,4 +1,16 @@
-2010-04-00: Version 2.3 beta 13
+2010-04-17: Version 2.3 RC 1a
+ * General:
+   * Change: Supress system dialogs when in full screen mode (r10605, ticket:1776)
+   * Fix: Actually use saved experience for new droids (r10604, ticket:251)
+   * Fix: Various build system fixes (r10561, r10563, r10586)
+ * Multiplayer:
+   * Fix: When using a passworded game, prevent connection to anyone but the host, until verified. (r10572, ticket:1611
+ * Mods:
+   * Change: DyDo AI updated to version 2.1.1
+ * Translations:
+   * Updated: Spanish (r10598), German (r10599), Croatian (r10588), Polish (r10577)
+
+2010-04-10: Version 2.3 beta 13
  * General:
    * Change: Crash report and log files now will reside in a UAC friendly directory for windows (r10532, ticket:1759)
    * Change: All platforms will have stderr routed to <configdir>/logs/WZlog*.txt (r10532, ticket:1759)
