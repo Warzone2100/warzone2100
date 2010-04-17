@@ -37,6 +37,7 @@
 #endif
 
 #include "lib/gamelib/gtime.h"
+#include "src/warzoneconfig.h"	// to determine if we are in full screen mode or not for the system dialogs
 
 #define MAX_LEN_LOG_LINE 512
 
@@ -430,12 +431,13 @@ void _debug( code_part part, const char *function, const char *str, ... )
 
 		// Throw up a dialog box for windows users since most don't have a clue to check the stderr.txt file for information
 		// Use for (duh) Fatal errors, that force us to terminate the game.
-		if (part == LOG_FATAL)
+		// FIXME: This only works for windowed mode now, screenToggleMode() doesn't seem to toggle us back and forth for some reason.
+		if (part == LOG_FATAL && !war_getFullscreen())
 		{
 #if defined(WZ_OS_WIN)
 			char* popupBuf;
-			sasprintf(&popupBuf, "%s\n\nPlease check your stderr.txt file in the same directory as the program file for more details. \
-				\nDo not forget to upload both the stderr.txt file and the warzone2100.rpt file in your bug reports!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			sasprintf(&popupBuf, "%s\n\nPlease check your WZlog file in your <config dir>/logs directory for more details. \
+				\nDo not forget to upload both the WZlog<date><time>.txt file and the warzone2100.rpt file in your bug reports!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 
 			MessageBoxA(NULL, popupBuf, "Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
 #elif defined(WZ_HAVE_MOTIF)
@@ -451,7 +453,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 			GetStandardAlertDefaultParams( &param, kStdCFStringAlertVersionOne );
 			param.movable = true;
 			
-			ssprintf(aBuffer, "%s\n\nPlease check your logs for more details.\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
+			ssprintf(aBuffer, "%s\n\nPlease check your <config dir>/logs/WZlog file for more details.\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
 			
 			err = CreateStandardAlert( kAlertStopAlert, CFStringCreateWithCString( nil, aBuffer, kCFStringEncodingMacRoman),
 				CFSTR( "Run Console.app and search for wz2100 and copy that to a file.\
@@ -468,11 +470,12 @@ void _debug( code_part part, const char *function, const char *str, ... )
 
 		// Throw up a dialog box for windows users since most don't have a clue to check the stderr.txt file for information
 		// This is a popup dialog used for times when the error isn't fatal, but we still need to notify user what is going on.
-		if (part == LOG_POPUP)
+		// FIXME: This only works for windowed mode now
+		if (part == LOG_POPUP && !war_getFullscreen())
 		{
 #if defined(WZ_OS_WIN) || defined(WZ_HAVE_MOTIF)
 			char* popupBuf;
-			sasprintf(&popupBuf, "A non fatal error has occurred.\n\n%s", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			sasprintf(&popupBuf, "A non fatal error has occurred.\n\n%s.\n\nCheck your <config dir>/logs/WZlog file for more details.", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 
 # if defined(WZ_OS_WIN)
 			MessageBoxA(NULL, popupBuf, "Warzone has detected a problem.", MB_OK|MB_ICONINFORMATION);
@@ -489,7 +492,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 			GetStandardAlertDefaultParams( &param, kStdCFStringAlertVersionOne );
 			param.movable = true;
 			
-			ssprintf(aBuffer, "A non fatal error has occurred.\n\n%s\n\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
+			ssprintf(aBuffer, "A non fatal error has occurred.\n\n%s\n\nCheck your <config dir>/logs/WZlog file for more details.", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
 			
 			err = CreateStandardAlert( kAlertNoteAlert, CFStringCreateWithCString( nil, aBuffer, kCFStringEncodingMacRoman), NULL, &param, &dialog );
 			SetWindowTitleWithCFString( GetDialogWindow( dialog ), CFSTR( "Warzone has detected a problem" ) );
