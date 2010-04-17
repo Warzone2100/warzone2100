@@ -2,7 +2,7 @@
  * General:
    * Change: Supress system dialogs when in full screen mode (r10605, ticket:1776)
    * Fix: Actually use saved experience for new droids (r10604, ticket:251)
-   * Fix: Various build system fixes (r10561, r10563, r10586)
+   * Fix: Various build fixes (r10558, r10561, r10563, r10586, r10595, r10606)
  * Multiplayer:
    * Fix: When using a passworded game, prevent connection to anyone but the host, until verified. (r10572, ticket:1611
  * Mods:
