@@ -743,6 +743,13 @@ BOOL recvMessage(void)
 			uint32_t player_id;
 			char reason[MAX_KICK_REASON];
 
+			if (player_id == NET_HOST_ONLY)
+			{
+				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
+				NETend();
+				break;
+			}
+
 			NETbeginDecode(NET_KICK);
 				NETuint32_t(&player_id);
 				NETstring( reason, MAX_KICK_REASON);
