@@ -29,9 +29,9 @@ from __future__ import with_statement
 #
 
 __author__ = "Gerard Krol, Tim Perrei, Freddie Witherden, Gerhard Schaden, Dennis Schridde, Buginator"
-__version__ = "2.2"
+__version__ = "2.3"
 __bpydoc__ = """\
-This script runs a Warzone 2100 2.2.x+ masterserver
+This script runs a Warzone 2100 2.3.x+ masterserver
 """
 
 #
@@ -55,7 +55,8 @@ from protocol import *
 
 checkInterval = 100      # Interval between requests causing a gamedb check
 
-MOTDstring = None        # our message of the day (max 255 bytes)
+MOTDstring = None        # our message of the day (max 255 bytes) (for 2.3 / trunk)
+MOTD22string = None      # the EOL message for 2.2.x
 
 logging.basicConfig(level = logging.DEBUG, format = "%(asctime)-15s %(levelname)s %(message)s")
 
@@ -301,7 +302,13 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 						self.sendStatusMessage(self.CLIENT_ERROR_NOT_ACCEPTABLE, 'Game unreachable, failed to open a connection to: [%s]:%d' % (self.gameHost, protocol.gamePort))
 						return
 
-					self.sendStatusMessage(self.SUCCESS_OK, MOTDstring)
+					if self.g.lobbyVersion == 3:
+					   self.sendStatusMessage(self.SUCCESS_OK, MOTDstring)
+					else:
+					   self.sendStatusMessage(self.SUCCESS_OK, MOTD22string)
+# After a few weeks, we will force 2.2.x clients to upgrade, by closing the connection after MOTD is sent.
+#					   self.sendStatusMessage(self.CLIENT_ERROR_NOT_ACCEPTABLE, MOTD22string)
+#					   return
 					gamedb.listGames()
 				return
 			# Get a game list.
@@ -363,9 +370,17 @@ if __name__ == '__main__':
 	logging.info("Starting Warzone 2100 lobby server on port %d" % (protocol.lobbyPort))
 
 	# Read in the Message of the Day, max is 1 line, 255 chars
+	#for the 2.3 / trunk clients
 	in_file = open("motd.txt", "r")
 	MOTDstring = in_file.read()
 	in_file.close()
+
+	#for the 2.2.x client (farewell message)
+	in_file = open("motd2.2.txt", "r")
+	MOTD22string = in_file.read()
+	in_file.close()
+
+	logging.info("The MOTD(2.2) is (%s)" % MOTD22string)
 	logging.info("The MOTD is (%s)" % MOTDstring)
 
 
