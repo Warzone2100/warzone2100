@@ -2763,7 +2763,7 @@ static void processMultiopWidgets(UDWORD id)
 	if((id >= MULTIOP_PLAYER_START) && (id <= MULTIOP_PLAYER_END))	// clicked on a player
 	{
 		// options for kicking
-		if(NetPlay.isHost)
+		if(NetPlay.isHost && (id - MULTIOP_PLAYER_START != NET_HOST_ONLY) )	// can't kick self!
 		{
 			if(mouseDown(MOUSE_RMB)) // both buttons....
 			{
@@ -3065,6 +3065,13 @@ void frontendMultiMessages(void)
 			uint32_t player_id;
 			char reason[MAX_KICK_REASON];
 			LOBBY_ERROR_TYPES KICK_TYPE = ERROR_NOERROR;
+
+			if (player_id == NET_HOST_ONLY)
+			{
+				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
+				NETend();
+				break;
+			}
 
 			NETbeginDecode(NET_KICK);
 				NETuint32_t(&player_id);

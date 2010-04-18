@@ -2799,6 +2799,20 @@ receive_message:
 
 				pMsg->size = ntohs(pMsg->size);
 
+				if (pMsg->source != NET_HOST_ONLY && (pMsg->type == NET_KICK || pMsg->type == NET_PLAYER_LEAVING) )
+				{
+					// somone is trying to kick the HOST, and we are not going to let them, instead we will kick THEM.
+					char msg[256] = {'\0'};
+
+					ssprintf(msg, "Kicking player %u, because they tried to kick the host!", (unsigned int) pMsg->source);
+					NETlogEntry(msg, SYNC_FLAG, pMsg->source);
+
+					kickPlayer((unsigned int) pMsg->source, "it is not nice to cheat!", ERROR_CHEAT);
+					debug(LOG_ERROR, "%s", msg);
+					return;
+
+				}
+
 				// we are the host, and have received a broadcast packet; distribute it
 				for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 				{
