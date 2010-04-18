@@ -4272,6 +4272,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 	STRUCTURE	*psStruct;
 	UDWORD		body, armourK[NUM_HIT_SIDES], armourH[NUM_HIT_SIDES];
 	HIT_SIDE	impact_side;
+	int them = 0;
 
 	CHECK_DROID(psD);
 
@@ -4322,44 +4323,60 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 					psD->asBits[COMP_REPAIRUNIT].nStat = (UBYTE)aDefaultRepair[psD->player];
 				}
 			}
-			}
+		}
 		// add back into cluster system
 		clustNewDroid(psD);
 
 		// Update visibility
 		visTilesUpdate((BASE_OBJECT*)psD);
 
-		// check through the 'to' players list of droids to see if any are targetting it
-		for (psCurr = apsDroidLists[to]; psCurr != NULL; psCurr = psCurr->psNext)
+		// check through the players, and our allies, list of droids to see if any are targetting it
+		for (them = 0; them < MAX_PLAYERS; them++)
 		{
-			if (psCurr->psTarget == (BASE_OBJECT *)psD || psCurr->psActionTarget[0] == (BASE_OBJECT *)psD)
+			if (!aiCheckAlliances(them, to))	// scan all the droid list for ALLIANCE_FORMED (yes, we have a alliance with ourselves)
 			{
-				orderDroid(psCurr, DORDER_STOP);
+				continue;
 			}
-			// check through order list
-			for (i = 0; i < psCurr->listSize; i++)
+
+			for (psCurr = apsDroidLists[them]; psCurr != NULL; psCurr = psCurr->psNext)
 			{
-				if (psCurr->asOrderList[i].psOrderTarget == (BASE_OBJECT *)psD)
+				if (psCurr->psTarget == (BASE_OBJECT *)psD || psCurr->psActionTarget[0] == (BASE_OBJECT *)psD)
 				{
-					removeDroidOrderTarget(psCurr, i);
-					// move the rest of the list down
-					memmove(&psCurr->asOrderList[i], &psCurr->asOrderList[i] + 1, (psCurr->listSize - i) * sizeof(ORDER_LIST));
-					// adjust list size
-					psCurr->listSize -= 1;
-					// initialise the empty last slot
-					memset(psCurr->asOrderList + psCurr->listSize, 0, sizeof(ORDER_LIST));
+					orderDroid(psCurr, DORDER_STOP);
+				}
+				// check through order list
+				for (i = 0; i < psCurr->listSize; i++)
+				{
+					if (psCurr->asOrderList[i].psOrderTarget == (BASE_OBJECT *)psD)
+					{
+						removeDroidOrderTarget(psCurr, i);
+						// move the rest of the list down
+						memmove(&psCurr->asOrderList[i], &psCurr->asOrderList[i] + 1, (psCurr->listSize - i) * sizeof(ORDER_LIST));
+						// adjust list size
+						psCurr->listSize -= 1;
+						// initialise the empty last slot
+						memset(psCurr->asOrderList + psCurr->listSize, 0, sizeof(ORDER_LIST));
+					}
 				}
 			}
 		}
-		// check through the 'to' players list of structures to see if any are targetting it
-		for (psStruct = apsStructLists[to]; psStruct != NULL; psStruct = psStruct->psNext)
+
+		for (them = 0; them < MAX_PLAYERS; them++)
 		{
-			if (psStruct->psTarget[0] == (BASE_OBJECT *)psD)
+			if (!aiCheckAlliances(them, to))	// scan all the droid list for ALLIANCE_FORMED (yes, we have a alliance with ourselves)
 			{
-				psStruct->psTarget[0] = NULL;
+				continue;
+			}
+
+			// check through the players list, and our allies, of structures to see if any are targetting it
+			for (psStruct = apsStructLists[them]; psStruct != NULL; psStruct = psStruct->psNext)
+			{
+				if (psStruct->psTarget[0] == (BASE_OBJECT *)psD)
+				{
+					psStruct->psTarget[0] = NULL;
+				}
 			}
 		}
-
 		// skirmish callback!
 		psScrCBDroidTaken = psD;
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_UNITTAKEOVER);
