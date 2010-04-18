@@ -197,7 +197,7 @@ AS_IF([test "x$enable_sound" != "xyes"],[
 ])
 
 AC_ARG_ENABLE([motif],
-	AS_HELP_STRING([--disable-debug],[Use Motif widgets to provide message dialog boxes with.]),
+	AS_HELP_STRING([--disable-motif],[Use Motif widgets to provide message dialog boxes]),
 	[ enable_motif=${enableval} ], [ enable_motif=try ])
 
 # -O0 turns off all optimizations; this is necessary for accurate debugging
