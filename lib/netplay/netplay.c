@@ -2809,7 +2809,7 @@ receive_message:
 
 					kickPlayer((unsigned int) pMsg->source, "it is not nice to cheat!", ERROR_CHEAT);
 					debug(LOG_ERROR, "%s", msg);
-					return;
+					return true;
 
 				}
 
