@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-12 21:03+0200\n"
-"PO-Revision-Date: 2010-02-13 14:39-0300\n"
+"POT-Creation-Date: 2010-04-18 22:12+0200\n"
+"PO-Revision-Date: 2010-04-18 19:39-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -3445,7 +3445,7 @@ msgstr "Alvos: Estruturas"
 #: data/mp/messages/resmessages2.rmsg:720
 #: data/mp/messages/strings/resstrings.txt:737
 msgid "Drops High Explosive Armor Piercing bombs"
-msgstr "Bombas Altamente Explosivas"
+msgstr "Lança Bombas Altamente Explosivas"
 
 #: data/base/messages/resmessages2.rmsg:721
 #: data/base/messages/strings/resstrings.txt:705
@@ -3628,7 +3628,7 @@ msgstr "Ogivas Altamente Explosivas e Perfurantes"
 #: data/mp/messages/resmessages2.rmsg:941
 #: data/mp/messages/strings/resstrings.txt:1009
 msgid "High Explosive Squash Head warhead"
-msgstr "Ogiva Altamente Explosiva e Perfurante"
+msgstr "Ogiva de Choque Altamente Explosiva"
 
 #: data/base/messages/resmessages3.rmsg:18
 #: data/mp/messages/resmessages3.rmsg:18
@@ -9804,7 +9804,6 @@ msgid "VTOL Lancer Bug VTOL"
 msgstr "VTOL Lançadeiro Inseto"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1874
-#, fuzzy
 msgid "VTOL HPV Cannon Bug VTOL"
 msgstr "VTOL Canhão de Hiper Velocidade Inseto"
 
@@ -9814,7 +9813,6 @@ msgid "VTOL Lancer Scorpion VTOL"
 msgstr "VTOL Lançadeiro Escorpião"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
-#, fuzzy
 msgid "VTOL HPV Cannon Scorpion VTOL"
 msgstr "VTOL Canhão de Hiper Velocidade Escorpião"
 
@@ -9824,7 +9822,6 @@ msgid "VTOL Lancer Mantis VTOL"
 msgstr "VTOL Lançadeiro Mantis"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
-#, fuzzy
 msgid "VTOL HPV Cannon Mantis VTOL"
 msgstr "VTOL Canhão de Hiper Velocidade Mantis"
 
@@ -9954,7 +9951,6 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr "Tanque Mini-Foguetes Cobra"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Tracks"
 msgstr "Tanque Artilharia de Mini-Foguetes Cobra"
 
@@ -9964,9 +9960,8 @@ msgid "Inferno Cobra Half-Tracks"
 msgstr "Híbrido Inferno Cobra"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1920
-#, fuzzy
 msgid "HPV Cannon Python Hover"
-msgstr "Hovercraft Canhão Pesado Píton"
+msgstr "Hovercraft Canhão Píton"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1924
 #: data/mp/messages/strings/names.txt:1924
@@ -10020,123 +10015,103 @@ msgstr "Híbrido Incendiário Víbora"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1937
 #: data/mp/messages/strings/names.txt:1937
-#, fuzzy
 msgid "Inferno Cobra Hover"
-msgstr "Híbrido Inferno Cobra"
+msgstr "Hovercraft Inferno Cobra"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1938
 #: data/mp/messages/strings/names.txt:1938
-#, fuzzy
 msgid "Medium Cannon Cobra Half Track"
-msgstr "Tanque Canhão Médio Cobra"
+msgstr "Híbrido Canhão Médio Cobra"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1939
 #: data/mp/messages/strings/names.txt:1939
-#, fuzzy
 msgid "Inferno Python Hover"
-msgstr "Hovercraft Canhão Pesado Píton"
+msgstr "Hovercraft Inferno Píton"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1940
 #: data/mp/messages/strings/names.txt:1940
-#, fuzzy
 msgid "Assault Gun Python Hover"
-msgstr "Tanque Canhão de Assalto Píton"
+msgstr "Hovercraft Metralhadora de Assalto Píton"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1941
 #: data/mp/messages/strings/names.txt:1941
-#, fuzzy
 msgid "Assault Gun Python Half Track"
-msgstr "Tanque Canhão de Assalto Píton"
+msgstr "Híbrido Metralhadora de Assalto Píton"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
 #: data/mp/messages/strings/names.txt:1942
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Tanque Metralhadora Pesada Escorpião"
+msgstr "Híbrido Metralhadora Pesada Escorpião"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
 #: data/mp/messages/strings/names.txt:1943
-#, fuzzy
 msgid "Assault Cannon Mantis Hover"
-msgstr "Torre de Canhão de Assalto"
+msgstr "Hovercraft Canhão de Assalto Mantis"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1944
 #: data/mp/messages/strings/names.txt:1944
-#, fuzzy
 msgid "Pulse Laser Leopard Hover"
-msgstr "Torre de Pulso Laser"
+msgstr "Hovercraft Pulso Laser Leopardo"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
 #: data/mp/messages/strings/names.txt:1945
-#, fuzzy
 msgid "Pulse Laser Panther Hover"
-msgstr "Torre de Pulso Laser"
+msgstr "Hovercraft Pulso Laser Pantera"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
 #: data/mp/messages/strings/names.txt:1946
-#, fuzzy
 msgid "Rail Gun Tiger Hover"
-msgstr "Melhora de Acelerador de Partículas"
+msgstr "Hovercraft Acelerador de Partículas Tigre"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1947
 #: data/mp/messages/strings/names.txt:1947
-#, fuzzy
 msgid "Pulse Laser Tiger Hover"
-msgstr "Tanque Pulso Laser Tigre"
+msgstr "Hovercraft Pulso Laser Tigre"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
 #: data/mp/messages/strings/names.txt:1948
-#, fuzzy
 msgid "Plasma Cannon Wyvern Tracks"
-msgstr "Tanque Canhão Gauss Dragonete"
+msgstr "Tanque Canhão de Plasma Dragonete"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1949
 #: data/mp/messages/strings/names.txt:1949
-#, fuzzy
 msgid "Scourge Missile Wyvern Tracks"
-msgstr "Torre de Míssil Scourge"
+msgstr "Tanque Míssil Scourge Dragonete"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1950
 #: data/mp/messages/strings/names.txt:1950
-#, fuzzy
 msgid "Flashlight Retribution Hover"
-msgstr "Atirador Laser"
+msgstr "Hovercraft Laser Médio Retribuição "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
 #: data/mp/messages/strings/names.txt:1951
-#, fuzzy
 msgid "Mini-Rocket Viper Half Track"
-msgstr "Híbrido Mini-foguetes Cobra"
+msgstr "Híbrido Mini-foguetes Víbora"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1952
 #: data/mp/messages/strings/names.txt:1952
-#, fuzzy
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Tanque Artilharia de Mini-Foguetes Cobra"
+msgstr "Híbrido Artilharia de Mini-Foguetes Víbora"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
 #: data/mp/messages/strings/names.txt:1953
-#, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "Bombas de Fósforo"
+msgstr "VTOL Bombas de Fósforo Mantis"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
 #: data/mp/messages/strings/names.txt:1954
-#, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "Bombas Explosivas VTOL"
+msgstr "VTOL Bombas Explosivas Mantis"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
 #: data/mp/messages/strings/names.txt:1955
-#, fuzzy
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Chassis Médio - Retribuição"
+msgstr "VTOL Bombas Explosivas Retribuição"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
 #: data/mp/messages/strings/names.txt:1956
-#, fuzzy
 msgid "Scourge Retaliation VTOL"
-msgstr "Retaliação"
+msgstr "VTOL Míssil Scourge Retaliação"
 
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
@@ -11016,19 +10991,16 @@ msgid "Rail Target Prediction Computer"
 msgstr "Computador de Predição de Alvos"
 
 #: data/mp/messages/strings/names.txt:1174
-#, fuzzy
 msgid "HESH Mini-Rockets"
-msgstr "Mini-Foguetes AP"
+msgstr "Mini-Foguetes OCAE"
 
 #: data/mp/messages/strings/names.txt:1175
-#, fuzzy
 msgid "HESH Mini-Rockets Mk2"
-msgstr "Mini-Foguetes AP Mk2"
+msgstr "Mini-Foguetes OCAE Mk2"
 
 #: data/mp/messages/strings/names.txt:1176
-#, fuzzy
 msgid "HESH Mini-Rockets Mk3"
-msgstr "Mini-Foguetes AP Mk3"
+msgstr "Mini-Foguetes OCAE Mk3"
 
 #: data/mp/messages/strings/names.txt:1385
 msgid "Assault Gun Tower"
@@ -11550,24 +11522,19 @@ msgid "Latin"
 msgstr "Latim"
 
 #: lib/netplay/netplay.c:1287
-#: lib/netplay/netplay.c:2132
+#: lib/netplay/netplay.c:2136
 msgid "Enter password here"
 msgstr "Entre a senha aqui"
 
-#: lib/netplay/netplay.c:3113
+#: lib/netplay/netplay.c:3131
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Não foi possível resolver o nome do servidor mestre (%s)!"
 
-#: lib/netplay/netplay.c:3138
+#: lib/netplay/netplay.c:3156
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Não foi possível communicar com o servidor de lobby! A porta TCP %u está aberta para tráfego saindo?"
-
-#: lib/netplay/netplay.c:3580
-#, fuzzy
-msgid ", mod: "
-msgstr ", mods:"
 
 #: src/challenge.c:188
 #: src/hci.c:1012
@@ -11910,68 +11877,68 @@ msgstr "Unidades Perdidas!"
 msgid "Structure Restored"
 msgstr "Estrutura Restaurada"
 
-#: src/droid.c:3342
+#: src/droid.c:3345
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u selecionado - %u Unidade"
 msgstr[1] "Grupo %u selecionado - %u Unidades"
 
-#: src/droid.c:3355
+#: src/droid.c:3358
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidade atribuída ao Grupo %u"
 msgstr[1] "%u unidades atribuídas ao Grupo %u"
 
-#: src/droid.c:3368
+#: src/droid.c:3371
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado no Grupo %u - %u Unidade"
 msgstr[1] "Centrado no Grupo %u - %u Unidades"
 
-#: src/droid.c:3372
+#: src/droid.c:3375
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alinhamento com o grupo %u - %u Unidade"
 msgstr[1] "Alinhamento com o grupo %u - %u Unidades"
 
-#: src/droid.c:3635
+#: src/droid.c:3638
 msgid "Rookie"
 msgstr "Recruta"
 
-#: src/droid.c:3636
+#: src/droid.c:3639
 msgctxt "rank"
 msgid "Green"
 msgstr "Soldado"
 
-#: src/droid.c:3637
+#: src/droid.c:3640
 msgid "Trained"
 msgstr "Treinado"
 
-#: src/droid.c:3638
+#: src/droid.c:3641
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3639
+#: src/droid.c:3642
 msgid "Professional"
 msgstr "Tenente"
 
-#: src/droid.c:3640
+#: src/droid.c:3643
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3641
+#: src/droid.c:3644
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3642
+#: src/droid.c:3645
 msgid "Special"
 msgstr "Força Especial"
 
-#: src/droid.c:3643
+#: src/droid.c:3646
 msgid "Hero"
 msgstr "Herói"
 
@@ -12308,9 +12275,8 @@ msgstr "OPÇÕES DE JOGO"
 
 #: src/frontend.c:1707
 #: src/multiint.c:2239
-#, fuzzy
 msgid "Mod: "
-msgstr ", mods:"
+msgstr "Mod:"
 
 #: src/hci.c:1358
 msgid "MAP SAVED!"
@@ -12482,6 +12448,9 @@ msgid ""
 "\n"
 "Warzone will try to load the game without it."
 msgstr ""
+"O mod necessário não pôde ser carregado: %s \n"
+"\n"
+"Warzone tentará carregar o jogo sem ele."
 
 #: src/intdisplay.c:202
 #: src/intdisplay.c:247
@@ -12639,9 +12608,9 @@ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your c
 msgstr ""
 
 #: src/keybind.c:491
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
-msgstr "Jogador %u é batota (debug menu) ele/ela mesma é um novo droid: %s."
+msgstr "Jogador %u está trapaceando, dando a ele/ela mesma uma nova armada dróide de %s(s)."
 
 #: src/keybind.c:530
 #: src/keybind.c:560
@@ -13624,21 +13593,21 @@ msgstr "O Host chutou %s do jogo!"
 msgid "Host is Starting Game"
 msgstr "O Host iniciou o Jogo"
 
-#: src/multiint.c:3458
+#: src/multiint.c:3465
 msgid "Players"
 msgstr "Jogadores"
 
-#: src/multiint.c:3575
+#: src/multiint.c:3582
 #, c-format
 msgid "Sending Map: %d%% "
-msgstr ""
+msgstr "Enviando mapa: %d%%"
 
-#: src/multiint.c:3584
+#: src/multiint.c:3591
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% baixado"
 
-#: src/multiint.c:3610
+#: src/multiint.c:3617
 msgid "HOST"
 msgstr "HOSPEDEIRO"
 
@@ -13655,7 +13624,7 @@ msgstr "%s saiu do jogo"
 #: src/multijoin.c:228
 #, c-format
 msgid "File transfer has been aborted for %d."
-msgstr ""
+msgstr "Transferência de arquivo foi abortada para %d."
 
 #: src/multijoin.c:347
 #, c-format
@@ -13753,47 +13722,47 @@ msgstr "Fornecer Energia"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Expulsando jogador %s porque tentou evitar a checagem de integridade de dados!"
 
-#: src/multiplay.c:1069
+#: src/multiplay.c:1076
 msgid "(allies"
 msgstr "(alliados"
 
-#: src/multiplay.c:1077
+#: src/multiplay.c:1084
 msgid "(private to "
 msgstr "(pessoal para"
 
-#: src/multiplay.c:1090
+#: src/multiplay.c:1097
 msgid "[invalid]"
 msgstr "[inválido]"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1956
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1957
 msgid "Orange"
 msgstr "Laranja"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1958
 msgid "Grey"
 msgstr "Cinza"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1959
 msgid "Black"
 msgstr "Preto"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1960
 msgid "Red"
 msgstr "Vermelho"
 
-#: src/multiplay.c:1954
+#: src/multiplay.c:1961
 msgid "Blue"
 msgstr "Azul"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1962
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.c:1956
+#: src/multiplay.c:1963
 msgid "Cyan"
 msgstr "Ciano"
 
@@ -13971,8 +13940,9 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossível localizar Comandantes!"
 
 #: src/structure.c:2739
+#, fuzzy
 msgid "Control Limit Reached - Production Halted"
-msgstr "Limite de Unidades de Controle Alcancado - Produção Interrompida"
+msgstr "Limite de Unidade Alcançado - Produção Interrompida"
 
 #: src/structure.c:5949
 #: src/structure.c:5974
@@ -14064,6 +14034,36 @@ msgstr " - Finalizado em %s"
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
 
+#~ msgid "Hardcrete Gate"
+#~ msgstr "Muro de Durocreto"
+
+#~ msgid "Gate"
+#~ msgstr "Portão"
+
+#~ msgid ", mod: "
+#~ msgstr ", mod:"
+
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "2 caminhões designados para a construção do Extrator de Petróleo"
+
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "%d caminhões designados para a construção do Extrator de Petróleo"
+
+#~ msgid "GAME SAVED: "
+#~ msgstr "JOGO SALVO:"
+
+#~ msgid "Tactical UI (Target Origin Icon): Show"
+#~ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Exibir"
+
+#~ msgid "Tactical UI (Target Origin Icon): Hide"
+#~ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Esconder"
+
+#~ msgid "Build Progress"
+#~ msgstr "Progresso da Construção"
+
+#~ msgid "Construction Progress"
+#~ msgstr "Progresso da Construção"
+
 #~ msgid "Active mods: "
 #~ msgstr "Mods ativos:"
 
@@ -14106,15 +14106,6 @@ msgstr "Versão %s%s%s%s"
 #~ msgid "Player %u found %u power in an oil drum"
 #~ msgstr "Jogador %u encountrou %u de energina num tambor de petróleo"
 
-#~ msgid "Build Progress"
-#~ msgstr "Progresso da Construção"
-
-#~ msgid "Construction Progress"
-#~ msgstr "Progresso da Construção"
-
-#~ msgid "GAME SAVED: "
-#~ msgstr "JOGO SALVO:"
-
 #~ msgid "Hardware"
 #~ msgstr "Hardware"
 
@@ -14126,12 +14117,6 @@ msgstr "Versão %s%s%s%s"
 
 #~ msgid "Stop Multiplayer Audio"
 #~ msgstr "Desligar Áudio no Multiplayer"
-
-#~ msgid "Tactical UI (Target Origin Icon): Hide"
-#~ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Esconder"
-
-#~ msgid "Tactical UI (Target Origin Icon): Show"
-#~ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Exibir"
 
 #~ msgid "you are being a jerk."
 #~ msgstr "você está sendo um idiota."
