@@ -2800,7 +2800,7 @@ function void vtolFactoryBuildVtol(STRUCTURE _factory)
 	{
 		_numTemplates = numVtolTemplates - 1;
 		_bestTemplates = 0;
-		while( (_bestTemplates < 3) and (_numTemplates >= 0) )
+		while( (_bestTemplates == 0) and (_numTemplates >= 0) )
 		{
 			if( skCanBuildTemplate(me,_factory, vtols[_numTemplates]) )
 			{
@@ -2812,7 +2812,7 @@ function void vtolFactoryBuildVtol(STRUCTURE _factory)
 
 		if(_bestTemplates > 0)
 		{
-			buildDroid(tmplChoice[random(_bestTemplates)],_factory,me,1);
+			buildDroid(tmplChoice[0], _factory, me, 1);	// now always build best template
 		}
 	}
 }

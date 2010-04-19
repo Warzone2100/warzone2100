@@ -19,7 +19,7 @@ run
 	numScouts[1]	int					3			// min number of droids in group to aim for.
 	numDefenders[1]	int					12
 	numAttackers[1]	int					0
-	numCyborgs[1]	int					25			// build cyborgs until scouts contains x droids
+	numCyborgs[1]	int					10			// build cyborgs until scouts contains x droids
 
 	
 	//default branch
@@ -32,7 +32,7 @@ run
 	maxScouts[1]	int					3			// min number of droids in group to aim for.
 	maxDefenders[1]	int					20
 	maxAttackers[1]	int					0
-	maxCyborgs[1]	int					50			// build cyborgs until scouts contains x droids
+	maxCyborgs[1]	int					20			// build cyborgs until scouts contains x droids
 	
 	tileExpand		int					12			// approx minutes to expand over the map.
 
@@ -52,7 +52,7 @@ run
 	vtolFactory		STRUCTURESTAT		"A0VTolFactory1"
 	sensorTower		STRUCTURESTAT		"Sys-SensoTower02"
 	lassat			STRUCTURESTAT		"A0LasSatCommand"
-	nexusDefence	RESEARCHSTAT		"R-Sys-Resistance-Circuits"
+	nexusDefence		RESEARCHSTAT		"R-Sys-Resistance-Circuits"
 	uplink			STRUCTURESTAT		"A0Sat-linkCentre"
 
 	//number of research topics for each research branch
@@ -81,46 +81,27 @@ run
 	tech[0][17]		RESEARCHSTAT		"R-Struc-Research-Upgrade06"	//to dedicate one reslab to cerebral stuff
 
 	//other tech: R-Vehicle-Prop-VTOL, R-Struc-VTOLPad, R-Struc-VTOLFactory
-	techCount[1]	int					27
+	techCount[1]	int					16
 	
 	//how many res facilities to use when finished researching all specified research topics
 	maxIdleRes[1]	int					3
-	
-	tech[1][0]		RESEARCHSTAT		"R-Struc-VTOLFactory"
-	tech[1][1]		RESEARCHSTAT		"R-Struc-VTOLPad"
-	tech[1][2]		RESEARCHSTAT		"R-Wpn-MG3Mk1"				//HMG
-	tech[1][3]		RESEARCHSTAT		"R-Cyborg-Wpn-MG"			//Machine gunner
-	
-	tech[1][4]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
-	tech[1][5]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
-	
-	tech[1][6]		RESEARCHSTAT		"R-Cyborg-Sys-Mechanic"		//mechanic
-	tech[1][7]		RESEARCHSTAT		"R-Cyborg-Sys-ComEng"		//cyb engineer
-	tech[1][8]		RESEARCHSTAT		"R-Cyborg-Wpn-Flamer"		//flamer
-	tech[1][9]		RESEARCHSTAT		"R-Wpn-Flamer-Damage03"		//flamer damage 03
-	tech[1][10]		RESEARCHSTAT		"R-Wpn-Flamer-ROF03"		//flamer ROF 03
-	
-	tech[1][11]		RESEARCHSTAT		"R-Cyborg-Wpn-Cannon"		//heavy gunner
-	tech[1][12]		RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"		//Lancer
-	tech[1][13]		RESEARCHSTAT		"R-Cyborg-Wpn-Rocket"		//Cyborg Lancer
-	tech[1][14]		RESEARCHSTAT		"R-Vehicle-Body08"			//Scorpion body
-	tech[1][15]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
-	tech[1][16]		RESEARCHSTAT		"R-Wpn-RocketSlow-Accuracy03"	//lancer accuracy
-	tech[1][17]		RESEARCHSTAT		"R-Wpn-RocketSlow-Damage06"	//lancer damage 06 (all 6 can be researched at once)
-	
-	tech[1][18]		RESEARCHSTAT		"R-Cyborg-Wpn-RotMG-Grd"	//assault gunner
-	
-	
-	tech[1][19]		RESEARCHSTAT		"R-Wpn-Rocket03-HvAT"		//BB
-	tech[1][20]		RESEARCHSTAT		"R-Cyborg-Wpn-Rail1-Grd"	//needle gunner
-	tech[1][21]		RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"
-	tech[1][22]		RESEARCHSTAT		"R-Struc-VTOLFactory-Upgrade06"
-	tech[1][23]		RESEARCHSTAT		"R-Sys-Autorepair-General"		//autorepair
-	tech[1][24]		RESEARCHSTAT		"R-Sys-Sensor-UpLink"
-	tech[1][25]		RESEARCHSTAT		"R-Sys-VTOLCBS-Turret01"
-	tech[1][26]		RESEARCHSTAT		"R-Sys-VTOLStrike-Tower01"
 
-	//tech[1][5]		RESEARCHSTAT			"R-Vehicle-Body04"				// Bug body
+	tech[1][0]		RESEARCHSTAT		"R-Defense-Tower01"		//mg tower for early fun
+	tech[1][1]		RESEARCHSTAT		"R-Struc-Research-Module"	//reslab module
+	tech[1][2]		RESEARCHSTAT		"R-Struc-PowerModuleMk1"	//power module
+	tech[1][3]		RESEARCHSTAT		"R-Struc-VTOLFactory"		//rush vtols
+	tech[1][4]		RESEARCHSTAT		"R-Struc-VTOLPad"		//vtol pads
+	tech[1][5]		RESEARCHSTAT		"R-Wpn-Bomb05"			//plasmite bomb - and we win
+	tech[1][6]		RESEARCHSTAT		"R-Defense-WallTower01"		//heavy mg hardpoint - in case missed
+	tech[1][7]		RESEARCHSTAT		"R-Defense-WallUpgrade01"	//impr hardcrete - in case missed
+	tech[1][8]		RESEARCHSTAT		"R-Struc-Materials01"		//reinf struc mat - in case missed
+	tech[1][9]		RESEARCHSTAT		"R-Vehicle-Body07"		//retribution body
+	tech[1][10]		RESEARCHSTAT		"R-Vehicle-Metals09"		//vtol armor
+	tech[1][11]		RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"	//rearm
+	tech[1][12]		RESEARCHSTAT		"R-Struc-VTOLFactory-Upgrade06"	//production
+	tech[1][13]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
+	tech[1][14]		RESEARCHSTAT		"R-Sys-Autorepair-General"	//autorepair
+	tech[1][15]		RESEARCHSTAT		"R-Vehicle-Engine09"		//finally - speed
 
 	maxVtolFacs[0]	int					1
 	maxVtolFacs[1]	int					4
@@ -378,31 +359,14 @@ run
 	/////////////////////////////////////////////////////////////////////
 	// VTOL TEMPLATES
 
-	numVtolTemplates		int		8
+	numVtolTemplates		int		6
 
-	vtols[0]	TEMPLATE	"P6-L-LTAT-V"		//Viper Lancer
-	vtols[1]	TEMPLATE	"P6-L-Bomb1-V"		//Viper Cluster Bombs Bay
-	vtols[2]	TEMPLATE	"SK-Bug-VTOL-CLBomb"
-	vtols[3]	TEMPLATE	"SK-Scorpion-VTOL-Hbomb"
-	vtols[4]	TEMPLATE	"H-Scorp-VTOL-Lancer"
-	vtols[5]	TEMPLATE	"H-Scorp-VTOL-BB"
-	vtols[6]	TEMPLATE	"H-Scorp-VTOL-Lancer"
-	vtols[7]	TEMPLATE	"SK-Retre-VTOL-Thermite"
-
-	/*
-	vtols[7]	TEMPLATE	"SK-Mantis-VTOL-BB"
-	vtols[8]	TEMPLATE	"SK-Leopard-VTOL-BB"
-	vtols[9]	TEMPLATE	"SK-Leopard-VTOL-PhosBomb"
-	vtols[10]	TEMPLATE	"SK-Panther-VTOL-Thermite"
-	vtols[11]	TEMPLATE	"SK-Panther-VTOL-BB"
-	vtols[12]	TEMPLATE	"SK-Panther-VTOL-Phosbomb"
-	vtols[13]	TEMPLATE	"SK-Panther-VTOL-TK"
-	//Campaign 3
-	vtols[14]	TEMPLATE	"SK-Retal-VTOL-Phosbomb"
-	vtols[16]	TEMPLATE	"SK-Retre-VTOL-PulseLsr"
-	vtols[17]	TEMPLATE	"SK-Retre-VTOL-Scourge"
-	*/
-
+	vtols[0]	TEMPLATE	"P6-L-Bomb1-V"		//Viper Cluster Bombs Bay
+	vtols[1]	TEMPLATE	"SK-Bug-VTOL-CLBomb"
+	vtols[2]	TEMPLATE	"SK-Scorpion-VTOL-Hbomb"
+	vtols[3]	TEMPLATE	"SK-Leopard-VTOL-PhosBomb"
+	vtols[4]	TEMPLATE	"SK-Retre-VTOL-Thermite"
+	vtols[5]	TEMPLATE	"SK-Retre-VTOL-Plasmite"
 
 	numVtolTargets		int				10
 
