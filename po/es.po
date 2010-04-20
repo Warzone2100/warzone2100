@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-15 17:12+0200\n"
+"POT-Creation-Date: 2010-04-20 15:03+0200\n"
 "PO-Revision-Date: 2010-04-15 23:00+0100\n"
 "Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -11409,6 +11409,11 @@ msgstr "Artillería Mini-Cohetes Cobra Oruga"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Cañón HPV Pitón Oruga"
 
+#: data/mp/messages/strings/names.txt:1960
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "Bahía de Bombas Múltiples Merecido ADV"
+
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
 msgid "System locale"
@@ -11539,23 +11544,19 @@ msgid "Latin"
 msgstr "Latino"
 
 #: lib/netplay/netplay.c:200
-#: lib/netplay/netplay.c:1053
+#: lib/netplay/netplay.c:1058
 msgid "Enter password here"
 msgstr "Introducir contraseña aquí"
 
-#: lib/netplay/netplay.c:2024
+#: lib/netplay/netplay.c:2043
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "¡No se pudo resolver el nombre del servidor maestro (%s)!"
 
-#: lib/netplay/netplay.c:2037
+#: lib/netplay/netplay.c:2056
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "¡No se pudo comunicar con el servidor! ¿Está el puerto TCP %u abierto para tráfico saliente?"
-
-#: lib/netplay/netplay.c:2476
-msgid ", mod: "
-msgstr ""
 
 #: src/challenge.c:188
 #: src/hci.c:1018
@@ -11712,8 +11713,8 @@ msgstr "Dominio"
 msgid "go directly to host screen"
 msgstr "Ir directamente a pantalla de dominio"
 
-#: src/configuration.c:452
-#: src/configuration.c:453
+#: src/configuration.c:445
+#: src/configuration.c:446
 #: src/multistat.c:124
 msgid "Player"
 msgstr "Jugador"
@@ -12011,11 +12012,11 @@ msgstr "TUTORIALES"
 #: src/frontend.c:376
 #: src/frontend.c:529
 #: src/frontend.c:591
-#: src/frontend.c:733
-#: src/frontend.c:872
-#: src/frontend.c:979
-#: src/frontend.c:1186
-#: src/frontend.c:1329
+#: src/frontend.c:725
+#: src/frontend.c:864
+#: src/frontend.c:971
+#: src/frontend.c:1178
+#: src/frontend.c:1321
 msgctxt "menu"
 msgid "Return"
 msgstr "Volver"
@@ -12095,19 +12096,19 @@ msgid "Video Playback"
 msgstr "Reproducción de Vídeo"
 
 #: src/frontend.c:656
-#: src/frontend.c:826
+#: src/frontend.c:818
 msgid "1X"
 msgstr "1X"
 
 #: src/frontend.c:660
-#: src/frontend.c:816
+#: src/frontend.c:808
 msgid "2X"
 msgstr "2X"
 
 #: src/frontend.c:664
-#: src/frontend.c:821
-#: src/frontend.c:944
-#: src/frontend.c:1002
+#: src/frontend.c:813
+#: src/frontend.c:936
+#: src/frontend.c:994
 msgid "Fullscreen"
 msgstr "Pantalla Completa"
 
@@ -12116,43 +12117,42 @@ msgid "Screen Shake"
 msgstr "Agitar pantalla"
 
 #: src/frontend.c:677
-#: src/frontend.c:707
-#: src/frontend.c:721
-#: src/frontend.c:757
-#: src/frontend.c:793
-#: src/frontend.c:802
-#: src/frontend.c:965
-#: src/frontend.c:1063
-#: src/frontend.c:1101
-#: src/frontend.c:1137
-#: src/frontend.c:1149
-#: src/frontend.c:1161
-#: src/frontend.c:1173
-#: src/frontend.c:1209
-#: src/frontend.c:1222
-#: src/frontend.c:1236
-#: src/frontend.c:1250
+#: src/frontend.c:705
+#: src/frontend.c:713
+#: src/frontend.c:749
+#: src/frontend.c:785
+#: src/frontend.c:794
+#: src/frontend.c:957
+#: src/frontend.c:1055
+#: src/frontend.c:1093
+#: src/frontend.c:1129
+#: src/frontend.c:1141
+#: src/frontend.c:1153
+#: src/frontend.c:1165
+#: src/frontend.c:1201
+#: src/frontend.c:1214
+#: src/frontend.c:1228
+#: src/frontend.c:1242
 msgid "On"
 msgstr "Activado"
 
 #: src/frontend.c:681
-#: src/frontend.c:703
-#: src/frontend.c:713
-#: src/frontend.c:725
-#: src/frontend.c:752
-#: src/frontend.c:788
-#: src/frontend.c:806
-#: src/frontend.c:969
-#: src/frontend.c:1058
-#: src/frontend.c:1096
-#: src/frontend.c:1141
-#: src/frontend.c:1153
-#: src/frontend.c:1165
-#: src/frontend.c:1177
-#: src/frontend.c:1204
-#: src/frontend.c:1217
-#: src/frontend.c:1231
-#: src/frontend.c:1245
+#: src/frontend.c:701
+#: src/frontend.c:717
+#: src/frontend.c:744
+#: src/frontend.c:780
+#: src/frontend.c:798
+#: src/frontend.c:961
+#: src/frontend.c:1050
+#: src/frontend.c:1088
+#: src/frontend.c:1133
+#: src/frontend.c:1145
+#: src/frontend.c:1157
+#: src/frontend.c:1169
+#: src/frontend.c:1196
+#: src/frontend.c:1209
+#: src/frontend.c:1223
+#: src/frontend.c:1237
 msgid "Off"
 msgstr "Desactivado"
 
@@ -12162,145 +12162,144 @@ msgid "Fog"
 msgstr "Niebla"
 
 #: src/frontend.c:689
-#: src/frontend.c:775
+#: src/frontend.c:767
 msgid "Mist"
 msgstr "Neblina"
 
 #: src/frontend.c:693
-#: src/frontend.c:768
+#: src/frontend.c:760
 #: src/multiint.c:1325
 msgid "Fog Of War"
 msgstr "Niebla de Guerra"
 
-#: src/frontend.c:700
-#: src/frontend.c:712
+#: src/frontend.c:698
 msgid "Subtitles"
 msgstr "Subtítulos"
 
-#: src/frontend.c:718
+#: src/frontend.c:710
 msgid "Shadows"
 msgstr "Sombras"
 
-#: src/frontend.c:729
+#: src/frontend.c:721
 msgid "GRAPHICS OPTIONS"
 msgstr "OPCIONES GRÁFICAS"
 
-#: src/frontend.c:860
+#: src/frontend.c:852
 #: src/ingameop.c:177
 msgid "Voice Volume"
 msgstr "Volumen de Voces"
 
-#: src/frontend.c:864
+#: src/frontend.c:856
 #: src/ingameop.c:182
 msgid "FX Volume"
 msgstr "Volumen de Sonidos"
 
-#: src/frontend.c:868
+#: src/frontend.c:860
 #: src/ingameop.c:187
 msgid "Music Volume"
 msgstr "Volumen de Música"
 
-#: src/frontend.c:875
+#: src/frontend.c:867
 msgid "AUDIO OPTIONS"
 msgstr "OPCIONES DE AUDIO"
 
-#: src/frontend.c:940
+#: src/frontend.c:932
 msgid "Graphics Mode*"
 msgstr "Modo Gráfico*"
 
-#: src/frontend.c:948
-#: src/frontend.c:997
+#: src/frontend.c:940
+#: src/frontend.c:989
 msgid "Windowed"
 msgstr "En ventana"
 
-#: src/frontend.c:952
+#: src/frontend.c:944
 msgid "Resolution*"
 msgstr "Resolución*"
 
-#: src/frontend.c:957
+#: src/frontend.c:949
 msgid "Texture size"
 msgstr "Tamaño de las texturas"
 
-#: src/frontend.c:961
+#: src/frontend.c:953
 msgid "Vertical sync*"
 msgstr "Sincronización Vertical"
 
-#: src/frontend.c:973
+#: src/frontend.c:965
 msgid "* Takes effect on game restart"
 msgstr "* Tendrá efecto al reiniciar el juego"
 
-#: src/frontend.c:976
+#: src/frontend.c:968
 msgid "VIDEO OPTIONS"
 msgstr "OPCIONES DE VIDEO"
 
-#: src/frontend.c:1134
+#: src/frontend.c:1126
 msgid "Reverse Rotation"
 msgstr "Invertir Rotación"
 
-#: src/frontend.c:1145
+#: src/frontend.c:1137
 msgid "Trap Cursor"
 msgstr "Capturar Cursor"
 
-#: src/frontend.c:1157
+#: src/frontend.c:1149
 msgid "Colored Cursors*"
 msgstr "Cursores de colores"
 
-#: src/frontend.c:1170
+#: src/frontend.c:1162
 msgid "Switch Mouse Buttons"
 msgstr "Cambiar botones del ratón"
 
-#: src/frontend.c:1180
+#: src/frontend.c:1172
 msgid "* May negatively affect performance"
 msgstr "* Puede afectar negativamente al rendimiento"
 
-#: src/frontend.c:1183
+#: src/frontend.c:1175
 msgid "MOUSE OPTIONS"
 msgstr "OPCIONES DE RATÓN"
 
-#: src/frontend.c:1284
-#: src/frontend.c:1350
+#: src/frontend.c:1276
+#: src/frontend.c:1342
 msgid "Difficulty"
 msgstr "Dificultad"
 
-#: src/frontend.c:1288
-#: src/frontend.c:1358
-#: src/frontend.c:1389
+#: src/frontend.c:1280
+#: src/frontend.c:1350
+#: src/frontend.c:1381
 msgid "Easy"
 msgstr "Fácil"
 
-#: src/frontend.c:1291
-#: src/frontend.c:1361
-#: src/frontend.c:1381
+#: src/frontend.c:1283
+#: src/frontend.c:1353
+#: src/frontend.c:1373
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.c:1295
-#: src/frontend.c:1364
-#: src/frontend.c:1385
+#: src/frontend.c:1287
+#: src/frontend.c:1356
+#: src/frontend.c:1377
 msgid "Hard"
 msgstr "Difícil"
 
-#: src/frontend.c:1300
-#: src/frontend.c:1351
+#: src/frontend.c:1292
+#: src/frontend.c:1343
 msgid "Scroll Speed"
 msgstr "Velocidad de desplazamiento"
 
-#: src/frontend.c:1314
-#: src/frontend.c:1348
+#: src/frontend.c:1306
+#: src/frontend.c:1340
 msgid "Language"
 msgstr "Idioma"
 
-#: src/frontend.c:1326
-#: src/frontend.c:1349
+#: src/frontend.c:1318
+#: src/frontend.c:1341
 msgid "Unit Colour"
 msgstr "Color de las unidades"
 
-#: src/frontend.c:1332
-#: src/frontend.c:1352
+#: src/frontend.c:1324
+#: src/frontend.c:1344
 msgid "GAME OPTIONS"
 msgstr "OPCIONES DE JUEGO"
 
-#: src/frontend.c:1693
+#: src/frontend.c:1685
 #: src/multiint.c:2235
 msgid "Mod: "
 msgstr ""
@@ -13631,21 +13630,21 @@ msgstr "¡El anfitrión ha expulsado a %s de la partida!"
 msgid "Host is Starting Game"
 msgstr "Anfitrión Comenzando Partida"
 
-#: src/multiint.c:3452
+#: src/multiint.c:3459
 msgid "Players"
 msgstr "Jugadores"
 
-#: src/multiint.c:3569
+#: src/multiint.c:3576
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Enviando Mapa: %d%%"
 
-#: src/multiint.c:3577
+#: src/multiint.c:3584
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% descargado"
 
-#: src/multiint.c:3603
+#: src/multiint.c:3610
 msgid "HOST"
 msgstr "ANFITRIÓN"
 
@@ -13760,47 +13759,47 @@ msgstr "Dar Energía al Jugador"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "¡Kickeado el jugador %s, porque intentó saltar la seguridad de integridad de datos!"
 
-#: src/multiplay.c:1065
+#: src/multiplay.c:1072
 msgid "(allies"
 msgstr "( a aliados"
 
-#: src/multiplay.c:1073
+#: src/multiplay.c:1080
 msgid "(private to "
 msgstr "(privado a "
 
-#: src/multiplay.c:1086
+#: src/multiplay.c:1093
 msgid "[invalid]"
 msgstr "[inválido]"
 
-#: src/multiplay.c:1945
+#: src/multiplay.c:1952
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.c:1946
+#: src/multiplay.c:1953
 msgid "Orange"
 msgstr "Naranja"
 
-#: src/multiplay.c:1947
+#: src/multiplay.c:1954
 msgid "Grey"
 msgstr "Gris"
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1955
 msgid "Black"
 msgstr "Negro"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1956
 msgid "Red"
 msgstr "Rojo"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1957
 msgid "Blue"
 msgstr "Azul"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1958
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1959
 msgid "Cyan"
 msgstr "Cian"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-12 20:52+0200\n"
+"POT-Creation-Date: 2010-04-20 15:03+0200\n"
 "PO-Revision-Date: 2010-04-11 08:24+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -11419,6 +11419,11 @@ msgstr "Kobra artyleria minirakiet na gąsienicach"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Pyton poduszkowiec z działem HPV"
 
+#: data/mp/messages/strings/names.txt:1960
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "Odwet luk bomb HEAP VTOL"
+
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
 msgid "System locale"
@@ -11548,24 +11553,20 @@ msgstr "Chiński tradycyjny"
 msgid "Latin"
 msgstr "Łacina"
 
-#: lib/netplay/netplay.c:197
-#: lib/netplay/netplay.c:1037
+#: lib/netplay/netplay.c:200
+#: lib/netplay/netplay.c:1058
 msgid "Enter password here"
 msgstr "Wpisz hasło tutaj"
 
-#: lib/netplay/netplay.c:2000
+#: lib/netplay/netplay.c:2043
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Nie można rozwinąć nazwy głównego serwera (%s)!"
 
-#: lib/netplay/netplay.c:2013
+#: lib/netplay/netplay.c:2056
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Nie można skomunikować się z serwerem lobby! Czy port %u TCP jest otwarty dla ruchu wychodzącego?"
-
-#: lib/netplay/netplay.c:2418
-msgid ", mod: "
-msgstr ", mod: "
 
 #: src/challenge.c:188
 #: src/hci.c:1018
@@ -11722,8 +11723,8 @@ msgstr "gospodarz"
 msgid "go directly to host screen"
 msgstr "Idź od razu na ekran gospodarza"
 
-#: src/configuration.c:452
-#: src/configuration.c:453
+#: src/configuration.c:445
+#: src/configuration.c:446
 #: src/multistat.c:124
 msgid "Player"
 msgstr "Gracz"
@@ -11877,31 +11878,31 @@ msgstr "Gracz opuścił grę"
 msgid "Player dropped"
 msgstr "Gracz odrzucony"
 
-#: src/display.c:1659
+#: src/display.c:1660
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nie można budować. Płonie ropa."
 
-#: src/display.c:1839
-#: src/display.c:2431
+#: src/display.c:1840
+#: src/display.c:2432
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Obrażenia %d%% - Doświadczenie %d, %s"
 
-#: src/display.c:1855
+#: src/display.c:1856
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Sojusznik - Obrażenia %d%% - Doświadczenie %d, %s"
 
-#: src/display.c:2045
+#: src/display.c:2046
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Rozkazano budowniczemu zbudować Rafinerię"
 
-#: src/display.c:2046
+#: src/display.c:2047
 #, fuzzy
 msgid "2 trucks ordered to build Oil Derrick"
 msgstr "Rozkazano budowniczemu zbudować Rafinerię"
 
-#: src/display.c:2047
+#: src/display.c:2048
 #, fuzzy, c-format
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr "Rozkazano budowniczemu zbudować Rafinerię"
@@ -11914,7 +11915,7 @@ msgstr "Jednostka utracona!"
 msgid "Structure Restored"
 msgstr "Struktura odbudowana"
 
-#: src/droid.c:2957
+#: src/droid.c:2960
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -11922,7 +11923,7 @@ msgstr[0] "Wybrana grupa %u -  %u jednostka"
 msgstr[1] "Wybrana grupa %u -  %u jednostki"
 msgstr[2] "Wybrana grupa %u -  %u jednostek"
 
-#: src/droid.c:2970
+#: src/droid.c:2973
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -11930,7 +11931,7 @@ msgstr[0] "%u jednostka przypisana do Grupy %u"
 msgstr[1] "%u jednostki przypisane do Grupy %u"
 msgstr[2] "%u jednostek przypisano do Grupy %u"
 
-#: src/droid.c:2983
+#: src/droid.c:2986
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -11938,7 +11939,7 @@ msgstr[0] "Wyśrodkowano na grupie %u - %u jednostka"
 msgstr[1] "Wyśrodkowano na grupie %u - %u jednostki"
 msgstr[2] "Wyśrodkowano na grupie %u - %u jednostek"
 
-#: src/droid.c:2987
+#: src/droid.c:2990
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -11947,40 +11948,40 @@ msgstr[1] "Wyrównanie z grupą %u - %u jednostki"
 msgstr[2] "Wyrównanie z grupą %u - %u jednostek"
 
 # I had really trouble with this one. This word has no meaning in Polish so I decided to translate it as 'Newbe'
-#: src/droid.c:3271
+#: src/droid.c:3274
 msgid "Rookie"
 msgstr "Nowicjusz"
 
-#: src/droid.c:3272
+#: src/droid.c:3275
 msgctxt "rank"
 msgid "Green"
 msgstr "Zielony"
 
-#: src/droid.c:3273
+#: src/droid.c:3276
 msgid "Trained"
 msgstr "Wyszkolony"
 
-#: src/droid.c:3274
+#: src/droid.c:3277
 msgid "Regular"
 msgstr "Zawodowy"
 
-#: src/droid.c:3275
+#: src/droid.c:3278
 msgid "Professional"
 msgstr "Profesjonalny"
 
-#: src/droid.c:3276
+#: src/droid.c:3279
 msgid "Veteran"
 msgstr "Weteran"
 
-#: src/droid.c:3277
+#: src/droid.c:3280
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3278
+#: src/droid.c:3281
 msgid "Special"
 msgstr "Specjalny"
 
-#: src/droid.c:3279
+#: src/droid.c:3282
 msgid "Hero"
 msgstr "Bohater"
 
@@ -12026,11 +12027,11 @@ msgstr "SZKOLENIA"
 #: src/frontend.c:376
 #: src/frontend.c:529
 #: src/frontend.c:591
-#: src/frontend.c:733
-#: src/frontend.c:872
-#: src/frontend.c:979
-#: src/frontend.c:1186
-#: src/frontend.c:1329
+#: src/frontend.c:725
+#: src/frontend.c:864
+#: src/frontend.c:971
+#: src/frontend.c:1178
+#: src/frontend.c:1321
 msgctxt "menu"
 msgid "Return"
 msgstr "Powrót"
@@ -12110,19 +12111,19 @@ msgid "Video Playback"
 msgstr "Odtwarzanie filmów"
 
 #: src/frontend.c:656
-#: src/frontend.c:826
+#: src/frontend.c:818
 msgid "1X"
 msgstr "1X"
 
 #: src/frontend.c:660
-#: src/frontend.c:816
+#: src/frontend.c:808
 msgid "2X"
 msgstr "2X"
 
 #: src/frontend.c:664
-#: src/frontend.c:821
-#: src/frontend.c:944
-#: src/frontend.c:1002
+#: src/frontend.c:813
+#: src/frontend.c:936
+#: src/frontend.c:994
 msgid "Fullscreen"
 msgstr "Pełny ekran"
 
@@ -12131,43 +12132,42 @@ msgid "Screen Shake"
 msgstr "Wstrząsy ekranu"
 
 #: src/frontend.c:677
-#: src/frontend.c:707
-#: src/frontend.c:721
-#: src/frontend.c:757
-#: src/frontend.c:793
-#: src/frontend.c:802
-#: src/frontend.c:965
-#: src/frontend.c:1063
-#: src/frontend.c:1101
-#: src/frontend.c:1137
-#: src/frontend.c:1149
-#: src/frontend.c:1161
-#: src/frontend.c:1173
-#: src/frontend.c:1209
-#: src/frontend.c:1222
-#: src/frontend.c:1236
-#: src/frontend.c:1250
+#: src/frontend.c:705
+#: src/frontend.c:713
+#: src/frontend.c:749
+#: src/frontend.c:785
+#: src/frontend.c:794
+#: src/frontend.c:957
+#: src/frontend.c:1055
+#: src/frontend.c:1093
+#: src/frontend.c:1129
+#: src/frontend.c:1141
+#: src/frontend.c:1153
+#: src/frontend.c:1165
+#: src/frontend.c:1201
+#: src/frontend.c:1214
+#: src/frontend.c:1228
+#: src/frontend.c:1242
 msgid "On"
 msgstr "Włącz"
 
 #: src/frontend.c:681
-#: src/frontend.c:703
-#: src/frontend.c:713
-#: src/frontend.c:725
-#: src/frontend.c:752
-#: src/frontend.c:788
-#: src/frontend.c:806
-#: src/frontend.c:969
-#: src/frontend.c:1058
-#: src/frontend.c:1096
-#: src/frontend.c:1141
-#: src/frontend.c:1153
-#: src/frontend.c:1165
-#: src/frontend.c:1177
-#: src/frontend.c:1204
-#: src/frontend.c:1217
-#: src/frontend.c:1231
-#: src/frontend.c:1245
+#: src/frontend.c:701
+#: src/frontend.c:717
+#: src/frontend.c:744
+#: src/frontend.c:780
+#: src/frontend.c:798
+#: src/frontend.c:961
+#: src/frontend.c:1050
+#: src/frontend.c:1088
+#: src/frontend.c:1133
+#: src/frontend.c:1145
+#: src/frontend.c:1157
+#: src/frontend.c:1169
+#: src/frontend.c:1196
+#: src/frontend.c:1209
+#: src/frontend.c:1223
+#: src/frontend.c:1237
 msgid "Off"
 msgstr "Wyłącz"
 
@@ -12178,145 +12178,144 @@ msgstr "Mgła"
 
 # 'Mist' and 'Fog' has the same meaning in Polish
 #: src/frontend.c:689
-#: src/frontend.c:775
+#: src/frontend.c:767
 msgid "Mist"
 msgstr "Mgła"
 
 #: src/frontend.c:693
-#: src/frontend.c:768
+#: src/frontend.c:760
 #: src/multiint.c:1325
 msgid "Fog Of War"
 msgstr "Mgła wojny"
 
-#: src/frontend.c:700
-#: src/frontend.c:712
+#: src/frontend.c:698
 msgid "Subtitles"
 msgstr "Napisy"
 
-#: src/frontend.c:718
+#: src/frontend.c:710
 msgid "Shadows"
 msgstr "Cienie"
 
-#: src/frontend.c:729
+#: src/frontend.c:721
 msgid "GRAPHICS OPTIONS"
 msgstr "USTAWIENIA GRAFIKI"
 
-#: src/frontend.c:860
+#: src/frontend.c:852
 #: src/ingameop.c:177
 msgid "Voice Volume"
 msgstr "Głośność mowy"
 
-#: src/frontend.c:864
+#: src/frontend.c:856
 #: src/ingameop.c:182
 msgid "FX Volume"
 msgstr "Głośność efektów"
 
-#: src/frontend.c:868
+#: src/frontend.c:860
 #: src/ingameop.c:187
 msgid "Music Volume"
 msgstr "Głośność muzyki"
 
-#: src/frontend.c:875
+#: src/frontend.c:867
 msgid "AUDIO OPTIONS"
 msgstr "USTAWIENIA DŹWIĘKU"
 
-#: src/frontend.c:940
+#: src/frontend.c:932
 msgid "Graphics Mode*"
 msgstr "Tryb graficzny*"
 
-#: src/frontend.c:948
-#: src/frontend.c:997
+#: src/frontend.c:940
+#: src/frontend.c:989
 msgid "Windowed"
 msgstr "W oknie"
 
-#: src/frontend.c:952
+#: src/frontend.c:944
 msgid "Resolution*"
 msgstr "Rozdzielczość*"
 
-#: src/frontend.c:957
+#: src/frontend.c:949
 msgid "Texture size"
 msgstr "Rozmiar tekstury"
 
-#: src/frontend.c:961
+#: src/frontend.c:953
 msgid "Vertical sync*"
 msgstr "Synchron. pionowa*"
 
-#: src/frontend.c:973
+#: src/frontend.c:965
 msgid "* Takes effect on game restart"
 msgstr "* Wymaga restartu gry"
 
-#: src/frontend.c:976
+#: src/frontend.c:968
 msgid "VIDEO OPTIONS"
 msgstr "USTAWIENIA WIDEO"
 
-#: src/frontend.c:1134
+#: src/frontend.c:1126
 msgid "Reverse Rotation"
 msgstr "Odwróć rotację"
 
-#: src/frontend.c:1145
+#: src/frontend.c:1137
 msgid "Trap Cursor"
 msgstr "Złap kursor"
 
-#: src/frontend.c:1157
+#: src/frontend.c:1149
 msgid "Colored Cursors*"
 msgstr "Kolorowe kursory*"
 
-#: src/frontend.c:1170
+#: src/frontend.c:1162
 msgid "Switch Mouse Buttons"
 msgstr "Odwróć przyciski"
 
-#: src/frontend.c:1180
+#: src/frontend.c:1172
 msgid "* May negatively affect performance"
 msgstr "* Może zmniejszyć wydajność"
 
-#: src/frontend.c:1183
+#: src/frontend.c:1175
 msgid "MOUSE OPTIONS"
 msgstr "USTAWIENIA MYSZKI"
 
-#: src/frontend.c:1284
-#: src/frontend.c:1350
+#: src/frontend.c:1276
+#: src/frontend.c:1342
 msgid "Difficulty"
 msgstr "Poziom trudności"
 
-#: src/frontend.c:1288
-#: src/frontend.c:1358
-#: src/frontend.c:1389
+#: src/frontend.c:1280
+#: src/frontend.c:1350
+#: src/frontend.c:1381
 msgid "Easy"
 msgstr "Łatwy"
 
-#: src/frontend.c:1291
-#: src/frontend.c:1361
-#: src/frontend.c:1381
+#: src/frontend.c:1283
+#: src/frontend.c:1353
+#: src/frontend.c:1373
 msgid "Normal"
 msgstr "Normalny"
 
-#: src/frontend.c:1295
-#: src/frontend.c:1364
-#: src/frontend.c:1385
+#: src/frontend.c:1287
+#: src/frontend.c:1356
+#: src/frontend.c:1377
 msgid "Hard"
 msgstr "Trudny"
 
-#: src/frontend.c:1300
-#: src/frontend.c:1351
+#: src/frontend.c:1292
+#: src/frontend.c:1343
 msgid "Scroll Speed"
 msgstr "Szybkość przewijania"
 
-#: src/frontend.c:1314
-#: src/frontend.c:1348
+#: src/frontend.c:1306
+#: src/frontend.c:1340
 msgid "Language"
 msgstr "Język"
 
-#: src/frontend.c:1326
-#: src/frontend.c:1349
+#: src/frontend.c:1318
+#: src/frontend.c:1341
 msgid "Unit Colour"
 msgstr "Kolor jednostek"
 
-#: src/frontend.c:1332
-#: src/frontend.c:1352
+#: src/frontend.c:1324
+#: src/frontend.c:1344
 msgid "GAME OPTIONS"
 msgstr "USTAWIENIA GRY"
 
-#: src/frontend.c:1693
+#: src/frontend.c:1685
 #: src/multiint.c:2235
 msgid "Mod: "
 msgstr "Mod: "
@@ -13647,21 +13646,21 @@ msgstr "Gospodarz wyrzucił %s z gry!"
 msgid "Host is Starting Game"
 msgstr "Gospodarz rozpoczyna grę"
 
-#: src/multiint.c:3452
+#: src/multiint.c:3459
 msgid "Players"
 msgstr "Gracze"
 
-#: src/multiint.c:3569
+#: src/multiint.c:3576
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Przesyłanie mapy: %d%%"
 
-#: src/multiint.c:3577
+#: src/multiint.c:3584
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% pobrane"
 
-#: src/multiint.c:3603
+#: src/multiint.c:3610
 msgid "HOST"
 msgstr "GOSPODARZ"
 
@@ -13670,27 +13669,27 @@ msgstr "GOSPODARZ"
 msgid "Players Still Joining"
 msgstr "Gracze wciąż dołączają"
 
-#: src/multijoin.c:213
+#: src/multijoin.c:214
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s opuścił grę"
 
-#: src/multijoin.c:227
+#: src/multijoin.c:228
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Transfer pliku został anulowany dla %d."
 
-#: src/multijoin.c:348
+#: src/multijoin.c:349
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) ma niekompatybilny mod i został wyrzucony."
 
-#: src/multijoin.c:387
+#: src/multijoin.c:388
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s dołącza do gry"
 
-#: src/multijoin.c:397
+#: src/multijoin.c:398
 msgid "System message:"
 msgstr "Wiadomość systemowa:"
 
@@ -13776,47 +13775,47 @@ msgstr "Przesyła energię graczowi"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Gracz %s wyrzucony z powodu próby pominięcia sprawdzenia integralności danych!"
 
-#: src/multiplay.c:1064
+#: src/multiplay.c:1072
 msgid "(allies"
 msgstr "(sojusznicy"
 
-#: src/multiplay.c:1072
+#: src/multiplay.c:1080
 msgid "(private to "
 msgstr "(prywatny dla"
 
-#: src/multiplay.c:1085
+#: src/multiplay.c:1093
 msgid "[invalid]"
 msgstr "[nieprawidłowy]"
 
-#: src/multiplay.c:1944
+#: src/multiplay.c:1952
 msgid "Green"
 msgstr "Zielony"
 
-#: src/multiplay.c:1945
+#: src/multiplay.c:1953
 msgid "Orange"
 msgstr "Pomarańczowy"
 
-#: src/multiplay.c:1946
+#: src/multiplay.c:1954
 msgid "Grey"
 msgstr "Szary"
 
-#: src/multiplay.c:1947
+#: src/multiplay.c:1955
 msgid "Black"
 msgstr "Czarny"
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1956
 msgid "Red"
 msgstr "Czerwony"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1957
 msgid "Blue"
 msgstr "Niebieski"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1958
 msgid "Pink"
 msgstr "Różowy"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1959
 msgid "Cyan"
 msgstr "Turkusowy"
 
@@ -14092,6 +14091,9 @@ msgstr " - Zbudowana %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Wersja %s%s%s%s"
+
+#~ msgid ", mod: "
+#~ msgstr ", mod: "
 
 #~ msgid ": Unknown cheat code."
 #~ msgstr ": Nieznany kod oszustwa."

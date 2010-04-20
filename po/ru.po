@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-09 03:20+0200\n"
+"POT-Creation-Date: 2010-04-20 15:03+0200\n"
 "PO-Revision-Date: 2010-01-28 19:50+0600\n"
 "Last-Translator: Maxim <raptor9000@yandex.ru>\n"
 "Language-Team: Russian <>\n"
@@ -11435,6 +11435,11 @@ msgstr "Блок миниракет Кобра Гусеницы"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "ГС пушка питон ховер"
 
+#: data/mp/messages/strings/names.txt:1960
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "Средняя броня - Кара"
+
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
 msgid "System locale"
@@ -11564,25 +11569,20 @@ msgstr "китайский"
 msgid "Latin"
 msgstr "Латинский"
 
-#: lib/netplay/netplay.c:197
-#: lib/netplay/netplay.c:1037
+#: lib/netplay/netplay.c:200
+#: lib/netplay/netplay.c:1058
 msgid "Enter password here"
 msgstr "Введите пароль"
 
-#: lib/netplay/netplay.c:2000
+#: lib/netplay/netplay.c:2043
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "не могу получить имя основного сервера (%s)!"
 
-#: lib/netplay/netplay.c:2013
+#: lib/netplay/netplay.c:2056
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Не удалось соединиться с лобби-сервером. проверьте, открыт-ли TCP-порт %u для исходящего траффика."
-
-#: lib/netplay/netplay.c:2418
-#, fuzzy
-msgid ", mod: "
-msgstr ", моды:"
 
 #: src/challenge.c:188
 #: src/hci.c:1018
@@ -11739,8 +11739,8 @@ msgstr "Хост"
 msgid "go directly to host screen"
 msgstr "прямо на экран хоста"
 
-#: src/configuration.c:452
-#: src/configuration.c:453
+#: src/configuration.c:445
+#: src/configuration.c:446
 #: src/multistat.c:124
 msgid "Player"
 msgstr "Игрок"
@@ -11894,31 +11894,31 @@ msgstr "Игрок ушел"
 msgid "Player dropped"
 msgstr "Игрок пал"
 
-#: src/display.c:1659
+#: src/display.c:1660
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Строительство невозможно. Горит нефть."
 
-#: src/display.c:1839
-#: src/display.c:2431
+#: src/display.c:1840
+#: src/display.c:2432
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - повреждение %d%% - опыт %d, %s"
 
-#: src/display.c:1855
+#: src/display.c:1856
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - союзник %d%% - опыт %d, %s"
 
-#: src/display.c:2045
+#: src/display.c:2046
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Грузовику приказано строить нефтевышку"
 
-#: src/display.c:2046
+#: src/display.c:2047
 #, fuzzy
 msgid "2 trucks ordered to build Oil Derrick"
 msgstr "Грузовику приказано строить нефтевышку"
 
-#: src/display.c:2047
+#: src/display.c:2048
 #, fuzzy, c-format
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr "Грузовику приказано строить нефтевышку"
@@ -11931,7 +11931,7 @@ msgstr "Юнит потерян!"
 msgid "Structure Restored"
 msgstr "постройка восстановлена"
 
-#: src/droid.c:2955
+#: src/droid.c:2960
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -11939,7 +11939,7 @@ msgstr[0] "Выбрана группа %u - %u юнит"
 msgstr[1] "Выбрана группа %u - %u юнита"
 msgstr[2] "Выбрана группа %u - %u юнитов"
 
-#: src/droid.c:2968
+#: src/droid.c:2973
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -11947,7 +11947,7 @@ msgstr[0] "%u юнит назначен группе %u"
 msgstr[1] "%u юнита назначено группе %u"
 msgstr[2] "%u юнитов назначено группе %u"
 
-#: src/droid.c:2981
+#: src/droid.c:2986
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -11955,7 +11955,7 @@ msgstr[0] "Фокус на группе %u - %u юнит"
 msgstr[1] "Фокус на группе %u - %u юнита"
 msgstr[2] "Фокус на группе %u - %u юнитов"
 
-#: src/droid.c:2985
+#: src/droid.c:2990
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -11963,40 +11963,40 @@ msgstr[0] "Соединить с группой %u - %u Юнит"
 msgstr[1] "Соединить с группой %u - %u Юниты"
 msgstr[2] "Соединить с группой %u - %u Юниты"
 
-#: src/droid.c:3269
+#: src/droid.c:3274
 msgid "Rookie"
 msgstr "Новобранец"
 
-#: src/droid.c:3270
+#: src/droid.c:3275
 msgctxt "rank"
 msgid "Green"
 msgstr "Молодой"
 
-#: src/droid.c:3271
+#: src/droid.c:3276
 msgid "Trained"
 msgstr "Тренированный"
 
-#: src/droid.c:3272
+#: src/droid.c:3277
 msgid "Regular"
 msgstr "Опытный"
 
-#: src/droid.c:3273
+#: src/droid.c:3278
 msgid "Professional"
 msgstr "Профессионал"
 
-#: src/droid.c:3274
+#: src/droid.c:3279
 msgid "Veteran"
 msgstr "Ветеран"
 
-#: src/droid.c:3275
+#: src/droid.c:3280
 msgid "Elite"
 msgstr "Элита"
 
-#: src/droid.c:3276
+#: src/droid.c:3281
 msgid "Special"
 msgstr "Специалист"
 
-#: src/droid.c:3277
+#: src/droid.c:3282
 msgid "Hero"
 msgstr "Герой"
 
@@ -12042,11 +12042,11 @@ msgstr "ОБУЧЕНИЕ"
 #: src/frontend.c:376
 #: src/frontend.c:529
 #: src/frontend.c:591
-#: src/frontend.c:733
-#: src/frontend.c:872
-#: src/frontend.c:979
-#: src/frontend.c:1186
-#: src/frontend.c:1329
+#: src/frontend.c:725
+#: src/frontend.c:864
+#: src/frontend.c:971
+#: src/frontend.c:1178
+#: src/frontend.c:1321
 msgctxt "menu"
 msgid "Return"
 msgstr "Назад"
@@ -12126,19 +12126,19 @@ msgid "Video Playback"
 msgstr "Воспроизведение видео"
 
 #: src/frontend.c:656
-#: src/frontend.c:826
+#: src/frontend.c:818
 msgid "1X"
 msgstr "1Х"
 
 #: src/frontend.c:660
-#: src/frontend.c:816
+#: src/frontend.c:808
 msgid "2X"
 msgstr "2X"
 
 #: src/frontend.c:664
-#: src/frontend.c:821
-#: src/frontend.c:944
-#: src/frontend.c:1002
+#: src/frontend.c:813
+#: src/frontend.c:936
+#: src/frontend.c:994
 msgid "Fullscreen"
 msgstr "Полный экран"
 
@@ -12147,43 +12147,42 @@ msgid "Screen Shake"
 msgstr "Дрожание экрана"
 
 #: src/frontend.c:677
-#: src/frontend.c:707
-#: src/frontend.c:721
-#: src/frontend.c:757
-#: src/frontend.c:793
-#: src/frontend.c:802
-#: src/frontend.c:965
-#: src/frontend.c:1063
-#: src/frontend.c:1101
-#: src/frontend.c:1137
-#: src/frontend.c:1149
-#: src/frontend.c:1161
-#: src/frontend.c:1173
-#: src/frontend.c:1209
-#: src/frontend.c:1222
-#: src/frontend.c:1236
-#: src/frontend.c:1250
+#: src/frontend.c:705
+#: src/frontend.c:713
+#: src/frontend.c:749
+#: src/frontend.c:785
+#: src/frontend.c:794
+#: src/frontend.c:957
+#: src/frontend.c:1055
+#: src/frontend.c:1093
+#: src/frontend.c:1129
+#: src/frontend.c:1141
+#: src/frontend.c:1153
+#: src/frontend.c:1165
+#: src/frontend.c:1201
+#: src/frontend.c:1214
+#: src/frontend.c:1228
+#: src/frontend.c:1242
 msgid "On"
 msgstr "Вкл."
 
 #: src/frontend.c:681
-#: src/frontend.c:703
-#: src/frontend.c:713
-#: src/frontend.c:725
-#: src/frontend.c:752
-#: src/frontend.c:788
-#: src/frontend.c:806
-#: src/frontend.c:969
-#: src/frontend.c:1058
-#: src/frontend.c:1096
-#: src/frontend.c:1141
-#: src/frontend.c:1153
-#: src/frontend.c:1165
-#: src/frontend.c:1177
-#: src/frontend.c:1204
-#: src/frontend.c:1217
-#: src/frontend.c:1231
-#: src/frontend.c:1245
+#: src/frontend.c:701
+#: src/frontend.c:717
+#: src/frontend.c:744
+#: src/frontend.c:780
+#: src/frontend.c:798
+#: src/frontend.c:961
+#: src/frontend.c:1050
+#: src/frontend.c:1088
+#: src/frontend.c:1133
+#: src/frontend.c:1145
+#: src/frontend.c:1157
+#: src/frontend.c:1169
+#: src/frontend.c:1196
+#: src/frontend.c:1209
+#: src/frontend.c:1223
+#: src/frontend.c:1237
 msgid "Off"
 msgstr "Выкл."
 
@@ -12193,145 +12192,144 @@ msgid "Fog"
 msgstr "Туман"
 
 #: src/frontend.c:689
-#: src/frontend.c:775
+#: src/frontend.c:767
 msgid "Mist"
 msgstr "Мгла"
 
 #: src/frontend.c:693
-#: src/frontend.c:768
+#: src/frontend.c:760
 #: src/multiint.c:1325
 msgid "Fog Of War"
 msgstr "Туман войны"
 
-#: src/frontend.c:700
-#: src/frontend.c:712
+#: src/frontend.c:698
 msgid "Subtitles"
 msgstr "Субтитры"
 
-#: src/frontend.c:718
+#: src/frontend.c:710
 msgid "Shadows"
 msgstr "Тени"
 
-#: src/frontend.c:729
+#: src/frontend.c:721
 msgid "GRAPHICS OPTIONS"
 msgstr "Настройки графики"
 
-#: src/frontend.c:860
+#: src/frontend.c:852
 #: src/ingameop.c:177
 msgid "Voice Volume"
 msgstr "Громкость голоса"
 
-#: src/frontend.c:864
+#: src/frontend.c:856
 #: src/ingameop.c:182
 msgid "FX Volume"
 msgstr "Громкость эффектов"
 
-#: src/frontend.c:868
+#: src/frontend.c:860
 #: src/ingameop.c:187
 msgid "Music Volume"
 msgstr "Громкость музыкы"
 
-#: src/frontend.c:875
+#: src/frontend.c:867
 msgid "AUDIO OPTIONS"
 msgstr "Настройки аудио"
 
-#: src/frontend.c:940
+#: src/frontend.c:932
 msgid "Graphics Mode*"
 msgstr "Графический режим*"
 
-#: src/frontend.c:948
-#: src/frontend.c:997
+#: src/frontend.c:940
+#: src/frontend.c:989
 msgid "Windowed"
 msgstr "В окне"
 
-#: src/frontend.c:952
+#: src/frontend.c:944
 msgid "Resolution*"
 msgstr "Разрешение*"
 
-#: src/frontend.c:957
+#: src/frontend.c:949
 msgid "Texture size"
 msgstr "Размер текстур"
 
-#: src/frontend.c:961
+#: src/frontend.c:953
 msgid "Vertical sync*"
 msgstr "Вертикальная синхронизация*"
 
-#: src/frontend.c:973
+#: src/frontend.c:965
 msgid "* Takes effect on game restart"
 msgstr "* Применится после перезагрузки игры"
 
-#: src/frontend.c:976
+#: src/frontend.c:968
 msgid "VIDEO OPTIONS"
 msgstr "Настройки видео"
 
-#: src/frontend.c:1134
+#: src/frontend.c:1126
 msgid "Reverse Rotation"
 msgstr "Инверсия мыши"
 
-#: src/frontend.c:1145
+#: src/frontend.c:1137
 msgid "Trap Cursor"
 msgstr "Захват курсора"
 
-#: src/frontend.c:1157
+#: src/frontend.c:1149
 msgid "Colored Cursors*"
 msgstr "цветные курсоры *"
 
-#: src/frontend.c:1170
+#: src/frontend.c:1162
 msgid "Switch Mouse Buttons"
 msgstr "Настройки Мыши"
 
-#: src/frontend.c:1180
+#: src/frontend.c:1172
 msgid "* May negatively affect performance"
 msgstr "*может снизить производительность"
 
-#: src/frontend.c:1183
+#: src/frontend.c:1175
 msgid "MOUSE OPTIONS"
 msgstr "Настройки мыши"
 
-#: src/frontend.c:1284
-#: src/frontend.c:1350
+#: src/frontend.c:1276
+#: src/frontend.c:1342
 msgid "Difficulty"
 msgstr "Сложность"
 
-#: src/frontend.c:1288
-#: src/frontend.c:1358
-#: src/frontend.c:1389
+#: src/frontend.c:1280
+#: src/frontend.c:1350
+#: src/frontend.c:1381
 msgid "Easy"
 msgstr "Легкая"
 
-#: src/frontend.c:1291
-#: src/frontend.c:1361
-#: src/frontend.c:1381
+#: src/frontend.c:1283
+#: src/frontend.c:1353
+#: src/frontend.c:1373
 msgid "Normal"
 msgstr "Нормальная"
 
-#: src/frontend.c:1295
-#: src/frontend.c:1364
-#: src/frontend.c:1385
+#: src/frontend.c:1287
+#: src/frontend.c:1356
+#: src/frontend.c:1377
 msgid "Hard"
 msgstr "Тяжелая"
 
-#: src/frontend.c:1300
-#: src/frontend.c:1351
+#: src/frontend.c:1292
+#: src/frontend.c:1343
 msgid "Scroll Speed"
 msgstr "Скорость прокрутки"
 
-#: src/frontend.c:1314
-#: src/frontend.c:1348
+#: src/frontend.c:1306
+#: src/frontend.c:1340
 msgid "Language"
 msgstr "Язык"
 
-#: src/frontend.c:1326
-#: src/frontend.c:1349
+#: src/frontend.c:1318
+#: src/frontend.c:1341
 msgid "Unit Colour"
 msgstr "Цвет юнита"
 
-#: src/frontend.c:1332
-#: src/frontend.c:1352
+#: src/frontend.c:1324
+#: src/frontend.c:1344
 msgid "GAME OPTIONS"
 msgstr "НАСТРОЙКИ ИГРЫ"
 
-#: src/frontend.c:1693
+#: src/frontend.c:1685
 #: src/multiint.c:2235
 #, fuzzy
 msgid "Mod: "
@@ -13658,21 +13656,21 @@ msgstr "Хост выкинул %s из игры!"
 msgid "Host is Starting Game"
 msgstr "Хост стартует"
 
-#: src/multiint.c:3452
+#: src/multiint.c:3459
 msgid "Players"
 msgstr "Игроки"
 
-#: src/multiint.c:3569
+#: src/multiint.c:3576
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3577
+#: src/multiint.c:3584
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "карта: %d%% загружена"
 
-#: src/multiint.c:3603
+#: src/multiint.c:3610
 msgid "HOST"
 msgstr "ХОСТ"
 
@@ -13681,27 +13679,27 @@ msgstr "ХОСТ"
 msgid "Players Still Joining"
 msgstr "Игроки еще соединяються"
 
-#: src/multijoin.c:213
+#: src/multijoin.c:214
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s покинул игру"
 
-#: src/multijoin.c:227
+#: src/multijoin.c:228
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr ""
 
-#: src/multijoin.c:348
+#: src/multijoin.c:349
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) имеет несовместимый мод и отключен."
 
-#: src/multijoin.c:387
+#: src/multijoin.c:388
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s присоединился к игре"
 
-#: src/multijoin.c:397
+#: src/multijoin.c:398
 msgid "System message:"
 msgstr "Системное сообщение"
 
@@ -13787,47 +13785,47 @@ msgstr "Передать энергию  игроку"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Кик игрока %s за попытку обойти проверку внутренних данных"
 
-#: src/multiplay.c:1064
+#: src/multiplay.c:1072
 msgid "(allies"
 msgstr "( Союзники"
 
-#: src/multiplay.c:1072
+#: src/multiplay.c:1080
 msgid "(private to "
 msgstr "(приват"
 
-#: src/multiplay.c:1085
+#: src/multiplay.c:1093
 msgid "[invalid]"
 msgstr "[неверно]"
 
-#: src/multiplay.c:1944
+#: src/multiplay.c:1952
 msgid "Green"
 msgstr "Зелёный"
 
-#: src/multiplay.c:1945
+#: src/multiplay.c:1953
 msgid "Orange"
 msgstr "Оранжевый"
 
-#: src/multiplay.c:1946
+#: src/multiplay.c:1954
 msgid "Grey"
 msgstr "Серый"
 
-#: src/multiplay.c:1947
+#: src/multiplay.c:1955
 msgid "Black"
 msgstr "Чёрный"
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1956
 msgid "Red"
 msgstr "Красный"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1957
 msgid "Blue"
 msgstr "Синий"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1958
 msgid "Pink"
 msgstr "Розовый"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1959
 msgid "Cyan"
 msgstr "Голубой"
 
@@ -14102,6 +14100,10 @@ msgstr " - сборка %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версия %s%s%s%s"
+
+#, fuzzy
+#~ msgid ", mod: "
+#~ msgstr ", моды:"
 
 #~ msgid "Active mods: "
 #~ msgstr "Активные моды:"
