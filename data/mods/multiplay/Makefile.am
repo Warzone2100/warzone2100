@@ -8,8 +8,7 @@ stamp:
 
 DYDOAILIST = \
 	multiplay \
-	images \
-	messages
+	images
 
 DYDOAIARCHIVE = dydo-ai.wz
 
@@ -40,16 +39,21 @@ NTWLIST = \
 
 NTWARCHIVE = ntw.wz
 
-CLEANFILES = $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE)
+SEMPERFILIST = multiplay
+SEMPERFIARCHIVE = semperfi.wz
+
+CLEANFILES = $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE) $(SEMPERFIARCHIVE)
 
 $(DYDOAIARCHIVE): $(DYDOAILIST:%=$(basename $(DYDOAIARCHIVE))/%)
 $(OLD110ARCHIVE): $(OLD110LIST:%=$(basename $(OLD110ARCHIVE))/%)
 $(NTWARCHIVE): $(NTWLIST:%=$(basename $(NTWARCHIVE))/%)
+$(SEMPERFIARCHIVE): $(SEMPERFILIST:%=$(basename $(SEMPERFIARCHIVE))/%)
 
 multiplaymodsdir = $(pkgdatadir)/mods/multiplay
-nodist_multiplaymods_DATA =  $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE)
+nodist_multiplaymods_DATA =  $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE) $(SEMPERFIARCHIVE)
 
-dist-hook: $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE)
+dist-hook: $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE) $(SEMPERFIARCHIVE)
 	$(UNZIP) -u $(DYDOAIARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(DYDOAIARCHIVE))
 	$(UNZIP) -u $(OLD110ARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(OLD110ARCHIVE))
 	$(UNZIP) -u $(NTWARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(NTWARCHIVE))
+	$(UNZIP) -u $(SEMPERFIARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(SEMPERFIARCHIVE))
