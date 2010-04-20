@@ -8,4 +8,8 @@ cat > po/POTFILES.in << EOF
 # List of source files which contain translatable strings.
 EOF
 
-find lib src data -type f | grep -v '\/.svn\/' | grep -e '\.c\(pp\|xx\)\?$' -e 'data.*strings.*\.txt$' -e '\.slo$' -e '\.rmsg$' | grep -v -e '\.lex\.c\(pp\|xx\)\?$' -e '\.tab\.c\(pp\|xx\)\?$' -e 'sqlite3\.c' -e 'GLee\.c' | sort >> po/POTFILES.in
+find lib src data -type f |
+	grep -v '\/.svn\/' |
+	grep -e '\.c\(pp\|xx\)\?$' -e 'data.*strings.*\.txt$' -e '\.slo$' -e '\.rmsg$' |
+	grep -v -e '\.lex\.c\(pp\|xx\)\?$' -e '\.tab\.c\(pp\|xx\)\?$' -e 'lib/netplay/miniupnpc/*' -e 'GLee\.c' |
+	sort >> po/POTFILES.in
