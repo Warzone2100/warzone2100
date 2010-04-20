@@ -84,11 +84,15 @@ data/base/script/text/tech.slo
 data/base/script/text/tutorial3.slo
 data/base/script/text/vtols2.slo
 data/base/script/text/vtols.slo
+data/mods/multiplay/dydo-ai/messages/strings/names.txt
+data/mods/multiplay/dydo-ai/multiplay/skirmish/ai.slo
 data/mods/multiplay/ntw/messages/strings/genstrings.txt
 data/mods/multiplay/ntw/messages/strings/names.txt
 data/mods/multiplay/ntw/multiplay/script/autoenable.slo
 data/mods/multiplay/ntw/multiplay/script/camtech.slo
 data/mods/multiplay/ntw/multiplay/script/gates.slo
+data/mods/multiplay/ntw/multiplay/script/landmine.slo
+data/mods/multiplay/ntw/multiplay/script/multilim.slo
 data/mods/multiplay/ntw/multiplay/script/multiplay.slo
 data/mods/multiplay/ntw/multiplay/script/reactor.slo
 data/mods/multiplay/ntw/multiplay/skirmish/player0.slo
@@ -179,6 +183,7 @@ lib/ivis_opengl/textdraw.c
 lib/netplay/netjoin_stub.c
 lib/netplay/netlog.c
 lib/netplay/netplay.c
+lib/netplay/netsocket.cpp
 lib/netplay/nettypes.c
 lib/script/codeprint.c
 lib/script/event.c
