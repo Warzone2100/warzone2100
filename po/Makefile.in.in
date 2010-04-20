@@ -378,7 +378,12 @@ dist2: stamp-po $(DISTFILES)
 	  fi; \
 	done
 
-update-po: Makefile
+POTFILES.in: $(srcdir)/update-po.sh
+	(cd $(srcdir); ./update-po.sh)
+
+update-po-custom: POTFILES.in
+
+update-po: Makefile update-po-custom
 	$(MAKE) $(DOMAIN).pot-update
 	test -z "$(UPDATEPOFILES)" || $(MAKE) $(UPDATEPOFILES)
 	$(MAKE) update-gmo
