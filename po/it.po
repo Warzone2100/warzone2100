@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-12 21:03+0200\n"
-"PO-Revision-Date: 2010-03-31 14:39+0100\n"
+"POT-Creation-Date: 2010-04-20 15:08+0200\n"
+"PO-Revision-Date: 2010-04-20 14:10+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -10104,13 +10104,11 @@ msgstr "Batteria di Minirazzi Viper Semi-cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
 #: data/mp/messages/strings/names.txt:1953
-#, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
 msgstr "Bombe al Fosforo Mantis VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
 #: data/mp/messages/strings/names.txt:1954
-#, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
 msgstr "Bombe HEAP Mantis VTOL"
 
@@ -11533,24 +11531,19 @@ msgid "Latin"
 msgstr "Latino"
 
 #: lib/netplay/netplay.c:1287
-#: lib/netplay/netplay.c:2132
+#: lib/netplay/netplay.c:2136
 msgid "Enter password here"
 msgstr "Inserisci qua la password"
 
-#: lib/netplay/netplay.c:3113
+#: lib/netplay/netplay.c:3131
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Non posso decidere il nome del server master (%s)!"
 
-#: lib/netplay/netplay.c:3138
+#: lib/netplay/netplay.c:3156
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Non posso comunicare con il server della Lobby! La porta TCP %u è aperta?"
-
-#: lib/netplay/netplay.c:3580
-#, fuzzy
-msgid ", mod: "
-msgstr ", mods:"
 
 #: src/challenge.c:188
 #: src/hci.c:1012
@@ -11893,68 +11886,68 @@ msgstr "Unità Persa!"
 msgid "Structure Restored"
 msgstr "Struttura Riparata"
 
-#: src/droid.c:3342
+#: src/droid.c:3345
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppo %u selezionato - %u Unità"
 msgstr[1] "Gruppo %u selezionato - %u Unità"
 
-#: src/droid.c:3355
+#: src/droid.c:3358
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unità assegnata al Gruppo %u"
 msgstr[1] "%u unità assegnata al Gruppo %u"
 
-#: src/droid.c:3368
+#: src/droid.c:3371
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Visuale Centrata sul Gruppo %u - %u Unit"
 msgstr[1] "Visuale Centrata sul gruppo %u - %u Unità"
 
-#: src/droid.c:3372
+#: src/droid.c:3375
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Visuale affiancata al Gruppo %u - %u Unità"
 msgstr[1] "Visuale affiancata al Gruppo %u - %u Unità"
 
-#: src/droid.c:3635
+#: src/droid.c:3638
 msgid "Rookie"
 msgstr "Coscritta"
 
-#: src/droid.c:3636
+#: src/droid.c:3639
 msgctxt "rank"
 msgid "Green"
 msgstr "Inesperta"
 
-#: src/droid.c:3637
+#: src/droid.c:3640
 msgid "Trained"
 msgstr "Addestrata"
 
-#: src/droid.c:3638
+#: src/droid.c:3641
 msgid "Regular"
 msgstr "Normale"
 
-#: src/droid.c:3639
+#: src/droid.c:3642
 msgid "Professional"
 msgstr "Professionale"
 
-#: src/droid.c:3640
+#: src/droid.c:3643
 msgid "Veteran"
 msgstr "Veterana"
 
-#: src/droid.c:3641
+#: src/droid.c:3644
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3642
+#: src/droid.c:3645
 msgid "Special"
 msgstr "Speciale"
 
-#: src/droid.c:3643
+#: src/droid.c:3646
 msgid "Hero"
 msgstr "Eroe"
 
@@ -12291,9 +12284,8 @@ msgstr "OPZIONI DI GIOCO"
 
 #: src/frontend.c:1707
 #: src/multiint.c:2239
-#, fuzzy
 msgid "Mod: "
-msgstr ", mods:"
+msgstr "Mod:"
 
 #: src/hci.c:1358
 msgid "MAP SAVED!"
@@ -12465,6 +12457,9 @@ msgid ""
 "\n"
 "Warzone will try to load the game without it."
 msgstr ""
+"Il mod richiesto non può essere caricato: %s\n"
+"\n"
+"Warzone proverà a caricare il gioco senza di esso."
 
 #: src/intdisplay.c:202
 #: src/intdisplay.c:247
@@ -13607,21 +13602,21 @@ msgstr "L'host ha espulso %s dalla partita!"
 msgid "Host is Starting Game"
 msgstr "L'host sta avviando la partita"
 
-#: src/multiint.c:3458
+#: src/multiint.c:3465
 msgid "Players"
 msgstr "Giocatori"
 
-#: src/multiint.c:3575
+#: src/multiint.c:3582
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Invio mappa: %d%%"
 
-#: src/multiint.c:3584
+#: src/multiint.c:3591
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mappa: %d%% scaricata"
 
-#: src/multiint.c:3610
+#: src/multiint.c:3617
 msgid "HOST"
 msgstr "HOST"
 
@@ -13736,47 +13731,47 @@ msgstr "Invia Energia al Giocatore"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Il giocatore %s sarà kickato perchè hanno cercato di bypassare il controllo dell'integrità dei dati!"
 
-#: src/multiplay.c:1069
+#: src/multiplay.c:1076
 msgid "(allies"
 msgstr "(alleati"
 
-#: src/multiplay.c:1077
+#: src/multiplay.c:1084
 msgid "(private to "
 msgstr "(privato a"
 
-#: src/multiplay.c:1090
+#: src/multiplay.c:1097
 msgid "[invalid]"
 msgstr "[invalido]"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1956
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1957
 msgid "Orange"
 msgstr "Arancione"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1958
 msgid "Grey"
 msgstr "Grigio"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1959
 msgid "Black"
 msgstr "Nero"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1960
 msgid "Red"
 msgstr "Rosso"
 
-#: src/multiplay.c:1954
+#: src/multiplay.c:1961
 msgid "Blue"
 msgstr "Blu"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1962
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.c:1956
+#: src/multiplay.c:1963
 msgid "Cyan"
 msgstr "Azzurro"
 
@@ -13954,6 +13949,7 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossibile localizzare alcun Comandante!"
 
 #: src/structure.c:2739
+#, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Limite di Controllo Raggiunto - Produzione Bloccata"
 
@@ -14047,6 +14043,36 @@ msgstr " - Costruito %s"
 msgid "Version %s%s%s%s"
 msgstr "Versione %s%s%s%s"
 
+#~ msgid "Hardcrete Gate"
+#~ msgstr "Cancello di Cementitan"
+
+#~ msgid "Gate"
+#~ msgstr "Cancello"
+
+#~ msgid ", mod: "
+#~ msgstr ", mod:"
+
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "2 camion incaricati di costruire un Traliccio Petrolifero"
+
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "%d camion incaricati di costruire un Traliccio Petrolifero"
+
+#~ msgid "GAME SAVED: "
+#~ msgstr "PARTITA SALVATA:"
+
+#~ msgid "Tactical UI (Target Origin Icon): Show"
+#~ msgstr "UI Tattica (Icona dell'Origine del bersaglio): Visualizza"
+
+#~ msgid "Tactical UI (Target Origin Icon): Hide"
+#~ msgstr "UI Tattica (Icona dell'Origine del bersaglio): Nascondi"
+
+#~ msgid "Build Progress"
+#~ msgstr "Progresso della produzione"
+
+#~ msgid "Construction Progress"
+#~ msgstr "Progresso della costruzione"
+
 #~ msgid "Active mods: "
 #~ msgstr "Mod attivi:"
 
@@ -14098,9 +14124,6 @@ msgstr "Versione %s%s%s%s"
 
 #~ msgid "Stop Multiplayer Audio"
 #~ msgstr "Ferma l'Audio Multigiocatore"
-
-#~ msgid "Game"
-#~ msgstr "Partita"
 
 #~ msgid "Mayhem"
 #~ msgstr "Mayhem"
