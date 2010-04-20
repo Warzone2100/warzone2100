@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-12 21:03+0200\n"
+"POT-Creation-Date: 2010-04-20 15:08+0200\n"
 "PO-Revision-Date: 2008-05-09 16:39+0000\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Latin\n"
@@ -11560,22 +11560,18 @@ msgid "Latin"
 msgstr ""
 
 #: lib/netplay/netplay.c:1287
-#: lib/netplay/netplay.c:2132
+#: lib/netplay/netplay.c:2136
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3113
+#: lib/netplay/netplay.c:3131
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3138
+#: lib/netplay/netplay.c:3156
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-msgstr ""
-
-#: lib/netplay/netplay.c:3580
-msgid ", mod: "
 msgstr ""
 
 #: src/challenge.c:188
@@ -11919,70 +11915,70 @@ msgstr ""
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3342
+#: src/droid.c:3345
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3355
+#: src/droid.c:3358
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3368
+#: src/droid.c:3371
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3372
+#: src/droid.c:3375
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3635
+#: src/droid.c:3638
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:3636
+#: src/droid.c:3639
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:3637
+#: src/droid.c:3640
 #, fuzzy
 msgid "Trained"
 msgstr "Exercitum"
 
-#: src/droid.c:3638
+#: src/droid.c:3641
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:3639
+#: src/droid.c:3642
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:3640
+#: src/droid.c:3643
 #, fuzzy
 msgid "Veteran"
 msgstr "Veteranum"
 
-#: src/droid.c:3641
+#: src/droid.c:3644
 msgid "Elite"
 msgstr ""
 
-#: src/droid.c:3642
+#: src/droid.c:3645
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:3643
+#: src/droid.c:3646
 #, fuzzy
 msgid "Hero"
 msgstr "Heros"
@@ -13644,21 +13640,21 @@ msgstr ""
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:3458
+#: src/multiint.c:3465
 msgid "Players"
 msgstr ""
 
-#: src/multiint.c:3575
+#: src/multiint.c:3582
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3584
+#: src/multiint.c:3591
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3610
+#: src/multiint.c:3617
 msgid "HOST"
 msgstr ""
 
@@ -13773,49 +13769,49 @@ msgstr ""
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1069
+#: src/multiplay.c:1076
 msgid "(allies"
 msgstr ""
 
-#: src/multiplay.c:1077
+#: src/multiplay.c:1084
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1090
+#: src/multiplay.c:1097
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1956
 #, fuzzy
 msgid "Green"
 msgstr "Viridum"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1957
 msgid "Orange"
 msgstr ""
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1958
 msgid "Grey"
 msgstr "Canum"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1959
 msgid "Black"
 msgstr "Nĭgrum"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1960
 #, fuzzy
 msgid "Red"
 msgstr "Rubrum"
 
-#: src/multiplay.c:1954
+#: src/multiplay.c:1961
 msgid "Blue"
 msgstr ""
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1962
 msgid "Pink"
 msgstr ""
 
-#: src/multiplay.c:1956
+#: src/multiplay.c:1963
 msgid "Cyan"
 msgstr ""
 

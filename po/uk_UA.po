@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-12 21:03+0200\n"
+"POT-Creation-Date: 2010-04-20 15:08+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -11547,24 +11547,19 @@ msgid "Latin"
 msgstr "Латинь"
 
 #: lib/netplay/netplay.c:1287
-#: lib/netplay/netplay.c:2132
+#: lib/netplay/netplay.c:2136
 msgid "Enter password here"
 msgstr "Визначте Пароль"
 
-#: lib/netplay/netplay.c:3113
+#: lib/netplay/netplay.c:3131
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Неможливо отримати ім'я основного сервера (%s)!"
 
-#: lib/netplay/netplay.c:3138
+#: lib/netplay/netplay.c:3156
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Неможливо зв'язатись з сервером лоббі! Чи відкритий TCP порт %u для вихідного трафіку?"
-
-#: lib/netplay/netplay.c:3580
-#, fuzzy
-msgid ", mod: "
-msgstr ", моди: "
 
 #: src/challenge.c:188
 #: src/hci.c:1012
@@ -11907,68 +11902,68 @@ msgstr "Втрачено Бойову Одиницю!"
 msgid "Structure Restored"
 msgstr "Будівлю Відновлено"
 
-#: src/droid.c:3342
+#: src/droid.c:3345
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Групу %u обрано - %u Підрозділ"
 msgstr[1] "Групу %u обрано - %u Підрозділів"
 
-#: src/droid.c:3355
+#: src/droid.c:3358
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u підрозділ призначено у Групу %u"
 msgstr[1] "%u підрозділів призначено у Групу %u"
 
-#: src/droid.c:3368
+#: src/droid.c:3371
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Центр екрану на Групі %u - %u Підрозділ"
 msgstr[1] "Центр екрану на Групі %u - %u Підрозділів"
 
-#: src/droid.c:3372
+#: src/droid.c:3375
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Вирівнювання з Групою %u - %u Підрозділ"
 msgstr[1] "Вирівнювання з Групою %u - %u Підрозділів"
 
-#: src/droid.c:3635
+#: src/droid.c:3638
 msgid "Rookie"
 msgstr "Новобранець"
 
-#: src/droid.c:3636
+#: src/droid.c:3639
 msgctxt "rank"
 msgid "Green"
 msgstr "Зелений"
 
-#: src/droid.c:3637
+#: src/droid.c:3640
 msgid "Trained"
 msgstr "Рекрут"
 
-#: src/droid.c:3638
+#: src/droid.c:3641
 msgid "Regular"
 msgstr "Досвідчений"
 
-#: src/droid.c:3639
+#: src/droid.c:3642
 msgid "Professional"
 msgstr "Професіонал"
 
-#: src/droid.c:3640
+#: src/droid.c:3643
 msgid "Veteran"
 msgstr "Ветеран"
 
-#: src/droid.c:3641
+#: src/droid.c:3644
 msgid "Elite"
 msgstr "Елітний"
 
-#: src/droid.c:3642
+#: src/droid.c:3645
 msgid "Special"
 msgstr "Особливий"
 
-#: src/droid.c:3643
+#: src/droid.c:3646
 msgid "Hero"
 msgstr "Герой"
 
@@ -13621,21 +13616,21 @@ msgstr "Хост викинув %s з гри!"
 msgid "Host is Starting Game"
 msgstr "Хост Починає Гру"
 
-#: src/multiint.c:3458
+#: src/multiint.c:3465
 msgid "Players"
 msgstr "Гравці"
 
-#: src/multiint.c:3575
+#: src/multiint.c:3582
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3584
+#: src/multiint.c:3591
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Мапа: %d%% завантажена"
 
-#: src/multiint.c:3610
+#: src/multiint.c:3617
 msgid "HOST"
 msgstr "ХОСТ"
 
@@ -13750,47 +13745,47 @@ msgstr "Надати Енергію Гравцю"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Викидуємо гравця %s, тому що він намагався обійти перевірку цілісності даних!"
 
-#: src/multiplay.c:1069
+#: src/multiplay.c:1076
 msgid "(allies"
 msgstr "(союзники"
 
-#: src/multiplay.c:1077
+#: src/multiplay.c:1084
 msgid "(private to "
 msgstr "(приватно до"
 
-#: src/multiplay.c:1090
+#: src/multiplay.c:1097
 msgid "[invalid]"
 msgstr "[невірний]"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1956
 msgid "Green"
 msgstr "Зелений"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1957
 msgid "Orange"
 msgstr "Помаранчовий"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1958
 msgid "Grey"
 msgstr "Сірий"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1959
 msgid "Black"
 msgstr "Чорний"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1960
 msgid "Red"
 msgstr "Червоний"
 
-#: src/multiplay.c:1954
+#: src/multiplay.c:1961
 msgid "Blue"
 msgstr "Синій"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1962
 msgid "Pink"
 msgstr "Рожевий"
 
-#: src/multiplay.c:1956
+#: src/multiplay.c:1963
 msgid "Cyan"
 msgstr "Блакитний"
 
@@ -14060,6 +14055,10 @@ msgstr " - Збудовано %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версія %s%s%s%s"
+
+#, fuzzy
+#~ msgid ", mod: "
+#~ msgstr ", моди: "
 
 #~ msgid "Active mods: "
 #~ msgstr "Активувати моди:"

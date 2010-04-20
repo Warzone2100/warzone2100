@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-12 21:03+0200\n"
+"POT-Creation-Date: 2010-04-20 15:08+0200\n"
 "PO-Revision-Date: 2009-10-31 12:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -11725,25 +11725,20 @@ msgid "Latin"
 msgstr "Latijn"
 
 #: lib/netplay/netplay.c:1287
-#: lib/netplay/netplay.c:2132
+#: lib/netplay/netplay.c:2136
 #, fuzzy
 msgid "Enter password here"
 msgstr "Vul eerst het wachtwoord in"
 
-#: lib/netplay/netplay.c:3113
+#: lib/netplay/netplay.c:3131
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3138
+#: lib/netplay/netplay.c:3156
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Kan niet communiceren met de lobby server! is TCP port 9990 open?"
-
-#: lib/netplay/netplay.c:3580
-#, fuzzy
-msgid ", mod: "
-msgstr "mod"
 
 #: src/challenge.c:188
 #: src/hci.c:1012
@@ -12088,68 +12083,68 @@ msgstr "Eenheid verloren!"
 msgid "Structure Restored"
 msgstr "Gebouw hersteld"
 
-#: src/droid.c:3342
+#: src/droid.c:3345
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Groep %u geselecteerd - %u eenheid"
 msgstr[1] "Groep %u geselecteerd - %u eenheden"
 
-#: src/droid.c:3355
+#: src/droid.c:3358
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u eenheid aan groep %u toegewezen"
 msgstr[1] "%u eenheden aan groep %u toegewezen"
 
-#: src/droid.c:3368
+#: src/droid.c:3371
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Gecentreerd op groep %u - %u eenheid"
 msgstr[1] "Gecentreerd op groep %u - %u eenheden"
 
-#: src/droid.c:3372
+#: src/droid.c:3375
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3635
+#: src/droid.c:3638
 msgid "Rookie"
 msgstr "Rekruut"
 
-#: src/droid.c:3636
+#: src/droid.c:3639
 msgctxt "rank"
 msgid "Green"
 msgstr "Groen"
 
-#: src/droid.c:3637
+#: src/droid.c:3640
 msgid "Trained"
 msgstr "Geoefend"
 
-#: src/droid.c:3638
+#: src/droid.c:3641
 msgid "Regular"
 msgstr "Beroeps"
 
-#: src/droid.c:3639
+#: src/droid.c:3642
 msgid "Professional"
 msgstr "Professioneel"
 
-#: src/droid.c:3640
+#: src/droid.c:3643
 msgid "Veteran"
 msgstr "Veteraan"
 
-#: src/droid.c:3641
+#: src/droid.c:3644
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3642
+#: src/droid.c:3645
 msgid "Special"
 msgstr "Speciaal"
 
-#: src/droid.c:3643
+#: src/droid.c:3646
 msgid "Hero"
 msgstr "Held"
 
@@ -13826,21 +13821,21 @@ msgstr "De gastheer heeft %s uit het spel verwijderd!"
 msgid "Host is Starting Game"
 msgstr "Gastheer start spel"
 
-#: src/multiint.c:3458
+#: src/multiint.c:3465
 msgid "Players"
 msgstr "Spelers"
 
-#: src/multiint.c:3575
+#: src/multiint.c:3582
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3584
+#: src/multiint.c:3591
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3610
+#: src/multiint.c:3617
 msgid "HOST"
 msgstr ""
 
@@ -13956,48 +13951,48 @@ msgstr "Geef energie aan speler"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1069
+#: src/multiplay.c:1076
 #, fuzzy
 msgid "(allies"
 msgstr "Bondgenootschappen toestaan"
 
-#: src/multiplay.c:1077
+#: src/multiplay.c:1084
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1090
+#: src/multiplay.c:1097
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1956
 msgid "Green"
 msgstr "Groen"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1957
 msgid "Orange"
 msgstr "Oranje"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1958
 msgid "Grey"
 msgstr "Grijs"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1959
 msgid "Black"
 msgstr "Zwart"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1960
 msgid "Red"
 msgstr "Rood"
 
-#: src/multiplay.c:1954
+#: src/multiplay.c:1961
 msgid "Blue"
 msgstr "Blauw"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1962
 msgid "Pink"
 msgstr "Roze"
 
-#: src/multiplay.c:1956
+#: src/multiplay.c:1963
 msgid "Cyan"
 msgstr "Cyaan"
 
@@ -14268,6 +14263,10 @@ msgstr " - Gebouwd %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versie %s%s%s%s"
+
+#, fuzzy
+#~ msgid ", mod: "
+#~ msgstr "mod"
 
 #, fuzzy
 #~ msgid "Player %u has the wrong game version. Auto kicking."

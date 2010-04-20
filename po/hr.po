@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-15 17:08+0200\n"
+"POT-Creation-Date: 2010-04-20 15:08+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Antonio Kukas <tonykukas@gmail.com>\n"
 "Language-Team: \n"
@@ -11534,24 +11534,19 @@ msgid "Latin"
 msgstr "Latinski"
 
 #: lib/netplay/netplay.c:1287
-#: lib/netplay/netplay.c:2131
+#: lib/netplay/netplay.c:2136
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3112
+#: lib/netplay/netplay.c:3131
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3137
+#: lib/netplay/netplay.c:3156
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
-
-#: lib/netplay/netplay.c:3590
-#, fuzzy
-msgid ", mod: "
-msgstr "mod"
 
 #: src/challenge.c:188
 #: src/hci.c:1012
@@ -11894,68 +11889,68 @@ msgstr ""
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3342
+#: src/droid.c:3345
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3355
+#: src/droid.c:3358
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3368
+#: src/droid.c:3371
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3372
+#: src/droid.c:3375
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3635
+#: src/droid.c:3638
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:3636
+#: src/droid.c:3639
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:3637
+#: src/droid.c:3640
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:3638
+#: src/droid.c:3641
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:3639
+#: src/droid.c:3642
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:3640
+#: src/droid.c:3643
 msgid "Veteran"
 msgstr ""
 
-#: src/droid.c:3641
+#: src/droid.c:3644
 msgid "Elite"
 msgstr ""
 
-#: src/droid.c:3642
+#: src/droid.c:3645
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:3643
+#: src/droid.c:3646
 msgid "Hero"
 msgstr ""
 
@@ -13607,21 +13602,21 @@ msgstr "Host je izbacio %s iz igre."
 msgid "Host is Starting Game"
 msgstr "Host započinje igru"
 
-#: src/multiint.c:3458
+#: src/multiint.c:3465
 msgid "Players"
 msgstr "Igrači"
 
-#: src/multiint.c:3575
+#: src/multiint.c:3582
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Slanje karte: %d%%"
 
-#: src/multiint.c:3584
+#: src/multiint.c:3591
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Karta: %d%% downloadana"
 
-#: src/multiint.c:3610
+#: src/multiint.c:3617
 msgid "HOST"
 msgstr "HOST"
 
@@ -13736,47 +13731,47 @@ msgstr "Pošalji resurse igraču"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Izbacivanje igrača %s jer se podaci ne podudaraju"
 
-#: src/multiplay.c:1069
+#: src/multiplay.c:1076
 msgid "(allies"
 msgstr "(saveznika"
 
-#: src/multiplay.c:1077
+#: src/multiplay.c:1084
 msgid "(private to "
 msgstr "(samo za"
 
-#: src/multiplay.c:1090
+#: src/multiplay.c:1097
 msgid "[invalid]"
 msgstr "[nedostupno]"
 
-#: src/multiplay.c:1949
+#: src/multiplay.c:1956
 msgid "Green"
 msgstr "Zeleni"
 
-#: src/multiplay.c:1950
+#: src/multiplay.c:1957
 msgid "Orange"
 msgstr "Narančasti"
 
-#: src/multiplay.c:1951
+#: src/multiplay.c:1958
 msgid "Grey"
 msgstr "Sivi"
 
-#: src/multiplay.c:1952
+#: src/multiplay.c:1959
 msgid "Black"
 msgstr "Crni"
 
-#: src/multiplay.c:1953
+#: src/multiplay.c:1960
 msgid "Red"
 msgstr "Crveni"
 
-#: src/multiplay.c:1954
+#: src/multiplay.c:1961
 msgid "Blue"
 msgstr "Plavi"
 
-#: src/multiplay.c:1955
+#: src/multiplay.c:1962
 msgid "Pink"
 msgstr "Ljubičasta"
 
-#: src/multiplay.c:1956
+#: src/multiplay.c:1963
 msgid "Cyan"
 msgstr "Cijan"
 
@@ -14046,6 +14041,10 @@ msgstr " - Kompajlirano %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#, fuzzy
+#~ msgid ", mod: "
+#~ msgstr "mod"
 
 #~ msgid "Active mods: "
 #~ msgstr "Aktivni modovi:"
