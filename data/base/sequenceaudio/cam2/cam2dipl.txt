@@ -1,4 +1,4 @@
-20	432	10	100	"Decoding Transmission..."
+20	432	10	100	_("Decoding Transmission...")
 
 
 
