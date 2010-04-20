@@ -1639,7 +1639,6 @@ BOOL scrSkDoResearch(void)
 	SDWORD				player, bias;//,timeToResearch;//,*x,*y;
 	UWORD				i;
 
-	char				sTemp[128];
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
 	PLAYER_RESEARCH		*pPlayerRes;
@@ -1684,17 +1683,19 @@ BOOL scrSkDoResearch(void)
 
 		MakeResearchStarted(pPlayerRes);
 		psResFacilty->timeStarted = ACTION_START_TIME;
-        psResFacilty->timeStartHold = 0;
+		psResFacilty->timeStartHold = 0;
 		psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
 		if (psResFacilty->timeToResearch == 0)
 		{
 			psResFacilty->timeToResearch = 1;
 		}
-
-		sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[i].pName );
-		NETlogEntry(sTemp, SYNC_FLAG, 0);
-
-
+#if defined (DEBUG)
+		{
+			char				sTemp[128];
+			sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[i].pName );
+			NETlogEntry(sTemp, SYNC_FLAG, 0);
+		}
+#endif
 	}
 
 	return true;
