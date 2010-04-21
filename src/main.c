@@ -1057,6 +1057,17 @@ int main(int argc, char *argv[])
 	 * directory.
 	 */
 	initialize_ConfigDir();
+
+	/*** Initialize directory structure ***/
+	make_dir(ScreenDumpPath, "screenshots", NULL);
+	make_dir(SaveGamePath, "savegame", NULL);
+	PHYSFS_mkdir("maps");		// MUST have this to prevent crashes when getting map
+	PHYSFS_mkdir("music");
+	PHYSFS_mkdir("logs");		// a place to hold our netplay, mingw crash reports & WZ logs
+	make_dir(MultiPlayersPath, "multiplay", NULL);
+	make_dir(MultiPlayersPath, "multiplay", "players");
+	sstrcpy(MultiCustomMapsPath, "maps");
+
 	if (!customDebugfile)
 	{
 		// there was no custom debug file specified  (--debug-file=blah)
@@ -1074,16 +1085,6 @@ int main(int argc, char *argv[])
 		debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, buf );
 	}
 	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
-
-	/*** Initialize directory structure ***/
-	make_dir(ScreenDumpPath, "screenshots", NULL);
-	make_dir(SaveGamePath, "savegame", NULL);
-	PHYSFS_mkdir("maps");		// MUST have this to prevent crashes when getting map
-	PHYSFS_mkdir("music");
-	PHYSFS_mkdir("logs");		// a place to hold our netplay, mingw crash reports & WZ logs
-	make_dir(MultiPlayersPath, "multiplay", NULL);
-	make_dir(MultiPlayersPath, "multiplay", "players");
-	sstrcpy(MultiCustomMapsPath, "maps");
 
 	/* Put these files in the writedir root */
 	setRegistryFilePath("config");
