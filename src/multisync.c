@@ -780,16 +780,18 @@ BOOL recvStructureCheck()
 		// Structure was not found - build it
 		else
 		{
-			NETlogEntry("scheck:structure check failed, adding struct. val=type", SYNC_FLAG, type - REF_STRUCTURE_START);
-
+#if defined (DEBUG)
+			NETlogEntry("structure check failed, adding struct. val=type", SYNC_FLAG, type - REF_STRUCTURE_START);
+#endif
 			for (i = 0; i < numStructureStats && asStructureStats[i].ref != type; i++);
 			psStats = &asStructureStats[i];
 
 			// Check for similar buildings, to avoid overlaps
 			if (TileHasStructure(mapTile(map_coord(pos.x), map_coord(pos.y))))
 			{
-				NETlogEntry("scheck:Tile has structure val=player", SYNC_FLAG, player);
-
+#if defined (DEBUG)
+				NETlogEntry("Tile has structure val=player", SYNC_FLAG, player);
+#endif
 				pS = getTileStructure(map_coord(pos.x), map_coord(pos.y));
 
 				// If correct type && player then complete & modify
@@ -805,15 +807,18 @@ BOOL recvStructureCheck()
 						pS->status = SS_BUILT;
 						buildingComplete(pS);
 					}
-
+#if defined (DEBUG)
 					NETlogEntry("scheck: fixed?", SYNC_FLAG, player);
+#endif
 				}
 				// Wall becoming a cornerwall
 				else if (pS->pStructureType->type == REF_WALL)
 				{
 					if (psStats->type == REF_WALLCORNER)
 					{
+#if defined (DEBUG)
 						NETlogEntry("scheck: fixed wall->cornerwall", SYNC_FLAG, 0);
+#endif
 						removeStruct(pS, true);
 
 						powerCalc(false);
@@ -833,14 +838,14 @@ BOOL recvStructureCheck()
 				}
 				else
 				{
-					NETlogEntry("scheck:Tile did not have correct type or player val=player", SYNC_FLAG, player);
+					NETlogEntry("Tile did not have correct type or player val=player", SYNC_FLAG, player);
 					return false;
-			    }
+				}
 			}
 			// Nothing exists there so lets get building!
 			else
 			{
-				NETlogEntry("scheck: didn't find structure at all, building it", SYNC_FLAG, 0);
+				NETlogEntry("didn't find structure at all, building it", SYNC_FLAG, 0);
 
 				powerCalc(false);
 				pS = buildStructure((STRUCTURE_STATS *) psStats, pos.x, pos.y, player, true);
