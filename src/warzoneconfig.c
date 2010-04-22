@@ -46,7 +46,6 @@ typedef struct _warzoneGlobals
 	FMV_MODE	FMVmode;
 	BOOL		bFog;
 	SWORD		effectsLevel;
-	BOOL		allowSubtitles;
 	BOOL		Fullscreen;
 	BOOL		soundEnabled;
 	BOOL		trapCursor;
@@ -91,14 +90,6 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetColouredCursor(false);
 #endif
 	war_SetMusicEnabled(true);
-}
-
-void war_SetAllowSubtitles(BOOL b) {
-	warGlobs.allowSubtitles = b;
-}
-
-BOOL war_GetAllowSubtitles(void) {
-	return warGlobs.allowSubtitles;
 }
 
 void war_setFullscreen(BOOL b) {

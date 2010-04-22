@@ -94,13 +94,6 @@ BOOL loadConfig(void)
 	// //////////////////////////
 
 	// //////////////////////////
-	// subtitles
-	if(getWarzoneKeyNumeric("allowsubtitles", &val))
-	{
-		war_SetAllowSubtitles(val);
-	}
-
-	// //////////////////////////
 	// voice vol
 	if(getWarzoneKeyNumeric("voicevol", &val))
 	{
@@ -722,7 +715,6 @@ BOOL saveConfig(void)
 	{
 		setDifficultyLevel(DL_NORMAL);
 	}
-	setWarzoneKeyNumeric("allowSubtitles", war_GetAllowSubtitles());
 	setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
 	setWarzoneKeyNumeric("framerate", (SDWORD)getFramerateLimit());
 	setWarzoneKeyNumeric("showFPS", (SDWORD)showFPS);

@@ -700,22 +700,14 @@ BOOL startGameOptions2Menu(void)
 
 	////////////
 	//subtitle mode.
-	if(war_GetAllowSubtitles())
+	addTextButton(FRONTEND_SUBTITLES, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Subtitles"), 0);
+	if (!seq_GetSubtitles())
 	{
-		addTextButton(FRONTEND_SUBTITLES,	FRONTEND_POS5X-35,FRONTEND_POS5Y, _("Subtitles"), 0);
-		if ( !seq_GetSubtitles() )
-		{
-			addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS5M-55,FRONTEND_POS5Y, _("Off"), 0);
-		}
-		else
-		{
-			addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS5M-55,FRONTEND_POS5Y, _("On"), 0);
-		}
+		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, _("Off"), 0);
 	}
 	else
 	{
-		addTextButton(FRONTEND_SUBTITLES,	FRONTEND_POS5X-35, FRONTEND_POS5Y, _("Subtitles"), WBUT_DISABLE);
-		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, _("Off"), WBUT_DISABLE);
+		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, _("On"), 0);
 	}
 
 	////////////
