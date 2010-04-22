@@ -76,96 +76,100 @@ bool screenInitialise(
 							// or full screen
 			bool		vsync)		// If to sync to vblank or not
 {
-	static int video_flags = 0;
+	int video_flags = 0;
 	int bpp = 0, value;
+
+	// Fetch the video info.
+	const SDL_VideoInfo* video_info = SDL_GetVideoInfo();
 
 	/* Store the screen information */
 	screenWidth = width;
 	screenHeight = height;
 	screenDepth = bitDepth;
 
-	// Calculate the common flags for windowed and fullscreen modes.
-	if (video_flags == 0) {
-		// Fetch the video info.
-		const SDL_VideoInfo* video_info = SDL_GetVideoInfo();
+	if (!video_info)
+	{
+		return false;
+	}
 
-		if (!video_info) {
-			return false;
-		}
+	// The flags to pass to SDL_SetVideoMode.
+	video_flags  = SDL_OPENGL;    // Enable OpenGL in SDL.
+	video_flags |= SDL_ANYFORMAT; // Don't emulate requested BPP if not available.
+	video_flags |= SDL_HWPALETTE; // Store the palette in hardware.
 
-		// The flags to pass to SDL_SetVideoMode.
-		video_flags  = SDL_OPENGL;    // Enable OpenGL in SDL.
-		video_flags |= SDL_ANYFORMAT; // Don't emulate requested BPP if not available.
-		video_flags |= SDL_HWPALETTE; // Store the palette in hardware.
+	// This checks to see if surfaces can be stored in memory.
+	if (video_info->hw_available)
+	{
+		video_flags |= SDL_HWSURFACE;
+	}
+	else
+	{
+		video_flags |= SDL_SWSURFACE;
+	}
 
-		// This checks to see if surfaces can be stored in memory.
-		if (video_info->hw_available) {
-			video_flags |= SDL_HWSURFACE;
-		} else {
-			video_flags |= SDL_SWSURFACE;
-		}
+	// This checks if hardware blits can be done.
+	if (video_info->blit_hw)
+	{
+		video_flags |= SDL_HWACCEL;
+	}
 
-		// This checks if hardware blits can be done.
-		if (video_info->blit_hw) {
-			video_flags |= SDL_HWACCEL;
-		}
+	if (fullScreen)
+	{
+		video_flags |= SDL_FULLSCREEN;
+	}
 
-		if (fullScreen) {
-			video_flags |= SDL_FULLSCREEN;
-		}
+	// Set the double buffer OpenGL attribute.
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-		// Set the double buffer OpenGL attribute.
-		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	// Enable vsync if requested by the user
+	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, vsync);
 
-		// Enable vsync if requested by the user
-		SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, vsync);
-
-		bpp = SDL_VideoModeOK(width, height, bitDepth, video_flags);
-		if (!bpp) {
-			debug( LOG_ERROR, "Error: Video mode %dx%d@%dbpp is not supported!\n", width, height, bitDepth );
-			return false;
-		}
-		switch ( bpp )
-		{
-			case 32:
-			case 24:
-				SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
-				SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
-				SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
-				SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
-				SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
-				SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 8 );
-				break;
-			case 16:
-				debug( LOG_ERROR, "Warning: Using colour depth of %i instead of %i.", bpp, screenDepth );
-				debug( LOG_ERROR, "You will experience graphics glitches or crashes!" );
-				SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
-				SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 6 );
-				SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
-				SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
-				SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 8 );
-				break;
-			case 8:
-				debug( LOG_FATAL, "Error: You don't want to play Warzone with a bit depth of %i, do you?", bpp );
-				exit( 1 );
-				break;
-			default:
-				debug( LOG_FATAL, "Error: Unsupported bit depth: %i", bpp );
-				exit( 1 );
-				break;
-		}
+	bpp = SDL_VideoModeOK(width, height, bitDepth, video_flags);
+	if (!bpp)
+	{
+		debug(LOG_ERROR, "Video mode %dx%d@%dbpp is not supported!", width, height, bitDepth);
+		return false;
+	}
+	switch (bpp)
+	{
+		case 32:
+		case 24:
+			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+			SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+			SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+			break;
+		case 16:
+			info("Using colour depth of %i instead of %i.", bpp, screenDepth);
+			info("You might experience graphics glitches or crashes!");
+			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
+			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+			SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+			break;
+		case 8:
+			debug(LOG_FATAL, "You don't want to play Warzone with a bit depth of %i, do you?", bpp);
+			exit(1);
+			break;
+		default:
+			debug(LOG_FATAL, "Unsupported bit depth: %i", bpp);
+			exit(1);
+			break;
 	}
 
 	screen = SDL_SetVideoMode(width, height, bpp, video_flags);
-	if ( !screen )
+	if (!screen)
 	{
-		debug( LOG_ERROR, "Error: SDL_SetVideoMode failed (%s).", SDL_GetError() );
+		debug(LOG_ERROR, "SDL_SetVideoMode failed (%s).", SDL_GetError());
 		return false;
 	}
-	if ( SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1)
+	if (SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1)
 	{
-		debug( LOG_FATAL, "OpenGL initialization did not give double buffering!" );
-		debug( LOG_FATAL, "Double buffering is required for this game!");
+		debug(LOG_FATAL, "OpenGL initialization did not give double buffering!");
+		debug(LOG_FATAL, "Double buffering is required for this game!");
 		exit(1);
 	}
 	// Note that no initialisation of GLee is required, since this is handled automatically.

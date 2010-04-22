@@ -241,7 +241,18 @@ bool frameInitialise(
 
 	if (!screenInitialise(width, height, bitDepth, fullScreen, vsync))
 	{
-		return false;
+		if (fullScreen)
+		{
+			info("Trying windowed mode now.");
+			if (!screenInitialise(width, height, bitDepth, false, vsync))
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/* Initialise the input system */
