@@ -1,5 +1,5 @@
 /*
-DyDo-AI Rel 2.1.1
+DyDo-AI Rel 2.1.2
 Mod Developer: "DylanDog" on http://forums.wz2100.net/
 AI webpage: http://www.obooma.net/dydo/       
                                                                 
@@ -10,28 +10,14 @@ For changelog, bug reporting and downloads see DyDo-AI homepage:
 http://www.obooma.net/dydo/
 #################################################################
 
-{bug fix}     - Fixed a crashing bug (#1765), sometimes -1 was passed to pickDefQueue[_nDef]
-{feature fix} - Fixed a bug on micro droid management, when selecting best target for 
-            a droid, only tanks were taken into account.
-{change} - On droid micro management, now flamers attacks hover first, 
-            then cyborgs then other type of tanks.
-{change} - DyDo should now never build light tanks if heavy tanks are available. 
-{change} - DyDo do not build VTOL factories if heavy bodies are available and 
-           factories are not upgraded with 2 modules or if factories are 
-           not upgraded with at least one module.  
-{change} - DyDo starts upgrading factories earlier on T2 and T3 games .
-{change} - DyDo is now able to get coord for scavenger base (to be improved).
-{change} - When attacking with more then 6 VTOLs DyDo splits them in groups of three
-            droids each and select other structure targets near the main one (if any!).
-{change} - Improvement on droid micro management: droids should not attack walls
-            anymore for more then few secs but should attack enemy droids and 
-            enemy defend structures in their range or "move" to the target coord
 ________________ CHANGELOG ___________________________________
 
-
+{bug fix} - Fixed bug #1796: research event stopped due to a wrong parameter (-1)
+            this bug appeared only on T3 games
+{change} - _random() function replaced with random()
 
 */
-#define DYDOBP_RELEASE "DyDo-AI ver 2.1.1"
+#define DYDOBP_RELEASE "DyDo-AI ver 2.1.2"
 
 #define	GAME_TIME_IN_SECS	(gameTime / 10)
 #define	GAME_TIME_IN_MIN	(gameTime / 10 / 60)
@@ -245,8 +231,8 @@ public INT numMaxDerricks;   // rate of exploration
 
 // structures
 public INT baseX,baseY,minx,miny,maxx,maxy,defSpotX,defSpotY;
-public INT numStructs,numAA,numIncendrys, numFortressDef,numWallWeaps,numTmpls, numSuperCyb, numSense, numGenAA;
-public STRUCTURESTAT wall,incendrys[8],structs[51],defStructs[20],structChoice[30],fortressDef[4],wallWeaps[20],vtolDefStruct[10],sense[3],vtolGenStruct[10];
+public INT nScavStruct,numStructs,numAA,numIncendrys, numFortressDef,numWallWeaps,numTmpls, numSuperCyb, numSense, numGenAA;
+public STRUCTURESTAT wall,aScavBaseStr[4],incendrys[8],structs[51],defStructs[20],structChoice[30],fortressDef[4],wallWeaps[20],vtolDefStruct[10],sense[3],vtolGenStruct[10];
 public STRUCTURESTAT sensorTower,resLab,powGen,playerHQ,demAnomallyFix,lassat,scavFactory,factory,derrick,cybFactory,vtolPad,vtolFactory,repairFacility, uplinkCenter,CBSense;
 public STRUCTURESTAT HMGhardPoint,MGbunker,miniRocketTower,LancerTower, powModule,facModule,resModule;
 public STRUCTURESTAT defMortar,defBombard, defPepperpot,defRippleRockets;
@@ -657,7 +643,6 @@ function void displayErrMsg(STRING _message);
 function void SetDyDoPersonality(int nPersonality, int _player);
 
 function bool aiResponsibleForPlayer(int _player);
-function int _random(int x);
 function void assignDroidToGrp(DROID droid);
 function void manageVeryLowPower();
 function void manageVeryLowPower2();
@@ -1059,6 +1044,12 @@ event initialisedEvent(CALL_GAMEINIT)
       shutDownThisAI();
    }
   
+	 /*
+   if (  isScavenger(7) ){
+     createAlliance(player,7);
+     console("Dydo-AI: Alliance created ("& allianceExistsBetween(player,7) &")("& alliancesLocked() &")");
+   }
+   */
 
 }
 //=============================================
@@ -3047,9 +3038,9 @@ event activateAttack( inactive )
       
       //force attack after some time by using both cyborgs and tanks droids.
       if ( AIPersonality == AI_TURTLE ){
-        _rndTime = (10*TIME_MINUTE + _random(900));
+        _rndTime = (10*TIME_MINUTE + random(900));
       } else {
-        _rndTime = (6*TIME_MINUTE + _random(900));
+        _rndTime = (6*TIME_MINUTE + random(900));
       }
       if ( nMapPower <= LOW_POWER_MAP ){
         _bUseCybUnitsToo  = true;
@@ -3648,15 +3639,7 @@ event manageDefTank( inactive )
   if ( alertIsOn ){
     
      if ( gameTime - tDefTankAction > 50 and (tankDefGroup.members >= MIN_DEFUNIT_DEFEND)){
-       //_nDist = distBetweenTwoPoints(cyborgDefGroup.x,cyborgDefGroup.y,alertX,alertY);
-       //if ( _nDist > 8*TILE  ){
-         //dbg("manageDefTank: orderGroupScoutCMD called dist from alert: ("& _nDist/TILE &") ",player);
-         //orderGroupScoutCMD(tankDefGroup, alertX, alertY);
-       //} else {
-         //dbg("manageDefTank: droidMicroManager called dist from alert: ("& _nDist/TILE &") grpcoord ("& tankDefGroup.x/TILE &"-"& tankDefGroup.y/TILE &") alert("& alertX/TILE &"-"& alertY/TILE &") ",player);
-         droidMicroManager(tankDefGroup, 12*TILE, alertX, alertY );
-       //}
-      //orderGroupScoutCMD(tankDefGroup,alertX,alertY);
+      droidMicroManager(tankDefGroup, 12*TILE, alertX, alertY );
       tDefTankAction = gameTime;
     }
   
@@ -3754,15 +3737,7 @@ event manageDefCyborgs (inactive)//event 18!!!!
       //go to alert coord
      //displayMsg("manageDefCyborgs: cyborgs ("& cyborgDefGroup.members &") CALLED ("& alertIsOn &") _nDist("& _nDist/TILE &")");
      if ( gameTime - tDefCybAction > 50 and (cyborgDefGroup.members >= MIN_DEFCYB_DEFEND)){
-       //_nDist = distBetweenTwoPoints(cyborgDefGroup.x,cyborgDefGroup.y,alertX,alertY);
-       //if ( _nDist > 8*TILE  ){
-         //dbg("manageDefCyborgs: orderGroupScoutCMD called dist from alert: ("& _nDist/TILE &") ",player);
-         //orderGroupScoutCMD(cyborgDefGroup, alertX, alertY);
-       //} else {
-         //dbg("manageDefCyborgs: droidMicroManager called dist from alert: ("& _nDist/TILE &") grpcoord ("& cyborgDefGroup.x/TILE &"-"& cyborgDefGroup.y/TILE &") alert("& alertX/TILE &"-"& alertY/TILE &") ",player);
-         droidMicroManager(cyborgDefGroup, 12*TILE, alertX, alertY );
-       //}
-       //orderGroupScoutCMD(cyborgDefGroup,cybAlertX,cybAlertY);
+       droidMicroManager(cyborgDefGroup, 12*TILE, alertX, alertY );
        tDefCybAction = gameTime;
      } //else{ displayMsg("####### manageDefCyborgs: cybAlertX < 0??? "); }
   
@@ -5377,11 +5352,9 @@ event doResearch(inactive)//doResearchTr
 	while(structure != NULLOBJECT and boolResult2)
 	{
   	if( structureIdle(structure) and structureComplete(structure) ){
-	    //displayMsg("doResearch: resLab ("& structure.id &")");
       //check for AA first!!
       if ( bAttackedByVTOL ){ 
         if ( !researchFinished(CycloneAASite,player) ){
-			    //displayMsg("doResearch: forcing research of Cyclone AA Site");
           boolResult = pursueResearch(structure,player,CycloneAASite);
           if (boolResult) {
 			      printDebug1("doResearch; forcing research of Cyclone AA Site");
@@ -5392,8 +5365,6 @@ event doResearch(inactive)//doResearchTr
       //need rearmin pad for VTOL troops?
       if ( nVTOLFactories > 0 ){
         if ( !isStructureAvailable(vtolPad,player) ){
-			    //displayMsg("doResearch: forcing research OF VTOLPad");
-
           boolResult = pursueResearch(structure,player,VTOLPadRes);
           if (boolResult) {
 			      printDebug1("doResearch; forced research OF VTOLPad");
@@ -5410,7 +5381,6 @@ event doResearch(inactive)//doResearchTr
             boolResult = pursueResearch(structure,player,powUpgrades3);
             if (boolResult) {
               boolResult2 = false; tLastResearch = gameTime;
-  			      //dbg("dbg->doResearch: ("& getPlayerName(player) &") OK forcing research of POWER UPGRADES 'powUpgrades3' ",player);
   			      printDebug1("doResearch; OK forcing research of POWER UPGRADES 'powUpgrades3' ");
             } //else { dbg("dbg->doResearch: ("& getPlayerName(player) &") failed forcing research of POWER UPGRADES 'powUpgrades3' ",player);           }
           } else {
@@ -5418,7 +5388,6 @@ event doResearch(inactive)//doResearchTr
               boolResult = pursueResearch(structure,player,powUpgrades6);
               if (boolResult) {
                 boolResult2 = false; tLastResearch = gameTime;
-  				      //dbg("dbg->doResearch: ("& getPlayerName(player) &") forcing research of POWER UPGRADES 'powUpgrades6' ",player);
   			        printDebug1("doResearch; OK forcing research of POWER UPGRADES 'powUpgrades6' ");
               } //else { dbg("dbg->doResearch: ("& getPlayerName(player) &") failed forcing research of POWER UPGRADES 'powUpgrades6' ",player);       }
             }
@@ -5431,7 +5400,6 @@ event doResearch(inactive)//doResearchTr
             boolResult = pursueResearch(structure,player,resCBSense);
             if (boolResult) {
               boolResult2 = false; tLastResearch = gameTime;
-  			      //dbg("dbg->doResearch: ("& getPlayerName(player) &") attacked by long range weapon weap OK FORCING RESEARCH OF CB TOWER ",player);
   			      printDebug1("doResearch; attacked by long range weapon weap forcing research of CB TOWER");
             } //else {dbg("dbg->doResearch: ("& getPlayerName(player) &") attacked by long range weapon weap FAILED FORCING RESEARCH OF CB TOWER ",player);    }
           } else {
@@ -5439,7 +5407,6 @@ event doResearch(inactive)//doResearchTr
               boolResult = pursueResearch(structure,player,bombardPit);
               if (boolResult) {
                 boolResult2 = false; tLastResearch = gameTime;
-  				      //dbg("dbg->doResearch: ("& getPlayerName(player) &") attacked by long range weapon weap OK FORCING RESEARCH OF BOMBARD ",player);
   			        printDebug1("doResearch; attacked by long range weapon weap forcing research of BOMBARD");
               } //else { dbg("dbg->doResearch: ("& getPlayerName(player) &") attacked by long range weapon weap FAILED FORCING RESEARCH OF BOMBARD ",player);           }
             }
@@ -5452,7 +5419,6 @@ event doResearch(inactive)//doResearchTr
             boolResult = pursueResearch(structure,player,resCBSense);
             if (boolResult) {
               boolResult2 = false; tLastResearch = gameTime;
-  			      //dbg("dbg->doResearch: ("& getPlayerName(player) &") attacked by very long range weap OK forcing research of CB TOWER",player);
   			      printDebug1("doResearch; attacked by very long range weap forcing research of OF CB TOWER");
             } //else { dbg("dbg->doResearch: ("& getPlayerName(player) &") attacked by very long range weap FAILED forcing research of CB TOWER ",player);          }
           } else {
@@ -5460,7 +5426,6 @@ event doResearch(inactive)//doResearchTr
               boolResult = pursueResearch(structure,player,rippleRockets);
               if (boolResult) {
                 boolResult2 = false; tLastResearch = gameTime;
-  				      //dbg("dbg->doResearch: ("& getPlayerName(player) &") attacked by very long range weap OK forcing research of RippleRockets ",player);
   				      printDebug1("doResearch; attacked by very long range weap OK forcing research of RippleRockets");
               } //else {   dbg("dbg->doResearch: ("& getPlayerName(player) &") attacked by very long range weap FAILED forcing research of RippleRockets ",player);            }
             }
@@ -5472,7 +5437,6 @@ event doResearch(inactive)//doResearchTr
           boolResult = pursueResearch(structure,player,scorpionBody);
           if (boolResult) {
             boolResult2 = false; tLastResearch = gameTime;
-  	        //dbg("dbg->doResearch: ("& getPlayerName(player) &") forcing research to Scorpion body",player);
   	        printDebug1("doResearch; forcing research to Scorpion body as VTOL struct is available");
           } 
         }
@@ -5482,7 +5446,6 @@ event doResearch(inactive)//doResearchTr
           boolResult = pursueResearch(structure,player,lancerATweap);
           if (boolResult) {
             boolResult2 = false; tLastResearch = gameTime;
-  	        //dbg("dbg->doResearch: ("& getPlayerName(player) &") forcing research to Scorpion body",player);
   	        printDebug1("doResearch; forcing research to Lancer AT weapon as VTOL struct is available");
           } 
         }
@@ -5490,7 +5453,6 @@ event doResearch(inactive)//doResearchTr
         //perform a standard Research
         if ( boolResult2 ){
           if ( do_Research(structure, 0 ) < 0 ){
-    			    //displayMsg("doResearch: no standard research to pursue found, doing a random research");
     			    printDebug1("doResearch; no standard research to pursue found, doing a random research");
               skDoResearch(structure,player,1);
               tLastResearch = gameTime;
@@ -5517,11 +5479,7 @@ event doResearch(inactive)//doResearchTr
 		{
     	if( structureIdle(structure) and structureComplete(structure) )
     	{
-		    //displayMsg("doResearch: Cheap one on resLab ("& structure.id &")");
 				count = do_CheapResearch(structure, 0 );
-				//if ( do_CheapResearch(structure, 0 ) < 0 ){
-            //displayMsg("doResearch: no cheap research to pursue found");
-        //}
         boolResult = false;//execute only once
       }
   	  structure= enumStruct();
@@ -6140,40 +6098,25 @@ function int mapSize()
 //  - 2 attack def struct in group range
 //  - 3 attack droid in _x & _y range checking for best target based on its weapon
 //  - 4 if not targets found scout (50%) and move (50%) to _x & _y coordinates
+//
 function void droidMicroManager(GROUP _group, int _range, int _x, int _y)
 {
   local DROID _droid,_enDroid;
   local STRUCTURE _structTarget;
-
+  local BASEOBJ _oTarget;
+  
   //search for struct in group (! not his) range
   _structTarget = getEnemyDefStruct(_group,_range);
-  
+
   //check if any droid target in group short range 
-  //loop through the tanks
-
-  /*
-  _droid = getADroid(_group);
-  if ( _droid != NULLOBJECT ){
-    _enDroid = getEnemyDroid( _droid.x, _droid.y, 5*TILE, DROIDTYPE_HOVER);
-    if ( _enDroid == NULLOBJECT ) {
-      _enDroid = getEnemyDroid( _droid.x, _droid.y, 5*TILE, DROIDTYPE_CYBORG);
-    }
-    if ( _enDroid == NULLOBJECT ) {
-      _enDroid = getEnemyDroid( _droid.x, _droid.y, 5*TILE, DROIDTYPE_TANK);
-    }
+  _oTarget = objDroidTargetInRange(_group.x, _group.y, _range, false);
+  
+  //if not droid in short group range then attack def structs if any
+  if ( _oTarget == NULLOBJECT and _structTarget != NULLOBJECT ) {
+    dbg("droidMicroManager: ALL attacking team target is def Struct ("& _structTarget.id &") ("& _group.x/TILE &"-"& _group.y/TILE &")",player);
+    orderGroupObj(_group, DORDER_ATTACK, _structTarget);
+    return;
   }
-
-  if ( _enDroid == NULLOBJECT and _structTarget != NULLOBJECT ) {
-    if ( bScoutOrder ){
-      dbg("droidMicroManager: _droid ("& _droid.id &") Attacking def Struct ("& _structTarget.id &")",player);
-      orderDroidObj(_droid, DORDER_ATTACK, _structTarget);
-    } else {
-      dbg("droidMicroManager: _droid ("& _droid.id &") moving to def Struct ("& _structTarget.id &")",player);
-      orderDroidLoc(_droid, DORDER_MOVE, _structTarget.x, _structTarget.y);
-    }
-  }
-  */
-
 
   //loop through the tanks
 	initIterateGroup(_group);
@@ -6181,7 +6124,9 @@ function void droidMicroManager(GROUP _group, int _range, int _x, int _y)
 	count=0;
   while(_droid != NULLOBJECT and count < MAX_WHILE_LOOPS)
   {
-    
+   
+    boolResult = true;
+    _enDroid   = NULLOBJECT; //this is important otherwise event crashes!!
     //search for droid target in group range
     //Flamer - Laser    
     if ( isFlamer(_droid) ){
@@ -6214,52 +6159,43 @@ function void droidMicroManager(GROUP _group, int _range, int _x, int _y)
     
     //search for enemy def struct     
     if ( _enDroid == NULLOBJECT ) {
-      if (_structTarget != NULLOBJECT ) {
+      if (_structTarget != NULLOBJECT and _droid != NULLOBJECT ) {
         if ( bScoutOrder ){
           dbg("droidMicroManager: _droid ("& _droid.id &") Attacking def Struct ("& _structTarget.id &")",player);
           orderDroidObj(_droid, DORDER_ATTACK, _structTarget);
+          boolResult = false;
         } else {
           dbg("droidMicroManager: _droid ("& _droid.id &") moving to def Struct ("& _structTarget.id &")",player);
-          orderDroidLoc(_droid, DORDER_MOVE, _structTarget.x, _structTarget.y);
+          //to be changed in move for short range weapons
+          orderDroidObj(_droid, DORDER_ATTACK, _structTarget);
+          boolResult = false;
         }
       }
     }
   
-    //search for droid target in alert/target range if it has been reached
-    if ( _structTarget == NULLOBJECT and _enDroid == NULLOBJECT ) {    
-      if ( distBetweenTwoPoints( _group.x, _group.y, _x, _y) < 4 * TILE ){   
-        dbg("droidMicroManager: group is in target range ",player);
-        if ( isAntiPersonnel(_droid) ){
-          _enDroid = getEnemyDroid( _x, _y, _range, DROIDTYPE_CYBORG);
-          if ( _enDroid == NULLOBJECT ) {
-            _enDroid = getEnemyDroid( _x, _y, _range, DROIDTYPE_TANK);
-          }
-        } else {    
-          if ( isAntiTank(_droid) ){
-            _enDroid = getEnemyDroid( _x, _y, _range, DROIDTYPE_TANK);
-          } else {//All rounder
-            _enDroid = getEnemyDroid( _x, _y, _range, DROIDTYPE_CYBORG);      
+     
+    //attack or scout!!   
+    if ( boolResult ){
+      if ( _enDroid != NULLOBJECT and _droid != NULLOBJECT ) {
+        if ( bScoutOrder ){
+          dbg("droidMicroManager: _droid ("& _droid.id &") order to attack enemy droid ("& _enDroid.id &")",player);
+          orderDroidObj(_droid, DORDER_ATTACK,_enDroid);
+        } else {
+          dbg("droidMicroManager: _droid ("& _droid.id &") order to move to enemy droid ("& _enDroid.id &")",player);
+          //to be changed in move for short range weapons
+          orderDroidObj(_droid, DORDER_ATTACK,_enDroid);
+        }
+      } else {
+        if ( _droid != NULLOBJECT ){
+          if ( bScoutOrder ){
+            dbg("droidMicroManager: _droid ("& _droid.id &") order to scout",player);
+            orderDroidLoc(_droid, DORDER_SCOUT, _x, _y);
+          } else {
+            dbg("droidMicroManager: _droid ("& _droid.id &") order to move",player);
+            //to be changed in move for short range weapons
+            orderDroidLoc(_droid, DORDER_SCOUT, _x, _y);
           }
         }
-      }
-    } 
-        
-    //attack or scout!!   
-    if ( _enDroid != NULLOBJECT ) {
-      if ( bScoutOrder ){
-        dbg("droidMicroManager: _droid ("& _droid.id &") order to attack enemy droid ("& _enDroid.id &")",player);
-        orderDroidObj(_droid, DORDER_ATTACK,_enDroid);
-      } else {
-        dbg("droidMicroManager: _droid ("& _droid.id &") order to move to enemy droid ("& _enDroid.id &")",player);
-        orderDroidLoc(_droid, DORDER_MOVE, _enDroid.x, _enDroid.y);
-      }
-    } else {
-      if ( bScoutOrder ){
-        dbg("droidMicroManager: _droid ("& _droid.id &") order to scout",player);
-        orderDroidLoc(_droid, DORDER_SCOUT, _x, _y);
-      } else {
-        dbg("droidMicroManager: _droid ("& _droid.id &") order to move",player);
-        orderDroidLoc(_droid, DORDER_MOVE, _x, _y);
       }
     }
     
@@ -6825,7 +6761,7 @@ function void stopDroidHarvesting()
 function bool buildDefStruct(DROID _droid, int _x, int _y )
 {
   local int _t;
-  _t = max(pickDefQueueDepth - 1 - _random(3),0);
+  _t = max(pickDefQueueDepth - 1 - random(3),0);
 	if( isStructureAvailable(pickDefQueue[_t],player) )
 	{
 		buildX = _x ;
@@ -7465,7 +7401,7 @@ function void buildGatewayDef(DROID _defTruck, int _pos)
   _y = aGatewayPosY[_pos];
   if ( pickWallDefQueueDepth > 0 ){
   	_n    = min(pickWallDefQueueDepth,3);
-    _tmpl  = pickWallDefQueueDepth - 1 - _random(_n);
+    _tmpl  = pickWallDefQueueDepth - 1 - random(_n);
     if(isStructureAvailable(pickWallDefQueue[_tmpl],player)){
       skDefenseLocationB(ref _x, ref _y, wall, pickWallDefQueue[_tmpl], _defTruck, player);
       //dbg("dbg->buildGatewayDef(): droid ("& _defTruck.id &") build WALL def ["& _tmpl &"], best is ["& pickWallDefQueueDepth &"] - at("& _x/TILE &"-"& _y/TILE &")",player);
@@ -7479,7 +7415,7 @@ function void buildGatewayDef(DROID _defTruck, int _pos)
 
     //standard defences
   	_n    = min(pickDefQueueDepth,3);
-    _tmpl  = pickDefQueueDepth - 1 - _random(_n);
+    _tmpl  = pickDefQueueDepth - 1 - random(_n);
     boolResult = isStructureAvailable(pickDefQueue[_tmpl],player);
     //dbg("dbg->buildGatewayDef(): STD _tmpl("& _tmpl &") avail("& boolResult &") numDefStrAtGateway("& numDefStrAtGateway &")  _x/_y("& _x/TILE &"-"& _y/TILE &")",player); 
     if( isStructureAvailable(pickDefQueue[_tmpl],player) ){
@@ -8462,17 +8398,20 @@ function int do_CheapResearch(STRUCTURE _resFac, int _lastResIndex)
 	if(!_bStarted)	{return -1;}
 	return _lastResIndex;
 }
-//perform a research o resLab _resFac on the  _lastResIndex+1 item
-//returns -1 if no researches have started
+
 //-----------------------------------------------------------------------------
+// find_research return a valid research even if this cannot be pursued because an
+// ally (or another factory?) is researching it.  That value index for the array is then
+// passed to pursueResearch() anyway and this will return false. At the end of the
+// while loop that value index is the increased by one and find_research
+// will start looking for valid reseaches from that point. 
 function int do_Research(STRUCTURE _resFac, int _lastResIndex)
 {
 	local	bool	_bStarted;
-	local	int		_tech, _nn, _VTOLprob;
+	local	int		_tech, _VTOLprob;
 
 	/* current tech tree */
-	_tech     = 0;	//0=tank 1=VTOL research 
-  _nn       = 0;
+	_tech     = 0;	//0=STANDARD research 9=VTOL research 
   
   //VTOL AI
   if ( AIPersonality == AI_VTOL ){      
@@ -8512,7 +8451,6 @@ function int do_Research(STRUCTURE _resFac, int _lastResIndex)
     
   while ( !_bStarted and _lastResIndex < numRes[_tech] ){
 
-
     if ( _tech == 9 ){ //VTOL stuff
       _lastResIndex = find_Research(_lastResIndex, _tech, 1);//1=standard Research
       if(_lastResIndex > -1){
@@ -8526,28 +8464,32 @@ function int do_Research(STRUCTURE _resFac, int _lastResIndex)
         return -1;
       }
 
-    } else { // ______ not VTOl stuff ______________
-
-      _lastResIndex = find_Research(_lastResIndex, _tech, 1);//1=standard Research
-      if(_lastResIndex > -1){
+    } 
+    
+    //not VTOL researches
+    if ( _tech != 9 ) { 
       
+      _lastResIndex = find_Research(_lastResIndex, _tech, 1);//1=standard Research
+      if(_lastResIndex > -1){      
       	_bStarted = pursueResearch(_resFac,player,research[_tech][_lastResIndex]);
       	if ( _bStarted ){
-          //displayMsg("*** do_Research : pursue: ["& _tech &"]["& _lastResIndex &"] steps left ("& numResearchLeft(player,research[_tech][_lastResIndex]) &") researchFinished("& researchFinished(research[_tech][_lastResIndex],player)&") researchStarted("& researchStarted(research[_tech][_lastResIndex],player)&") lStopCheapResearch("& lStopCheapResearch &") nProdSelect("& nProdSelect &") lStopCheapResearch("& lStopCheapResearch &") pow("& playerPower(player) &")");
           printDebug1("do_Research; pursue ["& _tech &"]["& _lastResIndex &"] steps left ("& numResearchLeft(player,research[_tech][_lastResIndex]) &") nProdSelect("& nProdSelect &") power("& playerPower(player) &") _VTOLprob("& _VTOLprob &"%)");
           tLastResearch = gameTime;
-        } //else { displayMsg("### do_Research : COULD NOT pursue: ["& _tech &"]["& _lastResIndex &"] steps left ("& numResearchLeft(player,research[_tech][_lastResIndex]) &") researchFinished("& researchFinished(research[_tech][_lastResIndex],player)&") researchStarted("& researchStarted(research[_tech][_lastResIndex],player)&") lStopCheapResearch("& lStopCheapResearch &") nProdSelect("& nProdSelect &") lStopCheapResearch("& lStopCheapResearch &") pow("& playerPower(player) &")");   }
-      
+        } //else { displayMsg("### do_Research : COULD NOT pursue: ["& _tech &"]["& _lastResIndex &"] steps left ("& numResearchLeft(player,research[_tech][_lastResIndex]) &") researchFinished("& researchFinished(research[_tech][_lastResIndex],player)&") researchStarted("& researchStarted(research[_tech][_lastResIndex],player)&") lStopCheapResearch("& lStopCheapResearch &") nProdSelect("& nProdSelect &") lStopCheapResearch("& lStopCheapResearch &") pow("& playerPower(player) &")");   }      
       }
       else  //try with second block
       {
-
+        
+        //change array and  _lastResIndex is now -1 but is fine as it will be increased at the end of the while loop
         _tech = 1;
+        /*
+        if (_lastResIndex < 0){//first time enter this loop _lastResIndex is -1
+          _lastResIndex = 0;
+        }        
         _lastResIndex = find_Research(_lastResIndex, _tech, 1);//1=standard Research
     		if(_lastResIndex > -1){
     			_bStarted = pursueResearch(_resFac,player,research[_tech][_lastResIndex]);
     			if ( _bStarted ){
-    		    //displayMsg("do_Research : pursue: ["& _tech &"]["& _lastResIndex &"] steps left ("& numResearchLeft(player,research[_tech][_lastResIndex]) &") researchFinished("& researchFinished(research[_tech][_lastResIndex],player)&") researchStarted("& researchStarted(research[_tech][_lastResIndex],player)&") lStopCheapResearch("& lStopCheapResearch &") nProdSelect("& nProdSelect &") lStopCheapResearch("& lStopCheapResearch &") pow("& playerPower(player) &")");
     		    printDebug1("do_Research; pursue ["& _tech &"]["& _lastResIndex &"] steps left ("& numResearchLeft(player,research[_tech][_lastResIndex]) &") nProdSelect("& nProdSelect &") power("& playerPower(player) &") _VTOLprob("& _VTOLprob &"%)");
     		    tLastResearch = gameTime;
           } //else { displayMsg("### do_Research : COULD NOT pursue: ["& _tech &"]["& _lastResIndex &"] steps left ("& numResearchLeft(player,research[_tech][_lastResIndex]) &") researchFinished("& researchFinished(research[_tech][_lastResIndex],player)&") researchStarted("& researchStarted(research[_tech][_lastResIndex],player)&") lStopCheapResearch("& lStopCheapResearch &") nProdSelect("& nProdSelect &") lStopCheapResearch("& lStopCheapResearch &") pow("& playerPower(player) &")");   }
@@ -8555,15 +8497,18 @@ function int do_Research(STRUCTURE _resFac, int _lastResIndex)
           printDebug1("#### do_Research; no STANDARD research found");
           return -1;
         }
-      
+        */      
       }
     
-    }//endelse
+    }//endif   _tech != 9
 
     _lastResIndex++;
   }//endwhile
 
-	if(!_bStarted){ return -1; }
+	if(!_bStarted){ 
+    printDebug1("#### do_Research; no research found  _tech["& _tech &"]_ lastResIndex["& _lastResIndex &"]");
+    return -1; 
+  }
 
 	return _lastResIndex;
 }
@@ -8574,24 +8519,25 @@ function int find_Research(int _searchStart, int _techTree, int whichArray)
 {
 	local int _retInt;
 	
-  ASSERT(_searchStart >= 0, "findResearch: _searchStart < 0", player);
-	ASSERT(_techTree >= 0, "findResearch: _techTree < 0", player);
+  if ( _searchStart < 0 ){
+    printDebug1("#### find_Research; error on _searchStart("& _searchStart &"); _techTree("& _techTree &") whichArray("& whichArray &")" );
+    return -1;
+  }
 
   _retInt = _searchStart;
- 
-	if ( whichArray == 1 ){// =============== STANDARD RESEARCH ==================
+  
+  //printDebug1("find_Research; _searchStart("& _searchStart &") _techTree("& _techTree &") whichArray("& whichArray &")" );
+	if ( whichArray == 1 ){// =============== STANDARD RESEARCH (VTOL and NOT) ==================
 
     //find standard research to pursue
     while(_retInt < numRes[_techTree])
     {
     	if((not researchFinished(research[_techTree][_retInt], player)) and (not researchStarted(research[_techTree][_retInt], player)))
     	{
-        //printDebug1("find_Research; Standard Research found, _techTree("& _techTree &") _searchStart("& _searchStart &") _retInt("& _retInt &")" );
         return _retInt;		//found research
     	}
     	_retInt++;
     }
-    printDebug1("#### find_Research; Standard Research not found, _techTree("& _techTree &") _searchStart("& _searchStart &") _retInt("& _retInt &")" );
 
   } else { // =============== CHEAP RESEARCH ==================
   
@@ -8604,9 +8550,10 @@ function int find_Research(int _searchStart, int _techTree, int whichArray)
   		} //else {displayMsg("Cheap Research index ("& _retInt &") cannot be researched ");   }
   		_retInt++;
   	}
-  
+
   }
 
+  //printDebug1("#### find_Research; Research not found, whichArray("& whichArray &") _techTree("& _techTree &") _searchStart("& _searchStart &") _retInt("& _retInt &")" );
 	_retInt = -1;		//not found
 	return(_retInt);
 }
@@ -9650,8 +9597,13 @@ function int getEnemy_baseCoord( int _player, STRING sCoord )
 	
 	_i = 0;
 	if ( isScavenger(_player) ){
-    _baseStructs[0] = scavFactory;
-    _numBaseStructs = 1;
+    dbg("getEnemy_baseCoord: Scavenger AI found #("& _player &") allied:("& allianceExistsBetween(_player, player) &")",player);
+    _numBaseStructs = nScavStruct;
+    _numBaseStructs--; //do not include derricks
+    while ( _i < _numBaseStructs ){ 
+      _baseStructs[_i] = aScavBaseStr[_i];
+      _i++;
+    }
   } else {
     _numBaseStructs = numBaseStructs;
     _numBaseStructs--; //do not include derricks
@@ -9875,7 +9827,7 @@ function BASEOBJ objDroidTargetInRange(int _xCoord ,int _yCoord, int _Range, boo
   _xx = (mapWidth*128)-(128*2);
   _yy = (mapHeight*128)-(128*2);
   
-  _Range = _Range/2;
+  //_Range = _Range/2;
  
   _x  = min( _xCoord + _Range , _xx );
   _y  = min( _yCoord + _Range , _yy );
@@ -9892,7 +9844,6 @@ function BASEOBJ objDroidTargetInRange(int _xCoord ,int _yCoord, int _Range, boo
       if (!isVtol(droid) and distBetweenTwoPoints(droid.x,droid.y,_xCoord,_yCoord) < 15*TILE){
         if ( numEnemyAAInRange(droid.x, droid.y, AA_THREAT_RANGE) < 2 ){
           if ( droid.hitPoints > _bestHitPoints ){
-           //displayMsg("objDroidTargetInRange: target for VTOL found: Id("& droid.id &") hitPoints("& droid.hitPoints &")");
            _objTarget = droid;
            _bestHitPoints = droid.hitPoints;
           }
@@ -9903,24 +9854,16 @@ function BASEOBJ objDroidTargetInRange(int _xCoord ,int _yCoord, int _Range, boo
     }
   }
 
-  _bestHitPoints=0;
   if ( _objTarget == NULLOBJECT ){
-    //displayMsg("objDroidTargetInRange: ("& _n &") best target for VTOL NOT found, targetPlayerVTOL("& targetPlayerVTOL &")");
     count = 0;
     while ( count < MAX_PLAYERS and _objTarget == NULLOBJECT){
       if ( count != player and !friendlyPlayer(count) )
       {
         _objTarget = droidTargetInArea(count, player, _x, _y, _x1, _y1);
-        if (_objTarget != NULLOBJECT)
-        {
-          if ( !isVtol(objToDroid(_objTarget)) ){
-            if ( distBetweenTwoPoints(_xCoord, _yCoord, _objTarget.x, _objTarget.y) > _Range ) 
-            {
-              //if ( _objTarget.hitPoints > _bestHitPoints ){
-                _objTarget      = NULLOBJECT;
-                //_bestHitPoints  = _objTarget.hitPoints;
-              //}
-            }
+        if (_objTarget != NULLOBJECT){
+          if ( isVtol(objToDroid(_objTarget)) or distBetweenTwoPoints(_xCoord, _yCoord, _objTarget.x, _objTarget.y) > _Range ) 
+          {
+            _objTarget      = NULLOBJECT;
           }
         }
       }
@@ -10155,17 +10098,6 @@ function bool aiResponsibleForPlayer(int _player)
 	}
 
 	return true;
-}
-//-----------------------------------------------------------------------------
-function int _random(int x)
-{
-    local int _c,_d;
-    _c=0;
-    while( _c < (player+1)*2 ){
-      _d = random(x);
-      _c++;
-    }
-    return _d;
 }
 //-----------------------------------------------------------------------------
 function void assignDroidToGrp(DROID droid)
@@ -10563,9 +10495,9 @@ function STRUCTURE getVTOLstructTarget()
   _structTarget = NULLOBJECT;
   
   //search for enemy def structs not protected by AA
-  if ( _random(10) < 6 ){ // ------------ attack def structs or AA def ----------------
+  if ( random(10) < 6 ){ // ------------ attack def structs or AA def ----------------
     
-    if ( _random(10) < 5 ){ // ------------ attack def structs ----------------
+    if ( random(10) < 5 ){ // ------------ attack def structs ----------------
       
       _aa=0;
       _bestAA=999;
@@ -11562,20 +11494,21 @@ function void displayStats(int _choice)
     dbg("dbg-> Info : " & _sPlInf3,_count);
     dbg("dbg-> Tank Attack: tTKSentToGath ("& tTanksSentToGathering  &")  bTankAttIsOn ("& bTankAttIsOn &") lTKSentToGathPt ("& lTankSentToGatheringPoint &") bTKAlreadyGathered ("& bTankAlreadyGathered &") tankAttackX-Y ("& tankAttackY/TILE &"-"& tankAttackY/TILE &") targetPlTK ("& targetPlayerTank &") targetPlCyb("& targetPlayerCyb &") AttHumanPl("& nAttHumanPlayer &") AttAI("& nAttAIPlayer &")",_count);
   }
+ 
   if ( _choice == 3 ){
     dbg("dbg-> Standard Defe: Depth("& pickDefQueueDepth  &") - " & _sDef, _count );
     dbg("dbg-> Wall Defences: Depth("& pickWallDefQueueDepth  &") - "& _sWallDef, _count );
     dbg("dbg-> Fortresses: Depth("& pickFortQueueDepth  &") - "& _sFort, _count);
-    dbg("dbg-> Res: " & _str0, _count);
-    dbg("dbg-> Res: " & _str1, _count);
-    dbg("dbg-> Res: " & _str2, _count);
-    dbg("dbg-> Res: " & _str3, _count);
-    dbg("dbg-> Res: " & _str4, _count);
+    dbg("dbg-> Res0: " & _str0, _count);
+    dbg("dbg-> Res0: " & _str1, _count);
+    dbg("dbg-> Res0: " & _str2, _count);
+    dbg("dbg-> Res1: " & _str3, _count);
+    dbg("dbg-> Res1: " & _str4, _count);
     dbg("dbg-> Cheap Res: "& numCheapRes[0] & " " & _sRes2, _count);
     dbg("dbg-> VTOL Res: "& _str5,_count);
     dbg("dbg-> lMinBaseStructBuilt("& lMinBaseStructBuilt &") Working Lab("& nWorkingLab &") Fact("& nWorkingFact &") Cyb("& nWorkingCybFac &") ", _count);
   }
-    */
+     */
 }
 //-----------------------------------------------------------------------------
 function bool isPlayerStillLive(int _player)
@@ -11897,7 +11830,7 @@ function STRUCTURESTAT getDefStruct()
   if ( random(100) < 35 or pickWallDefQueueDepth < 2 ){
   
     if ( pickDefQueueDepth < 7 ){
-      _rnd = _random(100);
+      _rnd = random(100);
       //build mainly HMGhardPoint/MGbunker, LancerTower/miniRocketTower 
       if ( _rnd < 40 ){
         if (isStructureAvailable(HMGhardPoint,player)){
@@ -12604,47 +12537,15 @@ function void vtolAttack(BASEOBJ oTarget)
 //---------------------------------------------------------------------------
 function STRUCTURE getEnemyDefStruct(GROUP _group,int _range)
 {
-  local int _n,_dist,_bestDist,_player;
+  local int _n,_dist,_player,_healt,_bestHealt;
   local STRUCTURE _target,_tempDef;
   
   _target = NULLOBJECT;
   
-  //search for wall def
-  _n = numWallWeaps;
-  _n--;
-  _bestDist = 9999999;
-  _player = 0;
-  while ( _player < MAX_PLAYERS ){ 
-    if ( isPlayerStillLive(_player) and !friendlyPlayer(_player) ){
-
-      while (_n >= 0){
-        initEnumStruct(false,wallWeaps[_n],_player,_player); //all structs, also those not visible to this AI
-      	_tempDef = enumStruct();
-      	while(_tempDef != NULLOBJECT)
-      	{
-          _dist = distBetweenTwoPoints(_tempDef.x, _tempDef.y, _group.x, _group.y);
-          if ( _dist <= _range and _dist < _bestDist ){
-            _target   = _tempDef;
-            _bestDist = _dist;
-            dbg("getEnemyDefStruct: WALL def struct found ("& _tempDef.id &") _n("& _n &") dist("& _dist/TILE &")",player);
-          } 
-       		_tempDef = enumStruct();
-       	}//while
-       	_n--;
-      }//end while
-    
-    }
-    _player++;
-  } //end loop players 
-  
-  if ( _target != NULLOBJECT ){
-    return _target;
-  }
-  
   //search for standard def
   _n = numDefStructs;
   _n--;
-  _bestDist = 9999999;
+  _bestHealt = 100;
   _player = 0;
   while ( _player < MAX_PLAYERS ){ 
     if ( isPlayerStillLive(_player) and !friendlyPlayer(_player) ){
@@ -12655,10 +12556,10 @@ function STRUCTURE getEnemyDefStruct(GROUP _group,int _range)
       	while(_tempDef != NULLOBJECT)
       	{
           _dist = distBetweenTwoPoints(_tempDef.x, _tempDef.y, _group.x, _group.y);
-          if ( _dist <= _range and _dist < _bestDist ){
-            _target   = _tempDef;
-            _bestDist = _dist;
-            dbg("getEnemyDefStruct: STD def struct found ("& _tempDef.id &") _n("& _n &") dist("& _dist/TILE &")",player);
+          if ( _dist <= _range and _tempDef.health < _bestHealt and wallWeaps[_n] != wall ){
+            _target    = _tempDef;
+            _bestHealt = _tempDef.health;
+            dbg("getEnemyDefStruct: STD def struct found ("& _tempDef.id &") _n("& _n &") dist("& _dist/TILE &") health("& _tempDef.health &")",player);
           } 
        		_tempDef = enumStruct();
        	}//while
@@ -12668,6 +12569,38 @@ function STRUCTURE getEnemyDefStruct(GROUP _group,int _range)
     }
     _player++;
   } //end loop players
+
+  if ( _target != NULLOBJECT ){
+    return _target;
+  }
+  
+  //search for wall def
+  _n = numWallWeaps;
+  _n--;
+  _bestHealt = 100;
+  _player = 0;
+  while ( _player < MAX_PLAYERS ){ 
+    if ( isPlayerStillLive(_player) and !friendlyPlayer(_player) ){
+
+      while (_n >= 0){
+        initEnumStruct(false,wallWeaps[_n],_player,_player); //all structs, also those not visible to this AI
+      	_tempDef = enumStruct();
+      	while(_tempDef != NULLOBJECT)
+      	{
+          _dist = distBetweenTwoPoints(_tempDef.x, _tempDef.y, _group.x, _group.y);
+          if ( _dist <= _range and _tempDef.health < _bestHealt and wallWeaps[_n] != wall ){
+            _target    = _tempDef;
+            _bestHealt = _tempDef.health;
+            dbg("getEnemyDefStruct: WALL def struct found ("& _tempDef.id &") _n("& _n &") dist("& _dist/TILE &") health("& _tempDef.health &")",player);
+          } 
+       		_tempDef = enumStruct();
+       	}//while
+       	_n--;
+      }//end while
+    
+    }
+    _player++;
+  } //end loop players 
   
   return _target; 
 
