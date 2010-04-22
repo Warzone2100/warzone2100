@@ -542,52 +542,6 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	ASSERT_OR_RETURN(FPR_FAILED, psPropStats != NULL, "invalid propulsion stats pointer");
 	ASSERT_OR_RETURN(FPR_FAILED, psDroid->type == OBJ_DROID, "We got passed an object that isn't a DROID!");
 
-	// check whether the end point of the route
-	// is a blocking tile and find an alternative if it is
-	if (psDroid->sMove.Status != MOVEWAITROUTE && fpathBlockingTile(map_coord(tX), map_coord(tY), psPropStats->propulsionType))
-	{
-		// find the nearest non blocking tile to the DROID
-		int minDist = SDWORD_MAX;
-		int nearestDir = NUM_DIR;
-		int dir;
-
-		objTrace(psDroid->id, "BLOCKED(%d,%d) - trying workaround", map_coord(tX), map_coord(tY));
-		for (dir = 0; dir < NUM_DIR; dir++)
-		{
-			int x = map_coord(tX) + aDirOffset[dir].x;
-			int y = map_coord(tY) + aDirOffset[dir].y;
-
-			if (tileOnMap(x, y) && !fpathBlockingTile(x, y, psPropStats->propulsionType))
-			{
-				// pick the adjacent tile closest to our starting point
-				int tileDist = fpathDistToTile(x, y, psDroid->pos.x, psDroid->pos.y);
-
-				if (tileDist < minDist)
-				{
-					minDist = tileDist;
-					nearestDir = dir;
-				}
-			}
-
-			if (dir == NUM_BASIC - 1 && nearestDir != NUM_DIR)
-			{
-				break;	// found a solution without checking at greater distance
-			}
-		}
-
-		if (nearestDir == NUM_DIR)
-		{
-			// surrounded by blocking tiles, give up
-			objTrace(psDroid->id, "route to (%d, %d) failed - target blocked", map_coord(tX), map_coord(tY));
-			return FPR_FAILED;
-		}
-		else
-		{
-			tX = world_coord(map_coord(tX) + aDirOffset[nearestDir].x) + TILE_SHIFT / 2;
-			tY = world_coord(map_coord(tY) + aDirOffset[nearestDir].y) + TILE_SHIFT / 2;
-			objTrace(psDroid->id, "Workaround found at (%d, %d)", map_coord(tX), map_coord(tY));
-		}
-	}
 	return fpathRoute(&psDroid->sMove, psDroid->id, psDroid->pos.x, psDroid->pos.y, tX, tY, psPropStats->propulsionType, psDroid->droidType, moveType, psDroid->player);
 }
 
