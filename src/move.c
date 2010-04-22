@@ -884,8 +884,7 @@ static BOOL moveBlocked(DROID *psDroid)
 		// if the unit cannot see the next way point - reroute it's got stuck
 		if ( ( bMultiPlayer || (psDroid->player == selectedPlayer) ) &&
 			(psDroid->sMove.Position != psDroid->sMove.numPoints) &&
-			!fpathTileLOS(map_coord((SDWORD)psDroid->pos.x), map_coord((SDWORD)psDroid->pos.y),
-						  map_coord(psDroid->sMove.DestinationX), map_coord(psDroid->sMove.DestinationY)))
+			!fpathTileLOS(psDroid->pos, Vector3i_Init(psDroid->sMove.DestinationX, psDroid->sMove.DestinationY, 0)))
 		{
 			objTrace(psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
 			moveDroidTo(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
@@ -1687,7 +1686,7 @@ static BOOL moveReachedWayPoint(DROID *psDroid)
 		// but only move onto the next way point if we can see the previous one
 		// (this helps units that have got nudged off course).
 		if ((psDroid->sMove.boundX * droidX + psDroid->sMove.boundY * droidY <= 0) &&
-			fpathTileLOS(map_coord(psDroid->pos.x), map_coord(psDroid->pos.y), map_coord(psDroid->sMove.targetX), map_coord(psDroid->sMove.targetY)))
+			fpathTileLOS(psDroid->pos, Vector3i_Init(psDroid->sMove.targetX, psDroid->sMove.targetY, 0)))
 		{
 			objTrace(psDroid->id, "Next waypoint: droid %d bound (%d,%d) target (%d,%d)",
 			         (int)psDroid->id, (int)psDroid->sMove.boundX, (int)psDroid->sMove.boundY, (int)droidX, (int)droidY);

@@ -647,17 +647,14 @@ static bool fpathVisCallback(Vector3i pos, int32_t dist, void *data)
 	return true;
 }
 
-BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
+BOOL fpathTileLOS(Vector3i orig, Vector3i dest)
 {
-	// convert to world coords
-	Vector3i p1 = { world_coord(x1) + TILE_UNITS / 2, world_coord(y1) + TILE_UNITS / 2, 0 };
-	Vector3i p2 = { world_coord(x2) + TILE_UNITS / 2, world_coord(y2) + TILE_UNITS / 2, 0 };
-	Vector3i dir = Vector3i_Sub(p2, p1);
+	Vector3i dir = Vector3i_Sub(dest, orig);
 
 	// Initialise the callback variables
 	obstruction = false;
 
-	rayCast(p1, iAtan2(dir.x, dir.y), iHypot(dir.x, dir.y), fpathVisCallback, NULL);
+	rayCast(orig, iAtan2(dir.x, dir.y), iHypot(dir.x, dir.y), fpathVisCallback, NULL);
 
 	return !obstruction;
 }
