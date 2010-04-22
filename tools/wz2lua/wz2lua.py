@@ -5,6 +5,22 @@ from spark import *
 from sys import stdin, stdout, stderr
 import os.path
 
+from optparse import OptionParser
+
+usage = 'usage: wz2lua.py vlofile slofile lua_vlo lua_slo'
+
+parser = OptionParser(usage=usage)
+parser.add_option( '-v', dest='verbose', default = False, action='store_true',
+				   help='add "event at line xxx" comments into generated code')
+
+(options, args) = parser.parse_args()
+## print 'options ', options, 'args ', args
+
+# global flag
+# for sticking those -- event at line xxx comments into the generated code
+verbose = options.verbose
+
+
 '''
 			'CALL_DROID_SELECTED':'',
 			'CALL_MANURUN':'',
@@ -617,7 +633,8 @@ class CodeGenerator(GenericASTTraversal):
 		else:
 			node.code += node[0].code + ' = ' + node[1].code + '\n'
 	def n_function_declaration(self, node):
-		node.code += 'function ' + node[0].code + '(' + node[1].code + ') -- at line '+str(node.line)+'\n' + indent(node[2].code) + 'end\n'
+		global verbose
+		node.code += 'function ' + node[0].code + '(' + node[1].code + ')' + (' -- at line '+str(node.line) if verbose else '') +'\n' + indent(node[2].code) + 'end\n'
 	def n_argdef(self, node):
 		node.code = node[1].code
 	def n_argdeflist(self,node):
@@ -751,7 +768,7 @@ class CodeGenerator(GenericASTTraversal):
 				stderr.write('error: add checks for trigger '+trigger['expression']+'\n')
 		argsstr = ', '.join(args)
 		# write the function declaration
-		node.code += 'function ' + node[0].code + '('+argsstr+') -- event at line '+str(node.line)+'\n'
+		node.code += 'function ' + node[0].code + '('+argsstr+')' + (' -- event at line '+str(node.line) if verbose else '') +'\n'
 		node.code += indent(check_code)
 		# check if we need to reassign the renamed parameters
 		if trigger['ref']:
@@ -1118,12 +1135,12 @@ def load_file(filename):
 	text = text.replace('\r', '\n')
 	return text
 
-if len(sys.argv) < 5:
+if len(args) < 4:
 	raise "not enough arguments"
 
-vlotext = load_file(sys.argv[1])
+vlotext = load_file(args[0])
 
-settings_output = file(sys.argv[3], "wt")
+settings_output = file(args[2], "wt")
 
 tokens = VloScanner().tokenize(vlotext)
 #print tokens
@@ -1141,9 +1158,9 @@ settings_output.close()
 
 reset_comments()
 
-if not os.path.exists(sys.argv[4]):
-	slotext = load_file(sys.argv[2])
-	code_output = file(sys.argv[4], "wt")
+if not os.path.exists(args[3]):
+	slotext = load_file(args[1])
+	code_output = file(args[3], "wt")
 
 	#stderr.write('Slo: Tokenizing...\n')
 	tokens = CodeScanner2().tokenize(slotext)
