@@ -1653,19 +1653,14 @@ static void moveCalcBoundary(DROID *psDroid)
 		psDroid->sMove.boundX = sumY;
 		psDroid->sMove.boundY = -sumX;
 	}
-
-	objTrace(psDroid->id, "new boundary: droid boundary (%d, %d)", psDroid->sMove.boundX, psDroid->sMove.boundY);
 }
-
 
 // Check if a droid has got to a way point
 static BOOL moveReachedWayPoint(DROID *psDroid)
 {
-	SDWORD	droidX,droidY, iRange;
-
 	// Calculate the vector to the droid
-	droidX = (SDWORD)psDroid->pos.x - psDroid->sMove.targetX;
-	droidY = (SDWORD)psDroid->pos.y - psDroid->sMove.targetY;
+	const int droidX = psDroid->pos.x - psDroid->sMove.targetX;
+	const int droidY = psDroid->pos.y - psDroid->sMove.targetY;
 
 	// see if this is a formation end point
 	if (psDroid->droidType == DROID_TRANSPORTER ||
@@ -1673,7 +1668,7 @@ static BOOL moveReachedWayPoint(DROID *psDroid)
 		 formationMember(psDroid->sMove.psFormation, psDroid)) ||
 		 (isVtolDroid(psDroid) && (psDroid->sMove.numPoints == psDroid->sMove.Position)) )
 	{
-		iRange = TILE_UNITS / 4;
+		const int iRange = TILE_UNITS / 4;
 
 		if (droidX*droidX + droidY*droidY < iRange*iRange)
 		{
