@@ -627,7 +627,7 @@ static BOOL seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 				ASSERT(pText != NULL, "error parsing text file");
 				if (pText != NULL)
 				{
-					seq_AddTextForVideo(&pText[1], xOffset, yOffset, startFrame, endFrame, textJustification);
+					seq_AddTextForVideo(_(&pText[1]), xOffset, yOffset, startFrame, endFrame, textJustification);
 				}
 			}
 		}
