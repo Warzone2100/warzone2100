@@ -7,7 +7,6 @@ stamp:
 	rm -f stamp
 
 DYDOAILIST = \
-  maps \
 	multiplay \
 	images \
 	challenges
