@@ -726,20 +726,21 @@ function bool tryUpgrade()
 event buildFundamentals(inactive)
 {
 	local FEATURE	_oil;
+	local bool	needPwGen;
 
+	needPwGen = false;
 	count = 0;
 	setEventTrigger(buildFundamentals, inactive);
 
 	// Do we need power generators?
 	if (numUnusedDerricks() > 0)
 	{
+		needPwGen = true;
 		dbgPlr("More power generators needed");
-		setEventTrigger(buildPowerGenerators, chainloadTr);
-		exit;
 	}
 
 	// Do we need to get oil?
-	if (playerPower(me) < LOW_POWER)
+	if (not needPwGen and playerPower(me) < LOW_POWER)
 	{
 		// Any available?
 		initGetFeature(oilRes, -1, me);
@@ -763,7 +764,8 @@ event buildFundamentals(inactive)
 		while (droid != NULLOBJECT)
 		{
 			if (conCanHelp(droid, structure.x, structure.y)
-			    and distBetweenTwoPoints(droid.x, droid.y, structure.x, structure.y) < 20 * TILE)
+			    and distBetweenTwoPoints(droid.x, droid.y, structure.x, structure.y) < 20 * TILE
+			    and (!needPwGen or structure.stattype == REF_POWER_GEN or structure.stattype == REF_POWER_MODULE))
 			{
 				orderDroidObj(droid, DORDER_HELPBUILD, structure);
 				dbgObj(droid, "Aid construction at (" & structure.x & ", " & structure.y & ")");
@@ -771,6 +773,12 @@ event buildFundamentals(inactive)
 			droid = iterateGroup(buildGroup);
 		}
 		structure = enumUnbuilt();
+	}
+
+	if (needPwGen)
+	{
+		setEventTrigger(buildPowerGenerators, chainloadTr);
+		exit;
 	}
 
 	// If we have power, build up base basics
