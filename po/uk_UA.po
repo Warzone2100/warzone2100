@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-22 23:54+0200\n"
+"POT-Creation-Date: 2010-04-24 15:57+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -10680,7 +10680,6 @@ msgid "VTOL Lancer Bug VTOL"
 msgstr "ВЗІП Жук з ПУ 'Спис'"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1874
-#, fuzzy
 msgid "VTOL HPV Cannon Bug VTOL"
 msgstr "ВЗІП Жук з ГШ Гарматою"
 
@@ -10690,7 +10689,6 @@ msgid "VTOL Lancer Scorpion VTOL"
 msgstr "ВЗІП Скорпіон з ПУ 'Спис'"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
-#, fuzzy
 msgid "VTOL HPV Cannon Scorpion VTOL"
 msgstr "ВЗІП Скорпіон з ГШ Гарматою"
 
@@ -10700,7 +10698,6 @@ msgid "VTOL Lancer Mantis VTOL"
 msgstr "ВЗІП Богомол з ПУ 'Спис'"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
-#, fuzzy
 msgid "VTOL HPV Cannon Mantis VTOL"
 msgstr "ВЗІП Богомол з ГШ Гарматою"
 
@@ -10830,7 +10827,6 @@ msgid "Mini-Rocket Cobra Tracks"
 msgstr "Гусенична Кобра з Міні-Ракетами"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Tracks"
 msgstr "Гусенична Кобра з Міні-Ракетною Артилерією"
 
@@ -10840,9 +10836,8 @@ msgid "Inferno Cobra Half-Tracks"
 msgstr "Напівгусенична Кобра з Вогнеметом 'Пекло'"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1920
-#, fuzzy
 msgid "HPV Cannon Python Hover"
-msgstr "Всюдихідний Пітон з Важкою Гарматою"
+msgstr "Всюдихідний Пітон з ГШ Гарматою"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1924
 #: data/mp/messages/strings/names.txt:1924
@@ -10896,123 +10891,103 @@ msgstr "Напівгусенична Гадюка з Вогнеметом"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1937
 #: data/mp/messages/strings/names.txt:1937
-#, fuzzy
 msgid "Inferno Cobra Hover"
-msgstr "Напівгусенична Кобра з Вогнеметом 'Пекло'"
+msgstr "Всюдихідна Кобра з Вогнеметом 'Пекло'"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1938
 #: data/mp/messages/strings/names.txt:1938
-#, fuzzy
 msgid "Medium Cannon Cobra Half Track"
-msgstr "Гусенична Кобра з Середньою Гарматою"
+msgstr "Напівгусенична Кобра з Середньою Гарматою"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1939
 #: data/mp/messages/strings/names.txt:1939
-#, fuzzy
 msgid "Inferno Python Hover"
-msgstr "Всюдихідний Пітон з Важкою Гарматою"
+msgstr "Всюдихідний Пітон з Вогнеметом 'Пекло'"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1940
 #: data/mp/messages/strings/names.txt:1940
-#, fuzzy
 msgid "Assault Gun Python Hover"
-msgstr "Гусеничний Пітон з Штурмовим Кулеметом"
+msgstr "Всюдихідний Пітон з Штурмовим Кулеметом"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1941
 #: data/mp/messages/strings/names.txt:1941
-#, fuzzy
 msgid "Assault Gun Python Half Track"
-msgstr "Гусеничний Пітон з Штурмовим Кулеметом"
+msgstr "Напівгусеничний Пітон з Штурмовим Кулеметом"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
 #: data/mp/messages/strings/names.txt:1942
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Гусеничний Скорпіон з Важким Кулеметом"
+msgstr "Напівгусеничний Скорпіон з Важким Кулеметом"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
 #: data/mp/messages/strings/names.txt:1943
-#, fuzzy
 msgid "Assault Cannon Mantis Hover"
-msgstr "Вартова Вежа з Штурмовою Гарматою"
+msgstr "Всюдихідний Богомол з Штурмовою Гарматою"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1944
 #: data/mp/messages/strings/names.txt:1944
-#, fuzzy
 msgid "Pulse Laser Leopard Hover"
-msgstr "Вежа з Імпульсним Лазером"
+msgstr "Всюдихідний Леопард з Імпульсним Лазером"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
 #: data/mp/messages/strings/names.txt:1945
-#, fuzzy
 msgid "Pulse Laser Panther Hover"
-msgstr "Вежа з Імпульсним Лазером"
+msgstr "Всюдихідна Пантера з Імпульсним Лазером"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
 #: data/mp/messages/strings/names.txt:1946
-#, fuzzy
 msgid "Rail Gun Tiger Hover"
-msgstr "Покращення Рейкових Гармат"
+msgstr "Всюдихідний Тигр з Рейлганом"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1947
 #: data/mp/messages/strings/names.txt:1947
-#, fuzzy
 msgid "Pulse Laser Tiger Hover"
-msgstr "Гусеничний Тигр з Імпульсним Лазером"
+msgstr "Всюдихідний Тигр з Імпульсним Лазером"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
 #: data/mp/messages/strings/names.txt:1948
-#, fuzzy
 msgid "Plasma Cannon Wyvern Tracks"
-msgstr "Гусенична Виверна з Гарматою Гауса"
+msgstr "Гусенична Виверна з Плазмовою Гарматою"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1949
 #: data/mp/messages/strings/names.txt:1949
-#, fuzzy
 msgid "Scourge Missile Wyvern Tracks"
-msgstr "Вежа з ПУ 'Батіг'"
+msgstr "ГУсенична Виверна з ПУ 'Батіг'"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1950
 #: data/mp/messages/strings/names.txt:1950
-#, fuzzy
 msgid "Flashlight Retribution Hover"
-msgstr "Кіборг з Лазером 'Спалах'"
+msgstr "Всюдихідна з Кара Лазером 'Спалах'"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
 #: data/mp/messages/strings/names.txt:1951
-#, fuzzy
 msgid "Mini-Rocket Viper Half Track"
-msgstr "Напівгусенична Кобра з Міні-Ракетами"
+msgstr "Напівгусенична Гадюка з Міні-Ракетами"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1952
 #: data/mp/messages/strings/names.txt:1952
-#, fuzzy
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Гусенична Кобра з Міні-Ракетною Артилерією"
+msgstr "Напівгусенична Гадюка з Міні-Ракетною Артилерією"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
 #: data/mp/messages/strings/names.txt:1953
-#, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "Відсік Фосфорних Бомб"
+msgstr "ВЗІП Богомол з Фосфорними Бомбами"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
 #: data/mp/messages/strings/names.txt:1954
-#, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "ВЗІП Відсік Бронебійних Бомб"
+msgstr "ВЗІП Богомол з Бронебійними Бомбами"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
 #: data/mp/messages/strings/names.txt:1955
-#, fuzzy
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Середній Корпус - Кара"
+msgstr "ВЗІП Кара з Бронебійними Бомбами"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
 #: data/mp/messages/strings/names.txt:1956
-#, fuzzy
 msgid "Scourge Retaliation VTOL"
-msgstr "Відплата"
+msgstr "ВЗІП Відплата з ПУ 'Батіг'"
 
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
@@ -11892,17 +11867,14 @@ msgid "Rail Target Prediction Computer"
 msgstr "Комп'ютерний Цілевказувач Рейлгану"
 
 #: data/mp/messages/strings/names.txt:1174
-#, fuzzy
 msgid "HESH Mini-Rockets"
 msgstr "Вибухові Міні-Ракети"
 
 #: data/mp/messages/strings/names.txt:1175
-#, fuzzy
 msgid "HESH Mini-Rockets Mk2"
 msgstr "Вибухові Міні-Ракети Мк2"
 
 #: data/mp/messages/strings/names.txt:1176
-#, fuzzy
 msgid "HESH Mini-Rockets Mk3"
 msgstr "Вибухові Міні-Ракети Мк3"
 
@@ -12165,7 +12137,7 @@ msgstr "Важкий Ракетний Бастіон"
 #: data/mp/messages/strings/names.txt:1759
 #: data/mp/messages/strings/names.txt:1760
 msgid "Missile Fortress"
-msgstr "Фортеця з Ракетною Пусковою Установкою"
+msgstr "Фортеця з Самонавідною Пусковою Установкою"
 
 #: data/mp/messages/strings/names.txt:1764
 msgid "Heavy Body - Wyvern"
@@ -12694,7 +12666,7 @@ msgstr "Потужність Сенсора"
 
 #: src/design.c:1612
 msgid "ECM Power"
-msgstr "Потужність Електромгнітних Хвиль"
+msgstr "Потужність ЕМ Хвиль"
 
 #: src/design.c:1634
 #: src/design.c:1651
@@ -12752,7 +12724,7 @@ msgstr "Гравець вийшов"
 
 #: src/display3d.c:568
 msgid "Player dropped"
-msgstr "Гравець "
+msgstr "Гравець здався"
 
 #: src/display.c:1695
 msgid "Cannot Build. Oil Resource Burning."
@@ -12848,11 +12820,11 @@ msgstr "Герой"
 
 #: src/frontend.c:253
 msgid "Single Player"
-msgstr "Режим Одного Гравця"
+msgstr "Один Гравець"
 
 #: src/frontend.c:254
 msgid "Multi Player"
-msgstr "Режим Кількох Гравців"
+msgstr "Кілька Гравців"
 
 #: src/frontend.c:255
 #: src/frontend.c:313
@@ -13177,7 +13149,6 @@ msgstr "ІГРОВІ ОПЦІЇ"
 
 #: src/frontend.c:1699
 #: src/multiint.c:2239
-#, fuzzy
 msgid "Mod: "
 msgstr ", моди: "
 
@@ -13351,6 +13322,9 @@ msgid ""
 "\n"
 "Warzone will try to load the game without it."
 msgstr ""
+"Необхідний мод не був завантажений: %s\n"
+"\n"
+"Warzone спробує запустити гру без нього."
 
 #: src/intdisplay.c:202
 #: src/intdisplay.c:247
@@ -13505,12 +13479,12 @@ msgstr "Добре, показ радіусу сенсору на зброї в�
 #: src/keybind.c:411
 #, c-format
 msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
-msgstr ""
+msgstr "(Гравець %u) виявив баг з ногами кіборгів! Будь-ласка введіть ноги через консоль та завантажте нам файли!"
 
 #: src/keybind.c:491
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
-msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову одиницю : %s."
+msgstr "Гравець %u за допомогою шахрайства здобув(ла) нову одиницю : %s."
 
 #: src/keybind.c:530
 #: src/keybind.c:560
@@ -14239,7 +14213,7 @@ msgstr "%s Розірвав Союз З %s"
 #: src/multigifts.c:413
 #, c-format
 msgid "%s Forms An Alliance With %s"
-msgstr "%s Зформував Союз З %s"
+msgstr "%s Сформував Союз З %s"
 
 #: src/multigifts.c:773
 #, c-format
@@ -14500,7 +14474,7 @@ msgstr "Гравці"
 #: src/multiint.c:3582
 #, c-format
 msgid "Sending Map: %d%% "
-msgstr ""
+msgstr "Відправляється Карта: %d%% "
 
 #: src/multiint.c:3591
 #, c-format
@@ -14524,7 +14498,7 @@ msgstr "%s покинув Гру"
 #: src/multijoin.c:228
 #, c-format
 msgid "File transfer has been aborted for %d."
-msgstr ""
+msgstr "Передача файлу була перервана для %d."
 
 #: src/multijoin.c:347
 #, c-format
@@ -14546,7 +14520,7 @@ msgstr "Прийняти Значення за Замовченням та По�
 
 #: src/multilimit.c:316
 msgid "Limits reset to default values"
-msgstr ""
+msgstr "Обмеження повертаються до початкових значень"
 
 #: src/multimenu.c:609
 msgid "Technology level 1"
