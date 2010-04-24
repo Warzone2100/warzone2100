@@ -137,7 +137,6 @@ data/base/sequenceaudio/cam3/cam3_cn.txt
 data/base/sequenceaudio/devastation.txa
 data/base/sequenceaudio/devastation.txt
 data/base/sequenceaudio/outro.txt
-data/mods/multiplay/dydo-ai/messages/strings/names.txt
 data/mods/multiplay/dydo-ai/multiplay/skirmish/ai.slo
 data/mods/multiplay/ntw/messages/strings/genstrings.txt
 data/mods/multiplay/ntw/messages/strings/names.txt
@@ -263,6 +262,7 @@ lib/widget/scrap.c
 lib/widget/slider.c
 lib/widget/tip.c
 lib/widget/widget.c
+po/strings.txt
 src/action.c
 src/advvis.c
 src/ai.c
