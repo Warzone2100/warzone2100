@@ -51,18 +51,49 @@ event scavManagement;
 // (A nice way of saying we have bugs in our code.)
 event scavManagement(inactive)
 {
-	fac1 = getStructure(factory, enemy1);
-	if (fac1 != NULLOBJECT)
+	local DROID mydroid;
+	local int closest, current;
+	local STRUCTURE clfac;
+
+	initEnumStruct(FALSE, factory, enemy1, enemy1);
+	fac1 = enumStruct();
+	while (fac1 != NULLOBJECT)
 	{
+		// Remind factory to produce
 		if (structureIdle(fac1))
 		{
 			buildDroid(trike, fac1, enemy1, 1);
 		}
+		fac1 = enumStruct();
+	}
 
-		if ((gameTime - lastAttack) > 600)
+	if ((gameTime - lastAttack) > 600)
+	{
+		// Return to nearest factory (ie base)
+		lastAttack = gameTime;
+		initIterateGroup(attackGroup);
+		mydroid = iterateGroup(attackGroup);
+		while (mydroid != NULLOBJECT)
 		{
-			lastAttack = gameTime;
-			orderGroupLoc(attackGroup, DORDER_MOVE, fac1.x, fac1.y);
+			clfac = NULLOBJECT;
+			closest = 9999;
+			initEnumStruct(FALSE, factory, enemy1, enemy1);
+			fac1 = enumStruct();
+			while (fac1 != NULLOBJECT)
+			{
+				current = distBetweenTwoPoints(fac1.x, fac1.y, mydroid.x, mydroid.y);
+				if (current < closest)
+				{
+					closest = current;
+					clfac = fac1;
+				}
+				fac1 = enumStruct();
+			}
+			if (clfac != NULLOBJECT)
+			{
+				orderDroidLoc(mydroid, DORDER_MOVE, clfac.x, clfac.y);
+			}
+			mydroid = iterateGroup(attackGroup);
 		}
 	}
 
@@ -111,10 +142,21 @@ event droidbuilt(CALL_NEWDROID, enemy1, ref newDroid, ref fac1)
 // watch for structures being attacked. Send the cavalry as required.
 event structureAttacked(CALL_STRUCT_ATTACKED, enemy1, ref structure, ref attacker)
 {
+	local DROID mydroid;
+
 	if ((gameTime - lastAttack) > 300)
 	{
 		lastAttack = gameTime;
-		orderGroupLoc(attackGroup, DORDER_MOVE, attacker.x, attacker.y);
+		initIterateGroup(attackGroup);
+		mydroid = iterateGroup(attackGroup);
+		while (mydroid != NULLOBJECT)
+		{
+			if (distBetweenTwoPoints(attackGroup.x, attackGroup.y,attacker.x, attacker.y) < (24 * 128))
+			{
+				orderDroidLoc(mydroid, DORDER_MOVE, attacker.x, attacker.y);
+			}
+			mydroid = iterateGroup(attackGroup);
+		}
 	}
 }
 
