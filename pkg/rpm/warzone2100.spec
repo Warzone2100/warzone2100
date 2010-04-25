@@ -1,5 +1,5 @@
 Name:           warzone2100
-Version:        2.1.2
+Version:        2.3_beta8
 Release:        1%{?dist}
 Summary:        Innovative 3D real-time strategy
 %define		distributor wz2100.net
@@ -7,7 +7,7 @@ Summary:        Innovative 3D real-time strategy
 Group:          Amusements/Games
 License:        GPLv2+ and CC-BY-SA
 URL:            http://wz2100.net/
-Source0:        http://download.gna.org/warzone/releases/2.1/%{name}-%{version}.tar.bz2
+Source0:        http://download.gna.org/warzone/releases/2.2/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: physfs-devel openal-devel bison flex zip
@@ -25,6 +25,7 @@ continued by the Warzone 2100 Resurrection project to produce this improved vers
 %setup -q
 
 %build
+echo wc_uri=tags/%{version} > autorevision.conf
 %configure --disable-rpath --disable-debug --with-distributor=%{distributor}
 make %{_smp_mflags}
 
@@ -50,5 +51,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS ChangeLog COPYING COPYING.NONGPL COPYING.README
 
 %changelog
-* Sat Mar 07 2009 Per Inge Mathisen <per mathisen at gmail.com> - 2.1.2-1
+* Mon May 11 2009 Per Inge Mathisen <per mathisen at gmail.com>
+- 2.2_rc1 version
+
+* Sat Mar 07 2009 Per Inge Mathisen <per mathisen at gmail.com>
 - First version - spec file for the most part shamelessly copied from the Fedora project
