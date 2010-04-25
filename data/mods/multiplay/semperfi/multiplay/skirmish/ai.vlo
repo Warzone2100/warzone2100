@@ -134,11 +134,12 @@ run
 
  	// Essential and fundamental structs. Fundamental => what you build on level start
 	numStructs		int					13
-	numFundamental		int					4
+	numFundamental		int					5
 	structs[0]		STRUCTURESTAT		"A0LightFactory"
 	structs[1]		STRUCTURESTAT		"A0ResearchFacility"
 	structs[2]		STRUCTURESTAT		"A0CommandCentre"
 	structs[3]		STRUCTURESTAT		"A0CyborgFactory"
+	structs[4]		STRUCTURESTAT		"A0PowerGenerator"
 
 	structs[5]		STRUCTURESTAT		"Sys-CB-Tower01"
 	structs[6]		STRUCTURESTAT		"Sys-SpyTower"
