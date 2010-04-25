@@ -1,4 +1,4 @@
-SUBDIRS=dejavu devpkg gettext zlib ogg png vorbis theora qt4
+SUBDIRS=dejavu devpkg gettext zlib iconv ogg png vorbis theora qt4
 
 all: all-recursive
 build: build-recursive
