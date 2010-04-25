@@ -262,7 +262,6 @@ lib/widget/scrap.c
 lib/widget/slider.c
 lib/widget/tip.c
 lib/widget/widget.c
-po/strings.txt
 src/action.c
 src/advvis.c
 src/ai.c
