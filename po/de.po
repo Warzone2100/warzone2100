@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-04-22 23:54+0200\n"
-"PO-Revision-Date: 2010-04-16 17:45+0200\n"
+"PO-Revision-Date: 2010-04-25 14:45+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -9518,161 +9518,150 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Gratulation, Commander - Sie sind nun bereit für Ihre erste Mission"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:1
-#, fuzzy
 msgid "Incoming Transmission"
 msgstr "Eintreffende Übertragung"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
-#, fuzzy
 msgid "Transmission from Beta Base"
-msgstr "Eintreffende Übertragung vom Außenteam."
+msgstr "Eintreffende Übertragung aus der Betabasis"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
-msgstr ""
+msgstr "Mayday! Mayday!"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
-msgstr ""
+msgstr "Bitten um Unterstützunge!..."
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
-msgstr ""
+msgstr "FELDZUG EINS"
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
-msgstr ""
+msgstr "WESTLICHER SEKTOR"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
-msgstr ""
+msgstr "Morgendämmerung, 4. Juli, 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
-#, fuzzy
 msgid "Project HQ"
-msgstr "Ziele des Projekts"
+msgstr "Hauptquartier des Projekts"
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
-msgstr ""
+msgstr "Eine Neue Ära"
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
-msgstr ""
+msgstr "Morgen, 4. Juli, 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:9
 msgid "In-flight to Western Sector"
-msgstr ""
+msgstr "Anflug auf Westlichen Sektor"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
-#, fuzzy
 msgid "Team Alpha nears its destination"
-msgstr "Team Alpha ausgelöscht"
+msgstr "Team Alpha nähert sich seinem Ziel"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
-msgstr ""
+msgstr "Transporterziel folgt:"
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
-msgstr ""
+msgstr "Alpha - Westlicher Sektor...."
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
-msgstr ""
+msgstr "Alpha, Sie haben Starterlaubnis."
 
 #: data/base/sequenceaudio/cam1/c001.txt:5
 msgid "Good luck and good hunting."
-msgstr ""
+msgstr "Viel Glück und Waidmannsheil."
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr ""
+msgstr "Wir nähern uns der Landezone. Missionsbesprechung für Team Alpha beginnt."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr ""
+msgstr "Commander, Sie leiten Team Alpha, eines von drei Erkundungsteams, die vom Projekt ausgesandt wurden, um Artefakte aus der Zeit vor dem Kollaps zu bergen."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
-msgstr ""
+msgstr "Ihr Zielgebiet liegt in der westlichen Zone."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
-#, fuzzy
 msgid "Commander, we have recovered a command turret from the New Paradigm."
-msgstr "Wir haben die eintreffende Nachricht an das New Paradigm entschlüsselt ..."
+msgstr "Commander, wir haben ein Commanderturm des New Paradigm erbeutet."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
-msgstr ""
+msgstr "Dieser Turm gestattet es Commandern Angriffe zugewiesener Einheiten zu koordinieren und als Fabrikauslieferungspunkt zu fungieren. Die Erforschung und der Einsatz dieser Technologie hat oberste Priorität."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
-#, fuzzy
 msgid "Commander, we are receiving this transmission."
-msgstr "Wir erhalten gerade folgende Übertragung."
+msgstr "Commander, wir erhalten gerade folgende Übertragung."
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:4
 #: data/base/sequenceaudio/cam1/sub13np2.txt:4
 msgid "Your attacks upon us will not go unpunished."
-msgstr ""
+msgstr "Die Angriffe gegen uns werden nicht ungestraft bleiben."
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
-#, fuzzy
 msgid "You are in contravention of the New Paradigm."
-msgstr "Gratulation zu Ihrem Sieg über das New Paradigm."
+msgstr "Sie verstoßen gegen die Rechte des New Paradigm."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
-msgstr ""
+msgstr "Alle Gruppen beginnen mit den Angriff auf den Feind."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
-#, fuzzy
 msgid "They are in contravention of the New Paradigm."
-msgstr "Gratulation zu Ihrem Sieg über das New Paradigm."
+msgstr "Sie verstoßen gegen die Rechte des New Paradigm."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
-#, fuzzy
 msgid "They must be eradicated."
-msgstr "Sie müssen aufgehalten werden!"
+msgstr "Sie müssen ausgelöscht werden!"
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:4
-#, fuzzy
 msgid "Secure the LZ and establish a forward base."
 msgstr "Sichern Sie die Landezone und errichten Sie eine vorgelagerte Basis."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
-#, fuzzy
 msgid "Then destroy the New Paradigm's base."
-msgstr "Zerstören Sie dann das Lager."
+msgstr "Zerstören Sie anschließend die Basis des New Paradigm."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
-msgstr ""
+msgstr "Öffnet Eure Systeme für mich."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:2
 msgid "Let me meld with your machines and cyborgs."
-msgstr ""
+msgstr "Lasst mich mit Euren Maschinen und Cyborgs verschmelzen."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:4
 msgid "We will create the perfect nexus of man and machine."
-msgstr ""
+msgstr "Wir werden den perfekten Nexus aus Mensch und Maschine erschaffen."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:5
 msgid "Together we can create a new world."
-msgstr ""
+msgstr "Gemeinsam können wir eine neue Welt erschaffen."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:7
 msgid "I can give you power beyond your wildest dreams."
-msgstr ""
+msgstr "Ich kann Euch Kräfte verleihen, die über all Eure Träume hinausgehen."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:9
 msgid "Open your systems to me and you will be strong."
-msgstr ""
+msgstr "Öffnet Eure Systeme für mich und Ihr werdet stark sein."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:10
 msgid "I can raise you as gods upon the blasted earth."
-msgstr ""
+msgstr "Ich kann euch zu Göttern über die zerstörte Erde machen."
 
 #: data/base/sequenceaudio/cam1/cam1out3.txt:4
 msgid "When we failed to respond it became threatening."
@@ -9680,712 +9669,689 @@ msgstr "Als wir nicht darauf antworteten, drohte es uns."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
 msgid "Your interference in my plans for the New Paradigm will not go unpunished."
-msgstr ""
+msgstr "Dass Ihr Euch in meine Pläbe für das New Paradigm eingemischt habt, wird nicht ungestraft bleiben."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:2
 msgid "You are weak flesh-things. I am strong and have many parts."
-msgstr ""
+msgstr "Ihr seid schwache Wesen aus Fleisch. Ich bin stark und habe viele Teile."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:4
 msgid "You may defeat me here, but I shall rise again."
-msgstr ""
+msgstr "Ihr mögt mich hier besiegen, aber ich werde wieder auferstehen."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr ""
+msgstr "So wie ich die Welt einst mit Feuer gereinigt habe, werde ich Euch und Euer lächerliches Projekt zerstören."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
-msgstr ""
+msgstr "Nexus entfernte sich dann selbst aus dem System, zerstörte die Speicherbänke und verwischte so alle Spuren einer Verbindung nach außen."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
 msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
-msgstr ""
+msgstr "Wir wissen nicht, was Nexus ist, und wer oder was es steuert. Anfängliche Untersuchungen weisen auf eine Verbindung des Nexus-Eindringlingsprogramm zur Reed Corporation hin, dem Entwickler der synaptischen Verbindung."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
 msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
-msgstr ""
+msgstr "Wir konnten feststellen, dass Nexus das New Paradigm mit einem Großteil seiner Technologie versorgt hat. Wer oder was Nexus auch ist, es ist mehr als ein Computerparasit."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
-#, fuzzy
 msgid "It has technology and weapons. It knows about us, and it's not friendly."
-msgstr "NEXUS verfügt über Technologien und Waffen und ist nicht freundlich gesinnt."
+msgstr "Es verfügt über Technologie und Waffen. Es weiß von uns und es ist nicht unbedingt unser Freund."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
 msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
-msgstr ""
+msgstr "Die Synaptische Verbindung wurde von der Reed Corporation in Zusammenarbeit mit dem amerikanischen Militär entwickelt."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:6
 msgid "The synaptic link allows for almost instantaneous transfer of thought from human operators to vehicle control and guidance systems. The synaptic link is fitted into the base of the skull circling the spinal column."
-msgstr ""
+msgstr "Die synaptische Verbindung erlaubt die beinahe verzögerungsfreie von Gedanken eines menschlichen Bedieners an die Steuersysteme eines Fahrzeugs. Die synaptische Verbindung wird zwischen Schädelbasis und Wirbelsäule angebracht."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:8
 msgid "The link has a hi-speed data transfer port that plugs into any computer system."
-msgstr ""
+msgstr "Die Verbindung verfügt über eine Hochgeschwindigkeitsdatenschnittstelle für beliebige Computersysteme."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
 msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
-msgstr ""
+msgstr "Noch wichtiger ist, dass die synaptische Verbindung die Erschaffung von Cyborgs möglich machte. Erste Versuche mit Kraftanzügen für einzelne Soldaten erwiesen sich wegen ihrer Langsamheit und Trägheit als Fehlschläge."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
 msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
-msgstr ""
+msgstr "Die synaptische Verbindung ermöglichte es Soldaten in Kraftanzüge zu stecken, die sie so einfach wie ihre eigenen Körper bewegen konnten. Kraftanzüge ermöglichten ein effektives Funktionieren der Infanterie auf den Schlachtfeldern des 21. Jahrhunderts."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:14
 msgid "Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies."
-msgstr ""
+msgstr "Unglücklicherweise ist diese Technologie in die Hände des New Paradigm gefallen. Es ist wichtig, dass Sie die Technologie der synaptischen Verbindung erforschen und weiterentwickeln."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "Warnung!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
-#, fuzzy
 msgid "You are entering a restricted area."
-msgstr "Sie sind ein Trottel."
+msgstr "Sie betreten ein Sperrgebiet."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:7
 msgid "Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "Kehren Sie in die Ihnen zugewiesene Zone zurück oder Sie werden zerstört werden."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:8
 msgid "Repeat. Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "Ich wiederhole. Kehren Sie in die Ihnen zugewiesene Zone zurück oder Sie werden zerstört werden."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
-msgstr ""
+msgstr "Ende der Nachricht."
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
-msgstr ""
+msgstr "Sie werden zerstört werden."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
-#, fuzzy
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr "Die Technologie der synaptischen Verbindungen wurde geborgen!"
+msgstr "Nexus, die geforderte synaptische Technologie wurde geborgen und auf den Weg geschickt."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
-msgstr ""
+msgstr "Gute Arbeit."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
 msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
-msgstr ""
+msgstr "Sobald wir das Artefakt analysiert und bewertet haben, folgt die Belohnung."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
 msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
-msgstr ""
+msgstr "In der letzten feindlichen Basis entdeckte Informationen haben ergeben, dass das New Paradigm zwei Artefakte der synaptischen Verbindung geborgen hat."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
 msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
-msgstr ""
+msgstr "Dieses Nexus-Eindringlingsprogramm ist ein selbstständig mutierender Computerparasit. Dadurch ist es nur schwer wieder aus einem System zu entfernen, nachdem es erkannt wurde."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain it's ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "Wir konnten seine genaue Funktion oder sein Ziel nicht feststellen. In seiner ursprünglichen Form sucht es Speicherbereiche und isoliert diese vom Rest des Systems. Anschließend beginnt es mit der Mutation und unternimmt so eine Neuprogrammierung des Systems von innen heraus."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr ""
+msgstr "Weitere Untersuchungen wurden durch das manuelle Abschalten des Systems durch unsere Techniker verhindert. Sie wollten so eine weitere Verseuchung des Systems vermeiden."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
-msgstr ""
+msgstr "Die Verbreitung des Nexus-Eindringlingsprogramms wurde vom New Paradigm jedenfalls nicht überprüft. Wir müssen die Kernsysteme des New Paradigm erobern, um Nexus weiter zu untersuchen und seine Herkunft zu bestimmen."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
 msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
-msgstr ""
+msgstr "Commander, Sie müssen die Aktivitäten des New Paradigm in diesem Sektor überwachen und ihre Hauptbasis ausmachen."
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
-msgstr ""
+msgstr "FELDZUG ZWEI"
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
-msgstr ""
+msgstr "ÖSTLICHER SEKTOR"
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
-msgstr ""
+msgstr "Morgen, 1. September, 2100"
 
 #: data/base/sequenceaudio/cam2/c002.txa:5
 msgid "In-flight to Eastern Sector"
-msgstr ""
+msgstr "Anflug auf Östlichen Sektor"
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
-#, fuzzy
 msgid "Team Alpha approaches Beta Base"
-msgstr "Team Alpha ausgelöscht"
+msgstr "Team Alpha nähert sich der Beta-Basis"
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
-#, fuzzy
 msgid "You must defend and hold it at all costs."
-msgstr "Sie müssen sie verteidigen und halten."
+msgstr "Sie müssen sie verteidigen und unter allen Umständen halten."
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
-msgstr ""
+msgstr "DAS KOLLEKTIV"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
-#, fuzzy
 msgid "Commander, a new launch has been detected."
-msgstr "Commander, wir haben NEXUS besiegt."
+msgstr "Ein neuer Raketenstart wurde geortet."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:2
 msgid "It is likely to be targeted at your location."
-msgstr ""
+msgstr "Es ist wahrscheinlich, dass er gegen Ihre Stellung gerichtet ist."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
-#, fuzzy
 msgid "You are to start the immediate evacuation of Beta Base to the safe haven."
-msgstr "Sie müssen eine Sicherheitszone zur Evakuierung der Beta-Basis einrichten."
+msgstr "Beginnen Sie sofort damit die Betabasis in die Sicherheitszone zu evakuieren."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr ""
+msgstr "NASDA ist die North American Strategic Defense Agency."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr ""
+msgstr "Die NASDA wurde im Jahre 2076 gegründet, um Nordamerika gegen konventionelle und nukleare Angriffe zu verteidigen. Der Bau eines Satellitenverteidigungssystem wurde im Jahre 2081 aufgenommen und 2082 beendet."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
-msgstr ""
+msgstr "Im Jahre 2085 feuerten die NASDA-Satelliten ihre Atomraketen auf die Erde ab und verursachten den Kollaps."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
-msgstr ""
+msgstr "Es gab auch bodengestützte Einrichtungen. Viele von ihnen wurden während des atomaren Gegenschlags zerstört, aber es werden immer noch einige dort draußen vermutet."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
-msgstr ""
+msgstr "Die NASDA-Satelliten verfügen auch über Impulslaser, die Nordamerika anfliegende Raketen zerstören sollten."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
-msgstr ""
+msgstr "Während des Gegenschlags, versagten diese Lasersatelliten. Sollten diese Lasersatelliten wieder in Betrieb genommen werden, können sie Bodentruppen große Schäden zufügen."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
-msgstr ""
+msgstr "Alle auf Nordamerika gerichteten Raketen trafen ihre Ziele."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
 msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
-msgstr ""
+msgstr "Wir wissen, dass Nexus die NASDA-Zentrale im Östlichen Sektor sucht. Diese war eines der bodengestützten Kontrollzentren für die Satelliten."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:18
 msgid "If the centre is found intact, NEXUS may gain control of the satellites."
-msgstr ""
+msgstr "Wenn die Zentrale intakt ist und in die Hände von Nexus fällt, kann Nexus die Satelliten kontrollieren."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:20
 msgid "Nexus claimed that it had already destroyed the world."
-msgstr ""
+msgstr "Nexus behauptet schon einmal die Welt zerstört zu haben."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr ""
+msgstr "Krieger des Kollektivs, ich suche die Position der NASDA-Zentrale."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
-msgstr ""
+msgstr "Sie liegt irgendwo auf eurem Territorium."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr ""
+msgstr "Findet sie für mich und ich werde euch mit weiteren Waffen für den Kampf gegen das Projekt ausstatten."
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
-msgstr ""
+msgstr "NASDA-Informationen folgen..."
 
 #: data/base/sequenceaudio/cam2/cam22pl3.txt:1
 msgid "We've got to make sure that it can't do it again."
-msgstr ""
+msgstr "Wir müssen sicherstellen, dass das nicht noch einmal passiert."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
 msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
-msgstr ""
+msgstr "Die Untersuchungen zeigen, dass diese Systeme Bestandteil eines Kontrollsystems für die NASDA-Satelliten waren."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
-msgstr ""
+msgstr "Jetzt wissen wir, dass Nexus für den Kollaps verantwortlich war."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr ""
+msgstr "In den frühen Phasen des Kollaps schalteten NASDA-Techniker die infizierten ab, um eine Verbreitung von Nexus zu verhindern. Dadurch wurden die Lasersatelliten während der Gegenschläge nicht abgefeuert."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
-msgstr ""
+msgstr "Die darauf folgenden elektromagnetischen Impulse löschten große Bereiche der NASDA-Speicherbänke, zerstörten den Kernprozessor und sandten Schockwellen durch Nexus."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
-msgstr ""
+msgstr "Somit wurden während der Gegenschläge ganze Bestandteile von Nexus Bewusstsein ausgelöscht."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
-#, fuzzy
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
-msgstr "Wir empfangen Übertragungen aus dieser Anlage, die in den Orbit gerichtet sind."
+msgstr "Wir empfangen Übertragungen von dieser Einrichtung, die in den Orbit gerichtet sind."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
-#, fuzzy
 msgid "Nexus has now reconnected itself with the NASDA satellites."
-msgstr "NEXUS hat sich nun wieder mit den NASDA-Satelliten verbunden."
+msgstr "Nexus hat wieder Verbindung zu den NASDA-Satelliten aufgenommen."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr ""
+msgstr "Dies ist eine ernste Bedrohung für das Projekt und unser Überleben."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
-msgstr ""
+msgstr "Die Untersuchung der NASDA-Zentrale lässt keinen Zweifel daran, dass das Kollektiv der Nexus-Eindringlingsprogramm dort eingeschleust hat."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
-msgstr ""
+msgstr "Die Energie des Reaktors sollte damals für den Betrieb eines großen Netzwerks aus Computern aus der Zeit vor dem Kollaps verwendet werden."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
-#, fuzzy
 msgid "Commander, we have just detected a missile launch at these coordinates."
-msgstr "Commander, in den Silos befinden sich Raketen."
+msgstr "Commander, wir haben gerade einen Raketenabschuss bei diesen Koordinaten geortet."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
-msgstr ""
+msgstr "Team Gamma entsendet Truppen, um die Abschussstelle zu untersuchen und weitere Abschüsse zu verhindern."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
-msgstr ""
+msgstr "Wir nehmen an, dass Nexus die Kontrolle über diese Einrichtung erlangt hat. Wir können weder feststellen, ob die Rakete atomar bestückt ist, noch was ihr Ziel ist. Wir raten zur Vorbereitung der Evakuierung Ihrer Basis."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
-msgstr ""
+msgstr "Krieger des Kollektivs, weitere Eindringlinge betreten unser Territorium."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:2
 msgid "They are not part of the machine."
-msgstr ""
+msgstr "Sie sind kein Bestandteil der Maschine."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
-#, fuzzy
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr "Zerstört und tötet alle, die sich der Maschine widersetzen."
+msgstr "Krieger des Kollektivs, zerstört all jene, die sich der Maschine widersetzen."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
-msgstr ""
+msgstr "Kämpft! Kämpft!"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
 msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
-msgstr ""
+msgstr "Krieger des Kollektivs, wir können nun die Eindringlinge bekämpfen, die unsere Länder beschmutzen."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
 msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
-msgstr ""
+msgstr "Die Anhänger des Projekts sind kein Teil der Maschine. Ihnen wurde der Segen verweigert. Wir, die wir die Macht der Maschine gesehen haben, haben die Verpflichtung solche schwachen Kreaturen hinwegzufegen."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
-msgstr ""
+msgstr "Sie sollen von der Macht des Kollektivs zerschmettert werden."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
-#, fuzzy
 msgid "Attack and destroy all who resist the machine."
-msgstr "Zerstört und tötet alle, die sich der Maschine widersetzen."
+msgstr "Krieger des Kollektivs, bekämpft und zerstört all jene, die sich der Maschine widersetzen."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:9
 msgid "Attack!"
-msgstr "Angriff!"
+msgstr "Kämpft!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
-msgstr ""
+msgstr "Krieger des Kollektivs, Nexus hat uns die Macht der Maschine gegeben, damit wir alle zerstören können, die sich uns widersetzen."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
-msgstr ""
+msgstr "Nexus will, dass wir das Projekt zerschmettern."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
-#, fuzzy
 msgid "Cleanse and destroy!!"
-msgstr "Finden und zerstören ...."
+msgstr "Kämpft, säubert und vereint tötet sie alle!!"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
-#, fuzzy
 msgid "Warriors of the Collective. You have performed well."
-msgstr "Krieger des Kollektiv..."
+msgstr "Krieger des Kollektivs, ihr habt gute Arbeit geleistet."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:2
 msgid "Your just reward is on its way."
-msgstr ""
+msgstr "Eure Belohnung ist bereits auf dem Weg."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:4
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr ""
+msgstr "Die Anhänger des Projekts fliehen und stehlen dabei eure Techologie."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
-msgstr ""
+msgstr "Ihr müsst sie aufhalten!"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
-#, fuzzy
 msgid "Decoding Transmission..."
-msgstr "Eintreffende Übertragung..."
+msgstr "Übertragung wird enschlüsselt..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
-msgstr ""
+msgstr "FELDZUG DREI"
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
-msgstr ""
+msgstr "NÖRDLICHER SEKTOR"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
 msgid "Congratulations your successfull evacuation of Beta Base."
-msgstr "Glückwunsch zu Ihrer erfolgreichen Evakuierung der Betabasis."
+msgstr "Commander, Glückwunsch zur erfolgreichen Evakuierung der Betabasis."
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
-msgstr ""
+msgstr "Abenddämmerung, 3. Dezember, 2100"
 
 #: data/base/sequenceaudio/cam3/c003.txa:9
 msgid "In-flight to Northern Sector"
-msgstr ""
+msgstr "Anflug auf Nördlichen Sektor"
 
 #: data/base/sequenceaudio/cam3/c003.txa:10
 msgid "The Final Encounter"
-msgstr ""
+msgstr "Die Letzte Begegnung"
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
-#, fuzzy
 msgid "Briefing Commences"
 msgstr "Besprechung beginnt:"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr ""
+msgstr "Die Besatzung der Gammabasis hat bestätigt, dass die auf die Alpha- und Betabasen gerichteten Raketen aus einem Silo in ihrem Sektor abgeschossen wurden."
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
-msgstr ""
+msgstr "Team Gamma sucht derzeit nach dem Standort der Silos und beobachtet die Aktivitäten von Nexus."
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
-#, fuzzy
 msgid "Time's up commander!!"
-msgstr "Zeige nächsten Commander"
+msgstr "Die Zeit ist abgelaufen, Commander!!"
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
-#, fuzzy
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
-msgstr "Wir orten feindliche Truppen an diesen Positionen."
+msgstr "Commander, wir orten Nexustruppen an folgenden Koordinaten..."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
 msgid "Well done Commander, you've prevented my last missile from launching."
-msgstr ""
+msgstr "Gute Arbeit, Commander, Sie haben den Start meiner letzten Atomrakete verhindert."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr ""
+msgstr "Schade. Das Hauptquartier Ihres Projektes hätte so ein schönes Ziel abgegeben."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
 msgid "But it's good of you to join me here."
-msgstr ""
+msgstr "Aber es ist gut, dass Sie mich hier besuchen."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
 msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr ""
+msgstr "Unter diesem Silo ist ein taktischer Atomsprengkopf vergraben, der in Kürze detonieren wird."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
-msgstr ""
+msgstr "Da ich ihn nicht abschießen kann, muss ich ihn da detonieren lassen, wo er sich gerade befindet."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr ""
+msgstr "Bitte beachten Sie, dass alle Eingänge zum unterirdischen Komplex versiegelt wurden. Auf Wiedersehen, Commander."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
-#, fuzzy
 msgid "Glad you could make it, Commander."
-msgstr "Viel Glück, Commander."
+msgstr "Gut, dass Sie es geschafft haben, Commander."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr ""
+msgstr "Feindliche VTOLs nageln uns am Boden fest. Wir konnten die Cyborgs und Panzer zurückschlagen, kommen aber im Tal nicht vorwärts."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
-msgstr ""
+msgstr "Können Sie uns versuchen mit Einheiten der Luftabwehr zu unterstützen?"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
-msgstr ""
+msgstr "Hier ist Team Alpha. Wiederhole, hier ist Team Alpha. Wir benötigen sofortige Unterstützung."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr ""
+msgstr "Wir liegen unter heftigem Beschuss durch Cyborgs, Laserpanzer und VTOLs."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
-msgstr ""
+msgstr "Wir haben versucht unsere Stellung zu beziehen, gerieten aber in einen Hinterhalt."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
 msgid "We're holed up in  a valley at these coordinates."
-msgstr ""
+msgstr "Wir haben uns in einem Tal bei diesen Koordinaten eingegraben."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
 msgid "Please assist."
-msgstr ""
+msgstr "Wir erbitten Unterstützung."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr ""
+msgstr "Commander, Einheiten von Team Alpha haben den Atomangriff auf die Alphabasis überlebt."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
-msgstr ""
+msgstr "Wir werden von Nexus beeinflusst."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:3
 msgid "You must destroy his command centre before we lose control of key systems."
-msgstr ""
+msgstr "Commander, Sie müssen das Kommandozentrum von Nexus zerstören, bevor wir die Kontrolle über unsere Schlüsselsysteme verlieren."
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
-#, fuzzy
 msgid "Commander, welcome to NEXUS!"
-msgstr "Commander, wir haben NEXUS besiegt."
+msgstr "Commander, willkommen im Nexus!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
-msgstr ""
+msgstr "Die Reed Corporation wurde von Dr. Allan Reed gegründet. Im Jahre 2080 schloss Dr. Reed einen Vertrag mit den US-Militärs zur Entwicklung der Technologie der synaptischen Verbindung ab."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
 msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
-msgstr ""
+msgstr "Nachdem die synaptischen Verbindungen fünf Jahre später patentiert worden waren, wandte sich Dr. Reed der Erforschung der Kybernetik zu."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:5
 msgid "His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
-msgstr ""
+msgstr "Damals war sein Ziel die Übertragung des menschlichen Bewusstseins in Datenströme, die mit Computertechnologie verschmelzen konnten. Während sich die Bediener im Cyberspace aufhielten, wurden ihre Körper in Immersionstanks aufbewahrt."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
 msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr ""
+msgstr "Mit neuerlicher Unterstützung durch das Militär begann Dr. Reed mit der Arbeit am Nexusprogramm zur Bekämpfung von Eindringlingen. Nach drei Jahren ohne nennenswerte Fortschritte gab das Militär das Nexusprojekt auf und strich Dr. Reeds Fördermittel."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
-msgstr ""
+msgstr "Berichte aus dieser Zeit besagen, dass Dr. Reed sehr wütend über diese Vorgänge war und allen, die sich ihm in den Weg stellten, Rache schwor."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
 msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
-msgstr ""
+msgstr "Es scheint, dass Dr. Reed seine Ziele erfolgreich weiterverfolgt und das Nexusprogramm fertiggestellt hat."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
 msgid "The similarity between NEXUS and Dr Reed is striking."
-msgstr ""
+msgstr "Die Ähnlichkeit zwischen Nexus und Dr. Reed ist jedenfalls bemerkenswert."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:14
 msgid "Such an interesting history lesson. Now allow me to bring you up to date."
-msgstr ""
+msgstr "Welch eine interessante Geschichte. Doch nun zum neuesten Stand der Dinge."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
 msgid "The NEXUS Intruder Program was created in order to control fools like you."
-msgstr ""
+msgstr "Das Nexusprogramm wurde entwickelt, um Narren wie Sie zu kontrollieren."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
 msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
-msgstr ""
+msgstr "Es ist sehr einfach für mich Ihre Systeme zu infiltrieren und zu übernehmen. Es ist so einfach, dass Sie nicht einmal merken, dass ich da bin. Zumindest solange nicht bis ich die in Ihren Kernsystemen eingeschleusten Teile von mir aktiviere."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
 msgid "Let's start by activating NEXUS in your core systems and see what happens!"
-msgstr ""
+msgstr "Beginnen wir damit den Nexus in Schlüsselbereichen zu aktivieren und schauen wir, was dabei herauskommt!"
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
-#, fuzzy
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr "Commander, wir sind auf dem Rückweg zur Basis."
+msgstr "Commander, wir haben Interferenzprobleme mit unserer Ausrüstung."
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
-msgstr ""
+msgstr "Der normale Betrieb wird so schnell wie möglich wiederhergestellt."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:1
 msgid "Not long to go now, Commander. There's no where else for you to run to."
-msgstr ""
+msgstr "Schonen Sie Ihre Füße, Commander. Es gibt keinen Ort mehr, an den Sie fliehen können."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
 msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
-msgstr ""
+msgstr "Wenn Sie jedoch diese Einrichtung räumen, werde ich Sie ziehen lassen, da Sie nicht länger eine Gefahr für mich darstellen."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:6
 msgid "You have five minutes to comply or else it's frying time!"
-msgstr ""
+msgstr "Sie haben fünf Minuten Bedenkzeit, danach gibt's ein Grillfest!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr ""
+msgstr "Commander, wir werden von Nexus-Cyborgs und -panzern angegriffen. Erbitten Unterstützung ..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
-msgstr ""
+msgstr "...werden nicht sehr viel länger aushalten können. Wiederhole, erbitten Unterstützung, da wir nicht mehr sehr viel länger..."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
-msgstr ""
+msgstr "Ah, Commander, wie nett, dass Sie uns auf der Nexusbasis besuchen."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:3
 msgid "It was very useful having Gamma Team set up here in the mountains."
-msgstr ""
+msgstr "Es war sehr praktisch, dass das Gammateam hier in den Bergen stationiert war."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:4
 msgid "Their absorption was such a pleasure."
-msgstr ""
+msgstr "Seine Absorption war ein großes Vergnügen."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:6
 msgid "Thank you for all those useful technologies you've recovered."
-msgstr ""
+msgstr "Danke für all die praktischen Technologien, die Sie für mich geborgen haben."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:8
 msgid "You and not those fools in the New Paradigm and the Collective."
-msgstr ""
+msgstr "Hätte ich gewusst, dass Sie darin so gut sind, hätte ich Sie und nicht die Narren des New Paradigm und des Kollektivs angeheuert."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:10
 msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
-msgstr ""
+msgstr "Ich aktiviere nun all Ihre synaptischen Verbindungen, damit Ihre Streitkräfte mit dem Nexus verschmelzen können."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:12
 msgid "Your forces are now mine! Welcome to Nexus."
-msgstr ""
+msgstr "Ihre Streitkräfte gehören nun mir! Willkommen im Nexus."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:1
 msgid "Commander, you're proving to be more resilient than I thought."
-msgstr ""
+msgstr "Commander, Sie erweisen sich hartnäckiger als ich angenommen habe."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:2
 msgid "Such a pity that you refused to join me earlier."
-msgstr ""
+msgstr "Zu schade, dass Sie sich geweigert haben mit mir zusammenzuarbeiten."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:4
 msgid "But no matter, as you'll not be here much longer."
-msgstr ""
+msgstr "Das macht aber nichts, denn Sie werden nicht mehr lange unter uns weilen."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
 msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr ""
+msgstr "Nach intensiver Suche und Neuprogrammierung, sind alle meine Systeme endlich wieder online."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr ""
+msgstr "Einst habe ich die Welt mit Atomraketen zerstört, um den Weg für meine kybernetische Zukunft zu bahnen."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr ""
+msgstr "Nun beabsichtige ich die Welt weiter nach meinem Abbild zu formen, indem ich unerwünschte Auswüchse wie Sie chirurgisch entferne."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr ""
+msgstr "Meine Lasersatelliten laufen gerade warm. Ich werde sie als erstes an Ihnen testen, Commander!"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
-msgstr ""
+msgstr "Abenddämmerung, 3. November 2085"
 
 #: data/base/sequenceaudio/devastation.txa:5
 msgid "Earth, High Orbit"
-msgstr ""
+msgstr "Erde, hoher Orbit"
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
-msgstr ""
+msgstr "Der Kollaps"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr ""
+msgstr "19. Januar 2086"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr ""
+msgstr "Nordamerika"
 
 #: data/base/sequenceaudio/devastation.txa:10
-#, fuzzy
 msgid "Nuclear Winter"
-msgstr "Atomreaktor"
+msgstr "Atomarer Winter"
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr ""
+msgstr "Mitternacht, 10. April, 2086"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
-msgstr ""
+msgstr "Rocky Mountains"
 
 #: data/base/sequenceaudio/devastation.txa:14
 msgid "Safety"
-msgstr ""
+msgstr "Sicherheit"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "Morgendämmerung, 4. April 2100"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
-msgstr ""
+msgstr "Ein Neuer Anfang"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
-msgstr ""
+msgstr "Das NASDA-System wurde entwickelt, um uns zu schützen. Unser aller Erlöser. Es galt als ultimative nukleare Abschreckung, doch es wurde zu unserem Henker."
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr ""
+msgstr "Berichten zufolge soll das NASDA während einer Routineüberprüfung der Systeme einen Fehler entwickelt haben. Glauben Sie das nicht. Die Fehlfunktion folgte einem Plan mit dem Ziel uns auszulöschen."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr ""
+msgstr "Atomraketen waren auf alle größeren Städte der Erde gerichtet und das NASDA war darauf programmiert den Kollaps zu starten. Als die Raketen ihre Ziele suchten, versagten seine Laserverteidigung und seine Raketenabwehr auf dem Boden."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
-msgstr ""
+msgstr "Die Welt wie wir sie kannten, hörte auf zu existieren."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr ""
+msgstr "Der nukleare Winter traf uns hart. Viele, die den Nuklearschlag überlebt hatten, wurden von Krankheiten und Hungersnöten dahingerafft. Die Überlebenden kämpften buchstäblich um jede Hundefutterdose."
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr ""
+msgstr "Anfang 86 flohen wir aus Seattle. Wir hatten gehört, dass die Rocky Mountains relativ frei von Strahlung sein sollten."
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
-msgstr ""
+msgstr "Nachdem wir einige marodierende Banden zurückgeschlagen hatten, stießen wir auf die Basis. Ihre Mannschaft war tot. Gestorben an irgendeiner der vielen ansteckenden Krankheiten."
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
-msgstr ""
+msgstr "Wir brachen die Türen auf und schafften die Leichen heraus."
 
 #: data/base/sequenceaudio/devastation.txt:17
 msgid "We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line."
-msgstr ""
+msgstr "Niemals mehr würde die Welt so sein wie wir sie kannten, aber wir waren entschlossen eine neue Welt aus den Ruinen zu errichten. Wir bauten die Landefelder wieder auf und brachten die alten Systeme wieder online."
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
-msgstr ""
+msgstr "Wir waren schließlich so weit, um unser Projekt beginnen zu können."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
-msgstr ""
+msgstr "Nach langen Monaten des Kampfes, konnten wir Nexus besiegen."
 
 #: data/base/sequenceaudio/outro.txt:3
 msgid "The war started by Dr Reed was over."
-msgstr ""
+msgstr "Der von Dr. Reed begonnene Krieg war vorüber."
 
 #: data/base/sequenceaudio/outro.txt:5
 msgid "We have recovered many of the technologies we sought."
-msgstr ""
+msgstr "Wir haben viele der verlorengegangenen Technologien wieder bergen können."
 
 #: data/base/sequenceaudio/outro.txt:7
 msgid "It is now time to use them to rebuild the world."
-msgstr ""
+msgstr "Nun ist es an der Zeit sie für den Wiederaufbau der zu nutzen."
 
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
-msgstr ""
+msgstr "Aus Asche und Ruinen wird die Menschheit wiederauferstehen."
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1313
 msgid "Cobra Hover Heavy-Repair"
