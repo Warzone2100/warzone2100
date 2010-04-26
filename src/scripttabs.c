@@ -1955,6 +1955,9 @@ CONST_SYMBOL asConstantTable[] =
 	{ "IMAGE_CURSOR_FIX",	  VAL_INT,	false,	IMAGE_CURSOR_FIX,	    NULL, NULL, 0.0f },
 	{ "IMAGE_CURSOR_EMBARK",  VAL_INT,	false,	IMAGE_CURSOR_EMBARK, 	NULL, NULL, 0.0f },
 
+	{ "IMAGE_CURSOR_BRIDGE",  VAL_INT,	false,	IMAGE_CURSOR_BRIDGE,	NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_BOMB",    VAL_INT,	false,	IMAGE_CURSOR_BOMB,		NULL, NULL, 0.0f },
+
 	// game mode types  (possible values for intMode)
 	{ "INT_NORMAL",			VAL_INT,	false,	INT_NORMAL,		NULL, NULL, 0.0f }, // Standard mode (just the reticule)
 
