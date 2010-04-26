@@ -2137,7 +2137,7 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.pDisplay = displayPlayer;
 				sFormInit.UserData = i;
 				widgAddForm(psWScreen, &sFormInit);
-				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 35,9, DIFF_SLIDER_STOPS,
+				addFEAISlider(MULTIOP_SKSLIDE+i,sFormInit.id, 35,9, DIFF_SLIDER_STOPS,
 					(game.skDiff[i] <= DIFF_SLIDER_STOPS ? game.skDiff[i] : DIFF_SLIDER_STOPS / 2));	//set to 50% (value of UBYTE_MAX == human player)
 			}
 		}

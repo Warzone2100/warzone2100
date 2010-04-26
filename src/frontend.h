@@ -80,6 +80,7 @@ extern void	addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *t
 extern void	addText					(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID);
 extern void	addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt);
 extern void addFESlider				(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
+extern void addFEAISlider			(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
 
 extern void	displayLogo				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 extern void	displayTextOption		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
