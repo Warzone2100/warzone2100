@@ -430,6 +430,33 @@ static const char *cursor_embark[] = {
   "8,11"
 };
 
+static const char *cursor_disembark[] = {
+	/* width height num_colors chars_per_pixel */
+	"    16    16        3            1",
+	/* colors */
+	"X c #000000",
+	". c #ffffff",
+	"  c None",
+	/* pixels */
+	"                ",
+	"                ",
+	"     ......     ",
+	"     ......     ",
+	"    ........X   ",
+	"     ......X    ",
+	"     X....X     ",
+	"    ..X..X..    ",
+	"     ..XX..     ",
+	"      ....      ",
+	"       ..       ",
+	"                ",
+	"                ",
+	"                ",
+	"                ",
+	"                ",
+	"8,11"
+};
+
 static const char *cursor_fix[] = {
   /* width height num_colors chars_per_pixel */
   "    16    16        3            1",
@@ -536,6 +563,33 @@ static const char *cursor_lockon[] = {
   "                ",
   "                ",
   "7,7"
+};
+
+static const char *cursor_scout[] = {
+	/* width height num_colors chars_per_pixel */
+	"    16    16        3            1",
+	/* colors */
+	"X c #000000",
+	". c #ffffff",
+	"  c None",
+	/* pixels */
+	"                ",
+	"                ",
+	"                ",
+	"     ..X..      ",
+	"    .X   X.     ",
+	"    . . . .X    ",
+	"    X X. X X    ",
+	"    . X.X .X    ",
+	"    .X... .     ",
+	"     X...X      ",
+	"     .....      ",
+	"      XXXX      ",
+	"                ",
+	"                ",
+	"                ",
+	"                ",
+	"7,7"
 };
 
 static const char *cursor_menu[] = {
@@ -722,10 +776,12 @@ static const struct
 	{ cursor_bridge,        CURSOR_BRIDGE },
 	{ cursor_build,         CURSOR_BUILD },
 	{ cursor_embark,        CURSOR_EMBARK },
+	{ cursor_disembark,     CURSOR_EMBARK },
 	{ cursor_fix,           CURSOR_FIX },
 	{ cursor_guard,         CURSOR_GUARD },
 	{ cursor_jam,           CURSOR_JAM },
 	{ cursor_lockon,        CURSOR_LOCKON },
+	{ cursor_scout,         CURSOR_SCOUT },
 	{ cursor_menu,          CURSOR_MENU },
 	{ cursor_move,          CURSOR_MOVE },
 	{ cursor_notpossible,   CURSOR_NOTPOSSIBLE },
