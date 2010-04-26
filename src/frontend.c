@@ -108,6 +108,7 @@ static void	displayTitleBitmap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 void		displayText				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 void		displayTextAt270		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void	displayBigSlider		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void	displayAISlider			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 
 
@@ -1646,6 +1647,26 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDW
 	sSldInit.pCallback  = intUpdateQuantitySlider;
 	widgAddSlider(psWScreen, &sSldInit);
 }
+void addFEAISlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
+{
+	W_SLDINIT		sSldInit;
+	
+	memset(&sSldInit, 0, sizeof(W_SLDINIT));
+	sSldInit.formID		= parent;
+	sSldInit.id			= id;
+	sSldInit.style		= WSLD_PLAIN;
+	sSldInit.x			= (short)x;
+	sSldInit.y			= (short)y;
+	sSldInit.width		= iV_GetImageWidth(IntImages,IMAGE_SLIDER_BIG);
+	sSldInit.height		= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
+	sSldInit.orientation= WSLD_LEFT;
+	sSldInit.numStops	= (UBYTE) stops;
+	sSldInit.barSize	= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
+	sSldInit.pos		= (UBYTE) pos;
+	sSldInit.pDisplay	= displayAISlider;
+	sSldInit.pCallback  = intUpdateQuantitySlider;
+	widgAddSlider(psWScreen, &sSldInit);
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
@@ -1815,6 +1836,18 @@ static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, W
 	SWORD sx;
 
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIG,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
+
+	sx = (SWORD)((Slider->width-3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
+	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
+}
+static void displayAISlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	W_SLIDER *Slider = (W_SLIDER*)psWidget;
+	UDWORD x = xOffset+psWidget->x;
+	UDWORD y = yOffset+psWidget->y;
+	SWORD sx;
+
+	iV_DrawImage(IntImages,IMAGE_SLIDER_AI,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
 
 	sx = (SWORD)((Slider->width-3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
