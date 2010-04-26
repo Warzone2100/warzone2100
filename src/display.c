@@ -962,13 +962,13 @@ void processMouseClickInput(void)
 				arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
 				// Alt+move = disembark transporter
-				pie_SetMouse(CURSOR_EMBARK, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_DISEMBARK, war_GetColouredCursor());
 			}
 			else if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && selection == SC_DROID_DIRECT &&
 					 arnMPointers[item][selection] == CURSOR_MOVE)
 			{
 				// Alt+move = scout
-				pie_SetMouse(CURSOR_JAM, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_SCOUT, war_GetColouredCursor());
 			}
 			else if (arnMPointers[item][selection] == CURSOR_NOTPOSSIBLE &&
 			         ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&

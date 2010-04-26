@@ -187,10 +187,12 @@ static void initCursors(void)
 	aCursors[CURSOR_BRIDGE]      = init_system_cursor(CURSOR_BRIDGE, cursor_type);
 	aCursors[CURSOR_BUILD]       = init_system_cursor(CURSOR_BUILD, cursor_type);
 	aCursors[CURSOR_EMBARK]      = init_system_cursor(CURSOR_EMBARK, cursor_type);
+	aCursors[CURSOR_DISEMBARK]   = init_system_cursor(CURSOR_DISEMBARK, cursor_type);
 	aCursors[CURSOR_FIX]         = init_system_cursor(CURSOR_FIX, cursor_type);
 	aCursors[CURSOR_GUARD]       = init_system_cursor(CURSOR_GUARD, cursor_type);
 	aCursors[CURSOR_JAM]         = init_system_cursor(CURSOR_JAM, cursor_type);
 	aCursors[CURSOR_LOCKON]      = init_system_cursor(CURSOR_LOCKON, cursor_type);
+	aCursors[CURSOR_SCOUT]       = init_system_cursor(CURSOR_SCOUT, cursor_type);
 	aCursors[CURSOR_MENU]        = init_system_cursor(CURSOR_MENU, cursor_type);
 	aCursors[CURSOR_MOVE]        = init_system_cursor(CURSOR_MOVE, cursor_type);
 	aCursors[CURSOR_NOTPOSSIBLE] = init_system_cursor(CURSOR_NOTPOSSIBLE, cursor_type);

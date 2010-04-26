@@ -234,7 +234,7 @@ void printSearchPath( void )
 
 void setOverrideMods(char * modlist)
 {
-/*	char * curmod = modlist;
+	char * curmod = modlist;
 	char * nextmod;
 	int i=0;
 	while ((nextmod = strstr(curmod, ", ")) && i<MAX_MODS-2)
@@ -248,7 +248,7 @@ void setOverrideMods(char * modlist)
 	override_mods[i] = strdup(curmod);
 	override_mods[i+1] = NULL;
 	override_mod_list = modlist;
-	use_override_mods = true; */
+	use_override_mods = true;
 }
 void clearOverrideMods(void)
 {
