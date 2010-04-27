@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-04-22 23:54+0200\n"
-"PO-Revision-Date: 2010-04-25 14:45+0200\n"
+"PO-Revision-Date: 2010-04-27 20:06+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -9669,7 +9669,7 @@ msgstr "Als wir nicht darauf antworteten, drohte es uns."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
 msgid "Your interference in my plans for the New Paradigm will not go unpunished."
-msgstr "Dass Ihr Euch in meine Pläbe für das New Paradigm eingemischt habt, wird nicht ungestraft bleiben."
+msgstr "Dass Ihr Euch in meine Pläne für das New Paradigm eingemischt habt, wird nicht ungestraft bleiben."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:2
 msgid "You are weak flesh-things. I am strong and have many parts."
@@ -9706,7 +9706,7 @@ msgstr "Die Synaptische Verbindung wurde von der Reed Corporation in Zusammenarb
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:6
 msgid "The synaptic link allows for almost instantaneous transfer of thought from human operators to vehicle control and guidance systems. The synaptic link is fitted into the base of the skull circling the spinal column."
-msgstr "Die synaptische Verbindung erlaubt die beinahe verzögerungsfreie von Gedanken eines menschlichen Bedieners an die Steuersysteme eines Fahrzeugs. Die synaptische Verbindung wird zwischen Schädelbasis und Wirbelsäule angebracht."
+msgstr "Die synaptische Verbindung erlaubt die beinahe verzögerungsfreie Übertragung von Gedanken eines menschlichen Bedieners an die Steuersysteme eines Fahrzeugs. Die synaptische Verbindung wird zwischen Schädelbasis und Wirbelsäule angebracht."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:8
 msgid "The link has a hi-speed data transfer port that plugs into any computer system."
@@ -9846,7 +9846,7 @@ msgstr "Die NASDA-Satelliten verfügen auch über Impulslaser, die Nordamerika a
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
-msgstr "Während des Gegenschlags, versagten diese Lasersatelliten. Sollten diese Lasersatelliten wieder in Betrieb genommen werden, können sie Bodentruppen große Schäden zufügen."
+msgstr "Während des Gegenschlags versagten diese Lasersatelliten. Sollten diese Lasersatelliten wieder in Betrieb genommen werden, können sie Bodentruppen große Schäden zufügen."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
@@ -9894,7 +9894,7 @@ msgstr "Jetzt wissen wir, dass Nexus für den Kollaps verantwortlich war."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr "In den frühen Phasen des Kollaps schalteten NASDA-Techniker die infizierten ab, um eine Verbreitung von Nexus zu verhindern. Dadurch wurden die Lasersatelliten während der Gegenschläge nicht abgefeuert."
+msgstr "In den frühen Phasen des Kollaps schalteten NASDA-Techniker die infizierten Systeme ab, um eine Verbreitung von Nexus zu verhindern. Dadurch wurden die Lasersatelliten während der Gegenschläge nicht abgefeuert."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
@@ -9918,7 +9918,7 @@ msgstr "Dies ist eine ernste Bedrohung für das Projekt und unser Überleben."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
-msgstr "Die Untersuchung der NASDA-Zentrale lässt keinen Zweifel daran, dass das Kollektiv der Nexus-Eindringlingsprogramm dort eingeschleust hat."
+msgstr "Die Untersuchung der NASDA-Zentrale lässt keinen Zweifel daran, dass das Kollektiv das Nexus-Eindringlingsprogramm dort eingeschleust hat."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
@@ -10254,7 +10254,7 @@ msgstr "Abenddämmerung, 3. November 2085"
 
 #: data/base/sequenceaudio/devastation.txa:5
 msgid "Earth, High Orbit"
-msgstr "Erde, hoher Orbit"
+msgstr "Erde, Hoher Orbit"
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
@@ -10262,7 +10262,7 @@ msgstr "Der Kollaps"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr "19. Januar 2086"
+msgstr "19. Januar, 2086"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
@@ -10287,7 +10287,7 @@ msgstr "Sicherheit"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr "Morgendämmerung, 4. April 2100"
+msgstr "Morgendämmerung, 4. April, 2100"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
@@ -10335,7 +10335,7 @@ msgstr "Wir waren schließlich so weit, um unser Projekt beginnen zu können."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
-msgstr "Nach langen Monaten des Kampfes, konnten wir Nexus besiegen."
+msgstr "Nach langen Monaten des Kampfes konnten wir Nexus besiegen."
 
 #: data/base/sequenceaudio/outro.txt:3
 msgid "The war started by Dr Reed was over."
@@ -10347,7 +10347,7 @@ msgstr "Wir haben viele der verlorengegangenen Technologien wieder bergen könne
 
 #: data/base/sequenceaudio/outro.txt:7
 msgid "It is now time to use them to rebuild the world."
-msgstr "Nun ist es an der Zeit sie für den Wiederaufbau der zu nutzen."
+msgstr "Nun ist es an der Zeit sie für den Wiederaufbau der Welt zu nutzen."
 
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
