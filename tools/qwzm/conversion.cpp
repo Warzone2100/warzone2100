@@ -1,83 +1,85 @@
+#include <QtGlobal>
+
 #include <lib3ds/file.h>
 #include <lib3ds/mesh.h>
 #include <lib3ds/vector.h>
 #include <lib3ds/material.h>
 
+#include <sstream>
+#include <fstream>
+#include <cstdio>
+#include <string>
+#include <set>
+#include <list>
+#include <queue>
+#include <cmath>
+
+#include <QtGui/QDialog>
+
 #include "qwzm.h"
+#include "conversion.h"
 
-// Load PIE files
-#define iV_IMD_TEX	0x00000200
-#define iV_IMD_XNOCUL	0x00002000
-#define iV_IMD_TEXANIM	0x00004000
-#define MAX_POLYGON_SIZE 16
-
-typedef struct {
-	int index[MAX_POLYGON_SIZE];
-	int texCoord[MAX_POLYGON_SIZE][2];
-	int vertices;
-	int frames, rate, width, height; // animation data
-	bool cull;
-} WZ_FACE;
-
-typedef struct {
-	int x, y, z;
-} WZ_POSITION;
-
-void QWzmViewer::loadPIE(QString inputFile)
+MODEL *QWzmViewer::loadPIE(QString inputFile)
 {
-	const bool swapYZ = false;
-	const bool reverseWinding = false;
+        const bool swapYZ = false;
+        const bool reverseWinding = false;
 	const bool invertUV = false;
 	const bool assumeAnimation = false;
-	int num, x, y, z, levels, level;
-	char s[200];
-	const char *input = inputFile.toAscii().constData();
+        int num, x, y, z, levels, level, pieVersion;
+        char s[200];
+        QByteArray inFile = inputFile.toAscii();
+        const char *input = inFile.constData();
+        MODEL *psModel = NULL;
 	FILE *fp = fopen(input, "r");
 
 	if (!fp)
 	{
 		qWarning("Cannot open \"%s\" for reading: %s", input, strerror(errno));
-		return;
+                return NULL;
 	}
 
-	num = fscanf(fp, "PIE %d\n", &x);
+        num = fscanf(fp, "PIE %d\n", &pieVersion);
 	if (num != 1)
 	{
-		fprintf(stderr, "Bad PIE file %s\n", input);
-		exit(1);
+                qWarning("Bad PIE file %s\n", input);
+                fclose(fp);
+                freeModel(psModel);
+                return NULL;
 	}
 
-	num = fscanf(fp, "TYPE %d\n", &x); // ignore
+        num = fscanf(fp, "TYPE %x\n", &x); // ignore
 	if (num != 1)
 	{
-		fprintf(stderr, "Bad TYPE directive in %s\n", input);
-		exit(1);
+                qWarning("Bad TYPE directive in %s\n", input);
+                fclose(fp);
+                freeModel(psModel);
+                return NULL;
 	}
 
 	num = fscanf(fp, "TEXTURE %d %s %d %d\n", &z, s, &x, &y);
 	if (num != 4)
 	{
-		fprintf(stderr, "Bad TEXTURE directive in %s\n", input);
-		exit(1);
+                qWarning("Bad TEXTURE directive in %s\n", input);
+                fclose(fp);
+                freeModel(psModel);
+                return NULL;
 	}
 
 	num = fscanf(fp, "LEVELS %d\n", &levels);
 	if (num != 1)
 	{
-		fprintf(stderr, "Bad LEVELS directive in %s\n", input);
-		exit(1);
+                qWarning("Bad LEVELS directive in %s\n", input);
+                fclose(fp);
+                freeModel(psModel);
+                return NULL;
 	}
 
-	// Recreate model
-	if (psModel)
-	{
-		freeModel(psModel);
-		psModel = NULL;
-	}
 	psModel = createModel(levels, 0);
 	if (!psModel)
 	{
 		qFatal("Out of memory");
+                fclose(fp);
+                exit(EXIT_FAILURE);
 	}
 	strcpy(psModel->texPath, s);
 
@@ -91,39 +93,47 @@ void QWzmViewer::loadPIE(QString inputFile)
 		num = fscanf(fp, "\nLEVEL %d\n", &x);
 		if (num != 1 || level + 1 != x)
 		{
-			fprintf(stderr, "Bad LEVEL directive in %s, was %d should be %d.\n", input, x, level + 1);
-			exit(1);
+                        qWarning("Bad LEVEL directive in %s, was %d should be %d.\n", input, x, level + 1);
+                        fclose(fp);
+                        freeModel(psModel);
+                        return NULL;
 		}
 
 		num = fscanf(fp, "POINTS %d\n", &points);
 		if (num != 1)
 		{
-			fprintf(stderr, "Bad POINTS directive in %s, level %d.\n", input, level);
-			exit(1);
+                        qWarning("Bad POINTS directive in %s, level %d.\n", input, level);
+                        fclose(fp);
+                        freeModel(psModel);
+                        return NULL;
 		}
 		posList = (WZ_POSITION*)malloc(sizeof(WZ_POSITION) * points);
 		for (j = 0; j < points; j++)
 		{
 			if (swapYZ)
 			{
-				num = fscanf(fp, "%d %d %d\n", &posList[j].x, &posList[j].z, &posList[j].y);
+                                num = fscanf(fp, "%f %f %f\n", &posList[j].x, &posList[j].z, &posList[j].y);
 			}
 			else
 			{
-				num = fscanf(fp, "%d %d %d\n", &posList[j].x, &posList[j].y, &posList[j].z);
+                                num = fscanf(fp, "%f %f %f\n", &posList[j].x, &posList[j].y, &posList[j].z);
 			}
 			if (num != 3)
 			{
-				fprintf(stderr, "Bad POINTS entry level %d, number %d\n", level, j);
-				exit(1);
+                                qWarning("Bad POINTS entry level %d, number %d\n", level, j);
+                                fclose(fp);
+                                freeModel(psModel);
+                                return NULL;
 			}
 		}
 
 		num = fscanf(fp, "POLYGONS %d", &faces);
 		if (num != 1)
 		{
-			fprintf(stderr, "Bad POLYGONS directive in %s, level %d.\n", input, level);
-			exit(1);			
+                        qWarning("Bad POLYGONS directive in %s, level %d.\n", input, level);
+                        fclose(fp);
+                        freeModel(psModel);
+                        return NULL;
 		}
 		facesWZM = faces;	// for starters
 		faceList = (WZ_FACE*)malloc(sizeof(WZ_FACE) * faces);
@@ -136,13 +146,17 @@ void QWzmViewer::loadPIE(QString inputFile)
 			num = fscanf(fp, "\n%x", &flags);
 			if (num != 1)
 			{
-				fprintf(stderr, "Bad POLYGONS texture flag entry level %d, number %d\n", level, j);
-				exit(1);
+                                qWarning("Bad POLYGONS texture flag entry level %d, number %d\n", level, j);
+                                fclose(fp);
+                                freeModel(psModel);
+                                return NULL;
 			}
 			if (!(flags & iV_IMD_TEX))
 			{
-				fprintf(stderr, "Bad texture flag entry level %d, number %d - no texture flag!\n", level, j);
-				exit(1);
+                                qWarning("Bad texture flag entry level %d, number %d - no texture flag!\n", level, j);
+                                fclose(fp);
+                                freeModel(psModel);
+                                return NULL;
 			}
 
 			if (flags & iV_IMD_XNOCUL)
@@ -155,21 +169,23 @@ void QWzmViewer::loadPIE(QString inputFile)
 				faceList[j].cull = false;
 			}
 
-			num = fscanf(fp, "%d", &faceList[j].vertices);
+                        num = fscanf(fp, "%u", &faceList[j].vertices);
 			if (num != 1 || faceList[j].vertices < 0)
 			{
-				fprintf(stderr, "Bad POLYGONS vertices entry level %d, number %d\n", level, j);
-				exit(1);
+                                qWarning("Bad POLYGONS vertices entry level %d, number %d\n", level, j);
+                                fclose(fp);
+                                freeModel(psModel);
+                                return NULL;
 			}
 			assert(faceList[j].vertices <= MAX_POLYGON_SIZE); // larger polygons not supported
-			assert(faceList[j].vertices >= 3); // points and lines not supported
-			if (faceList[j].vertices > 3)
+                        assert(faceList[j].vertices >= VERTICES_PER_TRIANGLE); // points and lines not supported
+                        if (faceList[j].vertices > VERTICES_PER_TRIANGLE)
 			{
 				// since they are triangle fans already, we get to do easy tessellation
-				facesWZM += (faceList[j].vertices - 3);
+                                facesWZM += (faceList[j].vertices - VERTICES_PER_TRIANGLE);
 				if (faceList[j].cull)
 				{
-					facesWZM += (faceList[j].vertices - 3); // double the number of extra faces needed
+                                        facesWZM += (faceList[j].vertices - VERTICES_PER_TRIANGLE); // double the number of extra faces needed
 				}
 			}
 			pointsWZM += faceList[j].vertices;
@@ -180,21 +196,25 @@ void QWzmViewer::loadPIE(QString inputFile)
 				num = fscanf(fp, "%d", &faceList[j].index[k]);
 				if (num != 1)
 				{
-					fprintf(stderr, "Bad vertex position entry level %d, number %d\n", level, j);
-					exit(1);
+                                        qWarning("Bad vertex position entry level %d, number %d\n", level, j);
+                                        fclose(fp);
+                                        freeModel(psModel);
+                                        return NULL;
 				}
 			}
 			if (flags & iV_IMD_TEXANIM)
 			{
-				num = fscanf(fp, "%d %d %d %d", &faceList[j].frames, &faceList[j].rate, &faceList[j].width, &faceList[j].height);
+                                num = fscanf(fp, "%d %d %f %f", &faceList[j].frames, &faceList[j].rate, &faceList[j].width, &faceList[j].height);
 				if (num != 4)
 				{
-					fprintf(stderr, "Bad texture animation entry level %d, number %d.\n", level, j);
-					exit(1);
+                                        qWarning("Bad texture animation entry level %d, number %d.\n", level, j);
+                                        fclose(fp);
+                                        freeModel(psModel);
+                                        return NULL;
 				}
 				if (faceList[j].frames <= 1)
 				{
-					fprintf(stderr, "Level %d, polygon %d has a single animation frame. That makes no sense.\n", level, j);
+                                        qWarning("Level %d, polygon %d has a single animation frame. That makes no sense.\n", level, j);
 				}
 				if (textureArrays < faceList[j].frames)
 				{
@@ -205,16 +225,18 @@ void QWzmViewer::loadPIE(QString inputFile)
 			{
 				faceList[j].frames = 0;
 				faceList[j].rate = 0;
-				faceList[j].width = 1; // to avoid division by zero
-				faceList[j].height = 1;
+                                faceList[j].width = 0;
+                                faceList[j].height = 0;
 			}
 			for (k = 0; k < faceList[j].vertices; k++)
 			{
-				num = fscanf(fp, "%d %d", &faceList[j].texCoord[k][0], &faceList[j].texCoord[k][1]);
+                                num = fscanf(fp, "%f %f", &faceList[j].texCoord[k][0], &faceList[j].texCoord[k][1]);
 				if (num != 2)
 				{
-					fprintf(stderr, "Bad texture coordinate entry level %d, number %d\n", level, j);
-					exit(1);
+                                        qWarning("Bad texture coordinate entry level %d, number %d\n", level, j);
+                                        fclose(fp);
+                                        freeModel(psModel);
+                                        return NULL;
 				}
 			}
 		}
@@ -232,8 +254,8 @@ void QWzmViewer::loadPIE(QString inputFile)
 		pointCount = 0;
 		psMesh->vertices = pointsWZM;
 		psMesh->faces = facesWZM;
-		psMesh->vertexArray = (GLfloat*)malloc(sizeof(GLfloat) * psMesh->vertices * 3);
-		psMesh->indexArray = (GLuint*)malloc(sizeof(GLuint) * psMesh->vertices * 3);
+                psMesh->vertexArray = (GLfloat*)malloc(sizeof(GLfloat) * psMesh->vertices * VERTICES_PER_TRIANGLE);
+                psMesh->indexArray = (GLuint*)malloc(sizeof(GLuint) * psMesh->vertices * VERTICES_PER_TRIANGLE);
 		psMesh->textureArrays = textureArrays;
 		for (j = 0; j < textureArrays; j++)
 		{
@@ -247,7 +269,7 @@ void QWzmViewer::loadPIE(QString inputFile)
 				int pos = faceList[j].index[k];
 
 				// Generate new position
-				psMesh->vertexArray[z++] = posList[pos].x;
+                                psMesh->vertexArray[z++] = posList[pos].x;
 				psMesh->vertexArray[z++] = posList[pos].y;
 				psMesh->vertexArray[z++] = posList[pos].z;
 
@@ -262,23 +284,47 @@ void QWzmViewer::loadPIE(QString inputFile)
 			for (x = 0, j = 0; j < faces; j++)
 			{
 				for (int k = 0; k < faceList[j].vertices; k++)
-				{
-					// This works because wrap around is only permitted if you start the animation at the
-					// left border of the texture. What a horrible hack this was.
-					int framesPerLine = 256 / faceList[j].width;
-					int frameH = z % framesPerLine;
-					int frameV = z / framesPerLine;
-					double width = faceList[j].texCoord[k][0] + faceList[j].width * frameH;
-					double height = faceList[j].texCoord[k][1] + faceList[j].height * frameV;
-					double u = width / 256.0f;
-					double v = height / 256.0f;
+                                {
+                                        double u;
+                                        double v;
+                                        double framesPerLine = OLD_TEXTURE_SIZE_FIX;
+                                        if(pieVersion==3)
+                                        {
+                                                framesPerLine = 1 / faceList[j].width; // FIXME divide by zero
+                                        }
+                                        else if(faceList[j].width)
+                                        {
+                                                framesPerLine = OLD_TEXTURE_SIZE_FIX / (faceList[j].width);
+                                        }
 
-					if (invertUV)
-					{
-						v = 1.0f - v;
-					}
-					psMesh->textureArray[z][x++] = u;
-					psMesh->textureArray[z][x++] = v;
+                                        int frameH = z % (int)(framesPerLine);
+    
+                                        /*
+                                         * This works because wrap around is only permitted if you start the animation at the
+                                         * left border of the texture. What a horrible hack this was.
+                                         */
+                                        int frameV = z / framesPerLine;
+                                        double width = faceList[j].texCoord[k][0] + faceList[j].width * frameH;
+                                        double height = faceList[j].texCoord[k][1] + faceList[j].height * frameV;
+
+                                        if(pieVersion == 2)
+                                        {
+
+                                                u = width / OLD_TEXTURE_SIZE_FIX;
+                                                v = height / OLD_TEXTURE_SIZE_FIX;
+                                        }
+                                        else if(pieVersion == 3)
+                                        {
+                                                u = width;
+                                                v = height;
+                                        }
+    
+                                        if (invertUV)
+                                        {
+                                                v = 1.0f - v;
+                                        }
+                                        psMesh->textureArray[z][x++] = u;
+                                        psMesh->textureArray[z][x++] = v;
 				}
 			}
 		}
@@ -292,7 +338,7 @@ void QWzmViewer::loadPIE(QString inputFile)
 			key = faceList[j].index[0];
 			previous = faceList[j].index[2];
 			faceCount++;
-			if (reverseWinding || faceList[j].cull)
+                        if (reverseWinding || faceList[j].cull)
 			{
 				GLuint *v = &psMesh->indexArray[z];
 
@@ -312,7 +358,7 @@ void QWzmViewer::loadPIE(QString inputFile)
 			}
 
 			// Generate triangles from the Warzone triangle fans (PIEs, get it?)
-			for (k = 3; k < faceList[j].vertices; k++)
+                        for (k = VERTICES_PER_TRIANGLE; k < faceList[j].vertices; k++)
 			{
 				if (reverseWinding || faceList[j].cull)
 				{
@@ -368,13 +414,15 @@ void QWzmViewer::loadPIE(QString inputFile)
 			for (j = 0; j < psMesh->connectors; j++)
 			{
 				CONNECTOR *conn = &psMesh->connectorArray[j];
-				int a, b, c;
+                                GLfloat a, b, c;
 
-				num = fscanf(fp, "\n%d %d %d", &a, &b, &c);
+                                num = fscanf(fp, "\n%f %f %f", &a, &b, &c);
 				if (num != 3)
 				{
-					fprintf(stderr, "Bad CONNECTORS directive in %s entry level %d, number %d\n", input, level, j);
-					exit(1);
+                                        qWarning("Bad CONNECTORS directive in %s entry level %d, number %d\n", input, level, j);
+                                        fclose(fp);
+                                        freeModel(psModel);
+                                        return NULL;
 				}
 				conn->pos.x = a;
 				conn->pos.y = b;
@@ -386,9 +434,11 @@ void QWzmViewer::loadPIE(QString inputFile)
 		free(faceList);
 		free(posList);
 	}
+        fclose(fp);
+        return psModel;
 }
 
-void QWzmViewer::load3DS(QString input)
+MODEL *QWzmViewer::load3DS(QString input)
 {
 	const bool swapYZ = true;
 	const bool reverseWinding = true;
@@ -399,19 +449,16 @@ void QWzmViewer::load3DS(QString input)
 	int meshes = 0;
 	Lib3dsMesh *m;
 	int meshIdx;
+        MODEL *psModel;
 
 	if (!f)
 	{
 		qWarning("Loading 3DS file %s failed", input.toAscii().constData());
-		return;
+                return NULL;
 	}
 
 	for (meshes = 0, m = f->meshes; m; m = m->next, meshes++) ;	// count the meshes
-	if (psModel)
-	{
-		freeModel(psModel);
-		psModel = NULL;
-	}
+
 	psModel = createModel(meshes, 0);
 	if (!psModel)
 	{
@@ -500,4 +547,287 @@ void QWzmViewer::load3DS(QString input)
 	}
 
 	lib3ds_file_free(f);
+        return psModel;
+}
+
+int QWzmViewer::savePIE(const char *filename, const MODEL *psModel, int pieVersion, int type)
+{
+    std::fstream file;
+    int i, j, k;
+    unsigned int ptOffset, ptSetIndex, polyFlag;
+
+    /* Temporary stringstream used to accomodate
+     * the order PIE polygon data is written
+     */
+    std::stringstream animTmpSs;
+
+    MESH *mesh;
+    double unitW, unitH, tOL, bOR;
+    std::set< pie_Point> ptSet;
+    std::queue< textCoords, std::list<textCoords> > textures;
+
+    file.open( filename, std::fstream::out);
+
+    file << "PIE " << pieVersion << '\n';
+    file << "TYPE " << std::hex << type << std::dec << "\n";
+    file << "TEXTURE 0 "<< psModel->texPath;
+
+    switch(pieVersion)
+    {
+        case 2:
+            if(psModel->pixmap != NULL)
+            {
+                file << ' ' << psModel->pixmap->h << ' ' << psModel->pixmap->w << '\n';
+            }
+            else
+            {
+                file << " 0 0\n";
+            }
+            break;
+        case 3:
+            file << " 0 0\n";
+            break;
+        default:
+            file.close();
+            qWarning("QWzmViewer::savePIE - Unsupported pie version");
+            return -1;
+    }
+
+    file << "LEVELS "<< psModel->meshes << '\n';
+
+    for(i = 0; i < psModel->meshes; i++)
+    {
+        ptSet.clear();
+        mesh = &(psModel->mesh[i]);
+        file << "LEVEL "<<i+1<<"\n";
+
+        for( j = 0; j < mesh->vertices; j++)
+        {
+            ptSet.insert( pie_Point(mesh->vertexArray[j*VERTICES_PER_TRIANGLE],
+                                    mesh->vertexArray[j*VERTICES_PER_TRIANGLE+1],
+                                    mesh->vertexArray[j*VERTICES_PER_TRIANGLE+2]));
+        }
+
+        if( ptSet.size() > pie_MAX_POLYGONS)
+        {
+            file.close();
+            qWarning("QWzmViewer::savePIE - Model has too many vertices to save as PIE.");
+            return -1;
+        }
+        file << "POINTS "<< ptSet.size() << '\n';
+
+        std::set< pie_Point>::iterator it;
+        for( it = ptSet.begin(); it != ptSet.end(); it++ )
+        {
+            GLfloat x,y,z;
+            it->getXYZ( x, y, z);
+            switch(pieVersion)
+            {
+                case 2:
+                    file << '\t' << (int)(x + 0.5f) << ' ' << (int)(y + 0.5f) << ' ' << (int)(z + 0.5f) << '\n';
+                    break;
+                case 3:
+                    file << '\t' << x << ' ' << y << ' ' << z << '\n';
+                    break;
+            }
+        }
+
+        file << "POLYGONS " << mesh->faces << '\n';
+
+        for( j = 0; j < mesh->faces; j++)
+        {
+            polyFlag = iV_IMD_TEX;
+            animTmpSs.str(std::string());
+
+            if( mesh->textureArrays > 1 ){
+                ptOffset = mesh->indexArray[j*VERTICES_PER_TRIANGLE];
+
+                /*
+                 * TODO:
+                 * This _if_ statement isn't a robust way of checking
+                 * for animations or team colours.
+                 */
+                if( (mesh->textureArray[0][ptOffset*2] < mesh->textureArray[1][ptOffset*2])
+                    || (mesh->textureArray[0][ptOffset*2+1] < mesh->textureArray[mesh->textureArrays-1][ptOffset*2+1]))
+                {
+                    /* Find height and width for team colours
+                     * and animations.
+                     * TODO: Check that the animations are legal
+                     * for the PIE format.
+                     */
+                    unitH = 0;
+                    unitW = mesh->textureArray[1][ptOffset*2] - mesh->textureArray[0][ptOffset*2];
+
+                    for( k = 0; k < mesh->textureArrays - 1; k++){
+                        if(mesh->textureArray[k+1][ptOffset*2+1] > mesh->textureArray[k][ptOffset*2+1])
+                        {
+                            unitH = mesh->textureArray[k+1][ptOffset*2+1] - mesh->textureArray[k][ptOffset*2+1];
+                            break;
+                        }
+                    }
+
+                    if( k >= mesh->textureArrays - 1 || unitH <= 0)
+                    {
+                        // Find top and bottom, add pixels to the difference for good luck.
+                        bOR = 0; // Bottom or right
+                        tOL = 1; // Top or left
+                        for(k = 0; k < VERTICES_PER_TRIANGLE; k++)
+                        {
+                            ptOffset = mesh->indexArray[j*VERTICES_PER_TRIANGLE+k];
+                            if(mesh->textureArray[0][ptOffset*2+1] < tOL)
+                                tOL = mesh->textureArray[0][ptOffset*2+1];
+                            if(mesh->textureArray[0][ptOffset*2+1] > bOR)
+                                bOR = mesh->textureArray[0][ptOffset*2+1];
+                        }
+                        unitH = fabs(bOR - tOL);
+                        if(psModel->pixmap != NULL && psModel->pixmap->h != 0)
+                        {
+                            unitH += 2/psModel->pixmap->h;
+                        }
+                        else
+                        {
+                            unitH += 2/OLD_TEXTURE_SIZE_FIX;
+                        }
+                    }
+                    if( unitW <= 0)
+                    {
+                        // Find left and right, add pixels to the difference for good luck.
+                        bOR = 0; // Bottom or right
+                        tOL = 1; // Top or left
+                        for(k = 0; k < VERTICES_PER_TRIANGLE; k++)
+                        {
+                            ptOffset = mesh->indexArray[j*VERTICES_PER_TRIANGLE+k];
+                            if(mesh->textureArray[0][ptOffset*2] < tOL)
+                                tOL = mesh->textureArray[0][ptOffset*2+1];
+                            if(mesh->textureArray[0][ptOffset*2] > bOR)
+                                bOR = mesh->textureArray[0][ptOffset*2+1];
+                        }
+                        unitW = fabs(bOR - tOL);
+                        if(psModel->pixmap != NULL && psModel->pixmap->w != 0)
+                        {
+                            unitW += 2/psModel->pixmap->w;
+                        }
+                        else
+                        {
+                            unitW += 2/OLD_TEXTURE_SIZE_FIX;
+                        }
+                    }
+
+                    switch(pieVersion)
+                    {
+                        // TODO: Get texture change speed to replace the " 1 " with
+                        case 2:
+                            animTmpSs << mesh->textureArrays << " 1 " << (int)(255*unitW + 0.5f) << ' ' << (int)(255*unitH + 0.5f);
+                            break;
+                        case 3:
+                            animTmpSs << mesh->textureArrays << " 1 " << (GLfloat)unitW << ' ' << (GLfloat)unitH;
+                            break;
+                    }
+                    polyFlag|=iV_IMD_TEXANIM;
+                }
+            }
+
+            file << "\t" << std::hex << polyFlag << std::dec << ' ' << VERTICES_PER_TRIANGLE; // Triangles only
+
+            for( k = 0; k < VERTICES_PER_TRIANGLE; k++ )
+            {
+                ptOffset = mesh->indexArray[j*VERTICES_PER_TRIANGLE+k];
+
+                pie_Point thisPoint( mesh->vertexArray[ptOffset*VERTICES_PER_TRIANGLE],
+                                     mesh->vertexArray[ptOffset*VERTICES_PER_TRIANGLE+1],
+                                     mesh->vertexArray[ptOffset*VERTICES_PER_TRIANGLE+2]);
+
+                ptSetIndex = distance( ptSet.begin(), ptSet.find( thisPoint));
+
+                if( ptSetIndex == ptSet.size())
+                {
+                    file.close();
+                    qWarning("QWzmViewer::savePIE - Internal error: Failed to find vertex in set.");
+                    return -1;
+                }
+                else
+                {
+                    file << ' '<< ptSetIndex;
+                    textures.push( textCoords( mesh->textureArray[0][ptOffset*2],
+                                               mesh->textureArray[0][ptOffset*2+1]));
+                }
+            }
+
+            if(polyFlag & iV_IMD_TEXANIM){
+                file << ' ' << animTmpSs.str();
+            }
+
+            while (!textures.empty())
+            {
+                switch(pieVersion)
+                {
+                    case 2:
+                        file << ' ' << (int)(OLD_TEXTURE_SIZE_FIX*textures.front().u + 0.5f);
+                        file << ' ' << (int)(OLD_TEXTURE_SIZE_FIX*textures.front().v + 0.5f);
+                        break;
+                    case 3:
+                        file << ' ' << textures.front().u << ' ' << textures.front().v;
+                        break;
+                }
+                textures.pop();
+            }
+            file << '\n';
+        }
+
+        if(mesh->connectors > 0){
+            file << "CONNECTORS " << mesh->connectors << "\n";
+
+            for( j = 0; j < mesh->connectors; j++){
+                switch(pieVersion)
+                {
+                    case 2:
+                        file << "\t" << (int)(mesh->connectorArray[j].pos.x + 0.5f)
+                            << ' ' << (int)(mesh->connectorArray[j].pos.y + 0.5f)
+                            << ' ' << (int)(mesh->connectorArray[j].pos.z + 0.5f) << '\n';
+                        break;
+                    case 3:
+                        file << "\t" << mesh->connectorArray[j].pos.x
+                            << ' ' << mesh->connectorArray[j].pos.y
+                            << ' ' << mesh->connectorArray[j].pos.z << '\n';
+                        break;
+                }
+            }
+        }
+    }
+
+    file.close();
+    return 0;
+}
+
+QPieExportDialog::QPieExportDialog(QWidget *parent)
+                :QDialog(parent),Ui_PieExportDialog()
+{
+        setupUi(this);
+}
+
+QPieExportDialog::~QPieExportDialog()
+{
+}
+
+int QPieExportDialog::getPieVersion()
+{
+        return cbb_pieversion->currentIndex() + 2;
+}
+
+int QPieExportDialog::getFlags()
+{
+        int retVal = 0;
+        if( cb_TCMask->checkState())
+        {
+                retVal |= iV_IMD_TCMASK;
+        }
+        if( cb_Tex->checkState())
+        {
+                retVal |= iV_IMD_TEX;
+        }
+        if( cb_Other->checkState() )
+        {
+                retVal |= sb_OtherFlags->value();
+        }
+        return retVal;
 }

@@ -17,12 +17,16 @@
 */
 
 #include "qwzm.h"
+#include "conversion.h"
 
 QConnectorViewer::QConnectorViewer(QWidget *parent)
            : QDialog(parent), Ui_ConnectorView()
 {
 	setupUi(this);
 	connect(pushButtonClose, SIGNAL(pressed()), this, SLOT(hide()));
+        pushButtonPrepend->setDisabled(true);
+        pushButtonAppend->setDisabled(true);
+        pushButtonRemove->setDisabled(true);
 //	connect(pushButtonPrepend, SIGNAL(pressed()), parent, SLOT(prependConnector()));
 //	connect(pushButtonAppend, SIGNAL(pressed()), parent, SLOT(appendConnector()));
 //	connect(pushButtonRemove, SIGNAL(pressed()), parent, SLOT(removeConnector()));
@@ -102,8 +106,7 @@ QWzmViewer::QWzmViewer(QWidget *parent)
 	connect(actionSave, SIGNAL(triggered()), this, SLOT(save()));
 	connect(actionSaveAs, SIGNAL(triggered()), this, SLOT(saveAs()));
 	connect(actionImport_3DS, SIGNAL(triggered()), this, SLOT(open3DS()));
-	connect(actionOpenWZM, SIGNAL(triggered()), this, SLOT(openWZM()));
-	connect(actionImport_PIE, SIGNAL(triggered()), this, SLOT(openPIE()));
+        connect(actionOpen, SIGNAL(triggered()), this, SLOT(open()));
 	connect(actionWireframe, SIGNAL(triggered()), this, SLOT(toggleWireframe()));
 	connect(actionHelp, SIGNAL(triggered()), glView, SLOT(help()));
 	connect(actionAxis, SIGNAL(triggered()), glView, SLOT(toggleAxisIsDrawn()));
@@ -250,29 +253,47 @@ void QWzmViewer::saveAs()
 {
 	if (psModel)
 	{
-		filename = QFileDialog::getSaveFileName(this, tr("Choose output file"), QString::null, QString::null);
-		actionSave->setEnabled(true);
-		save();
+                filename = QFileDialog::getSaveFileName(this, tr("Choose output file"), QString::null, tr("All Compatible (*.wzm *.pie);;WZM (*.wzm);;PIE (*.pie)"));
+                actionSave->setEnabled(true);
+                save();
 	}
 }
 
 void QWzmViewer::save()
 {
-	if (filename != "" && psModel)
-	{
-		if (saveModel(filename.toAscii().constData(), psModel) != 0)
-		{
-			QMessageBox::critical(this, tr("Oops..."), "Could not save model", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
-		}
-	}
+        int retVal = -1;
+        if (!filename.isEmpty() && psModel)
+        {
+                QFileInfo fileInfo( filename);
+                if( fileInfo.completeSuffix().compare(QString("wzm"),Qt::CaseInsensitive) == 0){
+                        retVal = saveModel( filename.toAscii().constData(), psModel);
+                }
+                else if( fileInfo.completeSuffix().compare(QString("pie"),Qt::CaseInsensitive) == 0){
+                        QPieExportDialog dialog;
+                        dialog.exec();
+                        if( dialog.result())
+                        {
+                                retVal = savePIE( filename.toAscii().constData(), psModel, dialog.getPieVersion(), dialog.getFlags());
+                        }
+                        else
+                        {
+                                retVal = 0;
+                        }
+                }
+
+                if (retVal != 0)
+                {
+                        QMessageBox::warning(this, tr("Oops..."), "Could not save model", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+                }
+        }
 }
 
-void QWzmViewer::rowsChanged(const QModelIndex &parent, int start, int end)
+void QWzmViewer::rowsChanged(const QModelIndex&, int, int)
 {
 	reloadFrames();
 }
 
-void QWzmViewer::dataChanged(const QModelIndex &first, const QModelIndex &last)
+void QWzmViewer::dataChanged(const QModelIndex&, const QModelIndex&)
 {
 	reloadFrames();
 }
@@ -397,13 +418,14 @@ void QWzmViewer::setMesh(int index)
 	}
 }
 
-void QWzmViewer::setModel(QFileInfo &texPath)
+void QWzmViewer::setModel(const QFileInfo &texPath)
 {
 	psModel->pixmap = readPixmap(texPath.absoluteFilePath().toAscii().constData());
 	if (!psModel->pixmap)
 	{
-		QMessageBox::critical(this, tr("Oops..."), "Could not read texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
-		psModel = NULL;
+                QMessageBox::warning(this, tr("Oops..."), "Could not read texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+                freeModel(psModel);
+                psModel = NULL;
 		return;
 	}
 	glView->setModel(psModel);
@@ -411,10 +433,13 @@ void QWzmViewer::setModel(QFileInfo &texPath)
 	actionSave->setEnabled(false);
 	actionSaveAs->setEnabled(true);
 	comboBoxSelectedMesh->setMaxCount(0);	// delete previous
+        cb_visMesh->setMaxCount(1);
 	comboBoxSelectedMesh->setMaxCount(psModel->meshes);
+        cb_visMesh->setMaxCount(psModel->meshes + 1);
 	for (int i = 0; i < psModel->meshes; i++)
 	{
 		comboBoxSelectedMesh->insertItem(i, QString::number(i));
+                cb_visMesh->insertItem( i + 1, QString::number( i));
 	}
 	comboBoxSelectedMesh->setCurrentIndex(0);
 	setMesh(0);
@@ -422,107 +447,91 @@ void QWzmViewer::setModel(QFileInfo &texPath)
 
 void QWzmViewer::open3DS()
 {
-	QString model = QFileDialog::getOpenFileName(this, tr("Choose 3DS file"), QString::null, tr("3DS models (*.3ds)"));
-	if (model != "")
-	{
-		load3DS(model);
-		if (psModel)
-		{
-			QFileInfo texPath(psModel->texPath);
+        QString model = QFileDialog::getOpenFileName(this, tr("Choose 3DS file"), QString::null, tr("3DS models (*.3ds)"));
+        if ( !model.isEmpty())
+        {
+                MODEL *tmpModel = load3DS(model);
+                if (tmpModel)
+                {
+                        QFileInfo texPath(tmpModel->texPath);
 
-			if (!texPath.exists())
-			{
-				texPath.setFile(QString("../../data/base/texpages/"), psModel->texPath);
-				if (!texPath.exists())
-				{
-					texPath.setFile(QFileDialog::getOpenFileName(this, tr("Find texture"), QString::null, tr("PNG texture (*.png)")));
-					strcpy(psModel->texPath, texPath.fileName().toAscii().constData());
-					if (!texPath.exists())
-					{
-						QMessageBox::critical(this, tr("Oops..."), "Could not open texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
-						psModel = NULL;
-						return;
-					}
-				}
-			}
-			setModel(texPath);
-		}
-		else
-		{
-			qWarning("Failed to create model");
-		}
-	}
+                        if (!texPath.exists())
+                        {
+                                texPath.setFile(QFileDialog::getOpenFileName(this, tr("Find texture"), QString::null, tr("PNG texture (*.png)")));
+                                strcpy(tmpModel->texPath, texPath.fileName().toAscii().constData());
+                                if (!texPath.exists())
+                                {
+                                        QMessageBox::warning(this, tr("Oops..."), "Could not open texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+                                        freeModel(tmpModel);
+                                        return;
+                                }
+                        }
+                        if(psModel)
+                        {
+                            freeModel(psModel);
+                        }
+                        psModel = tmpModel;
+                        actionSave->setEnabled(true);
+                        setModel(texPath);
+                }
+                else
+                {
+                        qWarning("Failed to create model");
+                }
+        }
 }
 
-void QWzmViewer::openPIE()
+void QWzmViewer::open()
 {
-	QString model = QFileDialog::getOpenFileName(this, tr("Choose PIE file"), QString::null, tr("PIE models (*.pie)"));
-	if (model != "")
-	{
-		loadPIE(model);
-		if (psModel)
-		{
-			QFileInfo texPath(psModel->texPath);
+        static QString lastDir; // Convenience HACK to remember last succesful directory a model was loaded from.
+        filename = QFileDialog::getOpenFileName(this, tr("Choose a PIE or WZM file"), lastDir, tr("All Compatible (*.wzm *.pie);;WZM models (*.wzm);;PIE models (*.pie)"));
+        if (!filename.isEmpty())
+        {
+                QFileInfo theFile( filename);
+                MODEL *tmpModel = NULL;
+                if( theFile.completeSuffix().compare(QString("wzm"),Qt::CaseInsensitive) == 0){
+                        tmpModel = readModel(filename.toAscii().constData(), 0);
+                }
+                else if( theFile.completeSuffix().compare(QString("pie"),Qt::CaseInsensitive) == 0){
+                        tmpModel = loadPIE(filename);
+                }
+                else{
+                        return;
+                }
 
-			if (!texPath.exists())
-			{
-				texPath.setFile(QString("../../data/base/texpages/"), psModel->texPath);
-				if (!texPath.exists())
-				{
-					texPath.setFile(QFileDialog::getOpenFileName(this, tr("Find texture"), QString::null, tr("PNG texture (*.png)")));
-					strcpy(psModel->texPath, texPath.fileName().toAscii().constData());
-					if (!texPath.exists())
-					{
-						QMessageBox::critical(this, tr("Oops..."), "Could not open texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
-						psModel = NULL;
-						return;
-					}
-				}
-			}
-			setModel(texPath);
-		}
-		else
-		{
-			qWarning("Failed to create model");
-		}
-	}
-}
+                if (tmpModel)
+                {
+                        QFileInfo texPath(theFile.absoluteDir(),tmpModel->texPath);
 
-void QWzmViewer::openWZM()
-{
-	filename = QFileDialog::getOpenFileName(this, tr("Choose 3DS file"), QString::null, tr("WZM models (*.wzm)"));
-	if (filename != "")
-	{
-		MODEL *tmpModel = readModel(filename.toAscii().constData(), 0);
-
-		if (tmpModel)
-		{
-			QFileInfo texPath(tmpModel->texPath);
-
-			// Try to find texture automatically
-			if (!texPath.exists())
-			{
-				texPath.setFile(QString("../../data/base/texpages/"), tmpModel->texPath);
-				if (!texPath.exists())
-				{
-					texPath.setFile(QFileDialog::getExistingDirectory(this, tr("Specify texture directory"), QString::null), tmpModel->texPath);
-					if (!texPath.exists())
-					{
-						QMessageBox::critical(this, tr("Oops..."), "Could not find texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
-						free(tmpModel);
-						return;
-					}
-				}
-			}
-			psModel = tmpModel;
-			setModel(texPath);
-			actionSave->setEnabled(true);
-		}
-		else
-		{
-			qWarning("Failed to create model!");
-		}
-	}
+                        // Try to find texture automatically
+                        if (!texPath.exists())
+                        {
+                                texPath.setFile(QString("../../data/base/texpages/"), tmpModel->texPath);
+                                if (!texPath.exists())
+                                {
+                                        texPath.setFile(QFileDialog::getExistingDirectory(this, tr("Specify texture directory"), QString::null), tmpModel->texPath);
+                                        if (!texPath.exists())
+                                        {
+                                                QMessageBox::warning(this, tr("Oops..."), "Could not find texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+                                                freeModel(tmpModel);
+                                                return;
+                                        }
+                                }
+                        }
+                        if (psModel)
+                        {
+                            freeModel(psModel);
+                        }
+                        psModel = tmpModel;
+                        setModel(texPath);
+                        actionSave->setEnabled(true);
+                        lastDir = theFile.absolutePath();
+                }
+                else
+                {
+                        qWarning("Failed to create model!");
+                }
+        }
 }
 
 int main(int argc, char *argv[])
@@ -532,4 +541,9 @@ int main(int argc, char *argv[])
 
 	wzm->show();
 	return app.exec();
+}
+
+void QWzmViewer::on_cb_visMesh_currentIndexChanged(int index)
+{
+        Ui::QWZM::glView->selectMesh( index);
 }

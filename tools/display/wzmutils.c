@@ -56,9 +56,65 @@ static void interpolateVectors(Vector3f vec1, Vector3f vec2, Vector3f *result, d
 	result->z = vec1.z * (1.0 - fraction) + vec2.z * fraction;
 }
 
-void drawModel(MODEL *psModel, int now)
+static inline void drawMesh( MODEL *psModel,int now, int mesh)
 {
-	int i;
+        MESH *psMesh = &psModel->mesh[mesh];
+
+        assert(psMesh);
+        if (psMesh->frameArray)
+        {
+                FRAME *psFrame = &psMesh->frameArray[psMesh->currentFrame];
+                FRAME *nextFrame = psFrame;
+                double fraction = 1.0f / (psFrame->timeSlice * 1000) * (now - psMesh->lastChange); // until next frame
+                Vector3f vec;
+
+                glPushMatrix();	// save matrix state
+
+                assert(psMesh->currentFrame < psMesh->frames);
+
+                if (psMesh->currentFrame == psMesh->frames - 1)
+                {
+                        nextFrame = &psMesh->frameArray[0];	// wrap around
+                }
+                else
+                {
+                        nextFrame = &psMesh->frameArray[psMesh->currentFrame + 1];
+                }
+
+                // Try to avoid crap drivers from taking down the entire system
+                assert(finitef(psFrame->translation.x) && finitef(psFrame->translation.y) && finitef(psFrame->translation.z));
+                assert(psFrame->rotation.x >= -360.0f && psFrame->rotation.y >= -360.0f && psFrame->rotation.z >= -360.0f);
+                assert(psFrame->rotation.x <= 360.0f && psFrame->rotation.y <= 360.0f && psFrame->rotation.z <= 360.0f);
+
+                // Translate
+                interpolateVectors(psFrame->translation, nextFrame->translation, &vec, fraction);
+                glTranslatef(vec.x, vec.z, vec.y);	// z and y flipped
+
+                // Rotate
+                interpolateVectors(psFrame->rotation, nextFrame->rotation, &vec, fraction);
+                glRotatef(vec.x, 1, 0, 0);
+                glRotatef(vec.z, 0, 1, 0);	// z and y flipped again...
+                glRotatef(vec.y, 0, 0, 1);
+
+                // Morph
+                if (!psMesh->teamColours)
+                {
+                        psMesh->currentTextureArray = psFrame->textureArray;
+                }
+        }
+
+        glTexCoordPointer(2, GL_FLOAT, 0, psMesh->textureArray[psMesh->currentTextureArray]);
+        glVertexPointer(3, GL_FLOAT, 0, psMesh->vertexArray);
+
+        glDrawElements(GL_TRIANGLES, psMesh->faces * 3, GL_UNSIGNED_INT, psMesh->indexArray);
+        if (psMesh->frameArray)
+        {
+                glPopMatrix();	// restore position for next mesh
+        }
+}
+void drawModel(MODEL *psModel, int now, int selectedMesh)
+{
+        int i;
 
 	assert(psModel && psModel->mesh);
 
@@ -75,7 +131,7 @@ void drawModel(MODEL *psModel, int now)
 		psFrame = &psMesh->frameArray[psMesh->currentFrame];
 
 		assert(psMesh->currentFrame < psMesh->frames && psMesh->currentFrame >= 0);
-		if (psFrame->timeSlice != 0 && psFrame->timeSlice * 1000 + psMesh->lastChange < now)
+                if (psFrame->timeSlice != 0 && psFrame->timeSlice * 1000 + psMesh->lastChange < now)
 		{
 			psMesh->lastChange = now;
 			psMesh->currentFrame++;
@@ -88,62 +144,17 @@ void drawModel(MODEL *psModel, int now)
 
 	// Draw model
 	glColor3f(1.0f, 1.0f, 1.0f);
-	for (i = 0; i < psModel->meshes; i++)
-	{
-		MESH *psMesh = &psModel->mesh[i];
-
-		assert(psMesh);
-		if (psMesh->frameArray)
-		{
-			FRAME *psFrame = &psMesh->frameArray[psMesh->currentFrame];
-			FRAME *nextFrame = psFrame;
-			double fraction = 1.0f / (psFrame->timeSlice * 1000) * (now - psMesh->lastChange); // until next frame
-			Vector3f vec;
-
-			glPushMatrix();	// save matrix state
-
-			assert(psMesh->currentFrame < psMesh->frames);
-
-			if (psMesh->currentFrame == psMesh->frames - 1)
-			{
-				nextFrame = &psMesh->frameArray[0];	// wrap around
-			}
-			else
-			{
-				nextFrame = &psMesh->frameArray[psMesh->currentFrame + 1];
-			}
-
-			// Try to avoid crap drivers from taking down the entire system
-			assert(finitef(psFrame->translation.x) && finitef(psFrame->translation.y) && finitef(psFrame->translation.z));
-			assert(psFrame->rotation.x >= -360.0f && psFrame->rotation.y >= -360.0f && psFrame->rotation.z >= -360.0f);
-			assert(psFrame->rotation.x <= 360.0f && psFrame->rotation.y <= 360.0f && psFrame->rotation.z <= 360.0f);
-
-			// Translate
-			interpolateVectors(psFrame->translation, nextFrame->translation, &vec, fraction);
-			glTranslatef(vec.x, vec.z, vec.y);	// z and y flipped
-
-			// Rotate
-			interpolateVectors(psFrame->rotation, nextFrame->rotation, &vec, fraction);
-			glRotatef(vec.x, 1, 0, 0);
-			glRotatef(vec.z, 0, 1, 0);	// z and y flipped again...
-			glRotatef(vec.y, 0, 0, 1);
-
-			// Morph
-			if (!psMesh->teamColours)
-			{
-				psMesh->currentTextureArray = psFrame->textureArray;
-			}
-		}
-
-		glTexCoordPointer(2, GL_FLOAT, 0, psMesh->textureArray[psMesh->currentTextureArray]);
-		glVertexPointer(3, GL_FLOAT, 0, psMesh->vertexArray);
-
-		glDrawElements(GL_TRIANGLES, psMesh->faces * 3, GL_UNSIGNED_INT, psMesh->indexArray);
-		if (psMesh->frameArray)
-		{
-			glPopMatrix();	// restore position for next mesh
-		}
-	}
+        if(selectedMesh >= 0 && selectedMesh < psModel->meshes)
+        {
+                drawMesh(psModel,now,selectedMesh);
+        }
+        else
+        {
+                for (i = 0; i < psModel->meshes; i++)
+                {
+                        drawMesh(psModel,now,i);
+                }
+        }
 }
 
 MODEL *createModel(int meshes, int now)
@@ -280,7 +291,7 @@ int saveModel(const char *filename, MODEL *psModel)
 
 	if (!fp)
 	{
-		fprintf(stderr, "Cannot open \"%s\" for reading: %s", filename, strerror(errno));
+                fprintf(stderr, "Cannot open \"%s\" for writing: %s", filename, strerror(errno));
 		return -1;
 	}
 	fprintf(fp, "WZM %d\n", 1);
@@ -344,12 +355,13 @@ int saveModel(const char *filename, MODEL *psModel)
 			fprintf(fp, "\n\t%g %g %g 0", conn->pos.x, conn->pos.y, conn->pos.z);
 		}
 	}
+        fclose(fp);
 	return 0;
 }
 
 MODEL *readModel(const char *filename, int now)
 {
-	FILE *fp = fopen(filename, "r");
+        FILE *fp = fopen(filename, "r");
 	int num, x, meshes, mesh, version;
 	char s[200];
 	MODEL *psModel;
@@ -357,33 +369,37 @@ MODEL *readModel(const char *filename, int now)
 	if (!fp)
 	{
 		fprintf(stderr, "Cannot open \"%s\" for reading: %s", filename, strerror(errno));
-		exit(1);
+                return NULL;
 	}
 
 	num = fscanf(fp, "WZM %d\n", &version);
 	if (num != 1)
 	{
 		fprintf(stderr, "Bad WZM file or wrong version: %s\n", filename);
-		exit(1);
+                fclose(fp);
+                return NULL;
 	}
 	if (version != 1 && version != 2)
 	{
 		fprintf(stderr, "Bad WZM version %d in %s\n", version, filename);
-		exit(1);
+                fclose(fp);
+                return NULL;
 	}
 
 	num = fscanf(fp, "TEXTURE %s\n", s);
 	if (num != 1)
 	{
 		fprintf(stderr, "Bad TEXTURE directive in %s\n", filename);
-		exit(1);
+                fclose(fp);
+                return NULL;
 	}
 
 	num = fscanf(fp, "MESHES %d", &meshes);
 	if (num != 1)
 	{
 		fprintf(stderr, "Bad MESHES directive in %s\n", filename);
-		exit(1);
+                fclose(fp);
+                return NULL;
 	}
 	psModel = createModel(meshes, now);
 	strcpy(psModel->texPath, s);
@@ -396,15 +412,19 @@ MODEL *readModel(const char *filename, int now)
 		num = fscanf(fp, "\nMESH %s\n", s);
 		if (num != 1)
 		{
-			fprintf(stderr, "Bad MESH directive in %s, was \"%s\".\n", filename, s);
-			exit(1);
+                        fprintf(stderr, "Bad MESH directive in %s, was \"%s\".\n", filename, s);
+                        fclose(fp);
+                        freeModel(psModel);
+                        return NULL;
 		}
 
 		num = fscanf(fp, "TEAMCOLOURS %d\n", &x);
 		if (num != 1 || x > 1 || x < 0)
 		{
 			fprintf(stderr, "Bad TEAMCOLOURS directive in %s, mesh %d.\n", filename, mesh);
-			exit(1);
+                        fclose(fp);
+                        freeModel(psModel);
+                        return NULL;
 		}
 		psMesh->teamColours = x;
 
@@ -412,7 +432,9 @@ MODEL *readModel(const char *filename, int now)
 		if (num != 1 || x < 0)
 		{
 			fprintf(stderr, "Bad VERTICES directive in %s, mesh %d.\n", filename, mesh);
-			exit(1);
+                        fclose(fp);
+                        freeModel(psModel);
+                        return NULL;
 		}
 		psMesh->vertices = x;
 		psMesh->vertexArray = malloc(sizeof(GLfloat) * x * 3);
@@ -421,7 +443,9 @@ MODEL *readModel(const char *filename, int now)
 		if (num != 1)
 		{
 			fprintf(stderr, "Bad VERTICES directive in %s, mesh %d.\n", filename, mesh);
-			exit(1);
+                        fclose(fp);
+                        freeModel(psModel);
+                        return NULL;
 		}
 		psMesh->faces = x;
 		psMesh->indexArray = malloc(sizeof(GLuint) * x * 3);
@@ -430,7 +454,9 @@ MODEL *readModel(const char *filename, int now)
 		if (num == EOF)
 		{
 			fprintf(stderr, "No VERTEXARRAY directive in %s, mesh %d.\n", filename, mesh);
-			exit(1);
+                        fclose(fp);
+                        freeModel(psModel);
+                        return NULL;
 		}
 
 		for (j = 0; j < psMesh->vertices; j++)
@@ -441,7 +467,9 @@ MODEL *readModel(const char *filename, int now)
 			if (num != 3)
 			{
 				fprintf(stderr, "Bad VERTEXARRAY entry mesh %d, number %d\n", mesh, j);
-				exit(1);
+                                fclose(fp);
+                                freeModel(psModel);
+                                return NULL;
 			}
 		}
 
@@ -449,7 +477,9 @@ MODEL *readModel(const char *filename, int now)
 		if (num != 1 || x < 0)
 		{
 			fprintf(stderr, "Bad TEXTUREARRAYS directive in %s, mesh %d.\n", filename, mesh);
-			exit(1);
+                        fclose(fp);
+                        freeModel(psModel);
+                        return NULL;
 		}
 		psMesh->textureArrays = x;
 		for (j = 0; j < psMesh->textureArrays; j++)
@@ -460,7 +490,9 @@ MODEL *readModel(const char *filename, int now)
 			if (num != 1 || x < 0 || x != j)
 			{
 				fprintf(stderr, "Bad TEXTUREARRAY directive in %s, mesh %d, array %d.\n", filename, mesh, j);
-				exit(1);
+                                fclose(fp);
+                                freeModel(psModel);
+                                return NULL;
 			}
 			psMesh->textureArray[j] = malloc(sizeof(GLfloat) * psMesh->vertices * 2);
 			for (k = 0; k < psMesh->vertices; k++)
@@ -471,7 +503,9 @@ MODEL *readModel(const char *filename, int now)
 				if (num != 2)
 				{
 					fprintf(stderr, "Bad TEXTUREARRAY entry mesh %d, array %d, number %d\n", mesh, j, k);
-					exit(1);
+                                        fclose(fp);
+                                        freeModel(psModel);
+                                        return NULL;
 				}
 			}
 		}
@@ -480,7 +514,9 @@ MODEL *readModel(const char *filename, int now)
 		if (num == EOF)
 		{
 			fprintf(stderr, "No INDEXARRAY directive in %s, mesh %d.\n", filename, mesh);
-			exit(1);
+                        fclose(fp);
+                        freeModel(psModel);
+                        return NULL;
 		}
 
 		for (j = 0; j < psMesh->faces; j++)
@@ -491,7 +527,9 @@ MODEL *readModel(const char *filename, int now)
 			if (num != 3)
 			{
 				fprintf(stderr, "Bad INDEXARRAY entry in mesh %d, number %d\n", mesh, j);
-				exit(1);
+                                fclose(fp);
+                                freeModel(psModel);
+                                return NULL;
 			}
 		}
 
@@ -500,7 +538,9 @@ MODEL *readModel(const char *filename, int now)
 		if (num != 1 || psMesh->frames < 0)
 		{
 			fprintf(stderr, "Bad FRAMES directive in mesh %d\n", mesh);
-			exit(1);
+                        fclose(fp);
+                        freeModel(psModel);
+                        return NULL;
 		}
 		if (psMesh->frames)
 		{
@@ -516,7 +556,9 @@ MODEL *readModel(const char *filename, int now)
 			if (num != 8)
 			{
 				fprintf(stderr, "Bad FRAMES entry in mesh %d, number %d\n", mesh, j);
-				exit(1);
+                                fclose(fp);
+                                freeModel(psModel);
+                                return NULL;
 			}
 		}
 
@@ -525,7 +567,9 @@ MODEL *readModel(const char *filename, int now)
 		if (num != 1 || psMesh->connectors < 0)
 		{
 			fprintf(stderr, "Bad CONNECTORS directive in mesh %d\n", mesh);
-			exit(1);
+                        fclose(fp);
+                        freeModel(psModel);
+                        return NULL;
 		}
 		if (psMesh->connectors)
 		{
@@ -548,7 +592,9 @@ MODEL *readModel(const char *filename, int now)
 			if (num != 4)
 			{
 				fprintf(stderr, "Bad CONNECTORS entry in mesh %d, number %d\n", mesh, j);
-				exit(1);
+                                fclose(fp);
+                                freeModel(psModel);
+                                return NULL;
 			}
 		}
 	}

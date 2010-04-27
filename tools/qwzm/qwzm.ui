@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>QWZM</class>
- <widget class="QMainWindow" name="QWZM" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="QWZM">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,15 +10,15 @@
     <height>600</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>The Warzone Model Post-production Program</string>
   </property>
-  <widget class="QWidget" name="centralwidget" >
-   <layout class="QVBoxLayout" name="verticalLayout" >
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="WZMOpenGLWidget" native="1" name="glView" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="MinimumExpanding" hsizetype="Preferred" >
+     <widget class="WZMOpenGLWidget" name="glView" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -25,17 +26,17 @@
      </widget>
     </item>
     <item>
-     <widget class="QGroupBox" name="groupBox" >
-      <property name="title" >
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
        <string/>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout" >
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <spacer name="horizontalSpacer" >
-         <property name="orientation" >
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>40</width>
            <height>20</height>
@@ -44,74 +45,94 @@
         </spacer>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3" >
+        <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QLabel" name="label_2" >
-           <property name="text" >
-            <string>Selected mesh</string>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Selected Mesh</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBoxSelectedMesh" />
+          <widget class="QComboBox" name="comboBoxSelectedMesh"/>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="Line" name="line" >
-         <property name="orientation" >
+        <widget class="Line" name="line">
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" >
+        <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QLabel" name="label" >
-           <property name="text" >
-            <string>Player</string>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Visible Mesh</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBoxTeam" >
+          <widget class="QComboBox" name="cb_visMesh">
            <item>
-            <property name="text" >
+            <property name="text">
+             <string>All</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Team Color</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBoxTeam">
+           <item>
+            <property name="text">
              <string>Green</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Yellow</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Grey</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Black</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Red</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Blue</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Pink</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Cyan</string>
             </property>
            </item>
@@ -119,13 +140,26 @@
          </item>
         </layout>
        </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar" >
-   <property name="geometry" >
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
@@ -133,195 +167,201 @@
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuImport_3DS" >
-    <property name="title" >
+   <widget class="QMenu" name="menuImport_3DS">
+    <property name="title">
      <string>File</string>
     </property>
-    <addaction name="separator" />
-    <addaction name="actionOpenWZM" />
-    <addaction name="actionImport_3DS" />
-    <addaction name="actionImport_OBJ" />
-    <addaction name="actionImport_PIE" />
-    <addaction name="actionSave" />
-    <addaction name="actionSaveAs" />
-    <addaction name="separator" />
-    <addaction name="actionQuit" />
+    <addaction name="separator"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionImport_3DS"/>
+    <addaction name="actionImport_OBJ"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
    </widget>
-   <widget class="QMenu" name="menuDisplay" >
-    <property name="title" >
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
      <string>View</string>
     </property>
-    <addaction name="actionAnimation" />
-    <addaction name="actionCulling" />
-    <addaction name="actionWireframe" />
-    <addaction name="actionAxis" />
-    <addaction name="actionHelp" />
+    <addaction name="actionAnimation"/>
+    <addaction name="actionCulling"/>
+    <addaction name="actionWireframe"/>
+    <addaction name="actionAxis"/>
+    <addaction name="actionHelp"/>
    </widget>
-   <widget class="QMenu" name="menuConversion" >
-    <property name="title" >
+   <widget class="QMenu" name="menuConversion">
+    <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionSwapYZ" />
-    <addaction name="actionReverseWinding" />
-    <addaction name="actionFlipVerticalTexCoords" />
-    <addaction name="actionScaleModel" />
+    <addaction name="actionSwapYZ"/>
+    <addaction name="actionReverseWinding"/>
+    <addaction name="actionFlipVerticalTexCoords"/>
+    <addaction name="actionScaleModel"/>
    </widget>
-   <widget class="QMenu" name="menuEdit" >
-    <property name="title" >
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="actionEditFrames" />
-    <addaction name="actionEditConnectors" />
+    <addaction name="actionEditFrames"/>
+    <addaction name="actionEditConnectors"/>
    </widget>
-   <addaction name="menuImport_3DS" />
-   <addaction name="menuEdit" />
-   <addaction name="menuDisplay" />
-   <addaction name="menuConversion" />
+   <addaction name="menuImport_3DS"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuDisplay"/>
+   <addaction name="menuConversion"/>
   </widget>
-  <action name="actionImport_3DS" >
-   <property name="enabled" >
+  <action name="actionImport_3DS">
+   <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Import 3DS...</string>
    </property>
   </action>
-  <action name="actionImport_OBJ" >
-   <property name="enabled" >
+  <action name="actionImport_OBJ">
+   <property name="enabled">
     <bool>false</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Import OBJ...</string>
    </property>
   </action>
-  <action name="actionImport_PIE" >
-   <property name="enabled" >
+  <action name="actionSave">
+   <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="text" >
-    <string>Import PIE...</string>
-   </property>
-  </action>
-  <action name="actionSave" >
-   <property name="enabled" >
-    <bool>true</bool>
-   </property>
-   <property name="text" >
+   <property name="text">
     <string>Save</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionSaveAs" >
-   <property name="enabled" >
+  <action name="actionSaveAs">
+   <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Save as...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
   </action>
-  <action name="actionQuit" >
-   <property name="text" >
+  <action name="actionQuit">
+   <property name="text">
     <string>Quit</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionAnimation" >
-   <property name="checkable" >
+  <action name="actionAnimation">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Animate</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+A</string>
    </property>
   </action>
-  <action name="actionCulling" >
-   <property name="checkable" >
+  <action name="actionCulling">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="checked" >
+   <property name="checked">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Culling</string>
    </property>
   </action>
-  <action name="actionWireframe" >
-   <property name="checkable" >
+  <action name="actionWireframe">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Wireframe</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+W</string>
    </property>
   </action>
-  <action name="actionHelp" >
-   <property name="checkable" >
+  <action name="actionHelp">
+   <property name="checkable">
     <bool>false</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Help</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+H</string>
    </property>
   </action>
-  <action name="actionAxis" >
-   <property name="checkable" >
+  <action name="actionAxis">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="checked" >
+   <property name="checked">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Show axis</string>
    </property>
-   <property name="shortcut" >
-    <string>Ctrl+A</string>
+   <property name="shortcut">
+    <string>A</string>
    </property>
   </action>
-  <action name="actionOpenWZM" >
-   <property name="text" >
+  <action name="actionOpen">
+   <property name="text">
     <string>Open</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionSwapYZ" >
-   <property name="text" >
+  <action name="actionSwapYZ">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
     <string>Swap Y and Z axis</string>
    </property>
   </action>
-  <action name="actionReverseWinding" >
-   <property name="text" >
+  <action name="actionReverseWinding">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
     <string>Reverse polygon winding</string>
    </property>
   </action>
-  <action name="actionFlipVerticalTexCoords" >
-   <property name="text" >
+  <action name="actionFlipVerticalTexCoords">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
     <string>Flip vertical texcoords</string>
    </property>
   </action>
-  <action name="actionScaleModel" >
-   <property name="text" >
+  <action name="actionScaleModel">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
     <string>Scale model</string>
    </property>
   </action>
-  <action name="actionEditFrames" >
-   <property name="text" >
+  <action name="actionEditFrames">
+   <property name="text">
     <string>Frames</string>
    </property>
   </action>
-  <action name="actionEditConnectors" >
-   <property name="text" >
+  <action name="actionEditConnectors">
+   <property name="text">
     <string>Connectors</string>
    </property>
   </action>

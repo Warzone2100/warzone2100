@@ -30,6 +30,7 @@
 extern "C" {
 #include "wzmutils.h"
 }
+
 #include "ui_qwzm.h"
 #include "ui_animationview.h"
 #include "ui_connectorview.h"
@@ -72,8 +73,7 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void saveAs();
 	void save();
 	void open3DS();
-	void openWZM();
-	void openPIE();
+        void open();
 	void toggleWireframe();
 	void toggleCulling();
 	void setTeam(int index);
@@ -89,8 +89,8 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void animLock();
 	void animUnlock();
 
-	void rowsChanged(const QModelIndex &parent, int start, int end);
-	void dataChanged(const QModelIndex &first, const QModelIndex &last);
+        void rowsChanged(const QModelIndex &parent, int start, int end);
+        void dataChanged(const QModelIndex &first, const QModelIndex &last);
 	void reloadFrames();
 
 	void prependFrame();
@@ -101,11 +101,14 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	QString filename;
 	MODEL *psModel;
 	QStandardItemModel anim, connectors;
-	void load3DS(QString input);
-	void loadPIE(QString input);
-	void setModel(QFileInfo &texPath);
+        MODEL *load3DS(QString input);
+        MODEL *loadPIE(QString input);
+        int savePIE(const char *filename, const MODEL *psModel, int pieVersion, int type);
+        void setModel(const QFileInfo &texPath);
 	QAnimViewer *animView;
 	QConnectorViewer *connectorView;
-};
 
+private slots:
+        void on_cb_visMesh_currentIndexChanged(int index);
+};
 #endif

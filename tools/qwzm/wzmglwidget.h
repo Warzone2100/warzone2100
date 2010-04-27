@@ -34,6 +34,7 @@ class WZMOpenGLWidget : public QGLViewer
 	void setTeam(int index);
 	void setAnimation(bool value);
 	void draw();
+        void selectMesh (int meshSelect);
 
 	protected:
 	void init();
@@ -43,6 +44,7 @@ class WZMOpenGLWidget : public QGLViewer
 	private:
 	MODEL *psModel;
 	int teamIndex;
+        int selectedMesh;
 	bool animation;
 	QTime timer;
 	int now;
