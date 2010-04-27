@@ -1,5 +1,6 @@
-# Heavily modified, to set a HEADER_H_CPPFLAGS variable (for a file called
-# header.h) instead of modifying CFLAGS/CPPFLAGS directly.
+# Heavily modified, to try without any added includes first, and to set a
+# HEADER_H_CPPFLAGS variable (for a file called header.h) instead of modifying
+# CFLAGS/CPPFLAGS directly.
 
 # ===========================================================================
 #    http://www.gnu.org/software/autoconf-archive/ax_ext_check_header.html
@@ -38,10 +39,16 @@ AC_DEFUN([AX_EXT_HAVE_HEADER],
 [AC_LANG_PUSH(C)
 	got="no"
 	hdr=`echo $1 | $as_tr_sh`
+	AC_CACHE_CHECK([for $1], [ext_cv_hashdr_${hdr}],
+	               AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <$1>])], [got="yes"], [got="no"]))
+	if test "x$got" = "xyes"; then
+		hdr=`echo $1 | $as_tr_cpp`
+		eval ${hdr}_CPPFLAGS=""
+	fi
 	for dir in $2; do
 		if test "x${got}" = "xno"; then
 			ext_hashdr_cvdir=`echo $dir | $as_tr_sh`
-			AC_CACHE_CHECK([for $1 library with -I$dir], [ext_cv${ext_hashdr_cvdir}_hashdr_${hdr}],
+			AC_CACHE_CHECK([for $1 with -I$dir], [ext_cv${ext_hashdr_cvdir}_hashdr_${hdr}],
 			               [ext_have_hdr_save_cflags=${CFLAGS} CFLAGS="${CFLAGS} -I${dir}"
 			               AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <$1>])],
 			                                 [got="yes"; eval "ext_cv${ext_hashdr_cvdir}_hashdr_${hdr}"="yes"],
