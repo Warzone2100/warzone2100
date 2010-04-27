@@ -28,7 +28,7 @@
  * The water is drawn using the hardcoded page-80 and page-81 textures. 
  */
 
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 #include <string.h>
 
 #include "lib/framework/frame.h"
