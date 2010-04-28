@@ -1392,7 +1392,6 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 	SDWORD		neighbourType, scanType;
 	STRUCTURE_STATS	*psStats;
 	UDWORD		sx,sy;
-	UDWORD		oldBuildPoints;
 
 	// scan around the location looking for walls
 	memset(aWallPresent, 0, sizeof(aWallPresent));
@@ -1405,7 +1404,8 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 			(psStruct->pStructureType->type == REF_WALL ||
 			psStruct->pStructureType->type == REF_GATE ||
 			psStruct->pStructureType->type == REF_WALLCORNER ||
-			psStruct->pStructureType->type == REF_DEFENSE))
+			(psStruct->pStructureType->type == REF_DEFENSE && psStruct->pStructureType->strength == STRENGTH_HARD) || 
+			(psStruct->pStructureType->type == REF_BLASTDOOR && psStruct->pStructureType->strength == STRENGTH_HARD))) // fortresses
 		{
 			aWallPresent[xdiff+2][ydiff+2] = true;
 			apsStructs[xdiff+2][ydiff+2] = psStruct;
@@ -1454,37 +1454,23 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 						// change to a corner
 						if (psStruct->pStructureType->asFuncList[0]->type == WALL_TYPE)
 						{
-							const int oldBody = psStruct->body;
+							const int     oldBody = psStruct->body;
+							UDWORD        oldBuildPoints = psStruct->currentBuildPts;
+							STRUCT_STATES oldStatus = psStruct->status;
 
-							/* Still being built - so save and load build points */
-							if(psStruct->status == SS_BEING_BUILT)
+							psStats = ((WALL_FUNCTION *)psStruct->pStructureType->asFuncList[0])->pCornerStat;
+							sx = psStruct->pos.x; sy = psStruct->pos.y;
+							removeStruct(psStruct, true);
+							powerCalc(false);
+							psStruct = buildStructure(psStats, sx,sy, player, true);
+							powerCalc(true);
+							if (psStruct != NULL)
 							{
-								oldBuildPoints = psStruct->currentBuildPts;
-								psStats = ((WALL_FUNCTION *)psStruct->pStructureType->asFuncList[0])->pCornerStat;
-								sx = psStruct->pos.x; sy = psStruct->pos.y;
-								removeStruct(psStruct, true);
-								powerCalc(false);
-								psStruct = buildStructure(psStats, sx,sy, player, true);
-								powerCalc(true);
-								if(psStruct !=NULL)
+								psStruct->status = oldStatus;
+								psStruct->body = oldBody;
+								psStruct->currentBuildPts = (SWORD)oldBuildPoints;
+								if (oldStatus != SS_BEING_BUILT)
 								{
-									psStruct->status = SS_BEING_BUILT;
-									psStruct->body = oldBody;
-									psStruct->currentBuildPts = (SWORD)oldBuildPoints;
-								}
-							}
-							else
-							{
-								psStats = ((WALL_FUNCTION *)psStruct->pStructureType->asFuncList[0])->pCornerStat;
-								sx = psStruct->pos.x; sy = psStruct->pos.y;
-								removeStruct(psStruct, true);
-								powerCalc(false);
-								psStruct = buildStructure(psStats, sx,sy, player, true);
-								powerCalc(true);
-								if(psStruct !=NULL)
-								{
-									psStruct->status = SS_BUILT;
-									psStruct->body = oldBody;
 									buildingComplete(psStruct);
 								}
 							}
