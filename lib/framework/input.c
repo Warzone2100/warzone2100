@@ -328,7 +328,7 @@ void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 					&& buttonEvent->button != SDL_BUTTON_WHEELDOWN))
 				{
 				//whether double click or not
-					if ( gameTime - aMouseState[buttonEvent->button].lastdown < DOUBLE_CLICK_INTERVAL )
+					if ( gameTime2 - aMouseState[buttonEvent->button].lastdown < DOUBLE_CLICK_INTERVAL )
 					{
 						aMouseState[buttonEvent->button].state = KEY_DOUBLECLICK;
 						aMouseState[buttonEvent->button].lastdown = 0;
@@ -336,7 +336,7 @@ void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 					else
 					{
 						aMouseState[buttonEvent->button].state = KEY_PRESSED;
-						aMouseState[buttonEvent->button].lastdown = gameTime;
+						aMouseState[buttonEvent->button].lastdown = gameTime2;
 					}
 
 				}
