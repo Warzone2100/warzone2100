@@ -137,13 +137,6 @@ void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
 		sBuildDetails.width = ((STRUCTURE_STATS *)psStats)->baseWidth;
 		sBuildDetails.height = ((STRUCTURE_STATS *)psStats)->baseBreadth;
 		sBuildDetails.psStats = psStats;
-
-		// hack to increase the size of repair facilities
-		if (((STRUCTURE_STATS *)psStats)->type == REF_REPAIR_FACILITY)
-		{
-			sBuildDetails.width += 2;
-			sBuildDetails.height += 2;
-		}
 	}
 	else if (psStats->ref >= REF_FEATURE_START &&
 			 psStats->ref < (REF_FEATURE_START + REF_RANGE))
@@ -188,12 +181,6 @@ BOOL process3DBuilding(void)
   	{
 		bX = mouseTileX;
 		bY = mouseTileY;
-		// lovely hack to make the repair facility 3x3 - need to offset the position by 1
-		if (((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REPAIR_FACILITY)
-		{
-			bX += 1;
-			bY += 1;
-		}
 
       	if (validLocation(sBuildDetails.psStats, bX, bY, selectedPlayer, true))
         {
@@ -269,13 +256,6 @@ BOOL found3DBuilding(UDWORD *x, UDWORD *y)
 
 	*x = sBuildDetails.x;
 	*y = sBuildDetails.y;
-
-	// lovely hack to make the repair facility 3x3 - need to offset the position by 1
-	if (((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REPAIR_FACILITY)
-	{
-		*x += 1;
-		*y += 1;
-	}
 
 	buildState = BUILD3D_NONE;
 

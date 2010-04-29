@@ -4214,14 +4214,6 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 		site.xBR = (UWORD)(x + psBuilding->baseWidth - 1);
 		site.yBR = (UWORD)(y + psBuilding->baseBreadth - 1);
 
-		// increase the size of a repair facility
-		if (psBuilding->type == REF_REPAIR_FACILITY)
-		{
-			site.xTL -= 1;
-			site.yTL -= 1;
-			site.xBR += 1;
-			site.yBR += 1;
-		}
 		//if we're dragging the wall/defense we need to check along the current dragged size
 		if (wallDrag.status != DRAG_INACTIVE
 			&& (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE || psBuilding->type == REF_REARM_PAD ||  psBuilding->type == REF_GATE)
@@ -4336,30 +4328,6 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 		}
 	}
 
-	// can't build next to a repair facility
-	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
-	{
-		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
-		{
-			// get the top left of the struct
-			i = map_coord(psStruct->pos.x) - 1;
-			j = map_coord(psStruct->pos.y) - 1;
-
-			// see if the x extents overlap
-			if ((site.xTL >= i && site.xTL <= (i+2)) ||
-				(site.xBR >= i && site.xBR <= (i+2)))
-			{
-				// now see if y extents overlap
-				if ((site.yTL >= j && site.yTL <= (j+2)) ||
-					(site.yBR >= j && site.yBR <= (j+2)))
-				{
-					valid = false;
-					goto failed;
-				}
-			}
-		}
-	}
-
 	if (psStats->ref >= REF_STRUCTURE_START &&
 		psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 	{
@@ -4419,38 +4387,6 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 					}
 				}
 
-				// special droid/max-min test for repair facility
-				if ( valid && (psBuilding->type == REF_REPAIR_FACILITY))
-				{
-					getTileMaxMin(x, y, &max, &min);
-					if ((max - min) > MAX_INCLINE)
-					{
-						valid = false;
-					}
-					if (valid &&
-						!noDroid(x,y))
-					{
-						valid = false;
-					}
-				}
-
-				if (valid &&	// only do if necessary
-					(psBuilding->type != REF_REPAIR_FACILITY))
-				{
-					for (i = site.xTL; i <= site.xBR && valid; i++)
-					{
-						for (j = site.yTL; j <= site.yBR && valid; j++)
-						{
-							// This really needs to check to see if the droid that's in the way is the droid that wants to build
-							// in which case it should'nt invalidate the location.
-							if(noDroid(i,j) == false)
-							{
-								valid = false;
-							}
-						}
-					}
-				}
-
 				//walls/defensive structures can be built along any ground
 				if (valid &&	// only do if necessary
 					(!(psBuilding->type == REF_REPAIR_FACILITY ||
@@ -4475,68 +4411,54 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 				//don't bother checking if already found a problem
 				if (valid)
 				{
-					//on PC - defence structures can be built next to anything now- AB 22/09/98
-					//and the Missile_Silo (special case) - AB 01/03/99
-					if (!(psBuilding->type == REF_DEFENSE ||
-						psBuilding->type == REF_WALL ||
-						psBuilding->type == REF_WALLCORNER ||
-						psBuilding->type == REF_GATE ||
-						psBuilding->type == REF_REARM_PAD ||
-						psBuilding->type == REF_MISSILE_SILO))
+					/* need to check there is one tile between buildings */
+					for (i = (UWORD)(site.xTL-1); i <= (UWORD)(site.xBR+1); i++)
 					{
-						/*need to check there is one tile between buildings*/
-						for (i = (UWORD)(site.xTL-1); i <= (UWORD)(site.xBR+1); i++)
+						for (j = (UWORD)(site.yTL-1); j <= (UWORD)(site.yBR+1); j++)
 						{
-							for (j = (UWORD)(site.yTL-1); j <= (UWORD)(site.yBR+1); j++)
+							//skip the actual area the structure will cover
+							if (i < site.xTL || i > site.xBR ||
+								j < site.yTL || j > site.yBR)
 							{
-								//skip the actual area the structure will cover
-								if (i < site.xTL || i > site.xBR ||
-									j < site.yTL || j > site.yBR)
-								{
-									if (TileHasStructure(mapTile(i,j)))
-									{
-										psStruct = getTileStructure(i,j);
-										if (psStruct)
-										{
-											//you can build anything next to a defensive structure
-											if ((psStruct->pStructureType->type != REF_DEFENSE) &&
-												(psStruct->pStructureType->type != REF_WALL)	&&
-												(psStruct->pStructureType->type != REF_WALLCORNER)
-											)
-											{
-												//Walls can be built next to walls and defenses - AB 03/03/99
-												if (psBuilding->type == REF_WALL)
-												{
-													if (!(psStruct->pStructureType->type == REF_WALL ||
-													psStruct->pStructureType->type == REF_WALLCORNER))
-													{
-														valid = false;
-													}
-												}
-												else
-												{
-													valid = false;
-												}
-											}
-											else	// is a defense.
-											{		// skirmish players don't build defensives next to each other.(route hack)
-												if( bMultiPlayer && game.type == SKIRMISH && !isHumanPlayer(player) )
-												{
-													valid = false;
-												}
-											}
-										}
-									}
-									//cannot build within one tile of a oil resource
-									if(TileHasFeature(mapTile(i,j)))
-									{
-										FEATURE	*psFeat = getTileFeature(i, j);
+								FEATURE	*psFeat;
 
-										if (psFeat && psFeat->psStats->subType ==
-											FEAT_OIL_RESOURCE)
+								if (TileHasStructure(mapTile(i,j)) && (psStruct = getTileStructure(i,j)))
+								{
+									if (psBuilding->type == REF_REPAIR_FACILITY ||
+									    psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+									{
+										valid = false;
+									}
+									// these can be built next to anything
+									else if (!(psBuilding->type == REF_DEFENSE ||
+										  psBuilding->type == REF_WALL ||
+										  psBuilding->type == REF_WALLCORNER ||
+										  psBuilding->type == REF_GATE ||
+										  psBuilding->type == REF_REARM_PAD ||
+										  psBuilding->type == REF_MISSILE_SILO))
+									{
+										if (!(psStruct->pStructureType->type == REF_DEFENSE ||
+											  psStruct->pStructureType->type == REF_WALL ||
+											  psStruct->pStructureType->type == REF_WALLCORNER ||
+											  psStruct->pStructureType->type == REF_GATE ||
+											  psStruct->pStructureType->type == REF_REARM_PAD ||
+											  psStruct->pStructureType->type == REF_MISSILE_SILO))
 										{
 											valid = false;
 										}
+										// skirmish AIs don't build nondefensives next to anything. (route hack)
+										else if (bMultiPlayer && game.type == SKIRMISH && !isHumanPlayer(player))
+										{
+											valid = false;
+										}
+									}
+								}
+								//cannot build within one tile of a oil resource
+								if (TileHasFeature(mapTile(i,j)) && (psFeat = getTileFeature(i, j)))
+								{
+									if (psFeat->psStats->subType == FEAT_OIL_RESOURCE)
+									{
+										valid = false;
 									}
 								}
 							}
@@ -4680,15 +4602,6 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 										psOrderTarget)->baseBreadth;
 									up = map_coord(psDroid->asOrderList[order].y) - size/2;
 									down = up + size;
-									// increase the size of a repair facility
-									if (((STRUCTURE_STATS *)psDroid->asOrderList[
-										order].psOrderTarget)->type == REF_REPAIR_FACILITY)
-									{
-										left -= 1;
-										up -= 1;
-										right += 1;
-										down += 1;
-									}
 									if (((left > site.xTL-1 && left <= site.xBR+1) &&
 										(up > site.yTL-1 && up <= site.yBR+1)) ||
 										((right > site.xTL-1 && right <= site.xBR+1) &&
