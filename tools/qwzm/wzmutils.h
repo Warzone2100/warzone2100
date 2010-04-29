@@ -45,7 +45,10 @@ typedef int bool;
 #define MAX_TEXARRAYS 16
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
-typedef struct { float x, y, z; } Vector3f;
+typedef struct
+{
+	float x, y, z;
+} Vector3f;
 
 typedef struct
 {

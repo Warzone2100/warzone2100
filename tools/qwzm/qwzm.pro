@@ -1,19 +1,19 @@
 FORMS += qwzm.ui \
-    pieexport.ui
+	pieexport.ui
 SOURCES += qwzm.cpp \
-    wzmutils.c \
-    wzmglwidget.cpp \
-    conversion.cpp
+	wzmutils.c \
+	wzmglwidget.cpp \
+	conversion.cpp
 HEADERS += qwzm.h \
-    wzmutils.h \
-    wzmglwidget.h \
-    conversion.h \
-    qhexspinbox.h
+	wzmutils.h \
+	wzmglwidget.h \
+	conversion.h \
+	qhexspinbox.h
 TEMPLATE = app
 CONFIG += debug \
-    warn_on \
-    qt \
-    precompile_header
+	warn_on \
+	qt \
+	precompile_header
 TARGET = qwzm
 
 # If your system uses different paths for QGLViewer, create a file named
@@ -21,10 +21,9 @@ TARGET = qwzm
 QGLVIEWER_INCL = /usr/include/QGLViewer
 QGLVIEWER_LIBS = -lQGLViewer
 include("config")
-INCLUDEPATH += ../display \
-    $$QGLVIEWER_INCL
+INCLUDEPATH += $$QGLVIEWER_INCL
 LIBS += -l3ds \
-    -lm \
-    $$QGLVIEWER_LIBS
+	-lm \
+	$$QGLVIEWER_LIBS
 QT += opengl \
-    xml
+	xml

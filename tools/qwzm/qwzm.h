@@ -21,7 +21,8 @@
 
 #include "ui_qwzm.h"
 
-extern "C" {
+extern "C"
+{
 #include "wzmutils.h"
 }
 
@@ -38,25 +39,25 @@ extern "C" {
 
 class QWzmViewer : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
-    public:
+public:
 	QWzmViewer(QWidget *parent = 0);
 	~QWzmViewer();
 
-    protected:
-        void closeEvent(QCloseEvent *event);
-        MODEL *load3DS(QString input);
-        MODEL *loadPIE(QString input);
-        int savePIE(const char *filename, const MODEL *psModel, int pieVersion, int type);
-        void setModel(const QFileInfo &texPath);
+protected:
+	void closeEvent(QCloseEvent *event);
+	MODEL *load3DS(QString input);
+	MODEL *loadPIE(QString input);
+	int savePIE(const char *filename, const MODEL *psModel, int pieVersion, int type);
+	void setModel(const QFileInfo &texPath);
 
-    protected slots:
-        void actionOpen();
-        void actionSaveAs();
-        void actionSave();
+protected slots:
+	void actionOpen();
+	void actionSaveAs();
+	void actionSave();
 	void open3DS();
-        void actionAboutApplication();
+	void actionAboutApplication();
 	void toggleWireframe();
 	void toggleCulling();
 	void setTeam(int index);
@@ -67,31 +68,31 @@ class QWzmViewer : public QMainWindow
 	void toggleReverseWinding();
 	void toggleFlipVerticalTexCoords();
 	void setMesh(int index);
-        void toggleEditAnimation(bool show);
-        void toggleEditConnectors(bool show);
+	void toggleEditAnimation(bool show);
+	void toggleEditConnectors(bool show);
 	void animLock();
 	void animUnlock();
-        void setVisibleMesh(int index);
+	void setVisibleMesh(int index);
 
-        void rowsChanged(const QModelIndex &parent, int start, int end);
-        void dataChanged(const QModelIndex &first, const QModelIndex &last);
+	void rowsChanged(const QModelIndex &parent, int start, int end);
+	void dataChanged(const QModelIndex &first, const QModelIndex &last);
 	void reloadFrames();
 
 	void prependFrame();
 	void appendFrame();
 	void removeFrame();
 
-    private:
-        Ui::MainWindow *ui;
-        MODEL *psModel;
-        QString filename;
-        QStandardItemModel animationModel;
-        QStandardItemModel connectorsModel;
-        QComboBox *selectedMeshComboBox;
-        QComboBox *visibleMeshComboBox;
-        QComboBox *teamComboBox;
-        QSlider *scaleSlider;
-        QLabel *fileNameLabel;
-        QTimer *timer;
+private:
+	Ui::MainWindow *ui;
+	MODEL *psModel;
+	QString filename;
+	QStandardItemModel animationModel;
+	QStandardItemModel connectorsModel;
+	QComboBox *selectedMeshComboBox;
+	QComboBox *visibleMeshComboBox;
+	QComboBox *teamComboBox;
+	QSlider *scaleSlider;
+	QLabel *fileNameLabel;
+	QTimer *timer;
 };
 #endif
