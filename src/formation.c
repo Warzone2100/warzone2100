@@ -135,7 +135,7 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 		// line to the right
 		psNew->asLines[1].xoffset = 0;
 		psNew->asLines[1].yoffset = 0;
-		psNew->asLines[1].direction = dir - DEG(110);
+		psNew->asLines[1].direction = dir + DEG(110);
 		psNew->asLines[1].member = -1;
 		break;
 	case FT_COLUMN:
@@ -143,7 +143,7 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 		// line to the left
 		psNew->asLines[0].xoffset = 0;
 		psNew->asLines[0].yoffset = 0;
-		psNew->asLines[0].direction = dir - DEG(180);
+		psNew->asLines[0].direction = dir + DEG(180);
 		psNew->asLines[0].member = -1;
 		break;
 	default:
@@ -341,7 +341,7 @@ static void formationCalcPos(FORMATION *psFormation, SDWORD line, SDWORD dist,
 	const int rank = dist / psFormation->size;
 
 	// calculate the offset of the line based on the rank
-	uint16_t dir = psFormation->direction - DEG(180);
+	uint16_t dir = psFormation->direction + DEG(180);
 	const int xoffset = iSinR(dir, psFormation->rankDist * rank) + psFormation->asLines[line].xoffset;
 	const int yoffset = iCosR(dir, psFormation->rankDist * rank) + psFormation->asLines[line].yoffset;
 
