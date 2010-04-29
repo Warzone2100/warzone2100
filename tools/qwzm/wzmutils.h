@@ -95,7 +95,7 @@ PIXMAP *readPixmap(const char *filename);
 MODEL *readModel(const char *filename, int now);
 int saveModel(const char *filename, MODEL *psModel);
 void freeModel(MODEL *psModel);
-void drawModel(MODEL *psModel, int now);
+void drawModel(MODEL *psModel, int now, int meshSelect);
 void prepareModel(MODEL *psModel);
 
 #endif

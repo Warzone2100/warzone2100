@@ -1,11 +1,11 @@
 FORMS += qwzm.ui \
     pieexport.ui
 SOURCES += qwzm.cpp \
-    ../display/wzmutils.c \
+    wzmutils.c \
     wzmglwidget.cpp \
     conversion.cpp
 HEADERS += qwzm.h \
-    ../display/wzmutils.h \
+    wzmutils.h \
     wzmglwidget.h \
     conversion.h \
     qhexspinbox.h
