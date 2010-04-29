@@ -19,247 +19,203 @@
 #include "qwzm.h"
 #include "conversion.h"
 
-QConnectorViewer::QConnectorViewer(QWidget *parent)
-           : QDialog(parent), Ui_ConnectorView()
+#include <QtCore/QSettings>
+#include <QtGui/QFileDialog>
+#include <QtGui/QMessageBox>
+
+
+QWzmViewer::QWzmViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow()), psModel(NULL), timer(new QTimer(this))
 {
-	setupUi(this);
-	connect(pushButtonClose, SIGNAL(pressed()), this, SLOT(hide()));
-        pushButtonPrepend->setDisabled(true);
-        pushButtonAppend->setDisabled(true);
-        pushButtonRemove->setDisabled(true);
-//	connect(pushButtonPrepend, SIGNAL(pressed()), parent, SLOT(prependConnector()));
-//	connect(pushButtonAppend, SIGNAL(pressed()), parent, SLOT(appendConnector()));
-//	connect(pushButtonRemove, SIGNAL(pressed()), parent, SLOT(removeConnector()));
-}
+    QSettings settings;
+    ui->setupUi(this);
 
-void QConnectorViewer::setModel(QStandardItemModel *model)
-{
-	tableView->setModel(model);
-	tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-	tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-}
+    connectorsModel.setColumnCount(4);
+    connectorsModel.setHeaderData(0, Qt::Horizontal, QString("X"));
+    connectorsModel.setHeaderData(1, Qt::Horizontal, QString("Y"));
+    connectorsModel.setHeaderData(2, Qt::Horizontal, QString("Z"));
+    connectorsModel.setHeaderData(3, Qt::Horizontal, QString(tr("Type")));
 
-QModelIndex QConnectorViewer::selectedIndex()
-{
-	return tableView->currentIndex();
-}
+    animationModel.setColumnCount(8);
+    animationModel.setHeaderData(0, Qt::Horizontal, QString(tr("Time")));
+    animationModel.setHeaderData(1, Qt::Horizontal, QString("Tex"));
+    animationModel.setHeaderData(2, Qt::Horizontal, QString("Trs X"));
+    animationModel.setHeaderData(3, Qt::Horizontal, QString("Trs Y"));
+    animationModel.setHeaderData(4, Qt::Horizontal, QString("Trs Z"));
+    animationModel.setHeaderData(5, Qt::Horizontal, QString("Rot X"));
+    animationModel.setHeaderData(6, Qt::Horizontal, QString("Rot Y"));
+    animationModel.setHeaderData(7, Qt::Horizontal, QString("Rot Z"));
 
-void QConnectorViewer::setSelectedIndex(int idx)
-{
-	tableView->setCurrentIndex(tableView->model()->index(idx, 0));
-}
+    fileNameLabel = new QLabel(tr("No file loaded"), ui->statusBar);
 
-void QConnectorViewer::updateModel()
-{
-	tableView->resizeColumnsToContents();
-}
+    selectedMeshComboBox = new QComboBox(ui->statusBar);
+    selectedMeshComboBox->setToolTip(tr("Selected Mesh"));
+    selectedMeshComboBox->setEnabled(false);
 
-QConnectorViewer::~QConnectorViewer()
-{
-}
+    visibleMeshComboBox = new QComboBox(ui->statusBar);
+    visibleMeshComboBox->setEnabled(false);
+    visibleMeshComboBox->setToolTip(tr("Visible Mesh"));
+    visibleMeshComboBox->addItem(tr("All"));
 
-QAnimViewer::QAnimViewer(QWidget *parent)
-           : QDialog(parent), Ui_AnimationView()
-{
-	setupUi(this);
-	connect(pushButtonClose, SIGNAL(pressed()), this, SLOT(hide()));
-	connect(pushButtonPrepend, SIGNAL(pressed()), parent, SLOT(prependFrame()));
-	connect(pushButtonAppend, SIGNAL(pressed()), parent, SLOT(appendFrame()));
-	connect(pushButtonRemove, SIGNAL(pressed()), parent, SLOT(removeFrame()));
-}
+    teamComboBox = new QComboBox(ui->statusBar);
+    teamComboBox->setToolTip(tr("Team Colour"));
+    teamComboBox->addItem(tr("Green"));
+    teamComboBox->addItem(tr("Yellow"));
+    teamComboBox->addItem(tr("Grey"));
+    teamComboBox->addItem(tr("Black"));
+    teamComboBox->addItem(tr("Red"));
+    teamComboBox->addItem(tr("Blue"));
+    teamComboBox->addItem(tr("Pink"));
+    teamComboBox->addItem(tr("Cyan"));
 
-void QAnimViewer::setModel(QStandardItemModel *model)
-{
-	tableViewAnimation->setModel(model);
-	tableViewAnimation->setSelectionMode(QAbstractItemView::SingleSelection);
-	tableViewAnimation->setSelectionBehavior(QAbstractItemView::SelectRows);
-}
+    scaleSlider = new QSlider(ui->statusBar);
+    scaleSlider->setToolTip(tr("Scale"));
+    scaleSlider->setRange(1, 1000);
+    scaleSlider->setValue(100);
+    scaleSlider->setOrientation(Qt::Horizontal);
+    scaleSlider->setEnabled(false);
 
-QModelIndex QAnimViewer::selectedIndex()
-{
-	return tableViewAnimation->currentIndex();
-}
+    ui->statusBar->addPermanentWidget(fileNameLabel);
+    ui->statusBar->addPermanentWidget(selectedMeshComboBox);
+    ui->statusBar->addPermanentWidget(visibleMeshComboBox);
+    ui->statusBar->addPermanentWidget(teamComboBox);
+    ui->statusBar->addPermanentWidget(scaleSlider);
 
-void QAnimViewer::setSelectedIndex(int idx)
-{
-	tableViewAnimation->setCurrentIndex(tableViewAnimation->model()->index(idx, 0));
-}
+    ui->connectorTableView->setModel(&connectorsModel);
+    ui->animationTableView->setModel(&animationModel);
 
-void QAnimViewer::updateModel()
-{
-	tableViewAnimation->resizeColumnsToContents();
-}
+    ui->animationDockWidget->hide();
+    ui->connectorDockWidget->hide();
 
-QAnimViewer::~QAnimViewer()
-{
-}
+    connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
+    connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(actionOpen()));
+    connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(actionSave()));
+    connect(ui->actionSaveAs, SIGNAL(triggered()), this, SLOT(actionSaveAs()));
+    connect(ui->actionQuit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
+    connect(ui->actionImport_3DS, SIGNAL(triggered()), this, SLOT(open3DS()));
+    connect(ui->actionWireframe, SIGNAL(triggered()), this, SLOT(toggleWireframe()));
+    connect(ui->actionHelpContents, SIGNAL(triggered()), ui->glView, SLOT(help()));
+    connect(ui->actionAboutQt, SIGNAL(triggered()), QApplication::instance(), SLOT(aboutQt()));
+    connect(ui->actionAboutApplication, SIGNAL(triggered()), this, SLOT(actionAboutApplication()));
+    connect(ui->actionAxis, SIGNAL(triggered()), ui->glView, SLOT(toggleAxisIsDrawn()));
+    connect(ui->actionCulling, SIGNAL(triggered()), this, SLOT(toggleCulling()));
+    connect(ui->actionAnimation, SIGNAL(triggered()), this, SLOT(toggleAnimation()));
+    connect(ui->actionScaleModel, SIGNAL(triggered()), this, SLOT(toggleScale()));
+    connect(selectedMeshComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setMesh(int)));
+    connect(visibleMeshComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setVisibleMesh(int)));
+    connect(teamComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setTeam(int)));
+    connect(ui->actionSwapYZ, SIGNAL(triggered()), this, SLOT(toggleSwapYZ()));
+    connect(ui->actionReverseWinding, SIGNAL(triggered()), this, SLOT(toggleReverseWinding()));
+    connect(ui->actionFlipVerticalTexCoords, SIGNAL(triggered()), this, SLOT(toggleFlipVerticalTexCoords()));
+    connect(ui->actionFramesEditor, SIGNAL(toggled(bool)), this, SLOT(toggleEditAnimation(bool)));
+    connect(ui->actionConnectorsEditor, SIGNAL(toggled(bool)), this, SLOT(toggleEditConnectors(bool)));
+    connect(ui->animationDockWidget, SIGNAL(visibilityChanged(bool)), ui->actionFramesEditor, SLOT(setChecked(bool)));
+    connect(ui->connectorDockWidget, SIGNAL(visibilityChanged(bool)), ui->actionConnectorsEditor, SLOT(setChecked(bool)));
+    connect(ui->prependFrameButton, SIGNAL(pressed()), this, SLOT(prependFrame()));
+    connect(ui->appendFrameButton, SIGNAL(pressed()), this, SLOT(appendFrame()));
+    connect(ui->removeFrameButton, SIGNAL(pressed()), this, SLOT(removeFrame()));
 
-QWzmViewer::QWzmViewer(QWidget *parent)
-           : QMainWindow(parent), Ui::QWZM()
-{
-	psModel = NULL;
-	QTimer *timer = new QTimer(this);
+    // Set defaults
+    toggleAnimation();
 
-	setupUi(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
-	connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
-	connect(actionSave, SIGNAL(triggered()), this, SLOT(save()));
-	connect(actionSaveAs, SIGNAL(triggered()), this, SLOT(saveAs()));
-	connect(actionImport_3DS, SIGNAL(triggered()), this, SLOT(open3DS()));
-        connect(actionOpen, SIGNAL(triggered()), this, SLOT(open()));
-	connect(actionWireframe, SIGNAL(triggered()), this, SLOT(toggleWireframe()));
-	connect(actionHelp, SIGNAL(triggered()), glView, SLOT(help()));
-	connect(actionAxis, SIGNAL(triggered()), glView, SLOT(toggleAxisIsDrawn()));
-	connect(actionCulling, SIGNAL(triggered()), this, SLOT(toggleCulling()));
-	connect(actionAnimation, SIGNAL(triggered()), this, SLOT(toggleAnimation()));
-	connect(actionScaleModel, SIGNAL(triggered()), this, SLOT(toggleScale()));
-	connect(comboBoxTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(setTeam(int)));
-	connect(comboBoxSelectedMesh, SIGNAL(currentIndexChanged(int)), this, SLOT(setMesh(int)));
-	connect(actionSwapYZ, SIGNAL(triggered()), this, SLOT(toggleSwapYZ()));
-	connect(actionReverseWinding, SIGNAL(triggered()), this, SLOT(toggleReverseWinding()));
-	connect(actionFlipVerticalTexCoords, SIGNAL(triggered()), this, SLOT(toggleFlipVerticalTexCoords()));
-	connect(actionEditFrames, SIGNAL(triggered()), this, SLOT(toggleEditAnimation()));
-	connect(actionEditConnectors, SIGNAL(triggered()), this, SLOT(toggleEditConnectors()));
+    ui->actionSave->setEnabled(false);
+    ui->actionSaveAs->setEnabled(false);
 
-	// Set defaults
-	toggleAnimation();
-	actionSave->setEnabled(false);
-	actionSaveAs->setEnabled(false);
+    restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState(settings.value("windowState").toByteArray());
 
-	connectorView = new QConnectorViewer(this);
-	connectors.setColumnCount(4);
-	connectors.setHeaderData(0, Qt::Horizontal, QString("X"));
-	connectors.setHeaderData(1, Qt::Horizontal, QString("Y"));
-	connectors.setHeaderData(2, Qt::Horizontal, QString("Z"));
-	connectors.setHeaderData(3, Qt::Horizontal, QString("Type"));
-	connectorView->setModel(&connectors);
-
-	animView = new QAnimViewer(this);
-	anim.setColumnCount(8);
-	anim.setHeaderData(0, Qt::Horizontal, QString("Time"));
-	anim.setHeaderData(1, Qt::Horizontal, QString("Tex"));
-	anim.setHeaderData(2, Qt::Horizontal, QString("Trs X"));
-	anim.setHeaderData(3, Qt::Horizontal, QString("Trs Y"));
-	anim.setHeaderData(4, Qt::Horizontal, QString("Trs Z"));
-	anim.setHeaderData(5, Qt::Horizontal, QString("Rot X"));
-	anim.setHeaderData(6, Qt::Horizontal, QString("Rot Y"));
-	anim.setHeaderData(7, Qt::Horizontal, QString("Rot Z"));
-	animView->setModel(&anim);
-
-	timer->start(25);
+    timer->start(25);
 }
 
 QWzmViewer::~QWzmViewer()
 {
+    delete ui;
 }
 
-void QWzmViewer::toggleEditAnimation()
+void QWzmViewer::closeEvent(QCloseEvent *event)
 {
-	animView->show();
+    QSettings settings;
+
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("windowState", saveState());
+
+    QMainWindow::closeEvent(event);
 }
 
-void QWzmViewer::toggleEditConnectors()
+void QWzmViewer::actionOpen()
 {
-	connectorView->show();
+        static QString lastDir; // Convenience HACK to remember last succesful directory a model was loaded from.
+        filename = QFileDialog::getOpenFileName(this, tr("Choose a PIE or WZM file"), lastDir, tr("All Compatible (*.wzm *.pie);;WZM models (*.wzm);;PIE models (*.pie)"));
+        if (!filename.isEmpty())
+        {
+                QFileInfo theFile(filename);
+                MODEL *tmpModel = NULL;
+
+                if (theFile.completeSuffix().compare(QString("wzm"),Qt::CaseInsensitive) == 0)
+                {
+                        tmpModel = readModel(filename.toAscii().constData(), 0);
+                }
+                else if (theFile.completeSuffix().compare(QString("pie"),Qt::CaseInsensitive) == 0)
+                {
+                        tmpModel = loadPIE(filename);
+                }
+                else
+                {
+                        return;
+                }
+
+                if (tmpModel)
+                {
+
+                        QFileInfo texPath(theFile.absoluteDir(),tmpModel->texPath);
+
+                        // Try to find texture automatically
+                        if (!texPath.exists())
+                        {
+                                texPath.setFile(QString("../../data/base/texpages/"), tmpModel->texPath);
+                                if (!texPath.exists())
+                                {
+                                        texPath.setFile(QFileDialog::getExistingDirectory(this, tr("Specify texture directory"), QString::null), tmpModel->texPath);
+                                        if (!texPath.exists())
+                                        {
+                                                QMessageBox::warning(this, tr("Oops..."), "Could not find texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+                                                freeModel(tmpModel);
+                                                return;
+                                        }
+                                }
+                        }
+                        if (psModel)
+                        {
+                            freeModel(psModel);
+                        }
+                        psModel = tmpModel;
+                        setModel(texPath);
+                        ui->actionSave->setEnabled(true);
+                        lastDir = theFile.absolutePath();
+                        fileNameLabel->setText(theFile.fileName());
+                        fileNameLabel->setToolTip(filename);
+                }
+                else
+                {
+                        qWarning("Failed to create model!");
+
+                        ui->statusBar->showMessage(tr("Failed to create model!"), 3000);
+                }
+        }
 }
 
-void QWzmViewer::setTeam(int index)
+void QWzmViewer::actionSaveAs()
 {
-	glView->setTeam(index);
-}
-
-void QWzmViewer::toggleScale()
-{
-	double result = QInputDialog::getDouble(this, tr("Choose scale factor"), tr("Factor:") );
-	qWarning("TODO: %f", result);
-}
-
-void QWzmViewer::toggleSwapYZ()
-{
-	qWarning("TODO");
-}
-
-void QWzmViewer::toggleReverseWinding()
-{
-	qWarning("TODO");
-}
-
-void QWzmViewer::toggleFlipVerticalTexCoords()
-{
-	qWarning("TODO");
-}
-
-void QWzmViewer::tick()
-{
-	int currentMesh = comboBoxSelectedMesh->currentIndex();
-	if (psModel)
-	{
-		MESH *psMesh = &psModel->mesh[currentMesh];
-
-		psMesh->currentFrame = animView->selectedIndex().row();
-	}
-	glView->updateGL();
-	if (psModel && actionAnimation->isChecked())
-	{
-		MESH *psMesh = &psModel->mesh[currentMesh];
-
-		animView->setSelectedIndex(psMesh->currentFrame);
-	}
-}
-
-void QWzmViewer::toggleCulling()
-{
-	if (actionCulling->isChecked())
-	{
-		glEnable(GL_CULL_FACE);
-	}
-	else
-	{
-		glDisable(GL_CULL_FACE);
-	}
-}
-
-void QWzmViewer::toggleAnimation()
-{
-	// Reset animation on start because it might be out of sync
-	if (psModel && actionAnimation->isChecked())
-	{
-		animView->setSelectedIndex(0);
-		for (int i = 0; i < psModel->meshes; i++)
-		{
-			MESH *psMesh = &psModel->mesh[i];
-
-			psMesh->currentFrame = 0;
-			psMesh->lastChange = 0;
-		}
-	}
-
-	glView->setAnimation(actionAnimation->isChecked());
-}
-
-void QWzmViewer::toggleWireframe()
-{
-	if (actionWireframe->isChecked())
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	else
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-}
-
-void QWzmViewer::saveAs()
-{
-	if (psModel)
-	{
+        if (psModel)
+        {
                 filename = QFileDialog::getSaveFileName(this, tr("Choose output file"), QString::null, tr("All Compatible (*.wzm *.pie);;WZM (*.wzm);;PIE (*.pie)"));
-                actionSave->setEnabled(true);
-                save();
-	}
+                ui->actionSave->setEnabled(true);
+                fileNameLabel->setText(QFileInfo(filename).fileName());
+                fileNameLabel->setToolTip(filename);
+                actionSave();
+        }
 }
 
-void QWzmViewer::save()
+void QWzmViewer::actionSave()
 {
         int retVal = -1;
         if (!filename.isEmpty() && psModel)
@@ -288,6 +244,108 @@ void QWzmViewer::save()
         }
 }
 
+void QWzmViewer::actionAboutApplication()
+{
+    QMessageBox::about(this, tr("About QWZM"), QString(tr("<b>QWZM %1</b><br />Model viewer and editor for Warzone 2100.").arg(QApplication::instance()->applicationVersion())));
+}
+
+void QWzmViewer::toggleEditAnimation(bool show)
+{
+    ui->animationDockWidget->setVisible(show);
+}
+
+void QWzmViewer::toggleEditConnectors(bool show)
+{
+    ui->connectorDockWidget->setVisible(show);
+}
+
+void QWzmViewer::setTeam(int index)
+{
+    ui->glView->setTeam(index);
+}
+
+void QWzmViewer::toggleScale()
+{
+//  double result = QInputDialog::getDouble(this, tr("Choose scale factor"), tr("Factor:") );
+    qWarning("TODO");
+}
+
+void QWzmViewer::toggleSwapYZ()
+{
+    qWarning("TODO");
+}
+
+void QWzmViewer::toggleReverseWinding()
+{
+    qWarning("TODO");
+}
+
+void QWzmViewer::toggleFlipVerticalTexCoords()
+{
+    qWarning("TODO");
+}
+
+void QWzmViewer::tick()
+{
+        int currentMesh = selectedMeshComboBox->currentIndex();
+	if (psModel)
+	{
+		MESH *psMesh = &psModel->mesh[currentMesh];
+
+                psMesh->currentFrame = ui->animationTableView->currentIndex().row();
+	}
+        ui->glView->updateGL();
+        if (psModel && ui->actionAnimation->isChecked())
+	{
+		MESH *psMesh = &psModel->mesh[currentMesh];
+
+                ui->animationTableView->setCurrentIndex(animationModel.index(psMesh->currentFrame, 0));
+	}
+}
+
+void QWzmViewer::toggleCulling()
+{
+        if (ui->actionCulling->isChecked())
+	{
+		glEnable(GL_CULL_FACE);
+	}
+	else
+	{
+		glDisable(GL_CULL_FACE);
+	}
+}
+
+void QWzmViewer::toggleAnimation()
+{
+	// Reset animation on start because it might be out of sync
+        if (psModel && ui->actionAnimation->isChecked())
+	{
+                ui->animationTableView->setCurrentIndex(ui->animationTableView->model()->index(0, 0));
+
+                for (int i = 0; i < psModel->meshes; i++)
+		{
+			MESH *psMesh = &psModel->mesh[i];
+
+			psMesh->currentFrame = 0;
+			psMesh->lastChange = 0;
+		}
+	}
+
+        ui->glView->setAnimation(ui->actionAnimation->isChecked());
+}
+
+void QWzmViewer::toggleWireframe()
+{
+        if (ui->actionWireframe->isChecked())
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+}
+
 void QWzmViewer::rowsChanged(const QModelIndex&, int, int)
 {
 	reloadFrames();
@@ -301,10 +359,10 @@ void QWzmViewer::dataChanged(const QModelIndex&, const QModelIndex&)
 // Load animation frames from UI model into WZM drawing model
 void QWzmViewer::reloadFrames()
 {
-	MESH *psMesh = &psModel->mesh[comboBoxSelectedMesh->currentIndex()];
+        MESH *psMesh = &psModel->mesh[selectedMeshComboBox->currentIndex()];
 
 	// Reallocate frames
-	psMesh->frames = anim.rowCount();
+        psMesh->frames = animationModel.rowCount();
 	free(psMesh->frameArray);
 	psMesh->frameArray = (FRAME *)malloc(sizeof(FRAME) * psMesh->frames);
 
@@ -312,71 +370,71 @@ void QWzmViewer::reloadFrames()
 	{
 		FRAME *psFrame = &psMesh->frameArray[i];
 
-		psFrame->timeSlice = anim.data(anim.index(i, 0, QModelIndex())).toDouble();
-		psFrame->textureArray = anim.data(anim.index(i, 1, QModelIndex())).toInt();
-		psFrame->translation.x = anim.data(anim.index(i, 2, QModelIndex())).toDouble();
-		psFrame->translation.y = anim.data(anim.index(i, 3, QModelIndex())).toDouble();
-		psFrame->translation.z = anim.data(anim.index(i, 4, QModelIndex())).toDouble();
-		psFrame->rotation.x = anim.data(anim.index(i, 5, QModelIndex())).toDouble();
-		psFrame->rotation.y = anim.data(anim.index(i, 6, QModelIndex())).toDouble();
-		psFrame->rotation.z = anim.data(anim.index(i, 7, QModelIndex())).toDouble();
+                psFrame->timeSlice = animationModel.data(animationModel.index(i, 0, QModelIndex())).toDouble();
+                psFrame->textureArray = animationModel.data(animationModel.index(i, 1, QModelIndex())).toInt();
+                psFrame->translation.x = animationModel.data(animationModel.index(i, 2, QModelIndex())).toDouble();
+                psFrame->translation.y = animationModel.data(animationModel.index(i, 3, QModelIndex())).toDouble();
+                psFrame->translation.z = animationModel.data(animationModel.index(i, 4, QModelIndex())).toDouble();
+                psFrame->rotation.x = animationModel.data(animationModel.index(i, 5, QModelIndex())).toDouble();
+                psFrame->rotation.y = animationModel.data(animationModel.index(i, 6, QModelIndex())).toDouble();
+                psFrame->rotation.z = animationModel.data(animationModel.index(i, 7, QModelIndex())).toDouble();
 	}
 }
 
 void QWzmViewer::prependFrame()
 {
-	QModelIndex index = animView->selectedIndex();
+        QModelIndex index = ui->animationTableView->currentIndex();
 
 	animLock();
-	anim.insertRow(index.row());
-	anim.setData(anim.index(index.row(), 0, QModelIndex()), QString::number(0.1));
-	anim.setData(anim.index(index.row(), 1, QModelIndex()), QString::number(0));
-	anim.setData(anim.index(index.row(), 2, QModelIndex()), QString::number(0.0));
-	anim.setData(anim.index(index.row(), 3, QModelIndex()), QString::number(0.0));
-	anim.setData(anim.index(index.row(), 4, QModelIndex()), QString::number(0.0));
-	anim.setData(anim.index(index.row(), 5, QModelIndex()), QString::number(0.0));
-	anim.setData(anim.index(index.row(), 6, QModelIndex()), QString::number(0.0));
+        animationModel.insertRow(index.row());
+        animationModel.setData(animationModel.index(index.row(), 0, QModelIndex()), QString::number(0.1));
+        animationModel.setData(animationModel.index(index.row(), 1, QModelIndex()), QString::number(0));
+        animationModel.setData(animationModel.index(index.row(), 2, QModelIndex()), QString::number(0.0));
+        animationModel.setData(animationModel.index(index.row(), 3, QModelIndex()), QString::number(0.0));
+        animationModel.setData(animationModel.index(index.row(), 4, QModelIndex()), QString::number(0.0));
+        animationModel.setData(animationModel.index(index.row(), 5, QModelIndex()), QString::number(0.0));
+        animationModel.setData(animationModel.index(index.row(), 6, QModelIndex()), QString::number(0.0));
 	animUnlock();	// act on last change only
-	anim.setData(anim.index(index.row(), 7, QModelIndex()), QString::number(0.0));
+        animationModel.setData(animationModel.index(index.row(), 7, QModelIndex()), QString::number(0.0));
 }
 
 void QWzmViewer::appendFrame()
 {
-	QModelIndex index = animView->selectedIndex();
+        QModelIndex index = ui->animationTableView->currentIndex();
 	int idx = index.row() + 1;
 
 	animLock();
-	anim.insertRow(idx);
-	anim.setData(anim.index(idx, 0, QModelIndex()), QString::number(0.1));
-	anim.setData(anim.index(idx, 1, QModelIndex()), QString::number(0));
-	anim.setData(anim.index(idx, 2, QModelIndex()), QString::number(0.0));
-	anim.setData(anim.index(idx, 3, QModelIndex()), QString::number(0.0));
-	anim.setData(anim.index(idx, 4, QModelIndex()), QString::number(0.0));
-	anim.setData(anim.index(idx, 5, QModelIndex()), QString::number(0.0));
-	anim.setData(anim.index(idx, 6, QModelIndex()), QString::number(0.0));
+        animationModel.insertRow(idx);
+        animationModel.setData(animationModel.index(idx, 0, QModelIndex()), QString::number(0.1));
+        animationModel.setData(animationModel.index(idx, 1, QModelIndex()), QString::number(0));
+        animationModel.setData(animationModel.index(idx, 2, QModelIndex()), QString::number(0.0));
+        animationModel.setData(animationModel.index(idx, 3, QModelIndex()), QString::number(0.0));
+        animationModel.setData(animationModel.index(idx, 4, QModelIndex()), QString::number(0.0));
+        animationModel.setData(animationModel.index(idx, 5, QModelIndex()), QString::number(0.0));
+        animationModel.setData(animationModel.index(idx, 6, QModelIndex()), QString::number(0.0));
 	animUnlock();	// act on last change only
-	anim.setData(anim.index(idx, 7, QModelIndex()), QString::number(0.0));
+        animationModel.setData(animationModel.index(idx, 7, QModelIndex()), QString::number(0.0));
 }
 
 void QWzmViewer::removeFrame()
 {
-	QModelIndex index = animView->selectedIndex();
-	anim.removeRow(index.row());
+        QModelIndex index = ui->animationTableView->currentIndex();
+        animationModel.removeRow(index.row());
 }
 
 void QWzmViewer::animLock()
 {
 	// Prevent backscatter
-	disconnect(&anim, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
-	disconnect(&anim, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsChanged(const QModelIndex &, int, int)));
-	disconnect(&anim, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsChanged(const QModelIndex &, int, int)));
+        disconnect(&animationModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
+        disconnect(&animationModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsChanged(const QModelIndex &, int, int)));
+        disconnect(&animationModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsChanged(const QModelIndex &, int, int)));
 }
 
 void QWzmViewer::animUnlock()
 {
-	connect(&anim, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
-	connect(&anim, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsChanged(const QModelIndex &, int, int)));
-	connect(&anim, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsChanged(const QModelIndex &, int, int)));
+        connect(&animationModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
+        connect(&animationModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsChanged(const QModelIndex &, int, int)));
+        connect(&animationModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsChanged(const QModelIndex &, int, int)));
 }
 
 void QWzmViewer::setMesh(int index)
@@ -389,38 +447,42 @@ void QWzmViewer::setMesh(int index)
 
 	// Refresh frame view
 	animLock();
-	anim.setRowCount(psMesh->frames);
+        animationModel.setRowCount(psMesh->frames);
 	for (int i = 0; i < psMesh->frames; i++)
 	{
 		FRAME *psFrame = &psMesh->frameArray[i];
 
-		anim.setData(anim.index(i, 0, QModelIndex()), QString::number(psFrame->timeSlice));
-		anim.setData(anim.index(i, 1, QModelIndex()), QString::number(psFrame->textureArray));
-		anim.setData(anim.index(i, 2, QModelIndex()), QString::number(psFrame->translation.x));
-		anim.setData(anim.index(i, 3, QModelIndex()), QString::number(psFrame->translation.y));
-		anim.setData(anim.index(i, 4, QModelIndex()), QString::number(psFrame->translation.z));
-		anim.setData(anim.index(i, 5, QModelIndex()), QString::number(psFrame->rotation.x));
-		anim.setData(anim.index(i, 6, QModelIndex()), QString::number(psFrame->rotation.y));
-		anim.setData(anim.index(i, 7, QModelIndex()), QString::number(psFrame->rotation.z));
+                animationModel.setData(animationModel.index(i, 0, QModelIndex()), QString::number(psFrame->timeSlice));
+                animationModel.setData(animationModel.index(i, 1, QModelIndex()), QString::number(psFrame->textureArray));
+                animationModel.setData(animationModel.index(i, 2, QModelIndex()), QString::number(psFrame->translation.x));
+                animationModel.setData(animationModel.index(i, 3, QModelIndex()), QString::number(psFrame->translation.y));
+                animationModel.setData(animationModel.index(i, 4, QModelIndex()), QString::number(psFrame->translation.z));
+                animationModel.setData(animationModel.index(i, 5, QModelIndex()), QString::number(psFrame->rotation.x));
+                animationModel.setData(animationModel.index(i, 6, QModelIndex()), QString::number(psFrame->rotation.y));
+                animationModel.setData(animationModel.index(i, 7, QModelIndex()), QString::number(psFrame->rotation.z));
 	}
-	animView->updateModel();
-	animView->setSelectedIndex(psMesh->currentFrame);
+
+        ui->animationTableView->resizeColumnsToContents();
+        ui->animationTableView->horizontalHeader()->setStretchLastSection(true);
+        ui->animationTableView->setCurrentIndex(animationModel.index(psMesh->currentFrame, 0));
+
 	animUnlock();
 
 	// Refresh connector view
-	connectors.setRowCount(psMesh->connectors);
-	for (int i = 0; i < psMesh->connectors; i++)
+        connectorsModel.setRowCount(psMesh->connectors);
+        for (int i = 0; i < psMesh->connectors; i++)
 	{
-		connectors.setData(connectors.index(i, 0, QModelIndex()), QString::number(psMesh->connectorArray[i].pos.x));
-		connectors.setData(connectors.index(i, 1, QModelIndex()), QString::number(psMesh->connectorArray[i].pos.y));
-		connectors.setData(connectors.index(i, 2, QModelIndex()), QString::number(psMesh->connectorArray[i].pos.z));
-		connectors.setData(connectors.index(i, 4, QModelIndex()), QString::number(psMesh->connectorArray[i].type)); // TODO, dropdown box
+                connectorsModel.setData(connectorsModel.index(i, 0, QModelIndex()), QString::number(psMesh->connectorArray[i].pos.x));
+                connectorsModel.setData(connectorsModel.index(i, 1, QModelIndex()), QString::number(psMesh->connectorArray[i].pos.y));
+                connectorsModel.setData(connectorsModel.index(i, 2, QModelIndex()), QString::number(psMesh->connectorArray[i].pos.z));
+                connectorsModel.setData(connectorsModel.index(i, 4, QModelIndex()), QString::number(psMesh->connectorArray[i].type)); // TODO, dropdown box
 	}
 }
 
 void QWzmViewer::setModel(const QFileInfo &texPath)
 {
 	psModel->pixmap = readPixmap(texPath.absoluteFilePath().toAscii().constData());
+
 	if (!psModel->pixmap)
 	{
                 QMessageBox::warning(this, tr("Oops..."), "Could not read texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
@@ -428,29 +490,42 @@ void QWzmViewer::setModel(const QFileInfo &texPath)
                 psModel = NULL;
 		return;
 	}
-	glView->setModel(psModel);
-	comboBoxTeam->setCurrentIndex(0);
-	actionSave->setEnabled(false);
-	actionSaveAs->setEnabled(true);
-	comboBoxSelectedMesh->setMaxCount(0);	// delete previous
-        cb_visMesh->setMaxCount(1);
-	comboBoxSelectedMesh->setMaxCount(psModel->meshes);
-        cb_visMesh->setMaxCount(psModel->meshes + 1);
-	for (int i = 0; i < psModel->meshes; i++)
+
+        ui->glView->setModel(psModel);
+        teamComboBox->setCurrentIndex(0);
+        ui->actionSave->setEnabled(false);
+        ui->actionSaveAs->setEnabled(true);
+        selectedMeshComboBox->setEnabled(true);
+        selectedMeshComboBox->setMaxCount(0);	// delete previous
+        selectedMeshComboBox->setMaxCount(psModel->meshes);
+        visibleMeshComboBox->setEnabled(true);
+        visibleMeshComboBox->setMaxCount(1);
+        visibleMeshComboBox->setMaxCount(psModel->meshes + 1);
+        ui->animationDockWidgetContents->setEnabled(true);
+
+        for (int i = 0; i < psModel->meshes; i++)
 	{
-		comboBoxSelectedMesh->insertItem(i, QString::number(i));
-                cb_visMesh->insertItem( i + 1, QString::number( i));
+                selectedMeshComboBox->insertItem(i, QString::number(i));
+                visibleMeshComboBox->insertItem( i + 1, QString::number( i));
 	}
-	comboBoxSelectedMesh->setCurrentIndex(0);
+
+        selectedMeshComboBox->setCurrentIndex(0);
 	setMesh(0);
+}
+
+void QWzmViewer::setVisibleMesh(int index)
+{
+        ui->glView->selectMesh(index);
 }
 
 void QWzmViewer::open3DS()
 {
         QString model = QFileDialog::getOpenFileName(this, tr("Choose 3DS file"), QString::null, tr("3DS models (*.3ds)"));
-        if ( !model.isEmpty())
+
+        if (!model.isEmpty())
         {
                 MODEL *tmpModel = load3DS(model);
+
                 if (tmpModel)
                 {
                         QFileInfo texPath(tmpModel->texPath);
@@ -471,79 +546,28 @@ void QWzmViewer::open3DS()
                             freeModel(psModel);
                         }
                         psModel = tmpModel;
-                        actionSave->setEnabled(true);
+                        ui->actionSave->setEnabled(true);
                         setModel(texPath);
-                }
-                else
-                {
-                        qWarning("Failed to create model");
-                }
-        }
-}
-
-void QWzmViewer::open()
-{
-        static QString lastDir; // Convenience HACK to remember last succesful directory a model was loaded from.
-        filename = QFileDialog::getOpenFileName(this, tr("Choose a PIE or WZM file"), lastDir, tr("All Compatible (*.wzm *.pie);;WZM models (*.wzm);;PIE models (*.pie)"));
-        if (!filename.isEmpty())
-        {
-                QFileInfo theFile( filename);
-                MODEL *tmpModel = NULL;
-                if( theFile.completeSuffix().compare(QString("wzm"),Qt::CaseInsensitive) == 0){
-                        tmpModel = readModel(filename.toAscii().constData(), 0);
-                }
-                else if( theFile.completeSuffix().compare(QString("pie"),Qt::CaseInsensitive) == 0){
-                        tmpModel = loadPIE(filename);
-                }
-                else{
-                        return;
-                }
-
-                if (tmpModel)
-                {
-                        QFileInfo texPath(theFile.absoluteDir(),tmpModel->texPath);
-
-                        // Try to find texture automatically
-                        if (!texPath.exists())
-                        {
-                                texPath.setFile(QString("../../data/base/texpages/"), tmpModel->texPath);
-                                if (!texPath.exists())
-                                {
-                                        texPath.setFile(QFileDialog::getExistingDirectory(this, tr("Specify texture directory"), QString::null), tmpModel->texPath);
-                                        if (!texPath.exists())
-                                        {
-                                                QMessageBox::warning(this, tr("Oops..."), "Could not find texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
-                                                freeModel(tmpModel);
-                                                return;
-                                        }
-                                }
-                        }
-                        if (psModel)
-                        {
-                            freeModel(psModel);
-                        }
-                        psModel = tmpModel;
-                        setModel(texPath);
-                        actionSave->setEnabled(true);
-                        lastDir = theFile.absolutePath();
                 }
                 else
                 {
                         qWarning("Failed to create model!");
+
+                        ui->statusBar->showMessage(tr("Failed to create model!"), 3000);
                 }
         }
 }
 
 int main(int argc, char *argv[])
 {
-	QApplication app(argc, argv);
-	QWzmViewer *wzm = new QWzmViewer();
+        QApplication application(argc, argv);
+        application.setApplicationName("QWZM");
+        application.setApplicationVersion("Pre-Alpha");
+        application.setOrganizationName("Warzone2100");
+        application.setOrganizationDomain("wz2100.net");
+
+        QWzmViewer *wzm = new QWzmViewer();
 
 	wzm->show();
-	return app.exec();
-}
-
-void QWzmViewer::on_cb_visMesh_currentIndexChanged(int index)
-{
-        Ui::QWZM::glView->selectMesh( index);
+        return application.exec();
 }

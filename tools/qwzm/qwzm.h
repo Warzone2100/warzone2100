@@ -15,65 +15,48 @@
 	License along with this program. If not, see
 	<http://www.gnu.org/licenses/>.
 */
+
 #ifndef QWZM_H
 #define QWZM_H
 
-#include <QApplication>
-#include <QMainWindow>
-#include <QtOpenGL>
+#include "ui_qwzm.h"
+
+extern "C" {
+#include "wzmutils.h"
+}
 
 #include <stdint.h>
 #include <ctype.h>
 #include <errno.h>
 #include <math.h>
 
-extern "C" {
-#include "wzmutils.h"
-}
+#include <QtCore/QFileInfo>
+#include <QtGui/QComboBox>
+#include <QtGui/QLabel>
+#include <QtGui/QSlider>
+#include <QtGui/QStandardItemModel>
 
-#include "ui_qwzm.h"
-#include "ui_animationview.h"
-#include "ui_connectorview.h"
-
-/** Animation view */
-class QAnimViewer : public QDialog, private Ui_AnimationView
+class QWzmViewer : public QMainWindow
 {
-	Q_OBJECT
-	public:
-	QAnimViewer(QWidget *parent = 0);
-	~QAnimViewer();
-	void setModel(QStandardItemModel *model);
-	void updateModel();
-	QModelIndex selectedIndex();
-	void setSelectedIndex(int idx);
-};
+    Q_OBJECT
 
-/** Connector view */
-class QConnectorViewer : public QDialog, private Ui_ConnectorView
-{
-	Q_OBJECT
-	public:
-	QConnectorViewer(QWidget *parent = 0);
-	~QConnectorViewer();
-	void setModel(QStandardItemModel *model);
-	void updateModel();
-	QModelIndex selectedIndex();
-	void setSelectedIndex(int idx);
-};
-
-/** WZM Viewer */
-class QWzmViewer : public QMainWindow, private Ui::QWZM
-{
-	Q_OBJECT
-	public:
+    public:
 	QWzmViewer(QWidget *parent = 0);
 	~QWzmViewer();
 
-	protected slots:
-	void saveAs();
-	void save();
+    protected:
+        void closeEvent(QCloseEvent *event);
+        MODEL *load3DS(QString input);
+        MODEL *loadPIE(QString input);
+        int savePIE(const char *filename, const MODEL *psModel, int pieVersion, int type);
+        void setModel(const QFileInfo &texPath);
+
+    protected slots:
+        void actionOpen();
+        void actionSaveAs();
+        void actionSave();
 	void open3DS();
-        void open();
+        void actionAboutApplication();
 	void toggleWireframe();
 	void toggleCulling();
 	void setTeam(int index);
@@ -84,10 +67,11 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void toggleReverseWinding();
 	void toggleFlipVerticalTexCoords();
 	void setMesh(int index);
-	void toggleEditAnimation();
-	void toggleEditConnectors();
+        void toggleEditAnimation(bool show);
+        void toggleEditConnectors(bool show);
 	void animLock();
 	void animUnlock();
+        void setVisibleMesh(int index);
 
         void rowsChanged(const QModelIndex &parent, int start, int end);
         void dataChanged(const QModelIndex &first, const QModelIndex &last);
@@ -97,18 +81,17 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void appendFrame();
 	void removeFrame();
 
-	private:
-	QString filename;
-	MODEL *psModel;
-	QStandardItemModel anim, connectors;
-        MODEL *load3DS(QString input);
-        MODEL *loadPIE(QString input);
-        int savePIE(const char *filename, const MODEL *psModel, int pieVersion, int type);
-        void setModel(const QFileInfo &texPath);
-	QAnimViewer *animView;
-	QConnectorViewer *connectorView;
-
-private slots:
-        void on_cb_visMesh_currentIndexChanged(int index);
+    private:
+        Ui::MainWindow *ui;
+        MODEL *psModel;
+        QString filename;
+        QStandardItemModel animationModel;
+        QStandardItemModel connectorsModel;
+        QComboBox *selectedMeshComboBox;
+        QComboBox *visibleMeshComboBox;
+        QComboBox *teamComboBox;
+        QSlider *scaleSlider;
+        QLabel *fileNameLabel;
+        QTimer *timer;
 };
 #endif

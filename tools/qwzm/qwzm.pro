@@ -1,6 +1,4 @@
 FORMS += qwzm.ui \
-    animationview.ui \
-    connectorview.ui \
     pieexport.ui
 SOURCES += qwzm.cpp \
     ../display/wzmutils.c \

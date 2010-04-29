@@ -94,6 +94,7 @@ void WZMOpenGLWidget::setTeam(int index)
 	{
 		return;
 	}
+
 	if (index > 7 || index < 0)
 	{
 		qWarning("setTeam: Bad index %d", index);
@@ -146,7 +147,7 @@ void WZMOpenGLWidget::setModel(MODEL *model)
 
 QString WZMOpenGLWidget::helpString() const
 {
-	QString text("<h2>The Warzone Model Post-production Program</h2>");
+        QString text("<h2>The Warzone Model Post-production Program</h2>");
 	text += "Welcome! This help needs be a lot more helpful!";
 	return text;
 }
