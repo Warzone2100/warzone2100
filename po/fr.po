@@ -14,23 +14,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-22 23:54+0200\n"
-"PO-Revision-Date: 2009-05-15 21:52+0100\n"
-"Last-Translator: gesierfou <gesierfou@yahoo.fr>\n"
+"POT-Creation-Date: 2010-04-29 02:29+0200\n"
+"PO-Revision-Date: 2010-04-21 08:32-0500\n"
+"Last-Translator: Gilles J. Séguin <segg2@videotron.ca>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: data/base/messages/messages.rmsg:4
 msgid "Structure Research Completed"
-msgstr "Recherche pour Structure Achevée"
+msgstr "Recherche pour Structure complétée"
 
 #: data/base/messages/messages.rmsg:14
 msgid "Power Research Completed"
@@ -540,7 +540,7 @@ msgstr "Augmente la vitesse de construction"
 #: data/mp/messages/resmessages23.rmsg:46
 #: data/mp/messages/resmessages3.rmsg:514
 msgid "All trucks upgraded automatically"
-msgstr "Amélioration de tous les véhicules de construction automatique"
+msgstr "Mise à jour de tous les véhicules de construction automatique"
 
 #: data/base/messages/resmessages12.rmsg:69
 #: data/base/messages/resmessages1.rmsg:4
@@ -602,7 +602,7 @@ msgstr "Portée des radars de contre-batterie augmentée"
 #: data/mp/messages/resmessages23.rmsg:59
 #: data/mp/messages/resmessages3.rmsg:527
 msgid "All CB sensors upgraded automatically"
-msgstr "Amélioration automatique des radars de contre-batterie"
+msgstr "Mise à jour de tous les radars de contre-batterie"
 
 #: data/base/messages/resmessages12.rmsg:95
 #: data/base/messages/resmessages12.rmsg:212
@@ -619,7 +619,7 @@ msgstr "Amélioration automatique des radars de contre-batterie"
 #: data/mp/messages/resmessages3.rmsg:888
 #: data/mp/messages/resmessagesall.rmsg:212
 msgid "Cannon Upgrade"
-msgstr "Amélioration pour Canon"
+msgstr "mise à jour du Canon"
 
 #: data/base/messages/resmessages12.rmsg:96
 #: data/mp/messages/resmessages12.rmsg:96
@@ -646,7 +646,7 @@ msgstr "Précision des Canons accrue"
 #: data/mp/messages/resmessages3.rmsg:891
 #: data/mp/messages/resmessagesall.rmsg:215
 msgid "All cannons upgraded automatically"
-msgstr "Amélioration automatique des canons"
+msgstr "Mise à jour automatique des canons"
 
 #: data/base/messages/resmessages12.rmsg:108
 #: data/base/messages/resmessages1.rmsg:602
@@ -658,7 +658,7 @@ msgstr "Amélioration automatique des canons"
 #: data/mp/messages/resmessagesall.rmsg:771
 #: data/mp/messages/strings/resstrings.txt:802
 msgid "Flamer Upgrade"
-msgstr "Amélioration pour Lance-Flammes"
+msgstr "Mise à jour  des Lance-Flammes"
 
 #: data/base/messages/resmessages12.rmsg:109
 #: data/base/messages/resmessages12.rmsg:213
@@ -685,7 +685,7 @@ msgstr "Cadence de tir des lances-flammes améliorée"
 #: data/mp/messages/resmessagesall.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "All flamers upgraded automatically"
-msgstr "Amélioration automatique des lances-flammes"
+msgstr "Mise à jour automatique des lances-flammes"
 
 #: data/base/messages/resmessages12.rmsg:121
 #: data/base/messages/resmessages1.rmsg:537
@@ -862,7 +862,7 @@ msgstr "Résistance : Moyenne"
 #: data/mp/messages/strings/resstrings.txt:886
 #: data/mp/messages/strings/resstrings.txt:898
 msgid "Machinegun Upgrade"
-msgstr "Amélioration pour Mitrailleuse"
+msgstr "Mitrailleuse: mis à jour"
 
 #: data/base/messages/resmessages12.rmsg:135
 #: data/mp/messages/resmessages12.rmsg:135
@@ -898,7 +898,7 @@ msgstr "Cadence de tir des Mitrailleuses augmentée"
 #: data/mp/messages/strings/resstrings.txt:889
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "All machineguns upgraded automatically"
-msgstr "Amélioration automatique des mitrailleuses"
+msgstr "Mise à jour automatique des mitrailleuses"
 
 #: data/base/messages/resmessages12.rmsg:147
 #: data/base/messages/resmessages1.rmsg:667
@@ -1001,7 +1001,7 @@ msgstr "Résistance: Très faible"
 #: data/mp/messages/resmessages3.rmsg:1187
 #: data/mp/messages/strings/resstrings.txt:948
 msgid "Mortar Upgrade"
-msgstr "Amélioration pour Mortier"
+msgstr "Mortier: mis à jour"
 
 #: data/base/messages/resmessages12.rmsg:161
 #: data/mp/messages/resmessages12.rmsg:161
@@ -1031,7 +1031,7 @@ msgstr "Précision des Mortiers accrue"
 #: data/mp/messages/resmessages3.rmsg:1190
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "All mortars upgraded automatically"
-msgstr "Amélioration automatique des mortiers"
+msgstr "Mise à jour de tous les mortiers"
 
 #: data/base/messages/resmessages12.rmsg:174
 #: data/mp/messages/resmessages12.rmsg:174
@@ -1083,7 +1083,7 @@ msgstr "Fort contre: Véhicules et Emplacements"
 #: data/mp/messages/resmessagesall.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:1008
 msgid "Rocket Upgrade"
-msgstr "Amélioration pour Roquette"
+msgstr "Roquette: mis à jour"
 
 #: data/base/messages/resmessages12.rmsg:200
 #: data/mp/messages/resmessages12.rmsg:200
@@ -1109,7 +1109,7 @@ msgstr "Cadence de tir des Lance-Roquettes améliorée"
 #: data/mp/messages/resmessagesall.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "All rockets upgraded automatically"
-msgstr "Amélioration automatique des lances-roquettes"
+msgstr "Mise à jour de tous les lances-roquettes"
 
 #: data/base/messages/resmessages12.rmsg:214
 #: data/base/messages/resmessages3.rmsg:890
@@ -1288,7 +1288,7 @@ msgstr "Blindage Cinétique et Résistance augmentés"
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "All Cyborgs upgraded automatically"
-msgstr "Amélioration automatique des Cyborgs"
+msgstr "Mise à jour de tous les Cyborgs"
 
 #: data/base/messages/resmessages1.rmsg:43
 #: data/base/messages/resmessages1.rmsg:56
@@ -1446,7 +1446,7 @@ msgstr "Puissance Défensive: Faible"
 #: data/base/messages/resmessages1.rmsg:122
 #: data/mp/messages/resmessages1.rmsg:122
 msgid "Armored guard tower with Mini-Pod Rocket"
-msgstr "Tour de défense à Mini-Roquettes"
+msgstr "Tour renforcé avec Mini-nacelle de Roquettes"
 
 #: data/base/messages/resmessages1.rmsg:135
 #: data/mp/messages/resmessages1.rmsg:135
@@ -1512,7 +1512,7 @@ msgstr "Nouveau Bâtiment Disponible"
 #: data/base/messages/resmessages1.rmsg:239
 #: data/mp/messages/resmessages1.rmsg:239
 msgid "New Repair Facility Repairs Damaged Units"
-msgstr "Le Centre de Réparation Répare les Unités Endommagées"
+msgstr "L'atelier de Réparation Répare les Unités Endommagées"
 
 #: data/base/messages/resmessages1.rmsg:240
 #: data/mp/messages/resmessages1.rmsg:240
@@ -1522,7 +1522,7 @@ msgstr "Utiliser la Console de Commande pour envoyer des unités en réparation"
 #: data/base/messages/resmessages1.rmsg:241
 #: data/mp/messages/resmessages1.rmsg:241
 msgid "Or select the Repair Facility as a unit's target"
-msgstr "Ou sélectionner le Centre de Réparation comme cible d'une unité"
+msgstr "Ou sélectionner l'atelier de Réparation comme cible d'une unité"
 
 #: data/base/messages/resmessages1.rmsg:251
 #: data/base/messages/resmessages2.rmsg:329
@@ -1533,7 +1533,7 @@ msgstr "Ou sélectionner le Centre de Réparation comme cible d'une unité"
 #: data/mp/messages/resmessages3.rmsg:420
 #: data/mp/messages/strings/resstrings.txt:359
 msgid "Repair Facility Improved"
-msgstr "Centre de Réparation amélioré"
+msgstr "Atelier de Réparation amélioré"
 
 #: data/base/messages/resmessages1.rmsg:252
 #: data/mp/messages/resmessages1.rmsg:252
@@ -1738,7 +1738,7 @@ msgstr "Augmente la vitesse de recherche"
 #: data/base/messages/resmessages1.rmsg:345
 #: data/mp/messages/resmessages1.rmsg:346
 msgid "Use a truck to add the module to a research facility"
-msgstr "Utilisez un véhicule de construction pour ajouter un module"
+msgstr "Utilisez un camion pour ajouter un module au centre de recherche"
 
 #: data/base/messages/resmessages1.rmsg:355
 #: data/base/messages/resmessages2.rmsg:368
@@ -1951,7 +1951,7 @@ msgstr "Coûts et délais de production similaires au Python"
 #: data/mp/messages/resmessages3.rmsg:680
 #: data/mp/messages/strings/resstrings.txt:592
 msgid "Vehicle Engine Upgrade"
-msgstr "Amélioration du Moteur"
+msgstr "Moteur: mis à jour"
 
 #: data/base/messages/resmessages1.rmsg:460
 #: data/base/messages/strings/names.txt:942
@@ -2241,7 +2241,7 @@ msgstr "Fort contre: Véhicules à roues et aéroglisseurs"
 #: data/mp/messages/strings/resstrings.txt:986
 #: data/mp/messages/strings/resstrings.txt:994
 msgid "Mini-Rocket Upgrade"
-msgstr "Amélioration pour Mini-Roquettes"
+msgstr "Mise à jour pour Mini-Roquettes"
 
 #: data/base/messages/resmessages1.rmsg:707
 #: data/mp/messages/resmessages1.rmsg:708
@@ -2573,7 +2573,7 @@ msgstr "Toutes les tours de contrôle améliorées automatiquement"
 #: data/mp/messages/strings/resstrings.txt:692
 #: data/mp/messages/strings/resstrings.txt:710
 msgid "AA Upgrade"
-msgstr "Amélioration pour canon de DCA"
+msgstr "Mise à jour pour canon de DCA"
 
 #: data/base/messages/resmessages23.rmsg:135
 #: data/base/messages/resmessages2.rmsg:837
@@ -2607,7 +2607,7 @@ msgstr "Augmente la précision des armes AA"
 #: data/mp/messages/strings/resstrings.txt:695
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "All AA weapons upgraded automatically"
-msgstr "Amélioration automatique de tous les canons de DCA"
+msgstr "Mise à jour de tous les canons de DCA"
 
 #: data/base/messages/resmessages23.rmsg:147
 #: data/base/messages/resmessages2.rmsg:706
@@ -2641,7 +2641,7 @@ msgstr "Fort contre: Bunkers et Points Défensifs"
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:746
 msgid "Bombsight Upgrade"
-msgstr "Amélioration pour Bombardiers"
+msgstr "Mise à jour pour Bombardiers"
 
 #: data/base/messages/resmessages23.rmsg:161
 msgid "Laser designator paints and guides bombs to the target"
@@ -2669,7 +2669,7 @@ msgstr "Tous les bombardiers améliorés automatiquement"
 #: data/base/messages/resmessages23.rmsg:174
 #: data/mp/messages/resmessages23.rmsg:174
 msgid "Robotic advances make new chaingun upgrade available"
-msgstr "Les avancées en robotique permettent de nouvelles améliorations pour chargeur."
+msgstr "Les avancées en robotique permettent de mettre à jour les chargeurs."
 
 #: data/base/messages/resmessages23.rmsg:187
 #: data/mp/messages/resmessages23.rmsg:187
@@ -3363,7 +3363,7 @@ msgstr "Détecte et se verrouille sur les émissions moteur des VTOLs"
 #: data/mp/messages/resmessages3.rmsg:823
 #: data/mp/messages/strings/resstrings.txt:702
 msgid "AA Flak Upgrade"
-msgstr "Amélioration pour canons de DCA"
+msgstr "Mise à jour pour AA Flak"
 
 #: data/base/messages/resmessages2.rmsg:655
 #: data/base/messages/strings/resstrings.txt:670
@@ -3386,7 +3386,7 @@ msgstr "Augmente les dégâts des armes de DCA"
 #: data/mp/messages/resmessages3.rmsg:826
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "All AA flak weapons upgraded automatically"
-msgstr "Amélioration automatique de tous les canons de DCA"
+msgstr "Mise à jour de tous les AA flak"
 
 #: data/base/messages/resmessages2.rmsg:668
 #: data/base/messages/strings/resstrings.txt:678
@@ -3555,7 +3555,7 @@ msgstr "Fort contre: Bâtiments, bunkers"
 #: data/mp/messages/strings/resstrings.txt:840
 #: data/mp/messages/strings/resstrings.txt:848
 msgid "Howitzer Upgrade"
-msgstr "Amélioration pour Obusier"
+msgstr "Mise à jour pour Howitzer"
 
 #: data/base/messages/resmessages2.rmsg:838
 #: data/base/messages/resmessages3.rmsg:903
@@ -3818,12 +3818,12 @@ msgstr "Point défensif blindé équipé d'un Canon Gauss"
 #: data/base/messages/resmessages3.rmsg:343
 #: data/mp/messages/resmessages3.rmsg:343
 msgid "Armored guard tower with Scourge Missile"
-msgstr "Tour de défense à Missiles Scourge"
+msgstr "Tour renforcé de défense à Missiles Scourge"
 
 #: data/base/messages/resmessages3.rmsg:356
 #: data/mp/messages/resmessages3.rmsg:356
 msgid "Armored guard tower with Needle Gun"
-msgstr "Tour de défense à Canon à aiguille"
+msgstr "Tour renforcé de défense à Canon à aiguille"
 
 #: data/base/messages/resmessages3.rmsg:369
 #: data/mp/messages/resmessages3.rmsg:369
@@ -4142,12 +4142,12 @@ msgstr "Émet des impulsions laser"
 #: data/mp/messages/resmessages3.rmsg:979
 #: data/mp/messages/resmessages3.rmsg:992
 msgid "Laser Upgrade"
-msgstr "Amélioration pour Laser"
+msgstr "Mise à jour pour Laser"
 
 #: data/base/messages/resmessages3.rmsg:967
 #: data/mp/messages/resmessages3.rmsg:967
 msgid "Improvement in laser optics reduces light dispersal"
-msgstr "Amélioration du matériel optique réduisant la dispersion de la lumière"
+msgstr "Des percés en optique laser réduise la dispersion de la lumière"
 
 #: data/base/messages/resmessages3.rmsg:968
 msgid "Increases Laser accuracy"
@@ -4165,7 +4165,7 @@ msgstr "Tous les lasers améliorés automatiquements"
 #: data/base/messages/resmessages3.rmsg:980
 #: data/mp/messages/resmessages3.rmsg:980
 msgid "Improvement in laser emission density"
-msgstr "Amélioration de la densité des émissions laser"
+msgstr "Percés dans la densité des émissions laser"
 
 #: data/base/messages/resmessages3.rmsg:981
 msgid "Increases Laser damage"
@@ -4218,7 +4218,7 @@ msgstr "Missile Anti-Bunker"
 #: data/mp/messages/resmessages3.rmsg:1148
 #: data/mp/messages/resmessages3.rmsg:1161
 msgid "Missile Upgrade"
-msgstr "Amélioration pour Missile"
+msgstr "Mise à jour pour Missile"
 
 #: data/base/messages/resmessages3.rmsg:1058
 #: data/mp/messages/resmessages3.rmsg:1058
@@ -4361,7 +4361,7 @@ msgstr "Canon électrique lourd projetant de grosses fléchettes"
 #: data/mp/messages/resmessages3.rmsg:1252
 #: data/mp/messages/resmessages3.rmsg:1265
 msgid "Rail Gun Upgrade"
-msgstr "Amélioration pour Canon Électrique"
+msgstr "Mise à jour pour Canon Électrique"
 
 #: data/base/messages/resmessages3.rmsg:1240
 #: data/mp/messages/resmessages3.rmsg:1240
@@ -4379,7 +4379,7 @@ msgstr "Précision des Canons Électriques augmentée"
 #: data/mp/messages/resmessages3.rmsg:1255
 #: data/mp/messages/resmessages3.rmsg:1268
 msgid "All rail guns upgraded automatically"
-msgstr "Amélioration automatique des canons électriques"
+msgstr "Mise à jour de tous les canons électriques"
 
 #: data/base/messages/resmessages3.rmsg:1253
 #: data/mp/messages/resmessages3.rmsg:1253
@@ -4754,7 +4754,7 @@ msgstr "Voilà notre chance de renverser le Nouveau Paradigme et de détruire le
 #: data/base/messages/strings/cam2strings.txt:108
 #: data/base/messages/strings/cam3strings.txt:156
 msgid " "
-msgstr " "
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
@@ -5968,7 +5968,7 @@ msgstr "Pillard"
 #: data/base/messages/strings/names.txt:200
 #: data/mp/messages/strings/names.txt:203
 msgid "Jeep"
-msgstr "Jeep"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:201
 #: data/mp/messages/strings/names.txt:204
@@ -5978,7 +5978,7 @@ msgstr "Trois-Roues"
 #: data/base/messages/strings/names.txt:202
 #: data/mp/messages/strings/names.txt:205
 msgid "Buggy"
-msgstr "Buggy"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:203
 #: data/mp/messages/strings/names.txt:206
@@ -6094,7 +6094,7 @@ msgstr "Guêpe"
 #: data/base/messages/strings/names.txt:238
 #: data/mp/messages/strings/names.txt:241
 msgid "Cobra"
-msgstr "Cobra"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:239
 #: data/mp/messages/strings/names.txt:242
@@ -6109,7 +6109,7 @@ msgstr "Châtiment"
 #: data/base/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:244
 msgid "Scorpion"
-msgstr "Scorpion"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:242
 #: data/mp/messages/strings/names.txt:245
@@ -6119,12 +6119,12 @@ msgstr "Tigre"
 #: data/base/messages/strings/names.txt:243
 #: data/mp/messages/strings/names.txt:246
 msgid "Vengeance"
-msgstr "Vengeance"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:244
 #: data/mp/messages/strings/names.txt:247
 msgid "Python"
-msgstr "Python"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:245
 #: data/mp/messages/strings/names.txt:248
@@ -6139,7 +6139,7 @@ msgstr "Châssis de Transporteur"
 #: data/base/messages/strings/names.txt:297
 #: data/mp/messages/strings/names.txt:300
 msgid "Z NULL BRAIN"
-msgstr "Z NULL BRAIN"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
@@ -6153,7 +6153,7 @@ msgstr "Tourelle de Commandement"
 #: data/base/messages/strings/names.txt:303
 #: data/mp/messages/strings/names.txt:306
 msgid "Z NULL PROGRAM"
-msgstr "Z NULL PROGRAM"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:307
 #: data/base/messages/strings/names.txt:392
@@ -6165,12 +6165,12 @@ msgstr "Démolir"
 #: data/base/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:313
 msgid "Z NULL CONSTRUCT"
-msgstr "Z NULL CONSTRUCT"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:314
 #: data/mp/messages/strings/names.txt:317
 msgid "Z NULL PROP"
-msgstr "Z NULL PROP"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:318
@@ -6220,17 +6220,17 @@ msgstr "Aéroglisseur III"
 #: data/base/messages/strings/names.txt:324
 #: data/mp/messages/strings/names.txt:327
 msgid "VTOL"
-msgstr "VTOL"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:325
 #: data/mp/messages/strings/names.txt:328
 msgid "VTOL II"
-msgstr "VTOL II"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:326
 #: data/mp/messages/strings/names.txt:329
 msgid "VTOL III"
-msgstr "VTOL III"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:330
@@ -6269,12 +6269,12 @@ msgstr "Navale"
 #: data/base/messages/strings/names.txt:337
 #: data/mp/messages/strings/names.txt:340
 msgid "BaBaProp"
-msgstr "BaBaProp"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:338
 #: data/mp/messages/strings/names.txt:341
 msgid "BaBaLegs"
-msgstr "BaBaLegs"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
@@ -6286,7 +6286,7 @@ msgstr "Propulsion Bipédique"
 #: data/base/messages/strings/names.txt:345
 #: data/mp/messages/strings/names.txt:348
 msgid "Z NULL REPAIR"
-msgstr "Z NULL REPAIR"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
@@ -6296,12 +6296,12 @@ msgstr "Tourelle de Réparation"
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:352
 msgid "Z NULL ECM"
-msgstr "Z NULL ECM"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:362
 #: data/mp/messages/strings/names.txt:365
 msgid "Z NULL SENSOR"
-msgstr "Z NULL SENSOR"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:367
 #: data/base/messages/strings/names.txt:423
@@ -6787,7 +6787,7 @@ msgstr "Canon d'Assaut"
 #: data/base/messages/strings/names.txt:481
 #: data/mp/messages/strings/names.txt:488
 msgid "Inferno"
-msgstr "Inferno"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:483
 #: data/base/messages/strings/names.txt:1061
@@ -6799,7 +6799,7 @@ msgstr "Obusier"
 #: data/base/messages/strings/names.txt:485
 #: data/mp/messages/strings/names.txt:492
 msgid "Ground Shaker"
-msgstr "Ground Shaker"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:486
 #: data/base/messages/strings/names.txt:722
@@ -6813,7 +6813,7 @@ msgstr "Emplacement à Ground Shaker"
 #: data/base/messages/strings/names.txt:487
 #: data/mp/messages/strings/names.txt:494
 msgid "Hellstorm"
-msgstr "Hellstorm"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:1083
@@ -6957,9 +6957,8 @@ msgstr "Roquette Anti-Bunker"
 #: data/base/messages/strings/names.txt:1183
 #: data/mp/messages/strings/names.txt:533
 #: data/mp/messages/strings/names.txt:1199
-#, fuzzy
 msgid "Mini-Rocket Pod"
-msgstr "Amélioration pour Mini-Roquettes"
+msgstr "nacelle de Mini-Roquettes"
 
 #: data/base/messages/strings/names.txt:527
 #: data/base/messages/strings/names.txt:1184
@@ -7155,7 +7154,7 @@ msgstr "CAM1 DÉFENSES"
 #: data/base/messages/strings/names.txt:629
 #: data/mp/messages/strings/names.txt:636
 msgid "CAM1 STRUCTURES"
-msgstr "CAM1 STRUCTURES"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:630
 #: data/mp/messages/strings/names.txt:637
@@ -7170,7 +7169,7 @@ msgstr "CAM2 VÉHICULES"
 #: data/base/messages/strings/names.txt:632
 #: data/mp/messages/strings/names.txt:639
 msgid "CAM2 CYBORGS"
-msgstr "CAM2 CYBORGS"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:633
 #: data/mp/messages/strings/names.txt:640
@@ -7190,7 +7189,7 @@ msgstr "CAM2 DÉFENSES"
 #: data/base/messages/strings/names.txt:636
 #: data/mp/messages/strings/names.txt:643
 msgid "CAM2 STRUCTURES"
-msgstr "CAM2 STRUCTURES"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:638
 #: data/mp/messages/strings/names.txt:645
@@ -7665,44 +7664,44 @@ msgstr "Turbine à Vapeur"
 #: data/mp/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:1465
 msgid "Repair Facility"
-msgstr "Centre de Réparation"
+msgstr "Atelier de Réparation"
 
 #: data/base/messages/strings/names.txt:821
 #: data/mp/messages/strings/names.txt:832
 msgid "Automated Repair Facility"
-msgstr "Réparations Automatisées"
+msgstr "Atelier de Réparations Automatisées"
 
 #: data/base/messages/strings/names.txt:822
 msgid "Automated Repair Facility Upgrade Mk2"
-msgstr "Réparations Automatisées Mk2"
+msgstr "Atelier de Réparations Automatisées Mk2"
 
 #: data/base/messages/strings/names.txt:823
 msgid "Automated Repair Facility Upgrade Mk3"
-msgstr "Réparations Automatisées Mk3"
+msgstr "Atelier de Réparations Automatisées Mk3"
 
 #: data/base/messages/strings/names.txt:824
 msgid "Robotic Repair Facility Upgrade"
-msgstr "Réparations Robotisées"
+msgstr "Atelier de Réparations Robotisées"
 
 #: data/base/messages/strings/names.txt:825
 msgid "Robotic Repair Facility Upgrade Mk2"
-msgstr "Réparations Robotisées Mk2"
+msgstr "Atelier de Réparations Robotisées Mk2"
 
 #: data/base/messages/strings/names.txt:826
 msgid "Robotic Repair Facility Upgrade Mk3"
-msgstr "Réparations Robotisées Mk3"
+msgstr "Atelier Réparations Robotisées Mk3"
 
 #: data/base/messages/strings/names.txt:827
 msgid "Advanced Repair Facility Upgrade"
-msgstr "Réparations Avancées"
+msgstr "Atelier de Réparations Avancées"
 
 #: data/base/messages/strings/names.txt:828
 msgid "Advanced Repair Facility Upgrade Mk2"
-msgstr "Réparations Avancées Mk2"
+msgstr "Atelier de Réparations Avancées Mk2"
 
 #: data/base/messages/strings/names.txt:829
 msgid "Advanced Repair Facility Upgrade Mk3"
-msgstr "Réparations Avancées Mk3"
+msgstr "Atelier de Réparations Avancées Mk3"
 
 #: data/base/messages/strings/names.txt:832
 #: data/mp/messages/strings/names.txt:843
@@ -7847,7 +7846,7 @@ msgstr "Réparation des Véhicules Automatisée Mk3"
 #: data/base/messages/strings/names.txt:874
 #: data/mp/messages/strings/names.txt:887
 msgid "Sensor Upgrade"
-msgstr "Amélioration pour Radar"
+msgstr "Mise à jour pour Radar"
 
 #: data/base/messages/strings/names.txt:876
 #: data/mp/messages/strings/names.txt:889
@@ -7862,7 +7861,7 @@ msgstr "Génie"
 #: data/base/messages/strings/names.txt:879
 #: data/mp/messages/strings/names.txt:892
 msgid "Improved Engineering"
-msgstr "Amélioration du Génie"
+msgstr "Avancé en Génie"
 
 #: data/base/messages/strings/names.txt:880
 #: data/mp/messages/strings/names.txt:893
@@ -7883,12 +7882,12 @@ msgstr "Tourelle de Réparations Lourde"
 #: data/mp/messages/strings/names.txt:897
 #: data/mp/messages/strings/resstrings.txt:478
 msgid "Mobile Repair Upgrade"
-msgstr "Amélioration pour Réparation Mobile"
+msgstr "Mise à jour pour Réparation Mobile"
 
 #: data/base/messages/strings/names.txt:885
 #: data/mp/messages/strings/names.txt:898
 msgid "Mobile Repair Upgrade Mk2"
-msgstr "Amélioration pour Réparation Mobile Mk2"
+msgstr "Mise à jour pour Réparation Mobile Mk2"
 
 #: data/base/messages/strings/names.txt:891
 #: data/mp/messages/strings/names.txt:904
@@ -7898,17 +7897,17 @@ msgstr "Tourelle de contre-batterie"
 #: data/base/messages/strings/names.txt:893
 #: data/mp/messages/strings/names.txt:906
 msgid "CB Sensor Upgrade"
-msgstr "Amélioration pour Radar de CB"
+msgstr "Mise à jour pour Radar de CB"
 
 #: data/base/messages/strings/names.txt:894
 #: data/mp/messages/strings/names.txt:907
 msgid "CB Sensor Upgrade 2"
-msgstr "Amélioration pour Radar de CB Mk2"
+msgstr "Mise à jour pour Radar de CB Mk2"
 
 #: data/base/messages/strings/names.txt:895
 #: data/mp/messages/strings/names.txt:908
 msgid "CB Sensor Upgrade 3"
-msgstr "Amélioration pour Radar de CB Mk3"
+msgstr "Mise à jour pour Radar de CB Mk3"
 
 #: data/base/messages/strings/names.txt:897
 #: data/mp/messages/strings/names.txt:910
@@ -7918,32 +7917,32 @@ msgstr "Tourelle de Contrôle de CB Mobile"
 #: data/base/messages/strings/names.txt:900
 #: data/mp/messages/strings/names.txt:913
 msgid "VTOL CB Upgrade"
-msgstr "Amélioration pour Contrôle de CB"
+msgstr "Mise à jour pour Contrôle de CB"
 
 #: data/base/messages/strings/names.txt:901
 #: data/mp/messages/strings/names.txt:914
 msgid "VTOL CB Upgrade 2"
-msgstr "Amélioration pour Contrôle de CB Mk2"
+msgstr "Mise à jour pour Contrôle de CB Mk2"
 
 #: data/base/messages/strings/names.txt:902
 #: data/mp/messages/strings/names.txt:915
 msgid "VTOL CB Upgrade 3"
-msgstr "Amélioration pour Contrôle de CB Mk3"
+msgstr "Mise à jour pour Contrôle de CB Mk3"
 
 #: data/base/messages/strings/names.txt:903
 #: data/mp/messages/strings/names.txt:916
 msgid "VTOL Strike Upgrade"
-msgstr "Amélioration pour Contrôle Aérien"
+msgstr "Mise à jour pour Contrôle Aérien"
 
 #: data/base/messages/strings/names.txt:904
 #: data/mp/messages/strings/names.txt:917
 msgid "VTOL Strike Upgrade Mk2"
-msgstr "Amélioration pour Contrôle Aérien Mk2"
+msgstr "Mise à jour pour Contrôle Aérien Mk2"
 
 #: data/base/messages/strings/names.txt:905
 #: data/mp/messages/strings/names.txt:918
 msgid "VTOL Strike Upgrade Mk3"
-msgstr "Amélioration pour Contrôle Aérien Mk3"
+msgstr "Mise à jour pour Contrôle Aérien Mk3"
 
 #: data/base/messages/strings/names.txt:907
 #: data/mp/messages/strings/names.txt:435
@@ -8555,7 +8554,7 @@ msgstr "Chargeur Rapide"
 #: data/base/messages/strings/names.txt:1082
 #: data/mp/messages/strings/names.txt:1095
 msgid "Laser - Flashlight"
-msgstr "Laser - Flashlight"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:1085
 #: data/mp/messages/strings/names.txt:1098
@@ -9210,7 +9209,7 @@ msgstr "Canon d'assaut Python chenillé"
 #: data/base/messages/strings/names.txt:1467
 #: data/mp/messages/strings/names.txt:1483
 msgid "Flashlight"
-msgstr "Flashlight"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:1468
 #: data/mp/messages/strings/names.txt:1484
@@ -9235,17 +9234,17 @@ msgstr "Silo de Missiles"
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:260
 msgid "Armored guard tower with Heavy Machinegun"
-msgstr "Tour de défense à Mitrailleuse Lourde"
+msgstr "Tour de défense renforcé à Mitrailleuse Lourde"
 
 #: data/base/messages/strings/resstrings.txt:240
 #: data/mp/messages/strings/resstrings.txt:266
 msgid "Armored guard tower with Flamer"
-msgstr "Tour de défense à Lance-Flammes"
+msgstr "Tour de défense renforcé avec Lance-Flammes"
 
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:272
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "Tour de défense à Lance-Roquettes AC"
+msgstr "Tour de défense renforcé avec Lance-Roquettes AC"
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:286
@@ -9296,7 +9295,7 @@ msgstr "Brouilleur amélioré"
 #: data/base/messages/strings/resstrings.txt:512
 #: data/mp/messages/strings/resstrings.txt:540
 msgid "Improvement in synaptic link technology"
-msgstr "Amélioration dans la technologie du lien synaptique"
+msgstr "Mise à jour dans la technologie du lien synaptique"
 
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:541
@@ -10495,11 +10494,11 @@ msgstr "Lance-roquettes Vipère chenillé"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1341
 msgid "Cobra Half-Tracks Mini-Pod"
-msgstr ""
+msgstr "mini-nacelle Cobra semi-chenillé"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1342
 msgid "Cobra Tracks Mini-Pod"
-msgstr ""
+msgstr "mini-nacelle Cobra chenillé"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1343
 msgid "Cobra Tracks Mini-Rocket Artillery"
@@ -10679,9 +10678,8 @@ msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1863
 #: data/mp/messages/strings/names.txt:1863
-#, fuzzy
 msgid "Vengeance Tracks Gauss Cannon"
-msgstr "Anti-char Vengeance Chenilles"
+msgstr "Canon Anti-char Vengeance à Chenilles"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1864
 #: data/mp/messages/strings/names.txt:1864
@@ -10691,9 +10689,8 @@ msgstr "Anti-char Vengeance Chenilles"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1867
 #: data/mp/messages/strings/names.txt:1867
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "Bombes à Fragmentation"
+msgstr "Bombes à Fragmentation Bug VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1868
 #: data/mp/messages/strings/names.txt:1868
@@ -10866,9 +10863,8 @@ msgstr "Mini lance-Roquettes Cobra Semi-chenillé"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1916
 #: data/mp/messages/strings/names.txt:1916
-#, fuzzy
 msgid "Mini-Rocket Cobra Tracks"
-msgstr "Mini lance-Roquettes Cobra sur roues"
+msgstr "Mini lance-Roquettes Cobra chenillé"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
 #, fuzzy
@@ -10936,15 +10932,13 @@ msgstr "Lance-flammes Viper Semi-chenillé"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1937
 #: data/mp/messages/strings/names.txt:1937
-#, fuzzy
 msgid "Inferno Cobra Hover"
-msgstr "Inferno Cobra semi-chenillé"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1938
 #: data/mp/messages/strings/names.txt:1938
-#, fuzzy
 msgid "Medium Cannon Cobra Half Track"
-msgstr "Canon Moyen Cobra Chenillé"
+msgstr "Canon Moyen Cobra semi-Chenillé"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1939
 #: data/mp/messages/strings/names.txt:1939
@@ -10954,51 +10948,43 @@ msgstr "Canon à HV Python aéro-glisseur"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1940
 #: data/mp/messages/strings/names.txt:1940
-#, fuzzy
 msgid "Assault Gun Python Hover"
-msgstr "Canon d'assaut Python chenillé"
+msgstr "Canon d'assaut Python Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1941
 #: data/mp/messages/strings/names.txt:1941
-#, fuzzy
 msgid "Assault Gun Python Half Track"
-msgstr "Canon d'assaut Python chenillé"
+msgstr "Canon d'assaut Python semi-chenillé"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
 #: data/mp/messages/strings/names.txt:1942
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Mitrailleuse Lourde Scorpion Chenillée"
+msgstr "Mitrailleuse Lourde Scorpion semi-Chenillée"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
 #: data/mp/messages/strings/names.txt:1943
-#, fuzzy
 msgid "Assault Cannon Mantis Hover"
-msgstr "Tour de Garde à Canon d'Assaut"
+msgstr "Canon d'Assaut Mantis Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1944
 #: data/mp/messages/strings/names.txt:1944
-#, fuzzy
 msgid "Pulse Laser Leopard Hover"
-msgstr "Laser à Impulsions"
+msgstr "Laser à Impulsions Leopard Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
 #: data/mp/messages/strings/names.txt:1945
-#, fuzzy
 msgid "Pulse Laser Panther Hover"
-msgstr "Laser à Impulsions"
+msgstr "Laser à Impulsions Panther Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
 #: data/mp/messages/strings/names.txt:1946
-#, fuzzy
 msgid "Rail Gun Tiger Hover"
-msgstr "Amélioration pour Canon Électrique"
+msgstr "Canon Électrique: mis à jour"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1947
 #: data/mp/messages/strings/names.txt:1947
-#, fuzzy
 msgid "Pulse Laser Tiger Hover"
-msgstr "Laser à Impulsion Tigre Chenillé"
+msgstr "Laser à Impulsion Tigre Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
 #: data/mp/messages/strings/names.txt:1948
@@ -11008,15 +10994,13 @@ msgstr "Canon Gauss Wyvern Chenillé"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1949
 #: data/mp/messages/strings/names.txt:1949
-#, fuzzy
 msgid "Scourge Missile Wyvern Tracks"
-msgstr "Tour à Missiles Scourge"
+msgstr "Tour à Missiles Scourge chenillé"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1950
 #: data/mp/messages/strings/names.txt:1950
-#, fuzzy
 msgid "Flashlight Retribution Hover"
-msgstr "Cyborg Flashlight"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
 #: data/mp/messages/strings/names.txt:1951
@@ -11050,94 +11034,79 @@ msgstr "Châssis Moyen - Châtiment"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
 #: data/mp/messages/strings/names.txt:1956
-#, fuzzy
 msgid "Scourge Retaliation VTOL"
-msgstr "Revanche"
+msgstr "Revanche Scourge VTOL"
 
 #: data/mp/messages/resmessages12.rmsg:58
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "Augmente la vitesse de construction"
+msgstr "vitesse de construction +10%"
 
 #: data/mp/messages/resmessages12.rmsg:97
 #: data/mp/messages/resmessagesall.rmsg:214
-#, fuzzy
 msgid "Cannon accuracy +10%"
-msgstr "Précision des Canons accrue"
+msgstr "Précision des Canons +10%"
 
 #: data/mp/messages/resmessages12.rmsg:110
-#, fuzzy
 msgid "Flamer reload time -15%"
-msgstr "Chargeur Automatique pour Lance-Flammes"
+msgstr "Reharge des Lance-Flammes -15%"
 
 #: data/mp/messages/resmessages12.rmsg:136
 #: data/mp/messages/resmessages23.rmsg:175
 #: data/mp/messages/resmessages2.rmsg:890
-#, fuzzy
 msgid "Machinegun reload time -15%"
-msgstr "Amélioration pour Mitrailleuse"
+msgstr "recharge de Mitrailleuse -15%"
 
 #: data/mp/messages/resmessages12.rmsg:162
 #: data/mp/messages/resmessages23.rmsg:188
 #: data/mp/messages/resmessages3.rmsg:1176
-#, fuzzy
 msgid "Mortar accuracy +10%"
-msgstr "Précision des Mortiers accrue"
+msgstr "Précision des Mortiers +10%"
 
 #: data/mp/messages/resmessages12.rmsg:175
 #: data/mp/messages/resmessages3.rmsg:1189
-#, fuzzy
 msgid "Mortar reload time -10%"
-msgstr "Chargeur Automatique pour Mortier"
+msgstr "Recharge Mortier -10%"
 
 #: data/mp/messages/resmessages12.rmsg:201
-#, fuzzy
 msgid "Rocket reload time -15%"
-msgstr "Chargeur Automatique pour lance roquettes"
+msgstr "Recharge pour lance roquettes -15%"
 
 #: data/mp/messages/resmessages12.rmsg:214
 #: data/mp/messages/resmessages3.rmsg:890
-#, fuzzy
 msgid "Cannon reload time -10%"
-msgstr "Chargeur Automatique pour Canon"
+msgstr "temps de recharge du Canon -10%"
 
 #: data/mp/messages/resmessages12.rmsg:227
 #: data/mp/messages/resmessages1.rmsg:579
 #: data/mp/messages/resmessages3.rmsg:877
-#, fuzzy
 msgid "Cannon damage +25%"
-msgstr "Dégâts des Canons augmentés"
+msgstr "Dégâts des Canons +25%"
 
 #: data/mp/messages/resmessages12.rmsg:240
 #: data/mp/messages/resmessages1.rmsg:748
 #: data/mp/messages/resmessagesall.rmsg:175
-#, fuzzy
 msgid "Rocket accuracy +10%"
-msgstr "Précision des Roquettes augmentée"
+msgstr "Précision des Roquettes +10%"
 
 #: data/mp/messages/resmessages1.rmsg:32
 #: data/mp/messages/resmessages3.rmsg:71
 #: data/mp/messages/resmessages3.rmsg:84
-#, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "Blindage Cinétique et Résistance augmentés"
+msgstr "Blindage Cinétique +35%, Résistances +35%"
 
 #: data/mp/messages/resmessages1.rmsg:97
-#, fuzzy
 msgid "Armour +35%, Body Points +30%"
-msgstr "Augmente le Blindage et la Résistance"
+msgstr "Blindage +35%, Résistance +30%"
 
 #: data/mp/messages/resmessages1.rmsg:148
-#, fuzzy
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "Tour de défense à Lance-Roquettes AC"
+msgstr "Tour de défense renforcé avec Lance-Roquettes AC"
 
 #: data/mp/messages/resmessages1.rmsg:253
 #: data/mp/messages/resmessages2.rmsg:331
 #: data/mp/messages/resmessages3.rmsg:422
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "Accélère la Vitesse de Réparation"
+msgstr "Vitesse de Réparation +100%"
 
 #: data/mp/messages/resmessages1.rmsg:306
 #, no-c-format
@@ -11150,16 +11119,14 @@ msgid "Factory output speed +60%"
 msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:345
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "Recherche terminée : %s"
+msgstr "Recherche terminée : +85%"
 
 #: data/mp/messages/resmessages1.rmsg:358
 #: data/mp/messages/resmessages2.rmsg:370
 #: data/mp/messages/resmessages3.rmsg:448
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "Recherche terminée : %s"
+msgstr "Recherche terminée : +30%"
 
 #: data/mp/messages/resmessages1.rmsg:371
 #: data/mp/messages/resmessages2.rmsg:58
@@ -11168,25 +11135,22 @@ msgstr "Recherche terminée : %s"
 #: data/mp/messages/resmessages3.rmsg:227
 #: data/mp/messages/resmessages3.rmsg:461
 #: data/mp/messages/resmessages3.rmsg:474
-#, fuzzy
 msgid "Armor +35%, Body Points +30%"
-msgstr "Augmente le Blindage et la Résistance"
+msgstr "Blindage +35%, Résistance +30%"
 
 #: data/mp/messages/resmessages1.rmsg:462
 #: data/mp/messages/resmessages2.rmsg:500
 #: data/mp/messages/resmessages3.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:682
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "Châssis"
+msgstr "Véhicule vitesse +5%"
 
 #: data/mp/messages/resmessages1.rmsg:475
 #: data/mp/messages/resmessages2.rmsg:513
 #: data/mp/messages/resmessages3.rmsg:695
 #: data/mp/messages/resmessages3.rmsg:708
-#, fuzzy
 msgid "Kinetic armor +30%, body points +30%"
-msgstr "Augmente le blindage cinétique et la résistance"
+msgstr "blindage cinétique  +30%, résistance +30%"
 
 #: data/mp/messages/resmessages1.rmsg:553
 #: data/mp/messages/resmessages1.rmsg:566
@@ -11198,46 +11162,39 @@ msgstr "Fort contre: Véhicules et Emplacements"
 #: data/mp/messages/resmessages1.rmsg:605
 #: data/mp/messages/resmessages2.rmsg:786
 #: data/mp/messages/resmessagesall.rmsg:773
-#, fuzzy
 msgid "Flamer damage +25%"
-msgstr "Augmente les dégâts des lance-flammes"
+msgstr "dégâts des lance-flammes +25%"
 
 #: data/mp/messages/resmessages1.rmsg:644
 #: data/mp/messages/resmessages1.rmsg:657
 #: data/mp/messages/resmessages2.rmsg:877
 #: data/mp/messages/resmessages3.rmsg:1007
 #: data/mp/messages/resmessages3.rmsg:1020
-#, fuzzy
 msgid "Machinegun damage +25%"
-msgstr "Augmente les dommages des Mitrailleuses"
+msgstr "dommages des Mitrailleuses +25%"
 
 #: data/mp/messages/resmessages1.rmsg:683
 #: data/mp/messages/resmessages2.rmsg:916
-#, fuzzy
 msgid "Mortar damage +25%"
-msgstr "Augmente les dégâts des Mortiers"
+msgstr "dégâts des Mortiers +25%"
 
 #: data/mp/messages/resmessages1.rmsg:709
-#, fuzzy
 msgid "Mini-Rocket accuracy +10%"
-msgstr "Augmente la précision des Mini-Roquettes"
+msgstr "précision des Mini-Roquettes +10%"
 
 #: data/mp/messages/resmessages1.rmsg:722
 #: data/mp/messages/resmessages2.rmsg:929
-#, fuzzy
 msgid "Mini-Rocket damage +25%"
-msgstr "Augmente les dégâts des Mini-Roquettes"
+msgstr "dégâts des Mini-Roquettes +25%"
 
 #: data/mp/messages/resmessages1.rmsg:735
-#, fuzzy
 msgid "Mini-Rocket reload time -15%"
-msgstr "Amélioration pour Mini-Roquettes"
+msgstr "recharge des Mini-Roquettes -15%"
 
 #: data/mp/messages/resmessages1.rmsg:761
 #: data/mp/messages/resmessages2.rmsg:942
-#, fuzzy
 msgid "Rocket damage +25%"
-msgstr "Augmente les dégâts des Roquettes"
+msgstr "dégâts des Roquettes +25%"
 
 #: data/mp/messages/resmessages23.rmsg:32
 msgid "Power output +25%"
@@ -11245,9 +11202,8 @@ msgstr ""
 
 #: data/mp/messages/resmessages23.rmsg:45
 #: data/mp/messages/resmessages3.rmsg:513
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "Augmente la vitesse de construction"
+msgstr "Vitesse de construction +20%"
 
 #: data/mp/messages/resmessages23.rmsg:136
 #: data/mp/messages/resmessages2.rmsg:643
@@ -11258,9 +11214,8 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:160
 #: data/mp/messages/resmessages2.rmsg:732
 #: data/mp/messages/resmessages3.rmsg:862
-#, fuzzy
 msgid "Bomb Upgrade"
-msgstr "Amélioration pour Bombardiers"
+msgstr "Bombe: mis à jour"
 
 #: data/mp/messages/resmessages23.rmsg:161
 #, fuzzy
@@ -11274,19 +11229,16 @@ msgid "Bomb damage +25%"
 msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:6
-#, fuzzy
 msgid "Thermal Armor +45%"
-msgstr "Blindage Thermique"
+msgstr "Blindage Thermique +45%"
 
 #: data/mp/messages/resmessages2.rmsg:19
-#, fuzzy
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "Blindage Cinétique et Résistance augmentés"
+msgstr "Blindage Cinétique +35%, Résistance +35%"
 
 #: data/mp/messages/resmessages2.rmsg:357
-#, fuzzy
 msgid "Factory production rate +60%"
-msgstr "Augmente la vitesse de production des usines"
+msgstr "Taux de Production des usines +60%"
 
 #: data/mp/messages/resmessages2.rmsg:358
 #: data/mp/messages/resmessagesall.rmsg:787
@@ -11300,15 +11252,13 @@ msgid "Rearming speed +30%"
 msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:526
-#, fuzzy
 msgid "Thermal armor +40%"
-msgstr "Blindage Thermique"
+msgstr "Blindage Thermique +40%"
 
 #: data/mp/messages/resmessages2.rmsg:656
 #: data/mp/messages/resmessages3.rmsg:825
-#, fuzzy
 msgid "AA Flak damage +25%"
-msgstr "Augmente les dégâts des armes de DCA"
+msgstr "dégâts des armes de AA Flak +25%"
 
 #: data/mp/messages/resmessages2.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:838
@@ -11317,31 +11267,26 @@ msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:838
 #: data/mp/messages/resmessages3.rmsg:903
-#, fuzzy
 msgid "Howitzer accuracy +10%"
-msgstr "Augmente la précision des Obusiers"
+msgstr "précision des Howitzer +10%"
 
 #: data/mp/messages/resmessages2.rmsg:851
 #: data/mp/messages/resmessages3.rmsg:916
-#, fuzzy
 msgid "Howitzer damage +25%"
-msgstr "Augmente les dégâts des Obusiers"
+msgstr "dégâts des Howitzer +25%"
 
 #: data/mp/messages/resmessages2.rmsg:864
 #: data/mp/messages/resmessages3.rmsg:929
-#, fuzzy
 msgid "Howitzer reload time -10%"
-msgstr "Chargeur Automatique pour Obusier"
+msgstr "Recharge pour Howitzer -10%"
 
 #: data/mp/messages/resmessages3.rmsg:6
-#, fuzzy
 msgid "Thermal Armor +35%"
-msgstr "Blindage Thermique Mk3"
+msgstr "Blindage Thermique +35%"
 
 #: data/mp/messages/resmessages3.rmsg:304
-#, fuzzy
 msgid "Armored guard tower with Pulse Laser"
-msgstr "Tour de défense à Lance-Flammes"
+msgstr "Tour renforcé de défense à impulsion laser"
 
 #: data/mp/messages/resmessages3.rmsg:435
 msgid "Power output +30%"
@@ -11349,19 +11294,16 @@ msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:721
 #: data/mp/messages/resmessagesall.rmsg:838
-#, fuzzy
 msgid "Thermal Armor +40%"
-msgstr "Blindage Thermique"
+msgstr "Blindage Thermique +40%"
 
 #: data/mp/messages/resmessages3.rmsg:968
-#, fuzzy
 msgid "Laser accuracy +10%"
-msgstr "Augmente la précision des Lasers"
+msgstr "précision des Lasers +10%"
 
 #: data/mp/messages/resmessages3.rmsg:981
-#, fuzzy
 msgid "Laser damage +25%"
-msgstr "Augmente les dommages des Lasers"
+msgstr "dommages des Lasers +25%"
 
 #: data/mp/messages/resmessages3.rmsg:994
 msgid "Laser reload time -15%"
@@ -11369,40 +11311,33 @@ msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:1059
 #: data/mp/messages/resmessages3.rmsg:1072
-#, fuzzy
 msgid "Missile accuracy +10%"
-msgstr "Augmente la précision des Missiles"
+msgstr "précision des Missiles +10%"
 
 #: data/mp/messages/resmessages3.rmsg:1085
-#, fuzzy
 msgid "Missile damage +25%"
-msgstr "Augmente les dégâts des Missiles"
+msgstr "dégâts des Missiles +25%"
 
 #: data/mp/messages/resmessages3.rmsg:1150
 #: data/mp/messages/resmessages3.rmsg:1163
-#, fuzzy
 msgid "Missile reload time -15%"
-msgstr "Durée de la Mission - %s"
+msgstr "recharge de Missile -15%"
 
 #: data/mp/messages/resmessages3.rmsg:1241
-#, fuzzy
 msgid "Rail Gun accuracy +10%"
-msgstr "Précision des Canons Électriques augmentée"
+msgstr "Précision des Canons Électriques +10%"
 
 #: data/mp/messages/resmessages3.rmsg:1254
-#, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "Dégâts des Canons Électriques augmentés"
+msgstr "Dégâts des Canons Électriques +25%"
 
 #: data/mp/messages/resmessages3.rmsg:1267
-#, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "Amélioration pour Canon Électrique"
+msgstr "recharge Canon Électrique -15%"
 
 #: data/mp/messages/resmessagesall.rmsg:84
-#, fuzzy
 msgid "Sensor Range +25%"
-msgstr "Portée des Senseurs"
+msgstr "Portée des Senseurs +25%"
 
 #: data/mp/messages/resmessagesall.rmsg:96
 #, fuzzy
@@ -11410,9 +11345,8 @@ msgid "Improved Thermal Emissions detection"
 msgstr "Nouvelle technologie de détection d'émissions thermiques"
 
 #: data/mp/messages/resmessagesall.rmsg:97
-#, fuzzy
 msgid "Sensor Range +15%"
-msgstr "Portée des Senseurs"
+msgstr "Portée des Senseurs +15%"
 
 #: data/mp/messages/resmessagesall.rmsg:109
 #, fuzzy
@@ -11420,9 +11354,8 @@ msgid "Advanced Thermal Emissions detection"
 msgstr "Nouvelle technologie de détection d'émissions thermiques"
 
 #: data/mp/messages/resmessagesall.rmsg:110
-#, fuzzy
 msgid "Sensor Range +10%"
-msgstr "Portée des Senseurs"
+msgstr "Portée des Senseurs +10%"
 
 #: data/mp/messages/resmessagesall.rmsg:135
 msgid "Radar detector tower detects enemy sensors"
@@ -11568,7 +11501,7 @@ msgstr "Zone d'effet étroite"
 
 #: data/mp/messages/resmessagesall.rmsg:538
 msgid "Armored guard tower with Nexus Link"
-msgstr "Tour de défense à Lien Nexus"
+msgstr "Tour de garde renforcé avec Lien Nexus"
 
 #: data/mp/messages/resmessagesall.rmsg:551
 #: data/mp/messages/resmessagesall.rmsg:564
@@ -11590,7 +11523,7 @@ msgstr "Mur armé d'un laser lourd"
 
 #: data/mp/messages/resmessagesall.rmsg:590
 msgid "Armored guard tower with EMP Cannon"
-msgstr "Tour de défense à canon EMP"
+msgstr "Tour de garde renforcé avec canon EMP"
 
 #: data/mp/messages/resmessagesall.rmsg:603
 msgid "Armed with Cyborg Pulse Laser"
@@ -11762,9 +11695,8 @@ msgid "Radar Detector"
 msgstr "Détecteur de Radar"
 
 #: data/mp/messages/strings/names.txt:380
-#, fuzzy
 msgid "Radar Detector Tower"
-msgstr "Tour de Contrôle Aérien"
+msgstr "Tour de detection Aérien"
 
 #: data/mp/messages/strings/names.txt:385
 msgid "Nexus Link"
@@ -11792,21 +11724,18 @@ msgstr "Site DCA Cyclone"
 
 #: data/mp/messages/strings/names.txt:473
 #: data/mp/messages/strings/names.txt:787
-#, fuzzy
 msgid "Pulse Laser Hardpoint"
-msgstr "Point Défensif Lance-Flammes"
+msgstr "Point Défensif à impulsion laser"
 
 #: data/mp/messages/strings/names.txt:475
 #: data/mp/messages/strings/names.txt:749
-#, fuzzy
 msgid "Pulse Laser Tower"
-msgstr "Laser à Impulsions"
+msgstr "tour à Impulsions laser"
 
 #: data/mp/messages/strings/names.txt:512
 #: data/mp/messages/strings/names.txt:1134
-#, fuzzy
 msgid "Seraph Missile Array"
-msgstr "Augmente la précision des Missiles"
+msgstr "batterie de Missiles Seraph"
 
 #: data/mp/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:1197
@@ -11871,39 +11800,32 @@ msgstr "Tour lance-flammes"
 
 #: data/mp/messages/strings/names.txt:786
 #: data/mp/messages/strings/names.txt:1397
-#, fuzzy
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Canon à Hyper Vélocité"
+msgstr "point défensif avec Canon à Hyper Vélocité"
 
 #: data/mp/messages/strings/names.txt:805
-#, fuzzy
 msgid "Automated Manufacturing"
-msgstr "Réarmement Automatisé"
+msgstr "Manufacture Automatisé"
 
 #: data/mp/messages/strings/names.txt:806
-#, fuzzy
 msgid "Automated Manufacturing Mk2"
-msgstr "Réarmement Automatisé Mk2"
+msgstr "manufacture Automatisé Mk2"
 
 #: data/mp/messages/strings/names.txt:807
-#, fuzzy
 msgid "Automated Manufacturing Mk3"
-msgstr "Réarmement Automatisé Mk3"
+msgstr "manufacture Automatisé Mk3"
 
 #: data/mp/messages/strings/names.txt:808
-#, fuzzy
 msgid "Robotic Manufacturing"
-msgstr "Menu Assemblage"
+msgstr "manufacture robotisé"
 
 #: data/mp/messages/strings/names.txt:809
-#, fuzzy
 msgid "Robotic Manufacturing Mk2"
-msgstr "Réarmement Robotisé Mk2"
+msgstr "manufacture robotisé Mk2"
 
 #: data/mp/messages/strings/names.txt:810
-#, fuzzy
 msgid "Robotic Manufacturing Mk3"
-msgstr "Réarmement Robotisé Mk3"
+msgstr "manufacture robotisé Mk3"
 
 #: data/mp/messages/strings/names.txt:811
 #, fuzzy
@@ -11926,44 +11848,36 @@ msgid "Advanced Manufacturing Mk3"
 msgstr "Production de Véhicules Avancée Mk3"
 
 #: data/mp/messages/strings/names.txt:833
-#, fuzzy
 msgid "Automated Repair Facility Mk2"
-msgstr "Réparations Automatisées"
+msgstr "Atelier de Réparations Automatisées Mk2"
 
 #: data/mp/messages/strings/names.txt:834
-#, fuzzy
 msgid "Automated Repair Facility Mk3"
-msgstr "Réparations Automatisées"
+msgstr "Atelier de Réparations Automatisées Mk3"
 
 #: data/mp/messages/strings/names.txt:835
-#, fuzzy
 msgid "Robotic Repair Facility"
-msgstr "Réparations Robotisées"
+msgstr "Atelier de Réparations Robotisées"
 
 #: data/mp/messages/strings/names.txt:836
-#, fuzzy
 msgid "Robotic Repair Facility Mk2"
-msgstr "Réparations Robotisées Mk2"
+msgstr "Atelier de Réparations Robotisées Mk2"
 
 #: data/mp/messages/strings/names.txt:837
-#, fuzzy
 msgid "Advanced Repair Facility"
-msgstr "Réparations Avancées"
+msgstr "Atelier de Réparations Avancées"
 
 #: data/mp/messages/strings/names.txt:838
-#, fuzzy
 msgid "Robotic Repair Facility Mk3"
-msgstr "Réparations Robotisées Mk3"
+msgstr "Atelier de Réparations Robotisées Mk3"
 
 #: data/mp/messages/strings/names.txt:839
-#, fuzzy
 msgid "Advanced Repair Facility Mk2"
-msgstr "Réparations Avancées Mk2"
+msgstr "Atelier de Réparations Avancées Mk2"
 
 #: data/mp/messages/strings/names.txt:840
-#, fuzzy
 msgid "Advanced Repair Facility Mk3"
-msgstr "Réparations Avancées Mk3"
+msgstr "Atelier de Réparations Avancées Mk3"
 
 #: data/mp/messages/strings/names.txt:885
 msgid "Auto-Repair"
@@ -12058,11 +11972,11 @@ msgstr "Lance Roquette Anti-Bunker Cobra hovercraft"
 
 #: data/mp/messages/strings/names.txt:1516
 msgid "Sensor Upgrade Mk2"
-msgstr "Amélioration de capteur MK2"
+msgstr "Mise à jour de capteur MK2"
 
 #: data/mp/messages/strings/names.txt:1517
 msgid "Sensor Upgrade Mk3"
-msgstr "Amélioration de capteur MK3"
+msgstr "Mise à jour pour capteur MK3"
 
 #: data/mp/messages/strings/names.txt:1518
 msgid "Vapor Turbine Generator Mk2"
@@ -12094,7 +12008,7 @@ msgstr "Cyborg Grenadier"
 
 #: data/mp/messages/strings/names.txt:1619
 msgid "Grenadier"
-msgstr "Grenadier"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1623
 #: data/mp/messages/strings/names.txt:1626
@@ -12108,9 +12022,8 @@ msgstr "Mécanicien Cyborg"
 
 #: data/mp/messages/strings/names.txt:1635
 #: data/mp/messages/strings/names.txt:1636
-#, fuzzy
 msgid "Incendiary Howitzer"
-msgstr "Obusier Incendiaire"
+msgstr "Howitzer Incendiaire"
 
 #: data/mp/messages/strings/names.txt:1637
 #: data/mp/messages/strings/names.txt:1638
@@ -12321,7 +12234,7 @@ msgstr "Châssis Super Lourd - Dragon"
 
 #: data/mp/messages/strings/names.txt:1768
 msgid "Dragon"
-msgstr "Dragon"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1770
 msgid "Superhot Plasmite gel"
@@ -12403,21 +12316,18 @@ msgstr "Lance-Missile EMP"
 
 #: data/mp/messages/strings/names.txt:1807
 #: data/mp/messages/strings/names.txt:1808
-#, fuzzy
 msgid "Command Turret II"
-msgstr "Tourelle de Commandement"
+msgstr "Tourelle de Commandement II"
 
 #: data/mp/messages/strings/names.txt:1809
 #: data/mp/messages/strings/names.txt:1810
-#, fuzzy
 msgid "Command Turret III"
-msgstr "Tourelle de Commandemet Mk3"
+msgstr "Tourelle de Commandemet III"
 
 #: data/mp/messages/strings/names.txt:1811
 #: data/mp/messages/strings/names.txt:1812
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "Tourelle de Commandement"
+msgstr "Tourelle de Commandement IV"
 
 #: data/mp/messages/strings/names.txt:1874
 #, fuzzy
@@ -12476,9 +12386,8 @@ msgstr "Espagnol"
 
 #: lib/framework/i18n.c:62
 #: lib/framework/i18n.c:119
-#, fuzzy
 msgid "Estonian"
-msgstr "Roumain"
+msgstr "Estonien"
 
 #: lib/framework/i18n.c:64
 #: lib/framework/i18n.c:121
@@ -12502,9 +12411,8 @@ msgstr "Irlandais"
 
 #: lib/framework/i18n.c:75
 #: lib/framework/i18n.c:132
-#, fuzzy
 msgid "Croatian"
-msgstr "Latin"
+msgstr "Croatien"
 
 #: lib/framework/i18n.c:76
 #: lib/framework/i18n.c:133
@@ -12559,9 +12467,8 @@ msgstr "Slovénien"
 
 #: lib/framework/i18n.c:98
 #: lib/framework/i18n.c:150
-#, fuzzy
 msgid "Ukrainian"
-msgstr "Frisons"
+msgstr "Ukrénien"
 
 #: lib/framework/i18n.c:99
 #: lib/framework/i18n.c:151
@@ -12575,7 +12482,7 @@ msgstr "Chinois Traditionnel"
 
 #: lib/framework/i18n.c:134
 msgid "Latin"
-msgstr "Latin"
+msgstr ""
 
 #: lib/netplay/netplay.c:1287
 #: lib/netplay/netplay.c:2136
@@ -12611,9 +12518,8 @@ msgid "Close"
 msgstr "Fermer"
 
 #: src/cheat.c:142
-#, fuzzy
 msgid ": Unknown cheat code."
-msgstr "Exécution en mode DEBUG"
+msgstr ": code de trichage inconnu"
 
 #: src/clparse.c:81
 msgid "Run in cheat mode"
@@ -12679,7 +12585,7 @@ msgstr "Active un mod global"
 #: src/clparse.c:91
 #: src/clparse.c:92
 msgid "mod"
-msgstr "mod"
+msgstr ""
 
 #: src/clparse.c:91
 msgid "Enable a campaign only mod"
@@ -12690,9 +12596,8 @@ msgid "Enable a multiplay only mod"
 msgstr "Active un mod pour multijoueur"
 
 #: src/clparse.c:93
-#, fuzzy
 msgid "Disable asserts"
-msgstr "Désactiver les Ombres"
+msgstr "Désactiver les assertions"
 
 #: src/clparse.c:94
 msgid "Causes a crash to test the crash handler"
@@ -12902,14 +12807,12 @@ msgid "Systems"
 msgstr "Systèmes"
 
 #: src/display3d.c:568
-#, fuzzy
 msgid "Player left"
-msgstr "Joueur"
+msgstr "Joueur à quitter"
 
 #: src/display3d.c:568
-#, fuzzy
 msgid "Player dropped"
-msgstr "Joueur"
+msgstr "Joueur échapper"
 
 #: src/display.c:1695
 msgid "Cannot Build. Oil Resource Burning."
@@ -12922,9 +12825,9 @@ msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Endommagé à %d%% - Expérience %d, %s"
 
 #: src/display.c:1891
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
-msgstr "%s - Endommagé à %d%% - Expérience %d, %s"
+msgstr "%s - Allié - Endommagé à %d%% - Expérience %d, %s"
 
 #: src/display.c:2072
 msgid "Truck ordered to build Oil Derrick"
@@ -13003,351 +12906,346 @@ msgstr "Spécial"
 msgid "Hero"
 msgstr "Héros"
 
-#: src/frontend.c:253
+#: src/frontend.c:254
 msgid "Single Player"
 msgstr "Un Joueur"
 
-#: src/frontend.c:254
+#: src/frontend.c:255
 msgid "Multi Player"
 msgstr "Multi-joueurs"
 
-#: src/frontend.c:255
-#: src/frontend.c:313
-msgid "Tutorial"
-msgstr "Tutorial"
-
 #: src/frontend.c:256
-msgid "Options"
-msgstr "Options"
+#: src/frontend.c:314
+msgid "Tutorial"
+msgstr ""
 
 #: src/frontend.c:257
+msgid "Options"
+msgstr ""
+
+#: src/frontend.c:258
 msgid "View Intro"
 msgstr "Voir Intro"
 
-#: src/frontend.c:259
+#: src/frontend.c:260
 msgid "Quit Game"
 msgstr "Quitter"
 
-#: src/frontend.c:261
+#: src/frontend.c:262
 msgid "MAIN MENU"
 msgstr "MENU PRINCIPAL"
 
-#: src/frontend.c:314
+#: src/frontend.c:315
 msgid "Fast Play"
 msgstr "Partie Rapide"
 
-#: src/frontend.c:315
+#: src/frontend.c:316
 msgid "TUTORIALS"
 msgstr "TUTORIAUX"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:317
-#: src/frontend.c:377
-#: src/frontend.c:531
-#: src/frontend.c:596
-#: src/frontend.c:730
-#: src/frontend.c:869
-#: src/frontend.c:976
-#: src/frontend.c:1183
-#: src/frontend.c:1326
+#: src/frontend.c:318
+#: src/frontend.c:378
+#: src/frontend.c:532
+#: src/frontend.c:597
+#: src/frontend.c:731
+#: src/frontend.c:870
+#: src/frontend.c:977
+#: src/frontend.c:1184
+#: src/frontend.c:1327
 msgctxt "menu"
 msgid "Return"
 msgstr "Menu précédent"
 
-#: src/frontend.c:371
+#: src/frontend.c:372
 msgid "New Campaign"
 msgstr "Nouvelle Campagne"
 
-#: src/frontend.c:372
+#: src/frontend.c:373
 msgid "Start Skirmish Game"
 msgstr "Démarrer escarmouche"
 
-#: src/frontend.c:373
-#, fuzzy
-msgid "Challenges"
-msgstr "Pillard"
-
 #: src/frontend.c:374
+msgid "Challenges"
+msgstr "Défis"
+
+#: src/frontend.c:375
 #: src/ingameop.c:281
 msgid "Load Game"
 msgstr "Charger une Partie"
 
-#: src/frontend.c:376
+#: src/frontend.c:377
 msgid "SINGLE PLAYER"
 msgstr "UN JOUEUR"
 
-#: src/frontend.c:473
+#: src/frontend.c:474
 #: src/ingameop.c:507
 #: src/mission.c:2842
 #: src/mission.c:2947
 msgid "Load Saved Game"
 msgstr "Charger une partie Enregistrée"
 
-#: src/frontend.c:526
+#: src/frontend.c:527
 msgid "MULTI PLAYER"
 msgstr "MULTI-JOUEURS"
 
-#: src/frontend.c:528
+#: src/frontend.c:529
 msgid "Host Game"
 msgstr "Créer une Nouvelle Partie"
 
-#: src/frontend.c:529
+#: src/frontend.c:530
 msgid "Join Game"
 msgstr "Joindre une Partie"
 
-#: src/frontend.c:589
+#: src/frontend.c:590
 #: src/multiint.c:1257
 msgid "OPTIONS"
-msgstr "OPTIONS"
+msgstr ""
 
-#: src/frontend.c:590
+#: src/frontend.c:591
 msgid "Game Options"
 msgstr "Options du Jeu"
 
-#: src/frontend.c:591
+#: src/frontend.c:592
 msgid "Graphics Options"
 msgstr "Options Graphiques"
 
-#: src/frontend.c:592
+#: src/frontend.c:593
 msgid "Video Options"
 msgstr "Options Vidéos"
 
-#: src/frontend.c:593
+#: src/frontend.c:594
 #: src/ingameop.c:276
 msgid "Audio Options"
 msgstr "Options Audio"
 
-#: src/frontend.c:594
+#: src/frontend.c:595
 msgid "Mouse Options"
 msgstr "Options souris"
 
-#: src/frontend.c:595
+#: src/frontend.c:596
 msgid "Key Mappings"
 msgstr "Raccourcis Clavier"
 
-#: src/frontend.c:657
+#: src/frontend.c:658
 msgid "Video Playback"
 msgstr "Affichage des Vidéos"
 
-#: src/frontend.c:661
-#: src/frontend.c:823
+#: src/frontend.c:662
+#: src/frontend.c:824
 msgid "1X"
 msgstr ""
 
-#: src/frontend.c:665
-#: src/frontend.c:813
+#: src/frontend.c:666
+#: src/frontend.c:814
 msgid "2X"
 msgstr ""
 
-#: src/frontend.c:669
-#: src/frontend.c:818
-#: src/frontend.c:941
-#: src/frontend.c:999
+#: src/frontend.c:670
+#: src/frontend.c:819
+#: src/frontend.c:942
+#: src/frontend.c:1000
 msgid "Fullscreen"
 msgstr "Plein Écran"
 
-#: src/frontend.c:679
+#: src/frontend.c:680
 msgid "Screen Shake"
 msgstr "Tremblements de l'écran (explosion)"
 
-#: src/frontend.c:682
-#: src/frontend.c:710
-#: src/frontend.c:718
-#: src/frontend.c:754
-#: src/frontend.c:790
-#: src/frontend.c:799
-#: src/frontend.c:962
-#: src/frontend.c:1060
-#: src/frontend.c:1098
-#: src/frontend.c:1134
-#: src/frontend.c:1146
-#: src/frontend.c:1158
-#: src/frontend.c:1170
-#: src/frontend.c:1206
-#: src/frontend.c:1219
-#: src/frontend.c:1233
-#: src/frontend.c:1247
+#: src/frontend.c:683
+#: src/frontend.c:711
+#: src/frontend.c:719
+#: src/frontend.c:755
+#: src/frontend.c:791
+#: src/frontend.c:800
+#: src/frontend.c:963
+#: src/frontend.c:1061
+#: src/frontend.c:1099
+#: src/frontend.c:1135
+#: src/frontend.c:1147
+#: src/frontend.c:1159
+#: src/frontend.c:1171
+#: src/frontend.c:1207
+#: src/frontend.c:1220
+#: src/frontend.c:1234
+#: src/frontend.c:1248
 msgid "On"
 msgstr "Activé"
 
-#: src/frontend.c:686
-#: src/frontend.c:706
-#: src/frontend.c:722
-#: src/frontend.c:749
-#: src/frontend.c:785
-#: src/frontend.c:803
-#: src/frontend.c:966
-#: src/frontend.c:1055
-#: src/frontend.c:1093
-#: src/frontend.c:1138
-#: src/frontend.c:1150
-#: src/frontend.c:1162
-#: src/frontend.c:1174
-#: src/frontend.c:1201
-#: src/frontend.c:1214
-#: src/frontend.c:1228
-#: src/frontend.c:1242
+#: src/frontend.c:687
+#: src/frontend.c:707
+#: src/frontend.c:723
+#: src/frontend.c:750
+#: src/frontend.c:786
+#: src/frontend.c:804
+#: src/frontend.c:967
+#: src/frontend.c:1056
+#: src/frontend.c:1094
+#: src/frontend.c:1139
+#: src/frontend.c:1151
+#: src/frontend.c:1163
+#: src/frontend.c:1175
+#: src/frontend.c:1202
+#: src/frontend.c:1215
+#: src/frontend.c:1229
+#: src/frontend.c:1243
 msgid "Off"
 msgstr "Désactivé"
 
-#: src/frontend.c:691
+#: src/frontend.c:692
 #: src/multiint.c:1327
 msgid "Fog"
 msgstr "Brouillard"
 
-#: src/frontend.c:694
-#: src/frontend.c:772
+#: src/frontend.c:695
+#: src/frontend.c:773
 msgid "Mist"
 msgstr "Brume"
 
-#: src/frontend.c:698
-#: src/frontend.c:765
+#: src/frontend.c:699
+#: src/frontend.c:766
 #: src/multiint.c:1329
 msgid "Fog Of War"
 msgstr "Brouillard de guerre"
 
-#: src/frontend.c:703
+#: src/frontend.c:704
 msgid "Subtitles"
 msgstr "Sous-titres"
 
-#: src/frontend.c:715
+#: src/frontend.c:716
 msgid "Shadows"
 msgstr "Ombres"
 
-#: src/frontend.c:726
-#, fuzzy
+#: src/frontend.c:727
 msgid "GRAPHICS OPTIONS"
-msgstr "OPTIONS"
+msgstr "OPTIONS GRAPHIQUES"
 
-#: src/frontend.c:857
+#: src/frontend.c:858
 #: src/ingameop.c:179
 msgid "Voice Volume"
 msgstr "Volume de la Voix"
 
-#: src/frontend.c:861
+#: src/frontend.c:862
 #: src/ingameop.c:184
 msgid "FX Volume"
 msgstr "Volume des Bruits(FX)"
 
-#: src/frontend.c:865
+#: src/frontend.c:866
 #: src/ingameop.c:189
 msgid "Music Volume"
 msgstr "Volume de la Musique"
 
-#: src/frontend.c:872
-#, fuzzy
+#: src/frontend.c:873
 msgid "AUDIO OPTIONS"
-msgstr "OPTIONS"
+msgstr "OPTIONS AUDIO"
 
-#: src/frontend.c:937
+#: src/frontend.c:938
 msgid "Graphics Mode*"
 msgstr "Paramètres Visuels*"
 
-#: src/frontend.c:945
-#: src/frontend.c:994
+#: src/frontend.c:946
+#: src/frontend.c:995
 msgid "Windowed"
 msgstr "Fenêtré"
 
-#: src/frontend.c:949
+#: src/frontend.c:950
 msgid "Resolution*"
 msgstr "Résolution*"
 
-#: src/frontend.c:954
+#: src/frontend.c:955
 msgid "Texture size"
 msgstr "Taille des Textures"
 
-#: src/frontend.c:958
+#: src/frontend.c:959
 msgid "Vertical sync*"
 msgstr "Fréquence da rafraîchissement verticale*"
 
-#: src/frontend.c:970
+#: src/frontend.c:971
 msgid "* Takes effect on game restart"
 msgstr "* Le jeu doit être redémarré pour que ces options s'appliquent"
 
-#: src/frontend.c:973
+#: src/frontend.c:974
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "OPTIONS VIDÉOS"
 
-#: src/frontend.c:1131
-#, fuzzy
+#: src/frontend.c:1132
 msgid "Reverse Rotation"
-msgstr "Souris Inversée"
+msgstr "Rotation Inversée"
 
-#: src/frontend.c:1142
+#: src/frontend.c:1143
 msgid "Trap Cursor"
 msgstr "Piéger le Curseur"
 
-#: src/frontend.c:1154
+#: src/frontend.c:1155
 msgid "Colored Cursors*"
 msgstr "Curseur Coloré*"
 
-#: src/frontend.c:1167
+#: src/frontend.c:1168
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Inverser les Boutons de la Souris"
 
-#: src/frontend.c:1177
+#: src/frontend.c:1178
 msgid "* May negatively affect performance"
 msgstr "* Risque de diminuer les performances"
 
-#: src/frontend.c:1180
+#: src/frontend.c:1181
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "OPTIONS SOURIS"
 
-#: src/frontend.c:1281
-#: src/frontend.c:1347
+#: src/frontend.c:1282
+#: src/frontend.c:1348
 msgid "Difficulty"
 msgstr "Difficulté"
 
-#: src/frontend.c:1285
-#: src/frontend.c:1355
-#: src/frontend.c:1386
+#: src/frontend.c:1286
+#: src/frontend.c:1356
+#: src/frontend.c:1387
 msgid "Easy"
 msgstr "Facile"
 
-#: src/frontend.c:1288
-#: src/frontend.c:1358
-#: src/frontend.c:1378
+#: src/frontend.c:1289
+#: src/frontend.c:1359
+#: src/frontend.c:1379
 msgid "Normal"
 msgstr "Normale"
 
-#: src/frontend.c:1292
-#: src/frontend.c:1361
-#: src/frontend.c:1382
+#: src/frontend.c:1293
+#: src/frontend.c:1362
+#: src/frontend.c:1383
 msgid "Hard"
 msgstr "Difficile"
 
-#: src/frontend.c:1297
-#: src/frontend.c:1348
+#: src/frontend.c:1298
+#: src/frontend.c:1349
 msgid "Scroll Speed"
 msgstr "Vitesse de Défilement"
 
-#: src/frontend.c:1311
-#: src/frontend.c:1345
+#: src/frontend.c:1312
+#: src/frontend.c:1346
 msgid "Language"
 msgstr "Langue"
 
-#: src/frontend.c:1323
-#: src/frontend.c:1346
+#: src/frontend.c:1324
+#: src/frontend.c:1347
 msgid "Unit Colour"
 msgstr "Couleur des Unités"
 
-#: src/frontend.c:1329
-#: src/frontend.c:1349
+#: src/frontend.c:1330
+#: src/frontend.c:1350
 msgid "GAME OPTIONS"
 msgstr "OPTIONS"
 
-#: src/frontend.c:1699
+#: src/frontend.c:1720
 #: src/multiint.c:2239
 msgid "Mod: "
 msgstr ""
 
 #: src/hci.c:1358
-#, fuzzy
 msgid "MAP SAVED!"
-msgstr "PARTIE SAUVEGARDÉE!"
+msgstr "Carte SAUVEGARDÉE!"
 
 #: src/hci.c:1705
 #: src/loop.c:536
@@ -13767,9 +13665,8 @@ msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
 #: src/keybind.c:1307
-#, fuzzy
 msgid "Ending Mission."
-msgstr "Réception d'une transmission..."
+msgstr "Termine la mission"
 
 #: src/keybind.c:1419
 msgid "CHEATS ARE NOW ENABLED!"
@@ -13792,9 +13689,9 @@ msgid "View Aligned to North"
 msgstr "Caméra Réorientée vers le Nord"
 
 #: src/keybind.c:1497
-#, fuzzy, c-format
+#, c-format
 msgid "Trap cursor %s"
-msgstr "Piéger le Curseur"
+msgstr "Piéger le Curseur %s"
 
 #: src/keybind.c:1578
 msgid "Researched EVERYTHING for you!"
@@ -14132,9 +14029,8 @@ msgid "Select Commander 9"
 msgstr "Sélectionner le Commandant 9"
 
 #: src/keymap.c:350
-#, fuzzy
 msgid "Multiplayer Options / Alliance dialog"
-msgstr "Options Multijoueurs"
+msgstr "Options Multijoueurs / dialogue des alliances"
 
 #: src/keymap.c:353
 msgid "Snap View to North"
@@ -14311,7 +14207,7 @@ msgstr "Sélectionner l'Usine suivante"
 
 #: src/keymap.c:432
 msgid "Select next Research Facility"
-msgstr "Sélectionner le Laboratoire suivant"
+msgstr "Sélectionner le Centre de recheche suivant"
 
 #: src/keymap.c:433
 msgid "Select next Power Generator"
@@ -14327,27 +14223,24 @@ msgstr "Activer/Désactiver la réouverture du menu des Constructions"
 
 #: src/loop.c:543
 #: src/loop.c:559
-#, fuzzy
 msgid "Could not save game!"
-msgstr "Charger une Sauvegarde"
+msgstr "Ne peut sauver une partie!"
 
 #: src/mission.c:2382
 msgid "Load Transport"
 msgstr "Charger le Transporteur"
 
 #: src/mission.c:2776
-#, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr "MISSION ACCOMPLIE"
+msgstr "MISSION ACCOMPLIE en trichant"
 
 #: src/mission.c:2776
 msgid "OBJECTIVE ACHIEVED"
 msgstr "MISSION ACCOMPLIE"
 
 #: src/mission.c:2782
-#, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "ÉCHEC DE LA MISSION"
+msgstr "ÉCHEC DE LA MISSION--et vous avez triché"
 
 #: src/mission.c:2782
 msgid "OBJECTIVE FAILED"
@@ -14394,9 +14287,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s Vous a donné de la documentation sur une technologie"
 
 #: src/multigifts.c:338
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %u Power"
-msgstr "%s Vous donne de l'énergie supplémentaire"
+msgstr "%s Vous donne %u d'énergie"
 
 #: src/multigifts.c:358
 #, c-format
@@ -14430,9 +14323,8 @@ msgstr "Accepter les Réglages"
 
 #: src/multiint.c:579
 #: src/multiint.c:1123
-#, fuzzy
 msgid "Cancel"
-msgstr "Lanceur"
+msgstr "Annuler"
 
 #: src/multiint.c:590
 msgid "IP Address or Machine Name"
@@ -14444,16 +14336,15 @@ msgstr "CONNEXION"
 
 #: src/multiint.c:653
 msgid "Lobby"
-msgstr "Lobby"
+msgstr ""
 
 #: src/multiint.c:654
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/multiint.c:846
-#, fuzzy
 msgid "No games are available"
-msgstr "De nouvelles technologies sont à votre disposition."
+msgstr "Aucune partie disponible"
 
 #: src/multiint.c:849
 msgid "Game is full"
@@ -14500,9 +14391,8 @@ msgid "Refresh Games List"
 msgstr "Rafraîchir la Liste des Parties"
 
 #: src/multiint.c:1100
-#, fuzzy
 msgid "Enter Password:"
-msgstr "Entrez le mot de passe "
+msgstr "Entrez le mot de passe:"
 
 #: src/multiint.c:1121
 msgid "OK"
@@ -14523,9 +14413,8 @@ msgid "Select Map"
 msgstr "Carte à utiliser"
 
 #: src/multiint.c:1280
-#, fuzzy
 msgid "Click to set Password"
-msgstr "Cliquer pour voir la carte"
+msgstr "Cliquer pour choisir un mot de passe"
 
 #: src/multiint.c:1290
 #: src/multiint.c:1291
@@ -14534,9 +14423,8 @@ msgid "Scavengers"
 msgstr "Pillard"
 
 #: src/multiint.c:1293
-#, fuzzy
 msgid "No Scavengers"
-msgstr "Pillard"
+msgstr "Aucun Pillard"
 
 #: src/multiint.c:1324
 msgid "Select Player Name"
@@ -14549,7 +14437,7 @@ msgstr "Brouillard de distance"
 #: src/multiint.c:1341
 #: src/multimenu.c:756
 msgid "Alliances"
-msgstr "Alliances"
+msgstr ""
 
 #: src/multiint.c:1344
 msgid "No Alliances"
@@ -14577,7 +14465,7 @@ msgstr "Niveau d'énergie Élevé"
 
 #: src/multiint.c:1412
 msgid "Base"
-msgstr "Base"
+msgstr ""
 
 #: src/multiint.c:1414
 msgid "Start with No Bases"
@@ -14613,19 +14501,16 @@ msgid "Set Structure Limits"
 msgstr "Fixer des limites de Construction"
 
 #: src/multiint.c:1537
-#, fuzzy
 msgid "Player colour"
-msgstr "Joueur"
+msgstr "Couleur du Joueur"
 
 #: src/multiint.c:1553
-#, fuzzy
 msgid "Kick player"
-msgstr "2 joueurs"
+msgstr "chasser le joueur"
 
 #: src/multiint.c:1564
-#, fuzzy
 msgid "Player number"
-msgstr "Joueur"
+msgstr "numéro du Joueur"
 
 #: src/multiint.c:1926
 msgid "Team"
@@ -14641,7 +14526,7 @@ msgstr "Cliquer une fois prêt"
 
 #: src/multiint.c:1969
 msgid "READY?"
-msgstr ""
+msgstr "PRET?"
 
 #: src/multiint.c:2006
 msgid "PLAYERS"
@@ -14649,7 +14534,7 @@ msgstr "JOUEURS"
 
 #: src/multiint.c:2210
 msgid "CHAT"
-msgstr "CHAT"
+msgstr ""
 
 #: src/multiint.c:2244
 msgid "All players need to have the same mods to join your game."
@@ -14697,7 +14582,7 @@ msgstr ""
 
 #: src/multiint.c:3617
 msgid "HOST"
-msgstr ""
+msgstr "HOTE"
 
 #: src/multijoin.c:98
 #: src/multijoin.c:99
@@ -14725,14 +14610,12 @@ msgid "%s is Joining the Game"
 msgstr "%s vient de Rejoindre la Partie"
 
 #: src/multijoin.c:401
-#, fuzzy
 msgid "System message:"
-msgstr "Langage du système"
+msgstr "Message du système:"
 
 #: src/multilimit.c:185
-#, fuzzy
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "Revenir à l'écran précédent"
+msgstr "Appliquer les défaults et Revenir à l'écran précédent"
 
 #: src/multilimit.c:316
 msgid "Limits reset to default values"
@@ -14768,7 +14651,7 @@ msgstr "8 joueurs"
 
 #: src/multimenu.c:757
 msgid "Score"
-msgstr "Score"
+msgstr ""
 
 #: src/multimenu.c:758
 msgid "Kills"
@@ -14781,7 +14664,7 @@ msgstr "Unités"
 
 #: src/multimenu.c:772
 msgid "Ping"
-msgstr "Ping"
+msgstr ""
 
 #: src/multimenu.c:776
 msgid "Structs"
@@ -14813,9 +14696,8 @@ msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Le joueur %s à été kické car il a essayé de contourner le contrôle d'intégrité des données !"
 
 #: src/multiplay.c:1076
-#, fuzzy
 msgid "(allies"
-msgstr "Alliances"
+msgstr "( Alliés"
 
 #: src/multiplay.c:1084
 msgid "(private to "
@@ -15031,9 +14913,8 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossible de localiser le moindre Commandant !"
 
 #: src/structure.c:2739
-#, fuzzy
 msgid "Control Limit Reached - Production Halted"
-msgstr "Limite de Commandement Atteinte - Arrêt de la Production"
+msgstr "Limite du Control Atteinte - Arrêt de la Production"
 
 #: src/structure.c:5949
 #: src/structure.c:5974
@@ -15123,24 +15004,20 @@ msgstr " - Compilation %s"
 #: src/version.c:169
 #, c-format
 msgid "Version %s%s%s%s"
-msgstr "Version %s%s%s%s"
+msgstr ""
 
-#, fuzzy
 #~ msgid ", mod: "
 #~ msgstr "mod"
 
-#, fuzzy
 #~ msgid "Player %u has the wrong game version. Auto kicking."
 #~ msgstr "Le joueur %u a été kické car il a une version obsolète du jeu."
 
 #~ msgid "Player %u has the wrong game version.  Auto kicking."
 #~ msgstr "Le joueur %u a été kické car il a une version obsolète du jeu."
 
-#, fuzzy
 #~ msgid "Player %u has the wrong password. Auto kicking."
 #~ msgstr "Le joueur %u a été kické car il a donné un mot de passe incorrect."
 
-#, fuzzy
 #~ msgid "Increases Bombing damage"
 #~ msgstr "Dégâts des Canons augmentés"
 
@@ -15156,7 +15033,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Wrong data/mod detected by Host."
 #~ msgstr "L'hôte à détecté un mod ou des données corrompues."
 
-#, fuzzy
 #~ msgid "Kicking player %s, game data doesn't match!"
 #~ msgstr "Le joueur %s à été kické car les données ne correspondent pas !"
 
@@ -15190,9 +15066,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "English"
 #~ msgstr "Anglais"
 
-#~ msgid "Basque"
-#~ msgstr "Basque"
-
 #~ msgid "Norwegian (Nynorsk)"
 #~ msgstr "Norvégien"
 
@@ -15208,7 +15081,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Uzbek (Cyrillic)"
 #~ msgstr "Uzbek (Cyrillique)"
 
-#, fuzzy
 #~ msgid "Heavy Machinegun Cobra Half-trackS"
 #~ msgstr "Mitrailleuse Lourde Cobra Semi-chenillée"
 
@@ -15637,9 +15509,6 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Full"
 #~ msgstr "Plein Écran"
-
-#~ msgid "Minimal"
-#~ msgstr "Minimal"
 
 #~ msgid "Tried to give away a %s - but this is not allowed."
 #~ msgstr "A tenté de vous donner u %s - mais cette action n'est pas autorisée"
