@@ -49,7 +49,24 @@ protected:
 	void closeEvent(QCloseEvent *event);
 	MODEL *load3DS(QString input);
 	MODEL *loadPIE(QString input);
+
+	/** PIE Export Method.
+	  *
+	  * @brief Function that saves a WZM Model to a file in the PIE format.
+	  *
+	  * @note Data may be lost in the conversion, especially
+	  *		if exporting to PIE version 2.
+	  *
+	  * @param Name of file to serialised to.
+	  * @param Pointer to WZM data structure to be serialised.
+	  * @param PIE version to export to.
+	  * @note Currently only PIE version 2 and 3 are implemented.
+	  * @param PIE flags to set.
+	  * @return Returns 0 on success, -1 on failure.
+	  * @author Safety0ff
+	  */
 	int savePIE(const char *filename, const MODEL *psModel, int pieVersion, int type);
+
 	void setModel(const QFileInfo &texPath);
 
 protected slots:

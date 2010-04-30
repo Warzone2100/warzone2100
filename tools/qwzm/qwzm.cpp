@@ -295,6 +295,15 @@ void QWzmViewer::tick()
 		MESH *psMesh = &psModel->mesh[currentMesh];
 
 		psMesh->currentFrame = ui->animationTableView->currentIndex().row();
+
+		if(psMesh->frames <= 0)
+		{
+			psMesh->currentFrame = -1;
+		}
+		else if(psMesh->currentFrame >= psMesh->frames || psMesh->currentFrame < 0)
+		{
+			psMesh->currentFrame = 0;
+		}
 	}
 	ui->glView->updateGL();
 	if (psModel && ui->actionAnimation->isChecked())
@@ -380,6 +389,15 @@ void QWzmViewer::reloadFrames()
 		psFrame->rotation.x = animationModel.data(animationModel.index(i, 5, QModelIndex())).toDouble();
 		psFrame->rotation.y = animationModel.data(animationModel.index(i, 6, QModelIndex())).toDouble();
 		psFrame->rotation.z = animationModel.data(animationModel.index(i, 7, QModelIndex())).toDouble();
+	}
+
+	if(psMesh->frames <= 0)
+	{
+		psMesh->currentFrame = -1;
+	}
+	else if(psMesh->currentFrame >= psMesh->frames || psMesh->currentFrame < 0)
+	{
+		psMesh->currentFrame = 0;
 	}
 }
 

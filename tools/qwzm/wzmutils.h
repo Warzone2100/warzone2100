@@ -47,7 +47,7 @@ typedef int bool;
 
 typedef struct
 {
-	float x, y, z;
+	GLfloat x, y, z;
 } Vector3f;
 
 typedef struct
@@ -70,7 +70,7 @@ typedef struct
 	bool teamColours;
 	GLfloat *vertexArray;
 	GLuint *indexArray;	// TODO: use short instead
-	GLfloat *textureArray[MAX_TEXARRAYS];
+	GLclampf *textureArray[MAX_TEXARRAYS];
 	FRAME *frameArray;
 	int currentFrame;
 	int currentTextureArray;
