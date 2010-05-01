@@ -288,7 +288,8 @@ MODEL *QWzmViewer::loadPIE(QString inputFile)
 				{
 					double u;
 					double v;
-					double framesPerLine = OLD_TEXTURE_SIZE_FIX;
+					// Fix for division by zero in pie 2
+					int framesPerLine = OLD_TEXTURE_SIZE_FIX;
 
 					if (pieVersion == 3)
 					{
@@ -298,6 +299,7 @@ MODEL *QWzmViewer::loadPIE(QString inputFile)
 						}
 						else
 						{
+							// Fix for division by zero in pie 3
 							 framesPerLine = 1;
 						}
 					}
@@ -306,11 +308,12 @@ MODEL *QWzmViewer::loadPIE(QString inputFile)
 						framesPerLine = OLD_TEXTURE_SIZE_FIX / faceList[j].width;
 					}
 
-					int frameH = z % (int)(framesPerLine);
+					int frameH = z % framesPerLine;
 
 					/*
 					 * This works because wrap around is only permitted if you start the animation at the
-					 * left bder of the texture. What a horrible hack this was.
+					 * left border of the texture. What a horrible hack this was.
+					 * Note: It is done the same way in the Warzone source.
 					 */
 					int frameV = z / framesPerLine;
 					double width = faceList[j].texCoord[k][0] + faceList[j].width * frameH;
