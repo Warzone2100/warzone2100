@@ -24,15 +24,26 @@ if [ "${ACTION}" = "clean" ]; then
         rm -fRv "${FileName}"
     fi
     exit 0
-elif [ -d "${OutDir}" ]; then
-    # Do not do more work then we have to
-    echo "${OutDir} already exists, skipping"
-    exit 0
 elif [ -d "${DirectorY}" ]; then
     # Clean if dirty
     echo "error: ${DirectorY} exists, probably from an earlier failed run" >&2
     #rm -fRv "${DirectorY}"
     exit 1
+elif [[ -d "${OutDir}" ]] && [[ ! -f "${FileName}" ]]; then
+    # Clean up when updating versions
+    echo "warning: Cached file is outdated or incomplete, removing" >&2
+    rm -fRv "${DirectorY}" "${OutDir}"
+elif [[ -d "${OutDir}" ]] && [[ -f "${FileName}" ]]; then
+    # Check to make sure we have the right file
+    MD5SumLoc=`md5 -q "${FileName}"`
+    if [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
+        echo "warning: Cached file is outdated or incorrect, removing" >&2
+        rm -fRv "${FileName}" "${DirectorY}" "${OutDir}"
+    else
+        # Do not do more work then we have to
+        echo "${OutDir} already exists, skipping"
+        exit 0
+    fi
 fi
 
 # Fetch
@@ -75,7 +86,8 @@ fi
 if [ ! -d "${DirectorY}" ]; then
     echo "error: Can't find ${DirectorY} to rename" >&2
     exit 1
+else
+    mv "${DirectorY}" "${OutDir}"
 fi
-mv "${DirectorY}" "${OutDir}"
 
 exit 0

@@ -25,15 +25,26 @@ if [ "${ACTION}" = "clean" ]; then
         rm -fRv "prebuilt/${FileName}"
     fi
     exit 0
-elif [ -d "external/${OutDir}" ]; then
-    # Do not do more work then we have to
-    echo "${OutDir} exists, skipping"
-    exit 0
 elif [ -d "prebuilt/${DirectorY}" ]; then
     # Clean if dirty
     echo "error: ${DirectorY} exists, probably from an earlier failed run" >&2
     #rm -frv "prebuilt/${DirectorY}"
     exit 1
+elif [[ -d "external/${OutDir}" ]] && [[ ! -f "prebuilt/${FileName}" ]]; then
+    # Clean up when updating versions
+    echo "warning: Cached file is outdated or incomplete, removing" >&2
+    rm -fRv "prebuilt/${DirectorY}" "external/${OutDir}"
+elif [[ -d "external/${OutDir}" ]] && [[ -f "prebuilt/${FileName}" ]]; then
+    # Check to make sure we have the right file
+    MD5SumLoc=`md5 -q "prebuilt/${FileName}"`
+    if [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
+        echo "warning: Cached file is outdated or incorrect, removing" >&2
+        rm -fRv "prebuilt/${FileName}" "prebuilt/${DirectorY}" "external/${OutDir}"
+    else
+        # Do not do more work then we have to
+        echo "${OutDir} already exists, skipping"
+        exit 0
+    fi
 fi
 
 # Download
