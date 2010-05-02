@@ -1709,7 +1709,7 @@ void displayBlueprints(void)
 		{
 			if (deliveryPointToMove)
 			{
-				// it's a delivery point
+				// it's a droid (from the debug menu) or a delivery point
 				FLAG_POSITION pos = *deliveryPointToMove;
 				pos.coords.x = world_coord(sBuildDetails.x)+world_coord(1)/2;
 				pos.coords.y = world_coord(sBuildDetails.y)+world_coord(1)/2;
@@ -1718,9 +1718,15 @@ void displayBlueprints(void)
 			}
 			else
 			{
-				// it's a droid or a delivery point (from the debug menu)
-				// display nothing for now
-				;
+				// it's a droid (from the debug menu)
+				// no delivery point is known, so show a fake one
+				FLAG_POSITION pos;
+				pos.coords.x = world_coord(sBuildDetails.x)+world_coord(1)/2;
+				pos.coords.y = world_coord(sBuildDetails.y)+world_coord(1)/2;
+				pos.coords.z = map_Height(pos.coords.x, pos.coords.y) + world_coord(1)/8;
+				pos.factoryType = FACTORY_FLAG;
+				pos.factoryInc = 0;
+				renderDeliveryPoint(&pos, true);
 			}
 		}
 	}
