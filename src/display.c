@@ -1984,6 +1984,18 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 		clearSelection();
 		assignSensorTarget((BASE_OBJECT *)psStructure);
 	}
+	if (intDemolishSelectMode())
+	{
+		// we were demolishing something - now we're done
+		if (ctrlShiftDown())
+		{
+			quickQueueMode = true;
+		}
+		else
+		{
+			intDemolishCancel();
+		}
+	}
 
 	driveDisableTactical();
 }
@@ -2385,7 +2397,6 @@ static void dealWithRMB( void )
 	BASE_OBJECT			*psClickedOn;
 	DROID				*psDroid;
 	STRUCTURE			*psStructure;
-	BOOL				bDemolish = false;
 
 	if (driveModeActive() || mouseOverRadar ||
 	    InGameOpUp == true || widgGetFromID(psWScreen,INTINGAMEOP))
@@ -2514,23 +2525,19 @@ static void dealWithRMB( void )
 //				addGameMessage("Right clicked on own building",1000,true);
 //				addConsoleMessage("Right clicked on own building",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 
-				// Moderately inefficient, but I can't think of a better way.
-				if (bRightClickOrders)
-				{
-					for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
-					{
-						if (psDroid->selected &&
-						    chooseOrderObj(psDroid, psClickedOn, false) == DORDER_DEMOLISH)
-						{
-							bDemolish = true;
-							break;
-						}
-					}
-				}
-				if (bDemolish)
+				if (bRightClickOrders && intDemolishSelectMode())
 				{
 					orderSelectedObjAdd(selectedPlayer, psClickedOn, ctrlShiftDown());
 					FeedbackOrderGiven();
+					// we were demolishing something - now we're done
+					if (ctrlShiftDown())
+					{
+						quickQueueMode = true;
+					}
+					else
+					{
+						intDemolishCancel();
+					}
 				}
 				else if (psStructure->selected==true)
 				{
