@@ -15,8 +15,6 @@
 #include <queue>
 #include <cmath>
 
-#include <QtGui/QDialog>
-
 #include "qwzm.h"
 #include "conversion.h"
 
@@ -300,7 +298,7 @@ MODEL *QWzmViewer::loadPIE(QString inputFile)
 						else
 						{
 							// Fix for division by zero in pie 3
-							 framesPerLine = 1;
+							framesPerLine = 1;
 						}
 					}
 					else if (faceList[j].width != 0) // else pieVersion ==2
@@ -608,6 +606,12 @@ int QWzmViewer::savePIE(const char *filename, const MODEL *psModel, int pieVersi
 
 	file.open(filename, std::fstream::out);
 
+	if (!file.is_open())
+	{
+		qWarning("QWzmViewer::savePIE - Failed to open file.");
+		return -1;
+	}
+
 	file << "PIE " << pieVersion << '\n';
 	file << "TYPE " << std::hex << type << std::dec << "\n";
 
@@ -622,7 +626,7 @@ int QWzmViewer::savePIE(const char *filename, const MODEL *psModel, int pieVersi
 		}
 		else
 		{
-			file << " 0 0\n";
+			file << " 256 256\n";
 		}
 		break;
 	case 3:
@@ -673,7 +677,7 @@ int QWzmViewer::savePIE(const char *filename, const MODEL *psModel, int pieVersi
 			switch (pieVersion)
 			{
 			case 2:
-				file << '\t' << (int)(x + 0.5f) << ' ' << (int)(y + 0.5f) << ' ' << (int)(z + 0.5f) << '\n';
+				file << '\t' << (int)rintf(x) << ' ' << (int)rintf(y) << ' ' << (int)rintf(z) << '\n';
 				break;
 			case 3:
 				file << '\t' << x << ' ' << y << ' ' << z << '\n';
@@ -773,8 +777,8 @@ int QWzmViewer::savePIE(const char *filename, const MODEL *psModel, int pieVersi
 					{
 						// TODO: Get playback rate and replace the literal " 1 " with it.
 					case 2:
-						animTmpSs << mesh->textureArrays << " 1 " << (int)(OLD_TEXTURE_SIZE_FIX*unitW + 0.5f)
-								<< ' ' << (int)(OLD_TEXTURE_SIZE_FIX*unitH + 0.5f);
+						animTmpSs << mesh->textureArrays << " 1 " << (int)rintf(OLD_TEXTURE_SIZE_FIX*unitW)
+								<< ' ' << (int)rintf(OLD_TEXTURE_SIZE_FIX*unitH);
 						break;
 					case 3:
 						animTmpSs << mesh->textureArrays << " 1 " << (GLfloat)unitW << ' ' << (GLfloat)unitH;
@@ -826,8 +830,8 @@ int QWzmViewer::savePIE(const char *filename, const MODEL *psModel, int pieVersi
 				switch (pieVersion)
 				{
 				case 2:
-					file << ' ' << (int)(OLD_TEXTURE_SIZE_FIX*textures.front().u + 0.5f);
-					file << ' ' << (int)(OLD_TEXTURE_SIZE_FIX*textures.front().v + 0.5f);
+					file << ' ' << (int)rintf(OLD_TEXTURE_SIZE_FIX*textures.front().u);
+					file << ' ' << (int)rintf(OLD_TEXTURE_SIZE_FIX*textures.front().v);
 					break;
 				case 3:
 					file << ' ' << textures.front().u << ' ' << textures.front().v;
@@ -849,9 +853,9 @@ int QWzmViewer::savePIE(const char *filename, const MODEL *psModel, int pieVersi
 				switch (pieVersion)
 				{
 				case 2:
-					file << "\t" << (int)(mesh->connectorArray[j].pos.x + 0.5f)
-							<< ' ' << (int)(mesh->connectorArray[j].pos.y + 0.5f)
-							<< ' ' << (int)(mesh->connectorArray[j].pos.z + 0.5f) << '\n';
+					file << "\t" << (int)rintf(mesh->connectorArray[j].pos.x)
+							<< ' ' << (int)rintf(mesh->connectorArray[j].pos.y)
+							<< ' ' << (int)rintf(mesh->connectorArray[j].pos.z) << '\n';
 					break;
 				case 3:
 					file << "\t" << mesh->connectorArray[j].pos.x

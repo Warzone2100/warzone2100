@@ -86,8 +86,6 @@ struct textCoords
 	}
 };
 
-class QDialog;
-
 /** PIE Export dialog*/
 class QPieExportDialog : public QDialog, private Ui_PieExportDialog
 {
