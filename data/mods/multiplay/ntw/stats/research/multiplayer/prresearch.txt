@@ -144,7 +144,7 @@ R-Defense-Tower01,R-Defense-HardcreteWall,109
 R-Defense-Tower06,R-Defense-HardcreteWall,109
 R-Defense-Tower06,R-Wpn-Rocket03-HvAT,109
 R-Defense-Pillbox01,R-Defense-HardcreteWall,109
-R-Defense-Pillbox01,R-Wpn-MG-Damage01,109
+R-Defense-Pillbox01,R-R-Wpn-MG2Mk1,109
 R-Defense-Pillbox04,R-Defense-HardcreteWall,109
 R-Defense-Pillbox04,R-Wpn-Cannon1Mk1,109
 R-Defense-Pillbox05,R-Defense-HardcreteWall,109
