@@ -814,7 +814,7 @@ event buildFundamentals(inactive)
 		setEventTrigger(buildDerrick, chainloadTr);
 		exit;
 	}
-	else	// if lots of power and too few factories to replace high-risk oil hunting trucks
+	else	// if lots of power or too few factories to replace high-risk oil hunting trucks
 	{
 		dbgPlr("Too much power - EXPAND!");
 		setEventTrigger(buildExpand, chainloadTr);
@@ -1544,45 +1544,43 @@ event newfortify(inactive)
 	_maxBuilders = 1;
 	setEventTrigger(newfortify, inactive);
 
-	if(numGroupSameOrder(buildGroup, DORDER_LINEBUILD) >= _maxBuilders)	// only gateway fortifications use line build
+	if (numGroupSameOrder(buildGroup, DORDER_LINEBUILD) < _maxBuilders)	// only gateway fortifications use line build
 	{
-		exit;
-	}
-
-	boolResult = FALSE;
-	initIterateGroup(buildGroup);				// find idle an idle veh.in build group.
-	droid = iterateGroup(buildGroup);
-	while((boolResult == FALSE) and (droid != NULLOBJECT))
-	{
-		if (droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD and droid.order != DORDER_HELPBUILD)
-		{
-			boolResult = TRUE;					// dont do this again!
-
-			tempx = baseX;
-			tempy = baseY;
-
-			// choose a suitable turret.
-			count = numWallWeaps - 1;
-			count2 = 0;
-			while( (count2 < 3) and (count >= 0) )
-			{
-				if( isStructureAvailable(wallWeaps[count],me))
-				{
-					structChoice[count2] = wallWeaps[count];
-					count2 = count2 + 1;
-				}
-				count = count - 1;
-			}
-			count =0;
-			if((count2 > 0) and (_numBuilders < _maxBuilders))
-			{
-				count = random(count2);
-				skDefenseLocationB(ref tempx,ref tempy,wall,structChoice[count],droid,me);
-				_numBuilders++;
-			}
-
-		}
+		boolResult = FALSE;
+		initIterateGroup(buildGroup);				// find idle an idle veh.in build group.
 		droid = iterateGroup(buildGroup);
+		while((boolResult == FALSE) and (droid != NULLOBJECT))
+		{
+			if (droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD and droid.order != DORDER_HELPBUILD)
+			{
+				boolResult = TRUE;					// dont do this again!
+
+				tempx = baseX;
+				tempy = baseY;
+
+				// choose a suitable turret.
+				count = numWallWeaps - 1;
+				count2 = 0;
+				while ((count2 < 3) and (count >= 0))
+				{
+					if (isStructureAvailable(wallWeaps[count], me))
+					{
+						structChoice[count2] = wallWeaps[count];
+						count2 = count2 + 1;
+					}
+					count = count - 1;
+				}
+				count = 0;
+				if ((count2 > 0) and (_numBuilders < _maxBuilders))
+				{
+					count = random(count2);
+					skDefenseLocationB(ref tempx, ref tempy, wall, structChoice[count], droid, me);
+					_numBuilders++;
+				}
+
+			}
+			droid = iterateGroup(buildGroup);
+		}
 	}
 	if (idleGroup(buildGroup) > 0 and !tryUpgrade())
 	{
