@@ -8,7 +8,7 @@ A0BabaCornerWall,CORNER WALL,Level All,SOFT,0,1,1,Concrete,50,2,7,150,10,20,1,0,
 A0BabaCornerWall,CORNER WALL,Level All,SOFT,0,1,1,Concrete,50,2,7,150,10,20,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,BLBRBWLH.PIE,0,0,0
 A0ADemolishStructure,DEMOLISH,Level All,SOFT,0,1,1,Concrete,10,1,6,200,1,1,1,150,1,1,ZNULLECM,DefaultSensor1Mk1,0,icdozer.Pie,0,0,0
 A0BaBaRocketPitAT,DEFENSE,Level One,MEDIUM,1,1,1,Concrete,1,1,10,250,1,10,1,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,EXROCKET.PIE,0,0,1
-Laser-Sat,DEFENSE,Level All,HARD,1,2,2,Concrete,2500,2,16,500,10,1000,1,0,255,0,ZNULLECM,0,1,milasbas.pie,BLBDRDCM.PIE,0,1
+Laser-Sat,DEFENSE,Level All,HARD,1,2,2,Concrete,2500,2,16,500,10,1000,1,0,255,0,ZNULLECM,0,1,milasbas.pie,0,0,1
 A0ComDroidControl,COMMAND RELAY,Level All,HARD,0,2,2,Concrete,500,2,10,500,10,100,30,300,1,1,ZNULLECM,DefaultSensor1Mk1,0,bldrdcm0.Pie,BLBDRDCM.pie,1,0
 A0CommandCentre,DEFENSE,Level One,MEDIUM,0,1,1,Concrete,50,2,5,200,0,20,1,0,255,1,ZNULLECM,CCSensor,1,blbrlook.Pie,0,1,0
 A0CommandCentreDEL,HQ,Level All,HARD,0,2,2,Concrete,500,3,10,500,10,100,30,300,1,1,ZNULLECM,CCSensor,1,blhq.Pie,blbhq.pie,1,0
