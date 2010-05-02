@@ -47,11 +47,11 @@ elif [[ -d "external/${OutDir}" ]] && [[ -f "prebuilt/${FileName}" ]]; then
     fi
 fi
 
-# Download
+# Fetch
 cd prebuilt
 if [ ! -f "${FileName}" ]; then
     echo "Fetching ${FileName}"
-    if ! curl -L -O --connect-timeout "30" "${BuiltDLP}"; then
+    if ! curl -LfO --connect-timeout "30" "${BuiltDLP}"; then
         echo "error: Unable to fetch ${BuiltDLP}" >&2
         exit 1
     fi

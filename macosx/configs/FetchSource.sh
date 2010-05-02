@@ -49,10 +49,12 @@ fi
 # Fetch
 if [ ! -r "${FileName}" ]; then
     echo "Fetching ${SourceDLP}"
-    if ! curl -L --connect-timeout "30" -o "${FileName}" "${SourceDLP}"; then
+    if ! curl -Lfo "${FileName}" --connect-timeout "30" "${SourceDLP}"; then
         echo "error: Unable to fetch ${SourceDLP}" >&2
         exit 1
     fi
+else
+    echo "${FileName} already exists, skipping"
 fi
 
 # Check our sums
@@ -82,7 +84,7 @@ else
     exit 1
 fi
 
-# Reorganize
+# Move
 if [ ! -d "${DirectorY}" ]; then
     echo "error: Can't find ${DirectorY} to rename" >&2
     exit 1
