@@ -814,7 +814,21 @@ void processMouseClickInput(void)
 	selection = establishSelection(selectedPlayer);
 	ASSERT( selection<=POSSIBLE_SELECTIONS,"Weirdy selection!" );
 
-	if ((selection != SC_INVALID) && !gamePaused())
+	if (gamePaused())
+	{
+		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+	}
+	if (buildState == BUILD3D_VALID)
+	{
+		// special casing for building
+		pie_SetMouse(CURSOR_BUILD, war_GetColouredCursor());
+	}
+	else if (buildState == BUILD3D_POS)
+	{
+		// special casing for building - can't build here
+		pie_SetMouse(CURSOR_NOTPOSSIBLE, war_GetColouredCursor());
+	}
+	else if (selection != SC_INVALID)
 	{
 		BASE_OBJECT *ObjUnderMouse;
 		bool ObjAllied;
@@ -931,7 +945,7 @@ void processMouseClickInput(void)
 					item = MT_BLOCKING;
 				}
 			}
-			
+
 			//vtols cannot pick up artifacts
 			else if (item == MT_ARTIFACT
 					&& selection == SC_DROID_DIRECT
@@ -952,14 +966,15 @@ void processMouseClickInput(void)
 				item = MT_OWNDROID;
 			}
 			if ((arnMPointers[item][selection] == CURSOR_SELECT ||
-				 arnMPointers[item][selection] == CURSOR_EMBARK ||
-				 arnMPointers[item][selection] == CURSOR_ATTACH ||
-				 arnMPointers[item][selection] == CURSOR_LOCKON) && ObjAllied)
+			     arnMPointers[item][selection] == CURSOR_EMBARK ||
+			     arnMPointers[item][selection] == CURSOR_ATTACH ||
+			     arnMPointers[item][selection] == CURSOR_LOCKON ||
+			     arnMPointers[item][selection] == CURSOR_DEST) && ObjAllied)
 			{
 				// If you want to do these things, just gift your unit to your ally.
 				item = MT_BLOCKING;
 			}
-			
+
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && selection == SC_DROID_TRANSPORTER &&
 				arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
@@ -983,6 +998,10 @@ void processMouseClickInput(void)
 			{
 				pie_SetMouse(arnMPointers[item][selection], war_GetColouredCursor());
 			}
+		}
+		else
+		{
+			pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 		}
 	}
 	else
@@ -1028,7 +1047,7 @@ void processMouseClickInput(void)
 		}
 	}
 
-	CurrentItemUnderMouse= item;
+	CurrentItemUnderMouse = item;
 }
 
 
@@ -2908,6 +2927,11 @@ SELECTION_TYPE	selectionClass;
 	selectionClass = SC_INVALID;
 	CurrWeight = UBYTE_MAX;
 
+	if (intDemolishSelectMode())
+	{
+		return SC_DROID_DEMOLISH;
+	}
+
 	for(psDroid = apsDroidLists[selectedPlayer];
 			psDroid /*&& !atLeastOne*/; psDroid = psDroid->psNext)
 	{
@@ -2990,14 +3014,7 @@ SELECTION_TYPE	selectionClass;
 
 		case DROID_CONSTRUCT:
 		case DROID_CYBORG_CONSTRUCT:
-			if (intDemolishSelectMode())
-			{
-				selectionClass = SC_DROID_DEMOLISH;			// demolish mode.
-			}
-			else
-			{
-				selectionClass = SC_DROID_CONSTRUCT;		// ordinary mode.
-			}
+			selectionClass = SC_DROID_CONSTRUCT;
 			break;
 
 		case DROID_COMMAND:
