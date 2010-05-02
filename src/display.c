@@ -812,14 +812,28 @@ void processMouseClickInput(void)
 	selection = establishSelection(selectedPlayer);
 	ASSERT( selection<=POSSIBLE_SELECTIONS,"Weirdy selection!" );
 
-	if((selection != SC_INVALID) && !gamePaused())
+	if (gamePaused())
+	{
+		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+	}
+	if (buildState == BUILD3D_VALID)
+	{
+		// special casing for building
+		pie_SetMouse(CURSOR_BUILD, war_GetColouredCursor());
+	}
+	else if (buildState == BUILD3D_POS)
+	{
+		// special casing for building - can't build here
+		pie_SetMouse(CURSOR_NOTPOSSIBLE, war_GetColouredCursor());
+	}
+	else if (selection != SC_INVALID)
 	{
 		BASE_OBJECT *ObjUnderMouse;
 		bool ObjAllied;
-		
+
 		item = itemUnderMouse(&ObjUnderMouse);
 		ASSERT( item<POSSIBLE_TARGETS,"Weirdy target!" );
-		
+
 		// alliance override. If in alli then just use the move icon. - but not if its the same player
 		//in single player, the genexp script defaults to setting an alliance between player 0 and selectedPlayer
 		/* if(ObjUnderMouse && (selectedPlayer != ObjUnderMouse->player) &&
@@ -828,7 +842,7 @@ void processMouseClickInput(void)
 		 item = MT_NOTARGET;
 		 } */
 		ObjAllied = (ObjUnderMouse && selectedPlayer != ObjUnderMouse->player && aiCheckAlliances(selectedPlayer,ObjUnderMouse->player));
-		
+
 		if(item != MT_NOTARGET)
 		{
 			// exceptions to the lookup table.
@@ -880,7 +894,7 @@ void processMouseClickInput(void)
 						}
 					}
 				}
-				
+
 				// repair instead of sensor/guard with cons. droids.
 				else if (item == MT_SENSOR)
 				{
@@ -902,7 +916,7 @@ void processMouseClickInput(void)
 			{
 				selection = SC_DROID_SENSOR;
 			}
-			
+
 			// check the type of sensor for indirect weapons
 			else if ((item == MT_SENSOR || item == MT_SENSORSTRUCT || item == MT_SENSORSTRUCTDAM)
 					 && selection == SC_DROID_INDIRECT )
@@ -912,7 +926,7 @@ void processMouseClickInput(void)
 					item = MT_BLOCKING;
 				}
 			}
-			
+
 			//check for VTOL droids being assigned to a sensor droid/structure
 			else if ( (item == MT_SENSOR || item == MT_SENSORSTRUCT || item == MT_SENSORSTRUCTDAM)
 					 && selection == SC_DROID_DIRECT
@@ -929,7 +943,7 @@ void processMouseClickInput(void)
 					item = MT_BLOCKING;
 				}
 			}
-			
+
 			//vtols cannot pick up artifacts
 			else if (item == MT_ARTIFACT
 					 && selection == SC_DROID_DIRECT
@@ -937,7 +951,7 @@ void processMouseClickInput(void)
 			{
 				item = MT_BLOCKING;
 			}
-			
+
 			if (item == MT_TERRAIN
 				&& terrainType(mapTile(mouseTileX,mouseTileY)) == TER_CLIFFFACE)
 			{
@@ -950,14 +964,15 @@ void processMouseClickInput(void)
 				item = MT_OWNDROID;
 			}
 			if ((arnMPointers[item][selection] == CURSOR_SELECT ||
-				 arnMPointers[item][selection] == CURSOR_EMBARK ||
-				 arnMPointers[item][selection] == CURSOR_ATTACH ||
-				 arnMPointers[item][selection] == CURSOR_LOCKON) && ObjAllied)
+			     arnMPointers[item][selection] == CURSOR_EMBARK ||
+			     arnMPointers[item][selection] == CURSOR_ATTACH ||
+			     arnMPointers[item][selection] == CURSOR_LOCKON ||
+			     arnMPointers[item][selection] == CURSOR_DEST) && ObjAllied)
 			{
 				// If you want to do these things, just gift your unit to your ally.
 				item = MT_BLOCKING;
 			}
-			
+
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && selection == SC_DROID_TRANSPORTER &&
 				arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
@@ -982,12 +997,16 @@ void processMouseClickInput(void)
 				pie_SetMouse(arnMPointers[item][selection], war_GetColouredCursor());
 			}
 		}
+		else
+		{
+			pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+		}
 	}
 	else
 	{
 		BASE_OBJECT *ObjUnderMouse;
 		item = itemUnderMouse(&ObjUnderMouse);
-		
+
 		//exceptions, exceptions...AB 10/06/99
 		if (bMultiPlayer && bLasSatStruct)
 		{
@@ -1025,8 +1044,8 @@ void processMouseClickInput(void)
 			pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 		}
 	}
-	
-	CurrentItemUnderMouse= item;
+
+	CurrentItemUnderMouse = item;
 }
 
 
@@ -2955,6 +2974,11 @@ SELECTION_TYPE	selectionClass;
 	selectionClass = SC_INVALID;
 	CurrWeight = UBYTE_MAX;
 
+	if (intDemolishSelectMode())
+	{
+		return SC_DROID_DEMOLISH;
+	}
+
 	for(psDroid = apsDroidLists[selectedPlayer];
 			psDroid /*&& !atLeastOne*/; psDroid = psDroid->psNext)
 	{
@@ -3037,14 +3061,7 @@ SELECTION_TYPE	selectionClass;
 
 		case DROID_CONSTRUCT:
 		case DROID_CYBORG_CONSTRUCT:
-			if (intDemolishSelectMode())
-			{
-				selectionClass = SC_DROID_DEMOLISH;			// demolish mode.
-			}
-			else
-			{
-				selectionClass = SC_DROID_CONSTRUCT;		// ordinary mode.
-			}
+			selectionClass = SC_DROID_CONSTRUCT;
 			break;
 
 		case DROID_COMMAND:
