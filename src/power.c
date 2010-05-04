@@ -201,17 +201,16 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 		pointsToAdd = (modifier * EXTRACT_POINTS * gameTime) / (GAME_TICKS_PER_SEC * 100)
 		            - (modifier * EXTRACT_POINTS * pResExtractor->timeLastUpdated) / (GAME_TICKS_PER_SEC * 100);
 
-		if (pResExtractor->timeLastUpdated - gameTime > GAME_TICKS_PER_SEC || gameTime - pResExtractor->timeLastUpdated > GAME_TICKS_PER_SEC)
+		if ((int)pResExtractor->timeLastUpdated - (int)gameTime > GAME_TICKS_PER_SEC || (int)gameTime - (int)pResExtractor->timeLastUpdated > GAME_TICKS_PER_SEC)
 		{
 			// extractor is not in the right time zone
 			// we have a maximum time skip of less than a second, so this can't be caused by lag
 			ASSERT(false, "Oil derrick out of sync.");
-			pResExtractor->timeLastUpdated = gameTime;
 			pointsToAdd = 0;
 		}
+		pResExtractor->timeLastUpdated = gameTime;
 		if (pointsToAdd)
 		{
-			pResExtractor->timeLastUpdated = gameTime;
 			extractedPoints += pointsToAdd;
 
 			// If not having unlimited power, uncomment the following lines.
