@@ -184,7 +184,7 @@ void powerCalc(BOOL on)
 float updateExtractedPower(STRUCTURE	*psBuilding)
 {
 	RES_EXTRACTOR		*pResExtractor;
-	UDWORD				timeDiff;
+	SDWORD				timeDiff;
 	UBYTE			modifier;
 	float pointsToAdd,extractedPoints;
 
@@ -200,7 +200,7 @@ float updateExtractedPower(STRUCTURE	*psBuilding)
 		{
 			pResExtractor->timeLastUpdated = gameTime;
 		}
-		timeDiff = gameTime - pResExtractor->timeLastUpdated;
+		timeDiff = (int)gameTime - (int)pResExtractor->timeLastUpdated;
 		// Add modifier according to difficulty level
 		if (getDifficultyLevel() == DL_EASY)
 		{
@@ -222,7 +222,6 @@ float updateExtractedPower(STRUCTURE	*psBuilding)
 			// extractor is not in the right time zone
 			// we have a maximum time skip of less than a second, so this can't be caused by lag
 			ASSERT(false, "Oil derrick out of sync.");
-			pResExtractor->timeLastUpdated = gameTime;
 			pointsToAdd = 0;
 		}
 
