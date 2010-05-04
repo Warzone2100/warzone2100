@@ -191,10 +191,24 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 		{
 			modifier = NORMAL_POWER_MOD;
 		}
+		// if the extractor hasn't been updated recently, now would be a good time.
+		if (pResExtractor->timeLastUpdated < 20 && gameTime >= 20)
+		{
+			pResExtractor->timeLastUpdated = gameTime;
+		}
 		// include modifier as a %
 		// Written this way to prevent rounding errors - do not "simplify"
 		pointsToAdd = (modifier * EXTRACT_POINTS * gameTime) / (GAME_TICKS_PER_SEC * 100)
 		            - (modifier * EXTRACT_POINTS * pResExtractor->timeLastUpdated) / (GAME_TICKS_PER_SEC * 100);
+
+		if (pResExtractor->timeLastUpdated - gameTime > GAME_TICKS_PER_SEC || gameTime - pResExtractor->timeLastUpdated > GAME_TICKS_PER_SEC)
+		{
+			// extractor is not in the right time zone
+			// we have a maximum time skip of less than a second, so this can't be caused by lag
+			ASSERT(false, "Oil derrick out of sync.");
+			pResExtractor->timeLastUpdated = gameTime;
+			pointsToAdd = 0;
+		}
 		if (pointsToAdd)
 		{
 			pResExtractor->timeLastUpdated = gameTime;
