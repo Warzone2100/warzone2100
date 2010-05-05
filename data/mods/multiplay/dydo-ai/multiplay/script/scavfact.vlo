@@ -7,7 +7,18 @@ run
 enemy1		INT	7				//player number to use
 maxDroids	INT	35			// max guys to handle.
 
+//base structures
+nStructures INT 4
+aBaseStr[0] STRUCTURESTAT "A0BaBaFactory"
+aBaseStr[1] STRUCTURESTAT "A0CyborgFactory"
+aBaseStr[2] STRUCTURESTAT "A0PowerGenerator"
+aBaseStr[3] STRUCTURESTAT "A0ResearchFacility"
+
 factory			STRUCTURESTAT		"A0BaBaFactory"
+cybfact			STRUCTURESTAT		"A0CyborgFactory"
+powerGen		STRUCTURESTAT		"A0PowerGenerator"
+resLab      STRUCTURESTAT   "A0ResearchFacility"
+
 derrick     STRUCTURESTAT   "A0ResourceExtractor"
 
 oilRes			    FEATURESTAT		  "OilResource"
@@ -24,6 +35,10 @@ FireCan	TEMPLATE	"BabaFireCan"
 FireTruck	TEMPLATE	"BabaFireTruck"
 
 LegsProp PROPULSION "BaBaLegs"
+
+//researches
+research[0]	RESEARCHSTAT		"R-Vehicle-Armor-Heat09"
+research[1]	RESEARCHSTAT    "R-Vehicle-Metals09"
 
 }
 /*
@@ -68,5 +83,41 @@ BusCannon,Level One,10,10,10,10,10,10,GNLCAN.pie,Exturret.pie,FXLMgun.PIE,FXTrac
 BuggyMG,Level One-Two,3,11,1,1,1,1,0,0,FXLMgun.PIE,FXTracer.PIE,FXMETHIT.PIE,FXDIRTsp.PIE,FXSSplsh.PIE,0,640,960,60,50,5,1,0,0,16,0,0,0,0,0,0,10,0,1500,20,YES,KINETIC,MACHINE GUN,DIRECT,ANTI PERSONNEL,180,90,-30,YES,NO,100,0,NO,100,0,0,0,0
 bTrikeMG,Level One,2,11,1,1,1,1,0,0,FXLMgun.PIE,FXTracer.PIE,FXMETHIT.PIE,FXDIRTsp.PIE,FXSSplsh.PIE,0,640,960,60,50,5,1,0,0,13,0,0,0,0,0,0,10,0,1500,20,YES,KINETIC,MACHINE GUN,DIRECT,ANTI PERSONNEL,180,90,-30,YES,NO,100,0,NO,100,0,0,0,0
 BTowerMG,Level All,12,16,1,1,1,1,0,0,FXLMgun.PIE,FXTracRD.PIE,FXMETHIT.PIE,FXDIRTsp.PIE,FXSSplsh.PIE,0,640,960,70,50,5,1,0,0,16,0,0,0,0,0,0,10,0,1500,20,YES,KINETIC,MACHINE GUN,DIRECT,ANTI PERSONNEL,180,90,-30,YES,NO,100,0,NO,100,0,0,0,0
+
+structures.txt
+A0ADemolishStructure,DEMOLISH,Level All,SOFT,0,1,1,Concrete,10,1,6,400,1,0,1,150,1,1,ZNULLECM,DefaultSensor1Mk1,1,icdozer.PIE,0,0,0
+A0BaBaBunker,DEFENSE,Level One-Two,BUNKER,0,1,1,Concrete,10,1,12,600,1,100,1,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,blbrbbnk.PIE,0,0,1
+A0BabaCornerWall,CORNER WALL,Level All,SOFT,0,1,1,Concrete,3,2,5,300,10,20,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,BLBRBCR1.PIE,0,0,0
+A0BaBaFactory,FACTORY,Level One,MEDIUM,2,2,1,Concrete,1,2,5,400,1,20,25,150,255,0,ZNULLECM,ZNULLSENSOR,0,BLBRBFAC.PIE,0,1,0
+A0BaBaFlameTower,DEFENSE,Level One,MEDIUM,0,1,1,Concrete,10,2,7,400,0,100,1,150,255,0,ZNULLECM,DefaultSensor1Mk1,1,Blbrtowf.pie,0,0,1
+A0BaBaGunTower,DEFENSE,Level One-Two,MEDIUM,0,1,1,Concrete,10,2,7,400,0,100,1,150,255,0,ZNULLECM,DefaultSensor1Mk1,1,BLBRBTW1.PIE,0,0,1
+A0BaBaGunTowerEND,DEFENSE,Level One-Two,MEDIUM,0,1,1,Concrete,10,2,7,400,0,20,1,150,255,0,ZNULLECM,DefaultSensor1Mk1,1,Blbrbtw2.PIE,0,0,1
+A0BaBaHorizontalWall,WALL,Level All,SOFT,0,1,1,Concrete,10,2,7,300,0,10,1,0,255,0,ZNULLECM,BaBaSensor,0,BLBRBWLH.PIE,0,1,0
+A0BaBaMortarPit,DEFENSE,Level One,MEDIUM,1,1,1,Concrete,1,1,10,500,1,10,1,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLBRMRTP.PIE,0,0,1
+A0BaBaPowerGenerator,POWER GENERATOR,Level One,SOFT,1,1,1,Concrete,1,2,5,400,1,10,1,150,255,1,ZNULLECM,BaBaSensor,0,BLBRBGEN.PIE,0,1,0
+A0BaBaRocketPit,DEFENSE,Level One,MEDIUM,1,1,1,Concrete,1,1,10,500,1,10,1,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,EXROCKET.PIE,0,0,1
+A0BaBaRocketPitAT,DEFENSE,Level One,MEDIUM,1,1,1,Concrete,1,1,10,500,1,10,1,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,EXROCKET.PIE,0,0,1
+A0CannonTower,DEFENSE,Level One-Two,MEDIUM,0,1,1,Concrete,5,2,10,400,0,10,1,150,255,0,ZNULLECM,TowerSensor,1,BLBRTOWR.PIE,0,0,1
+A0ComDroidControl,COMMAND RELAY,Level All,HARD,0,2,2,Concrete,500,2,10,1000,10,100,30,300,1,1,ZNULLECM,DefaultSensor1Mk1,0,bldrdcm0.pie,BLBDRDCM.pie,1,0
+A0CommandCentre,HQ,Level All,HARD,0,2,2,Concrete,500,3,10,1000,10,100,30,300,1,1,ZNULLECM,CCSensor,0,blhq.pie,blbhq.pie,1,0
+A0CommandCentreCO,HQ,Level Two,HARD,0,2,2,Concrete,500,3,10,1000,10,100,30,300,1,1,ZNULLECM,CCSensor,0,blhq3.pie,blbhq.pie,1,0
+A0CommandCentreNE,HQ,Level Three,HARD,0,2,2,Concrete,500,3,10,1000,10,100,30,300,1,1,ZNULLECM,CCSensor,0,blhq4.pie,blbhq.pie,1,0
+A0CommandCentreNP,HQ,Level One,HARD,0,2,2,Concrete,500,3,10,1000,10,100,30,300,1,1,ZNULLECM,CCSensor,0,blhq2.pie,blbhq.pie,1,0
+A0CyborgFactory,CYBORG FACTORY,Level All,MEDIUM,1,1,2,Concrete,500,2,10,1000,100,100,30,150,255,20,ZNULLECM,DefaultSensor1Mk1,1,blcfact1.pie,blbcfact.pie,1,0
+A0FacMod1,FACTORY MODULE,Level All,MEDIUM,1,3,3,Concrete,250,2,10,500,100,100,25,150,255,30,ZNULLECM,DefaultSensor1Mk1,0,BLFACT1.PIE,0,1,0
+A0HardcreteMk1CWall,CORNER WALL,Level All,HARD,1,1,1,Concrete,125,2,15,700,10,25,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,BLWALLC1.pie,0,0,0
+A0HardcreteMk1Wall,WALL,Level All,HARD,1,1,1,Concrete,125,2,15,700,10,25,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,BLWALLH.pie,0,1,0
+A0LasSatCommand,DOOR,Level All,HARD,1,2,2,Concrete,2500,2,16,1000,10,1000,1,0,255,0,ZNULLECM,0,1,milasbas.pie,0,0,1
+A0LightFactory,FACTORY,Level All,MEDIUM,1,3,3,Concrete,500,3,10,1000,100,100,30,150,255,20,ZNULLECM,BaBaSensor,1,BLFACT0.pie,blbfact.pie,1,0
+A0PowerGenerator,POWER GENERATOR,Level All,MEDIUM,1,2,2,Concrete,500,2,20,1000,30,50,30,300,255,10,ZNULLECM,DefaultSensor1Mk1,0,BLPOWER0.PIE,blbpower.pie,1,0
+A0PowMod1,POWER MODULE,Level All,MEDIUM,0,2,2,Concrete,250,2,10,1000,0,0,0,150,255,0,ZNULLECM,DefaultSensor1Mk1,0,BLPOWER4.PIE,0,1,0
+A0RepairCentre3,REPAIR FACILITY,Level All,MEDIUM,0,1,1,Concrete,500,2,10,1000,0,100,0,150,255,0,RepairCentre,DefaultSensor1Mk1,0,BLRPAIR3.PIE,BLBGEN.PIE,1,0
+A0ResearchFacility,RESEARCH,Level All,MEDIUM,1,2,2,Concrete,500,2,10,800,100,100,30,150,255,10,ZNULLECM,DefaultSensor1Mk1,0,BLRESCH0.PIE,blbresch.pie,1,0
+A0ResearchModule1,RESEARCH MODULE,Level All,MEDIUM,1,2,2,Concrete,250,2,10,800,50,100,5,150,255,5,ZNULLECM,DefaultSensor1Mk1,0,blresch4.PIE,0,1,0
+A0ResourceExtractor,RESOURCE EXTRACTOR,Level All,MEDIUM,0,1,1,Concrete,100,1,5,600,10,0,2,150,255,1,ZNULLECM,DefaultSensor1Mk1,0,BLDERIK.PIE,0,1,0
+A0Sat-linkCentre,SAT UPLINK,Level All,MEDIUM,0,2,2,Concrete,1250,3,12,1600,10,1000,30,0,1,1,ZNULLECM,UplinkSensor,0,miupbase.PIE,0,0,0
+A0TankTrap,WALL,Level All,HARD,1,1,1,Concrete,40,1,10,200,10,15,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,MITRAP2.PIE,0,1,0
+A0VTolFactory1,VTOL FACTORY,Level All,MEDIUM,1,3,3,Concrete,500,3,10,500,100,100,30,150,255,20,ZNULLECM,DefaultSensor1Mk1,1,blvfact0.pie,blbfact.pie,1,0
+A0VtolPad,REARM PAD,Level All,MEDIUM,0,1,1,Concrete,300,1,10,300,0,100,0,150,255,0,ZNULLECM,DefaultSensor1Mk1,0,blvtolpd.pie,blbgen.pie,1,0
 
 */
