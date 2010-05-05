@@ -8,7 +8,7 @@ run
 {
    player          INT                0
 
-// Version 2.3
+// Version 2.4
 // the version of the .vlo files is not related to the one of the .slo files
 //
 //
@@ -92,6 +92,13 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   xxxxx           WEAPON "xxxxx"
   xxxxx           WEAPON "xxxxx"
   */
+  //scavenger stuctures
+  nScavStruct INT 4
+  aScavBaseStr[0] STRUCTURESTAT "A0BaBaFactory"
+  aScavBaseStr[1] STRUCTURESTAT "A0CyborgFactory"
+  aScavBaseStr[2] STRUCTURESTAT "A0PowerGenerator"
+  aScavBaseStr[3] STRUCTURESTAT "A0ResearchFacility"
+
   //Short Range Tank Weapons
   MGun            WEAPON "MG1Mk1"
   TwinMGun        WEAPON "MG2Mk1"
@@ -176,6 +183,9 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	
   cyborgPropulsion PROPULSION	    "CyborgLegs"
 
+  cyborgFactory    RESEARCHSTAT   "R-Struc-Factory-Cyborg"
+  MGTower          RESEARCHSTAT   "R-Defense-Tower01"
+  
   lancerATweap	   RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"	//Lancer
 
 	nexusDefence	   RESEARCHSTAT		"R-Sys-Resistance-Circuits"
@@ -282,9 +292,9 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	structsLimits[0][3]			INT		2 //VTOL
 
 	// General 2  VTOL
-	structsLimits[1][0]			INT		3
-	structsLimits[1][1]			INT		2
-	structsLimits[1][2]			INT		3 
+	structsLimits[1][0]			INT		2
+	structsLimits[1][1]			INT		4
+	structsLimits[1][2]			INT		2 
 	structsLimits[1][3]			INT		4 
 
 	// General 3  Turtle
@@ -455,7 +465,8 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	tmpl0[54]	TEMPLATE	"CobraLtA-Thalftrack"//anti-tank
   tmpl0[53]	TEMPLATE	"CobraHMGHalfTrack"		//Anti personnel
   tmpl0[52]	TEMPLATE	"CobraMedCnHTrks"    //all-rounder 
-  tmpl0[51]	TEMPLATE	"A-Cobra-Hover-MC"	  //all-rounder 
+  tmpl0[51]	TEMPLATE	"SK-Cobra-Track-HVC"	  //all-rounder 
+  //tmpl0[49]	TEMPLATE	"A-Cobra-Hover-MC" //all-rounder
 	tmpl0[50]	TEMPLATE	"CobraInfernoHTracks"//Anti personnel
   tmpl0[49]	TEMPLATE	"CobraInfernoHover" //Anti personnel
 	
@@ -467,9 +478,10 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   tmpl0[45]	TEMPLATE	"PhytonHoverAssGun"       //Anti personnel
   tmpl0[44]	TEMPLATE	"PhytonHTrackAssGun"      //Anti personnel
 	tmpl0[43]	TEMPLATE	"PythonMedCanTracks"	    //all-rounder 
-	tmpl0[42]	TEMPLATE	"SK-Python-Hover-Mcannon" //all-rounder 
+	tmpl0[42]	TEMPLATE	"P0cam3PyHPVcanTrk"       //all-rounder 
   tmpl0[41]	TEMPLATE	"Sk-PythonHvCanTrack"     //all-rounder 
 	tmpl0[40]	TEMPLATE	"SK-Python-Hover-Hcannon" //all-rounder 
+	//tmpl0[40]	TEMPLATE	"PythonHoverHVC" //all-rounder 
 
   //=================================================================
   //2-Bug
@@ -479,7 +491,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   tmpl0[38]	TEMPLATE	"ScorpHTrackHMG"	        //Anti personnel     
   tmpl0[37]	TEMPLATE	"SK-Scorp-Hover-Mcannon"	//all-rounder
 
-	//2-Mantis {R-Vehicle-Body12} AC,HC,HVC
+	//2-Mantis {R-Vehicle-Body12} AC,HC,[HVC]
 	tmpl0[36]	TEMPLATE	"MantisHoverAC"           //all-rounder
 	tmpl0[35]	TEMPLATE	"SK-Mantis-Hover-Hcannon" //all-rounder
 	tmpl0[34]	TEMPLATE	"SK-Mantis-Hover-HVC"     //all-rounder
@@ -503,9 +515,11 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	tmpl0[23]	TEMPLATE	"SK-Tiger-Hover-TK" //anti-tank 
 	tmpl0[22]	TEMPLATE	"SK-Tiger-Track-TK" //anti-tank 
 	tmpl0[21]	TEMPLATE	"TigerHoverPulseLas" // Anti personnel
-	tmpl0[20]	TEMPLATE	"SK-Tiger-Track-ASCannon" // Anti personnel
+	tmpl0[20]	TEMPLATE	"SK-Tiger-Track-ASCannon" // all-rounder
 	tmpl0[19]	TEMPLATE	"TigerHoverRailGun" // all-rounder
   tmpl0[18]	TEMPLATE	"SK-Tiger-Track-Hcannon" //all-rounder
+  //tmpl0[18]	TEMPLATE "SK-Tiger-Hover-HVC" //all-rounder
+  //tmpl0[18]	TEMPLATE "SK-Tiger-Track-HVC" //all-rounder
 	//tmpl0[14]	TEMPLATE	"TigerPulseTracks"		//OK	
 	//tmpl0[13]	TEMPLATE	"TigerHvLaserTracks"		//OK
 	
@@ -565,22 +579,22 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   researchCheap[0][0]	  RESEARCHSTAT		"R-Sys-MobileRepairTurret01"	//
  	researchCheap[0][1]	  RESEARCHSTAT		"R-Struc-Research-Module"   // 
 	researchCheap[0][2]	  RESEARCHSTAT		"R-Struc-Research-Upgrade02"	//160% 
-  researchCheap[0][3]	  RESEARCHSTAT		"R-Struc-RepairFacility" //repair facility {powMod - factModule-RepTurret}
+	researchCheap[0][3]   RESEARCHSTAT		"R-Vehicle-Body05"	     //Cobra
 	researchCheap[0][4]	  RESEARCHSTAT		"R-Defense-Tower06"		   //Mini-Rocket Tower  
-	researchCheap[0][5]	  RESEARCHSTAT		"R-Wpn-MG-Damage01"	     //Hardened MG Bullets 
-	researchCheap[0][6]	  RESEARCHSTAT		"R-Struc-Materials01"		 //Reinforced Base Structure Materials  
-	researchCheap[0][7]	  RESEARCHSTAT		"R-Cyborg-Metals01"		   //Cyborg Composite Alloys  
-  researchCheap[0][8]	  RESEARCHSTAT		"R-Struc-Factory-Upgrade01" //Automated Manufacturing {factMod-powMod} 
-	researchCheap[0][9]	  RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //HEAT Cannon Shells
-	researchCheap[0][10]  RESEARCHSTAT		"R-Vehicle-Engine01"	   //Fuel Injection Engine
+  researchCheap[0][5]	  RESEARCHSTAT		"R-Struc-RepairFacility" //repair facility {powMod - factModule-RepTurret}
+	researchCheap[0][6]	  RESEARCHSTAT		"R-Wpn-MG-Damage01"	     //Hardened MG Bullets 
+	researchCheap[0][7]	  RESEARCHSTAT		"R-Struc-Materials01"		 //Reinforced Base Structure Materials  
+	researchCheap[0][8]	  RESEARCHSTAT		"R-Cyborg-Metals01"		   //Cyborg Composite Alloys  
+  researchCheap[0][9]	  RESEARCHSTAT		"R-Struc-Factory-Upgrade01" //Automated Manufacturing {factMod-powMod} 
+	researchCheap[0][10]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //HEAT Cannon Shells
 	researchCheap[0][11]	RESEARCHSTAT		"R-Defense-WallUpgrade01"//Improved Hardcrete
-	researchCheap[0][12]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"//Cyclone AA site
-	researchCheap[0][13]	RESEARCHSTAT		"R-Vehicle-Body11"	     //$37 - Phyton , Cobra {facMod, powMod}
-	researchCheap[0][14]	RESEARCHSTAT		"R-Defense-WallTower01"	 //$37 - Heavy Machinegun Hardpoint  
-	researchCheap[0][15]	RESEARCHSTAT		"R-Defense-WallTower02"	 //$46 - "Light Cannon HardPoint"	{Light Cannon, HardCrete}
-  researchCheap[0][16]	RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	   //$75 - {POD, HE Mini-Rockets Mk2}
-	researchCheap[0][17]	RESEARCHSTAT	  "R-Defense-Pillbox06"	   //$46 - Lancer Tower {MRL, Lancer AT Rocket, Stabilized Mini-Rockets}
-	researchCheap[0][18]	RESEARCHSTAT		"R-Vehicle-Prop-Tracks"	 //$75 - Tracked Propulsion - {Composite Alloys Mk2, FactMod, ResearchMod}
+	researchCheap[0][12]	RESEARCHSTAT		"R-Vehicle-Prop-Tracks"	 //$75 - Tracked Propulsion - {Composite Alloys Mk2, FactMod, ResearchMod}
+	researchCheap[0][13]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"//Cyclone AA site
+	researchCheap[0][14]	RESEARCHSTAT		"R-Vehicle-Body11"	     //$37 - Phyton , Cobra {facMod, powMod}
+	researchCheap[0][15]	RESEARCHSTAT		"R-Defense-WallTower01"	 //$37 - Heavy Machinegun Hardpoint  
+	researchCheap[0][16]	RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"	   //Lancer
+  researchCheap[0][17]	RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	   //$75 - {POD, HE Mini-Rockets Mk2}
+	researchCheap[0][18]	RESEARCHSTAT	  "R-Defense-Pillbox06"	   //$46 - Lancer Tower {MRL, Lancer AT Rocket, Stabilized Mini-Rockets}
 	researchCheap[0][19]	RESEARCHSTAT		"R-Defense-MortarPit"		 //$37 - Mortar Pit  {hardcrete,facMod}
 	researchCheap[0][20]	RESEARCHSTAT		"R-Sys-CBSensor-Tower01"	//CB Tower 
   
@@ -596,14 +610,15 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   research[0][3]	RESEARCHSTAT	"R-Struc-Research-Upgrade03"// 130/160/190/(220*)/250/280/310**/340/370
   research[0][4]	RESEARCHSTAT	"R-Struc-Power-Upgrade01b"	  // 150-01*/(175-01b)/200-01c/230-02**/260-03/290-03a
 
-  //Cobra & Hover ---------------------
+  //Cobra & Hover - HMG, POD, Inferno, HVC, MC ---------------------
   research[0][5]  RESEARCHSTAT  "R-Vehicle-Body05"//cobra
   research[0][6]	RESEARCHSTAT	"R-Vehicle-Prop-Hover"	//Hover
-  research[0][7]  RESEARCHSTAT  "R-Defense-WallTower01" //HMG
-  research[0][8]  RESEARCHSTAT  "R-Defense-Tower06" //POD
-  research[0][9]  RESEARCHSTAT  "R-Wpn-Flame2" //Inferno    {damage04}
-  research[0][10]  RESEARCHSTAT  "R-Defense-MRL" //MRL
-  research[0][11]  RESEARCHSTAT  "R-Defense-WallTower03" //MEDCann
+  research[0][7]  RESEARCHSTAT  "R-Defense-WallTower01" //HMG  def
+  research[0][8]  RESEARCHSTAT  "R-Defense-Tower06" //POD def
+  research[0][9]  RESEARCHSTAT  "R-Wpn-Flame2" //Inferno
+  research[0][10] RESEARCHSTAT  "R-Defense-WallTower03" //MEDCann def
+  research[0][11] RESEARCHSTAT  "R-Defense-WallTower-HPVcannon"  //HVC def
+  //research[0][11]  RESEARCHSTAT "R-Defense-WallTower03" //MEDCann def
   
   //Cyborg Upgrades
   research[0][12]	RESEARCHSTAT		"R-Cyborg-Metals04"	// 135/170/205/(240*)/275/310/345**/380/415
@@ -625,12 +640,12 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   research[0][20]	RESEARCHSTAT		"R-Struc-Research-Upgrade05"// 30/160/190/220*/(250)/280/310**/340/370
   research[0][21]	RESEARCHSTAT		"R-Struc-Power-Upgrade01c"	// 150-01*/175-01b/(200-01c)/230-02**/260-03/290-03a
 
-  //Phyton - Heavy Cannon, Lancer, Assault Gun, Inferno --------------------
+  //Phyton - Heavy Cannon, Assault Gun --------------------
   research[0][22]  RESEARCHSTAT  "R-Vehicle-Body11"
   research[0][23]  RESEARCHSTAT  "R-Defense-WallTower04" //HeavyCann {damage04}
   research[0][24]  RESEARCHSTAT  "R-Defense-Pillbox06"   //Lancer
   research[0][25]  RESEARCHSTAT  "R-Defense-RotMG" //AssGun
-  research[0][26]  RESEARCHSTAT  "R-Defense-HvyFlamer"  //Inferno - Bunker
+  research[0][26]  RESEARCHSTAT  "R-Defense-RotMG"  //AssGun
  
   //Cyborg Upgrades
   research[0][27]	RESEARCHSTAT		"R-Cyborg-Metals05"	//135/170/205/240*/(275)/310/345**/380/415
@@ -652,10 +667,10 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   research[0][37]	RESEARCHSTAT		"R-Struc-Research-Upgrade07"// 30/160/190/220*/250/280/(310**)/340/370
   research[0][38]	RESEARCHSTAT		"R-Struc-Power-Upgrade02"	 // 150-01*/175-01b/200-01c/(230-02**)/260-03/290-03a
 
-  //Mantis-Scorpion -  HVC, Assault Cannon------------------
-  research[0][39] RESEARCHSTAT  "R-Vehicle-Body12"
-  research[0][40] RESEARCHSTAT  "R-Defense-WallTower-HPVcannon"  //HVC  {damage05}
-  research[0][41] RESEARCHSTAT  "R-Defense-Wall-VulcanCan" //AssCann   {damage01/ROF03}
+  //Mantis-Scorpion -  Assault Cannon------------------
+  research[0][39] RESEARCHSTAT  "R-Vehicle-Body08"  //Scorpion
+  research[0][40] RESEARCHSTAT  "R-Vehicle-Body12"  //Mantis
+  research[0][41] RESEARCHSTAT  "R-Defense-Wall-VulcanCan" //AssCann   {damage04/ROF01}
    
   //Weapon Upgrades
   research[0][42] RESEARCHSTAT  "R-Wpn-Cannon-Accuracy01" //(110)/120 %
@@ -838,13 +853,13 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
  	general2Cheap[0][1]	  RESEARCHSTAT		"R-Struc-Research-Module"   //$37 
 	general2Cheap[0][2]	  RESEARCHSTAT		"R-Struc-Research-Upgrade02"	//160% 
   general2Cheap[0][3]	  RESEARCHSTAT		"R-Struc-RepairFacility" //$75 - repair facility {powMod - factModule-RepTurret}
-	general2Cheap[0][4]	  RESEARCHSTAT		"R-Wpn-MG-Damage01"	     //$18 - 125% - Hardened MG Bullets 
-	general2Cheap[0][5]	  RESEARCHSTAT		"R-Struc-Materials01"		 //$37 - 135% - Reinforced Base Structure Materials  
-	general2Cheap[0][6]	  RESEARCHSTAT		"R-Cyborg-Metals01"		   //$37 - 135% - Cyborg Composite Alloys  
-  general2Cheap[0][7]	  RESEARCHSTAT		"R-Struc-Factory-Upgrade01" //$75 - 160% - Automated Manufacturing {factMod-powMod} 
-	general2Cheap[0][8]	  RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //$37 - 125% -  HEAT Cannon Shells
-	general2Cheap[0][9]   RESEARCHSTAT		"R-Vehicle-Engine01"	   //$37 - 105% -  Fuel Injection Engine
-	general2Cheap[0][10]	RESEARCHSTAT		"R-Defense-WallUpgrade01"//$37 - 135% -  Improved Hardcrete
+	general2Cheap[0][4]   RESEARCHSTAT		"R-Vehicle-Body05"	     //Cobra
+	general2Cheap[0][5]	  RESEARCHSTAT		"R-Defense-Tower06"		   //Mini-Rocket Tower  
+	general2Cheap[0][6]	  RESEARCHSTAT		"R-Wpn-MG-Damage01"	     //Hardened MG Bullets 
+	general2Cheap[0][7]	  RESEARCHSTAT		"R-Struc-Materials01"		 //Reinforced Base Structure Materials  
+	general2Cheap[0][8]	  RESEARCHSTAT		"R-Cyborg-Metals01"		   //Cyborg Composite Alloys  
+  general2Cheap[0][9]	  RESEARCHSTAT		"R-Struc-Factory-Upgrade01" //Automated Manufacturing {factMod-powMod} 
+	general2Cheap[0][10]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //HEAT Cannon Shells
 	general2Cheap[0][11]	RESEARCHSTAT		"R-Vehicle-Body11"	     //$37 - Phyton , Cobra {facMod, powMod}
 	general2Cheap[0][12]	RESEARCHSTAT		"R-Defense-WallTower01"		 //$37 - Heavy Machinegun Hardpoint  
 	general2Cheap[0][13]	RESEARCHSTAT		"R-Defense-WallTower02"	 //$46 - "Light Cannon HardPoint"	{Light Cannon, HardCrete}
@@ -924,8 +939,8 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 
   //Mantis-Scorpion -  HVC, Assault Cannon------------------
   general2[0][39] RESEARCHSTAT  "R-Vehicle-Body12"
-  general2[0][40] RESEARCHSTAT  "R-Defense-WallTower-HPVcannon"  //HVC  {damage05}
-  general2[0][41] RESEARCHSTAT  "R-Defense-Wall-VulcanCan" //AssCann   {damage01/ROF03}
+  general2[0][40] RESEARCHSTAT  "R-Defense-WallTower-HPVcannon"  //HVC  {LC/Research-Upgrade01/Accuracy01/Damage02}
+  general2[0][41] RESEARCHSTAT  "R-Defense-Wall-VulcanCan" //AssCann   {damage04/ROF01}
    
   //Weapon Upgrades
   general2[0][42] RESEARCHSTAT  "R-Wpn-Cannon-Accuracy01" //(110)/120 %
@@ -1368,34 +1383,30 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 
 
   //cheap Researches
-	numCheapResGen4[0]		INT					16
+	numCheapResGen4[0]		INT					17
 	
-  general4Cheap[0][0]	RESEARCHSTAT	"R-Wpn-MG-Damage01"	//$18 - 125% - Hardened MG Bullets 
+  general4Cheap[0][0]	RESEARCHSTAT	"R-Struc-Research-Upgrade02"// 130/160/(190)/220/250/280/310**/340/370
 	general4Cheap[0][1]	RESEARCHSTAT	"R-Wpn-Flamer-ROF01"	//$18 - 118% - Flamer Autoloader 
 	general4Cheap[0][2]	RESEARCHSTAT	"R-Vehicle-Body05"	//$37 - Cobra {facMod, powMod}
 	general4Cheap[0][3]	RESEARCHSTAT	"R-Wpn-Cannon-Damage01"	//$37 - 125% -  HEAT Cannon Shells
 	general4Cheap[0][4]	RESEARCHSTAT	"R-Vehicle-Engine01"	//$37 - 105% -  Fuel Injection Engine
 	general4Cheap[0][5]	RESEARCHSTAT	"R-Vehicle-Metals01"		 //$56 - 135% - Composite Alloys  
-  general4Cheap[0][6]	RESEARCHSTAT	"R-Struc-RepairFacility" //$75 - repair facility {powMod - factModule-RepTurret}
+  general4Cheap[0][6]	RESEARCHSTAT	"R-Wpn-MG-Damage01"	//$18 - 125% - Hardened MG Bullets 
+  general4Cheap[0][7]	RESEARCHSTAT	"R-Struc-RepairFacility" //$75 - repair facility {powMod - factModule-RepTurret}
 
-	general4Cheap[0][7]	RESEARCHSTAT	"R-Defense-WallTower02"		//$46 -  Light Cannon HardPoint 
-	general4Cheap[0][8]	RESEARCHSTAT	"R-Defense-WallUpgrade01"	//$37 - 135% -  Improved Hardcrete
-	//general4Cheap[0][9]	RESEARCHSTAT	"R-Defense-Tower06"		//$75 - Mini-Rocket Tower  {HardCrete,POD}
-  //general4Cheap[0][10]	RESEARCHSTAT	"R-Wpn-Rocket02-MRL"	//$75 - {POD, HE Mini-Rockets Mk2}
-	general4Cheap[0][9]	RESEARCHSTAT	"R-Defense-Pillbox06"	//$46 Lancer Tower
-	//general4Cheap[0][12]	RESEARCHSTAT	"R-Defense-MRL"	//$46 Mini Rocket Battery
-	general4Cheap[0][10]	RESEARCHSTAT	"R-Defense-WallTower03"	//$ medium cannon hardpoint
-	general4Cheap[0][11]	RESEARCHSTAT	"R-Defense-WallTower01"	//$37 - Heavy Machinegun Hardpoint  
+	general4Cheap[0][8]	RESEARCHSTAT	"R-Defense-WallTower02"		//$46 -  Light Cannon HardPoint 
+	general4Cheap[0][9]	RESEARCHSTAT	"R-Defense-WallUpgrade01"	//$37 - 135% -  Improved Hardcrete
+	general4Cheap[0][10]	RESEARCHSTAT	"R-Defense-Pillbox06"	//$46 Lancer Tower
+	general4Cheap[0][11]	RESEARCHSTAT	"R-Defense-WallTower03"	//$ medium cannon hardpoint
+	general4Cheap[0][12]	RESEARCHSTAT	"R-Defense-WallTower01"	//$37 - Heavy Machinegun Hardpoint  
 
-	general4Cheap[0][12]	RESEARCHSTAT	"R-Struc-Materials03"	//*** $112 - 205% Reinforced Base Structure Materials Mk3
-	general4Cheap[0][13]	RESEARCHSTAT	"R-Struc-RprFac-Upgrade01"	//$75 Automated Repair Facility
-	//general4Cheap[0][17]	RESEARCHSTAT	"R-Vehicle-Body11"	//$75 Phyton
-	//general4Cheap[0][18]	RESEARCHSTAT	"R-Vehicle-Prop-Tracks"	//
-	general4Cheap[0][14]	RESEARCHSTAT	"R-Vehicle-Body08"	//Scorpion
-	general4Cheap[0][15]	RESEARCHSTAT	"R-Sys-CBSensor-Tower01"	//CB Tower 
+	general4Cheap[0][13]	RESEARCHSTAT	"R-Struc-Materials03"	//*** $112 - 205% Reinforced Base Structure Materials Mk3
+	general4Cheap[0][14]	RESEARCHSTAT	"R-Struc-RprFac-Upgrade01"	//$75 Automated Repair Facility
+	general4Cheap[0][15]	RESEARCHSTAT	"R-Vehicle-Body08"	//Scorpion
+	general4Cheap[0][16]	RESEARCHSTAT	"R-Sys-CBSensor-Tower01"	//CB Tower 
   
   
-	numResGen4[0]		INT					53
+	numResGen4[0]		INT					54
 	//standard
   general4[0][0]	RESEARCHSTAT	"R-Sys-MobileRepairTurret01"	//repair turret, pre-researched
   general4[0][1]  RESEARCHSTAT  "R-Wpn-Flamer-ROF03"
@@ -1407,10 +1418,8 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   general4[0][5]  RESEARCHSTAT  "R-Vehicle-Body05"
   general4[0][6]	RESEARCHSTAT	"R-Vehicle-Prop-Hover"	//Hover
   general4[0][7]  RESEARCHSTAT  "R-Defense-WallTower01" //HMG
-  //general4[0][8]  RESEARCHSTAT  "R-Defense-Tower06" //POD **
   general4[0][8]  RESEARCHSTAT  "R-Wpn-Flame2" //Inferno    {damage04}
-  //general4[0][10]  RESEARCHSTAT  "R-Defense-MRL" //MRL **
-  general4[0][9]  RESEARCHSTAT  "R-Defense-WallTower03" //MEDCann
+  general4[0][9]  RESEARCHSTAT  "R-Defense-WallTower-HPVcannon" //HPV
   
   //Cyborg Upgrades
   general4[0][10]	RESEARCHSTAT		"R-Cyborg-Metals04"	// 135/170/205/(240*)/275/310/345**/380/415
@@ -1419,11 +1428,8 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 
   //Weapon Upgrades
   general4[0][12] RESEARCHSTAT    "R-Wpn-MG-Damage02" //125/(150)/175/200/225/250/275/300/325 %
-  //general4[0][15]	RESEARCHSTAT		"R-Wpn-Rocket-Damage02" //150% **
-  //general4[0][16]	RESEARCHSTAT		"R-Wpn-Rocket-ROF02"    //143% **
 
   //HardCretes & Armors
-  //general4[0][17]	RESEARCHSTAT		"R-Vehicle-Armor-Heat02"//** 140/(180)/220/260/300/340/380/420/460
   general4[0][13]	RESEARCHSTAT		"R-Struc-Materials03"     // 135/170/(205)/240/275/310/345* /370/405
   general4[0][14]	RESEARCHSTAT		"R-Defense-WallUpgrade03" // 135/170/(205)/240/275/305/340* /375/405/440/475/510
                                                             //* Research-Upgarde-08; 
@@ -1449,52 +1455,51 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   general4[0][24] RESEARCHSTAT  "R-Wpn-MG-ROF01"     //(118)/143/182 %
   general4[0][25] RESEARCHSTAT  "R-Wpn-Flamer-Damage04" //125/150/175/(200)/225/250/275/300/325 %
   general4[0][26] RESEARCHSTAT  "R-Wpn-MG-Damage04"  //125/150/175/(200)/225/250/275/300/325 %
+  general4[1][27]	RESEARCHSTAT	"R-Wpn-Cannon-Damage04"	 //125/150/175/(200)/225/250/275/300/325 %
   
   //HardCretes & Armors
-  //general4[0][34]	RESEARCHSTAT		"R-Vehicle-Armor-Heat03"//**140/180/(220)/260/300/340/380/420/460
-  general4[0][27]	RESEARCHSTAT		"R-Struc-Materials04"//135/170/205/(240)/275/310/345*/370/405
-  general4[0][28]	RESEARCHSTAT		"R-Defense-WallUpgrade04"//135/170/205/(240)/275/305/340* /375/405/440/475/510
+  general4[0][28]	RESEARCHSTAT		"R-Struc-Materials04"//135/170/205/(240)/275/310/345*/370/405
+  general4[0][29]	RESEARCHSTAT		"R-Defense-WallUpgrade04"//135/170/205/(240)/275/305/340* /375/405/440/475/510
 
   //Research and Power upgrades
-  general4[0][29]	RESEARCHSTAT		"R-Struc-Research-Upgrade07"// 30/160/190/220*/250/280/(310**)/340/370
-  general4[0][30]	RESEARCHSTAT		"R-Struc-Power-Upgrade02"	 // 150-01*/175-01b/200-01c/(230-02**)/260-03/290-03a
+  general4[0][30]	RESEARCHSTAT		"R-Struc-Research-Upgrade07"// 30/160/190/220*/250/280/(310**)/340/370
+  general4[0][31]	RESEARCHSTAT		"R-Struc-Power-Upgrade02"	 // 150-01*/175-01b/200-01c/(230-02**)/260-03/290-03a
 
   //Mantis-Scorpion -  HVC, Assault Cannon------------------
-  general4[0][31] RESEARCHSTAT  "R-Vehicle-Body12"
-  general4[0][32] RESEARCHSTAT  "R-Defense-WallTower-HPVcannon"  //HVC  {damage05}
-  general4[0][33] RESEARCHSTAT  "R-Defense-Wall-VulcanCan" //AssCann   {damage01/ROF03}
+  general4[0][32] RESEARCHSTAT  "R-Vehicle-Body12"
+  general4[0][33] RESEARCHSTAT  "R-Defense-WallTower-HPVcannon"  //HVC  {damage05}
+  general4[0][34] RESEARCHSTAT  "R-Defense-Wall-VulcanCan" //AssCann   {damage01/ROF03}
    
   //Weapon Upgrades
-  general4[0][34] RESEARCHSTAT  "R-Wpn-Cannon-Accuracy01" //(110)/120 %
-  general4[0][35] RESEARCHSTAT  "R-Wpn-Cannon-ROF04" //111/125/143/(167)/200/250 %
-  general4[0][36] RESEARCHSTAT  "R-Wpn-MG-ROF02"   //118/(143)/182 %
-  general4[0][37] RESEARCHSTAT  "R-Wpn-MG-Damage06" //125/150/175/200/225/(250)/275/300/325 %
-  general4[0][38] RESEARCHSTAT  "R-Wpn-Flamer-Damage06" //125/150/175/200/225/(250)/275/300/325 %
+  general4[0][35] RESEARCHSTAT  "R-Wpn-Cannon-Accuracy01" //(110)/120 %
+  general4[0][36] RESEARCHSTAT  "R-Wpn-Cannon-ROF04" //111/125/143/(167)/200/250 %
+  general4[0][37] RESEARCHSTAT  "R-Wpn-MG-ROF02"   //118/(143)/182 %
+  general4[0][38] RESEARCHSTAT  "R-Wpn-MG-Damage06" //125/150/175/200/225/(250)/275/300/325 %
+  general4[0][39] RESEARCHSTAT  "R-Wpn-Flamer-Damage06" //125/150/175/200/225/(250)/275/300/325 %
           
   //Cyborg Upgrades
-  general4[0][39]	RESEARCHSTAT		"R-Cyborg-Metals07"	    //135/170/205/240*/275/310/(345**)/380/415
-  general4[0][40]	RESEARCHSTAT		"R-Cyborg-Armor-Heat06"	//145*/190/235/270**/315/(360)/405/450/495
+  general4[0][40]	RESEARCHSTAT		"R-Cyborg-Metals07"	    //135/170/205/240*/275/310/(345**)/380/415
+  general4[0][41]	RESEARCHSTAT		"R-Cyborg-Armor-Heat06"	//145*/190/235/270**/315/(360)/405/450/495
 
   //Cyborg
-  general4[0][41]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Mcannon" //Super Heavy Gunner
-  general4[0][42]	RESEARCHSTAT		"R-Cyborg-Hvywpn-HPV" //Super Auto Cannon Cyborg
-  general4[0][43]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Acannon" //Super HPV Cyborg
+  general4[0][42]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Mcannon" //Super Heavy Gunner
+  general4[0][43]	RESEARCHSTAT		"R-Cyborg-Hvywpn-HPV" //Super Auto Cannon Cyborg
+  general4[0][44]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Acannon" //Super HPV Cyborg
   
   //HardCretes & Armors
-  //general4[0][52]	RESEARCHSTAT		"R-Vehicle-Armor-Heat05"//140/180/220/260/(300)/340/380/420/460
-  general4[0][44]	RESEARCHSTAT		"R-Struc-Materials05"//135/170/205/240/(275)/310/345*/370/405
-  general4[0][45]	RESEARCHSTAT		"R-Defense-Super-Cannon"//"R-Defense-WallUpgrade05"//135/170/205/240/(275)/305/340* /375/405/440/475/510
+  general4[0][45]	RESEARCHSTAT		"R-Struc-Materials05"//135/170/205/240/(275)/310/345*/370/405
+  general4[0][46]	RESEARCHSTAT		"R-Defense-Super-Cannon"//"R-Defense-WallUpgrade05"//135/170/205/240/(275)/305/340* /375/405/440/475/510
 
   //Research and Power upgrades
-  general4[0][46]	RESEARCHSTAT		"R-Struc-Research-Upgrade08"// 30/160/190/220*/250/280/310**/(340)/370
-  general4[0][47]	RESEARCHSTAT		"R-Struc-Power-Upgrade03"	 // 150-01*/175-01b/200-01c/230-02**/(260-03)/290-03a
+  general4[0][47]	RESEARCHSTAT		"R-Struc-Research-Upgrade08"// 30/160/190/220*/250/280/310**/(340)/370
+  general4[0][48]	RESEARCHSTAT		"R-Struc-Power-Upgrade03"	 // 150-01*/175-01b/200-01c/230-02**/(260-03)/290-03a
 
   //Leopard - Panther - Needle, Pulse Laser, Tank Killer-------------------------------------------
-	general4[0][48]	RESEARCHSTAT		"R-Vehicle-Body06"	//Panther
-	general4[0][49]	RESEARCHSTAT		"R-Defense-GuardTower-Rail1"	//Neelde
-	general4[0][50]	RESEARCHSTAT		"R-Defense-WallTower-PulseLas"		//Pulse Laser
-	general4[0][51]	RESEARCHSTAT		"R-Defense-WallTower-HvyA-Trocket"	//Tank Killer
+	general4[0][49]	RESEARCHSTAT		"R-Vehicle-Body06"	//Panther
+	general4[0][50]	RESEARCHSTAT		"R-Defense-GuardTower-Rail1"	//Neelde
+	general4[0][51]	RESEARCHSTAT		"R-Defense-WallTower-PulseLas"		//Pulse Laser
 	general4[0][52]	RESEARCHSTAT		"R-Defense-WallTower-HvyA-Trocket"	//Tank Killer
+	general4[0][53]	RESEARCHSTAT		"R-Defense-WallTower-HvyA-Trocket"	//Tank Killer
 
 	numResGen4[1]		INT					41
 
@@ -1511,7 +1516,6 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   general4[1][7]	RESEARCHSTAT		"R-Wpn-MG-Damage07"	           // 125/150/175/200/225/250/(275)/300/325 %
 
   //Tiger - Rail Gun----------------------------------------------------
-	//general4[1][8]	RESEARCHSTAT		"R-Vehicle-Body09"	//Tiger
 	general4[1][8]	RESEARCHSTAT		"R-Defense-WallTower-Rail2"	//Rail Gun
 	
   //Research and Power upgrades
@@ -1519,12 +1523,11 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   general4[1][10]	RESEARCHSTAT		"R-Struc-Power-Upgrade03"	 // 150-01* /175-01b/200-01c/230-02** /260-03/(290-03a)
 
   //HardCretes & Armors
-  //general4[1][12]	RESEARCHSTAT		"R-Vehicle-Armor-Heat06"//140/180/220/260/300/(340)/380/420/460
   general4[1][11]	RESEARCHSTAT		"R-Struc-Materials06"     // 135/170/205/240/275/(310)/345* /370/405
   general4[1][12]	RESEARCHSTAT		"R-Defense-WallUpgrade06" // 135/170/205/240/275/(305)/340* /375/405/440/475/510
 
 	//Weapon Upgrades
-  general4[1][13]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //(125)/150/175/200/225/250/275/300/325 %
+  general4[1][13]	RESEARCHSTAT		"R-Wpn-Cannon-Damage06"	 //125/150/175/200/225/(250)/275/300/325 %
   general4[1][14]	RESEARCHSTAT		"R-Wpn-Energy-Damage01"	 //(125)/150/175 %
   general4[1][15]	RESEARCHSTAT		"R-Wpn-Energy-ROF01"	   //(118)/143/182 %
 
@@ -1543,12 +1546,10 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   general4[1][22]	RESEARCHSTAT		"R-Wpn-Missile-Accuracy01" //(110)/120/182 %
 
   //Vengeance - Heavy Laser, Gauss Cannon ----------------------------------------------
-  //general4[1][25]	RESEARCHSTAT		"R-Vehicle-Body10"	 //Vengeance
 	general4[1][23]	RESEARCHSTAT		"R-Defense-HeavyLas" //Heavy Laser
 	general4[1][24]	RESEARCHSTAT		"R-Defense-WallTower-Rail3"	//Gauss Cannon
 	
   //HardCretes & Armors
-  //general4[1][28]	RESEARCHSTAT		"R-Vehicle-Armor-Heat07"//140/180/220/260/300/340/(380)/420/460
   general4[1][25]	RESEARCHSTAT		"R-Struc-Materials07"//135/170/205/240/275/310/(345*)/370/405
   general4[1][26]	RESEARCHSTAT		"R-Defense-WallUpgrade07"//135/170/205/240/275/305/(340*)/375/405/440/475/510
 
@@ -1567,7 +1568,6 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   general4[1][34]	RESEARCHSTAT		"R-Cyborg-Armor-Heat09"	//145* /190/235/270** /315/360/405/450/495
 
 	//Wyvern - Plasma Cannon  -------------------------------------------------
-  //general4[1][39]	RESEARCHSTAT		"R-Vehicle-Body13"	//Wyvern
 	general4[1][35]	RESEARCHSTAT		"R-Defense-PlasmaCannon"	//Plasma Caanon
 	
 	//Laser Satellite
