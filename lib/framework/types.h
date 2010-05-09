@@ -88,14 +88,19 @@ typedef int32_t  SDWORD;
 
 // If we are C99 compatible, the "bool" macro will be defined in <stdbool.h> (as _Bool)
 // C++ comes with an integrated bool type
-#if defined(WZ_CXX98)
-#elif defined(WZ_C99)
+#if defined(WZ_C99)
 # include <stdbool.h>
 #else
-// Pretend we are C99 compatible (well, for the bool type then)
-# ifndef bool
-#  define bool BOOL
-# endif
+#	if defined(_MSC_VER)
+#		ifndef __cplusplus
+// (!!!) NOTE: This it **REQUIRED** since bool in C++ is a byte, not a int for MSVC compilers!
+//				BOOL is a typedef in windef.h
+		typedef unsigned char bool;
+#		pragma message (" NOTE: BOOL is a int,  bool is the size of a unsigned char!")
+#		endif
+#	endif
+// MINGW fixes here if needed
+
 # ifndef true
 #  define true (1)
 # endif
