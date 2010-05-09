@@ -528,7 +528,7 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 			case Qt::Key_B                  :	lastKey = setKey(KEY_B, pressed); break;
 			case Qt::Key_N                  :	lastKey = setKey(KEY_N, pressed); break;
 			case Qt::Key_M                  :	lastKey = setKey(KEY_M, pressed); break;
-			case Qt::Key_Colon              :	lastKey = setKey(KEY_COMMA, pressed); break;
+			case Qt::Key_Comma              :	lastKey = setKey(KEY_COMMA, pressed); break;
 			case Qt::Key_Period             :	lastKey = setKey(KEY_FULLSTOP, pressed); break;
 			case Qt::Key_Slash              :	lastKey = setKey(KEY_FORWARDSLASH, pressed); break;
 			case Qt::Key_Space              :	lastKey = setKey(KEY_SPACE, pressed); break;
