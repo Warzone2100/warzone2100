@@ -110,7 +110,7 @@ unsigned int screenHeight = 0;
 }
 #endif
 static void inputAddBuffer(UDWORD key, utf_32_char unicode);
-
+static int WZkeyToQtKey(int code);
 /*!
  * The mainloop.
  * Fetches events, executes appropriate code
@@ -201,7 +201,7 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	small.setPixelSize(9);
 
 	// Want focusOutEvent messages.
-	setFocusPolicy(Qt::ClickFocus);
+	setFocusPolicy(Qt::StrongFocus);
 
 	// Want áéíóú inputMethodEvent messages.
 	setAttribute(Qt::WA_InputMethodEnabled);
@@ -846,15 +846,12 @@ bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 
 void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 {
-#if 0
-	if(keyCodeToSDLKey(code) == KEY_MAXSCAN)
-	{
-		strcpy(ascii,"???");
-		return;
-	}
-	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
-	snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
-#endif
+	QString ourString;
+	QByteArray ba;
+	const QKeySequence ks =  WZkeyToQtKey(code);		// convert key to something Qt understands
+	ourString = ks.toString(QKeySequence::NativeText);	// and convert it to a QtString
+	ba = ourString.toLatin1();							// convert that to a byte array
+	snprintf(ascii, maxStringSize, "%s", ba.data());	// and use that data as the text for the key
 }
 
 /* Initialise the input module */
@@ -1149,4 +1146,86 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 void iV_SetTextSize(float size)
 {
 	WzMainWindow::instance()->setFontSize(size);
+}
+
+static int WZkeyToQtKey(int code)
+{
+	if (code >= Qt::Key_0  && code  <= Qt::Key_AsciiTilde)
+		return code;	// maps 1:1
+	else if (code >= KEY_F1 && code <= KEY_F12)
+	{
+		return (Qt::Key_F1 + ( code - KEY_F1 ));
+	}
+	else if (code >= KEY_KP_0 && code <= KEY_KP_9)
+	{
+		return (Qt::Key_0 + ( code - KEY_KP_0 ));
+	}
+	else if (code >= Qt::Key_Exclam && code <= Qt::Key_Slash)
+		return code;	// maps 1:1
+	else if (code == KEY_ESC)
+		return Qt::Key_Escape;
+	else if (code == KEY_TAB)
+		return Qt::Key_Tab;
+	//Qt::Key_Backtab
+	else if (code == KEY_BACKSPACE)
+		return Qt::Key_Backspace;
+	else if (code == KEY_RETURN)
+		return Qt::Key_Return;
+	else if (code == KEY_KPENTER)
+		return 	Qt::Key_Enter;
+	else if (code == KEY_INSERT)
+		return Qt::Key_Insert;
+	else if (code == KEY_DELETE)
+		return Qt::Key_Delete;
+	//else if (code ==
+	//	return Qt::Key_Pause
+	//else if (code ==
+	//	return Qt::Key_Print
+	//else if (code ==
+	//	return Qt::Key_SysReq
+	//else if (code ==
+	//	return Qt::Key_Clear
+	else if (code == KEY_KP_STAR)
+		return Qt::Key_Asterisk;
+	else if (code == KEY_KP_PLUS)
+		return Qt::Key_Plus;
+	else if (code == KEY_KP_MINUS)
+		return Qt::Key_Minus;
+	else if (code == KEY_KP_BACKSLASH)
+		return Qt::Key_Backslash;
+	else if (code == KEY_HOME)
+		return Qt::Key_Home;
+	else if (code == KEY_END)
+		return Qt::Key_End;
+	else if (code == KEY_LEFTARROW)
+		return Qt::Key_Left;
+	else if (code == KEY_UPARROW)
+		return Qt::Key_Up;
+	else if (code == KEY_RIGHTARROW)
+		return Qt::Key_Right;
+	else if (code == KEY_DOWNARROW)
+		return Qt::Key_Down;
+	else if (code == KEY_PAGEUP)
+		return Qt::Key_PageUp;
+	else if (code == KEY_PAGEDOWN)
+		return Qt::Key_PageDown;
+	else if (code == KEY_RSHIFT || code == KEY_LSHIFT)
+		return Qt::SHIFT; //Qt::Key_Shift;
+	else if (code == KEY_LCTRL || code == KEY_RCTRL)
+		return Qt::CTRL; //Qt::Key_Control;
+	else if (code == KEY_LMETA || code == KEY_RMETA)
+		return Qt::META; //Qt::Key_Meta;
+	else if (code == KEY_LALT || code == KEY_RALT)
+		return Qt::ALT; //Qt::Key_Alt;
+	else if (code == KEY_MAXSCAN)
+	{
+		debug(LOG_WARNING, "KEY_MAXSCAN was found (key unassigned)");
+		return Qt::Key_Question;
+	}
+	else if (code == KEY_SPACE)
+		return Qt::Key_Space;
+
+	ASSERT(false, "We missed mapping a key, code is %d, map it to input.h, then qnamespace.h", code);
+
+	return 0;	// nothing found (should never happen)
 }

@@ -290,7 +290,7 @@ static BOOL keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 	}
 	else
 	{
-		sprintf(pStr,"%s + %s",asciiMeta,asciiSub);
+		sprintf(pStr,"%s %s", asciiMeta, asciiSub);
 	}
 	return true;
 }
@@ -327,12 +327,12 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_D
 	iV_DrawText(psMapping->pName, x + 2, y + (psWidget->height / 2) + 3);
 
 	// draw binding
-	keyMapToString(sKey,psMapping);
+	keyMapToString(sKey, psMapping);
 	// Check to see if key is on the numpad, if so tell user and change color
 	if (psMapping->subKeyCode >= KEY_KP_0 && psMapping->subKeyCode <= KEY_KPENTER)
 	{
 		iV_SetTextColour(WZCOL_YELLOW);
-		//ssprintf(sKey, "(numpad)%s", SDL_GetKeyName((SDLKey)psMapping->subKeyCode));
+		sstrcat(sKey, " (numpad)");
 	}
 	iV_DrawText(sKey, x + 364, y + (psWidget->height / 2) + 3);
 }
