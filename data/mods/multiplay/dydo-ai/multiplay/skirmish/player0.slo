@@ -12,6 +12,9 @@ For changelog and downloads see DyDo-AI homepage http://www.obooma.net/dydo/
 
 ________________ CHANGELOG ___________________________________
 
+{change} - The building sequence and speed has been improved: 
+          Trucks try to work together to complete one structure before starting a new one (not always).
+          It should never happen any more that power generators are built too late.
 
 + Rebalance to take into account "Changes to game balance" on Warzone 2.3
  
@@ -368,7 +371,7 @@ private int nKineticX,nKineticY,nWorkingLab,nTotDefences,nFreeOilRes,nTotBaseDef
 private int _targetPlayer,nLastDefSpotUpdate,_nOilRes, _t, _pos;
 private int nTotCybAR, nTotCybAP, nTotCybAT, nTotCybKK, nTotCybErr; 
 
-private int nTotEnemyDroids,nCybMechanic,nStructToBeBuilt,nAllyBeingHelped,nPODMRLTank, nWeakTank,nTotCyborgBuilt,nTotTankBuilt;
+private int nRepairFac,nTotEnemyDroids,nCybMechanic,nStructToBeBuilt,nAllyBeingHelped,nPODMRLTank, nWeakTank,nTotCyborgBuilt,nTotTankBuilt;
 private int tLastCybMech,tLastFinalAttack,nFinalAttacks,nDamageLevelRepair, nProdSelect, tLastPowerSwitch,tLastbuildBaseDef,nEnemyPlayers,nLastEnemyPlayer,nTeam,nHumanPlayers,nPlayersInGame,nDerricksAtStart;
 private int tDefVtolAction,tDefTankAction,tDefCybAction,tLastResearch;
 
@@ -390,7 +393,7 @@ public BODY Viper;
 private int			_sender,sender, x, y, tBeaconTimeout, beaconX[8], beaconY[8], tBeacon[8];
 private int     lastHelpPlayer, _fromPlayer, _choice;
 private string	message,_message,_cstr;
-private bool    _bBlipMessage,_bToHuman;
+private bool    _bBlipMessage,_bToHuman,_bCompletedStructOlny;
 
 private int tBeaconSent,_fromX,_fromY,_targetX,_targetY;
 
@@ -609,7 +612,7 @@ function void updateBaseRange();
 function void updateBaseCoord();
 
 //structure
-function int numStructsByType(STRUCTURESTAT _structure, int _player);
+function int numStructsByType(STRUCTURESTAT _structure, int _player, bool _bCompletedStructOlny);
 
 //research
 function int do_Research(STRUCTURE _resFac, int _lastResIndex);
@@ -1511,10 +1514,11 @@ event AIbrain (inactive)
   nTotCyborgs     = cyborgDefGroup.members + cyborgAttGroup.members + toBeRepairedCyborgGroup.members;
   nMyDerricks     = getNumDerricks(player);
   nPower	        = playerPower(player);
-  nFactories	    = numStructsByType(factory, player);
-  nVTOLFactories  = numStructsByType(vtolFactory, player);
-  nResLabs	      = numStructsByType(resLab, player);
-  nCybFact	      = numStructsByType(cybFactory, player);
+  nFactories	    = numStructsByType(factory, player, false);
+  nVTOLFactories  = numStructsByType(vtolFactory, player, false);
+  nResLabs	      = numStructsByType(resLab, player, false);
+  nCybFact	      = numStructsByType(cybFactory, player, false);
+  nRepairFac      = numStructsByType(repairFacility, player, false);
   nWorkingVTOLFac = getNumStructNotIdle(vtolFactory);
   nWorkingFact    = getNumStructNotIdle(factory);
   nWorkingLab	    = getNumStructNotIdle(resLab);
@@ -1651,13 +1655,13 @@ event AIbrain (inactive)
   }
 
   //repair Facility
-  if( gameTime < VALID_TIME_REPAIRFAC or numStructsByType(repairFacility, player) >= MAX_REPAIRFAC)
+  if( gameTime < VALID_TIME_REPAIRFAC or nRepairFac >= MAX_REPAIRFAC)
   { lStopBuildRepFacility = true; }
 
-  if( gameTime < 20*TIME_MINUTE and numStructsByType(repairFacility, player) > 2 )
+  if( gameTime < 20*TIME_MINUTE and nRepairFac > 2 )
   { lStopBuildRepFacility = true; }
 
-  if( gameTime < 30*TIME_MINUTE and numStructsByType(repairFacility, player) > 3 )
+  if( gameTime < 30*TIME_MINUTE and nRepairFac > 3 )
   { lStopBuildRepFacility = true; }
 
   if ( gameTime - nLastTimeBuiltRepFac < 2*TIME_MINUTE )
@@ -2201,7 +2205,7 @@ event vtolStructs(inactive)
 
   // see how many vtol factories we already have
 	_numVtolFacs  = nVTOLFactories;
-	_numRearmPads = numStructsByType(vtolPad, player);
+	_numRearmPads = numStructsByType(vtolPad, player, false);
   _totalVTOLS   = vtolDefendGr.members + vtolAttGr.members;
 	
   //see if we have enough rearm pads
@@ -2518,8 +2522,8 @@ displayMsg("VTOL: A - Reset Target");
 //===================================================================
 event buildBase(inactive) //event 8
 {
-  local int _f,_r,_c,_v,_h,_l;
-  
+  local int _f,_r,_c,_v,_h,_l,_p,_pCompleted,_fCompleted,_rCompleted,_cCompleted;
+  local bool _bProceed;
   ASSERT(player >= 0 and player < 8,      "player out of bounds: buildBase " & player, player);
   eventCheckTime[2] = gameTime;
   
@@ -2532,16 +2536,128 @@ event buildBase(inactive) //event 8
 	_r = nResLabs;
 	_c = nCybFact;
 	_v = nVTOLFactories;
-	_h = numStructsByType(playerHQ, player);
-	_l = numStructsByType(lassat, player);
+	_h = numStructsByType(playerHQ, player, false);
+	_l = numStructsByType(lassat, player, false);
+	_p = numStructsByType(powGen, player, false);
+	_fCompleted = numStructsByType(factory, player, true);
+	_rCompleted = numStructsByType(resLab, player, true);
+	_cCompleted = numStructsByType(cybFactory, player, true);
+	_pCompleted = numStructsByType(powGen, player, true);
 
   boolResult = true;
   droid = closestDroidCanBuild(buildGroup,baseX,baseY);
   
+	//dbg(" lMinBaseStructBuilt ("& lMinBaseStructBuilt &") _p ("& _p &") _pCompleted ("& _pCompleted &") power ("& playerPower(player) &") build("& buildGroup.members &") harv("& harvesterGroup.members &") def("& buildDefGroup.members &")",player);
+	//dbg(" _p ("& _p &") _pCompleted ("& _pCompleted &") fac("& _f &")("& _fCompleted &") res("& _r &")("& _rCompleted &") cyb("& _c &")("& _cCompleted &") ",player);
+
   if(droid == NULLOBJECT){
     exit;
   }
 	
+  //if game starts with no power generators and no derricks and for any reason DyDo never starts harvesting 
+  // the below code will ensure DyDo will build a power generator anyway
+  if( _p == 0 and playerPower(player) < 1000 )                                                     
+	{
+		buildX = baseX;  
+		buildY = baseY;
+		boolResult = pickStructLocation(powGen, ref buildX, ref buildY,player);
+		if(boolResult)
+		{
+      droid = closestDroidCanBuild(buildGroup,baseX,baseY);
+			if( droid != NULLOBJECT ){
+				if ( droidCanReach(droid, buildX, buildY) )
+        orderDroidStatsLoc(droid, DORDER_BUILD,powGen, buildX,buildY);
+				tLastPowerGen = gameTime;
+			}
+		}
+	}
+
+  //help build power generators
+  _bProceed = true;
+  if ( _pCompleted != _p ){
+    initEnumStruct(false,powGen,player,player);
+    structure = enumStruct();
+    while(structure != NULLOBJECT )
+    {
+      if ( !structureComplete(structure) ){          
+        droid = closestDroidCanBuild(buildGroup,structure.x,structure.y);
+  			if( droid != NULLOBJECT )
+  			{
+          if (droidCanReach(droid, structure.x, structure.y) ){
+            orderDroidObj(droid,DORDER_HELPBUILD,structure);
+            _bProceed = false;
+          }
+        }
+      }
+      structure = enumStruct();
+    }      
+  }
+  
+  if ( !_bProceed ){ exit; }
+
+  //In the initial phase use all available truck to build one single structure
+  if ( !lMinBaseStructBuilt ){
+    _bProceed = true;
+    if ( _fCompleted != _f ){
+      initEnumStruct(false,factory,player,player);
+      structure = enumStruct();
+      while(structure != NULLOBJECT )
+      {
+        if ( !structureComplete(structure) ){          
+          droid = closestDroidCanBuild(buildGroup,structure.x,structure.y);
+    			if( droid != NULLOBJECT )
+    			{
+            if (droidCanReach(droid, structure.x, structure.y) ){
+              orderDroidObj(droid,DORDER_HELPBUILD,structure);
+              _bProceed = false;
+            }
+          }
+      }
+        structure = enumStruct();
+      }      
+    }
+    if ( _cCompleted != _c ){
+      initEnumStruct(false,cybFactory,player,player);
+      structure = enumStruct();
+      while(structure != NULLOBJECT )
+      {
+        if ( !structureComplete(structure) ){
+          droid = closestDroidCanBuild(buildGroup,structure.x,structure.y);
+    			if( droid != NULLOBJECT )
+    			{
+            if (droidCanReach(droid, structure.x, structure.y) ){
+              orderDroidObj(droid,DORDER_HELPBUILD,structure);
+              _bProceed = false;
+            }
+          }
+        }
+        structure = enumStruct();
+      }      
+    }
+    if ( _rCompleted != _r ){
+      initEnumStruct(false,resLab,player,player);
+      structure = enumStruct();
+      while(structure != NULLOBJECT )
+      {
+        if ( !structureComplete(structure) ){
+          droid = closestDroidCanBuild(buildGroup,structure.x,structure.y);
+    			if( droid != NULLOBJECT )
+    			{
+            if (droidCanReach(droid, structure.x, structure.y) ){
+              orderDroidObj(droid,DORDER_HELPBUILD,structure);
+              _bProceed = false;
+            }
+          }
+        }
+        structure = enumStruct();
+      }      
+    }
+  }
+
+  if ( !_bProceed ){ exit; }
+  
+  if ( _pCompleted == 0 and playerPower(player) < 800 ){ exit; }
+
   if ( (_f >= 1 and _r >= 1 and _c >= 1) or (_f >= 3 and _r >= 3) or lMinBaseStructBuilt ){
 	
     //check PlayerHQ first
@@ -3110,7 +3226,7 @@ event activateAttack( inactive )
       _nTotUnits  = _nTotUnits + _nCybUnitsToBeMoved;
     }
   
-    dbg("Activate attack: _bUseCybUnitsToo("& _bUseCybUnitsToo &")("& _nCybUnitsToBeMoved &") _nTotUnits("& _nTotUnits &") >= _nUnitsRequiredToAttack("& _nUnitsRequiredToAttack &")",player);
+    //dbg("Activate attack: _bUseCybUnitsToo("& _bUseCybUnitsToo &")("& _nCybUnitsToBeMoved &") _nTotUnits("& _nTotUnits &") >= _nUnitsRequiredToAttack("& _nUnitsRequiredToAttack &")",player);
     if ( _nTotUnits >= _nUnitsRequiredToAttack )
     {
      //check time to avoid all tanks are re-assigned back to tankgroup after a withdraw
@@ -3121,7 +3237,7 @@ event activateAttack( inactive )
       moveUnitsBetweenGRPs(tankGroup, tankDefGroup, _nTankUnitsToBeMoved, true);
       tLastTankAttack = gameTime;
       bTankAttIsOn    = true;
-      dbg("Activate attack: Tank Attack Activated ("& tankGroup.members &")",player);
+      //dbg("Activate attack: Tank Attack Activated ("& tankGroup.members &")",player);
       printDebug1("ActivateAttack; Tank Attack Activated, att droids("& tankGroup.members &") _nTotUnits("& _nTotUnits &") _nUnitsRequired("& _nUnitsRequiredToAttack &") _bUseCybUn("& _bUseCybUnitsToo &") ToBeMoved Tk-Cy-toAdd("& _nTankUnitsToBeMoved &")("& _nCybUnitsToBeMoved &")("& nAttackingUnitsToAdd &")");
       if (bAttackHumanDerrick) {bAttackHumanDerrick = false;} else {bAttackHumanDerrick = true;}
       setEventTrigger(TankAttack,TankAttackTr);
@@ -3167,7 +3283,7 @@ event activateAttack( inactive )
             setEventTrigger(CyborgAttack,CyborgAttackTr);
             exit;
           } 
-          else { printDebug1("activateAttack: 1-no undefended human derricks to attack found");  }
+          //else { printDebug1("activateAttack: 1-no undefended human derricks to attack found");  }
         }
       }
     }
@@ -3192,7 +3308,7 @@ event activateAttack( inactive )
             setEventTrigger(TankAttack,TankAttackTr);
             exit;
           } 
-          else { printDebug1("activateAttack: 2-no undefended human derricks to attack found");  }
+          //else { printDebug1("activateAttack: 2-no undefended human derricks to attack found");  }
         }
       }
     }
@@ -3819,6 +3935,24 @@ event manageIdleTrucks(inactive)
    boolResult2 = true;
    boolResult3 = true;
 
+  initEnumStruct(false,powGen,player,player);
+  structure = enumStruct();
+  while(structure != NULLOBJECT )
+  {
+    if ( !structureComplete(structure) ){          
+      _idleTruck = pickCybEng(true);
+      if (_idleTruck == NULLOBJECT){  
+        _idleTruck = closestIdleDroid(buildGroup,baseX, baseY);
+      }
+      if (_idleTruck != NULLOBJECT){  
+        if (droidCanReach(_idleTruck, structure.x, structure.y) ){
+ 				 orderDroidObj(_idleTruck,DORDER_HELPBUILD,structure);
+ 				}
+			}
+    }
+    structure = enumStruct();
+  }      
+
   //force helpbuild of derricks
   initEnumStruct(FALSE,derrick,player,player);
   structure = enumStruct();
@@ -4244,8 +4378,7 @@ event buildRepFirst(inactive)
   
   //check on quantity and avoid multiple contruction at time, build max repFac - 1 to keep one
   // repFac to support attack team
-  count2 = numStructsByType(repairFacility, player);
-  if( count2 < _nMaxRepFac and (gameTime - nLastTimeBuiltRepFac) > 600 )
+  if( nRepairFac < _nMaxRepFac and (gameTime - nLastTimeBuiltRepFac) > 600 )
   {
 		boolResult = false;
 		if ( isStructureAvailable(repairFacility, player) )
@@ -4339,8 +4472,7 @@ event harvesterOperate(inactive)
       
       } else {//============= HARVEST WITHOUT CHECKING oliRes TARGET 
       
-        //Check this oilRes is not too far away
-        if ( count2 < count and droidCanReach(droid, _oilRes.x, _oilRes.y) )
+        if ( droidCanReach(droid, _oilRes.x, _oilRes.y) )
         { 
           orderDroidStatsLoc( droid, DORDER_BUILD, derrick, _oilRes.x, _oilRes.y);
         } 
@@ -4361,7 +4493,7 @@ event truckGroupSlider(inactive)
     
     //harvester are not required, move them to buildGRP and buildDefGRP
     if ( !bOilResLeft ){
-
+     
       initIterateGroup(harvesterGroup);
       droid = iterateGroup(harvesterGroup);
   		while(droid != NULLOBJECT)
@@ -4380,6 +4512,7 @@ event truckGroupSlider(inactive)
         if ( buildGroup.members > buildDefGroup.members ){
         
           droid = closestIdleDroid(buildGroup,baseX,baseY);
+          if (droid == NULLOBJECT){ droid = closestDroidCanBuild(buildGroup,baseX,baseY); }
           if (droid == NULLOBJECT){ droid = getADroid(buildGroup); }
       		if (droid != NULLOBJECT){
     		   groupAddDroid(harvesterGroup, droid );
@@ -4388,6 +4521,7 @@ event truckGroupSlider(inactive)
         } else {
         
           if (droid == NULLOBJECT){ droid = pickDefTruck(true); }
+          if (droid == NULLOBJECT){ droid = closestDroidCanBuild(buildDefGroup,baseX,baseY); }
           if (droid == NULLOBJECT){ droid = getADroid(buildDefGroup); }
       		if (droid != NULLOBJECT){
     		    groupAddDroid(harvesterGroup, droid );
@@ -4402,7 +4536,9 @@ event truckGroupSlider(inactive)
       
       if ( harvesterGroup.members < 2 ){
         if ( buildDefGroup.members >= 1 ){
-           droid = getADroid(buildDefGroup);
+           if (droid == NULLOBJECT){ droid = closestIdleDroid(buildDefGroup,baseX,baseY); }
+           if (droid == NULLOBJECT){ droid = closestDroidCanBuild(buildDefGroup,baseX,baseY); }
+           if (droid == NULLOBJECT){ droid = getADroid(buildDefGroup); }
        		 if (droid != NULLOBJECT){
     		     groupAddDroid(harvesterGroup, droid );
     		   }
@@ -4410,7 +4546,9 @@ event truckGroupSlider(inactive)
       }
       if ( harvesterGroup.members < 2 ){
         if ( buildGroup.members > 2 ){
-           droid = getADroid(buildGroup);
+           if (droid == NULLOBJECT){ droid = closestIdleDroid(buildGroup,baseX,baseY); }
+           if (droid == NULLOBJECT){ droid = closestDroidCanBuild(buildGroup,baseX,baseY); }
+           if (droid == NULLOBJECT){ droid = getADroid(buildGroup); }
        		 if (droid != NULLOBJECT){
     		     groupAddDroid(harvesterGroup, droid );
     		   }
@@ -4425,9 +4563,9 @@ event truckGroupSlider(inactive)
     		while(droid != NULLOBJECT)
     		{
           if ( buildGroup.members > buildDefGroup.members ){
-    		   groupAddDroid(buildDefGroup, droid );
+    		    groupAddDroid(buildDefGroup, droid );
           } else {
-     			 groupAddDroid(buildGroup, droid );
+     			  groupAddDroid(buildGroup, droid );
           }
           droid = iterateGroup(harvesterGroup);
     		}
@@ -4437,36 +4575,49 @@ event truckGroupSlider(inactive)
   }//gametime > TIME_HARVESTING_PHASE
 
   //ensure a bit of balance between buildGrp and buildDef GRP
-  // but only after 1 min because I want two trucks in buildGroups
-  if ( gameTime > 1*TIME_MINUTE ){
+  // but only after 30 secs because I want two trucks in buildGroups a the very start
+  if ( gameTime > 2*TIME_MINUTE ){
+    
     if ( !lMinBaseStructBuilt ){
+      
       if ( buildDefGroup.members > buildGroup.members ){
-        droid = getADroid(buildDefGroup);
+        if (droid == NULLOBJECT){ droid = closestIdleDroid(buildDefGroup,baseX,baseY); }
+        if (droid == NULLOBJECT){ droid = closestDroidCanBuild(buildDefGroup,baseX,baseY); }
+        if (droid == NULLOBJECT){ droid = getADroid(buildDefGroup); }
     		if (droid != NULLOBJECT){
     	   groupAddDroid(buildGroup, droid );
         }
       }
     
       if ( buildGroup.members > buildDefGroup.members+1 ){
-        droid = getADroid(buildGroup);
+        if (droid == NULLOBJECT){ droid = closestIdleDroid(buildGroup,baseX,baseY); }
+        if (droid == NULLOBJECT){ droid = closestDroidCanBuild(buildGroup,baseX,baseY); }
+        if (droid == NULLOBJECT){ droid = getADroid(buildGroup); }
     		if (droid != NULLOBJECT){
     	   groupAddDroid(buildDefGroup, droid );
         }
       }
+    
     } else {//need more def trucks
+      
       if ( buildGroup.members > buildDefGroup.members ){
-        droid = getADroid(buildGroup);
+        if (droid == NULLOBJECT){ droid = closestIdleDroid(buildGroup,baseX,baseY); }
+        if (droid == NULLOBJECT){ droid = closestDroidCanBuild(buildGroup,baseX,baseY); }
+        if (droid == NULLOBJECT){ droid = getADroid(buildGroup); }
     		if (droid != NULLOBJECT){
     	   groupAddDroid(buildDefGroup, droid );
         }
       }
     
       if ( buildDefGroup.members > buildGroup.members+1 ){
-        droid = getADroid(buildDefGroup);
+        if (droid == NULLOBJECT){ droid = closestIdleDroid(buildDefGroup,baseX,baseY); }
+        if (droid == NULLOBJECT){ droid = closestDroidCanBuild(buildDefGroup,baseX,baseY); }
+        if (droid == NULLOBJECT){ droid = getADroid(buildDefGroup); }
     		if (droid != NULLOBJECT){
     	   groupAddDroid(buildGroup, droid );
         }
       }
+    
     }
   }
 
@@ -4516,19 +4667,13 @@ event defendDerrick(inactive)
 event buildPowerGenerators(inactive)
 {
 
-	ASSERT(player >= 0 and player < 8,      "player out of bounds:.13 " & player, player);
+	local int _nPowGenCompleted;
+  ASSERT(player >= 0 and player < 8,      "player out of bounds:.13 " & player, player);
   eventCheckTime[13] = gameTime;
 
-
-  //Avoid to build a Power Generator at the game start if it is a NO BASES game
-	if ( playerPower(player) > 700 ){
-	  if ( gameTime < 6*TIME_MINUTE and nCybFact+nFactories <= 2 ){
-	    exit;
-	  }
-	}
-  
-
-	//search for incompleted structure fist
+	_nPowGenCompleted = numStructsByType(powGen, player, true);
+	
+  //search for incompleted structure fist
 	boolResult = true;
   initEnumStruct(false,powGen,player,player);
   structure = enumStruct();
@@ -4547,14 +4692,25 @@ event buildPowerGenerators(inactive)
     structure = enumStruct();
   }
 
-  if( boolResult and (numStructsByType(powGen, player) * 4) < numStructsByType(derrick, player) and (gameTime - tLastPowerGen) > 300 )                                                     
+  //Avoid to build a Power Generator at the game start if it is a NO BASES game
+	if ( playerPower(player) > 1000 ){
+	  if ( gameTime < 6*TIME_MINUTE and nCybFact+nFactories <= 2 ){
+	    exit;
+	  }
+	}
+	
+  //if DyDo is building the first pow gen then all trucks should help build it...
+  if ( _nPowGenCompleted == 0 ){
+	 exit;
+	}
+  if( boolResult and (_nPowGenCompleted * 4) < nMyDerricks and (gameTime - tLastPowerGen) > 300 )                                                     
 	{
 		buildX = baseX;  
 		buildY = baseY;
 		boolResult = pickStructLocation(powGen, ref buildX, ref buildY,player);
 		if(boolResult)
 		{
-      droid = closestDroidCanBuild(buildGroup,baseX,baseY);
+      droid = closestDroidCanBuild(buildGroup,baseX,baseY);//
 			if( droid != NULLOBJECT ){
 				if ( droidCanReach(droid, buildX, buildY) )
         orderDroidStatsLoc(droid, DORDER_BUILD,powGen, buildX,buildY);
@@ -4639,8 +4795,8 @@ event defendBase(inactive)
       buildX = defSpotX;                              
 			buildY = defSpotY;
 		} else	{
-			buildX = getCoordRelated(baseX, baseY, mapWidth*TILE/2, mapHeight*TILE/2, 1, count*TILE);
-			buildY = getCoordRelated(baseX, baseY, mapWidth*TILE/2, mapHeight*TILE/2, 2, count*TILE);
+			buildX = getCoordRelated(baseX, baseY, (mapWidth*TILE)/2, (mapHeight*TILE/2), 1, nBaseRange);
+			buildY = getCoordRelated(baseX, baseY, (mapWidth*TILE)/2, (mapHeight*TILE/2), 2, nBaseRange);
     }
     
     //check number of def already built in area
@@ -8499,7 +8655,7 @@ function int find_Research(int _searchStart, int _techTree, int whichArray)
 	return(_retInt);
 }
 //-----------------------------------------------------------------------------
-function int numStructsByType(STRUCTURESTAT _structure, int _player)
+function int numStructsByType(STRUCTURESTAT _structure, int _player, bool _bCompletedStructOlny)
 {
   local STRUCTURE _str;
   local int _count;
@@ -8510,7 +8666,13 @@ function int numStructsByType(STRUCTURESTAT _structure, int _player)
   _str = enumStruct();
   while(_str != NULLOBJECT)
   {
-    _count++;
+    if ( _bCompletedStructOlny ){
+      if (structureComplete(_str)){
+        _count++;
+      }
+    } else {
+      _count++;
+    }
     _str = enumStruct();
   }
   return _count;
@@ -10624,7 +10786,7 @@ function void updatePlayersStats()
   while( _player < MAX_PLAYERS ){
     if ( isPlayerStillLive(_player) ){
       aStat[OC_DERRICKS][_player]   = getNumDerricks(_player);
-      aStat[OC_RESLABS][_player]    = numStructsByType( resLab, _player );
+      aStat[OC_RESLABS][_player]    = numStructsByType( resLab, _player, false );
       aStat[OC_CYBORGS][_player]    = getDroidsInfo(_player, 0);
       aStat[OC_TANKS][_player]      = getDroidsInfo(_player, 1);
       aStat[OC_VTOLS][_player]      = getDroidsInfo(_player, 2);
@@ -11272,9 +11434,9 @@ function void notifyStatus(int _choice, int _player)
 	_r = nResLabs;
 	_c = nCybFact;
 	_v = nVTOLFactories;
-	_h = numStructsByType(playerHQ, player);
-	_l = numStructsByType(lassat, player);
-	_cc = numStructsByType(derrick, player);
+	_h = numStructsByType(playerHQ, player, false);
+	_l = numStructsByType(lassat, player, false);
+	_cc = numStructsByType(derrick, player, false);
 
   msg("Player #("& player &") colour("& getPlayerName(player) &") Game Time("& gameTime/10/60 &" min) Map Size("& mapWidth &"-"& mapHeight &") Defend Range("& nDefendRange/TILE &") Under attack("& alertIsOn &")", player, _player);
   msg("Power:"& playerPower(player) &" Derricks:"& _cc &"  Min base structures buit:"& lMinBaseStructBuilt &" alert is on("& alertIsOn &") alert level("& alertLevel &")", player, _player);
