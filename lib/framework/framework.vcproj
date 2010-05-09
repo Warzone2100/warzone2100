@@ -53,14 +53,14 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(QTDIR)\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;YY_STATIC;PACKAGE_VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;YY_STATIC;PACKAGE_VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;QT_NO_DEBUG;QT_LARGEFILE_SUPPORT;QT_DLL;QT_OPENGL_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT;QT_NO_DYNAMIC_CAST"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
