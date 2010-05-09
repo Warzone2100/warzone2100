@@ -1220,7 +1220,7 @@ static int WZkeyToQtKey(int code)
 		return Qt::ALT; //Qt::Key_Alt;
 	else if (code == KEY_MAXSCAN)
 	{
-		debug(LOG_WARNING, "KEY_MAXSCAN was found (key unassigned)");
+		// this just means that there is no key defined, so we print a "?" instead
 		return Qt::Key_Question;
 	}
 	else if (code == KEY_SPACE)
