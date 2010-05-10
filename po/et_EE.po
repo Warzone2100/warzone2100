@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-04-24 15:51+0200\n"
-"PO-Revision-Date: 2010-03-26 18:42+0200\n"
+"POT-Creation-Date: 2010-05-09 15:33+0200\n"
+"PO-Revision-Date: 2010-05-10 16:59+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1553,7 +1553,7 @@ msgstr "Kõik parandamisekeskused uuendati automaatselt"
 #: data/base/messages/resmessages1.rmsg:265
 #: data/mp/messages/resmessages1.rmsg:265
 msgid "Enables command turret research"
-msgstr "Võimaldab komandörii arendamist"
+msgstr "Võimaldab komandöri arendamist"
 
 #: data/base/messages/resmessages1.rmsg:266
 #: data/mp/messages/resmessages1.rmsg:266
@@ -7075,7 +7075,7 @@ msgstr "VTOL Parv Pommitus"
 #: data/base/messages/strings/names.txt:576
 #: data/mp/messages/strings/names.txt:584
 msgid "VTOL Heap Bomb Bay"
-msgstr "VTOL Kuhjadeviisi Pommitus"
+msgstr "VTOL Täispommitus"
 
 #: data/base/messages/strings/names.txt:577
 #: data/mp/messages/strings/names.txt:585
@@ -9491,141 +9491,130 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Õnnitlused komandör - sa oled valmis oma esimeseks missiooniks"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:1
-#, fuzzy
 msgid "Incoming Transmission"
 msgstr "Sissetulev Ülekanne"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
-#, fuzzy
 msgid "Transmission from Beta Base"
-msgstr "Sissetulev ülekanne ära rühmalt."
+msgstr "Ülekanne Beeta Baasist"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
-msgstr ""
+msgstr "Mayday! Mayday!"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
-msgstr ""
+msgstr "Palun abistage!..."
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
-msgstr ""
+msgstr "KAMPAANIA ÜKS"
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
-msgstr ""
+msgstr "LÄÄNE SEKTOR"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
-msgstr ""
+msgstr "Koit, 4. Juuli, 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
-#, fuzzy
 msgid "Project HQ"
-msgstr "Projekti Eesmärgid"
+msgstr "Projekti HQ"
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
-msgstr ""
+msgstr "Uus Piirkond"
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
-msgstr ""
+msgstr "Hommik, 4. Juuli, 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:9
 msgid "In-flight to Western Sector"
-msgstr ""
+msgstr "Lend Lääne Sektorisse"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
-#, fuzzy
 msgid "Team Alpha nears its destination"
-msgstr "Rühm Alfa Hävitatud"
+msgstr "Rühm Alfa läheneb oma sihtkohta"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
-msgstr ""
+msgstr "Järgnev Transpordi Sihtkoht"
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
-msgstr ""
+msgstr "Alfa - Lääne Sektor...."
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
-msgstr ""
+msgstr "Alfa te olete valmis õhku tõusma."
 
 #: data/base/sequenceaudio/cam1/c001.txt:5
 msgid "Good luck and good hunting."
-msgstr ""
+msgstr "Head õnne ja head jahtimist."
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr ""
+msgstr "Lähenemine Maandumis Tsooni. Tiim Alfa briifingu algus."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr ""
+msgstr "Komandör, sa juhit Tiim Alfat, ühte kolmest otsingurühmast mis saadeti teele Projekti poolt, et leida artifakte enne Kollapsi ajast."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
-msgstr ""
+msgstr "Sinu sihtpunkt asub lääne tsoonis."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
-#, fuzzy
 msgid "Commander, we have recovered a command turret from the New Paradigm."
-msgstr "Me dekodeerisime sissetuleva sõnumi uuele Paradigmile..."
+msgstr "Komandör, me saime New Paradigmidelt komandöritorni."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
-#, fuzzy
 msgid "Commander, we are receiving this transmission."
-msgstr "Me saime hetkel selle ülekande."
+msgstr "Komandör, me saame selle ülekande."
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:4
 #: data/base/sequenceaudio/cam1/sub13np2.txt:4
 msgid "Your attacks upon us will not go unpunished."
-msgstr ""
+msgstr "Teie rünnakuid meie vastu ei jäeta karistamata."
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
-#, fuzzy
 msgid "You are in contravention of the New Paradigm."
-msgstr "Õnnitlused Uus Paradigmi võitmise puhul."
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
-#, fuzzy
 msgid "They are in contravention of the New Paradigm."
-msgstr "Õnnitlused Uus Paradigmi võitmise puhul."
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
-#, fuzzy
 msgid "They must be eradicated."
-msgstr "Nad tuleb peatada."
+msgstr "Nad tuleb hävitada."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:4
-#, fuzzy
 msgid "Secure the LZ and establish a forward base."
-msgstr "Kindlusta Mandumis Tsoon, siis raja edasine baas."
+msgstr "Kindlusta Mandumis Tsoon ja raja edasine baas."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
-#, fuzzy
 msgid "Then destroy the New Paradigm's base."
-msgstr "Siis hävita laager."
+msgstr "Siis hävita New Paradigm-i baas."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
-msgstr ""
+msgstr "Avage mulle oma süsteemid."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:2
 msgid "Let me meld with your machines and cyborgs."
-msgstr ""
+msgstr "Luba ma sulatan su masinate ja küborgidega."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:4
 msgid "We will create the perfect nexus of man and machine."
@@ -9633,7 +9622,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:5
 msgid "Together we can create a new world."
-msgstr ""
+msgstr "Koos saame me luua uue maailma."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:7
 msgid "I can give you power beyond your wildest dreams."
@@ -9661,7 +9650,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:4
 msgid "You may defeat me here, but I shall rise again."
-msgstr ""
+msgstr "Te võite mind siin võita, aga ma tõusen taas."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
@@ -9681,9 +9670,8 @@ msgid "We have ascertained that Nexus supplied the New Paradigm with most of its
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
-#, fuzzy
 msgid "It has technology and weapons. It knows about us, and it's not friendly."
-msgstr "Nexusel on tehnoloogia ja relvad ja ei ole sõbralik."
+msgstr "Sellel on tehnoloogia ja relvad. See teab meist ja see ei ole sõbralik."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
 msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
@@ -9711,37 +9699,35 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "Hoiatus!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
-#, fuzzy
 msgid "You are entering a restricted area."
-msgstr "sa oled idikas"
+msgstr "Sa sisened keelatud alale."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:7
 msgid "Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "Naaske oma määratud tsooni, või teid hävitatakse."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:8
 msgid "Repeat. Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "Kordus.Naaske oma määratud tsooni, või teid hävitatakse."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
-msgstr ""
+msgstr "Sõnum Lõpeb."
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
-msgstr ""
+msgstr "Sind hävitatakse."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
-#, fuzzy
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr "Sünaptilise liidese tehnoloogia on omastatud!"
+msgstr "NEXUS, sünaptilise liidese tehnoloogia on omastatud ja saadetud su kolletsiooni."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
-msgstr ""
+msgstr "Sa tegid hästi."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
 msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
@@ -9773,59 +9759,55 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
-msgstr ""
+msgstr "KAMPAANIA KAKS"
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
-msgstr ""
+msgstr "IDA SEKTOR"
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
-msgstr ""
+msgstr "Hommik, 1.September, 2100"
 
 #: data/base/sequenceaudio/cam2/c002.txa:5
 msgid "In-flight to Eastern Sector"
-msgstr ""
+msgstr "Lend Ida Sektorisse"
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
-#, fuzzy
 msgid "Team Alpha approaches Beta Base"
-msgstr "Rühm Alfa Hävitatud"
+msgstr "Rühm Alfa läheneb Beeta Baasile"
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
-#, fuzzy
 msgid "You must defend and hold it at all costs."
-msgstr "Sa pead seda kaitsma ja hoidma."
+msgstr "Sa pead seda kaitsma ja iga hinnaga hoidma."
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
-msgstr ""
+msgstr "COLLECTIV"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
-#, fuzzy
 msgid "Commander, a new launch has been detected."
-msgstr "Komandör, me oleme NEXUSe võitnud."
+msgstr "Komandör, uus raketirünnak avastatud."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:2
 msgid "It is likely to be targeted at your location."
-msgstr ""
+msgstr "See on tõenäoliselt sihitud sinu asukohta."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
-#, fuzzy
 msgid "You are to start the immediate evacuation of Beta Base to the safe haven."
-msgstr "Sa pead rajama turvalise pelgupaiga Beeta Baasi evakueerimiseks."
+msgstr "Sa pead alustama kohest evakuatsiooni Beeta Baasist ohutusse taeva."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr ""
+msgstr "NASDA (PASKA) on Põhja Ameerika Strateegilise Kaitse Agentuur"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr ""
+msgstr "NASDA loodi 2076. aastal, et kaitsta Põhja Ameerikat tava- ja tuumarünnakute eest. Satelliit kaitse süsteemide ehitamine algas 2081. ja lõppes 2082. aastal."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
-msgstr ""
+msgstr "2085.aastal tulistasis NASDA satelliidid oma tuumapommidega Maad."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
@@ -9841,7 +9823,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
-msgstr ""
+msgstr "Kõik tuumapommid, mis sihiti Põhja Ameerikasse tabasid märki."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
 msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
@@ -9857,19 +9839,19 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr ""
+msgstr "Collectiveite Sõdurid, ma otsin NASDA Peajaama asukohta."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
-msgstr ""
+msgstr "Se asub kuskil sinu territooriumil."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr ""
+msgstr "Leidke see mulle ja ma varustan teid edasiste relvadega võitluses Projekti vastu."
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
-msgstr ""
+msgstr "Järgneb NASDA Briifing..."
 
 #: data/base/sequenceaudio/cam2/cam22pl3.txt:1
 msgid "We've got to make sure that it can't do it again."
@@ -9881,7 +9863,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
-msgstr ""
+msgstr "See on nüüd kindel, et Nexus on Kollapsi eest vastutatav."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
@@ -9896,18 +9878,16 @@ msgid "Nexus was fried as whole sections of its consciousness were obliterated i
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
-#, fuzzy
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
-msgstr "Me tuvastame sellest jaamast ülekandeid mis jõuavad kõrgele orbiidile."
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
-#, fuzzy
 msgid "Nexus has now reconnected itself with the NASDA satellites."
 msgstr "NEXUS on end nüüd NASDA satelliitidega taasühendanud."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr ""
+msgstr "See on suur oht Projektile ja meie edasise ellujäämisele"
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
@@ -9918,9 +9898,8 @@ msgid "The nuclear reactor was going to be used to power a vast network of pre-C
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
-#, fuzzy
 msgid "Commander, we have just detected a missile launch at these coordinates."
-msgstr "Komandör, silodes on raketid."
+msgstr "Komandör, me avastasime just raketirünnaku nendest kordinaatidest."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
@@ -9936,12 +9915,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:2
 msgid "They are not part of the machine."
-msgstr ""
+msgstr "Nad ei ole osa masinast."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
-#, fuzzy
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr "Hävitage ja tapke kõik kes Masinatele vastu hakkavad."
+msgstr "Collectiveite Sõdurid, rünnake ja hävitage kõik kes Masinatele vastu hakkavad."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
@@ -9960,9 +9938,8 @@ msgid "They shall fall before the might of The Collective."
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
-#, fuzzy
 msgid "Attack and destroy all who resist the machine."
-msgstr "Hävitage ja tapke kõik kes Masinatele vastu hakkavad."
+msgstr "Rünnake ja hävitage kõik kes Masinatele vastu hakkavad."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:9
 msgid "Attack!"
@@ -9974,17 +9951,15 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
-msgstr ""
+msgstr "Nexus käskis meil nüüd Projekt purustada."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
-#, fuzzy
 msgid "Cleanse and destroy!!"
-msgstr "Leia ja hävita .... "
+msgstr "Puhasta ja hävita!!"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
-#, fuzzy
 msgid "Warriors of the Collective. You have performed well."
-msgstr "Collectivite Sõdurid..."
+msgstr "Collectivite Sõdurid. Te olete hästi esinenud."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:2
 msgid "Your just reward is on its way."
@@ -9996,20 +9971,19 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
-msgstr ""
+msgstr "Me peame nad peatama!"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
-#, fuzzy
 msgid "Decoding Transmission..."
-msgstr "Sissetulev Ülekanne..."
+msgstr "Ülekande dekodeerimine..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
-msgstr ""
+msgstr "KAMPAANIA KOLM"
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
-msgstr ""
+msgstr "PÕHJA SEKTOR"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
 #, fuzzy
@@ -10018,20 +9992,19 @@ msgstr "Õnnitlused eduka Beeta Baasi evakueerimise puhul."
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
-msgstr ""
+msgstr "Videvik, 3. Detsember, 2100"
 
 #: data/base/sequenceaudio/cam3/c003.txa:9
 msgid "In-flight to Northern Sector"
-msgstr ""
+msgstr "Lend Põhja Sektorisse"
 
 #: data/base/sequenceaudio/cam3/c003.txa:10
 msgid "The Final Encounter"
-msgstr ""
+msgstr "Viimne Kohtumine"
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
-#, fuzzy
 msgid "Briefing Commences"
-msgstr "Algab Briifing:"
+msgstr "Algab Briifing"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
@@ -10042,22 +10015,20 @@ msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
-#, fuzzy
 msgid "Time's up commander!!"
-msgstr "Näita järgmist Komandöri"
+msgstr "Aeg on otsas komandör!!"
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
-#, fuzzy
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
-msgstr "Me tuvastasime vaenlase väed nendes asukohtades."
+msgstr "Komandör, me tuvastame NEXUSe väed nendel kordinaatidel..."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
 msgid "Well done Commander, you've prevented my last missile from launching."
-msgstr ""
+msgstr "Hästi tehtud Komandör, sa ei lasknud viimasel raketil startida."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr ""
+msgstr "Kahju, sinu Projekti Peeakorter oleks olnud ideaalne sihtmärk."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
 msgid "But it's good of you to join me here."
@@ -10076,9 +10047,8 @@ msgid "Please note that all entrances to the underground complex have been seale
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
-#, fuzzy
 msgid "Glad you could make it, Commander."
-msgstr "Head õnne, Komandör."
+msgstr "Hea, et te pääsesite, Komandör."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
@@ -10090,23 +10060,23 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
-msgstr ""
+msgstr "Siin Rühm Alfa.Kordan,siin Rühm Alfa. Me vajame kohest abi."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr ""
+msgstr "Me oleme küborgide, laser tankide ja ründe VTOLite raske rünnaku all."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
-msgstr ""
+msgstr "Me oleme proovinud teie asukohta jõuda, aga meid on varitsetud."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
 msgid "We're holed up in  a valley at these coordinates."
-msgstr ""
+msgstr "Me oleme selles orus, nendel kordinaatidel."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
 msgid "Please assist."
-msgstr ""
+msgstr "Palun aidake."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
@@ -10121,9 +10091,8 @@ msgid "You must destroy his command centre before we lose control of key systems
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
-#, fuzzy
 msgid "Commander, welcome to NEXUS!"
-msgstr "Komandör, me oleme NEXUSe võitnud."
+msgstr "Komandör, tere tulemast NEXUSesse!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
@@ -10170,9 +10139,8 @@ msgid "Let's start by activating NEXUS in your core systems and see what happens
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
-#, fuzzy
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr "Komandör, me proovime baasi naasda."
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
@@ -10232,7 +10200,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:2
 msgid "Such a pity that you refused to join me earlier."
-msgstr ""
+msgstr "Nii kahju, et sa loobusid varem minuga liitumast."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:4
 msgid "But no matter, as you'll not be here much longer."
@@ -10256,49 +10224,48 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
-msgstr ""
+msgstr "Videvik, 3.November, 2085"
 
 #: data/base/sequenceaudio/devastation.txa:5
 msgid "Earth, High Orbit"
-msgstr ""
+msgstr "Maa, Kõrge Orbiit"
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
-msgstr ""
+msgstr "Kollaps"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr ""
+msgstr "19. Jaanuar. 2086"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr ""
+msgstr "Põhja Ameerika"
 
 #: data/base/sequenceaudio/devastation.txa:10
-#, fuzzy
 msgid "Nuclear Winter"
-msgstr "Tuumareaktor"
+msgstr "Tuumatalv"
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr ""
+msgstr "Kesköö, 10. Aprill, 2086"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
-msgstr ""
+msgstr "Kaljumäed"
 
 #: data/base/sequenceaudio/devastation.txa:14
 msgid "Safety"
-msgstr ""
+msgstr "Ohutus"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "Koit, 4.Aprill, 2100"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
-msgstr ""
+msgstr "Uus Algus"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
@@ -10310,19 +10277,19 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr ""
+msgstr "Need tuumapommid olid sihitud kõikide suuremate linnade pihta üle maailma. NASDA oli programeeritud alustama Kollapsi. Kui vasturünnakud käivitati, siis selle laser kaitsed ja raketi-vastased maapinna silod feilisid."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
-msgstr ""
+msgstr "Maailm, mida me tundsime, lõppes..."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr ""
+msgstr "Tuuma Talv oli raske. Haigused ja nälg tappis suurem osa neist, kes olid tuumarünnakutes ellu jäänud. Sõjad koreatoidu purkide pärast aga veelgi rohkem."
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr ""
+msgstr "Me põgenesime Seattleist 86aastal. Me kuulsime, et Kaljumäed on suhteliselt radioktiivsuse vabad."
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
@@ -10330,7 +10297,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
-msgstr ""
+msgstr "Me murdsime uksed ja puhastasime sisemuse laipadest."
 
 #: data/base/sequenceaudio/devastation.txt:17
 msgid "We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line."
@@ -10338,27 +10305,27 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
-msgstr ""
+msgstr "Me olime viimaks valmis alustamaks Projekti."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
-msgstr ""
+msgstr "Pärast mitut pikka  kuud võitlust võitsime me NEXUSe"
 
 #: data/base/sequenceaudio/outro.txt:3
 msgid "The war started by Dr Reed was over."
-msgstr ""
+msgstr "Sõjda, mille alustas Dr Reed, sai läbi."
 
 #: data/base/sequenceaudio/outro.txt:5
 msgid "We have recovered many of the technologies we sought."
-msgstr ""
+msgstr "Me oleme leidnud palju otsitavaid tehnoloogiaid."
 
 #: data/base/sequenceaudio/outro.txt:7
 msgid "It is now time to use them to rebuild the world."
-msgstr ""
+msgstr "Nüüd on aeg neid kasutada, et maailm üles ehitada."
 
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
-msgstr ""
+msgstr "Aeglasti, tuhast välja, me tõuseme taas..."
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1313
 msgid "Cobra Hover Heavy-Repair"
@@ -10905,123 +10872,103 @@ msgstr "Pool-roomikutega Viper Leegiheitja"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1937
 #: data/mp/messages/strings/names.txt:1940
-#, fuzzy
 msgid "Inferno Cobra Hover"
-msgstr "Pool-Roomikutega Cobra Põrgupõletaja"
+msgstr "Hõljukiga Cobra Põrgupõletaja"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1938
 #: data/mp/messages/strings/names.txt:1941
-#, fuzzy
 msgid "Medium Cannon Cobra Half Track"
-msgstr "Roomikutega Cobra Keskkahur"
+msgstr "Pool-Roomikutega Cobra Keskkahur"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1939
 #: data/mp/messages/strings/names.txt:1942
-#, fuzzy
 msgid "Inferno Python Hover"
-msgstr "Hõljukiga Python HPV Kahur"
+msgstr "Hõljukiga Python Põrgupõletaja"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1940
 #: data/mp/messages/strings/names.txt:1943
-#, fuzzy
 msgid "Assault Gun Python Hover"
-msgstr "Roomikutega Python Ründekuulipildujaga"
+msgstr "Hõljukiga Python Ründekuulipilduja"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1941
 #: data/mp/messages/strings/names.txt:1944
-#, fuzzy
 msgid "Assault Gun Python Half Track"
-msgstr "Roomikutega Python Ründekuulipildujaga"
+msgstr "Pool-Roomikutega Python Ründekuulipilduja"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
 #: data/mp/messages/strings/names.txt:1945
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Roomikutega Scorpion Raskekuulipilduja"
+msgstr "Pool-Roomikutega Scorpion Raskekuulipilduja"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
 #: data/mp/messages/strings/names.txt:1946
-#, fuzzy
 msgid "Assault Cannon Mantis Hover"
-msgstr "Rünndekahuri Valvetorn"
+msgstr "Hõljukiga Mantis Ründekahur"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1944
 #: data/mp/messages/strings/names.txt:1947
-#, fuzzy
 msgid "Pulse Laser Leopard Hover"
-msgstr "Impulsslaseri Torn"
+msgstr "Hõljukiga Leopard Impulsslaser"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
 #: data/mp/messages/strings/names.txt:1948
-#, fuzzy
 msgid "Pulse Laser Panther Hover"
-msgstr "Impulsslaseri Torn"
+msgstr "Hõljukiga Panther Impulsslaser"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
 #: data/mp/messages/strings/names.txt:1949
-#, fuzzy
 msgid "Rail Gun Tiger Hover"
-msgstr "Railkahuri Uuendus"
+msgstr "Hõljukiga Tiger Railkahur"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1947
 #: data/mp/messages/strings/names.txt:1950
-#, fuzzy
 msgid "Pulse Laser Tiger Hover"
-msgstr "Roomiktega Tiger Impulsslaser"
+msgstr "Hõljukiga Tiger Impulsslaser"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
 #: data/mp/messages/strings/names.txt:1951
-#, fuzzy
 msgid "Plasma Cannon Wyvern Tracks"
-msgstr "Roomikutega Wyvern Gausskahur"
+msgstr "Roomikutega Wyvern Plasmakahur"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1949
 #: data/mp/messages/strings/names.txt:1952
-#, fuzzy
 msgid "Scourge Missile Wyvern Tracks"
-msgstr "Scourge Rakettide Torn"
+msgstr "Roomikutega Wyvern Scourge Rakett"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1950
 #: data/mp/messages/strings/names.txt:1953
-#, fuzzy
 msgid "Flashlight Retribution Hover"
-msgstr "Välkvalgusväelane"
+msgstr "Hõljukiga Retribution Välkvalguslaser"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
 #: data/mp/messages/strings/names.txt:1954
-#, fuzzy
 msgid "Mini-Rocket Viper Half Track"
 msgstr "Pool-Roomikutega Cobra Mini-Raketid"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1952
 #: data/mp/messages/strings/names.txt:1955
-#, fuzzy
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Roomikutega Cobra MRA"
+msgstr "Pool-Roomikutega Viper MRA"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
 #: data/mp/messages/strings/names.txt:1956
-#, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "Fosfori Pommitus"
+msgstr "VTOL Mantis Fosforpommitus"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
 #: data/mp/messages/strings/names.txt:1957
-#, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "VTOL Kuhjadeviisi Pommitus"
+msgstr "VTOL Mantis Täispommitus"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
 #: data/mp/messages/strings/names.txt:1958
-#, fuzzy
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Keskmine Kere - Retribution"
+msgstr "VTOL Retribution Täispommitus"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
 #: data/mp/messages/strings/names.txt:1959
-#, fuzzy
 msgid "Scourge Retaliation VTOL"
-msgstr "Retaliation"
+msgstr "VTOL Retaliation Scourge Rakett"
 
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
@@ -12315,7 +12262,7 @@ msgstr "Hõljukiga Python Hüperkiire Kahur"
 #: data/mp/messages/strings/names.txt:1960
 #, fuzzy
 msgid "Plasmite Retribution VTOL"
-msgstr "Keskmine Kere - Retribution"
+msgstr "VTOL Retribution Täispommitus"
 
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:111
@@ -12461,25 +12408,12 @@ msgstr "Ei suuda peaserveri nime lahendada (%s)!"
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Ei suuda lobby serveriga suhelda! Kas port %u on väljaminevale liiklusele avatud?"
 
-#: po/strings.txt:1
-msgid "Warzone 2100"
-msgstr ""
-
-#: po/strings.txt:2
-#, fuzzy
-msgid "Strategy Game"
-msgstr "Salvesta Mäng"
-
-#: po/strings.txt:3
-msgid "Postnuclear realtime strategy"
-msgstr ""
-
 #: src/challenge.c:188
-#: src/hci.c:1018
-#: src/hci.c:3833
-#: src/hci.c:3982
-#: src/hci.c:4499
-#: src/hci.c:5685
+#: src/hci.c:1015
+#: src/hci.c:3816
+#: src/hci.c:3965
+#: src/hci.c:4482
+#: src/hci.c:5668
 #: src/intelmap.c:543
 #: src/intorder.c:787
 #: src/loadsave.c:256
@@ -12784,31 +12718,31 @@ msgstr "Mängija lahkus"
 msgid "Player dropped"
 msgstr "Mängija Väjavisatud"
 
-#: src/display.c:1660
+#: src/display.c:1679
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "EI Saa Ehitada. Naftaresurss Põleb."
 
-#: src/display.c:1840
-#: src/display.c:2432
+#: src/display.c:1859
+#: src/display.c:2462
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Kahju %d%% - Kogemus %d, %s"
 
-#: src/display.c:1856
+#: src/display.c:1875
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s -Liitlane - Kahju %d%% - Kogemus %d, %s"
 
-#: src/display.c:2046
+#: src/display.c:2077
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Veoautol kästi Naftapuurtorn ehitada"
 
-#: src/display.c:2047
+#: src/display.c:2078
 #, fuzzy
 msgid "2 trucks ordered to build Oil Derrick"
 msgstr "Veoautol kästi Naftapuurtorn ehitada"
 
-#: src/display.c:2048
+#: src/display.c:2079
 #, fuzzy, c-format
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr "Veoautol kästi Naftapuurtorn ehitada"
@@ -12886,470 +12820,469 @@ msgstr "Eriline"
 msgid "Hero"
 msgstr "Kangelane"
 
-#: src/frontend.c:252
+#: src/frontend.c:253
 msgid "Single Player"
 msgstr "Üksik Mäng"
 
-#: src/frontend.c:253
+#: src/frontend.c:254
 msgid "Multi Player"
 msgstr "Mitmik Mäng"
 
-#: src/frontend.c:254
-#: src/frontend.c:312
+#: src/frontend.c:255
+#: src/frontend.c:313
 msgid "Tutorial"
 msgstr "Õpetus"
 
-#: src/frontend.c:255
+#: src/frontend.c:256
 msgid "Options"
 msgstr "Seaded"
 
-#: src/frontend.c:256
+#: src/frontend.c:257
 msgid "View Intro"
 msgstr "Näita Sissejuhatust"
 
-#: src/frontend.c:258
+#: src/frontend.c:259
 msgid "Quit Game"
 msgstr "Välju Mängust"
 
-#: src/frontend.c:260
+#: src/frontend.c:261
 msgid "MAIN MENU"
 msgstr "PEA MENÜÜ"
 
-#: src/frontend.c:313
+#: src/frontend.c:314
 msgid "Fast Play"
 msgstr "Kiir Mäng"
 
-#: src/frontend.c:314
+#: src/frontend.c:315
 msgid "TUTORIALS"
 msgstr "ÕPETUSED"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:316
-#: src/frontend.c:376
-#: src/frontend.c:529
-#: src/frontend.c:591
-#: src/frontend.c:725
-#: src/frontend.c:864
-#: src/frontend.c:971
-#: src/frontend.c:1178
-#: src/frontend.c:1321
+#: src/frontend.c:317
+#: src/frontend.c:377
+#: src/frontend.c:530
+#: src/frontend.c:592
+#: src/frontend.c:726
+#: src/frontend.c:865
+#: src/frontend.c:972
+#: src/frontend.c:1179
+#: src/frontend.c:1322
 msgctxt "menu"
 msgid "Return"
 msgstr "Tagasi"
 
-#: src/frontend.c:370
+#: src/frontend.c:371
 msgid "New Campaign"
 msgstr "Uus Kampaania"
 
-#: src/frontend.c:371
+#: src/frontend.c:372
 msgid "Start Skirmish Game"
 msgstr "Alusta Üksillahingut"
 
-#: src/frontend.c:372
+#: src/frontend.c:373
 msgid "Challenges"
 msgstr "Väljakutse"
 
-#: src/frontend.c:373
+#: src/frontend.c:374
 #: src/ingameop.c:293
 msgid "Load Game"
 msgstr "Laadi Mäng"
 
-#: src/frontend.c:375
+#: src/frontend.c:376
 msgid "SINGLE PLAYER"
 msgstr "ÜKSIK MÄNG"
 
-#: src/frontend.c:473
+#: src/frontend.c:474
 #: src/ingameop.c:519
 #: src/mission.c:2526
 #: src/mission.c:2631
 msgid "Load Saved Game"
 msgstr "Laadi Salvestatud Mäng"
 
-#: src/frontend.c:524
+#: src/frontend.c:525
 msgid "MULTI PLAYER"
 msgstr "MITMIKMÄNG"
 
-#: src/frontend.c:526
+#: src/frontend.c:527
 msgid "Host Game"
 msgstr "Võõrusta Mängu"
 
-#: src/frontend.c:527
+#: src/frontend.c:528
 msgid "Join Game"
 msgstr "Liitu Mängu"
 
-#: src/frontend.c:584
+#: src/frontend.c:585
 #: src/multiint.c:1254
 msgid "OPTIONS"
 msgstr "SEADED"
 
-#: src/frontend.c:585
+#: src/frontend.c:586
 msgid "Game Options"
 msgstr "Mängu Seaded"
 
-#: src/frontend.c:586
+#: src/frontend.c:587
 msgid "Graphics Options"
 msgstr "Graafika Seaded"
 
-#: src/frontend.c:587
+#: src/frontend.c:588
 msgid "Video Options"
 msgstr "Video Seaded"
 
-#: src/frontend.c:588
+#: src/frontend.c:589
 #: src/ingameop.c:288
 msgid "Audio Options"
 msgstr "Audio Seaded"
 
-#: src/frontend.c:589
+#: src/frontend.c:590
 msgid "Mouse Options"
 msgstr "Hiire Seaded"
 
-#: src/frontend.c:590
+#: src/frontend.c:591
 msgid "Key Mappings"
 msgstr "Nuppude Vasted"
 
-#: src/frontend.c:652
+#: src/frontend.c:653
 msgid "Video Playback"
 msgstr "Video Taasesitus"
 
-#: src/frontend.c:656
-#: src/frontend.c:818
+#: src/frontend.c:657
+#: src/frontend.c:819
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.c:660
-#: src/frontend.c:808
+#: src/frontend.c:661
+#: src/frontend.c:809
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.c:664
-#: src/frontend.c:813
-#: src/frontend.c:936
-#: src/frontend.c:994
+#: src/frontend.c:665
+#: src/frontend.c:814
+#: src/frontend.c:937
+#: src/frontend.c:995
 msgid "Fullscreen"
 msgstr "Täisaken"
 
-#: src/frontend.c:674
+#: src/frontend.c:675
 msgid "Screen Shake"
 msgstr "Ekraani Värin"
 
-#: src/frontend.c:677
-#: src/frontend.c:705
-#: src/frontend.c:713
-#: src/frontend.c:749
-#: src/frontend.c:785
-#: src/frontend.c:794
-#: src/frontend.c:957
-#: src/frontend.c:1055
-#: src/frontend.c:1093
-#: src/frontend.c:1129
-#: src/frontend.c:1141
-#: src/frontend.c:1153
-#: src/frontend.c:1165
-#: src/frontend.c:1201
-#: src/frontend.c:1214
-#: src/frontend.c:1228
-#: src/frontend.c:1242
+#: src/frontend.c:678
+#: src/frontend.c:706
+#: src/frontend.c:714
+#: src/frontend.c:750
+#: src/frontend.c:786
+#: src/frontend.c:795
+#: src/frontend.c:958
+#: src/frontend.c:1056
+#: src/frontend.c:1094
+#: src/frontend.c:1130
+#: src/frontend.c:1142
+#: src/frontend.c:1154
+#: src/frontend.c:1166
+#: src/frontend.c:1202
+#: src/frontend.c:1215
+#: src/frontend.c:1229
+#: src/frontend.c:1243
 msgid "On"
 msgstr "Sees"
 
-#: src/frontend.c:681
-#: src/frontend.c:701
-#: src/frontend.c:717
-#: src/frontend.c:744
-#: src/frontend.c:780
-#: src/frontend.c:798
-#: src/frontend.c:961
-#: src/frontend.c:1050
-#: src/frontend.c:1088
-#: src/frontend.c:1133
-#: src/frontend.c:1145
-#: src/frontend.c:1157
-#: src/frontend.c:1169
-#: src/frontend.c:1196
-#: src/frontend.c:1209
-#: src/frontend.c:1223
-#: src/frontend.c:1237
+#: src/frontend.c:682
+#: src/frontend.c:702
+#: src/frontend.c:718
+#: src/frontend.c:745
+#: src/frontend.c:781
+#: src/frontend.c:799
+#: src/frontend.c:962
+#: src/frontend.c:1051
+#: src/frontend.c:1089
+#: src/frontend.c:1134
+#: src/frontend.c:1146
+#: src/frontend.c:1158
+#: src/frontend.c:1170
+#: src/frontend.c:1197
+#: src/frontend.c:1210
+#: src/frontend.c:1224
+#: src/frontend.c:1238
 msgid "Off"
 msgstr "Väljas"
 
-#: src/frontend.c:686
+#: src/frontend.c:687
 #: src/multiint.c:1323
 msgid "Fog"
 msgstr "Udu"
 
-#: src/frontend.c:689
-#: src/frontend.c:767
+#: src/frontend.c:690
+#: src/frontend.c:768
 msgid "Mist"
 msgstr "Udu"
 
-#: src/frontend.c:693
-#: src/frontend.c:760
+#: src/frontend.c:694
+#: src/frontend.c:761
 #: src/multiint.c:1325
 msgid "Fog Of War"
 msgstr "Sõjaudu"
 
-#: src/frontend.c:698
+#: src/frontend.c:699
 msgid "Subtitles"
 msgstr "Suptiitrid"
 
-#: src/frontend.c:710
+#: src/frontend.c:711
 msgid "Shadows"
 msgstr "Varjud"
 
-#: src/frontend.c:721
+#: src/frontend.c:722
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAAFIKA SEADED"
 
-#: src/frontend.c:852
+#: src/frontend.c:853
 #: src/ingameop.c:177
 msgid "Voice Volume"
 msgstr "Hääle Volüüm"
 
-#: src/frontend.c:856
+#: src/frontend.c:857
 #: src/ingameop.c:182
 msgid "FX Volume"
 msgstr "FX Volüüm"
 
-#: src/frontend.c:860
+#: src/frontend.c:861
 #: src/ingameop.c:187
 msgid "Music Volume"
 msgstr "Muusika Volüüm"
 
-#: src/frontend.c:867
+#: src/frontend.c:868
 msgid "AUDIO OPTIONS"
 msgstr "HELI SEADED"
 
-#: src/frontend.c:932
+#: src/frontend.c:933
 msgid "Graphics Mode*"
 msgstr "Graafika Mode*"
 
-#: src/frontend.c:940
-#: src/frontend.c:989
+#: src/frontend.c:941
+#: src/frontend.c:990
 msgid "Windowed"
 msgstr "Akendatud"
 
-#: src/frontend.c:944
+#: src/frontend.c:945
 msgid "Resolution*"
 msgstr "Resolution*"
 
-#: src/frontend.c:949
+#: src/frontend.c:950
 msgid "Texture size"
 msgstr "Tekstuuri suurus"
 
-#: src/frontend.c:953
+#: src/frontend.c:954
 msgid "Vertical sync*"
 msgstr "Vertical sync*"
 
-#: src/frontend.c:965
+#: src/frontend.c:966
 msgid "* Takes effect on game restart"
 msgstr "* Võtab efekti kui mäng uuesti käivitatakse"
 
-#: src/frontend.c:968
+#: src/frontend.c:969
 msgid "VIDEO OPTIONS"
 msgstr "VIDEO SEADED"
 
-#: src/frontend.c:1126
+#: src/frontend.c:1127
 msgid "Reverse Rotation"
 msgstr "Tagasipööre"
 
-#: src/frontend.c:1137
+#: src/frontend.c:1138
 msgid "Trap Cursor"
 msgstr "Püüniskursor"
 
-#: src/frontend.c:1149
+#: src/frontend.c:1150
 msgid "Colored Cursors*"
 msgstr "Värvilised Kursorid*"
 
-#: src/frontend.c:1162
+#: src/frontend.c:1163
 msgid "Switch Mouse Buttons"
 msgstr "Vahetatud Hiire Nupud"
 
-#: src/frontend.c:1172
+#: src/frontend.c:1173
 msgid "* May negatively affect performance"
 msgstr "* May negatively affect performance"
 
-#: src/frontend.c:1175
+#: src/frontend.c:1176
 msgid "MOUSE OPTIONS"
 msgstr "HIIRE SEADED"
 
-#: src/frontend.c:1276
-#: src/frontend.c:1342
+#: src/frontend.c:1277
+#: src/frontend.c:1343
 msgid "Difficulty"
 msgstr "Raskusaste"
 
-#: src/frontend.c:1280
-#: src/frontend.c:1350
-#: src/frontend.c:1381
+#: src/frontend.c:1281
+#: src/frontend.c:1351
+#: src/frontend.c:1382
 msgid "Easy"
 msgstr "Kerge"
 
-#: src/frontend.c:1283
-#: src/frontend.c:1353
-#: src/frontend.c:1373
+#: src/frontend.c:1284
+#: src/frontend.c:1354
+#: src/frontend.c:1374
 msgid "Normal"
 msgstr "Normaalne"
 
-#: src/frontend.c:1287
-#: src/frontend.c:1356
-#: src/frontend.c:1377
+#: src/frontend.c:1288
+#: src/frontend.c:1357
+#: src/frontend.c:1378
 msgid "Hard"
 msgstr "Raske"
 
-#: src/frontend.c:1292
-#: src/frontend.c:1343
+#: src/frontend.c:1293
+#: src/frontend.c:1344
 msgid "Scroll Speed"
 msgstr "Kerimiskiirus"
 
-#: src/frontend.c:1306
-#: src/frontend.c:1340
+#: src/frontend.c:1307
+#: src/frontend.c:1341
 msgid "Language"
 msgstr "Keel"
 
-#: src/frontend.c:1318
-#: src/frontend.c:1341
+#: src/frontend.c:1319
+#: src/frontend.c:1342
 msgid "Unit Colour"
 msgstr "Üksuse Värv"
 
-#: src/frontend.c:1324
-#: src/frontend.c:1344
+#: src/frontend.c:1325
+#: src/frontend.c:1345
 msgid "GAME OPTIONS"
 msgstr "MÄNGU SEADED"
 
-#: src/frontend.c:1685
+#: src/frontend.c:1706
 #: src/multiint.c:2235
-#, fuzzy
 msgid "Mod: "
-msgstr ", mods:"
+msgstr "Mod:"
 
-#: src/hci.c:1363
+#: src/hci.c:1360
 msgid "MAP SAVED!"
 msgstr "KAART SALVESTATUD!"
 
-#: src/hci.c:1745
+#: src/hci.c:1742
 #: src/loop.c:528
 #: src/loop.c:544
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "MÄNG SALVESTATUD!"
 
-#: src/hci.c:2152
+#: src/hci.c:2132
 msgid "Failed to create building"
 msgstr "Failed to create building"
 
-#: src/hci.c:2175
+#: src/hci.c:2155
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Mängija %u teeb sohki (debug menu) Talle uus ehitis: %s."
 
-#: src/hci.c:2190
+#: src/hci.c:2170
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Mängija %u teeb sohki (debug menu) talle uus tunnus: %s."
 
-#: src/hci.c:2211
+#: src/hci.c:2191
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Mängija %u teeb sohki(debug menu) talle uus droid: %s."
 
-#: src/hci.c:3735
+#: src/hci.c:3718
 msgid "Commanders (F6)"
 msgstr "Komandörid (F6)"
 
-#: src/hci.c:3751
+#: src/hci.c:3734
 msgid "Intelligence Display (F5)"
 msgstr "Intelligentsus Ekraan (F5)"
 
-#: src/hci.c:3767
+#: src/hci.c:3750
 msgid "Manufacture (F1)"
 msgstr "Tootmine (F1)"
 
-#: src/hci.c:3783
+#: src/hci.c:3766
 msgid "Design (F4)"
 msgstr "Konstrueerimine (F4)"
 
-#: src/hci.c:3799
+#: src/hci.c:3782
 msgid "Research (F2)"
 msgstr "Uurimine (F2)"
 
-#: src/hci.c:3815
+#: src/hci.c:3798
 msgid "Build (F3)"
 msgstr "Ehitamine (F3)"
 
-#: src/hci.c:3893
+#: src/hci.c:3876
 #: src/multiint.c:1370
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.c:4077
+#: src/hci.c:4060
 msgid "Tile"
 msgstr "Tile"
 
-#: src/hci.c:4078
+#: src/hci.c:4061
 msgid "Place tiles on map"
 msgstr "Place tiles on map"
 
-#: src/hci.c:4087
+#: src/hci.c:4070
 msgid "Unit"
 msgstr "Üksus"
 
-#: src/hci.c:4088
+#: src/hci.c:4071
 msgid "Place Unit on map"
 msgstr "Paiguta kaartile üksus"
 
-#: src/hci.c:4096
+#: src/hci.c:4079
 msgid "Struct"
 msgstr "Ehitis"
 
-#: src/hci.c:4097
+#: src/hci.c:4080
 msgid "Place Structures on map"
 msgstr "Paiguta kaartile ehitis"
 
-#: src/hci.c:4105
+#: src/hci.c:4088
 msgid "Feat"
 msgstr "Saavutus"
 
-#: src/hci.c:4106
+#: src/hci.c:4089
 msgid "Place Features on map"
 msgstr "Place Features on map"
 
-#: src/hci.c:4117
+#: src/hci.c:4100
 msgid "Pause or unpause the game"
 msgstr "Paus või Pausi mahavõtmine"
 
-#: src/hci.c:4131
+#: src/hci.c:4114
 msgid "Align height of all map objects"
 msgstr "Align height of all map objects"
 
-#: src/hci.c:4156
+#: src/hci.c:4139
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "Välju"
 
-#: src/hci.c:4157
+#: src/hci.c:4140
 msgid "Exit Game"
 msgstr "Välju Mängust"
 
-#: src/hci.c:4580
+#: src/hci.c:4563
 #: src/intdisplay.c:270
 msgid "Progress Bar"
 msgstr "Progressi Riba"
 
-#: src/hci.c:5600
+#: src/hci.c:5583
 msgid "Factory Delivery Point"
 msgstr "Tehase Saatmis Koht"
 
-#: src/hci.c:5619
+#: src/hci.c:5602
 msgid "Loop Production"
 msgstr "Tsükkel tootmine"
 
-#: src/hci.c:5710
+#: src/hci.c:5693
 msgid "Tab Scroll left"
 msgstr "Tab Scroll left"
 
-#: src/hci.c:5727
+#: src/hci.c:5710
 msgid "Tab Scroll right"
 msgstr "Tab Scroll right"
 
@@ -14890,63 +14823,63 @@ msgstr "Võimetu leidma Sensorüksusi!"
 msgid "Unable to locate any Commanders!"
 msgstr "Võimetu leidma Komandöre!"
 
-#: src/structure.c:2837
+#: src/structure.c:2823
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kontroll Limiit Saavutatud - Tootmine Peatatud"
 
-#: src/structure.c:6125
-#: src/structure.c:6150
+#: src/structure.c:6024
+#: src/structure.c:6049
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Üksus määratud"
 msgstr[1] "%s - %u Üksused määratud"
 
-#: src/structure.c:6155
-#: src/structure.c:6223
-#: src/structure.c:6239
-#: src/structure.c:6253
+#: src/structure.c:6054
+#: src/structure.c:6122
+#: src/structure.c:6138
+#: src/structure.c:6152
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Kahju %3.0f%%"
 
-#: src/structure.c:6205
+#: src/structure.c:6104
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u Ühendatud %u -st"
 
-#: src/structure.c:6369
-#: src/structure.c:6414
+#: src/structure.c:6268
+#: src/structure.c:6313
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektrooniliselt Kahjustatud"
 
-#: src/structure.c:6650
+#: src/structure.c:6549
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektrooniline Autasu - Nägemis Raport"
 
-#: src/structure.c:6690
+#: src/structure.c:6589
 msgid "Factory Reward - Propulsion"
 msgstr "Tehase Auhind - Liikumissüsteem"
 
-#: src/structure.c:6714
+#: src/structure.c:6613
 msgid "Factory Reward - Body"
 msgstr "Tehase Autasu - Kere"
 
-#: src/structure.c:6738
+#: src/structure.c:6637
 msgid "Factory Reward - Weapon"
 msgstr "Tehase Autasu - Relv"
 
-#: src/structure.c:6747
+#: src/structure.c:6646
 msgid "Factory Reward - Nothing"
 msgstr "Tehase Autasu - Midagi"
 
-#: src/structure.c:6775
+#: src/structure.c:6674
 msgid "Repair Facility Award - Repair"
 msgstr "Remontimiskeskuse Autasu - Remont"
 
-#: src/structure.c:6782
+#: src/structure.c:6681
 msgid "Repair Facility Award - Nothing"
 msgstr "Remontimiskeskuse Autasu - Midagi"
 
@@ -14987,13 +14920,11 @@ msgstr " - Built %s"
 msgid "Version %s%s%s%s"
 msgstr "Versioon %s%s%s%s"
 
-#, fuzzy
-#~ msgid "Phosphor Bomb Bay Manits VTOL"
-#~ msgstr "Fosfori Pommitus"
+#~ msgid ": Unknown cheat code."
+#~ msgstr ": Tundmatu sohikood"
 
-#, fuzzy
-#~ msgid "Heap Bomb Bay Manits VTOL"
-#~ msgstr "VTOL Kuhjadeviisi Pommitus"
+#~ msgid "You found %u power in an oil drum"
+#~ msgstr "Sa leidsid naftatünnist %u energiat"
 
 #, fuzzy
 #~ msgid ", mod: "
@@ -15001,12 +14932,6 @@ msgstr "Versioon %s%s%s%s"
 
 #~ msgid "Active mods: "
 #~ msgstr "Aktiivsed mods:"
-
-#~ msgid ": Unknown cheat code."
-#~ msgstr ": Tundmatu sohikood"
-
-#~ msgid "You found %u power in an oil drum"
-#~ msgstr "Sa leidsid naftatünnist %u energiat"
 
 #~ msgid "Warning: Player %s did not send a data check, and may be cheating."
 #~ msgstr "Hoiatus: Mängija  %s ei saatnud info kontrolli, ja võib sohki teha."
