@@ -3571,7 +3571,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		else if (structureMode == REF_REARM_PAD)
 		{
 			REARM_PAD	*psReArmPad = &psStructure->pFunctionality->rearmPad;
-			UDWORD pointsAlreadyAdded;
 
 			psDroid = (DROID *)psChosenObj;
 			ASSERT_OR_RETURN( , psDroid != NULL, "invalid droid pointer");
@@ -3607,6 +3606,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					if (psDroid->sMove.iAttackRuns != 0)
 					{
 						UDWORD      pointsRequired;
+						UDWORD      pointsAlreadyAdded;
 
 						//amount required is a factor of the droids' weight
 						pointsRequired = psDroid->weight / REARM_FACTOR;
@@ -3634,8 +3634,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 								// Make sure it's a rearmable weapon (and so we don't divide by zero)
 								if (psDroid->sMove.iAttackRuns[i] > 0 && asWeaponStats[psDroid->asWeaps[i].nStat].numRounds > 0)
 								{
-									// Do not "simplify" this formula.
-									// It is written this way to prevent rounding errors.
+									// Written this way to prevent rounding errors - do not "simplify"
 									int ammoToAddThisTime =
 									    pointsToAdd*getNumAttackRuns(psDroid,i)/pointsRequired -
 									    pointsAlreadyAdded*getNumAttackRuns(psDroid,i)/pointsRequired;
@@ -3662,16 +3661,15 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				/* do repairing */
 				if (psDroid->body < psDroid->originalBody)
 				{
-					// Do not "simplify" this formula.
-					// It is written this way to prevent rounding errors.
-					pointsToAdd =  VTOL_REPAIR_FACTOR * (100+asReArmUpgrade[psStructure->player].modifier) * (gameTime -
-					               psReArmPad->timeStarted) / (GAME_TICKS_PER_SEC * 100);
-					pointsAlreadyAdded =  VTOL_REPAIR_FACTOR * (100+asReArmUpgrade[psStructure->player].modifier) * (psReArmPad->timeLastUpdated -
-					               psReArmPad->timeStarted) / (GAME_TICKS_PER_SEC * 100);
+					// Written this way to prevent rounding errors - do not "simplify"
+					pointsToAdd =  VTOL_REPAIR_FACTOR * (100+asReArmUpgrade[psStructure->player].modifier) * (gameTime % (1<<16))
+					               / (GAME_TICKS_PER_SEC * 100);
+					pointsToAdd -= VTOL_REPAIR_FACTOR * (100+asReArmUpgrade[psStructure->player].modifier) * (psReArmPad->timeLastUpdated % (1<<16))
+					               / (GAME_TICKS_PER_SEC * 100);
 
-					if ((pointsToAdd - pointsAlreadyAdded) > 0)
+					if (pointsToAdd > 0)
 					{
-						psDroid->body += (pointsToAdd - pointsAlreadyAdded);
+						psDroid->body += pointsToAdd;
 					}
 					if (psDroid->body >= psDroid->originalBody)
 					{

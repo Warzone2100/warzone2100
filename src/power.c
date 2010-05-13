@@ -198,8 +198,8 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 		}
 		// include modifier as a %
 		// Written this way to prevent rounding errors - do not "simplify"
-		pointsToAdd = (modifier * EXTRACT_POINTS * gameTime) / (GAME_TICKS_PER_SEC * 100)
-		            - (modifier * EXTRACT_POINTS * pResExtractor->timeLastUpdated) / (GAME_TICKS_PER_SEC * 100);
+		pointsToAdd = (gameTime % (1<<16)                       * modifier * EXTRACT_POINTS) / (GAME_TICKS_PER_SEC * 100)
+		            - (pResExtractor->timeLastUpdated % (1<<16) * modifier * EXTRACT_POINTS) / (GAME_TICKS_PER_SEC * 100);
 
 		if ((int)pResExtractor->timeLastUpdated - (int)gameTime > GAME_TICKS_PER_SEC || (int)gameTime - (int)pResExtractor->timeLastUpdated > GAME_TICKS_PER_SEC)
 		{
