@@ -43,6 +43,7 @@ BUILDDETAILS	sBuildDetails;
 HIGHLIGHT		buildSite;
 int brushSize = 1;
 bool editMode = false;
+bool quickQueueMode = false;
 
 // Initialisation function for statis & globals in this module.
 //
@@ -179,6 +180,11 @@ BOOL process3DBuilding(void)
 	//if not trying to build ignore
 	if (buildState == BUILD3D_NONE)
   	{
+		if (quickQueueMode && !ctrlShiftDown())
+		{
+			quickQueueMode = false;
+			intDemolishCancel();
+		}
 		return true;
 	}
 
@@ -253,6 +259,11 @@ BOOL process3DBuilding(void)
 		buildState = BUILD3D_NONE;
 		return true;
 	}
+	if (quickQueueMode && !ctrlShiftDown())
+	{
+		buildState = BUILD3D_NONE;
+		quickQueueMode = false;
+	}
 
 	return false;
 }
@@ -276,7 +287,15 @@ BOOL found3DBuilding(UDWORD *x, UDWORD *y)
 		*y += 1;
 	}
 
-	buildState = BUILD3D_NONE;
+	if (ctrlShiftDown())
+	{
+		quickQueueMode = true;
+		init3DBuilding(sBuildDetails.psStats, NULL, NULL);
+	}
+	else
+	{
+		buildState = BUILD3D_NONE;
+	}
 
 	return true;
 }
@@ -303,6 +322,13 @@ BOOL found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 	*py1 = wallDrag.y1;
 	*px2 = wallDrag.x2;
 	*py2 = wallDrag.y2;
+
+	if (ctrlShiftDown())
+	{
+		quickQueueMode = true;
+		init3DBuilding(sBuildDetails.psStats, NULL, NULL);
+	}
+
 	return true;
 }
 

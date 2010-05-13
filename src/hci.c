@@ -405,10 +405,6 @@ static BASE_OBJECT		*apsPreviousObj[IOBJ_MAX];
 /* The jump position for each object on the base bar */
 static Vector2i asJumpPos[IOBJ_MAX];
 
-// whether to reopen the build menu
-// chnaged back to pre Mark Donald setting at Jim's request - AlexM
-static BOOL				bReopenBuildMenu = false;
-
 /***************************************************************************************/
 /*              Function Prototypes                                                    */
 static BOOL intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats);
@@ -690,12 +686,13 @@ BOOL intInitialise(void)
 
 void intReopenBuild(BOOL reopen)
 {
-	bReopenBuildMenu = reopen;
+	// obsolete
 }
 
 BOOL intGetReopenBuild(void)
 {
-	return bReopenBuildMenu;
+	// obsolete
+	return false;
 }
 
 //initialise all the previous obj - particularly useful for when go Off world!
@@ -1994,19 +1991,9 @@ INT_RETVAL intRunWidgets(void)
 					}
 				}
 
-				// put the build menu up again after the structure position has been chosen
-				//or ctrl/shift is down and we're queing the build orders
-#ifdef DISABLE_BUILD_QUEUE
-				if (bReopenBuildMenu)
-#else
-				if (bReopenBuildMenu || ctrlShiftDown())
-#endif
+				if (!quickQueueMode)
 				{
-				    intAddBuild(NULL);
-				}
-				else
-				{
-					// Clear the object screen
+					// Clear the object screen, only if we aren't immediately building something else
 					intResetScreen(false);
 				}
 
@@ -2057,22 +2044,15 @@ INT_RETVAL intRunWidgets(void)
 //					DeSelectDroid((DROID*)psObjSelected);
 //				}
 
-				// put the build menu up again after the structure position has been chosen
-				// or ctrl/shift is down and we're queuing the build orders
-#ifdef DISABLE_BUILD_QUEUE
-				if (bReopenBuildMenu)
+				if (!quickQueueMode)
 				{
-					intAddBuild(NULL);
-				}
-				else
-				{
-					// Clear the object screen
+					// Clear the object screen, only if we aren't immediately building something else
 					intResetScreen(false);
 				}
-#else
-				// Clear the object screen
+			}
+			if (buildState == BUILD3D_NONE)
+			{
 				intResetScreen(false);
-#endif
 			}
 		}
 		else if (intMode == INT_EDITSTAT && editPosMode == IED_POS)
@@ -2173,7 +2153,10 @@ INT_RETVAL intRunWidgets(void)
 						Cheated = true;
 					}
 				}
-				editPosMode = IED_NOPOS;
+				if (!quickQueueMode)
+				{
+					editPosMode = IED_NOPOS;
+				}
 			}
 		}
 	}
