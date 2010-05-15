@@ -1135,6 +1135,7 @@ void iV_SetTextColour(PIELIGHT colour)
 
 void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotation)
 {
+	pie_SetTexturePage(TEXPAGE_FONT);
 	glDisable(GL_CULL_FACE);	// hack needed on MacOSX
 	QPainter painter(WzMainWindow::instance()->context()->device());
 	painter.translate(XPos, YPos);
@@ -1142,6 +1143,9 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	painter.setPen(fontColor);
 	painter.drawText(0, 0, QString::fromUtf8(string));
 	glEnable(GL_CULL_FACE);
+
+	rendStates.rendMode = REND_ALPHA;
+	pie_SetRendMode(REND_OPAQUE);		// beat state machinery into submission
 }
 
 void iV_SetTextSize(float size)
