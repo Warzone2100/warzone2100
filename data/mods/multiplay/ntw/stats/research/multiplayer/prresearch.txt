@@ -144,7 +144,7 @@ R-Defense-Tower01,R-Defense-HardcreteWall,109
 R-Defense-Tower06,R-Defense-HardcreteWall,109
 R-Defense-Tower06,R-Wpn-Rocket03-HvAT,109
 R-Defense-Pillbox01,R-Defense-HardcreteWall,109
-R-Defense-Pillbox01,R-R-Wpn-MG2Mk1,109
+R-Defense-Pillbox01,R-Wpn-MG2Mk1,109
 R-Defense-Pillbox04,R-Defense-HardcreteWall,109
 R-Defense-Pillbox04,R-Wpn-Cannon1Mk1,109
 R-Defense-Pillbox05,R-Defense-HardcreteWall,109
@@ -188,6 +188,7 @@ R-Wpn-Cannon-Accuracy01,R-Struc-Research-Upgrade01,109
 R-Sys-SpyTurret,R-Sys-Engineering03,109
 R-Sys-SpyTurret,R-Struc-Research-Upgrade08,109
 R-Sys-SpyTurret,R-Sys-Sensor-WSTower,109
+R-Sys-SpyTurret,R-Vehicle-Body10,109
 R-Wpn-HvyHowitzer,R-Wpn-Howitzer-Damage02,109
 R-Wpn-HvyHowitzer,R-Wpn-HowitzerMk1,109
 R-Wpn-Rocket-ROF01,R-Wpn-Rocket-Damage02,109
