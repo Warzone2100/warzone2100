@@ -615,7 +615,7 @@
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp",
 			);
-			script = "export PATH=$PATH:/sw/bin:/opt/local/bin\nmoc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}\" || exit 1";
+			script = "export PATH=/sw/lib/qt4-mac/bin:/opt/local/bin:${PATH}\nmoc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}\" || exit 1";
 		};
 /* End PBXBuildRule section */
 
@@ -3644,7 +3644,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=$PATH:/sw/bin:/opt/local/bin\necho \"Checking for moc...\"\nif ! type -aP moc; then\n    echo \"error: Fatal inability to properly moc the code. (Insure you have installed Qt or risk more mocing.)\" >&2\n    open ./README.BUILD.txt\n    exit 1\nelif ! moc -v; then\n    echo \"error: Moc is not properly installed\" >&2\n    exit 1\nfi\nexit 0";
+			shellScript = "export PATH=/sw/lib/qt4-mac/bin:/opt/local/bin:${PATH}\necho \"Checking for moc...\"\nif ! type -aP moc; then\n    echo \"error: Fatal inability to properly moc the code. (Insure you have installed Qt or risk more mocing.)\" >&2\n    open ./README.BUILD.txt\n    exit 1\nelif [[ `moc -v 2>&1 | sed -e 's:.*Qt \\(4\\.6\\)\\..)$:\\1:'` < \"4.6\" ]]; then\n    echo \"error: Moc is not properly installed\" >&2\n    exit 1\nfi\nmoc -v\nexit 0";
 		};
 		9711774C0F87A677000C8A96 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
