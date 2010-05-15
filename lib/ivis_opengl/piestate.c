@@ -436,34 +436,6 @@ void pie_SetAlphaTest(BOOL keyingOn)
 	}
 }
 
-static void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
-{
-	if (transMode != rendStates.transMode)
-	{
-		rendStates.transMode = transMode;
-		switch (transMode) {
-			case TRANS_ALPHA:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				break;
-			case TRANS_ADDITIVE:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-				break;
-			case TRANS_DECAL:
-				rendStates.transMode = TRANS_DECAL;
-				glDisable(GL_BLEND);
-				break;
-			case TRANS_FILTER:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_ONE, GL_ONE);
-				break;
-			default:
-				break;
-		}
-	}
-}
-
 void pie_SetRendMode(REND_MODE rendMode)
 {
 	if (rendMode != rendStates.rendMode)
@@ -472,18 +444,22 @@ void pie_SetRendMode(REND_MODE rendMode)
 		switch (rendMode)
 		{
 			case REND_OPAQUE:
-				pie_SetTranslucencyMode(TRANS_DECAL);
+				rendStates.transMode = TRANS_DECAL;
+				glDisable(GL_BLEND);
 				break;
 
 			case REND_ALPHA:
-				pie_SetTranslucencyMode(TRANS_ALPHA);
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				break;
 
 			case REND_ADDITIVE:
-				pie_SetTranslucencyMode(TRANS_ADDITIVE);
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 				break;
 
 			default:
+				ASSERT(false, "Bad render state");
 				break;
 		}
 	}
