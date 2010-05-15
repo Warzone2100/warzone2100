@@ -436,9 +436,10 @@ void pie_SetAlphaTest(BOOL keyingOn)
 	}
 }
 
-void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
+static void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 {
-	if (transMode != rendStates.transMode) {
+	if (transMode != rendStates.transMode)
+	{
 		rendStates.transMode = transMode;
 		switch (transMode) {
 			case TRANS_ALPHA:
@@ -461,6 +462,32 @@ void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 				break;
 		}
 	}
+}
+
+void pie_SetRendMode(REND_MODE rendMode)
+{
+	if (rendMode != rendStates.rendMode)
+	{
+		rendStates.rendMode = rendMode;
+		switch (rendMode)
+		{
+			case REND_OPAQUE:
+				pie_SetTranslucencyMode(TRANS_DECAL);
+				break;
+
+			case REND_ALPHA:
+				pie_SetTranslucencyMode(TRANS_ALPHA);
+				break;
+
+			case REND_ADDITIVE:
+				pie_SetTranslucencyMode(TRANS_ADDITIVE);
+				break;
+
+			default:
+				break;
+		}
+	}
+	return;
 }
 
 void pie_InitColourMouse(IMAGEFILE* img, const uint16_t cursorIDs[CURSOR_MAX])

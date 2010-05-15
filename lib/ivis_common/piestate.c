@@ -38,7 +38,8 @@ void pie_SetDefaultStates(void)//Sets all states
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 
 	rendStates.transMode = TRANS_ALPHA;//to force reset to DECAL
-	pie_SetTranslucencyMode(TRANS_DECAL);
+	rendStates.rendMode = REND_ALPHA;//to force reset to OPAQUE
+	pie_SetRendMode(REND_OPAQUE);
 
 	//chroma keying on black
 	rendStates.keyingOn = false;//to force reset to true
@@ -107,30 +108,4 @@ void pie_SetFogColour(PIELIGHT colour)
 PIELIGHT pie_GetFogColour(void)
 {
 	return rendStates.fogColour;
-}
-
-void pie_SetRendMode(REND_MODE rendMode)
-{
-	if (rendMode != rendStates.rendMode)
-	{
-		rendStates.rendMode = rendMode;
-		switch (rendMode)
-		{
-			case REND_OPAQUE:
-				pie_SetTranslucencyMode(TRANS_DECAL);
-				break;
-
-			case REND_ALPHA:
-				pie_SetTranslucencyMode(TRANS_ALPHA);
-				break;
-
-			case REND_ADDITIVE:
-				pie_SetTranslucencyMode(TRANS_ADDITIVE);
-				break;
-
-			default:
-				break;
-		}
-	}
-	return;
 }
