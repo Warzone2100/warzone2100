@@ -51,6 +51,7 @@ typedef	enum	REND_MODE
 					REND_ALPHA,
 					REND_ADDITIVE,
 					REND_OPAQUE,
+					REND_MULTIPLICATIVE
 				}
 				REND_MODE;
 
