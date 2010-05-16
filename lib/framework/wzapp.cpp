@@ -101,6 +101,7 @@ static std::deque<InputKey> inputBuffer;
 static QColor fontColor;
 static uint16_t mouseXPos = 0, mouseYPos = 0;
 static CURSOR lastCursor = CURSOR_ARROW;
+static bool crashing = false;
 
 #ifdef __cplusplus
 extern "C"
@@ -250,6 +251,12 @@ void WzMainWindow::paintGL()
 {
 	if (notReadyToPaint)
 	{
+		return;
+	}
+	if (crashing)
+	{
+		glClear(GL_COLOR_BUFFER_BIT);
+		swapBuffers();
 		return;
 	}
 
@@ -1163,6 +1170,7 @@ void iV_SetTextSize(float size)
 
 void wzFatalDialog(const char *text)
 {
+	crashing = true;
 	QMessageBox::critical(NULL, "Fatal error", text);
 }
 
