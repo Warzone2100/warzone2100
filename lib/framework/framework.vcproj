@@ -27,6 +27,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Running MOC on wzapp.h"
+				CommandLine="$(QTDIR)\bin\moc.exe wzapp.h. -o wzapp.moc.h"
 			/>
 			<Tool
 				Name="FlexGenerator"
@@ -50,15 +52,15 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;YY_STATIC;PACKAGE_VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(QTDIR)\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;YY_STATIC;PACKAGE_VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;QT_NO_DEBUG;QT_LARGEFILE_SUPPORT;QT_DLL;QT_OPENGL_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT;QT_NO_DYNAMIC_CAST"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -98,6 +100,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Running MOC on wzapp.h"
+				CommandLine="$(QTDIR)\bin\moc.exe wzapp.h. -o wzapp.moc.h"
 			/>
 			<Tool
 				Name="FlexGenerator"
@@ -120,7 +124,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(QTDIR)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;YY_STATIC;PACKAGE_VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -198,10 +202,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\input.c"
-				>
-			</File>
-			<File
 				RelativePath=".\lexer_input.c"
 				>
 			</File>
@@ -265,6 +265,10 @@
 			</File>
 			<File
 				RelativePath=".\utf.c"
+				>
+			</File>
+			<File
+				RelativePath=".\wzapp.cpp"
 				>
 			</File>
 		</Filter>
