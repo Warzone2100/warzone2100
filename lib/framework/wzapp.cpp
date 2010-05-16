@@ -26,6 +26,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QClipboard>
 #include <QtGui/QDesktopWidget>
+#include <QtGui/QMessageBox>
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
@@ -1158,6 +1159,11 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 void iV_SetTextSize(float size)
 {
 	WzMainWindow::instance()->setFontSize(size);
+}
+
+void wzFatalDialog(const char *text)
+{
+	QMessageBox::critical(NULL, "Fatal error", text);
 }
 
 static int WZkeyToQtKey(int code)
