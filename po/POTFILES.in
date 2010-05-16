@@ -199,7 +199,6 @@ lib/framework/debug.c
 lib/framework/frame.c
 lib/framework/frameresource.c
 lib/framework/i18n.c
-lib/framework/input.c
 lib/framework/lexer_input.c
 lib/framework/SDL_framerate.c
 lib/framework/stdio_ext.c
@@ -258,7 +257,6 @@ lib/widget/button.c
 lib/widget/editbox.c
 lib/widget/form.c
 lib/widget/label.c
-lib/widget/scrap.c
 lib/widget/slider.c
 lib/widget/tip.c
 lib/widget/widget.c
@@ -315,7 +313,7 @@ src/levels.c
 src/lighting.c
 src/loadsave.c
 src/loop.c
-src/main.c
+src/main.cpp
 src/map.c
 src/mapdisplay.c
 src/mapgrid.cpp

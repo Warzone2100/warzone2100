@@ -15,10 +15,6 @@
 extern "C" {
 #endif
 
-/* --- */
-
-#include <SDL/SDL.h>
-
 /* --------- Definitions */
 
 /* Some rates in Hz */
@@ -30,10 +26,10 @@ extern "C" {
 /* --------- Structure variables */
 
     typedef struct {
-	Uint32 framecount;
+	uint32_t framecount;
 	float rateticks;
-	Uint32 lastticks;
-	Uint32 rate;
+	uint32_t lastticks;
+	uint32_t rate;
     } FPSmanager;
 
 /* Functions return 0 or value for sucess and -1 for error */

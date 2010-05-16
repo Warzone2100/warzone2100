@@ -23,6 +23,7 @@
 
 #include "frame.h"
 #include "cursors.h"
+#include "wzapp_c.h"
 
 /* TODO: do bridge and attach need swapping? */
 static const char *cursor_arrow[] = {
@@ -1222,7 +1223,7 @@ static const struct
 	{ cursor_select,        CURSOR_SELECT },
 };
 
-SDL_Cursor* init_system_cursor32(CURSOR cur)
+void init_system_cursor32(CURSOR cur)
 {
 	int i, row, col;
 	uint8_t data[4 * 32];
@@ -1266,5 +1267,5 @@ SDL_Cursor* init_system_cursor32(CURSOR cur)
 	}
 
 	sscanf(image[4 + row], "%d,%d", &hot_x, &hot_y);
-	return SDL_CreateCursor(data, mask, 32, 32, hot_x, hot_y);
+	wzCreateCursor(cur, data, mask, 32, 32, hot_x, hot_y);
 }

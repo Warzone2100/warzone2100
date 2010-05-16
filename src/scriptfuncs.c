@@ -24,13 +24,13 @@
  *
  */
 
-#include <time.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/widget/widget.h"
+
+#include <time.h>
+#include <string.h>
 
 #include "effects.h"
 #include "lib/script/script.h"

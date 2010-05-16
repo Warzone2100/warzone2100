@@ -24,13 +24,12 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp_c.h"
 #include "lib/framework/string_ext.h"
 #include "lib/gamelib/gtime.h"
 #include "src/component.h"		// FIXME: we need to handle this better
 #include "src/modding.h"		// FIXME: we need to handle this better
 #include <time.h>			// for stats
-#include <SDL_timer.h>
-#include <SDL_thread.h>
 #include <physfs.h>
 #include <string.h>
 
@@ -135,7 +134,7 @@ static SocketSet* socket_set = NULL;
 // UPnP
 static int upnp = false;
 static bool upnp_done = false;
-SDL_Thread *upnpdiscover;
+WZ_THREAD *upnpdiscover;
 
 static struct UPNPUrls urls;
 static struct IGDdatas data;
@@ -795,7 +794,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	 || !socketReadReady(tcp_socket)
 	 || (result = readNoInt(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
-		unsigned int time = SDL_GetTicks();
+		unsigned int time = wzGetTicks();
 		if (result == SOCKET_ERROR)
 		{
 			debug(LOG_ERROR, "Server socket (%p) ecountered error: %s", tcp_socket, strSockError(getSockErr()));
@@ -805,7 +804,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 			return false;
 		}
 		i = result;
-		while (i < sizeof(buf) && SDL_GetTicks() < time + 2500)
+		while (i < sizeof(buf) && wzGetTicks() < time + 2500)
 		{
 			result = readNoInt(tcp_socket, buf+i, sizeof(buf)-i);
 			if (result == SOCKET_ERROR
@@ -1006,7 +1005,7 @@ void NETaddRedirects(void)
 	debug(LOG_NET, "%s\n", __FUNCTION__);
 	if (!upnp_done)
 	{
-		SDL_WaitThread(upnpdiscover, &upnp);
+		upnp = wzThreadJoin(upnpdiscover);
 		upnp_done = true;
 	}
 	if (upnp) {
@@ -1025,7 +1024,7 @@ void NETremRedirects(void)
 
 void NETdiscoverUPnPDevices(void)
 {
-	upnpdiscover = SDL_CreateThread(&upnp_init, NULL);
+	upnpdiscover = wzThreadCreate(&upnp_init, NULL);
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -2783,7 +2782,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		NETint32_t(&NETCODE_HASH); //unused
 	NETend();
 
-	i = SDL_GetTicks();
+	i = wzGetTicks();
 	// Loop until we've been accepted into the game
 	for (;;)
 	{
@@ -2792,7 +2791,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		NETrecv(&type);
 
 		// FIXME: shouldn't there be some sort of rejection message?
-		if (SDL_GetTicks() > i + 5000)
+		if (wzGetTicks() > i + 5000)
 		{
 			// timeout
 			return false;

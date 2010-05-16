@@ -31,7 +31,17 @@
 # include <inttypes.h>
 #else
 // Defines C99 types for C99 incompatible compilers (e.g. MSVC)
-#include <SDL_stdinc.h>
+//BEGIN Hope this is right.
+typedef unsigned char      uint8_t;
+typedef unsigned short     uint16_t;
+typedef unsigned int       uint32_t;
+typedef unsigned long long uint64_t;
+typedef signed   char      int8_t;
+typedef signed   short     int16_t;
+typedef signed   int       int32_t;
+typedef signed   long long int64_t;
+//END   Hope this is right.
+
 #ifndef WZ_CC_MINGW
 # define INT8_MIN               (-128)
 # define INT16_MIN              (-32767-1)
@@ -49,6 +59,10 @@
 typedef SSIZE_T ssize_t;
 #endif
 #endif // WZ_C99
+
+#ifndef INT8_MAX
+#warning inttypes.h and stdint.h defines missing! Make sure that __STDC_FORMAT_MACROS and __STDC_LIMIT_MACROS are defined when compiling C++ files.
+#endif
 
 #include <limits.h>
 #include <ctype.h>
@@ -74,14 +88,19 @@ typedef int32_t  SDWORD;
 
 // If we are C99 compatible, the "bool" macro will be defined in <stdbool.h> (as _Bool)
 // C++ comes with an integrated bool type
-#if defined(WZ_CXX98)
-#elif defined(WZ_C99)
+#if defined(WZ_C99)
 # include <stdbool.h>
 #else
-// Pretend we are C99 compatible (well, for the bool type then)
-# ifndef bool
-#  define bool BOOL
-# endif
+#	if defined(_MSC_VER)
+#		ifndef __cplusplus
+// (!!!) NOTE: This it **REQUIRED** since bool in C++ is a byte, not a int for MSVC compilers!
+//				BOOL is a typedef in windef.h
+		typedef unsigned char bool;
+#		pragma message (" NOTE: BOOL is a int,  bool is the size of a unsigned char!")
+#		endif
+#	endif
+// MINGW fixes here if needed
+
 # ifndef true
 #  define true (1)
 # endif

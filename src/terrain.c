@@ -628,6 +628,8 @@ static void updateSectorGeometry(int x, int y)
 	                                 sizeof(DecalVertex)*sectors[x*ySectors + y].decalSize, decaldata); glError();
 
 	free (decaldata);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (don't know if it has to be unbound everywhere), otherwise text rendering may mysteriously crash.
 }
 
 /**
@@ -1001,9 +1003,11 @@ bool initTerrain(void)
 	}
 	debug(LOG_TERRAIN, "the size of the map is %ix%i", mapWidth, mapHeight);
 	debug(LOG_TERRAIN, "lightmap texture size is %ix%i", lightmapSize, lightmapSize);
-	
+
 	terrainInitalised = true;
-	
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (in this function, at least), otherwise text rendering may mysteriously crash.
+
 	return true;
 }
 
@@ -1359,6 +1363,9 @@ void drawTerrain(void)
 	glDisableClientState( GL_VERTEX_ARRAY );
 	
 	glDepthMask(GL_TRUE);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (don't know if it has to be unbound everywhere), otherwise text rendering may mysteriously crash.
+
 	pie_SetRendMode(REND_OPAQUE);
 	
 	glPopAttrib();
@@ -1467,6 +1474,8 @@ void drawWater(void)
 	glDepthMask(GL_TRUE);
 	glDisable(GL_TEXTURE_GEN_S);
 	glDisable(GL_TEXTURE_GEN_T);
-	
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (don't know if it has to be unbound everywhere), otherwise text rendering may mysteriously crash.
+
 	glPopAttrib();
 }

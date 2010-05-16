@@ -32,6 +32,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"	// multiplayer
 #include "lib/sound/audio.h"
+#include "lib/framework/wzapp_c.h"
 
 #include "frontend.h"
 #include "keyedit.h"
@@ -258,8 +259,6 @@ TITLECODE titleLoop(void)
 
 	audio_Update();
 	
-	pie_DrawMouse(mouseX(), mouseY());
-
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
@@ -279,7 +278,7 @@ TITLECODE titleLoop(void)
 void loadingScreenCallback(void)
 {
 	const PIELIGHT loadingbar_background = WZCOL_LOADING_BAR_BACKGROUND;
-	const uint32_t currTick = SDL_GetTicks();
+	const uint32_t currTick = wzGetTicks();
 	unsigned int i;
 
 	if (currTick - lastTick < 50)

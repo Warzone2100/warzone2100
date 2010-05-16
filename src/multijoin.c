@@ -64,7 +64,13 @@
 #include "multistat.h"
 #include "multigifts.h"
 #include "scriptcb.h"
-#include <SDL.h>
+
+// For htonl().
+#ifndef WZ_OS_WIN
+#include <arpa/inet.h>
+#else
+#include <Winsock2.h>
+#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
@@ -351,8 +357,8 @@ bool recvDataCheck(void)
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 			kickPlayer(player, "your data doesn't match the host's!", ERROR_WRONGDATA);
-			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, SDL_SwapBE32(tempBuffer[i]), SDL_SwapBE32(DataHash[i]));
-			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, SDL_SwapBE32(tempBuffer[i]), SDL_SwapBE32(DataHash[i]));
+			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, htonl(tempBuffer[i]), htonl(DataHash[i]));
+			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, htonl(tempBuffer[i]), htonl(DataHash[i]));
 
 			return false;
 		}

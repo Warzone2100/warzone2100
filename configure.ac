@@ -63,6 +63,19 @@ AM_GNU_GETTEXT_VERSION([0.15])
 PKG_PROG_PKG_CONFIG
 AC_PROG_VERSION_CHECK([pkg-config], [0.9])
 
+# Check for Qt
+PKG_CHECK_MODULES(QT4, QtCore QtGui QtOpenGL QtNetwork,,[:])
+if test "$pkg_failed" = "yes" ; then
+	AC_MSG_ERROR([Qt not found - required!])
+fi
+QT4_INCLUDES=$QT4_FRONTEND_CFLAGS
+QT4_LDFLAGS=$QT4_FRONTEND_LIBS
+QT4_LIB=$QT4_FRONTEND_LIBS
+QT4_VERSION=`$PKG_CONFIG --modversion QtCore`
+AC_SUBST(QT4_VERSION)
+AC_PATH_PROGS(MOC4, [moc-qt4 moc])
+AC_PATH_PROGS(UIC4, [uic-qt4 uic])
+AC_PATH_PROGS(RCC4, [rcc-qt4 rcc])
 
 # Check for compiler
 case ${CC} in
@@ -211,6 +224,8 @@ AC_MSG_RESULT([${enable_debug}])
 # also important, it doesn't work if -Werror comes last.
 AX_C_CHECK_FLAG([-Werror -Wno-switch], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-switch")
 AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-enum-compare")
+# Only needed for CXX, actually.
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
 
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
@@ -297,7 +312,7 @@ fi
 
 # Checks for modules:
 
-PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
+#PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
 PKG_CHECK_MODULES([THEORA], [theora >= 1.0])
 
@@ -305,14 +320,6 @@ AS_IF([test "x$enable_sound" = "xyes"],[
 	PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
 	PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
 ])
-
-if test "x$enable_static" = "xyes" ; then
-	# If linking statically, make sure to include the direct dependencies of
-	# QuesoGLC as well, because it does not have a pkg-config file.
-	# FIXME Remove this whenever QuesoGLC has a pkg-config file
-	PKG_CHECK_MODULES([FONTCONFIG], [fontconfig])
-	PKG_CHECK_MODULES([FREETYPE], [freetype2])
-fi
 
 system_glee=false
 if test "x$host_os_mingw32" != "xyes" ; then
@@ -350,25 +357,13 @@ if test "x$host_os_mingw32" = "xyes" ; then
     WIN32_LIBS="${WIN32_LIBS} ${IBERTY_LIBS}"
 fi
 
-# Look for X11 if required
-AC_TRY_COMPILE(, [
-#if   (defined(__OS2__) && !defined(__EMX__))
-# error Running OS2, not a Unix system.
-#elif (!defined(SAG_COM) && (defined(WIN32) || defined(WIN64) || defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) || defined(__WIN64__) || defined(__NT__))) || (defined(__MWERKS__) && defined(__INTEL__))
-# error Running on Windows, not a Unix system.
-#endif
-],[
-	AC_CHECK_LIB(X11, XSetSelectionOwner, AC_SUBST([X11_LIBS], [-lX11]),
-		AC_MSG_ERROR([X11 library not found]))
-])
-
 # Look for PhysicsFS
 AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found.]))
 AC_CHECK_LIB(physfs, PHYSFS_init, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS not found.]), [${WIN32_LIBS}])
 
 # Look for OpenGL
-AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
-	AC_MSG_ERROR([SDL OpenGL header not found. Please install SDL with OpenGL support.]))
+#AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
+#	AC_MSG_ERROR([SDL OpenGL header not found. Please install SDL with OpenGL support.]))
 AC_CHECK_LIB(GL, main,
 	OPENGL_LIBS="-lGL",
 	AC_CHECK_LIB(opengl32, main,
@@ -381,21 +376,6 @@ AC_CHECK_LIB(GLU, main,
 		AC_MSG_ERROR([GLU library not found.]),
 		[${OPENGL_LIBS} -lm]), [${OPENGL_LIBS} -lm])
 AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
-
-# Look for OpenGLC
-AC_CHECK_HEADER(GL/glc.h, ,
-	AC_MSG_ERROR([OpenGLC header not found. Please install QuesoGLC: http://quesoglc.sourceforge.net/]))
-AC_CHECK_LIB(GLC, main,
-	OPENGLC_LIBS="-lGLC",
-	AC_CHECK_LIB(glc32, main,
-		OPENGLC_LIBS="-lglc32",
-		AC_MSG_ERROR([OpenGLC library not found. Please install QuesoGLC: http://quesoglc.sourceforge.net/])))
-if test "x$enable_static" = "xyes" ; then
-	# If linking statically, make sure to link against the direct dependencies, too.
-	# FIXME Remove this whenever QuesoGLC has a pkg-config file
-	OPENGLC_LIBS="${OPENGLC_LIBS} ${FONTCONFIG_LIBS} ${FREETYPE_LIBS}"
-fi
-AC_SUBST([OPENGLC_LIBS], [${OPENGLC_LIBS}])
 
 # When (cross-)compiling for Windows (MinGW) we need to link in BFD for the Dr.
 # MinGW derived exception handler.

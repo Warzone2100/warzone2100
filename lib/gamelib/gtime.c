@@ -24,10 +24,10 @@
  *
  */
 
-#include <SDL_timer.h>
 #include <time.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp_c.h"
 #include "gtime.h"
 
 #define GTIME_MINFRAME	(GAME_TICKS_PER_SEC/80)
@@ -84,7 +84,7 @@ extern void setGameTime(uint32_t newGameTime)
 	deltaGraphicsTime = gameTime;
 	graphicsTimeFraction = 0.f;
 	timeOffset = graphicsTime;
-	baseTime = SDL_GetTicks();
+	baseTime = wzGetTicks();
 
 	// Not setting real time.
 }
@@ -108,7 +108,7 @@ UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange)
 bool logicalUpdates = true;
 void gameTimeUpdate()
 {
-	uint32_t currTime = SDL_GetTicks();
+	uint32_t currTime = wzGetTicks();
 	bool sane = logicalUpdates;
 
 	if (currTime < realTime)
@@ -193,7 +193,7 @@ void gameTimeUpdate()
 void gameTimeResetMod(void)
 {
 	timeOffset = graphicsTime;
-	baseTime = SDL_GetTicks();
+	baseTime = wzGetTicks();
 
 	modifier = 1.0f;
 }
@@ -221,7 +221,7 @@ void gameTimeStop(void)
 {
 	if (stopCount == 0)
 	{
-		pauseStart = SDL_GetTicks();
+		pauseStart = wzGetTicks();
 		debug( LOG_NEVER, "Clock paused at %d\n", pauseStart);
 	}
 	stopCount += 1;
@@ -234,7 +234,7 @@ void gameTimeStart(void)
 	{
 		// shift the base time to now
 		timeOffset = gameTime;
-		baseTime = SDL_GetTicks();
+		baseTime = wzGetTicks();
 	}
 
 	if (stopCount > 0)
@@ -249,7 +249,7 @@ void gameTimeReset(UDWORD time)
 	// reset the game timers
 	setGameTime(time);
 	gameTimeResetMod();
-	realTime = SDL_GetTicks();
+	realTime = wzGetTicks();
 	deltaRealTime = 0;
 }
 

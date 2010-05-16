@@ -38,6 +38,8 @@ extern BOOL bDisableLobby;
 extern bool customDebugfile;
 extern GS_GAMEMODE GetGameMode(void) WZ_DECL_PURE;
 extern void SetGameMode(GS_GAMEMODE status);
+extern int finalInitialization(void);
+extern void mainLoop(void);
 
 extern char SaveGamePath[PATH_MAX];
 extern char datadir[PATH_MAX];

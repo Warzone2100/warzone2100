@@ -24,10 +24,8 @@
  *
  */
 
-#include <SDL.h>
-#include <SDL_thread.h>
-
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp_c.h"
 
 #include "objects.h"
 #include "map.h"
@@ -75,8 +73,9 @@ static const Vector2i aDirOffset[NUM_DIR] =
 };
 
 // threading stuff
-static SDL_Thread	*fpathThread = NULL;
-static SDL_sem		*fpathSemaphore = NULL;
+static WZ_THREAD        *fpathThread = NULL;
+static WZ_MUTEX         *fpathMutex = NULL;
+static WZ_SEMAPHORE     *fpathSemaphore = NULL;
 static PATHJOB		*firstJob = NULL;
 static PATHRESULT	*firstResult = NULL;
 
@@ -90,14 +89,14 @@ static int fpathJobQueueLength(void)
 	PATHJOB *psJob;
 	int count = 0;
 
-	SDL_SemWait(fpathSemaphore);
+	wzMutexLock(fpathMutex);
 	psJob = firstJob;
 	while (psJob)
 	{
 		count++;
 		psJob = psJob->next;
 	}
-	SDL_SemPost(fpathSemaphore);
+	wzMutexUnlock(fpathMutex);
 	return count;
 }
 
@@ -108,7 +107,7 @@ static int fpathResultQueueLength(void)
 	PATHRESULT *psResult;
 	int count = 0;
 
-	SDL_SemWait(fpathSemaphore);
+	wzMutexLock(fpathMutex);
 	psResult = firstResult;
 	while (psResult)
 	{
@@ -118,7 +117,7 @@ static int fpathResultQueueLength(void)
 		}
 		psResult = psResult->next;
 	}
-	SDL_SemPost(fpathSemaphore);
+	wzMutexUnlock(fpathMutex);
 	return count;
 }
 
@@ -126,7 +125,7 @@ static int fpathResultQueueLength(void)
 /** This runs in a separate thread */
 static int fpathThreadFunc(WZ_DECL_UNUSED void *data)
 {
-	SDL_SemWait(fpathSemaphore);
+	wzMutexLock(fpathMutex);
 
 	while (!fpathQuit)
 	{
@@ -148,9 +147,9 @@ static int fpathThreadFunc(WZ_DECL_UNUSED void *data)
 
 		if (!gotWork)
 		{
-			SDL_SemPost(fpathSemaphore);
-			SDL_Delay(100);
-			SDL_SemWait(fpathSemaphore);
+			wzMutexUnlock(fpathMutex);
+			wzSemaphoreWait(fpathSemaphore);  // Go to sleep until needed.
+			wzMutexLock(fpathMutex);
 			continue;
 		}
 
@@ -166,14 +165,14 @@ static int fpathThreadFunc(WZ_DECL_UNUSED void *data)
 		firstResult = psResult;
 		psResult = NULL;	// now hands off
 
-		SDL_SemPost(fpathSemaphore);
+		wzMutexUnlock(fpathMutex);
 
 		// Execute path-finding for this job using our local temporaries
 		memset(&result, 0, sizeof(result));
 		result.sMove.asPath = NULL;
 		fpathExecute(&job, &result);
 
-		SDL_SemWait(fpathSemaphore);
+		wzMutexLock(fpathMutex);
 
 		// Find our result again, and replace it with our local temporary
 		// We do it this way to avoid a race condition where a droid dies
@@ -190,7 +189,7 @@ static int fpathThreadFunc(WZ_DECL_UNUSED void *data)
 			psResult->done = true;
 		}
 	}
-	SDL_SemPost(fpathSemaphore);
+	wzMutexUnlock(fpathMutex);
 	return 0;
 }
 
@@ -203,8 +202,10 @@ BOOL fpathInitialise(void)
 
 	if (!fpathThread)
 	{
-		fpathSemaphore = SDL_CreateSemaphore(1);
-		fpathThread = SDL_CreateThread(fpathThreadFunc, NULL);
+		fpathMutex = wzMutexCreate();
+		fpathSemaphore = wzSemaphoreCreate(0);
+		fpathThread = wzThreadCreate(fpathThreadFunc, NULL);
+		wzThreadStart(fpathThread);
 	}
 
 	return true;
@@ -215,13 +216,16 @@ void fpathShutdown()
 {
 	// Signal the path finding thread to quit
 	fpathQuit = true;
+	wzSemaphorePost(fpathSemaphore);  // Wake up thread.
 
 	fpathHardTableReset();
 	if (fpathThread)
 	{
-		SDL_WaitThread(fpathThread, NULL);
+		wzThreadJoin(fpathThread);
 		fpathThread = NULL;
-		SDL_DestroySemaphore(fpathSemaphore);
+		wzMutexDestroy(fpathMutex);
+		fpathMutex = NULL;
+		wzSemaphoreDestroy(fpathSemaphore);
 		fpathSemaphore = NULL;
 	}
 }
@@ -348,7 +352,7 @@ void fpathRemoveDroidData(int id)
 	PATHRESULT	*psResult;
 	PATHRESULT	*psPrevResult = NULL;
 
-	SDL_SemWait(fpathSemaphore);
+	wzMutexLock(fpathMutex);
 
 	psJob = firstJob;
 	psResult = firstResult;
@@ -401,14 +405,14 @@ void fpathRemoveDroidData(int id)
 			psResult = psResult->next;
 		}
 	}
-	SDL_SemPost(fpathSemaphore);
+	wzMutexUnlock(fpathMutex);
 }
 
 
 static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner)
 {
 	PATHJOB		*psJob = NULL;
-	int		count;
+	int 		count;
 
 	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
 
@@ -426,7 +430,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 		PATHRESULT *psPrev = NULL, *psNext;
 
 		objTrace(id, "Checking if we have a path yet");
-		SDL_SemWait(fpathSemaphore);
+		wzMutexLock(fpathMutex);
 
 		// psNext should be _declared_ here, after the mutex lock! Used to be a race condition, thanks to -Wdeclaration-after-statement style pseudocompiler compatibility.
 		psNext = firstResult;
@@ -464,7 +468,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 				ASSERT(retval != FPR_OK || psMove->asPath, "Ok result but no path after copy");
 				ASSERT(retval != FPR_OK || psMove->numPoints > 0, "Ok result but path empty after copy");
 				free(psNext);
-				SDL_SemPost(fpathSemaphore);
+				wzMutexUnlock(fpathMutex);
 				objTrace(id, "Got a path to (%d, %d)! Length=%d Retval=%d", (int)psMove->DestinationX,
 				         (int)psMove->DestinationY, (int)psMove->numPoints, (int)retval);
 				return retval;
@@ -472,7 +476,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 			psPrev = psNext;
 			psNext = psNext->next;
 		}
-		SDL_SemPost(fpathSemaphore);
+		wzMutexUnlock(fpathMutex);
 		objTrace(id, "No path yet. Waiting.");
 		return FPR_WAIT;	// keep waiting
 	}
@@ -499,29 +503,30 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	// job or result for each droid in the system at any time.
 	fpathRemoveDroidData(id);
 
-	SDL_SemWait(fpathSemaphore);
+	wzMutexLock(fpathMutex);
 
 	// Add to end of list
+	count = 0;
 	if (!firstJob)
 	{
 		firstJob = psJob;
-		count = 0;
+		wzSemaphorePost(fpathSemaphore);  // Wake up processing thread.
 	}
 	else
 	{
 		PATHJOB *psNext = firstJob;
+		++count;
 
-		count = 0;
 		while (psNext->next != NULL)
 		{
 			psNext = psNext->next;
-			count++;
+			++count;
 		}
 
 		psNext->next = psJob;
 	}
 
-	SDL_SemPost(fpathSemaphore);
+	wzMutexUnlock(fpathMutex);
 
 	objTrace(id, "Queued up a path-finding request to (%d, %d), %d items earlier in queue", tX, tY, count);
 	return FPR_WAIT;	// wait while polling result queue
@@ -675,6 +680,7 @@ void fpathTest(int x, int y, int x2, int y2)
 
 	/* Check initial state */
 	assert(fpathThread != NULL);
+	assert(fpathMutex != NULL);
 	assert(fpathSemaphore != NULL);
 	assert(firstJob == NULL);
 	assert(firstResult == NULL);
@@ -696,7 +702,7 @@ void fpathTest(int x, int y, int x2, int y2)
 	assert(fpathJobQueueLength() == 1 || fpathResultQueueLength() == 1);
 	fpathRemoveDroidData(2);	// should not crash, nor remove our path
 	assert(fpathJobQueueLength() == 1 || fpathResultQueueLength() == 1);
-	while (fpathResultQueueLength() == 0) SDL_Delay(10);
+	while (fpathResultQueueLength() == 0) wzYieldCurrentThread();
 	assert(fpathJobQueueLength() == 0);
 	assert(fpathResultQueueLength() == 1);
 	r = fpathSimpleRoute(&sMove, 1, x, y, x2, y2);
@@ -713,7 +719,7 @@ void fpathTest(int x, int y, int x2, int y2)
 		r = fpathSimpleRoute(&sMove, i, x, y, x2, y2);
 		assert(r == FPR_WAIT);
 	}
-	while (fpathResultQueueLength() != 100) SDL_Delay(10);
+	while (fpathResultQueueLength() != 100) wzYieldCurrentThread();
 	assert(fpathJobQueueLength() == 0);
 	for (i = 1; i <= 100; i++)
 	{

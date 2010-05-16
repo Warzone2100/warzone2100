@@ -55,7 +55,8 @@
 #include "multirecv.h"
 #include "scriptfuncs.h"
 
-#include <SDL.h>
+#include "lib/framework/wzapp_c.h"
+
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
 
@@ -606,6 +607,7 @@ BOOL multiGameInit(void)
 BOOL multiGameShutdown(void)
 {
 	PLAYERSTATS	st;
+	uint32_t        time;
 
 	debug(LOG_NET,"%s is shutting down.",getPlayerName(selectedPlayer));
 
@@ -617,7 +619,11 @@ BOOL multiGameShutdown(void)
 	saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
 
 	// if we terminate the socket too quickly, then, it is possible not to get the leave message
-	SDL_Delay(1000);
+	time = wzGetTicks();
+	while (wzGetTicks() - time < 1000)
+	{
+		wzYieldCurrentThread();  // TODO Make a wzDelay() function?
+	}
 	// close game
 	NETclose();
 	NETremRedirects();

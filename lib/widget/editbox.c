@@ -25,6 +25,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/utf.h"
+#include "lib/framework/wzapp_c.h"
 #include "widget.h"
 #include "widgint.h"
 #include "editbox.h"
@@ -32,7 +33,6 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/textdraw.h"
-#include "scrap.h"
 
 
 /* Pixel gap between edge of edit box and text */
@@ -112,9 +112,7 @@ W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 
 	editBoxInitialise(psWidget);
 
-	psWidget->blinkOffset = SDL_GetTicks();
-
-	init_scrap();
+	psWidget->blinkOffset = wzGetTicks();
 
 	return psWidget;
 }
@@ -207,21 +205,6 @@ static void overwriteChar(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWOR
 
 	/* Update the insertion point */
 	*pPos += 1;
-}
-
-/* Put a character into a text buffer overwriting any text under the cursor */
-static void putSelection(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD *pPos)
-{
-	static char* scrap = NULL;
-	int scraplen;
-
-	get_scrap(T('T','E','X','T'), &scraplen, &scrap);
-	if (scraplen > 0 && scraplen < WIDG_MAXSTR-2)
-	{
-		free(*pBuffer);
-		*pBuffer = UTF8toUTF32(scrap, pBufferAllocated);
-		*pPos = *pBufferAllocated/sizeof(utf_32_char) - 1;
-	}
 }
 
 
@@ -377,7 +360,7 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 	for (key = inputGetKey(&unicode); key != 0 && !done; key = inputGetKey(&unicode))
 	{
 		// Don't blink while typing.
-		psWidget->blinkOffset = SDL_GetTicks();
+		psWidget->blinkOffset = wzGetTicks();
 
 		/* Deal with all the control keys, assume anything else is a printable character */
 		switch (key)
@@ -507,14 +490,16 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			debug(LOG_INPUT, "EditBox cursor backspace");
 			break;
 		case INPBUF_TAB :
-			putSelection(&pBuffer, &pBufferAllocated, &pos);
+			free(pBuffer);
+			pBuffer = UTF8toUTF32(wzGetClipboard(), &pBufferAllocated);  // get clipboard contents
+			pos = pBufferAllocated/sizeof(utf_32_char) - 1;              // put cursor at end
 
 			/* Update the printable text */
 			fitStringEnd(pBuffer, psWidget->width, &printStart, &printChars, &printWidth);
 			debug(LOG_INPUT, "EditBox cursor tab");
 			break;
 		case INPBUF_CR :
-		case SDLK_KP_ENTER:		// either normal return key || keypad enter
+		case KEY_KPENTER:                  // either normal return key || keypad enter
 			/* Finish editing */
 			editBoxFocusLost(psContext->psScreen, psWidget);
 			screenClearFocus(psContext->psScreen);
@@ -623,7 +608,7 @@ void editBoxClicked(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			screenSetFocus(psContext->psScreen, (WIDGET *)psWidget);
 
 			// Cursor should be visible instantly.
-			psWidget->blinkOffset = SDL_GetTicks();
+			psWidget->blinkOffset = wzGetTicks();
 		}
 	}
 }
@@ -738,7 +723,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 
 	/* Display the cursor if editing */
 #if CURSOR_BLINK
-	blink = !(((SDL_GetTicks() - psEdBox->blinkOffset)/WEDB_BLINKRATE) % 2);
+	blink = !(((wzGetTicks() - psEdBox->blinkOffset)/WEDB_BLINKRATE) % 2);
 	if ((psEdBox->state & WEDBS_MASK) == WEDBS_INSERT && blink)
 #else
 	if ((psEdBox->state & WEDBS_MASK) == WEDBS_INSERT)

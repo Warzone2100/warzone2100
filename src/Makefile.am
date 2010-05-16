@@ -8,7 +8,7 @@
 force-linker.cpp:
 	touch $@
 
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) $(GLee_CFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) $(GLee_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
@@ -23,15 +23,7 @@ BUILT_SOURCES = \
 	scriptvals_parser.tab.c \
 	scriptvals_parser.tab.h
 
-CLEANFILES = \
-	force-linker.cpp \
-	level_lexer.lex.c \
-	message_lexer.lex.c \
-	message_parser.tab.c \
-	message_parser.tab.h \
-	scriptvals_lexer.lex.c \
-	scriptvals_parser.tab.c \
-	scriptvals_parser.tab.h
+CLEANFILES = $(BUILT_SOURCES)
 
 EXTRA_DIST = \
 	message_lexer.l message_parser.y \
@@ -228,7 +220,7 @@ warzone2100_SOURCES = \
 	lighting.c \
 	loadsave.c \
 	loop.c \
-	main.c \
+	main.cpp \
 	map.c \
 	mapdisplay.c \
 	mapgrid.cpp \
@@ -301,7 +293,7 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/iniparser/libiniparser.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a
 
-warzone2100_LDADD += $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(X11_LIBS) $(GLee_LIBS)
+warzone2100_LDADD += $(LTLIBINTL) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT4_LIBS) $(GLee_LIBS)
 
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)

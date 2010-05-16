@@ -2,7 +2,6 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include <SDL.h>
 #include <time.h>
 
 #define mapX 64

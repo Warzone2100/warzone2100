@@ -27,7 +27,6 @@
 #include <GLee.h>
 #include "lib/framework/frame.h"
 #include "lib/exceptionhandler/dumpinfo.h"
-#include <SDL.h>
 #include <physfs.h>
 #include <png.h>
 #include "lib/ivis_common/png_util.h"
@@ -46,15 +45,9 @@
 #include "src/console.h"
 #include "src/levels.h"
 
-/* The Current screen size and bit depth */
-UDWORD		screenWidth = 0;
-UDWORD		screenHeight = 0;
-UDWORD		screenDepth = 0;
-
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression;
 
-static SDL_Surface	*screen = NULL;
 static BOOL		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
 static BOOL		screendump_required = false;
@@ -68,103 +61,25 @@ static BOOL FBOinit = false;
 BOOL bFboProblem = false;	// hack to work around people with bad drivers. (*cough*intel*cough*)
 
 /* Initialise the double buffered display */
-bool screenInitialise(
-			UDWORD		width,		// Display width
-			UDWORD		height,		// Display height
-			UDWORD		bitDepth,	// Display bit depth
-			unsigned int fsaa,      // FSAA anti aliasing level
-			bool		fullScreen,	// Whether to start windowed
-							// or full screen
-			bool		vsync)		// If to sync to vblank or not
+bool screenInitialise()
 {
-	int video_flags = 0;
-	int bpp = 0, value;
-	char buf[512];
+	char buf[256];
 	GLint glMaxTUs;
-	// Fetch the video info.
-	const SDL_VideoInfo* video_info = SDL_GetVideoInfo();
 
-	/* Store the screen information */
-	screenWidth = width;
-	screenHeight = height;
-	screenDepth = bitDepth;
-
-	if (!video_info)
+	// Copy this info to be used by the crash handler for the dump file
+	ssprintf(buf, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
+	addDumpInfo(buf);
+	ssprintf(buf, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
+	addDumpInfo(buf);
+	ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
+	addDumpInfo(buf);
+	if (GLEE_VERSION_2_0)
 	{
-		return false;
+		{
+		ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		addDumpInfo(buf);
+		}
 	}
-
-	// The flags to pass to SDL_SetVideoMode.
-	video_flags  = SDL_OPENGL;    // Enable OpenGL in SDL.
-	video_flags |= SDL_ANYFORMAT; // Don't emulate requested BPP if not available.
-
-	if (fullScreen)
-	{
-		video_flags |= SDL_FULLSCREEN;
-	}
-
-	// Set the double buffer OpenGL attribute.
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-	// Enable vsync if requested by the user
-	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, vsync);
-
-	// Enable FSAA anti-aliasing if and at the level requested by the user
-	if (fsaa)
-	{
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, fsaa);
-	}
-
-	bpp = SDL_VideoModeOK(width, height, bitDepth, video_flags);
-	if (!bpp)
-	{
-		debug(LOG_ERROR, "Video mode %dx%d@%dbpp is not supported!", width, height, bitDepth);
-		return false;
-	}
-	switch (bpp)
-	{
-		case 32:
-		case 24:
-			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-			SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-			break;
-		case 16:
-			info("Using colour depth of %i instead of %i.", bpp, screenDepth);
-			info("You will experience graphics glitches!");
-			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
-			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-			SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-			break;
-		case 8:
-			debug(LOG_FATAL, "You don't want to play Warzone with a bit depth of %i, do you?", bpp);
-			exit(1);
-			break;
-		default:
-			debug(LOG_FATAL, "Unsupported bit depth: %i", bpp);
-			exit(1);
-			break;
-	}
-
-	screen = SDL_SetVideoMode(width, height, bpp, video_flags);
-	if (!screen)
-	{
-		debug(LOG_ERROR, "SDL_SetVideoMode failed (%s).", SDL_GetError());
-		return false;
-	}
-	if ( SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1)
-	{
-		debug( LOG_FATAL, "OpenGL initialization did not give double buffering!" );
-		debug( LOG_FATAL, "Double buffering is required for this game!");
-		exit(1);
-	}
-	
 	/* Dump general information about OpenGL implementation to the console and the dump file */
 	ssprintf(buf, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
 	addDumpInfo(buf);
@@ -173,9 +88,6 @@ bool screenInitialise(
 	addDumpInfo(buf);
 	debug(LOG_3D, buf);
 	ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
-	addDumpInfo(buf);
-	debug(LOG_3D, buf);
-	ssprintf(buf, "Video Mode %d x %d (%d bpp) (%s)", width, height, bpp, fullScreen ? "fullscreen" : "window");
 	addDumpInfo(buf);
 	debug(LOG_3D, buf);
 
@@ -259,6 +171,7 @@ bool screenInitialise(
 		debug(LOG_INFO, "OpenGL 2.0 is not supported by your system, using fixed pipeline.");
 	}
 
+/*  // This code block left over from qt-trunk merge, should probably be deleted.
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -269,6 +182,7 @@ bool screenInitialise(
 	glLoadIdentity();
 	glCullFace(GL_FRONT);
 	glEnable(GL_CULL_FACE);
+*/
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -281,14 +195,8 @@ bool screenInitialise(
 /* Release the DD objects */
 void screenShutDown(void)
 {
-	if (screen != NULL)
-	{
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-		glFlush();
-		SDL_FreeSurface(screen);
-		screen = NULL;
-	}
 }
 
 
@@ -404,7 +312,7 @@ void screen_Upload(const char *newBackDropBmp)
 /* Swap between windowed and full screen mode */
 void screenToggleMode(void)
 {
-	(void) SDL_WM_ToggleFullScreen(screen);
+	// TODO
 }
 
 // Screenshot code goes below this
@@ -428,21 +336,15 @@ void screenDoDumpToDiskIfRequired(void)
 	if (!screendump_required) return;
 	debug( LOG_3D, "Saving screenshot %s\n", fileName );
 
-	// Dump the currently displayed screen in a buffer
-	// Casting to unsigned int here to prevent GCC from warning about a
-	// comparison between unsigned and signed integers. Why does SDL use
-	// a signed integer anyway? When will your screen ever have a negative
-	// width or height for your screen? Assert it to be sure though. -- Giel
-	ASSERT(screen->w >= 0 && screen->h >= 0, "Somehow our screen has negative dimensions! Width = %d; Height = %d", screen->w, screen->h);
-	if (image.width != (unsigned int)screen->w || image.height != (unsigned int)screen->h)
+	if (image.width != screenWidth || image.height != screenHeight)
 	{
 		if (image.bmp != NULL)
 		{
 			free(image.bmp);
 		}
 
-		image.width = screen->w;
-		image.height = screen->h;
+		image.width = screenWidth;
+		image.height = screenHeight;
 		image.bmp = malloc(channelsPerPixel * image.width * image.height);
 		if (image.bmp == NULL)
 		{
