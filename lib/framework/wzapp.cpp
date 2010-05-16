@@ -1,4 +1,4 @@
-/*
+﻿/*
 	This file is part of Warzone 2100.
 	Copyright (C) 2005-2009  Warzone Resurrection Project
 
@@ -480,10 +480,9 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 // and the Qt::Control, Qt::ControlModifier, and Qt::CTRL enum values correspond to the Command keys.
 #if defined(WZ_OS_MAC)
 			case Qt::Key_Meta				:
-			case Qt::Key_Control            :	lastKey = setKey(KEY_LCTRL, pressed); break;
-#else
-			case Qt::Key_Control            :	lastKey = setKey(KEY_LCTRL, pressed); break;
 #endif
+			case Qt::Key_Control            :	lastKey = setKey(KEY_LCTRL, pressed); break;
+
 			case Qt::Key_Alt                :	lastKey = setKey(KEY_LALT, pressed); break;
 			case Qt::Key_AltGr              :	lastKey = setKey(KEY_RALT, pressed); break;
 
