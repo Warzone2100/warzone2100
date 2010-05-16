@@ -444,7 +444,6 @@ void pie_SetRendMode(REND_MODE rendMode)
 		switch (rendMode)
 		{
 			case REND_OPAQUE:
-				rendStates.transMode = TRANS_DECAL;
 				glDisable(GL_BLEND);
 				break;
 
