@@ -1176,11 +1176,10 @@ void drawTerrain(void)
 	}
 
 
-	
 	//////////////////////////////////////
 	// canvas to draw on
-	glDisable(GL_TEXTURE_2D);
 	pie_SetRendMode(REND_OPAQUE);
+	pie_SetTexturePage(TEXPAGE_NONE);
 	// we only draw in the depth buffer of using fog of war, as the clear color is black then
 	if (rendStates.fogEnabled)
 	{
@@ -1237,7 +1236,7 @@ void drawTerrain(void)
 	///////////////////////////////////
 	// terrain
 	// we are going to use this one
-	glEnable(GL_TEXTURE_2D);
+	pie_SetTexturePage(TEXPAGE_FONT);
 	glEnableClientState( GL_COLOR_ARRAY );
 	
 	// set up for texture coord generation

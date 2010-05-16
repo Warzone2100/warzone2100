@@ -457,6 +457,11 @@ void pie_SetRendMode(REND_MODE rendMode)
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 				break;
 
+			case REND_MULTIPLICATIVE:
+				glEnable(GL_BLEND); 
+				glBlendFunc(GL_ZERO, GL_SRC_COLOR); 
+				break; 
+
 			default:
 				ASSERT(false, "Bad render state");
 				break;
