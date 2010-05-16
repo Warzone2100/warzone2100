@@ -36,6 +36,8 @@
 	<string>SVN_URI, Copyright © 1999-2004 Eidos Interactive, Copyright © 2005-2010 The Warzone 2100 Project</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.4.0</string>
+	<key>LSRequiresNativeExecution</key>
+	<true/>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
