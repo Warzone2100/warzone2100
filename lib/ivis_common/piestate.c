@@ -37,7 +37,6 @@ void pie_SetDefaultStates(void)//Sets all states
 	//depth Buffer on
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 
-	rendStates.transMode = TRANS_ALPHA;//to force reset to DECAL
 	rendStates.rendMode = REND_ALPHA;//to force reset to OPAQUE
 	pie_SetRendMode(REND_OPAQUE);
 
