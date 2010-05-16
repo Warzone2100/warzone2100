@@ -135,8 +135,6 @@ extern void pie_InitColourMouse(IMAGEFILE* img, const uint16_t cursorIDs[CURSOR_
 extern void pie_SetMouse(CURSOR cursor, bool coloured);
 extern void pie_ShowMouse(bool visible);
 
-extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
-
 /* Actually in piestate.c */
 
 // Shaders control center
