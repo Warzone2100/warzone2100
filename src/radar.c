@@ -265,7 +265,7 @@ void drawRadar(void)
 		frameSkip = RADAR_FRAME_SKIP;
 	}
 	frameSkip--;
-	pie_SetTranslucencyMode(TRANS_ALPHA);
+	pie_SetRendMode(REND_ALPHA);
 	pie_MatBegin();
 		pie_TRANSLATE(radarCenterX, radarCenterY, 0);
 		if (rotateRadar)
