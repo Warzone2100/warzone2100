@@ -57,7 +57,7 @@ AC_CHECK_HEADERS(alloca.h)
 
 # Check for gettext
 AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION([0.15])
+AC_PROG_VERSION_CHECK([msgfmt xgettext], [0.15])
 
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG
