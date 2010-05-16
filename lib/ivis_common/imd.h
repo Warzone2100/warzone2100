@@ -23,6 +23,11 @@
 
 #include "ivisdef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define IMD_NAME				"IMD"
 #define PIE_NAME				"PIE"  // Pumpkin image export data file
 #define IMD_VER				1
@@ -57,5 +62,9 @@ extern void iV_IMDRelease(iIMDShape *s);
 
 // How low do we stop looking?
 #define DROID_VIS_LOWER	10
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

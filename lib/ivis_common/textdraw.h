@@ -24,6 +24,11 @@
 #include "ivisdef.h"
 #include "piepalette.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 enum iV_fonts
 {
     font_regular,
@@ -83,5 +88,9 @@ static inline void iV_DrawText(const char* string, float x, float y)
 }
 
 extern void iV_DrawTextF(float x, float y, const char* format, ...) WZ_DECL_FORMAT(printf, 3, 4);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // _INCLUDED_TEXTDRAW_

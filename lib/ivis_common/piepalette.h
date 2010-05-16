@@ -22,6 +22,11 @@
 
 #include "lib/ivis_common/piedef.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 #define WZCOL_BLACK					psPalette[0]
 #define WZCOL_WHITE					psPalette[1]
 #define WZCOL_RELOAD_BACKGROUND		psPalette[2]
@@ -152,5 +157,9 @@ static inline void pal_PIELIGHTtoRGBA4f(float *rgba4f, PIELIGHT rgba)
 	rgba4f[2] = rgba.byte.b / 255.0;
 	rgba4f[3] = rgba.byte.a / 255.0;
 }
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

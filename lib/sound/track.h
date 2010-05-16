@@ -137,10 +137,10 @@ extern AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volu
 extern float sound_GetStreamVolume(const AUDIO_STREAM* stream);
 extern void sound_SetStreamVolume(AUDIO_STREAM* stream, float volume);
 
+void	soundTest(void);
+
 #if defined(__cplusplus)
 }
 #endif
-
-void soundTest(void);
 
 #endif	// __INCLUDED_LIB_SOUND_TRACK_H__

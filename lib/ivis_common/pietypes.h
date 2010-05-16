@@ -32,6 +32,11 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 //*************************************************************************
 //
 // Simple derived types
@@ -40,5 +45,9 @@
 typedef struct { Vector3i p, r; } iView;
 
 typedef struct { unsigned int width, height, depth; unsigned char *bmp; } iV_Image;
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // _pieTypes_h

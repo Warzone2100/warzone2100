@@ -28,6 +28,11 @@
 #endif
 #include "png_util.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 //*************************************************************************
 
 #define iV_TEX_MAX 128
@@ -71,5 +76,9 @@ extern void pie_MakeTexPageTCMaskName(char * filename);
 //*************************************************************************
 
 extern void pie_TexShutDown(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif

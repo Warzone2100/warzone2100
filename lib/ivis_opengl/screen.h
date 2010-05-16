@@ -35,6 +35,11 @@
 
 #include "lib/framework/types.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 /* ------------------------------------------------------------------------------------------- */
 
 /* Legacy stuff
@@ -62,4 +67,9 @@ extern void screenDoDumpToDiskIfRequired(void);
 
 extern BOOL Init_FBO(unsigned int width, unsigned int height);
 extern void Delete_FBO(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
+
 #endif
