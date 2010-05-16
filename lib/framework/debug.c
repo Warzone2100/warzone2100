@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "string_ext.h"
-
+#include "lib/framework/wzapp_c.h"
 #include "lib/gamelib/gtime.h"
 
 #define MAX_LEN_LOG_LINE 512
@@ -423,8 +423,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 
 		printToDebugCallbacks(outputBuffer);
 
-		// Throw up a dialog box for windows users since most don't have a clue to check the stderr.txt file for information
-		// Use for (duh) Fatal errors, that force us to terminate the game.
+		// Throw up a dialog box for users since most don't have a clue to check the dump file for information. Use for (duh) Fatal errors, that force us to terminate the game.
 		if (part == LOG_FATAL)
 		{
 #if defined(WZ_OS_WIN)
@@ -456,6 +455,9 @@ void _debug( code_part part, const char *function, const char *str, ... )
 			SetWindowTitleWithCFString( GetDialogWindow( dialog ), CFSTR( "Warzone has terminated unexpectedly" ) );
 			
 			RunStandardAlert( dialog, NULL, &itemHit );
+#else
+			const char* popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
+			wzFatalDialog(popupBuf);
 #endif
 		}
 
