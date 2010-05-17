@@ -220,6 +220,7 @@ trigger slowloadTr				(wait, 13);
 trigger checkActivitiesTr			(every, 400);
 trigger selectedDroidTr				(CALL_DROID_SELECTED, ref droid);
 trigger hostileAATr				(every, 600);	// check for AA each minute
+trigger vtolRetargetTr				(CALL_VTOL_RETARGET, me, ref droid);
 
 /* Events */
 event	checkForHostileAA;
@@ -395,6 +396,20 @@ function void dbgObj(DROID obj, string message)
 	if (obj.selected)
 	{
 		console(message);
+	}
+}
+
+event retargetVtol(vtolRetargetTr)
+{
+	local	BASEOBJ _obj;
+
+	if (droid != NULLOBJECT)
+	{
+		_obj = getClosestEnemy(droid.x, droid.y, MAX_VTOL_DEFEND_RADIUS, false, false, me);
+		if (_obj != NULLOBJECT)
+		{
+			orderDroidObj(droid, DORDER_ATTACK, _obj);
+		}
 	}
 }
 
