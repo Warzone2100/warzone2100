@@ -236,6 +236,7 @@ extern void kf_SlowDown( void );
 extern void kf_NormalSpeed( void );
 
 extern void kf_CloneSelected( void );
+extern void kf_Reload( void );
 
 extern void kf_ToggleLogical(void);
 

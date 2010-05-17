@@ -48,6 +48,7 @@
 #include "component.h"
 #include "geometry.h"
 #include "radar.h"
+#include "structure.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 
@@ -1445,6 +1446,31 @@ void	kf_FinishAllResearch(void)
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"),
 				selectedPlayer, _("Researched EVERYTHING for you!"));
 	sendTextMessage(cmsg, true);
+}
+
+void kf_Reload(void)
+{
+	STRUCTURE	*psCurr;
+
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
+
+	for (psCurr=interfaceStructList(); psCurr; psCurr = psCurr->psNext)
+	{
+		if (isLasSat(psCurr->pStructureType) && psCurr->selected)
+		{
+			unsigned int firePause = weaponFirePause(&asWeaponStats[psCurr->asWeaps[0].nStat], psCurr->player);
+
+			psCurr->asWeaps[0].lastFired -= firePause;
+			console("Selected buildings instantly recharged!");
+		}
+	}
 }
 
 // --------------------------------------------------------------------------
