@@ -767,14 +767,21 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 				if (!orderDroidList(psDroid))
 				{
-	       			psDroid->order = DORDER_NONE;
+					psDroid->order = DORDER_NONE;
 					moveToRearm(psDroid);
+					if (!vtolEmpty(psDroid))
+					{
+						// VTOL droid can do more work, let scripts handle it
+						psScrVtolRetarget = psDroid;
+						eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VTOL_RETARGET);
+						psScrVtolRetarget = NULL;
+					}
 				}
 			}
 			else
 			{
-       			psDroid->order = DORDER_NONE;
-        		actionDroid(psDroid, DACTION_NONE);
+				psDroid->order = DORDER_NONE;
+				actionDroid(psDroid, DACTION_NONE);
 			}
 		}
 		else if ( ((psDroid->action == DACTION_MOVE) ||

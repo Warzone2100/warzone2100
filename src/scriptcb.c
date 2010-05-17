@@ -57,6 +57,8 @@ STRUCTURE	*psScrCBNewDroidFact;	// id of factory that built it.
 // the attacker and target for a CALL_ATTACKED
 BASE_OBJECT	*psScrCBAttacker, *psScrCBTarget;
 
+// vtol target
+DROID		*psScrVtolRetarget = NULL;
 
 // alliance details
 UDWORD	CBallFrom,CBallTo;
@@ -176,6 +178,35 @@ BOOL scrCBStructAttacked(void)
 	}
 
 	scrFunctionResult.v.bval = triggered;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+BOOL scrCBVTOLRetarget(void)
+{
+	SDWORD			player;
+	DROID			**ppsDroid;
+
+	if (!stackPopParams(2, VAL_INT, &player, VAL_REF|ST_DROID, &ppsDroid))
+	{
+		return false;
+	}
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player %d", player);
+
+	if (player == psScrVtolRetarget->player)
+	{
+		*ppsDroid = psScrVtolRetarget;
+		scrFunctionResult.v.bval = true;
+	}
+	else
+	{
+		*ppsDroid = NULL;
+		scrFunctionResult.v.bval = false;
+	}
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return false;
