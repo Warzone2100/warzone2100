@@ -82,8 +82,6 @@
 //How many best templates to choose from when deciding what template to build
 #define	MAX_RANDOM_TEMPLATES	4
 
-
-
 private	int				me;			// player for this instance.
 public	int				tileExpand;			// rate of exploration
 
@@ -91,6 +89,11 @@ public	int				numScouts[TECHS],maxScouts[TECHS];			// aim for...
 public	int				numDefenders[TECHS],maxDefenders[TECHS];
 public	int				numAttackers[TECHS],maxAttackers[TECHS];
 public	int				numCyborgs[TECHS],maxCyborgs[TECHS];
+
+public	BODY				bugBody, viperBody, cobraBody, scorpionBody, leopardBody, pythonBody, retributionBody, tigerBody, vengeanceBody, wyvernBody, dragonBody;
+public	PROPULSION			vtolPropulsion, trackPropulsion, wheelPropulsion, hoverPropulsion, halftrackPropulsion;
+public	WEAPON				atWeapon[5], asWeapon[5], mdWeapon[5];
+public	int				numAtWeapons, numAsWeapons, numMdWeapons;
 
 public	int				branchDefault,branchVTOL,techCount[TECHS],maxVtolFacs[TECHS],maxIdleRes[TECHS],
 						maxVTOLs[TECHS],numVtolTargets,vtolTargetWeight[10],numRebuildStat[TECHS];
@@ -113,9 +116,6 @@ public	TEMPLATE		tmpl[TECHS][70];
 private	TEMPLATE		tmplChoice[5];
 
 public	TEMPLATE		cybTempl[10],superCyb[4],cybMechanic,cybEngineer,hovertruck;
-
-public	TEMPLATE		vtols[18];
-public	int				numVtolTemplates;
 
 public	TEMPLATE		sense[11];
 public	int				numSenseTemplates;
@@ -2797,34 +2797,113 @@ event buildVtols(inactive)
 	}
 }
 
-
 function void vtolFactoryBuildVtol(STRUCTURE _factory)
 {
-	local	int		_numTemplates,_bestTemplates;
+	local	TEMPLATE	_newTemplate;
+	local	BODY		_bestBody;
+	local	WEAPON		_bestWeapon;
+	local	int		_rand, _idx;
+	local	bool		seenAnyAA;
 
-	if(_factory == NULLOBJECT){
+	if (_factory == NULLOBJECT or not structureIdle(_factory))
+	{
 		return;
 	}
 
-	if( structureIdle(_factory) )
-	{
-		_numTemplates = numVtolTemplates - 1;
-		_bestTemplates = 0;
-		while( (_bestTemplates == 0) and (_numTemplates >= 0) )
-		{
-			if( skCanBuildTemplate(me,_factory, vtols[_numTemplates]) )
-			{
-				tmplChoice[_bestTemplates] = vtols[_numTemplates];
-				_bestTemplates++;
-			}
-			_numTemplates--;
-		}
+	// TODO
+	seenAnyAA = true;
 
-		if(_bestTemplates > 0)
+	// choose branch: AT, AS or splash
+	_rand = random(3);
+	_idx = 0;
+	_bestWeapon = NULLSTAT;
+	if (_rand == 0)	// anti-tank
+	{
+		_idx = numAtWeapons - 1;
+		while (_idx >= 0 and _bestWeapon == NULLSTAT)
 		{
-			buildDroid(tmplChoice[0], _factory, me, 1);	// now always build best template
+			if (isComponentAvailable(me, atWeapon[_idx]))
+			{
+				_bestWeapon = atWeapon[_idx];
+			}
+			_idx--;
 		}
 	}
+	if (_rand == 1)	// anti-structure
+	{
+		_idx = numAsWeapons - 1;
+		while (_idx >= 0 and _bestWeapon == NULLSTAT)
+		{
+			if (isComponentAvailable(me, asWeapon[_idx]))
+			{
+				_bestWeapon = asWeapon[_idx];
+			}
+			_idx--;
+		}
+	}
+	if (_rand == 2)	// indiscriminate mass destruction
+	{
+		_idx = numMdWeapons - 1;
+		while (_idx >= 0 and _bestWeapon == NULLSTAT)
+		{
+			if (isComponentAvailable(me, mdWeapon[_idx]))
+			{
+				_bestWeapon = mdWeapon[_idx];
+			}
+			_idx--;
+		}
+	}
+	if (_bestWeapon == NULLSTAT)
+	{
+		dbgPlr("Failed to find a weapon for VTOL design");
+		return;
+	}
+	_bestBody = NULLSTAT;
+	if (not seenAnyAA)
+	{
+		// no AA seen, so go for the cheapest bodies -- no need for defense yet!
+		if (isComponentAvailable(me, bugBody))
+		{
+			_bestBody = bugBody;
+		}
+		else if (isComponentAvailable(me, viperBody))
+		{
+			_bestBody = viperBody;
+		}
+	}
+	else
+	{
+		// build sturdiest body available with a decent engine
+		if (isComponentAvailable(me, retributionBody))
+		{
+			_bestBody = retributionBody;
+		}
+		else
+		{
+			if (isComponentAvailable(me, scorpionBody))
+			{
+				_bestBody = scorpionBody;
+			}
+			else if (isComponentAvailable(me, cobraBody))
+			{
+				_bestBody = cobraBody;
+			}
+		}
+	}
+	if (_bestBody == NULLSTAT or getBodySize(_bestBody) > skGetFactoryCapacity(_factory))
+	{
+		dbgPlr("Failed to find a viable body for VTOL design");
+		return;
+	}
+
+	_newTemplate = assembleWeaponTemplate(me, _bestBody, vtolPropulsion, _bestWeapon);
+
+	if (_newTemplate == NULLTEMPLATE or not skCanBuildTemplate(me, _factory, _newTemplate))
+	{
+		dbgPlr("Failed to construct viable VTOL template");
+		return;
+	}
+	buildDroid(_newTemplate, _factory, me, 1);
 }
 
 /////////////////////////////////////////////////////////////////////

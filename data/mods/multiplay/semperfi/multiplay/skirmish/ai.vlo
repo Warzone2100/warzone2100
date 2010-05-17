@@ -356,21 +356,7 @@ run
 	superCyb[2]		TEMPLATE	"Cyb-Hvy-Acannon"
 	superCyb[3]		TEMPLATE	"Cyb-Hvy-TK"
 
-
-	/////////////////////////////////////////////////////////////////////
-	// VTOL TEMPLATES
-
-	numVtolTemplates		int		6
-
-	vtols[0]	TEMPLATE	"P6-L-Bomb1-V"		//Viper Cluster Bombs Bay
-	vtols[1]	TEMPLATE	"SK-Bug-VTOL-CLBomb"
-	vtols[2]	TEMPLATE	"SK-Scorpion-VTOL-Hbomb"
-	vtols[3]	TEMPLATE	"SK-Leopard-VTOL-PhosBomb"
-	vtols[4]	TEMPLATE	"SK-Retre-VTOL-Thermite"
-	vtols[5]	TEMPLATE	"SK-Retre-VTOL-Plasmite"
-
 	numVtolTargets		int				10
-
 	vtolTarget[0]		STRUCTURESTAT	"A0CommandCentre"
 	vtolTargetWeight[0]	int				10
 	vtolTarget[1]		STRUCTURESTAT	"A0LightFactory"
@@ -404,6 +390,42 @@ run
 	numRebuildStat[1]	int				2
 	rebuildStat[1][0]	STRUCTURESTAT	"A0HardcreteMk1Wall"
 	rebuildStat[1][1]	STRUCTURESTAT	"A0HardcreteMk1CWall"
+
+	// propulsions
+	vtolPropulsion			PROPULSION	"V-Tol"
+	trackPropulsion			PROPULSION	"tracked01"
+	wheelPropulsion			PROPULSION	"wheeled01"
+	hoverPropulsion			PROPULSION	"hover01"
+	halftrackPropulsion		PROPULSION	"HalfTrack"
+
+	// bodies
+	bugBody				BODY		"Body4ABT"
+	viperBody			BODY		"Body1REC"
+	cobraBody			BODY		"Body5REC"
+	scorpionBody			BODY		"Body8MBT"
+	leopardBody			BODY		"Body2SUP"
+	pythonBody			BODY		"Body11ABT"
+	retributionBody			BODY		"Body7ABT"
+	tigerBody			BODY		"Body9REC"
+	vengeanceBody			BODY		"Body10MBT"
+	wyvernBody			BODY		"Body13SUP"
+	dragonBody			BODY		"Body14SUP"
+
+	// anti-tank weapons, in reverse order of priority
+	numAtWeapons			int		3
+	atWeapon[0]			WEAPON		"Rocket-VTOL-LtA-T"	// vtol lancer
+	atWeapon[1]			WEAPON		"Rocket-VTOL-HvyA-T"	// vtol tank-killer
+	atWeapon[2]			WEAPON		"Missile-VTOL-AT"	// vtol scourge
+
+	// anti-building weapons, in order of priority
+	numAsWeapons			int		1
+	asWeapon[0]			WEAPON		"Rocket-VTOL-BB"	// vtol bunker-buster
+
+	// weapons of mass destruction
+	numMdWeapons			int		3
+	mdWeapon[0]			WEAPON		"Bomb3-VTOL-LtINC"	// phosphor bomb
+	mdWeapon[1]			WEAPON		"Bomb4-VTOL-HvyINC"	// thermite bomb
+	mdWeapon[2]			WEAPON		"Bomb5-VTOL-Plasmite"	// plasmite bomb
 
 	/////////////////////////////////////////////////////////////////////
 }
