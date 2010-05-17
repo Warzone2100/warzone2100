@@ -47,6 +47,7 @@ BOOL	bAllowDebugMode = false;
 #define POPT_ARG_STRING true
 #define POPT_ARG_NONE false
 #define POPT_ERROR_BADOPT -1
+#define POPT_SKIP_MAC_PSN 666
 
 struct poptOption
 {
@@ -126,6 +127,12 @@ static int poptGetNextOpt(poptContext ctx)
 	if (ctx->current >= ctx->argc)	// counts from 1
 	{
 		return 0;
+	}
+
+	if (strstr(ctx->argv[ctx->current], "-psn_"))
+	{
+		ctx->current++;	// skip mac -psn_*  Yum!
+		return POPT_SKIP_MAC_PSN;
 	}
 
 	sstrcpy(match, ctx->argv[ctx->current]);
