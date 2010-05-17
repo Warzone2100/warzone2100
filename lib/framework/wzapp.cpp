@@ -859,10 +859,21 @@ void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 {
 	QString ourString;
 	QByteArray ba;
-	const QKeySequence ks =  WZkeyToQtKey(code);		// convert key to something Qt understands
+	const QKeySequence ks = WZkeyToQtKey(code);			// convert key to something Qt understands
+
 	ourString = ks.toString(QKeySequence::NativeText);	// and convert it to a QtString
 	ba = ourString.toLatin1();							// convert that to a byte array
 	snprintf(ascii, maxStringSize, "%s", ba.data());	// and use that data as the text for the key
+
+#if defined(WZ_OS_MAC)	// Yet another mac hack, since these are normally shown as symbols, NOT text.
+	if ( (code == KEY_LALT) || (code == KEY_RALT) )
+		snprintf(ascii, maxStringSize, "Alt +");
+	else if ( (code == KEY_LCTRL) || (code == KEY_RCTRL) )	// apparently, ctrl = cmd and cmd = ctrl on macs.
+		snprintf(ascii, maxStringSize, "Cmd +");
+	else if ( code == KEY_ESC )
+		snprintf(ascii, maxStringSize, "Esc");
+#endif
+
 }
 
 /* Initialise the input module */
