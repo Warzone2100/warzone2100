@@ -2444,28 +2444,31 @@ event doAllOutAttack(allOutAttackTr)
 // defend attacked objects.
 event defendWatch(defendWatchTr)
 {
-	if(baseobj != NULLOBJECT)
+	if (baseobj != NULLOBJECT)
 	{
-		if(!friendlyPlayer(baseobj.player))
+		if (baseobj.type == OBJ_DROID)
 		{
-			if(not isHumanPlayer(baseobj.player) )	// new in wdg1 dont allout attack a pc player	//TODO:is this check needed?
+			if (isVtol(objToDroid(baseobj)))
 			{
-				if(distBetweenTwoPoints(baseobj.x, baseobj.y, baseX, baseY) <= MAX_DEFENDERS_RADIUS)	//don't go too far away from the base
+				exit;	// avoid getting caught in the blast from incendiary bombs... no way to check if building is burning
+			}
+		}
+		if (!friendlyPlayer(baseobj.player))
+		{
+			if(distBetweenTwoPoints(baseobj.x, baseobj.y, baseX, baseY) <= MAX_DEFENDERS_RADIUS)	//don't go too far away from the base
+			{
+				defendObj = baseobj;
+				defendbusy = TRUE;
+				// if not too busy, attack.
+				if (idleGroup(defendGroup) >= (defendGroup.members / 2))
 				{
-					defendObj = baseobj;
-					defendbusy = TRUE;
-					// if not too busy, attack.
-					if( idleGroup(defendGroup) >= (defendGroup.members / 2) )
-					{
-						orderGroupLoc(defendGroup, DORDER_MOVE,defendObj.x,defendObj.y);	//cyborg mechanics can't attack (won't move)
-					}
-
-					if( idleGroup(scoutGroup) >= (scoutGroup.members / 2) )
-					{
-						orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
-					}
+					orderGroupLoc(defendGroup, DORDER_MOVE, defendObj.x, defendObj.y);	//cyborg mechanics can't attack (won't move)
 				}
 
+				if (idleGroup(scoutGroup) >= (scoutGroup.members / 2))
+				{
+					orderGroupLoc(scoutGroup, DORDER_MOVE, scoutX, scoutY);
+				}
 			}
 		}
 	}
@@ -2855,6 +2858,10 @@ function void vtolFactoryBuildVtol(STRUCTURE _factory)
 			}
 			_idx--;
 		}
+	}
+	if (_rand < 2 and _bestWeapon == NULLSTAT)
+	{
+		_rand = 2;	// try this instead
 	}
 	if (_rand == 2)	// indiscriminate mass destruction
 	{

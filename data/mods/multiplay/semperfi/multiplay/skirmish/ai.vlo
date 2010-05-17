@@ -91,7 +91,7 @@ run
 	tech[1][2]		RESEARCHSTAT		"R-Struc-PowerModuleMk1"	//power module
 	tech[1][3]		RESEARCHSTAT		"R-Struc-VTOLFactory"		//rush vtols
 	tech[1][4]		RESEARCHSTAT		"R-Struc-VTOLPad"		//vtol pads
-	tech[1][5]		RESEARCHSTAT		"R-Wpn-Bomb05"			//plasmite bomb - and we win
+	tech[1][5]		RESEARCHSTAT		"R-Wpn-Bomb04"			//thermite bomb - and we win
 	tech[1][6]		RESEARCHSTAT		"R-Defense-WallTower01"		//heavy mg hardpoint - in case missed
 	tech[1][7]		RESEARCHSTAT		"R-Defense-WallUpgrade01"	//impr hardcrete - in case missed
 	tech[1][8]		RESEARCHSTAT		"R-Struc-Materials01"		//reinf struc mat - in case missed
