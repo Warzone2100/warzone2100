@@ -483,12 +483,7 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 		switch (event->key())
 		{
 			case Qt::Key_Shift              :	lastKey = setKey(KEY_LSHIFT, pressed); break;
-// Hack for Mac, since:
-// To provide the expected behavior for Qt applications on Mac OS X, the Qt::Meta, Qt::MetaModifier, and Qt::META enum values correspond to the Control keys on the standard Macintosh keyboard,
-// and the Qt::Control, Qt::ControlModifier, and Qt::CTRL enum values correspond to the Command keys.
-#if defined(WZ_OS_MAC)
-			case Qt::Key_Meta				:
-#endif
+
 			case Qt::Key_Control            :	lastKey = setKey(KEY_LCTRL, pressed); break;
 
 			case Qt::Key_Alt                :	lastKey = setKey(KEY_LALT, pressed); break;
