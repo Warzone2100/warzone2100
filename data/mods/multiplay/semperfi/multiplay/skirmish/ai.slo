@@ -168,6 +168,7 @@ private	int				defendX,defendY,defendRadius,tDefendStart,tDefendTimeout,
 private	STRUCTURESTAT	rebuildStructStat[MAX_REBUILD_STRUCT];
 
 private int			order;	// callback global
+private bool			seenAnyAA;
 
 /////////////////////////////////////////////////////////////////////
 // triggers.
@@ -218,8 +219,10 @@ trigger chainloadTr				(wait, 1);
 trigger slowloadTr				(wait, 13);
 trigger checkActivitiesTr			(every, 400);
 trigger selectedDroidTr				(CALL_DROID_SELECTED, ref droid);
+trigger hostileAATr				(every, 600);	// check for AA each minute
 
 /* Events */
+event	checkForHostileAA;
 event	manicWalls;
 event	buildFundamentals;
 event	newfortify;
@@ -321,6 +324,7 @@ event initialisedEvent(CALL_GAMEINIT)
 	tDefendStart = -1;
 	tDefendTimeout = -1;
 	defendMoveType = -1;		//move or scout
+	seenAnyAA = false;
 
 	baseRange = 4 * TILE;
 
@@ -2803,15 +2807,11 @@ function void vtolFactoryBuildVtol(STRUCTURE _factory)
 	local	BODY		_bestBody;
 	local	WEAPON		_bestWeapon;
 	local	int		_rand, _idx;
-	local	bool		seenAnyAA;
 
 	if (_factory == NULLOBJECT or not structureIdle(_factory))
 	{
 		return;
 	}
-
-	// TODO
-	seenAnyAA = true;
 
 	// choose branch: AT, AS or splash
 	_rand = random(3);
@@ -3190,6 +3190,31 @@ function int getVtolTargetWeight(BASEOBJ _target)
 	}
 
 	return _targetWeight;
+}
+
+event checkForHostileAA(hostileAATr)
+{
+	local	int	_enemy, _numAA;
+
+	_numAA = 0;
+	_enemy = 0;
+	while (_enemy < MAX_PLAYERS)
+	{
+		if (!friendlyPlayer(_enemy))
+		{
+			_numAA = _numAA + numAAinRange(_enemy, me, baseX, baseY, -1);
+			if (_numAA > 0)
+			{
+				seenAnyAA = true;
+				exit;
+			}
+		}
+		_enemy++;
+	}
+	if (_numAA == 0)
+	{
+		seenAnyAA = false;
+	}
 }
 
 function int numEnemyAAInRange(int _x, int _y, int _range)
