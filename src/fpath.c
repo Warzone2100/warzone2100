@@ -632,12 +632,10 @@ static BOOL		obstruction;
  */
 static bool fpathVisCallback(Vector3i pos, int32_t dist, void *data)
 {
-	/* Has to be -1 to make sure that it doesn't match any enumerated
-	 * constant from PROPULSION_TYPE.
-	 */
-	static const PROPULSION_TYPE prop = (PROPULSION_TYPE)-1;
+	DROID *psDroid = (DROID *)data;
+	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 
-	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), prop))
+	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), psPropStats->propulsionType))
 	{
 		// found an obstruction
 		obstruction = true;
@@ -647,14 +645,14 @@ static bool fpathVisCallback(Vector3i pos, int32_t dist, void *data)
 	return true;
 }
 
-BOOL fpathTileLOS(Vector3i orig, Vector3i dest)
+BOOL fpathTileLOS(DROID *psDroid, Vector3i dest)
 {
-	Vector3i dir = Vector3i_Sub(dest, orig);
+	Vector3i dir = Vector3i_Sub(dest, psDroid->pos);
 
 	// Initialise the callback variables
 	obstruction = false;
 
-	rayCast(orig, iAtan2(dir.x, dir.y), iHypot(dir.x, dir.y), fpathVisCallback, NULL);
+	rayCast(psDroid->pos, iAtan2(dir.x, dir.y), iHypot(dir.x, dir.y), fpathVisCallback, psDroid);
 
 	return !obstruction;
 }

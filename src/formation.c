@@ -629,7 +629,7 @@ BOOL formationGetPos( FORMATION *psFormation, DROID* psDroid,
 	}
 
 	// check the unit can get to the formation position
-	if (bCheckLOS && !fpathTileLOS(psDroid->pos, Vector3i_Init(x, y, 0)))
+	if (bCheckLOS && !fpathTileLOS(psDroid, Vector3i_Init(x, y, 0)))
 	{
 		return false;
 	}

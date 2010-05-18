@@ -100,7 +100,7 @@ extern void fpathRemoveDroidData(int id);
 
 /** Check LOS (Line Of Sight) between two world positions.
  */
-extern BOOL fpathTileLOS(Vector3i orig, Vector3i dest);
+extern BOOL fpathTileLOS(DROID *psDroid, Vector3i dest);
 
 /** Quick O(1) test of whether it is theoretically possible to go from origin to destination
  *  using the given propulsion type. orig and dest are in world coordinates. */
