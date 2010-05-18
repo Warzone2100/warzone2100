@@ -74,6 +74,7 @@
 #include "map.h"
 #include "parsetest.h"
 #include "keybind.h"
+#include <time.h>
 
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)
@@ -173,6 +174,7 @@ static BOOL inList( char * list[], const char * item )
 void addSubdirs( const char * basedir, const char * subdir, const bool appendToPath, char * checkList[], bool addToModList )
 {
 	char tmpstr[PATH_MAX];
+	char buf[256];
 	char ** subdirlist = PHYSFS_enumerateFiles( subdir );
 	char ** i = subdirlist;
 	while( *i != NULL )
@@ -189,6 +191,8 @@ void addSubdirs( const char * basedir, const char * subdir, const bool appendToP
 			if (addToModList)
 			{
 				addLoadedMod(*i);
+				snprintf(buf, sizeof(buf), "mod: %s", *i);
+				addDumpInfo(buf);
 			}
 			PHYSFS_addToSearchPath( tmpstr, appendToPath );
 		}
@@ -213,7 +217,12 @@ void removeSubdirs( const char * basedir, const char * subdir, char * checkList[
 #ifdef DEBUG
 			debug( LOG_NEVER, "removeSubdirs: Removing [%s] from search path", tmpstr );
 #endif // DEBUG
-			PHYSFS_removeFromSearchPath( tmpstr );
+			if (!PHYSFS_removeFromSearchPath( tmpstr ))
+			{
+#ifdef DEBUG	// spams a ton!
+				debug(LOG_NEVER, "Couldn't remove %s from search path because %s", tmpstr, PHYSFS_getLastError());
+#endif // DEBUG
+			}
 		}
 		i++;
 	}
@@ -438,7 +447,7 @@ static void getPlatformUserDir(char * const tmpstr, size_t const size)
 	{
 		debug(LOG_FATAL, "Can't get UserDir?");
 		abort();
-}
+	}
 }
 
 
@@ -491,6 +500,15 @@ static void initialize_ConfigDir(void)
 			      tmpstr, PHYSFS_getLastError());
 			exit(1);
 		}
+
+		// NOTE: This is currently only used for mingw builds for now.
+#if defined (WZ_CC_MINGW)
+		if (!OverrideRPTDirectory(tmpstr))
+		{
+			// since it failed, we just use our default path, and not the user supplied one.
+			debug(LOG_ERROR, "Error setting exception hanlder to use directory %s", tmpstr);
+		}
+#endif
 	}
 
 	// User's home dir first so we allways see what we write
@@ -1048,10 +1066,27 @@ int main(int argc, char *argv[])
 	make_dir(SaveGamePath, "savegame", NULL);
 	PHYSFS_mkdir("maps");		// MUST have this to prevent crashes when getting map
 	PHYSFS_mkdir("music");
+	PHYSFS_mkdir("logs");		// a place to hold our netplay, mingw crash reports & WZ logs
 	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
-	make_dir(MultiCustomMapsPath, "multiplay", "custommaps");
+	sstrcpy(MultiCustomMapsPath, "maps");
 
+	if (!customDebugfile)
+	{
+		// there was no custom debug file specified  (--debug-file=blah)
+		// so we use our write directory to store our logs.
+		time_t aclock;
+		struct tm *newtime;
+		char buf[PATH_MAX];
+
+		time( &aclock );					// Get time in seconds
+		newtime = localtime( &aclock );		// Convert time to struct
+		// Note: We are using fopen(), and not physfs routines to open the file
+		// log name is logs/(or \)WZlog-MMDD_HHMMSS.txt
+		snprintf(buf, sizeof(buf), "%slogs%sWZlog-%02d%02d_%02d%02d%02d.txt", PHYSFS_getWriteDir(), PHYSFS_getDirSeparator(),
+			newtime->tm_mon, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec );
+		debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, buf );
+	}
 	/* Put these files in the writedir root */
 	setRegistryFilePath("config");
 	sstrcpy(KeyMapPath, "keymap.map");
@@ -1223,6 +1258,11 @@ int finalInitialization()
 			debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
 			break;
 	}
+
+#if defined(WZ_CC_MSVC) && defined(DEBUG)
+	debug_MEMSTATS();
+#endif
+
 	return 0;
 }
 
