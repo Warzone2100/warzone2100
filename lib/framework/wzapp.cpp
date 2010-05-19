@@ -164,22 +164,28 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 		debug(LOG_ERROR, "Bad buffer: %s", buffer.errorString().toAscii().constData());
 		abort();
 	}
-	loadCursor(CURSOR_PICKUP, 96, 160, buffer);
-	loadCursor(CURSOR_ATTACK, 192, 128, buffer);
-	loadCursor(CURSOR_SELECT, 32, 160, buffer);
-	loadCursor(CURSOR_LOCKON, 192, 160, buffer);
-	loadCursor(CURSOR_JAM, 224, 128, buffer);
+
+	loadCursor(CURSOR_EMBARK, 0, 128, buffer);
+	loadCursor(CURSOR_DEST, 32, 128, buffer);
 	loadCursor(CURSOR_DEFAULT, 64, 128, buffer);
 	loadCursor(CURSOR_BUILD, 96, 128, buffer);
-	loadCursor(CURSOR_MOVE, 160, 160, buffer);
+	loadCursor(CURSOR_SCOUT, 128, 128, buffer);
+	loadCursor(CURSOR_DISEMBARK, 160, 128, buffer);
+	loadCursor(CURSOR_ATTACK, 192, 128, buffer);
 	loadCursor(CURSOR_GUARD, 224, 128, buffer);
-	loadCursor(CURSOR_EMBARK, 0, 128, buffer);
-	loadCursor(CURSOR_BRIDGE, 128, 128, buffer);
-	loadCursor(CURSOR_ATTACH, 0, 192, buffer);
 	loadCursor(CURSOR_FIX, 0, 160, buffer);
-	loadCursor(CURSOR_SEEKREPAIR, 64, 160, buffer);
+	loadCursor(CURSOR_SELECT, 32, 160, buffer);
+//	loadCursor(CURSOR_REPAIR, 64, 160, buffer);		// FIX ME: This IS in infac.img, but the define is MIA
+	loadCursor(CURSOR_SEEKREPAIR, 64, 160, buffer);	// FIX ME: This is NOT in infac.img!
+	loadCursor(CURSOR_PICKUP, 96, 160, buffer);
 	loadCursor(CURSOR_NOTPOSSIBLE, 128, 160, buffer);
-	loadCursor(CURSOR_DEST, 32, 128, buffer);
+	loadCursor(CURSOR_MOVE, 160, 160, buffer);
+	loadCursor(CURSOR_LOCKON, 192, 160, buffer);
+//	loadCursor(CURSOR_ECM, 224, 160, buffer);		// FIX ME: Not defined yet!
+	loadCursor(CURSOR_JAM, 224, 160, buffer);		// FIX ME: This is NOT in infac.img, and is using IMAGE CURSOR ECM ?
+	loadCursor(CURSOR_ATTACH, 0, 192, buffer);
+	loadCursor(CURSOR_BRIDGE, 32, 192, buffer);
+	loadCursor(CURSOR_BOMB, 64, 192, buffer);
 	free(bytes);
 
 	// Reused (unused) cursors
