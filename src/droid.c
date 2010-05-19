@@ -2640,12 +2640,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 void initDroidMovement(DROID *psDroid)
 {
 	memset(&psDroid->sMove, 0, sizeof(MOVE_CONTROL));
-
-	psDroid->sMove.fx = psDroid->pos.x;
-	psDroid->sMove.fy = psDroid->pos.y;
-	psDroid->sMove.fz = psDroid->pos.z;
-	psDroid->sMove.speed = 0.0f;
-	psDroid->sMove.moveDir = 0;
 }
 
 // Set the asBits in a DROID structure given it's template.
@@ -4686,14 +4680,13 @@ BOOL cyborgDroid(const DROID* psDroid)
 BOOL droidOnMap(const DROID *psDroid)
 {
 	if (psDroid->died == NOT_CURRENT_LIST || psDroid->droidType == DROID_TRANSPORTER
-		|| psDroid->sMove.fx == INVALID_XY || psDroid->pos.x == INVALID_XY || missionIsOffworld()
+		|| psDroid->pos.x == INVALID_XY || psDroid->pos.y == INVALID_XY || missionIsOffworld()
 		|| mapHeight == 0)
 	{
 		// Off world or on a transport or is a transport or in mission list, or on a mission, or no map - ignore
 		return true;
 	}
-	return (worldOnMap(psDroid->sMove.fx, psDroid->sMove.fy)
-			&& worldOnMap(psDroid->pos.x, psDroid->pos.y));
+	return worldOnMap(psDroid->pos.x, psDroid->pos.y);
 }
 
 /** Teleport a droid to a new position on the map */

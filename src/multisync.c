@@ -60,8 +60,8 @@ static void packageCheck(DROID* pD);
 static BOOL sendDroidCheck		(void);							//droids
 
 static void highLevelDroidUpdate(DROID *psDroid,
-								 float fx,
-								 float fy,
+								 int fx,
+								 int fy,
 								 UDWORD state,
 								 UDWORD order,
 								 BASE_OBJECT *psTarget,
@@ -73,7 +73,7 @@ static void onscreenUpdate		(DROID *pDroid,UDWORD dam,		// the droid and its dam
 								 DROID_ORDER order);			// what it should be doing
 
 static void offscreenUpdate		(DROID *pDroid,UDWORD dam,
-								 float fx,float fy,
+								 int fx, int fy,
 								 Rotation rot,
 								 DROID_ORDER order);
 
@@ -331,8 +331,6 @@ static void packageCheck(DROID* pD)
 	uint32_t secondaryOrder = pD->secondaryOrder;
 	uint32_t body = pD->body;
 	float experience = pD->experience;
-	float sMoveX = pD->sMove.fx;
-	float sMoveY = pD->sMove.fy;
 
 	// Send the player to which the droid belongs
 	NETuint8_t(&player);
@@ -349,11 +347,11 @@ static void packageCheck(DROID* pD)
 	// Droid's current HP
 	NETuint32_t(&body);
 
-	// Direction it is going in
-	NETRotation(&pD->rot);
+	// Where it is
+	NETPosition(&pD->pos);
 
-	NETfloat(&sMoveX);
-	NETfloat(&sMoveY);
+	// Direction it is going
+	NETRotation(&pD->rot);
 
 	if (pD->order == DORDER_ATTACK)
 	{
@@ -391,13 +389,13 @@ BOOL recvDroidCheck()
 		{
 			DROID		*pD;
 			BASE_OBJECT	*psTarget = NULL;
-			float		fx = 0, fy = 0;
 			DROID_ORDER	order = 0;
 			BOOL		onscreen;
 			uint8_t		player;
 			float		experience;
 			uint16_t	tx, ty;
 			uint32_t	ref, body, target = 0, secondaryOrder;
+			Position	pos;
 			Rotation	rot;
 
 			// Fetch the player
@@ -415,12 +413,11 @@ BOOL recvDroidCheck()
 			// HP
 			NETuint32_t(&body);
 
+			// Position
+			NETPosition(&pos);
+
 			// Direction
 			NETRotation(&rot);
-
-			// Fractional move
-			NETfloat(&fx);
-			NETfloat(&fy);
 
 			// Find out what the droid is aiming at
 			if (order == DORDER_ATTACK)
@@ -477,16 +474,16 @@ BOOL recvDroidCheck()
 			}
 			else
 			{
-				offscreenUpdate(pD, body, fx, fy, rot, order);
+				offscreenUpdate(pD, body, pos.x, pos.y, rot, order);
 			}
 
-//			debug(LOG_SYNC, "difference in position for droid %d; was (%g, %g); did %s update", (int)pD->id, 
-//			      fx - pD->sMove.fx, fy - pD->sMove.fy, onscreen ? "onscreen" : "offscreen");
+//			debug(LOG_SYNC, "difference in position for droid %d; was (%d, %d); did %s update", (int)pD->id, 
+//			      pos.x - pD->pos.x, pos.y - pD->pos.y, onscreen ? "onscreen" : "offscreen");
 
 			// Update the higher level stuff
 			if (!isVtolDroid(pD))
 			{
-				highLevelDroidUpdate(pD, fx, fy, secondaryOrder, order, psTarget, experience);
+				highLevelDroidUpdate(pD, pos.x, pos.y, secondaryOrder, order, psTarget, experience);
 			}
 
 			// ...and repeat!
@@ -501,8 +498,7 @@ BOOL recvDroidCheck()
 
 // ////////////////////////////////////////////////////////////////////////////
 // higher order droid updating. Works mainly at the order level. comes after the main sync.
-static void highLevelDroidUpdate(DROID *psDroid, float fx, float fy,
-								 UDWORD state, UDWORD order,
+static void highLevelDroidUpdate(DROID *psDroid, int fx, int fy, UDWORD state, UDWORD order,
 								 BASE_OBJECT *psTarget,float experience)
 {
 	// update kill rating.
@@ -526,11 +522,11 @@ static void highLevelDroidUpdate(DROID *psDroid, float fx, float fy,
 	// offscreen updates will make this ok each time.
 	if (psDroid->order == DORDER_NONE && order == DORDER_NONE)
 	{
-		if(  (fabs(fx - psDroid->sMove.fx)>(TILE_UNITS*2))		// if more than 2 tiles wrong.
-		   ||(fabs(fy - psDroid->sMove.fy)>(TILE_UNITS*2)) )
+		if(  (abs(fx - psDroid->pos.x) > (TILE_UNITS * 2))		// if more than 2 tiles wrong.
+		   ||(abs(fy - psDroid->pos.y) > (TILE_UNITS * 2)))
 		{
 			turnOffMultiMsg(true);
-			debug(LOG_SYNC, "Move order from %d,%d to %d,%d", (int)psDroid->pos.x, (int)psDroid->pos.y, (int)fx, (int)fy);
+			debug(LOG_SYNC, "Move order from %d,%d to %d,%d", psDroid->pos.x, psDroid->pos.y, fx, fy);
 			orderDroidLoc(psDroid, DORDER_MOVE, fx, fy);
 			turnOffMultiMsg(false);
 		}
@@ -573,23 +569,21 @@ static void onscreenUpdate(DROID *psDroid,
 // droid offscreen needs modyfying.
 static void offscreenUpdate(DROID *psDroid,
 							UDWORD dam,
-							float fx,
-							float fy,
+							int fx,
+							int fy,
 							Rotation rot,
 							DROID_ORDER order)
 {
 	PROPULSION_STATS	*psPropStats;
 
-	if (fabs((float)psDroid->pos.x - fx) > TILE_UNITS || fabs((float)psDroid->pos.y - fy) > TILE_UNITS)
+	if (abs(psDroid->pos.x - fx) > TILE_UNITS || abs(psDroid->pos.y - fy) > TILE_UNITS)
 	{
-		debug(LOG_SYNC, "Moving droid %d from (%u,%u) to (%u,%u) (has order %s)",
-		      (int)psDroid->id, psDroid->pos.x, psDroid->pos.y, (UDWORD)fx, (UDWORD)fy, getDroidOrderName(order));
+		debug(LOG_SYNC, "Moving droid %d from (%d,%d) to (%d,%d) (has order %s)",
+		      (int)psDroid->id, psDroid->pos.x, psDroid->pos.y, fx, fy, getDroidOrderName(order));
 	}
 
 	psDroid->pos.x		= fx;				// update x
 	psDroid->pos.y		= fy;				// update y
-	psDroid->sMove.fx	= fx;
-	psDroid->sMove.fy	= fy;
 	psDroid->rot.direction	= rot.direction;		// update rotation
 	psDroid->body		= dam;								// update damage
 

@@ -5563,11 +5563,11 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.targetY      = PHYSFS_swapSLE32(psDroid->sMove.targetY);
 
 	// Little endian floats
-	psSaveDroid->sMove.fx           = PHYSFS_swapSLE32(psDroid->sMove.fx);
-	psSaveDroid->sMove.fy           = PHYSFS_swapSLE32(psDroid->sMove.fy);
+	psSaveDroid->sMove.fx           = 0;
+	psSaveDroid->sMove.fy           = 0;
 	psSaveDroid->sMove.speed        = PHYSFS_swapSLE32(psDroid->sMove.speed);
 	psSaveDroid->sMove.moveDir      = PHYSFS_swapSLE32(UNDEG(psDroid->sMove.moveDir));
-	psSaveDroid->sMove.fz           = PHYSFS_swapSLE32(psDroid->sMove.fz);
+	psSaveDroid->sMove.fz           = 0;
 
 	// Little endian SWORDs
 	psSaveDroid->sMove.boundX       = PHYSFS_swapSLE16(psDroid->sMove.boundX);
@@ -5635,21 +5635,8 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.targetY      = PHYSFS_swapSLE32(psSaveDroid->sMove.targetY);
 
 	// Little endian floats
-	psDroid->sMove.fx           = PHYSFS_swapSLE32(psSaveDroid->sMove.fx);
-	psDroid->sMove.fy           = PHYSFS_swapSLE32(psSaveDroid->sMove.fy);
 	psDroid->sMove.speed        = PHYSFS_swapSLE32(psSaveDroid->sMove.speed);
 	psDroid->sMove.moveDir      = DEG(PHYSFS_swapSLE32(psSaveDroid->sMove.moveDir));
-	psDroid->sMove.fz           = PHYSFS_swapSLE32(psSaveDroid->sMove.fz);
-
-	// Hack to fix bad droids in savegames
-	if (!droidOnMap(psDroid))
-	{
-		psDroid->sMove.fx = 0;
-		psDroid->sMove.fy = 0;
-		psDroid->sMove.fz = 0;
-		debug(LOG_ERROR, "%s had bad movement coordinates - fixed!", psDroid->aName);
-	}
-	ASSERT(droidOnMap(psDroid), "loaded droid standing or moving off the map");
 
 	// Little endian SWORDs
 	psDroid->sMove.boundX       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundX);

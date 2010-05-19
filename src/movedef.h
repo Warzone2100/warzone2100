@@ -60,7 +60,6 @@ typedef struct _move_control
 
 	SDWORD	DestinationX, DestinationY;			// World coordinates of movement destination
 	SDWORD	srcX,srcY,targetX,targetY;
-	float	fx,fy;						// droid location as a fract
 	float	speed;						// Speed of motion
 	SWORD	boundX,boundY;				// Vector for the end of path boundary
 
@@ -80,9 +79,6 @@ typedef struct _move_control
 
 	// iAttackRuns tracks the amount of ammunition a VTOL has remaining for each weapon
 	UDWORD	iAttackRuns[VTOL_MAXWEAPS];
-
-	// added for vtol movement
-	float	fz;
 } MOVE_CONTROL;
 
 #ifdef __cplusplus
