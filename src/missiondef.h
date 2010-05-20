@@ -67,6 +67,7 @@ typedef struct _mission
 	DROID						*apsDroidLists[MAX_PLAYERS];
 	FEATURE						*apsFeatureLists[MAX_PLAYERS];
 	BASE_OBJECT			*apsSensorList[1];
+	BASE_OBJECT			*apsOilList[1];
 	//struct _proximity_display	*apsProxDisp[MAX_PLAYERS];
 	FLAG_POSITION				*apsFlagPosLists[MAX_PLAYERS];
 	PLAYER_POWER				asPower[MAX_PLAYERS];

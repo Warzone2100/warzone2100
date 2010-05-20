@@ -256,14 +256,15 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	UDWORD		startX,startY,max,min;
 	SDWORD		i;
 	UBYTE		vis;
-
 	//try and create the Feature
 	FEATURE* psFeature = createFeature();
+
 	if (psFeature == NULL)
 	{
 		debug(LOG_WARNING, "Feature couldn't be built.");
 		return NULL;
 	}
+	psFeature->psStats = psStats;
 	// features are not in the cluster system
 	// this will cause an assert when they still end up there
 	psFeature->cluster = ~0;
@@ -310,10 +311,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	{
 		psFeature->rot.direction = 0;
 	}
-	//psFeature->damage = featureDamage;
 	psFeature->selected = false;
-	psFeature->psStats = psStats;
-	//psFeature->subType = psStats->subType;
 	psFeature->body = psStats->body;
 	psFeature->player = MAX_PLAYERS+1;	//set the player out of range to avoid targeting confusions
 	objSensorCache((BASE_OBJECT *)psFeature, NULL);
