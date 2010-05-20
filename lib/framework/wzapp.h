@@ -1,10 +1,6 @@
 #ifndef WZAPP_H
 #define WZAPP_H
 
-#include "lib/framework/cursors.h"
-#include "lib/ivis_common/textdraw.h"
-#include "input.h"
-
 #include <QtGui/QApplication>
 #include <QtCore/QTimer>
 #include <QtOpenGL/QGLWidget>
@@ -13,6 +9,13 @@
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
 #include <QtCore/QSemaphore>
+
+// Get platform defines before checking for them.
+// Qt headers MUST come before platform specific stuff!
+#include "lib/framework/frame.h"
+#include "lib/framework/cursors.h"
+#include "lib/ivis_common/textdraw.h"
+#include "input.h"
 
 class WzMainWindow : public QGLWidget
 {
@@ -34,7 +37,7 @@ private:
 	QCursor *cursors[CURSOR_MAX];
 	QTimer *timer;
 	QTime tickCount;
-	QFont regular, bold, small;
+	QFont regularFont, boldFont, smallFont;
 	bool notReadyToPaint;  ///< HACK Don't draw during initial show(), since some global variables apparently aren't set up.
 	static WzMainWindow *myself;
 

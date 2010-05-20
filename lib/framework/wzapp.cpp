@@ -30,9 +30,8 @@
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
-#include "frame.h"
-
 #include "wzapp.h"
+
 #if defined(WZ_CC_MSVC)
 #include "wzapp.moc.h"		// this is generated on the pre-build event.
 #endif
@@ -201,13 +200,13 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	cursors[CURSOR_RARROW] = new QCursor(Qt::SizeHorCursor);
 
 	// Fonts
-	regular.setFamily("DejaVu Sans");
-	regular.setPixelSize(12);
-	bold.setFamily("DejaVu Sans");
-	bold.setPixelSize(21);
-	bold.setBold(true);
-	small.setFamily("DejaVu Sans");
-	small.setPixelSize(9);
+	regularFont.setFamily("DejaVu Sans");
+	regularFont.setPixelSize(12);
+	boldFont.setFamily("DejaVu Sans");
+	boldFont.setPixelSize(21);
+	boldFont.setBold(true);
+	smallFont.setFamily("DejaVu Sans");
+	smallFont.setPixelSize(9);
 
 	// Want focusOutEvent messages.
 	setFocusPolicy(Qt::StrongFocus);
@@ -289,13 +288,13 @@ void WzMainWindow::setFontType(enum iV_fonts fontID)
 	switch (fontID)
 	{
 	case font_regular:
-		setFont(regular);
+		setFont(regularFont);
 		break;
 	case font_large:
-		setFont(bold);
+		setFont(boldFont);
 		break;
 	case font_small:
-		setFont(small);
+		setFont(smallFont);
 		break;
 	default:
 		break;
