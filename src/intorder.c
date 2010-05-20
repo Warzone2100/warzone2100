@@ -687,9 +687,9 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 		{
 			Droid = NULL;
 			psStructure = (STRUCTURE *)psObj;
-			ASSERT_OR_RETURN(StructIsFactory(psSelectedFactory), false, "Trying to select a %s as a factory!", 
-			                 objInfo((BASE_OBJECT *)psSelectedFactory));
 			psSelectedFactory = psStructure;
+			ASSERT_OR_RETURN(false, StructIsFactory(psSelectedFactory), "Trying to select a %s as a factory!", 
+			                 objInfo((BASE_OBJECT *)psSelectedFactory));
 		}
 		else
 		{
@@ -1227,7 +1227,7 @@ static BOOL CheckObjectOrderList(void)
 	if (psSelectedFactory != NULL)
 	{
 		// only valid for Factories (at the moment)
-		ASSERT_OR_RETURN(StructIsFactory(psSelectedFactory), false, "Selected factory is a %s!", 
+		ASSERT_OR_RETURN(false, StructIsFactory(psSelectedFactory), "Selected factory is a %s!", 
 		                 objInfo((BASE_OBJECT *)psSelectedFactory));
 
 		//this can be hard-coded!
