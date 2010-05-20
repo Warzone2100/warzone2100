@@ -33,6 +33,10 @@
 #include <physfs.h>
 #include <string.h>
 
+#if defined(WZ_OS_WIN)
+# include <winsock2.h>	// for sockets
+#endif
+
 #include "netplay.h"
 #include "netlog.h"
 #include "netsocket.h"

@@ -26,4 +26,11 @@ void   Timer_stop(void);					// stop the timer
 double Timer_getElapsedMilliSecs(void);		// get elapsed time in milliseconds
 double Timer_getElapsedMicroSecs(void);		// get elapsed time in microseconds
 
+#if defined(WZ_OS_WIN)
+# include <winsock2.h> /* for struct timeval */
+
+struct timezone;
+extern int gettimeofday(struct timeval* tv, struct timezone* tz);
+#endif
+
 #endif // __INCLUDED_LIB_SEQUENCE_TIMER_H__

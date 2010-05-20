@@ -109,13 +109,6 @@ extern UDWORD HashStringIgnoreCase( const char *String );
 }
 #endif //__cplusplus
 
-#if defined(WZ_OS_WIN)
-# include <winsock2.h> /* for struct timeval */
-
-struct timezone;
-extern int gettimeofday(struct timeval* tv, struct timezone* tz);
-#endif
-
 static inline WZ_DECL_CONST const char * bool2string(bool var)
 {
 	return (var ? "true" : "false");
