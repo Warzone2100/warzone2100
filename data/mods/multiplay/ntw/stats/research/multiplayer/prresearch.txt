@@ -92,7 +92,7 @@ R-Struc-RepairFacility,R-Sys-MobileRepairTurret01,109
 R-Struc-RepairFacility,R-Struc-Factory-Module,109
 R-Wpn-Cannon4AMk1,R-Wpn-Cannon-ROF01,109
 R-Wpn-Cannon4AMk1,R-Wpn-Cannon3Mk1,109
-R-Wpn-Cannon4AMk1,R-Wpn-Cannon-Damage09,109
+R-Wpn-Cannon4AMk1,R-Wpn-Cannon-Damage08,109
 R-Wpn-Cannon3Mk1,R-Wpn-Cannon-Damage06,109
 R-Wpn-Cannon3Mk1,R-Wpn-Cannon2Mk1,109
 R-Wpn-Rocket06-IDF,R-Wpn-Rocket02-MRL,109
@@ -534,6 +534,7 @@ R-Sys-Resistance-Circuits,R-Sys-Engineering03,109
 R-Sys-Resistance-Circuits,R-Struc-Research-Upgrade08,109
 R-Sys-Resistance-Circuits,R-Sys-Sensor-WSTower,109
 R-Wpn-Cannon6TwinAslt,R-Wpn-Cannon5,109
+R-Wpn-Cannon6TwinAslt,R-Wpn-Cannon-Damage06,109
 R-Defense-Cannon6,R-Wpn-Cannon6TwinAslt,109
 R-Defense-Cannon6,R-Defense-Pillbox04,109
 R-Wpn-HvyLaser,R-Wpn-Laser02,109
