@@ -1192,7 +1192,8 @@ void eventFireCallbackTrigger(TRIGGER_TYPE trigger)
 			case CALL_RESEARCHCOMPLETED:
 				lua_pushstring(L, psCBLastResearch->pName);
 				luaWZObj_pushstructure(L, psCBLastResStructure);
-				args += 2;
+				lua_pushinteger(L, CBResFacilityOwner);
+				args += 3;
 				break;
 			case CALL_OBJ_SEEN:
 				luaWZObj_pushobject(L, psScrCBObjSeen);

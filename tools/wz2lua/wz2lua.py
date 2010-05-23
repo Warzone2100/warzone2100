@@ -72,7 +72,8 @@ verbose = options.verbose
 			'CALL_CLUSTER_EMPTY':'',
 			'CALL_NO_REINFORCEMENTS_LEFT':'',
 			'CALL_VTOL_OFF_MAP':'',
-			'CALL_KEY_PRESSED':''
+			'CALL_KEY_PRESSED':'',
+			'CALL_DROID_REACH_LOCATION':''
 '''
 
 cvars = ['trackTransporter', 'mapWidth', 'mapHeight', 'gameInitialised', 'selectedPlayer', 'gameTime', 'gameLevel', 'inTutorial', 'cursorType', 'intMode', 'targetedObjectType', 'extraVictoryFlag', 'extraFailFlag', 'multiPlayerGameType', 'multiPlayerMaxPlayers', 'multiPlayerBaseType', 'multiPlayerAlliancesType']
@@ -699,7 +700,6 @@ class CodeGenerator(GenericASTTraversal):
 		check_player = {
 			'CALL_NEWDROID':(0,1),
 			'CALL_STRUCT_ATTACKED':(0,1),
-			'CALL_RESEARCHCOMPLETED':(2,1),
 			'CALL_DROID_ATTACKED':(0,1),
 			'CALL_ATTACKED':(0,1),
 			'CALL_VTOL_OFF_MAP':(0,1),
@@ -708,9 +708,11 @@ class CodeGenerator(GenericASTTraversal):
 			'CALL_STRUCTBUILT':(0,1),
 			'CALL_DROID_DESTROYED':(0,1),
 			'CALL_STRUCT_DESTROYED':(0,1),
+			'CALL_DROID_REACH_LOCATION':(0,1),
 			}
 		# these have a real player parameter
 		check_player_parameter = {
+			'CALL_RESEARCHCOMPLETED':2,
 			'CALL_TRANSPORTER_LANDED':1,
 			'CALL_TRANSPORTER_OFFMAP':0,
 			'CALL_AI_MSG':0,
