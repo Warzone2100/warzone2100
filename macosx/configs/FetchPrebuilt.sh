@@ -32,14 +32,14 @@ elif [ -d "prebuilt/${DirectorY}" ]; then
     exit 1
 elif [[ -d "external/${OutDir}" ]] && [[ ! -f "prebuilt/${FileName}" ]]; then
     # Clean up when updating versions
-    echo "warning: Cached file is outdated or incomplete, removing" >&2
-    rm -fRv "prebuilt/${DirectorY}" "external/${OutDir}"
+    echo "error: Cached file is outdated or incomplete, removing" >&2
+    rm -fR "prebuilt/${DirectorY}" "external/${OutDir}"
 elif [[ -d "external/${OutDir}" ]] && [[ -f "prebuilt/${FileName}" ]]; then
     # Check to make sure we have the right file
     MD5SumLoc=`md5 -q "prebuilt/${FileName}"`
     if [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
-        echo "warning: Cached file is outdated or incorrect, removing" >&2
-        rm -fRv "prebuilt/${FileName}" "prebuilt/${DirectorY}" "external/${OutDir}"
+        echo "error: Cached file is outdated or incorrect, removing" >&2
+        rm -fR "prebuilt/${FileName}" "prebuilt/${DirectorY}" "external/${OutDir}"
     else
         # Do not do more work then we have to
         echo "${OutDir} already exists, skipping"
@@ -82,6 +82,7 @@ if [ ! -d "${DirectorY}" ]; then
 else
     cd ..
     mv "prebuilt/${DirectorY}" "external/${OutDir}"
+    touch external/${OutDir}/*
 fi
 
 exit 0
