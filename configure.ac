@@ -320,6 +320,14 @@ AS_IF([test "x$enable_sound" = "xyes"],[
 	PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
 ])
 
+if test "x$enable_static" = "xyes" ; then
+	# If linking statically, make sure to include the direct dependencies of
+	# QuesoGLC as well, because it does not have a pkg-config file.
+	# FIXME Remove this whenever QuesoGLC has a pkg-config file
+	PKG_CHECK_MODULES([FONTCONFIG], [fontconfig])
+	PKG_CHECK_MODULES([FREETYPE], [freetype2])
+fi
+
 system_glee=false
 if test "x$host_os_mingw32" != "xyes" ; then
 	PKG_CHECK_MODULES([GLee], [glee >= 5.4.0], [system_glee=true], [system_glee=false])
@@ -373,6 +381,21 @@ AC_CHECK_LIB(GLU, main,
 		AC_MSG_ERROR([GLU library not found.]),
 		[${OPENGL_LIBS} -lm]), [${OPENGL_LIBS} -lm])
 AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
+
+# Look for OpenGLC
+AC_CHECK_HEADER(GL/glc.h, ,
+	AC_MSG_ERROR([OpenGLC header not found. Please install QuesoGLC: http://quesoglc.sourceforge.net/]))
+AC_CHECK_LIB(GLC, main,
+	OPENGLC_LIBS="-lGLC",
+	AC_CHECK_LIB(glc32, main,
+		OPENGLC_LIBS="-lglc32",
+		AC_MSG_ERROR([OpenGLC library not found. Please install QuesoGLC: http://quesoglc.sourceforge.net/])))
+if test "x$enable_static" = "xyes" ; then
+	# If linking statically, make sure to link against the direct dependencies, too.
+	# FIXME Remove this whenever QuesoGLC has a pkg-config file
+	OPENGLC_LIBS="${OPENGLC_LIBS} ${FONTCONFIG_LIBS} ${FREETYPE_LIBS}"
+fi
+AC_SUBST([OPENGLC_LIBS], [${OPENGLC_LIBS}])
 
 # When (cross-)compiling for Windows (MinGW) we need to link in BFD for the Dr.
 # MinGW derived exception handler.
