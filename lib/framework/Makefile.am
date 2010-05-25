@@ -76,7 +76,7 @@ noinst_HEADERS = \
 	wzglobal.h
 
 libframework_a_SOURCES = \
-	$(MOCEDFILES) \
+	wzapp_moc.cpp \
 	wzapp.cpp \
 	resource_lexer.lex.c \
 	resource_parser.tab.c \
