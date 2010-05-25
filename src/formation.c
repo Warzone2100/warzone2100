@@ -39,20 +39,14 @@
 // radius for the different body sizes
 static SDWORD	fmLtRad = 80, fmMedRad = 100, fmHvyRad = 110;
 
-// heap sizes
-#define F_HEAPINIT		10
-#define F_HEAPEXT		5
-
 // default length of a formation line
 #define F_DEFLENGTH		(4*fmLtRad)
-//(3 * TILE_UNITS / 1)
 
 // how close to the formation a unit has to be to receive a formation point
 #define F_JOINRANGE		(TILE_UNITS * 3)
 
 // how far apart to keep the ranks in a formation
 #define RANK_DIST		(2*fmLtRad)
-//(3*TILE_UNITS/2)
 
 // maximum number of ranks for a line
 #define MAX_RANK		15
@@ -100,11 +94,7 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 	FORMATION	*psNew = malloc(sizeof(FORMATION));
 
 	// get a heap structure
-	ASSERT(psNew, "Out of memory");
-	if (psNew == NULL)
-	{
-		return false;
-	}
+	ASSERT_OR_RETURN(false, psNew, "Out of memory");
 
 	// initialise it
 	psNew->refCount = 0;
@@ -147,8 +137,8 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 		psNew->asLines[0].member = -1;
 		break;
 	default:
-		ASSERT( false,"fmNewFormation: unknown formation type" );
-		break;
+		ASSERT(false, "Unknown formation type");
+		return false;
 	}
 
 	psNew->psNext = psFormationList;
@@ -218,8 +208,7 @@ void formationJoin(FORMATION *psFormation, const DROID* psDroid)
 {
 	SDWORD	rankDist, size;
 
-	ASSERT( psFormation != NULL,
-		"formationJoin: invalid formation" );
+	ASSERT_OR_RETURN(, psFormation != NULL, "Invalid formation");
 
 	psFormation->refCount += 1;
 
@@ -248,14 +237,12 @@ void formationLeave(FORMATION *psFormation, const DROID* psDroid)
 	F_MEMBER	*asMembers;
 	FORMATION	*psCurr, *psPrev;
 
-	ASSERT_OR_RETURN(, psFormation != NULL,
-		"formationLeave: invalid formation" );
+	ASSERT_OR_RETURN(, psFormation != NULL, "Invalid formation");
 	if (!psDroid)
 	{
 		return;
 	}
-	ASSERT_OR_RETURN(, psFormation->refCount > 0,
-		"formationLeave: refcount is zero" );
+	ASSERT_OR_RETURN(, psFormation->refCount > 0, "Formation refcount is zero");
 
 	asMembers = psFormation->asMembers;
 
@@ -335,8 +322,7 @@ void formationReset(FORMATION *psFormation)
 
 /** Calculate the coordinates of a position on a line
  */
-static void formationCalcPos(FORMATION *psFormation, SDWORD line, SDWORD dist,
-					  SDWORD *pX, SDWORD *pY)
+static void formationCalcPos(DROID *psDroid, FORMATION *psFormation, SDWORD line, SDWORD dist, SDWORD *pX, SDWORD *pY)
 {
 	const int rank = dist / psFormation->size;
 
@@ -350,6 +336,8 @@ static void formationCalcPos(FORMATION *psFormation, SDWORD line, SDWORD dist,
 	dist -= psFormation->size * rank;
 	*pX = iSinR(dir, dist) + xoffset + psFormation->x;
 	*pY = iCosR(dir, dist) + yoffset + psFormation->y;
+	//objTrace(psDroid->id, "Formation: xoff=%d, yoff=%d, dir=%d, dist=%d; formxoff=%d, formyoff=%d", xoffset, yoffset, 
+	//         psFormation->asLines[line].direction, dist, psFormation->asLines[line].xoffset, psFormation->asLines[line].yoffset);
 }
 
 
@@ -365,10 +353,9 @@ static void formationFindFree(FORMATION *psFormation, DROID* psDroid,
 	SDWORD		chosenLine, chosenDist, chosenPrev, chosenRank;
 	BOOL		found;
 
+	ASSERT(psFormation->free != -1, "No members left to allocate");
 	if (psFormation->free == -1)
 	{
-		ASSERT( false,
-			"formationFindFree: no members left to allocate" );
 		*pX = psFormation->x;
 		*pY = psFormation->y;
 		return;
@@ -426,7 +413,7 @@ static void formationFindFree(FORMATION *psFormation, DROID* psDroid,
 			if (found)
 			{
 				// calculate the position on the line
-				formationCalcPos(psFormation, line, currDist+objRadius, &x,&y);
+				formationCalcPos(psDroid, psFormation, line, currDist + objRadius, &x, &y);
 				if (fpathBlockingTile(map_coord(x), map_coord(y), getPropulsionStats(psDroid)->propulsionType))
 				{
 					// blocked, try the next rank
@@ -442,9 +429,7 @@ static void formationFindFree(FORMATION *psFormation, DROID* psDroid,
 		ydiff = y - psDroid->pos.y;
 		dist = xdiff*xdiff + ydiff*ydiff;
 //		dist += psFormation->rankDist*psFormation->rankDist * rank*rank;
-		if (((dist < objDist) && (rank == chosenRank)) ||
-			(rank < chosenRank))
-//		if (dist < objDist)
+		if ((dist < objDist && rank == chosenRank) || rank < chosenRank)
 		{
 			// this gap is nearer
 			objDist = dist;
@@ -564,12 +549,11 @@ static void formationReorder(FORMATION *psFormation)
 BOOL formationGetPos( FORMATION *psFormation, DROID* psDroid,
 						SDWORD *pX, SDWORD *pY, BOOL bCheckLOS )
 {
-	SDWORD		xdiff,ydiff,distSq;//,rangeSq;
+	SDWORD		xdiff,ydiff,distSq;
 	SDWORD		member, x,y;
 	F_MEMBER	*asMembers;
 
-	ASSERT( psFormation != NULL,
-		"formationGetPos: invalid formation pointer" );
+	ASSERT_OR_RETURN(false, psFormation != NULL, "Invalid formation pointer");
 
 /*	if (psFormation->refCount == 1)
 	{
@@ -581,12 +565,6 @@ BOOL formationGetPos( FORMATION *psFormation, DROID* psDroid,
 	xdiff = (SDWORD)psFormation->x - (SDWORD)psDroid->pos.x;
 	ydiff = (SDWORD)psFormation->y - (SDWORD)psDroid->pos.y;
 	distSq = xdiff*xdiff + ydiff*ydiff;
-//	rangeSq = 3*psFormation->size/2;
-//	rangeSq = rangeSq*rangeSq;
-//	if (distSq > F_JOINRANGE*F_JOINRANGE)
-//	{
-//		return false;
-//	}
 
 	// see if the unit is already in the formation
 	asMembers = psFormation->asMembers;
@@ -601,8 +579,7 @@ BOOL formationGetPos( FORMATION *psFormation, DROID* psDroid,
 	if (member < F_MAXMEMBERS)
 	{
 		// the unit is already in the formation - return it's current position
-		formationCalcPos(psFormation, asMembers[member].line, asMembers[member].dist,
-							&x,&y);
+		formationCalcPos(psDroid, psFormation, asMembers[member].line, asMembers[member].dist, &x, &y);
 	}
 	else if (psFormation->free != -1)
 	{
@@ -621,7 +598,7 @@ BOOL formationGetPos( FORMATION *psFormation, DROID* psDroid,
 		}
 
 		// calculate its position
-		formationCalcPos(psFormation, asMembers[member].line, asMembers[member].dist, &x, &y);
+		formationCalcPos(psDroid, psFormation, asMembers[member].line, asMembers[member].dist, &x, &y);
 	}
 	else
 	{
