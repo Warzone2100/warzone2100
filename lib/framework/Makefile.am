@@ -39,8 +39,8 @@ EXTRA_DIST = \
 
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = \
-	wzapp_c.h \
 	$(MOCHEADER) \
+	wzapp_c.h \
 	strres_parser.tab.h \
 	resource_parser.tab.h \
 	configfile.h \
@@ -76,7 +76,7 @@ noinst_HEADERS = \
 	wzglobal.h
 
 libframework_a_SOURCES = \
-	wzapp_moc.cpp \
+	$(MOCEDFILES) \
 	wzapp.cpp \
 	resource_lexer.lex.c \
 	resource_parser.tab.c \
