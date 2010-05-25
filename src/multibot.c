@@ -132,7 +132,7 @@ BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STA
 		uint8_t player = psDroid->player;
 		uint32_t droid = psDroid->id;
 		uint32_t body = psDroid->body;
-		Position pos = psDroid->pos;
+		Position pos = droidGetPrecisePosition(psDroid);
 
 		NETuint8_t(&player);
 		NETuint32_t(&droid);
@@ -183,11 +183,11 @@ BOOL recvDroidSecondary()
 	psDroid->body = body;
 
 	// Set the droids position if it is more than two tiles out
-	if (abs(pos.x - psDroid->pos.x) > (TILE_UNITS * 2)
-	 || abs(pos.y - psDroid->pos.y) > (TILE_UNITS * 2))
+	if (abs((pos.x >> EXTRA_BITS) - psDroid->pos.x) > (TILE_UNITS * 2)
+	 || abs((pos.y >> EXTRA_BITS) - psDroid->pos.y) > (TILE_UNITS * 2))
 	{
 		// Jump it, even if it is on screen (may want to change this)
-		psDroid->pos = pos;
+		droidSetPrecisePosition(psDroid, pos);
 	}
 
 	return true;
@@ -341,7 +341,7 @@ BOOL sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
 		uint8_t player = psDroid->player;
 		uint32_t droidID = psDroid->id;
 		uint32_t transporterID = psTransporter->id;
-		Position pos = psDroid->pos;
+		Position pos = droidGetPrecisePosition(psDroid);
 
 		NETuint8_t(&player);
 		NETuint32_t(&droidID);
@@ -409,7 +409,7 @@ BOOL recvDroidDisEmbark()
 		addDroid(psFoundDroid, apsDroidLists);
 
 		// Add it back into the world at the x/y
-		psFoundDroid->pos = pos;
+		droidSetPrecisePosition(psFoundDroid, pos);
 
 		if (!droidOnMap(psFoundDroid))
 		{
@@ -697,9 +697,11 @@ BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_O
 		{
 			if (psDroid->selected)
 			{
+				Position pos = droidGetPrecisePosition(psDroid);
+
 				NETuint32_t(&psDroid->id);
 				NETuint32_t(&psDroid->body);
-				NETPosition(&psDroid->pos);
+				NETPosition(&pos);
 				--droidCount;
 			}
 		}
@@ -767,9 +769,11 @@ BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t
 		// Add the droids to the message
 		for (psDroid = psGroup->psList; psDroid; psDroid = psDroid->psGrpNext)
 		{
+			Position pos = droidGetPrecisePosition(psDroid);
+
 			NETuint32_t(&psDroid->id);
 			NETuint32_t(&psDroid->body);
-			NETPosition(&psDroid->pos);
+			NETPosition(&pos);
 		}
 	}
 	return NETend();
@@ -896,11 +900,11 @@ BOOL recvGroupOrder()
 		psDroid->body = body;
 
 		// Set the droids position if it is more than two tiles out
-		if (abs(pos.x - psDroid->pos.x) > (TILE_UNITS * 2)
-		 || abs(pos.y - psDroid->pos.y) > (TILE_UNITS * 2))
+		if (abs((pos.x >> EXTRA_BITS) - psDroid->pos.x) > (TILE_UNITS * 2)
+		 || abs((pos.y >> EXTRA_BITS) - psDroid->pos.y) > (TILE_UNITS * 2))
 		{
 			// Jump it, even if it is on screen (may want to change this)
-			psDroid->pos = pos;
+			droidSetPrecisePosition(psDroid, pos);
 		}
 	}
 

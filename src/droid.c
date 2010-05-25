@@ -2435,8 +2435,10 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	// Set the droids type
 	psDroid->droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.
 
-	psDroid->pos.x = (UWORD)x;
-	psDroid->pos.y = (UWORD)y;
+	psDroid->pos.x = x;
+	psDroid->pos.y = y;
+	psDroid->sMove.eBitX = 0;
+	psDroid->sMove.eBitY = 0;
 
 	//don't worry if not on homebase cos not being drawn yet
 	if (!onMission)
