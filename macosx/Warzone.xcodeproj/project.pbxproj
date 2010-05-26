@@ -712,7 +712,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0223BBD00CFE3D5C0056EF85 /* QuesoGLC */;
+			remoteGlobalIDString = 0223BBD00CFE3D5C0056EF85;
 			remoteInfo = QuesoGLC;
 		};
 		43FA571210FF8EE90074E914 /* PBXContainerItemProxy */ = {
@@ -3659,7 +3659,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"QT_\"\nOutDir=\"QT\"\nFileName=\"QT.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/QT.tar.gz\"\nMD5Sum=\"6af9bd2badda7ece940a54f3e24e5ce5\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"QT_\"\nOutDir=\"QT\"\nFileName=\"QT.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/QT.tar.gz\"\nMD5Sum=\"17d495f6ab3921e00096895cab786462\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		433360B311A079F700380F5E /* Moc */ = {
 			isa = PBXShellScriptBuildPhase;
