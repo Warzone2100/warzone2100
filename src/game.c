@@ -11506,14 +11506,13 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
 /**
  * \param[out] backDropSprite The premade map texture.
  * \param scale               Scale of the map texture.
- * \param offX,offY           X and Y offset for map
  * \param[out] playeridpos    Will contain the position on the map where the player's HQ are located.
  *
  * Reads the current map and colours the map preview for any structures
  * present. Additionally we load the player's HQ location into playeridpos so
  * we know the player's starting location.
  */
-BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY,Vector2i playeridpos[])
+BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 {
 	SAVE_STRUCTURE				sSave;  // close eyes now.
 	SAVE_STRUCTURE				*psSaveStructure = &sSave; // assumes save_struct is larger than all previous ones...
@@ -11527,7 +11526,7 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 
 	STRUCT_SAVEHEADER		*psHeader;
 	char			aFileName[256];
-	UDWORD			xx,yy,x,y,count,fileSize,sizeOfSaveStruture;
+	UDWORD			xx,yy,count,fileSize,sizeOfSaveStruture;
 	UDWORD	playerid =0;
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel;
@@ -11942,15 +11941,9 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 		}
 
 		// and now we blit the color to the texture
-		for(x = (xx*scale);x < (xx*scale)+scale ;x++)
-		{
-			for(y = (yy*scale);y< (yy*scale)+scale ;y++)
-			{
-				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX)] = color.byte.r;
-				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 1] = color.byte.g;
-				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 2] = color.byte.b;
-			}
-		}
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
 	}
 
 	// NOTE: would do fallback if FBO is not available here.

@@ -154,6 +154,9 @@ TITLECODE titleLoop(void)
 		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 	}
 
+	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT && titleMode != STARTGAME)
+		screen_disableMapPreview();
+
 	switch(titleMode) // run relevant title screen code.
 	{
 		// MULTIPLAYER screens
