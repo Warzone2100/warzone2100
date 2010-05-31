@@ -14122,11 +14122,11 @@ msgstr "OBJETIVO ARQUIVADO"
 
 #: src/mission.c:2782
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "FLAHA NO OBJETIVO--e você trapaçeou!"
+msgstr "FALHA NO OBJETIVO--e você trapaçeou!"
 
 #: src/mission.c:2782
 msgid "OBJECTIVE FAILED"
-msgstr "FLAHA NO OBJETIVO"
+msgstr "FALHA NO OBJETIVO"
 
 #: src/mission.c:2808
 #: src/mission.c:2848
