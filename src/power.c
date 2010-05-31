@@ -178,6 +178,7 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 	//only extracts points whilst its active ie associated with a power gen
 	if (pResExtractor->active)
 	{
+		int overflowDiff;
 		// Add modifier according to difficulty level
 		if (getDifficultyLevel() == DL_EASY)
 		{
@@ -198,8 +199,20 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 		}
 		// include modifier as a %
 		// Written this way to prevent rounding errors - do not "simplify"
-		pointsToAdd = (gameTime % (1<<16)                       * modifier * EXTRACT_POINTS) / (GAME_TICKS_PER_SEC * 100)
-		            - (pResExtractor->timeLastUpdated % (1<<16) * modifier * EXTRACT_POINTS) / (GAME_TICKS_PER_SEC * 100);
+		overflowDiff = pResExtractor->timeLastUpdated - (pResExtractor->timeLastUpdated % (GAME_TICKS_PER_SEC*100));
+		pointsToAdd = ((gameTime - overflowDiff)                       * modifier * EXTRACT_POINTS) / (GAME_TICKS_PER_SEC * 100)
+		            - ((pResExtractor->timeLastUpdated - overflowDiff) * modifier * EXTRACT_POINTS) / (GAME_TICKS_PER_SEC * 100);
+		/*
+		 * If you are thinking about rewriting the preceding section of code, there are a few things
+		 * you should know.
+		 * 
+		 * First of all, division doesn't work intuitively.
+		 * 3 / 2 = 1, not 1.5. These are integers, not floats.
+		 *
+		 * Second of all, timeLastUpdated is NOT necessarily the time you want to base off of.
+		 * timeLastUpdated of an extractor that's just been created is some magic number around 12ms.
+		 * gameTime, on the other hand, could be around 3 hours.
+		 */
 
 		if ((int)pResExtractor->timeLastUpdated - (int)gameTime > GAME_TICKS_PER_SEC || (int)gameTime - (int)pResExtractor->timeLastUpdated > GAME_TICKS_PER_SEC)
 		{
