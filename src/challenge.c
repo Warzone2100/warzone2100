@@ -48,7 +48,7 @@
 
 #define totalslots 36			// challenge slots
 #define slotsInColumn 12		// # of slots in a column
-#define totalslotspace 64		// guessing 64 max chars for filename.
+#define totalslotspace 256		// max chars for slot strings.
 
 #define CHALLENGE_X				D_W + 16
 #define CHALLENGE_Y				D_H + 5
@@ -237,9 +237,9 @@ bool addChallenges()
 	for (i = files; *i != NULL; ++i)
 	{
 		W_BUTTON *button;
-		char description[128];
-		char highscore[64];
-		const char *name, *difficulty, *map;
+		char description[totalslotspace];
+		char highscore[totalslotspace];
+		const char *name, *difficulty, *map, *givendescription;
 		dictionary *dict;
 
 		// See if this filename contains the extension we're looking for
@@ -284,7 +284,8 @@ bool addChallenges()
 		name = iniparser_getstring(dict, "challenge:Name", "BAD NAME");
 		map = iniparser_getstring(dict, "challenge:Map", "BAD MAP");
 		difficulty = iniparser_getstring(dict, "challenge:difficulty", "BAD DIFFICULTY");
-		ssprintf(description, "%s - %s - %s", map, difficulty, highscore);
+		givendescription = iniparser_getstring(dict, "challenge:description", "");
+		ssprintf(description, "%s, %s, %s. %s", map, difficulty, highscore, givendescription);
 
 		button = (W_BUTTON*)widgGetFromID(psRequestScreen, CHALLENGE_ENTRY_START + slotCount);
 
