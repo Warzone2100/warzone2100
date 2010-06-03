@@ -262,7 +262,7 @@ BOOL screen_GetBackDrop(void)
 void screen_Upload(const char *newBackDropBmp, BOOL preview)
 {
 	static bool processed = false;
-	int x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight, i, scale, w, h;
+	int x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight, i, scale = 0, w = 0, h = 0;
 	float tx = 1, ty = 1;
 
 	if(newBackDropBmp != NULL)
