@@ -264,7 +264,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
  * was retrofitted onto something else. - Per */
 void pie_UploadDisplayBuffer()
 {
-	screen_Upload(NULL);
+	screen_Upload(NULL, false);
 }
 
 BOOL pie_InitRadar(void)
