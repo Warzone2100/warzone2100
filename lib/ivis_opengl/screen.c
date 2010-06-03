@@ -453,21 +453,19 @@ void screenDoDumpToDiskIfRequired(void)
  */
 void screenDumpToDisk(const char* path)
 {
-	static unsigned int screendump_num = 0;
+	unsigned int screendump_num = 0;
+	time_t aclock;
+	struct tm *t;
 
-	while (++screendump_num != 0) {
-		// We can safely use '/' as path separator here since PHYSFS uses that as its default separator
-		ssprintf(screendump_filename, "%s/wz2100_%s_shot_%03i.png", path, getLevelName(), screendump_num);
-		if (!PHYSFS_exists(screendump_filename)) {
-			// Found a usable filename, so we'll stop searching.
-			break;
-		}
+	time(&aclock);           /* Get time in seconds */
+	t = localtime(&aclock);  /* Convert time to struct */
+
+	ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, getLevelName());
+
+        while (PHYSFS_exists(screendump_filename))
+	{
+		ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s-%d.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, getLevelName(), ++screendump_num);
 	}
-
-	ASSERT( screendump_num != 0, "screenDumpToDisk: integer overflow; no more filenumbers available.\n" );
-
-	// If we have an integer overflow, we don't want to go about and overwrite files
-	if (screendump_num != 0)
-		screendump_required = true;
+	screendump_required = true;
 }
 
