@@ -27,6 +27,7 @@
 #include "lib/framework/configfile.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
+#include "lib/ivis_opengl/screen.h"
 
 #include "advvis.h"
 #include "ai.h"

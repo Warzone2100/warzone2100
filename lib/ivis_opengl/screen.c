@@ -33,6 +33,7 @@
 #include "lib/ivis_common/tex.h"
 
 #include "lib/framework/frameint.h"
+#include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieblitfunc.h"
 
@@ -53,12 +54,10 @@ static char		screendump_filename[PATH_MAX];
 static BOOL		screendump_required = false;
 static GLuint		backDropTexture = ~0;
 
-// Variables needed for our FBO
-GLuint fbo;					// Our handle to the FBO
-GLuint FBOtexture;			// The texture we are going to use
-GLuint FBOdepthbuffer;		// Our handle to the depth render buffer
-static BOOL FBOinit = false;
-BOOL bFboProblem = false;	// hack to work around people with bad drivers. (*cough*intel*cough*)
+static int preview_width = 0, preview_height = 0;
+static Vector2i player_pos[MAX_PLAYERS];
+static BOOL mappreview = false;
+static char mapname[256];
 
 /* Initialise the double buffered display */
 bool screenInitialise()
@@ -260,9 +259,11 @@ BOOL screen_GetBackDrop(void)
 //******************************************************************
 //slight hack to display maps (or whatever) in background.
 //bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-void screen_Upload(const char *newBackDropBmp)
+void screen_Upload(const char *newBackDropBmp, BOOL preview)
 {
 	static bool processed = false;
+	int x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight, i, scale, w, h;
+	float tx = 1, ty = 1;
 
 	if(newBackDropBmp != NULL)
 	{
@@ -296,16 +297,92 @@ void screen_Upload(const char *newBackDropBmp)
 	glBindTexture(GL_TEXTURE_2D, backDropTexture);
 	glColor3f(1, 1, 1);
 
+	if (preview)
+	{
+		int s1, s2;
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		s1 = screenWidth / preview_width;
+		s2 = screenHeight / preview_height;
+		scale = MIN(s1, s2);
+
+		w = preview_width * scale;
+		h = preview_height * scale;
+		x1 = screenWidth / 2 - w / 2;
+		x2 = screenWidth / 2 + w / 2;
+		y1 = screenHeight / 2 - h / 2;
+		y2 = screenHeight / 2 + h / 2;
+
+		tx = preview_width / (float)BACKDROP_HACK_WIDTH;
+		ty = preview_height / (float)BACKDROP_HACK_HEIGHT;
+	}
+
 	glBegin(GL_TRIANGLE_STRIP);
 		glTexCoord2f(0, 0);
-		glVertex2f(0, 0);
-		glTexCoord2f(1, 0);
-		glVertex2f(screenWidth, 0);
-		glTexCoord2f(0, 1);
-		glVertex2f(0, screenHeight);
-		glTexCoord2f(1, 1);
-		glVertex2f(screenWidth, screenHeight);
+		glVertex2f(x1, y1);
+		glTexCoord2f(tx, 0);
+		glVertex2f(x2, y1);
+		glTexCoord2f(0, ty);
+		glVertex2f(x1, y2);
+		glTexCoord2f(tx, ty);
+		glVertex2f(x2, y2);
 	glEnd();
+
+	if (preview)
+	{
+		for (i = 0; i < MAX_PLAYERS; i++)
+		{
+			int x = player_pos[i].x;
+			int y = player_pos[i].y;
+			char text[5];
+
+			if (x == 0x77777777)
+				continue;
+
+			x = screenWidth / 2 - w / 2 + x * scale;
+			y = screenHeight / 2 - h / 2 + y * scale;
+			ssprintf(text, "%d", i);
+			iV_SetFont(font_large);
+			iV_SetTextColour(WZCOL_BLACK);
+			iV_DrawText(text, x - 1, y - 1);
+			iV_DrawText(text, x + 1, y - 1);
+			iV_DrawText(text, x - 1, y + 1);
+			iV_DrawText(text, x + 1, y + 1);
+			iV_SetTextColour(WZCOL_WHITE);
+			iV_DrawText(text, x, y);
+		}
+	}
+}
+
+void screen_enableMapPreview(char *name, int width, int height, Vector2i *playerpositions)
+{
+	int i;
+	mappreview = true;
+	preview_width = width;
+	preview_height = height;
+	sstrcpy(mapname, name);
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		player_pos[i].x = playerpositions[i].x;
+		player_pos[i].y = playerpositions[i].y;
+	}
+}
+
+const char *screen_getMapName(void)
+{
+	return mapname;
+}
+
+void screen_disableMapPreview(void)
+{
+	mappreview = false;
+	sstrcpy(mapname, "none");
+}
+
+BOOL screen_getMapPreview(void)
+{
+	return mappreview;
 }
 
 /* Swap between windowed and full screen mode */
@@ -394,103 +471,3 @@ void screenDumpToDisk(const char* path)
 		screendump_required = true;
 }
 
-
-BOOL Init_FBO(unsigned int width, unsigned int height)
-{
-	GLenum status;
-
-	glErrors();
-	// Bail out if FBOs aren't supported
-	if (!GLEE_EXT_framebuffer_object)
-		return false;
-
-	// No need to create two FBOs
-	if (FBOinit)
-		return true;
-
-	// Create the FBO
-	glGenFramebuffersEXT(1, &fbo);
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
-
-	// create depthbuffer
-	glGenRenderbuffersEXT(1, &FBOdepthbuffer);
-	glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, FBOdepthbuffer);
-	glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, width, height);
-	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, FBOdepthbuffer);
-
-	// Now setup a texture to render to
-	glGenTextures(1, &FBOtexture);
-	glBindTexture(GL_TEXTURE_2D, FBOtexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,  width, height,0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	// attach that texture to the color
-	glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-				   GL_TEXTURE_2D, FBOtexture, 0);
-	glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0); // unbind FBO
-
-	// make sure everything went OK
-	status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-	if(status != GL_FRAMEBUFFER_COMPLETE_EXT)
-	{
-		switch (status)
-		{
-			case GL_FRAMEBUFFER_COMPLETE_EXT:
-				break;
-			case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-				debug(LOG_ERROR, "Error: FBO missing a required image/buffer attachment!");
-				break;
-			case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-				debug(LOG_ERROR, "Error: FBO has no images/buffers attached!");
-				break;
-			case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
-				debug(LOG_ERROR, "Error: FBO has mismatched image/buffer dimensions!");
-				break;
-			case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
-				debug(LOG_ERROR, "Error: FBO colorbuffer attachments have different types!");
-				break;
-			case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-				debug(LOG_ERROR, "Error: FBO trying to draw to non-attached color buffer!");
-				break;
-			case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-				debug(LOG_ERROR, "Error: FBO trying to read from a non-attached color buffer!");
-				break;
-			case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-				debug(LOG_ERROR, "Error: FBO format is not supported by current graphics card/driver!");
-				break;
-			case GL_INVALID_FRAMEBUFFER_OPERATION_EXT :
-				debug(LOG_ERROR, "Error: FBO Non-framebuffer passed to glCheckFramebufferStatusEXT()!");
-				break;
-			default:
-				debug(LOG_ERROR, "*UNKNOWN FBO ERROR* reported from glCheckFramebufferStatusEXT() for %x!", (unsigned int)status);
-				break;
-		}
-		FBOinit = false;	//we have a error with the FBO setup
-		return false;
-	}
-	else
-	{
-		FBOinit = true;		//everything is OK with FBO setup.
-	}
-
-	glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0); // unbind it for now.
-
-	bFboProblem |= glErrors(); // don't use FBOs if something here caused an error
-	return true;
-}
-
-void Delete_FBO(void)
-{
-	if(FBOinit)
-	{
-		glErrors();
-		glDeleteFramebuffersEXT(1, &fbo);
-		glDeleteRenderbuffersEXT(1, &FBOdepthbuffer);
-		glDeleteTextures(1,&FBOtexture);
-		bFboProblem |= glErrors();
-		fbo = FBOdepthbuffer = FBOtexture = FBOinit = 0;	//reset everything.
-	}
-}

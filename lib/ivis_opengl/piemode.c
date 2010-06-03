@@ -41,7 +41,6 @@
 #include "lib/ivis_common/pieclip.h"
 #include "screen.h"
 
-
 /***************************************************************************/
 /*
  *	Source
@@ -122,7 +121,7 @@ void pie_ScreenFlip(int clearMode)
 	}
 	if (screen_GetBackDrop())
 	{
-		screen_Upload(NULL);
+		screen_Upload(NULL, screen_getMapPreview());
 	}
 }
 

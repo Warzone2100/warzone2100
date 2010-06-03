@@ -145,7 +145,7 @@ extern void game_SetValidityKey(UDWORD keys);
 /*returns the current type of save game being loaded*/
 extern UDWORD getSaveGameType(void);
 
-BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY, Vector2i playeridpos[]);
+BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[]);
 
 #ifdef __cplusplus
 }
