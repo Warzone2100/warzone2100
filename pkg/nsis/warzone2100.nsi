@@ -190,6 +190,7 @@ Section $(TEXT_SecBase) SecBase
   File "${TOP_SRCDIR}\data\music\menu.ogg"
   File "${TOP_SRCDIR}\data\music\track1.ogg"
   File "${TOP_SRCDIR}\data\music\track2.ogg"
+  File "${TOP_SRCDIR}\data\music\track3.ogg"
   File "${TOP_SRCDIR}\data\music\music.wpl"
 
   SetOutPath "$INSTDIR\styles"
@@ -696,6 +697,7 @@ Section "Uninstall"
   Delete "$INSTDIR\music\menu.ogg"
   Delete "$INSTDIR\music\track1.ogg"
   Delete "$INSTDIR\music\track2.ogg"
+  Delete "$INSTDIR\music\track3.ogg"
   Delete "$INSTDIR\music\music.wpl"
   RMDir "$INSTDIR\music"
 
