@@ -53,15 +53,15 @@ static const struct
 } map[] = {
 	{ "", N_("System locale"), LANG_NEUTRAL, SUBLANG_DEFAULT },
 #  if defined(ENABLE_NLS)
-	{ "cs", N_("Czech"), LANG_CZECH, SUBLANG_DEFAULT },
-	{ "da", N_("Danish"), LANG_DANISH, SUBLANG_DEFAULT },
+//	{ "cs", N_("Czech"), LANG_CZECH, SUBLANG_DEFAULT },
+//	{ "da", N_("Danish"), LANG_DANISH, SUBLANG_DEFAULT },
 	{ "de", N_("German"), LANG_GERMAN, SUBLANG_GERMAN },
 //	{ "en", N_("English"), LANG_ENGLISH, SUBLANG_DEFAULT },
 	{ "en_GB", N_("English (United Kingdom)"), LANG_ENGLISH, SUBLANG_ENGLISH_UK },
 	{ "es", N_("Spanish"), LANG_SPANISH, SUBLANG_SPANISH },
 	{ "et_EE", N_("Estonian"), LANG_ESTONIAN, SUBLANG_DEFAULT },
 //	{ "eu", N_("Basque"), LANG_BASQUE, SUBLANG_DEFAULT },
-	{ "fi", N_("Finnish"), LANG_FINNISH, SUBLANG_DEFAULT },
+//	{ "fi", N_("Finnish"), LANG_FINNISH, SUBLANG_DEFAULT },
 	{ "fr", N_("French"), LANG_FRENCH, SUBLANG_FRENCH },
 	/* Our Frisian translation is the "West Frisian" variation of it. This
 	 * variation is mostly spoken in the Dutch province Friesland (Fryslân
@@ -70,21 +70,21 @@ static const struct
 	 * FIXME: We should really use a sub-language code for this. E.g.
 	 *        fy_XX.
 	 */
-	{ "fy", N_("Frisian"), LANG_FRISIAN, SUBLANG_FRISIAN_NETHERLANDS },
-	{ "ga", N_("Irish"), LANG_IRISH, SUBLANG_IRISH_IRELAND },
+//	{ "fy", N_("Frisian"), LANG_FRISIAN, SUBLANG_FRISIAN_NETHERLANDS },
+//	{ "ga", N_("Irish"), LANG_IRISH, SUBLANG_IRISH_IRELAND },
 	{ "hr", N_("Croatian"), LANG_CROATIAN, SUBLANG_DEFAULT },
 	{ "it", N_("Italian"), LANG_ITALIAN, SUBLANG_ITALIAN },
 //	{ "la", N_("Latin"), LANG_LATIN, SUBLANG_DEFAULT },
-	{ "lt", N_("Lithuanian"), LANG_LITHUANIAN, SUBLANG_DEFAULT },
+//	{ "lt", N_("Lithuanian"), LANG_LITHUANIAN, SUBLANG_DEFAULT },
 //	{ "lv", N_("Latvian"), LANG_LATVIAN, SUBLANG_DEFAULT },
 	// MSDN uses "no"...
-	{ "nb", N_("Norwegian"), LANG_NORWEGIAN, SUBLANG_DEFAULT },
+//	{ "nb", N_("Norwegian"), LANG_NORWEGIAN, SUBLANG_DEFAULT },
 //	{ "nn", N_("Norwegian (Nynorsk)"), LANG_NORWEGIAN, SUBLANG_NORWEGIAN_NYNORSK },
-	{ "nl", N_("Dutch"), LANG_DUTCH, SUBLANG_DUTCH },
+//	{ "nl", N_("Dutch"), LANG_DUTCH, SUBLANG_DUTCH },
 	{ "pl", N_("Polish"), LANG_POLISH, SUBLANG_DEFAULT },
 	{ "pt_BR", N_("Brazilian Portuguese"), LANG_PORTUGUESE, SUBLANG_PORTUGUESE_BRAZILIAN },
 	{ "pt", N_("Portuguese"), LANG_PORTUGUESE, SUBLANG_DEFAULT },
-	{ "ro", N_("Romanian"), LANG_ROMANIAN, SUBLANG_DEFAULT },
+//	{ "ro", N_("Romanian"), LANG_ROMANIAN, SUBLANG_DEFAULT },
 	{ "ru", N_("Russian"), LANG_RUSSIAN, SUBLANG_DEFAULT },
 	{ "sl", N_("Slovenian"), LANG_SLOVENIAN, SUBLANG_DEFAULT },
 #if (WINVER >= 0x0600)
@@ -96,7 +96,7 @@ static const struct
 //	{ "tr", N_("Turkish"), LANG_TURKISH, SUBLANG_DEFAULT },
 //	{ "uz", N_("Uzbek (Cyrillic)"), LANG_UZBEK, SUBLANG_UZBEK_CYRILLIC },
 	{ "uk_UA", N_("Ukrainian"), LANG_UKRAINIAN, SUBLANG_DEFAULT },
-	{ "zh_CN", N_("Simplified Chinese"), LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED },
+//	{ "zh_CN", N_("Simplified Chinese"), LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED },
 	{ "zh_TW", N_("Traditional Chinese"), LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL },
 #  endif
 };
@@ -110,15 +110,15 @@ static const struct
 } map[] = {
 	{ "",   N_("System locale"), "", "" },
 #  if defined(ENABLE_NLS)
-	{ "cs", N_("Czech"), "cs.UTF-8", "cs" },
-	{ "da", N_("Danish"), "da_DK.UTF-8", "da_DK" },
+//	{ "cs", N_("Czech"), "cs.UTF-8", "cs" },
+//	{ "da", N_("Danish"), "da_DK.UTF-8", "da_DK" },
 	{ "de", N_("German"), "de_DE.UTF-8", "de_DE" },
 //	{ "en", N_("English"), "en_US.UTF-8", "en_US" },
 	{ "en_GB", N_("English (United Kingdom)"), "en_GB.UTF-8", "en_GB" },
 	{ "es", N_("Spanish"), "es_ES.UTF-8", "es_ES" },
 	{ "et_EE", N_("Estonian"), "et_EE.UTF-8", "et_EE" },
 //	{ "eu", N_("Basque"), "eu.UTF-8", "eu" },
-	{ "fi", N_("Finnish"), "fi.UTF-8", "fi" },
+//	{ "fi", N_("Finnish"), "fi.UTF-8", "fi" },
 	{ "fr", N_("French"), "fr_FR.UTF-8", "fr_FR" },
 	/* Our Frisian translation is the "West Frisian" variation of it. This
 	 * variation is mostly spoken in the Dutch province Friesland (Fryslân
@@ -127,20 +127,20 @@ static const struct
 	 * FIXME: We should really use a sub-language code for this. E.g.
 	 *        fy_XX.
 	 */
-	{ "fy", N_("Frisian"), "fy.UTF-8", "fy" },
-	{ "ga", N_("Irish"), "ga.UTF-8", "ga" },
+//	{ "fy", N_("Frisian"), "fy.UTF-8", "fy" },
+//	{ "ga", N_("Irish"), "ga.UTF-8", "ga" },
 	{ "hr", N_("Croatian"), "hr_HR.UTF-8", "hr_HR" },
 	{ "it", N_("Italian"), "it_IT.UTF-8", "it_IT" },
-	{ "la", N_("Latin"), "la.UTF-8", "la" },
-	{ "lt", N_("Lithuanian"), "lt.UTF-8", "lt" },
+//	{ "la", N_("Latin"), "la.UTF-8", "la" },
+//	{ "lt", N_("Lithuanian"), "lt.UTF-8", "lt" },
 //	{ "lv", N_("Latvian"), "lv.UTF-8", "lv" },
-	{ "nb", N_("Norwegian"), "nb_NO.UTF-8", "nb_NO" },
+//	{ "nb", N_("Norwegian"), "nb_NO.UTF-8", "nb_NO" },
 //	{ "nn", N_("Norwegian (Nynorsk)"), "nn.UTF-8", "nn" },
-	{ "nl", N_("Dutch"), "nl_NL.UTF-8", "nl_NL" },
+//	{ "nl", N_("Dutch"), "nl_NL.UTF-8", "nl_NL" },
 	{ "pl", N_("Polish"), "pl.UTF-8", "pl" },
 	{ "pt_BR", N_("Brazilian Portuguese"), "pt_BR.UTF-8", "pt_BR" },
 	{ "pt", N_("Portuguese"), "pt_PT.UTF-8", "pt_PT" },
-	{ "ro", N_("Romanian"), "ro.UTF-8", "ro" },
+//	{ "ro", N_("Romanian"), "ro.UTF-8", "ro" },
 	{ "ru", N_("Russian"), "ru_RU.UTF-8", "ru_RU" },
 	{ "sl", N_("Slovenian"), "sl.UTF-8", "sl" },
 //	{ "sv_SE", N_("Swedish (Sweden)"), "sv_SE.UTF-8", "sv_SE" },
@@ -148,7 +148,7 @@ static const struct
 //	{ "tr", N_("Turkish"), "tr.UTF-8", "tr" },
 //	{ "uz", N_("Uzbek (Cyrillic)"), "uz.UTF-8", "uz" },
 	{ "uk_UA", N_("Ukrainian"), "uk_UA.UTF-8", "uk_UA" },
-	{ "zh_CN", N_("Simplified Chinese"), "zh_CN.UTF-8", "zh_CN" },
+//	{ "zh_CN", N_("Simplified Chinese"), "zh_CN.UTF-8", "zh_CN" },
 	{ "zh_TW", N_("Traditional Chinese"), "zh_TW.UTF-8", "zh_TW" },
 #  endif
 };
