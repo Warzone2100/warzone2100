@@ -2,18 +2,28 @@
 
 /* Only change the strings after the '='; '\n' gives you a new line, do not use it in the CFBundleName or CFBundleDisplayName strings */
 
-CFBundleName = "Warzone"; /* Name in the menubar */
 
-CFBundleDisplayName = "Warzone 2100"; /* Name of the app bundle */
+/* Warzone */ /* Name in the menubar */
+CFBundleName = "Warzone";
 
-NSHumanReadableCopyright = "Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2010 The Warzone 2100 Project";  /* Copyright string */
+/* Warzone 2100 */ /* Name of the app bundle */
+CFBundleDisplayName = "Warzone 2100";
 
-"Warzone 2100 Map / Mod File" = "Warzone-2100-Karten/Mod-Datei"; /* Description of .wz files */
+/* Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2010 The Warzone 2100 Project */ /* Copyright string */
+NSHumanReadableCopyright = "Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2010 The Warzone 2100 Project";
 
-"Warzone 2100 Multiplayer Mod File" = "Warzone 2100 Multiplayer Mod File"; /* Description of .mod.wz files */
 
-"Warzone 2100 Campaign Mod File" = "Warzone 2100 Campaign Mod File"; /* Description of .cam.wz files */
+/* Warzone 2100 Map / Mod File */ /* Description of .wz files */
+"Warzone 2100 Map / Mod File" = "Warzone-2100-Karten/Mod-Datei";
 
-"Warzone 2100 Global Mod File" = "Warzone 2100 Global Mod File"; /* Description of .gmod.wz files */
+/* Warzone 2100 Multiplayer Mod File */ /* Description of .mod.wz files */
+"Warzone 2100 Multiplayer Mod File" = "Warzone 2100 Multiplayer Mod File";
 
-"Warzone 2100 Music Mod File" = "Warzone 2100 Music Mod File"; /* Description of .music.wz files */
+/* Warzone 2100 Campaign Mod File */ /* Description of .cam.wz files */
+"Warzone 2100 Campaign Mod File" = "Warzone 2100 Campaign Mod File";
+
+/* Warzone 2100 Global Mod File */ /* Description of .gmod.wz files */
+"Warzone 2100 Global Mod File" = "Warzone 2100 Global Mod File";
+
+/* Warzone 2100 Music Mod File */ /* Description of .music.wz files */
+"Warzone 2100 Music Mod File" = "Warzone 2100 Music Mod File";
