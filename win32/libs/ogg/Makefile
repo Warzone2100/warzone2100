@@ -1,12 +1,12 @@
 PKG_NAME:=libogg
-PKG_VERSION:=1.1.4
+PKG_VERSION:=1.2.0
 
 PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:= \
 	http://downloads.xiph.org/releases/ogg/ \
 	http://www.il.fontys.nl/~giel/warzone/devpkg/
-PKG_MD5SUM:=10200ec22543841d9d1c23e0aed4e5e9
+PKG_MD5SUM:=c95b73759acfc30712beef6ce4e88efa
 
 TARGETS:= \
 	$(TOPDIR)/build/libs/include/ogg/ogg.h \
