@@ -56,6 +56,8 @@
  */
 
 #include <GLee.h>
+#include "lib/framework/frame.h"
+#include "lib/framework/frameint.h"
 #include "sequence.h"
 #include "timer.h"
 #include "lib/framework/math_ext.h"
@@ -165,8 +167,10 @@ static int frames = 0;
 static int dropped = 0;
 
 // Screen dimensions
-static int ScrnvidXsize = 0;
-static int ScrnvidYsize = 0;
+static int videoX1 = 0;
+static int videoX2 = 0;
+static int videoY1 = 0;
+static int videoY2 = 0;
 static int ScrnvidXpos = 0;
 static int ScrnvidYpos = 0;
 
@@ -341,13 +345,13 @@ static void video_write(bool update)
 	glTranslatef(ScrnvidXpos, ScrnvidYpos, 0.0f);
 	glBegin(GL_TRIANGLE_STRIP);
 	glTexCoord2f(0, 0);
-	glVertex2f(0, 0);
+	glVertex2f(videoX1, videoY1);
 	glTexCoord2f((float) video_width / texture_width, 0);
-	glVertex2f(ScrnvidXsize, 0);				//screenWidth
+	glVertex2f(videoX2, videoY1);				//screenWidth
 	glTexCoord2f(0, (float) video_height / texture_height);
-	glVertex2f(0, ScrnvidYsize);				//screenHeight
+	glVertex2f(videoX1, videoY2);				//screenHeight
 	glTexCoord2f((float) video_width / texture_width, (float) video_height / texture_height);
-	glVertex2f(ScrnvidXsize, ScrnvidYsize);		//screenWidth,screenHeight
+	glVertex2f(videoX2, videoY2);		//screenWidth,screenHeight
 	glEnd();
 
 	glPopMatrix();
@@ -420,7 +424,7 @@ static void seq_InitOgg(void)
 {
 	debug(LOG_VIDEO, "seq_InitOgg");
 
-	ASSERT((ScrnvidXsize && ScrnvidYsize), "Screen dimensions not specified!");
+	ASSERT((videoX2 && videoY2), "Screen dimensions not specified!");
 
 	stateflag = false;
 	theora_p = 0;
@@ -966,8 +970,31 @@ int seq_GetFrameNumber()
 // this controls the size of the video to display on screen
 void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 {
-	ScrnvidXsize = sizeX;
-	ScrnvidYsize = sizeY;
+	videoX1 = 0;
+	videoY1 = 0;
+	videoX2 = sizeX;
+	videoY2 = sizeY;
+
+	if (sizeX > 640 || sizeY > 480)
+	{
+		const float aspect = screenWidth / (float)screenHeight, videoAspect = 4 / (float)3;
+
+		if (aspect > videoAspect)
+		{
+			int offset = (screenWidth - screenHeight * videoAspect) / 2;
+			videoX1 += offset;
+			videoX2 -= offset;
+		}
+		else
+		{
+			int offset = (screenHeight - screenWidth / videoAspect) / 2;
+			videoY1 += offset;
+			videoY2 -= offset;
+		}
+
+
+	}
+
 	ScrnvidXpos = posX;
 	ScrnvidYpos = posY;
 }
