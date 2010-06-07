@@ -294,8 +294,6 @@ void screen_Upload(const char *newBackDropBmp, BOOL preview)
 			0, GL_RGB, GL_UNSIGNED_BYTE, newBackDropBmp);
 
 		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 		processed = true;
@@ -330,6 +328,11 @@ void screen_Upload(const char *newBackDropBmp, BOOL preview)
 
 		tx = preview_width / (float)BACKDROP_HACK_WIDTH;
 		ty = preview_height / (float)BACKDROP_HACK_HEIGHT;
+	}
+	else
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 
 	glBegin(GL_TRIANGLE_STRIP);
