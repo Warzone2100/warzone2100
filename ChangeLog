@@ -1,6 +1,7 @@
 2010-06-00: Version 2.3.1
  * General:
    * Change: Add the Playstation music track (r10905)
+   * Change: Put date and time in screenshot file names (r10951)
    * Fix: If setting the chosen fullscreen video mode fails, retry in windowed mode (10683)
    * Fix: Power calculations (r10770, r10772, r10794, r10885)
  * UI:
@@ -8,7 +9,10 @@
    * Change: Add "scout" and "disembark" cursors (r10723)
    * Change: Improved AI slider (r10725)
    * Change: Fast build queueing by holding down shift (r10795)
-   * Change: Improved map preview (r10901)
+   * Change: Improved map preview (r10901, r10944, r10947)
+   * Change: Show backdrops with correct aspect ratio, cut off the part that doesn't fit the screen (r10945, r10948)
+   * Change: Show videos with correct aspect ratio, with black borders (r10946)
+   * Change: Show an optional description for challenges (r10950)
    * Fix: Subtitles menu option works again (r10682)
    * Fix: Make double-click interval game-speed independent (r10736)
    * Fix: Display "build" cursor while building (r10764)
@@ -16,7 +20,8 @@
    * Fix: New improved scav script that operates scavengers individually, helps when they are station in multiple scav bases (r10717)
  * Translations:
    * Fix: Make subtitles translateable (r10685, r10686)
-   * Updated: Ukrainian (r10696), German (r10711, r10733), French (r10738, r10768), Spanish (r10742), Italian (r10777), Brazilian (r10785, r10887), Estonian (r10792), Polish (r10864, r10881)
+   * Change: Disable translations below 50% (r10919)
+   * Updated: Ukrainian (r10696), German (r10711, r10733), French (r10738, r10768), Spanish (r10742), Italian (r10777), Brazilian (r10785, r10887, r10949), Estonian (r10792), Polish (r10864, r10881), Croatian (r10915), Russian (r10942)
 
 2010-04-24: Version 2.3.0
  * General:
