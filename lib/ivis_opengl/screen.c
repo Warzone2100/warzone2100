@@ -318,6 +318,20 @@ void screen_Upload(const char *newBackDropBmp, BOOL preview)
 	static bool processed = false;
 	int x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight, i, scale = 0, w = 0, h = 0;
 	float tx = 1, ty = 1;
+	const float aspect = screenWidth / (float)screenHeight, backdropAspect = 4 / (float)3;
+
+	if (aspect > backdropAspect)
+	{
+		int offset = (screenWidth - screenHeight * backdropAspect) / 2;
+		x1 += offset;
+		x2 -= offset;
+	}
+	else
+	{
+		int offset = (screenHeight - screenWidth / backdropAspect) / 2;
+		y1 += offset;
+		y2 -= offset;
+	}
 
 	if(newBackDropBmp != NULL)
 	{
