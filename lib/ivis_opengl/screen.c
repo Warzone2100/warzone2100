@@ -452,8 +452,13 @@ const char *screen_getMapName(void)
 
 void screen_disableMapPreview(void)
 {
-	mappreview = false;
-	sstrcpy(mapname, "none");
+	if (mappreview)
+	{
+		mappreview = false;
+		sstrcpy(mapname, "none");
+		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+		screen_RestartBackDrop();
+	}
 }
 
 BOOL screen_getMapPreview(void)

@@ -740,7 +740,6 @@ static void startGameLoop(void)
 	{
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
 	}
-	screen_disableMapPreview();
 }
 
 
@@ -772,6 +771,7 @@ static void stopGameLoop(void)
 	}
 
 	gameInitialised = false;
+	screen_disableMapPreview();
 }
 
 
