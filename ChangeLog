@@ -4,6 +4,7 @@
    * Change: Put date and time in screenshot file names (r10951)
    * Fix: If setting the chosen fullscreen video mode fails, retry in windowed mode (10683)
    * Fix: Power calculations (r10770, r10772, r10794, r10885)
+   * Fix: Crash when loading saved games with different mods than currently loaded (r10959)
  * UI:
    * Change: Draw subtitles with shadows (r10681)
    * Change: Add "scout" and "disembark" cursors (r10723)
