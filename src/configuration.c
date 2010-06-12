@@ -683,8 +683,8 @@ BOOL loadRenderMode(void)
 	{
 		// If we have an invalid or incomplete resolution specified
 		// fall back to the defaults.
-		war_SetWidth(640);
-		war_SetHeight(480);
+		war_SetWidth(0);
+		war_SetHeight(0);
 	}
 
 	if (getWarzoneKeyNumeric("bpp", &val))

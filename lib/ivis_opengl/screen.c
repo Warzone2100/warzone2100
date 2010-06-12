@@ -37,6 +37,7 @@
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_common/pieclip.h"
 
 #if defined(WZ_OS_MAC)
 #include <OpenGL/glu.h>
@@ -83,10 +84,18 @@ bool screenInitialise(
 	// Fetch the video info.
 	const SDL_VideoInfo* video_info = SDL_GetVideoInfo();
 
-	/* Store the screen information */
-	screenWidth = width;
-	screenHeight = height;
-	screenDepth = bitDepth;
+	if (width == 0 || height == 0)
+	{
+		pie_SetVideoBufferWidth(width = screenWidth = video_info->current_w);
+		pie_SetVideoBufferHeight(height = screenHeight = video_info->current_h);
+		pie_SetVideoBufferDepth(bitDepth = screenDepth = video_info->vfmt->BitsPerPixel);
+	}
+	else
+	{
+		screenWidth = width;
+		screenHeight = height;
+		screenDepth = bitDepth;
+	}
 
 	if (!video_info)
 	{
