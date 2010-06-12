@@ -326,6 +326,20 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 			}
 			else
 			{
+				// We cannot cut corners
+				x = psCurr->x + aDirOffset[(dir + 1) % 8].x;
+				y = psCurr->y + aDirOffset[(dir + 1) % 8].y;
+				if (fpathBaseBlockingTile(x, y, psJob->propulsion, psJob->owner, psJob->moveType))
+				{
+					continue;
+				}
+				x = psCurr->x + aDirOffset[(dir - 1) % 8].x;
+				y = psCurr->y + aDirOffset[(dir - 1) % 8].y;
+				if (fpathBaseBlockingTile(x, y, psJob->propulsion, psJob->owner, psJob->moveType))
+				{
+					continue;
+				}
+
 				currDist = psCurr->dist + 14;
 			}
 
