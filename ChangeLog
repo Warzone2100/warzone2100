@@ -4,7 +4,7 @@
    * Change: Put date and time in screenshot file names (r10951)
    * Fix: If setting the chosen fullscreen video mode fails, retry in windowed mode (10683)
    * Fix: Power calculations (r10770, r10772, r10794, r10885)
-   * Fix: Crash when loading saved games with different mods than currently loaded (r10959)
+   * Fix: Crash when loading saved games with different mods than currently loaded (r10531, r10723)
  * UI:
    * Change: Draw subtitles with shadows (r10681)
    * Change: Add "scout" and "disembark" cursors (r10723)
@@ -19,10 +19,18 @@
    * Fix: Display "build" cursor while building (r10764)
  * Multiplayer:
    * Fix: New improved scav script that operates scavengers individually, helps when they are station in multiple scav bases (r10717)
+ * DyDo AI (r10773, r10774, r10775, r10776, r10786):
+   * Update to 2.1.4: Improved initial building sequence and speed, improved the way trucks are moved between groups (r10786)
+   * Challenges use maps included in the game
+ * NTW (r10762, r10800, r10872):
+   * More range for for twin assault cannon, less mg damage against all buildings, a slower tank and cyborg production at start (r10861)
+ * 1.10 balance:
+   * Less hit points for artillery, they are all on 25-35% now (r10879)
+   * remove the lancer rof upgrades to keep the old balance (r10953)
  * Translations:
    * Fix: Make subtitles translateable (r10685, r10686)
    * Change: Disable translations below 50% (r10919)
-   * Updated: Ukrainian (r10696), German (r10711, r10733), French (r10738, r10768), Spanish (r10742), Italian (r10777), Brazilian (r10785, r10887, r10949), Estonian (r10792), Polish (r10864, r10881), Croatian (r10915), Russian (r10942)
+   * Updated: Ukrainian (r10696), German (r10711, r10733), French (r10738, r10768), Spanish (r10742), Italian (r10777), Brazilian (r10785, r10887, r10949), Estonian (r10792), Polish (r10864, r10881), Croatian (r10915), Russian (r10942, r10957)
 
 2010-04-24: Version 2.3.0
  * General:
