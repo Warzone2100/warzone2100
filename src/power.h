@@ -38,8 +38,8 @@
 
 typedef struct _player_power
 {
-	UDWORD		currentPower;		/**< The current amount of power avaialble to the player. */
-	UDWORD		extractedPower;		/**< The power extracted but not converted. */
+	int32_t		currentPower;		/**< The current amount of power avaialble to the player. */
+	int32_t		extractedPower;		/**< The power extracted but not converted. */
 	BASE_OBJECT	*psLastPowered;		/**< The last object that received power before it ran out. */
 } PLAYER_POWER;
 
@@ -65,7 +65,7 @@ extern BOOL usePower(UDWORD player, UDWORD quantity);
 extern void addPower(UDWORD player, UDWORD quantity);
 
 /** Each Resource Extractor yields EXTRACT_POINTS per second until there are none left in the resource. */
-extern UDWORD updateExtractedPower(STRUCTURE	*psBuilding);
+extern int32_t updateExtractedPower(STRUCTURE	*psBuilding);
 
 /** Update current power based on what was extracted during the last cycle and what Power Generators exist. */
 extern void updatePlayerPower(UDWORD player);

@@ -139,6 +139,7 @@ void addPower(UDWORD player, UDWORD quantity)
 {
 	ASSERT(player < MAX_PLAYERS, "addPower: Bad player (%u)", player);
 
+	ASSERT(quantity <= MAX_POWER/2, "Power over or under flow. Tried to add %u.", quantity);
 	if (quantity > MAX_POWER)
 	{
 		debug(LOG_WARNING, "Power over or under flow. Tried to add %u - ignored", quantity);
@@ -154,23 +155,16 @@ void addPower(UDWORD player, UDWORD quantity)
 /*resets the power calc flag for all players*/
 void powerCalc(BOOL on)
 {
-	if (on)
-	{
-		powerCalculated = true;
-	}
-	else
-	{
-		powerCalculated = false;
-	}
+	powerCalculated = on;
 }
 
 /* Each Resource Extractor yields EXTRACT_POINTS per second until there are none
    left in the resource. */
-UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
+int32_t updateExtractedPower(STRUCTURE	*psBuilding)
 {
 	RES_EXTRACTOR		*pResExtractor;
-	UDWORD				pointsToAdd, extractedPoints;
-	UBYTE			modifier;
+	int32_t				pointsToAdd, extractedPoints;
+	int32_t				powmodifier;
 
 	pResExtractor = (RES_EXTRACTOR *) psBuilding->pFunctionality;
 	extractedPoints = 0;
@@ -182,15 +176,15 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 		// Add modifier according to difficulty level
 		if (getDifficultyLevel() == DL_EASY)
 		{
-			modifier = EASY_POWER_MOD;
+			powmodifier = EASY_POWER_MOD/10;
 		}
 		else if (getDifficultyLevel() == DL_HARD)
 		{
-			modifier = HARD_POWER_MOD;
+			powmodifier = HARD_POWER_MOD/10;
 		}
 		else
 		{
-			modifier = NORMAL_POWER_MOD;
+			powmodifier = NORMAL_POWER_MOD/10;
 		}
 		// if the extractor hasn't been updated recently, now would be a good time.
 		if (pResExtractor->timeLastUpdated < 20 && gameTime >= 20)
@@ -199,9 +193,9 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 		}
 		// include modifier as a %
 		// Written this way to prevent rounding errors - do not "simplify"
-		overflowDiff = pResExtractor->timeLastUpdated - (pResExtractor->timeLastUpdated % (GAME_TICKS_PER_SEC*100));
-		pointsToAdd = ((gameTime - overflowDiff)                       * modifier * EXTRACT_POINTS) / (GAME_TICKS_PER_SEC * 100)
-		            - ((pResExtractor->timeLastUpdated - overflowDiff) * modifier * EXTRACT_POINTS) / (GAME_TICKS_PER_SEC * 100);
+		overflowDiff = pResExtractor->timeLastUpdated - (pResExtractor->timeLastUpdated % (GAME_TICKS_PER_SEC*10));
+		pointsToAdd = ((gameTime - overflowDiff)                       * powmodifier * EXTRACT_POINTS) / (GAME_TICKS_PER_SEC * 10)
+		            - ((pResExtractor->timeLastUpdated - overflowDiff) * powmodifier * EXTRACT_POINTS) / (GAME_TICKS_PER_SEC * 10);
 		/*
 		 * If you are thinking about rewriting the preceding section of code, there are a few things
 		 * you should know.
@@ -213,6 +207,7 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 		 * timeLastUpdated of an extractor that's just been created is some magic number around 12ms.
 		 * gameTime, on the other hand, could be around 3 hours.
 		 */
+		ASSERT(pointsToAdd > -1 && pointsToAdd < 10, "pointsToAdd not in sensical range");
 
 		if ((int)pResExtractor->timeLastUpdated - (int)gameTime > GAME_TICKS_PER_SEC || (int)gameTime - (int)pResExtractor->timeLastUpdated > GAME_TICKS_PER_SEC)
 		{
@@ -294,7 +289,7 @@ void updatePlayerPower(UDWORD player)
 /* Updates the current power based on the extracted power and a Power Generator*/
 void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 {
-	UDWORD		power, i, extractedPower;
+	int32_t		power, i, extractedPower;
 
 	ASSERT(player < MAX_PLAYERS, "updateCurrentPower: Bad player");
 
@@ -325,10 +320,14 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 		asPower[player].extractedPower -= 100; // just to prevent integer overflow
 	}
 
-	asPower[player].currentPower += power;
-	if (asPower[player].currentPower > MAX_POWER)
+	ASSERT_OR_RETURN(, power < 20 && power > -1, "Power out of sane range");
+	if (power >= 0)
 	{
-		asPower[player].currentPower = MAX_POWER;
+		asPower[player].currentPower += power;
+		if (asPower[player].currentPower > MAX_POWER)
+		{
+			asPower[player].currentPower = MAX_POWER;
+		}
 	}
 }
 
