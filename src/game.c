@@ -11524,40 +11524,38 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
  */
 BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 {
-	SAVE_STRUCTURE				sSave;  // close eyes now.
+	SAVE_STRUCTURE sSave;  // close eyes now.
 	// assumes save_struct is larger than all previous ones...
-	SAVE_STRUCTURE_V2			*psSaveStructure2 = (SAVE_STRUCTURE_V2*)&sSave;
-	SAVE_STRUCTURE_V20			*psSaveStructure20= (SAVE_STRUCTURE_V20*)&sSave;
-										// ok you can open them again..
+	SAVE_STRUCTURE_V2 *psSaveStructure2 = (SAVE_STRUCTURE_V2*)&sSave;
+	SAVE_STRUCTURE_V20 *psSaveStructure20= (SAVE_STRUCTURE_V20*)&sSave;
+	// ok you can open them again..
 
-	STRUCT_SAVEHEADER		*psHeader;
-	char			aFileName[256];
-	UDWORD			xx,yy,count,fileSize,sizeOfSaveStruture;
-	UDWORD	playerid =0;
-	char			*pFileData = NULL;
-	LEVEL_DATASET	*psLevel;
+	STRUCT_SAVEHEADER *psHeader;
+	char aFileName[256];
+	UDWORD xx, yy, count, fileSize, sizeOfSaveStructure = sizeof(SAVE_STRUCTURE);
+	UDWORD playerid = 0;
+	char *pFileData = NULL;
+	LEVEL_DATASET *psLevel;
 	PIELIGHT color = WZCOL_BLACK ;
 	bool HQ = false;
 
-
 	psLevel = levFindDataSet(game.map);
-	strcpy(aFileName,psLevel->apDataFiles[0]);
-	aFileName[strlen(aFileName)-4] = '\0';
+	strcpy(aFileName, psLevel->apDataFiles[0]);
+	aFileName[strlen(aFileName) - 4] = '\0';
 	strcat(aFileName, "/struct.bjo");
 
 	pFileData = fileLoadBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
-		debug( LOG_NEVER, "plotStructurePreview16: Fail1\n" );
+		debug(LOG_NEVER, "Failed to load file to buffer.");
 	}
 
 	/* Check the file type */
 	psHeader = (STRUCT_SAVEHEADER *)pFileData;
 	if (psHeader->aFileType[0] != 's' || psHeader->aFileType[1] != 't' ||
-		psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'u')
+	    psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'u')
 	{
-		debug( LOG_ERROR, "plotStructurePreview16: Incorrect file type" );
-
+		debug(LOG_ERROR, "Invalid file type.");
 		return false;
 	}
 
@@ -11570,36 +11568,31 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 
 	if (psHeader->version < VERSION_12)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V2);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V2);
 	}
 	else if (psHeader->version < VERSION_14)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V12);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V12);
 	}
 	else if (psHeader->version <= VERSION_14)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V14);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V14);
 	}
 	else if (psHeader->version <= VERSION_16)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V15);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V15);
 	}
 	else if (psHeader->version <= VERSION_19)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V17);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V17);
 	}
 	else if (psHeader->version <= VERSION_20)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V20);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V20);
 	}
-	else
-	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE);
-	}
-
 
 	/* Load in the structure data */
-	for (count = 0; count < psHeader-> quantity; count ++, pFileData += sizeOfSaveStruture)
+	for (count = 0; count < psHeader->quantity; count++, pFileData += sizeOfSaveStructure)
 	{
 		// we are specifically looking for the HQ, and it seems this is the only way to
 		// find it via parsing map.
@@ -11614,7 +11607,7 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 			endian_udword(&psSaveStructure2->y);
 			endian_udword(&psSaveStructure2->player);
 			playerid = psSaveStructure2->player;
-			if(strncmp(psSaveStructure2->name,"A0CommandCentre",15)  == 0 )
+			if (strncmp(psSaveStructure2->name, "A0CommandCentre", 15) == 0)
 			{
 				HQ = true;
 				xx = playeridpos[playerid].x = map_coord(psSaveStructure2->x);
@@ -11637,11 +11630,11 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 			endian_udword(&psSaveStructure20->player);
 			playerid = psSaveStructure20->player;
 
-			if(strncmp(psSaveStructure20->name,"A0CommandCentre",15)  == 0 )
+			if (strncmp(psSaveStructure20->name, "A0CommandCentre", 15) == 0)
 			{
 				HQ = true;
-				xx = playeridpos[playerid].x  = map_coord(psSaveStructure20->x);
-				yy = playeridpos[playerid].y  = map_coord(psSaveStructure20->y);
+				xx = playeridpos[playerid].x = map_coord(psSaveStructure20->x);
+				yy = playeridpos[playerid].y = map_coord(psSaveStructure20->y);
 			}
 			else
 			{
@@ -11652,7 +11645,7 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 		}
 		playerid = getPlayerColour(RemapPlayerNumber(playerid));
 		// kludge to fix black, so you can see it on some maps.
-		if (playerid == 3)	// in this case 3 = pallete entry for black.
+		if (playerid == 3)	// in this case 3 = palette entry for black.
 		{
 			color = WZCOL_GREY;
 		}
@@ -11661,13 +11654,13 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 			color.rgba = clanColours[playerid].rgba;
 		}
 		
-		if(HQ)
+		if (HQ)
 		{	// This shows where the HQ is on the map in a special color.
 			// We could do the same for anything else (oil/whatever) also.
 			// Possible future enhancement?
-			color.byte.b=0xff;
-			color.byte.g=0;
-			color.byte.r=0xff;
+			color.byte.b = 0xff;
+			color.byte.g = 0;
+			color.byte.r = 0xff;
 		}
 
 		// and now we blit the color to the texture
