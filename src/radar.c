@@ -269,7 +269,7 @@ void drawRadar(void)
 	{
 		DrawRadarTiles();
 		DrawRadarObjects();
-		pie_DownLoadRadar(radarBuffer, radarTexWidth, radarTexHeight, rotateRadar);
+		pie_DownLoadRadar(radarBuffer, radarTexWidth, radarTexHeight);
 		frameSkip = RADAR_FRAME_SKIP;
 	}
 	frameSkip--;
