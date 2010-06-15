@@ -9,7 +9,7 @@ check_PROGRAMS = \
 	maptest \
 	pointtreetest
 
-astartest_SOURCES = astartest.c
+astartest_SOURCES = astartest.c ../lib/framework/debug.c
 astartest_LDADD = $(SDL_LIBS)
 
 maptest_SOURCES = ../tools/map/mapload.c maptest.c

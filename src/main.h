@@ -35,7 +35,7 @@ typedef enum {
 //flag to indicate when initialisation is complete
 extern BOOL gameInitialised;
 extern BOOL bDisableLobby;
-
+extern bool customDebugfile;
 extern GS_GAMEMODE GetGameMode(void) WZ_DECL_PURE;
 extern void SetGameMode(GS_GAMEMODE status);
 
@@ -50,6 +50,10 @@ extern char MultiPlayersPath[PATH_MAX];
 extern char * global_mods[MAX_MODS];
 extern char * campaign_mods[MAX_MODS];
 extern char * multiplay_mods[MAX_MODS];
+
+extern char * override_mods[MAX_MODS];
+extern char * override_mod_list;
+extern bool use_override_mods;
 
 #ifdef __cplusplus
 }

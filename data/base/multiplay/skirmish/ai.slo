@@ -391,6 +391,23 @@ event checkResearch(checkResearchTr)
 	setEventTrigger(doResearch, chainloadTr);
 }
 
+function void dbgPlr(string message)
+{
+	setEventTrigger(doResearch, chainloadTr);
+	if (me == selectedPlayer)
+	{
+		console(message);
+	}
+}
+
+function void dbgObj(DROID obj, string message)
+{
+	if (obj.selected)
+	{
+		console(message);
+	}
+}
+
 function bool conCanHelp(DROID mydroid, int bx, int by)
 {
 	return (mydroid.order != DORDER_HELPBUILD and mydroid.order != DORDER_BUILD and mydroid.order != DORDER_LINEBUILD and droidCanReach(mydroid, bx, by));
@@ -446,6 +463,8 @@ event arrived(reachedTr)
 
 	if (droid.droidType == DROID_CONSTRUCT or droid.droidType == DROID_CYBORG_CONSTRUCT)
 	{
+		dbgObj(droid, "Failed to build where we should - attempt to screw up enemy oil derrick");
+
 		// Check if at oil well, and it was taken by enemy
 		structure = structureBuiltInRange(derrick, droid.x, droid.y, (5 * 128), -1);
 		if (structure != NULLOBJECT)
@@ -475,12 +494,22 @@ event arrived(reachedTr)
 					{
 						orderDroidStatsLoc(droid, DORDER_BUILD, defStructs[count], buildX, buildY);
 					}
+					else
+					{
+						dbgObj(droid, "Wanted to be nasty, but found nowhere to build defense");
+						orderDroid(droid, DORDER_RTB);		// nothing more to do here.
+					}
+				}
+				else
+				{
+					dbgObj(droid, "Wanted to be nasty, but had nothing nasty to build - returning to base");
+					orderDroid(droid, DORDER_RTB);		// oh, well. nothing more to do here.
 				}
 				exit;
 			}
 			else if (droid.health < 100 and !insideBase(droid.x, droid.y))
 			{
-				orderDroid(droid, DORDER_RTB);		// bolt back to base now!
+				orderDroid(droid, DORDER_RTR);		// bolt back to base now!
 				exit;
 			}
 		}
@@ -707,7 +736,6 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 {
 	local	int		_numBuilders,_maxBuilders;
 
-
 	_maxBuilders = 1;
 
 	// check idle.
@@ -743,20 +771,8 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 					{
 						if( isStructureAvailable(defStructs[count],me))
 						{
-
-							// don't build multiple sensors together.
-							if(count == 5)
-							{
-								structure = structureBuiltInRange(defStructs[count], buildX, buildY,(6*128), me);
-								if(structure != NULLOBJECT)
-								{
-									count = 8;
-								}
-							}
-
 							structChoice[count2] = defStructs[count];
 							count2 = count2 + 1;
-
 						}
 						count = count - 1;
 					}
@@ -973,7 +989,10 @@ event incendry(incendryTr)
 // build a power gen for every 4 derricks. VITAL!
 event buildPowerGenerators(buildPowerGeneratorsTr)
 {
-
+	if (!isStructureAvailable(powGen, me))
+	{
+		exit;
+	}
 	initEnumStruct(FALSE,derrick,me,me);					// count = numderricks
 	structure= enumStruct();
 	count	 = 0;
@@ -2126,28 +2145,24 @@ event doAllOutAttack(allOutAttackTr)
 // defend attacked objects.
 event defendWatch(defendWatchTr)
 {
-	if(baseobj != NULLOBJECT)
+	if (baseobj != NULLOBJECT)
 	{
 		if(!friendlyPlayer(baseobj.player))
 		{
-			if(not isHumanPlayer(baseobj.player) )	// new in wdg1 dont allout attack a pc player	//TODO:is this check needed?
+			if(distBetweenTwoPoints(baseobj.x, baseobj.y, baseX, baseY) <= MAX_DEFENDERS_RADIUS)	//don't go too far away from the base
 			{
-				if(distBetweenTwoPoints(baseobj.x, baseobj.y, baseX, baseY) <= MAX_DEFENDERS_RADIUS)	//don't go too far away from the base
+				defendObj = baseobj;
+				defendbusy = TRUE;
+				// if not too busy, attack.
+				if (idleGroup(defendGroup) >= (defendGroup.members / 2))
 				{
-					defendObj = baseobj;
-					defendbusy = TRUE;
-					// if not too busy, attack.
-					if( idleGroup(defendGroup) >= (defendGroup.members / 2) )
-					{
-						orderGroupLoc(defendGroup, DORDER_MOVE,defendObj.x,defendObj.y);	//cyborg mechanics can't attack (won't move)
-					}
-
-					if( idleGroup(scoutGroup) >= (scoutGroup.members / 2) )
-					{
-						orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
-					}
+					orderGroupLoc(defendGroup, DORDER_MOVE,defendObj.x,defendObj.y);	//cyborg mechanics can't attack (won't move)
 				}
 
+				if (idleGroup(scoutGroup) >= (scoutGroup.members / 2))
+				{
+					orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
+				}
 			}
 		}
 	}
@@ -2590,10 +2605,7 @@ event vtolAttack(inactive)
 		{
 			if(defendObj != NULLOBJECT)
 			{
-				if(not isHumanPlayer(defendObj.player) )	// new in wdg1 	//TODO:is this check needed?
-				{
-					orderGroupObj(vtolDefendGr, DORDER_ATTACK,defendObj);		// get the defend target
-				}
+				orderGroupObj(vtolDefendGr, DORDER_ATTACK,defendObj);		// get the defend target
 			}
 		}
 	}
@@ -2929,8 +2941,8 @@ event vtolDefend(vtolDefendTr)
 						}
 						if(count2 != (-1) )
 						{
-							boolResult = pickStructLocation(vtolDefStruct[count2], ref buildX, ref buildY,me);
-							if((boolResult == TRUE) and (_numBuilders < _maxBuilders) and droidCanReach(droid, buildX, buildY))	// build a vtol defense near the attacked struct...
+							boolResult = pickDroidStructLocation(droid, vtolDefStruct[count2], ref buildX, ref buildY, me, 1);
+							if (boolResult == TRUE and (_numBuilders < _maxBuilders))	// build a vtol defense near the attacked struct...
 							{
 								orderDroidStatsLoc(droid, DORDER_BUILD,vtolDefStruct[count2],buildX,buildY);
 								_numBuilders++;

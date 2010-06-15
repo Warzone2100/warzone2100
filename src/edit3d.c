@@ -43,6 +43,7 @@ BUILDDETAILS	sBuildDetails;
 HIGHLIGHT		buildSite;
 int brushSize = 1;
 bool editMode = false;
+bool quickQueueMode = false;
 
 // Initialisation function for statis & globals in this module.
 //
@@ -137,13 +138,6 @@ void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
 		sBuildDetails.width = ((STRUCTURE_STATS *)psStats)->baseWidth;
 		sBuildDetails.height = ((STRUCTURE_STATS *)psStats)->baseBreadth;
 		sBuildDetails.psStats = psStats;
-
-		// hack to increase the size of repair facilities
-		if (((STRUCTURE_STATS *)psStats)->type == REF_REPAIR_FACILITY)
-		{
-			sBuildDetails.width += 2;
-			sBuildDetails.height += 2;
-		}
 	}
 	else if (psStats->ref >= REF_FEATURE_START &&
 			 psStats->ref < (REF_FEATURE_START + REF_RANGE))
@@ -180,6 +174,11 @@ BOOL process3DBuilding(void)
 	//if not trying to build ignore
 	if (buildState == BUILD3D_NONE)
   	{
+		if (quickQueueMode && !ctrlShiftDown())
+		{
+			quickQueueMode = false;
+			intDemolishCancel();
+		}
 		return true;
 	}
 
@@ -188,12 +187,6 @@ BOOL process3DBuilding(void)
   	{
 		bX = mouseTileX;
 		bY = mouseTileY;
-		// lovely hack to make the repair facility 3x3 - need to offset the position by 1
-		if (((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REPAIR_FACILITY)
-		{
-			bX += 1;
-			bY += 1;
-		}
 
       	if (validLocation(sBuildDetails.psStats, bX, bY, selectedPlayer, true))
         {
@@ -254,6 +247,11 @@ BOOL process3DBuilding(void)
 		buildState = BUILD3D_NONE;
 		return true;
 	}
+	if (quickQueueMode && !ctrlShiftDown())
+	{
+		buildState = BUILD3D_NONE;
+		quickQueueMode = false;
+	}
 
 	return false;
 }
@@ -270,14 +268,15 @@ BOOL found3DBuilding(UDWORD *x, UDWORD *y)
 	*x = sBuildDetails.x;
 	*y = sBuildDetails.y;
 
-	// lovely hack to make the repair facility 3x3 - need to offset the position by 1
-	if (((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REPAIR_FACILITY)
+	if (ctrlShiftDown())
 	{
-		*x += 1;
-		*y += 1;
+		quickQueueMode = true;
+		init3DBuilding(sBuildDetails.psStats, NULL, NULL);
 	}
-
-	buildState = BUILD3D_NONE;
+	else
+	{
+		buildState = BUILD3D_NONE;
+	}
 
 	return true;
 }
@@ -305,6 +304,13 @@ BOOL found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 	*py1 = wallDrag.y1;
 	*px2 = wallDrag.x2;
 	*py2 = wallDrag.y2;
+
+	if (ctrlShiftDown())
+	{
+		quickQueueMode = true;
+		init3DBuilding(sBuildDetails.psStats, NULL, NULL);
+	}
+
 	return true;
 }
 

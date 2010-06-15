@@ -266,6 +266,7 @@ BOOL multiPlayerLoop(void)
 							sprintf(msg, _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
 							sendTextMessage(msg, true);
 							addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+							NETlogEntry(msg, SYNC_FLAG, index);
 
 #ifndef DEBUG
 							kickPlayer(index, "it is not nice to cheat!", ERROR_CHEAT);
@@ -797,6 +798,13 @@ BOOL recvMessage(void)
 			// FIX ME: in game kick ?  Is this even possible with current code?
 			uint32_t player_id;
 			char reason[MAX_KICK_REASON];
+
+			if (player_id == NET_HOST_ONLY)
+			{
+				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
+				NETend();
+				break;
+			}
 
 			NETbeginDecode(queue, NET_KICK);
 				NETuint32_t(&player_id);

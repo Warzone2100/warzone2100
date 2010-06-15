@@ -77,6 +77,8 @@ static void NETregisterServer(int state);
 static void NETallowJoining(void);
 static void NET_InitPlayer(int i, bool initPosition);
 static void recvDebugSync(NETQUEUE queue);
+static bool onBanList(const char *ip);
+static void addToBanList(const char *ip, const char *name);
 
 /*
  * Network globals, these are part of the new network API
@@ -104,7 +106,7 @@ typedef struct
 // Variables
 
 NETPLAY	NetPlay;
-
+PLAYER_IP	*IPlist = NULL;
 static BOOL		allow_joining = false;
 static	bool server_not_there = false;
 static GAMESTRUCT	gamestruct;
@@ -135,7 +137,7 @@ static struct IGDdatas data;
 
 // local ip address
 static char lanaddr[16];
-
+static char clientAddress[40] = { '\0' };
 /**
  * Used for connections with clients.
  */
@@ -175,6 +177,7 @@ void NETGameLocked( bool flag)
 {
 	NetPlay.GamePassworded = flag;
 	gamestruct.privateGame = flag;
+	NETlogEntry("Password is", SYNC_FLAG, NetPlay.GamePassworded);
 	debug(LOG_NET, "Passworded game is %s", NetPlay.GamePassworded ? "TRUE" : "FALSE" );
 }
 
@@ -216,6 +219,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 		if (size == 0)
 		{
 			debug(LOG_NET, "Connection closed from the other side");
+			NETlogEntry("Connection closed from the other side..", SYNC_FLAG, selectedPlayer);
 		}
 		else
 		{
@@ -233,10 +237,12 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 		if (size > bufsize)
 		{
 			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %zd", bufsize, size);
+			NETlogEntry("Fatal connection error: buffer size was too small!", SYNC_FLAG, selectedPlayer);
 		}
 		if (tcp_socket == socket)
 		{
 			debug(LOG_NET, "Host connection was lost!");
+			NETlogEntry("Host connection was lost!", SYNC_FLAG, selectedPlayer);
 			tcp_socket = NULL;
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
@@ -289,6 +295,7 @@ void NET_InitPlayers()
 static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 {
 	debug(LOG_NET, "sending player's (%u) info to all players", index);
+	NETlogEntry(" sending player's info to all players", SYNC_FLAG, index);
 	NETbeginEncode(NETnetQueue(to), NET_PLAYER_INFO);
 		NETuint32_t(&index);
 		NETbool(&NetPlay.players[index].allocated);
@@ -318,21 +325,25 @@ static signed int NET_CreatePlayer(const char* name)
 		if (NetPlay.players[index].allocated == false)
 		{
 			debug(LOG_NET, "A new player has been created. Player, %s, is set to slot %u", name, index);
+			NETlogEntry("A new player has been created.", SYNC_FLAG, index);
+			NET_InitPlayer(index, false);	// re-init everything
 			NetPlay.players[index].allocated = true;
 			sstrcpy(NetPlay.players[index].name, name);
-			NETBroadcastPlayerInfo(index);
 			NetPlay.playercount++;
+			sync_counter.joins++;
 			return index;
 		}
 	}
 
 	debug(LOG_ERROR, "Could not find place for player %s", name);
+	NETlogEntry("Could not find a place for player!", SYNC_FLAG, index);
 	return -1;
 }
 
 static void NET_DestroyPlayer(unsigned int index)
 {
 	debug(LOG_NET, "Freeing slot %u for a new player", index);
+	NETlogEntry("Freeing slot for a new player.", SYNC_FLAG, index);
 	if (NetPlay.players[index].allocated)
 	{
 		NetPlay.players[index].allocated = false;
@@ -361,6 +372,7 @@ static void NETplayerClientDisconnect(uint32_t index)
 
 		NETplayerLeaving(index);
 
+		NETlogEntry("Player has left unexpectedly.", SYNC_FLAG, index);
 		// Announce to the world. This was really icky, because we may have been calling the send
 		// function recursively. We really ought to have had a send queue, and now we finally do...
 		NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
@@ -383,6 +395,7 @@ static void NETplayerLeaving(UDWORD index)
 	if(connected_bsocket[index])
 	{
 		debug(LOG_NET, "Player (%u) has left, closing socket %p", index, connected_bsocket[index]);
+		NETlogEntry("Player has left nicely.", SYNC_FLAG, index);
 
 		// Although we can get a error result from DelSocket, it don't really matter here.
 		SocketSet_DelSocket(socket_set, connected_bsocket[index]);
@@ -393,7 +406,7 @@ static void NETplayerLeaving(UDWORD index)
 	{
 		debug(LOG_NET, "Player (%u) has left nicely, socket already closed?", index);
 	}
-
+	sync_counter.left++;
 	MultiPlayerLeave(index);		// more cleanup
 	NET_DestroyPlayer(index);		// sets index player's array to false
 }
@@ -412,6 +425,7 @@ static void NETplayerDropped(UDWORD index)
 		NETuint32_t(&id);
 	NETend();
 	debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d", id);
+	sync_counter.drops++;
 	NET_DestroyPlayer(id);		// just clears array
 	MultiPlayerLeave(id);			// more cleanup
 
@@ -427,6 +441,9 @@ void NETplayerKicked(UDWORD index)
 	// kicking a player counts as "leaving nicely", since "nicely" in this case
 	// simply means "there wasn't a connection error."
 	debug(LOG_INFO, "Player %u was kicked.", index);
+	sync_counter.kicks++;
+	NETlogEntry("Player was kicked.", SYNC_FLAG, index);
+	addToBanList(NetPlay.players[index].IPtextAddress, NetPlay.players[index].name);
 	NETplayerLeaving(index);		// need to close socket for the player that left.
 	NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
 }
@@ -441,7 +458,7 @@ BOOL NETchangePlayerName(UDWORD index, char *newName)
 		return true;
 	}
 	debug(LOG_NET, "Requesting a change of player name for pid=%u to %s", index, newName);
-
+	NETlogEntry("Player wants a name change.", SYNC_FLAG, index);
 	sstrcpy(NetPlay.players[index].name, newName);
 
 	NETBroadcastPlayerInfo(index);
@@ -805,6 +822,11 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	ourgamestruct->future4 = ntoh32(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
 	
+	// cat the modstring (if there is one) to the version string to display it for the end-user
+	if (ourgamestruct->modlist[0] != '\0')
+	{
+		ssprintf(ourgamestruct->versionstring, "%s, Mods:%s", ourgamestruct->versionstring, ourgamestruct->modlist);
+	}
 	debug(LOG_NET, "received GAMESTRUCT");
 
 	return true;
@@ -940,6 +962,7 @@ int NETinit(BOOL bFirstCall)
 	UDWORD i;
 
 	debug(LOG_NET, "NETinit");
+	NETlogEntry("NETinit!", SYNC_FLAG, selectedPlayer);
 	NET_InitPlayers();
 
 	SOCKETinit();
@@ -976,8 +999,11 @@ int NETinit(BOOL bFirstCall)
 int NETshutdown(void)
 {
 	debug( LOG_NET, "NETshutdown" );
-
+	NETlogEntry("NETshutdown", SYNC_FLAG, selectedPlayer);
 	NETstopLogging();
+	if (IPlist)
+		free(IPlist);
+	IPlist = NULL;
 
 	SOCKETshutdown();
 
@@ -1181,6 +1207,7 @@ BOOL NETsend(uint8_t player, NETMESSAGE message)
 				{
 					// Write error, most likely client disconnect.
 					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+					NETlogEntry("client disconnect?", SYNC_FLAG, player);
 					NETplayerClientDisconnect(player);
 				}
 			}
@@ -1207,6 +1234,7 @@ BOOL NETsend(uint8_t player, NETMESSAGE message)
 				// Write error, most likely host disconnect.
 				debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
 				debug(LOG_ERROR, "Host connection was broken, socket %p.", tcp_socket);
+				NETlogEntry("write error--client disconnect.", SYNC_FLAG, player);
 				SocketSet_DelSocket(socket_set, tcp_socket);            // mark it invalid
 				socketClose(tcp_socket);
 				tcp_socket = NULL;
@@ -1808,6 +1836,7 @@ UBYTE NETrecvFile(NETQUEUE queue)
 	if (currPos+bytesRead == fileSize)	// last packet
 	{
 		PHYSFS_close(NetPlay.pMapFileHandle);
+		NetPlay.pMapFileHandle = NULL;
 	}
 
 	//return the percentage count
@@ -2107,7 +2136,7 @@ static void NETallowJoining(void)
 					{
 						debug(LOG_NET, "Client socket encountered error: %s", strSockError(getSockErr()));
 					}
-
+					NETlogEntry("Client socket disconnected (allowJoining)", SYNC_FLAG, i);
 					debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					socketClose(tmp_socket[i]);
@@ -2131,6 +2160,20 @@ static void NETallowJoining(void)
 					char GamePassword[password_string_size] = { '\0' };
 					int32_t Hash_Data = 0;				// Not currently used
 
+					if (onBanList(clientAddress))
+					{
+						char buf[256] = {'\0'};
+
+						ssprintf(buf, "** A player that you have kicked tried to rejoin the game, and was rejected. IP:%s", clientAddress );
+						debug(LOG_INFO, buf);
+						NETlogEntry(buf, SYNC_FLAG, i);
+						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
+						socketClose(tmp_socket[i]);
+						tmp_socket[i] = NULL;
+						sync_counter.rejected++;
+						return;
+					}
+
 					NETbeginDecode(NETnetTmpQueue(i), NET_JOIN);
 						NETstring(name, sizeof(name));
 						NETint32_t(&MajorVersion);	// NETCODE_VERSION_MAJOR
@@ -2150,12 +2193,13 @@ static void NETallowJoining(void)
 						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 						socketClose(tmp_socket[i]);
 						tmp_socket[i] = NULL;
+						sync_counter.cantjoin++;
 						return;
 					}
 
 					index = tmp;
 
-					debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
+					debug(LOG_NET, "freeing temp socket %p (%d), creating permanent socket.", tmp_socket[i], __LINE__);
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					connected_bsocket[index] = tmp_socket[i];
 					tmp_socket[i] = NULL;
@@ -2186,6 +2230,7 @@ static void NETallowJoining(void)
 					if (rejected)
 					{
 						debug(LOG_INFO, "We were rejected, reason (%u)", (unsigned int) rejected);
+						//NETlogEntry(buf, SYNC_FLAG, index);  // buf undeclared in newnet branch.
 						NETbeginEncode(NETnetQueue(index), NET_REJECTED);
 							NETuint8_t(&rejected);
 						NETend();
@@ -2199,6 +2244,16 @@ static void NETallowJoining(void)
 						connected_bsocket[index] = NULL;
 						return;
 					}
+
+					sstrcpy(NetPlay.players[index].IPtextAddress, clientAddress);
+					{
+						char buf[250] = {'\0'};
+						snprintf(buf, sizeof(buf), "Player %d has joined, IP is:%s", index, clientAddress);
+						NETlogEntry(buf, SYNC_FLAG, index);
+					}
+
+					// Broadcast to everyone that a new player has joined
+					NETBroadcastPlayerInfo(index);  // Should this be in newnet?
 
 					NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
 					NETuint8_t(&index);
@@ -2304,7 +2359,12 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	}
 
 	NetPlay.isHost = true;
-
+	NETlogEntry("Hosting game, resetting ban list.", SYNC_FLAG, 0);
+	if (IPlist)
+	{ 
+		free(IPlist);
+		IPlist = NULL;
+	}
 	sstrcpy(gamestruct.name, SessionName);
 	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
 	gamestruct.desc.dwSize = sizeof(gamestruct.desc);
@@ -2320,11 +2380,6 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	memset(gamestruct.secondaryHosts, 0, sizeof(gamestruct.secondaryHosts));
 	sstrcpy(gamestruct.extra, "Extra");						// extra string (future use)
 	sstrcpy(gamestruct.versionstring, VersionString);		// version (string)
-	if (*getModList())
-	{
-		sstrcat(gamestruct.versionstring, _(", mods: "));	// version (string)
-		sstrcat(gamestruct.versionstring, getModList());	// version (string)
-	}
 	sstrcpy(gamestruct.modlist, getModList());				// List of mods
 	gamestruct.GAMESTRUCT_VERSION = 3;						// version of this structure
 	gamestruct.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
@@ -2667,19 +2722,17 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		}
 		else if (type == NET_REJECTED)
 		{
-			// :(
 			uint8_t rejection = 0;
 
 			NETbeginDecode(queue, NET_REJECTED);
-				// WRY???
-				// And why "wry"?
 				NETuint8_t(&rejection);
 			NETend();
 			NETpop(queue);
 
-			debug(LOG_NET, "NET_REJECTED received. Better luck next time?");
+			debug(LOG_NET, "NET_REJECTED received. Error code: %u", (unsigned int) rejection);
 
 			setLobbyError((LOBBY_ERROR_TYPES)rejection);
+			NETclose();
 		}
 
 		NETpop(queue);
@@ -2985,4 +3038,54 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_MAX_TYPE:                 return "GAME_MAX_TYPE";
 	}
 	return "(INVALID MESSAGE TYPE)";
+}
+
+/**
+ * Check if ip is on the banned list.
+ * \param ip IP address converted to text
+ */
+static bool onBanList(const char *ip)
+{
+	int i;
+
+	if (!IPlist) return false;		//if no bans are added, then don't check.
+	for(i = 0; i < MAX_BANS ; i++)
+	{
+		if (strcmp(ip, IPlist[i].IPAddress) == 0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * Create the banned list.
+ * \param ip IP address in text format
+ * \param name Name of the player we are banning
+ */
+static void addToBanList(const char *ip, const char *name)
+{
+	static int numBans = 0;
+
+	if (!IPlist)
+	{
+		IPlist = malloc(sizeof(PLAYER_IP) * MAX_BANS + 1);
+		if (!IPlist)
+		{
+			debug(LOG_FATAL, "Out of memory!");
+			abort();
+		}
+		numBans = 0;
+	}
+	memset(IPlist, 0x0, sizeof(PLAYER_IP) * MAX_BANS);
+	sstrcpy(IPlist[numBans].IPAddress, ip);
+	sstrcpy(IPlist[numBans].pname, name);
+	numBans++;
+	sync_counter.banned++;
+	if (numBans > MAX_BANS)
+	{
+		debug(LOG_INFO, "We have exceeded %d bans, resetting to 0", MAX_BANS);
+		numBans = 0;
+	}
 }

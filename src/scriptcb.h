@@ -52,6 +52,7 @@ extern DROID		*psScrCBNewDroid;
 extern STRUCTURE	*psScrCBNewDroidFact;
 extern DROID		*psScrCBOrderDroid;
 extern SDWORD		psScrCBOrder;
+extern DROID		*psScrVtolRetarget;
 
 //Script key event callback
 extern SDWORD		cbPressedMetaKey;
@@ -137,6 +138,9 @@ extern BOOL scrCBResCompleted(void);
 
 /* when a player leaves the game*/
 extern BOOL scrCBPlayerLeft(void);
+
+/* when a VTOL runs out of things to do while mid-air */
+extern BOOL scrCBVTOLRetarget(void);
 
 // alliance offered.
 extern BOOL scrCBAllianceOffer(void);

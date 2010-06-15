@@ -140,6 +140,14 @@ cscope.out
 # Qt
 lib/framework/wzapp_moc.cpp
 
+tools/qwzm/config
+tools/qwzm/moc_qwzm.cpp
+tools/qwzm/moc_wzmglwidget.cpp
+tools/qwzm/qwzm
+tools/qwzm/ui_animationview.h
+tools/qwzm/ui_connectorview.h
+tools/qwzm/ui_qwzm.h
+
 # Patches
 *.patch
 *.diff

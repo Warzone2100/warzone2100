@@ -40,6 +40,7 @@
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
+#include "modding.h"
 
 #include "game.h"
 
@@ -1467,20 +1468,52 @@ static bool deserializeSaveGameV35Data(PHYSFS_file* fileHandle, SAVE_GAME_V35* s
 	return deserializeSaveGameV34Data(fileHandle, (SAVE_GAME_V34*) serializeGame);
 }
 
+// Store loaded mods in savegame
+#define GAME_SAVE_V38			\
+	GAME_SAVE_V35;					\
+	char		modList[modlist_string_size]
+
+typedef struct save_game_v38
+{
+	GAME_SAVE_V38;
+} SAVE_GAME_V38;
+
+static bool serializeSaveGameV38Data(PHYSFS_file* fileHandle, const SAVE_GAME_V38* serializeGame)
+{
+	if (!serializeSaveGameV35Data(fileHandle, (const SAVE_GAME_V35*) serializeGame))
+		return false;
+
+	if (PHYSFS_write(fileHandle, serializeGame->modList, modlist_string_size, 1) != 1)
+		return false;
+
+	return true;
+}
+
+static bool deserializeSaveGameV38Data(PHYSFS_file* fileHandle, SAVE_GAME_V38* serializeGame)
+{
+	if (!deserializeSaveGameV35Data(fileHandle, (SAVE_GAME_V35*) serializeGame))
+		return false;
+
+	if (PHYSFS_read(fileHandle, serializeGame->modList, modlist_string_size, 1) != 1)
+		return false;
+
+	return true;
+}
+
 // Current save game version
 typedef struct save_game
 {
-	GAME_SAVE_V35;
+	GAME_SAVE_V38;
 } SAVE_GAME;
 
 static bool serializeSaveGameData(PHYSFS_file* fileHandle, const SAVE_GAME* serializeGame)
 {
-	return serializeSaveGameV35Data(fileHandle, (const SAVE_GAME_V35*) serializeGame);
+	return serializeSaveGameV38Data(fileHandle, (const SAVE_GAME_V38*) serializeGame);
 }
 
 static bool deserializeSaveGameData(PHYSFS_file* fileHandle, SAVE_GAME* serializeGame)
 {
-	return deserializeSaveGameV35Data(fileHandle, (SAVE_GAME_V35*) serializeGame);
+	return deserializeSaveGameV38Data(fileHandle, (SAVE_GAME_V38*) serializeGame);
 }
 
 #define TEMP_DROID_MAXPROGS	3
@@ -2208,7 +2241,6 @@ static BOOL loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecord
 static BOOL writeResearchFile(char *pFileName);
 
 static BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType);
-static BOOL loadSaveMessageV(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType);
 static BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType);
 static BOOL writeMessageFile(char *pFileName);
 
@@ -2369,6 +2401,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			//clear all the messages?
 			apsProxDisp[player] = NULL;
 			apsSensorList[0] = NULL;
+			apsOilList[0] = NULL;
 		}
 		initFactoryNumFlag();
 	}
@@ -2384,6 +2417,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			mission.apsFeatureLists[player] = NULL;
 			mission.apsFlagPosLists[player] = NULL;
 		}
+		mission.apsOilList[0] = NULL;
+		mission.apsSensorList[0] = NULL;
 
 		//JPS 25 feb
 		//initialise upgrades
@@ -4425,6 +4460,16 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			return false;
 		}
 	}
+	else if (version <= VERSION_37) // versions 35-37 use the same save game format
+	{
+		//if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V35), 1) != 1)
+		if (!deserializeSaveGameV35Data(fileHandle, (SAVE_GAME_V35*) &saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
+
+			return false;
+		}
+	}
 	else if (version <= CURRENT_VERSION_NUM)
 	{
 		if (!deserializeSaveGameData(fileHandle, &saveGameData))
@@ -4448,6 +4493,11 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 	{
 		debug(LOG_ERROR, "Skirmish savegames of version %u are not supported in this release.", version);
 		return false;
+	}
+	/* Test mod list */
+	if (version >= VERSION_38)
+	{
+		setOverrideMods(saveGameData.modList);
 	}
 
 	// All savegames from version 34 or before are little endian so swap them. All
@@ -4966,6 +5016,9 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	{
 		strcpy(saveGame.sPlayerName[i], getPlayerName(i));
 	}
+
+	//version 38
+	sstrcpy(saveGame.modList, getModList());
 
 	status = serializeSaveGameData(fileHandle, &saveGame);
 
@@ -5509,11 +5562,11 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.targetY      = PHYSFS_swapSLE32(psDroid->sMove.targetY);
 
 	// Little endian floats
-	psSaveDroid->sMove.fx           = PHYSFS_swapSLE32(psDroid->sMove.fx);
-	psSaveDroid->sMove.fy           = PHYSFS_swapSLE32(psDroid->sMove.fy);
+	psSaveDroid->sMove.fx           = 0;
+	psSaveDroid->sMove.fy           = 0;
 	psSaveDroid->sMove.speed        = PHYSFS_swapSLE32(psDroid->sMove.speed);
 	psSaveDroid->sMove.moveDir      = PHYSFS_swapSLE32(UNDEG(psDroid->sMove.moveDir));
-	psSaveDroid->sMove.fz           = PHYSFS_swapSLE32(psDroid->sMove.fz);
+	psSaveDroid->sMove.fz           = 0;
 
 	// Little endian SWORDs
 	psSaveDroid->sMove.boundX       = PHYSFS_swapSLE16(psDroid->sMove.boundX);
@@ -5581,21 +5634,8 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.targetY      = PHYSFS_swapSLE32(psSaveDroid->sMove.targetY);
 
 	// Little endian floats
-	psDroid->sMove.fx           = PHYSFS_swapSLE32(psSaveDroid->sMove.fx);
-	psDroid->sMove.fy           = PHYSFS_swapSLE32(psSaveDroid->sMove.fy);
 	psDroid->sMove.speed        = PHYSFS_swapSLE32(psSaveDroid->sMove.speed);
 	psDroid->sMove.moveDir      = DEG(PHYSFS_swapSLE32(psSaveDroid->sMove.moveDir));
-	psDroid->sMove.fz           = PHYSFS_swapSLE32(psSaveDroid->sMove.fz);
-
-	// Hack to fix bad droids in savegames
-	if (!droidOnMap(psDroid))
-	{
-		psDroid->sMove.fx = 0;
-		psDroid->sMove.fy = 0;
-		psDroid->sMove.fz = 0;
-		debug(LOG_ERROR, "%s had bad movement coordinates - fixed!", psDroid->aName);
-	}
-	ASSERT(droidOnMap(psDroid), "loaded droid standing or moving off the map");
 
 	// Little endian SWORDs
 	psDroid->sMove.boundX       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundX);
@@ -10179,10 +10219,8 @@ BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType)
 	/* Check the file version */
 	if(psHeader->version <= VERSION_35)
 	{
-		if (!loadSaveMessageV(pFileData, filesize, psHeader->quantity, psHeader->version, levelType))
-		{
-			return false;
-		}
+		debug(LOG_ERROR, "Unsupported message save format %d", (int)psHeader->version);
+		return false;
 	}
 	else
 	{
@@ -10194,150 +10232,30 @@ BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType)
 	return true;
 }
 
-// -----------------------------------------------------------------------------------------
-BOOL loadSaveMessageV(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType)
-{
-	SAVE_MESSAGE	*psSaveMessage;
-	MESSAGE			*psMessage;
-	VIEWDATA		*psViewData = NULL;
-	UDWORD			i, height;
-
-	//clear any messages put in during level loads
-	//freeMessages();
-
-    //only clear the messages if its a mid save game
-	if (gameType == GTYPE_SAVE_MIDMISSION)
-    {
-        freeMessages();
-    }
-    else if (gameType == GTYPE_SAVE_START)
-    {
-        //if we're loading in a CamStart or a CamChange then we're not interested in any saved messages
-        if (levelType == LDS_CAMSTART || levelType == LDS_CAMCHANGE)
-        {
-            return true;
-        }
-
-    }
-
-	//check file
-	if ((sizeof(SAVE_MESSAGE) * numMessages + MESSAGE_HEADER_SIZE) >
-		filesize)
-	{
-		debug( LOG_ERROR, "loadSaveMessage: unexpected end of file" );
-
-		return false;
-	}
-
-	// Load the data
-	for (i = 0; i < numMessages; i++, pFileData += sizeof(SAVE_MESSAGE))
-	{
-		psSaveMessage = (SAVE_MESSAGE *) pFileData;
-
-		/* SAVE_MESSAGE */
-		endian_sdword((SDWORD*)&psSaveMessage->type);	/* FIXME: enum may not be this type! */
-		endian_udword(&psSaveMessage->objId);
-		endian_udword(&psSaveMessage->player);
-
-		if (psSaveMessage->type == MSG_PROXIMITY)
-		{
-            //only load proximity if a mid-mission save game
-            if (gameType == GTYPE_SAVE_MIDMISSION)
-            {
-			    if (psSaveMessage->bObj)
-			    {
-				    //proximity object so create get the obj from saved idy
-				    psMessage = addMessage(psSaveMessage->type, true, psSaveMessage->player);
-				    if (psMessage)
-				    {
-					    psMessage->pViewData = (MSG_VIEWDATA *)getBaseObjFromId(psSaveMessage->objId);
-				    }
-			    }
-			    else
-			    {
-				    //proximity position so get viewdata pointer from the name
-				    psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
-				    if (psMessage)
-				    {
-					    psViewData = (VIEWDATA *)getViewData(psSaveMessage->name);
-                        if (psViewData == NULL)
-                        {
-                            //skip this message
-                            continue;
-                        }
-					    psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
-				    }
-				    //check the z value is at least the height of the terrain
-				    height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x,
-					    ((VIEW_PROXIMITY *)psViewData->pData)->y);
-				    if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
-				    {
-					    ((VIEW_PROXIMITY *)psViewData->pData)->z = height;
-				    }
-			    }
-            }
-		}
-		else
-		{
-            //only load Campaign/Mission if a mid-mission save game
-            if (psSaveMessage->type == MSG_CAMPAIGN || psSaveMessage->type == MSG_MISSION)
-            {
-                if (gameType == GTYPE_SAVE_MIDMISSION)
-                {
-    			    // Research message // Campaign message // Mission Report messages
-    	    		psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
-	    	    	if (psMessage)
-		    	    {
-			    	    psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
-			        }
-                }
-            }
-            else
-            {
-    			// Research message
-    	    	psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
-	    	    if (psMessage)
-		    	{
-			    	psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
-			    }
-            }
-		}
-	}
-
-	return true;
-}
-
 BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType)
 {
 	SAVE_MESSAGE_36	*psSaveMessage;
 	MESSAGE			*psMessage;
-	VIEWDATA		*psViewData = NULL;
 	UDWORD			i, height;
 
-	//clear any messages put in during level loads
-	//freeMessages();
-
-    //only clear the messages if its a mid save game
+	// Only clear the messages if its a mid save game
 	if (gameType == GTYPE_SAVE_MIDMISSION)
-    {
-        freeMessages();
-    }
-    else if (gameType == GTYPE_SAVE_START)
-    {
-        //if we're loading in a CamStart or a CamChange then we're not interested in any saved messages
-        if (levelType == LDS_CAMSTART || levelType == LDS_CAMCHANGE)
-        {
-            return true;
-        }
-
-    }
+	{
+		freeMessages();
+	}
+	else if (gameType == GTYPE_SAVE_START)
+	{
+		// If we are loading in a CamStart or a CamChange then we are not interested in any saved messages
+		if (levelType == LDS_CAMSTART || levelType == LDS_CAMCHANGE)
+		{
+			return true;
+		}
+	}
 
 	//check file
-	if ((sizeof(SAVE_MESSAGE_36) * numMessages + MESSAGE_HEADER_SIZE) >
-		filesize)
+	if ((sizeof(SAVE_MESSAGE_36) * numMessages + MESSAGE_HEADER_SIZE) > filesize)
 	{
-		debug( LOG_ERROR, "loadSaveMessage: unexpected end of file" );
-
+		debug(LOG_ERROR, "loadSaveMessage: unexpected end of file");
 		return false;
 	}
 
@@ -10354,28 +10272,35 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 
 		if (psSaveMessage->type == MSG_PROXIMITY)
 		{
-            //only load proximity if a mid-mission save game
-            if (gameType == GTYPE_SAVE_MIDMISSION)
-            {
-			    if (psSaveMessage->bObj)
-			    {
-				    //proximity object so create get the obj from saved idy
-				    psMessage = addMessage(psSaveMessage->type, true, psSaveMessage->player);
-				    if (psMessage)
-				    {
-					    psMessage->pViewData = (MSG_VIEWDATA *)getBaseObjFromId(psSaveMessage->objId);
-				    }
-			    }
-			    else
-			    {
-				    //proximity position so get viewdata pointer from the name
+			//only load proximity if a mid-mission save game
+			if (gameType == GTYPE_SAVE_MIDMISSION)
+			{
+				if (psSaveMessage->bObj)
+				{
+					// Proximity object so create get the obj from saved idy
+					psMessage = addMessage(psSaveMessage->type, true, psSaveMessage->player);
+					if (psMessage)
+					{
+						psMessage->pViewData = (MSG_VIEWDATA *)getBaseObjFromId(psSaveMessage->objId);
+					}
+					else
+					{
+						debug(LOG_ERROR, "Proximity object could not be created (type=%d, player=%d)",
+					              (int)psSaveMessage->type, (int)psSaveMessage->player);
+					}
+				}
+				else
+				{
+					VIEWDATA	*psViewData = NULL;
+
+					// Proximity position so get viewdata pointer from the name
 					psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
 
 					if (psMessage)
-				    {
-						if(psSaveMessage->dataType == MSG_DATA_BEACON)
+					{
+						if (psSaveMessage->dataType == MSG_DATA_BEACON)
 						{
-							UDWORD locX,locY;
+							UDWORD locX, locY;
 							SDWORD sender;
 
 							endian_udword(&psSaveMessage->locX);
@@ -10386,53 +10311,72 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 							sender = psSaveMessage->sender;
 
 							psViewData = CreateBeaconViewData(sender, locX, locY);
+							if (psViewData == NULL)
+							{
+								// Skip this message
+								debug(LOG_ERROR, "Failed to create view data for beacon - skipping");
+								removeMessage(psMessage, psSaveMessage->player);
+								continue;
+							}
+						}
+						else if (psSaveMessage->name[0] != '\0')
+						{
+							psViewData = (VIEWDATA *)getViewData(psSaveMessage->name);
+							if (psViewData == NULL)
+							{
+								// Skip this message
+								debug(LOG_ERROR, "Failed to find view data for proximity position - skipping");
+								removeMessage(psMessage, psSaveMessage->player);
+								continue;
+							}
 						}
 						else
 						{
-							psViewData = (VIEWDATA *)getViewData(psSaveMessage->name);
+							debug(LOG_ERROR, "Proximity position with empty name skipped");
+							removeMessage(psMessage, psSaveMessage->player);
+							continue;
 						}
 
-						if (psViewData == NULL)
-                        {
-                            //skip this message
-                            continue;
-                        }
-					    psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
-				    }
-				    //check the z value is at least the height of the terrain
-				    height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x,
-					    ((VIEW_PROXIMITY *)psViewData->pData)->y);
-				    if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
-				    {
-					    ((VIEW_PROXIMITY *)psViewData->pData)->z = height;
-				    }
-			    }
-            }
+						psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
+						// Check the z value is at least the height of the terrain
+						height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x, ((VIEW_PROXIMITY *)psViewData->pData)->y);
+						if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
+						{
+							((VIEW_PROXIMITY *)psViewData->pData)->z = height;
+						}
+					}
+					else
+					{
+						debug(LOG_ERROR, "Proximity position could not be created (type=%d, player=%d)",
+					              (int)psSaveMessage->type, (int)psSaveMessage->player);
+					}
+				}
+			}
 		}
 		else
 		{
-            //only load Campaign/Mission if a mid-mission save game
-            if (psSaveMessage->type == MSG_CAMPAIGN || psSaveMessage->type == MSG_MISSION)
-            {
-                if (gameType == GTYPE_SAVE_MIDMISSION)
-                {
-    			    // Research message // Campaign message // Mission Report messages
-    	    		psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
-	    	    	if (psMessage)
-		    	    {
-			    	    psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
-			        }
-                }
-            }
-            else
-            {
-    			// Research message
-    	    	psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
-	    	    if (psMessage)
-		    	{
-			    	psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
-			    }
-            }
+			// Only load Campaign/Mission if a mid-mission save game
+			if (psSaveMessage->type == MSG_CAMPAIGN || psSaveMessage->type == MSG_MISSION)
+			{
+				if (gameType == GTYPE_SAVE_MIDMISSION)
+				{
+					// Research message // Campaign message // Mission Report messages
+					psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
+					if (psMessage)
+					{
+						psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
+					}
+				}
+			}
+			else
+			{
+				// Research message
+				psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
+				if (psMessage)
+				{
+					psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
+				}
+			}
 		}
 	}
 
@@ -11555,14 +11499,13 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
 /**
  * \param[out] backDropSprite The premade map texture.
  * \param scale               Scale of the map texture.
- * \param offX,offY           X and Y offset for map
  * \param[out] playeridpos    Will contain the position on the map where the player's HQ are located.
  *
  * Reads the current map and colours the map preview for any structures
  * present. Additionally we load the player's HQ location into playeridpos so
  * we know the player's starting location.
  */
-BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY,Vector2i playeridpos[])
+BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 {
 	SAVE_STRUCTURE				sSave;  // close eyes now.
 	SAVE_STRUCTURE				*psSaveStructure = &sSave; // assumes save_struct is larger than all previous ones...
@@ -11576,7 +11519,7 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 
 	STRUCT_SAVEHEADER		*psHeader;
 	char			aFileName[256];
-	UDWORD			xx,yy,x,y,count,fileSize,sizeOfSaveStruture;
+	UDWORD			xx,yy,count,fileSize,sizeOfSaveStruture;
 	UDWORD	playerid =0;
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel;
@@ -11991,15 +11934,9 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 		}
 
 		// and now we blit the color to the texture
-		for(x = (xx*scale);x < (xx*scale)+scale ;x++)
-		{
-			for(y = (yy*scale);y< (yy*scale)+scale ;y++)
-			{
-				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX)] = color.byte.r;
-				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 1] = color.byte.g;
-				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 2] = color.byte.b;
-			}
-		}
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
 	}
 
 	// NOTE: would do fallback if FBO is not available here.

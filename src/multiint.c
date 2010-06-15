@@ -39,6 +39,7 @@
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_opengl/piematrix.h"			// for setgeometricoffset
@@ -136,10 +137,6 @@
 extern char	MultiCustomMapsPath[PATH_MAX];
 extern char	MultiPlayersPath[PATH_MAX];
 extern char VersionString[80];		// from netplay.c
-extern GLuint fbo;					// Our handle to the FBO
-extern GLuint FBOtexture;			// The texture we are going to use
-extern GLuint FBOdepthbuffer;		// Our handle to the depth render buffer
-extern BOOL bFboProblem;			// hack to work around people with bad drivers. (*cough*intel*cough*)
 extern BOOL bSendingMap;			// used to indicate we are sending a map
 
 BOOL						bHosted			= false;				//we have set up a game
@@ -236,18 +233,18 @@ static int guessMapTilesetType(void)
 /// a picture of it
 void loadMapPreview(bool hideInterface)
 {
-	char			aFileName[256];
+	static char			aFileName[256], bFileName[256];
 	UDWORD			fileSize;
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel = NULL;
 	PIELIGHT		plCliffL, plCliffH, plWater, plRoadL, plRoadH, plGroundL, plGroundH;
 
-	UDWORD			i, j, x, y, height, offX2, offY2;
-	UBYTE			scale,col;
+	UDWORD			x, y, height;
+	UBYTE			col;
 	MAPTILE			*psTile,*WTile;
 	UDWORD oursize;
 	Vector2i playerpos[MAX_PLAYERS];	// Will hold player positions
-	char  *ptr = NULL, *imageData = NULL, *fboData = NULL;
+	char  *ptr = NULL, *imageData = NULL;
 
 	if(psMapTiles)
 	{
@@ -262,6 +259,16 @@ void loadMapPreview(bool hideInterface)
 	aFileName[strlen(aFileName)-4] = '\0';
 	sstrcat(aFileName, "/ttypes.ttp");
 	pFileData = fileLoadBuffer;
+	sstrcpy(bFileName, screen_getMapName());
+	if (!sstrcmp(aFileName, bFileName))
+	{
+		if (hideInterface)
+		{
+			hideTime = gameTime;
+		}
+		return;
+	}
+	sstrcpy(bFileName, aFileName);
 	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug(LOG_ERROR, "loadMapPreview: Failed to load terrain types file");
@@ -319,23 +326,6 @@ void loadMapPreview(bool hideInterface)
 		break;
 	}
 
-	scale = 1;
-	if((mapHeight <  240)&&(mapWidth < 320))
-	{
-		scale = 2;
-	}
-	if((mapHeight <  120)&&(mapWidth < 160))
-	{
-		scale = 3;
-	}
-	if((mapHeight <  60)&&(mapWidth < 80))
-	{
-		scale = 4;
-	}
-	if((mapHeight <  30)&&(mapWidth < 40))
-	{
-		scale = 5;
-	}
 	oursize = sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT;
 	imageData = (char*)malloc(oursize * 3);		// used for the texture
 	if( !imageData )
@@ -344,57 +334,41 @@ void loadMapPreview(bool hideInterface)
 		abort();	// should be a fatal error ?
 		return;
 	}
-	fboData = (char*)malloc(oursize* 3);		// used for the FBO texture
-	if( !fboData )
-	{
-		debug(LOG_FATAL,"Out of memory for FBO texture!");
-		free(imageData);
-		abort();	// should be a fatal error?
-		return ;
-	}
 	ptr = imageData;
-	memset(ptr, 0x45, sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
+	memset(ptr, 0, sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
 	psTile = psMapTiles;
-	offX2 = (BACKDROP_HACK_WIDTH / 2) - ((scale * mapWidth) / 2);
-	offY2 = (BACKDROP_HACK_HEIGHT / 2 )  - ((scale * mapHeight) / 2);
 
-	for (i = 0; i < mapHeight; i++)
+	for (y = 0; y < mapHeight; y++)
 	{
 		WTile = psTile;
-		for (j = 0; j < mapWidth; j++)
+		for (x = 0; x < mapWidth; x++)
 		{
+			char * const p = imageData + (3 * (y * BACKDROP_HACK_WIDTH + x));
 			height = WTile->height;
 			col = height;
 
-			for (x = (j * scale); x < (j * scale) + scale; x++)
+			switch (terrainType(WTile))
 			{
-				for (y = (i * scale); y < (i * scale) + scale; y++)
-				{
-					char * const p = imageData + (3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2)));
-					switch (terrainType(WTile))
-					{
-					case TER_CLIFFFACE:
-						p[0] = plCliffL.byte.r + (plCliffH.byte.r-plCliffL.byte.r) * col / 256;
-						p[1] = plCliffL.byte.g + (plCliffH.byte.g-plCliffL.byte.g) * col / 256;
-						p[2] = plCliffL.byte.b + (plCliffH.byte.b-plCliffL.byte.b) * col / 256;
-						break;
-					case TER_WATER:
-						p[0] = plWater.byte.r;
-						p[1] = plWater.byte.g;
-						p[2] = plWater.byte.b;
-						break;
-					case TER_ROAD:
-						p[0] = plRoadL.byte.r + (plRoadH.byte.r-plRoadL.byte.r) * col / 256;
-						p[1] = plRoadL.byte.g + (plRoadH.byte.g-plRoadL.byte.g) * col / 256;
-						p[2] = plRoadL.byte.b + (plRoadH.byte.b-plRoadL.byte.b) * col / 256;
-						break;
-					default:
-						p[0] = plGroundL.byte.r + (plGroundH.byte.r-plGroundL.byte.r) * col / 256;
-						p[1] = plGroundL.byte.g + (plGroundH.byte.g-plGroundL.byte.g) * col / 256;
-						p[2] = plGroundL.byte.b + (plGroundH.byte.b-plGroundL.byte.b) * col / 256;
-						break;
-					}
-				}
+				case TER_CLIFFFACE:
+					p[0] = plCliffL.byte.r + (plCliffH.byte.r-plCliffL.byte.r) * col / 256;
+					p[1] = plCliffL.byte.g + (plCliffH.byte.g-plCliffL.byte.g) * col / 256;
+					p[2] = plCliffL.byte.b + (plCliffH.byte.b-plCliffL.byte.b) * col / 256;
+					break;
+				case TER_WATER:
+					p[0] = plWater.byte.r;
+					p[1] = plWater.byte.g;
+					p[2] = plWater.byte.b;
+					break;
+				case TER_ROAD:
+					p[0] = plRoadL.byte.r + (plRoadH.byte.r-plRoadL.byte.r) * col / 256;
+					p[1] = plRoadL.byte.g + (plRoadH.byte.g-plRoadL.byte.g) * col / 256;
+					p[2] = plRoadL.byte.b + (plRoadH.byte.b-plRoadL.byte.b) * col / 256;
+					break;
+				default:
+					p[0] = plGroundL.byte.r + (plGroundH.byte.r-plGroundL.byte.r) * col / 256;
+					p[1] = plGroundL.byte.g + (plGroundH.byte.g-plGroundL.byte.g) * col / 256;
+					p[2] = plGroundL.byte.b + (plGroundH.byte.b-plGroundL.byte.b) * col / 256;
+					break;
 			}
 			WTile += 1;
 		}
@@ -403,95 +377,12 @@ void loadMapPreview(bool hideInterface)
 	// Slight hack to init array with a special value used to determine how many players on map
 	memset(playerpos,0x77,sizeof(playerpos));
 	// color our texture with clancolors @ correct position
-	plotStructurePreview16(imageData, scale, offX2, offY2,playerpos);
-	glErrors();					// clear openGL errorcodes
-	// and now, for those that have FBO available on their card
-	// added hack to work around bad drivers that report FBO available, when it is not.
-	if(Init_FBO(BACKDROP_HACK_WIDTH,BACKDROP_HACK_HEIGHT) && !bFboProblem)
-	{
-		// Save the view port and set it to the size of the texture
-		glPushAttrib(GL_VIEWPORT_BIT);
+	plotStructurePreview16(imageData, playerpos);
 
-		// First we bind the FBO so we can render to it
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
-		bFboProblem |= glErrors();
+	screen_enableMapPreview(bFileName, mapWidth, mapHeight, playerpos);
 
-		//set up projection & model matrix for the texture(!)
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		glOrtho(0.0f,(double)BACKDROP_HACK_HEIGHT,0,(double)BACKDROP_HACK_WIDTH,-1.0f,1.0f);
+	screen_Upload(imageData, true);
 
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-		glViewport( 0, 0, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT );
-		// Then render as normal
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT );		//| GL_DEPTH_BUFFER_BIT);	
-		glLoadIdentity();
-		// and start drawing here
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, FBOtexture);
-		//upload the texture to the FBO
-		glTexSubImage2D(GL_TEXTURE_2D,0,0,0,BACKDROP_HACK_WIDTH,BACKDROP_HACK_HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,imageData);
-
-		iV_SetFont(font_large);
-		glDisable(GL_CULL_FACE);
-		for(i=0;i < MAX_PLAYERS;i++)//
-		{
-			float fx,fy;
-			if(playerpos[i].x==0x77777777) continue;	// no player is available, so skip
-			fx =(float)playerpos[i].x;
-			fy =(float)playerpos[i].y;
-			fx*=(float)scale;
-			fy*=(float)scale;
-			fx+=(float)offX2;
-			fy+=(float)offY2;
-
-			glcRenderStyle(GLC_TEXTURE);
-			// first draw a slightly bigger font of the number using said color
-			iV_SetTextColour(WZCOL_DBLUE);
-			iV_SetTextSize(28.f);
-			iV_DrawTextF(fx,fy,"%d",i);
-			// now draw it again using smaller font and said color
-			iV_SetTextColour(WZCOL_LBLUE);
-			iV_SetTextSize(24.f);
-			iV_DrawTextF(fx,fy,"%d",i);
-		}
-		glcRenderStyle(GLC_TEXTURE);
-
-		// set rendering back to default frame buffer
-		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
-		glReadPixels(0, 0, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,fboData);
-
-		//done with the FBO, so unbind it.
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
-		glPopAttrib();
-		bFboProblem |= glErrors();
-		// if we detected a error, then we must fallback to old texture, or user will not see anything.
-		if(!bFboProblem)
-		{
-			screen_Upload(fboData);
-		}
-		else
-		{
-			screen_Upload(imageData);
-		}
-		bFboProblem |= glErrors();
-		glEnable(GL_CULL_FACE);
-	}
-	else
-	{
-		// no FBO was available, just show them what we got.
-		screen_Upload(imageData);
-	}
-
-	free(fboData);
 	free(imageData);
 
 	if (hideInterface)
@@ -499,7 +390,6 @@ void loadMapPreview(bool hideInterface)
 		hideTime = gameTime;
 	}
 	mapShutdown();
-	Delete_FBO();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -2115,7 +2005,7 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.pDisplay = displayPlayer;
 				sFormInit.UserData = i;
 				widgAddForm(psWScreen, &sFormInit);
-				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 35,9, DIFF_SLIDER_STOPS,
+				addFEAISlider(MULTIOP_SKSLIDE+i,sFormInit.id, 35,9, DIFF_SLIDER_STOPS,
 							(game.skDiff[i] <= DIFF_SLIDER_STOPS ? game.skDiff[i] : DIFF_SLIDER_STOPS / 2));	//set to 50% (value of UBYTE_MAX == human player)
 			}
 		}
@@ -2214,7 +2104,7 @@ static void addChatBox(void)
 	if (*getModList())
 	{
 		char modListMessage[WIDG_MAXSTR] = "";
-		sstrcat(modListMessage, _("Active mods: "));
+		sstrcat(modListMessage, _("Mod: "));
 		sstrcat(modListMessage, getModList());
 		addConsoleMessage(modListMessage,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		if (NetPlay.bComms)
@@ -2741,7 +2631,7 @@ static void processMultiopWidgets(UDWORD id)
 	if((id >= MULTIOP_PLAYER_START) && (id <= MULTIOP_PLAYER_END))	// clicked on a player
 	{
 		// options for kicking
-		if(NetPlay.isHost)
+		if(NetPlay.isHost && (id - MULTIOP_PLAYER_START != NET_HOST_ONLY) )	// can't kick self!
 		{
 			if(mouseDown(MOUSE_RMB)) // both buttons....
 			{
@@ -3047,6 +2937,13 @@ void frontendMultiMessages(void)
 			uint32_t player_id;
 			char reason[MAX_KICK_REASON];
 			LOBBY_ERROR_TYPES KICK_TYPE = ERROR_NOERROR;
+
+			if (player_id == NET_HOST_ONLY)
+			{
+				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
+				NETend();
+				break;
+			}
 
 			NETbeginDecode(queue, NET_KICK);
 				NETuint32_t(&player_id);

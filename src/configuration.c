@@ -27,6 +27,7 @@
 #include "lib/framework/configfile.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
+#include "lib/ivis_opengl/screen.h"
 
 #include "advvis.h"
 #include "ai.h"
@@ -92,13 +93,6 @@ BOOL loadConfig(void)
 
 	//  options screens.
 	// //////////////////////////
-
-	// //////////////////////////
-	// subtitles
-	if(getWarzoneKeyNumeric("allowsubtitles", &val))
-	{
-		war_SetAllowSubtitles(val);
-	}
 
 	// //////////////////////////
 	// voice vol
@@ -689,8 +683,8 @@ BOOL loadRenderMode(void)
 	{
 		// If we have an invalid or incomplete resolution specified
 		// fall back to the defaults.
-		war_SetWidth(640);
-		war_SetHeight(480);
+		war_SetWidth(0);
+		war_SetHeight(0);
 	}
 
 	if (getWarzoneKeyNumeric("bpp", &val))
@@ -730,7 +724,6 @@ BOOL saveConfig(void)
 	{
 		setDifficultyLevel(DL_NORMAL);
 	}
-	setWarzoneKeyNumeric("allowSubtitles", war_GetAllowSubtitles());
 	setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
 	setWarzoneKeyNumeric("framerate", (SDWORD)getFramerateLimit());
 	setWarzoneKeyNumeric("showFPS", (SDWORD)showFPS);

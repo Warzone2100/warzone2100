@@ -25,41 +25,19 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/math_ext.h"
 #include "lib/netplay/netplay.h"
 
-#include "objects.h"
-#include "combat.h"
-#include "stats.h"
-#include "visibility.h"
-#include "lib/gamelib/gtime.h"
-#include "map.h"
-#include "move.h"
-#include "cluster.h"
-#include "messagedef.h"
-#include "miscimd.h"
-#include "projectile.h"
-#include "lib/sound/audio.h"
-#include "geometry.h"
-#include "cmddroid.h"
-#include "mapgrid.h"
-#include "order.h"
-#include "ai.h"
 #include "action.h"
+#include "cluster.h"
+#include "combat.h"
 #include "difficulty.h"
+#include "geometry.h"
+#include "mapgrid.h"
+#include "projectile.h"
 #include "random.h"
-
-/* minimum miss distance */
-#define MIN_MISSDIST	(TILE_UNITS/6)
-
-/* The number of tiles of clear space needed for indirect fire */
-#define INDIRECT_LOSDIST 2
 
 // maximum random pause for firing
 #define RANDOM_PAUSE	500
-
-// visibility level below which the to hit chances are reduced
-#define VIS_ATTACK_MOD_LEVEL	150
 
 /* direction array for missed bullets */
 typedef struct _bul_dir
@@ -78,21 +56,6 @@ static BUL_DIR aScatterDir[BUL_MAXSCATTERDIR] =
 	{ -1,0 },
 	{ -1,-1 },
 };
-
-/* Initialise the combat system */
-BOOL combInitialise(void)
-{
-	return true;
-}
-
-
-/* Shutdown the combat system */
-BOOL combShutdown(void)
-{
-	return true;
-}
-
-unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE impactSide);
 
 // Watermelon:real projectile
 /* Fire a weapon at something */

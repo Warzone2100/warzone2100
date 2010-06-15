@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "pointtree.h"
 #include <algorithm>
 #include <vector>

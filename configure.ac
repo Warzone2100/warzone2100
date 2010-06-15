@@ -37,6 +37,11 @@ AX_PROG_PERL_VERSION([5.10], [], [ PERL="" ])
 AC_SUBST([PERL])
 AM_CONDITIONAL([PERL_AVAILABLE], test -n "$PERL")
 
+AC_CHECK_PROG(ZIP, zip, zip)
+test -z "${ZIP}" && AC_MSG_ERROR(Zip not found!)
+AC_CHECK_PROG(UNZIP, unzip, unzip)
+test -z "${UNZIP}" && AC_MSG_ERROR(Unzip not found!)
+
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
 
@@ -52,7 +57,7 @@ AC_CHECK_HEADERS(alloca.h)
 
 # Check for gettext
 AM_GNU_GETTEXT([external])
-AC_PROG_VERSION_CHECK([msgfmt xgettext], [0.15])
+AM_GNU_GETTEXT_VERSION([0.15])
 
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG
@@ -72,7 +77,7 @@ case ${host_os} in
 	*mingw32*)
 		host_os_mingw32=yes
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
-		WIN32_LIBS='-ldbghelp -lshfolder -lwinmm -lws2_32'
+		WIN32_LIBS='-ldbghelp -lshfolder -lshlwapi -lpsapi -lshell32 -lwinmm -lws2_32'
 		AC_SUBST([WIN32_LIBS], [${WIN32_LIBS}])
 		;;
 	*openbsd*)
@@ -195,10 +200,17 @@ AS_IF([test "x$enable_sound" != "xyes"],[
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE([debug],
-	AS_HELP_STRING([--enable-debug[=yes/relaxed/profile/debugprofile/no]],[Compile debug version [yes]]),
+	AS_HELP_STRING([--enable-debug[=yes/relaxed/profile/debugprofile/no]],[Compile debug version [[yes]]]),
 	[ enable_debug=${enableval} ], [ enable_debug=yes ])
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([${enable_debug}])
+
+# gcc 4.5 added some warnings to -Wall that weren't even valid in previous
+# versions. The -Werror is necessary since otherwise gcc prints a warning that
+# the option is only valid for c++/objc++, but the test succeeds. The order is
+# also important, it doesn't work if -Werror comes last.
+AX_C_CHECK_FLAG([-Werror -Wno-switch], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-switch")
+AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-enum-compare")
 
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
@@ -208,7 +220,7 @@ if test "x$enable_debug" = "xyes" ; then
 	else
 		# -mno-fused-madd = Do not generate fused multiply-add instructions, which round differently than separate multiply and add instructions.
 		WZ_WARNINGS="-Wall -Werror -Wno-unused-label -Wmissing-field-initializers -Wcast-align -Wwrite-strings -Wmissing-declarations -Wpointer-arith -Wno-format-security"
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -mno-fused-madd -Wno-pointer-to-int-cast -Wstrict-prototypes -Wdeclaration-after-statement ${WZ_WARNINGS}"
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -mno-fused-madd -Wno-pointer-to-int-cast -Wstrict-prototypes -Wdeclaration-after-statement ${WZ_WARNINGS} ${CFLAGS_IGNORE_WARNINGS}"
 		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -mno-fused-madd -Wextra ${WZ_WARNINGS}"
 		WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
@@ -309,13 +321,26 @@ if test "x$enable_static" = "xyes" ; then
 	PKG_CHECK_MODULES([FREETYPE], [freetype2])
 fi
 
-if test "x$host_os_mingw32" = "xno" ; then
+system_glee=false
+if test "x$host_os_mingw32" != "xyes" ; then
 	PKG_CHECK_MODULES([GLee], [glee >= 5.4.0], [system_glee=true], [system_glee=false])
-else
-	system_glee=false
+	if test "x$system_glee" = "xfalse" ; then
+		AX_EXT_HAVE_HEADER([GLee.h], [/usr/local/include/GL /usr/include/GL])
+		save_cppflags="${CPPFLAGS}"
+		CPPFLAGS="${CPPFLAGS} ${GLEE_H_CPPFLAGS}"
+		AC_CHECK_HEADER([GLee.h], [system_glee=true], [system_glee=false])
+		CPPFLAGS=${save_cppflags}
+		if test "x$system_glee" = "xtrue" ; then
+			AC_CHECK_LIB([GLee], [GLeeInit], [system_glee=true], [system_glee=false])
+			if test "x$system_glee" = "xtrue" ; then
+				AC_SUBST([GLee_CFLAGS], [${GLEE_H_CPPFLAGS}])
+				AC_SUBST([GLee_LIBS], [-lGLee])
+			fi
+		fi
+	fi
 fi
-AM_CONDITIONAL([SYSTEM_GLEE], [test x$system_glee = xtrue])
-if test x$system_glee = xfalse ; then
+AM_CONDITIONAL([SYSTEM_GLEE], [test "x$system_glee" = "xtrue"])
+if test "x$system_glee" = "xfalse" ; then
 	AC_MSG_NOTICE([Using integrated GLee])
 	AC_SUBST([GLee_CFLAGS], ['-I$(top_srcdir)/lib/ivis_opengl'])
 fi

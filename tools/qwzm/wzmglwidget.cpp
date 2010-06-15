@@ -19,7 +19,7 @@
 #include "wzmglwidget.h"
 
 #define gl_errors() really_report_gl_errors(__FILE__, __LINE__)
-static void really_report_gl_errors (const char *file, int line)
+static void really_report_gl_errors(const char *file, int line)
 {
 	GLenum error = glGetError();
 
@@ -30,17 +30,14 @@ static void really_report_gl_errors (const char *file, int line)
 }
 
 WZMOpenGLWidget::WZMOpenGLWidget(QWidget *parent)
-		: QGLViewer(parent)
+		: QGLViewer(parent), psModel(NULL), teamIndex(0),
+		selectedMesh(-1), animation(false), now(0)
 {
-	animation = false;
-	psModel = NULL;
-	teamIndex = 0;
 	if (!QGLFormat::hasOpenGL())
 	{
 		qWarning("This system has no OpenGL support!");
 		exit(EXIT_FAILURE);
 	}
-	now = 0;
 	timer.start();
 	setAxisIsDrawn(true);
 }
@@ -64,6 +61,9 @@ void WZMOpenGLWidget::init()
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GEQUAL, 0.05f);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -79,8 +79,13 @@ void WZMOpenGLWidget::draw()
 			now = timer.elapsed();
 		}
 
-		drawModel(psModel, now);
+		drawModel(psModel, now, selectedMesh);
 	}
+}
+
+void WZMOpenGLWidget::selectMesh(int index)
+{
+	selectedMesh = index - 1;
 }
 
 void WZMOpenGLWidget::setTeam(int index)
@@ -89,6 +94,7 @@ void WZMOpenGLWidget::setTeam(int index)
 	{
 		return;
 	}
+
 	if (index > 7 || index < 0)
 	{
 		qWarning("setTeam: Bad index %d", index);

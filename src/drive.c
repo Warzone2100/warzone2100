@@ -738,20 +738,3 @@ void driveProcessRadarInput(int x,int y)
 	CalcRadarPosition(x, y, &PosX, &PosY);
 	orderSelectedLoc(selectedPlayer, PosX*TILE_UNITS, PosY*TILE_UNITS, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
 }
-/*
-void driveMarkTarget(void)
-{
-
-		BASE_OBJECT *psObj = targetGetCurrent();
-		if(psObj != NULL)
-		{
-			if(driveAllowControl())
-			{
-//				MouseMovement(false);
-				targetMarkCurrent();
-				SetMousePos(0,psObj->sDisplay.screenX,psObj->sDisplay.screenY);
-//				pie_DrawMouse(psObj->sDisplay.screenX,psObj->sDisplay.screenY);
-			}
-		}
-}
-*/

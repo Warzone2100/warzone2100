@@ -28,7 +28,6 @@
 #include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
 #include "lib/ivis_common/rendmode.h"
-#include "lib/ivis_common/piestate.h"
 
 /***************************************************************************/
 /*
@@ -298,8 +297,6 @@ void pie_PerspectiveEnd(void)
 
 void pie_Begin3DScene(void)
 {
-	pie_SetTexturePage(TEXPAGE_FONT);
-	glColor3f( 1.0f, 1.0f, 1.0f);		// Reset Color to white
 	glDepthRange(0.1, 1);
 	drawing_interface = false;
 }

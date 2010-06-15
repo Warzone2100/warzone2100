@@ -411,10 +411,6 @@ static BASE_OBJECT		*apsPreviousObj[IOBJ_MAX];
 /* The jump position for each object on the base bar */
 static Vector2i asJumpPos[IOBJ_MAX];
 
-// whether to reopen the build menu
-// chnaged back to pre Mark Donald setting at Jim's request - AlexM
-static BOOL				bReopenBuildMenu = false;
-
 /***************************************************************************************/
 /*              Function Prototypes                                                    */
 static BOOL intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats);
@@ -696,12 +692,13 @@ BOOL intInitialise(void)
 
 void intReopenBuild(BOOL reopen)
 {
-	bReopenBuildMenu = reopen;
+	// obsolete
 }
 
 BOOL intGetReopenBuild(void)
 {
-	return bReopenBuildMenu;
+	// obsolete
+	return false;
 }
 
 //initialise all the previous obj - particularly useful for when go Off world!
@@ -2033,19 +2030,9 @@ INT_RETVAL intRunWidgets(void)
 					}
 				}
 
-				// put the build menu up again after the structure position has been chosen
-				//or ctrl/shift is down and we're queing the build orders
-#ifdef DISABLE_BUILD_QUEUE
-				if (bReopenBuildMenu)
-#else
-				if (bReopenBuildMenu || ctrlShiftDown())
-#endif
+				if (!quickQueueMode)
 				{
-				    intAddBuild(NULL);
-				}
-				else
-				{
-					// Clear the object screen
+					// Clear the object screen, only if we aren't immediately building something else
 					intResetScreen(false);
 				}
 
@@ -2093,22 +2080,15 @@ INT_RETVAL intRunWidgets(void)
 //					DeSelectDroid((DROID*)psObjSelected);
 //				}
 
-				// put the build menu up again after the structure position has been chosen
-				// or ctrl/shift is down and we're queuing the build orders
-#ifdef DISABLE_BUILD_QUEUE
-				if (bReopenBuildMenu)
+				if (!quickQueueMode)
 				{
-					intAddBuild(NULL);
-				}
-				else
-				{
-					// Clear the object screen
+					// Clear the object screen, only if we aren't immediately building something else
 					intResetScreen(false);
 				}
-#else
-				// Clear the object screen
+			}
+			if (buildState == BUILD3D_NONE)
+			{
 				intResetScreen(false);
-#endif
 			}
 		}
 		else if (intMode == INT_EDITSTAT && editPosMode == IED_POS)
@@ -2214,6 +2194,11 @@ INT_RETVAL intRunWidgets(void)
 						// Send a text message to all players, notifying them of
 						// the fact that we're cheating ourselves a new droid.
 						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new droid: %s."), selectedPlayer, psDroid->aName);
+
+						psScrCBNewDroid = psDroid;
+						psScrCBNewDroidFact = NULL;
+						eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);	// notify scripts so it will get assigned jobs
+						psScrCBNewDroid = NULL;
 					}
 					else
 					{
@@ -2224,7 +2209,10 @@ INT_RETVAL intRunWidgets(void)
 					sendTextMessage(msg, true);
 					Cheated = true;
 				}
-				editPosMode = IED_NOPOS;
+				if (!quickQueueMode)
+				{
+					editPosMode = IED_NOPOS;
+				}
 			}
 		}
 	}
@@ -3885,9 +3873,7 @@ BOOL intAddPower(void)
 	sBarInit.y = (SWORD)POW_Y;
 	sBarInit.width = POW_BARWIDTH;
 	sBarInit.height = iV_GetImageHeight(IntImages,IMAGE_PBAR_EMPTY);
-	sBarInit.sCol.byte.r = POW_CLICKBARMAJORRED;
-	sBarInit.sCol.byte.g = POW_CLICKBARMAJORGREEN;
-	sBarInit.sCol.byte.b = POW_CLICKBARMAJORBLUE;
+	sBarInit.sCol = WZCOL_POWER_BAR;
 	sBarInit.pDisplay = intDisplayPowerBar;
 	sBarInit.iRange = POWERBAR_SCALE;
 
@@ -4576,12 +4562,8 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 0;
-	sBarInit.sCol.byte.r = STAT_PROGBARMAJORRED;
-	sBarInit.sCol.byte.g = STAT_PROGBARMAJORGREEN;
-	sBarInit.sCol.byte.b = STAT_PROGBARMAJORBLUE;
-	sBarInit.sMinorCol.byte.r = STAT_PROGBARMINORRED;
-	sBarInit.sMinorCol.byte.g = STAT_PROGBARMINORGREEN;
-	sBarInit.sMinorCol.byte.b = STAT_PROGBARMINORBLUE;
+	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
+	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 	sBarInit.pTip = _("Progress Bar");
 
     //object output bar ie manuf power o/p, research power o/p
@@ -4846,17 +4828,11 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				widgSetButtonState(psWScreen, sBFormInit2.id, WBUT_CLICKLOCK);
 			}
 
-
-
-			if ( psObj->type != OBJ_DROID ||
-				 (((DROID *)psObj)->droidType == DROID_CONSTRUCT ||
-                 ((DROID *)psObj)->droidType == DROID_CYBORG_CONSTRUCT))
+			if (psObj->type != OBJ_DROID || (((DROID *)psObj)->droidType == DROID_CONSTRUCT || ((DROID *)psObj)->droidType == DROID_CYBORG_CONSTRUCT))
 			{
 				// Set the colour for the production run size text.
-				widgSetColour(psWScreen, sBFormInit2.id, WCOL_TEXT,
-								STAT_TEXTRED,STAT_TEXTGREEN,STAT_TEXTBLUE);
-				widgSetColour(psWScreen, sBFormInit2.id, WCOL_BKGRND,
-								STAT_PROGBARTROUGHRED,STAT_PROGBARTROUGHGREEN,STAT_PROGBARTROUGHBLUE);
+				widgSetColour(psWScreen, sBFormInit2.id, WCOL_TEXT, WZCOL_ACTION_PRODUCTION_RUN_TEXT);
+				widgSetColour(psWScreen, sBFormInit2.id, WCOL_BKGRND, WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND);
 			}
 
 			// Add command droid bits
@@ -5349,12 +5325,8 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 0;
-	sBarInit.sCol.byte.r = STAT_PROGBARMAJORRED;
-	sBarInit.sCol.byte.g = STAT_PROGBARMAJORGREEN;
-	sBarInit.sCol.byte.b = STAT_PROGBARMAJORBLUE;
-	sBarInit.sMinorCol.byte.r = STAT_PROGBARMINORRED;
-	sBarInit.sMinorCol.byte.g = STAT_PROGBARMINORGREEN;
-	sBarInit.sMinorCol.byte.b = STAT_PROGBARMINORBLUE;
+	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
+	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 	sBarInit.iRange = GAME_TICKS_PER_SEC;
 	// Setup widget update callback and object pointer so we can update the progress bar.
 	sBarInit.pCallback = intUpdateProgressBar;
@@ -5426,14 +5398,10 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 
 	sFormInit.pDisplay = intDisplayStatusButton;
 
-
 	widgAddForm(psWScreen, &sFormInit);
 	// Set the colour for the production run size text.
-	widgSetColour(psWScreen, sFormInit.id, WCOL_TEXT,
-							STAT_TEXTRED,STAT_TEXTGREEN,STAT_TEXTBLUE);
-	widgSetColour(psWScreen, sFormInit.id, WCOL_BKGRND,
-							STAT_PROGBARTROUGHRED,STAT_PROGBARTROUGHGREEN,STAT_PROGBARTROUGHBLUE);
-
+	widgSetColour(psWScreen, sFormInit.id, WCOL_TEXT, WZCOL_ACTION_PRODUCTION_RUN_TEXT);
+	widgSetColour(psWScreen, sFormInit.id, WCOL_BKGRND, WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND);
 
 	widgAddLabel(psWScreen, &sLabInit);
 	widgAddBarGraph(psWScreen, &sBarInit);
@@ -5813,12 +5781,8 @@ if (numForms(numStats, butPerForm)> MAX_TAB_SMALL_SHOWN)	//only want these butto
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 50;
-	sBarInit.sCol.byte.r = STAT_PROGBARMAJORRED;
-	sBarInit.sCol.byte.g = STAT_PROGBARMAJORGREEN;
-	sBarInit.sCol.byte.b = STAT_PROGBARMAJORBLUE;
-	sBarInit.sMinorCol.byte.r = STAT_PROGBARMINORRED;
-	sBarInit.sMinorCol.byte.g = STAT_PROGBARMINORGREEN;
-	sBarInit.sMinorCol.byte.b = STAT_PROGBARMINORBLUE;
+	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
+	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 	//sBarInit.pTip = _("Power Usage");
 
 	statID = 0;
@@ -5857,7 +5821,7 @@ if (numForms(numStats, butPerForm)> MAX_TAB_SMALL_SHOWN)	//only want these butto
 		{
 			return false;
 		}
-		widgSetColour(psWScreen, sBFormInit.id, WCOL_BKGRND, 0,0,0);
+		widgSetColour(psWScreen, sBFormInit.id, WCOL_BKGRND, WZCOL_BLACK);
 
 		//Stat = ppsStatsList[i];
 		if (Stat->ref >= REF_STRUCTURE_START &&

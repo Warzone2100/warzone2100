@@ -64,7 +64,11 @@ UDWORD		selectedPlayer = 0; 	/**< Current player */
  */
 
 /* Over how many seconds is the average required? */
-#define	TIMESPAN	5
+#ifdef _DEBUG
+# define	TIMESPAN	1
+#else
+# define	TIMESPAN	5
+#endif
 
 /* Initial filler value for the averages - arbitrary */
 #define  IN_A_FRAME 70
@@ -185,10 +189,12 @@ static void initCursors(void)
 	aCursors[CURSOR_BRIDGE]      = init_system_cursor(CURSOR_BRIDGE, cursor_type);
 	aCursors[CURSOR_BUILD]       = init_system_cursor(CURSOR_BUILD, cursor_type);
 	aCursors[CURSOR_EMBARK]      = init_system_cursor(CURSOR_EMBARK, cursor_type);
+	aCursors[CURSOR_DISEMBARK]   = init_system_cursor(CURSOR_DISEMBARK, cursor_type);
 	aCursors[CURSOR_FIX]         = init_system_cursor(CURSOR_FIX, cursor_type);
 	aCursors[CURSOR_GUARD]       = init_system_cursor(CURSOR_GUARD, cursor_type);
 	aCursors[CURSOR_JAM]         = init_system_cursor(CURSOR_JAM, cursor_type);
 	aCursors[CURSOR_LOCKON]      = init_system_cursor(CURSOR_LOCKON, cursor_type);
+	aCursors[CURSOR_SCOUT]       = init_system_cursor(CURSOR_SCOUT, cursor_type);
 	aCursors[CURSOR_MENU]        = init_system_cursor(CURSOR_MENU, cursor_type);
 	aCursors[CURSOR_MOVE]        = init_system_cursor(CURSOR_MOVE, cursor_type);
 	aCursors[CURSOR_NOTPOSSIBLE] = init_system_cursor(CURSOR_NOTPOSSIBLE, cursor_type);
@@ -240,7 +246,18 @@ bool frameInitialise(
 
 	if (!screenInitialise(width, height, bitDepth, fsaa, fullScreen, vsync))
 	{
-		return false;
+		if (fullScreen)
+		{
+			info("Trying windowed mode now.");
+			if (!screenInitialise(width, height, bitDepth, fsaa, false, vsync))
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/* Initialise the input system */

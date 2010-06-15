@@ -22,7 +22,7 @@
  * Draws the 3D view.
  * Originally by Alex McLean & Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE
  */
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 // Workaround X11 headers #defining Status
 #ifdef Status
 # undef Status
@@ -222,6 +222,10 @@ bool showSAMPLES = false;
  *  default OFF, turn ON via console command 'showorders'
  */
 bool showORDERS = false;	
+/** Show the current level name on the screen, toggle via the 'showlevelname'
+ *  console command
+*/
+bool showLevelName = true;
 /** When we have a connection issue, we will flash a message on screen
 * 0 = no issue, 1= player leaving nicely, 2= player got disconnected
 */
@@ -635,21 +639,21 @@ void draw3DScene( void )
 			break;
 		}
 	}
-	if (getWidgetsStatus() && getDebugMappingStatus() && !demoGetStatus() && !gamePaused())
-	{
-		iV_DrawText( "DEBUG ", RET_X + 134, 440 + E_H );
-	}
-	else
+	if (getWidgetsStatus() && !gamePaused())
 	{
 #ifdef DEBUG
-		if (getWidgetsStatus() && !gamePaused())
+		char buildInfo[255];
+		if (showLevelName)
 		{
-			char buildInfo[255];
 			iV_DrawText( getLevelName(), RET_X + 134, 420 + E_H );
-			getAsciiTime(buildInfo,gameTime);
-			iV_DrawText( buildInfo, RET_X + 134, 434 + E_H );
 		}
+		getAsciiTime(buildInfo,gameTime);
+		iV_DrawText( buildInfo, RET_X + 134, 434 + E_H );
 #endif
+		if (getDebugMappingStatus() && !demoGetStatus())
+		{
+			iV_DrawText( "DEBUG ", RET_X + 134, 448 + E_H );
+		}
 	}
 
 	while(player.r.y>DEG(360))
@@ -943,12 +947,6 @@ static void drawTiles(iView *player)
 
 	pie_EndLighting();
 
-	if(driveModeActive()) {
-		// If were in driving mode then mark the current target.
-		/*if(targetGetCurrent() != NULL) {
-			targetMarkCurrent();
-		}*/
-	}
 	if(!gamePaused())
 	{
 		doConstructionLines();
@@ -1476,7 +1474,7 @@ void displayBlueprints(void)
 		{
 			if (deliveryPointToMove)
 			{
-				// it's a delivery point
+				// it's a droid (from the debug menu) or a delivery point
 				FLAG_POSITION pos = *deliveryPointToMove;
 				pos.coords.x = world_coord(sBuildDetails.x)+world_coord(1)/2;
 				pos.coords.y = world_coord(sBuildDetails.y)+world_coord(1)/2;
@@ -1485,9 +1483,15 @@ void displayBlueprints(void)
 			}
 			else
 			{
-				// it's a droid or a delivery point (from the debug menu)
-				// display nothing for now
-				;
+				// it's a droid (from the debug menu)
+				// no delivery point is known, so show a fake one
+				FLAG_POSITION pos;
+				pos.coords.x = world_coord(sBuildDetails.x)+world_coord(1)/2;
+				pos.coords.y = world_coord(sBuildDetails.y)+world_coord(1)/2;
+				pos.coords.z = map_Height(pos.coords.x, pos.coords.y) + world_coord(1)/8;
+				pos.factoryType = FACTORY_FLAG;
+				pos.factoryInc = 0;
+				renderDeliveryPoint(&pos, true);
 			}
 		}
 	}
@@ -2465,16 +2469,16 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, BOOL blueprint)
 
 	pie_MatScale(50); // they are all big now so make this one smaller too
 
+	pieFlag = pie_TRANSLUCENT;
+	pieFlagData = BLUEPRINT_OPACITY;
+
 	if (blueprint)
 	{
-		pieFlag = pie_TRANSLUCENT;
-		pieFlagData = BLUEPRINT_OPACITY;
 		colour = (buildState == BUILD3D_VALID) ? WZCOL_BLUEPRINT_VALID : WZCOL_BLUEPRINT_INVALID;
 	}
 	else
 	{
-		pieFlag = 0;
-		pieFlagData = 0;
+		pieFlag |= pie_FORCE_FOG;
 		colour = WZCOL_WHITE;
 	}
 	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc], 0, 0, colour, WZCOL_BLACK, pieFlag, pieFlagData);
@@ -3352,9 +3356,6 @@ static void	drawDroidSelections( void )
 		}
 	}
 
-	// Reset color to white so that features textures are rendered as expected
-	glColor3f( 1.0f, 1.0f, 1.0f);
-	
 	for(psFeature = apsFeatureLists[0]; psFeature; psFeature = psFeature->psNext)
 	{
 		if(!psFeature->died && psFeature->sDisplay.frameNumber == currentGameFrame)
@@ -4217,10 +4218,9 @@ static void	drawDroidSensorLock(DROID *psDroid)
 /// Draw the construction lines for all construction droids
 static	void	doConstructionLines( void )
 {
-DROID	*psDroid;
-UDWORD	i;
+	DROID	*psDroid;
+	UDWORD	i;
 
-	pie_SetTranslucencyMode(TRANS_ALPHA);
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
 		for(psDroid= apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
@@ -4266,9 +4266,8 @@ UDWORD	i;
 /// Draw the construction or demolish lines for one droid
 static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 {
-	CLIP_VERTEX pts[3];
 	Vector3i each;
-	Vector3f *point;
+	Vector3f *point, pts[3];
 	UDWORD	pointIndex;
 	SDWORD	realY;
 	Vector3i null, vec;
@@ -4286,9 +4285,9 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pts[0].pos.x = vec.x + rx;
-	pts[0].pos.y = vec.y;
-	pts[0].pos.z = vec.z - rz;
+	pts[0].x = vec.x + rx;
+	pts[0].y = vec.y;
+	pts[0].z = vec.z - rz;
 
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
@@ -4310,9 +4309,9 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pts[1].pos.x = vec.x + rx;
-	pts[1].pos.y = vec.y;
-	pts[1].pos.z = vec.z - rz;
+	pts[1].x = vec.x + rx;
+	pts[1].y = vec.y;
+	pts[1].z = vec.z - rz;
 
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
@@ -4328,9 +4327,9 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pts[2].pos.x = vec.x + rx;
-	pts[2].pos.y = vec.y;
-	pts[2].pos.z = vec.z - rz;
+	pts[2].x = vec.x + rx;
+	pts[2].y = vec.y;
+	pts[2].z = vec.z - rz;
 
 	// set the colour
 	colour = pal_SetBrightness(UBYTE_MAX);
@@ -4343,18 +4342,6 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 		colour.byte.r = 0;
 		colour.byte.g = 0;
 	}
-	pts[0].light.rgba = 0xff000000;
-	pts[1].light.rgba = 0xff000000;
-	pts[2].light.rgba = 0xff000000;
-
-	pts[0].u = 0;
-	pts[0].v = 0;
-
-	pts[1].u = 0;
-	pts[1].v = 0;
-
-	pts[2].u = 0;
-	pts[2].v = 0;
 
 	pie_TransColouredTriangle(pts, colour);
 }

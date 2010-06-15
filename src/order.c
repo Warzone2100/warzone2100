@@ -753,14 +753,21 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 				if (!orderDroidList(psDroid))
 				{
-	       			psDroid->order = DORDER_NONE;
+					psDroid->order = DORDER_NONE;
 					moveToRearm(psDroid);
+					if (!vtolEmpty(psDroid))
+					{
+						// VTOL droid can do more work, let scripts handle it
+						psScrVtolRetarget = psDroid;
+						eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VTOL_RETARGET);
+						psScrVtolRetarget = NULL;
+					}
 				}
 			}
 			else
 			{
-       			psDroid->order = DORDER_NONE;
-        		actionDroid(psDroid, DACTION_NONE);
+				psDroid->order = DORDER_NONE;
+				actionDroid(psDroid, DACTION_NONE);
 			}
 		}
 		else if ( ((psDroid->action == DACTION_MOVE) ||
@@ -3176,25 +3183,6 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 	orderPlayOrderObjAudio( player, psObj );
 
 	turnOffMultiMsg(false); //msgs back on.
-
-    //This feels like the wrong place but it has to be done once the order has been received...
-    //demolish queuing...need to bring the interface back up
-    if (psDemolish && player == psObj->player)
-    {
-        /*this will stop the constructor being able to demolish any other
-        buildings until the demolish button is re-selected*/
-        intDemolishCancel();
-
-//turn off the build queue availability until desired release date!
-#ifndef DISABLE_BUILD_QUEUE
-        //re-add the stat (side) interface to allow a new selection
-        if (ctrlShiftDown())
-        {
-            intConstructorSelected(psDemolish);
-        }
-#endif
-    }
-
 }
 
 void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj)

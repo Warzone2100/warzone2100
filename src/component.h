@@ -34,17 +34,15 @@ extern "C"
 	Pumpkin Studios, EIDOS Interactive.
 */
 
-extern UBYTE PlayerColour[MAX_PLAYERS];
-extern void initPlayerColours(void);
-extern BOOL setPlayerColour(UDWORD player, UDWORD col);
-extern UBYTE getPlayerColour(UDWORD pl);
+BOOL setPlayerColour(UDWORD player, UDWORD col);
+UBYTE getPlayerColour(UDWORD pl);
 
-extern UDWORD getComponentDroidRadius(DROID *psDroid);
-extern UDWORD getComponentDroidTemplateRadius(DROID_TEMPLATE *psDroid);
-extern UDWORD getComponentRadius(BASE_STATS *psComponent);
-extern UDWORD getResearchRadius(BASE_STATS *Stat);
-extern UDWORD getStructureSize(STRUCTURE *psStructure);
-extern UDWORD getStructureStatSize(STRUCTURE_STATS *Stats);
+UDWORD getComponentDroidRadius(DROID *psDroid);
+UDWORD getComponentDroidTemplateRadius(DROID_TEMPLATE *psDroid);
+UDWORD getComponentRadius(BASE_STATS *psComponent);
+UDWORD getResearchRadius(BASE_STATS *Stat);
+UDWORD getStructureSize(STRUCTURE *psStructure);
+UDWORD getStructureStatSize(STRUCTURE_STATS *Stats);
 
 #define OBJECT_RADIUS				(128)
 #define COMPONENT_RADIUS			(64)
@@ -58,26 +56,28 @@ extern UDWORD getStructureStatSize(STRUCTURE_STATS *Stats);
 #define LARGE_STRUCT_SCALE			(25)
 
 #define TOWER_HEIGHT    100
-extern UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat);
+UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat);
 
-extern void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
-extern void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
-extern void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
-extern void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
-extern void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
-extern void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
-extern void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
-extern void displayComponentObject(DROID *psDroid);
+void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale);
+void displayComponentObject(DROID *psDroid);
 
-extern void	compPersonToBits(DROID *psDroid);
+void compPersonToBits(DROID *psDroid);
 
-/* Pass in the stats you're interested in and the COMPONENT - double reference, but works */
+SDWORD rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius);
+void destroyFXDroid(DROID *psDroid);
+
+/* Pass in the stats you're interested in and the COMPONENT - double reference, but works. NOTE: Unused!*/
 #define PART_IMD(STATS,DROID,COMPONENT,PLAYER)	(STATS[DROID->asBits[COMPONENT].nStat].pIMD)
-
 
 /* Get the chassis imd */
 #define BODY_IMD(DROID,PLAYER)	(asBodyStats[DROID->asBits[COMP_BODY].nStat].pIMD)
-/* Get the brain imd */
+/* Get the brain imd - NOTE: Unused!*/
 #define BRAIN_IMD(DROID,PLAYER)	(asBrainStats[DROID->asBits[COMP_BRAIN].nStat].pIMD)
 /* Get the weapon imd */
 #define WEAPON_IMD(DROID,WEAPON_NUM)	(asWeaponStats[DROID->asWeaps[WEAPON_NUM].nStat].pIMD)
@@ -103,11 +103,6 @@ extern void	compPersonToBits(DROID *psDroid);
 #define REPAIR_MOUNT_IMD(DROID,PLAYER)	(asRepairStats[DROID->asBits[COMP_REPAIRUNIT].nStat].pMountGraphic)
 /* Get a muzzle flash pie*/
 #define MUZZLE_FLASH_PIE(DROID,WEAPON_NUM)	(asWeaponStats[DROID->asWeaps[WEAPON_NUM].nStat].pMuzzleGraphic)
-
-/* Don't know what these might be? */
-extern SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius);
-
-extern void	destroyFXDroid(DROID	*psDroid);
 
 #ifdef __cplusplus
 }

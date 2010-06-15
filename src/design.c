@@ -805,7 +805,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	}
 
 	/* Set the text colour for the form */
-	widgSetColour(psWScreen, IDDES_POWERFORM, WCOL_TEXT, 0, 164, 0);
+	widgSetColour(psWScreen, IDDES_POWERFORM, WCOL_TEXT, WZCOL_DESIGN_POWER_FORM_BACKGROUND);
 
 	/* Add the design template power bar and label*/
 	sLabInit.formID	= IDDES_POWERFORM;
@@ -1056,12 +1056,8 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 50;
-	sBarInit.sCol.byte.r = STAT_PROGBARMAJORRED;
-	sBarInit.sCol.byte.g = STAT_PROGBARMAJORGREEN;
-	sBarInit.sCol.byte.b = STAT_PROGBARMAJORBLUE;
-	sBarInit.sMinorCol.byte.r = STAT_PROGBARMINORRED;
-	sBarInit.sMinorCol.byte.g = STAT_PROGBARMINORGREEN;
-	sBarInit.sMinorCol.byte.b = STAT_PROGBARMINORBLUE;
+	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
+	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 	sBarInit.pTip = _("Power Usage");
 
 	droidTemplID = 0;

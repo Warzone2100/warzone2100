@@ -126,6 +126,8 @@ typedef enum
 	// End of redundant messages.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
 } MESSAGE_TYPES;
+//#define SYNC_FLAG (NUM_GAME_PACKETS * NUM_GAME_PACKETS)	//special flag used for logging.
+#define SYNC_FLAG 0x10000000	//special flag used for logging. (Not sure what this is. Was added in trunk, NUM_GAME_PACKETS not in newnet.)
 
 // Constants
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
@@ -198,6 +200,13 @@ typedef struct {
 	uint64_t	unsentScoreCheck;
 	uint64_t	sentPing;
 	uint64_t	unsentPing;
+	uint16_t	kicks;
+	uint16_t	joins;
+	uint16_t	left;
+	uint16_t	drops;
+	uint16_t	cantjoin;
+	uint16_t	banned;
+	uint16_t	rejected;
 } SYNC_COUNTER;
 
 typedef struct
@@ -242,6 +251,7 @@ typedef struct
 	BOOL		unused_2;	///< for future usage
 	BOOL		needFile;			///< if We need a file sent to us
 	WZFile		wzFile;				///< for each player, we keep track of map progress
+	char		IPtextAddress[40];	///< IP of this player
 } PLAYER;
 
 // ////////////////////////////////////////////////////////////////////////
@@ -264,11 +274,18 @@ typedef struct {
 	char* MOTD;
 } NETPLAY;
 
+typedef struct
+{
+	char	pname[40];
+	char	IPAddress[40];
+} PLAYER_IP;
+#define MAX_BANS 255
 // ////////////////////////////////////////////////////////////////////////
 // variables
 
 extern NETPLAY				NetPlay;
 extern SYNC_COUNTER sync_counter;
+extern PLAYER_IP	*IPlist;
 // update flags
 extern bool netPlayersUpdated;
 extern int mapDownloadProgress;

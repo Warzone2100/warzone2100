@@ -277,10 +277,8 @@ static PACKAGED_CHECK packageCheck(const DROID *pD)
 		ASSERT(false, "Droid %u body is too high before synch, is %u, which is more than %u.", pc.droidID, pD->body, pD->originalBody);
 	}
 	pc.experience = pD->experience;
-	pc.pos = pD->pos;
+	pc.pos = droidGetPrecisePosition(pD);
 	pc.rot = pD->rot;
-	pc.sMoveX = pD->sMove.fx;
-	pc.sMoveY = pD->sMove.fy;
 	if (pD->order == DORDER_ATTACK)
 	{
 		pc.targetID = pD->psTarget->id;
@@ -312,13 +310,14 @@ BOOL recvDroidCheck(NETQUEUE queue)
 		{
 			DROID *         pD;
 			PACKAGED_CHECK  pc, pc2;
+			Position        precPos;
 
 			NETPACKAGED_CHECK(&pc);
 
 			// Find the droid in question
 			if (!IdToDroid(pc.droidID, pc.player, &pD))
 			{
-				NETlogEntry("Recvd Unknown droid info. val=player", 0, pc.player);
+				NETlogEntry("Recvd Unknown droid info. val=player", SYNC_FLAG, pc.player);
 				debug(LOG_SYNC, "Received checking info for an unknown (as yet) droid. player:%d ref:%d", pc.player, pc.droidID);
 				continue;
 			}
@@ -343,14 +342,14 @@ BOOL recvDroidCheck(NETQUEUE queue)
 #define MERGECOPY(x, y, z)  if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z" to %"z".", pc.droidID, x, pc.y);             x = pc.y; }
 #define MERGEDELTA(x, y, z) if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z" to %"z".", pc.droidID, x, x + pc.y - pc2.y); x += pc.y - pc2.y; }
 			// player not synched here...
-			MERGEDELTA(pD->pos.x, pos.x, "d");
-			MERGEDELTA(pD->pos.y, pos.y, "d");
-			MERGEDELTA(pD->pos.z, pos.z, "d");
+			precPos = droidGetPrecisePosition(pD);
+			MERGEDELTA(precPos.x, pos.x, "d");
+			MERGEDELTA(precPos.y, pos.y, "d");
+			MERGEDELTA(precPos.z, pos.z, "d");
+			droidSetPrecisePosition(pD, precPos);
 			MERGEDELTA(pD->rot.direction, rot.direction, "d");
 			MERGEDELTA(pD->rot.pitch, rot.pitch, "d");
 			MERGEDELTA(pD->rot.roll, rot.roll, "d");
-			MERGEDELTA(pD->sMove.fx, sMoveX, "f");
-			MERGEDELTA(pD->sMove.fy, sMoveY, "f");
 			MERGEDELTA(pD->body, body, "u");
 			if (pD->body > pD->originalBody)
 			{
@@ -431,7 +430,6 @@ BOOL recvDroidCheck(NETQUEUE queue)
 
 	return true;
 }
-
 
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////

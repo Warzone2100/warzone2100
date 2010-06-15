@@ -449,8 +449,11 @@ void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 				break;
+			case TRANS_MULTIPLICATIVE:
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+				break;
 			case TRANS_DECAL:
-				rendStates.transMode = TRANS_DECAL;
 				glDisable(GL_BLEND);
 				break;
 			case TRANS_FILTER:

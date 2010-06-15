@@ -20,7 +20,7 @@
 #include "pieclip.h"
 #include "ivi.h"
 
-static UDWORD videoBufferDepth = 32, videoBufferWidth = 640, videoBufferHeight = 480;
+static UDWORD videoBufferDepth = 32, videoBufferWidth = 0, videoBufferHeight = 0;
 
 BOOL pie_SetVideoBufferDepth(UDWORD depth)
 {

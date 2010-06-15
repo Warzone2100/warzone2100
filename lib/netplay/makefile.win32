@@ -10,7 +10,8 @@ SRC= \
 	netlog.c \
 	netplay.c \
 	netqueue.cpp \
-	nettypes.cpp
+	nettypes.cpp \
+	netsocket.cpp
 
 LIB=netplay
 

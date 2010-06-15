@@ -31,6 +31,7 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/framework/fixedpoint.h"
 
+#include "action.h"
 #include "display.h"
 #include "map.h"
 #include "loop.h"
@@ -813,7 +814,21 @@ void processMouseClickInput(void)
 	selection = establishSelection(selectedPlayer);
 	ASSERT( selection<=POSSIBLE_SELECTIONS,"Weirdy selection!" );
 
-	if ((selection != SC_INVALID) && !gamePaused())
+	if (gamePaused())
+	{
+		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+	}
+	if (buildState == BUILD3D_VALID)
+	{
+		// special casing for building
+		pie_SetMouse(CURSOR_BUILD, war_GetColouredCursor());
+	}
+	else if (buildState == BUILD3D_POS)
+	{
+		// special casing for building - can't build here
+		pie_SetMouse(CURSOR_NOTPOSSIBLE, war_GetColouredCursor());
+	}
+	else if (selection != SC_INVALID)
 	{
 		BASE_OBJECT *ObjUnderMouse;
 		bool ObjAllied;
@@ -930,7 +945,7 @@ void processMouseClickInput(void)
 					item = MT_BLOCKING;
 				}
 			}
-			
+
 			//vtols cannot pick up artifacts
 			else if (item == MT_ARTIFACT
 					&& selection == SC_DROID_DIRECT
@@ -951,25 +966,26 @@ void processMouseClickInput(void)
 				item = MT_OWNDROID;
 			}
 			if ((arnMPointers[item][selection] == CURSOR_SELECT ||
-				 arnMPointers[item][selection] == CURSOR_EMBARK ||
-				 arnMPointers[item][selection] == CURSOR_ATTACH ||
-				 arnMPointers[item][selection] == CURSOR_LOCKON) && ObjAllied)
+			     arnMPointers[item][selection] == CURSOR_EMBARK ||
+			     arnMPointers[item][selection] == CURSOR_ATTACH ||
+			     arnMPointers[item][selection] == CURSOR_LOCKON ||
+			     arnMPointers[item][selection] == CURSOR_DEST) && ObjAllied)
 			{
 				// If you want to do these things, just gift your unit to your ally.
 				item = MT_BLOCKING;
 			}
-			
+
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && selection == SC_DROID_TRANSPORTER &&
 				arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
 				// Alt+move = disembark transporter
-				pie_SetMouse(CURSOR_EMBARK, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_DISEMBARK, war_GetColouredCursor());
 			}
 			else if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && selection == SC_DROID_DIRECT &&
 				arnMPointers[item][selection] == CURSOR_MOVE)
 			{
 				// Alt+move = scout
-				pie_SetMouse(CURSOR_JAM, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_SCOUT, war_GetColouredCursor());
 			}
 			else if (arnMPointers[item][selection] == CURSOR_NOTPOSSIBLE &&
 			         ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
@@ -982,6 +998,10 @@ void processMouseClickInput(void)
 			{
 				pie_SetMouse(arnMPointers[item][selection], war_GetColouredCursor());
 			}
+		}
+		else
+		{
+			pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 		}
 	}
 	else
@@ -1027,7 +1047,7 @@ void processMouseClickInput(void)
 		}
 	}
 
-	CurrentItemUnderMouse= item;
+	CurrentItemUnderMouse = item;
 }
 
 
@@ -1660,7 +1680,7 @@ void AddDerrickBurningMessage(void)
 	audio_PlayTrack( ID_SOUND_BUILD_FAIL );
 }
 
-static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
+static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 {
 	bool ownDroid; // Not an allied droid
 
@@ -1863,7 +1883,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 
 }
 
-static inline void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selection)
+static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selection)
 {
 //	clearSelection();	// Clear droid selection.
 	bool ownStruct = (psStructure->player == selectedPlayer);
@@ -1964,11 +1984,23 @@ static inline void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE s
 		clearSelection();
 		assignSensorTarget((BASE_OBJECT *)psStructure);
 	}
+	if (intDemolishSelectMode())
+	{
+		// we were demolishing something - now we're done
+		if (ctrlShiftDown())
+		{
+			quickQueueMode = true;
+		}
+		else
+		{
+			intDemolishCancel();
+		}
+	}
 
 	driveDisableTactical();
 }
 
-static inline void dealWithLMBFeature(FEATURE* psFeature)
+static void dealWithLMBFeature(FEATURE* psFeature)
 {
 	//some features are targetable
 	//check for constructor droid trying to remove wrecked building first
@@ -2084,7 +2116,7 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 	driveDisableTactical();
 }
 
-static inline void dealWithLMBObject(BASE_OBJECT* psClickedOn)
+static void dealWithLMBObject(BASE_OBJECT* psClickedOn)
 {
 	SELECTION_TYPE selection = establishSelection(selectedPlayer);
 	OBJECT_TYPE type = psClickedOn->type;
@@ -2127,7 +2159,7 @@ void	dealWithLMB( void )
 	/* What have we clicked on? */
 	if(driveModeActive() && !driveTacticalActive())
 	{
-		psClickedOn = NULL;  //targetGetCurrent();
+		psClickedOn = NULL;
 		if (psClickedOn)
 		{
 			dealWithLMBObject(psClickedOn);
@@ -2263,25 +2295,15 @@ static void dealWithLMBDClick(void)
 			if(psDroid->player == selectedPlayer)
 			{
 				/* If we've double clicked on a constructor droid, activate build menu */
-				//if (psDroid->droidType == DROID_CONSTRUCT)
-				if (psDroid->droidType == DROID_CONSTRUCT ||
-					psDroid->droidType == DROID_CYBORG_CONSTRUCT)
-				{
-					intResetScreen(true);
-					intConstructorSelected(psDroid);
-				}
-				else if (psDroid->droidType == DROID_COMMAND)
+				if (psDroid->droidType == DROID_COMMAND)
 				{
 					intResetScreen(true);
 					intCommanderSelected(psDroid);
 				}
 				else
 				{
-					/* Otherwise, activate the droid's group (if any) */
-//					activateGroup(selectedPlayer,psDroid->group);
-					// Now selects all of smae type on screen
+					// Now selects all of same type on screen
 					selDroidSelection(selectedPlayer,DS_BY_TYPE,DST_ALL_SAME,true);
-
 				}
 			}
 		}
@@ -2371,7 +2393,6 @@ static void dealWithRMB( void )
 	BASE_OBJECT			*psClickedOn;
 	DROID				*psDroid;
 	STRUCTURE			*psStructure;
-	BOOL				bDemolish = false;
 
 	if (driveModeActive() || mouseOverRadar ||
 	    InGameOpUp == true || widgGetFromID(psWScreen,INTINGAMEOP))
@@ -2500,23 +2521,19 @@ static void dealWithRMB( void )
 //				addGameMessage("Right clicked on own building",1000,true);
 //				addConsoleMessage("Right clicked on own building",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 
-				// Moderately inefficient, but I can't think of a better way.
-				if (bRightClickOrders)
-				{
-					for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
-					{
-						if (psDroid->selected &&
-						    chooseOrderObj(psDroid, psClickedOn, false) == DORDER_DEMOLISH)
-						{
-							bDemolish = true;
-							break;
-						}
-					}
-				}
-				if (bDemolish)
+				if (bRightClickOrders && intDemolishSelectMode())
 				{
 					orderSelectedObjAdd(selectedPlayer, psClickedOn, ctrlShiftDown());
 					FeedbackOrderGiven();
+					// we were demolishing something - now we're done
+					if (ctrlShiftDown())
+					{
+						quickQueueMode = true;
+					}
+					else
+					{
+						intDemolishCancel();
+					}
 				}
 				else if (psStructure->selected==true)
 				{
@@ -2754,7 +2771,7 @@ STRUCTURE	*psStructure;
 	/*	Not a droid, so maybe a structure or feature?
 		If still NULL after this then nothing */
 	if(driveModeActive() && !driveTacticalActive()) {
-		psNotDroid = NULL;  //targetGetCurrent();
+		psNotDroid = NULL;
 	} else {
 		psNotDroid = getTileOccupier(mouseTileX, mouseTileY);
 	}
@@ -2913,6 +2930,11 @@ SELECTION_TYPE	selectionClass;
 	selectionClass = SC_INVALID;
 	CurrWeight = UBYTE_MAX;
 
+	if (intDemolishSelectMode())
+	{
+		return SC_DROID_DEMOLISH;
+	}
+
 	for(psDroid = apsDroidLists[selectedPlayer];
 			psDroid /*&& !atLeastOne*/; psDroid = psDroid->psNext)
 	{
@@ -2995,14 +3017,7 @@ SELECTION_TYPE	selectionClass;
 
 		case DROID_CONSTRUCT:
 		case DROID_CYBORG_CONSTRUCT:
-			if (intDemolishSelectMode())
-			{
-				selectionClass = SC_DROID_DEMOLISH;			// demolish mode.
-			}
-			else
-			{
-				selectionClass = SC_DROID_CONSTRUCT;		// ordinary mode.
-			}
+			selectionClass = SC_DROID_CONSTRUCT;
 			break;
 
 		case DROID_COMMAND:

@@ -10447,7 +10447,6 @@ BOOL scrPursueResearch(void)
 	BOOL				found;
 	PLAYER_RESEARCH		*pPlayerRes;
 
-	char				sTemp[128];
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
 
@@ -10620,9 +10619,13 @@ BOOL scrPursueResearch(void)
 				psResFacilty->timeToResearch = 1;
 			}
 		}
-
-		sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[foundIndex].pName );
-		NETlogEntry(sTemp,0,0);
+#if defined (DEBUG)
+		{
+			char	sTemp[128];
+			sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[foundIndex].pName );
+			NETlogEntry(sTemp, SYNC_FLAG, 0);
+		}
+#endif
 	}
 
 	scrFunctionResult.v.bval = found;

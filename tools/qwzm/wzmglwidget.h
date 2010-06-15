@@ -19,7 +19,8 @@
 #define QWZMGL_H
 
 #include <qglviewer.h>
-extern "C" {
+extern "C"
+{
 #include "wzmutils.h"
 }
 
@@ -27,22 +28,24 @@ class WZMOpenGLWidget : public QGLViewer
 {
 	Q_OBJECT
 
-	public:
+public:
 	WZMOpenGLWidget(QWidget *parent);
 	~WZMOpenGLWidget();
 	void setModel(MODEL *model);
 	void setTeam(int index);
 	void setAnimation(bool value);
 	void draw();
+	void selectMesh(int meshSelect);
 
-	protected:
+protected:
 	void init();
 //	void resizeGL(int w, int h);
 	QString helpString() const;
 
-	private:
+private:
 	MODEL *psModel;
 	int teamIndex;
+	int selectedMesh;
 	bool animation;
 	QTime timer;
 	int now;

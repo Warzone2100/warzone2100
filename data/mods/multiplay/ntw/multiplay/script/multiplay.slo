@@ -20,6 +20,7 @@ public	STRUCTURESTAT	NuclearReactor1;
 public	STRUCTURESTAT	CoolingTower1;
 public	STRUCTURESTAT	look;
 public	STRUCTURESTAT	shield;
+public	STRUCTURESTAT	shield2;
 public	STRUCTURESTAT	command2;
 
 ////////
@@ -243,6 +244,7 @@ event initialisedEvent(CALL_GAMEINIT)
 		setStructureLimits(CoolingTower1, 	4,playnum);
 		setStructureLimits(look, 	1, playnum);
 		setStructureLimits(shield, 	1, playnum);
+		setStructureLimits(shield2, 	1, playnum);
 		setStructureLimits(command2, 	1, playnum);
 
 //-----------------------------------------
@@ -411,7 +413,7 @@ event initialisedEventTwo(CALL_GAMEINIT)
 
 		if(multiPlayerBaseType == CAMP_CLEAN)
 		{
-			setPowerLevel(1300,playnum);	
+			setPowerLevel(750,playnum);	
 			count = 0;								
 			while (count < numCleanTech)
 			{
@@ -422,7 +424,7 @@ event initialisedEventTwo(CALL_GAMEINIT)
 		}
 		else if(multiPlayerBaseType == CAMP_BASE)
 		{
-			setPowerLevel(2500,playnum);	
+			setPowerLevel(1000,playnum);	
 			count = 0;								
 			while (count < numBaseTech)
 			{
@@ -434,7 +436,7 @@ event initialisedEventTwo(CALL_GAMEINIT)
 		else
 		{	
 
-			setPowerLevel(2500,playnum);		
+			setPowerLevel(1250,playnum);		
 			count = 0;								
 			while (count < numDefTech)
 			{

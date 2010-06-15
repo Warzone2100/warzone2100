@@ -22,25 +22,46 @@
 	Functions for the in-game console.
 */
 
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/gamelib/gtime.h"
-#include "ai.h"
-#include "basedef.h"
-#include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
-#include "intimage.h"
-#include "console.h"
-#include "scriptextern.h"
-#include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
-#include "radar.h"
+#include "lib/sound/audio_id.h"
+
+#include "ai.h"
+#include "console.h"
 #include "main.h"
+#include "radar.h"
 
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
+
+#define	DEFAULT_MESSAGE_DURATION		GAME_TICKS_PER_SEC * 8
+
+#define CON_BORDER_WIDTH				4
+#define CON_BORDER_HEIGHT				4
+
+typedef struct _console
+{
+	UDWORD	topX;
+	UDWORD	topY;
+	UDWORD	width;
+	UDWORD	textDepth;
+	BOOL	permanent;
+} CONSOLE;
+
+/* Definition of a message */
+typedef struct	_console_message
+{
+	char				text[MAX_CONSOLE_STRING_LENGTH];		// Text of the message
+	UDWORD				timeAdded;								// When was it added to our list?
+	//UDWORD			screenIndex;							// Info for justification
+	UDWORD				JustifyType;
+	UDWORD				id;
+	SDWORD				player;						// Player who sent this message or SYSTEM_MESSAGE
+	struct _console_message *psNext;
+} CONSOLE_MESSAGE;
 
 /** Is the console history on or off? */
 static BOOL	bConsoleDropped = false;
@@ -104,27 +125,13 @@ static UDWORD	messageId;	// unique ID
 char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
 
-/* MODULE CONSOLE PROTOTYPES */
-void	consolePrintf				( char *layout, ... );
-void	setConsoleSizePos			( UDWORD x, UDWORD y, UDWORD width );
-BOOL	addConsoleMessage			( const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player );
-void	updateConsoleMessages		( void );
-void	displayConsoleMessages		( void );
-void	initConsoleMessages			( void );
-void	setConsoleMessageDuration	( UDWORD time );
-void	removeTopConsoleMessage		( void );
-void	flushConsoleMessages		( void );
-void	setConsoleBackdropStatus	( BOOL state );
-void	enableConsoleDisplay		( BOOL state );
-BOOL	getConsoleDisplayStatus		( void );
-void	setDefaultConsoleJust		( CONSOLE_TEXT_JUSTIFICATION defJ );
-void	setConsolePermanence		( BOOL state, BOOL bClearOld );
-BOOL	mouseOverConsoleBox			( void );
-void	setConsoleLineInfo			( UDWORD vis );
-UDWORD	getConsoleLineInfo			( void );
-void	permitNewConsoleMessages	( BOOL allow);
-int		displayOldMessages			( void );
-void	setConsoleTextColor			( SDWORD player );
+/**
+	Specify how long messages will stay on screen.
+*/
+static void	setConsoleMessageDuration(UDWORD time)
+{
+	messageDuration = time;
+}
 
 /** Sets the system up */
 void	initConsoleMessages( void )
@@ -205,7 +212,7 @@ void	toggleConsoleDrop( void )
 }
 
 /** Add a string to the console. */
-static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType,
+BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType,
 							   SDWORD player)
 {
 	int textLength;
@@ -304,12 +311,6 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 	return true;
 }
 
-/// Wrapper for _addConsoleMessage
-BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType,
-					   SDWORD player)
-{
-	return _addConsoleMessage(messageText, jusType, player);
-}
 
 /// \return The number of console messages currently active
 UDWORD	getNumberConsoleMessages( void )
@@ -380,14 +381,6 @@ void	updateConsoleMessages( void )
 }
 
 /**
-	Specify how long messages will stay on screen.
-*/
-void	setConsoleMessageDuration(UDWORD time)
-{
-	messageDuration = time;
-}
-
-/**
 	Remove the top message on screen.
 	This and setConsoleMessageDuration should be sufficient to allow
 	us to put up messages that stay there until we remove them
@@ -423,7 +416,7 @@ void	flushConsoleMessages( void )
 }
 
 /** Sets console text color depending on message type */
-void setConsoleTextColor(SDWORD player)
+static void setConsoleTextColor(SDWORD player)
 {
 	// System messages
 	if(player == SYSTEM_MESSAGE)
@@ -457,99 +450,9 @@ void setConsoleTextColor(SDWORD player)
 }
 
 
-/** Displays all the console messages */
-void	displayConsoleMessages( void )
-{
-	CONSOLE_MESSAGE *psMessage;
-	int linePitch;
-	int boxDepth;
-	int drop;
-	int MesY;
-	int clipDepth;
-	unsigned int exceed, numProcessed;
-
-	/* Are there any to display? */
-	if(consoleMessages == NULL && !bConsoleDropped)
-	{
-		/* No point - so get out */
- 		return;
-	}
-
-	/* Return if it's disabled */
-	if(!bConsoleDisplayEnabled)
-	{
-		return;
-	}
-
-	/* Get the travel to the next line */
-	linePitch = iV_GetTextLineSize();
-
-	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-	pie_SetFogStatus(false);
-
-	drop = 0;
-	if(bConsoleDropped)
-	{
-		drop = displayOldMessages();
-	}
-	if(consoleMessages==NULL)
-	{
-		return;
-	}
-
-	/* Do we want a box under it? */
-	if(bTextBoxActive)
-	{
-		for (psMessage = consoleMessages, exceed = 0;
-		     psMessage && consoleVisibleLines > 0 && exceed < 4; // ho ho ho!!!
-		     psMessage = psMessage->psNext)
-		{
-			if (iV_GetTextWidth(psMessage->text) > mainConsole.width)
-			{
-				++exceed;
-			}
-		}
-
-		/* How big a box is necessary? */
-		boxDepth = (numActiveMessages> consoleVisibleLines ? consoleVisibleLines-1 : numActiveMessages-1);
-
-		/* Add on the extra - hope it doesn't exceed two lines! */
-		boxDepth += exceed;
-
-		/* GET RID OF THE MAGIC NUMBERS BELOW */
-		clipDepth = (mainConsole.topY+(boxDepth*linePitch)+CON_BORDER_HEIGHT+drop);
-		if(clipDepth > (pie_GetVideoBufferHeight() - linePitch))
-		{
-			clipDepth = (pie_GetVideoBufferHeight() - linePitch);
-		}
-
-		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT+drop+1,
-			mainConsole.topX+mainConsole.width ,clipDepth);
-	}
-
-	/* Stop when we've drawn enough or we're at the end */
-	MesY = mainConsole.topY + drop;
-
-	for (psMessage = consoleMessages, numProcessed = 0;
-	     psMessage && numProcessed < consoleVisibleLines && MesY < (pie_GetVideoBufferHeight() - linePitch);
-	     psMessage = psMessage->psNext)
-	{
-
-		/* Set text color depending on message type */
-		setConsoleTextColor(psMessage->player);
-
- 		/* Draw the text string */
-		MesY = iV_DrawFormattedText(psMessage->text, mainConsole.topX, MesY,
-									mainConsole.width, psMessage->JustifyType);
-
-		/* Move on */
-		++numProcessed;
-	}
-}
-
 /** Display up to the last 8 messages.
 	\return The number of messages actually shown */
-int displayOldMessages()
+static int displayOldMessages(void)
 {
 	int i;
 	BOOL bGotIt;
@@ -665,6 +568,96 @@ int displayOldMessages()
 }
 
 
+/** Displays all the console messages */
+void	displayConsoleMessages( void )
+{
+	CONSOLE_MESSAGE *psMessage;
+	int linePitch;
+	int boxDepth;
+	int drop;
+	int MesY;
+	int clipDepth;
+	unsigned int exceed, numProcessed;
+
+	/* Are there any to display? */
+	if(consoleMessages == NULL && !bConsoleDropped)
+	{
+		/* No point - so get out */
+ 		return;
+	}
+
+	/* Return if it's disabled */
+	if(!bConsoleDisplayEnabled)
+	{
+		return;
+	}
+
+	/* Get the travel to the next line */
+	linePitch = iV_GetTextLineSize();
+
+	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
+	pie_SetFogStatus(false);
+
+	drop = 0;
+	if(bConsoleDropped)
+	{
+		drop = displayOldMessages();
+	}
+	if(consoleMessages==NULL)
+	{
+		return;
+	}
+
+	/* Do we want a box under it? */
+	if(bTextBoxActive)
+	{
+		for (psMessage = consoleMessages, exceed = 0;
+		     psMessage && consoleVisibleLines > 0 && exceed < 4; // ho ho ho!!!
+		     psMessage = psMessage->psNext)
+		{
+			if (iV_GetTextWidth(psMessage->text) > mainConsole.width)
+			{
+				++exceed;
+			}
+		}
+
+		/* How big a box is necessary? */
+		boxDepth = (numActiveMessages> consoleVisibleLines ? consoleVisibleLines-1 : numActiveMessages-1);
+
+		/* Add on the extra - hope it doesn't exceed two lines! */
+		boxDepth += exceed;
+
+		/* GET RID OF THE MAGIC NUMBERS BELOW */
+		clipDepth = (mainConsole.topY+(boxDepth*linePitch)+CON_BORDER_HEIGHT+drop);
+		if(clipDepth > (pie_GetVideoBufferHeight() - linePitch))
+		{
+			clipDepth = (pie_GetVideoBufferHeight() - linePitch);
+		}
+
+		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT+drop+1,
+			mainConsole.topX+mainConsole.width ,clipDepth);
+	}
+
+	/* Stop when we've drawn enough or we're at the end */
+	MesY = mainConsole.topY + drop;
+
+	for (psMessage = consoleMessages, numProcessed = 0;
+	     psMessage && numProcessed < consoleVisibleLines && MesY < (pie_GetVideoBufferHeight() - linePitch);
+	     psMessage = psMessage->psNext)
+	{
+
+		/* Set text color depending on message type */
+		setConsoleTextColor(psMessage->player);
+
+ 		/* Draw the text string */
+		MesY = iV_DrawFormattedText(psMessage->text, mainConsole.topX, MesY,
+									mainConsole.width, psMessage->JustifyType);
+
+		/* Move on */
+		++numProcessed;
+	}
+}
+
 /** Allows toggling of the box under the console text */
 void	setConsoleBackdropStatus(BOOL state)
 {
@@ -764,6 +757,7 @@ UDWORD getConsoleLineInfo(void)
 }
 
 /// Function with printf arguments to print to the console
+// NOTE: Unused! void consolePrintf(char *layout, ...)
 void	consolePrintf(char *layout, ...)
 {
 	char	consoleString[MAX_CONSOLE_STRING_LENGTH];

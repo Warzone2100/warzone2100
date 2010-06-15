@@ -69,7 +69,7 @@ static STAR newStar(void)
 	STAR s;
 	s.xPos = rand() % barRightX;
 	s.speed = (rand() % 30 + 6) * pie_GetVideoBufferWidth() / 640.0;
-	s.colour = pal_Grey(150 + rand() % 100);
+	s.colour = pal_SetBrightness(150 + rand() % 100);
 	return s;
 }
 
@@ -153,6 +153,9 @@ TITLECODE titleLoop(void)
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 	}
+
+	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT && titleMode != STARTGAME)
+		screen_disableMapPreview();
 
 	switch(titleMode) // run relevant title screen code.
 	{
@@ -278,7 +281,7 @@ TITLECODE titleLoop(void)
 //loadbar update
 void loadingScreenCallback(void)
 {
-	const PIELIGHT loadingbar_background = pal_RGBA(0, 0, 0, 24);
+	const PIELIGHT loadingbar_background = WZCOL_LOADING_BAR_BACKGROUND;
 	const uint32_t currTick = SDL_GetTicks();
 	unsigned int i;
 

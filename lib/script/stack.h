@@ -25,6 +25,8 @@
 #ifndef _stack_h
 #define _stack_h
 
+#include "interpreter.h"
+
 #ifdef __cplusplus
 extern "C"
 {

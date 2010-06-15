@@ -57,3 +57,18 @@ A0,70,00,ff	// team2 - orange
 20,30,60,ff	// team6 - blue
 90,00,70,ff	// team7 - purple
 00,80,80,ff	// team8 - teal
+7f,7f,7f,ff	// default form background
+ff,ff,ff,ff	// default form text
+ff,ff,ff,ff	// default form light
+00,00,00,ff	// default form dark
+40,40,40,ff	// default form hilite
+ff,0,0,ff	// default form cursor
+30,30,30,ff	// default form tip background
+bf,bf,bf,ff	// default form disabled
+0,a4,0,ff	// design power form background
+cc,0,0,ff	// power bar
+cc,eb,13,ff	// action progress bar major
+55,0,0,ff	// action progress bar minor
+ff,ff,0,ff	// production run text
+0,20,40,ff	// production run background
+0,0,0,18	// game loading bar background

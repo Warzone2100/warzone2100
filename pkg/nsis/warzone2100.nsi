@@ -1,5 +1,5 @@
 ;  This file is part of Warzone 2100.
-;  Copyright (C) 2006-2009  Warzone 2100 Project
+;  Copyright (C) 2006-2010  Warzone 2100 Project
 ;  Copyright (C) 2006       Dennis Schridde
 ;
 ;  Warzone 2100 is free software; you can redistribute it and/or modify
@@ -86,12 +86,7 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 
   ; These indented statements modify settings for MUI_PAGE_FINISH
   !define MUI_FINISHPAGE_NOAUTOCLOSE
-  !define MUI_FINISHPAGE_RUN
-  !define MUI_FINISHPAGE_RUN_NOTCHECKED
-  !define MUI_FINISHPAGE_RUN_TEXT $(TEXT_RunWarzone)
-  !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
-  !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
-  !define MUI_FINISHPAGE_SHOWREADME $(TEXT_Readme)
+  !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 
 ;--------------------------------
 ;Pages
@@ -195,6 +190,7 @@ Section $(TEXT_SecBase) SecBase
   File "${TOP_SRCDIR}\data\music\menu.ogg"
   File "${TOP_SRCDIR}\data\music\track1.ogg"
   File "${TOP_SRCDIR}\data\music\track2.ogg"
+  File "${TOP_SRCDIR}\data\music\track3.ogg"
   File "${TOP_SRCDIR}\data\music\music.wpl"
 
   SetOutPath "$INSTDIR\styles"
@@ -331,79 +327,79 @@ SectionGroup $(TEXT_SecNLS) SecNLS
 
 Section "-NLS files" SecNLS_files
   SetOutPath "$INSTDIR\locale\cs\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\cs.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\cs.gmo"
 
   SetOutPath "$INSTDIR\locale\da\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\da.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\da.gmo"
 
   SetOutPath "$INSTDIR\locale\de\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\de.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\de.gmo"
 
   SetOutPath "$INSTDIR\locale\en_GB\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\en_GB.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\en_GB.gmo"
 
   SetOutPath "$INSTDIR\locale\es\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\es.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\es.gmo"
 
   SetOutPath "$INSTDIR\locale\et\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\et_EE.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\et_EE.gmo"
 
   SetOutPath "$INSTDIR\locale\fi\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fi.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\fi.gmo"
 
   SetOutPath "$INSTDIR\locale\fr\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fr.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\fr.gmo"
 
   SetOutPath "$INSTDIR\locale\fy\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fy.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\fy.gmo"
 
   SetOutPath "$INSTDIR\locale\ga\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ga.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ga.gmo"
 
   SetOutPath "$INSTDIR\locale\hr\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\hr.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\hr.gmo"
 
   SetOutPath "$INSTDIR\locale\it\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\it.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\it.gmo"
 
   SetOutPath "$INSTDIR\locale\la\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\la.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\la.gmo"
 
   SetOutPath "$INSTDIR\locale\lt\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\lt.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\lt.gmo"
 
   SetOutPath "$INSTDIR\locale\nb\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\nb.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\nb.gmo"
 
   SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\nl.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\nl.gmo"
 
   SetOutPath "$INSTDIR\locale\pl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\pl.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\pl.gmo"
 
   SetOutPath "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\pt_BR.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\pt_BR.gmo"
 
   SetOutPath "$INSTDIR\locale\pt\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\pt.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\pt.gmo"
 
   SetOutPath "$INSTDIR\locale\ro\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ro.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ro.gmo"
 
   SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ru.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ru.gmo"
 
   SetOutPath "$INSTDIR\locale\sl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\sl.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\sl.gmo"
 
   SetOutPath "$INSTDIR\locale\uk\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\uk_UA.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\uk_UA.gmo"
 
   SetOutPath "$INSTDIR\locale\zh_TW\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\zh_TW.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\zh_TW.gmo"
 
   SetOutPath "$INSTDIR\locale\zh_CN\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\zh_CN.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\zh_CN.gmo"
 
 SectionEnd
 
@@ -457,10 +453,6 @@ ${OrIf} ${SectionIsSelected} ${SecFMVs_EngLo}
 ;		!insertmacro RadioButton ${SecFMVs_Ger}
 	!insertmacro EndRadioButtons
 ${EndIf}
-FunctionEnd
-
-Function LaunchLink
-  Exec '$INSTDIR\${PACKAGE}.exe'
 FunctionEnd
 
 Function unix2dos
@@ -541,9 +533,6 @@ FunctionEnd
   LangString TEXT_SecOriginalMod ${LANG_ENGLISH} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_ENGLISH} "Play the game as it was back in the 1.10 days."
 
-  LangString TEXT_RunWarzone ${LANG_ENGLISH} "Run ${PACKAGE_NAME}"
-  LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.html"
-  
   ;Dutch
   LangString TEXT_SecBase ${LANG_DUTCH} "Core files"
   LangString DESC_SecBase ${LANG_DUTCH} "The core files required to run Warzone 2100."
@@ -581,9 +570,6 @@ FunctionEnd
   LangString TEXT_SecOriginalMod ${LANG_DUTCH} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_DUTCH} "Speel het spel met de originele 1.10 versie balans stats."
 
-  LangString TEXT_RunWarzone ${LANG_DUTCH} "Start ${PACKAGE_NAME}"
-  LangString TEXT_Readme ${LANG_DUTCH}   "$INSTDIR\Readme.en.html"
-  
   ;German
   LangString TEXT_SecBase ${LANG_GERMAN} "Core files"
   LangString DESC_SecBase ${LANG_GERMAN} "Die Kerndateien, die fьr Warzone 2100 benцtigt werden."
@@ -620,9 +606,6 @@ FunctionEnd
 
   LangString TEXT_SecOriginalMod ${LANG_GERMAN} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_GERMAN} "Spielen Sie das Spiel mit dem Balancing aus der Originalversion 1.10."
-
-  LangString TEXT_RunWarzone ${LANG_GERMAN} "Starte ${PACKAGE_NAME}"
-  LangString TEXT_Readme ${LANG_GERMAN}  "$INSTDIR\Readme.de.html"
 
   ;Russian
   LangString TEXT_SecBase ${LANG_RUSSIAN} "Базовые файлы"
@@ -661,9 +644,6 @@ FunctionEnd
   LangString TEXT_SecOriginalMod ${LANG_RUSSIAN} "Баланс 1.10"
   LangString DESC_SecOriginalMod ${LANG_RUSSIAN} "Играть в игру с балансом от оригинальной версии 1.10."
 
-  LangString TEXT_RunWarzone ${LANG_RUSSIAN} "Запуск ${PACKAGE_NAME}"
-  LangString TEXT_Readme ${LANG_RUSSIAN} "$INSTDIR\Readme.en.html"
-  
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecBase} $(DESC_SecBase)
@@ -717,6 +697,7 @@ Section "Uninstall"
   Delete "$INSTDIR\music\menu.ogg"
   Delete "$INSTDIR\music\track1.ogg"
   Delete "$INSTDIR\music\track2.ogg"
+  Delete "$INSTDIR\music\track3.ogg"
   Delete "$INSTDIR\music\music.wpl"
   RMDir "$INSTDIR\music"
 

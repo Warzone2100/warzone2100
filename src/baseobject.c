@@ -19,7 +19,7 @@
 */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/debug.h"
+
 #include "baseobject.h"
 #include "droid.h"
 #include "projectile.h"
@@ -37,7 +37,7 @@ static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, u
 	return v1 + angleDelta(v2 - v1) * numer/denom;
 }
 
-Position interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t2, uint32_t t)
+static Position interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t2, uint32_t t)
 {
 	Position ret = { interpolateInt(p1.x, p2.x, t1, t2, t),
 	                 interpolateInt(p1.y, p2.y, t1, t2, t),
@@ -55,7 +55,7 @@ Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint
 	return rot;
 }
 
-SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)
+static SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)
 {
 	return constructSpacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t), interpolateRot(st1.rot, st2.rot, st1.time, st2.time, t), t);
 }

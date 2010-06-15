@@ -1637,7 +1637,6 @@ BOOL scrSkDoResearch(void)
 	SDWORD				player, bias;//,timeToResearch;//,*x,*y;
 	UWORD				i;
 
-	char				sTemp[128];
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
 	PLAYER_RESEARCH		*pPlayerRes;
@@ -1696,8 +1695,13 @@ BOOL scrSkDoResearch(void)
 			}
 		}
 
-		sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[i].pName );
-		NETlogEntry(sTemp,0,0);
+#if defined (DEBUG)
+		{
+			char				sTemp[128];
+			sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[i].pName );
+			NETlogEntry(sTemp, SYNC_FLAG, 0);
+		}
+#endif
 	}
 
 	return true;

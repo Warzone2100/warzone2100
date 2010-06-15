@@ -82,26 +82,29 @@
 //How many best templates to choose from when deciding what template to build
 #define	MAX_RANDOM_TEMPLATES	4
 
-
-
 private	int				me;			// player for this instance.
 public	int				tileExpand;			// rate of exploration
 
-public	int				numScouts[TECHS],maxScouts[TECHS];			// aim for...
+public	int				numScouts,maxScouts;			// aim for...
 public	int				numDefenders[TECHS],maxDefenders[TECHS];
 public	int				numAttackers[TECHS],maxAttackers[TECHS];
-public	int				numCyborgs[TECHS],maxCyborgs[TECHS];
+public	int				numCyborgs,maxCyborgs;
 
-public	int				branchDefault,branchVTOL,techCount[TECHS],maxVtolFacs[TECHS],maxIdleRes[TECHS],
-						maxVTOLs[TECHS],numVtolTargets,vtolTargetWeight[10],numRebuildStat[TECHS];
+public	BODY				bugBody, viperBody, cobraBody, scorpionBody, leopardBody, pythonBody, retributionBody, tigerBody, vengeanceBody, wyvernBody, dragonBody;
+public	PROPULSION			vtolPropulsion, trackPropulsion, wheelPropulsion, hoverPropulsion, halftrackPropulsion;
+public	WEAPON				atWeapon[5], asWeapon[5], mdWeapon[5];
+public	int				numAtWeapons, numAsWeapons, numMdWeapons;
+
+public	int				branchDefault,branchVTOL,techCount[TECHS],maxVtolFacs[TECHS],maxIdleRes,
+						maxVTOLs[TECHS],numVtolTargets,vtolTargetWeight[10],numRebuildStat;
 public	RESEARCHSTAT	tech[TECHS][30];		//technology for different research branches
-public	STRUCTURESTAT	vtolTarget[10],rebuildStat[TECHS][2];
+public	STRUCTURESTAT	vtolTarget[10],rebuildStat[4];
 
 // structures
 private int				baseX,baseY,minx,miny,maxx,maxy;
-public	int				numStructs,numIncendrys,numDefStructs,numExtraStructs[TECHS],numWallWeaps,numBaseStruct,numLightCyborgs,numFundamental;
+public	int				numStructs,numIncendrys,numDefStructs,numWallWeaps,numBaseStruct,numLightCyborgs,numFundamental;
 private	STRUCTURESTAT	structChoice[5];
-public	STRUCTURESTAT	incendrys[8],structs[13],defStructs[26],extraStructs[TECHS][6],wallWeaps[11];
+public	STRUCTURESTAT	incendrys[8],structs[13],defStructs[26],wallWeaps[11];
 public	STRUCTURESTAT	sensorTower,wall,cornerWall,resLab,powGen,playerHQ,lassat,factory,derrick,cybFactory,
 						vtolDefStruct[5],vtolPad,vtolFactory,uplink,baseStruct[8];
 public	STRUCTURESTAT	powModule,facModule,resModule,vtolModule;
@@ -113,9 +116,6 @@ public	TEMPLATE		tmpl[TECHS][70];
 private	TEMPLATE		tmplChoice[5];
 
 public	TEMPLATE		cybTempl[10],superCyb[4],cybMechanic,cybEngineer,hovertruck;
-
-public	TEMPLATE		vtols[18];
-public	int				numVtolTemplates;
 
 public	TEMPLATE		sense[11];
 public	int				numSenseTemplates;
@@ -168,6 +168,7 @@ private	int				defendX,defendY,defendRadius,tDefendStart,tDefendTimeout,
 private	STRUCTURESTAT	rebuildStructStat[MAX_REBUILD_STRUCT];
 
 private int			order;	// callback global
+private bool			seenAnyAA;
 
 /////////////////////////////////////////////////////////////////////
 // triggers.
@@ -218,8 +219,11 @@ trigger chainloadTr				(wait, 1);
 trigger slowloadTr				(wait, 13);
 trigger checkActivitiesTr			(every, 400);
 trigger selectedDroidTr				(CALL_DROID_SELECTED, ref droid);
+trigger hostileAATr				(every, 600);	// check for AA each minute
+trigger vtolRetargetTr				(CALL_VTOL_RETARGET, me, ref droid);
 
 /* Events */
+event	checkForHostileAA;
 event	manicWalls;
 event	buildFundamentals;
 event	newfortify;
@@ -321,6 +325,7 @@ event initialisedEvent(CALL_GAMEINIT)
 	tDefendStart = -1;
 	tDefendTimeout = -1;
 	defendMoveType = -1;		//move or scout
+	seenAnyAA = false;
 
 	baseRange = 4 * TILE;
 
@@ -394,11 +399,29 @@ function void dbgObj(DROID obj, string message)
 	}
 }
 
+event retargetVtol(vtolRetargetTr)
+{
+	local	BASEOBJ _obj;
+
+	if (droid != NULLOBJECT)
+	{
+		_obj = getClosestEnemy(droid.x, droid.y, MAX_VTOL_DEFEND_RADIUS, false, false, me);
+		if (_obj != NULLOBJECT)
+		{
+			orderDroidObj(droid, DORDER_ATTACK, _obj);
+		}
+	}
+}
+
 // for debugging
 event selectedDroid(selectedDroidTr)
 {
 	local int groupcount;
 
+	if (!bRunning or me != selectedPlayer)
+	{
+		exit;
+	}
 	if (!hasGroup(droid))
 	{
 		console("Not in any group");
@@ -722,20 +745,21 @@ function bool tryUpgrade()
 event buildFundamentals(inactive)
 {
 	local FEATURE	_oil;
+	local bool	needPwGen;
 
+	needPwGen = false;
 	count = 0;
 	setEventTrigger(buildFundamentals, inactive);
 
 	// Do we need power generators?
 	if (numUnusedDerricks() > 0)
 	{
+		needPwGen = true;
 		dbgPlr("More power generators needed");
-		setEventTrigger(buildPowerGenerators, chainloadTr);
-		exit;
 	}
 
 	// Do we need to get oil?
-	if (playerPower(me) < LOW_POWER)
+	if (not needPwGen and playerPower(me) < LOW_POWER)
 	{
 		// Any available?
 		initGetFeature(oilRes, -1, me);
@@ -759,7 +783,8 @@ event buildFundamentals(inactive)
 		while (droid != NULLOBJECT)
 		{
 			if (conCanHelp(droid, structure.x, structure.y)
-			    and distBetweenTwoPoints(droid.x, droid.y, structure.x, structure.y) < 20 * TILE)
+			    and distBetweenTwoPoints(droid.x, droid.y, structure.x, structure.y) < 20 * TILE
+			    and (!needPwGen or structure.stattype == REF_POWER_GEN or structure.stattype == REF_POWER_MODULE))
 			{
 				orderDroidObj(droid, DORDER_HELPBUILD, structure);
 				dbgObj(droid, "Aid construction at (" & structure.x & ", " & structure.y & ")");
@@ -767,6 +792,12 @@ event buildFundamentals(inactive)
 			droid = iterateGroup(buildGroup);
 		}
 		structure = enumUnbuilt();
+	}
+
+	if (needPwGen)
+	{
+		setEventTrigger(buildPowerGenerators, chainloadTr);
+		exit;
 	}
 
 	// If we have power, build up base basics
@@ -802,7 +833,7 @@ event buildFundamentals(inactive)
 		setEventTrigger(buildDerrick, chainloadTr);
 		exit;
 	}
-	else	// if lots of power and too few factories to replace high-risk oil hunting trucks
+	else	// if lots of power or too few factories to replace high-risk oil hunting trucks
 	{
 		dbgPlr("Too much power - EXPAND!");
 		setEventTrigger(buildExpand, chainloadTr);
@@ -1532,45 +1563,43 @@ event newfortify(inactive)
 	_maxBuilders = 1;
 	setEventTrigger(newfortify, inactive);
 
-	if(numGroupSameOrder(buildGroup, DORDER_LINEBUILD) >= _maxBuilders)	// only gateway fortifications use line build
+	if (numGroupSameOrder(buildGroup, DORDER_LINEBUILD) < _maxBuilders)	// only gateway fortifications use line build
 	{
-		exit;
-	}
-
-	boolResult = FALSE;
-	initIterateGroup(buildGroup);				// find idle an idle veh.in build group.
-	droid = iterateGroup(buildGroup);
-	while((boolResult == FALSE) and (droid != NULLOBJECT))
-	{
-		if (droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD and droid.order != DORDER_HELPBUILD)
-		{
-			boolResult = TRUE;					// dont do this again!
-
-			tempx = baseX;
-			tempy = baseY;
-
-			// choose a suitable turret.
-			count = numWallWeaps - 1;
-			count2 = 0;
-			while( (count2 < 3) and (count >= 0) )
-			{
-				if( isStructureAvailable(wallWeaps[count],me))
-				{
-					structChoice[count2] = wallWeaps[count];
-					count2 = count2 + 1;
-				}
-				count = count - 1;
-			}
-			count =0;
-			if((count2 > 0) and (_numBuilders < _maxBuilders))
-			{
-				count = random(count2);
-				skDefenseLocationB(ref tempx,ref tempy,wall,structChoice[count],droid,me);
-				_numBuilders++;
-			}
-
-		}
+		boolResult = FALSE;
+		initIterateGroup(buildGroup);				// find idle an idle veh.in build group.
 		droid = iterateGroup(buildGroup);
+		while((boolResult == FALSE) and (droid != NULLOBJECT))
+		{
+			if (droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD and droid.order != DORDER_HELPBUILD)
+			{
+				boolResult = TRUE;					// dont do this again!
+
+				tempx = baseX;
+				tempy = baseY;
+
+				// choose a suitable turret.
+				count = numWallWeaps - 1;
+				count2 = 0;
+				while ((count2 < 3) and (count >= 0))
+				{
+					if (isStructureAvailable(wallWeaps[count], me))
+					{
+						structChoice[count2] = wallWeaps[count];
+						count2 = count2 + 1;
+					}
+					count = count - 1;
+				}
+				count = 0;
+				if ((count2 > 0) and (_numBuilders < _maxBuilders))
+				{
+					count = random(count2);
+					skDefenseLocationB(ref tempx, ref tempy, wall, structChoice[count], droid, me);
+					_numBuilders++;
+				}
+
+			}
+			droid = iterateGroup(buildGroup);
+		}
 	}
 	if (idleGroup(buildGroup) > 0 and !tryUpgrade())
 	{
@@ -1629,7 +1658,7 @@ event droidBuiltAssign(droidBuiltTr)
 			}
 			else
 			{
-				if(scoutGroup.members < numScouts[curTech])
+				if(scoutGroup.members < numScouts)
 				{
 					groupAddDroid(scoutGroup, droid);
 				}
@@ -1643,7 +1672,7 @@ event droidBuiltAssign(droidBuiltTr)
 				}
 				else
 				{
-					if(scoutGroup.members < maxScouts[curTech])
+					if(scoutGroup.members < maxScouts)
 					{
 						groupAddDroid(scoutGroup, droid);
 					}
@@ -2003,7 +2032,7 @@ function bool needTank()
 		return TRUE;
 	}
 
-	if((scoutGroup.members < maxScouts[curTech]) or (maxScouts[curTech] == UNLIMITED))
+	if((scoutGroup.members < maxScouts) or (maxScouts == UNLIMITED))
 	{
 		return TRUE;
 	}
@@ -2061,7 +2090,7 @@ function void factoryBuildDroid(STRUCTURE _factory)
 event cyborgFactoryEvent(cyborgFactoryEventTr)
 {
 
-	if(not ((defendGroup.members < maxCyborgs[curTech]) or (maxCyborgs[curTech] == UNLIMITED)))
+	if(not ((defendGroup.members < maxCyborgs) or (maxCyborgs == UNLIMITED)))
 	{
 		exit;		//we need no cyborgs
 	}
@@ -2088,7 +2117,7 @@ function void cybFactorBuildCyborg(STRUCTURE _factory)
 
 	if( structureIdle(_factory) )
 	{
-		if( (defendGroup.members < maxCyborgs[curTech]) and (getDroidCount(me) < MAX_DROIDS) )
+		if( (defendGroup.members < maxCyborgs) and (getDroidCount(me) < MAX_DROIDS) )
 		{
 			if(random(5) == 1)
 			{
@@ -2415,28 +2444,31 @@ event doAllOutAttack(allOutAttackTr)
 // defend attacked objects.
 event defendWatch(defendWatchTr)
 {
-	if(baseobj != NULLOBJECT)
+	if (baseobj != NULLOBJECT)
 	{
-		if(!friendlyPlayer(baseobj.player))
+		if (baseobj.type == OBJ_DROID)
 		{
-			if(not isHumanPlayer(baseobj.player) )	// new in wdg1 dont allout attack a pc player	//TODO:is this check needed?
+			if (isVtol(objToDroid(baseobj)))
 			{
-				if(distBetweenTwoPoints(baseobj.x, baseobj.y, baseX, baseY) <= MAX_DEFENDERS_RADIUS)	//don't go too far away from the base
+				exit;	// avoid getting caught in the blast from incendiary bombs... no way to check if building is burning
+			}
+		}
+		if (!friendlyPlayer(baseobj.player))
+		{
+			if(distBetweenTwoPoints(baseobj.x, baseobj.y, baseX, baseY) <= MAX_DEFENDERS_RADIUS)	//don't go too far away from the base
+			{
+				defendObj = baseobj;
+				defendbusy = TRUE;
+				// if not too busy, attack.
+				if (idleGroup(defendGroup) >= (defendGroup.members / 2))
 				{
-					defendObj = baseobj;
-					defendbusy = TRUE;
-					// if not too busy, attack.
-					if( idleGroup(defendGroup) >= (defendGroup.members / 2) )
-					{
-						orderGroupLoc(defendGroup, DORDER_MOVE,defendObj.x,defendObj.y);	//cyborg mechanics can't attack (won't move)
-					}
-
-					if( idleGroup(scoutGroup) >= (scoutGroup.members / 2) )
-					{
-						orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
-					}
+					orderGroupLoc(defendGroup, DORDER_MOVE, defendObj.x, defendObj.y);	//cyborg mechanics can't attack (won't move)
 				}
 
+				if (idleGroup(scoutGroup) >= (scoutGroup.members / 2))
+				{
+					orderGroupLoc(scoutGroup, DORDER_MOVE, scoutX, scoutY);
+				}
 			}
 		}
 	}
@@ -2521,7 +2553,7 @@ event doResearch(doResearchTr)
 				// do common research
 				if(not boolResult)	//didn't start branch research
 				{
-					if((maxIdleRes[curTech] == UNLIMITED) or (_numResearching < maxIdleRes[curTech]))
+					if((maxIdleRes == UNLIMITED) or (_numResearching < maxIdleRes))
 					{
 						skDoResearch(structure,me,0);
 						_numResearching++;
@@ -2787,34 +2819,113 @@ event buildVtols(inactive)
 	}
 }
 
-
 function void vtolFactoryBuildVtol(STRUCTURE _factory)
 {
-	local	int		_numTemplates,_bestTemplates;
+	local	TEMPLATE	_newTemplate;
+	local	BODY		_bestBody;
+	local	WEAPON		_bestWeapon;
+	local	int		_rand, _idx;
 
-	if(_factory == NULLOBJECT){
+	if (_factory == NULLOBJECT or not structureIdle(_factory))
+	{
 		return;
 	}
 
-	if( structureIdle(_factory) )
+	// choose branch: AT, AS or splash
+	_rand = random(3);
+	_idx = 0;
+	_bestWeapon = NULLSTAT;
+	if (_rand == 0)	// anti-tank
 	{
-		_numTemplates = numVtolTemplates - 1;
-		_bestTemplates = 0;
-		while( (_bestTemplates < 3) and (_numTemplates >= 0) )
+		_idx = numAtWeapons - 1;
+		while (_idx >= 0 and _bestWeapon == NULLSTAT)
 		{
-			if( skCanBuildTemplate(me,_factory, vtols[_numTemplates]) )
+			if (isComponentAvailable(me, atWeapon[_idx]))
 			{
-				tmplChoice[_bestTemplates] = vtols[_numTemplates];
-				_bestTemplates++;
+				_bestWeapon = atWeapon[_idx];
 			}
-			_numTemplates--;
-		}
-
-		if(_bestTemplates > 0)
-		{
-			buildDroid(tmplChoice[random(_bestTemplates)],_factory,me,1);
+			_idx--;
 		}
 	}
+	if (_rand == 1)	// anti-structure
+	{
+		_idx = numAsWeapons - 1;
+		while (_idx >= 0 and _bestWeapon == NULLSTAT)
+		{
+			if (isComponentAvailable(me, asWeapon[_idx]))
+			{
+				_bestWeapon = asWeapon[_idx];
+			}
+			_idx--;
+		}
+	}
+	if (_rand < 2 and _bestWeapon == NULLSTAT)
+	{
+		_rand = 2;	// try this instead
+	}
+	if (_rand == 2)	// indiscriminate mass destruction
+	{
+		_idx = numMdWeapons - 1;
+		while (_idx >= 0 and _bestWeapon == NULLSTAT)
+		{
+			if (isComponentAvailable(me, mdWeapon[_idx]))
+			{
+				_bestWeapon = mdWeapon[_idx];
+			}
+			_idx--;
+		}
+	}
+	if (_bestWeapon == NULLSTAT)
+	{
+		dbgPlr("Failed to find a weapon for VTOL design");
+		return;
+	}
+	_bestBody = NULLSTAT;
+	if (not seenAnyAA)
+	{
+		// no AA seen, so go for the cheapest bodies -- no need for defense yet!
+		if (isComponentAvailable(me, bugBody))
+		{
+			_bestBody = bugBody;
+		}
+		else if (isComponentAvailable(me, viperBody))
+		{
+			_bestBody = viperBody;
+		}
+	}
+	else
+	{
+		// build sturdiest body available with a decent engine
+		if (isComponentAvailable(me, retributionBody))
+		{
+			_bestBody = retributionBody;
+		}
+		else
+		{
+			if (isComponentAvailable(me, scorpionBody))
+			{
+				_bestBody = scorpionBody;
+			}
+			else if (isComponentAvailable(me, cobraBody))
+			{
+				_bestBody = cobraBody;
+			}
+		}
+	}
+	if (_bestBody == NULLSTAT or getBodySize(_bestBody) > skGetFactoryCapacity(_factory))
+	{
+		dbgPlr("Failed to find a viable body for VTOL design");
+		return;
+	}
+
+	_newTemplate = assembleWeaponTemplate(me, _bestBody, vtolPropulsion, _bestWeapon);
+
+	if (_newTemplate == NULLTEMPLATE or not skCanBuildTemplate(me, _factory, _newTemplate))
+	{
+		dbgPlr("Failed to construct viable VTOL template");
+		return;
+	}
+	buildDroid(_newTemplate, _factory, me, 1);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -3101,6 +3212,31 @@ function int getVtolTargetWeight(BASEOBJ _target)
 	}
 
 	return _targetWeight;
+}
+
+event checkForHostileAA(hostileAATr)
+{
+	local	int	_enemy, _numAA;
+
+	_numAA = 0;
+	_enemy = 0;
+	while (_enemy < MAX_PLAYERS)
+	{
+		if (!friendlyPlayer(_enemy))
+		{
+			_numAA = _numAA + numAAinRange(_enemy, me, baseX, baseY, -1);
+			if (_numAA > 0)
+			{
+				seenAnyAA = true;
+				exit;
+			}
+		}
+		_enemy++;
+	}
+	if (_numAA == 0)
+	{
+		seenAnyAA = false;
+	}
 }
 
 function int numEnemyAAInRange(int _x, int _y, int _range)
@@ -4142,9 +4278,9 @@ event structureDestroyed(structureDestroyedTr)
 
 	// add certain structures to the rebuild list
 	_count = 0;
-	while(_count < numRebuildStat[curTech])
+	while(_count < numRebuildStat)
 	{
-		if(structure.stat == rebuildStat[curTech][_count])
+		if(structure.stat == rebuildStat[_count])
 		{
 			if(countRebuildStruct < MAX_REBUILD_STRUCT)
 			{

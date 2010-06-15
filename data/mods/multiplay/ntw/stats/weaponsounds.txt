@@ -21,7 +21,7 @@ RailGun1-VTOL,gaussgun.ogg,smlexpl.ogg, 120
 QuadRotAAGun,asltmg.ogg,smlexpl.ogg, 121 
 QuadMg1AAGun,mgbar2.ogg,smlexpl.ogg, 122 
 PlasmiteFlamer,plasflm.ogg,-1, 123 
-PlasmaHeavy,medcan.ogg,lrgexpl.ogg, 124 
+PlasmaHeavy,nxstower.ogg,nxsexpld.ogg, 124 
 NX-CyborgPulseLas,plslsr.ogg,lsrexpl.ogg, 125 
 NX-CyborgMiss,rocket.ogg,lrgexpl.ogg, 126
 NX-CyborgChaingun,mgbar2.ogg,-1, 127 
@@ -131,3 +131,6 @@ RailGun4Mk1,col020a.ogg,lrgexpl.ogg, 233
 EMP-Trap,emp.ogg,-1, 234
 AAS-weapon,emp.ogg,-1, 235
 scv-Hvywpn-HPV,cybgrnd.ogg,smlexpl.ogg, 236
+GS-weapon,emp.ogg,-1, 237
+Incenediary-Mo,mortar.ogg,lrgexpl.ogg, 238
+LasSat2,bemlsr.ogg,lsrexpl.ogg,239

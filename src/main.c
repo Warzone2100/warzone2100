@@ -75,6 +75,7 @@
 #include "map.h"
 #include "parsetest.h"
 #include "keybind.h"
+#include <time.h>
 
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)
@@ -108,8 +109,13 @@ char * global_mods[MAX_MODS] = { NULL };
 char * campaign_mods[MAX_MODS] = { NULL };
 char * multiplay_mods[MAX_MODS] = { NULL };
 
+char * override_mods[MAX_MODS] = { NULL };
+char * override_mod_list = NULL;
+bool use_override_mods = false;
+
 char * loaded_mods[MAX_MODS] = { NULL };
 char * mod_list = NULL;
+bool customDebugfile = false;		// Default false: user has NOT specified where to store the stdout/err file.
 int num_loaded_mods = 0;
 
 
@@ -195,6 +201,7 @@ void removeSubdirs( const char * basedir, const char * subdir, char * checkList[
 	char tmpstr[PATH_MAX];
 	char ** subdirlist = PHYSFS_enumerateFiles( subdir );
 	char ** i = subdirlist;
+
 	while( *i != NULL )
 	{
 #ifdef DEBUG
@@ -206,7 +213,12 @@ void removeSubdirs( const char * basedir, const char * subdir, char * checkList[
 #ifdef DEBUG
 			debug( LOG_NEVER, "removeSubdirs: Removing [%s] from search path", tmpstr );
 #endif // DEBUG
-			PHYSFS_removeFromSearchPath( tmpstr );
+			if (!PHYSFS_removeFromSearchPath( tmpstr ))
+			{
+#ifdef DEBUG	// spams a ton!
+				debug(LOG_NEVER, "Couldn't remove %s from search path because %s", tmpstr, PHYSFS_getLastError());
+#endif // DEBUG
+			}
 		}
 		i++;
 	}
@@ -223,6 +235,36 @@ void printSearchPath( void )
 		debug(LOG_WZ, "    [%s]", *i);
 	}
 	PHYSFS_freeList( searchPath );
+}
+
+void setOverrideMods(char * modlist)
+{
+	char * curmod = modlist;
+	char * nextmod;
+	int i=0;
+	while ((nextmod = strstr(curmod, ", ")) && i<MAX_MODS-2)
+	{
+		override_mods[i] = malloc(nextmod-curmod+1);
+		strlcpy(override_mods[i], curmod, nextmod-curmod);
+		override_mods[i][nextmod-curmod] = '\0';
+		curmod = nextmod + 2;
+		i++;
+	}
+	override_mods[i] = strdup(curmod);
+	override_mods[i+1] = NULL;
+	override_mod_list = modlist;
+	use_override_mods = true;
+}
+void clearOverrideMods(void)
+{
+	int i;
+	use_override_mods = false;
+	for (i=0; i<MAX_MODS && override_mods[i]; i++)
+	{
+		free(override_mods[i]);
+	}
+	override_mods[0] = NULL;
+	override_mod_list = NULL;
 }
 
 void addLoadedMod(const char * modname)
@@ -451,6 +493,15 @@ static void initialize_ConfigDir(void)
 			      tmpstr, PHYSFS_getLastError());
 			exit(1);
 		}
+
+		// NOTE: This is currently only used for mingw builds for now.
+#if defined (WZ_CC_MINGW)
+		if (!OverrideRPTDirectory(tmpstr))
+		{
+			// since it failed, we just use our default path, and not the user supplied one.
+			debug(LOG_ERROR, "Error setting exception hanlder to use directory %s", tmpstr);
+		}
+#endif
 	}
 
 	// User's home dir first so we allways see what we write
@@ -694,6 +745,7 @@ static void startGameLoop(void)
 	{
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
 	}
+	screen_disableMapPreview();
 }
 
 
@@ -1122,17 +1174,33 @@ int main(int argc, char *argv[])
 	 */
 	initialize_ConfigDir();
 
-	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
-
 	/*** Initialize directory structure ***/
 	make_dir(ScreenDumpPath, "screenshots", NULL);
 	make_dir(SaveGamePath, "savegame", NULL);
 	PHYSFS_mkdir("maps");		// MUST have this to prevent crashes when getting map
 	PHYSFS_mkdir("music");
-	PHYSFS_mkdir("logs");		// a place to hold our netplay logs
+	PHYSFS_mkdir("logs");		// a place to hold our netplay, mingw crash reports & WZ logs
 	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
-	make_dir(MultiCustomMapsPath, "multiplay", "custommaps");
+	sstrcpy(MultiCustomMapsPath, "maps");
+
+	if (!customDebugfile)
+	{
+		// there was no custom debug file specified  (--debug-file=blah)
+		// so we use our write directory to store our logs.
+		time_t aclock;
+		struct tm *newtime;
+		char buf[PATH_MAX];
+
+		time( &aclock );					// Get time in seconds
+		newtime = localtime( &aclock );		// Convert time to struct
+		// Note: We are using fopen(), and not physfs routines to open the file
+		// log name is logs/(or \)WZlog-MMDD_HHMMSS.txt
+		snprintf(buf, sizeof(buf), "%slogs%sWZlog-%02d%02d_%02d%02d%02d.txt", PHYSFS_getWriteDir(), PHYSFS_getDirSeparator(),
+			newtime->tm_mon, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec );
+		debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, buf );
+	}
+	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
 
 	/* Put these files in the writedir root */
 	setRegistryFilePath("config");
@@ -1246,6 +1314,8 @@ int main(int argc, char *argv[])
 	{
 		return -1;
 	}
+	war_SetWidth(pie_GetVideoBufferWidth());
+	war_SetHeight(pie_GetVideoBufferHeight());
 
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);

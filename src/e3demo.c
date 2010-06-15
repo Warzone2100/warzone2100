@@ -27,6 +27,7 @@
 
 #include "lib/framework/frame.h"
 
+#include "action.h"
 #include "e3demo.h"
 #include "map.h"
 #include "warcam.h"

@@ -313,6 +313,7 @@ BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int p
 	{
 		// Implement gates by completely ignoring them
 		if (psTile->psObject->type == OBJ_STRUCTURE && psTile->psObject->player == player
+		    && ((STRUCTURE *)psTile->psObject)->status == SS_BUILT
 		    && ((STRUCTURE *)psTile->psObject)->pStructureType->type == REF_GATE)
 		{
 			return false;
@@ -575,7 +576,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 // Find a route for an DROID to a location in world coordinates
 FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
 {
-	PROPULSION_STATS	*psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
 
 	// override for AI to blast our way through stuff
 	if (!isHumanPlayer(psDroid->player) && moveType == FMT_MOVE)
@@ -676,12 +677,9 @@ static BOOL		obstruction;
  */
 static bool fpathVisCallback(Vector3i pos, int32_t dist, void *data)
 {
-	/* Has to be -1 to make sure that it doesn't match any enumerated
-	 * constant from PROPULSION_TYPE.
-	 */
-	static const PROPULSION_TYPE prop = (PROPULSION_TYPE)-1;
+	DROID *psDroid = (DROID *)data;
 
-	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), prop))
+	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), getPropulsionStats(psDroid)->propulsionType))
 	{
 		// found an obstruction
 		obstruction = true;
@@ -691,17 +689,14 @@ static bool fpathVisCallback(Vector3i pos, int32_t dist, void *data)
 	return true;
 }
 
-BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
+BOOL fpathTileLOS(DROID *psDroid, Vector3i dest)
 {
-	// convert to world coords
-	Vector3i p1 = { world_coord(x1) + TILE_UNITS / 2, world_coord(y1) + TILE_UNITS / 2, 0 };
-	Vector3i p2 = { world_coord(x2) + TILE_UNITS / 2, world_coord(y2) + TILE_UNITS / 2, 0 };
-	Vector3i dir = Vector3i_Sub(p2, p1);
+	Vector3i dir = Vector3i_Sub(dest, psDroid->pos);
 
 	// Initialise the callback variables
 	obstruction = false;
 
-	rayCast(p1, iAtan2(dir.x, dir.y), iHypot(dir.x, dir.y), fpathVisCallback, NULL);
+	rayCast(psDroid->pos, iAtan2(dir.x, dir.y), iHypot(dir.x, dir.y), fpathVisCallback, psDroid);
 
 	return !obstruction;
 }

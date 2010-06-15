@@ -83,6 +83,7 @@
 #include "research.h"
 #include "combat.h"
 #include "scriptfuncs.h"			//for ThreatInRange()
+#include "design.h"					//for GetDefaultTemplateName
 
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
 #define	DROID_DAMAGE_SPREAD	(16 - rand()%32)
@@ -1555,7 +1556,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 	{
 		char templName[MAX_STR_LENGTH];
 		char componentName[MAX_STR_LENGTH];
-		unsigned int player;
+		char playerType[MAX_STR_LENGTH];
 		int cnt;
 		DROID_TEMPLATE design;
 		DROID_TEMPLATE *pDroidDesign = &design;
@@ -1570,11 +1571,6 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		pDroidDesign->pName = templName;
 		sstrcpy(templName, componentName);
 
-		// Store translated name in aName
-		if (!getDroidResourceName(componentName))
-		{
-			return false;
-		}
 		sstrcpy(pDroidDesign->aName, componentName);
 
 		//read in Body Name
@@ -1697,11 +1693,11 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			ASSERT_OR_RETURN(false, found, "ECM component not found for droid %s", getTemplateName(pDroidDesign));
 		}
 
-		//read in player id - Access decides the order -crap hey?
-		sscanf(pDroidData, "%d,%n", &player,&cnt);
+		//read in player type - decides whether or not humans can access it
+		sscanf(pDroidData, "%[^','],%n", playerType,&cnt);
 		pDroidData += cnt;
 
-		if (getTemplateFromUniqueName(pDroidDesign->pName, player))
+		if (getTemplateFromUniqueName(pDroidDesign->pName, 0))
 		{
 			debug( LOG_ERROR, "Duplicate template %s", pDroidDesign->pName );
 			continue;
@@ -1836,6 +1832,18 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		//check that not allocating more weapons than allowed
 		ASSERT_OR_RETURN(false, pDroidDesign->numWeaps <= DROID_MAXWEAPS, "Too many weapons have been allocated for droid Template: %s", pDroidDesign->aName);
 
+		// Store translated name in aName
+		sstrcpy(componentName, pDroidDesign->aName);		
+		if (getDroidResourceName(componentName))
+		{
+			sstrcpy(pDroidDesign->aName, componentName);		
+		}
+		else
+		{
+			sstrcpy(pDroidDesign->aName, GetDefaultTemplateName(pDroidDesign));		
+		}
+
+
 		pDroidDesign->ref = REF_TEMPLATE_START + line;
 		// Store global default design if found else store in the appropriate array
 		if ( pDroidDesign->droidType == DROID_DEFAULT )
@@ -1851,13 +1859,20 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		{
 			int i;
 
-			// Give those meant for humans (player 0) to all human players.
-			for (i = 0; i < MAX_PLAYERS; i++)
+			// Give those meant for humans to all human players.
+			// Also support the old template format, in which those meant
+			// for humans were player 0 (in campaign) or 5 (in multiplayer).
+			if ((!strcmp(playerType, "0") && !bMultiPlayer) ||
+			    (!strcmp(playerType, "5") && bMultiPlayer) ||
+			    !strcmp(playerType, "YES"))
 			{
-				if (player == 0 && NetPlay.players[i].allocated)	// human prototype template
+				for (i = 0; i < MAX_PLAYERS; i++)
 				{
-					pDroidDesign->prefab = false;
-					addTemplateToList(pDroidDesign, &apsDroidTemplates[i]);
+					if (NetPlay.players[i].allocated)	// human prototype template
+					{
+						pDroidDesign->prefab = false;
+						addTemplateToList(pDroidDesign, &apsDroidTemplates[i]);
+					}
 				}
 			}
 			// Add all templates to static template list
@@ -2025,19 +2040,30 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 
 	for (line = 0; line < NumWeapons; line++)
 	{
-		int player, i;
-		char WeaponName[DROID_MAXWEAPS][MAX_STR_LENGTH] = {{'\0'}},
-			TemplateName[MAX_STR_LENGTH] = {'\0'};
+		DROID_TEMPLATE *pTemplate;
+		int player, i, j;
+		char WeaponName[DROID_MAXWEAPS][MAX_STR_LENGTH] = {{'\0'}};
+		char TemplateName[MAX_STR_LENGTH] = {'\0'};
 
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pWeaponData, "%[^','],%[^','],%[^','],%[^','],%d",
 			TemplateName, WeaponName[0], WeaponName[1], WeaponName[2], &player);
 
-		for (i = 0; i < MAX_PLAYERS; i++)
+		for (i = 0; i < MAX_PLAYERS + 1; i++)
 		{
-			unsigned int j;
-
-			DROID_TEMPLATE *pTemplate = getTemplateFromUniqueName(TemplateName, i);
+			if (i < MAX_PLAYERS)	// a player
+			{
+				if (!isHumanPlayer(i))
+				{
+					continue;	// no need to add to AIs, they use the static list
+				}
+				pTemplate = getTemplateFromUniqueName(TemplateName, i);
+			}
+			else			// special exception - the static list
+			{
+				// Add weapons to static list
+				pTemplate = getTemplateFromTranslatedNameNoPlayer(TemplateName);
+			}
 
 			/* if Template not found - try default design */
 			if (!pTemplate)
@@ -2069,10 +2095,6 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 				ASSERT_OR_RETURN(false, checkValidWeaponForProp(pTemplate), "Weapon is invalid for air propulsion for template %s", 
 				                 pTemplate->aName);
 				pTemplate->storeCount++;
-			}
-			if (!isHumanPlayer(i))
-			{
-				break;	// only one list to add to
 			}
 		}
 
@@ -2432,8 +2454,10 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 	// Set the droids type
 	psDroid->droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.
 
-	psDroid->pos.x = (UWORD)x;
-	psDroid->pos.y = (UWORD)y;
+	psDroid->pos.x = x;
+	psDroid->pos.y = y;
+	psDroid->sMove.eBitX = 0;
+	psDroid->sMove.eBitY = 0;
 
 	//don't worry if not on homebase cos not being drawn yet
 	if (!onMission)
@@ -2496,7 +2520,10 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 	psDroid->psBaseStruct = NULL;
 
 	// find the highest stored experience
-	if ((psDroid->droidType != DROID_CONSTRUCT) &&
+	// Unless game time is stopped, then we're hopefully loading a game and
+	// don't want to use up recycled experience for the droids we just loaded.
+	if (!gameTimeIsStopped() &&
+		(psDroid->droidType != DROID_CONSTRUCT) &&
 		(psDroid->droidType != DROID_CYBORG_CONSTRUCT) &&
 		(psDroid->droidType != DROID_REPAIR) &&
 		(psDroid->droidType != DROID_CYBORG_REPAIR) &&
@@ -2641,12 +2668,6 @@ DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, 
 void initDroidMovement(DROID *psDroid)
 {
 	memset(&psDroid->sMove, 0, sizeof(MOVE_CONTROL));
-
-	psDroid->sMove.fx = psDroid->pos.x;
-	psDroid->sMove.fy = psDroid->pos.y;
-	psDroid->sMove.fz = psDroid->pos.z;
-	psDroid->sMove.speed = 0.0f;
-	psDroid->sMove.moveDir = 0;
 }
 
 // Set the asBits in a DROID structure given it's template.
@@ -4275,6 +4296,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 	STRUCTURE	*psStruct;
 	UDWORD		body, armourK[NUM_HIT_SIDES], armourH[NUM_HIT_SIDES];
 	HIT_SIDE	impact_side;
+	int them = 0;
 
 	CHECK_DROID(psD);
 
@@ -4325,44 +4347,60 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 					psD->asBits[COMP_REPAIRUNIT].nStat = (UBYTE)aDefaultRepair[psD->player];
 				}
 			}
-			}
+		}
 		// add back into cluster system
 		clustNewDroid(psD);
 
 		// Update visibility
 		visTilesUpdate((BASE_OBJECT*)psD);
 
-		// check through the 'to' players list of droids to see if any are targetting it
-		for (psCurr = apsDroidLists[to]; psCurr != NULL; psCurr = psCurr->psNext)
+		// check through the players, and our allies, list of droids to see if any are targetting it
+		for (them = 0; them < MAX_PLAYERS; them++)
 		{
-			if (psCurr->psTarget == (BASE_OBJECT *)psD || psCurr->psActionTarget[0] == (BASE_OBJECT *)psD)
+			if (!aiCheckAlliances(them, to))	// scan all the droid list for ALLIANCE_FORMED (yes, we have a alliance with ourselves)
 			{
-				orderDroid(psCurr, DORDER_STOP);
+				continue;
 			}
-			// check through order list
-			for (i = 0; i < psCurr->listSize; i++)
+
+			for (psCurr = apsDroidLists[them]; psCurr != NULL; psCurr = psCurr->psNext)
 			{
-				if (psCurr->asOrderList[i].psOrderTarget == (BASE_OBJECT *)psD)
+				if (psCurr->psTarget == (BASE_OBJECT *)psD || psCurr->psActionTarget[0] == (BASE_OBJECT *)psD)
 				{
-					removeDroidOrderTarget(psCurr, i);
-					// move the rest of the list down
-					memmove(&psCurr->asOrderList[i], &psCurr->asOrderList[i] + 1, (psCurr->listSize - i) * sizeof(ORDER_LIST));
-					// adjust list size
-					psCurr->listSize -= 1;
-					// initialise the empty last slot
-					memset(psCurr->asOrderList + psCurr->listSize, 0, sizeof(ORDER_LIST));
+					orderDroid(psCurr, DORDER_STOP);
+				}
+				// check through order list
+				for (i = 0; i < psCurr->listSize; i++)
+				{
+					if (psCurr->asOrderList[i].psOrderTarget == (BASE_OBJECT *)psD)
+					{
+						removeDroidOrderTarget(psCurr, i);
+						// move the rest of the list down
+						memmove(&psCurr->asOrderList[i], &psCurr->asOrderList[i] + 1, (psCurr->listSize - i) * sizeof(ORDER_LIST));
+						// adjust list size
+						psCurr->listSize -= 1;
+						// initialise the empty last slot
+						memset(psCurr->asOrderList + psCurr->listSize, 0, sizeof(ORDER_LIST));
+					}
 				}
 			}
 		}
-		// check through the 'to' players list of structures to see if any are targetting it
-		for (psStruct = apsStructLists[to]; psStruct != NULL; psStruct = psStruct->psNext)
+
+		for (them = 0; them < MAX_PLAYERS; them++)
 		{
-			if (psStruct->psTarget[0] == (BASE_OBJECT *)psD)
+			if (!aiCheckAlliances(them, to))	// scan all the droid list for ALLIANCE_FORMED (yes, we have a alliance with ourselves)
 			{
-				psStruct->psTarget[0] = NULL;
+				continue;
+			}
+
+			// check through the players list, and our allies, of structures to see if any are targetting it
+			for (psStruct = apsStructLists[them]; psStruct != NULL; psStruct = psStruct->psNext)
+			{
+				if (psStruct->psTarget[0] == (BASE_OBJECT *)psD)
+				{
+					psStruct->psTarget[0] = NULL;
+				}
 			}
 		}
-
 		// skirmish callback!
 		psScrCBDroidTaken = psD;
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_UNITTAKEOVER);
@@ -4691,14 +4729,13 @@ BOOL cyborgDroid(const DROID* psDroid)
 BOOL droidOnMap(const DROID *psDroid)
 {
 	if (psDroid->died == NOT_CURRENT_LIST || psDroid->droidType == DROID_TRANSPORTER
-		|| psDroid->sMove.fx == INVALID_XY || psDroid->pos.x == INVALID_XY || missionIsOffworld()
+		|| psDroid->pos.x == INVALID_XY || psDroid->pos.y == INVALID_XY || missionIsOffworld()
 		|| mapHeight == 0)
 	{
 		// Off world or on a transport or is a transport or in mission list, or on a mission, or no map - ignore
 		return true;
 	}
-	return (worldOnMap(psDroid->sMove.fx, psDroid->sMove.fy)
-			&& worldOnMap(psDroid->pos.x, psDroid->pos.y));
+	return worldOnMap(psDroid->pos.x, psDroid->pos.y);
 }
 
 /** Teleport a droid to a new position on the map */

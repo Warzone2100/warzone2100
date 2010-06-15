@@ -63,6 +63,7 @@ DROID			*apsDroidLists[MAX_PLAYERS];
 STRUCTURE		*apsStructLists[MAX_PLAYERS];
 FEATURE			*apsFeatureLists[MAX_PLAYERS];		///< Only player zero is valid for features. TODO: Reduce to single list.
 BASE_OBJECT		*apsSensorList[1];			///< List of sensors in the game.
+BASE_OBJECT		*apsOilList[1];
 
 /*The list of Flag Positions allocated */
 FLAG_POSITION	*apsFlagPosLists[MAX_PLAYERS];
@@ -126,6 +127,7 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 	audio_RemoveObj(psObj);
 
 	visRemoveVisibility(psObj);
+	free(psObj->watchedTiles);
 	free(psObj);
 	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", psObj);
 }
@@ -421,7 +423,9 @@ static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJECT_DESTRUCTO
 			// Call a specialized destruction function
 			// (will do all cleanup except for releasing memory of object)
 			objectDestructor(psCurr);
-			visRemoveVisibility(psCurr);
+			// FIXME: the next call is disabled for now, yes, it will leak memory again.
+			// issue is with campaign games, and the swapping pointers 'trick' Pumpkin uses.
+			//	visRemoveVisibility(psCurr);
 			// Release object's memory
 			free(psCurr);
 		}
@@ -568,6 +572,10 @@ void addStructure(STRUCTURE *psStructToAdd)
 	{
 		addObjectToFuncList(apsSensorList, (BASE_OBJECT*)psStructToAdd, 0);
 	}
+	else if (psStructToAdd->type == REF_RESOURCE_EXTRACTOR)
+	{
+		addObjectToFuncList(apsOilList, (BASE_OBJECT*)psStructToAdd, 0);
+	}
 }
 
 /* Destroy a structure */
@@ -584,6 +592,10 @@ void killStruct(STRUCTURE *psBuilding)
 	    && psBuilding->pStructureType->pSensor->location == LOC_TURRET)
 	{
 		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psBuilding, 0);
+	}
+	else if (psBuilding->type == REF_RESOURCE_EXTRACTOR)
+	{
+		removeObjectFromFuncList(apsOilList, (BASE_OBJECT*)psBuilding, 0);
 	}
 
 	for (i = 0; i < STRUCT_MAXWEAPS; i++)
@@ -645,6 +657,10 @@ void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_P
 	{
 		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psStructToRemove, 0);
 	}
+	else if (psStructToRemove->type == REF_RESOURCE_EXTRACTOR)
+	{
+		removeObjectFromFuncList(apsOilList, (BASE_OBJECT*)psStructToRemove, 0);
+	}
 }
 
 /**************************  FEATURE  *********************************/
@@ -656,10 +672,14 @@ FEATURE* createFeature()
 }
 
 /* add the feature to the Feature Lists */
- void addFeature(FEATURE *psFeatureToAdd)
- {
+void addFeature(FEATURE *psFeatureToAdd)
+{
 	addObjectToList((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psFeatureToAdd, 0);
- }
+	if (psFeatureToAdd->psStats->subType == FEAT_OIL_RESOURCE)
+	{
+		addObjectToFuncList(apsOilList, (BASE_OBJECT*)psFeatureToAdd, 0);
+	}
+}
 
 /* Destroy a feature */
 // set the player to 0 since features have player = maxplayers+1. This screws up destroyObject
@@ -670,6 +690,11 @@ void killFeature(FEATURE *psDel)
 		"killFeature: pointer is not a feature" );
 	psDel->player = 0;
 	destroyObject((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psDel);
+
+	if (psDel->psStats->subType == FEAT_OIL_RESOURCE)
+	{
+		removeObjectFromFuncList(apsOilList, (BASE_OBJECT*)psDel, 0);
+	}
 }
 
 /* Remove all features */

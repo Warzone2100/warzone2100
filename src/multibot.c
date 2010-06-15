@@ -217,7 +217,7 @@ BOOL sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
 		uint8_t player = psDroid->player;
 		uint32_t droidID = psDroid->id;
 		uint32_t transporterID = psTransporter->id;
-		Position pos = psDroid->pos;
+		Position pos = droidGetPrecisePosition(psDroid);
 
 		NETuint8_t(&player);
 		NETuint32_t(&droidID);
@@ -285,7 +285,7 @@ BOOL recvDroidDisEmbark(NETQUEUE queue)
 		addDroid(psFoundDroid, apsDroidLists);
 
 		// Add it back into the world at the x/y
-		psFoundDroid->pos = pos;
+		droidSetPrecisePosition(psFoundDroid, pos);
 
 		if (!droidOnMap(psFoundDroid))
 		{
