@@ -11525,12 +11525,8 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
 BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 {
 	SAVE_STRUCTURE				sSave;  // close eyes now.
-	SAVE_STRUCTURE				*psSaveStructure = &sSave; // assumes save_struct is larger than all previous ones...
+	// assumes save_struct is larger than all previous ones...
 	SAVE_STRUCTURE_V2			*psSaveStructure2 = (SAVE_STRUCTURE_V2*)&sSave;
-	SAVE_STRUCTURE_V12			*psSaveStructure12= (SAVE_STRUCTURE_V12*)&sSave;
-	SAVE_STRUCTURE_V14			*psSaveStructure14= (SAVE_STRUCTURE_V14*)&sSave;
-	SAVE_STRUCTURE_V15			*psSaveStructure15= (SAVE_STRUCTURE_V15*)&sSave;
-	SAVE_STRUCTURE_V17			*psSaveStructure17= (SAVE_STRUCTURE_V17*)&sSave;
 	SAVE_STRUCTURE_V20			*psSaveStructure20= (SAVE_STRUCTURE_V20*)&sSave;
 										// ok you can open them again..
 
@@ -11605,18 +11601,18 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 	/* Load in the structure data */
 	for (count = 0; count < psHeader-> quantity; count ++, pFileData += sizeOfSaveStruture)
 	{
-		if (psHeader->version < VERSION_12)
+		// we are specifically looking for the HQ, and it seems this is the only way to
+		// find it via parsing map.
+		// We store the coordinates of the structure, into a array for as many players as are on the map.
+
+		if (psHeader->version <= VERSION_19)
 		{
-			memcpy(psSaveStructure2, pFileData, sizeOfSaveStruture);
+			// All versions up to 19 are compatible with V2.
+			memcpy(psSaveStructure2, pFileData, sizeof(SAVE_STRUCTURE_V2));
 
 			endian_udword(&psSaveStructure2->x);
 			endian_udword(&psSaveStructure2->y);
 			endian_udword(&psSaveStructure2->player);
-
-			// we are specifically looking for the HQ, and it seems this is the only way to
-			// find it via parsing map.
-			// We store the coordinates of the structure, into a array for as many players as are on the map.
-			// all map versions follow this pattern, and I will not comment the other routines.
 			playerid = psSaveStructure2->player;
 			if(strncmp(psSaveStructure2->name,"A0CommandCentre",15)  == 0 )
 			{
@@ -11631,97 +11627,10 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 				yy = map_coord(psSaveStructure2->y);
 			}
 		}
-		else if (psHeader->version < VERSION_14)
+		else
 		{
-			memcpy(psSaveStructure12, pFileData, sizeOfSaveStruture);
-
-			endian_udword(&psSaveStructure12->x);
-			endian_udword(&psSaveStructure12->y);
-			endian_udword(&psSaveStructure12->player);
-			playerid = psSaveStructure12->player;
-
-			if(strncmp(psSaveStructure12->name,"A0CommandCentre",15)  == 0 )
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x  = map_coord(psSaveStructure12->x);
-				yy = playeridpos[playerid].y  = map_coord(psSaveStructure12->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure12->x);
-				yy = map_coord(psSaveStructure12->y);
-			}
-		}
-		else if (psHeader->version <= VERSION_14)
-		{
-			memcpy(psSaveStructure14, pFileData, sizeOfSaveStruture);
-
-			endian_udword(&psSaveStructure14->x);
-			endian_udword(&psSaveStructure14->y);
-			endian_udword(&psSaveStructure14->player);
-			playerid = psSaveStructure14->player;
-
-			if(strncmp(psSaveStructure14->name,"A0CommandCentre",15)  == 0 )
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x  = map_coord(psSaveStructure14->x);
-				yy = playeridpos[playerid].y  = map_coord(psSaveStructure14->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure14->x);
-				yy = map_coord(psSaveStructure14->y);
-			}
-		}
-		else if (psHeader->version <= VERSION_16)
-		{
-			memcpy(psSaveStructure15, pFileData, sizeOfSaveStruture);
-
-			endian_udword(&psSaveStructure15->x);
-			endian_udword(&psSaveStructure15->y);
-			endian_udword(&psSaveStructure15->player);
-			playerid = psSaveStructure15->player;
-
-			if(strncmp(psSaveStructure15->name,"A0CommandCentre",15)  == 0 )
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x  = map_coord(psSaveStructure15->x);
-				yy = playeridpos[playerid].y  = map_coord(psSaveStructure15->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure15->x);
-				yy = map_coord(psSaveStructure15->y);
-			}
-		}
-		else if (psHeader->version <= VERSION_19)
-		{
-			memcpy(psSaveStructure17, pFileData, sizeOfSaveStruture);
-
-			endian_udword(&psSaveStructure17->x);
-			endian_udword(&psSaveStructure17->y);
-			endian_udword(&psSaveStructure17->player);
-			playerid = psSaveStructure17->player;
-
-			if(strncmp(psSaveStructure17->name,"A0CommandCentre",15)  == 0 )
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x  = map_coord(psSaveStructure17->x);
-				yy = playeridpos[playerid].y  = map_coord(psSaveStructure17->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure17->x);
-				yy = map_coord(psSaveStructure17->y);
-			}
-		}
-		else if (psHeader->version <= VERSION_20)
-		{
-			memcpy(psSaveStructure20, pFileData, sizeOfSaveStruture);
+			// All newer versions are compatible with V20.
+			memcpy(psSaveStructure20, pFileData, sizeof(SAVE_STRUCTURE_V20));
 
 			endian_udword(&psSaveStructure20->x);
 			endian_udword(&psSaveStructure20->y);
@@ -11739,28 +11648,6 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 				HQ = false;
 				xx = map_coord(psSaveStructure20->x);
 				yy = map_coord(psSaveStructure20->y);
-			}
-		}
-		else
-		{
-			memcpy(psSaveStructure, pFileData, sizeOfSaveStruture);
-
-			endian_udword(&psSaveStructure->x);
-			endian_udword(&psSaveStructure->y);
-			endian_udword(&psSaveStructure->player);
-			playerid = psSaveStructure->player;
-
-			if(strncmp(psSaveStructure->name,"A0CommandCentre",15)  == 0 )
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x  = map_coord(psSaveStructure->x);
-				yy = playeridpos[playerid].y  = map_coord(psSaveStructure->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure->x);
-				yy = map_coord(psSaveStructure->y);
 			}
 		}
 		playerid = getPlayerColour(RemapPlayerNumber(playerid));
