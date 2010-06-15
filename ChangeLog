@@ -1,8 +1,8 @@
-2010-06-00: Version 2.3.1
+2010-06-13: Version 2.3.1
  * General:
    * Change: Add the Playstation music track (r10905)
    * Change: Put date and time in screenshot file names (r10951)
-   * Fix: If setting the chosen fullscreen video mode fails, retry in windowed mode (10683)
+   * Fix: If setting the chosen fullscreen video mode fails, retry in windowed mode (r10683)
    * Fix: Power calculations (r10770, r10772, r10794, r10885)
    * Fix: Crash when loading saved games with different mods than currently loaded (r10531, r10723)
  * UI:
@@ -10,7 +10,7 @@
    * Change: Add "scout" and "disembark" cursors (r10723)
    * Change: Improved AI slider (r10725)
    * Change: Fast build queueing by holding down shift (r10795)
-   * Change: Improved map preview (r10901, r10944, r10947)
+   * Change: Improved map preview (r10901, r10944, r10947, r10962)
    * Change: Show backdrops with correct aspect ratio, cut off the part that doesn't fit the screen (r10945, r10948)
    * Change: Show videos with correct aspect ratio, with black borders (r10946)
    * Change: Show an optional description for challenges (r10950)
