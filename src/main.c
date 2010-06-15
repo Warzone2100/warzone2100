@@ -1199,6 +1199,8 @@ int main(int argc, char *argv[])
 	{
 		return -1;
 	}
+	war_SetWidth(pie_GetVideoBufferWidth());
+	war_SetHeight(pie_GetVideoBufferHeight());
 
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);
