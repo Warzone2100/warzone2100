@@ -285,13 +285,16 @@ BOOL pie_ShutdownRadar(void)
 void pie_DownLoadRadar(UDWORD *buffer, int width, int height)
 {
 	int w = 1, h = 1;
+	char *black;
 
 	/* Find power of two size */
 	while (width > (w *= 2));
 	while (height > (h *= 2));
 
 	pie_SetTexturePage(radarTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	black = calloc(1, w * h * 4);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, black);
+	free(black);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
