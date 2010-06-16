@@ -53,7 +53,7 @@
 
 //flag used to check for power calculations to be done or not
 BOOL	powerCalculated;
-UDWORD nextPowerSystemUpdate;
+static UDWORD nextPowerSystemUpdate;
 
 /* Updates the current power based on the extracted power and a Power Generator*/
 static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player);
@@ -63,7 +63,15 @@ static float updateExtractedPower(STRUCTURE *psBuilding);
 //returns the relevant list based on OffWorld or OnWorld
 static STRUCTURE* powerStructList(UBYTE player);
 
-PLAYER_POWER		asPower[MAX_PLAYERS];
+typedef struct _player_power
+{
+	float currentPower;         ///< The current amount of power avaialble to the player.
+	float powerProduced;        ///< Power produced
+	float powerRequested;       ///< Power requested
+	float economyThrottle;      ///< Which percentage of the requested power is actually delivered
+} PLAYER_POWER;
+
+static PLAYER_POWER asPower[MAX_PLAYERS];
 
 /*allocate the space for the playerPower*/
 BOOL allocPlayerPower(void)
@@ -134,7 +142,7 @@ void releasePlayerPower(void)
 }
 
 /*check the current power - if enough return true, else return false */
-BOOL checkPower(int player, float quantity)
+BOOL checkPower(int player, uint32_t quantity)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Bad player (%d)", player);
 
@@ -151,7 +159,7 @@ BOOL checkPower(int player, float quantity)
 	return false;
 }
 
-void usePower(int player, float quantity)
+void usePower(int player, uint32_t quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
 	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity);
@@ -170,14 +178,7 @@ void addPower(int player, float quantity)
 /*resets the power calc flag for all players*/
 void powerCalc(BOOL on)
 {
-	if (on)
-	{
-		powerCalculated = true;
-	}
-	else
-	{
-		powerCalculated = false;
-	}
+	powerCalculated = on;
 }
 
 /** Each Resource Extractor yields EXTRACT_POINTS per second FOREVER */
@@ -301,7 +302,7 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 }
 
 // only used in multiplayer games.
-void setPower(int player, float power)
+void setPower(unsigned player, int32_t power)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
@@ -309,7 +310,7 @@ void setPower(int player, float power)
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 }
 
-float getPower(int player)
+int32_t getPower(unsigned player)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
@@ -410,28 +411,6 @@ BOOL droidUsesPower(DROID *psDroid)
     }
 
     return bUsesPower;
-}
-
-float requestPower(int player, float amount)
-{
-	// this is the amount that we are willing to give
-	float amountConsidered = amount * asPower[player].economyThrottle;
-
-	if (!powerCalculated)
-	{
-		return amount; // it's all yours
-	}
-
-	// keep track on how much energy we could possibly spend
-	asPower[player].powerRequested += amount;
-	
-	if (amountConsidered <= asPower[player].currentPower)
-	{
-		// you can have it
-		asPower[player].currentPower -= amountConsidered;
-		return amountConsidered;
-	}
-	return 0; // no power this frame
 }
 
 // Why is there randomity in the power code?

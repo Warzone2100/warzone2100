@@ -3481,7 +3481,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			if (psFactory->timeToBuild > 0)
 			{
 				int progress;
-				secondsElapsed = (gameTime - psFactory->timeStarted) / (float)GAME_TICKS_PER_SEC;
+				secondsElapsed = (gameTime - psFactory->timeStarted) / GAME_TICKS_PER_SEC;
 				secondsToBuild = ((DROID_TEMPLATE*)pSubject)->buildPoints/(float)psFactory->productionOutput;
 				powerNeeded = ((DROID_TEMPLATE *)pSubject)->powerPoints*(secondsElapsed/secondsToBuild);
 				if (secondsElapsed > 0)
