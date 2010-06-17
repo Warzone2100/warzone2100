@@ -67,9 +67,14 @@ void PointTree::clear()
 	points.clear();
 }
 
+static bool pointTreeSortFunction(std::pair<uint64_t, void *> const &a, std::pair<uint64_t, void *> const &b)
+{
+	return a.first < b.first;  // Sort only by position, not by pointer address, even if two units are in the same place.
+}
+
 void PointTree::sort()
 {
-	std::sort(points.begin(), points.end());
+	std::stable_sort(points.begin(), points.end(), pointTreeSortFunction);  // Stable sort to avoid unspecified behaviour when two objects are in exactly the same place.
 }
 
 //#define DUMP_IMAGE  // All x and y coordinates must be in range -500 to 499, if dumping an image.
