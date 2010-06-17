@@ -468,9 +468,9 @@ void featureUpdate(FEATURE *psFeat)
 // free up a feature with no visual effects
 bool removeFeature(FEATURE *psDel)
 {
-	UDWORD		mapX, mapY, width,breadth, player;
+	int		mapX, mapY, width, breadth, player;
 	MESSAGE		*psMessage;
-	Vector3i pos;
+	Vector3i	pos;
 
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
 	ASSERT_OR_RETURN(false, !psDel->died, "Feature already dead");
@@ -481,18 +481,23 @@ bool removeFeature(FEATURE *psDel)
 	}
 
 	//remove from the map data
-	mapX = map_coord(psDel->pos.x - psDel->psStats->baseWidth * TILE_UNITS / 2);
-	mapY = map_coord(psDel->pos.y - psDel->psStats->baseBreadth * TILE_UNITS / 2);
-	for (width = 0; width < psDel->psStats->baseWidth; width++)
+	mapX = map_coord(psDel->pos.x);
+	mapY = map_coord(psDel->pos.y);
+	for (width = -psDel->psStats->baseWidth; width < psDel->psStats->baseWidth; width++)
 	{
-		for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
+		for (breadth = -psDel->psStats->baseBreadth; breadth < psDel->psStats->baseBreadth; breadth++)
 		{
-			MAPTILE *psTile = mapTile(mapX + width, mapY + breadth);
-
-			psTile->psObject = NULL;
-
-			CLEAR_TILE_TALLSTRUCTURE(psTile);
-			CLEAR_TILE_NOTBLOCKING(psTile);
+			if (tileOnMap(mapX + width, mapY + breadth))
+			{
+				MAPTILE *psTile = mapTile(mapX + width, mapY + breadth);
+	 
+				if (psTile->psObject == (BASE_OBJECT *)psDel)
+				{
+					psTile->psObject = NULL;
+					CLEAR_TILE_TALLSTRUCTURE(psTile);
+					CLEAR_TILE_NOTBLOCKING(psTile);
+				}
+			}
 		}
 	}
 
