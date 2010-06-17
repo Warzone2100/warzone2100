@@ -629,6 +629,7 @@
 		43F300CF10D3470600707B6E /* poptint.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F300CE10D346FF00707B6E /* poptint.c */; };
 		43F300D710D3496D00707B6E /* encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3006710D344AF00707B6E /* encode.c */; };
 		43F3013010D3588300707B6E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
+		43F3405B11CAA83D00D1E6C8 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F3405911CAA83D00D1E6C8 /* crc.cpp */; };
 		647D9C531039288D006D37CF /* dictionary.c in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C4F1039288D006D37CF /* dictionary.c */; };
 		647D9C541039288D006D37CF /* iniparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C511039288D006D37CF /* iniparser.c */; };
 		647D9C571039289A006D37CF /* challenge.c in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C551039289A006D37CF /* challenge.c */; };
@@ -1701,6 +1702,8 @@
 		43F3008C10D344B000707B6E /* x86state.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = x86state.c; sourceTree = "<group>"; };
 		43F300CE10D346FF00707B6E /* poptint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = poptint.c; path = external/popt/poptint.c; sourceTree = "<group>"; };
 		43F3013210D3590800707B6E /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = external/popt/config.h; sourceTree = "<group>"; };
+		43F3405911CAA83D00D1E6C8 /* crc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crc.cpp; path = ../lib/framework/crc.cpp; sourceTree = SOURCE_ROOT; };
+		43F3405A11CAA83D00D1E6C8 /* crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crc.h; path = ../lib/framework/crc.h; sourceTree = SOURCE_ROOT; };
 		43F3FFFE10D33F4D00707B6E /* macosx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = macosx.c; path = external/physfs/platform/macosx.c; sourceTree = "<group>"; };
 		43F3FFFF10D33F6600707B6E /* physfs_unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_unicode.c; path = external/physfs/physfs_unicode.c; sourceTree = "<group>"; };
 		647D9C4F1039288D006D37CF /* dictionary.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dictionary.c; path = ../lib/iniparser/dictionary.c; sourceTree = SOURCE_ROOT; };
@@ -2045,6 +2048,8 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				43F3405911CAA83D00D1E6C8 /* crc.cpp */,
+				43F3405A11CAA83D00D1E6C8 /* crc.h */,
 				974964250F5ABBE100A38899 /* endian_hack.h */,
 				974964260F5ABBE100A38899 /* fixedpoint.h */,
 				974964270F5ABBE100A38899 /* math_ext.h */,
@@ -4394,6 +4399,7 @@
 				43C18FD1114FF38B0028741B /* netplay.c in Sources */,
 				43C18FD2114FF38B0028741B /* netsocket.cpp in Sources */,
 				43C18FD3114FF38B0028741B /* nettypes.c in Sources */,
+				43F3405B11CAA83D00D1E6C8 /* crc.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
