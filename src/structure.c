@@ -2853,8 +2853,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	DROID_TEMPLATE		*psNextTemplate;
 #endif
 	UDWORD				i;
-	float secondsToBuild, powerNeeded;
-	int secondsElapsed;
 	UWORD 				tmpOrigin = ORIGIN_UNKNOWN;
 
 	CHECK_STRUCTURE(psStructure);
@@ -3394,8 +3392,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (pointsToAdd > 0 &&
 				    pResearch->researchPoints > 0) // might be a "free" research
 				{
-					float powerNeeded = (pResearch->researchPower * pointsToAdd) / (float)pResearch->researchPoints;
-					pPlayerRes->currentPoints += requestPowerFor(psStructure->player, powerNeeded, pointsToAdd);
+					int64_t powerNeeded = ((int64_t)(pResearch->researchPower * pointsToAdd) >> 32) / (float)pResearch->researchPoints;
+					pPlayerRes->currentPoints += requestPrecisePowerFor(psStructure->player, powerNeeded, pointsToAdd);
 					psResFacility->timeStarted = gameTime;
 				}
 
@@ -3481,12 +3479,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			if (psFactory->timeToBuild > 0)
 			{
 				int progress;
-				secondsElapsed = (gameTime - psFactory->timeStarted) / GAME_TICKS_PER_SEC;
-				secondsToBuild = ((DROID_TEMPLATE*)pSubject)->buildPoints/(float)psFactory->productionOutput;
-				powerNeeded = ((DROID_TEMPLATE *)pSubject)->powerPoints*(secondsElapsed/secondsToBuild);
+				int secondsElapsed = (gameTime - psFactory->timeStarted) / GAME_TICKS_PER_SEC;
+				int64_t powerNeeded = ((int64_t)(((DROID_TEMPLATE *)pSubject)->powerPoints*secondsElapsed*psFactory->productionOutput) << 32)/((DROID_TEMPLATE*)pSubject)->buildPoints;
 				if (secondsElapsed > 0)
 				{
-					progress = requestPowerFor(psStructure->player, powerNeeded, secondsElapsed);
+					progress = requestPrecisePowerFor(psStructure->player, powerNeeded, secondsElapsed);
 					psFactory->timeToBuild -= progress;
 					psFactory->timeStarted = psFactory->timeStarted + secondsElapsed*GAME_TICKS_PER_SEC;
 				}

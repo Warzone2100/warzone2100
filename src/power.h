@@ -54,9 +54,10 @@ extern void releasePlayerPower(void);
 /** Check the available power. */
 BOOL checkPower(int player, uint32_t quantity);
 
-extern int requestPowerFor(int player, float amount, int points);
+extern int requestPowerFor(int player, int32_t amount, int points);
+extern int requestPrecisePowerFor(int player, int64_t amount, int points);
 
-extern void addPower(int player, float quantity);
+extern void addPower(int player, int32_t quantity);
 
 void usePower(int player, uint32_t quantity);
 
