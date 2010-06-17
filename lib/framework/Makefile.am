@@ -3,9 +3,11 @@
 
 %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
+#	sed -i 's/\(fwrite(.*)\)/abs(\1)/' $@
 
 AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 BUILT_SOURCES = \
@@ -33,6 +35,7 @@ noinst_HEADERS = \
 	strres_parser.tab.h \
 	resource_parser.tab.h \
 	configfile.h \
+	crc.h \
 	cursors.h \
 	debug.h \
 	file.h \
@@ -70,6 +73,7 @@ libframework_a_SOURCES = \
 	strres_lexer.lex.c \
 	strres_parser.tab.c \
 	configfile.c \
+	crc.cpp \
 	cursors16.c \
 	cursors32.c \
 	cursors.c \
