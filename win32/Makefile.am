@@ -17,6 +17,7 @@ EXTRA_DIST = __BUILD_SCRIPT \
 	     libs/png/Makefile \
 	     libs/quesoglc/Makefile \
 	     libs/sdl/Makefile \
+	     libs/sdl/patches \
 	     libs/theora/Makefile \
 	     libs/vorbis/Makefile \
 	     libs/zlib/Makefile
