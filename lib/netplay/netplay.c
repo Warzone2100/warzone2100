@@ -47,6 +47,13 @@
 #include "src/multijoin.h"
 #include "src/multiint.h"
 
+#if   defined(WZ_OS_UNIX)
+# include <arpa/inet.h>
+#endif
+#ifdef WZ_OS_WIN
+# include <winsock2.h>
+#endif
+
 // WARNING !!! This is initialised via configuration.c !!!
 char masterserver_name[255] = {'\0'};
 static unsigned int masterserver_port = 0, gameserver_port = 0;
@@ -293,21 +300,6 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 	return false;
 }
 
-static uint16_t hton16(uint16_t h)
-{
-	uint8_t n[2] = {h>>8, h};
-	uint16_t n_;
-	memcpy(&n_, n, 2);
-	return n_;
-}
-
-static uint16_t ntoh16(uint16_t n_)
-{
-	uint8_t n[2];
-	memcpy(&n, &n_, 2);
-	return n[0]<<8 | n[1];
-}
-
 // Check if we have a full message waiting for us. If not, return false and wait for more data.
 // If there is a data remnant somewhere in the buffer except at its beginning, move it to the
 // beginning.
@@ -326,7 +318,7 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs)
 		goto error;
 	}
 
-	size = ntoh16(message->size) + headersize;
+	size = ntohs(message->size) + headersize;
 
 	if (size > bs->bytes)
 	{
@@ -334,7 +326,7 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs)
 	}
 
 	memcpy(pMsg, message, size);
-	pMsg->size = ntoh16(message->size);
+	pMsg->size = ntohs(message->size);
 	bs->buffer_start += size;
 	bs->bytes -= size;
 
@@ -628,21 +620,6 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
 	return true;
 }
 
-static uint32_t hton32(uint32_t h)
-{
-	uint8_t n[4] = {h>>24, h>>16, h>>8, h};
-	uint32_t n_;
-	memcpy(&n_, n, 4);
-	return n_;
-}
-
-static uint32_t ntoh32(uint32_t n_)
-{
-	uint8_t n[4];
-	memcpy(&n, &n_, 4);
-	return n[0]<<24 | n[1]<<16 | n[2]<<8 | n[3];
-}
-
 /**
  * @note \c game is being sent to the master server (if hosting)
  *       The implementation of NETsendGAMESTRUCT <em>must</em> guarantee to
@@ -667,7 +644,7 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 
 	// Now dump the data into the buffer
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = hton32(ourgamestruct->GAMESTRUCT_VERSION);
+	*(uint32_t*)buffer = htonl(ourgamestruct->GAMESTRUCT_VERSION);
 	buffer += sizeof(uint32_t);
 
 	// Copy a string
@@ -675,9 +652,9 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	buffer += sizeof(ourgamestruct->name);
 
 	// Copy 32bit large big endian numbers
-	*(int32_t*)buffer = hton32(ourgamestruct->desc.dwSize);
+	*(int32_t*)buffer = htonl(ourgamestruct->desc.dwSize);
 	buffer += sizeof(int32_t);
-	*(int32_t*)buffer = hton32(ourgamestruct->desc.dwFlags);
+	*(int32_t*)buffer = htonl(ourgamestruct->desc.dwFlags);
 	buffer += sizeof(int32_t);
 
 	// Copy yet another string
@@ -685,13 +662,13 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	buffer += sizeof(ourgamestruct->desc.host);
 
 	// Copy 32bit large big endian numbers
-	*(int32_t*)buffer = hton32(ourgamestruct->desc.dwMaxPlayers);
+	*(int32_t*)buffer = htonl(ourgamestruct->desc.dwMaxPlayers);
 	buffer += sizeof(int32_t);
-	*(int32_t*)buffer = hton32(ourgamestruct->desc.dwCurrentPlayers);
+	*(int32_t*)buffer = htonl(ourgamestruct->desc.dwCurrentPlayers);
 	buffer += sizeof(int32_t);
 	for (i = 0; i < ARRAY_SIZE(ourgamestruct->desc.dwUserFlags); ++i)
 	{
-		*(int32_t*)buffer = hton32(ourgamestruct->desc.dwUserFlags[i]);
+		*(int32_t*)buffer = htonl(ourgamestruct->desc.dwUserFlags[i]);
 		buffer += sizeof(int32_t);
 	}
 
@@ -715,39 +692,39 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	buffer += sizeof(ourgamestruct->modlist);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = hton32(ourgamestruct->game_version_major);
+	*(uint32_t*)buffer = htonl(ourgamestruct->game_version_major);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = hton32(ourgamestruct->game_version_minor);
+	*(uint32_t*)buffer = htonl(ourgamestruct->game_version_minor);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = hton32(ourgamestruct->privateGame);
+	*(uint32_t*)buffer = htonl(ourgamestruct->privateGame);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = hton32(ourgamestruct->pureGame);
+	*(uint32_t*)buffer = htonl(ourgamestruct->pureGame);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = hton32(ourgamestruct->Mods);
+	*(uint32_t*)buffer = htonl(ourgamestruct->Mods);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = hton32(ourgamestruct->gameId);
+	*(uint32_t*)buffer = htonl(ourgamestruct->gameId);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = hton32(ourgamestruct->future2);
+	*(uint32_t*)buffer = htonl(ourgamestruct->future2);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = hton32(ourgamestruct->future3);
+	*(uint32_t*)buffer = htonl(ourgamestruct->future3);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = hton32(ourgamestruct->future4);
+	*(uint32_t*)buffer = htonl(ourgamestruct->future4);
 	buffer += sizeof(uint32_t);
 
 
@@ -829,16 +806,16 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 
 	// Now dump the data into the game struct
 	// Copy 32bit large big endian numbers
-	ourgamestruct->GAMESTRUCT_VERSION = ntoh32(*(uint32_t*)buffer);
+	ourgamestruct->GAMESTRUCT_VERSION = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
 	// Copy a string
 	sstrcpy(ourgamestruct->name, buffer);
 	buffer += sizeof(ourgamestruct->name);
 
 	// Copy 32bit large big endian numbers
-	ourgamestruct->desc.dwSize = ntoh32(*(int32_t*)buffer);
+	ourgamestruct->desc.dwSize = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
-	ourgamestruct->desc.dwFlags = ntoh32(*(int32_t*)buffer);
+	ourgamestruct->desc.dwFlags = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
 
 	// Copy yet another string
@@ -846,13 +823,13 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	buffer += sizeof(ourgamestruct->desc.host);
 
 	// Copy 32bit large big endian numbers
-	ourgamestruct->desc.dwMaxPlayers = ntoh32(*(int32_t*)buffer);
+	ourgamestruct->desc.dwMaxPlayers = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
-	ourgamestruct->desc.dwCurrentPlayers = ntoh32(*(int32_t*)buffer);
+	ourgamestruct->desc.dwCurrentPlayers = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
 	for (i = 0; i < ARRAY_SIZE(ourgamestruct->desc.dwUserFlags); ++i)
 	{
-		ourgamestruct->desc.dwUserFlags[i] = ntoh32(*(int32_t*)buffer);
+		ourgamestruct->desc.dwUserFlags[i] = ntohl(*(int32_t*)buffer);
 		buffer += sizeof(int32_t);
 	}
 
@@ -876,23 +853,23 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	buffer += sizeof(ourgamestruct->modlist);
 
 	// Copy 32bit large big endian numbers
-	ourgamestruct->game_version_major = ntoh32(*(uint32_t*)buffer);
+	ourgamestruct->game_version_major = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	ourgamestruct->game_version_minor = ntoh32(*(uint32_t*)buffer);
+	ourgamestruct->game_version_minor = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	ourgamestruct->privateGame = ntoh32(*(uint32_t*)buffer);
+	ourgamestruct->privateGame = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	ourgamestruct->pureGame = ntoh32(*(uint32_t*)buffer);
+	ourgamestruct->pureGame = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	ourgamestruct->Mods = ntoh32(*(uint32_t*)buffer);
+	ourgamestruct->Mods = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	ourgamestruct->gameId = ntoh32(*(uint32_t*)buffer);
+	ourgamestruct->gameId = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
-	ourgamestruct->future2 = ntoh32(*(uint32_t*)buffer);
+	ourgamestruct->future2 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
-	ourgamestruct->future3 = ntoh32(*(uint32_t*)buffer);
+	ourgamestruct->future3 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
-	ourgamestruct->future4 = ntoh32(*(uint32_t*)buffer);
+	ourgamestruct->future4 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
 	
 	// cat the modstring (if there is one) to the version string to display it for the end-user
@@ -1268,7 +1245,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination) + sizeof(msg->source);
 
 	NETlogPacket(msg, false);
-	msg->size = hton16(msg->size);
+	msg->size = htons(msg->size);
 
 	if (NetPlay.isHost)
 	{
@@ -1328,7 +1305,7 @@ BOOL NETbcast(NETMSG *msg)
 	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination) + sizeof(msg->source);
 
 	NETlogPacket(msg, false);
-	msg->size = hton16(msg->size);
+	msg->size = htons(msg->size);
 
 	if (NetPlay.isHost)
 	{
@@ -1710,7 +1687,7 @@ receive_message:
 			{
 				unsigned int j;
 
-				pMsg->size = ntoh16(pMsg->size);
+				pMsg->size = ntohs(pMsg->size);
 
 				if (pMsg->source != NET_HOST_ONLY && (pMsg->type == NET_KICK || pMsg->type == NET_PLAYER_LEAVING) )
 				{
@@ -1750,7 +1727,7 @@ receive_message:
 				    && connected_bsocket[pMsg->destination]->socket != NULL)
 				{
 					debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
-					pMsg->size = ntoh16(pMsg->size);
+					pMsg->size = ntohs(pMsg->size);
 
 					if (writeAll(connected_bsocket[pMsg->destination]->socket, pMsg, size) == SOCKET_ERROR)
 					{
@@ -1976,8 +1953,8 @@ static ssize_t readLobbyResponse(Socket* sock, unsigned int timeout)
 	if (result != sizeof(buffer))
 		goto error;
 	received += result;
-	lobbyStatusCode = ntoh32(buffer[0]);
-	MOTDLength = ntoh32(buffer[1]);
+	lobbyStatusCode = ntohl(buffer[0]);
+	MOTDLength = ntohl(buffer[1]);
 
 	// Get status message
 	free(NetPlay.MOTD);
@@ -2072,7 +2049,7 @@ static void NETregisterServer(int state)
 					return;
 				}
 
-				gamestruct.gameId = ntoh32(gameId);
+				gamestruct.gameId = ntohl(gameId);
 				debug(LOG_NET, "Using game ID: %u", (unsigned int)gamestruct.gameId);
 
 				// Register our game with the server for all available address families
@@ -2131,7 +2108,7 @@ static void NETregisterServer(int state)
 static void NETallowJoining(void)
 {
 	unsigned int i;
-	UDWORD numgames = hton32(1);	// always 1 on normal server
+	UDWORD numgames = htonl(1);	// always 1 on normal server
 	char buffer[5];
 	ssize_t recv_result = 0;
 
@@ -2626,7 +2603,7 @@ BOOL NETfindGame(void)
 	 && socketReadReady(tcp_socket)
 	 && (result = readNoInt(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
 	{
-		gamesavailable = ntoh32(gamesavailable);
+		gamesavailable = ntohl(gamesavailable);
 	}
 	else
 	{
