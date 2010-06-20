@@ -237,7 +237,7 @@ BOOL runKeyMapEditor(void)
 	if(id == KM_RETURN)			// return
 	{
 		saveKeyMap();
-		changeTitleMode(TITLE);
+		changeTitleMode(OPTIONS);
 	}
 	if(id == KM_DEFAULT)
 	{
@@ -261,6 +261,11 @@ BOOL runKeyMapEditor(void)
 	}
 
 	widgDisplayScreen(psWScreen);				// show the widgets currently running
+
+	if (CancelPressed())
+	{
+		changeTitleMode(OPTIONS);
+	}
 
 	return true;
 }

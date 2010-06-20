@@ -592,6 +592,11 @@ void runConnectionScreen(void )
 	{
 		widgDisplayScreen(psConScreen);						// show the widgets currently running
 	}
+
+	if (CancelPressed())
+	{
+		changeTitleMode(MULTI);
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -2211,7 +2216,14 @@ static void stopJoining(void)
 			return;
 		}
 		debug(LOG_NET, "We have stopped joining.");
-		changeTitleMode(TITLE);		// Go back to top level menu
+		if (multiplayersetup)
+		{
+			changeTitleMode(MULTI);
+		}
+		else
+		{
+			changeTitleMode(SINGLE);
+		}
 		selectedPlayer = 0;
 
 		if (ingame.bHostSetup)
@@ -3132,6 +3144,18 @@ void runMultiOptions(void)
 	{
 		iV_SetFont(font_regular);											// switch to small font.
 		displayConsoleMessages();									// draw the chatbox
+	}
+
+	if (CancelPressed())
+	{
+		if (multiplayersetup)
+		{
+			changeTitleMode(MULTI);
+		}
+		else
+		{
+			changeTitleMode(SINGLE);
+		}
 	}
 }
 
