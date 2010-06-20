@@ -50,6 +50,8 @@ typedef enum _title_mode {
 
 extern tMode titleMode;					// the global case
 
+extern bool multiplayersetup;
+
 #define DEFAULT_LEVEL	"CAM_1A"
 #define TUTORIAL_LEVEL	"TUTORIAL3"
 

@@ -74,6 +74,7 @@
 // Global variables
 
 static int StartWithGame = 1; // New game starts in Cam 1.
+bool multiplayersetup = false; // Skirmish or multiplayer setup? Used to go back to the corresponding menu.
 
 // Widget code and non-constant strings do not get along
 static char resolution[WIDG_MAXSTR];
@@ -462,6 +463,7 @@ BOOL runSinglePlayerMenu(void)
 
 			case FRONTEND_SKIRMISH:
 				ingame.bHostSetup = true;
+				multiplayersetup = false;
 				changeTitleMode(MULTIOPTION);
 				break;
 
@@ -537,6 +539,7 @@ BOOL runMultiPlayerMenu(void)
 		bMultiMessages = true;
 		game.type = SKIRMISH;		// needed?
 		NetPlay.bComms = true;
+		multiplayersetup = true;
 		changeTitleMode(MULTIOPTION);
 		break;
 	case FRONTEND_JOIN:
@@ -558,6 +561,11 @@ BOOL runMultiPlayerMenu(void)
 	}
 
 	widgDisplayScreen(psWScreen); // show the widgets currently running
+
+	if (CancelPressed())
+	{
+		changeTitleMode(TITLE);
+	}
 
 	return true;
 }
@@ -1436,7 +1444,7 @@ BOOL runGameOptionsMenu(void)
 
 	// If close button pressed then return from this menu.
 	if(CancelPressed()) {
-		changeTitleMode(TITLE);
+		changeTitleMode(OPTIONS);
 	}
 
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
