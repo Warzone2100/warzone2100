@@ -119,13 +119,7 @@ static void	displayAISlider			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 //
 BOOL CancelPressed(void)
 {
-
-	if(keyPressed(KEY_ESC)) {
-		return true;
-	}
-
-
-	return false;
+	return keyPressed(KEY_ESC);
 }
 
 
