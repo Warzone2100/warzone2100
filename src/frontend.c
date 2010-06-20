@@ -448,21 +448,13 @@ BOOL runSinglePlayerMenu(void)
 			case FRONTEND_LOADCAM2:
 				sstrcpy(aLevelName, "CAM_2A");
 				changeTitleMode(STARTGAME);
- #ifdef LOADINGBACKDROPS
-				AddLoadingBackdrop(true);
- #else
 				initLoadingScreen(true);
- #endif
 				break;
 
 			case FRONTEND_LOADCAM3:
 				sstrcpy(aLevelName, "CAM_3A");
 				changeTitleMode(STARTGAME);
- #ifdef LOADINGBACKDROPS
-				AddLoadingBackdrop(true);
- #else
 				initLoadingScreen(true);
- #endif
 				break;
 			case FRONTEND_LOADGAME:
 				addLoadSave(LOAD_FRONTEND,SaveGamePath,"gam",_("Load Saved Game"));	// change mode when loadsave returns
