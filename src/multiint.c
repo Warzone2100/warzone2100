@@ -197,7 +197,6 @@ static void hidePasswordForm(void);
 static void showPasswordForm(void);
 
 // Connection option functions
-static void addConnections			(UDWORD);
 void		runConnectionScreen		(void);
 BOOL		startConnectionScreen	(void);
 
@@ -527,17 +526,12 @@ BOOL startConnectionScreen(void)
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
 		_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);	// goback buttpn levels
 
-	addConnections(0);
+	addTextButton(CON_TYPESID_START+0,FRONTEND_POS2X,FRONTEND_POS2Y, _("Lobby"), WBUT_TXTCENTRE);
+	addTextButton(CON_TYPESID_START+1,FRONTEND_POS3X,FRONTEND_POS3Y, _("IP"), WBUT_TXTCENTRE);
 
 	return true;
 }
 
-// add connections
-static void addConnections(UDWORD begin)
-{
-	addTextButton(CON_TYPESID_START+begin+0,FRONTEND_POS2X,FRONTEND_POS2Y, _("Lobby"), WBUT_TXTCENTRE);
-	addTextButton(CON_TYPESID_START+begin+1,FRONTEND_POS3X,FRONTEND_POS3Y, _("IP"), WBUT_TXTCENTRE);
-}
 
 void runConnectionScreen(void )
 {
@@ -559,18 +553,6 @@ void runConnectionScreen(void )
 			changeTitleMode(MULTI);
 			bMultiPlayer = false;
 			bMultiMessages = false;
-			break;
-		case CON_TYPESID_MORE:
-			widgDelete(psWScreen,FRONTEND_BOTFORM);
-
-			SettingsUp = false;
-			InitialProto +=5;
-
-			addBottomForm();
-			addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
-			_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);	// goback buttpn levels
-
-			addConnections(InitialProto);
 			break;
 		case CON_TYPESID_START+0: // Lobby button
 			NETsetupTCPIP(""); //inet
