@@ -556,7 +556,14 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 		}
 	}
 
-	armour = psObj->armour[impactSide][weaponClass];
+	if (impactSide != HIT_SIDE_PIERCE)
+	{
+		armour = 0;
+	}
+	else
+	{
+		armour = psObj->armour[impactSide][weaponClass];
+	}
 
 	debug(LOG_ATTACK, "objDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
 

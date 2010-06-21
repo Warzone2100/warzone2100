@@ -942,15 +942,16 @@ void droidUpdate(DROID *psDroid)
 			else
 			{
 				// do burn damage
-				damageToDo = BURN_DAMAGE * ((SDWORD)gameTime - (SDWORD)psDroid->burnStart) /
+				damageToDo = MAX(BURN_DAMAGE - psDroid->armour[HIT_SIDE_FRONT][WC_HEAT], BURN_DAMAGE/3) * ((SDWORD)gameTime - (SDWORD)psDroid->burnStart) /
 								GAME_TICKS_PER_SEC;
 				damageToDo -= (SDWORD)psDroid->burnDamage;
-				if (damageToDo > 0)
+				if (damageToDo > 20) // enough that DR takes effect
 				{
+					damageToDo -= (damageToDo % 20); // make deterministic
 					psDroid->burnDamage += damageToDo;
 
 					//just assume the burn damage is from FRONT
-					droidDamage(psDroid, damageToDo, WC_HEAT,WSC_FLAME, HIT_SIDE_FRONT);
+					droidDamage(psDroid, damageToDo, WC_HEAT,WSC_FLAME, HIT_SIDE_PIERCE);
 				}
 			}
 		}

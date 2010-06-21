@@ -3110,7 +3110,6 @@ void saveMissionPower(void)
 
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		//mission.asPower[inc].initialPower = asPower[inc].initialPower;
 		mission.asPower[inc].extractedPower = asPower[inc].extractedPower;
 		mission.asPower[inc].currentPower = asPower[inc].currentPower;
 	}
@@ -3123,7 +3122,6 @@ void adjustMissionPower(void)
 
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		//asPower[inc].initialPower += mission.asPower[inc].initialPower;
 		asPower[inc].extractedPower += mission.asPower[inc].extractedPower;
 		asPower[inc].currentPower += mission.asPower[inc].currentPower;
 	}

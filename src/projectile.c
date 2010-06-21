@@ -1556,17 +1556,20 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
 				   been done up till now */
 				damageSoFar = (gameTime - psCurr->burnStart)
 							  //* psStats->incenDamage
-							  * weaponIncenDamage(psStats,psProj->player)
+							  * MAX(weaponIncenDamage(psStats,psProj->player) - psCurr->armour[HIT_SIDE_FRONT][WC_HEAT], weaponIncenDamage(psStats,psProj->player)/3)
 							  / GAME_TICKS_PER_SEC;
 				damageToDo = (SDWORD)damageSoFar
 							 - (SDWORD)psCurr->burnDamage;
-				if (damageToDo > 0)
+				if (damageToDo > 20) // maximum DR becomes 95% instead of previous 0%
 				{
+					damageToDo -= (damageToDo % 20); // make deterministic
+
 					debug(LOG_NEVER, "Burn damage of %d to object %d, player %d\n",
 							damageToDo, psCurr->id, psCurr->player);
 
-					//Watermelon:just assume the burn damage is from FRONT
-					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, 0);
+					// HIT_SIDE_PIERCE because armor from burn effects is handled externally
+					// To be consistent with vehicle burn, all burn damage is thermal flame damage
+					relativeDamage = objectDamage(psCurr, damageToDo, WC_HEAT, WSC_FLAME, HIT_SIDE_PIERCE);
 
 					psCurr->burnDamage += damageToDo;
 

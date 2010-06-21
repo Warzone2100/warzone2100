@@ -147,6 +147,7 @@ typedef enum HIT_SIDE
 	HIT_SIDE_RIGHT,
 	HIT_SIDE_TOP,
 	HIT_SIDE_BOTTOM,
+	HIT_SIDE_PIERCE, // ignore armor
 	NUM_HIT_SIDES,			/**  The number of enumerators in this enum. */
 } HIT_SIDE;
 
