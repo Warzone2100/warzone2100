@@ -74,13 +74,14 @@
 // Global variables
 
 static int StartWithGame = 1; // New game starts in Cam 1.
-bool multiplayersetup = false; // Skirmish or multiplayer setup? Used to go back to the corresponding menu.
 
 // Widget code and non-constant strings do not get along
 static char resolution[WIDG_MAXSTR];
 static char textureSize[WIDG_MAXSTR];
 
 tMode titleMode; // the global case
+tMode lastTitleMode; // Since skirmish and multiplayer setup use the same functions, we use this to go back to the corresponding menu.
+
 char			aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
 BOOL			bLimiterLoaded = false;
@@ -463,7 +464,7 @@ BOOL runSinglePlayerMenu(void)
 
 			case FRONTEND_SKIRMISH:
 				ingame.bHostSetup = true;
-				multiplayersetup = false;
+				lastTitleMode = SINGLE;
 				changeTitleMode(MULTIOPTION);
 				break;
 
@@ -536,7 +537,7 @@ BOOL runMultiPlayerMenu(void)
 		bMultiPlayer = true;
 		bMultiMessages = true;
 		game.type = SKIRMISH;		// needed?
-		multiplayersetup = true;
+		lastTitleMode = MULTI;
 		changeTitleMode(MULTIOPTION);
 		break;
 	case FRONTEND_JOIN:
@@ -901,7 +902,7 @@ BOOL runGameOptions3Menu(void)
 
 	// If close button pressed then return from this menu.
 	if(CancelPressed()) {
-		changeTitleMode(TITLE);
+		changeTitleMode(OPTIONS);
 	}
 
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
