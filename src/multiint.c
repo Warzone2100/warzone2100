@@ -883,6 +883,11 @@ FAIL:
 		iV_SetFont(font_large);
 		iV_DrawText(_("Searching"), D_W+260, D_H+460);
 	}
+
+	if (CancelPressed())
+	{
+		changeTitleMode(PROTOCOL);
+	}
 }
 
 // Used to draw the password box for the lobby screen
@@ -2210,14 +2215,7 @@ static void stopJoining(void)
 			return;
 		}
 		debug(LOG_NET, "We have stopped joining.");
-		if (multiplayersetup)
-		{
-			changeTitleMode(MULTI);
-		}
-		else
-		{
-			changeTitleMode(SINGLE);
-		}
+		changeTitleMode(lastTitleMode);
 		selectedPlayer = 0;
 
 		if (ingame.bHostSetup)
@@ -3142,14 +3140,7 @@ void runMultiOptions(void)
 
 	if (CancelPressed())
 	{
-		if (multiplayersetup)
-		{
-			changeTitleMode(MULTI);
-		}
-		else
-		{
-			changeTitleMode(SINGLE);
-		}
+		changeTitleMode(lastTitleMode);
 	}
 }
 
