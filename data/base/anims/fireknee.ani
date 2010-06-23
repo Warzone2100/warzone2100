@@ -1,8 +1,0 @@
-/* header format: anim3d [filename] [frames][framerate] [num objects]            */
-/* anim line: [frame] [x] [y] [z] [xrot] [yrot] [zrot][xscale] [yscale] [zscale] */
-ANIM3DFRAMES "FireKnee.pie" 3 10
-{
-	  0	0 0 0 0 0 0 1000 1000 1000
-	  1	0 0 0 0 0 0 1000 1000 1000
-	  2	0 0 0 0 0 0 1000 1000 1000
-}

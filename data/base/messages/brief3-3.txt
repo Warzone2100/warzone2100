@@ -1,2 +1,0 @@
-MB3_3_MSG,0,1,3,cam3/cam3_3pl.ogg,3,CAM3_3_MSG1,CAM3_3_MSG2,CAM3_3_MSG3,cam3/cam3_3pl.ogg,0000,nexstart.ogg,0,nexstart.ogg,0000,nexend.ogg,0,nexend.ogg,0000
-MB3_3_MSG2,0,1,1,cam3/cam3_3b.ogg,3,CAM3_3_MSG4,CAM3_3_MSG5,CAM3_3_MSG6,cam3/cam3_3b.ogg,0000

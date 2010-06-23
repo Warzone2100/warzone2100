@@ -1,2 +1,0 @@
-ZNULLBRAIN,Level All,0,0,0,0,0,ZNULLWEAPON,0
-CommandBrain01,Level All,1,1,1,1,1,CommandTurret1,0

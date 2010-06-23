@@ -1,6 +1,0 @@
-// Ogg settings for Release configuration
-
-#include "Ogg-All.xcconfig"
-
-
-GCC_ENABLE_FIX_AND_CONTINUE = NO

@@ -1,2 +1,0 @@
-MB2_4_MSG,0,3,2,player.ogg,1,1,TRANS_MSG1,p-id.ogg,0000,player.ogg,1,2,CAM2_4_MSG,CAM2_4_MSG2,0,0000
-MB2_4_MSG2,0,1,1,cam2/cam2_4.ogg,3,CAM2_4_MSG3,CAM2_4_MSG4,CAM2_4_MSG5,cam2/cam2_4.ogg,0000

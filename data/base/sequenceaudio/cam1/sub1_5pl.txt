@@ -1,8 +1,0 @@
-//pos		frame	
-//x	y		start	end	Text	
-
-20	432		25	190	"Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
-
-
-
-

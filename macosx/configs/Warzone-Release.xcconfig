@@ -1,9 +1,0 @@
-// Warzone settings for Release configuration
-
-#include "warzone-all.xcconfig"
-
-
-GCC_OPTIMIZATION_LEVEL = 2
-GCC_PREPROCESSOR_DEFINITIONS = VORBIS_NEEDS_HACK $(inherited) // FIXME: VORBIS_NEEDS_HACK is a unnessary hack; there is a better way and it will be done eventually
-
-// BuildDependentFlagsForCandCpp = -fstack-protector // Needs 10.5 min before being used

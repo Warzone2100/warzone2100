@@ -1,9 +1,0 @@
-Wheeled,GROUND,80
-Tracked,GROUND,80
-Legged,GROUND,100
-Hover,GROUND,100
-Ski,GROUND,100
-Lift,AIR,140
-Propellor,GROUND,100
-Half-Tracked,GROUND,80
-Jump,AIR,200

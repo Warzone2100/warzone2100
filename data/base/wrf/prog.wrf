@@ -1,9 +1,0 @@
-/***********************************************************/
-/*  You may have to modify this file for it to be correct! */ 
-/*******************       WRF\prog.wrf      *******************/
-
-
-directory	"script/text"
-file		SCRIPT	"basic.slo"
-directory	"script/data"
-file		SCRIPTVAL	"basic.vlo"

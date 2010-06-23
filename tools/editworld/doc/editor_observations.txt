@@ -1,7 +1,0 @@
-1. Is it possible to use two keys to rotate the map in the 3d view around the center of the view ?
-2. Can an UNDO command be put in ?
-3. When a tile is rotated  and then flipped , the 3d map view doesn't update until the camera moves off and comes back.
-4. Pressing X in the top right hand corner of the window should prompt the user with a " Save Untitled.Ind ?" type message.
-5. When painting a texture , the screen should scroll as the mose moves towards the edge of the window.
-6. We need to be able to select an area and auto fill it with the selected texture.
-7. Also, if rotate texture is selected, and the mouse is left clicked within a selected area ALL the tiles in that area should be rotated.

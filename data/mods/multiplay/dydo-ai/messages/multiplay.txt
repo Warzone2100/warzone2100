@@ -1,2 +1,0 @@
-END,0,1,1,end.ogg,0,0,0000
-WIN,0,1,1,victory.ogg,0,0,0000

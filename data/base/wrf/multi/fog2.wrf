@@ -1,6 +1,0 @@
-
-directory       "script/text"
-file			SCRIPT		"cam2daynight.slo"
-
-directory       "script/data"
-file			SCRIPTVAL	"cam2day.vlo"

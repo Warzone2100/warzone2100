@@ -1,1 +1,0 @@
-SB1_8_MSG,0,1,2,cam1/sub1_8fmv.ogg,3,TRANS_MSG1,SUB1_8_MSG4,SUB1_8_MSG5,cam1/Sub1_8fmv.ogg,0000,cam1/sub1_8.ogg,3,SUB1_8_MSG1,SUB1_8_MSG2,SUB1_8_MSG3,cam1/sub1_8.ogg,0000
