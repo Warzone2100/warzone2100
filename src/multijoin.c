@@ -289,7 +289,7 @@ BOOL MultiPlayerJoin(UDWORD playerIndex)
 			{
 				if (NetPlay.players[i].allocated)
 				{
-					setMultiStats(i, getMultiStats(i, false), false);
+					setMultiStats(i, getMultiStats(i), false);
 				}
 			}
 		}
@@ -386,7 +386,7 @@ void setupNewPlayer(UDWORD player)
 
 	resetMultiVisibility(player);						// set visibility flags.
 
-	setMultiStats(player, getMultiStats(player, false), true);  // get the players score from the ether.
+	setMultiStats(player, getMultiStats(player), true);  // get the players score
 
 	ssprintf(buf, _("%s is Joining the Game"), getPlayerName(player));
 	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);

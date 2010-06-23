@@ -871,11 +871,11 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		if (NetPlay.bComms)
 		{
 			//c8:score,
-			sprintf(str,"%d",getMultiStats(player,true).recentScore);
+			sprintf(str,"%d",getMultiStats(player).recentScore);
 			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
 
 			//c9:kills,
-			sprintf(str,"%d",getMultiStats(player,true).recentKills);
+			sprintf(str,"%d",getMultiStats(player).recentKills);
 			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
 		}
 		else
@@ -935,11 +935,11 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		if (NetPlay.bComms)
 		{
 			//c8:score,
-			sprintf(str,"%d",getMultiStats(player,true).recentScore);
+			sprintf(str,"%d",getMultiStats(player).recentScore);
 			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
 
 			//c9:kills,
-			sprintf(str,"%d",getMultiStats(player,true).recentKills);
+			sprintf(str,"%d",getMultiStats(player).recentKills);
 			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
 		}
 		else
