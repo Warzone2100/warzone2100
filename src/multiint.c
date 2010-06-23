@@ -3401,13 +3401,13 @@ static UDWORD bestPlayer(UDWORD player)
 
 	UDWORD i, myscore,  score, count=1;
 
-	myscore =  getMultiStats(player,false).totalScore;
+	myscore =  getMultiStats(player).totalScore;
 
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
 		if(isHumanPlayer(i) && i!=player )
 		{
-			score = getMultiStats(i, false).totalScore;
+			score = getMultiStats(i).totalScore;
 
 			if(score >= myscore)
 			{
@@ -3546,13 +3546,13 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			break;
 		}
 
-		if(getMultiStats(j,false).played < 5)
+		if(getMultiStats(j).played < 5)
 		{
 			iV_DrawImage(FrontImages,IMAGE_MEDAL_DUMMY,x+37,y+13);
 		}
 		else
 		{
-			stat = getMultiStats(j,false);
+			stat = getMultiStats(j);
 
 			// star 1 total droid kills
 			eval = stat.totalKills;

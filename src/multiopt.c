@@ -612,7 +612,7 @@ BOOL multiGameShutdown(void)
 	sendLeavingMsg();							// say goodbye
 	updateMultiStatsGames();					// update games played.
 
-	st = getMultiStats(selectedPlayer, true);	// save stats
+	st = getMultiStats(selectedPlayer);	// save stats
 
 	saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
 
