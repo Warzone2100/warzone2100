@@ -1,8 +1,8 @@
 // Warzone settings for all configurations
 
 
+GCC_VERSION = com.apple.compilers.llvmgcc42
 INSTALL_PATH = $(HOME)/Applications
-OTHER_LDFLAGS[arch=ppc] = -w // This turns off 2 warnings that are actually in apple's sdk.
 PREBINDING = NO
 APPLY_RULES_IN_COPY_FILES = YES
 INFOPLIST_FILE = Resources/Warzone-Info.plist
@@ -23,6 +23,7 @@ OTHER_CPLUSPLUSFLAGS = $(FlagsForCandCpp)
 GCC_WARN_ABOUT_RETURN_TYPE = YES // -Wreturn-type
 GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES // -Wmissing-field-initializers
 WARNING_CFLAGS = -Wall -Wno-unused-label -Wno-format-security -Wno-strict-aliasing -Wmissing-field-initializers -Wcast-align -Wwrite-strings -Wpointer-arith // Wno-missing-declarations is set on GLee.c; otherwise we would have +3000 warnings
+GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO // FIXME: -Wno-format  Hides some "format not a string literal and no format arguments" warnings; these should be fixed at some point
 GCC_WARN_UNUSED_FUNCTION = YES // -Wunused-function
 GCC_WARN_UNUSED_LABEL = YES // -Wunused-label
 GCC_WARN_UNUSED_VALUE = YES // -Wunused-value
