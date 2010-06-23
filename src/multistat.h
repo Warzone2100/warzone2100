@@ -47,7 +47,7 @@ typedef struct
 
 BOOL saveMultiStats(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
 BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
-PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal);									// get from net
+PLAYERSTATS getMultiStats(UDWORD player);									// get from net
 BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats,BOOL bLocal);			// send to net.
 void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted);
 void updateMultiStatsGames(void);
