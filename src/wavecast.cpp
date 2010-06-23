@@ -102,8 +102,8 @@ static std::vector<WavecastTile> generateWavecastTable(unsigned radius)
 	// sortedAngles lookup table either.)
 	for (std::vector<WavecastTile>::iterator i = tiles.begin(); i != tiles.end(); ++i)
 	{
-		i->angBegin = std::find(sortedAngles.begin(), sortedAngles.end(), unsortedAngles[i->angBegin]) - sortedAngles.begin();
-		i->angEnd   = std::find(sortedAngles.begin(), sortedAngles.end(), unsortedAngles[i->angEnd  ]) - sortedAngles.begin();
+		i->angBegin = std::lower_bound(sortedAngles.begin(), sortedAngles.end(), unsortedAngles[i->angBegin]) - sortedAngles.begin();
+		i->angEnd   = std::lower_bound(sortedAngles.begin(), sortedAngles.end(), unsortedAngles[i->angEnd  ]) - sortedAngles.begin();
 	}
 
 #if 0  // Prints wavecast table.
