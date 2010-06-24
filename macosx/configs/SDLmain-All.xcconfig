@@ -1,7 +1,6 @@
 // SDLmain settings for all configurations
 
 
-GCC_VERSION = com.apple.compilers.llvmgcc42 // Match wz's
 INSTALL_PATH = /usr/local/lib
 PREBINDING = NO
 PRODUCT_NAME = SDLmain
