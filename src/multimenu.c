@@ -959,12 +959,12 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	if(getDebugMappingStatus())			//Won't pass this when in both release and multiplayer modes
 	{
 		//c10: Total number of player units in possession
-		sprintf(str,"%d",getNumDroids(player));
+		sprintf(str,"%d",getNumDroids(player) + getNumTransporterDroids(player));
 		iV_DrawText(str, x+MULTIMENU_C10, y+MULTIMENU_FONT_OSET);
 
 		//c11: Player power
 		sprintf(str, "%u", (int)getPower(player));
-		iV_DrawText(str, MULTIMENU_FORM_X+MULTIMENU_C11,  y+MULTIMENU_FONT_OSET);
+		iV_DrawText(str, MULTIMENU_FORM_X+MULTIMENU_C11, y+MULTIMENU_FONT_OSET);
 	}
 
 	// a droid of theirs.
