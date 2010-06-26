@@ -45,7 +45,7 @@ bool assertEnabled = true;
 #else
 bool assertEnabled = false;
 #endif
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC32) // FIXME: Needs to be made compatible with 64bit
 #include <Carbon/Carbon.h>
 #endif
 /*
@@ -434,7 +434,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 			MessageBoxA( NULL,
 				wbuf,
 				"Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
-#elif defined(WZ_OS_MAC)
+#elif defined(WZ_OS_MAC32) // FIXME: Needs to be made compatible with 64bit
 			AlertStdCFStringAlertParamRec	param;
 			DialogRef						dialog;
 			OSStatus						err;
@@ -469,7 +469,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 			MessageBoxA( NULL,
 				wbuf,
 				"Warzone has detected a problem.", MB_OK|MB_ICONINFORMATION);
-#elif defined (WZ_OS_MAC)
+#elif defined (WZ_OS_MAC32) // FIXME: Needs to be made compatible with 64bit
 			AlertStdCFStringAlertParamRec	param;
 			DialogRef						dialog;
 			OSStatus						err;
