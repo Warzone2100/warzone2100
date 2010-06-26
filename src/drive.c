@@ -594,7 +594,6 @@ SDWORD driveGetMoveDir(void)
 
 void driveSetDroidMove(DROID *psDroid)
 {
-//	psDroid->sMove.speed = (float)driveSpeed;
 	psDroid->rot.direction = DEG(driveDir);
 }
 

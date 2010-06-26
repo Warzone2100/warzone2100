@@ -72,7 +72,6 @@ extern void setGameTime(uint32_t newGameTime);
  * @returns true iff the game time ticked.
  */
 extern void gameTimeUpdate(void);
-extern bool logicalUpdates;  ///< Separate logical from graphical updates. FIXME Should be constant true. But first it needs to work perfectly.
 
 /* Returns true if gameTime is stopped. */
 extern BOOL gameTimeIsStopped(void);
