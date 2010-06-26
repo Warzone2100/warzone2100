@@ -65,7 +65,7 @@ typedef struct _move_control
 
 	SDWORD	DestinationX, DestinationY;			// World coordinates of movement destination
 	SDWORD	srcX,srcY,targetX,targetY;
-	float	speed;						// Speed of motion
+	int	speed;						// Speed of motion
 	SWORD	boundX,boundY;				// Vector for the end of path boundary
 	int32_t	eBitX, eBitY;					// extra bits stored in a temporary bit bucket
 

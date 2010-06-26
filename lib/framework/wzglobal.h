@@ -188,6 +188,7 @@
 
      MSVC     - Microsoft Visual C/C++, Intel C++ for Windows
      GNU      - GNU C++
+     CLANG    - Clang LLVM
      INTEL    - Intel C++ for Linux, Intel C++ for Windows
      TINYC    - Fabrice Bellard's Tiny C Compiler
 
@@ -226,6 +227,17 @@
 /* Intel C++ also masquerades as GCC 3.2.0 */
 #    define WZ_CC_INTEL
 #  endif
+
+#  if defined(__llvm__)
+#    define WZ_CC_LLVM
+#  endif
+#  if defined(__clang__)
+#    define WZ_CC_CLANG
+#  endif
+/* Clang may not always masquerade as gcc */
+#elif defined(__clang__)
+#  define WZ_CC_CLANG
+#  define WZ_CC_LLVM
 
 #elif defined(__TINYC__)
 #  define WZ_CC_TINYC

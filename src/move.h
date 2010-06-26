@@ -32,7 +32,7 @@ extern "C"
 #endif //__cplusplus
 
 /* The base movement speed */
-extern float	baseSpeed;
+extern int	baseSpeed;
 
 // The next object that should get the router when a lot of units are
 // in a MOVEROUTE state

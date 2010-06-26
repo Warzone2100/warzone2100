@@ -24,224 +24,67 @@
  * Alex Lee. Pumpkin Studios. Eidos PLC 98,
  */
 
-/*	Playstation button symbol -> font mappings.
-|	=	X
-{	=	Circle
-}	=	Square
-~	=	Triangle
-*/
-#include <string.h>
-
 #include "lib/framework/frame.h"
-#include "lib/framework/frameresource.h"
-#include "lib/framework/strres.h"
 #include "lib/framework/input.h"
 #include "lib/ivis_common/rendmode.h"
-#include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
-#include "lib/widget/widget.h"
-
-#include "lib/widget/slider.h"
-#include "lib/widget/label.h"
 #include "lib/widget/button.h"
+#include "lib/widget/label.h"
+#include "lib/widget/slider.h"
 
 #include "advvis.h"
 #include "challenge.h"
 #include "component.h"
+#include "configuration.h"
 #include "difficulty.h"
 #include "display.h"
 #include "frend.h"
 #include "frontend.h"
 #include "hci.h"
-#include "ingameop.h"
 #include "init.h"
 #include "intdisplay.h"
 #include "keyedit.h"
 #include "loadsave.h"
+#include "main.h"
+#include "modding.h"
 #include "multiint.h"
 #include "multilimit.h"
 #include "multiplay.h"
 #include "seqdisp.h"
 #include "texture.h"
-#include "warzoneconfig.h"
-#include "main.h"
-#include "wrappers.h"
 #include "version.h"
-#include "configuration.h"
-#include "modding.h"
+#include "warzoneconfig.h"
+#include "wrappers.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
-
-static int StartWithGame = 1; // New game starts in Cam 1.
 
 // Widget code and non-constant strings do not get along
 static char resolution[WIDG_MAXSTR];
 static char textureSize[WIDG_MAXSTR];
 
 tMode titleMode; // the global case
+tMode lastTitleMode; // Since skirmish and multiplayer setup use the same functions, we use this to go back to the corresponding menu.
+
 char			aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
 BOOL			bLimiterLoaded = false;
-BOOL			bUsingKeyboard = false;		// to disable mouse pointer when using keys.
-BOOL			bUsingSlider   = false;
 
-// ////////////////////////////////////////////////////////////////////////////
-// Function Definitions
-
-BOOL		startTitleMenu			(void);
-void		startSinglePlayerMenu	(void);
-BOOL		startTutorialMenu		(void);
-BOOL		startMultiPlayerMenu	(void);
-BOOL		startOptionsMenu		(void);
-BOOL		startGameOptionsMenu	(void);
-BOOL		startGameOptions2Menu	(void);
-BOOL		startGameOptions3Menu	(void);
-BOOL		startGameOptions4Menu	(void);
-BOOL		startGameOptions5Menu	(void);
-
-void		removeTopForm			(void);
-void		removeBottomForm		(void);
-void		removeBackdrop			(void);
-
-static void	displayTitleBitmap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayText				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
-void		displayTextAt270		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void	displayBigSlider		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void	displayAISlider			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+#define DEFAULT_LEVEL "CAM_1A"
+#define TUTORIAL_LEVEL "TUTORIAL3"
 
 
-
-
-
-// Returns true if escape key pressed on PC or close button pressed on Playstation.
+// Returns true if escape key pressed.
 //
 BOOL CancelPressed(void)
 {
-
-	if(keyPressed(KEY_ESC)) {
-		return true;
-	}
-
-
-	return false;
-}
-
-
-// ////////////////////////////////////////////////////////////////////////////
-// Change Mode
-void changeTitleMode(tMode mode)
-{
-	tMode oldMode;
-
-	widgDelete(psWScreen, FRONTEND_BACKDROP);		// delete backdrop.
-
-	oldMode = titleMode;							// store old mode
-	titleMode = mode;								// set new mode
-
-	switch(mode)
-	{
-/*	case DEMOMODE:// demo case. remove for release
-		startDemoMenu();
-		break;
-	case VIDEO:
-		startVideoOptionsMenu();
-		break;
-*/
-	case SINGLE:
-		startSinglePlayerMenu();
-		break;
-	case GAME:
-		startGameOptionsMenu();
-		break;
-
-	case GAME2:
-		startGameOptions2Menu();
-		break;
-
-	case GAME3:
-		startGameOptions3Menu();
-		break;
-
-	case GAME4:
-		startGameOptions4Menu();
-		break;
-
-	case GAME5:
-		startGameOptions5Menu();
-		break;
-
-	case TUTORIAL:
-		startTutorialMenu();
-		break;
-	case OPTIONS:
-		startOptionsMenu();
-		break;
-	case TITLE:
-		startTitleMenu();
-		break;
-
-//	case GRAPHICS:
-//		startGraphicsOptionsMenu();
-//		break;
-	case CREDITS:
-		startCreditsScreen();
-		break;
-
- 	case MULTI:
-		startMultiPlayerMenu();		// goto multiplayer menu
-		break;
-	case PROTOCOL:
-		startConnectionScreen();
-		break;
-	case MULTIOPTION:
-		bUsingKeyboard = false;
-		if(oldMode == MULTILIMIT)
-		{
-			startMultiOptions(true);
-		}
-		else
-		{
-			startMultiOptions(false);
-		}
-		break;
-	case GAMEFIND:
-		bUsingKeyboard = false;
-		startGameFind();
-		break;
-	case MULTILIMIT:
-		bUsingKeyboard = false;
-		startLimitScreen();
-		break;
-	case KEYMAP:
-		bUsingKeyboard = false;
-		startKeyMapEditor(true);
-		break;
-
-	case STARTGAME:
-	case QUIT:
-	case LOADSAVEGAME:
-		bUsingKeyboard = false;
-		bLimiterLoaded = false;
-	case SHOWINTRO:
-		break;
-
-	default:
-		debug( LOG_FATAL, "Unknown title mode requested" );
-		abort();
-		break;
-	}
-
-	/* Set default frame rate limit */
-	setDefaultFrameRateLimit();
-
-	return;
+	return keyPressed(KEY_ESC);
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
 // Title Screen
-BOOL startTitleMenu(void)
+static BOOL startTitleMenu(void)
 {
 //	widgDelete(psWScreen,1);	// close reticule if it's open. MAGIC NUMBERS?
 	intRemoveReticule();
@@ -262,7 +105,6 @@ BOOL startTitleMenu(void)
 
 	return true;
 }
-
 
 BOOL runTitleMenu(void)
 {
@@ -302,8 +144,7 @@ BOOL runTitleMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Tutorial Menu
-
-BOOL startTutorialMenu(void)
+static BOOL startTutorialMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -361,8 +202,7 @@ BOOL runTutorialMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Single Player Menu
-
-void startSinglePlayerMenu(void)
+static void startSinglePlayerMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -379,27 +219,15 @@ void startSinglePlayerMenu(void)
 
 static void frontEndNewGame( void )
 {
-	switch(StartWithGame) {
-		case 1:
-			sstrcpy(aLevelName, DEFAULT_LEVEL);
-			seq_ClearSeqList();
-			seq_AddSeqToList("cam1/c001.ogg",NULL,"cam1/c001.txa",false);
-			seq_StartNextFullScreenVideo();
-			break;
-
-		case 2:
-			sstrcpy(aLevelName, "CAM_2A");
-			break;
-
-		case 3:
-			sstrcpy(aLevelName, "CAM_3A");
-			break;
-	}
+	sstrcpy(aLevelName, DEFAULT_LEVEL);
+	seq_ClearSeqList();
+	seq_AddSeqToList("cam1/c001.ogg", NULL, "cam1/c001.txa", false);
+	seq_StartNextFullScreenVideo();
 
 	changeTitleMode(STARTGAME);
 }
 
-void loadOK( void )
+static void loadOK( void )
 {
 	if(strlen(sRequestResult))
 	{
@@ -454,21 +282,13 @@ BOOL runSinglePlayerMenu(void)
 			case FRONTEND_LOADCAM2:
 				sstrcpy(aLevelName, "CAM_2A");
 				changeTitleMode(STARTGAME);
- #ifdef LOADINGBACKDROPS
-				AddLoadingBackdrop(true);
- #else
 				initLoadingScreen(true);
- #endif
 				break;
 
 			case FRONTEND_LOADCAM3:
 				sstrcpy(aLevelName, "CAM_3A");
 				changeTitleMode(STARTGAME);
- #ifdef LOADINGBACKDROPS
-				AddLoadingBackdrop(true);
- #else
 				initLoadingScreen(true);
- #endif
 				break;
 			case FRONTEND_LOADGAME:
 				addLoadSave(LOAD_FRONTEND,SaveGamePath,"gam",_("Load Saved Game"));	// change mode when loadsave returns
@@ -476,6 +296,7 @@ BOOL runSinglePlayerMenu(void)
 
 			case FRONTEND_SKIRMISH:
 				ingame.bHostSetup = true;
+				lastTitleMode = SINGLE;
 				changeTitleMode(MULTIOPTION);
 				break;
 
@@ -516,7 +337,7 @@ BOOL runSinglePlayerMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Multi Player Menu
-BOOL startMultiPlayerMenu(void)
+static BOOL startMultiPlayerMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -531,7 +352,6 @@ BOOL startMultiPlayerMenu(void)
 
 	return true;
 }
-
 
 BOOL runMultiPlayerMenu(void)
 {
@@ -548,6 +368,7 @@ BOOL runMultiPlayerMenu(void)
 		bMultiPlayer = true;
 		bMultiMessages = true;
 		game.type = SKIRMISH;		// needed?
+		lastTitleMode = MULTI;
 		changeTitleMode(MULTIOPTION);
 		break;
 	case FRONTEND_JOIN:
@@ -568,13 +389,18 @@ BOOL runMultiPlayerMenu(void)
 
 	widgDisplayScreen(psWScreen); // show the widgets currently running
 
+	if (CancelPressed())
+	{
+		changeTitleMode(TITLE);
+	}
+
 	return true;
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
 // Options Menu
-BOOL startOptionsMenu(void)
+static BOOL startOptionsMenu(void)
 {
 	sliderEnableDrag(true);
 
@@ -584,16 +410,15 @@ BOOL startOptionsMenu(void)
 
 	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY, _("OPTIONS"));
 	addTextButton(FRONTEND_GAMEOPTIONS,	FRONTEND_POS2X,FRONTEND_POS2Y, _("Game Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_GAMEOPTIONS2,FRONTEND_POS3X,FRONTEND_POS3Y, _("Graphics Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_GAMEOPTIONS4, FRONTEND_POS4X,FRONTEND_POS4Y, _("Video Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_GAMEOPTIONS3,	FRONTEND_POS5X,FRONTEND_POS5Y, _("Audio Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_GAMEOPTIONS5,	FRONTEND_POS6X,FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_GRAPHICSOPTIONS, FRONTEND_POS3X,FRONTEND_POS3Y, _("Graphics Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_VIDEOOPTIONS, FRONTEND_POS4X,FRONTEND_POS4Y, _("Video Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_AUDIOOPTIONS, FRONTEND_POS5X,FRONTEND_POS5Y, _("Audio Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_MOUSEOPTIONS, FRONTEND_POS6X,FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X,FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	return true;
 }
-
 
 BOOL runOptionsMenu(void)
 {
@@ -606,17 +431,17 @@ BOOL runOptionsMenu(void)
 	case FRONTEND_GAMEOPTIONS:
 		changeTitleMode(GAME);
 		break;
-	case FRONTEND_GAMEOPTIONS2:
-		changeTitleMode(GAME2);
+	case FRONTEND_GRAPHICSOPTIONS:
+		changeTitleMode(GRAPHICS_OPTIONS);
 		break;
-	case FRONTEND_GAMEOPTIONS3:
-		changeTitleMode(GAME3);
+	case FRONTEND_AUDIOOPTIONS:
+		changeTitleMode(AUDIO_OPTIONS);
 		break;
-	case FRONTEND_GAMEOPTIONS4:
-		changeTitleMode(GAME4);
+	case FRONTEND_VIDEOOPTIONS:
+		changeTitleMode(VIDEO_OPTIONS);
 		break;
-	case FRONTEND_GAMEOPTIONS5:
-		changeTitleMode(GAME5);
+	case FRONTEND_MOUSEOPTIONS:
+		changeTitleMode(MOUSE_OPTIONS);
 		break;
 	case FRONTEND_KEYMAP:
 		changeTitleMode(KEYMAP);
@@ -640,9 +465,10 @@ BOOL runOptionsMenu(void)
 	return true;
 }
 
+
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
-BOOL startGameOptions2Menu(void)
+static BOOL startGraphicsOptionsMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -728,8 +554,7 @@ BOOL startGameOptions2Menu(void)
 	return true;
 }
 
-// Graphics Options
-BOOL runGameOptions2Menu(void)
+BOOL runGraphicsOptionsMenu(void)
 {
 	UDWORD id;
 	int mode = 0;
@@ -757,13 +582,11 @@ BOOL runGameOptions2Menu(void)
 	{	// turn off crap fog, turn on vis fog.
 		debug(LOG_FOG, "runGameOptions2Menu: Fog of war ON, visual fog OFF");
 		war_SetFog(false);
-		avSetStatus(true);
 		widgSetString(psWScreen,FRONTEND_FOGTYPE_R, _("Fog Of War"));
 	}
 	else
 	{	// turn off vis fog, turn on normal crap fog.
 		debug(LOG_FOG, "runGameOptions2Menu: Fog of war OFF, visual fog ON");
-		avSetStatus(false);
 		war_SetFog(true);
 		widgSetString(psWScreen,FRONTEND_FOGTYPE_R, _("Mist"));
 	}
@@ -843,7 +666,7 @@ BOOL runGameOptions2Menu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Audio Options Menu
-BOOL startGameOptions3Menu(void)
+static BOOL startAudioOptionsMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -870,8 +693,8 @@ BOOL startGameOptions3Menu(void)
 
 	return true;
 }
-// Audio Options
-BOOL runGameOptions3Menu(void)
+
+BOOL runAudioOptionsMenu(void)
 {
 	UDWORD id;
 
@@ -907,7 +730,7 @@ BOOL runGameOptions3Menu(void)
 
 	// If close button pressed then return from this menu.
 	if(CancelPressed()) {
-		changeTitleMode(TITLE);
+		changeTitleMode(OPTIONS);
 	}
 
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
@@ -917,7 +740,7 @@ BOOL runGameOptions3Menu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Video Options
-BOOL startGameOptions4Menu(void)
+static BOOL startVideoOptionsMenu(void)
 {
 	// Generate the resolution string
 	snprintf(resolution, WIDG_MAXSTR, "%d x %d",
@@ -974,8 +797,7 @@ BOOL startGameOptions4Menu(void)
 	return true;
 }
 
-// Video Options
-BOOL runGameOptions4Menu(void)
+BOOL runVideoOptionsMenu(void)
 {
 	SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
 	UDWORD id = widgRunScreen(psWScreen);
@@ -1114,9 +936,10 @@ BOOL runGameOptions4Menu(void)
 	return true;
 }
 
+
 // ////////////////////////////////////////////////////////////////////////////
 // Mouse Options
-BOOL startGameOptions5Menu(void)
+static BOOL startMouseOptionsMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -1181,8 +1004,7 @@ BOOL startGameOptions5Menu(void)
 	return true;
 }
 
-// Mouse Options
-BOOL runGameOptions5Menu(void)
+BOOL runMouseOptionsMenu(void)
 {
 	UDWORD id = widgRunScreen(psWScreen);
 
@@ -1262,9 +1084,10 @@ BOOL runGameOptions5Menu(void)
 	return true;
 }
 
+
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
-BOOL startGameOptionsMenu(void)
+static BOOL startGameOptionsMenu(void)
 {
 	UDWORD	w, h;
 	int playercolor;
@@ -1445,7 +1268,7 @@ BOOL runGameOptionsMenu(void)
 
 	// If close button pressed then return from this menu.
 	if(CancelPressed()) {
-		changeTitleMode(TITLE);
+		changeTitleMode(OPTIONS);
 	}
 
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
@@ -1453,241 +1276,6 @@ BOOL runGameOptionsMenu(void)
 	return true;
 }
 
-
-
-// ////////////////////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
-// common widgets.
-
-void addBackdrop(void)
-{
-	W_FORMINIT		sFormInit;
-
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));				// Backdrop
-	sFormInit.formID = 0;
-	sFormInit.id = FRONTEND_BACKDROP;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)( (pie_GetVideoBufferWidth() - HIDDEN_FRONTEND_WIDTH)/2);
-	sFormInit.y = (SWORD)( (pie_GetVideoBufferHeight() - HIDDEN_FRONTEND_HEIGHT)/2);
-	sFormInit.width = HIDDEN_FRONTEND_WIDTH-1;
-	sFormInit.height = HIDDEN_FRONTEND_HEIGHT-1;
-	sFormInit.pDisplay = displayTitleBitmap;
-	widgAddForm(psWScreen, &sFormInit);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-
-void removeBackdrop(void)
-{
-	widgDelete( psWScreen, FRONTEND_BACKDROP );
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-
-void addBottomForm(void)
-{
-	W_FORMINIT		sFormInit;
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = FRONTEND_BOTFORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = FRONTEND_BOTFORMX;
-	sFormInit.y = FRONTEND_BOTFORMY;
-	sFormInit.width = FRONTEND_BOTFORMW;
-	sFormInit.height = FRONTEND_BOTFORMH;
-
-	sFormInit.pDisplay = intOpenPlainForm;
-	sFormInit.disableChildren = true;
-
-	widgAddForm(psWScreen, &sFormInit);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-
-void removeBottomForm( void )
-{
-	widgDelete( psWScreen, FRONTEND_BOTFORM );
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-
-void addTopForm(void)
-{
-	W_FORMINIT		sFormInit;
-
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = FRONTEND_TOPFORM;
-	sFormInit.style = WFORM_PLAIN;
-
-	if(titleMode == MULTIOPTION)
-	{
-		sFormInit.x		= FRONTEND_TOPFORM_WIDEX;
-		sFormInit.y		= FRONTEND_TOPFORM_WIDEY;
-		sFormInit.width = FRONTEND_TOPFORM_WIDEW;
-		sFormInit.height= FRONTEND_TOPFORM_WIDEH;
-	}
-	else
-
-	{
-		sFormInit.x		= FRONTEND_TOPFORMX;
-		sFormInit.y		= FRONTEND_TOPFORMY;
-		sFormInit.width = FRONTEND_TOPFORMW;
-		sFormInit.height= FRONTEND_TOPFORMH;
-	}
-	sFormInit.pDisplay = intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
-
-	sFormInit.formID= FRONTEND_TOPFORM;
-	sFormInit.id	= FRONTEND_LOGO;
-	sFormInit.x		= (short)((sFormInit.width/2)-(FRONTEND_LOGOW/2)); //115;
-	sFormInit.y		= (short)((sFormInit.height/2)-(FRONTEND_LOGOH/2));//18;
-	sFormInit.width = FRONTEND_LOGOW;
-	sFormInit.height= FRONTEND_LOGOH;
-	sFormInit.pDisplay= displayLogo;
-	widgAddForm(psWScreen, &sFormInit);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-
-void removeTopForm( void )
-{
-	widgDelete( psWScreen, FRONTEND_TOPFORM );
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)
-{
-	W_BUTINIT		sButInit;
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-
-	sButInit.formID = FRONTEND_BOTFORM;
-	sButInit.id = id;
-	sButInit.x = (short)PosX;
-	sButInit.y = (short)PosY;
-	sButInit.style = WBUT_PLAIN;
-
-	// Align
-	if ( !(style & WBUT_TXTCENTRE) )
-	{
-		sButInit.width = (short)(iV_GetTextWidth(txt)+10);
-		sButInit.x+=35;
-	}
-	else
-	{
-		sButInit.style |= WBUT_TXTCENTRE;
-		sButInit.width = FRONTEND_BUTWIDTH;
-	}
-
-	// Enable right clicks
-	if (style & WBUT_SECONDARY)
-	{
-		sButInit.style |= WBUT_SECONDARY;
-	}
-
-	sButInit.UserData = (style & WBUT_DISABLE); // store disable state
-
-	sButInit.height = FRONTEND_BUTHEIGHT;
-	sButInit.pDisplay = displayTextOption;
-	sButInit.FontID = font_large;
-	sButInit.pText = txt;
-	widgAddButton(psWScreen, &sButInit);
-	
-	// Disable button
-	if (style & WBUT_DISABLE)									
-	{
-		widgSetButtonState(psWScreen, id, WBUT_DISABLE);
-	}
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-void addText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
-{
-	W_LABINIT		sLabInit;
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
-	
-	sLabInit.formID = formID;
-	sLabInit.id = id;
-	sLabInit.x = (short)PosX;
-	sLabInit.y = (short)PosY;
-	sLabInit.style = (WLAB_PLAIN | WLAB_ALIGNCENTRE);
-	
-	// Align
-	sLabInit.width = MULTIOP_READY_WIDTH;
-	//sButInit.x+=35;
-	
-	sLabInit.height = FRONTEND_BUTHEIGHT;
-	sLabInit.pDisplay = displayText;
-	sLabInit.FontID = font_small;
-	sLabInit.pText = txt;
-	widgAddLabel(psWScreen, &sLabInit);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
-{
-	W_SLDINIT		sSldInit;
-
-	memset(&sSldInit, 0, sizeof(W_SLDINIT));
-	sSldInit.formID		= parent;
-	sSldInit.id			= id;
-	sSldInit.style		= WSLD_PLAIN;
-	sSldInit.x			= (short)x;
-	sSldInit.y			= (short)y;
-	sSldInit.width		= iV_GetImageWidth(IntImages,IMAGE_SLIDER_BIG);
-	sSldInit.height		= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
-	sSldInit.orientation= WSLD_LEFT;
-	sSldInit.numStops	= (UBYTE) stops;
-	sSldInit.barSize	= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
-	sSldInit.pos		= (UBYTE) pos;
-	sSldInit.pDisplay	= displayBigSlider;
-	sSldInit.pCallback  = intUpdateQuantitySlider;
-	widgAddSlider(psWScreen, &sSldInit);
-}
-void addFEAISlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
-{
-	W_SLDINIT		sSldInit;
-	
-	memset(&sSldInit, 0, sizeof(W_SLDINIT));
-	sSldInit.formID		= parent;
-	sSldInit.id			= id;
-	sSldInit.style		= WSLD_PLAIN;
-	sSldInit.x			= (short)x;
-	sSldInit.y			= (short)y;
-	sSldInit.width		= iV_GetImageWidth(IntImages,IMAGE_SLIDER_BIG);
-	sSldInit.height		= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
-	sSldInit.orientation= WSLD_LEFT;
-	sSldInit.numStops	= (UBYTE) stops;
-	sSldInit.barSize	= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
-	sSldInit.pos		= (UBYTE) pos;
-	sSldInit.pDisplay	= displayAISlider;
-	sSldInit.pCallback  = intUpdateQuantitySlider;
-	widgAddSlider(psWScreen, &sSldInit);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
-{
-	W_LABINIT	sLabInit;
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
-
-	sLabInit.formID = FRONTEND_BACKDROP;
-	sLabInit.id = id;
-	sLabInit.style = WLAB_PLAIN;
-	sLabInit.x = (short) PosX;
-	sLabInit.y = (short) PosY;
-	sLabInit.width = 30;
-	sLabInit.height = FRONTEND_BOTFORMH;
-
-	sLabInit.FontID = font_large;
-
-	sLabInit.pDisplay = displayTextAt270;
-	sLabInit.pText = txt;
-	widgAddLabel(psWScreen, &sLabInit);
-}
 
 // ////////////////////////////////////////////////////////////////////////////
 // drawing functions
@@ -1719,11 +1307,88 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 
 // ////////////////////////////////////////////////////////////////////////////
 // show warzone logo
-void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	iV_DrawImage(FrontImages,IMAGE_FE_LOGO,xOffset+psWidget->x,yOffset+psWidget->y);
 }
 
+
+// ////////////////////////////////////////////////////////////////////////////
+// show, well have a guess..
+static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	W_SLIDER *Slider = (W_SLIDER*)psWidget;
+	UDWORD x = xOffset+psWidget->x;
+	UDWORD y = yOffset+psWidget->y;
+	SWORD sx;
+
+	iV_DrawImage(IntImages,IMAGE_SLIDER_BIG,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
+
+	sx = (SWORD)((Slider->width-3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
+	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
+}
+
+static void displayAISlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	W_SLIDER *Slider = (W_SLIDER*)psWidget;
+	UDWORD x = xOffset+psWidget->x;
+	UDWORD y = yOffset+psWidget->y;
+	SWORD sx;
+
+	iV_DrawImage(IntImages,IMAGE_SLIDER_AI,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
+
+	sx = (SWORD)((Slider->width-3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
+	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
+}
+
+
+// ////////////////////////////////////////////////////////////////////////////
+// show text.
+static void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	SDWORD			fx,fy, fw;
+	W_LABEL		*psLab;
+
+	psLab = (W_LABEL *)psWidget;
+	iV_SetFont(psLab->FontID);
+
+	fw = iV_GetTextWidth(psLab->aText);
+	fy = yOffset + psWidget->y;
+
+	if (psWidget->style & WLAB_ALIGNCENTRE)	//check for centering, calculate offset.
+	{
+		fx = xOffset + psWidget->x + ((psWidget->width - fw) / 2);
+	}
+	else
+	{
+		fx = xOffset + psWidget->x;
+	}
+
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_DrawText( psLab->aText, fx, fy);
+
+	return;
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+// show text written on its side.
+static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	SDWORD		fx,fy;
+	W_LABEL		*psLab;
+
+	psLab = (W_LABEL *)psWidget;
+
+	iV_SetFont(font_large);
+
+	fx = xOffset + psWidget->x;
+	fy = yOffset + psWidget->y + iV_GetTextWidth(psLab->aText) ;
+
+	iV_SetTextColour(WZCOL_GREY);
+	iV_DrawTextRotated(psLab->aText, fx+2, fy+2, 270.f);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_DrawTextRotated(psLab->aText, fx, fy, 270.f);
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // show a text option.
@@ -1777,78 +1442,320 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 
 
 // ////////////////////////////////////////////////////////////////////////////
-// show text.
-void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+// ////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
+// common widgets.
+
+void addBackdrop(void)
 {
-	SDWORD			fx,fy, fw;
-	W_LABEL		*psLab;
-	
-	psLab = (W_LABEL *)psWidget;
-	iV_SetFont(psLab->FontID);
-	
-  	fw = iV_GetTextWidth(psLab->aText);
-	fy = yOffset + psWidget->y;
-	
-	if (psWidget->style & WLAB_ALIGNCENTRE)	//check for centering, calculate offset.
+	W_FORMINIT		sFormInit;
+
+	memset(&sFormInit, 0, sizeof(W_FORMINIT));				// Backdrop
+	sFormInit.formID = 0;
+	sFormInit.id = FRONTEND_BACKDROP;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.x = (SWORD)( (pie_GetVideoBufferWidth() - HIDDEN_FRONTEND_WIDTH)/2);
+	sFormInit.y = (SWORD)( (pie_GetVideoBufferHeight() - HIDDEN_FRONTEND_HEIGHT)/2);
+	sFormInit.width = HIDDEN_FRONTEND_WIDTH-1;
+	sFormInit.height = HIDDEN_FRONTEND_HEIGHT-1;
+	sFormInit.pDisplay = displayTitleBitmap;
+	widgAddForm(psWScreen, &sFormInit);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+void addTopForm(void)
+{
+	W_FORMINIT		sFormInit;
+
+	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+
+	sFormInit.formID = FRONTEND_BACKDROP;
+	sFormInit.id = FRONTEND_TOPFORM;
+	sFormInit.style = WFORM_PLAIN;
+
+	if(titleMode == MULTIOPTION)
 	{
-		fx = xOffset + psWidget->x + ((psWidget->width - fw) / 2);
+		sFormInit.x		= FRONTEND_TOPFORM_WIDEX;
+		sFormInit.y		= FRONTEND_TOPFORM_WIDEY;
+		sFormInit.width = FRONTEND_TOPFORM_WIDEW;
+		sFormInit.height= FRONTEND_TOPFORM_WIDEH;
+	}
+	else
+
+	{
+		sFormInit.x		= FRONTEND_TOPFORMX;
+		sFormInit.y		= FRONTEND_TOPFORMY;
+		sFormInit.width = FRONTEND_TOPFORMW;
+		sFormInit.height= FRONTEND_TOPFORMH;
+	}
+	sFormInit.pDisplay = intDisplayPlainForm;
+	widgAddForm(psWScreen, &sFormInit);
+
+	sFormInit.formID= FRONTEND_TOPFORM;
+	sFormInit.id	= FRONTEND_LOGO;
+	sFormInit.x		= (short)((sFormInit.width/2)-(FRONTEND_LOGOW/2)); //115;
+	sFormInit.y		= (short)((sFormInit.height/2)-(FRONTEND_LOGOH/2));//18;
+	sFormInit.width = FRONTEND_LOGOW;
+	sFormInit.height= FRONTEND_LOGOH;
+	sFormInit.pDisplay= displayLogo;
+	widgAddForm(psWScreen, &sFormInit);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+void addBottomForm(void)
+{
+	W_FORMINIT		sFormInit;
+	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+
+	sFormInit.formID = FRONTEND_BACKDROP;
+	sFormInit.id = FRONTEND_BOTFORM;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.x = FRONTEND_BOTFORMX;
+	sFormInit.y = FRONTEND_BOTFORMY;
+	sFormInit.width = FRONTEND_BOTFORMW;
+	sFormInit.height = FRONTEND_BOTFORMH;
+
+	sFormInit.pDisplay = intOpenPlainForm;
+	sFormInit.disableChildren = true;
+
+	widgAddForm(psWScreen, &sFormInit);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+void addText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
+{
+	W_LABINIT		sLabInit;
+	memset(&sLabInit, 0, sizeof(W_LABINIT));
+
+	sLabInit.formID = formID;
+	sLabInit.id = id;
+	sLabInit.x = (short)PosX;
+	sLabInit.y = (short)PosY;
+	sLabInit.style = (WLAB_PLAIN | WLAB_ALIGNCENTRE);
+
+	// Align
+	sLabInit.width = MULTIOP_READY_WIDTH;
+	//sButInit.x+=35;
+
+	sLabInit.height = FRONTEND_BUTHEIGHT;
+	sLabInit.pDisplay = displayText;
+	sLabInit.FontID = font_small;
+	sLabInit.pText = txt;
+	widgAddLabel(psWScreen, &sLabInit);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
+{
+	W_LABINIT	sLabInit;
+	memset(&sLabInit, 0, sizeof(W_LABINIT));
+
+	sLabInit.formID = FRONTEND_BACKDROP;
+	sLabInit.id = id;
+	sLabInit.style = WLAB_PLAIN;
+	sLabInit.x = (short) PosX;
+	sLabInit.y = (short) PosY;
+	sLabInit.width = 30;
+	sLabInit.height = FRONTEND_BOTFORMH;
+
+	sLabInit.FontID = font_large;
+
+	sLabInit.pDisplay = displayTextAt270;
+	sLabInit.pText = txt;
+	widgAddLabel(psWScreen, &sLabInit);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)
+{
+	W_BUTINIT		sButInit;
+	memset(&sButInit, 0, sizeof(W_BUTINIT));
+
+	sButInit.formID = FRONTEND_BOTFORM;
+	sButInit.id = id;
+	sButInit.x = (short)PosX;
+	sButInit.y = (short)PosY;
+	sButInit.style = WBUT_PLAIN;
+
+	// Align
+	if ( !(style & WBUT_TXTCENTRE) )
+	{
+		sButInit.width = (short)(iV_GetTextWidth(txt)+10);
+		sButInit.x+=35;
 	}
 	else
 	{
-		fx = xOffset + psWidget->x;
+		sButInit.style |= WBUT_TXTCENTRE;
+		sButInit.width = FRONTEND_BUTWIDTH;
 	}
+
+	// Enable right clicks
+	if (style & WBUT_SECONDARY)
+	{
+		sButInit.style |= WBUT_SECONDARY;
+	}
+
+	sButInit.UserData = (style & WBUT_DISABLE); // store disable state
+
+	sButInit.height = FRONTEND_BUTHEIGHT;
+	sButInit.pDisplay = displayTextOption;
+	sButInit.FontID = font_large;
+	sButInit.pText = txt;
+	widgAddButton(psWScreen, &sButInit);
 	
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText( psLab->aText, fx, fy);
+	// Disable button
+	if (style & WBUT_DISABLE)									
+	{
+		widgSetButtonState(psWScreen, id, WBUT_DISABLE);
+	}
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
+{
+	W_SLDINIT		sSldInit;
+
+	memset(&sSldInit, 0, sizeof(W_SLDINIT));
+	sSldInit.formID		= parent;
+	sSldInit.id			= id;
+	sSldInit.style		= WSLD_PLAIN;
+	sSldInit.x			= (short)x;
+	sSldInit.y			= (short)y;
+	sSldInit.width		= iV_GetImageWidth(IntImages,IMAGE_SLIDER_BIG);
+	sSldInit.height		= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
+	sSldInit.orientation= WSLD_LEFT;
+	sSldInit.numStops	= (UBYTE) stops;
+	sSldInit.barSize	= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
+	sSldInit.pos		= (UBYTE) pos;
+	sSldInit.pDisplay	= displayBigSlider;
+	sSldInit.pCallback  = intUpdateQuantitySlider;
+	widgAddSlider(psWScreen, &sSldInit);
+}
+
+void addFEAISlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
+{
+	W_SLDINIT		sSldInit;
 	
+	memset(&sSldInit, 0, sizeof(W_SLDINIT));
+	sSldInit.formID		= parent;
+	sSldInit.id			= id;
+	sSldInit.style		= WSLD_PLAIN;
+	sSldInit.x			= (short)x;
+	sSldInit.y			= (short)y;
+	sSldInit.width		= iV_GetImageWidth(IntImages,IMAGE_SLIDER_BIG);
+	sSldInit.height		= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
+	sSldInit.orientation= WSLD_LEFT;
+	sSldInit.numStops	= (UBYTE) stops;
+	sSldInit.barSize	= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
+	sSldInit.pos		= (UBYTE) pos;
+	sSldInit.pDisplay	= displayAISlider;
+	sSldInit.pCallback  = intUpdateQuantitySlider;
+	widgAddSlider(psWScreen, &sSldInit);
+}
+
+
+// ////////////////////////////////////////////////////////////////////////////
+// Change Mode
+void changeTitleMode(tMode mode)
+{
+	tMode oldMode;
+
+	widgDelete(psWScreen, FRONTEND_BACKDROP);		// delete backdrop.
+
+	oldMode = titleMode;							// store old mode
+	titleMode = mode;								// set new mode
+
+	switch(mode)
+	{
+/*	case DEMOMODE:// demo case. remove for release
+		startDemoMenu();
+		break;
+	case VIDEO:
+		startVideoOptionsMenu();
+		break;
+*/
+	case SINGLE:
+		startSinglePlayerMenu();
+		break;
+	case GAME:
+		startGameOptionsMenu();
+		break;
+
+	case GRAPHICS_OPTIONS:
+		startGraphicsOptionsMenu();
+		break;
+
+	case AUDIO_OPTIONS:
+		startAudioOptionsMenu();
+		break;
+
+	case VIDEO_OPTIONS:
+		startVideoOptionsMenu();
+		break;
+
+	case MOUSE_OPTIONS:
+		startMouseOptionsMenu();
+		break;
+
+	case TUTORIAL:
+		startTutorialMenu();
+		break;
+	case OPTIONS:
+		startOptionsMenu();
+		break;
+	case TITLE:
+		startTitleMenu();
+		break;
+
+//	case GRAPHICS:
+//		startGraphicsOptionsMenu();
+//		break;
+	case CREDITS:
+		startCreditsScreen();
+		break;
+
+ 	case MULTI:
+		startMultiPlayerMenu();		// goto multiplayer menu
+		break;
+	case PROTOCOL:
+		startConnectionScreen();
+		break;
+	case MULTIOPTION:
+		if(oldMode == MULTILIMIT)
+		{
+			startMultiOptions(true);
+		}
+		else
+		{
+			startMultiOptions(false);
+		}
+		break;
+	case GAMEFIND:
+		startGameFind();
+		break;
+	case MULTILIMIT:
+		startLimitScreen();
+		break;
+	case KEYMAP:
+		startKeyMapEditor(true);
+		break;
+
+	case STARTGAME:
+	case QUIT:
+	case LOADSAVEGAME:
+		bLimiterLoaded = false;
+	case SHOWINTRO:
+		break;
+
+	default:
+		debug( LOG_FATAL, "Unknown title mode requested" );
+		abort();
+		break;
+	}
+
+	/* Set default frame rate limit */
+	setDefaultFrameRateLimit();
+
 	return;
 }
 
-
-// ////////////////////////////////////////////////////////////////////////////
-// show text written on its side.
-void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
-{
-	SDWORD		fx,fy;
-	W_LABEL		*psLab;
-
-	psLab = (W_LABEL *)psWidget;
-
-	iV_SetFont(font_large);
-
-	fx = xOffset + psWidget->x;
-	fy = yOffset + psWidget->y + iV_GetTextWidth(psLab->aText) ;
-
-	iV_SetTextColour(WZCOL_GREY);
-	iV_DrawTextRotated(psLab->aText, fx+2, fy+2, 270.f);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawTextRotated(psLab->aText, fx, fy, 270.f);
-}
-
-
-// ////////////////////////////////////////////////////////////////////////////
-// show, well have a guess..
-static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
-{
-	W_SLIDER *Slider = (W_SLIDER*)psWidget;
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
-	SWORD sx;
-
-	iV_DrawImage(IntImages,IMAGE_SLIDER_BIG,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
-
-	sx = (SWORD)((Slider->width-3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
-	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
-}
-static void displayAISlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
-{
-	W_SLIDER *Slider = (W_SLIDER*)psWidget;
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
-	SWORD sx;
-
-	iV_DrawImage(IntImages,IMAGE_SLIDER_AI,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
-
-	sx = (SWORD)((Slider->width-3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
-	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
-}

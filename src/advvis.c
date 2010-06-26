@@ -36,13 +36,6 @@ static BOOL bRevealActive = false;
 
 
 // ------------------------------------------------------------------------------------
-void	avSetStatus(BOOL var)
-{
-	debug(LOG_FOG, "avSetStatus: Setting fog of war %s", var ? "ON" : "OFF");
-	bRevealActive = var;
-}
-
-// ------------------------------------------------------------------------------------
 void	avUpdateTiles( void )
 {
 	const int len = mapHeight * mapWidth;

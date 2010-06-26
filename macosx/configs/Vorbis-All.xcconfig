@@ -1,6 +1,7 @@
 // Vorbis settings for all configurations
 
 
+GCC_VERSION = 4.2
 INSTALL_PATH = @executable_path/../Frameworks
 DYLIB_COMPATIBILITY_VERSION = 1
 DYLIB_CURRENT_VERSION = 1

@@ -47,57 +47,47 @@ typedef enum _title_mode {
 	QUIT,			// 14 leaving game
 	LOADSAVEGAME,	// 15 loading a save game
 	KEYMAP,			// 16 keymap editor
-	GAME2,			// 17 second options menu.
-	GAME3,			// 18 third options menu.
-	GAME4,			// 19 fourth options menu.
-	GAME5,			// 20 fifth options menu (mouse)
+	GRAPHICS_OPTIONS,       // 17 graphics options menu
+	AUDIO_OPTIONS,          // 18 audio options menu
+	VIDEO_OPTIONS,          // 19 video options menu
+	MOUSE_OPTIONS,          // 20 mouse options menu
 } tMode;
 
 extern tMode titleMode;					// the global case
-
-#define DEFAULT_LEVEL	"CAM_1A"
-#define TUTORIAL_LEVEL	"TUTORIAL3"
+extern tMode lastTitleMode;
 
 #define MAX_LEVEL_NAME_SIZE	(256)
 
 extern char	aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
-extern BOOL	bUsingKeyboard;	// to disable mouse pointer when using keys.
-extern BOOL	bUsingSlider;
-
 extern BOOL	bLimiterLoaded;
 
-extern void	changeTitleMode			(tMode mode);
-extern BOOL startTitleMenu			(void);
-extern BOOL runTitleMenu			(void);
-extern BOOL runSinglePlayerMenu		(void);
-extern BOOL runMultiPlayerMenu		(void);
-extern BOOL runGameOptionsMenu		(void);
-extern BOOL runDemoMenu				(void);
-extern BOOL runOptionsMenu			(void);
-extern BOOL runTutorialMenu			(void);
 
-extern void processFrontendSnap		(BOOL bHideCursor);
+void changeTitleMode(tMode mode);
+BOOL runTitleMenu(void);
+BOOL runSinglePlayerMenu(void);
+BOOL runMultiPlayerMenu(void);
+BOOL runGameOptionsMenu(void);
+BOOL runOptionsMenu(void);
+BOOL runGraphicsOptionsMenu(void);
+BOOL runAudioOptionsMenu(void);
+BOOL runVideoOptionsMenu(void);
+BOOL runMouseOptionsMenu(void);
+BOOL runTutorialMenu(void);
 
-extern void addTopForm				(void);
-extern void addBottomForm			(void);
-extern void addBackdrop				(void);
-extern void	addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
-extern void	addText					(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID);
-extern void	addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt);
-extern void addFESlider				(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
-extern void addFEAISlider			(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
+void addTopForm(void);
+void addBottomForm(void);
+void addBackdrop(void);
+void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
+void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID);
+void addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
+void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
+void addFEAISlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
 
-extern void	displayLogo				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-extern void	displayTextOption		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-extern void loadOK					(void);
-extern BOOL CancelPressed			(void);
+BOOL CancelPressed(void);
 
-BOOL		runGameOptions2Menu		(void);
-BOOL		runGameOptions3Menu		(void);
-BOOL		runGameOptions4Menu		(void);
-BOOL		runGameOptions5Menu		(void);
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines.
@@ -112,7 +102,6 @@ BOOL		runGameOptions5Menu		(void);
 #define FRONTEND_TOPFORM_WIDEY	10
 #define FRONTEND_TOPFORM_WIDEW	588
 #define FRONTEND_TOPFORM_WIDEH	150
-
 
 
 #define FRONTEND_BOTFORMX		80
@@ -194,7 +183,7 @@ enum
 	FE_P6,								// player 6 buton
 	FE_P7,								// player 7 buton
 
-	FRONTEND_GAMEOPTIONS	= 21000,	// Game Options menu 1
+	FRONTEND_GAMEOPTIONS = 21000,           // Game Options menu
 	FRONTEND_LANGUAGE,
 	FRONTEND_LANGUAGE_R,
 	FRONTEND_COLOUR,
@@ -203,7 +192,7 @@ enum
 	FRONTEND_SCROLLSPEED_SL,
 	FRONTEND_SCROLLSPEED,				// screen scroll speed
 
-	FRONTEND_GAMEOPTIONS2	= 22000,	// Graphics Options Menu 2
+	FRONTEND_GRAPHICSOPTIONS = 22000,       // Graphics Options Menu
 	FRONTEND_SSHAKE,
 	FRONTEND_SSHAKE_R,
 	FRONTEND_FMVMODE,
@@ -215,7 +204,7 @@ enum
 	FRONTEND_FOGTYPE,
 	FRONTEND_FOGTYPE_R,
 
-	FRONTEND_GAMEOPTIONS3	= 23000,	// Audio Options Menu 3
+	FRONTEND_AUDIOOPTIONS = 23000,          // Audio Options Menu
 	FRONTEND_3D_FX,						// 3d sound volume
 	FRONTEND_FX,						// 2d (voice) sound volume
 	FRONTEND_MUSIC,						// music volume
@@ -223,7 +212,7 @@ enum
 	FRONTEND_FX_SL,
 	FRONTEND_MUSIC_SL,
 
-	FRONTEND_GAMEOPTIONS4	= 24000,	// video Options Menu 4
+	FRONTEND_VIDEOOPTIONS = 24000,          // video Options Menu
 	FRONTEND_WINDOWMODE,
 	FRONTEND_WINDOWMODE_R,
 	FRONTEND_RESOLUTION,
@@ -234,7 +223,7 @@ enum
 	FRONTEND_VSYNC,
 	FRONTEND_VSYNC_R,
 
-	FRONTEND_GAMEOPTIONS5	= 25000,	// Mouse Options Menu 5
+	FRONTEND_MOUSEOPTIONS = 25000,          // Mouse Options Menu
 	FRONTEND_CURSORMODE,
 	FRONTEND_CURSORMODE_R,
 	FRONTEND_TRAP,

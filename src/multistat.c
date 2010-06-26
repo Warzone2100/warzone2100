@@ -40,18 +40,14 @@ static PLAYERSTATS playerStats[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////////
 // Get Player's stats
-PLAYERSTATS getMultiStats(UDWORD player, BOOL bLocal)
+PLAYERSTATS getMultiStats(UDWORD player)
 {
-	static PLAYERSTATS stat;
-
-	// Copy over the data from our local array
-	memcpy(&stat, &playerStats[player], sizeof(stat));
-
-	return stat;
+	return playerStats[player];
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // Set Player's stats
+// send stats to all players when bLocal is false
 BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats, BOOL bLocal)
 {
 	uint32_t playerIndex = (uint32_t)player;
@@ -206,7 +202,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 	// Host controls self + AI, so update the scores for them as well.
 	if(myResponsibility(attacker) && NetPlay.bComms)
 	{
-		st = getMultiStats(attacker,true);	// get stats
+		st = getMultiStats(attacker);	// get stats
 		if(NetPlay.bComms)
 		{
 			st.scoreToAdd += (2*inflicted);
@@ -226,7 +222,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 	// Host controls self + AI, so update the scores for them as well.
 	if(myResponsibility(defender) && NetPlay.bComms)
 	{
-		st = getMultiStats(defender,true);	// get stats
+		st = getMultiStats(defender);	// get stats
 		if(NetPlay.bComms)
 		{
 			st.scoreToAdd  -= inflicted;
@@ -252,7 +248,7 @@ void updateMultiStatsGames(void)
 	{
 		return;
 	}
-	st  = getMultiStats(selectedPlayer,true);
+	st  = getMultiStats(selectedPlayer);
 	st.played ++;
 	setMultiStats(selectedPlayer, st, true);
 }
@@ -265,7 +261,7 @@ void updateMultiStatsWins(void)
 	{
 		return;
 	}
-	st  = getMultiStats(selectedPlayer,true);
+	st  = getMultiStats(selectedPlayer);
 	st.wins ++;
 	setMultiStats(selectedPlayer, st, true);
 }
@@ -278,7 +274,7 @@ void updateMultiStatsLoses(void)
 	{
 		return;
 	}
-	st  = getMultiStats(selectedPlayer,true);
+	st  = getMultiStats(selectedPlayer);
 	++st.losses;
 	setMultiStats(selectedPlayer, st, true);
 }
@@ -296,7 +292,7 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 	// Host controls self + AI, so update the scores for them as well.
 	if(myResponsibility(player) && NetPlay.bComms)
 	{
-		st  = getMultiStats(player,true);
+		st  = getMultiStats(player);
 
 		if(NetPlay.bComms)
 		{

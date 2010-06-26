@@ -759,8 +759,8 @@ BOOL sendScoreCheck(void)
 			// Host controls AI's scores + his own...
 			if (myResponsibility(i))
 			{
-				// Update local score
-				stats = getMultiStats(i, true);
+				// Update score
+				stats = getMultiStats(i);
 
 				// Add recently scored points
 				stats.recentKills += stats.killsToAdd;

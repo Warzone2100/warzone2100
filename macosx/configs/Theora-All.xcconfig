@@ -10,3 +10,4 @@ INFOPLIST_FILE = Resources/theora/Info.plist
 PRODUCT_NAME = Theora
 HEADER_SEARCH_PATHS = external/libtheora/lib external/libtheora/include/** $(inherited)
 GCC_MODEL_TUNING = G5
+WARNING_CFLAGS = -Wno-parentheses // Silence warnings that are not ours

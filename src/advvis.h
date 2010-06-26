@@ -33,7 +33,6 @@ UDWORD avGetObjLightLevel(BASE_OBJECT *psObj, UDWORD origLevel);
 void setRevealStatus(BOOL val);
 BOOL getRevealStatus(void);
 void preProcessVisibility(void);
-void avSetStatus(BOOL var);
 
 #ifdef __cplusplus
 }

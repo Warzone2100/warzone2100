@@ -11507,44 +11507,38 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
  */
 BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 {
-	SAVE_STRUCTURE				sSave;  // close eyes now.
-	SAVE_STRUCTURE				*psSaveStructure = &sSave; // assumes save_struct is larger than all previous ones...
-	SAVE_STRUCTURE_V2			*psSaveStructure2 = (SAVE_STRUCTURE_V2*)&sSave;
-	SAVE_STRUCTURE_V12			*psSaveStructure12= (SAVE_STRUCTURE_V12*)&sSave;
-	SAVE_STRUCTURE_V14			*psSaveStructure14= (SAVE_STRUCTURE_V14*)&sSave;
-	SAVE_STRUCTURE_V15			*psSaveStructure15= (SAVE_STRUCTURE_V15*)&sSave;
-	SAVE_STRUCTURE_V17			*psSaveStructure17= (SAVE_STRUCTURE_V17*)&sSave;
-	SAVE_STRUCTURE_V20			*psSaveStructure20= (SAVE_STRUCTURE_V20*)&sSave;
-										// ok you can open them again..
+	SAVE_STRUCTURE sSave;  // close eyes now.
+	// assumes save_struct is larger than all previous ones...
+	SAVE_STRUCTURE_V2 *psSaveStructure2 = (SAVE_STRUCTURE_V2*)&sSave;
+	SAVE_STRUCTURE_V20 *psSaveStructure20= (SAVE_STRUCTURE_V20*)&sSave;
+	// ok you can open them again..
 
-	STRUCT_SAVEHEADER		*psHeader;
-	char			aFileName[256];
-	UDWORD			xx,yy,count,fileSize,sizeOfSaveStruture;
-	UDWORD	playerid =0;
-	char			*pFileData = NULL;
-	LEVEL_DATASET	*psLevel;
+	STRUCT_SAVEHEADER *psHeader;
+	char aFileName[256];
+	UDWORD xx, yy, count, fileSize, sizeOfSaveStructure = sizeof(SAVE_STRUCTURE);
+	UDWORD playerid = 0;
+	char *pFileData = NULL;
+	LEVEL_DATASET *psLevel;
 	PIELIGHT color = WZCOL_BLACK ;
 	bool HQ = false;
 
-
 	psLevel = levFindDataSet(game.map);
-	strcpy(aFileName,psLevel->apDataFiles[0]);
-	aFileName[strlen(aFileName)-4] = '\0';
+	strcpy(aFileName, psLevel->apDataFiles[0]);
+	aFileName[strlen(aFileName) - 4] = '\0';
 	strcat(aFileName, "/struct.bjo");
 
 	pFileData = fileLoadBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
-		debug( LOG_NEVER, "plotStructurePreview16: Fail1\n" );
+		debug(LOG_NEVER, "Failed to load file to buffer.");
 	}
 
 	/* Check the file type */
 	psHeader = (STRUCT_SAVEHEADER *)pFileData;
 	if (psHeader->aFileType[0] != 's' || psHeader->aFileType[1] != 't' ||
-		psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'u')
+	    psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'u')
 	{
-		debug( LOG_ERROR, "plotStructurePreview16: Incorrect file type" );
-
+		debug(LOG_ERROR, "Invalid file type.");
 		return false;
 	}
 
@@ -11557,68 +11551,46 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 
 	if (psHeader->version < VERSION_12)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V2);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V2);
 	}
 	else if (psHeader->version < VERSION_14)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V12);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V12);
 	}
 	else if (psHeader->version <= VERSION_14)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V14);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V14);
 	}
 	else if (psHeader->version <= VERSION_16)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V15);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V15);
 	}
 	else if (psHeader->version <= VERSION_19)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V17);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V17);
 	}
 	else if (psHeader->version <= VERSION_20)
 	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE_V20);
+		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V20);
 	}
-	else
-	{
-		sizeOfSaveStruture = sizeof(SAVE_STRUCTURE);
-	}
-
 
 	/* Load in the structure data */
-	for (count = 0; count < psHeader-> quantity; count ++, pFileData += sizeOfSaveStruture)
+	for (count = 0; count < psHeader->quantity; count++, pFileData += sizeOfSaveStructure)
 	{
-		if (psHeader->version < VERSION_12)
-		{
-			memcpy(psSaveStructure2, pFileData, sizeOfSaveStruture);
+		// we are specifically looking for the HQ, and it seems this is the only way to
+		// find it via parsing map.
+		// We store the coordinates of the structure, into a array for as many players as are on the map.
 
-			/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
-			endian_sdword(&psSaveStructure2->currentBuildPts);
-			endian_udword(&psSaveStructure2->body);
-			endian_udword(&psSaveStructure2->armour);
-			endian_udword(&psSaveStructure2->resistance);
-			endian_udword(&psSaveStructure2->dummy1);
-			endian_udword(&psSaveStructure2->subjectInc);
-			endian_udword(&psSaveStructure2->timeStarted);
-			endian_udword(&psSaveStructure2->output);
-			endian_udword(&psSaveStructure2->capacity);
-			endian_udword(&psSaveStructure2->quantity);
-			/* OBJECT_SAVE_V19 */
-			endian_udword(&psSaveStructure2->id);
+		if (psHeader->version <= VERSION_19)
+		{
+			// All versions up to 19 are compatible with V2.
+			memcpy(psSaveStructure2, pFileData, sizeof(SAVE_STRUCTURE_V2));
+
 			endian_udword(&psSaveStructure2->x);
 			endian_udword(&psSaveStructure2->y);
-			endian_udword(&psSaveStructure2->z);
-			endian_udword(&psSaveStructure2->direction);
 			endian_udword(&psSaveStructure2->player);
-			endian_udword(&psSaveStructure2->burnStart);
-			endian_udword(&psSaveStructure2->burnDamage);
-
-			// we are specifically looking for the HQ, and it seems this is the only way to
-			// find it via parsing map.
-			// We store the coordinates of the structure, into a array for as many players as are on the map.
-			// all map versions follow this pattern, and I will not comment the other routines.
 			playerid = psSaveStructure2->player;
-			if(strncmp(psSaveStructure2->name,"A0CommandCentre",15)  == 0 )
+			if (strncmp(psSaveStructure2->name, "A0CommandCentre", 15) == 0)
 			{
 				HQ = true;
 				xx = playeridpos[playerid].x = map_coord(psSaveStructure2->x);
@@ -11631,231 +11603,21 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 				yy = map_coord(psSaveStructure2->y);
 			}
 		}
-		else if (psHeader->version < VERSION_14)
+		else
 		{
-			memcpy(psSaveStructure12, pFileData, sizeOfSaveStruture);
+			// All newer versions are compatible with V20.
+			memcpy(psSaveStructure20, pFileData, sizeof(SAVE_STRUCTURE_V20));
 
-			/* STRUCTURE_SAVE_V12 includes STRUCTURE_SAVE_V2 */
-			endian_udword(&psSaveStructure12->factoryInc);
-			endian_udword(&psSaveStructure12->powerAccrued);
-			endian_udword(&psSaveStructure12->droidTimeStarted);
-			endian_udword(&psSaveStructure12->timeToBuild);
-			endian_udword(&psSaveStructure12->timeStartHold);
-			/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
-			endian_sdword(&psSaveStructure12->currentBuildPts);
-			endian_udword(&psSaveStructure12->body);
-			endian_udword(&psSaveStructure12->armour);
-			endian_udword(&psSaveStructure12->resistance);
-			endian_udword(&psSaveStructure12->dummy1);
-			endian_udword(&psSaveStructure12->subjectInc);
-			endian_udword(&psSaveStructure12->timeStarted);
-			endian_udword(&psSaveStructure12->output);
-			endian_udword(&psSaveStructure12->capacity);
-			endian_udword(&psSaveStructure12->quantity);
-			/* OBJECT_SAVE_V19 */
-			endian_udword(&psSaveStructure12->id);
-			endian_udword(&psSaveStructure12->x);
-			endian_udword(&psSaveStructure12->y);
-			endian_udword(&psSaveStructure12->z);
-			endian_udword(&psSaveStructure12->direction);
-			endian_udword(&psSaveStructure12->player);
-			endian_udword(&psSaveStructure12->burnStart);
-			endian_udword(&psSaveStructure12->burnDamage);
-			playerid = psSaveStructure12->player;
-
-			if(strncmp(psSaveStructure12->name,"A0CommandCentre",15)  == 0 )
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x  = map_coord(psSaveStructure12->x);
-				yy = playeridpos[playerid].y  = map_coord(psSaveStructure12->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure12->x);
-				yy = map_coord(psSaveStructure12->y);
-			}
-		}
-		else if (psHeader->version <= VERSION_14)
-		{
-			memcpy(psSaveStructure14, pFileData, sizeOfSaveStruture);
-
-			/* STRUCTURE_SAVE_V14 includes STRUCTURE_SAVE_V12 */
-			/* STRUCTURE_SAVE_V12 includes STRUCTURE_SAVE_V2 */
-			endian_udword(&psSaveStructure14->factoryInc);
-			endian_udword(&psSaveStructure14->powerAccrued);
-			endian_udword(&psSaveStructure14->droidTimeStarted);
-			endian_udword(&psSaveStructure14->timeToBuild);
-			endian_udword(&psSaveStructure14->timeStartHold);
-			/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
-			endian_sdword(&psSaveStructure14->currentBuildPts);
-			endian_udword(&psSaveStructure14->body);
-			endian_udword(&psSaveStructure14->armour);
-			endian_udword(&psSaveStructure14->resistance);
-			endian_udword(&psSaveStructure14->dummy1);
-			endian_udword(&psSaveStructure14->subjectInc);
-			endian_udword(&psSaveStructure14->timeStarted);
-			endian_udword(&psSaveStructure14->output);
-			endian_udword(&psSaveStructure14->capacity);
-			endian_udword(&psSaveStructure14->quantity);
-			/* OBJECT_SAVE_V19 */
-			endian_udword(&psSaveStructure14->id);
-			endian_udword(&psSaveStructure14->x);
-			endian_udword(&psSaveStructure14->y);
-			endian_udword(&psSaveStructure14->z);
-			endian_udword(&psSaveStructure14->direction);
-			endian_udword(&psSaveStructure14->player);
-			endian_udword(&psSaveStructure14->burnStart);
-			endian_udword(&psSaveStructure14->burnDamage);
-			playerid = psSaveStructure14->player;
-
-			if(strncmp(psSaveStructure14->name,"A0CommandCentre",15)  == 0 )
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x  = map_coord(psSaveStructure14->x);
-				yy = playeridpos[playerid].y  = map_coord(psSaveStructure14->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure14->x);
-				yy = map_coord(psSaveStructure14->y);
-			}
-		}
-		else if (psHeader->version <= VERSION_16)
-		{
-			memcpy(psSaveStructure15, pFileData, sizeOfSaveStruture);
-
-			/* STRUCTURE_SAVE_V15 includes STRUCTURE_SAVE_V14 */
-			/* STRUCTURE_SAVE_V14 includes STRUCTURE_SAVE_V12 */
-			/* STRUCTURE_SAVE_V12 includes STRUCTURE_SAVE_V2 */
-			endian_udword(&psSaveStructure15->factoryInc);
-			endian_udword(&psSaveStructure15->powerAccrued);
-			endian_udword(&psSaveStructure15->droidTimeStarted);
-			endian_udword(&psSaveStructure15->timeToBuild);
-			endian_udword(&psSaveStructure15->timeStartHold);
-			/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
-			endian_sdword(&psSaveStructure15->currentBuildPts);
-			endian_udword(&psSaveStructure15->body);
-			endian_udword(&psSaveStructure15->armour);
-			endian_udword(&psSaveStructure15->resistance);
-			endian_udword(&psSaveStructure15->dummy1);
-			endian_udword(&psSaveStructure15->subjectInc);
-			endian_udword(&psSaveStructure15->timeStarted);
-			endian_udword(&psSaveStructure15->output);
-			endian_udword(&psSaveStructure15->capacity);
-			endian_udword(&psSaveStructure15->quantity);
-			/* OBJECT_SAVE_V19 */
-			endian_udword(&psSaveStructure15->id);
-			endian_udword(&psSaveStructure15->x);
-			endian_udword(&psSaveStructure15->y);
-			endian_udword(&psSaveStructure15->z);
-			endian_udword(&psSaveStructure15->direction);
-			endian_udword(&psSaveStructure15->player);
-			endian_udword(&psSaveStructure15->burnStart);
-			endian_udword(&psSaveStructure15->burnDamage);
-			playerid = psSaveStructure15->player;
-
-			if(strncmp(psSaveStructure15->name,"A0CommandCentre",15)  == 0 )
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x  = map_coord(psSaveStructure15->x);
-				yy = playeridpos[playerid].y  = map_coord(psSaveStructure15->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure15->x);
-				yy = map_coord(psSaveStructure15->y);
-			}
-		}
-		else if (psHeader->version <= VERSION_19)
-		{
-			memcpy(psSaveStructure17, pFileData, sizeOfSaveStruture);
-
-			/* STRUCTURE_SAVE_V17 includes STRUCTURE_SAVE_V15 */
-			endian_sword(&psSaveStructure17->currentPowerAccrued);
-			/* STRUCTURE_SAVE_V15 includes STRUCTURE_SAVE_V14 */
-			/* STRUCTURE_SAVE_V14 includes STRUCTURE_SAVE_V12 */
-			/* STRUCTURE_SAVE_V12 includes STRUCTURE_SAVE_V2 */
-			endian_udword(&psSaveStructure17->factoryInc);
-			endian_udword(&psSaveStructure17->powerAccrued);
-			endian_udword(&psSaveStructure17->droidTimeStarted);
-			endian_udword(&psSaveStructure17->timeToBuild);
-			endian_udword(&psSaveStructure17->timeStartHold);
-			/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
-			endian_sdword(&psSaveStructure17->currentBuildPts);
-			endian_udword(&psSaveStructure17->body);
-			endian_udword(&psSaveStructure17->armour);
-			endian_udword(&psSaveStructure17->resistance);
-			endian_udword(&psSaveStructure17->dummy1);
-			endian_udword(&psSaveStructure17->subjectInc);
-			endian_udword(&psSaveStructure17->timeStarted);
-			endian_udword(&psSaveStructure17->output);
-			endian_udword(&psSaveStructure17->capacity);
-			endian_udword(&psSaveStructure17->quantity);
-			/* OBJECT_SAVE_V19 */
-			endian_udword(&psSaveStructure17->id);
-			endian_udword(&psSaveStructure17->x);
-			endian_udword(&psSaveStructure17->y);
-			endian_udword(&psSaveStructure17->z);
-			endian_udword(&psSaveStructure17->direction);
-			endian_udword(&psSaveStructure17->player);
-			endian_udword(&psSaveStructure17->burnStart);
-			endian_udword(&psSaveStructure17->burnDamage);
-			playerid = psSaveStructure17->player;
-
-			if(strncmp(psSaveStructure17->name,"A0CommandCentre",15)  == 0 )
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x  = map_coord(psSaveStructure17->x);
-				yy = playeridpos[playerid].y  = map_coord(psSaveStructure17->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure17->x);
-				yy = map_coord(psSaveStructure17->y);
-			}
-		}
-		else if (psHeader->version <= VERSION_20)
-		{
-			memcpy(psSaveStructure20, pFileData, sizeOfSaveStruture);
-
-			/* STRUCTURE_SAVE_V20 includes OBJECT_SAVE_V20 */
-			endian_sdword(&psSaveStructure20->currentBuildPts);
-			endian_udword(&psSaveStructure20->body);
-			endian_udword(&psSaveStructure20->armour);
-			endian_udword(&psSaveStructure20->resistance);
-			endian_udword(&psSaveStructure20->dummy1);
-			endian_udword(&psSaveStructure20->subjectInc);
-			endian_udword(&psSaveStructure20->timeStarted);
-			endian_udword(&psSaveStructure20->output);
-			endian_udword(&psSaveStructure20->capacity);
-			endian_udword(&psSaveStructure20->quantity);
-			endian_udword(&psSaveStructure20->factoryInc);
-			endian_udword(&psSaveStructure20->powerAccrued);
-			endian_udword(&psSaveStructure20->dummy2);
-			endian_udword(&psSaveStructure20->droidTimeStarted);
-			endian_udword(&psSaveStructure20->timeToBuild);
-			endian_udword(&psSaveStructure20->timeStartHold);
-			endian_sword(&psSaveStructure20->currentPowerAccrued);
-			/* OBJECT_SAVE_V20 */
-			endian_udword(&psSaveStructure20->id);
 			endian_udword(&psSaveStructure20->x);
 			endian_udword(&psSaveStructure20->y);
-			endian_udword(&psSaveStructure20->z);
-			endian_udword(&psSaveStructure20->direction);
 			endian_udword(&psSaveStructure20->player);
-			endian_udword(&psSaveStructure20->burnStart);
-			endian_udword(&psSaveStructure20->burnDamage);
 			playerid = psSaveStructure20->player;
 
-			if(strncmp(psSaveStructure20->name,"A0CommandCentre",15)  == 0 )
+			if (strncmp(psSaveStructure20->name, "A0CommandCentre", 15) == 0)
 			{
 				HQ = true;
-				xx = playeridpos[playerid].x  = map_coord(psSaveStructure20->x);
-				yy = playeridpos[playerid].y  = map_coord(psSaveStructure20->y);
+				xx = playeridpos[playerid].x = map_coord(psSaveStructure20->x);
+				yy = playeridpos[playerid].y = map_coord(psSaveStructure20->y);
 			}
 			else
 			{
@@ -11864,58 +11626,9 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 				yy = map_coord(psSaveStructure20->y);
 			}
 		}
-		else
-		{
-			memcpy(psSaveStructure, pFileData, sizeOfSaveStruture);
-
-			/* SAVE_STRUCTURE is STRUCTURE_SAVE_V21 */
-			/* STRUCTURE_SAVE_V21 includes STRUCTURE_SAVE_V20 */
-			endian_udword(&psSaveStructure->commandId);
-			/* STRUCTURE_SAVE_V20 includes OBJECT_SAVE_V20 */
-			endian_sdword(&psSaveStructure->currentBuildPts);
-			endian_udword(&psSaveStructure->body);
-			endian_udword(&psSaveStructure->armour);
-			endian_udword(&psSaveStructure->resistance);
-			endian_udword(&psSaveStructure->dummy1);
-			endian_udword(&psSaveStructure->subjectInc);
-			endian_udword(&psSaveStructure->timeStarted);
-			endian_udword(&psSaveStructure->output);
-			endian_udword(&psSaveStructure->capacity);
-			endian_udword(&psSaveStructure->quantity);
-			endian_udword(&psSaveStructure->factoryInc);
-			endian_udword(&psSaveStructure->powerAccrued);
-			endian_udword(&psSaveStructure->dummy2);
-			endian_udword(&psSaveStructure->droidTimeStarted);
-			endian_udword(&psSaveStructure->timeToBuild);
-			endian_udword(&psSaveStructure->timeStartHold);
-			endian_sword(&psSaveStructure->currentPowerAccrued);
-			/* OBJECT_SAVE_V20 */
-			endian_udword(&psSaveStructure->id);
-			endian_udword(&psSaveStructure->x);
-			endian_udword(&psSaveStructure->y);
-			endian_udword(&psSaveStructure->z);
-			endian_udword(&psSaveStructure->direction);
-			endian_udword(&psSaveStructure->player);
-			endian_udword(&psSaveStructure->burnStart);
-			endian_udword(&psSaveStructure->burnDamage);
-			playerid = psSaveStructure->player;
-
-			if(strncmp(psSaveStructure->name,"A0CommandCentre",15)  == 0 )
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x  = map_coord(psSaveStructure->x);
-				yy = playeridpos[playerid].y  = map_coord(psSaveStructure->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure->x);
-				yy = map_coord(psSaveStructure->y);
-			}
-		}
 		playerid = getPlayerColour(RemapPlayerNumber(playerid));
 		// kludge to fix black, so you can see it on some maps.
-		if (playerid == 3)	// in this case 3 = pallete entry for black.
+		if (playerid == 3)	// in this case 3 = palette entry for black.
 		{
 			color = WZCOL_GREY;
 		}
@@ -11924,13 +11637,13 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 			color.rgba = clanColours[playerid].rgba;
 		}
 		
-		if(HQ)
+		if (HQ)
 		{	// This shows where the HQ is on the map in a special color.
 			// We could do the same for anything else (oil/whatever) also.
 			// Possible future enhancement?
-			color.byte.b=0xff;
-			color.byte.g=0;
-			color.byte.r=0xff;
+			color.byte.b = 0xff;
+			color.byte.g = 0;
+			color.byte.r = 0xff;
 		}
 
 		// and now we blit the color to the texture

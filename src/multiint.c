@@ -183,9 +183,6 @@ static void removeGames				(void);
 static void hidePasswordForm(void);
 static void showPasswordForm(void);
 
-// Connection option functions
-static void addConnections			(UDWORD);
-
 // Game option functions
 static	void	addGameOptions		(BOOL bRedo);				// options (rhs) boxV
 static	void	addChatBox			(void);
@@ -505,17 +502,12 @@ BOOL startConnectionScreen(void)
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
 		_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);	// goback buttpn levels
 
-	addConnections(0);
+	addTextButton(CON_TYPESID_START+0,FRONTEND_POS2X,FRONTEND_POS2Y, _("Lobby"), WBUT_TXTCENTRE);
+	addTextButton(CON_TYPESID_START+1,FRONTEND_POS3X,FRONTEND_POS3Y, _("IP"), WBUT_TXTCENTRE);
 
 	return true;
 }
 
-// add connections
-static void addConnections(UDWORD begin)
-{
-	addTextButton(CON_TYPESID_START+begin+0,FRONTEND_POS2X,FRONTEND_POS2Y, _("Lobby"), WBUT_TXTCENTRE);
-	addTextButton(CON_TYPESID_START+begin+1,FRONTEND_POS3X,FRONTEND_POS3Y, _("IP"), WBUT_TXTCENTRE);
-}
 
 void runConnectionScreen(void )
 {
@@ -537,18 +529,6 @@ void runConnectionScreen(void )
 			changeTitleMode(MULTI);
 			bMultiPlayer = false;
 			bMultiMessages = false;
-			break;
-		case CON_TYPESID_MORE:
-			widgDelete(psWScreen,FRONTEND_BOTFORM);
-
-			SettingsUp = false;
-			InitialProto +=5;
-
-			addBottomForm();
-			addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
-			_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);	// goback buttpn levels
-
-			addConnections(InitialProto);
 			break;
 		case CON_TYPESID_START+0: // Lobby button
 			NETsetupTCPIP(""); //inet
@@ -591,6 +571,11 @@ void runConnectionScreen(void )
 	if(SettingsUp == true)
 	{
 		widgDisplayScreen(psConScreen);						// show the widgets currently running
+	}
+
+	if (CancelPressed())
+	{
+		changeTitleMode(MULTI);
 	}
 }
 
@@ -883,6 +868,11 @@ FAIL:
 	{
 		iV_SetFont(font_large);
 		iV_DrawText(_("Searching"), D_W+260, D_H+460);
+	}
+
+	if (CancelPressed())
+	{
+		changeTitleMode(PROTOCOL);
 	}
 }
 
@@ -2211,7 +2201,7 @@ static void stopJoining(void)
 			return;
 		}
 		debug(LOG_NET, "We have stopped joining.");
-		changeTitleMode(TITLE);		// Go back to top level menu
+		changeTitleMode(lastTitleMode);
 		selectedPlayer = 0;
 
 		if (ingame.bHostSetup)
@@ -3146,6 +3136,11 @@ void runMultiOptions(void)
 		iV_SetFont(font_regular);											// switch to small font.
 		displayConsoleMessages();									// draw the chatbox
 	}
+
+	if (CancelPressed())
+	{
+		changeTitleMode(lastTitleMode);
+	}
 }
 
 BOOL startMultiOptions(BOOL bReenter)
@@ -3399,13 +3394,13 @@ static UDWORD bestPlayer(UDWORD player)
 
 	UDWORD i, myscore,  score, count=1;
 
-	myscore =  getMultiStats(player,false).totalScore;
+	myscore =  getMultiStats(player).totalScore;
 
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
 		if(isHumanPlayer(i) && i!=player )
 		{
-			score = getMultiStats(i, false).totalScore;
+			score = getMultiStats(i).totalScore;
 
 			if(score >= myscore)
 			{
@@ -3544,13 +3539,13 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			break;
 		}
 
-		if(getMultiStats(j,false).played < 5)
+		if(getMultiStats(j).played < 5)
 		{
 			iV_DrawImage(FrontImages,IMAGE_MEDAL_DUMMY,x+37,y+13);
 		}
 		else
 		{
-			stat = getMultiStats(j,false);
+			stat = getMultiStats(j);
 
 			// star 1 total droid kills
 			eval = stat.totalKills;

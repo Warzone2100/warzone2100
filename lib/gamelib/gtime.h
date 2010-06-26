@@ -79,7 +79,6 @@ extern void setGameTime(uint32_t newGameTime);
  * @returns true iff the game time ticked.
  */
 extern void gameTimeUpdate(void);
-extern bool logicalUpdates;  ///< Separate logical from graphical updates. FIXME Should be constant true. But first it needs to work perfectly.
 
 /// Updates the realTime timer, and corresponding deltaRealTime.
 void realTimeUpdate(void);

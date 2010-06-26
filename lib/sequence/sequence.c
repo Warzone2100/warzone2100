@@ -668,6 +668,7 @@ bool seq_Play(const char* filename)
 	/* open video */
 	if (theora_p)
 	{
+		char *blackframe = calloc(1, texture_width * texture_height * 4);
 		if (videodata.ti.frame_width > texture_width ||
 				videodata.ti.frame_height > texture_height)
 		{
@@ -685,7 +686,8 @@ bool seq_Play(const char* filename)
 		glGenTextures(1, &video_texture);
 		glBindTexture(GL_TEXTURE_2D, video_texture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture_width, texture_height,
-				0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+				0, GL_RGBA, GL_UNSIGNED_BYTE, blackframe);
+		free(blackframe);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);

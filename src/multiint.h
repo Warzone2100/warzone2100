@@ -63,7 +63,6 @@ void loadMapPreview(bool hideInterface);
 #define CON_CONTYPES_FORM	10104
 #define CON_TYPESID_START	10105
 #define CON_TYPESID_END		10128
-#define CON_TYPESID_MORE	10129
 
 #define CON_SETTINGS		10130
 #define CON_SETTINGS_LABEL	10131
