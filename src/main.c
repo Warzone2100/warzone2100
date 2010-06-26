@@ -1152,7 +1152,10 @@ int main(int argc, char *argv[])
 	// Sanity check that floating point math is the same on all machines. (x86 needs to be compiled at least with the "-msse -mfpmath=sse" compiler flags, in addition to "-mno-fused-madd".)
 	ok = fptest1();
 	fptest2();  // Multiplayer seems to work, even if doubles are broken. (Should avoid use of doubles, or require "-msse2".)
-	ASSERT(ok, "Your compiler and compiler flag combination breaks 32-bit floats. Multiplayer will be broken.");
+	if (!ok)
+	{
+		debug(LOG_WARNING, "Your compiler and compiler flag combination breaks 32-bit floats. Hope there isn't too much floating point code left.");
+	}
 
 	/*** Initialize PhysicsFS ***/
 	initialize_PhysicsFS(argv[0]);
