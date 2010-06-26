@@ -38,13 +38,6 @@
 static BOOL bRevealActive = false;
 
 
-// ------------------------------------------------------------------------------------
-void	avSetStatus(BOOL var)
-{
-	debug(LOG_FOG, "avSetStatus: Setting fog of war %s", var ? "ON" : "OFF");
-	bRevealActive = var;
-}
-
 void	avInformOfChange(SDWORD x, SDWORD y)
 {
 	MAPTILE	*psTile = mapTile(x, y);

@@ -378,17 +378,14 @@ BOOL loadConfig(void)
 		if(val)
 		{
 			war_SetFog(false);
-			avSetStatus(true);
 		}
 		else
 		{
-			avSetStatus(false);
 			war_SetFog(true);
 		}
 	}
 	else
 	{
-		avSetStatus(false);
 		war_SetFog(true);
 		setWarzoneKeyNumeric("visfog", 0);
 	}

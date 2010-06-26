@@ -30,6 +30,5 @@ extern UDWORD avGetObjLightLevel( BASE_OBJECT *psObj, UDWORD origLevel);
 extern void	setRevealStatus( BOOL val );
 extern BOOL	getRevealStatus( void );
 extern void	preProcessVisibility( void );
-extern void	avSetStatus(BOOL var);
 
 #endif // __INCLUDED_SRC_ADVVIS_H__

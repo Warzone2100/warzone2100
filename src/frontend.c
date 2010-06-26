@@ -584,13 +584,11 @@ BOOL runGraphicsOptionsMenu(void)
 	{	// turn off crap fog, turn on vis fog.
 		debug(LOG_FOG, "runGameOptions2Menu: Fog of war ON, visual fog OFF");
 		war_SetFog(false);
-		avSetStatus(true);
 		widgSetString(psWScreen,FRONTEND_FOGTYPE_R, _("Fog Of War"));
 	}
 	else
 	{	// turn off vis fog, turn on normal crap fog.
 		debug(LOG_FOG, "runGameOptions2Menu: Fog of war OFF, visual fog ON");
-		avSetStatus(false);
 		war_SetFog(true);
 		widgSetString(psWScreen,FRONTEND_FOGTYPE_R, _("Mist"));
 	}
