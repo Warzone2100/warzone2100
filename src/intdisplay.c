@@ -3341,7 +3341,6 @@ void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 			if(Slider->pos > 0)
 			{
 				Slider->pos = (UWORD)(Slider->pos - sliderMouseUnit(Slider));
-				bUsingSlider = true;
 				SetMousePos(sliderMousePos(Slider), mouseY());	// move mouse
 			}
 		}
@@ -3350,7 +3349,6 @@ void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 			if(Slider->pos < Slider->numStops)
 			{
 				Slider->pos = (UWORD)(Slider->pos + sliderMouseUnit(Slider));
-				bUsingSlider = true;
 				SetMousePos(sliderMousePos(Slider), mouseY());	// move mouse
 			}
 		}

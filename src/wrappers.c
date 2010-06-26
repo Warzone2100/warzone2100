@@ -214,20 +214,20 @@ TITLECODE titleLoop(void)
 			break;
 
 
-		case GAME2:
-			runGameOptions2Menu();
+		case GRAPHICS_OPTIONS:
+			runGraphicsOptionsMenu();
 			break;
 
-		case GAME3:
-			runGameOptions3Menu();
+		case AUDIO_OPTIONS:
+			runAudioOptionsMenu();
 			break;
 
-		case GAME4:
-			runGameOptions4Menu();
+		case VIDEO_OPTIONS:
+			runVideoOptionsMenu();
 			break;
 
-		case GAME5:
-			runGameOptions5Menu();
+		case MOUSE_OPTIONS:
+			runMouseOptionsMenu();
 			break;
 
 		case QUIT:
