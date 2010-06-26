@@ -335,10 +335,6 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
 	if (oldAction[SIGSYS].sa_handler != SIG_IGN)
 		sigaction(SIGSYS, &new_handler, NULL);
 
-	sigaction(SIGTRAP, NULL, &oldAction[SIGTRAP]);
-	if (oldAction[SIGTRAP].sa_handler != SIG_IGN)
-		sigaction(SIGTRAP, &new_handler, NULL);
-
 	sigaction(SIGXCPU, NULL, &oldAction[SIGXCPU]);
 	if (oldAction[SIGXCPU].sa_handler != SIG_IGN)
 		sigaction(SIGXCPU, &new_handler, NULL);
@@ -346,6 +342,10 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
 	sigaction(SIGXFSZ, NULL, &oldAction[SIGXFSZ]);
 	if (oldAction[SIGXFSZ].sa_handler != SIG_IGN)
 		sigaction(SIGXFSZ, &new_handler, NULL);
+
+	// ignore SIGTRAP
+	new_handler.sa_handler = SIG_IGN;
+	sigaction(SIGTRAP, &new_handler, &oldAction[SIGTRAP]);
 #endif // _XOPEN_UNIX
 }
 
