@@ -32,6 +32,7 @@
 #endif
 
 #include <assert.h>
+#include <signal.h>
 #include "macros.h"
 #include "types.h"
 
@@ -60,7 +61,7 @@ extern bool assertEnabled;
 		(void)_debug(LOG_ERROR, function, __VA_ARGS__), \
 		(void)_debug(LOG_ERROR, function, "Assert in Warzone: %s (%s), last script event: '%s'", \
 	                                  location_description, expr_string, last_called_script_event), \
-		( assertEnabled ? assert(expr) : (void)0 )\
+		( assertEnabled ? (void)raise(SIGTRAP) : (void)0 )\
 	)
 
 /**
