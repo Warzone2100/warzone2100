@@ -3327,6 +3327,7 @@ BOOL objHasWeapon(BASE_OBJECT *psObj)
 SENSOR_STATS *objActiveRadar(BASE_OBJECT *psObj)
 {
 	SENSOR_STATS	*psStats = NULL;
+	int				compIndex;
 
 	switch (psObj->type)
 	{
@@ -3335,7 +3336,9 @@ SENSOR_STATS *objActiveRadar(BASE_OBJECT *psObj)
 		{
 			return NULL;
 		}
-		psStats = asSensorStats + ((DROID *)psObj)->asBits[COMP_SENSOR].nStat;
+		compIndex = ((DROID *)psObj)->asBits[COMP_SENSOR].nStat;
+		ASSERT_OR_RETURN( NULL, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
+		psStats = asSensorStats + compIndex;
 		break;
 	case OBJ_STRUCTURE:
 		psStats = ((STRUCTURE *)psObj)->pStructureType->pSensor;
