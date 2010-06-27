@@ -149,6 +149,7 @@ BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
 	SDWORD			dx, dy, dz, radSq, rangeSq, longRange;
 	WEAPON_STATS	*psStats;
+	int compIndex;
 
 	CHECK_DROID(psDroid);
 	if (psDroid->asWeaps[0].nStat == 0)
@@ -162,7 +163,9 @@ BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 
 	radSq = dx*dx + dy*dy;
 
-	psStats = asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
+	compIndex = psDroid->asWeaps[weapon_slot].nStat;
+	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+	psStats = asWeaponStats + compIndex;
 
 	if (psDroid->order == DORDER_ATTACKTARGET
 		&& secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)
@@ -221,6 +224,7 @@ BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
 	SDWORD			dx, dy, dz, radSq, rangeSq, longRange;
 	WEAPON_STATS	*psStats;
+	int compIndex;
 
 	CHECK_DROID(psDroid);
 
@@ -229,7 +233,9 @@ BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 		return false;
 	}
 
-	psStats = asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
+	compIndex = psDroid->asWeaps[weapon_slot].nStat;
+	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+	psStats = asWeaponStats + compIndex;
 
 	dx = (SDWORD)psDroid->pos.x - (SDWORD)psObj->pos.x;
 	dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
@@ -645,6 +651,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	WEAPON_STATS	*psStats;
+	int compIndex;
 
 	CHECK_DROID(psDroid);
 	ASSERT_OR_RETURN(false, psTarget != NULL, "Target is NULL");
@@ -665,8 +672,10 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 		}
 		return false;
 	}
+	compIndex = psDroid->asWeaps[weapon_slot].nStat;
+	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+	psStats = asWeaponStats + compIndex;
 
-	psStats = asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
 	if (proj_Direct(psStats))
 	{
 		if (visibleObject((BASE_OBJECT*)psDroid, psTarget, true))

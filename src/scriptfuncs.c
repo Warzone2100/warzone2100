@@ -2155,6 +2155,7 @@ BOOL scrStructureBeingBuilt(void)
 		return false;
 	}
 
+	ASSERT_OR_RETURN( false, structInc < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", structInc, numStructureStats);
 	psStats = (STRUCTURE_STATS *)(asStructureStats + structInc);
 	beingBuilt = false;
 	if (checkStructureStatus(psStats, player, SS_BEING_BUILT))
@@ -2238,6 +2239,7 @@ BOOL scrStructureBuilt(void)
 		return false;
 	}
 
+	ASSERT_OR_RETURN( false, structInc < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", structInc, numStructureStats);
 	psStats = (STRUCTURE_STATS *)(asStructureStats + structInc);
 
 	built = false;
@@ -4277,37 +4279,13 @@ BOOL scrStructureBuiltInRange(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructureBuiltInRange:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Player index out of bounds");
+	ASSERT_OR_RETURN(false, x >= 0 && map_coord(x) < mapWidth, "Invalid X coord");
+	ASSERT_OR_RETURN(false, y >= 0 && map_coord(y) < mapHeight, "Invalid Y coord");
+	ASSERT_OR_RETURN(false, index >= 0 && index < numStructureStats, "Invalid structure stat");
+	ASSERT_OR_RETURN(false, range >= 0, "Negative range"); 
 
-	if (x < 0
-	 || map_coord(x) > (SDWORD)mapWidth)
-	{
-		ASSERT( false, "scrStructureBuiltInRange : invalid X coord" );
-		return false;
-	}
-	if (y < 0
-	 || map_coord(y) > (SDWORD)mapHeight)
-	{
-		ASSERT( false,"scrStructureBuiltInRange : invalid Y coord" );
-		return false;
-	}
-	if (index < (SDWORD)0 || index > (SDWORD)numStructureStats)
-	{
-		ASSERT( false, "scrStructureBuiltInRange : Invalid structure stat" );
-		return false;
-	}
-	if (range < (SDWORD)0)
-	{
-		ASSERT( false, "scrStructureBuiltInRange : Rnage is less than zero" );
-		return false;
-	}
-
-	//now look through the players list of structures to see if this type
-	//exists within range
+	// Now look through the players list of structures to see if this type exists within range
 	psTarget = &asStructureStats[index];
 	rangeSquared = range * range;
 	found = false;
@@ -8387,10 +8365,10 @@ BOOL scrNumStructsByStatInArea(void)
 		return false;
 	}
 
+	ASSERT_OR_RETURN( false, index < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", index, numStructureStats);
 	psStats = (STRUCTURE_STATS *)(asStructureStats + index);
 
-	ASSERT( psStats != NULL,
-			"scrNumStructsByStatInArea: Invalid structure pointer" );
+	ASSERT_OR_RETURN( false, psStats != NULL, "Invalid structure pointer" );
 
 	NumStruct = 0;
 
@@ -8995,6 +8973,7 @@ BOOL scrObjWeaponMaxRange(void)
 		psDroid = (DROID*)psObj;
 		if (psDroid->asWeaps[0].nStat != 0)
 		{
+			ASSERT_OR_RETURN(false, psDroid->asWeaps[0].nStat < numWeaponStats, "Invalid range referenced.");
 			psStats = asWeaponStats + psDroid->asWeaps[0].nStat;
 			scrFunctionResult.v.ival = psStats->longRange;
 			if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -9010,6 +8989,7 @@ BOOL scrObjWeaponMaxRange(void)
 		psStruct = (STRUCTURE*)psObj;
 		if (psStruct->asWeaps[0].nStat != 0)
 		{
+			ASSERT_OR_RETURN(false, psStruct->asWeaps[0].nStat < numWeaponStats, "Invalid range referenced.");
 			psStats = asWeaponStats + psStruct->asWeaps[0].nStat;
 			scrFunctionResult.v.ival = psStats->longRange;
 			if (!stackPushResult(VAL_INT, &scrFunctionResult))
