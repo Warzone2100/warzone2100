@@ -1687,7 +1687,7 @@ receive_message:
 			{
 				unsigned int j;
 
-				pMsg->size = ntohs(pMsg->size);
+				pMsg->size = htons(pMsg->size);
 
 				if (pMsg->source != NET_HOST_ONLY && (pMsg->type == NET_KICK || pMsg->type == NET_PLAYER_LEAVING) )
 				{
@@ -1727,7 +1727,7 @@ receive_message:
 				    && connected_bsocket[pMsg->destination]->socket != NULL)
 				{
 					debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
-					pMsg->size = ntohs(pMsg->size);
+					pMsg->size = htons(pMsg->size);
 
 					if (writeAll(connected_bsocket[pMsg->destination]->socket, pMsg, size) == SOCKET_ERROR)
 					{
