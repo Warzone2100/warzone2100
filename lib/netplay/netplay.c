@@ -3877,6 +3877,7 @@ connect_succesfull:
 		freeaddrinfo(hosts);
 		SocketSet_DelSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
+		tcp_socket = NULL;
 		free(socket_set);
 		socket_set = NULL;
 		return false;
@@ -3893,6 +3894,7 @@ connect_succesfull:
 		// Shouldn't join; game is full
 		SocketSet_DelSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
+		tcp_socket = NULL;
 		free(socket_set);
 		socket_set = NULL;
 		setLobbyError(ERROR_FULL);
