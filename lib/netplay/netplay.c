@@ -2749,6 +2749,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		debug(LOG_ERROR, "Failed to send 'join' command: %s", strSockError(getSockErr()));
 		SocketSet_DelSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
+		tcp_socket = NULL;
 		deleteSocketSet(socket_set);
 		socket_set = NULL;
 		return false;
@@ -2764,6 +2765,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		// Shouldn't join; game is full
 		SocketSet_DelSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
+		tcp_socket = NULL;
 		deleteSocketSet(socket_set);
 		socket_set = NULL;
 		setLobbyError(ERROR_FULL);
