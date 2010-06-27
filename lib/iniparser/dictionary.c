@@ -278,6 +278,14 @@ int dictionary_set(dictionary *d, const char *key, const char *val)
 	return 0;
 }
 
+int dictionary_set_int(dictionary *d, const char *key, int val)
+{
+	char *strval;
+	sasprintf(&strval, "%d", val);
+
+	return dictionary_set(d, key, strval);
+}
+
 /*-------------------------------------------------------------------------*/
 /**
   @brief	Delete a key in a dictionary
