@@ -479,7 +479,15 @@ static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHY
 	{
 		return NULL;
 	}
+
 	decoder = sound_CreateOggVorbisDecoder(PHYSFS_fileHandle, true);
+	if (decoder == NULL)
+	{
+		debug(LOG_WARNING, "Failed to open audio file for decoding");
+		free(psTrack);
+		return NULL;
+	}
+
 	soundBuffer = sound_DecodeOggVorbis(decoder, 0);
 	sound_DestroyOggVorbisDecoder(decoder);
 
