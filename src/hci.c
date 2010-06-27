@@ -2789,6 +2789,7 @@ static void intProcessStats(UDWORD id)
 	BASE_STATS		*psStats;
 	STRUCTURE		*psStruct;
 	FLAG_POSITION	*psFlag;
+	int compIndex;
 
 #ifdef INCLUDE_FACTORYLISTS
 	DROID_TEMPLATE	*psNext;
@@ -2814,16 +2815,15 @@ static void intProcessStats(UDWORD id)
 			//manufacture works differently!
 			if(objMode == IOBJ_MANUFACTURE)
 			{
+				compIndex = id - IDSTAT_START;
 				//get the stats
-				psStats = ppsStatsList[id - IDSTAT_START];
-				ASSERT( psObjSelected != NULL,
-					"intProcessStats: Invalid structure pointer" );
-				ASSERT( psStats != NULL,
-					"intProcessStats: Invalid template pointer" );
-                if (productionPlayer == (SBYTE)selectedPlayer)
-                {
-                    FACTORY  *psFactory = (FACTORY *)((STRUCTURE *)psObjSelected)->
-                        pFunctionality;
+				ASSERT_OR_RETURN( , compIndex < numStatsListEntries, "Invalid range referenced for numStatsListEntries, %d > %d", compIndex, numStatsListEntries);
+				psStats = ppsStatsList[compIndex];
+				ASSERT_OR_RETURN( , psObjSelected != NULL, "Invalid structure pointer" );
+				ASSERT_OR_RETURN( , psStats != NULL, "Invalid template pointer" );
+				if (productionPlayer == (SBYTE)selectedPlayer)
+				{
+					FACTORY  *psFactory = (FACTORY *)((STRUCTURE *)psObjSelected)->pFunctionality;
 
                     //increase the production
 				    factoryProdAdjust((STRUCTURE *)psObjSelected, (DROID_TEMPLATE *)psStats, true);
@@ -2926,7 +2926,9 @@ static void intProcessStats(UDWORD id)
 					}
 
 					// Set the object stats
-					psStats = ppsStatsList[id - IDSTAT_START];
+					compIndex = id - IDSTAT_START;
+					ASSERT_OR_RETURN( , compIndex < numStatsListEntries, "Invalid range referenced for numStatsListEntries, %d > %d", compIndex, numStatsListEntries);
+					psStats = ppsStatsList[compIndex];
 
 					// Reset the button on the object form
 					//if this returns false, there's a problem so set the button to NULL
@@ -4298,6 +4300,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	BOOL			IsFactory;
 	BOOL			Animate = true;
 	UWORD           FormX,FormY;
+	int				compIndex;
 
 	// Is the form already up?
 	if(widgGetFromID(psWScreen,IDOBJ_FORM) != NULL) {
@@ -4639,8 +4642,10 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				if (Droid->droidType == DROID_CONSTRUCT ||
                     Droid->droidType == DROID_CYBORG_CONSTRUCT)
 				{
-			   		ASSERT( Droid->asBits[COMP_CONSTRUCT].nStat,"intAddObjectWindow: invalid droid type" );
-					psStats = (BASE_STATS*)(asConstructStats + Droid->asBits[COMP_CONSTRUCT].nStat);
+					compIndex = Droid->asBits[COMP_CONSTRUCT].nStat;
+					ASSERT_OR_RETURN( false, Droid->asBits[COMP_CONSTRUCT].nStat,"Invalid droid type" );
+					ASSERT_OR_RETURN( false, compIndex < numConstructStats, "Invalid range referenced for numConstructStats, %d > %d", compIndex, numConstructStats);
+					psStats = (BASE_STATS*)(asConstructStats + compIndex);
 					sBarInit2.size = (UWORD)constructorPoints((CONSTRUCT_STATS*)psStats, Droid->player);
 					if (sBarInit2.size > WBAR_SCALE)
 					{
@@ -6498,8 +6503,7 @@ static void intStatsRMBPressed(UDWORD id)
 	DROID_TEMPLATE		*psNext;
 #endif
 
-	ASSERT( id - IDSTAT_START < numStatsListEntries,
-			"intStatsRMBPressed: Invalid structure stats id" );
+	ASSERT_OR_RETURN( , id - IDSTAT_START < numStatsListEntries, "Invalid range referenced for numStatsListEntries, %d > %d",id - IDSTAT_START, numStatsListEntries);
 
 	if (objMode == IOBJ_MANUFACTURE)
 	{
@@ -6508,14 +6512,11 @@ static void intStatsRMBPressed(UDWORD id)
 		//this now causes the production run to be decreased by one
 #ifdef INCLUDE_FACTORYLISTS
 
-		ASSERT( psObjSelected != NULL,
-			"intStatsRMBPressed: Invalid structure pointer" );
-		ASSERT( psStats != NULL,
-			"intStatsRMBPressed: Invalid template pointer" );
-        if (productionPlayer == (SBYTE)selectedPlayer)
-        {
-            FACTORY  *psFactory = (FACTORY *)((STRUCTURE *)psObjSelected)->
-                pFunctionality;
+		ASSERT_OR_RETURN( , psObjSelected != NULL, "Invalid structure pointer");
+		ASSERT_OR_RETURN( , psStats != NULL, "Invalid template pointer");
+		if (productionPlayer == (SBYTE)selectedPlayer)
+		{
+			FACTORY  *psFactory = (FACTORY *)((STRUCTURE *)psObjSelected)->pFunctionality;
 
 		    //decrease the production
 		    factoryProdAdjust((STRUCTURE *)psObjSelected, psStats, false);

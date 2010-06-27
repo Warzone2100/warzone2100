@@ -374,9 +374,9 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	Vector3f		muzzle;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
-	ASSERT( psStats != NULL, "proj_SendProjectile: invalid weapon stats" );
-
-	ASSERT( psTarget == NULL || !psTarget->died, "Aiming at dead target!" );
+	ASSERT_OR_RETURN( false, psWeap->nStat < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", psWeap->nStat, numWeaponStats);
+	ASSERT_OR_RETURN( false, psStats != NULL, "Invalid weapon stats" );
+	ASSERT_OR_RETURN( false, psTarget == NULL || !psTarget->died, "Aiming at dead target!" );
 
 	/* get muzzle offset */
 	if (psAttacker == NULL)
@@ -668,7 +668,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	psProj->time = gameTime;
 
 	psStats = psProj->psWStats;
-	ASSERT(psStats != NULL, "proj_InFlightDirectFunc: Invalid weapon stats pointer");
+	ASSERT_OR_RETURN( , psStats != NULL, "Invalid weapon stats pointer");
 
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */

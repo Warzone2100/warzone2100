@@ -2204,6 +2204,7 @@ BOOL scrStructureBeingBuilt(void)
 		return false;
 	}
 
+	ASSERT_OR_RETURN( false, structInc < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", structInc, numStructureStats);
 	psStats = (STRUCTURE_STATS *)(asStructureStats + structInc);
 	beingBuilt = false;
 	if (checkStructureStatus(psStats, player, SS_BEING_BUILT))
@@ -2287,6 +2288,7 @@ BOOL scrStructureBuilt(void)
 		return false;
 	}
 
+	ASSERT_OR_RETURN( false, structInc < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", structInc, numStructureStats);
 	psStats = (STRUCTURE_STATS *)(asStructureStats + structInc);
 
 	built = false;
@@ -8445,10 +8447,10 @@ BOOL scrNumStructsByStatInArea(void)
 		return false;
 	}
 
+	ASSERT_OR_RETURN( false, index < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", index, numStructureStats);
 	psStats = (STRUCTURE_STATS *)(asStructureStats + index);
 
-	ASSERT( psStats != NULL,
-			"scrNumStructsByStatInArea: Invalid structure pointer" );
+	ASSERT_OR_RETURN( false, psStats != NULL, "Invalid structure pointer" );
 
 	NumStruct = 0;
 
@@ -9053,6 +9055,7 @@ BOOL scrObjWeaponMaxRange(void)
 		psDroid = (DROID*)psObj;
 		if (psDroid->asWeaps[0].nStat != 0)
 		{
+			ASSERT_OR_RETURN(false, psDroid->asWeaps[0].nStat < numWeaponStats, "Invalid range referenced.");
 			psStats = asWeaponStats + psDroid->asWeaps[0].nStat;
 			scrFunctionResult.v.ival = psStats->longRange;
 			if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -9068,6 +9071,7 @@ BOOL scrObjWeaponMaxRange(void)
 		psStruct = (STRUCTURE*)psObj;
 		if (psStruct->asWeaps[0].nStat != 0)
 		{
+			ASSERT_OR_RETURN(false, psStruct->asWeaps[0].nStat < numWeaponStats, "Invalid range referenced.");
 			psStats = asWeaponStats + psStruct->asWeaps[0].nStat;
 			scrFunctionResult.v.ival = psStats->longRange;
 			if (!stackPushResult(VAL_INT, &scrFunctionResult))

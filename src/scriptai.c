@@ -617,16 +617,15 @@ BOOL scrOrderDroidStatsLoc(void)
 
 	if (statIndex < 0 || statIndex >= (SDWORD)numStructureStats)
 	{
-		ASSERT( false,
-			"scrOrderUnitStatsLoc: invalid structure stat" );
+		ASSERT( false, "Invalid structure stat" );
 		return false;
 	}
+
+	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
 	psStats = (BASE_STATS *)(asStructureStats + statIndex);
 
-	ASSERT( psDroid != NULL,
-		"scrOrderUnitStatsLoc: Invalid Unit pointer" );
-	ASSERT( psStats != NULL,
-		"scrOrderUnitStatsLoc: Invalid object pointer" );
+	ASSERT_OR_RETURN( false, psDroid != NULL, "Invalid Unit pointer" );
+	ASSERT_OR_RETURN( false, psStats != NULL, "Invalid object pointer" );
 	if (psDroid == NULL)
 	{
 		return false;
@@ -635,15 +634,13 @@ BOOL scrOrderDroidStatsLoc(void)
 	if ((x < 0) || (x > (SDWORD)mapWidth*TILE_UNITS) ||
 		(y < 0) || (y > (SDWORD)mapHeight*TILE_UNITS))
 	{
-		ASSERT( false,
-			"scrOrderUnitStatsLoc: Invalid location" );
+		ASSERT( false, "Invalid location" );
 		return false;
 	}
 
 	if (order != DORDER_BUILD)
 	{
-		ASSERT( false,
-			"scrOrderUnitStatsLoc: Invalid order" );
+		ASSERT( false, "Invalid order" );
 		return false;
 	}
 
@@ -1841,7 +1838,10 @@ static BOOL defenseLocation(BOOL variantB)
 		return false;
 	}
 
+	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
 	psStats = (BASE_STATS *)(asStructureStats + statIndex);
+
+	ASSERT_OR_RETURN( false, statIndex2 < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex2, numStructureStats);
 	psWStats = (BASE_STATS *)(asStructureStats + statIndex2);
 
     // check for wacky coords.

@@ -11464,30 +11464,38 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
 	switch (compType)
 	{
 	case COMP_BODY:
+		ASSERT_OR_RETURN( false, compIndex < numBodyStats, "Invalid range referenced for numBodyStats, %d > %d", compIndex, numBodyStats);
 		psStats = (BASE_STATS *)(asBodyStats + compIndex);
 		break;
 	case COMP_BRAIN:
+		ASSERT_OR_RETURN( false, compIndex < numBrainStats, "Invalid range referenced for numBrainStats, %d > %d", compIndex, numBrainStats);
 		psStats = (BASE_STATS *)(asBrainStats + compIndex);
 		break;
 	case COMP_PROPULSION:
+		ASSERT_OR_RETURN( false, compIndex < numPropulsionStats, "Invalid range referenced for numPropulsionStats, %d > %d", compIndex, numPropulsionStats);
 		psStats = (BASE_STATS *)(asPropulsionStats + compIndex);
 		break;
 	case COMP_REPAIRUNIT:
+		ASSERT_OR_RETURN( false, compIndex < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", compIndex, numRepairStats);
 		psStats = (BASE_STATS*)(asRepairStats  + compIndex);
 		break;
 	case COMP_ECM:
+		ASSERT_OR_RETURN( false, compIndex < numECMStats, "Invalid range referenced for numECMStats, %d > %d", compIndex, numECMStats);
 		psStats = (BASE_STATS*)(asECMStats + compIndex);
 		break;
 	case COMP_SENSOR:
+		ASSERT_OR_RETURN( false, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
 		psStats = (BASE_STATS*)(asSensorStats + compIndex);
 		break;
 	case COMP_CONSTRUCT:
+		ASSERT_OR_RETURN( false, compIndex < numConstructStats, "Invalid range referenced for numConstructStats, %d > %d", compIndex, numConstructStats);
 		psStats = (BASE_STATS*)(asConstructStats + compIndex);
 		break;
 	/*case COMP_PROGRAM:
 		psStats = (BASE_STATS*)(asProgramStats + compIndex);
 		break;*/
 	case COMP_WEAPON:
+		ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
 		psStats = (BASE_STATS*)(asWeaponStats + compIndex);
 		break;
 	default:
