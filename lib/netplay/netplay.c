@@ -1244,8 +1244,8 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 
 	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination) + sizeof(msg->source);
 
-	NETlogPacket(msg, false);
-	msg->size = htons(msg->size);
+	NETlogPacket(msg->type, msg->size, false);		// log packet we are sending
+	msg->size = htons(msg->size);					// convert it to network byte order
 
 	if (NetPlay.isHost)
 	{
@@ -1304,8 +1304,8 @@ BOOL NETbcast(NETMSG *msg)
 
 	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination) + sizeof(msg->source);
 
-	NETlogPacket(msg, false);
-	msg->size = htons(msg->size);
+	NETlogPacket(msg->type, msg->size, false);		// log packet we are sending
+	msg->size = htons(msg->size);					// convert it to network byte order
 
 	if (NetPlay.isHost)
 	{
@@ -1673,7 +1673,7 @@ receive_message:
 
 		if (received == false)
 		{
-			return false;
+			return false;		// (Host | client) didn't get any data
 		}
 		else
 		{
@@ -1686,8 +1686,7 @@ receive_message:
 			else if (pMsg->destination == NET_ALL_PLAYERS)
 			{
 				unsigned int j;
-
-				pMsg->size = htons(pMsg->size);
+				uint16_t Sbytes;
 
 				if (pMsg->source != NET_HOST_ONLY && (pMsg->type == NET_KICK || pMsg->type == NET_PLAYER_LEAVING) )
 				{
@@ -1703,6 +1702,10 @@ receive_message:
 
 				}
 
+				NETlogPacket(pMsg->type, pMsg->size, true);		// log packet that we received
+				Sbytes = pMsg->size;
+				pMsg->size = htons(pMsg->size);			// convert back to network byte order when sending
+
 				// we are the host, and have received a broadcast packet; distribute it
 				for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 				{
@@ -1716,6 +1719,7 @@ receive_message:
 							debug(LOG_ERROR, "Failed to send message (host broadcast): %s", strSockError(getSockErr()));
 							NETplayerClientDisconnect(j);
 						}
+						NETlogPacket(pMsg->type, Sbytes, false);				// and since we are sending it out again, log it.
 					}
 				}
 			}
@@ -1727,7 +1731,10 @@ receive_message:
 				    && connected_bsocket[pMsg->destination]->socket != NULL)
 				{
 					debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
-					pMsg->size = htons(pMsg->size);
+
+					NETlogPacket(pMsg->type, pMsg->size, true);		// log packet that we received
+					NETlogPacket(pMsg->type, pMsg->size, false);	// log packet that we are sending out
+					pMsg->size = htons(pMsg->size);	// convert back to network byte order when sending
 
 					if (writeAll(connected_bsocket[pMsg->destination]->socket, pMsg, size) == SOCKET_ERROR)
 					{
@@ -1749,8 +1756,6 @@ receive_message:
 		}
 
 	} while (NETprocessSystemMessage() == true);
-
-	NETlogPacket(pMsg, true);
 
 	*type = pMsg->type;
 	return true;

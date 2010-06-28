@@ -32,7 +32,7 @@ extern "C"
 BOOL NETstartLogging(void);
 BOOL NETstopLogging(void);
 BOOL NETlogEntry( const char *str, UDWORD a, UDWORD b );
-void NETlogPacket(NETMSG *msg, BOOL received);
+void NETlogPacket( uint8_t type, uint16_t size, BOOL received);
 
 #ifdef __cplusplus
 }
