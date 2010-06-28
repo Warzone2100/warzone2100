@@ -469,6 +469,7 @@
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13210D6028C00A19EE4 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12E10D6028C00A19EE4 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4371B5A611D93BA3005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B5A411D93BA3005A67AB /* pngpriv.h */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
 		43BE73ED11121A47007DF934 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177E70F87A926000C8A96 /* config.h */; };
@@ -1527,6 +1528,8 @@
 		4355E12D10D6028C00A19EE4 /* theora.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theora.h; path = external/libtheora/include/theora/theora.h; sourceTree = "<group>"; };
 		4355E12E10D6028C00A19EE4 /* theoradec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoradec.h; path = external/libtheora/include/theora/theoradec.h; sourceTree = "<group>"; };
 		4355E12F10D6028C00A19EE4 /* theoraenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoraenc.h; path = external/libtheora/include/theora/theoraenc.h; sourceTree = "<group>"; };
+		4371B5A311D93BA3005A67AB /* new_push_process_row.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = new_push_process_row.c; path = external/libpng/new_push_process_row.c; sourceTree = "<group>"; };
+		4371B5A411D93BA3005A67AB /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = external/libpng/pngpriv.h; sourceTree = "<group>"; };
 		438BDDD81129DC9A00998660 /* cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438BDDD91129DC9A00998660 /* da */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438BDDDA1129DC9A00998660 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -2542,6 +2545,8 @@
 		02DDA8600BD3C1AF0049AB60 /* Png sources */ = {
 			isa = PBXGroup;
 			children = (
+				4371B5A311D93BA3005A67AB /* new_push_process_row.c */,
+				4371B5A411D93BA3005A67AB /* pngpriv.h */,
 				02356DC90BD3BC9900E9A019 /* png.c */,
 				02356DCA0BD3BC9900E9A019 /* png.h */,
 				02356DCB0BD3BC9900E9A019 /* pngconf.h */,
@@ -3198,6 +3203,7 @@
 			files = (
 				02356DDC0BD3BC9900E9A019 /* png.h in Headers */,
 				02356DDD0BD3BC9900E9A019 /* pngconf.h in Headers */,
+				4371B5A611D93BA3005A67AB /* pngpriv.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3890,7 +3896,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libpng-1.4.2\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.4.2.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/01-libpng-master/1.4.2/libpng-1.4.2.tar.gz\"\nMD5Sum=\"89fd334dc5fc84ff146b9269c4fa452f\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"libpng-1.4.3\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.4.3.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/01-libpng-master/1.4.3/libpng-1.4.3.tar.gz\"\nMD5Sum=\"df3521f61a1b8b69489d297c0ca8c1f8\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD38340BD4012A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
