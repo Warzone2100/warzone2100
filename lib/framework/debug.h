@@ -31,8 +31,10 @@
 # error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
+#include "wzglobal.h"
+
 #include <assert.h>
-#if !defined(_MSC_VER)
+#if !defined(WZ_OS_WIN)
 #include <signal.h>
 #endif
 #include "macros.h"
@@ -59,7 +61,7 @@ extern bool assertEnabled;
 
 
 /* Do the correct assert call for each compiler */
-#if defined(_MSC_VER)
+#if defined(WZ_OS_WIN)
 #define wz_assert(expr) assert(expr)
 #else
 #define wz_assert(expr) raise(SIGTRAP)
