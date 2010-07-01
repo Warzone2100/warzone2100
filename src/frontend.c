@@ -752,6 +752,9 @@ static BOOL startVideoOptionsMenu(void)
 	addTopForm();
 	addBottomForm();
 
+	// Add a note about changes taking effect on restart for certain options
+	addTextHint(FRONTEND_TAKESEFFECT, FRONTEND_POS1X + 48, FRONTEND_POS1Y + 24, _("* Takes effect on game restart"));
+
 	// Fullscreen/windowed
 	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X-35, FRONTEND_POS2Y, _("Graphics Mode*"), 0);
 
@@ -784,9 +787,6 @@ static BOOL startVideoOptionsMenu(void)
 	{
 		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, _("Off"), 0);
 	}
-
-	// Add a note about changes taking effect on restart for certain options
-	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("* Takes effect on game restart"), WBUT_DISABLE);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("VIDEO OPTIONS"));
@@ -949,6 +949,8 @@ static BOOL startMouseOptionsMenu(void)
 	addTopForm();
 	addBottomForm();
 
+	addTextHint(FRONTEND_TAKESEFFECT, FRONTEND_POS1X + 48, FRONTEND_POS1Y + 24, _("* May negatively affect performance"));
+
 	////////////
 	// mouseflip
 	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X-35,   FRONTEND_POS2Y, _("Reverse Rotation"), 0);
@@ -996,8 +998,6 @@ static BOOL startMouseOptionsMenu(void)
 	{	// left-click orders
 		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("Off"), 0);
 	}
-
-	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("* May negatively affect performance"), WBUT_DISABLE);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MOUSE OPTIONS"));
@@ -1526,7 +1526,27 @@ void addBottomForm(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
+void addTextHint(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
+{
+	W_LABINIT		sLabInit;
+	memset(&sLabInit, 0, sizeof(W_LABINIT));
+
+	sLabInit.formID = FRONTEND_BOTFORM;
+	sLabInit.id = id;
+	sLabInit.x = (short)PosX;
+	sLabInit.y = (short)PosY;
+	sLabInit.style = WLAB_PLAIN;
+
+	sLabInit.width = MULTIOP_READY_WIDTH;
+	sLabInit.height = FRONTEND_BUTHEIGHT;
+	sLabInit.pDisplay = displayText;
+	sLabInit.FontID = font_regular;
+	sLabInit.pText = txt;
+	widgAddLabel(psWScreen, &sLabInit);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
 {
 	W_LABINIT		sLabInit;
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
