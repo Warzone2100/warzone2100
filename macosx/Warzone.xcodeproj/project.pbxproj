@@ -456,6 +456,7 @@
 		43C18FD1114FF38B0028741B /* netplay.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAA114FF38B0028741B /* netplay.c */; };
 		43C18FD2114FF38B0028741B /* netsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAC114FF38B0028741B /* netsocket.cpp */; };
 		43C18FD3114FF38B0028741B /* nettypes.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAE114FF38B0028741B /* nettypes.c */; };
+		43C2711E11DD308D009BC740 /* jpeg_encoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C2711C11DD308D009BC740 /* jpeg_encoder.c */; };
 		43C3B91F118BBFCB000BBE59 /* gzwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B913118BB545000BBE59 /* gzwrite.c */; };
 		43C3B920118BBFCD000BBE59 /* gzread.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B912118BB545000BBE59 /* gzread.c */; };
 		43C3B921118BBFCF000BBE59 /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B911118BB545000BBE59 /* gzlib.c */; };
@@ -1528,6 +1529,8 @@
 		43C18FAD114FF38B0028741B /* netsocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netsocket.h; path = ../lib/netplay/netsocket.h; sourceTree = SOURCE_ROOT; };
 		43C18FAE114FF38B0028741B /* nettypes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nettypes.c; path = ../lib/netplay/nettypes.c; sourceTree = SOURCE_ROOT; };
 		43C18FAF114FF38B0028741B /* nettypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nettypes.h; path = ../lib/netplay/nettypes.h; sourceTree = SOURCE_ROOT; };
+		43C2711C11DD308D009BC740 /* jpeg_encoder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jpeg_encoder.c; path = ../lib/ivis_common/jpeg_encoder.c; sourceTree = SOURCE_ROOT; };
+		43C2711D11DD308D009BC740 /* jpeg_encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jpeg_encoder.h; path = ../lib/ivis_common/jpeg_encoder.h; sourceTree = SOURCE_ROOT; };
 		43C3B90F118BB545000BBE59 /* gzclose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gzclose.c; path = external/zlib/gzclose.c; sourceTree = "<group>"; };
 		43C3B910118BB545000BBE59 /* gzguts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gzguts.h; path = external/zlib/gzguts.h; sourceTree = "<group>"; };
 		43C3B911118BB545000BBE59 /* gzlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gzlib.c; path = external/zlib/gzlib.c; sourceTree = "<group>"; };
@@ -2000,6 +2003,8 @@
 		0246A0E90BD3CC10004D1C70 /* Ivis Common */ = {
 			isa = PBXGroup;
 			children = (
+				43C2711C11DD308D009BC740 /* jpeg_encoder.c */,
+				43C2711D11DD308D009BC740 /* jpeg_encoder.h */,
 				02C8AEF60BE68A5600E9D8A7 /* png_util.c */,
 				02C8AEF70BE68A5600E9D8A7 /* png_util.h */,
 				0246A0EA0BD3CC29004D1C70 /* bitimage.c */,
@@ -4016,6 +4021,7 @@
 				43C18FD2114FF38B0028741B /* netsocket.cpp in Sources */,
 				43C18FD3114FF38B0028741B /* nettypes.c in Sources */,
 				4333607211A0731500380F5E /* wzapp.cpp in Sources */,
+				43C2711E11DD308D009BC740 /* jpeg_encoder.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
