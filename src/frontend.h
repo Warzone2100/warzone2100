@@ -79,6 +79,7 @@ void addTopForm(void);
 void addBottomForm(void);
 void addBackdrop(void);
 void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
+void addTextHint(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
 void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID);
 void addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
