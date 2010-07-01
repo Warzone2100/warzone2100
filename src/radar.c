@@ -86,6 +86,7 @@ static SDWORD radarWidth, radarHeight, radarCenterX, radarCenterY, radarTexWidth
 static uint8_t RadarZoom;
 static float RadarZoomMultiplier = 1.0f;
 static UDWORD radarBufferSize = 0;
+static int frameSkip = 0;
 
 static void DrawRadarTiles(void);
 static void DrawRadarObjects(void);
@@ -155,7 +156,14 @@ BOOL resizeRadar(void)
 		return false;
 	}
 	memset(radarBuffer, 0, radarBufferSize);
-	RadarZoomMultiplier = (float)MAX(RADWIDTH, RADHEIGHT) / (float)MAX(radarTexWidth, radarTexHeight);
+        if (rotateRadar)
+	{
+		RadarZoomMultiplier = (float)MAX(RADWIDTH, RADHEIGHT) / (float)MAX(radarTexWidth, radarTexHeight);
+	}
+	else
+	{
+		RadarZoomMultiplier = 1.0f;
+	}
 	debug(LOG_WZ, "Setting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
 
@@ -189,6 +197,7 @@ void SetRadarZoom(uint8_t ZoomLevel)
 	debug(LOG_WZ, "Setting radar zoom to %u from %u", ZoomLevel, RadarZoom);
 	RadarZoom = ZoomLevel;
 	radarSize(RadarZoom);
+	frameSkip = 0;
 }
 
 uint8_t GetRadarZoom(void)
@@ -255,7 +264,6 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 void drawRadar(void)
 {
 	float	pixSizeH, pixSizeV;
-	static int frameSkip = 0;
 
 	ASSERT(radarBuffer, "No radar buffer allocated");
 	if (!radarBuffer)
@@ -267,9 +275,14 @@ void drawRadar(void)
 
 	if (frameSkip <= 0)
 	{
+		bool filter = true;
+		if (!rotateRadar)
+		{
+			filter = RadarZoom % 16 != 0;
+		}
 		DrawRadarTiles();
 		DrawRadarObjects();
-		pie_DownLoadRadar(radarBuffer, radarTexWidth, radarTexHeight);
+		pie_DownLoadRadar(radarBuffer, radarTexWidth, radarTexHeight, filter);
 		frameSkip = RADAR_FRAME_SKIP;
 	}
 	frameSkip--;

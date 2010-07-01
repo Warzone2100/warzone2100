@@ -77,7 +77,7 @@ extern void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT
 
 extern BOOL pie_InitRadar(void);
 extern BOOL pie_ShutdownRadar(void);
-extern void pie_DownLoadRadar(UDWORD *buffer, int width, int height);
+extern void pie_DownLoadRadar(UDWORD *buffer, int width, int height, bool filter);
 extern void pie_RenderRadar(int x, int y, int width, int height);
 
 extern void pie_UploadDisplayBuffer(void);
