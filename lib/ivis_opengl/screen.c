@@ -556,8 +556,8 @@ void screenDoDumpToDiskIfRequired(void)
 	}
 	glReadPixels(0, 0, image.width, image.height, GL_RGB, GL_UNSIGNED_BYTE, image.bmp);
 
-	// Write the screen to a PNG
 	iV_saveImage_PNG(fileName, &image);
+	iV_saveImage_JPEG(fileName, &image);
 
 	// display message to user about screenshot
 	snprintf(ConsoleString,sizeof(ConsoleString),"Screenshot %s saved!",fileName);
