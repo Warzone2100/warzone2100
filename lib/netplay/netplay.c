@@ -35,6 +35,8 @@
 
 #if defined(WZ_OS_WIN)
 # include <winsock2.h>	// for sockets
+#else
+#include <arpa/inet.h>
 #endif
 
 #include "netplay.h"
