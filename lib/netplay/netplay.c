@@ -298,14 +298,6 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 	return false;
 }
 
-static uint16_t hton16(uint16_t h)
-{
-	uint8_t n[2] = {h>>8, h};
-	uint16_t n_;
-	memcpy(&n_, n, 2);
-	return n_;
-}
-
 static uint16_t ntoh16(uint16_t n_)
 {
 	uint8_t n[2];
