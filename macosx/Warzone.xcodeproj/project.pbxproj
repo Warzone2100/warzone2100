@@ -3680,7 +3680,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"QT_\"\nOutDir=\"QT\"\nFileName=\"QT.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/QT.tar.gz\"\nMD5Sum=\"17d495f6ab3921e00096895cab786462\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"QT_\"\nOutDir=\"QT\"\nFileName=\"QT.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/QT.tar.gz\"\nMD5Sum=\"07d1802c9528ac35fccd89652c5d092f\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf QT.tar.gz --exclude '.DS_Store' QT_";
 		};
 		433360B311A079F700380F5E /* Moc */ = {
 			isa = PBXShellScriptBuildPhase;
