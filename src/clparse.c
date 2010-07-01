@@ -69,6 +69,9 @@ typedef struct _poptContext
 	const struct poptOption *table;
 } *poptContext;
 
+/// TODO: Find a way to use the real qFatal from Qt
+#define qFatal(...) { fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(1); }
+
 static void poptPrintHelp(poptContext ctx, FILE *output, WZ_DECL_UNUSED int unused)
 {
 	int i;
@@ -317,8 +320,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 
 		if (iOption == POPT_ERROR_BADOPT)
 		{
-			debug(LOG_FATAL, "Unrecognized option: %s", poptBadOption(poptCon, 0));
-			exit(1);
+			qFatal("Unrecognized option: %s", poptBadOption(poptCon, 0));
 		}
 
 		switch (option)
@@ -328,15 +330,13 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_FATAL, "Usage: --debug=<flag>");
-					return false;
+					qFatal("Usage: --debug=<flag>");
 				}
 
 				// Attempt to enable the given debug section
 				if (!debug_enable_switch(token))
 				{
-					debug(LOG_FATAL, "Debug flag \"%s\" not found!", token);
-					return false;
+					qFatal("Debug flag \"%s\" not found!", token);
 				}
 				break;
 
@@ -345,8 +345,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_FATAL, "Missing debugfile filename?");
-					return false;
+					qFatal("Missing debugfile filename?");
 				}
 				debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
 				customDebugfile = true;
@@ -362,8 +361,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_FATAL, "Unrecognised configuration directory");
-					return false;
+					qFatal("Unrecognised configuration directory");
 				}
 				sstrcpy(configdir, token);
 				break;
@@ -435,8 +433,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_FATAL, "Unrecognised datadir");
-					return false;
+					qFatal("Unrecognised datadir");
 				}
 				sstrcpy(datadir, token);
 				break;
@@ -449,8 +446,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_FATAL, "No IP/hostname given");
-					return false;
+					qFatal("No IP/hostname given");
 				}
 				sstrcpy(iptoconnect, token);
 				break;
@@ -461,17 +457,12 @@ bool ParseCommandLine(int argc, const char** argv)
 			case CLI_GAME:
 				// retrieve the game name
 				token = poptGetOptArg(poptCon);
-				if (token == NULL)
+				if (token == NULL
+				    || (strcmp(token, "CAM_1A") && strcmp(token, "CAM_2A") && strcmp(token, "CAM_3A")
+				        && strcmp(token, "TUTORIAL3") && strcmp(token, "FASTPLAY")))
 				{
-					debug(LOG_FATAL, "No game name");
-					return false;
-				}
-				if (strcmp(token, "CAM_1A") && strcmp(token, "CAM_2A") && strcmp(token, "CAM_3A")
-				    && strcmp(token, "TUTORIAL3") && strcmp(token, "FASTPLAY"))
-				{
-					debug(LOG_FATAL, "The game parameter requires one of the following keywords:");
-					debug(LOG_FATAL, "CAM_1A, CAM_2A, CAM_3A, TUTORIAL3, or FASTPLAY");
-					return false;
+					qFatal("The game parameter requires one of the following keywords:"
+					       "CAM_1A, CAM_2A, CAM_3A, TUTORIAL3, or FASTPLAY.");
 				}
 				NetPlay.bComms = false;
 				bMultiPlayer = false;
@@ -496,16 +487,14 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_FATAL, "Missing mod name?");
-					return false;
+					qFatal("Missing mod name?");
 				}
 
 				// Find an empty place in the global_mods list
 				for (i = 0; i < 100 && global_mods[i] != NULL; ++i);
 				if (i >= 100 || global_mods[i] != NULL)
 				{
-					debug(LOG_FATAL, "Too many mods registered! Aborting!");
-					return false;
+					qFatal("Too many mods registered! Aborting!");
 				}
 				global_mods[i] = strdup(token);
 				break;
@@ -518,16 +507,14 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_FATAL, "Missing mod name?");
-					return false;
+					qFatal("Missing mod name?");
 				}
 
 				// Find an empty place in the campaign_mods list
 				for (i = 0; i < 100 && campaign_mods[i] != NULL; ++i);
 				if (i >= 100 || campaign_mods[i] != NULL)
 				{
-					debug(LOG_FATAL, "Too many mods registered! Aborting!");
-					return false;
+					qFatal("Too many mods registered! Aborting!");
 				}
 				campaign_mods[i] = strdup(token);
 				break;
@@ -540,15 +527,13 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_FATAL, "Missing mod name?");
-					return false;
+					qFatal("Missing mod name?");
 				}
 
 				for (i = 0; i < 100 && multiplay_mods[i] != NULL; ++i);
 				if (i >= 100 || multiplay_mods[i] != NULL)
 				{
-					debug(LOG_FATAL, "Too many mods registered! Aborting!");
-					return false;
+					qFatal("Too many mods registered! Aborting!");
 				}
 				multiplay_mods[i] = strdup(token);
 				break;
@@ -560,15 +545,14 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (sscanf(token, "%ix%i", &width, &height ) != 2 )
 				{
-					debug(LOG_FATAL, "Invalid parameter specified (format is WIDTHxHEIGHT, e.g. 800x600)");
-					return false;
+					qFatal("Invalid parameter specified (format is WIDTHxHEIGHT, e.g. 800x600)");
 				}
 				if (width < 640) {
-					debug(LOG_POPUP, "Screen width < 640 unsupported, using 640");
+					debug(LOG_ERROR, "Screen width < 640 unsupported, using 640");
 					width = 640;
 				}
 				if (height < 480) {
-					debug(LOG_POPUP, "Screen height < 480 unsupported, using 480");
+					debug(LOG_ERROR, "Screen height < 480 unsupported, using 480");
 					height = 480;
 				}
 				// tell the display system of the desired resolution
@@ -584,8 +568,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_POPUP, "Unrecognised savegame name");
-					return false;
+					qFatal("Unrecognised savegame name");
 				}
 				snprintf(saveGameName, sizeof(saveGameName), "%s/%s", SaveGamePath, token);
 				SetGameMode(GS_SAVEGAMELOAD);
