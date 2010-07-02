@@ -434,16 +434,6 @@ BOOL recvDroid(NETQUEUE queue)
 }
 
 
-/*!
- * Type of the target of the movement
- */
-typedef enum {
-	NET_ORDER_SUBTYPE_POSITION,
-	NET_ORDER_SUBTYPE_OBJECT,
-	NET_ORDER_SUBTYPE_SPECIAL // x and y are 0, no idea what that means
-} NET_ORDER_SUBTYPE;
-
-
 // ////////////////////////////////////////////////////////////////////////////
 /*!
  * Droid Group/selection orders.
@@ -456,7 +446,7 @@ BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_O
 
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GROUPORDER);
 	{
-		DROID_ORDER order = (altOrder?DORDER_UNKNOWN_ALT:DORDER_UNKNOWN);
+		DROID_ORDER order = (DROID_ORDER)(altOrder?DORDER_UNKNOWN_ALT:DORDER_UNKNOWN);
 		BOOL subType = (psObj) ? true : false, cmdOrder = false;
 		DROID* psDroid;
 		uint8_t droidCount;
@@ -614,7 +604,7 @@ BOOL recvGroupOrder(NETQUEUE queue)
 		NETuint8_t(&droidCount);
 
 		// Allocate some space on the stack to hold the droid IDs
-		droidIDs = alloca(droidCount * sizeof(uint32_t));
+		droidIDs = (uint32_t *)alloca(droidCount * sizeof(uint32_t));
 
 		// Retrieve the droids from the message
 		for (i = 0; i < droidCount; ++i)
@@ -676,7 +666,7 @@ BOOL recvGroupOrder(NETQUEUE queue)
 			/* Otherwise if the droids are being ordered to `goto' a
 			 * specific position. Then we don't have any destination info
 			 */
-			ProcessDroidOrder(psDroid, order, x, y, 0, 0);
+			ProcessDroidOrder(psDroid, order, x, y, (OBJECT_TYPE)0, 0);
 		}
 
 		syncDebugDroid(psDroid, '>');
@@ -833,7 +823,7 @@ BOOL recvDroidInfo(NETQUEUE queue)
 		// Otherwise it is just a normal "goto location" order
 		else
 		{
-			ProcessDroidOrder(psDroid, order, x, y, destType, destId);
+			ProcessDroidOrder(psDroid, order, x, y, (OBJECT_TYPE)destType, destId);
 		}
 	}
 	NETend();

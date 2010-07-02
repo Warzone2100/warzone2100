@@ -99,19 +99,17 @@ PACKETDIR NETgetPacketDir(void);
 }
 
 template <typename EnumT>
-static BOOL NETenum(EnumT* enumPtr)
+static void NETenum(EnumT* enumPtr)
 {
 	int32_t val;
 	
 	if (NETgetPacketDir() == PACKET_ENCODE)
 		val = *enumPtr;
 
-	const BOOL retVal = NETint32_t(&val);
+	NETint32_t(&val);
 
 	if (NETgetPacketDir() == PACKET_DECODE)
 		*enumPtr = static_cast<EnumT>(val);
-
-	return retVal;
 }
 
 extern "C"

@@ -241,7 +241,7 @@ warzone2100_SOURCES = \
 	miscimd.c \
 	mission.c \
 	move.c \
-	multibot.c \
+	multibot.cpp \
 	multigifts.c \
 	multiint.c \
 	multijoin.c \
