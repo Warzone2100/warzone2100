@@ -20,6 +20,24 @@
 /** @file
  *  A* based path finding
  *  See http://en.wikipedia.org/wiki/A*_search_algorithm for more information.
+ *  How this works:
+ *  * First time (in a given tick)  that some droid  wants to pathfind  to a particular
+ *    destination,  the A*  algorithm from source to  destination is used.  The desired
+ *    destination,  and the nearest  reachable point  to the  destination is saved in a
+ *    Context.
+ *  * Second time (in a given tick)  that some droid wants to  pathfind to a particular
+ *    destination,  the appropriate  Context is found,  and the A* algorithm is used to
+ *    find a path from the nearest reachable point to the destination  (which was saved
+ *    earlier), to the source.
+ *  * Subsequent times  (in a given tick) that some droid wants to pathfind to a parti-
+ *    cular destination,  the path is looked up in appropriate Context.  If the path is
+ *    not already known,  the A* weights are adjusted, and the previous A*  pathfinding
+ *    is continued until the new source is reached.  If the new source is  not reached,
+ *    the droid is  on a  different island than the previous droid,  and pathfinding is
+ *    restarted from the first step.
+ *  Up to 30 pathfinding maps from A* are cached, in a LRU list. The PathNode heap con-
+ *  tains the  priority-heap-sorted  nodes which are to be explored.  The path back  is
+ *  stored in the PathExploredTile 2D array of tiles.
  */
 
 #ifndef WZ_TESTING
@@ -29,14 +47,9 @@
 #include "map.h"
 #endif
 
+#include <list>
 #include <vector>
 #include <algorithm>
-
-/** Counter to implement lazy deletion from nodeArray.
- *
- *  @see fpathTableReset
- */
-static uint16_t resetIterationCount = 0;
 
 /// A coordinate.
 struct PathCoord
@@ -70,21 +83,60 @@ struct PathNode
 	PathCoord p;                    // Map coords.
 	unsigned  dist, est;            // Distance so far and estimate to end.
 };
-struct PathExploredNode
+struct PathExploredTile
 {
+	PathExploredTile() : iteration(0xFFFF) {}
+
 	uint16_t iteration;
 	int8_t   dx, dy;                // Offset from previous point in the route.
 	unsigned dist;                  // Shortest known distance to tile.
 	bool     visited;
 };
 
-/** A map's maximum width & height
- */
-#define MAX_MAP_SIZE (UINT8_MAX + 1)
+// Data structures used for pathfinding, can contain cached results.
+struct PathfindContext
+{
+	PathfindContext() : iteration(0) { clear(); }
+	bool isBlocked(int x, int y) const { return fpathBaseBlockingTile(x, y, propulsion, owner, moveType); }
+	bool matches(PROPULSION_TYPE propulsion_, int owner_, FPATH_MOVETYPE moveType_, PathCoord tileS_) const { return propulsion == propulsion_ && owner == owner_ && moveType == moveType_ && tileS == tileS_ && gameTime == myGameTime; }
+	void assign(PROPULSION_TYPE propulsion_, int owner_, FPATH_MOVETYPE moveType_, PathCoord tileS_)
+	{
+		propulsion = propulsion_; owner = owner_; moveType = moveType_; tileS = tileS_;
+		myGameTime = gameTime;
+		nodes.clear();
 
-/** Table of closed nodes
- */
-static PathExploredNode nodeArray[MAX_MAP_SIZE][MAX_MAP_SIZE];
+		// Make the iteration not match any value of iteration in map.
+		if (++iteration == 0xFFFF)
+		{
+			map.clear();  // There are no values of iteration guaranteed not to exist in map, so clear the map.
+			iteration = 0;
+		}
+		map.resize(mapWidth * mapHeight);  // Allocate space for map, if needed.
+	}
+	void clear() { assign(PROPULSION_TYPE_NUM, -1, FMT_MOVE, PathCoord(0, 0)); }
+
+	// Type of object which needs a path.
+	PROPULSION_TYPE propulsion;
+	int             owner;
+	FPATH_MOVETYPE  moveType;
+
+	PathCoord       tileS;                // Start tile for pathfinding. (May be either source or target tile.)
+	uint32_t        myGameTime;
+
+	PathCoord       nearestCoord;         // Nearest reachable tile to destination.
+
+	/** Counter to implement lazy deletion from map.
+	 *
+	 *  @see fpathTableReset
+	 */
+	uint16_t        iteration;
+
+	std::vector<PathNode> nodes;        ///< Edge of explored region of the map.
+	std::vector<PathExploredTile> map;  ///< Map, with paths leading back to tileS.
+};
+
+/// Last recently used list of contexts.
+static std::list<PathfindContext> fpathContexts;
 
 // Convert a direction into an offset
 // dir 0 => x = 0, y = -1
@@ -100,50 +152,14 @@ static const Vector2i aDirOffset[] =
 	{ 1, 1},
 };
 
-/** Reset the node table
- *
- *  @NOTE The actual implementation does a lazy reset, because resetting the
- *        entire node table is expensive.
- */
-static void fpathTableReset(void)
-{
-	// Reset node table, simulate this by incrementing the iteration
-	// counter, which will invalidate all nodes currently in the table. See
-	// the implementation of fpathGetNode().
-	++resetIterationCount;
-
-	// Check to prevent overflows of resetIterationCount
-	if (resetIterationCount < UINT16_MAX)
-	{
-		ASSERT(resetIterationCount > 0, "Integer overflow occurred!");
-
-		return;
-	}
-
-	// If we're about to overflow resetIterationCount, reset the entire
-	// table for real (not lazy for once in a while) and start counting
-	// at zero (0) again.
-	fpathHardTableReset();
-}
-
 void fpathHardTableReset()
 {
-	int x, y;
-
-	for (x = 0; x < ARRAY_SIZE(nodeArray); ++x)
-	{
-		for (y = 0; y < ARRAY_SIZE(nodeArray[x]); ++y)
-		{
-			nodeArray[x][y].iteration = UINT16_MAX;
-		}
-	}
-
-	resetIterationCount = 0;
+	fpathContexts.clear();
 }
 
 /** Get the nearest entry in the open list
  */
-/// Takes the current best node, and removes from the node tree.
+/// Takes the current best node, and removes from the node heap.
 static inline PathNode fpathTakeNode(std::vector<PathNode> &nodes)
 {
 	// find the node with the lowest distance
@@ -151,7 +167,7 @@ static inline PathNode fpathTakeNode(std::vector<PathNode> &nodes)
 	PathNode ret = nodes.front();
 
 	// remove the node from the list
-	std::pop_heap(nodes.begin(), nodes.end());  // Move the best node from the front of nodes to the back of nodes, preserving the tree properties, setting the front to the next best node.
+	std::pop_heap(nodes.begin(), nodes.end());  // Move the best node from the front of nodes to the back of nodes, preserving the heap properties, setting the front to the next best node.
 	nodes.pop_back();                           // Pop the best node (which we will be returning).
 
 	return ret;
@@ -168,9 +184,9 @@ static inline unsigned WZ_DECL_CONST fpathEstimate(PathCoord s, PathCoord f)
 
 /** Generate a new node
  */
-static inline void fpathNewNode(std::vector<PathNode> &nodes, PathCoord dest, PathCoord pos, unsigned prevDist, PathCoord prevPos)
+static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCoord pos, unsigned prevDist, PathCoord prevPos)
 {
-	ASSERT(pos.x < ARRAY_SIZE(nodeArray) && pos.y < ARRAY_SIZE(nodeArray[pos.x]), "X (%d) or Y (%d) coordinate for path finding node is out of range!", pos.x, pos.y);
+	ASSERT((unsigned)pos.x < (unsigned)mapWidth && (unsigned)pos.y < (unsigned)mapHeight, "X (%d) or Y (%d) coordinate for path finding node is out of range!", pos.x, pos.y);
 
 	// Create the node.
 	PathNode node;
@@ -178,53 +194,51 @@ static inline void fpathNewNode(std::vector<PathNode> &nodes, PathCoord dest, Pa
 	node.dist = prevDist + fpathEstimate(prevPos, pos);
 	node.est = node.dist + fpathEstimate(pos, dest);
 
-	PathExploredNode &expl = nodeArray[pos.x][pos.y];
-	if (expl.iteration == resetIterationCount && (expl.visited || expl.dist <= node.dist))
+	PathExploredTile &expl = context.map[pos.x + pos.y*mapWidth];
+	if (expl.iteration == context.iteration && (expl.visited || expl.dist <= node.dist))
 	{
 		return;  // Already visited this tile. Do nothing.
 	}
 
 	// Remember where we have been, and remember the way back.
-	expl.iteration = resetIterationCount;
+	expl.iteration = context.iteration;
 	expl.dx = pos.x - prevPos.x;
 	expl.dy = pos.y - prevPos.y;
 	expl.dist = node.dist;
 	expl.visited = false;
 
-	// Add the node to the node tree.
-	nodes.push_back(node);                       // Add the new node to nodes.
-	std::push_heap(nodes.begin(), nodes.end());  // Move the new node to the right place in the tree.
+	// Add the node to the node heap.
+	context.nodes.push_back(node);                               // Add the new node to nodes.
+	std::push_heap(context.nodes.begin(), context.nodes.end());  // Move the new node to the right place in the heap.
 }
 
-static std::vector<PathNode> nodes;
-static std::vector<Vector2i> path;
+/// Recalculates estimates to new tileF tile.
+static void fpathAStarReestimate(PathfindContext &context, PathCoord tileF)
+{
+	for (std::vector<PathNode>::iterator node = context.nodes.begin(); node != context.nodes.end(); ++node)
+	{
+		node->est = node->dist + fpathEstimate(node->p, tileF);
+	}
 
-SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
+	// Changing the estimates breaks the heap ordering. Fix the heap ordering.
+	std::make_heap(context.nodes.begin(), context.nodes.end());
+}
+
+/// Returns nearest explored tile to tileF.
+static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 {
 	PathCoord       nearestCoord(0, 0);
 	unsigned        nearestDist = 0xFFFFFFFF;
 
-	int             retval = ASR_OK;
-
-	const PathCoord tileS(map_coord(psJob->origX), map_coord(psJob->origY));
-	const PathCoord tileF(map_coord(psJob->destX), map_coord(psJob->destY));
-
-	fpathTableReset();
-	nodes.clear();  // Could declare nodes here, but making global to save allocations.
-
-	// Add the start point to the open list
-	fpathNewNode(nodes, tileF, tileS, 0, tileS);
-	ASSERT(!nodes.empty(), "fpathNewNode failed to add node.");
-
 	// search for a route
-	while (!nodes.empty())
+	while (!context.nodes.empty())
 	{
-		PathNode node = fpathTakeNode(nodes);
-		if (nodeArray[node.p.x][node.p.y].visited)
+		PathNode node = fpathTakeNode(context.nodes);
+		if (context.map[node.p.x + node.p.y*mapWidth].visited)
 		{
 			continue;  // Already been here.
 		}
-		nodeArray[node.p.x][node.p.y].visited = true;
+		context.map[node.p.x + node.p.y*mapWidth].visited = true;
 
 		// note the nearest node to the target so far
 		if (node.est - node.dist < nearestDist)
@@ -241,7 +255,7 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		}
 
 		// loop through possible moves in 8 directions to find a valid move
-		for (int dir = 0; dir < ARRAY_SIZE(aDirOffset); ++dir)
+		for (unsigned dir = 0; dir < ARRAY_SIZE(aDirOffset); ++dir)
 		{
 			/*
 			   5  6  7
@@ -258,13 +272,13 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 				// We cannot cut corners
 				x = node.p.x + aDirOffset[(dir + 1) % 8].x;
 				y = node.p.y + aDirOffset[(dir + 1) % 8].y;
-				if (fpathBaseBlockingTile(x, y, psJob->propulsion, psJob->owner, psJob->moveType))
+				if (context.isBlocked(x, y))
 				{
 					continue;
 				}
 				x = node.p.x + aDirOffset[(dir + 7) % 8].x;
 				y = node.p.y + aDirOffset[(dir + 7) % 8].y;
-				if (fpathBaseBlockingTile(x, y, psJob->propulsion, psJob->owner, psJob->moveType))
+				if (context.isBlocked(x, y))
 				{
 					continue;
 				}
@@ -275,27 +289,104 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 			int y = node.p.y + aDirOffset[dir].y;
 
 			// See if the node is a blocking tile
-			if (fpathBaseBlockingTile(x, y, psJob->propulsion, psJob->owner, psJob->moveType))
+			if (context.isBlocked(x, y))
 			{
 				// tile is blocked, skip it
 				continue;
 			}
 
 			// Now insert the point into the appropriate list, if not already visited.
-			fpathNewNode(nodes, tileF, PathCoord(x, y), node.dist, node.p);
+			fpathNewNode(context, tileF, PathCoord(x, y), node.dist, node.p);
 		}
 	}
-	ASSERT(nearestDist != 0xFFFFFFFF, "Failed to find a point closer to the destination than infinity.");
+
+	return nearestCoord;
+}
+
+static void fpathInitContext(PathfindContext &context, PROPULSION_TYPE propulsion, int owner, FPATH_MOVETYPE moveType, PathCoord tileS, PathCoord tileRealS, PathCoord tileF)
+{
+	context.assign(propulsion, owner, moveType, tileS);
+
+	// Add the start point to the open list
+	fpathNewNode(context, tileF, tileRealS, 0, tileRealS);
+	ASSERT(!context.nodes.empty(), "fpathNewNode failed to add node.");
+}
+
+SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
+{
+	int             retval = ASR_OK;
+
+	bool            mustReverse = true;
+
+	const PathCoord tileOrig(map_coord(psJob->origX), map_coord(psJob->origY));
+	const PathCoord tileDest(map_coord(psJob->destX), map_coord(psJob->destY));
+
+	PathCoord endCoord;  // Either nearest coord (mustReverse = true) or orig (mustReverse = false).
+
+	std::list<PathfindContext>::iterator contextIterator = fpathContexts.begin();
+	for (contextIterator = fpathContexts.begin(); contextIterator != fpathContexts.end(); ++contextIterator)
+	{
+		if (!contextIterator->matches(psJob->propulsion, psJob->owner, psJob->moveType, tileDest))
+		{
+			// This context is not for the same droid type and same destination.
+			continue;
+		}
+
+		// We have tried going to tileDest before.
+
+		if (contextIterator->map[tileOrig.x + tileOrig.y*mapWidth].iteration == contextIterator->iteration
+		 && contextIterator->map[tileOrig.x + tileOrig.y*mapWidth].visited)
+		{
+			// Already know the path from orig to dest.
+			endCoord = tileOrig;
+		}
+		else
+		{
+			// Need to find the path from orig to dest, continue previous exploration.
+			fpathAStarReestimate(*contextIterator, tileOrig);
+			endCoord = fpathAStarExplore(*contextIterator, tileOrig);
+		}
+
+		if (endCoord != tileOrig)
+		{
+			// orig turned out to be on a different island than what this context was used for, so can't use this context data after all.
+			continue;
+		}
+
+		mustReverse = false;  // We have the path from the nearest reachable tile to dest, to orig.
+		break;  // Found the path! Don't search more contexts.
+	}
+
+	if (contextIterator == fpathContexts.end())
+	{
+		// We did not find an appropriate context. Make one.
+
+		if (fpathContexts.size() < 30)
+		{
+			fpathContexts.push_back(PathfindContext());
+		}
+		--contextIterator;
+
+		// Init a new context, overwriting the oldest one if we are caching too many.
+		// We will be searching from orig to dest, since we don't know where the nearest reachable tile to dest is.
+		fpathInitContext(*contextIterator, psJob->propulsion, psJob->owner, psJob->moveType, tileOrig, tileOrig, tileDest);
+		endCoord = fpathAStarExplore(*contextIterator, tileDest);
+		contextIterator->nearestCoord = endCoord;
+	}
+
+	PathfindContext &context = *contextIterator;
 
 	// return the nearest route if no actual route was found
-	if (nearestCoord != tileF)
+	if (context.nearestCoord != tileDest)
 	{
 		retval = ASR_NEAREST;
 	}
 
 	// Get route, in reverse order.
-	path.clear();  // Could declare path here, but making global to save allocations.
-	for (PathCoord p = nearestCoord; p != tileS; p = PathCoord(p.x - nodeArray[p.x][p.y].dx, p.y - nodeArray[p.x][p.y].dy))
+	static std::vector<Vector2i> path;  // Declared static to save allocations.
+	path.clear();
+
+	for (PathCoord p = endCoord; p != context.tileS; p = PathCoord(p.x - context.map[p.x + p.y*mapWidth].dx, p.y - context.map[p.x + p.y*mapWidth].dy))
 	{
 		ASSERT(tileOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
 
@@ -312,7 +403,14 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	{
 		// Found exact path, so use exact coordinates for last point, no reason to lose precision
 		Vector2i v = {psJob->destX, psJob->destY};
-		path.front() = v;
+		if (mustReverse)
+		{
+			path.front() = v;
+		}
+		else
+		{
+			path.back() = v;
+		}
 	}
 
 	// TODO FIXME once we can change numPoints to something larger than uint16_t
@@ -338,10 +436,31 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	//
 	// If many droids are heading towards the same destination, then destination
 	// to source would be faster if reusing the information in nodeArray. --Cyp
-	std::copy(path.rbegin(), path.rend(), psMove->asPath);
+	if (mustReverse)
+	{
+		// Copy the list, in reverse.
+		std::copy(path.rbegin(), path.rend(), psMove->asPath);
 
-	psMove->DestinationX = path.back().x;
-	psMove->DestinationY = path.back().y;
+		if (!context.isBlocked(tileOrig.x, tileOrig.y))  // If blocked, searching from tileDest to tileOrig wouldn't find the tileOrig tile.
+		{
+			// Next time, search starting from nearest reachable tile to the destination.
+			fpathInitContext(context, psJob->propulsion, psJob->owner, psJob->moveType, tileDest, context.nearestCoord, tileOrig);
+		}
+	}
+	else
+	{
+		// Copy the list.
+		std::copy(path.begin(), path.end(), psMove->asPath);
+	}
+
+	// Move context to beginning of last recently used list.
+	if (contextIterator != fpathContexts.begin())  // Not sure whether or not the splice is a safe noop, if equal.
+	{
+		fpathContexts.splice(fpathContexts.begin(), fpathContexts, contextIterator);
+	}
+
+	psMove->DestinationX = psMove->asPath[path.size() - 1].x;
+	psMove->DestinationY = psMove->asPath[path.size() - 1].y;
 
 	return retval;
 }
