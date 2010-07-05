@@ -207,6 +207,7 @@ lib/framework/tagfile.c
 lib/framework/treap.c
 lib/framework/trig.c
 lib/framework/utf.c
+lib/framework/wzapp.cpp
 lib/gamelib/anim.c
 lib/gamelib/animobj.c
 lib/gamelib/gtime.c
@@ -216,6 +217,7 @@ lib/iniparser/iniparser.c
 lib/ivis_common/bitimage.c
 lib/ivis_common/imd.c
 lib/ivis_common/imdload.c
+lib/ivis_common/jpeg_encoder.c
 lib/ivis_common/pieclip.c
 lib/ivis_common/piestate.c
 lib/ivis_common/png_util.c
