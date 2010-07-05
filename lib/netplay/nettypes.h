@@ -87,6 +87,7 @@ void NETint16_t(int16_t *ip);
 void NETuint16_t(uint16_t *ip);
 void NETint32_t(int32_t *ip);
 void NETuint32_t(uint32_t *ip);
+void NETuint32_tSmall(uint32_t *ip);  ///< Encodes small values in less than 4 bytes, large values up to 5 bytes.
 void NETfloat(float* fp);
 void NETbool(BOOL *bp);
 void NETnull(void);
@@ -101,12 +102,12 @@ PACKETDIR NETgetPacketDir(void);
 template <typename EnumT>
 static void NETenum(EnumT* enumPtr)
 {
-	int32_t val;
+	uint32_t val;
 	
 	if (NETgetPacketDir() == PACKET_ENCODE)
 		val = *enumPtr;
 
-	NETint32_t(&val);
+	NETuint32_tSmall(&val);
 
 	if (NETgetPacketDir() == PACKET_DECODE)
 		*enumPtr = static_cast<EnumT>(val);
@@ -120,11 +121,11 @@ static inline void squelchUninitialisedUseWarning(void *ptr) { (void)ptr; }
 #define NETenum(enumPtr) \
 do \
 { \
-	int32_t _val; \
+	uint32_t _val; \
 	squelchUninitialisedUseWarning(enumPtr); \
 	_val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
 \
-	NETint32_t(&_val); \
+	NETuint32_tSmall(&_val); \
 \
 	*(enumPtr) = _val; \
 } while(0)

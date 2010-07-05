@@ -45,9 +45,69 @@
 #include "mapgrid.h"
 #include "multirecv.h"
 
+#include <vector>
+#include <algorithm>
+
 #define ANYPLAYER	99
 #define DORDER_UNKNOWN		99
 #define DORDER_UNKNOWN_ALT 100
+
+struct QueuedDroidInfo
+{
+	/// Sorts by order, then finally by droid id, to group multiple droids with the same order.
+	bool operator <(QueuedDroidInfo const &z) const
+	{
+		int orComp = orderCompare(z);
+		if (orComp != 0) return orComp < 0;
+		return droidId < z.droidId;
+	}
+	/// Returns 0 if order is the same, non-zero otherwise.
+	int orderCompare(QueuedDroidInfo const &z) const
+	{
+		if (player != z.player)       return player < z.player ? -1 : 1;
+		if (order != z.order)         return order < z.order ? -1 : 1;
+		if (subType != z.subType)     return subType < z.subType ? -1 : 1;
+		if (subType)
+		{
+			if (destId != z.destId)       return destId < z.destId ? -1 : 1;
+			if (destType != z.destType)   return destType < z.destType ? -1 : 1;
+		}
+		else
+		{
+			if (x != z.x)                 return x < z.x ? -1 : 1;
+			if (y != z.y)                 return y < z.y ? -1 : 1;
+		}
+		if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
+		{
+			if (structRef != z.structRef) return structRef < z.structRef ? -1 : 1;
+			if (structId != z.structId)   return structId < z.structId ? -1 : 1;
+			if (direction != z.direction) return direction < z.direction ? -1 : 1;
+		}
+		if (order == DORDER_LINEBUILD)
+		{
+			if (x2 != z.x2)               return x2 < z.x2 ? -1 : 1;
+			if (y2 != z.y2)               return y2 < z.y2 ? -1 : 1;
+		}
+		return 0;
+	}
+
+	uint8_t     player;
+	uint32_t    droidId;
+	DROID_ORDER order;
+	BOOL        subType;
+	uint32_t    destId;     // if (subType)
+	OBJECT_TYPE destType;   // if (subType)
+	uint32_t    x;          // if (!subType)
+	uint32_t    y;          // if (!subType)
+	uint32_t    structRef;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
+	uint32_t    structId;   // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
+	uint16_t    direction;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
+	uint32_t    x2;         // if (order == DORDER_LINEBUILD)
+	uint32_t    y2;         // if (order == DORDER_LINEBUILD)
+};
+
+static std::vector<QueuedDroidInfo> queuedOrders;
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
@@ -675,6 +735,72 @@ BOOL recvGroupOrder(NETQUEUE queue)
 	return true;
 }
 
+/// Does not read/write info->droidId!
+static void NETQueuedDroidInfo(QueuedDroidInfo *info)
+{
+	NETuint8_t(&info->player);
+	NETenum(&info->order);
+	NETbool(&info->subType);
+	if (info->subType)
+	{
+		NETuint32_t(&info->destId);
+		NETenum(&info->destType);
+	}
+	else
+	{
+		NETuint32_tSmall(&info->x);
+		NETuint32_tSmall(&info->y);
+	}
+	if (info->order == DORDER_BUILD || info->order == DORDER_LINEBUILD)
+	{
+		NETuint32_t(&info->structRef);
+		NETuint32_t(&info->structId);
+		NETuint16_t(&info->direction);
+	}
+	if (info->order == DORDER_LINEBUILD)
+	{
+		NETuint32_tSmall(&info->x2);
+		NETuint32_tSmall(&info->y2);
+	}
+}
+
+// Actually send the droid info.
+void sendQueuedDroidInfo()
+{
+	// Sort queued orders, to group the same order to multiple droids.
+	std::sort(queuedOrders.begin(), queuedOrders.end());
+
+	std::vector<QueuedDroidInfo>::iterator eqBegin, eqEnd;
+	for (eqBegin = queuedOrders.begin(); eqBegin != queuedOrders.end(); eqBegin = eqEnd)
+	{
+		// Find end of range of orders which differ only by the droid ID.
+		for (eqEnd = eqBegin + 1; eqEnd != queuedOrders.end() && eqEnd->orderCompare(*eqBegin) == 0; ++eqEnd)
+		{}
+
+		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDINFO);
+			NETQueuedDroidInfo(&*eqBegin);
+
+			uint32_t num = eqEnd - eqBegin;
+			NETuint32_tSmall(&num);
+
+			uint32_t prevDroidId = 0;
+			for (unsigned n = 0; n < num; ++n)
+			{
+				uint32_t droidId = (eqBegin + n)->droidId;
+
+				// Encode deltas between droid IDs, since the deltas are smaller than the actual droid IDs, and will encode to less bytes on average.
+				uint32_t deltaDroidId = droidId - prevDroidId;
+				NETuint32_tSmall(&deltaDroidId);
+
+				prevDroidId = droidId;
+			}
+		NETend();
+	}
+
+	// Sent the orders. Don't send them again.
+	queuedOrders.clear();
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Droid update information
 BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction)
@@ -687,49 +813,39 @@ BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t
 		return true;
 	}
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDINFO);
+	QueuedDroidInfo info;
+	memset(&info, 0x00, sizeof(info));  // Suppress uninitialised warnings. (The uninitialised values in the queue would be ignored when reading the queue.)
+
+	info.player = psDroid->player;
+	info.droidId = psDroid->id;
+	info.order = order;
+	info.subType = psObj != NULL;
+	if (info.subType)
 	{
-		uint32_t droidId = psDroid->id;
-		BOOL subType = (psObj) ? true : false;
-		uint8_t player = psDroid->player;
-
-		NETuint8_t(&player);
-		// Send the droid's ID
-		NETuint32_t(&droidId);
-
-		// Send the droid's order
-		NETenum(&order);
-		NETbool(&subType);
-
-		if (subType)
-		{
-			uint32_t destId = psObj->id;
-			uint32_t destType = psObj->type;
-
-			NETuint32_t(&destId);
-			NETenum(&destType);
-		}
-		else
-		{
-			NETuint32_t(&x);
-			NETuint32_t(&y);
-		}
-		if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
-		{
-			uint32_t structId = generateNewObjectId();
-			uint32_t structRef = psStats->ref;
-
-			NETuint32_t(&structRef);
-			NETuint32_t(&structId);
-			NETuint16_t(&direction);
-		}
-		if (order == DORDER_LINEBUILD)
-		{
-			NETuint32_t(&x2);
-			NETuint32_t(&y2);
-		}
+		info.destId = psObj->id;
+		info.destType = psObj->type;
 	}
-	return NETend();
+	else
+	{
+		info.x = x;
+		info.y = y;
+	}
+	if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
+	{
+		info.structRef = psStats->ref;
+		info.structId = generateNewObjectId();
+		info.direction = direction;
+	}
+	if (order == DORDER_LINEBUILD)
+	{
+		info.x2 = x2;
+		info.y2 = y2;
+	}
+
+	// Send later, grouped by order, so multiple droids with the same order can be encoded to much less data.
+	queuedOrders.push_back(info);
+
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -738,92 +854,70 @@ BOOL recvDroidInfo(NETQUEUE queue)
 {
 	NETbeginDecode(queue, GAME_DROIDINFO);
 	{
-		uint32_t	droidId;
-		DROID*		psDroid;
-		DROID_ORDER	order = DORDER_NONE;
-		BOOL		subType;
-		uint8_t		player;
-		uint32_t        destId = 0, destType = 0;
-		uint32_t        x = 0, y = 0;
+		QueuedDroidInfo info;
+		memset(&info, 0x00, sizeof(info));  // Default to nothing, if bad packet.
+		info.droidId = 0;                   // droidId not set by NETQueuedDroidInfo.
+		NETQueuedDroidInfo(&info);
+
 		STRUCTURE_STATS *psStats = NULL;
-		uint32_t        structId = 0;
-		uint32_t        x2 = 0, y2 = 0;
-		uint16_t        direction = 0;
-
-		NETuint8_t(&player);		// actual player this belongs to
-		NETuint32_t(&droidId);		// Get the droid
-
-		if (!IdToDroid(droidId, ANYPLAYER, &psDroid))
+		if (info.order == DORDER_BUILD || info.order == DORDER_LINEBUILD)
 		{
-			debug(LOG_ERROR, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
-				queue.index, droidId, isHumanPlayer(player) ? "Human" : "AI", player);
-			return false;
-		}
-
-		// Get the droid's order
-		NETenum(&order);
-		NETbool(&subType);
-
-		if (subType)
-		{
-			NETuint32_t(&destId);
-			NETenum(&destType);
-		}
-		else
-		{
-			NETuint32_t(&x);
-			NETuint32_t(&y);
-		}
-
-		if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
-		{
-			uint32_t structRef = 0;
-			unsigned typeIndex;
-
-			NETuint32_t(&structRef);
-			NETuint32_t(&structId);
 			// Find structure target
-			for (typeIndex = 0; typeIndex < numStructureStats; typeIndex++)
+			for (unsigned typeIndex = 0; typeIndex < numStructureStats; typeIndex++)
 			{
-				if (asStructureStats[typeIndex].ref == structRef)
+				if (asStructureStats[typeIndex].ref == info.structRef)
 				{
 					psStats = asStructureStats + typeIndex;
+					break;
 				}
 			}
-			NETuint16_t(&direction);
-		}
-		if (order == DORDER_LINEBUILD)
-		{
-			NETuint32_t(&x2);
-			NETuint32_t(&y2);
 		}
 
-		psDroid->waitingForOwnReceiveDroidInfoMessage = false;
+		uint32_t num = 0;
+		NETuint32_tSmall(&num);
 
-		if (order == DORDER_BUILD)
+		for (unsigned n = 0; n < num; ++n)
 		{
-			turnOffMultiMsg(true);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.
-			orderDroidStatsLocDir(psDroid, order, (BASE_STATS *)psStats, x, y, direction);
-			turnOffMultiMsg(false);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.
-		}
-		else if (order == DORDER_LINEBUILD)
-		{
-			turnOffMultiMsg(true);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.
-			orderDroidStatsTwoLocDir(psDroid, order, (BASE_STATS *)psStats, x, y, x2, y2, direction);
-			turnOffMultiMsg(false);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.
-		}
-		else if (!subType && x == 0 && y == 0)
-		{
-			// If both the X _and_ Y coordinate are zero we've been given a
-			// "special" order.
-			turnOffMultiMsg(true);
-			orderDroid(psDroid, order);
-			turnOffMultiMsg(false);
-		}
-		// Otherwise it is just a normal "goto location" order
-		else
-		{
-			ProcessDroidOrder(psDroid, order, x, y, (OBJECT_TYPE)destType, destId);
+			// Get the next droid ID which is being given this order.
+			uint32_t deltaDroidId = 0;
+			NETuint32_tSmall(&deltaDroidId);
+			info.droidId += deltaDroidId;
+
+			DROID *psDroid = NULL;
+			if (!IdToDroid(info.droidId, ANYPLAYER, &psDroid))
+			{
+				debug(LOG_ERROR, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
+				      queue.index, info.droidId, isHumanPlayer(info.player) ? "Human" : "AI", info.player);
+				continue;  // Can't find the droid, so skip this droid.
+			}
+
+			psDroid->waitingForOwnReceiveDroidInfoMessage = false;
+
+			if (info.order == DORDER_BUILD)
+			{
+				turnOffMultiMsg(true);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.
+				orderDroidStatsLocDir(psDroid, info.order, (BASE_STATS *)psStats, info.x, info.y, info.direction);
+				turnOffMultiMsg(false);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.
+			}
+			else if (info.order == DORDER_LINEBUILD)
+			{
+				turnOffMultiMsg(true);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.
+				orderDroidStatsTwoLocDir(psDroid, info.order, (BASE_STATS *)psStats, info.x, info.y, info.x2, info.y2, info.direction);
+				turnOffMultiMsg(false);  // Grrr, want to remove the turnOffMultiMsg calls, not add more... Trying to get building working in a sane way for now.
+			}
+			else if (!info.subType && info.x == 0 && info.y == 0)
+			{
+				// If both the X _and_ Y coordinate are zero we've been given a
+				// "special" order.
+				turnOffMultiMsg(true);
+				orderDroid(psDroid, info.order);
+				turnOffMultiMsg(false);
+			}
+			// Otherwise it is just a normal "goto location" order
+			else
+			{
+				ProcessDroidOrder(psDroid, info.order, info.x, info.y, info.destType, info.destId);
+			}
 		}
 	}
 	NETend();

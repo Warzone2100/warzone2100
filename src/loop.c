@@ -158,6 +158,9 @@ GAMECODE gameLoop(void)
 
 	if (gameTicked)
 	{
+		// Actually send pending droid orders.
+		sendQueuedDroidInfo();
+
 		sendPlayerGameTime();
 		gameSRand(gameTime);   // Brute force way of synchronising the random number generator, which can't go out of synch.
 	}
