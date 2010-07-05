@@ -1,6 +1,6 @@
 // Warzone settings for Release configuration
 
-#include "warzone-all.xcconfig"
+#include "Warzone-All.xcconfig"
 
 
 GCC_OPTIMIZATION_LEVEL = 2
