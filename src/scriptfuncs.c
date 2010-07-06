@@ -4496,7 +4496,7 @@ BOOL scrAddPower(void)
 		return false;
 	}
 
-	addPower(player, power);
+	giftPower(ANYPLAYER, player, power, true);
 
 	return true;
 }

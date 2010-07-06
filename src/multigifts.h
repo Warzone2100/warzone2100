@@ -48,7 +48,7 @@ extern void sendMultiPlayerFeature(FEATURE_TYPE type, uint32_t x, uint32_t y, ui
 
 extern void	giftArtifact					(UDWORD owner,UDWORD x,UDWORD y);
 extern BOOL	addOilDrum						(uint8_t count);
-extern void	giftPower						(uint8_t from, uint8_t to, BOOL send);
+void giftPower                          (uint8_t from, uint8_t to, uint32_t amount, BOOL send);
 extern void giftRadar						(uint8_t from, uint8_t to, BOOL send);
 
 #define RADAR_GIFT		1

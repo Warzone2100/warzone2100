@@ -95,7 +95,7 @@ BOOL recvGift(NETQUEUE queue)
 			break;
 		case POWER_GIFT:
 			audioTrack = ID_POWER_TRANSMIT;
-			giftPower(from, to, false);
+			giftPower(from, to, droidID, false);
 			break;
 		default:
 			debug(LOG_ERROR, "recvGift: Unknown Gift recvd");
@@ -131,7 +131,7 @@ BOOL sendGift(uint8_t type, uint8_t to)
 			break;
 		case POWER_GIFT:
 			audioTrack = ID_POWER_TRANSMIT;
-			giftPower(selectedPlayer, to, true);
+			giftPower(selectedPlayer, to, 0, true);
 			break;
 		default:
 			debug( LOG_ERROR, "Unknown Gift sent" );
@@ -304,10 +304,8 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 
 // ////////////////////////////////////////////////////////////////////////////
 // give Power
-void giftPower(uint8_t from, uint8_t to, BOOL send)
+void giftPower(uint8_t from, uint8_t to, uint32_t amount, BOOL send)
 {
-	uint32_t dummy = 0;
-
 	if (send)
 	{
 		uint8_t giftType = POWER_GIFT;
@@ -316,16 +314,16 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 			NETuint8_t(&giftType);
 			NETuint8_t(&from);
 			NETuint8_t(&to);
-			NETuint32_t(&dummy);
+			NETuint32_t(&amount);
 		NETend();
 	}
 	else
 	{
 		uint32_t gifval;
 
-		if (from == ANYPLAYER)
+		if (from == ANYPLAYER || amount != 0)
 		{
-			gifval = OILDRUM_POWER;
+			gifval = amount;
 		}
 		else
 		{

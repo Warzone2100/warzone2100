@@ -2585,7 +2585,7 @@ static void checkLocalFeatures(DROID *psDroid)
 
 		if(bMultiPlayer && (psObj->player == ANYPLAYER))
 		{
-			giftPower(ANYPLAYER,selectedPlayer,true);			// give power
+			giftPower(ANYPLAYER, selectedPlayer, OILDRUM_POWER, true);  // give power
 			CONPRINTF(ConsoleString,(ConsoleString,_("You found %u power in an oil drum."),OILDRUM_POWER));
 			// when player finds oil, we init the timer, and flag that we need a drum
 			if (!oilTimer)

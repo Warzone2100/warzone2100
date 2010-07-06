@@ -44,6 +44,7 @@
 #include "geometry.h"
 #include "src/scriptfuncs.h"
 #include "fpath.h"
+#include "multigifts.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
@@ -1792,7 +1793,7 @@ BOOL scrSkDifficultyModifier(void)
 	}
 
 	// power modifier, range: 0-1000
-	addPower(player, game.skDiff[player] * 50);
+	giftPower(ANYPLAYER, player, game.skDiff[player] * 50, true);
 
 	//research modifier
 	for (psStr=apsStructLists[player];psStr;psStr=psStr->psNext)
