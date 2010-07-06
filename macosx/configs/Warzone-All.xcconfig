@@ -1,6 +1,7 @@
 // Warzone settings for all configurations
 
 
+GCC_VERSION = 4.2 // required for -mfpmath=sse and -mno-fused-madd
 INSTALL_PATH = $(HOME)/Applications
 PREBINDING = NO
 APPLY_RULES_IN_COPY_FILES = YES
