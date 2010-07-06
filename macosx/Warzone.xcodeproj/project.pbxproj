@@ -471,6 +471,7 @@
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4371B5A611D93BA3005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B5A411D93BA3005A67AB /* pngpriv.h */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
+		4396141511E2447100878481 /* barkmel.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B9C0118BEBE0000BBE59 /* barkmel.c */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
 		43BE73ED11121A47007DF934 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177E70F87A926000C8A96 /* config.h */; };
 		43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BE75E811124BB4007DF934 /* wavecast.cpp */; };
@@ -499,7 +500,6 @@
 		43C3B9BB118BEAE7000BBE59 /* res_books_uncoupled.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C3B9BA118BEAE7000BBE59 /* res_books_uncoupled.h */; };
 		43C3B9BE118BEB63000BBE59 /* residue_44p51.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C3B9BC118BEB63000BBE59 /* residue_44p51.h */; };
 		43C3B9BF118BEB63000BBE59 /* setup_44p51.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C3B9BD118BEB63000BBE59 /* setup_44p51.h */; };
-		43C3B9C5118BEBE0000BBE59 /* tone.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B9C2118BEBE0000BBE59 /* tone.c */; };
 		43C3B9E0118BEC40000BBE59 /* res_books_51.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C3B9B4118BEA9D000BBE59 /* res_books_51.h */; };
 		43E1890411440D8C000870EB /* eval-plural.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F850BD55B4F002E64E3 /* eval-plural.h */; };
 		43E1890511440D8D000870EB /* gettextP.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F860BD55B4F002E64E3 /* gettextP.h */; };
@@ -4467,7 +4467,7 @@
 				02DDA8410BD3C1420049AB60 /* window.c in Sources */,
 				02DDA8590BD3C18B0049AB60 /* vorbisenc.c in Sources */,
 				02DDA85A0BD3C18B0049AB60 /* vorbisfile.c in Sources */,
-				43C3B9C5118BEBE0000BBE59 /* tone.c in Sources */,
+				4396141511E2447100878481 /* barkmel.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
