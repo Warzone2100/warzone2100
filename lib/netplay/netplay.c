@@ -2790,8 +2790,8 @@ receive_message:
 			size =	  pMsg->size + sizeof(pMsg->size) + sizeof(pMsg->type)
 				+ sizeof(pMsg->destination) + sizeof(pMsg->source);
 			if (!NetPlay.isHost)
-			{
-				// do nothing
+			{	//client gets a packet
+				NETlogPacket(pMsg->type, pMsg->size, true);		// log packet that we received
 			}
 			else if (pMsg->destination == NET_ALL_PLAYERS)
 			{
