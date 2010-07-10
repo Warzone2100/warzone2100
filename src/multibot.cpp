@@ -78,7 +78,7 @@ struct QueuedDroidInfo
 		if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
 		{
 			if (structRef != z.structRef) return structRef < z.structRef ? -1 : 1;
-			if (structId != z.structId)   return structId < z.structId ? -1 : 1;
+			// Don't sort by structId, since everything obeying this build order should build the same structure.
 			if (direction != z.direction) return direction < z.direction ? -1 : 1;
 		}
 		if (order == DORDER_LINEBUILD)
@@ -98,7 +98,7 @@ struct QueuedDroidInfo
 	uint32_t    x;          // if (!subType)
 	uint32_t    y;          // if (!subType)
 	uint32_t    structRef;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
-	uint32_t    structId;   // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
+	uint32_t    structId;   // if (order == DORDER_BUILD || order == DORDER_LINEBUILD), not used when sorting.
 	uint16_t    direction;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
 	uint32_t    x2;         // if (order == DORDER_LINEBUILD)
 	uint32_t    y2;         // if (order == DORDER_LINEBUILD)
@@ -580,6 +580,9 @@ void sendQueuedDroidInfo()
 		for (eqEnd = eqBegin + 1; eqEnd != queuedOrders.end() && eqEnd->orderCompare(*eqBegin) == 0; ++eqEnd)
 		{}
 
+		// Generate the structure ID for the new structure to be built.
+		eqBegin->structId = generateNewObjectId();
+
 		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDINFO);
 			NETQueuedDroidInfo(&*eqBegin);
 
@@ -636,7 +639,7 @@ BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t
 	if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
 	{
 		info.structRef = psStats->ref;
-		info.structId = generateNewObjectId();
+		// Skip info.structId, generate one just before actually sending the order, since the structId should be the same for all droids obeying this order.
 		info.direction = direction;
 	}
 	if (order == DORDER_LINEBUILD)
