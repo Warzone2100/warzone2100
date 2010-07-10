@@ -79,7 +79,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				ExecutionBucket="11"
-				AdditionalDependencies="OpenGL32.lib GLU32.lib shfolder.lib winmm.lib ws2_32.lib dbghelp.lib libogg_static.lib libvorbis_static.lib libvorbisfile_static.lib libtheora_static.lib libpng.lib physfs.lib zlibstat.lib OpenAL32.lib QtGui4.lib QtOpenGL4.lib QtCore4.lib QtMain.lib"
+				AdditionalDependencies="OpenGL32.lib GLU32.lib shfolder.lib winmm.lib ws2_32.lib dbghelp.lib libogg_static.lib libvorbis_static.lib libvorbisfile_static.lib libtheora_static.lib libpng.lib physfs.lib zlibstat.lib OpenAL32.lib QtGui4.lib QtOpenGL4.lib QtCore4.lib QtMain.lib glc32.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\devpkg\lib&quot;"
