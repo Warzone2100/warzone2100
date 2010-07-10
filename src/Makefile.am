@@ -179,7 +179,7 @@ warzone2100_SOURCES = \
 	advvis.c \
 	ai.c \
 	aiexperience.c \
-	astar.c \
+	astar.cpp \
 	atmos.c \
 	aud.c \
 	baseobject.c \

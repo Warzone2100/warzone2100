@@ -85,10 +85,10 @@ BOOL NETstopLogging(void)
 	for (i = 0; i < NUM_GAME_PACKETS; i++)
 	{
 		snprintf(buf, sizeof(buf), "%-24s:\t received %u times, %u bytes; sent %u times, %u bytes\n", messageTypeToString(i),
-			packetcount[0][i], packetsize[0][i], packetcount[1][i], packetsize[1][i]);
+			packetcount[1][i], packetsize[1][i], packetcount[0][i], packetsize[0][i]);
 		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
-		totalBytessent += packetsize[1][i];
-		totalBytesrecv += packetsize[0][i];
+		totalBytessent += packetsize[0][i];
+		totalBytesrecv += packetsize[1][i];
 		totalPacketsent += packetcount[0][i];
 		totalPacketrecv += packetcount[1][i];
 	}
@@ -140,6 +140,11 @@ BOOL NETstopLogging(void)
 	return true;
 }
 
+/** log packet
+ *  \param type, uint8_t, the packet's type.
+ *  \param size, uint32_t, the packet's size
+ *  \param received, BOOL, true if we are receiving a packet, false if we are sending a packet.
+*/
 void NETlogPacket(uint8_t type, uint32_t size, BOOL received)
 {
 	STATIC_ASSERT((1<<(8*sizeof(type))) == NUM_GAME_PACKETS);  // NUM_GAME_PACKETS must be larger than maximum possible type.

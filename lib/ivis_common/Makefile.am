@@ -9,6 +9,7 @@ noinst_HEADERS = \
 	ivi.h \
 	ivisdef.h \
 	ivispatch.h \
+	jpeg_encoder.h \
 	pieblitfunc.h \
 	pieclip.h \
 	piedef.h \
@@ -26,6 +27,7 @@ libivis_common_a_SOURCES = \
 	bitimage.c \
 	imd.c \
 	imdload.c \
+	jpeg_encoder.c \
 	pieclip.c \
 	piestate.c \
 	png_util.c

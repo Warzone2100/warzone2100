@@ -70,6 +70,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	DROID			*psDroid = NULL;
 	int				minOffset = 5;
 	SDWORD			dist;
+	int				compIndex;
 
 	CHECK_OBJECT(psAttacker);
 	CHECK_OBJECT(psTarget);
@@ -86,7 +87,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	/* Get the stats for the weapon */
-	psStats = asWeaponStats + psWeap->nStat;
+	compIndex = psWeap->nStat;
+	ASSERT_OR_RETURN( , compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+	psStats = asWeaponStats + compIndex;
 
 	// check valid weapon/prop combination
 	if (!validTarget(psAttacker, psTarget, weapon_slot))

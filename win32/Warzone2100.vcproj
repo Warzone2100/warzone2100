@@ -252,7 +252,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\astar.c"
+					RelativePath="..\src\astar.cpp"
 					>
 				</File>
 				<File

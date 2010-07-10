@@ -31,7 +31,12 @@
 # error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
+#include "wzglobal.h"
+
 #include <assert.h>
+#if !defined(WZ_OS_WIN)
+#include <signal.h>
+#endif
 #include "macros.h"
 #include "types.h"
 
@@ -54,13 +59,22 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 /** Whether asserts are currently enabled. */
 extern bool assertEnabled;
 
+
+/* Do the correct assert call for each compiler */
+#if defined(WZ_OS_WIN)
+#define wz_assert(expr) assert(expr)
+#else
+#define wz_assert(expr) raise(SIGTRAP)
+#endif
+
+
 /** Deals with failure in an assert. Expression is (re-)evaluated for output in the assert() call. */
 #define ASSERT_FAILURE(expr, expr_string, location_description, function, ...) \
 	( \
 		(void)_debug(LOG_ERROR, function, __VA_ARGS__), \
 		(void)_debug(LOG_ERROR, function, "Assert in Warzone: %s (%s), last script event: '%s'", \
 	                                  location_description, expr_string, last_called_script_event), \
-		( assertEnabled ? assert(expr) : (void)0 )\
+		( assertEnabled ? (void)wz_assert(expr) : (void)0 )\
 	)
 
 /**

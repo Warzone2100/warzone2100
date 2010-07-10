@@ -162,6 +162,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\jpeg_encoder.c"
+				>
+			</File>
+			<File
 				RelativePath=".\pieclip.c"
 				>
 			</File>
@@ -197,6 +201,10 @@
 			</File>
 			<File
 				RelativePath=".\ivispatch.h"
+				>
+			</File>
+			<File
+				RelativePath=".\jpeg_encoder.h"
 				>
 			</File>
 			<File

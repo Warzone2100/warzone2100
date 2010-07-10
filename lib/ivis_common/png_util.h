@@ -50,4 +50,5 @@ void iV_saveImage_PNG(const char *fileName, const iV_Image *image);
  */
 void iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image);
 
+void iV_saveImage_JPEG(const char *fileName, const iV_Image *image);
 #endif // _LIBIVIS_COMMON_PNG_H_

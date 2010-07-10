@@ -47,7 +47,7 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob);
 
 /** Clean up the path finding node table.
  *
- *  @note Call this <em>only</em> on shutdown to prevent memory from leaking.
+ *  @note Call this on shutdown to prevent memory from leaking, or if loading/saving, to prevent stale data from being reused.
  *
  *  @ingroup pathfinding
  */

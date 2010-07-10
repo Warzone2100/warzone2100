@@ -192,6 +192,7 @@ lib/exceptionhandler/dumpinfo.cpp
 lib/exceptionhandler/exceptionhandler.c
 lib/exceptionhandler/exchndl.c
 lib/framework/configfile.c
+lib/framework/crc.cpp
 lib/framework/cursors16.c
 lib/framework/cursors32.c
 lib/framework/cursors.c
@@ -217,6 +218,7 @@ lib/iniparser/iniparser.c
 lib/ivis_common/bitimage.c
 lib/ivis_common/imd.c
 lib/ivis_common/imdload.c
+lib/ivis_common/jpeg_encoder.c
 lib/ivis_common/pieclip.c
 lib/ivis_common/piestate.c
 lib/ivis_common/png_util.c
@@ -266,7 +268,7 @@ src/action.c
 src/advvis.c
 src/ai.c
 src/aiexperience.c
-src/astar.c
+src/astar.cpp
 src/atmos.c
 src/aud.c
 src/baseobject.c

@@ -80,13 +80,6 @@
 // Maximum size of an object for collision
 #define OBJ_MAXRADIUS	(TILE_UNITS * 4)
 
-// How close to a way point the next target starts to phase in
-const float WAYPOINT_DIST = TILE_UNITS*2.0f;
-#define WAYPOINT_DSQ (WAYPOINT_DIST*WAYPOINT_DIST) // C does not allows this to be a const variable...
-
-// Never get turned stronger towards the 2nd next waypoint than this times the current waypoint's strength
-const float WAYPOINT_2NDNEXT_SUCKINESS = 0.5f;
-
 // Accuracy for the boundary vector
 #define BOUND_ACC		1000
 
@@ -1445,71 +1438,21 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
  */
 static uint16_t moveGetDirection(DROID *psDroid)
 {
-	// Current position and destination direction
-	Vector2f
-		src = { psDroid->pos.x, psDroid->pos.y },
-		dest = { 0.0f, 0.0f };
-	// Current waypoint
-	Vector2f
-		target = { psDroid->sMove.targetX, psDroid->sMove.targetY },
-		delta = Vector2f_Sub(target, src);
-	float magnitude = Vector2f_ScalarP(delta, delta);
-
-	// Dont fade in the next target point if we are at finished or too far away from the current
-	if (psDroid->sMove.Position == psDroid->sMove.numPoints || magnitude > WAYPOINT_DSQ)
-	{
-		dest = Vector2f_Normalise(delta);
-	}
-	// We are in reach of the current waypoint and have further points to go
-	else
-	{
-		// Next waypoint
-		Vector2f
-			nextTarget = Vector2i_To2f( movePeekNextTarget(psDroid) ),
-			nextDelta = Vector2f_Sub(nextTarget, src);
-		float nextMagnitude = Vector2f_ScalarP(nextDelta, nextDelta);
-
-		// We are already there
-		if (magnitude < FLT_EPSILON && nextMagnitude < FLT_EPSILON)
-		{
-			return 0; // We are practically standing on our only waypoint
-		}
-		// We are passing the current waypoint, so directly head over to the next
-		else if (magnitude < FLT_EPSILON)
-		{
-			dest = Vector2f_Normalise(nextDelta);
-		}
-		// We are passing the next waypoint or so close we could be circling between both, 
-		// so for now don't interpolate it. Instead head to the first unvisited waypoint as
-		// a silly workaround. What we should do is drop this waypoint and head to the next.
-		else if (nextMagnitude < WAYPOINT_DSQ)
-		{
-			dest = Vector2f_Normalise(delta);
-		}
-		// Interpolate with the next target
-		else
-		{
-			// Make sure we get sucked stronger towards the 2nd waypoint than the first.
-			// Also ensure we get never turned away from a waypoint.
-			float nextInterpolation = fmaxf(fminf(WAYPOINT_DSQ - magnitude, magnitude * WAYPOINT_2NDNEXT_SUCKINESS), 0.0f);
-
-			// Interpolate the vectors based on how close to them we are
-			delta = Vector2f_Mult(delta, magnitude);
-			nextDelta = Vector2f_Mult(nextDelta, nextInterpolation);
-
-			dest = Vector2f_Normalise( Vector2f_Add(delta, nextDelta) );
-		}
-	}
-
-	ASSERT(isfinite(dest.x) && isfinite(dest.y), "float infinity detected");
+	Position src = droidGetPrecisePosition(psDroid);
+	Position target = { (psDroid->sMove.targetX << EXTRA_BITS), (psDroid->sMove.targetY << EXTRA_BITS), 0 };
+	Position dest = Vector3i_Sub(target, src);
 
 	// Transporters don't need to avoid obstacles, but everyone else should
-	if ( psDroid->droidType != DROID_TRANSPORTER )
+	if (psDroid->droidType != DROID_TRANSPORTER)
 	{
-		moveGetObstacleVector(psDroid, &dest.x, &dest.y);
+		float fX = dest.x >> EXTRA_BITS;
+		float fY = dest.y >> EXTRA_BITS;
+		moveGetObstacleVector(psDroid, &fX, &fY);
+		dest.x = fX * EXTRA_PRECISION;
+		dest.y = fY * EXTRA_PRECISION;
 	}
 
-	return iAtan2(dest.x*10000, dest.y*10000);
+	return iAtan2(dest.x, dest.y);
 }
 
 

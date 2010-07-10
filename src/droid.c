@@ -1326,6 +1326,7 @@ BOOL droidUpdateRestore( DROID *psDroid )
 	STRUCTURE		*psStruct;
 	UDWORD			pointsToAdd, restorePoints;
 	WEAPON_STATS	*psStats;
+	int compIndex;
 
 	CHECK_DROID(psDroid);
 
@@ -1336,7 +1337,9 @@ BOOL droidUpdateRestore( DROID *psDroid )
 
 	ASSERT_OR_RETURN(false, psDroid->asWeaps[0].nStat > 0, "droid doesn't have any weapons");
 
-	psStats = asWeaponStats + psDroid->asWeaps[0].nStat;
+	compIndex = psDroid->asWeaps[0].nStat;
+	ASSERT_OR_RETURN(false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+	psStats = asWeaponStats + compIndex;
 
 	ASSERT_OR_RETURN(false, psStats->weaponSubClass == WSC_ELECTRONIC, "unit's weapon is not EW");
 
@@ -4161,6 +4164,7 @@ FIRE_SUPPORT order can be assigned*/
 BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 {
 	SENSOR_STATS	*psStats = NULL;
+	int compIndex;
 
 	CHECK_DROID(psDroid);
 
@@ -4189,7 +4193,9 @@ BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 		{
 			return false;
 		}
-		psStats = asSensorStats + ((DROID *)psObj)->asBits[COMP_SENSOR].nStat;
+		compIndex = ((DROID *)psObj)->asBits[COMP_SENSOR].nStat;
+		ASSERT_OR_RETURN( false, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
+		psStats = asSensorStats + compIndex;
 		break;
 	case OBJ_STRUCTURE:
 		psStats = ((STRUCTURE *)psObj)->pStructureType->pSensor;
