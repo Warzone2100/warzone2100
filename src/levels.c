@@ -145,10 +145,17 @@ LEVEL_DATASET* levFindDataSet(const char* name)
 
 	for (psNewLevel = psLevels; psNewLevel; psNewLevel = psNewLevel->psNext)
 	{
-		if (psNewLevel->pName != NULL
-		 && strcmp(psNewLevel->pName, name) == 0)
+		if (psNewLevel->pName != NULL)
 		{
-			return psNewLevel;
+			if (strcmp(psNewLevel->pName, name) == 0 ||
+			    (strncmp(psNewLevel->pName, "Sk-", 3) == 0 &&
+			     strcmp(psNewLevel->pName+3, name) == 0) ||
+			    (strncmp(psNewLevel->pName, "Sk-", 3) == 0 &&
+			     strcmp(psNewLevel->pName+strlen(name)-3-3, "-T1") &&
+			     strncmp(psNewLevel->pName+3, name, strlen(name)-3) == 0))
+			{
+				return psNewLevel;
+			}
 		}
 	}
 
