@@ -992,6 +992,7 @@ static void mainLoop(void)
 					handleActiveEvent(&event.active);
 					break;
 				case SDL_QUIT:
+					saveConfig();
 					return;
 				default:
 					break;
