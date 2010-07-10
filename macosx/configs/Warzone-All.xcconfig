@@ -1,7 +1,6 @@
 // Warzone settings for all configurations
 
 
-GCC_VERSION = 4.2 // required for -mfpmath=sse and -mno-fused-madd
 INSTALL_PATH = $(HOME)/Applications
 PREBINDING = NO
 APPLY_RULES_IN_COPY_FILES = YES
@@ -38,5 +37,5 @@ GCC_WARN_UNUSED_VALUE = YES // -Wunused-value
 GCC_WARN_UNUSED_VARIABLE = YES // -Wunused-variable
 
 // Additional build flags for both c and c++ files
-FlagsForCandCpp = $(BuildDependentFlagsForCandCpp) -mno-fused-madd
-FlagsForCandCpp[arch=i386] = -mfpmath=sse $(inherited) // Flags for intel 32 bit only
+FlagsForCandCpp = $(BuildDependentFlagsForCandCpp)
+FlagsForCandCpp[arch=i386] = $(inherited) // Flags for intel 32 bit only

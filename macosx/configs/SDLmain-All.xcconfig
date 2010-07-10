@@ -1,7 +1,6 @@
 // SDLmain settings for all configurations
 
 
-GCC_VERSION = 4.2 // match warzone
 INSTALL_PATH = /usr/local/lib
 PREBINDING = NO
 PRODUCT_NAME = SDLmain

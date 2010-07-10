@@ -208,7 +208,7 @@
 		0246A28E0BD3CCDC004D1C70 /* advvis.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A19A0BD3CCDB004D1C70 /* advvis.c */; };
 		0246A28F0BD3CCDC004D1C70 /* ai.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A19C0BD3CCDB004D1C70 /* ai.c */; };
 		0246A2900BD3CCDC004D1C70 /* aiexperience.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A19E0BD3CCDB004D1C70 /* aiexperience.c */; };
-		0246A2920BD3CCDC004D1C70 /* astar.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A30BD3CCDB004D1C70 /* astar.c */; };
+		0246A2920BD3CCDC004D1C70 /* astar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A30BD3CCDB004D1C70 /* astar.cpp */; };
 		0246A2930BD3CCDC004D1C70 /* atmos.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A50BD3CCDB004D1C70 /* atmos.c */; };
 		0246A2940BD3CCDC004D1C70 /* aud.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A70BD3CCDB004D1C70 /* aud.c */; };
 		0246A2950BD3CCDC004D1C70 /* bridge.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A90BD3CCDB004D1C70 /* bridge.c */; };
@@ -486,6 +486,7 @@
 		4355E13210D6028C00A19EE4 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12E10D6028C00A19EE4 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4371DCFE1151394A00869BAB /* nettypes.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43C18FAF114FF38B0028741B /* nettypes.h */; };
+		43805E6411E8C8D400888529 /* jpeg_encoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 43805E6211E8C8D400888529 /* jpeg_encoder.c */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
 		438F99561141A296003CB5F2 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438F99541141A296003CB5F2 /* crc.cpp */; };
 		4396138B11E23EC000878481 /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = 4396138511E23EC000878481 /* gzclose.c */; };
@@ -1138,7 +1139,7 @@
 		0246A19E0BD3CCDB004D1C70 /* aiexperience.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = aiexperience.c; path = ../src/aiexperience.c; sourceTree = SOURCE_ROOT; };
 		0246A19F0BD3CCDB004D1C70 /* aiexperience.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aiexperience.h; path = ../src/aiexperience.h; sourceTree = SOURCE_ROOT; };
 		0246A1A00BD3CCDB004D1C70 /* anim_id.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = anim_id.h; path = ../src/anim_id.h; sourceTree = SOURCE_ROOT; };
-		0246A1A30BD3CCDB004D1C70 /* astar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = astar.c; path = ../src/astar.c; sourceTree = SOURCE_ROOT; };
+		0246A1A30BD3CCDB004D1C70 /* astar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = astar.cpp; path = ../src/astar.cpp; sourceTree = SOURCE_ROOT; };
 		0246A1A40BD3CCDB004D1C70 /* astar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = astar.h; path = ../src/astar.h; sourceTree = SOURCE_ROOT; };
 		0246A1A50BD3CCDB004D1C70 /* atmos.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = atmos.c; path = ../src/atmos.c; sourceTree = SOURCE_ROOT; };
 		0246A1A60BD3CCDB004D1C70 /* atmos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = atmos.h; path = ../src/atmos.h; sourceTree = SOURCE_ROOT; };
@@ -1565,6 +1566,8 @@
 		4355E12D10D6028C00A19EE4 /* theora.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theora.h; path = external/libtheora/include/theora/theora.h; sourceTree = "<group>"; };
 		4355E12E10D6028C00A19EE4 /* theoradec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoradec.h; path = external/libtheora/include/theora/theoradec.h; sourceTree = "<group>"; };
 		4355E12F10D6028C00A19EE4 /* theoraenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoraenc.h; path = external/libtheora/include/theora/theoraenc.h; sourceTree = "<group>"; };
+		43805E6211E8C8D400888529 /* jpeg_encoder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jpeg_encoder.c; path = ../lib/ivis_common/jpeg_encoder.c; sourceTree = SOURCE_ROOT; };
+		43805E6311E8C8D400888529 /* jpeg_encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jpeg_encoder.h; path = ../lib/ivis_common/jpeg_encoder.h; sourceTree = SOURCE_ROOT; };
 		438BDDD81129DC9A00998660 /* cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438BDDD91129DC9A00998660 /* da */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438BDDDA1129DC9A00998660 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -2133,6 +2136,8 @@
 		0246A0E90BD3CC10004D1C70 /* Ivis Common */ = {
 			isa = PBXGroup;
 			children = (
+				43805E6211E8C8D400888529 /* jpeg_encoder.c */,
+				43805E6311E8C8D400888529 /* jpeg_encoder.h */,
 				02C8AEF60BE68A5600E9D8A7 /* png_util.c */,
 				02C8AEF70BE68A5600E9D8A7 /* png_util.h */,
 				0246A0EA0BD3CC29004D1C70 /* bitimage.c */,
@@ -2317,7 +2322,7 @@
 				0246A19E0BD3CCDB004D1C70 /* aiexperience.c */,
 				0246A19F0BD3CCDB004D1C70 /* aiexperience.h */,
 				0246A1A00BD3CCDB004D1C70 /* anim_id.h */,
-				0246A1A30BD3CCDB004D1C70 /* astar.c */,
+				0246A1A30BD3CCDB004D1C70 /* astar.cpp */,
 				0246A1A40BD3CCDB004D1C70 /* astar.h */,
 				0246A1A50BD3CCDB004D1C70 /* atmos.c */,
 				0246A1A60BD3CCDB004D1C70 /* atmos.h */,
@@ -4263,7 +4268,7 @@
 				0246A28E0BD3CCDC004D1C70 /* advvis.c in Sources */,
 				0246A28F0BD3CCDC004D1C70 /* ai.c in Sources */,
 				0246A2900BD3CCDC004D1C70 /* aiexperience.c in Sources */,
-				0246A2920BD3CCDC004D1C70 /* astar.c in Sources */,
+				0246A2920BD3CCDC004D1C70 /* astar.cpp in Sources */,
 				0246A2930BD3CCDC004D1C70 /* atmos.c in Sources */,
 				0246A2940BD3CCDC004D1C70 /* aud.c in Sources */,
 				0246A2950BD3CCDC004D1C70 /* bridge.c in Sources */,
@@ -4408,6 +4413,7 @@
 				43C18FD0114FF38B0028741B /* netlog.c in Sources */,
 				43C18FD1114FF38B0028741B /* netplay.c in Sources */,
 				43C18FD2114FF38B0028741B /* netsocket.cpp in Sources */,
+				43805E6411E8C8D400888529 /* jpeg_encoder.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
