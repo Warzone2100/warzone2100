@@ -35,7 +35,6 @@ extern "C"
 extern BOOL recvDroid               (NETQUEUE queue);
 extern BOOL recvDroidInfo           (NETQUEUE queue);
 extern BOOL recvDestroyDroid        (NETQUEUE queue);
-extern BOOL recvGroupOrder          (NETQUEUE queue);
 extern BOOL recvDroidMove           (NETQUEUE queue);
 extern BOOL recvDestroyStructure    (NETQUEUE queue);
 extern BOOL recvBuildStarted        (NETQUEUE queue);

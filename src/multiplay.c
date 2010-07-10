@@ -667,9 +667,6 @@ BOOL recvMessage(void)
 			case GAME_DROIDDEST:					// droid destroy
 				recvDestroyDroid(queue);
 				break;
-			case GAME_GROUPORDER:				// an order for more than 1 droid.
-				recvGroupOrder(queue);
-				break;
 			case GAME_CHECK_DROID:				// droid damage and position checks
 				recvDroidCheck(queue);
 				break;

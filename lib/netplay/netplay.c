@@ -3008,7 +3008,6 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_MIN_TYPE:                 return "GAME_MIN_TYPE";
 		case GAME_DROID:                    return "GAME_DROID";
 		case GAME_DROIDINFO:                return "GAME_DROIDINFO";
-		case GAME_GROUPORDER:               return "GAME_GROUPORDER";
 		case GAME_TEMPLATE:                 return "GAME_TEMPLATE";
 		case GAME_TEMPLATEDEST:             return "GAME_TEMPLATEDEST";
 		case GAME_FEATUREDEST:              return "GAME_FEATUREDEST";

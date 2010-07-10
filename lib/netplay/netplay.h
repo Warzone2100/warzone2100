@@ -97,7 +97,6 @@ typedef enum
 	GAME_MIN_TYPE = 111,            ///< Minimum-1 valid GAME_ type, *MUST* be first.
 	GAME_DROID,                     ///< a new droid
 	GAME_DROIDINFO,                 ///< update a droid order.
-	GAME_GROUPORDER,                ///< order a group of droids.
 	GAME_TEMPLATE,                  ///< a new template
 	GAME_TEMPLATEDEST,              ///< remove template
 	GAME_FEATUREDEST,               ///< destroy a game feature.

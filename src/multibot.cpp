@@ -49,8 +49,6 @@
 #include <algorithm>
 
 #define ANYPLAYER	99
-#define DORDER_UNKNOWN		99
-#define DORDER_UNKNOWN_ALT 100
 
 struct QueuedDroidInfo
 {
@@ -497,68 +495,23 @@ BOOL recvDroid(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 /*!
  * Droid Group/selection orders.
- * Minimises comms by sending orders for whole groups, rather than each droid
+ * The SendDroidInfo function minimises comms by sending orders for whole groups, rather than each droid.
  */
 BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, BOOL altOrder)
 {
 	if (!bMultiMessages)
 		return true;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GROUPORDER);
+	for (DROID *psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-		DROID_ORDER order = (DROID_ORDER)(altOrder?DORDER_UNKNOWN_ALT:DORDER_UNKNOWN);
-		BOOL subType = (psObj) ? true : false, cmdOrder = false;
-		DROID* psDroid;
-		uint8_t droidCount;
-
-		NETuint8_t(&player);
-		NETenum(&order);
-		NETbool(&cmdOrder);
-		NETbool(&subType);
-
-		// If they are being ordered to `goto' an object
-		if (subType)
+		if (psDroid->selected)
 		{
-			uint32_t id = psObj->id;
-			uint32_t type = psObj->type;
-
-			NETuint32_t(&id);
-			NETenum(&type);
-		}
-		// Else if the droids are being ordered to `goto' a specific position
-		else
-		{
-			NETuint32_t(&x);
-			NETuint32_t(&y);
-		}
-
-		// Work out the number of droids to send
-		for (psDroid = apsDroidLists[player], droidCount = 0; psDroid; psDroid = psDroid->psNext)
-		{
-			if (psDroid->selected)
-				++droidCount;
-		}
-
-		// If there are less than 2 droids don't bother (to allow individual orders)
-		if (droidCount < 2)
-		{
-			return false;
-		}
-
-		// Add the number of droids to the message
-		NETuint8_t(&droidCount);
-
-		// Add the droids to the message
-		for (psDroid = apsDroidLists[player]; psDroid && droidCount; psDroid = psDroid->psNext)
-		{
-			if (psDroid->selected)
-			{
-				NETuint32_t(&psDroid->id);
-				--droidCount;
-			}
+			DROID_ORDER order = psObj? chooseOrderObj(psDroid, const_cast<BASE_OBJECT *>(psObj), altOrder) : chooseOrderLoc(psDroid, x, y, altOrder);
+			SendDroidInfo(psDroid, order, x, y, psObj, NULL, 0, 0, 0);
 		}
 	}
-	return NETend();
+
+	return true;
 }
 /*
 *	This routine is called by the AI scripts
@@ -567,7 +520,7 @@ BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_O
 BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj)
 {
 	/* Check if the order is valid */
-	if ((psObj && !validOrderForObj(order)) || (!psObj && !validOrderForLoc(order)))
+	if (!(psObj? validOrderForObj(order) : validOrderForLoc(order)))
 	{
 		ASSERT(false, "SendGroupOrderGroup: Bad order");
 		return false;
@@ -576,160 +529,10 @@ BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t
 	if (!bMultiMessages)
 		return true;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GROUPORDER);
+	// Add the droids to the message
+	for (DROID *psDroid = psGroup->psList; psDroid; psDroid = psDroid->psGrpNext)
 	{
-		BOOL	subType = (psObj) ? true : false, cmdOrder = false;
-		DROID	*psDroid;
-		uint8_t	droidCount;
-		uint8_t	player = 99;	// anything over MAX_PLAYERS = AI
-
-		if(psGroup && psGroup->psList)
-		{
-			player = psGroup->psList->player;
-		}
-
-		NETuint8_t(&player);
-		NETenum(&order);
-		NETbool(&cmdOrder);
-		NETbool(&subType);
-
-		// If they are being ordered to `goto' an object
-		if (subType)
-		{
-			uint32_t id = psObj->id;
-			uint32_t type = psObj->type;
-
-			NETuint32_t(&id);
-			NETenum(&type);
-		}
-		// Else if the droids are being ordered to `goto' a specific position
-		else
-		{
-			NETuint32_t(&x);
-			NETuint32_t(&y);
-		}
-
-		// Work out the number of droids to send
-		for (psDroid = psGroup->psList, droidCount = 0; psDroid; psDroid = psDroid->psGrpNext)
-		{
-			++droidCount;
-		}
-
-		// Add the number of droids to the message
-		NETuint8_t(&droidCount);
-
-		// Add the droids to the message
-		for (psDroid = psGroup->psList; psDroid; psDroid = psDroid->psGrpNext)
-		{
-			NETuint32_t(&psDroid->id);
-		}
-	}
-	return NETend();
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// receive a group order.
-BOOL recvGroupOrder(NETQUEUE queue)
-{
-	DROID_ORDER order = DORDER_NONE;
-	BOOL		subType, cmdOrder;
-
-	uint32_t	destId, x, y;
-	OBJECT_TYPE destType = OBJ_DROID; // Dummy initialisation to workaround NETenum macro
-
-	uint8_t		droidCount, i, player;
-	uint32_t	*droidIDs;
-
-	NETbeginDecode(queue, GAME_GROUPORDER);
-	{
-		NETuint8_t(&player);		// FYI: anything over MAX_PLAYERS means this is a ai player
-		NETenum(&order);
-		NETbool(&cmdOrder);
-		NETbool(&subType);
-
-		// If they are being ordered to `goto' an object
-		if (subType)
-		{
-			NETuint32_t(&destId);
-			NETenum(&destType);
-		}
-		// Else if the droids are being ordered to `goto' a specific position
-		else
-		{
-			NETuint32_t(&x);
-			NETuint32_t(&y);
-		}
-
-		// Get the droid count
-		NETuint8_t(&droidCount);
-
-		// Allocate some space on the stack to hold the droid IDs
-		droidIDs = (uint32_t *)alloca(droidCount * sizeof(uint32_t));
-
-		// Retrieve the droids from the message
-		for (i = 0; i < droidCount; ++i)
-		{
-			// Retrieve the id number for the current droid
-			NETuint32_t(&droidIDs[i]);
-		}
-	}
-	if (!NETend())
-	{
-		// If somehow we fail assume the message got truncated prematurely
-		debug(LOG_SYNC, "Error retrieving droid ID number; while there are (supposed to be) still %u droids left for p%d",
-			(unsigned int)droidCount, player);
-		return false;
-	}
-
-	/* Check if the order is valid */
-	if (order != DORDER_UNKNOWN && order != DORDER_UNKNOWN_ALT && ((subType && !validOrderForObj(order)) || (!subType && !validOrderForLoc(order))))
-	{
-		debug(LOG_ERROR, "Invalid group order received from %d, [%s : p%d]", queue.index,
-			isHumanPlayer(player) ? "Human" : "AI", player);
-		return false;
-	}
-
-	// Process the given order for all droids we've retrieved
-	for (i = 0; i < droidCount; ++i)
-	{
-		DROID* psDroid;
-
-		// Retrieve the droid associated with the current ID
-		if (!IdToDroid(droidIDs[i], ANYPLAYER, &psDroid))
-		{
-			debug(LOG_ERROR, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
-				queue.index, droidIDs[i], isHumanPlayer(player) ? "Human" : "AI", player);
-			continue; // continue working on next droid; crossing fingers...
-		}
-
-		syncDebugDroid(psDroid, '<');
-
-		/*
-		 * If the current order not is a command order and we are not a
-		 * commander yet are in the commander group remove us from it.
-		 */
-		if (!cmdOrder && hasCommander(psDroid))
-		{
-			grpLeave(psDroid->psGroup, psDroid);
-		}
-
-		// Process the droid's order
-		if (subType)
-		{
-			/* If they are being ordered to `goto' an object then we don't
-			 * have any X and Y coordinate.
-			 */
-			ProcessDroidOrder(psDroid, order, 0, 0, destType, destId);
-		}
-		else
-		{
-			/* Otherwise if the droids are being ordered to `goto' a
-			 * specific position. Then we don't have any destination info
-			 */
-			ProcessDroidOrder(psDroid, order, x, y, (OBJECT_TYPE)0, 0);
-		}
-
-		syncDebugDroid(psDroid, '>');
+		SendDroidInfo(psDroid, order, x, y, psObj, NULL, 0, 0, 0);
 	}
 
 	return true;
@@ -873,6 +676,18 @@ BOOL recvDroidInfo(NETQUEUE queue)
 			}
 		}
 
+		// DORDER_RTB not valid for anything, according to validOrderForLoc and validOrderForObj.
+		// Possibly same for other orders... So don't check this.
+		/*
+		// Check if the order is valid.
+		if (!(info.subType? validOrderForObj(info.order) : info.order == DORDER_BUILD || info.order == DORDER_LINEBUILD || validOrderForLoc(info.order)))
+		{
+			debug(LOG_ERROR, "Invalid order %s %d received from %d, [%s : p%d]", getDroidOrderName(info.order), info.subType, queue.index,
+			      isHumanPlayer(info.player) ? "Human" : "AI", info.player);
+			return false;
+		}
+		*/
+
 		uint32_t num = 0;
 		NETuint32_tSmall(&num);
 
@@ -891,7 +706,18 @@ BOOL recvDroidInfo(NETQUEUE queue)
 				continue;  // Can't find the droid, so skip this droid.
 			}
 
+			syncDebugDroid(psDroid, '<');
+
 			psDroid->waitingForOwnReceiveDroidInfoMessage = false;
+
+			/*
+			* If the current order not is a command order and we are not a
+			* commander yet are in the commander group remove us from it.
+			*/
+			if (hasCommander(psDroid))
+			{
+				grpLeave(psDroid->psGroup, psDroid);
+			}
 
 			if (info.order == DORDER_BUILD)
 			{
@@ -918,6 +744,9 @@ BOOL recvDroidInfo(NETQUEUE queue)
 			{
 				ProcessDroidOrder(psDroid, info.order, info.x, info.y, info.destType, info.destId);
 			}
+
+			syncDebugDroid(psDroid, '>');
+
 		}
 	}
 	NETend();
@@ -938,16 +767,6 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 		 && order != DORDER_DISEMBARK)
 		{
 			return;
-		}
-
-		// If no specific order was passed work one out based on the location
-		if (order == DORDER_UNKNOWN)
-		{
-			order = chooseOrderLoc(psDroid, x, y, false);
-		}
-		else if (order == DORDER_UNKNOWN_ALT)
-		{
-			order = chooseOrderLoc(psDroid, x, y, true);
 		}
 
 		turnOffMultiMsg(true);
@@ -990,15 +809,6 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 			return;
 		}
 
-		// If we didn't sepcify an order, then pick one
-		if (order == DORDER_UNKNOWN)
-		{
-			order = chooseOrderObj(psDroid, psObj, false);
-		}
-		else if (order == DORDER_UNKNOWN_ALT)
-		{
-			order = chooseOrderObj(psDroid, psObj, true);
-		}
 		turnOffMultiMsg(true);
 		orderDroidObj(psDroid, order, psObj);
 		turnOffMultiMsg(false);
