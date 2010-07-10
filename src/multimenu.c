@@ -472,7 +472,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	sButInit.formID = M_REQUEST;
 	sButInit.id = M_REQUEST_CLOSE;
 	sButInit.style = WBUT_PLAIN;
-	sButInit.x = M_REQUEST_W - CLOSE_WIDTH;
+	sButInit.x = M_REQUEST_W - CLOSE_WIDTH - 3;
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
