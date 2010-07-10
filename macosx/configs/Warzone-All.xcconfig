@@ -36,6 +36,5 @@ GCC_WARN_UNUSED_VALUE = YES // -Wunused-value
 GCC_WARN_UNUSED_VARIABLE = YES // -Wunused-variable
 
 // Additional build flags for both c and c++ files
-// Cyp: when merging with newnet delete this line and uncomment the lines below 
-FlagsForCandCpp = $(BuildDependentFlagsForCandCpp) //  -mno-fused-madd
-// FlagsForCandCpp[arch=i386] = -mfpmath=sse $(inherited) // Flags for intel 32 bit only
+FlagsForCandCpp = $(BuildDependentFlagsForCandCpp)
+FlagsForCandCpp[arch=i386] = $(inherited) // Flags for intel 32 bit only
