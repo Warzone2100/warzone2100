@@ -1626,8 +1626,8 @@ receive_message:
 				{
 					ASSERT(i < MAX_CONNECTED_PLAYERS, "Bad player number %u (current was %u)", i, current);
 					if (connected_bsocket[i] == NULL || connected_bsocket[i]->socket == NULL)
-					{
-						// do nothing
+					{	//client gets a packet
+						NETlogPacket(pMsg->type, pMsg->size, true);		// log packet that we received
 					}
 					else if (NET_fillBuffer(connected_bsocket[i], socket_set))
 					{
