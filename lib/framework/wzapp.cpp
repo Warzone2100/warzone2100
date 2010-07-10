@@ -44,6 +44,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "wzapp_c.h"
 #include "src/main.h"
+#include "src/configuration.h"
 #include "lib/gamelib/gtime.h"
 #include <deque>
 
@@ -716,6 +717,7 @@ int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool full
 	debug(LOG_MAIN, "Entering main loop");
 	app.exec();
 
+	saveConfig();
 	debug(LOG_MAIN, "Shutting down Warzone 2100");
 	return EXIT_SUCCESS;
 }
