@@ -103,7 +103,7 @@ static SDWORD msgStackPos = -1;				//top element pointer
 // Remote Prototypes
 extern RESEARCH*			asResearch;							//list of possible research items.
 extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
-
+extern int NET_PlayerConnectionStatus;
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
@@ -690,6 +690,24 @@ BOOL recvMessage(void)
 		case NET_OPTIONS:
 			recvOptions();
 			break;
+		case NET_PLAYER_DROPPED:				// remote player got disconnected
+		{
+			BOOL host;
+			uint32_t player_id;
+
+			NETbeginDecode(NET_PLAYER_DROPPED);
+			{
+				NETuint32_t(&player_id);
+				NETbool(&host);
+			}
+			NETend();
+
+			debug(LOG_INFO,"** player %u has dropped! Host is %s", player_id, host?"true":"false");
+
+			MultiPlayerLeave(player_id);		// get rid of their stuff
+			NET_PlayerConnectionStatus = 2;		//DROPPED_CONNECTION
+			break;
+		}
 		case NET_PLAYERRESPONDING:			// remote player is now playing
 		{
 			uint32_t player_id;
