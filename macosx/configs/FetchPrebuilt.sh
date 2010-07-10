@@ -70,7 +70,7 @@ elif [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
 fi
 
 # Unpack
-if ! tar -zxf "${FileName}"; then
+if ! tar -xzf "${FileName}"; then
     echo "error: Unpacking $FileName failed" >&2
     exit 1
 fi

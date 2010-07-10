@@ -3,6 +3,5 @@
 #include "QuesoGLC-All.xcconfig"
 
 
-OTHER_LDFLAGS = -framework Carbon
 GCC_ENABLE_FIX_AND_CONTINUE = NO
 ZERO_LINK = NO
