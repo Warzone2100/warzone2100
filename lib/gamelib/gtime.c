@@ -435,3 +435,8 @@ void setPlayerGameTime(unsigned player, uint32_t time)
 		gameQueueTime[player] = time;
 	}
 }
+
+bool isInSync(void)
+{
+	return !crcError;
+}

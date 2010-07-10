@@ -220,7 +220,11 @@ static BOOL sendDroidCheck(void)
 
 	lastSent = gameTime;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_DROID);
+
+	if (!isInSync())  // Don't really send anything, unless out of synch.
+	{
+		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_DROID);
+	}
 
 		// Allocate space for the list of droids to send
 		ppD = alloca(sizeof(DROID *) * toSend);
@@ -245,17 +249,25 @@ static BOOL sendDroidCheck(void)
 			*(PACKAGED_CHECK *)pD->gameCheckDroid = packageCheck(pD);
 		}
 
-		// Send the number of droids to expect
-		NETuint8_t(&count);
-		NETuint32_t(&gameTime);  // Send game time.
-
-		// Add the droids to the packet
-		for (i = 0; i < count; i++)
+		if (!isInSync())  // Don't really send anything, unless out of synch.
 		{
-			NETPACKAGED_CHECK((PACKAGED_CHECK *)ppD[i]->gameCheckDroid);
+			// Send the number of droids to expect
+			NETuint8_t(&count);
+			NETuint32_t(&gameTime);  // Send game time.
+
+			// Add the droids to the packet
+			for (i = 0; i < count; i++)
+			{
+				NETPACKAGED_CHECK((PACKAGED_CHECK *)ppD[i]->gameCheckDroid);
+			}
 		}
 
-	return NETend();
+	if (!isInSync())  // Don't really send anything, unless out of synch.
+	{
+		return NETend();
+	}
+
+	return true;
 }
 
 #define MIN_DELAY_BETWEEN_DROID_SYNCHS 5000  // Must be longer than maximum possible latency.
@@ -512,18 +524,21 @@ static BOOL sendStructureCheck(void)
 
 		if (myResponsibility(player))
 		{
-			NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_STRUCT);
-				NETuint8_t(&player);
-				NETuint32_t(&gameTime);
-				NETuint32_t(&pS->id);
-				NETuint32_t(&pS->body);
-				NETuint32_t(&pS->pStructureType->type);
-				NETRotation(&pS->rot);
-				if (hasCapacity)
-				{
-					NETuint8_t(&capacity);
-				}
-			NETend();
+			if (!isInSync())  // Don't really send anything, unless out of synch.
+			{
+				NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_STRUCT);
+					NETuint8_t(&player);
+					NETuint32_t(&gameTime);
+					NETuint32_t(&pS->id);
+					NETuint32_t(&pS->body);
+					NETuint32_t(&pS->pStructureType->type);
+					NETRotation(&pS->rot);
+					if (hasCapacity)
+					{
+						NETuint8_t(&capacity);
+					}
+				NETend();
+			}
 		}
 	}
 
@@ -680,11 +695,14 @@ static BOOL sendPowerCheck()
 		powerCheckLastPower[player] = getPower(player);
 		if (myResponsibility(player))
 		{
-			NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_POWER);
-				NETuint8_t(&player);
-				NETuint32_t(&gameTime);
-				NETfloat(&powerCheckLastPower[player]);
-			NETend();
+			if (!isInSync())  // Don't really send anything, unless out of synch.
+			{
+				NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_POWER);
+					NETuint8_t(&player);
+					NETuint32_t(&gameTime);
+					NETfloat(&powerCheckLastPower[player]);
+				NETend();
+			}
 		}
 	}
 	return true;
