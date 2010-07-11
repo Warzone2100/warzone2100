@@ -386,13 +386,21 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	static std::vector<Vector2i> path;  // Declared static to save allocations.
 	path.clear();
 
-	for (PathCoord p = endCoord; p != context.tileS; p = PathCoord(p.x - context.map[p.x + p.y*mapWidth].dx, p.y - context.map[p.x + p.y*mapWidth].dy))
+	PathCoord newP;
+	for (PathCoord p = endCoord; p != context.tileS; p = newP)
 	{
 		ASSERT_OR_RETURN(ASR_FAILED, tileOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
 		ASSERT_OR_RETURN(ASR_FAILED, path.size() < mapWidth*mapHeight, "Pathfinding got in a loop.");
 
 		Vector2i v = {world_coord(p.x) + TILE_UNITS / 2, world_coord(p.y) + TILE_UNITS / 2};
 		path.push_back(v);
+
+		PathExploredTile &tile = context.map[p.x + p.y*mapWidth];
+		newP = PathCoord(p.x - tile.dx, p.y - tile.dy);
+		if (p == newP)
+		{
+			break;  // We stopped moving, because we reached the closest reachable tile to context.tileS. Give up now.
+		}
 	}
 	if (path.empty())
 	{
