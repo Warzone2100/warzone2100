@@ -1,3 +1,8 @@
+2010-__-__: Version 2.3.2
+ * Map:
+   * Fix: Fix a missing cliff tile on 8c-Wheel (r11145, ticket:1935)
+   * Change: 2c-Startup rebalanced, files replaced with the files from 2c-startup2 (r11145)
+
 2010-06-13: Version 2.3.1
  * General:
    * Change: Add the Playstation music track (r10905)
