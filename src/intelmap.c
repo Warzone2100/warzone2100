@@ -60,6 +60,7 @@
 #include "multiplay.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/sequence/sequence.h"
+#include "lib/sound/track.h"
 
 #include "scriptextern.h"
 
@@ -966,32 +967,39 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 			if (psResearch != NULL)
 			{
 				static const float maxVolume = 1.f;
+				static AUDIO_STREAM *playing = NULL;
+
+				// only play the sample once, otherwise, they tend to overlap each other
+				if (sound_isStreamPlaying(playing))
+				{
+					sound_StopStream(playing);
+				}
 
 				switch(psResearch->iconID)
 				{
 				case IMAGE_RES_DROIDTECH:
-					audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_WEAPONTECH:
-					audio_PlayStream("sequenceaudio/res_weapons.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_weapons.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_COMPUTERTECH:
-					audio_PlayStream("sequenceaudio/res_com.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_com.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_POWERTECH:
-					audio_PlayStream("sequenceaudio/res_pow.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_pow.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_SYSTEMTECH:
-					audio_PlayStream("sequenceaudio/res_systech.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_systech.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_STRUCTURETECH:
-					audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_CYBORGTECH:
-					audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_DEFENCE:
-					audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
 						break;
 				}
 			}
