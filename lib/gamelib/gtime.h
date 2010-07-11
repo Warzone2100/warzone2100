@@ -36,6 +36,10 @@
  * changed to /6 by ajl. if this needs to go back to ticks/10 then tell me. */
 #define GTIME_MAXFRAME (GAME_TICKS_PER_SEC/6)
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 /// The current time in the game world.
 /// Changes in GAME_UNITS_PER_TICK increments.
 extern UDWORD gameTime;
@@ -164,4 +168,9 @@ static inline float timeAdjustedIncrement(float value, BOOL pauseTime)
 	return (pauseTime ? gameTimeAdjustedIncrement : realTimeAdjustedIncrement)(value);
 }
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus
+
 #endif
+
