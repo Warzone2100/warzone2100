@@ -8723,7 +8723,7 @@ msgstr "Teški Minobacač - Bombarder"
 #: data/base/messages/strings/names.txt:1140
 #: data/mp/messages/strings/names.txt:1153
 msgid "Rotary Mortar - Pepperpot"
-msgstr "Rotirajući Minobacač -"
+msgstr "Rotirajući Minobacač - \"Pepperpot\""
 
 #: data/base/messages/strings/names.txt:1145
 msgid "Target Prediction Computer"
@@ -10266,7 +10266,7 @@ msgstr "Novi Početak"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
-msgstr "Nažda Sustav je razvijen da nas zaštiti. Trebalo je biti ultimatno nuklearnog odvačanja. Kako se pokazalo, to je bion naš krvnik."
+msgstr "Nasda Sustav je razvijen da nas zaštiti. Trebalo je biti ultimatno nuklearnog odvačanja. Kako se pokazalo, to je bion naš krvnik."
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
@@ -10282,7 +10282,7 @@ msgstr "Svijet koji smo mi znali je završio."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr "Nuklearna zima je udarila jako. Bolesti i glad pogodio večinu od nas koji su preživjeli nuklearni udar. Ratovi zbog konzervne hrane za pse je uzeo više."
+msgstr "Nuklearna zima je udarila jako. Bolesti i glad pogodio večinu od nas koji su preživjeli nuklearni udar. Ratovi zbog konzervni hrane za pse je uzelo još više."
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
@@ -10310,7 +10310,7 @@ msgstr "Nakon mnogo dugih mjeseci borbe, mi smo porazili NEXUS."
 
 #: data/base/sequenceaudio/outro.txt:3
 msgid "The war started by Dr Reed was over."
-msgstr "Rat okji je započeo Doktor Reed je završen."
+msgstr "Rat koji je započeo Doktor Reed je završen."
 
 #: data/base/sequenceaudio/outro.txt:5
 msgid "We have recovered many of the technologies we sought."
@@ -11321,7 +11321,7 @@ msgstr "Naoružan sa Strojnicom"
 
 #: data/mp/messages/resmessagesall.rmsg:228
 msgid "Requires heavy VTOL factory to produce"
-msgstr "Potrebno je teška VTOL tvornica da proizvodi"
+msgstr "Potrebna je teška VTOL tvornica za proizvodnju"
 
 #: data/mp/messages/resmessagesall.rmsg:239
 msgid "Incendiary howitzer emplacement"
@@ -11808,7 +11808,7 @@ msgstr "Napredni Objekt za Popravak Mk3"
 
 #: data/mp/messages/strings/names.txt:885
 msgid "Auto-Repair"
-msgstr "Automatski Porpavak"
+msgstr "Automatski Popravak"
 
 #: data/mp/messages/strings/names.txt:896
 #: data/mp/messages/strings/names.txt:1647
