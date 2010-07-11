@@ -956,6 +956,30 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 #endif
 }
 
+/** Checks if the stream is playing.
+ *  \param stream the stream to check
+ *  \post true if playing, false otherwise.
+ *
+ */
+BOOL sound_isStreamPlaying(AUDIO_STREAM *stream)
+{
+#if !defined(WZ_NOSOUND)
+	ALint state;
+
+	if (stream)
+	{
+		alGetSourcei(stream->source, AL_SOURCE_STATE, &state);
+		sound_GetError();
+		if (state == AL_PLAYING)
+		{
+			return true;
+		}
+	}
+	return false;
+
+#endif
+}
+
 /** Stops the current stream from playing.
  *  \param stream the stream to stop
  *  \post The stopped stream will be destroyed on the next invocation of
