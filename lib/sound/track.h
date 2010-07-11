@@ -130,6 +130,7 @@ void	sound_SetStoppedCallback( AUDIO_CALLBACK pStopTrackCallback );
 UDWORD	sound_GetTrackTimeLastFinished( SDWORD iTrack );
 void	sound_SetTrackTimeLastFinished( SDWORD iTrack, UDWORD iTime );
 
+extern BOOL sound_isStreamPlaying(AUDIO_STREAM *stream);
 extern void sound_StopStream(AUDIO_STREAM* stream);
 extern void sound_PauseStream(AUDIO_STREAM* stream);
 extern void sound_ResumeStream(AUDIO_STREAM* stream);
