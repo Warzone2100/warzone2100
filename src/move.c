@@ -205,6 +205,27 @@ static void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 // Calculate the boundary vector
 static void	moveCalcBoundary(DROID *psDroid);
 
+const char *moveDescription(MOVE_STATUS status)
+{
+	switch (status)
+	{
+	case MOVEINACTIVE : return "Inactive";
+	case MOVENAVIGATE : return "Navigate";
+	case MOVETURN : return "Turn";
+	case MOVEPAUSE : return "Pause";
+	case MOVEPOINTTOPOINT : return "P2P";
+	case MOVETURNSTOP : return "Turnstop";
+	case MOVETURNTOTARGET : return "Turn2target";
+	case MOVEROUTE : return "Route";
+	case MOVEHOVER : return "Hover";
+	case MOVEDRIVE : return "Drive";
+	case MOVEWAITROUTE : return "Waitroute";
+	case MOVESHUFFLE : return "Shuffle";
+	case MOVEROUTESHUFFLE : return "Routeshuffle";
+	}
+	return "Error";	// satisfy compiler
+}
+
 /** Initialise the movement system
  */
 BOOL moveInitialise(void)
@@ -272,8 +293,8 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		x = psDroid->sMove.DestinationX;
 		y = psDroid->sMove.DestinationY;
 
-		objTrace(psDroid->id, "unit %d: path ok - base Speed %u, speed %d, target(%d, %d)",
-		         (int)psDroid->id, psDroid->baseSpeed, psDroid->sMove.speed, (int)x, (int)y);
+		objTrace(psDroid->id, "unit %d: path ok - base Speed %u, speed %d, target(%u|%d, %u|%d)",
+		         (int)psDroid->id, psDroid->baseSpeed, psDroid->sMove.speed, x, map_coord(x), y, map_coord(y));
 
 		psDroid->sMove.Status = MOVENAVIGATE;
 		psDroid->sMove.Position=0;
