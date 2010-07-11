@@ -41,7 +41,6 @@ typedef int bool;
 #define iV_IMD_TEXANIM	0x00004000
 #define MAX_POLYGON_SIZE 6 // the game can't handle more
 
-static char *input = "";
 static bool verbose = false;
 
 typedef struct {
@@ -57,15 +56,16 @@ typedef struct {
 	bool dupe;
 } WZ_POSITION;
 
-static void parse_args(int argc, char **argv)
+static int parse_args(int argc, char **argv)
 {
-	unsigned int i = 1;
+	unsigned int i, result = 1;
 
 	for (i = 1; argc >= 2 + i && argv[i][0] == '-'; i++)
 	{
 		if (argv[i][1] == 'v')
 		{
 			verbose = true;
+			result++;
 		}
 	}
 	if (argc < 1 + i)
@@ -74,10 +74,10 @@ static void parse_args(int argc, char **argv)
 		fprintf(stderr, "  -v  Verbose mode.\n");
 		exit(1);
 	}
-	input = argv[i++];
+	return result;
 }
 
-static void dump_to_pie(FILE *ctl, FILE *fp)
+static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 {
 	int num, x, y, z, levels, level;
 	char s[200];
@@ -360,18 +360,16 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 	}
 }
 
-int main(int argc, char **argv)
+int convert(const char *filename)
 {
 	FILE *p, *f;
 	char buffer[1024];
 	size_t rsize;
 
-	parse_args(argc, argv);
-	
-	p = fopen(input, "r");
+	p = fopen(filename, "r");
 	if (!p)
 	{
-		fprintf(stderr, "Cannot open \"%s\" for reading: %s\n", input, strerror(errno));
+		fprintf(stderr, "Cannot open \"%s\" for reading: %s\n", filename, strerror(errno));
 		exit(1);
 	}
 	f = tmpfile();
@@ -381,35 +379,12 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-#ifdef _WIN32
-	if (verbose)
-	{
-		// Should it be / on Linux?
-		//char *fname = strrchr(input, '/');
-		char *fname = strrchr(input, '\\');
-		if (fname && *(fname + 1))
-		{
-			fname++;
-		}
-		else
-		{
-			fname = input;
-		}
-		printf("PIE: %s ", fname);
-	}
-#endif
-	
-	dump_to_pie(f, p);
+	dump_to_pie(f, p, filename);
 	fclose(p);
 
-	if (verbose)
-	{
-		printf("\n");
-	}
-		
 	// Now copy temporary file to original
 	rewind(f);
-	p = fopen(input, "w");
+	p = fopen(filename, "w");
 	while (!feof(f) && !ferror(p) && !ferror(f))
 	{
 		rsize = fread(buffer, 1, sizeof(buffer), f);
@@ -420,6 +395,19 @@ int main(int argc, char **argv)
 
 	fclose(p);
 	fclose(f);	// also deletes temporary file
+
+	return 0;
+}
+
+int main(int argc, char **argv)
+{
+	int i;
+
+	for (i = parse_args(argc, argv); i < argc; i++)
+	{
+		printf("Processing %s\n", argv[i]);
+		convert(argv[i]);
+	}
 
 	return 0;
 }
