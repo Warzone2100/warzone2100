@@ -80,6 +80,8 @@ extern BOOL moveCheckDroidMovingAndVisible( void *psObj );
 // set a vtol to be hovering in the air
 void moveMakeVtolHover( DROID *psDroid );
 
+const char *moveDescription(MOVE_STATUS status);
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus
