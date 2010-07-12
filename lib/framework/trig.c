@@ -162,7 +162,16 @@ int32_t iSqrt(uint32_t n)
 
 int32_t i64Sqrt(uint64_t n)
 {
-	uint64_t r = sqrt(n);          // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
+	uint64_t r;
+	if (sizeof(void *) > 4)
+	{
+		r = sqrt(n);          // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
+	}
+	else
+	{
+		// Bad compiler workaround. On some compilers, sqrt() seems to have somehow been taking 64-bit doubles and returning 80-bit doubles, breaking expected rounding behaviour.
+		r = sqrtl(n);         // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
+	}
 
 	r -= (int64_t)(r*r - n) > 0;   // If we rounded up, subtract 1.
 

@@ -99,6 +99,8 @@ static inline void droidSetPrecisePosition(DROID *psDroid, Position newPos)
 	psDroid->pos.y = newPos.y >> EXTRA_BITS;
 }
 
+const char *moveDescription(MOVE_STATUS status);
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus
