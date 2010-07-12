@@ -24,27 +24,10 @@
  *
  */
 
-// TODO Delete these defines during Qt merge.
-#define WZ_THREAD SDL_Thread
-#define WZ_MUTEX SDL_mutex
-#define WZ_SEMAPHORE SDL_sem
-#define wzMutexLock SDL_LockMutex
-#define wzMutexUnlock SDL_UnlockMutex
-#define wzSemaphoreCreate SDL_CreateSemaphore
-#define wzSemaphoreDestroy SDL_DestroySemaphore
-#define wzSemaphoreWait SDL_SemWait
-#define wzSemaphorePost SDL_SemPost
-#define wzThreadJoin(x) SDL_WaitThread(x, NULL)
-#define wzMutexDestroy SDL_DestroyMutex
-#define wzMutexCreate SDL_CreateMutex
-#define wzYieldCurrentThread() SDL_Delay(10)
-#define wzThreadCreate SDL_CreateThread
-#define wzThreadStart(x)
-#include <SDL.h>
-#include <SDL_thread.h>
-
 #include "lib/framework/frame.h"
 #include "lib/netplay/netplay.h"
+
+#include "lib/framework/wzapp_c.h"
 
 #include "objects.h"
 #include "map.h"
