@@ -53,6 +53,7 @@ typedef struct _jobNode
 	struct _jobNode	*next;
 	FPATH_MOVETYPE	moveType;
 	int		owner;		///< Player owner
+	struct PathBlockingMap *blockingMap;  ///< Map of blocking tiles.
 } PATHJOB;
 
 typedef enum _fpath_retval
@@ -75,6 +76,10 @@ extern void fpathUpdate(void);
 /** Find a route for a droid to a location.
  */
 extern FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType);
+
+/// Returns true iff the parameters have equivalent behaviour in fpathBaseBlockingTile.
+bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_MOVETYPE moveType1,
+                               PROPULSION_TYPE propulsion2, int player2, FPATH_MOVETYPE moveType2);
 
 /** Function pointer to the currently in-use blocking tile check function.
  *  

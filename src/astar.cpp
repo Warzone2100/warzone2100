@@ -90,16 +90,48 @@ struct PathExploredTile
 	bool     visited;
 };
 
+struct PathBlockingType
+{
+	uint32_t gameTime;
+
+	PROPULSION_TYPE propulsion;
+	int owner;
+	FPATH_MOVETYPE moveType;
+};
+/// Pathfinding blocking map
+struct PathBlockingMap
+{
+	bool operator ==(PathBlockingType const &z) const
+	{
+		return type.gameTime == z.gameTime &&
+		       fpathIsEquivalentBlocking(type.propulsion, type.owner, type.moveType,
+		                                    z.propulsion,    z.owner,    z.moveType);
+	}
+
+	PathBlockingType type;
+	std::vector<bool> map;
+};
+
+
 // Data structures used for pathfinding, can contain cached results.
 struct PathfindContext
 {
-	PathfindContext() : iteration(0) { clear(); }
-	bool isBlocked(int x, int y) const { return fpathBaseBlockingTile(x, y, propulsion, owner, moveType); }
-	bool matches(PROPULSION_TYPE propulsion_, int owner_, FPATH_MOVETYPE moveType_, PathCoord tileS_) const { return propulsion == propulsion_ && owner == owner_ && moveType == moveType_ && tileS == tileS_ && gameTime == myGameTime; }
-	void assign(PROPULSION_TYPE propulsion_, int owner_, FPATH_MOVETYPE moveType_, PathCoord tileS_)
+	PathfindContext() : iteration(0), myGameTime(0), blockingMap(NULL) {}
+	bool isBlocked(int x, int y) const
 	{
-		propulsion = propulsion_; owner = owner_; moveType = moveType_; tileS = tileS_;
-		myGameTime = gameTime;
+		// Not sure whether the out-of-bounds check is needed, can only happen if pathfinding is started on a blocking tile (or off the map).
+		return x < 0 || y < 0 || x >= mapWidth || y >= mapWidth || blockingMap->map[x + y*mapWidth];
+	}
+	bool matches(PathBlockingMap const *blockingMap_, PathCoord tileS_) const
+	{
+		// Must check that myGameTime == blockingMap->type.gameTime, otherwise blockingMap be a deleted pointer which coincidentally compares equal to the valid pointer blockingMap_.
+		return myGameTime == blockingMap->type.gameTime && blockingMap == blockingMap_ && tileS == tileS_;
+	}
+	void assign(PathBlockingMap const *blockingMap_, PathCoord tileS_)
+	{
+		blockingMap = blockingMap_;
+		tileS = tileS_;
+		myGameTime = blockingMap->type.gameTime;
 		nodes.clear();
 
 		// Make the iteration not match any value of iteration in map.
@@ -110,12 +142,6 @@ struct PathfindContext
 		}
 		map.resize(mapWidth * mapHeight);  // Allocate space for map, if needed.
 	}
-	void clear() { assign(PROPULSION_TYPE_NUM, -1, FMT_MOVE, PathCoord(0, 0)); }
-
-	// Type of object which needs a path.
-	PROPULSION_TYPE propulsion;
-	int             owner;
-	FPATH_MOVETYPE  moveType;
 
 	PathCoord       tileS;                // Start tile for pathfinding. (May be either source or target tile.)
 	uint32_t        myGameTime;
@@ -130,10 +156,18 @@ struct PathfindContext
 
 	std::vector<PathNode> nodes;        ///< Edge of explored region of the map.
 	std::vector<PathExploredTile> map;  ///< Map, with paths leading back to tileS.
+	PathBlockingMap const *blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
 };
 
 /// Last recently used list of contexts.
 static std::list<PathfindContext> fpathContexts;
+
+/// Lists of blocking maps from current tick.
+static std::list<PathBlockingMap> fpathBlockingMaps;
+/// Lists of blocking maps from previous tick, will be cleared next tick (since it will be no longer needed after that).
+static std::list<PathBlockingMap> fpathPrevBlockingMaps;
+/// Game time for all blocking maps in fpathBlockingMaps.
+static uint32_t fpathCurrentGameTime;
 
 // Convert a direction into an offset
 // dir 0 => x = 0, y = -1
@@ -152,6 +186,8 @@ static const Vector2i aDirOffset[] =
 void fpathHardTableReset()
 {
 	fpathContexts.clear();
+	fpathBlockingMaps.clear();
+	fpathPrevBlockingMaps.clear();
 }
 
 /** Get the nearest entry in the open list
@@ -300,9 +336,9 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 	return nearestCoord;
 }
 
-static void fpathInitContext(PathfindContext &context, PROPULSION_TYPE propulsion, int owner, FPATH_MOVETYPE moveType, PathCoord tileS, PathCoord tileRealS, PathCoord tileF)
+static void fpathInitContext(PathfindContext &context, PathBlockingMap const *blockingMap, PathCoord tileS, PathCoord tileRealS, PathCoord tileF)
 {
-	context.assign(propulsion, owner, moveType, tileS);
+	context.assign(blockingMap, tileS);
 
 	// Add the start point to the open list
 	fpathNewNode(context, tileF, tileRealS, 0, tileRealS);
@@ -323,7 +359,7 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	std::list<PathfindContext>::iterator contextIterator = fpathContexts.begin();
 	for (contextIterator = fpathContexts.begin(); contextIterator != fpathContexts.end(); ++contextIterator)
 	{
-		if (!contextIterator->matches(psJob->propulsion, psJob->owner, psJob->moveType, tileDest))
+		if (!contextIterator->matches(psJob->blockingMap, tileDest))
 		{
 			// This context is not for the same droid type and same destination.
 			continue;
@@ -366,7 +402,7 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 
 		// Init a new context, overwriting the oldest one if we are caching too many.
 		// We will be searching from orig to dest, since we don't know where the nearest reachable tile to dest is.
-		fpathInitContext(*contextIterator, psJob->propulsion, psJob->owner, psJob->moveType, tileOrig, tileOrig, tileDest);
+		fpathInitContext(*contextIterator, psJob->blockingMap, tileOrig, tileOrig, tileDest);
 		endCoord = fpathAStarExplore(*contextIterator, tileDest);
 		contextIterator->nearestCoord = endCoord;
 	}
@@ -450,7 +486,7 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		if (!context.isBlocked(tileOrig.x, tileOrig.y))  // If blocked, searching from tileDest to tileOrig wouldn't find the tileOrig tile.
 		{
 			// Next time, search starting from nearest reachable tile to the destination.
-			fpathInitContext(context, psJob->propulsion, psJob->owner, psJob->moveType, tileDest, context.nearestCoord, tileOrig);
+			fpathInitContext(context, psJob->blockingMap, tileDest, context.nearestCoord, tileOrig);
 		}
 	}
 	else
@@ -469,4 +505,44 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	psMove->DestinationY = psMove->asPath[path.size() - 1].y;
 
 	return retval;
+}
+
+void fpathSetBlockingMap(PATHJOB *psJob)
+{
+	if (fpathCurrentGameTime != gameTime)
+	{
+		// New tick, remove maps which are no longer needed.
+		fpathCurrentGameTime = gameTime;
+		fpathPrevBlockingMaps.swap(fpathBlockingMaps);
+		fpathBlockingMaps.clear();
+	}
+
+	// Figure out which map we are looking for.
+	PathBlockingType type;
+	type.gameTime = gameTime;
+	type.propulsion = psJob->propulsion;
+	type.owner = psJob->owner;
+	type.moveType = psJob->moveType;
+
+	// Find the map.
+	std::list<PathBlockingMap>::iterator i = std::find(fpathBlockingMaps.begin(), fpathBlockingMaps.end(), type);
+	if (i == fpathBlockingMaps.end())
+	{
+		// Didn't find the map, so i does not point to a map.
+		fpathBlockingMaps.push_back(PathBlockingMap());
+		--i;
+
+		// i now points to an empty map with no data. Fill the map.
+		i->type = type;
+		std::vector<bool> &map = i->map;
+		map.resize(mapWidth*mapHeight);
+		for (int y = 0; y < mapHeight; ++y)
+			for (int x = 0; x < mapWidth; ++x)
+		{
+			map[x + y*mapWidth] = fpathBaseBlockingTile(x, y, type.propulsion, type.owner, type.moveType);
+		}
+	}
+
+	// i now points to the correct map. Make psJob->blockingMap point to it.
+	psJob->blockingMap = &*i;
 }
