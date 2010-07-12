@@ -71,13 +71,10 @@ struct PathNode
 	bool operator <(PathNode const &z) const
 	{
 		// Sort decending est, fallback to ascending dist, fallback to sorting by position.
-		return est  > z.est ||
-		      (est == z.est &&
-		       dist  < z.dist ||
-		      (dist == z.dist &&
-		       p.x  < z.p.x ||
-		      (p.x == z.p.x &&
-		       p.y  < z.p.y)));
+		if (est  != z.est)  return est  > z.est;
+		if (dist != z.dist) return dist < z.dist;
+		if (p.x  != z.p.x)  return p.x  < z.p.x;
+		                    return p.y  < z.p.y;
 	}
 
 	PathCoord p;                    // Map coords.
@@ -390,7 +387,7 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	for (PathCoord p = endCoord; p != context.tileS; p = newP)
 	{
 		ASSERT_OR_RETURN(ASR_FAILED, tileOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
-		ASSERT_OR_RETURN(ASR_FAILED, path.size() < mapWidth*mapHeight, "Pathfinding got in a loop.");
+		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (unsigned)mapWidth*mapHeight, "Pathfinding got in a loop.");
 
 		Vector2i v = {world_coord(p.x) + TILE_UNITS / 2, world_coord(p.y) + TILE_UNITS / 2};
 		path.push_back(v);
