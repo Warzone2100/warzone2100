@@ -24,11 +24,10 @@
  *
  */
 
-#include <SDL.h>
-#include <SDL_thread.h>
-
 #include "lib/framework/frame.h"
 #include "lib/netplay/netplay.h"
+
+#include "lib/framework/wzapp_c.h"
 
 #include "objects.h"
 #include "map.h"
