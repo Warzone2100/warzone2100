@@ -184,7 +184,7 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 		}
 
 		// Droid destroyed
-		debug(LOG_ATTACK, "droidDamage(%d): DESTROYED", psDroid->id);
+		debug(LOG_ATTACK, "droid (%d): DESTROYED", psDroid->id);
 
 		// Deal with score increase/decrease and messages to the player
 		if( psDroid->player == selectedPlayer)
@@ -208,7 +208,7 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 		// Otherwise use the default destruction animation
 		else
 		{
-			debug(LOG_DEATH, "droidDamage: Droid %d beyond repair", (int)psDroid->id);
+			debug(LOG_DEATH, "Droid %d is toast", (int)psDroid->id);
 			// This should be sent even if multi messages are turned off, as the group message that was
 			// sent won't contain the destroyed droid
 			if (bMultiPlayer && !bMultiMessages)

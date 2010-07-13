@@ -522,7 +522,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
  * \param weaponClass the class of the weapon that deals the damage
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \param angle angle of impact (from the damage dealing projectile in relation to this object)
- * \return > 0 when the dealt damage destroys the object, < 0 when the object survives
+ * \return < 0 when the dealt damage destroys the object, > 0 when the object survives
  */
 float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
@@ -595,13 +595,20 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 
 	objTrace(psObj->id, "objDamage: Penetrated %d", actualDamage);
 
+	// for some odd reason, we have 0 hitpoints.
+	if (!originalhp)
+	{
+		ASSERT(originalhp, "original hitpoints are 0 ?");
+		return -1.0f;	// it is dead
+	}
+
 	// If the shell did sufficient damage to destroy the object, deal with it and return
 	if (actualDamage >= psObj->body)
 	{
 		return (float) psObj->body / (float) originalhp * -1.0f;
 	}
 
-	// Substract the dealt damage from the droid's remaining body points
+	// Subtract the dealt damage from the droid's remaining body points
 	psObj->body -= actualDamage;
 
 	return (float) actualDamage / (float) originalhp;
