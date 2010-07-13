@@ -518,8 +518,8 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 
 			ssize_t received;
 			do
-			{
-				received = recv(sock->fd[SOCK_CONNECTION], &sock->zInflateInBuf[0], sock->zInflateInBuf.size(), 0);
+			{  //                                                  v----- This weird cast is because recv() takes a char * on windows instead of a void *...
+				received = recv(sock->fd[SOCK_CONNECTION], (char *)&sock->zInflateInBuf[0], sock->zInflateInBuf.size(), 0);
 			} while (received == SOCKET_ERROR && getSockErr() == EINTR);
 			if (received < 0)
 			{
