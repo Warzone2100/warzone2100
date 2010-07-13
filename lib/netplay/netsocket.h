@@ -65,6 +65,8 @@ ssize_t readNoInt(Socket *sock, void *buf, size_t max_size);            ///< Rea
 ssize_t readAll(Socket* sock, void *buf, size_t size, unsigned timeout);///< Reads exactly size bytes from the Socket, or blocks until the timeout expires.
 ssize_t writeAll(Socket *sock, const void* buf, size_t size);           ///< Nonblocking write of size bytes to the Socket. All bytes will be written asynchronously, by a separate thread.
 
+void socketBeginCompression(Socket *sock);                              ///< Makes future data sent compressed, and future data received expected to be compressed.
+
 // Socket sets.
 SocketSet *allocSocketSet(void);                                        ///< Constructs a SocketSet.
 void deleteSocketSet(SocketSet *set);                                   ///< Destroys the SocketSet.

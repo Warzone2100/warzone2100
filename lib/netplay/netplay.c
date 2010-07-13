@@ -165,9 +165,9 @@ int NET_PlayerConnectionStatus = CONNECTIONSTATUS_NORMAL;
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk, netcode 4.6";
+char VersionString[VersionStringSize] = "trunk, netcode 4.7";
 static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 6;
+static int NETCODE_VERSION_MINOR = 7;
 static int NETCODE_HASH = 0;			// unused for now
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
@@ -2094,6 +2094,7 @@ static void NETallowJoining(void)
 					socketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
+				socketBeginCompression(tmp_socket[i]);
 			}
 			else
 			{
@@ -2659,6 +2660,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	NETinitQueue(NETnetQueue(NET_HOST_ONLY));
 	// NOTE: tcp_socket = bsocket now!
 	bsocket = tcp_socket;
+	socketBeginCompression(bsocket);
 
 	// Send a join message to the host
 	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_JOIN);

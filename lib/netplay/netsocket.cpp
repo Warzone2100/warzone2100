@@ -32,6 +32,8 @@
 #include <algorithm>
 #include <map>
 
+#include <zlib.h>
+
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
 # include <errno.h>
@@ -95,12 +97,19 @@ struct Socket
 	 *
 	 * All non-listening sockets will only use the first socket handle.
 	 */
-	Socket() : ready(false), writeError(false) {}
+	Socket() : ready(false), writeError(false), isCompressed(false) {}
+	~Socket();
 
 	SOCKET fd[SOCK_COUNT];
 	bool ready;
 	bool writeError;
 	char textAddress[40];
+
+	bool isCompressed;
+	z_stream zDeflate;
+	z_stream zInflate;
+	std::vector<uint8_t> zDeflateOutBuf;
+	std::vector<uint8_t> zInflateInBuf;
 };
 
 struct SocketSet
@@ -492,8 +501,6 @@ static int socketThreadFunction(void *)
  */
 ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 {
-	ssize_t received;
-
 	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Invalid socket");
@@ -501,6 +508,45 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 		return SOCKET_ERROR;
 	}
 
+	if (sock->isCompressed)
+	{
+		if (sock->zInflate.avail_in <= 0)
+		{
+			// No input data, read some.
+
+			sock->zInflateInBuf.resize(max_size + 1000);
+
+			ssize_t received;
+			do
+			{
+				received = recv(sock->fd[SOCK_CONNECTION], &sock->zInflateInBuf[0], sock->zInflateInBuf.size(), 0);
+			} while (received == SOCKET_ERROR && getSockErr() == EINTR);
+			if (received < 0)
+			{
+				return received;
+			}
+
+			sock->zInflate.next_in = &sock->zInflateInBuf[0];
+			sock->zInflate.avail_in = received;
+		}
+
+		sock->zInflate.next_out = (Bytef *)buf;
+		sock->zInflate.avail_out = max_size;
+		int ret = inflate(&sock->zInflate, Z_NO_FLUSH);
+		ASSERT(ret != Z_STREAM_ERROR, "zlib inflate not working!");
+		switch (ret)
+		{
+			case Z_NEED_DICT:
+			case Z_DATA_ERROR:
+			case Z_MEM_ERROR:
+				debug(LOG_ERROR, "Couldn't decompress data from socket. zlib error %d", ret);
+				return -1;  // Bad data!
+		}
+
+		return max_size - sock->zInflate.avail_out;  // Got some data, return how much.
+	}
+
+	ssize_t received;
 	do
 	{
 		received = recv(sock->fd[SOCK_CONNECTION], (char*)buf, max_size, 0);
@@ -540,11 +586,72 @@ ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 			wzSemaphorePost(socketThreadSemaphore);
 		}
 		std::vector<uint8_t> &writeQueue = socketThreadWrites[sock];
-		writeQueue.insert(writeQueue.end(), static_cast<char const *>(buf), static_cast<char const *>(buf) + size);
+		if (!sock->isCompressed)
+		{
+			writeQueue.insert(writeQueue.end(), static_cast<char const *>(buf), static_cast<char const *>(buf) + size);
+		}
+		else
+		{
+			sock->zDeflate.next_in = (Bytef *)buf;
+			sock->zDeflate.avail_in = size;
+			sock->zDeflateOutBuf.resize(size + 20);
+			do
+			{
+				sock->zDeflate.next_out = (Bytef *)&sock->zDeflateOutBuf[0];
+				sock->zDeflate.avail_out = sock->zDeflateOutBuf.size();
+
+				int ret = deflate(&sock->zDeflate, Z_SYNC_FLUSH);    /* no bad return value */
+				ASSERT(ret != Z_STREAM_ERROR, "zlib compression failed!");
+
+				writeQueue.insert(writeQueue.end(), sock->zDeflateOutBuf.begin(), sock->zDeflateOutBuf.end() - sock->zDeflate.avail_out);
+
+				// Primitive network logging, uncomment to use.
+				//printf("Size %3zu ->%3zu, buf =", size, sock->zDeflateOutBuf.size() - sock->zDeflate.avail_out);
+				//for (unsigned n = 0; n < std::min<unsigned>(size, 30); ++n) printf(" %02X", static_cast<char const *>(buf)[n]&0xFF);
+				//printf("\n");
+			} while(sock->zDeflate.avail_out == 0);
+		}
 		wzMutexUnlock(socketThreadMutex);
 	}
 
 	return size;
+}
+
+void socketBeginCompression(Socket *sock)
+{
+	if (sock->isCompressed)
+	{
+		return;  // Nothing to do.
+	}
+
+	wzMutexLock(socketThreadMutex);
+
+	// Init deflate.
+	sock->zDeflate.zalloc = Z_NULL;
+	sock->zDeflate.zfree = Z_NULL;
+	sock->zDeflate.opaque = Z_NULL;
+	int ret = deflateInit(&sock->zDeflate, 6);
+	ASSERT(ret == Z_OK, "deflateInit failed! Sockets won't work.");
+
+	sock->zInflate.zalloc = Z_NULL;
+	sock->zInflate.zfree = Z_NULL;
+	sock->zInflate.opaque = Z_NULL;
+	sock->zInflate.avail_in = 0;
+	sock->zInflate.next_in = Z_NULL;
+	ret = inflateInit(&sock->zInflate);
+	ASSERT(ret == Z_OK, "deflateInit failed! Sockets won't work.");
+
+	sock->isCompressed = true;
+	wzMutexUnlock(socketThreadMutex);
+}
+
+Socket::~Socket()
+{
+	if (isCompressed)
+	{
+		deflateEnd(&zDeflate);
+		deflateEnd(&zInflate);
+	}
 }
 
 SocketSet *allocSocketSet()
@@ -712,6 +819,8 @@ int checkSockets(const SocketSet* set, unsigned int timeout)
  */
 ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
 {
+	ASSERT(!sock->isCompressed, "readAll on compressed sockets not implemented.");
+
 	const SocketSet set = {std::vector<Socket *>(1, sock)};
 
 	size_t received = 0;
