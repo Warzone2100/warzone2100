@@ -179,6 +179,12 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 			return false;
 		}
 
+		if (psFeature->damageable && psFeature->body == 0)
+		{
+			debug(LOG_ERROR, "The feature %s, ref %d, is damageable, but has no body points!  The files need to be updated / fixed.  " \
+							 "Assigning 1 body point to feature.", psFeature->pName, psFeature->ref);
+			psFeature->body = 1;
+		}
 		//determine the feature type
 		featureType(psFeature, type);
 
@@ -228,9 +234,9 @@ float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWOR
 {
 	float		relativeDamage;
 
-	ASSERT_OR_RETURN(0.0, psFeature != NULL, "Invalid feature pointer");
+	ASSERT_OR_RETURN(0.0f, psFeature != NULL, "Invalid feature pointer");
 
-	debug(LOG_ATTACK, "featureDamage(%d): body %d armour %d damage: %d",
+	debug(LOG_ATTACK, "feature (id %d): body %d armour %d damage: %d",
 	      psFeature->id, psFeature->body, psFeature->armour[impactSide][weaponClass], damage);
 
 	relativeDamage = objDamage((BASE_OBJECT *)psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, impactSide);
@@ -238,6 +244,7 @@ float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWOR
 	// If the shell did sufficient damage to destroy the feature
 	if (relativeDamage < 0.0f)
 	{
+		debug(LOG_ATTACK, "feature (id %d) DESTROYED", psFeature->id);
 		destroyFeature(psFeature);
 		return relativeDamage * -1.0f;
 	}

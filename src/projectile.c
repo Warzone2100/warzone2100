@@ -1715,15 +1715,15 @@ static float objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,
 			break;
 
 		case OBJ_PROJECTILE:
-			ASSERT(!"invalid object type: bullet", "objectDamage: invalid object type: OBJ_PROJECTILE");
+			ASSERT(!"invalid object type: bullet", "invalid object type: OBJ_PROJECTILE (id=%d)", psObj->id);
 			break;
 
 		case OBJ_TARGET:
-			ASSERT(!"invalid object type: target", "objectDamage: invalid object type: OBJ_TARGET");
+			ASSERT(!"invalid object type: target", "invalid object type: OBJ_TARGET (id=%d)", psObj->id);
 			break;
 
 		default:
-			ASSERT(!"unknown object type", "objectDamage: unknown object type");
+			ASSERT(!"unknown object type", "unknown object type %d, id=%d", psObj->type, psObj->id );
 	}
 
 	return 0;
