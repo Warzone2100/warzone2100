@@ -644,8 +644,8 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 		}
 		else
 		{
-			tX = world_coord(map_coord(tX) + aDirOffset[nearestDir].x) + TILE_SHIFT / 2;
-			tY = world_coord(map_coord(tY) + aDirOffset[nearestDir].y) + TILE_SHIFT / 2;
+			tX = world_coord(map_coord(tX) + aDirOffset[nearestDir].x) + TILE_UNITS / 2;
+			tY = world_coord(map_coord(tY) + aDirOffset[nearestDir].y) + TILE_UNITS / 2;
 			objTrace(psDroid->id, "Workaround found at (%d, %d)", map_coord(tX), map_coord(tY));
 		}
 	}
