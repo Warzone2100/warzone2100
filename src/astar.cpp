@@ -116,7 +116,7 @@ struct PathBlockingMap
 // Data structures used for pathfinding, can contain cached results.
 struct PathfindContext
 {
-	PathfindContext() : iteration(0), myGameTime(0), blockingMap(NULL) {}
+	PathfindContext() : myGameTime(0), iteration(0), blockingMap(NULL) {}
 	bool isBlocked(int x, int y) const
 	{
 		// Not sure whether the out-of-bounds check is needed, can only happen if pathfinding is started on a blocking tile (or off the map).
