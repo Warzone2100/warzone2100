@@ -162,10 +162,10 @@ int NET_PlayerConnectionStatus = CONNECTIONSTATUS_NORMAL;
 #define VersionStringSize 80
 /************************************************************************************
  **  NOTE (!)  Change the VersionString when net code changes!!
- **			   ie ("trunk", "2.1.3", ...)
+ **            ie ("trunk", "2.1.3", "3.0", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk, netcode 4.7";
+char VersionString[VersionStringSize] = "newnet, netcode 4.7";
 static int NETCODE_VERSION_MAJOR = 4;
 static int NETCODE_VERSION_MINOR = 7;
 static int NETCODE_HASH = 0;			// unused for now

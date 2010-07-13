@@ -1065,7 +1065,7 @@ float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 
 	CHECK_STRUCTURE(psStructure);
 
-	debug(LOG_ATTACK, "structure %d, body %d, armour %d, damage: %d",
+	debug(LOG_ATTACK, "structure id %d, body %d, armour %d, damage: %d",
 		  psStructure->id, psStructure->body, psStructure->armour[impactSide][weaponClass], damage);
 
 	relativeDamage = objDamage((BASE_OBJECT *)psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, impactSide);
@@ -1073,7 +1073,7 @@ float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	// If the shell did sufficient damage to destroy the structure
 	if (relativeDamage < 0.0f)
 	{
-		debug(LOG_ATTACK, "DESTROYED");
+		debug(LOG_ATTACK, "Structure (id %d) DESTROYED", psStructure->id);
 		destroyStruct(psStructure);
 	}
 	else
