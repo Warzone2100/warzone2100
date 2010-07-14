@@ -2097,7 +2097,7 @@ static void addChatBox(void)
 	enableConsoleDisplay(true);
 	setConsoleBackdropStatus(false);
 	setDefaultConsoleJust(LEFT_JUSTIFY);
-	setConsoleSizePos(MULTIOP_CHATBOXX+4+D_W, MULTIOP_CHATBOXY+10+D_H, MULTIOP_CHATBOXW-4);
+	setConsoleSizePos(MULTIOP_CHATBOXX+4+D_W, MULTIOP_CHATBOXY+14+D_H, MULTIOP_CHATBOXW-4);
 	setConsolePermanence(true,true);
 	setConsoleLineInfo(5);											// use x lines on chat window
 
