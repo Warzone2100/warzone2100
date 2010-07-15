@@ -137,7 +137,7 @@ void gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::
 
 struct ConditionTrue
 {
-	bool test(BASE_OBJECT *obj) const
+	bool test(BASE_OBJECT *) const
 	{
 		return true;
 	}
