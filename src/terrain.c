@@ -93,6 +93,10 @@ static GLuint lightmap_tex_num;
 static unsigned int lightmapNextUpdate;
 /// How big is the lightmap?
 static int lightmapSize;
+/// Lightmap image
+static GLubyte *lightmapPixmap;
+/// Ticks per lightmap refresh
+static const unsigned int LIGHTMAP_REFRESH = 80;
 
 /// VBOs
 static GLuint geometryVBO, geometryIndexVBO, textureVBO, textureIndexVBO, decalVBO;
@@ -1001,7 +1005,27 @@ bool initTerrain(void)
 	}
 	debug(LOG_TERRAIN, "the size of the map is %ix%i", mapWidth, mapHeight);
 	debug(LOG_TERRAIN, "lightmap texture size is %ix%i", lightmapSize, lightmapSize);
-	
+
+	// Prepare the lightmap pixmap and texture
+	lightmapPixmap = (GLubyte *)calloc(1, lightmapSize * lightmapSize * 3 * sizeof(GLubyte));
+	if (lightmapPixmap == NULL)
+	{
+		debug(LOG_FATAL, "Out of memory!");
+		abort();
+		return false;
+	}
+
+	glGenTextures(1, &lightmap_tex_num);
+	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, lightmapSize, lightmapSize, 0, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
+
 	terrainInitalised = true;
 	
 	return true;
@@ -1030,7 +1054,11 @@ void shutdownTerrain(void)
 		}
 	}
 	free(sectors);
-	
+
+	glDeleteTextures(1, &lightmap_tex_num);
+	free(lightmapPixmap);
+	lightmapPixmap = NULL;
+
 	terrainInitalised = false;
 }
 
@@ -1052,18 +1080,19 @@ void drawTerrain(void)
 
 	glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TEXTURE_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	// lightmap
-	// we limit the framerate of the lightmap, because uploading a texture is an expensive operation
-	if (gameTime > lightmapNextUpdate)
-	{
-		// allocate 3D array for our lightmap--but MSVC don't support VLA's :P
-		unsigned char *data=(unsigned char * )malloc(lightmapSize * lightmapSize * 3 * sizeof(unsigned char));
-		
-		lightmapNextUpdate = gameTime + 80;
-		glDeleteTextures(1, &lightmap_tex_num);
+	///////////////////////////////////
+	// set up the lightmap texture
 
-		glGenTextures(1, &lightmap_tex_num);
-		
+	glActiveTexture(GL_TEXTURE1);
+	// bind the texture
+	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
+	glEnable(GL_TEXTURE_2D);
+
+	// we limit the framerate of the lightmap, because updating a texture is an expensive operation
+	if (gameTime >= lightmapNextUpdate)
+	{
+		lightmapNextUpdate = gameTime + LIGHTMAP_REFRESH;
+
 		for (i = 0; i < lightmapSize; i++)
 		{
 			for (j = 0; j < lightmapSize; j++)
@@ -1073,9 +1102,9 @@ void drawTerrain(void)
 				float playerX = (float)player.p.x/TILE_UNITS+visibleTiles.x/2;
 				float playerY = (float)player.p.z/TILE_UNITS+visibleTiles.y/2;
 				getColour(&colour, i, j, false);
-				data[(i * lightmapSize + j) * 3 + 0] = colour.byte.r;
-				data[(i * lightmapSize + j) * 3 + 1] = colour.byte.g;
-				data[(i * lightmapSize + j) * 3 + 2] = colour.byte.b;
+				lightmapPixmap[(i * lightmapSize + j) * 3 + 0] = colour.byte.r;
+				lightmapPixmap[(i * lightmapSize + j) * 3 + 1] = colour.byte.g;
+				lightmapPixmap[(i * lightmapSize + j) * 3 + 2] = colour.byte.b;
 				
 				if (!rendStates.fogEnabled)
 				{
@@ -1099,34 +1128,19 @@ void drawTerrain(void)
 					}
 					if (darken < 1)
 					{
-						data[(i * lightmapSize + j) * 3 + 0] *= darken;
-						data[(i * lightmapSize + j) * 3 + 1] *= darken;
-						data[(i * lightmapSize + j) * 3 + 2] *= darken;
+						lightmapPixmap[(i * lightmapSize + j) * 3 + 0] *= darken;
+						lightmapPixmap[(i * lightmapSize + j) * 3 + 1] *= darken;
+						lightmapPixmap[(i * lightmapSize + j) * 3 + 2] *= darken;
 					}
 				}
 			}
 		}
-		
-		glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
+
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, 3, lightmapSize, lightmapSize, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-		// once lightmap has been uploaded, we free it.
-		free(data);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, lightmapSize, lightmapSize, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
 	}
-	
-	///////////////////////////////////
-	// now set up the lightmap texture
-	
-	glActiveTexture(GL_TEXTURE1);
-	// load the texture
-	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
-	glEnable(GL_TEXTURE_2D);
 
+	// enable texture coord generation
 	glEnable(GL_TEXTURE_GEN_S); glError();
 	glEnable(GL_TEXTURE_GEN_T); glError();
 	glEnable(GL_BLEND);
