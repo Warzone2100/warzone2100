@@ -111,6 +111,7 @@ struct Socket
 	z_stream zDeflate;
 	z_stream zInflate;
 	unsigned zDeflateInSize;
+	bool zInflateNeedInput;
 	std::vector<uint8_t> zDeflateOutBuf;
 	std::vector<uint8_t> zInflateInBuf;
 };
@@ -529,7 +530,7 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 
 	if (sock->isCompressed)
 	{
-		if (sock->zInflate.avail_in <= 0)
+		if (sock->zInflateNeedInput)
 		{
 			// No input data, read some.
 
@@ -552,6 +553,10 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 			{
 				sock->readDisconnected = true;
 			}
+			else
+			{
+				sock->zInflateNeedInput = false;
+			}
 		}
 
 		sock->zInflate.next_out = (Bytef *)buf;
@@ -569,6 +574,12 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 		{
 			debug(LOG_ERROR, "Couldn't decompress data from socket. zlib error %s", err);
 			return -1;  // Bad data!
+		}
+
+		if (sock->zInflate.avail_out != 0)
+		{
+			sock->zInflateNeedInput = true;
+			ASSERT(sock->zInflate.avail_in == 0, "zlib not consuming all input!");
 		}
 
 		return max_size - sock->zInflate.avail_out;  // Got some data, return how much.
@@ -724,6 +735,8 @@ void socketBeginCompression(Socket *sock)
 	ret = inflateInit(&sock->zInflate);
 	ASSERT(ret == Z_OK, "deflateInit failed! Sockets won't work.");
 
+	sock->zInflateNeedInput = true;
+
 	sock->isCompressed = true;
 	wzMutexUnlock(socketThreadMutex);
 }
@@ -842,21 +855,41 @@ int checkSockets(const SocketSet* set, unsigned int timeout)
 		return 0;
 	}
 
-	int ret;
-	fd_set fds;
 #if   defined(WZ_OS_UNIX)
 	SOCKET maxfd = INT_MIN;
 #elif defined(WZ_OS_WIN)
 	SOCKET maxfd = 0;
 #endif
 
+	bool compressedReady = false;
 	for (size_t i = 0; i < set->fds.size(); ++i)
 	{
 		ASSERT(set->fds[i]->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid file descriptor!");
 
+		if (set->fds[i]->isCompressed && !set->fds[i]->zInflateNeedInput)
+		{
+			compressedReady = true;
+			break;
+		}
+
 		maxfd = std::max(maxfd, set->fds[i]->fd[SOCK_CONNECTION]);
 	}
 
+	if (compressedReady)
+	{
+		// A socket already has some data ready. Don't really poll the sockets.
+
+		int ret = 0;
+		for (size_t i = 0; i < set->fds.size(); ++i)
+		{
+			set->fds[i]->ready = set->fds[i]->isCompressed && !set->fds[i]->zInflateNeedInput;
+			++ret;
+		}
+		return ret;
+	}
+
+	int ret;
+	fd_set fds;
 	do
 	{
 		struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
