@@ -297,6 +297,7 @@ extern int   NETinit(BOOL bFirstCall);				// init
 BOOL NETsend(uint8_t player, NETMESSAGE message);                        ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
 extern BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type);                  ///< recv a message from the net queues if possible.
 extern BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type);                 ///< recv a message from the game queues which is sceduled to execute by time, if possible.
+void NETflush(void);                                                     ///< Flushes any data stuck in compression buffers.
 
 extern UBYTE   NETsendFile(char *fileName, UDWORD player);	// send file chunk.
 extern UBYTE   NETrecvFile(NETQUEUE queue);                     // recv file chunk

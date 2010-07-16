@@ -1252,6 +1252,34 @@ BOOL NETsend(uint8_t player, NETMESSAGE message)
 	return false;
 }
 
+void NETflush()
+{
+	if (!NetPlay.bComms)
+	{
+		return;
+	}
+
+	if (NetPlay.isHost)
+	{
+		int player;
+		for (player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
+		{
+			// We are the host, send directly to player.
+			if (connected_bsocket[player] != NULL)
+			{
+				socketFlush(connected_bsocket[player]);
+			}
+		}
+	}
+	else
+	{
+		if (bsocket != NULL)
+		{
+			socketFlush(bsocket);
+		}
+	}
+}
+
 ///////////////////////////////////////////////////////////////////////////
 // Check if a message is a system message
 static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
@@ -2232,6 +2260,7 @@ static void NETallowJoining(void)
 						NETbeginEncode(NETnetQueue(index), NET_REJECTED);
 							NETuint8_t(&rejected);
 						NETend();
+						NETflush();
 
 						allow_joining = false; // no need to inform master server
 						NET_DestroyPlayer(index);
@@ -2673,6 +2702,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		NETstring(NetPlay.gamePassword, sizeof(NetPlay.gamePassword));
 		NETint32_t(&NETCODE_HASH); //unused
 	NETend();
+	socketFlush(bsocket);  // Make sure the message was completely sent.
 
 	i = SDL_GetTicks();
 	// Loop until we've been accepted into the game

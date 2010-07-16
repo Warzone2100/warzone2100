@@ -65,8 +65,10 @@ ssize_t readNoInt(Socket *sock, void *buf, size_t max_size);            ///< Rea
 ssize_t readAll(Socket* sock, void *buf, size_t size, unsigned timeout);///< Reads exactly size bytes from the Socket, or blocks until the timeout expires.
 ssize_t writeAll(Socket *sock, const void* buf, size_t size);           ///< Nonblocking write of size bytes to the Socket. All bytes will be written asynchronously, by a separate thread.
 
+// Sockets, compressed.
 void socketBeginCompression(Socket *sock);                              ///< Makes future data sent compressed, and future data received expected to be compressed.
 bool socketReadDisconnected(Socket *sock);                              ///< If readNoInt returned 0, returns true if this is the result of a disconnect, or false if the input compressed data just hasn't produced any output bytes.
+void socketFlush(Socket *sock);                                         ///< Actually sends the data written with writeAll. Only useful on compressed sockets. Note that flushing too often makes compression less effective.
 
 // Socket sets.
 SocketSet *allocSocketSet(void);                                        ///< Constructs a SocketSet.

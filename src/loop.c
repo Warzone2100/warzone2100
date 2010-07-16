@@ -147,6 +147,7 @@ GAMECODE gameLoop(void)
 	INT_RETVAL	intRetVal;
 	int	        clearMode = 0;
 	bool            gameTicked;                     // true iff we are doing a logical update.
+	uint32_t        lastFlushTime = 0;
 
 	// Receive NET_BLAH messages.
 	// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
@@ -163,6 +164,12 @@ GAMECODE gameLoop(void)
 
 		sendPlayerGameTime();
 		gameSRand(gameTime);   // Brute force way of synchronising the random number generator, which can't go out of synch.
+	}
+
+	if (gameTicked || realTime - lastFlushTime < 400u)
+	{
+		lastFlushTime = realTime;
+		NETflush();  // Make sure the game time tick message is really sent over the network, and that we aren't waiting too long to send data.
 	}
 
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
