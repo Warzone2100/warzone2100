@@ -731,7 +731,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 //	if(psEdBox->pFontDisplay) {
 //		psEdBox->pFontDisplay(fx,fy, pPrint);
 //	} else {
-		iV_DrawText(utf, fx, fy);
+		iV_DrawText(utf, fx, fy+2);
 //	}
 	free(utf);
 	*pInsPoint = ch;

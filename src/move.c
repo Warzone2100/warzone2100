@@ -25,9 +25,6 @@
  */
 #include "lib/framework/frame.h"
 
-#include <float.h>
-#include <math.h>
-
 #include "lib/framework/trig.h"
 #include "lib/framework/math_ext.h"
 #include "lib/gamelib/gtime.h"
@@ -1311,16 +1308,14 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 }
 
 // get an obstacle avoidance vector
-static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
+static void moveGetObstacleVector(DROID *psDroid, int32_t *pX, int32_t *pY)
 {
-	SDWORD				xdiff, ydiff, absx, absy, dist;
-	BASE_OBJECT			*psObj;
-	SDWORD				numObst = 0, distTot = 0;
-	float				dirX = 0, dirY = 0;
-	float				omag, ox, oy, ratio;
-	float				avoidX, avoidY;
-	SDWORD				mapX, mapY, tx, ty, td;
-	PROPULSION_STATS		*psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	int32_t                 xdiff, ydiff, distSq;
+	BASE_OBJECT *           psObj;
+	int32_t                 numObst = 0, distTot = 0;
+	int32_t                 dirX = 0, dirY = 0;
+	int32_t                 mapOX, mapOY, mapX, mapY;
+	PROPULSION_STATS *      psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 
 	ASSERT(psPropStats, "invalid propulsion stats pointer");
 
@@ -1348,107 +1343,80 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 			// don't avoid people on the other side - run over them
 			continue;
 		}
-		xdiff = (SDWORD)psObj->pos.x - (SDWORD)psDroid->pos.x;
-		ydiff = (SDWORD)psObj->pos.y - (SDWORD)psDroid->pos.y;
-		if ((float)xdiff * *pX + (float)ydiff * *pY < 0)
+		xdiff = psObj->pos.x - psDroid->pos.x;
+		ydiff = psObj->pos.y - psDroid->pos.y;
+		if (xdiff * *pX + ydiff * *pY < 0)
 		{
 			// object behind
 			continue;
 		}
 
-		absx = labs(xdiff);
-		absy = labs(ydiff);
-		dist = absx > absy ? absx + absy/2 : absx/2 + absy;
+		distSq = xdiff*xdiff + ydiff*ydiff + 1;
 
-		if (dist != 0)
-		{
-			dirX += (float)xdiff / (float)(dist * dist);
-			dirY += (float)ydiff / (float)(dist * dist);
-			distTot += dist*dist;
-			numObst += 1;
-		}
-		else
-		{
-			dirX += xdiff;
-			dirY += ydiff;
-			numObst += 1;
-		}
+		dirX += xdiff * 65536 / distSq;
+		dirY += ydiff * 65536 / distSq;
+		distTot += distSq;
+		numObst += 1;
 	}
 
 	// now scan for blocking tiles
-	mapX = map_coord(psDroid->pos.x);
-	mapY = map_coord(psDroid->pos.y);
-	for(ydiff=-2; ydiff<=2; ydiff++)
+	mapOX = map_coord(psDroid->pos.x);
+	mapOY = map_coord(psDroid->pos.y);
+	for (mapY = mapOY - 2; mapY <= mapOY + 2; ++mapY)
 	{
-		for(xdiff=-2; xdiff<=2; xdiff++)
+		for (mapX = mapOX - 2; mapX <= mapOX + 2; ++mapX)
 		{
-			if ((float)xdiff * *pX + (float)ydiff * *pY <= 0)
+			xdiff = world_coord(mapX) + TILE_UNITS/2 - psDroid->pos.x;
+			ydiff = world_coord(mapY) + TILE_UNITS/2 - psDroid->pos.y;
+			if (xdiff * *pX + ydiff * *pY <= 0)
 			{
 				// object behind
 				continue;
 			}
-			if (fpathBlockingTile(mapX + xdiff, mapY + ydiff, psPropStats->propulsionType))
+			if (fpathBlockingTile(mapX, mapY, psPropStats->propulsionType))
 			{
-				tx = world_coord(xdiff);
-				ty = world_coord(ydiff);
-				td = tx*tx + ty*ty;
-				if (td < AVOID_DIST*AVOID_DIST)
+				distSq = xdiff*xdiff + ydiff*ydiff + 1;
+				if (distSq < AVOID_DIST*AVOID_DIST)
 				{
-					absx = labs(tx);
-					absy = labs(ty);
-					dist = absx > absy ? absx + absy/2 : absx/2 + absy;
-
-					if (dist != 0)
-					{
-						dirX += (float)tx / (float)(dist * dist);
-						dirY += (float)ty / (float)(dist * dist);
-						distTot += dist*dist;
-						numObst += 1;
-					}
+					dirX += xdiff * 65536 / distSq;
+					dirY += ydiff * 65536 / distSq;
+					distTot += distSq;
+					numObst += 1;
 				}
 			}
 		}
 	}
 
-	if (numObst > 0)
+	if (dirX != 0 || dirY != 0)
 	{
+		int32_t avoidX, avoidY;
+		int32_t ox, oy;
+		int32_t dist;
+		int64_t ratio;
+
 		distTot /= numObst;
 
 		// Create the avoid vector
-		if (dirX == 0 && dirY == 0)
+		dist = iHypot(dirX, dirY);
+		ox = (int64_t)dirX * 65536 / dist;
+		oy = (int64_t)dirY * 65536 / dist;
+		if (*pX * oy + *pY * -ox < 0)
 		{
-			avoidX = 0;
-			avoidY = 0;
-			distTot = AVOID_DIST*AVOID_DIST;
+			avoidX = -oy;
+			avoidY = ox;
 		}
 		else
 		{
-			omag = sqrtf(dirX*dirX + dirY*dirY);
-			ox = dirX / omag;
-			oy = dirY / omag;
-			if (*pX * oy + *pY * -ox < 0)
-			{
-				avoidX = -oy;
-				avoidY = ox;
-			}
-			else
-			{
-				avoidX = oy;
-				avoidY = -ox;
-			}
+			avoidX = oy;
+			avoidY = -ox;
 		}
 
 		// combine the avoid vector and the target vector
-		ratio = (float)distTot / (float)(AVOID_DIST * AVOID_DIST);
-		if (ratio > 1)
-		{
-			ratio = 1;
-		}
+		ratio = MIN(distTot, (AVOID_DIST * AVOID_DIST));
 
-		*pX = *pX * ratio + avoidX * (1.f - ratio);
-		*pY = *pY * ratio + avoidY * (1.f - ratio);
+		*pX = *pX * ratio / 256 + avoidX * ((AVOID_DIST * AVOID_DIST) - ratio) / 65536;
+		*pY = *pY * ratio / 256 + avoidY * ((AVOID_DIST * AVOID_DIST) - ratio) / 65536;
 	}
-	ASSERT(isfinite(*pX) && isfinite(*pY), "float infinity detected");
 }
 
 
@@ -1466,11 +1434,7 @@ static uint16_t moveGetDirection(DROID *psDroid)
 	// Transporters don't need to avoid obstacles, but everyone else should
 	if (psDroid->droidType != DROID_TRANSPORTER)
 	{
-		float fX = dest.x >> EXTRA_BITS;
-		float fY = dest.y >> EXTRA_BITS;
-		moveGetObstacleVector(psDroid, &fX, &fY);
-		dest.x = fX * EXTRA_PRECISION;
-		dest.y = fY * EXTRA_PRECISION;
+		moveGetObstacleVector(psDroid, &dest.x, &dest.y);
 	}
 
 	return iAtan2(dest.x, dest.y);

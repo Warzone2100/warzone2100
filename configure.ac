@@ -214,39 +214,40 @@ AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAG
 
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -fp-model precise -fp-model source -ftz -no-fma -Wcheck -Werror"
-		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -fp-model precise -fp-model source -ftz -no-fma -Wcheck -Werror"
+		# "-fp-model precise -fp-model source -ftz -no-fma" was here
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wcheck -Werror"
+		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Wcheck -Werror"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
-		# -mno-fused-madd = Do not generate fused multiply-add instructions, which round differently than separate multiply and add instructions.
+		# "-mno-fused-madd" was here
 		WZ_WARNINGS="-Wall -Werror -Wno-unused-label -Wmissing-field-initializers -Wcast-align -Wwrite-strings -Wmissing-declarations -Wpointer-arith -Wno-format-security"
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -mno-fused-madd -Wno-pointer-to-int-cast -Wstrict-prototypes -Wdeclaration-after-statement ${WZ_WARNINGS} ${CFLAGS_IGNORE_WARNINGS}"
-		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -mno-fused-madd -Wextra ${WZ_WARNINGS}"
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wno-pointer-to-int-cast  -Wstrict-prototypes -Wdeclaration-after-statement ${WZ_WARNINGS} ${CFLAGS_IGNORE_WARNINGS}"
+		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Wextra ${WZ_WARNINGS}"
 		WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
 elif test "x$enable_debug" = "xrelaxed" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -mno-fused-madd -Wall -Wextra -Wwrite-strings"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 -mno-fused-madd -Wall -Wextra -Wwrite-strings"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -Wall -Wextra -Wwrite-strings"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 -Wall -Wextra -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 elif test "x$enable_debug" = "xdebugprofile" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -pg -Wall -Wwrite-strings"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 -pg -mno-fused-madd -Wall -Wwrite-strings"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 -pg -Wall -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
 elif test "x$enable_debug" = "xprofile" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -pg -mno-fused-madd -Wall -Wwrite-strings"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -Os -pg -mno-fused-madd -Wall -Wwrite-strings"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -pg -Wall -Wwrite-strings"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -Os -pg -Wall -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
 elif test "x$enable_debug" = "xg++" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O2 -mno-fused-madd -Wall -fpermissive"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O2 -mno-fused-madd -Wall"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -O2 -Wall -fpermissive"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O2 -Wall"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	CC="g++"
 else
-	WZ_CFLAGS="${WZ_CFLAGS} -g -mno-fused-madd -Wall -Wwrite-strings"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -mno-fused-madd -Wall -Wwrite-strings"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -Wall -Wwrite-strings"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -Wall -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 fi
 
