@@ -380,20 +380,17 @@ void inputHandleMouseMotionEvent(SDL_MouseMotionEvent * motionEvent)
 	switch (motionEvent->type)
 	{
 		case SDL_MOUSEMOTION:
-			if(!mouseDown(MOUSE_MMB))
-			{
-				/* store the current mouse position */
-				mouseXPos = motionEvent->x;
-				mouseYPos = motionEvent->y;
+			/* store the current mouse position */
+			mouseXPos = motionEvent->x;
+			mouseYPos = motionEvent->y;
 
-				/* now see if a drag has started */
-				if (  ( aMouseState[dragKey].state == KEY_PRESSED ||
-						aMouseState[dragKey].state == KEY_DOWN )
-				&& ( ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
-						ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD ) )
-				{
-					aMouseState[dragKey].state = KEY_DRAG;
-				}
+			/* now see if a drag has started */
+			if ((aMouseState[dragKey].state == KEY_PRESSED ||
+			     aMouseState[dragKey].state == KEY_DOWN) &&
+			    (ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
+			     ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD))
+			{
+				aMouseState[dragKey].state = KEY_DRAG;
 			}
 			break;
 		default:
@@ -495,7 +492,10 @@ Uint16 mouseY(void)
 /* This returns true if the mouse key is currently depressed */
 bool mouseDown(MOUSE_KEY_CODE code)
 {
-	return (aMouseState[code].state != KEY_UP);
+	return (aMouseState[code].state != KEY_UP) ||
+
+	       // holding down LMB and RMB counts as holding down MMB
+	       (code == MOUSE_MMB && aMouseState[MOUSE_LMB].state != KEY_UP && aMouseState[MOUSE_RMB].state != KEY_UP);
 }
 
 /* This returns true if the mouse key was double clicked */
@@ -523,7 +523,11 @@ bool mouseReleased(MOUSE_KEY_CODE code)
 /* Check for a mouse drag, return the drag start coords if dragging */
 bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 {
-	if (aMouseState[code].state == KEY_DRAG)
+	if ((aMouseState[code].state == KEY_DRAG) ||
+
+	    // dragging LMB and RMB counts as dragging MMB
+	    (code == MOUSE_MMB && ((aMouseState[MOUSE_LMB].state == KEY_DRAG && aMouseState[MOUSE_RMB].state != KEY_UP) ||
+	     (aMouseState[MOUSE_LMB].state != KEY_UP && aMouseState[MOUSE_RMB].state == KEY_DRAG))))
 	{
 		*px = dragX;
 		*py = dragY;
