@@ -66,6 +66,7 @@ ssize_t readAll(Socket* sock, void *buf, size_t size, unsigned timeout);///< Rea
 ssize_t writeAll(Socket *sock, const void* buf, size_t size);           ///< Nonblocking write of size bytes to the Socket. All bytes will be written asynchronously, by a separate thread.
 
 void socketBeginCompression(Socket *sock);                              ///< Makes future data sent compressed, and future data received expected to be compressed.
+bool socketReadDisconnected(Socket *sock);                              ///< If readNoInt returned 0, returns true if this is the result of a disconnect, or false if the input compressed data just hasn't produced any output bytes.
 
 // Socket sets.
 SocketSet *allocSocketSet(void);                                        ///< Constructs a SocketSet.

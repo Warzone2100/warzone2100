@@ -97,7 +97,7 @@ struct Socket
 	 *
 	 * All non-listening sockets will only use the first socket handle.
 	 */
-	Socket() : ready(false), writeError(false), isCompressed(false) {}
+	Socket() : ready(false), writeError(false), isCompressed(false), readDisconnected(false) {}
 	~Socket();
 
 	SOCKET fd[SOCK_COUNT];
@@ -106,6 +106,7 @@ struct Socket
 	char textAddress[40];
 
 	bool isCompressed;
+	bool readDisconnected;  ///< True iff a call to recv() returned 0.
 	z_stream zDeflate;
 	z_stream zInflate;
 	std::vector<uint8_t> zDeflateOutBuf;
@@ -528,6 +529,11 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 
 			sock->zInflate.next_in = &sock->zInflateInBuf[0];
 			sock->zInflate.avail_in = received;
+
+			if (received == 0)
+			{
+				sock->readDisconnected = true;
+			}
 		}
 
 		sock->zInflate.next_out = (Bytef *)buf;
@@ -550,11 +556,20 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 	do
 	{
 		received = recv(sock->fd[SOCK_CONNECTION], (char*)buf, max_size, 0);
+		if (received == 0)
+		{
+			sock->readDisconnected = true;
+		}
 	} while (received == SOCKET_ERROR && getSockErr() == EINTR);
 
 	sock->ready = false;
 
 	return received;
+}
+
+bool socketReadDisconnected(Socket *sock)
+{
+	return sock->readDisconnected;
 }
 
 /**
@@ -859,6 +874,7 @@ ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
 		if (ret == 0)
 		{
 			debug(LOG_NET, "Socket %x disconnected.", sock->fd[SOCK_CONNECTION]);
+			sock->readDisconnected = true;
 			setSockErr(ECONNRESET);
 			return received;
 		}

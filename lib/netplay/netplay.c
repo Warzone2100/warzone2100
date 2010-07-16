@@ -217,7 +217,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 
 	size = readNoInt(socket, bufstart, bufsize);
 
-	if (size != 0 && size != SOCKET_ERROR)
+	if ((size != 0 || !socketReadDisconnected(socket)) && size != SOCKET_ERROR)
 	{
 		return size;
 	}
@@ -728,7 +728,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 		{
 			result = readNoInt(tcp_socket, buf+i, sizeof(buf)-i);
 			if (result == SOCKET_ERROR
-			 || result == 0)
+			 || (result == 0 && socketReadDisconnected(tcp_socket)))
 			{
 				debug(LOG_ERROR, "Server socket (%p) ecountered error: %s", tcp_socket, strSockError(getSockErr()));
 				debug(LOG_ERROR, "GAMESTRUCT recv failed; received %u bytes out of %d", i, (int)sizeof(buf));
@@ -2123,7 +2123,7 @@ static void NETallowJoining(void)
 				uint8_t buffer[NET_BUFFER_SIZE];
 				ssize_t size = readNoInt(tmp_socket[i], buffer, sizeof(buffer));
 
-				if (size == 0 || size == SOCKET_ERROR)
+				if ((size == 0 && socketReadDisconnected(tmp_socket[i])) || size == SOCKET_ERROR)
 				{
 					// disconnect or programmer error
 					if (size == 0)
