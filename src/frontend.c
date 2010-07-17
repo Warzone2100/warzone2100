@@ -997,6 +997,18 @@ static BOOL startMouseOptionsMenu(void)
 		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("Off"), 0);
 	}
 
+	////////////
+	// middle-click rotate
+	addTextButton(FRONTEND_MMROTATE,	 FRONTEND_POS2X-35,   FRONTEND_POS6Y, _("Rotate Screen"), 0);
+	if( getMiddleClickRotate() )
+	{	// right-click orders
+		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M-25,  FRONTEND_POS6Y, P_("middle mouse button", "Middle Button"), 0);
+	}
+	else
+	{	// left-click orders
+		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M-25,  FRONTEND_POS6Y, P_("right mouse button", "Right Button"), 0);
+	}
+
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MOUSE OPTIONS"));
 
@@ -1065,6 +1077,20 @@ BOOL runMouseOptionsMenu(void)
 			{
 				setRightClickOrders(true);
 				widgSetString(psWScreen,FRONTEND_MBUTTONS_R, _("On"));
+			}
+			break;
+
+		case FRONTEND_MMROTATE:
+		case FRONTEND_MMROTATE_R:
+			if( getMiddleClickRotate() )
+			{
+				setMiddleClickRotate(false);
+				widgSetString(psWScreen,FRONTEND_MMROTATE_R, P_("right mouse button", "Right Button"));
+			}
+			else
+			{
+				setMiddleClickRotate(true);
+				widgSetString(psWScreen,FRONTEND_MMROTATE_R, P_("middle mouse button", "Middle Button"));
 			}
 			break;
 
