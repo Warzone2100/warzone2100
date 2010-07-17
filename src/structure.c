@@ -3409,9 +3409,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					{
 						if (myResponsibility(psStructure->player))
 						{
+							// This message should have no effect if in synch.
 							SendResearch(psStructure->player, pSubject->ref - REF_RESEARCH_START, true);
 						}
-						return;  // Wait for our message before adding the research.
 					}
 
 					//store the last topic researched - if its the best
