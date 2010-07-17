@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-07-11 20:56+0200\n"
-"PO-Revision-Date: 2010-04-27 20:06+0200\n"
+"PO-Revision-Date: 2010-07-17 11:21+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -3392,7 +3392,7 @@ msgstr "Alle Luftabwehrgeschütze wurden automatisch aufgerüstet"
 #: data/mp/messages/resmessages2.rmsg:668
 #: data/mp/messages/strings/resstrings.txt:711
 msgid "Recoil loaded AA ammunition hopper"
-msgstr "Rückstoßgeladener Munitionstrichter für Luftabwehrgeschütze"
+msgstr "Rückstoßgeladene Munitionszufuhr via Ladestreifen für Luftabwehrwaffen"
 
 #: data/base/messages/resmessages2.rmsg:669
 #: data/base/messages/resmessages3.rmsg:838
@@ -8244,17 +8244,17 @@ msgstr "Hochexplosive, panzerbrechende Luftabwehrgeschosse Mk3"
 #: data/base/messages/strings/names.txt:993
 #: data/mp/messages/strings/names.txt:1006
 msgid "AA Ammunition Hopper"
-msgstr "Luftabwehr-Munitionstrichter"
+msgstr "Kastenmagazin mit Ladestreifen für Luftabwehrwaffen"
 
 #: data/base/messages/strings/names.txt:994
 #: data/mp/messages/strings/names.txt:1007
 msgid "AA Ammunition Hopper Mk2"
-msgstr "Luftabwehr-Munitionstrichter Mk2"
+msgstr "Kastenmagazin mit Ladestreifen für Luftabwehrwaffen Mk2"
 
 #: data/base/messages/strings/names.txt:995
 #: data/mp/messages/strings/names.txt:1008
 msgid "AA Ammunition Hopper Mk3"
-msgstr "Luftabwehr-Munitionstrichter Mk3"
+msgstr "Kastenmagazin mit Ladestreifen für Luftabwehrwaffen Mk3"
 
 #: data/base/messages/strings/names.txt:996
 #: data/mp/messages/strings/names.txt:1009
@@ -8330,32 +8330,32 @@ msgstr "Hochexplosive Antipanzergeschosse für Geschütze Mk3"
 #: data/base/messages/strings/names.txt:1017
 #: data/mp/messages/strings/names.txt:1030
 msgid "APFSDS Cannon Rounds"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Treibspiegelgeschosse für Geschütze"
+msgstr "Panzerbrechende, flügelstabilisierte Treibkäfiggeschosse für Geschütze"
 
 #: data/base/messages/strings/names.txt:1018
 #: data/mp/messages/strings/names.txt:1031
 msgid "APFSDS Cannon Rounds Mk2"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Treibspiegelgeschosse für Geschütze Mk2"
+msgstr "Panzerbrechende, flügelstabilisierte Treibkäfiggeschosse für Geschütze Mk2"
 
 #: data/base/messages/strings/names.txt:1019
 #: data/mp/messages/strings/names.txt:1032
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Treibspiegelgeschosse für Geschütze Mk3"
+msgstr "Panzerbrechende, flügelstabilisierte Treibkäfiggeschosse für Geschütze Mk3"
 
 #: data/base/messages/strings/names.txt:1020
 #: data/mp/messages/strings/names.txt:1033
 msgid "HVAPFSDS Cannon Rounds"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Geschütze"
+msgstr "Panzerbrechende, flügelstabilisierte Hochgeschwindigkeitstreibkäfiggeschosse für Geschütze"
 
 #: data/base/messages/strings/names.txt:1021
 #: data/mp/messages/strings/names.txt:1034
 msgid "HVAPFSDS Cannon Rounds Mk2"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Geschütze Mk2"
+msgstr "Panzerbrechende, flügelstabilisierte Hochgeschwindigkeitstreibkäfiggeschosse für Geschütze Mk2"
 
 #: data/base/messages/strings/names.txt:1022
 #: data/mp/messages/strings/names.txt:1035
 msgid "HVAPFSDS Cannon Rounds Mk3"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Geschütze Mk3"
+msgstr "Panzerbrechende, flügelstabilisierte Hochgeschwindigkeitstreibkäfiggeschosse für Geschütze Mk3"
 
 # auto -> selbst
 # Substantiv im Englischen absichtlich als Adjektiv im Deutschen -Kreuvf
@@ -9596,7 +9596,7 @@ msgstr "Ihr Zielgebiet liegt in der westlichen Zone."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
 msgid "Commander, we have recovered a command turret from the New Paradigm."
-msgstr "Commander, wir haben ein Commanderturm des New Paradigm erbeutet."
+msgstr "Commander, wir haben einen Commanderturm des New Paradigm erbeutet."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
@@ -13474,7 +13474,7 @@ msgstr "CHEATS SIND JETZT AKTIVIERT!"
 
 #: src/keybind.c:1419
 msgid "CHEATS ARE NOW DISABLED!"
-msgstr "CHEAST SIND JETZT DEAKTIVIERT!"
+msgstr "CHEATS SIND JETZT DEAKTIVIERT!"
 
 #: src/keybind.c:1476
 msgid "God Mode ON"
