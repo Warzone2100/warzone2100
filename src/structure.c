@@ -5000,12 +5000,14 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 BOOL destroyStruct(STRUCTURE *psDel)
 {
 	UDWORD			mapX, mapY, width,breadth;
-	UDWORD			i;
 	UDWORD			widthScatter,breadthScatter,heightScatter;
-	Vector3i pos;
 	BOOL			resourceFound = false;
 	MAPTILE			*psTile;
-	BOOL			bMinor = false;
+	bool                    bMinor;
+
+	const unsigned          burnDurationWall    =  1000;
+	const unsigned          burnDurationOilWell = 60000;
+	const unsigned          burnDurationOther   = 10000;
 
 	CHECK_STRUCTURE(psDel);
 
@@ -5015,15 +5017,15 @@ BOOL destroyStruct(STRUCTURE *psDel)
 		SendDestroyStructure(psDel);
 	}
 
+	/* Firstly, are we dealing with a wall section */
+	bMinor = psDel->pStructureType->type == REF_WALL || psDel->pStructureType->type == REF_WALLCORNER;
+
 //---------------------------------------
 	/* Only add if visible */
 	if(psDel->visible[selectedPlayer])
 	{
-		/* Firstly, are we dealing with a wall section */
-		if(psDel->pStructureType->type == REF_WALL || psDel->pStructureType->type == REF_WALLCORNER)
-		{
-			bMinor = true;
-		}
+		Vector3i pos;
+		int      i;
 
 //---------------------------------------  Do we add immediate explosions?
 		/* Set off some explosions, but not for walls */
@@ -5031,7 +5033,7 @@ BOOL destroyStruct(STRUCTURE *psDel)
 		widthScatter = TILE_UNITS;
 		breadthScatter = TILE_UNITS;
 		heightScatter = TILE_UNITS;
-		for(i=0; i<(UDWORD)(bMinor ? 2 : 4); i++)	// only add two for walls - gets crazy otherwise
+		for (i = 0; i < (bMinor ? 2 : 4); ++i)  // only add two for walls - gets crazy otherwise
 		{
 			pos.x = psDel->pos.x + widthScatter - rand()%(2*widthScatter);
 			pos.z = psDel->pos.y + breadthScatter - rand()%(2*breadthScatter);
@@ -5041,8 +5043,8 @@ BOOL destroyStruct(STRUCTURE *psDel)
 
 		/* Get coordinates for everybody! */
 		pos.x = psDel->pos.x;
-		pos.z = psDel->pos.y;
-		pos.y = map_Height((UWORD)pos.x,(UWORD)pos.z);
+		pos.z = psDel->pos.y;  // z = y [sic] intentional
+		pos.y = map_Height(pos.x, pos.z);
 
 //--------------------------------------- Do we add a fire?
 		// Set off a fire, provide dimensions for the fire
@@ -5054,24 +5056,23 @@ BOOL destroyStruct(STRUCTURE *psDel)
 		{
 			effectGiveAuxVar(world_coord(psDel->pStructureType->baseWidth) / 3);
 		}
-		if(bMinor)							 // walls
+		if (bMinor)  // walls
 		{
 			/* Give a duration */
-			effectGiveAuxVarSec(1000);
+			effectGiveAuxVarSec(burnDurationWall);
 			/* Normal fire - no smoke */
 			addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_LOCALISED,false,NULL,0);
-
 		}
 		else if(psDel->pStructureType->type == REF_RESOURCE_EXTRACTOR) // oil resources
 		{
 			/* Oil resources burn AND puff out smoke AND for longer*/
-			effectGiveAuxVarSec(60000);
+			effectGiveAuxVarSec(burnDurationOilWell);
 			addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_SMOKY,false,NULL,0);
 		}
 		else	// everything else
 		{
 			/* Give a duration */
-			effectGiveAuxVarSec(10000);
+			effectGiveAuxVarSec(burnDurationOther);
 			addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_LOCALISED,false,NULL,0);
 		}
 
@@ -5082,13 +5083,6 @@ BOOL destroyStruct(STRUCTURE *psDel)
 			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_POWER_STATION,false,NULL,0);
 			pos.y += SHOCK_WAVE_HEIGHT;
 			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SHOCKWAVE,false,NULL,0);
-			// give some power back to the player.
-			addPower(psDel->player, structPowerToBuild(psDel));
-			//if it had a module attached, need to add the power for the base struct as well
-			if (psDel->pFunctionality->powerGenerator.capacity)
-			{
-				addPower(psDel->player, psDel->pStructureType->powerToBuild);
-			}
 		}
 		/* As do wall sections */
 		else if(bMinor)
@@ -5112,6 +5106,33 @@ BOOL destroyStruct(STRUCTURE *psDel)
 		audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION );
 	}
 //---------------------------------------------------------------------------------------
+
+	// Actually set the tiles on fire - even if the effect is not visible.
+	if (bMinor)  // walls
+	{
+		tileSetFire(psDel->pos.x, psDel->pos.y, burnDurationWall);
+	}
+	else if(psDel->pStructureType->type == REF_RESOURCE_EXTRACTOR)  // oil resources
+	{
+		/* Oil resources burn AND puff out smoke AND for longer*/
+		tileSetFire(psDel->pos.x, psDel->pos.y, burnDurationOilWell);
+	}
+	else  // everything else
+	{
+		tileSetFire(psDel->pos.x, psDel->pos.y, burnDurationOther);
+	}
+
+	// Power generators give back their power when destroyed.
+	if (psDel->pStructureType->type == REF_POWER_GEN)
+	{
+		// Give some power back to the player, whether or not the power generator is visible.
+		addPower(psDel->player, structPowerToBuild(psDel));
+		// If it had a module attached, need to add the power for the base struct as well, whether or not the power generator is visible.
+		if (psDel->pFunctionality->powerGenerator.capacity)
+		{
+			addPower(psDel->player, psDel->pStructureType->powerToBuild);
+		}
+	}
 
 	resourceFound = removeStruct(psDel, true);
 

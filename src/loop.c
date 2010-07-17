@@ -273,6 +273,9 @@ GAMECODE gameLoop(void)
 				// Check which objects are visible.
 				processVisibility();
 
+				// Update the map.
+				mapUpdate();
+
 				//update the findpath system
 				fpathUpdate();
 

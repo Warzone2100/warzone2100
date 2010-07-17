@@ -454,19 +454,6 @@ static void positionEffect(const EFFECT *psEffect)
 
 static void killEffect(EFFECT *e)
 {
-	if (e->group == EFFECT_FIRE && psMapTiles)
-	{
-		const int posX = map_coord(e->position.x);
-		const int posY = map_coord(e->position.z);
-		MAPTILE *psTile = mapTile(posX, posY);
-
-		ASSERT(psTile, "Fire effect on non-existing tile (%d, %d)", posX, posY);
-		if (psTile)
-		{
-			psTile->tileInfoBits &= ~BITS_ON_FIRE;	// clear fire bit
-		}
-	}
-
 	/* Put effect back into pool */
 	Effect_free(e);
 }
@@ -2262,15 +2249,6 @@ void	effectSetupConstruction(EFFECT *psEffect)
 
 void	effectSetupFire(EFFECT *psEffect)
 {
-	const int posX = map_coord(psEffect->position.x);
-	const int posY = map_coord(psEffect->position.z);
-	MAPTILE *psTile = mapTile(posX, posY);
-
-	ASSERT(psTile, "Cannot place a fire effect %d, %d - outside map!", posX, posY);
-	if (psTile)
-	{
-		psTile->tileInfoBits |= BITS_ON_FIRE;
-	}
 	psEffect->frameDelay = 300;	   // needs to be investigated...
 	psEffect->radius = auxVar;	// needs to be investigated
 	psEffect->lifeSpan = (UWORD)auxVarSec;

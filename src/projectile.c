@@ -1052,6 +1052,11 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		}
 	}
 
+	if (psStats->incenRadius != 0 && psStats->incenTime != 0)
+	{
+		tileSetFire(psObj->pos.x, psObj->pos.y, psStats->incenTime);
+	}
+
 	// Set the effects position and radius
 	position.x = psObj->pos.x;
 	position.z = psObj->pos.y; // z = y [sic] intentional
