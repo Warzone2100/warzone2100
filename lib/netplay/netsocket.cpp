@@ -680,7 +680,7 @@ void socketFlush(Socket *sock)
 		sock->zDeflate.next_out = (Bytef *)&sock->zDeflateOutBuf[alreadyHave];
 		sock->zDeflate.avail_out = sock->zDeflateOutBuf.size() - alreadyHave;
 
-		int ret = deflate(&sock->zDeflate, Z_SYNC_FLUSH);
+		int ret = deflate(&sock->zDeflate, Z_PARTIAL_FLUSH);
 		ASSERT(ret != Z_STREAM_ERROR, "zlib compression failed!");
 
 		// Remove unused part of buffer.
