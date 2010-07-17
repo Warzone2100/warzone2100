@@ -494,7 +494,13 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 
 	if (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_DROID)
 	{
+		// Force sending messages, even if messages were turned off, since a non-synchronised script will execute here. (Aaargh!)
+		bool bMultiMessagesBackup = bMultiMessages;
+		bMultiMessages = bMultiPlayer;
+
 		clustObjectAttacked((BASE_OBJECT *)psObj);
+
+		bMultiMessages = bMultiMessagesBackup;
 	}
 
 
