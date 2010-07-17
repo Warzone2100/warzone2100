@@ -328,7 +328,8 @@ static void updateLatency()
 	{
 		if (!NetPlay.players[player].kick)  // .kick: Don't wait for dropped players.
 		{
-			minWantedLatency = MIN(minWantedLatency, wantedLatencies[player]);  // Minimum, so the clients don't increase the latency to try to make one slow computer run faster.
+			//minWantedLatency = MIN(minWantedLatency, wantedLatencies[player]);  // Minimum, so the clients don't increase the latency to try to make one slow computer run faster.
+			minWantedLatency = MAX(minWantedLatency, wantedLatencies[player]);  // Maximum, since the host experiences lower latency than everyone else.
 		}
 	}
 	// Adjust the agreed latency. (Can maximum decrease by 15ms or increase by 30ms per update.
