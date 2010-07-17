@@ -65,7 +65,7 @@ public:
 	void writeRawData(const uint8_t *netData, size_t netLen);          ///< Inserts data from the network into the NetQueue.
 	// Network related, sending
 	void setWillNeverGetMessagesForNet();                              ///< Marks that we will not be sending this data over the network.
-	bool checkCanGetMessagesForNet() const;                            ///< Checks that we didn't mark that we will not be sending this data over the network.
+	unsigned numMessagesForNet() const;                                ///< Checks that we didn't mark that we will not be sending this data over the network (returns 0), and returns the number of messages to be sent.
 	const NetMessage &getMessageForNet() const;                        ///< Extracts data from the NetQueue to send over the network.
 	void popMessageForNet();                                           ///< Pops the extracted data, so that future getMessageForNet calls do not return that data.
 

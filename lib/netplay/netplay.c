@@ -1259,6 +1259,8 @@ void NETflush()
 		return;
 	}
 
+	NETflushGameQueues();
+
 	if (NetPlay.isHost)
 	{
 		int player;
@@ -1333,23 +1335,29 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 		}
 		case NET_SHARE_GAME_QUEUE:
 		{
-			uint8_t player;
+			uint8_t player = 0;
+			uint32_t num = 0, n;
 			NETMESSAGE message = NULL;
 
 			// Encoded in NETprocessSystemMessage in nettypes.cpp.
 			NETbeginDecode(playerQueue, NET_SHARE_GAME_QUEUE);
 				NETuint8_t(&player);
-				NETNETMESSAGE(&message);
+				NETuint32_tSmall(&num);
+				for (n = 0; n < num; ++n)
+				{
+					NETNETMESSAGE(&message);
+
+					// TODO Check that playerQueue is actually responsible for this game queue.
+					NETinsertMessageFromNet(NETgameQueue(player), message);
+
+					NETdestroyNETMESSAGE(message);
+					message = NULL;
+				}
 			if (!NETend() || player > MAX_PLAYERS)
 			{
 				debug(LOG_ERROR, "Bad NET_SHARE_GAME_QUEUE message.");
 				break;
 			}
-
-			// TODO Check that playerQueue is actually responsible for this game queue.
-			NETinsertMessageFromNet(NETgameQueue(player), message);
-
-			NETdestroyNETMESSAGE(message);
 			break;
 		}
 		case NET_PLAYER_STATS:

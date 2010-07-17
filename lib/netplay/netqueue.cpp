@@ -60,9 +60,18 @@ void NetQueue::setWillNeverGetMessagesForNet()
 	canGetMessagesForNet = false;
 }
 
-bool NetQueue::checkCanGetMessagesForNet() const
+unsigned NetQueue::numMessagesForNet() const
 {
-	return canGetMessagesForNet;
+	unsigned count = 0;
+	if (canGetMessagesForNet)
+	{
+		for (List::iterator i = dataPos; i != messages.begin(); --i)
+		{
+			++count;
+		}
+	}
+
+	return count;
 }
 
 const NetMessage &NetQueue::getMessageForNet() const

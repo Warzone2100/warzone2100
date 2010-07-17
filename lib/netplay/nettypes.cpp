@@ -575,19 +575,6 @@ BOOL NETend()
 			NETsend(queueInfo.index, &queue->getMessageForNet());
 			queue->popMessageForNet();
 		}
-		else if (queueInfo.queueType == QUEUE_GAME && queue->checkCanGetMessagesForNet())
-		{
-			uint8_t player = queueInfo.index;  // queueInfo.index is changed by NETbeginEncode.
-
-			// Not sure exactly where this belongs, but easy to put here in NETend()...
-			// Decoded in NETprocessSystemMessage in netplay.c.
-			NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
-				NETuint8_t(&player);
-				queueAuto(const_cast<NetMessage &>(queue->getMessageForNet()));  // const_cast is safe since we are encoding, not decoding.
-			NETend();  // Recursive call, but queueInfo.queueType = QUEUE_BROADCAST now.
-
-			queue->popMessageForNet();
-		}
 
 		// We have ended the serialisation, so mark the direction invalid
 		NETsetPacketDir(PACKET_INVALID);
@@ -607,6 +594,37 @@ BOOL NETend()
 
 	assert(false && false && false);
 	return false;
+}
+
+void NETflushGameQueues()
+{
+	for (uint8_t player = 0; player < MAX_PLAYERS; ++player)
+	{
+		NetQueue *queue = gameQueues[player];
+
+		if (queue == NULL)
+		{
+			continue;  // Can't send for this player.
+		}
+
+		uint32_t num = queue->numMessagesForNet();
+
+		if (num <= 0)
+		{
+			continue;  // Nothing to send for this player.
+		}
+
+		// Decoded in NETprocessSystemMessage in netplay.c.
+		NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
+			NETuint8_t(&player);
+			NETuint32_tSmall(&num);
+			for (uint32_t n = 0; n < num; ++n)
+			{
+				queueAuto(const_cast<NetMessage &>(queue->getMessageForNet()));  // const_cast is safe since we are encoding, not decoding.
+				queue->popMessageForNet();
+			}
+		NETend();
+	}
 }
 
 void NETpop(NETQUEUE queue)

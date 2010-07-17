@@ -79,6 +79,7 @@ void NETmoveQueue(NETQUEUE src, NETQUEUE dst); ///< Used for moving the tmpQueue
 void NETbeginEncode(NETQUEUE queue, uint8_t type);
 void NETbeginDecode(NETQUEUE queue, uint8_t type);
 BOOL NETend(void);
+void NETflushGameQueues(void);
 void NETpop(NETQUEUE queue);
 
 void NETint8_t(int8_t *ip);
