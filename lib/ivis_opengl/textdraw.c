@@ -34,6 +34,8 @@
 #include "lib/ivis_common/bitimage.h"
 
 #ifdef WZ_OS_MAC
+# include <CoreFoundation/CoreFoundation.h>
+# include <CoreFoundation/CFURL.h>
 # include <QuesoGLC/glc.h>
 #else
 # include <GL/glc.h>
@@ -130,6 +132,22 @@ static void iV_initializeGLC(void)
 	glcEnable(GLC_AUTO_FONT);		// We *do* want font fall-backs
 	glcRenderStyle(GLC_TEXTURE);
 	glcStringType(GLC_UTF8_QSO); // Set GLC's string type to UTF-8 FIXME should be UCS4 to avoid conversions
+
+	#ifdef WZ_OS_MAC
+	{
+		char resourcePath[PATH_MAX];
+		CFURLRef resourceURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
+		if (CFURLGetFileSystemRepresentation(resourceURL, true, (UInt8 *) resourcePath, PATH_MAX))
+		{
+			sstrcat(resourcePath, "/Fonts");
+			glcAppendCatalog(resourcePath);
+		}
+		else
+		{
+			debug(LOG_ERROR, "Could not change to resources directory.");
+		}
+	}
+	#endif
 
 	_glcFont_Regular = glcGenFontID();
 	_glcFont_Bold = glcGenFontID();

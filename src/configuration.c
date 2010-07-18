@@ -277,34 +277,24 @@ BOOL loadConfig(void)
 		setWarzoneKeyString("masterserver_name", NETgetMasterserverName());
 	}
 
-	if (getWarzoneKeyString("fontname", sBuf))
+	if (getWarzoneKeyString("fontname", sBuf) && strcmp(sBuf,"Lucida Grande"))
 	{
 		iV_font(sBuf, NULL, NULL);
 	}
 	else
 	{
-#ifdef WZ_OS_MAC
-		iV_font("Lucida Grande", NULL, NULL);
-		setWarzoneKeyString("fontname", "Lucida Grande");
-#else
 		iV_font("DejaVu Sans", NULL, NULL);
 		setWarzoneKeyString("fontname", "DejaVu Sans");
-#endif
 	}
 
-	if (getWarzoneKeyString("fontface", sBuf))
+	if (getWarzoneKeyString("fontface", sBuf) && strcmp(sBuf,"Normal"))
 	{
 		iV_font(NULL, sBuf, NULL);
 	}
 	else
 	{
-#ifdef WZ_OS_MAC
-		iV_font(NULL, "Regular", NULL);
-		setWarzoneKeyString("fontface", "Regular");
-#else
 		iV_font(NULL, "Book", NULL);
 		setWarzoneKeyString("fontface", "Book");
-#endif
 	}
 
 	if (getWarzoneKeyString("fontfacebold", sBuf))
