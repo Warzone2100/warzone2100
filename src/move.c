@@ -2622,7 +2622,7 @@ void moveUpdateDroid(DROID *psDroid)
 		break;
 	case MOVEWAITROUTE:
 		moveDroidTo(psDroid, psDroid->sMove.DestinationX,psDroid->sMove.DestinationY);
-		moveSpeed = psDroid->sMove.speed - 1;
+		moveSpeed = MAX(0, psDroid->sMove.speed - 1);
 		break;
 	case MOVENAVIGATE:
 		// Get the next control point
@@ -2649,7 +2649,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 		psDroid->sMove.Status = MOVEPOINTTOPOINT;
 		psDroid->sMove.bumpTime = 0;
-		moveSpeed = psDroid->sMove.speed - 1;
+		moveSpeed = MAX(0, psDroid->sMove.speed - 1);
 
 		/* save started status for movePlayAudio */
 		if (psDroid->sMove.speed == 0)
