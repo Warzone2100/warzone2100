@@ -728,11 +728,11 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 
 	*pInsPoint = '\0';
 	utf = UTF32toUTF8(pPrint, NULL);
-//	if(psEdBox->pFontDisplay) {
-//		psEdBox->pFontDisplay(fx,fy, pPrint);
-//	} else {
-		iV_DrawText(utf, fx, fy+2);
-//	}
+#ifdef WZ_OS_MAC
+	iV_DrawText(utf, fx, fy+2);
+#else
+	iV_DrawText(utf, fx, fy);
+#endif
 	free(utf);
 	*pInsPoint = ch;
 

@@ -2950,7 +2950,11 @@ void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	/* draw text value */
 	sprintf(szVal, "%d", BarGraph->iOriginal);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+#ifdef WZ_OS_MAC
 	iV_DrawText( szVal, x0, iY+2 );
+#else
+	iV_DrawText( szVal, x0, iY );
+#endif
 
 	//draw the comparison value - only if not zero
 	if (BarGraph->minorSize != 0)
@@ -3007,7 +3011,11 @@ void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
 	/* draw text value */
 	sprintf(szVal, "%d", BarGraph->iOriginal);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+#ifdef WZ_OS_MAC
 	iV_DrawText( szVal, x0, iY+2 );
+#else
+	iV_DrawText( szVal, x0, iY );
+#endif
 
 	//draw the comparison value - only if not zero
 	if (BarGraph->minorSize != 0)
