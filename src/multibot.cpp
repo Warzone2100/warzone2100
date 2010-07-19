@@ -133,7 +133,7 @@ BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STA
 		uint32_t droid = psDroid->id;
 
 		NETuint8_t(&player);
-		NETuint32_t(&droid);
+		NETuint32_tSmall(&droid);
 		NETenum(&sec);
 		NETenum(&state);
 	}
@@ -153,7 +153,7 @@ BOOL recvDroidSecondary(NETQUEUE queue)
 		uint32_t droid;
 
 		NETuint8_t(&player);
-		NETuint32_t(&droid);
+		NETuint32_tSmall(&droid);
 		NETenum(&sec);
 		NETenum(&state);
 
@@ -546,7 +546,7 @@ static void NETQueuedDroidInfo(QueuedDroidInfo *info)
 	NETbool(&info->subType);
 	if (info->subType)
 	{
-		NETuint32_t(&info->destId);
+		NETuint32_tSmall(&info->destId);
 		NETenum(&info->destType);
 	}
 	else
@@ -556,8 +556,8 @@ static void NETQueuedDroidInfo(QueuedDroidInfo *info)
 	}
 	if (info->order == DORDER_BUILD || info->order == DORDER_LINEBUILD)
 	{
-		NETuint32_t(&info->structRef);
-		NETuint32_t(&info->structId);
+		NETuint32_tSmall(&info->structRef);
+		NETuint32_tSmall(&info->structId);
 		NETuint16_t(&info->direction);
 	}
 	if (info->order == DORDER_LINEBUILD)

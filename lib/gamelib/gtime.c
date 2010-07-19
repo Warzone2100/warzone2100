@@ -353,7 +353,7 @@ static void updateLatency()
 void sendPlayerGameTime()
 {
 	unsigned player;
-	uint32_t time = gameTime + discreteChosenLatency;
+	uint32_t latencyTicks = discreteChosenLatency / GAME_TICKS_PER_UPDATE;
 	uint32_t checkTime = gameTime;
 	uint32_t checkCrc = nextDebugSync();
 
@@ -365,8 +365,8 @@ void sendPlayerGameTime()
 		}
 
 		NETbeginEncode(NETgameQueue(player), GAME_GAME_TIME);
-			NETuint32_t(&time);
-			NETuint32_t(&checkTime);
+			NETuint32_tSmall(&latencyTicks);
+			NETuint32_tSmall(&checkTime);
 			NETuint32_t(&checkCrc);
 			NETuint16_t(&wantedLatency);
 		NETend();
@@ -375,18 +375,18 @@ void sendPlayerGameTime()
 
 void recvPlayerGameTime(NETQUEUE queue)
 {
-	uint32_t time = 0;
+	uint32_t latencyTicks = 0;
 	uint32_t checkTime = 0;
 	uint32_t checkCrc = 0;
 
 	NETbeginDecode(queue, GAME_GAME_TIME);
-		NETuint32_t(&time);
-		NETuint32_t(&checkTime);
+		NETuint32_tSmall(&latencyTicks);
+		NETuint32_tSmall(&checkTime);
 		NETuint32_t(&checkCrc);
 		NETuint16_t(&wantedLatencies[queue.index]);
 	NETend();
 
-	gameQueueTime[queue.index] = time;
+	gameQueueTime[queue.index] = checkTime + latencyTicks * GAME_TICKS_PER_UPDATE;  // gameTime when future messages shall be processed.
 
 	gameQueueCheckTime[queue.index] = checkTime;
 	gameQueueCheckCrc[queue.index] = checkCrc;
