@@ -137,6 +137,10 @@ static SDWORD ButtonDrawYOffset;
 
 static void DeleteButtonData(void);
 
+static bool StructureIsResearching(STRUCTURE *Structure);
+static bool StructureIsResearchingPending(STRUCTURE *Structure);
+
+
 // Set audio IDs for form opening/closing anims.
 // Use -1 to dissable audio.
 //
@@ -787,7 +791,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 							break;
 
 						case REF_RESEARCH:
-							if (StructureIsResearching(Structure))
+							if (StructureIsResearchingPending(Structure))
 							{
 								iIMDShape * shape = Object;
 								Stats = (BASE_STATS*)Buffer->Data2;
@@ -2659,15 +2663,20 @@ FACTORY *StructureGetFactory(STRUCTURE *Structure)
 	return (FACTORY*)Structure->pFunctionality;
 }
 
-BOOL StructureIsResearching(STRUCTURE *Structure)
+bool StructureIsResearching(STRUCTURE *Structure)
 {
-	return (Structure->pStructureType->type == REF_RESEARCH) &&
-			((RESEARCH_FACILITY*)Structure->pFunctionality)->psSubject;
+	return Structure->pStructureType->type == REF_RESEARCH && Structure->pFunctionality->researchFacility.psSubject != NULL;
+}
+
+bool StructureIsResearchingPending(STRUCTURE *Structure)
+{
+	return Structure->pStructureType->type == REF_RESEARCH && (Structure->pFunctionality->researchFacility.psSubject != NULL ||
+	                                                           Structure->pFunctionality->researchFacility.psSubjectPending != NULL);
 }
 
 RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure)
 {
-	return (RESEARCH_FACILITY*)Structure->pFunctionality;
+	return &Structure->pFunctionality->researchFacility;
 }
 
 

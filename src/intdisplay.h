@@ -248,7 +248,6 @@ BOOL DroidIsDemolishing(DROID *Droid);
 
 BOOL StructureIsManufacturing(STRUCTURE *Structure);
 RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure);
-BOOL StructureIsResearching(STRUCTURE *Structure);
 FACTORY *StructureGetFactory(STRUCTURE *Structure);
 iIMDShape *StructureGetIMD(STRUCTURE *Structure);
 

@@ -1029,14 +1029,14 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 			goto add_research;
 		}
 		//if its a cancelled topic - add to list
-		if (IsResearchCancelled(&pPlayerRes[inc]))
+		if (IsResearchCancelledPending(&pPlayerRes[inc]))
 		{
 			goto add_research;
 		}
 		//if the topic is possible and has not already been researched - add to list
 		if ((IsResearchPossible(&pPlayerRes[inc])))
 		{
-			if ((IsResearchCompleted(&pPlayerRes[inc])==false) && (IsResearchStarted(&pPlayerRes[inc])==false))
+			if (!IsResearchCompleted(&pPlayerRes[inc]) && !IsResearchStartedPending(&pPlayerRes[inc]))
 			{
 				goto add_research;
 			}
@@ -1053,7 +1053,7 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 		}
 
 		// make sure that the research is not completed  or started by another researchfac
-		if ((IsResearchCompleted(&pPlayerRes[inc])==false) && (IsResearchStarted(&pPlayerRes[inc])==false))
+		if (!IsResearchCompleted(&pPlayerRes[inc]) && !IsResearchStartedPending(&pPlayerRes[inc]))
 		{
 			// Research is not completed  ... also  it has not been started by another researchfac
 
@@ -1980,6 +1980,8 @@ void cancelResearch(STRUCTURE *psBuilding)
 		{
 			// Tell others that we want to stop researching something.
 			sendResearchStatus(NULL, topicInc, psBuilding->player, false);
+			// Immediately tell the UI that we can research this now. (But don't change the game state.)
+			MakeResearchCancelledPending(pPlayerRes);
 			return;  // Wait for our message before doing anything. (Whatever this function does...)
 		}
 

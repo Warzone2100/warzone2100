@@ -6199,14 +6199,20 @@ static BOOL selectResearch(BASE_OBJECT *psObj)
 /* Return the stats for a research facility */
 static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 {
-	STRUCTURE	*psBuilding;
+	STRUCTURE *psBuilding;
+	RESEARCH_FACILITY *psResearchFacility;
 
 	ASSERT( psObj != NULL && psObj->type == OBJ_STRUCTURE,
 		"getResearchTip: invalid Structure pointer" );
 	psBuilding = (STRUCTURE *)psObj;
+	psResearchFacility = &psBuilding->pFunctionality->researchFacility;
 
-	return (BASE_STATS*)(((RESEARCH_FACILITY*)psBuilding->pFunctionality)->
-		psSubject);
+	if (psResearchFacility->psSubjectPending != NULL)
+	{
+		return psResearchFacility->psSubjectPending;
+	}
+
+	return psResearchFacility->psSubject;
 }
 
 /* Set the stats for a research facility */
@@ -6222,6 +6228,7 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		"setResearchStats: invalid Structure pointer" );
 	/* psStats might be NULL if the operation is canceled in the middle */
 	psBuilding = (STRUCTURE *)psObj;
+	psResFacilty = &psBuilding->pFunctionality->researchFacility;
 
 	if (bMultiMessages)
 	{
@@ -6229,17 +6236,20 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		{
 			// Say that we want to do reseach [sic].
 			sendResearchStatus(psBuilding, ((RESEARCH *)psStats)->ref - REF_RESEARCH_START, selectedPlayer, true);
+
+			// Tell UI to remove from the list of available research.
+			MakeResearchStartedPending(asPlayerResList[selectedPlayer] + (((RESEARCH *)psStats)->ref - REF_RESEARCH_START));
 		}
 		else
 		{
 			cancelResearch(psBuilding);
 		}
+		psResFacilty->psSubjectPending = psStats;  // Tell UI that we are going to research.
 		//stop the button from flashing once a topic has been chosen
 		stopReticuleButtonFlash(IDRET_RESEARCH);
 		return true;
 	}
 
-	psResFacilty = (RESEARCH_FACILITY*)psBuilding->pFunctionality;
 	//initialise the subject
 	psResFacilty->psSubject = NULL;
 
@@ -7121,8 +7131,8 @@ void intCheckResearchButton(void)
 		psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_RESEARCH &&
-            psStruct->status == SS_BUILT &&
-			((RESEARCH_FACILITY *)psStruct->pFunctionality)->psSubject == NULL)
+		    psStruct->status == SS_BUILT &&
+		    getResearchStats((BASE_OBJECT *)psStruct) == NULL)
 		{
 			resFree = true;
 			break;

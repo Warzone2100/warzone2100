@@ -172,7 +172,8 @@ typedef enum _struct_states
 
 typedef struct _research_facility
 {
-	struct BASE_STATS	*psSubject;		/* the subject the structure is working on*/
+	struct BASE_STATS *     psSubject;              // The subject the structure is working on.
+	struct BASE_STATS *     psSubjectPending;       // The subject the structure is going to work on when the GAME_RESEARCHSTATUS message is received.
 	UDWORD		capacity;				/* Number of upgrade modules added*/
 	UDWORD		timeStarted;			/* The time the building started on the subject*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/

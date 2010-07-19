@@ -1006,9 +1006,13 @@ BOOL recvResearchStatus(NETQUEUE queue)
 		{
 			psResFacilty = (RESEARCH_FACILITY *) psBuilding->pFunctionality;
 
+			psResFacilty->psSubjectPending = NULL;  // Research is no longer pending, as it's actually starting now.
+
 			if (psResFacilty->psSubject)
 			{
+				turnOffMultiMsg(true);
 				cancelResearch(psBuilding);
+				turnOffMultiMsg(false);
 			}
 
 			// Set the subject up
@@ -1071,7 +1075,9 @@ BOOL recvResearchStatus(NETQUEUE queue)
 		// Stop the facility doing any research
 		if (psBuilding)
 		{
+			turnOffMultiMsg(true);
 			cancelResearch(psBuilding);
+			turnOffMultiMsg(false);
 		}
 	}
 
