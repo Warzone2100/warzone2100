@@ -1323,6 +1323,8 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				if (receiver == NET_ALL_PLAYERS)
 				{
 					NETinsertMessageFromNet(NETnetQueue(sender), message);  // Message is also for the host.
+					// Not sure if flushing here can make a difference, maybe it can:
+					//NETflush();  // Send the message to everyone as fast as possible.
 				}
 			}
 			else

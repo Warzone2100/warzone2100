@@ -232,65 +232,26 @@ static void queueSmall(const Q &q, int32_t &v)
 template<class Q>
 static void queueSmall(const Q &q, uint32_t &vOrig)
 {
-	// Byte n is the final byte, iff it is less than 256-a[n].
-
-	// Some possible values of a[n], such that the maximum encodable value is 0xFFFFFFFF, satisfying the assertion below:
-	//const unsigned a[5] = {14, 127, 74, 127, 0};  // <242: 1 byte, <2048: 2 bytes, <325644: 3 bytes, <17298432: 4 bytes, <4294967296: 5 bytes
-	const unsigned a[5] = {78, 95, 32, 70, 0};  // <178: 1 byte, <12736: 2 bytes, <1672576: 3 bytes, <45776896: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {78, 95, 71, 31, 0};  // <178: 1 byte, <12736: 2 bytes, <1383586: 3 bytes, <119758336: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {104, 71, 19, 119, 0};  // <152: 1 byte, <19392: 2 bytes, <1769400: 3 bytes, <20989952: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {104, 71, 20, 113, 0};  // <152: 1 byte, <19392: 2 bytes, <1762016: 3 bytes, <22880256: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {104, 71, 24, 94, 0};  // <152: 1 byte, <19392: 2 bytes, <1732480: 3 bytes, <30441472: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {104, 71, 30, 75, 0};  // <152: 1 byte, <19392: 2 bytes, <1688176: 3 bytes, <41783296: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {104, 71, 38, 59, 0};  // <152: 1 byte, <19392: 2 bytes, <1629104: 3 bytes, <56905728: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {104, 71, 40, 56, 0};  // <152: 1 byte, <19392: 2 bytes, <1614336: 3 bytes, <60686336: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {104, 71, 57, 39, 0};  // <152: 1 byte, <19392: 2 bytes, <1488808: 3 bytes, <92821504: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {104, 71, 60, 37, 0};  // <152: 1 byte, <19392: 2 bytes, <1466656: 3 bytes, <98492416: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {104, 71, 76, 29, 0};  // <152: 1 byte, <19392: 2 bytes, <1348512: 3 bytes, <128737280: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {104, 71, 95, 23, 0};  // <152: 1 byte, <19392: 2 bytes, <1208216: 3 bytes, <164653056: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {104, 71, 114, 19, 0};  // <152: 1 byte, <19392: 2 bytes, <1067920: 3 bytes, <200568832: 4 bytes, <4294967296: 5 bytes
-	//const unsigned a[5] = {104, 71, 120, 18, 0};  // <152: 1 byte, <19392: 2 bytes, <1023616: 3 bytes, <211910656: 4 bytes, <4294967296: 5 bytes
-
-	ASSERT(0xFFFFFFFF == 255*(1 + a[0]*(1 + a[1]*(1 + a[2]*(1 + a[3]*(1 + a[4]))))), "Maximum encodable value not 0xFFFFFFFF.");
-
 	if (Q::Direction == Q::Write)
 	{
 		uint32_t v = vOrig;
-		for (int n = 0;; ++n)
+		bool moreBytes = true;
+		for (int n = 0; moreBytes; ++n)
 		{
-			if (v < 256 - a[n])
-			{
-				uint8_t b = v;
-				queue(q, b);
-				break;  // Last encoded byte.
-			}
-			else
-			{
-				v -= 256 - a[n];
-				uint8_t b = 255 - v%a[n];
-				queue(q, b);
-				v /= a[n];
-			}
+			uint8_t b;
+			moreBytes = encode_uint32_t(b, v, n);
+			queue(q, b);
 		}
 	}
 	else if (Q::Direction == Q::Read)
 	{
-		uint32_t v = 0, m = 1;
-		for (int n = 0;; ++n)
+		uint32_t v = 0;
+		bool moreBytes = true;
+		for (int n = 0; moreBytes; ++n)
 		{
-			uint8_t b;
+			uint8_t b = 0;
 			queue(q, b);
-
-			if (b < 256 - a[n])
-			{
-				v += b*m;
-				break;  // Last encoded byte.
-			}
-			else
-			{
-				v += (256 - a[n] + 255 - b)*m;
-				m *= a[n];
-			}
+			moreBytes = decode_uint32_t(b, v, n);
 		}
 
 		vOrig = v;
@@ -317,7 +278,7 @@ template<class Q, class T>
 static void queue(const Q &q, std::vector<T> &v)
 {
 	uint32_t len = v.size();
-	queue(q, len);
+	queueSmall(q, len);
 	switch (Q::Direction)
 	{
 		case Q::Write:

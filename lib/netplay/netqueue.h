@@ -106,4 +106,15 @@ public:
 	NetQueue receive;
 };
 
+/// Returns the number of bytes required to encode v.
+unsigned encodedlength_uint32_t(uint32_t v);
+/// Returns true iff there is another byte to be encoded.
+/// Modifies v.
+/// Input is v, output is b.
+bool encode_uint32_t(uint8_t &b, uint32_t &v, unsigned n);
+/// Returns true iff another byte is required to decode.
+/// Must init v to 0, does not modify b.
+/// Input is b, output is v.
+bool decode_uint32_t(uint8_t b, uint32_t &v, unsigned n);
+
 #endif //_NET_QUEUE_H_
