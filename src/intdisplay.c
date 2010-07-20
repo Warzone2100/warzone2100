@@ -614,7 +614,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	iV_DrawImage(IntImages,IMAGE_PBAR_TOP,x0,y0);
 
 	iX = x0 + 3;
-	iY = y0 + 9;
+	iY = y0 + 10;
 
 	x0 += iV_GetImageWidth(IntImages,IMAGE_PBAR_TOP);
 
@@ -2913,7 +2913,7 @@ void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	/* draw text value */
 	sprintf(szVal, "%d", BarGraph->iOriginal);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText( szVal, x0, iY+2 );
+	iV_DrawText( szVal, x0, iY );
 
 	//draw the comparison value - only if not zero
 	if (BarGraph->minorSize != 0)
@@ -2970,7 +2970,7 @@ void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
 	/* draw text value */
 	sprintf(szVal, "%d", BarGraph->iOriginal);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText( szVal, x0, iY+2 );
+	iV_DrawText( szVal, x0, iY );
 
 	//draw the comparison value - only if not zero
 	if (BarGraph->minorSize != 0)

@@ -2614,6 +2614,7 @@ void moveUpdateDroid(DROID *psDroid)
 		break;
 	case MOVEWAITROUTE:
 		moveDroidTo(psDroid, psDroid->sMove.DestinationX,psDroid->sMove.DestinationY);
+		moveSpeed = MAX(0, psDroid->sMove.speed - 1);
 		break;
 	case MOVENAVIGATE:
 		// Get the next control point
@@ -2631,9 +2632,6 @@ void moveUpdateDroid(DROID *psDroid)
 			break;
 		}
 
-		// Calculate the direction vector
-//		psDroid->rot.direction = calcDirection(psDroid->pos.x,psDroid->pos.y, tarX,tarY);
-
 		moveCalcBoundary(psDroid);
 
 		if (isVtolDroid(psDroid))
@@ -2643,6 +2641,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 		psDroid->sMove.Status = MOVEPOINTTOPOINT;
 		psDroid->sMove.bumpTime = 0;
+		moveSpeed = MAX(0, psDroid->sMove.speed - 1);
 
 		/* save started status for movePlayAudio */
 		if (psDroid->sMove.speed == 0)
