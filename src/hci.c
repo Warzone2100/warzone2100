@@ -2800,8 +2800,6 @@ static void intProcessStats(UDWORD id)
 	FLAG_POSITION	*psFlag;
 	int compIndex;
 
-	DROID_TEMPLATE	*psNext;
-
 	ASSERT( widgGetFromID(psWScreen,IDOBJ_TABFORM) != NULL,"intProcessStats, missing form\n" );
 
 	if (id >= IDSTAT_START &&
@@ -2829,56 +2827,33 @@ static void intProcessStats(UDWORD id)
 				ASSERT_OR_RETURN( , psStats != NULL, "Invalid template pointer" );
 				if (productionPlayer == (SBYTE)selectedPlayer)
 				{
-					FACTORY  *psFactory = (FACTORY *)((STRUCTURE *)psObjSelected)->pFunctionality;
+					STRUCTURE *psStructure = (STRUCTURE *)psObjSelected;
+					FACTORY  *psFactory = &psStructure->pFunctionality->factory;
+					DROID_TEMPLATE *psNext = (DROID_TEMPLATE *)psStats;
 
-                    //increase the production
-				    factoryProdAdjust((STRUCTURE *)psObjSelected, (DROID_TEMPLATE *)psStats, true);
-                    //need to check if this was the template that was mid-production
-                    if (psStats == psFactory->psSubject)
-                    {
-				        //if have wrapped round to zero then cancel the production
-				        if (getProductionQuantity((STRUCTURE *)psObjSelected,
-					        (DROID_TEMPLATE *)psStats) == 0)
-				        {
-					        //init the factory production
-					        psFactory->psSubject = NULL;
-					        //check to see if anything left to produce
-					        psNext = factoryProdUpdate((STRUCTURE *)psObjSelected, NULL);
-					        if (psNext == NULL)
-					        {
-						        intManufactureFinished((STRUCTURE *)psObjSelected);
-					        }
-					        else
-					        {
-						        if (!objSetStatsFunc(psObjSelected, (BASE_STATS *)psNext))
-						        {
-							        intSetStats(objStatID, NULL);
-						        }
-						        else
-						        {
-							        // Reset the button on the object form
-							        intSetStats(objStatID, psStats);
-						        }
-					        }
-				        }
-                    }
-				    else
-				    {
-					    //if factory wasn't currently on line then set the object button
-					    if (!psFactory->psSubject)
-					    {
-						    if (!objSetStatsFunc(psObjSelected, psStats))
-						    {
-							    intSetStats(objStatID, NULL);
-						    }
-						    else
-						    {
-							    // Reset the button on the object form
-							    intSetStats(objStatID, psStats);
-						    }
-					    }
-				    }
-                }
+					//increase the production
+					factoryProdAdjust(psStructure, psNext, true);
+
+					if (!StructureIsManufacturingPending(psStructure))
+					{
+						structSetManufacture(psStructure, psNext);
+					}
+
+					//need to check if this was the template that was mid-production
+					if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
+					{
+						doNextProduction(psStructure, FactoryGetTemplate(psFactory));
+						psNext = FactoryGetTemplate(psFactory);
+					}
+
+					if (StructureIsOnHoldPending(psStructure))
+					{
+						releaseProduction(psStructure);
+					}
+
+					// Reset the button on the object form
+					intSetStats(objStatID, (BASE_STATS *)psNext);
+				}
 			}
 			else
 			{
@@ -4587,7 +4562,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabInit.y = OBJ_T1TEXTY;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
-	sLabInit.pText = "10";
+	sLabInit.pText = "BUG! (a)";
 	sLabInit.FontID = font_regular;
 
 	memset(&sLabInitCmdFac,0,sizeof(W_LABINIT));
@@ -4597,7 +4572,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabInitCmdFac.y = OBJ_T2TEXTY;
 	sLabInitCmdFac.width = 16;
 	sLabInitCmdFac.height = 16;
-	sLabInitCmdFac.pText = "10";
+	sLabInitCmdFac.pText = "BUG! (b)";
 	sLabInitCmdFac.FontID = font_regular;
 
 	memset(&sLabInitCmdFac2,0,sizeof(W_LABINIT));
@@ -4607,7 +4582,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabInitCmdFac2.y = OBJ_T3TEXTY;
 	sLabInitCmdFac2.width = 16;
 	sLabInitCmdFac2.height = 16;
-	sLabInitCmdFac2.pText = "10";
+	sLabInitCmdFac2.pText = "BUG! (c)";
 	sLabInitCmdFac2.FontID = font_regular;
 
 	memset(&sLabIntObjText,0,sizeof(W_LABINIT));
@@ -5345,7 +5320,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sLabInit.y = OBJ_T1TEXTY;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
-	sLabInit.pText = "10";
+	sLabInit.pText = "BUG! (d)";
 	sLabInit.FontID = font_regular;
 
 
@@ -6520,14 +6495,11 @@ static BOOL intAddCommand(DROID *psSelected)
 /*Deals with the RMB click for the stats screen */
 static void intStatsRMBPressed(UDWORD id)
 {
-	DROID_TEMPLATE		*psStats;
-	DROID_TEMPLATE		*psNext;
-
 	ASSERT_OR_RETURN( , id - IDSTAT_START < numStatsListEntries, "Invalid range referenced for numStatsListEntries, %d > %d",id - IDSTAT_START, numStatsListEntries);
 
 	if (objMode == IOBJ_MANUFACTURE)
 	{
-		psStats = (DROID_TEMPLATE *)ppsStatsList[id - IDSTAT_START];
+		BASE_STATS *psStats = ppsStatsList[id - IDSTAT_START];
 
 		//this now causes the production run to be decreased by one
 
@@ -6535,55 +6507,33 @@ static void intStatsRMBPressed(UDWORD id)
 		ASSERT_OR_RETURN( , psStats != NULL, "Invalid template pointer");
 		if (productionPlayer == (SBYTE)selectedPlayer)
 		{
-			FACTORY  *psFactory = (FACTORY *)((STRUCTURE *)psObjSelected)->pFunctionality;
+			STRUCTURE *psStructure = (STRUCTURE *)psObjSelected;
+			FACTORY  *psFactory = &psStructure->pFunctionality->factory;
+			DROID_TEMPLATE *psNext = (DROID_TEMPLATE *)psStats;
 
-		    //decrease the production
-		    factoryProdAdjust((STRUCTURE *)psObjSelected, psStats, false);
-            //need to check if this was the template that was mid-production
-            if (psStats == (DROID_TEMPLATE *)psFactory->psSubject)
-            {
-    		    //if have decreased to zero then cancel the production
-	    	    if (getProductionQuantity((STRUCTURE *)psObjSelected, psStats) == 0)
-		        {
-			        //init the factory production
-			        psFactory->psSubject = NULL;
-			        //check to see if anything left to produce
-			        psNext = factoryProdUpdate((STRUCTURE *)psObjSelected, NULL);
-			        if (psNext == NULL)
-			        {
-				        intManufactureFinished((STRUCTURE *)psObjSelected);
-			        }
-			        else
-			        {
-				        if (!objSetStatsFunc(psObjSelected, (BASE_STATS *)psNext))
-				        {
-					        intSetStats(objStatID, NULL);
-				        }
-				        else
-				        {
-					        // Reset the button on the object form
-					        intSetStats(objStatID, (BASE_STATS *)psStats);
-				        }
-			        }
-		        }
-            }
-		    else
-		    {
-			    //if factory wasn't currently on line then set the object button
-			    if (!psFactory->psSubject)
-			    {
-				    if (!objSetStatsFunc(psObjSelected, (BASE_STATS *)psStats))
-				    {
-					    intSetStats(objStatID, NULL);
-				    }
-				    else
-				    {
-					    // Reset the button on the object form
-					    intSetStats(objStatID, (BASE_STATS *)psStats);
-				    }
-			    }
-		    }
-        }
+			//decrease the production
+			factoryProdAdjust(psStructure, psNext, false);
+
+			if (!StructureIsManufacturingPending(psStructure))
+			{
+				structSetManufacture(psStructure, psNext);
+			}
+
+			//need to check if this was the template that was mid-production
+			if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
+			{
+				doNextProduction(psStructure, FactoryGetTemplate(psFactory));
+				psNext = FactoryGetTemplate(psFactory);
+			}
+
+			if (StructureIsOnHoldPending(psStructure))
+			{
+				releaseProduction(psStructure);
+			}
+
+			// Reset the button on the object form
+			intSetStats(objStatID, (BASE_STATS *)psNext);
+		}
 #if 0
 		// set the current Template
 		psCurrTemplate = apsDroidTemplates[selectedPlayer];
@@ -6660,10 +6610,10 @@ static void intObjStatRMBPressed(UDWORD id)
 			if (StructIsFactory(psStructure))
 			{
 				//check if active
-				if (((FACTORY *)psStructure->pFunctionality)->psSubject)
+				if (StructureIsManufacturingPending(psStructure))
 				{
 					//if not curently on hold, set it
-					if (((FACTORY *)psStructure->pFunctionality)->timeStartHold == 0)
+					if (!StructureIsOnHoldPending(psStructure))
 					{
 						holdProduction(psStructure);
 					}
@@ -6671,13 +6621,13 @@ static void intObjStatRMBPressed(UDWORD id)
 					{
 						//cancel if have RMB-clicked twice
 						cancelProduction(psStructure);
-                		//play audio to indicate cancelled
-		                audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
+						//play audio to indicate cancelled
+						audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 					}
 				}
 			}
-            else if (psStructure->pStructureType->type == REF_RESEARCH)
-            {
+			else if (psStructure->pStructureType->type == REF_RESEARCH)
+			{
 				//check if active
 				if (((RESEARCH_FACILITY *)psStructure->pFunctionality)->psSubject)
 				{
@@ -6689,12 +6639,12 @@ static void intObjStatRMBPressed(UDWORD id)
 					else
 					{
 						//cancel if have RMB-clicked twice
-                        cancelResearch(psStructure);
-                		//play audio to indicate cancelled
-		                audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
+						cancelResearch(psStructure);
+						//play audio to indicate cancelled
+						audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 					}
 				}
-            }
+			}
 		}
 	}
 }

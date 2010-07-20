@@ -424,13 +424,13 @@ void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID
 
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_STRUCTUREINFO);
 		NETuint8_t(&player);
-		NETuint32_t(&structId);
+		NETuint32_tSmall(&structId);
 		NETuint8_t(&structureInfo);
 		if (structureInfo_ == STRUCTUREINFO_MANUFACTURE)
 		{
 			uint32_t templateId = psTempl != NULL ? psTempl->multiPlayerID : 0;
 
-			NETuint32_t(&templateId);
+			NETuint32_tSmall(&templateId);
 		}
 	NETend();
 }
@@ -446,11 +446,11 @@ void recvStructureInfo(NETQUEUE queue)
 
 	NETbeginDecode(queue, GAME_STRUCTUREINFO);
 		NETuint8_t(&player);
-		NETuint32_t(&structId);
+		NETuint32_tSmall(&structId);
 		NETuint8_t(&structureInfo);
 		if (structureInfo == STRUCTUREINFO_MANUFACTURE)
 		{
-			NETuint32_t(&templateId);
+			NETuint32_tSmall(&templateId);
 			if (templateId != 0)
 			{
 				psTempl = IdToTemplate(templateId, player);
@@ -467,6 +467,17 @@ void recvStructureInfo(NETQUEUE queue)
 	{
 		debug(LOG_SYNC, "Couldn't find structure %u to change production.", structId);
 		return;
+	}
+
+	if (psStruct->pFunctionality->factory.pendingCount == 0)
+	{
+		++psStruct->pFunctionality->factory.pendingCount;
+	}
+	if (--psStruct->pFunctionality->factory.pendingCount == 0)
+	{
+		// Subject is now synchronised, remove pending.
+		psStruct->pFunctionality->factory.psSubjectPending = NULL;
+		psStruct->pFunctionality->factory.statusPending = FACTORY_NOTHING_PENDING;
 	}
 
 	syncDebugStructure(psStruct, '<');

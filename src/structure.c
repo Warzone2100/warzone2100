@@ -1315,7 +1315,7 @@ BOOL structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 /* Set the type of droid for a factory to build */
 BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl)
 {
-	FACTORY		*psFact;
+	FACTORY *psFact;
 
 	CHECK_STRUCTURE(psStruct);
 
@@ -1325,14 +1325,19 @@ BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl)
 	                 (int)psStruct->pStructureType->type);
 	/* psTempl might be NULL if the build is being cancelled in the middle */
 
+	psFact = &psStruct->pFunctionality->factory;
+
 	if (bMultiMessages)
 	{
 		sendStructureInfo(psStruct, STRUCTUREINFO_MANUFACTURE, psTempl);
+		psStruct->pFunctionality->factory.psSubjectPending = (BASE_STATS *)psTempl;
+		psStruct->pFunctionality->factory.statusPending = FACTORY_START_PENDING;
+		++psFact->pendingCount;
+
 		return true;  // Wait for our message before doing anything.
 	}
 
 	//assign it to the Factory
-	psFact = &psStruct->pFunctionality->factory;
 	psFact->psSubject = (BASE_STATS *)psTempl;
 
 	//set up the start time and build time
@@ -2859,7 +2864,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	BOOL				bFinishAction, bDroidPlaced = false;
 	WEAPON_STATS		*psWStats;
 	SDWORD				xdiff,ydiff, mindist, currdist;
-	DROID_TEMPLATE		*psNextTemplate;
 	UDWORD				i;
 	float secondsToBuild, powerNeeded;
 	int secondsElapsed;
@@ -3539,14 +3543,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				//next bit for productionPlayer only
 				if (productionPlayer == psStructure->player)
 				{
-					psNextTemplate = factoryProdUpdate(psStructure, (DROID_TEMPLATE *)pSubject);
-					structSetManufacture(psStructure, psNextTemplate);
-
-					if (!psNextTemplate)
-					{
-						//nothing more to manufacture - reset the Subject and Tab on HCI Form
-						intManufactureFinished(psStructure);
-					}
+					doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject);
 				}
 			}
 		}
@@ -6850,7 +6847,7 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 accrued but not used*/
 void cancelProduction(STRUCTURE *psBuilding)
 {
-	FACTORY		*psFactory;
+	FACTORY *psFactory;
 
 	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
 
@@ -6866,6 +6863,17 @@ void cancelProduction(STRUCTURE *psBuilding)
 		}
 
 		sendStructureInfo(psBuilding, STRUCTUREINFO_CANCELPRODUCTION, NULL);
+
+		psFactory->psSubjectPending = NULL;
+		psFactory->statusPending = FACTORY_CANCEL_PENDING;
+		++psFactory->pendingCount;
+
+		if (psBuilding->player == productionPlayer)
+		{
+			//tell the interface
+			intManufactureFinished(psBuilding);
+		}
+
 		return;
 	}
 
@@ -6888,7 +6896,7 @@ void cancelProduction(STRUCTURE *psBuilding)
 
 		//clear the factory's subject
 		psFactory->psSubject = NULL;
-		if (psBuilding->player == productionPlayer)
+		if (psBuilding->player == productionPlayer && !bMultiPlayer)
 		{
 			//tell the interface
 			intManufactureFinished(psBuilding);
@@ -6900,17 +6908,28 @@ void cancelProduction(STRUCTURE *psBuilding)
 /*set a factory's production run to hold*/
 void holdProduction(STRUCTURE *psBuilding)
 {
-	FACTORY		*psFactory;
+	FACTORY *psFactory;
 
 	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
+
+	psFactory = &psBuilding->pFunctionality->factory;
 
 	if (bMultiMessages)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDPRODUCTION, NULL);
+
+		if (psFactory->psSubjectPending == NULL)
+		{
+			psFactory->psSubjectPending = psFactory->psSubject;
+		}
+		if (psFactory->psSubjectPending != NULL)
+		{
+			psFactory->statusPending = FACTORY_HOLD_PENDING;
+		}
+		++psFactory->pendingCount;
+
 		return;
 	}
-
-	psFactory = &psBuilding->pFunctionality->factory;
 
 	if (psFactory->psSubject)
 	{
@@ -6928,17 +6947,28 @@ void holdProduction(STRUCTURE *psBuilding)
 /*release a factory's production run from hold*/
 void releaseProduction(STRUCTURE *psBuilding)
 {
-	FACTORY		*psFactory;
+	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
 	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
+
+	psFactory = &psBuilding->pFunctionality->factory;
 
 	if (bMultiMessages)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASEPRODUCTION, NULL);
+
+		if (psFactory->psSubjectPending == NULL && psFactory->statusPending != FACTORY_CANCEL_PENDING)
+		{
+			psFactory->psSubjectPending = psFactory->psSubject;
+		}
+		if (psFactory->psSubjectPending != NULL)
+		{
+			psFactory->statusPending = FACTORY_START_PENDING;
+		}
+		++psFactory->pendingCount;
+
 		return;
 	}
-
-	psFactory = &psBuilding->pFunctionality->factory;
 
 	if (psFactory->psSubject && psFactory->timeStartHold)
 	{
@@ -6948,6 +6978,21 @@ void releaseProduction(STRUCTURE *psBuilding)
 			psFactory->timeStarted += (gameTime - psFactory->timeStartHold);
 		}
 		psFactory->timeStartHold = 0;
+	}
+}
+
+void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current)
+{
+	DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStructure, current);
+
+	if (psNextTemplate != NULL)
+	{
+		structSetManufacture(psStructure, psNextTemplate);
+	}
+	else
+	{
+		//nothing more to manufacture
+		cancelProduction(psStructure);
 	}
 }
 
@@ -7133,20 +7178,27 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
  */
 static int getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL totalQuantity)
 {
-	UDWORD		inc, factoryType, factoryInc;
-	FACTORY		*psFactory;
-
-	if (psStructure == NULL) return 0;
-	if (psStructure->player == productionPlayer)
+	if (psTemplate == NULL)
 	{
-		psFactory = &psStructure->pFunctionality->factory;
-		factoryType = psFactory->psAssemblyPoint->factoryType;
-		factoryInc = psFactory->psAssemblyPoint->factoryInc;
+		return 0;  // Not producing any NULL pointers.
+	}
+
+	if (psStructure != NULL && psStructure->player == productionPlayer)
+	{
+		FACTORY *psFactory = &psStructure->pFunctionality->factory;
+		unsigned factoryType = psFactory->psAssemblyPoint->factoryType;
+		unsigned factoryInc = psFactory->psAssemblyPoint->factoryInc;
 
 		//see if the template is in the list
+		unsigned inc;
 		for (inc=0; inc < MAX_PROD_RUN; inc++)
 		{
-			if (asProductionRun[factoryType][factoryInc][inc].psTemplate == psTemplate)
+			if (asProductionRun[factoryType][factoryInc][inc].psTemplate == NULL)
+			{
+				continue;
+			}
+
+			if (asProductionRun[factoryType][factoryInc][inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID)
 			{
 				if (totalQuantity)
 				{

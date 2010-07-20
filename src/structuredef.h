@@ -82,10 +82,6 @@ typedef struct _flag_position
 } FLAG_POSITION;
 
 
-#ifdef DEMO
-#define NUM_DEMO_STRUCTS	12
-#endif
-
 //only allowed one weapon per structure (more memory for Tim)
 //Watermelon:only allowed 4 weapons per structure(sorry Tim...)
 #define STRUCT_MAXWEAPS		4
@@ -186,33 +182,35 @@ typedef struct _research_facility
 
 } RESEARCH_FACILITY;
 
+typedef enum
+{
+	FACTORY_NOTHING_PENDING = 0,
+	FACTORY_START_PENDING,
+	FACTORY_HOLD_PENDING,
+	FACTORY_CANCEL_PENDING
+} FACTORY_STATUS_PENDING;
+
 typedef struct _factory
 {
-
 	UBYTE				capacity;			/* The max size of body the factory
 											   can produce*/
 	uint8_t                         productionLoops;        ///< Number of loops to perform. Not synchronised, and only meaningful for selectedPlayer.
 	UBYTE				loopsPerformed;		/* how many times the loop has been performed*/
-	//struct _propulsion_types*	propulsionType;
-	//UBYTE				propulsionType;		/* The type of propulsion the facility
-	//										   can produce*/
 	UBYTE				productionOutput;	/* Droid Build Points Produced Per
 											   Build Cycle*/
 	UDWORD				powerAccrued;		/* used to keep track of power before building a droid*/
-	BASE_STATS			*psSubject;			/* the subject the structure is working on */
+	BASE_STATS *                    psSubject;              ///< The subject the structure is working on.
+	BASE_STATS *                    psSubjectPending;       ///< The subject the structure is going to working on. (Pending = not yet synchronised.)
+	FACTORY_STATUS_PENDING          statusPending;          ///< Pending = not yet synchronised.
+	unsigned                        pendingCount;           ///< Number of messages sent but not yet processed.
+
 	UDWORD				timeStarted;		/* The time the building started on the subject*/
 	UDWORD				timeToBuild;		/* Time taken to build one droid */
 	UDWORD				timeStartHold;		/* The time the factory was put on hold*/
 	FLAG_POSITION		*psAssemblyPoint;	/* Place for the new droids to assemble at */
 	struct DROID		*psCommander;	    // command droid to produce droids for (if any)
-    UDWORD              secondaryOrder;     // secondary order state for all units coming out of the factory
+	uint32_t                        secondaryOrder;         ///< Secondary order state for all units coming out of the factory.
                                             // added AB 22/04/99
-
-    //these are no longer required - yipee!
-	// The group the droids produced by this factory belong to - used for Missions
-	//struct _droid_group		*psGroup;
-	//struct DROID			*psGrpNext;
-
 } FACTORY;
 
 typedef struct _res_extractor

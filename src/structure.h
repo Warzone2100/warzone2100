@@ -335,6 +335,9 @@ extern void holdProduction(STRUCTURE *psBuilding);
 /*release a factory's production run from hold*/
 extern void releaseProduction(STRUCTURE *psBuilding);
 
+/// Does the next item in the production list.
+void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current);
+
 /*This function is called after a game is loaded so that any resource extractors
 that are active are initialised for when to start*/
 extern void checkResExtractorsActive(void);

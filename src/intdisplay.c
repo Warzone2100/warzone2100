@@ -221,11 +221,15 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 		case OBJ_STRUCTURE:					// If it's a structure and...
 			Structure = (STRUCTURE*)psObj;
 
-			if(StructureIsManufacturing(Structure)) {			// Is it manufacturing.
+			if (StructureIsManufacturingPending(Structure))  // Is it manufacturing.
+			{
+				unsigned timeToBuild;
+
 				Manufacture = StructureGetFactory(Structure);
 
-				Range = ((DROID_TEMPLATE*)Manufacture->psSubject)->buildPoints/(float)Manufacture->productionOutput;
-				BuildPoints = Range - Manufacture->timeToBuild;
+				Range = FactoryGetTemplate(Manufacture)->buildPoints / Manufacture->productionOutput;
+				timeToBuild = Manufacture->psSubject != NULL? Manufacture->timeToBuild : Range;  // If psSubject == NULL, this is not yet synched, and Manufacture->timeToBuild is not set correctly.
+				BuildPoints = Range - timeToBuild;
 				//set the colour of the bar to yellow
 				BarGraph->majorCol = WZCOL_YELLOW;
 				//and change the tool tip
@@ -319,44 +323,24 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*Structure;
-	DROID_TEMPLATE	*psTemplate;
+	DROID_TEMPLATE *        psTemplate;
 	W_LABEL			*Label = (W_LABEL*)psWidget;
-	UDWORD			Quantity, Remaining;
+	int                     Quantity, Built;
 
-	psObj = (BASE_OBJECT*)Label->pUserData;	// Get the object associated with this widget.
+	psObj = (BASE_OBJECT*)Label->pUserData;  // Get the object associated with this widget.
 	Structure = (STRUCTURE*)psObj;
 
-	if( (psObj != NULL) &&
-		(psObj->type == OBJ_STRUCTURE) && (StructureIsManufacturing(Structure)) )
+	if (psObj != NULL && psObj->type == OBJ_STRUCTURE && StructureIsManufacturingPending(Structure))
 	{
 		ASSERT(!isDead(psObj),"intUpdateQuantity: object is dead");
 
-		/*Quantity = StructureGetFactory(Structure)->quantity;
-		if (Quantity == NON_STOP_PRODUCTION)
+		psTemplate = FactoryGetTemplate(StructureGetFactory(Structure));
+		Quantity = getProductionQuantity(Structure, psTemplate);
+		Built = getProductionBuilt(Structure, psTemplate);
+		snprintf(Label->aText, sizeof(Label->aText), "%02d", Quantity - Built);
+		if (Quantity - Built <= 0)
 		{
-			sstrcpy(Label->aText, "*");
-		}
-		else
-		{
-			snprintf(Label->aText, sizeof(Label->aText), "%02u", Quantity);
-		}*/
-
-		psTemplate = (DROID_TEMPLATE *)StructureGetFactory(Structure)->psSubject;
-   		//Quantity = getProductionQuantity(Structure, psTemplate) -
-		//					getProductionBuilt(Structure, psTemplate);
-        Quantity = getProductionQuantity(Structure, psTemplate);
-        Remaining = getProductionBuilt(Structure, psTemplate);
-        if (Quantity > Remaining)
-        {
-            Quantity -= Remaining;
-        }
-        else
-        {
-            Quantity = 0;
-        }
-		if (Quantity)
-		{
-			snprintf(Label->aText, sizeof(Label->aText), "%02u", Quantity);
+			snprintf(Label->aText, sizeof(Label->aText), "BUG! (e) %d-%d", Quantity, Built);
 		}
 		Label->style &= ~WIDG_HIDDEN;
 	}
@@ -777,15 +761,12 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 						case REF_FACTORY:
 						case REF_CYBORG_FACTORY:
 						case REF_VTOL_FACTORY:
-							if (StructureIsManufacturing(Structure))
+							if (StructureIsManufacturingPending(Structure))
 							{
 								IMDType = IMDTYPE_DROIDTEMPLATE;
 								Object = (void*)FactoryGetTemplate(StructureGetFactory(Structure));
 								RENDERBUTTON_INITIALISED(Buffer);
-								if (StructureGetFactory(Structure)->timeStartHold)
-								{
-									bOnHold = true;
-								}
+								bOnHold = StructureIsOnHoldPending(Structure);
 							}
 
 							break;
@@ -799,10 +780,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 								{
 									break;
 								}
-	    							if (((RESEARCH_FACILITY *)Structure->pFunctionality)->timeStartHold)
-		    						{
-			    						bOnHold = true;
-				    				}
+								bOnHold = StructureIsOnHoldPending(Structure);
 								StatGetResearchImage(Stats,&Image,&shape, &psResGraphic, false);
 								Object = shape;
 								if (psResGraphic)
@@ -2650,28 +2628,62 @@ iIMDShape *DroidGetIMD(DROID *Droid)
 	return Droid->sDisplay.imd;
 }
 
-BOOL StructureIsManufacturing(STRUCTURE *Structure)
+bool StructureIsManufacturingPending(STRUCTURE *structure)
 {
-	return ((Structure->pStructureType->type == REF_FACTORY ||
-			Structure->pStructureType->type == REF_CYBORG_FACTORY ||
-			Structure->pStructureType->type == REF_VTOL_FACTORY) &&
-			((FACTORY*)Structure->pFunctionality)->psSubject);
+	switch (structure->pStructureType->type)
+	{
+		case REF_FACTORY:
+		case REF_CYBORG_FACTORY:
+		case REF_VTOL_FACTORY:
+			if (structure->pFunctionality->factory.statusPending != FACTORY_NOTHING_PENDING)
+			{
+				return structure->pFunctionality->factory.statusPending == FACTORY_START_PENDING ||
+				       structure->pFunctionality->factory.statusPending == FACTORY_HOLD_PENDING;
+			}
+			return structure->pFunctionality->factory.psSubject != NULL;
+		default:
+			return false;
+	}
 }
 
 FACTORY *StructureGetFactory(STRUCTURE *Structure)
 {
-	return (FACTORY*)Structure->pFunctionality;
+	return &Structure->pFunctionality->factory;
 }
 
-bool StructureIsResearching(STRUCTURE *Structure)
+static bool StructureIsResearching(STRUCTURE *Structure)
 {
 	return Structure->pStructureType->type == REF_RESEARCH && Structure->pFunctionality->researchFacility.psSubject != NULL;
 }
 
-bool StructureIsResearchingPending(STRUCTURE *Structure)
+static bool StructureIsResearchingPending(STRUCTURE *Structure)
 {
 	return Structure->pStructureType->type == REF_RESEARCH && (Structure->pFunctionality->researchFacility.psSubject != NULL ||
 	                                                           Structure->pFunctionality->researchFacility.psSubjectPending != NULL);
+}
+
+bool StructureIsOnHoldPending(STRUCTURE *structure)
+{
+	switch (structure->pStructureType->type)
+	{
+		case REF_FACTORY:
+		case REF_CYBORG_FACTORY:
+		case REF_VTOL_FACTORY:
+			if (structure->pFunctionality->factory.statusPending != FACTORY_NOTHING_PENDING)
+			{
+				return structure->pFunctionality->factory.statusPending == FACTORY_HOLD_PENDING;
+			}
+			return structure->pFunctionality->factory.timeStartHold != 0;
+		case REF_RESEARCH:
+			if (structure->pFunctionality->researchFacility.psSubjectPending != NULL)
+			{
+				return false;
+			}
+			return structure->pFunctionality->researchFacility.timeStartHold != 0;
+		default:
+			ASSERT(false, "Huh?");
+			return false;
+	}
 }
 
 RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure)
@@ -2688,7 +2700,12 @@ iIMDShape *StructureGetIMD(STRUCTURE *Structure)
 
 DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory)
 {
-	return (DROID_TEMPLATE*)Factory->psSubject;
+	if (Factory->psSubjectPending != NULL)
+	{
+		return (DROID_TEMPLATE *)Factory->psSubjectPending;
+	}
+
+	return (DROID_TEMPLATE *)Factory->psSubject;
 }
 
 BOOL StatIsStructure(BASE_STATS *Stat)
