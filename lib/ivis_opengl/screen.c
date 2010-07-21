@@ -118,6 +118,8 @@ bool screenInitialise()
 		debug(LOG_FATAL, "OpenGL 1.4 + VBO extension is required for this game!");
 		exit(1);
 	}
+	screenWidth = MAX(screenWidth, 640);
+	screenHeight = MAX(screenHeight, 480);
 
 #ifndef WZ_OS_MAC
 	// Make OpenGL's VBO functions available under the core names for
