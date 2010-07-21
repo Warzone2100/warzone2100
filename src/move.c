@@ -339,7 +339,7 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		x = psDroid->sMove.DestinationX;
 		y = psDroid->sMove.DestinationY;
 
-		objTrace(psDroid->id, "unit %d: path ok - base Speed %u, speed %d, target(%u|%d, %u|%d)",
+		objTrace(psDroid->id, "unit %d: path ok - base Speed %u, speed %f, target(%u|%d, %u|%d)",
 		         (int)psDroid->id, psDroid->baseSpeed, psDroid->sMove.speed, x, map_coord(x), y, map_coord(y));
 
 		psDroid->sMove.Status = MOVENAVIGATE;
