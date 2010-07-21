@@ -96,6 +96,8 @@ bool screenInitialise(
 		screenHeight = height;
 		screenDepth = bitDepth;
 	}
+	screenWidth = MAX(screenWidth, 640);
+	screenHeight = MAX(screenHeight, 480);
 
 	if (!video_info)
 	{
