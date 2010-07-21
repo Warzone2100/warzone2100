@@ -184,7 +184,7 @@ AC_ARG_ENABLE([static],
 if test "x$enable_static" = "xyes" ; then
 	# Add libs where even pkg-config cannot help statically linking them,
 	# where one would otherwise have to provide them via commandline
-	WIN32_LIBS="${WIN32_LIBS} -lz -lintl -liconv"
+	WIN32_LIBS="${WIN32_LIBS} -lintl -liconv"
 	# Tell pkg-config to link against static libraries, incl. all dependencies
 	PKG_CONFIG="${PKG_CONFIG} --static"
 fi
@@ -211,6 +211,9 @@ AC_MSG_RESULT([${enable_debug}])
 # also important, it doesn't work if -Werror comes last.
 AX_C_CHECK_FLAG([-Werror -Wno-switch], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-switch")
 AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-enum-compare")
+
+# zlib
+LDFLAGS="-lz ${LDFLAGS}"
 
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
