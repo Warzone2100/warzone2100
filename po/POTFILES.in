@@ -237,6 +237,7 @@ lib/ivis_opengl/textdraw.c
 lib/netplay/netjoin_stub.c
 lib/netplay/netlog.c
 lib/netplay/netplay.c
+lib/netplay/netqueue.cpp
 lib/netplay/netsocket.cpp
 lib/netplay/nettypes.cpp
 lib/script/codeprint.c
@@ -326,7 +327,7 @@ src/message.c
 src/miscimd.c
 src/mission.c
 src/move.c
-src/multibot.c
+src/multibot.cpp
 src/multigifts.c
 src/multiint.c
 src/multijoin.c
