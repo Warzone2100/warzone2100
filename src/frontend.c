@@ -236,6 +236,27 @@ static void loadOK( void )
 	}
 }
 
+static void SPinit(void)
+{
+	uint8_t playercolor;
+
+	// FIXME: We should do a SPinit() to make sure all the variables are reset correctly.
+	// game.type is switched to SKIRMISH in startMultiOptions()
+	NetPlay.bComms = false;
+	bMultiPlayer = false;
+	bMultiMessages = false;
+	game.type = CAMPAIGN;
+	NET_InitPlayers();
+	NetPlay.players[0].allocated = true;
+	game.skDiff[0] = UBYTE_MAX;
+	// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
+	playercolor = getPlayerColour(0);
+	if (playercolor >= 1 && playercolor <= 3)
+	{
+		setPlayerColour(0,0);  // default is green
+	}
+}
+
 BOOL runSinglePlayerMenu(void)
 {
 	UDWORD id;
@@ -253,48 +274,35 @@ BOOL runSinglePlayerMenu(void)
 	}
 	else
 	{
-		uint8_t playercolor = 0;
-
-		// FIXME: We should do a SPinit() to make sure all the variables are reset correctly.
-		// game.type is switched to SKIRMISH in startMultiOptions()
-		NetPlay.bComms = false;
-		bMultiPlayer = false;
-		bMultiMessages = false;
-		game.type = CAMPAIGN;
-		NET_InitPlayers();
-		NetPlay.players[0].allocated = true;
-		game.skDiff[0] = UBYTE_MAX;
-		// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
-		playercolor = getPlayerColour(0);
-		if (playercolor >= 1 && playercolor <= 3)
-		{
-			setPlayerColour(0,0);		// default is green
-		}
-
 		id = widgRunScreen(psWScreen);						// Run the current set of widgets
 
 		switch(id)
 		{
 			case FRONTEND_NEWGAME:
+				SPinit();
 				frontEndNewGame();
 				break;
 
 			case FRONTEND_LOADCAM2:
+				SPinit();
 				sstrcpy(aLevelName, "CAM_2A");
 				changeTitleMode(STARTGAME);
 				initLoadingScreen(true);
 				break;
 
 			case FRONTEND_LOADCAM3:
+				SPinit();
 				sstrcpy(aLevelName, "CAM_3A");
 				changeTitleMode(STARTGAME);
 				initLoadingScreen(true);
 				break;
 			case FRONTEND_LOADGAME:
+				SPinit();
 				addLoadSave(LOAD_FRONTEND,SaveGamePath,"gam",_("Load Saved Game"));	// change mode when loadsave returns
 				break;
 
 			case FRONTEND_SKIRMISH:
+				SPinit();
 				ingame.bHostSetup = true;
 				lastTitleMode = SINGLE;
 				changeTitleMode(MULTIOPTION);
@@ -305,6 +313,7 @@ BOOL runSinglePlayerMenu(void)
 				break;
 
 			case FRONTEND_CHALLENGES:
+				SPinit();
 				addChallenges();
 				break;
 
