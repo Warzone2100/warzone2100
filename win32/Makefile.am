@@ -18,6 +18,7 @@ EXTRA_DIST = __BUILD_SCRIPT \
 	     libs/popt/Makefile \
 	     libs/popt/patches \
 	     libs/quesoglc/Makefile \
+	     libs/quesoglc/patches \
 	     libs/sdl/Makefile \
 	     libs/sdl/patches \
 	     libs/theora/Makefile \
