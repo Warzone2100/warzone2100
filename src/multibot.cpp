@@ -709,6 +709,8 @@ BOOL recvDroidInfo(NETQUEUE queue)
 				continue;  // Can't find the droid, so skip this droid.
 			}
 
+			CHECK_DROID(psDroid);
+
 			syncDebugDroid(psDroid, '<');
 
 			psDroid->waitingForOwnReceiveDroidInfoMessage = false;
@@ -750,6 +752,7 @@ BOOL recvDroidInfo(NETQUEUE queue)
 
 			syncDebugDroid(psDroid, '>');
 
+			CHECK_DROID(psDroid);
 		}
 	}
 	NETend();

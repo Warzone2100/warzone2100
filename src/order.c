@@ -1866,7 +1866,10 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			else
 			{
 				// haven't got an LZ set up so don't do anything
+				actionDroid(psDroid, DACTION_NONE);
 				psDroid->order = DORDER_NONE;
+				setDroidTarget(psDroid, NULL);
+				psDroid->psTarStats = NULL;
 			}
 		}
 		break;
