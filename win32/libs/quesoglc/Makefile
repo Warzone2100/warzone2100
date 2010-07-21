@@ -16,7 +16,14 @@ $(PKG_SOURCEBASE) fetch-stamp:
 
 $(PKG_SOURCEBASE)/configure.in: fetch-stamp
 
-$(PKG_SOURCEBASE)/configure: $(PKG_SOURCEBASE)/configure.in
+patch-stamp: fetch-stamp
+	@for patch in patches/*.diff; do \
+		echo sed -e "s/\$$sourcebase\b/$(PKG_SOURCEBASE)/g" -e "s/\$$host_triplet\b/$(HOST_TRIPLET)/g" "$$patch" \| patch -p0; \
+		sed -e "s/\$$sourcebase\b/$(PKG_SOURCEBASE)/g" -e "s/\$$host_triplet\b/$(HOST_TRIPLET)/g" "$$patch" | patch -p0 || exit ; \
+	done
+	touch patch-stamp
+
+$(PKG_SOURCEBASE)/configure: $(PKG_SOURCEBASE)/configure.in patch-stamp
 	cd $(PKG_SOURCEBASE) && ./bootstrap
 
 $(PKG_SOURCEBASE)/config.status: $(PKG_SOURCEBASE)/configure
@@ -37,6 +44,6 @@ all: build
 build: $(TARGETS)
 
 clean:
-	$(RM) -r $(PKG_SOURCEBASE) fetch-stamp
+	$(RM) -r $(PKG_SOURCEBASE) fetch-stamp patch-stamp
 
 .PHONY: all build clean
