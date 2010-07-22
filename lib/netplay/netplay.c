@@ -2608,7 +2608,7 @@ BOOL NETfindGame(void)
 	 && socketReadReady(tcp_socket)
 	 && (result = readNoInt(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
 	{
-		gamesavailable = ntohl(gamesavailable);
+		gamesavailable = MIN(ntohl(gamesavailable), ARRAY_SIZE(NetPlay.games));
 	}
 	else
 	{
@@ -2630,6 +2630,9 @@ BOOL NETfindGame(void)
 	}
 
 	debug(LOG_NET, "receiving info on %u game(s)", (unsigned int)gamesavailable);
+
+	// Clear old games from list.
+	memset(NetPlay.games, 0x00, sizeof(NetPlay.games));
 
 	do
 	{
