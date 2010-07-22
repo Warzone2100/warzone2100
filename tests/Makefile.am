@@ -5,7 +5,6 @@ BUILT_SOURCES = \
 	maplist.txt
 
 check_PROGRAMS = \
-	astartest \
 	maptest \
 	pointtreetest
 
@@ -23,7 +22,6 @@ CLEANFILES = \
 	$(BUILT_SOURCES)
 
 TESTS = \
-	astartest \
 	maptest \
 	pointtreetest
 
