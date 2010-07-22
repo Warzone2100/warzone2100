@@ -66,6 +66,7 @@ Makefile
 Makefile.in
 /aclocal.m4
 /autom4te.cache/*
+/build-stamp
 /config.*
 /configure
 /depcomp
@@ -112,3 +113,30 @@ cscope.out
 /.kdev4/
 /warzone.kdev4
 /.kdev_include_paths
+
+# patches
+*.patch
+
+# Debian stuff
+/debian
+/pkg/dpkg/files
+/pkg/dpkg/tmp/
+/pkg/dpkg/warzone2100-data.debhelper.log
+/pkg/dpkg/warzone2100-data.substvars
+/pkg/dpkg/warzone2100-data/
+/pkg/dpkg/warzone2100-music.debhelper.log
+/pkg/dpkg/warzone2100-music.substvars
+/pkg/dpkg/warzone2100-music/
+/pkg/dpkg/warzone2100.debhelper.log
+/pkg/dpkg/warzone2100.postinst.debhelper
+/pkg/dpkg/warzone2100.postrm.debhelper
+/pkg/dpkg/warzone2100.substvars
+/pkg/dpkg/warzone2100/
+
+
+# build folders
+/build
+/2.3
+/trunk
+/newnet
+/qt-trunk
