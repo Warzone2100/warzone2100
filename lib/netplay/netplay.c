@@ -3777,7 +3777,7 @@ BOOL NETfindGame(void)
 	// Clear old games from list.
 	memset(NetPlay.games, 0x00, sizeof(NetPlay.games));
 
-	do
+	while (gamecount < gamesavailable)
 	{
 		// Attempt to receive a game description structure
 		if (!NETrecvGAMESTRUCT(&NetPlay.games[gamecount]))
@@ -3794,7 +3794,7 @@ BOOL NETfindGame(void)
 		}
 
 		++gamecount;
-	} while (gamecount < gamesavailable);
+	}
 
 	freeaddrinfo(hosts);
 	return true;
