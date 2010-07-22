@@ -3382,7 +3382,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 
 			pPlayerRes += (pSubject->ref - REF_RESEARCH_START);
 			//check research has not already been completed by another structure
-			if (IsResearchCompleted(pPlayerRes)==0)
+			if (!IsResearchCompleted(pPlayerRes))
 			{
 				pResearch = (RESEARCH *)pSubject;
 
@@ -6760,14 +6760,9 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 //
 BOOL StructIsFactory(STRUCTURE *Struct)
 {
-	if( (Struct->pStructureType->type == REF_FACTORY) ||
-		(Struct->pStructureType->type == REF_CYBORG_FACTORY) ||
-		(Struct->pStructureType->type == REF_VTOL_FACTORY) )
-	{
-		return true;
-	}
-
-	return false;
+	return Struct->pStructureType->type == REF_FACTORY ||
+	       Struct->pStructureType->type == REF_CYBORG_FACTORY ||
+	       Struct->pStructureType->type == REF_VTOL_FACTORY;
 }
 
 

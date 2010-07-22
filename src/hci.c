@@ -2755,7 +2755,6 @@ static void intProcessObject(UDWORD id)
 			}
 			else if (psObj->type == OBJ_STRUCTURE)
 			{
-
 //				clearSelection();
 //				psObj->selected = true;
 
@@ -2764,11 +2763,11 @@ static void intProcessObject(UDWORD id)
 					//might need to cancel the hold on production
 					releaseProduction((STRUCTURE *)psObj);
 				}
-                else if (((STRUCTURE *)psObj)->pStructureType->type == REF_RESEARCH)
-                {
+				else if (((STRUCTURE *)psObj)->pStructureType->type == REF_RESEARCH)
+				{
 					//might need to cancel the hold on research facilty
 					releaseResearch((STRUCTURE *)psObj);
-                }
+				}
 			}
 		}
 	}

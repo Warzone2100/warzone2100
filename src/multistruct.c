@@ -469,15 +469,20 @@ void recvStructureInfo(NETQUEUE queue)
 		return;
 	}
 
-	if (psStruct->pFunctionality->factory.pendingCount == 0)
+	CHECK_STRUCTURE(psStruct);
+
+	if (StructIsFactory(psStruct))
 	{
-		++psStruct->pFunctionality->factory.pendingCount;
-	}
-	if (--psStruct->pFunctionality->factory.pendingCount == 0)
-	{
-		// Subject is now synchronised, remove pending.
-		psStruct->pFunctionality->factory.psSubjectPending = NULL;
-		psStruct->pFunctionality->factory.statusPending = FACTORY_NOTHING_PENDING;
+		if (psStruct->pFunctionality->factory.pendingCount == 0)
+		{
+			++psStruct->pFunctionality->factory.pendingCount;
+		}
+		if (--psStruct->pFunctionality->factory.pendingCount == 0)
+		{
+			// Subject is now synchronised, remove pending.
+			psStruct->pFunctionality->factory.psSubjectPending = NULL;
+			psStruct->pFunctionality->factory.statusPending = FACTORY_NOTHING_PENDING;
+		}
 	}
 
 	syncDebugStructure(psStruct, '<');
@@ -497,4 +502,6 @@ void recvStructureInfo(NETQUEUE queue)
 	turnOffMultiMsg(false);
 
 	syncDebugStructure(psStruct, '>');
+
+	CHECK_STRUCTURE(psStruct);
 }
