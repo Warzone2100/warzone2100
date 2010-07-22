@@ -55,7 +55,7 @@ static inline BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE pro
 }
 
 #define WZ_TESTING
-#include "../src/astar.c"
+#include "../src/astar.cpp"
 
 static void printmap(MOVE_CONTROL *move, PATHJOB *job)
 {
