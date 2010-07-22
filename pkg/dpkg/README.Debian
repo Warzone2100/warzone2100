@@ -1,0 +1,5 @@
+This package was created by the scripts included in the Warzone 2100 source.
+Those are currently based on r11051 of
+svn://svn.debian.org/svn/pkg-games/packages/trunk/warzone2100, but changed to
+have a higher version number as to not being overwritten by repository packages
+(epoch 9), among other things.

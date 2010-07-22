@@ -77,6 +77,9 @@ Makefile.in
 /po/remove-potcdate.sed
 /po/warzone2100.pot
 
+# Include this one Makefile
+!/pkg/dpkg/videos/Makefile
+
 # Betawidget autotools and libtool files:
 /lib/betawidget/.libs/
 /lib/betawidget/aclocal.m4
