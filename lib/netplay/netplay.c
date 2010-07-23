@@ -136,7 +136,6 @@ static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leavi
 static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETregisterServer(int state);
 static void NETallowJoining(void);
-static void NET_InitPlayer(int i, bool initPosition);
 static bool onBanList(const char *ip);
 static void addToBanList(const char *ip, const char *name);
 
@@ -1447,7 +1446,7 @@ error:
 	return false;
 }
 
-static void NET_InitPlayer(int i, bool initPosition)
+void NET_InitPlayer(int i, bool initPosition)
 {
 	NetPlay.players[i].allocated = false;
 	NetPlay.players[i].heartattacktime = 0;
