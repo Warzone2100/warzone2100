@@ -1595,8 +1595,7 @@ static BOOL changePosition(UBYTE player, UBYTE position)
 			      player, NetPlay.players[player].position, i, NetPlay.players[i].position);
 			NetPlay.players[i].position = NetPlay.players[player].position;
 			NetPlay.players[player].position = position;
-			NETBroadcastPlayerInfo(player);
-			NETBroadcastPlayerInfo(i);
+			NETBroadcastTwoPlayerInfo(player, i);
 			netPlayersUpdated = true;
 			return true;
 		}
@@ -1627,8 +1626,7 @@ static BOOL changeColour(UBYTE player, UBYTE col)
 			NetPlay.players[i].colour = getPlayerColour(player);
 			setPlayerColour(player, col);
 			NetPlay.players[player].colour = col;
-			NETBroadcastPlayerInfo(player);
-			NETBroadcastPlayerInfo(i);
+			NETBroadcastTwoPlayerInfo(player, i);
 			netPlayersUpdated = true;
 			return true;
 		}

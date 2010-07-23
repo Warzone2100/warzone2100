@@ -347,6 +347,7 @@ extern unsigned int NETgetGameserverPort(void);
 extern BOOL NETsetupTCPIP(const char *machine);
 extern void NETsetGamePassword(const char *password);
 extern void NETBroadcastPlayerInfo(uint32_t index);
+void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2);
 extern bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
 extern bool NETgameIsCorrectVersion(GAMESTRUCT* check_game);
 extern void NET_InitPlayers(void);
