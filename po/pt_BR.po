@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-11 20:56+0200\n"
+"POT-Creation-Date: 2010-07-24 01:24+0200\n"
 "PO-Revision-Date: 2010-06-05 03:14-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
@@ -12252,17 +12252,17 @@ msgstr "Hovercraft Canhão de Hiper Velocidade Píton"
 msgid "System locale"
 msgstr "Localização do Sistema"
 
-#: lib/netplay/netplay.c:1287
-#: lib/netplay/netplay.c:2136
+#: lib/netplay/netplay.c:1286
+#: lib/netplay/netplay.c:2159
 msgid "Enter password here"
 msgstr "Entre a senha aqui"
 
-#: lib/netplay/netplay.c:3136
+#: lib/netplay/netplay.c:3171
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Não foi possível resolver o nome do servidor mestre (%s)!"
 
-#: lib/netplay/netplay.c:3161
+#: lib/netplay/netplay.c:3196
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Não foi possível communicar com o servidor de lobby! A porta TCP %u está aberta para tráfego saindo?"
@@ -12426,8 +12426,8 @@ msgstr "hospedeiro"
 msgid "go directly to host screen"
 msgstr "ir diretamente à tela de hospedeiro"
 
-#: src/configuration.c:443
-#: src/configuration.c:444
+#: src/configuration.c:452
+#: src/configuration.c:453
 #: src/multistat.c:120
 msgid "Player"
 msgstr "Jogador"
@@ -12581,22 +12581,22 @@ msgstr "Jogador saiu"
 msgid "Player dropped"
 msgstr "Jogador desconectou-se"
 
-#: src/display.c:1714
+#: src/display.c:1727
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Impossível construir. Poço em chamas."
 
-#: src/display.c:1894
-#: src/display.c:2509
+#: src/display.c:1907
+#: src/display.c:2522
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Danos %d%% - Experiência %d, %s"
 
-#: src/display.c:1910
+#: src/display.c:1923
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Aliado - Danos %d%% - Experiência %d, %s"
 
-#: src/display.c:2103
+#: src/display.c:2116
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Caminhão designados para a construção do Extrator de Petróleo"
 
@@ -12718,8 +12718,8 @@ msgstr "APRENDENDO A JOGAR"
 #: src/frontend.c:554
 #: src/frontend.c:690
 #: src/frontend.c:797
-#: src/frontend.c:1004
-#: src/frontend.c:1147
+#: src/frontend.c:1016
+#: src/frontend.c:1173
 msgctxt "menu"
 msgid "Return"
 msgstr "Voltar"
@@ -12832,10 +12832,10 @@ msgstr "Tremer a Tela"
 #: src/frontend.c:969
 #: src/frontend.c:981
 #: src/frontend.c:993
-#: src/frontend.c:1026
-#: src/frontend.c:1039
-#: src/frontend.c:1053
-#: src/frontend.c:1067
+#: src/frontend.c:1038
+#: src/frontend.c:1051
+#: src/frontend.c:1065
+#: src/frontend.c:1079
 msgid "On"
 msgstr "Ligado"
 
@@ -12852,10 +12852,10 @@ msgstr "Ligado"
 #: src/frontend.c:973
 #: src/frontend.c:985
 #: src/frontend.c:997
-#: src/frontend.c:1021
-#: src/frontend.c:1034
-#: src/frontend.c:1048
-#: src/frontend.c:1062
+#: src/frontend.c:1033
+#: src/frontend.c:1046
+#: src/frontend.c:1060
+#: src/frontend.c:1074
 msgid "Off"
 msgstr "Desligado"
 
@@ -12955,55 +12955,72 @@ msgstr "Cursores Coloridos *"
 msgid "Switch Mouse Buttons"
 msgstr "Inverter Botões do Mouse"
 
-#: src/frontend.c:1001
+#: src/frontend.c:1002
+#, fuzzy
+msgid "Rotate Screen"
+msgstr "Girar a visão para a esquerda"
+
+#: src/frontend.c:1005
+#: src/frontend.c:1093
+msgctxt "middle mouse button"
+msgid "Middle Button"
+msgstr ""
+
+#: src/frontend.c:1009
+#: src/frontend.c:1088
+msgctxt "right mouse button"
+msgid "Right Button"
+msgstr ""
+
+#: src/frontend.c:1013
 msgid "MOUSE OPTIONS"
 msgstr "OPÇÕES DE MOUSE"
 
-#: src/frontend.c:1102
-#: src/frontend.c:1168
+#: src/frontend.c:1128
+#: src/frontend.c:1194
 msgid "Difficulty"
 msgstr "Dificuldade"
 
-#: src/frontend.c:1106
-#: src/frontend.c:1176
-#: src/frontend.c:1207
+#: src/frontend.c:1132
+#: src/frontend.c:1202
+#: src/frontend.c:1233
 msgid "Easy"
 msgstr "Fácil"
 
-#: src/frontend.c:1109
-#: src/frontend.c:1179
-#: src/frontend.c:1199
+#: src/frontend.c:1135
+#: src/frontend.c:1205
+#: src/frontend.c:1225
 msgid "Normal"
 msgstr "Média"
 
-#: src/frontend.c:1113
-#: src/frontend.c:1182
-#: src/frontend.c:1203
+#: src/frontend.c:1139
+#: src/frontend.c:1208
+#: src/frontend.c:1229
 msgid "Hard"
 msgstr "Difícil"
 
-#: src/frontend.c:1118
-#: src/frontend.c:1169
+#: src/frontend.c:1144
+#: src/frontend.c:1195
 msgid "Scroll Speed"
 msgstr "Velocidade da Tela"
 
-#: src/frontend.c:1132
-#: src/frontend.c:1166
+#: src/frontend.c:1158
+#: src/frontend.c:1192
 msgid "Language"
 msgstr "Idioma"
 
-#: src/frontend.c:1144
-#: src/frontend.c:1167
+#: src/frontend.c:1170
+#: src/frontend.c:1193
 msgid "Unit Colour"
 msgstr "Cor das Unidades"
 
-#: src/frontend.c:1150
-#: src/frontend.c:1170
+#: src/frontend.c:1176
+#: src/frontend.c:1196
 msgid "GAME OPTIONS"
 msgstr "OPÇÕES DE JOGO"
 
-#: src/frontend.c:1305
-#: src/multiint.c:2122
+#: src/frontend.c:1331
+#: src/multiint.c:2120
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -13119,9 +13136,9 @@ msgid "Exit Game"
 msgstr "Sair do Jogo"
 
 #: src/hci.c:4510
-#: src/intdisplay.c:212
-#: src/intdisplay.c:255
-#: src/intdisplay.c:306
+#: src/intdisplay.c:209
+#: src/intdisplay.c:252
+#: src/intdisplay.c:303
 msgid "Progress Bar"
 msgstr "Barra de Progresso"
 
@@ -13181,9 +13198,9 @@ msgstr ""
 "\n"
 "Warzone tentará carregar o jogo sem ele."
 
-#: src/intdisplay.c:202
-#: src/intdisplay.c:247
-#: src/intdisplay.c:299
+#: src/intdisplay.c:199
+#: src/intdisplay.c:244
+#: src/intdisplay.c:296
 msgid "Power Accrued"
 msgstr "Energia Coletada"
 
@@ -14267,75 +14284,75 @@ msgstr "Expulsar jogador"
 msgid "Player number"
 msgstr "Número do jogador"
 
-#: src/multiint.c:1809
+#: src/multiint.c:1807
 msgid "Team"
 msgstr "Time"
 
-#: src/multiint.c:1842
+#: src/multiint.c:1840
 msgid "Waiting for other players"
 msgstr "Aguardando outros jogadores"
 
-#: src/multiint.c:1848
+#: src/multiint.c:1846
 msgid "Click when ready"
 msgstr "Clique quando estiver pronto"
 
-#: src/multiint.c:1852
+#: src/multiint.c:1850
 msgid "READY?"
 msgstr "PRONTO?"
 
-#: src/multiint.c:1889
+#: src/multiint.c:1887
 msgid "PLAYERS"
 msgstr "JOGADORES"
 
-#: src/multiint.c:2093
+#: src/multiint.c:2091
 msgid "CHAT"
 msgstr "BATE-PAPO"
 
-#: src/multiint.c:2127
+#: src/multiint.c:2125
 msgid "All players need to have the same mods to join your game."
 msgstr "Todos os jogadores devem ter os mesmos mods para entrar no seu jogo."
 
-#: src/multiint.c:2287
+#: src/multiint.c:2285
 msgid "*** password is now required! ***"
 msgstr "*** a sessão está protegida por senha ***"
 
-#: src/multiint.c:2294
+#: src/multiint.c:2292
 msgid "*** password is NOT required! ***"
 msgstr "*** a sessão NÃO está protegida por senha ***"
 
-#: src/multiint.c:2537
+#: src/multiint.c:2535
 msgid "Sorry! Failed to host the game."
 msgstr "Desculpe! Falha ao hospedar uma sessão."
 
-#: src/multiint.c:2622
+#: src/multiint.c:2620
 msgid "'Locked Teams' mode enabled"
 msgstr "Modo 'Times Fixos' ativado"
 
-#: src/multiint.c:2661
-#: src/multiint.c:2711
+#: src/multiint.c:2659
+#: src/multiint.c:2709
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "O Host chutou %s do jogo!"
 
-#: src/multiint.c:2789
+#: src/multiint.c:2787
 msgid "Host is Starting Game"
 msgstr "O Host iniciou o Jogo"
 
-#: src/multiint.c:3353
+#: src/multiint.c:3356
 msgid "Players"
 msgstr "Jogadores"
 
-#: src/multiint.c:3470
+#: src/multiint.c:3474
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Enviando mapa: %d%%"
 
-#: src/multiint.c:3479
+#: src/multiint.c:3483
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% baixado"
 
-#: src/multiint.c:3505
+#: src/multiint.c:3509
 msgid "HOST"
 msgstr "HOSPEDEIRO"
 
@@ -14450,47 +14467,47 @@ msgstr "Fornecer Energia"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Expulsando jogador %s porque tentou evitar a checagem de integridade de dados!"
 
-#: src/multiplay.c:1094
+#: src/multiplay.c:1092
 msgid "(allies"
 msgstr "(alliados"
 
-#: src/multiplay.c:1102
+#: src/multiplay.c:1100
 msgid "(private to "
 msgstr "(pessoal para"
 
-#: src/multiplay.c:1115
+#: src/multiplay.c:1113
 msgid "[invalid]"
 msgstr "[inválido]"
 
-#: src/multiplay.c:1974
+#: src/multiplay.c:1972
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.c:1975
+#: src/multiplay.c:1973
 msgid "Orange"
 msgstr "Laranja"
 
-#: src/multiplay.c:1976
+#: src/multiplay.c:1974
 msgid "Grey"
 msgstr "Cinza"
 
-#: src/multiplay.c:1977
+#: src/multiplay.c:1975
 msgid "Black"
 msgstr "Preto"
 
-#: src/multiplay.c:1978
+#: src/multiplay.c:1976
 msgid "Red"
 msgstr "Vermelho"
 
-#: src/multiplay.c:1979
+#: src/multiplay.c:1977
 msgid "Blue"
 msgstr "Azul"
 
-#: src/multiplay.c:1980
+#: src/multiplay.c:1978
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.c:1981
+#: src/multiplay.c:1979
 msgid "Cyan"
 msgstr "Ciano"
 

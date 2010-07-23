@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-11 20:56+0200\n"
+"POT-Creation-Date: 2010-07-24 01:24+0200\n"
 "PO-Revision-Date: 2010-06-10 02:04+0300\n"
 "Last-Translator: Filipp Chertiev <f@fzfx.ru>\n"
 "Language-Team: Russian <>\n"
@@ -12264,17 +12264,17 @@ msgstr "ГС пушка питон ховер"
 msgid "System locale"
 msgstr "Системная локализация"
 
-#: lib/netplay/netplay.c:1287
-#: lib/netplay/netplay.c:2136
+#: lib/netplay/netplay.c:1286
+#: lib/netplay/netplay.c:2159
 msgid "Enter password here"
 msgstr "Введите пароль"
 
-#: lib/netplay/netplay.c:3136
+#: lib/netplay/netplay.c:3171
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Не могу получить имя основного сервера (%s)!"
 
-#: lib/netplay/netplay.c:3161
+#: lib/netplay/netplay.c:3196
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Не удалось соединиться с лобби-сервером. проверьте, открыт-ли TCP-порт %u для исходящего траффика."
@@ -12438,8 +12438,8 @@ msgstr "Хост"
 msgid "go directly to host screen"
 msgstr "прямо на экран хоста"
 
-#: src/configuration.c:443
-#: src/configuration.c:444
+#: src/configuration.c:452
+#: src/configuration.c:453
 #: src/multistat.c:120
 msgid "Player"
 msgstr "Игрок"
@@ -12593,22 +12593,22 @@ msgstr "Игрок ушел"
 msgid "Player dropped"
 msgstr "Игрок исчез"
 
-#: src/display.c:1714
+#: src/display.c:1727
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Строительство невозможно. Горит нефть."
 
-#: src/display.c:1894
-#: src/display.c:2509
+#: src/display.c:1907
+#: src/display.c:2522
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - повреждение %d%% - опыт %d, %s"
 
-#: src/display.c:1910
+#: src/display.c:1923
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - союзник %d%% - опыт %d, %s"
 
-#: src/display.c:2103
+#: src/display.c:2116
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Грузовику приказано строить нефтевышку"
 
@@ -12734,8 +12734,8 @@ msgstr "ОБУЧЕНИЕ"
 #: src/frontend.c:554
 #: src/frontend.c:690
 #: src/frontend.c:797
-#: src/frontend.c:1004
-#: src/frontend.c:1147
+#: src/frontend.c:1016
+#: src/frontend.c:1173
 msgctxt "menu"
 msgid "Return"
 msgstr "Назад"
@@ -12848,10 +12848,10 @@ msgstr "Дрожание экрана"
 #: src/frontend.c:969
 #: src/frontend.c:981
 #: src/frontend.c:993
-#: src/frontend.c:1026
-#: src/frontend.c:1039
-#: src/frontend.c:1053
-#: src/frontend.c:1067
+#: src/frontend.c:1038
+#: src/frontend.c:1051
+#: src/frontend.c:1065
+#: src/frontend.c:1079
 msgid "On"
 msgstr "Вкл."
 
@@ -12868,10 +12868,10 @@ msgstr "Вкл."
 #: src/frontend.c:973
 #: src/frontend.c:985
 #: src/frontend.c:997
-#: src/frontend.c:1021
-#: src/frontend.c:1034
-#: src/frontend.c:1048
-#: src/frontend.c:1062
+#: src/frontend.c:1033
+#: src/frontend.c:1046
+#: src/frontend.c:1060
+#: src/frontend.c:1074
 msgid "Off"
 msgstr "Выкл."
 
@@ -12971,55 +12971,72 @@ msgstr "Цветные курсоры *"
 msgid "Switch Mouse Buttons"
 msgstr "Настройки Мыши"
 
-#: src/frontend.c:1001
+#: src/frontend.c:1002
+#, fuzzy
+msgid "Rotate Screen"
+msgstr "Повернуть влево"
+
+#: src/frontend.c:1005
+#: src/frontend.c:1093
+msgctxt "middle mouse button"
+msgid "Middle Button"
+msgstr ""
+
+#: src/frontend.c:1009
+#: src/frontend.c:1088
+msgctxt "right mouse button"
+msgid "Right Button"
+msgstr ""
+
+#: src/frontend.c:1013
 msgid "MOUSE OPTIONS"
 msgstr "Настройки мыши"
 
-#: src/frontend.c:1102
-#: src/frontend.c:1168
+#: src/frontend.c:1128
+#: src/frontend.c:1194
 msgid "Difficulty"
 msgstr "Сложность"
 
-#: src/frontend.c:1106
-#: src/frontend.c:1176
-#: src/frontend.c:1207
+#: src/frontend.c:1132
+#: src/frontend.c:1202
+#: src/frontend.c:1233
 msgid "Easy"
 msgstr "Легкая"
 
-#: src/frontend.c:1109
-#: src/frontend.c:1179
-#: src/frontend.c:1199
+#: src/frontend.c:1135
+#: src/frontend.c:1205
+#: src/frontend.c:1225
 msgid "Normal"
 msgstr "Нормальная"
 
-#: src/frontend.c:1113
-#: src/frontend.c:1182
-#: src/frontend.c:1203
+#: src/frontend.c:1139
+#: src/frontend.c:1208
+#: src/frontend.c:1229
 msgid "Hard"
 msgstr "Тяжелая"
 
-#: src/frontend.c:1118
-#: src/frontend.c:1169
+#: src/frontend.c:1144
+#: src/frontend.c:1195
 msgid "Scroll Speed"
 msgstr "Скорость прокрутки"
 
-#: src/frontend.c:1132
-#: src/frontend.c:1166
+#: src/frontend.c:1158
+#: src/frontend.c:1192
 msgid "Language"
 msgstr "Язык"
 
-#: src/frontend.c:1144
-#: src/frontend.c:1167
+#: src/frontend.c:1170
+#: src/frontend.c:1193
 msgid "Unit Colour"
 msgstr "Цвет юнита"
 
-#: src/frontend.c:1150
-#: src/frontend.c:1170
+#: src/frontend.c:1176
+#: src/frontend.c:1196
 msgid "GAME OPTIONS"
 msgstr "НАСТРОЙКИ ИГРЫ"
 
-#: src/frontend.c:1305
-#: src/multiint.c:2122
+#: src/frontend.c:1331
+#: src/multiint.c:2120
 msgid "Mod: "
 msgstr "Мод:"
 
@@ -13135,9 +13152,9 @@ msgid "Exit Game"
 msgstr "Выйти из игры"
 
 #: src/hci.c:4510
-#: src/intdisplay.c:212
-#: src/intdisplay.c:255
-#: src/intdisplay.c:306
+#: src/intdisplay.c:209
+#: src/intdisplay.c:252
+#: src/intdisplay.c:303
 msgid "Progress Bar"
 msgstr "Панель прогресса"
 
@@ -13197,9 +13214,9 @@ msgstr ""
 "\n"
 "Warzone попробует запустить игру без него. Молитесь!"
 
-#: src/intdisplay.c:202
-#: src/intdisplay.c:247
-#: src/intdisplay.c:299
+#: src/intdisplay.c:199
+#: src/intdisplay.c:244
+#: src/intdisplay.c:296
 msgid "Power Accrued"
 msgstr "Накопленная энергия"
 
@@ -14283,75 +14300,75 @@ msgstr "Выкинуть игрока"
 msgid "Player number"
 msgstr "Номер игрока"
 
-#: src/multiint.c:1809
+#: src/multiint.c:1807
 msgid "Team"
 msgstr "Команда"
 
-#: src/multiint.c:1842
+#: src/multiint.c:1840
 msgid "Waiting for other players"
 msgstr "Ожидание других игроков"
 
-#: src/multiint.c:1848
+#: src/multiint.c:1846
 msgid "Click when ready"
 msgstr "Щелкни когда будешь готов"
 
-#: src/multiint.c:1852
+#: src/multiint.c:1850
 msgid "READY?"
 msgstr "ГОТОВ?"
 
-#: src/multiint.c:1889
+#: src/multiint.c:1887
 msgid "PLAYERS"
 msgstr "ИГРОКИ"
 
-#: src/multiint.c:2093
+#: src/multiint.c:2091
 msgid "CHAT"
 msgstr "ЧАТ"
 
-#: src/multiint.c:2127
+#: src/multiint.c:2125
 msgid "All players need to have the same mods to join your game."
 msgstr "Всем игрокам нужен такой же мод, что и у вас."
 
-#: src/multiint.c:2287
+#: src/multiint.c:2285
 msgid "*** password is now required! ***"
 msgstr "*** требуется пароль! ***"
 
-#: src/multiint.c:2294
+#: src/multiint.c:2292
 msgid "*** password is NOT required! ***"
 msgstr "*** пароль не требуется! ***"
 
-#: src/multiint.c:2537
+#: src/multiint.c:2535
 msgid "Sorry! Failed to host the game."
 msgstr "Извините! Не удалось создать игру."
 
-#: src/multiint.c:2622
+#: src/multiint.c:2620
 msgid "'Locked Teams' mode enabled"
 msgstr "Закрытые Команды"
 
-#: src/multiint.c:2661
-#: src/multiint.c:2711
+#: src/multiint.c:2659
+#: src/multiint.c:2709
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Хост выкинул %s из игры!"
 
-#: src/multiint.c:2789
+#: src/multiint.c:2787
 msgid "Host is Starting Game"
 msgstr "Хост стартует"
 
-#: src/multiint.c:3353
+#: src/multiint.c:3356
 msgid "Players"
 msgstr "Игроки"
 
-#: src/multiint.c:3470
+#: src/multiint.c:3474
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Отправка карты: %d%%"
 
-#: src/multiint.c:3479
+#: src/multiint.c:3483
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "карта: %d%% загружена"
 
-#: src/multiint.c:3505
+#: src/multiint.c:3509
 msgid "HOST"
 msgstr "ХОСТ"
 
@@ -14466,47 +14483,47 @@ msgstr "Передать энергию  игроку"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Кик игрока %s за попытку обойти проверку внутренних данных"
 
-#: src/multiplay.c:1094
+#: src/multiplay.c:1092
 msgid "(allies"
 msgstr "(союзники"
 
-#: src/multiplay.c:1102
+#: src/multiplay.c:1100
 msgid "(private to "
 msgstr "(приват"
 
-#: src/multiplay.c:1115
+#: src/multiplay.c:1113
 msgid "[invalid]"
 msgstr "[неверно]"
 
-#: src/multiplay.c:1974
+#: src/multiplay.c:1972
 msgid "Green"
 msgstr "Зелёный"
 
-#: src/multiplay.c:1975
+#: src/multiplay.c:1973
 msgid "Orange"
 msgstr "Оранжевый"
 
-#: src/multiplay.c:1976
+#: src/multiplay.c:1974
 msgid "Grey"
 msgstr "Серый"
 
-#: src/multiplay.c:1977
+#: src/multiplay.c:1975
 msgid "Black"
 msgstr "Чёрный"
 
-#: src/multiplay.c:1978
+#: src/multiplay.c:1976
 msgid "Red"
 msgstr "Красный"
 
-#: src/multiplay.c:1979
+#: src/multiplay.c:1977
 msgid "Blue"
 msgstr "Синий"
 
-#: src/multiplay.c:1980
+#: src/multiplay.c:1978
 msgid "Pink"
 msgstr "Розовый"
 
-#: src/multiplay.c:1981
+#: src/multiplay.c:1979
 msgid "Cyan"
 msgstr "Голубой"
 
