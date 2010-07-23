@@ -2876,23 +2876,28 @@ void frontendMultiMessages(void)
 
 		case NET_PLAYER_DROPPED:		// remote player got disconnected
 		{
-			BOOL host;
-			uint32_t player_id;
+			uint32_t player_id = MAX_PLAYERS;
 
 			resetReadyStatus(false);
 
 			NETbeginDecode(NET_PLAYER_DROPPED);
 			{
 				NETuint32_t(&player_id);
-				NETbool(&host);
 			}
 			NETend();
 
-			debug(LOG_INFO,"** player %u has dropped! Host is %s", player_id, host?"true":"false");
+			if (player_id >= MAX_PLAYERS)
+			{
+				debug(LOG_INFO, "** player %u has dropped - huh?", player_id);
+				break;
+			}
+
+			debug(LOG_INFO,"** player %u has dropped!", player_id);
 
 			MultiPlayerLeave(player_id);		// get rid of their stuff
+			NET_InitPlayer(player_id, false);           // sets index player's array to false
 			NET_PlayerConnectionStatus = 2;		//DROPPED_CONNECTION
-			if (host || player_id == selectedPlayer)	// if host quits or we quit, abort out
+			if (player_id == NetPlay.hostPlayer || player_id == selectedPlayer)	// if host quits or we quit, abort out
 			{
 				stopJoining();
 			}
