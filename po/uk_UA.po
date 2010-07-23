@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-11 21:09+0200\n"
+"POT-Creation-Date: 2010-07-24 01:26+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -12458,8 +12458,8 @@ msgstr "хост"
 msgid "go directly to host screen"
 msgstr "перейти безпосередньо до екрану хосту"
 
+#: src/configuration.c:442
 #: src/configuration.c:443
-#: src/configuration.c:444
 #: src/multistat.c:120
 msgid "Player"
 msgstr "Гравець"
@@ -12613,31 +12613,31 @@ msgstr "Гравець вийшов"
 msgid "Player dropped"
 msgstr "Гравець здався"
 
-#: src/display.c:1679
+#: src/display.c:1692
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Будівництво Неможливе. Через пожежу на Нафтовому Родовищі"
 
-#: src/display.c:1859
-#: src/display.c:2462
+#: src/display.c:1872
+#: src/display.c:2475
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Пошкоджень %d%% - Вбито %d, %s"
 
-#: src/display.c:1875
+#: src/display.c:1888
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Союзник - Пошкоджень %d%% - Вбито %d, %s"
 
-#: src/display.c:2077
+#: src/display.c:2090
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Інженеру наказано побудувати Бурову Вежу"
 
-#: src/display.c:2078
+#: src/display.c:2091
 #, fuzzy
 msgid "2 trucks ordered to build Oil Derrick"
 msgstr "Інженеру наказано побудувати Бурову Вежу"
 
-#: src/display.c:2079
+#: src/display.c:2092
 #, fuzzy, c-format
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr "Інженеру наказано побудувати Бурову Вежу"
@@ -12755,13 +12755,13 @@ msgstr "НАВЧАННЯ"
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.c:158
 #: src/frontend.c:217
-#: src/frontend.c:351
-#: src/frontend.c:418
-#: src/frontend.c:552
-#: src/frontend.c:688
-#: src/frontend.c:795
-#: src/frontend.c:1002
-#: src/frontend.c:1145
+#: src/frontend.c:360
+#: src/frontend.c:427
+#: src/frontend.c:561
+#: src/frontend.c:697
+#: src/frontend.c:804
+#: src/frontend.c:1023
+#: src/frontend.c:1180
 msgctxt "menu"
 msgid "Return"
 msgstr "Повернутись"
@@ -12787,264 +12787,279 @@ msgstr "Завнтажити Гру"
 msgid "SINGLE PLAYER"
 msgstr "РЕЖИМ ОДНОГО ГРАВЦЯ"
 
-#: src/frontend.c:294
+#: src/frontend.c:301
 #: src/ingameop.c:519
 #: src/mission.c:2534
 #: src/mission.c:2639
 msgid "Load Saved Game"
 msgstr "Завантажити Збережену Гру"
 
-#: src/frontend.c:346
+#: src/frontend.c:355
 msgid "MULTI PLAYER"
 msgstr "РЕЖИМ КІЛЬКОХ ГРАВЦІВ"
 
-#: src/frontend.c:348
+#: src/frontend.c:357
 msgid "Host Game"
 msgstr "Створити Гру"
 
-#: src/frontend.c:349
+#: src/frontend.c:358
 msgid "Join Game"
 msgstr "Приєднатись до Гри"
 
-#: src/frontend.c:411
+#: src/frontend.c:420
 #: src/multiint.c:1136
 msgid "OPTIONS"
 msgstr "ОПЦІЇ"
 
-#: src/frontend.c:412
+#: src/frontend.c:421
 msgid "Game Options"
 msgstr "Ігрові Опції"
 
-#: src/frontend.c:413
+#: src/frontend.c:422
 msgid "Graphics Options"
 msgstr "Опції Графіки"
 
-#: src/frontend.c:414
+#: src/frontend.c:423
 msgid "Video Options"
 msgstr "Опції Відео"
 
-#: src/frontend.c:415
+#: src/frontend.c:424
 #: src/ingameop.c:288
 msgid "Audio Options"
 msgstr "Опції Звуку"
 
-#: src/frontend.c:416
+#: src/frontend.c:425
 msgid "Mouse Options"
 msgstr "Опції Мишки"
 
-#: src/frontend.c:417
+#: src/frontend.c:426
 msgid "Key Mappings"
 msgstr "Призначення Клавіш"
 
-#: src/frontend.c:479
+#: src/frontend.c:488
 msgid "Video Playback"
 msgstr "Програвання Відео"
 
-#: src/frontend.c:483
-#: src/frontend.c:642
+#: src/frontend.c:492
+#: src/frontend.c:651
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.c:487
-#: src/frontend.c:632
+#: src/frontend.c:496
+#: src/frontend.c:641
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.c:491
-#: src/frontend.c:637
-#: src/frontend.c:763
-#: src/frontend.c:817
+#: src/frontend.c:500
+#: src/frontend.c:646
+#: src/frontend.c:772
+#: src/frontend.c:826
 msgid "Fullscreen"
 msgstr "Повний Екран"
 
-#: src/frontend.c:501
+#: src/frontend.c:510
 msgid "Screen Shake"
 msgstr "Трясіння Екрану"
 
-#: src/frontend.c:504
-#: src/frontend.c:532
-#: src/frontend.c:540
-#: src/frontend.c:575
-#: src/frontend.c:609
+#: src/frontend.c:513
+#: src/frontend.c:541
+#: src/frontend.c:549
+#: src/frontend.c:584
 #: src/frontend.c:618
-#: src/frontend.c:784
-#: src/frontend.c:878
-#: src/frontend.c:916
-#: src/frontend.c:955
-#: src/frontend.c:967
-#: src/frontend.c:979
-#: src/frontend.c:991
-#: src/frontend.c:1024
-#: src/frontend.c:1037
-#: src/frontend.c:1051
-#: src/frontend.c:1065
+#: src/frontend.c:627
+#: src/frontend.c:793
+#: src/frontend.c:887
+#: src/frontend.c:925
+#: src/frontend.c:964
+#: src/frontend.c:976
+#: src/frontend.c:988
+#: src/frontend.c:1000
+#: src/frontend.c:1045
+#: src/frontend.c:1058
+#: src/frontend.c:1072
+#: src/frontend.c:1086
 msgid "On"
 msgstr "Ввімкнено"
 
-#: src/frontend.c:508
-#: src/frontend.c:528
-#: src/frontend.c:544
-#: src/frontend.c:570
-#: src/frontend.c:604
-#: src/frontend.c:622
-#: src/frontend.c:788
-#: src/frontend.c:873
-#: src/frontend.c:911
-#: src/frontend.c:959
-#: src/frontend.c:971
-#: src/frontend.c:983
-#: src/frontend.c:995
-#: src/frontend.c:1019
-#: src/frontend.c:1032
-#: src/frontend.c:1046
-#: src/frontend.c:1060
+#: src/frontend.c:517
+#: src/frontend.c:537
+#: src/frontend.c:553
+#: src/frontend.c:579
+#: src/frontend.c:613
+#: src/frontend.c:631
+#: src/frontend.c:797
+#: src/frontend.c:882
+#: src/frontend.c:920
+#: src/frontend.c:968
+#: src/frontend.c:980
+#: src/frontend.c:992
+#: src/frontend.c:1004
+#: src/frontend.c:1040
+#: src/frontend.c:1053
+#: src/frontend.c:1067
+#: src/frontend.c:1081
 msgid "Off"
 msgstr "Вимкнено"
 
-#: src/frontend.c:513
+#: src/frontend.c:522
 #: src/multiint.c:1205
 msgid "Fog"
 msgstr "Туман"
 
-#: src/frontend.c:516
-#: src/frontend.c:591
+#: src/frontend.c:525
+#: src/frontend.c:600
 msgid "Mist"
 msgstr "Імла"
 
-#: src/frontend.c:520
-#: src/frontend.c:585
+#: src/frontend.c:529
+#: src/frontend.c:594
 #: src/multiint.c:1207
 msgid "Fog Of War"
 msgstr "Туман Війни"
 
-#: src/frontend.c:525
+#: src/frontend.c:534
 msgid "Subtitles"
 msgstr "Субтитри"
 
-#: src/frontend.c:537
+#: src/frontend.c:546
 msgid "Shadows"
 msgstr "Тіні"
 
-#: src/frontend.c:548
+#: src/frontend.c:557
 msgid "GRAPHICS OPTIONS"
 msgstr "ОПЦІЇ ГРАФІКИ"
 
-#: src/frontend.c:676
+#: src/frontend.c:685
 #: src/ingameop.c:177
 msgid "Voice Volume"
 msgstr "Гучність Звуку"
 
-#: src/frontend.c:680
+#: src/frontend.c:689
 #: src/ingameop.c:182
 msgid "FX Volume"
 msgstr "Гучність Ефектів"
 
-#: src/frontend.c:684
+#: src/frontend.c:693
 #: src/ingameop.c:187
 msgid "Music Volume"
 msgstr "Гучність Музики"
 
-#: src/frontend.c:691
+#: src/frontend.c:700
 msgid "AUDIO OPTIONS"
 msgstr "ОПЦІЇ ЗВУКУ"
 
-#: src/frontend.c:756
+#: src/frontend.c:765
 msgid "* Takes effect on game restart"
 msgstr "* Зміни всупають в силу після перезавантаження гри"
 
-#: src/frontend.c:759
+#: src/frontend.c:768
 msgid "Graphics Mode*"
 msgstr "Режим Графіки*"
 
-#: src/frontend.c:767
-#: src/frontend.c:812
+#: src/frontend.c:776
+#: src/frontend.c:821
 msgid "Windowed"
 msgstr "Віконний Режим"
 
-#: src/frontend.c:771
+#: src/frontend.c:780
 msgid "Resolution*"
 msgstr "Роздільна Здатність*"
 
-#: src/frontend.c:776
+#: src/frontend.c:785
 msgid "Texture size"
 msgstr "Розмір Текстур"
 
-#: src/frontend.c:780
+#: src/frontend.c:789
 msgid "Vertical sync*"
 msgstr "Вертикальна Синхронізація*"
 
-#: src/frontend.c:792
+#: src/frontend.c:801
 msgid "VIDEO OPTIONS"
 msgstr "ОПЦІЇ ВІДЕО"
 
-#: src/frontend.c:948
+#: src/frontend.c:957
 msgid "* May negatively affect performance"
 msgstr "* Може негативно вплинути на роботу"
 
-#: src/frontend.c:952
+#: src/frontend.c:961
 msgid "Reverse Rotation"
 msgstr "Зворотнє Обертання"
 
-#: src/frontend.c:963
+#: src/frontend.c:972
 msgid "Trap Cursor"
 msgstr "Зафіксувати Курсор"
 
-#: src/frontend.c:975
+#: src/frontend.c:984
 msgid "Colored Cursors*"
 msgstr "Кольорові Курсори*"
 
-#: src/frontend.c:988
+#: src/frontend.c:997
 msgid "Switch Mouse Buttons"
 msgstr "Поміняти Призначення Кнопок Миші"
 
-#: src/frontend.c:999
+#: src/frontend.c:1009
+#, fuzzy
+msgid "Rotate Screen"
+msgstr "Повернути Ліворуч"
+
+#: src/frontend.c:1012
+#: src/frontend.c:1100
+msgid "Middle Mouse"
+msgstr ""
+
+#: src/frontend.c:1016
+#: src/frontend.c:1095
+msgid "Right Mouse"
+msgstr ""
+
+#: src/frontend.c:1020
 msgid "MOUSE OPTIONS"
 msgstr "ОПЦІЇ МИШКИ"
 
-#: src/frontend.c:1100
-#: src/frontend.c:1166
+#: src/frontend.c:1135
+#: src/frontend.c:1201
 msgid "Difficulty"
 msgstr "Важкість"
 
-#: src/frontend.c:1104
-#: src/frontend.c:1174
-#: src/frontend.c:1205
+#: src/frontend.c:1139
+#: src/frontend.c:1209
+#: src/frontend.c:1240
 msgid "Easy"
 msgstr "Легко"
 
-#: src/frontend.c:1107
-#: src/frontend.c:1177
-#: src/frontend.c:1197
+#: src/frontend.c:1142
+#: src/frontend.c:1212
+#: src/frontend.c:1232
 msgid "Normal"
 msgstr "Нормально"
 
-#: src/frontend.c:1111
-#: src/frontend.c:1180
-#: src/frontend.c:1201
+#: src/frontend.c:1146
+#: src/frontend.c:1215
+#: src/frontend.c:1236
 msgid "Hard"
 msgstr "Важко"
 
-#: src/frontend.c:1116
-#: src/frontend.c:1167
+#: src/frontend.c:1151
+#: src/frontend.c:1202
 msgid "Scroll Speed"
 msgstr "Швидкість Прокрутки"
 
-#: src/frontend.c:1130
-#: src/frontend.c:1164
+#: src/frontend.c:1165
+#: src/frontend.c:1199
 msgid "Language"
 msgstr "Мова"
 
-#: src/frontend.c:1142
-#: src/frontend.c:1165
+#: src/frontend.c:1177
+#: src/frontend.c:1200
 msgid "Unit Colour"
 msgstr "Колір Підрозділів"
 
-#: src/frontend.c:1148
-#: src/frontend.c:1168
+#: src/frontend.c:1183
+#: src/frontend.c:1203
 msgid "GAME OPTIONS"
 msgstr "ІГРОВІ ОПЦІЇ"
 
-#: src/frontend.c:1294
+#: src/frontend.c:1329
 #: src/multiint.c:2117
 msgid "Mod: "
 msgstr ", моди: "
@@ -13160,7 +13175,7 @@ msgid "Exit Game"
 msgstr "Покинути Гру"
 
 #: src/hci.c:4566
-#: src/intdisplay.c:270
+#: src/intdisplay.c:267
 msgid "Progress Bar"
 msgstr "Індикатор Прогресу"
 
@@ -13232,17 +13247,17 @@ msgstr ""
 "\n"
 "Warzone спробує запустити гру без нього."
 
-#: src/intdisplay.c:197
+#: src/intdisplay.c:194
 #, fuzzy
 msgid "Build Progress"
 msgstr "Ефективність Інженерного Обладнання"
 
-#: src/intdisplay.c:228
+#: src/intdisplay.c:225
 #, fuzzy
 msgid "Construction Progress"
 msgstr "Помилка З’єднання"
 
-#: src/intdisplay.c:263
+#: src/intdisplay.c:260
 msgid "Power Accrued"
 msgstr "Накопичена Енергія"
 
@@ -14072,8 +14087,8 @@ msgstr "Продовжити Гру"
 msgid "GAME SAVED :"
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
 
-#: src/move.c:2540
-#: src/move.c:2556
+#: src/move.c:2525
+#: src/move.c:2541
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Ви знайшли %u енергії в бочці нафти."
@@ -14379,17 +14394,17 @@ msgstr "Хост Починає Гру"
 msgid "Players"
 msgstr "Гравці"
 
-#: src/multiint.c:3463
+#: src/multiint.c:3464
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Відправляється Карта: %d%% "
 
-#: src/multiint.c:3471
+#: src/multiint.c:3472
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Мапа: %d%% завантажена"
 
-#: src/multiint.c:3497
+#: src/multiint.c:3498
 msgid "HOST"
 msgstr "ХОСТ"
 
