@@ -434,11 +434,10 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextCyborgFactory,_("Select next Cyborg Factory"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_ToggleReopenBuildMenu,_("Toggle reopening the build menu"));
 
-	// NOTE THIS!!!!!!!
-	// available: ctrl+l
+	// Debug options
+	keyAddMapping(KEYMAP___HIDE,KEY_LSHIFT,KEY_BACKSPACE,KEYMAP_PRESSED,kf_ToggleDebugMappings,			"TOGGLE Debug Mappings");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_M,KEYMAP_PRESSED,kf_ToggleShowPath,				"Toggle display of droid path");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_E,KEYMAP_PRESSED,kf_ToggleShowGateways,			"Toggle display of gateways");
-	keyAddMapping(KEYMAP___HIDE,KEY_LSHIFT,KEY_BACKSPACE,KEYMAP_PRESSED,kf_ToggleDebugMappings,			"TOGGLE Debug Mappings");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_M,KEYMAP_PRESSED,kf_ShowMappings,				"Show all keyboard mappings - use pause!");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_V,KEYMAP_PRESSED,kf_ToggleVisibility,			"Toggle visibility");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_W,KEYMAP_DOWN,kf_RaiseTile,					"Raise tile height");
@@ -449,8 +448,6 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_Q,KEYMAP_PRESSED,kf_ToggleWeather,				"Trigger some weather");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_K,KEYMAP_PRESSED,kf_TriFlip,					"Flip terrain triangle");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_K,KEYMAP_PRESSED,kf_MapCheck,					"Realign height of all objects on the map");
-
-	//These ones are necessary for debugging
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_A,KEYMAP_PRESSED,kf_AllAvailable,						"Make all items available");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_K,KEYMAP_PRESSED,kf_KillSelected,						"Kill Selected Unit(s)");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_G,KEYMAP_PRESSED,kf_ToggleGodMode,				"Toggle god Mode Status");
@@ -459,6 +456,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_W,KEYMAP_PRESSED,kf_ToggleWatchWindow,			"Toggle watch window");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_L,KEYMAP_PRESSED,kf_TraceObject,				"Trace a game object");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_D,KEYMAP_PRESSED,kf_ToggleDrivingMode, 			"Toggle Driving Mode");
+
 	saveKeyMap();	// save out the default key mappings.
 
 //  ------------------------ OLD STUFF - Store here!
