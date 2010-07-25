@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-24 01:26+0200\n"
+"POT-Creation-Date: 2010-07-25 17:24+0200\n"
 "PO-Revision-Date: 2008-05-09 16:54+0000\n"
 "Last-Translator: Olav Andreas Lindekleiv <Unknown>\n"
 "Language-Team: none\n"
@@ -12733,361 +12733,376 @@ msgstr "Spesiell"
 msgid "Hero"
 msgstr "Helt"
 
-#: src/frontend.c:96
+#: src/frontend.c:97
 #, fuzzy
 msgid "Single Player"
 msgstr "Solospill"
 
-#: src/frontend.c:97
+#: src/frontend.c:98
 #, fuzzy
 msgid "Multi Player"
 msgstr "Samspill"
 
-#: src/frontend.c:98
-#: src/frontend.c:154
+#: src/frontend.c:99
+#: src/frontend.c:155
 msgid "Tutorial"
 msgstr "Introduksjon"
 
-#: src/frontend.c:99
+#: src/frontend.c:100
 msgid "Options"
 msgstr "Alternativer"
 
-#: src/frontend.c:100
+#: src/frontend.c:101
 msgid "View Intro"
 msgstr ""
 
-#: src/frontend.c:102
+#: src/frontend.c:103
 msgid "Quit Game"
 msgstr "Avslutt"
 
-#: src/frontend.c:104
+#: src/frontend.c:105
 msgid "MAIN MENU"
 msgstr "HOVEDMENY"
 
-#: src/frontend.c:155
+#: src/frontend.c:156
 msgid "Fast Play"
 msgstr ""
 
-#: src/frontend.c:156
+#: src/frontend.c:157
 msgid "TUTORIALS"
 msgstr "INTRODUKSJON"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:158
-#: src/frontend.c:217
-#: src/frontend.c:360
-#: src/frontend.c:427
-#: src/frontend.c:561
-#: src/frontend.c:697
-#: src/frontend.c:804
-#: src/frontend.c:1023
-#: src/frontend.c:1180
+#: src/frontend.c:159
+#: src/frontend.c:218
+#: src/frontend.c:361
+#: src/frontend.c:428
+#: src/frontend.c:562
+#: src/frontend.c:698
+#: src/frontend.c:805
+#: src/frontend.c:1024
+#: src/frontend.c:1185
 msgctxt "menu"
 msgid "Return"
 msgstr ""
 
-#: src/frontend.c:211
+#: src/frontend.c:212
 msgid "New Campaign"
 msgstr ""
 
-#: src/frontend.c:212
+#: src/frontend.c:213
 #, fuzzy
 msgid "Start Skirmish Game"
 msgstr "Start med baser"
 
-#: src/frontend.c:213
+#: src/frontend.c:214
 msgid "Challenges"
 msgstr ""
 
-#: src/frontend.c:214
+#: src/frontend.c:215
 #: src/ingameop.c:293
 msgid "Load Game"
 msgstr "Last Spill"
 
-#: src/frontend.c:216
+#: src/frontend.c:217
 msgid "SINGLE PLAYER"
 msgstr "SOLOSPILL"
 
-#: src/frontend.c:301
+#: src/frontend.c:302
 #: src/ingameop.c:519
 #: src/mission.c:2534
 #: src/mission.c:2639
 msgid "Load Saved Game"
 msgstr "Last inn spill"
 
-#: src/frontend.c:355
+#: src/frontend.c:356
 msgid "MULTI PLAYER"
 msgstr "SAMSPILL"
 
-#: src/frontend.c:357
+#: src/frontend.c:358
 msgid "Host Game"
 msgstr ""
 
-#: src/frontend.c:358
+#: src/frontend.c:359
 msgid "Join Game"
 msgstr "Bli med i spill"
 
-#: src/frontend.c:420
+#: src/frontend.c:421
 #: src/multiint.c:1136
 msgid "OPTIONS"
 msgstr "ALTERNATIVER"
 
-#: src/frontend.c:421
+#: src/frontend.c:422
 msgid "Game Options"
 msgstr "Spillalternativer"
 
-#: src/frontend.c:422
+#: src/frontend.c:423
 msgid "Graphics Options"
 msgstr "Grafikkalternativer"
 
-#: src/frontend.c:423
+#: src/frontend.c:424
 #, fuzzy
 msgid "Video Options"
 msgstr "Lydalternativer"
 
-#: src/frontend.c:424
+#: src/frontend.c:425
 #: src/ingameop.c:288
 msgid "Audio Options"
 msgstr "Lydalternativer"
 
-#: src/frontend.c:425
+#: src/frontend.c:426
 #, fuzzy
 msgid "Mouse Options"
 msgstr "Spillalternativer"
 
-#: src/frontend.c:426
+#: src/frontend.c:427
 msgid "Key Mappings"
 msgstr ""
 
-#: src/frontend.c:488
+#: src/frontend.c:489
 msgid "Video Playback"
 msgstr ""
 
-#: src/frontend.c:492
-#: src/frontend.c:651
+#: src/frontend.c:493
+#: src/frontend.c:652
 msgid "1X"
 msgstr ""
 
-#: src/frontend.c:496
-#: src/frontend.c:641
+#: src/frontend.c:497
+#: src/frontend.c:642
 msgid "2X"
 msgstr ""
 
-#: src/frontend.c:500
-#: src/frontend.c:646
-#: src/frontend.c:772
-#: src/frontend.c:826
+#: src/frontend.c:501
+#: src/frontend.c:647
+#: src/frontend.c:773
+#: src/frontend.c:827
 msgid "Fullscreen"
 msgstr ""
 
-#: src/frontend.c:510
+#: src/frontend.c:511
 msgid "Screen Shake"
 msgstr ""
 
-#: src/frontend.c:513
-#: src/frontend.c:541
-#: src/frontend.c:549
-#: src/frontend.c:584
-#: src/frontend.c:618
-#: src/frontend.c:627
-#: src/frontend.c:793
-#: src/frontend.c:887
-#: src/frontend.c:925
-#: src/frontend.c:964
-#: src/frontend.c:976
-#: src/frontend.c:988
-#: src/frontend.c:1000
-#: src/frontend.c:1045
-#: src/frontend.c:1058
-#: src/frontend.c:1072
-#: src/frontend.c:1086
+#: src/frontend.c:514
+#: src/frontend.c:542
+#: src/frontend.c:550
+#: src/frontend.c:585
+#: src/frontend.c:619
+#: src/frontend.c:628
+#: src/frontend.c:794
+#: src/frontend.c:888
+#: src/frontend.c:926
+#: src/frontend.c:965
+#: src/frontend.c:977
+#: src/frontend.c:989
+#: src/frontend.c:1001
+#: src/frontend.c:1046
+#: src/frontend.c:1059
+#: src/frontend.c:1073
+#: src/frontend.c:1087
 msgid "On"
 msgstr "På"
 
-#: src/frontend.c:517
-#: src/frontend.c:537
-#: src/frontend.c:553
-#: src/frontend.c:579
-#: src/frontend.c:613
-#: src/frontend.c:631
-#: src/frontend.c:797
-#: src/frontend.c:882
-#: src/frontend.c:920
-#: src/frontend.c:968
-#: src/frontend.c:980
-#: src/frontend.c:992
-#: src/frontend.c:1004
-#: src/frontend.c:1040
-#: src/frontend.c:1053
-#: src/frontend.c:1067
-#: src/frontend.c:1081
+#: src/frontend.c:518
+#: src/frontend.c:538
+#: src/frontend.c:554
+#: src/frontend.c:580
+#: src/frontend.c:614
+#: src/frontend.c:632
+#: src/frontend.c:798
+#: src/frontend.c:883
+#: src/frontend.c:921
+#: src/frontend.c:969
+#: src/frontend.c:981
+#: src/frontend.c:993
+#: src/frontend.c:1005
+#: src/frontend.c:1041
+#: src/frontend.c:1054
+#: src/frontend.c:1068
+#: src/frontend.c:1082
 msgid "Off"
 msgstr "Av"
 
-#: src/frontend.c:522
+#: src/frontend.c:523
 #: src/multiint.c:1205
 msgid "Fog"
 msgstr "Tåke"
 
-#: src/frontend.c:525
-#: src/frontend.c:600
+#: src/frontend.c:526
+#: src/frontend.c:601
 msgid "Mist"
 msgstr ""
 
-#: src/frontend.c:529
-#: src/frontend.c:594
+#: src/frontend.c:530
+#: src/frontend.c:595
 #: src/multiint.c:1207
 msgid "Fog Of War"
 msgstr "Krigståke"
 
-#: src/frontend.c:534
+#: src/frontend.c:535
 msgid "Subtitles"
 msgstr ""
 
-#: src/frontend.c:546
+#: src/frontend.c:547
 msgid "Shadows"
 msgstr ""
 
-#: src/frontend.c:557
+#: src/frontend.c:558
 #, fuzzy
 msgid "GRAPHICS OPTIONS"
 msgstr "SPILLALTERNATIVER"
 
-#: src/frontend.c:685
+#: src/frontend.c:686
 #: src/ingameop.c:177
 msgid "Voice Volume"
 msgstr "Stemmevolum"
 
-#: src/frontend.c:689
+#: src/frontend.c:690
 #: src/ingameop.c:182
 msgid "FX Volume"
 msgstr "Lydeffektvolum"
 
-#: src/frontend.c:693
+#: src/frontend.c:694
 #: src/ingameop.c:187
 msgid "Music Volume"
 msgstr "Musikkvolum"
 
-#: src/frontend.c:700
+#: src/frontend.c:701
 #, fuzzy
 msgid "AUDIO OPTIONS"
 msgstr "SPILLALTERNATIVER"
 
-#: src/frontend.c:765
+#: src/frontend.c:766
 msgid "* Takes effect on game restart"
 msgstr ""
 
-#: src/frontend.c:768
+#: src/frontend.c:769
 #, fuzzy
 msgid "Graphics Mode*"
 msgstr "Grafikkalternativer"
 
-#: src/frontend.c:776
-#: src/frontend.c:821
+#: src/frontend.c:777
+#: src/frontend.c:822
 msgid "Windowed"
 msgstr ""
 
-#: src/frontend.c:780
+#: src/frontend.c:781
 msgid "Resolution*"
 msgstr ""
 
-#: src/frontend.c:785
+#: src/frontend.c:786
 msgid "Texture size"
 msgstr ""
 
-#: src/frontend.c:789
+#: src/frontend.c:790
 msgid "Vertical sync*"
 msgstr ""
 
-#: src/frontend.c:801
+#: src/frontend.c:802
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "SPILLALTERNATIVER"
 
-#: src/frontend.c:957
+#: src/frontend.c:958
 msgid "* May negatively affect performance"
 msgstr ""
 
-#: src/frontend.c:961
+#: src/frontend.c:962
 msgid "Reverse Rotation"
 msgstr ""
 
-#: src/frontend.c:972
+#: src/frontend.c:973
 msgid "Trap Cursor"
 msgstr ""
 
-#: src/frontend.c:984
+#: src/frontend.c:985
 msgid "Colored Cursors*"
 msgstr ""
 
-#: src/frontend.c:997
+#: src/frontend.c:998
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Spillalternativer"
 
-#: src/frontend.c:1009
+#: src/frontend.c:1010
 msgid "Rotate Screen"
 msgstr ""
 
-#: src/frontend.c:1012
-#: src/frontend.c:1100
+#: src/frontend.c:1013
+#: src/frontend.c:1101
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.c:1016
-#: src/frontend.c:1095
+#: src/frontend.c:1017
+#: src/frontend.c:1096
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.c:1020
+#: src/frontend.c:1021
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "SPILLALTERNATIVER"
 
-#: src/frontend.c:1135
-#: src/frontend.c:1201
+#: src/frontend.c:1136
+#: src/frontend.c:1206
 msgid "Difficulty"
 msgstr "Vanskelighetsgrad"
 
-#: src/frontend.c:1139
-#: src/frontend.c:1209
-#: src/frontend.c:1240
+#: src/frontend.c:1140
+#: src/frontend.c:1214
+#: src/frontend.c:1251
 msgid "Easy"
 msgstr "Enkel"
 
-#: src/frontend.c:1142
-#: src/frontend.c:1212
-#: src/frontend.c:1232
+#: src/frontend.c:1143
+#: src/frontend.c:1217
+#: src/frontend.c:1243
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.c:1146
-#: src/frontend.c:1215
-#: src/frontend.c:1236
+#: src/frontend.c:1147
+#: src/frontend.c:1220
+#: src/frontend.c:1247
 msgid "Hard"
 msgstr "Tøff"
 
-#: src/frontend.c:1151
-#: src/frontend.c:1202
+#: src/frontend.c:1152
+#: src/frontend.c:1207
 msgid "Scroll Speed"
 msgstr ""
 
-#: src/frontend.c:1165
-#: src/frontend.c:1199
+#: src/frontend.c:1166
+#: src/frontend.c:1204
 msgid "Language"
 msgstr ""
 
-#: src/frontend.c:1177
-#: src/frontend.c:1200
+#: src/frontend.c:1178
+#: src/frontend.c:1205
 msgid "Unit Colour"
 msgstr ""
 
-#: src/frontend.c:1183
-#: src/frontend.c:1203
+#: src/frontend.c:1181
+msgid "Radar"
+msgstr ""
+
+#: src/frontend.c:1182
+#: src/frontend.c:1231
+#, fuzzy
+msgid "Rotating"
+msgstr "Latin"
+
+#: src/frontend.c:1182
+#: src/frontend.c:1231
+msgid "Fixed"
+msgstr ""
+
+#: src/frontend.c:1188
+#: src/frontend.c:1208
 msgid "GAME OPTIONS"
 msgstr "SPILLALTERNATIVER"
 
-#: src/frontend.c:1329
+#: src/frontend.c:1340
 #: src/multiint.c:2117
 msgid "Mod: "
 msgstr ""
@@ -14931,9 +14946,6 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Russian"
 #~ msgstr "Russisk"
-
-#~ msgid "Latin"
-#~ msgstr "Latin"
 
 #, fuzzy
 #~ msgid "Strategy Game"
