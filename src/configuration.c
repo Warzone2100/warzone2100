@@ -742,6 +742,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("trapCursor", war_GetTrapCursor());
 	setWarzoneKeyNumeric("vsync", war_GetVsync());
 	setWarzoneKeyNumeric("textureSize", getTextureSize());
+	setWarzoneKeyNumeric("rotateRadar", rotateRadar);
 	setWarzoneKeyNumeric("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	setWarzoneKeyNumeric("ColouredCursor", war_GetColouredCursor());
 	setWarzoneKeyString("masterserver_name", NETgetMasterserverName());

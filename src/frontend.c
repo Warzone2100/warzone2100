@@ -50,6 +50,7 @@
 #include "multiint.h"
 #include "multilimit.h"
 #include "multiplay.h"
+#include "radar.h"
 #include "seqdisp.h"
 #include "texture.h"
 #include "version.h"
@@ -1169,6 +1170,10 @@ static BOOL startGameOptionsMenu(void)
 	widgSetButtonState(psWScreen, FE_P0 + playercolor, WBUT_LOCK);
 	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour"), 0);
 
+	// Radar
+	addTextButton(FRONTEND_RADAR, FRONTEND_POS6X - 25, FRONTEND_POS6Y, _("Radar"), 0);
+	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS6M - 25, FRONTEND_POS6Y, rotateRadar ? _("Rotating") : _("Fixed"), 0);
+
 	// Quit
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
@@ -1213,6 +1218,12 @@ BOOL runGameOptionsMenu(void)
 			break;
 		}
 		break;
+
+	case FRONTEND_RADAR_R:
+		rotateRadar = !rotateRadar;
+		widgSetString(psWScreen, FRONTEND_RADAR_R, rotateRadar ? _("Rotating") : _("Fixed"));
+		break;
+
 	case FRONTEND_SCROLLSPEED:
 		break;
 
