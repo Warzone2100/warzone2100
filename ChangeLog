@@ -1,9 +1,46 @@
-2010-__-__: Version 2.3.2
+2010-07-25: Version 2.3.2
+ * General:
+   * Change: Save settings when closing the window, not only when quitting with the menu (r11128)
+   * Change: Save screenshots as PNG and JPG (r11131, r11201)
+   * Change: Use the desktop resolution by default instead of 640x480 (r10981)
+   * Change: Make sure to use at least 640x480 (r11250)
+   * Change: Add descriptions for the included Challenges (r11181)
+   * Change: Show burning oil wells burning on the radar instead of pulsing (r11263)
+   * Change: Show cliffs (impassable tiles) on the radar (r11264)
+   * Change: Add an option to select fixed or rotating radar (r11286)
+   * Change: Make the fixed radar have a constant distance from the border (r10972)
+   * Change: Make the fixed radar unblurred at full zoom steps (r11130)
+   * Fix: Don't crash when hitting features with 0 hitpoints (r11186, r11280)
+   * Fix: Make fire damage independent of frame rate, fixes armor calculations (r11015)
+   * Fix: Initialize the radar and video textures to black (r10987)
+   * Fix: Correctly clean up destroyed features (r10994)
+   * Fix: Correct unit destinations (r11193)
+   * Fix: Unit count in debug mode (r11030)
+   * Fix: Don't play overlapping sounds in the intelligence window (r11147)
+   * Fix: Make the Debian packaging scripts work again (r11266
  * UI:
-   * Fix: Fix broken text alignment in Mac OS X. (r11231)
- * Map:
-   * Fix: Fix a missing cliff tile on 8c-Wheel (r11145, ticket:1935)
+   * Change: Add an option to rotate with the middle mouse button, or left and right together (r11224)
+   * Change: Don't show "Sk-" and "-T1" in the map chooser (r11112, r11202, r11206)
+   * Change: Draw the hints in the option menus smaller at the top (r11129)
+   * Fix: Fix broken text alignment in Mac OS X (r11231)
+   * Fix: Make sure all menus return to the previous one, and that escape works in all of them (r11011, r11014)
+   * Fix: Correctly align the map chooser close button (r11132)
+   * Fix: Transporter ETA image (r11271)
+   * Fix: Show complete game name in the lobby tooltip (r11276)
+ * Multiplayer:
+   * Change: Update sync timings (r11016)
+   * Fix: Don't crash when trying to join a full game (r11051)
+   * Fix: Prevent a possible crash when a player drops (r11273)
+   * Fix: Make sure everyone sees quitting players (r11111)
+   * Fix: Make player position and color changes atomic, to prevent inconsistencies (r11272)
+   * Fix: Receiving the game list from the lobby server (r11257, r11265)
+   * Fix: Byte and packet counts in the net logs (r11065)
+ * Maps:
    * Change: 2c-Startup rebalanced, files replaced with the files from 2c-startup2 (r11145)
+   * Change: New four player map Pyramidal by Mysteryem (r11190)
+   * Fix: Add a missing cliff tile on 8c-Wheel (r11145, ticket:1935)
+ * Translations:
+   * Updated: Croatian (r11162), German (r11220, r11281, r11288)
 
 2010-06-13: Version 2.3.1
  * General:
