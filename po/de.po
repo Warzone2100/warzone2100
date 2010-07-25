@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-07-24 01:24+0200\n"
-"PO-Revision-Date: 2010-07-17 11:21+0200\n"
+"PO-Revision-Date: 2010-07-25 15:05+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -12988,21 +12988,20 @@ msgid "Switch Mouse Buttons"
 msgstr "Maustasten vertauschen"
 
 #: src/frontend.c:1002
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Nach links rotieren"
+msgstr "Bildschirm drehen"
 
 #: src/frontend.c:1005
 #: src/frontend.c:1093
 msgctxt "middle mouse button"
 msgid "Middle Button"
-msgstr ""
+msgstr "Mittlere Maustaste"
 
 #: src/frontend.c:1009
 #: src/frontend.c:1088
 msgctxt "right mouse button"
 msgid "Right Button"
-msgstr ""
+msgstr "Rechte Maustaste"
 
 #: src/frontend.c:1013
 msgid "MOUSE OPTIONS"
