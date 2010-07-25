@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-07-25 17:25+0200\n"
-"PO-Revision-Date: 2010-07-25 15:05+0200\n"
+"PO-Revision-Date: 2010-07-25 17:35+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -13047,18 +13047,17 @@ msgstr "Einheitenfarbe"
 
 #: src/frontend.c:1174
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.c:1175
 #: src/frontend.c:1224
-#, fuzzy
 msgid "Rotating"
-msgstr "Nach rechts rotieren"
+msgstr "Drehend"
 
 #: src/frontend.c:1175
 #: src/frontend.c:1224
 msgid "Fixed"
-msgstr ""
+msgstr "Fest"
 
 #: src/frontend.c:1181
 #: src/frontend.c:1201
