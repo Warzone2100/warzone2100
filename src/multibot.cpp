@@ -768,8 +768,8 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 	if (destid == 0 && desttype == 0)
 	{
 		// Don't bother if it is close
-		if (abs(psDroid->pos.x - x) < (TILE_UNITS/2)
-		 && abs(psDroid->pos.y - y) < (TILE_UNITS/2)
+		if (abs(psDroid->pos.x - (int) x) < (TILE_UNITS/2)
+		 && abs(psDroid->pos.y - (int) y) < (TILE_UNITS/2)
 		 && order != DORDER_DISEMBARK)
 		{
 			return;
