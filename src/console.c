@@ -653,11 +653,6 @@ void	displayConsoleMessages( void )
 		MesY = iV_DrawFormattedText(psMessage->text, mainConsole.topX, MesY,
 									mainConsole.width, psMessage->JustifyType);
 
-		if (!bTextBoxActive)
-		{
-			MesY -= 3; // make them fit inside the chat box
-		}
-
 		/* Move on */
 		++numProcessed;
 	}
