@@ -3105,15 +3105,7 @@ SELECTION_TYPE	selectionClass;
 /* Just returns true if the building's present body points aren't 100 percent */
 static BOOL	buildingDamaged(STRUCTURE *psStructure)
 {
-	//if( PERCENT(psStructure->body , psStructure->baseBodyPoints ) < 100)
-	if( PERCENT(psStructure->body , structureBody(psStructure)) < 100)
-	{
-		return(true);
-	}
-	else
-	{
-		return(false);
-	}
+	return psStructure->body < structureBody(psStructure);
 }
 
 /*Looks through the list of selected players droids to see if one is a repair droid*/
