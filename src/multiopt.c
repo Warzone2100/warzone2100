@@ -131,7 +131,7 @@ static BOOL checkGameWdg(const char *nm)
 		    (strncmp(lev->pName, "Sk-", 3) == 0 &&
 		     strcmp(lev->pName+3, nm) == 0) ||
 		    (strncmp(lev->pName, "Sk-", 3) == 0 &&
-		     strcmp(lev->pName+strlen(nm)-3-3, "-T1") &&
+		     strcmp(lev->pName+strlen(nm)-3-3, "-T1") == 0 &&
 		     strncmp(lev->pName+3, nm, strlen(nm)-3) == 0))
 		{
 			return true;
