@@ -942,7 +942,7 @@ void droidUpdate(DROID *psDroid)
 			else
 			{
 				// do burn damage
-				damageToDo = MAX(BURN_DAMAGE - psDroid->armour[HIT_SIDE_FRONT][WC_HEAT], BURN_DAMAGE/3) * ((SDWORD)gameTime - (SDWORD)psDroid->burnStart) /
+				damageToDo = MAX(BURN_DAMAGE - (int32_t)psDroid->armour[HIT_SIDE_FRONT][WC_HEAT], BURN_DAMAGE/3) * ((SDWORD)gameTime - (SDWORD)psDroid->burnStart) /
 								GAME_TICKS_PER_SEC;
 				damageToDo -= (SDWORD)psDroid->burnDamage;
 				if (damageToDo > 20) // enough that DR takes effect
@@ -950,7 +950,8 @@ void droidUpdate(DROID *psDroid)
 					damageToDo -= (damageToDo % 20); // make deterministic
 					psDroid->burnDamage += damageToDo;
 
-					//just assume the burn damage is from FRONT
+					// HIT_SIDE_PIERCE because armor from burn effects is handled externally
+					// To be consistent with vehicle burn, all burn damage is thermal flame damage
 					droidDamage(psDroid, damageToDo, WC_HEAT,WSC_FLAME, HIT_SIDE_PIERCE);
 				}
 			}
