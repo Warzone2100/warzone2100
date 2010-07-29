@@ -172,7 +172,7 @@ void gameTimeUpdate()
 			baseTime = currTime;
 			timeOffset = graphicsTime;
 
-			debug(LOG_NEVER, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7]);
+			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7]);
 			mayUpdate = false;
 
 			NET_PlayerConnectionStatus |= CONNECTIONSTATUS_WAITING_FOR_PLAYER;
@@ -319,7 +319,7 @@ void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWORD *seco
 
 static void updateLatency()
 {
-	uint16_t minWantedLatency = UINT16_MAX;
+	uint16_t maxWantedLatency = 0;
 	unsigned player;
 	uint16_t prevDiscreteChosenLatency = discreteChosenLatency;
 
@@ -329,11 +329,11 @@ static void updateLatency()
 		if (!NetPlay.players[player].kick)  // .kick: Don't wait for dropped players.
 		{
 			//minWantedLatency = MIN(minWantedLatency, wantedLatencies[player]);  // Minimum, so the clients don't increase the latency to try to make one slow computer run faster.
-			minWantedLatency = MAX(minWantedLatency, wantedLatencies[player]);  // Maximum, since the host experiences lower latency than everyone else.
+			maxWantedLatency = MAX(maxWantedLatency, wantedLatencies[player]);  // Maximum, since the host experiences lower latency than everyone else.
 		}
 	}
 	// Adjust the agreed latency. (Can maximum decrease by 15ms or increase by 30ms per update.
-	chosenLatency = chosenLatency + clip(minWantedLatency - chosenLatency, -15, 30);
+	chosenLatency = chosenLatency + clip(maxWantedLatency - chosenLatency, -15, 30);
 	// Round the chosen latency to an integer number of updates, up to 10.
 	discreteChosenLatency = clip((chosenLatency + GAME_TICKS_PER_UPDATE/2)/GAME_TICKS_PER_UPDATE*GAME_TICKS_PER_UPDATE, GAME_TICKS_PER_UPDATE, GAME_TICKS_PER_UPDATE*GAME_UPDATES_PER_SEC);
 	if (prevDiscreteChosenLatency != discreteChosenLatency)
