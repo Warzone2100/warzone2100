@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -338,6 +338,12 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			col.byte.r = sqrtf(col.byte.r * WTile->illumination);
 			col.byte.b = sqrtf(col.byte.b * WTile->illumination);
 			col.byte.g = sqrtf(col.byte.g * WTile->illumination);
+			if (terrainType(WTile) == TER_CLIFFFACE)
+			{
+				col.byte.r /= 2;
+				col.byte.b /= 2;
+				col.byte.g /= 2;
+			}
 			if (!hasSensorOnTile(WTile, selectedPlayer))
 			{
 				col.byte.r /= 2;
@@ -355,6 +361,12 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			col.byte.r = sqrtf(col.byte.r * (WTile->illumination + WTile->height) / 2);
 			col.byte.b = sqrtf(col.byte.b * (WTile->illumination + WTile->height) / 2);
 			col.byte.g = sqrtf(col.byte.g * (WTile->illumination + WTile->height) / 2);
+			if (terrainType(WTile) == TER_CLIFFFACE)
+			{
+				col.byte.r /= 2;
+				col.byte.b /= 2;
+				col.byte.g /= 2;
+			}
 			if (!hasSensorOnTile(WTile, selectedPlayer))
 			{
 				col.byte.r /= 2;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-11 21:09+0200\n"
+"POT-Creation-Date: 2010-07-25 17:24+0200\n"
 "PO-Revision-Date: 2008-05-09 10:33+0000\n"
 "Last-Translator: Lartza <lartza@wippies.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -12445,8 +12445,8 @@ msgstr ""
 msgid "go directly to host screen"
 msgstr ""
 
+#: src/configuration.c:442
 #: src/configuration.c:443
-#: src/configuration.c:444
 #: src/multistat.c:120
 msgid "Player"
 msgstr "Pelaaja"
@@ -12604,30 +12604,30 @@ msgstr "Pelaaja"
 msgid "Player dropped"
 msgstr "Pelaaja"
 
-#: src/display.c:1679
+#: src/display.c:1692
 msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
-#: src/display.c:1859
-#: src/display.c:2462
+#: src/display.c:1872
+#: src/display.c:2475
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Vahinko %d%% - Kokemus %d, %s"
 
-#: src/display.c:1875
+#: src/display.c:1888
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Vahinko %d%% - Kokemus %d, %s"
 
-#: src/display.c:2077
+#: src/display.c:2090
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
-#: src/display.c:2078
+#: src/display.c:2091
 msgid "2 trucks ordered to build Oil Derrick"
 msgstr ""
 
-#: src/display.c:2079
+#: src/display.c:2092
 #, c-format
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr ""
@@ -12708,345 +12708,374 @@ msgstr ""
 msgid "Hero"
 msgstr "Sankari"
 
-#: src/frontend.c:96
+#: src/frontend.c:97
 #, fuzzy
 msgid "Single Player"
 msgstr "Yksinpelikampanja"
 
-#: src/frontend.c:97
+#: src/frontend.c:98
 #, fuzzy
 msgid "Multi Player"
 msgstr "Moninpelikampanja"
 
-#: src/frontend.c:98
-#: src/frontend.c:154
+#: src/frontend.c:99
+#: src/frontend.c:155
 msgid "Tutorial"
 msgstr ""
 
-#: src/frontend.c:99
+#: src/frontend.c:100
 msgid "Options"
 msgstr "Asetukset"
 
-#: src/frontend.c:100
+#: src/frontend.c:101
 msgid "View Intro"
 msgstr ""
 
-#: src/frontend.c:102
+#: src/frontend.c:103
 msgid "Quit Game"
 msgstr "Poistu pelistä"
 
-#: src/frontend.c:104
+#: src/frontend.c:105
 msgid "MAIN MENU"
 msgstr "PÄÄVALIKKO"
 
-#: src/frontend.c:155
+#: src/frontend.c:156
 msgid "Fast Play"
 msgstr ""
 
-#: src/frontend.c:156
+#: src/frontend.c:157
 msgid "TUTORIALS"
 msgstr ""
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:158
-#: src/frontend.c:217
-#: src/frontend.c:351
-#: src/frontend.c:418
-#: src/frontend.c:552
-#: src/frontend.c:688
-#: src/frontend.c:795
-#: src/frontend.c:1002
-#: src/frontend.c:1145
+#: src/frontend.c:159
+#: src/frontend.c:218
+#: src/frontend.c:361
+#: src/frontend.c:428
+#: src/frontend.c:562
+#: src/frontend.c:698
+#: src/frontend.c:805
+#: src/frontend.c:1024
+#: src/frontend.c:1185
 msgctxt "menu"
 msgid "Return"
 msgstr "Palaa"
 
-#: src/frontend.c:211
+#: src/frontend.c:212
 msgid "New Campaign"
 msgstr "Uusi kampanja"
 
-#: src/frontend.c:212
+#: src/frontend.c:213
 msgid "Start Skirmish Game"
 msgstr ""
 
-#: src/frontend.c:213
+#: src/frontend.c:214
 msgid "Challenges"
 msgstr ""
 
-#: src/frontend.c:214
+#: src/frontend.c:215
 #: src/ingameop.c:293
 msgid "Load Game"
 msgstr "Lataa peli"
 
-#: src/frontend.c:216
+#: src/frontend.c:217
 msgid "SINGLE PLAYER"
 msgstr "YKSINPELI"
 
-#: src/frontend.c:294
+#: src/frontend.c:302
 #: src/ingameop.c:519
 #: src/mission.c:2534
 #: src/mission.c:2639
 msgid "Load Saved Game"
 msgstr "Lataa tallennettu peli"
 
-#: src/frontend.c:346
+#: src/frontend.c:356
 msgid "MULTI PLAYER"
 msgstr "MONINPELI"
 
-#: src/frontend.c:348
+#: src/frontend.c:358
 msgid "Host Game"
 msgstr ""
 
-#: src/frontend.c:349
+#: src/frontend.c:359
 msgid "Join Game"
 msgstr "Liity peliin"
 
-#: src/frontend.c:411
+#: src/frontend.c:421
 #: src/multiint.c:1136
 msgid "OPTIONS"
 msgstr "ASETUKSET"
 
-#: src/frontend.c:412
+#: src/frontend.c:422
 msgid "Game Options"
 msgstr "Peliasetukset"
 
-#: src/frontend.c:413
+#: src/frontend.c:423
 msgid "Graphics Options"
 msgstr ""
 
-#: src/frontend.c:414
+#: src/frontend.c:424
 #, fuzzy
 msgid "Video Options"
 msgstr "Peliasetukset"
 
-#: src/frontend.c:415
+#: src/frontend.c:425
 #: src/ingameop.c:288
 msgid "Audio Options"
 msgstr ""
 
-#: src/frontend.c:416
+#: src/frontend.c:426
 #, fuzzy
 msgid "Mouse Options"
 msgstr "Peliasetukset"
 
-#: src/frontend.c:417
+#: src/frontend.c:427
 msgid "Key Mappings"
 msgstr ""
 
-#: src/frontend.c:479
+#: src/frontend.c:489
 msgid "Video Playback"
 msgstr ""
 
-#: src/frontend.c:483
-#: src/frontend.c:642
+#: src/frontend.c:493
+#: src/frontend.c:652
 msgid "1X"
 msgstr ""
 
-#: src/frontend.c:487
-#: src/frontend.c:632
+#: src/frontend.c:497
+#: src/frontend.c:642
 msgid "2X"
 msgstr ""
 
-#: src/frontend.c:491
-#: src/frontend.c:637
-#: src/frontend.c:763
-#: src/frontend.c:817
+#: src/frontend.c:501
+#: src/frontend.c:647
+#: src/frontend.c:773
+#: src/frontend.c:827
 msgid "Fullscreen"
 msgstr "Kokoruutu"
 
-#: src/frontend.c:501
+#: src/frontend.c:511
 msgid "Screen Shake"
 msgstr "Ruudn tärinä"
 
-#: src/frontend.c:504
-#: src/frontend.c:532
-#: src/frontend.c:540
-#: src/frontend.c:575
-#: src/frontend.c:609
-#: src/frontend.c:618
-#: src/frontend.c:784
-#: src/frontend.c:878
-#: src/frontend.c:916
-#: src/frontend.c:955
-#: src/frontend.c:967
-#: src/frontend.c:979
-#: src/frontend.c:991
-#: src/frontend.c:1024
-#: src/frontend.c:1037
-#: src/frontend.c:1051
-#: src/frontend.c:1065
+#: src/frontend.c:514
+#: src/frontend.c:542
+#: src/frontend.c:550
+#: src/frontend.c:585
+#: src/frontend.c:619
+#: src/frontend.c:628
+#: src/frontend.c:794
+#: src/frontend.c:888
+#: src/frontend.c:926
+#: src/frontend.c:965
+#: src/frontend.c:977
+#: src/frontend.c:989
+#: src/frontend.c:1001
+#: src/frontend.c:1046
+#: src/frontend.c:1059
+#: src/frontend.c:1073
+#: src/frontend.c:1087
 msgid "On"
 msgstr "Päällä"
 
-#: src/frontend.c:508
-#: src/frontend.c:528
-#: src/frontend.c:544
-#: src/frontend.c:570
-#: src/frontend.c:604
-#: src/frontend.c:622
-#: src/frontend.c:788
-#: src/frontend.c:873
-#: src/frontend.c:911
-#: src/frontend.c:959
-#: src/frontend.c:971
-#: src/frontend.c:983
-#: src/frontend.c:995
-#: src/frontend.c:1019
-#: src/frontend.c:1032
-#: src/frontend.c:1046
-#: src/frontend.c:1060
+#: src/frontend.c:518
+#: src/frontend.c:538
+#: src/frontend.c:554
+#: src/frontend.c:580
+#: src/frontend.c:614
+#: src/frontend.c:632
+#: src/frontend.c:798
+#: src/frontend.c:883
+#: src/frontend.c:921
+#: src/frontend.c:969
+#: src/frontend.c:981
+#: src/frontend.c:993
+#: src/frontend.c:1005
+#: src/frontend.c:1041
+#: src/frontend.c:1054
+#: src/frontend.c:1068
+#: src/frontend.c:1082
 msgid "Off"
 msgstr "Pois päältä"
 
-#: src/frontend.c:513
+#: src/frontend.c:523
 #: src/multiint.c:1205
 msgid "Fog"
 msgstr "Sumu"
 
-#: src/frontend.c:516
-#: src/frontend.c:591
+#: src/frontend.c:526
+#: src/frontend.c:601
 msgid "Mist"
 msgstr ""
 
-#: src/frontend.c:520
-#: src/frontend.c:585
+#: src/frontend.c:530
+#: src/frontend.c:595
 #: src/multiint.c:1207
 msgid "Fog Of War"
 msgstr ""
 
-#: src/frontend.c:525
+#: src/frontend.c:535
 msgid "Subtitles"
 msgstr "Tekstitykset"
 
-#: src/frontend.c:537
+#: src/frontend.c:547
 msgid "Shadows"
 msgstr "Varjot"
 
-#: src/frontend.c:548
+#: src/frontend.c:558
 #, fuzzy
 msgid "GRAPHICS OPTIONS"
 msgstr "PELIASETUKSET"
 
-#: src/frontend.c:676
+#: src/frontend.c:686
 #: src/ingameop.c:177
 msgid "Voice Volume"
 msgstr ""
 
-#: src/frontend.c:680
+#: src/frontend.c:690
 #: src/ingameop.c:182
 msgid "FX Volume"
 msgstr ""
 
-#: src/frontend.c:684
+#: src/frontend.c:694
 #: src/ingameop.c:187
 msgid "Music Volume"
 msgstr ""
 
-#: src/frontend.c:691
+#: src/frontend.c:701
 #, fuzzy
 msgid "AUDIO OPTIONS"
 msgstr "PELIASETUKSET"
 
-#: src/frontend.c:756
+#: src/frontend.c:766
 msgid "* Takes effect on game restart"
 msgstr ""
 
-#: src/frontend.c:759
+#: src/frontend.c:769
 msgid "Graphics Mode*"
 msgstr ""
 
-#: src/frontend.c:767
-#: src/frontend.c:812
+#: src/frontend.c:777
+#: src/frontend.c:822
 msgid "Windowed"
 msgstr "Ikkunoitu"
 
-#: src/frontend.c:771
+#: src/frontend.c:781
 msgid "Resolution*"
 msgstr "Resoluutio*"
 
-#: src/frontend.c:776
+#: src/frontend.c:786
 msgid "Texture size"
 msgstr ""
 
-#: src/frontend.c:780
+#: src/frontend.c:790
 msgid "Vertical sync*"
 msgstr ""
 
-#: src/frontend.c:792
+#: src/frontend.c:802
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "PELIASETUKSET"
 
-#: src/frontend.c:948
+#: src/frontend.c:958
 msgid "* May negatively affect performance"
 msgstr ""
 
-#: src/frontend.c:952
+#: src/frontend.c:962
 msgid "Reverse Rotation"
 msgstr ""
 
-#: src/frontend.c:963
+#: src/frontend.c:973
 msgid "Trap Cursor"
 msgstr ""
 
-#: src/frontend.c:975
+#: src/frontend.c:985
 msgid "Colored Cursors*"
 msgstr ""
 
-#: src/frontend.c:988
+#: src/frontend.c:998
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Peliasetukset"
 
-#: src/frontend.c:999
+#: src/frontend.c:1010
+msgid "Rotate Screen"
+msgstr ""
+
+#: src/frontend.c:1013
+#: src/frontend.c:1101
+msgid "Middle Mouse"
+msgstr ""
+
+#: src/frontend.c:1017
+#: src/frontend.c:1096
+msgid "Right Mouse"
+msgstr ""
+
+#: src/frontend.c:1021
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "PELIASETUKSET"
 
-#: src/frontend.c:1100
-#: src/frontend.c:1166
+#: src/frontend.c:1136
+#: src/frontend.c:1206
 msgid "Difficulty"
 msgstr "Vaikeustaso"
 
-#: src/frontend.c:1104
-#: src/frontend.c:1174
-#: src/frontend.c:1205
+#: src/frontend.c:1140
+#: src/frontend.c:1214
+#: src/frontend.c:1251
 msgid "Easy"
 msgstr "Helppo"
 
-#: src/frontend.c:1107
-#: src/frontend.c:1177
-#: src/frontend.c:1197
+#: src/frontend.c:1143
+#: src/frontend.c:1217
+#: src/frontend.c:1243
 msgid "Normal"
 msgstr ""
 
-#: src/frontend.c:1111
-#: src/frontend.c:1180
-#: src/frontend.c:1201
+#: src/frontend.c:1147
+#: src/frontend.c:1220
+#: src/frontend.c:1247
 msgid "Hard"
 msgstr "Vaikea"
 
-#: src/frontend.c:1116
-#: src/frontend.c:1167
+#: src/frontend.c:1152
+#: src/frontend.c:1207
 msgid "Scroll Speed"
 msgstr "Vieritysnopeus"
 
-#: src/frontend.c:1130
-#: src/frontend.c:1164
+#: src/frontend.c:1166
+#: src/frontend.c:1204
 msgid "Language"
 msgstr "Kieli"
 
-#: src/frontend.c:1142
-#: src/frontend.c:1165
+#: src/frontend.c:1178
+#: src/frontend.c:1205
 msgid "Unit Colour"
 msgstr ""
 
-#: src/frontend.c:1148
-#: src/frontend.c:1168
+#: src/frontend.c:1181
+msgid "Radar"
+msgstr ""
+
+#: src/frontend.c:1182
+#: src/frontend.c:1231
+#, fuzzy
+msgid "Rotating"
+msgstr "latina"
+
+#: src/frontend.c:1182
+#: src/frontend.c:1231
+msgid "Fixed"
+msgstr ""
+
+#: src/frontend.c:1188
+#: src/frontend.c:1208
 msgid "GAME OPTIONS"
 msgstr "PELIASETUKSET"
 
-#: src/frontend.c:1294
+#: src/frontend.c:1340
 #: src/multiint.c:2117
 msgid "Mod: "
 msgstr ""
@@ -13166,7 +13195,7 @@ msgid "Exit Game"
 msgstr "Poistu pelistä"
 
 #: src/hci.c:4566
-#: src/intdisplay.c:270
+#: src/intdisplay.c:267
 msgid "Progress Bar"
 msgstr "Edistymispalkki"
 
@@ -13233,16 +13262,16 @@ msgid ""
 "Warzone will try to load the game without it."
 msgstr ""
 
-#: src/intdisplay.c:197
+#: src/intdisplay.c:194
 #, fuzzy
 msgid "Build Progress"
 msgstr "Edistymispalkki"
 
-#: src/intdisplay.c:228
+#: src/intdisplay.c:225
 msgid "Construction Progress"
 msgstr ""
 
-#: src/intdisplay.c:263
+#: src/intdisplay.c:260
 msgid "Power Accrued"
 msgstr ""
 
@@ -14075,8 +14104,8 @@ msgstr "Jatka peliä"
 msgid "GAME SAVED :"
 msgstr "Peli tallennettu"
 
-#: src/move.c:2540
-#: src/move.c:2556
+#: src/move.c:2525
+#: src/move.c:2541
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -14388,17 +14417,17 @@ msgstr ""
 msgid "Players"
 msgstr "Pelaajat"
 
-#: src/multiint.c:3463
+#: src/multiint.c:3464
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3471
+#: src/multiint.c:3472
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3497
+#: src/multiint.c:3498
 msgid "HOST"
 msgstr ""
 
@@ -14872,9 +14901,6 @@ msgstr ""
 
 #~ msgid "Russian"
 #~ msgstr "venäjä"
-
-#~ msgid "Latin"
-#~ msgstr "latina"
 
 #, fuzzy
 #~ msgid "Strategy Game"

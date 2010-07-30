@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -2553,7 +2553,7 @@ BOOL NETfindGame(void)
 	 && socketReadReady(tcp_socket)
 	 && (result = readNoInt(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
 	{
-		gamesavailable = ntohl(gamesavailable);
+		gamesavailable = MIN(ntohl(gamesavailable), ARRAY_SIZE(NetPlay.games));
 	}
 	else
 	{
@@ -2576,7 +2576,10 @@ BOOL NETfindGame(void)
 
 	debug(LOG_NET, "receiving info on %u game(s)", (unsigned int)gamesavailable);
 
-	do
+	// Clear old games from list.
+	memset(NetPlay.games, 0x00, sizeof(NetPlay.games));
+
+	while (gamecount < gamesavailable)
 	{
 		// Attempt to receive a game description structure
 		if (!NETrecvGAMESTRUCT(&NetPlay.games[gamecount]))
@@ -2592,7 +2595,7 @@ BOOL NETfindGame(void)
 		}
 
 		++gamecount;
-	} while (gamecount < gamesavailable);
+	}
 
 	return true;
 }

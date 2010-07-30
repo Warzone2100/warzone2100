@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -3054,15 +3054,7 @@ SELECTION_TYPE	selectionClass;
 /* Just returns true if the building's present body points aren't 100 percent */
 static BOOL	buildingDamaged(STRUCTURE *psStructure)
 {
-	//if( PERCENT(psStructure->body , psStructure->baseBodyPoints ) < 100)
-	if( PERCENT(psStructure->body , structureBody(psStructure)) < 100)
-	{
-		return(true);
-	}
-	else
-	{
-		return(false);
-	}
+	return psStructure->body < structureBody(psStructure);
 }
 
 /*Looks through the list of selected players droids to see if one is a repair droid*/

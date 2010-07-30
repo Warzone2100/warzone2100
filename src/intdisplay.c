@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -91,9 +91,6 @@
 #define buttonIsFlashing(p)  (((W_BUTTON*)p)->state & WBUTS_FLASHON)
 
 #define FORM_OPEN_ANIM_DURATION		(GAME_TICKS_PER_SEC/6) // Time duration for form open/close anims.
-
-//number of pulses in the blip for the radar
-#define NUM_PULSES			3
 
 //the loop default value
 #define DEFAULT_LOOP		1
@@ -3088,6 +3085,11 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 	UDWORD			i;
 	SDWORD width, height;
 	int		x = 0, y = 0;
+	static const uint16_t imagesEnemy[] = {IMAGE_RAD_ENMREAD, IMAGE_RAD_ENM1, IMAGE_RAD_ENM2, IMAGE_RAD_ENM3};
+	static const uint16_t imagesResource[] = {IMAGE_RAD_RESREAD, IMAGE_RAD_RES1, IMAGE_RAD_RES2, IMAGE_RAD_RES3};
+	static const uint16_t imagesArtifact[] = {IMAGE_RAD_ARTREAD, IMAGE_RAD_ART1, IMAGE_RAD_ART2, IMAGE_RAD_ART3};
+	static const uint16_t imagesBurningResource[] = {IMAGE_RAD_BURNRESREAD, IMAGE_RAD_BURNRES1, IMAGE_RAD_BURNRES2, IMAGE_RAD_BURNRES3, IMAGE_RAD_BURNRES4, IMAGE_RAD_BURNRES5, IMAGE_RAD_BURNRES6};
+	static const uint16_t *const imagesProxTypes[] = {imagesEnemy, imagesResource, imagesArtifact};
 
 	// store the width & height of the radar/mini-map
 	width = scrollMaxX - scrollMinX;
@@ -3123,7 +3125,8 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 	/* Go through all the proximity Displays */
 	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL; psProxDisp = psProxDisp->psNext)
 	{
-		PROX_TYPE	proxType;
+		unsigned        animationLength = ARRAY_SIZE(imagesEnemy) - 1;  // Same size as imagesResource and imagesArtifact.
+		const uint16_t *images;
 
 		if (psProxDisp->psMessage->player != selectedPlayer)
 		{
@@ -3132,7 +3135,8 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 
 		if (psProxDisp->type == POS_PROXDATA)
 		{
-			proxType = ((VIEW_PROXIMITY*)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->proxType;
+			PROX_TYPE proxType = ((VIEW_PROXIMITY*)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->proxType;
+			images = imagesProxTypes[proxType];
 		}
 		else
 		{
@@ -3141,32 +3145,33 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 			ASSERT(psFeature && psFeature->psStats, "Bad feature message");
 			if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 			{
-				proxType = PROX_RESOURCE;
+				images = imagesResource;
+				if (fireOnLocation(psFeature->pos.x, psFeature->pos.y))
+				{
+					images = imagesBurningResource;
+					animationLength = ARRAY_SIZE(imagesBurningResource) - 1;  // Longer animation for burning oil wells.
+				}
 			}
 			else
 			{
-				proxType = PROX_ARTEFACT;
+				images = imagesArtifact;
 			}
 		}
 
 		// Draw the 'blips' on the radar - use same timings as radar blips if the message is read - don't animate
 		if (psProxDisp->psMessage->read)
 		{
-			imageID = IMAGE_RAD_ENM3 + (proxType * (NUM_PULSES + 1));
+			imageID = images[0];
 		}
 		else
 		{
 			// Draw animated
-			if ((gameTime2 - psProxDisp->timeLastDrawn) > delay)
+			if (realTime - psProxDisp->timeLastDrawn > delay)
 			{
-				psProxDisp->strobe++;
-				if (psProxDisp->strobe > (NUM_PULSES-1))
-				{
-					psProxDisp->strobe = 0;
-				}
-				psProxDisp->timeLastDrawn = gameTime2;
+				psProxDisp->strobe = (psProxDisp->strobe + 1) % animationLength;
+				psProxDisp->timeLastDrawn = realTime;
 			}
-			imageID = (UWORD)(IMAGE_RAD_ENM1 + psProxDisp->strobe + (proxType * (NUM_PULSES + 1)));
+			imageID = images[1 + psProxDisp->strobe];
 		}
 
 		if (psProxDisp->type == POS_PROXDATA)
@@ -3199,10 +3204,11 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 	}
 	if (audio_GetPreviousQueueTrackRadarBlipPos(&x, &y))
 	{
-		int strobe = (gameTime2/delay)%NUM_PULSES;
+		unsigned        animationLength = ARRAY_SIZE(imagesEnemy) - 1;
+		int             strobe = (realTime/delay) % animationLength;
 		x = (x / TILE_UNITS - scrollMinX) * pixSizeH;
 		y = (y / TILE_UNITS - scrollMinY) * pixSizeV;
-		imageID = (UWORD)(IMAGE_RAD_ENM1 + strobe + (PROX_ENEMY * (NUM_PULSES + 1)));
+		imageID = imagesEnemy[strobe];
 		
 		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
 		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip

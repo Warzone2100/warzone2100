@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -131,8 +131,8 @@ static BOOL checkGameWdg(const char *nm)
 		    (strncmp(lev->pName, "Sk-", 3) == 0 &&
 		     strcmp(lev->pName+3, nm) == 0) ||
 		    (strncmp(lev->pName, "Sk-", 3) == 0 &&
-		     strcmp(lev->pName+strlen(nm)-3-3, "-T1") &&
-		     strncmp(lev->pName+3, nm, strlen(nm)-3) == 0))
+		     strcmp(lev->pName+strlen(nm)+3, "-T1") == 0 &&
+		     strncmp(lev->pName+3, nm, strlen(nm)) == 0))
 		{
 			return true;
 		}

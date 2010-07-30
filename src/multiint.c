@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -3286,7 +3286,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	BOOL Hilight = false;
 	BOOL Down = false;
 	UDWORD	i = psWidget->UserData;
-	char	tmp[8];
+	char	tmp[8], gamename[StringSize];
 	unsigned int ping;
 
 	if (LobbyError != ERROR_NOERROR)
@@ -3377,11 +3377,12 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	}
 
 	//draw game name
-	while(iV_GetTextWidth(NetPlay.games[i].name) > (psWidget->width-110) )
+	sstrcpy(gamename, NetPlay.games[i].name);
+	while(iV_GetTextWidth(gamename) > (psWidget->width-110) )
 	{
-		NetPlay.games[i].name[strlen(NetPlay.games[i].name)-1]='\0';
+		gamename[strlen(gamename)-1]='\0';
 	}
-	iV_DrawText(NetPlay.games[i].name, x + 100, y + 18);	// name
+	iV_DrawText(gamename, x + 100, y + 18);	// name
 
 	iV_SetFont(font_small);											// font
 	iV_DrawText(NetPlay.games[i].versionstring, x + 100, y + 32);	// version

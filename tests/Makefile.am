@@ -5,12 +5,11 @@ BUILT_SOURCES = \
 	maplist.txt
 
 check_PROGRAMS = \
-	astartest \
 	maptest \
 	pointtreetest
 
-astartest_SOURCES = astartest.c ../lib/framework/debug.c
-astartest_LDADD = $(SDL_LIBS)
+#astartest_SOURCES = astartest.c ../lib/framework/debug.c
+#astartest_LDADD = $(SDL_LIBS)
 
 maptest_SOURCES = ../tools/map/mapload.c maptest.c
 noinst_HEADERS = ../tools/map/mapload.h
@@ -23,7 +22,6 @@ CLEANFILES = \
 	$(BUILT_SOURCES)
 
 TESTS = \
-	astartest \
 	maptest \
 	pointtreetest
 

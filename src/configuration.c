@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -740,6 +740,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("trapCursor", war_GetTrapCursor());
 	setWarzoneKeyNumeric("vsync", war_GetVsync());
 	setWarzoneKeyNumeric("textureSize", getTextureSize());
+	setWarzoneKeyNumeric("rotateRadar", rotateRadar);
 	setWarzoneKeyNumeric("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	setWarzoneKeyNumeric("ColouredCursor", war_GetColouredCursor());
 	setWarzoneKeyString("masterserver_name", NETgetMasterserverName());

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@
 #include "multiint.h"
 #include "multilimit.h"
 #include "multiplay.h"
+#include "radar.h"
 #include "seqdisp.h"
 #include "texture.h"
 #include "version.h"
@@ -236,6 +237,27 @@ static void loadOK( void )
 	}
 }
 
+static void SPinit(void)
+{
+	uint8_t playercolor;
+
+	// FIXME: We should do a SPinit() to make sure all the variables are reset correctly.
+	// game.type is switched to SKIRMISH in startMultiOptions()
+	NetPlay.bComms = false;
+	bMultiPlayer = false;
+	bMultiMessages = false;
+	game.type = CAMPAIGN;
+	NET_InitPlayers();
+	NetPlay.players[0].allocated = true;
+	game.skDiff[0] = UBYTE_MAX;
+	// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
+	playercolor = getPlayerColour(0);
+	if (playercolor >= 1 && playercolor <= 3)
+	{
+		setPlayerColour(0,0);  // default is green
+	}
+}
+
 BOOL runSinglePlayerMenu(void)
 {
 	UDWORD id;
@@ -253,48 +275,35 @@ BOOL runSinglePlayerMenu(void)
 	}
 	else
 	{
-		uint8_t playercolor = 0;
-
-		// FIXME: We should do a SPinit() to make sure all the variables are reset correctly.
-		// game.type is switched to SKIRMISH in startMultiOptions()
-		NetPlay.bComms = false;
-		bMultiPlayer = false;
-		bMultiMessages = false;
-		game.type = CAMPAIGN;
-		NET_InitPlayers();
-		NetPlay.players[0].allocated = true;
-		game.skDiff[0] = UBYTE_MAX;
-		// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
-		playercolor = getPlayerColour(0);
-		if (playercolor >= 1 && playercolor <= 3)
-		{
-			setPlayerColour(0,0);		// default is green
-		}
-
 		id = widgRunScreen(psWScreen);						// Run the current set of widgets
 
 		switch(id)
 		{
 			case FRONTEND_NEWGAME:
+				SPinit();
 				frontEndNewGame();
 				break;
 
 			case FRONTEND_LOADCAM2:
+				SPinit();
 				sstrcpy(aLevelName, "CAM_2A");
 				changeTitleMode(STARTGAME);
 				initLoadingScreen(true);
 				break;
 
 			case FRONTEND_LOADCAM3:
+				SPinit();
 				sstrcpy(aLevelName, "CAM_3A");
 				changeTitleMode(STARTGAME);
 				initLoadingScreen(true);
 				break;
 			case FRONTEND_LOADGAME:
+				SPinit();
 				addLoadSave(LOAD_FRONTEND,SaveGamePath,"gam",_("Load Saved Game"));	// change mode when loadsave returns
 				break;
 
 			case FRONTEND_SKIRMISH:
+				SPinit();
 				ingame.bHostSetup = true;
 				lastTitleMode = SINGLE;
 				changeTitleMode(MULTIOPTION);
@@ -305,6 +314,7 @@ BOOL runSinglePlayerMenu(void)
 				break;
 
 			case FRONTEND_CHALLENGES:
+				SPinit();
 				addChallenges();
 				break;
 
@@ -1167,6 +1177,10 @@ static BOOL startGameOptionsMenu(void)
 	widgSetButtonState(psWScreen, FE_P0 + playercolor, WBUT_LOCK);
 	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour"), 0);
 
+	// Radar
+	addTextButton(FRONTEND_RADAR, FRONTEND_POS6X - 25, FRONTEND_POS6Y, _("Radar"), 0);
+	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS6M - 25, FRONTEND_POS6Y, rotateRadar ? _("Rotating") : _("Fixed"), 0);
+
 	// Quit
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
@@ -1211,6 +1225,12 @@ BOOL runGameOptionsMenu(void)
 			break;
 		}
 		break;
+
+	case FRONTEND_RADAR_R:
+		rotateRadar = !rotateRadar;
+		widgSetString(psWScreen, FRONTEND_RADAR_R, rotateRadar ? _("Rotating") : _("Fixed"));
+		break;
+
 	case FRONTEND_SCROLLSPEED:
 		break;
 

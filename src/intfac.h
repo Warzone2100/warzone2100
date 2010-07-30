@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -553,7 +553,14 @@ enum {
 	IMAGE_CURSOR_ATTACH,
 	IMAGE_CURSOR_BRIDGE,
 	IMAGE_CURSOR_BOMB,
-	IMAGE_SLIDER_AI
+	IMAGE_SLIDER_AI,
+	IMAGE_RAD_BURNRESREAD,
+	IMAGE_RAD_BURNRES1,
+	IMAGE_RAD_BURNRES2,
+	IMAGE_RAD_BURNRES3,
+	IMAGE_RAD_BURNRES4,
+	IMAGE_RAD_BURNRES5,
+	IMAGE_RAD_BURNRES6
 };
 
 #ifdef __cplusplus
