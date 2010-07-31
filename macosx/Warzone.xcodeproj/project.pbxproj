@@ -1625,6 +1625,7 @@
 		43C3B9C2118BEBE0000BBE59 /* tone.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tone.c; path = external/libvorbis/lib/tone.c; sourceTree = "<group>"; };
 		43D4861511EE6F6F00997E08 /* DejaVuSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "DejaVuSans-Bold.ttf"; path = "external/fonts/DejaVuSans-Bold.ttf"; sourceTree = "<group>"; };
 		43D4861611EE6F6F00997E08 /* DejaVuSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = DejaVuSans.ttf; path = external/fonts/DejaVuSans.ttf; sourceTree = "<group>"; };
+		43D615DC120488E3004B9630 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43E188F311440CC9000870EB /* tsearch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tsearch.c; path = "external/gettext/gettext-runtime/intl/tsearch.c"; sourceTree = "<group>"; };
 		43E188F411440CC9000870EB /* tsearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tsearch.h; path = "external/gettext/gettext-runtime/intl/tsearch.h"; sourceTree = "<group>"; };
 		43E1897311441009000870EB /* os2compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = os2compat.c; path = "external/gettext/gettext-runtime/intl/os2compat.c"; sourceTree = "<group>"; };
@@ -3702,6 +3703,7 @@
 				zh_TW,
 				et_EE,
 				ga,
+				ko,
 			);
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
@@ -4771,6 +4773,7 @@
 				438BDDF01129DC9A00998660 /* uk_UA */,
 				438BDDF11129DC9A00998660 /* zh_CN */,
 				438BDDF21129DC9A00998660 /* zh_TW */,
+				43D615DC120488E3004B9630 /* ko */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
