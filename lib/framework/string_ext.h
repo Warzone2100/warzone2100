@@ -50,7 +50,7 @@ static inline char *strdup2(const char *s, char *fileName, int line)
 	(void)debug_MEMCHKOFF();
 	result = (char*)malloc(strlen(s) + 1);
 	(void)debug_MEMCHKON();
-	debug(LOG_NEVER, "allocator toggled in %s %d",fileName,line);
+
 	if (result == (char*)0)
 		return (char*)0;
 	strcpy(result, s); 
