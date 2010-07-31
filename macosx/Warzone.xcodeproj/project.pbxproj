@@ -1556,6 +1556,7 @@
 		439A28B7114F2E14004F1266 /* zh_TW */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh_TW; path = zh_TW.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43BB94E211ED898E00F0C9E5 /* jpeg_encoder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jpeg_encoder.c; path = ../lib/ivis_common/jpeg_encoder.c; sourceTree = SOURCE_ROOT; };
 		43BB94E311ED898E00F0C9E5 /* jpeg_encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jpeg_encoder.h; path = ../lib/ivis_common/jpeg_encoder.h; sourceTree = SOURCE_ROOT; };
+		43D6166E12048CDE004B9630 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43F3005510D344AF00707B6E /* analyze.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = analyze.c; path = external/libtheora/lib/analyze.c; sourceTree = "<group>"; };
 		43F3005610D344AF00707B6E /* apiwrapper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = apiwrapper.c; path = external/libtheora/lib/apiwrapper.c; sourceTree = "<group>"; };
 		43F3005710D344AF00707B6E /* apiwrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apiwrapper.h; path = external/libtheora/lib/apiwrapper.h; sourceTree = "<group>"; };
@@ -3469,6 +3470,7 @@
 				uk_UA,
 				zh_CN,
 				zh_TW,
+				ko,
 			);
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
@@ -4519,6 +4521,7 @@
 				439A28B5114F2E14004F1266 /* uk_UA */,
 				439A28B6114F2E14004F1266 /* zh_CN */,
 				439A28B7114F2E14004F1266 /* zh_TW */,
+				43D6166E12048CDE004B9630 /* ko */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
