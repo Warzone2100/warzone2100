@@ -667,7 +667,7 @@
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h",
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c",
 			);
-			script = "configs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}\".tab.c \"${INPUT_FILE_PATH}\" || exit 1";
+			script = "configs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_PATH}\"\nexit ${?}";
 		};
 		0246AA730BD3E47F004D1C70 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -676,8 +676,9 @@
 			isEditable = 1;
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.c",
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.h",
 			);
-			script = "cd \"${DERIVED_FILES_DIR}\" || exit 1\nflex -o\"${INPUT_FILE_BASE}\".lex.c \"${INPUT_FILE_PATH}\" || exit 1";
+			script = "flex --outfile=\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.c\" --header-file=\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.lex.h\" \"${INPUT_FILE_PATH}\"\nexit ${?}";
 		};
 /* End PBXBuildRule section */
 
@@ -1667,6 +1668,7 @@
 		43C18FAC114FF38B0028741B /* netsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netsocket.cpp; path = ../lib/netplay/netsocket.cpp; sourceTree = SOURCE_ROOT; };
 		43C18FAD114FF38B0028741B /* netsocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netsocket.h; path = ../lib/netplay/netsocket.h; sourceTree = SOURCE_ROOT; };
 		43C18FAF114FF38B0028741B /* nettypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nettypes.h; path = ../lib/netplay/nettypes.h; sourceTree = SOURCE_ROOT; };
+		43D6163212048C6E004B9630 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43E188F311440CC9000870EB /* tsearch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tsearch.c; path = "external/gettext/gettext-runtime/intl/tsearch.c"; sourceTree = "<group>"; };
 		43E188F411440CC9000870EB /* tsearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tsearch.h; path = "external/gettext/gettext-runtime/intl/tsearch.h"; sourceTree = "<group>"; };
 		43E1897311441009000870EB /* os2compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = os2compat.c; path = "external/gettext/gettext-runtime/intl/os2compat.c"; sourceTree = "<group>"; };
@@ -3747,6 +3749,7 @@
 				zh_TW,
 				et_EE,
 				ga,
+				ko,
 			);
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
@@ -4818,6 +4821,7 @@
 				438BDDF01129DC9A00998660 /* uk_UA */,
 				438BDDF11129DC9A00998660 /* zh_CN */,
 				438BDDF21129DC9A00998660 /* zh_TW */,
+				43D6163212048C6E004B9630 /* ko */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
