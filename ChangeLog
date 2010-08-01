@@ -1,3 +1,13 @@
+2010-08-01: Version 2.3.3
+ * General:
+   * Fix: Prevent out of bounds access of player stat arrays that would corrupt random memory (r11322, ticket:2029)
+   * Fix: Burn damage calculations (r11303)
+ * UI:
+   * Revert: Don't show "Sk-" and "-T1" in the map chooser (r11112, r11202, r11206) 
+ * Translations:
+   * New: Korean (r11349)
+   * Updated: Polish (r11348)
+
 2010-07-25: Version 2.3.2
  * General:
    * Change: Save settings when closing the window, not only when quitting with the menu (r11128)
