@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:25+0200\n"
-"PO-Revision-Date: 2010-05-28 10:43+0100\n"
+"POT-Creation-Date: 2010-08-01 14:21+0200\n"
+"PO-Revision-Date: 2010-07-26 09:40+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -12445,7 +12445,7 @@ msgstr "Idź od razu na ekran hosta"
 
 #: src/configuration.c:452
 #: src/configuration.c:453
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "Gracz"
 
@@ -12621,11 +12621,11 @@ msgstr "Rozkazano budowniczemu zbudować Rafinerię"
 msgid "Unit Lost!"
 msgstr "Jednostka utracona!"
 
-#: src/droid.c:1601
+#: src/droid.c:1602
 msgid "Structure Restored"
 msgstr "Struktura odbudowana"
 
-#: src/droid.c:3349
+#: src/droid.c:3350
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -12633,7 +12633,7 @@ msgstr[0] "Wybrana grupa %u -  %u jednostka"
 msgstr[1] "Wybrana grupa %u -  %u jednostki"
 msgstr[2] "Wybrana grupa %u -  %u jednostek"
 
-#: src/droid.c:3362
+#: src/droid.c:3363
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -12641,7 +12641,7 @@ msgstr[0] "%u jednostka przypisana do Grupy %u"
 msgstr[1] "%u jednostki przypisane do Grupy %u"
 msgstr[2] "%u jednostek przypisano do Grupy %u"
 
-#: src/droid.c:3375
+#: src/droid.c:3376
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -12649,7 +12649,7 @@ msgstr[0] "Wyśrodkowano na grupie %u - %u jednostka"
 msgstr[1] "Wyśrodkowano na grupie %u - %u jednostki"
 msgstr[2] "Wyśrodkowano na grupie %u - %u jednostek"
 
-#: src/droid.c:3379
+#: src/droid.c:3380
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -12658,40 +12658,40 @@ msgstr[1] "Wyrównanie z grupą %u - %u jednostki"
 msgstr[2] "Wyrównanie z grupą %u - %u jednostek"
 
 # I had really trouble with this one. This word has no meaning in Polish so I decided to translate it as 'Newbe'
-#: src/droid.c:3642
+#: src/droid.c:3643
 msgid "Rookie"
 msgstr "Nowicjusz"
 
-#: src/droid.c:3643
+#: src/droid.c:3644
 msgctxt "rank"
 msgid "Green"
 msgstr "Zielony"
 
-#: src/droid.c:3644
+#: src/droid.c:3645
 msgid "Trained"
 msgstr "Wyszkolony"
 
-#: src/droid.c:3645
+#: src/droid.c:3646
 msgid "Regular"
 msgstr "Zawodowy"
 
-#: src/droid.c:3646
+#: src/droid.c:3647
 msgid "Professional"
 msgstr "Profesjonalny"
 
-#: src/droid.c:3647
+#: src/droid.c:3648
 msgid "Veteran"
 msgstr "Weteran"
 
-#: src/droid.c:3648
+#: src/droid.c:3649
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3649
+#: src/droid.c:3650
 msgid "Special"
 msgstr "Specjalny"
 
-#: src/droid.c:3650
+#: src/droid.c:3651
 msgid "Hero"
 msgstr "Bohater"
 
@@ -12979,21 +12979,20 @@ msgid "Switch Mouse Buttons"
 msgstr "Odwróć przyciski"
 
 #: src/frontend.c:1003
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Obrót w lewo"
+msgstr "Obracanie ekranu"
 
 #: src/frontend.c:1006
 #: src/frontend.c:1094
 msgctxt "middle mouse button"
 msgid "Middle Button"
-msgstr ""
+msgstr "Środkowy przycisk"
 
 #: src/frontend.c:1010
 #: src/frontend.c:1089
 msgctxt "right mouse button"
 msgid "Right Button"
-msgstr ""
+msgstr "Prawy przycisk"
 
 #: src/frontend.c:1014
 msgid "MOUSE OPTIONS"
@@ -13039,18 +13038,17 @@ msgstr "Kolor jednostek"
 
 #: src/frontend.c:1174
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.c:1175
 #: src/frontend.c:1224
-#, fuzzy
 msgid "Rotating"
-msgstr "Obrót w prawo"
+msgstr "Obracający się"
 
 #: src/frontend.c:1175
 #: src/frontend.c:1224
 msgid "Fixed"
-msgstr ""
+msgstr "Nieruchomy"
 
 #: src/frontend.c:1181
 #: src/frontend.c:1201
@@ -14688,12 +14686,12 @@ msgstr "ZWYCIĘŻYŁEŚ!"
 msgid "YOU WERE DEFEATED!"
 msgstr "ZOSTAŁEŚ POKONANY!"
 
-#: src/scriptfuncs.c:10088
+#: src/scriptfuncs.c:10089
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sygnał otrzymany od %s!"
 
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10135
 #, c-format
 msgid "Beacon %d"
 msgstr "Sygnał %d"
@@ -14818,78 +14816,3 @@ msgstr " - Zbudowana %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Wersja %s%s%s%s"
-
-#~ msgid "Czech"
-#~ msgstr "Czeski"
-
-#~ msgid "Danish"
-#~ msgstr "Duński"
-
-#~ msgid "German"
-#~ msgstr "Niemiecki"
-
-#~ msgid "English (United Kingdom)"
-#~ msgstr "Angielski (Wlk. Brytania)"
-
-#~ msgid "Spanish"
-#~ msgstr "Hiszpański"
-
-#~ msgid "Estonian"
-#~ msgstr "Estoński"
-
-#~ msgid "Finnish"
-#~ msgstr "Fiński"
-
-#~ msgid "French"
-#~ msgstr "Francuski"
-
-#~ msgid "Frisian"
-#~ msgstr "Frisian"
-
-#~ msgid "Irish"
-#~ msgstr "Irlański"
-
-#~ msgid "Croatian"
-#~ msgstr "Chorwacki"
-
-#~ msgid "Italian"
-#~ msgstr "Włoski"
-
-#~ msgid "Lithuanian"
-#~ msgstr "Litewski"
-
-#~ msgid "Norwegian"
-#~ msgstr "Norweski"
-
-#~ msgid "Dutch"
-#~ msgstr "Holenderski"
-
-#~ msgid "Polish"
-#~ msgstr "Polski"
-
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Portugalski (Brazylia)"
-
-#~ msgid "Portuguese"
-#~ msgstr "Portugalski"
-
-#~ msgid "Romanian"
-#~ msgstr "Rumuński"
-
-#~ msgid "Russian"
-#~ msgstr "Rosyjski"
-
-#~ msgid "Slovenian"
-#~ msgstr "Słoweński"
-
-#~ msgid "Ukrainian"
-#~ msgstr "Ukraiński"
-
-#~ msgid "Simplified Chinese"
-#~ msgstr "Uproszczony chiński"
-
-#~ msgid "Traditional Chinese"
-#~ msgstr "Chiński tradycyjny"
-
-#~ msgid "Latin"
-#~ msgstr "Łacina"
