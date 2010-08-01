@@ -501,7 +501,7 @@ BOOL recvDroidMove()
 		}
 		if (!IdToDroid(droid, player, &psDroid))
 		{
-			debug(LOG_ERROR, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
+			debug(LOG_NEVER, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
 				NETgetSource(), droid, isHumanPlayer(player) ? "Human" : "AI", player);
 			return false;
 		}
@@ -868,7 +868,7 @@ BOOL recvGroupOrder()
 		// Retrieve the droid associated with the current ID
 		if (!IdToDroid(droidIDs[i], ANYPLAYER, &psDroid))
 		{
-			debug(LOG_ERROR, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
+			debug(LOG_NEVER, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
 				NETgetSource(), droidIDs[i], isHumanPlayer(player) ? "Human" : "AI", player);
 			continue; // continue working on next droid; crossing fingers...
 		}
@@ -979,7 +979,7 @@ BOOL recvDroidInfo()
 
 		if (!IdToDroid(droidId, ANYPLAYER, &psDroid))
 		{
-			debug(LOG_ERROR, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
+			debug(LOG_NEVER, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
 				NETgetSource(), droidId, isHumanPlayer(player) ? "Human" : "AI", player);
 			return false;
 		}

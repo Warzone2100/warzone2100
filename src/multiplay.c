@@ -1553,7 +1553,7 @@ BOOL recvDestroyFeature()
 	pF = IdToFeature(id,ANYPLAYER);
 	if (pF == NULL)
 	{
-	debug(LOG_WARNING, "feature id %d not found? (sync error?)", id);
+		debug(LOG_FEATURE, "feature id %d not found (probably already destroyed)", id);
 		return false;
 	}
 
