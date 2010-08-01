@@ -11,14 +11,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:25+0200\n"
+"POT-Creation-Date: 2010-07-31 21:33-0400\n"
 "PO-Revision-Date: 2010-07-25 17:35+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
@@ -12308,7 +12308,7 @@ msgstr "Konnte nicht mit Lobbyserver kommunizieren! Ist der TCP-Port %u für aus
 #: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1366
+#: src/multimenu.c:1356
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12460,7 +12460,7 @@ msgstr "Direkt zum Spielleiterschirm"
 
 #: src/configuration.c:452
 #: src/configuration.c:453
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "Spieler"
 
@@ -12636,72 +12636,72 @@ msgstr "LKW wurde beauftragt, einen Ölbohrturm zu bauen"
 msgid "Unit Lost!"
 msgstr "Einheit verloren!"
 
-#: src/droid.c:1601
+#: src/droid.c:1602
 msgid "Structure Restored"
 msgstr "Gebäude wiederhergestellt"
 
-#: src/droid.c:3349
+#: src/droid.c:3350
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppe %u ausgewählt - %u Einheit"
 msgstr[1] "Gruppe %u ausgewählt - %u Einheiten"
 
-#: src/droid.c:3362
+#: src/droid.c:3363
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u Einheit zur Gruppe %u hinzugefügt"
 msgstr[1] "%u Einheiten zur Gruppe %u hinzugefügt"
 
-#: src/droid.c:3375
+#: src/droid.c:3376
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Auf Gruppe %u zentriert - %u Einheit"
 msgstr[1] "Auf Gruppe %u zentriert - %u Einheiten"
 
-#: src/droid.c:3379
+#: src/droid.c:3380
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "An Gruppe %u ausgerichtet - %u Einheit"
 msgstr[1] "An Gruppe %u ausgerichtet - %u Einheiten"
 
-#: src/droid.c:3642
+#: src/droid.c:3643
 msgid "Rookie"
 msgstr "Anfänger"
 
-#: src/droid.c:3643
+#: src/droid.c:3644
 msgctxt "rank"
 msgid "Green"
 msgstr "Neuling"
 
-#: src/droid.c:3644
+#: src/droid.c:3645
 msgid "Trained"
 msgstr "Geübter"
 
-#: src/droid.c:3645
+#: src/droid.c:3646
 msgid "Regular"
 msgstr "Durchschnitt"
 
-#: src/droid.c:3646
+#: src/droid.c:3647
 msgid "Professional"
 msgstr "Profi"
 
-#: src/droid.c:3647
+#: src/droid.c:3648
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3648
+#: src/droid.c:3649
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3649
+#: src/droid.c:3650
 msgid "Special"
 msgstr "Spezialist"
 
-#: src/droid.c:3650
+#: src/droid.c:3651
 msgid "Hero"
 msgstr "Held"
 
@@ -13126,7 +13126,7 @@ msgstr "Konstruktionsmenü"
 
 #: src/hci.c:3882
 #: src/multiint.c:1257
-#: src/multimenu.c:773
+#: src/multimenu.c:763
 msgid "Power"
 msgstr "Energie"
 
@@ -14260,7 +14260,7 @@ msgid "Distance Fog"
 msgstr "Entfernungsnebel"
 
 #: src/multiint.c:1224
-#: src/multimenu.c:766
+#: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Bündnisse"
 
@@ -14447,72 +14447,72 @@ msgstr "Standardwerte nehmen und zum vorherigen Bildschirm zurückkehren"
 msgid "Limits reset to default values"
 msgstr "Begrenzungen auf Standardwerte zurückgesetzt"
 
-#: src/multimenu.c:619
+#: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Technologiestufe 1"
 
-#: src/multimenu.c:627
+#: src/multimenu.c:617
 msgid "Technology level 2"
 msgstr "Technologiestufe 2"
 
-#: src/multimenu.c:633
+#: src/multimenu.c:623
 msgid "Technology level 3"
 msgstr "Technologiestufe 3"
 
-#: src/multimenu.c:639
+#: src/multimenu.c:629
 msgid "Any number of players"
 msgstr "Beliebige Spielerzahl"
 
-#: src/multimenu.c:646
+#: src/multimenu.c:636
 msgid "2 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.c:652
+#: src/multimenu.c:642
 msgid "4 players"
 msgstr "4 Spieler"
 
-#: src/multimenu.c:658
+#: src/multimenu.c:648
 msgid "8 players"
 msgstr "8 Spieler"
 
-#: src/multimenu.c:767
+#: src/multimenu.c:757
 msgid "Score"
 msgstr "Punktestand"
 
-#: src/multimenu.c:768
+#: src/multimenu.c:758
 msgid "Kills"
 msgstr "Abschüsse"
 
-#: src/multimenu.c:772
-#: src/multimenu.c:777
+#: src/multimenu.c:762
+#: src/multimenu.c:767
 msgid "Units"
 msgstr "Einheiten"
 
-#: src/multimenu.c:782
+#: src/multimenu.c:772
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multimenu.c:786
+#: src/multimenu.c:776
 msgid "Structs"
 msgstr "Gebäude"
 
-#: src/multimenu.c:1149
+#: src/multimenu.c:1139
 msgid "Toggle Alliance State"
 msgstr "Bündnisstatus umschalten"
 
-#: src/multimenu.c:1168
+#: src/multimenu.c:1158
 msgid "Give Visibility Report"
 msgstr "Sensordaten übertragen"
 
-#: src/multimenu.c:1174
+#: src/multimenu.c:1164
 msgid "Leak Technology Documents"
 msgstr "Technologie übertragen"
 
-#: src/multimenu.c:1181
+#: src/multimenu.c:1171
 msgid "Hand Over Selected Units"
 msgstr "Übergebe ausgewählte Einheiten"
 
-#: src/multimenu.c:1187
+#: src/multimenu.c:1177
 msgid "Give Power To Player"
 msgstr "Energie übertragen"
 
@@ -14704,12 +14704,12 @@ msgstr "SIE HABEN GEWONNEN!"
 msgid "YOU WERE DEFEATED!"
 msgstr "SIE WURDEN BESIEGT!"
 
-#: src/scriptfuncs.c:10088
+#: src/scriptfuncs.c:10089
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Signal von %s erhalten!"
 
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10135
 #, c-format
 msgid "Beacon %d"
 msgstr "Signal %d"

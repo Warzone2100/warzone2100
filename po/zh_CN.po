@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:25+0200\n"
+"POT-Creation-Date: 2010-07-31 21:33-0400\n"
 "PO-Revision-Date: 2009-05-13 16:12+0800\n"
 "Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
@@ -12417,7 +12417,7 @@ msgstr ""
 #: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1366
+#: src/multimenu.c:1356
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12570,7 +12570,7 @@ msgstr ""
 
 #: src/configuration.c:452
 #: src/configuration.c:453
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "玩家"
 
@@ -12748,73 +12748,73 @@ msgstr "命令工程车建造钻油塔"
 msgid "Unit Lost!"
 msgstr "单位被摧毁! "
 
-#: src/droid.c:1601
+#: src/droid.c:1602
 msgid "Structure Restored"
 msgstr "重建建筑物"
 
-#: src/droid.c:3349
+#: src/droid.c:3350
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "已选择 %u 号编队 - %u 单位"
 
-#: src/droid.c:3362
+#: src/droid.c:3363
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u 单位已指派为 %u 号编队"
 
-#: src/droid.c:3375
+#: src/droid.c:3376
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "移动视野中心到 %u 号编队 - %u 单位"
 
-#: src/droid.c:3379
+#: src/droid.c:3380
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3642
+#: src/droid.c:3643
 #, fuzzy
 msgid "Rookie"
 msgstr "新兵部队: %u"
 
-#: src/droid.c:3643
+#: src/droid.c:3644
 #, fuzzy
 msgctxt "rank"
 msgid "Green"
 msgstr "绿色"
 
-#: src/droid.c:3644
+#: src/droid.c:3645
 #, fuzzy
 msgid "Trained"
 msgstr "作训部队: %u"
 
-#: src/droid.c:3645
+#: src/droid.c:3646
 #, fuzzy
 msgid "Regular"
 msgstr "标准部队: %u"
 
-#: src/droid.c:3646
+#: src/droid.c:3647
 msgid "Professional"
 msgstr "专业部队"
 
-#: src/droid.c:3647
+#: src/droid.c:3648
 msgid "Veteran"
 msgstr "老兵部队"
 
-#: src/droid.c:3648
+#: src/droid.c:3649
 msgid "Elite"
 msgstr "精锐部队"
 
-#: src/droid.c:3649
+#: src/droid.c:3650
 msgid "Special"
 msgstr "特种部队"
 
-#: src/droid.c:3650
+#: src/droid.c:3651
 msgid "Hero"
 msgstr "英雄部队"
 
@@ -13248,7 +13248,7 @@ msgstr "建造建筑 (F3)"
 
 #: src/hci.c:3882
 #: src/multiint.c:1257
-#: src/multimenu.c:773
+#: src/multimenu.c:763
 msgid "Power"
 msgstr "能源"
 
@@ -14386,7 +14386,7 @@ msgid "Distance Fog"
 msgstr "薄雾（可以看见地形）"
 
 #: src/multiint.c:1224
-#: src/multimenu.c:766
+#: src/multimenu.c:756
 msgid "Alliances"
 msgstr "同盟"
 
@@ -14578,74 +14578,74 @@ msgstr "返回到前一个屏幕"
 msgid "Limits reset to default values"
 msgstr ""
 
-#: src/multimenu.c:619
+#: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "技术等级1"
 
-#: src/multimenu.c:627
+#: src/multimenu.c:617
 msgid "Technology level 2"
 msgstr "技术等级2"
 
-#: src/multimenu.c:633
+#: src/multimenu.c:623
 msgid "Technology level 3"
 msgstr "技术等级3"
 
-#: src/multimenu.c:639
+#: src/multimenu.c:629
 msgid "Any number of players"
 msgstr ""
 
-#: src/multimenu.c:646
+#: src/multimenu.c:636
 msgid "2 players"
 msgstr "2个玩家"
 
-#: src/multimenu.c:652
+#: src/multimenu.c:642
 msgid "4 players"
 msgstr "4个玩家"
 
-#: src/multimenu.c:658
+#: src/multimenu.c:648
 msgid "8 players"
 msgstr "8个玩家"
 
-#: src/multimenu.c:767
+#: src/multimenu.c:757
 msgid "Score"
 msgstr "分数"
 
-#: src/multimenu.c:768
+#: src/multimenu.c:758
 msgid "Kills"
 msgstr "杀敌"
 
-#: src/multimenu.c:772
-#: src/multimenu.c:777
+#: src/multimenu.c:762
+#: src/multimenu.c:767
 #, fuzzy
 msgid "Units"
 msgstr "单位"
 
-#: src/multimenu.c:782
+#: src/multimenu.c:772
 msgid "Ping"
 msgstr ""
 
-#: src/multimenu.c:786
+#: src/multimenu.c:776
 #, fuzzy
 msgid "Structs"
 msgstr "损失建筑物"
 
-#: src/multimenu.c:1149
+#: src/multimenu.c:1139
 msgid "Toggle Alliance State"
 msgstr ""
 
-#: src/multimenu.c:1168
+#: src/multimenu.c:1158
 msgid "Give Visibility Report"
 msgstr ""
 
-#: src/multimenu.c:1174
+#: src/multimenu.c:1164
 msgid "Leak Technology Documents"
 msgstr ""
 
-#: src/multimenu.c:1181
+#: src/multimenu.c:1171
 msgid "Hand Over Selected Units"
 msgstr ""
 
-#: src/multimenu.c:1187
+#: src/multimenu.c:1177
 msgid "Give Power To Player"
 msgstr ""
 
@@ -14838,12 +14838,12 @@ msgstr "你取得了胜利! "
 msgid "YOU WERE DEFEATED!"
 msgstr "你被击败了! "
 
-#: src/scriptfuncs.c:10088
+#: src/scriptfuncs.c:10089
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10135
 #, c-format
 msgid "Beacon %d"
 msgstr ""
