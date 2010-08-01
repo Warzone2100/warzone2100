@@ -231,6 +231,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 		NetPlay.players[playerIndex].wzFile.isSending = false;
 		NetPlay.players[playerIndex].needFile = false;
 	}
+	NetPlay.players[playerIndex].kick = true;  // Don't wait for GAME_GAME_TIME messages from them.
 
 	if (widgGetFromID(psWScreen, IDRET_FORM))
 	{
