@@ -52,6 +52,11 @@ BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats, BOOL bLocal)
 {
 	uint32_t playerIndex = (uint32_t)player;
 
+	if (playerIndex >= MAX_PLAYERS)
+	{
+		return true;
+	}
+
 	// First copy over the data into our local array
 	memcpy(&playerStats[playerIndex], &plStats, sizeof(plStats));
 
@@ -86,6 +91,11 @@ void recvMultiStats(NETQUEUE queue)
 		// Retrieve the ID number of the player for which we need to
 		// update the stats
 		NETuint32_t(&playerIndex);
+
+		if (playerIndex >= MAX_PLAYERS)
+		{
+			return;
+		}
 
 		// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
 		if (!myResponsibility(playerIndex))
@@ -200,42 +210,48 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 	}
 	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
 	// Host controls self + AI, so update the scores for them as well.
-	if(myResponsibility(attacker) && NetPlay.bComms)
+	if (attacker < MAX_PLAYERS)
 	{
-		st = getMultiStats(attacker);	// get stats
-		if(NetPlay.bComms)
+		if (myResponsibility(attacker) && NetPlay.bComms)
 		{
-			st.scoreToAdd += (2*inflicted);
+			st = getMultiStats(attacker);	// get stats
+			if (NetPlay.bComms)
+			{
+				st.scoreToAdd += (2 * inflicted);
+			}
+			else
+			{
+				st.recentScore += (2 * inflicted);
+			}
+			setMultiStats(attacker, st, true);
 		}
 		else
 		{
-			st.recentScore += (2*inflicted);
+			ingame.skScores[attacker][0] += (2 * inflicted);	// increment skirmish players rough score.
 		}
-		setMultiStats(attacker, st, true);
-	}
-	else
-	{
-		ingame.skScores[attacker][0] += (2*inflicted);	// increment skirmish players rough score.
 	}
 
 	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
 	// Host controls self + AI, so update the scores for them as well.
-	if(myResponsibility(defender) && NetPlay.bComms)
+	if (defender < MAX_PLAYERS)
 	{
-		st = getMultiStats(defender);	// get stats
-		if(NetPlay.bComms)
+		if (myResponsibility(defender) && NetPlay.bComms)
 		{
-			st.scoreToAdd  -= inflicted;
+			st = getMultiStats(defender);	// get stats
+			if (NetPlay.bComms)
+			{
+				st.scoreToAdd  -= inflicted;
+			}
+			else
+			{
+				st.recentScore  -= inflicted;
+			}
+			setMultiStats(defender, st, true);
 		}
 		else
 		{
-			st.recentScore  -= inflicted;
+			ingame.skScores[defender][0] -= inflicted;	// increment skirmish players rough score.
 		}
-		setMultiStats(defender, st, true);
-	}
-	else
-	{
-		ingame.skScores[defender][0] -= inflicted;	// increment skirmish players rough score.
 	}
 }
 
