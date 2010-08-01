@@ -659,14 +659,13 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	const unsigned int LAS_SAT_DELAY = 4;
 	int timeSoFar;
 	int distancePercent; /* How far we are 0..100 */
-	float distanceRatio; /* How far we are, 1.0==at target */
-	float distanceExtensionFactor; /* Extended lifespan */
+	int distanceExtensionFactor; /* Extended lifespan */
 	Vector3i move;
 	// Projectile is missile:
 	bool bMissile = false;
 	WEAPON_STATS *psStats;
 	Vector3i nextPos;
-	unsigned int targetDistance, currentDistance;
+	int32_t targetDistance, currentDistance;
 	BASE_OBJECT *psTempObj, *closestCollisionObject = NULL;
 #ifdef WZ_CC_MSVC // Such hacks are assert-hell for MSVC, so avoid them..
 	SPACETIME closestCollisionSpacetime; 
@@ -696,7 +695,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	{
 		case WSC_MGUN:
 		case WSC_COMMAND:
-			distanceExtensionFactor = 1.2f;
+			distanceExtensionFactor = 120;
 			break;
 		case WSC_CANNON:
 		case WSC_BOMB:
@@ -705,10 +704,10 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		case WSC_FLAME:
 		case WSC_ENERGY:
 		case WSC_GAUSS:
-			distanceExtensionFactor = 1.5f;
+			distanceExtensionFactor = 150;
 			break;
 		case WSC_AAGUN: // No extended distance
-			distanceExtensionFactor = 1.0f;
+			distanceExtensionFactor = 100;
 			break;
 		case WSC_ROCKET:
 		case WSC_MISSILE:
@@ -719,14 +718,14 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		case WSC_MORTARS:
 		case WSC_HOWITZERS:
 		case WSC_LAS_SAT:
-			distanceExtensionFactor = 1.5f;
+			distanceExtensionFactor = 150;
 			break;
 		default:
 			// WSC_NUM_WEAPON_SUBCLASSES
 			/* Uninitialized "marker", this can be used as a
 			 * condition to assert on (i.e. it shouldn't occur).
 			 */
-			distanceExtensionFactor = 0.f;
+			distanceExtensionFactor = 0;
 			break;
 	}
 
@@ -773,19 +772,18 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		targetDistance = 1;
 	}
 
-	distanceRatio = (float)currentDistance / targetDistance;
 	distancePercent = PERCENT(currentDistance, targetDistance);
 
 	/* Calculate next position */
-	nextPos.x = psProj->startX + (distanceRatio * move.x);
-	nextPos.y = psProj->startY + (distanceRatio * move.y);
+	nextPos.x = psProj->startX + move.x * currentDistance/targetDistance;
+	nextPos.y = psProj->startY + move.y * currentDistance/targetDistance;
 	if (!bIndirect)
 	{
-		nextPos.z = (SDWORD)(psProj->srcHeight + (distanceRatio * move.z));  // Save unclamped nextPos.z value.
+		nextPos.z = psProj->srcHeight + move.z * currentDistance/targetDistance;
 	}
 	else
 	{
-		nextPos.z = (SDWORD)(psProj->srcHeight + move.z);  // Save unclamped nextPos.z value.
+		nextPos.z = psProj->srcHeight + move.z;
 	}
 
 	/* impact if about to go off map else update coordinates */
@@ -918,7 +916,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			memset(&asWeap, 0, sizeof(asWeap));
 			asWeap.nStat = psStats - asWeaponStats;
 
-			ASSERT(distanceExtensionFactor != 0.f, "Unitialized variable used! distanceExtensionFactor is not initialized.");
+			ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");
 
 			newDest.x = clip(newDest.x, 0, world_coord(mapWidth - 1));
 			newDest.y = clip(newDest.y, 0, world_coord(mapHeight - 1));
@@ -934,9 +932,9 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		return;
 	}
 
-	ASSERT(distanceExtensionFactor != 0.f, "Unitialized variable used! distanceExtensionFactor is not initialized.");
+	ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");
 
-	if (distanceRatio > distanceExtensionFactor || /* We've traveled our maximum range */
+	if (distancePercent >= distanceExtensionFactor || /* We've traveled our maximum range */
 		!mapObjIsAboveGround((BASE_OBJECT*)psProj)) /* trying to travel through terrain */
 	{
 		/* Miss due to range or height */
