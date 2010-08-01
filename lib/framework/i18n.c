@@ -52,6 +52,7 @@
 #define LANG_NAME_IRISH "Imruagadh"
 #define LANG_NAME_CROATIAN "Hrvatski"
 #define LANG_NAME_ITALIAN "Italiano"
+#define LANG_NAME_KOREAN "한국어"
 #define LANG_NAME_LITHUANIAN "lietuvių kalba"
 #define LANG_NAME_LATIN "latine"
 #define LANG_NAME_LATVIAN "latviešu valoda"
@@ -108,6 +109,7 @@ static const struct
 //	{ "ga", LANG_NAME_IRISH, LANG_IRISH, SUBLANG_IRISH_IRELAND },
 	{ "hr", LANG_NAME_CROATIAN, LANG_CROATIAN, SUBLANG_DEFAULT },
 	{ "it", LANG_NAME_ITALIAN, LANG_ITALIAN, SUBLANG_ITALIAN },
+	{ "ko_KR", LANG_NAME_KOREAN, LANG_KOREAN, SUBLANG_DEFAULT },
 //	{ "la", LANG_NAME_LATIN, LANG_LATIN, SUBLANG_DEFAULT },
 //	{ "lt", LANG_NAME_LITHUANIAN, LANG_LITHUANIAN, SUBLANG_DEFAULT },
 //	{ "lv", LANG_NAME_LATVIAN, LANG_LATVIAN, SUBLANG_DEFAULT },
@@ -165,6 +167,7 @@ static const struct
 //	{ "ga", LANG_NAME_IRISH, "ga.UTF-8", "ga" },
 	{ "hr", LANG_NAME_CROATIAN, "hr_HR.UTF-8", "hr_HR" },
 	{ "it", LANG_NAME_ITALIAN, "it_IT.UTF-8", "it_IT" },
+	{ "ko_KR", LANG_NAME_KOREAN, "ko_KR.UTF-8", "ko_KR" },
 //	{ "la", LANG_NAME_LATIN, "la.UTF-8", "la" },
 //	{ "lt", LANG_NAME_LITHUANIAN, "lt.UTF-8", "lt" },
 //	{ "lv", LANG_NAME_LATVIAN, "lv.UTF-8", "lv" },
