@@ -679,8 +679,6 @@ BOOL frontendShutdown(void)
 		return false;
 	}
 
-	releasePlayerPower();
-
 	interfaceShutDown();
 	scrShutDown();
 
@@ -856,7 +854,6 @@ BOOL stageOneShutDown(void)
 	grpShutDown();
 
 	formationShutDown();
-	releasePlayerPower();
 
 	ResearchRelease();
 

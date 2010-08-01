@@ -23,27 +23,14 @@
  * Store PlayerPower and other power related stuff!
  *
  */
-#include <string.h>
-#include "objectdef.h"
-#include "power.h"
-#include "hci.h"
-#include "lib/gamelib/gtime.h"
-#include "lib/sound/audio.h"
-#include "objmem.h"
-#include "frontend.h"
 
-#include "lib/netplay/netplay.h"
-#include "multiplay.h"
-#include "multiint.h"
+#include "lib/framework/frame.h"
 
-#include "feature.h"
-#include "structure.h"
-#include "mission.h"
-#include "research.h"
-#include "intdisplay.h"
-#include "action.h"
 #include "difficulty.h"
-
+#include "intdisplay.h"
+#include "mission.h"
+#include "power.h"
+#include "research.h"
 
 #define EXTRACT_POINTS	    1
 #define EASY_POWER_MOD      110
@@ -53,12 +40,6 @@
 
 //flag used to check for power calculations to be done or not
 BOOL	powerCalculated;
-
-/* Updates the current power based on the extracted power and a Power Generator*/
-static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player);
-
-//returns the relevant list based on OffWorld or OnWorld
-static STRUCTURE* powerStructList(UBYTE player);
 
 PLAYER_POWER		asPower[MAX_PLAYERS];
 
@@ -79,12 +60,6 @@ void clearPlayerPower(void)
 	{
 		memset(&asPower[player], 0, sizeof(PLAYER_POWER));
 	}
-}
-
-/*Free the space used for playerPower */
-void releasePlayerPower(void)
-{
-	// nothing now
 }
 
 /*check the current power - if enough return true, else return false */
@@ -124,13 +99,6 @@ BOOL usePower(UDWORD player, UDWORD quantity)
 		asPower[player].currentPower -= quantity;
 		return true;
 	}
-	else if (player == selectedPlayer)
-	{
-		if(titleMode == FORCESELECT) //|| (titleMode == DESIGNSCREEN))
-		{
-			return false;
-		}
-	}
 	return false;
 }
 
@@ -160,7 +128,7 @@ void powerCalc(BOOL on)
 
 /* Each Resource Extractor yields EXTRACT_POINTS per second until there are none
    left in the resource. */
-int32_t updateExtractedPower(STRUCTURE	*psBuilding)
+static int32_t updateExtractedPower(STRUCTURE *psBuilding)
 {
 	RES_EXTRACTOR		*pResExtractor;
 	int32_t				pointsToAdd, extractedPoints;
@@ -249,7 +217,7 @@ int32_t updateExtractedPower(STRUCTURE	*psBuilding)
 }
 
 //returns the relevant list based on OffWorld or OnWorld
-STRUCTURE* powerStructList(UBYTE player)
+static STRUCTURE* powerStructList(UBYTE player)
 {
 	ASSERT(player < MAX_PLAYERS, "powerStructList: Bad player");
 	if (offWorldKeepLists)
@@ -262,32 +230,8 @@ STRUCTURE* powerStructList(UBYTE player)
 	}
 }
 
-/* Update current power based on what Power Generators exist */
-void updatePlayerPower(UDWORD player)
-{
-	STRUCTURE		*psStruct;//, *psList;
-
-	ASSERT(player < MAX_PLAYERS, "updatePlayerPower: Bad player");
-
-	for (psStruct = powerStructList((UBYTE)player); psStruct != NULL; psStruct =
-		psStruct->psNext)
-	{
-		if (psStruct->pStructureType->type == REF_POWER_GEN && psStruct->
-			status == SS_BUILT)
-		{
-			updateCurrentPower((POWER_GEN *)psStruct->pFunctionality, player);
-		}
-	}
-
-	// Check that the psLastPowered hasn't died
-	if (asPower[player].psLastPowered && asPower[player].psLastPowered->died)
-	{
-		asPower[player].psLastPowered = NULL;
-	}
-}
-
 /* Updates the current power based on the extracted power and a Power Generator*/
-void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
+static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 {
 	int32_t		power, i, extractedPower;
 
@@ -328,6 +272,30 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 		{
 			asPower[player].currentPower = MAX_POWER;
 		}
+	}
+}
+
+/* Update current power based on what Power Generators exist */
+void updatePlayerPower(UDWORD player)
+{
+	STRUCTURE		*psStruct;//, *psList;
+
+	ASSERT(player < MAX_PLAYERS, "updatePlayerPower: Bad player");
+
+	for (psStruct = powerStructList((UBYTE)player); psStruct != NULL; psStruct =
+		psStruct->psNext)
+	{
+		if (psStruct->pStructureType->type == REF_POWER_GEN && psStruct->
+			status == SS_BUILT)
+		{
+			updateCurrentPower((POWER_GEN *)psStruct->pFunctionality, player);
+		}
+	}
+
+	// Check that the psLastPowered hasn't died
+	if (asPower[player].psLastPowered && asPower[player].psLastPowered->died)
+	{
+		asPower[player].psLastPowered = NULL;
 	}
 }
 
