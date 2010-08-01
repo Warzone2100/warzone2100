@@ -167,6 +167,8 @@ void gameTimeUpdate()
 
 		if (scaledCurrTime >= gameTime && !checkPlayerGameTime(NET_ALL_PLAYERS))
 		{
+			unsigned player;
+
 			// Pause time, since we are waiting GAME_GAME_TIME from other players.
 			scaledCurrTime = graphicsTime;
 			baseTime = currTime;
@@ -175,38 +177,60 @@ void gameTimeUpdate()
 			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7]);
 			mayUpdate = false;
 
-			NET_PlayerConnectionStatus |= CONNECTIONSTATUS_WAITING_FOR_PLAYER;
+			for (player = 0; player < MAX_PLAYERS; ++player)
+			{
+				if (!checkPlayerGameTime(player))
+				{
+					NETsetPlayerConnectionStatus(CONNECTIONSTATUS_WAITING_FOR_PLAYER, player);
+					break;  // GAME_GAME_TIME is processed serially, so don't know if waiting for more players.
+				}
+			}
 		}
 
 		// Calculate the time for this frame
 		deltaGraphicsTime = scaledCurrTime - graphicsTime;
 
 		// Adjust deltas.
-			if (scaledCurrTime >= gameTime && mayUpdate)
+		if (scaledCurrTime >= gameTime && mayUpdate)
+		{
+			if (scaledCurrTime > gameTime + GAME_TICKS_PER_UPDATE)
 			{
-				if (scaledCurrTime > gameTime + GAME_TICKS_PER_UPDATE)
-				{
-					// Game isn't updating fast enough...
-					uint32_t slideBack = deltaGraphicsTime - GAME_TICKS_PER_UPDATE;
-					baseTime += slideBack / modifier;  // adjust the addition to base time
-					deltaGraphicsTime -= slideBack;
-				}
-
-				deltaGameTime = GAME_TICKS_PER_UPDATE;
-
-				updateLatency();
-
-				if (crcError)
-				{
-					debug(LOG_ERROR, "Synch error, gameTimes were: {%10u, %10u, %10u, %10u, %10u, %10u, %10u, %10u}", gameQueueCheckTime[0], gameQueueCheckTime[1], gameQueueCheckTime[2], gameQueueCheckTime[3], gameQueueCheckTime[4], gameQueueCheckTime[5], gameQueueCheckTime[6], gameQueueCheckTime[7]);
-					debug(LOG_ERROR, "Synch error, CRCs were:      {0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X}", gameQueueCheckCrc[0], gameQueueCheckCrc[1], gameQueueCheckCrc[2], gameQueueCheckCrc[3], gameQueueCheckCrc[4], gameQueueCheckCrc[5], gameQueueCheckCrc[6], gameQueueCheckCrc[7]);
-					crcError = false;
-				}
+				// Game isn't updating fast enough...
+				uint32_t slideBack = deltaGraphicsTime - GAME_TICKS_PER_UPDATE;
+				baseTime += slideBack / modifier;  // adjust the addition to base time
+				deltaGraphicsTime -= slideBack;
 			}
-			else
+
+			deltaGameTime = GAME_TICKS_PER_UPDATE;
+
+			updateLatency();
+
+			if (crcError)
 			{
-				deltaGameTime = 0;
+				unsigned player;
+				unsigned num = 0;
+				for (player = 0; player < MAX_PLAYERS; ++player)
+				{
+					if (NetPlay.players[player].allocated && gameQueueCheckCrc[player] != gameQueueCheckCrc[selectedPlayer])
+					{
+						NETsetPlayerConnectionStatus(CONNECTIONSTATUS_DESYNC, player);
+						++num;
+					}
+				}
+				if (num == 0)  // Sanity check, should never trigger.
+				{
+					ASSERT(false, "Desync out of sync!");
+					NETsetPlayerConnectionStatus(CONNECTIONSTATUS_DESYNC, selectedPlayer);
+				}
+				debug(LOG_ERROR, "Synch error %u player(s), gameTimes were: {%10u, %10u, %10u, %10u, %10u, %10u, %10u, %10u}", num, gameQueueCheckTime[0], gameQueueCheckTime[1], gameQueueCheckTime[2], gameQueueCheckTime[3], gameQueueCheckTime[4], gameQueueCheckTime[5], gameQueueCheckTime[6], gameQueueCheckTime[7]);
+				debug(LOG_ERROR, "Synch error %u player(s), CRCs were:      {0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X}", num, gameQueueCheckCrc[0], gameQueueCheckCrc[1], gameQueueCheckCrc[2], gameQueueCheckCrc[3], gameQueueCheckCrc[4], gameQueueCheckCrc[5], gameQueueCheckCrc[6], gameQueueCheckCrc[7]);
+				crcError = false;
 			}
+		}
+		else
+		{
+			deltaGameTime = 0;
+		}
 
 		// Store the game and graphics times
 		gameTime     += deltaGameTime;
@@ -393,7 +417,6 @@ void recvPlayerGameTime(NETQUEUE queue)
 	if (!checkDebugSync(checkTime, checkCrc))
 	{
 		crcError = true;
-		NET_PlayerConnectionStatus |= CONNECTIONSTATUS_DESYNC;
 	}
 
 	if (updateReadyTime == 0 && checkPlayerGameTime(NET_ALL_PLAYERS))

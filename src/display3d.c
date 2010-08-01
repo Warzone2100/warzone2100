@@ -406,6 +406,7 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
 	UWORD ImageID;
+	unsigned status = UNPACKDWORD_TRI_A(psWidget->UserData);
 
 	ASSERT( psWidget->type == WIDG_BUTTON,"Not a button" );
 
@@ -419,52 +420,75 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
 	}
 
+	if (NETcheckPlayerConnectionStatus(status, NET_ALL_PLAYERS))
+	{
+		unsigned width, height;
+		unsigned n, c = 0;
+		char players[MAX_PLAYERS + 1];
+		unsigned playerMaskMapped = 0;
+		for (n = 0; n < MAX_PLAYERS; ++n)
+		{
+			if (NETcheckPlayerConnectionStatus(status, n))
+			{
+				playerMaskMapped |= 1<<NetPlay.players[n].position;
+			}
+		}
+		for (n = 0; n < MAX_PLAYERS; ++n)
+		{
+			if ((playerMaskMapped & 1<<n) != 0)
+			{
+				players[c++] = "0123456789ABCDEF"[n];
+			}
+		}
+		players[c] = '\0';
+
+		width = iV_GetTextWidth(players) + 10;
+		height = iV_GetTextHeight(players) + 10;
+
+		iV_DrawText(players, x - width, y + height);
+	}
+
 	iV_DrawImage(IntImages,ImageID,x,y);
 }
 
-static void setupConnectionStatusForm(CONNECTION_STATUS status, CONNECTION_STATUS const *orderOfPreference, unsigned orderOfPreferenceNum)
+static void setupConnectionStatusForm(void)
 {
 	static W_FORMINIT        sFormInit;
 	static W_BUTINIT         sButInit;
-	static bool              formUP = false;
-	static CONNECTION_STATUS prevStatus = CONNECTIONSTATUS_NORMAL;
+	static unsigned          prevStatusMask = 0;
 
 	const int separation = 3;
+	unsigned statusMask = 0;
+	unsigned total = 0;
 	unsigned i;
 
-	// If this asserts, look up at the top of the function, and change it!
-	//ASSERT(ARRAY_SIZE(sButInit) <= orderOfPreferenceNum, "Please redefine sButInit[%u] array as sButInit[%u]!", (unsigned)ARRAY_SIZE(sButInit), (unsigned)orderOfPreferenceNum);
+	for (i = 0; i < CONNECTIONSTATUS_NORMAL; ++i)
+	{
+		if (NETcheckPlayerConnectionStatus((CONNECTION_STATUS)i, NET_ALL_PLAYERS))
+		{
+			statusMask |= 1<<i;
+			++total;
+		}
+	}
 
-	if (formUP && status != prevStatus)
+	if (prevStatusMask != 0 && statusMask != prevStatusMask)
 	{
 		// Remove the icons.
-		for (i = 0; i < orderOfPreferenceNum; ++i)
+		for (i = 0; i < CONNECTIONSTATUS_NORMAL; ++i)
 		{
-			if ((prevStatus & orderOfPreference[i]) != orderOfPreference[i])
+			if ((statusMask & 1<<i) != 0)
 			{
-				continue;
+				widgDelete(psWScreen, NETWORK_BUT_ID + i);   // kill button
 			}
-			widgDelete(psWScreen, NETWORK_BUT_ID + i);   // kill button
 		}
 		widgDelete(psWScreen, NETWORK_FORM_ID);  // kill form
 
-		formUP = false;
-		prevStatus = CONNECTIONSTATUS_NORMAL;
+		prevStatusMask = 0;
 	}
 
-	if (!formUP && status != CONNECTIONSTATUS_NORMAL)
+	if (prevStatusMask == 0 && statusMask != 0)
 	{
 		unsigned n = 0;
-		unsigned total = 0;
-		for (i = 0; i < orderOfPreferenceNum; ++i)
-		{
-			if ((status & orderOfPreference[i]) != orderOfPreference[i])
-			{
-				continue;
-			}
-			++total;
-		}
-
 		// Create the basic form
 		memset(&sFormInit, 0, sizeof(W_FORMINIT));
 		sFormInit.formID = 0;
@@ -481,9 +505,9 @@ static void setupConnectionStatusForm(CONNECTION_STATUS status, CONNECTION_STATU
 		}
 
 		/* Now add the buttons */
-		for (i = 0; i < orderOfPreferenceNum; ++i)
+		for (i = 0; i < CONNECTIONSTATUS_NORMAL; ++i)
 		{
-			if ((status & orderOfPreference[i]) != orderOfPreference[i])
+			if ((statusMask & 1<<i) == 0)
 			{
 				continue;
 			}
@@ -502,28 +526,29 @@ static void setupConnectionStatusForm(CONNECTION_STATUS status, CONNECTION_STATU
 			sButInit.y = (24 + separation)*n;
 			sButInit.pDisplay = NetworkDisplayImage;
 			// Note we would set the image to be different based on which issue it is.
-			switch (orderOfPreference[i])
+			switch (i)
 			{
 			default:
 				ASSERT(false, "Bad connection status value.");
 				sButInit.pTip = "Bug";
-				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DESYNC_HI, IMAGE_PLAYER_LEFT_LO);
+				sButInit.UserData = PACKDWORD_TRI(0, IMAGE_DESYNC_HI, IMAGE_PLAYER_LEFT_LO);
 				break;
 			case CONNECTIONSTATUS_PLAYER_LEAVING:
 				sButInit.pTip = _("Player left");
-				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_PLAYER_LEFT_HI, IMAGE_PLAYER_LEFT_LO);
+				sButInit.UserData = PACKDWORD_TRI(i, IMAGE_PLAYER_LEFT_HI, IMAGE_PLAYER_LEFT_LO);
 				break;
 			case CONNECTIONSTATUS_PLAYER_DROPPED:
 				sButInit.pTip = _("Player dropped");
-				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DISCONNECT_LO, IMAGE_DISCONNECT_HI);
+				sButInit.UserData = PACKDWORD_TRI(i, IMAGE_DISCONNECT_LO, IMAGE_DISCONNECT_HI);
 				break;
 			case CONNECTIONSTATUS_WAITING_FOR_PLAYER:
 				sButInit.pTip = _("Waiting for other players");
-				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_WAITING_HI, IMAGE_WAITING_LO);
+				sButInit.UserData = PACKDWORD_TRI(i, IMAGE_WAITING_HI, IMAGE_WAITING_LO);
+
 				break;
 			case CONNECTIONSTATUS_DESYNC:
 				sButInit.pTip = _("Out of sync");
-				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DESYNC_HI, IMAGE_DESYNC_LO);
+				sButInit.UserData = PACKDWORD_TRI(i, IMAGE_DESYNC_HI, IMAGE_DESYNC_LO);
 				break;
 			}
 
@@ -535,8 +560,7 @@ static void setupConnectionStatusForm(CONNECTION_STATUS status, CONNECTION_STATU
 			++n;
 		}
 
-		formUP = true;
-		prevStatus = status;
+		prevStatusMask = statusMask;
 	}
 }
 
@@ -544,13 +568,6 @@ static void setupConnectionStatusForm(CONNECTION_STATUS status, CONNECTION_STATU
 void draw3DScene( void )
 {
 	BOOL bPlayerHasHQ = false;
-
-	// Misplaced here, due to -Wdeclaration-after-statement.
-	const CONNECTION_STATUS  orderOfPreference[] = {CONNECTIONSTATUS_PLAYER_DROPPED, CONNECTIONSTATUS_PLAYER_LEAVING, CONNECTIONSTATUS_DESYNC, CONNECTIONSTATUS_WAITING_FOR_PLAYER};
-	const int timeouts[]                         = {GAME_TICKS_PER_SEC*10,           GAME_TICKS_PER_SEC*10,           GAME_TICKS_PER_SEC,      GAME_TICKS_PER_SEC/10,             };
-	static uint32_t          flashTimer[]        = {0,                               0,                               0,                       0,                                 };
-	static CONNECTION_STATUS flashStatus = CONNECTIONSTATUS_NORMAL;
-	unsigned i;
 
 	// the world centre - used for decaying lighting etc
 	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
@@ -656,26 +673,7 @@ void draw3DScene( void )
 		iV_DrawText(DROIDDOING, 0, pie_GetVideoBufferHeight()- height);
 	}
 
-	for (i = 0; i < ARRAY_SIZE(orderOfPreference); ++i)
-	{
-		// Display relevant icons.
-		if ((NET_PlayerConnectionStatus & orderOfPreference[i]) == orderOfPreference[i])
-		{
-			NET_PlayerConnectionStatus &= ~orderOfPreference[i];
-
-			// Enable icon.
-			flashStatus |= orderOfPreference[i];
-			flashTimer[i] = realTime;
-		}
-
-		if ((flashStatus & orderOfPreference[i]) == orderOfPreference[i] &&  // Icon was visible and...
-		    (int)(flashTimer[i] + timeouts[i] - realTime) < 0)               // has timed out
-		{
-			// Stop displaying old icon.
-			flashStatus &= ~orderOfPreference[i];
-		}
-	}
-	setupConnectionStatusForm(flashStatus, orderOfPreference, ARRAY_SIZE(orderOfPreference));
+	setupConnectionStatusForm();
 
 	if (getWidgetsStatus() && !gamePaused())
 	{

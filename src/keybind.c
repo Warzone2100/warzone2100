@@ -178,6 +178,11 @@ void	kf_ForceSync( void )
 	
 }
 
+void kf_ForceDesync(void)
+{
+	syncDebug("Oh no!!! I went out of sync!!!");
+}
+
 void	kf_PowerInfo( void )
 {
 	int i;

@@ -156,7 +156,7 @@ static NETSTATS		nStats = { 0, 0, 0, 0 };
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
 char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
 
-int NET_PlayerConnectionStatus = CONNECTIONSTATUS_NORMAL;
+unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////////
 #define VersionStringSize 80
@@ -436,7 +436,7 @@ static void NETplayerDropped(UDWORD index)
 	NET_DestroyPlayer(id);		// just clears array
 	MultiPlayerLeave(id);			// more cleanup
 
-	NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
+	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, id);
 }
 
 /**
@@ -452,7 +452,7 @@ void NETplayerKicked(UDWORD index)
 	NETlogEntry("Player was kicked.", SYNC_FLAG, index);
 	addToBanList(NetPlay.players[index].IPtextAddress, NetPlay.players[index].name);
 	NETplayerLeaving(index);		// need to close socket for the player that left.
-	NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
+	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_LEAVING, index);
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -1485,7 +1485,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 
 			debug(LOG_INFO, "Player %u has left the game.", index);
 			NETplayerLeaving(index);		// need to close socket for the player that left.
-			NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
+			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_LEAVING, index);
 			break;
 		}
 		case NET_GAME_FLAGS:
@@ -2832,6 +2832,63 @@ void NETsetGameserverPort(unsigned int port)
 unsigned int NETgetGameserverPort()
 {
 	return gameserver_port;
+}
+
+
+void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player)
+{
+	unsigned n;
+	const int timeouts[] = {GAME_TICKS_PER_SEC*10, GAME_TICKS_PER_SEC*10, GAME_TICKS_PER_SEC, GAME_TICKS_PER_SEC/6};
+	ASSERT(ARRAY_SIZE(timeouts) == CONNECTIONSTATUS_NORMAL, "Connection status timeout array too small.");
+
+	if (status == CONNECTIONSTATUS_NORMAL)
+	{
+		for (n = 0; n < CONNECTIONSTATUS_NORMAL; ++n)
+		{
+			NET_PlayerConnectionStatus[n][player] = 0;
+		}
+		return;
+	}
+	if (player == NET_ALL_PLAYERS)
+	{
+		for (n = 0; n < MAX_PLAYERS; ++n)
+		{
+			NETsetPlayerConnectionStatus(status, n);
+		}
+		return;
+	}
+
+	NET_PlayerConnectionStatus[status][player] = realTime + timeouts[status];
+}
+
+bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player)
+{
+	unsigned n;
+
+	if (player == NET_ALL_PLAYERS)
+	{
+		for (n = 0; n < MAX_PLAYERS; ++n)
+		{
+			if (NETcheckPlayerConnectionStatus(status, n))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	if (status == CONNECTIONSTATUS_NORMAL)
+	{
+		for (n = 0; n < CONNECTIONSTATUS_NORMAL; ++n)
+		{
+			if (NETcheckPlayerConnectionStatus((CONNECTION_STATUS)n, player))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	return realTime < NET_PlayerConnectionStatus[status][player];
 }
 
 #define MAX_LEN_LOG_LINE 512  // From debug.c - no use printing something longer.

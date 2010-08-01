@@ -130,7 +130,7 @@ void NetQueue::writeRawData(const uint8_t *netData, size_t netLen)
 		}
 		unsigned headerLen = 1 + n;
 
-		ASSERT(len < 400, "Trying to write a very large packet (%u bytes) to the queue.", len);
+		ASSERT(len < 40000000, "Trying to write a very large packet (%u bytes) to the queue.", len);
 		if (buffer.size() - used - headerLen < len)
 		{
 			break;  // Don't have a whole message ready yet.

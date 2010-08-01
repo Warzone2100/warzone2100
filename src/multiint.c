@@ -2612,7 +2612,7 @@ static void processMultiopWidgets(UDWORD id)
 			{
 				startMultiplayerGame();
 				// reset flag in case people dropped/quit on join screen
-				NET_PlayerConnectionStatus = 0;
+				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);
 			}
 		}
 	}
@@ -2707,7 +2707,7 @@ void startMultiplayerGame(void)
 	decideWRF();										// set up swrf & game.map
 	bMultiPlayer = true;
 	bMultiMessages = true;
-	NET_PlayerConnectionStatus = 0; // reset disconnect conditions
+	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);  // reset disconnect conditions
 
 	if (NetPlay.isHost)
 	{
@@ -2874,7 +2874,7 @@ void frontendMultiMessages(void)
 			debug(LOG_INFO,"** player %u has dropped! Host is %s", player_id, host?"true":"false");
 
 			MultiPlayerLeave(player_id);		// get rid of their stuff
-			NET_PlayerConnectionStatus = 2;		//DROPPED_CONNECTION
+			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
 
 			if (host || player_id == selectedPlayer)	// if host quits or we quit, abort out
 			{

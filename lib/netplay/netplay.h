@@ -44,7 +44,7 @@ typedef enum
 	ERROR_CHEAT,
 	ERROR_KICKED,
 	ERROR_WRONGVERSION,
-	ERROR_WRONGPASSWORD,				// NOTE WRONG_PASSWORD results in conflict
+	ERROR_WRONGPASSWORD,
 	ERROR_HOSTDROPPED,
 	ERROR_WRONGDATA,
 	ERROR_UNKNOWNFILEISSUE
@@ -52,12 +52,12 @@ typedef enum
 
 typedef enum
 {
-	CONNECTIONSTATUS_NORMAL              = 0,
+	CONNECTIONSTATUS_PLAYER_DROPPED,
+	CONNECTIONSTATUS_PLAYER_LEAVING,
+	CONNECTIONSTATUS_DESYNC,
+	CONNECTIONSTATUS_WAITING_FOR_PLAYER,
 
-	CONNECTIONSTATUS_PLAYER_LEAVING      = 1,
-	CONNECTIONSTATUS_PLAYER_DROPPED      = 2,
-	CONNECTIONSTATUS_WAITING_FOR_PLAYER  = 4,
-	CONNECTIONSTATUS_DESYNC              = 8
+	CONNECTIONSTATUS_NORMAL
 } CONNECTION_STATUS;
 
 typedef enum
@@ -289,7 +289,6 @@ extern PLAYER_IP	*IPlist;
 extern bool netPlayersUpdated;
 extern int mapDownloadProgress;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
-extern int NET_PlayerConnectionStatus;
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
@@ -349,6 +348,9 @@ extern void NET_InitPlayers(void);
 
 void NETGameLocked(bool flag);
 void NETresetGamePassword(void);
+
+void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);    ///< Cumulative, except that CONNECTIONSTATUS_NORMAL resets.
+bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);  ///< True iff connection status icon hasn't expired for this player. CONNECTIONSTATUS_NORMAL means any status, NET_ALL_PLAYERS means all players.
 
 const char *messageTypeToString(unsigned messageType);
 
