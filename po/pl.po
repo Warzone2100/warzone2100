@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:21+0200\n"
-"PO-Revision-Date: 2010-05-28 10:43+0100\n"
+"POT-Creation-Date: 2010-08-01 15:00+0200\n"
+"PO-Revision-Date: 2010-07-26 09:40+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -12456,7 +12456,7 @@ msgstr "Idź od razu na ekran hosta"
 
 #: src/configuration.c:443
 #: src/configuration.c:444
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "Gracz"
 
@@ -13043,18 +13043,17 @@ msgstr "Kolor jednostek"
 
 #: src/frontend.c:1150
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.c:1151
 #: src/frontend.c:1200
-#, fuzzy
 msgid "Rotating"
-msgstr "Obrót w prawo"
+msgstr "Obracający się"
 
 #: src/frontend.c:1151
 #: src/frontend.c:1200
 msgid "Fixed"
-msgstr ""
+msgstr "Nieruchomy"
 
 #: src/frontend.c:1157
 #: src/frontend.c:1177
@@ -14837,83 +14836,19 @@ msgstr " - Zbudowana %s"
 msgid "Version %s%s%s%s"
 msgstr "Wersja %s%s%s%s"
 
-#~ msgid "Czech"
-#~ msgstr "Czeski"
-
-#~ msgid "Danish"
-#~ msgstr "Duński"
-
-#~ msgid "German"
-#~ msgstr "Niemiecki"
-
-#~ msgid "English (United Kingdom)"
-#~ msgstr "Angielski (Wlk. Brytania)"
-
-#~ msgid "Spanish"
-#~ msgstr "Hiszpański"
-
-#~ msgid "Estonian"
-#~ msgstr "Estoński"
-
-#~ msgid "Finnish"
-#~ msgstr "Fiński"
-
-#~ msgid "French"
-#~ msgstr "Francuski"
-
-#~ msgid "Frisian"
-#~ msgstr "Frisian"
-
-#~ msgid "Irish"
-#~ msgstr "Irlański"
-
-#~ msgid "Croatian"
-#~ msgstr "Chorwacki"
-
-#~ msgid "Italian"
-#~ msgstr "Włoski"
-
-#~ msgid "Lithuanian"
-#~ msgstr "Litewski"
-
-#~ msgid "Norwegian"
-#~ msgstr "Norweski"
-
-#~ msgid "Dutch"
-#~ msgstr "Holenderski"
-
-#~ msgid "Polish"
-#~ msgstr "Polski"
-
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Portugalski (Brazylia)"
-
-#~ msgid "Portuguese"
-#~ msgstr "Portugalski"
-
-#~ msgid "Romanian"
-#~ msgstr "Rumuński"
-
-#~ msgid "Russian"
-#~ msgstr "Rosyjski"
-
-#~ msgid "Slovenian"
-#~ msgstr "Słoweński"
-
-#~ msgid "Ukrainian"
-#~ msgstr "Ukraiński"
-
-#~ msgid "Simplified Chinese"
-#~ msgstr "Uproszczony chiński"
-
-#~ msgid "Traditional Chinese"
-#~ msgstr "Chiński tradycyjny"
-
-#~ msgid "Latin"
-#~ msgstr "Łacina"
-
 #~ msgid ": Unknown cheat code."
 #~ msgstr ": Nieznany kod oszustwa."
+
+#~ msgid "Rotate Screen"
+#~ msgstr "Obracanie ekranu"
+
+#~ msgctxt "middle mouse button"
+#~ msgid "Middle Button"
+#~ msgstr "Środkowy przycisk"
+
+#~ msgctxt "right mouse button"
+#~ msgid "Right Button"
+#~ msgstr "Prawy przycisk"
 
 #~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
 #~ msgstr "(Gracz %u) wykrył  błąd 'legs' (nóg) cyborgów! Wprowadź legs do swojej konsoli i wyślij do nas pliki!"
