@@ -156,7 +156,7 @@ LEVEL_DATASET* levFindDataSet(const char* name)
 			{
 				return psNewLevel;
 			}
-			if (strcmp(psNewLevel->pName, name) == 0)
+			if (!psCloseEnough && strcmp(psNewLevel->pName, name) == 0)
 			{
 				psCloseEnough = psNewLevel;
 			}
