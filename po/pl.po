@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-31 21:33-0400\n"
-"PO-Revision-Date: 2010-05-28 10:43+0100\n"
+"POT-Creation-Date: 2010-08-01 19:34+0200\n"
+"PO-Revision-Date: 2010-07-26 09:40+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n%10>=2) && (n%10<=4) && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Lokalize 1.0\n"
@@ -12979,21 +12979,20 @@ msgid "Switch Mouse Buttons"
 msgstr "Odwróć przyciski"
 
 #: src/frontend.c:1003
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Obrót w lewo"
+msgstr "Obracanie ekranu"
 
 #: src/frontend.c:1006
 #: src/frontend.c:1094
 msgctxt "middle mouse button"
 msgid "Middle Button"
-msgstr ""
+msgstr "Środkowy przycisk"
 
 #: src/frontend.c:1010
 #: src/frontend.c:1089
 msgctxt "right mouse button"
 msgid "Right Button"
-msgstr ""
+msgstr "Prawy przycisk"
 
 #: src/frontend.c:1014
 msgid "MOUSE OPTIONS"
@@ -13039,18 +13038,17 @@ msgstr "Kolor jednostek"
 
 #: src/frontend.c:1174
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.c:1175
 #: src/frontend.c:1224
-#, fuzzy
 msgid "Rotating"
-msgstr "Obrót w prawo"
+msgstr "Obracający się"
 
 #: src/frontend.c:1175
 #: src/frontend.c:1224
 msgid "Fixed"
-msgstr ""
+msgstr "Nieruchomy"
 
 #: src/frontend.c:1181
 #: src/frontend.c:1201
@@ -14818,78 +14816,3 @@ msgstr " - Zbudowana %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Wersja %s%s%s%s"
-
-#~ msgid "Czech"
-#~ msgstr "Czeski"
-
-#~ msgid "Danish"
-#~ msgstr "Duński"
-
-#~ msgid "German"
-#~ msgstr "Niemiecki"
-
-#~ msgid "English (United Kingdom)"
-#~ msgstr "Angielski (Wlk. Brytania)"
-
-#~ msgid "Spanish"
-#~ msgstr "Hiszpański"
-
-#~ msgid "Estonian"
-#~ msgstr "Estoński"
-
-#~ msgid "Finnish"
-#~ msgstr "Fiński"
-
-#~ msgid "French"
-#~ msgstr "Francuski"
-
-#~ msgid "Frisian"
-#~ msgstr "Frisian"
-
-#~ msgid "Irish"
-#~ msgstr "Irlański"
-
-#~ msgid "Croatian"
-#~ msgstr "Chorwacki"
-
-#~ msgid "Italian"
-#~ msgstr "Włoski"
-
-#~ msgid "Lithuanian"
-#~ msgstr "Litewski"
-
-#~ msgid "Norwegian"
-#~ msgstr "Norweski"
-
-#~ msgid "Dutch"
-#~ msgstr "Holenderski"
-
-#~ msgid "Polish"
-#~ msgstr "Polski"
-
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Portugalski (Brazylia)"
-
-#~ msgid "Portuguese"
-#~ msgstr "Portugalski"
-
-#~ msgid "Romanian"
-#~ msgstr "Rumuński"
-
-#~ msgid "Russian"
-#~ msgstr "Rosyjski"
-
-#~ msgid "Slovenian"
-#~ msgstr "Słoweński"
-
-#~ msgid "Ukrainian"
-#~ msgstr "Ukraiński"
-
-#~ msgid "Simplified Chinese"
-#~ msgstr "Uproszczony chiński"
-
-#~ msgid "Traditional Chinese"
-#~ msgstr "Chiński tradycyjny"
-
-#~ msgid "Latin"
-#~ msgstr "Łacina"
