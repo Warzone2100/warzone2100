@@ -37,7 +37,7 @@
   OutFile "${OUTFILE}"
 
   ;Default installation folder
-  InstallDir "$PROGRAMFILES\${PACKAGE_NAME} ${PACKAGE_VERSION}"
+  InstallDir "$PROGRAMFILES\${PACKAGE_NAME}"
 
   ;Get installation folder from registry if available
   InstallDirRegKey HKLM "Software\${PACKAGE_NAME}" ""
