@@ -704,7 +704,7 @@ BOOL recvDroidInfo(NETQUEUE queue)
 			DROID *psDroid = NULL;
 			if (!IdToDroid(info.droidId, ANYPLAYER, &psDroid))
 			{
-				debug(LOG_ERROR, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
+				debug(LOG_NEVER, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
 				      queue.index, info.droidId, isHumanPlayer(info.player) ? "Human" : "AI", info.player);
 				continue;  // Can't find the droid, so skip this droid.
 			}
