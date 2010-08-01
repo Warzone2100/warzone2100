@@ -82,7 +82,6 @@ static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leavi
 static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETregisterServer(int state);
 static void NETallowJoining(void);
-static void NET_InitPlayer(int i, bool initPosition);
 static void recvDebugSync(NETQUEUE queue);
 static bool onBanList(const char *ip);
 static void addToBanList(const char *ip, const char *name);
@@ -165,9 +164,9 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  **            ie ("trunk", "2.1.3", "3.0", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "newnet, netcode 4.7";
+char VersionString[VersionStringSize] = "newnet, netcode 4.1000";
 static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 7;
+static int NETCODE_VERSION_MINOR = 1000;
 static int NETCODE_HASH = 0;			// unused for now
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
@@ -264,7 +263,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 	return 0;
 }
 
-static void NET_InitPlayer(int i, bool initPosition)
+void NET_InitPlayer(int i, bool initPosition)
 {
 	NetPlay.players[i].allocated = false;
 	NetPlay.players[i].heartattacktime = 0;
@@ -274,6 +273,7 @@ static void NET_InitPlayer(int i, bool initPosition)
 	if (initPosition)
 	{
 		NetPlay.players[i].colour = i;
+		setPlayerColour(i, i);  // PlayerColour[] in component.c must match this! Why is this in more than one place??!
 		NetPlay.players[i].position = i;
 		NetPlay.players[i].team = i;
 	}
@@ -299,23 +299,46 @@ void NET_InitPlayers()
 	debug(LOG_NET, "Players initialized");
 }
 
+static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to)
+{
+	int n;
+
+	NETbeginEncode(NETnetQueue(to), NET_PLAYER_INFO);
+		NETuint32_tSmall(&indexLen);
+		for (n = 0; n < indexLen; ++n)
+		{
+			debug(LOG_NET, "sending player's (%u) info to all players", index[n]);
+			NETlogEntry(" sending player's info to all players", SYNC_FLAG, index[n]);
+			NETuint32_tSmall(&index[n]);
+			NETbool(&NetPlay.players[index[n]].allocated);
+			NETbool(&NetPlay.players[index[n]].heartbeat);
+			NETbool(&NetPlay.players[index[n]].kick);
+			NETstring(NetPlay.players[index[n]].name, sizeof(NetPlay.players[index[n]].name));
+			NETuint32_tSmall(&NetPlay.players[index[n]].heartattacktime);
+			NETint32_tSmall(&NetPlay.players[index[n]].colour);
+			NETint32_tSmall(&NetPlay.players[index[n]].position);
+			NETint32_tSmall(&NetPlay.players[index[n]].team);
+			NETbool(&NetPlay.players[index[n]].ready);
+		}
+		NETuint32_tSmall(&NetPlay.hostPlayer);
+	NETend();
+}
+
 static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 {
-	debug(LOG_NET, "sending player's (%u) info to all players", index);
-	NETlogEntry(" sending player's info to all players", SYNC_FLAG, index);
-	NETbeginEncode(NETnetQueue(to), NET_PLAYER_INFO);
-		NETuint32_t(&index);
-		NETbool(&NetPlay.players[index].allocated);
-		NETbool(&NetPlay.players[index].heartbeat);
-		NETbool(&NetPlay.players[index].kick);
-		NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
-		NETuint32_t(&NetPlay.players[index].heartattacktime);
-		NETint32_t(&NetPlay.players[index].colour);
-		NETint32_t(&NetPlay.players[index].position);
-		NETint32_t(&NetPlay.players[index].team);
-		NETbool(&NetPlay.players[index].ready);
-		NETuint32_t(&NetPlay.hostPlayer);
-	NETend();
+	NETSendNPlayerInfoTo(&index, 1, to);
+}
+
+static void NETSendAllPlayerInfoTo(unsigned to)
+{
+	static uint32_t indices[MAX_PLAYERS] = {0, 1, 2, 3, 4, 5, 6, 7};
+	NETSendNPlayerInfoTo(indices, ARRAY_SIZE(indices), to);
+}
+
+void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2)
+{
+	uint32_t indices[2] = {index1, index2};
+	NETSendNPlayerInfoTo(indices, 2, NET_ALL_PLAYERS);
 }
 
 void NETBroadcastPlayerInfo(uint32_t index)
@@ -1370,20 +1393,19 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 		}
 		case NET_PLAYER_INFO:
 		{
-			uint32_t index;
+			uint32_t indexLen = 0, n;
+			uint32_t index = MAX_PLAYERS;
 			int32_t colour = 0;
 			int32_t position = 0;
 			int32_t team = 0;
 			uint32_t hostPlayer = 0;
+			bool error = false;
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
-				// Retrieve the player's ID
-				NETuint32_t(&index);
-
-				// Bail out if the given ID number is out of range
-				if (index >= MAX_CONNECTED_PLAYERS)
+				NETuint32_tSmall(&indexLen);
+				if (indexLen > MAX_PLAYERS)
 				{
-					debug(LOG_ERROR, "MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", index, (unsigned int)MAX_CONNECTED_PLAYERS);
+					debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated");
 					NETend();
 					break;
 				}
@@ -1394,35 +1416,49 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					break;
 				}
 
-				// Retrieve the rest of the data
-				NETbool(&NetPlay.players[index].allocated);
-				NETbool(&NetPlay.players[index].heartbeat);
-				NETbool(&NetPlay.players[index].kick);
-				NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
-				NETuint32_t(&NetPlay.players[index].heartattacktime);
-				NETint32_t(&colour);
-				NETint32_t(&position);
-				NETint32_t(&team);
-				NETbool(&NetPlay.players[index].ready);
-				NETuint32_t(&hostPlayer);
+				for (n = 0; n < indexLen; ++n)
+				{
+					// Retrieve the player's ID
+					NETuint32_tSmall(&index);
+
+					// Bail out if the given ID number is out of range
+					if (index >= MAX_CONNECTED_PLAYERS)
+					{
+						debug(LOG_ERROR, "MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", index, (unsigned int)MAX_CONNECTED_PLAYERS);
+						NETend();
+						error = true;
+						break;
+					}
+
+					// Retrieve the rest of the data
+					NETbool(&NetPlay.players[index].allocated);
+					NETbool(&NetPlay.players[index].heartbeat);
+					NETbool(&NetPlay.players[index].kick);
+					NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
+					NETuint32_tSmall(&NetPlay.players[index].heartattacktime);
+					NETint32_tSmall(&colour);
+					NETint32_tSmall(&position);
+					NETint32_tSmall(&team);
+					NETbool(&NetPlay.players[index].ready);
+
+					// Don't let anyone except the host change these, otherwise it will end up inconsistent at some point, and the game gets really messed up.
+					if (playerQueue.index == NetPlay.hostPlayer)
+					{
+						NetPlay.players[index].colour = colour;
+						NetPlay.players[index].position = position;
+						NetPlay.players[index].team = team;
+						//NetPlay.hostPlayer = hostPlayer;  // Huh?
+					}
+
+					debug(LOG_NET, "%s for player %u (%s)", n == 0? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
+					// update the color to the local array
+					setPlayerColour(index, NetPlay.players[index].colour);
+				}
+				NETuint32_tSmall(&hostPlayer);
 			NETend();
-
-			// Don't let anyone except the host change these, otherwise it will end up inconsistent at some point, and the game gets really messed up.
-			if (playerQueue.index == NetPlay.hostPlayer)
-			{
-				NetPlay.players[index].colour = colour;
-				NetPlay.players[index].position = position;
-				NetPlay.players[index].team = team;
-				//NetPlay.hostPlayer = hostPlayer;  // Huh?
-			}
-
-			debug(LOG_NET, "Receiving MSG_PLAYER_INFO for player %u (%s)", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
-			// update the color to the local array
-			setPlayerColour(index, NetPlay.players[index].colour);
-
 			// If we're the game host make sure to send the updated
 			// data to all other clients as well.
-			if (NetPlay.isHost)
+			if (NetPlay.isHost && !error)
 			{
 				NETBroadcastPlayerInfo(index);
 				NETfixDuplicatePlayerNames();
@@ -2289,12 +2325,14 @@ static void NETallowJoining(void)
 						NETlogEntry(buf, SYNC_FLAG, index);
 					}
 
-					// Broadcast to everyone that a new player has joined
-					NETBroadcastPlayerInfo(index);  // Should this be in newnet?
-
 					NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
 					NETuint8_t(&index);
 					NETend();
+
+					// First send info about players to newcomer.
+					NETSendAllPlayerInfoTo(index);
+					// then send info about newcomer to all players.
+					NETBroadcastPlayerInfo(index);
 
 					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name, (unsigned int)index, connected_bsocket[index]);
 
@@ -2303,7 +2341,7 @@ static void NETallowJoining(void)
 
 					MultiPlayerJoin(index);
 
-					// Send info about players to newcomer.
+					// Narrowcast to new player that everyone has joined.
 					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 					{
 						if (index != j)  // We will broadcast the index == j case.
@@ -2314,15 +2352,13 @@ static void NETallowJoining(void)
 									NETuint8_t(&j);
 								NETend();
 							}
-							NETSendPlayerInfoTo(j, index);
 						}
 					}
 
-					// Send info about newcomer to all players.
+					// Broadcast to everyone that a new player has joined
 					NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_JOINED);
 						NETuint8_t(&index);
 					NETend();
-					NETBroadcastPlayerInfo(index);
 
 					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 					{

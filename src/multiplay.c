@@ -744,17 +744,15 @@ BOOL recvMessage(void)
 			break;
 		case NET_PLAYER_DROPPED:				// remote player got disconnected
 		{
-			BOOL host;
 			uint32_t player_id;
 
 			NETbeginDecode(queue, NET_PLAYER_DROPPED);
 			{
 				NETuint32_t(&player_id);
-				NETbool(&host);
 			}
 			NETend();
 
-			debug(LOG_INFO,"** player %u has dropped! Host is %s", player_id, host?"true":"false");
+			debug(LOG_INFO,"** player %u has dropped!", player_id);
 
 			MultiPlayerLeave(player_id);		// get rid of their stuff
 			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);

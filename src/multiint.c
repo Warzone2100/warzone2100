@@ -1570,8 +1570,7 @@ static BOOL changePosition(UBYTE player, UBYTE position)
 			      player, NetPlay.players[player].position, i, NetPlay.players[i].position);
 			NetPlay.players[i].position = NetPlay.players[player].position;
 			NetPlay.players[player].position = position;
-			NETBroadcastPlayerInfo(player);
-			NETBroadcastPlayerInfo(i);
+			NETBroadcastTwoPlayerInfo(player, i);
 			netPlayersUpdated = true;
 			return true;
 		}
@@ -1602,8 +1601,7 @@ static BOOL changeColour(UBYTE player, UBYTE col)
 			NetPlay.players[i].colour = getPlayerColour(player);
 			setPlayerColour(player, col);
 			NetPlay.players[player].colour = col;
-			NETBroadcastPlayerInfo(player);
-			NETBroadcastPlayerInfo(i);
+			NETBroadcastTwoPlayerInfo(player, i);
 			netPlayersUpdated = true;
 			return true;
 		}
@@ -2859,24 +2857,28 @@ void frontendMultiMessages(void)
 
 		case NET_PLAYER_DROPPED:		// remote player got disconnected
 		{
-			BOOL host;
-			uint32_t player_id;
+			uint32_t player_id = MAX_PLAYERS;
 
 			resetReadyStatus(false);
 
 			NETbeginDecode(queue, NET_PLAYER_DROPPED);
 			{
 				NETuint32_t(&player_id);
-				NETbool(&host);
 			}
 			NETend();
 
-			debug(LOG_INFO,"** player %u has dropped! Host is %s", player_id, host?"true":"false");
+			if (player_id >= MAX_PLAYERS)
+			{
+				debug(LOG_INFO, "** player %u has dropped - huh?", player_id);
+				break;
+			}
+
+			debug(LOG_INFO,"** player %u has dropped!", player_id);
 
 			MultiPlayerLeave(player_id);		// get rid of their stuff
+			NET_InitPlayer(player_id, false);           // sets index player's array to false
 			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
-
-			if (host || player_id == selectedPlayer)	// if host quits or we quit, abort out
+			if (player_id == NetPlay.hostPlayer || player_id == selectedPlayer)	// if host quits or we quit, abort out
 			{
 				stopJoining();
 			}
