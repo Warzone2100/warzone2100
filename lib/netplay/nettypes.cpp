@@ -633,6 +633,16 @@ void NETuint32_tSmall(uint32_t *ip)
 	queueAutoSmall(*ip);
 }
 
+void NETint64_t(int64_t *ip)
+{
+	queueAuto(*ip);
+}
+
+void NETuint64_t(uint64_t *ip)
+{
+	queueAuto(*ip);
+}
+
 void NETfloat(float *fp)
 {
 	queueAuto(*fp);

@@ -21,7 +21,6 @@
  * @file
  *
  * Handles fixed point operations for degrees and matrix math.
- * @todo Get rid of this file and use floats instead.
  */
 
 #ifndef FIXEDPOINT_H

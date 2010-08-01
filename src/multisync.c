@@ -669,7 +669,7 @@ BOOL recvStructureCheck(NETQUEUE queue)
 }
 
 static uint32_t powerCheckLastSent = 0;
-static float powerCheckLastPower[MAX_PLAYERS];
+static int64_t powerCheckLastPower[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
@@ -692,7 +692,7 @@ static BOOL sendPowerCheck()
 	powerCheckLastSent = gameTime;
 	for (player = 0; player < MAX_PLAYERS; ++player)
 	{
-		powerCheckLastPower[player] = getPower(player);
+		powerCheckLastPower[player] = getPrecisePower(player);
 		if (myResponsibility(player))
 		{
 			if (!isInSync())  // Don't really send anything, unless out of synch.
@@ -700,7 +700,7 @@ static BOOL sendPowerCheck()
 				NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_POWER);
 					NETuint8_t(&player);
 					NETuint32_t(&gameTime);
-					NETfloat(&powerCheckLastPower[player]);
+					NETint64_t(&powerCheckLastPower[player]);
 				NETend();
 			}
 		}
@@ -712,12 +712,12 @@ BOOL recvPowerCheck(NETQUEUE queue)
 {
 	uint8_t		player;
 	uint32_t        synchTime;
-	float           power;
+	int64_t         power;
 
 	NETbeginDecode(queue, GAME_CHECK_POWER);
 		NETuint8_t(&player);
 		NETuint32_t(&synchTime);
-		NETfloat(&power);
+		NETint64_t(&power);
 	NETend();
 
 	if (powerCheckLastSent != synchTime)
@@ -735,12 +735,12 @@ BOOL recvPowerCheck(NETQUEUE queue)
 
 	if (power != powerCheckLastPower[player])
 	{
-		float powerFrom = getPower(player);
-		float powerTo = powerFrom + power - powerCheckLastPower[player];
-		debug(LOG_SYNC, "GAME_CHECK_POWER: Adjusting power for player %d (%s) from %f to %f",
-		      (int)player, isHumanPlayer(player) ? "Human" : "AI", powerFrom, powerTo);
-		syncDebug("Adjusting power for player %d (%s) from %s to %s", (int)player, isHumanPlayer(player) ? "Human" : "AI", syncDebugFloat(powerFrom), syncDebugFloat(powerTo));
-		setPower(player, powerTo);
+		int64_t powerFrom = getPrecisePower(player);
+		int64_t powerTo = powerFrom + power - powerCheckLastPower[player];
+		debug(LOG_SYNC, "GAME_CHECK_POWER: Adjusting power for player %d (%s) from %lf to %lf",
+		      (int)player, isHumanPlayer(player) ? "Human" : "AI", powerFrom/4294967296., powerTo/4294967296.);
+		syncDebug("Adjusting power for player %d (%s) from %"PRId64" to %"PRId64"", (int)player, isHumanPlayer(player) ? "Human" : "AI", powerFrom, powerTo);
+		setPrecisePower(player, powerTo);
 	}
 	return true;
 }

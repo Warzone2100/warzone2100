@@ -70,7 +70,7 @@ typedef struct _mission
 	BASE_OBJECT			*apsOilList[1];
 	//struct _proximity_display	*apsProxDisp[MAX_PLAYERS];
 	FLAG_POSITION				*apsFlagPosLists[MAX_PLAYERS];
-	PLAYER_POWER				asPower[MAX_PLAYERS];
+	int32_t                         asCurrentPower[MAX_PLAYERS];
 
 	UDWORD				startTime;			//time the mission started
 	SDWORD				time;				//how long the mission can last

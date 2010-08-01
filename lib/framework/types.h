@@ -46,6 +46,7 @@
 #ifdef WZ_CC_MSVC
 # define PRIu32					"u"
 # define PRIu64					"I64u"
+# define PRId64					"I64d"
 typedef SSIZE_T ssize_t;
 #endif
 #endif // WZ_C99

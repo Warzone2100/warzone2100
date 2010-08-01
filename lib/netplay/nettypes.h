@@ -90,6 +90,8 @@ void NETint32_t(int32_t *ip);
 void NETint32_tSmall(int32_t *ip);  ///< Encodes small values (< 836 288) in at most 3 bytes, large values (≥ 22 888 448) in 5 bytes.
 void NETuint32_t(uint32_t *ip);
 void NETuint32_tSmall(uint32_t *ip);  ///< Encodes small values (< 1 672 576) in at most 3 bytes, large values (≥ 45 776 896) in 5 bytes.
+void NETint64_t(int64_t *ip);
+void NETuint64_t(uint64_t *ip);
 void NETfloat(float* fp);
 void NETbool(BOOL *bp);
 void NETnull(void);

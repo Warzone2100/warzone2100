@@ -2791,7 +2791,7 @@ void saveMissionPower(void)
 
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		mission.asPower[inc].currentPower = getPower(inc);
+		mission.asCurrentPower[inc] = getPower(inc);
 	}
 }
 
@@ -2802,7 +2802,7 @@ void adjustMissionPower(void)
 
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		addPower(inc, mission.asPower[inc].currentPower);
+		addPower(inc, mission.asCurrentPower[inc]);
 	}
 }
 
