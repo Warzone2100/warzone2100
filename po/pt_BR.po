@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:25+0200\n"
-"PO-Revision-Date: 2010-06-05 03:14-0300\n"
+"POT-Creation-Date: 2010-08-02 22:24+0200\n"
+"PO-Revision-Date: 2010-08-01 23:54-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -536,7 +536,7 @@ msgstr "Todos os caminhões melhorados automaticamente"
 #: data/mp/messages/resmessages12.rmsg:69
 #: data/mp/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
-msgstr "Novo Torrete de Sistemas Disponível para Projeto"
+msgstr "Novo Torrete de Sistemas Disponível para Projetos"
 
 #: data/base/messages/resmessages12.rmsg:70
 #: data/mp/messages/resmessages12.rmsg:70
@@ -923,7 +923,7 @@ msgstr "Nova Arma de Artilharia"
 #: data/mp/messages/resmessages2.rmsg:902
 #: data/mp/messages/strings/resstrings.txt:933
 msgid "May be assigned to a sensor"
-msgstr "Pode ser designado a um sensor"
+msgstr "Pode ser deisgnado a um sensor"
 
 #: data/base/messages/resmessages12.rmsg:149
 #: data/base/messages/resmessages1.rmsg:669
@@ -5422,7 +5422,7 @@ msgstr "Os benefícios de sua pesquisa seriam vastos."
 
 #: data/base/messages/strings/cam3strings.txt:79
 msgid "Enemy forces are ....... from these coordinates."
-msgstr "Forças inimigas ........ dessas coordenadas."
+msgstr "Forças inimigas....... dessas coordenadas."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
@@ -8842,7 +8842,7 @@ msgstr "Melhora no Direcionamento dos Foguetes"
 #: data/base/messages/strings/names.txt:1168
 #: data/mp/messages/strings/names.txt:1184
 msgid "Rocket Laser Designator"
-msgstr "Designador a Laser de Foguetes"
+msgstr "Deisgnador a Laser de Foguetes"
 
 #: data/base/messages/strings/names.txt:1169
 #: data/mp/messages/strings/names.txt:1185
@@ -12247,8 +12247,8 @@ msgstr "Tanque Artilharia de Mini-Foguetes Cobra"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hovercraft Canhão de Hiper Velocidade Píton"
 
-#: lib/framework/i18n.c:88
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:147
 msgid "System locale"
 msgstr "Localização do Sistema"
 
@@ -12428,7 +12428,7 @@ msgstr "ir diretamente à tela de hospedeiro"
 
 #: src/configuration.c:452
 #: src/configuration.c:453
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "Jogador"
 
@@ -12583,7 +12583,7 @@ msgstr "Jogador desconectou-se"
 
 #: src/display.c:1727
 msgid "Cannot Build. Oil Resource Burning."
-msgstr "Impossível construir. Poço em chamas."
+msgstr "Não pode construir. Recursos petrolíferos queimados."
 
 #: src/display.c:1907
 #: src/display.c:2522
@@ -12598,78 +12598,78 @@ msgstr "%s - Aliado - Danos %d%% - Experiência %d, %s"
 
 #: src/display.c:2116
 msgid "Truck ordered to build Oil Derrick"
-msgstr "Caminhão designados para a construção do Extrator de Petróleo"
+msgstr "O Caminhão ordenou a construção Oil Derrick"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
 msgstr "Unidades Perdidas!"
 
-#: src/droid.c:1601
+#: src/droid.c:1602
 msgid "Structure Restored"
 msgstr "Estrutura Restaurada"
 
-#: src/droid.c:3349
+#: src/droid.c:3350
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u selecionado - %u Unidade"
 msgstr[1] "Grupo %u selecionado - %u Unidades"
 
-#: src/droid.c:3362
+#: src/droid.c:3363
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidade atribuída ao Grupo %u"
 msgstr[1] "%u unidades atribuídas ao Grupo %u"
 
-#: src/droid.c:3375
+#: src/droid.c:3376
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado no Grupo %u - %u Unidade"
 msgstr[1] "Centrado no Grupo %u - %u Unidades"
 
-#: src/droid.c:3379
+#: src/droid.c:3380
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alinhamento com o grupo %u - %u Unidade"
 msgstr[1] "Alinhamento com o grupo %u - %u Unidades"
 
-#: src/droid.c:3642
+#: src/droid.c:3643
 msgid "Rookie"
 msgstr "Recruta"
 
-#: src/droid.c:3643
+#: src/droid.c:3644
 msgctxt "rank"
 msgid "Green"
 msgstr "Soldado"
 
-#: src/droid.c:3644
+#: src/droid.c:3645
 msgid "Trained"
 msgstr "Treinado"
 
-#: src/droid.c:3645
+#: src/droid.c:3646
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3646
+#: src/droid.c:3647
 msgid "Professional"
 msgstr "Tenente"
 
-#: src/droid.c:3647
+#: src/droid.c:3648
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3648
+#: src/droid.c:3649
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3649
+#: src/droid.c:3650
 msgid "Special"
 msgstr "Força Especial"
 
-#: src/droid.c:3650
+#: src/droid.c:3651
 msgid "Hero"
 msgstr "Herói"
 
@@ -12730,7 +12730,7 @@ msgstr "Nova Campanha"
 
 #: src/frontend.c:213
 msgid "Start Skirmish Game"
-msgstr "Jogar Contra o Computador"
+msgstr "Iniciar Jogo vs. Computador"
 
 #: src/frontend.c:214
 msgid "Challenges"
@@ -12908,7 +12908,7 @@ msgstr "OPÇÕES DE ÁUDIO"
 
 #: src/frontend.c:759
 msgid "* Takes effect on game restart"
-msgstr "* É necessário reiniciar o jogo"
+msgstr "* Precisa reiniciar o jogo"
 
 #: src/frontend.c:762
 msgid "Graphics Mode*"
@@ -12956,21 +12956,22 @@ msgid "Switch Mouse Buttons"
 msgstr "Inverter Botões do Mouse"
 
 #: src/frontend.c:1003
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Girar a visão para a esquerda"
+msgstr "Girar a Tela"
 
 #: src/frontend.c:1006
 #: src/frontend.c:1094
+#, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
-msgstr ""
+msgstr "Botão do Meio"
 
 #: src/frontend.c:1010
 #: src/frontend.c:1089
+#, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
-msgstr ""
+msgstr "Botão Direito"
 
 #: src/frontend.c:1014
 msgid "MOUSE OPTIONS"
@@ -13016,18 +13017,17 @@ msgstr "Cor das Unidades"
 
 #: src/frontend.c:1174
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.c:1175
 #: src/frontend.c:1224
-#, fuzzy
 msgid "Rotating"
-msgstr "Girar a visão para a direita"
+msgstr "Giratório"
 
 #: src/frontend.c:1175
 #: src/frontend.c:1224
 msgid "Fixed"
-msgstr ""
+msgstr "Fixo"
 
 #: src/frontend.c:1181
 #: src/frontend.c:1201
@@ -13057,17 +13057,17 @@ msgstr "Impossível criar edifício"
 #: src/hci.c:2115
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "Jogador %u trapaçeou (debug menu) e criou uma nova estrutura: %s."
+msgstr "Jogador %u é batota (debug menu) ele/ela mesma é uma nova estrutura: %s."
 
 #: src/hci.c:2130
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr "Jogador %u trapaçeou (debug menu) e criou um novo artefato: %s."
+msgstr "Jogador %u é batota (debug menu) ele/ela mesma é uma nova característica: %s."
 
 #: src/hci.c:2151
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr "Jogador %u trapaçeou (debug menu) e criou um novo droide: %s."
+msgstr "Jogador %u é batota (debug menu) ele/ela mesma é um novo droid: %s."
 
 #: src/hci.c:3722
 msgid "Commanders (F6)"
@@ -13357,7 +13357,7 @@ msgstr "Atenção! Essa trapaça é instável. Recomendamos contra o seu uso."
 
 #: src/keybind.c:201
 msgid "Lets us see what you see!"
-msgstr "Vamos ver o que você ve!"
+msgstr "Permite-nos ver o que você vê!"
 
 #: src/keybind.c:203
 msgid "Fine, weapon & sensor display is off!"
@@ -13371,7 +13371,7 @@ msgstr ""
 #: src/keybind.c:491
 #, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
-msgstr "Jogador %u está trapaceando, construindo uma nova armada dróide de %s(s)."
+msgstr "Jogador %u está trapaceando, dando a ele/ela mesma uma nova armada dróide de %s(s)."
 
 #: src/keybind.c:530
 #: src/keybind.c:560
@@ -13392,39 +13392,39 @@ msgstr "(Jogador %u) está trapaceando: %s"
 
 #: src/keybind.c:531
 msgid "Hard as nails!!!"
-msgstr "Duro como pedra!!!"
+msgstr "Doer as unhas!!!"
 
 #: src/keybind.c:545
 msgid "Takings thing easy!"
-msgstr "Vamos com calma!"
+msgstr "Rendimento, coisas fácil !"
 
 #: src/keybind.c:561
 msgid "1000 big ones!!!"
-msgstr "1000 grandões!!!"
+msgstr "1000 grandes!!!"
 
 #: src/keybind.c:578
 msgid "Power overwhelming"
-msgstr "Power overwhelming"
+msgstr "Poder esmagador"
 
 #: src/keybind.c:593
 msgid "Back to normality!"
-msgstr "De volta ao normal!"
+msgstr "Voltar a normalidade!"
 
 #: src/keybind.c:606
 msgid "Getting tricky!"
-msgstr "Ficando tenso!"
+msgstr "Obtendo complicado!"
 
 #: src/keybind.c:622
 msgid "Twice as nice!"
-msgstr "Duas vezes melhor!"
+msgstr "Duas vezes mais agradável!"
 
 #: src/keybind.c:633
 msgid "FPS display is enabled."
-msgstr "Mostrador FPS ativado."
+msgstr "mostrar FPS é ativado."
 
 #: src/keybind.c:637
 msgid "FPS display is disabled."
-msgstr "Mostrador FPS desativado."
+msgstr "mostrar FPS é desativado."
 
 #: src/keybind.c:661
 #, c-format
@@ -13438,11 +13438,11 @@ msgstr "(Jogador %u) está trapaceando - No. Ciborgues: %d No. Estruturas: %d No
 
 #: src/keybind.c:730
 msgid "Infinite power disabled"
-msgstr "Energia infinita desativada"
+msgstr "Poder infinito desativado"
 
 #: src/keybind.c:730
 msgid "Infinite power enabled"
-msgstr "Energia infinita ativada"
+msgstr "Poder infinito ativado"
 
 #: src/keybind.c:770
 msgid "All items made available"
@@ -13483,7 +13483,7 @@ msgstr "Modo Deus DESLIGADO"
 
 #: src/keybind.c:1488
 msgid "View Aligned to North"
-msgstr "Alinhar a Vista com o Norte"
+msgstr "Ver alinhado com o Norte"
 
 #: src/keybind.c:1497
 #, c-format
@@ -13492,7 +13492,7 @@ msgstr "Travar Cursor %s"
 
 #: src/keybind.c:1578
 msgid "Researched EVERYTHING for you!"
-msgstr "Pesquisei TUDO para você!"
+msgstr "Pesquisou TUDO para você!"
 
 #: src/keybind.c:1611
 #, c-format
@@ -13533,7 +13533,7 @@ msgstr "Branco como a neve... NEVE"
 
 #: src/keybind.c:1933
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
-msgstr "Águas de Março... CHUVA"
+msgstr "Garoa Paulista... CHUVA"
 
 #: src/keybind.c:1939
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
@@ -13545,7 +13545,7 @@ msgstr "Atenção! Isso pode ter consequências drásticas se usado incorretamen
 
 #: src/keybind.c:1986
 msgid "All enemies destroyed by cheating!"
-msgstr "Inimigos destruídos por trapaça!"
+msgstr "Inimigos destruido por trapaça!"
 
 #: src/keybind.c:2027
 msgid "Destroying selected droids and structures!"
@@ -13665,7 +13665,7 @@ msgstr "Construção"
 
 #: src/keymap.c:298
 msgid "Design"
-msgstr "Projetar"
+msgstr "Projeto"
 
 #: src/keymap.c:299
 msgid "Intelligence Display"
@@ -13945,7 +13945,7 @@ msgstr "Atirar à vontade"
 
 #: src/keymap.c:388
 msgid "Return to HQ"
-msgstr "Retornar ao QG"
+msgstr "Retornar ao QH"
 
 #: src/keymap.c:396
 msgid "Send Text Message"
@@ -13985,7 +13985,7 @@ msgstr "Selecionar todos os VTOLs"
 
 #: src/keymap.c:425
 msgid "Select all Wheels"
-msgstr "Selecionar todos os 4x4"
+msgstr "Selecionar todos os veículos de rodas"
 
 #: src/keymap.c:427
 msgid "Select all Similar Units"
@@ -14022,19 +14022,19 @@ msgstr "Carregar Transportes"
 
 #: src/mission.c:2776
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr "OBJETIVO ALCANÇADO por trapaça!"
+msgstr "OBJETIVO ARQUIVADO por trapaça!"
 
 #: src/mission.c:2776
 msgid "OBJECTIVE ACHIEVED"
-msgstr "OBJETIVO ALCANÇADO"
+msgstr "OBJETIVO ARQUIVADO"
 
 #: src/mission.c:2782
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "OBJETIVO PERDIDO--e você trapaçeou!"
+msgstr "FALHA NO OBJETIVO--e você trapaçeou!"
 
 #: src/mission.c:2782
 msgid "OBJECTIVE FAILED"
-msgstr "OBJETIVO PERDIDO"
+msgstr "FALHA NO OBJETIVO"
 
 #: src/mission.c:2808
 #: src/mission.c:2848
@@ -14059,12 +14059,12 @@ msgstr "Você encontrou %u de energia de um tambor de petróleo"
 #: src/multigifts.c:170
 #, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr "%s Dá-lhe Um Relatório De Visibilidade"
+msgstr "%s Dar-lhe um relatório de visibilidade"
 
 #: src/multigifts.c:190
 #, c-format
 msgid "%s Gives you a %s"
-msgstr "%s Dá-lhe um %s"
+msgstr "%s Dar-lhe um %s"
 
 #: src/multigifts.c:241
 #, c-format
@@ -14074,37 +14074,37 @@ msgstr "Tentativa de dar um %s não-vazio não foi permitida."
 #: src/multigifts.c:300
 #, c-format
 msgid "%s Gives You Technology Documents"
-msgstr "%s Dá-lhe Documentos De Tecnologia"
+msgstr "%s Dar-lhe documentos de tecnologia"
 
 #: src/multigifts.c:338
 #, c-format
 msgid "%s Gives You %u Power"
-msgstr "%s Dá-lhe %u De Energia"
+msgstr "%s Te Dá %u de Energia"
 
 #: src/multigifts.c:358
 #, c-format
 msgid "%s Requests An Alliance With You"
-msgstr "%s Solicita Uma Aliança Com Você"
+msgstr "%s Solicita uma aliança com você"
 
 #: src/multigifts.c:367
 #, c-format
 msgid "You Invite %s To Form An Alliance"
-msgstr "Você Convida %s Para Formar Uma Aliança"
+msgstr "Você convida %s para formar uma aliança"
 
 #: src/multigifts.c:387
 #, c-format
 msgid "%s Breaks The Alliance With %s"
-msgstr "%s Quebra A Aliança Com %s"
+msgstr "%s Quebrar a allança com %s"
 
 #: src/multigifts.c:413
 #, c-format
 msgid "%s Forms An Alliance With %s"
-msgstr "%s Forma Uma Aliança Com %s"
+msgstr "%s Formar uma alliança com %s"
 
 #: src/multigifts.c:773
 #, c-format
 msgid "You Discover Blueprints For %s"
-msgstr "Você Descobre Projetos Para %s"
+msgstr "Você descobre projetos para %s"
 
 #: src/multiint.c:467
 #: src/multilimit.c:192
@@ -14150,7 +14150,7 @@ msgstr "Versão do Jogo Errada!"
 
 #: src/multiint.c:737
 msgid "You have an incompatible mod."
-msgstr "Você tem um mod incompatível."
+msgstr "Você tem um mod incompatível"
 
 #: src/multiint.c:742
 msgid "Host couldn't send file?"
@@ -14665,12 +14665,12 @@ msgstr "VOCÊ FOI VITORIOSO"
 msgid "YOU WERE DEFEATED!"
 msgstr "VOCÊ FOI DERROTADO"
 
-#: src/scriptfuncs.c:10088
+#: src/scriptfuncs.c:10089
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sinal recebido de %s!"
 
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10135
 #, c-format
 msgid "Beacon %d"
 msgstr "Sinal %d"
@@ -14731,40 +14731,40 @@ msgstr "%s - Danificado Eletronicamente"
 
 #: src/structure.c:6444
 msgid "Electronic Reward - Visibility Report"
-msgstr "Presente - Eletrônico - Relatório de Visibilidade"
+msgstr "Prêmio - Relatório de Visibilidade"
 
 #: src/structure.c:6484
 msgid "Factory Reward - Propulsion"
-msgstr "Presente - Sist. de Propulsão"
+msgstr "Prêmio - Propulsão"
 
 #: src/structure.c:6508
 msgid "Factory Reward - Body"
-msgstr "Presente - Chassis"
+msgstr "Prêmio - Chassis"
 
 #: src/structure.c:6532
 msgid "Factory Reward - Weapon"
-msgstr "Presente - Arma"
+msgstr "Prêmio - Arma"
 
 #: src/structure.c:6541
 msgid "Factory Reward - Nothing"
-msgstr "Presente - Nada"
+msgstr "Prêmio - Nada"
 
 #: src/structure.c:6569
 msgid "Repair Facility Award - Repair"
-msgstr "Presente - Centro de Reparos"
+msgstr "Prêmio - Centro de Reparos"
 
 #: src/structure.c:6576
 msgid "Repair Facility Award - Nothing"
-msgstr "Presente - Nada"
+msgstr "Prêmio - Nada"
 
 #: src/transporter.c:397
 #: src/transporter.c:451
 msgid "Launch Transport"
-msgstr "Lançar Transporte"
+msgstr "Lançar Transportes"
 
 #: src/transporter.c:1758
 msgid "Reinforcements landing"
-msgstr "Reforços pousando"
+msgstr "Reforços de aterragem"
 
 #: src/version.c:139
 msgid " (modified and switched locally)"
@@ -14794,48 +14794,6 @@ msgstr " - Finalizado em %s"
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
 
-#~ msgid "German"
-#~ msgstr "Alemão"
-
-#~ msgid "English (United Kingdom)"
-#~ msgstr "Inglês Britânico"
-
-#~ msgid "Spanish"
-#~ msgstr "Espanhol"
-
-#~ msgid "Estonian"
-#~ msgstr "Estoniano"
-
-#~ msgid "French"
-#~ msgstr "Francês"
-
-#~ msgid "Croatian"
-#~ msgstr "Croata"
-
-#~ msgid "Italian"
-#~ msgstr "Italiano"
-
-#~ msgid "Polish"
-#~ msgstr "Polandês"
-
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Português Brasileiro"
-
-#~ msgid "Portuguese"
-#~ msgstr "Português"
-
-#~ msgid "Russian"
-#~ msgstr "Russo"
-
-#~ msgid "Slovenian"
-#~ msgstr "Slovênio"
-
-#~ msgid "Ukrainian"
-#~ msgstr "Ucraniano"
-
-#~ msgid "Traditional Chinese"
-#~ msgstr "Chinês Tradicional"
-
 #~ msgid "Hardcrete Gate"
 #~ msgstr "Muro de Durocreto"
 
@@ -14844,39 +14802,6 @@ msgstr "Versão %s%s%s%s"
 
 #~ msgid "Plasmite Retribution VTOL"
 #~ msgstr "VTOL Plasmite Retribuição"
-
-#~ msgid "Czech"
-#~ msgstr "Tcheco"
-
-#~ msgid "Danish"
-#~ msgstr "Dinamarquês"
-
-#~ msgid "Finnish"
-#~ msgstr "Finlandês"
-
-#~ msgid "Frisian"
-#~ msgstr "Frisiano"
-
-#~ msgid "Irish"
-#~ msgstr "Irlandês"
-
-#~ msgid "Lithuanian"
-#~ msgstr "Lituânio"
-
-#~ msgid "Norwegian"
-#~ msgstr "Norueguês"
-
-#~ msgid "Dutch"
-#~ msgstr "Holandês"
-
-#~ msgid "Romanian"
-#~ msgstr "Romeno"
-
-#~ msgid "Simplified Chinese"
-#~ msgstr "Chinês Simplificado"
-
-#~ msgid "Latin"
-#~ msgstr "Latim"
 
 #~ msgid "2 trucks ordered to build Oil Derrick"
 #~ msgstr "2 caminhões designados para a construção do Extrator de Petróleo"
@@ -14898,6 +14823,81 @@ msgstr "Versão %s%s%s%s"
 
 #~ msgid "Construction Progress"
 #~ msgstr "Progresso da Construção"
+
+#~ msgid "Czech"
+#~ msgstr "Tcheco"
+
+#~ msgid "Danish"
+#~ msgstr "Dinamarquês"
+
+#~ msgid "German"
+#~ msgstr "Alemão"
+
+#~ msgid "English (United Kingdom)"
+#~ msgstr "Inglês Britânico"
+
+#~ msgid "Spanish"
+#~ msgstr "Espanhol"
+
+#~ msgid "Estonian"
+#~ msgstr "Estoniano"
+
+#~ msgid "Finnish"
+#~ msgstr "Finlandês"
+
+#~ msgid "French"
+#~ msgstr "Francês"
+
+#~ msgid "Frisian"
+#~ msgstr "Frisiano"
+
+#~ msgid "Irish"
+#~ msgstr "Irlandês"
+
+#~ msgid "Croatian"
+#~ msgstr "Croata"
+
+#~ msgid "Italian"
+#~ msgstr "Italiano"
+
+#~ msgid "Lithuanian"
+#~ msgstr "Lituânio"
+
+#~ msgid "Norwegian"
+#~ msgstr "Norueguês"
+
+#~ msgid "Dutch"
+#~ msgstr "Holandês"
+
+#~ msgid "Polish"
+#~ msgstr "Polandês"
+
+#~ msgid "Brazilian Portuguese"
+#~ msgstr "Português Brasileiro"
+
+#~ msgid "Portuguese"
+#~ msgstr "Português"
+
+#~ msgid "Romanian"
+#~ msgstr "Romeno"
+
+#~ msgid "Russian"
+#~ msgstr "Russo"
+
+#~ msgid "Slovenian"
+#~ msgstr "Slovênio"
+
+#~ msgid "Ukrainian"
+#~ msgstr "Ucraniano"
+
+#~ msgid "Simplified Chinese"
+#~ msgstr "Chinês Simplificado"
+
+#~ msgid "Traditional Chinese"
+#~ msgstr "Chinês Tradicional"
+
+#~ msgid "Latin"
+#~ msgstr "Latim"
 
 #~ msgid "Warzone 2100"
 #~ msgstr "Warzone 2100"
