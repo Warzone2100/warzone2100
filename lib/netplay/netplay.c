@@ -2929,14 +2929,14 @@ bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player)
 
 #define MAX_LEN_LOG_LINE 512  // From debug.c - no use printing something longer.
 #define MAX_SYNC_MESSAGES 10000
-#define MAX_SYNC_HISTORY 10
+#define MAX_SYNC_HISTORY 12
 
 static unsigned syncDebugNext = 0;
 static uint32_t syncDebugNum[MAX_SYNC_HISTORY];
-static uint32_t syncDebugGameTime[MAX_SYNC_HISTORY];
+static uint32_t syncDebugGameTime[MAX_SYNC_HISTORY + 1];
 static char *syncDebugFunctions[MAX_SYNC_HISTORY][MAX_SYNC_MESSAGES];
 static char *syncDebugStrings[MAX_SYNC_HISTORY][MAX_SYNC_MESSAGES];
-static uint32_t syncDebugCrcs[MAX_SYNC_HISTORY];
+static uint32_t syncDebugCrcs[MAX_SYNC_HISTORY + 1];
 
 void _syncDebug(const char *function, const char *str, ...)
 {
@@ -3062,7 +3062,7 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 		return true;
 	}
 
-	for (index = 0; index != MAX_SYNC_HISTORY; ++index)
+	for (index = 0; index < MAX_SYNC_HISTORY + 1; ++index)
 	{
 		if (syncDebugGameTime[index] == checkGameTime)
 		{
@@ -3075,9 +3075,9 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 		}
 	}
 
-	if (index == MAX_SYNC_HISTORY)
+	if (index >= MAX_SYNC_HISTORY)
 	{
-		return true;                                    // Couldn't check. May have dumped already.
+		return false;                                   // Couldn't check. May have dumped already, or MAX_SYNC_HISTORY isn't big enough compared to the maximum latency.
 	}
 
 	// Dump our version, and also erase it, so we only dump it at most once.
@@ -3095,6 +3095,12 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 		++numDumps;
 		sendDebugSync(debugSyncTmpBuf, bufSize, syncDebugGameTime[index]);
 	}
+
+	// Backup correct CRC for checking against remaining players, even though we erased the logs (which were dumped already).
+	syncDebugGameTime[MAX_SYNC_HISTORY] = syncDebugGameTime[index];
+	syncDebugCrcs[MAX_SYNC_HISTORY]     = syncDebugCrcs[index];
+
+	// Finish erasing our version.
 	syncDebugNum[index] = 0;
 	syncDebugGameTime[index] = 0;
 	syncDebugCrcs[index] = 0x00000000;

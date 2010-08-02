@@ -207,23 +207,8 @@ void gameTimeUpdate()
 
 			if (crcError)
 			{
-				unsigned player;
-				unsigned num = 0;
-				for (player = 0; player < MAX_PLAYERS; ++player)
-				{
-					if (NetPlay.players[player].allocated && gameQueueCheckCrc[player] != gameQueueCheckCrc[selectedPlayer])
-					{
-						NETsetPlayerConnectionStatus(CONNECTIONSTATUS_DESYNC, player);
-						++num;
-					}
-				}
-				if (num == 0)  // Sanity check, should never trigger.
-				{
-					ASSERT(false, "Desync out of sync!");
-					NETsetPlayerConnectionStatus(CONNECTIONSTATUS_DESYNC, selectedPlayer);
-				}
-				debug(LOG_ERROR, "Synch error %u player(s), gameTimes were: {%10u, %10u, %10u, %10u, %10u, %10u, %10u, %10u}", num, gameQueueCheckTime[0], gameQueueCheckTime[1], gameQueueCheckTime[2], gameQueueCheckTime[3], gameQueueCheckTime[4], gameQueueCheckTime[5], gameQueueCheckTime[6], gameQueueCheckTime[7]);
-				debug(LOG_ERROR, "Synch error %u player(s), CRCs were:      {0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X}", num, gameQueueCheckCrc[0], gameQueueCheckCrc[1], gameQueueCheckCrc[2], gameQueueCheckCrc[3], gameQueueCheckCrc[4], gameQueueCheckCrc[5], gameQueueCheckCrc[6], gameQueueCheckCrc[7]);
+				debug(LOG_ERROR, "Synch error, gameTimes were: {%10u, %10u, %10u, %10u, %10u, %10u, %10u, %10u}", gameQueueCheckTime[0], gameQueueCheckTime[1], gameQueueCheckTime[2], gameQueueCheckTime[3], gameQueueCheckTime[4], gameQueueCheckTime[5], gameQueueCheckTime[6], gameQueueCheckTime[7]);
+				debug(LOG_ERROR, "Synch error, CRCs were:      {0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X}", gameQueueCheckCrc[0], gameQueueCheckCrc[1], gameQueueCheckCrc[2], gameQueueCheckCrc[3], gameQueueCheckCrc[4], gameQueueCheckCrc[5], gameQueueCheckCrc[6], gameQueueCheckCrc[7]);
 				crcError = false;
 			}
 		}
@@ -417,6 +402,10 @@ void recvPlayerGameTime(NETQUEUE queue)
 	if (!checkDebugSync(checkTime, checkCrc))
 	{
 		crcError = true;
+		if (NetPlay.players[queue.index].allocated)
+		{
+			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_DESYNC, queue.index);
+		}
 	}
 
 	if (updateReadyTime == 0 && checkPlayerGameTime(NET_ALL_PLAYERS))
