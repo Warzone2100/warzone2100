@@ -4303,18 +4303,21 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 		}
 	}
 
-	// cant place on top of a delivery point...
-	for (psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
+	if (bCheckBuildQueue)
 	{
-		ASSERT_OR_RETURN(false, psCurrFlag->coords.x != ~0, "flag has invalid position");
-		i = map_coord(psCurrFlag->coords.x);
-		j = map_coord(psCurrFlag->coords.y);
-
-		if (i >= site.xTL && i <= site.xBR &&
-			j >= site.yTL && j <= site.yBR)
+		// cant place on top of a delivery point...
+		for (psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
 		{
-			valid = false;
-			goto failed;
+			ASSERT_OR_RETURN(false, psCurrFlag->coords.x != ~0, "flag has invalid position");
+			i = map_coord(psCurrFlag->coords.x);
+			j = map_coord(psCurrFlag->coords.y);
+
+			if (i >= site.xTL && i <= site.xBR &&
+				j >= site.yTL && j <= site.yBR)
+			{
+				valid = false;
+				goto failed;
+			}
 		}
 	}
 
@@ -4626,25 +4629,14 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 		valid = !fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED);
 	}
 
-failed:
-	if (!valid)
-	{
-		// Only set the hilight colour if it's the selected player.
-		if(player == selectedPlayer)
-		{
-			outlineTile = false;
-		}
-
-		return false;
-	}
-
+failed:  // Succeeded if got here without jumping.
 	// Only set the hilight colour if it's the selected player.
 	if (player == selectedPlayer)
 	{
 		outlineTile = true;
 	}
 
-	return true;
+	return valid;
 }
 
 /*
