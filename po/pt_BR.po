@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:24+0200\n"
-"PO-Revision-Date: 2010-05-08 00:46-0300\n"
+"POT-Creation-Date: 2010-08-02 22:26+0200\n"
+"PO-Revision-Date: 2010-08-01 23:54-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -12435,7 +12435,7 @@ msgstr "ir diretamente à tela de hospedeiro"
 
 #: src/configuration.c:442
 #: src/configuration.c:443
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "Jogador"
 
@@ -12972,19 +12972,18 @@ msgid "Switch Mouse Buttons"
 msgstr "Inverter Botões do Mouse"
 
 #: src/frontend.c:1010
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Girar a visão para a esquerda"
+msgstr "Girar a Tela"
 
 #: src/frontend.c:1013
 #: src/frontend.c:1101
 msgid "Middle Mouse"
-msgstr ""
+msgstr "Botão do Meio"
 
 #: src/frontend.c:1017
 #: src/frontend.c:1096
 msgid "Right Mouse"
-msgstr ""
+msgstr "Botão Direito"
 
 #: src/frontend.c:1021
 msgid "MOUSE OPTIONS"
@@ -13030,18 +13029,17 @@ msgstr "Cor das Unidades"
 
 #: src/frontend.c:1181
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.c:1182
 #: src/frontend.c:1231
-#, fuzzy
 msgid "Rotating"
-msgstr "Girar a visão para a direita"
+msgstr "Giratório"
 
 #: src/frontend.c:1182
 #: src/frontend.c:1231
 msgid "Fixed"
-msgstr ""
+msgstr "Fixo"
 
 #: src/frontend.c:1188
 #: src/frontend.c:1208
