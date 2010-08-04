@@ -142,28 +142,17 @@ void lev_error(const char* msg)
 LEVEL_DATASET* levFindDataSet(const char* name)
 {
 	LEVEL_DATASET* psNewLevel;
-	LEVEL_DATASET* psCloseEnough = NULL;
 
 	for (psNewLevel = psLevels; psNewLevel; psNewLevel = psNewLevel->psNext)
 	{
-		if (psNewLevel->pName != NULL)
+		if (psNewLevel->pName != NULL
+		 && strcmp(psNewLevel->pName, name) == 0)
 		{
-			if ((strncmp(psNewLevel->pName, "Sk-", 3) == 0 &&
-			     strcmp(psNewLevel->pName+3, name) == 0) ||
-			    (strncmp(psNewLevel->pName, "Sk-", 3) == 0 &&
-			     strcmp(psNewLevel->pName+strlen(name)+3, "-T1") == 0 &&
-			     strncmp(psNewLevel->pName+3, name, strlen(name)) == 0))
-			{
-				return psNewLevel;
-			}
-			if (!psCloseEnough && strcmp(psNewLevel->pName, name) == 0)
-			{
-				psCloseEnough = psNewLevel;
-			}
+			return psNewLevel;
 		}
 	}
 
-	return psCloseEnough;
+	return NULL;
 }
 
 // parse a level description data file

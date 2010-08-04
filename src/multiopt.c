@@ -126,12 +126,7 @@ static BOOL checkGameWdg(const char *nm)
 
 	for (lev = psLevels; lev; lev = lev->psNext)
 	{
-		if (strcmp(lev->pName, nm) == 0 ||
-		    (strncmp(lev->pName, "Sk-", 3) == 0 &&
-		     strcmp(lev->pName+3, nm) == 0) ||
-		    (strncmp(lev->pName, "Sk-", 3) == 0 &&
-		     strcmp(lev->pName+strlen(nm)+3, "-T1") == 0 &&
-		     strncmp(lev->pName+3, nm, strlen(nm)) == 0))
+		if (strcmp(lev->pName, nm) == 0)
 		{
 			return true;
 		}
