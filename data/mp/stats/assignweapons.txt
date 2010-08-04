@@ -301,7 +301,7 @@ CobraMedCnHTrks,Cannon2A-TMk1,NULL,NULL,6
 PythonHoverInferno,Flame2,NULL,NULL,6
 PhytonHoverAssGun,MG4ROTARYMk1,NULL,NULL,6
 PhytonHTrackAssGun,MG4ROTARYMk1,NULL,NULL,6
-ScorpHTrackHMG,MG1Mk1,NULL,NULL,6
+ScorpHTrackHMG,MG3Mk1,NULL,NULL,6
 MantisHoverAC,Cannon5VulcanMk1,NULL,NULL,6
 LeopardHoverPulseLas,Laser2PULSEMk1,NULL,NULL,6
 PantherHoverPulseLas,Laser2PULSEMk1,NULL,NULL,6
