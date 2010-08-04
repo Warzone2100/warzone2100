@@ -16,11 +16,18 @@ x defend team to defend owned structures and units when attacked. Only droids
 x scavenger AI is performing random researches
 x AI builds 2 x research labs if not present at the start of the game
 
+  v1.2
+x fixed a bug in wanderTeams events
+
+  v1.2.1
+x fixed a bug droidAttacked event
+
+
 + pursure certain vital researches, mainly metals, armors and damage
 */
 
 // scavenger values
-#define SCAVAI_VERSION "1.2"
+#define SCAVAI_VERSION "1.2.1"
 #define MAX_PLAYERS 8
 #define	TILE				128
 #define MAX_WHILE_LOOPS 99
@@ -53,6 +60,11 @@ public    PROPULSION LegsProp;
 private		GROUP		attackGroup,defendGroup,wanderGroup,wanderGroup2;
 private		DROID		newDroid, droid;
 
+//message
+private int			sender;
+private string	message;
+
+
 // attacking 
 private		STRUCTURE  structure;
 private		BASEOBJ    attacker,oTargetObj;
@@ -78,6 +90,7 @@ private bool _DEBUG;
 
 #region triggers
 
+trigger consoleTr	(CALL_CONSOLE, ref sender, ref message);
 trigger chainloadTr(wait, 10);
 trigger prepareAttackTr(every, 100);
 trigger regularTr(every, 100);
@@ -101,6 +114,7 @@ event wanderTeam2;
 event buildScavDroid;
 event formAllianceEvent;
 event doResearch;
+event consoleEv;
 
 #endregion triggers
 
@@ -134,6 +148,7 @@ event startup(CALL_GAMEINIT)
 		setEventTrigger(droidAttacked, inactive);
 		setEventTrigger(formAllianceEvent, inactive);
 		setEventTrigger(doResearch, inactive);
+		setEventTrigger(consoleEv, inactive);
  	} else {
     _DEBUG = true;//print off debug messages
  	  tAttacked = 0;
@@ -264,7 +279,7 @@ event wanderTeam(wanderTeamTr)
   if ( !bAnyOilResLeft()) {
     if ( wanderGroup.members > 0 ){
       initIterateGroup(wanderGroup);
-    	droid = iterateGroup(defendGroup);
+    	droid = iterateGroup(wanderGroup);
       while ( droid != NULLOBJECT){
         groupAddDroid(defendGroup, droid);
   		  droid = iterateGroup(wanderGroup);
@@ -321,7 +336,7 @@ event wanderTeam2(wanderTeam2Tr)
   if ( !bAnyOilResLeft()) {
     if ( wanderGroup2.members > 0 ){
       initIterateGroup(wanderGroup2);
-    	droid = iterateGroup(defendGroup);
+    	droid = iterateGroup(wanderGroup2);
       while ( droid != NULLOBJECT){
         groupAddDroid(defendGroup, droid);
   		  droid = iterateGroup(wanderGroup2);
@@ -549,33 +564,58 @@ event structureAttacked(CALL_STRUCT_ATTACKED, enemy1, ref structure, ref attacke
 event droidAttacked(CALL_DROID_ATTACKED, enemy1, ref mydroid, ref attacker)
 {
 	local DROID _droid;
-	local int _dist;
+	local int _dist,_x,_y;
 	
 	if ( mydroid.group == attackGroup ){ exit; }
+  if ( mydroid != NULLOBJECT ){
+    _x = mydroid.x;
+    _y = mydroid.y;
+  } else {
+    if ( attacker != NULLOBJECT ){
+      _x = attacker.x;
+      _y = attacker.y;
+    } else {
+      exit;
+    }
+  }
 	
   if ((gameTime - tAttacked) > 300){		
     
-    if (attacker.type == OBJ_DROID){
-      _droid = objToDroid(attacker);
-  		if ( !isVtol(_droid) ){
-        orderGroupScoutCMD(defendGroup,  attacker.x, attacker.y, SCAV_DEF_RANGE);
-        defSpotX = mydroid.x;
-  		  defSpotY = mydroid.y;
-  		  tAttacked = gameTime;
-  		}
-		} else {
-      _dist = distBetweenTwoPoints(mydroid.x, mydroid.y, attacker.x, attacker.y);
-      if ( _dist < 24*TILE ){
-        orderGroupScoutCMD(defendGroup,  attacker.x, attacker.y, SCAV_DEF_RANGE);
-        defSpotX = mydroid.x;
-  		  defSpotY = mydroid.y;
-  		  tAttacked = gameTime;
+    if ( attacker != NULLOBJECT ){
+      if (attacker.type == OBJ_DROID){
+        _droid = objToDroid(attacker);
+    		if ( !isVtol(_droid) ){
+          orderGroupScoutCMD(defendGroup,  attacker.x, attacker.y, SCAV_DEF_RANGE);
+          defSpotX = mydroid.x;
+    		  defSpotY = mydroid.y;
+    		  tAttacked = gameTime;
+    		}
+  		} else {
+        _dist = distBetweenTwoPoints(_x,_y, attacker.x, attacker.y);
+        if ( _dist < 24*TILE ){
+          orderGroupScoutCMD(defendGroup,  attacker.x, attacker.y, SCAV_DEF_RANGE);
+          defSpotX = _x;
+    		  defSpotY = _y;
+    		  tAttacked = gameTime;
+        }
       }
     }
 	
   }
 }
-
+//----------------------------------------------------------
+event consoleEv(consoleTr)  //(CALL_CONSOLE, ref sender, ref message);
+{
+  //console(getPlayerName(player) & " console sender ("& sender &") message ("& message &")");
+  local string _strAIDesc;
+  
+  if ( !isPlayerStillLive(enemy1) ){ exit; }
+  
+  if( message == "are you dydoscav" or message == "are you dydo-scav" or message == "are you dydoscav?" or message == "are you dydo-scav?" or message == "who are you?" or message == "who are you" )
+	{
+	  msg("I am dydo-scav version '"& SCAVAI_VERSION &"' ",enemy1, sender);
+	}
+}
 // ======================================================
 //
 //    FUNCTIONS
