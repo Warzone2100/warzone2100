@@ -3,12 +3,12 @@
 // Generic vlo for each computer player - skirmish games
 /////////////////////////////////////////////////////////////////////
 
-script "player0.slo" 
+script "player4.slo" 
 run
 {
    player          INT                4
 
-// Version 2.4
+// Version 2.5.1
 // the version of the .vlo files is not related to the one of the .slo files
 //
 //
@@ -30,13 +30,13 @@ run
 	//AIControl		BOOL		false  //<-- edit this value
 
 	//CHANGE AI Personality
-	AIPersonality		int  0 //<-- edit this value
+	AIPersonality		int  1 //<-- edit this value
 
 	//SHOW AI Personality
 	showAIPersonality		bool  true //<-- edit this value
 
 	//AI strenght
-	AIstrength		int  0 //<-- edit this value
+	AIstrength		int  5 //<-- edit this value
 
 // -------->>> MODIFICATION MANUAL:
 /*---------------------------------------------------------------
@@ -53,38 +53,46 @@ AIControl - ALLOW AI TO CONTROL HUMAN BASE:
 AIPersonality - CHANGE AI Personality
   0 - Random personality {General x}
   1 - General 1 personality {Standard AI}
-  2 - General 2 personality {AI prioritizes use, production and research of VTOLs stuffs}
+  2 - General 2 personality {VTOL AI}
   3 - General 3 personality {Turtle AI}
   4 - General 4 personality {Cyborg AI}
 
 AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players games
               2 players gaems are not affected by this (yet!). 
   0 - random
-  1 - standard
-  2 - a bit stronger
-  3 - stronger
-  4 - hard  
-  5 - really hard
+  1 - increases the % to attack human player by 10%
+  2 - increases the % to attack human player by 20%
+  3 - increases the % to attack human player by 30%
+  4 - increases the % to attack human player by 40% and collect statistics about "not seen" units and droids too
+  5 - increases the % to attack human player by 50% and collect statistics about "not seen" units and droids too
   
 // 
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
 */
 
 //+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*
 //+*+ DO NOT EDIT BELOW THIS LINE (for AI experts and mod developers ONLY) *+*+*+*+*+*+*
 //+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*
 
-  
-
-  //long Range Cyborgs
+  //Cyborgs  Weapons
   cybGren         WEAPON "Cyb-Wpn-Grenade"
   cybLancer       WEAPON "CyborgRocket"
   cybScourge      WEAPON "Cyb-Wpn-Atmiss"
+  cybNeedle       WEAPON "Cyb-Wpn-Rail1"
+  cybFlashLight   WEAPON "Cyb-Wpn-Laser"
   cybSuperHPV     WEAPON "Cyb-Hvywpn-HPV"
   cybSuperScourge WEAPON "Cyb-Hvywpn-A-T"
   cybTankKiller   WEAPON "Cyb-Hvywpn-TK"
+  cybSuperPulsLas WEAPON "Cyb-Hvywpn-PulseLsr"
+  cybCannon       WEAPON "CyborgCannon"
+  cybChainGun     WEAPON "CyborgChaingun"
+  cybFlamer       WEAPON "CyborgFlamer01"
+  cybThermite     WEAPON "Cyb-Wpn-Thermite"
+  cybRotMg        WEAPON "CyborgRotMG"
+  cybAtmiss       WEAPON "Cyb-Wpn-Atmiss"
+  cybHvyAcannon   WEAPON "Cyb-Hvywpn-Acannon"
+  cybHvyMcannon   WEAPON "Cyb-Hvywpn-Mcannon"
+  cybHvyRailGun   WEAPON "Cyb-Hvywpn-RailGunner"
 
   /*
   xxxxx           WEAPON "xxxxx"
@@ -99,7 +107,35 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   aScavBaseStr[2] STRUCTURESTAT "A0PowerGenerator"
   aScavBaseStr[3] STRUCTURESTAT "A0ResearchFacility"
 
-  //Short Range Tank Weapons
+
+
+  //Commanders
+  Commander1      WEAPON "CommandTurret1"
+  Commander2      WEAPON "CommandTurret2"
+  Commander3      WEAPON "CommandTurret3"
+  Commander4      WEAPON "CommandTurret4"
+
+  //Long Range Weapons, max range 18
+  MortarWeap      WEAPON "Mortar1Mk1"
+  MortarIncWeap   WEAPON "Mortar-Incenediary"
+  BombardWeap     WEAPON "Mortar2Mk1"
+  PepperpotWeap   WEAPON "Mortar3ROTARYMk1"
+  
+  //range max 39
+  HowitzerWeap    WEAPON "Howitzer105Mk1"
+  HowitzerIncWeap WEAPON "Howitzer-Incenediary"
+  //range max 78
+  GroundSheakWeap WEAPON "Howitzer150Mk1"
+  //range max 55
+  HellstormWeap   WEAPON "Howitzer03-Rot"
+
+  //range max 86
+  RippleRockets   WEAPON "Rocket-IDF"
+  //range max 120
+  ArchangelMissile WEAPON "Missile-HvyArt" 
+
+
+  //Short Range Weapons
   MGun            WEAPON "MG1Mk1"
   TwinMGun        WEAPON "MG2Mk1"
   HMGun           WEAPON "MG3Mk1"
@@ -125,10 +161,8 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   Lancer          WEAPON "Rocket-LtA-T"
   RocketBB        WEAPON "Rocket-BB"
   TankKiller      WEAPON "Rocket-HvyA-T"
-  RippleRockets   WEAPON "Rocket-IDF"
   ScourgeMissle   WEAPON "Missile-A-T"
   SeraphMissile   WEAPON "Missile-MdArt"
-  ArchangelMissile WEAPON "Missile-HvyArt" 
   FlashLight      WEAPON  "Laser3BEAMMk1"
   PulseLaser      WEAPON  "Laser2PULSEMk1"
   HeavyLaser      WEAPON  "HeavyLaser"
@@ -171,13 +205,18 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   bombardPit        RESEARCHSTAT    "R-Wpn-Mortar02Hvy"
   pepperpotPit      RESEARCHSTAT    "R-Wpn-Mortar3"
   rippleRockets     RESEARCHSTAT    "R-Wpn-Rocket06-IDF"
-  sensorTower		    STRUCTURESTAT		"Sys-SensoTower02"
+  
+  BBRocket          RESEARCHSTAT    "R-Wpn-Rocket03-HvAT"
+  
+  sensorTower		    STRUCTURESTAT		"Sys-SensoTower01"
+  sensorHardTower	  STRUCTURESTAT		"Sys-SensoTower02"
 	CBSense			      STRUCTURESTAT		"Sys-CB-Tower01"
   defMortar	        STRUCTURESTAT		"Emplacement-MortarPit01"  //Mortar Pit  [range 9-18]
 	defBombard	      STRUCTURESTAT		"Emplacement-MortarPit02"  //Bombard Pit [range 9-18]
 	defPepperpot	    STRUCTURESTAT		"Emplacement-RotMor"       //*Pepperpot Pit [range 9-18]
   defRippleRockets	STRUCTURESTAT		"Emplacement-Rocket06-IDF" //*Ripple Rockets Battery [range 8-86]
-
+  
+  
 	NEXUS_WEAPON1	   WEAPON		      "NEXUSlink"
 	NEXUS_WEAPON2	   WEAPON		      "SpyTurret01"
 	
@@ -186,16 +225,17 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   cyborgFactory    RESEARCHSTAT   "R-Struc-Factory-Cyborg"
   MGTower          RESEARCHSTAT   "R-Defense-Tower01"
   
-  lancerATweap	   RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"	//Lancer
+  lancerATweap	   RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"	
 
 	nexusDefence	   RESEARCHSTAT		"R-Sys-Resistance-Circuits"
 	powerAddOn		   RESEARCHSTAT		"R-Struc-Power-Upgrade03a"
 	CyborgLegs 		   RESEARCHSTAT 	"R-Cyborg-Legs01"
 	VTOLPadRes       RESEARCHSTAT   "R-Struc-VTOLPad"
-	AASite	         RESEARCHSTAT		"R-Defense-AASite-QuadBof"//Cyclone AA Site
-	HurricaneAASite	 RESEARCHSTAT	  "R-Defense-AASite-QuadMg1" //Hurricane AA Site
+	HurricaneAASite	 RESEARCHSTAT	  "R-Defense-AASite-QuadMg1" 
 	CycloneAASite    RESEARCHSTAT   "R-Defense-AASite-QuadBof"
 	WhirlwindAASite  RESEARCHSTAT   "R-Defense-AASite-QuadRotMg"
+
+	MortarFastLoad3  RESEARCHSTAT   "R-Wpn-Mortar-ROF03"
 
   cobraBody       RESEARCHSTAT		"R-Vehicle-Body05"
   phytonBody	    RESEARCHSTAT		"R-Vehicle-Body11"
@@ -213,6 +253,9 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   mediumCannon	  RESEARCHSTAT		"R-Wpn-Cannon2Mk1"
   heavyCannon	    RESEARCHSTAT		"R-Wpn-Cannon3Mk1"
   
+  defRippleRes    RESEARCHSTAT    "R-Defense-IDFRocket"
+  
+  HalftrackProp	  RESEARCHSTAT		"R-Vehicle-Prop-Halftracks"
   trackPropulsion	RESEARCHSTAT		"R-Vehicle-Prop-Tracks"
   hoverPropulsion RESEARCHSTAT    "R-Vehicle-Prop-Hover"
 	
@@ -224,7 +267,13 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   powUpgrades5  RESEARCHSTAT "R-Struc-Power-Upgrade03"
   powUpgrades6  RESEARCHSTAT "R-Struc-Power-Upgrade03a"
 
-	wall			STRUCTURESTAT		"A0HardcreteMk1Wall"
+  Res_Lassat        RESEARCHSTAT "R-Wpn-LasSat"
+  Res_SuperCannon   RESEARCHSTAT "R-Defense-Super-Cannon"
+  Res_SuperRocket   RESEARCHSTAT "R-Defense-Super-Rocket"
+  Res_SuperMissile  RESEARCHSTAT "R-Defense-Super-Missile"
+  Res_MassDriver    RESEARCHSTAT "R-Defense-MassDriver"
+
+  wall			STRUCTURESTAT		"A0HardcreteMk1Wall"
 
 	// incendry emplacements
 	numIncendrys	INT					8
@@ -292,7 +341,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	structsLimits[0][3]			INT		2 //VTOL
 
 	// General 2  VTOL
-	structsLimits[1][0]			INT		2
+	structsLimits[1][0]			INT		1
 	structsLimits[1][1]			INT		4
 	structsLimits[1][2]			INT		2 
 	structsLimits[1][3]			INT		4 
@@ -306,41 +355,59 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	// General 4  Cyborg
 	structsLimits[3][0]			INT		1
 	structsLimits[3][1]			INT		4
-	structsLimits[3][2]			INT		5 
-	structsLimits[3][3]			INT		1   
+	structsLimits[3][2]			INT		4 
+	structsLimits[3][3]			INT		0   
 
-  numDefStructs	INT					11
-  defStructs[0]  STRUCTURESTAT    "GuardTower1"//*MG3Mk1 $Machinegun Guard Tower
-  defStructs[1]  STRUCTURESTAT    "PillBox1"//Machinegun Bunker
-  defStructs[2]  STRUCTURESTAT    "PillBox5"//Flamer Bunker
-  defStructs[3]  STRUCTURESTAT    "GuardTower6"//Mini-Rocket (pod) tower 
-  defStructs[4]  STRUCTURESTAT    "GuardTower5"//Lancer Tower
-  defStructs[5]  STRUCTURESTAT    "PillBox6"//Lancer Bunker 
-  defStructs[6]  STRUCTURESTAT    "PillBox4"//Light Cannon Bunker
-	defStructs[7]	 STRUCTURESTAT		"Emplacement-RotMor" //*Pepperpot Pit [range 9-18]
-	defStructs[8]  STRUCTURESTAT		"Emplacement-HvyATrocket"
-	defStructs[9]  STRUCTURESTAT		"Emplacement-PulseLaser"	
-	defStructs[10] STRUCTURESTAT		"Emplacement-Rail2"
+  numDefStructs	INT					17
   
+  //AP
+  defStructs[0]  STRUCTURESTAT    "PillBox1"      //*MG Bunker -AP
+  defStructs[1]  STRUCTURESTAT    "GuardTower1"   //*MG Tower - AP
+  defStructs[2]  STRUCTURESTAT    "Pillbox-RotMG" //Rotary MG Bunker - AP
+	defStructs[3]  STRUCTURESTAT		"Emplacement-PrisLas"	     //FlashLight Emp - AP 
+	defStructs[4]  STRUCTURESTAT		"GuardTower-BeamLas"	     //Pulse Laser Tower - AP 
+	defStructs[5]  STRUCTURESTAT		"Emplacement-HeavyLaser"   //Heavy Laser Emp - AP	
+
+  //AT
+  defStructs[6]  STRUCTURESTAT    "GuardTower6"       //POD Tower - AT 
+  defStructs[7]  STRUCTURESTAT    "GuardTower5"       //Lancer Tower - AT
+	defStructs[8]  STRUCTURESTAT		"GuardTower-ATMiss" //Scourge Missile Tower - AT
+	defStructs[9]  STRUCTURESTAT		"Emplacement-HvyATrocket" //Tank Killer EMP - AT
+	defStructs[10]  STRUCTURESTAT		"P0-AASite-Laser"	        //Stormbringer Emp - AT
+	defStructs[11]  STRUCTURESTAT		"P0-AASite-SAM2"	        //Vindicator SAM Site - AT
+	
+  //AR 
+  defStructs[12]  STRUCTURESTAT		"Emplacement-HPVcannon"    //HPV EMP - AR
+	defStructs[13]  STRUCTURESTAT		"Emplacement-PlasmaCannon" //PlasmaCannon EMP - AR
+	defStructs[14]  STRUCTURESTAT		"GuardTower-Rail1"         //Needle Gun Tower - AR
+	defStructs[15]  STRUCTURESTAT		"Emplacement-Rail2"        //Railgun Emplacement - AR
+	defStructs[16]  STRUCTURESTAT		"Emplacement-Rail3"        //Gauss Cannon Emp - AR 
 
 	// wall structs - NOT BUILT YET
-	numWallWeaps	INT					16
-	wallWeaps[0]	STRUCTURESTAT		"WallTower01"//Heavy Machinegun Hardpoint $100
-	wallWeaps[1]	STRUCTURESTAT		"WallTower02"//Light Cannon Hardpoint $125
-	wallWeaps[2]	STRUCTURESTAT		"WallTower03"//*Medium Cannon Hardpoint $200
-	wallWeaps[3]	STRUCTURESTAT		"WallTower06"//Lancer Hardpoint $150
-	wallWeaps[4]	STRUCTURESTAT		"WallTower04"//*Heavy Cannon Hardpoint $250
-	wallWeaps[5]	STRUCTURESTAT		"Wall-RotMg"//*Assault Gun Hardpoin $150
-	wallWeaps[6]	STRUCTURESTAT		"WallTower-EMP"
-	wallWeaps[7]	STRUCTURESTAT		"WallTower-Projector"
-	wallWeaps[8]	STRUCTURESTAT		"Wall-VulcanCan"
-	wallWeaps[9]	STRUCTURESTAT		"WallTower-HvATrocket"
-	wallWeaps[10]	STRUCTURESTAT		"WallTower-Rail2"//Rail Gun Hardpoint $350
-	wallWeaps[11]	STRUCTURESTAT		"WallTower-Rail3"//Gauss Cannon Emplacement $450
-	wallWeaps[12]	STRUCTURESTAT		"WallTower-PulseLas"
-	wallWeaps[13]	STRUCTURESTAT		"WallTower-HPVcannon"//??Emplacement-HPVcannon $200
-	wallWeaps[14]	STRUCTURESTAT		"WallTower-Atmiss"
-	wallWeaps[15]	STRUCTURESTAT		"WallTower-Atmiss"
+	numWallWeaps	INT					15
+	
+  //AP
+  wallWeaps[0]	STRUCTURESTAT		"WallTower01"               //Heavy Machinegun 
+	wallWeaps[1]	STRUCTURESTAT		"Wall-RotMg"                //Assault Gun 
+	wallWeaps[2]	STRUCTURESTAT		"WallTower-TwinAssaultGun"  //TwinAssaultGun 
+	wallWeaps[3]	STRUCTURESTAT		"WallTower-PulseLas"        //PulseLas
+
+	//AR
+  wallWeaps[4]	STRUCTURESTAT		"WallTower03"        //Medium Cannon
+	wallWeaps[5]	STRUCTURESTAT		"WallTower-HPVcannon"//HPVcannon Hard 
+	wallWeaps[6]	STRUCTURESTAT		"Wall-VulcanCan"     //Assault Cannon 
+	wallWeaps[7]	STRUCTURESTAT		"WallTower04"        //Heavy Cannon 
+  wallWeaps[8]	STRUCTURESTAT		"WallTower-Rail2"    //Rail Gun  
+	wallWeaps[9]	STRUCTURESTAT		"WallTower-Rail3"    //Gauss Cannon  
+	wallWeaps[10]	STRUCTURESTAT		"WallTower-EMP"      //EMP Cannon Tower
+	
+
+	//AT
+  wallWeaps[11]	STRUCTURESTAT		"WallTower06"             //Lancer
+	wallWeaps[12]	STRUCTURESTAT		"WallTower-HvATrocket"    //Tank Killer
+	wallWeaps[13]	STRUCTURESTAT		"WallTower-Atmiss"        //Scourge Missile
+	wallWeaps[14]	STRUCTURESTAT		"WallTower-SamHvy"        //Vindicator 
+
 
   numFortressDef INT 4 
   fortressDef[0]  STRUCTURESTAT "X-Super-Cannon"//"R-Defense-Super-Cannon"//Cannon Fortress
@@ -372,51 +439,57 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	cybcondroid	 TEMPLATE	"Cyb-ComEng"
 	cybMech      TEMPLATE "Cyb-Mechanic"
 
-
+  CobraHoverBB TEMPLATE "SK-Cobra-Hover-BB"
+    
 	/////////////////////////////////////////////////////////////////////
 	// cyborg templates
 	numSuperCyb	INT		17
 
 	//Anti tank
-  superCyb[0]		TEMPLATE	"Cyb-Hvy-A-T"      //[1][36]Super Scourge Cyborg 
-	superCyb[3]		TEMPLATE	"Cyb-Hvy-TK"       //[1][0]Super Tank-Killer Cyborg 
-	superCyb[7]		TEMPLATE	"MP-Cyb-ATmiss-GRD"//[1][21]Scourge 
-	superCyb[9]		TEMPLATE	"CyborgRkt01Ground"//[0][24]Lancer
+  superCyb[0]		TEMPLATE	"Cyb-Hvy-A-T"      //Super Scourge Cyborg 
+	superCyb[3]		TEMPLATE	"Cyb-Hvy-TK"       //Super Tank-Killer Cyborg 
+	superCyb[7]		TEMPLATE	"MP-Cyb-ATmiss-GRD"//Scourge 
+	superCyb[9]		TEMPLATE	"CyborgRkt01Ground"//Lancer
 	
   //All Rounder
-  superCyb[1]		TEMPLATE	"Cyb-Hvy-RailGunner" //[1][2]  Super Rail-Gunner
-	superCyb[4]		TEMPLATE	"Cyb-Hvy-HPV"        //[0][51] Super HPV Cyborg 
-	superCyb[5]		TEMPLATE	"Cyb-Hvy-Acannon"    //[0][50] Super Auto-Cannon Cyborg 
-	superCyb[6]		TEMPLATE	"Cyb-Hvy-Mcannon"    //[0][49] Super Heavy-Gunner
+  superCyb[1]		TEMPLATE	"Cyb-Hvy-RailGunner" //Super Rail-Gunner
+	superCyb[4]		TEMPLATE	"Cyb-Hvy-HPV"        //Super HPV Cyborg 
+	superCyb[5]		TEMPLATE	"Cyb-Hvy-Acannon"    //Super Auto-Cannon Cyborg 
+	superCyb[6]		TEMPLATE	"Cyb-Hvy-Mcannon"    //Super Heavy-Gunner
   
   //Anti Personnel
-	   //Flamers-Lasers
-  superCyb[2]		TEMPLATE	"Cyb-Hvy-PulseLsr"  //[1][1]Super Pulse Laser Cyborg 
-	superCyb[10]	TEMPLATE	"MP-Cyb-Laser1-GRD" //[0][59] Flashlight Gunner 
-	superCyb[12]	TEMPLATE	"Cyb-Thermite"      //Thermite Flamer 
+	           //Lasers
+  superCyb[2]		TEMPLATE	"Cyb-Hvy-PulseLsr"  //Super Pulse Laser Cyborg 
+	superCyb[10]	TEMPLATE	"MP-Cyb-Laser1-GRD" //Flashlight Gunner 
+	   //Flamers
+  superCyb[12]	TEMPLATE	"Cyb-Thermite"      //Thermite Flamer 
 	superCyb[15]	TEMPLATE	"CyborgFlamer01Grd" //flamer
 	   //Guns
-  superCyb[11]	TEMPLATE	"CyborgRotMgGround"   //[0][25] Assault Gunner 
+  superCyb[11]	TEMPLATE	"CyborgRotMgGround"   //Assault Gunner 
 	superCyb[14]	TEMPLATE	"CyborgCannon01Grd"   //heavy Gunner 
 	superCyb[16]	TEMPLATE	"CyborgChain01Ground" //Machinegunner
   
   //Kinetic
-	superCyb[8]		TEMPLATE	"MP-Cyb-Needle-GRD" //[0][58]Needle Gunner 
+	superCyb[8]		TEMPLATE	"MP-Cyb-Needle-GRD" //Needle Gunner 
 	superCyb[13]	TEMPLATE	"Cyb-Gren"          //Grenadier 
   
 
 	/////////////////////////////////////////////////////////////////////
 	// VTOL TEMPLATES
-	numVtolTemplates		int		9
+	numVtolTemplates		int		11
 	vtols[0]	TEMPLATE	"V-Bug-Lancer"		         //Bug - Lancer
 	vtols[1]	TEMPLATE	"V-Bug-HPV"		             //Bug - HyperVelCann
-	vtols[2]	TEMPLATE	"H-Scorp-VTOL-Lancer"      //Scorpion - Lancer
+	vtols[2]	TEMPLATE	"V-Scor-Lancer"            //Scorpion - Lancer
 	vtols[3]	TEMPLATE	"V-Scor-HPV"               //Scorpion - HyperVelCann
-	vtols[4]	TEMPLATE	"SK-Retal-VTOL-Scourge"    //Retaliation - Scourge Missle (AT)
-	vtols[5]	TEMPLATE	"SK-Mantis-VTOL-PBB"       //**Mantis - Phosphor Bomb Bay
-	vtols[6]	TEMPLATE	"SK-Mantis-VTOL-HBB"       //**Mantis - Heap Bomb Bay
-	vtols[7]	TEMPLATE	"SK-Retre-VTOL-HBB"        //**Retribution - Heap Bomb Bay
-	vtols[8]	TEMPLATE	"SK-Retre-VTOL-Thermite"   //**Retribution - Thermite Bomb Bay 
+	vtols[4]	TEMPLATE	"V-Mantis-Lancer"          //Mantis - Lancer
+	vtols[5]	TEMPLATE	"V-Mantis-HPV"             //Mantis - HPV
+	vtols[6]	TEMPLATE	"SK-Retal-VTOL-Scourge"    //Retaliation - Scourge Missle (AT)
+	vtols[7]	TEMPLATE	"SK-Retre-VTOL-Scourge"    //Retribution - Scourge 
+
+	vtols[8]	TEMPLATE	"SK-Mantis-VTOL-PBB"       //**Mantis - Phosphor Bomb Bay
+	vtols[9]	TEMPLATE	"SK-Mantis-VTOL-HBB"       //**Mantis - Heap Bomb Bay
+	vtols[10]	TEMPLATE	"SK-Retre-VTOL-HBB"        //**Retribution - Heap Bomb Bay
+	vtols[11]	TEMPLATE	"SK-Retre-VTOL-Thermite"   //**Retribution - Thermite Bomb Bay 
   
 ////////////////////////////////////////////////////////////////////
 // 
@@ -448,39 +521,325 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 
 */
 
-	
-	numTmpls	INT		63
+
+
+	numTmpl_AR	INT		24
   //=================================================================
   //1-Viper
-	tmpl0[62]	TEMPLATE	"ViperMG01Wheels"//Anti personnel
-  tmpl0[61]	TEMPLATE	"ViperFlameHalfTracks"  //Anti personnel
-	tmpl0[60]	TEMPLATE	"ViperMG02Halftrack"    //Anti personnel
-	tmpl0[59]	TEMPLATE	"ViperLtCannonHTracks"	//all-rounder 
+	tmpl_AR[23]	TEMPLATE	"ViperLtCannonHTracks"	//* all-rounder 
+
+  //1-Cobra
+  tmpl_AR[22]	TEMPLATE	"CobraMedCnHTrks"     //* all-rounder 
+  tmpl_AR[21]	TEMPLATE	"SK-Cobra-Track-HVC"	//* all-rounder 
+  //tmpl_AR[49]	TEMPLATE	"A-Cobra-Hover-MC"  //* all-rounder
+	
+
+  //1-Phyton  Lancer,TK,Inferno,AssGun,MC,HC
+	tmpl_AR[20]	TEMPLATE	"PythonMedCanTracks"	    //* all-rounder 
+	tmpl_AR[19]	TEMPLATE	"P0cam3PyHPVcanTrk"       //* all-rounder 
+  tmpl_AR[18]	TEMPLATE	"Sk-PythonHvCanTrack"     //* all-rounder 
+	tmpl_AR[17]	TEMPLATE	"SK-Python-Hover-Hcannon" //* all-rounder 
+	//tmpl_AR[40]	TEMPLATE	"PythonHoverHVC" //all-rounder 
+
+  //=================================================================
+  //2-Bug
+ 
+  //2-Scorpion {R-Vehicle-Body08}
+  tmpl_AR[16]	TEMPLATE	"SK-Scorp-Hover-Mcannon"	//* all-rounder
+
+	//2-Mantis {R-Vehicle-Body12} AC,HC,[HVC]
+	tmpl_AR[15]	TEMPLATE	"MantisHoverAC"           //* all-rounder
+	tmpl_AR[14]	TEMPLATE	"SK-Mantis-Hover-Hcannon" //* all-rounder
+	tmpl_AR[13]	TEMPLATE	"SK-Mantis-Hover-HVC"     //* all-rounder
+
+  //=================================================================
+	//3-Leopard {R-Vehicle-Body02}
+  tmpl_AR[12]	TEMPLATE	"SK-Leopard-Hover-Needle" //* all-rounder  
+  tmpl_AR[11]	TEMPLATE	"SK-Leopard-Htrk-Needle"  //* all-rounder  
+	
+	//3-Panther {R-Vehicle-Body06}
+  tmpl_AR[10]	TEMPLATE	"SK-Panther-Hover-HVC"   //* all-rounder 
+  tmpl_AR[9]	TEMPLATE	"SK-Panther-Track-HVC"   //* all-rounder
+	
+  //3-Tiger {R-Vehicle-Body09}
+	tmpl_AR[8]	TEMPLATE	"SK-Tiger-Track-ASCannon" //* all-rounder
+	tmpl_AR[7]	TEMPLATE	"TigerHoverRailGun"       //* all-rounder
+  tmpl_AR[6]	TEMPLATE	"SK-Tiger-Track-Hcannon"  //* all-rounder
+	
+  //=================================================================
+  //4-Retaliation {R-Vehicle-Body03}
+
+  //4-Retribution {R-Vehicle-Body07}
+	tmpl_AR[5]	TEMPLATE	"SK-Retre-Hover-RailGun"  //* all-rounder
+	tmpl_AR[4]	TEMPLATE	"SK-Retre-Track-RailGun"  //* all-rounder
+	
+  //4-Vengeance {Body10MBT}
+	tmpl_AR[3]	TEMPLATE	"SK-Veng-Hover-Gauss"     //* all-rounder
+	tmpl_AR[2]	TEMPLATE	"SK-Veng-Track-Gauss"     //* all-rounder
+
+  //=================================================================
+	//5-Wyvern {R-Vehicle-Body13}
+	tmpl_AR[1]	TEMPLATE	"WyvernGaussTracks"        //* all-rounder 
+	tmpl_AR[0]	TEMPLATE	"WyvernPlasmaCTracks"      //* all-rounder 
+
+
+
+  //=================================================================
+  //    Templates for Research PATH = 1 (Flamers/Lasers - POD/Lancer/TK/Scourge)
+  //=================================================================
+	
+  
+  numTmpl_01	INT		52
+  //=================================================================
+  //1-Viper
+  tmpl_p1[51]	TEMPLATE	"ViperFlameWheels"      //anti personnel
+  tmpl_p1[50]	TEMPLATE	"ViperFlameHalfTracks"  //anti personnel
+	tmpl_p1[49]	TEMPLATE	"ViperPODHalfTracks"		//anti-tank
+	tmpl_p1[48]	TEMPLATE	"ViperMRLHalfTracks"		//anti-tank
+
+  //1-Cobra
+  tmpl_p1[47]	TEMPLATE	"CobraMRLHalftrack"   //anti-tank
+  tmpl_p1[46]	TEMPLATE	"CobraPODHTracks"		  //anti-tank
+	tmpl_p1[45]	TEMPLATE	"CobraLtA-Thalftrack" //anti-tank
+	tmpl_p1[44]	TEMPLATE	"CobraHMGHalfTrack"   //anti personnel - T2 games
+	tmpl_p1[43]	TEMPLATE	"CobraInfernoHTracks" //anti personnel
+  tmpl_p1[42]	TEMPLATE	"CobraInfernoHover"   //anti personnel
+	
+
+  //1-Phyton  Lancer,TK,Inferno,AssGun,MC,HC
+  tmpl_p1[41]	TEMPLATE	"SK-Python-Hover-Lancer" //anti-tank 
+  tmpl_p1[40]	TEMPLATE	"A-Python-Trk-Lancer"    //anti-tank 
+	tmpl_p1[39]	TEMPLATE	"PythonTKTracks"			   //anti-tank 
+	tmpl_p1[38]	TEMPLATE	"PythonScourgeTracks"		 //anti-tank 
+  tmpl_p1[37]	TEMPLATE	"PythonHoverInferno"     //anti personnel
+	tmpl_p1[36]	TEMPLATE	"PythonPulseTracks"		   //anti personnel 
+
+  //=================================================================
+  //2-Bug
+ 
+  //2-Scorpion {R-Vehicle-Body08}
+  tmpl_p1[35]	TEMPLATE	"SK-Scorp-Hover-Lancer"	  //anti-tank  
+  tmpl_p1[34]	TEMPLATE	"H-Scorp-Trk-Lancer"	    //anti-tank  
+  //tmpl_p1[46]	TEMPLATE	"ScorpHTrackHMG"	        //anti personnel  T2 games   
+
+	//2-Mantis {R-Vehicle-Body12} AC,HC,[HVC]
+  tmpl_p1[33]	TEMPLATE	"A-Mantis-Trk-Pulse"   //anti personnel
+  tmpl_p1[32]	TEMPLATE	"A-Mantis-Trk-Lancer"  //anti-tank 
+  tmpl_p1[31]	TEMPLATE	"TK-Mantis-H"          //anti-tank 
+  tmpl_p1[30]	TEMPLATE	"MantisTKTracks"       //anti-tank 
+  tmpl_p1[29]	TEMPLATE	"MantisScourgeTracks"  //anti-tank 
+
+  //=================================================================
+	//3-Leopard {R-Vehicle-Body02}
+  tmpl_p1[28]	TEMPLATE	"LeopardHoverPulseLas"    //anti personnel
+	
+	//3-Panther {R-Vehicle-Body06}
+  tmpl_p1[27]	TEMPLATE	"CO-M-HvFlame-Track"     //anti personnel
+  tmpl_p1[26]	TEMPLATE	"PantherHoverPulseLas"   //anti personnel
+  tmpl_p1[25]	TEMPLATE	"CO-M-LTAT-Hover"        //anti-tank 
+  tmpl_p1[24]	TEMPLATE	"SK-Panther-Hover-TK"    //anti-tank 
+  tmpl_p1[23]	TEMPLATE	"SK-Panther-Track-TK"    //anti-tank 
+	
+  //3-Tiger {R-Vehicle-Body09}
+	tmpl_p1[22]	TEMPLATE	"TigerHoverPulseLas"      //anti personnel
+	tmpl_p1[21]	TEMPLATE	"TigerPulseTracks"        //anti personnel
+	tmpl_p1[20]	TEMPLATE	"TigerHvLaserTracks"      //anti personnel
+	tmpl_p1[19]	TEMPLATE	"SK-Tiger-Hover-TK"       //anti-tank 
+	tmpl_p1[18]	TEMPLATE	"SK-Tiger-Track-TK"       //anti-tank 
+	tmpl_p1[17]	TEMPLATE	"SK-Tiger-Track-Scourge"  //anti-tank 
+	tmpl_p1[16]	TEMPLATE	"SK-Tiger-Hover-Scourge"  //anti-tank 
+	
+  //=================================================================
+  //4-Retaliation {R-Vehicle-Body03}
+
+  //4-Retribution {Body7ABT}
+  tmpl_p1[15]	TEMPLATE	"SK-Retre-Hover-Scourge"    //anti-tank
+	tmpl_p1[14]	TEMPLATE	"SK-Retre-Track-Scourge"    //anti-tank
+	tmpl_p1[13]	TEMPLATE	"RetreHoverFlashLight"      //anti personnel 
+	tmpl_p1[12]	TEMPLATE	"SK-Retre-Track-FlashLight" //anti personnel
+	tmpl_p1[11]	TEMPLATE	"SK-Retre-Track-PulseLsr"   //anti personnel
+	tmpl_p1[10]	TEMPLATE	"NX-M-PulseLas-Hover"       //anti personnel
+	
+  //4-Vengeance {Body10MBT}
+  tmpl_p1[9]	TEMPLATE	"A-Veng-Trk-TK"           //anti-tank
+  tmpl_p1[8]	TEMPLATE	"SK-Veng-Hover-Scourge"   //anti-tank
+	tmpl_p1[7]	TEMPLATE	"SK-Veng-Track-Scourge"   //anti-tank
+	tmpl_p1[6]	TEMPLATE	"SK-Veng-Hover-PulseLsr"  //anti personnel
+	tmpl_p1[5]	TEMPLATE	"SK-Veng-Track-PulseLsr"  //anti personnel
+	tmpl_p1[4]	TEMPLATE	"SK-Veng-Track-HvyLaser"  //anti personnel
+
+  //=================================================================
+	//5-Wyvern {R-Vehicle-Body13}
+	tmpl_p1[3]	TEMPLATE	"WyvernScourgeTracks" //anti-tank
+	tmpl_p1[2]	TEMPLATE	"WyvernScourgeTracks" //anti-tank
+	tmpl_p1[1]	TEMPLATE	"WyvernPulseTracks"   //anti personnel
+	tmpl_p1[0]	TEMPLATE	"WyvernHvLaserTracks" //anti personnel
+
+	
+
+
+
+
+  //=================================================================
+  //    Templates for Research PATH = 2 (MG - Cannons)
+  //=================================================================
+	numTmpl_02	INT		64
+  //=================================================================
+  //1-Viper
+	tmpl_p2[63]	TEMPLATE	"ViperMG01Wheels"       //anti personnel  
+	tmpl_p2[62]	TEMPLATE	"ViperMG02Halftrack"    //anti personnel
+	tmpl_p2[61]	TEMPLATE	"ViperHMGHalftrack"     //anti personnel
+
+	tmpl_p2[60]	TEMPLATE	"ViperLtCannonHTracks"	//all-rounder 
+
+  //1-Cobra  Hover - HMG - MCHVC
+  tmpl_p2[59]	TEMPLATE	"CobraHMGHalfTrack"		//anti personnel
+  tmpl_p2[58]	TEMPLATE	"SK-Cobra-Hover-HMG"  //anti personnel
+
+  tmpl_p2[57]	TEMPLATE	"CobraMedCnHTrks"     //all-rounder 
+  tmpl_p2[56]	TEMPLATE	"A-Cobra-Hover-MC"    //all-rounder
+
+  tmpl_p2[55]	TEMPLATE	"SK-Cobra-Track-HVC"	//all-rounder 
+	
+
+  //1-Phyton AssGun,MC,HVC,HC
+  tmpl_p2[54]	TEMPLATE	"PhytonHoverAssGun"       //anti personnel
+  tmpl_p2[53]	TEMPLATE	"PhytonHTrackAssGun"      //anti personnel
+
+	tmpl_p2[52]	TEMPLATE	"PythonMedCanTracks"	    //all-rounder 
+	tmpl_p2[51]	TEMPLATE	"SK-Python-Hover-Mcannon" //all-rounder 
+
+	tmpl_p2[50]	TEMPLATE	"P0cam3PyHPVcanTrk"       //all-rounder 
+	tmpl_p2[49]	TEMPLATE	"PythonHoverHVC"          //all-rounder 
+
+  tmpl_p2[48]	TEMPLATE	"SK-Python-Track-Hcannon" //all-rounder 
+	tmpl_p2[47]	TEMPLATE	"SK-Python-Hover-Hcannon" //all-rounder 
+
+  //=================================================================
+  //2-Bug
+ 
+  //2-Scorpion HMG,AssGun,MC 
+  tmpl_p2[46]	TEMPLATE	"ScorpHTrackHMG"	        //anti personnel     
+  tmpl_p2[45]	TEMPLATE	"SK-Scorp-Hover-ASGUN"	  //anti personnel 
+  tmpl_p2[44]	TEMPLATE	"SK-Scorp-Hover-Mcannon"	//all-rounder
+
+	//2-Mantis (Pulse)(RailGun),AssCann,HVC
+  tmpl_p2[43]	TEMPLATE	"A-Mantis-Trk-Pulse"      //anti personnel
+
+	tmpl_p2[42]	TEMPLATE	"MantisHoverAC"           //all-rounder
+	tmpl_p2[41]	TEMPLATE	"SK-Mantis-Hover-HVC"     //all-rounder
+
+	tmpl_p2[40]	TEMPLATE	"SK-Mantis-Hover-Hcannon" //all-rounder
+	tmpl_p2[39]	TEMPLATE	"A-Mantis-Trk-Rail"       //all-rounder 
+
+  //=================================================================
+	//3-Leopard AssGun,PulseLas,HvyLas - Needle  
+  tmpl_p2[38]	TEMPLATE	"SK-Leopard-HTrk-ASGun"   //anti personnel  
+  tmpl_p2[37]	TEMPLATE	"LeopardHoverPulseLas"    //anti personnel
+  
+  tmpl_p2[36]	TEMPLATE	"SK-Leopard-Hover-Needle" //all-rounder  
+  tmpl_p2[35]	TEMPLATE	"SK-Leopard-Htrk-Needle"  //all-rounder  
+	
+	//3-Panther PulseLas,AssGun - RailGun,HVC
+  tmpl_p2[33]	TEMPLATE	"SK-Panther-Htrk-ASGun"    //anti personnel 
+  tmpl_p2[34]	TEMPLATE	"PantherHoverPulseLas"     //anti personnel
+
+  tmpl_p2[32]	TEMPLATE	"SK-Panther-Hover-HVC"     //all-rounder 
+  tmpl_p2[31]	TEMPLATE	"SK-Panther-Track-HVC"     //all-rounder
+  tmpl_p2[30]	TEMPLATE	"SK-Panther-Track-RailGun" //all-rounder
+	
+  //3-Tiger PulseLas,HvyLas - Needle,RailGun,AssCann,HC,HVC,Gauss
+	tmpl_p2[29]	TEMPLATE	"TigerHoverPulseLas"      //anti personnel
+	tmpl_p2[28]	TEMPLATE	"TigerPulseTracks"        //anti personnel
+
+	tmpl_p2[27]	TEMPLATE	"TigerHvLaserTracks"      //anti personnel
+
+	tmpl_p2[26]	TEMPLATE	"SK-Tiger-Track-ASCannon" //all-rounder
+	tmpl_p2[25]	TEMPLATE	"SK-Tiger-Hover-ASCannon" //all-rounder
+
+  tmpl_p2[24]	TEMPLATE	"SK-Tiger-Track-Hcannon"  //all-rounder
+	tmpl_p2[23]	TEMPLATE	"A-Tiger-Trk-Needle"      //all-rounder 
+	tmpl_p2[22]	TEMPLATE	"TigerHoverRailGun"       //all-rounder
+
+  tmpl_p2[21]	TEMPLATE  "SK-Tiger-Track-Gauss"    //all-rounder
+  tmpl_p2[20]	TEMPLATE  "SK-Tiger-Hover-Gauss"    //all-rounder
+	
+  //=================================================================
+  //4-Retaliation  Needle
+	tmpl_p2[19]	TEMPLATE	"SK-Retal-Track-Needle"   //all-rounder
+
+  //4-Retribution  Flash,PulseLas - Needle, RailGun
+	tmpl_p2[18]	TEMPLATE	"RetreHoverFlashLight"      //anti personnel 
+	tmpl_p2[17]	TEMPLATE	"SK-Retre-Track-FlashLight" //anti personnel
+
+	tmpl_p2[16]	TEMPLATE	"SK-Retre-Track-PulseLsr"   //anti personnel
+	tmpl_p2[15]	TEMPLATE	"NX-M-PulseLas-Hover"       //anti personnel
+
+	tmpl_p2[14]	TEMPLATE	"A-Retrib-Trk-Needle"     //all-rounder
+
+	tmpl_p2[13]	TEMPLATE	"SK-Retre-Track-RailGun"  //all-rounder
+	tmpl_p2[12]	TEMPLATE	"SK-Retre-Hover-RailGun"  //all-rounder
+	
+  //4-Vengeance  PulseLas,HvyLas - Needle,TwinAssCann,RailGun,GaussCann
+	tmpl_p2[11]	TEMPLATE	"SK-Veng-Hover-PulseLsr"   //anti personnel
+	tmpl_p2[10]	TEMPLATE	"SK-Veng-Track-PulseLsr"   //anti personnel
+	tmpl_p2[9]	TEMPLATE	"SK-Veng-Track-HvyLaser"   //anti personnel
+
+	tmpl_p2[8]	TEMPLATE	"A-Veng-Trk-Needle"        //all-rounder
+	tmpl_p2[7]	TEMPLATE	"A-Veng-Trk-Needle"        //all-rounder
+	tmpl_p2[6]	TEMPLATE	"A-Veng-Trk-Rail"          //all-rounder
+
+	tmpl_p2[5]	TEMPLATE	"SK-Veng-Hover-Gauss"      //*ll-rounder
+	tmpl_p2[4]	TEMPLATE	"SK-Veng-Track-Gauss"      //all-rounder
+	
+  //=================================================================
+	//5-Wyvern PulseLas,HvyLas - PlasmaCann, GaussCann 
+	tmpl_p2[3]	TEMPLATE	"WyvernPulseTracks"   //anti personnel
+	tmpl_p2[2]	TEMPLATE	"WyvernHvLaserTracks" //anti personnel
+
+	tmpl_p2[1]	TEMPLATE	"WyvernPlasmaCTracks" //all-rounder 
+	tmpl_p2[0]	TEMPLATE	"WyvernGaussTracks"   //all-rounder 
+
+
+
+
+
+  //=================================================================
+  //    Templates for Research PATH = STANDARD
+  //=================================================================
+	numTmpls	INT		64
+  //=================================================================
+  //1-Viper
+	tmpl0[63]	TEMPLATE	"ViperMG01Wheels"       //* anti personnel
+	tmpl0[62]	TEMPLATE	"ViperMG01Wheels"       //* anti personnel
+  tmpl0[61]	TEMPLATE	"ViperFlameHalfTracks"  //anti personnel
+	tmpl0[60]	TEMPLATE	"ViperHMGHalftrack"     //* anti personnel
+	tmpl0[59]	TEMPLATE	"ViperLtCannonHTracks"	//* all-rounder 
 	tmpl0[58]	TEMPLATE	"ViperPODHalfTracks"		//anti-tank
 	tmpl0[57]	TEMPLATE	"ViperMRLHalfTracks"		//anti-tank
 
   //1-Cobra
-  tmpl0[56]	TEMPLATE	"CobraPODHTracks"		//anti-tank
-  tmpl0[55]	TEMPLATE	"CobraMRLHalftrack"//anti-tank
-	tmpl0[54]	TEMPLATE	"CobraLtA-Thalftrack"//anti-tank
-  tmpl0[53]	TEMPLATE	"CobraHMGHalfTrack"		//Anti personnel
-  tmpl0[52]	TEMPLATE	"CobraMedCnHTrks"    //all-rounder 
-  tmpl0[51]	TEMPLATE	"SK-Cobra-Track-HVC"	  //all-rounder 
-  //tmpl0[49]	TEMPLATE	"A-Cobra-Hover-MC" //all-rounder
-	tmpl0[50]	TEMPLATE	"CobraInfernoHTracks"//Anti personnel
-  tmpl0[49]	TEMPLATE	"CobraInfernoHover" //Anti personnel
+  tmpl0[56]	TEMPLATE	"CobraPODHTracks"		  //anti-tank
+  tmpl0[55]	TEMPLATE	"CobraMRLHalftrack"   //anti-tank
+	tmpl0[54]	TEMPLATE	"CobraLtA-Thalftrack" //anti-tank
+  tmpl0[53]	TEMPLATE	"CobraHMGHalfTrack"		//* anti personnel
+  tmpl0[52]	TEMPLATE	"CobraMedCnHTrks"     //* all-rounder 
+  tmpl0[51]	TEMPLATE	"SK-Cobra-Track-HVC"	//* all-rounder 
+  //tmpl0[49]	TEMPLATE	"A-Cobra-Hover-MC"  //all-rounder
+	tmpl0[50]	TEMPLATE	"CobraInfernoHTracks" //anti personnel
+  tmpl0[49]	TEMPLATE	"CobraInfernoHover"   //anti personnel
 	
 
   //1-Phyton  Lancer,TK,Inferno,AssGun,MC,HC
   tmpl0[48]	TEMPLATE	"SK-Python-Hover-Lancer"  //anti-tank 
 	tmpl0[47]	TEMPLATE	"PythonTKTracks"			    //anti-tank 
-  tmpl0[46]	TEMPLATE	"PythonHoverInferno"      //Anti personnel
-  tmpl0[45]	TEMPLATE	"PhytonHoverAssGun"       //Anti personnel
-  tmpl0[44]	TEMPLATE	"PhytonHTrackAssGun"      //Anti personnel
-	tmpl0[43]	TEMPLATE	"PythonMedCanTracks"	    //all-rounder 
-	tmpl0[42]	TEMPLATE	"P0cam3PyHPVcanTrk"       //all-rounder 
-  tmpl0[41]	TEMPLATE	"Sk-PythonHvCanTrack"     //all-rounder 
-	tmpl0[40]	TEMPLATE	"SK-Python-Hover-Hcannon" //all-rounder 
+  tmpl0[46]	TEMPLATE	"PythonHoverInferno"      //anti personnel
+  tmpl0[45]	TEMPLATE	"PhytonHoverAssGun"       //* anti personnel
+  tmpl0[44]	TEMPLATE	"PhytonHTrackAssGun"      //* anti personnel
+	tmpl0[43]	TEMPLATE	"PythonMedCanTracks"	    //* all-rounder 
+	tmpl0[42]	TEMPLATE	"P0cam3PyHPVcanTrk"       //* all-rounder 
+  tmpl0[41]	TEMPLATE	"Sk-PythonHvCanTrack"     //* all-rounder 
+	tmpl0[40]	TEMPLATE	"SK-Python-Hover-Hcannon" //* all-rounder 
 	//tmpl0[40]	TEMPLATE	"PythonHoverHVC" //all-rounder 
 
   //=================================================================
@@ -488,68 +847,69 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
  
   //2-Scorpion {R-Vehicle-Body08}
   tmpl0[39]	TEMPLATE	"SK-Scorp-Hover-Lancer"	  //anti-tank  
-  tmpl0[38]	TEMPLATE	"ScorpHTrackHMG"	        //Anti personnel     
-  tmpl0[37]	TEMPLATE	"SK-Scorp-Hover-Mcannon"	//all-rounder
+  tmpl0[38]	TEMPLATE	"ScorpHTrackHMG"	        //* anti personnel     
+  tmpl0[37]	TEMPLATE	"SK-Scorp-Hover-Mcannon"	//* all-rounder
 
 	//2-Mantis {R-Vehicle-Body12} AC,HC,[HVC]
-	tmpl0[36]	TEMPLATE	"MantisHoverAC"           //all-rounder
-	tmpl0[35]	TEMPLATE	"SK-Mantis-Hover-Hcannon" //all-rounder
-	tmpl0[34]	TEMPLATE	"SK-Mantis-Hover-HVC"     //all-rounder
+	tmpl0[36]	TEMPLATE	"MantisHoverAC"           //* all-rounder
+	tmpl0[35]	TEMPLATE	"SK-Mantis-Hover-HVC"     //* all-rounder
+	
+  tmpl0[34]	TEMPLATE	"SK-Mantis-Hover-Hcannon" //* all-rounder
 
   //=================================================================
 	//3-Leopard {R-Vehicle-Body02}
-  tmpl0[33]	TEMPLATE	"LeopardHoverPulseLas" //Anti personnel
-  tmpl0[32]	TEMPLATE	"SK-Leopard-HTrk-ASGun" //Anti personnel  
-  tmpl0[31]	TEMPLATE	"SK-Leopard-Hover-Needle" //all-rounder  
-  tmpl0[30]	TEMPLATE	"SK-Leopard-Htrk-Needle" //all-rounder  
+  tmpl0[33]	TEMPLATE	"LeopardHoverPulseLas"    //anti personnel
+  tmpl0[32]	TEMPLATE	"SK-Leopard-HTrk-ASGun"   //* anti personnel  
+  tmpl0[31]	TEMPLATE	"SK-Leopard-Hover-Needle" //* all-rounder  
+  tmpl0[30]	TEMPLATE	"SK-Leopard-Htrk-Needle"  //* all-rounder  
 	
 	//3-Panther {R-Vehicle-Body06}
-  tmpl0[29]	TEMPLATE	"SK-Panther-Hover-TK"  //anti-tank 
-  tmpl0[28]	TEMPLATE	"SK-Panther-Track-TK"  //anti-tank 
-  tmpl0[27]	TEMPLATE	"PantherHoverPulseLas"  //Anti personnel
-  tmpl0[26]	TEMPLATE	"SK-Panther-Htrk-ASGun"  //Anti personnel 
-  tmpl0[25]	TEMPLATE	"SK-Panther-Hover-HVC"  //all-rounder 
-  tmpl0[24]	TEMPLATE	"SK-Panther-Track-HVC"  //all-rounder
+  tmpl0[29]	TEMPLATE	"SK-Panther-Hover-TK"    //anti-tank 
+  tmpl0[28]	TEMPLATE	"SK-Panther-Track-TK"    //anti-tank 
+  tmpl0[27]	TEMPLATE	"PantherHoverPulseLas"   //anti personnel
+  tmpl0[26]	TEMPLATE	"SK-Panther-Htrk-ASGun"  //* anti personnel 
+  tmpl0[25]	TEMPLATE	"SK-Panther-Hover-HVC"   //* all-rounder 
+  tmpl0[24]	TEMPLATE	"SK-Panther-Track-HVC"   //* all-rounder
 	
   //3-Tiger {R-Vehicle-Body09}
-	tmpl0[23]	TEMPLATE	"SK-Tiger-Hover-TK" //anti-tank 
-	tmpl0[22]	TEMPLATE	"SK-Tiger-Track-TK" //anti-tank 
-	tmpl0[21]	TEMPLATE	"TigerHoverPulseLas" // Anti personnel
-	tmpl0[20]	TEMPLATE	"SK-Tiger-Track-ASCannon" // all-rounder
-	tmpl0[19]	TEMPLATE	"TigerHoverRailGun" // all-rounder
-  tmpl0[18]	TEMPLATE	"SK-Tiger-Track-Hcannon" //all-rounder
-  //tmpl0[18]	TEMPLATE "SK-Tiger-Hover-HVC" //all-rounder
-  //tmpl0[18]	TEMPLATE "SK-Tiger-Track-HVC" //all-rounder
-	//tmpl0[14]	TEMPLATE	"TigerPulseTracks"		//OK	
+	tmpl0[23]	TEMPLATE	"SK-Tiger-Hover-TK"       //anti-tank 
+	tmpl0[22]	TEMPLATE	"SK-Tiger-Track-TK"       //anti-tank 
+	tmpl0[21]	TEMPLATE	"TigerHoverPulseLas"      //anti personnel
+	tmpl0[20]	TEMPLATE	"SK-Tiger-Track-ASCannon" //* all-rounder
+	tmpl0[19]	TEMPLATE	"TigerHoverRailGun"       //* all-rounder
+  tmpl0[18]	TEMPLATE	"SK-Tiger-Track-Hcannon"  //* all-rounder
+  //tmpl0[18]	TEMPLATE "SK-Tiger-Hover-HVC"     //all-rounder
+  //tmpl0[18]	TEMPLATE "SK-Tiger-Track-HVC"     //all-rounder
+	//tmpl0[14]	TEMPLATE	"TigerPulseTracks"		  //OK	
 	//tmpl0[13]	TEMPLATE	"TigerHvLaserTracks"		//OK
 	
   //=================================================================
   //4-Retaliation {R-Vehicle-Body03}
 
-  //4-Retribution {R-Vehicle-Body07}
-  tmpl0[17]	TEMPLATE	"SK-Retre-Hover-Scourge" //anti-tank
+  //4-Retribution {Body7ABT}
+  tmpl0[17]	TEMPLATE	"SK-Retre-Hover-Scourge"  //anti-tank
 	tmpl0[16]	TEMPLATE	"SK-Retre-Track-Scourge"  //anti-tank
-	tmpl0[15]	TEMPLATE	"RetreHoverFlashLight"  //Anti personnel - replace with PulseLAS??
-	tmpl0[14]	TEMPLATE	"SK-Retre-Track-PulseLsr"  //Anti personnel
-	tmpl0[13]	TEMPLATE	"SK-Retre-Hover-RailGun"  //all-rounder
-	tmpl0[12]	TEMPLATE	"SK-Retre-Track-RailGun"  //all-rounder
+	tmpl0[15]	TEMPLATE	"RetreHoverFlashLight"    //anti personnel - replace with PulseLAS??
+	tmpl0[14]	TEMPLATE	"SK-Retre-Track-PulseLsr" //anti personnel
+	tmpl0[13]	TEMPLATE	"SK-Retre-Hover-RailGun"  //* all-rounder
+	tmpl0[12]	TEMPLATE	"SK-Retre-Track-RailGun"  //* all-rounder
 	
   //4-Vengeance {Body10MBT}
   tmpl0[11]	TEMPLATE	"SK-Veng-Hover-Scourge"   //anti-tank
-	tmpl0[10]	TEMPLATE	"SK-Veng-Track-Scourge"  //anti-tank
-	tmpl0[9]	TEMPLATE	"SK-Veng-Hover-PulseLsr"  //Anti personnel
-	tmpl0[8]	TEMPLATE	"SK-Veng-Track-HvyLaser"  //Anti personnel
-	tmpl0[7]	TEMPLATE	"SK-Veng-Hover-Gauss"  //all-rounder
-	tmpl0[6]	TEMPLATE	"SK-Veng-Track-Gauss"  //all-rounder
+	tmpl0[10]	TEMPLATE	"SK-Veng-Track-Scourge"   //anti-tank
+	tmpl0[9]	TEMPLATE	"SK-Veng-Hover-PulseLsr"  //anti personnel
+	tmpl0[8]	TEMPLATE	"SK-Veng-Track-HvyLaser"  //anti personnel
+	tmpl0[7]	TEMPLATE	"SK-Veng-Hover-Gauss"     //* all-rounder
+	tmpl0[6]	TEMPLATE	"SK-Veng-Track-Gauss"     //* all-rounder
 
   //=================================================================
 	//5-Wyvern {R-Vehicle-Body13}
 	tmpl0[5]	TEMPLATE	"WyvernScourgeTracks" //anti-tank
 	tmpl0[4]	TEMPLATE	"WyvernScourgeTracks" //anti-tank
-	tmpl0[3]	TEMPLATE	"WyvernPulseTracks" //Anti personnel
-	tmpl0[2]	TEMPLATE	"WyvernHvLaserTracks" //Anti personnel
-	tmpl0[1]	TEMPLATE	"WyvernGaussTracks" // all-rounder 
-	tmpl0[0]	TEMPLATE	"WyvernPlasmaCTracks" //all-rounder 
+	tmpl0[3]	TEMPLATE	"WyvernPulseTracks"   //anti personnel
+	tmpl0[2]	TEMPLATE	"WyvernHvLaserTracks" //anti personnel
+	tmpl0[1]	TEMPLATE	"WyvernGaussTracks"   //* all-rounder 
+	tmpl0[0]	TEMPLATE	"WyvernPlasmaCTracks" //* all-rounder 
 
 	//5-Dragon {R-Vehicle-Body14}
 
@@ -575,272 +935,887 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	/***************************************************************/
 
   //cheap Researches
-	numCheapRes[0]		INT					21
-  researchCheap[0][0]	  RESEARCHSTAT		"R-Sys-MobileRepairTurret01"	//
- 	researchCheap[0][1]	  RESEARCHSTAT		"R-Struc-Research-Module"   // 
-	researchCheap[0][2]	  RESEARCHSTAT		"R-Struc-Research-Upgrade02"	//160% 
-	researchCheap[0][3]   RESEARCHSTAT		"R-Vehicle-Body05"	     //Cobra
-	researchCheap[0][4]	  RESEARCHSTAT		"R-Defense-Tower06"		   //Mini-Rocket Tower  
-  researchCheap[0][5]	  RESEARCHSTAT		"R-Struc-RepairFacility" //repair facility {powMod - factModule-RepTurret}
-	researchCheap[0][6]	  RESEARCHSTAT		"R-Wpn-MG-Damage01"	     //Hardened MG Bullets 
-	researchCheap[0][7]	  RESEARCHSTAT		"R-Struc-Materials01"		 //Reinforced Base Structure Materials  
-	researchCheap[0][8]	  RESEARCHSTAT		"R-Cyborg-Metals01"		   //Cyborg Composite Alloys  
-  researchCheap[0][9]	  RESEARCHSTAT		"R-Struc-Factory-Upgrade01" //Automated Manufacturing {factMod-powMod} 
-	researchCheap[0][10]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //HEAT Cannon Shells
-	researchCheap[0][11]	RESEARCHSTAT		"R-Defense-WallUpgrade01"//Improved Hardcrete
-	researchCheap[0][12]	RESEARCHSTAT		"R-Vehicle-Prop-Tracks"	 //$75 - Tracked Propulsion - {Composite Alloys Mk2, FactMod, ResearchMod}
-	researchCheap[0][13]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"//Cyclone AA site
-	researchCheap[0][14]	RESEARCHSTAT		"R-Vehicle-Body11"	     //$37 - Phyton , Cobra {facMod, powMod}
-	researchCheap[0][15]	RESEARCHSTAT		"R-Defense-WallTower01"	 //$37 - Heavy Machinegun Hardpoint  
-	researchCheap[0][16]	RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"	   //Lancer
-  researchCheap[0][17]	RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	   //$75 - {POD, HE Mini-Rockets Mk2}
-	researchCheap[0][18]	RESEARCHSTAT	  "R-Defense-Pillbox06"	   //$46 - Lancer Tower {MRL, Lancer AT Rocket, Stabilized Mini-Rockets}
-	researchCheap[0][19]	RESEARCHSTAT		"R-Defense-MortarPit"		 //$37 - Mortar Pit  {hardcrete,facMod}
-	researchCheap[0][20]	RESEARCHSTAT		"R-Sys-CBSensor-Tower01"	//CB Tower 
+	numCheapRes[0]		INT					23
   
-  
-  //used for checks
+  //Basics R-Struc-Materials02
+ 	researchCheap[0][0]	  RESEARCHSTAT		"R-Struc-Research-Module"  // 
+ 	researchCheap[0][1]	  RESEARCHSTAT		"R-Struc-PowerModuleMk1"   // 
+ 	researchCheap[0][2]	  RESEARCHSTAT		"R-Struc-Factory-Module"   // 
+ 	researchCheap[0][3]	  RESEARCHSTAT		"R-Struc-RepairFacility"   // 
+ 	researchCheap[0][4]	  RESEARCHSTAT		"R-Struc-Materials02"   // 
+ 	researchCheap[0][5]	  RESEARCHSTAT		"R-Vehicle-Body05"         // Cobra 
+ 	researchCheap[0][6]	  RESEARCHSTAT		"R-Struc-Factory-Upgrade01"  // 160%
 
+	//Propulsions
+  researchCheap[0][7]	  RESEARCHSTAT		"R-Vehicle-Prop-Hover"	 //Hover - {R-Vehicle-Engine02, Fac & Pow Mod}
+  researchCheap[0][8]	  RESEARCHSTAT		"R-Vehicle-Prop-Tracks"	 //Track - {Composite Alloys Mk2, Fact & Res & Power Mod}
+
+	//Phyton body
+	researchCheap[0][9]	  RESEARCHSTAT		"R-Vehicle-Body11"	        //Phyton , Cobra {facMod, powMod}
+
+  //Defences - 1  (MG,AA,Mortar,POD)
+	researchCheap[0][10]	RESEARCHSTAT		"R-Defense-Tower01"		      //Machinegun Guard Tower  
+	researchCheap[0][11]	RESEARCHSTAT		"R-Defense-AASite-QuadMg1"  //Hurricane AA site {Twin MG}
+	researchCheap[0][12]	RESEARCHSTAT		"R-Defense-MortarPit"		    //Mortar Pit  
+	researchCheap[0][13]	RESEARCHSTAT		"R-Defense-Tower06"		      //Mini-Rocket Tower  
+ 	researchCheap[0][14]	RESEARCHSTAT		"R-Struc-Materials03"       // 
+
+  //Defences - 2  (AA,HMG,MC,HPV)
+	researchCheap[0][15]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"  //Cyclone AA site {R-Wpn-AAGun-Damage02}
+	researchCheap[0][16]	RESEARCHSTAT		"R-Defense-WallTower01"	    //HMG Hard Point {HardCrete,HMG} 
+	researchCheap[0][17]  RESEARCHSTAT		"R-Defense-WallTower03"	    //MC Hard Point {LC, R-Wpn-Cannon-Damage01}
+  researchCheap[0][18]	RESEARCHSTAT		"R-Defense-WallTower-HPVcannon" //HPV Hard Point {R-Struc-Research-Upgrade01,R-Wpn-Cannon-Accuracy01,R-Wpn-Cannon-Damage02-} 
+	
+  //Repair Upgrade
+  researchCheap[0][19]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
+  researchCheap[0][20]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
+  researchCheap[0][21]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
+  researchCheap[0][22]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
+  
+  
+ /*
+  ================================================================
+                RESEARCH PATH 1 - Rockets and Flamers
+  ================================================================
+  */
+
+	numPath1[0]		INT					62
+  
+  //essentials
+  resPath1[0][0]	RESEARCHSTAT	"R-Sys-MobileRepairTurret01"	//repair turret, pre-researched
+  resPath1[0][1]  RESEARCHSTAT  "R-Struc-Research-Upgrade01"
+  resPath1[0][2]  RESEARCHSTAT  "R-Wpn-Flamer-ROF01"   // (118*)/143**/182
+  resPath1[0][3]  RESEARCHSTAT  "R-Wpn-Flamer-Damage02"  //125/(150)*/175/200**/225/250/275/300/325 %
+  resPath1[0][4]	RESEARCHSTAT	"R-Vehicle-Body05"	// Cobra
+  resPath1[0][5]	RESEARCHSTAT	"R-Cyborg-Metals02"	// (135)/170/205/240*/275/310/345**/380/415
+  resPath1[0][6]  RESEARCHSTAT  "R-Defense-Tower06" //POD def
+
+  //Research and Power
+  resPath1[0][7]	RESEARCHSTAT	"R-Struc-Research-Upgrade04"// 130/160/190/(220*)/250/280/310**/340/370
+  resPath1[0][8]	RESEARCHSTAT	"R-Struc-Power-Upgrade03a"	  // 150-01*/(175-01b)/200-01c/230-02**/260-03/290-03a
+
+  //---------------------------------------------------------------------------
+  //Cobra & Hover - POD, Lancer, Inferno ---------------------
+  resPath1[0][9]  RESEARCHSTAT  "R-Vehicle-Body05"//cobra
+  resPath1[0][10]	RESEARCHSTAT	"R-Vehicle-Prop-Hover"	//Hover
+  resPath1[0][11]  RESEARCHSTAT  "R-Defense-WallTower01" //HMG  def
+  resPath1[0][12] RESEARCHSTAT  "R-Wpn-Flame2" //Inferno  {R-Wpn-Flamer-Damage04}
+  resPath1[0][13] RESEARCHSTAT  "R-Defense-Pillbox06" //Lancer Tower  {R-Wpn-Rocket-Damage03,R-Wpn-Rocket-Accuracy01}
+  
+  
+  //Weapon Upgrades
+  resPath1[0][14] RESEARCHSTAT    "R-Wpn-MG-Damage02" //125/(150)/175/200/225/250/275/300/325 %
+  resPath1[0][15] RESEARCHSTAT    "R-Wpn-Flamer-Damage05"  // 125/150*/175/200**/(225)/250/275/300/325 %
+  resPath1[0][16] RESEARCHSTAT    "R-Wpn-Flamer-ROF02"    // 118*/143**/(182)
+  resPath1[0][17]	RESEARCHSTAT		"R-Wpn-Rocket-Damage04"    //125/150**/175***/(200)/225/250 
+  resPath1[0][18]	RESEARCHSTAT		"R-Wpn-Rocket-ROF02"       //118*/(143**)/182*** 
+  resPath1[0][19]	RESEARCHSTAT		"R-Wpn-Rocket-Accuracy02"  //110**/(120) 
+
+  //Engineering
+  resPath1[0][20]  RESEARCHSTAT "R-Sys-Engineering02" //+130% constr speed {R-Struc-Research-Upgrade04}
+  
+  //Cyborg and Vehicle Upgrades
+  resPath1[0][21]	RESEARCHSTAT		"R-Vehicle-Metals03"	// 135/170/(205)/240*/275/310/345**/380/415
+  //resPath1[0][11]	RESEARCHSTAT		"R-Vehicle-Armor-Heat01"	// (145)*/190/235/270**/315/360/405/450/495
+  resPath1[0][22]	RESEARCHSTAT		"R-Cyborg-Metals03"	// 135/170/(205)/240*/275/310/345**/380/415
+  //resPath1[0][12]	RESEARCHSTAT		"R-Cyborg-Armor-Heat01"	// (145)*/190/235/270**/315/360/405/450/495
+
+  //HardCretes & Armors
+  resPath1[0][23]	RESEARCHSTAT		"R-Defense-WallUpgrade03" // 135*/170/(205)/240*/275/305/340*/375/405/440/475/510
+  resPath1[0][24]	RESEARCHSTAT		"R-Struc-Materials03"     // 135*/170/(205)/240*/275/310/345*/370/405
+
+  //Research and power upgrades
+  resPath1[0][25]	RESEARCHSTAT		"R-Struc-Research-Upgrade05"// 30/160/190/220*/(250)/280/310**/340/370
+  resPath1[0][26]	RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	// 150-01*/175-01b/(200-01c)/230-02**/260-03/290-03a
+  resPath1[0][27]	RESEARCHSTAT		"R-Struc-Factory-Upgrade04"	// 01-160/(04-220)/07-280/09-340
+
+  //---------------------------------------------------------------------------
+  //Phyton  (Lancer,TK,Inferno)   {R-Vehicle-Metals02}
+  resPath1[0][28]  RESEARCHSTAT  "R-Vehicle-Body11"
+  resPath1[0][29]  RESEARCHSTAT  "R-Defense-WallTower06"   //Lancer HardPoint
+ 
+  //Weapon Upgrades
+  resPath1[0][30] RESEARCHSTAT    "R-Wpn-MG-Damage03" //125/150/(175)/200/225/250/275/300/325 %
+  resPath1[0][31] RESEARCHSTAT    "R-Wpn-Flamer-Damage06"  // 125/150*/175/200**/225/(250)/275/300/325 %
+  resPath1[0][32] RESEARCHSTAT    "R-Wpn-Flamer-ROF03"    // 118*/143**/(182)
+  resPath1[0][33]	RESEARCHSTAT		"R-Wpn-Rocket-Damage05"    //125/150**/175***/200/(225)/250 
+  resPath1[0][34]	RESEARCHSTAT		"R-Wpn-Rocket-ROF03"       //118*/143**/(182***) 
+  resPath1[0][35]	RESEARCHSTAT		"R-Wpn-Rocket-Accuracy01"  //(110)**/120 
+
+  //Cyborg and Vehicle Upgrades
+  resPath1[0][36]	RESEARCHSTAT		"R-Vehicle-Metals04"	// 135/170/205/(240*)/275/310/345**/380/415
+  //resPath1[0][11]	RESEARCHSTAT		"R-Vehicle-Armor-Heat01"	// 145*/190/235/270**/315/360/405/450/495
+  resPath1[0][37]	RESEARCHSTAT		"R-Cyborg-Metals04"	// 135/170/205/(240*)/275/310/345**/380/415
+  //resPath1[0][12]	RESEARCHSTAT		"R-Cyborg-Armor-Heat01"	// (145)*/190/235/270**/315/360/405/450/495
+ 
+  //HardCretes & Armors
+  resPath1[0][38]	RESEARCHSTAT		"R-Defense-WallUpgrade04" // 135*/170/205/(240*)/275/305/340*/375/405/440/475/510
+  resPath1[0][39]	RESEARCHSTAT		"R-Struc-Materials04"     // 135*/170/205/(240*)/275/310/345*/370/405
+
+  //Research and Power upgrades
+  resPath1[0][40]	RESEARCHSTAT		"R-Struc-Research-Upgrade07"// 30/160/190/220*/250/280/(310**)/340/370
+  resPath1[0][41]	RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	 // 150-01*/175-01b/200-01c/(230-02**)/260-03/290-03a
+  //resPath1[0][22]	RESEARCHSTAT		"R-Struc-Factory-Upgrade04"	// 01-160/04-220/07-280/09-340
+
+  //---------------------------------------------------------------------------
+  //Mantis () and Scorpion (Lancer)  
+  resPath1[0][42] RESEARCHSTAT  "R-Vehicle-Body08"  //Scorpion
+  resPath1[0][43] RESEARCHSTAT  "R-Vehicle-Body12"  //Mantis
+   
+  //Weapon Upgrades
+  //resPath1[0][15] RESEARCHSTAT    "R-Wpn-MG-Damage03" //125/150/(175)/200/225/250/275/300/325 %
+  //resPath1[0][14] RESEARCHSTAT    "R-Wpn-Flamer-Damage07"  // 125/150*/175/200**/225/(250)/275/300/325 %
+  //resPath1[0][13] RESEARCHSTAT    "R-Wpn-Flamer-ROF03"    // 118*/143**/(182)
+  resPath1[0][44]	RESEARCHSTAT		"R-Wpn-Rocket-Damage06"    //125/150**/175***/200/225/(250) 
+  //resPath1[0][16]	RESEARCHSTAT		"R-Wpn-Rocket-ROF03"       //118*/143**/(182***) 
+  resPath1[0][45]	RESEARCHSTAT		"R-Wpn-Rocket-Accuracy02"  //110**/(120) 
+          
+   //Cyborg and Vehicle Upgrades
+  resPath1[0][46]	RESEARCHSTAT		"R-Vehicle-Metals05"	// 135/170/205/240*/(275)/310/345**/380/415
+  resPath1[0][47]	RESEARCHSTAT		"R-Vehicle-Armor-Heat02"	// 145*/(190)/235/270**/315/360/405/450/495
+  resPath1[0][48]	RESEARCHSTAT		"R-Cyborg-Metals05"	// 135/170/205/240*/(275)/310/345**/380/415
+  resPath1[0][49]	RESEARCHSTAT		"R-Cyborg-Armor-Heat01"	// (145)*/190/235/270**/315/360/405/450/495
+  
+  //HardCretes & Armors
+  resPath1[0][50]	RESEARCHSTAT		"R-Defense-WallUpgrade05" // 135*/170/205/240*/(275)/305/340*/375/405/440/475/510
+  resPath1[0][51]	RESEARCHSTAT		"R-Struc-Materials05"     // 135*/170/205/240*/(275)/310/345*/370/405
+
+  //Research and Power upgrades
+  resPath1[0][52]	RESEARCHSTAT		"R-Struc-Research-Upgrade08"// 30/160/190/220*/250/280/310**/(340)/370
+  resPath1[0][53]	RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	 // 150-01*/175-01b/200-01c/230-02**/(260-03)/290-03a
+  resPath1[0][54]	RESEARCHSTAT		"R-Struc-Factory-Upgrade07"	// 01-160/04-220/(07-280)/09-340
+
+  //---------------------------------------------------------------------------
+  //Leopard (PulseLaser) - Panther (PulseLaser, TK) 
+
+	resPath1[0][55]	RESEARCHSTAT		"R-Vehicle-Body06"	//Panther
+	resPath1[0][56]	RESEARCHSTAT		"R-Defense-GuardTower-Rail1"	//Neelde
+	resPath1[0][57]	RESEARCHSTAT		"R-Defense-WallTower-PulseLas"		//Pulse Laser
+	resPath1[0][58]	RESEARCHSTAT		"R-Defense-WallTower-HvyA-Trocket"	//Tank Killer  {R-Wpn-RocketSlow-Damage03,R-Wpn-RocketSlow-Accuracy02}
+	resPath1[0][59]	RESEARCHSTAT		"R-Defense-WallTower-HvyA-Trocket"	//Tank Killer
+
+	//spare pos
+  resPath1[0][60]	RESEARCHSTAT		"R-Defense-WallTower-HvyA-Trocket"	//Tank Killer
+  resPath1[0][61]	RESEARCHSTAT		"R-Defense-WallTower-HvyA-Trocket"	//Tank Killer
+
+
+  
+	numPath1[1]		INT					62
+  //SuperCyborgs
+  resPath1[1][0]	RESEARCHSTAT		"R-Cyborg-Hvywpn-TK" // Super Tank-Killer Cyborg  {R-Cyborg-Metals04,R-Struc-Research-Upgrade04}
+  resPath1[1][1]	RESEARCHSTAT		"R-Cyborg-Hvywpn-PulseLsr" //Super Pulse Laser Cyborg {R-Struc-Research-Upgrade08}
+
+
+	//Weapon Upgrades
+  resPath1[1][2]	RESEARCHSTAT		"R-Wpn-RocketSlow-Damage04"	  //  125*/150/175/(200)/225/250 %
+  resPath1[1][3]	RESEARCHSTAT		"R-Wpn-RocketSlow-Accuracy02"	//  110*/(120)/130 
+  resPath1[1][4]	RESEARCHSTAT		"R-Wpn-RocketSlow-ROF01"	    //  (118)*/143/182 
+  resPath1[1][5]	RESEARCHSTAT		"R-Wpn-Energy-Accuracy01"	    //  (110)
+  resPath1[1][6]	RESEARCHSTAT		"R-Wpn-Energy-Damage01"	      //  (125)/150/175 
+  resPath1[1][7]	RESEARCHSTAT		"R-Wpn-Energy-ROF01"	        //  (118)/143/182 
+
+   //Cyborg and Vehicle Upgrades
+  resPath1[1][8]	RESEARCHSTAT		"R-Vehicle-Metals06"	// 135/170/205/240*/275/(310)/345**/380/415
+  resPath1[1][9]	RESEARCHSTAT		"R-Vehicle-Armor-Heat03"	// 145*/190/(235)/270**/315/360/405/450/495
+  resPath1[1][10]	RESEARCHSTAT		"R-Cyborg-Metals06"	// 135/170/205/240*/275/(310)/345**/380/415
+  resPath1[1][11]	RESEARCHSTAT		"R-Cyborg-Armor-Heat02"	// 145*/(190)/235/270**/315/360/405/450/495
+
+  //HardCretes & Armors
+  resPath1[1][12]	RESEARCHSTAT		"R-Struc-Materials06"     // 135/170/205/240/275/(310)/345* /370/405
+  resPath1[1][13]	RESEARCHSTAT		"R-Defense-WallUpgrade06" // 135/170/205/240/275/(305)/340* /375/405/440/475/510
+
+  //Research and Power upgrades
+  //resPath1[1][55]	RESEARCHSTAT		"R-Struc-Research-Upgrade08"// 30/160/190/220*/250/280/310**/(340)/370
+  //resPath1[1][56]	RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	 // 150-01*/175-01b/200-01c/230-02**/(260-03)/290-03a
+  //resPath1[1][22]	RESEARCHSTAT		"R-Struc-Factory-Upgrade09"	// 01-160/04-220/07-280/(09-340)
+  
+  //---------------------------------------------------------------------------
+  //Tiger (TK,Pulse Laser)   {R-Vehicle-Metals04}
+	resPath1[1][14]	RESEARCHSTAT		"R-Vehicle-Body09"	//Tiger
+
+	//Weapon Upgrades
+  resPath1[1][15]	RESEARCHSTAT		"R-Wpn-RocketSlow-Damage05"	  //  125*/150/175/(200)/225/250 %
+  resPath1[1][16]	RESEARCHSTAT		"R-Wpn-RocketSlow-Accuracy02"	//  110*/(120)/130 
+  resPath1[1][17]	RESEARCHSTAT		"R-Wpn-RocketSlow-ROF02"	    //  118*/(143)/182 
+  resPath1[1][18]	RESEARCHSTAT		"R-Wpn-Energy-Damage02"	      //  125/(150)/175 
+  resPath1[1][19]	RESEARCHSTAT		"R-Wpn-Energy-ROF02"	        //  118/(143)/182 
+
+  //Cyborg and Vehicle Upgrades
+  resPath1[1][20]	RESEARCHSTAT		"R-Vehicle-Metals07"	// 135/170/205/240*/275/310/(345**)/380/415
+  resPath1[1][21]	RESEARCHSTAT		"R-Vehicle-Armor-Heat04"	// 145*/190/235/(270**)/315/360/405/450/495
+  resPath1[1][22]	RESEARCHSTAT		"R-Cyborg-Metals06"	// 135/170/205/240*/275/(310)/345**/380/415
+  resPath1[1][23]	RESEARCHSTAT		"R-Cyborg-Armor-Heat03"	// 145*/190/(235)/270**/315/360/405/450/495
+
+  //HardCretes & Armors
+  resPath1[1][24]	RESEARCHSTAT		"R-Struc-Materials07"     // 135/170/205/240/275/310/(345*)/370/405
+  resPath1[1][25]	RESEARCHSTAT		"R-Defense-WallUpgrade07" // 135/170/205/240/275/305/(340*)/375/405/440/475/510
+
+  //Research and Power upgrades
+  resPath1[1][26]	RESEARCHSTAT		"R-Struc-Research-Upgrade08"// 30/160/190/220*/250/280/310**/(340)/370
+  resPath1[1][27]	RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	 // 150-01*/175-01b/200-01c/230-02**/(260-03)/290-03a
+
+  //Extra
+  resPath1[1][28]	RESEARCHSTAT		"R-Sys-Autorepair-General"// Auto Repair
+  
+  //---------------------------------------------------------------------------
+  //Retribution - Scourge  
+  resPath1[1][29]	RESEARCHSTAT		"R-Vehicle-Body07"		//Retribution
+	resPath1[1][30]	RESEARCHSTAT		"R-Defense-WallTower-A-Tmiss"		//Scourge
+	
+	//Weapon Upgrades
+  resPath1[1][31]	RESEARCHSTAT		"R-Wpn-RocketSlow-Damage06"	  //  125*/150/175/200/(225)/250 %
+  resPath1[1][32]	RESEARCHSTAT		"R-Wpn-RocketSlow-Accuracy03"	//  110*/120/(130) 
+  resPath1[1][33]	RESEARCHSTAT		"R-Wpn-RocketSlow-ROF03"	    //  118*/143/(182) 
+  resPath1[1][34]	RESEARCHSTAT		"R-Wpn-Energy-Damage03"	      //  125/150/(175) 
+  resPath1[1][35]	RESEARCHSTAT		"R-Wpn-Energy-ROF03"	        //  118/143/(182) 
+
+  //Extra Heavy Rocket Bastion {R-Wpn-RocketSlow-Damage05,R-Wpn-RocketSlow-Accuracy03,R-Defense-WallUpgrade05} 
+  resPath1[1][36]	RESEARCHSTAT		"R-Defense-Super-Rocket"	    //Heavy Rocket Bastion  
+  
+  //Cyborg and Vehicle Upgrades
+  //resPath1[1][11]	RESEARCHSTAT		"R-Vehicle-Metals08"	// 135/170/205/240*/275/310/345**/(380)/415
+  resPath1[1][37]	RESEARCHSTAT		"R-Vehicle-Armor-Heat06"	// 145*/190/235/270**/315/(360)/405/450/495
+  resPath1[1][38]	RESEARCHSTAT		"R-Cyborg-Metals07"	// 135/170/205/240*/275/310/(345**)/380/415
+  resPath1[1][39]	RESEARCHSTAT		"R-Cyborg-Armor-Heat04"	// 145*/190/235/(270**)/315/360/405/450/495
+
+  //HardCretes & Armors
+  resPath1[1][40]	RESEARCHSTAT		"R-Struc-Materials08"     // 135/170/205/240/275/310/(345*)/370/405
+  resPath1[1][41]	RESEARCHSTAT		"R-Defense-WallUpgrade08" // 135/170/205/240/275/305/(340*)/375/405/440/475/510
+
+  //Research and Power upgrades
+  resPath1[1][42]	RESEARCHSTAT		"R-Struc-Research-Upgrade09"// 30/160/190/220*/250/280/310**/340/370
+  resPath1[1][43]	RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	 // 150-01*/175-01b/200-01c/230-02**/260-03/290-03a
+
+  //---------------------------------------------------------------------------
+  //Vengeance - Heavy Laser
+  resPath1[1][44]	RESEARCHSTAT		"R-Vehicle-Body10"	 //Vengeance
+	resPath1[1][45]	RESEARCHSTAT		"R-Defense-HeavyLas" //Heavy Laser
+	
+  //Cyborg and Vehicle Upgrades
+  resPath1[1][46]	RESEARCHSTAT		"R-Vehicle-Metals08"	// 135/170/205/240*/275/310/345**/(380)/415
+  resPath1[1][47]	RESEARCHSTAT		"R-Vehicle-Armor-Heat07"	// 145*/190/235/270**/315/360/(405)/450/495
+  resPath1[1][48]	RESEARCHSTAT		"R-Cyborg-Metals08"	// 135/170/205/240*/275/310/345**/(380)/415
+  resPath1[1][49]	RESEARCHSTAT		"R-Cyborg-Armor-Heat06"	// 145*/190/235/270**/315/(360)/405/450/495
+
+  //HardCretes & Armors
+  resPath1[1][50]	RESEARCHSTAT		"R-Struc-Materials09"     // 135/170/205/240/275/310/345*/370/(405)
+  resPath1[1][51]	RESEARCHSTAT		"R-Defense-WallUpgrade09" // 135/170/205/240/275/305/340*/375/(405)/440/475/510
+
+  //Research and Power upgrades
+  //resPath1[1][55]	RESEARCHSTAT		"R-Struc-Research-Upgrade09"// 30/160/190/220*/250/280/310**/340/(370)
+  //resPath1[1][56]	RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	 // 150-01*/175-01b/200-01c/230-02**/260-03/(290-03a)
+
+  //SuperCyborg
+  resPath1[1][52]	RESEARCHSTAT		"R-Cyborg-Hvywpn-A-T" //Super Scourge Cyborg {R-Cyborg-Metals04,R-Struc-Research-Upgrade07}
+
+  //---------------------------------------------------------------------------
+	//Wyvern - Plasma Cannon 
+  resPath1[1][53]	RESEARCHSTAT		"R-Vehicle-Body13"	//Wyvern
+	resPath1[1][54]	RESEARCHSTAT		"R-Defense-PlasmaCannon"	//Plasma Caanon
+	
+	//Laser Satellite
+  resPath1[1][55]	RESEARCHSTAT		"R-Wpn-LasSat"	//LaserSat  {R-Struc-Research-Upgrade09-R-Sys-Sensor-UpLink}
+
+  //Fortresses
+  resPath1[1][56]	RESEARCHSTAT		"R-Defense-Super-Missile"	//Missile Fortress
+  resPath1[1][57]	RESEARCHSTAT		"R-Defense-MassDriver"	//Mass Driver Fortress
+
+  //Cyborg and Vehicle Upgrades
+  resPath1[1][58]	RESEARCHSTAT		"R-Vehicle-Metals09"	// 135/170/205/240*/275/310/345**/380/(415)
+  resPath1[1][59]	RESEARCHSTAT		"R-Vehicle-Armor-Heat08"	// 145*/190/235/270**/315/360/405/(450)/495
+  resPath1[1][60]	RESEARCHSTAT		"R-Cyborg-Metals09"	// 135/170/205/240*/275/310/345**/380/(415)
+  resPath1[1][61]	RESEARCHSTAT		"R-Cyborg-Armor-Heat07"	// 145*/190/235/270**/315/360/(405)/450/495
+
+  //HardCretes & Armors
+  //resPath1[1][61]	RESEARCHSTAT		"R-Struc-Materials09"//135/170/205/240/275/310/345* /370/405
+  //resPath1[1][62]	RESEARCHSTAT		"R-Defense-WallUpgrade12"//135/170/205/240/275/305/340* /375/405/440/475/510
+
+
+
+
+  /*
+  ================================================================
+                 RESEARCH PATH 2 - Machine Gunners and Cannons
+  ================================================================
+  */
+	numPath2[0]		INT					62
+  
+  //essentials
+  resPath2[0][0]	RESEARCHSTAT	"R-Sys-MobileRepairTurret01"	//repair turret, pre-researched
+  resPath2[0][1]  RESEARCHSTAT  "R-Struc-Factory-Module"      //PowMod,CybFact,FuelInjEng
+  resPath2[0][2]  RESEARCHSTAT  "R-Defense-WallTower01"       //HMG
+  resPath2[0][3]	RESEARCHSTAT	"R-Struc-Power-Upgrade03a"	  //150-01*/175-01b/200-01c/230-02**/260-03/(290-03a)
+
+  //Cobra & Hover HMG - MC,HVC
+  resPath2[0][4]  RESEARCHSTAT  "R-Vehicle-Body05"      //Cobra
+  resPath2[0][5]  RESEARCHSTAT  "R-Wpn-Cannon2Mk1" //MEDCann {LC, Dam01}
+  resPath2[0][6]	RESEARCHSTAT	"R-Vehicle-Prop-Hover"	//Hover
+  resPath2[0][7]  RESEARCHSTAT  "R-Defense-WallTower03"  //MEDCann {LC, Dam01}
+  resPath2[0][8]  RESEARCHSTAT  "R-Defense-Emplacement-HPVcannon"  //HVC {Dam02,Acc01}
+  
+  //Weapon Upgrades
+  resPath2[0][9] RESEARCHSTAT     "R-Wpn-Cannon-Damage03" //125/150/(175)/200/225/250/275/300/325%
+  resPath2[0][10] RESEARCHSTAT    "R-Wpn-Cannon-ROF01"    //(111)/125/143/167/200/250%
+  resPath2[0][11] RESEARCHSTAT    "R-Wpn-MG-ROF01"        //(118)*/143/182%
+  resPath2[0][12] RESEARCHSTAT    "R-Wpn-MG-Damage02"     //125/(150)/175/200/225*/250/275/300/325%
+
+  //Cyborg & Vehicle
+  resPath2[0][13]	RESEARCHSTAT		"R-Vehicle-Metals02"	//135/170/205**/(240)***/275/310/345****/380/415
+  //resPath2[0][9]	RESEARCHSTAT		"R-Vehicle-Armor-Heat01"	//145*/(190)**/235***/270****/315/360/405/450/495
+  resPath2[0][14]	RESEARCHSTAT		"R-Cyborg-Metals02"	// 135/(170)/205/240*/275/(310)/345**/380/415
+  //resPath2[0][11]	RESEARCHSTAT		"R-Cyborg-Armor-Heat02"	// 145*/(190)/235/270**/315/360/405/450/495
+
+  //HardCretes & Armors
+  resPath2[0][15]	RESEARCHSTAT		"R-Struc-Materials02"     // 135/(170)/205/240/275/310/345* /370/405
+  resPath2[0][16]	RESEARCHSTAT		"R-Defense-WallUpgrade02" // 135/(170)/205/240/275/305/340* /375/405/440/475/510
+                                                            //* Research-Upgarde-08; 
+
+  //---------------------------------------------------------------------------
+  //Phyton AssGun - (MC),(HVC),HC
+  resPath2[0][17]  RESEARCHSTAT  "R-Vehicle-Body11"     //{R-Vehicle-Metals02}
+  resPath2[0][18]  RESEARCHSTAT  "R-Defense-WallTower04" //HeavyCann {dam04}
+  resPath2[0][19]  RESEARCHSTAT  "R-Defense-RotMG"       //AssGun {dam03,ROF03}
+ 
+  //Factory PProduction upgrade
+  resPath2[0][20]	RESEARCHSTAT		"R-Struc-Factory-Upgrade04"	// 01-160/(04-220)/07-280/09-340
+
+  //Weapon Upgrades
+  resPath2[0][21] RESEARCHSTAT    "R-Wpn-Cannon-Damage05" //125/150/175/200/(225)/250/275/300/325%
+  resPath2[0][22] RESEARCHSTAT    "R-Wpn-Cannon-ROF01"    //(111)/125/143/167/200/250%
+  resPath2[0][23] RESEARCHSTAT    "R-Wpn-MG-Damage04"     //125/150/175/(200)/225*/250/275/300/325%
+
+  //Cyborg & Vehicle
+  resPath2[0][24]	RESEARCHSTAT		"R-Vehicle-Metals03"	//135/170/(205**)/240***/275/310/345****/380/415
+  resPath2[0][25]	RESEARCHSTAT		"R-Vehicle-Armor-Heat01"	//(145*)/190**/235***/270****/315/360/405/450/495
+  resPath2[0][26]	RESEARCHSTAT		"R-Cyborg-Metals03"	// 135/170/(205)/240*/275/(310)/345**/380/415
+  resPath2[0][27]	RESEARCHSTAT		"R-Cyborg-Armor-Heat02"	// 145*/(190)/235/270**/315/360/405/450/495
+
+  //HardCretes & Armors
+  resPath2[0][28]	RESEARCHSTAT		"R-Struc-Materials03"     // 135/170/(205)/240/275/310/345* /370/405
+  resPath2[0][29]	RESEARCHSTAT		"R-Defense-WallUpgrade03" // 135/170/(205)/240/275/305/340* /375/405/440/475/510
+ 
+  //---------------------------------------------------------------------------
+  //Mantis-Scorpion _||_ Scorpion (HMG),(AssGun),(MC)  Mantis [Pulse][RailGun],AssCann,(HVC)
+  resPath2[0][30] RESEARCHSTAT  "R-Vehicle-Body08"  //Scorpion
+  resPath2[0][31] RESEARCHSTAT  "R-Vehicle-Body12"  //Mantis
+  resPath2[0][32] RESEARCHSTAT  "R-Defense-Wall-VulcanCan" //AssCann   {damage03/ROF01}
+   
+  //Cyborg
+  resPath2[0][33]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Mcannon"  //Super Heavy Gunner  {dam01/Met04}
+  resPath2[0][34]	RESEARCHSTAT		"R-Cyborg-Hvywpn-HPV"      //Super Auto Cannon Cyborg {met04,HPV,MC}
+  resPath2[0][35]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Acannon"  //Super HPV Cyborg  {RF01}
+  
+  //Weapon Upgrades
+  resPath2[0][36] RESEARCHSTAT    "R-Wpn-Cannon-Damage06" //125/150/175/200/225/(250)/275/300/325%
+  resPath2[0][37] RESEARCHSTAT    "R-Wpn-Cannon-ROF02"    //(111)/125/143/167/200/250%
+  resPath2[0][38] RESEARCHSTAT    "R-Wpn-MG-Damage05"     //125/150/175/200/(225)*/250/275/300/325%
+
+  //Cyborg & Vehicle
+  resPath2[0][39]	RESEARCHSTAT		"R-Vehicle-Metals04"	    //135/170/205**/(240)***/275/310/345****/380/415
+  resPath2[0][40]	RESEARCHSTAT		"R-Vehicle-Armor-Heat02"	//145*/(190)**/235***/270****/315/360/405/450/495
+  resPath2[0][41]	RESEARCHSTAT		"R-Cyborg-Metals05"	      //135/170/205/240*/(275)/310/345**/380/415
+  resPath2[0][42]	RESEARCHSTAT		"R-Cyborg-Armor-Heat02"	  //145*/(190)/235/270**/315/360/405/450/495
+
+  //HardCretes & Armors
+  resPath2[0][43]	RESEARCHSTAT		"R-Struc-Materials04"     // 135/170/205/(240)/275/310/345* /370/405
+  resPath2[0][44]	RESEARCHSTAT		"R-Defense-WallUpgrade04" // 135/170/205/(240)/275/305/340* /375/405/440/475/510
+  
+  //---------------------------------------------------------------------------
+  // __Leopard (AssGun),PulseLas,[HvyLas] - Needle   __Panther PulseLas,(AssGun) - RailGun,(HVC)
+	resPath2[0][45]	RESEARCHSTAT		"R-Vehicle-Body06"	            //Panther {R-Vehicle-Metals04}
+	resPath2[0][46]	RESEARCHSTAT		"R-Defense-GuardTower-Rail1"	  //Neelde
+	resPath2[0][47]	RESEARCHSTAT		"R-Defense-WallTower-Rail2"	    //Rail Gun  {CannDam07,RailDam02}
+	resPath2[0][48]	RESEARCHSTAT		"R-Defense-WallTower-PulseLas"	//Pulse Laser
+
+  //Factory PProduction upgrade
+  resPath2[0][49]	RESEARCHSTAT		"R-Struc-Factory-Upgrade07"	// 01-160/(04-220)/07-280/09-340
+
+  //SuperCyborgs
+  resPath2[0][50]	RESEARCHSTAT		"R-Cyborg-Hvywpn-RailGunner" //Super Rail-Gunner Cyborg  
+  resPath2[0][51]	RESEARCHSTAT		"R-Cyborg-Hvywpn-PulseLsr"   //Super Pulse Laser Cyborg 
+
+  //Weapon Upgrades
+  //resPath2[0][61]	RESEARCHSTAT		"R-Wpn-Rail-Damage03"	        //125*/150/(175)%
+  resPath2[0][52]	RESEARCHSTAT		"R-Wpn-Rail-ROF01"	        //(125)*/150/175%
+  resPath2[0][53]  RESEARCHSTAT		"R-Wpn-Energy-Accuracy01"	    //(110)
+  resPath2[0][54]  RESEARCHSTAT		"R-Wpn-Energy-Damage01"	      //(125)/150/175 
+  resPath2[0][55]	RESEARCHSTAT		"R-Wpn-Energy-ROF01"	        //(118)/143/182 
+
+  //Cyborg & Vehicle
+  resPath2[0][56]	RESEARCHSTAT		"R-Vehicle-Metals05"	    //135/170/205**/240***/(275)/310/345****/380/415
+  resPath2[0][57]	RESEARCHSTAT		"R-Vehicle-Armor-Heat03"	//145*/190**/(235)***/270****/315/360/405/450/495
+  //resPath2[0][34]	RESEARCHSTAT		"R-Cyborg-Metals05"	      //135/170/205/240*/(275)/310/345**/380/415
+  resPath2[0][58]	RESEARCHSTAT		"R-Cyborg-Armor-Heat03"	  //145*/190/(235)/270**/315/360/405/450/495
+
+  //HardCretes & Armors
+  resPath2[0][59]	RESEARCHSTAT		"R-Struc-Materials05"     // 135/170/205/240/(275)/310/345* /370/405
+  resPath2[0][60]	RESEARCHSTAT		"R-Defense-WallUpgrade05" // 135/170/205/240/(275)/305/340* /375/405/440/475/510
+
+
+  //---------------------------------------------------------------------------
+  //Tiger (PulseLas),HvyLas - (Needle),(RailGun),(AssCann),(HC),(HVC),Gauss
+	resPath2[0][61]	RESEARCHSTAT		"R-Vehicle-Body09"	  //Tiger {Met04}
+
+	numPath2[1]		INT					39
+
+	resPath2[1][0]	RESEARCHSTAT		"R-Defense-Rail3"	    //Gauss Cannon Emplacement  {RailDam03}
+	resPath2[1][1]	RESEARCHSTAT		"R-Defense-HeavyLas"  //Heavy Laser (EnDam01)
+
+  //Weapon Upgrades
+  resPath2[1][2]	RESEARCHSTAT		"R-Wpn-Rail-Damage03"	    //125*/150/(175)%
+  resPath2[1][3]	RESEARCHSTAT		"R-Wpn-Rail-Damage03"	    //125*/150/(175)%
+  resPath2[1][4]	RESEARCHSTAT		"R-Wpn-Rail-ROF02"	        //125*/(150)/175%
+  resPath2[1][5]  RESEARCHSTAT		"R-Wpn-Energy-Damage02"	    //125/(150)/175 
+  resPath2[1][6]	RESEARCHSTAT		"R-Wpn-Energy-ROF02"	      //118/(143)/182 
+
+  //Cyborg & Vehicle
+  resPath2[1][7]	RESEARCHSTAT		"R-Vehicle-Metals07"	    //135/170/205**/240***/275/310/(345)****/380/415
+  //resPath2[0][49]	RESEARCHSTAT		"R-Vehicle-Armor-Heat04"	//145*/190**/235***/(270****)/315/360/405/450/495
+  resPath2[1][8]	RESEARCHSTAT		"R-Cyborg-Metals07"	      //135/170/205/240*/275/310/(345)**/380/415
+  //resPath2[0][11]	RESEARCHSTAT		"R-Cyborg-Armor-Heat04"	  //145*/190/235/(270**)/315/360/405/450/495
+
+  //HardCretes & Armors
+  resPath2[1][9]	RESEARCHSTAT		"R-Struc-Materials06"     // 135/170/205/240/275/(310)/345* /370/405
+  resPath2[1][10]	RESEARCHSTAT		"R-Defense-WallUpgrade06" // 135/170/205/240/275/(305)/340* /375/405/440/475/510
+
+
+  //---------------------------------------------------------------------------
+  //__Retaliation (Needle) __Retribution  (Flash),(PulseLas) - (Needle), (RailGun) 
+  resPath2[1][11]	RESEARCHSTAT		"R-Vehicle-Body07"		//Retribution {met06}
+	resPath2[1][12]	RESEARCHSTAT		"R-Defense-WallTower-A-Tmiss"		//Scourge
+	
+  //Cyborg
+  resPath2[1][13]	RESEARCHSTAT		"R-Cyborg-Hvywpn-A-T" //Super Scourge Cyborg
+
+	//Weapon Upgrades
+  //resPath2[0][61]	RESEARCHSTAT		"R-Wpn-Rail-Damage03"	    //125*/150/(175)%
+  resPath2[1][14]	RESEARCHSTAT		"R-Wpn-Rail-ROF03"	        //125*/150/(175)%
+  resPath2[1][15]  RESEARCHSTAT		"R-Wpn-Energy-Damage03"	    //125/150/(175) 
+  resPath2[1][16]	RESEARCHSTAT		"R-Wpn-Energy-ROF03"	      //118/143/(182) 
+
+
+  //Cyborg & Vehicle
+  //resPath2[1][48]	RESEARCHSTAT		"R-Vehicle-Metals07"	    //135/170/205**/240***/275/310/(345)****/380/415
+  resPath2[1][17]	RESEARCHSTAT		"R-Vehicle-Armor-Heat04"	//145*/190**/235***/(270****)/315/360/405/450/495
+  //resPath2[1][34]	RESEARCHSTAT		"R-Cyborg-Metals07"	      //135/170/205/240*/275/310/(345)**/380/415
+  resPath2[1][18]	RESEARCHSTAT		"R-Cyborg-Armor-Heat04"	  //145*/190/235/(270**)/315/360/405/450/495
+
+  //HardCretes & Armors
+  resPath2[1][19]	RESEARCHSTAT		"R-Struc-Materials07"     // 135/170/205/240/275/310/(345*)/370/405
+  resPath2[1][20]	RESEARCHSTAT		"R-Defense-WallUpgrade08" // 135/170/205/240/275/305/340*/(375)/405/440/475/510
+
+  
+  //---------------------------------------------------------------------------
+  //Vengeance  (PulseLas),(HvyLas) - (Needle),(RailGun),GaussCann
+  resPath2[1][21]	RESEARCHSTAT		"R-Vehicle-Body10"	        //Vengeance
+	resPath2[1][22]	RESEARCHSTAT		"R-Defense-WallTower-Rail3"	//Gauss Cannon
+	
+	//Weapon Upgrades
+  
+  //Cyborg & Vehicle
+  resPath2[1][23]	RESEARCHSTAT		"R-Vehicle-Metals08"	    //135/170/205**/240***/275/310/345****/(380)/415
+  resPath2[1][24]	RESEARCHSTAT		"R-Vehicle-Armor-Heat05"	//145*/190**/235***/270****/(315)/360/405/450/495
+  resPath2[1][25]	RESEARCHSTAT		"R-Cyborg-Metals08"	      //135/170/205/240*/275/310/345**/(380)/415
+  resPath2[1][26]	RESEARCHSTAT		"R-Cyborg-Armor-Heat05"	  //145*/190/235/270**/(315)/360/405/450/495
+              
+  //HardCretes & Armors
+  resPath2[1][27]	RESEARCHSTAT		"R-Struc-Materials08"     // 135/170/205/240/275/310/345*/(370)/405
+  resPath2[1][28]	RESEARCHSTAT		"R-Defense-WallUpgrade09" // 135/170/205/240/275/305/340*/375/(405)/440/475/510
+
+
+  //---------------------------------------------------------------------------
+	//Wyvern (PulseLas),(HvyLas) - PlasmaCann, (GaussCann)
+  resPath2[1][29]	RESEARCHSTAT		"R-Vehicle-Body13"	      //Wyvern
+	resPath2[1][30]	RESEARCHSTAT		"R-Defense-PlasmaCannon"	//Plasma Cannon Emplacement
+	
+  //Lassat
+  resPath2[1][31]	RESEARCHSTAT		"R-Wpn-LasSat"	//LaserSat  {R-Struc-Research-Upgrade09-R-Sys-Sensor-UpLink}
+  
+  //Cyborg & Vehicle
+  resPath2[1][32]	RESEARCHSTAT		"R-Vehicle-Metals09"	    //135/170/205**/240***/275/310/345****/380/(415)
+  resPath2[1][33]	RESEARCHSTAT		"R-Vehicle-Armor-Heat07"	//145*/190**/235***/270****/315/360/(405)/450/495
+  resPath2[1][34]	RESEARCHSTAT		"R-Cyborg-Metals09"	      //135/170/205/240*/275/310/345**/380/(415)
+  resPath2[1][35]	RESEARCHSTAT		"R-Cyborg-Armor-Heat07"	  //145*/190/235/270**/315/360/(405)/450/495
+              
+  //HardCretes & Armors
+  resPath2[1][36]	RESEARCHSTAT		"R-Struc-Materials09"     // 135/170/205/240/275/310/345*/370/(405)
+  resPath2[1][37]	RESEARCHSTAT		"R-Defense-WallUpgrade12" // 135/170/205/240/275/305/340*/375/405/440/475/(510)
+
+  //Factory PProduction upgrade
+  resPath2[1][38]	RESEARCHSTAT		"R-Struc-Factory-Upgrade09"	// 01-160/(04-220)/07-280/09-340
+
+
+
+
+  /*
+  ================================================================
+                STANDARD RESEARCH PATH
+  ================================================================
+  */
 	numRes[0]		INT					62
   
   //essentials
   research[0][0]	RESEARCHSTAT	"R-Sys-MobileRepairTurret01"	//repair turret, pre-researched
-  research[0][1]  RESEARCHSTAT  "R-Wpn-Flamer-ROF03"
-  research[0][2]  RESEARCHSTAT  "R-Wpn-Flamer-Damage03"
-  research[0][3]	RESEARCHSTAT	"R-Struc-Research-Upgrade03"// 130/160/190/(220*)/250/280/310**/340/370
-  research[0][4]	RESEARCHSTAT	"R-Struc-Power-Upgrade01b"	  // 150-01*/(175-01b)/200-01c/230-02**/260-03/290-03a
+  research[0][1]  RESEARCHSTAT  "R-Wpn-Flamer-Damage02"       //125/(150*)/175/200**/(225)/250/275/300/325 %
+  research[0][2]  RESEARCHSTAT  "R-Wpn-Flamer-ROF01"          //(118*)/143**/182
+  research[0][3]	RESEARCHSTAT	"R-Struc-Power-Upgrade03a"	  //150-01*/(175-01b)/200-01c/230-02**/260-03/290-03a
+  //research[0][3]	RESEARCHSTAT	"R-Struc-Research-Upgrade7"  //130/160/190/(220*)/250/280/310**/340/370
 
   //Cobra & Hover - HMG, POD, Inferno, HVC, MC ---------------------
-  research[0][5]  RESEARCHSTAT  "R-Vehicle-Body05"//cobra
-  research[0][6]	RESEARCHSTAT	"R-Vehicle-Prop-Hover"	//Hover
-  research[0][7]  RESEARCHSTAT  "R-Defense-WallTower01" //HMG  def
-  research[0][8]  RESEARCHSTAT  "R-Defense-Tower06" //POD def
-  research[0][9]  RESEARCHSTAT  "R-Wpn-Flame2" //Inferno
-  research[0][10] RESEARCHSTAT  "R-Defense-WallTower03" //MEDCann def
-  research[0][11] RESEARCHSTAT  "R-Defense-WallTower-HPVcannon"  //HVC def
-  //research[0][11]  RESEARCHSTAT "R-Defense-WallTower03" //MEDCann def
+  research[0][4]  RESEARCHSTAT  "R-Vehicle-Body05"//cobra
+  research[0][5]	RESEARCHSTAT	"R-Vehicle-Prop-Hover"	//Hover
+  research[0][6]  RESEARCHSTAT  "R-Defense-WallTower01" //HMG  def
+  research[0][7]  RESEARCHSTAT  "R-Wpn-Rocket05-MiniPod" //POD
+  research[0][8]  RESEARCHSTAT  "R-Wpn-Flame2" //Inferno  {R-Wpn-Flamer-Damage04}
+  research[0][9]  RESEARCHSTAT  "R-Wpn-Cannon2Mk1" //MEDCann def
+  research[0][10] RESEARCHSTAT  "R-Wpn-Cannon4AMk1"  //HVC def {R-Wpn-Cannon-Damage02}
   
-  //Cyborg Upgrades
-  research[0][12]	RESEARCHSTAT		"R-Cyborg-Metals04"	// 135/170/205/(240*)/275/310/345**/380/415
-  research[0][13]	RESEARCHSTAT		"R-Cyborg-Armor-Heat01"	// (145)*/190/235/270**/315/360/405/450/495
-
-
   //Weapon Upgrades
-  research[0][14] RESEARCHSTAT    "R-Wpn-MG-Damage02" //125/(150)/175/200/225/250/275/300/325 %
-  research[0][15]	RESEARCHSTAT		"R-Wpn-Rocket-Damage02"   //150% 
-  research[0][16]	RESEARCHSTAT		"R-Wpn-Rocket-ROF02"       //143% 
+  //research[0][15] RESEARCHSTAT    "R-Wpn-Flamer-Damage05"  // 125/150*/175/200**/(225)/250/275/300/325 %
+  //research[0][16] RESEARCHSTAT    "R-Wpn-Flamer-ROF02"    // 118*/(143**)/182
+  research[0][11] RESEARCHSTAT    "R-Wpn-Cannon-Damage03" //125/150/(175)/200/225/250/275/300/325%
+  research[0][12] RESEARCHSTAT    "R-Wpn-Cannon-ROF01"    //(111)/125/143/167/200/250%
+  research[0][13] RESEARCHSTAT    "R-Wpn-MG-ROF01"        //(118)*/143/182%
+  research[0][14] RESEARCHSTAT    "R-Wpn-MG-Damage02"     //125/(150)/175/200/225*/250/275/300/325%
+  research[0][15]	RESEARCHSTAT		"R-Wpn-Rocket-Damage02" ////125/(150**)/175***/200/225/250  
+  research[0][16]	RESEARCHSTAT		"R-Wpn-Rocket-ROF01"    //(118**)/143***/182% 
+
+  //Cyborg & Vehicle
+  research[0][17]	RESEARCHSTAT		"R-Vehicle-Metals02"	//135/170/205**/(240)***/275/310/345****/380/415
+  //research[0][9]	RESEARCHSTAT		"R-Vehicle-Armor-Heat01"	//145*/(190)**/235***/270****/315/360/405/450/495
+  research[0][18]	RESEARCHSTAT		"R-Cyborg-Metals02"	// 135/(170)/205/240*/275/(310)/345**/380/415
+  //research[0][11]	RESEARCHSTAT		"R-Cyborg-Armor-Heat02"	// 145*/(190)/235/270**/315/360/405/450/495
 
   //HardCretes & Armors
-  research[0][17]	RESEARCHSTAT		"R-Vehicle-Armor-Heat02"//140/(180)/220/260/300/340/380/420/460
-  research[0][18]	RESEARCHSTAT		"R-Struc-Materials03"     // 135/170/(205)/240/275/310/345* /370/405
-  research[0][19]	RESEARCHSTAT		"R-Defense-WallUpgrade03" // 135/170/(205)/240/275/305/340* /375/405/440/475/510
+  research[0][19]	RESEARCHSTAT		"R-Struc-Materials02"     // 135/(170)/205/240/275/310/345* /370/405
+  research[0][20]	RESEARCHSTAT		"R-Defense-WallUpgrade02" // 135/(170)/205/240/275/305/340* /375/405/440/475/510
                                                             //* Research-Upgarde-08; 
 
-  //Research and power upgrades
-  research[0][20]	RESEARCHSTAT		"R-Struc-Research-Upgrade05"// 30/160/190/220*/(250)/280/310**/340/370
-  research[0][21]	RESEARCHSTAT		"R-Struc-Power-Upgrade01c"	// 150-01*/175-01b/(200-01c)/230-02**/260-03/290-03a
-
   //Phyton - Heavy Cannon, Assault Gun --------------------
-  research[0][22]  RESEARCHSTAT  "R-Vehicle-Body11"
-  research[0][23]  RESEARCHSTAT  "R-Defense-WallTower04" //HeavyCann {damage04}
-  research[0][24]  RESEARCHSTAT  "R-Defense-Pillbox06"   //Lancer
-  research[0][25]  RESEARCHSTAT  "R-Defense-RotMG" //AssGun
-  research[0][26]  RESEARCHSTAT  "R-Defense-RotMG"  //AssGun
+  research[0][21]  RESEARCHSTAT  "R-Vehicle-Body11"     //{R-Vehicle-Metals02}
+  research[0][22]  RESEARCHSTAT  "R-Defense-WallTower04" //HeavyCann {damage04}
+  research[0][23]  RESEARCHSTAT  "R-Defense-Pillbox06"   //Lancer
+  research[0][24]  RESEARCHSTAT  "R-Defense-RotMG"       //AssGun
+  research[0][25]  RESEARCHSTAT  "R-Defense-RotMG"       //AssGun
  
-  //Cyborg Upgrades
-  research[0][27]	RESEARCHSTAT		"R-Cyborg-Metals05"	//135/170/205/240*/(275)/310/345**/380/415
-  research[0][28]	RESEARCHSTAT		"R-Cyborg-Armor-Heat02"	//145*/(190)/235/270**/315/360/405/450/495
-
   //Weapon Upgrades
-  research[0][29] RESEARCHSTAT  "R-Wpn-Cannon-ROF04" //111/125/143/(167)/200/250 %
-  research[0][30] RESEARCHSTAT  "R-Wpn-Flamer-ROF02" //118/(143)/182 %
-  research[0][31] RESEARCHSTAT  "R-Wpn-MG-ROF01"     //(118)/143/182 %
-  research[0][32] RESEARCHSTAT  "R-Wpn-Flamer-Damage04" //125/150/175/(200)/225/250/275/300/325 %
-  research[0][33] RESEARCHSTAT  "R-Wpn-MG-Damage04"  //125/150/175/(200)/225/250/275/300/325 %
-  
+  research[0][26] RESEARCHSTAT    "R-Wpn-Flamer-Damage05"  // 125/150*/175/200**/(225)/250/275/300/325 %
+  research[0][27] RESEARCHSTAT    "R-Wpn-Flamer-ROF02"    // 118*/(143**)/182
+  research[0][28] RESEARCHSTAT    "R-Wpn-Cannon-Damage04" //125/150/175/200/(225)/250/275/300/325%
+  //research[0][12] RESEARCHSTAT    "R-Wpn-Cannon-ROF01"    //(111)/125/143/167/200/250%
+  //research[0][13] RESEARCHSTAT    "R-Wpn-MG-ROF01"        //(118)*/143/182%
+  research[0][29] RESEARCHSTAT    "R-Wpn-MG-Damage03"     //125/150/(175)/200/225*/250/275/300/325%
+  research[0][30]	RESEARCHSTAT		"R-Wpn-Rocket-Damage03" ////125/150**/(175***)/200/225/250  
+  //research[0][16]	RESEARCHSTAT		"R-Wpn-Rocket-ROF01"    //(118**)/143***/182% 
+
+  //Cyborg & Vehicle
+  research[0][31]	RESEARCHSTAT		"R-Vehicle-Metals03"	//135/170/205**/(240)***/275/310/345****/380/415
+  research[0][32]	RESEARCHSTAT		"R-Vehicle-Armor-Heat01"	//145*/(190)**/235***/270****/315/360/405/450/495
+  research[0][33]	RESEARCHSTAT		"R-Cyborg-Metals03"	// 135/170/(205)/240*/275/(310)/345**/380/415
+  //research[0][11]	RESEARCHSTAT		"R-Cyborg-Armor-Heat02"	// 145*/190/235/270**/315/360/405/450/495
+
   //HardCretes & Armors
-  research[0][34]	RESEARCHSTAT		"R-Vehicle-Armor-Heat03"//140/180/(220)/260/300/340/380/420/460
-  research[0][35]	RESEARCHSTAT		"R-Struc-Materials04"//135/170/205/(240)/275/310/345*/370/405
-  research[0][36]	RESEARCHSTAT		"R-Defense-WallUpgrade04"//135/170/205/(240)/275/305/340* /375/405/440/475/510
-
-  //Research and Power upgrades
-  research[0][37]	RESEARCHSTAT		"R-Struc-Research-Upgrade07"// 30/160/190/220*/250/280/(310**)/340/370
-  research[0][38]	RESEARCHSTAT		"R-Struc-Power-Upgrade02"	 // 150-01*/175-01b/200-01c/(230-02**)/260-03/290-03a
-
+  research[0][34]	RESEARCHSTAT		"R-Struc-Materials03"     // 135/170/(205)/240/275/310/345* /370/405
+  research[0][35]	RESEARCHSTAT		"R-Defense-WallUpgrade03" // 135/170/(205)/240/275/305/340* /375/405/440/475/510
+ 
   //Mantis-Scorpion -  Assault Cannon------------------
-  research[0][39] RESEARCHSTAT  "R-Vehicle-Body08"  //Scorpion
-  research[0][40] RESEARCHSTAT  "R-Vehicle-Body12"  //Mantis
-  research[0][41] RESEARCHSTAT  "R-Defense-Wall-VulcanCan" //AssCann   {damage04/ROF01}
+  research[0][36] RESEARCHSTAT  "R-Vehicle-Body08"  //Scorpion
+  research[0][37] RESEARCHSTAT  "R-Vehicle-Body12"  //Mantis
+  research[0][38] RESEARCHSTAT  "R-Defense-Wall-VulcanCan" //AssCann   {damage03/ROF01}
    
-  //Weapon Upgrades
-  research[0][42] RESEARCHSTAT  "R-Wpn-Cannon-Accuracy01" //(110)/120 %
-  research[0][43] RESEARCHSTAT  "R-Wpn-Cannon-ROF04" //111/125/143/(167)/200/250 %
-  research[0][44] RESEARCHSTAT  "R-Wpn-MG-ROF02"   //118/(143)/182 %
-  research[0][45] RESEARCHSTAT  "R-Wpn-MG-Damage06" //125/150/175/200/225/(250)/275/300/325 %
-  research[0][46] RESEARCHSTAT  "R-Wpn-Flamer-Damage06" //125/150/175/200/225/(250)/275/300/325 %
-          
-  //Cyborg Upgrades
-  research[0][47]	RESEARCHSTAT		"R-Cyborg-Metals06"	    //135/170/205/240*/275/(310)/345**/380/415
-  research[0][48]	RESEARCHSTAT		"R-Cyborg-Armor-Heat03"	//145*/190/(235)/270**/315/360/405/450/495
-
   //Cyborg
-  research[0][49]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Mcannon" //Super Heavy Gunner
-  research[0][50]	RESEARCHSTAT		"R-Cyborg-Hvywpn-HPV" //Super Auto Cannon Cyborg
-  research[0][51]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Acannon" //Super HPV Cyborg
+  research[0][39]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Mcannon" //Super Heavy Gunner  {dam01/Met04}
+  research[0][40]	RESEARCHSTAT		"R-Cyborg-Hvywpn-HPV" //Super Auto Cannon Cyborg {met04,HPV,MC}
+  research[0][41]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Acannon" //Super HPV Cyborg  {RF01}
   
+    //Weapon Upgrades
+  //research[0][43] RESEARCHSTAT    "R-Wpn-Flamer-Damage05"  // 125/150*/175/200**/(225)/250/275/300/325 %
+  research[0][42] RESEARCHSTAT    "R-Wpn-Flamer-ROF02"    // 118*/(143**)/182
+  research[0][43] RESEARCHSTAT    "R-Wpn-Cannon-Damage05" //125/150/175/200/225/(250)/275/300/325%
+  research[0][44] RESEARCHSTAT    "R-Wpn-Cannon-ROF01"    //(111)/125/143/167/200/250%
+  research[0][45] RESEARCHSTAT    "R-Wpn-MG-ROF02"        //118*/(143)/182%
+  //research[0][46] RESEARCHSTAT    "R-Wpn-MG-Damage03"     //125/150/(175)/200/225*/250/275/300/325%
+  research[0][46]	RESEARCHSTAT		"R-Wpn-Rocket-Damage04" ////125/150**/175***/(200)/225/250  
+  research[0][47]	RESEARCHSTAT		"R-Wpn-Rocket-ROF02"    //118**/(143***)/182% 
+
+  //Cyborg & Vehicle
+  research[0][48]	RESEARCHSTAT		"R-Vehicle-Metals04"	    //135/170/205**/(240)***/275/310/345****/380/415
+  research[0][49]	RESEARCHSTAT		"R-Vehicle-Armor-Heat02"	//145*/(190)**/235***/270****/315/360/405/450/495
+  //research[0][34]	RESEARCHSTAT		"R-Cyborg-Metals04"	// 135/170/205/(240*)/275/310/345**/380/415
+  //research[0][11]	RESEARCHSTAT		"R-Cyborg-Armor-Heat02"	// 145*/190/235/270**/315/360/405/450/495
+
   //HardCretes & Armors
-  research[0][52]	RESEARCHSTAT		"R-Vehicle-Armor-Heat05"//140/180/220/260/(300)/340/380/420/460
-  research[0][53]	RESEARCHSTAT		"R-Struc-Materials05"//135/170/205/240/(275)/310/345*/370/405
-  research[0][54]	RESEARCHSTAT		"R-Defense-Super-Cannon"//R-Defense-WallUpgrade05"//135/170/205/240/(275)/305/340* /375/405/440/475/510
+  research[0][50]	RESEARCHSTAT		"R-Struc-Materials04"     // 135/170/205/(240)/275/310/345* /370/405
+  research[0][51]	RESEARCHSTAT		"R-Defense-WallUpgrade04" // 135/170/205/(240)/275/305/340* /375/405/440/475/510
 
-  //Research and Power upgrades
-  research[0][55]	RESEARCHSTAT		"R-Struc-Research-Upgrade08"// 30/160/190/220*/250/280/310**/(340)/370
-  research[0][56]	RESEARCHSTAT		"R-Struc-Power-Upgrade03"	 // 150-01*/175-01b/200-01c/230-02**/(260-03)/290-03a
+  
+  
+  //Leopard - Panther - Needle, AssGun, Pulse Laser, Tank Killer-------------------------------------------
+	research[0][52]	RESEARCHSTAT		"R-Vehicle-Body06"	//Panther {R-Vehicle-Metals04}
+	research[0][53]	RESEARCHSTAT		"R-Defense-GuardTower-Rail1"	//Neelde
+	research[0][54]	RESEARCHSTAT		"R-Defense-WallTower-PulseLas"		//Pulse Laser
+	research[0][55]	RESEARCHSTAT		"R-Defense-WallTower-HvyA-Trocket"	//Tank Killer
+	research[0][56]	RESEARCHSTAT		"R-Defense-Wall-RotMg"	//Assault Gun {ROF03 - DAM03}
 
-  //Leopard - Panther - Needle, Pulse Laser, Tank Killer-------------------------------------------
-	research[0][57]	RESEARCHSTAT		"R-Vehicle-Body06"	//Panther
-	research[0][58]	RESEARCHSTAT		"R-Defense-GuardTower-Rail1"	//Neelde
-	research[0][59]	RESEARCHSTAT		"R-Defense-WallTower-PulseLas"		//Pulse Laser
-	research[0][60]	RESEARCHSTAT		"R-Defense-WallTower-HvyA-Trocket"	//Tank Killer
-	research[0][61]	RESEARCHSTAT		"R-Defense-WallTower-HvyA-Trocket"	//Tank Killer
+  //SuperCyborgs
+  research[0][57]	RESEARCHSTAT		"R-Cyborg-Hvywpn-TK" // Super Tank-Killer Cyborg  {R-Cyborg-Metals04,R-Struc-Research-Upgrade04}
+  research[0][58]	RESEARCHSTAT		"R-Cyborg-Hvywpn-PulseLsr" //Super Pulse Laser Cyborg {R-Cyborg-Metals04,R-Struc-Research-Upgrade08}
 
-	numRes[1]		INT					47
+  //Weapon Upgrades
+  research[0][59]	RESEARCHSTAT		"R-Wpn-RocketSlow-Damage01"	  //(125)*/150/175/200/225/250 %
+  research[0][60]	RESEARCHSTAT		"R-Wpn-RocketSlow-Accuracy01"	//(110)*/120/130 
+  //research[0][60]	RESEARCHSTAT		"R-Wpn-RocketSlow-ROF01"	    //(118)*/143/182 
+  research[0][61]	RESEARCHSTAT		"R-Wpn-Rail-Damage01"	        //(125)*/150/175%
 
-  //Cyborg
-  research[1][0]	RESEARCHSTAT		"R-Cyborg-Hvywpn-TK" // Super Tank-Killer Cyborg
-  research[1][1]	RESEARCHSTAT		"R-Cyborg-Hvywpn-PulseLsr" //Super Pulse Laser Cyborg
-  research[1][2]	RESEARCHSTAT		"R-Cyborg-Hvywpn-RailGunner" // Super Rail Gunner
+	numRes[1]		INT					62
 
-	//Weapon Upgrades
-  research[1][3]	RESEARCHSTAT		"R-Wpn-RocketSlow-Damage02"	   //  125/(150)/175/200/225/250 %
-  research[1][4]	RESEARCHSTAT		"R-Wpn-RocketSlow-ROF01"	     //  (118)/143/182 %
-  research[1][5]	RESEARCHSTAT		"R-Wpn-RocketSlow-Accuracy01"	 //  (110)/120/130 %
-  research[1][6]	RESEARCHSTAT		"R-Wpn-Rail-ROF01"	           // (118)/143/182 % 
-  research[1][7]	RESEARCHSTAT		"R-Wpn-MG-Damage07"	           // 125/150/175/200/225/250/(275)/300/325 %
+  //research[1][2]	RESEARCHSTAT		"R-Wpn-Rail-ROF01"	          //(118)*/143/182%
+  research[1][0] RESEARCHSTAT		 "R-Wpn-Energy-Accuracy01"	    //(110)
+  research[1][1] RESEARCHSTAT    "R-Wpn-Cannon-Damage06" //125/150/175/200/225/250/(275)/300/325%
+  research[1][2] RESEARCHSTAT    "R-Wpn-Cannon-ROF03"    //111/125/(143)/167/200/250%
+  research[1][3] RESEARCHSTAT    "R-Wpn-MG-Damage04"     //125/150/175/(200)/225*/250/275/300/325%
+  research[1][4] RESEARCHSTAT		 "R-Wpn-Energy-Damage01"	      //(125)/150/175 
+  //research[0][7]	RESEARCHSTAT		"R-Wpn-Energy-ROF01"	        //(118)/143/182 
+
+  //Cyborg & Vehicle
+  research[1][5]	RESEARCHSTAT		"R-Vehicle-Metals05"	    //135/170/205**/240***/(275)/310/345****/380/415
+  research[1][6]	RESEARCHSTAT		"R-Vehicle-Armor-Heat03"	//145*/190**/(235)***/270****/315/360/405/450/495
+  research[1][7]	RESEARCHSTAT		"R-Cyborg-Metals05"	      //135/170/205/240*/(275)/310/345**/380/415
+  research[1][8]	RESEARCHSTAT		"R-Cyborg-Armor-Heat03"	  //145*/190/(235)/270**/315/360/405/450/495
+
+  //HardCretes & Armors
+  research[1][9]	RESEARCHSTAT		"R-Struc-Materials05"     // 135/170/205/240/(275)/310/345* /370/405
+  research[1][10]	RESEARCHSTAT		"R-Defense-WallUpgrade05" // 135/170/205/240/(275)/305/340* /375/405/440/475/510
+
 
   //Tiger - Rail Gun----------------------------------------------------
-	research[1][8]	RESEARCHSTAT		"R-Vehicle-Body09"	//Tiger
-	research[1][9]	RESEARCHSTAT		"R-Defense-WallTower-Rail2"	//Rail Gun
-	
-  //Research and Power upgrades
-  research[1][10]	RESEARCHSTAT		"R-Struc-Research-Upgrade08"// 30/160/190/220* /250/280/310** /340/(370)
-  research[1][11]	RESEARCHSTAT		"R-Struc-Power-Upgrade03"	 // 150-01* /175-01b/200-01c/230-02** /260-03/(290-03a)
+	research[1][11]	RESEARCHSTAT		"R-Vehicle-Body09"	//Tiger {Met04}
+	research[1][12]	RESEARCHSTAT		"R-Defense-WallTower-Rail2"	//Rail Gun
+
+  //SuperCyborg
+  research[1][13]	RESEARCHSTAT		"R-Cyborg-Hvywpn-RailGunner" // Super Rail Gunner
+
+  //Weapon Upgrades
+  research[1][14]	RESEARCHSTAT		"R-Wpn-RocketSlow-Damage02"	    //125*/(150)/175/200/225/250 %
+  //research[1][59]	RESEARCHSTAT		"R-Wpn-RocketSlow-Accuracy01"	//(110)*/120/130 
+  research[1][15]	RESEARCHSTAT		"R-Wpn-RocketSlow-ROF01"	      //(118)*/143/182 
+  research[1][16]	RESEARCHSTAT		"R-Wpn-Rail-Damage02"	          //125*/(150)/175%
+  research[1][17]	RESEARCHSTAT		"R-Wpn-Rail-ROF01"	            //(118)*/143/182%
+  research[1][18]	RESEARCHSTAT		"R-Wpn-Energy-Damage02"	        //125/(150)/175 
+  research[1][19]	RESEARCHSTAT		"R-Wpn-Energy-ROF01"	          //(118)/143/182 
+  //research[1][01]  RESEARCHSTAT    "R-Wpn-Cannon-Damage06" //125/150/175/200/225/250/(275)/300/325%
+  research[1][20]  RESEARCHSTAT    "R-Wpn-Cannon-ROF04"    //111/125/143/(167)/200/250%
+  research[1][21]  RESEARCHSTAT    "R-Wpn-MG-Damage05"     //125/150/175/200/(225)*/250/275/300/325%
+
+  //Cyborg & Vehicle
+  research[1][22]	RESEARCHSTAT		"R-Vehicle-Metals06"	    //135/170/205**/240***/275/(310)/345****/380/415
+  //research[1][3]	RESEARCHSTAT		"R-Vehicle-Armor-Heat03"	//145*/190**/(235)***/270****/315/360/405/450/495
+  research[1][23]	RESEARCHSTAT		"R-Cyborg-Metals06"	      //135/170/205/240*/275/(310)/345**/380/415
+  //research[1][5]	RESEARCHSTAT		"R-Cyborg-Armor-Heat03"	  //145*/190/(235)/270**/315/360/405/450/495
 
   //HardCretes & Armors
-  research[1][12]	RESEARCHSTAT		"R-Vehicle-Armor-Heat06"//140/180/220/260/300/(340)/380/420/460
-  research[1][13]	RESEARCHSTAT		"R-Struc-Materials06"     // 135/170/205/240/275/(310)/345* /370/405
-  research[1][14]	RESEARCHSTAT		"R-Defense-WallUpgrade06" // 135/170/205/240/275/(305)/340* /375/405/440/475/510
+  research[1][24]	RESEARCHSTAT		"R-Struc-Materials06"     // 135/170/205/240/275/(310)/345* /370/405
+  research[1][25]	RESEARCHSTAT		"R-Defense-WallUpgrade06" // 135/170/205/240/275/(305)/340* /375/405/440/475/510
 
-	//Weapon Upgrades
-  research[1][15]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //(125)/150/175/200/225/250/275/300/325 %
-  research[1][16]	RESEARCHSTAT		"R-Wpn-Energy-Damage01"	 //(125)/150/175 %
-  research[1][17]	RESEARCHSTAT		"R-Wpn-Energy-ROF01"	   //(118)/143/182 %
-
-
-  //Cyborg Upgrades
-  research[1][18]	RESEARCHSTAT		"R-Cyborg-Metals07"	    //135/170/205/240* /275/310/(345**)/380/415
-  research[1][19]	RESEARCHSTAT		"R-Cyborg-Armor-Heat04"	//145* /190/235/(270**)/315/360/405/450/495
 
   //Retribution - Scourge  ----------------------------------------------
-  research[1][20]	RESEARCHSTAT		"R-Vehicle-Body07"		//Retribution
-	research[1][21]	RESEARCHSTAT		"R-Defense-WallTower-A-Tmiss"		//Scourge
+  research[1][26]	RESEARCHSTAT		"R-Vehicle-Body07"		//Retribution {met06}
+	research[1][27]	RESEARCHSTAT		"R-Defense-WallTower-A-Tmiss"		//Scourge
 	
-	//Weapon Upgrades
-  research[1][22]	RESEARCHSTAT		"R-Wpn-Missile-Damage01"	 //(125)/150/175 %
-  research[1][23]	RESEARCHSTAT		"R-Wpn-Missile-ROF01"	     //(118)/143/182 %
-  research[1][24]	RESEARCHSTAT		"R-Wpn-Missile-Accuracy01" //(110)/120/182 %
-
-  //Vengeance - Heavy Laser, Gauss Cannon ----------------------------------------------
-  research[1][25]	RESEARCHSTAT		"R-Vehicle-Body10"	 //Vengeance
-	research[1][26]	RESEARCHSTAT		"R-Defense-HeavyLas" //Heavy Laser
-	research[1][27]	RESEARCHSTAT		"R-Defense-WallTower-Rail3"	//Gauss Cannon
-	
-  //HardCretes & Armors
-  research[1][28]	RESEARCHSTAT		"R-Vehicle-Armor-Heat07"//140/180/220/260/300/340/(380)/420/460
-  research[1][29]	RESEARCHSTAT		"R-Struc-Materials07"//135/170/205/240/275/310/(345*)/370/405
-  research[1][30]	RESEARCHSTAT		"R-Defense-WallUpgrade07"//135/170/205/240/275/305/(340*)/375/405/440/475/510
-
-	//Weapon Upgrades
-  research[1][31]	RESEARCHSTAT		"R-Wpn-Energy-Damage03"	 //125/150/(175) %
-  research[1][32]	RESEARCHSTAT		"R-Wpn-Energy-ROF03"	 //118/143/(182) %
-  research[1][33]	RESEARCHSTAT		"R-Wpn-Energy-Accuracy01"	 //110/110 %
-  research[1][34]	RESEARCHSTAT		"R-Wpn-Rail-ROF03"	     // 118/143/(182) % 
-  research[1][35]	RESEARCHSTAT		"R-Wpn-Rail-Accuracy01"	 // 110/110 %
-
   //Cyborg
-  research[1][36]	RESEARCHSTAT		"R-Cyborg-Hvywpn-A-T" //Super Scourge Cyborg
+  research[1][28]	RESEARCHSTAT		"R-Cyborg-Hvywpn-A-T" //Super Scourge Cyborg
 
-  //Cyborg Upgrades
-  research[1][37]	RESEARCHSTAT		"R-Cyborg-Metals08"	    //135/170/205/240* /275/310/345** /(380)/415
-  research[1][38]	RESEARCHSTAT		"R-Cyborg-Armor-Heat06"	//145* /190/235/270** /315/(360)/405/450/495
+	//Weapon Upgrades
+  research[1][29]	RESEARCHSTAT		"R-Wpn-Missile-Damage01"	 //(125)/150/175 %
+  research[1][30]	RESEARCHSTAT		"R-Wpn-Missile-ROF01"	     //(118)/143/182 %
+  research[1][31]	RESEARCHSTAT		"R-Wpn-Missile-Accuracy01" //(110)/120/182 %
+  research[1][32]	RESEARCHSTAT		"R-Wpn-Rail-Damage03"	     //125*/150/(175)%
+  research[1][33]	RESEARCHSTAT		"R-Wpn-Rail-ROF02"	       //118*/(143)/182%
+  research[1][34]	RESEARCHSTAT		"R-Wpn-Energy-Damage03"	   //125/150/(175) 
+  research[1][35]	RESEARCHSTAT		"R-Wpn-Energy-ROF02"	     //118/(143)/182 
+  //research[1][1]  RESEARCHSTAT    "R-Wpn-Cannon-Damage07"  //125/150/175/200/225/250/(275)/300/325%
+  //research[1][29]  RESEARCHSTAT    "R-Wpn-Cannon-ROF04"    //111/125/143/(167)/200/250%
+  research[1][36]  RESEARCHSTAT    "R-Wpn-MG-Damage06"       //125/150/175/200/225*/(250)/275/300/325%
+
+  //Cyborg & Vehicle
+  research[1][37]	RESEARCHSTAT		"R-Vehicle-Metals07"	    //135/170/205**/240***/275/310/(345)****/380/415
+  research[1][38]	RESEARCHSTAT		"R-Vehicle-Armor-Heat05"	//145*/190**/235***/270****/(315)/360/405/450/495
+  research[1][39]	RESEARCHSTAT		"R-Cyborg-Metals07"	      //135/170/205/240*/275/310/(345)**/380/415
+  research[1][40]	RESEARCHSTAT		"R-Cyborg-Armor-Heat05"	  //145*/190/235/270**/(315)/360/405/450/495
+
+  //HardCretes & Armors
+  research[1][41]	RESEARCHSTAT		"R-Struc-Materials07"     // 135/170/205/240/275/310/(345*)/370/405
+  research[1][42]	RESEARCHSTAT		"R-Defense-WallUpgrade07" // 135/170/205/240/275/305/(340*)/375/405/440/475/510
+
+  
+  //Vengeance - Heavy Laser, Gauss Cannon ----------------------------------------------
+  research[1][43]	RESEARCHSTAT		"R-Vehicle-Body10"	 //Vengeance
+	research[1][44]	RESEARCHSTAT		"R-Defense-HeavyLas" //Heavy Laser
+	research[1][45]	RESEARCHSTAT		"R-Defense-WallTower-Rail3"	//Gauss Cannon
+	
+	//Weapon Upgrades
+  research[1][46]	RESEARCHSTAT		"R-Wpn-Missile-Damage02"	 //125/(150)/175 %
+  research[1][47]	RESEARCHSTAT		"R-Wpn-Missile-ROF02"	     //118/(143)/182 %
+  research[1][48]	RESEARCHSTAT		"R-Wpn-Missile-Accuracy02" //110/(120)/182 %
+  research[1][49]	RESEARCHSTAT		"R-Wpn-Rail-ROF03"	       //118*/143/(182)%
+  research[1][50]	RESEARCHSTAT		"R-Wpn-Energy-ROF03"	     //118/143/(182) 
+  
+  //Cyborg & Vehicle
+  research[1][51]	RESEARCHSTAT		"R-Vehicle-Metals08"	    //135/170/205**/240***/275/310/345****/(380)/415
+  research[1][52]	RESEARCHSTAT		"R-Vehicle-Armor-Heat06"	//145*/190**/235***/270****/315/(360)/405/450/495
+  research[1][53]	RESEARCHSTAT		"R-Cyborg-Metals08"	      //135/170/205/240*/275/310/345**/(380)/415
+  research[1][54]	RESEARCHSTAT		"R-Cyborg-Armor-Heat06"	  //145*/190/235/270**/315/(360)/405/450/495
+              
+  //HardCretes & Armors
+  research[1][55]	RESEARCHSTAT		"R-Struc-Materials08"     // 135/170/205/240/275/310/345*/(370)/405
+  research[1][56]	RESEARCHSTAT		"R-Defense-WallUpgrade08" // 135/170/205/240/275/305/340*/(375)/405/440/475/510
+
 
 	//Wyvern - Plasma Cannon  -------------------------------------------------
-  research[1][39]	RESEARCHSTAT		"R-Vehicle-Body13"	//Wyvern
-	research[1][40]	RESEARCHSTAT		"R-Defense-PlasmaCannon"	//Plasma Caanon
+  research[1][57]	RESEARCHSTAT		"R-Vehicle-Body13"	//Wyvern
+	research[1][58]	RESEARCHSTAT		"R-Defense-PlasmaCannon"	//Plasma Caanon
 	
-	//Laser Satellite
-  research[1][41]	RESEARCHSTAT		"R-Wpn-LasSat"	//LaserSat
+	//Weapon Upgrades
+  research[1][59]	RESEARCHSTAT		"R-Wpn-Missile-Damage03"	 //125/150/(175) %
+  research[1][60]	RESEARCHSTAT		"R-Wpn-Missile-ROF03"	     //118/143/(182) %
 
-  //Fortresses
-  research[1][42]	RESEARCHSTAT		"R-Defense-Super-Missile"	//Missile Fortress
-  research[1][43]	RESEARCHSTAT		"R-Defense-MassDriver"	//Mass Driver Fortress
-
-
-  //HardCretes & Armors
-  research[1][44]	RESEARCHSTAT		"R-Vehicle-Armor-Heat09"//140/180/220/260/300/340/380/420/(460)
-  research[1][45]	RESEARCHSTAT		"R-Struc-Materials09"//135/170/205/240/275/310/345* /370/405
-  research[1][46]	RESEARCHSTAT		"R-Defense-WallUpgrade12"//135/170/205/240/275/305/340* /375/405/440/475/510
+  research[1][61]	RESEARCHSTAT		"R-Vehicle-Metals09"	    //135/170/205**/240***/275/310/345****/380/(415)
+  
 
 	/****************************/
 	/*	VTOL Stuff 	*/
 	/****************************/
 	
-  numRes[9]	INT			26
+  //STANDARD PATH
+  numRes[9]	INT			19
   
   //VTOL fact & Propulsion, Rearming PAD, Anti AA def 
   research[9][0]	RESEARCHSTAT		"R-Vehicle-Prop-Hover"	
   research[9][1]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade01"	
-  research[9][2]	RESEARCHSTAT		"R-Defense-AASite-QuadBof" //Cyclone AA Site	
-  research[9][3]	RESEARCHSTAT		"R-Wpn-AAGun-ROF03" //AA ROF	
-  research[9][4]	RESEARCHSTAT		"R-Wpn-AAGun-Accuracy01" //AA Accuracy	
+
+  //Weapons
+  research[9][2]	RESEARCHSTAT		"R-Wpn-AAGun-ROF02" //111-(125)-143-167-200-250	(TwinMG)
+  research[9][3]	RESEARCHSTAT		"R-Wpn-AAGun-Damage03" //125-150-(175)-200-225-250
   
   //Scorpion - Bug 
-  research[9][5]	RESEARCHSTAT		"R-Vehicle-Body08"	//Scorpion Body + Bug
+  research[9][4]	RESEARCHSTAT		"R-Vehicle-Body08"	//Scorpion Body + Bug
   
   //Lancer - HPV
-  research[9][6]	RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"	//Lamcer
-  research[9][7]	RESEARCHSTAT		"R-Wpn-Cannon4AMk1"	//HPV
+  research[9][5]	RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"	//Lancer
+  research[9][6]	RESEARCHSTAT		"R-Wpn-Cannon4AMk1"	//HPV
   
   //Rearming upgrade - VTOL Strike Turret
-  research[9][8]	RESEARCHSTAT		"R-Sys-VTOLStrike-Turret01"	//VTOL Strike Turret,VTOL Strike Tower detects approaching enemies
-  research[9][9]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade03"	
+  research[9][7]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade03"	//130-160-(190)-220-250-280
 
   //Mantis - Phosphor Bomb Bay - Heap Bomb Bay
-  research[9][10]	RESEARCHSTAT		"R-Vehicle-Body12"
-	research[9][11]	RESEARCHSTAT		"R-Wpn-Bomb03" //Phosphor BB
-  research[9][12]	RESEARCHSTAT		"R-Wpn-Bomb02" //Heap BB	
+  research[9][8]	RESEARCHSTAT		"R-Vehicle-Body12"
+	research[9][9]	RESEARCHSTAT		"R-Wpn-Bomb03" //Phosphor BB  (Flamer)
+  research[9][10]	RESEARCHSTAT		"R-Wpn-Bomb02" //Heap BB (Mortar)	
+
+  research[9][11]	RESEARCHSTAT		"R-Wpn-AAGun-ROF03" //111-125-(143)-167-200-250	(Gun)
 
   //Rearming upgrade - AA def
-  research[9][13]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg" //Whirlwind AA Site
-  research[9][14]	RESEARCHSTAT		"R-Wpn-AAGun-ROF04" //AA ROF	
-  research[9][15]	RESEARCHSTAT		"R-Wpn-AAGun-Accuracy02" //AA Accuracy	
-  research[9][16]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade04"	
+  research[9][12]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade04"	//130-160-190-(220)-250-280
 
 	//Retaliation - Scourge Missle
-  research[9][17]	RESEARCHSTAT		"R-Vehicle-Body03"	//
-  research[9][18]	RESEARCHSTAT		"R-Wpn-Missile2A-T"	//AT
+  research[9][13]	RESEARCHSTAT		"R-Vehicle-Body03"	//Retaliation
+  research[9][14]	RESEARCHSTAT		"R-Wpn-Missile2A-T"	//Scourge
   
   //Retribution - Thermite BB
-  research[9][19]	RESEARCHSTAT		"R-Vehicle-Body07"	//
-  research[9][20]	RESEARCHSTAT		"R-Wpn-Bomb04"	//
+  research[9][15]	RESEARCHSTAT		"R-Vehicle-Body07"	//Retribution
+  research[9][16]	RESEARCHSTAT		"R-Wpn-Bomb04"	// Thermite (Flamer)
+
+
+  research[9][17]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"	//130-160-190-220-250-(280)
+  research[9][18]	RESEARCHSTAT		"R-Defense-SamSite1" //Avenger SAM Site
+
+  //------------------------------------------------------------------------
+  //PATH # 1  (Flamers and Rockets)
+  numPath1[9]	INT			16
+  
+  //VTOL fact & Propulsion, Rearming PAD, Anti AA def 
+  resPath1[9][0]	RESEARCHSTAT		"R-Vehicle-Prop-Hover"	
+  resPath1[9][1]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade01"	
+
+  //Weapons
+  resPath1[9][2]	RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"	//Lancer
+  //resPath1[9][2]	RESEARCHSTAT		"R-Wpn-Cannon4AMk1"	//HPV
+  
+  //Scorpion - Bug 
+  resPath1[9][3]	RESEARCHSTAT		"R-Vehicle-Body08"	//Scorpion Body + Bug
+  
+  //Lancer - HPV
+  resPath1[9][4]	RESEARCHSTAT		"R-Wpn-AAGun-Damage03" //125-150-(175)-200-225-250
+  //resPath1[9][4]	RESEARCHSTAT		"R-Wpn-AAGun-ROF02" //111-(125)-143-167-200-250	(TwinMG)
+  
+  //Rearming upgrade - VTOL Strike Turret
+  resPath1[9][5]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade03"	//130-160-(190)-220-250-280
+
+  //Mantis - Phosphor Bomb Bay - Heap Bomb Bay
+  resPath1[9][6]	RESEARCHSTAT		"R-Vehicle-Body12"
+	resPath1[9][7]	RESEARCHSTAT		"R-Wpn-Bomb03" //Phosphor BB  (Flamer)
+  resPath1[9][8]	RESEARCHSTAT		"R-Wpn-Bomb02" //Heap BB (Mortar)	
+
+  //resPath1[9][9]	RESEARCHSTAT		"R-Wpn-AAGun-ROF03" //111-125-(143)-167-200-250	(Gun)
 
   //Rearming upgrade - AA def
-  research[9][21]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"	
-  research[9][22]	RESEARCHSTAT		"R-Defense-SamSite1" //Avenger SAM Site
-  research[9][23]	RESEARCHSTAT		"R-Wpn-Missile-Damage03" //Avenger Damage	
-  research[9][24]	RESEARCHSTAT		"R-Wpn-Missile-ROF03" //Avenger ROF	
-  research[9][25]	RESEARCHSTAT		"R-Wpn-Missile-Accuracy02" //Avenger ROF	
+  resPath1[9][9]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade04"	//130-160-190-(220)-250-280
 
+	//Retaliation - Scourge Missle
+  resPath1[9][10]	RESEARCHSTAT		"R-Vehicle-Body03"	//Retaliation
+  resPath1[9][11]	RESEARCHSTAT		"R-Wpn-Missile2A-T"	//Scourge
+  
+  //Retribution - Thermite BB
+  resPath1[9][12]	RESEARCHSTAT		"R-Vehicle-Body07"	//Retribution
+  resPath1[9][13]	RESEARCHSTAT		"R-Wpn-Bomb04"	// Thermite (Flamer)
+
+
+  resPath1[9][14]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"	//130-160-190-220-250-(280)
+  resPath1[9][15]	RESEARCHSTAT		"R-Defense-SamSite1" //Avenger SAM Site (Rocket)
+
+  //------------------------------------------------------------------------
+  //PATH # 2  (Gunners and Cannons)
+  numPath2[9]	INT			14
+  
+  //VTOL fact & Propulsion, Rearming PAD, Anti AA def 
+  resPath2[9][0]	RESEARCHSTAT		"R-Vehicle-Prop-Hover"	
+  resPath2[9][1]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade01"	
+
+  //Lancer - HPV
+  //resPath2[9][2]	RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"	//Lancer
+  resPath2[9][2]	RESEARCHSTAT		"R-Wpn-Cannon4AMk1"	//HPV
+  
+  //Scorpion - Bug 
+  resPath2[9][3]	RESEARCHSTAT		"R-Vehicle-Body08"	//Scorpion Body + Bug
+  
+  //Weapons
+  resPath2[9][4]	RESEARCHSTAT		"R-Wpn-AAGun-ROF02" //111-(125)-143-167-200-250	(TwinMG)
+  resPath2[9][5]	RESEARCHSTAT		"R-Wpn-AAGun-Damage03" //125-150-(175)-200-225-250
+  
+  //Rearming upgrade - VTOL Strike Turret
+  resPath2[9][6]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade03"	//130-160-(190)-220-250-280
+
+  //Mantis - Phosphor Bomb Bay - Heap Bomb Bay
+  resPath2[9][7]	RESEARCHSTAT		"R-Vehicle-Body12"
+	//resPath2[9][9]	RESEARCHSTAT		"R-Wpn-Bomb03" //Phosphor BB  (Flamer)
+  resPath2[9][8]	RESEARCHSTAT		"R-Wpn-Bomb02" //Heap BB (Mortar)	
+
+  resPath2[9][9]	RESEARCHSTAT		"R-Wpn-AAGun-ROF03" //111-125-(143)-167-200-250	(Gun)
+
+  //Rearming upgrade - AA def
+  resPath2[9][10]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade04"	//130-160-190-(220)-250-280
+
+	//Retaliation - Scourge Missle
+  resPath2[9][11]	RESEARCHSTAT		"R-Vehicle-Body03"	//Retaliation
+  //resPath2[9][14]	RESEARCHSTAT		"R-Wpn-Missile2A-T"	//Scourge
+  
+  //Retribution - Thermite BB
+  resPath2[9][12]	RESEARCHSTAT		"R-Vehicle-Body07"	//Retribution
+  //resPath2[9][16]	RESEARCHSTAT		"R-Wpn-Bomb04"	// Thermite (Flamer)
+
+
+  resPath2[9][13]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"	//130-160-190-220-250-(280)
+  //resPath2[9][18]	RESEARCHSTAT		"R-Defense-SamSite1" //Avenger SAM Site (Rocket)
 	
 
   // ================================================================================
@@ -849,27 +1824,38 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   
   //cheap Researches
 	numCheapResGen2[0]		INT					21
-  general2Cheap[0][0]	  RESEARCHSTAT		"R-Sys-MobileRepairTurret01"	//$18 repair turret, pre-researched
- 	general2Cheap[0][1]	  RESEARCHSTAT		"R-Struc-Research-Module"   //$37 
-	general2Cheap[0][2]	  RESEARCHSTAT		"R-Struc-Research-Upgrade02"	//160% 
-  general2Cheap[0][3]	  RESEARCHSTAT		"R-Struc-RepairFacility" //$75 - repair facility {powMod - factModule-RepTurret}
-	general2Cheap[0][4]   RESEARCHSTAT		"R-Vehicle-Body05"	     //Cobra
-	general2Cheap[0][5]	  RESEARCHSTAT		"R-Defense-Tower06"		   //Mini-Rocket Tower  
-	general2Cheap[0][6]	  RESEARCHSTAT		"R-Wpn-MG-Damage01"	     //Hardened MG Bullets 
-	general2Cheap[0][7]	  RESEARCHSTAT		"R-Struc-Materials01"		 //Reinforced Base Structure Materials  
-	general2Cheap[0][8]	  RESEARCHSTAT		"R-Cyborg-Metals01"		   //Cyborg Composite Alloys  
-  general2Cheap[0][9]	  RESEARCHSTAT		"R-Struc-Factory-Upgrade01" //Automated Manufacturing {factMod-powMod} 
-	general2Cheap[0][10]	RESEARCHSTAT		"R-Wpn-Cannon-Damage01"	 //HEAT Cannon Shells
-	general2Cheap[0][11]	RESEARCHSTAT		"R-Vehicle-Body11"	     //$37 - Phyton , Cobra {facMod, powMod}
-	general2Cheap[0][12]	RESEARCHSTAT		"R-Defense-WallTower01"		 //$37 - Heavy Machinegun Hardpoint  
-	general2Cheap[0][13]	RESEARCHSTAT		"R-Defense-WallTower02"	 //$46 - "Light Cannon HardPoint"	{Light Cannon, HardCrete}
-	general2Cheap[0][14]	RESEARCHSTAT		"R-Defense-Tower06"		   //$75 - Mini-Rocket Tower  
-  general2Cheap[0][15]	RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	   //$75 - {POD, HE Mini-Rockets Mk2}
-	general2Cheap[0][16]	RESEARCHSTAT	  "R-Defense-Pillbox06"	   //$46 - Lancer Tower {MRL, Lancer AT Rocket, Stabilized Mini-Rockets}
-	general2Cheap[0][17]	RESEARCHSTAT		"R-Vehicle-Prop-Tracks"	 //$75 - Tracked Propulsion - {Composite Alloys Mk2, FactMod, ResearchMod}
-	general2Cheap[0][18]	RESEARCHSTAT		"R-Defense-AASite-QuadMg1"//Hurricane AA site
-	general2Cheap[0][19]	RESEARCHSTAT		"R-Defense-MortarPit"		 //$37 - Mortar Pit  {hardcrete,facMod}
-	general2Cheap[0][20]	RESEARCHSTAT		"R-Sys-CBSensor-Tower01"	       //CB Tower 
+  //Basics
+ 	general2Cheap[0][0]	  RESEARCHSTAT		"R-Struc-Research-Module"  // 
+ 	general2Cheap[0][1]	  RESEARCHSTAT		"R-Struc-PowerModuleMk1"   // 
+ 	general2Cheap[0][2]	  RESEARCHSTAT		"R-Struc-Factory-Module"   // 
+ 	general2Cheap[0][3]	  RESEARCHSTAT		"R-Struc-RepairFacility"   // 
+ 	general2Cheap[0][4]	  RESEARCHSTAT		"R-Vehicle-Body05"         // Cobra 
+ 	general2Cheap[0][5]	  RESEARCHSTAT		"R-Sys-Sensor-Tower02"     // Hardened Sensor Tower 
+
+	//Propulsions
+  general2Cheap[0][6]	  RESEARCHSTAT		"R-Vehicle-Prop-Hover"	 //Hover - {R-Vehicle-Engine02, Fac & Pow Mod}
+  general2Cheap[0][7]	  RESEARCHSTAT		"R-Vehicle-Prop-Tracks"	 //Track - {Composite Alloys Mk2, Fact & Res & Power Mod}
+
+  //Defences - 1  (MG,AA,Mortar,POD)
+	general2Cheap[0][8]	  RESEARCHSTAT		"R-Defense-Tower01"		      //Machinegun Guard Tower  
+	general2Cheap[0][9]	  RESEARCHSTAT		"R-Defense-AASite-QuadMg1"  //Hurricane AA site {Twin MG}
+	general2Cheap[0][10]	RESEARCHSTAT		"R-Defense-MortarPit"		    //Mortar Pit  
+	general2Cheap[0][11]	RESEARCHSTAT		"R-Defense-Tower06"		      //Mini-Rocket Tower  
+ 
+	//Phyton body
+	general2Cheap[0][12]	RESEARCHSTAT		"R-Vehicle-Body11"	        //Phyton , Cobra {facMod, powMod}
+
+  //Defences - 2  (AA,HMG,MC,HPV)
+	general2Cheap[0][13]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"  //Cyclone AA site {R-Wpn-AAGun-Damage02}
+	general2Cheap[0][14]	RESEARCHSTAT		"R-Defense-WallTower01"	    //HMG Hard Point {HardCrete,HMG} 
+	general2Cheap[0][15]  RESEARCHSTAT		"R-Defense-WallTower03"	    //MC Hard Point {LC, R-Wpn-Cannon-Damage01}
+  general2Cheap[0][16]	RESEARCHSTAT		"R-Defense-WallTower-HPVcannon" //HPV Hard Point {R-Struc-Research-Upgrade01,R-Wpn-Cannon-Accuracy01,R-Wpn-Cannon-Damage02-} 
+	
+  //Repair Upgrade
+  general2Cheap[0][17]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
+  general2Cheap[0][18]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
+  general2Cheap[0][19]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
+  general2Cheap[0][20]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
   
   
   //used for checks
@@ -1116,30 +2102,39 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 
   //cheap Researches
 	numCheapResGen3[0]		INT					21
-  general3Cheap[0][0]	RESEARCHSTAT	"R-Sys-MobileRepairTurret01"	//repair turret, pre-researched
- 	general3Cheap[0][1]	RESEARCHSTAT	"R-Struc-Research-Module"    
-  general3Cheap[0][2]	RESEARCHSTAT	"R-Wpn-MG-Damage01"	//125% - Hardened MG Bullets 
-	general3Cheap[0][3]	RESEARCHSTAT	"R-Wpn-Flamer-ROF01"	//118% - Flamer Autoloader 
-	general3Cheap[0][4]	RESEARCHSTAT	"R-Vehicle-Body05"	//Cobra {facMod, powMod}
-	general3Cheap[0][5]	RESEARCHSTAT	"R-Vehicle-Engine01"	//105% -  Fuel Injection Engine
-	general3Cheap[0][6]	RESEARCHSTAT	"R-Vehicle-Metals01"		 //135% - Composite Alloys  
-  general3Cheap[0][7]	RESEARCHSTAT	"R-Struc-RepairFacility" //repair facility {powMod - factModule-RepTurret}
+  //Basics
+ 	general3Cheap[0][0]	  RESEARCHSTAT		"R-Struc-Research-Module"  // 
+ 	general3Cheap[0][1]	  RESEARCHSTAT		"R-Struc-PowerModuleMk1"   // 
+ 	general3Cheap[0][2]	  RESEARCHSTAT		"R-Struc-Factory-Module"   // 
+ 	general3Cheap[0][3]	  RESEARCHSTAT		"R-Struc-RepairFacility"   // 
+ 	general3Cheap[0][4]	  RESEARCHSTAT		"R-Vehicle-Body05"         // Cobra 
+ 	general3Cheap[0][5]	  RESEARCHSTAT		"R-Sys-Sensor-Tower02"     // Hardened Sensor Tower 
 
-	general3Cheap[0][8]	RESEARCHSTAT	"R-Defense-WallTower02"		//Light Cannon HardPoint 
-	general3Cheap[0][9]	RESEARCHSTAT	"R-Defense-WallTower01"	//Heavy Machinegun Hardpoint  
-	general3Cheap[0][10]	RESEARCHSTAT	"R-Defense-Tower06"		//Mini-Rocket Tower  {HardCrete,POD}
-  general3Cheap[0][11]	RESEARCHSTAT	"R-Wpn-Rocket02-MRL"	//{POD, HE Mini-Rockets Mk2}
-	general3Cheap[0][12]	RESEARCHSTAT	"R-Defense-Pillbox06"	//Lancer Tower
-	general3Cheap[0][13]	RESEARCHSTAT	"R-Sys-CBSensor-Tower01"	//CB Tower
-	general3Cheap[0][14]	RESEARCHSTAT	"R-Defense-WallTower03"	//Medium cannon hardpoint
-	general3Cheap[0][15]	RESEARCHSTAT	"R-Defense-HvyFlamer"	//Inferno Bunker 
-	general3Cheap[0][16]	RESEARCHSTAT	"R-Defense-Wall-RotMg"	//Assault Gun Hardpoint  
+	//Propulsions
+  general3Cheap[0][6]	  RESEARCHSTAT		"R-Vehicle-Prop-Hover"	 //Hover - {R-Vehicle-Engine02, Fac & Pow Mod}
+  general3Cheap[0][7]	  RESEARCHSTAT		"R-Vehicle-Prop-Tracks"	 //Track - {Composite Alloys Mk2, Fact & Res & Power Mod}
 
-	general3Cheap[0][17]	RESEARCHSTAT	"R-Struc-Materials03"	//*** $112 - 205% Reinforced Base Structure Materials Mk3
-	general3Cheap[0][18]	RESEARCHSTAT	"R-Struc-RprFac-Upgrade01"	//$75 Automated Repair Facility
-	general3Cheap[0][19]	RESEARCHSTAT	"R-Vehicle-Body11"	//$75 Phyton
-	general3Cheap[0][20]	RESEARCHSTAT	"R-Vehicle-Prop-Tracks"	//
-  
+  //Defences - 1  (MG,AA,Mortar,POD)
+	general3Cheap[0][8]	  RESEARCHSTAT		"R-Defense-Tower01"		      //Machinegun Guard Tower  
+	general3Cheap[0][9]	  RESEARCHSTAT		"R-Defense-AASite-QuadMg1"  //Hurricane AA site {Twin MG}
+	general3Cheap[0][10]	RESEARCHSTAT		"R-Defense-MortarPit"		    //Mortar Pit  
+	general3Cheap[0][11]	RESEARCHSTAT		"R-Defense-Tower06"		      //Mini-Rocket Tower  
+ 
+	//Phyton body
+	general3Cheap[0][12]	RESEARCHSTAT		"R-Vehicle-Body11"	        //Phyton , Cobra {facMod, powMod}
+
+  //Defences - 2  (AA,HMG,MC,HPV)
+	general3Cheap[0][13]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"  //Cyclone AA site {R-Wpn-AAGun-Damage02}
+	general3Cheap[0][14]	RESEARCHSTAT		"R-Defense-WallTower01"	    //HMG Hard Point {HardCrete,HMG} 
+	general3Cheap[0][15]  RESEARCHSTAT		"R-Defense-WallTower03"	    //MC Hard Point {LC, R-Wpn-Cannon-Damage01}
+  general3Cheap[0][16]	RESEARCHSTAT		"R-Defense-WallTower-HPVcannon" //HPV Hard Point {R-Struc-Research-Upgrade01,R-Wpn-Cannon-Accuracy01,R-Wpn-Cannon-Damage02-} 
+	
+  //Repair Upgrade
+  general3Cheap[0][17]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
+  general3Cheap[0][18]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
+  general3Cheap[0][19]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
+  general3Cheap[0][20]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
+
 
 	numResGen3[0] INT					62
   general3[0][0]	RESEARCHSTAT	"R-Sys-MobileRepairTurret01"	//repair turret, pre-researched
@@ -1382,28 +2377,32 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   // ================================================================================
 
 
+
   //cheap Researches
-	numCheapResGen4[0]		INT					17
+	numCheapResGen4[0]		INT					19
 	
-  general4Cheap[0][0]	RESEARCHSTAT	"R-Struc-Research-Upgrade02"// 130/160/(190)/220/250/280/310**/340/370
-	general4Cheap[0][1]	RESEARCHSTAT	"R-Wpn-Flamer-ROF01"	//$18 - 118% - Flamer Autoloader 
-	general4Cheap[0][2]	RESEARCHSTAT	"R-Vehicle-Body05"	//$37 - Cobra {facMod, powMod}
-	general4Cheap[0][3]	RESEARCHSTAT	"R-Wpn-Cannon-Damage01"	//$37 - 125% -  HEAT Cannon Shells
-	general4Cheap[0][4]	RESEARCHSTAT	"R-Vehicle-Engine01"	//$37 - 105% -  Fuel Injection Engine
-	general4Cheap[0][5]	RESEARCHSTAT	"R-Vehicle-Metals01"		 //$56 - 135% - Composite Alloys  
-  general4Cheap[0][6]	RESEARCHSTAT	"R-Wpn-MG-Damage01"	//$18 - 125% - Hardened MG Bullets 
-  general4Cheap[0][7]	RESEARCHSTAT	"R-Struc-RepairFacility" //$75 - repair facility {powMod - factModule-RepTurret}
+ 	general4Cheap[0][0]	  RESEARCHSTAT		"R-Struc-Research-Module"   
+ 	general4Cheap[0][1]	  RESEARCHSTAT		"R-Struc-PowerModuleMk1"    
+ 	general4Cheap[0][2]	  RESEARCHSTAT		"R-Struc-Factory-Module"    
+ 	general4Cheap[0][3]	  RESEARCHSTAT		"R-Struc-RepairFacility"    
+ 	general4Cheap[0][4]	  RESEARCHSTAT		"R-Cyborg-Metals02"    
+ 	general4Cheap[0][5]	  RESEARCHSTAT		"R-Struc-Materials01"          
+ 	general4Cheap[0][6]	  RESEARCHSTAT		"R-Wpn-MG-ROF01"  
+  general4Cheap[0][7]	  RESEARCHSTAT		"R-Wpn-MG-Damage02" 
+ 	general4Cheap[0][8]	  RESEARCHSTAT		"R-Struc-Factory-Upgrade02"  
 
-	general4Cheap[0][8]	RESEARCHSTAT	"R-Defense-WallTower02"		//$46 -  Light Cannon HardPoint 
-	general4Cheap[0][9]	RESEARCHSTAT	"R-Defense-WallUpgrade01"	//$37 - 135% -  Improved Hardcrete
-	general4Cheap[0][10]	RESEARCHSTAT	"R-Defense-Pillbox06"	//$46 Lancer Tower
-	general4Cheap[0][11]	RESEARCHSTAT	"R-Defense-WallTower03"	//$ medium cannon hardpoint
-	general4Cheap[0][12]	RESEARCHSTAT	"R-Defense-WallTower01"	//$37 - Heavy Machinegun Hardpoint  
+	general4Cheap[0][9]	  RESEARCHSTAT		"R-Defense-Tower01"		      //Machinegun Guard Tower  
+	general4Cheap[0][10]	RESEARCHSTAT		"R-Defense-AASite-QuadMg1"  //Hurricane AA site {Twin MG}
+	general4Cheap[0][11]	RESEARCHSTAT		"R-Defense-MortarPit"		    //Mortar Pit  
+	general4Cheap[0][12]	RESEARCHSTAT		"R-Defense-Tower06"		      //Mini-Rocket Tower  
+ 	general4Cheap[0][13]	RESEARCHSTAT		"R-Struc-Materials03"        
 
-	general4Cheap[0][13]	RESEARCHSTAT	"R-Struc-Materials03"	//*** $112 - 205% Reinforced Base Structure Materials Mk3
-	general4Cheap[0][14]	RESEARCHSTAT	"R-Struc-RprFac-Upgrade01"	//$75 Automated Repair Facility
-	general4Cheap[0][15]	RESEARCHSTAT	"R-Vehicle-Body08"	//Scorpion
-	general4Cheap[0][16]	RESEARCHSTAT	"R-Sys-CBSensor-Tower01"	//CB Tower 
+  //Defences - 2  (AA,HMG,MC,HPV)
+	general4Cheap[0][14]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"  //Cyclone AA site {R-Wpn-AAGun-Damage02}
+	general4Cheap[0][15]	RESEARCHSTAT		"R-Defense-WallTower01"	    //HMG Hard Point {HardCrete,HMG} 
+	general4Cheap[0][16]  RESEARCHSTAT		"R-Defense-WallTower03"	    //MC Hard Point {LC, R-Wpn-Cannon-Damage01}
+  general4Cheap[0][17]	RESEARCHSTAT		"R-Defense-WallTower-HPVcannon" //HPV Hard Point {R-Struc-Research-Upgrade01,R-Wpn-Cannon-Accuracy01,R-Wpn-Cannon-Damage02-} 
+  general4Cheap[0][18]	RESEARCHSTAT		"R-Struc-RprFac-Upgrade03"	//Upgrades research speed to 190% 
   
   
 	numResGen4[0]		INT					54
@@ -1415,76 +2414,74 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   general4[0][4]	RESEARCHSTAT	"R-Struc-Power-Upgrade01b"	  // 150-01*/(175-01b)/200-01c/230-02**/260-03/290-03a
 
   //Cobra & Hover ---------------------
-  general4[0][5]  RESEARCHSTAT  "R-Vehicle-Body05"
-  general4[0][6]	RESEARCHSTAT	"R-Vehicle-Prop-Hover"	//Hover
+  general4[0][5]  RESEARCHSTAT  "R-Wpn-MG-Damage02"
+  general4[0][6]	RESEARCHSTAT	"R-Wpn-Flame2"	//Inferno
   general4[0][7]  RESEARCHSTAT  "R-Defense-WallTower01" //HMG
-  general4[0][8]  RESEARCHSTAT  "R-Wpn-Flame2" //Inferno    {damage04}
+  general4[0][8]  RESEARCHSTAT  "R-Wpn-Flame2" //Inferno 
   general4[0][9]  RESEARCHSTAT  "R-Defense-WallTower-HPVcannon" //HPV
   
   //Cyborg Upgrades
   general4[0][10]	RESEARCHSTAT		"R-Cyborg-Metals04"	// 135/170/205/(240*)/275/310/345**/380/415
   general4[0][11]	RESEARCHSTAT		"R-Cyborg-Armor-Heat03"	// 145*/190/(235)/270**/315/360/405/450/495
 
-
   //Weapon Upgrades
-  general4[0][12] RESEARCHSTAT    "R-Wpn-MG-Damage02" //125/(150)/175/200/225/250/275/300/325 %
+  general4[0][12] RESEARCHSTAT    "R-Wpn-MG-Damage04" //125/150/175/(200)/225/250/275/300/325 %
 
   //HardCretes & Armors
   general4[0][13]	RESEARCHSTAT		"R-Struc-Materials03"     // 135/170/(205)/240/275/310/345* /370/405
   general4[0][14]	RESEARCHSTAT		"R-Defense-WallUpgrade03" // 135/170/(205)/240/275/305/340* /375/405/440/475/510
-                                                            //* Research-Upgarde-08; 
 
   //Research and power upgrades
   general4[0][15]	RESEARCHSTAT		"R-Struc-Research-Upgrade05"// 30/160/190/220*/(250)/280/310**/340/370
   general4[0][16]	RESEARCHSTAT		"R-Struc-Power-Upgrade01c"	// 150-01*/175-01b/(200-01c)/230-02**/260-03/290-03a
 
+  //Cyborg
+  general4[0][17]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Mcannon" //Super Heavy Gunner
+  general4[0][18]	RESEARCHSTAT		"R-Cyborg-Hvywpn-HPV" //Super Auto Cannon Cyborg
+  general4[0][19]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Acannon" //Super HPV Cyborg
+
   //Phyton - Heavy Cannon, Lancer, Assault Gun, Inferno --------------------
   //general4[0][22]  RESEARCHSTAT  "R-Vehicle-Body11" //**
-  general4[0][17]  RESEARCHSTAT  "R-Defense-WallTower04" //HeavyCann {damage04}
-  general4[0][18]  RESEARCHSTAT  "R-Defense-Pillbox06"   //Lancer
-  general4[0][19]  RESEARCHSTAT  "R-Defense-RotMG" //AssGun
-  general4[0][20]  RESEARCHSTAT  "R-Defense-HvyFlamer"  //Inferno - Bunker
+  general4[0][20]  RESEARCHSTAT  "R-Defense-WallTower04" //HeavyCann {damage04}
+  general4[0][21]  RESEARCHSTAT  "R-Defense-Pillbox06"   //Lancer
+  general4[0][22]  RESEARCHSTAT  "R-Defense-RotMG" //AssGun
+  general4[0][23]  RESEARCHSTAT  "R-Defense-HvyFlamer"  //Inferno - Bunker
  
   //Cyborg Upgrades
-  general4[0][21]	RESEARCHSTAT		"R-Cyborg-Metals06"	//135/170/205/240*/275/(310)/345**/380/415
+  general4[0][24]	RESEARCHSTAT		"R-Cyborg-Metals06"	//135/170/205/240*/275/(310)/345**/380/415
   //general4[0][28]	RESEARCHSTAT		"R-Cyborg-Armor-Heat02"	//145*/(190)/235/270**/315/360/405/450/495
 
   //Weapon Upgrades
-  general4[0][22] RESEARCHSTAT  "R-Wpn-Cannon-ROF04" //111/125/143/(167)/200/250 %
-  general4[0][23] RESEARCHSTAT  "R-Wpn-Flamer-ROF02" //118/(143)/182 %
-  general4[0][24] RESEARCHSTAT  "R-Wpn-MG-ROF01"     //(118)/143/182 %
-  general4[0][25] RESEARCHSTAT  "R-Wpn-Flamer-Damage04" //125/150/175/(200)/225/250/275/300/325 %
-  general4[0][26] RESEARCHSTAT  "R-Wpn-MG-Damage04"  //125/150/175/(200)/225/250/275/300/325 %
-  general4[1][27]	RESEARCHSTAT	"R-Wpn-Cannon-Damage04"	 //125/150/175/(200)/225/250/275/300/325 %
+  general4[0][25] RESEARCHSTAT  "R-Wpn-Cannon-ROF04" //111/125/143/(167)/200/250 %
+  general4[0][26] RESEARCHSTAT  "R-Wpn-Flamer-ROF02" //118/(143)/182 %
+  general4[0][27] RESEARCHSTAT  "R-Wpn-MG-ROF02"     //(118)/143/182 %
+  general4[0][28] RESEARCHSTAT  "R-Wpn-Flamer-Damage04" //125/150/175/(200)/225/250/275/300/325 %
+  general4[0][29] RESEARCHSTAT  "R-Wpn-MG-Damage04"  //125/150/175/(200)/225/250/275/300/325 %
+  general4[0][30]	RESEARCHSTAT	"R-Wpn-Cannon-Damage04"	 //125/150/175/(200)/225/250/275/300/325 %
   
   //HardCretes & Armors
-  general4[0][28]	RESEARCHSTAT		"R-Struc-Materials04"//135/170/205/(240)/275/310/345*/370/405
-  general4[0][29]	RESEARCHSTAT		"R-Defense-WallUpgrade04"//135/170/205/(240)/275/305/340* /375/405/440/475/510
+  general4[0][31]	RESEARCHSTAT		"R-Struc-Materials04"//135/170/205/(240)/275/310/345*/370/405
+  general4[0][32]	RESEARCHSTAT		"R-Defense-WallUpgrade04"//135/170/205/(240)/275/305/340* /375/405/440/475/510
 
   //Research and Power upgrades
-  general4[0][30]	RESEARCHSTAT		"R-Struc-Research-Upgrade07"// 30/160/190/220*/250/280/(310**)/340/370
-  general4[0][31]	RESEARCHSTAT		"R-Struc-Power-Upgrade02"	 // 150-01*/175-01b/200-01c/(230-02**)/260-03/290-03a
+  general4[0][33]	RESEARCHSTAT		"R-Struc-Research-Upgrade07"// 30/160/190/220*/250/280/(310**)/340/370
+  general4[0][34]	RESEARCHSTAT		"R-Struc-Power-Upgrade02"	 // 150-01*/175-01b/200-01c/(230-02**)/260-03/290-03a
 
   //Mantis-Scorpion -  HVC, Assault Cannon------------------
-  general4[0][32] RESEARCHSTAT  "R-Vehicle-Body12"
-  general4[0][33] RESEARCHSTAT  "R-Defense-WallTower-HPVcannon"  //HVC  {damage05}
-  general4[0][34] RESEARCHSTAT  "R-Defense-Wall-VulcanCan" //AssCann   {damage01/ROF03}
+  general4[0][35] RESEARCHSTAT  "R-Defense-WallTower-HPVcannon"
+  general4[0][36] RESEARCHSTAT  "R-Defense-WallTower-HPVcannon"  //HVC  {damage05}
+  general4[0][37] RESEARCHSTAT  "R-Defense-Wall-VulcanCan" //AssCann   {damage01/ROF03}
    
   //Weapon Upgrades
-  general4[0][35] RESEARCHSTAT  "R-Wpn-Cannon-Accuracy01" //(110)/120 %
-  general4[0][36] RESEARCHSTAT  "R-Wpn-Cannon-ROF04" //111/125/143/(167)/200/250 %
-  general4[0][37] RESEARCHSTAT  "R-Wpn-MG-ROF02"   //118/(143)/182 %
-  general4[0][38] RESEARCHSTAT  "R-Wpn-MG-Damage06" //125/150/175/200/225/(250)/275/300/325 %
-  general4[0][39] RESEARCHSTAT  "R-Wpn-Flamer-Damage06" //125/150/175/200/225/(250)/275/300/325 %
+  general4[0][38] RESEARCHSTAT  "R-Wpn-Cannon-Accuracy01" //(110)/120 %
+  general4[0][39] RESEARCHSTAT  "R-Wpn-Cannon-ROF04" //111/125/143/(167)/200/250 %
+  general4[0][40] RESEARCHSTAT  "R-Wpn-MG-ROF02"   //118/(143)/182 %
+  general4[0][41] RESEARCHSTAT  "R-Wpn-MG-Damage06" //125/150/175/200/225/(250)/275/300/325 %
+  general4[0][42] RESEARCHSTAT  "R-Wpn-Flamer-Damage06" //125/150/175/200/225/(250)/275/300/325 %
           
   //Cyborg Upgrades
-  general4[0][40]	RESEARCHSTAT		"R-Cyborg-Metals07"	    //135/170/205/240*/275/310/(345**)/380/415
-  general4[0][41]	RESEARCHSTAT		"R-Cyborg-Armor-Heat06"	//145*/190/235/270**/315/(360)/405/450/495
-
-  //Cyborg
-  general4[0][42]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Mcannon" //Super Heavy Gunner
-  general4[0][43]	RESEARCHSTAT		"R-Cyborg-Hvywpn-HPV" //Super Auto Cannon Cyborg
-  general4[0][44]	RESEARCHSTAT		"R-Cyborg-Hvywpn-Acannon" //Super HPV Cyborg
+  general4[0][43]	RESEARCHSTAT		"R-Cyborg-Metals07"	    //135/170/205/240*/275/310/(345**)/380/415
+  general4[0][44]	RESEARCHSTAT		"R-Cyborg-Armor-Heat06"	//145*/190/235/270**/315/(360)/405/450/495
   
   //HardCretes & Armors
   general4[0][45]	RESEARCHSTAT		"R-Struc-Materials05"//135/170/205/240/(275)/310/345*/370/405
@@ -1494,8 +2491,8 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   general4[0][47]	RESEARCHSTAT		"R-Struc-Research-Upgrade08"// 30/160/190/220*/250/280/310**/(340)/370
   general4[0][48]	RESEARCHSTAT		"R-Struc-Power-Upgrade03"	 // 150-01*/175-01b/200-01c/230-02**/(260-03)/290-03a
 
-  //Leopard - Panther - Needle, Pulse Laser, Tank Killer-------------------------------------------
-	general4[0][49]	RESEARCHSTAT		"R-Vehicle-Body06"	//Panther
+  //Needle, Pulse Laser, Tank Killer-------------------------------------------
+	general4[0][49]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg" //Whirlwind AA Site
 	general4[0][50]	RESEARCHSTAT		"R-Defense-GuardTower-Rail1"	//Neelde
 	general4[0][51]	RESEARCHSTAT		"R-Defense-WallTower-PulseLas"		//Pulse Laser
 	general4[0][52]	RESEARCHSTAT		"R-Defense-WallTower-HvyA-Trocket"	//Tank Killer
