@@ -655,31 +655,9 @@ static inline WZ_DECL_CONST unsigned int Vector3i_ScalarP(const Vector3i op1, co
  * \param v Vector
  * \return Length
  */
-static inline WZ_DECL_CONST float Vector3i_Length(const Vector3i v)
+static inline WZ_DECL_CONST int32_t Vector3i_Length(const Vector3i v)
 {
 	return iHypot3(v.x, v.y, v.z);
-}
-
-
-/*!
- * Normalise a Vector
- * \param v Vector
- * \return Normalised vector, nullvector when input was nullvector or very small
- */
-static inline WZ_DECL_CONST Vector3i Vector3i_Normalise(const Vector3i v)
-{
-	float length = Vector3i_Length(v);
-
-	if (length == 0.0f)
-	{
-		Vector3i dest = { 0, 0, 0 };
-		return dest;
-	}
-	else
-	{
-		Vector3i dest = { v.x / length, v.y / length, v.z / length };
-		return dest;
-	}
 }
 
 
