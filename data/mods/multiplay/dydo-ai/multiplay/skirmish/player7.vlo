@@ -601,7 +601,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   tmpl_p1[47]	TEMPLATE	"CobraMRLHalftrack"   //anti-tank
   tmpl_p1[46]	TEMPLATE	"CobraPODHTracks"		  //anti-tank
 	tmpl_p1[45]	TEMPLATE	"CobraLtA-Thalftrack" //anti-tank
-	tmpl_p1[44]	TEMPLATE	"CobraHMGHalfTrack"   //anti personnel - T2 games
+	tmpl_p1[44]	TEMPLATE	"CobraHMGHalfTrack"   //anti personnel
 	tmpl_p1[43]	TEMPLATE	"CobraInfernoHTracks" //anti personnel
   tmpl_p1[42]	TEMPLATE	"CobraInfernoHover"   //anti personnel
 	
@@ -946,19 +946,21 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
  	researchCheap[0][5]	  RESEARCHSTAT		"R-Vehicle-Body05"         // Cobra 
  	researchCheap[0][6]	  RESEARCHSTAT		"R-Struc-Factory-Upgrade01"  // 160%
 
+ 	//Inferno
+  researchCheap[0][7]	RESEARCHSTAT		"R-Wpn-Flame2"       // Inferno
+
 	//Propulsions
-  researchCheap[0][7]	  RESEARCHSTAT		"R-Vehicle-Prop-Hover"	 //Hover - {R-Vehicle-Engine02, Fac & Pow Mod}
-  researchCheap[0][8]	  RESEARCHSTAT		"R-Vehicle-Prop-Tracks"	 //Track - {Composite Alloys Mk2, Fact & Res & Power Mod}
+  researchCheap[0][8]	  RESEARCHSTAT		"R-Vehicle-Prop-Hover"	 //Hover - {R-Vehicle-Engine02, Fac & Pow Mod}
+  researchCheap[0][9]	  RESEARCHSTAT		"R-Vehicle-Prop-Tracks"	 //Track - {Composite Alloys Mk2, Fact & Res & Power Mod}
 
 	//Phyton body
-	researchCheap[0][9]	  RESEARCHSTAT		"R-Vehicle-Body11"	        //Phyton , Cobra {facMod, powMod}
+	researchCheap[0][10]	  RESEARCHSTAT		"R-Vehicle-Body11"	        //Phyton , Cobra {facMod, powMod}
 
   //Defences - 1  (MG,AA,Mortar,POD)
-	researchCheap[0][10]	RESEARCHSTAT		"R-Defense-Tower01"		      //Machinegun Guard Tower  
-	researchCheap[0][11]	RESEARCHSTAT		"R-Defense-AASite-QuadMg1"  //Hurricane AA site {Twin MG}
-	researchCheap[0][12]	RESEARCHSTAT		"R-Defense-MortarPit"		    //Mortar Pit  
-	researchCheap[0][13]	RESEARCHSTAT		"R-Defense-Tower06"		      //Mini-Rocket Tower  
- 	researchCheap[0][14]	RESEARCHSTAT		"R-Struc-Materials03"       // 
+	researchCheap[0][11]	RESEARCHSTAT		"R-Defense-Tower01"		      //Machinegun Guard Tower  
+	researchCheap[0][12]	RESEARCHSTAT		"R-Defense-AASite-QuadMg1"  //Hurricane AA site {Twin MG}
+	researchCheap[0][13]	RESEARCHSTAT		"R-Defense-MortarPit"		    //Mortar Pit  
+	researchCheap[0][14]	RESEARCHSTAT		"R-Defense-Tower06"		      //Mini-Rocket Tower  
 
   //Defences - 2  (AA,HMG,MC,HPV)
 	researchCheap[0][15]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"  //Cyclone AA site {R-Wpn-AAGun-Damage02}
@@ -997,9 +999,9 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   //---------------------------------------------------------------------------
   //Cobra & Hover - POD, Lancer, Inferno ---------------------
   resPath1[0][9]  RESEARCHSTAT  "R-Vehicle-Body05"//cobra
-  resPath1[0][10]	RESEARCHSTAT	"R-Vehicle-Prop-Hover"	//Hover
-  resPath1[0][11]  RESEARCHSTAT  "R-Defense-WallTower01" //HMG  def
-  resPath1[0][12] RESEARCHSTAT  "R-Wpn-Flame2" //Inferno  {R-Wpn-Flamer-Damage04}
+  resPath1[0][10] RESEARCHSTAT  "R-Wpn-Flame2" //Inferno  {R-Wpn-Flamer-Damage04}
+  resPath1[0][11]	RESEARCHSTAT	"R-Vehicle-Prop-Hover"	//Hover
+  resPath1[0][12] RESEARCHSTAT  "R-Defense-WallTower01" //HMG  def
   resPath1[0][13] RESEARCHSTAT  "R-Defense-Pillbox06" //Lancer Tower  {R-Wpn-Rocket-Damage03,R-Wpn-Rocket-Accuracy01}
   
   
@@ -2391,9 +2393,9 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   general4Cheap[0][7]	  RESEARCHSTAT		"R-Wpn-MG-Damage02" 
  	general4Cheap[0][8]	  RESEARCHSTAT		"R-Struc-Factory-Upgrade02"  
 
-	general4Cheap[0][9]	  RESEARCHSTAT		"R-Defense-Tower01"		      //Machinegun Guard Tower  
-	general4Cheap[0][10]	RESEARCHSTAT		"R-Defense-AASite-QuadMg1"  //Hurricane AA site {Twin MG}
-	general4Cheap[0][11]	RESEARCHSTAT		"R-Defense-MortarPit"		    //Mortar Pit  
+	general4Cheap[0][9]	  RESEARCHSTAT		"R-Defense-MortarPit"		    //Mortar Pit  
+	general4Cheap[0][10]	RESEARCHSTAT		"R-Defense-Tower01"		      //Machinegun Guard Tower  
+	general4Cheap[0][11]	RESEARCHSTAT		"R-Defense-AASite-QuadMg1"  //Hurricane AA site {Twin MG}
 	general4Cheap[0][12]	RESEARCHSTAT		"R-Defense-Tower06"		      //Mini-Rocket Tower  
  	general4Cheap[0][13]	RESEARCHSTAT		"R-Struc-Materials03"        
 
@@ -2534,7 +2536,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   general4[1][17]	RESEARCHSTAT		"R-Cyborg-Armor-Heat07"	//145* /190/235/270**/315/360/(405)/450/495
 
   //Retribution - Scourge  ----------------------------------------------
-  general4[1][18]	RESEARCHSTAT		"R-Vehicle-Body07"		//Retribution
+  general4[1][18]	RESEARCHSTAT		"R-Defense-WallTower-A-Tmiss"		//Scourge
 	general4[1][19]	RESEARCHSTAT		"R-Defense-WallTower-A-Tmiss"		//Scourge
 	
 	//Weapon Upgrades

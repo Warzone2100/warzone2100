@@ -1,5 +1,5 @@
 /*
-DyDo-AI Rel 2.2.2
+DyDo-AI Rel 2.2.3
 Mod Developer: "DylanDog" on http://forums.wz2100.net/
 AI webpage: http://www.obooma.net/dydo/       
                                                                 
@@ -12,27 +12,15 @@ For changelog and downloads see DyDo-AI homepage http://www.obooma.net/dydo/
 
 ________________ CHANGELOG ___________________________________
 
-{bug fix} - Group gathering coord for cyborg attack team were related to the 
-            tank attack group and not to the cyborg attack group.
-{bug fix} - Due to a warzone bug VTOLs units were attacking his own or friendly units / structures.
-            I have fixed this with a hack.
-{fix}     - Gateways Range was not calculated correctly.
-{change} - DyDo can move droids between team mates.
-{change} - DyDo does not research CB turrets anymore.
-{change} - When attacked by VTOLs DyDo force research of Hurricane AA site first 
-            and only when complete it forces researches of Cyclone AA Site.
-{change} - Rebalanced a bit the research paths between basic and standard researches.
-{change} - Research paths are used for VTOL techs too.
-{change} - Added few VTOLs templates.
-{change} - DyDo sends from 10 to 15 units (instead of 5) when an ally asks for help or a Go! command is received
-{change} - droidMicroManager improved
-{change} - help team now uses droidMicroManager too
-{change} - Added chat command to set AI level ("/set level 1", "/set level 2",...)
-{change} - Again improved VTOL management (hopefully for the last time).
-{change} - Build base event improved, multiple tentatives are made to try to get a valid building positions.
-{change} - Cyborgs AI does not build VTOLs anymore.
-{change} - Improved research path for Cyborg AI.
-{change} - Cyborg AI builds Cyborg Mechanics too.
+
+{fix} - Small fix on light tank building sequence when research path is "Flamers/Rockets".
+          It happened that rockets were built instead of flamers. 
+{change} - If research path = Gunners and Cannons VTOL research only heap bombs. 
+          This improves the efficiency of the research, otherwise flamers technologies
+          would have been research to allow the building of such VTOLs bombs 
+{change} - Improved the method to get artillery building coordinates to defend base.
+{change} - droids will attack nearest enemy to their group and not the most damaged one as this method 
+            is more effective for droids having long range weapons.
 
 DROID takeOverSingleDroid(DROID droidToTakeOver, int playerToGain)
     This replaces the existing droid (droidToTakeOver) by a new one for 
@@ -48,7 +36,7 @@ int takeOverDroidsInAreaExp(int fromPlayer, int toPlayer, int x1, int y1, int x2
     the maximum number of units to take over. 
 
 */
-#define DYDOBP_RELEASE "DyDo-AI ver 2.2.2"
+#define DYDOBP_RELEASE "DyDo-AI ver 2.2.3"
 
 #define	GAME_TIME_IN_SECS	(gameTime / 10)
 #define	GAME_TIME_IN_MIN	(gameTime / 10 / 60)
@@ -402,7 +390,7 @@ private int nDefendBasePos,nArtilleryPos,nRippleRocketsPos,nTime,nAttackTime,nFr
 private int nTanksDefGrp,nMapPower,nEnWeapStructs,nEnWeapDroids,nEnWeapDrStr;
 private int tVTOLAttackReset,tGatheringHelp,tGatheringCyb,tGatheringTank,tTargetTime,tFinishOilHack,alertX,alertY,alertTime,alertLevel,nX,nY;
 private int tLongRangeTime,tLastRRBuilt,tLastArtilleryBuilt,tLastPowerGen,tChangeTimeTankToAdd,nHelpX,nHelpY,tLastHelp,tTotalAttack,tLastTankAttack,tLastCyborgAttack;
-private int tTimeForceAttack,tTanksReSentToGathering,tTanksSentToGathering,nTankGatheringX,nTankGatheringY,tankAttackX;
+private int tGtwDefBuilt,tTimeForceAttack,tTanksReSentToGathering,tTanksSentToGathering,nTankGatheringX,nTankGatheringY,tankAttackX;
 private int tStartBaseAttacks,tankAttackY,targetPlayerTank,targetPlayerVTOL;
 private int tCybReSentToGathering,tCybSentToGathering,tCybAttackAction,tHelpAction,tTankAttackAction;
 private int nWeapCybSelection,nWeapSelection,nCybGatheringX,nCybGatheringY,cybAlertX,cybAlertY,cybAttackX,cybAttackY,targetPlayerCyb;
@@ -718,7 +706,6 @@ function int gameType();
 function int getWeaponUnitsInfo( int _player, int _choice);
 function int getTargetEnemy(bool _dbg);
 function bool bHasHumanEnemies(int _player);
-function void displayStats(int _choice);
 
 function bool coordChanged(DROID _droid);
 function bool hasCoordStored(DROID _droid);
@@ -837,6 +824,7 @@ event initialisedEvent(CALL_GAMEINIT)
     aGatewayPosY[count]       = -1;
     count++;
   }
+  tGtwDefBuilt = 0;
   nResTmplPath = -1;
   bScoutOrder = true;
   bFactUpgraded2Modules = false;
@@ -1366,8 +1354,22 @@ event evPrintDebug (inactive)
       _count++;
     }
     
-    
     printDebug("------------------------------------------------------------------");
+    if ( nResTmplPath == RESTMPL_1){
+      if ( resPath1[0][8] != research[0][8]){
+        printDebug("#### Research path 1 is NOT fine!!!");
+      } else {
+        printDebug("Research path 1 is fine: Flamers and Rockets");
+      }
+    }
+    if ( nResTmplPath == RESTMPL_2){
+      if ( resPath2[0][8] != research[0][8]){
+        printDebug("#### Research path 2 is NOT fine!!!");
+      } else {
+        printDebug("Research path 2 is fine: Gunners and Cannons");
+      }
+    }
+    
     printDebug("Stats A: nAIcheck("& nAIcheck &") gameType("& gameType() &") map("& mapWidth &"-"& mapHeight &") BaseRange("& nBaseRange/TILE &") gtwRange("& gatewaysRangeTiles &") DefRange("& nDefendRange/TILE &") Base("& baseX/TILE &"-"& baseY/TILE &") tk("& nTotTanks &") cyb("& nTotCyborgs &")");
     printDebug("Stats B: lMinBaseStructBuilt("& lMinBaseStructBuilt &") bIsEnemyHumanOnly("& bIsEnemyHumanOnly &") nTotBaseDefences("& nTotBaseDefences &") bAttackedByVTOL("& bAttackedByVTOL &") numAAinBase("& numAAinBase &") ");
     printDebug("Stats C: Cyb built(AR-AT-AP-KK)(Err) ("& nTotCybAR &" - "& nTotCybAT &" - "& nTotCybAP &" - "& nTotCybKK &")("& nTotCybErr &") lastTK("& gameTime - tLastTankAttack &")lastCyb("& gameTime - tLastCyborgAttack &") tStBaseAtt("& tStartBaseAttacks &") bEnIsNear("& bEnemyIsNear &") nNearEn("& nNearestEnemy &")");
@@ -1772,7 +1774,7 @@ event AIbrain (inactive)
   }
 
   
-  if (  gameTime > 12*TIME_MINUTE and (nTotCyborgs+nTotTanks+nWorkingFact+nWorkingCybFac) < MIN_TOT_UNITS ){
+  if (  gameTime > 12*TIME_MINUTE and (nTotCyborgs+nTotTanks) < MIN_TOT_UNITS ){
     lForceUnitsProduciton = true;
     
     //check if need to ask for big help nBigHelpRequests,tBigHelpRequest
@@ -1836,7 +1838,7 @@ event AIbrain (inactive)
       count = numTemplatesInProduction(cybcondroid, player);
       count = count + numTemplatesInProduction(constructor, player);
       count = count + numTemplatesInProduction(constructor2, player);
-      if ( count + cybConstGrp.members + buildGrp.members + harvesterGroup.members + buildDefGrp.members >= 4 ) {
+      if ( count + cybConstGrp.members + buildGrp.members + harvesterGroup.members + buildDefGrp.members >= 2 ) {
         //I am in trouble need tanks not trucks!!!
         lStopBuildTankProd = true;
         lStopCybEngProd    = true;
@@ -2441,14 +2443,16 @@ event manageAttVTOL(inactive)
           }
         }
         if ( targetPlayerVTOL > 0){
-          if ( friendlyPlayer(targetPlayerVTOL) ){ printDebug1("#### manageAttVTOL: targetPlayerVTOL was friendly player pl#("& targetPlayerVTOL &")");   }
-            attTargetVTOL = getVTOLstructTarget();//uses targetPlayerVTOL & AA_THREAT_RANGE_LONG, return a buuilding as target (not a def struct!)
-          	//All VTOLs to attack this struct!!!
-            if ( attTargetVTOL != NULLOBJECT and idleGroup(vtolGr) > 0 ){
-              orderGroupObj(vtolGr, DORDER_ATTACK, attTargetVTOL);
-              tVtolAction = gameTime;
-              exit;	
-            }
+          if ( friendlyPlayer(targetPlayerVTOL) ){ 
+            printDebug1("#### manageAttVTOL: targetPlayerVTOL was friendly player pl#("& targetPlayerVTOL &")");   
+          }
+          attTargetVTOL = getVTOLstructTarget();//uses targetPlayerVTOL & AA_THREAT_RANGE_LONG, return a buuilding as target (not a def struct!)
+        	//All VTOLs to attack this struct!!!
+          if ( attTargetVTOL != NULLOBJECT and idleGroup(vtolGr) > 0 ){
+            orderGroupObj(vtolGr, DORDER_ATTACK, attTargetVTOL);
+            tVtolAction = gameTime;
+            exit;	
+          }
         }
         if ( attTargetVTOL == NULLOBJECT ){ targetPlayerVTOL = -1; } 
         _i++;
@@ -3364,7 +3368,6 @@ event activateAttack( inactive )
           setEventTrigger(CyborgAttack,CyborgAttackTr);
           exit;
         } 
-        //else { printDebug1("activateAttack: 1-no undefended human derricks to attack found");  }
       }
     }
   
@@ -3400,7 +3403,6 @@ event activateAttack( inactive )
           setEventTrigger(TankAttack,TankAttackTr);
           exit;
         } 
-        //else { printDebug1("activateAttack: 2-no undefended human derricks to attack found");  }
       }
     }
   
@@ -3591,7 +3593,8 @@ event TankAttack(inactive)
         //just "rememeber" tanks where to go...
         if ( gameTime - tTanksReSentToGathering > 70 ){
           if (bAttackTeamAttacked){
-            orderGroupScoutCMD(tankGroup,nTankGatheringX,nTankGatheringY);
+            //orderGroupScoutCMD(tankGroup,nTankGatheringX,nTankGatheringY);
+            droidMicroManager(tankGroup, 12*TILE, nTankGatheringX, nTankGatheringY );
           }else{
             orderGroupLoc(tankGroup,DORDER_MOVE,nTankGatheringX,nTankGatheringY);
           }
@@ -3767,7 +3770,8 @@ event CyborgAttack(inactive)//Original event ID: xx (of 106)
         //just "rememeber" cyborgs where to go...
         if ( gameTime - tCybReSentToGathering > 70 ){
           if (bAttackTeamAttacked){
-            orderGroupScoutCMD(cyborgAttGroup,nCybGatheringX,nCybGatheringY);
+            //orderGroupScoutCMD(cyborgAttGroup,nCybGatheringX,nCybGatheringY);
+            droidMicroManager(cyborgAttGroup, 12*TILE, nCybGatheringX, nCybGatheringY );
           }else{
             orderGroupLoc(cyborgAttGroup,DORDER_MOVE,nCybGatheringX,nCybGatheringY);
           }
@@ -5005,7 +5009,11 @@ event reSortUnits(inactive)
   }  
   
   groupAddAreaNoGroup(xGroup, player, 0, 0, (mapWidth*128), (mapHeight*128));
-  if ( xGroup.members > 0 ){ printDebug1("#### reSortUnits; resort has left ("& xGroup.members &") units in no groups "); } else { printDebug1("reSortUnits; was successful ("& xGroup.members &")"); }
+  if ( xGroup.members > 0 ){ 
+    printDebug1("#### reSortUnits; resort has left ("& xGroup.members &") units in no groups "); 
+  } else { 
+    printDebug1("reSortUnits; was successful ("& xGroup.members &")"); 
+  }
   setEventTrigger(reSortUnits,inactive);
   
 }
@@ -5048,7 +5056,7 @@ event SelectTankTemplate(inactive)
   
   //repair Truck 
   _bProceed = true;
-  if ( repairGroup.members+numTemplatesInProduction(repairTank,player)+numTemplatesInProduction(repairTank,player)+numTemplatesInProduction(cybMech,player) < MAX_REPAIR_UNITS ){
+  if ( !lForceUnitsProduciton and repairGroup.members+numTemplatesInProduction(repairTank,player)+numTemplatesInProduction(repairTank,player)+numTemplatesInProduction(cybMech,player) < MAX_REPAIR_UNITS ){
   if ( getStructure(repairFacility,player) == NULLOBJECT ){
   if ( gameTime > TIME_HARVESTING_PHASE ){
     initEnumStruct(false,factory,player,player);
@@ -5140,7 +5148,7 @@ event SelectTankTemplate(inactive)
       //check if in 1vs1 games the human players has mainly cyborgs or tanks
       //printDebug1("SelectTankTemplate: nEnemyPlayers("& nEnemyPlayers &") nAPTankBuilt("& nAPTankBuilt &") cyb("& aStat[OC_CYBORGS][nLastEnemyPlayer] &") tk("& aStat[OC_TANKS][nLastEnemyPlayer] &")");
       if ( nEnemyPlayers == 1 ){
-        if ( aStat[OC_CYBORGS][nLastEnemyPlayer] + aStat[OC_TANKS][nLastEnemyPlayer] > 8 )
+        if ( aStat[OC_CYBORGS][nLastEnemyPlayer] + aStat[OC_TANKS][nLastEnemyPlayer] > 5 )
         {
           if ( aStat[OC_CYBORGS][nLastEnemyPlayer] > aStat[OC_TANKS][nLastEnemyPlayer]*3 )
           {
@@ -5244,7 +5252,7 @@ event SelectTankTemplate(inactive)
               }
             }
           } else {
-            printDebug1("#### SelectTankTemplate; not able to build any HEAVY or MEDIUM tank template with this weapon type ("& _nWeaponType &")(0=AR,1=AT,2=AP)");              
+            printDebug1("#### SelectTankTemplate; not able to build any HEAVY or MEDIUM tank tmpl with weapon=("& _nWeaponType &")(0=AR,1=AT,2=AP) try to build light tank");
           }
         }
 
@@ -5286,24 +5294,26 @@ event SelectTankTemplate(inactive)
             }
           }
         }
-        
-        //Only Light is availabe or was not able to build any medium template
-        if ( !_bProceed ){
-            if ( nResTmplPath == RESTMPL_1 ){
-              _bProceed = buildLightTank1(_nWeaponType,structure);
-            } else {
-              if ( nResTmplPath == RESTMPL_2 ){
-                _bProceed = buildLightTank2(_nWeaponType,structure);
-              } else {
-                _bProceed = buildLightTank(_nWeaponType,structure);
-              }
-            }
-        }
-        if ( !_bProceed ){
-          printDebug1("#### SelectTankTemplate; not able to build any tank template with this weapon type ("& _nWeaponType &")(0=AR,1=AT,2=AP)");              
-        }
       
       } //end else ( //medium and light body only)
+
+      //Only Light is availabe or was not able to build any medium/heavy template
+      if ( !_bProceed ){
+          if ( nResTmplPath == RESTMPL_1 ){
+            _bProceed = buildLightTank1(_nWeaponType,structure);
+          } else {
+            if ( nResTmplPath == RESTMPL_2 ){
+              _bProceed = buildLightTank2(_nWeaponType,structure);
+            } else {
+              _bProceed = buildLightTank(_nWeaponType,structure);
+            }
+          }
+      }
+      if ( !_bProceed ){
+        printDebug1("#### SelectTankTemplate; not able to build any tank with weapon=("& _nWeaponType &")(0=AR,1=AT,2=AP)");              
+      } 
+      
+
     }//endif(structureComplete(structure) and structureIdle(structure))
 
 	  structure = enumStruct();
@@ -5383,10 +5393,10 @@ event SelectCyborgTemplate(inactive)
 			
       // build cyborg constructor
       if( !lStopCybEngProd ){
-			    boolResult       = false;
-			    lastCybEngBuilt  = gameTime;
-					buildDroid(cybcondroid, structure, player, 1); 
-					//displayMsg("*** SelectCyborgTemplate: Building Constructor Droid power("& playerPower(player) &")");
+			  boolResult       = false;
+			  lastCybEngBuilt  = gameTime;
+				buildDroid(cybcondroid, structure, player, 1); 
+				//displayMsg("*** SelectCyborgTemplate: Building Constructor Droid power("& playerPower(player) &")");
 			}
 
       //build cyborg Mechanic
@@ -6230,10 +6240,6 @@ event manageDefVTOL(inactive)
     while(_droid != NULLOBJECT and _n < 60)
     {
       
-      if ( _droid.player == player or friendlyPlayer(_droid.player) ){ 
-        //dbg("#### manageDefVTOL; InitEnumDroids is wrong _droid,player("& _droid.player  &")",player);
-        printDebug1("#### manageDefVTOL; InitEnumDroids is wrong _droid,player("& _droid.player  &")");
-      }
       _dist  = distBetweenTwoPoints(_droid.x,_droid.y, nHelpX, nHelpY);
       if (_dist < 13*TILE){
         //dbg("manageDefVTOL:  _aEnDroid["& _n &"] id("& _droid.id &") ",player);
@@ -6810,7 +6816,7 @@ function void droidMicroManager(GROUP _group, int _range, int _x, int _y)
   }
 
   //use anti struct droids for structure and rest for droids
-  if ( _oTarget != NULLOBJECT and _structTarget != NULLOBJECT ) {
+  if ( _oTarget == NULLOBJECT and _structTarget != NULLOBJECT ) {
 
     _bAntiStruct = true; //avoid to process twice these droids.
 
@@ -6824,14 +6830,14 @@ function void droidMicroManager(GROUP _group, int _range, int _x, int _y)
 
         //check first if any enemy is too near, like enemy flamers
         _eascapeRange = 4*TILE; //
-        if ( isLongRange(_droid) )    { _eascapeRange = 7*TILE;  }//8-10
-        if ( isVeryLongRange(_droid) ){ _eascapeRange = 10*TILE; }//11 and upwards
+        if ( isLongRange(_droid) )    { _eascapeRange = 6*TILE;  }//8-10
+        if ( isVeryLongRange(_droid) ){ _eascapeRange = 8*TILE; }//11 and upwards
         _enWeapons = numEnemyWeapObjInRange(player, _droid.x, _droid.y, _eascapeRange, false, true);
         if ( _enWeapons > 0 ){
            orderDroidLoc(_droid, DORDER_MOVE, baseX, baseY);
-         } else {
+        } else {
            orderDroidObj(_droid, DORDER_ATTACK, _structTarget);
-         }
+        }
       
       }
       
@@ -6867,8 +6873,8 @@ function void droidMicroManager(GROUP _group, int _range, int _x, int _y)
       if (!isFlamer(_droid)){
 
         _eascapeRange = 4*TILE; //
-        if ( isLongRange(_droid) )    { _eascapeRange = 7*TILE;  }//8-10
-        if ( isVeryLongRange(_droid) ){ _eascapeRange = 10*TILE; }//11 and upwards
+        if ( isLongRange(_droid) )    { _eascapeRange = 6*TILE;  }//8-10
+        if ( isVeryLongRange(_droid) ){ _eascapeRange = 8*TILE; }//11 and upwards
 
         _enWeapons = numEnemyWeapObjInRange(player, _droid.x, _droid.y, _eascapeRange, false, true);
 
@@ -6903,10 +6909,18 @@ function void droidMicroManager(GROUP _group, int _range, int _x, int _y)
           //AT
           if ( isAntiTank(_droid) ){
             _enDroid = getEnemyDroid( _group.x, _group.y, _range, DROIDTYPE_TANK);
+            if ( _enDroid == NULLOBJECT and _structTarget == NULLOBJECT ){
+              _enDroid = getEnemyDroid( _group.x, _group.y, _range, DROIDTYPE_CYBORG);
+            }
           } else {
             //All rounder: search a droid taget if structure target is NULLOBJECT
             if (_structTarget == NULLOBJECT ) {
               _enDroid = getEnemyDroid( _group.x, _group.y, _range, DROIDTYPE_TANK);
+              if ( _enDroid == NULLOBJECT and _structTarget == NULLOBJECT ){
+                _enDroid = getEnemyDroid( _group.x, _group.y, _range, DROIDTYPE_CYBORG);
+              }
+             
+              
             }      
           }
         } 
@@ -6916,18 +6930,10 @@ function void droidMicroManager(GROUP _group, int _range, int _x, int _y)
     //search for enemy def struct     
     if ( _enDroid == NULLOBJECT and boolResult ) {
       if (_structTarget != NULLOBJECT and _droid != NULLOBJECT ) {
-        if ( bScoutOrder ){
-          orderDroidObj(_droid, DORDER_ATTACK, _structTarget);
-          boolResult = false;
-        } else {
-          //to be changed in move for short range weapons
-          orderDroidObj(_droid, DORDER_ATTACK, _structTarget);
-          boolResult = false;
-        }
+        orderDroidObj(_droid, DORDER_ATTACK, _structTarget);
+        boolResult = false;
       }
     }
-  
-         
 
     //attack or scout!!   
     if ( boolResult ){
@@ -6956,13 +6962,14 @@ function void droidMicroManager(GROUP _group, int _range, int _x, int _y)
 //-----------------------------------------------------------------------------
 function DROID getEnemyDroid(int _x,int _y,int _dist,int _droidType)
 {
-  local int _player, _lowestHealth;
-  local DROID _droid, _tmpDroid, _bestDroid;
+  local int _player, _lowestHealth,  _bestDist, _droidDist;
+  local DROID _droid, _tmpDroid, _bestDroid ;
   
   _player = 0;
   _droid  = NULLOBJECT;
   _bestDroid  = NULLOBJECT;
   _lowestHealth = 100;
+  _bestDist = 999999; //bestDist
   
   while ( _player < MAX_PLAYERS ){ 
     
@@ -6996,13 +7003,27 @@ function DROID getEnemyDroid(int _x,int _y,int _dist,int _droidType)
             }
           }
         
-          //pick up most damage one
+          //attack the nearest enemy
           if ( _tmpDroid != NULLOBJECT ){
-            if ( _tmpDroid.health < _lowestHealth ){
+            _droidDist = distBetweenTwoPoints(_tmpDroid.x ,_tmpDroid.y ,_x ,_y);
+            if ( _droidDist < _bestDist  ){
+              _bestDroid  = _tmpDroid;
+              _bestDist   = _droidDist;
+            }
+          }
+          
+          /*
+          I have removed this because droids with long range weapons tended to attack
+          enemy droids which were too far away and they mostly got the order to
+          move back to the base becasue of enemies near to them.
+          //pick up most damage one if near enough
+          if ( _tmpDroid != NULLOBJECT ){
+            if ( _tmpDroid.health < _lowestHealth and  ){
               _bestDroid    = _tmpDroid;
               _lowestHealth = _tmpDroid.health;
             }
           }
+          */
           
         }//dist
         
@@ -9118,6 +9139,8 @@ function void updateDefendRange()
       nDefendRange = MAX_DEFEND_RANGETILES*TILE;
     }
   }
+  //introduce a min def range
+  if (nDefendRange < 25*TILE){ nDefendRange = 25*TILE; }
   
 }
 //-----------------------------------------------------------------------------
@@ -9930,12 +9953,12 @@ function BASEOBJ findEnemyOBJ(bool _mustBeHuman, int _targetPlayer)
   //target player not found!!!
   if ( _targetPl < 0 ) {
   	_targetPl = getRandomEnemyPlayer(_mustBeHuman);
-    if ( _targetPl > -1 ){
-      printDebug1("findEnemyOBJ: target set to random enemy player("& getPlayerName(_targetPl) &") _mustBeHuman("& _mustBeHuman &") isHuman("& isHumanPlayer(_targetPl) &") mapSize("& mapSize() &" > "& MAP_SMALL &")");
-    }
+    //if ( _targetPl > -1 ){
+      //printDebug1("findEnemyOBJ: target set to random enemy player("& getPlayerName(_targetPl) &") _mustBeHuman("& _mustBeHuman &") isHuman("& isHumanPlayer(_targetPl) &") mapSize("& mapSize() &" > "& MAP_SMALL &")");
+    //}
   }
   if ( _targetPl == -1 ){
-    printDebug1("#### findEnemyOBJ(): No enemy found _mustBeHuman("& _mustBeHuman &") _targetPlayer("& _targetPlayer &")");
+    //printDebug1("#### findEnemyOBJ(): No enemy found _mustBeHuman("& _mustBeHuman &") _targetPlayer("& _targetPlayer &")");
     return _attackObject; //NULLOBJECT
   }
   
@@ -10100,7 +10123,6 @@ function int getTargetEnemy(bool _dbg)
       _player++;
     }
     if ( _tempPlayer == -1){
-      //dbg("dbg->getTargetEnemy: pl("& getPlayerName(player) &") too weak enemy not found",player);
       if ( _dbg ) {
         printDebug1("getTargetEnemy; too weak enemy not found");
       }
@@ -10173,15 +10195,11 @@ function BASEOBJ getTargetObj()
   //   then attack nearest enemy
   if ( (!bHasHumanEnemies(player) and nPlayersInGame > 4) or mapSize() > MAP_MEDIUM ){
     _targetPlayer = getNearestEnemyPlayer(false);
-    if (_targetPlayer >= 0){
-      printDebug1("getTargetObj; Nearest enemy found: '"& getPlayerName(_targetPlayer) &"'");
-    }
+    //if (_targetPlayer >= 0){  printDebug1("getTargetObj; Nearest enemy found: '"& getPlayerName(_targetPlayer) &"'"); }
   } else {
     //search for too strong or too weak enemies
     _targetPlayer = getTargetEnemy(false);
-    if (_targetPlayer >= 0){
-        printDebug1("getTargetObj; Very strong or weak enemy found: '"& getPlayerName(_targetPlayer) &"'");
-    }
+    //if (_targetPlayer >= 0){  printDebug1("getTargetObj; Very strong or weak enemy found: '"& getPlayerName(_targetPlayer) &"'");}
   }
 
   _nGameType = gameType();
@@ -10234,7 +10252,7 @@ function BASEOBJ getTargetObj()
       attackTankObj = getAAgroups(_mustBeHuman);
       bAAgroupsAttacked = true;
       if ( attackTankObj != NULLOBJECT ){ 
-        printDebug1("getTargetObj; attacking AA groups, player("& getPlayerName(attackTankObj.player) &") _mustBeHuman("& _mustBeHuman &")" ); 
+        //printDebug1("getTargetObj; attacking AA groups, player("& getPlayerName(attackTankObj.player) &") _mustBeHuman("& _mustBeHuman &")" ); 
         return attackTankObj; 
       }
     } else {
@@ -10247,7 +10265,7 @@ function BASEOBJ getTargetObj()
   if ( bNeedDerrick  or ( _rnd < 7 and mapSize() > MAP_MEDIUM ) ){
     //dbg("dbg: getTargetObj-> pl("& getPlayerName(player) &") big map or derricks required _rnd("& _rnd &")" , player); 
     if ( AIstrength >= 4){
-      printDebug1("getTargetObj; target is human derrick, big map or derricks required AIstrength("& AIstrength &")>=4 _rnd("& _rnd &"/7) bNeedDerrick("& bNeedDerrick &") mapSize("& mapSize() &") _mustBeHuman("& _mustBeHuman &")" ); 
+      //printDebug1("getTargetObj; target is human derrick, big map or derricks required AIstrength("& AIstrength &")>=4 _rnd("& _rnd &"/7) bNeedDerrick("& bNeedDerrick &") mapSize("& mapSize() &") _mustBeHuman("& _mustBeHuman &")" ); 
       oHumanDerrick1 = objHumanDerrick(false,1,10);//(bool bVTOLTarget, int _numDef, int _distInTiles)
       oHumanDerrick2 = objHumanDerrick(false,2,10);//(bool bVTOLTarget, int _numDef, int _distInTiles)
       oHumanDerrick3 = objHumanDerrick(false,3,10);//(bool bVTOLTarget, int _numDef, int _distInTiles)
@@ -10270,22 +10288,24 @@ function BASEOBJ getTargetObj()
         if ( _d2 < _d3 ){ attackTankObj = oHumanDerrick2; }
         if ( _d3 < _d1 and _d3 < _d2 ){ attackTankObj = oHumanDerrick3; }
       }
-      printDebug1("getTargetObj; Target should be human derrick, _d1 _d2 _d3("& _d1/TILE &"-"& _d2/TILE &"-"& _d3/TILE &")" ); 
+      //printDebug1("getTargetObj; Target should be human derrick, _d1 _d2 _d3("& _d1/TILE &"-"& _d2/TILE &"-"& _d3/TILE &")" ); 
     } else {
-      printDebug1("getTargetObj; _targetPlayer forced to ("& -1 &") target is derrick, big map or derricks required _rnd("& _rnd &"/7) bNeedDerrick("& bNeedDerrick &") mapSize("& mapSize() &") _mustBeHuman("& _mustBeHuman &")" ); 
+      //printDebug1("getTargetObj; _targetPlayer forced to ("& -1 &") target is derrick, big map or derricks required _rnd("& _rnd &"/7) bNeedDerrick("& bNeedDerrick &") mapSize("& mapSize() &") _mustBeHuman("& _mustBeHuman &")" ); 
       attackTankObj = closestEnemyDerrick(_mustBeHuman , -1);
     }
-  } else {
-    printDebug1("getTargetObj; target will not be a derrick; _targetPlayer("& _targetPlayer &") _rnd("& _rnd &"/7) bNeedDerrick("& bNeedDerrick &") mapSize("& mapSize() &") "); 
-  }
+  } 
+  //else {
+    //printDebug1("getTargetObj; target will not be a derrick; _targetPlayer("& _targetPlayer &") _rnd("& _rnd &"/7) bNeedDerrick("& bNeedDerrick &") mapSize("& mapSize() &") "); 
+  //}
   
   //attack enemy base
   if ( attackTankObj == NULLOBJECT ){
-    printDebug1("getTargetObj; derrick not found, try with base _targetPlayer("& _targetPlayer &") _mustBeHuman("& _mustBeHuman &")"); 
+    //printDebug1("getTargetObj; derrick not found, try with base _targetPlayer("& _targetPlayer &") _mustBeHuman("& _mustBeHuman &")"); 
     attackTankObj = findEnemyOBJ(_mustBeHuman,_targetPlayer);
-  } else {
-    printDebug1("getTargetObj; derrick found Id("& attackTankObj.id  &") " ); 
-  }
+  } 
+  //else {
+    //printDebug1("getTargetObj; derrick found Id("& attackTankObj.id  &") " ); 
+  //}
   //attackTankObj = findEnemyOBJ(_mustBeHuman);
    
   if (attackTankObj != NULLOBJECT) {
@@ -10364,7 +10384,7 @@ function BASEOBJ getAAgroups(bool _mustBeHuman)
               if ( _nDist > nBaseRange ){
                 if ( _nAA > _nMaxAA ){
                   _oAAtarget = _struct;
-                  printDebug1("getAAgroups; AA group target found; _nDist ("& _nDist/TILE &")>("& nBaseRange/TILE &") _nAA("& _nAA &")>("& _nMaxAA &") _nEnWeap("& _nEnWeap &")<("& _nMyUnits &"*2) enemy("& getPlayerName(_nEnemyPlayer) &") tanks("& tankGroup.members  &") cyborgs("& cyborgAttGroup.members  &")");
+                  //printDebug1("getAAgroups; AA group target found; _nDist ("& _nDist/TILE &")>("& nBaseRange/TILE &") _nAA("& _nAA &")>("& _nMaxAA &") _nEnWeap("& _nEnWeap &")<("& _nMyUnits &"*2) enemy("& getPlayerName(_nEnemyPlayer) &") tanks("& tankGroup.members  &") cyborgs("& cyborgAttGroup.members  &")");
                   _nMaxAA = _nAA;
                 }
               }
@@ -10384,12 +10404,12 @@ function BASEOBJ getAAgroups(bool _mustBeHuman)
     _nEnemyPlayer++;
   }//player loop
 
-  if ( _oAAtarget == NULLOBJECT ){
-    printDebug1("getAAgroups; AA target not found ");
-  } else {
-    printDebug1("getAAgroups; AA target found ");
+  //if ( _oAAtarget == NULLOBJECT ){
+    //printDebug1("getAAgroups; AA target not found ");
+  //} else {
+    //printDebug1("getAAgroups; AA target found ");
     //printDebug1("getAAgroups; AA target found player("& getPlayerName(_oAAtarget) &") Id("& _oAAtarget.id &") x-y("& _oAAtarget.x/TILE &")-("& _oAAtarget.y/TILE &")");
-  }
+  //}
   return _oAAtarget;
   
 }
@@ -11730,12 +11750,12 @@ function bool canHelpAlly(int _sender)
     _dist = distBetweenTwoPoints(baseX,baseY,beaconX[_sender],beaconY[_sender]);
     if ( mapSize() == MAP_BIG ){
       if ( _dist > MAX_HELP_DISTANCE+30  ) {
-    	  printDebug1("canHelpAlly; beacon is too far away ("& _dist/TILE &") _sender("& _sender &") mapSize()("& mapSize() &") ");
+    	  //printDebug1("canHelpAlly; beacon is too far away ("& _dist/TILE &") _sender("& _sender &") mapSize()("& mapSize() &") ");
         return false;
       }
     } else {
       if ( _dist > MAX_HELP_DISTANCE  ) {
-    	  printDebug1("canHelpAlly; beacon is too far away ("& _dist/TILE &") _sender("& _sender &") mapSize()("& mapSize() &") ");
+    	  //printDebug1("canHelpAlly; beacon is too far away ("& _dist/TILE &") _sender("& _sender &") mapSize()("& mapSize() &") ");
         return false;
       }
     }
@@ -11753,7 +11773,7 @@ function bool canHelpAlly(int _sender)
     return false;
   }
   
-  printDebug1("canHelpAlly; __OK__ dist("& _dist/TILE &") tk ("& _tank &") + cyb ("& _cyb &") > ("& MIN_HELPING_UNITS &") ?, alert ("& alertIsOn &") alertLevel ("& alertLevel &") _sender("& _sender &") ");
+  //printDebug1("canHelpAlly; __OK__ dist("& _dist/TILE &") tk ("& _tank &") + cyb ("& _cyb &") > ("& MIN_HELPING_UNITS &") ?, alert ("& alertIsOn &") alertLevel ("& alertLevel &") _sender("& _sender &") ");
   return true;
 }
 
@@ -11787,7 +11807,7 @@ function void helpAlly(int _ally){
   }
   
   msg("Sending "& helpGroup.members &" units to beacon point coord: "& (nHelpX/TILE) &"-"& (nHelpY/TILE), player, _ally);
-  printDebug1("helpAlly; Sending "& helpGroup.members &" units to beacon point coord: "& (nHelpX/TILE) &"-"& (nHelpY/TILE) &" helping ("& getPlayerName(_ally) &")" );
+  //printDebug1("helpAlly; Sending "& helpGroup.members &" units to beacon point coord: "& (nHelpX/TILE) &"-"& (nHelpY/TILE) &" helping ("& getPlayerName(_ally) &")" );
   
   orderGroupMoveCMD(helpGroup, nHelpX, nHelpY);
   setEventTrigger(manageHelpTeam,manageHelpTeamTr);
@@ -11843,23 +11863,36 @@ event consoleEv(consoleTr)  //(CALL_CONSOLE, ref sender, ref message);
       lPathSet = true;
       nResTmplPath = RESTMPL_0;
       SetDyDoPath();
-      printDebug1("msg from TeamLeader: PATH == "& nResTmplPath &" (all technologies), AIPersonality("& AIPersonality &") !");    
+      //printDebug1("msg from TeamLeader: PATH == "& nResTmplPath &" (all technologies), AIPersonality("& AIPersonality &") !");    
       console("Player("& getPlayerName(player) &")("& player &"): Research path set to # "& nResTmplPath &" (all technologies), AIPersonality("& AIPersonality &") !");    
     }
     if ( message == "set rp1" ){
       lPathSet = true;
       nResTmplPath = RESTMPL_1;
       SetDyDoPath();
-      printDebug1("msg from TeamLeader: PATH == "& nResTmplPath &" (Flamers and Rockets), AIPersonality("& AIPersonality &") !");    
+      //printDebug1("msg from TeamLeader: PATH == "& nResTmplPath &" (Flamers and Rockets), AIPersonality("& AIPersonality &") !");    
       console("Player("& getPlayerName(player) &")("& player &"): Research path set to # "& nResTmplPath &" (Flamers and Rockets), AIPersonality("& AIPersonality &") !");    
     }
     if ( message == "set rp2" ){
       lPathSet = true;
       nResTmplPath = RESTMPL_2;
       SetDyDoPath();
-      printDebug1("msg from TeamLeader: PATH == "& nResTmplPath &" (Gunners and Cannons), AIPersonality("& AIPersonality &") !");    
+      //printDebug1("msg from TeamLeader: PATH == "& nResTmplPath &" (Gunners and Cannons), AIPersonality("& AIPersonality &") !");    
       console("Player("& getPlayerName(player) &")("& player &"): Research path set to # "& nResTmplPath &" (Gunners and Cannons), AIPersonality("& AIPersonality &") !");    
     }
+  }
+
+  if ( message == "/set pow500" ){
+    addPower(500,player);  
+    console("Player("& getPlayerName(player) &")("& player &"): got +500 power !");    
+  }
+  if ( message == "/set pow1000" ){
+    addPower(1000,player);  
+    console("Player("& getPlayerName(player) &")("& player &"): got +1000 power !");    
+  }
+  if ( message == "/set pow5000" ){
+    addPower(5000,player);  
+    console("Player("& getPlayerName(player) &")("& player &"): got +5000 power !");    
   }
 
   if ( message == "/set rp0" ){
@@ -11933,18 +11966,6 @@ event consoleEv(consoleTr)  //(CALL_CONSOLE, ref sender, ref message);
 
   if (message == "/stats" )	{
     count = getTargetEnemy(false);
-  }
-
-  if (message == "/stats1" )	{
-    displayStats(1);
-  }
-
-  if (message == "/stats2" )	{
-    displayStats(2);
-  }
-
-  if (message == "/stats3" )	{
-    displayStats(3);
   }
 
   if (message == "/set level 1" )	{
@@ -12331,7 +12352,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
       
       //dbg("BIGHELP; player has given ("& count2 &")("& count3 &")/("& count &") units to player ("& _sender &") ",player);
       msg("player has given ("& count2 &")/("& _nBigHelpDroids &") units",player,_sender);
-      printDebug1("BIGHELP; player has given ("& count2 &")("& count3 &")/("& _nBigHelpDroids &") units to player ("& _sender &") ");
+      //printDebug1("BIGHELP; player has given ("& count2 &")("& count3 &")/("& _nBigHelpDroids &") units to player ("& _sender &") ");
     
     } else {
       
@@ -12347,12 +12368,12 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
           count++;
         }
         msg("I have given you ("& count &") units",player,_sender);
-        printDebug1("BIGHELP;has given ("& getPlayerName(_sender) &") '"& count &"' units");
+        //printDebug1("BIGHELP;has given ("& getPlayerName(_sender) &") '"& count &"' units");
         
       } else {
 
         msg("Sorry, I am in trouble or not have enough units",player,_sender);
-        printDebug1("BIGHELP; is in trouble or not have enough units to send");
+        //printDebug1("BIGHELP; is in trouble or not have enough units to send");
       }
     }
     }
@@ -12471,174 +12492,7 @@ function void notifyStatus(int _choice, int _player)
   msg("Have a beacon("& haveAnyBeacon() &") Player Helped("& nAllyBeingHelped &") Helping Droids("& helpGroup.members &")", player, _player);
   
 }
-//-----------------------------------------------------------------------------
-function void displayStats(int _choice)
-{
 
-	local string _sPlPow, _sPlInf1,_sPlInf2,_sPlInf3, _strTeams, _sWallDef, _sDef; 
-  local string _sRes, _sRes2, _str0, _str1, _str2, _str3, _str4, _str5, _sFort;
-  local int _totTanks, _HQx,_HQy,_tDG,  _bg, _hg, _tg, _bdg, _ccG, _rg, _HelpG;
-  local int _cG, _totHarv, _enWeap, _myWeap, _myWeapSTR, _enemyCost, _friendCost;
-  local int _count,_count2;
-	
-  _count=0;
-  while ( _count < 11 )
-  {
-    if ( oilResTargetId[_count] > -1 ){
-      _totHarv++;
-    }
-    _count++;
-  }
-  
-  _bg = buildGrp.members;
-  _hg = harvesterGroup.members;
-  _rg = repairGroup.members;
-  _tg = tankGroup.members;
-  _bdg = buildDefGrp.members;
-  _ccG = cybConstGrp.members;
-  _cG = cyborgDefGroup.members;
-  _tDG = tankDefGroup.members;
-  _HelpG = helpGroup.members;
-  _totTanks = MIN_ATTACKING_TANKS+nAttackingUnitsToAdd+minDefDroids[nAI_Pers][MINDEF_TANKS];
-
-  _enWeap = numEnemyWeapDroidsInRange(player,baseX, baseY, nBaseRange , false);
-	_myWeap	= numPlayerWeapDroidsInRange(player, player, baseX, baseY, nBaseRange , true);
-  _myWeapSTR = numFriendlyWeapStructsInRange(player,baseX, baseY, nBaseRange, true);
-	
-  structure = getStructure(playerHQ, player);
-	if(structure != NULLOBJECT)
-	{
-	  _HQx = structure.x;
-	  _HQy = structure.y;
-	} else {
-	  _HQx = 0;
-	  _HQy = 0;
-  }
-  
-  _count = 0;
-  while ( _count < numWallWeaps ){
-    _sWallDef = _sWallDef & " ["& _count &"]("& isStructureAvailable(wallWeaps[_count],player) &") ";
-    _count++;
-  }
-  _count = 0;
-  while ( _count < numDefStructs ){
-    _sDef = _sDef & " ["& _count &"]("& isStructureAvailable(defStructs[_count],player) &") ";
-    _count++;
-  }
-
-  _count = 0;
-  while ( _count < numFortressDef ){
-    _sFort = _sFort & " ["& _count &"]("& isStructureAvailable(fortressDef[_count],player) &") ";
-    _count++;
-  }
-
-  _count = 0;
-  while ( _count < 20){
-    _str0 = _str0 & " ["& _count &"]"& numResearchLeft(player,research[0][_count]) &" ";
-    _count++;
-  }
-  while ( _count < 40){
-    _str1 = _str1 & " ["& _count &"]"& numResearchLeft(player,research[0][_count]) &" ";
-    _count++;
-  }
-  while ( _count < numRes[0]){
-    _str2 = _str2 & " ["& _count &"]"& numResearchLeft(player,research[0][_count]) &" ";
-    _count++;
-  }
-  
-  _count = 0;
-  while ( _count < 23){
-    _str3 = _str3 & " ["& _count &"]"& numResearchLeft(player,research[1][_count]) &" ";
-    _count++;
-  }
-  while ( _count < numRes[1]){
-    _str4 = _str4 & " ["& _count &"]"& numResearchLeft(player,research[1][_count]) &" ";
-    _count++;
-  }
-
- 
-  _count = 0;
-  while ( _count < numCheapRes[0] ){
-    _sRes2 = _sRes2 & " ["& _count &"]"& numResearchLeft(player,researchCheap[0][_count]) &" ";
-    _count++;
-  }
-  
-  _count = 0;
-  while ( _count < numRes[9] ){
-    _str5 = _str5 & " ["& _count &"]"& numResearchLeft(player,research[9][_count]) &" ";
-    _count++;
-  }
-
-  _count = 0;
-  while (_count < MAX_PLAYERS){
-    if (isPlayerStillLive(_count)){
-      _strTeams = _strTeams & " '"& getPlayerName(_count) &"'' #"& _count &" ["& aPlayers[TEAM_NUMBER][_count] &"] ";
-    }
-    _count++;
-  }
-
-  _count=0;
-  while( _count < MAX_PLAYERS and _count < 3){
-    if (isPlayerStillLive(_count)){
-      _sPlInf1 = _sPlInf1 & " *["& getPlayerName(_count) &"] RL(" & aStat[OC_RESLABS][_count] & ") Der("& aStat[OC_DERRICKS][_count] &") Cy-Tk-VTOL("& aStat[OC_CYBORGS][_count] &"-"& aStat[OC_TANKS][_count] &"-"& aStat[OC_VTOLS][_count] &") Pow("& aStat[OC_CYB_POWER][_count] &"-"& aStat[OC_TK_POWER][_count] &"-"& aStat[OC_VTOL_POWER][_count] &") hp("& aStat[OC_CYB_HP][_count] &"-"& aStat[OC_TK_HP][_count] &"-"& aStat[OC_VTOL_HP][_count] &")";
-    }
-    _count++;
-  }
-  while( _count < MAX_PLAYERS and _count < 6 ){
-    if (isPlayerStillLive(_count)){
-      _sPlInf2 = _sPlInf2 & " *["& getPlayerName(_count) &"] RL(" & aStat[OC_RESLABS][_count] & ") Der("& aStat[OC_DERRICKS][_count] &") Cy-Tk-VTOL("& aStat[OC_CYBORGS][_count] &"-"& aStat[OC_TANKS][_count] &"-"& aStat[OC_VTOLS][_count] &") Pow("& aStat[OC_CYB_POWER][_count] &"-"& aStat[OC_TK_POWER][_count] &"-"& aStat[OC_VTOL_POWER][_count] &") hp("& aStat[OC_CYB_HP][_count] &"-"& aStat[OC_TK_HP][_count] &"-"& aStat[OC_VTOL_HP][_count] &")";
-    }
-    _count++;
-  }
-  while( _count < MAX_PLAYERS and _count < 8 ){
-    if (isPlayerStillLive(_count)){
-      _sPlInf3 = _sPlInf3 & " *["& getPlayerName(_count) &"] RL(" & aStat[OC_RESLABS][_count] & ") Der("& aStat[OC_DERRICKS][_count] &") Cy-Tk-VTOL("& aStat[OC_CYBORGS][_count] &"-"& aStat[OC_TANKS][_count] &"-"& aStat[OC_VTOLS][_count] &") Pow("& aStat[OC_CYB_POWER][_count] &"-"& aStat[OC_TK_POWER][_count] &"-"& aStat[OC_VTOL_POWER][_count] &") hp("& aStat[OC_CYB_HP][_count] &"-"& aStat[OC_TK_HP][_count] &"-"& aStat[OC_VTOL_HP][_count] &")";
-    }
-    _count++;
-  }
-
-  _count2=0;
-  while( _count2 < MAX_PLAYERS ){
-    if (isPlayerStillLive(_count2)){
-      _sPlPow = _sPlPow & " __"& getPlayerName(_count2) &" (" & getPowerIndex(_count2) & ")" ;
-    }
-    _count2++;
-  }
-
-  _count = player;
-  /*
-  if ( _choice == 1 ){
-    dbg("dbg-> GameTime("& gameTime &") General("& AIPersonality &") AIstrength("& AIstrength &") gameType("& gameType() &") gameTime("& gameTime &") MAP("& mapWidth &"-"& mapHeight &") nBasRg("& nBaseRange/TILE &") gatRange("& gatewaysRangeTiles &") DefRange("& nDefendRange/TILE &") HQ("& _HQx/TILE &"-"& _HQy/TILE &") Base("& baseX/TILE &"-"& baseY/TILE &") arHarv("& _totHarv &") ",_count);
-    dbg("dbg-> Plyers: " & _strTeams & " nTeam("& nTeam &") nLastEnemyPlayer ("& nLastEnemyPlayer &") nEnemyPlayers ("& nEnemyPlayers &") nHumanPlayers("& nHumanPlayers &") nPlayersInGame("& nPlayersInGame &") nTotEnemyDroids("& nTotEnemyDroids &")", _count);
-    dbg("dbg-> bAnyOilResLeft("& bOilResLeft &") Harv("& _hg &") build("& _bg  &") bDef"& _bdg &") cybConst("& _ccG &") _HelpG ("& _HelpG &") Tank("& _tg &") TankDef(" & _tDG & ") cybDef("& _cG &")  cybAtt("& cyborgAttGroup.members &")  CybRep("& toBeRepairedCyborgGroup.members &") TankRep("& toBeRepairedTankGroup.members &") VTOLdef("& vtolGr.members &") VTOLatt("& vtolAttGr.members &")",_count);  
-    dbg("dbg-> CybAttReq("& minDefDroids[nAI_Pers][MINDEF_CYBORGS]+MIN_ATT_CYBORGS+nCybAttUnitsToAdd &") TotCyb("& nTotCyborgs &") TankAttReq("& _totTanks &") TotTank("& nTotTanks &") help("& helpGroup.members &") alertIsOn ("& alertIsOn &")  realGatew("& nRealGatewaysFound &") nAllyBeingHelped("& nAllyBeingHelped &") tTotalAttack("& tTotalAttack &")",_count );
-    dbg("dbg-> Cyborgs Built: (AR-AT-AP-KK)(Error) ("& nTotCybAR &" - "& nTotCybAT &" - "& nTotCybAP &" - "& nTotCybKK &")("& nTotCybErr &")",player);
-    dbg("dbg-> POWER ("& playerPower(0) &") ("& playerPower(1) &") ("& playerPower(2) &") ("& playerPower(3) &") ("& playerPower(4) &") ("& playerPower(5) &") ("& playerPower(6) &") ("& playerPower(7) &") DROID-LEFT ("& anyDroidsLeft(0) &")("& anyDroidsLeft(1) &")("& anyDroidsLeft(2) &")("& anyDroidsLeft(3) &")("& anyDroidsLeft(4) &")("& anyDroidsLeft(5) &")("& anyDroidsLeft(6) &")("& anyDroidsLeft(7) &") defSpotX/Y ("& defSpotX &"-"& defSpotY &") nTotOilInAtStart ("& nTotOilInAtStart &") ",_count);
-
-  } 
-  if ( _choice == 2 ){
-    dbg("dbg-> Power:  bNeedDerrick ("& bNeedDerrick &") bForceResPowUp("& bForceResPowUp &") numRemainingOilRes()("& nFreeOilRes &") " & _sPlPow, _count);
-    dbg("dbg-> Info : " & _sPlInf1,_count);
-    dbg("dbg-> Info : " & _sPlInf2,_count);
-    dbg("dbg-> Info : " & _sPlInf3,_count);
-    dbg("dbg-> Tank Attack: tTKSentToGath ("& tTanksSentToGathering  &")  bTankAttIsOn ("& bTankAttIsOn &") lTKSentToGathPt ("& lTankSentToGatheringPoint &") bTKAlreadyGathered ("& bTankAlreadyGathered &") tankAttackX-Y ("& tankAttackY/TILE &"-"& tankAttackY/TILE &") targetPlTK ("& targetPlayerTank &") targetPlCyb("& targetPlayerCyb &") AttHumanPl("& nAttHumanPlayer &") AttAI("& nAttAIPlayer &")",_count);
-  }
- 
-  if ( _choice == 3 ){
-    dbg("dbg-> Standard Defe: Depth("& pickDefQueueDepth  &") - " & _sDef, _count );
-    dbg("dbg-> Wall Defences: Depth("& pickWallDefQueueDepth  &") - "& _sWallDef, _count );
-    dbg("dbg-> Fortresses: Depth("& pickFortQueueDepth  &") - "& _sFort, _count);
-    dbg("dbg-> Res0: " & _str0, _count);
-    dbg("dbg-> Res0: " & _str1, _count);
-    dbg("dbg-> Res0: " & _str2, _count);
-    dbg("dbg-> Res1: " & _str3, _count);
-    dbg("dbg-> Res1: " & _str4, _count);
-    dbg("dbg-> Cheap Res: "& numCheapRes[0] & " " & _sRes2, _count);
-    dbg("dbg-> VTOL Res: "& _str5,_count);
-    dbg("dbg-> lMinBaseStructBuilt("& lMinBaseStructBuilt &") Working Lab("& nWorkingLab &") Fact("& nWorkingFact &") Cyb("& nWorkingCybFac &") ", _count);
-  }
-     */
-}
 //-----------------------------------------------------------------------------
 function bool isPlayerStillLive(int _player)
 {
@@ -14320,11 +14174,11 @@ function  bool buildMediumTank1( int _nWeapon, STRUCTURE _struct )
       _nChoice = 46;//CobraPODHTracks
     }
   }
-  if ( ( _nTmpl == 34 and skCanBuildTemplate(player,_struct, tmpl0[35]) ) or (_nTmpl == 35 and skCanBuildTemplate(player,_struct, tmpl0[34]) ) ){
-    if ( random(10) < 5 ){
-      _nChoice = 35;//set SK-Scorp-Hover-Lancer 
+  if ( ( _nTmpl == 43 and skCanBuildTemplate(player,_struct, tmpl0[42]) ) or (_nTmpl == 42 and skCanBuildTemplate(player,_struct, tmpl0[43]) ) ){
+    if ( random(10) < 7 ){
+      _nChoice = 43;//CobraInfernoHTracks 
     } else {
-      _nChoice = 34;//set H-Scorp-Trk-Lancer
+      _nChoice = 42;//CobraInfernoHover
     }
   }
   
@@ -14368,7 +14222,7 @@ function  bool buildMediumTank1( int _nWeapon, STRUCTURE _struct )
   
   if( skCanBuildTemplate( player , _struct , tmpl0[_nChoice]) ){
     //dbg("buildMediumTank: build template _nWeapon("& _nWeapon &") _nChoice("& _nChoice &") _pos("& _pos &") _n("& _n &")",player);
-    //printDebug1("buildMediumTank1; build template _nWeapon("& _nWeapon &") _nChoice("& _nChoice &") _pos("& _pos &") _n("& _n &")");
+    printDebug1("buildMediumTank1; build template _nWeapon("& _nWeapon &") _nChoice("& _nChoice &") _pos("& _pos &") _n("& _n &")");
     buildDroid( tmpl0[_nChoice] , _struct, player, 1);
     return true;  
   } else {
@@ -14543,13 +14397,13 @@ function  bool buildLightTank1( int _nWeapon, STRUCTURE _struct )
   _nBestTmpl = -1;
 
   if ( _nWeapon == WEAPON_AP ){
+      if( skCanBuildTemplate(player,_struct, tmpl0[51]) ){ _tmpl[_n] = 51; _n++; }
       if( skCanBuildTemplate(player,_struct, tmpl0[50]) ){ _tmpl[_n] = 50; _n++; }
-      if( skCanBuildTemplate(player,_struct, tmpl0[49]) ){ _tmpl[_n] = 49; _n++; }
       if( skCanBuildTemplate(player,_struct, tmpl0[28]) ){ _tmpl[_n] = 28; _n++; }
   }
   if ( _nWeapon == WEAPON_AT ){
+      if( skCanBuildTemplate(player,_struct, tmpl0[49]) ){ _tmpl[_n] = 49; _n++; }
       if( skCanBuildTemplate(player,_struct, tmpl0[48]) ){ _tmpl[_n] = 48; _n++; }
-      if( skCanBuildTemplate(player,_struct, tmpl0[47]) ){ _tmpl[_n] = 47; _n++; }
   }
 
   if ( _n > 0 ){
@@ -14561,7 +14415,7 @@ function  bool buildLightTank1( int _nWeapon, STRUCTURE _struct )
   }
 
   _nChoice = _tmpl[_nBestTmpl];
-  //printDebug1("buildLightTank1;  _n("& _n &") _nBestTmpl("& _nBestTmpl &") ");
+  //printDebug1("buildLightTank1; A _n("& _n &") _nBestTmpl("& _nBestTmpl &") _nChoice("& _nChoice &")");
 
   if ( ( _nChoice == 48 and skCanBuildTemplate(player,_struct, tmpl0[47]) or _nChoice == 47 and skCanBuildTemplate(player,_struct, tmpl0[48]) ) ){
     if ( random(10) < 4 ){
@@ -14717,9 +14571,9 @@ function  int checkBestBody1(int _nBody, int _nWeapon, STRUCTURE _struct )
       if( skCanBuildTemplate(player,_struct, tmpl0[10]) ){ _i++; }
     }
     if ( _nWeapon == WEAPON_AT ){
+      if( skCanBuildTemplate(player,_struct, tmpl0[47]) ){ _i++; }
       if( skCanBuildTemplate(player,_struct, tmpl0[46]) ){ _i++; }
       if( skCanBuildTemplate(player,_struct, tmpl0[45]) ){ _i++; }
-      if( skCanBuildTemplate(player,_struct, tmpl0[44]) ){ _i++; }
       if( skCanBuildTemplate(player,_struct, tmpl0[35]) ){ _i++; }
       if( skCanBuildTemplate(player,_struct, tmpl0[34]) ){ _i++; }
       if( skCanBuildTemplate(player,_struct, tmpl0[25]) ){ _i++; }
@@ -14737,8 +14591,8 @@ function  int checkBestBody1(int _nBody, int _nWeapon, STRUCTURE _struct )
       if( skCanBuildTemplate(player,_struct, tmpl0[28]) ){ _i++; }
     }
     if ( _nWeapon == WEAPON_AT ){
+      if( skCanBuildTemplate(player,_struct, tmpl0[49]) ){ _i++; }
       if( skCanBuildTemplate(player,_struct, tmpl0[48]) ){ _i++; }
-      if( skCanBuildTemplate(player,_struct, tmpl0[47]) ){ _i++; }
     }
   }
   if ( _nBody == BODY_LIGHT ) { _sBody = "Light"; }
@@ -15194,7 +15048,7 @@ function void SetDyDoPath()
       
       printDebug1("SetDyDoPath; Setting research paths to #1 Flamers and Rockets");
       // --- CHEAP RESEARCHES ----
-      //do not research cannon stuffs
+      //do not research cannon stuffs, force to mortars
       researchCheap[0][17] = researchCheap[0][13]; 
       researchCheap[0][18] = researchCheap[0][13]; 
       
@@ -15239,8 +15093,9 @@ function void SetDyDoPath()
       
       printDebug1("SetDyDoPath; Setting research paths to #2 MG and Cannons ");
       // --- Standard RESEARCHES ----
-      //do not research Rockets stuffs
-      researchCheap[0][13] = researchCheap[0][16]; 
+      //do not research Inferno and Rockets stuffs, force to HMG
+      researchCheap[0][7]  = researchCheap[0][16]; 
+      researchCheap[0][14] = researchCheap[0][16]; 
   
       _cc=0;
       while ( _cc < numPath2[0] ){
@@ -15262,6 +15117,9 @@ function void SetDyDoPath()
         research[9][_cc] = resPath2[9][_cc];
         _cc++;
       }
+      //adjust for this research path
+    	research[9][9] = 	research[9][10];//force to heap bomb bay
+     	research[9][16]= 	research[9][10];//force to heap bomb bay
   
       // --- TEMPLATES ----
       _cc=0;
@@ -15558,6 +15416,7 @@ function void buildArtillery(DROID _droid)
   }
   if ( _numWeapInBase >= 5 ) { exit; }
 
+  //dbg("buildArtillery; 0 CBTime("& gameTime - tCBSense &") senstr av("& isStructureAvailable(sensorTower,player) &")  artInBase("& _numWeapInBase &") ",player);
   //buildSensorTower
   if ( gameTime - tCBSense > 1*TIME_MINUTE ){
     if ( isStructureAvailable(sensorTower,player) )    { sensStruct = sensorTower; }
@@ -15565,10 +15424,36 @@ function void buildArtillery(DROID _droid)
      
     if ( isStructureAvailable(sensStruct,player) and _numWeapInBase > 0 and numStructinRange(sensStruct,player, baseX, baseY, nBaseRange + TILE*3) == 0 )
     {
-      if ( baseX > mapWidth/2*TILE ){ buildX = baseX - nBaseRange/3;}
-      if ( baseX < mapWidth/2*TILE ){ buildX = baseX + nBaseRange/3;}
-      if ( baseY > mapHeight/2*TILE ){ buildY = baseY - nBaseRange/3;}
-      if ( baseY < mapHeight/2*TILE ){ buildY = baseY + nBaseRange/3;}
+      //default
+      buildX = baseX;
+      buildY = baseY;
+      
+      if ( bEnemyIsNear ){
+        
+        //pick up best position
+        if ( baseX > aPl[nNearestEnemy][X_COORD] ){
+          buildX = baseX - 5*TILE - random(4)*TILE;     
+        } 
+        if ( baseX < aPl[nNearestEnemy][X_COORD] ){
+          buildX = baseX + 5*TILE + random(4)*TILE;
+        } 
+        if ( baseY > aPl[nNearestEnemy][Y_COORD] ){
+          buildY = baseY - 5*TILE - random(4)*TILE;     
+        } 
+        if ( baseY < aPl[nNearestEnemy][Y_COORD] ){
+          buildY = baseY + 5*TILE + random(4)*TILE;
+        }
+
+      } else {
+
+        if ( baseX > mapWidth/2*TILE ){ buildX = baseX - nBaseRange/3;}
+        if ( baseX < mapWidth/2*TILE ){ buildX = baseX + nBaseRange/3;}
+        if ( baseY > mapHeight/2*TILE ){ buildY = baseY - nBaseRange/3;}
+        if ( baseY < mapHeight/2*TILE ){ buildY = baseY + nBaseRange/3;}
+
+      }
+      //dbg("buildArtillery; 0a CBTime("& gameTime - tCBSense &") senstr av("& isStructureAvailable(sensorTower,player) &")  artInBase("& _numWeapInBase &") ",player);
+      
       if( pickStructLocation(sensStruct, ref buildX, ref buildY, player ) ){
   			if ( droidCanReach(_droid, buildX, buildY) ){
           printDebug1("buildArtillery; force building of sensorTower in ("& buildX/TILE &"-"& buildY/TILE &") ");
@@ -15584,22 +15469,45 @@ function void buildArtillery(DROID _droid)
   if ( gameTime - tCBSense > 1*TIME_MINUTE ){
     if ( isStructureAvailable(CBSense,player) and _numWeapInBase > 1 and numStructinRange(CBSense,player, baseX, baseY, nBaseRange + TILE*3) == 0 )
     {
-      if ( baseX > mapWidth/2*TILE ){ buildX = baseX - nBaseRange/3;}
-      if ( baseX < mapWidth/2*TILE ){ buildX = baseX + nBaseRange/3;}
-      if ( baseY > mapHeight/2*TILE ){ buildY = baseY - nBaseRange/3;}
-      if ( baseY < mapHeight/2*TILE ){ buildY = baseY + nBaseRange/3;}
-      if( pickStructLocation(CBSense, ref buildX, ref buildY, player ) ){
-  			if ( droidCanReach(_droid, buildX, buildY) ){
-          printDebug1("buildArtillery; force building of CBSense in ("& buildX/TILE &"-"& buildY/TILE &")");
-          orderDroidStatsLoc(_droid, DORDER_BUILD,CBSense,buildX,buildY);
-          tCBSense = gameTime;
-          return;
+      buildX = baseX;
+      buildY = baseY;
+
+      if ( bEnemyIsNear ){
+        
+        //pick up best position
+        if ( baseX > aPl[nNearestEnemy][X_COORD] ){
+          buildX = baseX - 5*TILE - random(4)*TILE;     
+        } 
+        if ( baseX < aPl[nNearestEnemy][X_COORD] ){
+          buildX = baseX + 5*TILE + random(4)*TILE;
+        } 
+        if ( baseY > aPl[nNearestEnemy][Y_COORD] ){
+          buildY = baseY - 5*TILE - random(4)*TILE;     
+        } 
+        if ( baseY < aPl[nNearestEnemy][Y_COORD] ){
+          buildY = baseY + 5*TILE + random(4)*TILE;
         }
+
+      } else {
+
+        if ( baseX > mapWidth/2*TILE ){ buildX = baseX - nBaseRange/3;}
+        if ( baseX < mapWidth/2*TILE ){ buildX = baseX + nBaseRange/3;}
+        if ( baseY > mapHeight/2*TILE ){ buildY = baseY - nBaseRange/3;}
+        if ( baseY < mapHeight/2*TILE ){ buildY = baseY + nBaseRange/3;}
+        if( pickStructLocation(CBSense, ref buildX, ref buildY, player ) ){
+    			if ( droidCanReach(_droid, buildX, buildY) ){
+            printDebug1("buildArtillery; force building of CBSense in ("& buildX/TILE &"-"& buildY/TILE &")");
+            orderDroidStatsLoc(_droid, DORDER_BUILD,CBSense,buildX,buildY);
+            tCBSense = gameTime;
+            return;
+          }
+        }
+      
       }
     }
   }
 
-  //dbg("buildArtillery Weap: lMinBaseStructBuilt("& lMinBaseStructBuilt &") num weap in base("& _numWeapInBase &") lStopBuildDef("& lStopBuildDef &") tLastArtilleryBuilt("& tLastArtilleryBuilt &")",player);
+  //dbg("buildArtillery; 1 lMinStr("& lMinBaseStructBuilt &") bEnemyIsNear("& bEnemyIsNear &")  nArtilleryPos("& nArtilleryPos &") artInBase("& _numWeapInBase &") lStopBuildDef("& lStopBuildDef &") tLastArtilleryBuilt("& tLastArtilleryBuilt &")",player);
   //if ( gameTime - tLastArtilleryBuilt < 1 * TIME_MINUTE ){ exit; }  
   
   // build AA defenses.
@@ -15608,23 +15516,26 @@ function void buildArtillery(DROID _droid)
     //pick up the position - nNearestEnemy
     if ( bEnemyIsNear ){
       
-      //buildCB first!
-      
+      //default
+      buildX = baseX;
+      buildY = baseY;
       
       //pick up best position
       if ( baseX > aPl[nNearestEnemy][X_COORD] ){
-        buildX = baseX - 5*TILE;     
+        buildX = baseX - 5*TILE - random(4)*TILE;     
       } 
       if ( baseX < aPl[nNearestEnemy][X_COORD] ){
-        buildX = baseX + 5*TILE;
+        buildX = baseX + 5*TILE + random(4)*TILE;
       } 
       if ( baseY > aPl[nNearestEnemy][Y_COORD] ){
-        buildY = baseY - 5*TILE;     
+        buildY = baseY - 5*TILE - random(4)*TILE;     
       } 
       if ( baseY < aPl[nNearestEnemy][Y_COORD] ){
-        buildY = baseY + 5*TILE;
+        buildY = baseY + 5*TILE + random(4)*TILE;
       }
-    
+  
+  //dbg("buildArtillery; 1a nNearestEnemy("& nNearestEnemy &") dist("& count/TILE &") myBase("& baseX/TILE &"-"& baseY/TILE &") EnemyBase("& aPl[nNearestEnemy][X_COORD]/TILE &"-"& aPl[nNearestEnemy][Y_COORD]/TILE &")  Build("& buildX/TILE &"-"& buildY/TILE &")",player);
+
     } else {
       
       nArtilleryPos++;
@@ -15634,6 +15545,7 @@ function void buildArtillery(DROID _droid)
     
     }
     
+    //dbg("buildArtillery; 2 build def ["& _nBestDef &"] ("& buildX/TILE &"-"& buildY/TILE &")",player);
     if ( buildX < TILE*4 ) { buildX = TILE*4; }
     if ( buildY < TILE*4 ) { buildY = TILE*4; }
     
@@ -15642,6 +15554,7 @@ function void buildArtillery(DROID _droid)
       if(boolResult and droidCanReach(_droid, buildX ,buildY) )	
       {
         
+        //dbg("buildArtillery; 3 build def ["& _nBestDef &"] ("& buildX/TILE &"-"& buildY/TILE &")",player);
         printDebug1("buildArtillery;  build def ["& _nBestDef &"] _numWeapInBase("& _numWeapInBase &")");
         orderDroidStatsLoc(_droid, DORDER_BUILD,incendrys[_nBestDef],buildX,buildY);
         tLastArtilleryBuilt = gameTime;
@@ -15835,7 +15748,7 @@ function void defendBase(DROID _droid)
 			if(boolResult and gameTime - tLastbuildBaseDef > 80) 
 			{
 				if ( droidCanReach(_droid, buildX, buildY) ){
-          printDebug1("defendBase; building base defence on coord _rnd("& _rnd &") ("& buildX/TILE &"-"& buildY/TILE &") defSpotX-Y("& defSpotX/TILE &")("& defSpotY/TILE &") pos("& nDefendBasePos &")");
+          //printDebug1("defendBase; building base defence on coord _rnd("& _rnd &") ("& buildX/TILE &"-"& buildY/TILE &") defSpotX-Y("& defSpotX/TILE &")("& defSpotY/TILE &") pos("& nDefendBasePos &")");
           orderDroidStatsLoc(_droid, DORDER_BUILD,_defStruct,buildX,buildY);
           tLastbuildBaseDef = gameTime;
         }
@@ -15871,15 +15784,15 @@ function void buildGatewayDef(DROID _defTruck)
         
       _defStruct = getDefStruct(true);
         
-      if(isStructureAvailable(_defStruct,player) and gameTime - tProd1 > 80 ){
+      if(isStructureAvailable(_defStruct,player) and gameTime - tGtwDefBuilt > 80 ){
         if( _defStruct != demAnomallyFix){ //hack to avoid a warzone BUG!!!
           if( droidCanReach(_defTruck, _x ,_y) ){
             _bOK = skDefenseLocationB(ref _x, ref _y, wall, _defStruct, _defTruck, player);
             if ( !_bOK ){
               _bOK2 = skDefenseLocation(ref _x, ref _y, wall, _defStruct, _defTruck, player);
             }
-            printDebug1("buildGatewayDef();  ok("& _bOK &") ok2("& _bOK2 &") build WALL DEF, at("& _x/TILE &"-"& _y/TILE &")");
-            tProd1 = gameTime;
+            //printDebug1("buildGatewayDef();  ok("& _bOK &") ok2("& _bOK2 &") build WALL DEF, at("& _x/TILE &"-"& _y/TILE &")");
+            tGtwDefBuilt = gameTime;
           }
         } else {
           printDebug1("#### buildGatewayDef();  TRYING to build demolish struct!! ");
@@ -16004,7 +15917,7 @@ function int getPosToBuildDef(int _pos){
   _tiles  = nBaseRange/3;
   
   //dbg("getPosToBuildDef: MapPos("& aPl[player][PL_POSITION] &")  _pos("& _pos &") _tiles("& _tiles/TILE &") baseRng("& nBaseRange/TILE &") base("&  baseX/TILE &")("& baseY/TILE &") ",player);
-  printDebug1("getPosToBuildDef: MapPos("& aPl[player][PL_POSITION] &")  _pos("& _pos &") _tiles("& _tiles/TILE &") baseRng("& nBaseRange/TILE &") base("&  baseX/TILE &")("& baseY/TILE &") ");
+  //printDebug1("getPosToBuildDef: MapPos("& aPl[player][PL_POSITION] &")  _pos("& _pos &") _tiles("& _tiles/TILE &") baseRng("& nBaseRange/TILE &") base("&  baseX/TILE &")("& baseY/TILE &") ");
   if ( aPl[player][PL_POSITION] == 0 ){
     if ( _pos > 2 ){ _pos = 0; }
     if ( _pos == 0 ){ buildX = baseX+_tiles; buildY = baseY+_tiles; }
