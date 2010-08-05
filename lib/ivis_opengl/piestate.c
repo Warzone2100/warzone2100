@@ -27,7 +27,7 @@
 #include <SDL.h>
 #include <SDL_mouse.h>
 #include <physfs.h>
-#include <SDL/SDL_opengl.h>
+#include <SDL_opengl.h>
 
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piedef.h"

@@ -367,8 +367,12 @@ AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found.]))
 AC_CHECK_LIB(physfs, PHYSFS_init, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS not found.]), [${WIN32_LIBS}])
 
 # Look for OpenGL
-AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
+CPPFLAGS_SAVE="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
+AC_CHECK_HEADER([SDL_opengl.h], [],
 	AC_MSG_ERROR([SDL OpenGL header not found. Please install SDL with OpenGL support.]))
+CPPFLAGS="$CPPFLAGS_SAVE"
+
 AC_CHECK_LIB(GL, main,
 	OPENGL_LIBS="-lGL",
 	AC_CHECK_LIB(opengl32, main,
