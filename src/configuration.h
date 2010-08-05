@@ -37,7 +37,7 @@ void closeConfig( void );
 void setDefaultFrameRateLimit(void);
 
 /// Default map for Skirmish
-static const char DEFAULTSKIRMISHMAP[] = "Rush";
+static const char DEFAULTSKIRMISHMAP[] = "Sk-Rush";
 
 #ifdef __cplusplus
 }

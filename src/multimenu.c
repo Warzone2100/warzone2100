@@ -569,16 +569,6 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 				sstrcpy(tips[tip_index], mapName);
 				free(mapName);
 
-				// Chop off the "Sk-" if necessary
-				if (strncmp(tips[tip_index], "Sk-", 3) == 0)
-				{
-					memmove(tips[tip_index], tips[tip_index]+3, strlen(tips[tip_index]+3)+1);
-				}
-				if (strncmp(tips[tip_index]+strlen(tips[tip_index])-3, "-T1", 3)==0)
-				{
-					tips[tip_index][strlen(tips[tip_index])-3] = 0;
-				}
-
 				sButInit.pTip = tips[tip_index];
 				sButInit.pText = tips[tip_index];
 				sButInit.UserData	= players;
