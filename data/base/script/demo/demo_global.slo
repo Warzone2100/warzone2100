@@ -47,7 +47,6 @@ event startup(CALL_GAMEINIT)
 
 	centreViewPos(3392, 10944);		//centre on P0 base
 
-	randomiseSeed();
 	playnum=0;
 	while (playnum < 8)
 	{

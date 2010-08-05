@@ -172,7 +172,6 @@ event startEvnt(CALL_GAMEINIT)
 
 
 	LZMess = numLZ+1;					//force to recalc
-	randomiseSeed();
 /*
 //also don't allow building on 1CA's enemy LZs!
 	count = 0;
