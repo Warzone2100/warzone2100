@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 17:47+0200\n"
+"POT-Creation-Date: 2010-08-08 20:38+0200\n"
 "PO-Revision-Date: 2010-07-26 09:40+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -13328,7 +13328,7 @@ msgid "Go to Transport"
 msgstr "Idź do transportu"
 
 #: src/intorder.c:177
-#: src/keymap.c:420
+#: src/keymap.c:419
 msgid "Return for Recycling"
 msgstr "Wróć na przetworzenie"
 
@@ -13703,6 +13703,11 @@ msgstr "Przełącz limit prędkości formacji"
 msgid "View Location of Previous Message"
 msgstr "Wyświetl miejsce ostatniej wiadomości"
 
+#: src/keymap.c:307
+#, fuzzy
+msgid "Toggle Sensor display"
+msgstr "Przełącz wyświetlanie konsoli"
+
 #: src/keymap.c:311
 msgid "Assign Group 0"
 msgstr "Przypisz grupę 0"
@@ -13955,6 +13960,38 @@ msgstr "Wróć do kwatery głównej"
 msgid "Send Text Message"
 msgstr "Wyślij wiadomość tekstową"
 
+#: src/keymap.c:399
+msgid "Drop a beacon"
+msgstr ""
+
+#: src/keymap.c:401
+#, fuzzy
+msgid "Sensor display On"
+msgstr "Zasięg radaru"
+
+#: src/keymap.c:402
+msgid "Sensor display Off"
+msgstr ""
+
+#: src/keymap.c:403
+#, fuzzy
+msgid "Toggles shadows"
+msgstr "Włącz cienie"
+
+#: src/keymap.c:404
+#, fuzzy
+msgid "Trap cursor"
+msgstr "Złap kursor"
+
+#: src/keymap.c:405
+#, fuzzy
+msgid "Toggle radar terrain"
+msgstr "Przełącz radar"
+
+#: src/keymap.c:406
+msgid "Toggle ally-enemy radar view"
+msgstr ""
+
 #: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr "Zaznacz wszystkie jednostki bojowe"
@@ -13963,55 +14000,55 @@ msgstr "Zaznacz wszystkie jednostki bojowe"
 msgid "Select all Heavily Damaged Units"
 msgstr "Zaznacz wszystkie ciężko uszkodzone jednostki"
 
-#: src/keymap.c:418
+#: src/keymap.c:417
 msgid "Select all Half-tracks"
 msgstr "Zaznacz wszystkie jednostki na pół-gąsienicach"
 
-#: src/keymap.c:419
+#: src/keymap.c:418
 msgid "Select all Hovers"
 msgstr "Zaznacz wszystkie poduszkowce"
 
-#: src/keymap.c:421
+#: src/keymap.c:420
 msgid "Select all Units on Screen"
 msgstr "Zaznacz wszystkie jednostki na ekranie"
 
-#: src/keymap.c:422
+#: src/keymap.c:421
 msgid "Select all Tracks"
 msgstr "Zaznacz wszystkie jednostki na gąsienicach"
 
-#: src/keymap.c:423
+#: src/keymap.c:422
 msgid "Select EVERY unit"
 msgstr "Zaznacz WSZYSTKIE jednostki"
 
-#: src/keymap.c:424
+#: src/keymap.c:423
 msgid "Select all VTOLs"
 msgstr "Zaznacz wszystkie VTOL"
 
-#: src/keymap.c:425
+#: src/keymap.c:424
 msgid "Select all Wheels"
 msgstr "Zaznacz wszystkie jednostki kołowe"
 
-#: src/keymap.c:427
+#: src/keymap.c:426
 msgid "Select all Similar Units"
 msgstr "Zaznacz wszystkie podobne jednostki"
 
-#: src/keymap.c:431
+#: src/keymap.c:430
 msgid "Select next Factory"
 msgstr "Zaznacz kolejną Fabrykę"
 
-#: src/keymap.c:432
+#: src/keymap.c:431
 msgid "Select next Research Facility"
 msgstr "Zaznacz kolejną Stację Badawczą"
 
-#: src/keymap.c:433
+#: src/keymap.c:432
 msgid "Select next Power Generator"
 msgstr "Zaznacz następny Generator"
 
-#: src/keymap.c:434
+#: src/keymap.c:433
 msgid "Select next Cyborg Factory"
 msgstr "Zaznacz następną Fabrykę Cyborgów"
 
-#: src/keymap.c:435
+#: src/keymap.c:434
 msgid "Toggle reopening the build menu"
 msgstr "Przełącz otwieranie menu budowania"
 

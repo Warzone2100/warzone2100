@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 17:47+0200\n"
+"POT-Creation-Date: 2010-08-08 20:38+0200\n"
 "PO-Revision-Date: 2010-06-10 02:04+0300\n"
 "Last-Translator: Filipp Chertiev <f@fzfx.ru>\n"
 "Language-Team: Russian <>\n"
@@ -13319,7 +13319,7 @@ msgid "Go to Transport"
 msgstr "Идти к транспорту"
 
 #: src/intorder.c:177
-#: src/keymap.c:420
+#: src/keymap.c:419
 msgid "Return for Recycling"
 msgstr "Вернуться для утилизации"
 
@@ -13694,6 +13694,11 @@ msgstr "Ограничения скорости"
 msgid "View Location of Previous Message"
 msgstr "Обзор места предыдущего сообщения"
 
+#: src/keymap.c:307
+#, fuzzy
+msgid "Toggle Sensor display"
+msgstr "Переключатель консоли"
+
 #: src/keymap.c:311
 msgid "Assign Group 0"
 msgstr "Назначить группу 0"
@@ -13946,6 +13951,38 @@ msgstr "Вернуться к штабу"
 msgid "Send Text Message"
 msgstr "Отправить сообщение"
 
+#: src/keymap.c:399
+msgid "Drop a beacon"
+msgstr ""
+
+#: src/keymap.c:401
+#, fuzzy
+msgid "Sensor display On"
+msgstr "Дальность сенсора"
+
+#: src/keymap.c:402
+msgid "Sensor display Off"
+msgstr ""
+
+#: src/keymap.c:403
+#, fuzzy
+msgid "Toggles shadows"
+msgstr "Включить тени"
+
+#: src/keymap.c:404
+#, fuzzy
+msgid "Trap cursor"
+msgstr "Захват курсора"
+
+#: src/keymap.c:405
+#, fuzzy
+msgid "Toggle radar terrain"
+msgstr "Переключатель радара"
+
+#: src/keymap.c:406
+msgid "Toggle ally-enemy radar view"
+msgstr ""
+
 #: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr "Выделить все боевые юниты"
@@ -13954,55 +13991,55 @@ msgstr "Выделить все боевые юниты"
 msgid "Select all Heavily Damaged Units"
 msgstr "Выделить всю сильно поврежденную технику"
 
-#: src/keymap.c:418
+#: src/keymap.c:417
 msgid "Select all Half-tracks"
 msgstr "Выделить всю технику на полугусеничном ходу"
 
-#: src/keymap.c:419
+#: src/keymap.c:418
 msgid "Select all Hovers"
 msgstr "Выделить всю технику на воздушной подушке"
 
-#: src/keymap.c:421
+#: src/keymap.c:420
 msgid "Select all Units on Screen"
 msgstr "Выделить все технику на экране"
 
-#: src/keymap.c:422
+#: src/keymap.c:421
 msgid "Select all Tracks"
 msgstr "Выделить всю технику на гусеничном ходу"
 
-#: src/keymap.c:423
+#: src/keymap.c:422
 msgid "Select EVERY unit"
 msgstr "Выделить КАЖДОГО юнита"
 
-#: src/keymap.c:424
+#: src/keymap.c:423
 msgid "Select all VTOLs"
 msgstr "Выделить всю воздушную технику"
 
-#: src/keymap.c:425
+#: src/keymap.c:424
 msgid "Select all Wheels"
 msgstr "Выделить всю технику на колесах"
 
-#: src/keymap.c:427
+#: src/keymap.c:426
 msgid "Select all Similar Units"
 msgstr "Выделить всех похожих юнитов"
 
-#: src/keymap.c:431
+#: src/keymap.c:430
 msgid "Select next Factory"
 msgstr "Выбрать следующий завод техники"
 
-#: src/keymap.c:432
+#: src/keymap.c:431
 msgid "Select next Research Facility"
 msgstr "Выбрать следующую исследовательскую лабораторию"
 
-#: src/keymap.c:433
+#: src/keymap.c:432
 msgid "Select next Power Generator"
 msgstr "Выбрать следующий генератор энергии"
 
-#: src/keymap.c:434
+#: src/keymap.c:433
 msgid "Select next Cyborg Factory"
 msgstr "Выбрать следующий завод киборгов"
 
-#: src/keymap.c:435
+#: src/keymap.c:434
 msgid "Toggle reopening the build menu"
 msgstr "Открыть заново меню постройки"
 

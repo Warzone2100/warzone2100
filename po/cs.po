@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 17:47+0200\n"
+"POT-Creation-Date: 2010-08-08 20:38+0200\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -13384,7 +13384,7 @@ msgid "Go to Transport"
 msgstr "Nastup do Transportu"
 
 #: src/intorder.c:177
-#: src/keymap.c:420
+#: src/keymap.c:419
 msgid "Return for Recycling"
 msgstr ""
 
@@ -13770,6 +13770,10 @@ msgstr ""
 msgid "View Location of Previous Message"
 msgstr "Zobrazit pozici předchozí zprávy"
 
+#: src/keymap.c:307
+msgid "Toggle Sensor display"
+msgstr ""
+
 #: src/keymap.c:311
 #, fuzzy
 msgid "Assign Group 0"
@@ -14032,6 +14036,36 @@ msgstr "Zpět na HQ"
 msgid "Send Text Message"
 msgstr "Poslat textovou zprávu"
 
+#: src/keymap.c:399
+msgid "Drop a beacon"
+msgstr ""
+
+#: src/keymap.c:401
+#, fuzzy
+msgid "Sensor display On"
+msgstr "Dosah snímačů"
+
+#: src/keymap.c:402
+msgid "Sensor display Off"
+msgstr ""
+
+#: src/keymap.c:403
+#, fuzzy
+msgid "Toggles shadows"
+msgstr "Povolit stíny"
+
+#: src/keymap.c:404
+msgid "Trap cursor"
+msgstr ""
+
+#: src/keymap.c:405
+msgid "Toggle radar terrain"
+msgstr ""
+
+#: src/keymap.c:406
+msgid "Toggle ally-enemy radar view"
+msgstr ""
+
 #: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr "Vybrat všechny Bojové Jednotky"
@@ -14040,56 +14074,56 @@ msgstr "Vybrat všechny Bojové Jednotky"
 msgid "Select all Heavily Damaged Units"
 msgstr "Vybrat všechny Těžce Poškozené Jednotky"
 
-#: src/keymap.c:418
+#: src/keymap.c:417
 msgid "Select all Half-tracks"
 msgstr "Vybrat všechny Kolopásové Jednotky"
 
-#: src/keymap.c:419
+#: src/keymap.c:418
 msgid "Select all Hovers"
 msgstr "Vybrat všechna Vznášedla"
 
-#: src/keymap.c:421
+#: src/keymap.c:420
 msgid "Select all Units on Screen"
 msgstr "Vybrat všechny Jednotky na Obrazovce"
 
-#: src/keymap.c:422
+#: src/keymap.c:421
 msgid "Select all Tracks"
 msgstr "Vybrat všechny Pásové Jednotky"
 
-#: src/keymap.c:423
+#: src/keymap.c:422
 msgid "Select EVERY unit"
 msgstr "Vybrat VŠECHNY jednotky"
 
-#: src/keymap.c:424
+#: src/keymap.c:423
 msgid "Select all VTOLs"
 msgstr ""
 
-#: src/keymap.c:425
+#: src/keymap.c:424
 msgid "Select all Wheels"
 msgstr "Vybet všechny Kolové Jednotky"
 
-#: src/keymap.c:427
+#: src/keymap.c:426
 #, fuzzy
 msgid "Select all Similar Units"
 msgstr "Vybet všechny Podobné Jednotky"
 
-#: src/keymap.c:431
+#: src/keymap.c:430
 msgid "Select next Factory"
 msgstr "Vybrat další Továrnu"
 
-#: src/keymap.c:432
+#: src/keymap.c:431
 msgid "Select next Research Facility"
 msgstr "Vybrat další Výzkumné Zařízení"
 
-#: src/keymap.c:433
+#: src/keymap.c:432
 msgid "Select next Power Generator"
 msgstr "Vybrat další generátor energie"
 
-#: src/keymap.c:434
+#: src/keymap.c:433
 msgid "Select next Cyborg Factory"
 msgstr ""
 
-#: src/keymap.c:435
+#: src/keymap.c:434
 msgid "Toggle reopening the build menu"
 msgstr ""
 

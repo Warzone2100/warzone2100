@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 17:47+0200\n"
+"POT-Creation-Date: 2010-08-08 20:38+0200\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -13456,7 +13456,7 @@ msgid "Go to Transport"
 msgstr "Pojdi do prevoza"
 
 #: src/intorder.c:177
-#: src/keymap.c:420
+#: src/keymap.c:419
 msgid "Return for Recycling"
 msgstr "Vrni se za reciklažo"
 
@@ -13833,6 +13833,11 @@ msgstr "Nastavi omejevanje hitrosti reda"
 msgid "View Location of Previous Message"
 msgstr "Poglej položaj prejšnjega sporočila"
 
+#: src/keymap.c:307
+#, fuzzy
+msgid "Toggle Sensor display"
+msgstr "Nastavi konzolni zaslon"
+
 #: src/keymap.c:311
 msgid "Assign Group 0"
 msgstr "Dodeli skupino 0"
@@ -14086,6 +14091,38 @@ msgstr "Vrni se v GS"
 msgid "Send Text Message"
 msgstr "Pošlji besedilno sporočilo"
 
+#: src/keymap.c:399
+msgid "Drop a beacon"
+msgstr ""
+
+#: src/keymap.c:401
+#, fuzzy
+msgid "Sensor display On"
+msgstr "Domet senzorja"
+
+#: src/keymap.c:402
+msgid "Sensor display Off"
+msgstr ""
+
+#: src/keymap.c:403
+#, fuzzy
+msgid "Toggles shadows"
+msgstr "Omogoči sence"
+
+#: src/keymap.c:404
+#, fuzzy
+msgid "Trap cursor"
+msgstr "Ujemi kazalec"
+
+#: src/keymap.c:405
+#, fuzzy
+msgid "Toggle radar terrain"
+msgstr "Nastavi radar"
+
+#: src/keymap.c:406
+msgid "Toggle ally-enemy radar view"
+msgstr ""
+
 #: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr "Izberi vse bojne enote"
@@ -14094,56 +14131,56 @@ msgstr "Izberi vse bojne enote"
 msgid "Select all Heavily Damaged Units"
 msgstr "Izberi vse težko poškodovane enote"
 
-#: src/keymap.c:418
+#: src/keymap.c:417
 msgid "Select all Half-tracks"
 msgstr "Izberi vse polgosenice"
 
-#: src/keymap.c:419
+#: src/keymap.c:418
 msgid "Select all Hovers"
 msgstr "Izberi vse zračne blazine"
 
-#: src/keymap.c:421
+#: src/keymap.c:420
 msgid "Select all Units on Screen"
 msgstr "Izberi vse enote na zaslonu"
 
-#: src/keymap.c:422
+#: src/keymap.c:421
 msgid "Select all Tracks"
 msgstr "Izberi vse gosenice"
 
-#: src/keymap.c:423
+#: src/keymap.c:422
 msgid "Select EVERY unit"
 msgstr "Izberi VSE enote"
 
-#: src/keymap.c:424
+#: src/keymap.c:423
 msgid "Select all VTOLs"
 msgstr "Izberi vse NVP"
 
-#: src/keymap.c:425
+#: src/keymap.c:424
 msgid "Select all Wheels"
 msgstr "Izberi vsa kolesa"
 
-#: src/keymap.c:427
+#: src/keymap.c:426
 #, fuzzy
 msgid "Select all Similar Units"
 msgstr "Izberi vse istovrstne enote"
 
-#: src/keymap.c:431
+#: src/keymap.c:430
 msgid "Select next Factory"
 msgstr "Izberi naslednjo tovarno"
 
-#: src/keymap.c:432
+#: src/keymap.c:431
 msgid "Select next Research Facility"
 msgstr "Izberi naslednjo raziskovalno stavbo"
 
-#: src/keymap.c:433
+#: src/keymap.c:432
 msgid "Select next Power Generator"
 msgstr "Izberi naslednji generator moči"
 
-#: src/keymap.c:434
+#: src/keymap.c:433
 msgid "Select next Cyborg Factory"
 msgstr "Izberi naslednjo tovarno kiborgov"
 
-#: src/keymap.c:435
+#: src/keymap.c:434
 msgid "Toggle reopening the build menu"
 msgstr "Nastavi ponovno odpiranje gradbenega menija"
 

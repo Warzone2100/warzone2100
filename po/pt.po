@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 17:47+0200\n"
+"POT-Creation-Date: 2010-08-08 20:38+0200\n"
 "PO-Revision-Date: 2009-08-04 22:59+0100\n"
 "Last-Translator: Pedro Miguel Martins da Silva Caetano <pedro.m.caetano@netcabo.pt>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
@@ -13461,7 +13461,7 @@ msgid "Go to Transport"
 msgstr "Ir para o Transporte"
 
 #: src/intorder.c:177
-#: src/keymap.c:420
+#: src/keymap.c:419
 msgid "Return for Recycling"
 msgstr "Voltar para Reciclagem"
 
@@ -13840,6 +13840,11 @@ msgstr "Activar/Desactivar Limitador de Velocidade da Formação"
 msgid "View Location of Previous Message"
 msgstr "Ver localizacão da mensagem anterior"
 
+#: src/keymap.c:307
+#, fuzzy
+msgid "Toggle Sensor display"
+msgstr "Activar/Desactivar Ecrâ de Consola"
+
 #: src/keymap.c:311
 msgid "Assign Group 0"
 msgstr "Designar Grupo 0"
@@ -14093,6 +14098,38 @@ msgstr "Voltar ao QG"
 msgid "Send Text Message"
 msgstr "Enviar mensagem"
 
+#: src/keymap.c:399
+msgid "Drop a beacon"
+msgstr ""
+
+#: src/keymap.c:401
+#, fuzzy
+msgid "Sensor display On"
+msgstr "Alcance do sensor"
+
+#: src/keymap.c:402
+msgid "Sensor display Off"
+msgstr ""
+
+#: src/keymap.c:403
+#, fuzzy
+msgid "Toggles shadows"
+msgstr "Activar sombras"
+
+#: src/keymap.c:404
+#, fuzzy
+msgid "Trap cursor"
+msgstr "Restringir Cursor"
+
+#: src/keymap.c:405
+#, fuzzy
+msgid "Toggle radar terrain"
+msgstr "Activar/Desactivar Radar"
+
+#: src/keymap.c:406
+msgid "Toggle ally-enemy radar view"
+msgstr ""
+
 #: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr "Seleccionar todas as unidades de combate"
@@ -14101,56 +14138,56 @@ msgstr "Seleccionar todas as unidades de combate"
 msgid "Select all Heavily Damaged Units"
 msgstr "Seleccionar Todas as Unidades Muito Danificadas"
 
-#: src/keymap.c:418
+#: src/keymap.c:417
 msgid "Select all Half-tracks"
 msgstr "Seleccionar todos os veículos movidos por meias-lagartas"
 
-#: src/keymap.c:419
+#: src/keymap.c:418
 msgid "Select all Hovers"
 msgstr "Seleccionar todos os Hovercrafts"
 
-#: src/keymap.c:421
+#: src/keymap.c:420
 msgid "Select all Units on Screen"
 msgstr "Seleccionar Todas as Unidades no Ecrâ"
 
-#: src/keymap.c:422
+#: src/keymap.c:421
 msgid "Select all Tracks"
 msgstr "Seleccionar todos os veículos movidos por Lagartas"
 
-#: src/keymap.c:423
+#: src/keymap.c:422
 msgid "Select EVERY unit"
 msgstr "Seleccionar TODAS as unidades"
 
-#: src/keymap.c:424
+#: src/keymap.c:423
 msgid "Select all VTOLs"
 msgstr "Seleccionar todos os VTOL"
 
-#: src/keymap.c:425
+#: src/keymap.c:424
 msgid "Select all Wheels"
 msgstr "Seleccionar todos os veículos movidos por Rodas"
 
-#: src/keymap.c:427
+#: src/keymap.c:426
 #, fuzzy
 msgid "Select all Similar Units"
 msgstr "Seleccionar todas as Unidades Semelhantes"
 
-#: src/keymap.c:431
+#: src/keymap.c:430
 msgid "Select next Factory"
 msgstr "Seleccionar a próxima Fábrica"
 
-#: src/keymap.c:432
+#: src/keymap.c:431
 msgid "Select next Research Facility"
 msgstr "Seleccionar o próximo Centro de Investigação"
 
-#: src/keymap.c:433
+#: src/keymap.c:432
 msgid "Select next Power Generator"
 msgstr "Seleccionar o próximo Gerador de Energia"
 
-#: src/keymap.c:434
+#: src/keymap.c:433
 msgid "Select next Cyborg Factory"
 msgstr "Seleccionar a próxima Fábrica de Cyborgs"
 
-#: src/keymap.c:435
+#: src/keymap.c:434
 msgid "Toggle reopening the build menu"
 msgstr "Activar / desactivar reabertura do menu de construção"
 
