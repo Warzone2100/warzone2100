@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 17:44+0200\n"
+"POT-Creation-Date: 2010-08-08 20:42+0200\n"
 "PO-Revision-Date: 2010-04-21 08:32-0500\n"
 "Last-Translator: Gilles J. Séguin <segg2@videotron.ca>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -13384,7 +13384,7 @@ msgid "Go to Transport"
 msgstr "Aller au Transporteur"
 
 #: src/intorder.c:177
-#: src/keymap.c:420
+#: src/keymap.c:419
 msgid "Return for Recycling"
 msgstr "Retour pour Recyclage"
 
@@ -13769,6 +13769,11 @@ msgstr "Activer/Désactiver la Limite de vitesse en Formation"
 msgid "View Location of Previous Message"
 msgstr "Voir la Provenance du Dernier Message Reçu"
 
+#: src/keymap.c:307
+#, fuzzy
+msgid "Toggle Sensor display"
+msgstr "Affichage de la Console"
+
 #: src/keymap.c:311
 msgid "Assign Group 0"
 msgstr "Assigner au Groupe 0"
@@ -14021,6 +14026,38 @@ msgstr "Retour au QG"
 msgid "Send Text Message"
 msgstr "Envoyer un Message Textuel"
 
+#: src/keymap.c:399
+msgid "Drop a beacon"
+msgstr ""
+
+#: src/keymap.c:401
+#, fuzzy
+msgid "Sensor display On"
+msgstr "Portée des Senseurs"
+
+#: src/keymap.c:402
+msgid "Sensor display Off"
+msgstr ""
+
+#: src/keymap.c:403
+#, fuzzy
+msgid "Toggles shadows"
+msgstr "Activer les Ombres"
+
+#: src/keymap.c:404
+#, fuzzy
+msgid "Trap cursor"
+msgstr "Piéger le Curseur"
+
+#: src/keymap.c:405
+#, fuzzy
+msgid "Toggle radar terrain"
+msgstr "Affichage du Radar"
+
+#: src/keymap.c:406
+msgid "Toggle ally-enemy radar view"
+msgstr ""
+
 #: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr "Sélectionner toutes les Unités de Combat"
@@ -14029,58 +14066,158 @@ msgstr "Sélectionner toutes les Unités de Combat"
 msgid "Select all Heavily Damaged Units"
 msgstr "Sélectionner toutes les unités Sévèrement Endommagées"
 
-#: src/keymap.c:418
+#: src/keymap.c:417
 msgid "Select all Half-tracks"
 msgstr "Selectionner toutes les Autochenilles"
 
-#: src/keymap.c:419
+#: src/keymap.c:418
 msgid "Select all Hovers"
 msgstr "Selectionner tous les aéro-glisseur"
 
-#: src/keymap.c:421
+#: src/keymap.c:420
 msgid "Select all Units on Screen"
 msgstr "Sélectionner toutes les Unités à l'Écran"
 
-#: src/keymap.c:422
+#: src/keymap.c:421
 msgid "Select all Tracks"
 msgstr "Sélectionner touts les Véhicules à Chenilles"
 
-#: src/keymap.c:423
+#: src/keymap.c:422
 msgid "Select EVERY unit"
 msgstr "Sélectionner TOUTES les Unités"
 
-#: src/keymap.c:424
+#: src/keymap.c:423
 msgid "Select all VTOLs"
 msgstr "Sélectionner tous les VTOLs"
 
-#: src/keymap.c:425
+#: src/keymap.c:424
 msgid "Select all Wheels"
 msgstr "Sélectionner tous les Véhicules à Roues"
 
-#: src/keymap.c:427
+#: src/keymap.c:425
+msgid "Show frame rate"
+msgstr ""
+
+#: src/keymap.c:426
 #, fuzzy
 msgid "Select all Similar Units"
 msgstr "Sélectionner toutes les unitées similaires"
 
-#: src/keymap.c:431
+#: src/keymap.c:430
 msgid "Select next Factory"
 msgstr "Sélectionner l'Usine suivante"
 
-#: src/keymap.c:432
+#: src/keymap.c:431
 msgid "Select next Research Facility"
 msgstr "Sélectionner le Centre de recheche suivant"
 
-#: src/keymap.c:433
+#: src/keymap.c:432
 msgid "Select next Power Generator"
 msgstr "Sélectionner le Générateur d'énergie suivant"
 
-#: src/keymap.c:434
+#: src/keymap.c:433
 msgid "Select next Cyborg Factory"
 msgstr "Sélectionner l'Usine à Cyborgs suivante"
 
-#: src/keymap.c:435
+#: src/keymap.c:434
 msgid "Toggle reopening the build menu"
 msgstr "Activer/Désactiver la réouverture du menu des Constructions"
+
+#: src/keymap.c:438
+msgid "Toggle display of droid path"
+msgstr ""
+
+#: src/keymap.c:439
+msgid "Toggle display of gateways"
+msgstr ""
+
+#: src/keymap.c:440
+#, fuzzy
+msgid "Toggle Debug Mappings"
+msgstr "Raccourcis Clavier"
+
+#: src/keymap.c:441
+msgid "Show all keyboard mappings - use pause!"
+msgstr ""
+
+#: src/keymap.c:442
+#, fuzzy
+msgid "Toggle visibility"
+msgstr "Bascules des Overlays"
+
+#: src/keymap.c:443
+#, fuzzy
+msgid "Raise tile height"
+msgstr "Rotation vers la Droite"
+
+#: src/keymap.c:444
+msgid "Lower tile height"
+msgstr ""
+
+#: src/keymap.c:445
+msgid "Toggles on/off DEMO Mode"
+msgstr ""
+
+#: src/keymap.c:446
+#, fuzzy
+msgid "End Mission"
+msgstr "Termine la mission"
+
+#: src/keymap.c:447
+#, fuzzy
+msgid "Toggles All fog"
+msgstr "Activer/Désactiver l'état des Alliances"
+
+#: src/keymap.c:448
+msgid "Trigger some weather"
+msgstr ""
+
+#: src/keymap.c:449
+msgid "Flip terrain triangle"
+msgstr ""
+
+#: src/keymap.c:450
+#, fuzzy
+msgid "Realign height of all objects on the map"
+msgstr "Align height of all map objects"
+
+#: src/keymap.c:453
+#, fuzzy
+msgid "Make all items available"
+msgstr "Tout les éléments sont disponibles"
+
+#: src/keymap.c:454
+#, fuzzy
+msgid "Kill Selected Unit(s)"
+msgstr "Céder les Unités Sélectionnées"
+
+#: src/keymap.c:455
+#, fuzzy
+msgid "Toggle god Mode Status"
+msgstr "Activer/Désactiver l'état des Alliances"
+
+#: src/keymap.c:456
+#, fuzzy
+msgid "Display Options Screen"
+msgstr "Afficher les Options de Jeu"
+
+#: src/keymap.c:457
+#, fuzzy
+msgid "Complete current research"
+msgstr "Permet de rechercher la tourelle de commandement"
+
+#: src/keymap.c:458
+msgid "Toggle watch window"
+msgstr ""
+
+#: src/keymap.c:459
+msgid "Trace a game object"
+msgstr ""
+
+#: src/keymap.c:460
+#, fuzzy
+msgid "Toggle Driving Mode"
+msgstr "Basculer la Caméra Traqueuse"
 
 #: src/loop.c:543
 #: src/loop.c:559

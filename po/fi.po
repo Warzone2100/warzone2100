@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 17:44+0200\n"
+"POT-Creation-Date: 2010-08-08 20:42+0200\n"
 "PO-Revision-Date: 2010-01-01 21:08+0200\n"
 "Last-Translator: Tefa <muu_posti@hotamil.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -13287,7 +13287,7 @@ msgid "Go to Transport"
 msgstr ""
 
 #: src/intorder.c:177
-#: src/keymap.c:420
+#: src/keymap.c:419
 msgid "Return for Recycling"
 msgstr "Palaa kierrätykseen"
 
@@ -13667,6 +13667,10 @@ msgstr ""
 msgid "View Location of Previous Message"
 msgstr ""
 
+#: src/keymap.c:307
+msgid "Toggle Sensor display"
+msgstr ""
+
 #: src/keymap.c:311
 msgid "Assign Group 0"
 msgstr ""
@@ -13921,6 +13925,35 @@ msgstr ""
 msgid "Send Text Message"
 msgstr "Lähetä Viesti"
 
+#: src/keymap.c:399
+msgid "Drop a beacon"
+msgstr ""
+
+#: src/keymap.c:401
+msgid "Sensor display On"
+msgstr ""
+
+#: src/keymap.c:402
+msgid "Sensor display Off"
+msgstr ""
+
+#: src/keymap.c:403
+#, fuzzy
+msgid "Toggles shadows"
+msgstr "Varjot päällä"
+
+#: src/keymap.c:404
+msgid "Trap cursor"
+msgstr ""
+
+#: src/keymap.c:405
+msgid "Toggle radar terrain"
+msgstr ""
+
+#: src/keymap.c:406
+msgid "Toggle ally-enemy radar view"
+msgstr ""
+
 #: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr ""
@@ -13929,56 +13962,146 @@ msgstr ""
 msgid "Select all Heavily Damaged Units"
 msgstr ""
 
-#: src/keymap.c:418
+#: src/keymap.c:417
 msgid "Select all Half-tracks"
 msgstr ""
 
-#: src/keymap.c:419
+#: src/keymap.c:418
 msgid "Select all Hovers"
 msgstr ""
 
-#: src/keymap.c:421
+#: src/keymap.c:420
 msgid "Select all Units on Screen"
 msgstr ""
 
-#: src/keymap.c:422
+#: src/keymap.c:421
 msgid "Select all Tracks"
 msgstr ""
 
-#: src/keymap.c:423
+#: src/keymap.c:422
 msgid "Select EVERY unit"
 msgstr ""
 
-#: src/keymap.c:424
+#: src/keymap.c:423
 msgid "Select all VTOLs"
 msgstr ""
 
-#: src/keymap.c:425
+#: src/keymap.c:424
 msgid "Select all Wheels"
 msgstr ""
 
-#: src/keymap.c:427
+#: src/keymap.c:425
+msgid "Show frame rate"
+msgstr ""
+
+#: src/keymap.c:426
 msgid "Select all Similar Units"
 msgstr ""
 
-#: src/keymap.c:431
+#: src/keymap.c:430
 msgid "Select next Factory"
 msgstr ""
 
-#: src/keymap.c:432
+#: src/keymap.c:431
 msgid "Select next Research Facility"
 msgstr ""
 
-#: src/keymap.c:433
+#: src/keymap.c:432
 msgid "Select next Power Generator"
 msgstr ""
 
-#: src/keymap.c:434
+#: src/keymap.c:433
 msgid "Select next Cyborg Factory"
 msgstr ""
 
-#: src/keymap.c:435
+#: src/keymap.c:434
 msgid "Toggle reopening the build menu"
+msgstr ""
+
+#: src/keymap.c:438
+msgid "Toggle display of droid path"
+msgstr ""
+
+#: src/keymap.c:439
+msgid "Toggle display of gateways"
+msgstr ""
+
+#: src/keymap.c:440
+msgid "Toggle Debug Mappings"
+msgstr ""
+
+#: src/keymap.c:441
+msgid "Show all keyboard mappings - use pause!"
+msgstr ""
+
+#: src/keymap.c:442
+msgid "Toggle visibility"
+msgstr ""
+
+#: src/keymap.c:443
+#, fuzzy
+msgid "Raise tile height"
+msgstr "Käännä Oikeaan"
+
+#: src/keymap.c:444
+msgid "Lower tile height"
+msgstr ""
+
+#: src/keymap.c:445
+msgid "Toggles on/off DEMO Mode"
+msgstr ""
+
+#: src/keymap.c:446
+msgid "End Mission"
+msgstr ""
+
+#: src/keymap.c:447
+msgid "Toggles All fog"
+msgstr ""
+
+#: src/keymap.c:448
+msgid "Trigger some weather"
+msgstr ""
+
+#: src/keymap.c:449
+msgid "Flip terrain triangle"
+msgstr ""
+
+#: src/keymap.c:450
+msgid "Realign height of all objects on the map"
+msgstr ""
+
+#: src/keymap.c:453
+#, fuzzy
+msgid "Make all items available"
+msgstr "Ei pelejä saatavilla"
+
+#: src/keymap.c:454
+msgid "Kill Selected Unit(s)"
+msgstr ""
+
+#: src/keymap.c:455
+msgid "Toggle god Mode Status"
+msgstr ""
+
+#: src/keymap.c:456
+msgid "Display Options Screen"
+msgstr ""
+
+#: src/keymap.c:457
+msgid "Complete current research"
+msgstr ""
+
+#: src/keymap.c:458
+msgid "Toggle watch window"
+msgstr ""
+
+#: src/keymap.c:459
+msgid "Trace a game object"
+msgstr ""
+
+#: src/keymap.c:460
+msgid "Toggle Driving Mode"
 msgstr ""
 
 #: src/loop.c:543
