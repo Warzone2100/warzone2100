@@ -1510,8 +1510,6 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
 	SDWORD			xDiff,yDiff;
 	WEAPON_STATS	*psStats;
 	UDWORD			radSquared;
-	UDWORD			damageSoFar;
-	SDWORD			damageToDo;
 	float			relativeDamage;
 
 	CHECK_PROJECTILE(psProj);
@@ -1554,11 +1552,15 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
 			{
 				/* Calculate how much damage should have
 				   been done up till now */
-				damageSoFar = (gameTime - psCurr->burnStart)
-				              * MAX((int32_t)weaponIncenDamage(psStats,psProj->player) - (int32_t)psCurr->armour[HIT_SIDE_FRONT][WC_HEAT], weaponIncenDamage(psStats,psProj->player)/3)
-				              / GAME_TICKS_PER_SEC;
-				damageToDo = (SDWORD)damageSoFar
-				             - (SDWORD)psCurr->burnDamage;
+				const int timeburned = gameTime - psCurr->burnStart;
+				const int weapondamage = weaponIncenDamage(psStats, psProj->player);
+				const int armourreduceddamage = weapondamage - psCurr->armour[HIT_SIDE_FRONT][WC_HEAT];
+				const int minimaldamage = weapondamage / 3;
+				const int realdamage = MAX(armourreduceddamage, minimaldamage);
+
+				const int damageSoFar = realdamage * timeburned / GAME_TICKS_PER_SEC;
+				int damageToDo = damageSoFar - psCurr->burnDamage;
+
 				if (damageToDo > 20) // maximum DR becomes 95% instead of previous 0%
 				{
 					damageToDo -= (damageToDo % 20); // make deterministic

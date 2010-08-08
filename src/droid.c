@@ -806,7 +806,6 @@ void droidUpdate(DROID *psDroid)
 	Vector3i dv;
 	UDWORD	percentDamage, emissionInterval;
 	BASE_OBJECT	*psBeingTargetted = NULL;
-	SDWORD	damageToDo;
 
 	CHECK_DROID(psDroid);
 
@@ -941,10 +940,16 @@ void droidUpdate(DROID *psDroid)
 			}
 			else
 			{
-				// do burn damage
-				damageToDo = MAX(BURN_DAMAGE - (int32_t)psDroid->armour[HIT_SIDE_FRONT][WC_HEAT], BURN_DAMAGE/3) * ((SDWORD)gameTime - (SDWORD)psDroid->burnStart) /
-								GAME_TICKS_PER_SEC;
-				damageToDo -= (SDWORD)psDroid->burnDamage;
+				/* Calculate how much damage should have
+				   been done up till now */
+				const int timeburned = gameTime - psDroid->burnStart;
+				const int armourreduceddamage = BURN_DAMAGE - psDroid->armour[HIT_SIDE_FRONT][WC_HEAT];
+				const int minimaldamage = BURN_DAMAGE / 3;
+				const int realdamage = MAX(armourreduceddamage, minimaldamage);
+
+				const int damageSoFar = realdamage * timeburned / GAME_TICKS_PER_SEC;
+				int damageToDo = damageSoFar - psDroid->burnDamage;
+
 				if (damageToDo > 20) // enough that DR takes effect
 				{
 					damageToDo -= (damageToDo % 20); // make deterministic
