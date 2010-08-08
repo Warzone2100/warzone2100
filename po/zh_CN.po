@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:21+0200\n"
+"POT-Creation-Date: 2010-08-08 17:52+0200\n"
 "PO-Revision-Date: 2009-05-13 16:12+0800\n"
 "Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -6150,11 +6150,6 @@ msgstr "螳螂坦克"
 msgid "Transport Body"
 msgstr "车体"
 
-#: data/base/messages/strings/names.txt:297
-#: data/mp/messages/strings/names.txt:300
-msgid "Z NULL BRAIN"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
 #: data/base/messages/strings/names.txt:648
@@ -6164,27 +6159,12 @@ msgstr ""
 msgid "Command Turret"
 msgstr "指挥炮塔"
 
-#: data/base/messages/strings/names.txt:303
-#: data/mp/messages/strings/names.txt:306
-msgid "Z NULL PROGRAM"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:307
 #: data/base/messages/strings/names.txt:392
 #: data/mp/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:399
 msgid "Demolish"
 msgstr "拆除"
-
-#: data/base/messages/strings/names.txt:310
-#: data/mp/messages/strings/names.txt:313
-msgid "Z NULL CONSTRUCT"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:317
-msgid "Z NULL PROP"
-msgstr ""
 
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:318
@@ -6280,16 +6260,6 @@ msgstr "生化步兵三型"
 msgid "Naval"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:337
-#: data/mp/messages/strings/names.txt:340
-msgid "BaBaProp"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:338
-#: data/mp/messages/strings/names.txt:341
-msgid "BaBaLegs"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
@@ -6297,26 +6267,11 @@ msgstr ""
 msgid "Cyborg Propulsion"
 msgstr "生化步兵"
 
-#: data/base/messages/strings/names.txt:345
-#: data/mp/messages/strings/names.txt:348
-msgid "Z NULL REPAIR"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
 #, fuzzy
 msgid "Repair Turret"
 msgstr "维修中心"
-
-#: data/base/messages/strings/names.txt:349
-#: data/mp/messages/strings/names.txt:352
-msgid "Z NULL ECM"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:362
-#: data/mp/messages/strings/names.txt:365
-msgid "Z NULL SENSOR"
-msgstr ""
 
 #: data/base/messages/strings/names.txt:367
 #: data/base/messages/strings/names.txt:423
@@ -7034,10 +6989,6 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:559
 #: data/mp/messages/strings/names.txt:998
 msgid "Hurricane AA Turret"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:558
-msgid "LasSat"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:560
@@ -12401,8 +12352,8 @@ msgstr "重型加农炮"
 msgid "Plasmite Retribution VTOL"
 msgstr "中量级车体 - 惩罚者"
 
-#: lib/framework/i18n.c:88
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:147
 msgid "System locale"
 msgstr "系统语言"
 
@@ -12431,7 +12382,7 @@ msgstr ""
 #: src/intorder.c:787
 #: src/loadsave.c:256
 #: src/multimenu.c:479
-#: src/multimenu.c:1367
+#: src/multimenu.c:1357
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12579,7 +12530,7 @@ msgstr ""
 
 #: src/configuration.c:443
 #: src/configuration.c:444
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "玩家"
 
@@ -13250,7 +13201,7 @@ msgstr "建造建筑 (F3)"
 
 #: src/hci.c:3878
 #: src/multiint.c:1246
-#: src/multimenu.c:773
+#: src/multimenu.c:763
 msgid "Power"
 msgstr "能源"
 
@@ -14399,7 +14350,7 @@ msgid "Distance Fog"
 msgstr "薄雾（可以看见地形）"
 
 #: src/multiint.c:1213
-#: src/multimenu.c:766
+#: src/multimenu.c:756
 msgid "Alliances"
 msgstr "同盟"
 
@@ -14591,74 +14542,74 @@ msgstr "返回到前一个屏幕"
 msgid "Limits reset to default values"
 msgstr ""
 
-#: src/multimenu.c:619
+#: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "技术等级1"
 
-#: src/multimenu.c:627
+#: src/multimenu.c:617
 msgid "Technology level 2"
 msgstr "技术等级2"
 
-#: src/multimenu.c:633
+#: src/multimenu.c:623
 msgid "Technology level 3"
 msgstr "技术等级3"
 
-#: src/multimenu.c:639
+#: src/multimenu.c:629
 msgid "Any number of players"
 msgstr ""
 
-#: src/multimenu.c:646
+#: src/multimenu.c:636
 msgid "2 players"
 msgstr "2个玩家"
 
-#: src/multimenu.c:652
+#: src/multimenu.c:642
 msgid "4 players"
 msgstr "4个玩家"
 
-#: src/multimenu.c:658
+#: src/multimenu.c:648
 msgid "8 players"
 msgstr "8个玩家"
 
-#: src/multimenu.c:767
+#: src/multimenu.c:757
 msgid "Score"
 msgstr "分数"
 
-#: src/multimenu.c:768
+#: src/multimenu.c:758
 msgid "Kills"
 msgstr "杀敌"
 
-#: src/multimenu.c:772
-#: src/multimenu.c:777
+#: src/multimenu.c:762
+#: src/multimenu.c:767
 #, fuzzy
 msgid "Units"
 msgstr "单位"
 
-#: src/multimenu.c:782
+#: src/multimenu.c:772
 msgid "Ping"
 msgstr ""
 
-#: src/multimenu.c:786
+#: src/multimenu.c:776
 #, fuzzy
 msgid "Structs"
 msgstr "损失建筑物"
 
-#: src/multimenu.c:1150
+#: src/multimenu.c:1140
 msgid "Toggle Alliance State"
 msgstr ""
 
-#: src/multimenu.c:1169
+#: src/multimenu.c:1159
 msgid "Give Visibility Report"
 msgstr ""
 
-#: src/multimenu.c:1175
+#: src/multimenu.c:1165
 msgid "Leak Technology Documents"
 msgstr ""
 
-#: src/multimenu.c:1182
+#: src/multimenu.c:1172
 msgid "Hand Over Selected Units"
 msgstr ""
 
-#: src/multimenu.c:1188
+#: src/multimenu.c:1178
 msgid "Give Power To Player"
 msgstr ""
 
