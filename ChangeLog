@@ -1,3 +1,14 @@
+2010-08-xx: Version 2.3.4
+ * General:
+   * Fix: Really fix burn damage calculations (r11393, ticket:2045)
+ * Multiplayer:
+   * Change: Show less netcode errors/warnings (r11356)
+ * DyDo-AI:
+   * Update to 2.2.3, improved efficiency of research for research path Gunners and Cannons, minor fixes (r11374, r11375, r11377, r11388)
+   * New challenges using not included maps again... (r11373, r11376)
+ * Translations:
+   * Updated: Brazilian (r11364, ticket:2043), Korean (r11396, ticket:2055)
+
 2010-08-01: Version 2.3.3
  * General:
    * Fix: Prevent out of bounds access of player stat arrays that would corrupt random memory (r11322, ticket:2029)
