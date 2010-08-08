@@ -292,204 +292,204 @@ void	keyInitMappings( BOOL bForceDefaults )
 	//                                **********************************
 	//                                **********************************
 	//									FUNCTION KEY MAPPINGS F1 to F12
-	keyAddMapping(KEYMAP_ALWAYS_PROCESS,KEY_IGNORE,KEY_F1,KEYMAP_PRESSED,kf_ChooseManufacture,		_("Manufacture"));
-	keyAddMapping(KEYMAP_ALWAYS_PROCESS,KEY_IGNORE,KEY_F2,KEYMAP_PRESSED,kf_ChooseResearch,			_("Research"));
-	keyAddMapping(KEYMAP_ALWAYS_PROCESS,KEY_IGNORE,KEY_F3,KEYMAP_PRESSED,kf_ChooseBuild,			_("Build"));
-	keyAddMapping(KEYMAP_ALWAYS_PROCESS,KEY_IGNORE,KEY_F4,KEYMAP_PRESSED,kf_ChooseDesign,			_("Design"));
-   	keyAddMapping(KEYMAP_ALWAYS_PROCESS,KEY_IGNORE,KEY_F5,KEYMAP_PRESSED,kf_ChooseIntelligence,		_("Intelligence Display"));
-   	keyAddMapping(KEYMAP_ALWAYS_PROCESS,KEY_IGNORE,KEY_F6,KEYMAP_PRESSED,kf_ChooseCommand,			_("Commanders"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F7,KEYMAP_PRESSED,kf_ToggleRadar,			_("Toggle Radar"));
-  	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F8,KEYMAP_PRESSED,kf_ToggleConsole,			_("Toggle Console Display"));
-  	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F9,KEYMAP_PRESSED,kf_ToggleEnergyBars,			_("Toggle Damage Bars On/Off"));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_F10,KEYMAP_PRESSED,kf_ScreenDump,				_("Take Screen Shot"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F11,KEYMAP_PRESSED,kf_ToggleFormationSpeedLimiting,			_("Toggle Formation Speed Limiting"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F12,KEYMAP_PRESSED,kf_MoveToLastMessagePos, _("View Location of Previous Message"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LSHIFT,KEY_F12,KEYMAP_PRESSED,kf_ToggleSensorDisplay,"Toggle Sensor display"); //Which key should we use? --Re enabled see below! -Q 5-10-05
+	keyAddMapping(KEYMAP_ALWAYS_PROCESS, KEY_IGNORE, KEY_F1,  KEYMAP_PRESSED, kf_ChooseManufacture,            N_("Manufacture"));
+	keyAddMapping(KEYMAP_ALWAYS_PROCESS, KEY_IGNORE, KEY_F2,  KEYMAP_PRESSED, kf_ChooseResearch,               N_("Research"));
+	keyAddMapping(KEYMAP_ALWAYS_PROCESS, KEY_IGNORE, KEY_F3,  KEYMAP_PRESSED, kf_ChooseBuild,                  N_("Build"));
+	keyAddMapping(KEYMAP_ALWAYS_PROCESS, KEY_IGNORE, KEY_F4,  KEYMAP_PRESSED, kf_ChooseDesign,                 N_("Design"));
+	keyAddMapping(KEYMAP_ALWAYS_PROCESS, KEY_IGNORE, KEY_F5,  KEYMAP_PRESSED, kf_ChooseIntelligence,           N_("Intelligence Display"));
+	keyAddMapping(KEYMAP_ALWAYS_PROCESS, KEY_IGNORE, KEY_F6,  KEYMAP_PRESSED, kf_ChooseCommand,                N_("Commanders"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F7,  KEYMAP_PRESSED, kf_ToggleRadar,                  N_("Toggle Radar"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F8,  KEYMAP_PRESSED, kf_ToggleConsole,                N_("Toggle Console Display"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F9,  KEYMAP_PRESSED, kf_ToggleEnergyBars,             N_("Toggle Damage Bars On/Off"));
+	keyAddMapping(KEYMAP_ALWAYS,         KEY_IGNORE, KEY_F10, KEYMAP_PRESSED, kf_ScreenDump,                   N_("Take Screen Shot"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F11, KEYMAP_PRESSED, kf_ToggleFormationSpeedLimiting, N_("Toggle Formation Speed Limiting"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F12, KEYMAP_PRESSED, kf_MoveToLastMessagePos,         N_("View Location of Previous Message"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_LSHIFT, KEY_F12, KEYMAP_PRESSED, kf_ToggleSensorDisplay,          N_("Toggle Sensor display")); //Which key should we use? --Re enabled see below! -Q 5-10-05
 	//                                **********************************
 	//                                **********************************
 	//										ASSIGN GROUPS
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_0,KEYMAP_PRESSED,kf_AssignGrouping_0,				_("Assign Group 0"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_1,KEYMAP_PRESSED,kf_AssignGrouping_1,				_("Assign Group 1"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_2,KEYMAP_PRESSED,kf_AssignGrouping_2,				_("Assign Group 2"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_3,KEYMAP_PRESSED,kf_AssignGrouping_3,				_("Assign Group 3"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_4,KEYMAP_PRESSED,kf_AssignGrouping_4,				_("Assign Group 4"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_5,KEYMAP_PRESSED,kf_AssignGrouping_5,				_("Assign Group 5"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_6,KEYMAP_PRESSED,kf_AssignGrouping_6,				_("Assign Group 6"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_7,KEYMAP_PRESSED,kf_AssignGrouping_7,				_("Assign Group 7"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_8,KEYMAP_PRESSED,kf_AssignGrouping_8,				_("Assign Group 8"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_9,KEYMAP_PRESSED,kf_AssignGrouping_9,				_("Assign Group 9"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_0, KEYMAP_PRESSED, kf_AssignGrouping_0, N_("Assign Group 0"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_1, KEYMAP_PRESSED, kf_AssignGrouping_1, N_("Assign Group 1"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_2, KEYMAP_PRESSED, kf_AssignGrouping_2, N_("Assign Group 2"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_3, KEYMAP_PRESSED, kf_AssignGrouping_3, N_("Assign Group 3"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_4, KEYMAP_PRESSED, kf_AssignGrouping_4, N_("Assign Group 4"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_5, KEYMAP_PRESSED, kf_AssignGrouping_5, N_("Assign Group 5"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_6, KEYMAP_PRESSED, kf_AssignGrouping_6, N_("Assign Group 6"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_7, KEYMAP_PRESSED, kf_AssignGrouping_7, N_("Assign Group 7"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_8, KEYMAP_PRESSED, kf_AssignGrouping_8, N_("Assign Group 8"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_9, KEYMAP_PRESSED, kf_AssignGrouping_9, N_("Assign Group 9"));
 	//                                **********************************
 	//                                **********************************
 	//	SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_0,KEYMAP_PRESSED,kf_SelectGrouping_0,				_("Select Group 0"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_1,KEYMAP_PRESSED,kf_SelectGrouping_1,				_("Select Group 1"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_2,KEYMAP_PRESSED,kf_SelectGrouping_2,				_("Select Group 2"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_3,KEYMAP_PRESSED,kf_SelectGrouping_3,				_("Select Group 3"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_4,KEYMAP_PRESSED,kf_SelectGrouping_4,				_("Select Group 4"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_5,KEYMAP_PRESSED,kf_SelectGrouping_5,				_("Select Group 5"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_6,KEYMAP_PRESSED,kf_SelectGrouping_6,				_("Select Group 6"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_7,KEYMAP_PRESSED,kf_SelectGrouping_7,				_("Select Group 7"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_8,KEYMAP_PRESSED,kf_SelectGrouping_8,				_("Select Group 8"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_9,KEYMAP_PRESSED,kf_SelectGrouping_9,				_("Select Group 9"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_0, KEYMAP_PRESSED, kf_SelectGrouping_0, N_("Select Group 0"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_1, KEYMAP_PRESSED, kf_SelectGrouping_1, N_("Select Group 1"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_2, KEYMAP_PRESSED, kf_SelectGrouping_2, N_("Select Group 2"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_3, KEYMAP_PRESSED, kf_SelectGrouping_3, N_("Select Group 3"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_4, KEYMAP_PRESSED, kf_SelectGrouping_4, N_("Select Group 4"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_5, KEYMAP_PRESSED, kf_SelectGrouping_5, N_("Select Group 5"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_6, KEYMAP_PRESSED, kf_SelectGrouping_6, N_("Select Group 6"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_7, KEYMAP_PRESSED, kf_SelectGrouping_7, N_("Select Group 7"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_8, KEYMAP_PRESSED, kf_SelectGrouping_8, N_("Select Group 8"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_9, KEYMAP_PRESSED, kf_SelectGrouping_9, N_("Select Group 9"));
 	//                                **********************************
 	//                                **********************************
 	//	SELECT COMMANDER - Will jump to the group as well as select if group is ALREADY selected
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_0,KEYMAP_PRESSED,kf_SelectCommander_0,				_("Select Commander 0"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_1,KEYMAP_PRESSED,kf_SelectCommander_1,				_("Select Commander 1"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_2,KEYMAP_PRESSED,kf_SelectCommander_2,				_("Select Commander 2"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_3,KEYMAP_PRESSED,kf_SelectCommander_3,				_("Select Commander 3"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_4,KEYMAP_PRESSED,kf_SelectCommander_4,				_("Select Commander 4"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_5,KEYMAP_PRESSED,kf_SelectCommander_5,				_("Select Commander 5"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_6,KEYMAP_PRESSED,kf_SelectCommander_6,				_("Select Commander 6"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_7,KEYMAP_PRESSED,kf_SelectCommander_7,				_("Select Commander 7"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_8,KEYMAP_PRESSED,kf_SelectCommander_8,				_("Select Commander 8"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_9,KEYMAP_PRESSED,kf_SelectCommander_9,				_("Select Commander 9"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_0, KEYMAP_PRESSED, kf_SelectCommander_0, N_("Select Commander 0"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_1, KEYMAP_PRESSED, kf_SelectCommander_1, N_("Select Commander 1"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_2, KEYMAP_PRESSED, kf_SelectCommander_2, N_("Select Commander 2"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_3, KEYMAP_PRESSED, kf_SelectCommander_3, N_("Select Commander 3"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_4, KEYMAP_PRESSED, kf_SelectCommander_4, N_("Select Commander 4"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_5, KEYMAP_PRESSED, kf_SelectCommander_5, N_("Select Commander 5"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_6, KEYMAP_PRESSED, kf_SelectCommander_6, N_("Select Commander 6"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_7, KEYMAP_PRESSED, kf_SelectCommander_7, N_("Select Commander 7"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_8, KEYMAP_PRESSED, kf_SelectCommander_8, N_("Select Commander 8"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_9, KEYMAP_PRESSED, kf_SelectCommander_9, N_("Select Commander 9"));
 	//                                **********************************
 	//                                **********************************
 	//	MULTIPLAYER
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KPENTER,KEYMAP_PRESSED,kf_addMultiMenu,		_("Multiplayer Options / Alliance dialog"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KPENTER, KEYMAP_PRESSED, kf_addMultiMenu, N_("Multiplayer Options / Alliance dialog"));
 	//
 	//	GAME CONTROLS - Moving around, zooming in, rotating etc
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_BACKSPACE,KEYMAP_PRESSED,kf_SeekNorth,		_("Snap View to North"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_SPACE,KEYMAP_PRESSED,kf_ToggleCamera,		_("Toggle Tracking Camera"));
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_ESC,KEYMAP_PRESSED,kf_addInGameOptions,			_("Display In-Game Options"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_MINUS,KEYMAP_PRESSED,kf_RadarZoomOut,		_("Zoom Radar Out"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_EQUALS,KEYMAP_PRESSED,kf_RadarZoomIn,		_("Zoom Radar In"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KP_MINUS,KEYMAP_DOWN,kf_ZoomOut,				_("Zoom In"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KP_PLUS,KEYMAP_DOWN,kf_ZoomIn,				_("Zoom Out"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KP_2,KEYMAP_DOWN,kf_PitchForward,			_("Pitch Forward"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KP_4,KEYMAP_DOWN,kf_RotateLeft,				_("Rotate Left"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KP_5,KEYMAP_DOWN,kf_ResetPitch,				_("Reset Pitch"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KP_6,KEYMAP_DOWN,kf_RotateRight,				_("Rotate Right"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KP_8,KEYMAP_DOWN,kf_PitchBack,				_("Pitch Back"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KP_0,KEYMAP_PRESSED,kf_RightOrderMenu,		_("Orders Menu"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_MINUS,KEYMAP_PRESSED,kf_SlowDown,				_("Decrease Game Speed"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_EQUALS,KEYMAP_PRESSED,kf_SpeedUp,				_("Increase Game Speed"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_BACKSPACE,KEYMAP_PRESSED,kf_NormalSpeed,		_("Reset Game Speed"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_UPARROW,KEYMAP_PRESSED,kf_FaceNorth, _("View North"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_DOWNARROW,KEYMAP_PRESSED,kf_FaceSouth,_("View South") );
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_LEFTARROW,KEYMAP_PRESSED,kf_FaceEast, _("View East"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_RIGHTARROW,KEYMAP_PRESSED,kf_FaceWest, _("View West"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_KP_STAR,KEYMAP_PRESSED,kf_JumpToResourceExtractor,	_("View next Oil Derrick"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToRepairUnits,	_("View next Repair Unit"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToConstructorUnits,	_("View next Truck"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToSensorUnits,	_("View next Sensor Unit"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_JumpToCommandUnits,	_("View next Commander"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_TAB,KEYMAP_PRESSED,kf_ToggleOverlays,			_("Toggle Overlays"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_BACKQUOTE,KEYMAP_PRESSED,kf_ToggleConsoleDrop,_("Console On/Off"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_BACKSPACE,         KEYMAP_PRESSED, kf_SeekNorth,               N_("Snap View to North"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_SPACE,             KEYMAP_PRESSED, kf_ToggleCamera,            N_("Toggle Tracking Camera"));
+	keyAddMapping(KEYMAP_ALWAYS,     KEY_IGNORE, KEY_ESC,               KEYMAP_PRESSED, kf_addInGameOptions,        N_("Display In-Game Options"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_MINUS,             KEYMAP_PRESSED, kf_RadarZoomOut,            N_("Zoom Radar Out"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_EQUALS,            KEYMAP_PRESSED, kf_RadarZoomIn,             N_("Zoom Radar In"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_MINUS,          KEYMAP_DOWN,    kf_ZoomOut,                 N_("Zoom In"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_PLUS,           KEYMAP_DOWN,    kf_ZoomIn,                  N_("Zoom Out"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_2,              KEYMAP_DOWN,    kf_PitchForward,            N_("Pitch Forward"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_4,              KEYMAP_DOWN,    kf_RotateLeft,              N_("Rotate Left"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_5,              KEYMAP_DOWN,    kf_ResetPitch,              N_("Reset Pitch"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_6,              KEYMAP_DOWN,    kf_RotateRight,             N_("Rotate Right"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_8,              KEYMAP_DOWN,    kf_PitchBack,               N_("Pitch Back"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_0,              KEYMAP_PRESSED, kf_RightOrderMenu,          N_("Orders Menu"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_MINUS,             KEYMAP_PRESSED, kf_SlowDown,                N_("Decrease Game Speed"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_EQUALS,            KEYMAP_PRESSED, kf_SpeedUp,                 N_("Increase Game Speed"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_BACKSPACE,         KEYMAP_PRESSED, kf_NormalSpeed,             N_("Reset Game Speed"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_UPARROW,           KEYMAP_PRESSED, kf_FaceNorth,               N_("View North"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_DOWNARROW,         KEYMAP_PRESSED, kf_FaceSouth,               N_("View South") );
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_LEFTARROW,         KEYMAP_PRESSED, kf_FaceEast,                N_("View East"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_RIGHTARROW,        KEYMAP_PRESSED, kf_FaceWest,                N_("View West"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_STAR,           KEYMAP_PRESSED, kf_JumpToResourceExtractor, N_("View next Oil Derrick"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpToRepairUnits,       N_("View next Repair Unit"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpToConstructorUnits,  N_("View next Truck"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpToSensorUnits,       N_("View next Sensor Unit"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpToCommandUnits,      N_("View next Commander"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_TAB,               KEYMAP_PRESSED, kf_ToggleOverlays,          N_("Toggle Overlays"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_BACKQUOTE,         KEYMAP_PRESSED, kf_ToggleConsoleDrop,       N_("Console On/Off"));
 	//                                **********************************
 	// IN GAME MAPPINGS - Single key presses - ALL __DEBUG keymappings will be removed for master
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_B,KEYMAP_PRESSED,kf_CentreOnBase,			_("Center View on HQ"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_C,KEYMAP_PRESSED,kf_SetDroidAttackCease ,	_("Hold Fire"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_D,KEYMAP_PRESSED,kf_JumpToUnassignedUnits,	_("View Unassigned Units"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_E,KEYMAP_PRESSED,kf_SetDroidAttackReturn,	_("Return Fire"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_F,KEYMAP_PRESSED,kf_SetDroidAttackAtWill,	_("Fire at Will"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_G,KEYMAP_PRESSED,kf_SetDroidMoveGuard,		_("Guard Position"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_H,KEYMAP_PRESSED,kf_SetDroidReturnToBase,	_("Return to HQ"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_I,KEYMAP_PRESSED,kf_SetDroidRangeDefault,	_("Optimum Range"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_O,KEYMAP_PRESSED,kf_SetDroidRangeShort,		_("Short Range"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_P,KEYMAP_PRESSED,kf_SetDroidMovePursue ,		_("Pursue"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_Q,KEYMAP_PRESSED,kf_SetDroidMovePatrol ,		_("Patrol"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_R,KEYMAP_PRESSED,kf_SetDroidGoForRepair ,	_("Return For Repair"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_S,KEYMAP_PRESSED,kf_SetDroidMoveHold ,		_("Hold Position"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_T,KEYMAP_PRESSED,kf_SetDroidGoToTransport,	_("Go to Transport"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_RETURN,KEYMAP_PRESSED,kf_SendTextMessage,			_("Send Text Message"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_U,KEYMAP_PRESSED,kf_SetDroidRangeLong,		_("Long Range"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_B,      KEYMAP_PRESSED, kf_CentreOnBase,          N_("Center View on HQ"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_C,      KEYMAP_PRESSED, kf_SetDroidAttackCease,   N_("Hold Fire"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_D,      KEYMAP_PRESSED, kf_JumpToUnassignedUnits, N_("View Unassigned Units"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_E,      KEYMAP_PRESSED, kf_SetDroidAttackReturn,  N_("Return Fire"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_F,      KEYMAP_PRESSED, kf_SetDroidAttackAtWill,  N_("Fire at Will"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_G,      KEYMAP_PRESSED, kf_SetDroidMoveGuard,     N_("Guard Position"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_H,      KEYMAP_PRESSED, kf_SetDroidReturnToBase,  N_("Return to HQ"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_I,      KEYMAP_PRESSED, kf_SetDroidRangeDefault,  N_("Optimum Range"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_O,      KEYMAP_PRESSED, kf_SetDroidRangeShort,    N_("Short Range"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_P,      KEYMAP_PRESSED, kf_SetDroidMovePursue,    N_("Pursue"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_Q,      KEYMAP_PRESSED, kf_SetDroidMovePatrol,    N_("Patrol"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_R,      KEYMAP_PRESSED, kf_SetDroidGoForRepair,   N_("Return For Repair"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_S,      KEYMAP_PRESSED, kf_SetDroidMoveHold,      N_("Hold Position"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_T,      KEYMAP_PRESSED, kf_SetDroidGoToTransport, N_("Go to Transport"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_RETURN, KEYMAP_PRESSED, kf_SendTextMessage,       N_("Send Text Message"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_U,      KEYMAP_PRESSED, kf_SetDroidRangeLong,     N_("Long Range"));
 
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_H,KEYMAP_PRESSED,kf_AddHelpBlip,		"Drop a beacon");
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_H, KEYMAP_PRESSED, kf_AddHelpBlip, N_("Drop a beacon"));
 
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_SensorDisplayOn,		"Sensor display On");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_Z,KEYMAP_RELEASED,kf_SensorDisplayOff,	"Sensor display Off");
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_S,KEYMAP_PRESSED,kf_ToggleShadows, "Toggles shadows");
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_T, KEYMAP_PRESSED, kf_toggleTrapCursor, "Trap cursor");
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarTerrain,         "Toggle radar terrain");
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LSHIFT,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarAllyEnemy,      "Toggle ally-enemy radar view");
+	keyAddMapping(KEYMAP_ALWAYS,     KEY_IGNORE, KEY_Z,   KEYMAP_PRESSED,  kf_SensorDisplayOn,      N_("Sensor display On"));
+	keyAddMapping(KEYMAP_ALWAYS,     KEY_IGNORE, KEY_Z,   KEYMAP_RELEASED, kf_SensorDisplayOff,     N_("Sensor display Off"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_S,   KEYMAP_PRESSED,  kf_ToggleShadows,        N_("Toggles shadows"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_T,   KEYMAP_PRESSED,  kf_toggleTrapCursor,     N_("Trap cursor"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_TAB, KEYMAP_PRESSED,  kf_ToggleRadarTerrain,   N_("Toggle radar terrain"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_TAB, KEYMAP_PRESSED,  kf_ToggleRadarAllyEnemy, N_("Toggle ally-enemy radar view"));
 
 	// Some extra non QWERTY mappings but functioning in same way
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_COMMA,KEYMAP_PRESSED,kf_SetDroidRetreatMedium,	   _("Retreat at Medium Damage") );
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_FULLSTOP,KEYMAP_PRESSED,kf_SetDroidRetreatHeavy,	   _("Retreat at Heavy Damage") );
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_FORWARDSLASH,KEYMAP_PRESSED,kf_SetDroidRetreatNever,_("Do or Die!") );
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_COMMA,        KEYMAP_PRESSED, kf_SetDroidRetreatMedium, N_("Retreat at Medium Damage"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_FULLSTOP,     KEYMAP_PRESSED, kf_SetDroidRetreatHeavy,  N_("Retreat at Heavy Damage"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_FORWARDSLASH, KEYMAP_PRESSED, kf_SetDroidRetreatNever,  N_("Do or Die!"));
 	//                                **********************************
 	//                                **********************************
 	//								In game mappings - COMBO (CTRL + LETTER) presses.
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_A,KEYMAP_PRESSED,kf_SelectAllCombatUnits,		_("Select all Combat Units"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_D,KEYMAP_PRESSED,kf_SelectAllDamaged,			_("Select all Heavily Damaged Units"));
-
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_F,KEYMAP_PRESSED,kf_SelectAllHalfTracked,		_("Select all Half-tracks"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_H,KEYMAP_PRESSED,kf_SelectAllHovers,			_("Select all Hovers"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_R,KEYMAP_PRESSED,kf_SetDroidRecycle,			_("Return for Recycling"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_S,KEYMAP_PRESSED,kf_SelectAllOnScreenUnits,	_("Select all Units on Screen"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_T,KEYMAP_PRESSED,kf_SelectAllTracked,			_("Select all Tracks"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_U,KEYMAP_PRESSED,kf_SelectAllUnits,			_("Select EVERY unit"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_V,KEYMAP_PRESSED,kf_SelectAllVTOLs,			_("Select all VTOLs"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_W,KEYMAP_PRESSED,kf_SelectAllWheeled,			_("Select all Wheels"));
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_Y,KEYMAP_PRESSED,kf_FrameRate,					"Show frame rate");
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_Z,KEYMAP_PRESSED,kf_SelectAllSameType,		_("Select all Similar Units"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_A, KEYMAP_PRESSED, kf_SelectAllCombatUnits,   N_("Select all Combat Units"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_D, KEYMAP_PRESSED, kf_SelectAllDamaged,       N_("Select all Heavily Damaged Units"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_F, KEYMAP_PRESSED, kf_SelectAllHalfTracked,   N_("Select all Half-tracks"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_H, KEYMAP_PRESSED, kf_SelectAllHovers,        N_("Select all Hovers"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_R, KEYMAP_PRESSED, kf_SetDroidRecycle,        N_("Return for Recycling"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_S, KEYMAP_PRESSED, kf_SelectAllOnScreenUnits, N_("Select all Units on Screen"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_T, KEYMAP_PRESSED, kf_SelectAllTracked,       N_("Select all Tracks"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_U, KEYMAP_PRESSED, kf_SelectAllUnits,         N_("Select EVERY unit"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_V, KEYMAP_PRESSED, kf_SelectAllVTOLs,         N_("Select all VTOLs"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_W, KEYMAP_PRESSED, kf_SelectAllWheeled,       N_("Select all Wheels"));
+	keyAddMapping(KEYMAP__DEBUG,     KEY_LCTRL, KEY_Y, KEYMAP_PRESSED, kf_FrameRate,              "Show frame rate");
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_Z, KEYMAP_PRESSED, kf_SelectAllSameType,      N_("Select all Similar Units"));
 	//                                **********************************
 	//                                **********************************
 	//									SELECT PLAYERS - DEBUG ONLY
- 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextFactory,_("Select next Factory"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextResearch,_("Select next Research Facility"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextPowerStation,_("Select next Power Generator"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_SelectNextCyborgFactory,_("Select next Cyborg Factory"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_ToggleReopenBuildMenu,_("Toggle reopening the build menu"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextFactory,       N_("Select next Factory"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextResearch,      N_("Select next Research Facility"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextPowerStation,  N_("Select next Power Generator"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextCyborgFactory, N_("Select next Cyborg Factory"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_ToggleReopenBuildMenu,   N_("Toggle reopening the build menu"));
 
 	// Debug options
-	keyAddMapping(KEYMAP___HIDE,KEY_LSHIFT,KEY_BACKSPACE,KEYMAP_PRESSED,kf_ToggleDebugMappings,			"TOGGLE Debug Mappings");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_M,KEYMAP_PRESSED,kf_ToggleShowPath,				"Toggle display of droid path");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_E,KEYMAP_PRESSED,kf_ToggleShowGateways,			"Toggle display of gateways");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_M,KEYMAP_PRESSED,kf_ShowMappings,				"Show all keyboard mappings - use pause!");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_V,KEYMAP_PRESSED,kf_ToggleVisibility,			"Toggle visibility");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_W,KEYMAP_DOWN,kf_RaiseTile,					"Raise tile height");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_A,KEYMAP_DOWN,kf_LowerTile,						"Lower tile height");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Y,KEYMAP_PRESSED,kf_ToggleDemoMode,				"Toggles on/off DEMO Mode");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_B,KEYMAP_PRESSED,kf_EndMissionOffWorld,			"End Mission");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_J,KEYMAP_PRESSED,kf_ToggleFog,					"Toggles All fog");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_Q,KEYMAP_PRESSED,kf_ToggleWeather,				"Trigger some weather");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_K,KEYMAP_PRESSED,kf_TriFlip,					"Flip terrain triangle");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_K,KEYMAP_PRESSED,kf_MapCheck,					"Realign height of all objects on the map");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_A,KEYMAP_PRESSED,kf_AllAvailable,						"Make all items available");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_K,KEYMAP_PRESSED,kf_KillSelected,						"Kill Selected Unit(s)");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_G,KEYMAP_PRESSED,kf_ToggleGodMode,				"Toggle god Mode Status");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_O,KEYMAP_PRESSED,kf_ChooseOptions,				"Display Options Screen");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_X,KEYMAP_PRESSED,kf_FinishResearch,				"Complete current research");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_W,KEYMAP_PRESSED,kf_ToggleWatchWindow,			"Toggle watch window");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_L,KEYMAP_PRESSED,kf_TraceObject,				"Trace a game object");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_D,KEYMAP_PRESSED,kf_ToggleDrivingMode, 			"Toggle Driving Mode");
+	keyAddMapping(KEYMAP___HIDE, KEY_LSHIFT, KEY_BACKSPACE, KEYMAP_PRESSED, kf_ToggleDebugMappings, "Toggle Debug Mappings");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_M,         KEYMAP_PRESSED, kf_ToggleShowPath,      "Toggle display of droid path");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_E,         KEYMAP_PRESSED, kf_ToggleShowGateways,  "Toggle display of gateways");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_M,         KEYMAP_PRESSED, kf_ShowMappings,        "Show all keyboard mappings - use pause!");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_V,         KEYMAP_PRESSED, kf_ToggleVisibility,    "Toggle visibility");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_W,         KEYMAP_DOWN,    kf_RaiseTile,           "Raise tile height");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_A,         KEYMAP_DOWN,    kf_LowerTile,           "Lower tile height");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_Y,         KEYMAP_PRESSED, kf_ToggleDemoMode,      "Toggles on/off DEMO Mode");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_B,         KEYMAP_PRESSED, kf_EndMissionOffWorld,  "End Mission");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_J,         KEYMAP_PRESSED, kf_ToggleFog,           "Toggles All fog");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_Q,         KEYMAP_PRESSED, kf_ToggleWeather,       "Trigger some weather");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_K,         KEYMAP_PRESSED, kf_TriFlip,             "Flip terrain triangle");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_K,         KEYMAP_PRESSED, kf_MapCheck,            "Realign height of all objects on the map");
 
+	//These ones are necessary for debugging
+	keyAddMapping(KEYMAP__DEBUG, KEY_LALT,   KEY_A, KEYMAP_PRESSED, kf_AllAvailable,      "Make all items available");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LALT,   KEY_K, KEYMAP_PRESSED, kf_KillSelected,      "Kill Selected Unit(s)");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_G, KEYMAP_PRESSED, kf_ToggleGodMode,     "Toggle god Mode Status");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_O, KEYMAP_PRESSED, kf_ChooseOptions,     "Display Options Screen");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_X, KEYMAP_PRESSED, kf_FinishResearch,    "Complete current research");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_W, KEYMAP_PRESSED, kf_ToggleWatchWindow, "Toggle watch window");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_L, KEYMAP_PRESSED, kf_TraceObject,       "Trace a game object");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_D, KEYMAP_PRESSED, kf_ToggleDrivingMode, "Toggle Driving Mode");
 	saveKeyMap();	// save out the default key mappings.
 
 //  ------------------------ OLD STUFF - Store here!
 	/*
-	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_D,KEYMAP_PRESSED,kf_ToggleDrivingMode, 			"Toggle Driving Mode");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F6,KEYMAP_DOWN,kf_UpGeoOffset,"Raise the geometric offset");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F7,KEYMAP_DOWN,kf_DownGeoOffset,"Lower the geometric offset");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_E,KEYMAP_PRESSED,kf_ToggleDroidInfo,"Display droid info whilst tracking");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_I,KEYMAP_PRESSED,kf_ToggleWidgets,"Toggle Widgets");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_J,KEYMAP_PRESSED,kf_ToggleRadarAllign,"Toggles Radar allignment");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_R,KEYMAP_PRESSED,kf_ShowNumObjects,"Show number of Objects");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_T,KEYMAP_PRESSED,kf_SendTextMessage,"Send Text Message");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_U,KEYMAP_PRESSED,kf_ToggleBackgroundFog,"Toggle Background Fog");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_V,KEYMAP_PRESSED,kf_BuildInfo,"Build date and time");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Y,KEYMAP_PRESSED,kf_ToggleDemoMode,"Toggles on/off DEMO Mode");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Z,KEYMAP_PRESSED,kf_ShowGridInfo,"DBPRINTF map grid coverage");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_D, KEYMAP_PRESSED, kf_ToggleDrivingMode, 			"Toggle Driving Mode");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_F6, KEYMAP_DOWN, kf_UpGeoOffset,"Raise the geometric offset");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_F7, KEYMAP_DOWN, kf_DownGeoOffset,"Lower the geometric offset");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_E, KEYMAP_PRESSED, kf_ToggleDroidInfo,"Display droid info whilst tracking");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_I, KEYMAP_PRESSED, kf_ToggleWidgets,"Toggle Widgets");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_J, KEYMAP_PRESSED, kf_ToggleRadarAllign,"Toggles Radar allignment");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_R, KEYMAP_PRESSED, kf_ShowNumObjects,"Show number of Objects");
+	keyAddMapping(KEYMAP_ALWAYS, KEY_IGNORE, KEY_T, KEYMAP_PRESSED, kf_SendTextMessage,"Send Text Message");
+	keyAddMapping(KEYMAP_ALWAYS, KEY_IGNORE, KEY_U, KEYMAP_PRESSED, kf_ToggleBackgroundFog,"Toggle Background Fog");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_V, KEYMAP_PRESSED, kf_BuildInfo,"Build date and time");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_Y, KEYMAP_PRESSED, kf_ToggleDemoMode,"Toggles on/off DEMO Mode");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_Z, KEYMAP_PRESSED, kf_ShowGridInfo,"DBPRINTF map grid coverage");
 
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_SCROLLLOCK,KEYMAP_PRESSED,kf_TogglePauseMode,	_("Toggle Pause Mode"));		//not needed, done with KEY_ESC
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_J,KEYMAP_PRESSED,kf_MaxScrollLimits,				"Maximum scroll limits");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_N,KEYMAP_PRESSED,kf_GiveTemplateSet,				"Give template set(s) to player 0 ");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_KP_MINUS,KEYMAP_PRESSED,kf_SystemClose,			"System Close (EXIT)");			//not working right now
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_I,KEYMAP_PRESSED,kf_RecalcLighting,				"Recalculate lighting");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_N,KEYMAP_PRESSED,kf_NewPlayerPower,				"New game player power");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_SCROLLLOCK, KEYMAP_PRESSED, kf_TogglePauseMode,	_("Toggle Pause Mode"));		//not needed, done with KEY_ESC
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_J, KEYMAP_PRESSED, kf_MaxScrollLimits,				"Maximum scroll limits");
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_N, KEYMAP_PRESSED, kf_GiveTemplateSet,				"Give template set(s) to player 0 ");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_KP_MINUS, KEYMAP_PRESSED, kf_SystemClose,			"System Close (EXIT)");			//not working right now
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_I, KEYMAP_PRESSED, kf_RecalcLighting,				"Recalculate lighting");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_N, KEYMAP_PRESSED, kf_NewPlayerPower,				"New game player power");
 
 	// This is not needed, use ctrl-o
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F1,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  0");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F2,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  1");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F3,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  2");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F4,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  3");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F5,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  4");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F6,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  5");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F7,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  6");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F8,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  7");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F1, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  0");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F2, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  1");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F3, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  2");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F4, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  3");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F5, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  4");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F6, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  5");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F7, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  6");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F8, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  7");
 	*/
 }
 
@@ -878,11 +878,11 @@ BOOL	onlySub;
 	keyScanToString(psMapping->subKeyCode,(char *)&asciiSub,20);
 	if(onlySub)
 	{
-   		CONPRINTF(ConsoleString,(ConsoleString,"%s - %s",asciiSub,psMapping->pName));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s - %s", asciiSub, _(psMapping->pName)));
 	}
 	else
 	{
-		CONPRINTF(ConsoleString,(ConsoleString,"%s and %s - %s",asciiMeta,asciiSub,psMapping->pName));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s and %s - %s", asciiMeta, asciiSub, _(psMapping->pName)));
 	}
 	debug(LOG_INPUT, "Received %s from Console", ConsoleString);
 }
