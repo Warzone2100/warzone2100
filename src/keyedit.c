@@ -324,7 +324,7 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_D
 	iV_SetFont(font_regular);											// font type
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
-	iV_DrawText(psMapping->pName, x + 2, y + (psWidget->height / 2) + 3);
+	iV_DrawText(_(psMapping->pName), x + 2, y + (psWidget->height / 2) + 3);
 
 	// draw binding
 	keyMapToString(sKey,psMapping);
