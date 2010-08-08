@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 16:02+0200\n"
+"POT-Creation-Date: 2010-08-08 17:44+0200\n"
 "PO-Revision-Date: 2010-08-07 01:45+0900\n"
 "Last-Translator: Josh Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -6150,11 +6150,6 @@ msgstr ""
 msgid "Transport Body"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:297
-#: data/mp/messages/strings/names.txt:300
-msgid "Z NULL BRAIN"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
 #: data/base/messages/strings/names.txt:648
@@ -6164,26 +6159,11 @@ msgstr ""
 msgid "Command Turret"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:303
-#: data/mp/messages/strings/names.txt:306
-msgid "Z NULL PROGRAM"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:307
 #: data/base/messages/strings/names.txt:392
 #: data/mp/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:399
 msgid "Demolish"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:310
-#: data/mp/messages/strings/names.txt:313
-msgid "Z NULL CONSTRUCT"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:317
-msgid "Z NULL PROP"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:315
@@ -6281,16 +6261,6 @@ msgstr ""
 msgid "Naval"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:337
-#: data/mp/messages/strings/names.txt:340
-msgid "BaBaProp"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:338
-#: data/mp/messages/strings/names.txt:341
-msgid "BaBaLegs"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
@@ -6298,24 +6268,9 @@ msgstr ""
 msgid "Cyborg Propulsion"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:345
-#: data/mp/messages/strings/names.txt:348
-msgid "Z NULL REPAIR"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
 msgid "Repair Turret"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:349
-#: data/mp/messages/strings/names.txt:352
-msgid "Z NULL ECM"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:362
-#: data/mp/messages/strings/names.txt:365
-msgid "Z NULL SENSOR"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:367
@@ -7032,10 +6987,6 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:558
 #: data/mp/messages/strings/names.txt:995
 msgid "Hurricane AA Turret"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:558
-msgid "LasSat"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:560

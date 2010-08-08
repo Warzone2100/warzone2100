@@ -297,24 +297,24 @@ CybNXRail1Jmp				"*CybNXRail1Jmp*"
 //NX-Cyb-Rail1-JUMP			"*NX-Cyb-J*"
 
 /* BRAIN */
-ZNULLBRAIN				_("Z NULL BRAIN")
+ZNULLBRAIN				"Z NULL BRAIN"
 StandardBrain				"*TEST - Standard Brain*"
 ConstructionBrain			"*TEST - ConstructionBrain*"
 CommandBrain01				_("Command Turret")
 
 /* PROGRAM */
-ZNULLPROGRAM				_("Z NULL PROGRAM")
+ZNULLPROGRAM				"Z NULL PROGRAM"
 program1				"*TEST - program #1*"
 Construct				"*TEST - Construct*"
 RadarProgram				"*TEST - Radar Program*"
 Demolish				_("Demolish")
 
 /* CONSTRUCTION */	
-ZNULLCONSTRUCT				_("Z NULL CONSTRUCT")
+ZNULLCONSTRUCT				"Z NULL CONSTRUCT"
 Spade1Mk1				_("Truck")
 
 /* PROPULSION */
-ZNULLPROP				_("Z NULL PROP")
+ZNULLPROP				"Z NULL PROP"
 wheeled01				_("Wheels")
 wheeled02				_("Wheels II")
 wheeled03				_("Wheels III")
@@ -337,19 +337,19 @@ CyborgLegs03				_("Cyborg Propulsion III")
 Naval					_("Naval")
 
 /*BABARIAN PROPULSIONS*/
-BaBaProp				_("BaBaProp")
-BaBaLegs				_("BaBaLegs")
+BaBaProp				"BaBaProp"
+BaBaLegs				"BaBaLegs"
 
 /*CYBORG PROPULSIONS*/
 CyborgLegs				_("Cyborg Propulsion")
 //CyborgJets				_("Cyborg Jump Pack")
 
 /* VEHICLE AUTO-REPAIR */
-ZNULLREPAIR				_("Z NULL REPAIR")
+ZNULLREPAIR				"Z NULL REPAIR"
 LightRepair1				_("Repair Turret")
 
 /* ECM */
-ZNULLECM				_("Z NULL ECM")
+ZNULLECM				"Z NULL ECM"
 //ECM1PylonMk1				_("Jammer Tower")
 //ECM1TurretMk1				_("Jammer Turret")
 //ECM1DefaultMk1				"*TEST - ECM1 Default Mk1*"
@@ -362,7 +362,7 @@ ECM1Default				"*TEST - Baba ECM Default*"
 //ECM3DefaultMk1				"*ECM3DefaultMk1*"
 
 /* SENSORS */
-ZNULLSENSOR				_("Z NULL SENSOR")
+ZNULLSENSOR				"Z NULL SENSOR"
 BaBaSensor				"*BaBa Default Sensor*"
 CCSensor				"*CC Sensor*"
 DefaultSensor1Mk1			"*Default Sensor*"

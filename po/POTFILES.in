@@ -213,6 +213,7 @@ lib/iniparser/iniparser.c
 lib/ivis_common/bitimage.c
 lib/ivis_common/imd.c
 lib/ivis_common/imdload.c
+lib/ivis_common/jpeg_encoder.c
 lib/ivis_common/pieclip.c
 lib/ivis_common/piestate.c
 lib/ivis_common/png_util.c

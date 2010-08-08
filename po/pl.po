@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-01 14:21+0200\n"
+"POT-Creation-Date: 2010-08-08 17:44+0200\n"
 "PO-Revision-Date: 2010-07-26 09:40+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -6124,11 +6124,6 @@ msgstr "Modliszka"
 msgid "Transport Body"
 msgstr "Kadłub transportowca"
 
-#: data/base/messages/strings/names.txt:297
-#: data/mp/messages/strings/names.txt:300
-msgid "Z NULL BRAIN"
-msgstr "Z NULL BRAIN"
-
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
 #: data/base/messages/strings/names.txt:648
@@ -6138,27 +6133,12 @@ msgstr "Z NULL BRAIN"
 msgid "Command Turret"
 msgstr "Wieżyczka dowodząca"
 
-#: data/base/messages/strings/names.txt:303
-#: data/mp/messages/strings/names.txt:306
-msgid "Z NULL PROGRAM"
-msgstr "Z NULL PROGRAM"
-
 #: data/base/messages/strings/names.txt:307
 #: data/base/messages/strings/names.txt:392
 #: data/mp/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:399
 msgid "Demolish"
 msgstr "Wyburz"
-
-#: data/base/messages/strings/names.txt:310
-#: data/mp/messages/strings/names.txt:313
-msgid "Z NULL CONSTRUCT"
-msgstr "Z NULL CONSTRUCT"
-
-#: data/base/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:317
-msgid "Z NULL PROP"
-msgstr "Z NULL PROP"
 
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:318
@@ -6254,16 +6234,6 @@ msgstr "Napęd cyborgów III"
 msgid "Naval"
 msgstr "Naval"
 
-#: data/base/messages/strings/names.txt:337
-#: data/mp/messages/strings/names.txt:340
-msgid "BaBaProp"
-msgstr "BaBaProp"
-
-#: data/base/messages/strings/names.txt:338
-#: data/mp/messages/strings/names.txt:341
-msgid "BaBaLegs"
-msgstr "BaBaLegs"
-
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
@@ -6271,25 +6241,10 @@ msgstr "BaBaLegs"
 msgid "Cyborg Propulsion"
 msgstr "Napęd cyborgów"
 
-#: data/base/messages/strings/names.txt:345
-#: data/mp/messages/strings/names.txt:348
-msgid "Z NULL REPAIR"
-msgstr "Z NULL REPAIR"
-
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
 msgid "Repair Turret"
 msgstr "Wieżyczka naprawiająca"
-
-#: data/base/messages/strings/names.txt:349
-#: data/mp/messages/strings/names.txt:352
-msgid "Z NULL ECM"
-msgstr "Z NULL ECM"
-
-#: data/base/messages/strings/names.txt:362
-#: data/mp/messages/strings/names.txt:365
-msgid "Z NULL SENSOR"
-msgstr "Z NULL SENSOR"
 
 #: data/base/messages/strings/names.txt:367
 #: data/base/messages/strings/names.txt:423
@@ -7006,10 +6961,6 @@ msgstr "Działko AA Whirlwind"
 #: data/mp/messages/strings/names.txt:995
 msgid "Hurricane AA Turret"
 msgstr "Działko AA Hurricane"
-
-#: data/base/messages/strings/names.txt:558
-msgid "LasSat"
-msgstr "LasSat"
 
 #: data/base/messages/strings/names.txt:560
 #: data/mp/messages/strings/names.txt:567
@@ -12264,8 +12215,8 @@ msgstr "Kobra artyleria minirakiet na gąsienicach"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Pyton poduszkowiec z działem HPV"
 
-#: lib/framework/i18n.c:88
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:147
 msgid "System locale"
 msgstr "Język systemu"
 
@@ -12294,7 +12245,7 @@ msgstr "Nie można skomunikować się z serwerem lobby! Czy port %u TCP jest otw
 #: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1366
+#: src/multimenu.c:1356
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12621,11 +12572,11 @@ msgstr "Rozkazano budowniczemu zbudować Rafinerię"
 msgid "Unit Lost!"
 msgstr "Jednostka utracona!"
 
-#: src/droid.c:1602
+#: src/droid.c:1607
 msgid "Structure Restored"
 msgstr "Struktura odbudowana"
 
-#: src/droid.c:3350
+#: src/droid.c:3355
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -12633,7 +12584,7 @@ msgstr[0] "Wybrana grupa %u -  %u jednostka"
 msgstr[1] "Wybrana grupa %u -  %u jednostki"
 msgstr[2] "Wybrana grupa %u -  %u jednostek"
 
-#: src/droid.c:3363
+#: src/droid.c:3368
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -12641,7 +12592,7 @@ msgstr[0] "%u jednostka przypisana do Grupy %u"
 msgstr[1] "%u jednostki przypisane do Grupy %u"
 msgstr[2] "%u jednostek przypisano do Grupy %u"
 
-#: src/droid.c:3376
+#: src/droid.c:3381
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -12649,7 +12600,7 @@ msgstr[0] "Wyśrodkowano na grupie %u - %u jednostka"
 msgstr[1] "Wyśrodkowano na grupie %u - %u jednostki"
 msgstr[2] "Wyśrodkowano na grupie %u - %u jednostek"
 
-#: src/droid.c:3380
+#: src/droid.c:3385
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -12658,40 +12609,40 @@ msgstr[1] "Wyrównanie z grupą %u - %u jednostki"
 msgstr[2] "Wyrównanie z grupą %u - %u jednostek"
 
 # I had really trouble with this one. This word has no meaning in Polish so I decided to translate it as 'Newbe'
-#: src/droid.c:3643
+#: src/droid.c:3648
 msgid "Rookie"
 msgstr "Nowicjusz"
 
-#: src/droid.c:3644
+#: src/droid.c:3649
 msgctxt "rank"
 msgid "Green"
 msgstr "Zielony"
 
-#: src/droid.c:3645
+#: src/droid.c:3650
 msgid "Trained"
 msgstr "Wyszkolony"
 
-#: src/droid.c:3646
+#: src/droid.c:3651
 msgid "Regular"
 msgstr "Zawodowy"
 
-#: src/droid.c:3647
+#: src/droid.c:3652
 msgid "Professional"
 msgstr "Profesjonalny"
 
-#: src/droid.c:3648
+#: src/droid.c:3653
 msgid "Veteran"
 msgstr "Weteran"
 
-#: src/droid.c:3649
+#: src/droid.c:3654
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3650
+#: src/droid.c:3655
 msgid "Special"
 msgstr "Specjalny"
 
-#: src/droid.c:3651
+#: src/droid.c:3656
 msgid "Hero"
 msgstr "Bohater"
 
@@ -13116,7 +13067,7 @@ msgstr "Buduj (F3)"
 
 #: src/hci.c:3882
 #: src/multiint.c:1257
-#: src/multimenu.c:773
+#: src/multimenu.c:763
 msgid "Power"
 msgstr "Energia"
 
@@ -14244,7 +14195,7 @@ msgid "Distance Fog"
 msgstr "Mgła dystansowa"
 
 #: src/multiint.c:1224
-#: src/multimenu.c:766
+#: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Sojusze"
 
@@ -14429,72 +14380,72 @@ msgstr "Zastosuj wartości domyślne i powróć do poprzedniego ekranu"
 msgid "Limits reset to default values"
 msgstr "Limity zresetowane do wartości domyślnych"
 
-#: src/multimenu.c:619
+#: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Poziom technologii 1"
 
-#: src/multimenu.c:627
+#: src/multimenu.c:617
 msgid "Technology level 2"
 msgstr "Poziom technologii 2"
 
-#: src/multimenu.c:633
+#: src/multimenu.c:623
 msgid "Technology level 3"
 msgstr "Poziom technologii 3"
 
-#: src/multimenu.c:639
+#: src/multimenu.c:629
 msgid "Any number of players"
 msgstr "Dowolna liczba graczy"
 
-#: src/multimenu.c:646
+#: src/multimenu.c:636
 msgid "2 players"
 msgstr "2 graczy"
 
-#: src/multimenu.c:652
+#: src/multimenu.c:642
 msgid "4 players"
 msgstr "4 graczy"
 
-#: src/multimenu.c:658
+#: src/multimenu.c:648
 msgid "8 players"
 msgstr "8 graczy"
 
-#: src/multimenu.c:767
+#: src/multimenu.c:757
 msgid "Score"
 msgstr "Wynik"
 
-#: src/multimenu.c:768
+#: src/multimenu.c:758
 msgid "Kills"
 msgstr "Zabójstwa"
 
-#: src/multimenu.c:772
-#: src/multimenu.c:777
+#: src/multimenu.c:762
+#: src/multimenu.c:767
 msgid "Units"
 msgstr "Jednostki"
 
-#: src/multimenu.c:782
+#: src/multimenu.c:772
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multimenu.c:786
+#: src/multimenu.c:776
 msgid "Structs"
 msgstr "Konstrukcje"
 
-#: src/multimenu.c:1149
+#: src/multimenu.c:1139
 msgid "Toggle Alliance State"
 msgstr "Przełącz stan sojuszu"
 
-#: src/multimenu.c:1168
+#: src/multimenu.c:1158
 msgid "Give Visibility Report"
 msgstr "Przesyła raport widoczności"
 
-#: src/multimenu.c:1174
+#: src/multimenu.c:1164
 msgid "Leak Technology Documents"
 msgstr "Niekompletne dokumenty technologii"
 
-#: src/multimenu.c:1181
+#: src/multimenu.c:1171
 msgid "Hand Over Selected Units"
 msgstr "Przesuń nad zaznaczonymi jednostkami"
 
-#: src/multimenu.c:1187
+#: src/multimenu.c:1177
 msgid "Give Power To Player"
 msgstr "Przesyła energię graczowi"
 
@@ -14816,3 +14767,33 @@ msgstr " - Zbudowana %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Wersja %s%s%s%s"
+
+#~ msgid "Z NULL BRAIN"
+#~ msgstr "Z NULL BRAIN"
+
+#~ msgid "Z NULL PROGRAM"
+#~ msgstr "Z NULL PROGRAM"
+
+#~ msgid "Z NULL CONSTRUCT"
+#~ msgstr "Z NULL CONSTRUCT"
+
+#~ msgid "Z NULL PROP"
+#~ msgstr "Z NULL PROP"
+
+#~ msgid "BaBaProp"
+#~ msgstr "BaBaProp"
+
+#~ msgid "BaBaLegs"
+#~ msgstr "BaBaLegs"
+
+#~ msgid "Z NULL REPAIR"
+#~ msgstr "Z NULL REPAIR"
+
+#~ msgid "Z NULL ECM"
+#~ msgstr "Z NULL ECM"
+
+#~ msgid "Z NULL SENSOR"
+#~ msgstr "Z NULL SENSOR"
+
+#~ msgid "LasSat"
+#~ msgstr "LasSat"

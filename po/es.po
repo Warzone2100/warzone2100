@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:25+0200\n"
+"POT-Creation-Date: 2010-08-08 17:44+0200\n"
 "PO-Revision-Date: 2010-04-29 17:24+0100\n"
 "Last-Translator: Daniel Vijande <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -6126,11 +6126,6 @@ msgstr "Mantis"
 msgid "Transport Body"
 msgstr "Cuerpo de Transporte"
 
-#: data/base/messages/strings/names.txt:297
-#: data/mp/messages/strings/names.txt:300
-msgid "Z NULL BRAIN"
-msgstr "Z NULL BRAIN"
-
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
 #: data/base/messages/strings/names.txt:648
@@ -6140,27 +6135,12 @@ msgstr "Z NULL BRAIN"
 msgid "Command Turret"
 msgstr "Torreta de Comandante"
 
-#: data/base/messages/strings/names.txt:303
-#: data/mp/messages/strings/names.txt:306
-msgid "Z NULL PROGRAM"
-msgstr "Z NULL PROGRAM"
-
 #: data/base/messages/strings/names.txt:307
 #: data/base/messages/strings/names.txt:392
 #: data/mp/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:399
 msgid "Demolish"
 msgstr "Demoler"
-
-#: data/base/messages/strings/names.txt:310
-#: data/mp/messages/strings/names.txt:313
-msgid "Z NULL CONSTRUCT"
-msgstr "Z NULL CONSTRUCT"
-
-#: data/base/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:317
-msgid "Z NULL PROP"
-msgstr "Z NULL PROP"
 
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:318
@@ -6256,16 +6236,6 @@ msgstr "Propulsión Cyborg III"
 msgid "Naval"
 msgstr "Naval"
 
-#: data/base/messages/strings/names.txt:337
-#: data/mp/messages/strings/names.txt:340
-msgid "BaBaProp"
-msgstr "BaBaProp"
-
-#: data/base/messages/strings/names.txt:338
-#: data/mp/messages/strings/names.txt:341
-msgid "BaBaLegs"
-msgstr "BaBaLegs"
-
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
@@ -6273,25 +6243,10 @@ msgstr "BaBaLegs"
 msgid "Cyborg Propulsion"
 msgstr "Propulsión Cyborg"
 
-#: data/base/messages/strings/names.txt:345
-#: data/mp/messages/strings/names.txt:348
-msgid "Z NULL REPAIR"
-msgstr "Z NULL REPAIR"
-
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
 msgid "Repair Turret"
 msgstr "Torreta de Reparación"
-
-#: data/base/messages/strings/names.txt:349
-#: data/mp/messages/strings/names.txt:352
-msgid "Z NULL ECM"
-msgstr "Z NULL ECM"
-
-#: data/base/messages/strings/names.txt:362
-#: data/mp/messages/strings/names.txt:365
-msgid "Z NULL SENSOR"
-msgstr "Z NULL SENSOR"
 
 #: data/base/messages/strings/names.txt:367
 #: data/base/messages/strings/names.txt:423
@@ -7008,10 +6963,6 @@ msgstr "Torreta Antiaérea Torbellino"
 #: data/mp/messages/strings/names.txt:995
 msgid "Hurricane AA Turret"
 msgstr "Torreta Antiaérea Huracán"
-
-#: data/base/messages/strings/names.txt:558
-msgid "LasSat"
-msgstr "LasSat"
 
 #: data/base/messages/strings/names.txt:560
 #: data/mp/messages/strings/names.txt:567
@@ -12253,8 +12204,8 @@ msgstr "Artillería Mini-Cohetes Cobra Oruga"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Cañón HPV Pitón Oruga"
 
-#: lib/framework/i18n.c:88
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:147
 msgid "System locale"
 msgstr "Idioma del sistema"
 
@@ -12283,7 +12234,7 @@ msgstr "¡No se pudo comunicar con el servidor! ¿Está el puerto TCP %u abierto
 #: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1366
+#: src/multimenu.c:1356
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12434,7 +12385,7 @@ msgstr "Ir directamente a pantalla de dominio"
 
 #: src/configuration.c:452
 #: src/configuration.c:453
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "Jugador"
 
@@ -12610,72 +12561,72 @@ msgstr "Camión enviado a construir Torre Petrolífera"
 msgid "Unit Lost!"
 msgstr "¡Unidad destruída!"
 
-#: src/droid.c:1601
+#: src/droid.c:1607
 msgid "Structure Restored"
 msgstr "Estructura Restaurada"
 
-#: src/droid.c:3349
+#: src/droid.c:3355
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u seleccionado - %u Unidad"
 msgstr[1] "Grupo %u seleccionado - %u Unidades"
 
-#: src/droid.c:3362
+#: src/droid.c:3368
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidad asignada al Grupo %u"
 msgstr[1] "%u unidades asignadas al Grupo %u"
 
-#: src/droid.c:3375
+#: src/droid.c:3381
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado en el Grupo %u - %u Unidad"
 msgstr[1] "Centrado en el Grupo %u - %u Unidades"
 
-#: src/droid.c:3379
+#: src/droid.c:3385
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alineando con el Grupo %u - %u Unidad"
 msgstr[1] "Alineando con el Grupo %u - %u Unidades"
 
-#: src/droid.c:3642
+#: src/droid.c:3648
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.c:3643
+#: src/droid.c:3649
 msgctxt "rank"
 msgid "Green"
 msgstr "Principiante"
 
-#: src/droid.c:3644
+#: src/droid.c:3650
 msgid "Trained"
 msgstr "Entrenado"
 
-#: src/droid.c:3645
+#: src/droid.c:3651
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3646
+#: src/droid.c:3652
 msgid "Professional"
 msgstr "Profesional"
 
-#: src/droid.c:3647
+#: src/droid.c:3653
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3648
+#: src/droid.c:3654
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.c:3649
+#: src/droid.c:3655
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.c:3650
+#: src/droid.c:3656
 msgid "Hero"
 msgstr "Héroe"
 
@@ -13101,7 +13052,7 @@ msgstr "Construcción (F3)"
 
 #: src/hci.c:3882
 #: src/multiint.c:1257
-#: src/multimenu.c:773
+#: src/multimenu.c:763
 msgid "Power"
 msgstr "Energía"
 
@@ -14229,7 +14180,7 @@ msgid "Distance Fog"
 msgstr "Niebla de Distancia"
 
 #: src/multiint.c:1224
-#: src/multimenu.c:766
+#: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Alianzas"
 
@@ -14414,72 +14365,72 @@ msgstr "Restablecer Valores por defecto y Volver a la Pantalla Anterior"
 msgid "Limits reset to default values"
 msgstr "Límites reiniciados a valores por defecto"
 
-#: src/multimenu.c:619
+#: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Nivel Tecnológico 1"
 
-#: src/multimenu.c:627
+#: src/multimenu.c:617
 msgid "Technology level 2"
 msgstr "Nivel Tecnológico 2"
 
-#: src/multimenu.c:633
+#: src/multimenu.c:623
 msgid "Technology level 3"
 msgstr "Nivel Tecnológico 3"
 
-#: src/multimenu.c:639
+#: src/multimenu.c:629
 msgid "Any number of players"
 msgstr "Cualquier número de jugadores"
 
-#: src/multimenu.c:646
+#: src/multimenu.c:636
 msgid "2 players"
 msgstr "2 jugadores"
 
-#: src/multimenu.c:652
+#: src/multimenu.c:642
 msgid "4 players"
 msgstr "4 jugadores"
 
-#: src/multimenu.c:658
+#: src/multimenu.c:648
 msgid "8 players"
 msgstr "8 jugadores"
 
-#: src/multimenu.c:767
+#: src/multimenu.c:757
 msgid "Score"
 msgstr "Puntuación"
 
-#: src/multimenu.c:768
+#: src/multimenu.c:758
 msgid "Kills"
 msgstr "Muertes"
 
-#: src/multimenu.c:772
-#: src/multimenu.c:777
+#: src/multimenu.c:762
+#: src/multimenu.c:767
 msgid "Units"
 msgstr "Unidades"
 
-#: src/multimenu.c:782
+#: src/multimenu.c:772
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multimenu.c:786
+#: src/multimenu.c:776
 msgid "Structs"
 msgstr "Estructuras"
 
-#: src/multimenu.c:1149
+#: src/multimenu.c:1139
 msgid "Toggle Alliance State"
 msgstr "Alternar Estado de la Alianza"
 
-#: src/multimenu.c:1168
+#: src/multimenu.c:1158
 msgid "Give Visibility Report"
 msgstr "Dar Informe de Visibilidad"
 
-#: src/multimenu.c:1174
+#: src/multimenu.c:1164
 msgid "Leak Technology Documents"
 msgstr "Fuga de Documentos Tecnológicos"
 
-#: src/multimenu.c:1181
+#: src/multimenu.c:1171
 msgid "Hand Over Selected Units"
 msgstr "Transferir las unidades seleccionadas"
 
-#: src/multimenu.c:1187
+#: src/multimenu.c:1177
 msgid "Give Power To Player"
 msgstr "Dar Energía al Jugador"
 
@@ -14671,12 +14622,12 @@ msgstr "¡ERES EL GANADOR!"
 msgid "YOU WERE DEFEATED!"
 msgstr "¡HAS SIDO DERROTADO!"
 
-#: src/scriptfuncs.c:10088
+#: src/scriptfuncs.c:10089
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "¡Baliza recibida de %s!"
 
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10135
 #, c-format
 msgid "Beacon %d"
 msgstr "Baliza %d"
@@ -14798,6 +14749,36 @@ msgstr " - Construido %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versión: %s%s%s%s"
+
+#~ msgid "Z NULL BRAIN"
+#~ msgstr "Z NULL BRAIN"
+
+#~ msgid "Z NULL PROGRAM"
+#~ msgstr "Z NULL PROGRAM"
+
+#~ msgid "Z NULL CONSTRUCT"
+#~ msgstr "Z NULL CONSTRUCT"
+
+#~ msgid "Z NULL PROP"
+#~ msgstr "Z NULL PROP"
+
+#~ msgid "BaBaProp"
+#~ msgstr "BaBaProp"
+
+#~ msgid "BaBaLegs"
+#~ msgstr "BaBaLegs"
+
+#~ msgid "Z NULL REPAIR"
+#~ msgstr "Z NULL REPAIR"
+
+#~ msgid "Z NULL ECM"
+#~ msgstr "Z NULL ECM"
+
+#~ msgid "Z NULL SENSOR"
+#~ msgstr "Z NULL SENSOR"
+
+#~ msgid "LasSat"
+#~ msgstr "LasSat"
 
 #~ msgid "Czech"
 #~ msgstr "Checo"

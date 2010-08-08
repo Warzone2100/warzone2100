@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:25+0200\n"
+"POT-Creation-Date: 2010-08-08 17:44+0200\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -6121,11 +6121,6 @@ msgstr "Bogomolka"
 msgid "Transport Body"
 msgstr "Prevozno telo"
 
-#: data/base/messages/strings/names.txt:297
-#: data/mp/messages/strings/names.txt:300
-msgid "Z NULL BRAIN"
-msgstr "Z NIČ MOŽGANI"
-
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
 #: data/base/messages/strings/names.txt:648
@@ -6135,27 +6130,12 @@ msgstr "Z NIČ MOŽGANI"
 msgid "Command Turret"
 msgstr "Poveljniška kupola"
 
-#: data/base/messages/strings/names.txt:303
-#: data/mp/messages/strings/names.txt:306
-msgid "Z NULL PROGRAM"
-msgstr "Z NIČ PROGRAM"
-
 #: data/base/messages/strings/names.txt:307
 #: data/base/messages/strings/names.txt:392
 #: data/mp/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:399
 msgid "Demolish"
 msgstr "Poruši"
-
-#: data/base/messages/strings/names.txt:310
-#: data/mp/messages/strings/names.txt:313
-msgid "Z NULL CONSTRUCT"
-msgstr "Z NIČ ZGRADB"
-
-#: data/base/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:317
-msgid "Z NULL PROP"
-msgstr "Z NIČ PADEC"
 
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:318
@@ -6251,16 +6231,6 @@ msgstr "Pogon za kiborge III"
 msgid "Naval"
 msgstr "Pomorski"
 
-#: data/base/messages/strings/names.txt:337
-#: data/mp/messages/strings/names.txt:340
-msgid "BaBaProp"
-msgstr "BaBaPog"
-
-#: data/base/messages/strings/names.txt:338
-#: data/mp/messages/strings/names.txt:341
-msgid "BaBaLegs"
-msgstr "BaBaNoge"
-
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
@@ -6268,25 +6238,10 @@ msgstr "BaBaNoge"
 msgid "Cyborg Propulsion"
 msgstr "Pogon za kiborge"
 
-#: data/base/messages/strings/names.txt:345
-#: data/mp/messages/strings/names.txt:348
-msgid "Z NULL REPAIR"
-msgstr "Z NIČ POPRAVILO"
-
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
 msgid "Repair Turret"
 msgstr "Kupola za popravila"
-
-#: data/base/messages/strings/names.txt:349
-#: data/mp/messages/strings/names.txt:352
-msgid "Z NULL ECM"
-msgstr "Z NIČ ECM"
-
-#: data/base/messages/strings/names.txt:362
-#: data/mp/messages/strings/names.txt:365
-msgid "Z NULL SENSOR"
-msgstr "Z NIČ SENZOR"
 
 #: data/base/messages/strings/names.txt:367
 #: data/base/messages/strings/names.txt:423
@@ -7003,10 +6958,6 @@ msgstr "PZ stolp z zračnim vrtincem"
 #: data/mp/messages/strings/names.txt:995
 msgid "Hurricane AA Turret"
 msgstr "PZ kupola s hurikanom"
-
-#: data/base/messages/strings/names.txt:558
-msgid "LasSat"
-msgstr "LasSat"
 
 #: data/base/messages/strings/names.txt:560
 #: data/mp/messages/strings/names.txt:567
@@ -12386,8 +12337,8 @@ msgstr "Mini-raketno topništvo Naočarka Gosenice"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Težki top Piton Zračna blazina"
 
-#: lib/framework/i18n.c:88
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:147
 msgid "System locale"
 msgstr "Lokalni sistem"
 
@@ -12417,7 +12368,7 @@ msgstr "Ni bilo mogoče komunicirati z vežnim strežnikom! Je TCP prehod %u odp
 #: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1366
+#: src/multimenu.c:1356
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12569,7 +12520,7 @@ msgstr "pojdi naravnost na gostiteljev zaslon"
 
 #: src/configuration.c:452
 #: src/configuration.c:453
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "Igralec"
 
@@ -12745,11 +12696,11 @@ msgstr "Tovornjaku ukazana gradnja naftne vrtine"
 msgid "Unit Lost!"
 msgstr "Enota izgubljena!"
 
-#: src/droid.c:1601
+#: src/droid.c:1607
 msgid "Structure Restored"
 msgstr "Zgradba obnovljena"
 
-#: src/droid.c:3349
+#: src/droid.c:3355
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -12758,7 +12709,7 @@ msgstr[1] "Skupina %u izbrana - %u enota"
 msgstr[2] "Skupina %u izbrana - %u enoti"
 msgstr[3] "Skupina %u izbrana - %u enote"
 
-#: src/droid.c:3362
+#: src/droid.c:3368
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -12767,7 +12718,7 @@ msgstr[1] "%u enota dodeljena skupini %u"
 msgstr[2] "%u enoti dodeljeni skupini %u"
 msgstr[3] "%u enote dodeljene skupini %u"
 
-#: src/droid.c:3375
+#: src/droid.c:3381
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -12776,7 +12727,7 @@ msgstr[1] "Centriran na skupino %u - %u enota"
 msgstr[2] "Centriran na skupino %u - %u enoti"
 msgstr[3] "Centriran na skupino %u - %u enote"
 
-#: src/droid.c:3379
+#: src/droid.c:3385
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -12785,40 +12736,40 @@ msgstr[1] "Poravnava s skupino %u - %u enota"
 msgstr[2] "Poravnava s skupino %u - %u enoti"
 msgstr[3] "Poravnava s skupino %u - %u enote"
 
-#: src/droid.c:3642
+#: src/droid.c:3648
 msgid "Rookie"
 msgstr "Novinec"
 
-#: src/droid.c:3643
+#: src/droid.c:3649
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelen"
 
-#: src/droid.c:3644
+#: src/droid.c:3650
 msgid "Trained"
 msgstr "Izurjen"
 
-#: src/droid.c:3645
+#: src/droid.c:3651
 msgid "Regular"
 msgstr "Navaden"
 
-#: src/droid.c:3646
+#: src/droid.c:3652
 msgid "Professional"
 msgstr "Poklicni"
 
-#: src/droid.c:3647
+#: src/droid.c:3653
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3648
+#: src/droid.c:3654
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3649
+#: src/droid.c:3655
 msgid "Special"
 msgstr "Poseben"
 
-#: src/droid.c:3650
+#: src/droid.c:3656
 msgid "Hero"
 msgstr "Junak"
 
@@ -13251,7 +13202,7 @@ msgstr "Gradnja (F3)"
 
 #: src/hci.c:3882
 #: src/multiint.c:1257
-#: src/multimenu.c:773
+#: src/multimenu.c:763
 msgid "Power"
 msgstr "Moč"
 
@@ -14386,7 +14337,7 @@ msgid "Distance Fog"
 msgstr "Daljna megla"
 
 #: src/multiint.c:1224
-#: src/multimenu.c:766
+#: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Zavezništva"
 
@@ -14576,72 +14527,72 @@ msgstr "Vrni se na prejšnji zaslon"
 msgid "Limits reset to default values"
 msgstr ""
 
-#: src/multimenu.c:619
+#: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Tehnološka stopnja 1"
 
-#: src/multimenu.c:627
+#: src/multimenu.c:617
 msgid "Technology level 2"
 msgstr "Tehnološka stopnja 2"
 
-#: src/multimenu.c:633
+#: src/multimenu.c:623
 msgid "Technology level 3"
 msgstr "Tehnološka stopnja 3"
 
-#: src/multimenu.c:639
+#: src/multimenu.c:629
 msgid "Any number of players"
 msgstr "Katerokoli število igralcev"
 
-#: src/multimenu.c:646
+#: src/multimenu.c:636
 msgid "2 players"
 msgstr "2 igralca"
 
-#: src/multimenu.c:652
+#: src/multimenu.c:642
 msgid "4 players"
 msgstr "4 igralci"
 
-#: src/multimenu.c:658
+#: src/multimenu.c:648
 msgid "8 players"
 msgstr "8 igralcev"
 
-#: src/multimenu.c:767
+#: src/multimenu.c:757
 msgid "Score"
 msgstr "Dosežene točke"
 
-#: src/multimenu.c:768
+#: src/multimenu.c:758
 msgid "Kills"
 msgstr "Uničene enote"
 
-#: src/multimenu.c:772
-#: src/multimenu.c:777
+#: src/multimenu.c:762
+#: src/multimenu.c:767
 msgid "Units"
 msgstr "Enote"
 
-#: src/multimenu.c:782
+#: src/multimenu.c:772
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multimenu.c:786
+#: src/multimenu.c:776
 msgid "Structs"
 msgstr "Zgradbe"
 
-#: src/multimenu.c:1149
+#: src/multimenu.c:1139
 msgid "Toggle Alliance State"
 msgstr "Nastavi zavezniško stanje"
 
-#: src/multimenu.c:1168
+#: src/multimenu.c:1158
 msgid "Give Visibility Report"
 msgstr "Daj poročilo o vidljivosti"
 
-#: src/multimenu.c:1174
+#: src/multimenu.c:1164
 msgid "Leak Technology Documents"
 msgstr "Prepusti tehnološke dokumente"
 
-#: src/multimenu.c:1181
+#: src/multimenu.c:1171
 msgid "Hand Over Selected Units"
 msgstr "Predaj izbrane enote"
 
-#: src/multimenu.c:1187
+#: src/multimenu.c:1177
 msgid "Give Power To Player"
 msgstr "Daj igralcu moč"
 
@@ -14834,12 +14785,12 @@ msgstr "ZMAGALI STE!"
 msgid "YOU WERE DEFEATED!"
 msgstr "BILI STE PREMAGANI!"
 
-#: src/scriptfuncs.c:10088
+#: src/scriptfuncs.c:10089
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Prejet poziv od %s!"
 
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10135
 #, c-format
 msgid "Beacon %d"
 msgstr "Poziv %d"
@@ -14966,6 +14917,36 @@ msgstr "- Zgrajen %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#~ msgid "Z NULL BRAIN"
+#~ msgstr "Z NIČ MOŽGANI"
+
+#~ msgid "Z NULL PROGRAM"
+#~ msgstr "Z NIČ PROGRAM"
+
+#~ msgid "Z NULL CONSTRUCT"
+#~ msgstr "Z NIČ ZGRADB"
+
+#~ msgid "Z NULL PROP"
+#~ msgstr "Z NIČ PADEC"
+
+#~ msgid "BaBaProp"
+#~ msgstr "BaBaPog"
+
+#~ msgid "BaBaLegs"
+#~ msgstr "BaBaNoge"
+
+#~ msgid "Z NULL REPAIR"
+#~ msgstr "Z NIČ POPRAVILO"
+
+#~ msgid "Z NULL ECM"
+#~ msgstr "Z NIČ ECM"
+
+#~ msgid "Z NULL SENSOR"
+#~ msgstr "Z NIČ SENZOR"
+
+#~ msgid "LasSat"
+#~ msgstr "LasSat"
 
 #~ msgid "Czech"
 #~ msgstr "Češki"

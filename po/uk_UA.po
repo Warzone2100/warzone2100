@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:25+0200\n"
+"POT-Creation-Date: 2010-08-08 17:44+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -6116,11 +6116,6 @@ msgstr "Богомол"
 msgid "Transport Body"
 msgstr "Корпус Транспорта"
 
-#: data/base/messages/strings/names.txt:297
-#: data/mp/messages/strings/names.txt:300
-msgid "Z NULL BRAIN"
-msgstr "Z NULL BRAIN"
-
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
 #: data/base/messages/strings/names.txt:648
@@ -6130,27 +6125,12 @@ msgstr "Z NULL BRAIN"
 msgid "Command Turret"
 msgstr "Командна Башта"
 
-#: data/base/messages/strings/names.txt:303
-#: data/mp/messages/strings/names.txt:306
-msgid "Z NULL PROGRAM"
-msgstr "Z NULL PROGRAM"
-
 #: data/base/messages/strings/names.txt:307
 #: data/base/messages/strings/names.txt:392
 #: data/mp/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:399
 msgid "Demolish"
 msgstr "Зруйнувати"
-
-#: data/base/messages/strings/names.txt:310
-#: data/mp/messages/strings/names.txt:313
-msgid "Z NULL CONSTRUCT"
-msgstr "Z NULL CONSTRUCT"
-
-#: data/base/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:317
-msgid "Z NULL PROP"
-msgstr "Z NULL PROP"
 
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:318
@@ -6246,16 +6226,6 @@ msgstr "Руховий Механізм Кіборгів ІІІ"
 msgid "Naval"
 msgstr "Морський"
 
-#: data/base/messages/strings/names.txt:337
-#: data/mp/messages/strings/names.txt:340
-msgid "BaBaProp"
-msgstr "BaBaProp"
-
-#: data/base/messages/strings/names.txt:338
-#: data/mp/messages/strings/names.txt:341
-msgid "BaBaLegs"
-msgstr "BaBaLegs"
-
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
@@ -6263,25 +6233,10 @@ msgstr "BaBaLegs"
 msgid "Cyborg Propulsion"
 msgstr "Руховий Механізм Кіборгів"
 
-#: data/base/messages/strings/names.txt:345
-#: data/mp/messages/strings/names.txt:348
-msgid "Z NULL REPAIR"
-msgstr "Z NULL REPAIR"
-
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
 msgid "Repair Turret"
 msgstr "Ремонтна Башта"
-
-#: data/base/messages/strings/names.txt:349
-#: data/mp/messages/strings/names.txt:352
-msgid "Z NULL ECM"
-msgstr "Z NULL ECM"
-
-#: data/base/messages/strings/names.txt:362
-#: data/mp/messages/strings/names.txt:365
-msgid "Z NULL SENSOR"
-msgstr "Z NULL SENSOR"
 
 #: data/base/messages/strings/names.txt:367
 #: data/base/messages/strings/names.txt:423
@@ -6998,10 +6953,6 @@ msgstr "Зенітна Башта 'Вихор'"
 #: data/mp/messages/strings/names.txt:995
 msgid "Hurricane AA Turret"
 msgstr "Зенітна Башта 'Ураган'"
-
-#: data/base/messages/strings/names.txt:558
-msgid "LasSat"
-msgstr "Супутниковий Лазер"
 
 #: data/base/messages/strings/names.txt:560
 #: data/mp/messages/strings/names.txt:567
@@ -12269,8 +12220,8 @@ msgstr "Гусенична Кобра з Міні-Ракетною Артиле�
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Гусеничний Пітон з ГШ Гарматою"
 
-#: lib/framework/i18n.c:88
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:147
 msgid "System locale"
 msgstr "Мова локалізації системи"
 
@@ -12299,7 +12250,7 @@ msgstr "Неможливо зв'язатись з сервером лоббі! �
 #: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1366
+#: src/multimenu.c:1356
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12450,7 +12401,7 @@ msgstr "перейти безпосередньо до екрану хосту"
 
 #: src/configuration.c:452
 #: src/configuration.c:453
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "Гравець"
 
@@ -12626,72 +12577,72 @@ msgstr "Інженеру наказано побудувати Бурову Ве
 msgid "Unit Lost!"
 msgstr "Втрачено Бойову Одиницю!"
 
-#: src/droid.c:1601
+#: src/droid.c:1607
 msgid "Structure Restored"
 msgstr "Будівлю Відновлено"
 
-#: src/droid.c:3349
+#: src/droid.c:3355
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Групу %u обрано - %u Підрозділ"
 msgstr[1] "Групу %u обрано - %u Підрозділів"
 
-#: src/droid.c:3362
+#: src/droid.c:3368
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u підрозділ призначено у Групу %u"
 msgstr[1] "%u підрозділів призначено у Групу %u"
 
-#: src/droid.c:3375
+#: src/droid.c:3381
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Центр екрану на Групі %u - %u Підрозділ"
 msgstr[1] "Центр екрану на Групі %u - %u Підрозділів"
 
-#: src/droid.c:3379
+#: src/droid.c:3385
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Вирівнювання з Групою %u - %u Підрозділ"
 msgstr[1] "Вирівнювання з Групою %u - %u Підрозділів"
 
-#: src/droid.c:3642
+#: src/droid.c:3648
 msgid "Rookie"
 msgstr "Новобранець"
 
-#: src/droid.c:3643
+#: src/droid.c:3649
 msgctxt "rank"
 msgid "Green"
 msgstr "Зелений"
 
-#: src/droid.c:3644
+#: src/droid.c:3650
 msgid "Trained"
 msgstr "Рекрут"
 
-#: src/droid.c:3645
+#: src/droid.c:3651
 msgid "Regular"
 msgstr "Досвідчений"
 
-#: src/droid.c:3646
+#: src/droid.c:3652
 msgid "Professional"
 msgstr "Професіонал"
 
-#: src/droid.c:3647
+#: src/droid.c:3653
 msgid "Veteran"
 msgstr "Ветеран"
 
-#: src/droid.c:3648
+#: src/droid.c:3654
 msgid "Elite"
 msgstr "Елітний"
 
-#: src/droid.c:3649
+#: src/droid.c:3655
 msgid "Special"
 msgstr "Особливий"
 
-#: src/droid.c:3650
+#: src/droid.c:3656
 msgid "Hero"
 msgstr "Герой"
 
@@ -13117,7 +13068,7 @@ msgstr "Будівництво (F3)"
 
 #: src/hci.c:3882
 #: src/multiint.c:1257
-#: src/multimenu.c:773
+#: src/multimenu.c:763
 msgid "Power"
 msgstr "Енергія"
 
@@ -14245,7 +14196,7 @@ msgid "Distance Fog"
 msgstr "Дальній Туман"
 
 #: src/multiint.c:1224
-#: src/multimenu.c:766
+#: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Союзи"
 
@@ -14430,72 +14381,72 @@ msgstr "Прийняти Значення за Замовченням та По�
 msgid "Limits reset to default values"
 msgstr "Обмеження повертаються до початкових значень"
 
-#: src/multimenu.c:619
+#: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Рівень технологій 1"
 
-#: src/multimenu.c:627
+#: src/multimenu.c:617
 msgid "Technology level 2"
 msgstr "Рівень технологій 2"
 
-#: src/multimenu.c:633
+#: src/multimenu.c:623
 msgid "Technology level 3"
 msgstr "Рівень технологій 3"
 
-#: src/multimenu.c:639
+#: src/multimenu.c:629
 msgid "Any number of players"
 msgstr "Будь-яка кількість гравців"
 
-#: src/multimenu.c:646
+#: src/multimenu.c:636
 msgid "2 players"
 msgstr "2 гравці"
 
-#: src/multimenu.c:652
+#: src/multimenu.c:642
 msgid "4 players"
 msgstr "4 гравці"
 
-#: src/multimenu.c:658
+#: src/multimenu.c:648
 msgid "8 players"
 msgstr "8 гравців"
 
-#: src/multimenu.c:767
+#: src/multimenu.c:757
 msgid "Score"
 msgstr "Очки"
 
-#: src/multimenu.c:768
+#: src/multimenu.c:758
 msgid "Kills"
 msgstr "Вбивства"
 
-#: src/multimenu.c:772
-#: src/multimenu.c:777
+#: src/multimenu.c:762
+#: src/multimenu.c:767
 msgid "Units"
 msgstr "Підрозділи"
 
-#: src/multimenu.c:782
+#: src/multimenu.c:772
 msgid "Ping"
 msgstr "Пінг"
 
-#: src/multimenu.c:786
+#: src/multimenu.c:776
 msgid "Structs"
 msgstr "Будівлі"
 
-#: src/multimenu.c:1149
+#: src/multimenu.c:1139
 msgid "Toggle Alliance State"
 msgstr "Змінити Статус Союзу"
 
-#: src/multimenu.c:1168
+#: src/multimenu.c:1158
 msgid "Give Visibility Report"
 msgstr "Надати Інформацію про Зону Видимості"
 
-#: src/multimenu.c:1174
+#: src/multimenu.c:1164
 msgid "Leak Technology Documents"
 msgstr "Надати Технологічну Документацію"
 
-#: src/multimenu.c:1181
+#: src/multimenu.c:1171
 msgid "Hand Over Selected Units"
 msgstr "Передати Вибрані Одиниці"
 
-#: src/multimenu.c:1187
+#: src/multimenu.c:1177
 msgid "Give Power To Player"
 msgstr "Надати Енергію Гравцю"
 
@@ -14687,12 +14638,12 @@ msgstr "ВИ ПЕРЕМОГЛИ!"
 msgid "YOU WERE DEFEATED!"
 msgstr "ВИ ЗАЗНАЛИ ПОРАЗКИ!"
 
-#: src/scriptfuncs.c:10088
+#: src/scriptfuncs.c:10089
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Отримано Сигнал від %s!"
 
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10135
 #, c-format
 msgid "Beacon %d"
 msgstr "Сигнал %d"
@@ -14814,6 +14765,36 @@ msgstr " - Збудовано %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версія %s%s%s%s"
+
+#~ msgid "Z NULL BRAIN"
+#~ msgstr "Z NULL BRAIN"
+
+#~ msgid "Z NULL PROGRAM"
+#~ msgstr "Z NULL PROGRAM"
+
+#~ msgid "Z NULL CONSTRUCT"
+#~ msgstr "Z NULL CONSTRUCT"
+
+#~ msgid "Z NULL PROP"
+#~ msgstr "Z NULL PROP"
+
+#~ msgid "BaBaProp"
+#~ msgstr "BaBaProp"
+
+#~ msgid "BaBaLegs"
+#~ msgstr "BaBaLegs"
+
+#~ msgid "Z NULL REPAIR"
+#~ msgstr "Z NULL REPAIR"
+
+#~ msgid "Z NULL ECM"
+#~ msgstr "Z NULL ECM"
+
+#~ msgid "Z NULL SENSOR"
+#~ msgstr "Z NULL SENSOR"
+
+#~ msgid "LasSat"
+#~ msgstr "Супутниковий Лазер"
 
 #~ msgid "Czech"
 #~ msgstr "Чеська"

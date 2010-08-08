@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:25+0200\n"
+"POT-Creation-Date: 2010-08-08 17:44+0200\n"
 "PO-Revision-Date: 2009-10-31 12:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -6141,11 +6141,6 @@ msgstr "Bidsprinkhaan"
 msgid "Transport Body"
 msgstr "Vervoerscarrosserie"
 
-#: data/base/messages/strings/names.txt:297
-#: data/mp/messages/strings/names.txt:300
-msgid "Z NULL BRAIN"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
 #: data/base/messages/strings/names.txt:648
@@ -6155,27 +6150,12 @@ msgstr ""
 msgid "Command Turret"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:303
-#: data/mp/messages/strings/names.txt:306
-msgid "Z NULL PROGRAM"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:307
 #: data/base/messages/strings/names.txt:392
 #: data/mp/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:399
 msgid "Demolish"
 msgstr "Slopen"
-
-#: data/base/messages/strings/names.txt:310
-#: data/mp/messages/strings/names.txt:313
-msgid "Z NULL CONSTRUCT"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:317
-msgid "Z NULL PROP"
-msgstr ""
 
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:318
@@ -6271,16 +6251,6 @@ msgstr "Cyborgaandrijving III"
 msgid "Naval"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:337
-#: data/mp/messages/strings/names.txt:340
-msgid "BaBaProp"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:338
-#: data/mp/messages/strings/names.txt:341
-msgid "BaBaLegs"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
@@ -6288,26 +6258,11 @@ msgstr ""
 msgid "Cyborg Propulsion"
 msgstr "Cyborg-aandrijving"
 
-#: data/base/messages/strings/names.txt:345
-#: data/mp/messages/strings/names.txt:348
-msgid "Z NULL REPAIR"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
 #, fuzzy
 msgid "Repair Turret"
 msgstr "Mobiele reparatiekoepel"
-
-#: data/base/messages/strings/names.txt:349
-#: data/mp/messages/strings/names.txt:352
-msgid "Z NULL ECM"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:362
-#: data/mp/messages/strings/names.txt:365
-msgid "Z NULL SENSOR"
-msgstr "Z NULSENSOR"
 
 #: data/base/messages/strings/names.txt:367
 #: data/base/messages/strings/names.txt:423
@@ -7028,10 +6983,6 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:558
 #: data/mp/messages/strings/names.txt:995
 msgid "Hurricane AA Turret"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:558
-msgid "LasSat"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:560
@@ -12458,8 +12409,8 @@ msgstr "Mini-raket-artillerie Adder Wielen"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Zwaar kanon"
 
-#: lib/framework/i18n.c:88
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:147
 msgid "System locale"
 msgstr "Systeemtaal"
 
@@ -12489,7 +12440,7 @@ msgstr "Kan niet communiceren met de lobby server! is TCP port 9990 open?"
 #: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1366
+#: src/multimenu.c:1356
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12642,7 +12593,7 @@ msgstr "Ga direct naar het gastheer scherm"
 
 #: src/configuration.c:452
 #: src/configuration.c:453
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "Speler"
 
@@ -12818,72 +12769,72 @@ msgstr "Vrachtwagen bevel gegeven om jaknikker te bouwen."
 msgid "Unit Lost!"
 msgstr "Eenheid verloren!"
 
-#: src/droid.c:1601
+#: src/droid.c:1607
 msgid "Structure Restored"
 msgstr "Gebouw hersteld"
 
-#: src/droid.c:3349
+#: src/droid.c:3355
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Groep %u geselecteerd - %u eenheid"
 msgstr[1] "Groep %u geselecteerd - %u eenheden"
 
-#: src/droid.c:3362
+#: src/droid.c:3368
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u eenheid aan groep %u toegewezen"
 msgstr[1] "%u eenheden aan groep %u toegewezen"
 
-#: src/droid.c:3375
+#: src/droid.c:3381
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Gecentreerd op groep %u - %u eenheid"
 msgstr[1] "Gecentreerd op groep %u - %u eenheden"
 
-#: src/droid.c:3379
+#: src/droid.c:3385
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3642
+#: src/droid.c:3648
 msgid "Rookie"
 msgstr "Rekruut"
 
-#: src/droid.c:3643
+#: src/droid.c:3649
 msgctxt "rank"
 msgid "Green"
 msgstr "Groen"
 
-#: src/droid.c:3644
+#: src/droid.c:3650
 msgid "Trained"
 msgstr "Geoefend"
 
-#: src/droid.c:3645
+#: src/droid.c:3651
 msgid "Regular"
 msgstr "Beroeps"
 
-#: src/droid.c:3646
+#: src/droid.c:3652
 msgid "Professional"
 msgstr "Professioneel"
 
-#: src/droid.c:3647
+#: src/droid.c:3653
 msgid "Veteran"
 msgstr "Veteraan"
 
-#: src/droid.c:3648
+#: src/droid.c:3654
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3649
+#: src/droid.c:3655
 msgid "Special"
 msgstr "Speciaal"
 
-#: src/droid.c:3650
+#: src/droid.c:3656
 msgid "Hero"
 msgstr "Held"
 
@@ -13317,7 +13268,7 @@ msgstr "Bouw (F3)"
 
 #: src/hci.c:3882
 #: src/multiint.c:1257
-#: src/multimenu.c:773
+#: src/multimenu.c:763
 msgid "Power"
 msgstr "Energie"
 
@@ -14455,7 +14406,7 @@ msgid "Distance Fog"
 msgstr "Afstandsmist"
 
 #: src/multiint.c:1224
-#: src/multimenu.c:766
+#: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Bondgenootschappen toestaan"
 
@@ -14645,72 +14596,72 @@ msgstr "Terug naar vorig scherm"
 msgid "Limits reset to default values"
 msgstr ""
 
-#: src/multimenu.c:619
+#: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Technologyniveau 1"
 
-#: src/multimenu.c:627
+#: src/multimenu.c:617
 msgid "Technology level 2"
 msgstr "Technologyniveau 2"
 
-#: src/multimenu.c:633
+#: src/multimenu.c:623
 msgid "Technology level 3"
 msgstr "Technologyniveau 3"
 
-#: src/multimenu.c:639
+#: src/multimenu.c:629
 msgid "Any number of players"
 msgstr "Elk aantal spelers"
 
-#: src/multimenu.c:646
+#: src/multimenu.c:636
 msgid "2 players"
 msgstr "2 spelers"
 
-#: src/multimenu.c:652
+#: src/multimenu.c:642
 msgid "4 players"
 msgstr "4 spelers"
 
-#: src/multimenu.c:658
+#: src/multimenu.c:648
 msgid "8 players"
 msgstr "8 spelers"
 
-#: src/multimenu.c:767
+#: src/multimenu.c:757
 msgid "Score"
 msgstr "Score"
 
-#: src/multimenu.c:768
+#: src/multimenu.c:758
 msgid "Kills"
 msgstr "Doden"
 
-#: src/multimenu.c:772
-#: src/multimenu.c:777
+#: src/multimenu.c:762
+#: src/multimenu.c:767
 msgid "Units"
 msgstr "Eenheden"
 
-#: src/multimenu.c:782
+#: src/multimenu.c:772
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multimenu.c:786
+#: src/multimenu.c:776
 msgid "Structs"
 msgstr "Gebouwen"
 
-#: src/multimenu.c:1149
+#: src/multimenu.c:1139
 msgid "Toggle Alliance State"
 msgstr "Bondgenootschap veranderen"
 
-#: src/multimenu.c:1168
+#: src/multimenu.c:1158
 msgid "Give Visibility Report"
 msgstr "Zichtbaarheidsrapport geven"
 
-#: src/multimenu.c:1174
+#: src/multimenu.c:1164
 msgid "Leak Technology Documents"
 msgstr "Onderzoeksdocumenten laten uitlekken"
 
-#: src/multimenu.c:1181
+#: src/multimenu.c:1171
 msgid "Hand Over Selected Units"
 msgstr "Geselecteerde eenheden overdragen"
 
-#: src/multimenu.c:1187
+#: src/multimenu.c:1177
 msgid "Give Power To Player"
 msgstr "Geef energie aan speler"
 
@@ -14903,12 +14854,12 @@ msgstr "JE HEBT GEWONNEN!"
 msgid "YOU WERE DEFEATED!"
 msgstr "JE BENT VERSLAGEN!"
 
-#: src/scriptfuncs.c:10088
+#: src/scriptfuncs.c:10089
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Baken ontvangen  van %s!"
 
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10135
 #, c-format
 msgid "Beacon %d"
 msgstr "Baken %d"
@@ -15031,6 +14982,9 @@ msgstr " - Gebouwd %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versie %s%s%s%s"
+
+#~ msgid "Z NULL SENSOR"
+#~ msgstr "Z NULSENSOR"
 
 #~ msgid "Czech"
 #~ msgstr "Tsjechisch"
