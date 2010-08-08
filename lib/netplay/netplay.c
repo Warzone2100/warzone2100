@@ -888,7 +888,7 @@ static Socket* socketAccept(Socket* sock)
 {
 	unsigned int i;
 
-	ASSERT(sock != NULL, "NULL Socket provided");
+	ASSERT_OR_RETURN(NULL, sock != NULL, "NULL Socket provided");
 
 	/* Search for a socket that has a pending connection on it and accept
 	 * the first one.
