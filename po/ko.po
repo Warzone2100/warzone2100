@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-01 15:12+0200\n"
-"PO-Revision-Date: 2010-08-01 11:09+0900\n"
+"POT-Creation-Date: 2010-08-08 16:02+0200\n"
+"PO-Revision-Date: 2010-08-07 01:45+0900\n"
 "Last-Translator: Josh Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
 "Language: \n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: data/base/messages/messages.rmsg:4
 msgid "Structure Research Completed"
-msgstr "구조 연구 완료"
+msgstr "구조물 연구 완료"
 
 #: data/base/messages/messages.rmsg:14
 msgid "Power Research Completed"
@@ -209,11 +209,12 @@ msgstr "무기 연구 완료"
 msgid "New Defensive Structure Available"
 msgstr "새로운 방어 구조 사용가능"
 
+# get rid of 장갑??? armored
 #: data/base/messages/resmessages12.rmsg:5
 #: data/mp/messages/resmessages12.rmsg:5
 #, fuzzy
 msgid "Armored Mortar battery pit"
-msgstr "박격포 장갑피트(구덩이)"
+msgstr "박격포 배터리 장갑구덩이"
 
 #: data/base/messages/resmessages12.rmsg:6
 #: data/base/messages/resmessages12.rmsg:19
@@ -255,7 +256,7 @@ msgstr "박격포 장갑피트(구덩이)"
 #: data/mp/messages/strings/resstrings.txt:203
 #: data/mp/messages/strings/resstrings.txt:209
 msgid "Assigned automatically to nearest sensor or CB tower"
-msgstr "가까운 센서 또는 CB 관제탑으로 자동 할당"
+msgstr "가까운 센서 또는 카운터배터리 관제탑으로 자동 할당"
 
 #: data/base/messages/resmessages12.rmsg:7
 #: data/base/messages/resmessages12.rmsg:20
@@ -356,7 +357,7 @@ msgstr "방위력  : 중급"
 #: data/base/messages/resmessages12.rmsg:18
 #: data/mp/messages/resmessages12.rmsg:18
 msgid "Mini-rocket armored strongpoint"
-msgstr "미니 로켓 장갑진지"
+msgstr "미니 로케트 장갑진지"
 
 #: data/base/messages/resmessages12.rmsg:31
 #: data/mp/messages/resmessages12.rmsg:31
@@ -502,7 +503,7 @@ msgstr "방위력  : 상급"
 #: data/base/messages/resmessages12.rmsg:44
 #: data/mp/messages/resmessages12.rmsg:44
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr "랜서 대전차미사일 장갑진지"
+msgstr "랜서Lancer 대전차미사일 장갑진지"
 
 #: data/base/messages/resmessages12.rmsg:56
 #: data/base/messages/resmessages23.rmsg:43
@@ -533,34 +534,33 @@ msgstr "건설 속도를 증가"
 #: data/mp/messages/resmessages23.rmsg:46
 #: data/mp/messages/resmessages3.rmsg:514
 msgid "All trucks upgraded automatically"
-msgstr "모든 트럭이 자동으로 업그레이드됩니다"
+msgstr "모든 트럭이 자동으로 개선됩니다"
 
 #: data/base/messages/resmessages12.rmsg:69
 #: data/base/messages/resmessages1.rmsg:4
 #: data/mp/messages/resmessages12.rmsg:69
 #: data/mp/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
-msgstr "새로운 시스템 터릿이 디자인 가능합니다"
+msgstr "새로운 시스템 터릿이 디자인에 사용 가능합니다"
 
 #: data/base/messages/resmessages12.rmsg:70
 #: data/mp/messages/resmessages12.rmsg:70
 msgid "Counter-battery turret detects enemy indirect fire batteries"
-msgstr "카운터-배터리 터릿이 적의 간접 대포 사격을 감지하였습니다"
+msgstr "카운터배터리 터릿이 적의 간접 대포 사격을 감지하였습니다"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessagesall.rmsg:97
 #: data/mp/messages/resmessages12.rmsg:71
 #: data/mp/messages/resmessagesall.rmsg:123
-#, fuzzy
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
-msgstr "간접 사격 유닛에게 적의 배터리를 공격하라 명령하였습니다."
+msgstr "간접 사격 유닛에게 적의 포대를 공격하라 명령하였습니다."
 
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessagesall.rmsg:98
 #: data/mp/messages/resmessages12.rmsg:72
 #: data/mp/messages/resmessagesall.rmsg:124
 msgid "Counter-battery fire continues until enemy battery is suppressed"
-msgstr "카운터-배터리 사격은 적의 배터리가 억압될때까지 계속됩니다"
+msgstr "카운터배터리 사격은 적의 배터리가 억압될때까지 계속됩니다"
 
 #: data/base/messages/resmessages12.rmsg:82
 #: data/base/messages/resmessages23.rmsg:56
@@ -569,7 +569,7 @@ msgstr "카운터-배터리 사격은 적의 배터리가 억압될때까지 계
 #: data/mp/messages/resmessages23.rmsg:56
 #: data/mp/messages/resmessages3.rmsg:524
 msgid "CB Sensor Improved"
-msgstr "카운터-배터리 센서 개선"
+msgstr "카운터배터리 센서 개선"
 
 #: data/base/messages/resmessages12.rmsg:83
 #: data/base/messages/resmessages2.rmsg:447
@@ -587,7 +587,7 @@ msgstr "새로운 공격 탐지 시스템"
 #: data/mp/messages/resmessages23.rmsg:58
 #: data/mp/messages/resmessages3.rmsg:526
 msgid "Extends CB Range"
-msgstr "카운터-배터리의 범위 확장"
+msgstr "카운터배터리의 범위 확장"
 
 #: data/base/messages/resmessages12.rmsg:85
 #: data/base/messages/resmessages23.rmsg:59
@@ -596,7 +596,7 @@ msgstr "카운터-배터리의 범위 확장"
 #: data/mp/messages/resmessages23.rmsg:59
 #: data/mp/messages/resmessages3.rmsg:527
 msgid "All CB sensors upgraded automatically"
-msgstr "모든 카운터-배터리 센서가 자동으로 업그레이드됩니다"
+msgstr "모든 카운터배터리 센서가 자동으로 개선됩니다"
 
 #: data/base/messages/resmessages12.rmsg:95
 #: data/base/messages/resmessages12.rmsg:212
@@ -613,7 +613,7 @@ msgstr "모든 카운터-배터리 센서가 자동으로 업그레이드됩니�
 #: data/mp/messages/resmessages3.rmsg:888
 #: data/mp/messages/resmessagesall.rmsg:212
 msgid "Cannon Upgrade"
-msgstr "캐논 업그레이드"
+msgstr "캐논 개선"
 
 #: data/base/messages/resmessages12.rmsg:96
 #: data/mp/messages/resmessages12.rmsg:96
@@ -640,7 +640,7 @@ msgstr "캐논의 정확성을 능가시킵니다"
 #: data/mp/messages/resmessages3.rmsg:891
 #: data/mp/messages/resmessagesall.rmsg:215
 msgid "All cannons upgraded automatically"
-msgstr "모든 캐논이 자동 업그레이드됩니다"
+msgstr "모든 캐논이 자동 개선됩니다"
 
 #: data/base/messages/resmessages12.rmsg:108
 #: data/base/messages/resmessages1.rmsg:602
@@ -652,7 +652,7 @@ msgstr "모든 캐논이 자동 업그레이드됩니다"
 #: data/mp/messages/resmessagesall.rmsg:771
 #: data/mp/messages/strings/resstrings.txt:802
 msgid "Flamer Upgrade"
-msgstr "화염방사기 업그레이드"
+msgstr "화염방사기 개선"
 
 #: data/base/messages/resmessages12.rmsg:109
 #: data/base/messages/resmessages12.rmsg:213
@@ -663,7 +663,7 @@ msgstr "화염방사기 업그레이드"
 #: data/mp/messages/resmessages2.rmsg:863
 #: data/mp/messages/strings/resstrings.txt:849
 msgid "Automatic loading mechanism replaces manual loader"
-msgstr "자동 로딩 메커니즘은 수동 로더를 대체"
+msgstr "자동 장전기 메커니즘은 수동 장전기를 대체"
 
 #: data/base/messages/resmessages12.rmsg:110
 msgid "Increases Flamer ROF"
@@ -679,7 +679,7 @@ msgstr "화염방사기의 ROF(공격 범위)를 증가시킵니다"
 #: data/mp/messages/resmessagesall.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "All flamers upgraded automatically"
-msgstr "모든 화염방사기가 자동 업그레이드됩니다"
+msgstr "모든 화염방사기가 자동 개선됩니다"
 
 #: data/base/messages/resmessages12.rmsg:121
 #: data/base/messages/resmessages1.rmsg:537
@@ -856,12 +856,12 @@ msgstr "바디포인트: 중급"
 #: data/mp/messages/strings/resstrings.txt:886
 #: data/mp/messages/strings/resstrings.txt:898
 msgid "Machinegun Upgrade"
-msgstr "기관총 업그레이드"
+msgstr "기관총 개선"
 
 #: data/base/messages/resmessages12.rmsg:135
 #: data/mp/messages/resmessages12.rmsg:135
 msgid "Chaingun mechanism replaces belt-feed"
-msgstr "체인건 메커니즘이 벨트-피드를 대체하였습니다"
+msgstr "체인건 메커니즘이 벨트사용 장전을 대체하였습니다"
 
 #: data/base/messages/resmessages12.rmsg:136
 #: data/base/messages/resmessages23.rmsg:175
@@ -892,7 +892,7 @@ msgstr "기관총의 ROF(공격 범위)를 증가시킵니다"
 #: data/mp/messages/strings/resstrings.txt:889
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "All machineguns upgraded automatically"
-msgstr "모든 기관총이 자동 업그레이드됩니다"
+msgstr "모든 기관총이 자동 개선됩니다"
 
 #: data/base/messages/resmessages12.rmsg:147
 #: data/base/messages/resmessages1.rmsg:667
@@ -995,7 +995,7 @@ msgstr "바디포인트: 매우 낮음"
 #: data/mp/messages/resmessages3.rmsg:1187
 #: data/mp/messages/strings/resstrings.txt:948
 msgid "Mortar Upgrade"
-msgstr "박격포 업그레이드"
+msgstr "박격포 개선"
 
 #: data/base/messages/resmessages12.rmsg:161
 #: data/mp/messages/resmessages12.rmsg:161
@@ -1025,12 +1025,12 @@ msgstr "박격포 정확도를 증가시킵니다."
 #: data/mp/messages/resmessages3.rmsg:1190
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "All mortars upgraded automatically"
-msgstr "모든 박격포는 자동으로 업그레이드됩니다"
+msgstr "모든 박격포는 자동으로 개선됩니다"
 
 #: data/base/messages/resmessages12.rmsg:174
 #: data/mp/messages/resmessages12.rmsg:174
 msgid "Automatic loader replaces manual feed"
-msgstr "자동 로더가 수동 피드를 대체하였습니다"
+msgstr "자동 장전기가 수동 장전를 대체하였습니다"
 
 #: data/base/messages/resmessages12.rmsg:175
 #: data/base/messages/resmessages3.rmsg:1189
@@ -1050,12 +1050,12 @@ msgstr "박격포의 ROF(공격 범위)를 증가시킵니다"
 #: data/mp/messages/resmessagesall.rmsg:186
 #: data/mp/messages/resmessagesall.rmsg:199
 msgid "New Rocket Available"
-msgstr "새로운 로켓 무기 사용가능"
+msgstr "새로운 로케트 무기 사용가능"
 
 #: data/base/messages/resmessages12.rmsg:187
 #: data/mp/messages/resmessages12.rmsg:187
 msgid "Rocket artillery; can be assigned to a sensor"
-msgstr "로켓 화포; 센서에 할당할 수 있습니다"
+msgstr "로케트 포병대. 센서에 할당할 수 있습니다"
 
 #: data/base/messages/resmessages12.rmsg:188
 #: data/mp/messages/resmessages12.rmsg:188
@@ -1077,16 +1077,16 @@ msgstr "가장 효과적인 타깃: 차량, 포좌"
 #: data/mp/messages/resmessagesall.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:1008
 msgid "Rocket Upgrade"
-msgstr "로켓 업그레이드"
+msgstr "로케트 개선"
 
 #: data/base/messages/resmessages12.rmsg:200
 #: data/mp/messages/resmessages12.rmsg:200
 msgid "Autoloader increases reload rate"
-msgstr "자동 로더가 재장전 속도를 증가했습니다"
+msgstr "자동 장전기가 재장전 속도를 증가했습니다"
 
 #: data/base/messages/resmessages12.rmsg:201
 msgid "Increases Rocket ROF"
-msgstr "로켓 ROF(공격 범위)를 증가합니다"
+msgstr "로케트 ROF(공격 범위)를 증가합니다"
 
 #: data/base/messages/resmessages12.rmsg:202
 #: data/base/messages/resmessages12.rmsg:241
@@ -1103,7 +1103,7 @@ msgstr "로켓 ROF(공격 범위)를 증가합니다"
 #: data/mp/messages/resmessagesall.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "All rockets upgraded automatically"
-msgstr "모든 로켓이 자동 업그레이드됩니다"
+msgstr "모든 로케트가 자동 개선됩니다"
 
 #: data/base/messages/resmessages12.rmsg:214
 #: data/base/messages/resmessages3.rmsg:890
@@ -1124,18 +1124,18 @@ msgstr "캐논의 파괴력을 증가시킵니다"
 #: data/base/messages/resmessages12.rmsg:239
 #: data/mp/messages/resmessages12.rmsg:239
 msgid "Rocket tracks the laser designator to the target"
-msgstr "로켓이 레이저 추적기를 따라 타깃을 접근합니다"
+msgstr "로케트이 레이저 추적기를 따라 타깃을 접근합니다"
 
 #: data/base/messages/resmessages12.rmsg:240
 #: data/base/messages/resmessages1.rmsg:747
 #: data/base/messages/resmessagesall.rmsg:136
 msgid "Increases Rocket accuracy"
-msgstr "로켓의 정확도를 증가합니다"
+msgstr "로케트의 정확도를 증가합니다"
 
 #: data/base/messages/resmessages12.rmsg:252
 #: data/mp/messages/resmessages12.rmsg:252
 msgid "Heavy anti-tank rocket"
-msgstr "헤비(Heavy)급 대전차로켓"
+msgstr "헤비(Heavy)급 대전차로케트"
 
 #: data/base/messages/resmessages12.rmsg:253
 #: data/base/messages/resmessages1.rmsg:539
@@ -1169,7 +1169,7 @@ msgstr "가장 효과적인 타깃: 차량"
 #: data/base/messages/resmessages12.rmsg:265
 #: data/mp/messages/resmessages12.rmsg:265
 msgid "Fires salvoes of mini-rockets"
-msgstr "미니로켓을 일제히 발사합니다"
+msgstr "미니로케트를 일제히 발사합니다"
 
 #: data/base/messages/resmessages12.rmsg:266
 #: data/mp/messages/resmessages12.rmsg:266
@@ -1285,7 +1285,7 @@ msgstr "장갑과 바디포인트를 향상시켜줍니다"
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "All Cyborgs upgraded automatically"
-msgstr "모든 사이보그가 자동 업그레이드됩니다"
+msgstr "모든 사이보그가 자동 개선됩니다"
 
 #: data/base/messages/resmessages1.rmsg:43
 #: data/base/messages/resmessages1.rmsg:56
@@ -1393,7 +1393,7 @@ msgstr "사이보그 화염 방사기로 무장"
 #: data/base/messages/resmessages1.rmsg:83
 #: data/mp/messages/resmessages1.rmsg:83
 msgid "Armed with Lance Anti-Tank rocket"
-msgstr "'랜스' 대전차로켓으로 무장"
+msgstr "랜서Lancer 대전차로케트로 무장"
 
 #: data/base/messages/resmessages1.rmsg:95
 #: data/base/messages/resmessages2.rmsg:56
@@ -1411,7 +1411,7 @@ msgstr "방비가 개선되었습니다"
 #: data/base/messages/resmessages1.rmsg:96
 #: data/mp/messages/resmessages1.rmsg:96
 msgid "Improved Titanium-reinforced concrete"
-msgstr "개선된 티타늄-철근 콘크리트"
+msgstr "개선된 티타늄 철근콘크리트"
 
 #: data/base/messages/resmessages1.rmsg:97
 msgid "Increases Armour and Body Points"
@@ -1428,7 +1428,7 @@ msgstr "갑옷과 바디포인트를 향상시켜줍니다"
 #: data/mp/messages/resmessages3.rmsg:228
 #: data/mp/messages/strings/resstrings.txt:124
 msgid "All defenses and walls upgraded automatically"
-msgstr "모든 방어물과 벽들은 자동 업그레이드됩니다"
+msgstr "모든 방어물과 벽은 자동 개선됩니다"
 
 #: data/base/messages/resmessages1.rmsg:109
 #: data/mp/messages/resmessages1.rmsg:109
@@ -1443,7 +1443,7 @@ msgstr "방위력: 낮음"
 #: data/base/messages/resmessages1.rmsg:122
 #: data/mp/messages/resmessages1.rmsg:122
 msgid "Armored guard tower with Mini-Pod Rocket"
-msgstr "미니 로켓 포드 달린 보안 탑"
+msgstr "미니포드(pod) 로케트가 달린 경호 탑"
 
 #: data/base/messages/resmessages1.rmsg:135
 #: data/mp/messages/resmessages1.rmsg:135
@@ -1452,7 +1452,7 @@ msgstr "기관총 장갑벙커"
 
 #: data/base/messages/resmessages1.rmsg:148
 msgid "Armored bunker with Lancer AT rocket"
-msgstr "랜서 대전차로켓 장갑벙커"
+msgstr "랜서Lancer 대전차로케트 장갑벙커"
 
 #: data/base/messages/resmessages1.rmsg:161
 #: data/mp/messages/resmessages1.rmsg:161
@@ -1467,24 +1467,24 @@ msgstr "소형 캐논 장갑벙커"
 #: data/base/messages/resmessages1.rmsg:187
 #: data/mp/messages/resmessages1.rmsg:187
 msgid "Armored hardpoint with Light Cannon"
-msgstr "소형 캐논 장갑 하드포인트"
+msgstr "소형 캐논 하드포인트"
 
 #: data/base/messages/resmessages1.rmsg:200
 #: data/mp/messages/resmessages1.rmsg:200
 msgid "Armored hardpoint with Medium Cannon"
-msgstr "중형 캐논 장갑벙커"
+msgstr "중형 캐논 하드포인트"
 
 #: data/base/messages/resmessages1.rmsg:213
 #: data/mp/messages/resmessages1.rmsg:213
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr "대형 캐논 장갑벙커"
+msgstr "대형 캐논 하드포인트"
 
 #: data/base/messages/resmessages1.rmsg:226
 #: data/base/messages/strings/resstrings.txt:324
 #: data/mp/messages/resmessages1.rmsg:226
 #: data/mp/messages/strings/resstrings.txt:350
 msgid "Reinforced concrete tank traps"
-msgstr "철근 콘크리트 탱크 장애물"
+msgstr "철근콘크리트 탱크 장애물"
 
 #: data/base/messages/resmessages1.rmsg:227
 #: data/base/messages/strings/resstrings.txt:325
@@ -1554,12 +1554,12 @@ msgstr "수리 속도를 증가"
 #: data/mp/messages/resmessages3.rmsg:423
 #: data/mp/messages/strings/resstrings.txt:362
 msgid "All repair facilities upgraded automatically"
-msgstr "모든 수리 시설이 자동 업그레이드됩니다"
+msgstr "모든 수리 시설이 자동 개선됩니다"
 
 #: data/base/messages/resmessages1.rmsg:265
 #: data/mp/messages/resmessages1.rmsg:265
 msgid "Enables command turret research"
-msgstr "명령 터렛 연구를 활성화 해줍니다"
+msgstr "명령 터릿 연구를 활성화 해줍니다"
 
 #: data/base/messages/resmessages1.rmsg:266
 #: data/mp/messages/resmessages1.rmsg:266
@@ -1612,7 +1612,7 @@ msgstr "사이보그 공장의 생산량을 증가합니다"
 #: data/mp/messages/strings/resstrings.txt:376
 #: data/mp/messages/strings/resstrings.txt:384
 msgid "All Cyborg factories upgraded automatically"
-msgstr "모든 사이보그 공장이 자동 업그레이드됩니다"
+msgstr "모든 사이보그 공장이 자동 개선됩니다"
 
 #: data/base/messages/resmessages1.rmsg:291
 #: data/base/messages/strings/names.txt:399
@@ -1687,7 +1687,7 @@ msgstr "자동화된 공장 생산"
 #: data/mp/messages/strings/resstrings.txt:394
 #: data/mp/messages/strings/resstrings.txt:402
 msgid "All vehicle factories upgraded automatically"
-msgstr "모든 차량 공장이 자동 업그레이드됩니다"
+msgstr "모든 차량 공장이 자동 개선됩니다"
 
 #: data/base/messages/resmessages1.rmsg:329
 #: data/mp/messages/resmessages1.rmsg:330
@@ -1716,12 +1716,12 @@ msgstr "트럭을 써서 전력 발전기에 모듈을 더하십시오"
 #: data/base/messages/resmessages1.rmsg:342
 #: data/mp/messages/resmessages1.rmsg:343
 msgid "Research Module Available"
-msgstr "연구소 모듈 사용가능"
+msgstr "연구 센터 모듈 사용가능"
 
 #: data/base/messages/resmessages1.rmsg:343
 #: data/mp/messages/resmessages1.rmsg:344
 msgid "Research module expands research facilities"
-msgstr "연구소 모듈이 연구 시설을 확장해줍니다"
+msgstr "연구 센터 모듈이 연구 시설을 확장해줍니다"
 
 #: data/base/messages/resmessages1.rmsg:344
 #: data/base/messages/resmessages1.rmsg:357
@@ -1751,7 +1751,7 @@ msgstr "연구가 개선되었습니다"
 #: data/base/messages/resmessages1.rmsg:356
 #: data/mp/messages/resmessages1.rmsg:357
 msgid "Synaptic link data analysis"
-msgstr "시냅스 연결 데이터 분석"
+msgstr "시냅스 링크 데이터 분석"
 
 #: data/base/messages/resmessages1.rmsg:358
 #: data/base/messages/resmessages2.rmsg:371
@@ -1762,7 +1762,7 @@ msgstr "시냅스 연결 데이터 분석"
 #: data/mp/messages/resmessages3.rmsg:449
 #: data/mp/messages/strings/resstrings.txt:418
 msgid "All research facilities upgraded automatically"
-msgstr "모든 연구 시설이 자동으로 업그레이드됩니다"
+msgstr "모든 연구 시설이 자동으로 개선됩니다"
 
 #: data/base/messages/resmessages1.rmsg:368
 #: data/base/messages/resmessages2.rmsg:381
@@ -1809,17 +1809,17 @@ msgstr "장갑과 바디포인트를 향상합니다"
 #: data/mp/messages/resmessages3.rmsg:475
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "All base structures upgraded automatically"
-msgstr "모든 기지 구조물이 자동 업그레이드됩니다"
+msgstr "모든 기지 구조물이 자동 개선됩니다"
 
 #: data/base/messages/resmessages1.rmsg:381
 #: data/mp/messages/resmessages1.rmsg:382
 msgid "Project Light Body"
-msgstr "프로젝트 라이트(소형) 바디"
+msgstr "프로젝트 소형 바디"
 
 #: data/base/messages/resmessages1.rmsg:382
 #: data/mp/messages/resmessages1.rmsg:383
 msgid "Light body vulnerable to heavy weapons"
-msgstr "라이트 바디는 중화기에 취약합니다"
+msgstr "소형 바디 중화기에 취약합니다"
 
 #: data/base/messages/resmessages1.rmsg:383
 #: data/mp/messages/resmessages1.rmsg:384
@@ -1834,7 +1834,7 @@ msgstr "낮은 전력 비용과 낮은 생산 시간비용"
 #: data/base/messages/resmessages1.rmsg:394
 #: data/mp/messages/resmessages1.rmsg:395
 msgid "New Paradigm Light Body"
-msgstr "새로운 패러다임 라이트 바디"
+msgstr "새로운 패러다임 소형 바디"
 
 #: data/base/messages/resmessages1.rmsg:395
 #: data/mp/messages/resmessages1.rmsg:396
@@ -1855,7 +1855,6 @@ msgstr "생산시 전력 소모와 시간 소요는 바이퍼와 비슷함"
 
 #: data/base/messages/resmessages1.rmsg:407
 #: data/mp/messages/resmessages1.rmsg:408
-#, fuzzy
 msgid "Project Medium Body"
 msgstr "프로젝트 미디엄(중형) 바디"
 
@@ -1949,7 +1948,7 @@ msgstr "전력 비용과 생산시간소요가 파이썬과 같음"
 #: data/mp/messages/resmessages3.rmsg:680
 #: data/mp/messages/strings/resstrings.txt:592
 msgid "Vehicle Engine Upgrade"
-msgstr "차량 엔진 업그레이드"
+msgstr "차량 엔진 개선"
 
 #: data/base/messages/resmessages1.rmsg:460
 #: data/base/messages/strings/names.txt:942
@@ -1995,7 +1994,7 @@ msgstr "차량 속도를 증가시킵니다"
 #: data/mp/messages/strings/resstrings.txt:607
 #: data/mp/messages/strings/resstrings.txt:617
 msgid "All vehicles upgraded automatically"
-msgstr "모든 차량이 자동 업그레이드됩니다"
+msgstr "모든 차량이 자동 개선됩니다"
 
 #: data/base/messages/resmessages1.rmsg:472
 #: data/base/messages/resmessages2.rmsg:511
@@ -2032,9 +2031,8 @@ msgstr "새로운 추진력이 사용가능합니다"
 
 #: data/base/messages/resmessages1.rmsg:486
 #: data/mp/messages/resmessages1.rmsg:487
-#, fuzzy
 msgid "Armored Half-tracks"
-msgstr "장갑 해프트랙"
+msgstr "장갑한 반 무한궤도(Half-tracks)"
 
 #: data/base/messages/resmessages1.rmsg:487
 #: data/mp/messages/resmessages1.rmsg:488
@@ -2102,7 +2100,7 @@ msgstr "바디포인트: 낮음"
 #: data/base/messages/resmessages1.rmsg:512
 #: data/mp/messages/resmessages1.rmsg:513
 msgid "Armored Tracks"
-msgstr "장갑 무한궤도 "
+msgstr "장갑한 무한궤도 "
 
 #: data/base/messages/resmessages1.rmsg:513
 #: data/mp/messages/resmessages1.rmsg:514
@@ -2119,7 +2117,7 @@ msgstr "바퀴 추진"
 #: data/base/messages/resmessages1.rmsg:538
 #: data/mp/messages/resmessages1.rmsg:539
 msgid "Light Cannon firing 40mm rounds"
-msgstr "40mm 탄환을 발사하는 라이트 캐논"
+msgstr "40mm 탄환을 발사하는 소형 캐논"
 
 #: data/base/messages/resmessages1.rmsg:551
 #: data/mp/messages/resmessages1.rmsg:552
@@ -2134,7 +2132,7 @@ msgstr "120mm 탄환을 발사하는 대형 캐논"
 #: data/base/messages/resmessages1.rmsg:577
 #: data/mp/messages/resmessages1.rmsg:578
 msgid "High Explosive Anti-Tank Cannon Shells"
-msgstr "고성능 대전차 캐논 포탄 "
+msgstr "대전차 캐논 고성능 폭발탄"
 
 #: data/base/messages/resmessages1.rmsg:590
 #: data/mp/messages/resmessages1.rmsg:591
@@ -2203,7 +2201,7 @@ msgstr "APDSB 운동 에너지탄"
 #: data/mp/messages/resmessages1.rmsg:669
 #: data/mp/messages/resmessagesall.rmsg:343
 msgid "May be targeted directly or assigned to a sensor turret or tower"
-msgstr "직사하거나 센서터릿 또는 센서타워에 지정될 수 있습니다"
+msgstr "직접 사격으로 사용하거나 센서터릿 또는 센서탑에 지정될 수 있습니다"
 
 #: data/base/messages/resmessages1.rmsg:681
 #: data/mp/messages/resmessages1.rmsg:682
@@ -2221,7 +2219,7 @@ msgstr "박격포의 파괴력을 증가시킵니다"
 #: data/base/messages/resmessages1.rmsg:694
 #: data/mp/messages/resmessages1.rmsg:695
 msgid "Fast firing light anti-vehicle rockets"
-msgstr "급속발사 차량용 라이트 로켓"
+msgstr "급속발사 차량용 소형 로케트"
 
 #: data/base/messages/resmessages1.rmsg:695
 #: data/mp/messages/resmessages1.rmsg:696
@@ -2241,7 +2239,7 @@ msgstr "가장 효과적인 표적:  바퀴추진 또는 호버추진 차량"
 #: data/mp/messages/strings/resstrings.txt:986
 #: data/mp/messages/strings/resstrings.txt:994
 msgid "Mini-Rocket Upgrade"
-msgstr "미니로켓 업그레이드"
+msgstr "미니로케트 개선"
 
 #: data/base/messages/resmessages1.rmsg:707
 #: data/mp/messages/resmessages1.rmsg:708
@@ -2250,7 +2248,7 @@ msgstr "날개안정덕분에 비행 탄도가 개선되었습니다"
 
 #: data/base/messages/resmessages1.rmsg:708
 msgid "Increases Mini-Rocket accuracy"
-msgstr "미니로켓의 정확도를 증가시킵니다"
+msgstr "미니로케트의 정확도를 증가시킵니다"
 
 #: data/base/messages/resmessages1.rmsg:709
 #: data/base/messages/resmessages1.rmsg:722
@@ -2265,7 +2263,7 @@ msgstr "미니로켓의 정확도를 증가시킵니다"
 #: data/mp/messages/strings/resstrings.txt:989
 #: data/mp/messages/strings/resstrings.txt:997
 msgid "All mini-rockets upgraded automatically"
-msgstr "모든 미니로켓이 자동으로 업그레이드됩니다"
+msgstr "모든 미니로케트가 자동으로 개선됩니다"
 
 #: data/base/messages/resmessages1.rmsg:720
 #: data/mp/messages/resmessages1.rmsg:721
@@ -2277,7 +2275,7 @@ msgstr "성형 폭탄의 탄두가 개선되었습니다"
 #: data/base/messages/strings/resstrings.txt:945
 #: data/mp/messages/strings/resstrings.txt:988
 msgid "Increases Mini-Rocket damage"
-msgstr "미니로켓의 파괴력을 증가합니다"
+msgstr "미니로케트의 파괴력을 증가합니다"
 
 #: data/base/messages/resmessages1.rmsg:733
 #: data/mp/messages/resmessages1.rmsg:734
@@ -2286,31 +2284,31 @@ msgstr "자동 재장전 시스템"
 
 #: data/base/messages/resmessages1.rmsg:734
 msgid "Increases Mini-Rockets ROF"
-msgstr "미니로켓의 공격범위를 넓혀줍니다"
+msgstr "미니로케트의 공격범위를 넓혀줍니다"
 
 #: data/base/messages/resmessages1.rmsg:746
 #: data/mp/messages/resmessages1.rmsg:747
 msgid "Tracks and directs in-flight rocket to target"
-msgstr "비행중 로켓의 진로를 관찰하면서 표적으로 안내해줍니다"
+msgstr "비행중인 로케트의 진로를 관찰하면서 표적으로 안내해줍니다"
 
 #: data/base/messages/resmessages1.rmsg:759
 #: data/mp/messages/resmessages1.rmsg:760
 msgid "High Explosive Anti-Tank warhead"
-msgstr "고성능 대전차용 폭발탄두"
+msgstr "대전차용 고성능 탄두"
 
 #: data/base/messages/resmessages1.rmsg:760
 #: data/base/messages/resmessages2.rmsg:942
 #: data/base/messages/strings/resstrings.txt:967
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Increases Rocket damage"
-msgstr ""
+msgstr "로케트의 파괴력을 증가시킵니다"
 
 #: data/base/messages/resmessages23.rmsg:4
 #: data/base/messages/resmessages3.rmsg:56
 #: data/mp/messages/resmessages23.rmsg:4
 #: data/mp/messages/resmessages3.rmsg:56
 msgid "Cyborg Propulsion Improved"
-msgstr ""
+msgstr "사이보그 추진력이 향상되었습니다"
 
 #: data/base/messages/resmessages23.rmsg:5
 #: data/base/messages/resmessages2.rmsg:538
@@ -2340,8 +2338,9 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:635
 #: data/mp/messages/strings/resstrings.txt:645
 #: data/mp/messages/strings/resstrings.txt:655
+#, fuzzy
 msgid "New armored construction"
-msgstr ""
+msgstr "새로운 장갑한 건설기술"
 
 #: data/base/messages/resmessages23.rmsg:6
 #: data/base/messages/resmessages2.rmsg:539
@@ -2372,29 +2371,29 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:646
 #: data/mp/messages/strings/resstrings.txt:656
 msgid "Increases Body Points"
-msgstr ""
+msgstr "바디포인트를 증가시켜줍니다"
 
 #: data/base/messages/resmessages23.rmsg:18
 #: data/mp/messages/resmessages23.rmsg:18
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr ""
+msgstr "하드포인트 초고속포탄 캐논"
 
 #: data/base/messages/resmessages23.rmsg:31
 #: data/base/messages/resmessages3.rmsg:434
 msgid "New Power Generation Technology"
-msgstr ""
+msgstr "새로운 발전 기술"
 
 #: data/base/messages/resmessages23.rmsg:32
 #: data/mp/messages/resmessages23.rmsg:31
 msgid "Gas turbine boosts power output"
-msgstr ""
+msgstr "가스 터빈(turbine)이 출력을 증가시켜줍니다"
 
 #: data/base/messages/resmessages23.rmsg:33
 #: data/base/messages/resmessages3.rmsg:436
 #: data/mp/messages/resmessages23.rmsg:33
 #: data/mp/messages/resmessages3.rmsg:436
 msgid "All power generators upgraded automatically"
-msgstr ""
+msgstr "모든 전력 발전기가 자동으로 개선됩니다"
 
 #: data/base/messages/resmessages23.rmsg:57
 #: data/base/messages/resmessages23.rmsg:83
@@ -2403,7 +2402,7 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:83
 #: data/mp/messages/resmessages3.rmsg:525
 msgid "Improved fire detection systems"
-msgstr ""
+msgstr "사격 탐지 시스템이 향상되었습니다"
 
 #: data/base/messages/resmessages23.rmsg:69
 #: data/base/messages/resmessages23.rmsg:95
@@ -2415,12 +2414,12 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:121
 #: data/mp/messages/resmessagesall.rmsg:134
 msgid "New Systems Tower Available"
-msgstr ""
+msgstr "새로운 시스템 탑이 사용가능합니다"
 
 #: data/base/messages/resmessages23.rmsg:70
 #: data/mp/messages/resmessages23.rmsg:70
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
-msgstr ""
+msgstr "VTOL 카운터배터리 탑에서 적의 간접 사격 포대를 감지했습니다"
 
 #: data/base/messages/resmessages23.rmsg:71
 #: data/base/messages/resmessages2.rmsg:435
@@ -2429,7 +2428,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:435
 #: data/mp/messages/strings/resstrings.txt:509
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr ""
+msgstr "VTOL 유닛에게 적의 포대를 공격하도록 명령하였습니다"
 
 #: data/base/messages/resmessages23.rmsg:72
 #: data/base/messages/resmessages2.rmsg:436
@@ -2438,7 +2437,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:436
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr ""
+msgstr "VTOL 유닛이 적의 포대가 억압될 때까지 공격합니다"
 
 #: data/base/messages/resmessages23.rmsg:82
 #: data/base/messages/resmessages2.rmsg:446
@@ -2449,7 +2448,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:537
 #: data/mp/messages/strings/resstrings.txt:513
 msgid "VTOL CB Improved"
-msgstr ""
+msgstr "VTOL 카운터배터리가 향상되었습니다"
 
 #: data/base/messages/resmessages23.rmsg:84
 #: data/base/messages/resmessages2.rmsg:448
@@ -2460,7 +2459,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:539
 #: data/mp/messages/strings/resstrings.txt:515
 msgid "Extends VTOL CB Range"
-msgstr ""
+msgstr "VTOL 카운터배터리의 공격범위를 넓혀줍니다"
 
 #: data/base/messages/resmessages23.rmsg:85
 #: data/base/messages/resmessages2.rmsg:449
@@ -2471,22 +2470,22 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:540
 #: data/mp/messages/strings/resstrings.txt:516
 msgid "All VTOL CB sensors upgraded automatically"
-msgstr ""
+msgstr "모든 VTOL 카운터배터리 센서가 자동 개선됩니다"
 
 #: data/base/messages/resmessages23.rmsg:96
 #: data/mp/messages/resmessages23.rmsg:96
 msgid "VTOL Strike Tower detects approaching enemies"
-msgstr ""
+msgstr "VTOL 스트라이크 탑에서 접근하는 적을 감지했습니다"
 
 #: data/base/messages/resmessages23.rmsg:97
 #: data/mp/messages/resmessages23.rmsg:97
 msgid "Assigned VTOLs attack the enemy units"
-msgstr ""
+msgstr "할당 VTOL 유닛이 적의 유닛을 공격합니다"
 
 #: data/base/messages/resmessages23.rmsg:98
 #: data/mp/messages/resmessages23.rmsg:98
 msgid "Strike mission continues until enemy destroyed or they retreat"
-msgstr ""
+msgstr "스트라이크 임무는 적이 파괴되거나 후퇴할 때까지 계속됩니다"
 
 #: data/base/messages/resmessages23.rmsg:108
 #: data/base/messages/resmessages2.rmsg:433
@@ -2503,22 +2502,22 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:469
 #: data/mp/messages/strings/resstrings.txt:507
 msgid "New Systems Turret Available"
-msgstr ""
+msgstr "새로운 시스템 터릿 사용가능"
 
 #: data/base/messages/resmessages23.rmsg:109
 #: data/mp/messages/resmessages23.rmsg:109
 msgid "VTOL Strike turret used to spot targets"
-msgstr ""
+msgstr "표적을 찾아내는 데 사용되는 VTOL 스트라이크 터릿"
 
 #: data/base/messages/resmessages23.rmsg:110
 #: data/mp/messages/resmessages23.rmsg:110
 msgid "Assigned VTOLs attack the designated targets"
-msgstr ""
+msgstr "할당 VTOL 유닛이 지정된 표적을 공격합니다"
 
 #: data/base/messages/resmessages23.rmsg:111
 #: data/mp/messages/resmessages23.rmsg:111
 msgid "Select new targets to continue the VTOL strikes"
-msgstr ""
+msgstr "VTOL 스트라이크를 계속할 새로운 표적을 선택하십시오"
 
 #: data/base/messages/resmessages23.rmsg:121
 #: data/base/messages/resmessages2.rmsg:459
@@ -2529,12 +2528,12 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:550
 #: data/mp/messages/strings/resstrings.txt:527
 msgid "VTOL Strike Improved"
-msgstr ""
+msgstr "VTOL 스트라이크가 개선되었습니다"
 
 #: data/base/messages/resmessages23.rmsg:122
 #: data/mp/messages/resmessages23.rmsg:122
 msgid "Improved target recognition systems"
-msgstr ""
+msgstr "표적 인식 시스템이 개선되었습니다"
 
 #: data/base/messages/resmessages23.rmsg:123
 #: data/base/messages/resmessages2.rmsg:461
@@ -2545,7 +2544,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:552
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "Extends VTOL Strike Range"
-msgstr ""
+msgstr "VTOL 스트라이크(공격) 범위를 늘립니다"
 
 #: data/base/messages/resmessages23.rmsg:124
 #: data/base/messages/resmessages2.rmsg:462
@@ -2556,7 +2555,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:553
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr ""
+msgstr "모든 VTOL 스트라이크 센서가 자동 개선됩니다"
 
 #: data/base/messages/resmessages23.rmsg:134
 #: data/base/messages/resmessages2.rmsg:641
@@ -2573,7 +2572,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:692
 #: data/mp/messages/strings/resstrings.txt:710
 msgid "AA Upgrade"
-msgstr ""
+msgstr "대공(Anti-air) 개선"
 
 #: data/base/messages/resmessages23.rmsg:135
 #: data/base/messages/resmessages2.rmsg:837
@@ -2582,7 +2581,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:837
 #: data/mp/messages/strings/resstrings.txt:833
 msgid "Self-guided rocket powered shells"
-msgstr ""
+msgstr "자동 유도형 로케트추진 포탄"
 
 #: data/base/messages/resmessages23.rmsg:136
 #: data/base/messages/resmessages2.rmsg:643
@@ -2590,7 +2589,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:661
 #: data/mp/messages/strings/resstrings.txt:694
 msgid "Increases AA accuracy"
-msgstr ""
+msgstr "대공의 정확도를 증가시킵니다"
 
 #: data/base/messages/resmessages23.rmsg:137
 #: data/base/messages/resmessages2.rmsg:644
@@ -2607,7 +2606,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:695
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "All AA weapons upgraded automatically"
-msgstr ""
+msgstr "모든 대공 무기가 자동 개선됩니다"
 
 #: data/base/messages/resmessages23.rmsg:147
 #: data/base/messages/resmessages2.rmsg:706
@@ -2623,17 +2622,17 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:730
 #: data/mp/messages/strings/resstrings.txt:736
 msgid "New Bomb Bay Available"
-msgstr ""
+msgstr "새로운 폭탄 투하실이 사용가능합니다"
 
 #: data/base/messages/resmessages23.rmsg:148
 #: data/mp/messages/resmessages23.rmsg:148
 msgid "Drops incendiary bombs"
-msgstr ""
+msgstr "소이탄을 떨어뜨립니다"
 
 #: data/base/messages/resmessages23.rmsg:149
 #: data/mp/messages/resmessages23.rmsg:149
 msgid "Best Targets: Bunkers and Hardpoints"
-msgstr ""
+msgstr "가장 효과적인 표적: 벙커와 하드포인트"
 
 #: data/base/messages/resmessages23.rmsg:160
 #: data/base/messages/resmessages2.rmsg:732
@@ -2641,11 +2640,11 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:746
 msgid "Bombsight Upgrade"
-msgstr ""
+msgstr "폭격 조준기 개선"
 
 #: data/base/messages/resmessages23.rmsg:161
 msgid "Laser designator paints and guides bombs to the target"
-msgstr ""
+msgstr "레이저 조준기가 표적을 향해 폭탄을 지도해줍니다"
 
 #: data/base/messages/resmessages23.rmsg:162
 #: data/base/messages/resmessages2.rmsg:734
@@ -2653,7 +2652,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:715
 #: data/mp/messages/strings/resstrings.txt:748
 msgid "Increases Bombing accuracy"
-msgstr ""
+msgstr "폭격 정확성을 늘려줍니다"
 
 #: data/base/messages/resmessages23.rmsg:163
 #: data/base/messages/resmessages2.rmsg:735
@@ -2664,22 +2663,22 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:865
 #: data/mp/messages/strings/resstrings.txt:749
 msgid "All bomb bays upgraded automatically"
-msgstr ""
+msgstr "모든 폭탄 투하실이 자동 개선됩니다"
 
 #: data/base/messages/resmessages23.rmsg:174
 #: data/mp/messages/resmessages23.rmsg:174
 msgid "Robotic advances make new chaingun upgrade available"
-msgstr ""
+msgstr "로봇발전 덕분에 새로운 체인건 개선가 사용가능합니다"
 
 #: data/base/messages/resmessages23.rmsg:187
 #: data/mp/messages/resmessages23.rmsg:187
 msgid "Shells detect and home to thermal heat signatures"
-msgstr ""
+msgstr "포탄이 적외선을 감지하고 자동 추적합니다"
 
 #: data/base/messages/resmessages23.rmsg:200
 #: data/mp/messages/resmessages23.rmsg:200
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
-msgstr ""
+msgstr "105mm 다중 총열 곡사포가 센서에 할당될 수 있습니다"
 
 #: data/base/messages/resmessages23.rmsg:201
 #: data/base/messages/resmessages2.rmsg:799
@@ -2693,19 +2692,19 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:812
 #: data/mp/messages/strings/resstrings.txt:820
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr ""
+msgstr "가장 효과적인 표적: 기지 구조물, 보병, 바퀴추진 차량"
 
 #: data/base/messages/resmessages23.rmsg:213
 #: data/mp/messages/resmessages23.rmsg:213
 msgid "Multi-barrel, rapid-fire machinegun"
-msgstr ""
+msgstr "다중 총열, 속사 기관총"
 
 #: data/base/messages/resmessages23.rmsg:215
 #: data/mp/messages/resmessages23.rmsg:215
 #: data/mp/messages/resmessagesall.rmsg:878
 #: data/mp/messages/resmessagesall.rmsg:891
 msgid "Replaces all machineguns"
-msgstr ""
+msgstr "모든 기관총을 대체합니다"
 
 #: data/base/messages/resmessages2.rmsg:4
 #: data/base/messages/resmessages3.rmsg:4
@@ -2714,7 +2713,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:43
 msgid "Cyborg Thermal Armor Improved"
-msgstr ""
+msgstr "사이보그 열갑옷이 개선되었습니다"
 
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
@@ -2723,14 +2722,14 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:5
 #: data/mp/messages/strings/resstrings.txt:44
 msgid "Heat resistant armored layers"
-msgstr ""
+msgstr "겹쳐진 내열성 장갑층"
 
 #: data/base/messages/resmessages2.rmsg:6
 #: data/base/messages/resmessages3.rmsg:6
 #: data/base/messages/strings/resstrings.txt:43
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Thermal Armor increased"
-msgstr ""
+msgstr "열갑옷 증가"
 
 #: data/base/messages/resmessages2.rmsg:18
 #: data/base/messages/resmessages2.rmsg:512
@@ -2741,7 +2740,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:34
 #: data/mp/messages/strings/resstrings.txt:605
 msgid "Layered dense composite alloys and energy-absorbing fibres"
-msgstr ""
+msgstr "겹쳐진 고밀도 복합 합금과 에너지흡수 섬유"
 
 #: data/base/messages/resmessages2.rmsg:31
 #: data/base/messages/strings/resstrings.txt:50
@@ -2750,28 +2749,28 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:52
 #: data/mp/messages/strings/resstrings.txt:102
 msgid "Armed with Bunker Buster rocket"
-msgstr ""
+msgstr "벙커 버스터(Buster) 로케트로 무장"
 
 #: data/base/messages/resmessages2.rmsg:44
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/resmessages2.rmsg:44
 #: data/mp/messages/strings/resstrings.txt:84
 msgid "Armed with Cyborg Assault Gun"
-msgstr ""
+msgstr "사이보그 어썰트총으로 무장"
 
 #: data/base/messages/resmessages2.rmsg:57
 #: data/base/messages/strings/resstrings.txt:104
 #: data/mp/messages/resmessages2.rmsg:57
 #: data/mp/messages/strings/resstrings.txt:122
 msgid "High-tensile concrete reinforced with boron"
-msgstr ""
+msgstr "붕소로 강화된 고장력 콘크리트"
 
 #: data/base/messages/resmessages2.rmsg:70
 #: data/base/messages/strings/resstrings.txt:120
 #: data/mp/messages/resmessages2.rmsg:70
 #: data/mp/messages/strings/resstrings.txt:138
 msgid "AA Site with Cyclone Flak Turret"
-msgstr ""
+msgstr "싸이클론 대공포 발사시설"
 
 #: data/base/messages/resmessages2.rmsg:71
 #: data/base/messages/resmessages2.rmsg:97
@@ -2789,71 +2788,73 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:133
 #: data/mp/messages/strings/resstrings.txt:139
 #: data/mp/messages/strings/resstrings.txt:151
+#, fuzzy
 msgid "Automatically targets VTOLs"
-msgstr ""
+msgstr "VTOL 유닛을 자동 겨냥합니다"
 
 #: data/base/messages/resmessages2.rmsg:83
 #: data/base/messages/strings/resstrings.txt:126
 #: data/mp/messages/resmessages2.rmsg:83
 #: data/mp/messages/strings/resstrings.txt:144
 msgid "AA Site with Hurricane Gun Turret"
-msgstr ""
+msgstr "허리케인 터릿 대공포 발사시설"
 
 #: data/base/messages/resmessages2.rmsg:84
 #: data/base/messages/strings/resstrings.txt:127
 #: data/mp/messages/resmessages2.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:145
+#, fuzzy
 msgid "Automatically targets VTOL"
-msgstr ""
+msgstr "VTOL을 자동 겨냥합니다"
 
 #: data/base/messages/resmessages2.rmsg:96
 #: data/base/messages/strings/resstrings.txt:132
 #: data/mp/messages/resmessages2.rmsg:96
 #: data/mp/messages/strings/resstrings.txt:150
 msgid "AA Site with Whirlwind Gun Turret"
-msgstr ""
+msgstr "회오리 터릿 대공포 발사시설"
 
 #: data/base/messages/resmessages2.rmsg:109
 #: data/base/messages/strings/resstrings.txt:114
 #: data/mp/messages/resmessages2.rmsg:109
 #: data/mp/messages/strings/resstrings.txt:132
 msgid "AA Site with Tornado Flak Turret"
-msgstr ""
+msgstr "토네이도 터릿 대공포 발사시설"
 
 #: data/base/messages/resmessages2.rmsg:122
 #: data/base/messages/strings/resstrings.txt:142
 #: data/mp/messages/resmessages2.rmsg:122
 #: data/mp/messages/strings/resstrings.txt:160
 msgid "Indirect fire rocket battery"
-msgstr ""
+msgstr "간접 사격 로케트 배터리"
 
 #: data/base/messages/resmessages2.rmsg:135
 #: data/base/messages/strings/resstrings.txt:154
 #: data/mp/messages/resmessages2.rmsg:135
 #: data/mp/messages/strings/resstrings.txt:174
 msgid "Armored Bombard battery pit"
-msgstr ""
+msgstr "봄바드(bombard) 배터리 장갑구덩이"
 
 #: data/base/messages/resmessages2.rmsg:148
 #: data/base/messages/strings/resstrings.txt:168
 #: data/mp/messages/resmessages2.rmsg:148
 #: data/mp/messages/strings/resstrings.txt:188
 msgid "Armored howitzer emplacement"
-msgstr ""
+msgstr "장갑한 곡사포 포좌"
 
 #: data/base/messages/resmessages2.rmsg:161
 #: data/base/messages/strings/resstrings.txt:174
 #: data/mp/messages/resmessages2.rmsg:161
 #: data/mp/messages/strings/resstrings.txt:194
 msgid "Armored Ground Shaker howitzer emplacement"
-msgstr ""
+msgstr "그라운드 쉐이커 곡사포 포좌"
 
 #: data/base/messages/resmessages2.rmsg:174
 #: data/base/messages/strings/resstrings.txt:160
 #: data/mp/messages/resmessages2.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:180
 msgid "Armored Pepperpot mortar battery pit"
-msgstr ""
+msgstr "페퍼폿(pepperpot) 박격포 배터리 구덩이"
 
 #: data/base/messages/resmessages2.rmsg:187
 #: data/base/messages/resmessages2.rmsg:200
@@ -2864,14 +2865,14 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:202
 #: data/mp/messages/strings/resstrings.txt:208
 msgid "Armored Hellstorm howitzer emplacement"
-msgstr ""
+msgstr "장갑 헬스톰Hellstorm 곡사포 포좌"
 
 #: data/base/messages/resmessages2.rmsg:213
 #: data/base/messages/strings/resstrings.txt:192
 #: data/mp/messages/resmessages2.rmsg:213
 #: data/mp/messages/strings/resstrings.txt:214
 msgid "Armored strongpoint with Tank Killer rocket"
-msgstr ""
+msgstr "탱크킬러 로케트 스트롱포인트"
 
 #: data/base/messages/resmessages2.rmsg:214
 #: data/base/messages/resmessages2.rmsg:227
@@ -2904,70 +2905,72 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:245
 #: data/mp/messages/strings/resstrings.txt:251
 msgid "Automatically targets enemies in range"
-msgstr ""
+msgstr "공격 범위 내에있는 적을 자동 겨냥합니다"
 
 #: data/base/messages/resmessages2.rmsg:226
 #: data/base/messages/strings/resstrings.txt:198
 #: data/mp/messages/resmessages2.rmsg:226
 #: data/mp/messages/strings/resstrings.txt:220
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr ""
+msgstr "초고속포탄 캐논 하드포인트 "
 
 #: data/base/messages/resmessages2.rmsg:239
 #: data/base/messages/strings/resstrings.txt:204
 #: data/mp/messages/resmessages2.rmsg:239
 #: data/mp/messages/strings/resstrings.txt:226
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr ""
+msgstr "인퍼노Inferno 화염방사기 스트롱포인트"
 
+# taking out the "장갑" parts (they mean "armored")
 #: data/base/messages/resmessages2.rmsg:252
 #: data/base/messages/strings/resstrings.txt:218
 #: data/mp/messages/resmessages2.rmsg:252
 #: data/mp/messages/strings/resstrings.txt:244
 msgid "Armored strongpoint with Assault Cannon"
-msgstr ""
+msgstr "어썰트Assault 캐논 스트롱포인트"
 
 #: data/base/messages/resmessages2.rmsg:265
 #: data/base/messages/strings/resstrings.txt:224
 #: data/mp/messages/resmessages2.rmsg:265
 #: data/mp/messages/strings/resstrings.txt:250
 msgid "Reinforced tower with Assault Gun"
-msgstr ""
+msgstr "어썰트총 보강탑"
 
 #: data/base/messages/resmessages2.rmsg:278
 #: data/base/messages/strings/resstrings.txt:288
 #: data/mp/messages/resmessages2.rmsg:278
 #: data/mp/messages/strings/resstrings.txt:314
 msgid "Armored hardpoint with Assault Gun"
-msgstr ""
+msgstr "어썰트총 하드포인트"
 
+# 장갑 하드포인트 or 하드포인트?
 #: data/base/messages/resmessages2.rmsg:291
 #: data/base/messages/strings/resstrings.txt:294
 #: data/mp/messages/resmessages2.rmsg:291
 #: data/mp/messages/strings/resstrings.txt:320
 msgid "Armored hardpoint with Assault Cannon"
-msgstr ""
+msgstr "어썰트 캐논 하드포인트"
 
 #: data/base/messages/resmessages2.rmsg:304
 #: data/base/messages/strings/resstrings.txt:302
 #: data/mp/messages/resmessages2.rmsg:304
 #: data/mp/messages/strings/resstrings.txt:328
 msgid "Armored hardpoint with Inferno flamer"
-msgstr ""
+msgstr "인퍼노Inferno 하드포인트"
 
 #: data/base/messages/resmessages2.rmsg:317
 #: data/base/messages/strings/resstrings.txt:308
 #: data/mp/messages/resmessages2.rmsg:317
 #: data/mp/messages/strings/resstrings.txt:334
 msgid "Armored hardpoint with Tank Killer AT missile"
-msgstr ""
+msgstr "탱크킬러 대전차미사일 하드포인트"
 
 #: data/base/messages/resmessages2.rmsg:330
 #: data/base/messages/strings/resstrings.txt:334
 #: data/mp/messages/resmessages2.rmsg:330
 #: data/mp/messages/strings/resstrings.txt:360
 msgid "New robotic repair techniques"
-msgstr ""
+msgstr "새로운 로봇 수리 기법"
 
 #: data/base/messages/resmessages2.rmsg:343
 #: data/base/messages/strings/names.txt:786
@@ -2976,20 +2979,20 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:797
 #: data/mp/messages/strings/resstrings.txt:374
 msgid "Robotic Cyborg Production"
-msgstr ""
+msgstr "로보트 사이보그 생산"
 
 #: data/base/messages/resmessages2.rmsg:356
 #: data/base/messages/strings/resstrings.txt:366
 #: data/mp/messages/resmessages2.rmsg:356
 #: data/mp/messages/strings/resstrings.txt:392
 msgid "New Robotic Techniques improve factory production"
-msgstr ""
+msgstr "새로운 로봇 기술이 공장의 생산을 향상하였습니다"
 
 #: data/base/messages/resmessages2.rmsg:357
 #: data/base/messages/strings/resstrings.txt:367
 #: data/mp/messages/strings/resstrings.txt:393
 msgid "Increases factory production rate"
-msgstr ""
+msgstr "공장의 생산 속도를 증가합니다"
 
 #: data/base/messages/resmessages2.rmsg:369
 #: data/base/messages/strings/names.txt:835
@@ -2998,7 +3001,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:846
 #: data/mp/messages/strings/resstrings.txt:416
 msgid "Dedicated Synaptic Link Data Analysis"
-msgstr ""
+msgstr "전용 시냅스 링크 데이터 분석"
 
 #: data/base/messages/resmessages2.rmsg:382
 #: data/base/messages/strings/names.txt:808
@@ -3007,7 +3010,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:819
 #: data/mp/messages/strings/resstrings.txt:426
 msgid "Hardened Base Structure Materials"
-msgstr ""
+msgstr "강화된 기지 구조물 재료"
 
 #: data/base/messages/resmessages2.rmsg:395
 #: data/base/messages/strings/names.txt:851
@@ -3016,7 +3019,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:862
 #: data/mp/messages/strings/resstrings.txt:438
 msgid "Robotic VTOL Production"
-msgstr ""
+msgstr "로봇식 VTOL 생산"
 
 #: data/base/messages/resmessages2.rmsg:396
 #: data/base/messages/resmessages3.rmsg:487
@@ -3025,7 +3028,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:487
 #: data/mp/messages/strings/resstrings.txt:439
 msgid "Increases VTOL factory output"
-msgstr ""
+msgstr "VTOL 공장의 생산량을 증가시킵니다"
 
 #: data/base/messages/resmessages2.rmsg:397
 #: data/base/messages/resmessages3.rmsg:488
@@ -3034,7 +3037,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:488
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "All VTOL factories upgraded automatically"
-msgstr ""
+msgstr "모든 VTOL 공장이 자동으로 개선됩니다"
 
 #: data/base/messages/resmessages2.rmsg:407
 #: data/base/messages/resmessages3.rmsg:498
@@ -3043,7 +3046,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:498
 #: data/mp/messages/strings/resstrings.txt:447
 msgid "VTOL Rearming Times Reduced"
-msgstr ""
+msgstr "VTOL 재무장 시간 소요 감소"
 
 #: data/base/messages/resmessages2.rmsg:408
 #: data/base/messages/strings/names.txt:843
@@ -3052,14 +3055,14 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:854
 #: data/mp/messages/strings/resstrings.txt:448
 msgid "Automated VTOL Rearming"
-msgstr ""
+msgstr "VTOL 자동 재무장"
 
 #: data/base/messages/resmessages2.rmsg:409
 #: data/base/messages/resmessages3.rmsg:500
 #: data/base/messages/strings/resstrings.txt:423
 #: data/mp/messages/strings/resstrings.txt:449
 msgid "Reduces rearming time"
-msgstr ""
+msgstr "재무장시 시간 소요를 감소합니다"
 
 #: data/base/messages/resmessages2.rmsg:410
 #: data/base/messages/resmessages3.rmsg:501
@@ -3068,28 +3071,28 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:501
 #: data/mp/messages/strings/resstrings.txt:450
 msgid "All rearming pads upgraded automatically"
-msgstr ""
+msgstr "모든 재무장 패드가 자동 개선됩니다"
 
 #: data/base/messages/resmessages2.rmsg:420
 #: data/base/messages/strings/resstrings.txt:459
 #: data/mp/messages/resmessages2.rmsg:420
 #: data/mp/messages/strings/resstrings.txt:487
 msgid "Improved Sensor Tower Available"
-msgstr ""
+msgstr "개선된 센서탑이 사용가능합니다"
 
 #: data/base/messages/resmessages2.rmsg:421
 #: data/base/messages/strings/resstrings.txt:460
 #: data/mp/messages/resmessages2.rmsg:421
 #: data/mp/messages/strings/resstrings.txt:488
 msgid "New construction techniques improve tower"
-msgstr ""
+msgstr "새로운 걸설 기법때문에 탑이 향상되었습니다"
 
 #: data/base/messages/resmessages2.rmsg:422
 #: data/base/messages/strings/resstrings.txt:461
 #: data/mp/messages/resmessages2.rmsg:422
 #: data/mp/messages/strings/resstrings.txt:489
 msgid "Replaces existing sensor tower"
-msgstr ""
+msgstr "기존의 센서 탑을 대체합니다"
 
 #: data/base/messages/resmessages2.rmsg:423
 #: data/base/messages/resmessagesall.rmsg:59
@@ -3100,28 +3103,31 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:72
 #: data/mp/messages/strings/resstrings.txt:490
 msgid "May be assigned as spotter for indirect fire weapons"
-msgstr ""
+msgstr "간접 사격기를 위한 정찰기로 할당될 수 있습니다"
 
+# Phrase:
+# Does this mean the turret HAS detected enemy, or just that the turret's fuction is DETECTION??
 #: data/base/messages/resmessages2.rmsg:434
 #: data/base/messages/strings/resstrings.txt:480
 #: data/mp/messages/resmessages2.rmsg:434
 #: data/mp/messages/strings/resstrings.txt:508
+#, fuzzy
 msgid "VTOL CB turret detects enemy indirect fire batteries"
-msgstr ""
+msgstr "VTOL 카운터배터리 터릿이 적의 간접 사격 포대를 감지합니다"
 
 #: data/base/messages/resmessages2.rmsg:460
 #: data/base/messages/strings/resstrings.txt:500
 #: data/mp/messages/resmessages2.rmsg:460
 #: data/mp/messages/strings/resstrings.txt:528
 msgid "New target recognition systems"
-msgstr ""
+msgstr "새로운 표적 인식 시스템"
 
 #: data/base/messages/resmessages2.rmsg:472
 #: data/base/messages/strings/resstrings.txt:527
 #: data/mp/messages/resmessages2.rmsg:472
 #: data/mp/messages/strings/resstrings.txt:560
 msgid "Collective Light Body"
-msgstr ""
+msgstr "'컬렉티브' 소형 바디"
 
 #: data/base/messages/resmessages2.rmsg:473
 #: data/base/messages/resmessages3.rmsg:629
@@ -3130,28 +3136,28 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:629
 #: data/mp/messages/strings/resstrings.txt:561
 msgid "Superior armor and body points to Viper"
-msgstr ""
+msgstr "바이퍼보다 우수한 장갑과 바디 포인트"
 
 #: data/base/messages/resmessages2.rmsg:474
 #: data/base/messages/strings/resstrings.txt:529
 #: data/mp/messages/resmessages2.rmsg:474
 #: data/mp/messages/strings/resstrings.txt:562
 msgid "Slower than Viper"
-msgstr ""
+msgstr "바이퍼보다 느림"
 
 #: data/base/messages/resmessages2.rmsg:475
 #: data/base/messages/strings/resstrings.txt:530
 #: data/mp/messages/resmessages2.rmsg:475
 #: data/mp/messages/strings/resstrings.txt:563
 msgid "High power costs and slower to produce than Viper"
-msgstr ""
+msgstr "전력 비용이 높고 바이퍼보다 생산이 느립니다"
 
 #: data/base/messages/resmessages2.rmsg:485
 #: data/base/messages/strings/resstrings.txt:539
 #: data/mp/messages/resmessages2.rmsg:485
 #: data/mp/messages/strings/resstrings.txt:572
 msgid "Collective Medium Body"
-msgstr ""
+msgstr "'컬렉티브' 중형 바디"
 
 #: data/base/messages/resmessages2.rmsg:486
 #: data/base/messages/resmessages3.rmsg:642
@@ -3160,21 +3166,21 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:642
 #: data/mp/messages/strings/resstrings.txt:573
 msgid "Superior armor and body points to Cobra"
-msgstr ""
+msgstr "코브라보다 우수한 장갑과 바디 포인트"
 
 #: data/base/messages/resmessages2.rmsg:487
 #: data/base/messages/strings/resstrings.txt:541
 #: data/mp/messages/resmessages2.rmsg:487
 #: data/mp/messages/strings/resstrings.txt:574
 msgid "Slower than Cobra"
-msgstr ""
+msgstr "코브라보다 느림"
 
 #: data/base/messages/resmessages2.rmsg:488
 #: data/base/messages/strings/resstrings.txt:542
 #: data/mp/messages/resmessages2.rmsg:488
 #: data/mp/messages/strings/resstrings.txt:575
 msgid "High power costs and slower to produce than Cobra"
-msgstr ""
+msgstr "전력 비용이 높고 코브라보다 생산이 느립니다"
 
 #: data/base/messages/resmessages2.rmsg:499
 #: data/base/messages/strings/names.txt:945
@@ -3183,7 +3189,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:958
 #: data/mp/messages/strings/resstrings.txt:593
 msgid "Turbo-Charged Engine"
-msgstr ""
+msgstr "터보충전기Turbo-Charger 엔진"
 
 #: data/base/messages/resmessages2.rmsg:524
 #: data/base/messages/resmessages3.rmsg:719
@@ -3193,7 +3199,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:836
 #: data/mp/messages/strings/resstrings.txt:614
 msgid "Vehicle Thermal Armor Improved"
-msgstr ""
+msgstr "차량의 열갑옷이 향상되었습니다"
 
 #: data/base/messages/resmessages2.rmsg:525
 #: data/base/messages/resmessages3.rmsg:720
@@ -3203,14 +3209,14 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:837
 #: data/mp/messages/strings/resstrings.txt:615
 msgid "Heat-resistant armored layers"
-msgstr ""
+msgstr "겹쳐진 내열성 장갑층"
 
 #: data/base/messages/resmessages2.rmsg:526
 #: data/base/messages/resmessages3.rmsg:721
 #: data/base/messages/strings/resstrings.txt:583
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Increases Thermal Armor"
-msgstr ""
+msgstr "열갑옷을 증가시킵니다"
 
 #: data/base/messages/resmessages2.rmsg:537
 #: data/base/messages/resmessages2.rmsg:550
@@ -3241,7 +3247,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:644
 #: data/mp/messages/strings/resstrings.txt:654
 msgid "Vehicle Propulsion Improved"
-msgstr ""
+msgstr "차량 추진력 향상"
 
 #: data/base/messages/resmessages2.rmsg:540
 #: data/base/messages/resmessages3.rmsg:735
@@ -3250,7 +3256,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:735
 #: data/mp/messages/strings/resstrings.txt:627
 msgid "All half-tracks upgraded automatically"
-msgstr ""
+msgstr "모든 반 무한궤도(Half-tracks)가 자동 개선됩니다"
 
 #: data/base/messages/resmessages2.rmsg:553
 #: data/base/messages/resmessages3.rmsg:748
@@ -3259,7 +3265,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:748
 #: data/mp/messages/strings/resstrings.txt:637
 msgid "All hovers upgraded automatically"
-msgstr ""
+msgstr "모든 호버차량이 자동 개선됩니다"
 
 #: data/base/messages/resmessages2.rmsg:566
 #: data/base/messages/resmessages3.rmsg:761
@@ -3268,7 +3274,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:761
 #: data/mp/messages/strings/resstrings.txt:647
 msgid "All tracks upgraded automatically"
-msgstr ""
+msgstr "모든 무한궤도가 자동 개선됩니다"
 
 #: data/base/messages/resmessages2.rmsg:579
 #: data/base/messages/resmessages3.rmsg:774
@@ -3277,7 +3283,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:657
 msgid "All wheels upgraded automatically"
-msgstr ""
+msgstr "모든 바퀴가 자동 개선됩니다"
 
 #: data/base/messages/resmessages2.rmsg:589
 #: data/base/messages/resmessages2.rmsg:602
@@ -3296,14 +3302,14 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:680
 #: data/mp/messages/strings/resstrings.txt:686
 msgid "New AA Turret Available"
-msgstr ""
+msgstr "새로운 대공 터릿이 사용가능합니다"
 
 #: data/base/messages/resmessages2.rmsg:590
 #: data/base/messages/strings/resstrings.txt:636
 #: data/mp/messages/resmessages2.rmsg:590
 #: data/mp/messages/strings/resstrings.txt:669
 msgid "Twin 80mm flak weapon"
-msgstr ""
+msgstr "80mm 쌍대공포 "
 
 #: data/base/messages/resmessages2.rmsg:591
 #: data/base/messages/resmessages2.rmsg:604
@@ -3325,21 +3331,21 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:682
 #: data/mp/messages/strings/resstrings.txt:688
 msgid "Aerial targets only"
-msgstr ""
+msgstr "공중 표적 전용"
 
 #: data/base/messages/resmessages2.rmsg:603
 #: data/base/messages/strings/resstrings.txt:642
 #: data/mp/messages/resmessages2.rmsg:603
 #: data/mp/messages/strings/resstrings.txt:675
 msgid "Quad 80mm flak weapon"
-msgstr ""
+msgstr "80mm 대공포 2쌍"
 
 #: data/base/messages/resmessages2.rmsg:616
 #: data/base/messages/strings/resstrings.txt:648
 #: data/mp/messages/resmessages2.rmsg:616
 #: data/mp/messages/strings/resstrings.txt:681
 msgid "30mm Anti-Aircraft machinegun"
-msgstr ""
+msgstr "30mm 대공 기관총"
 
 #: data/base/messages/resmessages2.rmsg:629
 #: data/base/messages/strings/resstrings.txt:654
@@ -3347,14 +3353,14 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:759
 #: data/mp/messages/strings/resstrings.txt:687
 msgid "Quad 30mm Anti-Aircraft machinegun"
-msgstr ""
+msgstr "30mm 대공 기관총 2쌍"
 
 #: data/base/messages/resmessages2.rmsg:642
 #: data/base/messages/strings/resstrings.txt:660
 #: data/mp/messages/resmessages2.rmsg:642
 #: data/mp/messages/strings/resstrings.txt:693
 msgid "Detects and locks-on to VTOL engine emissions"
-msgstr ""
+msgstr "VTOL 배기가스를 감지, 자동 추적합니다"
 
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/resmessages3.rmsg:823
@@ -3363,21 +3369,21 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:823
 #: data/mp/messages/strings/resstrings.txt:702
 msgid "AA Flak Upgrade"
-msgstr ""
+msgstr "대공포 개선"
 
 #: data/base/messages/resmessages2.rmsg:655
 #: data/base/messages/strings/resstrings.txt:670
 #: data/mp/messages/resmessages2.rmsg:655
 #: data/mp/messages/strings/resstrings.txt:703
 msgid "High Explosive Flak shards"
-msgstr ""
+msgstr "고성능 대공포탄의 파편"
 
 #: data/base/messages/resmessages2.rmsg:656
 #: data/base/messages/resmessages3.rmsg:825
 #: data/base/messages/strings/resstrings.txt:671
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "Increases AA Flak damage"
-msgstr ""
+msgstr "대공포의 파괴력을 증가시킵니다"
 
 #: data/base/messages/resmessages2.rmsg:657
 #: data/base/messages/resmessages3.rmsg:826
@@ -3386,21 +3392,21 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:826
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "All AA flak weapons upgraded automatically"
-msgstr ""
+msgstr "모든 대공포가 자동 개선됩니다"
 
 #: data/base/messages/resmessages2.rmsg:668
 #: data/base/messages/strings/resstrings.txt:678
 #: data/mp/messages/resmessages2.rmsg:668
 #: data/mp/messages/strings/resstrings.txt:711
 msgid "Recoil loaded AA ammunition hopper"
-msgstr ""
+msgstr "반동-재장전 대공탄약 호퍼"
 
 #: data/base/messages/resmessages2.rmsg:669
 #: data/base/messages/resmessages3.rmsg:838
 #: data/base/messages/strings/resstrings.txt:679
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "Increases AA ROF"
-msgstr ""
+msgstr "대공 화기의 공격 범위를 넓힙니다"
 
 #: data/base/messages/resmessages2.rmsg:680
 #: data/base/messages/resmessages2.rmsg:693
@@ -3411,14 +3417,14 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:718
 #: data/mp/messages/strings/resstrings.txt:724
 msgid "New Proximity Bomb Turret Available"
-msgstr ""
+msgstr "새로운 근접폭탄 터릿이 사용가능합니다"
 
 #: data/base/messages/resmessages2.rmsg:681
 #: data/base/messages/strings/resstrings.txt:686
 #: data/mp/messages/resmessages2.rmsg:681
 #: data/mp/messages/strings/resstrings.txt:719
 msgid "Bomb turret explodes in proximity to enemy"
-msgstr ""
+msgstr "폭탄 터릿이 적이 근접할 때 터집니다"
 
 #: data/base/messages/resmessages2.rmsg:682
 #: data/base/messages/resmessages2.rmsg:695
@@ -3429,76 +3435,76 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:720
 #: data/mp/messages/strings/resstrings.txt:726
 msgid "Best Targets: Base Structures and Defenses"
-msgstr ""
+msgstr "가장 효과적인 표적: 기지 구조물, 방어 시설"
 
 #: data/base/messages/resmessages2.rmsg:694
 #: data/base/messages/strings/resstrings.txt:692
 #: data/mp/messages/resmessages2.rmsg:694
 #: data/mp/messages/strings/resstrings.txt:725
 msgid "Superbomb turret explodes in proximity to enemy"
-msgstr ""
+msgstr "초강력 폭탄 터릿이 적이 근접할 때 터집니다"
 
 #: data/base/messages/resmessages2.rmsg:707
 #: data/base/messages/strings/resstrings.txt:698
 #: data/mp/messages/resmessages2.rmsg:707
 #: data/mp/messages/strings/resstrings.txt:731
 msgid "Drops High Explosive Cluster bombs"
-msgstr ""
+msgstr "고성능 클러스터 폭탄을 떨어뜨립니다"
 
 #: data/base/messages/resmessages2.rmsg:708
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/resmessages2.rmsg:708
 #: data/mp/messages/strings/resstrings.txt:732
 msgid "Best Targets: Base Structures"
-msgstr ""
+msgstr "가장 효과적인 표적: 기지 구조물"
 
 #: data/base/messages/resmessages2.rmsg:720
 #: data/base/messages/strings/resstrings.txt:704
 #: data/mp/messages/resmessages2.rmsg:720
 #: data/mp/messages/strings/resstrings.txt:737
 msgid "Drops High Explosive Armor Piercing bombs"
-msgstr ""
+msgstr "고성능 철갑탄을 떨어뜨립니다"
 
 #: data/base/messages/resmessages2.rmsg:721
 #: data/base/messages/strings/resstrings.txt:705
 #: data/mp/messages/resmessages2.rmsg:721
 #: data/mp/messages/strings/resstrings.txt:738
 msgid "Best Targets: Defenses"
-msgstr ""
+msgstr "가장 효과적인 표적: 방어 시설"
 
 #: data/base/messages/resmessages2.rmsg:733
 #: data/base/messages/strings/resstrings.txt:714
 #: data/mp/messages/strings/resstrings.txt:747
 msgid "Locks on to thermal emissions"
-msgstr ""
+msgstr "열 방출을 자동 추적합니다"
 
 #: data/base/messages/resmessages2.rmsg:746
 #: data/base/messages/strings/resstrings.txt:730
 #: data/mp/messages/resmessages2.rmsg:746
 #: data/mp/messages/strings/resstrings.txt:763
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr ""
+msgstr "88mm 탄환을 발사하는 초고속 자동캐논"
 
 #: data/base/messages/resmessages2.rmsg:748
 #: data/base/messages/strings/resstrings.txt:732
 #: data/mp/messages/resmessages2.rmsg:748
 #: data/mp/messages/strings/resstrings.txt:765
 msgid "Replaces Medium Cannon"
-msgstr ""
+msgstr "중형 캐논을 대체합니다"
 
 #: data/base/messages/resmessages2.rmsg:759
 #: data/base/messages/strings/resstrings.txt:736
 #: data/mp/messages/resmessages2.rmsg:759
 #: data/mp/messages/strings/resstrings.txt:769
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "76mm 초고속 4총열 자동캐논"
 
 #: data/base/messages/resmessages2.rmsg:772
 #: data/base/messages/strings/resstrings.txt:758
 #: data/mp/messages/resmessages2.rmsg:772
 #: data/mp/messages/strings/resstrings.txt:795
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
-msgstr ""
+msgstr "프로필렌옥사이드 젤을 발사하는 대형 화염방사기"
 
 #: data/base/messages/resmessages2.rmsg:785
 #: data/base/messages/strings/resstrings.txt:766
@@ -3506,35 +3512,35 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:772
 #: data/mp/messages/strings/resstrings.txt:803
 msgid "Propylene Oxide treated to burn at superhot temperatures"
-msgstr ""
+msgstr "프로필렌옥사이드가 과열 온도에서 타도록 화학 처리되었습니다"
 
 #: data/base/messages/resmessages2.rmsg:798
 #: data/base/messages/strings/resstrings.txt:774
 #: data/mp/messages/resmessages2.rmsg:798
 #: data/mp/messages/strings/resstrings.txt:811
 msgid "105mm Howitzer may be assigned to a sensor"
-msgstr ""
+msgstr "105mm 곡사포가 센서에 할당될 수 있습니다"
 
 #: data/base/messages/resmessages2.rmsg:811
 #: data/base/messages/strings/resstrings.txt:780
 #: data/mp/messages/resmessages2.rmsg:811
 #: data/mp/messages/strings/resstrings.txt:819
 msgid "155mm Howitzer may be assigned to a sensor"
-msgstr ""
+msgstr "155mm 곡사포가 센서에 할당될 수 있습니다"
 
 #: data/base/messages/resmessages2.rmsg:824
 #: data/base/messages/strings/resstrings.txt:788
 #: data/mp/messages/resmessages2.rmsg:824
 #: data/mp/messages/strings/resstrings.txt:827
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
-msgstr ""
+msgstr "소이탄을 발사하는105mm 곡사포가 센서에 할당될 수 있습니다"
 
 #: data/base/messages/resmessages2.rmsg:825
 #: data/base/messages/strings/resstrings.txt:789
 #: data/mp/messages/resmessages2.rmsg:825
 #: data/mp/messages/strings/resstrings.txt:828
 msgid "Best Targets: Base Structures, bunkers"
-msgstr ""
+msgstr "가장 효과적인 표적: 기지 구조물, 벙커"
 
 #: data/base/messages/resmessages2.rmsg:836
 #: data/base/messages/resmessages2.rmsg:849
@@ -3555,14 +3561,14 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:840
 #: data/mp/messages/strings/resstrings.txt:848
 msgid "Howitzer Upgrade"
-msgstr ""
+msgstr "곡사포 개선"
 
 #: data/base/messages/resmessages2.rmsg:838
 #: data/base/messages/resmessages3.rmsg:903
 #: data/base/messages/strings/resstrings.txt:795
 #: data/mp/messages/strings/resstrings.txt:834
 msgid "Increases Howitzer accuracy"
-msgstr ""
+msgstr "곡사포의 정확도를 증가시킵니다"
 
 #: data/base/messages/resmessages2.rmsg:839
 #: data/base/messages/resmessages2.rmsg:852
@@ -3583,7 +3589,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:843
 #: data/mp/messages/strings/resstrings.txt:851
 msgid "All howitzers upgraded automatically"
-msgstr ""
+msgstr "모든 곡사포가 자동 개선됩니다"
 
 #: data/base/messages/resmessages2.rmsg:850
 #: data/base/messages/strings/resstrings.txt:802
@@ -3591,143 +3597,144 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:850
 #: data/mp/messages/strings/resstrings.txt:841
 msgid "High Explosive shells"
-msgstr ""
+msgstr "고성능 폭발탄"
 
 #: data/base/messages/resmessages2.rmsg:851
 #: data/base/messages/resmessages3.rmsg:916
 #: data/base/messages/strings/resstrings.txt:803
 #: data/mp/messages/strings/resstrings.txt:842
 msgid "Increases Howitzer damage"
-msgstr ""
+msgstr "곡사포의 파괴력을 증가시킵니다"
 
 #: data/base/messages/resmessages2.rmsg:864
 #: data/base/messages/resmessages3.rmsg:929
 #: data/base/messages/strings/resstrings.txt:811
 #: data/mp/messages/strings/resstrings.txt:850
 msgid "Increases Howitzer ROF"
-msgstr ""
+msgstr "곡사포의 공격범위를 높입니다"
 
 #: data/base/messages/resmessages2.rmsg:876
 #: data/base/messages/strings/resstrings.txt:846
 #: data/mp/messages/resmessages2.rmsg:876
 #: data/mp/messages/strings/resstrings.txt:887
 msgid "Tungsten-tipped armor-piercing bullets"
-msgstr ""
+msgstr "끝 부분이 텅스텐으로 되어있는 철갑 뚫는 탄환"
 
 #: data/base/messages/resmessages2.rmsg:889
 #: data/base/messages/strings/resstrings.txt:858
 #: data/mp/messages/resmessages2.rmsg:889
 #: data/mp/messages/strings/resstrings.txt:899
 msgid "Improved chaingun mechanism"
-msgstr ""
+msgstr "개선된 체인건 메커니즘"
 
 #: data/base/messages/resmessages2.rmsg:915
 #: data/base/messages/strings/resstrings.txt:906
 #: data/mp/messages/resmessages2.rmsg:915
 #: data/mp/messages/strings/resstrings.txt:949
 msgid "High Explosive Armor-Piercing Shells"
-msgstr ""
+msgstr "고성능 철갑탄"
 
 #: data/base/messages/resmessages2.rmsg:928
 #: data/base/messages/strings/resstrings.txt:944
 #: data/mp/messages/resmessages2.rmsg:928
 #: data/mp/messages/strings/resstrings.txt:987
 msgid "High Explosive Armor-Piercing warheads"
-msgstr ""
+msgstr "철갑을 뚫는 고성능 탄두"
 
 #: data/base/messages/resmessages2.rmsg:941
 #: data/base/messages/strings/resstrings.txt:966
 #: data/mp/messages/resmessages2.rmsg:941
 #: data/mp/messages/strings/resstrings.txt:1009
 msgid "High Explosive Squash Head warhead"
-msgstr ""
+msgstr "고성능 스쿼시 헤드(Squash Head) 탄두"
 
 #: data/base/messages/resmessages3.rmsg:18
 #: data/mp/messages/resmessages3.rmsg:18
 msgid "NEXUS Intruder Program analyzed"
-msgstr ""
+msgstr "넥서스의 '침입자' 바이러스가 분석되었습니다"
 
+# computer parasite??
 #: data/base/messages/resmessages3.rmsg:19
 #: data/mp/messages/resmessages3.rmsg:19
 msgid "Intruder parasite isolated"
-msgstr ""
+msgstr "넥서스의 '침입자' 바이러스가 고립되었습니다"
 
 #: data/base/messages/resmessages3.rmsg:20
 #: data/base/messages/resmessages3.rmsg:33
 #: data/mp/messages/resmessages3.rmsg:20
 #: data/mp/messages/resmessages3.rmsg:33
 msgid "Reduced chance of NEXUS take-over"
-msgstr ""
+msgstr "넥서스가 우리를 장악할 가능성이 감소되었습니다"
 
 #: data/base/messages/resmessages3.rmsg:31
 #: data/mp/messages/resmessages3.rmsg:31
 msgid "Improved NEXUS resistance circuitry"
-msgstr ""
+msgstr "넥서스를 저항할 전기 회로망이 개선되었습니다"
 
 #: data/base/messages/resmessages3.rmsg:32
 #: data/mp/messages/resmessages3.rmsg:32
 msgid "Computer systems can now be 'ring-fenced' from NEXUS"
-msgstr ""
+msgstr "이제는 컴퓨터 시스템을 넥서스로부터 고립, 보호 할 수 있습니다"
 
 #: data/base/messages/resmessages3.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:43
 msgid "New Cyborg Research Available"
-msgstr ""
+msgstr "새로운 사이보그 연구가 이용 가능합니다"
 
 #: data/base/messages/resmessages3.rmsg:44
 #: data/mp/messages/resmessages3.rmsg:44
 msgid "Aerodynamic Jump Pack"
-msgstr ""
+msgstr "공기력 점프팩"
 
 #: data/base/messages/resmessages3.rmsg:45
 #: data/mp/messages/resmessages3.rmsg:45
 msgid "Gives Cyborg limited flight abilities"
-msgstr ""
+msgstr "사이보그에게 제한된 비행 능력을 부여합니다"
 
 #: data/base/messages/resmessages3.rmsg:46
 #: data/mp/messages/resmessages3.rmsg:46
 msgid "Jump Cyborgs can now be researched"
-msgstr ""
+msgstr "점프사이보그가 연구 가능합니다"
 
 #: data/base/messages/resmessages3.rmsg:70
 #: data/base/messages/resmessages3.rmsg:694
 #: data/mp/messages/resmessages3.rmsg:70
 #: data/mp/messages/resmessages3.rmsg:694
 msgid "Superdense composite alloys and energy-absorbing fibres"
-msgstr ""
+msgstr "초고밀도 복합 합금과 에너지흡수 섬유"
 
 #: data/base/messages/resmessages3.rmsg:83
 #: data/base/messages/resmessages3.rmsg:707
 #: data/mp/messages/resmessages3.rmsg:83
 #: data/mp/messages/resmessages3.rmsg:707
 msgid "Laminated alloys bonded with energy-deflecting optic bundles"
-msgstr ""
+msgstr "에너지를 반사하는 광학 와이어가 접착된 합금 합판"
 
 #: data/base/messages/resmessages3.rmsg:96
 #: data/base/messages/strings/resstrings.txt:78
 #: data/mp/messages/resmessages3.rmsg:96
 #: data/mp/messages/strings/resstrings.txt:96
 msgid "Armed with Revenger Surface-to-Air missile"
-msgstr ""
+msgstr "리벤져Revenger 지대공미사일로 무장"
 
 #: data/base/messages/resmessages3.rmsg:109
 #: data/base/messages/resmessages3.rmsg:174
 #: data/mp/messages/resmessages3.rmsg:109
 #: data/mp/messages/resmessages3.rmsg:174
 msgid "Armed with Needle Gun"
-msgstr ""
+msgstr "후장총으로 무장"
 
 #: data/base/messages/resmessages3.rmsg:122
 #: data/base/messages/resmessages3.rmsg:187
 #: data/mp/messages/resmessages3.rmsg:122
 #: data/mp/messages/resmessages3.rmsg:187
 msgid "Armed with Scourge anti-tank missile"
-msgstr ""
+msgstr "스커지Scourge 대전차미사일로 무장"
 
 #: data/base/messages/resmessages3.rmsg:135
 #: data/mp/messages/resmessages3.rmsg:135
 msgid "Armed with flashlight laser"
-msgstr ""
+msgstr "레이저 전등으로 무장"
 
 #: data/base/messages/resmessages3.rmsg:147
 #: data/base/messages/resmessages3.rmsg:160
@@ -3744,181 +3751,183 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:95
 #: data/mp/messages/strings/resstrings.txt:101
 msgid "New Jump Cyborg Available"
-msgstr ""
+msgstr "새로운 점프사이보그가 사용 가능합니다"
 
 #: data/base/messages/resmessages3.rmsg:148
 #: data/mp/messages/resmessages3.rmsg:148
 msgid "Armed with Lancer anti-tank missile"
-msgstr ""
+msgstr "랜서 대전차미사일로무장"
 
 #: data/base/messages/resmessages3.rmsg:161
 #: data/mp/messages/resmessages3.rmsg:161
 msgid "Armed with Cyborg assault gun"
-msgstr ""
+msgstr "사이보그 어썰트assault총으로 무장"
 
 #: data/base/messages/resmessages3.rmsg:200
 #: data/mp/messages/resmessages3.rmsg:200
 msgid "Armed with Flashlight Laser"
-msgstr ""
+msgstr "레이저 전등으로 무장"
 
 #: data/base/messages/resmessages3.rmsg:202
 #: data/mp/messages/resmessages3.rmsg:202
 msgid "Requires cyborg factory to produce"
-msgstr ""
+msgstr "생산하기 위해 사이보그 공장이 필요합니다"
 
 #: data/base/messages/resmessages3.rmsg:213
 #: data/mp/messages/resmessages3.rmsg:213
 msgid "High tensile concrete-plastic composite"
-msgstr ""
+msgstr "고장력 콘크리트-플라스틱 복합"
 
 #: data/base/messages/resmessages3.rmsg:226
 #: data/mp/messages/resmessages3.rmsg:226
 msgid "Bonded metallic laminates formed into walls and defenses"
-msgstr ""
+msgstr "접착된 금속 합판이 벽과 방어 시설로 만들어졌습니다"
 
 #: data/base/messages/resmessages3.rmsg:239
 #: data/mp/messages/resmessages3.rmsg:239
 msgid "SAM site with Avenger missiles"
-msgstr ""
+msgstr "어벤져Avenger 지대공미사일 발사시설"
 
 #: data/base/messages/resmessages3.rmsg:252
 #: data/mp/messages/resmessages3.rmsg:252
 msgid "SAM site with Vindicator missiles"
-msgstr ""
+msgstr "빈디케이터Vindicator 지대공미사일 발사시설"
 
 #: data/base/messages/resmessages3.rmsg:265
 #: data/mp/messages/resmessages3.rmsg:265
 msgid "Artillery battery firing Firestorm Missiles"
-msgstr ""
+msgstr "파이어스톰Firestorm 미사일을 발사하는 포병대 배터리"
 
 #: data/base/messages/resmessages3.rmsg:278
 #: data/mp/messages/resmessages3.rmsg:278
 msgid "Artillery battery firing Novastorm Missiles"
-msgstr ""
+msgstr "노바스톰Novastorm 미사일을 발사하는 포병대 배터리"
 
+# Since this is not a small flashlight?? - -;;
 #: data/base/messages/resmessages3.rmsg:291
 #: data/mp/messages/resmessages3.rmsg:291
 msgid "Armored strongpoint with Flashlight laser"
-msgstr ""
+msgstr "레이저 전등 스트롱포인트"
 
 #: data/base/messages/resmessages3.rmsg:304
 msgid "Armored strongpoint with Pulse Laser"
-msgstr ""
+msgstr "펄스 pulse 레이저 스트롱포인트"
 
 #: data/base/messages/resmessages3.rmsg:317
 #: data/mp/messages/resmessages3.rmsg:317
 msgid "Armored strongpoint with Rail Gun"
-msgstr ""
+msgstr "레일건 스트롱포인트"
 
 #: data/base/messages/resmessages3.rmsg:330
 #: data/mp/messages/resmessages3.rmsg:330
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr ""
+msgstr "가우스캐논 스트롱포인트"
 
 #: data/base/messages/resmessages3.rmsg:343
 #: data/mp/messages/resmessages3.rmsg:343
 msgid "Armored guard tower with Scourge Missile"
-msgstr ""
+msgstr "스커지Scourge 미사일 경호탑"
 
 #: data/base/messages/resmessages3.rmsg:356
 #: data/mp/messages/resmessages3.rmsg:356
 msgid "Armored guard tower with Needle Gun"
-msgstr ""
+msgstr "후장총 경호탑"
 
 #: data/base/messages/resmessages3.rmsg:369
 #: data/mp/messages/resmessages3.rmsg:369
 msgid "Armored hardpoint with Scourge AT Missile"
-msgstr ""
+msgstr "스커지Scourge 대전차미사일 하드포인트"
 
 #: data/base/messages/resmessages3.rmsg:382
 #: data/mp/messages/resmessages3.rmsg:382
 msgid "Armored hardpoint with Flashlight laser"
-msgstr ""
+msgstr "레이저 전등 하드포인트"
 
 #: data/base/messages/resmessages3.rmsg:395
 #: data/mp/messages/resmessages3.rmsg:395
 msgid "Armored hardpoint with Rail Gun"
-msgstr ""
+msgstr "레일건 하드포인트"
 
 #: data/base/messages/resmessages3.rmsg:408
 #: data/mp/messages/resmessages3.rmsg:408
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr ""
+msgstr "가우스(Gauss) 캐논 하드포인트"
 
 #: data/base/messages/resmessages3.rmsg:421
 #: data/mp/messages/resmessages3.rmsg:421
 msgid "Advanced repair techniques"
-msgstr ""
+msgstr "고급 수리 기법"
 
 #: data/base/messages/resmessages3.rmsg:435
 #: data/mp/messages/resmessages3.rmsg:434
 msgid "Vapor Turbine boosts power output"
-msgstr ""
+msgstr "증기 터빈이 전력 생산량을 증가합니다"
 
+# what is a brain in this instance???
 #: data/base/messages/resmessages3.rmsg:447
 #: data/base/messages/strings/names.txt:838
 #: data/mp/messages/resmessages3.rmsg:447
 #: data/mp/messages/strings/names.txt:849
 msgid "Neural Synapse Research Brain"
-msgstr ""
+msgstr "시냅스 신경 연구 브레인(Brain)"
 
 #: data/base/messages/resmessages3.rmsg:460
 #: data/base/messages/strings/names.txt:811
 #: data/mp/messages/resmessages3.rmsg:460
 #: data/mp/messages/strings/names.txt:822
 msgid "Advanced Base Structure Materials"
-msgstr ""
+msgstr "고급 기지 구조물 자재"
 
 #: data/base/messages/resmessages3.rmsg:473
 #: data/mp/messages/resmessages3.rmsg:473
 msgid "High Density Base Structure Materials"
-msgstr ""
+msgstr "고밀도 기지 구조물 자재"
 
 #: data/base/messages/resmessages3.rmsg:486
 #: data/base/messages/strings/names.txt:854
 #: data/mp/messages/resmessages3.rmsg:486
 #: data/mp/messages/strings/names.txt:865
 msgid "Advanced VTOL Production"
-msgstr ""
+msgstr "VTOL 고급 생산"
 
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/strings/names.txt:846
 #: data/mp/messages/resmessages3.rmsg:499
 #: data/mp/messages/strings/names.txt:857
 msgid "Robotic VTOL Rearming"
-msgstr ""
+msgstr "로봇식 VTOL 재무장"
 
 #: data/base/messages/resmessages3.rmsg:512
 #: data/mp/messages/resmessages3.rmsg:512
 msgid "Advanced Engineering Techniques"
-msgstr ""
+msgstr "고급 공학 기법"
 
 #: data/base/messages/resmessages3.rmsg:538
 #: data/mp/messages/resmessages3.rmsg:538
 msgid "Advanced fire detection systems"
-msgstr ""
+msgstr "고급 사격 감지 시스템"
 
 #: data/base/messages/resmessages3.rmsg:551
 #: data/mp/messages/resmessages3.rmsg:551
 msgid "Advanced target recognition systems"
-msgstr ""
+msgstr "고급 표적 인식 시스템"
 
 #: data/base/messages/resmessages3.rmsg:564
 #: data/mp/messages/resmessages3.rmsg:564
 #: data/mp/messages/resmessagesall.rmsg:382
 msgid "Synaptic Link Scrambler technology"
-msgstr ""
+msgstr "시냅스 링크 주파수대 변환기 기술"
 
 #: data/base/messages/resmessages3.rmsg:565
 #: data/mp/messages/resmessages3.rmsg:565
 #: data/mp/messages/resmessagesall.rmsg:383
 msgid "Electronically attacks and disrupts enemy structures"
-msgstr ""
+msgstr "적의 구조물을 전자적으로 공격, 혼란시킵니다"
 
 #: data/base/messages/resmessages3.rmsg:566
 #: data/mp/messages/resmessages3.rmsg:566
 msgid "Steals technology from enemies"
-msgstr ""
+msgstr "적에게서 테크놀로지를 훔칩니다."
 
 #: data/base/messages/resmessages3.rmsg:576
 #: data/base/messages/resmessages3.rmsg:589
@@ -3930,7 +3939,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:615
 #: data/mp/messages/resmessagesall.rmsg:407
 msgid "New Repair Technology Discovered"
-msgstr ""
+msgstr "새로운 수리 기술이 발견되었습니다"
 
 #: data/base/messages/resmessages3.rmsg:577
 #: data/base/messages/resmessages3.rmsg:590
@@ -3943,7 +3952,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:395
 #: data/mp/messages/resmessagesall.rmsg:408
 msgid "Synaptic Link technology breakthrough"
-msgstr ""
+msgstr "시냅스 링크 기술 혁신"
 
 #: data/base/messages/resmessages3.rmsg:578
 #: data/base/messages/resmessages3.rmsg:617
@@ -3951,126 +3960,126 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:617
 #: data/mp/messages/resmessagesall.rmsg:409
 msgid "On-board diagnostic and repair systems"
-msgstr ""
+msgstr "선내 진단 밎 수리 시스템"
 
 #: data/base/messages/resmessages3.rmsg:579
 #: data/mp/messages/resmessages3.rmsg:579
 msgid "Enables self-repair in all Cyborgs"
-msgstr ""
+msgstr "모든 사이보그에게 자체 수리를 활성화합니다"
 
 #: data/base/messages/resmessages3.rmsg:591
 #: data/base/messages/resmessages3.rmsg:604
 #: data/mp/messages/resmessages3.rmsg:591
 #: data/mp/messages/resmessages3.rmsg:604
 msgid "Built-in diagnostic and repair systems"
-msgstr ""
+msgstr "내장된 진단 및 수리 시스템"
 
 #: data/base/messages/resmessages3.rmsg:592
 #: data/mp/messages/resmessages3.rmsg:592
 msgid "Enables self-repair in all base structures"
-msgstr ""
+msgstr "모든 기지 구조물에 자체 수리를 활성화합니다"
 
 #: data/base/messages/resmessages3.rmsg:605
 #: data/mp/messages/resmessages3.rmsg:605
 msgid "Enables self-repair in all defenses"
-msgstr ""
+msgstr "모든 방어 시설에 자체 수리를 활성화합니다"
 
 #: data/base/messages/resmessages3.rmsg:618
 #: data/mp/messages/resmessages3.rmsg:618
 msgid "Enables self-repair in all vehicles"
-msgstr ""
+msgstr "모든 차량에 자체 수리를 활성화합니다"
 
 #: data/base/messages/resmessages3.rmsg:628
 #: data/mp/messages/resmessages3.rmsg:628
 msgid "NEXUS Light Body"
-msgstr ""
+msgstr "넥서스 소형 바디"
 
 #: data/base/messages/resmessages3.rmsg:631
 #: data/mp/messages/resmessages3.rmsg:631
 msgid "Expensive to produce"
-msgstr ""
+msgstr "생산 비용이 비쌉니다"
 
 #: data/base/messages/resmessages3.rmsg:641
 #: data/mp/messages/resmessages3.rmsg:641
 msgid "NEXUS Medium Body"
-msgstr ""
+msgstr "넥서스 중형 바디"
 
 #: data/base/messages/resmessages3.rmsg:644
 #: data/mp/messages/resmessages3.rmsg:644
 msgid "Expensive and slow to produce"
-msgstr ""
+msgstr "비용이 비싸고 생산이 느립니다"
 
 #: data/base/messages/resmessages3.rmsg:654
 #: data/mp/messages/resmessages3.rmsg:654
 msgid "NEXUS Heavy Body"
-msgstr ""
+msgstr "넥서스 대형 바디"
 
 #: data/base/messages/resmessages3.rmsg:655
 #: data/base/messages/resmessagesall.rmsg:109
 #: data/mp/messages/resmessages3.rmsg:655
 #: data/mp/messages/resmessagesall.rmsg:148
 msgid "More armor and body points than Python"
-msgstr ""
+msgstr "파이썬보다 장갑과 바디포인트가 많습니다"
 
 #: data/base/messages/resmessages3.rmsg:657
 #: data/mp/messages/resmessages3.rmsg:657
 #: data/mp/messages/resmessagesall.rmsg:722
 #: data/mp/messages/resmessagesall.rmsg:735
 msgid "Very expensive to produce"
-msgstr ""
+msgstr "생산 비용이 매우 비쌉니다"
 
 #: data/base/messages/resmessages3.rmsg:668
 #: data/base/messages/strings/names.txt:948
 #: data/mp/messages/resmessages3.rmsg:668
 #: data/mp/messages/strings/names.txt:961
 msgid "Gas Turbine Engine"
-msgstr ""
+msgstr "가스 터빈 엔진"
 
 #: data/base/messages/resmessages3.rmsg:681
 #: data/mp/messages/resmessages3.rmsg:681
 msgid "Ionizing Turbine Engine"
-msgstr ""
+msgstr "이온화 터빈 엔진"
 
 #: data/base/messages/resmessages3.rmsg:785
 #: data/base/messages/resmessages3.rmsg:798
 #: data/mp/messages/resmessages3.rmsg:785
 #: data/mp/messages/resmessages3.rmsg:798
 msgid "New power efficient propulsion"
-msgstr ""
+msgstr "새로운 전력 효율적 추진"
 
 #: data/base/messages/resmessages3.rmsg:786
 #: data/base/messages/resmessages3.rmsg:799
 #: data/mp/messages/resmessages3.rmsg:786
 #: data/mp/messages/resmessages3.rmsg:799
 msgid "Body Points and Speed Increased"
-msgstr ""
+msgstr "바디포인트와 속도가 증가되었습니다"
 
 #: data/base/messages/resmessages3.rmsg:787
 #: data/base/messages/resmessages3.rmsg:800
 #: data/mp/messages/resmessages3.rmsg:787
 #: data/mp/messages/resmessages3.rmsg:800
 msgid "All VTOLs upgraded automatically"
-msgstr ""
+msgstr "모든 VTOL이 자동 개선됩니다"
 
 #: data/base/messages/resmessages3.rmsg:811
 #: data/mp/messages/resmessages3.rmsg:811
 msgid "Computer plots and guides shell to target's position"
-msgstr ""
+msgstr "컴퓨터가 표적의 위치를 계산하며 포탄을 지도해줍니다"
 
 #: data/base/messages/resmessages3.rmsg:824
 #: data/mp/messages/resmessages3.rmsg:824
 msgid "High Explosive Armor Piercing Flak"
-msgstr ""
+msgstr "고성능 철갑용 대공폭탄"
 
 #: data/base/messages/resmessages3.rmsg:837
 #: data/mp/messages/resmessages3.rmsg:837
 msgid "Chainfeed loader eradicates jams and improves performance"
-msgstr ""
+msgstr "체인식 장전기가 걸림을 방지하고 성능을 향상합니다"
 
 #: data/base/messages/resmessages3.rmsg:850
 #: data/mp/messages/resmessages3.rmsg:850
 msgid "Drops high intensity thermite bombs"
-msgstr ""
+msgstr "고강도 테르밋 폭탄을 떨어뜨립니다"
 
 #: data/base/messages/resmessages3.rmsg:851
 #: data/base/messages/resmessages3.rmsg:1046
@@ -4080,16 +4089,16 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:201
 #: data/mp/messages/resmessagesall.rmsg:903
 msgid "Best Targets: Bunkers and hardpoints"
-msgstr ""
+msgstr "가장 효과적인 표적: 벙커, 하드포인트"
 
 #: data/base/messages/resmessages3.rmsg:863
 msgid "Bombs lock on and guide themselves to the target"
-msgstr ""
+msgstr "폭탄이 표적을 자동 추적합니다"
 
 #: data/base/messages/resmessages3.rmsg:876
 #: data/mp/messages/resmessages3.rmsg:876
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
+msgstr "고속 APFSDS 철갑용 운동에너지탄"
 
 #: data/base/messages/resmessages3.rmsg:889
 #: data/base/messages/resmessages3.rmsg:928
@@ -4098,17 +4107,17 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:928
 #: data/mp/messages/resmessages3.rmsg:1188
 msgid "Robotic loading system feeds rounds into breech"
-msgstr ""
+msgstr "로봇식 장전 시스템이 탄환을 약실로 넣습니다"
 
 #: data/base/messages/resmessages3.rmsg:902
 #: data/mp/messages/resmessages3.rmsg:902
 msgid "Computer guided shells"
-msgstr ""
+msgstr "컴퓨터 유도 포탄"
 
 #: data/base/messages/resmessages3.rmsg:915
 #: data/mp/messages/resmessages3.rmsg:915
 msgid "High Explosive Armor Piercing Shells"
-msgstr ""
+msgstr "철갑용 고성능 폭탄"
 
 #: data/base/messages/resmessages3.rmsg:940
 #: data/base/messages/resmessages3.rmsg:953
@@ -4116,24 +4125,24 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:953
 #: data/mp/messages/resmessagesall.rmsg:472
 msgid "New Laser Weapon Available"
-msgstr ""
+msgstr "새로운 레이저 무기가 사용 가능합니다"
 
 #: data/base/messages/resmessages3.rmsg:941
 #: data/mp/messages/resmessages3.rmsg:941
 msgid "Generates and concentrates bursts of laser energy"
-msgstr ""
+msgstr "레이저 에너지 펄스를 생성하고 집중시킵니다"
 
 #: data/base/messages/resmessages3.rmsg:942
 #: data/base/messages/resmessages3.rmsg:955
 #: data/mp/messages/resmessages3.rmsg:942
 #: data/mp/messages/resmessages3.rmsg:955
 msgid "Best Targets: Cyborgs"
-msgstr ""
+msgstr "가장 효과적인 표적: 사이보그"
 
 #: data/base/messages/resmessages3.rmsg:954
 #: data/mp/messages/resmessages3.rmsg:954
 msgid "Fires pulses of laser light"
-msgstr ""
+msgstr "레이저 빛 펄스을 발사합니다"
 
 #: data/base/messages/resmessages3.rmsg:966
 #: data/base/messages/resmessages3.rmsg:979
@@ -4142,16 +4151,16 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:979
 #: data/mp/messages/resmessages3.rmsg:992
 msgid "Laser Upgrade"
-msgstr ""
+msgstr "레이저 개선"
 
 #: data/base/messages/resmessages3.rmsg:967
 #: data/mp/messages/resmessages3.rmsg:967
 msgid "Improvement in laser optics reduces light dispersal"
-msgstr ""
+msgstr "레이저 광학의 개선이 빛의 분산을 줄였습니다"
 
 #: data/base/messages/resmessages3.rmsg:968
 msgid "Increases Laser accuracy"
-msgstr ""
+msgstr "레이저의 정확도를 증가시킵니다"
 
 #: data/base/messages/resmessages3.rmsg:969
 #: data/base/messages/resmessages3.rmsg:982
@@ -4160,52 +4169,53 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:982
 #: data/mp/messages/resmessages3.rmsg:995
 msgid "All lasers upgraded automatically"
-msgstr ""
+msgstr "모든 레이저가 자동 개선됩니다"
 
 #: data/base/messages/resmessages3.rmsg:980
 #: data/mp/messages/resmessages3.rmsg:980
 msgid "Improvement in laser emission density"
-msgstr ""
+msgstr "레이저 방출 밀도가 개선되었습니다"
 
 #: data/base/messages/resmessages3.rmsg:981
 msgid "Increases Laser damage"
-msgstr ""
+msgstr "레이저의 파괴력을 증가시킵니다"
 
 #: data/base/messages/resmessages3.rmsg:993
 #: data/mp/messages/resmessages3.rmsg:993
 msgid "Improved Energizer reduces laser recharge time"
-msgstr ""
+msgstr "향상된 에너자이저가 레이저 충전 시간을 단축하였습니다"
 
 #: data/base/messages/resmessages3.rmsg:994
 msgid "Increases Laser ROF"
-msgstr ""
+msgstr "레이저의 공격 범위를 넓힙니다"
 
 #: data/base/messages/resmessages3.rmsg:1006
 #: data/mp/messages/resmessages3.rmsg:1006
 msgid "Depleted uranium kinetic energy bullets"
-msgstr ""
+msgstr "감손 우라늄 운동 에너지 총알"
 
 #: data/base/messages/resmessages3.rmsg:1019
 #: data/mp/messages/resmessages3.rmsg:1019
+#, fuzzy
 msgid "Collapsing Plutonium kinetic energy bullets"
-msgstr ""
+msgstr "플루토늄 운동에너지 총알"
 
 #: data/base/messages/resmessages3.rmsg:1031
 #: data/base/messages/resmessages3.rmsg:1044
 #: data/mp/messages/resmessages3.rmsg:1031
 #: data/mp/messages/resmessages3.rmsg:1044
 msgid "New Missile Turret Available"
-msgstr ""
+msgstr "새로운 미사일 터릿이 사용 가능합니다"
 
 #: data/base/messages/resmessages3.rmsg:1032
 #: data/mp/messages/resmessages3.rmsg:1032
 msgid "Anti-tank missile"
-msgstr ""
+msgstr "대전차미사일"
 
 #: data/base/messages/resmessages3.rmsg:1045
 #: data/mp/messages/resmessages3.rmsg:1045
 msgid "Bunker buster missile"
-msgstr ""
+msgstr "벙커 버스터(buster) 미사일"
 
 #: data/base/messages/resmessages3.rmsg:1057
 #: data/base/messages/resmessages3.rmsg:1070
@@ -4218,17 +4228,17 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:1148
 #: data/mp/messages/resmessages3.rmsg:1161
 msgid "Missile Upgrade"
-msgstr ""
+msgstr "미사일 개선"
 
 #: data/base/messages/resmessages3.rmsg:1058
 #: data/mp/messages/resmessages3.rmsg:1058
 msgid "On-board computer predicts target movement"
-msgstr ""
+msgstr "내장된 컴퓨터가 표적의 움직임을 예측합니다"
 
 #: data/base/messages/resmessages3.rmsg:1059
 #: data/base/messages/resmessages3.rmsg:1072
 msgid "Increases Missile accuracy"
-msgstr ""
+msgstr "미사일의 정확도를 높입니다"
 
 #: data/base/messages/resmessages3.rmsg:1060
 #: data/base/messages/resmessages3.rmsg:1073
@@ -4241,35 +4251,35 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:1151
 #: data/mp/messages/resmessages3.rmsg:1164
 msgid "All missiles upgraded automatically"
-msgstr ""
+msgstr "모든 미사일이 자동 개선됩니다"
 
 #: data/base/messages/resmessages3.rmsg:1071
 #: data/mp/messages/resmessages3.rmsg:1071
 msgid "Missile actively seeks and homes on targets"
-msgstr ""
+msgstr "미사일이 활동적으로 표적을 찾아내고 자동 추적합니다"
 
 #: data/base/messages/resmessages3.rmsg:1084
 #: data/mp/messages/resmessages3.rmsg:863
 #: data/mp/messages/resmessages3.rmsg:1084
 msgid "Low yield thermonuclear warhead"
-msgstr ""
+msgstr "저수율 열핵 탄두"
 
 #: data/base/messages/resmessages3.rmsg:1085
 msgid "Increases Missile damage"
-msgstr ""
+msgstr "미사일의 파괴력을 높입니다"
 
 #: data/base/messages/resmessages3.rmsg:1096
 #: data/base/messages/resmessages3.rmsg:1109
 #: data/mp/messages/resmessages3.rmsg:1096
 #: data/mp/messages/resmessages3.rmsg:1109
 msgid "New SAM Turret Available"
-msgstr ""
+msgstr "새로운 지대공미사일 터릿이 사용가능합니다"
 
 #: data/base/messages/resmessages3.rmsg:1097
 #: data/mp/messages/resmessages3.rmsg:1097
 #: data/mp/messages/resmessagesall.rmsg:850
 msgid "Surface-to-air missile"
-msgstr ""
+msgstr "지대공미사일"
 
 #: data/base/messages/resmessages3.rmsg:1098
 #: data/base/messages/resmessages3.rmsg:1111
@@ -4278,57 +4288,57 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:747
 #: data/mp/messages/resmessagesall.rmsg:851
 msgid "Best Targets: Aerial targets only"
-msgstr ""
+msgstr "가장 효과적인 표적: 공중 목표물만"
 
 #: data/base/messages/resmessages3.rmsg:1110
 #: data/mp/messages/resmessages3.rmsg:1110
 #: data/mp/messages/resmessagesall.rmsg:746
 msgid "Heavy surface-to-air missile"
-msgstr ""
+msgstr "대형 지대공미사일"
 
 #: data/base/messages/resmessages3.rmsg:1122
 #: data/base/messages/resmessages3.rmsg:1135
 #: data/mp/messages/resmessages3.rmsg:1122
 #: data/mp/messages/resmessages3.rmsg:1135
 msgid "New Artillery Missile Turret Available"
-msgstr ""
+msgstr "새로운 미사일 포병대 터릿이 사용 가능합니다"
 
 #: data/base/messages/resmessages3.rmsg:1123
 #: data/mp/messages/resmessages3.rmsg:1123
 msgid "High explosive artillery missile"
-msgstr ""
+msgstr "고성능 포병대 미사일"
 
 #: data/base/messages/resmessages3.rmsg:1124
 #: data/base/messages/resmessages3.rmsg:1137
 #: data/mp/messages/resmessages3.rmsg:1124
 #: data/mp/messages/resmessages3.rmsg:1137
 msgid "Best Targets: Base structures and cyborgs"
-msgstr ""
+msgstr "가장 효과적인 표적: 기지 구조물, 사이보그"
 
 #: data/base/messages/resmessages3.rmsg:1136
 #: data/mp/messages/resmessages3.rmsg:1136
 msgid "High explosive heavy artillery missile"
-msgstr ""
+msgstr "고성능 포병대 대형 미사일"
 
 #: data/base/messages/resmessages3.rmsg:1149
 #: data/mp/messages/resmessages3.rmsg:1149
 msgid "Missiles detect and lock-on to targets while loading"
-msgstr ""
+msgstr "미사일이 장전되는 중 표적을 감지, 자동 추적합니다"
 
 #: data/base/messages/resmessages3.rmsg:1150
 #: data/base/messages/resmessages3.rmsg:1163
 msgid "Increases Missile ROF"
-msgstr ""
+msgstr "미사일의 공격 범위를 넓힙니다"
 
 #: data/base/messages/resmessages3.rmsg:1162
 #: data/mp/messages/resmessages3.rmsg:1162
 msgid "Racked missile dispensers allow for fast reloading"
-msgstr ""
+msgstr "받침대가 달린 미사일 디스펜서가 빠른 재장전을 가능하게합니다"
 
 #: data/base/messages/resmessages3.rmsg:1175
 #: data/mp/messages/resmessages3.rmsg:1175
 msgid "Self-guided rocket-powered shells"
-msgstr ""
+msgstr "자동 유도형 로케트 추진 포탄"
 
 #: data/base/messages/resmessages3.rmsg:1200
 #: data/base/messages/resmessages3.rmsg:1213
@@ -4337,22 +4347,22 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:1213
 #: data/mp/messages/resmessages3.rmsg:1226
 msgid "New Rail Gun Available"
-msgstr ""
+msgstr "새로운 레일건이 사용 가능합니다"
 
 #: data/base/messages/resmessages3.rmsg:1201
 #: data/mp/messages/resmessages3.rmsg:1201
 msgid "Rapid fire rail gun firing needle darts"
-msgstr ""
+msgstr "후장총 다트를 쏘는 속사(rapid fire) 레일건"
 
 #: data/base/messages/resmessages3.rmsg:1214
 #: data/mp/messages/resmessages3.rmsg:1214
 msgid "Rail gun firing armor-piercing darts"
-msgstr ""
+msgstr "철갑용 다트를 발사하는 레일건"
 
 #: data/base/messages/resmessages3.rmsg:1227
 #: data/mp/messages/resmessages3.rmsg:1227
 msgid "Heavy rail gun firing large kinetic energy darts"
-msgstr ""
+msgstr "대형 운동 에너지 다트를 발사하는 대형 레일건"
 
 #: data/base/messages/resmessages3.rmsg:1239
 #: data/base/messages/resmessages3.rmsg:1252
@@ -4361,16 +4371,16 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:1252
 #: data/mp/messages/resmessages3.rmsg:1265
 msgid "Rail Gun Upgrade"
-msgstr ""
+msgstr "레일건 개선"
 
 #: data/base/messages/resmessages3.rmsg:1240
 #: data/mp/messages/resmessages3.rmsg:1240
 msgid "Computer predicts and compensates for target's movement"
-msgstr ""
+msgstr "컴퓨터가 표적의 움직임을 예측하고 감안합니다"
 
 #: data/base/messages/resmessages3.rmsg:1241
 msgid "Increases Rail Gun accuracy"
-msgstr ""
+msgstr "레일건의 정확도를 증가시킵니다"
 
 #: data/base/messages/resmessages3.rmsg:1242
 #: data/base/messages/resmessages3.rmsg:1255
@@ -4379,75 +4389,75 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:1255
 #: data/mp/messages/resmessages3.rmsg:1268
 msgid "All rail guns upgraded automatically"
-msgstr ""
+msgstr "모든 레일건이 자동 개선됩니다"
 
 #: data/base/messages/resmessages3.rmsg:1253
 #: data/mp/messages/resmessages3.rmsg:1253
 msgid "Improved armor-piercing dart"
-msgstr ""
+msgstr "개선된 철갑용 다트"
 
 #: data/base/messages/resmessages3.rmsg:1254
 msgid "Increases Rail Gun damage"
-msgstr ""
+msgstr "레일건의 파괴력을 증가시킵니다"
 
 #: data/base/messages/resmessages3.rmsg:1266
 #: data/mp/messages/resmessages3.rmsg:1266
 msgid "Increased gauss output speeds up reload time"
-msgstr ""
+msgstr "증가된 가우스(gauss) 출력이 재장전 속도를 늘려줍니다"
 
 #: data/base/messages/resmessages3.rmsg:1267
 msgid "Increases Rail Gun ROF"
-msgstr ""
+msgstr "레일건의 공격범위를 넓힙니다"
 
 #: data/base/messages/resmessagesall.rmsg:4
 #: data/mp/messages/resmessagesall.rmsg:4
 msgid "New Construction Options Available"
-msgstr ""
+msgstr "새로운 건설 옵션이 사용 가능합니다"
 
 #: data/base/messages/resmessagesall.rmsg:5
 #: data/mp/messages/resmessagesall.rmsg:5
 msgid "Titanium-reinforced concrete"
-msgstr ""
+msgstr "티타늄 철근콘크리트"
 
 #: data/base/messages/resmessagesall.rmsg:6
 #: data/mp/messages/resmessagesall.rmsg:6
 msgid "Enables Hardcrete walls"
-msgstr ""
+msgstr "하드크리트 벽을 사용할 수 있게 합니다"
 
 #: data/base/messages/resmessagesall.rmsg:18
 #: data/mp/messages/resmessagesall.rmsg:18
 msgid "VTOL factory enables VTOL production"
-msgstr ""
+msgstr "VTOL 공장이 VTOL 생산을 가능하게 합니다"
 
 #: data/base/messages/resmessagesall.rmsg:19
 #: data/mp/messages/resmessagesall.rmsg:19
 msgid "VTOL rearming pads required to keep VTOLs flying"
-msgstr ""
+msgstr "VTOL 재무장 패드가 VTOL 유닛의 연속비행을 유지하는 데 필요합니다"
 
 #: data/base/messages/resmessagesall.rmsg:20
 #: data/mp/messages/resmessagesall.rmsg:20
 msgid "May be upgraded using factory modules"
-msgstr ""
+msgstr "공장 모듈을 사용해 개선될 수 있습니다"
 
 #: data/base/messages/resmessagesall.rmsg:31
 #: data/mp/messages/resmessagesall.rmsg:31
 msgid "Refuels, rearms and repairs VTOLs"
-msgstr ""
+msgstr "VTOL을 급유하며, 재무장, 수리합니다"
 
 #: data/base/messages/resmessagesall.rmsg:32
 #: data/mp/messages/resmessagesall.rmsg:32
 msgid "Assign a VTOL by selecting the rearming pad as its target"
-msgstr ""
+msgstr "재무장 패드를 VTOL 유닛의 표적으로 선택하여 할당하십시오"
 
 #: data/base/messages/resmessagesall.rmsg:33
 #: data/mp/messages/resmessagesall.rmsg:33
 msgid "The VTOL returns to the selected pad for rearming"
-msgstr ""
+msgstr "VTOL 유닛이 재무장하기 위해 선택된 패드로 돌아옵니다"
 
 #: data/base/messages/resmessagesall.rmsg:44
 #: data/mp/messages/resmessagesall.rmsg:44
 msgid "Battlefield repair unit"
-msgstr ""
+msgstr "전장 수리 유닛"
 
 #: data/base/messages/resmessagesall.rmsg:45
 #: data/base/messages/strings/resstrings.txt:445
@@ -4455,7 +4465,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:357
 #: data/mp/messages/strings/resstrings.txt:471
 msgid "Automatically Repairs Damaged Units"
-msgstr ""
+msgstr "자동으로 손상된 유닛을 수리합니다"
 
 #: data/base/messages/resmessagesall.rmsg:46
 #: data/base/messages/strings/resstrings.txt:446
@@ -4463,29 +4473,29 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:358
 #: data/mp/messages/strings/resstrings.txt:472
 msgid "Or damaged units may be selected as target"
-msgstr ""
+msgstr "또는 손상된 유닛을 표적으로 선택할 수도 있습니다"
 
 #: data/base/messages/resmessagesall.rmsg:56
 #: data/mp/messages/resmessagesall.rmsg:56
 msgid "New Systems Turret Available For Design"
-msgstr ""
+msgstr "새로운 시스템 터릿이 디자인에 사용 가능합니다"
 
 #: data/base/messages/resmessagesall.rmsg:57
 #: data/mp/messages/resmessagesall.rmsg:57
 #: data/mp/messages/resmessagesall.rmsg:514
 #: data/mp/messages/resmessagesall.rmsg:709
 msgid "Improved sensor range"
-msgstr ""
+msgstr "센서의 감지 범위가 향상되었습니다"
 
 #: data/base/messages/resmessagesall.rmsg:58
 #: data/mp/messages/resmessagesall.rmsg:58
 msgid "Makes excellent scout vehicle"
-msgstr ""
+msgstr "뛰어난 정찰 차량입니다"
 
 #: data/base/messages/resmessagesall.rmsg:70
 #: data/mp/messages/resmessagesall.rmsg:70
 msgid "Extended sensor range"
-msgstr ""
+msgstr "센서의 감지 범위가 확장되었습니다"
 
 #: data/base/messages/resmessagesall.rmsg:71
 #: data/mp/messages/resmessagesall.rmsg:71
@@ -4493,258 +4503,259 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:513
 #: data/mp/messages/resmessagesall.rmsg:708
 msgid "Keeps map areas under constant surveillance"
-msgstr ""
+msgstr "맵의 영역을 지속적인 감시 아래 유지합니다"
 
 #: data/base/messages/resmessagesall.rmsg:82
 #: data/mp/messages/resmessagesall.rmsg:82
 #: data/mp/messages/resmessagesall.rmsg:95
 #: data/mp/messages/resmessagesall.rmsg:108
 msgid "Sensors Improved"
-msgstr ""
+msgstr "센서가 개선되었습니다"
 
 #: data/base/messages/resmessagesall.rmsg:83
 #: data/mp/messages/resmessagesall.rmsg:83
 msgid "New Thermal Emissions detection"
-msgstr ""
+msgstr "새로운 열 배출 감지 기능"
 
 #: data/base/messages/resmessagesall.rmsg:84
 msgid "Extends Sensor Range"
-msgstr ""
+msgstr "센서의 감지 범위를 확장함"
 
 #: data/base/messages/resmessagesall.rmsg:85
 #: data/mp/messages/resmessagesall.rmsg:85
 #: data/mp/messages/resmessagesall.rmsg:98
 #: data/mp/messages/resmessagesall.rmsg:111
 msgid "All sensors upgraded automatically"
-msgstr ""
+msgstr "모든 센서가 자동 개선됩니다"
 
 #: data/base/messages/resmessagesall.rmsg:96
 #: data/mp/messages/resmessagesall.rmsg:122
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr ""
+msgstr "카운터배터리 탑이 적의 간접 사격 배터리를 감지함"
 
 #: data/base/messages/resmessagesall.rmsg:108
 #: data/mp/messages/resmessagesall.rmsg:147
 msgid "Collective Heavy Body"
-msgstr ""
+msgstr "'컬렉티브' 대형 바디"
 
 #: data/base/messages/resmessagesall.rmsg:110
 #: data/mp/messages/resmessagesall.rmsg:149
 msgid "Slower than Python"
-msgstr ""
+msgstr "파이썬보다 느림"
 
 #: data/base/messages/resmessagesall.rmsg:111
 #: data/mp/messages/resmessagesall.rmsg:150
 msgid "High power costs and slow to produce"
-msgstr ""
+msgstr "전력 비용이 높고 생산이 느립니다"
 
 #: data/base/messages/resmessagesall.rmsg:121
 #: data/mp/messages/resmessagesall.rmsg:160
 msgid "New Propulsion Available for Design"
-msgstr ""
+msgstr "새로운 추진력이 디자인에 사용 가능합니다"
 
 #: data/base/messages/resmessagesall.rmsg:122
 #: data/mp/messages/resmessagesall.rmsg:161
 msgid "Vertical Take Off and Landing Propulsion"
-msgstr ""
+msgstr "수직 이륙과 착륙용 추진력"
 
 #: data/base/messages/resmessagesall.rmsg:123
 #: data/mp/messages/resmessagesall.rmsg:162
 msgid "Speed: VTOL"
-msgstr ""
+msgstr "속도: VTOL"
 
 #: data/base/messages/resmessagesall.rmsg:135
 #: data/mp/messages/resmessagesall.rmsg:174
 msgid "Rocket detects and locks on to engine emissions"
-msgstr ""
+msgstr "로케트가 엔진 배기가스를 감지하고 자동추적합니다"
 
 #: data/base/messages/resmessagesall.rmsg:148
 #: data/mp/messages/resmessagesall.rmsg:187
 msgid "Anti-tank rocket"
-msgstr ""
+msgstr "대전차 로케트"
 
 #: data/base/messages/resmessagesall.rmsg:161
 #: data/mp/messages/resmessagesall.rmsg:200
 msgid "High explosive shaped charge missile"
-msgstr ""
+msgstr "고성능 성형 폭탄미사일"
 
 #: data/base/messages/resmessagesall.rmsg:174
 #: data/mp/messages/resmessagesall.rmsg:213
 msgid "Laser designator paints and guides rounds to the target"
-msgstr ""
+msgstr "레이저 조준기가 표적을 향해 탄환을 지도해줍니다"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr ""
+msgstr "목표: 신경 시냅스 기술을 찾아 복구한다"
 
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr ""
+msgstr "기지를 확립하고, 그 다음 컬랩스 전(Pre-Collapse) 시대의 구조물을 찾습니다."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr ""
+msgstr "이 구조물이 우리 '프로젝트'의 성공을 위해 필수적인 기술이 들어있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr ""
+msgstr "알파(ALPHA) 기지 중요임무: 스캐빈저 해적"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "스캐빈저(Scavenger) 해적들이 우리의 기지에 접근하고있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "기지를 보호하고 스캐빈저 캠프를 파괴하십시오."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr ""
+msgstr "알파(ALPHA) 기지 중요임무: 파워 서지(power surge)가 감지되었습니다"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr ""
+msgstr "우리 위치의 남쪽으로 급격한 전력 상승이 감지되었습니다."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr ""
+msgstr "조사에 착수하여 그 지역을 확보하십시오."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr ""
+msgstr "알파(ALPHA) 기지 중요임무: '뉴 패러다임' (New Paradigm)"
 
 #: data/base/messages/strings/cam1strings.txt:16
+#, fuzzy
 msgid "The New Paradigm control superior weapons technology."
-msgstr ""
+msgstr "'뉴 패러다임'은 우리보다 우수한 무기 기술을 제어합니다."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr ""
+msgstr "그들이 시냅스 링크 기술을 가지고 있을 수도 있습니다. 우리가 그것을 회수하는 것이 필수적입니다."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "수송 중요임무: 유물을 찾아 수색하십시오"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr ""
+msgstr "공격군을 수송선 안에 태우십시오."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr ""
+msgstr "착륙시, 폐허를 탐험하고 유물을 되찾습니다."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr ""
+msgstr "수송 중요임무: 연구 센터를 조사하십시오"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr ""
+msgstr "그 지역을 조사하고 발견하는 유물을 되찾으십시오."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "지원군을 사용할 수 있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr ""
+msgstr "수송 중요임무: 암호화된 신호가 감지되었습니다"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
-msgstr ""
+msgstr "정찰대를 데리고 이 신호를 조사해보십시오."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr ""
+msgstr "트럭을 사용하여 착륙 지점에 방어물을 지으십시오."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr ""
+msgstr "수송 중요임무: 적의 전송이 감지되었습니다"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr ""
+msgstr "지정된 영역을 적의 연구 시설을 찾기 위해 정찰하십시오."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr ""
+msgstr "착륙 지점 #2로 진행합니다. 이번에는 적과 교전하지 마십시오."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr ""
+msgstr "수송 중요임무: 시냅스 링크의 위치"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr ""
+msgstr "'뉴 패러다임'이 이 위치에서 시냅스 링크 기술을 분석하고 있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr ""
+msgstr "공격팀을 집합하여 시냅스 링크 기술을 되찾으십시오."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr ""
+msgstr "수송 중요임무: 새로운 목표"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr ""
+msgstr "'뉴 패러다임'이 이 부근에서 유물을 찾기 위해 수색하고 있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr ""
+msgstr "그들을 가로막으십시오. 어느 적도 이 지역을 떠나지 못하게 하십시오."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr ""
+msgstr "수송 중요임무: 적의 기지가 건설되고 있습니다"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr ""
+msgstr "적군이 이 위치에 전진 기지를 설립하고 있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
-msgstr ""
+msgstr "기지를 근절하고 그 지역을 확보하십시오."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr ""
+msgstr "알파(ALPHA) 기지 중요임무: 전진 기지를 설립하십시오"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau."
-msgstr ""
+msgstr "고원에 전진 기지를 설립하십시오."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures."
-msgstr ""
+msgstr "방어물을 건설하십시오."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr ""
+msgstr "알파(ALPHA) 기지 중요임무: 역습"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
-msgstr ""
+msgstr "적군이 동쪽과 북쪽에서 다가오고 있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr ""
+msgstr "기지를 방어하고 공격이 있으면 물리치십시오."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr ""
+msgstr "알파(ALPHA) 기지 중요임무: 전송 수신중"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
-msgstr ""
+msgstr "우리가 이 위치들에 적군을 감지하고 있습니다"
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr ""
+msgstr "이것은 우리가 '뉴 패러다임'을 물리치고 그들의 기지를 파괴할 기회입니다."
 
 #: data/base/messages/strings/cam1strings.txt:62
 #: data/base/messages/strings/cam1strings.txt:72
@@ -4754,662 +4765,671 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:108
 #: data/base/messages/strings/cam3strings.txt:156
 msgid " "
-msgstr ""
+msgstr " "
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "축하합니다 사령관님."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr ""
+msgstr "우리는 지금 당신이 수행해 주어야 할 과제가 더 있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "알파(ALPHA) 기지 중요임무: 유물을 찾아 수색하십시오"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
-msgstr ""
+msgstr "처음 두 영역은 이제 안전합니다."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
-msgstr ""
+msgstr "프로젝트 팀 업데이트"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "베타(BETA)팀 업데이트"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
-msgstr ""
+msgstr "우리는 몇 가지 유물을 발견했습니다."
 
 #: data/base/messages/strings/cam1strings.txt:80
 msgid "There is a better equipped force operating in this area."
-msgstr ""
+msgstr "이 지역에 우리보다 더 힘을 갖춘 조직이 운용되고 있습니다. "
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "감마(GAMMA)팀 업데이트"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
-msgstr ""
+msgstr "별일 없는데요."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr ""
+msgstr "우리는 유물을 발견하지 못했고 적에 맞닥뜨리지도 않았습니다."
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr ""
+msgstr "알파(ALPHA) 기지 기밀 보고: 적군의 공격"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
-msgstr ""
+msgstr "이 곳에서 적의 공격부대가 감지되고 있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "주요 목적"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr ""
+msgstr "기 구조물은 당신의 주목적입니다."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
-msgstr ""
+msgstr "여기를 수색해 유물을 되찾으십시오."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
-msgstr ""
+msgstr "적군 착륙 지점"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr ""
+msgstr "적의 착륙을 막기 위해 이 착륙 지점을 파괴하십시오."
 
+# get rid of '' or not??
 #: data/base/messages/strings/cam1strings.txt:101
+#, fuzzy
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr ""
+msgstr "알파(Alpha) 기지 기밀 보고: 넥서스"
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
-msgstr ""
+msgstr "새로운 목표."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
-msgstr ""
+msgstr "우리는 침입 바이러스을 감지하고 격리하였습니다."
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
-msgstr ""
+msgstr "추보"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr ""
+msgstr "시냅스 링크 기술이 이 위치에 있었지만 제거되었습니다."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr ""
+msgstr "전진 기지를 설립하고 시냅스 링크를 위해 계속 수색하십시오."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
-msgstr ""
+msgstr "전송 수신중"
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
-msgstr ""
+msgstr "해독 진행중..."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
-msgstr ""
+msgstr "사령관님."
 
+# what does this phrase mean???
 #: data/base/messages/strings/cam1strings.txt:120
+#, fuzzy
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr ""
+msgstr "우리가 수신중인 전갈을 뉴 패러다임에게 해독해주었습니다..."
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
-msgstr ""
+msgstr "적군의 기지를 파괴하십시오"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
-msgstr ""
+msgstr "공격 부대를 모아 수송선에 태우십시오."
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
-msgstr ""
+msgstr "적의 기지를 파괴하고 유물이 있으면 되찾으십시오."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr ""
+msgstr "시냅스 링크 기술을 되찾았습니다!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr ""
+msgstr "초기 연구에 의해 이것이 프로젝트에 큰 도움이 될 것으로 확인되었습니다. "
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr ""
+msgstr "베타(Beta) 기지가 맹공격을 받고 있으니, 도움이 필요할 수도 있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
-msgstr ""
+msgstr "수신되는 대로 추가 정보를 보내드리겠습니다."
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
-msgstr ""
+msgstr "이 전송은 몇 분 전 우리가 가로챘습니다."
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
-msgstr ""
+msgstr "그것은 동쪽에서 송신되었습니다."
 
 #: data/base/messages/strings/cam1strings.txt:140
+#, fuzzy
 msgid "POWER MODULE ARTIFACT"
-msgstr ""
+msgstr "전력 모듈 유물"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
-msgstr ""
+msgstr "전력 모듈 유물을 연구하십시오."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr ""
+msgstr "그리고 나서 트럭을 사용해 당신의 전력 발전기를 전력 모듈로 개선하십시오."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
-msgstr ""
+msgstr "스캐빈저 기지가 감지되었습니다"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr ""
+msgstr "스캐빈저들을 물리치고 유물이 있으면 되찾으십시오."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr ""
+msgstr "뉴 패러다임을 물리친 것을 축하합니다, 이제 이 지역은 안전합니다."
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr ""
+msgstr "넥서스 침입 바이러스가 뉴 패러다임의 시스템에서 발견되었습니다."
 
 #: data/base/messages/strings/cam1strings.txt:152
+#, fuzzy
 msgid "We recorded two conversations with it, extracts follow..."
-msgstr ""
+msgstr "우리가 그것으로 두 개의 대화를 녹음하였고, 이제 발췌한 것을 들려드리겠습니다..."
 
 #: data/base/messages/strings/cam1strings.txt:155
 msgid "We'll keep you informed of further developments"
-msgstr ""
+msgstr "다른 진전이 있으면 알려드리겠습니다."
 
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
 msgid "Commander you are to assist Team Beta"
-msgstr ""
+msgstr "사령관님, 당신은 베타 팀을 도울 것입니다"
 
 #: data/base/messages/strings/cam2strings.txt:4
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr ""
+msgstr "베타(BETA) 기지 미션: 동쪽 지역"
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
 msgid "Upon arrival you are to assume command of the base."
-msgstr ""
+msgstr "도착 즉시 당신은 기지의 지휘를 맞게 될 것입니다."
 
 #: data/base/messages/strings/cam2strings.txt:6
 msgid "You must defend it and hold it."
-msgstr ""
+msgstr "그 기지를 지키십시오."
 
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr ""
+msgstr "베타(BETA) 기지 미션: 방어 및 강화"
 
 #: data/base/messages/strings/cam2strings.txt:10
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr ""
+msgstr "기지 주위를 강화하고 대공 방어 시설을 건설하는 것도 잊지 마십시오."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
 #: data/base/sequenceaudio/cam2/c002.txa:18
 msgid "New technologies are available."
-msgstr ""
+msgstr "새로운 기술이 사용 가능합니다."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr ""
+msgstr "우리는 지금 비트 스트림 암호 신호를 감지하고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr ""
+msgstr "해독중..."
 
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr ""
+msgstr "수송 중요임무: 격추된 수송선"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr ""
+msgstr "알파 기지의 유닛을 태운 우리의 수송선이 격추되었습니다."
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr ""
+msgstr "이 위치에서 컬렉티브(The Collective)의 공격을 받고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr ""
+msgstr "구조 팀을 집합시켜 수송선과 그 안에 탄 유닛들을 되찾으십시오."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
-msgstr ""
+msgstr "비행 중 브리핑(BRIEFING)"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr ""
+msgstr "베타 팀이 수직 이륙과 착륙용 추진력(VTOL) 기술을 찾고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr ""
+msgstr "컬랩스 전(Pre-Collapse) 시대 항공 기지에 있는 것으로 여겨지고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr ""
+msgstr "베타 팀이 맹공격을 받고 있습니다"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr ""
+msgstr "베타(BETA) 기지 미션: 무슨 수를 써서라도 방어하십시오"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr ""
+msgstr "우리는 컬렉티브의 비트 스트림 암호 신호를 감지하고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr ""
+msgstr "베타(BETA) 기지 미션: 무슨 수를 써서라도 방어하십시오"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
-msgstr ""
+msgstr "북쪽에서 지상과 공중 병력이 감지됩니다."
 
 #: data/base/messages/strings/cam2strings.txt:44
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
-msgstr ""
+msgstr "당신의 위치를 방어하고 공격을 물리친 다음, 적의 북쪽 기지를 파괴하십시오."
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr ""
+msgstr "수송 중요임무: 수송대를 가로막으십시오."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr ""
+msgstr "컬렉티브 기지에서 추출한 정보가 넥서스 침입 바이러스의 존재를 나타냅니다."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr ""
+msgstr "넥서스가 오프라인으로 전환하기 전에 우리가 다음 정보를 모았습니다."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr ""
+msgstr "적군 사령관이 이 위치에서 넥서스가 보낸 수송물을 받을 예정입니다."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr ""
+msgstr "착륙 지점에 도착한 다음, 적군 사령관을 없애고 수송물을 되찾으십시오."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
-msgstr ""
+msgstr "그 다음 착륙 지점으로 돌아가십시오."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
-msgstr ""
+msgstr "NASDA에 대한 충격적인 보고가 들어왔습니다."
 
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr ""
+msgstr "수송 중요임무: 수송대를 찾아 파괴하십시오"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
-msgstr ""
+msgstr "당신이 되찾은 수송물은 미끼였습니다."
 
 #: data/base/messages/strings/cam2strings.txt:60
 msgid "We have detected another convoy proceeding along the river."
-msgstr ""
+msgstr "강을 따라 움직이는 또다른 수송대를 감지하였습니다."
 
 #: data/base/messages/strings/cam2strings.txt:64
 msgid "You are to intercept the convoy and recover its cargo."
-msgstr ""
+msgstr "당신은 그 수송대를 가로막아 화물을 되찾으십시오."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr ""
+msgstr "적의 VTOL 유닛들이 가까이 호위 비행을 하고 있을 가능성이 높습니다."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr ""
+msgstr "수송 중요임무: 컨테인먼트(봉쇄) 캠프에 있는 민간인을 구조하십시오"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
+msgstr "컬렉티브가 이 기지에서 민간인을 컴퓨터(데이터) 처리하고 박멸시키고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
-msgstr ""
+msgstr "민간인을 구조하십시오."
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
-msgstr ""
+msgstr "그 다음 캠프를 파괴하십시오."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr ""
+msgstr "베타 기지 중요임무: 적의 항공 기지를 파괴하고 VTOL을 되찾으십시오."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr ""
+msgstr "비행 경로의 분석에 따르면 컬렉티브의 VTOL 유닛의 출몰지역이 이 위치에 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr ""
+msgstr "베타 기지 중요임무: 적의 항공 기지를 파괴하고 VTOL을 되찾으십시오."
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr ""
+msgstr "적의 항공 기지가 이곳에 있습니다; 이 기지가 당신의 주목표입니다."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr ""
+msgstr "컬렉티브의 군대를 모두 제거하고 모든 유물을 되찾으십시오."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr ""
+msgstr "이차적인 임무: 적의 수송선을 파괴하거나 몰아내십시오"
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
-msgstr ""
+msgstr "컬렉티브가 이 지역에서 모든 민간인을 찾아 모으고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
-msgstr ""
+msgstr "그 다음 그들을 우리가 알 수없는 위치로 수송선으로 운송하고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:92
+#, fuzzy
 msgid "Destroy or drive off The Collective's transport."
-msgstr ""
+msgstr "컬렉티브의 수송선을 파괴하거나 몰아내십시오."
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
-msgstr ""
+msgstr "가능한한 많은 민간인를 구조하십시오."
 
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr ""
+msgstr "수송 중요임무: 원자로를 파괴하십시오"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr ""
+msgstr "컬렉티브가 원자로에 대한 지식을 찾고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
-msgstr ""
+msgstr "그들을 막아야 합니다."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr ""
+msgstr "착륙 지점에서 전진해 원자로를 파괴하십시오."
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr ""
+msgstr "컬렉티브가 원자로를 작동시키게 허용 해선 안 됩니다."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr ""
+msgstr "베타 기지 중요임무: NASDA 중앙기지를 차지하십시오"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr ""
+msgstr "NASDA 중앙기지를 넥서스 또는 컬렉티브가 사용하기 전 차지하십시오."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr ""
+msgstr "수송 중요임무: 위성 업링크 구역"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
-msgstr ""
+msgstr "넥서스는 아직도 작동하는 기억 장치(메모리 뱅크)를 찾고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:113
+#, fuzzy
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr ""
+msgstr "그것의 의식 일부는 NASDA 원격 제어 구역으로 이동했습니다."
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
+msgstr "우리가 이 구역에서 높은 궤도에까지 도달하는 전송을 감지하고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
-msgstr ""
+msgstr "넥서스가 이제 다시 NASDA 위성들과 연결하였습니다."
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
-msgstr ""
+msgstr "수송선을 사용하여 공격 부대를 이 구역으로 운송하십시오."
 
 #: data/base/messages/strings/cam2strings.txt:123
 msgid "Destroy the site and return to your base."
-msgstr ""
+msgstr "그 장소를 파괴하고 당신의 기지로 돌아 오십시오."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr ""
+msgstr "수송 중요임무: 적의 지대공 미사일 발사시설을 파괴하십시오"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr ""
+msgstr "당신이 이곳을 탈출하기 위해서는 기지 둘레에 있는 지대공 미사일 발사시설을 파괴하여야 합니다."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr ""
+msgstr "착륙 지점으로 날아간 다음, 육로로 전진해 지대공 미사일 발사시설을 파괴하십시오."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr ""
+msgstr "수송 중요임무: 안전한 피난처를 설립하십시오"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr ""
+msgstr "우리는 알파 기지를 향해 미사일이 날아오고 있다는 것을 확인하였습니다."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr ""
+msgstr "베타 기지를 소개시기 위해 안전한 피난처를 설립하여야 합니다."
 
 #: data/base/messages/strings/cam2strings.txt:137
 msgid "Eradicate any enemy and secure the area."
-msgstr ""
+msgstr "모든 적군을 없애고 그 지역을 확보하십시오."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr ""
+msgstr "안전한 피난처가 완성되면 추가 명령을 받기 위해 착륙 지점으로 돌아오십시오."
 
 #: data/base/messages/strings/cam2strings.txt:141
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Evacuate!"
-msgstr ""
+msgstr "베타 기지 중요임무: 피신하라!"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
-msgstr ""
+msgstr "사령관님, 심각한 소식이 들어왔습니다."
 
 #: data/base/messages/strings/cam2strings.txt:143
 msgid "Alpha base has been destroyed by nuclear missile attack."
-msgstr ""
+msgstr "알파 기지가 핵미사일로 인해 파괴되었습니다."
 
 #: data/base/messages/strings/cam2strings.txt:147
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
-msgstr ""
+msgstr "컬렉티브는 이 핵공격에 대해 모르고 있고 그들의 비행차량이 그 기지를 향해 움직이고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
-msgstr ""
+msgstr "이 소식은 몇 분 전 우리가 도청했습니다..."
 
 #: data/base/messages/strings/cam2strings.txt:152
 msgid "You must transport as many of your forces as possible."
-msgstr ""
+msgstr "당신은 가능한 한 많은 병력을 이동시켜야 합니다."
 
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
 msgid "Good luck, Commander."
-msgstr ""
+msgstr "행운을 빕니다, 사령관님."
 
 #: data/base/messages/strings/cam3strings.txt:4
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr ""
+msgstr "수송 중요임무: 북부 지역"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#, fuzzy
 msgid "Congratulations on your successful evacuation of Beta Base."
-msgstr ""
+msgstr "베타 기지의 성공적인 대피 작업을 축하합니다."
 
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr ""
+msgstr "넥서스가 핵무기를 얻었으며, 프로젝트를 파괴하기로 결심하였습니다."
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
-msgstr ""
+msgstr "당신의 병력을 북부 지역으로 데리고 가십시오."
 
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr ""
+msgstr "산에 도달하면 착륙 지점을 하나 확보하십시오. 그 다음 전진 기지를 설립하십시오."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr ""
+msgstr "감마(Gamma) 팀이 그쪽으로 연락할 것입니다."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr ""
+msgstr "수송 중요임무: 전진 기지를 설립하십시오"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
 msgid "Commander, the success of the Project lies with you."
-msgstr ""
+msgstr "사령관님, 우리 프로젝트의 성공이 당신에게 달렸습니다."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
-msgstr ""
+msgstr "착륙 지점을 하나 확보한 다음 전진 기지를 건설하십시오."
 
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr ""
+msgstr "수송 중요임무: 미사일 발사시설 좌표"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
-msgstr ""
+msgstr "우리는 미사일이 발사된 발사시설을 발견하였습니다."
 
 #: data/base/messages/strings/cam3strings.txt:21
 msgid "There were one or more missiles at this NASDA site."
-msgstr ""
+msgstr "이 NASDA 시설에 하나 이상의 미사일이 있었습니다."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr ""
+msgstr "미사일 사일로(silo) 근처에 있는 착륙 지점의 좌표를 수신 중입니다."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:1
 msgid "Coordinate Download Completed."
-msgstr ""
+msgstr "좌표 다운로드 완료."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr ""
+msgstr "당신의 착륙 지점을 확보하고, 육로로 이동해 미사일 사일로를 파괴하십시오."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
 msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
-msgstr ""
+msgstr "북부 지역 중요임무: 핵폭발"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
-msgstr ""
+msgstr "탄두가 폴발하기전 모든 유닛이 그 지역을 벗어나야 합니다."
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr ""
+msgstr "수송선으로 비행하는 것은 불가능합니다. 당신이 육로를 사용해야겠군요."
 
 #: data/base/messages/strings/cam3strings.txt:39
 msgid "The mountain range to the east should shield you from the blast."
-msgstr ""
+msgstr "동쪽으로 있는 산맥이 당신을 폭발로부터 보호해줄 것입니다."
 
 #: data/base/messages/strings/cam3strings.txt:40
 msgid "The valley is your only chance of escape."
-msgstr ""
+msgstr "계곡은 당신이 탈출할 수 있는 유일한 기회입니다."
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr ""
+msgstr "원정대(AWAY TEAM) 업데이트"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr ""
+msgstr "핵 폭발 후 원정대와 모든 연락이 손실되었습니다."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
-msgstr ""
+msgstr "그들의 마지막 전송은 원정대가 기지로 되돌아오고 있다고 나타내었습니다."
 
 #: data/base/messages/strings/cam3strings.txt:48
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
-msgstr ""
+msgstr "북부 지역 중요임무: 감마 팀을 도우십시오"
 
 #: data/base/messages/strings/cam3strings.txt:49
 msgid "You are to assist Team Gamma."
-msgstr ""
+msgstr "당신은 감마(Gamma) 팀을 도와야 합니다."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr ""
+msgstr "감마 기지에 도착 하였을 때, 넥서스의 공격으로부터 그 지역을 단단히 보완하는 대에 힘쓰십시오."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
-msgstr ""
+msgstr "넥서스가 패배하였습니다"
 
 #: data/base/messages/strings/cam3strings.txt:54
 msgid "Commander, we have defeated NEXUS."
-msgstr ""
+msgstr "사령관님, 우리가 넥서스를 무찔렀습니다."
 
 #: data/base/messages/strings/cam3strings.txt:55
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr ""
+msgstr "불행히도, 우리 시스템의 성능이 넥서스의 영향을 받았습니다. 우리는 이것을 수습하려고 노력 중입니다."
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
-msgstr ""
+msgstr "우리는 현재 이 전송을 받고 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr ""
+msgstr "수송 중요임무: 알파 팀이 감지되었습니다"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr ""
+msgstr "정찰 부대를 이 좌표로 데리고 가 상황을 평가하십시오."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr ""
+msgstr "그들이 알파 팀인지 알아내십시오. 진짜 알파 팀이 맞는다면 그들을 구조해 착륙 지점으로 호위해주십시오."
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
@@ -6211,10 +6231,11 @@ msgstr ""
 msgid "Hover III"
 msgstr ""
 
+# just VTOL or 비행차량 or VTOL 비행차량?
 #: data/base/messages/strings/names.txt:324
 #: data/mp/messages/strings/names.txt:327
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 #: data/base/messages/strings/names.txt:325
 #: data/mp/messages/strings/names.txt:328
@@ -12287,7 +12308,7 @@ msgstr ""
 #: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1366
+#: src/multimenu.c:1356
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12614,72 +12635,72 @@ msgstr ""
 msgid "Unit Lost!"
 msgstr ""
 
-#: src/droid.c:1602
+#: src/droid.c:1607
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3350
+#: src/droid.c:3355
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3363
+#: src/droid.c:3368
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3376
+#: src/droid.c:3381
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3380
+#: src/droid.c:3385
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3643
+#: src/droid.c:3648
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:3644
+#: src/droid.c:3649
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:3645
+#: src/droid.c:3650
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:3646
+#: src/droid.c:3651
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:3647
+#: src/droid.c:3652
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:3648
+#: src/droid.c:3653
 msgid "Veteran"
 msgstr ""
 
-#: src/droid.c:3649
+#: src/droid.c:3654
 msgid "Elite"
 msgstr ""
 
-#: src/droid.c:3650
+#: src/droid.c:3655
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:3651
+#: src/droid.c:3656
 msgid "Hero"
 msgstr ""
 
@@ -12689,7 +12710,7 @@ msgstr "싱글 플레이어(Single Player)"
 
 #: src/frontend.c:98
 msgid "Multi Player"
-msgstr "멀티 플레이어(Multi-player)"
+msgstr "멀티 플레이어(Multi player)"
 
 #: src/frontend.c:99
 #: src/frontend.c:155
@@ -12714,7 +12735,7 @@ msgstr "메인 메뉴"
 
 #: src/frontend.c:156
 msgid "Fast Play"
-msgstr "바로 플레이"
+msgstr "바로 하기"
 
 #: src/frontend.c:157
 msgid "TUTORIALS"
@@ -13104,7 +13125,7 @@ msgstr "건축"
 
 #: src/hci.c:3882
 #: src/multiint.c:1257
-#: src/multimenu.c:773
+#: src/multimenu.c:763
 msgid "Power"
 msgstr "전력"
 
@@ -13133,9 +13154,8 @@ msgid "Place Structures on map"
 msgstr "게임맵에서 구조물을 놓습니다"
 
 #: src/hci.c:4094
-#, fuzzy
 msgid "Feat"
-msgstr "위업"
+msgstr "물체"
 
 #: src/hci.c:4095
 msgid "Place Features on map"
@@ -14230,7 +14250,7 @@ msgid "Distance Fog"
 msgstr ""
 
 #: src/multiint.c:1224
-#: src/multimenu.c:766
+#: src/multimenu.c:756
 msgid "Alliances"
 msgstr ""
 
@@ -14415,72 +14435,72 @@ msgstr ""
 msgid "Limits reset to default values"
 msgstr ""
 
-#: src/multimenu.c:619
+#: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr ""
 
-#: src/multimenu.c:627
+#: src/multimenu.c:617
 msgid "Technology level 2"
 msgstr ""
 
-#: src/multimenu.c:633
+#: src/multimenu.c:623
 msgid "Technology level 3"
 msgstr ""
 
-#: src/multimenu.c:639
+#: src/multimenu.c:629
 msgid "Any number of players"
 msgstr ""
 
-#: src/multimenu.c:646
+#: src/multimenu.c:636
 msgid "2 players"
 msgstr ""
 
-#: src/multimenu.c:652
+#: src/multimenu.c:642
 msgid "4 players"
 msgstr ""
 
-#: src/multimenu.c:658
+#: src/multimenu.c:648
 msgid "8 players"
 msgstr ""
 
-#: src/multimenu.c:767
+#: src/multimenu.c:757
 msgid "Score"
 msgstr ""
 
-#: src/multimenu.c:768
+#: src/multimenu.c:758
 msgid "Kills"
 msgstr ""
 
-#: src/multimenu.c:772
-#: src/multimenu.c:777
+#: src/multimenu.c:762
+#: src/multimenu.c:767
 msgid "Units"
 msgstr ""
 
-#: src/multimenu.c:782
+#: src/multimenu.c:772
 msgid "Ping"
 msgstr ""
 
-#: src/multimenu.c:786
+#: src/multimenu.c:776
 msgid "Structs"
 msgstr ""
 
-#: src/multimenu.c:1149
+#: src/multimenu.c:1139
 msgid "Toggle Alliance State"
 msgstr ""
 
-#: src/multimenu.c:1168
+#: src/multimenu.c:1158
 msgid "Give Visibility Report"
 msgstr ""
 
-#: src/multimenu.c:1174
+#: src/multimenu.c:1164
 msgid "Leak Technology Documents"
 msgstr ""
 
-#: src/multimenu.c:1181
+#: src/multimenu.c:1171
 msgid "Hand Over Selected Units"
 msgstr ""
 
-#: src/multimenu.c:1187
+#: src/multimenu.c:1177
 msgid "Give Power To Player"
 msgstr ""
 
