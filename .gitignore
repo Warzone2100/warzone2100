@@ -101,6 +101,9 @@ Makefile.in
 /po/stamp-po
 /po/warzone2100.pot
 
+# Include this one Makefile
+!/pkg/dpkg/videos/Makefile
+
 # Betawidget autotools and libtool files:
 /lib/betawidget/.libs/
 /lib/betawidget/aclocal.m4
@@ -147,3 +150,27 @@ tools/qwzm/ui_qwzm.h
 
 # patches
 *.patch
+
+# Debian stuff
+/debian
+/pkg/dpkg/files
+/pkg/dpkg/tmp/
+/pkg/dpkg/warzone2100-data.debhelper.log
+/pkg/dpkg/warzone2100-data.substvars
+/pkg/dpkg/warzone2100-data/
+/pkg/dpkg/warzone2100-music.debhelper.log
+/pkg/dpkg/warzone2100-music.substvars
+/pkg/dpkg/warzone2100-music/
+/pkg/dpkg/warzone2100.debhelper.log
+/pkg/dpkg/warzone2100.postinst.debhelper
+/pkg/dpkg/warzone2100.postrm.debhelper
+/pkg/dpkg/warzone2100.substvars
+/pkg/dpkg/warzone2100/
+
+# build folders
+/build
+/2.3
+/trunk
+/newnet
+/qt-trunk
+
