@@ -1796,7 +1796,7 @@ void actionUpdateDroid(DROID *psDroid)
 			if (actionDroidOnBuildPos(psDroid,
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 			{
-				SDWORD pbx, pby;
+				SDWORD pbx = 0, pby = 0;
 
 				actionHomeBasePos(psDroid->player, &pbx, &pby);
 				if (pbx == 0 || pby == 0)
@@ -1903,7 +1903,7 @@ void actionUpdateDroid(DROID *psDroid)
 			if (actionDroidOnBuildPos(psDroid,
 						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats))
 			{
-				SDWORD pbx, pby;
+				SDWORD pbx = 0, pby = 0;
 
 				actionHomeBasePos(psDroid->player, &pbx, &pby);
 				if (pbx == 0 || pby == 0)
