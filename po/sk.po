@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3.2\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:25+0200\n"
+"POT-Creation-Date: 2010-08-10 22:06+0200\n"
 "PO-Revision-Date: 2010-07-30 08:44+0100\n"
 "Last-Translator: Marian Zsemlye <koapa@inmail.sk>\n"
 "Language-Team: Koapa - Marian Zsemlye <koapa@inmail.sk>\n"
@@ -6125,11 +6125,6 @@ msgstr ""
 msgid "Transport Body"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:297
-#: data/mp/messages/strings/names.txt:300
-msgid "Z NULL BRAIN"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
 #: data/base/messages/strings/names.txt:648
@@ -6139,26 +6134,11 @@ msgstr ""
 msgid "Command Turret"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:303
-#: data/mp/messages/strings/names.txt:306
-msgid "Z NULL PROGRAM"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:307
 #: data/base/messages/strings/names.txt:392
 #: data/mp/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:399
 msgid "Demolish"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:310
-#: data/mp/messages/strings/names.txt:313
-msgid "Z NULL CONSTRUCT"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:317
-msgid "Z NULL PROP"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:315
@@ -6255,16 +6235,6 @@ msgstr ""
 msgid "Naval"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:337
-#: data/mp/messages/strings/names.txt:340
-msgid "BaBaProp"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:338
-#: data/mp/messages/strings/names.txt:341
-msgid "BaBaLegs"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
@@ -6272,25 +6242,10 @@ msgstr ""
 msgid "Cyborg Propulsion"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:345
-#: data/mp/messages/strings/names.txt:348
-msgid "Z NULL REPAIR"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
 msgid "Repair Turret"
 msgstr "Opravná veža"
-
-#: data/base/messages/strings/names.txt:349
-#: data/mp/messages/strings/names.txt:352
-msgid "Z NULL ECM"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:362
-#: data/mp/messages/strings/names.txt:365
-msgid "Z NULL SENSOR"
-msgstr ""
 
 #: data/base/messages/strings/names.txt:367
 #: data/base/messages/strings/names.txt:423
@@ -7006,10 +6961,6 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:558
 #: data/mp/messages/strings/names.txt:995
 msgid "Hurricane AA Turret"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:558
-msgid "LasSat"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:560
@@ -12252,8 +12203,8 @@ msgstr ""
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr ""
 
-#: lib/framework/i18n.c:88
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:90
+#: lib/framework/i18n.c:149
 msgid "System locale"
 msgstr "Systémové údaje"
 
@@ -12282,7 +12233,7 @@ msgstr ""
 #: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:479
-#: src/multimenu.c:1366
+#: src/multimenu.c:1356
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12433,7 +12384,7 @@ msgstr ""
 
 #: src/configuration.c:452
 #: src/configuration.c:453
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "Hráč"
 
@@ -12609,11 +12560,11 @@ msgstr "Vozidlo poverené stavbou ropnej veže"
 msgid "Unit Lost!"
 msgstr "Jednotka stratená!"
 
-#: src/droid.c:1601
+#: src/droid.c:1607
 msgid "Structure Restored"
 msgstr "Budova obnovená"
 
-#: src/droid.c:3349
+#: src/droid.c:3355
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -12621,7 +12572,7 @@ msgstr[0] "Skupina %u vybraná - %u jednotka"
 msgstr[1] "Skupina %u vybraná - %u jednotky"
 msgstr[2] "Skupina %u vybraná - %u jednotiek"
 
-#: src/droid.c:3362
+#: src/droid.c:3368
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -12629,7 +12580,7 @@ msgstr[0] "%u jednotka pripojená ku skupine %u"
 msgstr[1] "%u jednotky pripojené ku skupine %u"
 msgstr[2] "%u jednotiek pripojených ku skupine %u"
 
-#: src/droid.c:3375
+#: src/droid.c:3381
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -12637,7 +12588,7 @@ msgstr[0] "Zamerané na skupinu %u - %u jednotka"
 msgstr[1] "Zamerané na skupinu %u - %u jednotky"
 msgstr[2] "Zamerané na skupinu %u - %u jednotiek"
 
-#: src/droid.c:3379
+#: src/droid.c:3385
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -12645,40 +12596,40 @@ msgstr[0] "Vyrovananý so skupinou %u - %u jednotka"
 msgstr[1] "Vyrovnané so skupinou %u - %u jednotky"
 msgstr[2] "Vyrovnaných so skupinou %u - %u jednotiek"
 
-#: src/droid.c:3642
+#: src/droid.c:3648
 msgid "Rookie"
 msgstr "Nováčik"
 
-#: src/droid.c:3643
+#: src/droid.c:3649
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelenáč"
 
-#: src/droid.c:3644
+#: src/droid.c:3650
 msgid "Trained"
 msgstr "Trénovaný"
 
-#: src/droid.c:3645
+#: src/droid.c:3651
 msgid "Regular"
 msgstr "Bežný"
 
-#: src/droid.c:3646
+#: src/droid.c:3652
 msgid "Professional"
 msgstr "Profesionál"
 
-#: src/droid.c:3647
+#: src/droid.c:3653
 msgid "Veteran"
 msgstr "Veterán"
 
-#: src/droid.c:3648
+#: src/droid.c:3654
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3649
+#: src/droid.c:3655
 msgid "Special"
 msgstr "Špecialista"
 
-#: src/droid.c:3650
+#: src/droid.c:3656
 msgid "Hero"
 msgstr "Hrdina"
 
@@ -13102,7 +13053,7 @@ msgstr "Stavba (F3)"
 
 #: src/hci.c:3882
 #: src/multiint.c:1257
-#: src/multimenu.c:773
+#: src/multimenu.c:763
 msgid "Power"
 msgstr "Energia"
 
@@ -13323,7 +13274,7 @@ msgid "Go to Transport"
 msgstr "Nastúp do transportu"
 
 #: src/intorder.c:177
-#: src/keymap.c:420
+#: src/keymap.c:419
 msgid "Return for Recycling"
 msgstr ""
 
@@ -13703,6 +13654,10 @@ msgstr ""
 msgid "View Location of Previous Message"
 msgstr "Zobraziť pozíciu predchádzajúcej správy"
 
+#: src/keymap.c:307
+msgid "Toggle Sensor display"
+msgstr ""
+
 #: src/keymap.c:311
 msgid "Assign Group 0"
 msgstr "Priradiť ku skupine 0"
@@ -13955,6 +13910,36 @@ msgstr "Zpäť na HQ"
 msgid "Send Text Message"
 msgstr "Poslať textovú správu"
 
+#: src/keymap.c:399
+msgid "Drop a beacon"
+msgstr ""
+
+#: src/keymap.c:401
+#, fuzzy
+msgid "Sensor display On"
+msgstr "Dosah snímačov"
+
+#: src/keymap.c:402
+msgid "Sensor display Off"
+msgstr ""
+
+#: src/keymap.c:403
+#, fuzzy
+msgid "Toggles shadows"
+msgstr "Zapnúť tiene"
+
+#: src/keymap.c:404
+msgid "Trap cursor"
+msgstr ""
+
+#: src/keymap.c:405
+msgid "Toggle radar terrain"
+msgstr ""
+
+#: src/keymap.c:406
+msgid "Toggle ally-enemy radar view"
+msgstr ""
+
 #: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr "Vybrať všetky bojové jednotky"
@@ -13963,56 +13948,147 @@ msgstr "Vybrať všetky bojové jednotky"
 msgid "Select all Heavily Damaged Units"
 msgstr "Vybrať všetky ťažko poškodené jednotky"
 
-#: src/keymap.c:418
+#: src/keymap.c:417
 msgid "Select all Half-tracks"
 msgstr "Vybrať všetky polopásové jednotky"
 
-#: src/keymap.c:419
+#: src/keymap.c:418
 msgid "Select all Hovers"
 msgstr "Vybrať všetky vzášadlá"
 
-#: src/keymap.c:421
+#: src/keymap.c:420
 msgid "Select all Units on Screen"
 msgstr "Vybrať všetky jednotky na obrazovke"
 
-#: src/keymap.c:422
+#: src/keymap.c:421
 msgid "Select all Tracks"
 msgstr "Vybrať všetny pásové jednotky"
 
-#: src/keymap.c:423
+#: src/keymap.c:422
 msgid "Select EVERY unit"
 msgstr "Vybrať VŠETKY jednotky"
 
-#: src/keymap.c:424
+#: src/keymap.c:423
 msgid "Select all VTOLs"
 msgstr ""
 
-#: src/keymap.c:425
+#: src/keymap.c:424
 msgid "Select all Wheels"
 msgstr "Vybrať všetky kolesové jednotky"
 
-#: src/keymap.c:427
+#: src/keymap.c:425
+msgid "Show frame rate"
+msgstr ""
+
+#: src/keymap.c:426
 msgid "Select all Similar Units"
 msgstr "Vyber všetky podobné jednotky"
 
-#: src/keymap.c:431
+#: src/keymap.c:430
 msgid "Select next Factory"
 msgstr "Vybrať dalšiu továrňu"
 
-#: src/keymap.c:432
+#: src/keymap.c:431
 msgid "Select next Research Facility"
 msgstr "Vybrať dalšie výskumné zariadenie"
 
-#: src/keymap.c:433
+#: src/keymap.c:432
 msgid "Select next Power Generator"
 msgstr "Vybrať další generátor energie"
 
-#: src/keymap.c:434
+#: src/keymap.c:433
 msgid "Select next Cyborg Factory"
 msgstr ""
 
-#: src/keymap.c:435
+#: src/keymap.c:434
 msgid "Toggle reopening the build menu"
+msgstr ""
+
+#: src/keymap.c:438
+msgid "Toggle display of droid path"
+msgstr ""
+
+#: src/keymap.c:439
+msgid "Toggle display of gateways"
+msgstr ""
+
+#: src/keymap.c:440
+#, fuzzy
+msgid "Toggle Debug Mappings"
+msgstr "Mapovanie kláves"
+
+#: src/keymap.c:441
+msgid "Show all keyboard mappings - use pause!"
+msgstr ""
+
+#: src/keymap.c:442
+msgid "Toggle visibility"
+msgstr ""
+
+#: src/keymap.c:443
+#, fuzzy
+msgid "Raise tile height"
+msgstr "Otočiť doprava"
+
+#: src/keymap.c:444
+msgid "Lower tile height"
+msgstr ""
+
+#: src/keymap.c:445
+msgid "Toggles on/off DEMO Mode"
+msgstr ""
+
+#: src/keymap.c:446
+msgid "End Mission"
+msgstr ""
+
+#: src/keymap.c:447
+msgid "Toggles All fog"
+msgstr ""
+
+#: src/keymap.c:448
+msgid "Trigger some weather"
+msgstr ""
+
+#: src/keymap.c:449
+msgid "Flip terrain triangle"
+msgstr ""
+
+#: src/keymap.c:450
+msgid "Realign height of all objects on the map"
+msgstr ""
+
+#: src/keymap.c:453
+#, fuzzy
+msgid "Make all items available"
+msgstr "Žiadne hry k dispozícii"
+
+#: src/keymap.c:454
+msgid "Kill Selected Unit(s)"
+msgstr ""
+
+#: src/keymap.c:455
+msgid "Toggle god Mode Status"
+msgstr ""
+
+#: src/keymap.c:456
+msgid "Display Options Screen"
+msgstr ""
+
+#: src/keymap.c:457
+msgid "Complete current research"
+msgstr ""
+
+#: src/keymap.c:458
+msgid "Toggle watch window"
+msgstr ""
+
+#: src/keymap.c:459
+msgid "Trace a game object"
+msgstr ""
+
+#: src/keymap.c:460
+msgid "Toggle Driving Mode"
 msgstr ""
 
 #: src/loop.c:543
@@ -14227,7 +14303,7 @@ msgid "Distance Fog"
 msgstr "Vzdialenostná hmla"
 
 #: src/multiint.c:1224
-#: src/multimenu.c:766
+#: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Spojenectvá"
 
@@ -14412,72 +14488,72 @@ msgstr "Nastav východzie a návrat na predchádzajúcu obrazovku"
 msgid "Limits reset to default values"
 msgstr ""
 
-#: src/multimenu.c:619
+#: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Technologická úroveň 1"
 
-#: src/multimenu.c:627
+#: src/multimenu.c:617
 msgid "Technology level 2"
 msgstr "Technologická úroveň 2"
 
-#: src/multimenu.c:633
+#: src/multimenu.c:623
 msgid "Technology level 3"
 msgstr "Technologická úroveň 3"
 
-#: src/multimenu.c:639
+#: src/multimenu.c:629
 msgid "Any number of players"
 msgstr "Ľubovolný počet hráčov"
 
-#: src/multimenu.c:646
+#: src/multimenu.c:636
 msgid "2 players"
 msgstr "2 hráči"
 
-#: src/multimenu.c:652
+#: src/multimenu.c:642
 msgid "4 players"
 msgstr "4 hráči"
 
-#: src/multimenu.c:658
+#: src/multimenu.c:648
 msgid "8 players"
 msgstr "8 hráčov"
 
-#: src/multimenu.c:767
+#: src/multimenu.c:757
 msgid "Score"
 msgstr ""
 
-#: src/multimenu.c:768
+#: src/multimenu.c:758
 msgid "Kills"
 msgstr ""
 
-#: src/multimenu.c:772
-#: src/multimenu.c:777
+#: src/multimenu.c:762
+#: src/multimenu.c:767
 msgid "Units"
 msgstr "Jednotky"
 
-#: src/multimenu.c:782
+#: src/multimenu.c:772
 msgid "Ping"
 msgstr ""
 
-#: src/multimenu.c:786
+#: src/multimenu.c:776
 msgid "Structs"
 msgstr "Stavby"
 
-#: src/multimenu.c:1149
+#: src/multimenu.c:1139
 msgid "Toggle Alliance State"
 msgstr ""
 
-#: src/multimenu.c:1168
+#: src/multimenu.c:1158
 msgid "Give Visibility Report"
 msgstr ""
 
-#: src/multimenu.c:1174
+#: src/multimenu.c:1164
 msgid "Leak Technology Documents"
 msgstr ""
 
-#: src/multimenu.c:1181
+#: src/multimenu.c:1171
 msgid "Hand Over Selected Units"
 msgstr ""
 
-#: src/multimenu.c:1187
+#: src/multimenu.c:1177
 msgid "Give Power To Player"
 msgstr ""
 
@@ -14669,12 +14745,12 @@ msgstr "STE VÝŤAZ!"
 msgid "YOU WERE DEFEATED!"
 msgstr "BOLI STE PORAZENÝ!"
 
-#: src/scriptfuncs.c:10088
+#: src/scriptfuncs.c:10089
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10135
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -14713,9 +14789,9 @@ msgstr ""
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
-msgstr[0] "Jednotka priradená"
-msgstr[1] "Jednotky priradené"
-msgstr[2] "Jednotiek priradených"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: src/structure.c:5977
 #: src/structure.c:6041
