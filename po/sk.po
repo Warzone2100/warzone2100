@@ -14713,9 +14713,9 @@ msgstr ""
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
-msgstr[0] "Jednotka priradená"
-msgstr[1] "Jednotky priradené"
-msgstr[2] "Jednotiek priradených"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: src/structure.c:5977
 #: src/structure.c:6041
