@@ -64,6 +64,7 @@
 #define LANG_NAME_PORTUGUESE "Português"
 #define LANG_NAME_ROMANIAN "română"
 #define LANG_NAME_RUSSIAN "Русский"
+#define LANG_NAME_SLOVAK "Slovensky"
 #define LANG_NAME_SLOVENIAN "Slovenski"
 #define LANG_NAME_SWEDISH_SWEDEN "svenska (Sverige)"
 #define LANG_NAME_SWEDISH "svenska"
@@ -122,6 +123,7 @@ static const struct
 	{ "pt", LANG_NAME_PORTUGUESE, LANG_PORTUGUESE, SUBLANG_DEFAULT },
 //	{ "ro", LANG_NAME_ROMANIAN, LANG_ROMANIAN, SUBLANG_DEFAULT },
 	{ "ru", LANG_NAME_RUSSIAN, LANG_RUSSIAN, SUBLANG_DEFAULT },
+	{ "sk", LANG_NAME_SLOVAK, LANG_SLOVAK, SUBLANG_DEFAULT },
 	{ "sl", LANG_NAME_SLOVENIAN, LANG_SLOVENIAN, SUBLANG_DEFAULT },
 #if (WINVER >= 0x0600)
 //	{ "sv_SE", LANG_NAME_SWEDISH_SWEDEN, LANG_SWEDISH, SUBLANG_SWEDISH_SWEDEN },
@@ -179,6 +181,7 @@ static const struct
 	{ "pt", LANG_NAME_PORTUGUESE, "pt_PT.UTF-8", "pt_PT" },
 //	{ "ro", LANG_NAME_ROMANIAN, "ro.UTF-8", "ro" },
 	{ "ru", LANG_NAME_RUSSIAN, "ru_RU.UTF-8", "ru_RU" },
+	{ "sk", LANG_NAME_SLOVAK, "sk_SK.UTF-8", "sk_SK" },
 	{ "sl", LANG_NAME_SLOVENIAN, "sl.UTF-8", "sl" },
 //	{ "sv_SE", LANG_NAME_SWEDISH_SWEDEN, "sv_SE.UTF-8", "sv_SE" },
 //	{ "sv", LANG_NAME_SWEDISH, "sv.UTF-8", "sv" },
