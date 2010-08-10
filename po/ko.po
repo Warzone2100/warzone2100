@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 20:38+0200\n"
-"PO-Revision-Date: 2010-08-07 01:45+0900\n"
+"POT-Creation-Date: 2010-08-10 20:25+0200\n"
+"PO-Revision-Date: 2010-08-10 01:44+0900\n"
 "Last-Translator: Josh Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
 "Language: \n"
@@ -214,7 +214,7 @@ msgstr "새로운 방어 구조 사용가능"
 #: data/mp/messages/resmessages12.rmsg:5
 #, fuzzy
 msgid "Armored Mortar battery pit"
-msgstr "박격포 배터리 장갑구덩이"
+msgstr "박격포 포대 장갑구덩이"
 
 #: data/base/messages/resmessages12.rmsg:6
 #: data/base/messages/resmessages12.rmsg:19
@@ -546,21 +546,21 @@ msgstr "새로운 시스템 터릿이 디자인에 사용 가능합니다"
 #: data/base/messages/resmessages12.rmsg:70
 #: data/mp/messages/resmessages12.rmsg:70
 msgid "Counter-battery turret detects enemy indirect fire batteries"
-msgstr "카운터배터리 터릿이 적의 간접 대포 사격을 감지하였습니다"
+msgstr "카운터배터리 터릿이 적의 간접 대포 사격을 감지합니다"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessagesall.rmsg:97
 #: data/mp/messages/resmessages12.rmsg:71
 #: data/mp/messages/resmessagesall.rmsg:123
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
-msgstr "간접 사격 유닛에게 적의 포대를 공격하라 명령하였습니다."
+msgstr "할당된 간접 사격 유닛에게 적의 포대를 공격하라 명령합니다"
 
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessagesall.rmsg:98
 #: data/mp/messages/resmessages12.rmsg:72
 #: data/mp/messages/resmessagesall.rmsg:124
 msgid "Counter-battery fire continues until enemy battery is suppressed"
-msgstr "카운터배터리 사격은 적의 배터리가 억압될때까지 계속됩니다"
+msgstr "카운터배터리 사격은 적의 포대가 억압될때까지 계속됩니다"
 
 #: data/base/messages/resmessages12.rmsg:82
 #: data/base/messages/resmessages23.rmsg:56
@@ -667,7 +667,7 @@ msgstr "자동 장전기 메커니즘은 수동 장전기를 대체"
 
 #: data/base/messages/resmessages12.rmsg:110
 msgid "Increases Flamer ROF"
-msgstr "화염방사기의 ROF(공격 범위)를 증가시킵니다"
+msgstr "화염방사기의 공격 범위를 증가시킵니다"
 
 #: data/base/messages/resmessages12.rmsg:111
 #: data/base/messages/resmessages1.rmsg:605
@@ -861,7 +861,7 @@ msgstr "기관총 개선"
 #: data/base/messages/resmessages12.rmsg:135
 #: data/mp/messages/resmessages12.rmsg:135
 msgid "Chaingun mechanism replaces belt-feed"
-msgstr "체인건 메커니즘이 벨트사용 장전을 대체하였습니다"
+msgstr "체인건 메커니즘이 벨트 사용 장전을 대체합니다"
 
 #: data/base/messages/resmessages12.rmsg:136
 #: data/base/messages/resmessages23.rmsg:175
@@ -869,7 +869,7 @@ msgstr "체인건 메커니즘이 벨트사용 장전을 대체하였습니다"
 #: data/base/messages/strings/resstrings.txt:859
 #: data/mp/messages/strings/resstrings.txt:900
 msgid "Increases Machinegun ROF"
-msgstr "기관총의 ROF(공격 범위)를 증가시킵니다"
+msgstr "기관총의 공격 범위를 증가시킵니다"
 
 #: data/base/messages/resmessages12.rmsg:137
 #: data/base/messages/resmessages1.rmsg:644
@@ -1030,12 +1030,12 @@ msgstr "모든 박격포는 자동으로 개선됩니다"
 #: data/base/messages/resmessages12.rmsg:174
 #: data/mp/messages/resmessages12.rmsg:174
 msgid "Automatic loader replaces manual feed"
-msgstr "자동 장전기가 수동 장전를 대체하였습니다"
+msgstr "자동 장전기가 수동 장전를 대체합니다"
 
 #: data/base/messages/resmessages12.rmsg:175
 #: data/base/messages/resmessages3.rmsg:1189
 msgid "Increases Mortar ROF"
-msgstr "박격포의 ROF(공격 범위)를 증가시킵니다"
+msgstr "박격포의 공격 범위를 증가시킵니다"
 
 #: data/base/messages/resmessages12.rmsg:186
 #: data/base/messages/resmessages12.rmsg:251
@@ -1055,7 +1055,7 @@ msgstr "새로운 로케트 무기 사용가능"
 #: data/base/messages/resmessages12.rmsg:187
 #: data/mp/messages/resmessages12.rmsg:187
 msgid "Rocket artillery; can be assigned to a sensor"
-msgstr "로케트 포병대. 센서에 할당할 수 있습니다"
+msgstr "로케트 포병입니다. 센서에 할당할 수 있습니다"
 
 #: data/base/messages/resmessages12.rmsg:188
 #: data/mp/messages/resmessages12.rmsg:188
@@ -1086,7 +1086,7 @@ msgstr "자동 장전기가 재장전 속도를 증가했습니다"
 
 #: data/base/messages/resmessages12.rmsg:201
 msgid "Increases Rocket ROF"
-msgstr "로케트 ROF(공격 범위)를 증가합니다"
+msgstr "로케트 공격 범위를 증가합니다"
 
 #: data/base/messages/resmessages12.rmsg:202
 #: data/base/messages/resmessages12.rmsg:241
@@ -1108,7 +1108,7 @@ msgstr "모든 로케트가 자동 개선됩니다"
 #: data/base/messages/resmessages12.rmsg:214
 #: data/base/messages/resmessages3.rmsg:890
 msgid "Increases Cannon ROF"
-msgstr "캐논 ROF(공격 범위)를 늘립니다"
+msgstr "캐논 공격 범위를 늘립니다"
 
 #: data/base/messages/resmessages12.rmsg:226
 #: data/mp/messages/resmessages12.rmsg:226
@@ -1124,7 +1124,7 @@ msgstr "캐논의 파괴력을 증가시킵니다"
 #: data/base/messages/resmessages12.rmsg:239
 #: data/mp/messages/resmessages12.rmsg:239
 msgid "Rocket tracks the laser designator to the target"
-msgstr "로케트이 레이저 추적기를 따라 타깃을 접근합니다"
+msgstr "로케트가 레이저 추적기를 따라 타깃을 접근합니다"
 
 #: data/base/messages/resmessages12.rmsg:240
 #: data/base/messages/resmessages1.rmsg:747
@@ -1135,7 +1135,7 @@ msgstr "로케트의 정확도를 증가합니다"
 #: data/base/messages/resmessages12.rmsg:252
 #: data/mp/messages/resmessages12.rmsg:252
 msgid "Heavy anti-tank rocket"
-msgstr "헤비(Heavy)급 대전차로케트"
+msgstr "대형 대전차로케트"
 
 #: data/base/messages/resmessages12.rmsg:253
 #: data/base/messages/resmessages1.rmsg:539
@@ -1187,7 +1187,7 @@ msgstr "새로운 전장 컴퓨터 시스템"
 #: data/mp/messages/resmessagesall.rmsg:942
 #: data/mp/messages/resmessagesall.rmsg:955
 msgid "Commander leads groups acts as factory delivery point"
-msgstr "커맨더가 그룹을 이끌며 공장 배달 지점으로 처신합니다"
+msgstr "커맨더가 그룹을 이끌며 공장 배달 지점으로도 처신합니다"
 
 #: data/base/messages/resmessages1.rmsg:7
 #: data/base/messages/resmessages1.rmsg:514
@@ -1221,7 +1221,7 @@ msgstr "컴퓨터 기술 혁신"
 #: data/base/messages/resmessages1.rmsg:18
 #: data/mp/messages/resmessages1.rmsg:18
 msgid "Synaptic Link allows humans to interface directly with computers"
-msgstr "시냅스 링크는 사람이 직접 컴퓨터와 접속할 수 있도록 해줍니다"
+msgstr "시냅스 연결은 사람이 직접 컴퓨터와 접속할 수 있도록 해줍니다"
 
 #: data/base/messages/resmessages1.rmsg:19
 #: data/mp/messages/resmessages1.rmsg:19
@@ -1406,7 +1406,7 @@ msgstr "랜서Lancer 대전차로케트로 무장"
 #: data/mp/messages/resmessages3.rmsg:225
 #: data/mp/messages/strings/resstrings.txt:121
 msgid "Defenses Improved"
-msgstr "방비가 개선되었습니다"
+msgstr "방어 시설이 개선되었습니다"
 
 #: data/base/messages/resmessages1.rmsg:96
 #: data/mp/messages/resmessages1.rmsg:96
@@ -1443,7 +1443,7 @@ msgstr "방위력: 낮음"
 #: data/base/messages/resmessages1.rmsg:122
 #: data/mp/messages/resmessages1.rmsg:122
 msgid "Armored guard tower with Mini-Pod Rocket"
-msgstr "미니포드(pod) 로케트가 달린 경호 탑"
+msgstr "미니포드 로케트 경호탑"
 
 #: data/base/messages/resmessages1.rmsg:135
 #: data/mp/messages/resmessages1.rmsg:135
@@ -1484,7 +1484,7 @@ msgstr "대형 캐논 하드포인트"
 #: data/mp/messages/resmessages1.rmsg:226
 #: data/mp/messages/strings/resstrings.txt:350
 msgid "Reinforced concrete tank traps"
-msgstr "철근콘크리트 탱크 장애물"
+msgstr "철근콘크리트 탱크 트랩"
 
 #: data/base/messages/resmessages1.rmsg:227
 #: data/base/messages/strings/resstrings.txt:325
@@ -1583,10 +1583,13 @@ msgstr "최대 5개의 커맨더를 제어합니다"
 msgid "Cyborg Production Improved"
 msgstr "사이보그 생산이 향상되었습니다"
 
+# automated = 자동화
+# automated production = 자동화 생산
 #: data/base/messages/resmessages1.rmsg:278
 #: data/base/messages/strings/names.txt:783
 #: data/mp/messages/resmessages1.rmsg:278
 #: data/mp/messages/strings/names.txt:797
+#, fuzzy
 msgid "Automated Cyborg Production"
 msgstr "사이보그 자동 생산"
 
@@ -1649,7 +1652,7 @@ msgstr "생산이 향상되었습니다"
 #: data/base/messages/resmessages1.rmsg:304
 #: data/mp/messages/resmessages1.rmsg:304
 msgid "Factory module enables medium and large bodies"
-msgstr "공장 모듈이 중형 및 대형 바디를 활성화합니다"
+msgstr "공장 모듈이 중형 및 대형 차체를 활성화합니다"
 
 #: data/base/messages/resmessages1.rmsg:305
 #: data/base/messages/resmessages1.rmsg:318
@@ -1677,7 +1680,7 @@ msgstr "차량 생산이 향상되었습니다"
 #: data/base/messages/strings/names.txt:794
 #: data/mp/messages/resmessages1.rmsg:318
 msgid "Automated Factory Production"
-msgstr "자동화된 공장 생산"
+msgstr "자동화 공장 생산"
 
 #: data/base/messages/resmessages1.rmsg:319
 #: data/base/messages/resmessages2.rmsg:358
@@ -1692,7 +1695,7 @@ msgstr "모든 차량 공장이 자동 개선됩니다"
 #: data/base/messages/resmessages1.rmsg:329
 #: data/mp/messages/resmessages1.rmsg:330
 msgid "Power Module Available"
-msgstr "파워 모듈 사용 가능"
+msgstr "발전기 모듈 사용 가능"
 
 #: data/base/messages/resmessages1.rmsg:330
 #: data/base/messages/resmessages23.rmsg:30
@@ -1716,12 +1719,12 @@ msgstr "트럭을 써서 전력 발전기에 모듈을 더하십시오"
 #: data/base/messages/resmessages1.rmsg:342
 #: data/mp/messages/resmessages1.rmsg:343
 msgid "Research Module Available"
-msgstr "연구 센터 모듈 사용가능"
+msgstr "연구 시설 모듈 사용가능"
 
 #: data/base/messages/resmessages1.rmsg:343
 #: data/mp/messages/resmessages1.rmsg:344
 msgid "Research module expands research facilities"
-msgstr "연구 센터 모듈이 연구 시설을 확장해줍니다"
+msgstr "연구 시설 모듈이 연구 시설을 확장해줍니다"
 
 #: data/base/messages/resmessages1.rmsg:344
 #: data/base/messages/resmessages1.rmsg:357
@@ -1751,7 +1754,7 @@ msgstr "연구가 개선되었습니다"
 #: data/base/messages/resmessages1.rmsg:356
 #: data/mp/messages/resmessages1.rmsg:357
 msgid "Synaptic link data analysis"
-msgstr "시냅스 링크 데이터 분석"
+msgstr "시냅스 연결 데이터 분석"
 
 #: data/base/messages/resmessages1.rmsg:358
 #: data/base/messages/resmessages2.rmsg:371
@@ -1782,7 +1785,7 @@ msgstr "피해 저항력을 늘립니다"
 #: data/mp/messages/resmessages1.rmsg:370
 #: data/mp/messages/strings/names.txt:819
 msgid "Reinforced Base Structure Materials"
-msgstr "강화된 기지 구조물 재료"
+msgstr "보강된 기지 구조물 재료"
 
 #: data/base/messages/resmessages1.rmsg:370
 #: data/base/messages/resmessages2.rmsg:58
@@ -1814,12 +1817,12 @@ msgstr "모든 기지 구조물이 자동 개선됩니다"
 #: data/base/messages/resmessages1.rmsg:381
 #: data/mp/messages/resmessages1.rmsg:382
 msgid "Project Light Body"
-msgstr "프로젝트 소형 바디"
+msgstr "프로젝트 소형 차체"
 
 #: data/base/messages/resmessages1.rmsg:382
 #: data/mp/messages/resmessages1.rmsg:383
 msgid "Light body vulnerable to heavy weapons"
-msgstr "소형 바디 중화기에 취약합니다"
+msgstr "중화기에 취약한 소형 차체"
 
 #: data/base/messages/resmessages1.rmsg:383
 #: data/mp/messages/resmessages1.rmsg:384
@@ -1834,7 +1837,7 @@ msgstr "낮은 전력 비용과 낮은 생산 시간비용"
 #: data/base/messages/resmessages1.rmsg:394
 #: data/mp/messages/resmessages1.rmsg:395
 msgid "New Paradigm Light Body"
-msgstr "새로운 패러다임 소형 바디"
+msgstr "새로운 패러다임 소형 차체"
 
 #: data/base/messages/resmessages1.rmsg:395
 #: data/mp/messages/resmessages1.rmsg:396
@@ -1856,12 +1859,12 @@ msgstr "생산시 전력 소모와 시간 소요는 바이퍼와 비슷함"
 #: data/base/messages/resmessages1.rmsg:407
 #: data/mp/messages/resmessages1.rmsg:408
 msgid "Project Medium Body"
-msgstr "프로젝트 미디엄(중형) 바디"
+msgstr "프로젝트 중형 차체"
 
 #: data/base/messages/resmessages1.rmsg:408
 #: data/mp/messages/resmessages1.rmsg:409
 msgid "Medium body increases armor and body points"
-msgstr "중형 바디가 장갑과 바디포인트를 증가시켜줍니다"
+msgstr "중형 차체가 장갑과 바디포인트를 증가시켜줍니다"
 
 #: data/base/messages/resmessages1.rmsg:409
 #: data/mp/messages/resmessages1.rmsg:410
@@ -1876,7 +1879,7 @@ msgstr "전력 비용과 생산시간 소요는 평균"
 #: data/base/messages/resmessages1.rmsg:420
 #: data/mp/messages/resmessages1.rmsg:421
 msgid "New Paradigm Medium body"
-msgstr "새로운 패러다임 중형 바디"
+msgstr "새로운 패러다임 중형 차체"
 
 #: data/base/messages/resmessages1.rmsg:421
 #: data/mp/messages/resmessages1.rmsg:422
@@ -1898,17 +1901,17 @@ msgstr "코브라와 비슷한 전력 비용과 생산시간 소요"
 #: data/base/messages/resmessages1.rmsg:433
 #: data/mp/messages/resmessages1.rmsg:434
 msgid "Project Heavy Body"
-msgstr "프로젝트 헤비(대형) 바디"
+msgstr "프로젝트 대형 차체"
 
 #: data/base/messages/resmessages1.rmsg:434
 #: data/mp/messages/resmessages1.rmsg:435
 msgid "Heavy body increases armor and body points"
-msgstr "대형 바디가 장갑과 바디포인트를 향상합니다"
+msgstr "대형 차체가 장갑과 바디포인트를 향상합니다"
 
 #: data/base/messages/resmessages1.rmsg:435
 #: data/mp/messages/resmessages1.rmsg:436
 msgid "Good main battle tank and heavy artillery platform"
-msgstr "좋은 주 배틀탱크와 중화기 플랫폼"
+msgstr "좋은 주 전투탱크이며 대형 화포 플랫폼입니다"
 
 #: data/base/messages/resmessages1.rmsg:436
 #: data/mp/messages/resmessages1.rmsg:437
@@ -1918,7 +1921,7 @@ msgstr "매우 높은 전력 비용이 들며 생산이 매우 느림"
 #: data/base/messages/resmessages1.rmsg:446
 #: data/mp/messages/resmessages1.rmsg:447
 msgid "New Paradigm Heavy Body"
-msgstr "새로운 패러다임 대형 바디"
+msgstr "새로운 패러다임 대형 차체"
 
 #: data/base/messages/resmessages1.rmsg:447
 #: data/mp/messages/resmessages1.rmsg:448
@@ -2007,7 +2010,7 @@ msgstr "모든 차량이 자동 개선됩니다"
 #: data/mp/messages/resmessages3.rmsg:706
 #: data/mp/messages/strings/resstrings.txt:604
 msgid "Vehicle Bodies Improved"
-msgstr "차량 바디가 향상되었습니다"
+msgstr "차량 차체가 향상되었습니다"
 
 #: data/base/messages/resmessages1.rmsg:474
 #: data/base/messages/resmessages2.rmsg:513
@@ -2032,7 +2035,7 @@ msgstr "새로운 추진력이 사용가능합니다"
 #: data/base/messages/resmessages1.rmsg:486
 #: data/mp/messages/resmessages1.rmsg:487
 msgid "Armored Half-tracks"
-msgstr "장갑한 반 무한궤도(Half-tracks)"
+msgstr "장갑한 반 무한궤도"
 
 #: data/base/messages/resmessages1.rmsg:487
 #: data/mp/messages/resmessages1.rmsg:488
@@ -2132,7 +2135,7 @@ msgstr "120mm 탄환을 발사하는 대형 캐논"
 #: data/base/messages/resmessages1.rmsg:577
 #: data/mp/messages/resmessages1.rmsg:578
 msgid "High Explosive Anti-Tank Cannon Shells"
-msgstr "대전차 캐논 고성능 폭발탄"
+msgstr "대전차 캐논 고위력 폭발탄"
 
 #: data/base/messages/resmessages1.rmsg:590
 #: data/mp/messages/resmessages1.rmsg:591
@@ -2206,7 +2209,7 @@ msgstr "직접 사격으로 사용하거나 센서터릿 또는 센서탑에 지
 #: data/base/messages/resmessages1.rmsg:681
 #: data/mp/messages/resmessages1.rmsg:682
 msgid "Improved high explosive shells"
-msgstr "고성능 폭발탄이 향상되었습니다 "
+msgstr "고위력 폭발탄이 향상되었습니다 "
 
 #: data/base/messages/resmessages1.rmsg:682
 #: data/base/messages/resmessages2.rmsg:916
@@ -2294,7 +2297,7 @@ msgstr "비행중인 로케트의 진로를 관찰하면서 표적으로 안내�
 #: data/base/messages/resmessages1.rmsg:759
 #: data/mp/messages/resmessages1.rmsg:760
 msgid "High Explosive Anti-Tank warhead"
-msgstr "대전차용 고성능 탄두"
+msgstr "대전차용 고위력 탄두"
 
 #: data/base/messages/resmessages1.rmsg:760
 #: data/base/messages/resmessages2.rmsg:942
@@ -2419,7 +2422,7 @@ msgstr "새로운 시스템 탑이 사용가능합니다"
 #: data/base/messages/resmessages23.rmsg:70
 #: data/mp/messages/resmessages23.rmsg:70
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
-msgstr "VTOL 카운터배터리 탑에서 적의 간접 사격 포대를 감지했습니다"
+msgstr "VTOL 카운터배터리 탑에서 적의 간접 사격 포대를 감지합니다"
 
 #: data/base/messages/resmessages23.rmsg:71
 #: data/base/messages/resmessages2.rmsg:435
@@ -2428,7 +2431,7 @@ msgstr "VTOL 카운터배터리 탑에서 적의 간접 사격 포대를 감지�
 #: data/mp/messages/resmessages2.rmsg:435
 #: data/mp/messages/strings/resstrings.txt:509
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr "VTOL 유닛에게 적의 포대를 공격하도록 명령하였습니다"
+msgstr "할당된 VTOL 유닛에게 적의 포대를 공격하도록 명령합니다"
 
 #: data/base/messages/resmessages23.rmsg:72
 #: data/base/messages/resmessages2.rmsg:436
@@ -2475,7 +2478,7 @@ msgstr "모든 VTOL 카운터배터리 센서가 자동 개선됩니다"
 #: data/base/messages/resmessages23.rmsg:96
 #: data/mp/messages/resmessages23.rmsg:96
 msgid "VTOL Strike Tower detects approaching enemies"
-msgstr "VTOL 스트라이크 탑에서 접근하는 적을 감지했습니다"
+msgstr "VTOL 공습 탑에서 접근하는 적을 감지합니다"
 
 #: data/base/messages/resmessages23.rmsg:97
 #: data/mp/messages/resmessages23.rmsg:97
@@ -2485,7 +2488,7 @@ msgstr "할당 VTOL 유닛이 적의 유닛을 공격합니다"
 #: data/base/messages/resmessages23.rmsg:98
 #: data/mp/messages/resmessages23.rmsg:98
 msgid "Strike mission continues until enemy destroyed or they retreat"
-msgstr "스트라이크 임무는 적이 파괴되거나 후퇴할 때까지 계속됩니다"
+msgstr "공습 임무는 적이 파괴되거나 후퇴할 때까지 계속됩니다"
 
 #: data/base/messages/resmessages23.rmsg:108
 #: data/base/messages/resmessages2.rmsg:433
@@ -2507,7 +2510,7 @@ msgstr "새로운 시스템 터릿 사용가능"
 #: data/base/messages/resmessages23.rmsg:109
 #: data/mp/messages/resmessages23.rmsg:109
 msgid "VTOL Strike turret used to spot targets"
-msgstr "표적을 찾아내는 데 사용되는 VTOL 스트라이크 터릿"
+msgstr "표적을 찾아내는 데 사용되는 VTOL 공습 터릿"
 
 #: data/base/messages/resmessages23.rmsg:110
 #: data/mp/messages/resmessages23.rmsg:110
@@ -2517,7 +2520,7 @@ msgstr "할당 VTOL 유닛이 지정된 표적을 공격합니다"
 #: data/base/messages/resmessages23.rmsg:111
 #: data/mp/messages/resmessages23.rmsg:111
 msgid "Select new targets to continue the VTOL strikes"
-msgstr "VTOL 스트라이크를 계속할 새로운 표적을 선택하십시오"
+msgstr "VTOL 공습을 계속할 새로운 표적을 선택하십시오"
 
 #: data/base/messages/resmessages23.rmsg:121
 #: data/base/messages/resmessages2.rmsg:459
@@ -2528,7 +2531,7 @@ msgstr "VTOL 스트라이크를 계속할 새로운 표적을 선택하십시오
 #: data/mp/messages/resmessages3.rmsg:550
 #: data/mp/messages/strings/resstrings.txt:527
 msgid "VTOL Strike Improved"
-msgstr "VTOL 스트라이크가 개선되었습니다"
+msgstr "VTOL 공습이 개선되었습니다"
 
 #: data/base/messages/resmessages23.rmsg:122
 #: data/mp/messages/resmessages23.rmsg:122
@@ -2544,7 +2547,7 @@ msgstr "표적 인식 시스템이 개선되었습니다"
 #: data/mp/messages/resmessages3.rmsg:552
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "Extends VTOL Strike Range"
-msgstr "VTOL 스트라이크(공격) 범위를 늘립니다"
+msgstr "VTOL 공습 범위를 늘립니다"
 
 #: data/base/messages/resmessages23.rmsg:124
 #: data/base/messages/resmessages2.rmsg:462
@@ -2555,7 +2558,7 @@ msgstr "VTOL 스트라이크(공격) 범위를 늘립니다"
 #: data/mp/messages/resmessages3.rmsg:553
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "모든 VTOL 스트라이크 센서가 자동 개선됩니다"
+msgstr "모든 VTOL 공습 센서가 자동 개선됩니다"
 
 #: data/base/messages/resmessages23.rmsg:134
 #: data/base/messages/resmessages2.rmsg:641
@@ -2572,7 +2575,7 @@ msgstr "모든 VTOL 스트라이크 센서가 자동 개선됩니다"
 #: data/mp/messages/strings/resstrings.txt:692
 #: data/mp/messages/strings/resstrings.txt:710
 msgid "AA Upgrade"
-msgstr "대공(Anti-air) 개선"
+msgstr "대공(Anti-air) 업그레이드"
 
 #: data/base/messages/resmessages23.rmsg:135
 #: data/base/messages/resmessages2.rmsg:837
@@ -2589,7 +2592,7 @@ msgstr "자동 유도형 로케트추진 포탄"
 #: data/base/messages/strings/resstrings.txt:661
 #: data/mp/messages/strings/resstrings.txt:694
 msgid "Increases AA accuracy"
-msgstr "대공의 정확도를 증가시킵니다"
+msgstr "대공포의 정확도를 증가시킵니다"
 
 #: data/base/messages/resmessages23.rmsg:137
 #: data/base/messages/resmessages2.rmsg:644
@@ -2713,7 +2716,7 @@ msgstr "모든 기관총을 대체합니다"
 #: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:43
 msgid "Cyborg Thermal Armor Improved"
-msgstr "사이보그 열갑옷이 개선되었습니다"
+msgstr "사이보그 내열성 갑옷이 개선되었습니다"
 
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
@@ -2729,7 +2732,7 @@ msgstr "겹쳐진 내열성 장갑층"
 #: data/base/messages/strings/resstrings.txt:43
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Thermal Armor increased"
-msgstr "열갑옷 증가"
+msgstr "내열성 갑옷 증가"
 
 #: data/base/messages/resmessages2.rmsg:18
 #: data/base/messages/resmessages2.rmsg:512
@@ -2749,7 +2752,7 @@ msgstr "겹쳐진 고밀도 복합 합금과 에너지흡수 섬유"
 #: data/mp/messages/strings/resstrings.txt:52
 #: data/mp/messages/strings/resstrings.txt:102
 msgid "Armed with Bunker Buster rocket"
-msgstr "벙커 버스터(Buster) 로케트로 무장"
+msgstr "벙커 버스터 로케트로 무장"
 
 #: data/base/messages/resmessages2.rmsg:44
 #: data/base/messages/strings/resstrings.txt:66
@@ -2826,14 +2829,14 @@ msgstr "토네이도 터릿 대공포 발사시설"
 #: data/mp/messages/resmessages2.rmsg:122
 #: data/mp/messages/strings/resstrings.txt:160
 msgid "Indirect fire rocket battery"
-msgstr "간접 사격 로케트 배터리"
+msgstr "간접 사격 로케트 포대"
 
 #: data/base/messages/resmessages2.rmsg:135
 #: data/base/messages/strings/resstrings.txt:154
 #: data/mp/messages/resmessages2.rmsg:135
 #: data/mp/messages/strings/resstrings.txt:174
 msgid "Armored Bombard battery pit"
-msgstr "봄바드(bombard) 배터리 장갑구덩이"
+msgstr "대형 박격포 포대 구덩이"
 
 #: data/base/messages/resmessages2.rmsg:148
 #: data/base/messages/strings/resstrings.txt:168
@@ -2854,7 +2857,7 @@ msgstr "그라운드 쉐이커 곡사포 포좌"
 #: data/mp/messages/resmessages2.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:180
 msgid "Armored Pepperpot mortar battery pit"
-msgstr "페퍼폿(pepperpot) 박격포 배터리 구덩이"
+msgstr "페퍼팟 박격포 포대 구덩이"
 
 #: data/base/messages/resmessages2.rmsg:187
 #: data/base/messages/resmessages2.rmsg:200
@@ -2919,7 +2922,7 @@ msgstr "초고속포탄 캐논 하드포인트 "
 #: data/mp/messages/resmessages2.rmsg:239
 #: data/mp/messages/strings/resstrings.txt:226
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "인퍼노Inferno 화염방사기 스트롱포인트"
+msgstr "인퍼노 화염방사기 스트롱포인트"
 
 # taking out the "장갑" parts (they mean "armored")
 #: data/base/messages/resmessages2.rmsg:252
@@ -2927,7 +2930,7 @@ msgstr "인퍼노Inferno 화염방사기 스트롱포인트"
 #: data/mp/messages/resmessages2.rmsg:252
 #: data/mp/messages/strings/resstrings.txt:244
 msgid "Armored strongpoint with Assault Cannon"
-msgstr "어썰트Assault 캐논 스트롱포인트"
+msgstr "어썰트 캐논 스트롱포인트"
 
 #: data/base/messages/resmessages2.rmsg:265
 #: data/base/messages/strings/resstrings.txt:224
@@ -2956,7 +2959,7 @@ msgstr "어썰트 캐논 하드포인트"
 #: data/mp/messages/resmessages2.rmsg:304
 #: data/mp/messages/strings/resstrings.txt:328
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "인퍼노Inferno 하드포인트"
+msgstr "인퍼노 화염방사기 하드포인트"
 
 #: data/base/messages/resmessages2.rmsg:317
 #: data/base/messages/strings/resstrings.txt:308
@@ -2979,14 +2982,14 @@ msgstr "새로운 로봇 수리 기법"
 #: data/mp/messages/strings/names.txt:800
 #: data/mp/messages/strings/resstrings.txt:374
 msgid "Robotic Cyborg Production"
-msgstr "로보트 사이보그 생산"
+msgstr "로봇식 사이보그 생산"
 
 #: data/base/messages/resmessages2.rmsg:356
 #: data/base/messages/strings/resstrings.txt:366
 #: data/mp/messages/resmessages2.rmsg:356
 #: data/mp/messages/strings/resstrings.txt:392
 msgid "New Robotic Techniques improve factory production"
-msgstr "새로운 로봇 기술이 공장의 생산을 향상하였습니다"
+msgstr "새로운 로보트 기술이 공장의 생산을 향상합니다"
 
 #: data/base/messages/resmessages2.rmsg:357
 #: data/base/messages/strings/resstrings.txt:367
@@ -3000,8 +3003,9 @@ msgstr "공장의 생산 속도를 증가합니다"
 #: data/mp/messages/resmessages2.rmsg:369
 #: data/mp/messages/strings/names.txt:849
 #: data/mp/messages/strings/resstrings.txt:416
+#, fuzzy
 msgid "Dedicated Synaptic Link Data Analysis"
-msgstr "전용 시냅스 링크 데이터 분석"
+msgstr "전용 시냅스 연결 데이터 분석"
 
 #: data/base/messages/resmessages2.rmsg:382
 #: data/base/messages/strings/names.txt:808
@@ -3055,7 +3059,7 @@ msgstr "VTOL 재무장 시간 소요 감소"
 #: data/mp/messages/strings/names.txt:857
 #: data/mp/messages/strings/resstrings.txt:448
 msgid "Automated VTOL Rearming"
-msgstr "VTOL 자동 재무장"
+msgstr "자동 VTOL 재무장"
 
 #: data/base/messages/resmessages2.rmsg:409
 #: data/base/messages/resmessages3.rmsg:500
@@ -3127,7 +3131,7 @@ msgstr "새로운 표적 인식 시스템"
 #: data/mp/messages/resmessages2.rmsg:472
 #: data/mp/messages/strings/resstrings.txt:560
 msgid "Collective Light Body"
-msgstr "'컬렉티브' 소형 바디"
+msgstr "'컬렉티브' 소형 차체"
 
 #: data/base/messages/resmessages2.rmsg:473
 #: data/base/messages/resmessages3.rmsg:629
@@ -3157,7 +3161,7 @@ msgstr "전력 비용이 높고 바이퍼보다 생산이 느립니다"
 #: data/mp/messages/resmessages2.rmsg:485
 #: data/mp/messages/strings/resstrings.txt:572
 msgid "Collective Medium Body"
-msgstr "'컬렉티브' 중형 바디"
+msgstr "'컬렉티브' 중형 차체"
 
 #: data/base/messages/resmessages2.rmsg:486
 #: data/base/messages/resmessages3.rmsg:642
@@ -3189,7 +3193,7 @@ msgstr "전력 비용이 높고 코브라보다 생산이 느립니다"
 #: data/mp/messages/strings/names.txt:961
 #: data/mp/messages/strings/resstrings.txt:593
 msgid "Turbo-Charged Engine"
-msgstr "터보충전기Turbo-Charger 엔진"
+msgstr "터보충전 엔진"
 
 #: data/base/messages/resmessages2.rmsg:524
 #: data/base/messages/resmessages3.rmsg:719
@@ -3199,7 +3203,7 @@ msgstr "터보충전기Turbo-Charger 엔진"
 #: data/mp/messages/resmessagesall.rmsg:836
 #: data/mp/messages/strings/resstrings.txt:614
 msgid "Vehicle Thermal Armor Improved"
-msgstr "차량의 열갑옷이 향상되었습니다"
+msgstr "차량의 내열성 갑옷이 향상되었습니다"
 
 #: data/base/messages/resmessages2.rmsg:525
 #: data/base/messages/resmessages3.rmsg:720
@@ -3216,7 +3220,7 @@ msgstr "겹쳐진 내열성 장갑층"
 #: data/base/messages/strings/resstrings.txt:583
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Increases Thermal Armor"
-msgstr "열갑옷을 증가시킵니다"
+msgstr "내열성 갑옷을 증가시킵니다"
 
 #: data/base/messages/resmessages2.rmsg:537
 #: data/base/messages/resmessages2.rmsg:550
@@ -3247,7 +3251,7 @@ msgstr "열갑옷을 증가시킵니다"
 #: data/mp/messages/strings/resstrings.txt:644
 #: data/mp/messages/strings/resstrings.txt:654
 msgid "Vehicle Propulsion Improved"
-msgstr "차량 추진력 향상"
+msgstr "차량 추진 향상"
 
 #: data/base/messages/resmessages2.rmsg:540
 #: data/base/messages/resmessages3.rmsg:735
@@ -3256,7 +3260,7 @@ msgstr "차량 추진력 향상"
 #: data/mp/messages/resmessages3.rmsg:735
 #: data/mp/messages/strings/resstrings.txt:627
 msgid "All half-tracks upgraded automatically"
-msgstr "모든 반 무한궤도(Half-tracks)가 자동 개선됩니다"
+msgstr "모든 반 무한궤도가 자동 개선됩니다"
 
 #: data/base/messages/resmessages2.rmsg:553
 #: data/base/messages/resmessages3.rmsg:748
@@ -3376,7 +3380,7 @@ msgstr "대공포 개선"
 #: data/mp/messages/resmessages2.rmsg:655
 #: data/mp/messages/strings/resstrings.txt:703
 msgid "High Explosive Flak shards"
-msgstr "고성능 대공포탄의 파편"
+msgstr "고위력 대공포탄의 파편"
 
 #: data/base/messages/resmessages2.rmsg:656
 #: data/base/messages/resmessages3.rmsg:825
@@ -3399,7 +3403,7 @@ msgstr "모든 대공포가 자동 개선됩니다"
 #: data/mp/messages/resmessages2.rmsg:668
 #: data/mp/messages/strings/resstrings.txt:711
 msgid "Recoil loaded AA ammunition hopper"
-msgstr "반동-재장전 대공탄약 호퍼"
+msgstr "반동재장전 대공탄약 호퍼"
 
 #: data/base/messages/resmessages2.rmsg:669
 #: data/base/messages/resmessages3.rmsg:838
@@ -3444,12 +3448,14 @@ msgstr "가장 효과적인 표적: 기지 구조물, 방어 시설"
 msgid "Superbomb turret explodes in proximity to enemy"
 msgstr "초강력 폭탄 터릿이 적이 근접할 때 터집니다"
 
+# High explosive = 고성능 폭탄
+# fix all phrases to include the whole meaning of HE
 #: data/base/messages/resmessages2.rmsg:707
 #: data/base/messages/strings/resstrings.txt:698
 #: data/mp/messages/resmessages2.rmsg:707
 #: data/mp/messages/strings/resstrings.txt:731
 msgid "Drops High Explosive Cluster bombs"
-msgstr "고성능 클러스터 폭탄을 떨어뜨립니다"
+msgstr "고위력 클러스터 폭탄을 떨어뜨립니다"
 
 #: data/base/messages/resmessages2.rmsg:708
 #: data/base/messages/strings/resstrings.txt:699
@@ -3463,7 +3469,7 @@ msgstr "가장 효과적인 표적: 기지 구조물"
 #: data/mp/messages/resmessages2.rmsg:720
 #: data/mp/messages/strings/resstrings.txt:737
 msgid "Drops High Explosive Armor Piercing bombs"
-msgstr "고성능 철갑탄을 떨어뜨립니다"
+msgstr "고위력 HEAP 철갑탄을 떨어뜨립니다"
 
 #: data/base/messages/resmessages2.rmsg:721
 #: data/base/messages/strings/resstrings.txt:705
@@ -3483,7 +3489,7 @@ msgstr "열 방출을 자동 추적합니다"
 #: data/mp/messages/resmessages2.rmsg:746
 #: data/mp/messages/strings/resstrings.txt:763
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr "88mm 탄환을 발사하는 초고속 자동캐논"
+msgstr "88mm 탄환을 발사하는 초고속포탄 자동캐논"
 
 #: data/base/messages/resmessages2.rmsg:748
 #: data/base/messages/strings/resstrings.txt:732
@@ -3497,7 +3503,7 @@ msgstr "중형 캐논을 대체합니다"
 #: data/mp/messages/resmessages2.rmsg:759
 #: data/mp/messages/strings/resstrings.txt:769
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr "76mm 초고속 4총열 자동캐논"
+msgstr "76mm4총열 초고속포탄 자동화 캐논"
 
 #: data/base/messages/resmessages2.rmsg:772
 #: data/base/messages/strings/resstrings.txt:758
@@ -3597,7 +3603,7 @@ msgstr "모든 곡사포가 자동 개선됩니다"
 #: data/mp/messages/resmessages2.rmsg:850
 #: data/mp/messages/strings/resstrings.txt:841
 msgid "High Explosive shells"
-msgstr "고성능 폭발탄"
+msgstr "고위력 폭발탄"
 
 #: data/base/messages/resmessages2.rmsg:851
 #: data/base/messages/resmessages3.rmsg:916
@@ -3618,7 +3624,7 @@ msgstr "곡사포의 공격범위를 높입니다"
 #: data/mp/messages/resmessages2.rmsg:876
 #: data/mp/messages/strings/resstrings.txt:887
 msgid "Tungsten-tipped armor-piercing bullets"
-msgstr "끝 부분이 텅스텐으로 되어있는 철갑 뚫는 탄환"
+msgstr "철갑용 텅스텐 탄두 총알"
 
 #: data/base/messages/resmessages2.rmsg:889
 #: data/base/messages/strings/resstrings.txt:858
@@ -3632,32 +3638,32 @@ msgstr "개선된 체인건 메커니즘"
 #: data/mp/messages/resmessages2.rmsg:915
 #: data/mp/messages/strings/resstrings.txt:949
 msgid "High Explosive Armor-Piercing Shells"
-msgstr "고성능 철갑탄"
+msgstr "고위력 철갑탄"
 
 #: data/base/messages/resmessages2.rmsg:928
 #: data/base/messages/strings/resstrings.txt:944
 #: data/mp/messages/resmessages2.rmsg:928
 #: data/mp/messages/strings/resstrings.txt:987
 msgid "High Explosive Armor-Piercing warheads"
-msgstr "철갑을 뚫는 고성능 탄두"
+msgstr "철갑을 뚫는 고위력 탄두"
 
 #: data/base/messages/resmessages2.rmsg:941
 #: data/base/messages/strings/resstrings.txt:966
 #: data/mp/messages/resmessages2.rmsg:941
 #: data/mp/messages/strings/resstrings.txt:1009
 msgid "High Explosive Squash Head warhead"
-msgstr "고성능 스쿼시 헤드(Squash Head) 탄두"
+msgstr "점착유탄 탄두"
 
 #: data/base/messages/resmessages3.rmsg:18
 #: data/mp/messages/resmessages3.rmsg:18
 msgid "NEXUS Intruder Program analyzed"
-msgstr "넥서스의 '침입자' 바이러스가 분석되었습니다"
+msgstr "넥서스의 침입자 프로그램이 분석되었습니다"
 
 # computer parasite??
 #: data/base/messages/resmessages3.rmsg:19
 #: data/mp/messages/resmessages3.rmsg:19
 msgid "Intruder parasite isolated"
-msgstr "넥서스의 '침입자' 바이러스가 고립되었습니다"
+msgstr "침입 바이러스가 격리되었습니다"
 
 #: data/base/messages/resmessages3.rmsg:20
 #: data/base/messages/resmessages3.rmsg:33
@@ -3761,7 +3767,7 @@ msgstr "랜서 대전차미사일로무장"
 #: data/base/messages/resmessages3.rmsg:161
 #: data/mp/messages/resmessages3.rmsg:161
 msgid "Armed with Cyborg assault gun"
-msgstr "사이보그 어썰트assault총으로 무장"
+msgstr "사이보그 어썰트총으로 무장"
 
 #: data/base/messages/resmessages3.rmsg:200
 #: data/mp/messages/resmessages3.rmsg:200
@@ -3791,17 +3797,17 @@ msgstr "어벤져Avenger 지대공미사일 발사시설"
 #: data/base/messages/resmessages3.rmsg:252
 #: data/mp/messages/resmessages3.rmsg:252
 msgid "SAM site with Vindicator missiles"
-msgstr "빈디케이터Vindicator 지대공미사일 발사시설"
+msgstr "빈디케이터 지대공미사일 발사시설"
 
 #: data/base/messages/resmessages3.rmsg:265
 #: data/mp/messages/resmessages3.rmsg:265
 msgid "Artillery battery firing Firestorm Missiles"
-msgstr "파이어스톰Firestorm 미사일을 발사하는 포병대 배터리"
+msgstr "파이어스톰 미사일을 발사하는 포병 포대"
 
 #: data/base/messages/resmessages3.rmsg:278
 #: data/mp/messages/resmessages3.rmsg:278
 msgid "Artillery battery firing Novastorm Missiles"
-msgstr "노바스톰Novastorm 미사일을 발사하는 포병대 배터리"
+msgstr "노바스톰 미사일을 발사하는 포병 포대"
 
 # Since this is not a small flashlight?? - -;;
 #: data/base/messages/resmessages3.rmsg:291
@@ -3811,7 +3817,7 @@ msgstr "레이저 전등 스트롱포인트"
 
 #: data/base/messages/resmessages3.rmsg:304
 msgid "Armored strongpoint with Pulse Laser"
-msgstr "펄스 pulse 레이저 스트롱포인트"
+msgstr "펄스 레이저 스트롱포인트"
 
 #: data/base/messages/resmessages3.rmsg:317
 #: data/mp/messages/resmessages3.rmsg:317
@@ -3868,15 +3874,16 @@ msgstr "증기 터빈이 전력 생산량을 증가합니다"
 #: data/base/messages/strings/names.txt:838
 #: data/mp/messages/resmessages3.rmsg:447
 #: data/mp/messages/strings/names.txt:852
+#, fuzzy
 msgid "Neural Synapse Research Brain"
-msgstr "시냅스 신경 연구 브레인(Brain)"
+msgstr "시냅스 신경 연구 브레인(뇌)"
 
 #: data/base/messages/resmessages3.rmsg:460
 #: data/base/messages/strings/names.txt:811
 #: data/mp/messages/resmessages3.rmsg:460
 #: data/mp/messages/strings/names.txt:825
 msgid "Advanced Base Structure Materials"
-msgstr "고급 기지 구조물 자재"
+msgstr "고급 기지 구조물 재료"
 
 #: data/base/messages/resmessages3.rmsg:473
 #: data/mp/messages/resmessages3.rmsg:473
@@ -3888,7 +3895,7 @@ msgstr "고밀도 기지 구조물 자재"
 #: data/mp/messages/resmessages3.rmsg:486
 #: data/mp/messages/strings/names.txt:868
 msgid "Advanced VTOL Production"
-msgstr "VTOL 고급 생산"
+msgstr "고급 VTOL 생산"
 
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/strings/names.txt:846
@@ -3916,7 +3923,7 @@ msgstr "고급 표적 인식 시스템"
 #: data/mp/messages/resmessages3.rmsg:564
 #: data/mp/messages/resmessagesall.rmsg:382
 msgid "Synaptic Link Scrambler technology"
-msgstr "시냅스 링크 주파수대 변환기 기술"
+msgstr "시냅스 연결 주파수대 변환기 기술"
 
 #: data/base/messages/resmessages3.rmsg:565
 #: data/mp/messages/resmessages3.rmsg:565
@@ -3952,7 +3959,7 @@ msgstr "새로운 수리 기술이 발견되었습니다"
 #: data/mp/messages/resmessagesall.rmsg:395
 #: data/mp/messages/resmessagesall.rmsg:408
 msgid "Synaptic Link technology breakthrough"
-msgstr "시냅스 링크 기술 혁신"
+msgstr "시냅스 연결 기술 혁신"
 
 #: data/base/messages/resmessages3.rmsg:578
 #: data/base/messages/resmessages3.rmsg:617
@@ -3992,7 +3999,7 @@ msgstr "모든 차량에 자체 수리를 활성화합니다"
 #: data/base/messages/resmessages3.rmsg:628
 #: data/mp/messages/resmessages3.rmsg:628
 msgid "NEXUS Light Body"
-msgstr "넥서스 소형 바디"
+msgstr "넥서스 소형 차체"
 
 #: data/base/messages/resmessages3.rmsg:631
 #: data/mp/messages/resmessages3.rmsg:631
@@ -4002,7 +4009,7 @@ msgstr "생산 비용이 비쌉니다"
 #: data/base/messages/resmessages3.rmsg:641
 #: data/mp/messages/resmessages3.rmsg:641
 msgid "NEXUS Medium Body"
-msgstr "넥서스 중형 바디"
+msgstr "넥서스 중형 차체"
 
 #: data/base/messages/resmessages3.rmsg:644
 #: data/mp/messages/resmessages3.rmsg:644
@@ -4012,7 +4019,7 @@ msgstr "비용이 비싸고 생산이 느립니다"
 #: data/base/messages/resmessages3.rmsg:654
 #: data/mp/messages/resmessages3.rmsg:654
 msgid "NEXUS Heavy Body"
-msgstr "넥서스 대형 바디"
+msgstr "넥서스 대형 차체"
 
 #: data/base/messages/resmessages3.rmsg:655
 #: data/base/messages/resmessagesall.rmsg:109
@@ -4045,7 +4052,7 @@ msgstr "이온화 터빈 엔진"
 #: data/mp/messages/resmessages3.rmsg:785
 #: data/mp/messages/resmessages3.rmsg:798
 msgid "New power efficient propulsion"
-msgstr "새로운 전력 효율적 추진"
+msgstr "새로운 전력 효율적인 추진"
 
 #: data/base/messages/resmessages3.rmsg:786
 #: data/base/messages/resmessages3.rmsg:799
@@ -4069,7 +4076,7 @@ msgstr "컴퓨터가 표적의 위치를 계산하며 포탄을 지도해줍니�
 #: data/base/messages/resmessages3.rmsg:824
 #: data/mp/messages/resmessages3.rmsg:824
 msgid "High Explosive Armor Piercing Flak"
-msgstr "고성능 철갑용 대공폭탄"
+msgstr "고위력 철갑용 대공폭탄"
 
 #: data/base/messages/resmessages3.rmsg:837
 #: data/mp/messages/resmessages3.rmsg:837
@@ -4156,7 +4163,7 @@ msgstr "레이저 개선"
 #: data/base/messages/resmessages3.rmsg:967
 #: data/mp/messages/resmessages3.rmsg:967
 msgid "Improvement in laser optics reduces light dispersal"
-msgstr "레이저 광학의 개선이 빛의 분산을 줄였습니다"
+msgstr "레이저 광학의 개선이 빛의 분산을 줄입니다"
 
 #: data/base/messages/resmessages3.rmsg:968
 msgid "Increases Laser accuracy"
@@ -4301,12 +4308,12 @@ msgstr "대형 지대공미사일"
 #: data/mp/messages/resmessages3.rmsg:1122
 #: data/mp/messages/resmessages3.rmsg:1135
 msgid "New Artillery Missile Turret Available"
-msgstr "새로운 미사일 포병대 터릿이 사용 가능합니다"
+msgstr "새로운 포병 미사일 터릿이 사용 가능합니다"
 
 #: data/base/messages/resmessages3.rmsg:1123
 #: data/mp/messages/resmessages3.rmsg:1123
 msgid "High explosive artillery missile"
-msgstr "고성능 포병대 미사일"
+msgstr "고성능 포병 미사일"
 
 #: data/base/messages/resmessages3.rmsg:1124
 #: data/base/messages/resmessages3.rmsg:1137
@@ -4318,7 +4325,7 @@ msgstr "가장 효과적인 표적: 기지 구조물, 사이보그"
 #: data/base/messages/resmessages3.rmsg:1136
 #: data/mp/messages/resmessages3.rmsg:1136
 msgid "High explosive heavy artillery missile"
-msgstr "고성능 포병대 대형 미사일"
+msgstr "고성능 대형 포병 미사일"
 
 #: data/base/messages/resmessages3.rmsg:1149
 #: data/mp/messages/resmessages3.rmsg:1149
@@ -4531,12 +4538,12 @@ msgstr "모든 센서가 자동 개선됩니다"
 #: data/base/messages/resmessagesall.rmsg:96
 #: data/mp/messages/resmessagesall.rmsg:122
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr "카운터배터리 탑이 적의 간접 사격 배터리를 감지함"
+msgstr "카운터배터리 탑이 적의 간접 사격 포대를 감지함"
 
 #: data/base/messages/resmessagesall.rmsg:108
 #: data/mp/messages/resmessagesall.rmsg:147
 msgid "Collective Heavy Body"
-msgstr "'컬렉티브' 대형 바디"
+msgstr "'컬렉티브' 대형 차체"
 
 #: data/base/messages/resmessagesall.rmsg:110
 #: data/mp/messages/resmessagesall.rmsg:149
@@ -4591,7 +4598,7 @@ msgstr "목표: 신경 시냅스 기술을 찾아 복구한다"
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "기지를 확립하고, 그 다음 컬랩스 전(Pre-Collapse) 시대의 구조물을 찾습니다."
+msgstr "기지를 확립하고, 그 다음 멸망 전(Pre-Collapse) 시대의 구조물을 찾습니다."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
@@ -4600,11 +4607,11 @@ msgstr "이 구조물이 우리 '프로젝트'의 성공을 위해 필수적인 
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "알파(ALPHA) 기지 중요임무: 스캐빈저 해적"
+msgstr "알파(ALPHA) 기지 중요임무: 스캐빈저 도적"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr "스캐빈저(Scavenger) 해적들이 우리의 기지에 접근하고있습니다."
+msgstr "스캐빈저(Scavenger) 도적들이 우리의 기지에 접근하고있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
@@ -4627,14 +4634,16 @@ msgstr "조사에 착수하여 그 지역을 확보하십시오."
 msgid "ALPHA BASE MISSION: The New Paradigm"
 msgstr "알파(ALPHA) 기지 중요임무: '뉴 패러다임' (New Paradigm)"
 
+# use ' around the name of faction
+# only the first time the name appears
 #: data/base/messages/strings/cam1strings.txt:16
 #, fuzzy
 msgid "The New Paradigm control superior weapons technology."
-msgstr "'뉴 패러다임'은 우리보다 우수한 무기 기술을 제어합니다."
+msgstr "뉴 패러다임은 우리보다 우수한 무기 기술을 제어합니다."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "그들이 시냅스 링크 기술을 가지고 있을 수도 있습니다. 우리가 그것을 회수하는 것이 필수적입니다."
+msgstr "그들이 시냅스 연결 기술을 가지고 있을 수도 있습니다. 우리가 그것을 회수하는 것이 필수적입니다."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -4687,15 +4696,15 @@ msgstr "착륙 지점 #2로 진행합니다. 이번에는 적과 교전하지 �
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr "수송 중요임무: 시냅스 링크의 위치"
+msgstr "수송 중요임무: 시냅스 연결의 위치"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr "'뉴 패러다임'이 이 위치에서 시냅스 링크 기술을 분석하고 있습니다."
+msgstr "'뉴 패러다임'이 이 위치에서 시냅스 연결 기술을 분석하고 있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr "공격팀을 집합하여 시냅스 링크 기술을 되찾으십시오."
+msgstr "공격팀을 집합하여 시냅스 연결 기술을 되찾으십시오."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
@@ -4785,11 +4794,11 @@ msgstr "처음 두 영역은 이제 안전합니다."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
-msgstr "프로젝트 팀 업데이트"
+msgstr "프로젝트 팀 보도"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr "베타(BETA)팀 업데이트"
+msgstr "베타(BETA)팀 보도"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
@@ -4801,7 +4810,7 @@ msgstr "이 지역에 우리보다 더 힘을 갖춘 조직이 운용되고 있�
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr "감마(GAMMA)팀 업데이트"
+msgstr "감마(GAMMA)팀 보도"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
@@ -4825,7 +4834,7 @@ msgstr "주요 목적"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr "기 구조물은 당신의 주목적입니다."
+msgstr "이 구조물은 당신의 주목적입니다."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
@@ -4851,7 +4860,7 @@ msgstr "새로운 목표."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
-msgstr "우리는 침입 바이러스을 감지하고 격리하였습니다."
+msgstr "우리는 침입 프로그램 하나를 감지하고 격리시켰습니다."
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
@@ -4859,11 +4868,11 @@ msgstr "추보"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr "시냅스 링크 기술이 이 위치에 있었지만 제거되었습니다."
+msgstr "시냅스 연결 기술이 이 위치에 있었지만 제거되었습니다."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr "전진 기지를 설립하고 시냅스 링크를 위해 계속 수색하십시오."
+msgstr "전진 기지를 설립하고 시냅스 연결를 위해 계속 수색하십시오."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -4879,9 +4888,8 @@ msgstr "사령관님."
 
 # what does this phrase mean???
 #: data/base/messages/strings/cam1strings.txt:120
-#, fuzzy
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr "우리가 수신중인 전갈을 뉴 패러다임에게 해독해주었습니다..."
+msgstr "뉴 패러다임에게 송신된 전갈을 우리가 수신, 해독하였습니다..."
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
@@ -4897,11 +4905,11 @@ msgstr "적의 기지를 파괴하고 유물이 있으면 되찾으십시오."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr "시냅스 링크 기술을 되찾았습니다!"
+msgstr "시냅스 연결 기술을 되찾았습니다!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "초기 연구에 의해 이것이 프로젝트에 큰 도움이 될 것으로 확인되었습니다. "
+msgstr "초기 연구로 확인한 바 이것이 프로젝트에 큰 도움이 될 것입니다."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
@@ -4920,13 +4928,12 @@ msgid "It originates from the east."
 msgstr "그것은 동쪽에서 송신되었습니다."
 
 #: data/base/messages/strings/cam1strings.txt:140
-#, fuzzy
 msgid "POWER MODULE ARTIFACT"
-msgstr "전력 모듈 유물"
+msgstr "발전기 모듈 유물"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
-msgstr "전력 모듈 유물을 연구하십시오."
+msgstr "발전기 모듈을 연구하십시오."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
@@ -4946,12 +4953,11 @@ msgstr "뉴 패러다임을 물리친 것을 축하합니다, 이제 이 지역�
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "넥서스 침입 바이러스가 뉴 패러다임의 시스템에서 발견되었습니다."
+msgstr "넥서스 침입자 프로그램이 뉴 패러다임의 시스템에서 발견되었습니다."
 
 #: data/base/messages/strings/cam1strings.txt:152
-#, fuzzy
 msgid "We recorded two conversations with it, extracts follow..."
-msgstr "우리가 그것으로 두 개의 대화를 녹음하였고, 이제 발췌한 것을 들려드리겠습니다..."
+msgstr "우리가 그것으로 두 개의 대화를 기록하였습니다. 이제 발췌한 것을 알려드리겠습니다..."
 
 #: data/base/messages/strings/cam1strings.txt:155
 msgid "We'll keep you informed of further developments"
@@ -5030,7 +5036,7 @@ msgstr "베타 팀이 수직 이륙과 착륙용 추진력(VTOL) 기술을 찾�
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr "컬랩스 전(Pre-Collapse) 시대 항공 기지에 있는 것으로 여겨지고 있습니다."
+msgstr "멸망 전(Pre-Collapse) 시대 항공 기지에 있는 것으로 여겨지고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
@@ -5062,7 +5068,7 @@ msgstr "수송 중요임무: 수송대를 가로막으십시오."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr "컬렉티브 기지에서 추출한 정보가 넥서스 침입 바이러스의 존재를 나타냅니다."
+msgstr "컬렉티브 기지에서 추출한 정보가 넥서스 침입자 프로그램의 존재를 나타냅니다."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
@@ -5091,7 +5097,7 @@ msgstr "수송 중요임무: 수송대를 찾아 파괴하십시오"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
-msgstr "당신이 되찾은 수송물은 미끼였습니다."
+msgstr "당신이 되찾은 수송물은 유인용 미끼였습니다."
 
 #: data/base/messages/strings/cam2strings.txt:60
 msgid "We have detected another convoy proceeding along the river."
@@ -5204,9 +5210,8 @@ msgid "NEXUS is searching for still functioning memory banks."
 msgstr "넥서스는 아직도 작동하는 기억 장치(메모리 뱅크)를 찾고 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:113
-#, fuzzy
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr "그것의 의식 일부는 NASDA 원격 제어 구역으로 이동했습니다."
+msgstr "그것의 의식 중 일부는 NASDA 원격 제어 구역으로 이동하였습니다."
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
@@ -5346,7 +5351,7 @@ msgstr "이 NASDA 시설에 하나 이상의 미사일이 있었습니다."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr "미사일 사일로(silo) 근처에 있는 착륙 지점의 좌표를 수신 중입니다."
+msgstr "미사일 저장고 근처에 있는 착륙 지점의 좌표를 수신 중입니다."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
@@ -5356,7 +5361,7 @@ msgstr "좌표 다운로드 완료."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr "당신의 착륙 지점을 확보하고, 육로로 이동해 미사일 사일로를 파괴하십시오."
+msgstr "당신의 착륙 지점을 확보하고, 육로로 이동해 미사일 저장고를 파괴하십시오."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
@@ -5381,7 +5386,7 @@ msgstr "계곡은 당신이 탈출할 수 있는 유일한 기회입니다."
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr "원정대(AWAY TEAM) 업데이트"
+msgstr "원정대(AWAY TEAM) 보도"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
@@ -5433,355 +5438,356 @@ msgstr "그들이 알파 팀인지 알아내십시오. 진짜 알파 팀이 맞�
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr ""
+msgstr "이 무리는 알파 팀의 일부입니다. 구조하여 착륙 지점으로 호위하십시오."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
-msgstr ""
+msgstr "북부 지역 중요임무: 알파 팀 보고"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
-msgstr ""
+msgstr "알파 팀의 전력 이송이 진행 중입니다."
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr ""
+msgstr "사령관님, 당신이 서부 지역을 떠나고 나서 우리가 이 유물을 발견하였습니다."
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
-msgstr ""
+msgstr "이것을 연구하면 혜택은 엄청날 수도 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:79
 msgid "Enemy forces are ....... from these coordinates."
-msgstr ""
+msgstr "이 좌표로 부터 적의 군사들이 ....... 하고 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
-msgstr ""
+msgstr "기지와 ...... 을 ....... 방어하십시오."
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
-msgstr ""
+msgstr "수색 섬멸...."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
-msgstr ""
+msgstr "수송 중요임무: 넥서스의 부대를 매복 습격하십시오"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
-msgstr ""
+msgstr "결단력있는 당신의 조치 덕분에 넥서스가 퍼져 나가는 것이 멈춰졌습니다."
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr ""
+msgstr "넥서스가 추방되기 전, 우리가 이 전송을 가로챘습니다 - 해독 완료."
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
-msgstr ""
+msgstr "넥서스의 기동 부대가 이 좌표를 향해 움직이고 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:90
 msgid "You have an opportunity to destroy NEXUS before they get there."
-msgstr ""
+msgstr "당신이 그들이 좌표에 도달하기 전 넥서스를 전멸시킬 수 있는 기회입니다."
 
 #: data/base/messages/strings/cam3strings.txt:91
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
-msgstr ""
+msgstr "공격 부대를 태워가 ...... 에서 넥서스의 기동 부대를 매복 습격하십 ......"
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
-msgstr ""
+msgstr "수송 중요임무: 원정대"
 
 #: data/base/messages/strings/cam3strings.txt:95
+#, fuzzy
 msgid "Commander, your attack on ...."
-msgstr ""
+msgstr "사령관님 .... 에 대한 당신의 공격이 ...."
 
 #: data/base/messages/strings/cam3strings.txt:98
 msgid "NEXUS exiting system."
-msgstr ""
+msgstr "넥서스가 시스템을 퇴장합니다."
 
 #: data/base/messages/strings/cam3strings.txt:101
 msgid "Incoming transmission from away team."
-msgstr ""
+msgstr "원정대에게서 전송이 들어옵니다."
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
-msgstr ""
+msgstr "사령관님, 우리는 기지로 되돌아 가려고 시도하고 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:105
 msgid "This is our current position."
-msgstr ""
+msgstr "우리는 현재 이 위치에 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:106
 msgid "Take control of our forces and lead us."
-msgstr ""
+msgstr "우리 병력을 지휘하여 인도해 주십시오."
 
 #: data/base/messages/strings/cam3strings.txt:109
 msgid "Control transfer successful."
-msgstr ""
+msgstr "권력이 성공적으로 이양되었습니다."
 
 #: data/base/messages/strings/cam3strings.txt:110
 msgid "Entering new zone."
-msgstr ""
+msgstr "새로운 지역으로 들어갑니다."
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
-msgstr ""
+msgstr "전송이 들어오고 있습니다..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
-msgstr ""
+msgstr "감마 팀의 요원들이 우리를 연락하었습니다."
 
 #: data/base/messages/strings/cam3strings.txt:117
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr ""
+msgstr "그들은 넥서스로부터 자유롭다고 하면서 작전 활동을 위해 감마 기지의 사용을 제공합니다."
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
-msgstr ""
+msgstr "기지의 좌표가 다운로드 중입니다."
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
-msgstr ""
+msgstr "북부 지역 중요임무: 레이저 위성"
 
 #: data/base/messages/strings/cam3strings.txt:122
 msgid "We are detecting strong energy surges from orbit."
-msgstr ""
+msgstr "우리는 높은 궤도에서 강한 전력 상승을 감지하였습니다."
 
 #: data/base/messages/strings/cam3strings.txt:123
 msgid "The laser satellites are charged and moving towards our position."
-msgstr ""
+msgstr "레이저 위성은 충전 돼 있고 우리 위치를 향해 오고 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:126
 msgid "The 2nd Team Gamma base is at this location."
-msgstr ""
+msgstr "두 번째 감마 팀 기지는 이 위치에 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:127
 msgid "We have limited time to evacuate this base and move to Gamma Base."
-msgstr ""
+msgstr "이 기지를 소개하고 감마 기지로 이동하는 데 사용할 시간이 한정되어 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
-msgstr ""
+msgstr "레이저 위성이 정확하게 작동하지 않고 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:131
 msgid "They are directing their fire towards this position."
-msgstr ""
+msgstr "그들은 이곳으로 향해 사격을 집중시키고 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:132
 msgid "We will need to evacuate this base shortly."
-msgstr ""
+msgstr "우리는 곧 이 기지를 철수해야합니다."
 
 #: data/base/messages/strings/cam3strings.txt:135
 msgid "Team Gamma reports a missile silo at this location."
-msgstr ""
+msgstr "감마 팀이 이 위치에 미사일 저장고가 있다고 보고합니다."
 
 #: data/base/messages/strings/cam3strings.txt:136
 msgid "They believe that the silo contains missiles capable of reaching high orbit."
-msgstr ""
+msgstr "그들은 저장고 안에 높은 궤도까지 도달할 수 있는 미사일이 들어 있다고 믿습니다."
 
 #: data/base/messages/strings/cam3strings.txt:137
 msgid "Capture this silo at all costs."
-msgstr ""
+msgstr "어떤 수를 써서라도 이 저장고를 차지하여야 합니다."
 
 #: data/base/messages/strings/cam3strings.txt:140
 msgid "Missile silos captured."
-msgstr ""
+msgstr "미사일 저장고를 확보하였습니다."
 
 #: data/base/messages/strings/cam3strings.txt:143
 #: data/base/messages/strings/cam3strings.txt:161
 msgid "NORTHERN SECTOR MISSION: Missile Codes"
-msgstr ""
+msgstr "북부 지역 중요임무: 미사일 코드(codes)"
 
 #: data/base/messages/strings/cam3strings.txt:144
 msgid "Commander, there are missiles present at the silos."
-msgstr ""
+msgstr "사령관님, 저장고 안에 미사일이 들어 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr ""
+msgstr "넥서스가 미사일 제어 코드를 알아내는 것을 막고 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
-msgstr ""
+msgstr "넥서스는 우리의 시스템 속에 존재하고 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:149
 msgid "To defeat NEXUS we must research the Nexus Intruder Program."
-msgstr ""
+msgstr "넥서스를 물리치기 위해 넥서스 침입자 프로그램을 연구해야 합니다."
 
 #: data/base/messages/strings/cam3strings.txt:150
 msgid "Assign this task to a research facility."
-msgstr ""
+msgstr "연구 시설에 이 일을 할당하십시오."
 
 #: data/base/messages/strings/cam3strings.txt:153
 msgid "NEXUS forces detected at these locations."
-msgstr ""
+msgstr "넥서스 병력이 이 위치들에서 감지되었습니다."
 
 #: data/base/messages/strings/cam3strings.txt:157
 msgid "NEXUS has been eradicated from all Project systems."
-msgstr ""
+msgstr "프로젝트의 모든 시스템에서 넥서스의 프로그램이 제거되었습니다."
 
 #: data/base/messages/strings/cam3strings.txt:158
 msgid "We are attempting to access the missile control codes."
-msgstr ""
+msgstr "우리는 미사일 제어 코드를 알아 내려고 시도하고 있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:162
 msgid "A research facility is required to crack the code. Allocate one immediately."
-msgstr ""
+msgstr "이 코드를 해킹하는 데 연구 시설이 필요합니다. 당장 하나를 할당시키십시오."
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
-msgstr ""
+msgstr "넥서스의 공격으로부터 미사일 저장고를 보호하십시오."
 
 #: data/base/messages/strings/cam3strings.txt:166
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
-msgstr ""
+msgstr "프로젝트 보도: 1차 미사일 코드가 해킹되었습니다."
 
 #: data/base/messages/strings/cam3strings.txt:167
 msgid "Missile arming in progress."
-msgstr ""
+msgstr "미사일 장전이 진행 중입니다."
 
 #: data/base/messages/strings/cam3strings.txt:168
 msgid "More research is required to proceed further."
-msgstr ""
+msgstr "더 진행하기 위해 추가 연구가 필요합니다."
 
 #: data/base/messages/strings/cam3strings.txt:171
 msgid "PROJECT UPDATE: 2nd Level Missile Code Cracked."
-msgstr ""
+msgstr "프로젝트 보도: 2차 미사일 코드가 해킹되었습니다."
 
 #: data/base/messages/strings/cam3strings.txt:172
 msgid "Missile target programming in progress."
-msgstr ""
+msgstr "미사일 표적 프로그램 작성이 진행 중입니다."
 
 #: data/base/messages/strings/cam3strings.txt:173
 msgid "Once level 3 codes are cracked we initiate launch procedures."
-msgstr ""
+msgstr "3차 미사일 코드가 해킹되면 발사 절차를 초기화합니다."
 
 #: data/base/messages/strings/cam3strings.txt:176
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
-msgstr ""
+msgstr "프로젝트 보도: 2차 미사일 코드가 해킹되었습니다."
 
 #: data/base/messages/strings/cam3strings.txt:177
 msgid "Missile launch sequence initiated."
-msgstr ""
+msgstr "미사일 발사 절차가 초기화 되었습니다."
 
 #: data/base/messages/strings/cam3strings.txt:180
 msgid "TRANSPORT MISSION: Attack NEXUS Final Base"
-msgstr ""
+msgstr "수송 중요임무: 넥서스의 마지막 기지를 공격하십시오"
 
 #: data/base/messages/strings/cam3strings.txt:181
 msgid "We have located NEXUS' base at this location."
-msgstr ""
+msgstr "우리는 넥서스의 기지를 이곳에서 발견하였습니다."
 
 #: data/base/messages/strings/cam3strings.txt:184
 msgid "This area contains numerous NEXUS structures."
-msgstr ""
+msgstr "이 지역에는 수많은 넥서스 구조물이 세워져있습니다."
 
 #: data/base/messages/strings/cam3strings.txt:185
 msgid "We are certain that NEXUS's core systems are located here."
-msgstr ""
+msgstr "우리는 넥서스의 핵심 시스템이 이곳에 있다는 것을 확신합니다."
 
 #: data/base/messages/strings/cam3strings.txt:188
 msgid "Establish an LZ."
-msgstr ""
+msgstr "착륙 지점을 설립하십시오."
 
 #: data/base/messages/strings/cam3strings.txt:189
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
-msgstr ""
+msgstr "넥서스에 대한 공격을 시작하십시오. 그들의 핵심 시스템을 파괴해야합니다."
 
 #: data/base/messages/strings/cam3strings.txt:192
 msgid "Incoming intelligence report... Team Gamma"
-msgstr ""
+msgstr "송신중인 기밀 보고... 감마 팀"
 
 #: data/base/messages/strings/genstrings.txt:4
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
-msgstr ""
+msgstr "브리핑이 시작됩니다:"
 
 #: data/base/messages/strings/genstrings.txt:7
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
-msgstr ""
+msgstr "스캐빈저 도적들의 전초기지"
 
 #: data/base/messages/strings/genstrings.txt:8
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:8
 msgid "Power Resource"
-msgstr ""
+msgstr "전력 자원"
 
 #: data/base/messages/strings/genstrings.txt:9
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
-msgstr ""
+msgstr "알 수 없는 유물"
 
 #: data/base/messages/strings/genstrings.txt:10
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
-msgstr ""
+msgstr "전력 급상승의 근원"
 
 #: data/base/messages/strings/genstrings.txt:13
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
-msgstr ""
+msgstr "착륙 지점"
 
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:14
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:24
 msgid "Mission Target"
-msgstr ""
+msgstr "임무 목표"
 
 #: data/base/messages/strings/genstrings.txt:15
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
-msgstr ""
+msgstr "멸망 전(Pre-Collapse) 시대의 연구 센터"
 
 #: data/base/messages/strings/genstrings.txt:17
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
-msgstr ""
+msgstr "작전 수행지로 가는 도중에"
 
 #: data/base/messages/strings/genstrings.txt:18
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
-msgstr ""
+msgstr "임무에 실패하였습니다"
 
 #: data/base/messages/strings/genstrings.txt:19
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
-msgstr ""
+msgstr "임무에 성공하였습니다"
 
 #: data/base/messages/strings/genstrings.txt:22
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
-msgstr ""
+msgstr "적군 착륙 지점"
 
 #: data/base/messages/strings/genstrings.txt:23
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
-msgstr ""
+msgstr "적군 기지"
 
 #: data/base/messages/strings/genstrings.txt:27
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
-msgstr ""
+msgstr "전송이 들어오고 있습니다."
 
 #: data/base/messages/strings/genstrings.txt:30
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
-msgstr ""
+msgstr "기밀 보고가 송신 중입니다."
 
 #: data/base/messages/strings/genstrings.txt:33
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
-msgstr ""
+msgstr "원자로"
 
 #: data/base/messages/strings/names.txt:12
 #: data/mp/messages/strings/names.txt:12
 msgid "New Design"
-msgstr ""
+msgstr "새 디자인"
 
 #: data/base/messages/strings/names.txt:15
 msgid "Transport"
-msgstr ""
+msgstr "수송선"
 
 #: data/base/messages/strings/names.txt:16
 #: data/base/messages/strings/names.txt:153
@@ -5792,7 +5798,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:314
 #: data/mp/messages/strings/names.txt:1476
 msgid "Truck"
-msgstr ""
+msgstr "트럭"
 
 #: data/base/messages/strings/names.txt:17
 #: data/base/messages/strings/names.txt:173
@@ -5801,154 +5807,154 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:1835
 msgid "Machinegun Viper Wheels"
-msgstr ""
+msgstr "기관총 바이퍼 바퀴추진"
 
 #: data/base/messages/strings/names.txt:143
 #: data/mp/messages/strings/names.txt:143
 msgid "Light Cannon Viper Wheels"
-msgstr ""
+msgstr "소형 캐논 바이퍼 바퀴추진"
 
 #: data/base/messages/strings/names.txt:144
 #: data/mp/messages/strings/names.txt:145
 msgid "Flamer Viper Wheels"
-msgstr ""
+msgstr "화염방사기 바이퍼 바퀴추진"
 
 #: data/base/messages/strings/names.txt:145
 #: data/mp/messages/strings/names.txt:146
 msgid "Sensor Turret Viper Wheels"
-msgstr ""
+msgstr "센서 터릿 바이퍼 바퀴추진"
 
 #: data/base/messages/strings/names.txt:146
 #: data/mp/messages/strings/names.txt:147
 msgid "Light Cannon Viper Tracks"
-msgstr ""
+msgstr "소형 캐논 바이퍼 무한궤도"
 
 #: data/base/messages/strings/names.txt:148
 #: data/base/messages/strings/names.txt:1421
 #: data/mp/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:1440
 msgid "Heavy Machinegun Cobra Half-tracks"
-msgstr ""
+msgstr "중기관총 코브라 반 무한궤도"
 
 #: data/base/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:150
 msgid "Mortar Cobra Half-tracks"
-msgstr ""
+msgstr "박격포 코브라 반 무한궤도"
 
 #: data/base/messages/strings/names.txt:150
 #: data/mp/messages/strings/names.txt:151
 msgid "Light Cannon Cobra Tracks"
-msgstr ""
+msgstr "소형 캐논 코브라 무한궤도"
 
 #: data/base/messages/strings/names.txt:170
 #: data/mp/messages/strings/names.txt:173
 msgid "Medium Cannon Viper Tracks"
-msgstr ""
+msgstr "중형 캐논 바이퍼 무한궤도"
 
 #: data/base/messages/strings/names.txt:171
 #: data/mp/messages/strings/names.txt:174
 msgid "Repair Turret Viper Wheels"
-msgstr ""
+msgstr "수리 터릿 바이퍼 바퀴추진"
 
 #: data/base/messages/strings/names.txt:172
 msgid "Repair Turret Viper Half-tracks"
-msgstr ""
+msgstr "수리 터릿 바이퍼 반 무한궤도"
 
 #: data/base/messages/strings/names.txt:174
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1833
 #: data/mp/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:1836
 msgid "Twin Machinegun Viper Wheels"
-msgstr ""
+msgstr "쌍기관총 바이퍼 바퀴추진"
 
 #: data/base/messages/strings/names.txt:175
 #: data/mp/messages/strings/names.txt:178
 msgid "Twin Machinegun Viper Half-tracks"
-msgstr ""
+msgstr "쌍기관총 바이퍼 반 무한궤도"
 
 #: data/base/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:179
 msgid "Heavy Machinegun Viper Half-tracks"
-msgstr ""
+msgstr "중기관총 바이퍼 반 무한궤도"
 
 #: data/base/messages/strings/names.txt:177
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1840
 #: data/mp/messages/strings/names.txt:180
 #: data/mp/messages/strings/names.txt:1843
 msgid "Heavy Machinegun Viper Tracks"
-msgstr ""
+msgstr "중기관총 바이퍼 무한궤도"
 
 #: data/base/messages/strings/names.txt:178
 #: data/mp/messages/strings/names.txt:181
 msgid "Lancer Viper Wheels"
-msgstr ""
+msgstr "랜서 바이퍼 바퀴추진"
 
 #: data/base/messages/strings/names.txt:179
 #: data/mp/messages/strings/names.txt:182
 msgid "Mini-Rocket Viper Wheels"
-msgstr ""
+msgstr "미니로케트 바이퍼 바퀴추진"
 
 #: data/base/messages/strings/names.txt:180
 msgid "Mini-Rocket Artillery Viper Wheels"
-msgstr ""
+msgstr "미니로케트 화포 바이퍼 바퀴추진"
 
 #: data/base/messages/strings/names.txt:181
 msgid "Bunker Buster Viper Wheels"
-msgstr ""
+msgstr "벙커 버스터 바이퍼 바퀴추진"
 
 #: data/base/messages/strings/names.txt:183
 #: data/mp/messages/strings/names.txt:186
 #: data/mp/messages/strings/names.txt:1365
 msgid "Medium Cannon Cobra Tracks"
-msgstr ""
+msgstr "중형 캐논 코브라 무한궤도"
 
 #: data/base/messages/strings/names.txt:184
 #: data/mp/messages/strings/names.txt:187
 msgid "Heavy Cannon Cobra Tracks"
-msgstr ""
+msgstr "대형 캐논 코브라 무한궤도"
 
 #: data/base/messages/strings/names.txt:185
 #: data/base/messages/strings/names.txt:1344
 #: data/mp/messages/strings/names.txt:188
 #: data/mp/messages/strings/names.txt:1363
 msgid "Cobra Truck"
-msgstr ""
+msgstr "코브라 트럭"
 
 #: data/base/messages/strings/names.txt:186
 msgid "Sensor Cobra Half-tracks"
-msgstr ""
+msgstr "센서 코브라 반 무한궤도"
 
 #: data/base/messages/strings/names.txt:187
 #: data/mp/messages/strings/names.txt:190
 #: data/mp/messages/strings/names.txt:1364
 msgid "Flamer Cobra Tracks"
-msgstr ""
+msgstr "화염방사기 코브라 무한궤도"
 
 #: data/base/messages/strings/names.txt:188
 #: data/mp/messages/strings/names.txt:191
 msgid "Bombard Cobra Half-tracks"
-msgstr ""
+msgstr "대형 박격포 코브라 반 무한궤도"
 
 #: data/base/messages/strings/names.txt:189
 #: data/mp/messages/strings/names.txt:192
 msgid "Command Turret Cobra Half-tracks"
-msgstr ""
+msgstr "명령 터릿 코브라 반 무한궤도"
 
 #: data/base/messages/strings/names.txt:190
 #: data/base/messages/strings/names.txt:1420
 #: data/mp/messages/strings/names.txt:193
 #: data/mp/messages/strings/names.txt:1439
 msgid "Lancer Cobra Half-tracks"
-msgstr ""
+msgstr "랜서 코브라 반 무한궤도"
 
 #: data/base/messages/strings/names.txt:191
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
-msgstr ""
+msgstr "미니로케트 화포 코브라 반 무한궤도"
 
 #: data/base/messages/strings/names.txt:193
 #: data/mp/messages/strings/names.txt:196
 msgid "Light Cannon Python Tracks"
-msgstr ""
+msgstr "소형 캐논 파이썬 무한궤도"
 
 #: data/base/messages/strings/names.txt:194
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1357
@@ -5956,7 +5962,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1926
 msgid "Medium Cannon Python Tracks"
-msgstr ""
+msgstr "중형 캐논 파이썬 무한궤도"
 
 #: data/base/messages/strings/names.txt:195
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1848
@@ -5965,69 +5971,71 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1516
 #: data/mp/messages/strings/names.txt:1851
 msgid "Heavy Cannon Python Tracks"
-msgstr ""
+msgstr "대형 캐논 파이썬 무한궤도"
 
 #: data/base/messages/strings/names.txt:196
 #: data/base/messages/strings/names.txt:1422
 #: data/mp/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:1441
 msgid "Command Turret Python Tracks"
-msgstr ""
+msgstr "명령 터릿 파이썬 무한궤도"
 
 #: data/base/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:202
 msgid "Scavenger"
-msgstr ""
+msgstr "스캐빈저"
 
 #: data/base/messages/strings/names.txt:200
 #: data/mp/messages/strings/names.txt:203
 msgid "Jeep"
-msgstr ""
+msgstr "지프(Jeep)"
 
 #: data/base/messages/strings/names.txt:201
 #: data/mp/messages/strings/names.txt:204
 msgid "Trike"
-msgstr ""
+msgstr "세발자전거"
 
 #: data/base/messages/strings/names.txt:202
 #: data/mp/messages/strings/names.txt:205
 msgid "Buggy"
-msgstr ""
+msgstr "사륜차"
 
 #: data/base/messages/strings/names.txt:203
 #: data/mp/messages/strings/names.txt:206
 msgid "Rocket Buggy"
-msgstr ""
+msgstr "로케트 사륜차"
 
 #: data/base/messages/strings/names.txt:204
 #: data/mp/messages/strings/names.txt:207
 msgid "Rocket Jeep"
-msgstr ""
+msgstr "로케트 지프(Jeep)"
 
 #: data/base/messages/strings/names.txt:205
 #: data/mp/messages/strings/names.txt:208
 msgid "Fire Truck"
-msgstr ""
+msgstr "소방차"
 
 #: data/base/messages/strings/names.txt:206
 #: data/mp/messages/strings/names.txt:209
 msgid "Pick-Up Truck"
-msgstr ""
+msgstr "소형 오픈 트럭 "
 
+# not sure what this is
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
+#, fuzzy
 msgid "Fire Cannon"
-msgstr ""
+msgstr "화염 캐논"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
 msgid "School Bus"
-msgstr ""
+msgstr "스쿨 버스"
 
 #: data/base/messages/strings/names.txt:209
 #: data/mp/messages/strings/names.txt:212
 msgid "Civilian"
-msgstr ""
+msgstr "민간인"
 
 #: data/base/messages/strings/names.txt:212
 #: data/base/messages/strings/names.txt:218
@@ -6036,7 +6044,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:221
 #: data/mp/messages/strings/names.txt:545
 msgid "Machinegunner"
-msgstr ""
+msgstr "기관총 사수 "
 
 #: data/base/messages/strings/names.txt:213
 #: data/base/messages/strings/names.txt:480
@@ -6047,7 +6055,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:546
 #: data/mp/messages/strings/names.txt:1074
 msgid "Flamer"
-msgstr ""
+msgstr "화염 방사기 사수"
 
 #: data/base/messages/strings/names.txt:214
 #: data/base/messages/strings/names.txt:221
@@ -6058,8 +6066,9 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:544
 msgid "Lancer"
-msgstr ""
+msgstr "랜서 사수"
 
+# machine gun??
 #: data/base/messages/strings/names.txt:215
 #: data/base/messages/strings/names.txt:220
 #: data/base/messages/strings/names.txt:534
@@ -6067,88 +6076,88 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:223
 #: data/mp/messages/strings/names.txt:542
 msgid "Heavy Gunner"
-msgstr ""
+msgstr "소형 캐논 사수"
 
 #: data/base/messages/strings/names.txt:219
 #: data/mp/messages/strings/names.txt:222
 msgid "Cyborg Flamer"
-msgstr ""
+msgstr "화염방사기 사이보그"
 
 #: data/base/messages/strings/names.txt:222
 #: data/mp/messages/strings/names.txt:155
 #: data/mp/messages/strings/names.txt:225
 msgid "Assault Gunner"
-msgstr ""
+msgstr "어썰트총 사수"
 
 #: data/base/messages/strings/names.txt:226
 #: data/mp/messages/strings/names.txt:229
 msgid "Cyborg Cannon"
-msgstr ""
+msgstr "캐논 사이보그"
 
 #: data/base/messages/strings/names.txt:234
 #: data/mp/messages/strings/names.txt:237
 msgid "Viper"
-msgstr ""
+msgstr "바이퍼"
 
 #: data/base/messages/strings/names.txt:235
 #: data/mp/messages/strings/names.txt:238
 msgid "Leopard"
-msgstr ""
+msgstr "레퍼드"
 
 #: data/base/messages/strings/names.txt:236
 #: data/mp/messages/strings/names.txt:239
 msgid "Retaliation"
-msgstr ""
+msgstr "리탤리에이션"
 
 #: data/base/messages/strings/names.txt:237
 #: data/mp/messages/strings/names.txt:240
 msgid "Bug"
-msgstr ""
+msgstr "버그"
 
 #: data/base/messages/strings/names.txt:238
 #: data/mp/messages/strings/names.txt:241
 msgid "Cobra"
-msgstr ""
+msgstr "코브라"
 
 #: data/base/messages/strings/names.txt:239
 #: data/mp/messages/strings/names.txt:242
 msgid "Panther"
-msgstr ""
+msgstr "팬써"
 
 #: data/base/messages/strings/names.txt:240
 #: data/mp/messages/strings/names.txt:243
 msgid "Retribution"
-msgstr ""
+msgstr "레트리뷰션"
 
 #: data/base/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:244
 msgid "Scorpion"
-msgstr ""
+msgstr "스코피언"
 
 #: data/base/messages/strings/names.txt:242
 #: data/mp/messages/strings/names.txt:245
 msgid "Tiger"
-msgstr ""
+msgstr "타이거"
 
 #: data/base/messages/strings/names.txt:243
 #: data/mp/messages/strings/names.txt:246
 msgid "Vengeance"
-msgstr ""
+msgstr "벤젼스"
 
 #: data/base/messages/strings/names.txt:244
 #: data/mp/messages/strings/names.txt:247
 msgid "Python"
-msgstr ""
+msgstr "파이썬"
 
 #: data/base/messages/strings/names.txt:245
 #: data/mp/messages/strings/names.txt:248
 msgid "Mantis"
-msgstr ""
+msgstr "맨티스"
 
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:250
 msgid "Transport Body"
-msgstr ""
+msgstr "수송 차체"
 
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
@@ -6157,59 +6166,59 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:550
 #: data/mp/messages/strings/names.txt:656
 msgid "Command Turret"
-msgstr ""
+msgstr "명령 터릿"
 
 #: data/base/messages/strings/names.txt:307
 #: data/base/messages/strings/names.txt:392
 #: data/mp/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:399
 msgid "Demolish"
-msgstr ""
+msgstr "철거"
 
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:318
 msgid "Wheels"
-msgstr ""
+msgstr "바퀴"
 
 #: data/base/messages/strings/names.txt:316
 #: data/mp/messages/strings/names.txt:319
 msgid "Wheels II"
-msgstr ""
+msgstr "바퀴 II"
 
 #: data/base/messages/strings/names.txt:317
 #: data/mp/messages/strings/names.txt:320
 msgid "Wheels III"
-msgstr ""
+msgstr "바퀴 III"
 
 #: data/base/messages/strings/names.txt:318
 #: data/mp/messages/strings/names.txt:321
 msgid "Tracks"
-msgstr ""
+msgstr "무한궤도"
 
 #: data/base/messages/strings/names.txt:319
 #: data/mp/messages/strings/names.txt:322
 msgid "Tracks II"
-msgstr ""
+msgstr "무한궤도 II"
 
 #: data/base/messages/strings/names.txt:320
 #: data/mp/messages/strings/names.txt:323
 msgid "Tracks III"
-msgstr ""
+msgstr "무한궤도 III"
 
 #: data/base/messages/strings/names.txt:321
 #: data/mp/messages/strings/names.txt:324
 msgid "Hover"
-msgstr ""
+msgstr "호버(Hover)"
 
 #: data/base/messages/strings/names.txt:322
 #: data/mp/messages/strings/names.txt:325
 msgid "Hover II"
-msgstr ""
+msgstr "호버 II"
 
 #: data/base/messages/strings/names.txt:323
 #: data/mp/messages/strings/names.txt:326
 msgid "Hover III"
-msgstr ""
+msgstr "호버 III"
 
 # just VTOL or 비행차량 or VTOL 비행차량?
 #: data/base/messages/strings/names.txt:324
@@ -6220,58 +6229,59 @@ msgstr "VTOL"
 #: data/base/messages/strings/names.txt:325
 #: data/mp/messages/strings/names.txt:328
 msgid "VTOL II"
-msgstr ""
+msgstr "VTOL II"
 
 #: data/base/messages/strings/names.txt:326
 #: data/mp/messages/strings/names.txt:329
 msgid "VTOL III"
-msgstr ""
+msgstr "VTOL III"
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:330
 msgid "Half-tracks"
-msgstr ""
+msgstr "반 무한궤도"
 
 #: data/base/messages/strings/names.txt:328
 #: data/mp/messages/strings/names.txt:331
 msgid "Half-tracks II"
-msgstr ""
+msgstr "반 무한궤도 II"
 
 #: data/base/messages/strings/names.txt:329
 #: data/mp/messages/strings/names.txt:332
 msgid "Half-tracks III"
-msgstr ""
+msgstr "반 무한궤도 III"
 
 #: data/base/messages/strings/names.txt:330
 #: data/base/messages/strings/names.txt:693
 #: data/mp/messages/strings/names.txt:333
 #: data/mp/messages/strings/names.txt:703
 msgid "Cyborg Propulsion II"
-msgstr ""
+msgstr "사이보그 추진력 II"
 
 #: data/base/messages/strings/names.txt:331
 #: data/base/messages/strings/names.txt:694
 #: data/mp/messages/strings/names.txt:334
 #: data/mp/messages/strings/names.txt:704
 msgid "Cyborg Propulsion III"
-msgstr ""
+msgstr "사이보그 추진력 III"
 
 #: data/base/messages/strings/names.txt:334
 #: data/mp/messages/strings/names.txt:337
+#, fuzzy
 msgid "Naval"
-msgstr ""
+msgstr "해군의"
 
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
 #: data/mp/messages/strings/names.txt:702
 msgid "Cyborg Propulsion"
-msgstr ""
+msgstr "사이보그 추진력"
 
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
 msgid "Repair Turret"
-msgstr ""
+msgstr "수리 터릿"
 
 #: data/base/messages/strings/names.txt:367
 #: data/base/messages/strings/names.txt:423
@@ -6280,7 +6290,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:431
 #: data/mp/messages/strings/names.txt:904
 msgid "Sensor Tower"
-msgstr ""
+msgstr "센서 탑"
 
 #: data/base/messages/strings/names.txt:368
 #: data/base/messages/strings/names.txt:424
@@ -6289,151 +6299,151 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:432
 #: data/mp/messages/strings/names.txt:905
 msgid "Hardened Sensor Tower"
-msgstr ""
+msgstr "강화된 센서 탑"
 
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/names.txt:887
 #: data/mp/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:903
 msgid "Sensor Turret"
-msgstr ""
+msgstr "센서 터릿"
 
 #: data/base/messages/strings/names.txt:371
 #: data/base/messages/strings/names.txt:372
 #: data/mp/messages/strings/names.txt:377
 #: data/mp/messages/strings/names.txt:378
 msgid "VTOL CB Radar Tower"
-msgstr ""
+msgstr "VTOL 카운터배터리 레이더 탑"
 
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:379
 msgid "Uplink Sensor"
-msgstr ""
+msgstr "업링크 센서"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:382
 msgid "CB Radar Turret"
-msgstr ""
+msgstr "카운터배터리 레이더 터릿"
 
 #: data/base/messages/strings/names.txt:376
 #: data/base/messages/strings/names.txt:906
 #: data/mp/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:922
 msgid "VTOL Strike Turret"
-msgstr ""
+msgstr "VTOL 공습 터릿"
 
 #: data/base/messages/strings/names.txt:377
 #: data/mp/messages/strings/names.txt:384
 msgid "VTOL CB Radar Turret"
-msgstr ""
+msgstr "VTOL 카운터배터리 레이더 터릿"
 
 #: data/base/messages/strings/names.txt:378
 msgid "NEXUS Link"
-msgstr ""
+msgstr "넥서스 링크"
 
 #: data/base/messages/strings/names.txt:380
 #: data/base/messages/strings/names.txt:909
 msgid "Scrambler Turret"
-msgstr ""
+msgstr "주파수대 변환기 터릿"
 
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:390
 msgid "Oil Derrick"
-msgstr ""
+msgstr "유정탑"
 
 #: data/base/messages/strings/names.txt:384
 #: data/mp/messages/strings/names.txt:391
 msgid "Command Center"
-msgstr ""
+msgstr "명령 센터"
 
 #: data/base/messages/strings/names.txt:385
 #: data/mp/messages/strings/names.txt:392
 msgid "Factory"
-msgstr ""
+msgstr "공장"
 
 #: data/base/messages/strings/names.txt:386
 #: data/base/messages/strings/names.txt:793
 #: data/mp/messages/strings/names.txt:393
 #: data/mp/messages/strings/names.txt:807
 msgid "Factory Module"
-msgstr ""
+msgstr "공장 모듈"
 
 #: data/base/messages/strings/names.txt:387
 #: data/mp/messages/strings/names.txt:394
 msgid "Power Generator"
-msgstr ""
+msgstr "전력 발전기"
 
 #: data/base/messages/strings/names.txt:388
 #: data/base/messages/strings/names.txt:816
 #: data/mp/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:830
 msgid "Power Module"
-msgstr ""
+msgstr "발전기 모듈"
 
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:396
 msgid "Research Facility"
-msgstr ""
+msgstr "연구 시설"
 
 #: data/base/messages/strings/names.txt:390
 #: data/base/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:397
 #: data/mp/messages/strings/names.txt:845
 msgid "Research Module"
-msgstr ""
+msgstr "연구 시설 모듈"
 
 #: data/base/messages/strings/names.txt:391
 #: data/mp/messages/strings/names.txt:398
 msgid "Demolish Structure"
-msgstr ""
+msgstr "구조물 철거"
 
 #: data/base/messages/strings/names.txt:393
 #: data/base/messages/strings/names.txt:1448
 #: data/mp/messages/strings/names.txt:400
 #: data/mp/messages/strings/names.txt:1467
 msgid "Repair Center"
-msgstr ""
+msgstr "수리 센터"
 
 #: data/base/messages/strings/names.txt:394
 #: data/mp/messages/strings/names.txt:401
 msgid "Command Relay Center"
-msgstr ""
+msgstr "명령 전달 센터"
 
 #: data/base/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:402
 msgid "Hardcrete Corner Wall"
-msgstr ""
+msgstr "하드크리트 모서리 벽"
 
 #: data/base/messages/strings/names.txt:396
 #: data/mp/messages/strings/names.txt:403
 msgid "Hardcrete Wall"
-msgstr ""
+msgstr "하드크리트 벽"
 
 #: data/base/messages/strings/names.txt:398
 #: data/base/messages/strings/names.txt:850
 #: data/mp/messages/strings/names.txt:406
 #: data/mp/messages/strings/names.txt:864
 msgid "VTOL Factory"
-msgstr ""
+msgstr "VTOL 공장"
 
 #: data/base/messages/strings/names.txt:402
 #: data/base/messages/strings/names.txt:721
 msgid "Inferno Emplacement"
-msgstr ""
+msgstr "인퍼노 화염방사기 포좌"
 
 #: data/base/messages/strings/names.txt:403
 #: data/base/messages/strings/names.txt:773
 #: data/mp/messages/strings/names.txt:411
 #: data/mp/messages/strings/names.txt:787
 msgid "Inferno Hardpoint"
-msgstr ""
+msgstr "인퍼노 화염방사기 하드포인트"
 
 #: data/base/messages/strings/names.txt:404
 #: data/base/messages/strings/names.txt:747
 #: data/mp/messages/strings/names.txt:412
 #: data/mp/messages/strings/names.txt:761
 msgid "Pepperpot Pit"
-msgstr ""
+msgstr "페퍼팟 박격포 구덩이"
 
 #: data/base/messages/strings/names.txt:405
 #: data/base/messages/strings/names.txt:488
@@ -6442,160 +6452,163 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:496
 #: data/mp/messages/strings/names.txt:759
 msgid "Hellstorm Emplacement"
-msgstr ""
+msgstr "헬스톰 포좌"
 
 #: data/base/messages/strings/names.txt:409
 #: data/base/messages/strings/names.txt:715
 #: data/mp/messages/strings/names.txt:729
 msgid "Tornado AA Flak Site"
-msgstr ""
+msgstr "토네이도 대공포 발사 시설"
 
 #: data/base/messages/strings/names.txt:410
 #: data/base/messages/strings/names.txt:712
 msgid "Cyclone AA Flak Site"
-msgstr ""
+msgstr "싸이클론 대공포 발사 시설"
 
 #: data/base/messages/strings/names.txt:411
 #: data/base/messages/strings/names.txt:713
 #: data/mp/messages/strings/names.txt:419
 #: data/mp/messages/strings/names.txt:727
 msgid "Hurricane AA Site"
-msgstr ""
+msgstr "허리케인 대공 발사 시설"
 
 #: data/base/messages/strings/names.txt:412
 #: data/base/messages/strings/names.txt:714
 #: data/mp/messages/strings/names.txt:420
 #: data/mp/messages/strings/names.txt:728
 msgid "Whirlwind AA Site"
-msgstr ""
+msgstr "월윈드(Whirlwind) 대공 발사시설"
 
+# battery = 포대
+# battery here means a defensive structure
 #: data/base/messages/strings/names.txt:414
 #: data/base/messages/strings/names.txt:726
 #: data/mp/messages/strings/names.txt:422
 #: data/mp/messages/strings/names.txt:740
+#, fuzzy
 msgid "Ripple Rocket Battery"
-msgstr ""
+msgstr "리플 로케트 포대"
 
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:425
 msgid "Assault Cannon Guard Tower"
-msgstr ""
+msgstr "어썰트 캐논 경호탑"
 
 #: data/base/messages/strings/names.txt:418
 #: data/base/messages/strings/names.txt:1369
 msgid "Assault Gun Guard Tower"
-msgstr ""
+msgstr "어썰트총 경호탑"
 
 #: data/base/messages/strings/names.txt:419
 #: data/base/messages/strings/names.txt:770
 #: data/mp/messages/strings/names.txt:427
 #: data/mp/messages/strings/names.txt:784
 msgid "Assault Gun Hardpoint"
-msgstr ""
+msgstr "어썰트총 하드포인트"
 
 #: data/base/messages/strings/names.txt:420
 #: data/base/messages/strings/names.txt:771
 #: data/mp/messages/strings/names.txt:428
 #: data/mp/messages/strings/names.txt:785
 msgid "Assault Cannon Hardpoint"
-msgstr ""
+msgstr "어썰트 캐논 하드포인트"
 
 #: data/base/messages/strings/names.txt:426
 #: data/base/messages/strings/names.txt:892
 #: data/mp/messages/strings/names.txt:434
 #: data/mp/messages/strings/names.txt:908
 msgid "CB Tower"
-msgstr ""
+msgstr "카운터배터리 탑"
 
 #: data/base/messages/strings/names.txt:427
 #: data/base/messages/strings/names.txt:899
 #: data/mp/messages/strings/names.txt:435
 #: data/mp/messages/strings/names.txt:915
 msgid "VTOL CB Tower"
-msgstr ""
+msgstr "VTOL 카운터배터리 탑"
 
 #: data/base/messages/strings/names.txt:428
 msgid "VTOL Radar Tower"
-msgstr ""
+msgstr "VTOL 레이더 탑"
 
 #: data/base/messages/strings/names.txt:431
 #: data/base/messages/strings/names.txt:764
 #: data/mp/messages/strings/names.txt:439
 #: data/mp/messages/strings/names.txt:778
 msgid "Heavy Machinegun Hardpoint"
-msgstr ""
+msgstr "중기관총 하드포인트"
 
 #: data/base/messages/strings/names.txt:432
 #: data/base/messages/strings/names.txt:765
 #: data/mp/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:779
 msgid "Light Cannon Hardpoint"
-msgstr ""
+msgstr "소형 캐논 하드포인트"
 
 #: data/base/messages/strings/names.txt:433
 #: data/base/messages/strings/names.txt:766
 #: data/mp/messages/strings/names.txt:441
 #: data/mp/messages/strings/names.txt:780
 msgid "Medium Cannon Hardpoint"
-msgstr ""
+msgstr "중형 캐논 하드포인트"
 
 #: data/base/messages/strings/names.txt:434
 #: data/base/messages/strings/names.txt:767
 #: data/mp/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:781
 msgid "Heavy Cannon Hardpoint"
-msgstr ""
+msgstr "대형 캐논 하드포인트"
 
 #: data/base/messages/strings/names.txt:435
 #: data/base/messages/strings/names.txt:768
 #: data/mp/messages/strings/names.txt:443
 #: data/mp/messages/strings/names.txt:782
 msgid "Flamer Hardpoint"
-msgstr ""
+msgstr "화염방사기 하드포인트"
 
 #: data/base/messages/strings/names.txt:436
 #: data/base/messages/strings/names.txt:769
 #: data/mp/messages/strings/names.txt:444
 #: data/mp/messages/strings/names.txt:783
 msgid "Lancer Hardpoint"
-msgstr ""
+msgstr "랜서 하드포인트"
 
 #: data/base/messages/strings/names.txt:438
 #: data/base/messages/strings/names.txt:755
 #: data/mp/messages/strings/names.txt:446
 #: data/mp/messages/strings/names.txt:769
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "기관총 경호탑"
 
 #: data/base/messages/strings/names.txt:439
 #: data/mp/messages/strings/names.txt:447
 msgid "Twin Machinegun Guard Tower"
-msgstr ""
+msgstr "쌍기관총 경호탑"
 
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:448
 #: data/mp/messages/strings/names.txt:770
 msgid "Heavy Machinegun Tower"
-msgstr ""
+msgstr "중기관총 탑"
 
 #: data/base/messages/strings/names.txt:441
 #: data/base/messages/strings/names.txt:757
 #: data/mp/messages/strings/names.txt:449
 msgid "Flamer Guard Tower"
-msgstr ""
+msgstr "화염방사기 경호탑"
 
 #: data/base/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:450
 #: data/mp/messages/strings/names.txt:751
 #: data/mp/messages/strings/names.txt:772
 msgid "Lancer Tower"
-msgstr ""
+msgstr "랜서 탑"
 
 #: data/base/messages/strings/names.txt:443
 #: data/mp/messages/strings/names.txt:451
 #: data/mp/messages/strings/names.txt:773
 msgid "Mini-Rocket Tower"
-msgstr ""
+msgstr "미니로케트 탑"
 
 #: data/base/messages/strings/names.txt:446
 #: data/base/messages/strings/names.txt:496
@@ -6604,14 +6617,14 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:504
 #: data/mp/messages/strings/names.txt:747
 msgid "Machinegun Bunker"
-msgstr ""
+msgstr "기관총 벙커"
 
 #: data/base/messages/strings/names.txt:447
 #: data/base/messages/strings/names.txt:498
 #: data/mp/messages/strings/names.txt:455
 #: data/mp/messages/strings/names.txt:506
 msgid "Twin Machinegun Bunker"
-msgstr ""
+msgstr "쌍기관총 벙커"
 
 #: data/base/messages/strings/names.txt:448
 #: data/base/messages/strings/names.txt:500
@@ -6620,27 +6633,27 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:508
 #: data/mp/messages/strings/names.txt:748
 msgid "Heavy Machinegun Bunker"
-msgstr ""
+msgstr "중기관총 벙커"
 
 #: data/base/messages/strings/names.txt:449
 #: data/base/messages/strings/names.txt:735
 #: data/mp/messages/strings/names.txt:457
 #: data/mp/messages/strings/names.txt:749
 msgid "Light Cannon Bunker"
-msgstr ""
+msgstr "소형 캐논 벙커"
 
 #: data/base/messages/strings/names.txt:450
 #: data/base/messages/strings/names.txt:736
 #: data/mp/messages/strings/names.txt:458
 #: data/mp/messages/strings/names.txt:750
 msgid "Flamer Bunker"
-msgstr ""
+msgstr "화염방사기 벙커"
 
 #: data/base/messages/strings/names.txt:451
 #: data/base/messages/strings/names.txt:737
 #: data/mp/messages/strings/names.txt:459
 msgid "Lancer Bunker"
-msgstr ""
+msgstr "랜서 벙커"
 
 #: data/base/messages/strings/names.txt:454
 #: data/base/messages/strings/names.txt:456
@@ -6649,7 +6662,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:464
 #: data/mp/messages/strings/names.txt:766
 msgid "Tank Traps"
-msgstr ""
+msgstr "탱크 트랩"
 
 #: data/base/messages/strings/names.txt:455
 #: data/base/messages/strings/names.txt:457
@@ -6658,14 +6671,14 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:465
 #: data/mp/messages/strings/names.txt:767
 msgid "Dragon's Teeth"
-msgstr ""
+msgstr "용 이빨"
 
 #: data/base/messages/strings/names.txt:460
 #: data/base/messages/strings/names.txt:842
 #: data/mp/messages/strings/names.txt:468
 #: data/mp/messages/strings/names.txt:856
 msgid "VTOL Rearming Pad"
-msgstr ""
+msgstr "VTOL 재무장 패드"
 
 #: data/base/messages/strings/names.txt:463
 #: data/base/messages/strings/names.txt:484
@@ -6674,7 +6687,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:492
 #: data/mp/messages/strings/names.txt:733
 msgid "Howitzer Emplacement"
-msgstr ""
+msgstr "곡사포 포좌"
 
 #: data/base/messages/strings/names.txt:464
 #: data/base/messages/strings/names.txt:740
@@ -6683,92 +6696,92 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:754
 #: data/mp/messages/strings/names.txt:1381
 msgid "Flashlight Emplacement"
-msgstr ""
+msgstr "레이저 전등 포좌"
 
 #: data/base/messages/strings/names.txt:466
 #: data/base/messages/strings/names.txt:776
 msgid "Flashlight Hardpoint"
-msgstr ""
+msgstr "레이저 전등 하드포인트"
 
 #: data/base/messages/strings/names.txt:467
 #: data/base/messages/strings/names.txt:777
 #: data/mp/messages/strings/names.txt:475
 #: data/mp/messages/strings/names.txt:791
 msgid "Rail Gun Hardpoint"
-msgstr ""
+msgstr "레일건 하드포인트"
 
 #: data/base/messages/strings/names.txt:469
 #: data/base/messages/strings/names.txt:761
 #: data/mp/messages/strings/names.txt:477
 #: data/mp/messages/strings/names.txt:775
 msgid "Scourge Missile Tower"
-msgstr ""
+msgstr "스커지 미사일 탑"
 
 #: data/base/messages/strings/names.txt:470
 #: data/base/messages/strings/names.txt:762
 #: data/mp/messages/strings/names.txt:478
 #: data/mp/messages/strings/names.txt:776
 msgid "Needle Gun Tower"
-msgstr ""
+msgstr "후장총 탑"
 
 #: data/base/messages/strings/names.txt:471
 #: data/base/messages/strings/names.txt:743
 #: data/mp/messages/strings/names.txt:479
 #: data/mp/messages/strings/names.txt:757
 msgid "Gauss Cannon Emplacement"
-msgstr ""
+msgstr "가우스 캐논 포좌"
 
 #: data/base/messages/strings/names.txt:474
 #: data/base/messages/strings/names.txt:1033
 #: data/mp/messages/strings/names.txt:482
 #: data/mp/messages/strings/names.txt:1049
 msgid "Light Cannon"
-msgstr ""
+msgstr "소형 캐논"
 
 #: data/base/messages/strings/names.txt:475
 #: data/base/messages/strings/names.txt:1034
 #: data/mp/messages/strings/names.txt:483
 #: data/mp/messages/strings/names.txt:1050
 msgid "Medium Cannon"
-msgstr ""
+msgstr "중형 캐논"
 
 #: data/base/messages/strings/names.txt:476
 #: data/base/messages/strings/names.txt:1035
 #: data/mp/messages/strings/names.txt:484
 #: data/mp/messages/strings/names.txt:1051
 msgid "Heavy Cannon"
-msgstr ""
+msgstr "대형 캐논"
 
 #: data/base/messages/strings/names.txt:477
 #: data/base/messages/strings/names.txt:1036
 #: data/mp/messages/strings/names.txt:485
 #: data/mp/messages/strings/names.txt:1052
 msgid "Hyper Velocity Cannon"
-msgstr ""
+msgstr "초고속 캐논"
 
 #: data/base/messages/strings/names.txt:478
 #: data/base/messages/strings/names.txt:1037
 #: data/mp/messages/strings/names.txt:486
 #: data/mp/messages/strings/names.txt:1053
 msgid "Assault Cannon"
-msgstr ""
+msgstr "어썰트 캐논"
 
 #: data/base/messages/strings/names.txt:481
 #: data/mp/messages/strings/names.txt:489
 msgid "Inferno"
-msgstr ""
+msgstr "인퍼노(Inferno)"
 
 #: data/base/messages/strings/names.txt:483
 #: data/base/messages/strings/names.txt:1061
 #: data/mp/messages/strings/names.txt:491
 #: data/mp/messages/strings/names.txt:1077
 msgid "Howitzer"
-msgstr ""
+msgstr "곡사포"
 
 #: data/base/messages/strings/names.txt:485
 #: data/mp/messages/strings/names.txt:493
 msgid "Ground Shaker"
-msgstr ""
+msgstr "대형 곡사포"
 
 #: data/base/messages/strings/names.txt:486
 #: data/base/messages/strings/names.txt:722
@@ -6777,19 +6790,19 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:736
 #: data/mp/messages/strings/names.txt:1472
 msgid "Ground Shaker Emplacement"
-msgstr ""
+msgstr "대형 곡사포 포좌"
 
 #: data/base/messages/strings/names.txt:487
 #: data/mp/messages/strings/names.txt:495
 msgid "Hellstorm"
-msgstr ""
+msgstr "헬스톰(Hellstorm)"
 
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:1083
 #: data/mp/messages/strings/names.txt:500
 #: data/mp/messages/strings/names.txt:1099
 msgid "Pulse Laser"
-msgstr ""
+msgstr "펄스 레이저"
 
 #: data/base/messages/strings/names.txt:495
 #: data/base/messages/strings/names.txt:540
@@ -6798,1406 +6811,1420 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:548
 #: data/mp/messages/strings/names.txt:1114
 msgid "Machinegun"
-msgstr ""
+msgstr "기관총"
 
 #: data/base/messages/strings/names.txt:497
 #: data/base/messages/strings/names.txt:1099
 #: data/mp/messages/strings/names.txt:505
 #: data/mp/messages/strings/names.txt:1115
 msgid "Twin Machinegun"
-msgstr ""
+msgstr "쌍기관총"
 
 #: data/base/messages/strings/names.txt:499
 #: data/base/messages/strings/names.txt:1100
 #: data/mp/messages/strings/names.txt:507
 #: data/mp/messages/strings/names.txt:1116
 msgid "Heavy Machinegun"
-msgstr ""
+msgstr "중기관총"
 
 #: data/base/messages/strings/names.txt:501
 #: data/base/messages/strings/names.txt:1101
 #: data/mp/messages/strings/names.txt:509
 #: data/mp/messages/strings/names.txt:1117
 msgid "Assault Gun"
-msgstr ""
+msgstr "어썰트(Assault)총"
 
 #: data/base/messages/strings/names.txt:504
 #: data/base/messages/strings/names.txt:1120
 #: data/mp/messages/strings/names.txt:512
 #: data/mp/messages/strings/names.txt:1136
 msgid "Scourge Missile"
-msgstr ""
+msgstr "스커지 미사일"
 
 #: data/base/messages/strings/names.txt:505
 #: data/base/messages/strings/names.txt:1121
 msgid "Angel Missile"
-msgstr ""
+msgstr "엔젤 미사일"
 
 #: data/base/messages/strings/names.txt:506
 #: data/base/messages/strings/names.txt:1119
 #: data/mp/messages/strings/names.txt:514
 #: data/mp/messages/strings/names.txt:1135
 msgid "Vindicator SAM"
-msgstr ""
+msgstr "빈디케이터 지대공미사일"
 
 #: data/base/messages/strings/names.txt:507
 #: data/base/messages/strings/names.txt:1122
 #: data/mp/messages/strings/names.txt:515
 #: data/mp/messages/strings/names.txt:1138
 msgid "Archangel Missile"
-msgstr ""
+msgstr "아크엔젤 미사일"
 
 #: data/base/messages/strings/names.txt:509
 #: data/base/messages/strings/names.txt:1118
 #: data/mp/messages/strings/names.txt:517
 #: data/mp/messages/strings/names.txt:1134
 msgid "Avenger SAM"
-msgstr ""
+msgstr "어벤져 지대공미사일"
 
 #: data/base/messages/strings/names.txt:511
 #: data/mp/messages/strings/names.txt:519
 msgid "VTOL Scourge Missile"
-msgstr ""
+msgstr "VTOL 스커지 미사일"
 
 #: data/base/messages/strings/names.txt:513
 #: data/base/messages/strings/names.txt:1138
 #: data/mp/messages/strings/names.txt:521
 #: data/mp/messages/strings/names.txt:1154
 msgid "Mortar"
-msgstr ""
+msgstr "박격포"
 
 #: data/base/messages/strings/names.txt:514
 #: data/mp/messages/strings/names.txt:522
 msgid "Mortar Emplacement"
-msgstr ""
+msgstr "박격포 포좌"
 
 #: data/base/messages/strings/names.txt:515
 #: data/mp/messages/strings/names.txt:523
 msgid "Bombard"
-msgstr ""
+msgstr "대형 박격포"
 
 #: data/base/messages/strings/names.txt:516
 #: data/mp/messages/strings/names.txt:524
 msgid "Bombard Emplacement"
-msgstr ""
+msgstr "대형 박격포 포좌"
 
 #: data/base/messages/strings/names.txt:517
 #: data/mp/messages/strings/names.txt:525
 msgid "Pepperpot"
-msgstr ""
+msgstr "페퍼팟(Pepperpot) 박격포"
 
 #: data/base/messages/strings/names.txt:518
 #: data/mp/messages/strings/names.txt:526
 msgid "Pepperpot Emplacement"
-msgstr ""
+msgstr "페퍼팟 박격포"
 
 #: data/base/messages/strings/names.txt:519
 #: data/base/messages/strings/names.txt:1142
 #: data/mp/messages/strings/names.txt:527
 #: data/mp/messages/strings/names.txt:1158
 msgid "Needle Gun"
-msgstr ""
+msgstr "후장총"
 
 #: data/base/messages/strings/names.txt:520
 #: data/base/messages/strings/names.txt:1143
 #: data/mp/messages/strings/names.txt:528
 #: data/mp/messages/strings/names.txt:1159
 msgid "Rail Gun"
-msgstr ""
+msgstr "레일건"
 
 #: data/base/messages/strings/names.txt:521
 #: data/base/messages/strings/names.txt:1144
 #: data/mp/messages/strings/names.txt:529
 #: data/mp/messages/strings/names.txt:1160
 msgid "Gauss Cannon"
-msgstr ""
+msgstr "가우스 캐논"
 
 #: data/base/messages/strings/names.txt:523
 #: data/base/messages/strings/names.txt:1181
 msgid "Mini-Rocket Artillery"
-msgstr ""
+msgstr "미니로케트 화포"
 
 #: data/base/messages/strings/names.txt:524
 #: data/mp/messages/strings/names.txt:532
 msgid "Bunker Buster"
-msgstr ""
+msgstr "벙커"
 
 #: data/base/messages/strings/names.txt:526
 #: data/base/messages/strings/names.txt:1183
 #: data/mp/messages/strings/names.txt:534
 #: data/mp/messages/strings/names.txt:1202
 msgid "Mini-Rocket Pod"
-msgstr ""
+msgstr "미니로케트 포드"
 
 #: data/base/messages/strings/names.txt:527
 #: data/base/messages/strings/names.txt:1184
 #: data/mp/messages/strings/names.txt:535
 #: data/mp/messages/strings/names.txt:1203
 msgid "Ripple Rockets"
-msgstr ""
+msgstr "리플 로케트"
 
 #: data/base/messages/strings/names.txt:528
 #: data/mp/messages/strings/names.txt:536
 msgid "Tank Killer"
-msgstr ""
+msgstr "탱크킬러"
 
 #: data/base/messages/strings/names.txt:529
 #: data/mp/messages/strings/names.txt:537
 msgid "VTOL Bunker Buster"
-msgstr ""
+msgstr "VTOL 버커 버스터"
 
 #: data/base/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:538
 msgid "VTOL Mini-Rocket"
-msgstr ""
+msgstr "VTOL 미니로케트"
 
 #: data/base/messages/strings/names.txt:531
 #: data/mp/messages/strings/names.txt:539
 msgid "VTOL Lancer"
-msgstr ""
+msgstr "VTOL 랜서"
 
 #: data/base/messages/strings/names.txt:532
 #: data/mp/messages/strings/names.txt:540
 msgid "VTOL Tank Killer"
-msgstr ""
+msgstr "VTOL 탱크킬러"
 
 #: data/base/messages/strings/names.txt:544
 #: data/base/messages/strings/names.txt:980
 #: data/mp/messages/strings/names.txt:552
 #: data/mp/messages/strings/names.txt:996
 msgid "Tornado Flak Turret"
-msgstr ""
+msgstr "토네이도 대공포 터릿"
 
 #: data/base/messages/strings/names.txt:545
 #: data/base/messages/strings/names.txt:981
 #: data/mp/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:997
 msgid "Cyclone Flak Turret"
-msgstr ""
+msgstr "싸이클론 대공포 터릿"
 
 #: data/base/messages/strings/names.txt:550
 #: data/base/messages/strings/names.txt:983
 #: data/mp/messages/strings/names.txt:558
 #: data/mp/messages/strings/names.txt:999
 msgid "Whirlwind AA Turret"
-msgstr ""
+msgstr "월윈드 대공 터릿"
 
 #: data/base/messages/strings/names.txt:551
 #: data/base/messages/strings/names.txt:982
 #: data/mp/messages/strings/names.txt:559
 #: data/mp/messages/strings/names.txt:998
 msgid "Hurricane AA Turret"
-msgstr ""
+msgstr "허리케인 대공 터릿"
 
 #: data/base/messages/strings/names.txt:560
 #: data/mp/messages/strings/names.txt:568
 msgid "VTOL Cannon"
-msgstr ""
+msgstr "VTOL 캐논"
 
 #: data/base/messages/strings/names.txt:561
 #: data/mp/messages/strings/names.txt:569
 msgid "VTOL Hyper Velocity Cannon"
-msgstr ""
+msgstr "VTOL 초고속 캐논"
 
 #: data/base/messages/strings/names.txt:562
 #: data/mp/messages/strings/names.txt:570
 msgid "VTOL Assault Cannon"
-msgstr ""
+msgstr "VTOL 어썰트 캐논"
 
 #: data/base/messages/strings/names.txt:563
 #: data/mp/messages/strings/names.txt:571
 msgid "VTOL Pulse Laser"
-msgstr ""
+msgstr "VTOL 펄스 레이저"
 
 #: data/base/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:573
 msgid "VTOL Machinegun"
-msgstr ""
+msgstr "VTOL 기관총"
 
 #: data/base/messages/strings/names.txt:566
 #: data/mp/messages/strings/names.txt:574
 msgid "VTOL Twin Machinegun"
-msgstr ""
+msgstr "VTOL 쌍기관총"
 
 #: data/base/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:575
 msgid "VTOL Heavy Machinegun"
-msgstr ""
+msgstr "VTOL 중기관총"
 
 #: data/base/messages/strings/names.txt:568
 #: data/mp/messages/strings/names.txt:576
 msgid "VTOL Assault Gun"
-msgstr ""
+msgstr "VTOL 어썰트총"
 
 #: data/base/messages/strings/names.txt:569
 #: data/mp/messages/strings/names.txt:577
 msgid "VTOL Needle Gun"
-msgstr ""
+msgstr "VTOL 후장총"
 
 #: data/base/messages/strings/names.txt:570
 #: data/mp/messages/strings/names.txt:578
 msgid "VTOL Rail Gun"
-msgstr ""
+msgstr "VTOL 레일건"
 
 #: data/base/messages/strings/names.txt:572
 #: data/mp/messages/strings/names.txt:580
 msgid "Proximity Bomb Turret"
-msgstr ""
+msgstr "근접폭탄 터릿"
 
 #: data/base/messages/strings/names.txt:573
 #: data/mp/messages/strings/names.txt:581
 msgid "Proximity Superbomb Turret"
-msgstr ""
+msgstr "초강력 근접폭탄 터릿"
 
 #: data/base/messages/strings/names.txt:575
 msgid "VTOL Cluster Bombs Bay"
-msgstr ""
+msgstr "VTOL 클러스터 폭탄 투하실"
 
 #: data/base/messages/strings/names.txt:576
 #: data/mp/messages/strings/names.txt:584
 msgid "VTOL Heap Bomb Bay"
-msgstr ""
+msgstr "VTOL HEAP 폭탄 투하실"
 
+# 형광체 or 인광체?
 #: data/base/messages/strings/names.txt:577
 #: data/mp/messages/strings/names.txt:585
+#, fuzzy
 msgid "VTOL Phosphor Bomb Bay"
-msgstr ""
+msgstr "VTOL 인광체 폭탄 투하실"
 
 #: data/base/messages/strings/names.txt:578
 #: data/mp/messages/strings/names.txt:586
 msgid "VTOL Thermite Bomb Bay"
-msgstr ""
+msgstr "VTOL 테르밋 폭탄 투하실"
 
 #: data/base/messages/strings/names.txt:581
 #: data/mp/messages/strings/names.txt:589
 msgid "Collective Wall"
-msgstr ""
+msgstr "컬렉티브 벽"
 
 #: data/base/messages/strings/names.txt:582
 msgid "Collective CWall"
-msgstr ""
+msgstr "컬렉티브 모서리 벽"
 
 #: data/base/messages/strings/names.txt:604
 msgid "NEXUS Wall"
-msgstr ""
+msgstr "넥서스 벽"
 
 #: data/base/messages/strings/names.txt:605
 msgid "NEXUS CWall"
-msgstr ""
+msgstr "넥서스 모서리 벽"
 
 #: data/base/messages/strings/names.txt:623
 #: data/mp/messages/strings/names.txt:631
 msgid "CAM1 RESEARCH"
-msgstr ""
+msgstr "캠페인 1 연구"
 
 #: data/base/messages/strings/names.txt:624
 #: data/mp/messages/strings/names.txt:632
 msgid "ADVANCED RESEARCH"
-msgstr ""
+msgstr "고급 연구"
 
 #: data/base/messages/strings/names.txt:625
 #: data/mp/messages/strings/names.txt:633
 msgid "CAM1 VEHICLES"
-msgstr ""
+msgstr "캠페인 1 차량"
 
 #: data/base/messages/strings/names.txt:626
 #: data/mp/messages/strings/names.txt:634
 msgid "CAM1 WEAPONS"
-msgstr ""
+msgstr "캠페인 1 무기"
 
 #: data/base/messages/strings/names.txt:627
 #: data/mp/messages/strings/names.txt:635
 msgid "CAM1 SYSTEMS"
-msgstr ""
+msgstr "캠페인 1 시스템"
 
 #: data/base/messages/strings/names.txt:628
 #: data/mp/messages/strings/names.txt:636
 msgid "CAM1 DEFENSES"
-msgstr ""
+msgstr "캠페인 1 방어물"
 
 #: data/base/messages/strings/names.txt:629
 #: data/mp/messages/strings/names.txt:637
 msgid "CAM1 STRUCTURES"
-msgstr ""
+msgstr "캠페인 1 구조물"
 
 #: data/base/messages/strings/names.txt:630
 #: data/mp/messages/strings/names.txt:638
 msgid "CAM2 RESEARCH"
-msgstr ""
+msgstr "캠페인 2 연구"
 
 #: data/base/messages/strings/names.txt:631
 #: data/mp/messages/strings/names.txt:639
 msgid "CAM2 VEHICLES"
-msgstr ""
+msgstr "캠페인 2 차량"
 
 #: data/base/messages/strings/names.txt:632
 #: data/mp/messages/strings/names.txt:640
 msgid "CAM2 CYBORGS"
-msgstr ""
+msgstr "캠페인 2 사이보그"
 
 #: data/base/messages/strings/names.txt:633
 #: data/mp/messages/strings/names.txt:641
 msgid "CAM2 WEAPONS"
-msgstr ""
+msgstr "캠페인 2 무기"
 
 #: data/base/messages/strings/names.txt:634
 #: data/mp/messages/strings/names.txt:642
 msgid "CAM2 SYSTEMS"
-msgstr ""
+msgstr "캠페인 2 시스템"
 
 #: data/base/messages/strings/names.txt:635
 #: data/mp/messages/strings/names.txt:643
 msgid "CAM2 DEFENSES"
-msgstr ""
+msgstr "캠페인 2 방어물"
 
 #: data/base/messages/strings/names.txt:636
 #: data/mp/messages/strings/names.txt:644
 msgid "CAM2 STRUCTURES"
-msgstr ""
+msgstr "캠페인 2 구조물"
 
 #: data/base/messages/strings/names.txt:638
 #: data/mp/messages/strings/names.txt:646
 msgid "CAM3 RESEARCH"
-msgstr ""
+msgstr "캠페인 3 연구"
 
 #: data/base/messages/strings/names.txt:649
 #: data/mp/messages/strings/names.txt:657
 msgid "Synaptic Link"
-msgstr ""
+msgstr "시냅스 연결"
 
 #: data/base/messages/strings/names.txt:651
 #: data/mp/messages/strings/names.txt:659
+#, fuzzy
 msgid "Missile Targeting Codes"
-msgstr ""
+msgstr "미사일 겨낭(타겟팅) 코드"
 
 #: data/base/messages/strings/names.txt:652
 #: data/mp/messages/strings/names.txt:660
+#, fuzzy
 msgid "Second Level Missile Targeting Codes"
-msgstr ""
+msgstr "2 단계 미사일 타겟팅 코드"
 
 #: data/base/messages/strings/names.txt:653
 #: data/mp/messages/strings/names.txt:661
+#, fuzzy
 msgid "Third Level Missile Firing Codes"
-msgstr ""
+msgstr "3 단계 미사일 타겟팅 코드"
 
 #: data/base/messages/strings/names.txt:655
 #: data/mp/messages/strings/names.txt:663
 msgid "Cyborg Thermal Armor"
-msgstr ""
+msgstr "사이보그 내열성 갑옷"
 
 #: data/base/messages/strings/names.txt:656
 #: data/mp/messages/strings/names.txt:664
 msgid "Cyborg Thermal Armor Mk2"
-msgstr ""
+msgstr "사이보그 내열성 갑옷 Mk 2"
 
 #: data/base/messages/strings/names.txt:657
 #: data/mp/messages/strings/names.txt:665
 msgid "Cyborg Thermal Armor Mk3"
-msgstr ""
+msgstr "사이보그 내열성 갑옷 Mk 3"
 
 #: data/base/messages/strings/names.txt:658
 #: data/mp/messages/strings/names.txt:666
 msgid "Cyborg High Intensity Thermal Armor"
-msgstr ""
+msgstr "고강도 사이보그 내열성 갑옷"
 
 #: data/base/messages/strings/names.txt:659
 #: data/mp/messages/strings/names.txt:667
 msgid "Cyborg High Intensity Thermal Armor Mk2"
-msgstr ""
+msgstr "고강도 사이보그 내열성 갑옷 Mk 2"
 
 #: data/base/messages/strings/names.txt:660
 #: data/mp/messages/strings/names.txt:668
 msgid "Cyborg High Intensity Thermal Armor Mk3"
-msgstr ""
+msgstr "고강도 사이보그 내열성 갑옷 Mk 3"
 
 #: data/base/messages/strings/names.txt:662
 #: data/mp/messages/strings/names.txt:670
 msgid "Cyborg Composite Alloys"
-msgstr ""
+msgstr "사이보그 복합 합금"
 
 #: data/base/messages/strings/names.txt:663
 #: data/mp/messages/strings/names.txt:671
 msgid "Cyborg Composite Alloys Mk2"
-msgstr ""
+msgstr "사이보그 복합 합금 Mk 2"
 
 #: data/base/messages/strings/names.txt:664
 #: data/mp/messages/strings/names.txt:672
 msgid "Cyborg Composite Alloys Mk3"
-msgstr ""
+msgstr "사이보그 복합 합금 Mk 3"
 
 #: data/base/messages/strings/names.txt:665
 #: data/mp/messages/strings/names.txt:673
 msgid "Cyborg Dense Composite Alloys"
-msgstr ""
+msgstr "고밀도 사이보그 복합 합금"
 
 #: data/base/messages/strings/names.txt:666
 #: data/mp/messages/strings/names.txt:674
 msgid "Cyborg Dense Composite Alloys Mk2"
-msgstr ""
+msgstr "고밀도 사이보그 복합 합금 Mk 2"
 
 #: data/base/messages/strings/names.txt:667
 #: data/mp/messages/strings/names.txt:675
 msgid "Cyborg Dense Composite Alloys Mk3"
-msgstr ""
+msgstr "고밀도 사이보그 복합 합금 Mk 3"
 
 #: data/base/messages/strings/names.txt:668
 #: data/mp/messages/strings/names.txt:676
 msgid "Cyborg Superdense Composite Alloys"
-msgstr ""
+msgstr "초고밀도 사이보그 복합 합금"
 
 #: data/base/messages/strings/names.txt:669
 #: data/mp/messages/strings/names.txt:677
 msgid "Cyborg Superdense Composite Alloys Mk2"
-msgstr ""
+msgstr "초고밀도 사이보그 복합 합금 Mk 2"
 
 #: data/base/messages/strings/names.txt:670
 #: data/mp/messages/strings/names.txt:678
 msgid "Cyborg Superdense Composite Alloys Mk3"
-msgstr ""
+msgstr "초고밀도 사이보그 복합 합금 Mk 3"
 
 #: data/base/messages/strings/names.txt:673
 #: data/mp/messages/strings/names.txt:683
 msgid "Bunker Blaster Cyborg"
-msgstr ""
+msgstr "벙커 블래스터 사이보그"
 
 #: data/base/messages/strings/names.txt:674
 #: data/mp/messages/strings/names.txt:684
 msgid "Heavy Gunner Cyborg"
-msgstr ""
+msgstr "소형 캐논 사수 사이보그"
 
 #: data/base/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:685
 msgid "Flamer Cyborg"
-msgstr ""
+msgstr "화염방사기 사이보그"
 
 #: data/base/messages/strings/names.txt:676
 #: data/mp/messages/strings/names.txt:686
 msgid "Machinegunner Cyborg"
-msgstr ""
+msgstr "기관총 사수 사이보그"
 
 #: data/base/messages/strings/names.txt:677
 #: data/mp/messages/strings/names.txt:687
 msgid "Lancer Cyborg"
-msgstr ""
+msgstr "랜서 사이보그"
 
 #: data/base/messages/strings/names.txt:678
 #: data/mp/messages/strings/names.txt:688
 msgid "Assault Gunner Cyborg"
-msgstr ""
+msgstr "어썰트총 사수 사이보그"
 
 #: data/base/messages/strings/names.txt:679
 #: data/mp/messages/strings/names.txt:689
 msgid "Needle Gunner Cyborg"
-msgstr ""
+msgstr "후장총 사수 사이보그"
 
 #: data/base/messages/strings/names.txt:680
 #: data/mp/messages/strings/names.txt:690
 msgid "Scourge Cyborg"
-msgstr ""
+msgstr "스커지 사이보그"
 
 #: data/base/messages/strings/names.txt:681
 #: data/mp/messages/strings/names.txt:691
 msgid "Flashlight Gunner Cyborg"
-msgstr ""
+msgstr "레이저 전등 사수 사이보그"
 
 #: data/base/messages/strings/names.txt:683
 #: data/mp/messages/strings/names.txt:693
 msgid "Jump Bunker Blaster"
-msgstr ""
+msgstr "점프 벙커 블래스터 사수"
 
 #: data/base/messages/strings/names.txt:684
 #: data/mp/messages/strings/names.txt:694
 msgid "Jump Heavy Gunner"
-msgstr ""
+msgstr "점프 소형 캐논 사수"
 
 #: data/base/messages/strings/names.txt:685
 #: data/mp/messages/strings/names.txt:695
 msgid "Jump Lancer"
-msgstr ""
+msgstr "점프 랜서 사수"
 
 #: data/base/messages/strings/names.txt:686
 #: data/mp/messages/strings/names.txt:696
 msgid "Jump Assault Gunner"
-msgstr ""
+msgstr "점프 어썰트총 사수"
 
 #: data/base/messages/strings/names.txt:687
 #: data/mp/messages/strings/names.txt:697
 msgid "Jump Needle Gunner"
-msgstr ""
+msgstr "점프 후장총 사수"
 
 #: data/base/messages/strings/names.txt:688
 #: data/mp/messages/strings/names.txt:698
 msgid "Jump Scourge"
-msgstr ""
+msgstr "점프 시커지 사수"
 
 #: data/base/messages/strings/names.txt:689
 #: data/mp/messages/strings/names.txt:699
 msgid "Jump Flashlight Gunner"
-msgstr ""
+msgstr "점프 레이저 전등 사수"
 
 #: data/base/messages/strings/names.txt:691
 #: data/mp/messages/strings/names.txt:701
 msgid "Cyborg Jump Pack"
-msgstr ""
+msgstr "사이보그 점프 팩"
 
 #: data/base/messages/strings/names.txt:697
 #: data/mp/messages/strings/names.txt:707
 msgid "Hardcrete"
-msgstr ""
+msgstr "하드크리트(Hardcrete)"
 
 #: data/base/messages/strings/names.txt:699
 #: data/mp/messages/strings/names.txt:709
 msgid "NP-Hardcrete"
-msgstr ""
+msgstr "뉴 패러다임 하드크리트"
 
 #: data/base/messages/strings/names.txt:701
 #: data/mp/messages/strings/names.txt:711
 msgid "Improved Hardcrete"
-msgstr ""
+msgstr "개선된 하드크리트"
 
 #: data/base/messages/strings/names.txt:702
 #: data/mp/messages/strings/names.txt:712
 msgid "Improved Hardcrete Mk2"
-msgstr ""
+msgstr "개선된 하드크리트 Mk 2"
 
 #: data/base/messages/strings/names.txt:703
 #: data/mp/messages/strings/names.txt:713
 msgid "Improved Hardcrete Mk3"
-msgstr ""
+msgstr "개선된 하드크리트 Mk 3"
 
 #: data/base/messages/strings/names.txt:704
 #: data/mp/messages/strings/names.txt:714
 msgid "Supercrete"
-msgstr ""
+msgstr "슈퍼크리트(Supercrete)"
 
 #: data/base/messages/strings/names.txt:705
 #: data/mp/messages/strings/names.txt:715
 msgid "Supercrete Mk2"
-msgstr ""
+msgstr "슈퍼크리트 Mk 2"
 
 #: data/base/messages/strings/names.txt:706
 #: data/mp/messages/strings/names.txt:716
 msgid "Supercrete Mk3"
-msgstr ""
+msgstr "슈퍼크리트 Mk 3"
 
 #: data/base/messages/strings/names.txt:707
 #: data/mp/messages/strings/names.txt:717
 msgid "Plascrete"
-msgstr ""
+msgstr "플라스크리트(Plascrete)"
 
 #: data/base/messages/strings/names.txt:708
 #: data/mp/messages/strings/names.txt:718
 msgid "Plascrete Mk2"
-msgstr ""
+msgstr "플라스크리트 Mk 2"
 
 #: data/base/messages/strings/names.txt:709
 msgid "Plascrete MK3"
-msgstr ""
+msgstr "플라스크리트 Mk 3"
 
 #: data/base/messages/strings/names.txt:717
 #: data/base/messages/strings/names.txt:1373
 msgid "HPV Cannon Emplacement"
-msgstr ""
+msgstr "초고속 캐논 포좌"
 
 #: data/base/messages/strings/names.txt:720
 #: data/base/messages/strings/names.txt:1371
 #: data/mp/messages/strings/names.txt:734
 #: data/mp/messages/strings/names.txt:1390
 msgid "Tank Killer Emplacement"
-msgstr ""
+msgstr "탱크킬러 포좌"
 
 #: data/base/messages/strings/names.txt:723
 #: data/base/messages/strings/names.txt:1452
 #: data/mp/messages/strings/names.txt:737
 #: data/mp/messages/strings/names.txt:1471
 msgid "Bombard Pit"
-msgstr ""
+msgstr "대형 박격포 포좌"
 
 #: data/base/messages/strings/names.txt:728
 msgid "Angel Missile Battery"
-msgstr ""
+msgstr "엔젤 미사일 포대"
 
 #: data/base/messages/strings/names.txt:729
 #: data/mp/messages/strings/names.txt:743
 msgid "Archangel Missile Battery"
-msgstr ""
+msgstr "아크엔젤 미사일 포대"
 
 #: data/base/messages/strings/names.txt:730
 #: data/base/messages/strings/names.txt:1216
 #: data/mp/messages/strings/names.txt:744
 #: data/mp/messages/strings/names.txt:1235
 msgid "Mortar Pit"
-msgstr ""
+msgstr "박격포 구덩이"
 
 #: data/base/messages/strings/names.txt:731
 #: data/mp/messages/strings/names.txt:745
 #: data/mp/messages/strings/names.txt:1387
 msgid "Mini-Rocket Battery"
-msgstr ""
+msgstr "미니로케트 포대"
 
 #: data/base/messages/strings/names.txt:738
 #: data/base/messages/strings/names.txt:1374
 #: data/mp/messages/strings/names.txt:1393
 msgid "Pulse Laser Emplacement"
-msgstr ""
+msgstr "펄스 레이저 포좌"
 
+# 포좌 or something else??
 #: data/base/messages/strings/names.txt:742
 #: data/mp/messages/strings/names.txt:756
+#, fuzzy
 msgid "Rail Gun Emplacement"
-msgstr ""
+msgstr "레일건 포좌"
 
 #: data/base/messages/strings/names.txt:744
 #: data/mp/messages/strings/names.txt:758
 msgid "Assault Cannon Emplacement"
-msgstr ""
+msgstr "어썰트 캐논 포좌"
 
 #: data/base/messages/strings/names.txt:746
 #: data/mp/messages/strings/names.txt:426
 msgid "Assault Gun Emplacement"
-msgstr ""
+msgstr "어썰트총 포좌"
 
 #: data/base/messages/strings/names.txt:749
 #: data/base/messages/strings/names.txt:1363
 #: data/mp/messages/strings/names.txt:763
 #: data/mp/messages/strings/names.txt:1382
 msgid "Avenger SAM Site"
-msgstr ""
+msgstr "어벤져 지대공미사일 발사시설"
 
 #: data/base/messages/strings/names.txt:750
 #: data/base/messages/strings/names.txt:1364
 #: data/mp/messages/strings/names.txt:764
 #: data/mp/messages/strings/names.txt:1383
 msgid "Vindicator SAM Site"
-msgstr ""
+msgstr "빈디케이터 지대공미사일 발사시설"
 
 #: data/base/messages/strings/names.txt:756
 msgid "Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "중기관총 경호탑"
 
 #: data/base/messages/strings/names.txt:758
 msgid "Lancer Guard Tower"
-msgstr ""
+msgstr "랜서 경호탑"
 
 #: data/base/messages/strings/names.txt:759
 msgid "Mini-Rocket Guard Tower"
-msgstr ""
+msgstr "미니로케트 경호탑"
 
 #: data/base/messages/strings/names.txt:772
 #: data/base/messages/strings/names.txt:1382
 #: data/mp/messages/strings/names.txt:786
 #: data/mp/messages/strings/names.txt:1401
 msgid "Scourge Missile Hardpoint"
-msgstr ""
+msgstr "스커지 미사일 하드포인트"
 
 #: data/base/messages/strings/names.txt:774
 #: data/base/messages/strings/names.txt:1380
 #: data/mp/messages/strings/names.txt:788
 #: data/mp/messages/strings/names.txt:1399
 msgid "Tank Killer Hardpoint"
-msgstr ""
+msgstr "탱크킬러 하드포인트"
 
+# hyper velocity = 초고속 발사, or 초고속 탄?
 #: data/base/messages/strings/names.txt:775
 #: data/base/messages/strings/names.txt:1381
+#, fuzzy
 msgid "HPV Cannon Hardpoint"
-msgstr ""
+msgstr "초고속 캐논 하드포인트"
 
 #: data/base/messages/strings/names.txt:778
 #: data/base/messages/strings/names.txt:1383
 #: data/mp/messages/strings/names.txt:792
 #: data/mp/messages/strings/names.txt:1402
 msgid "Gauss Cannon Hardpoint"
-msgstr ""
+msgstr "가우스 캐논 하드포인트"
 
+# post = 주둔지
 #: data/base/messages/strings/names.txt:780
 #: data/mp/messages/strings/names.txt:794
 msgid "Command Relay Post"
-msgstr ""
+msgstr "명령 전달 주둔지"
 
 #: data/base/messages/strings/names.txt:784
 #: data/mp/messages/strings/names.txt:798
 msgid "Automated Cyborg Production Mk2"
-msgstr ""
+msgstr "사이보그 자동화 생산 Mk 2"
 
 #: data/base/messages/strings/names.txt:785
 #: data/mp/messages/strings/names.txt:799
 msgid "Automated Cyborg Production Mk3"
-msgstr ""
+msgstr "사이보그 자동화 생산 Mk 3"
 
 #: data/base/messages/strings/names.txt:787
 #: data/mp/messages/strings/names.txt:801
 msgid "Robotic Cyborg Production Mk2"
-msgstr ""
+msgstr "로봇식 사이보그 생산 Mk 2"
 
 #: data/base/messages/strings/names.txt:788
 #: data/mp/messages/strings/names.txt:802
 msgid "Robotic Cyborg Production Mk3"
-msgstr ""
+msgstr "로봇식 사이보그 생산 Mk 3"
 
 #: data/base/messages/strings/names.txt:789
 #: data/mp/messages/resmessagesall.rmsg:798
 #: data/mp/messages/strings/names.txt:803
+#, fuzzy
 msgid "Advanced Cyborg Production"
-msgstr ""
+msgstr "사이보그 고급 생산"
 
 #: data/base/messages/strings/names.txt:790
 #: data/mp/messages/strings/names.txt:804
+#, fuzzy
 msgid "Advanced Cyborg Production Mk2"
-msgstr ""
+msgstr "사이보그 고급 생산 Mk2"
 
 #: data/base/messages/strings/names.txt:791
 #: data/mp/messages/strings/names.txt:805
+#, fuzzy
 msgid "Advanced Cyborg Production Mk3"
-msgstr ""
+msgstr "사이보그 고급 생산 Mk3"
 
 #: data/base/messages/strings/names.txt:795
 msgid "Automated Factory Production Mk2"
-msgstr ""
+msgstr "자동화된 공장 생산 Mk 2"
 
 #: data/base/messages/strings/names.txt:796
 msgid "Automated Factory Production Mk3"
-msgstr ""
+msgstr "자동화된 공장 생산 Mk 3"
 
 #: data/base/messages/strings/names.txt:797
 msgid "Robotic Factory Production"
-msgstr ""
+msgstr "로봇식 공장 생산"
 
 #: data/base/messages/strings/names.txt:798
 msgid "Robotic Factory Production Mk2"
-msgstr ""
+msgstr "로봇식 공장 생산 Mk 2"
 
 #: data/base/messages/strings/names.txt:799
 msgid "Robotic Factory Production Mk3"
-msgstr ""
+msgstr "로봇식 공장 생산 Mk 3"
 
 #: data/base/messages/strings/names.txt:800
 #: data/mp/messages/resmessagesall.rmsg:785
 msgid "Advanced Factory Production"
-msgstr ""
+msgstr "고급 공장 생산"
 
 #: data/base/messages/strings/names.txt:801
 msgid "Advanced Factory Production Mk2"
-msgstr ""
+msgstr "고급 공장 생산 Mk 2"
 
 #: data/base/messages/strings/names.txt:802
 msgid "Advanced Factory Production Mk3"
-msgstr ""
+msgstr "고급 공장 생산 Mk 3"
 
 #: data/base/messages/strings/names.txt:806
 #: data/mp/messages/strings/names.txt:820
 msgid "Reinforced Base Structure Materials Mk2"
-msgstr ""
+msgstr "보강된 기지 구조물 재료 Mk 2"
 
 #: data/base/messages/strings/names.txt:807
 #: data/mp/messages/strings/names.txt:821
 msgid "Reinforced Base Structure Materials Mk3"
-msgstr ""
+msgstr "보강된 기지 구조물 재료 Mk 3"
 
 #: data/base/messages/strings/names.txt:809
 #: data/mp/messages/strings/names.txt:823
 msgid "Hardened Base Structure Materials Mk2"
-msgstr ""
+msgstr "강화된 기지 구조물 재료 Mk 2"
 
 #: data/base/messages/strings/names.txt:810
 #: data/mp/messages/strings/names.txt:824
 msgid "Hardened Base Structure Materials Mk3"
-msgstr ""
+msgstr "강화된 기지 구조물 재료 Mk 3"
 
 #: data/base/messages/strings/names.txt:812
 #: data/mp/messages/strings/names.txt:826
 msgid "Advanced Base Structure Materials Mk2"
-msgstr ""
+msgstr "고급 기지 구조물 재료 Mk 2"
 
 #: data/base/messages/strings/names.txt:813
 #: data/mp/messages/strings/names.txt:827
 msgid "Advanced Base Structure Materials Mk3"
-msgstr ""
+msgstr "고급 기지 구조물 재료 Mk 3"
 
 #: data/base/messages/strings/names.txt:817
 #: data/mp/messages/strings/names.txt:831
 msgid "Gas Turbine Generator"
-msgstr ""
+msgstr "가스 터빈 발전기"
 
 #: data/base/messages/strings/names.txt:818
 #: data/mp/messages/strings/names.txt:832
 msgid "Vapor Turbine Generator"
-msgstr ""
+msgstr "증기 터빈 발전기"
 
 #: data/base/messages/strings/names.txt:820
 #: data/base/messages/strings/names.txt:1449
 #: data/mp/messages/strings/names.txt:834
 #: data/mp/messages/strings/names.txt:1468
 msgid "Repair Facility"
-msgstr ""
+msgstr "수리 시설"
 
 #: data/base/messages/strings/names.txt:821
 #: data/mp/messages/strings/names.txt:835
 msgid "Automated Repair Facility"
-msgstr ""
+msgstr "자동화 수리 시설"
 
 #: data/base/messages/strings/names.txt:822
 msgid "Automated Repair Facility Upgrade Mk2"
-msgstr ""
+msgstr "자동 수리 시설 개량 Mk 2"
 
 #: data/base/messages/strings/names.txt:823
 msgid "Automated Repair Facility Upgrade Mk3"
-msgstr ""
+msgstr "자동 수리 시설 개량 Mk 3"
 
 #: data/base/messages/strings/names.txt:824
 msgid "Robotic Repair Facility Upgrade"
-msgstr ""
+msgstr "로봇식 수리 시설 개량"
 
 #: data/base/messages/strings/names.txt:825
 msgid "Robotic Repair Facility Upgrade Mk2"
-msgstr ""
+msgstr "로봇식 수리 시설 개량 Mk 2"
 
 #: data/base/messages/strings/names.txt:826
 msgid "Robotic Repair Facility Upgrade Mk3"
-msgstr ""
+msgstr "로봇식 수리 시설 개량 Mk 3"
 
 #: data/base/messages/strings/names.txt:827
 msgid "Advanced Repair Facility Upgrade"
-msgstr ""
+msgstr "고급 수리 시설 개량"
 
 #: data/base/messages/strings/names.txt:828
 msgid "Advanced Repair Facility Upgrade Mk2"
-msgstr ""
+msgstr "고급 수리 시설 개량 Mk 2"
 
 #: data/base/messages/strings/names.txt:829
 msgid "Advanced Repair Facility Upgrade Mk3"
-msgstr ""
+msgstr "고급 수리 시설 개량 Mk3"
 
 #: data/base/messages/strings/names.txt:832
 #: data/mp/messages/strings/names.txt:846
 msgid "Synaptic Link Data Analysis"
-msgstr ""
+msgstr "시냅스 연결 데이터 분석"
 
 #: data/base/messages/strings/names.txt:833
 #: data/mp/messages/strings/names.txt:847
 msgid "Synaptic Link Data Analysis Mk2"
-msgstr ""
+msgstr "시냅스 연결 데이터 분석 Mk 2"
 
 #: data/base/messages/strings/names.txt:834
 #: data/mp/messages/strings/names.txt:848
 msgid "Synaptic Link Data Analysis Mk3"
-msgstr ""
+msgstr "시냅스 연결 데이터 분석 Mk 3"
 
 #: data/base/messages/strings/names.txt:836
 #: data/mp/messages/strings/names.txt:850
 msgid "Dedicated Synaptic Link Data Analysis Mk2"
-msgstr ""
+msgstr "전용 시냅스 연결 데이터 분석 Mk 2"
 
 #: data/base/messages/strings/names.txt:837
 #: data/mp/messages/strings/names.txt:851
 msgid "Dedicated Synaptic Link Data Analysis Mk3"
-msgstr ""
+msgstr "전용 시냅스 연결 데이터 분석 Mk 3"
 
 #: data/base/messages/strings/names.txt:839
 #: data/mp/messages/strings/names.txt:853
 msgid "Neural Synapse Research Brain Mk2"
-msgstr ""
+msgstr "시냅스 신경 연구 브레인 Mk 2"
 
 #: data/base/messages/strings/names.txt:840
 #: data/mp/messages/strings/names.txt:854
 msgid "Neural Synapse Research Brain Mk3"
-msgstr ""
+msgstr "시냅스 신경 연구 브레인 Mk 3"
 
 #: data/base/messages/strings/names.txt:844
 #: data/mp/messages/strings/names.txt:858
 msgid "Automated VTOL Rearming Mk2"
-msgstr ""
+msgstr "자동 VTOL 재무장 Mk 2"
 
 #: data/base/messages/strings/names.txt:845
 #: data/mp/messages/strings/names.txt:859
 msgid "Automated VTOL Rearming Mk3"
-msgstr ""
+msgstr "자동 VTOL 재무장 Mk 3"
 
 #: data/base/messages/strings/names.txt:847
 #: data/mp/messages/strings/names.txt:861
 msgid "Robotic VTOL Rearming Mk2"
-msgstr ""
+msgstr "로봇식 VTOL 재무장 Mk 2"
 
 #: data/base/messages/strings/names.txt:848
 #: data/mp/messages/strings/names.txt:862
 msgid "Robotic VTOL Rearming Mk3"
-msgstr ""
+msgstr "로봇식 VTOL 재무장 Mk 3"
 
 #: data/base/messages/strings/names.txt:849
 #: data/mp/messages/strings/names.txt:863
 msgid "Robotic VTOL Rearming Mk4"
-msgstr ""
+msgstr "로봇식 VTOL 재무장 Mk 4"
 
 #: data/base/messages/strings/names.txt:852
 #: data/mp/messages/strings/names.txt:866
 msgid "Robotic VTOL Production Mk2"
-msgstr ""
+msgstr "로봇식 VTOL 생산 Mk 2"
 
 #: data/base/messages/strings/names.txt:853
 #: data/mp/messages/strings/names.txt:867
 msgid "Robotic VTOL Production Mk3"
-msgstr ""
+msgstr "로봇식 VTOL 생산 Mk 3"
 
 #: data/base/messages/strings/names.txt:855
 #: data/mp/messages/strings/names.txt:869
 msgid "Advanced VTOL Production Mk2"
-msgstr ""
+msgstr "고급 VTOL 생산 Mk 2"
 
 #: data/base/messages/strings/names.txt:856
 #: data/mp/messages/strings/names.txt:870
 msgid "Advanced VTOL Production Mk3"
-msgstr ""
+msgstr "고급 VTOL 생산 Mk 3"
 
 #: data/base/messages/strings/names.txt:858
 #: data/mp/messages/strings/names.txt:872
 msgid "Cyborg Self-Repair"
-msgstr ""
+msgstr "사이보그 자체 수리"
 
 #: data/base/messages/strings/names.txt:859
 #: data/mp/messages/strings/names.txt:873
 msgid "Automated Cyborg Repair Mk2"
-msgstr ""
+msgstr "사이보그 자동 수리 Mk 2"
 
 #: data/base/messages/strings/names.txt:860
 #: data/mp/messages/strings/names.txt:874
 msgid "Automated Cyborg Repair Mk3"
-msgstr ""
+msgstr "사이보그 자동 수리 Mk 3"
 
 #: data/base/messages/strings/names.txt:862
 #: data/mp/messages/strings/names.txt:876
 msgid "Defenses Self-Repair"
-msgstr ""
+msgstr "방어시설 자체 수리"
 
 #: data/base/messages/strings/names.txt:863
 #: data/mp/messages/strings/names.txt:877
 msgid "Automated Defenses Repair Mk2"
-msgstr ""
+msgstr "방어시설 자동화 수리 Mk 2"
 
 #: data/base/messages/strings/names.txt:864
 #: data/mp/messages/strings/names.txt:878
 msgid "Automated Defenses Repair Mk3"
-msgstr ""
+msgstr "방어시설 자동화 수리 Mk 3"
 
 #: data/base/messages/strings/names.txt:866
 #: data/mp/messages/strings/names.txt:880
 msgid "Base Structure Self-Repair"
-msgstr ""
+msgstr "기지 구조물 자체 수리"
 
 #: data/base/messages/strings/names.txt:867
 #: data/mp/messages/strings/names.txt:881
 msgid "Automated Base Structure Repair Mk2"
-msgstr ""
+msgstr "기지 구조물 자동화 수리 Mk 2"
 
 #: data/base/messages/strings/names.txt:868
 #: data/mp/messages/strings/names.txt:882
 msgid "Automated Base Structure Repair Mk3"
-msgstr ""
+msgstr "기지 구조물 자동화 수리 Mk 3"
 
 #: data/base/messages/strings/names.txt:870
 #: data/mp/messages/strings/names.txt:884
 msgid "Vehicle Self-Repair"
-msgstr ""
+msgstr "차량 자체 수리"
 
 #: data/base/messages/strings/names.txt:871
 #: data/mp/messages/strings/names.txt:885
 msgid "Automated Vehicle Repair Mk2"
-msgstr ""
+msgstr "자동화된 차량 수리 Mk 2"
 
 #: data/base/messages/strings/names.txt:872
 #: data/mp/messages/strings/names.txt:886
 msgid "Automated Vehicle Repair Mk3"
-msgstr ""
+msgstr "자동화된 차량 수리 Mk 3"
 
 #: data/base/messages/strings/names.txt:874
 #: data/mp/messages/strings/names.txt:890
 msgid "Sensor Upgrade"
-msgstr ""
+msgstr "센서 개선"
 
 #: data/base/messages/strings/names.txt:876
 #: data/mp/messages/strings/names.txt:892
 msgid "Construction Unit"
-msgstr ""
+msgstr "건설 유닛"
 
 #: data/base/messages/strings/names.txt:878
 #: data/mp/messages/strings/names.txt:894
 msgid "Engineering"
-msgstr ""
+msgstr "공학"
 
 #: data/base/messages/strings/names.txt:879
 #: data/mp/messages/strings/names.txt:895
 msgid "Improved Engineering"
-msgstr ""
+msgstr "개선된 공학"
 
 #: data/base/messages/strings/names.txt:880
 #: data/mp/messages/strings/names.txt:896
 msgid "Advanced Engineering"
-msgstr ""
+msgstr "고급 공학"
 
 #: data/base/messages/strings/names.txt:882
 #: data/mp/messages/strings/names.txt:898
 msgid "Mobile Repair Turret"
-msgstr ""
+msgstr "이동식 수리 터릿"
 
 #: data/base/messages/strings/names.txt:883
 msgid "Heavy Mobile Repair Turret"
-msgstr ""
+msgstr "대형 이동식 수리 터릿"
 
 #: data/base/messages/strings/names.txt:884
 #: data/base/messages/strings/resstrings.txt:450
 #: data/mp/messages/strings/names.txt:900
 #: data/mp/messages/strings/resstrings.txt:478
 msgid "Mobile Repair Upgrade"
-msgstr ""
+msgstr "이동식 수리 개량"
 
 #: data/base/messages/strings/names.txt:885
 #: data/mp/messages/strings/names.txt:901
 msgid "Mobile Repair Upgrade Mk2"
-msgstr ""
+msgstr "이동식 수리 개량 Mk 2"
 
 #: data/base/messages/strings/names.txt:891
 #: data/mp/messages/strings/names.txt:907
 msgid "CB Turret"
-msgstr ""
+msgstr "카운터배터리 터릿"
 
 #: data/base/messages/strings/names.txt:893
 #: data/mp/messages/strings/names.txt:909
 msgid "CB Sensor Upgrade"
-msgstr ""
+msgstr "카운터배터리 센서 개량"
 
 #: data/base/messages/strings/names.txt:894
 #: data/mp/messages/strings/names.txt:910
 msgid "CB Sensor Upgrade 2"
-msgstr ""
+msgstr "카운터배터리 센서 개량 2"
 
 #: data/base/messages/strings/names.txt:895
 #: data/mp/messages/strings/names.txt:911
 msgid "CB Sensor Upgrade 3"
-msgstr ""
+msgstr "카운터배터리 센서 개량 3"
 
 #: data/base/messages/strings/names.txt:897
 #: data/mp/messages/strings/names.txt:913
 msgid "VTOL CB Turret"
-msgstr ""
+msgstr "VTOL 카운터배터리 터릿"
 
 #: data/base/messages/strings/names.txt:900
 #: data/mp/messages/strings/names.txt:916
 msgid "VTOL CB Upgrade"
-msgstr ""
+msgstr "VTOL 카운터배터리 개량"
 
 #: data/base/messages/strings/names.txt:901
 #: data/mp/messages/strings/names.txt:917
 msgid "VTOL CB Upgrade 2"
-msgstr ""
+msgstr "VTOL 카운터배터리 개량 2"
 
 #: data/base/messages/strings/names.txt:902
 #: data/mp/messages/strings/names.txt:918
 msgid "VTOL CB Upgrade 3"
-msgstr ""
+msgstr "VTOL 카운터배터리 개량 3"
 
 #: data/base/messages/strings/names.txt:903
 #: data/mp/messages/strings/names.txt:919
 msgid "VTOL Strike Upgrade"
-msgstr ""
+msgstr "VTOL 공습 개선"
 
 #: data/base/messages/strings/names.txt:904
 #: data/mp/messages/strings/names.txt:920
 msgid "VTOL Strike Upgrade Mk2"
-msgstr ""
+msgstr "VTOL 공습 개선 Mk 2"
 
 #: data/base/messages/strings/names.txt:905
 #: data/mp/messages/strings/names.txt:921
 msgid "VTOL Strike Upgrade Mk3"
-msgstr ""
+msgstr "VTOL 공습 개선 Mk 3"
 
 #: data/base/messages/strings/names.txt:907
 #: data/mp/messages/strings/names.txt:436
 #: data/mp/messages/strings/names.txt:923
 msgid "VTOL Strike Tower"
-msgstr ""
+msgstr "VTOL 공습탑"
 
 #: data/base/messages/strings/names.txt:910
 #: data/mp/messages/strings/names.txt:926
 msgid "Improved Scrambler"
-msgstr ""
+msgstr "개선된 주파수대 변환기"
 
 #: data/base/messages/strings/names.txt:911
 #: data/mp/messages/strings/names.txt:927
 msgid "Scrambler Turret Mk2"
-msgstr ""
+msgstr "주파수대 변환기 터릿 Mk 2"
 
 #: data/base/messages/strings/names.txt:913
 msgid "NEXUS Intruder Program"
-msgstr ""
+msgstr "넥서스 침입자 프로그램"
 
 #: data/base/messages/strings/names.txt:914
 msgid "NEXUS Resistance Circuits"
-msgstr ""
+msgstr "넥서스 저항 회로"
 
 #: data/base/messages/strings/names.txt:915
 msgid "NEXUS Resistance Circuits Mk2"
-msgstr ""
+msgstr "넥서스 저항 회로 Mk 2"
 
 #: data/base/messages/strings/names.txt:916
 msgid "NEXUS Resistance Circuits Mk3"
-msgstr ""
+msgstr "넥서스 저항 회로 Mk 3"
 
 #: data/base/messages/strings/names.txt:918
 #: data/mp/messages/strings/names.txt:934
 msgid "Sensor Lock"
-msgstr ""
+msgstr "센서 자동추적"
 
 #: data/base/messages/strings/names.txt:922
 #: data/mp/messages/strings/names.txt:938
 msgid "Thermal Armor"
-msgstr ""
+msgstr "내열성 갑옷"
 
 #: data/base/messages/strings/names.txt:923
 #: data/mp/messages/strings/names.txt:939
 msgid "Thermal Armor Mk2"
-msgstr ""
+msgstr "내열성 갑옷 Mk 2"
 
 #: data/base/messages/strings/names.txt:924
 #: data/mp/messages/strings/names.txt:940
 msgid "Thermal Armor Mk3"
-msgstr ""
+msgstr "내열성 갑옷 Mk 3"
 
 #: data/base/messages/strings/names.txt:925
 #: data/mp/messages/strings/names.txt:941
 msgid "High Intensity Thermal Armor"
-msgstr ""
+msgstr "고강도 내열성 갑옷"
 
 #: data/base/messages/strings/names.txt:926
 #: data/mp/messages/strings/names.txt:942
 msgid "High Intensity Thermal Armor Mk2"
-msgstr ""
+msgstr "고강도 내열성 갑옷 Mk 2"
 
 #: data/base/messages/strings/names.txt:927
 #: data/mp/messages/strings/names.txt:943
 msgid "High Intensity Thermal Armor Mk3"
-msgstr ""
+msgstr "고강도 내열성 갑옷 Mk 3"
 
 #: data/base/messages/strings/names.txt:929
 #: data/mp/messages/strings/names.txt:945
 msgid "Light Body - Viper"
-msgstr ""
+msgstr "소형 차체 - 바이퍼(독사)"
 
 #: data/base/messages/strings/names.txt:930
 #: data/mp/messages/strings/names.txt:946
 msgid "Light Body - Leopard"
-msgstr ""
+msgstr "소형 차체 - 레퍼드(표범)"
 
 #: data/base/messages/strings/names.txt:931
 #: data/mp/messages/strings/names.txt:947
 msgid "Light Body - Retaliation"
-msgstr ""
+msgstr "소형 차체 - 리탤리에이션(앙갚음)"
 
 #: data/base/messages/strings/names.txt:932
 #: data/mp/messages/strings/names.txt:948
 msgid "Light Body - Bug"
-msgstr ""
+msgstr "소형 차체 - 버그(벌레)"
 
 #: data/base/messages/strings/names.txt:933
 #: data/mp/messages/strings/names.txt:949
 msgid "Medium Body - Cobra"
-msgstr ""
+msgstr "중형 차체 - 코브라"
 
 #: data/base/messages/strings/names.txt:934
 #: data/mp/messages/strings/names.txt:950
 msgid "Medium Body - Panther"
-msgstr ""
+msgstr "중형 차체 - 팬써(검은 표범)"
 
 #: data/base/messages/strings/names.txt:935
 #: data/mp/messages/strings/names.txt:951
 msgid "Medium Body - Retribution"
-msgstr ""
+msgstr "중형 차체 - 레트리뷰션(보복)"
 
 #: data/base/messages/strings/names.txt:936
 #: data/mp/messages/strings/names.txt:952
 msgid "Medium Body - Scorpion"
-msgstr ""
+msgstr "중형 차체 - 스코피언(전갈)"
 
 #: data/base/messages/strings/names.txt:937
 #: data/mp/messages/strings/names.txt:953
 msgid "Heavy Body - Tiger"
-msgstr ""
+msgstr "대형 차체 - 타이거(호랑이)"
 
 #: data/base/messages/strings/names.txt:938
 #: data/mp/messages/strings/names.txt:954
 msgid "Heavy Body - Vengeance"
-msgstr ""
+msgstr "대형 차체 - 벤젼스(복수)"
 
 #: data/base/messages/strings/names.txt:939
 #: data/mp/messages/strings/names.txt:955
 msgid "Heavy Body - Python"
-msgstr ""
+msgstr "대형 차체 - 파이썬(비단뱀)"
 
 #: data/base/messages/strings/names.txt:940
 #: data/mp/messages/strings/names.txt:956
 msgid "Heavy Body - Mantis"
-msgstr ""
+msgstr "대형 차체 - 맨티스(사마귀)"
 
 #: data/base/messages/strings/names.txt:943
 #: data/mp/messages/strings/names.txt:959
 msgid "Fuel Injection Engine Mk2"
-msgstr ""
+msgstr "연료 분사 엔진 Mk 2"
 
 #: data/base/messages/strings/names.txt:944
 #: data/mp/messages/strings/names.txt:960
 msgid "Fuel Injection Engine Mk3"
-msgstr ""
+msgstr "연료 분사 엔진 Mk 3"
 
 #: data/base/messages/strings/names.txt:946
 #: data/mp/messages/strings/names.txt:962
 msgid "Turbo-Charged Engine Mk2"
-msgstr ""
+msgstr "터보충전 엔진 Mk 2"
 
 #: data/base/messages/strings/names.txt:947
 #: data/mp/messages/strings/names.txt:963
 msgid "Turbo-Charged Engine Mk3"
-msgstr ""
+msgstr "터보충전 엔진 Mk 3"
 
 #: data/base/messages/strings/names.txt:949
 #: data/mp/messages/strings/names.txt:965
 msgid "Gas Turbine Engine Mk2"
-msgstr ""
+msgstr "가스 터빈 엔진 Mk 2"
 
 #: data/base/messages/strings/names.txt:950
 #: data/mp/messages/strings/names.txt:966
 msgid "Gas Turbine Engine Mk3"
-msgstr ""
+msgstr "가스 터빈 엔진 Mk 3"
 
 #: data/base/messages/strings/names.txt:953
 #: data/mp/messages/strings/names.txt:969
 msgid "Composite Alloys"
-msgstr ""
+msgstr "복합 합금"
 
 #: data/base/messages/strings/names.txt:954
 #: data/mp/messages/strings/names.txt:970
 msgid "Composite Alloys Mk2"
-msgstr ""
+msgstr "복합 합금 Mk 2"
 
 #: data/base/messages/strings/names.txt:955
 #: data/mp/messages/strings/names.txt:971
 msgid "Composite Alloys Mk3"
-msgstr ""
+msgstr "복합 합금 Mk 3"
 
 #: data/base/messages/strings/names.txt:956
 #: data/mp/messages/strings/names.txt:972
 msgid "Dense Composite Alloys"
-msgstr ""
+msgstr "고밀도 복합 합금"
 
 #: data/base/messages/strings/names.txt:957
 #: data/mp/messages/strings/names.txt:973
 msgid "Dense Composite Alloys Mk2"
-msgstr ""
+msgstr "고밀도 복합 합금 Mk 2"
 
 #: data/base/messages/strings/names.txt:958
 #: data/mp/messages/strings/names.txt:974
 msgid "Dense Composite Alloys Mk3"
-msgstr ""
+msgstr "고밀도 복합 합금 Mk 3"
 
 #: data/base/messages/strings/names.txt:959
 #: data/mp/messages/strings/names.txt:975
 msgid "Superdense Composite Alloys"
-msgstr ""
+msgstr "초고밀도 복합 합금"
 
 #: data/base/messages/strings/names.txt:960
 #: data/mp/messages/strings/names.txt:976
 msgid "Superdense Composite Alloys Mk2"
-msgstr ""
+msgstr "초고밀도 복합 합금 Mk 2"
 
 #: data/base/messages/strings/names.txt:961
 #: data/mp/messages/strings/names.txt:977
 msgid "Superdense Composite Alloys Mk3"
-msgstr ""
+msgstr "초고밀도 복합 합금 Mk 3"
 
 #: data/base/messages/strings/names.txt:964
 #: data/mp/messages/strings/names.txt:980
 msgid "Hover Propulsion"
-msgstr ""
+msgstr "호버 추진"
 
 #: data/base/messages/strings/names.txt:965
 #: data/mp/messages/strings/names.txt:981
 msgid "Hover Propulsion II"
-msgstr ""
+msgstr "호버 추진 II"
 
 #: data/base/messages/strings/names.txt:967
 #: data/mp/messages/strings/names.txt:983
 msgid "Half-tracked Propulsion"
-msgstr ""
+msgstr "반 무한궤도 추진"
 
 #: data/base/messages/strings/names.txt:968
 #: data/mp/messages/strings/names.txt:984
 msgid "Half-tracked Propulsion II"
-msgstr ""
+msgstr "반 무한궤도 추진 II"
 
 #: data/base/messages/strings/names.txt:970
 #: data/mp/messages/strings/names.txt:986
 msgid "Tracked Propulsion"
-msgstr ""
+msgstr "무한궤도 추진"
 
 #: data/base/messages/strings/names.txt:971
 #: data/mp/messages/strings/names.txt:987
 msgid "Tracked Propulsion II"
-msgstr ""
+msgstr "무한궤도 추진 II"
 
 #: data/base/messages/strings/names.txt:973
 #: data/mp/messages/strings/names.txt:989
 msgid "VTOL Propulsion"
-msgstr ""
+msgstr "VTOL 추진"
 
 #: data/base/messages/strings/names.txt:974
 #: data/mp/messages/strings/names.txt:990
 msgid "VTOL Propulsion II"
-msgstr ""
+msgstr "VTOL 추진 II"
 
 #: data/base/messages/strings/names.txt:977
 #: data/mp/messages/strings/names.txt:993
 msgid "Wheeled Propulsion II"
-msgstr ""
+msgstr "바퀴 추진 II"
 
 #: data/base/messages/strings/names.txt:984
 #: data/mp/messages/strings/names.txt:1000
 msgid "AA Thermal Imaging Sensor"
-msgstr ""
+msgstr "대공 열 영상 센서"
 
 #: data/base/messages/strings/names.txt:985
 #: data/mp/messages/strings/names.txt:1001
 msgid "AA Target Acquisition Shells"
-msgstr ""
+msgstr "대공 표적 포착 포탄"
 
 #: data/base/messages/strings/names.txt:986
 #: data/mp/messages/strings/names.txt:1002
 msgid "AA Target Prediction Computer"
-msgstr ""
+msgstr "대공 표적 예측 컴퓨터"
 
 #: data/base/messages/strings/names.txt:987
 #: data/mp/messages/strings/names.txt:1003
 msgid "AA HE Flak"
-msgstr ""
+msgstr "대공 고위력 폭발 포탄"
 
 #: data/base/messages/strings/names.txt:988
 #: data/mp/messages/strings/names.txt:1004
 msgid "AA HE Flak Mk2"
-msgstr ""
+msgstr "대공 고위력 폭발 포탄 Mk 2"
 
 #: data/base/messages/strings/names.txt:989
 #: data/mp/messages/strings/names.txt:1005
 msgid "AA HE Flak Mk3"
-msgstr ""
+msgstr "대공 고위력 폭발 포탄 Mk 3"
 
+# High Explosive Armor-Piercing = HEAP
 #: data/base/messages/strings/names.txt:990
 #: data/mp/messages/strings/names.txt:1006
 msgid "AA HEAP Flak"
-msgstr ""
+msgstr "대공 고위력 철갑용 폭팔 포탄"
 
 #: data/base/messages/strings/names.txt:991
 #: data/mp/messages/strings/names.txt:1007
 msgid "AA HEAP Flak Mk2"
-msgstr ""
+msgstr "대공 고위력 철갑용 폭팔 포탄 Mk 2"
 
 #: data/base/messages/strings/names.txt:992
 #: data/mp/messages/strings/names.txt:1008
 msgid "AA HEAP Flak Mk3"
-msgstr ""
+msgstr "대공 고위력 철갑용 폭팔 포탄 Mk 3"
 
 #: data/base/messages/strings/names.txt:993
 #: data/mp/messages/strings/names.txt:1009
@@ -8270,6 +8297,7 @@ msgstr ""
 msgid "Cannon Laser Designator"
 msgstr ""
 
+# HEAT = 대전차고폭탄
 #: data/base/messages/strings/names.txt:1014
 #: data/mp/messages/strings/names.txt:1030
 msgid "HEAT Cannon Shells"
@@ -9171,7 +9199,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1467
 #: data/mp/messages/strings/names.txt:1486
 msgid "Flashlight"
-msgstr ""
+msgstr "레이저 전등"
 
 #: data/base/messages/strings/names.txt:1468
 #: data/mp/messages/strings/names.txt:1487
@@ -11611,8 +11639,9 @@ msgid "Nexus Link Turret"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:404
+#, fuzzy
 msgid "Hardcrete Gate"
-msgstr ""
+msgstr "하드크리트 벽"
 
 #: data/mp/messages/strings/names.txt:410
 #: data/mp/messages/strings/names.txt:735
@@ -12239,8 +12268,9 @@ msgid "Hyper Velocity Cannon Python Hover"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1960
+#, fuzzy
 msgid "Plasmite Retribution VTOL"
-msgstr ""
+msgstr "레트리뷰션"
 
 #: lib/framework/i18n.c:89
 #: lib/framework/i18n.c:147
@@ -12730,7 +12760,7 @@ msgstr "새 캠페인"
 
 #: src/frontend.c:213
 msgid "Start Skirmish Game"
-msgstr "스커미시 게임 시작"
+msgstr "스커미시(Skirmish) 게임 시작"
 
 #: src/frontend.c:214
 msgid "Challenges"
@@ -12750,7 +12780,7 @@ msgstr "싱글 플레이어"
 #: src/mission.c:2534
 #: src/mission.c:2639
 msgid "Load Saved Game"
-msgstr "저장된 게임 로드"
+msgstr "저장된 게임 로드하기"
 
 #: src/frontend.c:356
 msgid "MULTI PLAYER"
@@ -12758,11 +12788,11 @@ msgstr "멀티 플레이어"
 
 #: src/frontend.c:358
 msgid "Host Game"
-msgstr "네트워크 게임 새로 시작"
+msgstr "네트워크 게임 새로 시작 (호스팅 하기)"
 
 #: src/frontend.c:359
 msgid "Join Game"
-msgstr "기존 네트워크 게임 들어가기"
+msgstr "네트워크 게임 참여하기"
 
 #: src/frontend.c:421
 #: src/multiint.c:1136
@@ -12837,7 +12867,7 @@ msgstr "화면 떨림(Shake)"
 #: src/frontend.c:1073
 #: src/frontend.c:1087
 msgid "On"
-msgstr "사용"
+msgstr "켜짐"
 
 #: src/frontend.c:518
 #: src/frontend.c:538
@@ -12857,7 +12887,7 @@ msgstr "사용"
 #: src/frontend.c:1068
 #: src/frontend.c:1082
 msgid "Off"
-msgstr "사용 안함"
+msgstr "꺼짐"
 
 #: src/frontend.c:523
 #: src/multiint.c:1205
@@ -12873,7 +12903,7 @@ msgstr "흐림(Mist)"
 #: src/frontend.c:595
 #: src/multiint.c:1207
 msgid "Fog Of War"
-msgstr "전장의 안개(Fog of War)"
+msgstr "전쟁의 안개(Fog of War)"
 
 #: src/frontend.c:535
 msgid "Subtitles"
@@ -12917,7 +12947,7 @@ msgstr "그래픽 모드*"
 #: src/frontend.c:777
 #: src/frontend.c:822
 msgid "Windowed"
-msgstr "윈도우(Window) 모드"
+msgstr "윈도우(창) 모드"
 
 #: src/frontend.c:781
 msgid "Resolution*"
@@ -12937,7 +12967,7 @@ msgstr "비디오 옵션"
 
 #: src/frontend.c:958
 msgid "* May negatively affect performance"
-msgstr "*성능을 떨어뜨릴 수 도 있습니다"
+msgstr "*게임의 성능을 떨어뜨릴 수 도 있습니다"
 
 #: src/frontend.c:962
 msgid "Reverse Rotation"
@@ -13034,7 +13064,7 @@ msgstr "게임 옵션"
 #: src/frontend.c:1340
 #: src/multiint.c:2115
 msgid "Mod: "
-msgstr "게임 Mod:"
+msgstr "Mod (Modification):"
 
 #: src/hci.c:1360
 msgid "MAP SAVED!"
@@ -13045,7 +13075,7 @@ msgstr "맵이 저장되었습니다!"
 #: src/loop.c:544
 #, fuzzy
 msgid "GAME SAVED: "
-msgstr "게임 저장됨:"
+msgstr "게임 저장됨 :"
 
 #: src/hci.c:2132
 msgid "Failed to create building"
@@ -13076,7 +13106,7 @@ msgstr "보도 디스플레이 (F5)"
 
 #: src/hci.c:3752
 msgid "Manufacture (F1)"
-msgstr "제조 (F1)"
+msgstr "생산 (F1)"
 
 #: src/hci.c:3768
 msgid "Design (F4)"
@@ -13110,7 +13140,7 @@ msgstr "유닛"
 
 #: src/hci.c:4073
 msgid "Place Unit on map"
-msgstr "게임맵에서 유닛을 놓습니다"
+msgstr "게임맵 위에서 유닛을 배치하십시오"
 
 #: src/hci.c:4081
 msgid "Struct"
@@ -13130,7 +13160,7 @@ msgstr ""
 
 #: src/hci.c:4102
 msgid "Pause or unpause the game"
-msgstr "게임을 일시 중지하거나 일시중지를 해제하십시오"
+msgstr "게임을 일시 중지하거나 일시중지를 해제합니다"
 
 #: src/hci.c:4116
 msgid "Align height of all map objects"
@@ -13145,7 +13175,7 @@ msgstr "종료"
 
 #: src/hci.c:4142
 msgid "Exit Game"
-msgstr "게임 끝내기"
+msgstr "게임 종료"
 
 #: src/hci.c:4566
 #: src/intdisplay.c:267
@@ -13201,7 +13231,7 @@ msgstr "호스트(Host)가 게임을 종료하였습니다!"
 
 #: src/ingameop.c:370
 msgid "The game can't continue without the host."
-msgstr "이 게임은 호스트 없이 계속할 수 없습니다"
+msgstr "이 게임은 호스트 없이 계속할 수 없습니다."
 
 #: src/ingameop.c:376
 msgid "-->  QUIT  <--"
@@ -13220,8 +13250,9 @@ msgid "Build Progress"
 msgstr ""
 
 #: src/intdisplay.c:225
+#, fuzzy
 msgid "Construction Progress"
-msgstr ""
+msgstr "건설 유닛"
 
 #: src/intdisplay.c:260
 msgid "Power Accrued"
@@ -13230,7 +13261,7 @@ msgstr ""
 #: src/intelmap.c:248
 #: src/keybind.c:1397
 msgid "PAUSED"
-msgstr "게임이 일시 정지되었습니다"
+msgstr "게임이 일시 중지되었습니다"
 
 #: src/intelmap.c:414
 msgid "Research Update"
@@ -14084,7 +14115,7 @@ msgstr ""
 
 #: src/mission.c:2605
 msgid "GAME SAVED :"
-msgstr "게임 저장됨:"
+msgstr "게임 저장됨 :"
 
 #: src/move.c:2525
 #: src/move.c:2541
@@ -14830,6 +14861,36 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
+
+#~ msgid "Z NULL BRAIN"
+#~ msgstr "Z NULL BRAIN"
+
+#~ msgid "Z NULL PROGRAM"
+#~ msgstr "Z NULL PROGRAM"
+
+#~ msgid "Z NULL CONSTRUCT"
+#~ msgstr "Z NULL CONSTRUCT"
+
+#~ msgid "Z NULL PROP"
+#~ msgstr "Z NULL PROP"
+
+#~ msgid "BaBaProp"
+#~ msgstr "BaBaProp"
+
+#~ msgid "BaBaLegs"
+#~ msgstr "BaBaLegs"
+
+#~ msgid "Z NULL REPAIR"
+#~ msgstr "Z NULL REPAIR"
+
+#~ msgid "Z NULL ECM"
+#~ msgstr "Z NULL ECM"
+
+#~ msgid "Z NULL SENSOR"
+#~ msgstr "Z NULL SENSOR"
+
+#~ msgid "LasSat"
+#~ msgstr "LasSat"
 
 #~ msgid "Czech"
 #~ msgstr "체코어"
