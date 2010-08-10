@@ -3,16 +3,20 @@
    * Fix: Really fix burn damage calculations (r11393, ticket:2045)
  * Multiplayer:
    * Change: Show less netcode errors/warnings (r11356)
+   * Fix: Possible crash (r11409, ticket:2033)
  * DyDo-AI:
    * Update to 2.2.3, improved efficiency of research for research path Gunners and Cannons, minor fixes (r11374, r11375, r11377, r11388)
    * New challenges using not included maps again... (r11373, r11376)
  * Translations:
-   * Updated: Brazilian (r11364, ticket:2043), Korean (r11396, ticket:2055)
+   * Change: Don't save translated descriptions in the keymap (r11408, ticket:2049)
+   * New: Slovak (r11421, ticket:2036)
+   * Updated: Brazilian (r11364, ticket:2043), Korean (r11396, ticket:2055, r11420, ticket:2068)
 
 2010-08-01: Version 2.3.3
  * General:
    * Fix: Prevent out of bounds access of player stat arrays that would corrupt random memory (r11322, ticket:2029)
    * Fix: Burn damage calculations (r11303, ticket:2019)
+   * Fix: Prevent a division by zero (r11308, ticket:2008)
  * UI:
    * Revert: Don't show "Sk-" and "-T1" in the map chooser (r11327)
  * Translations:
