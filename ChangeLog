@@ -1,4 +1,4 @@
-2010-08-xx: Version 2.3.4
+2010-08-11: Version 2.3.4
  * General:
    * Fix: Really fix burn damage calculations (r11393, ticket:2045)
  * Multiplayer:
@@ -6,11 +6,12 @@
    * Fix: Possible crash (r11409, ticket:2033)
  * DyDo-AI:
    * Update to 2.2.3, improved efficiency of research for research path Gunners and Cannons, minor fixes (r11374, r11375, r11377, r11388)
-   * New challenges using not included maps again... (r11373, r11376)
+   * New challenges (r11373, r11376, r11436)
  * Translations:
    * Change: Don't save translated descriptions in the keymap (r11408, ticket:2049)
+   * Fix: Actually install the Korean translation on Windows (r11434, ticket:2074)
    * New: Slovak (r11421, ticket:2036)
-   * Updated: Brazilian (r11364, ticket:2043), Korean (r11396, ticket:2055, r11420, ticket:2068)
+   * Updated: Brazilian (r11364, ticket:2043), Korean (r11396, ticket:2055, r11420, ticket:2068, r11435, ticket:2075)
 
 2010-08-01: Version 2.3.3
  * General:
