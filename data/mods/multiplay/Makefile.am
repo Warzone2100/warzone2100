@@ -9,7 +9,12 @@ stamp:
 DYDOAILIST = \
 	multiplay \
 	images \
-	challenges
+	challenges \
+	2c-Caladan.addon.lev \
+	2c-CaladanB.addon.lev \
+	4c-Arrakis.addon.lev \
+	4c-ArrakisB.addon.lev \
+	4c-Printus.addon.lev
 
 DYDOAIARCHIVE = dydo-ai.wz
 
