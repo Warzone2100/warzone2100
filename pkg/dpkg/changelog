@@ -1,3 +1,9 @@
+warzone2100 (9:2.3.4) unstable; urgency=low
+
+  * Version 2.3.4.
+
+ -- Warzone 2100 Project <warzone-dev@gna.org>  Wed, 11 Aug 2010 14:35:17 +0200
+
 warzone2100 (9:2.3svn-1) unstable; urgency=low
 
   * SVN snapshot of the 2.3 branch.
