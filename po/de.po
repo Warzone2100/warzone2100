@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-08-08 20:42+0200\n"
-"PO-Revision-Date: 2010-07-25 17:35+0200\n"
+"PO-Revision-Date: 2010-08-12 19:53+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -13688,9 +13688,8 @@ msgid "View Location of Previous Message"
 msgstr "Zeige Ort der letzten Meldung"
 
 #: src/keymap.c:307
-#, fuzzy
 msgid "Toggle Sensor display"
-msgstr "Konsolenanzeige umschalten"
+msgstr "Sensoranzeige umschalten"
 
 #: src/keymap.c:311
 msgid "Assign Group 0"
@@ -13946,35 +13945,31 @@ msgstr "Sende Textnachricht"
 
 #: src/keymap.c:399
 msgid "Drop a beacon"
-msgstr ""
+msgstr "Setze ein Signal"
 
 #: src/keymap.c:401
-#, fuzzy
 msgid "Sensor display On"
-msgstr "Sensorreichweite"
+msgstr "Sensoranzeige ein"
 
 #: src/keymap.c:402
 msgid "Sensor display Off"
-msgstr ""
+msgstr "Sensoranzeige aus"
 
 #: src/keymap.c:403
-#, fuzzy
 msgid "Toggles shadows"
-msgstr "Schatten aktivieren"
+msgstr "Schatten umschalten"
 
 #: src/keymap.c:404
-#, fuzzy
 msgid "Trap cursor"
 msgstr "Mauszeiger einfangen"
 
 #: src/keymap.c:405
-#, fuzzy
 msgid "Toggle radar terrain"
-msgstr "Radar umschalten"
+msgstr "Radargelände umschalten"
 
 #: src/keymap.c:406
 msgid "Toggle ally-enemy radar view"
-msgstr ""
+msgstr "Freund-Feind-Radaransicht umschalten"
 
 #: src/keymap.c:415
 msgid "Select all Combat Units"
@@ -14014,7 +14009,7 @@ msgstr "Alle Radfahrzeuge auswählen"
 
 #: src/keymap.c:425
 msgid "Show frame rate"
-msgstr ""
+msgstr "Zeige Bildwiederholrate"
 
 #: src/keymap.c:426
 msgid "Select all Similar Units"
@@ -14042,99 +14037,88 @@ msgstr "Wiederöffnung des Konstruktionsmenüs umschalten"
 
 #: src/keymap.c:438
 msgid "Toggle display of droid path"
-msgstr ""
+msgstr "Einheitenweganzeige umschalten"
 
 #: src/keymap.c:439
 msgid "Toggle display of gateways"
-msgstr ""
+msgstr "Gateway-Anzeige umschalten"
 
 #: src/keymap.c:440
-#, fuzzy
 msgid "Toggle Debug Mappings"
-msgstr "Tastenzuordnung"
+msgstr "Debug-Tastaturbelegung umschalten"
 
 #: src/keymap.c:441
 msgid "Show all keyboard mappings - use pause!"
-msgstr ""
+msgstr "Zeige sämtliche Tastenkombinationen - benutze Pause!"
 
 #: src/keymap.c:442
-#, fuzzy
 msgid "Toggle visibility"
-msgstr "Menü und Energiebalken umschalten"
+msgstr "Sichtbarkeit umschalten"
 
 #: src/keymap.c:443
-#, fuzzy
 msgid "Raise tile height"
-msgstr "Nach rechts rotieren"
+msgstr "Kachelhöhe anheben"
 
 #: src/keymap.c:444
 msgid "Lower tile height"
-msgstr ""
+msgstr "Kachelhöhe absenken"
 
 #: src/keymap.c:445
 msgid "Toggles on/off DEMO Mode"
-msgstr ""
+msgstr "DEMO-Modus umschalten"
 
 #: src/keymap.c:446
-#, fuzzy
 msgid "End Mission"
 msgstr "Beende Mission."
 
 #: src/keymap.c:447
-#, fuzzy
 msgid "Toggles All fog"
-msgstr "Bündnisstatus umschalten"
+msgstr "Sämtliche Nebel umschalten"
 
 #: src/keymap.c:448
 msgid "Trigger some weather"
-msgstr ""
+msgstr "Wetter auslösen"
 
 #: src/keymap.c:449
 msgid "Flip terrain triangle"
-msgstr ""
+msgstr "Drehe Geländedreieck um"
 
 #: src/keymap.c:450
-#, fuzzy
 msgid "Realign height of all objects on the map"
-msgstr "Höhe aller Kartenobjekte abgleichen"
+msgstr "Höhe aller Objekte auf der Karte neu ausrichten"
 
 #: src/keymap.c:453
-#, fuzzy
 msgid "Make all items available"
-msgstr "Alle Gegenstände wurden verfügbar gemacht"
+msgstr "Sämtliche Gegenstände verfügbar machen"
 
 #: src/keymap.c:454
-#, fuzzy
 msgid "Kill Selected Unit(s)"
-msgstr "Übergebe ausgewählte Einheiten"
+msgstr "Gewählte Einheit(en) vernichten"
 
 #: src/keymap.c:455
-#, fuzzy
 msgid "Toggle god Mode Status"
-msgstr "Bündnisstatus umschalten"
+msgstr "God-Mode-Status umschalten"
 
 #: src/keymap.c:456
-#, fuzzy
 msgid "Display Options Screen"
-msgstr "Zeige Spieleinstellungen"
+msgstr "Zeige Darstellungsoptionen"
 
 #: src/keymap.c:457
-#, fuzzy
 msgid "Complete current research"
-msgstr "Ermöglicht Erforschung von Commandersystemtürmen"
+msgstr "Erledige aktuelle Forschung"
 
 #: src/keymap.c:458
+#, fuzzy
 msgid "Toggle watch window"
-msgstr ""
+msgstr "Beobachtungsfenster umschalten"
 
 #: src/keymap.c:459
 msgid "Trace a game object"
-msgstr ""
+msgstr "Spielobjekt verfolgen"
 
 #: src/keymap.c:460
-#, fuzzy
 msgid "Toggle Driving Mode"
-msgstr "Verfolgerkamera umschalten"
+msgstr "Fahrmodus umschalten"
 
 #: src/loop.c:543
 #: src/loop.c:559
