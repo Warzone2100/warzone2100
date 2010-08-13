@@ -10,7 +10,7 @@
  * Translations:
    * Change: Don't save translated descriptions in the keymap (r11408, ticket:2049)
    * Fix: Actually install the Korean translation on Windows (r11434, ticket:2074)
-   * New: Slovak (r11421, ticket:2036)
+   * New: Slovak (r11421, ticket:2036, r11434)
    * Updated: Brazilian (r11364, ticket:2043), Korean (r11396, ticket:2055, r11420, ticket:2068, r11435, ticket:2075)
 
 2010-08-01: Version 2.3.3
