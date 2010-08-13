@@ -150,6 +150,7 @@ extern BOOL SendResearch(uint8_t player, uint32_t index, bool trigger);
 extern BOOL SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.
 extern BOOL sendTextMessage		(const char *pStr,BOOL cast);		// send a text message
 extern BOOL sendAIMessage		(char *pStr, UDWORD player, UDWORD to);	//send AI message
+void printConsoleNameChange(const char *oldName, const char *newName);  ///< Print message to console saying a name changed.
 
 extern void turnOffMultiMsg		(BOOL bDoit);
 
